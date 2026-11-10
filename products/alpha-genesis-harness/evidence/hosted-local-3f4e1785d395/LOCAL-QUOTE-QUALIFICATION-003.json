@@ -1,0 +1,498 @@
+{
+  "schema": "alpha-harness/live-quote-qualification/v3",
+  "trial_id": "quote-trial-003",
+  "source_revision": "3f4e1785d3954a417c21b3435cce243caad2fbd6",
+  "product_tree_sha": "581e6db05c2860df9f5e5edadef5d66601ac907c",
+  "protocol_sha256": "b515dba42aab593212cf1987825253cb541bf48661636793cee855d6907ea43e",
+  "source_sha256": {
+    "bridge/adapters.py": "9df37397ab9931d0738f0148ca15703f0ecbfa6c88149987684cf8f9f05ac22e",
+    "bridge/streaming.py": "dd4cd766fb911e350358d4f31f7053b4d6847b189243cf1ce1108ebc834b21ec",
+    "bridge/workflows.py": "51663d8068fb1a8ca3fe4b75887e725058dd5f828692bd1a158761681cf3ad0c",
+    "bridge/workflow_strategies.py": "bb639bfe6467c1da816149fc5918f785f9df8053b3e5fc841f9e0cdef3115124",
+    "bridge/instruments.py": "787466086e1303599aa4576c1c677e732257efa10d2bf932b96a705a96ac03b9",
+    "scripts/qualify_quote_workflow_003.py": "4eb036eb8e99802d8d3ba696a781b3044a2505add308c8db37590b5adc01286d"
+  },
+  "runtime_binary_sha256": "fe211d00c4754aa67aaa492d2c755ab0f6ef60bf30eee3c0c74a3496189cde17",
+  "runtime_version": "version: 0.9.0-dev (build 12242, commit 3b4d6ab3f)\nbuilt with GNU 11.4.0 for Linux x86_64",
+  "model_download": {
+    "url": "https://huggingface.co/bartowski/Qwen_Qwen3-4B-Instruct-2507-GGUF/resolve/ae44f08e1392f39c0e474af10c3ff8355c8b6688/Qwen_Qwen3-4B-Instruct-2507-Q4_K_M.gguf",
+    "bytes": 2497280736,
+    "sha256": "2fde00ce69dd4899c70d020845e2638353015bba0fdf161b3eb965f2bca4464e",
+    "verified": true,
+    "wall_seconds": 88.482430022,
+    "model_license": "Apache-2.0",
+    "original_model": "https://huggingface.co/Qwen/Qwen3-4B-Instruct-2507",
+    "original_revision": "cdbee75f17c01a7cc42f958dc650907174af0554",
+    "quantization_source": "bartowski/Qwen_Qwen3-4B-Instruct-2507-GGUF",
+    "quantization_revision": "ae44f08e1392f39c0e474af10c3ff8355c8b6688",
+    "license_url": "https://huggingface.co/Qwen/Qwen3-4B-Instruct-2507/resolve/cdbee75f17c01a7cc42f958dc650907174af0554/LICENSE",
+    "license_sha256": "832dd9e00a68dd83b3c3fb9f5588dad7dcf337a0db50f7d9483f310cd292e92e",
+    "upstream_lfs": {
+      "sha256": "2fde00ce69dd4899c70d020845e2638353015bba0fdf161b3eb965f2bca4464e",
+      "size": 2497280736
+    },
+    "upstream_digest_matches": true
+  },
+  "model_sha256_matches_receipt": true,
+  "arms": [
+    {
+      "id": "manufacturing_construct",
+      "status": "exhausted",
+      "wall_seconds": 142.80758585400002,
+      "model_calls": 2,
+      "actions": 0,
+      "verification": {
+        "checks": [],
+        "passed": false,
+        "scope": "No checks executed."
+      },
+      "state_id": "wf_fe8fb9f23116be7a21cd3534",
+      "events": [
+        {
+          "at": "2026-11-10T06:01:57.205613+00:00",
+          "detail": {
+            "acceptance_source": "Operator-frozen conditions; independence is not inferred.",
+            "spec_hash": "bd872319c9926cbc9854019c27951abbee64d5314b77f2e8d7705f191551b05c"
+          },
+          "index": 0,
+          "kind": "created",
+          "previous": "0000000000000000000000000000000000000000000000000000000000000000",
+          "sha256": "888153d440464baea25e03f72ac9ce7f32c2cbb2dbde38e7fec11f02db6917ad"
+        },
+        {
+          "at": "2026-11-10T06:01:57.208121+00:00",
+          "detail": {
+            "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+            "provider": "local",
+            "role": "builder",
+            "run_id": "wf_fe8fb9f23116be7a21cd3534_332601de685b302a"
+          },
+          "index": 1,
+          "kind": "model_started",
+          "previous": "888153d440464baea25e03f72ac9ce7f32c2cbb2dbde38e7fec11f02db6917ad",
+          "sha256": "88e2b95e97cc3b2111b8d2a55f301ee554567da624e6e733f5a7f61afd11a15f"
+        },
+        {
+          "at": "2026-11-10T06:03:28.294182+00:00",
+          "detail": {
+            "cost": {
+              "accounted": 0.0,
+              "amount": 0.0,
+              "attempts": 1,
+              "basis": "reported_usage_at_user_rates",
+              "complete_cost_known": false,
+              "currency": "USD"
+            },
+            "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+            "provider": "local",
+            "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+            "reported_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+            "requested_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+            "response_sha256": "f9bc585ead7d3373fd2a6413d6f1e023bf48cdab04c9afb0a45768bb8e9e4c52",
+            "role": "builder",
+            "run_id": "wf_fe8fb9f23116be7a21cd3534_332601de685b302a",
+            "usage": {
+              "input_tokens": 1149,
+              "output_tokens": 265
+            }
+          },
+          "index": 2,
+          "kind": "model_completed",
+          "previous": "88e2b95e97cc3b2111b8d2a55f301ee554567da624e6e733f5a7f61afd11a15f",
+          "sha256": "941a7dd5ca283a73f8178d5e37da5deebdd1043d784cc4bea6ee28aff5cb971f"
+        },
+        {
+          "at": "2026-11-10T06:03:28.294312+00:00",
+          "detail": {
+            "reason": "Malformed or unsupported response: A valid finite JSON object is required."
+          },
+          "index": 3,
+          "kind": "response_refused",
+          "previous": "941a7dd5ca283a73f8178d5e37da5deebdd1043d784cc4bea6ee28aff5cb971f",
+          "sha256": "d0c1e26911343a1a73c2f95204344f1accc986a14154fd39e5de07fce06cf306"
+        },
+        {
+          "at": "2026-11-10T06:03:28.297120+00:00",
+          "detail": {
+            "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+            "provider": "local",
+            "role": "builder",
+            "run_id": "wf_fe8fb9f23116be7a21cd3534_e8b7084236c6af0d"
+          },
+          "index": 4,
+          "kind": "model_started",
+          "previous": "d0c1e26911343a1a73c2f95204344f1accc986a14154fd39e5de07fce06cf306",
+          "sha256": "24c35ad4a2fb012a690add11463074dc884d41e4de8079d674983797430f0c95"
+        },
+        {
+          "at": "2026-11-10T06:04:19.914375+00:00",
+          "detail": {
+            "cost": {
+              "accounted": 0.0,
+              "amount": 0.0,
+              "attempts": 1,
+              "basis": "reported_usage_at_user_rates",
+              "complete_cost_known": false,
+              "currency": "USD"
+            },
+            "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+            "provider": "local",
+            "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+            "reported_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+            "requested_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+            "response_sha256": "ea9cab3b39ed8e23d7fc13641eee49a7f41ac3decac61180ee565ad75db038d1",
+            "role": "builder",
+            "run_id": "wf_fe8fb9f23116be7a21cd3534_e8b7084236c6af0d",
+            "usage": {
+              "input_tokens": 1163,
+              "output_tokens": 245
+            }
+          },
+          "index": 5,
+          "kind": "model_completed",
+          "previous": "24c35ad4a2fb012a690add11463074dc884d41e4de8079d674983797430f0c95",
+          "sha256": "3c731faf2abae7cb138c7bb833440cf230b84c66acf9e2b65e2c7d17f24127ea"
+        },
+        {
+          "at": "2026-11-10T06:04:19.914466+00:00",
+          "detail": {
+            "reason": "Malformed or unsupported response: A valid finite JSON object is required."
+          },
+          "index": 6,
+          "kind": "response_refused",
+          "previous": "3c731faf2abae7cb138c7bb833440cf230b84c66acf9e2b65e2c7d17f24127ea",
+          "sha256": "bf4bacc504bd735c045313e88ca364a66719c7a64019bf2f90e481eccb29cd9b"
+        },
+        {
+          "index": 7,
+          "at": "2026-11-10T06:04:19.916851+00:00",
+          "kind": "stopped",
+          "detail": {
+            "reason": "Declared iteration or action bound reached."
+          },
+          "previous": "bf4bacc504bd735c045313e88ca364a66719c7a64019bf2f90e481eccb29cd9b",
+          "sha256": "46f1e43ab722afdfe9e19cc7f228266ff0ca7ba3b2792abfc39dbaa6fdfc9e27"
+        }
+      ],
+      "observations": [
+        {
+          "run_id": "wf_fe8fb9f23116be7a21cd3534_332601de685b302a",
+          "prompt_sha256": "db8590d075f2d112fe0c224e531ee5450ae8979c422c231854eec30317b53519",
+          "response": {
+            "run_id": "wf_fe8fb9f23116be7a21cd3534_332601de685b302a",
+            "provider": "local",
+            "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+            "requested_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+            "reported_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+            "text": "{\"summary\":\"Construct quote.json calculator that computes declared_cost_cents and validates inputs based on non-negativity and capacity constraints\",\"actions\":[{\"tool\":\"construct_instrument\",\"name\":\"quote.json\",\"spec\":{\"name\":\"Quote Calculator\",\"inputs\":[\"quantity\",\"unit_cost_cents\",\"setup_cents\",\"verification_cents\",\"maintenance_cents\",\"capacity\"],\"outputs\":{\"declared_cost_cents\":{\"op\":\"add\",\"args\":[{\"op\":\"mul\",\"args\":[{\"field\":\"quantity\"},{\"field\":\"unit_cost_cents\"}]},{\"field\":\"setup_cents\"},{\"field\":\"verification_cents\"},{\"field\":\"maintenance_cents\"}]},{\"valid\":{\"op\":\"and\",\"args\":[{\"op\":\"and\",\"args\":[{\"op\":\"gte\",\"args\":[{\"field\":\"quantity\"},{\"literal\":0}]},{\"op\":\"gte\",\"args\":[{\"field\":\"unit_cost_cents\"},{\"literal\":0}]},{\"op\":\"gte\",\"args\":[{\"field\":\"setup_cents\"},{\"literal\":0}]},{\"op\":\"gte\",\"args\":[{\"field\":\"verification_cents\"},{\"literal\":0}]},{\"op\":\"gte\",\"args\":[{\"field\":\"maintenance_cents\"},{\"literal\":0}]},{\"op\":\"gte\",\"args\":[{\"field\":\"capacity\"},{\"literal\":0}]}]}},\"within_capacity\":{\"op\":\"lte\",\"args\":[{\"field\":\"quantity\"},{\"field\":\"capacity\"}]}}}]}},\"done\":true}",
+            "usage": {
+              "input_tokens": 1149,
+              "output_tokens": 265
+            },
+            "tool_calls": [],
+            "usage_class": "local_compute",
+            "cost": {
+              "currency": "USD",
+              "amount": 0.0,
+              "accounted": 0.0,
+              "basis": "reported_usage_at_user_rates",
+              "attempts": 1,
+              "complete_cost_known": false
+            },
+            "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION"
+          },
+          "wall_seconds": 91.08400136700001
+        },
+        {
+          "run_id": "wf_fe8fb9f23116be7a21cd3534_e8b7084236c6af0d",
+          "prompt_sha256": "cd5acfdf54704b406a077bac02406725ac0e537a096751d521957f27bfd5d6e2",
+          "response": {
+            "run_id": "wf_fe8fb9f23116be7a21cd3534_e8b7084236c6af0d",
+            "provider": "local",
+            "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+            "requested_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+            "reported_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+            "text": "{\"summary\":\"Construct quote calculator with validated inputs and cost computation\",\"actions\":[{\"tool\":\"construct_instrument\",\"name\":\"quote.json\",\"spec\":{\"name\":\"Quote Calculator\",\"inputs\":[\"quantity\",\"unit_cost_cents\",\"setup_cents\",\"verification_cents\",\"maintenance_cents\",\"capacity\"],\"outputs\":{\"declared_cost_cents\":{\"op\":\"add\",\"args\":[{\"op\":\"mul\",\"args\":[{\"field\":\"quantity\"},{\"field\":\"unit_cost_cents\"}]},{\"field\":\"setup_cents\"},{\"field\":\"verification_cents\"},{\"field\":\"maintenance_cents\"}]},\"valid\":{\"op\":\"and\",\"args\":[{\"op\":\"gte\",\"args\":[{\"field\":\"quantity\"},{\"value\":0}]},{\"op\":\"gte\",\"args\":[{\"field\":\"unit_cost_cents\"},{\"value\":0}]},{\"op\":\"gte\",\"args\":[{\"field\":\"setup_cents\"},{\"value\":0}]},{\"op\":\"gte\",\"args\":[{\"field\":\"verification_cents\"},{\"value\":0}]},{\"op\":\"gte\",\"args\":[{\"field\":\"maintenance_cents\"},{\"value\":0}]},{\"op\":\"gte\",\"args\":[{\"field\":\"capacity\"},{\"value\":0}]}]},\"within_capacity\":{\"op\":\"lte\",\"args\":[{\"field\":\"quantity\"},{\"field\":\"capacity\"}]}}}]}},\"done\":true}",
+            "usage": {
+              "input_tokens": 1163,
+              "output_tokens": 245
+            },
+            "tool_calls": [],
+            "usage_class": "local_compute",
+            "cost": {
+              "currency": "USD",
+              "amount": 0.0,
+              "accounted": 0.0,
+              "basis": "reported_usage_at_user_rates",
+              "attempts": 1,
+              "complete_cost_known": false
+            },
+            "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION"
+          },
+          "wall_seconds": 51.61539066399996
+        }
+      ],
+      "artifact_hashes": {},
+      "archive_sha256": "c3c0617387ef5064d4829fa3a2aca4d6e1c25d27d817559971d7b7e415260873"
+    },
+    {
+      "id": "lab_inherit",
+      "status": "BLOCKED",
+      "reason": "Original construction did not pass; no verified capability to inherit."
+    },
+    {
+      "id": "lab_fresh",
+      "status": "exhausted",
+      "wall_seconds": 115.22696502100001,
+      "model_calls": 2,
+      "actions": 0,
+      "verification": {
+        "checks": [],
+        "passed": false,
+        "scope": "No checks executed."
+      },
+      "state_id": "wf_ae9ccf92a6ccb985c6b2cb3e",
+      "events": [
+        {
+          "at": "2026-11-10T06:04:19.920190+00:00",
+          "detail": {
+            "acceptance_source": "Operator-frozen conditions; independence is not inferred.",
+            "spec_hash": "6b504e0d5ff3a8c6e6a16b98abf16fe4ca81fa8cf46ad3bfec961ceb0f90489d"
+          },
+          "index": 0,
+          "kind": "created",
+          "previous": "0000000000000000000000000000000000000000000000000000000000000000",
+          "sha256": "9dc62fd467d2bcc14ceb5575894d70f81ff93606fcbf8a2002fcdc61b4fe7dac"
+        },
+        {
+          "at": "2026-11-10T06:04:19.921807+00:00",
+          "detail": {
+            "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+            "provider": "local",
+            "role": "builder",
+            "run_id": "wf_ae9ccf92a6ccb985c6b2cb3e_7f48a55efc0c99f6"
+          },
+          "index": 1,
+          "kind": "model_started",
+          "previous": "9dc62fd467d2bcc14ceb5575894d70f81ff93606fcbf8a2002fcdc61b4fe7dac",
+          "sha256": "20d1445364724e4647ad1ed956a0b6419a4fde3303cccdea1af5cd5b6956525d"
+        },
+        {
+          "at": "2026-11-10T06:05:25.954030+00:00",
+          "detail": {
+            "cost": {
+              "accounted": 0.0,
+              "amount": 0.0,
+              "attempts": 1,
+              "basis": "reported_usage_at_user_rates",
+              "complete_cost_known": false,
+              "currency": "USD"
+            },
+            "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+            "provider": "local",
+            "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+            "reported_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+            "requested_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+            "response_sha256": "2f3fccd0336507fc65d068258216f47751b3797c9d4958bd03977b97c3985e1a",
+            "role": "builder",
+            "run_id": "wf_ae9ccf92a6ccb985c6b2cb3e_7f48a55efc0c99f6",
+            "usage": {
+              "input_tokens": 1001,
+              "output_tokens": 258
+            }
+          },
+          "index": 2,
+          "kind": "model_completed",
+          "previous": "20d1445364724e4647ad1ed956a0b6419a4fde3303cccdea1af5cd5b6956525d",
+          "sha256": "6092fa83345f5d154ed6c10d260c03618c368308d584254ea427d96f66f80280"
+        },
+        {
+          "at": "2026-11-10T06:05:25.954101+00:00",
+          "detail": {
+            "reason": "Malformed or unsupported response: A valid finite JSON object is required."
+          },
+          "index": 3,
+          "kind": "response_refused",
+          "previous": "6092fa83345f5d154ed6c10d260c03618c368308d584254ea427d96f66f80280",
+          "sha256": "283f34cac611d2933b8f3de743648d1189be13dcec8a379dd3068a9e2f25a553"
+        },
+        {
+          "at": "2026-11-10T06:05:25.956189+00:00",
+          "detail": {
+            "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+            "provider": "local",
+            "role": "builder",
+            "run_id": "wf_ae9ccf92a6ccb985c6b2cb3e_26386806d6742368"
+          },
+          "index": 4,
+          "kind": "model_started",
+          "previous": "283f34cac611d2933b8f3de743648d1189be13dcec8a379dd3068a9e2f25a553",
+          "sha256": "68fa6a392f79ddf045ad2794f9eb174bf74dab4ca116a6f9e9ee8e74b51e9c44"
+        },
+        {
+          "at": "2026-11-10T06:06:15.142141+00:00",
+          "detail": {
+            "cost": {
+              "accounted": 0.0,
+              "amount": 0.0,
+              "attempts": 1,
+              "basis": "reported_usage_at_user_rates",
+              "complete_cost_known": false,
+              "currency": "USD"
+            },
+            "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+            "provider": "local",
+            "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+            "reported_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+            "requested_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+            "response_sha256": "101094632953a4c0f88cae7b77f92a87452d2c1236a4244f94c2b887d394a2d6",
+            "role": "builder",
+            "run_id": "wf_ae9ccf92a6ccb985c6b2cb3e_26386806d6742368",
+            "usage": {
+              "input_tokens": 1015,
+              "output_tokens": 246
+            }
+          },
+          "index": 5,
+          "kind": "model_completed",
+          "previous": "68fa6a392f79ddf045ad2794f9eb174bf74dab4ca116a6f9e9ee8e74b51e9c44",
+          "sha256": "5c45a505cb854ab80a3853052d34adac6e77d637b06a4706d1a9d339e0cafa95"
+        },
+        {
+          "at": "2026-11-10T06:06:15.142211+00:00",
+          "detail": {
+            "reason": "Malformed or unsupported response: A valid finite JSON object is required."
+          },
+          "index": 6,
+          "kind": "response_refused",
+          "previous": "5c45a505cb854ab80a3853052d34adac6e77d637b06a4706d1a9d339e0cafa95",
+          "sha256": "67c079b5a0fc24435cefda61bd35ded9d36bce289a81c5c741dedc0bc8d45b76"
+        },
+        {
+          "index": 7,
+          "at": "2026-11-10T06:06:15.144703+00:00",
+          "kind": "stopped",
+          "detail": {
+            "reason": "Declared iteration or action bound reached."
+          },
+          "previous": "67c079b5a0fc24435cefda61bd35ded9d36bce289a81c5c741dedc0bc8d45b76",
+          "sha256": "be56d260325d08ca32f5117645604c1f293479445805f8ec82ddbb3104570df4"
+        }
+      ],
+      "observations": [
+        {
+          "run_id": "wf_ae9ccf92a6ccb985c6b2cb3e_7f48a55efc0c99f6",
+          "prompt_sha256": "396e1d2371164a874d8c6d557ba9bd6a16b3564401d7a72c89ee3a14026f1a21",
+          "response": {
+            "run_id": "wf_ae9ccf92a6ccb985c6b2cb3e_7f48a55efc0c99f6",
+            "provider": "local",
+            "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+            "requested_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+            "reported_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+            "text": "{\"summary\":\"Construct quote.json calculator with six inputs and three outputs as specified\",\"actions\":[{\"tool\":\"construct_instrument\",\"name\":\"quote.json\",\"spec\":{\"name\":\"Quote Calculator\",\"inputs\":[\"quantity\",\"unit_cost_cents\",\"setup_cents\",\"verification_cents\",\"maintenance_cents\",\"capacity\"],\"outputs\":{\"declared_cost_cents\":{\"op\":\"add\",\"args\":[{\"op\":\"mul\",\"args\":[{\"field\":\"quantity\"},{\"field\":\"unit_cost_cents\"}]},{\"field\":\"setup_cents\"},{\"field\":\"verification_cents\"},{\"field\":\"maintenance_cents\"}]},{\"valid\":{\"op\":\"and\",\"args\":[{\"op\":\"gte\",\"args\":[{\"field\":\"quantity\"},{\"literal\":0}]},\"{op\":\"gte\",\"args\":[{\"field\":\"unit_cost_cents\"},{\"literal\":0}]},\"{op\":\"gte\",\"args\":[{\"field\":\"setup_cents\"},{\"literal\":0}]},\"{op\":\"gte\",\"args\":[{\"field\":\"verification_cents\"},{\"literal\":0}]},\"{op\":\"gte\",\"args\":[{\"field\":\"maintenance_cents\"},{\"literal\":0}]},\"{op\":\"gte\",\"args\":[{\"field\":\"capacity\"},{\"literal\":0}]}]},\"within_capacity\":{\"op\":\"lte\",\"args\":[{\"field\":\"quantity\"},{\"field\":\"capacity\"}]}}}]}},\"done\":true}",
+            "usage": {
+              "input_tokens": 1001,
+              "output_tokens": 258
+            },
+            "tool_calls": [],
+            "usage_class": "local_compute",
+            "cost": {
+              "currency": "USD",
+              "amount": 0.0,
+              "accounted": 0.0,
+              "basis": "reported_usage_at_user_rates",
+              "attempts": 1,
+              "complete_cost_known": false
+            },
+            "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION"
+          },
+          "wall_seconds": 66.03085918599999
+        },
+        {
+          "run_id": "wf_ae9ccf92a6ccb985c6b2cb3e_26386806d6742368",
+          "prompt_sha256": "ff728252707cb4f59b4145e52ed4ca20b3a98fbf4dbda51cbe19c7087936d7c7",
+          "response": {
+            "run_id": "wf_ae9ccf92a6ccb985c6b2cb3e_26386806d6742368",
+            "provider": "local",
+            "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+            "requested_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+            "reported_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+            "text": "{\"summary\":\"Construct quote calculator with six inputs and three outputs as specified\",\"actions\":[{\"tool\":\"construct_instrument\",\"name\":\"quote.json\",\"spec\":{\"name\":\"Quote Calculator\",\"inputs\":[\"quantity\",\"unit_cost_cents\",\"setup_cents\",\"verification_cents\",\"maintenance_cents\",\"capacity\"],\"outputs\":{\"declared_cost_cents\":{\"op\":\"add\",\"args\":[{\"op\":\"mul\",\"args\":[{\"field\":\"quantity\"},{\"field\":\"unit_cost_cents\"}]},{\"field\":\"setup_cents\"},{\"field\":\"verification_cents\"},{\"field\":\"maintenance_cents\"}]},{\"valid\":{\"op\":\"and\",\"args\":[{\"op\":\"gte\",\"args\":[{\"field\":\"quantity\"},{\"literal\":0}]},{\"op\":\"gte\",\"args\":[{\"field\":\"unit_cost_cents\"},{\"literal\":0}]},{\"op\":\"gte\",\"args\":[{\"field\":\"setup_cents\"},{\"literal\":0}]},{\"op\":\"gte\",\"args\":[{\"field\":\"verification_cents\"},{\"literal\":0}]},{\"op\":\"gte\",\"args\":[{\"field\":\"maintenance_cents\"},{\"literal\":0}]},{\"op\":\"gte\",\"args\":[{\"field\":\"capacity\"},{\"literal\":0}]}]},{\"within_capacity\":{\"op\":\"lte\",\"args\":[{\"field\":\"quantity\"},{\"field\":\"capacity\"}]}}}}],\"done\":true}",
+            "usage": {
+              "input_tokens": 1015,
+              "output_tokens": 246
+            },
+            "tool_calls": [],
+            "usage_class": "local_compute",
+            "cost": {
+              "currency": "USD",
+              "amount": 0.0,
+              "accounted": 0.0,
+              "basis": "reported_usage_at_user_rates",
+              "attempts": 1,
+              "complete_cost_known": false
+            },
+            "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION"
+          },
+          "wall_seconds": 49.184405818000016
+        }
+      ],
+      "artifact_hashes": {},
+      "archive_sha256": "43159885af055b2287bd4d17d06be3db58b9e98b5ce47155a06839b0cf5f520f"
+    }
+  ],
+  "outside_execution": [],
+  "numerical_boundary": [],
+  "status": "FAIL",
+  "claims": {
+    "live_local_inference": true,
+    "useful_artifact_constructed": false,
+    "successor_reuse_accepted": false,
+    "economic_superiority": "NOT_ESTABLISHED",
+    "novelty": "NOT_ESTABLISHED",
+    "commercial_validation": "NOT_ESTABLISHED"
+  },
+  "full_cost_boundaries": {
+    "known": "API charges zero because local CPU inference; actual tokens and elapsed/CPU telemetry recorded. Declared planning costs are explicitly authored inputs.",
+    "unknown": [
+      "electricity and hardware depreciation",
+      "human authoring/review/setup/download costs",
+      "future maintenance and validation",
+      "taxes, financing and acquisition not supplied in the input contract",
+      "actual demand, buyer acceptance and collected revenue"
+    ],
+    "comparison": "Original construction costs remain visible for inheritance. No economic superiority, profitability, novelty or autonomous scientific invention is presumed."
+  },
+  "ordinary_control": {
+    "status": "PASS",
+    "model_calls": 0,
+    "cases": 11,
+    "method": "Direct conventional scalar arithmetic and sign/capacity comparisons, same contract and inputs.",
+    "cost_scope": "No inference requests. Human implementation, review and operating cost are unmeasured, not zero."
+  },
+  "discovery": {
+    "models": [
+      {
+        "id": "Qwen3-4B-Instruct-2507-Q4_K_M",
+        "configured": true
+      }
+    ],
+    "scope": "Provider-reported first page; listing does not prove generation access or model capability.",
+    "has_more": false
+  },
+  "source_unchanged": true,
+  "final_source_sha256": {
+    "bridge/adapters.py": "9df37397ab9931d0738f0148ca15703f0ecbfa6c88149987684cf8f9f05ac22e",
+    "bridge/streaming.py": "dd4cd766fb911e350358d4f31f7053b4d6847b189243cf1ce1108ebc834b21ec",
+    "bridge/workflows.py": "51663d8068fb1a8ca3fe4b75887e725058dd5f828692bd1a158761681cf3ad0c",
+    "bridge/workflow_strategies.py": "bb639bfe6467c1da816149fc5918f785f9df8053b3e5fc841f9e0cdef3115124",
+    "bridge/instruments.py": "787466086e1303599aa4576c1c677e732257efa10d2bf932b96a705a96ac03b9",
+    "scripts/qualify_quote_workflow_003.py": "4eb036eb8e99802d8d3ba696a781b3044a2505add308c8db37590b5adc01286d"
+  },
+  "resource": {
+    "child_cpu_seconds": 519.256077,
+    "api_paid_requests": 0,
+    "local_compute_full_cost": null
+  },
+  "comparison_verdict": "Conventional direct arithmetic accepts every fixed case with zero inference. Inheritance can reuse a verified artifact, but no superior outcome or complete-cost advantage over that capable control is established. Initial construction and all failed attempts remain charged/visible."
+}

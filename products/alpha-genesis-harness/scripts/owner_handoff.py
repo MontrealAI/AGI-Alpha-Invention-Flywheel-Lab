@@ -368,6 +368,7 @@ def assemble(args):
         screenshot_dirs.insert(0, args.screenshots_dir.resolve(strict=True))
     screenshots = []
     screenshot_bindings = []
+    browser_exports = []
     platforms = []
     browser = None
     for directory_index, directory in enumerate(screenshot_dirs, 1):
@@ -410,6 +411,32 @@ def assemble(args):
                     log = directory / f'{platform_name}-operation-{index}.{suffix}.txt'
                     if log.is_file() and not log.is_symlink() and log.stat().st_size < 5_000_000:
                         copy_bytes(folder, '05-VERIFICATION/operation-logs/' + log.name, log.read_bytes())
+        for prefix, graphical in [('',candidate)] + [(name+'-',record) for name,(value,_target) in platform_receipts.items() for record in [value.get('browser_report')]]:
+            if not graphical or not graphical.get('exports'):
+                continue
+            if graphical.get('source_revision') != args.source_sha or graphical.get('status') != 'PASS':
+                raise ValueError('Browser exports require a successful matching-source receipt')
+            for item in graphical['exports']:
+                name = item.get('file')
+                if not isinstance(name,str) or not safe_path(name) or '/' in name:
+                    raise ValueError('Unsafe browser export filename')
+                exported = directory/(prefix+name)
+                if exported.is_symlink() or not exported.is_file() or not 0 < exported.stat().st_size <= 30_000_000:
+                    raise ValueError('Missing or unsafe browser export file')
+                data = exported.read_bytes()
+                if type(item.get('bytes')) is not int or item['bytes'] != len(data) or digest(data) != item.get('sha256'):
+                    raise ValueError('Browser export bytes differ from their receipt')
+                target = '05-VERIFICATION/browser-exports/'+prefix+name
+                if (folder/target).exists() and (folder/target).read_bytes() != data:
+                    raise ValueError('Conflicting browser export filename')
+                copy_bytes(folder,target,data)
+                if not any(row['path']==target for row in browser_exports):
+                    browser_exports.append({'path':target,'sha256':digest(data),'bytes':len(data)})
+        for platform_name in platform_receipts:
+            for suffix in ('stdout','stderr'):
+                log = directory/f'{platform_name}-launcher.{suffix}.txt'
+                if log.is_file() and not log.is_symlink() and log.stat().st_size < 5_000_000:
+                    copy_bytes(folder,'05-VERIFICATION/operation-logs/'+log.name,log.read_bytes())
         candidates = sorted(set(directory.glob('HARNESS-*.png')) | set(directory.glob('*-HARNESS-*.png')))
         for image in candidates:
             if image.is_symlink() or image.stat().st_size > 20_000_000:
@@ -466,6 +493,19 @@ def assemble(args):
                     if (folder / log_target).exists() and (folder / log_target).read_bytes() != log.read_bytes():
                         raise ValueError('Conflicting native Codex diagnostic filename')
                     copy_bytes(folder, log_target, log.read_bytes())
+    source_probe_receipts = []
+    for name in ('FRONTIER-MONITOR-VERIFICATION.json','UPGRADE-FOUNDRY-HOST-VERIFICATION.json'):
+        file = asset_dir/name
+        if not file.exists():
+            continue
+        if file.is_symlink() or not file.is_file() or file.stat().st_size >= 5_000_000:
+            raise ValueError('Unsafe extension probe receipt')
+        record = read_json(file)
+        if (record.get('source_revision') != args.source_sha or record.get('archive_sha256') != archive_hash
+                or record.get('status') not in {'PASS','FAIL','BLOCKED'}):
+            raise ValueError('Extension probe must identify this exact source and archive')
+        target = copy_bytes(folder,'05-VERIFICATION/'+name,file.read_bytes())
+        source_probe_receipts.append({'path':target,'status':record['status'],'sha256':digest(file.read_bytes())})
     rows = matrix['criteria']
     remaining = [r for r in rows if r['status'] != 'PASS']
     blocked = [r for r in rows if r['status'] == 'BLOCKED']
@@ -500,7 +540,9 @@ def assemble(args):
         '6': ['02-EXPLORE-THE-EDITION/bridge/config.example.json'],
         '7': ['02-EXPLORE-THE-EDITION/bridge/config.local-only.example.json'],
         '8': ['03-MANUAL-UPLOAD/CHATGPT-APPROVAL-MATERIALS.md'],
-        '11': ['02-EXPLORE-THE-EDITION/bridge/genesis_next.py', '02-EXPLORE-THE-EDITION/scripts/qualify_genesis_successor.py'],
+        '10': ['02-EXPLORE-THE-EDITION/docs/FRONTIER-MONITOR.md'],
+        '11': ['02-EXPLORE-THE-EDITION/bridge/genesis_next.py', '02-EXPLORE-THE-EDITION/scripts/qualify_genesis_successor.py',
+               '02-EXPLORE-THE-EDITION/docs/UPGRADE-FOUNDRY.md','02-EXPLORE-THE-EDITION/bridge/upgrade_foundry.py'],
         '13': ['05-VERIFICATION/OMEGA-FRESH-SOURCE-FREEZE.json', '05-VERIFICATION/OMEGA-FRESH-SUCCESSOR.json',
                '02-EXPLORE-THE-EDITION/evidence/OMEGA-PROTOCOL.md', '02-EXPLORE-THE-EDITION/evidence/OMEGA-FRESH-SUCCESSOR-PROTOCOL.md'],
         '15': ['02-EXPLORE-THE-EDITION/docs/PRIVACY.md', '02-EXPLORE-THE-EDITION/LICENSE', '02-EXPLORE-THE-EDITION/THIRD-PARTY.json'],
@@ -509,6 +551,7 @@ def assemble(args):
         '20': ['02-EXPLORE-THE-EDITION/docs/EDITION.md'],
         '22': ['05-VERIFICATION/PUBLISHED-OPERATION.json'],
     }
+    required_paths['13'].extend(row['path'] for row in browser_exports+source_probe_receipts)
     inventory = []
     for number, label, path in items:
         paths = [path] + required_paths.get(number, [])
@@ -526,6 +569,7 @@ def assemble(args):
                 'native_codex_probe_receipts': native_probe_receipts,
                 'model_evidence_archive': model_evidence_view,
                 'published_operation_evidence': operation_evidence,
+                'browser_exports':browser_exports, 'source_probe_receipts':source_probe_receipts,
                 'squarespace_activity':'NONE; explicitly reserved to Vincent',
                 'required_deliverables':inventory, 'remaining_criteria':remaining,
                 'scope':'The customer ZIP is copied byte-for-byte. The expanded copy is for owner inspection. This bundle does not certify live access or promote candidate/commercial status.'}

@@ -32,6 +32,7 @@ class OwnerHandoffTests(unittest.TestCase):
    'bridge/config.example.json':b'{}',
    'bridge/config.local-only.example.json':b'{}',
    'bridge/genesis_next.py':b'# Synthetic GENESIS fixture; not executed\n',
+   'bridge/upgrade_foundry.py':b'# Synthetic foundry fixture; not executed\n',
    'scripts/qualify_genesis_successor.py':b'# Synthetic successor fixture; not executed\n',
    'evidence/OMEGA-PROTOCOL.md':b'Synthetic bounded construction protocol',
    'evidence/OMEGA-FRESH-SUCCESSOR-PROTOCOL.md':b'Synthetic fresh-instance protocol',
@@ -41,7 +42,7 @@ class OwnerHandoffTests(unittest.TestCase):
    'commercial/listing.json':b'{}',
    'commercial/storefront-checklist.md':b'Owner only',
   }
-  for name in ['INSTALLATION','MODEL-CONNECTIONS','QUICKSTART','OPERATOR','TROUBLESHOOTING','PRIVACY','RELEASE-NOTES','FAQ','EDITION','CHATGPT-COMMERCIAL-APPLICATION','CHATGPT-PLAN','PROVIDER-PROTOCOLS','OMEGA-GENESIS-NEXT','RELEASE']:
+  for name in ['INSTALLATION','MODEL-CONNECTIONS','QUICKSTART','OPERATOR','TROUBLESHOOTING','PRIVACY','RELEASE-NOTES','FAQ','EDITION','CHATGPT-COMMERCIAL-APPLICATION','CHATGPT-PLAN','PROVIDER-PROTOCOLS','OMEGA-GENESIS-NEXT','RELEASE','UPGRADE-FOUNDRY','FRONTIER-MONITOR']:
    self.content['docs/'+name+'.md']=b'synthetic documentation fixture'
   self.manifest={'schema':'alpha-genesis-harness-release/v1','version':'0.3.0','source_revision':SOURCE,'source_product_tree':'b'*40,'build_mode':'source-bound','source_matches_commit':True,'release_status':'release-candidate'}
   self.write_archive()
@@ -77,6 +78,30 @@ class OwnerHandoffTests(unittest.TestCase):
   page=(folder/'00-OWNER-START.html').read_text()
   self.assertIn('&lt;script&gt;',page);self.assertNotIn('<script>alert(1)</script>',page)
   self.assertIn('not a declaration that the full commercial mandate is complete',page)
+ def test_browser_exports_and_extension_probes_are_preserved_without_new_categories(self):
+  data=b'{"experiments":["synthetic-owner-export"]}'
+  file=self.assets/'GENESIS-NEXT-browser-export.json';file.write_bytes(data)
+  receipt_path=self.assets/'BROWSER-VERIFICATION.json';receipt=json.loads(receipt_path.read_text())
+  receipt['exports']=[{'file':file.name,'bytes':len(data),'sha256':module.digest(data)}];receipt_path.write_text(json.dumps(receipt))
+  probe={'source_revision':SOURCE,'archive_sha256':module.digest(self.archive.read_bytes()),'status':'BLOCKED','scope':'Synthetic receipt only'}
+  probe_path=self.assets/'FRONTIER-MONITOR-VERIFICATION.json';probe_path.write_text(json.dumps(probe))
+  result=module.assemble(self.args);folder=Path(result['owner_directory']);identity=json.loads((folder/'OWNER-HANDOFF.json').read_text())
+  self.assertEqual(result['included_deliverable_types'],22)
+  self.assertEqual((folder/'05-VERIFICATION/browser-exports'/file.name).read_bytes(),data)
+  self.assertEqual((folder/'05-VERIFICATION'/probe_path.name).read_bytes(),probe_path.read_bytes())
+  self.assertEqual(identity['source_probe_receipts'][0]['status'],'BLOCKED')
+  self.assertEqual(identity['browser_exports'][0]['sha256'],module.digest(data))
+  foundry=next(row for row in identity['required_deliverables'] if row['id']=='11')
+  self.assertIn('02-EXPLORE-THE-EDITION/docs/UPGRADE-FOUNDRY.md',foundry['paths'])
+  self.assertFalse(identity['commercially_ready'])
+ def test_browser_export_substitution_is_refused(self):
+  file=self.assets/'export.json';file.write_bytes(b'{}')
+  receipt_path=self.assets/'BROWSER-VERIFICATION.json';receipt=json.loads(receipt_path.read_text())
+  receipt['exports']=[{'file':file.name,'bytes':2,'sha256':'0'*64}];receipt_path.write_text(json.dumps(receipt))
+  with self.assertRaisesRegex(ValueError,'Browser export bytes'):module.assemble(self.args)
+ def test_foreign_extension_probe_is_refused(self):
+  (self.assets/'UPGRADE-FOUNDRY-HOST-VERIFICATION.json').write_text(json.dumps({'source_revision':'c'*40,'archive_sha256':module.digest(self.archive.read_bytes()),'status':'PASS'}))
+  with self.assertRaisesRegex(ValueError,'Extension probe'):module.assemble(self.args)
  def test_22_categories_include_genesis_source_and_untouched_fresh_successor_evidence(self):
   result=module.assemble(self.args);folder=Path(result['owner_directory'])
   identity=json.loads((folder/'OWNER-HANDOFF.json').read_text(encoding='utf-8'))

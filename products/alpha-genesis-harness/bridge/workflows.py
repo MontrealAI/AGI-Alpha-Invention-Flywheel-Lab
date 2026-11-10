@@ -129,6 +129,9 @@ def _atomic(path, data):
 class WorkflowService:
     """One local service owns each private root. No shell, payments, or external tools."""
     def __init__(self, runtime, private_root):
+        if isinstance(runtime, Runtime):
+            from .services import AccessRuntime
+            runtime = AccessRuntime(runtime)
         self.runtime = runtime
         self.root = Path(private_root).expanduser().absolute()
         require(not any(p.is_symlink() for p in [self.root, *self.root.parents]), "Workspace parents must not be symlinks.")
@@ -157,6 +160,7 @@ class WorkflowService:
             shared = _WORKSPACES[str(self.root)]
             shared[5]["references"] += 1
         self._locks, self._workers, self._inflight, self._guard = shared[:4]
+        self._waiting = shared[5].setdefault("waiting", {})
         self._closed = False
         key_path = self.root / ".integrity-key"
         try:
@@ -180,17 +184,17 @@ class WorkflowService:
             shared[5]["references"] -= 1
             if shared[5]["references"] > 0:
                 return
-        for ident in list(self._inflight):
+        for ident in list(set(self._inflight) | set(self._waiting)):
             self._interrupt(ident, "paused")
         with _WORKSPACES_LOCK:
-            if not self._inflight and not self._workers:
+            if not self._inflight and not self._workers and not self._waiting:
                 os.close(shared[4])
                 _WORKSPACES.pop(str(self.root), None)
 
     def _release_closed_lease(self):
         with _WORKSPACES_LOCK:
             shared = _WORKSPACES.get(str(self.root))
-            if shared and shared[5]["references"] <= 0 and not self._inflight and not self._workers:
+            if shared and shared[5]["references"] <= 0 and not self._inflight and not self._workers and not self._waiting:
                 os.close(shared[4])
                 _WORKSPACES.pop(str(self.root), None)
 
@@ -247,6 +251,7 @@ class WorkflowService:
     def _view(self, state):
         result = copy.deepcopy(state)
         result["worker_active"] = state["id"] in self._workers
+        result["waiting_for_capacity"] = state["id"] in self._waiting and state["status"] not in TERMINAL | {"paused"}
         result["objective"] = state["spec"]["objective"]
         result["roles"] = state["spec"]["roles"]
         if state.get("branch_runs"):
@@ -268,6 +273,8 @@ class WorkflowService:
                 requests[detail["run_id"]] = {"workflow": state["id"], "event_index": event["index"], "event_kind": "model_started",
                     "run_id": detail["run_id"], "role": detail.get("role"), "provider": detail.get("provider"), "model": detail.get("model"),
                     "cost": None, "usage": None, "cost_uncertain": True}
+            elif event["kind"] == "model_not_dispatched":
+                requests.pop(detail["run_id"], None)
             elif event["kind"] in {"model_completed", "model_error", "late_result_discarded"}:
                 request_id = detail.get("run_id")
                 if request_id is None and requests:  # Earlier edition error events lacked an ID.
@@ -414,6 +421,7 @@ class WorkflowService:
                 'construct_instrument {name:"calculator.json",spec:{name:"...",inputs:["x"],outputs:{result:{op:"mul",args:[{field:"x"},2]}}}}; '
                 'run_instrument {name:"calculator.json",input:{x:2}}; read_artifact {name:"report.md"}. '
                 'Expressions support finite numeric literals, fields, add/sub/mul/div/min/max/sum/count/eq/lt/lte/gt/gte/and/or/not/if. '
+                'A numeric literal is a bare JSON number such as 2 or -0.5, never {"value":2} or {"literal":2}. A field leaf has exactly {"field":"name"}; an operator has exactly {"op":"mul","args":[{"field":"x"},2]}. '
                 'Each action has its arguments at the TOP LEVEL beside tool, never inside arguments, parameters or input. '
                 'Complete formatting example for a different sum task: {"summary":"Construct sum","actions":[{"tool":"construct_instrument","name":"sum.json","spec":{"name":"Sum","inputs":["a","b"],"outputs":{"sum":{"op":"add","args":[{"field":"a"},{"field":"b"}]}}}}],"done":true}. '
                 'Only the operator-enabled subset of tools may run: ' + ", ".join(spec["tool_permissions"]) + '. '
@@ -561,8 +569,51 @@ class WorkflowService:
                 parent_strategy = False
         if parent_strategy:
             return strategy_step(self, ident)
+        if not hasattr(self.runtime, "execution_slot"):
+            return self._step_model(ident)
         with self._lock(ident):
             state = self._load(ident)
+            require(ident not in self._waiting and ident not in self._inflight, "A model request is queued or active.", "WORKFLOW_BUSY")
+            require(state["status"] not in TERMINAL | {"paused"} and state["inflight"] is None, "Resume the workflow before dispatch.", "WORKFLOW_STATE")
+            role = state["phase"]
+            if state["model_calls"] >= state.get("model_call_limit", call_limit(state["spec"])) or (role == "builder" and (state["iteration"] >= state["spec"]["max_iterations"] or state["actions"] >= state["spec"]["max_actions"])):
+                return self._step_model(ident)
+            route, epoch, marker = state["spec"]["roles"][role], state["epoch"], object()
+            self._waiting[ident] = marker
+            self._event(state, "model_queued", {"role": role, **route, "scope": "Waiting for selected service capacity; no model call or construction iteration consumed."})
+            self._save(state)
+        def cancelled():
+            with self._lock(ident):
+                current = self._load(ident)
+                return self._closed or current["epoch"] != epoch or current["status"] in TERMINAL | {"paused"}
+        admitted = False
+        try:
+            with self.runtime.execution_slot(route, cancelled=cancelled) as admission:
+                admitted = True
+                return self._step_model(ident, _admission=admission, _waiting=marker, _epoch=epoch)
+        except BridgeError as error:
+            if admitted:
+                raise
+            with self._lock(ident):
+                current = self._load(ident)
+                if current["epoch"] == epoch and current["status"] not in TERMINAL | {"paused"}:
+                    current["status"] = "paused"
+                    self._event(current, "admission_refused", {"code": error.code, "scope": "No model dispatch or attempt allowance consumed; inspect the selected connection before explicit resume."})
+                    self._save(current)
+                return self._view(current)
+        finally:
+            with self._lock(ident):
+                if self._waiting.get(ident) is marker:
+                    self._waiting.pop(ident, None)
+                self._release_closed_lease()
+
+    def _step_model(self, ident, _admission=None, _waiting=None, _epoch=None):
+        from .workflow_strategies import call_limit
+        with self._lock(ident):
+            state = self._load(ident)
+            require(self._waiting.get(ident) is _waiting, "A model request is already queued.", "WORKFLOW_BUSY")
+            require(_epoch is None or state["epoch"] == _epoch, "Queued request was interrupted before dispatch.", "WORKFLOW_STATE")
+            require(not self._closed, "Workflow service closed before dispatch.", "WORKFLOW_STATE")
             require(ident not in self._inflight, "A model request is already in progress.", "WORKFLOW_BUSY")
             require(state["inflight"] is None, "An interrupted request needs explicit resume before new dispatch.", "WORKFLOW_STATE")
             require(state["status"] not in TERMINAL | {"paused"}, "Resume a paused/interrupted workflow before stepping; terminal runs cannot dispatch.", "WORKFLOW_STATE")
@@ -587,11 +638,17 @@ class WorkflowService:
             state["inflight"] = {"run_id": request_id, "role": role, **route}
             state["status"] = "running"
             self._inflight[ident] = request_id
+            self._waiting.pop(ident, None)
             self._event(state, "model_started", state["inflight"])
             prompt = self._prompt(state, role)
             self._save(state)
         try:
             request = {**route, "run_id": request_id, "prompt": prompt, "max_output_tokens": state["spec"]["max_output_tokens"]}
+            if role in {"builder", "critic"} and hasattr(self.runtime, "provider"):
+                configured = self.runtime.provider(route["provider"])
+                model = getattr(configured, "models", {}).get(route["model"])
+                if getattr(configured, "kind", None) != "anthropic" and getattr(model, "json_mode", False) is True:
+                    request["json_mode"] = True
             progress = {"characters": 0, "reported": 0}
             def on_event(event):
                 if not isinstance(event, dict):
@@ -611,12 +668,28 @@ class WorkflowService:
                         self._save(live)
                         progress["reported"] = progress["characters"]
             supports_progress = "on_event" in inspect.signature(self.runtime.generate).parameters
-            result = self.runtime.generate(request, on_event=on_event) if supports_progress else self.runtime.generate(request)
+            options = {"on_event": on_event} if supports_progress else {}
+            if _admission is not None:
+                options["_admission"] = _admission
+            result = self.runtime.generate(request, **options)
             require(isinstance(result, dict) and isinstance(result.get("text"), str) and 0 < len(result["text"].encode()) <= MAX_FILE, "Model returned an invalid or oversized workflow response.", "WORKFLOW_MODEL_RESPONSE")
         except Exception as error:
             with self._lock(ident):
                 current = self._load(ident)
                 self._inflight.pop(ident, None)
+                if isinstance(error, BridgeError) and getattr(error, "pre_dispatch", False) is True:
+                    # Only the trusted admission boundary can prove no model was
+                    # invoked. Never refund a generic provider error or BUSY.
+                    current["model_calls"] -= 1
+                    if role == "builder":
+                        current["iteration"] -= 1
+                    current["inflight"] = None
+                    if current["epoch"] == epoch:
+                        current["status"] = "paused"
+                    self._event(current, "model_not_dispatched", {"run_id": request_id, "code": error.code, "attempt_allowance_restored": True})
+                    self._save(current)
+                    self._release_closed_lease()
+                    return self._view(current)
                 if current["epoch"] == epoch:
                     current["status"] = "paused"
                     current["inflight"] = None
@@ -762,7 +835,7 @@ class WorkflowService:
             state = self._load(ident)
             require(not state.get("parent_run"), "Internal branches must be started through their parent workflow.", "WORKFLOW_PERMISSION")
             require(state["status"] not in TERMINAL | {"paused"}, "Workflow cannot start from its current state.", "WORKFLOW_STATE")
-            require(ident not in self._workers and ident not in self._inflight, "Workflow already running.", "WORKFLOW_BUSY")
+            require(ident not in self._workers and ident not in self._inflight and ident not in self._waiting, "Workflow already running.", "WORKFLOW_BUSY")
             def run():
                 try:
                     while True:
@@ -810,7 +883,7 @@ class WorkflowService:
             if state.get("parent_run"):
                 require(_parent == state["parent_run"], "Internal branches must be resumed through their parent workflow.", "WORKFLOW_PERMISSION")
             require(state["status"] not in TERMINAL, "Terminal workflow cannot resume; create a new successor instead.", "WORKFLOW_STATE")
-            require(ident not in self._inflight and ident not in self._workers, "Wait for the previous request to finish before resuming.", "WORKFLOW_BUSY")
+            require(ident not in self._inflight and ident not in self._workers and ident not in self._waiting, "Wait for the previous request to finish before resuming.", "WORKFLOW_BUSY")
             state["epoch"] += 1
             state["status"] = "ready"
             if state["inflight"]:
@@ -827,7 +900,7 @@ class WorkflowService:
     def export(self, ident):
         with self._lock(ident):
             state = self._load(ident)
-            require(ident not in self._inflight, "Pause and wait before exporting a running request.", "WORKFLOW_BUSY")
+            require(ident not in self._inflight and ident not in self._waiting, "Pause and wait before exporting a running request.", "WORKFLOW_BUSY")
             files = {name: self._read_artifact(state, name).decode() for name in state["artifacts"]}
             value = {"schema": "alpha-genesis-workflow-export/v1", "state": state, "files": files,
                      "notice": "Contains your objective, context and artifacts. Inspect before sharing. No connector credentials or workspace integrity key included. Recorded verification is historical; recheck imported work."}

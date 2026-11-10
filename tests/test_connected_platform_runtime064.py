@@ -171,6 +171,26 @@ while True:
 
 
 class CurrentWorkflowPlatformTests(unittest.TestCase):
+    def assert_public_standard_job(self, workflow_name, name, job):
+        runner = 'ubuntu-latest'
+        if workflow_name == 'alpha-genesis-harness.yml' and name == 'local-model-qualification':
+            runner = 'ubuntu-24.04'
+        elif workflow_name == 'alpha-genesis-harness.yml' and name == 'platform-first-use':
+            runner = '${{ matrix.os }}'
+            strategies = re.findall(r'(?ms)^    strategy:\n(.*?)(?=^    \S|\Z)', job)
+            self.assertEqual(len(strategies), 1)
+            # Check the entire matrix, including possible include/override routes.
+            # Only these two standard native hosts were authorized for this job.
+            self.assertEqual(textwrap.dedent(strategies[0]).strip(),
+                             'fail-fast: false\nmatrix:\n  os: [macos-15, windows-2025]')
+        self.assertEqual(re.findall(r'(?m)^    runs-on: (.+)$', job), [runner])
+        self.assertEqual(re.findall(r'(?m)^    timeout-minutes: (.+)$', job), ['360'])
+        self.assertNotRegex(job, r'(?m)^    (?:container|services):')
+        first = workflow_steps(job)[0]
+        self.assertIn('AGI_JOB_START_EPOCH', first)
+        self.assertIn('GITHUB_ENV', first)
+        self.assertNotIn('actions/checkout', first)
+
     def test_all_current_jobs_use_the_public_standard_runner_and_platform_window(self):
         workflows = sorted((ROOT/'.github/workflows').glob('*.yml'))
         self.assertTrue(workflows)
@@ -179,13 +199,45 @@ class CurrentWorkflowPlatformTests(unittest.TestCase):
             self.assertTrue(jobs, workflow.name)
             for name, job in jobs.items():
                 with self.subTest(workflow=workflow.name, job=name):
-                    self.assertEqual(re.findall(r'(?m)^    runs-on: (.+)$', job), ['ubuntu-latest'])
-                    self.assertEqual(re.findall(r'(?m)^    timeout-minutes: (.+)$', job), ['360'])
-                    self.assertNotRegex(job, r'(?m)^    (?:container|services):')
-                    first = workflow_steps(job)[0]
-                    self.assertIn('AGI_JOB_START_EPOCH', first)
-                    self.assertIn('GITHUB_ENV', first)
-                    self.assertNotIn('actions/checkout', first)
+                    self.assert_public_standard_job(workflow.name, name, job)
+
+    def test_harness_native_runner_exceptions_cannot_expand_to_other_capacity_or_jobs(self):
+        workflow = 'alpha-genesis-harness.yml'
+        jobs = workflow_jobs((ROOT/'.github/workflows'/workflow).read_text())
+        native = jobs['platform-first-use']
+        local = jobs['local-model-qualification']
+        cases = [
+            (workflow, 'platform-first-use', native.replace('macos-15', 'macos-15-large')),
+            (workflow, 'platform-first-use', native.replace('windows-2025', 'self-hosted')),
+            (workflow, 'platform-first-use', native.replace('windows-2025]', 'windows-2025, ubuntu-24.04-16core]')),
+            (workflow, 'platform-first-use', native.replace('${{ matrix.os }}', '${{ matrix.runner }}')),
+            (workflow, 'platform-first-use', native.replace('os: [macos-15, windows-2025]',
+                'os: [macos-15, windows-2025]\n        include:\n          - os: self-hosted')),
+            (workflow, 'another-native-job', native),
+            ('another-workflow.yml', 'platform-first-use', native),
+            (workflow, 'local-model-qualification', local.replace('ubuntu-24.04', 'ubuntu-24.04-16core')),
+            (workflow, 'local-model-qualification', local.replace('ubuntu-24.04', '[self-hosted, gpu]')),
+            (workflow, 'another-local-job', local),
+            ('another-workflow.yml', 'local-model-qualification', local),
+        ]
+        for index, (filename, name, job) in enumerate(cases):
+            with self.subTest(case=index), self.assertRaises(AssertionError):
+                self.assert_public_standard_job(filename, name, job)
+
+    def test_approved_native_jobs_keep_window_isolation_and_initial_clock_guards(self):
+        workflow = 'alpha-genesis-harness.yml'
+        jobs = workflow_jobs((ROOT/'.github/workflows'/workflow).read_text())
+        for name in ('local-model-qualification', 'platform-first-use'):
+            job = jobs[name]
+            with self.subTest(job=name):
+                self.assert_public_standard_job(workflow, name, job)
+            mutations = [job.replace('timeout-minutes: 360', 'timeout-minutes: 720'),
+                         job.replace('    steps:\n', '    container: custom-image\n    steps:\n'),
+                         job.replace('    steps:\n', '    services:\n      sidecar: {}\n    steps:\n'),
+                         job.replace('AGI_JOB_START_EPOCH', 'UNRELATED_START_EPOCH', 1)]
+            for index, modified in enumerate(mutations):
+                with self.subTest(job=name, mutation=index), self.assertRaises(AssertionError):
+                    self.assert_public_standard_job(workflow, name, modified)
 
     def test_publisher_downloads_the_qualified_producer_id_not_its_current_attempt(self):
         jobs = workflow_jobs((ROOT/'.github/workflows/connected014-release.yml').read_text())

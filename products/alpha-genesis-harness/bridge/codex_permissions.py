@@ -1,5 +1,6 @@
 # SPDX-License-Identifier: Apache-2.0
 """Current official Codex permission profiles, checked before OAuth execution."""
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -13,6 +14,9 @@ import tempfile
 import threading
 
 from .adapters import BridgeError, strict_json
+
+# Bind this module before a later lazy self-upgrade evaluator imports it.
+LOADED_SOURCE_SHA256 = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
 
 PROFILE = "harness_isolated"
 

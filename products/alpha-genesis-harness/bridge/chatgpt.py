@@ -135,11 +135,16 @@ class PlanTransport:
             return value
 
     def events(self, token, body, cancel):
+        """Open synchronously so callers can bind dispatch to a locked authorization."""
+        if cancel.is_set():
+            raise BridgeError("CANCELLED", "ChatGPT request cancelled before dispatch.", 409)
+        response = self.open(RESOURCE + "/responses", token=token, body=body)
+        return self._events(response, cancel)
+
+    def _events(self, response, cancel):
         """SSE framing supports multiline data; interrupted streams never become success."""
         try:
-            if cancel.is_set():
-                raise BridgeError("CANCELLED", "ChatGPT request cancelled before dispatch.", 409)
-            with self.open(RESOURCE + "/responses", token=token, body=body) as response:
+            with response:
                 if "text/event-stream" not in response.headers.get("Content-Type", ""):
                     raise BridgeError("CHATGPT_STREAM", "ChatGPT did not return an event stream.", 502)
                 total, parts = 0, []
@@ -305,6 +310,8 @@ class CredentialStore:
 
 
 class ChatGPTPlanService:
+    max_concurrent = 1
+
     def __init__(self, config=None, storage_path=None, transport=None, browser_open=webbrowser.open, identity_verifier=verify_identity):
         self.config = config or {}
         self.transport = transport or PlanTransport()
@@ -315,6 +322,8 @@ class ChatGPTPlanService:
         self._lock = threading.RLock()
         self._runs = {}
         self._active = {}
+        self._closed = False
+        self._close_epoch = 0
         self.requests_started = 0
         self.request_limit = self.config.get("request_limit", 20)
         if type(self.request_limit) is not int or self.request_limit < 1:
@@ -322,6 +331,8 @@ class ChatGPTPlanService:
         self._quota_blocked = False
 
     def gate(self):
+        if self._closed:
+            raise BridgeError("CHATGPT_CLOSED", "This ChatGPT connection service is closed.", 409)
         if self.config.get("allow_plan_usage") is not True:
             raise BridgeError("CHATGPT_DISABLED", "ChatGPT plan access is disabled. Enable the authorized connection in local configuration.", 403)
         distribution = self.config.get("distribution", "commercial")
@@ -334,6 +345,48 @@ class ChatGPTPlanService:
     def _state(self):
         with self.store.locked():
             return self.store.read()
+
+    @staticmethod
+    def _authority_epoch(state):
+        epoch = state.get("authorization_epoch", 0)
+        if type(epoch) is not int or epoch < 0:
+            raise BridgeError("CHATGPT_STORAGE", "Saved authorization generation is invalid.")
+        return epoch
+
+    def execution_identity(self):
+        """Bind queued work without refreshing, discovering models or exposing tokens."""
+        with self._lock:
+            self.gate()
+            if not self.store.path.exists():
+                raise BridgeError("CHATGPT_CONSENT", "Connect ChatGPT before queuing plan usage.", 403)
+            return self._identity_from_state(self._state())
+
+    def _identity_from_state(self, state):
+        self.gate()
+        account = state["accounts"].get(state.get("active"), {})
+        subject = account.get("subject")
+        if not self._has_permission(account) or not isinstance(subject, str) or not subject:
+            raise BridgeError("CHATGPT_CONSENT", "Connect ChatGPT and explicitly authorize plan usage before inference.", 403)
+        return (state["active"], hashlib.sha256(subject.encode()).hexdigest(),
+                self._authority_epoch(state), self._close_epoch)
+
+    def _check_execution_identity(self, expected, *, state=None):
+        # All callers use this only before request counting and provider dispatch.
+        if expected is not None:
+            try:
+                actual = self.execution_identity() if state is None else self._identity_from_state(state)
+                if actual != expected:
+                    raise BridgeError("CHATGPT_ACCOUNT_CHANGED", "ChatGPT authorization changed while this request was queued. Submit it again explicitly.", 409)
+            except BridgeError as error:
+                error.pre_dispatch = True
+                raise
+
+    @staticmethod
+    def _check_pre_dispatch_cancellation(cancelled):
+        if cancelled is not None and cancelled():
+            error = BridgeError("CANCELLED", "Request cancelled before provider dispatch.", 409)
+            error.pre_dispatch = True
+            raise error
 
     def redact(self, text):
         if self.store.path.exists():
@@ -493,6 +546,7 @@ class ChatGPTPlanService:
             account.update(identity, client_id=issued, label=(identity["email"] or identity["subject"]) + " · " + issued[-8:])
             self._save_tokens(account, data, initial=True)
             state["active"] = issued
+            state["authorization_epoch"] = self._authority_epoch(state) + 1
             for cancel in self._active.values():
                 cancel.set()
             self.store.write(state)
@@ -529,6 +583,7 @@ class ChatGPTPlanService:
             if account_id not in state["accounts"] or not state["accounts"][account_id].get("subject"):
                 raise BridgeError("CHATGPT_ACCOUNT", "Select a validated saved account.")
             state["active"] = account_id
+            state["authorization_epoch"] = self._authority_epoch(state) + 1
             self.store.write(state)
         self._quota_blocked = False
         return self.status()
@@ -588,12 +643,16 @@ class ChatGPTPlanService:
                     pass
             for key in TOKEN_FIELDS:
                 account.pop(key, None)
+            state["authorization_epoch"] = self._authority_epoch(state) + 1
             self.store.write(state)
         return {"disconnected": True, "remote_revocation_confirmed": confirmed,
                 "notice": "Renewable session revoked." if confirmed else "Local credentials cleared. Remote revocation was not confirmed; disconnect this app in ChatGPT Settings."}
 
     def close(self):
         with self._lock:
+            if not self._closed:
+                self._close_epoch += 1
+            self._closed = True
             if self.pending and self.pending.get("status") == "pending":
                 self.pending.update(status="failed", error="CHATGPT_SIGN_IN_CANCELLED")
             for cancel in self._active.values():
@@ -618,7 +677,7 @@ class ChatGPTPlanService:
                 event.set()
             return {"run_id": run_id, "cancelled": event is not None}
 
-    def generate(self, data, on_event=None):
+    def generate(self, data, on_event=None, *, expected_execution_identity=None, cancelled_before_dispatch=None):
         if not isinstance(data, dict) or set(data) - {"model", "prompt", "run_id", "json_mode", "max_output_tokens", "provider", "stream"}:
             raise BridgeError("INPUT", "Unsupported ChatGPT generation fields.")
         model, prompt, run_id = data.get("model"), data.get("prompt"), data.get("run_id")
@@ -627,6 +686,8 @@ class ChatGPTPlanService:
         if data.get("json_mode") is True:
             raise BridgeError("CAPABILITY", "Use text mode with ChatGPT plan requests; structured output is not claimed.")
         with self._lock:
+            self._check_pre_dispatch_cancellation(cancelled_before_dispatch)
+            self._check_execution_identity(expected_execution_identity)
             if self._quota_blocked or self.requests_started >= self.request_limit:
                 raise BridgeError("CHATGPT_LIMIT", "ChatGPT requests are paused by the local session limit or a provider usage limit.", 429)
             if run_id in self._runs:
@@ -643,11 +704,18 @@ class ChatGPTPlanService:
             available = self._discover_account(account)["models"]
             if model not in {row["id"] for row in available}:
                 raise BridgeError("CAPABILITY", "The selected model is not in this ChatGPT account's current catalog.")
-            with self._lock:
-                if cancel.is_set() or self._state().get("active") != account["client_id"]:
+            # The vault lock also excludes other service instances/processes.
+            # Release it after connection opening, before reading the event stream.
+            with self._lock, self.store.locked():
+                current = self.store.read()
+                self._check_execution_identity(expected_execution_identity, state=current)
+                self._check_pre_dispatch_cancellation(cancelled_before_dispatch)
+                selected = current["accounts"].get(current.get("active"), {})
+                if cancel.is_set() or current.get("active") != account["client_id"] or selected.get("access_token") != account["access_token"]:
                     raise BridgeError("CHATGPT_ACCOUNT_CHANGED", "ChatGPT account changed or request cancelled during preparation.", 409)
                 self.requests_started += 1
-            for event in self.transport.events(account["access_token"], body, cancel):
+                stream = self.transport.events(account["access_token"], body, cancel)
+            for event in stream:
                 if cancel.is_set():
                     raise BridgeError("CANCELLED", "ChatGPT response cancelled; consumed plan usage may remain.", 409)
                 if not isinstance(event, dict):

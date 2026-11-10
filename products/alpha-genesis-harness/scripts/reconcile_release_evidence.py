@@ -28,8 +28,10 @@ LIVE_KEYS = {'local_inference', 'single_agent', 'multi_agent', 'parallel_explora
 LIVE_SOURCE_FILES = {'bridge/adapters.py', 'bridge/streaming.py', 'bridge/workflows.py',
                      'bridge/workflow_strategies.py', 'bridge/instruments.py',
                      'scripts/qualify_hosted_local.py', 'scripts/probe_local_workflows.py',
-                     'scripts/qualify_quote_workflow_003.py'}
-BLOCKED = {'B1', 'B3', 'B4', 'B5'}
+                     'scripts/qualify_quote_workflow_004.py'}
+BLOCKED = {'B1', 'B3', 'B4', 'B5', 'O11'}
+FRONTIER_SOURCE_FILES = {'bridge/adapters.py','bridge/workflows.py','bridge/instruments.py','bridge/genesis_next.py','bridge/frontier_monitor.py','scripts/probe_frontier_monitor.py'}
+FRONTIER_URL = 'https://developers.openai.com/siwc/token-sharing-open-source'
 UNRESOLVED_GENESIS_FAILURES = {'O4', 'O6'}
 GENESIS_SOURCES = {label:path.resolve().relative_to(Path(__file__).resolve().parents[1]).as_posix()
                    for label,path in GENESIS_SOURCE_PATHS.items()}
@@ -41,6 +43,8 @@ FIXTURE_MODULES = {
     'G5': ['test_release', 'test_qualification'],
     'O1': ['test_genesis_next', 'test_genesis_next_independent'],
     'O9': ['test_proof_to_market', 'test_genesis_http'],
+    'O10': ['test_upgrade_foundry','test_extension_security'],
+    'O12': ['test_frontier_monitor','test_frontier_probe'],
 }
 REQUIRED_FILES = {
     'START-HERE.html', 'GUIDE.html', 'LICENSE', 'THIRD-PARTY.json', 'SECURITY.md', 'VERSION.json',
@@ -50,7 +54,8 @@ REQUIRED_FILES = {
     'commercial/listing.md', 'commercial/listing.json', 'commercial/storefront-checklist.md',
     'docs/OMEGA-GENESIS-NEXT.md', 'docs/PROOF-TO-MARKET.md', 'bridge/genesis_next.py',
     'evidence/OMEGA-PROTOCOL.md', 'evidence/OMEGA-FRESH-SUCCESSOR-PROTOCOL.md',
-    'scripts/qualify_genesis_successor.py',
+    'scripts/qualify_genesis_successor.py', 'docs/UPGRADE-FOUNDRY.md','docs/FRONTIER-MONITOR.md',
+    'bridge/upgrade_foundry.py','bridge/frontier_monitor.py','scripts/probe_frontier_monitor.py',
 }
 
 
@@ -97,7 +102,11 @@ def browser_passed(record, source, directory=None, image_prefix=''):
         raise ValueError('Browser receipt has a different source revision')
     if record.get('status') != 'PASS' or record.get('errors') != []:
         return False
-    if not BROWSER_CHECKS.issubset(set(record.get('checks', []))):
+    required_checks = set(BROWSER_CHECKS)
+    if record.get('server_mode') == 'external-native-launcher':
+        required_checks.remove('spawned connector announced its own loopback origin')
+        required_checks.add('native source launcher supplied the verified loopback origin')
+    if not required_checks.issubset(set(record.get('checks', []))):
         return False
     screenshots = record.get('screenshots')
     if not isinstance(screenshots, list) or not screenshots:
@@ -110,6 +119,52 @@ def browser_passed(record, source, directory=None, image_prefix=''):
             if path.is_symlink() or not path.is_file() or not path.read_bytes().startswith(b'\x89PNG\r\n\x1a\n'):
                 return False
     return True
+
+
+def browser_exports_passed(record, directory, prefix=''):
+    exports = record.get('exports')
+    if not isinstance(exports,list) or not exports:
+        return False
+    for item in exports:
+        name = item.get('file')
+        if not isinstance(name,str) or not safe_path(name) or '/' in name:
+            raise ValueError('Unsafe browser export name')
+        path = Path(directory)/(prefix+name)
+        if path.is_symlink() or not path.is_file() or not 0 < path.stat().st_size <= 30_000_000:
+            return False
+        raw = path.read_bytes()
+        if type(item.get('bytes')) is not int or item['bytes'] != len(raw) or item.get('sha256') != digest(raw):
+            return False
+    return True
+
+
+def frontier_status(record, content, source, archive_hash):
+    if (record.get('schema') != 'alpha-genesis-live-frontier-observation/v1'
+            or record.get('source_revision') != source or record.get('archive_sha256') != archive_hash):
+        raise ValueError('Frontier observation must identify the exact source and archive')
+    if record.get('status') not in {'PASS','FAIL','BLOCKED'}:
+        raise ValueError('Unsupported frontier observation status')
+    source_hashes_match(record,content)
+    if not FRONTIER_SOURCE_FILES.issubset(record['source_sha256']):
+        raise ValueError('Frontier observation lacks required source hashes')
+    if (type(record.get('inference_calls')) is not int or record['inference_calls'] != 0
+            or record.get('real_credentials_used') is not False or record.get('paid_requests_enabled') is not False):
+        raise ValueError('Frontier observation contradicts credential-free scope')
+    if record['status'] != 'PASS':
+        return record['status']
+    observation, event = record.get('observation',{}), record.get('evidence_event',{})
+    good = (record.get('source_url') == FRONTIER_URL and record.get('allowed_hosts') == ['developers.openai.com']
+            and record.get('source_observation_attempts') == 1 and record.get('http_dispatch_verified') is True
+            and record.get('background_monitoring_started') is False and record.get('stopped') is True
+            and record.get('temporary_workspace_removed') is True and record.get('opportunity_status') == 'reconsider'
+            and observation.get('status') == 'INITIAL_OBSERVATION' and observation.get('previous_sha256') is None
+            and observation.get('replayed') is True and DIGEST.fullmatch(str(observation.get('sha256','')))
+            and record.get('actual_source_sha256') == observation['sha256']
+            and event.get('content_sha256') == observation['sha256'] and event.get('url') == FRONTIER_URL
+            and event.get('evidence_status') == 'reported')
+    if not good:
+        raise ValueError('Frontier PASS lacks actual dispatch and reported-only byte evidence')
+    return 'PASS'
 
 
 def paired_passed(record, content):
@@ -162,11 +217,11 @@ def validate_live_provenance(record, files, content):
     if not DIGEST.fullmatch(str(downloads.get('runtime_binary_sha256', ''))):
         raise ValueError('Live PASS lacks the runtime executable hash')
     commands = record.get('commands', [])
-    core_commands = [row for row in commands if Path(str(row.get('entrypoint',''))).name in {'probe_local_workflows.py', 'qualify_quote_workflow_003.py'}]
+    core_commands = [row for row in commands if Path(str(row.get('entrypoint',''))).name in {'probe_local_workflows.py', 'qualify_quote_workflow_004.py'}]
     if not core_commands or any(type(row.get('returncode')) is not int or type(row.get('timed_out')) is not bool for row in core_commands):
         raise ValueError('Live PASS lacks recorded actual inference driver execution')
     raw_records = []
-    for name, tree_key in [('LOCAL-WORKFLOWS-HOSTED.json','source_product_tree'), ('LOCAL-QUOTE-QUALIFICATION-003.json','product_tree_sha')]:
+    for name, tree_key in [('LOCAL-WORKFLOWS-HOSTED.json','source_product_tree'), ('LOCAL-QUOTE-QUALIFICATION-004.json','product_tree_sha')]:
         if name in files:
             raw = json.loads(files[name])
             if raw.get('source_revision') != record['source_revision'] or raw.get(tree_key) != record['source_product_tree']:
@@ -299,7 +354,7 @@ def reconcile(args):
         raise ValueError('Duplicate criterion ID')
     required_ids = {'A1','A2','B1','B2','B3','B4','B5','C1','C2','D1','E1','E2','F1','F2',
                     'G1','G2','G3','G4','G5','H1','H2','H3','I1','I2','J1',
-                    'B6','O1','O2','O3','O4','O5','O6','O7','O8','O9'}
+                    'B6','O1','O2','O3','O4','O5','O6','O7','O8','O9','O10','O11','O12','O13'}
     if not required_ids.issubset(rows):
         raise ValueError('Packaged matrix is missing reconciled criteria')
     changes, inputs = [], []
@@ -451,6 +506,8 @@ def reconcile(args):
             if status not in {'PASS','FAIL','BLOCKED','NOT TESTED'}:
                 raise ValueError('Unsupported platform status')
             if status == 'PASS':
+                if 'error' in platform:
+                    raise ValueError('Platform PASS contradicts its recorded error')
                 ops = platform.get('operations', [])
                 if not ops or any(type(row.get('returncode')) is not int or row['returncode'] != 0 or not isinstance(row.get('command'), list) for row in ops):
                     raise ValueError('Platform PASS contradicts its operations')
@@ -461,15 +518,45 @@ def reconcile(args):
                 host = str(platform.get('host', '')).lower()
                 actual_os = (host.startswith(('macos-', 'darwin-')) if system == 'Darwin' else host.startswith('windows-'))
                 actual_os = actual_os and platform.get('browser_report', {}).get('platform') == expected_browser_os
-                if not (actual_os and native and engine and rendered and browser_passed(platform.get('browser_report',{}), args.source_sha, asset_dir, system+'-')):
+                auth = platform.get('checks',{}).get('loopback_authentication',{})
+                interpreter = platform.get('launcher_interpreter',{})
+                live_native = (platform.get('launcher') == launcher_name and platform.get('browser_report',{}).get('server_mode') == 'external-native-launcher'
+                    and auth.get('bootstrap') == 'PASS' and type(auth.get('unauthenticated_status')) is int and auth['unauthenticated_status'] == 403
+                    and type(auth.get('authenticated_status')) is int and auth['authenticated_status'] == 200
+                    and isinstance(interpreter.get('version'),str) and isinstance(interpreter.get('executable'),str))
+                if not (actual_os and native and live_native and engine and rendered
+                        and browser_passed(platform.get('browser_report',{}), args.source_sha, asset_dir, system+'-')
+                        and browser_exports_passed(platform.get('browser_report',{}), asset_dir, system+'-')):
                     status = 'NOT TESTED'
             scope = platform.get('scope', '')
         platform_results.append({'platform':system, 'status':status, 'scope':scope})
     platform_status = 'PASS' if all(row['status']=='PASS' for row in platform_results) else ('FAIL' if any(row['status']=='FAIL' for row in platform_results) else 'NOT TESTED')
     set_row('I2', platform_status,
-            'Same exact archive on actual macOS and Windows: JavaScript, native launcher help, Python startup and headless browser first use.',
+            'Same exact archive on actual macOS and Windows: JavaScript, native help and running wrapper, local-session authorization, headless browser first use and hash-verified GENESIS export.',
             'PLATFORM-Darwin-VERIFICATION.json; PLATFORM-Windows-VERIFICATION.json',
             'No full Python/security suite, authenticated model, signed installer, Safari or Finder/Explorer double-click claim. Repeated tests are per-platform executions. Native Codex isolation is a separate receipt and does not qualify authenticated construction.')
+    frontier_path = asset_dir/'FRONTIER-MONITOR-VERIFICATION.json'
+    if frontier_path.is_file():
+        record_input(frontier_path)
+        status = frontier_status(read_json(frontier_path),content,args.source_sha,archive_hash)
+        set_row('O13',status,'Executed one explicitly permitted official HTTPS observation and checked its source identities, byte hash and reported-only replay.',
+                frontier_path.name,'Retrieval and reported evidence only; no freshness guarantee, frontier coverage, reproduced capability, removed bottleneck or commercial approval.')
+    foundry_path = asset_dir/'UPGRADE-FOUNDRY-HOST-VERIFICATION.json'
+    if foundry_path.is_file():
+        record_input(foundry_path)
+        foundry = read_json(foundry_path)
+        if (foundry.get('schema') != 'harness-foundry-native-probe/v1' or foundry.get('source_revision') != args.source_sha
+                or foundry.get('archive_sha256') != archive_hash or foundry.get('status') not in {'PASS','FAIL','BLOCKED'}
+                or foundry.get('live_model_construction') != 'NOT_TESTED' or foundry.get('generated_code_executed') is not False):
+            raise ValueError('Foundry native probe contradicts its exact-source credential-free scope')
+        if foundry.get('source_manifest'):
+            source_hashes_match({'source_sha256':foundry['source_manifest']},content)
+        for name,value in foundry.get('evaluator_authority',{}).get('sources',{}).items():
+            path = 'bridge/'+name
+            if path not in content or digest(content[path]) != value:
+                raise ValueError('Foundry evaluator source differs from the exact archive')
+        set_row('O11','BLOCKED','Recorded native original-interpreter probe: '+foundry['status']+'. No authenticated model-written candidate was requested.',
+                foundry_path.name,'Eligible official authentication and a real sandboxed model-written upgrade remain required; credential-free native operation cannot satisfy this gate.')
     docs_ok = REQUIRED_FILES.issubset(content) and any(name.startswith('examples/') for name in content)
     listing = content.get('commercial/listing.md', b'').decode('utf-8')
     docs_ok = docs_ok and '## English' in listing and '## Français' in listing

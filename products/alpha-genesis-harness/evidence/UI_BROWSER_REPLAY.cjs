@@ -19,17 +19,23 @@ function findBrowser() {
   }
   throw Error('Install Chrome/Chromium or set CHROME_BIN to its executable.');
 }
+const crypto = require('node:crypto');
 
 (async () => {
   const product = path.resolve(__dirname, '..');
   const output = path.resolve(process.env.HARNESS_SCREENSHOT_DIR || path.join(os.tmpdir(), 'harness-visual'));
   fs.mkdirSync(output, { recursive: true });
   const temporary = fs.mkdtempSync(path.join(os.tmpdir(), 'harness-visual-work-'));
-  const server = spawn(process.env.PYTHON || 'python3', ['-u', path.join(product, 'launch.py'), '--port', '0', '--no-browser', '--workspace', path.join(temporary, 'work')], { stdio: ['ignore', 'pipe', 'pipe'] });
+  const external = process.env.HARNESS_BASE_URL;
+  if (external) {
+    const base = new URL(external);
+    assert.ok(base.protocol === 'http:' && base.hostname === '127.0.0.1' && !base.username && !base.password && base.pathname === '/' && !base.search && !base.hash, 'Browser qualification accepts only the exact loopback application');
+  }
+  const server = external ? null : spawn(process.env.PYTHON || 'python3', ['-u', path.join(product, 'launch.py'), '--port', '0', '--no-browser', '--workspace', path.join(temporary, 'work')], { stdio: ['ignore', 'pipe', 'pipe'] });
   let browser, page, origin, serverError, serverStderr = '';
-  server.on('error', error => { serverError = error; });
-  server.stderr.on('data', chunk => { serverStderr = (serverStderr + chunk.toString()).slice(-16000); });
-  const ready = new Promise((resolve, reject) => {
+  server?.on('error', error => { serverError = error; });
+  server?.stderr.on('data', chunk => { serverStderr = (serverStderr + chunk.toString()).slice(-16000); });
+  const ready = server ? new Promise((resolve, reject) => {
     let stdout = '';
     const finish = (error, address) => {
       clearTimeout(timer);
@@ -49,15 +55,15 @@ function findBrowser() {
     server.stdout.on('data', onData);
     server.once('error', onError);
     server.once('exit', onExit);
-  });
-  const errors = [], checks = [], screenshots = [];
+  }) : Promise.resolve(new URL(external).origin);
+  const errors = [], checks = [], screenshots = [], exports = [];
   try {
     // The child announces its own ephemeral port. A stale listener cannot be
     // mistaken for the source under test merely because a fixed port is open.
     origin = await ready;
-    checks.push('spawned connector announced its own loopback origin');
+    checks.push(external ? 'native source launcher supplied the verified loopback origin' : 'spawned connector announced its own loopback origin');
     const executablePath = findBrowser();
-    browser = await chromium.launch({ executablePath, headless: true, args: ['--no-sandbox'] });
+    browser = await chromium.launch({ executablePath, headless: true, args: process.platform === 'linux' ? ['--no-sandbox'] : [] });
     page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
     page.on('pageerror', error => errors.push(error.message));
     const response = await page.goto(origin);
@@ -75,6 +81,11 @@ function findBrowser() {
     await page.waitForFunction(() => document.querySelector('#omega-capabilities')?.textContent?.includes('bounded-verification'));
     assert.equal(await page.locator('#omega-run').isEnabled(), false);
     await shot('HARNESS-07-genesis-next-en.png');
+    await page.locator('#foundry-refresh').click();
+    await page.waitForFunction(() => document.querySelector('#foundry-status')?.textContent?.includes('Isolated research selection'));
+    assert.equal(await page.locator('#foundry-construct').isEnabled(), false);
+    checks.push('model-driven source foundry visible; no unregistered or unconsented construction');
+
     await page.locator('#omega-discover').click();
     await page.waitForFunction(() => document.querySelector('#omega-candidates')?.textContent?.includes('dependency'));
     await page.locator('#omega-authorize').check();
@@ -87,6 +98,15 @@ function findBrowser() {
     await page.waitForFunction(() => document.querySelector('#omega-results')?.textContent?.includes('NO_SUPERIORITY_ESTABLISHED'));
     assert.equal(await page.locator('#omega-run').isEnabled(), false);
     await shot('HARNESS-08-genesis-next-result-en.png');
+    const omegaDownload = page.waitForEvent('download');
+    await page.locator('#omega-export').click();
+    const omegaExport = await omegaDownload;
+    const omegaExportPath = path.join(output, 'GENESIS-NEXT-browser-export.json');
+    await omegaExport.saveAs(omegaExportPath);
+    const omegaExportBytes = fs.readFileSync(omegaExportPath);
+    assert.ok(JSON.parse(omegaExportBytes).experiments.some(item => item.id === omegaResult.experiment.id), 'Downloaded evidence must contain the actual completed experiment');
+    exports.push({ file: path.basename(omegaExportPath), sha256: crypto.createHash('sha256').update(omegaExportBytes).digest('hex'), bytes: omegaExportBytes.length });
+    checks.push('actual browser evidence download contains the completed local self-upgrade experiment');
     checks.push('actual local self-upgrade HTTP experiment; consent, independent checks, conventional tie and unknown complete costs');
     await page.locator('[data-view="economy"]').click();
     await page.locator('#proof-example').click();
@@ -162,6 +182,14 @@ function findBrowser() {
     assert.ok(omegaWidths.content <= omegaWidths.viewport + 2, JSON.stringify(omegaWidths));
     assert.match(await page.locator('#omega-title').textContent(), /Inventez/);
     checks.push('GENESIS NEXT French mobile results without page overflow');
+    await page.locator('[data-view="frontier"]').click();
+    await page.waitForFunction(() => document.querySelector('#frontier-monitor-status')?.textContent?.length > 0);
+    assert.equal(await page.locator('#frontier-monitor-add').isEnabled(), false);
+    await shot('HARNESS-10-frontier-mobile-fr.png');
+    const frontierWidths = await page.evaluate(() => ({ viewport: innerWidth, content: document.documentElement.scrollWidth }));
+    assert.ok(frontierWidths.content <= frontierWidths.viewport + 2, JSON.stringify(frontierWidths));
+    checks.push('Frontier Observatory French mobile view; no consent means no monitor creation');
+
 
     const offlineContext = await browser.newContext({ viewport: { width: 1440, height: 1000 } });
     try {
@@ -180,22 +208,24 @@ function findBrowser() {
       checks.push('START-HERE opens local files; offline experiment completes without any HTTP requests');
     } finally { await offlineContext.close(); }
     assert.deepEqual(errors, []);
-    assert.equal(serverError, undefined);
-    assert.equal(server.exitCode, null);
-    assert.equal(server.signalCode, null);
-    fs.writeFileSync(path.join(output, 'BROWSER-VERIFICATION.json'), JSON.stringify({ status: 'PASS', source_revision: process.env.EXPECTED_SOURCE || null, origin, browser: await browser.version(), platform: process.platform, checks, screenshots, errors, scope: 'Headless graphical checks on the recorded host OS, including runnable source launcher and offline files. No live model, signed installer, Finder/Explorer double-click or other OS qualification.' }, null, 2));
-    console.log(JSON.stringify({ status: 'PASS', checks, screenshots }));
+    if (server) {
+      assert.equal(serverError, undefined);
+      assert.equal(server.exitCode, null);
+      assert.equal(server.signalCode, null);
+    }
+    fs.writeFileSync(path.join(output, 'BROWSER-VERIFICATION.json'), JSON.stringify({ status: 'PASS', source_revision: process.env.EXPECTED_SOURCE || null, origin, browser: await browser.version(), platform: process.platform, architecture: process.arch, headless: true, server_mode: external ? 'external-native-launcher' : 'spawned-source-launcher', checks, screenshots, exports, errors, scope: 'Headless graphical checks on the recorded host OS, including runnable source launcher and offline files. No live model, signed installer, Finder/Explorer double-click or other OS qualification.' }, null, 2));
+    console.log(JSON.stringify({ status: 'PASS', platform: process.platform, checks, screenshots, exports }));
   } catch (error) {
     if (page && !page.isClosed()) {
       try { await page.screenshot({ path: path.join(output, 'HARNESS-FAILURE.png'), fullPage: true }); screenshots.push('HARNESS-FAILURE.png'); }
       catch (_) { /* Preserve the original failure even if rendering stopped. */ }
     }
-    fs.writeFileSync(path.join(output, 'BROWSER-VERIFICATION.json'), JSON.stringify({ status: 'FAIL', source_revision: process.env.EXPECTED_SOURCE || null, origin, checks, screenshots, errors, server_stderr: serverStderr, failure: error.message }, null, 2));
+    fs.writeFileSync(path.join(output, 'BROWSER-VERIFICATION.json'), JSON.stringify({ status: 'FAIL', source_revision: process.env.EXPECTED_SOURCE || null, origin, platform: process.platform, architecture: process.arch, headless: true, server_mode: external ? 'external-native-launcher' : 'spawned-source-launcher', checks, screenshots, exports, errors, server_stderr: serverStderr, failure: error.message }, null, 2));
     throw error;
   } finally {
     try { if (browser) await browser.close(); }
     finally {
-      if (server.pid && server.exitCode === null && server.signalCode === null) {
+      if (server?.pid && server.exitCode === null && server.signalCode === null) {
         await new Promise(resolve => {
           const timer = setTimeout(() => server.kill('SIGKILL'), 3000);
           server.once('exit', () => { clearTimeout(timer); resolve(); });

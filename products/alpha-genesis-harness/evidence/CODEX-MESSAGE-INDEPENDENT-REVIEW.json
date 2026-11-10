@@ -1,0 +1,43 @@
+{
+  "schema": "harness-codex-message-independent-review/v1",
+  "reviewed_at": "2026-11-10T06:04:46.693988+00:00",
+  "source_state": "working-tree bytes identified below; not a claim of merged or released source",
+  "source_sha256": {
+    "bridge/codex.py": "c05a689a3fcb417ae3a04a689532928beebca65b3cdd5f4d6262ea6e6ca3a0b2",
+    "bridge/codex_permissions.py": "ec1dbc1e20b9ca3ae6f4ea5a7c15256e63a4a50413a40321a0281552ee130f66",
+    "bridge/upgrade_foundry.py": "4704c9c9a32d440313182df9098030a4a1f8175ea4d4fedd8807bcbc1f5bee95",
+    "tests/test_codex_messages.py": "4b5f206f75c1fe77b8e60891cde2328b8c57eb8e578c49d8467f8c5c3a0eebe0",
+    "tests/test_upgrade_foundry.py": "f1131a2c8d8011abbfc1a7f514fb601b017364f316f3bee079a8f78a0d483c62",
+    "tests/test_extension_security.py": "24e52d92bc036e0e080cf198413e47bce2691451390d637087eeafaec9a70531"
+  },
+  "result": "PASS_FOR_REVIEWED_PROTOCOL_SCOPE",
+  "checks": {
+    "message_phase_regressions": {
+      "passed": 13,
+      "failed": 0
+    },
+    "foundry_contract_regressions": {
+      "passed": 13,
+      "failed": 0
+    },
+    "independent_extension_security": {
+      "passed": 5,
+      "failed": 0
+    }
+  },
+  "findings_resolved": [
+    "Commentary and partial-answer items no longer concatenate into terminal JSON.",
+    "Authoritative completed item snapshots replace streamed drafts without duplicate appending.",
+    "Interleaved item lifecycle/activity order selects the latest eligible completed answer; later unfinished activity prevents stale fallback.",
+    "Known phase metadata cannot be downgraded by a later null phase.",
+    "Thread/turn/item scope and unfinished answer refusal remain enforced."
+  ],
+  "official_references": [
+    "https://learn.chatgpt.com/docs/app-server#items",
+    "https://developers.openai.com/codex/app-server"
+  ],
+  "foundry_authority": "Registration records codex.py and permission module source identities; existing registered candidates cannot qualify under changed evaluator dependencies. Restart required after loaded-source drift.",
+  "live_authorization": "NOT_TESTED",
+  "scope": "Independent code/protocol review with synthetic transport; no inference, credentials or generated candidate execution.",
+  "source_stable_during_tests": true
+}

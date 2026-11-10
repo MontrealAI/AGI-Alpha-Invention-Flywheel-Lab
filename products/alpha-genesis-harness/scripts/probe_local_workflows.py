@@ -38,9 +38,9 @@ def main():
                "--chat-template-kwargs", '{"enable_thinking":false}', "--reasoning-budget", "0"]
     log = (args.output / "server.log").open("wb")
     process = subprocess.Popen(command, stdout=log, stderr=subprocess.STDOUT)
-    record = {"schema": "alpha-genesis-live-local-workflow/v1", "scope": "Actual local CPU inference against two frozen arithmetic cases. This establishes narrow construction behavior, not frontier reasoning or general invention superiority.",
+    record = {"schema": "alpha-genesis-live-local-workflow/v1", "protocol_revision": "explicit-json-mode-v2", "structured_output": "Explicitly configured JSON-object generation for builder and critic; independent semantic checks and original allocations unchanged. Historical unformatted failure preserved at evidence/hosted-local-3f4e1785d395.", "scope": "Actual local CPU inference against two frozen arithmetic cases. This establishes narrow construction behavior, not frontier reasoning or general invention superiority.",
               "model": {"configured_alias": args.alias, "weights_sha256": sha(weights), "server_sha256": sha(binary), "server_arguments": command[1:]},
-              "source_sha256": {str(p.relative_to(ROOT)): sha(p) for p in [ROOT / "bridge/workflows.py", ROOT / "bridge/workflow_strategies.py", ROOT / "bridge/instruments.py", ROOT / "bridge/adapters.py", ROOT / "bridge/streaming.py", Path(__file__)]}, "runs": []}
+              "source_sha256": {str(p.relative_to(ROOT)): sha(p) for p in [ROOT / "bridge/workflows.py", ROOT / "bridge/services.py", ROOT / "bridge/workflow_strategies.py", ROOT / "bridge/instruments.py", ROOT / "bridge/adapters.py", ROOT / "bridge/streaming.py", Path(__file__)]}, "runs": []}
     try:
         ready = False
         for _ in range(120):
@@ -55,7 +55,7 @@ def main():
                 time.sleep(1)
         if not ready:
             raise RuntimeError("Explicitly selected local server did not become ready.")
-        config = {"local_only": True, "timeout_seconds": 300, "providers": {"local": {"kind": "openai", "base_url": f"http://127.0.0.1:{args.port}/v1", "output_limit_field": "max_tokens", "models": {args.alias: {"input_per_million": 0, "output_per_million": 0, "max_output_tokens": 2048, "input_token_overhead": 4096}}}}}
+        config = {"local_only": True, "timeout_seconds": 300, "providers": {"local": {"kind": "openai", "base_url": f"http://127.0.0.1:{args.port}/v1", "output_limit_field": "max_tokens", "models": {args.alias: {"input_per_million": 0, "output_per_million": 0, "max_output_tokens": 2048, "input_token_overhead": 4096, "json_mode": True}}}}}
         runtime = Runtime(config)
         service = WorkflowService(runtime, args.output / "workspace")
         for policy in ["single-model", "actor-critic", "parallel-exploration"]:

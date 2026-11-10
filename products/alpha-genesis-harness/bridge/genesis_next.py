@@ -15,7 +15,7 @@ import time
 from urllib.parse import urlsplit
 from datetime import datetime, timezone
 
-from . import adapters as _adapters_module, instruments as _instruments_module, workflows as _workflows_module, workflow_strategies as _strategies_module
+from . import adapters as _adapters_module, instruments as _instruments_module, workflows as _workflows_module, workflow_strategies as _strategies_module, services as _services_module
 from .adapters import BridgeError, strict_json
 from .instruments import evaluate
 from .workflows import WorkflowService, _atomic, _regular, digest, encoded, equivalent, now, require
@@ -50,11 +50,12 @@ def _number(value, label, optional=False):
 
 def source_identity():
     identities = {name: hashlib.sha256(_regular(PRODUCT / "bridge" / name, 1024 * 1024)).hexdigest()
-                  for name in ("workflows.py", "workflow_strategies.py", "instruments.py", "adapters.py", "genesis_next.py")}
+                  for name in ("workflows.py", "workflow_strategies.py", "services.py", "instruments.py", "adapters.py", "genesis_next.py")}
     dependencies_loaded = {"adapters.py": _adapters_module.LOADED_SOURCE_SHA256,
                            "instruments.py": _instruments_module.LOADED_SOURCE_SHA256,
                            "workflows.py": _workflows_module.LOADED_SOURCE_SHA256,
-                           "workflow_strategies.py": _strategies_module.LOADED_SOURCE_SHA256}
+                           "workflow_strategies.py": _strategies_module.LOADED_SOURCE_SHA256,
+                           "services.py": _services_module.LOADED_SOURCE_SHA256}
     require(all(identities[name] == value for name, value in dependencies_loaded.items()),
             "HARNESS dependency changed after it was loaded. Restart the connector before GENESIS initialization.",
             "GENESIS_SOURCE_DRIFT")

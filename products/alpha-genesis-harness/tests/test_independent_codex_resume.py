@@ -29,7 +29,8 @@ class SyntheticProcess:
     def __init__(self, profile=PROFILE, events=None):
         events = events if events is not None else [{"id": 0, "result": {}}, {"id": 1, "result": {"thread": {"id": "review-thread"}, "activePermissionProfile": {"id": profile}}},
                   {"id": 2, "result": {"turn": {"id": "review-turn"}}},
-                  {"method": "item/agentMessage/delta", "params": {"threadId": "review-thread", "turnId": "review-turn", "delta": "Synthetic accepted terminal text"}},
+                  {"method": "item/agentMessage/delta", "params": {"threadId": "review-thread", "turnId": "review-turn", "itemId": "review-final-item", "delta": "Synthetic accepted terminal text"}},
+                  {"method": "item/completed", "params": {"threadId": "review-thread", "turnId": "review-turn", "item": {"type": "agentMessage", "id": "review-final-item", "text": "Synthetic accepted terminal text", "phase": "final_answer"}}},
                   {"method": "turn/completed", "params": {"threadId": "review-thread", "turn": {"id": "review-turn", "status": "completed"}}}]
         self.stdout = io.StringIO("\n".join(map(json.dumps, events)) + "\n")
         self.stdin = InputCapture()

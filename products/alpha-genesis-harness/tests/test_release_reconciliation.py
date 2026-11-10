@@ -110,10 +110,16 @@ class ReconciliationTests(unittest.TestCase):
 
     def platform_receipts(self):
         for system,launcher in [('Darwin','Launch-HARNESS.command'),('Windows','Launch-HARNESS.cmd')]:
-            browser = dict(self.browser, platform='darwin' if system == 'Darwin' else 'win32')
+            browser = dict(self.browser, platform='darwin' if system == 'Darwin' else 'win32', server_mode='external-native-launcher')
+            browser['checks']=[value for value in browser['checks'] if value != 'spawned connector announced its own loopback origin']+['native source launcher supplied the verified loopback origin']
+            data=b'{"experiments":["synthetic"]}'
+            browser['exports']=[{'file':'GENESIS-NEXT-browser-export.json','bytes':len(data),'sha256':hashlib.sha256(data).hexdigest()}]
+            (self.fixture.assets/(system+'-GENESIS-NEXT-browser-export.json')).write_bytes(data)
             value = {'source_revision':owner_fixture.SOURCE,'archive_sha256':self.archive_hash,'status':'PASS',
                 'host':'macOS-15-synthetic' if system == 'Darwin' else 'Windows-2025-synthetic',
                 'scope':'Synthetic receipt fixture; no actual OS evidence', 'browser_report':browser,
+                'launcher':launcher,'launcher_interpreter':{'version':'3.12','executable':'synthetic'},
+                'checks':{'loopback_authentication':{'bootstrap':'PASS','unauthenticated_status':403,'authenticated_status':200}},
                 'operations':[{'command':['node','--test','tests/fixture.test.cjs'],'returncode':0},
                               {'command':[launcher,'--help'],'returncode':0},
                               {'command':['node','evidence/UI_BROWSER_REPLAY.cjs'],'returncode':0}]}
@@ -122,7 +128,7 @@ class ReconciliationTests(unittest.TestCase):
 
     def test_actual_fixture_receipts_qualify_only_scoped_rows(self):
         rows,matrix,audit = self.rows()
-        for identifier in ['A1','A2','C2','F2','G1','G2','G3','G4','G5','H1','H2','I1','J1']:
+        for identifier in ['A1','A2','C2','F2','G1','G2','G3','G4','G5','H1','H2','I1','J1','O10','O12']:
             self.assertEqual(rows[identifier]['status'],'PASS',identifier)
         for identifier in ['B2','C1','D1','I2']:
             self.assertEqual(rows[identifier]['status'],'NOT TESTED',identifier)
@@ -243,6 +249,51 @@ class ReconciliationTests(unittest.TestCase):
     def test_empty_external_digest_refused(self):
         self.args.expected_sha256=''
         with self.assertRaisesRegex(ValueError,'digest'):self.rows()
+
+    def frontier_receipt(self,status='PASS'):
+        receipt={'schema':'alpha-genesis-live-frontier-observation/v1','status':status,
+            'source_revision':owner_fixture.SOURCE,'archive_sha256':self.archive_hash,
+            'source_sha256':{name:hashlib.sha256(self.fixture.content[name]).hexdigest() for name in reconcile.FRONTIER_SOURCE_FILES},
+            'inference_calls':0,'real_credentials_used':False,'paid_requests_enabled':False,
+            'source_url':reconcile.FRONTIER_URL,'allowed_hosts':['developers.openai.com'],'source_observation_attempts':1,
+            'http_dispatch_verified':True,'background_monitoring_started':False,'stopped':True,'temporary_workspace_removed':True,
+            'opportunity_status':'reconsider','observation':{'status':'INITIAL_OBSERVATION','previous_sha256':None,'replayed':True,'sha256':'d'*64},
+            'actual_source_sha256':'d'*64,'evidence_event':{'url':reconcile.FRONTIER_URL,'content_sha256':'d'*64,'evidence_status':'reported'}}
+        path=self.fixture.assets/'FRONTIER-MONITOR-VERIFICATION.json';path.write_text(json.dumps(receipt))
+        return path,receipt
+
+    def test_frontier_pass_is_scoped_to_reported_observation(self):
+        self.frontier_receipt();rows,_,_=self.rows()
+        self.assertEqual(rows['O13']['status'],'PASS');self.assertEqual(rows['O7']['status'],'NOT TESTED')
+        self.assertEqual(rows['O11']['status'],'BLOCKED');self.assertEqual(rows['O6']['status'],'FAIL')
+
+    def test_frontier_false_dispatch_or_promoted_evidence_is_refused(self):
+        for change in ('dispatch','promoted','source'):
+            path,value=self.frontier_receipt()
+            if change=='dispatch':value['http_dispatch_verified']=False
+            elif change=='promoted':value['evidence_event']['evidence_status']='reproduced'
+            else:value['source_sha256']['bridge/frontier_monitor.py']='0'*64
+            path.write_text(json.dumps(value))
+            with self.subTest(change=change),self.assertRaises(ValueError):self.rows()
+
+    def test_frontier_blocked_attempt_remains_blocked(self):
+        path,value=self.frontier_receipt('BLOCKED');value['http_dispatch_verified']=False;value.pop('evidence_event');path.write_text(json.dumps(value))
+        self.assertEqual(self.rows()[0]['O13']['status'],'BLOCKED')
+
+    def test_native_help_without_live_wrapper_session_or_export_cannot_pass(self):
+        for change in ('session','export'):
+            self.platform_receipts();path=self.fixture.assets/'PLATFORM-Windows-VERIFICATION.json';value=json.loads(path.read_text())
+            if change=='session':value['checks']['loopback_authentication']['authenticated_status']=403
+            else:(self.fixture.assets/'Windows-GENESIS-NEXT-browser-export.json').write_bytes(b'tampered')
+            path.write_text(json.dumps(value))
+            with self.subTest(change=change):self.assertEqual(self.rows()[0]['I2']['status'],'NOT TESTED')
+
+    def test_credential_free_foundry_probe_does_not_qualify_model_construction(self):
+        record={'schema':'harness-foundry-native-probe/v1','status':'PASS','source_revision':owner_fixture.SOURCE,
+            'archive_sha256':self.archive_hash,'live_model_construction':'NOT_TESTED','generated_code_executed':False,
+            'source_manifest':{'bridge/upgrade_foundry.py':hashlib.sha256(self.fixture.content['bridge/upgrade_foundry.py']).hexdigest()}}
+        (self.fixture.assets/'UPGRADE-FOUNDRY-HOST-VERIFICATION.json').write_text(json.dumps(record))
+        rows,_,_=self.rows();self.assertEqual(rows['O11']['status'],'BLOCKED');self.assertIn('probe: PASS',rows['O11']['actual_test_or_required_procedure'])
 
 
 class GenesisRawProofTests(unittest.TestCase):

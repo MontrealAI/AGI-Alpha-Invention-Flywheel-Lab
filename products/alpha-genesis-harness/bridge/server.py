@@ -77,6 +77,8 @@ class HarnessServer(ThreadingHTTPServer):
         self._workflows = None
         self._genesis_next = None
         self._local_connections = None
+        self._upgrade_foundry = None
+        self._frontier_monitor = None
         self._workflow_lock = threading.RLock()
         self.token = secrets.token_urlsafe(32)
         self.app_path = Path(app_path).resolve()
@@ -84,6 +86,14 @@ class HarnessServer(ThreadingHTTPServer):
         super().__init__(address, Handler)
         self.host = f"127.0.0.1:{self.server_port}"
         self.origin = "http://" + self.host
+        # Resume only monitor jobs carrying explicit persisted restart consent.
+        # An unused installation performs no network work or workspace creation.
+        if (self.workspace / "frontier-monitor" / "state.json").exists():
+            try:
+                self.frontier_monitor
+            except Exception:
+                self.server_close()
+                raise
 
     @property
     def workflows(self):
@@ -94,6 +104,10 @@ class HarnessServer(ThreadingHTTPServer):
             return self._workflows
 
     def server_close(self):
+        if self._frontier_monitor is not None:
+            self._frontier_monitor.close()
+        if self._upgrade_foundry is not None:
+            self._upgrade_foundry.close()
         if self._workflows is not None and hasattr(self._workflows, "close"):
             self._workflows.close()
         self.runtime.close()
@@ -114,6 +128,22 @@ class HarnessServer(ThreadingHTTPServer):
                 from bridge.onboarding import LocalConnectionService
                 self._local_connections = LocalConnectionService(self.runtime, self.workspace)
             return self._local_connections
+
+    @property
+    def upgrade_foundry(self):
+        with self._workflow_lock:
+            if self._upgrade_foundry is None:
+                from bridge.upgrade_foundry import UpgradeFoundryService
+                self._upgrade_foundry = UpgradeFoundryService(self.workflows, self.runtime.service("codex"))
+            return self._upgrade_foundry
+
+    @property
+    def frontier_monitor(self):
+        with self._workflow_lock:
+            if self._frontier_monitor is None:
+                from bridge.frontier_monitor import FrontierMonitorService
+                self._frontier_monitor = FrontierMonitorService(self.workflows, self.genesis_next)
+            return self._frontier_monitor
 
 
 class Handler(BaseHTTPRequestHandler):
@@ -200,6 +230,12 @@ class Handler(BaseHTTPRequestHandler):
             if self.path == "/api/genesis-next/status":
                 self.boundary(authenticated=True)
                 return self.json(200, self.server.genesis_next.status())
+            if self.path == "/api/upgrade-foundry/status":
+                self.boundary(authenticated=True)
+                return self.json(200, self.server.upgrade_foundry.status())
+            if self.path == "/api/frontier-monitor/status":
+                self.boundary(authenticated=True)
+                return self.json(200, self.server.frontier_monitor.status())
             if self.path in {"/api/chatgpt/status", "/api/codex/status"}:
                 self.boundary(authenticated=True)
                 return self.json(200, self.connection_status(self.path.split("/")[2]))
@@ -253,6 +289,10 @@ class Handler(BaseHTTPRequestHandler):
             elif self.path == "/api/proof-to-market/assess":
                 from bridge.proof_to_market import assess
                 result = assess(data)
+            elif self.path.startswith("/api/upgrade-foundry/"):
+                result = self.upgrade_foundry_action(self.path.rsplit("/", 1)[1], data)
+            elif self.path.startswith("/api/frontier-monitor/"):
+                result = self.frontier_monitor_action(self.path.rsplit("/", 1)[1], data)
             elif self.path.startswith("/api/chatgpt/") or self.path.startswith("/api/codex/"):
                 result = self.connection_action(self.path.split("/")[2], self.path.rsplit("/", 1)[1], data)
             else:
@@ -293,10 +333,10 @@ class Handler(BaseHTTPRequestHandler):
         if action == "models":
             return service.discover()
         if action == "generate":
-            return service.generate(dict(data, provider=category))
+            return self.server.runtime.generate(dict(data, provider=category))
         if action == "resume":
-            return service.resume(dict(data, provider=category))
-        return service.cancel(data.get("run_id"))
+            return self.server.runtime.resume(dict(data, provider=category))
+        return self.server.runtime.cancel(data.get("run_id"))
 
     def connection_status(self, category):
         result = self.server.runtime.service(category).status()
@@ -385,6 +425,26 @@ class Handler(BaseHTTPRequestHandler):
         if action == "connect":
             return service.connect(data)
         return service.disconnect(data)
+
+    def upgrade_foundry_action(self, action, data):
+        if action not in {"status", "register", "construct", "qualify", "activate", "rollback", "evaluate", "export", "cancel"}:
+            raise BridgeError("NOT_FOUND", "Unknown upgrade foundry action.", 404)
+        if action == "construct":
+            self.server.runtime._network_allowed()
+        service = self.server.upgrade_foundry
+        if action == "status":
+            return service.status()
+        if action == "evaluate":
+            return service.evaluate_retained(data)
+        return getattr(service, action)(data)
+
+    def frontier_monitor_action(self, action, data):
+        if action not in {"status", "add", "poll", "start", "stop", "remove"}:
+            raise BridgeError("NOT_FOUND", "Unknown frontier monitor action.", 404)
+        service = self.server.frontier_monitor
+        if action == "status":
+            return service.status()
+        return getattr(service, action)(data)
 
     def do_OPTIONS(self):
         self.json(403, {"error": {"code": "CORS", "message": "Cross-origin access is disabled."}})

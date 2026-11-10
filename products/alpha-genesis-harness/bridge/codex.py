@@ -28,7 +28,68 @@ from .codex_permissions import PROFILE, permission_overrides, verify_profile_pro
 verify_sandbox_protocol = verify_profile_protocol
 
 
+# Bind this module before a later lazy self-upgrade evaluator imports it.
+LOADED_SOURCE_SHA256 = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
+
+
+class _AgentMessages:
+    """Keep app-server message items distinct until their terminal snapshots.
+
+    Deltas have an itemId but no phase. Item lifecycle events supply the phase
+    and item/completed supplies authoritative text. A missing/null phase stays
+    compatible with legacy providers without merging their separate messages.
+    """
+    def __init__(self):
+        self.items = {}
+        self.received_characters = 0
+
+    def _item(self, ident):
+        if not isinstance(ident, str) or not ident:
+            raise BridgeError("CODEX_PROTOCOL", "Codex message did not supply an item ID.", 502)
+        return self.items.setdefault(ident, {"text": "", "phase": None, "completed": False})
+
+    def delta(self, params):
+        item = self._item(params.get("itemId"))
+        delta = params.get("delta")
+        if not isinstance(delta, str) or item["completed"]:
+            raise BridgeError("CODEX_PROTOCOL", "Codex returned an invalid message delta.", 502)
+        item["text"] += delta
+        self.received_characters += len(delta)
+        self.items[params["itemId"]] = self.items.pop(params["itemId"])
+
+    def snapshot(self, value, *, completed):
+        if not isinstance(value, dict):
+            raise BridgeError("CODEX_PROTOCOL", "Codex returned a malformed item.", 502)
+        if value.get("type") != "agentMessage":
+            return
+        item = self._item(value.get("id"))
+        phase, text = value.get("phase"), value.get("text")
+        if phase not in (None, "commentary", "partial_answer", "final_answer") or not isinstance(text, str):
+            raise BridgeError("CODEX_PROTOCOL", "Codex returned malformed agent message text or phase.", 502)
+        # Null means unknown, not permission to downgrade known commentary into
+        # a legacy terminal answer when a later snapshot omits phase metadata.
+        if phase is not None:
+            item["phase"] = phase
+        item.update(text=text, completed=completed)
+        # Item starts/deltas may interleave. Follow their latest lifecycle
+        # activity so a late completion wins and a newer unfinished item blocks
+        # fallback to an older result. A turn snapshot supplies canonical order.
+        self.items[value["id"]] = self.items.pop(value["id"])
+
+    def final_text(self):
+        items = list(self.items.values())
+        final = [item for item in items if item["phase"] == "final_answer"]
+        candidate = final[-1] if final else (items[-1] if items else None)
+        # Do not fall back to an earlier unknown message if the last item is
+        # explicitly nonterminal or unfinished, nor to a superseded final.
+        if candidate and candidate["completed"] and candidate["phase"] in (None, "final_answer"):
+            return candidate["text"]
+        return ""
+
+
 class CodexService:
+    max_concurrent = 1
+
     def __init__(self, config=None, plan_service=None, workspace_root=None, process_factory=subprocess.Popen, sandbox_validator=verify_sandbox_protocol, runtime_probe=verify_runtime_sandbox):
         self.config = config or {}
         self.plan = plan_service or ChatGPTPlanService()
@@ -36,12 +97,15 @@ class CodexService:
         self.process_factory = process_factory
         self._lock = threading.RLock()
         self._active, self._runs = {}, set()
+        self._closed = False
         self.binary = self.config.get("executable") or shutil.which("codex")
         self.sandbox_validator = sandbox_validator
         self.runtime_probe = runtime_probe
         self._validated_binary = None
 
     def gate(self):
+        if self._closed:
+            raise BridgeError("CODEX_CLOSED", "This Codex execution service is closed.", 409)
         self.plan.gate()
         if self.config.get("allow_execution") is not True:
             raise BridgeError("CODEX_DISABLED", "Codex execution is disabled. Explicitly enable it in local configuration.", 403)
@@ -67,6 +131,11 @@ class CodexService:
         self.gate()
         return self.plan.discover()
 
+    def execution_identity(self):
+        if self._closed:
+            raise BridgeError("CODEX_CLOSED", "This Codex execution service is closed.", 409)
+        return self.plan.execution_identity()
+
     def redact(self, text):
         return self.plan.redact(text)
 
@@ -79,6 +148,7 @@ class CodexService:
 
     def close(self):
         with self._lock:
+            self._closed = True
             for row in self._active.values():
                 row["cancel"].set()
 
@@ -152,10 +222,11 @@ class CodexService:
         finally:
             temp.unlink(missing_ok=True)
 
-    def resume(self, data, on_event=None):
+    def resume(self, data, on_event=None, *, expected_execution_identity=None, cancelled_before_dispatch=None):
         if not isinstance(data, dict) or not isinstance(data.get("resume_run_id"), str):
             raise BridgeError("CODEX_RESUME", "Supply resume_run_id for the original Codex workspace and a fresh run_id.")
-        return self.generate(data, on_event=on_event)
+        return self.generate(data, on_event=on_event, expected_execution_identity=expected_execution_identity,
+                             cancelled_before_dispatch=cancelled_before_dispatch)
 
     def _workspace_lock(self, workspace_id):
         directory = self.root / ".harness-checkpoints"
@@ -204,8 +275,10 @@ class CodexService:
             args += ["-c", key + "=" + value]
         return args + permission_overrides(directory, writable, self.binary)
 
-    def generate(self, data, on_event=None):
+    def generate(self, data, on_event=None, *, expected_execution_identity=None, cancelled_before_dispatch=None):
         self.gate()
+        with self.plan._lock:
+            self.plan._check_execution_identity(expected_execution_identity)
         if not isinstance(data, dict) or set(data) - {"provider", "model", "prompt", "run_id", "max_output_tokens", "json_mode", "stream", "resume_run_id"}:
             raise BridgeError("INPUT", "Unsupported Codex generation fields.")
         model, prompt, run_id = data.get("model"), data.get("prompt"), data.get("run_id")
@@ -214,6 +287,7 @@ class CodexService:
         if data.get("json_mode") is True:
             raise BridgeError("CAPABILITY", "This Codex engineering path returns text and artifacts; structured-model output is not claimed.")
         with self._lock:
+            self.plan._check_pre_dispatch_cancellation(cancelled_before_dispatch)
             if self._active or run_id in self._runs:
                 raise BridgeError("BUSY", "Wait for the active Codex turn and use a new run ID.", 409)
             cancel = threading.Event()
@@ -222,12 +296,15 @@ class CodexService:
         process, account, checkpoint, workspace_id, workspace_lock = None, None, None, None, None
         events = queue.Queue(maxsize=128)
         try:
-            account = self.plan._account()
+            with self.plan._lock:
+                self.plan._check_execution_identity(expected_execution_identity)
+                account = self.plan._account()
             if model not in {row["id"] for row in self.plan._discover_account(account)["models"]}:
                 raise BridgeError("CAPABILITY", "This model is not in the selected account catalog.")
             # The plan service's request guard also applies to Codex; this is one
             # turn, which may contain several internal model calls and tool actions.
             with self.plan._lock:
+                self.plan._check_execution_identity(expected_execution_identity)
                 if self.plan._quota_blocked or self.plan.requests_started >= self.plan.request_limit:
                     raise BridgeError("CHATGPT_LIMIT", "The local ChatGPT request/turn limit is reached.", 429)
                 if self.plan._active:
@@ -274,8 +351,10 @@ class CodexService:
             env.update({"CODEX_HOME": str(codex_home), "HOME": str(codex_home), "ACCESS_TOKEN": account["access_token"]})
             command = self._command(directory, writable)
             self.runtime_probe(command, directory, codex_home, writable)
-            with self.plan._lock:
-                current = self.plan._state()
+            with self.plan._lock, self.plan.store.locked():
+                current = self.plan.store.read()
+                self.plan._check_execution_identity(expected_execution_identity, state=current)
+                self.plan._check_pre_dispatch_cancellation(cancelled_before_dispatch)
                 selected = current["accounts"].get(current.get("active"), {})
                 if cancel.is_set() or current.get("active") != account["client_id"] or selected.get("access_token") != account["access_token"]:
                     raise BridgeError("CANCELLED", "Codex authorization changed or turn was cancelled before process launch.", 409)
@@ -316,6 +395,7 @@ class CodexService:
 
             send("initialize", {"clientInfo": {"name": APP_NAME, "title": "ALPHA GENESIS HARNESS", "version": "0.3.0"}, "capabilities": {"experimentalApi": True}}, 0)
             thread_id, turn_id, text, completed, interrupted = None, None, "", False, None
+            agent_messages = _AgentMessages()
             total = 0
             while True:
                 if cancel.is_set():
@@ -365,20 +445,27 @@ class CodexService:
                                          "cwd": str(directory), "approvalPolicy": "never", "permissions": PROFILE}, 2)
                 elif message.get("id") == 2 and "result" in message:
                     turn_id = message["result"].get("turn", {}).get("id")
-                elif message.get("method") == "item/agentMessage/delta":
+                elif message.get("method") in {"item/agentMessage/delta", "item/started", "item/completed"}:
                     if message.get("params", {}).get("threadId") != thread_id or message.get("params", {}).get("turnId") != turn_id or turn_id is None:
                         raise BridgeError("CODEX_PROTOCOL", "Codex output did not match the active thread and turn.", 502)
-                    delta = message.get("params", {}).get("delta")
-                    if isinstance(delta, str):
-                        text += delta
+                    if message["method"] == "item/agentMessage/delta":
+                        agent_messages.delta(message["params"])
                         if on_event:
-                            on_event({"type": "progress", "provider": "codex", "received_characters": len(text)})
+                            on_event({"type": "progress", "provider": "codex", "received_characters": agent_messages.received_characters})
+                    else:
+                        agent_messages.snapshot(message["params"].get("item"), completed=message["method"] == "item/completed")
                 elif message.get("method") == "turn/completed":
                     params = message.get("params", {})
                     if params.get("threadId") != thread_id or params.get("turn", {}).get("id") != turn_id or turn_id is None:
                         raise BridgeError("CODEX_PROTOCOL", "Codex completion did not match the active thread and turn.", 502)
                     if cancel.is_set() or params.get("turn", {}).get("status") != "completed":
                         raise BridgeError("CODEX_INCOMPLETE", "Codex turn failed or was interrupted; no completed result was accepted.", 502)
+                    items = params["turn"].get("items", [])
+                    if not isinstance(items, list):
+                        raise BridgeError("CODEX_PROTOCOL", "Codex completion returned malformed turn items.", 502)
+                    for item in items:
+                        agent_messages.snapshot(item, completed=True)
+                    text = agent_messages.final_text()
                     completed = True
                     break
                 elif message.get("method") and "id" in message:
@@ -390,7 +477,7 @@ class CodexService:
                         process.stdin.write(json.dumps({"id": message["id"], "error": {"code": -32601, "message": "Unsupported server request; no permission granted."}}) + "\n")
                         process.stdin.flush()
             if not completed or not text.strip():
-                raise BridgeError("CODEX_EMPTY", "Codex completed without an inspectable text result.", 502)
+                raise BridgeError("CODEX_EMPTY", "Codex completed without a terminal or legacy message result.", 502)
             checkpoint["status"] = "completed"
             self._checkpoint(workspace_id, checkpoint)
             for field in ("access_token", "refresh_token", "id_token"):

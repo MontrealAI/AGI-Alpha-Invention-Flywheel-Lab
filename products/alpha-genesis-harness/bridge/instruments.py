@@ -44,7 +44,7 @@ def evaluate(spec, inputs, max_operations=10000):
             raise ValueError("Arithmetic requires numeric operands.")
         return finite(v)
 
-    def visit(value, depth=0):
+    def visit(value, depth=0, location="$"):
         nonlocal count
         count += 1
         if count > max_operations or depth > 32:
@@ -52,7 +52,7 @@ def evaluate(spec, inputs, max_operations=10000):
         if value is None or type(value) in {str, int, float, bool}:
             return finite(value)
         if isinstance(value, list):
-            return [visit(v, depth + 1) for v in value]
+            return [visit(v, depth + 1, f"{location}[{index}]") for index, v in enumerate(value)]
         if not isinstance(value, dict):
             raise ValueError("Only JSON expressions are supported.")
         if set(value) == {"field"}:
@@ -68,16 +68,19 @@ def evaluate(spec, inputs, max_operations=10000):
                 at = at[part]
             return finite(at)
         if set(value) != {"op", "args"} or not isinstance(value["args"], list):
-            raise ValueError("Expressions require only op and args.")
+            if set(value) in ({"literal"}, {"value"}, {"const"}):
+                raise ValueError(location + ': a literal is a raw JSON value (for example 7), not a literal/value/const object. Input references use exactly {"field":"name"}.')
+            raise ValueError(location + ': an operation must contain exactly "op" and an "args" array; received keys ' + ", ".join(sorted(map(str, value))) + ".")
         op, raw = value["op"], value["args"]
         if op == "if":
             if len(raw) != 3:
                 raise ValueError("if needs three operands.")
-            cond = visit(raw[0], depth + 1)
+            cond = visit(raw[0], depth + 1, location + ".args[0]")
             if type(cond) is not bool:
                 raise ValueError("if condition must be boolean.")
-            return visit(raw[1] if cond else raw[2], depth + 1)
-        args = [visit(v, depth + 1) for v in raw]
+            branch = 1 if cond else 2
+            return visit(raw[branch], depth + 1, f"{location}.args[{branch}]")
+        args = [visit(v, depth + 1, f"{location}.args[{index}]") for index, v in enumerate(raw)]
         if op in {"add", "mul", "min", "max"}:
             if not args:
                 raise ValueError("Arithmetic needs operands.")
@@ -120,7 +123,7 @@ def evaluate(spec, inputs, max_operations=10000):
         return finite(result)
 
     finite(inputs)
-    result = {key: visit(expr) for key, expr in spec["outputs"].items()}
+    result = {key: visit(expr, location="$.outputs[" + json.dumps(key) + "]") for key, expr in spec["outputs"].items()}
     return {"output": result, "operations": count, "scope": "Bounded declarative execution; acceptance must be checked separately."}
 
 

@@ -12,8 +12,8 @@ on:
 permissions:
   contents: read
 concurrency:
-  group: alpha-genesis-harness-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+  group: alpha-genesis-harness-${{ github.event.pull_request.number || github.ref }}-${{ github.event.pull_request.head.sha || github.sha }}
+  cancel-in-progress: false  # Preserve in-flight registered model trials and their failure evidence.
 jobs:
   qualify:
     runs-on: ubuntu-latest
@@ -77,6 +77,44 @@ jobs:
           print(json.dumps(receipt))
           PY
           # Exit 2 is recorded BLOCKED, never authenticated or sandbox-qualified PASS.
+      - name: Exercise native foundry evaluator without model credentials
+        env:
+          SOURCE_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set +e
+          python products/alpha-genesis-harness/scripts/probe_upgrade_foundry.py --executable "$RUNNER_TEMP/harness-codex/node_modules/.bin/codex" --output "$RUNNER_TEMP/harness-assets/UPGRADE-FOUNDRY-HOST-VERIFICATION.json"
+          probe_status=$?
+          set -e
+          test "$probe_status" -eq 0 || test "$probe_status" -eq 2
+          PROBE_STATUS="$probe_status" python - <<'PY'
+          import json, os
+          from pathlib import Path
+          path = Path(os.environ['RUNNER_TEMP']) / 'harness-assets/UPGRADE-FOUNDRY-HOST-VERIFICATION.json'
+          receipt = json.loads(path.read_text())
+          assert (int(os.environ['PROBE_STATUS']), receipt['status']) in ((0, 'PASS'), (2, 'BLOCKED'))
+          assert receipt['live_model_construction'] == 'NOT_TESTED' and receipt['generated_code_executed'] is False
+          receipt['source_revision'] = os.environ['SOURCE_SHA']
+          path.write_text(json.dumps(receipt, indent=2) + '\n')
+          PY
+      - name: Observe authorized official public source without model credentials
+        env:
+          SOURCE_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set +e
+          python products/alpha-genesis-harness/scripts/probe_frontier_monitor.py --output "$RUNNER_TEMP/harness-assets/FRONTIER-MONITOR-VERIFICATION.json"
+          probe_status=$?
+          set -e
+          test "$probe_status" -eq 0 || test "$probe_status" -eq 2
+          PROBE_STATUS="$probe_status" python - <<'PY'
+          import json, os
+          from pathlib import Path
+          path = Path(os.environ['RUNNER_TEMP']) / 'harness-assets/FRONTIER-MONITOR-VERIFICATION.json'
+          receipt = json.loads(path.read_text())
+          assert (int(os.environ['PROBE_STATUS']), receipt['status']) in ((0, 'PASS'), (2, 'BLOCKED'))
+          assert receipt['inference_calls'] == 0 and receipt['real_credentials_used'] is False and receipt['paid_requests_enabled'] is False
+          receipt['source_revision'] = os.environ['SOURCE_SHA']
+          path.write_text(json.dumps(receipt, indent=2) + '\n')
+          PY
       - name: Render and exercise the customer interface in Chromium
         env:
           NODE_PATH: ${{ runner.temp }}/harness-visual/node_modules
@@ -108,6 +146,12 @@ jobs:
           assert probe['source_revision'] == os.environ['EXPECTED_SOURCE']
           probe['archive_sha256'] = receipt['archive_sha256']
           probe_path.write_text(json.dumps(probe, indent=2) + '\n')
+          for name in ['UPGRADE-FOUNDRY-HOST-VERIFICATION.json', 'FRONTIER-MONITOR-VERIFICATION.json']:
+              path = Path(os.environ['RUNNER_TEMP']) / 'harness-assets' / name
+              evidence = json.loads(path.read_text())
+              assert evidence['source_revision'] == os.environ['EXPECTED_SOURCE']
+              evidence['archive_sha256'] = receipt['archive_sha256']
+              path.write_text(json.dumps(evidence, indent=2) + '\n')
           with open(os.environ['GITHUB_OUTPUT'], 'a') as out:
               out.write('source_sha='+os.environ['EXPECTED_SOURCE']+'\n')
               out.write('archive_sha='+receipt['archive_sha256']+'\n')
@@ -133,12 +177,16 @@ jobs:
             ${{ runner.temp }}/harness-operation
             ${{ runner.temp }}/harness-assets/BROWSER-VERIFICATION.json
             ${{ runner.temp }}/harness-assets/CODEX-HOST-VERIFICATION.json
+            ${{ runner.temp }}/harness-assets/UPGRADE-FOUNDRY-HOST-VERIFICATION.json
+            ${{ runner.temp }}/harness-assets/FRONTIER-MONITOR-VERIFICATION.json
             ${{ runner.temp }}/harness-assets/HARNESS-*.png
           if-no-files-found: warn
   local-model-qualification:
     runs-on: ubuntu-24.04
     timeout-minutes: 360
     steps:
+      - name: Record platform job execution start
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
@@ -168,6 +216,8 @@ jobs:
       run:
         shell: bash
     steps:
+      - name: Record platform job execution start
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           ref: ${{ needs.qualify.outputs.source_sha }}
@@ -184,17 +234,27 @@ jobs:
           path: ${{ runner.temp }}/harness-platform-received
           merge-multiple: true
       - name: Install exact browser test dependency
+        env:
+          PLAYWRIGHT_BROWSERS_PATH: ${{ runner.temp }}/harness-platform-browser
+          NODE_PATH: ${{ runner.temp }}/harness-platform-visual/node_modules
         run: |
           mkdir -p "$RUNNER_TEMP/harness-platform-visual"
           cp products/alpha-genesis-harness/tests/visual/package*.json "$RUNNER_TEMP/harness-platform-visual/"
           npm ci --prefix "$RUNNER_TEMP/harness-platform-visual" --ignore-scripts --no-audit --no-fund
+          node "$RUNNER_TEMP/harness-platform-visual/node_modules/playwright-core/cli.js" install chromium
+          python - <<'PY'
+          import os, subprocess
+          browser = subprocess.check_output(['node', '-e', "process.stdout.write(require('playwright-core').chromium.executablePath())"], text=True)
+          with open(os.environ['GITHUB_ENV'], 'a', encoding='utf-8') as output:
+              output.write('HARNESS_NATIVE_BROWSER=' + browser + '\n')
+          PY
       - name: Verify and exercise the same extracted archive on this OS
         env:
           ARCHIVE_NAME: ${{ needs.qualify.outputs.archive_name }}
           ARCHIVE_SHA: ${{ needs.qualify.outputs.archive_sha }}
           SOURCE_SHA: ${{ needs.qualify.outputs.source_sha }}
         run: |
-          python products/alpha-genesis-harness/scripts/qualify_platform.py "$RUNNER_TEMP/harness-platform-received/$ARCHIVE_NAME" --expected-sha256 "$ARCHIVE_SHA" --expected-source-revision "$SOURCE_SHA" --visual-modules "$RUNNER_TEMP/harness-platform-visual/node_modules" --output "$RUNNER_TEMP/harness-platform-operation"
+          python products/alpha-genesis-harness/scripts/qualify_platform.py "$RUNNER_TEMP/harness-platform-received/$ARCHIVE_NAME" --expected-sha256 "$ARCHIVE_SHA" --expected-source-revision "$SOURCE_SHA" --visual-modules "$RUNNER_TEMP/harness-platform-visual/node_modules" --browser-executable "$HARNESS_NATIVE_BROWSER" --output "$RUNNER_TEMP/harness-platform-operation"
       - name: Record native Codex isolation on this OS without authentication
         env:
           SOURCE_SHA: ${{ needs.qualify.outputs.source_sha }}

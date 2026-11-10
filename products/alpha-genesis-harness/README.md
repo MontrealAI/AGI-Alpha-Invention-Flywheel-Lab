@@ -20,10 +20,12 @@ For model connections and persistent agentic construction, use the source launch
 
 - A bilingual English/French workspace for a mission, sources, competing contributions, experiments, evidence and retained capabilities.
 - Guided manual model interaction, with imports tied to their declared provider, model and role.
-- A bounded declarative interpreter and inspectable instruments; generated arbitrary code is not executed.
+- A bounded declarative interpreter for ordinary workflow instruments. The separate optional source foundry executes generated Python only inside its required native sandbox.
 - Explicit economic assumptions, participant outside options and complete-cost fields, without moving money or creating a second enterprise ledger.
 - Versioned project export/import, a capability record and scope-limited comparison procedures.
 - Ω GENESIS NEXT: a bounded internal evidence-reuse upgrade, independent comparison, deferred-opportunity replay and a separate successor experiment. The built-in recipe is authored; ordinary reuse may tie or win.
+- A model-driven Upgrade Foundry for isolated interpreter-module edits, independent host checks, explicit hash-bound research selection and rollback. Live model construction remains separately gated.
+- Consent-bound monitoring of configured public sources, with pause/restart controls and reported-only frontier replay. A source change never proves an improved capability.
 - A local connector for configured provider APIs/local inference, bounded persistent agentic construction and official eligible ChatGPT/Codex pathways. See [model connections](docs/MODEL-CONNECTIONS.md); real authenticated integrations remain unqualified unless the release evidence specifically says otherwise.
 
 The synthetic example demonstrates software behavior. It does not establish a new invention, actual market demand, customers, profitability or generally improved inventive intelligence. A model-generated idea is a hypothesis until independently tested. A recorded source URL alone does not verify its content or freshness.
@@ -37,6 +39,8 @@ The synthetic example demonstrates software behavior. It does not establish a ne
 - [Official ChatGPT-plan and Codex setup](docs/CHATGPT-PLAN.md)
 - [Agentic workflow specifications](docs/AGENTIC-WORKFLOWS.md)
 - [Ω GENESIS NEXT: improve and challenge the HARNESS](docs/OMEGA-GENESIS-NEXT.md)
+- [Model-driven Upgrade Foundry](docs/UPGRADE-FOUNDRY.md)
+- [Authorized frontier monitoring and replay](docs/FRONTIER-MONITOR.md)
 - [Proof-to-Market: test a conditional economic arrangement](docs/PROOF-TO-MARKET.md)
 - [Advanced operators, verification and inheritance](docs/OPERATOR.md)
 - [Troubleshooting](docs/TROUBLESHOOTING.md) and [FAQ](docs/FAQ.md)
@@ -45,7 +49,7 @@ The synthetic example demonstrates software behavior. It does not establish a ne
 
 ## Actual local-model evidence
 
-The [local workflow receipt](evidence/live-local-workflows.json) records real Qwen3-1.7B inference through llama.cpp on Linux CPU, single-model and builder–critic construction, independent acceptance, an externally executed artifact and successor reuse. It includes exact source/runtime/weight identities and earlier negative attempts. This is bounded local execution evidence; ordinary reuse ties, and cloud APIs/ChatGPT-plan access retain their separate live gates.
+The [final 0.3 local workflow receipt](evidence/live-local-workflows-v0.3.json) records actual HTTP onboarding and Qwen3-1.7B inference through llama.cpp on Linux CPU. Its aggregate result is **FAIL**: the single builder exhausted three calls producing invalid input-field artifacts. The builder–critic path passed in two calls, exported an independently checked artifact and reused it successfully. The [earlier 0.3 both-policy success](evidence/live-local-workflows-v0.3-before-final-integration.json) and [0.2 receipt](evidence/live-local-workflows.json) retain their original source identities. These are bounded local results; ordinary reuse ties, and cloud APIs/ChatGPT-plan access retain their separate live gates.
 
 ## Privacy and permissions
 

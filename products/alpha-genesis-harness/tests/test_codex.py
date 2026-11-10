@@ -41,7 +41,8 @@ class CodexTests(unittest.TestCase):
         seed(self.plan)
         self.messages = [{"id": 0, "result": {}}, {"id": 1, "result": {"thread": {"id": "thread-one"}, "activePermissionProfile": {"id": PROFILE}}},
                          {"id": 2, "result": {"turn": {"id": "turn-one"}}},
-                         {"method": "item/agentMessage/delta", "params": {"threadId": "thread-one", "turnId": "turn-one", "delta": "Constructed useful output"}},
+                         {"method": "item/agentMessage/delta", "params": {"threadId": "thread-one", "turnId": "turn-one", "itemId": "final-one", "delta": "Constructed useful output"}},
+                         {"method": "item/completed", "params": {"threadId": "thread-one", "turnId": "turn-one", "item": {"type": "agentMessage", "id": "final-one", "phase": "final_answer", "text": "Constructed useful output"}}},
                          {"method": "turn/completed", "params": {"threadId": "thread-one", "turn": {"id": "turn-one", "status": "completed"}}}]
         self.calls = []
         def factory(command, **kwargs):

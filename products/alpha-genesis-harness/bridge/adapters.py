@@ -482,10 +482,14 @@ class Runtime:
             return {"run_id": ident, "cancelled": event is not None,
                     "notice": "Cancellation stops retries and result acceptance; an upstream request may continue and incur charges."}
 
-    def generate(self, data, on_event=None):
+    def generate(self, data, on_event=None, *, cancelled_before_dispatch=None, expected_provider=None):
         if not isinstance(data, dict) or set(data) - {"provider", "model", "prompt", "max_output_tokens", "run_id", "json_mode", "stream", "tools", "required_capabilities"}:
             raise BridgeError("INPUT", "Unsupported generation fields; only text and explicit function declarations are permitted.")
         p = self.provider(data.get("provider"))
+        if expected_provider is not None and p is not expected_provider:
+            error = BridgeError("PROVIDER_CHANGED", "Selected connection changed before dispatch. Submit a new request explicitly.", 409)
+            error.pre_dispatch = True
+            raise error
         model = data.get("model")
         prompt, run_id = data.get("prompt"), data.get("run_id")
         limit = data.get("max_output_tokens", 2048)
@@ -517,11 +521,17 @@ class Runtime:
         reserved = one*self.attempts
         with self._lock:
             if self.providers.get(p.id) is not p:
-                raise BridgeError("PROVIDER_CHANGED", "The local connection changed while this request was prepared. Select the current connection and submit a new request.", 409)
+                error = BridgeError("PROVIDER_CHANGED", "The local connection changed while this request was prepared. Select the current connection and submit a new request.", 409)
+                error.pre_dispatch = True
+                raise error
             if run_id in self._runs:
                 raise BridgeError("RUN_ID", "This run_id has already been used; duplicate dispatch is refused.", 409)
             if len(self._active) >= self.max_concurrent:
                 raise BridgeError("BUSY", "The configured simultaneous-request limit is reached. Wait or cancel a running request.", 429)
+            if cancelled_before_dispatch is not None and cancelled_before_dispatch():
+                error = BridgeError("CANCELLED", "Request cancelled before provider admission or budget reservation.", 409)
+                error.pre_dispatch = True
+                raise error
             self.budget.reserve(reserved)
             cancel = threading.Event()
             self._runs[run_id] = cancel
