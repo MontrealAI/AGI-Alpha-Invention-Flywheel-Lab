@@ -19,7 +19,7 @@ from bridge.adapters import BridgeError, Runtime
 from bridge.chatgpt import ChatGPTPlanService
 from bridge.codex import CodexService
 from bridge.instruments import evaluate
-from bridge.upgrade_foundry import UpgradeFoundryService, NativeEvaluator, EDITABLE, _CHILD
+from bridge.upgrade_foundry import UpgradeFoundryService, NativeEvaluator, EDITABLE, _CHILD, _protocol
 from bridge.workflows import WorkflowService
 from test_chatgpt import FakeTransport, seed
 from test_codex import ProcessFixture
@@ -117,7 +117,7 @@ class FoundryTests(unittest.TestCase):
     def test_end_to_end_contract_qualification_retention_and_rollback(self):
         exp = self.qualify()
         self.assertEqual(exp["qualification"]["correctness"], "PASS")
-        self.assertEqual(exp["qualification"]["arms"]["candidate"]["cases"], 52)
+        self.assertEqual(exp["qualification"]["arms"]["candidate"]["cases"], len(_protocol(0)["cases"]))
         self.assertEqual(exp["qualification"]["arms"]["ordinary_direct_arithmetic"]["cases"], 48)
         self.assertEqual(exp["qualification"]["general_improvement"], "NOT_ESTABLISHED")
         with self.assertRaises(BridgeError): self.service.activate({"experiment_id": exp["id"], "authorize": True, "expected_candidate_sha256": "wrong"})
@@ -134,6 +134,23 @@ class FoundryTests(unittest.TestCase):
         self.service.rollback({"authorize": True})
         self.assertIsNone(self.service.status()["active_candidate"])
         with self.assertRaises(BridgeError): self.service.evaluate_retained({"instrument": {}, "inputs": {}})
+
+    def test_fixed_json_contract_rejects_nested_python_boolean_coercion(self):
+        protocol = _protocol(0)
+        self.assertEqual(protocol["schema"], "harness-interpreter-upgrade-protocol/v2")
+        cases = [case for case in protocol["cases"] if case["id"].startswith("equality-")]
+        self.assertEqual(len(cases), 12)
+        trusted = self.evaluator.run(self.root, cases)
+        self.assertTrue(self.service._judge(cases, trusted)["passed"])
+        # Simulate the old host-language container comparison, without importing
+        # or executing generated candidate code in this test process.
+        regressed = [{"id": case["id"], "output": {"result": case["inputs"]["left"] == case["inputs"]["right"]}}
+                     for case in cases]
+        verdict = self.service._judge(cases, regressed)
+        self.assertFalse(verdict["passed"])
+        self.assertEqual({row["id"] for row in verdict["decisions"] if not row["passed"]},
+                         {"equality-list-bool-number", "equality-object-bool-number", "equality-nested-bool-number",
+                          "equality-nested-number-bool"})
 
     def test_wrong_candidate_outputs_fail_parent_decision(self):
         exp = self.construct(); self.evaluator.bad = True
