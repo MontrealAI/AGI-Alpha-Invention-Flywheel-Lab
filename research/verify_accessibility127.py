@@ -39,11 +39,31 @@ class FactParser(HTMLParser):
         self.skip = 0
         self.meta_attrs = []
         self.static_text = []
+        self.stack = []  # Independent well-formed semantic containment contract.
 
     def handle_starttag(self, tag, attrs):
         att = dict(attrs)
         if tag not in ALLOWED_TAGS or len(att) != len(attrs):
             raise ValueError('UNSAFE_HTML_TAG_OR_ATTRIBUTE')
+        parent = self.stack[-1] if self.stack else None
+        # HTMLParser is token-oriented and does not enforce a browser-like tree.
+        # A count of <main> alone cannot establish that the verified content
+        # remains inside it. Reject all unregistered nesting and orphan tags.
+        required_parent = {
+            'html': None, 'head': 'html', 'meta': 'head',
+            'title': 'head', 'body': 'html', 'main': 'body',
+            'h1': 'main', 'h2': 'main', 'p': 'main',
+            'strong': 'p', 'table': 'main', 'caption': 'table',
+            'thead': 'table', 'tbody': 'table',
+            'tr': ('thead', 'tbody'), 'th': 'tr', 'td': 'tr',
+            'a': ('body', 'td'),
+        }[tag]
+        if isinstance(required_parent, tuple):
+            permitted = parent in required_parent
+        else:
+            permitted = parent == required_parent
+        if not permitted:
+            raise ValueError('SEMANTIC_NESTING_REJECTED')
         if tag == 'meta':
             if att not in EXPECTED_META:
                 raise ValueError('UNSAFE_HTML_TAG_OR_ATTRIBUTE')
@@ -82,6 +102,8 @@ class FactParser(HTMLParser):
                 if not href or urlsplit(href).scheme != 'https':
                     raise ValueError('UNSAFE_SOURCE_LINK')
                 self.links.append(href)
+        if tag != 'meta':  # HTML meta is a void element.
+            self.stack.append(tag)
         if tag == 'tr' and 'data-record-id' in att:
             if self.current is not None:
                 raise ValueError('NESTED_ROW')
@@ -115,6 +137,8 @@ class FactParser(HTMLParser):
         raise ValueError('UNSUPPORTED_HTML_INSTRUCTION')
 
     def handle_endtag(self, tag):
+        if not self.stack or self.stack[-1] != tag:
+            raise ValueError('SEMANTIC_NESTING_REJECTED')
         if tag in {'th', 'td'} and self.cell is not None:
             self.current['cells'].append(''.join(self.cell).strip())
             self.cell = None
@@ -124,6 +148,7 @@ class FactParser(HTMLParser):
                 raise ValueError('UNCLOSED_CELL')
             self.rows.append(self.current)
             self.current = None
+        self.stack.pop()
 
 
 def verify(input_path, html_path, manifest_path):
@@ -144,7 +169,7 @@ def verify(input_path, html_path, manifest_path):
     p = FactParser()
     p.feed(document.decode('utf-8', errors='strict'))
     p.close()
-    if p.meta_attrs != EXPECTED_META or p.current is not None or p.cell is not None:
+    if p.meta_attrs != EXPECTED_META or p.current is not None or p.cell is not None or p.stack:
         raise ValueError('STRUCTURE_REJECTED')
     if ' '.join(' '.join(p.static_text).split()) != EXPECTED_STATIC:
         raise ValueError('UNEXPECTED_STATIC_TEXT')
