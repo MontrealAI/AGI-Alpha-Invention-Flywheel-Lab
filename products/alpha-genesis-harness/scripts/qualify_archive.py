@@ -88,6 +88,10 @@ def qualify(archive: Path, expected_sha256: str, expected_revision: str, output:
                 commands.append([sys.executable, "-B", "scripts/qualify_genesis_successor.py", "freeze", "--output", frozen])
                 commands.append([sys.executable, "-B", "scripts/qualify_genesis_successor.py", "run", "--freeze", frozen,
                                  "--output", str(output.resolve() / "OMEGA-FRESH-SUCCESSOR.json")])
+            if (product / "bridge/strategy_demo.py").is_file():
+                commands.append([sys.executable, "-B", "-m", "bridge.strategy_demo",
+                                 "--workspace", str(Path(folder) / "private-strategy-demo"),
+                                 "--output", str(output.resolve() / "STRATEGY-DEMONSTRATION.json")])
             if dom_modules is not None:
                 dom_modules = dom_modules.resolve(strict=True)
                 expected = json.loads((product / "tests/dom/package.json").read_text())["dependencies"]["jsdom"]

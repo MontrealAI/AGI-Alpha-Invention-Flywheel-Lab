@@ -20,6 +20,11 @@ from urllib.parse import quote, urlsplit
 from urllib.request import Request, build_opener, ProxyHandler, HTTPRedirectHandler
 from urllib.error import HTTPError, URLError
 
+if __package__:
+    from .output_schema import SchemaError, prepare_schema, validate_output
+else:
+    from output_schema import SchemaError, prepare_schema, validate_output
+
 # Pin source at this module's own load, before a later lazy GENESIS import.
 LOADED_SOURCE_SHA256 = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
 
@@ -29,7 +34,7 @@ ID = re.compile(r"[A-Za-z0-9][A-Za-z0-9_.:/-]{0,199}\Z")
 RUN_ID = re.compile(r"[A-Za-z0-9_-]{1,128}\Z")
 ENV_ID = re.compile(r"[A-Z][A-Z0-9_]{0,127}\Z")
 KINDS = {"openai", "responses", "anthropic", "gemini", "ollama"}
-CAPABILITIES = {"text", "json", "streaming", "tool_calling"}
+CAPABILITIES = {"text", "json", "json_schema", "streaming", "tool_calling"}
 DEFAULT_HOSTS = ["arxiv.org", "www.nature.com", "www.science.org", "docs.ollama.com",
                  "ai.google.dev", "developers.openai.com", "platform.claude.com",
                  "montrealai.github.io"]
@@ -95,10 +100,11 @@ class Model:
     streaming: bool = False
     tool_calling: bool = False
     context_window: int | None = None
+    json_schema: bool = False
 
     def supports(self, name):
         return {"text": True, "json": self.json_mode, "streaming": self.streaming,
-                "tool_calling": self.tool_calling}.get(name, False)
+                "tool_calling": self.tool_calling, "json_schema": self.json_schema}.get(name, False)
 
 
 class Provider:
@@ -129,11 +135,15 @@ class Provider:
             overhead = model.get("input_token_overhead", 4096)
             if type(bound) is not int or bound < 1 or type(overhead) is not int or overhead < 0:
                 raise BridgeError("CONFIG", "Declare positive output and nonnegative input-overhead token bounds.")
+            if "json_schema" in model and type(model["json_schema"]) is not bool:
+                raise BridgeError("CONFIG", "json_schema must be an explicit boolean capability.")
+            if model.get("json_schema") is True and (self.remote or self.kind not in {"openai", "ollama"}):
+                raise BridgeError("CONFIG", "Schema output is supported only for explicitly configured local compatible-chat or Ollama models.")
             self.models[name] = Model(name, decimal(model["input_per_million"], "input price"),
                                       decimal(model["output_per_million"], "output price"),
                                       model.get("json_mode") is True, bound, overhead,
                                       model.get("streaming") is True, model.get("tool_calling") is True,
-                                      model.get("context_window"))
+                                      model.get("context_window"), model.get("json_schema") is True)
             context = self.models[name].context_window
             if context is not None and (type(context) is not int or context < bound):
                 raise BridgeError("CONFIG", "context_window must be an integer at least as large as max_output_tokens.")
@@ -157,10 +167,17 @@ class Provider:
             result["Authorization"] = "Bearer " + self.key
         return result
 
-    def request(self, model, prompt, limit, json_mode=False, *, stream=False, tools=None):
-        if json_mode and not self.models[model].json_mode:
+    def request(self, model, prompt, limit, json_mode=False, *, stream=False, tools=None, json_schema=None):
+        if json_mode and json_schema is None and not self.models[model].json_mode:
             raise BridgeError("CAPABILITY", "JSON output is not enabled for this model.")
         tools = validate_tools(tools)
+        if json_schema is not None:
+            if not self.models[model].json_schema or self.remote or self.kind not in {"openai", "ollama"} or tools:
+                raise BridgeError("CAPABILITY", "Schema output requires an enabled local model and cannot be combined with native tool declarations.")
+            try:
+                json_schema = prepare_schema(json_schema)
+            except SchemaError as error:
+                raise BridgeError("SCHEMA", str(error)) from None
         if stream and not self.models[model].streaming:
             raise BridgeError("CAPABILITY", "Streaming is not enabled for this model.")
         if tools and not self.models[model].tool_calling:
@@ -175,7 +192,9 @@ class Provider:
             return self.base + "/responses", body
         if self.kind == "openai":
             body = {"model": model, "messages": message, self.limit_field: limit, "stream": stream}
-            if json_mode:
+            if json_schema is not None:
+                body["response_format"] = {"type": "json_schema", "json_schema": {"name": "harness_output", "strict": True, "schema": json_schema}}
+            elif json_mode:
                 body["response_format"] = {"type": "json_object"}
             if stream:
                 body["stream_options"] = {"include_usage": True}
@@ -202,7 +221,9 @@ class Provider:
         body = {"model": model, "messages": message, "stream": stream, "options": {"num_predict": limit}}
         if tools:
             body["tools"] = [{"type": "function", "function": t} for t in tools]
-        if json_mode:
+        if json_schema is not None:
+            body["format"] = json_schema
+        elif json_mode:
             body["format"] = "json"
         return self.base + "/api/chat", body
 
@@ -434,6 +455,7 @@ class Runtime:
             rows.append({"id": p.id, "label": p.label, "kind": p.kind, "models": list(p.models),
                          "ready": p.ready and (self.allow_paid or not p.remote), "reason": reason,
                          "capabilities": {"text": True, "json": p.kind != "anthropic" and any(m.json_mode for m in p.models.values()),
+                                          "json_schema": any(m.json_schema for m in p.models.values()),
                                           "streaming": any(m.streaming for m in p.models.values()),
                                           "tool_calling": any(m.tool_calling for m in p.models.values()), "discovery": True},
                          "model_capabilities": {m.id: {c: m.supports(c) for c in sorted(CAPABILITIES)} for m in p.models.values()},
@@ -482,10 +504,14 @@ class Runtime:
             return {"run_id": ident, "cancelled": event is not None,
                     "notice": "Cancellation stops retries and result acceptance; an upstream request may continue and incur charges."}
 
-    def generate(self, data, on_event=None):
-        if not isinstance(data, dict) or set(data) - {"provider", "model", "prompt", "max_output_tokens", "run_id", "json_mode", "stream", "tools", "required_capabilities"}:
+    def generate(self, data, on_event=None, *, cancelled_before_dispatch=None, expected_provider=None):
+        if not isinstance(data, dict) or set(data) - {"provider", "model", "prompt", "max_output_tokens", "run_id", "json_mode", "json_schema", "stream", "tools", "required_capabilities"}:
             raise BridgeError("INPUT", "Unsupported generation fields; only text and explicit function declarations are permitted.")
         p = self.provider(data.get("provider"))
+        if expected_provider is not None and p is not expected_provider:
+            error = BridgeError("PROVIDER_CHANGED", "Selected connection changed before dispatch. Submit a new request explicitly.", 409)
+            error.pre_dispatch = True
+            raise error
         model = data.get("model")
         prompt, run_id = data.get("prompt"), data.get("run_id")
         limit = data.get("max_output_tokens", 2048)
@@ -505,30 +531,45 @@ class Runtime:
             raise BridgeError("CAPABILITY", "Selected model lacks a required capability.")
         streaming = data.get("stream") is True
         tools = validate_tools(data.get("tools"))
-        url, body = p.request(model, prompt, limit, data.get("json_mode") is True, stream=streaming, tools=tools)
+        schema = None
+        if "json_schema" in data:
+            try:
+                schema = prepare_schema(data["json_schema"])
+            except SchemaError as error:
+                raise BridgeError("SCHEMA", str(error)) from None
+        url, body = p.request(model, prompt, limit, data.get("json_mode") is True, stream=streaming, tools=tools, json_schema=schema)
         # One token per UTF-8 byte plus declared framing overhead is conservative for
         # ordinary text tokenizers. Not a vendor-enforced billing guarantee.
         input_bound = len(prompt.encode("utf-8")) + m.input_token_overhead
         if tools:
             input_bound += len(json.dumps(tools, ensure_ascii=False).encode())
+        if schema is not None:
+            input_bound += len(json.dumps(schema, ensure_ascii=False).encode())
         if m.context_window is not None and input_bound + limit > m.context_window:
             raise BridgeError("CONTEXT", "Conservative input plus output estimate exceeds the configured context window; reduce or explicitly summarize the input.")
         one = (Decimal(input_bound)*m.input_price + Decimal(limit)*m.output_price) / 1_000_000
-        reserved = one*self.attempts
+        attempt_limit = 1 if schema is not None else self.attempts
+        reserved = one*attempt_limit
         with self._lock:
             if self.providers.get(p.id) is not p:
-                raise BridgeError("PROVIDER_CHANGED", "The local connection changed while this request was prepared. Select the current connection and submit a new request.", 409)
+                error = BridgeError("PROVIDER_CHANGED", "The local connection changed while this request was prepared. Select the current connection and submit a new request.", 409)
+                error.pre_dispatch = True
+                raise error
             if run_id in self._runs:
                 raise BridgeError("RUN_ID", "This run_id has already been used; duplicate dispatch is refused.", 409)
             if len(self._active) >= self.max_concurrent:
                 raise BridgeError("BUSY", "The configured simultaneous-request limit is reached. Wait or cancel a running request.", 429)
+            if cancelled_before_dispatch is not None and cancelled_before_dispatch():
+                error = BridgeError("CANCELLED", "Request cancelled before provider admission or budget reservation.", 409)
+                error.pre_dispatch = True
+                raise error
             self.budget.reserve(reserved)
             cancel = threading.Event()
             self._runs[run_id] = cancel
             self._active.add(run_id)
         accounted, attempts, usage, text, last_error = Decimal(0), 0, None, None, None
         try:
-            for attempt in range(self.attempts):
+            for attempt in range(attempt_limit):
                 if cancel.is_set():
                     raise BridgeError("CANCELLED", "Run cancelled. Completed or sent attempts remain accounted.", 409)
                 attempts += 1
@@ -542,7 +583,7 @@ class Runtime:
                             nonlocal pending
                             pending += fragment
                             pending = self.redact(pending)
-                            if on_event and len(pending) > keep:
+                            if schema is None and on_event and len(pending) > keep:
                                 cut = len(pending) - keep
                                 on_event({"type": "text_delta", "run_id": run_id, "text": pending[:cut]})
                                 pending = pending[cut:]
@@ -564,12 +605,18 @@ class Runtime:
                     attempt_accounted = True
                     if cancel.is_set():
                         raise BridgeError("CANCELLED_ACCOUNTED", "Run cancelled; the completed response was discarded and its cost accounted.", 409)
-                    if streaming and on_event and pending:
-                        on_event({"type": "text_delta", "run_id": run_id, "text": self.redact(pending)})
+                    if schema is not None:
+                        try:
+                            validate_output(strict_json(self.redact(text)), schema)
+                        except (SchemaError, BridgeError, RecursionError):
+                            raise BridgeError("SCHEMA_RESPONSE", "The completed response does not satisfy the requested JSON schema. No fallback or retry was sent.", 502) from None
+                    if streaming and on_event and (pending or schema is not None):
+                        accepted_text = text if schema is not None else pending
+                        on_event({"type": "text_delta", "run_id": run_id, "text": self.redact(accepted_text)})
                     reported_model = response.get("modelVersion") if p.kind == "gemini" else response.get("model")
                     if not isinstance(reported_model, str) or len(reported_model) > 512:
                         reported_model = None
-                    return {"run_id": run_id, "provider": p.id, "model": model, "requested_model": model,
+                    result = {"run_id": run_id, "provider": p.id, "model": model, "requested_model": model,
                             "reported_model": self.redact(reported_model) if reported_model else None,
                             "text": self.redact(text), "usage": usage,
                             "tool_calls": strict_json(self.redact(json.dumps(calls))),
@@ -577,6 +624,10 @@ class Runtime:
                             "cost": {"currency": "USD", "amount": float(amount), "accounted": float(accounted), "basis": basis,
                                      "attempts": attempts, "complete_cost_known": False},
                             "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION"}
+                    if schema is not None:
+                        result["structured_output"] = {"mode": "json_schema", "validated": True,
+                            "schema_sha256": hashlib.sha256(json.dumps(schema, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode()).hexdigest()}
+                    return result
                 except BridgeError as error:
                     if error.code == "CANCELLED_ACCOUNTED":
                         raise
@@ -584,7 +635,7 @@ class Runtime:
                     if not attempt_accounted:
                         accounted += one
                     last_error = error
-                    if error.code not in {"PROVIDER_HTTP", "PROVIDER_CONNECTION"} or attempt + 1 == self.attempts:
+                    if error.code not in {"PROVIDER_HTTP", "PROVIDER_CONNECTION"} or attempt + 1 == attempt_limit:
                         raise
                     if cancel.wait(min(2 ** attempt, 4)):
                         raise BridgeError("CANCELLED", "Run cancelled; no further retry sent.", 409)

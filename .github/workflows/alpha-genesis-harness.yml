@@ -12,8 +12,8 @@ on:
 permissions:
   contents: read
 concurrency:
-  group: alpha-genesis-harness-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+  group: alpha-genesis-harness-${{ github.event.pull_request.number || github.ref }}-${{ github.event.pull_request.head.sha || github.sha }}
+  cancel-in-progress: false  # Preserve in-flight registered model trials and their failure evidence.
 jobs:
   qualify:
     runs-on: ubuntu-latest
@@ -53,6 +53,8 @@ jobs:
           node products/alpha-genesis-harness/evidence/UI_HTTP_WORKFLOW_REPLAY.cjs
           node products/alpha-genesis-harness/evidence/UI_GENESIS_NEXT_REPLAY.cjs
       - name: Record official Codex sandbox operation without model authentication
+        env:
+          SOURCE_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
         run: |
           mkdir -p "$RUNNER_TEMP/harness-codex" "$RUNNER_TEMP/harness-assets"
           cp products/alpha-genesis-harness/tests/codex/package*.json "$RUNNER_TEMP/harness-codex/"
@@ -62,24 +64,57 @@ jobs:
           probe_status=$?
           set -e
           test "$probe_status" -eq 0 || test "$probe_status" -eq 2
-          cat "$RUNNER_TEMP/harness-assets/CODEX-HOST-VERIFICATION.json"
+          PROBE_STATUS="$probe_status" python - <<'PY'
+          import json, os
+          from pathlib import Path
+          path = Path(os.environ['RUNNER_TEMP']) / 'harness-assets/CODEX-HOST-VERIFICATION.json'
+          receipt = json.loads(path.read_text())
+          assert (int(os.environ['PROBE_STATUS']), receipt['status']) in ((0, 'PASS'), (2, 'BLOCKED'))
+          assert receipt['inference_calls'] == 0 and receipt['real_credentials_used'] is False
+          receipt['source_revision'] = os.environ['SOURCE_SHA']
+          receipt['binding_scope'] = 'Credential-free probe of the committed source checkout; archive digest added only after source-bound packaging.'
+          path.write_text(json.dumps(receipt, indent=2) + '\n')
+          print(json.dumps(receipt))
+          PY
           # Exit 2 is recorded BLOCKED, never authenticated or sandbox-qualified PASS.
       - name: Exercise native foundry evaluator without model credentials
+        env:
+          SOURCE_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
         run: |
           set +e
           python products/alpha-genesis-harness/scripts/probe_upgrade_foundry.py --executable "$RUNNER_TEMP/harness-codex/node_modules/.bin/codex" --output "$RUNNER_TEMP/harness-assets/UPGRADE-FOUNDRY-HOST-VERIFICATION.json"
           probe_status=$?
           set -e
           test "$probe_status" -eq 0 || test "$probe_status" -eq 2
-          # A credential-free interpreter probe cannot qualify model construction.
+          PROBE_STATUS="$probe_status" python - <<'PY'
+          import json, os
+          from pathlib import Path
+          path = Path(os.environ['RUNNER_TEMP']) / 'harness-assets/UPGRADE-FOUNDRY-HOST-VERIFICATION.json'
+          receipt = json.loads(path.read_text())
+          assert (int(os.environ['PROBE_STATUS']), receipt['status']) in ((0, 'PASS'), (2, 'BLOCKED'))
+          assert receipt['live_model_construction'] == 'NOT_TESTED' and receipt['generated_code_executed'] is False
+          receipt['source_revision'] = os.environ['SOURCE_SHA']
+          path.write_text(json.dumps(receipt, indent=2) + '\n')
+          PY
       - name: Observe authorized official public source without model credentials
+        env:
+          SOURCE_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
         run: |
           set +e
           python products/alpha-genesis-harness/scripts/probe_frontier_monitor.py --output "$RUNNER_TEMP/harness-assets/FRONTIER-MONITOR-VERIFICATION.json"
           probe_status=$?
           set -e
           test "$probe_status" -eq 0 || test "$probe_status" -eq 2
-          # Retrieval and reported replay do not establish reproduced capability.
+          PROBE_STATUS="$probe_status" python - <<'PY'
+          import json, os
+          from pathlib import Path
+          path = Path(os.environ['RUNNER_TEMP']) / 'harness-assets/FRONTIER-MONITOR-VERIFICATION.json'
+          receipt = json.loads(path.read_text())
+          assert (int(os.environ['PROBE_STATUS']), receipt['status']) in ((0, 'PASS'), (2, 'BLOCKED'))
+          assert receipt['inference_calls'] == 0 and receipt['real_credentials_used'] is False and receipt['paid_requests_enabled'] is False
+          receipt['source_revision'] = os.environ['SOURCE_SHA']
+          path.write_text(json.dumps(receipt, indent=2) + '\n')
+          PY
       - name: Render and exercise the customer interface in Chromium
         env:
           NODE_PATH: ${{ runner.temp }}/harness-visual/node_modules
@@ -106,6 +141,17 @@ jobs:
           from pathlib import Path
           receipt = json.loads((Path(os.environ['RUNNER_TEMP'])/'harness-build.json').read_text())
           assert receipt['source_matches_commit'] is True
+          probe_path = Path(os.environ['RUNNER_TEMP']) / 'harness-assets/CODEX-HOST-VERIFICATION.json'
+          probe = json.loads(probe_path.read_text())
+          assert probe['source_revision'] == os.environ['EXPECTED_SOURCE']
+          probe['archive_sha256'] = receipt['archive_sha256']
+          probe_path.write_text(json.dumps(probe, indent=2) + '\n')
+          for name in ['UPGRADE-FOUNDRY-HOST-VERIFICATION.json', 'FRONTIER-MONITOR-VERIFICATION.json']:
+              path = Path(os.environ['RUNNER_TEMP']) / 'harness-assets' / name
+              evidence = json.loads(path.read_text())
+              assert evidence['source_revision'] == os.environ['EXPECTED_SOURCE']
+              evidence['archive_sha256'] = receipt['archive_sha256']
+              path.write_text(json.dumps(evidence, indent=2) + '\n')
           with open(os.environ['GITHUB_OUTPUT'], 'a') as out:
               out.write('source_sha='+os.environ['EXPECTED_SOURCE']+'\n')
               out.write('archive_sha='+receipt['archive_sha256']+'\n')
@@ -129,15 +175,41 @@ jobs:
           path: |
             ${{ runner.temp }}/harness-build.json
             ${{ runner.temp }}/harness-operation
+            ${{ runner.temp }}/harness-assets/BROWSER-VERIFICATION.json
+            ${{ runner.temp }}/harness-assets/CODEX-HOST-VERIFICATION.json
+            ${{ runner.temp }}/harness-assets/UPGRADE-FOUNDRY-HOST-VERIFICATION.json
+            ${{ runner.temp }}/harness-assets/FRONTIER-MONITOR-VERIFICATION.json
+            ${{ runner.temp }}/harness-assets/HARNESS-*.png
           if-no-files-found: warn
-  native-platforms:
-    # The owner's cross-platform release mandate covers standard public-repository
-    # runners only; no larger/custom/private paid runner or billing change.
+  local-model-qualification:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 360
+    steps:
+      - name: Record platform job execution start
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Execute preregistered local-model construction and successor trials
+        run: |
+          python -B products/alpha-genesis-harness/scripts/qualify_hosted_local.py --work "$RUNNER_TEMP/harness-local-work" --publish "$RUNNER_TEMP/harness-local-public"
+      - name: Preserve only allowlisted model evidence and accepted portable artifacts
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: alpha-genesis-harness-local-${{ github.event.pull_request.head.sha || github.sha }}-attempt-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/harness-local-public
+          if-no-files-found: error
+  platform-first-use:
     needs: qualify
     strategy:
       fail-fast: false
       matrix:
-        os: [windows-latest, macos-latest]
+        os: [macos-15, windows-2025]
     runs-on: ${{ matrix.os }}
     timeout-minutes: 360
     defaults:
@@ -145,9 +217,7 @@ jobs:
         shell: bash
     steps:
       - name: Record platform job execution start
-        run: |
-          echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
-          echo "PLAYWRIGHT_BROWSERS_PATH=$RUNNER_TEMP/harness-browser" >> "$GITHUB_ENV"
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           ref: ${{ needs.qualify.outputs.source_sha }}
@@ -155,56 +225,98 @@ jobs:
       - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
         with:
           python-version: '3.12'
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '22'
       - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
         with:
           artifact-ids: ${{ needs.qualify.outputs.artifact_id }}
-          path: ${{ runner.temp }}/harness-received
+          path: ${{ runner.temp }}/harness-platform-received
           merge-multiple: true
-      - name: Prepare pinned browser verification dependency
-        working-directory: products/alpha-genesis-harness/tests/visual
+      - name: Install exact browser test dependency
+        env:
+          PLAYWRIGHT_BROWSERS_PATH: ${{ runner.temp }}/harness-platform-browser
+          NODE_PATH: ${{ runner.temp }}/harness-platform-visual/node_modules
         run: |
-          npm ci --ignore-scripts --no-audit --no-fund
-          node node_modules/playwright-core/cli.js install chromium
+          mkdir -p "$RUNNER_TEMP/harness-platform-visual"
+          cp products/alpha-genesis-harness/tests/visual/package*.json "$RUNNER_TEMP/harness-platform-visual/"
+          npm ci --prefix "$RUNNER_TEMP/harness-platform-visual" --ignore-scripts --no-audit --no-fund
+          node "$RUNNER_TEMP/harness-platform-visual/node_modules/playwright-core/cli.js" install chromium
           python - <<'PY'
           import os, subprocess
-          from pathlib import Path
           browser = subprocess.check_output(['node', '-e', "process.stdout.write(require('playwright-core').chromium.executablePath())"], text=True)
           with open(os.environ['GITHUB_ENV'], 'a', encoding='utf-8') as output:
               output.write('HARNESS_NATIVE_BROWSER=' + browser + '\n')
-              output.write('HARNESS_VISUAL_MODULES=' + str(Path('node_modules').resolve()) + '\n')
           PY
-      - name: Operate exact archive through native source launcher and Chromium
+      - name: Verify and exercise the same extracted archive on this OS
         env:
           ARCHIVE_NAME: ${{ needs.qualify.outputs.archive_name }}
           ARCHIVE_SHA: ${{ needs.qualify.outputs.archive_sha }}
           SOURCE_SHA: ${{ needs.qualify.outputs.source_sha }}
         run: |
-          python -B products/alpha-genesis-harness/scripts/qualify_platform.py "$RUNNER_TEMP/harness-received/$ARCHIVE_NAME" --expected-sha256 "$ARCHIVE_SHA" --expected-source-revision "$SOURCE_SHA" --output "$RUNNER_TEMP/harness-native-operation" --visual-modules "$HARNESS_VISUAL_MODULES" --browser-executable "$HARNESS_NATIVE_BROWSER"
-      - name: Probe native macOS Codex isolation without credentials
-        if: ${{ always() && !cancelled() && matrix.os == 'macos-latest' }}
+          python products/alpha-genesis-harness/scripts/qualify_platform.py "$RUNNER_TEMP/harness-platform-received/$ARCHIVE_NAME" --expected-sha256 "$ARCHIVE_SHA" --expected-source-revision "$SOURCE_SHA" --visual-modules "$RUNNER_TEMP/harness-platform-visual/node_modules" --browser-executable "$HARNESS_NATIVE_BROWSER" --output "$RUNNER_TEMP/harness-platform-operation"
+      - name: Record native Codex isolation on this OS without authentication
+        if: ${{ always() && !cancelled() }}
+        env:
+          SOURCE_SHA: ${{ needs.qualify.outputs.source_sha }}
+          ARCHIVE_SHA: ${{ needs.qualify.outputs.archive_sha }}
         run: |
-          mkdir -p "$RUNNER_TEMP/harness-codex" "$RUNNER_TEMP/harness-native-operation/sandbox-probes"
-          cp products/alpha-genesis-harness/tests/codex/package*.json "$RUNNER_TEMP/harness-codex/"
-          npm ci --prefix "$RUNNER_TEMP/harness-codex" --ignore-scripts --no-audit --no-fund
-          set +e
-          python products/alpha-genesis-harness/scripts/probe_codex_sandbox.py --executable "$RUNNER_TEMP/harness-codex/node_modules/.bin/codex" --work-root "$GITHUB_WORKSPACE/harness-sandbox-probe" > "$RUNNER_TEMP/harness-native-operation/sandbox-probes/CODEX-HOST-VERIFICATION.json"
-          boundary_status=$?
-          python products/alpha-genesis-harness/scripts/probe_upgrade_foundry.py --executable "$RUNNER_TEMP/harness-codex/node_modules/.bin/codex" --output "$RUNNER_TEMP/harness-native-operation/sandbox-probes/UPGRADE-FOUNDRY-HOST-VERIFICATION.json"
-          foundry_status=$?
-          set -e
-          test "$boundary_status" -eq 0 || test "$boundary_status" -eq 2
-          test "$foundry_status" -eq 0 || test "$foundry_status" -eq 2
-          # Use the native Seatbelt boundary unchanged. BLOCKED stays BLOCKED;
-          # neither credential-free probe establishes model-written construction.
-      - name: Preserve native platform scope and results
+          mkdir -p "$RUNNER_TEMP/harness-platform-codex"
+          cp products/alpha-genesis-harness/tests/codex/package*.json "$RUNNER_TEMP/harness-platform-codex/"
+          npm ci --prefix "$RUNNER_TEMP/harness-platform-codex" --ignore-scripts --no-audit --no-fund
+          python - <<'PY'
+          import json, os, platform, subprocess, sys
+          from pathlib import Path
+          root = Path(os.environ['RUNNER_TEMP'])
+          modules = root / 'harness-platform-codex/node_modules/@openai'
+          if os.name == 'nt':
+              architecture = {'amd64':'x64','x86_64':'x64','arm64':'arm64','aarch64':'arm64'}.get(platform.machine().lower())
+              assert architecture, 'Unrecognized Windows architecture'
+              package = modules / ('codex-win32-' + architecture)
+              candidates = [p for p in package.rglob('codex.exe') if p.is_file() and not p.is_symlink()]
+              if len(candidates) != 1:
+                  raise RuntimeError('Expected exactly one installed official native Windows Codex executable')
+              executable = candidates[0]
+          else:
+              # The official npm launcher resolves the installed platform layout;
+              # do not assume a vendor subdirectory spelling on macOS.
+              executable = root / 'harness-platform-codex/node_modules/.bin/codex'
+              assert executable.is_file(), 'Official installed Codex launcher is missing'
+          result = subprocess.run([sys.executable, 'products/alpha-genesis-harness/scripts/probe_codex_sandbox.py', '--executable', str(executable), '--work-root', str(Path.cwd() / 'harness-sandbox-probe')], capture_output=True, text=True, encoding='utf-8')
+          output = root / 'harness-platform-operation'
+          output.mkdir(parents=True, exist_ok=True)
+          (output / (platform.system() + '-CODEX-HOST-VERIFICATION.stdout.txt')).write_text(result.stdout, encoding='utf-8')
+          (output / (platform.system() + '-CODEX-HOST-VERIFICATION.stderr.txt')).write_text(result.stderr, encoding='utf-8')
+          assert result.returncode in (0, 2), result.stderr
+          receipt = json.loads(result.stdout)
+          assert (result.returncode, receipt['status']) in ((0, 'PASS'), (2, 'BLOCKED'))
+          assert receipt['inference_calls'] == 0 and receipt['real_credentials_used'] is False
+          receipt.update(source_revision=os.environ['SOURCE_SHA'], archive_sha256=os.environ['ARCHIVE_SHA'], host=platform.platform())
+          (output / (platform.system() + '-CODEX-HOST-VERIFICATION.json')).write_text(json.dumps(receipt, indent=2), encoding='utf-8')
+          print(json.dumps({'host': platform.system(), 'status': receipt['status'], 'code': receipt.get('code')}))
+          if platform.system() == 'Darwin':
+              path = output / 'Darwin-UPGRADE-FOUNDRY-HOST-VERIFICATION.json'
+              foundry = subprocess.run([sys.executable, 'products/alpha-genesis-harness/scripts/probe_upgrade_foundry.py', '--executable', str(executable), '--output', str(path)], capture_output=True, text=True, encoding='utf-8')
+              (output / 'Darwin-UPGRADE-FOUNDRY-HOST-VERIFICATION.stdout.txt').write_text(foundry.stdout, encoding='utf-8')
+              (output / 'Darwin-UPGRADE-FOUNDRY-HOST-VERIFICATION.stderr.txt').write_text(foundry.stderr, encoding='utf-8')
+              assert foundry.returncode in (0, 2), foundry.stderr
+              value = json.loads(path.read_text(encoding='utf-8'))
+              assert (foundry.returncode, value['status']) in ((0, 'PASS'), (2, 'BLOCKED'))
+              assert value['live_model_construction'] == 'NOT_TESTED' and value['generated_code_executed'] is False
+              value.update(source_revision=os.environ['SOURCE_SHA'], archive_sha256=os.environ['ARCHIVE_SHA'], host=platform.platform())
+              path.write_text(json.dumps(value, indent=2) + '\n', encoding='utf-8')
+              print(json.dumps({'host':'Darwin', 'foundry_status':value['status'], 'live_model_construction':'NOT_TESTED'}))
+
+          PY
+      - name: Preserve platform evidence including failures
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: alpha-genesis-harness-native-${{ matrix.os }}-${{ needs.qualify.outputs.source_sha }}-attempt-${{ github.run_attempt }}
-          path: ${{ runner.temp }}/harness-native-operation
+          name: alpha-genesis-harness-platform-${{ matrix.os }}-${{ needs.qualify.outputs.source_sha }}-attempt-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/harness-platform-operation
           if-no-files-found: warn
   release-candidate:
-    needs: [qualify, native-platforms]
+    needs: [qualify, platform-first-use, local-model-qualification]
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     runs-on: ubuntu-latest
     timeout-minutes: 360
@@ -226,73 +338,26 @@ jobs:
           artifact-ids: ${{ needs.qualify.outputs.artifact_id }}
           path: ${{ runner.temp }}/harness-received
           merge-multiple: true
-      - name: Download source-specific native platform evidence
-        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
-        with:
-          pattern: alpha-genesis-harness-native-*-${{ needs.qualify.outputs.source_sha }}-attempt-*
-          path: ${{ runner.temp }}/harness-native-evidence
-          merge-multiple: false
-      - name: Verify and bundle native receipts, screenshots and downloads
-        env:
-          SOURCE_SHA: ${{ needs.qualify.outputs.source_sha }}
-          ARCHIVE_SHA: ${{ needs.qualify.outputs.archive_sha }}
-        run: |
-          python - <<'PYCODE'
-          import hashlib, json, os, re, zipfile
-          from pathlib import Path
-          root = Path(os.environ['RUNNER_TEMP'])
-          source, archive = os.environ['SOURCE_SHA'], os.environ['ARCHIVE_SHA']
-          included = {}
-          origins = []
-          for runner, host, browser_platform in [('windows-latest', 'Windows', 'win32'), ('macos-latest', 'Darwin', 'darwin')]:
-              pattern = re.compile('alpha-genesis-harness-native-' + runner + '-' + source + '-attempt-([0-9]+)')
-              available = [(int(match.group(1)), item) for item in (root / 'harness-native-evidence').iterdir() if (match := pattern.fullmatch(item.name)) and item.is_dir()]
-              assert available, 'Missing native platform artifact for ' + runner
-              attempt, directory = max(available)
-              assert attempt <= int(os.environ['GITHUB_RUN_ATTEMPT'])
-              origins.append({'runner': runner, 'artifact_name': directory.name, 'producer_attempt': attempt})
-              receipt = json.loads((directory / 'PLATFORM-QUALIFICATION.json').read_text())
-              browser = json.loads((directory / 'browser/BROWSER-VERIFICATION.json').read_text())
-              assert receipt['status'] == 'PASS' and receipt['source_revision'] == source and receipt['archive_sha256'] == archive
-              assert receipt['host']['system'] == host and receipt['checks']['browser'] == browser
-              assert browser['status'] == 'PASS' and browser['source_revision'] == source and browser['platform'] == browser_platform
-              assert browser['server_mode'] == 'external-native-launcher' and browser['screenshots'] and browser['exports']
-              selected = ['PLATFORM-QUALIFICATION.json', 'browser/BROWSER-VERIFICATION.json']
-              for name in browser['screenshots']:
-                  assert Path(name).name == name and name.endswith('.png')
-                  data = (directory / 'browser' / name).read_bytes()
-                  assert data.startswith(b'\x89PNG\r\n\x1a\n') and len(data) > 8
-                  selected.append('browser/' + name)
-              for exported in browser['exports']:
-                  name = exported['file']
-                  assert Path(name).name == name
-                  data = (directory / 'browser' / name).read_bytes()
-                  assert data and len(data) == exported['bytes'] and hashlib.sha256(data).hexdigest() == exported['sha256']
-                  selected.append('browser/' + name)
-              if runner == 'macos-latest':
-                  for name in ('CODEX-HOST-VERIFICATION.json', 'UPGRADE-FOUNDRY-HOST-VERIFICATION.json'):
-                      probe = json.loads((directory / 'sandbox-probes' / name).read_text())
-                      assert probe['status'] in {'PASS', 'BLOCKED'}
-                      if name.startswith('CODEX'):
-                          assert probe['inference_calls'] == 0 and probe['real_credentials_used'] is False
-                      else:
-                          assert probe['live_model_construction'] == 'NOT_TESTED' and probe['generated_code_executed'] is False
-                      selected.append('sandbox-probes/' + name)
-              for name in selected:
-                  included[runner + '/' + name] = (directory / name).read_bytes()
-          included['NATIVE-EVIDENCE-PROVENANCE.json'] = (json.dumps({'source_revision': source, 'archive_sha256': archive, 'producer_artifacts': origins}, indent=2) + '\n').encode()
-          output = root / 'harness-received' / ('HARNESS_NATIVE_EVIDENCE_' + source[:12] + '.zip')
-          with zipfile.ZipFile(output, 'w', compression=zipfile.ZIP_DEFLATED) as bundle:
-              for name, data in sorted(included.items()):
-                  bundle.writestr(zipfile.ZipInfo(name, (1980, 1, 1, 0, 0, 0)), data)
-          output.with_suffix('.zip.sha256').write_text(hashlib.sha256(output.read_bytes()).hexdigest() + '  ' + output.name + '\n')
-          PYCODE
       - name: Prepare pinned optional identity and extracted UI verification dependencies
         run: |
           python -m pip install -r products/alpha-genesis-harness/requirements-chatgpt.txt
           mkdir -p "$RUNNER_TEMP/harness-dom"
           cp products/alpha-genesis-harness/tests/dom/package*.json "$RUNNER_TEMP/harness-dom/"
           npm ci --prefix "$RUNNER_TEMP/harness-dom" --ignore-scripts --no-audit --no-fund
+          mkdir -p "$RUNNER_TEMP/harness-owner-visual-deps"
+          cp products/alpha-genesis-harness/tests/visual/package*.json "$RUNNER_TEMP/harness-owner-visual-deps/"
+          npm ci --prefix "$RUNNER_TEMP/harness-owner-visual-deps" --ignore-scripts --no-audit --no-fund
+      - name: Receive source-matched macOS and Windows operation evidence
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          pattern: alpha-genesis-harness-platform-*-${{ needs.qualify.outputs.source_sha }}-attempt-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/harness-received
+          merge-multiple: true
+      - name: Receive exact-source local inference evidence
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: alpha-genesis-harness-local-${{ needs.qualify.outputs.source_sha }}-attempt-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/harness-local-public
       - name: Verify exact immutable artifact before publication
         env:
           ARCHIVE_NAME: ${{ needs.qualify.outputs.archive_name }}
@@ -301,87 +366,44 @@ jobs:
         run: |
           python -B products/alpha-genesis-harness/scripts/package_release.py verify "$RUNNER_TEMP/harness-received/$ARCHIVE_NAME" --expected-sha256 "$ARCHIVE_SHA" --expected-source-revision "$SOURCE_SHA" --compare-source-revision "$SOURCE_SHA"
           python -B products/alpha-genesis-harness/scripts/qualify_archive.py "$RUNNER_TEMP/harness-received/$ARCHIVE_NAME" --expected-sha256 "$ARCHIVE_SHA" --expected-source-revision "$SOURCE_SHA" --output "$RUNNER_TEMP/harness-received-operation" --dom-modules "$RUNNER_TEMP/harness-dom/node_modules"
-      - name: Reconcile immutable archive and live qualification receipts
+      - name: Package the allowlisted local-model evidence
+        id: model_archive
         env:
           SOURCE_SHA: ${{ needs.qualify.outputs.source_sha }}
-          ARCHIVE_SHA: ${{ needs.qualify.outputs.archive_sha }}
         run: |
-          python - <<'PYCODE'
-          import hashlib, json, os, shutil, zipfile
-          from pathlib import Path
+          python - <<'PY'
+          import hashlib, json, os, shutil, subprocess, zipfile
+          from pathlib import Path, PurePosixPath
           root = Path(os.environ['RUNNER_TEMP'])
-          assets, product = root / 'harness-received', Path('products/alpha-genesis-harness')
-          source, archive = os.environ['SOURCE_SHA'], os.environ['ARCHIVE_SHA']
-          report = json.loads((product / 'evidence/QUALIFICATION-MATRIX.json').read_text())
-          rows = {row['id']: row for row in report['criteria']}
-          inputs = []
-          def evidence(name):
-              path = assets / name
-              raw = path.read_bytes()
-              inputs.append({'file': name, 'sha256': hashlib.sha256(raw).hexdigest(), 'bytes': len(raw)})
-              return json.loads(raw)
-          operation_dir = root / 'harness-received-operation'
-          shutil.copyfile(operation_dir / 'QUALIFICATION.json', assets / 'EXACT-ARCHIVE-QUALIFICATION.json')
-          operation = evidence('EXACT-ARCHIVE-QUALIFICATION.json')
-          assert operation['verdict'] == 'PASSED IN SCOPE' and operation['archive_sha256'] == archive and operation['source_revision'] == source
-          assert operation['operations'] and all(item['returncode'] == 0 for item in operation['operations'])
-          assert operation['dom_qualification'].startswith('PASS:')
-          for name in operation['omega_qualification']['evidence_files']:
-              assert Path(name).name == name
-              shutil.copyfile(operation_dir / name, assets / name)
-              evidence(name)
-          browser = evidence('BROWSER-VERIFICATION.json')
-          assert browser['status'] == 'PASS' and browser['source_revision'] == source and browser['platform'] == 'linux'
-          native_name = 'HARNESS_NATIVE_EVIDENCE_' + source[:12] + '.zip'
-          native_path = assets / native_name
-          inputs.append({'file': native_name, 'sha256': hashlib.sha256(native_path.read_bytes()).hexdigest(), 'bytes': native_path.stat().st_size})
-          with zipfile.ZipFile(native_path) as native:
-              for runner in ('windows-latest', 'macos-latest'):
-                  receipt = json.loads(native.read(runner + '/PLATFORM-QUALIFICATION.json'))
-                  assert receipt['status'] == 'PASS' and receipt['archive_sha256'] == archive and receipt['source_revision'] == source
-              for name in ('CODEX-HOST-VERIFICATION.json', 'UPGRADE-FOUNDRY-HOST-VERIFICATION.json'):
-                  (assets / ('MACOS-' + name)).write_bytes(native.read('macos-latest/sandbox-probes/' + name))
-          mac_boundary = evidence('MACOS-CODEX-HOST-VERIFICATION.json')
-          mac_foundry = evidence('MACOS-UPGRADE-FOUNDRY-HOST-VERIFICATION.json')
-          assert mac_boundary['status'] in {'PASS', 'BLOCKED'} and mac_foundry['status'] in {'PASS', 'BLOCKED'}
-          frontier = evidence('FRONTIER-MONITOR-VERIFICATION.json')
-          assert frontier['status'] in {'PASS', 'BLOCKED'}
-          for name, digest in frontier['source_sha256'].items():
-              relative = Path(name)
-              assert not relative.is_absolute() and '..' not in relative.parts
-              assert hashlib.sha256((product / relative).read_bytes()).hexdigest() == digest
-          if frontier['status'] == 'PASS':
-              assert frontier['http_dispatch_verified'] and frontier['evidence_event']['evidence_status'] == 'reported'
-          foundry = evidence('UPGRADE-FOUNDRY-HOST-VERIFICATION.json')
-          assert foundry['status'] in {'PASS', 'BLOCKED'}
-          updates = {
-              'A1': ('PASS', 'Exact extracted DOM/HTTP operation plus Linux rendered-browser workflow; authored model fixtures.'),
-              'A2': ('PASS', 'Actual connector and HTTP workflow operated from the freshly extracted immutable archive.'),
-              'H1': ('PASS', 'Committed source comparison, external archive digest and clean extracted operation passed.'),
-              'I1': ('PASS', 'Linux headless Chromium responsive, keyboard and export checks; finite accessibility scope.'),
-              'I2': ('PASS', 'Windows/macOS native source-launcher processes and headless Chromium on identical ZIP; no desktop double-click, signing, notarization or clean consumer image claim.'),
-              'J1': ('PASS', 'This external report reconciles source/archive identity and hashed input receipts without modifying the customer ZIP.'),
-              'O13': (frontier['status'], 'One exact authorized official source observation and reported-only replay. No verified capability improvement, frontier coverage or publication freshness.')}
-          for key, (status, scope) in updates.items():
-              rows[key].update(status=status, actual_test_or_required_procedure=scope,
-                               remaining_dependency_or_scope='See hashed input receipts and their stated limits.', evidence_location='Release input receipts listed in this report')
-          rows['O11']['remaining_dependency_or_scope'] += ' Hosted credential-free original-interpreter probe: Linux ' + foundry['status'] + ', macOS ' + mac_foundry['status'] + '; no authenticated model construction was tested.'
-          report.update(schema='alpha-genesis-harness-release-qualification/v1', source_revision=source, archive_sha256=archive,
-                        commercial_mandate_satisfied=False, commercially_validated=False, input_receipts=inputs,
-                        native_sandbox_probes={'linux_foundry': foundry['status'], 'macos_boundary': mac_boundary['status'], 'macos_foundry': mac_foundry['status'], 'scope': 'Credential-free actual native sandbox and original interpreter only; no model-written candidate or authenticated construction.'},
-                        scope='External post-freeze supplement. PASS applies only to each named engineering scope; inherited failures, unknown costs and commercial/authentication blockers remain unchanged.')
-          (assets / 'RELEASE-QUALIFICATION.json').write_text(json.dumps(report, indent=2, ensure_ascii=False) + '\n')
-          lines = ['# Exact release qualification', '', 'Source: `' + source + '`', '', 'Customer ZIP SHA-256: `' + archive + '`', '',
-                   '**Complete commercial mandate: not satisfied.** Finite engineering passes do not remove live authentication, model reliability, scientific advantage or commercial authorization gaps.', '',
-                   '| Criterion | Status | Tested scope / remaining limit |', '|---|---|---|']
-          for row in report['criteria']:
-              cells = [row['id'] + ' — ' + row['requirement'], row['status'], row['actual_test_or_required_procedure'] + ' ' + row['remaining_dependency_or_scope']]
-              lines.append('| ' + ' | '.join(cell.replace('|', '\\|').replace('\n', ' ') for cell in cells) + ' |')
-          lines += ['', '## Input receipts', '', '| File | SHA-256 |', '|---|---|']
-          lines += ['| ' + item['file'] + ' | `' + item['sha256'] + '` |' for item in inputs]
-          lines += ['', '## Français', '', 'Le mandat commercial complet reste non satisfait. Chaque réussite vise uniquement le périmètre indiqué. Les échecs du modèle local, les égalités avec les méthodes ordinaires, les coûts inconnus et les autorisations manquantes demeurent visibles. Les reçus identifient les octets testés sans modifier le ZIP client.', '']
-          (assets / 'RELEASE-QUALIFICATION.md').write_text('\n'.join(lines))
-          PYCODE
+          public = root / 'harness-local-public'
+          record = json.loads((public / 'HOSTED-LOCAL-QUALIFICATION.json').read_text())
+          source = os.environ['SOURCE_SHA']
+          tree = subprocess.check_output(['git', 'rev-parse', source + ':products/alpha-genesis-harness'], text=True).strip()
+          assert record['source_revision'] == source and record['source_product_tree'] == tree and record['source_unchanged'] is True
+          assert record['release_qualification'] == 'PASS'
+          # Optional quote failures remain in status/qualifications; GENESIS is the mandatory primary experiment.
+          expected = record['published_sha256']
+          files = {p.relative_to(public).as_posix(): p for p in public.rglob('*') if p.is_file()}
+          assert set(files) == set(expected) | {'HOSTED-LOCAL-QUALIFICATION.json'}
+          for name, path in files.items():
+              relative = PurePosixPath(name)
+              assert not path.is_symlink() and not relative.is_absolute() and '..' not in relative.parts and '\\' not in name
+              if name in expected:
+                  assert hashlib.sha256(path.read_bytes()).hexdigest() == expected[name]
+          archive = root / 'harness-received' / ('LOCAL-MODEL-EVIDENCE_' + source[:12] + '.zip')
+          with zipfile.ZipFile(archive, 'w', compression=zipfile.ZIP_DEFLATED, compresslevel=9) as out:
+              for name, path in sorted(files.items()):
+                  info = zipfile.ZipInfo(name, date_time=(2026, 1, 1, 0, 0, 0))
+                  info.create_system = 3
+                  info.external_attr = 0o100644 << 16
+                  info.compress_type = zipfile.ZIP_DEFLATED
+                  out.writestr(info, path.read_bytes())
+          digest = hashlib.sha256(archive.read_bytes()).hexdigest()
+          archive.with_suffix('.zip.sha256').write_text(digest + '  ' + archive.name + '\n')
+          shutil.copyfile(public / 'HOSTED-LOCAL-QUALIFICATION.json', archive.parent / 'HOSTED-LOCAL-QUALIFICATION.json')
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as out:
+              out.write('name=' + archive.name + '\nsha256=' + digest + '\n')
+          PY
       - name: Publish source-specific prerelease without replacing prior releases
         env:
           GH_TOKEN: ${{ github.token }}
@@ -399,7 +421,20 @@ jobs:
           ARCHIVE_SHA: ${{ needs.qualify.outputs.archive_sha }}
         run: |
           tag="alpha-genesis-harness-v0.3.0-rc-${SOURCE_SHA:0:12}"
-          gh release download "$tag" --pattern "$ARCHIVE_NAME" --dir "$RUNNER_TEMP/harness-published"
+          gh release download "$tag" --dir "$RUNNER_TEMP/harness-published"
+      - name: Verify downloaded local-model evidence
+        env:
+          MODEL_ARCHIVE_NAME: ${{ steps.model_archive.outputs.name }}
+          MODEL_ARCHIVE_SHA: ${{ steps.model_archive.outputs.sha256 }}
+        run: |
+          python - <<'PY'
+          import hashlib, os
+          from pathlib import Path
+          root = Path(os.environ['RUNNER_TEMP'])
+          data = (root / 'harness-published' / os.environ['MODEL_ARCHIVE_NAME']).read_bytes()
+          assert hashlib.sha256(data).hexdigest() == os.environ['MODEL_ARCHIVE_SHA']
+          # Reconciliation and owner assembly independently validate the contained manifest and every member.
+          PY
       - name: Operate the published archive without publication credentials
         env:
           SOURCE_SHA: ${{ needs.qualify.outputs.source_sha }}
@@ -407,6 +442,28 @@ jobs:
           ARCHIVE_SHA: ${{ needs.qualify.outputs.archive_sha }}
         run: |
           python -B products/alpha-genesis-harness/scripts/qualify_archive.py "$RUNNER_TEMP/harness-published/$ARCHIVE_NAME" --expected-sha256 "$ARCHIVE_SHA" --expected-source-revision "$SOURCE_SHA" --output "$RUNNER_TEMP/harness-published-operation" --dom-modules "$RUNNER_TEMP/harness-dom/node_modules"
+      - name: Reconcile actual evidence and assemble the bilingual owner handoff
+        env:
+          SOURCE_SHA: ${{ needs.qualify.outputs.source_sha }}
+          ARCHIVE_NAME: ${{ needs.qualify.outputs.archive_name }}
+          ARCHIVE_SHA: ${{ needs.qualify.outputs.archive_sha }}
+          MODEL_ARCHIVE_NAME: ${{ steps.model_archive.outputs.name }}
+          NODE_PATH: ${{ runner.temp }}/harness-owner-visual-deps/node_modules
+        run: |
+          product_tree=$(git rev-parse "$SOURCE_SHA:products/alpha-genesis-harness")
+          tag="alpha-genesis-harness-v0.3.0-rc-${SOURCE_SHA:0:12}"
+          python -B products/alpha-genesis-harness/scripts/reconcile_release_evidence.py --archive "$RUNNER_TEMP/harness-published/$ARCHIVE_NAME" --expected-sha256 "$ARCHIVE_SHA" --source-sha "$SOURCE_SHA" --source-product-tree "$product_tree" --operation-receipt "$RUNNER_TEMP/harness-published-operation/QUALIFICATION.json" --asset-dir "$RUNNER_TEMP/harness-published" --live-receipt "$RUNNER_TEMP/harness-published/HOSTED-LOCAL-QUALIFICATION.json" --model-evidence-archive "$RUNNER_TEMP/harness-published/$MODEL_ARCHIVE_NAME" --output "$RUNNER_TEMP/harness-final-evidence"
+          python -B products/alpha-genesis-harness/scripts/owner_handoff.py --source-sha "$SOURCE_SHA" --release-url "https://github.com/$GITHUB_REPOSITORY/releases/tag/$tag" --asset-dir "$RUNNER_TEMP/harness-published" --expected-sha256 "$ARCHIVE_SHA" --operation-receipt "$RUNNER_TEMP/harness-published-operation/QUALIFICATION.json" --matrix "$RUNNER_TEMP/harness-final-evidence/QUALIFICATION-MATRIX.json" --model-evidence-archive "$RUNNER_TEMP/harness-published/$MODEL_ARCHIVE_NAME" --output "$RUNNER_TEMP/harness-owner" > "$RUNNER_TEMP/harness-owner-build.json"
+          owner_dir=$(python -c 'import json,os; from pathlib import Path; print(json.loads((Path(os.environ["RUNNER_TEMP"])/"harness-owner-build.json").read_text())["owner_directory"])')
+          node products/alpha-genesis-harness/scripts/verify_owner_handoff.cjs "$owner_dir" "$RUNNER_TEMP/harness-owner-visual" "$SOURCE_SHA"
+      - name: Publish the verified owner download and final qualification evidence
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          SOURCE_SHA: ${{ needs.qualify.outputs.source_sha }}
+        run: |
+          tag="alpha-genesis-harness-v0.3.0-rc-${SOURCE_SHA:0:12}"
+          gh release upload "$tag" "$RUNNER_TEMP/harness-owner/"*.zip "$RUNNER_TEMP/harness-owner/"*.sha256 "$RUNNER_TEMP/harness-owner/"*.receipt.json "$RUNNER_TEMP/harness-final-evidence/"*.json "$RUNNER_TEMP/harness-final-evidence/"*.md "$RUNNER_TEMP/harness-owner-visual/"*
       - name: Preserve released-byte operation evidence
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
@@ -415,4 +472,7 @@ jobs:
           path: |
             ${{ runner.temp }}/harness-received-operation
             ${{ runner.temp }}/harness-published-operation
+            ${{ runner.temp }}/harness-final-evidence
+            ${{ runner.temp }}/harness-owner-build.json
+            ${{ runner.temp }}/harness-owner-visual
           if-no-files-found: warn

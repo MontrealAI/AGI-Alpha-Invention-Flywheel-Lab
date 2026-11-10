@@ -15,7 +15,8 @@ import time
 from urllib.parse import urlsplit
 from datetime import datetime, timezone
 
-from . import adapters as _adapters_module, instruments as _instruments_module, workflows as _workflows_module
+from . import adapters as _adapters_module, instruments as _instruments_module, workflows as _workflows_module, workflow_strategies as _strategies_module, services as _services_module
+from . import workflow_schemas as _workflow_schemas_module, output_schema as _output_schema_module
 from .adapters import BridgeError, strict_json
 from .instruments import evaluate
 from .workflows import WorkflowService, _atomic, _regular, digest, encoded, equivalent, now, require
@@ -50,10 +51,14 @@ def _number(value, label, optional=False):
 
 def source_identity():
     identities = {name: hashlib.sha256(_regular(PRODUCT / "bridge" / name, 1024 * 1024)).hexdigest()
-                  for name in ("workflows.py", "instruments.py", "adapters.py", "genesis_next.py")}
+                  for name in ("workflows.py", "workflow_strategies.py", "workflow_schemas.py", "output_schema.py", "services.py", "instruments.py", "adapters.py", "genesis_next.py")}
     dependencies_loaded = {"adapters.py": _adapters_module.LOADED_SOURCE_SHA256,
                            "instruments.py": _instruments_module.LOADED_SOURCE_SHA256,
-                           "workflows.py": _workflows_module.LOADED_SOURCE_SHA256}
+                           "workflows.py": _workflows_module.LOADED_SOURCE_SHA256,
+                           "workflow_strategies.py": _strategies_module.LOADED_SOURCE_SHA256,
+                           "workflow_schemas.py": _workflow_schemas_module.LOADED_SOURCE_SHA256,
+                           "output_schema.py": _output_schema_module.LOADED_SOURCE_SHA256,
+                           "services.py": _services_module.LOADED_SOURCE_SHA256}
     require(all(identities[name] == value for name, value in dependencies_loaded.items()),
             "HARNESS dependency changed after it was loaded. Restart the connector before GENESIS initialization.",
             "GENESIS_SOURCE_DRIFT")
@@ -188,15 +193,16 @@ class CandidateWorkflow(WorkflowService):
 
     def _verify(self, state):
         dependencies = dict(self.checker_dependencies)
+        checks = state["spec"]["acceptance"] + state.get("adversarial_cases", [])
         try:
-            for name in {c["artifact"] for c in state["spec"]["acceptance"]}:
+            for name in {c["artifact"] for c in checks}:
                 raw = self._read_artifact(state, name)
                 actual = hashlib.sha256(raw).hexdigest()
                 require(actual == state["artifacts"][name]["sha256"], "Artifact integrity failed.")
                 dependencies["artifact:" + name] = actual
         except (BridgeError, ValueError, TypeError, KeyError, RecursionError):
             return super()._verify(state)
-        spec = {"acceptance": state["spec"]["acceptance"], "max_operations": state["spec"]["max_operations"], "artifact_kinds": {name: state["artifacts"][name]["kind"] for name in {c["artifact"] for c in state["spec"]["acceptance"]}}}
+        spec = {"acceptance": checks, "max_operations": state["spec"]["max_operations"], "artifact_kinds": {name: state["artifacts"][name]["kind"] for name in {c["artifact"] for c in checks}}}
         def verify():
             super(CandidateWorkflow, self)._verify(state)
             return copy.deepcopy(state["verification"])
@@ -269,41 +275,61 @@ class GenesisNextService:
         return view
 
     def _observations(self):
-        """Inspect authenticated real workflow traces without treating them as new proof."""
+        """Inspect authenticated traces, including isolated children, exactly once."""
         records, total_checks, repeats, failures, model_calls, unknown_costs = [], 0, 0, 0, 0, 0
-        for summary in self.workflows.list()["runs"]:
+        pending = list(self.workflows.list()["runs"])
+        seen = set()
+        while pending:
+            summary = pending.pop(0)
+            if summary["id"] in seen:
+                continue
+            seen.add(summary["id"])
             if summary["status"] == "integrity_error":
                 records.append({"run_id": summary["id"], "status": "INTEGRITY_ERROR", "usable_evidence": False})
                 continue
-            workflow = self.workflows.get(summary["id"])
+            try:
+                workflow = self.workflows.get(summary["id"])
+            except BridgeError as error:
+                records.append({"run_id": summary["id"], "status": "UNAVAILABLE", "usable_evidence": False, "error_code": error.code})
+                continue
+            for branch in workflow.get("branch_runs", []):
+                pending.append({"id": branch["run_id"], "status": "branch"})
             signatures, run_repeats, run_failures, run_checks, route_calls = set(), 0, 0, 0, []
             for event in workflow["events"]:
                 if event["kind"] == "verification":
                     detail = event["detail"]
-                    # A matching historical signature identifies redundant work to
-                    # investigate; it never itself authorizes skipping a current check.
+                    # A historical signature is investigation evidence only.
                     signature = digest({"checks": detail.get("checks"), "artifacts": detail.get("artifact_hashes"),
                                         "acceptance": workflow["spec"]["acceptance"], "max_operations": workflow["spec"]["max_operations"]})
                     run_checks += 1
                     run_repeats += signature in signatures
                     signatures.add(signature)
                     run_failures += detail.get("passed") is not True
-                if event["kind"] == "model_completed":
-                    detail = event["detail"]
-                    model_calls += 1
-                    cost = detail.get("cost")
-                    unknown_costs += not isinstance(cost, dict) or cost.get("amount") is None
-                    route_calls.append({"role": detail.get("role"), "provider": detail.get("provider"), "model": detail.get("model"), "reported_cost": cost})
+            completions = {event["detail"].get("run_id"): event["detail"] for event in workflow["events"] if event["kind"] == "model_completed"}
+            # Parent counters already aggregate children. Count actual started
+            # requests from each run once, never parent aggregate counters.
+            for request in self.workflows._request_costs(workflow):
+                if request["workflow"] != workflow["id"]:
+                    continue
+                model_calls += 1
+                cost = request.get("cost")
+                unknown_costs += not isinstance(cost, dict) or cost.get("amount") is None
+                completion = completions.get(request["run_id"], {})
+                route_calls.append({"run_id": request["run_id"], "role": request.get("role"), "provider": completion.get("provider", request.get("provider")),
+                                    "model": completion.get("model", request.get("model")), "requested_model": request.get("model"),
+                                    "reported_model": completion.get("reported_model"), "reported_cost": cost, "event_kind": request["event_kind"],
+                                    "cost_uncertain": request["cost_uncertain"]})
             total_checks += run_checks
             repeats += run_repeats
             failures += run_failures
-            records.append({"run_id": workflow["id"], "status": workflow["status"], "usable_evidence": True,
+            records.append({"run_id": workflow["id"], "parent_run": workflow.get("parent_run"), "branch_index": workflow.get("branch_index"),
+                            "status": workflow["status"], "usable_evidence": True,
                             "event_chain_sha256": workflow["events"][-1]["sha256"] if workflow["events"] else None,
                             "verification_events": run_checks, "repeated_verification_signatures": run_repeats,
                             "failed_verifications": run_failures, "model_routes": route_calls})
         return {"runs": records, "verification_events": total_checks, "repeated_verification_signatures": repeats,
                 "failed_verifications": failures, "model_calls": model_calls, "unknown_model_costs": unknown_costs,
-                "scope": "Observed authenticated local traces. Repeated signatures are investigation evidence, not reusable current acceptance or measured economic savings."}
+                "scope": "Observed authenticated local traces including branch failures and every attempted model request. Repeated signatures are investigation evidence, not reusable current acceptance or measured economic savings."}
 
     def status(self):
         with self.lock:
@@ -598,7 +624,7 @@ def demonstrate(directory):
              "unknown_costs": ["prior design and implementation", "independent review", "ongoing maintenance", "hardware and electricity", "complete economic cost"]}
     result = {"schema": "genesis-next-experiment/v1", "title": "The HARNESS retains exact evidence and selects unresolved successor experiments", "status": "complete", "created_at": now(),
               "limitation": "WorkflowService._verify repeats unchanged deterministic acceptance checks.", "construction": "Constructor-owned source recipe adds exact dependency-aware reuse to an isolated WorkflowService subclass.",
-              "source": {"baseline_sha256": source_before["workflows.py"], "candidate_sha256": candidate["sha256"], "protocol_sha256": protocol_sha, "checker_sha256": source_before["instruments.py"], "evaluation_sources_unchanged": source_unchanged},
+              "source": {"baseline_sha256": source_before["workflows.py"], "candidate_sha256": candidate["sha256"], "protocol_sha256": protocol_sha, "checker_sha256": source_before["instruments.py"], "dependency_sha256": source_before, "evaluation_sources_unchanged": source_unchanged},
               "qualification": {"correctness": "PASS" if correctness else "FAIL", "decision": "RETAIN_BOUNDED_RESEARCH_CAPABILITY" if correctness else "REJECT", "production_promotion": False,
                                 "scientific_verdict": "NO_SUPERIORITY_ESTABLISHED: competent content-addressed ordinary reuse ties; complete costs remain unknown.", "independence": "Evaluator and frozen protocol outside candidate edit boundary; this built-in authored demonstration is separate from independent reviewer tests."},
               "arms": arms, "successor": {"task": "Prioritize unresolved experiments with two new verification calls", "candidate": inherited, "ordinary": {"outcomes": ordinary_outcomes, "verification_calls": ordinary_calls},

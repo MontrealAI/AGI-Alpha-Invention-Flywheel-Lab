@@ -171,21 +171,19 @@ while True:
 
 
 class CurrentWorkflowPlatformTests(unittest.TestCase):
-    def assert_public_platform_contract(self, workflow_name, job_name, job):
-        runners = re.findall(r'(?m)^    runs-on: (.+)$', job)
-        if (workflow_name, job_name) == ('alpha-genesis-harness.yml', 'native-platforms'):
-            # The explicit HARNESS cross-platform mandate adds only these two
-            # standard public runners. No other job, expression, matrix include,
-            # custom image, larger runner or self-hosted route inherits permission.
-            self.assertEqual(runners, ['${{ matrix.os }}'])
-            strategy = re.findall(r'(?ms)^    strategy:\n(.*?)(?=^    [A-Za-z0-9_-]+:|\Z)', job)
-            self.assertEqual(strategy, [
-                '      fail-fast: false\n'
-                '      matrix:\n'
-                '        os: [windows-latest, macos-latest]\n'
-            ])
-        else:
-            self.assertEqual(runners, ['ubuntu-latest'])
+    def assert_public_standard_job(self, workflow_name, name, job):
+        runner = 'ubuntu-latest'
+        if workflow_name == 'alpha-genesis-harness.yml' and name == 'local-model-qualification':
+            runner = 'ubuntu-24.04'
+        elif workflow_name == 'alpha-genesis-harness.yml' and name == 'platform-first-use':
+            runner = '${{ matrix.os }}'
+            strategies = re.findall(r'(?ms)^    strategy:\n(.*?)(?=^    \S|\Z)', job)
+            self.assertEqual(len(strategies), 1)
+            # Check the entire matrix, including possible include/override routes.
+            # Only these two standard native hosts were authorized for this job.
+            self.assertEqual(textwrap.dedent(strategies[0]).strip(),
+                             'fail-fast: false\nmatrix:\n  os: [macos-15, windows-2025]')
+        self.assertEqual(re.findall(r'(?m)^    runs-on: (.+)$', job), [runner])
         self.assertEqual(re.findall(r'(?m)^    timeout-minutes: (.+)$', job), ['360'])
         self.assertNotRegex(job, r'(?m)^    (?:container|services):')
         first = workflow_steps(job)[0]
@@ -201,29 +199,45 @@ class CurrentWorkflowPlatformTests(unittest.TestCase):
             self.assertTrue(jobs, workflow.name)
             for name, job in jobs.items():
                 with self.subTest(workflow=workflow.name, job=name):
-                    self.assert_public_platform_contract(workflow.name, name, job)
+                    self.assert_public_standard_job(workflow.name, name, job)
 
-    def test_harness_native_exception_cannot_expand_runner_or_platform_authority(self):
-        name = 'alpha-genesis-harness.yml'
-        job = workflow_jobs((ROOT/'.github/workflows'/name).read_text())['native-platforms']
-        self.assert_public_platform_contract(name, 'native-platforms', job)
-        mutations = {
-            'larger-mac-runner': job.replace('macos-latest]', 'macos-latest-large]'),
-            'third-matrix-runner': job.replace('macos-latest]', 'macos-latest, self-hosted]'),
-            'matrix-include-override': job.replace('        os: [windows-latest, macos-latest]\n',
-                '        os: [windows-latest, macos-latest]\n        include:\n          - os: self-hosted\n'),
-            'different-expression': job.replace('runs-on: ${{ matrix.os }}', 'runs-on: ${{ inputs.runner }}'),
-            'literal-windows-outside-matrix': job.replace('runs-on: ${{ matrix.os }}', 'runs-on: windows-latest'),
-            'changed-platform-window': job.replace('timeout-minutes: 360', 'timeout-minutes: 359'),
-            'missing-platform-marker': job.replace('AGI_JOB_START_EPOCH', 'NOT_THE_PLATFORM_MARKER'),
-            'custom-container': job.replace('    timeout-minutes: 360\n', '    timeout-minutes: 360\n    container: custom/image\n'),
-        }
-        for mutation, changed in mutations.items():
-            with self.subTest(mutation=mutation), self.assertRaises(AssertionError):
-                self.assert_public_platform_contract(name, 'native-platforms', changed)
-        for workflow_name, job_name in (('other-workflow.yml', 'native-platforms'), (name, 'other-job')):
-            with self.subTest(workflow=workflow_name, job=job_name), self.assertRaises(AssertionError):
-                self.assert_public_platform_contract(workflow_name, job_name, job)
+    def test_harness_native_runner_exceptions_cannot_expand_to_other_capacity_or_jobs(self):
+        workflow = 'alpha-genesis-harness.yml'
+        jobs = workflow_jobs((ROOT/'.github/workflows'/workflow).read_text())
+        native = jobs['platform-first-use']
+        local = jobs['local-model-qualification']
+        cases = [
+            (workflow, 'platform-first-use', native.replace('macos-15', 'macos-15-large')),
+            (workflow, 'platform-first-use', native.replace('windows-2025', 'self-hosted')),
+            (workflow, 'platform-first-use', native.replace('windows-2025]', 'windows-2025, ubuntu-24.04-16core]')),
+            (workflow, 'platform-first-use', native.replace('${{ matrix.os }}', '${{ matrix.runner }}')),
+            (workflow, 'platform-first-use', native.replace('os: [macos-15, windows-2025]',
+                'os: [macos-15, windows-2025]\n        include:\n          - os: self-hosted')),
+            (workflow, 'another-native-job', native),
+            ('another-workflow.yml', 'platform-first-use', native),
+            (workflow, 'local-model-qualification', local.replace('ubuntu-24.04', 'ubuntu-24.04-16core')),
+            (workflow, 'local-model-qualification', local.replace('ubuntu-24.04', '[self-hosted, gpu]')),
+            (workflow, 'another-local-job', local),
+            ('another-workflow.yml', 'local-model-qualification', local),
+        ]
+        for index, (filename, name, job) in enumerate(cases):
+            with self.subTest(case=index), self.assertRaises(AssertionError):
+                self.assert_public_standard_job(filename, name, job)
+
+    def test_approved_native_jobs_keep_window_isolation_and_initial_clock_guards(self):
+        workflow = 'alpha-genesis-harness.yml'
+        jobs = workflow_jobs((ROOT/'.github/workflows'/workflow).read_text())
+        for name in ('local-model-qualification', 'platform-first-use'):
+            job = jobs[name]
+            with self.subTest(job=name):
+                self.assert_public_standard_job(workflow, name, job)
+            mutations = [job.replace('timeout-minutes: 360', 'timeout-minutes: 720'),
+                         job.replace('    steps:\n', '    container: custom-image\n    steps:\n'),
+                         job.replace('    steps:\n', '    services:\n      sidecar: {}\n    steps:\n'),
+                         job.replace('AGI_JOB_START_EPOCH', 'UNRELATED_START_EPOCH', 1)]
+            for index, modified in enumerate(mutations):
+                with self.subTest(job=name, mutation=index), self.assertRaises(AssertionError):
+                    self.assert_public_standard_job(workflow, name, modified)
 
     def test_publisher_downloads_the_qualified_producer_id_not_its_current_attempt(self):
         jobs = workflow_jobs((ROOT/'.github/workflows/connected014-release.yml').read_text())

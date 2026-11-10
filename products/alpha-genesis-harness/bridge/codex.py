@@ -88,6 +88,8 @@ class _AgentMessages:
 
 
 class CodexService:
+    max_concurrent = 1
+
     def __init__(self, config=None, plan_service=None, workspace_root=None, process_factory=subprocess.Popen, sandbox_validator=verify_sandbox_protocol, runtime_probe=verify_runtime_sandbox):
         self.config = config or {}
         self.plan = plan_service or ChatGPTPlanService()
@@ -95,12 +97,15 @@ class CodexService:
         self.process_factory = process_factory
         self._lock = threading.RLock()
         self._active, self._runs = {}, set()
+        self._closed = False
         self.binary = self.config.get("executable") or shutil.which("codex")
         self.sandbox_validator = sandbox_validator
         self.runtime_probe = runtime_probe
         self._validated_binary = None
 
     def gate(self):
+        if self._closed:
+            raise BridgeError("CODEX_CLOSED", "This Codex execution service is closed.", 409)
         self.plan.gate()
         if self.config.get("allow_execution") is not True:
             raise BridgeError("CODEX_DISABLED", "Codex execution is disabled. Explicitly enable it in local configuration.", 403)
@@ -126,6 +131,11 @@ class CodexService:
         self.gate()
         return self.plan.discover()
 
+    def execution_identity(self):
+        if self._closed:
+            raise BridgeError("CODEX_CLOSED", "This Codex execution service is closed.", 409)
+        return self.plan.execution_identity()
+
     def redact(self, text):
         return self.plan.redact(text)
 
@@ -138,6 +148,7 @@ class CodexService:
 
     def close(self):
         with self._lock:
+            self._closed = True
             for row in self._active.values():
                 row["cancel"].set()
 
@@ -211,10 +222,11 @@ class CodexService:
         finally:
             temp.unlink(missing_ok=True)
 
-    def resume(self, data, on_event=None):
+    def resume(self, data, on_event=None, *, expected_execution_identity=None, cancelled_before_dispatch=None):
         if not isinstance(data, dict) or not isinstance(data.get("resume_run_id"), str):
             raise BridgeError("CODEX_RESUME", "Supply resume_run_id for the original Codex workspace and a fresh run_id.")
-        return self.generate(data, on_event=on_event)
+        return self.generate(data, on_event=on_event, expected_execution_identity=expected_execution_identity,
+                             cancelled_before_dispatch=cancelled_before_dispatch)
 
     def _workspace_lock(self, workspace_id):
         directory = self.root / ".harness-checkpoints"
@@ -263,8 +275,10 @@ class CodexService:
             args += ["-c", key + "=" + value]
         return args + permission_overrides(directory, writable, self.binary)
 
-    def generate(self, data, on_event=None):
+    def generate(self, data, on_event=None, *, expected_execution_identity=None, cancelled_before_dispatch=None):
         self.gate()
+        with self.plan._lock:
+            self.plan._check_execution_identity(expected_execution_identity)
         if not isinstance(data, dict) or set(data) - {"provider", "model", "prompt", "run_id", "max_output_tokens", "json_mode", "stream", "resume_run_id"}:
             raise BridgeError("INPUT", "Unsupported Codex generation fields.")
         model, prompt, run_id = data.get("model"), data.get("prompt"), data.get("run_id")
@@ -273,6 +287,7 @@ class CodexService:
         if data.get("json_mode") is True:
             raise BridgeError("CAPABILITY", "This Codex engineering path returns text and artifacts; structured-model output is not claimed.")
         with self._lock:
+            self.plan._check_pre_dispatch_cancellation(cancelled_before_dispatch)
             if self._active or run_id in self._runs:
                 raise BridgeError("BUSY", "Wait for the active Codex turn and use a new run ID.", 409)
             cancel = threading.Event()
@@ -281,12 +296,15 @@ class CodexService:
         process, account, checkpoint, workspace_id, workspace_lock = None, None, None, None, None
         events = queue.Queue(maxsize=128)
         try:
-            account = self.plan._account()
+            with self.plan._lock:
+                self.plan._check_execution_identity(expected_execution_identity)
+                account = self.plan._account()
             if model not in {row["id"] for row in self.plan._discover_account(account)["models"]}:
                 raise BridgeError("CAPABILITY", "This model is not in the selected account catalog.")
             # The plan service's request guard also applies to Codex; this is one
             # turn, which may contain several internal model calls and tool actions.
             with self.plan._lock:
+                self.plan._check_execution_identity(expected_execution_identity)
                 if self.plan._quota_blocked or self.plan.requests_started >= self.plan.request_limit:
                     raise BridgeError("CHATGPT_LIMIT", "The local ChatGPT request/turn limit is reached.", 429)
                 if self.plan._active:
@@ -333,8 +351,10 @@ class CodexService:
             env.update({"CODEX_HOME": str(codex_home), "HOME": str(codex_home), "ACCESS_TOKEN": account["access_token"]})
             command = self._command(directory, writable)
             self.runtime_probe(command, directory, codex_home, writable)
-            with self.plan._lock:
-                current = self.plan._state()
+            with self.plan._lock, self.plan.store.locked():
+                current = self.plan.store.read()
+                self.plan._check_execution_identity(expected_execution_identity, state=current)
+                self.plan._check_pre_dispatch_cancellation(cancelled_before_dispatch)
                 selected = current["accounts"].get(current.get("active"), {})
                 if cancel.is_set() or current.get("active") != account["client_id"] or selected.get("access_token") != account["access_token"]:
                     raise BridgeError("CANCELLED", "Codex authorization changed or turn was cancelled before process launch.", 409)

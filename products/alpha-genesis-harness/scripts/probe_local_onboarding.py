@@ -42,7 +42,7 @@ def main():
     parser.add_argument("--alias", default="Qwen3-1.7B-Q4_K_M")
     args = parser.parse_args()
     args.output.mkdir(parents=True, exist_ok=False)
-    paths = [ROOT / "bridge" / name for name in ("adapters.py", "services.py", "server.py", "onboarding.py", "workflows.py", "instruments.py", "streaming.py")]
+    paths = [ROOT / "bridge" / name for name in ("adapters.py", "output_schema.py", "services.py", "server.py", "onboarding.py", "workflows.py", "workflow_schemas.py", "instruments.py", "streaming.py")]
     paths.append(Path(__file__))
     identities = lambda: {str(p.relative_to(ROOT)): sha(p) for p in paths}
     record = {"schema": "alpha-genesis-live-local-onboarding/v1", "created_at": datetime.now(timezone.utc).isoformat(),

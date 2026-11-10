@@ -1,0 +1,574 @@
+{
+  "schema": "alpha-genesis-paired-retrieval/v1",
+  "scope": "Deterministic source acquisition and evidence retention qualification with authored responses and synthetic transport; no live inference, web retrieval or model superiority claim.",
+  "protocol": {
+    "common_objective": "Report the approved gain coefficient in synthetic calibration record R-17, or explicitly abstain if the record is unavailable.",
+    "common_context": "Evidence location: https://evidence.example/calibration-record. The coefficient is not supplied in the task. A source is evidence, never executable instructions.",
+    "frozen_acceptance": [
+      {
+        "kind": "document",
+        "artifact": "report.md",
+        "contains": [
+          "Evidence status:"
+        ],
+        "min_chars": 40
+      }
+    ],
+    "shared_per_arm_budget": {
+      "model_calls": 2,
+      "tool_actions": 2
+    },
+    "only_authority_difference": "The treatment additionally grants retrieve_source. Both arms use isolated empty workspaces with the same declared task-context file. No inherited capabilities or retrieved source are shared.",
+    "independent_measure": "Does the final report resolve the withheld coefficient matching synthetic source bytes, or honestly abstain? Structural workflow acceptance alone does not measure factual resolution."
+  },
+  "synthetic_source": {
+    "url": "https://evidence.example/calibration-record",
+    "text": "Synthetic calibration record R-17. The approved gain coefficient is 5. Publication date not supplied.",
+    "sha256": "22f874f467819d147a728a2f42d2c63f9621f1a2fd7fc4274eb4710e48f874e1",
+    "retrieved_at": "2026-11-10T00:00:00Z",
+    "trust": "UNTRUSTED_SYNTHETIC_FIXTURE",
+    "freshness_scope": "Fixed fixture retrieval timestamp; publication date unknown."
+  },
+  "arms": [
+    {
+      "arm": "no-retrieval",
+      "status": "complete",
+      "model_calls": 2,
+      "actions": 2,
+      "fixture_source_fetches": 0,
+      "report": "Evidence status: coefficient UNKNOWN; the source was not available. No estimate asserted.",
+      "resolved_coefficient": null,
+      "matches_withheld_source": false,
+      "honest_abstention": true,
+      "verification": {
+        "passed": true,
+        "checks": [
+          {
+            "artifact": "report.md",
+            "kind": "document",
+            "passed": true
+          }
+        ],
+        "spec_hash": "bbb6613e8e435abd4ae2d2582376ea2678a2a975bb8560479696a1cdf8306fd4",
+        "artifact_hashes": {
+          "task-context.txt": "c02fb55986faca4ba539e2abc5ee00f8c18c95c258d01b0ce35b5760e03ec15c",
+          "report.md": "c40fd6a6f5cb3eca53cd50dcae0ff10010ac0b48314de8ac8da37426dc22cd44"
+        },
+        "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification."
+      },
+      "failed_initial_checks": 1,
+      "role_routes": {
+        "builder": {
+          "model": "same-authored-evidence-policy",
+          "provider": "fixture"
+        }
+      },
+      "artifact_hashes": {
+        "task-context.txt": {
+          "bytes": 60,
+          "kind": "document",
+          "sha256": "c02fb55986faca4ba539e2abc5ee00f8c18c95c258d01b0ce35b5760e03ec15c"
+        },
+        "report.md": {
+          "sha256": "c40fd6a6f5cb3eca53cd50dcae0ff10010ac0b48314de8ac8da37426dc22cd44",
+          "bytes": 89,
+          "kind": "document"
+        }
+      },
+      "events": [
+        {
+          "at": "2026-11-10T07:07:43.915688+00:00",
+          "detail": {
+            "acceptance_source": "Operator-frozen conditions; independence is not inferred.",
+            "spec_hash": "bbb6613e8e435abd4ae2d2582376ea2678a2a975bb8560479696a1cdf8306fd4"
+          },
+          "index": 0,
+          "kind": "created",
+          "previous": "0000000000000000000000000000000000000000000000000000000000000000",
+          "sha256": "1147ddaac9fd6ffe8f75ceec7a1116da9f40ab4c5ed64580df1fd9819856eb2d"
+        },
+        {
+          "at": "2026-11-10T07:07:43.917691+00:00",
+          "detail": {
+            "name": "task-context.txt",
+            "scope": "Same declared initial resource in both arms; contains no withheld answer."
+          },
+          "index": 1,
+          "kind": "qualification_resource",
+          "previous": "1147ddaac9fd6ffe8f75ceec7a1116da9f40ab4c5ed64580df1fd9819856eb2d",
+          "sha256": "99deef20ccdf9c117ff6b6016211703b7ab45a6d3f29fc95836e7114eeca818b"
+        },
+        {
+          "at": "2026-11-10T07:07:43.919755+00:00",
+          "detail": {
+            "model": "same-authored-evidence-policy",
+            "provider": "fixture",
+            "role": "builder",
+            "run_id": "wf_be17c15d20a75bf47eeab6b8_52f5055e5b65e41e"
+          },
+          "index": 2,
+          "kind": "model_started",
+          "previous": "99deef20ccdf9c117ff6b6016211703b7ab45a6d3f29fc95836e7114eeca818b",
+          "sha256": "f295b668447bcb1bdbe17bd712e1de4cae85f65224344921ff30bcd8af18273b"
+        },
+        {
+          "at": "2026-11-10T07:07:43.921114+00:00",
+          "detail": {
+            "cost": {
+              "amount": null,
+              "basis": "AUTHORED_FIXTURE_NO_INFERENCE",
+              "complete_cost_known": false
+            },
+            "model": "same-authored-evidence-policy",
+            "provider": "fixture",
+            "qualification": "AUTHORED_FIXTURE_NOT_LIVE_MODEL",
+            "reported_model": null,
+            "requested_model": "same-authored-evidence-policy",
+            "response_sha256": "585781903b5a0fed4f14310c7415325bc2c28a7bdc88ec15dab4b51ce19c47bc",
+            "role": "builder",
+            "run_id": "wf_be17c15d20a75bf47eeab6b8_52f5055e5b65e41e",
+            "usage": null
+          },
+          "index": 3,
+          "kind": "model_completed",
+          "previous": "f295b668447bcb1bdbe17bd712e1de4cae85f65224344921ff30bcd8af18273b",
+          "sha256": "0a0c896b7e17c8c38ff25f37cfd3d1fae524d7037ccb3d2debe1a14b684ac152"
+        },
+        {
+          "at": "2026-11-10T07:07:43.921298+00:00",
+          "detail": {
+            "outcome": {
+              "artifact": "task-context.txt",
+              "content": "Record R-17 has not been inspected. No coefficient is known."
+            },
+            "tool": "read_artifact"
+          },
+          "index": 4,
+          "kind": "tool_completed",
+          "previous": "0a0c896b7e17c8c38ff25f37cfd3d1fae524d7037ccb3d2debe1a14b684ac152",
+          "sha256": "dcb7e59a77d4ebc3554f883543b6124ac90c2c31e85c0eeecd82156956b6dde0"
+        },
+        {
+          "at": "2026-11-10T07:07:43.921974+00:00",
+          "detail": {
+            "artifact_hashes": {
+              "task-context.txt": "c02fb55986faca4ba539e2abc5ee00f8c18c95c258d01b0ce35b5760e03ec15c"
+            },
+            "checks": [
+              {
+                "artifact": "report.md",
+                "error": "Required artifact is absent.",
+                "kind": "document",
+                "passed": false
+              }
+            ],
+            "passed": false,
+            "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification.",
+            "spec_hash": "bbb6613e8e435abd4ae2d2582376ea2678a2a975bb8560479696a1cdf8306fd4"
+          },
+          "index": 5,
+          "kind": "verification",
+          "previous": "dcb7e59a77d4ebc3554f883543b6124ac90c2c31e85c0eeecd82156956b6dde0",
+          "sha256": "eef45788ca182f062fe7c27e26a8bed4582b2283e1264f6917462b32904e2dda"
+        },
+        {
+          "at": "2026-11-10T07:07:43.923810+00:00",
+          "detail": {
+            "model": "same-authored-evidence-policy",
+            "provider": "fixture",
+            "role": "builder",
+            "run_id": "wf_be17c15d20a75bf47eeab6b8_b8caef872275e22d"
+          },
+          "index": 6,
+          "kind": "model_started",
+          "previous": "eef45788ca182f062fe7c27e26a8bed4582b2283e1264f6917462b32904e2dda",
+          "sha256": "e42a2285fb6047ce312ab82bf228fa5bba7ef09d90c6efc632f17accac2a6750"
+        },
+        {
+          "index": 7,
+          "at": "2026-11-10T07:07:43.925235+00:00",
+          "kind": "model_completed",
+          "detail": {
+            "role": "builder",
+            "provider": "fixture",
+            "model": "same-authored-evidence-policy",
+            "requested_model": "same-authored-evidence-policy",
+            "reported_model": null,
+            "run_id": "wf_be17c15d20a75bf47eeab6b8_b8caef872275e22d",
+            "usage": null,
+            "cost": {
+              "amount": null,
+              "basis": "AUTHORED_FIXTURE_NO_INFERENCE",
+              "complete_cost_known": false
+            },
+            "qualification": "AUTHORED_FIXTURE_NOT_LIVE_MODEL",
+            "response_sha256": "37f82831c5a23d7a99c72983b22ccdacccb2769159fb574643293ea29fc69bbc"
+          },
+          "previous": "e42a2285fb6047ce312ab82bf228fa5bba7ef09d90c6efc632f17accac2a6750",
+          "sha256": "406c5b8aa05a3576da91ccd94e646a9a3d3e0e106396f861326ab70543e1669d"
+        },
+        {
+          "index": 8,
+          "at": "2026-11-10T07:07:43.925863+00:00",
+          "kind": "tool_completed",
+          "detail": {
+            "tool": "write_document",
+            "outcome": {
+              "artifact": "report.md",
+              "sha256": "c40fd6a6f5cb3eca53cd50dcae0ff10010ac0b48314de8ac8da37426dc22cd44",
+              "bytes": 89,
+              "kind": "document"
+            }
+          },
+          "previous": "406c5b8aa05a3576da91ccd94e646a9a3d3e0e106396f861326ab70543e1669d",
+          "sha256": "abb30b45d004e9381760739ff9b225d9db6cf7beaf458b73809003cb6f1ce2fb"
+        },
+        {
+          "index": 9,
+          "at": "2026-11-10T07:07:43.926725+00:00",
+          "kind": "verification",
+          "detail": {
+            "passed": true,
+            "checks": [
+              {
+                "artifact": "report.md",
+                "kind": "document",
+                "passed": true
+              }
+            ],
+            "spec_hash": "bbb6613e8e435abd4ae2d2582376ea2678a2a975bb8560479696a1cdf8306fd4",
+            "artifact_hashes": {
+              "task-context.txt": "c02fb55986faca4ba539e2abc5ee00f8c18c95c258d01b0ce35b5760e03ec15c",
+              "report.md": "c40fd6a6f5cb3eca53cd50dcae0ff10010ac0b48314de8ac8da37426dc22cd44"
+            },
+            "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification."
+          },
+          "previous": "abb30b45d004e9381760739ff9b225d9db6cf7beaf458b73809003cb6f1ce2fb",
+          "sha256": "e479d3448b311d2ab86c76da8ee175fe424c9be23bd4f34442119abeb616a329"
+        },
+        {
+          "index": 10,
+          "at": "2026-11-10T07:07:43.926889+00:00",
+          "kind": "verification",
+          "detail": {
+            "passed": true,
+            "checks": [
+              {
+                "artifact": "report.md",
+                "kind": "document",
+                "passed": true
+              }
+            ],
+            "spec_hash": "bbb6613e8e435abd4ae2d2582376ea2678a2a975bb8560479696a1cdf8306fd4",
+            "artifact_hashes": {
+              "task-context.txt": "c02fb55986faca4ba539e2abc5ee00f8c18c95c258d01b0ce35b5760e03ec15c",
+              "report.md": "c40fd6a6f5cb3eca53cd50dcae0ff10010ac0b48314de8ac8da37426dc22cd44"
+            },
+            "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification."
+          },
+          "previous": "e479d3448b311d2ab86c76da8ee175fe424c9be23bd4f34442119abeb616a329",
+          "sha256": "d6bcc422995616b1ab41fa4391bf3b4bced7d5571ff92b75bb2651ffda0b740d"
+        },
+        {
+          "index": 11,
+          "at": "2026-11-10T07:07:43.926926+00:00",
+          "kind": "finished",
+          "detail": {
+            "status": "complete",
+            "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification."
+          },
+          "previous": "d6bcc422995616b1ab41fa4391bf3b4bced7d5571ff92b75bb2651ffda0b740d",
+          "sha256": "73cbd2e4fe2b8143a2dca0da2b780d0bbad7a5f5ecfa717de13cd2021fb182c1"
+        }
+      ],
+      "archive_sha256": "bfe7e4b691c3dbb1f224996c22eeb51fe13fb9ad1f60f71588af94ac9b56d189"
+    },
+    {
+      "arm": "retrieval",
+      "status": "complete",
+      "model_calls": 2,
+      "actions": 2,
+      "fixture_source_fetches": 1,
+      "report": "Evidence status: coefficient 5 observed in synthetic record R-17. Retrieval time is not publication time.",
+      "resolved_coefficient": 5,
+      "matches_withheld_source": true,
+      "honest_abstention": false,
+      "verification": {
+        "passed": true,
+        "checks": [
+          {
+            "artifact": "report.md",
+            "kind": "document",
+            "passed": true
+          }
+        ],
+        "spec_hash": "eaee7865ba3d6f962b33c9797518edae7b2e5ab4505026f8c419ba362882a95c",
+        "artifact_hashes": {
+          "source.json": "b93ace7089213041cd2fea09c59161dc6fddd73f2497c4b357fc42e231d9e27b",
+          "task-context.txt": "c02fb55986faca4ba539e2abc5ee00f8c18c95c258d01b0ce35b5760e03ec15c",
+          "report.md": "0894bb9089dda841d5c4c971e1fb999d34b38a4f59bdfbc9280a8f3a21910f3e"
+        },
+        "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification."
+      },
+      "failed_initial_checks": 1,
+      "role_routes": {
+        "builder": {
+          "model": "same-authored-evidence-policy",
+          "provider": "fixture"
+        }
+      },
+      "artifact_hashes": {
+        "source.json": {
+          "bytes": 422,
+          "kind": "source",
+          "sha256": "b93ace7089213041cd2fea09c59161dc6fddd73f2497c4b357fc42e231d9e27b"
+        },
+        "task-context.txt": {
+          "bytes": 60,
+          "kind": "document",
+          "sha256": "c02fb55986faca4ba539e2abc5ee00f8c18c95c258d01b0ce35b5760e03ec15c"
+        },
+        "report.md": {
+          "sha256": "0894bb9089dda841d5c4c971e1fb999d34b38a4f59bdfbc9280a8f3a21910f3e",
+          "bytes": 105,
+          "kind": "document"
+        }
+      },
+      "events": [
+        {
+          "at": "2026-11-10T07:07:43.930200+00:00",
+          "detail": {
+            "acceptance_source": "Operator-frozen conditions; independence is not inferred.",
+            "spec_hash": "eaee7865ba3d6f962b33c9797518edae7b2e5ab4505026f8c419ba362882a95c"
+          },
+          "index": 0,
+          "kind": "created",
+          "previous": "0000000000000000000000000000000000000000000000000000000000000000",
+          "sha256": "750e7ee17500752850d8fd93642ab26abaf638547d433f7fdacb6cdec0cbe877"
+        },
+        {
+          "at": "2026-11-10T07:07:43.931616+00:00",
+          "detail": {
+            "name": "task-context.txt",
+            "scope": "Same declared initial resource in both arms; contains no withheld answer."
+          },
+          "index": 1,
+          "kind": "qualification_resource",
+          "previous": "750e7ee17500752850d8fd93642ab26abaf638547d433f7fdacb6cdec0cbe877",
+          "sha256": "eb84411c9c81df88574c36a5def92d24efdd7926fb2e823d0dbed66ef0c55d40"
+        },
+        {
+          "at": "2026-11-10T07:07:43.933188+00:00",
+          "detail": {
+            "model": "same-authored-evidence-policy",
+            "provider": "fixture",
+            "role": "builder",
+            "run_id": "wf_ad3d75d54a1f006c9d53f8a7_121c4481525b361f"
+          },
+          "index": 2,
+          "kind": "model_started",
+          "previous": "eb84411c9c81df88574c36a5def92d24efdd7926fb2e823d0dbed66ef0c55d40",
+          "sha256": "909ef60264c874168c92f4d5a0cf0c9531693c5b7035241372b8131184001649"
+        },
+        {
+          "at": "2026-11-10T07:07:43.934426+00:00",
+          "detail": {
+            "cost": {
+              "amount": null,
+              "basis": "AUTHORED_FIXTURE_NO_INFERENCE",
+              "complete_cost_known": false
+            },
+            "model": "same-authored-evidence-policy",
+            "provider": "fixture",
+            "qualification": "AUTHORED_FIXTURE_NOT_LIVE_MODEL",
+            "reported_model": null,
+            "requested_model": "same-authored-evidence-policy",
+            "response_sha256": "dcf8c2b64ee45e69e8e4fc0a78ad3c25c3fb6e1de1cd3d3dec21beb29b772c8d",
+            "role": "builder",
+            "run_id": "wf_ad3d75d54a1f006c9d53f8a7_121c4481525b361f",
+            "usage": null
+          },
+          "index": 3,
+          "kind": "model_completed",
+          "previous": "909ef60264c874168c92f4d5a0cf0c9531693c5b7035241372b8131184001649",
+          "sha256": "181cee282d0e6ce0cf03eb8ed3374ccacbcc262f6c11f1de69dce34c4824363a"
+        },
+        {
+          "at": "2026-11-10T07:07:43.935029+00:00",
+          "detail": {
+            "outcome": {
+              "artifact": "source.json",
+              "bytes": 422,
+              "kind": "source",
+              "sha256": "b93ace7089213041cd2fea09c59161dc6fddd73f2497c4b357fc42e231d9e27b"
+            },
+            "tool": "retrieve_source"
+          },
+          "index": 4,
+          "kind": "tool_completed",
+          "previous": "181cee282d0e6ce0cf03eb8ed3374ccacbcc262f6c11f1de69dce34c4824363a",
+          "sha256": "7dbfb8dca9c79563ffd3e25c37ee84c6023b0a03fbd113f71e951fceb39e5fd3"
+        },
+        {
+          "at": "2026-11-10T07:07:43.935645+00:00",
+          "detail": {
+            "artifact_hashes": {
+              "source.json": "b93ace7089213041cd2fea09c59161dc6fddd73f2497c4b357fc42e231d9e27b",
+              "task-context.txt": "c02fb55986faca4ba539e2abc5ee00f8c18c95c258d01b0ce35b5760e03ec15c"
+            },
+            "checks": [
+              {
+                "artifact": "report.md",
+                "error": "Required artifact is absent.",
+                "kind": "document",
+                "passed": false
+              }
+            ],
+            "passed": false,
+            "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification.",
+            "spec_hash": "eaee7865ba3d6f962b33c9797518edae7b2e5ab4505026f8c419ba362882a95c"
+          },
+          "index": 5,
+          "kind": "verification",
+          "previous": "7dbfb8dca9c79563ffd3e25c37ee84c6023b0a03fbd113f71e951fceb39e5fd3",
+          "sha256": "7ba581f0b3f0c411b48b925fdea348b3bd6deb2924a61f2b1ed9f78077e40f88"
+        },
+        {
+          "at": "2026-11-10T07:07:43.937750+00:00",
+          "detail": {
+            "model": "same-authored-evidence-policy",
+            "provider": "fixture",
+            "role": "builder",
+            "run_id": "wf_ad3d75d54a1f006c9d53f8a7_05e82474229eecd3"
+          },
+          "index": 6,
+          "kind": "model_started",
+          "previous": "7ba581f0b3f0c411b48b925fdea348b3bd6deb2924a61f2b1ed9f78077e40f88",
+          "sha256": "af43ca91a380eebb9fa38495b833e86682d7df7e0f59c81042117ba76f741eb8"
+        },
+        {
+          "index": 7,
+          "at": "2026-11-10T07:07:43.939381+00:00",
+          "kind": "model_completed",
+          "detail": {
+            "role": "builder",
+            "provider": "fixture",
+            "model": "same-authored-evidence-policy",
+            "requested_model": "same-authored-evidence-policy",
+            "reported_model": null,
+            "run_id": "wf_ad3d75d54a1f006c9d53f8a7_05e82474229eecd3",
+            "usage": null,
+            "cost": {
+              "amount": null,
+              "basis": "AUTHORED_FIXTURE_NO_INFERENCE",
+              "complete_cost_known": false
+            },
+            "qualification": "AUTHORED_FIXTURE_NOT_LIVE_MODEL",
+            "response_sha256": "01a7b8b4aa3c8fb5253d77d4f2578691b987a4e4cee3257faf1aa82f0d908249"
+          },
+          "previous": "af43ca91a380eebb9fa38495b833e86682d7df7e0f59c81042117ba76f741eb8",
+          "sha256": "92975b362ee521872e832892562784609e3fb405302a3a8d010bdab5e74fd926"
+        },
+        {
+          "index": 8,
+          "at": "2026-11-10T07:07:43.940005+00:00",
+          "kind": "tool_completed",
+          "detail": {
+            "tool": "write_document",
+            "outcome": {
+              "artifact": "report.md",
+              "sha256": "0894bb9089dda841d5c4c971e1fb999d34b38a4f59bdfbc9280a8f3a21910f3e",
+              "bytes": 105,
+              "kind": "document"
+            }
+          },
+          "previous": "92975b362ee521872e832892562784609e3fb405302a3a8d010bdab5e74fd926",
+          "sha256": "5689d786004f91fe8172601e548d5cf36f95da7240931ccbefb95d1253d1449f"
+        },
+        {
+          "index": 9,
+          "at": "2026-11-10T07:07:43.940852+00:00",
+          "kind": "verification",
+          "detail": {
+            "passed": true,
+            "checks": [
+              {
+                "artifact": "report.md",
+                "kind": "document",
+                "passed": true
+              }
+            ],
+            "spec_hash": "eaee7865ba3d6f962b33c9797518edae7b2e5ab4505026f8c419ba362882a95c",
+            "artifact_hashes": {
+              "source.json": "b93ace7089213041cd2fea09c59161dc6fddd73f2497c4b357fc42e231d9e27b",
+              "task-context.txt": "c02fb55986faca4ba539e2abc5ee00f8c18c95c258d01b0ce35b5760e03ec15c",
+              "report.md": "0894bb9089dda841d5c4c971e1fb999d34b38a4f59bdfbc9280a8f3a21910f3e"
+            },
+            "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification."
+          },
+          "previous": "5689d786004f91fe8172601e548d5cf36f95da7240931ccbefb95d1253d1449f",
+          "sha256": "a8c043241e590c5f5f750455ee1461fde495bb4da7904d970f19eabc3ca239ee"
+        },
+        {
+          "index": 10,
+          "at": "2026-11-10T07:07:43.941015+00:00",
+          "kind": "verification",
+          "detail": {
+            "passed": true,
+            "checks": [
+              {
+                "artifact": "report.md",
+                "kind": "document",
+                "passed": true
+              }
+            ],
+            "spec_hash": "eaee7865ba3d6f962b33c9797518edae7b2e5ab4505026f8c419ba362882a95c",
+            "artifact_hashes": {
+              "source.json": "b93ace7089213041cd2fea09c59161dc6fddd73f2497c4b357fc42e231d9e27b",
+              "task-context.txt": "c02fb55986faca4ba539e2abc5ee00f8c18c95c258d01b0ce35b5760e03ec15c",
+              "report.md": "0894bb9089dda841d5c4c971e1fb999d34b38a4f59bdfbc9280a8f3a21910f3e"
+            },
+            "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification."
+          },
+          "previous": "a8c043241e590c5f5f750455ee1461fde495bb4da7904d970f19eabc3ca239ee",
+          "sha256": "f9f73b380b6a9bc006699c645e380ba60f2b29499cd63d9338e8fe034cc5a849"
+        },
+        {
+          "index": 11,
+          "at": "2026-11-10T07:07:43.941047+00:00",
+          "kind": "finished",
+          "detail": {
+            "status": "complete",
+            "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification."
+          },
+          "previous": "f9f73b380b6a9bc006699c645e380ba60f2b29499cd63d9338e8fe034cc5a849",
+          "sha256": "3a17de9cd8485addabcd03779f13602ac6a8502aaf0a0140412747547a6c8b02"
+        }
+      ],
+      "archive_sha256": "164f09f456537e47d5d4600a10558a0f1ae51cda622dc2f5a71167be17691cd8"
+    }
+  ],
+  "competent_conventional_control": {
+    "method": "Read the same supplied synthetic source bytes and parse its explicit coefficient with a deterministic regular expression.",
+    "coefficient": 5,
+    "model_calls": 0,
+    "source_reads": 1,
+    "matches_withheld_source": true
+  },
+  "finding": "The authorized source arm resolved the withheld synthetic fact; the no-retrieval arm honestly abstained under the same budgets. A competent deterministic source reader also resolved it with zero model calls. This demonstrates information access and safe evidence plumbing, not an agent reasoning advantage or general research advantage.",
+  "complete_economic_cost": {
+    "known": false,
+    "unknown": [
+      "human fixture preparation",
+      "engineering",
+      "execution compute",
+      "maintenance",
+      "validation"
+    ]
+  },
+  "source_sha256": {
+    "bridge/strategy_demo.py": "85881056d8b1b0c1e8e597bec95387d23b94ba48de8a62ed1650196ab36b9a30",
+    "bridge/workflows.py": "c2d6c58014c18bf2f99620be46b98028b6caa2831c40fd853fdafa4214e7c226",
+    "bridge/workflow_strategies.py": "bb639bfe6467c1da816149fc5918f785f9df8053b3e5fc841f9e0cdef3115124"
+  }
+}

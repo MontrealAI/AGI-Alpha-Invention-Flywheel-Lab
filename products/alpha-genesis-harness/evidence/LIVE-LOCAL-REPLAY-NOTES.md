@@ -1,6 +1,8 @@
-# Local model replay: demonstrated operation, variable construction quality
+# Historical local model replay: demonstrated operation, variable construction quality
 
-The [current equality-corrected source](live-local-workflows-v0.3-equality-fixed.json)
+**Historical source scope:** the equality-corrected receipt’s eight dependency hashes match revision `0398ea3196f57b9adb6ed77a691e24738a5f2d86`. They do not identify the merged runtime. Source matching and unchanged-source statements below refer to each recorded execution, not the present checkout. Raw receipts are preserved without alteration.
+
+The [historical equality-corrected source](live-local-workflows-v0.3-equality-fixed.json)
 completed a real **local actor–critic workflow** using llama.cpp b12242 and
 Qwen3-1.7B Q4_K_M on Linux CPU. Customer HTTP onboarding discovered and
 connected the model. The first builder response contained malformed JSON and
@@ -12,7 +14,7 @@ x=41**. Ordinary arithmetic and equal-content reuse produce the same result.
 This demonstrates bounded automatic repair in one run, not general invention
 or a compounding advantage.
 
-**The current two-policy replay is FAIL overall.** Its single-builder arm
+**The historical equality-corrected two-policy replay is FAIL overall.** Its single-builder arm
 exhausted all three registered iterations, repeatedly representing the numeric
 constant `2` as the input reference `{"field":"2"}`. The evaluator rejected
 the undeclared input; no invalid artifact was accepted. The actor–critic
@@ -35,7 +37,7 @@ prior receipts do not become current-source evidence after a code change.
 | 05:57 | [Withdrawn exploratory grammar clarification](live-local-workflows-v0.3-exploratory-unqualified.json) | **FAIL_SOURCE_CHANGED; unqualified** | 1 + 2 | 32.02 / 60.36 |
 | 06:46 | [Equality-corrected source](live-local-workflows-v0.3-equality-fixed.json), context 16384 | Single builder FAIL after three iterations; actor–critic PASS after one malformed response and repair, then export/reuse | 3 + 3 | 79.86 / 154.31 |
 
-The last exploratory attempt briefly added two general expression-format
+The exploratory attempt at 05:57 briefly added two general expression-format
 sentences to the builder prompt. The change was withdrawn to preserve the
 already frozen source. A stop request raced with completion: both model arms
 had run, but the source changed during execution and the probe correctly
@@ -43,12 +45,12 @@ refused qualification. Its consumed calls and resource use remain recorded;
 its generated outputs are not final-source evidence. Only the two added
 sentences were removed. The restored `bridge/workflows.py` SHA-256 is
 `05203df3906e44be13e4ed51e4b9766f9e260fd3ee8560bfd99ec3ed4a75cfd9`,
-matching both the prior integration and new equality-corrected receipts. The
+matching both the prior integration and historical equality-corrected receipts. The
 older receipt’s eight dependencies matched its own source snapshot. Its old
-interpreter identity is historical: the new run records the corrected
+interpreter identity is historical: the 06:46 run records the corrected
 `bridge/instruments.py` SHA-256
 `0a7fb53f8559f04f8b5d9e49ed91b235651541ec7cca87af8152f23c39b551f8`.
-All eight dependencies of the new receipt matched the executed files and
+All eight dependencies of the 06:46 receipt matched the executed files and
 remained unchanged throughout that run. The equality correction justified one
 new fixed replay with the same prompts, public cases and registered limits;
 there was no extra retry or prompt change.

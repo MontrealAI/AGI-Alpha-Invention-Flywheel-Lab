@@ -29,7 +29,7 @@ ROOT = "ALPHA_GENESIS_HARNESS_0.3.0"
 FAKE_SECRET_NAMES = ["GH_TOKEN", "GITHUB_TOKEN", "HARNESS_OPENAI_API_KEY", "AWS_SECRET_ACCESS_KEY", "OPENAI_API_KEY"]
 
 
-def archive_fixture(marker="VERIFIED_SNAPSHOT", *, should_fail=False, extra_test_failure=False, extra_files=None):
+def archive_fixture(marker="VERIFIED_SNAPSHOT", *, should_fail=False, extra_test_failure=False, extra_files=None, strategy_mode=None):
     """A separately authored tiny archive satisfying the integrity schema only."""
     files = {name: b"synthetic release-boundary fixture\n" for name in packaging.REQUIRED}
     files["VERSION.json"] = b'{"version":"0.3.0"}\n'
@@ -50,6 +50,25 @@ def archive_fixture(marker="VERIFIED_SNAPSHOT", *, should_fail=False, extra_test
     files["tests/test_bridge.py"] = python.encode()
     if extra_test_failure:
         files["tests/test_new_service.py"] = b"import unittest\nclass NewService(unittest.TestCase):\n    def test_required_component(self):\n        self.fail('NEW_SERVICE_MUST_BE_CHECKED')\n"
+    if strategy_mode is not None:
+        files["bridge/__init__.py"] = b""
+        strategy = ("import argparse, json, os\nfrom pathlib import Path\n"
+                    "parser=argparse.ArgumentParser()\n"
+                    "parser.add_argument('--workspace',type=Path,required=True)\n"
+                    "parser.add_argument('--output',type=Path,required=True)\n"
+                    "args=parser.parse_args()\n"
+                    f"assert all(name not in os.environ for name in {FAKE_SECRET_NAMES!r})\n"
+                    "assert not args.workspace.exists()\n"
+                    "assert args.workspace.parent == Path.cwd().parent\n"
+                    "args.workspace.mkdir()\n"
+                    "assert args.output.is_absolute()\n")
+        if strategy_mode == "fail":
+            strategy += "raise SystemExit('STRATEGY_FIXTURE_FAILURE')\n"
+        else:
+            strategy += ("args.output.write_text(json.dumps({'schema':'synthetic-archive-strategy-boundary/v1',"
+                         "'marker':'EXTRACTED_STRATEGY_EXECUTED','workspace':str(args.workspace)})+'\\n')\n"
+                         "print('EXTRACTED_STRATEGY_EXECUTED')\n")
+        files["bridge/strategy_demo.py"] = strategy.encode()
     if extra_files:
         files.update(extra_files)
     manifest = {"schema": "alpha-genesis-harness-release/v1", "version": "0.3.0", "build_mode": "source-bound",
@@ -72,7 +91,7 @@ class ArchiveQualificationBoundaryTests(unittest.TestCase):
                 "bridge/genesis_next.py", "docs/OMEGA-GENESIS-NEXT.md", "evidence/OMEGA-PROTOCOL.md",
                 "tests/test_genesis_next.py", "tests/test_genesis_next_independent.py",
                 "evidence/OMEGA-FRESH-SUCCESSOR-PROTOCOL.md", "scripts/qualify_genesis_successor.py")}
-            raw = archive_fixture(extra_files=entries)
+            raw = archive_fixture(extra_files=entries, strategy_mode="pass")
             archive.write_bytes(raw)
             def zero_exit(command, **kwargs):
                 if "bridge.genesis_next" in command:
@@ -86,6 +105,7 @@ class ArchiveQualificationBoundaryTests(unittest.TestCase):
             receipt = json.loads((output / "QUALIFICATION.json").read_text())
             self.assertEqual(receipt["verdict"], "INVALID")
             self.assertTrue(all(operation["returncode"] == 0 for operation in receipt["operations"]))
+            self.assertTrue(any("bridge.strategy_demo" in operation["command"] for operation in receipt["operations"]))
 
     def test_omega_source_without_independent_qualification_cannot_execute(self):
         with tempfile.TemporaryDirectory() as folder:
@@ -168,6 +188,36 @@ class ArchiveQualificationBoundaryTests(unittest.TestCase):
             self.assertTrue(all(step["returncode"] == 0 for step in result["operations"]))
             for log in output.glob("*.txt"):
                 self.assertNotIn("INERT_TEST_VALUE_NOT_A_CREDENTIAL", log.read_text())
+
+    def test_extracted_strategy_demonstration_is_run_and_failure_is_not_ignored(self):
+        if shutil.which("node") is None:
+            self.skipTest("Node is required for the extracted-byte operation")
+        for mode in ("pass", "fail"):
+            with self.subTest(mode=mode), tempfile.TemporaryDirectory() as folder:
+                archive, output = Path(folder) / "download.zip", Path(folder) / "receipt"
+                raw = archive_fixture(strategy_mode=mode)
+                archive.write_bytes(raw)
+                fixtures = {name: "INERT_TEST_VALUE_NOT_A_CREDENTIAL" for name in FAKE_SECRET_NAMES}
+                with patch.dict(os.environ, fixtures):
+                    if mode == "fail":
+                        with self.assertRaisesRegex(ValueError, "Extracted operation 3 failed"):
+                            qualification.qualify(archive, hashlib.sha256(raw).hexdigest(), SOURCE, output)
+                    else:
+                        qualification.qualify(archive, hashlib.sha256(raw).hexdigest(), SOURCE, output)
+                receipt = json.loads((output / "QUALIFICATION.json").read_text())
+                self.assertEqual(len(receipt["operations"]), 3)
+                command = receipt["operations"][-1]["command"]
+                self.assertEqual(command[:4], [sys.executable, "-B", "-m", "bridge.strategy_demo"])
+                self.assertEqual(command[-2:], ["--output", str(output.resolve() / "STRATEGY-DEMONSTRATION.json")])
+                if mode == "pass":
+                    self.assertEqual(receipt["verdict"], "PASSED IN SCOPE")
+                    evidence = json.loads((output / "STRATEGY-DEMONSTRATION.json").read_text())
+                    self.assertEqual(evidence["marker"], "EXTRACTED_STRATEGY_EXECUTED")
+                    self.assertIn("EXTRACTED_STRATEGY_EXECUTED", (output / "operation-3.stdout.txt").read_text())
+                else:
+                    self.assertEqual(receipt["verdict"], "INVALID")
+                    self.assertNotEqual(receipt["operations"][-1]["returncode"], 0)
+                    self.assertIn("STRATEGY_FIXTURE_FAILURE", (output / "operation-3.stderr.txt").read_text())
 
     def test_processing_bound_applies_before_validation_or_execution(self):
         with tempfile.TemporaryDirectory() as folder:

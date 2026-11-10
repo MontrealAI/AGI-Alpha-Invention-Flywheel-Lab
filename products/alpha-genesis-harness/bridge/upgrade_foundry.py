@@ -22,6 +22,7 @@ import threading
 import time
 
 from . import adapters as _adapters, workflows as _workflows, codex as _codex, codex_permissions as _permissions
+from . import workflow_schemas as _workflow_schemas, output_schema as _output_schema
 from .adapters import BridgeError, strict_json
 from .codex import CodexService
 from .codex_permissions import PROFILE, permission_overrides, verify_profile_protocol, verify_runtime_sandbox
@@ -48,7 +49,7 @@ def _source_guard():
 def _authority_manifest(binary):
     _source_guard()
     sources = {"upgrade_foundry.py": OWN_SHA}
-    for module in (_adapters, _workflows, _codex, _permissions):
+    for module in (_adapters, _workflows, _workflow_schemas, _output_schema, _codex, _permissions):
         path = Path(module.__file__)
         actual = hashlib.sha256(_regular(path, 1024 * 1024)).hexdigest()
         require(actual == module.LOADED_SOURCE_SHA256,
@@ -327,8 +328,23 @@ class UpgradeFoundryService:
             _atomic(directory / "PROTOCOL.json", encoded(protocol))
             return {"experiment": self._public({"experiments": [exp]})["experiments"][0], "state": self._public(state)}
 
+    def _construction_runtime(self):
+        runtime = self.workflows.runtime
+        config = getattr(runtime, "config", {})
+        require(not (getattr(runtime, "local_only", False) or
+                     (isinstance(config, dict) and config.get("local_only") is True)),
+                "Local-only mode disables remote foundry construction.", "LOCAL_ONLY")
+        require(callable(getattr(runtime, "execution_slot", None)) and
+                callable(getattr(runtime, "generate_admitted_external", None)) and
+                callable(getattr(runtime, "service", None)),
+                "Foundry construction requires shared model execution admission.", "FOUNDRY_EXECUTION_ADMISSION")
+        require(runtime.service("codex") is self.codex,
+                "Foundry Codex connection differs from the shared runtime connection.", "FOUNDRY_EXECUTION_ADMISSION")
+        return runtime
+
     def construct(self, data):
         require(isinstance(data, dict) and data.get("authorize") is True, "Explicitly authorize model-driven source construction.", "FOUNDRY_AUTHORIZATION")
+        runtime = self._construction_runtime()
         with self.lock:
             state = self._load(); exp = self._experiment(state, data.get("experiment_id"))
             require(exp["status"] == "registered", "Construction requires a fresh registered experiment; attempts are not silently retried.", "FOUNDRY_STATE")
@@ -336,7 +352,8 @@ class UpgradeFoundryService:
             self.codex.gate()
             ident = exp["id"]; directory = self.root / ident
             seeded = _SeededCodex(self.codex, directory / "construction", exp["source_files"])
-            exp["status"] = "constructing"; self.active[ident] = {"codex": seeded, "cancel": threading.Event()}; self._save(state)
+            cancel = threading.Event()
+            exp["status"] = "constructing"; self.active[ident] = {"codex": seeded, "cancel": cancel}; self._save(state)
             prompt = ("Improve the HARNESS source to address this objective: " + exp["objective"] + "\n"
                       "This is an isolated source snapshot. Edit ONLY bridge/instruments.py. Preserve existing evaluate(spec, inputs, max_operations) output and safety contracts. "
                       "No network, dependency installation, permission changes or edits to any other file. Avoid bytecode writes (PYTHONDONTWRITEBYTECODE=1). "
@@ -353,8 +370,19 @@ class UpgradeFoundryService:
                 state = self._load(); current = self._experiment(state, ident)
                 current["progress"] = {"phase": "constructing", "received_characters": event.get("received_characters"), "updated_at": timestamp()}
                 self._save(state)
+        dispatched = False
+        def dispatch_seeded(request, on_event=None, *, expected_execution_identity=None, cancelled_before_dispatch=None):
+            nonlocal dispatched
+            self._construction_runtime()
+            require(not cancel.is_set(), "Queued construction cancelled before dispatch.", "FOUNDRY_CANCELLED")
+            require(seeded.plan is self.codex.plan, "Seeded construction changed the selected account.", "FOUNDRY_EXECUTION_ADMISSION")
+            dispatched = True
+            return seeded.generate(request, on_event=on_event, expected_execution_identity=expected_execution_identity,
+                                   cancelled_before_dispatch=cancelled_before_dispatch)
         try:
-            response = seeded.generate({"model": exp["model"], "prompt": prompt, "run_id": ident}, on_event=progress)
+            request = {"provider": "codex", "model": exp["model"], "prompt": prompt, "run_id": ident}
+            with runtime.execution_slot(request, cancelled=cancel.is_set) as admission:
+                response = runtime.generate_admitted_external(request, dispatch_seeded, admission, on_event=progress)
             candidate = Path(response["workspace"])
             require(candidate.resolve() == (directory / "construction" / ident).resolve(), "Unexpected construction workspace.", "FOUNDRY_INTEGRITY")
             files = self._candidate_files(candidate, exp["baseline_manifest"])
@@ -370,7 +398,8 @@ class UpgradeFoundryService:
             with self.lock:
                 state = self._load(); current = self._experiment(state, ident)
                 current["status"] = "blocked" if getattr(error, "code", "").startswith(("CODEX_SANDBOX", "CODEX_UNAVAILABLE", "CHATGPT")) else "construction_failed"
-                current["events"].append({"kind": "construction_failed", "at": timestamp(), "code": getattr(error, "code", "CONSTRUCTION_FAILED"), "cost": "Unknown upstream consumption; no automatic retry."})
+                current["events"].append({"kind": "construction_failed", "at": timestamp(), "code": getattr(error, "code", "CONSTRUCTION_FAILED"),
+                    "dispatch_started": dispatched, "cost": "Unknown upstream consumption; no automatic retry." if dispatched else "No model dispatch occurred; no model attempt was started."})
                 current["costs"]["construction_wall_seconds"] = time.perf_counter() - started
                 self._save(state)
             raise

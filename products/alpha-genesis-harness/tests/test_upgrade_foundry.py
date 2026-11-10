@@ -11,6 +11,7 @@ from pathlib import Path
 import sys
 import tempfile
 import threading
+import time
 import unittest
 from unittest.mock import patch
 
@@ -21,6 +22,7 @@ from bridge.codex import CodexService
 from bridge.instruments import evaluate
 from bridge.upgrade_foundry import UpgradeFoundryService, NativeEvaluator, EDITABLE, _CHILD, _protocol
 from bridge.workflows import WorkflowService
+from bridge.services import AccessRuntime
 from test_chatgpt import FakeTransport, seed
 from test_codex import ProcessFixture
 
@@ -42,7 +44,8 @@ class EvaluatorFixture:
 class FoundryTests(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory(); self.root = Path(self.temp.name)
-        self.workflows = WorkflowService(Runtime({"local_only": True}), self.root / "workflows")
+        self.runtime = AccessRuntime(Runtime({}), private_root=self.root / "runtime")
+        self.workflows = WorkflowService(self.runtime, self.root / "workflows")
         self.transport = FakeTransport()
         self.plan = ChatGPTPlanService({"allow_plan_usage": True, "distribution": "open-source-local"}, self.root / "auth", self.transport)
         seed(self.plan)
@@ -64,11 +67,12 @@ class FoundryTests(unittest.TestCase):
             return ProcessFixture(self.messages)
         self.codex = CodexService({"allow_execution": True, "allow_workspace_write": True, "executable": sys.executable},
                                  self.plan, self.root / "codex", factory, sandbox_validator=lambda _: None, runtime_probe=lambda *args: None)
+        self.runtime._services.update(codex=self.codex, chatgpt=self.plan)
         self.evaluator = EvaluatorFixture()
         self.service = UpgradeFoundryService(self.workflows, self.codex, evaluator=self.evaluator)
 
     def tearDown(self):
-        self.codex.close(); self.plan.close(); self.workflows.close(); self.temp.cleanup()
+        self.service.close(); self.codex.close(); self.plan.close(); self.workflows.close(); self.temp.cleanup()
 
     def register(self):
         return self.service.register({"objective": "Reduce repeated interpreter work while preserving acceptance", "model": "account-model"})["experiment"]
@@ -97,6 +101,105 @@ class FoundryTests(unittest.TestCase):
         with self.assertRaises(BridgeError): self.service.construct({"experiment_id": exp["id"]})
         self.codex.config["allow_workspace_write"] = False
         with self.assertRaises(BridgeError): self.service.construct({"experiment_id": exp["id"], "authorize": True})
+        self.assertFalse(self.process_calls)
+
+    def test_direct_service_local_only_refuses_before_codex_dispatch(self):
+        for source in ("facade", "base"):
+            with self.subTest(source=source):
+                exp = self.register()
+                previous = self.runtime.base.local_only
+                if source == "facade":
+                    self.runtime.config["local_only"] = True
+                else:
+                    self.runtime.base.local_only = True
+                try:
+                    with self.assertRaises(BridgeError) as error:
+                        self.service.construct({"experiment_id": exp["id"], "authorize": True})
+                    self.assertEqual(error.exception.code, "LOCAL_ONLY")
+                    self.assertFalse(self.process_calls)
+                finally:
+                    self.runtime.config.pop("local_only", None)
+                    self.runtime.base.local_only = previous
+
+    def test_direct_service_without_shared_admission_fails_closed(self):
+        exp = self.register()
+        self.workflows.runtime = Runtime({})
+        try:
+            with self.assertRaises(BridgeError) as error:
+                self.service.construct({"experiment_id": exp["id"], "authorize": True})
+            self.assertEqual(error.exception.code, "FOUNDRY_EXECUTION_ADMISSION")
+            self.assertFalse(self.process_calls)
+        finally:
+            self.workflows.runtime = self.runtime
+
+    def _queue_construction(self, exp):
+        results, errors = [], []
+        def run():
+            try:
+                results.append(self.service.construct({"experiment_id": exp["id"], "authorize": True}))
+            except Exception as error:
+                errors.append(error)
+        worker = threading.Thread(target=run)
+        worker.start()
+        gate = self.plan._harness_execution_gate
+        deadline = time.monotonic() + 3
+        while worker.is_alive() and time.monotonic() < deadline:
+            with gate.condition:
+                if gate.waiters:
+                    return worker, results, errors
+            time.sleep(.01)
+        worker.join(1)
+        self.fail("Foundry did not wait behind the existing account execution slot: " + repr(errors))
+
+    def test_foundry_shares_plan_queue_and_cancelled_waiter_never_dispatches(self):
+        exp = self.register()
+        with self.runtime.execution_slot({"provider": "codex", "model": "account-model"}):
+            worker, results, errors = self._queue_construction(exp)
+            try:
+                self.assertFalse(self.process_calls)
+                self.assertTrue(self.service.cancel({"experiment_id": exp["id"]})["cancelled"])
+                worker.join(3)
+                self.assertFalse(worker.is_alive())
+            finally:
+                self.service.cancel({"experiment_id": exp["id"]})
+                worker.join(3)
+        self.assertFalse(results)
+        self.assertTrue(errors and isinstance(errors[0], BridgeError))
+        self.assertIn(errors[0].code, {"CANCELLED", "FOUNDRY_CANCELLED"})
+        self.assertFalse(self.process_calls)
+        row = next(row for row in self.service.status()["experiments"] if row["id"] == exp["id"])
+        self.assertFalse(row["events"][-1]["dispatch_started"])
+
+    def test_foundry_queue_reconnect_refuses_stale_identity_before_dispatch(self):
+        exp = self.register()
+        with self.runtime.execution_slot({"provider": "codex", "model": "account-model"}):
+            worker, results, errors = self._queue_construction(exp)
+            try:
+                with self.plan.store.locked():
+                    state = self.plan.store.read()
+                    state["authorization_epoch"] = state.get("authorization_epoch", 0) + 1
+                    self.plan.store.write(state)
+                worker.join(3)
+                self.assertFalse(worker.is_alive())
+            finally:
+                self.service.cancel({"experiment_id": exp["id"]})
+                worker.join(3)
+        self.assertFalse(results)
+        self.assertTrue(errors and isinstance(errors[0], BridgeError))
+        self.assertEqual(errors[0].code, "EXECUTION_IDENTITY_CHANGED")
+        self.assertFalse(self.process_calls)
+
+    def test_seeded_constructor_rechecks_admitted_identity_after_native_probe(self):
+        exp = self.register()
+        def reconnect_during_probe(*args):
+            with self.plan.store.locked():
+                state = self.plan.store.read()
+                state["authorization_epoch"] = state.get("authorization_epoch", 0) + 1
+                self.plan.store.write(state)
+        self.codex.runtime_probe = reconnect_during_probe
+        with self.assertRaises(BridgeError) as error:
+            self.service.construct({"experiment_id": exp["id"], "authorize": True})
+        self.assertEqual(error.exception.code, "CHATGPT_ACCOUNT_CHANGED")
         self.assertFalse(self.process_calls)
 
     def test_constructed_code_cannot_edit_independent_evaluator_or_other_source(self):
@@ -138,6 +241,7 @@ class FoundryTests(unittest.TestCase):
     def test_fixed_json_contract_rejects_nested_python_boolean_coercion(self):
         protocol = _protocol(0)
         self.assertEqual(protocol["schema"], "harness-interpreter-upgrade-protocol/v2")
+        self.assertEqual(len(protocol["cases"]), 64)
         cases = [case for case in protocol["cases"] if case["id"].startswith("equality-")]
         self.assertEqual(len(cases), 12)
         trusted = self.evaluator.run(self.root, cases)

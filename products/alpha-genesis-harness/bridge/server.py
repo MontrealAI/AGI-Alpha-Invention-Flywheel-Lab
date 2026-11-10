@@ -333,10 +333,10 @@ class Handler(BaseHTTPRequestHandler):
         if action == "models":
             return service.discover()
         if action == "generate":
-            return service.generate(dict(data, provider=category))
+            return self.server.runtime.generate(dict(data, provider=category))
         if action == "resume":
-            return service.resume(dict(data, provider=category))
-        return service.cancel(data.get("run_id"))
+            return self.server.runtime.resume(dict(data, provider=category))
+        return self.server.runtime.cancel(data.get("run_id"))
 
     def connection_status(self, category):
         result = self.server.runtime.service(category).status()

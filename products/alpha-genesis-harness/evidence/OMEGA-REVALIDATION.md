@@ -1,8 +1,10 @@
-# Fresh successor revalidation after JSON equality repair
+# Historical fresh successor revalidation after JSON equality repair
+
+**Historical source scope:** this record applies to revision `0398ea3196f57b9adb6ed77a691e24738a5f2d86` and its seven recorded dependencies. It does not qualify the merged runtime or its expanded source closure. Raw JSON receipts remain unchanged.
 
 The single post-repair attempt passed the unchanged, preregistered finite successor protocol. The candidate tied the independently implemented conventional memoization control. This does not establish superiority over ordinary reuse or general self-improvement.
 
-The reviewed source was publicly frozen at Git revision `0398ea3196f57b9adb6ed77a691e24738a5f2d86` before creating the new source-freeze receipt or generating the new nonce. All seven source-closure hashes in the receipt were checked against that revision and the still-current files after execution. The generator, both protocols, and candidate are unchanged from the original experiment; the interpreter dependency now includes the recursive JSON equality repair.
+The reviewed source was publicly frozen at Git revision `0398ea3196f57b9adb6ed77a691e24738a5f2d86` before creating the new source-freeze receipt or generating the new nonce. All seven source-closure hashes in the receipt were checked against that revision and the files present immediately after that historical execution. The generator, both protocols, and candidate are unchanged from the original experiment; the interpreter dependency now includes the recursive JSON equality repair.
 
 ## Evidence and attempt identity
 
@@ -32,4 +34,4 @@ Directly evaluating all successor instances without any initial acquisition take
 
 The prior interpreter actually returned equality for nested `true` versus `1`; the corrected interpreter returns false on the same witness. The independent review preserves both observations and exact source hashes. Equality checks passed in three separately labelled groups: 51 repair-author cases, 361 independent Cartesian pairs against the actual shipped JavaScript evaluator, and eight independent structural adversaries. Cases overlap; these counts are not independent empirical trials or unique tasks.
 
-Foundry protocol v2 separately checks 64 interpreter cases: 48 fresh affine cases, four malformed cases, and 12 fixed equality cases with explicit expected booleans. Its ordinary direct-arithmetic comparator applies only to the 48 affine cases. Four equality test methods and 14 foundry test methods passed. The successor revalidation above exercises fresh instances of the existing internal selection task; it does not itself test the equality repair or demonstrate a new external task family, live model improvement, or reproduced frontier capability.
+Foundry protocol v2 separately checks 64 interpreter cases: 48 fresh affine cases, four malformed cases, and 12 fixed equality cases with explicit expected booleans. Its ordinary direct-arithmetic comparator applies only to the 48 affine cases. At that revision, four equality test methods and 14 foundry test methods passed. The successor revalidation above exercises fresh instances of the existing internal selection task; it does not itself test the equality repair or demonstrate a new external task family, live model improvement, or reproduced frontier capability.

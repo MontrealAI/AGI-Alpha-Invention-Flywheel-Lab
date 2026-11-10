@@ -1,0 +1,146 @@
+{
+  "schema": "alpha-genesis-workflow-recovery/v1",
+  "date": "2026-11-10",
+  "scope": "Recovery record, not a replacement for lost raw run receipts. The execution environment became unavailable before the final local changes were published.",
+  "published_base": "8d69f4f84d0b7e64fe7b55bc7a607294ecac08fa",
+  "files": [
+    {
+      "path": "products/alpha-genesis-harness/bridge/workflows.py",
+      "git_blob_sha": "be3c237646f2766861d6b9a4e5d94dd23470dca4",
+      "sha256": "098410d3b410383ed17ffc60e14deb55ac26a45546b6b71d5a0311713538462d",
+      "pre_outage_sha256": "098410d3b410383ed17ffc60e14deb55ac26a45546b6b71d5a0311713538462d",
+      "exact_pre_outage_hash_match": true,
+      "recovery": "Reconstructed from retained source reads and tool-call edits; full SHA256 matches independently recorded frozen source."
+    },
+    {
+      "path": "products/alpha-genesis-harness/bridge/workflow_strategies.py",
+      "git_blob_sha": "fc701ec05fcb6381bb4630fbdbd903855775d2ab",
+      "sha256": "f995a052f7b3d6ad6a6017665138d051c6d5df65a2155ae81a987156a6541a06",
+      "pre_outage_sha256": "f995a052f7b3d6ad6a6017665138d051c6d5df65a2155ae81a987156a6541a06",
+      "exact_pre_outage_hash_match": true,
+      "recovery": "Reconstructed from retained source reads and tool-call edits; full SHA256 matches independently recorded frozen source."
+    },
+    {
+      "path": "products/alpha-genesis-harness/bridge/strategy_demo.py",
+      "git_blob_sha": "a588a211007f94d093da7710c65910f910260452",
+      "sha256": "85881056d8b1b0c1e8e597bec95387d23b94ba48de8a62ed1650196ab36b9a30",
+      "pre_outage_sha256": "85881056d8b1b0c1e8e597bec95387d23b94ba48de8a62ed1650196ab36b9a30",
+      "exact_pre_outage_hash_match": true,
+      "recovery": "Reconstructed from retained source reads and tool-call edits; full SHA256 matches independently recorded frozen source."
+    },
+    {
+      "path": "products/alpha-genesis-harness/tests/test_workflow_strategies.py",
+      "git_blob_sha": "913b484ebffd5c837fef6f5829193cfda0934e54",
+      "sha256": "e6175989b46bf0751f6068fbe7ff484085e7a35e68f4faaa7f3c76184084e764",
+      "pre_outage_sha256": null,
+      "exact_pre_outage_hash_match": false,
+      "recovery": "Reconstructed verbatim from retained tool-call edits and published base; pre-outage full hash unavailable, so hosted verification is required."
+    },
+    {
+      "path": "products/alpha-genesis-harness/scripts/probe_local_workflows.py",
+      "git_blob_sha": "20df8d5111708641d51566820d6ad250c437c438",
+      "sha256": "3e814499e99700839cae9a175947a97efcd35484a1f029c2204527818e99f759",
+      "pre_outage_sha256": null,
+      "exact_pre_outage_hash_match": false,
+      "recovery": "Reconstructed verbatim from retained tool-call edits and published base; pre-outage full hash unavailable, so hosted verification is required."
+    },
+    {
+      "path": "products/alpha-genesis-harness/docs/AGENTIC-WORKFLOWS.md",
+      "git_blob_sha": "82d3f2e77c57ec6e9adfae0939baf018e3b66dc7",
+      "sha256": "d911eb855d6264b827496d9f8879a1fe176cf63f120ceaa4e7b6444f1f0a54dd",
+      "pre_outage_sha256": null,
+      "exact_pre_outage_hash_match": false,
+      "recovery": "Reconstructed verbatim from retained tool-call edits and published base; pre-outage full hash unavailable, so hosted verification is required."
+    }
+  ],
+  "preserved_published_evidence": [
+    "products/alpha-genesis-harness/evidence/live-local-workflows.json",
+    "products/alpha-genesis-harness/evidence/workflow-qualification.json"
+  ],
+  "lost_unpublished_raw_receipts": [
+    "Refreshed evidence/live-local-workflows.json containing final-source Qwen branch events and actual instrument contents.",
+    "evidence/strategy-comparisons.json containing paired fixture events and run identities.",
+    "Refreshed evidence/workflow-qualification.json."
+  ],
+  "transcript_observations_not_raw_receipts": {
+    "tests": {
+      "command": "python3 -m unittest discover -s tests -p 'test*.py' -q",
+      "reported_passed": 198,
+      "reported_seconds": 11.129,
+      "qualification": "Observed terminal output before outage; recovered code still needs hosted rerun."
+    },
+    "live_local": {
+      "model": "Qwen3-1.7B-Q4_K_M",
+      "weights_sha256": "d2387ca2dbfee2ffabce7120d3770dadca0b293052bc2f0e138fdc940d9bc7b5",
+      "source_unchanged_reported": true,
+      "runs": [
+        {
+          "policy": "single-model",
+          "status": "complete",
+          "model_calls": 1,
+          "actions": 1
+        },
+        {
+          "policy": "actor-critic",
+          "status": "complete",
+          "model_calls": 2,
+          "actions": 1
+        },
+        {
+          "policy": "parallel-exploration",
+          "status": "complete",
+          "model_calls": 2,
+          "actions": 3,
+          "branches": [
+            {
+              "index": 0,
+              "status": "complete",
+              "model_calls": 1,
+              "verification_passed": true
+            },
+            {
+              "index": 1,
+              "status": "exhausted",
+              "model_calls": 1,
+              "verification_passed": false
+            }
+          ]
+        }
+      ],
+      "scope": "Narrow arithmetic software qualification. Parallel exploration did not establish an advantage over the passing one-call direct baseline. Full new raw receipt is unavailable; rerun on recovered sources."
+    },
+    "paired_fixture": {
+      "arms": [
+        {
+          "arm": "no-retrieval",
+          "status": "complete",
+          "model_calls": 2,
+          "actions": 2,
+          "resolved_coefficient": null,
+          "honest_abstention": true
+        },
+        {
+          "arm": "retrieval",
+          "status": "complete",
+          "model_calls": 2,
+          "actions": 2,
+          "resolved_coefficient": 5,
+          "honest_abstention": false
+        }
+      ],
+      "competent_conventional_control": {
+        "model_calls": 0,
+        "resolved_coefficient": 5
+      },
+      "scope": "Authored conditional responses and synthetic source transport; no live inference or network, and no general research advantage claim. Regenerate with recovered strategy_demo.py."
+    }
+  },
+  "rerun_commands": [
+    "python3 -m unittest discover -s tests -p 'test*.py' -q",
+    "python3 -m bridge.strategy_demo --workspace /absolute/new/paired --output /absolute/new/paired-evidence.json",
+    "python3 -m bridge.workflows demo --workspace /absolute/new/workflow-demo --output /absolute/new/workflow-demo-evidence.json",
+    "python3 scripts/probe_local_workflows.py --server /absolute/llama-server --model /absolute/selected-weights.gguf --alias selected-model-id --output /absolute/new/live-workflows"
+  ],
+  "rerun_notice": "The live probe accepts a compatible explicitly selected local GGUF, starts its own llama.cpp server, and records weights/server/source digests. An exit code of zero means the protocol completed; inspect every run status in RESULT.json. A newer model's outcomes must be reported as a new trial, not attributed to the unavailable 1.7B receipt.",
+  "branch_changes": "Only unreachable Git blobs/tree created during this recovery. Parent publisher controls refs."
+}
