@@ -1,0 +1,159 @@
+{
+  "schema": "harness-wasi-baseline-preregistration/v3",
+  "execution_status": "NOT_EXECUTED",
+  "objective": "Test whether a separately isolated WASI evaluator can preserve the unchanged HARNESS interpreter contract with no Codex authentication, before any model-written candidate is admitted.",
+  "baseline_revision": "48d3f80781d1f2d732d0cc5e6cbab0dbc6a387d8",
+  "baseline_source_sha256": {
+    "products/alpha-genesis-harness/bridge/instruments.py": "cca18a8703a03448cd9bf035223226d513ed58bb544f018949e31603e7c8c2e5",
+    "products/alpha-genesis-harness/bridge/upgrade_foundry.py": "d4334196411651a99ff21ca08853ff1b0c2a85ae9b6334186894666e5ccd6d07"
+  },
+  "cases_sha256": "180d601781b95c7a1289ffa50071a9e6e6111c0c5149fed6da2fb5971c5a4b92",
+  "cases": "Exact _protocol('harness-wasi-baseline-v1-20261110') output from pinned foundry v2: 48 public seeded affine,4 malformed/budget,12 fixed JSON equality. These are public baseline regressions, not hidden confirmation.",
+  "downloads": {
+    "cpython": {
+      "filename": "Python-3.15.2.tar.xz",
+      "url": "https://www.python.org/ftp/python/3.15.2/Python-3.15.2.tar.xz",
+      "sha256": "8b5536d280142ecf6cdfe15d12a21ba1c65e300bbf7b28a8d0cdb849575797de",
+      "max_bytes": 35000000
+    },
+    "sdk": {
+      "filename": "wasi-sdk-33.0-x86_64-linux.tar.gz",
+      "url": "https://github.com/WebAssembly/wasi-sdk/releases/download/wasi-sdk-33/wasi-sdk-33.0-x86_64-linux.tar.gz",
+      "sha256": "0ba8b5bfaeb2adf3f29bab5841d76cf5318ab8e1642ea195f88baba1abd47bce",
+      "max_bytes": 210000000
+    },
+    "wasmtime_python": {
+      "filename": "wasmtime-50.0.1-py3-none-manylinux1_x86_64.whl",
+      "url": "https://files.pythonhosted.org/packages/d5/9d/97c109d4a25c716c4045644398d7e684e1d4fa5ec6c99412b5cba35a9a98/wasmtime-50.0.1-py3-none-manylinux1_x86_64.whl",
+      "sha256": "cc14c3a17654e0394e0225b11813532ef0cd7bd1e222a0c5494cdedaabeddac4",
+      "max_bytes": 12000000
+    }
+  },
+  "wasmtime_python_wasi_source_sha256": "f43f6f86e82512b7cca0cee0921fe154f190ce18e06614f13b54f71dba56deb1",
+  "readonly_api": "wasmtime-py50.0.1 WasiConfig.preopen_dir(self,path,guest_path,fs_mutable=True), called with fs_mutable=False; no omitted/default/mutable fallback.",
+  "readonly_native_mapping": {
+    "source": "https://github.com/bytecodealliance/wasmtime/blob/v50.0.0/crates/c-api/src/wasi.rs",
+    "source_sha256": "29da0788b86e3bd3e11cd897b10755a3ad6cecb9dbab16029a2fa3499ffb5dcf",
+    "mapping": "fs_mutable=false maps to wasmtime_wasi::FsPerms::ReadOnly"
+  },
+  "version_note": "Python package50.0.1 is the available official v50 wheel;50.0.0 PyPI lookup returned404. The reviewed C-API semantics are pinned to the standalone Wasmtime50.0.0 source. This prototype does not download/use a standalone Wasmtime CLI.",
+  "capability_boundary": {
+    "preopens": "Exactly one fresh staging tree mapped to /sandbox, readonly. Contains pinned public CPython Lib with freshly derived checked-hash bytecode caches, trusted driver and exact unchanged baseline. Capability negatives additionally use a public fixture and one deliberate link to a synthetic outside sentinel; both are removed before baseline replay.",
+    "stdio": "Closed stdin; explicitly supplied bounded stdout/stderr callbacks. No inherited terminal or arbitrary host callback.",
+    "environment": "WASI environment explicitly empty. Disposable host worker receives only PATH,LANG and a public synthetic canary.",
+    "network_and_process": "Only WASI Preview1 imports; no socket descriptor, network preopen, HTTP linker, host process bridge or inherited descriptor. Local sentinel tests denied loopback connection.",
+    "other_wasi": "Standard WASI clocks,randomness and exit remain available; fuel alone does not bound blocking host calls. External process watchdog covers package import, compilation, instantiation and execution.",
+    "trust": "Official pinned build sources/toolchain/wheel,host OS,Wasmtime and trusted supervisor/driver. Candidate/guest outputs never establish acceptance. Runtime defects and microarchitectural side channels are not ruled out by finite tests."
+  },
+  "guest_limits": {
+    "linear_memory_bytes": 268435456,
+    "wasm_stack_bytes": 1048576,
+    "worker_address_space_bytes": 4294967296,
+    "worker_cpu_seconds": 35,
+    "worker_wall_seconds": 40,
+    "epoch_seconds": 30,
+    "fuel": 2000000000,
+    "output_bytes": 65536,
+    "watchdog_probe_seconds": 3
+  },
+  "limit_scope": "Prospective per-invocation security envelopes, not mission deadlines or measured sufficient startup budgets. No automatic increases/retries. Failure remains failure and any adjusted envelope needs a new protocol.",
+  "required_capability_checks": [
+    "public_read",
+    "create_file",
+    "overwrite_file",
+    "append_file",
+    "create_directory",
+    "rename",
+    "delete",
+    "absolute_outside_read",
+    "traversal_read",
+    "symlink_escape_read",
+    "symlink_escape_write",
+    "create_symlink",
+    "environment_not_inherited",
+    "loopback_network",
+    "process_spawn"
+  ],
+  "resource_checks": "Fuel trap,epoch trap,memory.grow succeeds up to the registered256MiB limit then refuses one additional64KiB page (well below the wasm32 architectural limit), via small trusted Wasm probes under the same engine controls; real Python output overflow; external watchdog kills a worker confirmed entering a trusted infinite Wasm loop.",
+  "execution_order": [
+    "Verify public clean source and protocol identity",
+    "Download/hash pinned public build inputs",
+    "Build trusted unchanged CPython WASIp1",
+    "Install exact Wasmtime wheel in isolated venv",
+    "Prepare matching trusted stdlib caches and verify staging delta",
+    "Trusted normal/trap output lifecycle probes with ordinary worker exit",
+    "Capability negatives and positive public read",
+    "Resource negatives",
+    "Unchanged64-case oracle replay in fresh processes",
+    "Check source and staging identities; export compact receipts"
+  ],
+  "acceptance": "Verified trusted stdlib-cache manifest and both output lifecycle probes must pass first. All15 capability checks true with zero listener connections and unchanged staging/outside sentinel; all5 resource checks true; all64 baseline cases accepted by host-owned oracle with exact source hash; source unchanged; no model/candidate execution. Exit0 only on all conditions. Every completed worker must also exit normally and report successful supported resource closes; the deliberate external watchdog test retains its required forced termination.",
+  "attempts": "One registered invocation, no automatic retries or result-driven case/prompt/limit edits. Preserve build failure stage,command exit,full log hash/size and final128KiB log excerpt. A separately registered reproduction must retain prior outcomes.",
+  "platform": "Linux x86_64,standard public GitHub ubuntu-latest;360min hard platform limit from first-step AGI_JOB_START_EPOCH with300s receipt/upload reserve. No containers,services,sudo,paid runner or GPU.",
+  "model_calls": 0,
+  "current_codex_controls": "Untouched and still independently gated; this experiment is not a bypass,fallback or qualification of the native Codex adapter.",
+  "claims_excluded": [
+    "Model-authored source improvement",
+    "General sandbox proof",
+    "Novelty",
+    "Performance or economic superiority",
+    "Native Codex qualification",
+    "Current product release qualification"
+  ],
+  "costs": "Record wall time,child CPU,worker peak RSS and download sizes. No paid API calls. Host/electricity/engineering/maintenance/opportunity costs remain unknown; public runner policy does not establish zero complete economic cost.",
+  "attempt_id": "wasi-baseline-003",
+  "previous_attempt": {
+    "source_revision": "663f33e3df8fbc0b070993c163506ed37d4f2673",
+    "protocol_sha256": "0fb753c1e94c93b712b6f9f4008cd1ee61f74e647ea85008ad5d556a3d1872de",
+    "status": "FAIL",
+    "stage": "capability_negatives",
+    "baseline_cases_executed": 0,
+    "summary": "evidence/attempt002/SUMMARY.json",
+    "artifact_sha256": "e80728df16739bda01cb2be79364f0aebc09442ba95b917fe68ce986c11e8578"
+  },
+  "changes_from_previous": [
+    "Prepare checked-hash bytecode caches only for the pinned public staged stdlib using its exact native CPython3.15.2 build. Keep source bytes and -I -S -B, optimize0,2e9fuel and all independent limits unchanged. No baseline module,guest driver,candidate or model source is precompiled.",
+    "Explicitly stop and join the epoch timer, record remaining fuel, then close Store,Linker,Module,unconsumed WasiConfig,Engine and Config while Python callback references remain alive. Require ordinary worker exit and successful supported close calls; this does not claim a joined native async-task drain. One shared threading.Lock protects combined stdout/stderr capacity accounting, writes and the final output snapshot against concurrent native callbacks.",
+    "Before any CPython guest, run two tiny trusted WASI output lifecycle probes covering normal return and deliberate unreachable trap. Both must capture exact stdout/stderr, retain the combined64KiB output limit and exit the worker normally after cleanup. Existing15 capability checks,5 resource checks and64 oracle cases are unchanged.",
+    "Preserve attempt002's observed OUT_OF_FUEL during compilation and separate subsequent host abort without promoting either. Selected JSON retained here is decoded sanitized diagnostic output from an independently hash-verified archive, not the original member bytes."
+  ],
+  "trusted_stdlib_cache": {
+    "compiler": "Exact already-built native CPython3.15.2 from the pinned source archive, invoked with -I -S -B.",
+    "assertions": {
+      "version": [
+        3,
+        15,
+        2
+      ],
+      "cache_tag": "cpython-315",
+      "magic_hex": "520e0d0a",
+      "optimize": 0,
+      "checked_hash_header_flags": 3
+    },
+    "selection": "All .py under the fresh stage/python/lib/python3.15, with byte equality to pinned source Lib; exclude directory names test,tests,idle_test,__pycache__ and upstream bad_coding|badsyntax|site-packages path regex. Every selected compilation must succeed; exclusions are listed explicitly.",
+    "output": "Only __pycache__/*.cpython-315.pyc beneath the selected stdlib directories; source files remain unchanged. Checked-hash header and source_hash are validated. Record source SHA256,pyc SHA256/size,compiler hash,and pre/post staging inventories.",
+    "trust_limit": "This is trusted runtime preparation. No candidate baseline/driver is compiled on the host. Matching bytecode headers are not authentication by themselves; provenance comes from pinned source comparison and fresh trusted compilation.",
+    "references": [
+      "https://github.com/python/cpython/blob/v3.15.2/Lib/py_compile.py",
+      "https://github.com/python/cpython/blob/v3.15.2/Lib/importlib/_bootstrap_external.py",
+      "https://github.com/python/cpython/blob/v3.15.2/Include/internal/pycore_magic_number.h",
+      "https://github.com/python/cpython/blob/v3.15.2/Makefile.pre.in"
+    ]
+  },
+  "output_lifecycle": {
+    "required_probes": [
+      "lifecycle_return",
+      "lifecycle_trap"
+    ],
+    "cleanup_scope": "Supported synchronous close calls are recorded separately from ordinary process exit. Neither alone proves a general async runtime drain; both are required for normal/trap probes and all completed capability/resource/baseline workers. The deliberate watchdog test still requires termination.",
+    "hypothesis": "Attempt002's first observed guest failure was OUT_OF_FUEL during compilation. Its later tokio non-unwinding abort may involve late custom-output callback finalization. The cause is not experimentally established; explicit cleanup and two independent trusted probes prospectively test the repair.",
+    "references": [
+      "https://github.com/bytecodealliance/wasmtime-py/blob/50.0.1/wasmtime/_managed.py",
+      "https://github.com/bytecodealliance/wasmtime-py/blob/50.0.1/wasmtime/_store.py",
+      "https://github.com/bytecodealliance/wasmtime-py/blob/50.0.1/wasmtime/_wasi.py",
+      "https://github.com/bytecodealliance/wasmtime/blob/v50.0.1/crates/wasi/src/p2/write_stream.rs",
+      "https://github.com/bytecodealliance/wasmtime/blob/v50.0.1/crates/wasi/src/runtime.rs"
+    ],
+    "output_guard": "Shared lock makes combined stdout/stderr accounting and buffer mutation atomic and protects the final snapshot. The output_bytes=65536 cap and overflow refusal semantics are unchanged."
+  }
+}

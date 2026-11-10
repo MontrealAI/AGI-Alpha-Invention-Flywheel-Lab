@@ -1,0 +1,38 @@
+{
+  "schema": "harness-wasi-inspected-failure-summary/v1",
+  "attempt_id": "wasi-baseline-002",
+  "source_revision": "663f33e3df8fbc0b070993c163506ed37d4f2673",
+  "status": "FAIL",
+  "stage": "capability_negatives",
+  "artifact": {
+    "id": 13749646988,
+    "bytes": 163848,
+    "sha256": "e80728df16739bda01cb2be79364f0aebc09442ba95b917fe68ce986c11e8578",
+    "run_id": 42785601400
+  },
+  "diagnostic": {
+    "source_revision": "d78ec37b4d18744f9ab8f4fa72b93c156ff437fd",
+    "run_id": 42788277154,
+    "job_id": 129734910956,
+    "status": "success",
+    "wrapper_bytes_independently_verified": true
+  },
+  "observations": {
+    "preparation_tests_passed": 8,
+    "source_unchanged": true,
+    "trap_code": "TrapCode.OUT_OF_FUEL",
+    "remaining_fuel": 0,
+    "guest_wall_seconds": 3.887797414999966,
+    "supervisor_wall_seconds": 6.803104040999983,
+    "worker_returncode": -6,
+    "peak_rss_kib": 397432,
+    "output_overflow": false,
+    "baseline_cases_executed": 0,
+    "model_calls": 0,
+    "total_wall_seconds": 245.9559760093689,
+    "child_cpu_seconds": 708.199188
+  },
+  "cause_scope": "Confirmed first failure: CPython guest exhausted2e9fuel while compiling code. A subsequent tokio thread non-unwinding abort occurred after its trap receipt was written. Late custom-output callback finalization is a source-supported hypothesis, not proven causal diagnosis.",
+  "preservation_scope": "INSPECTED-RESULT.json and INSPECTED-worker-001.json are semantic JSON values decoded from the successful read-only diagnostic's sanitized INSPECT log lines. They are not byte-identical copies of original ZIP members; do not assign them original-member hashes. Original wrapper SHA was recomputed and verified by diagnostic CI. Original protocol bytes are preserved exactly from published663.",
+  "prospective_repair": "Checked-hash trusted stdlib caches with exact matching native Python; unchanged2e9fuel and all independent bounds; explicit supported resource closure and two required trusted output lifecycle probes. No model/candidate execution and no native Codex changes."
+}

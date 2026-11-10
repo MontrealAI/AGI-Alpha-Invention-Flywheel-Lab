@@ -1,0 +1,76 @@
+{
+  "schema": "harness-wasi-historical-failure-summary/v1",
+  "attempt_id": "wasi-baseline-001",
+  "source_revision": "95f7d2705335de7f9fe3e43d4376d290462369aa",
+  "source_product_tree": "fa6fe606d73d8dbd1ec909de893e42131b099b9c",
+  "protocol_sha256": "dbb270d343a2ff0fb0615721d577bf3b282e0ff3e1feac9943b1b63cf4e51108",
+  "status": "FAIL",
+  "stage": "trusted_build",
+  "failure": {
+    "type": "RuntimeError",
+    "message": "Build command 5 failed with exit 1"
+  },
+  "source_unchanged": true,
+  "capability_checks_executed": 0,
+  "resource_checks_executed": 0,
+  "baseline_cases_executed": 0,
+  "model_calls": 0,
+  "candidate_execution": false,
+  "run_url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/42782868930",
+  "job_url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/42782868930/job/129716869533",
+  "artifact": {
+    "id": 13747182703,
+    "name": "harness-wasi-v1-95f7d2705335de7f9fe3e43d4376d290462369aa-1",
+    "url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/42782868930/artifacts/13747182703",
+    "bytes": 31788,
+    "sha256": "880cffa52fb35738b99b57ba7ef71e79da40a6296d5cfc10f73f8f20665921fc",
+    "expires_at": "2026-11-24T08:32:15Z",
+    "raw_member_count": 8
+  },
+  "result_sha256": "0a14f0c4a79ec21011077e98a4b94ebf511461b1ebf8f8985f45511034a007dd",
+  "observed_costs": {
+    "wall_seconds": 232.7197301387787,
+    "child_cpu_seconds": 651.162748,
+    "complete_cost_known": false,
+    "api_paid_requests": 0
+  },
+  "cause": "Official make_wasi_python completed make all, then invoked python.sh --version. configure-host --host-runner false deliberately made that launcher execute false, so the postbuild version launch returned1. No capability/resource/baseline guest ran.",
+  "official_helper_source": "https://github.com/python/cpython/blob/v3.15.2/Platforms/WASI/_build.py",
+  "prospective_fix": "Execute the same make --jobs cpu_count all directly in the configured official cross-build directory, leaving HOSTRUNNER=false and all qualification bounds/cases unchanged.",
+  "preservation_scope": "Compact summary recovered from the completed read-only audit before local environment loss; this is not raw RESULT.json. Wrapper bytes were downloaded and SHA256-verified against GitHub metadata and upload log before loss. Original eight raw members remain in the linked artifact; they are not reconstructed here. Original protocol bytes are preserved verbatim from public95.",
+  "log_scope": "Published command-03.log and command-05.log are the last128KiB excerpts of larger full logs. Full log hashes/byte counts are recorded in original RESULT.json, not represented as excerpt hashes.",
+  "raw_members": [
+    {
+      "name": "CASES.json",
+      "bytes": 23799
+    },
+    {
+      "name": "PROTOCOL.json",
+      "bytes": 7037
+    },
+    {
+      "name": "RESULT.json",
+      "bytes": 5644
+    },
+    {
+      "name": "command-01.log",
+      "bytes": 245
+    },
+    {
+      "name": "command-02.log",
+      "bytes": 354
+    },
+    {
+      "name": "command-03.log",
+      "bytes": 131072
+    },
+    {
+      "name": "command-04.log",
+      "bytes": 36072
+    },
+    {
+      "name": "command-05.log",
+      "bytes": 131072
+    }
+  ]
+}
