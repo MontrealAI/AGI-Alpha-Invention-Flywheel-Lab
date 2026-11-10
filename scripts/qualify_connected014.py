@@ -28,6 +28,14 @@ TEST_ONLY_INPUTS = {
     'tests/test_connected_p0_source_guard.py': ('tools/p0_source_guard.py',),
     'tests/test_connected_release.py': (
         'evidence/strategic024-publication/COMPOSED_SOURCE_BINDING.json',
+        # Original, public, key-free historical publication fixture bytes.
+        # These are consumed by composed_asset_fixture() when this test ships.
+        'docs/completion015/PAPER.pdf',
+        'docs/completion015/PAPER.tex',
+        'docs/completion015/index.html',
+        'docs/completion015/REPORT.md',
+        'docs/completion015/PUBLICATION.json',
+        'docs/completion015/PDF_QA.json',
     ),
 }
 
