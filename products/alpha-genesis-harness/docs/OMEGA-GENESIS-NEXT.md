@@ -72,6 +72,8 @@ python3 scripts/qualify_genesis_successor.py run \
 
 The [supplementary protocol](../evidence/OMEGA-FRESH-SUCCESSOR-PROTOCOL.md) fixes the generator, alternatives and acceptance rules. A new nonce creates previously unseen instance values only after the source freeze. The receipt retains that nonce, exact cases and all four arms. Fresh instances of this declared task are distinct from an unseen external task family. The ordinary content-addressed control receives the same inherited information and may tie.
 
+The [equality-corrected source revalidation](../evidence/OMEGA-REVALIDATION.md) preserves the same scientific conclusion: candidate and ordinary reuse both correctly adjudicated 32 successor cases using 20 new checks and 12 reuses, after 24 initial checks. Uncached and inheritance-withdrawn arms adjudicated 20 cases under the same successor allowance. All arms made 44 total checks; full economic costs remain unknown. Earlier receipts are retained with their original source identities.
+
 ## Reading the outcome
 
 | Result | Meaning |
@@ -94,6 +96,8 @@ Décompressez le téléchargement, puis lancez le connecteur local avec Python 3
 L'expérience construit une modification isolée du vérificateur réel. Un index de preuves cherche à éviter les vérifications inchangées, tout en refusant la réutilisation d'une acceptation périmée. Le code candidat ne remplace pas l'application installée et ne modifie pas ses critères d'évaluation. Une seconde tâche étudie la sélection des vérifications avec la capacité conservée.
 
 La recette est préparée, finie et reproductible. Elle ne prouve pas qu'un modèle a inventé l'algorithme de façon autonome. La comparaison autorise une solution ordinaire compétente à gagner ou à égaler le candidat. Une économie d'opérations ne prouve pas un bénéfice économique complet lorsque les coûts de construction, de transfert ou de maintenance ne sont pas mesurés.
+
+La revalidation sur le code corrigé conserve l’égalité avec la réutilisation ordinaire : les deux méthodes jugent correctement 32 cas suivants avec 20 nouvelles vérifications et 12 réutilisations, après 24 vérifications initiales. Aucun avantage en coûts complets n’est établi.
 
 Le coffre de possibilités garde les obstacles et conditions de réexamen. Une nouvelle observation peut proposer une expérience; elle ne prouve pas que l'obstacle a disparu. Les observations rapportées, les tests exécutés et les résultats indépendamment vérifiés demeurent distincts.
 
