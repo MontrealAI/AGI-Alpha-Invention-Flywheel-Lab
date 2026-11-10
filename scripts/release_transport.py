@@ -211,7 +211,7 @@ class GitHub:
                 raise RuntimeError("Signed download failed: HTTP " + str(error.code)) from None
         raise ValueError("Signed download redirect limit exceeded")
 
-    def request(self, path, method="GET", value=None, raw=None, accept="application/vnd.github+json", missing=False):
+    def request(self, path, method="GET", value=None, raw=None, accept="application/vnd.github+json", missing=False, binary=False):
         url = path if path.startswith("https://") else API_ROOT + path
         parts = urllib.parse.urlsplit(url)
         require(parts.scheme == "https" and parts.hostname in {"api.github.com", "uploads.github.com"}
@@ -227,9 +227,9 @@ class GitHub:
             with self.opener.open(urllib.request.Request(url, data=payload, headers=headers, method=method), timeout=120) as response:
                 data = response.read(MAX_BYTES + 1)
                 require(len(data) <= MAX_BYTES, "Response exceeds transport bound")
-                return data if accept == "application/octet-stream" else (decode(data) if data else None)
+                return data if binary else (decode(data) if data else None)
         except urllib.error.HTTPError as error:
-            if error.code in (301,302,303,307,308) and method == "GET" and accept == "application/octet-stream":
+            if error.code in (301,302,303,307,308) and method == "GET" and binary:
                 return self.unsigned_download(urllib.parse.urljoin(url, error.headers["Location"]))
             if missing and error.code == 404:
                 return None
@@ -247,7 +247,7 @@ class GitHub:
 
     def asset_bytes(self, asset):
         require(str(asset.get("url","")) == API_ROOT + "/releases/assets/" + str(asset["id"]), "Foreign asset API URL")
-        return self.request("/releases/assets/" + str(asset["id"]), accept="application/octet-stream")
+        return self.request("/releases/assets/" + str(asset["id"]), accept="application/octet-stream", binary=True)
 
 
 def source_guard(source_dir):
@@ -271,7 +271,7 @@ def acquire(root, api):
                 and run.get("id") == RUN and run.get("head_sha") == SOURCE
                 and run.get("repository_id") == REPO_ID and run.get("head_repository_id") == REPO_ID,
                 "Pinned artifact metadata differs: " + key)
-        raw = api.request("/actions/artifacts/" + str(identifier) + "/zip", accept="application/octet-stream")
+        raw = api.request("/actions/artifacts/" + str(identifier) + "/zip", binary=True)
         validate_record(raw, {"bytes":size,"sha256":expected})
         put(root/"input-zips"/(key+".zip"), raw)
         members = zip_members(raw, flat=key not in {"model","failed_publication"})

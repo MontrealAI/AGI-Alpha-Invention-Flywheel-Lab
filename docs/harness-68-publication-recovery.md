@@ -91,3 +91,20 @@ Do not claim that an owner bundle exists or that a phase passed until its actual
 receipt and published asset are available. The owner ZIP is for review; only the
 untouched customer ZIP is the potential storefront upload. All Squarespace
 actions remain with the owner.
+
+## Recovery transport attempt 1
+
+The recovery-control commit `669136de5a47251dffdd78433f555ced46324ea4`
+passed all 39 synthetic tests in 0.213 seconds on 10 November 2026, then
+[run 42800283531, job 129775709257](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/42800283531/job/129775709257)
+refused the first artifact download with HTTP 415 at 10:34:47 UTC. No release
+publication step ran. Acquisition had not written any files, so the always-run
+artifact upload reported no files; the Actions log is the original evidence.
+
+The Actions artifact archive endpoint requires the GitHub JSON Accept header
+for its download redirect; release asset binary downloads use octet-stream.
+The correction separates response-byte handling from the request Accept header,
+keeps redirected storage requests unauthenticated, and adds direct/redirected
+transport and actual acquisition-call regressions. The 42-test suite must pass
+before the corrected acquisition runs. The five original artifact identities,
+customer ZIP, model evidence and product source remain unchanged.

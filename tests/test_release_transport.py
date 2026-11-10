@@ -187,19 +187,69 @@ class RecoveryTransportTests(unittest.TestCase):
                 transport.approved_download(url)
 
     def test_binary_redirect_has_no_publication_authorization(self):
+        for artifact in (True, False):
+            requests=[]
+            class Opener:
+                def open(self,request,**kwargs):
+                    requests.append(request)
+                    if len(requests)==1:
+                        expected="application/vnd.github+json" if artifact else "application/octet-stream"
+                        if request.get_header("Accept") != expected:
+                            raise urllib.error.HTTPError(request.full_url,415,"Unsupported Media Type",{},None)
+                        raise urllib.error.HTTPError(request.full_url,302,"Found",
+                            {"Location":"https://release-assets.githubusercontent.com/object?signature=public"},None)
+                    return io.BytesIO(b"exact")
+            api=transport.GitHub("never-forward")
+            api.opener=Opener()
+            with self.subTest(artifact=artifact):
+                if artifact:
+                    actual=api.request("/actions/artifacts/1/zip",binary=True)
+                else:
+                    actual=api.asset_bytes({"id":1,"url":transport.API_ROOT+"/releases/assets/1"})
+                self.assertEqual(actual,b"exact")
+                self.assertEqual(requests[0].get_header("Authorization"),"Bearer never-forward")
+                self.assertIsNone(requests[1].get_header("Authorization"))
+                self.assertEqual(len(requests),2)
+
+    def test_binary_direct_response_is_not_json_decoded(self):
+        class Opener:
+            def open(self,request,**kwargs):
+                return io.BytesIO(bytes((0x50,0x4b,3,4,255)))
+        api=transport.GitHub("token");api.opener=Opener()
+        self.assertEqual(api.request("/actions/artifacts/1/zip",binary=True),bytes((0x50,0x4b,3,4,255)))
+
+    def test_metadata_stays_json_and_does_not_follow_download_redirects(self):
+        class Opener:
+            def open(self,request,**kwargs):
+                if request.full_url.endswith("/1"):
+                    return io.BytesIO(b'{"id":1}')
+                raise urllib.error.HTTPError(request.full_url,302,"Found",
+                    {"Location":"https://release-assets.githubusercontent.com/object?signature=private"},None)
+        api=transport.GitHub("token");api.opener=Opener()
+        self.assertEqual(api.request("/actions/artifacts/1"),{"id":1})
+        with self.assertRaisesRegex(RuntimeError,"HTTP 302") as error:
+            api.request("/actions/artifacts/2")
+        self.assertNotIn("signature",str(error.exception))
+
+    def test_acquire_uses_binary_response_with_actions_accept_header(self):
+        identifier,size,expected,prefix=next(iter(transport.PINS.values()))
         requests=[]
+        class DownloadReached(Exception):pass
         class Opener:
             def open(self,request,**kwargs):
                 requests.append(request)
-                if len(requests)==1:
-                    raise urllib.error.HTTPError(request.full_url,302,"Found",
-                        {"Location":"https://release-assets.githubusercontent.com/object?signature=public"},None)
-                return io.BytesIO(b"exact")
-        api=transport.GitHub("never-forward")
-        api.opener=Opener()
-        self.assertEqual(api.request("/actions/artifacts/1/zip",accept="application/octet-stream"),b"exact")
-        self.assertEqual(requests[0].get_header("Authorization"),"Bearer never-forward")
-        self.assertIsNone(requests[1].get_header("Authorization"))
+                if request.full_url.endswith("/zip"):
+                    if request.get_header("Accept") != "application/vnd.github+json":
+                        raise urllib.error.HTTPError(request.full_url,415,"Unsupported Media Type",{},None)
+                    raise DownloadReached()
+                return io.BytesIO(transport.encode({
+                    "id":identifier,"size_in_bytes":size,"digest":"sha256:"+expected,
+                    "expired":False,"name":prefix+transport.SOURCE+"-attempt-1",
+                    "workflow_run":{"id":transport.RUN,"head_sha":transport.SOURCE,
+                        "repository_id":transport.REPO_ID,"head_repository_id":transport.REPO_ID}}))
+        api=transport.GitHub("token");api.opener=Opener()
+        with self.assertRaises(DownloadReached):
+            transport.acquire(self.root,api)
         self.assertEqual(len(requests),2)
 
     def test_api_403_429_500_are_never_absence(self):
