@@ -1,0 +1,48 @@
+{
+  "schema": "alpha-genesis-harness-live-source-qualification/v1",
+  "started_at": "2026-11-10T01:11:20.812037+00:00",
+  "source_url": "https://raw.githubusercontent.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/74d8b5fe435a6a0cd670d57158adb5f68ebd5cc0/README.md",
+  "expected_repository_revision": "74d8b5fe435a6a0cd670d57158adb5f68ebd5cc0",
+  "expected_source_sha256": "8256c54b914147c5cd05e46d2a3071b1eae66a14fba712202f778e0742752334",
+  "expected_source_bytes": 21999,
+  "scope": "Real local bridge /api/source HTTP route with unchanged public-DNS validation; pinned TLS connection was not reached. No provider/model integration qualification.",
+  "allowlisted_hosts": [
+    "raw.githubusercontent.com"
+  ],
+  "provider_configuration": {},
+  "paid_requests_authorized": false,
+  "attempts": [
+    {
+      "http_status": 400,
+      "finished_at": "2026-11-10T01:11:20.815967+00:00",
+      "error": {
+        "code": "SOURCE_URL",
+        "message": "Use an exact allowlisted HTTPS host resolving only to public addresses."
+      }
+    }
+  ],
+  "verdict": "UNKNOWN",
+  "model_calls": 0,
+  "source_changes": false,
+  "loopback_session_status": 200,
+  "reason": "The public-source request was refused or failed. No source bytes/hash/freshness were fabricated; no alternate routing attempted.",
+  "wall_seconds": 0.502373,
+  "finished_at": "2026-11-10T01:11:21.315958+00:00",
+  "actual_host_and_network_cost": "Unknown; no separately paid service activated",
+  "provider_credentials_acquired_or_used": false,
+  "local_session": "Temporary loopback session token obtained and used in memory only; not retained",
+  "transport_stage": "REFUSED_BEFORE_TLS_PUBLIC_ADDRESS_VALIDATION",
+  "pinned_tls_exercised": false,
+  "observed_remote_source_sha256": null,
+  "observed_remote_retrieval_timestamp": null,
+  "bridge_source_files": {
+    "products/alpha-genesis-harness/bridge/adapters.py": {
+      "sha256": "964b33d95e493a28e331c256050879ccfb233abbda5ba95f7f8aaae43e9f27e8",
+      "matches_pinned_revision": true
+    },
+    "products/alpha-genesis-harness/bridge/server.py": {
+      "sha256": "0b73877d16c514545b27f8c014e80f82627b8532928123747698d3740d7ca4b3",
+      "matches_pinned_revision": true
+    }
+  }
+}

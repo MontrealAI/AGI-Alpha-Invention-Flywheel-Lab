@@ -1,0 +1,80 @@
+{
+  "schema": "alpha-genesis-harness-dependencies/v1",
+  "scope": "products/alpha-genesis-harness only",
+  "bundled_external_libraries": [],
+  "runtime_dependencies": [
+    {
+      "name": "Desktop web browser",
+      "use": "Core browser application",
+      "bundled": false,
+      "license": "Supplied separately by the browser vendor"
+    },
+    {
+      "name": "Python standard library",
+      "use": "Optional local model bridge and release verification",
+      "bundled": false,
+      "license": "Python Software Foundation License; supplied by the installed Python distribution"
+    },
+    {
+      "name": "Node.js",
+      "use": "Development and automated JavaScript tests only",
+      "bundled": false,
+      "license": "Supplied separately; consult Node.js distribution LICENSE"
+    }
+  ],
+  "external_services": [
+    {
+      "name": "OpenAI-compatible model endpoints",
+      "bundled": false,
+      "terms": "Customer-selected provider terms and charges apply"
+    },
+    {
+      "name": "Anthropic API",
+      "bundled": false,
+      "terms": "Separate customer account, provider terms and charges apply"
+    },
+    {
+      "name": "Google Gemini API",
+      "bundled": false,
+      "terms": "Separate customer account, provider terms and charges apply"
+    },
+    {
+      "name": "Ollama",
+      "bundled": false,
+      "terms": "Separately installed software and model-specific licenses apply"
+    },
+    {
+      "name": "Manual AI chat account",
+      "bundled": false,
+      "terms": "Customer chooses their service; subscription does not itself grant API access"
+    }
+  ],
+  "datasets": [
+    {
+      "name": "Bundled demonstration data",
+      "provenance": "Newly authored synthetic instructional fixtures",
+      "real_world_evidence": false
+    }
+  ],
+  "excluded": [
+    "Root repository implementations",
+    "Research PDFs",
+    "Third-party models and weights",
+    "Customer documents",
+    "Credentials",
+    "Private recovery state"
+  ],
+  "audit_limit": "This inventory covers the scoped distribution. It is not a license audit or relicensing of the full research repository. Recheck on every dependency change.",
+  "development_dependencies": [
+    {
+      "name": "jsdom",
+      "version": "26.1.0",
+      "license": "MIT",
+      "bundled": false,
+      "use": "Locked development-only DOM-emulation replays in evidence/UI_REPLAY.cjs, UI_PARALLEL_REPLAY.cjs and UI_CONNECTED_ACCEPTANCE.cjs, including hosted qualification; not a graphical browser or customer runtime dependency",
+      "source": "https://github.com/jsdom/jsdom/tree/26.1.0",
+      "transitive_modules_bundled": false,
+      "lockfile": "tests/dom/package-lock.json"
+    }
+  ]
+}
