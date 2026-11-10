@@ -26,6 +26,8 @@ PATHS = {
     "protocol": ROOT / "evidence/OMEGA-FRESH-SUCCESSOR-PROTOCOL.md",
     "original_protocol": ROOT / "evidence/OMEGA-PROTOCOL.md",
     "interpreter": ROOT / "bridge/instruments.py",
+    "workflow_helpers": ROOT / "bridge/workflows.py",
+    "provider_contracts": ROOT / "bridge/adapters.py",
 }
 BUDGET = 20
 
@@ -163,15 +165,26 @@ def qualify(freeze_path, output_path):
     initial, successor = generate(seed, current["interpreter"])
     from bridge.genesis_next import EvidenceIndex
     checker_id = digest({"reviewer": current["evaluator"], "interpreter": current["interpreter"]})
-    arms = [
-        run_arm("uncached_baseline", Uncached(), initial, successor),
-        run_arm("inherited_candidate", EvidenceIndex(checker_id), initial, successor),
-        run_arm("strong_ordinary_memoization", OrdinaryMemoization(checker_id), initial, successor),
-        run_arm("inheritance_withdrawn", EvidenceIndex(checker_id), initial, successor, withdraw_inheritance=True),
-    ]
+    arms = []
+    for name, index, withdrawn in (
+        ("uncached_baseline", Uncached(), False),
+        ("inherited_candidate", EvidenceIndex(checker_id), False),
+        ("strong_ordinary_memoization", OrdinaryMemoization(checker_id), False),
+        ("inheritance_withdrawn", EvidenceIndex(checker_id), True),
+    ):
+        try:
+            arms.append(run_arm(name, index, initial, successor, withdraw_inheritance=withdrawn))
+        except Exception as error:
+            # Keep the other registered arms and the failed attempt visible.
+            # An exception is never a reason to silently replace the sampled seed.
+            arms.append({"arm": name, "status": "ERROR", "error_type": type(error).__name__,
+                         "error": str(error)[:500], "adjudicated": 0, "errors": 1,
+                         "successor_verification_calls": None, "total_verification_calls": None,
+                         "reused": 0, "unknown_costs": ["work completed before exception"]})
     candidate, ordinary = arms[1], arms[2]
     failures = [f"{arm['arm']}: incorrect decisions" for arm in arms if arm["errors"]]
-    failures += [f"{arm['arm']}: exceeded successor allowance" for arm in arms if arm["successor_verification_calls"] > BUDGET]
+    failures += [f"{arm['arm']}: unknown or exceeded successor allowance" for arm in arms
+                 if arm["successor_verification_calls"] is None or arm["successor_verification_calls"] > BUDGET]
     for arm in (candidate, ordinary):
         if arm["adjudicated"] != 32 or arm["successor_verification_calls"] != 20 or arm["reused"] != 12:
             failures.append(f"{arm['arm']}: failed complete successor qualification")

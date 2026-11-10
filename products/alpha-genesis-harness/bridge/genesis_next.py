@@ -15,6 +15,7 @@ import time
 from urllib.parse import urlsplit
 from datetime import datetime, timezone
 
+from . import adapters as _adapters_module, instruments as _instruments_module, workflows as _workflows_module
 from .adapters import BridgeError, strict_json
 from .instruments import evaluate
 from .workflows import WorkflowService, _atomic, _regular, digest, encoded, equivalent, now, require
@@ -39,13 +40,23 @@ def _ids(value, label):
 def _number(value, label, optional=False):
     if optional and value is None:
         return None
-    require(type(value) in {int, float} and math.isfinite(value) and value >= 0, label + " must be a finite nonnegative number.", "GENESIS_INPUT")
+    try:
+        finite = type(value) in {int, float} and math.isfinite(value) and value >= 0
+    except (OverflowError, TypeError):
+        finite = False
+    require(finite, label + " must be a finite nonnegative number.", "GENESIS_INPUT")
     return value
 
 
 def source_identity():
     identities = {name: hashlib.sha256(_regular(PRODUCT / "bridge" / name, 1024 * 1024)).hexdigest()
                   for name in ("workflows.py", "instruments.py", "adapters.py", "genesis_next.py")}
+    dependencies_loaded = {"adapters.py": _adapters_module.LOADED_SOURCE_SHA256,
+                           "instruments.py": _instruments_module.LOADED_SOURCE_SHA256,
+                           "workflows.py": _workflows_module.LOADED_SOURCE_SHA256}
+    require(all(identities[name] == value for name, value in dependencies_loaded.items()),
+            "HARNESS dependency changed after it was loaded. Restart the connector before GENESIS initialization.",
+            "GENESIS_SOURCE_DRIFT")
     loaded = globals().get("_LOADED_SOURCE_IDENTITIES")
     require(loaded is None or identities == loaded,
             "HARNESS source changed after module load. Restart the connector before verification or construction.",

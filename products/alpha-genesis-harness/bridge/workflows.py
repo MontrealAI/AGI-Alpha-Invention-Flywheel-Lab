@@ -19,6 +19,9 @@ import stat
 import sys
 import threading
 
+# Pin source at this module's own load, before a later lazy GENESIS import.
+LOADED_SOURCE_SHA256 = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
+
 if not __package__:
     sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
     __package__ = "bridge"

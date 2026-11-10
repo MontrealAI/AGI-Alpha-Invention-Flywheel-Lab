@@ -7,6 +7,7 @@ import http.client
 import ipaddress
 import json
 import os
+from pathlib import Path
 import re
 import socket
 import ssl
@@ -18,6 +19,9 @@ from decimal import Decimal, InvalidOperation
 from urllib.parse import quote, urlsplit
 from urllib.request import Request, build_opener, ProxyHandler, HTTPRedirectHandler
 from urllib.error import HTTPError, URLError
+
+# Pin source at this module's own load, before a later lazy GENESIS import.
+LOADED_SOURCE_SHA256 = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
 
 MAX_BODY = 1_048_576  # HTTP resource safety, not a mission/business-scale ceiling.
 MAX_RESPONSE = 4_194_304
