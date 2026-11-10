@@ -50,3 +50,56 @@ This uses **authored fixture responses**, not a live model. It builds a faulty a
 Le parcours connecté enchaîne proposition, actions autorisées, observation, vérification des cas fixés par l'utilisateur, critique distincte et correction. Les outils créent des documents texte, des CSV et des instruments déclaratifs exécutables. Ils n'exécutent aucun code arbitraire et n'autorisent ni paiement ni communication externe.
 
 Choisissez les modèles, définissez l'objectif et les critères avant de lancer le parcours. Le mode local interdit les connexions distantes. Une validation positive concerne uniquement les cas indiqués; l'accord d'un modèle ne remplace jamais un test indépendant. Les archives contiennent votre contexte privé et doivent être examinées avant partage. Les identifiants de connexion en sont exclus. La réutilisation sur un nouveau problème exige de nouveaux critères et une nouvelle vérification.
+
+## Executable strategy policies
+
+The connected executor supports seven policies. These select actual call/action order; they do not claim that a larger topology is better.
+
+| `strategy` | Required roles | Executed behavior |
+| --- | --- | --- |
+| `single-model` | builder | Construct, run frozen checks, repair within limits. |
+| `actor-critic` | builder, critic | Add a separate critique invocation after each construction. |
+| `researcher-builder-verifier` | researcher, builder, critic | Analyze supplied information first, then construct and critique. |
+| `strategist-economist` | builder, economist | Add economic analysis after technical acceptance; it cannot authorize transactions. |
+| `parallel-exploration` | builder | Dispatch distinct operator-registered approach branches with isolated artifacts and independent checks. |
+| `adaptive` | builder | Try a direct primary approach first, then activate registered alternatives only after recorded failed work exhausts its allocation. |
+| `adversarial-review` | builder, adversary | Ask a separate invocation for counterexample inputs and execute/adjudicate them against an operator reference or existing frozen case. |
+
+Optional critic, adversary, researcher and economist roles execute when explicitly configured. Separate invocations may use the same model; that is not independent training or external scientific validation. Routes never change silently.
+
+For parallel exploration, add `approaches`, an array of two to four distinct brief strings. `max_iterations` and `max_actions` are **shared across the parent and all children**, partitioned before any model dispatch. Each child has its own immutable artifact directory. A branch cannot read its siblings' artifacts or be dispatched independently through the HTTP API. The model-call ceiling includes every registered researcher, critic, adversary and economist allocation. The existing runtime additionally guards concurrent API monetary reservations; completed, failed, cancelled and unresolved attempts remain in the parent's request-cost evidence. Complete economic costs usually remain unknown.
+
+For example, extend an existing valid spec with:
+
+```json
+{
+  "strategy": "parallel-exploration",
+  "approaches": ["Use a direct affine equation.", "Use explicit products and a separately checked offset."],
+  "max_iterations": 4,
+  "max_actions": 8
+}
+```
+
+A parent step runs one model phase in each eligible branch concurrently, subject to runtime concurrency limits. All launched sibling work settles before selection. Among branches completing the same frozen acceptance and required reviews, selection uses fewest tool actions, then model calls, then registered branch order. This is deterministic selection, not a claim of economic optimality. Failed alternatives and actual routes remain in the portable parent export. Parent pause/cancel applies to all children; resume preserves their identities and consumed allowances. Crash recovery reuses parent-reserved child identities and does not create a second budget allocation.
+
+`adaptive` uses the same `approaches` plus optional `adaptive_after_failures` (default `1`), which allocates that many construction attempts to the initial direct approach. At least one iteration/action must remain for each alternative. A successful primary finishes without alternatives. A failed primary can activate alternatives only when its history contains a refused response/tool or failed executable verification. A transport error pauses for explicit operator recovery. Acceptance, model routes and permissions stay frozen; the switch event links its supporting failed evidence.
+
+For adversarial review, the adversary returns:
+
+```json
+{"counterexamples":[{"artifact":"calculator.json","input":{"x":-1},"expected":{"result":-2},"reason":"Probe negative input"}],"feedback":"Check boundary behavior."}
+```
+
+`expected` is only a model claim. Optional `adversarial_oracles` maps artifact filenames to operator-supplied bounded reference instruments. Each reference must agree with every original frozen case for that artifact before dispatch. New counterexamples execute against both the candidate and that frozen reference; adjudicated cases persist through repair. Without a reference, only an already-frozen input has an authoritative expected output. Other claims stop at `needs_review`, never becoming model-authored acceptance. Reference correctness outside its supplied cases remains an explicit assumption. An empty adversary proposal list demonstrates no discovered counterexample, not universal correctness.
+
+Parent JSON exports contain every branch's complete historical events, outcomes, role routes and artifact digests. Imports validate every child contract against the exact parent plan before writing any imported file. They use fresh local identities and are paused/unverified; historical local child IDs cannot point at unrelated local capabilities. Import starts a new declared allocation, while resuming the same run preserves its spent allowance. Archives remain bounded to 16 MiB and may include private losing-branch content as well as the winner.
+
+## Paired retrieval comparison
+
+```sh
+python3 -m bridge.strategy_demo --workspace /private/new-paired-demo --output paired-evidence.json
+```
+
+This deterministic qualification uses authored conditional responses and a synthetic source transport: **no live model and no network retrieval**. Both arms have the same objective, context, structural acceptance, two model-call allocations and two tool actions. Only the treatment has the explicit source permission. Separate workspaces and identical initial resources prevent retrieved evidence from leaking into the control. The source coefficient is withheld from the model task context and original checks.
+
+The source arm resolves the synthetic coefficient; the no-retrieval arm honestly abstains. Both satisfy the report's structural checks, so a separately recorded outcome measure distinguishes factual resolution from a valid abstention. A competent ordinary source reader resolves the same coefficient using a deterministic parser and zero model calls. The result demonstrates authorized information access and retained evidence, with no established reasoning, discovery or economic advantage. See `evidence/strategy-comparisons.json`; actual local inference is reported separately in `evidence/live-local-workflows.json`.

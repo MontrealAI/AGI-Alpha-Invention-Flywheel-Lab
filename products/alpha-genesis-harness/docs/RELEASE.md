@@ -58,6 +58,14 @@ python3 scripts/qualify_archive.py /absolute/release.zip \
 
 The qualifier checks the installed jsdom version against the packaged requirement and runs all five UI replays against the extracted application. The HTTP replay starts the actual connector and workflow engine with authored model fixtures. Credentials are not inherited. Omitting `--dom-modules` leaves this UI criterion explicitly **NOT TESTED**. DOM emulation does not replace actual rendered-browser, assistive-technology or cross-OS testing.
 
+## Read the actual platform reports
+
+The hosted release workflow can run `scripts/qualify_platform.py` on actual macOS and Windows hosts against the **same** source-bound archive. Published `PLATFORM-Darwin-VERIFICATION.json` and `PLATFORM-Windows-VERIFICATION.json` identify the source commit, whole-archive SHA-256, host and operation outcomes. The corresponding screenshots use `Darwin-HARNESS-` and `Windows-HARNESS-` prefixes.
+
+Check that those identities match the downloaded customer archive and read the recorded status. These reports cover the JavaScript engine tests, native launcher help, Python loopback startup and headless browser first use on the named host. They exclude the complete cross-platform Python/security suite, live authenticated model calls, signed installers and Finder/Explorer double-click. A configured CI job is not a passing result; missing or failed reports leave that scope unverified. Repeated JavaScript tests are **per-platform executions**, not additional unique tests.
+
 ### Français
 
 Le qualificateur vérifie le ZIP exact, l’extrait dans un dossier neuf et exécute ses tests, son lanceur et la démonstration de construction. L’option `--dom-modules` ajoute les cinq scénarios d’interface sur les octets extraits, avec la version jsdom déclarée. Le scénario HTTP utilise le vrai connecteur et le moteur, mais des réponses de modèles préparées. Sans cette option, le critère d’interface reste explicitement non testé. Ces contrôles ne remplacent pas les essais graphiques et multiplateformes.
+
+Les rapports `PLATFORM-Darwin-VERIFICATION.json` et `PLATFORM-Windows-VERIFICATION.json`, lorsqu'ils sont publiés, documentent l'exécution du même ZIP sur des hôtes macOS et Windows réels. Vérifiez la source, l'empreinte, l'hôte et le résultat. Le périmètre couvre JavaScript, l'aide du lanceur natif, le démarrage Python local et le premier parcours dans un navigateur sans fenêtre; il exclut la suite Python/sécurité complète, les modèles authentifiés, les installateurs signés et le double-clic Finder/Explorer. Les captures portent le préfixe du système. Une tâche CI prévue ne prouve pas sa réussite. Les tests répétés sur plusieurs systèmes sont comptés par plateforme, sans addition en tant que tests uniques.

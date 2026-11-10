@@ -13,8 +13,10 @@ The download contains a browser application and an optional Python connector. It
 | System | Local connector launcher | Equivalent command in the product folder | Verification scope |
 |---|---|---|---|
 | Linux | `Launch-HARNESS.sh` | `python3 launch.py` | Linux automation is recorded in the exact release evidence |
-| macOS | `Launch-HARNESS.command` | `python3 launch.py` | Script supplied; native macOS/Finder/Safari use requires its own recorded test |
-| Windows | `Launch-HARNESS.cmd` | `py -3 launch.py` | Script supplied; native Windows/Explorer use requires its own recorded test |
+| macOS | `Launch-HARNESS.command` | `python3 launch.py` | Consult this source's `PLATFORM-Darwin-VERIFICATION.json`; Finder double-click and Safari require separate tests |
+| Windows | `Launch-HARNESS.cmd` | `py -3 launch.py` | Consult this source's `PLATFORM-Windows-VERIFICATION.json`; Explorer double-click requires a separate test |
+
+The release may include reports from actual hosted macOS and Windows machines operating the same archive. A report qualifies only the recorded source, archive hash, host and outcome. Its scope is JavaScript tests, native launcher help, Python loopback startup and headless browser first use. It does **not** qualify the complete Python/security suite, authenticated providers, signed installers or Finder/Explorer double-click. If the matching report is absent or does not pass, that platform scope remains unverified. See [release verification](RELEASE.md).
 
 These are source launchers, not signed installers or notarized applications. If your operating system blocks an untrusted download, first verify its origin and checksum. Do not disable system protections globally. The terminal command is an explicit alternative after you trust the source. If a ZIP extractor loses the macOS/Linux execute bit, the terminal command still works.
 
@@ -41,7 +43,7 @@ Le téléchargement contient une application de navigateur et un connecteur Pyth
 4. Pour connecter des modèles et conserver des exécutions agentiques, utilisez Python 3.10 ou ultérieur avec le lanceur de votre système indiqué dans le tableau.
 5. Gardez le terminal ouvert. Utilisez l'adresse locale affichée. Ctrl+C arrête le connecteur.
 
-Les lanceurs sont des scripts source, sans signature native ni notarisation. Les tests Linux ne démontrent pas le fonctionnement graphique de macOS ou Windows. Vérifiez l'origine du téléchargement; ne désactivez pas globalement les protections du système. Si le droit d'exécution n'est pas conservé par l'extracteur, utilisez la commande du tableau.
+Les lanceurs sont des scripts source, sans signature native ni notarisation. Consultez les rapports `PLATFORM-Darwin-VERIFICATION.json` et `PLATFORM-Windows-VERIFICATION.json` de la publication exacte, lorsqu'ils sont fournis. Ils doivent identifier la même source et la même empreinte d'archive. Leur périmètre couvre les tests JavaScript, l'aide du lanceur natif, le démarrage Python local et le premier parcours dans un navigateur sans fenêtre sur l'hôte indiqué. Ils ne valident pas toute la suite Python/sécurité, les connexions authentifiées, les installateurs signés ni le double-clic Finder/Explorer. Un rapport absent ou non réussi ne vaut pas une validation. Vérifiez l'origine du téléchargement; ne désactivez pas globalement les protections du système. Si le droit d'exécution n'est pas conservé par l'extracteur, utilisez la commande du tableau.
 
 La configuration privée et l'espace de travail doivent rester hors du téléchargement et du dépôt. Un modèle local exige son propre serveur, ses poids et les ressources indiquées par son éditeur. Un compte API exige une autorisation explicite et un budget; un abonnement ChatGPT utilise un parcours d'autorisation distinct. L'accès commercial au forfait ChatGPT reste soumis à l'approbation applicable.
 
