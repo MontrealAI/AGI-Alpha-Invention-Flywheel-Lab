@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta name="description" content="Turn an ambition into competing possibilities, a bounded experiment, and inspectable evidence. A private, local-first intelligence workspace.">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self' http://127.0.0.1:* http://localhost:*; object-src 'none'; base-uri 'none'; form-action 'none'">
+<title>ALPHA GENESIS Ω — HARNESS</title>
+<link rel="stylesheet" href="styles.css">
+<script src="engine.js" defer></script>
+<script src="app.js" defer></script>
+</head>
+<body>
+<a class="skip-link" href="#main" data-i18n="skip">Skip to workspace</a>
+<div class="shell">
+<aside class="sidebar" aria-label="Workspace navigation">
+  <a class="brand" href="#start" aria-label="ALPHA GENESIS home"><span class="brand-mark" aria-hidden="true">Ω</span><span>ALPHA GENESIS<small>FLYWHEEL HARNESS</small></span></a>
+  <p class="sidebar-kicker" data-i18n="workspace">YOUR POSSIBILITY WORKSPACE</p>
+  <nav class="nav" aria-label="Journey">
+    <button class="nav-item active" data-view="start" aria-current="page"><span aria-hidden="true">◈</span><span data-i18n="navStart">Start here</span></button>
+    <button class="nav-item" data-view="mission"><span class="nav-number">01</span><span data-i18n="navMission">Define the ambition</span></button>
+    <button class="nav-item" data-view="intelligence"><span class="nav-number">02</span><span data-i18n="navIntelligence">Bring intelligence</span></button>
+    <button class="nav-item" data-view="possibilities"><span class="nav-number">03</span><span data-i18n="navPossibilities">Explore possibilities</span></button>
+    <button class="nav-item" data-view="experiment"><span class="nav-number">04</span><span data-i18n="navExperiment">Build & test</span></button>
+    <button class="nav-item" data-view="evidence"><span class="nav-number">05</span><span data-i18n="navEvidence">Inspect the evidence</span></button>
+    <button class="nav-item" data-view="capabilities"><span class="nav-number">06</span><span data-i18n="navCapabilities">Carry it forward</span></button>
+  </nav>
+  <div class="sidebar-bottom"><span class="private-dot" aria-hidden="true"></span><span data-i18n="localPrivate">Your work stays on this device</span><p data-i18n="localNote">You choose what to export or send to a model.</p><span id="version" class="version">Preview · 0.1.0</span></div>
+</aside>
+<div class="workspace">
+<header class="topbar">
+  <div class="project-label"><span class="topbar-eyebrow" data-i18n="currentProject">CURRENT PROJECT</span><strong id="project-name">Untitled ambition</strong></div>
+  <div class="topbar-actions">
+    <span id="save-state" class="save-state" role="status"></span>
+    <button class="button text-button" id="save-project" data-i18n="save">Save</button>
+    <button class="button text-button" id="open-project" data-i18n="open">Open</button>
+    <button class="button secondary small" id="export-project" data-i18n="export">Export project</button>
+    <button class="language-switch" id="language-toggle" aria-label="Passer en français">FR</button>
+  </div>
+</header>
+<main id="main" tabindex="-1">
+<div id="notice" class="notice hidden" role="status" aria-live="polite"></div>
+<section class="view" id="view-start" aria-labelledby="start-title">
+  <div class="hero">
+    <div class="hero-content">
+      <div class="eyebrow"><span class="gold-line"></span><span data-i18n="heroEyebrow">THE NEXT POSSIBILITY STARTS HERE</span></div>
+      <h1 id="start-title" data-i18n="heroTitle">Build what<br>becomes possible.</h1>
+      <p class="hero-copy" data-i18n="heroCopy">Bring your ambition. Explore a different way forward. Construct a small, decisive test—and keep the evidence that tells you what works.</p>
+      <div class="button-row"><button class="button primary" id="start-mission"><span data-i18n="startMission">Start with your ambition</span><span aria-hidden="true">↗</span></button><button class="button hero-secondary" id="load-demo" data-i18n="tryDemo">Explore the working demo</button></div>
+      <p class="hero-footnote" data-i18n="heroFootnote">No account. No API key. Start with the AI chat you already use.</p>
+    </div>
+    <div class="orbital" aria-hidden="true"><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="orbit orbit-three"></div><span class="orbit-point point-one"></span><span class="orbit-point point-two"></span><span class="orbit-point point-three"></span><span class="omega">Ω</span><span class="orbit-word word-past" data-i18n="past">THE PAST</span><span class="orbit-word word-present" data-i18n="present">THE PRESENT</span><span class="orbit-word word-possible" data-i18n="possible">THE POSSIBLE</span></div>
+  </div>
+  <div class="intro-heading"><h2 data-i18n="oneLoop">One useful outcome. A new starting point.</h2><span class="subtle" data-i18n="youControl">You control the objective, models and decisions.</span></div>
+  <div class="feature-grid">
+    <article class="feature-card"><span class="feature-index">01 /</span><h3 data-i18n="featureOneTitle">Discover a missing move</h3><p data-i18n="featureOneCopy">Challenge the assumed route. Compare independent ideas and look for the capability or arrangement that changes what is feasible.</p></article>
+    <article class="feature-card"><span class="feature-index">02 /</span><h3 data-i18n="featureTwoTitle">Make the claim testable</h3><p data-i18n="featureTwoCopy">Build a bounded instrument, check participant incentives, and distinguish a useful hypothesis from a result that survives checking.</p></article>
+    <article class="feature-card"><span class="feature-index">03 /</span><h3 data-i18n="featureThreeTitle">Keep what earns its place</h3><p data-i18n="featureThreeCopy">Export the project and its evidence. Retain an instrument, then compare its use on a fresh task with ordinary construction.</p></article>
+  </div>
+  <div class="demo-teaser"><div class="teaser-icon" aria-hidden="true">↔</div><div><h3 data-i18n="demoTitle">Try a shared-instrument experiment</h3><p data-i18n="demoCopy">Can several participants make a useful capability affordable together? Inspect the assumptions, catch a planted error and run the arithmetic yourself.</p><span class="tag" data-i18n="synthetic">Synthetic teaching example · no real customers or model calls</span></div><button class="button secondary" id="load-demo-bottom" data-i18n="openDemo">Open demo →</button></div>
+  <div class="privacy-strip"><strong data-i18n="privateByChoice">Private by choice.</strong><span data-i18n="privacyCopy">This application has no analytics. Manual mode makes no network requests. Browser storage is convenient, but your exported file is your portable backup.</span></div>
+</section>
+<section class="view hidden" id="view-mission" aria-labelledby="mission-title">
+ <div class="page-heading"><div class="eyebrow" data-i18n="stepOne">01 / DEFINE THE AMBITION</div><h1 id="mission-title" data-i18n="missionTitle">What would be worth making possible?</h1><p data-i18n="missionSubtitle">Start with the outcome. Separate what must be true from how people usually achieve it.</p></div>
+ <form id="mission-form" class="panel">
+  <label for="mission-name" data-i18n="projectTitle">Project name</label><input id="mission-name" maxlength="160" required data-placeholder="projectPlaceholder" placeholder="A useful capability for independent laboratories">
+  <label for="mission-objective" data-i18n="objective">The outcome that matters</label><textarea id="mission-objective" rows="4" maxlength="12000" required data-placeholder="objectivePlaceholder" placeholder="Who should be able to do what, under which real constraints?"></textarea>
+  <div class="form-grid"><div><label for="mission-constraints" data-i18n="constraints">Requirements & limits</label><textarea id="mission-constraints" rows="4" data-placeholder="constraintsPlaceholder" placeholder="Budget, deadline, quality, permission and safety requirements. One per line."></textarea></div><div><label for="mission-resources" data-i18n="resources">What you can already use</label><textarea id="mission-resources" rows="4" data-placeholder="resourcesPlaceholder" placeholder="Skills, existing tools, data, available capacity, collaborators."></textarea></div></div>
+  <label for="mission-acceptance" data-i18n="acceptance">What would count as a useful result?</label><textarea id="mission-acceptance" rows="3" data-placeholder="acceptancePlaceholder" placeholder="State an observable outcome and who could independently check it."></textarea>
+  <div class="panel-footer"><span class="subtle" data-i18n="noActionPermission">Defining a mission does not authorize purchases or external actions.</span><button type="submit" class="button primary" data-i18n="continueIntelligence">Continue to intelligence →</button></div>
+ </form>
+ <div class="panel source-panel"><div class="section-heading"><h2 data-i18n="sourceHeading">Give the work something to stand on</h2><span class="tag" data-i18n="sourceOptional">Evidence & sources</span></div><p class="subtle" data-i18n="sourceHint">Add a source you have inspected. A link or model citation alone is not verification.</p>
+ <form id="source-form"><div class="form-grid"><div><label for="source-title" data-i18n="sourceTitle">Source title</label><input id="source-title" required maxlength="300"></div><div><label for="source-url" data-i18n="sourceURL">Public URL (optional)</label><input id="source-url" type="url" placeholder="https://…"></div></div><label for="source-excerpt" data-i18n="sourceObservation">Your observation or relevant excerpt</label><textarea id="source-excerpt" rows="3" maxlength="12000" required></textarea><div class="button-row"><button class="button secondary" type="submit" data-i18n="addSource">Add inspected source</button><span class="subtle" data-i18n="sourcePrivacy">Only include information you are allowed to use.</span></div></form><div id="source-list" class="item-list"></div>
+ </div>
+</section>
+<section class="view hidden" id="view-intelligence" aria-labelledby="intelligence-title">
+ <div class="page-heading"><div class="eyebrow" data-i18n="stepTwo">02 / BRING INTELLIGENCE</div><h1 id="intelligence-title" data-i18n="intelligenceTitle">Your models. A clearer mission.</h1><p data-i18n="intelligenceSubtitle">Use one model, invite an independent alternative, or investigate a different way to make the outcome achievable.</p></div>
+ <fieldset class="mode-grid"><legend class="sr-only" data-i18n="chooseMode">Choose an intelligence approach</legend>
+ <label class="mode-card selected"><input type="radio" name="mode" value="direct" checked><span class="mode-icon" aria-hidden="true">↗</span><strong data-i18n="modeDirect">Direct intelligence</strong><span data-i18n="modeDirectCopy">Ask one model for the strongest useful route.</span></label>
+ <label class="mode-card"><input type="radio" name="mode" value="parallel"><span class="mode-icon" aria-hidden="true">⇄</span><strong data-i18n="modeParallel">Independent alternatives</strong><span data-i18n="modeParallelCopy">Compare contributions before choosing.</span></label>
+ <label class="mode-card"><input type="radio" name="mode" value="transformational"><span class="mode-icon" aria-hidden="true">✧</span><strong data-i18n="modeTransformational">Transformational discovery</strong><span data-i18n="modeTransformationalCopy">Explore what would change the game.</span></label>
+ </fieldset>
+ <div class="two-columns">
+  <div class="panel"><div class="section-heading"><h2 data-i18n="promptHeading">1. Take the mission to your AI</h2><span class="tag" data-i18n="manualMode">MANUAL · NO API</span></div><p class="subtle" data-i18n="promptHint">Copy this brief into an AI chat you choose. For an independent alternative, start a new chat without the previous answer.</p><label for="model-role" data-i18n="responsibility">Responsibility</label><select id="model-role"><option value="actor" data-i18n="roleActor">Construct a strong proposal</option><option value="critic" data-i18n="roleCritic">Find a checkable weakness</option><option value="verifier" data-i18n="roleVerifier">Design an independent check</option><option value="alternative" data-i18n="roleAlternative">Develop an independent alternative</option></select><textarea id="prompt-output" class="code-text" rows="12" readonly aria-label="Mission prompt"></textarea><button class="button primary full-width" id="copy-prompt" data-i18n="copyPrompt">Copy mission brief</button></div>
+  <div class="panel"><h2 data-i18n="importHeading">2. Bring the response back</h2><p class="subtle" data-i18n="importHint">Paste the response, including uncertainty and sources. A model's confidence is not an independent verdict.</p><div class="form-grid"><div><label for="response-provider" data-i18n="providerLabel">Provider / chat</label><input id="response-provider" maxlength="100" placeholder="ChatGPT, Claude, Gemini, local…"></div><div><label for="response-model" data-i18n="modelLabel">Model (if known)</label><input id="response-model" maxlength="100" placeholder="…"></div></div><label for="model-response" data-i18n="responseLabel">Model response</label><textarea id="model-response" rows="10" maxlength="200000" data-placeholder="responsePlaceholder" placeholder="Paste prose or the structured JSON from your AI chat."></textarea><button class="button primary full-width" id="import-response" data-i18n="importResponse">Add contribution</button></div>
+ </div>
+ <details class="panel connection-panel"><summary data-i18n="connectHeading">Optional: connect through the local model bridge</summary><p data-i18n="bridgeHint">API connections use the optional local bridge. Credentials stay in its server-side environment. Consumer chat subscriptions do not include API usage.</p><div id="bridge-status" class="subtle"></div><div id="bridge-controls" class="hidden"><div class="form-grid"><div><label for="bridge-provider" data-i18n="providerLabel">Provider / chat</label><select id="bridge-provider"></select></div><div><label for="bridge-model" data-i18n="modelLabel">Model (if known)</label><input id="bridge-model" autocomplete="off"></div></div><div id="bridge-parallel" class="hidden"><p class="subtle" data-i18n="parallelBridgeHint">Each selected model receives the same mission independently. Responses are kept separate; no model sees another response. Your bridge budget applies to every request.</p><div id="bridge-alternatives" class="item-list"></div><button class="button text-button" id="bridge-add-model" data-i18n="addComparisonModel">+ Add a model alternative</button></div><div class="button-row"><button class="button secondary" id="bridge-generate" data-i18n="runConnected">Send mission to connected model</button><button class="button text-button" id="bridge-cancel" disabled data-i18n="cancel">Cancel</button></div></div></details>
+ <div class="section-heading"><h2 data-i18n="contributions">The intelligence you brought</h2><button class="button secondary" data-goto="possibilities" data-i18n="continuePossibilities">Explore possibilities →</button></div><div id="contribution-list" class="item-list"></div>
+</section>
+<section class="view hidden" id="view-possibilities" aria-labelledby="possibilities-title">
+ <div class="page-heading"><div class="eyebrow" data-i18n="stepThree">03 / EXPLORE POSSIBILITIES</div><h1 id="possibilities-title" data-i18n="possibilitiesTitle">Find the move that changes the outcome.</h1><p data-i18n="possibilitiesSubtitle">Bring forward hypotheses, assumptions and the smallest test that could prove a route wrong. Keeping the existing solution is a valid result.</p></div>
+ <div class="panel"><div class="section-heading"><h2 data-i18n="discoveryHeading">From contributions to testable possibilities</h2><button class="button primary" id="discover" data-i18n="organizePossibilities">Investigate contributions</button></div><p class="subtle" data-i18n="discoveryHint">The workspace organizes your evidence and model proposals. It does not create a real-time frontier search when disconnected.</p><div id="discovery-summary"></div></div>
+ <div id="opportunity-list" class="opportunity-grid"></div>
+ <div class="panel"><h2 data-i18n="mechanismHeading">Choose the kind of missing move to investigate</h2><p class="subtle" data-i18n="mechanismHint">These lenses guide a model investigation. Execution uses only declared, bounded operations. A named lens is not proof of invention.</p><div id="mechanism-list" class="mechanism-grid"></div></div>
+ <div class="button-row end"><button class="button secondary" data-goto="intelligence" data-i18n="bringAnother">Bring another perspective</button><button class="button primary" data-goto="experiment" data-i18n="continueBuild">Build a decisive test →</button></div>
+</section>
+<section class="view hidden" id="view-experiment" aria-labelledby="experiment-title">
+ <div class="page-heading"><div class="eyebrow" data-i18n="stepFour">04 / BUILD & TEST</div><h1 id="experiment-title" data-i18n="experimentTitle">Make the possibility answer to evidence.</h1><p data-i18n="experimentSubtitle">Construct a bounded instrument. Test a complete arrangement. Keep the difference between a computed result and a real-world fact visible.</p></div>
+ <div class="experiment-banner"><div><span class="tag" data-i18n="bounded">BOUNDED LOCAL EXECUTION</span><h2 data-i18n="experimentBanner">Useful instruments, with an explicit boundary.</h2><p data-i18n="experimentBoundary">Only declared arithmetic and checking operations run here. Imported model text is never executed as code. No purchase, contract or external action is performed.</p></div><span class="experiment-glyph" aria-hidden="true">∑</span></div>
+ <div id="experiment-empty" class="panel empty-state"><h2 data-i18n="noInstrumentTitle">Construct a useful instrument for this mission</h2><p data-i18n="noInstrumentCopy">Ask your chosen model for a bounded, executable instrument in its structured response, or create a simple transparent quote calculator here. Your mission stays in place.</p><div class="button-row"><button class="button primary" id="request-instrument" data-i18n="requestInstrument">Ask my model to construct an instrument</button><button class="button secondary" id="create-basic-instrument" data-i18n="createBasicInstrument">Create a quote calculator</button><button class="button text-button" id="experiment-load-demo" data-i18n="loadExperiment">Load demonstration instead</button></div></div>
+ <div id="experiment-workspace" class="hidden">
+ <div class="two-columns"><div class="panel"><h2 data-i18n="economyHeading">Does the arrangement work for everyone?</h2><p class="subtle" data-i18n="economyHint">Declared values are assumptions in minor currency units (100 = $1). They do not represent real payments or participant consent.</p><div id="economic-editor"></div><details><summary data-i18n="inspectArrangement">Inspect or edit the complete arrangement</summary><textarea id="arrangement-input" rows="16" class="code-text" aria-label="Arrangement JSON"></textarea></details><button class="button secondary full-width" id="check-economics" data-i18n="checkEconomics">Check the arrangement</button><div id="economics-result"></div></div>
+ <div class="panel"><h2 data-i18n="instrumentHeading">Construct an inspectable instrument</h2><p class="subtle" data-i18n="instrumentHint">The instrument is a declarative, bounded procedure. It can be exported, inspected, rerun and retained with its limits.</p><div id="instrument-description"></div><div id="instrument-inputs"></div><details><summary data-i18n="inspectInstrument">Inspect the instrument specification</summary><textarea id="instrument-spec" rows="12" class="code-text" aria-label="Instrument specification JSON"></textarea></details><div class="button-row"><button class="button primary" id="run-experiment" data-i18n="runExperiment">Run the experiment</button><button class="button text-button" id="cancel-experiment" disabled data-i18n="cancel">Cancel</button></div><div id="experiment-progress" role="status" aria-live="polite"></div></div></div>
+ <div id="experiment-result"></div>
+ <details class="panel"><summary data-i18n="customWorkflow">Advanced: compose a bounded workflow</summary><p class="subtle" data-i18n="workflowHint">A JSON procedure declares its inputs, dependencies, effects and stopping rules. The compiler rejects unknown operations and forbidden effects.</p><label for="workflow-input" data-i18n="workflowSpec">Workflow specification</label><textarea id="workflow-input" class="code-text" rows="12"></textarea><label for="workflow-data" data-i18n="workflowData">Workflow input data</label><textarea id="workflow-data" class="code-text" rows="5">{}</textarea><button class="button secondary" id="run-workflow" data-i18n="runWorkflow">Compile & run locally</button><pre id="workflow-result" class="result-pre"></pre></details>
+ </div>
+</section>
+<section class="view hidden" id="view-evidence" aria-labelledby="evidence-title">
+ <div class="page-heading"><div class="eyebrow" data-i18n="stepFive">05 / INSPECT THE EVIDENCE</div><h1 id="evidence-title" data-i18n="evidenceTitle">Let the result earn your confidence.</h1><p data-i18n="evidenceSubtitle">A passed check has a scope. A rejected claim teaches something. Unknown is an honest, useful state.</p></div>
+ <div class="verdict-legend"><div><span class="status passed">PASSED IN SCOPE</span><p data-i18n="passedMeaning">Passed the named check on the declared cases.</p></div><div><span class="status rejected">REJECTED</span><p data-i18n="rejectedMeaning">A checkable contradiction or failing case exists.</p></div><div><span class="status unknown">UNKNOWN</span><p data-i18n="unknownMeaning">The available evidence does not settle the claim.</p></div><div><span class="status invalid">INVALID</span><p data-i18n="invalidMeaning">The input or evaluation contract is not valid.</p></div></div>
+ <div id="evidence-summary"></div><div id="evidence-list" class="item-list"></div>
+ <div class="panel"><div class="section-heading"><div><h2 data-i18n="dossierTitle">Take the complete dossier with you</h2><p class="subtle" data-i18n="dossierCopy">Your objective, sources, alternatives, assumptions, runs and limitations—in one readable file.</p></div><button class="button primary" id="export-dossier" data-i18n="exportDossier">Export dossier</button></div></div>
+</section>
+<section class="view hidden" id="view-capabilities" aria-labelledby="capabilities-title">
+ <div class="page-heading"><div class="eyebrow" data-i18n="stepSix">06 / CARRY IT FORWARD</div><h1 id="capabilities-title" data-i18n="capabilitiesTitle">Keep the means. Test the next possibility.</h1><p data-i18n="capabilitiesSubtitle">An instrument exists. It works in a scope. It improves fresh work. Those are three different achievements.</p></div>
+ <div class="panel"><h2 data-i18n="retainTitle">Retain what survived checking</h2><p class="subtle" data-i18n="retainCopy">The registry keeps the instrument, its version, provenance and verification limits. Reuse carries no permission to take external actions.</p><div class="button-row"><button class="button primary" id="retain-capability" data-i18n="retainCapability">Retain the verified instrument</button><button class="button secondary" id="export-instrument" data-i18n="exportInstrument">Export instrument</button></div></div>
+ <div id="capability-list" class="item-list"></div>
+ <div class="panel"><div class="section-heading"><h2 data-i18n="inheritanceTitle">Does inheritance help on a fresh task?</h2><button class="button secondary" id="test-inheritance" data-i18n="testInheritance">Run the matched comparison</button></div><p class="subtle" data-i18n="inheritanceCopy">Compare inherited use with ordinary construction on the same fresh cases. Equal outcomes are a tie. Saved construction effort is not automatically better discovery.</p><div id="inheritance-result"></div></div>
+ <div class="panel privacy-panel"><h2 data-i18n="privacyTitle">Your workspace, your control</h2><p data-i18n="privacyDetail">Save keeps this project in this browser profile. Export creates a portable file you control. Opening a project does not run imported text. Remove the local copy when you are finished on a shared device.</p><button class="button danger" id="clear-local" data-i18n="clearLocal">Remove this browser's saved project</button></div>
+</section>
+<footer class="footer"><span>ALPHA GENESIS FLYWHEEL Ω</span><span data-i18n="footerText">Discover. Construct. Verify. Carry forward.</span><span>MONTREAL.AI / QUÉBEC.AI</span></footer>
+</main>
+</div>
+</div>
+<input type="file" id="project-file" accept=".json,application/json" hidden>
+<dialog id="confirm-dialog"><h2 id="dialog-title"></h2><p id="dialog-copy"></p><div class="button-row end"><button class="button secondary" id="dialog-cancel" data-i18n="cancel">Cancel</button><button class="button primary" id="dialog-confirm" data-i18n="continue">Continue</button></div></dialog>
+</body>
+</html>

@@ -8,6 +8,8 @@ on:
       - 'tests/test_alpha_site.cjs'
       - 'tests/test_surf_reader.cjs'
       - '.github/workflows/research-pages.yml'
+      - 'products/alpha-genesis-harness/app/**'
+      - 'products/alpha-genesis-harness/scripts/publish_preview.py'
   push:
     branches: [main]
     paths:
@@ -17,6 +19,8 @@ on:
       - 'tests/test_alpha_site.cjs'
       - 'tests/test_surf_reader.cjs'
       - '.github/workflows/research-pages.yml'
+      - 'products/alpha-genesis-harness/app/**'
+      - 'products/alpha-genesis-harness/scripts/publish_preview.py'
   workflow_dispatch:
 permissions:
   contents: read
@@ -40,6 +44,11 @@ jobs:
             tests/test_research_site.py
             tests/test_alpha_site.cjs
             tests/test_surf_reader.cjs
+            products/alpha-genesis-harness/app
+            products/alpha-genesis-harness/scripts/publish_preview.py
+            products/alpha-genesis-harness/tests/engine.test.cjs
+            products/alpha-genesis-harness/tests/acceptance.test.cjs
+            products/alpha-genesis-harness/examples/customer-mission.json
           sparse-checkout-cone-mode: false
       - name: Validate original PDFs, links and publication boundary
         run: python3 -m unittest discover -s tests -p 'test_research_site.py' -v
@@ -52,6 +61,10 @@ jobs:
           cmp docs/research/out-accelerate/results/summary.csv "$RUNNER_TEMP/out-accelerate-replay/summary.csv"
       - name: Build only the public website allowlist
         run: python3 scripts/build_research_site.py --output "$RUNNER_TEMP/research-site"
+      - name: Qualify and add the standalone HARNESS preview
+        run: |
+          node --test products/alpha-genesis-harness/tests/*.test.cjs
+          python3 products/alpha-genesis-harness/scripts/publish_preview.py --output "$RUNNER_TEMP/research-site/harness" --source-revision "$(git rev-parse HEAD)"
       - name: Upload the allowlisted Pages artifact
         if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
         uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b # v4

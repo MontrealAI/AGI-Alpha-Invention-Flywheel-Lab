@@ -1,0 +1,145 @@
+name: ALPHA GENESIS HARNESS candidate qualification
+on:
+  pull_request:
+    paths:
+      - 'products/alpha-genesis-harness/**'
+      - '.github/workflows/alpha-genesis-harness.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'products/alpha-genesis-harness/**'
+      - '.github/workflows/alpha-genesis-harness.yml'
+permissions:
+  contents: read
+concurrency:
+  group: alpha-genesis-harness-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+jobs:
+  qualify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    outputs:
+      artifact_id: ${{ steps.upload.outputs.artifact-id }}
+      source_sha: ${{ steps.build.outputs.source_sha }}
+      archive_sha: ${{ steps.build.outputs.archive_sha }}
+      archive_name: ${{ steps.build.outputs.archive_name }}
+    steps:
+      - name: Record platform job execution start
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Execute product and independent adversarial tests
+        working-directory: products/alpha-genesis-harness
+        run: |
+          node --test tests/*.test.cjs
+          python -B -m unittest discover -s tests -p 'test_*.py' -v
+      - name: Preserve canonical mechanism and platform contracts
+        run: |
+          python -B -m unittest discover -s tests -p 'test_mechanism_harness_0*.py' -v
+          python -B -m unittest discover -s tests -p 'test_connected_platform_runtime064.py' -v
+      - name: Build exact committed archive and operate extracted bytes
+        id: build
+        env:
+          EXPECTED_SOURCE: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          test "$(git rev-parse HEAD)" = "$EXPECTED_SOURCE"
+          python -B products/alpha-genesis-harness/scripts/package_release.py build --output "$RUNNER_TEMP/harness-assets" --source-revision "$EXPECTED_SOURCE" > "$RUNNER_TEMP/harness-build.json"
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          receipt = json.loads((Path(os.environ['RUNNER_TEMP'])/'harness-build.json').read_text())
+          assert receipt['source_matches_commit'] is True
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as out:
+              out.write('source_sha='+os.environ['EXPECTED_SOURCE']+'\n')
+              out.write('archive_sha='+receipt['archive_sha256']+'\n')
+              out.write('archive_name='+Path(receipt['archive']).name+'\n')
+          PY
+          archive=$(find "$RUNNER_TEMP/harness-assets" -name '*.zip' -type f)
+          archive_sha=$(sha256sum "$archive" | cut -d' ' -f1)
+          python -B products/alpha-genesis-harness/scripts/qualify_archive.py "$archive" --expected-sha256 "$archive_sha" --expected-source-revision "$EXPECTED_SOURCE" --output "$RUNNER_TEMP/harness-operation"
+      - name: Preserve immutable candidate package
+        id: upload
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: alpha-genesis-harness-${{ github.event.pull_request.head.sha || github.sha }}-attempt-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/harness-assets
+          if-no-files-found: error
+      - name: Preserve operation evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: alpha-genesis-harness-operation-${{ github.event.pull_request.head.sha || github.sha }}-attempt-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/harness-build.json
+            ${{ runner.temp }}/harness-operation
+          if-no-files-found: warn
+  release-candidate:
+    needs: qualify
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    permissions:
+      contents: write
+      actions: read
+    steps:
+      - name: Record platform job execution start
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ needs.qualify.outputs.source_sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          artifact-ids: ${{ needs.qualify.outputs.artifact_id }}
+          path: ${{ runner.temp }}/harness-received
+          merge-multiple: true
+      - name: Verify exact immutable artifact before publication
+        env:
+          ARCHIVE_NAME: ${{ needs.qualify.outputs.archive_name }}
+          ARCHIVE_SHA: ${{ needs.qualify.outputs.archive_sha }}
+          SOURCE_SHA: ${{ needs.qualify.outputs.source_sha }}
+        run: |
+          python -B products/alpha-genesis-harness/scripts/package_release.py verify "$RUNNER_TEMP/harness-received/$ARCHIVE_NAME" --expected-sha256 "$ARCHIVE_SHA" --expected-source-revision "$SOURCE_SHA" --compare-source-revision "$SOURCE_SHA"
+          python -B products/alpha-genesis-harness/scripts/qualify_archive.py "$RUNNER_TEMP/harness-received/$ARCHIVE_NAME" --expected-sha256 "$ARCHIVE_SHA" --expected-source-revision "$SOURCE_SHA" --output "$RUNNER_TEMP/harness-received-operation"
+      - name: Publish source-specific prerelease without replacing prior releases
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          SOURCE_SHA: ${{ needs.qualify.outputs.source_sha }}
+        run: |
+          tag="alpha-genesis-harness-v0.1.0-rc-${SOURCE_SHA:0:12}"
+          gh release create "$tag" "$RUNNER_TEMP/harness-received/"* --target "$SOURCE_SHA" --prerelease --latest=false --title "ALPHA GENESIS HARNESS 0.1.0 — release candidate" --notes-file products/alpha-genesis-harness/docs/RELEASE-NOTES.md
+      - name: Download the published archive
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          SOURCE_SHA: ${{ needs.qualify.outputs.source_sha }}
+          ARCHIVE_NAME: ${{ needs.qualify.outputs.archive_name }}
+          ARCHIVE_SHA: ${{ needs.qualify.outputs.archive_sha }}
+        run: |
+          tag="alpha-genesis-harness-v0.1.0-rc-${SOURCE_SHA:0:12}"
+          gh release download "$tag" --pattern "$ARCHIVE_NAME" --dir "$RUNNER_TEMP/harness-published"
+      - name: Operate the published archive without publication credentials
+        env:
+          SOURCE_SHA: ${{ needs.qualify.outputs.source_sha }}
+          ARCHIVE_NAME: ${{ needs.qualify.outputs.archive_name }}
+          ARCHIVE_SHA: ${{ needs.qualify.outputs.archive_sha }}
+        run: |
+          python -B products/alpha-genesis-harness/scripts/qualify_archive.py "$RUNNER_TEMP/harness-published/$ARCHIVE_NAME" --expected-sha256 "$ARCHIVE_SHA" --expected-source-revision "$SOURCE_SHA" --output "$RUNNER_TEMP/harness-published-operation"
+      - name: Preserve released-byte operation evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: alpha-genesis-harness-release-operation-${{ needs.qualify.outputs.source_sha }}-attempt-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/harness-received-operation
+            ${{ runner.temp }}/harness-published-operation
+          if-no-files-found: warn

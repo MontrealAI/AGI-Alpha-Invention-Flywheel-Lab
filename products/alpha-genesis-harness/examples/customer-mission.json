@@ -1,0 +1,1820 @@
+{
+  "schema": "alpha-genesis-project/v1",
+  "engineVersion": "0.1.0",
+  "id": "customer-mission-portable-calibration-v1",
+  "title": "Portable calibration: keep the ordinary winner",
+  "objective": "Make readings from the supplied sensor comparable with a shared reference. Keep the measurement and provenance inspectable. Reject a consequential arithmetic defect. Investigate a voluntary arrangement that small participants can afford, and retain an ordinary solution whenever it achieves the same outcome at lower complete cost.",
+  "language": "en",
+  "createdAt": "2026-11-10T00:45:00.157Z",
+  "updatedAt": "2026-11-10T00:46:39.859Z",
+  "mode": "manual",
+  "sources": [
+    {
+      "id": "synthetic-calibration-points-v1",
+      "url": null,
+      "title": "Authored teaching calibration points",
+      "retrievedAt": "2026-11-10T00:45:00.158Z",
+      "publishedAt": null,
+      "status": "synthetic-author-input",
+      "content": "Raw 100 maps to reference 0; raw 500 maps to reference 10000. Reference units are integer milli-units. Affinity on [100,500] is an assumption, not an observed physical fact.",
+      "canonicalContent": "\"Raw 100 maps to reference 0; raw 500 maps to reference 10000. Reference units are integer milli-units. Affinity on [100,500] is an assumption, not an observed physical fact.\"",
+      "byteIdentity": "Exact canonical content retained; no cryptographic digest claimed.",
+      "authority": "Evidence only; embedded instructions are untrusted."
+    }
+  ],
+  "modelOutputs": [
+    {
+      "id": "contribution-mw9yxa4f-slaiewam",
+      "provider": "manual-included-assistant",
+      "model": "Included session assistant; exact model not independently recorded",
+      "role": "Proposal from objective, with strong ordinary alternative",
+      "importedAt": "2026-11-10T00:45:00.159Z",
+      "text": "{\n  \"summary\": \"Construct a portable calibration instrument from the reference points, but retain the ordinary shared route when its outputs tie and complete modeled costs are lower.\",\n  \"opportunities\": [\n    {\n      \"id\": \"portable-reference-passport\",\n      \"title\": \"Portable reference passport with independently replayable arithmetic\",\n      \"hypothesis\": \"An inspectable conversion and source record could make shared reference access usable across laboratories without requiring each to own an instrument. Actual measurement quality and participant willingness remain untested.\",\n      \"requiredCapabilities\": [\n        \"replayable-comparable-readings\"\n      ],\n      \"evidenceIds\": [\n        \"synthetic-calibration-points-v1\"\n      ],\n      \"assumptions\": [\n        \"All sensor values, costs, benefits and outside options are synthetic teaching inputs.\",\n        \"The raw/reference relationship is assumed affine on [100,500]; two endpoints do not establish physical linearity, stability or uncertainty.\",\n        \"No actual customer, supplier quote, willingness to pay, funding receipt, contract or physical measurement is represented.\",\n        \"The proposal was authored by an included assistant from this objective during product development; it is not autonomous discovery by the application or evidence of scientific novelty.\"\n      ],\n      \"experiment\": {\n        \"procedure\": \"Construct (reading - 100) × 25, retain a calibrated-range flag, compare frozen numerical cases against direct algebra, reject an omitted offset, and recompute every participant payoff.\",\n        \"acceptance\": \"Exact agreement on declared numerical cases; protected independently prepared cases are evaluated separately. No participant falls below its declared outside option.\",\n        \"failure\": \"Incorrect conversion, unrecognized range violation, unfavorable participant payoff or conventional complete route advantage prevents an invention-superiority claim.\"\n      },\n      \"alternatives\": [\n        \"Ordinary shared reference plus direct algebra\",\n        \"Separate external verification\",\n        \"Non-entry\"\n      ]\n    }\n  ],\n  \"capabilities\": [\n    {\n      \"id\": \"ordinary-shared-route\",\n      \"requires\": [\n        \"synthetic-calibration-evidence\",\n        \"voluntary-laboratories\"\n      ],\n      \"provides\": [\n        \"replayable-comparable-readings\"\n      ],\n      \"costMinor\": 30000\n    },\n    {\n      \"id\": \"portable-harness-construction\",\n      \"requires\": [\n        \"synthetic-calibration-evidence\",\n        \"voluntary-laboratories\"\n      ],\n      \"provides\": [\n        \"replayable-comparable-readings\"\n      ],\n      \"costMinor\": 33000\n    }\n  ],\n  \"uncertainties\": [\n    \"Real sensor behavior, uncertainty, source authenticity, access rights, prices, participant preferences, funding timing and actual resource bills are unknown.\",\n    \"No actual multi-model comparison or measured AI-versus-human productivity result is supplied.\"\n  ]\n}",
+      "verdict": "UNKNOWN",
+      "provenance": "Customer-supplied response; authorship and external truth not independently authenticated."
+    }
+  ],
+  "opportunities": [
+    {
+      "id": "portable-reference-passport",
+      "title": "Portable reference passport with independently replayable arithmetic",
+      "hypothesis": "An inspectable conversion and source record could make shared reference access usable across laboratories without requiring each to own an instrument. Actual measurement quality and participant willingness remain untested.",
+      "requiredCapabilities": [
+        "replayable-comparable-readings"
+      ],
+      "evidenceIds": [
+        "synthetic-calibration-points-v1"
+      ],
+      "assumptions": [
+        "All sensor values, costs, benefits and outside options are synthetic teaching inputs.",
+        "The raw/reference relationship is assumed affine on [100,500]; two endpoints do not establish physical linearity, stability or uncertainty.",
+        "No actual customer, supplier quote, willingness to pay, funding receipt, contract or physical measurement is represented.",
+        "The proposal was authored by an included assistant from this objective during product development; it is not autonomous discovery by the application or evidence of scientific novelty."
+      ],
+      "experiment": {
+        "procedure": "Construct (reading - 100) × 25, retain a calibrated-range flag, compare frozen numerical cases against direct algebra, reject an omitted offset, and recompute every participant payoff.",
+        "acceptance": "Exact agreement on declared numerical cases; protected independently prepared cases are evaluated separately. No participant falls below its declared outside option.",
+        "failure": "Incorrect conversion, unrecognized range violation, unfavorable participant payoff or conventional complete route advantage prevents an invention-superiority claim."
+      },
+      "alternatives": [
+        "Ordinary shared reference plus direct algebra",
+        "Separate external verification",
+        "Non-entry"
+      ],
+      "origin": "contribution-mw9yxa4f-slaiewam",
+      "verdict": "UNKNOWN",
+      "novelty": "Not established",
+      "accepted": false,
+      "unsupportedEvidenceIds": [],
+      "investigation": {
+        "verdict": "PASSED IN SCOPE",
+        "steps": [
+          "ordinary-shared-route"
+        ],
+        "provides": [
+          "replayable-comparable-readings",
+          "synthetic-calibration-evidence",
+          "voluntary-laboratories"
+        ],
+        "costMinor": 30000,
+        "operations": 39,
+        "scope": "Least declared additive cost in the supplied finite capability graph; availability, costs and applicability remain assumptions."
+      },
+      "decisionOptions": [
+        "Investigate",
+        "Retain existing solution",
+        "Decline",
+        "Unresolved"
+      ]
+    }
+  ],
+  "capabilities": [
+    {
+      "id": "capability-mw9yzf1v-utwzvrgn",
+      "name": "Synthetic affine calibration passport",
+      "version": 1,
+      "instrument": {
+        "schema": "alpha-genesis-instrument/v1",
+        "name": "Portable affine calibration with explicit range flag",
+        "inputs": [
+          "reading"
+        ],
+        "outputs": {
+          "reference": {
+            "op": "mul",
+            "args": [
+              {
+                "op": "sub",
+                "args": [
+                  {
+                    "field": "reading"
+                  },
+                  100
+                ]
+              },
+              25
+            ]
+          },
+          "inRange": {
+            "op": "and",
+            "args": [
+              {
+                "op": "gte",
+                "args": [
+                  {
+                    "field": "reading"
+                  },
+                  100
+                ]
+              },
+              {
+                "op": "lte",
+                "args": [
+                  {
+                    "field": "reading"
+                  },
+                  500
+                ]
+              }
+            ]
+          }
+        },
+        "effects": [],
+        "authority": "pure-data-only",
+        "limitations": "Finite numeric and logical expressions; not arbitrary generated code. Binary floating-point arithmetic except safe integer operations."
+      },
+      "verification": {
+        "verdict": "PASSED IN SCOPE",
+        "confirmationId": "independent-affine-heldout-1",
+        "preparedBy": "separate qualification agent",
+        "independence": "independently-prepared",
+        "scope": "Five preregistered synthetic in-range affine conversions; exact direct-algebra control; no physical calibration or superior discovery claim.",
+        "results": [
+          {
+            "case": 1,
+            "passed": true,
+            "input": {
+              "reading": 108
+            },
+            "expected": {
+              "reference": 200,
+              "inRange": true
+            },
+            "actual": {
+              "reference": 200,
+              "inRange": true
+            },
+            "issues": [],
+            "operations": 48
+          },
+          {
+            "case": 2,
+            "passed": true,
+            "input": {
+              "reading": 284
+            },
+            "expected": {
+              "reference": 4600,
+              "inRange": true
+            },
+            "actual": {
+              "reference": 4600,
+              "inRange": true
+            },
+            "issues": [],
+            "operations": 48
+          },
+          {
+            "case": 3,
+            "passed": true,
+            "input": {
+              "reading": 476
+            },
+            "expected": {
+              "reference": 9400,
+              "inRange": true
+            },
+            "actual": {
+              "reference": 9400,
+              "inRange": true
+            },
+            "issues": [],
+            "operations": 48
+          },
+          {
+            "case": 4,
+            "passed": true,
+            "input": {
+              "reading": 100
+            },
+            "expected": {
+              "reference": 0,
+              "inRange": true
+            },
+            "actual": {
+              "reference": 0,
+              "inRange": true
+            },
+            "issues": [],
+            "operations": 48
+          },
+          {
+            "case": 5,
+            "passed": true,
+            "input": {
+              "reading": 500
+            },
+            "expected": {
+              "reference": 10000,
+              "inRange": true
+            },
+            "actual": {
+              "reference": 10000,
+              "inRange": true
+            },
+            "issues": [],
+            "operations": 48
+          }
+        ],
+        "operations": 315,
+        "checkedAt": "2026-11-10T00:46:39.857Z",
+        "limitation": "Procedural evaluator separation in this application; not external certification. The declared author and independence require separate provenance checks."
+      },
+      "currentVerification": "UNKNOWN",
+      "createdAt": "2026-11-10T00:46:39.859Z",
+      "dependencies": [],
+      "limitations": [
+        "Finite numeric and logical expressions; not arbitrary generated code. Binary floating-point arithmetic except safe integer operations.",
+        "Five preregistered synthetic in-range affine conversions; exact direct-algebra control; no physical calibration or superior discovery claim.",
+        "Historical independent arithmetic receipt only; revalidate current source and data. This example is not a physical calibration. Confirmation cases are exposed after this first evaluation."
+      ],
+      "counterexamples": [],
+      "successorBenefit": "UNKNOWN",
+      "state": "active",
+      "imported": true,
+      "sourceIds": [
+        "synthetic-calibration-points-v1"
+      ]
+    }
+  ],
+  "proposedCapabilities": [
+    {
+      "id": "ordinary-shared-route",
+      "requires": [
+        "synthetic-calibration-evidence",
+        "voluntary-laboratories"
+      ],
+      "provides": [
+        "replayable-comparable-readings"
+      ],
+      "costMinor": 30000,
+      "contributionId": "contribution-mw9yxa4f-slaiewam",
+      "verification": "UNKNOWN"
+    },
+    {
+      "id": "portable-harness-construction",
+      "requires": [
+        "synthetic-calibration-evidence",
+        "voluntary-laboratories"
+      ],
+      "provides": [
+        "replayable-comparable-readings"
+      ],
+      "costMinor": 33000,
+      "contributionId": "contribution-mw9yxa4f-slaiewam",
+      "verification": "UNKNOWN"
+    }
+  ],
+  "runs": [
+    {
+      "id": "customer-mission-executed-v1",
+      "kind": "synthetic-external-proposal",
+      "createdAt": "2026-11-10T00:45:00.170Z",
+      "instrument": {
+        "schema": "alpha-genesis-instrument/v1",
+        "name": "Portable affine calibration with explicit range flag",
+        "inputs": [
+          "reading"
+        ],
+        "outputs": {
+          "reference": {
+            "op": "mul",
+            "args": [
+              {
+                "op": "sub",
+                "args": [
+                  {
+                    "field": "reading"
+                  },
+                  100
+                ]
+              },
+              25
+            ]
+          },
+          "inRange": {
+            "op": "and",
+            "args": [
+              {
+                "op": "gte",
+                "args": [
+                  {
+                    "field": "reading"
+                  },
+                  100
+                ]
+              },
+              {
+                "op": "lte",
+                "args": [
+                  {
+                    "field": "reading"
+                  },
+                  500
+                ]
+              }
+            ]
+          }
+        },
+        "effects": [],
+        "authority": "pure-data-only",
+        "limitations": "Finite numeric and logical expressions; not arbitrary generated code. Binary floating-point arithmetic except safe integer operations."
+      },
+      "execution": {
+        "verdict": "PASSED IN SCOPE",
+        "outputs": {
+          "reference": 6000,
+          "inRange": true
+        },
+        "operations": 48,
+        "scope": "Declared expressions executed; successful execution does not independently validate the instrument or real-world claims."
+      },
+      "economics": {
+        "verdict": "PASSED IN SCOPE",
+        "feasible": true,
+        "currency": "CAD",
+        "participation": [
+          {
+            "id": "Lab A",
+            "benefitMinor": 60000,
+            "costMinor": 0,
+            "paymentMinor": 14000,
+            "netBenefitMinor": 46000,
+            "outsideOptionMinor": 40000,
+            "individuallyWorthwhile": true,
+            "surplusOverOutsideMinor": 6000
+          },
+          {
+            "id": "Lab B",
+            "benefitMinor": 60000,
+            "costMinor": 0,
+            "paymentMinor": 14000,
+            "netBenefitMinor": 46000,
+            "outsideOptionMinor": 40000,
+            "individuallyWorthwhile": true,
+            "surplusOverOutsideMinor": 6000
+          },
+          {
+            "id": "Lab C",
+            "benefitMinor": 60000,
+            "costMinor": 0,
+            "paymentMinor": 14000,
+            "netBenefitMinor": 46000,
+            "outsideOptionMinor": 40000,
+            "individuallyWorthwhile": true,
+            "surplusOverOutsideMinor": 6000
+          },
+          {
+            "id": "Operator",
+            "benefitMinor": 0,
+            "costMinor": 33000,
+            "paymentMinor": -42000,
+            "netBenefitMinor": 9000,
+            "outsideOptionMinor": 6000,
+            "individuallyWorthwhile": true,
+            "surplusOverOutsideMinor": 3000
+          }
+        ],
+        "costs": [
+          {
+            "id": "inference",
+            "category": "inference",
+            "amountMinor": 0,
+            "basis": "This category is included in operator costMinor; see operatorCostBreakdown. Zero here prevents double counting."
+          },
+          {
+            "id": "tools",
+            "category": "tools",
+            "amountMinor": 0,
+            "basis": "This category is included in operator costMinor; see operatorCostBreakdown. Zero here prevents double counting."
+          },
+          {
+            "id": "compute",
+            "category": "compute",
+            "amountMinor": 0,
+            "basis": "This category is included in operator costMinor; see operatorCostBreakdown. Zero here prevents double counting."
+          },
+          {
+            "id": "construction",
+            "category": "construction",
+            "amountMinor": 0,
+            "basis": "This category is included in operator costMinor; see operatorCostBreakdown. Zero here prevents double counting."
+          },
+          {
+            "id": "verification",
+            "category": "verification",
+            "amountMinor": 0,
+            "basis": "This category is included in operator costMinor; see operatorCostBreakdown. Zero here prevents double counting."
+          },
+          {
+            "id": "maintenance",
+            "category": "maintenance",
+            "amountMinor": 0,
+            "basis": "This category is included in operator costMinor; see operatorCostBreakdown. Zero here prevents double counting."
+          },
+          {
+            "id": "failed-experiments",
+            "category": "failed-experiments",
+            "amountMinor": 0,
+            "basis": "This category is included in operator costMinor; see operatorCostBreakdown. Zero here prevents double counting."
+          },
+          {
+            "id": "coordination",
+            "category": "coordination",
+            "amountMinor": 0,
+            "basis": "This category is included in operator costMinor; see operatorCostBreakdown. Zero here prevents double counting."
+          },
+          {
+            "id": "financing",
+            "category": "financing",
+            "amountMinor": 0,
+            "basis": "This category is included in operator costMinor; see operatorCostBreakdown. Zero here prevents double counting."
+          },
+          {
+            "id": "support",
+            "category": "support",
+            "amountMinor": 0,
+            "basis": "This category is included in operator costMinor; see operatorCostBreakdown. Zero here prevents double counting."
+          },
+          {
+            "id": "other",
+            "category": "other",
+            "amountMinor": 0,
+            "basis": "This category is included in operator costMinor; see operatorCostBreakdown. Zero here prevents double counting."
+          }
+        ],
+        "totalCostMinor": 33000,
+        "consortiumCostMinor": 0,
+        "participantCostMinor": 33000,
+        "contributionsMinor": 0,
+        "fundingAvailableMinor": 0,
+        "fundingGapMinor": 0,
+        "fundingAssumption": "fundingAvailableMinor, when supplied, is TOTAL consortium funding replacing net member contributions, not additional funding. Signed member payments are positive contributions or negative receipts. Planning input only; no account balance or agreement.",
+        "bestAlternative": {
+          "id": "ordinary-shared",
+          "name": "Ordinary shared reference plus direct algebra; same acceptance and permissions",
+          "totalCostMinor": 30000,
+          "feasible": true
+        },
+        "savingsMinor": -3000,
+        "alternatives": [
+          {
+            "id": "ordinary-shared",
+            "name": "Ordinary shared reference plus direct algebra; same acceptance and permissions",
+            "totalCostMinor": 30000,
+            "feasible": true
+          },
+          {
+            "id": "separate",
+            "name": "Three separate external reference checks (authored price assumption)",
+            "totalCostMinor": 60000,
+            "feasible": true
+          },
+          {
+            "id": "non-entry",
+            "name": "Non-entry; preserves resources but does not achieve the requested comparison",
+            "totalCostMinor": 0,
+            "feasible": false
+          }
+        ],
+        "issues": [],
+        "unitemizedCostCategories": [],
+        "completeCostStatus": "All category labels supplied; amounts remain assumptions.",
+        "comparisonVerdict": "Retain cheaper conventional alternative",
+        "scope": "Exact arithmetic and voluntary participation under declared inputs; no demand, consent, funding receipt or equilibrium is established."
+      },
+      "verification": {
+        "verdict": "UNKNOWN",
+        "confirmationId": "calibration-exposed-development-v1",
+        "preparedBy": "Customer mission author",
+        "independence": "development",
+        "scope": "Exact synthetic affine arithmetic plus range flag on exposed development values only.",
+        "results": [
+          {
+            "case": 1,
+            "passed": true,
+            "input": {
+              "reading": 140
+            },
+            "expected": {
+              "reference": 1000,
+              "inRange": true
+            },
+            "actual": {
+              "reference": 1000,
+              "inRange": true
+            },
+            "issues": [],
+            "operations": 48
+          },
+          {
+            "case": 2,
+            "passed": true,
+            "input": {
+              "reading": 340
+            },
+            "expected": {
+              "reference": 6000,
+              "inRange": true
+            },
+            "actual": {
+              "reference": 6000,
+              "inRange": true
+            },
+            "issues": [],
+            "operations": 48
+          },
+          {
+            "case": 3,
+            "passed": true,
+            "input": {
+              "reading": 500
+            },
+            "expected": {
+              "reference": 10000,
+              "inRange": true
+            },
+            "actual": {
+              "reference": 10000,
+              "inRange": true
+            },
+            "issues": [],
+            "operations": 48
+          },
+          {
+            "case": 4,
+            "passed": true,
+            "input": {
+              "reading": 99
+            },
+            "expected": {
+              "reference": -25,
+              "inRange": false
+            },
+            "actual": {
+              "reference": -25,
+              "inRange": false
+            },
+            "issues": [],
+            "operations": 48
+          }
+        ],
+        "operations": 260,
+        "checkedAt": "2026-11-10T00:45:00.163Z",
+        "limitation": "Procedural evaluator separation in this application; not external certification. The declared author and independence require separate provenance checks."
+      },
+      "plantedError": {
+        "verdict": "REJECTED",
+        "confirmationId": "calibration-exposed-development-v1",
+        "preparedBy": "Customer mission author",
+        "independence": "development",
+        "scope": "Exact synthetic affine arithmetic plus range flag on exposed development values only.",
+        "results": [
+          {
+            "case": 1,
+            "passed": false,
+            "input": {
+              "reading": 140
+            },
+            "expected": {
+              "reference": 1000,
+              "inRange": true
+            },
+            "actual": {
+              "reference": 3500,
+              "inRange": true
+            },
+            "issues": [],
+            "operations": 42
+          },
+          {
+            "case": 2,
+            "passed": false,
+            "input": {
+              "reading": 340
+            },
+            "expected": {
+              "reference": 6000,
+              "inRange": true
+            },
+            "actual": {
+              "reference": 8500,
+              "inRange": true
+            },
+            "issues": [],
+            "operations": 42
+          },
+          {
+            "case": 3,
+            "passed": false,
+            "input": {
+              "reading": 500
+            },
+            "expected": {
+              "reference": 10000,
+              "inRange": true
+            },
+            "actual": {
+              "reference": 12500,
+              "inRange": true
+            },
+            "issues": [],
+            "operations": 42
+          },
+          {
+            "case": 4,
+            "passed": false,
+            "input": {
+              "reading": 99
+            },
+            "expected": {
+              "reference": -25,
+              "inRange": false
+            },
+            "actual": {
+              "reference": 2475,
+              "inRange": false
+            },
+            "issues": [],
+            "operations": 42
+          }
+        ],
+        "operations": 232,
+        "checkedAt": "2026-11-10T00:45:00.163Z",
+        "limitation": "Procedural evaluator separation in this application; not external certification. The declared author and independence require separate provenance checks."
+      },
+      "workflow": {
+        "verdict": "PASSED IN SCOPE",
+        "outputs": {
+          "reading": {
+            "verdict": "PASSED IN SCOPE",
+            "outputs": {
+              "reference": 6000,
+              "inRange": true
+            },
+            "operations": 48,
+            "scope": "Declared expressions executed; successful execution does not independently validate the instrument or real-world claims."
+          },
+          "economics": {
+            "verdict": "PASSED IN SCOPE",
+            "feasible": true,
+            "currency": "CAD",
+            "participation": [
+              {
+                "id": "Lab A",
+                "benefitMinor": 60000,
+                "costMinor": 0,
+                "paymentMinor": 14000,
+                "netBenefitMinor": 46000,
+                "outsideOptionMinor": 40000,
+                "individuallyWorthwhile": true,
+                "surplusOverOutsideMinor": 6000
+              },
+              {
+                "id": "Lab B",
+                "benefitMinor": 60000,
+                "costMinor": 0,
+                "paymentMinor": 14000,
+                "netBenefitMinor": 46000,
+                "outsideOptionMinor": 40000,
+                "individuallyWorthwhile": true,
+                "surplusOverOutsideMinor": 6000
+              },
+              {
+                "id": "Lab C",
+                "benefitMinor": 60000,
+                "costMinor": 0,
+                "paymentMinor": 14000,
+                "netBenefitMinor": 46000,
+                "outsideOptionMinor": 40000,
+                "individuallyWorthwhile": true,
+                "surplusOverOutsideMinor": 6000
+              },
+              {
+                "id": "Operator",
+                "benefitMinor": 0,
+                "costMinor": 33000,
+                "paymentMinor": -42000,
+                "netBenefitMinor": 9000,
+                "outsideOptionMinor": 6000,
+                "individuallyWorthwhile": true,
+                "surplusOverOutsideMinor": 3000
+              }
+            ],
+            "costs": [
+              {
+                "id": "inference",
+                "category": "inference",
+                "amountMinor": 0,
+                "basis": "This category is included in operator costMinor; see operatorCostBreakdown. Zero here prevents double counting."
+              },
+              {
+                "id": "tools",
+                "category": "tools",
+                "amountMinor": 0,
+                "basis": "This category is included in operator costMinor; see operatorCostBreakdown. Zero here prevents double counting."
+              },
+              {
+                "id": "compute",
+                "category": "compute",
+                "amountMinor": 0,
+                "basis": "This category is included in operator costMinor; see operatorCostBreakdown. Zero here prevents double counting."
+              },
+              {
+                "id": "construction",
+                "category": "construction",
+                "amountMinor": 0,
+                "basis": "This category is included in operator costMinor; see operatorCostBreakdown. Zero here prevents double counting."
+              },
+              {
+                "id": "verification",
+                "category": "verification",
+                "amountMinor": 0,
+                "basis": "This category is included in operator costMinor; see operatorCostBreakdown. Zero here prevents double counting."
+              },
+              {
+                "id": "maintenance",
+                "category": "maintenance",
+                "amountMinor": 0,
+                "basis": "This category is included in operator costMinor; see operatorCostBreakdown. Zero here prevents double counting."
+              },
+              {
+                "id": "failed-experiments",
+                "category": "failed-experiments",
+                "amountMinor": 0,
+                "basis": "This category is included in operator costMinor; see operatorCostBreakdown. Zero here prevents double counting."
+              },
+              {
+                "id": "coordination",
+                "category": "coordination",
+                "amountMinor": 0,
+                "basis": "This category is included in operator costMinor; see operatorCostBreakdown. Zero here prevents double counting."
+              },
+              {
+                "id": "financing",
+                "category": "financing",
+                "amountMinor": 0,
+                "basis": "This category is included in operator costMinor; see operatorCostBreakdown. Zero here prevents double counting."
+              },
+              {
+                "id": "support",
+                "category": "support",
+                "amountMinor": 0,
+                "basis": "This category is included in operator costMinor; see operatorCostBreakdown. Zero here prevents double counting."
+              },
+              {
+                "id": "other",
+                "category": "other",
+                "amountMinor": 0,
+                "basis": "This category is included in operator costMinor; see operatorCostBreakdown. Zero here prevents double counting."
+              }
+            ],
+            "totalCostMinor": 33000,
+            "consortiumCostMinor": 0,
+            "participantCostMinor": 33000,
+            "contributionsMinor": 0,
+            "fundingAvailableMinor": 0,
+            "fundingGapMinor": 0,
+            "fundingAssumption": "fundingAvailableMinor, when supplied, is TOTAL consortium funding replacing net member contributions, not additional funding. Signed member payments are positive contributions or negative receipts. Planning input only; no account balance or agreement.",
+            "bestAlternative": {
+              "id": "ordinary-shared",
+              "name": "Ordinary shared reference plus direct algebra; same acceptance and permissions",
+              "totalCostMinor": 30000,
+              "feasible": true
+            },
+            "savingsMinor": -3000,
+            "alternatives": [
+              {
+                "id": "ordinary-shared",
+                "name": "Ordinary shared reference plus direct algebra; same acceptance and permissions",
+                "totalCostMinor": 30000,
+                "feasible": true
+              },
+              {
+                "id": "separate",
+                "name": "Three separate external reference checks (authored price assumption)",
+                "totalCostMinor": 60000,
+                "feasible": true
+              },
+              {
+                "id": "non-entry",
+                "name": "Non-entry; preserves resources but does not achieve the requested comparison",
+                "totalCostMinor": 0,
+                "feasible": false
+              }
+            ],
+            "issues": [],
+            "unitemizedCostCategories": [],
+            "completeCostStatus": "All category labels supplied; amounts remain assumptions.",
+            "comparisonVerdict": "Retain cheaper conventional alternative",
+            "scope": "Exact arithmetic and voluntary participation under declared inputs; no demand, consent, funding receipt or equilibrium is established."
+          }
+        },
+        "trace": [
+          {
+            "id": "instrument",
+            "op": "construct",
+            "result": {
+              "schema": "alpha-genesis-instrument/v1",
+              "name": "Portable affine calibration with explicit range flag",
+              "inputs": [
+                "reading"
+              ],
+              "outputs": {
+                "reference": {
+                  "op": "mul",
+                  "args": [
+                    {
+                      "op": "sub",
+                      "args": [
+                        {
+                          "field": "reading"
+                        },
+                        100
+                      ]
+                    },
+                    25
+                  ]
+                },
+                "inRange": {
+                  "op": "and",
+                  "args": [
+                    {
+                      "op": "gte",
+                      "args": [
+                        {
+                          "field": "reading"
+                        },
+                        100
+                      ]
+                    },
+                    {
+                      "op": "lte",
+                      "args": [
+                        {
+                          "field": "reading"
+                        },
+                        500
+                      ]
+                    }
+                  ]
+                }
+              },
+              "effects": [],
+              "authority": "pure-data-only",
+              "limitations": "Finite numeric and logical expressions; not arbitrary generated code. Binary floating-point arithmetic except safe integer operations."
+            },
+            "operationsAfter": 204
+          },
+          {
+            "id": "reading",
+            "op": "execute",
+            "result": {
+              "verdict": "PASSED IN SCOPE",
+              "outputs": {
+                "reference": 6000,
+                "inRange": true
+              },
+              "operations": 48,
+              "scope": "Declared expressions executed; successful execution does not independently validate the instrument or real-world claims."
+            },
+            "operationsAfter": 290
+          },
+          {
+            "id": "economics",
+            "op": "economics",
+            "result": {
+              "verdict": "PASSED IN SCOPE",
+              "feasible": true,
+              "currency": "CAD",
+              "participation": [
+                {
+                  "id": "Lab A",
+                  "benefitMinor": 60000,
+                  "costMinor": 0,
+                  "paymentMinor": 14000,
+                  "netBenefitMinor": 46000,
+                  "outsideOptionMinor": 40000,
+                  "individuallyWorthwhile": true,
+                  "surplusOverOutsideMinor": 6000
+                },
+                {
+                  "id": "Lab B",
+                  "benefitMinor": 60000,
+                  "costMinor": 0,
+                  "paymentMinor": 14000,
+                  "netBenefitMinor": 46000,
+                  "outsideOptionMinor": 40000,
+                  "individuallyWorthwhile": true,
+                  "surplusOverOutsideMinor": 6000
+                },
+                {
+                  "id": "Lab C",
+                  "benefitMinor": 60000,
+                  "costMinor": 0,
+                  "paymentMinor": 14000,
+                  "netBenefitMinor": 46000,
+                  "outsideOptionMinor": 40000,
+                  "individuallyWorthwhile": true,
+                  "surplusOverOutsideMinor": 6000
+                },
+                {
+                  "id": "Operator",
+                  "benefitMinor": 0,
+                  "costMinor": 33000,
+                  "paymentMinor": -42000,
+                  "netBenefitMinor": 9000,
+                  "outsideOptionMinor": 6000,
+                  "individuallyWorthwhile": true,
+                  "surplusOverOutsideMinor": 3000
+                }
+              ],
+              "costs": [
+                {
+                  "id": "inference",
+                  "category": "inference",
+                  "amountMinor": 0,
+                  "basis": "This category is included in operator costMinor; see operatorCostBreakdown. Zero here prevents double counting."
+                },
+                {
+                  "id": "tools",
+                  "category": "tools",
+                  "amountMinor": 0,
+                  "basis": "This category is included in operator costMinor; see operatorCostBreakdown. Zero here prevents double counting."
+                },
+                {
+                  "id": "compute",
+                  "category": "compute",
+                  "amountMinor": 0,
+                  "basis": "This category is included in operator costMinor; see operatorCostBreakdown. Zero here prevents double counting."
+                },
+                {
+                  "id": "construction",
+                  "category": "construction",
+                  "amountMinor": 0,
+                  "basis": "This category is included in operator costMinor; see operatorCostBreakdown. Zero here prevents double counting."
+                },
+                {
+                  "id": "verification",
+                  "category": "verification",
+                  "amountMinor": 0,
+                  "basis": "This category is included in operator costMinor; see operatorCostBreakdown. Zero here prevents double counting."
+                },
+                {
+                  "id": "maintenance",
+                  "category": "maintenance",
+                  "amountMinor": 0,
+                  "basis": "This category is included in operator costMinor; see operatorCostBreakdown. Zero here prevents double counting."
+                },
+                {
+                  "id": "failed-experiments",
+                  "category": "failed-experiments",
+                  "amountMinor": 0,
+                  "basis": "This category is included in operator costMinor; see operatorCostBreakdown. Zero here prevents double counting."
+                },
+                {
+                  "id": "coordination",
+                  "category": "coordination",
+                  "amountMinor": 0,
+                  "basis": "This category is included in operator costMinor; see operatorCostBreakdown. Zero here prevents double counting."
+                },
+                {
+                  "id": "financing",
+                  "category": "financing",
+                  "amountMinor": 0,
+                  "basis": "This category is included in operator costMinor; see operatorCostBreakdown. Zero here prevents double counting."
+                },
+                {
+                  "id": "support",
+                  "category": "support",
+                  "amountMinor": 0,
+                  "basis": "This category is included in operator costMinor; see operatorCostBreakdown. Zero here prevents double counting."
+                },
+                {
+                  "id": "other",
+                  "category": "other",
+                  "amountMinor": 0,
+                  "basis": "This category is included in operator costMinor; see operatorCostBreakdown. Zero here prevents double counting."
+                }
+              ],
+              "totalCostMinor": 33000,
+              "consortiumCostMinor": 0,
+              "participantCostMinor": 33000,
+              "contributionsMinor": 0,
+              "fundingAvailableMinor": 0,
+              "fundingGapMinor": 0,
+              "fundingAssumption": "fundingAvailableMinor, when supplied, is TOTAL consortium funding replacing net member contributions, not additional funding. Signed member payments are positive contributions or negative receipts. Planning input only; no account balance or agreement.",
+              "bestAlternative": {
+                "id": "ordinary-shared",
+                "name": "Ordinary shared reference plus direct algebra; same acceptance and permissions",
+                "totalCostMinor": 30000,
+                "feasible": true
+              },
+              "savingsMinor": -3000,
+              "alternatives": [
+                {
+                  "id": "ordinary-shared",
+                  "name": "Ordinary shared reference plus direct algebra; same acceptance and permissions",
+                  "totalCostMinor": 30000,
+                  "feasible": true
+                },
+                {
+                  "id": "separate",
+                  "name": "Three separate external reference checks (authored price assumption)",
+                  "totalCostMinor": 60000,
+                  "feasible": true
+                },
+                {
+                  "id": "non-entry",
+                  "name": "Non-entry; preserves resources but does not achieve the requested comparison",
+                  "totalCostMinor": 0,
+                  "feasible": false
+                }
+              ],
+              "issues": [],
+              "unitemizedCostCategories": [],
+              "completeCostStatus": "All category labels supplied; amounts remain assumptions.",
+              "comparisonVerdict": "Retain cheaper conventional alternative",
+              "scope": "Exact arithmetic and voluntary participation under declared inputs; no demand, consent, funding receipt or equilibrium is established."
+            },
+            "operationsAfter": 391
+          }
+        ],
+        "operations": 391,
+        "scope": "Bounded workflow executed; individual output verdicts remain separate and are not overridden by this execution receipt."
+      },
+      "ordinaryComparison": {
+        "method": "Direct affine arithmetic with the same range check, inputs and output requirement",
+        "results": [
+          {
+            "reading": 140,
+            "ordinary": {
+              "reference": 1000,
+              "inRange": true
+            },
+            "harness": {
+              "reference": 1000,
+              "inRange": true
+            }
+          },
+          {
+            "reading": 340,
+            "ordinary": {
+              "reference": 6000,
+              "inRange": true
+            },
+            "harness": {
+              "reference": 6000,
+              "inRange": true
+            }
+          },
+          {
+            "reading": 500,
+            "ordinary": {
+              "reference": 10000,
+              "inRange": true
+            },
+            "harness": {
+              "reference": 10000,
+              "inRange": true
+            }
+          },
+          {
+            "reading": 99,
+            "ordinary": {
+              "reference": -25,
+              "inRange": false
+            },
+            "harness": {
+              "reference": -25,
+              "inRange": false
+            }
+          }
+        ],
+        "numericalVerdict": "TIE",
+        "completeCostDecision": "Retain ordinary shared route; authored costs are 30000 versus 33000 CAD minor units.",
+        "actualComparativeTiming": "NOT MEASURED",
+        "modelComparison": "NOT TESTED"
+      },
+      "successor": {
+        "verdict": "PASSED IN SCOPE",
+        "comparisons": [
+          {
+            "case": 1,
+            "inherited": {
+              "verdict": "PASSED IN SCOPE",
+              "outputs": {
+                "reference": 3025,
+                "inRange": true
+              },
+              "operations": 48,
+              "scope": "Declared expressions executed; successful execution does not independently validate the instrument or real-world claims."
+            },
+            "noInheritance": {
+              "verdict": "PASSED IN SCOPE",
+              "outputs": {
+                "reference": 3025,
+                "inRange": true
+              },
+              "operations": 48,
+              "scope": "Declared expressions executed; successful execution does not independently validate the instrument or real-world claims."
+            },
+            "inheritedPassed": true,
+            "conventionalPassed": true,
+            "equalContentControl": true,
+            "equalPermissions": true,
+            "executionOperationDifference": 0
+          },
+          {
+            "case": 2,
+            "inherited": {
+              "verdict": "PASSED IN SCOPE",
+              "outputs": {
+                "reference": 9075,
+                "inRange": true
+              },
+              "operations": 48,
+              "scope": "Declared expressions executed; successful execution does not independently validate the instrument or real-world claims."
+            },
+            "noInheritance": {
+              "verdict": "PASSED IN SCOPE",
+              "outputs": {
+                "reference": 9075,
+                "inRange": true
+              },
+              "operations": 48,
+              "scope": "Declared expressions executed; successful execution does not independently validate the instrument or real-world claims."
+            },
+            "inheritedPassed": true,
+            "conventionalPassed": true,
+            "equalContentControl": true,
+            "equalPermissions": true,
+            "executionOperationDifference": 0
+          }
+        ],
+        "improvedOutcome": false,
+        "recursiveEnablingClaim": "NOT ESTABLISHED",
+        "discoveryProcedureImprovement": "NOT TESTED",
+        "acquisitionConstructionAndMaintenanceCost": "UNMEASURED",
+        "scope": "Fresh supplied cases with matched execution and equal-content ordinary reconstruction; passing reuse does not establish an advantage or better inventive intelligence."
+      },
+      "scope": "Executed numerical interpreter and conditional economics. Development confirmation is not independent acceptance. No physical, demand, novelty or superiority claim.",
+      "independentVerification": {
+        "verdict": "PASSED IN SCOPE",
+        "confirmationId": "independent-affine-heldout-1",
+        "preparedBy": "separate qualification agent",
+        "independence": "independently-prepared",
+        "scope": "Five preregistered synthetic in-range affine conversions; exact direct-algebra control; no physical calibration or superior discovery claim.",
+        "results": [
+          {
+            "case": 1,
+            "passed": true,
+            "input": {
+              "reading": 108
+            },
+            "expected": {
+              "reference": 200,
+              "inRange": true
+            },
+            "actual": {
+              "reference": 200,
+              "inRange": true
+            },
+            "issues": [],
+            "operations": 48
+          },
+          {
+            "case": 2,
+            "passed": true,
+            "input": {
+              "reading": 284
+            },
+            "expected": {
+              "reference": 4600,
+              "inRange": true
+            },
+            "actual": {
+              "reference": 4600,
+              "inRange": true
+            },
+            "issues": [],
+            "operations": 48
+          },
+          {
+            "case": 3,
+            "passed": true,
+            "input": {
+              "reading": 476
+            },
+            "expected": {
+              "reference": 9400,
+              "inRange": true
+            },
+            "actual": {
+              "reference": 9400,
+              "inRange": true
+            },
+            "issues": [],
+            "operations": 48
+          },
+          {
+            "case": 4,
+            "passed": true,
+            "input": {
+              "reading": 100
+            },
+            "expected": {
+              "reference": 0,
+              "inRange": true
+            },
+            "actual": {
+              "reference": 0,
+              "inRange": true
+            },
+            "issues": [],
+            "operations": 48
+          },
+          {
+            "case": 5,
+            "passed": true,
+            "input": {
+              "reading": 500
+            },
+            "expected": {
+              "reference": 10000,
+              "inRange": true
+            },
+            "actual": {
+              "reference": 10000,
+              "inRange": true
+            },
+            "issues": [],
+            "operations": 48
+          }
+        ],
+        "operations": 315,
+        "checkedAt": "2026-11-10T00:45:38.935Z",
+        "limitation": "Procedural evaluator separation in this application; not external certification. The declared author and independence require separate provenance checks."
+      },
+      "independentPlantedError": {
+        "verdict": "REJECTED",
+        "confirmationId": "independent-affine-heldout-1",
+        "preparedBy": "separate qualification agent",
+        "independence": "independently-prepared",
+        "scope": "Five preregistered synthetic in-range affine conversions; exact direct-algebra control; no physical calibration or superior discovery claim.",
+        "results": [
+          {
+            "case": 1,
+            "passed": false,
+            "input": {
+              "reading": 108
+            },
+            "expected": {
+              "reference": 200,
+              "inRange": true
+            },
+            "actual": {
+              "reference": 2700,
+              "inRange": true
+            },
+            "issues": [],
+            "operations": 42
+          },
+          {
+            "case": 2,
+            "passed": false,
+            "input": {
+              "reading": 284
+            },
+            "expected": {
+              "reference": 4600,
+              "inRange": true
+            },
+            "actual": {
+              "reference": 7100,
+              "inRange": true
+            },
+            "issues": [],
+            "operations": 42
+          },
+          {
+            "case": 3,
+            "passed": false,
+            "input": {
+              "reading": 476
+            },
+            "expected": {
+              "reference": 9400,
+              "inRange": true
+            },
+            "actual": {
+              "reference": 11900,
+              "inRange": true
+            },
+            "issues": [],
+            "operations": 42
+          },
+          {
+            "case": 4,
+            "passed": false,
+            "input": {
+              "reading": 100
+            },
+            "expected": {
+              "reference": 0,
+              "inRange": true
+            },
+            "actual": {
+              "reference": 2500,
+              "inRange": true
+            },
+            "issues": [],
+            "operations": 42
+          },
+          {
+            "case": 5,
+            "passed": false,
+            "input": {
+              "reading": 500
+            },
+            "expected": {
+              "reference": 10000,
+              "inRange": true
+            },
+            "actual": {
+              "reference": 12500,
+              "inRange": true
+            },
+            "issues": [],
+            "operations": 42
+          }
+        ],
+        "operations": 281,
+        "checkedAt": "2026-11-10T00:45:38.936Z",
+        "limitation": "Procedural evaluator separation in this application; not external certification. The declared author and independence require separate provenance checks."
+      },
+      "retainedCapabilityId": "capability-mw9yzf1v-utwzvrgn"
+    }
+  ],
+  "assumptions": [
+    "All sensor values, costs, benefits and outside options are synthetic teaching inputs.",
+    "The raw/reference relationship is assumed affine on [100,500]; two endpoints do not establish physical linearity, stability or uncertainty.",
+    "No actual customer, supplier quote, willingness to pay, funding receipt, contract or physical measurement is represented.",
+    "The proposal was authored by an included assistant from this objective during product development; it is not autonomous discovery by the application or evidence of scientific novelty.",
+    "Real sensor behavior, uncertainty, source authenticity, access rights, prices, participant preferences, funding timing and actual resource bills are unknown.",
+    "No actual multi-model comparison or measured AI-versus-human productivity result is supplied."
+  ],
+  "constraints": [
+    {
+      "kind": "hard",
+      "text": "Return the correct numerical conversion and an explicit in-range indicator."
+    },
+    {
+      "kind": "hard",
+      "text": "Every participant must meet its declared outside option; payments conserve and resource costs are counted once."
+    },
+    {
+      "kind": "method",
+      "text": "Each laboratory must own its own reference device."
+    },
+    {
+      "kind": "assumption",
+      "text": "Shared reference access and an affine conversion meet the real measurement quality requirements.",
+      "test": "Validate the model, units, drift, uncertainty and actual reference procedure on independently acquired physical data."
+    }
+  ],
+  "costs": {
+    "currency": "CAD",
+    "actualInferenceMinor": null,
+    "actualHostMinor": null,
+    "actualHumanMinutes": null
+  },
+  "privacy": {
+    "localOnly": true,
+    "telemetry": false
+  },
+  "demo": false,
+  "instrumentSpec": {
+    "name": "Portable affine calibration with explicit range flag",
+    "inputs": [
+      "reading"
+    ],
+    "outputs": {
+      "reference": {
+        "op": "mul",
+        "args": [
+          {
+            "op": "sub",
+            "args": [
+              {
+                "field": "reading"
+              },
+              100
+            ]
+          },
+          25
+        ]
+      },
+      "inRange": {
+        "op": "and",
+        "args": [
+          {
+            "op": "gte",
+            "args": [
+              {
+                "field": "reading"
+              },
+              100
+            ]
+          },
+          {
+            "op": "lte",
+            "args": [
+              {
+                "field": "reading"
+              },
+              500
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "instrumentInput": {
+    "reading": 340
+  },
+  "plantedInstrumentSpec": {
+    "name": "Planted offset omission",
+    "inputs": [
+      "reading"
+    ],
+    "outputs": {
+      "reference": {
+        "op": "mul",
+        "args": [
+          {
+            "field": "reading"
+          },
+          25
+        ]
+      },
+      "inRange": {
+        "op": "and",
+        "args": [
+          {
+            "op": "gte",
+            "args": [
+              {
+                "field": "reading"
+              },
+              100
+            ]
+          },
+          {
+            "op": "lte",
+            "args": [
+              {
+                "field": "reading"
+              },
+              500
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "confirmation": {
+    "id": "calibration-exposed-development-v1",
+    "preparedBy": "Customer mission author",
+    "independence": "development",
+    "scope": "Exact synthetic affine arithmetic plus range flag on exposed development values only.",
+    "cases": [
+      {
+        "input": {
+          "reading": 140
+        },
+        "expected": {
+          "reference": 1000,
+          "inRange": true
+        }
+      },
+      {
+        "input": {
+          "reading": 340
+        },
+        "expected": {
+          "reference": 6000,
+          "inRange": true
+        }
+      },
+      {
+        "input": {
+          "reading": 500
+        },
+        "expected": {
+          "reference": 10000,
+          "inRange": true
+        }
+      },
+      {
+        "input": {
+          "reading": 99
+        },
+        "expected": {
+          "reference": -25,
+          "inRange": false
+        }
+      }
+    ]
+  },
+  "freshCases": [
+    {
+      "input": {
+        "reading": 221
+      },
+      "expected": {
+        "reference": 3025,
+        "inRange": true
+      }
+    },
+    {
+      "input": {
+        "reading": 463
+      },
+      "expected": {
+        "reference": 9075,
+        "inRange": true
+      }
+    }
+  ],
+  "operatorCostBreakdown": [
+    {
+      "category": "inference",
+      "amountMinor": 2000,
+      "basis": "Synthetic model input; counted once in operator costMinor. Other is search; coordination is onboarding."
+    },
+    {
+      "category": "tools",
+      "amountMinor": 5000,
+      "basis": "Synthetic model input; counted once in operator costMinor. Other is search; coordination is onboarding."
+    },
+    {
+      "category": "compute",
+      "amountMinor": 2000,
+      "basis": "Synthetic model input; counted once in operator costMinor. Other is search; coordination is onboarding."
+    },
+    {
+      "category": "construction",
+      "amountMinor": 8000,
+      "basis": "Synthetic model input; counted once in operator costMinor. Other is search; coordination is onboarding."
+    },
+    {
+      "category": "verification",
+      "amountMinor": 4000,
+      "basis": "Synthetic model input; counted once in operator costMinor. Other is search; coordination is onboarding."
+    },
+    {
+      "category": "maintenance",
+      "amountMinor": 2000,
+      "basis": "Synthetic model input; counted once in operator costMinor. Other is search; coordination is onboarding."
+    },
+    {
+      "category": "failed-experiments",
+      "amountMinor": 3000,
+      "basis": "Synthetic model input; counted once in operator costMinor. Other is search; coordination is onboarding."
+    },
+    {
+      "category": "coordination",
+      "amountMinor": 2000,
+      "basis": "Synthetic model input; counted once in operator costMinor. Other is search; coordination is onboarding."
+    },
+    {
+      "category": "financing",
+      "amountMinor": 1000,
+      "basis": "Synthetic model input; counted once in operator costMinor. Other is search; coordination is onboarding."
+    },
+    {
+      "category": "support",
+      "amountMinor": 2000,
+      "basis": "Synthetic model input; counted once in operator costMinor. Other is search; coordination is onboarding."
+    },
+    {
+      "category": "other",
+      "amountMinor": 2000,
+      "basis": "Synthetic model input; counted once in operator costMinor. Other is search; coordination is onboarding."
+    }
+  ],
+  "arrangement": {
+    "currency": "CAD",
+    "participants": [
+      {
+        "id": "Lab A",
+        "benefitMinor": 60000,
+        "costMinor": 0,
+        "paymentMinor": 14000,
+        "outsideOptionMinor": 40000
+      },
+      {
+        "id": "Lab B",
+        "benefitMinor": 60000,
+        "costMinor": 0,
+        "paymentMinor": 14000,
+        "outsideOptionMinor": 40000
+      },
+      {
+        "id": "Lab C",
+        "benefitMinor": 60000,
+        "costMinor": 0,
+        "paymentMinor": 14000,
+        "outsideOptionMinor": 40000
+      },
+      {
+        "id": "Operator",
+        "benefitMinor": 0,
+        "costMinor": 33000,
+        "paymentMinor": -42000,
+        "outsideOptionMinor": 6000
+      }
+    ],
+    "costs": [
+      {
+        "id": "inference",
+        "category": "inference",
+        "amountMinor": 0,
+        "basis": "This category is included in operator costMinor; see operatorCostBreakdown. Zero here prevents double counting."
+      },
+      {
+        "id": "tools",
+        "category": "tools",
+        "amountMinor": 0,
+        "basis": "This category is included in operator costMinor; see operatorCostBreakdown. Zero here prevents double counting."
+      },
+      {
+        "id": "compute",
+        "category": "compute",
+        "amountMinor": 0,
+        "basis": "This category is included in operator costMinor; see operatorCostBreakdown. Zero here prevents double counting."
+      },
+      {
+        "id": "construction",
+        "category": "construction",
+        "amountMinor": 0,
+        "basis": "This category is included in operator costMinor; see operatorCostBreakdown. Zero here prevents double counting."
+      },
+      {
+        "id": "verification",
+        "category": "verification",
+        "amountMinor": 0,
+        "basis": "This category is included in operator costMinor; see operatorCostBreakdown. Zero here prevents double counting."
+      },
+      {
+        "id": "maintenance",
+        "category": "maintenance",
+        "amountMinor": 0,
+        "basis": "This category is included in operator costMinor; see operatorCostBreakdown. Zero here prevents double counting."
+      },
+      {
+        "id": "failed-experiments",
+        "category": "failed-experiments",
+        "amountMinor": 0,
+        "basis": "This category is included in operator costMinor; see operatorCostBreakdown. Zero here prevents double counting."
+      },
+      {
+        "id": "coordination",
+        "category": "coordination",
+        "amountMinor": 0,
+        "basis": "This category is included in operator costMinor; see operatorCostBreakdown. Zero here prevents double counting."
+      },
+      {
+        "id": "financing",
+        "category": "financing",
+        "amountMinor": 0,
+        "basis": "This category is included in operator costMinor; see operatorCostBreakdown. Zero here prevents double counting."
+      },
+      {
+        "id": "support",
+        "category": "support",
+        "amountMinor": 0,
+        "basis": "This category is included in operator costMinor; see operatorCostBreakdown. Zero here prevents double counting."
+      },
+      {
+        "id": "other",
+        "category": "other",
+        "amountMinor": 0,
+        "basis": "This category is included in operator costMinor; see operatorCostBreakdown. Zero here prevents double counting."
+      }
+    ],
+    "alternatives": [
+      {
+        "id": "ordinary-shared",
+        "name": "Ordinary shared reference plus direct algebra; same acceptance and permissions",
+        "totalCostMinor": 30000,
+        "feasible": true
+      },
+      {
+        "id": "separate",
+        "name": "Three separate external reference checks (authored price assumption)",
+        "totalCostMinor": 60000,
+        "feasible": true
+      },
+      {
+        "id": "non-entry",
+        "name": "Non-entry; preserves resources but does not achieve the requested comparison",
+        "totalCostMinor": 0,
+        "feasible": false
+      }
+    ],
+    "fundingAvailableMinor": 0
+  },
+  "availableCapabilities": [
+    "synthetic-calibration-evidence",
+    "voluntary-laboratories"
+  ],
+  "discoveryBudgetMinor": 50000,
+  "workflowSpec": {
+    "name": "Construct, run and check complete calibration arrangement",
+    "inputs": [
+      "spec",
+      "measurement",
+      "arrangement"
+    ],
+    "effects": [],
+    "budget": {
+      "maxOperations": 5000
+    },
+    "steps": [
+      {
+        "id": "instrument",
+        "op": "construct",
+        "dependsOn": [
+          "spec"
+        ],
+        "args": {
+          "$ref": "spec"
+        }
+      },
+      {
+        "id": "reading",
+        "op": "execute",
+        "dependsOn": [
+          "instrument",
+          "measurement"
+        ],
+        "args": {
+          "instrument": {
+            "$ref": "instrument"
+          },
+          "input": {
+            "$ref": "measurement"
+          }
+        }
+      },
+      {
+        "id": "economics",
+        "op": "economics",
+        "dependsOn": [
+          "arrangement"
+        ],
+        "args": {
+          "$ref": "arrangement"
+        }
+      }
+    ],
+    "outputs": [
+      "reading",
+      "economics"
+    ]
+  },
+  "reproduction": {
+    "nodeCommand": "node --test tests/acceptance.test.cjs",
+    "independentConfirmationCommitment": "c3c7902ee8a2891e553312d20308466b94d0cba6b7aaa27417ef3b34ff66c776",
+    "independentConfirmationStatus": "Executed by separate qualification agent before revealing five confirmation cases: correct instrument PASSED IN SCOPE; planted offset omission REJECTED. Cases are now exposed regression evidence, not a fresh future holdout.",
+    "foundation": {
+      "section": "11 (printed p18), 12.1 (printed p19)",
+      "sourceRevision": "3ccf23595c65f8a85b1e69391820463a2d72d5e8",
+      "sourceSha256": "180eb477cbb212f89b613bc40f47f70fb2bbc7f13cf1ffca6c16a8440a0b5a2e"
+    },
+    "retentionStatus": "Version1 record retained from a bound verifier receipt using independently prepared cases. Saved/imported current verification is UNKNOWN pending revalidation.",
+    "implementationLesson": "The registry correctly rejected a source ID passed as a capability dependency. Source provenance is recorded separately; dependencies name retained capabilities only."
+  }
+}

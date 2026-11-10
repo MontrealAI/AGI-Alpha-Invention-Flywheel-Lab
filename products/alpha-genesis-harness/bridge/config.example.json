@@ -1,0 +1,38 @@
+{
+  "session_budget_usd": 0,
+  "allow_paid_requests": false,
+  "timeout_seconds": 60,
+  "max_attempts": 1,
+  "max_concurrent_requests": 2,
+  "providers": {
+    "ollama": {
+      "kind": "ollama",
+      "label": "Local Ollama",
+      "base_url": "http://127.0.0.1:11434",
+      "models": {}
+    },
+    "openai-compatible": {
+      "kind": "openai",
+      "label": "OpenAI-compatible API",
+      "base_url": "https://api.openai.com/v1",
+      "key_env": "HARNESS_OPENAI_API_KEY",
+      "output_limit_field": "max_completion_tokens",
+      "models": {}
+    },
+    "anthropic": {
+      "kind": "anthropic",
+      "label": "Anthropic API",
+      "base_url": "https://api.anthropic.com/v1",
+      "api_version": "2026-10-21",
+      "key_env": "HARNESS_ANTHROPIC_API_KEY",
+      "models": {}
+    },
+    "gemini": {
+      "kind": "gemini",
+      "label": "Google Gemini API",
+      "base_url": "https://generativelanguage.googleapis.com/v1beta",
+      "key_env": "HARNESS_GEMINI_API_KEY",
+      "models": {}
+    }
+  }
+}
