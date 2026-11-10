@@ -75,12 +75,16 @@
   function renderMechanisms(){const box=$('mechanism-list');clear(box);const raw=E.MECHANISMS||[];const mechanisms=Array.isArray(raw)?raw:Object.entries(raw).map(([id,x])=>typeof x==='string'?{id,name:x}:{id,...x});mechanisms.forEach(m=>{const id=typeof m==='string'?m:m.id||m.name;const namesFR={'structural-transfer':'Transfert de structure','adversarial-discovery':'Examen contradictoire','meta-strategy':'Construction de stratégie','reframing':'Recadrage transformationnel','instrument':'Construction d’instrument','uncertainty':'Incertitude ouverte','composition':'Composition de mécanismes','abstraction':'Abstraction générative','recursion':'Comparaison du successeur'};const name=language==='fr'&&namesFR[id]?namesFR[id]:typeof m==='string'?m:m.name||m.label||m.id;const button=el('button','mechanism-button'+(list(project.selectedMechanisms).includes(id)?' active':''),name);button.setAttribute('aria-pressed',list(project.selectedMechanisms).includes(id)?'true':'false');button.addEventListener('click',()=>{const selected=new Set(list(project.selectedMechanisms));if(selected.has(id))selected.delete(id);else selected.add(id);project.selectedMechanisms=[...selected];markDirty();renderMechanisms();refreshPrompt();notify(t('Investigation lens updated in the mission brief.','Perspective mise à jour dans le mandat.'));});append(box,button);});}
   function renderExperiment(){
     const has=!!project.instrumentSpec;
+    const hasOther=!!project.arrangement||!!project.workflowSpec||!!project.workflow;
     $('experiment-empty').classList.toggle('hidden',has);
-    $('experiment-workspace').classList.toggle('hidden',!has);
-    if(!has)return;
+    $('experiment-workspace').classList.toggle('hidden',!(has||hasOther));
+    $('instrument-spec').closest('.panel').classList.toggle('hidden',!has);
+    $('workflow-input').closest('details').classList.toggle('hidden',!has&&!project.workflowSpec&&!project.workflow);
+    if(!has&&!hasOther)return;
     $('arrangement-input').value=json(project.arrangement||{});
-    $('instrument-spec').value=json(project.instrumentSpec);
     renderEconomicEditor();
+    if(has){
+      $('instrument-spec').value=json(project.instrumentSpec);
     const box=$('instrument-description');clear(box);
     append(box,el('h3','',project.instrumentSpec.name||t('Bounded arithmetic instrument','Instrument de calcul borné')),el('p','subtle',project.instrumentSpec.description||t('Construct and execute the declared expression. Compare against separately supplied confirmation cases.','Construire et exécuter l’expression déclarée. Comparer aux cas de confirmation fournis séparément.')));
     if(project.demo||project.uiDemoLoaded||project.synthetic)append(box,el('p','inline-note',t('Synthetic demonstration. Arithmetic validity does not establish customer demand or physical feasibility.','Démonstration synthétique. La validité des calculs ne prouve ni la demande ni la faisabilité physique.')));
@@ -99,9 +103,10 @@
     });
     const budgetLabel=el('label','',t('Instrument execution operation budget','Budget d’opérations pour l’exécution de l’instrument'));budgetLabel.htmlFor='instrument-budget';
     const budgetInput=el('input');budgetInput.id='instrument-budget';budgetInput.type='number';budgetInput.min='1';budgetInput.step='1';budgetInput.value=String(project.operationBudget||100000);append(fields,budgetLabel,budgetInput,el('p','bounded-details',t('This limit applies to the selected instrument execution. Confirmation and the demonstration’s other checks have separate bounded evaluations. A custom workflow has its own cumulative operation budget.','Cette limite s’applique à l’exécution de l’instrument choisi. Les confirmations et autres contrôles de la démonstration ont des évaluations bornées distinctes. Une procédure personnalisée a son propre budget cumulatif.')));
-    const defaultWorkflow={name:'Construct and execute this instrument',inputs:['data'],effects:[],budget:{maxOperations:100000},steps:[{id:'instrument',op:'construct',dependsOn:[],args:project.instrumentSpec},{id:'result',op:'execute',dependsOn:['instrument','data'],args:{instrument:{$ref:'instrument'},input:{$ref:'data'}}}],outputs:['result']};
+    }
+    const defaultWorkflow=has?{name:'Construct and execute this instrument',inputs:['data'],effects:[],budget:{maxOperations:100000},steps:[{id:'instrument',op:'construct',dependsOn:[],args:project.instrumentSpec},{id:'result',op:'execute',dependsOn:['instrument','data'],args:{instrument:{$ref:'instrument'},input:{$ref:'data'}}}],outputs:['result']}:{};
     $('workflow-input').value=json(project.workflowSpec||project.workflow||defaultWorkflow);
-    $('workflow-data').value=json(project.workflowInputs||{data:project.instrumentInput});
+    $('workflow-data').value=json(project.workflowInputs||(has?{data:project.instrumentInput}:{}));
     renderLastResult();
   }
   function readInstrumentField(input){
