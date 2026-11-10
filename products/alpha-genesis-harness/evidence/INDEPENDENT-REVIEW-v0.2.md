@@ -32,6 +32,9 @@ The reviewer reported these concrete defects to their implementation owners; imp
 | Codex resume concurrency | Reading a checkpoint before acquiring its exclusive lock could replay an attempt committed concurrently. | A deterministic concurrent-commit regression confirms the locked checkpoint is read before accepting a new attempt. |
 | Codex sign-out race | The final account check released its lock before launching the child, allowing a launch with old credentials after sign-out finished. | Final identity check and process launch share the authorization lock. A deterministic lock-release schedule confirms no launch after completed invalidation. |
 | Codex persisted configuration | The runtime directory lived inside the agent's writable workspace and could be changed before continuation. | The runtime directory is a protected sibling outside every per-run write grant, with its exact location bound by the signed checkpoint. |
+| Action-budget exhaustion | A refused excess action skipped frozen verification and required criticism after earlier durable work; a repair could retain a stale pass. | Remaining actions are refused, then current artifact bytes are checked and reviewed. Valid within-budget work can finish; an invalid replacement cannot inherit the earlier pass. |
+| Parallel cost evidence | Parent capabilities omitted costs because model requests were recorded only in child histories. | Parent evidence aggregates each attempted branch request, including failed, interrupted and late responses, without charging the runtime budget a second time. |
+| Branch initialization interruption | A child's first checkpoint was saved before parent ownership and registration, allowing an ungoverned orphan after interruption. | Parent identities and allocations are reserved first; the first child checkpoint records ownership. Interrupted initialization resumes the same child identity and allocation. |
 
 The original partial or malformed outcomes are not promoted into passes. Fixed-source checks are reported below.
 
@@ -43,7 +46,7 @@ Command from repository root:
 python3 -m unittest discover -s products/alpha-genesis-harness/tests -p 'test_independent_*.py' -q
 ```
 
-**53 tests passed in 2.332 seconds**, with no skips, on the integrated working source reviewed in this session: 32 general boundary regressions, 15 Codex continuation/profile regressions, and 6 source-tool regressions. The source-bound release qualification must rerun the suite on the exact packaged bytes; this review is not a substitute for that receipt.
+**74 tests passed in 2.583 seconds**, with no skips, on the integrated working source reviewed in this session: 32 general boundary regressions, 15 Codex continuation/profile regressions, 6 source-tool regressions, 18 strategy executor regressions and 3 paired-retrieval regressions. The source-bound release qualification must rerun the suite on the exact packaged bytes; this review is not a substitute for that receipt.
 
 The suite also exercises one-character credential fragmentation across streaming callbacks, transmitted tool-schema budget refusal before dispatch, unsolicited tool refusal, interrupted stream rejection, disabled connection with no transport, incorrect OAuth state with no code exchange, credential-file symlink refusal, caller mutation of frozen acceptance, forged model verification refusal, artifact tampering before reuse/export, cancellation followed by a late proposal, foreign-origin HTTP rejection, and an actual loopback ZIP download containing only the verified artifact bytes and a portable workflow record.
 
@@ -51,17 +54,43 @@ The HTTP follow-up accepts a portable workflow larger than 1 MiB through its exp
 
 Every workflow response in these adversarial tests is explicitly supplied by a fixture. This demonstrates enforcement and executable workflow behavior, not real-model autonomy, current frontier model quality or a new discovery advantage. Separate model invocations do not make their judgments independent empirical evidence. Document acceptance checks remain structural. Real authentication, remote quota behavior, operating-system protections and commercial authorization require their separately stated live checks.
 
+## Strategy follow-up
+
+The strategy regressions check isolated branch artifacts, deterministic accepted-branch selection, fixed sums of iteration/action allocations and a model-call cap that includes critic, adversary, economist and researcher overhead. Internal child IDs cannot be dispatched directly through public step/start/resume operations. Adaptive success does not activate alternatives; an actual recorded failure is retained when the registered topology changes, with the original providers, permissions and acceptance unchanged.
+
+The monetary test uses the real `Runtime` and atomic `Budget` with an authored local sender. Two branches attempt reservations while the first response is held; the shared balance permits exactly one request to dispatch. The accepted response is accounted once and all reservations are released. This is a synthetic price/usage test with no paid request. Cancellation discards both late branch proposals. Pause, service reopen and explicit resume preserve the original branch IDs and consumed attempts. A checkpoint-boundary interruption during branch initialization cannot expose a standalone child or create a second allocation on recovery. Rehashed child imports cannot enlarge the frozen parent contract, imported branches remain paused and unverified, and corrupt inherited bytes are refused before dispatch.
+
+Adversarial cases are adjudicated against the operator-frozen reference or original case. A model's invented expected value cannot override that reference; an actual counterexample invalidates an initial pass. Claims without a reference stop for review and do not register a capability. The operator reference remains an explicit assumption outside its supplied checks.
+
+The paired driver was independently rerun and its recorded source hashes match the reviewed files. Both arms use equal two-call/two-action budgets, the same objective, initial context and structural acceptance, with isolated artifacts and only the retrieval permission differing. The control honestly abstains; the treatment resolves the synthetic source value. Changing the source coefficient changes the observed answer, and a missing ground-truth coefficient is refused before creating an experiment. A deterministic reader also resolves the same fact with zero model calls. This qualifies information access and evidence handling, not research superiority, live retrieval or an economic advantage.
+
+## Credential portability and CI follow-up
+
+The credential reader now uses a zero fallback when the host lacks `os.O_NONBLOCK`, while retaining regular-file and applicable owner-permission checks. The separate 13-test ChatGPT suite passed in 0.122 seconds, including simulated absence of that Unix flag. This Linux-host test does not qualify Windows authentication, DPAPI behavior, installation or credential protection on an actual Windows machine.
+
+CI/browser review corrected a fixed-port false-pass risk: the replay now waits for its own child to announce an ephemeral loopback origin and confirms an HTTP 200 response and a live child. Chrome/Chromium lookup, startup errors and child cleanup are explicit. Failure receipts and available screenshots, including native Codex probe results, are retained by the unconditional evidence-upload step. Syntax, YAML and package/lock consistency checks passed; the lock integrity encodings were checked, not freshly authenticated against remote tarballs. Three local negative-path exercises preserved failure receipts and stopped their child: missing Python, a ready connector followed by a missing browser, and actual Chromium fallback blocked by host socket permissions. Later keyboard, save/reload, portable JSON import, disabled Codex and offline-file checks were read in the current replay; their graphical execution requires source-matched hosted receipts. This review adds no macOS, Windows or final-source browser PASS claim.
+
+The subsequent macOS/Windows CI addition selects exactly one native executable from the locked platform-specific Codex package and runs the existing probe without authentication or model calls. Its receipt must agree with its exit code (`0`/`PASS` or `2`/`BLOCKED`), declare zero inference calls and no real credentials, and records the source, archive digest and host. Raw output is preserved, and release publication depends on both platform jobs. A blocked native sandbox remains explicitly blocked even when the evidence-recording step succeeds.
+
+This follow-up reproduced and corrected a qualifier false-pass: assigning PASS before parsing the browser receipt left PASS/exit zero after a JSON error. The qualifier now validates browser status, exact source, host-platform mapping and empty error list before assigning PASS; exceptions force FAIL. Seven synthetic subprocess scenarios were exercised: malformed receipt, wrong source, wrong status and wrong platform all failed, while valid Linux/Windows/macOS platform-name mappings passed. These simulations test receipt validation, not operation on those operating systems. Actual platform qualification still requires the corresponding hosted receipt.
+
 ## Follow-up source identities
 
 The final focused run above observed these SHA-256 identities. Later edits require the release qualification to rerun the relevant checks.
 
 | File | SHA-256 |
 |---|---|
+| `bridge/chatgpt.py` | `70b9dde0531090612fe9de41247af2a6fdb4386ec560b457f329118b59f316c6` |
 | `bridge/codex.py` | `37ed92af69ea0458321d64d851659113402f11a61880e120f52e79d903ff2ca7` |
 | `bridge/codex_permissions.py` | `0b92a29817d761bb13994ca4a62c1b825e0d7f44712d2b88e0eecbc89319b578` |
-| `bridge/workflows.py` | `9c40337f4a0e61bea5f5a5bdefe77602cc3021339782f7c0fc5aa806142f9bd6` |
+| `bridge/workflows.py` | `098410d3b410383ed17ffc60e14deb55ac26a45546b6b71d5a0311713538462d` |
+| `bridge/workflow_strategies.py` | `f995a052f7b3d6ad6a6017665138d051c6d5df65a2155ae81a987156a6541a06` |
+| `bridge/strategy_demo.py` | `85881056d8b1b0c1e8e597bec95387d23b94ba48de8a62ed1650196ab36b9a30` |
 | `bridge/server.py` | `6062338ae27ad8187c6c50c2ccb75c0e1ce76e2959b07f6600e5fe2ab25acb34` |
 | `bridge/services.py` | `fed69688610d2d8045d7fa95eb1c15eebea8f62ee8ccfed2920cf1dc6a67c0c6` |
+| `evidence/UI_BROWSER_REPLAY.cjs` | `3d5909b7dffac331549ae2c8cb9ea7f8a30021bb0087f803523d3c01aa12e5d0` |
+| `scripts/qualify_platform.py` | `4edbdd3ab27cf8c2d84ee8e5d67bb5183cd674a2657497cda37983da3a4cf647` |
+| `.github/workflows/alpha-genesis-harness.yml` (repository root) | `467bb4992be7d89a9a524a3056a641319ae432257ed238d25b8ef44ad6cf0be5` |
 
 ## Interruption reproduction details
 

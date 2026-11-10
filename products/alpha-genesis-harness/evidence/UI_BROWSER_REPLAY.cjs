@@ -1,31 +1,74 @@
 /* SPDX-License-Identifier: Apache-2.0 */
-// Graphical Linux browser verification. No external models, authentication or user files.
+// Graphical host-OS browser verification. No external models, authentication or user files.
 const { chromium } = require('playwright-core');
 const fs = require('node:fs');
 const path = require('node:path');
 const { spawn, execFileSync } = require('node:child_process');
 const assert = require('node:assert/strict');
 const os = require('node:os');
+const { pathToFileURL } = require('node:url');
+
+function findBrowser() {
+  if (process.env.CHROME_BIN) {
+    fs.accessSync(process.env.CHROME_BIN, fs.constants.X_OK);
+    return process.env.CHROME_BIN;
+  }
+  for (const name of ['google-chrome', 'google-chrome-stable', 'chromium', 'chromium-browser']) {
+    try { return execFileSync('which', [name], { stdio: ['ignore', 'pipe', 'ignore'] }).toString().trim(); }
+    catch (_) { /* Try the next installed browser name. */ }
+  }
+  throw Error('Install Chrome/Chromium or set CHROME_BIN to its executable.');
+}
 
 (async () => {
   const product = path.resolve(__dirname, '..');
   const output = path.resolve(process.env.HARNESS_SCREENSHOT_DIR || path.join(os.tmpdir(), 'harness-visual'));
   fs.mkdirSync(output, { recursive: true });
   const temporary = fs.mkdtempSync(path.join(os.tmpdir(), 'harness-visual-work-'));
-  const server = spawn(process.env.PYTHON || 'python3', [path.join(product, 'bridge/server.py'), '--port', '18765', '--no-browser', '--workspace', path.join(temporary, 'work')], { stdio: 'ignore' });
-  let browser;
+  const server = spawn(process.env.PYTHON || 'python3', ['-u', path.join(product, 'launch.py'), '--port', '0', '--no-browser', '--workspace', path.join(temporary, 'work')], { stdio: ['ignore', 'pipe', 'pipe'] });
+  let browser, page, origin, serverError, serverStderr = '';
+  server.on('error', error => { serverError = error; });
+  server.stderr.on('data', chunk => { serverStderr = (serverStderr + chunk.toString()).slice(-16000); });
+  const ready = new Promise((resolve, reject) => {
+    let stdout = '';
+    const finish = (error, address) => {
+      clearTimeout(timer);
+      server.stdout.off('data', onData);
+      server.off('error', onError);
+      server.off('exit', onExit);
+      if (error) reject(error); else resolve(address);
+    };
+    const onData = chunk => {
+      stdout = (stdout + chunk.toString()).slice(-16000);
+      const match = stdout.match(/^ALPHA GENESIS HARNESS: (http:\/\/127\.0\.0\.1:\d+)\r?$/m);
+      if (match) finish(null, match[1]);
+    };
+    const onError = error => finish(error);
+    const onExit = (code, signal) => finish(Error(`Connector exited before readiness (${code ?? signal}): ${serverStderr}`));
+    const timer = setTimeout(() => finish(Error('Connector did not announce readiness: ' + serverStderr)), 10000);
+    server.stdout.on('data', onData);
+    server.once('error', onError);
+    server.once('exit', onExit);
+  });
   const errors = [], checks = [], screenshots = [];
   try {
-    const executablePath = process.env.CHROME_BIN || execFileSync('which', ['google-chrome']).toString().trim();
+    // The child announces its own ephemeral port. A stale listener cannot be
+    // mistaken for the source under test merely because a fixed port is open.
+    origin = await ready;
+    checks.push('spawned connector announced its own loopback origin');
+    const executablePath = findBrowser();
     browser = await chromium.launch({ executablePath, headless: true, args: ['--no-sandbox'] });
-    const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
+    page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
     page.on('pageerror', error => errors.push(error.message));
-    for (let i = 0; ; i++) {
-      try { await page.goto('http://127.0.0.1:18765'); break; }
-      catch (error) { if (i >= 20) throw error; await new Promise(resolve => setTimeout(resolve, 100)); }
-    }
+    const response = await page.goto(origin);
+    assert.equal(response.status(), 200);
     const shot = async name => { await page.screenshot({ path: path.join(output, name), fullPage: true }); screenshots.push(name); };
     await page.locator('#start-mission').waitFor();
+    await page.keyboard.press('Tab');
+    assert.equal(await page.locator('.skip-link').evaluate(element => element === document.activeElement), true);
+    await page.keyboard.press('Enter');
+    assert.equal(new URL(page.url()).hash, '#main');
+    checks.push('keyboard skip link reaches workspace');
     await shot('HARNESS-01-start-en.png');
     checks.push('first-run rendered');
     await page.locator('#start-genesis-next').click();
@@ -72,9 +115,35 @@ const os = require('node:os');
     assert.match(await page.locator('#experiment-result').textContent(), /Planted cost omission detected/);
     await shot('HARNESS-03-construction-en.png');
     checks.push('synthetic instrument executed in real browser');
+    await page.locator('#codex-panel > summary').click();
+    const codexStatusResponse = page.waitForResponse(response => response.url().endsWith('/api/codex/status') && response.status() === 200);
+    await page.locator('#codex-refresh').click();
+    const codexStatus = await (await codexStatusResponse).json();
+    assert.equal(codexStatus.enabled, false);
+    await page.waitForFunction(reason => document.querySelector('#codex-status')?.textContent?.includes(reason), codexStatus.reason);
+    assert.equal(await page.locator('#codex-run').isEnabled(), false);
+    await page.locator('#codex-panel').screenshot({ path: path.join(output, 'HARNESS-07-codex-en.png') });
+    screenshots.push('HARNESS-07-codex-en.png');
+    checks.push('separate Codex engineering path displays actual disabled authorization status');
+    await page.locator('#codex-panel > summary').click();
     await page.locator('[data-view="verification"]').click();
     assert.match(await page.locator('#verification-list').textContent(), /PASSED IN SCOPE/);
     await shot('HARNESS-04-verification-en.png');
+    await page.locator('#save-project').click();
+    const projectName = await page.locator('#project-name').textContent();
+    const downloaded = page.waitForEvent('download');
+    await page.locator('#export-project').click();
+    const exported = path.join(temporary, 'portable-project.harness.json');
+    await (await downloaded).saveAs(exported);
+    assert.ok(fs.statSync(exported).size > 100);
+    await page.reload();
+    assert.equal(await page.locator('#project-name').textContent(), projectName);
+    await page.evaluate(() => localStorage.clear());
+    await page.reload();
+    assert.notEqual(await page.locator('#project-name').textContent(), projectName);
+    await page.locator('#project-file').setInputFiles(exported);
+    await page.waitForFunction(name => document.querySelector('#project-name').textContent === name, projectName);
+    checks.push('saved project survives reload; downloaded JSON reopens in fresh browser storage');
     await page.locator('#language-toggle').click();
     assert.equal(await page.locator('html').getAttribute('lang'), 'fr');
     await page.locator('[data-view="start"]').click();
@@ -86,6 +155,7 @@ const os = require('node:os');
     assert.ok(widths.content <= widths.viewport + 2, JSON.stringify(widths));
     checks.push('390px responsive layout without page overflow');
     await page.locator('[data-view="genesis-next"]').click();
+    await page.locator('#omega-refresh').click();
     await page.waitForFunction(() => document.querySelector('#omega-results')?.textContent?.includes('NO_SUPERIORITY_ESTABLISHED'));
     await shot('HARNESS-09-genesis-next-mobile-fr.png');
     const omegaWidths = await page.evaluate(() => ({ viewport: innerWidth, content: document.documentElement.scrollWidth }));
@@ -93,15 +163,46 @@ const os = require('node:os');
     assert.match(await page.locator('#omega-title').textContent(), /Inventez/);
     checks.push('GENESIS NEXT French mobile results without page overflow');
 
+    const offlineContext = await browser.newContext({ viewport: { width: 1440, height: 1000 } });
+    try {
+      const offline = await offlineContext.newPage();
+      const networkRequests = [];
+      offline.on('pageerror', error => errors.push(error.message));
+      offline.on('request', request => { if (/^https?:/.test(request.url())) networkRequests.push(request.url()); });
+      await offline.goto(pathToFileURL(path.join(product, 'START-HERE.html')).href);
+      await offline.locator('a[href="app/index.html"]').click();
+      await offline.locator('#load-demo').click();
+      await offline.locator('[data-view="experiment"]').click();
+      await offline.locator('#run-experiment').click();
+      await offline.waitForFunction(() => !document.querySelector('#run-experiment').disabled && document.querySelector('#experiment-result')?.textContent?.includes('PASSED IN SCOPE'));
+      assert.equal(await offline.locator('#experiment-result .metric-value').first().textContent(), '42500');
+      assert.deepEqual(networkRequests, []);
+      checks.push('START-HERE opens local files; offline experiment completes without any HTTP requests');
+    } finally { await offlineContext.close(); }
     assert.deepEqual(errors, []);
-    fs.writeFileSync(path.join(output, 'BROWSER-VERIFICATION.json'), JSON.stringify({ status: 'PASS', source_revision: process.env.EXPECTED_SOURCE || null, browser: await browser.version(), platform: process.platform, checks, screenshots, errors, scope: 'Linux Chromium graphical checks; no live model or other OS qualification.' }, null, 2));
+    assert.equal(serverError, undefined);
+    assert.equal(server.exitCode, null);
+    assert.equal(server.signalCode, null);
+    fs.writeFileSync(path.join(output, 'BROWSER-VERIFICATION.json'), JSON.stringify({ status: 'PASS', source_revision: process.env.EXPECTED_SOURCE || null, origin, browser: await browser.version(), platform: process.platform, checks, screenshots, errors, scope: 'Headless graphical checks on the recorded host OS, including runnable source launcher and offline files. No live model, signed installer, Finder/Explorer double-click or other OS qualification.' }, null, 2));
     console.log(JSON.stringify({ status: 'PASS', checks, screenshots }));
   } catch (error) {
-    fs.writeFileSync(path.join(output, 'BROWSER-VERIFICATION.json'), JSON.stringify({ status: 'FAIL', checks, screenshots, errors, failure: error.message }, null, 2));
+    if (page && !page.isClosed()) {
+      try { await page.screenshot({ path: path.join(output, 'HARNESS-FAILURE.png'), fullPage: true }); screenshots.push('HARNESS-FAILURE.png'); }
+      catch (_) { /* Preserve the original failure even if rendering stopped. */ }
+    }
+    fs.writeFileSync(path.join(output, 'BROWSER-VERIFICATION.json'), JSON.stringify({ status: 'FAIL', source_revision: process.env.EXPECTED_SOURCE || null, origin, checks, screenshots, errors, server_stderr: serverStderr, failure: error.message }, null, 2));
     throw error;
   } finally {
-    if (browser) await browser.close();
-    server.kill('SIGTERM');
-    fs.rmSync(temporary, { recursive: true, force: true });
+    try { if (browser) await browser.close(); }
+    finally {
+      if (server.pid && server.exitCode === null && server.signalCode === null) {
+        await new Promise(resolve => {
+          const timer = setTimeout(() => server.kill('SIGKILL'), 3000);
+          server.once('exit', () => { clearTimeout(timer); resolve(); });
+          server.kill('SIGTERM');
+        });
+      }
+      fs.rmSync(temporary, { recursive: true, force: true });
+    }
   }
 })().catch(error => { console.error(error.message); process.exitCode = 1; });

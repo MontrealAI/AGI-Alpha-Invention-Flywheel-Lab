@@ -44,7 +44,7 @@ Keep the exact archive, public digest and release receipt for each sold version.
 
 ## Operate the exact archive with UI integration checks
 
-The qualifier extracts the verified immutable ZIP into a fresh temporary directory and runs its JavaScript acceptance tests, every Python component test, launcher help, the Linux source-launcher entry point where available, workflow construction, the Ω GENESIS NEXT experiment and a separately frozen fresh-instance successor comparison. The workflow demonstration has authored model responses; it is not live inference. The Ω experiment constructs an authored bounded source modification and measures actual checker operations. Neither demonstration establishes autonomous scientific discovery.
+The qualifier extracts the verified immutable ZIP into a fresh temporary directory and runs its JavaScript acceptance tests, every Python component test, launcher help, the Linux source-launcher entry point where available, workflow construction, the paired source-acquisition fixture, the Ω GENESIS NEXT experiment and a separately frozen fresh-instance successor comparison. The workflow demonstration has authored model responses; it is not live inference. The Ω experiment constructs an authored bounded source modification and measures actual checker operations. Neither demonstration establishes autonomous scientific discovery.
 
 For the complete DOM/HTTP integration gate, install the development-only dependency from the committed `tests/dom/package-lock.json` using `npm ci --ignore-scripts --no-audit --no-fund` in that directory. Pass its absolute `node_modules` directory explicitly:
 
@@ -58,6 +58,26 @@ python3 scripts/qualify_archive.py /absolute/release.zip \
 
 The qualifier checks the installed jsdom version against the packaged requirement and runs all six UI replays against the extracted application. The HTTP replay starts the actual connector and workflow engine with authored model fixtures. Credentials are not inherited. Omitting `--dom-modules` leaves this UI criterion explicitly **NOT TESTED**. DOM emulation does not replace actual rendered-browser, assistive-technology or cross-OS testing.
 
+## Read the actual platform reports
+
+The hosted release workflow can run `scripts/qualify_platform.py` on actual macOS and Windows hosts against the **same** source-bound archive. Published `PLATFORM-Darwin-VERIFICATION.json` and `PLATFORM-Windows-VERIFICATION.json` identify the source commit, whole-archive SHA-256, host and operation outcomes. The corresponding screenshots use `Darwin-HARNESS-` and `Windows-HARNESS-` prefixes.
+
+Check that those identities match the downloaded customer archive and read the recorded status. These reports cover the JavaScript engine tests, native launcher help, Python loopback startup and headless browser first use on the named host. They exclude the complete cross-platform Python/security suite, live authenticated model calls, signed installers and Finder/Explorer double-click. A configured CI job is not a passing result; missing or failed reports leave that scope unverified. Repeated JavaScript tests are **per-platform executions**, not additional unique tests.
+
 ### Français
 
 Le qualificateur vérifie le ZIP exact, l’extrait dans un dossier neuf et exécute ses tests, son lanceur et la démonstration de construction. L’option `--dom-modules` ajoute les six scénarios d’interface sur les octets extraits, avec la version jsdom déclarée. Le scénario HTTP utilise le vrai connecteur et le moteur, mais des réponses de modèles préparées. Sans cette option, le critère d’interface reste explicitement non testé. Ces contrôles ne remplacent pas les essais graphiques et multiplateformes.
+
+Les rapports `PLATFORM-Darwin-VERIFICATION.json` et `PLATFORM-Windows-VERIFICATION.json`, lorsqu'ils sont publiés, documentent l'exécution du même ZIP sur des hôtes macOS et Windows réels. Vérifiez la source, l'empreinte, l'hôte et le résultat. Le périmètre couvre JavaScript, l'aide du lanceur natif, le démarrage Python local et le premier parcours dans un navigateur sans fenêtre; il exclut la suite Python/sécurité complète, les modèles authentifiés, les installateurs signés et le double-clic Finder/Explorer. Les captures portent le préfixe du système. Une tâche CI prévue ne prouve pas sa réussite. Les tests répétés sur plusieurs systèmes sont comptés par plateforme, sans addition en tant que tests uniques.
+
+## Mandatory GENESIS self-improvement evidence
+
+The 0.3 edition’s principal example is the HARNESS improving its own bounded acceptance process. Keep the source-generated candidate, baseline/candidate/competent ordinary controls, and the different successor comparison together. A quote or arithmetic instrument is an additional example and cannot replace this GENESIS requirement.
+
+The exact-archive operation preserves `OMEGA-DEMONSTRATION.json`, `OMEGA-FRESH-SOURCE-FREEZE.json` and `OMEGA-FRESH-SUCCESSOR.json`. The first receipt contains the actual constructed candidate source and all comparison arms. The separately frozen successor receipt retains the post-freeze nonce, exact initial/successor instances, per-case decisions, acquisition and successor checks, and the inheritance-withdrawn arm. Preserve these raw records, not only a favorable summary. Historical embedded Ω receipts remain tied to their original source; fresh final-source operation is required for the released edition.
+
+The release reconciler uses actual matching operation receipts to generate the final JSON/Markdown matrix and the 22-category owner handoff. Correctness and bounded reuse may pass while the complete-cost advantage remains failed or unestablished. The built-in construction recipe is authored; arbitrary autonomous self-improvement, live frontier-change reproduction and actual commercial success remain separate unmet criteria. See [the Ω walkthrough](OMEGA-GENESIS-NEXT.md) and [the fixed successor protocol](../evidence/OMEGA-FRESH-SUCCESSOR-PROTOCOL.md).
+
+### Français — preuve GENESIS obligatoire
+
+L’exemple principal de la version 0.3 est l’amélioration limitée du HARNESS lui-même. Le candidat source réellement construit, les méthodes de référence et la tâche suivante doivent rester réunis avec les preuves brutes. Un instrument de devis demeure un exemple additionnel et ne remplace pas ce parcours GENESIS. Conservez le nonce tiré après gel, les cas exacts, les décisions et les coûts de vérification de chaque méthode. Une égalité avec la réutilisation conventionnelle ne devient pas un avantage scientifique ou économique. Les critères non satisfaits et les autorisations externes bloquées restent explicites.

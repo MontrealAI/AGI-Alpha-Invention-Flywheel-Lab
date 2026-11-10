@@ -1,9 +1,9 @@
 {
   "schema": "alpha-genesis-harness-qualification/v1",
   "product_version": "0.3.0",
-  "status": "CANDIDATE_NOT_COMMERCIALLY_QUALIFIED",
+  "status": "CANDIDATE_PENDING_EXACT_SOURCE_QUALIFICATION",
   "source_revision": null,
-  "scope": "The distribution manifest binds this record to packaged source. Local tests and authored protocol fixtures do not replace live authenticated provider, Pro, Codex, graphical OS or commercial authorization gates. Hosted exact-source receipts are reported separately.",
+  "scope": "Integrated 0.3 GENESIS NEXT candidate. Historical source-bound successes and negative outcomes are retained; they do not automatically qualify this merged source. GENESIS self-upgrade and separately frozen fresh-successor raw proof are mandatory. Quote construction is additional. Final exact-archive and hosted receipts may update only their explicit scopes; commercial and authenticated gates remain blocked.",
   "squarespace_execution": "EXCLUDED_BY_OWNER",
   "commercially_validated": false,
   "criteria": [
@@ -13,7 +13,7 @@
       "status": "NOT TESTED",
       "actual_test_or_required_procedure": "node --test tests/*.test.cjs; graphical first-use test",
       "evidence_location": "tests/acceptance.test.cjs",
-      "remaining_dependency_or_scope": "Final 0.3.0 source and graphical evidence"
+      "remaining_dependency_or_scope": "Final 0.2.0 source and graphical evidence"
     },
     {
       "id": "A2",
@@ -34,10 +34,12 @@
     {
       "id": "B2",
       "requirement": "Actual local LLM inference",
-      "status": "PASS",
+      "status": "NOT TESTED",
       "actual_test_or_required_procedure": "Real llama.cpp CPU model discovery, buffered completion and SSE completion without API credentials.",
       "evidence_location": "scripts/qualify_local_model.py; evidence/LOCAL-MODEL-VERIFICATION.json",
-      "remaining_dependency_or_scope": "Historical 0.2 source-bound live inference evidence; current 0.3 end-to-end live retest is separate (B6). Linux llama.cpp with pinned SmolLM2-135M protocol checks and Qwen3-1.7B construction. Other local runtimes are contract-configurable, not separately live-qualified. Preserved factual/malformed-output failures limit quality claims."
+      "remaining_dependency_or_scope": "Final integrated 0.3 source receipt required. Historical 0.2 source-bound live inference evidence; current 0.3 end-to-end live retest is separate (B6). Linux llama.cpp with pinned SmolLM2-135M protocol checks and Qwen3-1.7B construction. Other local runtimes are contract-configurable, not separately live-qualified. Preserved factual/malformed-output failures limit quality claims.",
+      "historical_status": "PASS",
+      "historical_scope": "Historical 0.2 source-bound live inference evidence; current 0.3 end-to-end live retest is separate (B6). Linux llama.cpp with pinned SmolLM2-135M protocol checks and Qwen3-1.7B construction. Other local runtimes are contract-configurable, not separately live-qualified. Preserved factual/malformed-output failures limit quality claims."
     },
     {
       "id": "B3",
@@ -61,95 +63,133 @@
       "status": "BLOCKED",
       "actual_test_or_required_procedure": "Current official Codex 0.167.0 and 0.169.0-alpha.7 schema/profile checks; credential-free native sandbox probe; independent authority/resume tests. Authenticated construction remains pending.",
       "evidence_location": "bridge/codex.py; bridge/codex_permissions.py; evidence/CODEX-CLI-COMPATIBILITY.json; scripts/probe_codex_sandbox.py",
-      "remaining_dependency_or_scope": "Eligible SIWC consent and a host permitting native sandbox setup. Named permission profiles are supported by current CLI releases; this container denies the required namespace operation. No authenticated turn claimed."
+      "remaining_dependency_or_scope": "Eligible SIWC consent and an actual authenticated Codex construction receipt remain required. Credential-free native sandbox reports may describe only that host's isolation; they do not establish ChatGPT-plan access, completed model turns or commercial authorization."
     },
     {
       "id": "B6",
       "requirement": "Current 0.3 source end-to-end real local-model retest",
-      "status": "PASS",
+      "status": "NOT TESTED",
       "actual_test_or_required_procedure": "Actual HTTP onboarding, discovery/configuration, single builder (one inference call), separate builder/critic (two calls), export with external result x=17→34 and retained reuse x=41→82 through pinned llama.cpp b12242 and Qwen3-1.7B-Q4_K_M on Linux CPU.",
       "evidence_location": "scripts/probe_local_onboarding.py; evidence/live-local-workflows-v0.3.json",
-      "remaining_dependency_or_scope": "Exact current source-byte run, not a live-model run from the later extracted ZIP. The first declared 8192-context preflight refusal is preserved; a server/configured16384 context succeeded. Other engines and multi-provider combinations lack live qualification. Ordinary arithmetic/reuse ties; full economic costs unknown."
+      "remaining_dependency_or_scope": "Final integrated 0.3 source receipt required. Exact current source-byte run, not a live-model run from the later extracted ZIP. The first declared 8192-context preflight refusal is preserved; a server/configured16384 context succeeded. Other engines and multi-provider combinations lack live qualification. Ordinary arithmetic/reuse ties; full economic costs unknown.",
+      "historical_status": "PASS",
+      "historical_scope": "Exact current source-byte run, not a live-model run from the later extracted ZIP. The first declared 8192-context preflight refusal is preserved; a server/configured16384 context succeeded. Other engines and multi-provider combinations lack live qualification. Ordinary arithmetic/reuse ties; full economic costs unknown."
     },
     {
       "id": "C1",
       "requirement": "Actual single-model and multi-agent orchestration",
-      "status": "PASS",
+      "status": "NOT TESTED",
       "actual_test_or_required_procedure": "Actual local Qwen3-1.7B single-builder (one inference call) and builder/critic (two distinct inference calls) completed frozen arithmetic construction.",
       "evidence_location": "evidence/live-local-workflows.json",
-      "remaining_dependency_or_scope": "Historical 0.2 source-bound live inference evidence; current 0.3 end-to-end live retest is separate (B6). Separate roles share one local model; multi-provider combinations are contract-tested. Narrow arithmetic task, not general reasoning or invention superiority."
+      "remaining_dependency_or_scope": "Final integrated 0.3 source receipt required. Historical 0.2 source-bound live inference evidence; current 0.3 end-to-end live retest is separate (B6). Separate roles share one local model; multi-provider combinations are contract-tested. Narrow arithmetic task, not general reasoning or invention superiority.",
+      "historical_status": "PASS",
+      "historical_scope": "Historical 0.2 source-bound live inference evidence; current 0.3 end-to-end live retest is separate (B6). Separate roles share one local model; multi-provider combinations are contract-tested. Narrow arithmetic task, not general reasoning or invention superiority."
+    },
+    {
+      "id": "C2",
+      "requirement": "Execute all seven bounded orchestration strategies",
+      "status": "NOT TESTED",
+      "actual_test_or_required_procedure": "Execute single model, actor/critic, research, economist, parallel exploration, adaptive routing and adversarial review through the real connector/workflow engine with explicit authored responses; inspect independent authority, allocation and retained-branch regressions.",
+      "evidence_location": "tests/test_workflow_strategies.py; tests/test_independent_strategies.py; evidence/UI_HTTP_WORKFLOW_REPLAY.cjs",
+      "remaining_dependency_or_scope": "Final extracted-byte operation receipt required. This criterion covers executable policies with authored fixtures; live inference and any strategy advantage require separate evidence."
     },
     {
       "id": "D1",
       "requirement": "Construct and independently check a usable artifact",
-      "status": "PASS",
+      "status": "NOT TESTED",
       "actual_test_or_required_procedure": "Live local model constructed calculator.json; frozen checks passed; exported RUN_INSTRUMENT.py executed outside HARNESS and returned 34 for x=17.",
       "evidence_location": "evidence/live-local-workflows.json; evidence/workflow-qualification.json",
-      "remaining_dependency_or_scope": "Historical 0.2 source-bound live inference evidence; current 0.3 end-to-end live retest is separate (B6). Bounded arithmetic grammar. A useful executable construction, not arbitrary-code or open-world scientific validation."
+      "remaining_dependency_or_scope": "Final integrated 0.3 source receipt required. Historical 0.2 source-bound live inference evidence; current 0.3 end-to-end live retest is separate (B6). Bounded arithmetic grammar. A useful executable construction, not arbitrary-code or open-world scientific validation.",
+      "historical_status": "PASS",
+      "historical_scope": "Historical 0.2 source-bound live inference evidence; current 0.3 end-to-end live retest is separate (B6). Bounded arithmetic grammar. A useful executable construction, not arbitrary-code or open-world scientific validation."
     },
     {
       "id": "E1",
       "requirement": "Retain, reopen and reuse on a different successor",
-      "status": "PASS",
+      "status": "NOT TESTED",
       "actual_test_or_required_procedure": "Close/reopen integrity-protected state; inherit artifact onto distinct successor inputs; rerun frozen successor acceptance.",
       "evidence_location": "evidence/workflow-qualification.json; tests/test_workflows.py",
-      "remaining_dependency_or_scope": "Finite numerical transfer only; current acceptance and authority are not inherited."
+      "remaining_dependency_or_scope": "Final-source receipt required. Finite numerical transfer only; current acceptance and authority are not inherited.",
+      "historical_status": "PASS",
+      "historical_scope": "Finite numerical transfer only; current acceptance and authority are not inherited."
     },
     {
       "id": "E2",
       "requirement": "Measure successor advantage against competent ordinary reuse",
-      "status": "PASS",
+      "status": "NOT TESTED",
       "actual_test_or_required_procedure": "Compare retained execution against competent equal-content ordinary reuse, counting construction/verification/maintenance declarations.",
       "evidence_location": "evidence/workflow-qualification.json",
-      "remaining_dependency_or_scope": "Ordinary reuse ties. No successor performance or discovery advantage established; unknown economic costs remain unknown."
+      "remaining_dependency_or_scope": "Final-source receipt required. Ordinary reuse ties. No successor performance or discovery advantage established; unknown economic costs remain unknown.",
+      "historical_status": "PASS",
+      "historical_scope": "Ordinary reuse ties. No successor performance or discovery advantage established; unknown economic costs remain unknown."
     },
     {
       "id": "F1",
       "requirement": "Independent mechanism comparison and negative result preservation",
-      "status": "PASS",
+      "status": "NOT TESTED",
       "actual_test_or_required_procedure": "Independent evaluator and conventional comparator; preserve initial failed checks and negative/tied result.",
       "evidence_location": "evidence/workflow-qualification.json; tests/test_independent_security.py",
-      "remaining_dependency_or_scope": "Bounded computational mechanism; no general invention superiority or empirical economic validation."
+      "remaining_dependency_or_scope": "Final-source receipt required. Bounded computational mechanism; no general invention superiority or empirical economic validation.",
+      "historical_status": "PASS",
+      "historical_scope": "Bounded computational mechanism; no general invention superiority or empirical economic validation."
+    },
+    {
+      "id": "F2",
+      "requirement": "Paired evidence-acquisition fixture with competent conventional control",
+      "status": "NOT TESTED",
+      "actual_test_or_required_procedure": "Execute bridge.strategy_demo from the exact archive; compare isolated no-retrieval and authorized-retrieval arms with equal declared budgets, preserved initial failures, withheld synthetic source bytes, honest abstention and a deterministic zero-model-call source reader.",
+      "evidence_location": "bridge/strategy_demo.py; tests/test_workflow_strategies.py; final STRATEGY-DEMONSTRATION.json",
+      "remaining_dependency_or_scope": "Final paired receipt required. Deterministic authored responses and synthetic source transport only; demonstrates information access and evidence handling, not live web research, reasoning superiority or complete economic advantage."
     },
     {
       "id": "G1",
       "requirement": "Credential, permission, protocol, quota and malformed-output failures",
-      "status": "PASS",
+      "status": "NOT TESTED",
       "actual_test_or_required_procedure": "Execute invalid credentials, consent, protocol, budget, missing usage, malformed response and interrupted stream regressions.",
       "evidence_location": "tests/test_bridge.py; tests/test_providers.py",
-      "remaining_dependency_or_scope": "Transport fixtures plus actual local model; remote account-specific behavior remains live-unverified."
+      "remaining_dependency_or_scope": "Final-source receipt required. Transport fixtures plus actual local model; remote account-specific behavior remains live-unverified.",
+      "historical_status": "PASS",
+      "historical_scope": "Transport fixtures plus actual local model; remote account-specific behavior remains live-unverified."
     },
     {
       "id": "G2",
       "requirement": "OAuth refusal, expiry, revocation and plan exhaustion",
-      "status": "PASS",
+      "status": "NOT TESTED",
       "actual_test_or_required_procedure": "Validate OIDC signature/claims and refusal/expiry/revocation/quota/account-race fixtures.",
       "evidence_location": "tests/test_chatgpt.py; tests/test_independent_security.py",
-      "remaining_dependency_or_scope": "Contract and cryptographic tests; no real Pro sign-in or revocation completed."
+      "remaining_dependency_or_scope": "Final-source receipt required. Contract and cryptographic tests; no real Pro sign-in or revocation completed.",
+      "historical_status": "PASS",
+      "historical_scope": "Contract and cryptographic tests; no real Pro sign-in or revocation completed."
     },
     {
       "id": "G3",
       "requirement": "Cancellation, persistence, recovery and failed tool execution",
-      "status": "PASS",
+      "status": "NOT TESTED",
       "actual_test_or_required_procedure": "Cancel stale model output; fail unauthorized tools; persist and resume after actual subprocess crash during repair; round-trip browser JSON.",
       "evidence_location": "tests/test_workflows.py; tests/test_independent_security.py; evidence/UI_HTTP_WORKFLOW_REPLAY.cjs",
-      "remaining_dependency_or_scope": "No externally executed consequential actions; uncertain upstream requests remain charged/recorded."
+      "remaining_dependency_or_scope": "Final-source receipt required. No externally executed consequential actions; uncertain upstream requests remain charged/recorded.",
+      "historical_status": "PASS",
+      "historical_scope": "No externally executed consequential actions; uncertain upstream requests remain charged/recorded."
     },
     {
       "id": "G4",
       "requirement": "Untrusted input, filesystem isolation and secret exclusion",
-      "status": "PASS",
+      "status": "NOT TESTED",
       "actual_test_or_required_procedure": "Reject foreign origin and unsafe files/imported runners; enforce local-only before dispatch; redact fragmented credentials.",
       "evidence_location": "tests/test_server_integrations.py; tests/test_independent_security.py",
-      "remaining_dependency_or_scope": "Tested Linux private workspace boundary. Windows protection code remains platform-unverified."
+      "remaining_dependency_or_scope": "Final-source Linux fixture execution required. OS first-use tests and credential-free Codex sandbox probes do not validate Windows credential protection or the complete cross-platform security suite.",
+      "historical_status": "PASS",
+      "historical_scope": "Tested Linux private workspace boundary. Windows protection code remains platform-unverified."
     },
     {
       "id": "G5",
       "requirement": "Archive corruption and identity substitution",
-      "status": "PASS",
+      "status": "NOT TESTED",
       "actual_test_or_required_procedure": "Reject corrupt, traversal, symlink, substituted-source and forged-manifest archive cases.",
       "evidence_location": "tests/test_release.py; tests/test_qualification.py",
-      "remaining_dependency_or_scope": "Integrity requires an independently trusted published checksum; self-consistency is not authenticity."
+      "remaining_dependency_or_scope": "Final-source receipt required. Integrity requires an independently trusted published checksum; self-consistency is not authenticity.",
+      "historical_status": "PASS",
+      "historical_scope": "Integrity requires an independently trusted published checksum; self-consistency is not authenticity."
     },
     {
       "id": "H1",
@@ -162,10 +202,12 @@
     {
       "id": "H2",
       "requirement": "Bilingual guides, launchers, examples, notices and owner materials",
-      "status": "PASS",
+      "status": "NOT TESTED",
       "actual_test_or_required_procedure": "Checked bilingual documentation links, launcher syntax/help, scoped license and required file inventory.",
       "evidence_location": "docs/INSTALLATION.md; docs/QUICKSTART.md; docs/OPERATOR.md; commercial/storefront-checklist.md",
-      "remaining_dependency_or_scope": "macOS/Windows launcher execution untested. Commercial integration approval and final listing activation remain separate."
+      "remaining_dependency_or_scope": "Exact archive inventory and generated owner handoff required. Platform execution is reported separately in I2; commercial integration approval and listing activation remain separate.",
+      "historical_status": "PASS",
+      "historical_scope": "macOS/Windows launcher execution untested. Commercial integration approval and final listing activation remain separate."
     },
     {
       "id": "H3",
@@ -185,11 +227,11 @@
     },
     {
       "id": "I2",
-      "requirement": "macOS and Windows native graphical launch",
+      "requirement": "macOS and Windows same-archive launcher help and headless first use",
       "status": "NOT TESTED",
-      "actual_test_or_required_procedure": "Launch extracted package on each OS and complete first use",
-      "evidence_location": "docs/INSTALLATION.md",
-      "remaining_dependency_or_scope": "Access to each actual operating system; supplied scripts are not verification"
+      "actual_test_or_required_procedure": "Operate the same source-bound archive on actual hosted macOS and Windows: JavaScript tests, native launcher help, Python loopback startup and headless browser first-use checks.",
+      "evidence_location": "PLATFORM-Darwin-VERIFICATION.json; PLATFORM-Windows-VERIFICATION.json; scripts/qualify_platform.py",
+      "remaining_dependency_or_scope": "Matching source/archive PASS receipts from both operating systems required. Excludes the complete Python/security suite, authenticated models, signed installers, Finder/Explorer double-click, Safari and accessibility conformance. Repeated tests are per-platform executions."
     },
     {
       "id": "J1",
@@ -202,26 +244,32 @@
     {
       "id": "O1",
       "requirement": "Ω capability map, possibility vault, frontier replay and shared bottleneck discovery",
-      "status": "PASS",
+      "status": "NOT TESTED",
       "actual_test_or_required_procedure": "Engine and independent regressions exercised persistent map/vault state, source conditions, shared bottlenecks and reported-only frontier replay.",
       "evidence_location": "tests/test_genesis_next.py; tests/test_genesis_next_independent.py; evidence/OMEGA-INDEPENDENT-REVIEW.md",
-      "remaining_dependency_or_scope": "Finite declared observations and dependency rules. No general autonomous opportunity-discovery claim."
+      "remaining_dependency_or_scope": "Final integrated 0.3 source receipt required. Finite declared observations and dependency rules. No general autonomous opportunity-discovery claim.",
+      "historical_status": "PASS",
+      "historical_scope": "Finite declared observations and dependency rules. No general autonomous opportunity-discovery claim."
     },
     {
       "id": "O2",
       "requirement": "Actual bounded self-upgrade construction against HARNESS acceptance",
-      "status": "PASS",
+      "status": "NOT TESTED",
       "actual_test_or_required_procedure": "Isolated source subclass ran the actual HARNESS checker: baseline 7 verification calls, candidate 5, competent ordinary reuse 5; incorrect/changed/missing cases refused.",
       "evidence_location": "bridge/genesis_next.py; evidence/OMEGA-PROTOCOL.md; evidence/OMEGA-INDEPENDENT-REVIEW.md",
-      "remaining_dependency_or_scope": "Authored bounded recipe; no automatic production promotion. Original checker/evaluator remain outside candidate edit authority. Exact archive reruns this demonstration."
+      "remaining_dependency_or_scope": "Final integrated 0.3 source receipt required. Authored bounded recipe; no automatic production promotion. Original checker/evaluator remain outside candidate edit authority. Exact archive reruns this demonstration.",
+      "historical_status": "PASS",
+      "historical_scope": "Authored bounded recipe; no automatic production promotion. Original checker/evaluator remain outside candidate edit authority. Exact archive reruns this demonstration."
     },
     {
       "id": "O3",
       "requirement": "Different successor task and causal reuse comparison",
-      "status": "PASS",
+      "status": "NOT TESTED",
       "actual_test_or_required_procedure": "Fresh nonce sampled after public source freeze: candidate and ordinary control correctly adjudicated 32/32 successor cases using 20 new checks plus 12 reuses; uncached and inheritance-withdrawn arms adjudicated 20/32 with 20 checks. Zero errors in all arms.",
       "evidence_location": "evidence/OMEGA-FRESH-RESULTS.json; evidence/OMEGA-FRESH-SOURCE-FREEZE.json; evidence/OMEGA-INDEPENDENT-REVIEW.md",
-      "remaining_dependency_or_scope": "Distinct internal selection task with fresh generated instances, not a new external task family. All arms incur 24 initial plus 20 successor calls. Strong ordinary control ties; no complete-cost superiority."
+      "remaining_dependency_or_scope": "Final integrated 0.3 source receipt required. Distinct internal selection task with fresh generated instances, not a new external task family. All arms incur 24 initial plus 20 successor calls. Strong ordinary control ties; no complete-cost superiority.",
+      "historical_status": "PASS",
+      "historical_scope": "Distinct internal selection task with fresh generated instances, not a new external task family. All arms incur 24 initial plus 20 successor calls. Strong ordinary control ties; no complete-cost superiority."
     },
     {
       "id": "O4",
@@ -234,10 +282,12 @@
     {
       "id": "O5",
       "requirement": "Bilingual Ω user journey, authorization and evidence export",
-      "status": "PASS",
+      "status": "NOT TESTED",
       "actual_test_or_required_procedure": "Thirteen DOM scenarios exercise bilingual Ω entry, permission refusal/consent, observed capability/vault/replay behavior, conventional tie display, export and offline/error recovery.",
       "evidence_location": "evidence/UI_GENESIS_NEXT_REPLAY.cjs",
-      "remaining_dependency_or_scope": "DOM route fixtures; source construction and fresh successor are independently exercised by the CLI and reviewer protocol. Actual rendered-browser status remains separately tracked under I1."
+      "remaining_dependency_or_scope": "Final integrated 0.3 source receipt required. DOM route fixtures; source construction and fresh successor are independently exercised by the CLI and reviewer protocol. Actual rendered-browser status remains separately tracked under I1.",
+      "historical_status": "PASS",
+      "historical_scope": "DOM route fixtures; source construction and fresh successor are independently exercised by the CLI and reviewer protocol. Actual rendered-browser status remains separately tracked under I1."
     },
     {
       "id": "O6",
@@ -266,10 +316,12 @@
     {
       "id": "O9",
       "requirement": "Proof-to-Market conditional arrangement planner",
-      "status": "PASS",
+      "status": "NOT TESTED",
       "actual_test_or_required_procedure": "Six planner tests and loopback HTTP/UI checks exercise explicit participants, outside options, complete-cost categories, contingent funding, staged commercial records and changed-scenario invalidation.",
       "evidence_location": "bridge/proof_to_market.py; tests/test_proof_to_market.py; tests/test_genesis_http.py; evidence/UI_GENESIS_NEXT_REPLAY.cjs",
-      "remaining_dependency_or_scope": "Conditional numerical planning with operator declarations; no actual customer, executed financing, money movement or commercial success is established. O8 remains separate."
+      "remaining_dependency_or_scope": "Final integrated 0.3 source receipt required. Conditional numerical planning with operator declarations; no actual customer, executed financing, money movement or commercial success is established. O8 remains separate.",
+      "historical_status": "PASS",
+      "historical_scope": "Conditional numerical planning with operator declarations; no actual customer, executed financing, money movement or commercial success is established. O8 remains separate."
     }
   ],
   "prior_source_context": {
@@ -278,5 +330,12 @@
     "harness_workflow": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/42756911389",
     "observed_status": "success",
     "scope": "Prior 0.2 source evidence; it does not qualify newly added 0.3 source."
+  },
+  "required_deliverable_categories": 22,
+  "primary_example": "GENESIS itself: bounded self-upgrade, independent strong controls, retained evidence and different successor task",
+  "additional_example": "Declared-cost/capacity quote instrument; not a substitute for GENESIS self-improvement",
+  "historical_genesis_source_context": {
+    "revision": "9c3e5d8f4318600a8eb09dafb779a315198e6fd6",
+    "scope": "Existing 0.3 source and its preserved raw Ω evidence before integrating seven strategies and release evidence handoff. The merged source requires new qualification."
   }
 }

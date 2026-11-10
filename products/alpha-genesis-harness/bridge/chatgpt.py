@@ -271,7 +271,7 @@ class CredentialStore:
     def read(self):
         if not self.path.exists():
             return {"schema": 1, "host_id": "urn:uuid:" + str(uuid.uuid4()), "accounts": {}, "active": None}
-        fd = os.open(self.path, os.O_RDONLY | getattr(os, "O_NOFOLLOW", 0) | os.O_NONBLOCK)
+        fd = os.open(self.path, os.O_RDONLY | getattr(os, "O_NOFOLLOW", 0) | getattr(os, "O_NONBLOCK", 0))
         with os.fdopen(fd, "rb") as source:
             info = os.fstat(source.fileno())
             if not stat.S_ISREG(info.st_mode):

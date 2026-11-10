@@ -11,6 +11,8 @@ import tempfile
 import threading
 import time
 import unittest
+from types import SimpleNamespace
+from unittest.mock import patch
 from urllib.parse import parse_qs, urlsplit
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
@@ -145,6 +147,27 @@ class PlanTests(unittest.TestCase):
         self.assertEqual(progress[-1]["delta"], "Useful result")
         with self.assertRaisesRegex(BridgeError, "already used"):
             self.service.generate(self.request())
+
+    def test_credential_read_without_unix_nonblocking_flag_keeps_file_checks(self):
+        seed(self.service)
+        # Windows lacks O_NONBLOCK. Exercise that absence on any CI host without
+        # replacing the actual regular-file read or its protected-store checks.
+        with patch.dict(os.__dict__):
+            os.__dict__.pop("O_NONBLOCK", None)
+            with self.service.store.locked():
+                state = self.service.store.read()
+            self.assertEqual(state["accounts"]["oaiapp_fixture"]["access_token"],
+                             "synthetic-access-credential")
+            with patch("bridge.chatgpt.os.fstat", return_value=SimpleNamespace(st_mode=0)):
+                with self.assertRaisesRegex(BridgeError, "ordinary file"):
+                    self.service.store.read()
+            if os.name != "nt":
+                self.service.store.path.chmod(0o644)
+                try:
+                    with self.assertRaisesRegex(BridgeError, "owner-only"):
+                        self.service.store.read()
+                finally:
+                    self.service.store.path.chmod(0o600)
 
     def test_interrupted_incomplete_failed_and_quota_streams(self):
         seed(self.service)

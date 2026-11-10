@@ -27,6 +27,7 @@ PATHS = {
     "original_protocol": ROOT / "evidence/OMEGA-PROTOCOL.md",
     "interpreter": ROOT / "bridge/instruments.py",
     "workflow_helpers": ROOT / "bridge/workflows.py",
+    "workflow_strategies": ROOT / "bridge/workflow_strategies.py",
     "provider_contracts": ROOT / "bridge/adapters.py",
 }
 BUDGET = 20
