@@ -25,12 +25,16 @@ STRATEGIES = {'single-model', 'researcher-builder-verifier', 'strategist-economi
               'parallel-exploration', 'adaptive', 'adversarial-review'}
 LIVE_KEYS = {'local_inference', 'single_agent', 'multi_agent', 'parallel_exploration',
              'quote_construction', 'successor_reuse', 'independent_export'}
-LIVE_SOURCE_FILES = {'bridge/adapters.py', 'bridge/streaming.py', 'bridge/workflows.py',
+LIVE_SOURCE_FILES = {'bridge/adapters.py', 'bridge/streaming.py', 'bridge/workflows.py', 'bridge/workflow_schemas.py', 'bridge/output_schema.py',
                      'bridge/workflow_strategies.py', 'bridge/instruments.py',
                      'scripts/qualify_hosted_local.py', 'scripts/probe_local_workflows.py',
-                     'scripts/qualify_quote_workflow_005.py'}
+                     'scripts/qualify_quote_workflow_006.py'}
+PAIRED_SOURCE_FILES = {'bridge/strategy_demo.py', 'bridge/workflows.py', 'bridge/workflow_strategies.py',
+                       'bridge/workflow_schemas.py', 'bridge/output_schema.py'}
+GENESIS_DEPENDENCY_NAMES = {'workflows.py', 'workflow_strategies.py', 'workflow_schemas.py', 'output_schema.py',
+                          'services.py', 'instruments.py', 'adapters.py', 'genesis_next.py'}
 BLOCKED = {'B1', 'B3', 'B4', 'B5', 'O11'}
-FRONTIER_SOURCE_FILES = {'bridge/adapters.py','bridge/workflows.py','bridge/instruments.py','bridge/genesis_next.py','bridge/frontier_monitor.py','scripts/probe_frontier_monitor.py'}
+FRONTIER_SOURCE_FILES = {'bridge/adapters.py','bridge/workflows.py', 'bridge/workflow_schemas.py', 'bridge/output_schema.py','bridge/instruments.py','bridge/genesis_next.py','bridge/frontier_monitor.py','scripts/probe_frontier_monitor.py'}
 FRONTIER_URL = 'https://developers.openai.com/siwc/token-sharing-open-source'
 UNRESOLVED_GENESIS_FAILURES = {'O4', 'O6'}
 GENESIS_SOURCES = {label:path.resolve().relative_to(Path(__file__).resolve().parents[1]).as_posix()
@@ -171,6 +175,8 @@ def paired_passed(record, content):
     if record.get('schema') != 'alpha-genesis-paired-retrieval/v1':
         raise ValueError('Unsupported paired fixture schema')
     source_hashes_match(record, content)
+    if not PAIRED_SOURCE_FILES.issubset(record['source_sha256']):
+        raise ValueError('Paired fixture lacks required workflow/schema source hashes')
     arms = record.get('arms', [])
     if len(arms) != 2 or {arm.get('arm') for arm in arms} != {'no-retrieval', 'retrieval'}:
         return False
@@ -217,11 +223,11 @@ def validate_live_provenance(record, files, content):
     if not DIGEST.fullmatch(str(downloads.get('runtime_binary_sha256', ''))):
         raise ValueError('Live PASS lacks the runtime executable hash')
     commands = record.get('commands', [])
-    core_commands = [row for row in commands if Path(str(row.get('entrypoint',''))).name in {'probe_local_workflows.py', 'qualify_quote_workflow_005.py'}]
+    core_commands = [row for row in commands if Path(str(row.get('entrypoint',''))).name in {'probe_local_workflows.py', 'qualify_quote_workflow_006.py'}]
     if not core_commands or any(type(row.get('returncode')) is not int or type(row.get('timed_out')) is not bool for row in core_commands):
         raise ValueError('Live PASS lacks recorded actual inference driver execution')
     raw_records = []
-    for name, tree_key in [('LOCAL-WORKFLOWS-HOSTED.json','source_product_tree'), ('LOCAL-QUOTE-QUALIFICATION-005.json','product_tree_sha')]:
+    for name, tree_key in [('LOCAL-WORKFLOWS-HOSTED.json','source_product_tree'), ('LOCAL-QUOTE-QUALIFICATION-006.json','product_tree_sha')]:
         if name in files:
             raw = json.loads(files[name])
             if raw.get('source_revision') != record['source_revision'] or raw.get(tree_key) != record['source_product_tree']:
@@ -259,6 +265,11 @@ def genesis_demo_passed(receipt, content):
     if result.get('schema') != 'genesis-next-experiment/v1':
         raise ValueError('Unsupported GENESIS experiment schema')
     source = result.get('source', {})
+    dependencies = source.get('dependency_sha256')
+    if not isinstance(dependencies, dict) or set(dependencies) != GENESIS_DEPENDENCY_NAMES:
+        raise ValueError('GENESIS demonstration lacks its complete dependency source identity')
+    if any(dependencies[name] != digest(content['bridge/' + name]) for name in GENESIS_DEPENDENCY_NAMES):
+        raise ValueError('GENESIS dependency differs from exact archived source')
     for key,path in [('baseline_sha256','bridge/workflows.py'), ('checker_sha256','bridge/instruments.py'), ('protocol_sha256','evidence/OMEGA-PROTOCOL.md')]:
         if source.get(key) != digest(content[path]):
             raise ValueError('GENESIS demonstration differs from exact archived source')

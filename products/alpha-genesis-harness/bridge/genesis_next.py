@@ -16,6 +16,7 @@ from urllib.parse import urlsplit
 from datetime import datetime, timezone
 
 from . import adapters as _adapters_module, instruments as _instruments_module, workflows as _workflows_module, workflow_strategies as _strategies_module, services as _services_module
+from . import workflow_schemas as _workflow_schemas_module, output_schema as _output_schema_module
 from .adapters import BridgeError, strict_json
 from .instruments import evaluate
 from .workflows import WorkflowService, _atomic, _regular, digest, encoded, equivalent, now, require
@@ -50,11 +51,13 @@ def _number(value, label, optional=False):
 
 def source_identity():
     identities = {name: hashlib.sha256(_regular(PRODUCT / "bridge" / name, 1024 * 1024)).hexdigest()
-                  for name in ("workflows.py", "workflow_strategies.py", "services.py", "instruments.py", "adapters.py", "genesis_next.py")}
+                  for name in ("workflows.py", "workflow_strategies.py", "workflow_schemas.py", "output_schema.py", "services.py", "instruments.py", "adapters.py", "genesis_next.py")}
     dependencies_loaded = {"adapters.py": _adapters_module.LOADED_SOURCE_SHA256,
                            "instruments.py": _instruments_module.LOADED_SOURCE_SHA256,
                            "workflows.py": _workflows_module.LOADED_SOURCE_SHA256,
                            "workflow_strategies.py": _strategies_module.LOADED_SOURCE_SHA256,
+                           "workflow_schemas.py": _workflow_schemas_module.LOADED_SOURCE_SHA256,
+                           "output_schema.py": _output_schema_module.LOADED_SOURCE_SHA256,
                            "services.py": _services_module.LOADED_SOURCE_SHA256}
     require(all(identities[name] == value for name, value in dependencies_loaded.items()),
             "HARNESS dependency changed after it was loaded. Restart the connector before GENESIS initialization.",
@@ -621,7 +624,7 @@ def demonstrate(directory):
              "unknown_costs": ["prior design and implementation", "independent review", "ongoing maintenance", "hardware and electricity", "complete economic cost"]}
     result = {"schema": "genesis-next-experiment/v1", "title": "The HARNESS retains exact evidence and selects unresolved successor experiments", "status": "complete", "created_at": now(),
               "limitation": "WorkflowService._verify repeats unchanged deterministic acceptance checks.", "construction": "Constructor-owned source recipe adds exact dependency-aware reuse to an isolated WorkflowService subclass.",
-              "source": {"baseline_sha256": source_before["workflows.py"], "candidate_sha256": candidate["sha256"], "protocol_sha256": protocol_sha, "checker_sha256": source_before["instruments.py"], "evaluation_sources_unchanged": source_unchanged},
+              "source": {"baseline_sha256": source_before["workflows.py"], "candidate_sha256": candidate["sha256"], "protocol_sha256": protocol_sha, "checker_sha256": source_before["instruments.py"], "dependency_sha256": source_before, "evaluation_sources_unchanged": source_unchanged},
               "qualification": {"correctness": "PASS" if correctness else "FAIL", "decision": "RETAIN_BOUNDED_RESEARCH_CAPABILITY" if correctness else "REJECT", "production_promotion": False,
                                 "scientific_verdict": "NO_SUPERIORITY_ESTABLISHED: competent content-addressed ordinary reuse ties; complete costs remain unknown.", "independence": "Evaluator and frozen protocol outside candidate edit boundary; this built-in authored demonstration is separate from independent reviewer tests."},
               "arms": arms, "successor": {"task": "Prioritize unresolved experiments with two new verification calls", "candidate": inherited, "ordinary": {"outcomes": ordinary_outcomes, "verification_calls": ordinary_calls},

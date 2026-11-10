@@ -44,7 +44,7 @@ def main():
                'model': args.model, 'discovery': discovery, 'runs': results, 'config': config,
                'scope': 'Actual local model request/response operation only. Not frontier reasoning, tool calling or general agent quality. Runtime description is operator supplied; attach installation identities separately. No cloud API fallback or billed API request.',
                'source_sha256': {str(p.relative_to(PRODUCT)): hashlib.sha256(p.read_bytes()).hexdigest()
-                 for p in [PRODUCT/'bridge/adapters.py', PRODUCT/'bridge/streaming.py', Path(__file__).resolve()]}}
+                 for p in [PRODUCT/'bridge/adapters.py', PRODUCT/'bridge/output_schema.py', PRODUCT/'bridge/streaming.py', Path(__file__).resolve()]}}
     args.output.write_text(json.dumps(receipt, ensure_ascii=False, indent=2) + '\n')
     print(json.dumps({'status': receipt['status'], 'runs': len(results), 'output': str(args.output)}))
     return 0

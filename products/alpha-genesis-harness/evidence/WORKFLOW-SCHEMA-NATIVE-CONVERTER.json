@@ -1,0 +1,218 @@
+{
+  "scope": "Native C++ schema conversion and grammar matching, without models or inference; no WASI execution",
+  "upstream_repository": "https://github.com/ggml-org/llama.cpp",
+  "upstream_tag": "b12242",
+  "upstream_commit": "3b4d6ab3f79651935fba1dd93732f29022a7f5f5",
+  "source_files": 50,
+  "source_manifest_sha256": "dd6b7da356b1923dd971fc4fcdb63ec82fb84ecaf39ebf29136443ec2eadcc70",
+  "generator_sha256": "74951ad4dedc2519a64ae8a8853da2fbe83c642e73ad12c36542a01f8b4ba58b",
+  "compiler": "g++ (Debian 14.2.0-19) 14.2.0",
+  "reference_audit": {
+    "definitions": 66,
+    "local_references": 229,
+    "acyclic": true,
+    "expression_definitions": [
+      "expr0",
+      "expr1",
+      "expr10",
+      "expr11",
+      "expr12",
+      "expr13",
+      "expr14",
+      "expr15",
+      "expr16",
+      "expr17",
+      "expr18",
+      "expr19",
+      "expr2",
+      "expr20",
+      "expr21",
+      "expr22",
+      "expr23",
+      "expr24",
+      "expr25",
+      "expr26",
+      "expr27",
+      "expr28",
+      "expr29",
+      "expr3",
+      "expr30",
+      "expr31",
+      "expr32",
+      "expr4",
+      "expr5",
+      "expr6",
+      "expr7",
+      "expr8",
+      "expr9"
+    ]
+  },
+  "conversions": [
+    {
+      "schema": "builder",
+      "schema_sha256": "9563a63fb92255b41a91dfc2167210568cba52386688db76edc15cbd8de1d257",
+      "exit_code": 0,
+      "seconds": 0.006592314999579685,
+      "grammar_bytes": 100549,
+      "grammar_sha256": "4ab07606a2edbb4364383af4fa6f1f296bf8387a4a001c2ab3b37508413b3132",
+      "stderr": ""
+    },
+    {
+      "schema": "critic",
+      "schema_sha256": "515ac61b86727b499cc79c9b08f7711569b73813167c127bd2631f5ab2d9c796",
+      "exit_code": 0,
+      "seconds": 0.002224393001597491,
+      "grammar_bytes": 360,
+      "grammar_sha256": "9ba2480b694267905ed59d794612fd15dfb37c3fc00b91bf911b716ba893cda6",
+      "stderr": ""
+    },
+    {
+      "schema": "construct-only",
+      "schema_sha256": "ea835a701dfd4f7e9f9e3893c5a62a4b7ab6d322beb89662d1bbb732d249f516",
+      "exit_code": 0,
+      "seconds": 0.00623927500055288,
+      "grammar_bytes": 97806,
+      "grammar_sha256": "f5c0a92f523851c4309fb18a27614c8c84ebdebbebc4b5f0e152f79aa7896018",
+      "stderr": ""
+    }
+  ],
+  "upstream_test": {
+    "exit_code": 0,
+    "seconds": 0.009552362000249559,
+    "case_lines": 168
+  },
+  "fixtures": [
+    {
+      "name": "valid_nested",
+      "expected": true,
+      "grammar": "builder",
+      "returncode": 0,
+      "seconds": 0.004437211999174906,
+      "result": {
+        "accepted": true,
+        "codepoints_processed": 206,
+        "grammar_rules": 2005
+      },
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "valid_depth32",
+      "expected": true,
+      "grammar": "builder",
+      "returncode": 0,
+      "seconds": 0.0056802940016495995,
+      "result": {
+        "accepted": true,
+        "codepoints_processed": 865,
+        "grammar_rules": 2005
+      },
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "invalid_depth33",
+      "expected": false,
+      "grammar": "builder",
+      "returncode": 2,
+      "seconds": 0.0066965930000151275,
+      "result": {
+        "accepted": false,
+        "codepoints_processed": 783,
+        "grammar_rules": 2005
+      },
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "invalid_literal_wrapper",
+      "expected": false,
+      "grammar": "builder",
+      "returncode": 2,
+      "seconds": 0.004162163000728469,
+      "result": {
+        "accepted": false,
+        "codepoints_processed": 165,
+        "grammar_rules": 2005
+      },
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "invalid_root_key",
+      "expected": false,
+      "grammar": "builder",
+      "returncode": 2,
+      "seconds": 0.0040731050012254855,
+      "result": {
+        "accepted": false,
+        "codepoints_processed": 193,
+        "grammar_rules": 2005
+      },
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "invalid_string_action",
+      "expected": false,
+      "grammar": "builder",
+      "returncode": 2,
+      "seconds": 0.0036904700009472435,
+      "result": {
+        "accepted": false,
+        "codepoints_processed": 29,
+        "grammar_rules": 2005
+      },
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "unauthorized_tool",
+      "expected": false,
+      "grammar": "construct-only",
+      "returncode": 2,
+      "seconds": 0.003627559999586083,
+      "result": {
+        "accepted": false,
+        "codepoints_processed": 52,
+        "grammar_rules": 1957
+      },
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "critic_accept",
+      "expected": true,
+      "grammar": "critic",
+      "returncode": 0,
+      "seconds": 0.0017583520002517616,
+      "result": {
+        "accepted": true,
+        "codepoints_processed": 55,
+        "grammar_rules": 31
+      },
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "critic_unknown_verdict",
+      "expected": false,
+      "grammar": "critic",
+      "returncode": 2,
+      "seconds": 0.0016552679990127217,
+      "result": {
+        "accepted": false,
+        "codepoints_processed": 13,
+        "grammar_rules": 31
+      },
+      "stderr": "",
+      "passed": true
+    }
+  ],
+  "passed": true,
+  "limits": [
+    "Grammar constrains syntax, not evaluator truth or authorization.",
+    "Local no-inference proof does not establish model generation quality, server behavior, cross-platform coverage or released-source qualification.",
+    "Object-key order follows schema insertion order in this pinned converter."
+  ]
+}

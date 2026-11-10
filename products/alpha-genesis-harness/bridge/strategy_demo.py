@@ -94,7 +94,7 @@ def demonstrate(workspace):
     observed_contrast = record['arms'][0]['honest_abstention'] and record['arms'][1]['matches_withheld_source'] and record['competent_conventional_control']['matches_withheld_source']
     record['finding'] = ('The authorized source arm resolved the withheld synthetic fact; the no-retrieval arm honestly abstained under the same budgets. A competent deterministic source reader also resolved it with zero model calls.' if observed_contrast else 'The expected source-resolution versus honest-abstention contrast was not observed; inspect each retained arm.') + ' This demonstrates information access and safe evidence plumbing, not an agent reasoning advantage or general research advantage.'
     record['complete_economic_cost'] = {'known':False,'unknown':['human fixture preparation','engineering','execution compute','maintenance','validation']}
-    record['source_sha256'] = {str(path.relative_to(Path(__file__).parents[1])):hashlib.sha256(path.read_bytes()).hexdigest() for path in [Path(__file__),Path(__file__).with_name('workflows.py'),Path(__file__).with_name('workflow_strategies.py')]}
+    record['source_sha256'] = {str(path.relative_to(Path(__file__).parents[1])):hashlib.sha256(path.read_bytes()).hexdigest() for path in [Path(__file__),Path(__file__).with_name('workflows.py'),Path(__file__).with_name('workflow_strategies.py'),Path(__file__).with_name('workflow_schemas.py'),Path(__file__).with_name('output_schema.py')]}
     return record
 
 

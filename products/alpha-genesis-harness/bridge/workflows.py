@@ -29,9 +29,11 @@ if not __package__:
 if __package__:
     from .adapters import BridgeError, Runtime, strict_json, retrieve_source
     from .instruments import evaluate
+    from .workflow_schemas import INSTRUMENT_GRAMMAR, response_schema
 else:
     from adapters import BridgeError, Runtime, strict_json, retrieve_source
     from instruments import evaluate
+    from workflow_schemas import INSTRUMENT_GRAMMAR, response_schema
 
 NAME = re.compile(r"[A-Za-z0-9][A-Za-z0-9_.-]{0,99}\Z")
 RUN = re.compile(r"wf_[a-f0-9]{24}\Z")
@@ -415,6 +417,8 @@ class WorkflowService:
         payload = {"objective": spec["objective"], "context": spec["context"], "research": state["research"], "feedback": state["feedback"],
                    "acceptance": spec["acceptance"], "verification": state["verification"], "artifacts": self._artifact_texts(state),
                    "remaining_actions": spec["max_actions"] - state["actions"], "iteration": state["iteration"]}
+        if role in {"builder", "critic"}:
+            instructions += INSTRUMENT_GRAMMAR
         if role == "builder":
             instructions += ('Return only JSON {"summary":"...","actions":[{"tool":"...",...}],"done":true}. At most eight actions. '
                 'Allowed tools: write_document {name:"report.md",content:"text"}; write_dataset {name:"data.csv",columns:["x"],rows:[[1]]}; '
@@ -647,7 +651,11 @@ class WorkflowService:
             if role in {"builder", "critic"} and hasattr(self.runtime, "provider"):
                 configured = self.runtime.provider(route["provider"])
                 model = getattr(configured, "models", {}).get(route["model"])
-                if getattr(configured, "kind", None) != "anthropic" and getattr(model, "json_mode", False) is True:
+                if (getattr(configured, "kind", None) in {"openai", "ollama"}
+                        and not getattr(configured, "remote", True) and getattr(model, "json_schema", False) is True):
+                    request["json_schema"] = response_schema(role, state["spec"]["tool_permissions"],
+                                                             state["spec"]["max_actions"] - state["actions"])
+                elif getattr(configured, "kind", None) != "anthropic" and getattr(model, "json_mode", False) is True:
                     request["json_mode"] = True
             progress = {"characters": 0, "reported": 0}
             def on_event(event):

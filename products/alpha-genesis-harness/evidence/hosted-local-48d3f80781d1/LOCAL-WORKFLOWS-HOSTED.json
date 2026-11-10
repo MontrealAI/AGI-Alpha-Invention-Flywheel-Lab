@@ -1,0 +1,1583 @@
+{
+  "schema": "alpha-genesis-live-local-workflow/v1",
+  "protocol_revision": "explicit-json-mode-v2",
+  "structured_output": "Explicitly configured JSON-object generation for builder and critic; independent semantic checks and original allocations unchanged. Historical unformatted failure preserved at evidence/hosted-local-3f4e1785d395.",
+  "scope": "Actual local CPU inference against two frozen arithmetic cases. This establishes narrow construction behavior, not frontier reasoning or general invention superiority.",
+  "model": {
+    "configured_alias": "Qwen3-4B-Instruct-2507-Q4_K_M",
+    "weights_sha256": "2fde00ce69dd4899c70d020845e2638353015bba0fdf161b3eb965f2bca4464e",
+    "server_sha256": "fe211d00c4754aa67aaa492d2c755ab0f6ef60bf30eee3c0c74a3496189cde17",
+    "server_arguments": [
+      "-m",
+      "/home/runner/work/_temp/harness-local-work/qwen3-4b-instruct-2507.gguf",
+      "--host",
+      "127.0.0.1",
+      "--port",
+      "18766",
+      "-c",
+      "8192",
+      "-t",
+      "2",
+      "--n-gpu-layers",
+      "0",
+      "--no-webui",
+      "--alias",
+      "Qwen3-4B-Instruct-2507-Q4_K_M",
+      "--chat-template-kwargs",
+      "{\"enable_thinking\":false}",
+      "--reasoning-budget",
+      "0"
+    ]
+  },
+  "source_sha256": {
+    "bridge/workflows.py": "c2d6c58014c18bf2f99620be46b98028b6caa2831c40fd853fdafa4214e7c226",
+    "bridge/services.py": "41b71b3f946f0912898558995f2c83f1f09b0cb2d5f9203bfecbef301de4a081",
+    "bridge/workflow_strategies.py": "bb639bfe6467c1da816149fc5918f785f9df8053b3e5fc841f9e0cdef3115124",
+    "bridge/instruments.py": "cca18a8703a03448cd9bf035223226d513ed58bb544f018949e31603e7c8c2e5",
+    "bridge/adapters.py": "bf5df3970a4dadd3fbbe3757ba2ef25ed148d24f1e7d52c52bc12a4b110a7c0d",
+    "bridge/streaming.py": "dd4cd766fb911e350358d4f31f7053b4d6847b189243cf1ce1108ebc834b21ec",
+    "scripts/probe_local_workflows.py": "1d8f6a480fe70d3a21e8c155fa51e21fed654b91d2b2be472ae5e44e43e84212"
+  },
+  "runs": [
+    {
+      "policy": "single-model",
+      "status": "exhausted",
+      "wall_seconds": 90.93472529999985,
+      "model_calls": 3,
+      "iterations": 3,
+      "actions": 3,
+      "verification": {
+        "artifact_hashes": {
+          "RUN_INSTRUMENT.py": "cca18a8703a03448cd9bf035223226d513ed58bb544f018949e31603e7c8c2e5",
+          "calculator.json": "03b2f81f397a0803c97623f4d1b40c5dd0407e6186cc8d6c7fe3b8ab561ffb28"
+        },
+        "checks": [
+          {
+            "actual": {
+              "result": 9
+            },
+            "artifact": "calculator.json",
+            "expected": {
+              "result": 6
+            },
+            "kind": "instrument",
+            "operations": 3,
+            "passed": false
+          },
+          {
+            "actual": {
+              "result": 0
+            },
+            "artifact": "calculator.json",
+            "expected": {
+              "result": 0
+            },
+            "kind": "instrument",
+            "operations": 3,
+            "passed": true
+          }
+        ],
+        "passed": false,
+        "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification.",
+        "spec_hash": "ee84073cad469f7888429b02aaf5b2c22cc8f90ed21cc33d6cb5b9c442f2c357"
+      },
+      "events": [
+        {
+          "at": "2026-11-10T07:51:16.197644+00:00",
+          "detail": {
+            "acceptance_source": "Operator-frozen conditions; independence is not inferred.",
+            "spec_hash": "ee84073cad469f7888429b02aaf5b2c22cc8f90ed21cc33d6cb5b9c442f2c357"
+          },
+          "index": 0,
+          "kind": "created",
+          "previous": "0000000000000000000000000000000000000000000000000000000000000000",
+          "sha256": "62dd206271a0d465abe77da8e231dad0bff861192566e11832193a9faa4f47ef"
+        },
+        {
+          "at": "2026-11-10T07:51:16.199057+00:00",
+          "detail": {
+            "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+            "provider": "local",
+            "role": "builder",
+            "scope": "Waiting for selected service capacity; no model call or construction iteration consumed."
+          },
+          "index": 1,
+          "kind": "model_queued",
+          "previous": "62dd206271a0d465abe77da8e231dad0bff861192566e11832193a9faa4f47ef",
+          "sha256": "dc3a75ac47af77006648c9ea651b994d45a0a3f0de8efbd0a306fc72d378d2b4"
+        },
+        {
+          "at": "2026-11-10T07:51:16.200534+00:00",
+          "detail": {
+            "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+            "provider": "local",
+            "role": "builder",
+            "run_id": "wf_23a399d10c9f6e2ccdeae332_91d1394c7379594e"
+          },
+          "index": 2,
+          "kind": "model_started",
+          "previous": "dc3a75ac47af77006648c9ea651b994d45a0a3f0de8efbd0a306fc72d378d2b4",
+          "sha256": "dfcf387e7ea396716a831577850fcd027b5fe75941761c9d0cdd285893e44a12"
+        },
+        {
+          "at": "2026-11-10T07:51:36.817145+00:00",
+          "detail": {
+            "cost": {
+              "accounted": 0.0,
+              "amount": 0.0,
+              "attempts": 1,
+              "basis": "reported_usage_at_user_rates",
+              "complete_cost_known": false,
+              "currency": "USD"
+            },
+            "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+            "provider": "local",
+            "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+            "reported_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+            "requested_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+            "response_sha256": "9a5153db71b6c70c0836c05f2d54b4b17fd5ce748698b19a35560f7a6916df4f",
+            "role": "builder",
+            "run_id": "wf_23a399d10c9f6e2ccdeae332_91d1394c7379594e",
+            "usage": {
+              "input_tokens": 571,
+              "output_tokens": 67
+            }
+          },
+          "index": 3,
+          "kind": "model_completed",
+          "previous": "dfcf387e7ea396716a831577850fcd027b5fe75941761c9d0cdd285893e44a12",
+          "sha256": "c93d9fb9d293b08f88bb76210217a1ceb9d720a1262784d2499f2dcfabca270a"
+        },
+        {
+          "at": "2026-11-10T07:51:36.818733+00:00",
+          "detail": {
+            "outcome": {
+              "artifact": "calculator.json",
+              "bytes": 225,
+              "kind": "instrument",
+              "run": "python3 RUN_INSTRUMENT.py calculator.json input.json",
+              "sha256": "8e629109970a1082d918aca192f43b7de2431f32f1e0dace086375befec93d61"
+            },
+            "tool": "construct_instrument"
+          },
+          "index": 4,
+          "kind": "tool_completed",
+          "previous": "c93d9fb9d293b08f88bb76210217a1ceb9d720a1262784d2499f2dcfabca270a",
+          "sha256": "59ff00a0499b47b43d4ad31596b5425f30098bd09aefd500fb96474e3ec5ece5"
+        },
+        {
+          "at": "2026-11-10T07:51:36.820375+00:00",
+          "detail": {
+            "artifact_hashes": {
+              "RUN_INSTRUMENT.py": "cca18a8703a03448cd9bf035223226d513ed58bb544f018949e31603e7c8c2e5",
+              "calculator.json": "8e629109970a1082d918aca192f43b7de2431f32f1e0dace086375befec93d61"
+            },
+            "checks": [
+              {
+                "artifact": "calculator.json",
+                "error": "$.outputs[\"result\"].args[1]: a literal is a raw JSON value (for example 7), not a literal/value/const object. Input references use exactly {\"field\":\"name\"}.",
+                "kind": "instrument",
+                "passed": false
+              },
+              {
+                "artifact": "calculator.json",
+                "error": "$.outputs[\"result\"].args[1]: a literal is a raw JSON value (for example 7), not a literal/value/const object. Input references use exactly {\"field\":\"name\"}.",
+                "kind": "instrument",
+                "passed": false
+              }
+            ],
+            "passed": false,
+            "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification.",
+            "spec_hash": "ee84073cad469f7888429b02aaf5b2c22cc8f90ed21cc33d6cb5b9c442f2c357"
+          },
+          "index": 5,
+          "kind": "verification",
+          "previous": "59ff00a0499b47b43d4ad31596b5425f30098bd09aefd500fb96474e3ec5ece5",
+          "sha256": "a297248ed97dce6ea00048d670d9f1ab197e8383259076cd5a559a3c8fe9f2ea"
+        },
+        {
+          "at": "2026-11-10T07:51:36.822676+00:00",
+          "detail": {
+            "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+            "provider": "local",
+            "role": "builder",
+            "scope": "Waiting for selected service capacity; no model call or construction iteration consumed."
+          },
+          "index": 6,
+          "kind": "model_queued",
+          "previous": "a297248ed97dce6ea00048d670d9f1ab197e8383259076cd5a559a3c8fe9f2ea",
+          "sha256": "5c035202f863b9e1b00ff7f1efbc5f400db7dd7eea24b6e0b665f7347efd68df"
+        },
+        {
+          "at": "2026-11-10T07:51:36.824931+00:00",
+          "detail": {
+            "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+            "provider": "local",
+            "role": "builder",
+            "run_id": "wf_23a399d10c9f6e2ccdeae332_fecc0cabeab8f430"
+          },
+          "index": 7,
+          "kind": "model_started",
+          "previous": "5c035202f863b9e1b00ff7f1efbc5f400db7dd7eea24b6e0b665f7347efd68df",
+          "sha256": "059e8bff01a40a56bb6391cb0f01dea2f04930fad8b32d03038a4cb83bf7a85d"
+        },
+        {
+          "at": "2026-11-10T07:52:10.922665+00:00",
+          "detail": {
+            "cost": {
+              "accounted": 0.0,
+              "amount": 0.0,
+              "attempts": 1,
+              "basis": "reported_usage_at_user_rates",
+              "complete_cost_known": false,
+              "currency": "USD"
+            },
+            "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+            "provider": "local",
+            "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+            "reported_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+            "requested_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+            "response_sha256": "0359413ac61fca29e71cc0576274c58493a4eb4caf48d0bcf4a634a73dfa72f3",
+            "role": "builder",
+            "run_id": "wf_23a399d10c9f6e2ccdeae332_fecc0cabeab8f430",
+            "usage": {
+              "input_tokens": 1357,
+              "output_tokens": 79
+            }
+          },
+          "index": 8,
+          "kind": "model_completed",
+          "previous": "059e8bff01a40a56bb6391cb0f01dea2f04930fad8b32d03038a4cb83bf7a85d",
+          "sha256": "aeb14e803610529e9c399deac4f866bda8b8b76f5a03067f408df79bbfcce27a"
+        },
+        {
+          "at": "2026-11-10T07:52:10.922979+00:00",
+          "detail": {
+            "outcome": {
+              "artifact": "calculator.json",
+              "bytes": 225,
+              "kind": "instrument",
+              "run": "python3 RUN_INSTRUMENT.py calculator.json input.json",
+              "sha256": "8e629109970a1082d918aca192f43b7de2431f32f1e0dace086375befec93d61"
+            },
+            "tool": "construct_instrument"
+          },
+          "index": 9,
+          "kind": "tool_completed",
+          "previous": "aeb14e803610529e9c399deac4f866bda8b8b76f5a03067f408df79bbfcce27a",
+          "sha256": "39a62cfd90f98bfdf5f09ee17ea6336ac42b30770311ce53e5066d8e4da8bd3c"
+        },
+        {
+          "at": "2026-11-10T07:52:10.924287+00:00",
+          "detail": {
+            "artifact_hashes": {
+              "RUN_INSTRUMENT.py": "cca18a8703a03448cd9bf035223226d513ed58bb544f018949e31603e7c8c2e5",
+              "calculator.json": "8e629109970a1082d918aca192f43b7de2431f32f1e0dace086375befec93d61"
+            },
+            "checks": [
+              {
+                "artifact": "calculator.json",
+                "error": "$.outputs[\"result\"].args[1]: a literal is a raw JSON value (for example 7), not a literal/value/const object. Input references use exactly {\"field\":\"name\"}.",
+                "kind": "instrument",
+                "passed": false
+              },
+              {
+                "artifact": "calculator.json",
+                "error": "$.outputs[\"result\"].args[1]: a literal is a raw JSON value (for example 7), not a literal/value/const object. Input references use exactly {\"field\":\"name\"}.",
+                "kind": "instrument",
+                "passed": false
+              }
+            ],
+            "passed": false,
+            "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification.",
+            "spec_hash": "ee84073cad469f7888429b02aaf5b2c22cc8f90ed21cc33d6cb5b9c442f2c357"
+          },
+          "index": 10,
+          "kind": "verification",
+          "previous": "39a62cfd90f98bfdf5f09ee17ea6336ac42b30770311ce53e5066d8e4da8bd3c",
+          "sha256": "62ac4184ccbf68e4e38b3e67fbae39a03ed1003e53bb70f5745b5139b86d79d4"
+        },
+        {
+          "at": "2026-11-10T07:52:10.927017+00:00",
+          "detail": {
+            "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+            "provider": "local",
+            "role": "builder",
+            "scope": "Waiting for selected service capacity; no model call or construction iteration consumed."
+          },
+          "index": 11,
+          "kind": "model_queued",
+          "previous": "62ac4184ccbf68e4e38b3e67fbae39a03ed1003e53bb70f5745b5139b86d79d4",
+          "sha256": "9229623cca8ba3c0fad5e09a1bc4d305978d1a50321f852205ec938b83e96fe1"
+        },
+        {
+          "at": "2026-11-10T07:52:10.930172+00:00",
+          "detail": {
+            "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+            "provider": "local",
+            "role": "builder",
+            "run_id": "wf_23a399d10c9f6e2ccdeae332_da2acb9e1d1e7c0b"
+          },
+          "index": 12,
+          "kind": "model_started",
+          "previous": "9229623cca8ba3c0fad5e09a1bc4d305978d1a50321f852205ec938b83e96fe1",
+          "sha256": "962e1b09af5830f9d93b914a8633f460349bace4bdb59967415918e78856a23e"
+        },
+        {
+          "at": "2026-11-10T07:52:47.124188+00:00",
+          "detail": {
+            "cost": {
+              "accounted": 0.0,
+              "amount": 0.0,
+              "attempts": 1,
+              "basis": "reported_usage_at_user_rates",
+              "complete_cost_known": false,
+              "currency": "USD"
+            },
+            "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+            "provider": "local",
+            "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+            "reported_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+            "requested_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+            "response_sha256": "63faefecad4b1b594990cb376c1aef460fd687b7c88cbb22d88a84f7e3b25b82",
+            "role": "builder",
+            "run_id": "wf_23a399d10c9f6e2ccdeae332_da2acb9e1d1e7c0b",
+            "usage": {
+              "input_tokens": 1727,
+              "output_tokens": 95
+            }
+          },
+          "index": 13,
+          "kind": "model_completed",
+          "previous": "962e1b09af5830f9d93b914a8633f460349bace4bdb59967415918e78856a23e",
+          "sha256": "8be366de0198974861306f9cf4ba4e8f3c692dda3948cf4c9fbd1c8c646b8ca8"
+        },
+        {
+          "at": "2026-11-10T07:52:47.125282+00:00",
+          "detail": {
+            "outcome": {
+              "artifact": "calculator.json",
+              "bytes": 225,
+              "kind": "instrument",
+              "run": "python3 RUN_INSTRUMENT.py calculator.json input.json",
+              "sha256": "03b2f81f397a0803c97623f4d1b40c5dd0407e6186cc8d6c7fe3b8ab561ffb28"
+            },
+            "tool": "construct_instrument"
+          },
+          "index": 14,
+          "kind": "tool_completed",
+          "previous": "8be366de0198974861306f9cf4ba4e8f3c692dda3948cf4c9fbd1c8c646b8ca8",
+          "sha256": "d2dd4777ad753bf89d834c22d4d0a796030e14897d5bb54fc767d7a1bc30bbff"
+        },
+        {
+          "at": "2026-11-10T07:52:47.126577+00:00",
+          "detail": {
+            "artifact_hashes": {
+              "RUN_INSTRUMENT.py": "cca18a8703a03448cd9bf035223226d513ed58bb544f018949e31603e7c8c2e5",
+              "calculator.json": "03b2f81f397a0803c97623f4d1b40c5dd0407e6186cc8d6c7fe3b8ab561ffb28"
+            },
+            "checks": [
+              {
+                "actual": {
+                  "result": 9
+                },
+                "artifact": "calculator.json",
+                "expected": {
+                  "result": 6
+                },
+                "kind": "instrument",
+                "operations": 3,
+                "passed": false
+              },
+              {
+                "actual": {
+                  "result": 0
+                },
+                "artifact": "calculator.json",
+                "expected": {
+                  "result": 0
+                },
+                "kind": "instrument",
+                "operations": 3,
+                "passed": true
+              }
+            ],
+            "passed": false,
+            "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification.",
+            "spec_hash": "ee84073cad469f7888429b02aaf5b2c22cc8f90ed21cc33d6cb5b9c442f2c357"
+          },
+          "index": 15,
+          "kind": "verification",
+          "previous": "d2dd4777ad753bf89d834c22d4d0a796030e14897d5bb54fc767d7a1bc30bbff",
+          "sha256": "2df8b50cecaaae830c5a0a93f2f1e7c7eb820d5637acb71b2504e0c2ec2aeee4"
+        },
+        {
+          "index": 16,
+          "at": "2026-11-10T07:52:47.132143+00:00",
+          "kind": "stopped",
+          "detail": {
+            "reason": "Declared model-call allocation exhausted; no further inference dispatched."
+          },
+          "previous": "2df8b50cecaaae830c5a0a93f2f1e7c7eb820d5637acb71b2504e0c2ec2aeee4",
+          "sha256": "947012d5fa8dffb81b9822b24d487e6da57ad52b74a87cb647117fee8ad932af"
+        }
+      ],
+      "artifacts": {
+        "RUN_INSTRUMENT.py": {
+          "bytes": 8843,
+          "kind": "trusted_runner",
+          "sha256": "cca18a8703a03448cd9bf035223226d513ed58bb544f018949e31603e7c8c2e5"
+        },
+        "calculator.json": {
+          "bytes": 225,
+          "kind": "instrument",
+          "sha256": "03b2f81f397a0803c97623f4d1b40c5dd0407e6186cc8d6c7fe3b8ab561ffb28"
+        }
+      }
+    },
+    {
+      "policy": "actor-critic",
+      "status": "complete",
+      "wall_seconds": 33.48262632299998,
+      "model_calls": 2,
+      "iterations": 1,
+      "actions": 1,
+      "verification": {
+        "passed": true,
+        "checks": [
+          {
+            "artifact": "calculator.json",
+            "kind": "instrument",
+            "passed": true,
+            "actual": {
+              "result": 6
+            },
+            "expected": {
+              "result": 6
+            },
+            "operations": 3
+          },
+          {
+            "artifact": "calculator.json",
+            "kind": "instrument",
+            "passed": true,
+            "actual": {
+              "result": 0
+            },
+            "expected": {
+              "result": 0
+            },
+            "operations": 3
+          }
+        ],
+        "spec_hash": "d914fc92b88cb0f229b6b8adb62a5cd5b5a142b4d5e2f952a1056a473579494c",
+        "artifact_hashes": {
+          "RUN_INSTRUMENT.py": "cca18a8703a03448cd9bf035223226d513ed58bb544f018949e31603e7c8c2e5",
+          "calculator.json": "6e314133083c2bed7afc9282675095e0be71a318395b3f1579b5138eedf1c9fb"
+        },
+        "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification."
+      },
+      "events": [
+        {
+          "at": "2026-11-10T07:52:47.136072+00:00",
+          "detail": {
+            "acceptance_source": "Operator-frozen conditions; independence is not inferred.",
+            "spec_hash": "d914fc92b88cb0f229b6b8adb62a5cd5b5a142b4d5e2f952a1056a473579494c"
+          },
+          "index": 0,
+          "kind": "created",
+          "previous": "0000000000000000000000000000000000000000000000000000000000000000",
+          "sha256": "c5675f175a3b1f3be4ed0c0b23b45c37f81056955e6a37fd84839dac0875be88"
+        },
+        {
+          "at": "2026-11-10T07:52:47.137070+00:00",
+          "detail": {
+            "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+            "provider": "local",
+            "role": "builder",
+            "scope": "Waiting for selected service capacity; no model call or construction iteration consumed."
+          },
+          "index": 1,
+          "kind": "model_queued",
+          "previous": "c5675f175a3b1f3be4ed0c0b23b45c37f81056955e6a37fd84839dac0875be88",
+          "sha256": "d8cc3ef8faab19cdf4d48e68230a38fa5ed19ee4577bbe89c645da1033cf400c"
+        },
+        {
+          "at": "2026-11-10T07:52:47.138440+00:00",
+          "detail": {
+            "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+            "provider": "local",
+            "role": "builder",
+            "run_id": "wf_6e6403d289f870ec0e131f3c_37c663b7c33909db"
+          },
+          "index": 2,
+          "kind": "model_started",
+          "previous": "d8cc3ef8faab19cdf4d48e68230a38fa5ed19ee4577bbe89c645da1033cf400c",
+          "sha256": "5c3872be8be3c2e0d6ca0b6e0f198f2c486ea24ad6655108a21fca75c4d954a7"
+        },
+        {
+          "at": "2026-11-10T07:52:55.802207+00:00",
+          "detail": {
+            "cost": {
+              "accounted": 0.0,
+              "amount": 0.0,
+              "attempts": 1,
+              "basis": "reported_usage_at_user_rates",
+              "complete_cost_known": false,
+              "currency": "USD"
+            },
+            "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+            "provider": "local",
+            "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+            "reported_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+            "requested_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+            "response_sha256": "c8a255fe164adbdf5d28d2a403df88f1286f18e4a8dc0a38ccffdbd802b1358b",
+            "role": "builder",
+            "run_id": "wf_6e6403d289f870ec0e131f3c_37c663b7c33909db",
+            "usage": {
+              "input_tokens": 571,
+              "output_tokens": 65
+            }
+          },
+          "index": 3,
+          "kind": "model_completed",
+          "previous": "5c3872be8be3c2e0d6ca0b6e0f198f2c486ea24ad6655108a21fca75c4d954a7",
+          "sha256": "5d04ae7d695b6f97904c78813a1e916a4f94aeeeaa1a9449cf8565e553a81fdc"
+        },
+        {
+          "at": "2026-11-10T07:52:55.803649+00:00",
+          "detail": {
+            "outcome": {
+              "artifact": "calculator.json",
+              "bytes": 192,
+              "kind": "instrument",
+              "run": "python3 RUN_INSTRUMENT.py calculator.json input.json",
+              "sha256": "6e314133083c2bed7afc9282675095e0be71a318395b3f1579b5138eedf1c9fb"
+            },
+            "tool": "construct_instrument"
+          },
+          "index": 4,
+          "kind": "tool_completed",
+          "previous": "5d04ae7d695b6f97904c78813a1e916a4f94aeeeaa1a9449cf8565e553a81fdc",
+          "sha256": "85ee5b914992645e1a26df5a5ce68fb19b1c06a284b7022ed639445e38709899"
+        },
+        {
+          "at": "2026-11-10T07:52:55.963358+00:00",
+          "detail": {
+            "artifact_hashes": {
+              "RUN_INSTRUMENT.py": "cca18a8703a03448cd9bf035223226d513ed58bb544f018949e31603e7c8c2e5",
+              "calculator.json": "6e314133083c2bed7afc9282675095e0be71a318395b3f1579b5138eedf1c9fb"
+            },
+            "checks": [
+              {
+                "actual": {
+                  "result": 6
+                },
+                "artifact": "calculator.json",
+                "expected": {
+                  "result": 6
+                },
+                "kind": "instrument",
+                "operations": 3,
+                "passed": true
+              },
+              {
+                "actual": {
+                  "result": 0
+                },
+                "artifact": "calculator.json",
+                "expected": {
+                  "result": 0
+                },
+                "kind": "instrument",
+                "operations": 3,
+                "passed": true
+              }
+            ],
+            "passed": true,
+            "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification.",
+            "spec_hash": "d914fc92b88cb0f229b6b8adb62a5cd5b5a142b4d5e2f952a1056a473579494c"
+          },
+          "index": 5,
+          "kind": "verification",
+          "previous": "85ee5b914992645e1a26df5a5ce68fb19b1c06a284b7022ed639445e38709899",
+          "sha256": "54eafc0bd8c568a7a43b9988a1a7fba22a9cb0e5018195b829019656d890518f"
+        },
+        {
+          "at": "2026-11-10T07:52:55.965369+00:00",
+          "detail": {
+            "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+            "provider": "local",
+            "role": "critic",
+            "scope": "Waiting for selected service capacity; no model call or construction iteration consumed."
+          },
+          "index": 6,
+          "kind": "model_queued",
+          "previous": "54eafc0bd8c568a7a43b9988a1a7fba22a9cb0e5018195b829019656d890518f",
+          "sha256": "9c84957efdc688d8a9e09277e7410fa9f0f667a6101ae5620ccf25f78200b5f8"
+        },
+        {
+          "at": "2026-11-10T07:52:55.967497+00:00",
+          "detail": {
+            "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+            "provider": "local",
+            "role": "critic",
+            "run_id": "wf_6e6403d289f870ec0e131f3c_37f884efab2a1f79"
+          },
+          "index": 7,
+          "kind": "model_started",
+          "previous": "9c84957efdc688d8a9e09277e7410fa9f0f667a6101ae5620ccf25f78200b5f8",
+          "sha256": "0a9522c9bca4ad169512af8939612b99df1357d0b48b123d1a841ec5c6e498d1"
+        },
+        {
+          "index": 8,
+          "at": "2026-11-10T07:53:20.617723+00:00",
+          "kind": "model_completed",
+          "detail": {
+            "role": "critic",
+            "provider": "local",
+            "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+            "requested_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+            "reported_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+            "run_id": "wf_6e6403d289f870ec0e131f3c_37f884efab2a1f79",
+            "usage": {
+              "input_tokens": 636,
+              "output_tokens": 102
+            },
+            "cost": {
+              "currency": "USD",
+              "amount": 0.0,
+              "accounted": 0.0,
+              "basis": "reported_usage_at_user_rates",
+              "attempts": 1,
+              "complete_cost_known": false
+            },
+            "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+            "response_sha256": "eae23ff116ba59b05c635d89dd6b33734e19c4f82f71f1baa07f95b6c2e5de95"
+          },
+          "previous": "0a9522c9bca4ad169512af8939612b99df1357d0b48b123d1a841ec5c6e498d1",
+          "sha256": "cafc076ed2268b89b3941d3eb6082a06cddf9f142a6fc1cb5863f22342e503bc"
+        },
+        {
+          "index": 9,
+          "at": "2026-11-10T07:53:20.617769+00:00",
+          "kind": "critique",
+          "detail": {
+            "verdict": "accept",
+            "feedback": "All provided tests pass deterministically. The calculator.json artifact correctly defines input 'x' and outputs 'result' via multiplication by 2. Both test cases (x=3 and x=0) yield the expected results (6 and 0). The structural definition matches the specification. No counterexample, missing requirement, or invalid structural transfer is present. Verification scope is confined to the operator-frozen test cases and deterministic execution within the permission-bounded workspace.",
+            "independence": "Separate model invocation; model agreement is not independent verification."
+          },
+          "previous": "cafc076ed2268b89b3941d3eb6082a06cddf9f142a6fc1cb5863f22342e503bc",
+          "sha256": "397fd1b8e4d364be249650cf74335677b76885e38628b3da20ffb2791677f9bb"
+        },
+        {
+          "index": 10,
+          "at": "2026-11-10T07:53:20.617984+00:00",
+          "kind": "verification",
+          "detail": {
+            "passed": true,
+            "checks": [
+              {
+                "artifact": "calculator.json",
+                "kind": "instrument",
+                "passed": true,
+                "actual": {
+                  "result": 6
+                },
+                "expected": {
+                  "result": 6
+                },
+                "operations": 3
+              },
+              {
+                "artifact": "calculator.json",
+                "kind": "instrument",
+                "passed": true,
+                "actual": {
+                  "result": 0
+                },
+                "expected": {
+                  "result": 0
+                },
+                "operations": 3
+              }
+            ],
+            "spec_hash": "d914fc92b88cb0f229b6b8adb62a5cd5b5a142b4d5e2f952a1056a473579494c",
+            "artifact_hashes": {
+              "RUN_INSTRUMENT.py": "cca18a8703a03448cd9bf035223226d513ed58bb544f018949e31603e7c8c2e5",
+              "calculator.json": "6e314133083c2bed7afc9282675095e0be71a318395b3f1579b5138eedf1c9fb"
+            },
+            "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification."
+          },
+          "previous": "397fd1b8e4d364be249650cf74335677b76885e38628b3da20ffb2791677f9bb",
+          "sha256": "335158af1e16642550d3ae67f94a65967ad46360d0bfde39d8d6d627eb05bdcc"
+        },
+        {
+          "index": 11,
+          "at": "2026-11-10T07:53:20.618007+00:00",
+          "kind": "finished",
+          "detail": {
+            "status": "complete",
+            "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification."
+          },
+          "previous": "335158af1e16642550d3ae67f94a65967ad46360d0bfde39d8d6d627eb05bdcc",
+          "sha256": "f770a2aaa01cd361dd598267d4836aa716b2c72cacc55f08c8b4330b9fa5e61b"
+        }
+      ],
+      "artifacts": {
+        "RUN_INSTRUMENT.py": {
+          "bytes": 8843,
+          "kind": "trusted_runner",
+          "sha256": "cca18a8703a03448cd9bf035223226d513ed58bb544f018949e31603e7c8c2e5"
+        },
+        "calculator.json": {
+          "bytes": 192,
+          "kind": "instrument",
+          "sha256": "6e314133083c2bed7afc9282675095e0be71a318395b3f1579b5138eedf1c9fb"
+        }
+      },
+      "external_execution": {
+        "returncode": 0,
+        "result": {
+          "output": {
+            "result": 34
+          },
+          "operations": 3,
+          "scope": "Bounded declarative execution; acceptance must be checked separately."
+        }
+      },
+      "reuse": {
+        "capability_id": "wf_6e6403d289f870ec0e131f3c",
+        "outputs": {
+          "calculator.json": {
+            "output": {
+              "result": 82
+            },
+            "operations": 3,
+            "scope": "Bounded declarative execution; acceptance must be checked separately."
+          }
+        },
+        "verification": "EXECUTED_NOT_SUCCESSOR_ACCEPTED",
+        "scope": "Original acceptance does not verify this new input's real-world meaning or applicability."
+      },
+      "strong_control": {
+        "direct_arithmetic_result": 82,
+        "accepted": true,
+        "advantage": "NOT_ESTABLISHED; direct arithmetic and equal-content ordinary reuse remain competent controls."
+      }
+    },
+    {
+      "policy": "parallel-exploration",
+      "status": "exhausted",
+      "wall_seconds": 17.065810002000035,
+      "model_calls": 2,
+      "iterations": 2,
+      "actions": 2,
+      "verification": {
+        "checks": [],
+        "passed": false,
+        "scope": "No checks executed."
+      },
+      "events": [
+        {
+          "at": "2026-11-10T07:53:20.655610+00:00",
+          "detail": {
+            "acceptance_source": "Operator-frozen conditions; independence is not inferred.",
+            "spec_hash": "f6eb2ed80489243d65a53b25643e49e6b12c7d073f664e1595cec39441116371"
+          },
+          "index": 0,
+          "kind": "created",
+          "previous": "0000000000000000000000000000000000000000000000000000000000000000",
+          "sha256": "80324ed0b21f1f285d0eaf2514f28a9462aeb2550cd9d2de1a8d37a2d04761fb"
+        },
+        {
+          "at": "2026-11-10T07:53:20.664758+00:00",
+          "detail": {
+            "branches": [
+              "wf_0beac3897c887bca01f39942",
+              "wf_1056bb3cfc64572f76e6540b"
+            ],
+            "phase": "exploration",
+            "shared_action_limit": 4,
+            "shared_model_call_limit": 2
+          },
+          "index": 1,
+          "kind": "strategy_wave_started",
+          "previous": "80324ed0b21f1f285d0eaf2514f28a9462aeb2550cd9d2de1a8d37a2d04761fb",
+          "sha256": "d147c90e1e84fe6afa2d3a3d79c5faa23e5327e91c36325fa26773e5d371d73e"
+        },
+        {
+          "at": "2026-11-10T07:53:37.712743+00:00",
+          "detail": {
+            "branches": [
+              {
+                "actions": 1,
+                "index": 0,
+                "iteration": 1,
+                "model_calls": 1,
+                "run_id": "wf_0beac3897c887bca01f39942",
+                "status": "ready"
+              },
+              {
+                "actions": 1,
+                "index": 1,
+                "iteration": 1,
+                "model_calls": 1,
+                "run_id": "wf_1056bb3cfc64572f76e6540b",
+                "status": "ready"
+              }
+            ],
+            "errors": [],
+            "phase": "exploration"
+          },
+          "index": 2,
+          "kind": "strategy_wave_completed",
+          "previous": "d147c90e1e84fe6afa2d3a3d79c5faa23e5327e91c36325fa26773e5d371d73e",
+          "sha256": "81db072d82a0c6239fd4ab513f986d9421e1088882ca27176e7ac3f2502e725c"
+        },
+        {
+          "at": "2026-11-10T07:53:37.718715+00:00",
+          "detail": {
+            "branches": [
+              "wf_0beac3897c887bca01f39942",
+              "wf_1056bb3cfc64572f76e6540b"
+            ],
+            "phase": "exploration",
+            "shared_action_limit": 4,
+            "shared_model_call_limit": 2
+          },
+          "index": 3,
+          "kind": "strategy_wave_started",
+          "previous": "81db072d82a0c6239fd4ab513f986d9421e1088882ca27176e7ac3f2502e725c",
+          "sha256": "e7872705463b76eb49a950c7bc811168eaf23f0ab5ef3dab3c7e6e96bc02ace4"
+        },
+        {
+          "index": 4,
+          "at": "2026-11-10T07:53:37.725901+00:00",
+          "kind": "strategy_wave_completed",
+          "detail": {
+            "phase": "exploration",
+            "branches": [
+              {
+                "run_id": "wf_0beac3897c887bca01f39942",
+                "index": 0,
+                "status": "exhausted",
+                "model_calls": 1,
+                "actions": 1,
+                "iteration": 1
+              },
+              {
+                "run_id": "wf_1056bb3cfc64572f76e6540b",
+                "index": 1,
+                "status": "exhausted",
+                "model_calls": 1,
+                "actions": 1,
+                "iteration": 1
+              }
+            ],
+            "errors": []
+          },
+          "previous": "e7872705463b76eb49a950c7bc811168eaf23f0ab5ef3dab3c7e6e96bc02ace4",
+          "sha256": "c72252de6203db50cb3d504464b75b19cdf74a506e7cac219449604322b9d87e"
+        },
+        {
+          "index": 5,
+          "at": "2026-11-10T07:53:37.725925+00:00",
+          "kind": "exploration_rejected",
+          "detail": {
+            "reason": "No branch completed the frozen acceptance and required review.",
+            "candidate_count": 2
+          },
+          "previous": "c72252de6203db50cb3d504464b75b19cdf74a506e7cac219449604322b9d87e",
+          "sha256": "2270677cc7bbca620b1a637fbb64e7bc8339bf591bf838a1f488d8d11abf6013"
+        }
+      ],
+      "artifacts": {},
+      "branches": [
+        {
+          "approach": "Use direct multiplication of x by the literal 2.",
+          "index": 0,
+          "label": "approach-1",
+          "max_actions": 2,
+          "max_iterations": 1,
+          "model_call_limit": 1,
+          "run_id": "wf_0beac3897c887bca01f39942",
+          "status": "exhausted",
+          "model_calls": 1,
+          "actions": 1,
+          "iteration": 1,
+          "verification": {
+            "artifact_hashes": {
+              "RUN_INSTRUMENT.py": "cca18a8703a03448cd9bf035223226d513ed58bb544f018949e31603e7c8c2e5",
+              "calculator.json": "8e629109970a1082d918aca192f43b7de2431f32f1e0dace086375befec93d61"
+            },
+            "checks": [
+              {
+                "artifact": "calculator.json",
+                "error": "$.outputs[\"result\"].args[1]: a literal is a raw JSON value (for example 7), not a literal/value/const object. Input references use exactly {\"field\":\"name\"}.",
+                "kind": "instrument",
+                "passed": false
+              },
+              {
+                "artifact": "calculator.json",
+                "error": "$.outputs[\"result\"].args[1]: a literal is a raw JSON value (for example 7), not a literal/value/const object. Input references use exactly {\"field\":\"name\"}.",
+                "kind": "instrument",
+                "passed": false
+              }
+            ],
+            "passed": false,
+            "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification.",
+            "spec_hash": "f6acbf21a1d803d4b5a27a678488d861d1852f40029603eef9e648c62c4cfcfd"
+          },
+          "artifacts": {
+            "RUN_INSTRUMENT.py": {
+              "bytes": 8843,
+              "kind": "trusted_runner",
+              "sha256": "cca18a8703a03448cd9bf035223226d513ed58bb544f018949e31603e7c8c2e5"
+            },
+            "calculator.json": {
+              "bytes": 225,
+              "kind": "instrument",
+              "sha256": "8e629109970a1082d918aca192f43b7de2431f32f1e0dace086375befec93d61"
+            }
+          },
+          "roles": {
+            "builder": {
+              "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+              "provider": "local"
+            }
+          },
+          "events_count": 8
+        },
+        {
+          "approach": "Use addition of x to itself; avoid multiplication.",
+          "index": 1,
+          "label": "approach-2",
+          "max_actions": 2,
+          "max_iterations": 1,
+          "model_call_limit": 1,
+          "run_id": "wf_1056bb3cfc64572f76e6540b",
+          "status": "exhausted",
+          "model_calls": 1,
+          "actions": 1,
+          "iteration": 1,
+          "verification": {
+            "artifact_hashes": {
+              "RUN_INSTRUMENT.py": "cca18a8703a03448cd9bf035223226d513ed58bb544f018949e31603e7c8c2e5",
+              "calculator.json": "8e629109970a1082d918aca192f43b7de2431f32f1e0dace086375befec93d61"
+            },
+            "checks": [
+              {
+                "artifact": "calculator.json",
+                "error": "$.outputs[\"result\"].args[1]: a literal is a raw JSON value (for example 7), not a literal/value/const object. Input references use exactly {\"field\":\"name\"}.",
+                "kind": "instrument",
+                "passed": false
+              },
+              {
+                "artifact": "calculator.json",
+                "error": "$.outputs[\"result\"].args[1]: a literal is a raw JSON value (for example 7), not a literal/value/const object. Input references use exactly {\"field\":\"name\"}.",
+                "kind": "instrument",
+                "passed": false
+              }
+            ],
+            "passed": false,
+            "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification.",
+            "spec_hash": "2d9bd88d6adceb6bb6973a82b7f0c3dee7bc29c422eb591ebafadc745706300d"
+          },
+          "artifacts": {
+            "RUN_INSTRUMENT.py": {
+              "bytes": 8843,
+              "kind": "trusted_runner",
+              "sha256": "cca18a8703a03448cd9bf035223226d513ed58bb544f018949e31603e7c8c2e5"
+            },
+            "calculator.json": {
+              "bytes": 225,
+              "kind": "instrument",
+              "sha256": "8e629109970a1082d918aca192f43b7de2431f32f1e0dace086375befec93d61"
+            }
+          },
+          "roles": {
+            "builder": {
+              "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+              "provider": "local"
+            }
+          },
+          "events_count": 8
+        }
+      ],
+      "selected_branch": null,
+      "request_costs": [
+        {
+          "workflow": "wf_0beac3897c887bca01f39942",
+          "event_index": 3,
+          "event_kind": "model_completed",
+          "run_id": "wf_0beac3897c887bca01f39942_0462b5859660db89",
+          "role": "builder",
+          "provider": "local",
+          "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+          "cost": {
+            "accounted": 0.0,
+            "amount": 0.0,
+            "attempts": 1,
+            "basis": "reported_usage_at_user_rates",
+            "complete_cost_known": false,
+            "currency": "USD"
+          },
+          "usage": {
+            "input_tokens": 599,
+            "output_tokens": 67
+          },
+          "cost_uncertain": true
+        },
+        {
+          "workflow": "wf_1056bb3cfc64572f76e6540b",
+          "event_index": 3,
+          "event_kind": "model_completed",
+          "run_id": "wf_1056bb3cfc64572f76e6540b_c007c17094153e6c",
+          "role": "builder",
+          "provider": "local",
+          "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+          "cost": {
+            "accounted": 0.0,
+            "amount": 0.0,
+            "attempts": 1,
+            "basis": "reported_usage_at_user_rates",
+            "complete_cost_known": false,
+            "currency": "USD"
+          },
+          "usage": {
+            "input_tokens": 598,
+            "output_tokens": 70
+          },
+          "cost_uncertain": true
+        }
+      ],
+      "branch_evidence": [
+        {
+          "state": {
+            "actions": 1,
+            "adversarial_cases": [],
+            "artifacts": {
+              "RUN_INSTRUMENT.py": {
+                "bytes": 8843,
+                "kind": "trusted_runner",
+                "sha256": "cca18a8703a03448cd9bf035223226d513ed58bb544f018949e31603e7c8c2e5"
+              },
+              "calculator.json": {
+                "bytes": 225,
+                "kind": "instrument",
+                "sha256": "8e629109970a1082d918aca192f43b7de2431f32f1e0dace086375befec93d61"
+              }
+            },
+            "branch_index": 0,
+            "branch_initialized": true,
+            "capability_id": null,
+            "created_at": "2026-11-10T07:53:20.658051+00:00",
+            "epoch": 0,
+            "events": [
+              {
+                "at": "2026-11-10T07:53:20.658061+00:00",
+                "detail": {
+                  "acceptance_source": "Operator-frozen conditions; independence is not inferred.",
+                  "spec_hash": "f6acbf21a1d803d4b5a27a678488d861d1852f40029603eef9e648c62c4cfcfd"
+                },
+                "index": 0,
+                "kind": "created",
+                "previous": "0000000000000000000000000000000000000000000000000000000000000000",
+                "sha256": "908ad5b4d50ae370eb3e4703e30dabb8cedb313b6aad2920520484a86758e311"
+              },
+              {
+                "at": "2026-11-10T07:53:20.658830+00:00",
+                "detail": {
+                  "approach": "Use direct multiplication of x by the literal 2.",
+                  "index": 0,
+                  "parent": "wf_1e14c3556edfa52f12db3d4d",
+                  "shared_budget_allocation": {
+                    "max_actions": 2,
+                    "max_iterations": 1,
+                    "model_call_limit": 1
+                  }
+                },
+                "index": 1,
+                "kind": "branch_created",
+                "previous": "908ad5b4d50ae370eb3e4703e30dabb8cedb313b6aad2920520484a86758e311",
+                "sha256": "0377251d5504bba816424aae730d9a3f8187b8e68a443e80bc0c4b39d35efb6c"
+              },
+              {
+                "at": "2026-11-10T07:53:20.667015+00:00",
+                "detail": {
+                  "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+                  "provider": "local",
+                  "role": "builder",
+                  "scope": "Waiting for selected service capacity; no model call or construction iteration consumed."
+                },
+                "index": 2,
+                "kind": "model_queued",
+                "previous": "0377251d5504bba816424aae730d9a3f8187b8e68a443e80bc0c4b39d35efb6c",
+                "sha256": "0ff8a5390c7f8b00c27ecfbb66b0190da26d0018f8c5c201d7eafe9bb5bbd403"
+              },
+              {
+                "at": "2026-11-10T07:53:20.671388+00:00",
+                "detail": {
+                  "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+                  "provider": "local",
+                  "role": "builder",
+                  "run_id": "wf_0beac3897c887bca01f39942_0462b5859660db89"
+                },
+                "index": 3,
+                "kind": "model_started",
+                "previous": "0ff8a5390c7f8b00c27ecfbb66b0190da26d0018f8c5c201d7eafe9bb5bbd403",
+                "sha256": "2ad0182c7d92f17c31ee36c36d34926885fcf51c2e95fabf72ede296025c2a90"
+              },
+              {
+                "at": "2026-11-10T07:53:37.425702+00:00",
+                "detail": {
+                  "cost": {
+                    "accounted": 0.0,
+                    "amount": 0.0,
+                    "attempts": 1,
+                    "basis": "reported_usage_at_user_rates",
+                    "complete_cost_known": false,
+                    "currency": "USD"
+                  },
+                  "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+                  "provider": "local",
+                  "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+                  "reported_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+                  "requested_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+                  "response_sha256": "9a5153db71b6c70c0836c05f2d54b4b17fd5ce748698b19a35560f7a6916df4f",
+                  "role": "builder",
+                  "run_id": "wf_0beac3897c887bca01f39942_0462b5859660db89",
+                  "usage": {
+                    "input_tokens": 599,
+                    "output_tokens": 67
+                  }
+                },
+                "index": 4,
+                "kind": "model_completed",
+                "previous": "2ad0182c7d92f17c31ee36c36d34926885fcf51c2e95fabf72ede296025c2a90",
+                "sha256": "f7096e5120e2bac9e87d9209a0d6c266887ca6affc1bdcd14dfa550f4d94692a"
+              },
+              {
+                "at": "2026-11-10T07:53:37.427895+00:00",
+                "detail": {
+                  "outcome": {
+                    "artifact": "calculator.json",
+                    "bytes": 225,
+                    "kind": "instrument",
+                    "run": "python3 RUN_INSTRUMENT.py calculator.json input.json",
+                    "sha256": "8e629109970a1082d918aca192f43b7de2431f32f1e0dace086375befec93d61"
+                  },
+                  "tool": "construct_instrument"
+                },
+                "index": 5,
+                "kind": "tool_completed",
+                "previous": "f7096e5120e2bac9e87d9209a0d6c266887ca6affc1bdcd14dfa550f4d94692a",
+                "sha256": "89b425b49f842af0927080ca8b248667442d336104c3bf8adc722812f88981c5"
+              },
+              {
+                "at": "2026-11-10T07:53:37.429288+00:00",
+                "detail": {
+                  "artifact_hashes": {
+                    "RUN_INSTRUMENT.py": "cca18a8703a03448cd9bf035223226d513ed58bb544f018949e31603e7c8c2e5",
+                    "calculator.json": "8e629109970a1082d918aca192f43b7de2431f32f1e0dace086375befec93d61"
+                  },
+                  "checks": [
+                    {
+                      "artifact": "calculator.json",
+                      "error": "$.outputs[\"result\"].args[1]: a literal is a raw JSON value (for example 7), not a literal/value/const object. Input references use exactly {\"field\":\"name\"}.",
+                      "kind": "instrument",
+                      "passed": false
+                    },
+                    {
+                      "artifact": "calculator.json",
+                      "error": "$.outputs[\"result\"].args[1]: a literal is a raw JSON value (for example 7), not a literal/value/const object. Input references use exactly {\"field\":\"name\"}.",
+                      "kind": "instrument",
+                      "passed": false
+                    }
+                  ],
+                  "passed": false,
+                  "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification.",
+                  "spec_hash": "f6acbf21a1d803d4b5a27a678488d861d1852f40029603eef9e648c62c4cfcfd"
+                },
+                "index": 6,
+                "kind": "verification",
+                "previous": "89b425b49f842af0927080ca8b248667442d336104c3bf8adc722812f88981c5",
+                "sha256": "08c5b906828a180255def673627d4786665f8af4cb9295ac3b9e9320d32a6b23"
+              },
+              {
+                "at": "2026-11-10T07:53:37.723191+00:00",
+                "detail": {
+                  "reason": "Declared model-call allocation exhausted; no further inference dispatched."
+                },
+                "index": 7,
+                "kind": "stopped",
+                "previous": "08c5b906828a180255def673627d4786665f8af4cb9295ac3b9e9320d32a6b23",
+                "sha256": "d494bdcf97efaaac2737b65fff2cbc42c5b5db7f052ea7d599669a7feaba0f8b"
+              }
+            ],
+            "feedback": "\nDeterministic acceptance: {\"artifact_hashes\":{\"RUN_INSTRUMENT.py\":\"cca18a8703a03448cd9bf035223226d513ed58bb544f018949e31603e7c8c2e5\",\"calculator.json\":\"8e629109970a1082d918aca192f43b7de2431f32f1e0dace086375befec93d61\"},\"checks\":[{\"artifact\":\"calculator.json\",\"error\":\"$.outputs[\\\"result\\\"].args[1]: a literal is a raw JSON value (for example 7), not a literal/value/const object. Input references use exactly {\\\"field\\\":\\\"name\\\"}.\",\"kind\":\"instrument\",\"passed\":false},{\"artifact\":\"calculator.json\",\"error\":\"$.outputs[\\\"result\\\"].args[1]: a literal is a raw JSON value (for example 7), not a literal/value/const object. Input references use exactly {\\\"field\\\":\\\"name\\\"}.\",\"kind\":\"instrument\",\"passed\":false}],\"passed\":false,\"scope\":\"Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification.\",\"spec_hash\":\"f6acbf21a1d803d4b5a27a678488d861d1852f40029603eef9e648c62c4cfcfd\"}",
+            "id": "wf_0beac3897c887bca01f39942",
+            "inflight": null,
+            "iteration": 1,
+            "model_call_limit": 1,
+            "model_calls": 1,
+            "parent_run": "wf_1e14c3556edfa52f12db3d4d",
+            "phase": "builder",
+            "research": "",
+            "schema": "alpha-genesis-workflow/v1",
+            "spec": {
+              "acceptance": [
+                {
+                  "artifact": "calculator.json",
+                  "expected": {
+                    "result": 6
+                  },
+                  "input": {
+                    "x": 3
+                  },
+                  "kind": "instrument"
+                },
+                {
+                  "artifact": "calculator.json",
+                  "expected": {
+                    "result": 0
+                  },
+                  "input": {
+                    "x": 0
+                  },
+                  "kind": "instrument"
+                }
+              ],
+              "context": "Use the construct_instrument tool. The operator prepared the expected outputs. No document is required.\n\nOPERATOR-ASSIGNED APPROACH (same objective, acceptance and permissions):\nUse direct multiplication of x by the literal 2.",
+              "local_only": true,
+              "max_actions": 2,
+              "max_iterations": 1,
+              "max_operations": 10000,
+              "max_output_tokens": 2048,
+              "objective": "Construct calculator.json with declared input x and output result = x * 2. Return only the requested JSON action object. This is an arithmetic software qualification, not an empirical claim.",
+              "roles": {
+                "builder": {
+                  "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+                  "provider": "local"
+                }
+              },
+              "strategy": "single-model",
+              "tool_permissions": [
+                "construct_instrument",
+                "read_artifact",
+                "run_instrument",
+                "write_dataset",
+                "write_document"
+              ]
+            },
+            "spec_hash": "f6acbf21a1d803d4b5a27a678488d861d1852f40029603eef9e648c62c4cfcfd",
+            "status": "exhausted",
+            "unadjudicated_counterexamples": [],
+            "updated_at": "2026-11-10T07:53:37.723191+00:00",
+            "verification": {
+              "artifact_hashes": {
+                "RUN_INSTRUMENT.py": "cca18a8703a03448cd9bf035223226d513ed58bb544f018949e31603e7c8c2e5",
+                "calculator.json": "8e629109970a1082d918aca192f43b7de2431f32f1e0dace086375befec93d61"
+              },
+              "checks": [
+                {
+                  "artifact": "calculator.json",
+                  "error": "$.outputs[\"result\"].args[1]: a literal is a raw JSON value (for example 7), not a literal/value/const object. Input references use exactly {\"field\":\"name\"}.",
+                  "kind": "instrument",
+                  "passed": false
+                },
+                {
+                  "artifact": "calculator.json",
+                  "error": "$.outputs[\"result\"].args[1]: a literal is a raw JSON value (for example 7), not a literal/value/const object. Input references use exactly {\"field\":\"name\"}.",
+                  "kind": "instrument",
+                  "passed": false
+                }
+              ],
+              "passed": false,
+              "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification.",
+              "spec_hash": "f6acbf21a1d803d4b5a27a678488d861d1852f40029603eef9e648c62c4cfcfd"
+            }
+          },
+          "artifact_hashes": {
+            "RUN_INSTRUMENT.py": {
+              "bytes": 8843,
+              "kind": "trusted_runner",
+              "sha256": "cca18a8703a03448cd9bf035223226d513ed58bb544f018949e31603e7c8c2e5"
+            },
+            "calculator.json": {
+              "bytes": 225,
+              "kind": "instrument",
+              "sha256": "8e629109970a1082d918aca192f43b7de2431f32f1e0dace086375befec93d61"
+            }
+          },
+          "export_sha256": "3f3daaea8332a5fefbd56c7226f2b4189fa142db837c6d51caf87c467aac0e7b"
+        },
+        {
+          "state": {
+            "actions": 1,
+            "adversarial_cases": [],
+            "artifacts": {
+              "RUN_INSTRUMENT.py": {
+                "bytes": 8843,
+                "kind": "trusted_runner",
+                "sha256": "cca18a8703a03448cd9bf035223226d513ed58bb544f018949e31603e7c8c2e5"
+              },
+              "calculator.json": {
+                "bytes": 225,
+                "kind": "instrument",
+                "sha256": "8e629109970a1082d918aca192f43b7de2431f32f1e0dace086375befec93d61"
+              }
+            },
+            "branch_index": 1,
+            "branch_initialized": true,
+            "capability_id": null,
+            "created_at": "2026-11-10T07:53:20.659874+00:00",
+            "epoch": 0,
+            "events": [
+              {
+                "at": "2026-11-10T07:53:20.659884+00:00",
+                "detail": {
+                  "acceptance_source": "Operator-frozen conditions; independence is not inferred.",
+                  "spec_hash": "2d9bd88d6adceb6bb6973a82b7f0c3dee7bc29c422eb591ebafadc745706300d"
+                },
+                "index": 0,
+                "kind": "created",
+                "previous": "0000000000000000000000000000000000000000000000000000000000000000",
+                "sha256": "ff33956d21402070e06ce9ce0ededbbb46f555ce5dcdea6f5d6f603ee0874b14"
+              },
+              {
+                "at": "2026-11-10T07:53:20.660635+00:00",
+                "detail": {
+                  "approach": "Use addition of x to itself; avoid multiplication.",
+                  "index": 1,
+                  "parent": "wf_1e14c3556edfa52f12db3d4d",
+                  "shared_budget_allocation": {
+                    "max_actions": 2,
+                    "max_iterations": 1,
+                    "model_call_limit": 1
+                  }
+                },
+                "index": 1,
+                "kind": "branch_created",
+                "previous": "ff33956d21402070e06ce9ce0ededbbb46f555ce5dcdea6f5d6f603ee0874b14",
+                "sha256": "b3084fe2ca849cb0fc96ef5cdc27c7d8a6636a4f657df97ea9762bad9be62bd6"
+              },
+              {
+                "at": "2026-11-10T07:53:20.666661+00:00",
+                "detail": {
+                  "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+                  "provider": "local",
+                  "role": "builder",
+                  "scope": "Waiting for selected service capacity; no model call or construction iteration consumed."
+                },
+                "index": 2,
+                "kind": "model_queued",
+                "previous": "b3084fe2ca849cb0fc96ef5cdc27c7d8a6636a4f657df97ea9762bad9be62bd6",
+                "sha256": "4505daf80526775eb4f1fb4e839d4ed2b40bdb988a597ebc0052a505109ce78a"
+              },
+              {
+                "at": "2026-11-10T07:53:20.668797+00:00",
+                "detail": {
+                  "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+                  "provider": "local",
+                  "role": "builder",
+                  "run_id": "wf_1056bb3cfc64572f76e6540b_c007c17094153e6c"
+                },
+                "index": 3,
+                "kind": "model_started",
+                "previous": "4505daf80526775eb4f1fb4e839d4ed2b40bdb988a597ebc0052a505109ce78a",
+                "sha256": "5f88640922054b0f048c0789ecca2d6e57c8d93c7a8c21b0ff84e3293c09d401"
+              },
+              {
+                "at": "2026-11-10T07:53:37.707732+00:00",
+                "detail": {
+                  "cost": {
+                    "accounted": 0.0,
+                    "amount": 0.0,
+                    "attempts": 1,
+                    "basis": "reported_usage_at_user_rates",
+                    "complete_cost_known": false,
+                    "currency": "USD"
+                  },
+                  "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+                  "provider": "local",
+                  "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+                  "reported_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+                  "requested_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+                  "response_sha256": "5aeba3f81e8b2f3aeb1ae1ea8a0d037a08c4477a9d680b73559f71f9f353009e",
+                  "role": "builder",
+                  "run_id": "wf_1056bb3cfc64572f76e6540b_c007c17094153e6c",
+                  "usage": {
+                    "input_tokens": 598,
+                    "output_tokens": 70
+                  }
+                },
+                "index": 4,
+                "kind": "model_completed",
+                "previous": "5f88640922054b0f048c0789ecca2d6e57c8d93c7a8c21b0ff84e3293c09d401",
+                "sha256": "479e4121ab6ae1256b604a7185347a5a8bb4a645e2fa41423ecbc40843baba75"
+              },
+              {
+                "at": "2026-11-10T07:53:37.709320+00:00",
+                "detail": {
+                  "outcome": {
+                    "artifact": "calculator.json",
+                    "bytes": 225,
+                    "kind": "instrument",
+                    "run": "python3 RUN_INSTRUMENT.py calculator.json input.json",
+                    "sha256": "8e629109970a1082d918aca192f43b7de2431f32f1e0dace086375befec93d61"
+                  },
+                  "tool": "construct_instrument"
+                },
+                "index": 5,
+                "kind": "tool_completed",
+                "previous": "479e4121ab6ae1256b604a7185347a5a8bb4a645e2fa41423ecbc40843baba75",
+                "sha256": "a35ebc99570fb05d0a22d43983f36c5a862375497de6d86486ca690aa3f6d0a2"
+              },
+              {
+                "at": "2026-11-10T07:53:37.710338+00:00",
+                "detail": {
+                  "artifact_hashes": {
+                    "RUN_INSTRUMENT.py": "cca18a8703a03448cd9bf035223226d513ed58bb544f018949e31603e7c8c2e5",
+                    "calculator.json": "8e629109970a1082d918aca192f43b7de2431f32f1e0dace086375befec93d61"
+                  },
+                  "checks": [
+                    {
+                      "artifact": "calculator.json",
+                      "error": "$.outputs[\"result\"].args[1]: a literal is a raw JSON value (for example 7), not a literal/value/const object. Input references use exactly {\"field\":\"name\"}.",
+                      "kind": "instrument",
+                      "passed": false
+                    },
+                    {
+                      "artifact": "calculator.json",
+                      "error": "$.outputs[\"result\"].args[1]: a literal is a raw JSON value (for example 7), not a literal/value/const object. Input references use exactly {\"field\":\"name\"}.",
+                      "kind": "instrument",
+                      "passed": false
+                    }
+                  ],
+                  "passed": false,
+                  "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification.",
+                  "spec_hash": "2d9bd88d6adceb6bb6973a82b7f0c3dee7bc29c422eb591ebafadc745706300d"
+                },
+                "index": 6,
+                "kind": "verification",
+                "previous": "a35ebc99570fb05d0a22d43983f36c5a862375497de6d86486ca690aa3f6d0a2",
+                "sha256": "d1f879a60b1cc9e889bc5e63411c3d4407a05fe4360ef12eaa91cba570f65852"
+              },
+              {
+                "at": "2026-11-10T07:53:37.723040+00:00",
+                "detail": {
+                  "reason": "Declared model-call allocation exhausted; no further inference dispatched."
+                },
+                "index": 7,
+                "kind": "stopped",
+                "previous": "d1f879a60b1cc9e889bc5e63411c3d4407a05fe4360ef12eaa91cba570f65852",
+                "sha256": "e28641d5a0d11218213bf0e1566ac11f08c13be63fa0653242095fee5196cb39"
+              }
+            ],
+            "feedback": "\nDeterministic acceptance: {\"artifact_hashes\":{\"RUN_INSTRUMENT.py\":\"cca18a8703a03448cd9bf035223226d513ed58bb544f018949e31603e7c8c2e5\",\"calculator.json\":\"8e629109970a1082d918aca192f43b7de2431f32f1e0dace086375befec93d61\"},\"checks\":[{\"artifact\":\"calculator.json\",\"error\":\"$.outputs[\\\"result\\\"].args[1]: a literal is a raw JSON value (for example 7), not a literal/value/const object. Input references use exactly {\\\"field\\\":\\\"name\\\"}.\",\"kind\":\"instrument\",\"passed\":false},{\"artifact\":\"calculator.json\",\"error\":\"$.outputs[\\\"result\\\"].args[1]: a literal is a raw JSON value (for example 7), not a literal/value/const object. Input references use exactly {\\\"field\\\":\\\"name\\\"}.\",\"kind\":\"instrument\",\"passed\":false}],\"passed\":false,\"scope\":\"Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification.\",\"spec_hash\":\"2d9bd88d6adceb6bb6973a82b7f0c3dee7bc29c422eb591ebafadc745706300d\"}",
+            "id": "wf_1056bb3cfc64572f76e6540b",
+            "inflight": null,
+            "iteration": 1,
+            "model_call_limit": 1,
+            "model_calls": 1,
+            "parent_run": "wf_1e14c3556edfa52f12db3d4d",
+            "phase": "builder",
+            "research": "",
+            "schema": "alpha-genesis-workflow/v1",
+            "spec": {
+              "acceptance": [
+                {
+                  "artifact": "calculator.json",
+                  "expected": {
+                    "result": 6
+                  },
+                  "input": {
+                    "x": 3
+                  },
+                  "kind": "instrument"
+                },
+                {
+                  "artifact": "calculator.json",
+                  "expected": {
+                    "result": 0
+                  },
+                  "input": {
+                    "x": 0
+                  },
+                  "kind": "instrument"
+                }
+              ],
+              "context": "Use the construct_instrument tool. The operator prepared the expected outputs. No document is required.\n\nOPERATOR-ASSIGNED APPROACH (same objective, acceptance and permissions):\nUse addition of x to itself; avoid multiplication.",
+              "local_only": true,
+              "max_actions": 2,
+              "max_iterations": 1,
+              "max_operations": 10000,
+              "max_output_tokens": 2048,
+              "objective": "Construct calculator.json with declared input x and output result = x * 2. Return only the requested JSON action object. This is an arithmetic software qualification, not an empirical claim.",
+              "roles": {
+                "builder": {
+                  "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+                  "provider": "local"
+                }
+              },
+              "strategy": "single-model",
+              "tool_permissions": [
+                "construct_instrument",
+                "read_artifact",
+                "run_instrument",
+                "write_dataset",
+                "write_document"
+              ]
+            },
+            "spec_hash": "2d9bd88d6adceb6bb6973a82b7f0c3dee7bc29c422eb591ebafadc745706300d",
+            "status": "exhausted",
+            "unadjudicated_counterexamples": [],
+            "updated_at": "2026-11-10T07:53:37.723040+00:00",
+            "verification": {
+              "artifact_hashes": {
+                "RUN_INSTRUMENT.py": "cca18a8703a03448cd9bf035223226d513ed58bb544f018949e31603e7c8c2e5",
+                "calculator.json": "8e629109970a1082d918aca192f43b7de2431f32f1e0dace086375befec93d61"
+              },
+              "checks": [
+                {
+                  "artifact": "calculator.json",
+                  "error": "$.outputs[\"result\"].args[1]: a literal is a raw JSON value (for example 7), not a literal/value/const object. Input references use exactly {\"field\":\"name\"}.",
+                  "kind": "instrument",
+                  "passed": false
+                },
+                {
+                  "artifact": "calculator.json",
+                  "error": "$.outputs[\"result\"].args[1]: a literal is a raw JSON value (for example 7), not a literal/value/const object. Input references use exactly {\"field\":\"name\"}.",
+                  "kind": "instrument",
+                  "passed": false
+                }
+              ],
+              "passed": false,
+              "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification.",
+              "spec_hash": "2d9bd88d6adceb6bb6973a82b7f0c3dee7bc29c422eb591ebafadc745706300d"
+            }
+          },
+          "artifact_hashes": {
+            "RUN_INSTRUMENT.py": {
+              "bytes": 8843,
+              "kind": "trusted_runner",
+              "sha256": "cca18a8703a03448cd9bf035223226d513ed58bb544f018949e31603e7c8c2e5"
+            },
+            "calculator.json": {
+              "bytes": 225,
+              "kind": "instrument",
+              "sha256": "8e629109970a1082d918aca192f43b7de2431f32f1e0dace086375befec93d61"
+            }
+          },
+          "export_sha256": "6daa98c06ca9245bd301e3a83bf53385a764dc1d84d41c4e8022bd55425f5fe0"
+        }
+      ]
+    }
+  ],
+  "source_unchanged": true,
+  "source_revision": "48d3f80781d1f2d732d0cc5e6cbab0dbc6a387d8",
+  "source_product_tree": "fa6fe606d73d8dbd1ec909de893e42131b099b9c",
+  "provenance_added_by": "qualify_hosted_local.py; actual underlying run fields unchanged"
+}

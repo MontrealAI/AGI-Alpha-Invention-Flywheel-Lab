@@ -22,6 +22,7 @@ import threading
 import time
 
 from . import adapters as _adapters, workflows as _workflows, codex as _codex, codex_permissions as _permissions
+from . import workflow_schemas as _workflow_schemas, output_schema as _output_schema
 from .adapters import BridgeError, strict_json
 from .codex import CodexService
 from .codex_permissions import PROFILE, permission_overrides, verify_profile_protocol, verify_runtime_sandbox
@@ -48,7 +49,7 @@ def _source_guard():
 def _authority_manifest(binary):
     _source_guard()
     sources = {"upgrade_foundry.py": OWN_SHA}
-    for module in (_adapters, _workflows, _codex, _permissions):
+    for module in (_adapters, _workflows, _workflow_schemas, _output_schema, _codex, _permissions):
         path = Path(module.__file__)
         actual = hashlib.sha256(_regular(path, 1024 * 1024)).hexdigest()
         require(actual == module.LOADED_SOURCE_SHA256,

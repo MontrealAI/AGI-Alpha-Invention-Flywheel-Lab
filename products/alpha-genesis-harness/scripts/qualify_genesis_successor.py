@@ -28,6 +28,8 @@ PATHS = {
     "interpreter": ROOT / "bridge/instruments.py",
     "workflow_helpers": ROOT / "bridge/workflows.py",
     "workflow_strategies": ROOT / "bridge/workflow_strategies.py",
+    "workflow_schemas": ROOT / "bridge/workflow_schemas.py",
+    "output_schema": ROOT / "bridge/output_schema.py",
     "execution_services": ROOT / "bridge/services.py",
     "provider_contracts": ROOT / "bridge/adapters.py",
 }

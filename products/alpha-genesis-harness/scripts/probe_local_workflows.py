@@ -38,9 +38,9 @@ def main():
                "--chat-template-kwargs", '{"enable_thinking":false}', "--reasoning-budget", "0"]
     log = (args.output / "server.log").open("wb")
     process = subprocess.Popen(command, stdout=log, stderr=subprocess.STDOUT)
-    record = {"schema": "alpha-genesis-live-local-workflow/v1", "protocol_revision": "explicit-json-mode-v2", "structured_output": "Explicitly configured JSON-object generation for builder and critic; independent semantic checks and original allocations unchanged. Historical unformatted failure preserved at evidence/hosted-local-3f4e1785d395.", "scope": "Actual local CPU inference against two frozen arithmetic cases. This establishes narrow construction behavior, not frontier reasoning or general invention superiority.",
+    record = {"schema": "alpha-genesis-live-local-workflow/v1", "protocol_revision": "explicit-json-schema-v3", "structured_output": "Explicitly configured generic action/expression schema generation and local response validation for builder and critic. Independent semantic checks and original allocations unchanged. Source48d3 JSON-object-mode failure remains preserved at evidence/hosted-local-48d3f80781d1.", "scope": "Actual local CPU inference against two frozen arithmetic cases. This establishes narrow construction behavior, not frontier reasoning or general invention superiority.",
               "model": {"configured_alias": args.alias, "weights_sha256": sha(weights), "server_sha256": sha(binary), "server_arguments": command[1:]},
-              "source_sha256": {str(p.relative_to(ROOT)): sha(p) for p in [ROOT / "bridge/workflows.py", ROOT / "bridge/services.py", ROOT / "bridge/workflow_strategies.py", ROOT / "bridge/instruments.py", ROOT / "bridge/adapters.py", ROOT / "bridge/streaming.py", Path(__file__)]}, "runs": []}
+              "source_sha256": {str(p.relative_to(ROOT)): sha(p) for p in [ROOT / "bridge/workflows.py", ROOT / "bridge/workflow_schemas.py", ROOT / "bridge/output_schema.py", ROOT / "bridge/services.py", ROOT / "bridge/workflow_strategies.py", ROOT / "bridge/instruments.py", ROOT / "bridge/adapters.py", ROOT / "bridge/streaming.py", Path(__file__)]}, "runs": []}
     try:
         ready = False
         for _ in range(120):
@@ -55,8 +55,25 @@ def main():
                 time.sleep(1)
         if not ready:
             raise RuntimeError("Explicitly selected local server did not become ready.")
-        config = {"local_only": True, "timeout_seconds": 300, "providers": {"local": {"kind": "openai", "base_url": f"http://127.0.0.1:{args.port}/v1", "output_limit_field": "max_tokens", "models": {args.alias: {"input_per_million": 0, "output_per_million": 0, "max_output_tokens": 2048, "input_token_overhead": 4096, "json_mode": True}}}}}
-        runtime = Runtime(config)
+        config = {"local_only": True, "timeout_seconds": 300, "providers": {"local": {"kind": "openai", "base_url": f"http://127.0.0.1:{args.port}/v1", "output_limit_field": "max_tokens", "models": {args.alias: {"input_per_million": 0, "output_per_million": 0, "max_output_tokens": 2048, "input_token_overhead": 4096, "json_mode": True, "json_schema": True}}}}}
+        observations = []
+        class ObservedRuntime(Runtime):
+            def generate(self, data, on_event=None, *, cancelled_before_dispatch=None, expected_provider=None):
+                started = time.monotonic()
+                observation = {"run_id": data["run_id"], "prompt_sha256": hashlib.sha256(data["prompt"].encode()).hexdigest()}
+                if data.get("json_schema") is not None:
+                    observation["request_schema_sha256"] = hashlib.sha256(json.dumps(data["json_schema"], sort_keys=True, separators=(",", ":"), ensure_ascii=False, allow_nan=False).encode()).hexdigest()
+                try:
+                    response = super().generate(data, on_event=on_event, cancelled_before_dispatch=cancelled_before_dispatch, expected_provider=expected_provider)
+                    observation["response"] = response
+                    return response
+                except Exception as error:
+                    observation["error_code"] = getattr(error, "code", type(error).__name__)
+                    raise
+                finally:
+                    observation["wall_seconds"] = time.monotonic() - started
+                    observations.append(observation)
+        runtime = ObservedRuntime(config)
         service = WorkflowService(runtime, args.output / "workspace")
         for policy in ["single-model", "actor-critic", "parallel-exploration"]:
             roles = {"builder": {"provider": "local", "model": args.alias}}
@@ -68,6 +85,7 @@ def main():
             if policy == "parallel-exploration":
                 spec.update(approaches=["Use direct multiplication of x by the literal 2.", "Use addition of x to itself; avoid multiplication."], max_iterations=2, max_actions=4)
             state = service.create(spec)
+            observation_start = len(observations)
             started = time.monotonic()
             while state["status"] in {"ready", "running"}:
                 state = service.step(state["id"])
@@ -76,9 +94,12 @@ def main():
             export = service.export(state["id"])
             (args.output / (policy + "-project.json")).write_text(json.dumps(export, ensure_ascii=False, indent=2) + "\n")
             entry = {"policy": policy, "status": state["status"], "wall_seconds": elapsed, "model_calls": state["model_calls"], "iterations": state["iteration"], "actions": state["actions"], "verification": state["verification"], "events": state["events"], "artifacts": state["artifacts"]}
+            entry["observations"] = observations[observation_start:]
+            entry["untrusted_artifact_text"] = {name: content for name, content in export["files"].items() if name == "calculator.json"}
+            entry["raw_evidence_notice"] = "Allowlisted calculator text and completed responses returned by the adapter are untrusted diagnostic evidence, including semantic failures. Adapter refusals preserve error codes, not discarded raw response text. These are not accepted artifacts or independent claims."
             if state.get("branches"):
                 entry.update(branches=state["branches"], selected_branch=state.get("selected_branch"), request_costs=state["request_costs"],
-                             branch_evidence=[{"state": child["state"], "artifact_hashes": child["state"]["artifacts"], "export_sha256": child["sha256"]} for child in export["branch_exports"]])
+                             branch_evidence=[{"state": child["state"], "artifact_hashes": child["state"]["artifacts"], "export_sha256": child["sha256"], "untrusted_artifact_text": {name: content for name, content in child["files"].items() if name == "calculator.json"}} for child in export["branch_exports"]])
             if state["status"] == "complete":
                 external = args.output / (policy + "-export")
                 external.mkdir()

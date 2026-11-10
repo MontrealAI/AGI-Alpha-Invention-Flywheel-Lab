@@ -282,7 +282,7 @@ class OwnerHandoffTests(unittest.TestCase):
  def model_fixture(self, status='FAIL'):
   self.args.model_evidence_archive=self.assets/'LOCAL-MODEL-EVIDENCE-fixture.zip'
   self.model_files={'quote/manufacturing_construct/quote.json':b'{"fixture":"not executed"}',
-                    'LOCAL-QUOTE-PROTOCOL-005.json':b'{"fixture":true}'}
+                    'LOCAL-QUOTE-PROTOCOL-006.json':b'{"fixture":true}'}
   self.model_manifest={'schema':'alpha-harness/hosted-local-qualification/v1','status':status,
                        'source_revision':SOURCE,'source_product_tree':self.manifest['source_product_tree'],
                        'source_unchanged':True,'qualifications':{'local_inference':'FAIL'},
@@ -319,8 +319,8 @@ class OwnerHandoffTests(unittest.TestCase):
    with self.subTest(mutation=mutation):
     self.model_fixture()
     if mutation=='extra':self.model_files['unlisted.txt']=b'unlisted'
-    elif mutation=='missing':self.model_files.pop('LOCAL-QUOTE-PROTOCOL-005.json')
-    else:self.model_files['LOCAL-QUOTE-PROTOCOL-005.json']=b'changed'
+    elif mutation=='missing':self.model_files.pop('LOCAL-QUOTE-PROTOCOL-006.json')
+    else:self.model_files['LOCAL-QUOTE-PROTOCOL-006.json']=b'changed'
     self.write_model_archive()
     with self.assertRaisesRegex(ValueError,'Model evidence (inventory|file hash)'):module.assemble(self.args)
     self.assertFalse(self.args.output.exists())

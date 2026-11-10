@@ -51,7 +51,7 @@ class ReconciliationTests(unittest.TestCase):
                         'platform':'linux','checks':sorted(reconcile.BROWSER_CHECKS),'screenshots':['HARNESS-fixture.png']}
         (f.assets/'BROWSER-VERIFICATION.json').write_text(json.dumps(self.browser))
         self.paired = {'schema':'alpha-genesis-paired-retrieval/v1',
-            'source_sha256':{name:hashlib.sha256(f.content[name]).hexdigest() for name in ['bridge/strategy_demo.py','bridge/workflows.py','bridge/workflow_strategies.py']},
+            'source_sha256':{name:hashlib.sha256(f.content[name]).hexdigest() for name in reconcile.PAIRED_SOURCE_FILES},
             'protocol':{'shared_per_arm_budget':{'model_calls':2,'tool_actions':2}},
             'arms':[{'arm':'no-retrieval','status':'complete','model_calls':2,'actions':2,'failed_initial_checks':1,'fixture_source_fetches':0,'honest_abstention':True,'matches_withheld_source':False,'verification':{'passed':True}},
                     {'arm':'retrieval','status':'complete','model_calls':2,'actions':2,'failed_initial_checks':1,'fixture_source_fetches':1,'honest_abstention':False,'matches_withheld_source':True,'verification':{'passed':True}}],
@@ -260,22 +260,22 @@ class ReconciliationTests(unittest.TestCase):
         self.live_files['LOCAL-WORKFLOWS-HOSTED.json']=json.dumps(raw).encode();self.write_live(value)
         with self.assertRaisesRegex(ValueError,'completed model event'):self.rows()
 
-    def test_current_quote_trial_requires_005_driver_and_raw_receipt(self):
+    def test_current_quote_trial_requires_006_driver_and_raw_receipt(self):
         value=self.live_receipt()
         value['qualifications']={key:('PASS' if key=='local_inference' else 'NOT_TESTED') for key in reconcile.LIVE_KEYS}
-        value['commands']=[{'entrypoint':'qualify_quote_workflow_005.py','returncode':1,'timed_out':False}]
+        value['commands']=[{'entrypoint':'qualify_quote_workflow_006.py','returncode':1,'timed_out':False}]
         raw=json.dumps({'source_revision':owner_fixture.SOURCE,'product_tree_sha':'b'*40,
                         'arms':[{'events':[{'kind':'model_completed'}]}]}).encode()
-        self.live_files={'LOCAL-QUOTE-QUALIFICATION-005.json':raw}
+        self.live_files={'LOCAL-QUOTE-QUALIFICATION-006.json':raw}
         self.write_live(value)
         rows,_,_=self.rows()
         self.assertEqual(rows['B2']['status'],'PASS')
         self.assertEqual(rows['D1']['status'],'NOT TESTED')
-        self.live_files={'LOCAL-QUOTE-QUALIFICATION-004.json':raw}
+        self.live_files={'LOCAL-QUOTE-QUALIFICATION-005.json':raw}
         self.write_live(value)
         with self.assertRaisesRegex(ValueError,'completed model event'):self.rows()
-        self.live_files={'LOCAL-QUOTE-QUALIFICATION-005.json':raw}
-        value['commands'][0]['entrypoint']='qualify_quote_workflow_004.py'
+        self.live_files={'LOCAL-QUOTE-QUALIFICATION-006.json':raw}
+        value['commands'][0]['entrypoint']='qualify_quote_workflow_005.py'
         self.write_live(value)
         with self.assertRaisesRegex(ValueError,'actual inference driver execution'):self.rows()
 
@@ -288,6 +288,16 @@ class ReconciliationTests(unittest.TestCase):
                          {key:value for key,value in after.items() if key not in metadata})
         self.assertEqual(after['trial_id'],'quote-trial-005')
         self.assertEqual(after['diagnostic_revision']['source'],'bridge/instruments.py')
+
+    def test_trial_006_preserves_frozen_acceptance_resources_and_controls(self):
+        before=json.loads((HERE.parent/'evidence/LOCAL-QUOTE-PROTOCOL-005.json').read_text())
+        after=json.loads((HERE.parent/'evidence/LOCAL-QUOTE-PROTOCOL-006.json').read_text())
+        for key in ['contract','fields','manufacturing_cases','lab_cases','arms',
+                    'finite_inference_budget','acceptance_rules','full_cost_boundaries','model',
+                    'construction_format_instruction','inheritance_format_instruction']:
+            self.assertEqual(before[key],after[key],key)
+        self.assertEqual(after['trial_id'],'quote-trial-006')
+        self.assertEqual(after['structured_output']['wire_request']['response_format']['type'],'json_schema')
 
     def test_empty_external_digest_refused(self):
         self.args.expected_sha256=''
@@ -367,7 +377,7 @@ class GenesisRawProofTests(unittest.TestCase):
         cls.demo = json.loads((cls.folder/'demo.json').read_text())
         cls.frozen = (cls.folder/'freeze.json').read_bytes()
         cls.successor = json.loads((cls.folder/'successor.json').read_text())
-        cls.content = {name:(cls.product/name).read_bytes() for name in reconcile.GENESIS_SOURCES.values()}
+        cls.content = {name:(cls.product/name).read_bytes() for name in set(reconcile.GENESIS_SOURCES.values()) | {'bridge/'+name for name in reconcile.GENESIS_DEPENDENCY_NAMES}}
 
     def test_actual_constructed_source_and_fresh_successor_validate(self):
         self.assertTrue(reconcile.genesis_demo_passed(self.demo,self.content))
@@ -377,6 +387,15 @@ class GenesisRawProofTests(unittest.TestCase):
         value = copy.deepcopy(self.demo);value['experiment']['artifacts'].pop('candidate.py')
         with self.assertRaisesRegex(ValueError,'constructed source'):
             reconcile.genesis_demo_passed(value,self.content)
+
+    def test_missing_or_changed_schema_dependency_is_refused(self):
+        for name in ('workflow_schemas.py', 'output_schema.py'):
+            value = copy.deepcopy(self.demo); value['experiment']['source']['dependency_sha256'].pop(name)
+            with self.assertRaisesRegex(ValueError, 'dependency source identity'):
+                reconcile.genesis_demo_passed(value,self.content)
+            value = copy.deepcopy(self.demo); value['experiment']['source']['dependency_sha256'][name] = '0'*64
+            with self.assertRaisesRegex(ValueError, 'dependency differs'):
+                reconcile.genesis_demo_passed(value,self.content)
 
     def test_forged_successor_acceptance_cannot_pass_even_with_new_digest(self):
         value = copy.deepcopy(self.successor)
