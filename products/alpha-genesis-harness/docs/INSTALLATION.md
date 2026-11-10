@@ -13,8 +13,10 @@ The download contains a browser application and an optional Python connector. It
 | System | Local connector launcher | Equivalent command in the product folder | Verification scope |
 |---|---|---|---|
 | Linux | `Launch-HARNESS.sh` | `python3 launch.py` | Linux automation is recorded in the exact release evidence |
-| macOS | `Launch-HARNESS.command` | `python3 launch.py` | Script supplied; native macOS/Finder/Safari use requires its own recorded test |
-| Windows | `Launch-HARNESS.cmd` | `py -3 launch.py` | Script supplied; native Windows/Explorer use requires its own recorded test |
+| macOS | `Launch-HARNESS.command` | `python3 launch.py` | See this exact release’s macOS source-launcher/Chromium receipt; Finder/Safari are separate |
+| Windows | `Launch-HARNESS.cmd` | `py -3 launch.py` | See this exact release’s Windows source-launcher/Chromium receipt; Explorer double-click is separate |
+
+The separate native evidence supplement records each tested OS, exact archive hash, source launcher, headless Chromium workflows, screenshots and exported output. Only a matching PASS receipt establishes that scope; the included static matrix describes the source-freeze state before hosted execution. Finder/Explorer double-click, Safari, signed installers and notarization need separate evidence.
 
 These are source launchers, not signed installers or notarized applications. If your operating system blocks an untrusted download, first verify its origin and checksum. Do not disable system protections globally. The terminal command is an explicit alternative after you trust the source. If a ZIP extractor loses the macOS/Linux execute bit, the terminal command still works.
 
@@ -43,7 +45,7 @@ Le téléchargement contient une application de navigateur et un connecteur Pyth
 4. Pour connecter des modèles et conserver des exécutions agentiques, utilisez Python 3.10 ou ultérieur avec le lanceur de votre système indiqué dans le tableau.
 5. Gardez le terminal ouvert. Utilisez l'adresse locale affichée. Ctrl+C arrête le connecteur.
 
-Les lanceurs sont des scripts source, sans signature native ni notarisation. Les tests Linux ne démontrent pas le fonctionnement graphique de macOS ou Windows. Vérifiez l'origine du téléchargement; ne désactivez pas globalement les protections du système. Si le droit d'exécution n'est pas conservé par l'extracteur, utilisez la commande du tableau.
+Les lanceurs sont des scripts source, sans signature native ni notarisation. Consultez les reçus macOS et Windows du supplément de preuves correspondant à l’empreinte exacte du ZIP. Une réussite y couvre le lanceur source et Chromium sans interface système; elle ne couvre pas le double clic Finder/Explorer, Safari ou une installation native signée. La matrice incluse décrit l’état au gel du code, avant ces exécutions hébergées. Vérifiez l'origine du téléchargement; ne désactivez pas globalement les protections du système. Si le droit d'exécution n'est pas conservé par l'extracteur, utilisez la commande du tableau.
 
 La configuration privée et l'espace de travail doivent rester hors du téléchargement et du dépôt. Un modèle local exige son propre serveur, ses poids et les ressources indiquées par son éditeur. Un compte API exige une autorisation explicite et un budget; un abonnement ChatGPT utilise un parcours d'autorisation distinct. L'accès commercial au forfait ChatGPT reste soumis à l'approbation applicable.
 

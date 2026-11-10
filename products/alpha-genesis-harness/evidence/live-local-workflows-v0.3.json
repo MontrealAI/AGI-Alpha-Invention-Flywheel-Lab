@@ -1,155 +1,149 @@
 {
   "schema": "alpha-genesis-live-local-onboarding/v1",
-  "created_at": "2026-11-10T05:38:01.345792+00:00",
+  "created_at": "2026-11-10T05:54:47.913044+00:00",
   "platform": "Linux-6.18.57-x86_64-with-glibc2.41",
   "source_sha256": {
     "bridge/adapters.py": "9df37397ab9931d0738f0148ca15703f0ecbfa6c88149987684cf8f9f05ac22e",
     "bridge/services.py": "fed69688610d2d8045d7fa95eb1c15eebea8f62ee8ccfed2920cf1dc6a67c0c6",
-    "bridge/server.py": "16579dbadcc0574fb0ec1182148cf39d8347b69e941fdd72e18d0e44deed2479",
+    "bridge/server.py": "ba63d38377eb5f66f07cda785a080b25034c4909c1e9806826c355de36e8e5ed",
     "bridge/onboarding.py": "6a94b257aefa5d50a26ad394af3569d1435bb4cf17a9e2a452b0da2e488dfbdc",
     "bridge/workflows.py": "05203df3906e44be13e4ed51e4b9766f9e260fd3ee8560bfd99ec3ed4a75cfd9",
     "bridge/instruments.py": "787466086e1303599aa4576c1c677e732257efa10d2bf932b96a705a96ac03b9",
     "bridge/streaming.py": "dd4cd766fb911e350358d4f31f7053b4d6847b189243cf1ce1108ebc834b21ec",
     "scripts/probe_local_onboarding.py": "cc81746dd2a82c54a59786588fd6e205551773b9d4532bdcfad955dd99de4cc5"
   },
-  "status": "PASS",
+  "status": "FAIL",
   "runs": [
     {
       "policy": "single-model",
-      "status": "complete",
-      "wall_seconds": 8.601181257000007,
-      "model_calls": 1,
-      "iterations": 1,
-      "actions": 1,
+      "status": "exhausted",
+      "wall_seconds": 52.76791409599991,
+      "model_calls": 3,
+      "iterations": 3,
+      "actions": 3,
       "verification": {
-        "passed": true,
+        "artifact_hashes": {
+          "RUN_INSTRUMENT.py": "787466086e1303599aa4576c1c677e732257efa10d2bf932b96a705a96ac03b9",
+          "calculator.json": "d4b1518020a6188969a67221e2b0252b364c437a1d438202fc368b0196fb2160",
+          "sum.json": "d4b1518020a6188969a67221e2b0252b364c437a1d438202fc368b0196fb2160"
+        },
         "checks": [
           {
             "artifact": "calculator.json",
+            "error": "Input field root was not declared.",
             "kind": "instrument",
-            "passed": true,
-            "actual": {
-              "result": 6
-            },
-            "expected": {
-              "result": 6
-            },
-            "operations": 3
+            "passed": false
           },
           {
             "artifact": "calculator.json",
+            "error": "Input field root was not declared.",
             "kind": "instrument",
-            "passed": true,
-            "actual": {
-              "result": 0
-            },
-            "expected": {
-              "result": 0
-            },
-            "operations": 3
+            "passed": false
           }
         ],
-        "spec_hash": "d199f17bbcaa5ae0bd75459cd433314b6af451a760735b30a8ea3df686184ca0",
-        "artifact_hashes": {
-          "calculator.json": "415205a99a1b6906dd10c055f9ff5a2d3cc171f7af73791df03323af66e888e4",
-          "RUN_INSTRUMENT.py": "787466086e1303599aa4576c1c677e732257efa10d2bf932b96a705a96ac03b9"
-        },
-        "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification."
+        "passed": false,
+        "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification.",
+        "spec_hash": "d199f17bbcaa5ae0bd75459cd433314b6af451a760735b30a8ea3df686184ca0"
       },
       "artifacts": {
-        "calculator.json": {
-          "sha256": "415205a99a1b6906dd10c055f9ff5a2d3cc171f7af73791df03323af66e888e4",
-          "bytes": 190,
-          "kind": "instrument"
-        },
         "RUN_INSTRUMENT.py": {
-          "sha256": "787466086e1303599aa4576c1c677e732257efa10d2bf932b96a705a96ac03b9",
           "bytes": 6633,
-          "kind": "trusted_runner"
+          "kind": "trusted_runner",
+          "sha256": "787466086e1303599aa4576c1c677e732257efa10d2bf932b96a705a96ac03b9"
+        },
+        "calculator.json": {
+          "bytes": 223,
+          "kind": "instrument",
+          "sha256": "d4b1518020a6188969a67221e2b0252b364c437a1d438202fc368b0196fb2160"
+        },
+        "sum.json": {
+          "bytes": 223,
+          "kind": "instrument",
+          "sha256": "d4b1518020a6188969a67221e2b0252b364c437a1d438202fc368b0196fb2160"
         }
       },
       "events": [
         {
           "kind": "model_completed",
           "detail": {
-            "role": "builder",
-            "provider": "local-llama-cpp",
+            "cost": {
+              "accounted": 0.0,
+              "amount": 0.0,
+              "attempts": 1,
+              "basis": "reported_usage_at_user_rates",
+              "complete_cost_known": false,
+              "currency": "USD"
+            },
             "model": "Qwen3-1.7B-Q4_K_M",
-            "requested_model": "Qwen3-1.7B-Q4_K_M",
+            "provider": "local-llama-cpp",
+            "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
             "reported_model": "Qwen3-1.7B-Q4_K_M",
-            "run_id": "wf_840c77e9b5dd95ba4b8202a0_9644f2de8567fbcb",
+            "requested_model": "Qwen3-1.7B-Q4_K_M",
+            "response_sha256": "8a8606a12461804cc8f4b9906d6366fb424f77adc0195589c9d0d2a17729fc4b",
+            "role": "builder",
+            "run_id": "wf_d5213c11337556ccdfa059a4_e5992eb88db547cb",
             "usage": {
               "input_tokens": 516,
-              "output_tokens": 55
-            },
+              "output_tokens": 57
+            }
+          }
+        },
+        {
+          "kind": "model_completed",
+          "detail": {
             "cost": {
-              "currency": "USD",
-              "amount": 0.0,
               "accounted": 0.0,
-              "basis": "reported_usage_at_user_rates",
+              "amount": 0.0,
               "attempts": 1,
-              "complete_cost_known": false
+              "basis": "reported_usage_at_user_rates",
+              "complete_cost_known": false,
+              "currency": "USD"
             },
+            "model": "Qwen3-1.7B-Q4_K_M",
+            "provider": "local-llama-cpp",
             "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
-            "response_sha256": "3b2159a23da30df0430eb747572293fd8485fa708d27366920cb9074dd31d850"
+            "reported_model": "Qwen3-1.7B-Q4_K_M",
+            "requested_model": "Qwen3-1.7B-Q4_K_M",
+            "response_sha256": "3ecd3503242c8afb4518a0c5000247e5888085c3b0f835fc7a858b2f5ebb3f12",
+            "role": "builder",
+            "run_id": "wf_d5213c11337556ccdfa059a4_e4b854512ca91152",
+            "usage": {
+              "input_tokens": 1151,
+              "output_tokens": 125
+            }
           }
-        }
-      ],
-      "external_execution": {
-        "returncode": 0,
-        "result": {
-          "output": {
-            "result": 34
-          },
-          "operations": 3,
-          "scope": "Bounded declarative execution; acceptance must be checked separately."
         },
-        "accepted": true
-      },
-      "reuse": {
-        "capability_id": "wf_840c77e9b5dd95ba4b8202a0",
-        "outputs": {
-          "calculator.json": {
-            "output": {
-              "result": 82
+        {
+          "kind": "model_completed",
+          "detail": {
+            "cost": {
+              "accounted": 0.0,
+              "amount": 0.0,
+              "attempts": 1,
+              "basis": "reported_usage_at_user_rates",
+              "complete_cost_known": false,
+              "currency": "USD"
             },
-            "operations": 3,
-            "scope": "Bounded declarative execution; acceptance must be checked separately."
-          }
-        },
-        "verification": "EXECUTED_NOT_SUCCESSOR_ACCEPTED",
-        "scope": "Original acceptance does not verify this new input's real-world meaning or applicability."
-      },
-      "reuse_accepted_on_frozen_case": true,
-      "strong_control": {
-        "output": {
-          "result": 82
-        },
-        "accepted": true,
-        "advantage": "NOT_ESTABLISHED; direct arithmetic and ordinary reuse tie."
-      },
-      "constructed_instrument": {
-        "name": "Multiply",
-        "inputs": [
-          "x"
-        ],
-        "outputs": {
-          "result": {
-            "op": "mul",
-            "args": [
-              {
-                "field": "x"
-              },
-              2
-            ]
+            "model": "Qwen3-1.7B-Q4_K_M",
+            "provider": "local-llama-cpp",
+            "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+            "reported_model": "Qwen3-1.7B-Q4_K_M",
+            "requested_model": "Qwen3-1.7B-Q4_K_M",
+            "response_sha256": "d4b50f7c44edb3ec8ee5f3744ba167c09b9257a49b6dbf078337f019cb8a3b7b",
+            "role": "builder",
+            "run_id": "wf_d5213c11337556ccdfa059a4_f9e77dea3fa5a0ea",
+            "usage": {
+              "input_tokens": 1665,
+              "output_tokens": 121
+            }
           }
         }
-      }
+      ]
     },
     {
       "policy": "actor-critic",
       "status": "complete",
-      "wall_seconds": 17.280605342999934,
+      "wall_seconds": 18.239938304000134,
       "model_calls": 2,
       "iterations": 1,
       "actions": 1,
@@ -184,7 +178,7 @@
         "spec_hash": "3eb1b84305237f3614c9a98663884ce7fe10bf2eaba6e793882be12d282a46dc",
         "artifact_hashes": {
           "RUN_INSTRUMENT.py": "787466086e1303599aa4576c1c677e732257efa10d2bf932b96a705a96ac03b9",
-          "calculator.json": "415205a99a1b6906dd10c055f9ff5a2d3cc171f7af73791df03323af66e888e4"
+          "calculator.json": "19ad926b2b2fcba9e2c591f4acbba7ea71e67fe1ccac01a138ba761b460ca3dd"
         },
         "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification."
       },
@@ -195,9 +189,9 @@
           "sha256": "787466086e1303599aa4576c1c677e732257efa10d2bf932b96a705a96ac03b9"
         },
         "calculator.json": {
-          "bytes": 190,
+          "bytes": 195,
           "kind": "instrument",
-          "sha256": "415205a99a1b6906dd10c055f9ff5a2d3cc171f7af73791df03323af66e888e4"
+          "sha256": "19ad926b2b2fcba9e2c591f4acbba7ea71e67fe1ccac01a138ba761b460ca3dd"
         }
       },
       "events": [
@@ -217,12 +211,12 @@
             "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
             "reported_model": "Qwen3-1.7B-Q4_K_M",
             "requested_model": "Qwen3-1.7B-Q4_K_M",
-            "response_sha256": "6cddd573055a46d50f4c155ef6d90712c784370ed3023adf1bfb75dba4c2d8e5",
+            "response_sha256": "02e3c54c8f6f4973c0ebdfb07148f5f2fe2c5d2611b8ddd7f979207d5c98f140",
             "role": "builder",
-            "run_id": "wf_1dcc418d495a1c9da901cab6_ea30729f8d3df12b",
+            "run_id": "wf_a7d0a9ce470eb2586972ac77_8e42c00e3cd5efaa",
             "usage": {
               "input_tokens": 516,
-              "output_tokens": 115
+              "output_tokens": 106
             }
           }
         },
@@ -234,10 +228,10 @@
             "model": "Qwen3-1.7B-Q4_K_M",
             "requested_model": "Qwen3-1.7B-Q4_K_M",
             "reported_model": "Qwen3-1.7B-Q4_K_M",
-            "run_id": "wf_1dcc418d495a1c9da901cab6_e130639b80d0a350",
+            "run_id": "wf_a7d0a9ce470eb2586972ac77_2873e492ae2817ae",
             "usage": {
-              "input_tokens": 640,
-              "output_tokens": 61
+              "input_tokens": 636,
+              "output_tokens": 76
             },
             "cost": {
               "currency": "USD",
@@ -248,14 +242,14 @@
               "complete_cost_known": false
             },
             "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
-            "response_sha256": "7b6353b1d450212afc48cb36afedb39e4438f231937900b0961f4272fdb64075"
+            "response_sha256": "b091c7f85eb3f425f8f7e24603d08399791dd462d8fc053d9c0bc7082b8aa347"
           }
         },
         {
           "kind": "critique",
           "detail": {
             "verdict": "accept",
-            "feedback": "The artifact satisfies the deterministic checks against operator-frozen cases. The calculator.json correctly implements the function result = x * 2 as required, with the specified inputs and outputs. The checks are valid and meet the specified criteria.",
+            "feedback": "The artifact meets the deterministic checks against operator-frozen cases. The calculator.json correctly implements the function f(x) = x * 2, as verified by the instrument checks with expected results 6 and 0 for inputs 3 and 0 respectively. No structural issues or missing requirements were found.",
             "independence": "Separate model invocation; model agreement is not independent verification."
           }
         }
@@ -272,7 +266,7 @@
         "accepted": true
       },
       "reuse": {
-        "capability_id": "wf_1dcc418d495a1c9da901cab6",
+        "capability_id": "wf_a7d0a9ce470eb2586972ac77",
         "outputs": {
           "calculator.json": {
             "output": {
@@ -294,7 +288,7 @@
         "advantage": "NOT_ESTABLISHED; direct arithmetic and ordinary reuse tie."
       },
       "constructed_instrument": {
-        "name": "Multiply",
+        "name": "Multiply by 2",
         "inputs": [
           "x"
         ],
@@ -419,8 +413,8 @@
   },
   "source_unchanged_during_execution": true,
   "resources": {
-    "wall_seconds": 28.587282018999986,
-    "child_cpu_seconds": 53.80317599999999,
+    "wall_seconds": 73.67449007699997,
+    "child_cpu_seconds": 143.755161,
     "separately_billed_model_requests": 0,
     "complete_cost_known": false,
     "unknown_costs": [
@@ -548,5 +542,7 @@
     }
   ],
   "reproduce": "python3 scripts/probe_local_onboarding.py --server /path/to/llama-b12242/llama-server --model /path/to/Qwen3-1.7B-Q4_K_M.gguf --alias Qwen3-1.7B-Q4_K_M --output /absolute/new/proof",
-  "evidence_status": "Current executed source-byte identities are recorded above. Final packaged source must match these hashes; this receipt does not assert every unrelated product feature was exercised."
+  "evidence_status": "Current executed source-byte identities are recorded above. Final packaged source must match these hashes; this receipt does not assert every unrelated product feature was exercised.",
+  "prior_success_receipt": "live-local-workflows-v0.3-before-final-integration.json",
+  "failure_lesson": "Single-builder repeatedly encoded numeric constant 2 as an undeclared input field {field: \"2\"}; unchanged independent evaluator rejected each attempt. Actor/critic separately completed. This failure is not relabeled as a pass."
 }

@@ -37,6 +37,11 @@ const crypto = require('node:crypto');
     await page.waitForFunction(() => document.querySelector('#omega-capabilities')?.textContent?.includes('bounded-verification'));
     assert.equal(await page.locator('#omega-run').isEnabled(), false);
     await shot('HARNESS-07-genesis-next-en.png');
+    await page.locator('#foundry-refresh').click();
+    await page.waitForFunction(() => document.querySelector('#foundry-status')?.textContent?.includes('Isolated research selection'));
+    assert.equal(await page.locator('#foundry-construct').isEnabled(), false);
+    checks.push('model-driven source foundry visible; no unregistered or unconsented construction');
+
     await page.locator('#omega-discover').click();
     await page.waitForFunction(() => document.querySelector('#omega-candidates')?.textContent?.includes('dependency'));
     await page.locator('#omega-authorize').check();
@@ -106,6 +111,14 @@ const crypto = require('node:crypto');
     assert.ok(omegaWidths.content <= omegaWidths.viewport + 2, JSON.stringify(omegaWidths));
     assert.match(await page.locator('#omega-title').textContent(), /Inventez/);
     checks.push('GENESIS NEXT French mobile results without page overflow');
+    await page.locator('[data-view="frontier"]').click();
+    await page.waitForFunction(() => document.querySelector('#frontier-monitor-status')?.textContent?.length > 0);
+    assert.equal(await page.locator('#frontier-monitor-add').isEnabled(), false);
+    await shot('HARNESS-10-frontier-mobile-fr.png');
+    const frontierWidths = await page.evaluate(() => ({ viewport: innerWidth, content: document.documentElement.scrollWidth }));
+    assert.ok(frontierWidths.content <= frontierWidths.viewport + 2, JSON.stringify(frontierWidths));
+    checks.push('Frontier Observatory French mobile view; no consent means no monitor creation');
+
 
     assert.deepEqual(errors, []);
     fs.writeFileSync(path.join(output, 'BROWSER-VERIFICATION.json'), JSON.stringify({ status: 'PASS', source_revision: process.env.EXPECTED_SOURCE || null, browser: await browser.version(), platform: process.platform, architecture: process.arch, headless: true, server_mode: external ? 'external-native-launcher' : 'direct-python', checks, screenshots, exports, errors, scope: 'Headless native-OS Chromium checks only; no Finder/Explorer double-click, signing, notarization, live model or other OS qualification.' }, null, 2));

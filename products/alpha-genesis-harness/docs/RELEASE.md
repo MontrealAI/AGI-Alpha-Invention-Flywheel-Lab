@@ -38,6 +38,14 @@ The hosted workflow may publish an immutable **prerelease** bound to its source 
 
 The core distribution contains newly authored product source and public demonstration fixtures. It excludes old research source, models, customer projects, private configs and credentials. Keep merchant/customer state outside the repository and archive.
 
+## Native platform evidence
+
+The release workflow receives the identical Linux-built ZIP on standard public Windows and macOS runners. It verifies the external archive digest, starts the shipped `.cmd` or `.command` source launcher and operates the local application in headless native-OS Chromium. The platform receipt identifies the source, archive, host, interpreter and browser. This covers source-launcher execution and rendered browser workflows; Finder/Explorer double-click, code signing, notarization and a clean consumer-machine installation remain separate.
+
+A release requires both native jobs to succeed. Their source-specific receipts, screenshots and actual downloaded exports are checked before publication and bundled in a separate `HARNESS_NATIVE_EVIDENCE_<source>.zip` with its own checksum. The workflow rejects missing or failed receipts, mismatched OS/source/archive identities, absent screenshots and export hash mismatches. This evidence supplement is distinct from the installable product archive. The accompanying `RELEASE-QUALIFICATION.json` and `.md` reconcile the frozen matrix with actual extracted, Linux browser, native platform and source-observation receipts. They identify each input by filename and SHA-256, retain failed and blocked criteria, and explicitly leave the full commercial mandate unsatisfied. They are generated after testing and do not change the customer ZIP.
+
+Credential-free hosted probes record actual Codex sandbox/interpreter operation and authorized official-source monitoring separately. A blocked probe stays **BLOCKED**, and a successful probe does not establish authenticated model construction, autonomous improvement or reproduced frontier capabilities.
+
 ## Version retention
 
 Keep the exact archive, public digest and release receipt for each sold version. Replacing the file behind a storefront listing can affect old customers' download links. Give later versions their own explicit identities, preserve the purchased-version entitlement and test delivery again. Do not silently promise future editions.

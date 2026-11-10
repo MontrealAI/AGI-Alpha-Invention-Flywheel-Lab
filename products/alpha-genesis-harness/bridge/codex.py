@@ -28,6 +28,65 @@ from .codex_permissions import PROFILE, permission_overrides, verify_profile_pro
 verify_sandbox_protocol = verify_profile_protocol
 
 
+# Bind this module before a later lazy self-upgrade evaluator imports it.
+LOADED_SOURCE_SHA256 = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
+
+
+class _AgentMessages:
+    """Keep app-server message items distinct until their terminal snapshots.
+
+    Deltas have an itemId but no phase. Item lifecycle events supply the phase
+    and item/completed supplies authoritative text. A missing/null phase stays
+    compatible with legacy providers without merging their separate messages.
+    """
+    def __init__(self):
+        self.items = {}
+        self.received_characters = 0
+
+    def _item(self, ident):
+        if not isinstance(ident, str) or not ident:
+            raise BridgeError("CODEX_PROTOCOL", "Codex message did not supply an item ID.", 502)
+        return self.items.setdefault(ident, {"text": "", "phase": None, "completed": False})
+
+    def delta(self, params):
+        item = self._item(params.get("itemId"))
+        delta = params.get("delta")
+        if not isinstance(delta, str) or item["completed"]:
+            raise BridgeError("CODEX_PROTOCOL", "Codex returned an invalid message delta.", 502)
+        item["text"] += delta
+        self.received_characters += len(delta)
+        self.items[params["itemId"]] = self.items.pop(params["itemId"])
+
+    def snapshot(self, value, *, completed):
+        if not isinstance(value, dict):
+            raise BridgeError("CODEX_PROTOCOL", "Codex returned a malformed item.", 502)
+        if value.get("type") != "agentMessage":
+            return
+        item = self._item(value.get("id"))
+        phase, text = value.get("phase"), value.get("text")
+        if phase not in (None, "commentary", "partial_answer", "final_answer") or not isinstance(text, str):
+            raise BridgeError("CODEX_PROTOCOL", "Codex returned malformed agent message text or phase.", 502)
+        # Null means unknown, not permission to downgrade known commentary into
+        # a legacy terminal answer when a later snapshot omits phase metadata.
+        if phase is not None:
+            item["phase"] = phase
+        item.update(text=text, completed=completed)
+        # Item starts/deltas may interleave. Follow their latest lifecycle
+        # activity so a late completion wins and a newer unfinished item blocks
+        # fallback to an older result. A turn snapshot supplies canonical order.
+        self.items[value["id"]] = self.items.pop(value["id"])
+
+    def final_text(self):
+        items = list(self.items.values())
+        final = [item for item in items if item["phase"] == "final_answer"]
+        candidate = final[-1] if final else (items[-1] if items else None)
+        # Do not fall back to an earlier unknown message if the last item is
+        # explicitly nonterminal or unfinished, nor to a superseded final.
+        if candidate and candidate["completed"] and candidate["phase"] in (None, "final_answer"):
+            return candidate["text"]
+        return ""
+
+
 class CodexService:
     def __init__(self, config=None, plan_service=None, workspace_root=None, process_factory=subprocess.Popen, sandbox_validator=verify_sandbox_protocol, runtime_probe=verify_runtime_sandbox):
         self.config = config or {}
@@ -316,6 +375,7 @@ class CodexService:
 
             send("initialize", {"clientInfo": {"name": APP_NAME, "title": "ALPHA GENESIS HARNESS", "version": "0.3.0"}, "capabilities": {"experimentalApi": True}}, 0)
             thread_id, turn_id, text, completed, interrupted = None, None, "", False, None
+            agent_messages = _AgentMessages()
             total = 0
             while True:
                 if cancel.is_set():
@@ -365,20 +425,27 @@ class CodexService:
                                          "cwd": str(directory), "approvalPolicy": "never", "permissions": PROFILE}, 2)
                 elif message.get("id") == 2 and "result" in message:
                     turn_id = message["result"].get("turn", {}).get("id")
-                elif message.get("method") == "item/agentMessage/delta":
+                elif message.get("method") in {"item/agentMessage/delta", "item/started", "item/completed"}:
                     if message.get("params", {}).get("threadId") != thread_id or message.get("params", {}).get("turnId") != turn_id or turn_id is None:
                         raise BridgeError("CODEX_PROTOCOL", "Codex output did not match the active thread and turn.", 502)
-                    delta = message.get("params", {}).get("delta")
-                    if isinstance(delta, str):
-                        text += delta
+                    if message["method"] == "item/agentMessage/delta":
+                        agent_messages.delta(message["params"])
                         if on_event:
-                            on_event({"type": "progress", "provider": "codex", "received_characters": len(text)})
+                            on_event({"type": "progress", "provider": "codex", "received_characters": agent_messages.received_characters})
+                    else:
+                        agent_messages.snapshot(message["params"].get("item"), completed=message["method"] == "item/completed")
                 elif message.get("method") == "turn/completed":
                     params = message.get("params", {})
                     if params.get("threadId") != thread_id or params.get("turn", {}).get("id") != turn_id or turn_id is None:
                         raise BridgeError("CODEX_PROTOCOL", "Codex completion did not match the active thread and turn.", 502)
                     if cancel.is_set() or params.get("turn", {}).get("status") != "completed":
                         raise BridgeError("CODEX_INCOMPLETE", "Codex turn failed or was interrupted; no completed result was accepted.", 502)
+                    items = params["turn"].get("items", [])
+                    if not isinstance(items, list):
+                        raise BridgeError("CODEX_PROTOCOL", "Codex completion returned malformed turn items.", 502)
+                    for item in items:
+                        agent_messages.snapshot(item, completed=True)
+                    text = agent_messages.final_text()
                     completed = True
                     break
                 elif message.get("method") and "id" in message:
@@ -390,7 +457,7 @@ class CodexService:
                         process.stdin.write(json.dumps({"id": message["id"], "error": {"code": -32601, "message": "Unsupported server request; no permission granted."}}) + "\n")
                         process.stdin.flush()
             if not completed or not text.strip():
-                raise BridgeError("CODEX_EMPTY", "Codex completed without an inspectable text result.", 502)
+                raise BridgeError("CODEX_EMPTY", "Codex completed without a terminal or legacy message result.", 502)
             checkpoint["status"] = "completed"
             self._checkpoint(workspace_id, checkpoint)
             for field in ("access_token", "refresh_token", "id_token"):

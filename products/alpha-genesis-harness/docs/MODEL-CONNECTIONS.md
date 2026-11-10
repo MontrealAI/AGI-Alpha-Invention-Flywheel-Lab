@@ -12,13 +12,13 @@ The three automated access categories share one workspace but have different aut
 
 ## Local models without cloud credentials
 
-Start the optional connector with a private copy of `bridge/config.local-only.example.json`. Add an actually installed model's exact ID and demonstrated capabilities. The supported compatibility configurations cover Ollama, LM Studio, llama.cpp, vLLM and MLX servers. They do not install the servers or model weights. Follow [provider protocols](PROVIDER-PROTOCOLS.md) for supported fields and the difference between compatibility and live verification.
+Start the optional connector, then use **Local** in the Intelligence workspace to discover and connect an installed server/model. Declare the exact model ID and demonstrated capabilities. Advanced operators can instead use a private copy of `bridge/config.local-only.example.json`. The supported compatibility configurations cover Ollama, LM Studio, llama.cpp, vLLM and MLX servers. They do not install the servers or model weights. Follow [provider protocols](PROVIDER-PROTOCOLS.md) for supported fields and the difference between compatibility and live verification.
 
 Local-only configuration denies remote provider access. Public-source retrieval must also remain disabled for a fully local workflow. The HARNESS cannot certify another local program's network behavior; use OS-level isolation if your use requires that separate guarantee. Local token rates of zero mean no declared API token charge, not free hardware or electricity.
 
 ## Executed local qualification in this candidate
 
-On Linux CPU, the llama.cpp-compatible connection completed actual Qwen3-1.7B inference in a single-model construction run and a builder–critic run. The generated instrument passed independently frozen cases; its exported evaluator ran outside the HARNESS, and reuse was checked on a new input. See [the exact live receipt](../evidence/live-local-workflows.json) for source, model-weight and runtime hashes, calls, outputs and earlier failed attempts.
+The [final 0.3 source receipt](../evidence/live-local-workflows-v0.3.json) records actual Linux CPU Qwen3-1.7B inference through llama.cpp. The single builder exhausted three calls with invalid input-field artifacts; the aggregate run is **FAIL**. The builder–critic path passed in two calls, exported an independently checked instrument returning 34 for x=17 and reused it to return 82 for x=41. The [earlier 0.3 both-policy success](../evidence/live-local-workflows-v0.3-before-final-integration.json) and [0.2 live receipt](../evidence/live-local-workflows.json) retain their original source identities. Each receipt records model/runtime/source hashes and the actual attempts.
 
 This qualifies those recorded local executions. It does not verify every local server, frontier API, ChatGPT plan, scientific novelty or improved invention. The retained instrument tied the ordinary direct control; no compounding advantage is established.
 

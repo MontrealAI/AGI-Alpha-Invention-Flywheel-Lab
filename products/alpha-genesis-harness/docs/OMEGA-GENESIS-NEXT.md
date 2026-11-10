@@ -26,11 +26,17 @@ The successor is a different internal operation: selecting verification work und
 
 The built-in construction recipe is authored and finite. It is not evidence that a model independently invented this algorithm, that this is a novel caching method, or that GENESIS can safely rewrite arbitrary production code. Authorization covers the isolated experiment, not deployment, credentials, purchases or changes to the evaluator.
 
+## Construct a new model-driven source candidate
+
+The separate [Upgrade Foundry](UPGRADE-FOUNDRY.md) can use an authorized Codex session to write a new bounded modification to an isolated interpreter module. It registers independent fresh cases before construction, runs candidate code only in the native sandbox, and requires separate qualification and exact-hash selection. Its live model/sandbox gates are distinct from the authored demo above. An isolated selected candidate can be called explicitly on a new instrument and rolled back; it never replaces installed production source.
+
 ## Capability map, vault and frontier replay
 
 The capability map records implementation, requirements, limits and evidence separately. The Possibility Vault preserves deferred opportunities and their missing capabilities. Shared-bottleneck discovery considers which missing means recur across opportunities, without counting forecast successor value as realized value.
 
 A frontier observation can trigger reconsideration of a vault entry. An observation marked reported remains a report until tested. A matching phrase, model release or source URL alone does not remove an engineering obstacle. Replay proposes a targeted test; it does not certify the opportunity as feasible.
+
+The [Frontier Monitor](FRONTIER-MONITOR.md) can periodically observe explicitly allowed public sources while the connector runs, then replay new hashes as reported observations. Restart consent is separate.
 
 Keep source timestamps, provenance and uncertainty. Connected research requires separately authorized data access. This local demonstration sends no inference or frontier-retrieval requests.
 
