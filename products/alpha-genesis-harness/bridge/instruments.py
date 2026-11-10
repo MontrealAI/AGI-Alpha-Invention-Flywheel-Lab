@@ -25,6 +25,19 @@ def finite(value, depth=0):
     return value
 
 
+def _json_equal(left, right):
+    """Compare JSON values recursively without treating booleans as numbers."""
+    if type(left) in {int, float} and type(right) in {int, float}:
+        return left == right
+    if type(left) is not type(right):
+        return False
+    if isinstance(left, list):
+        return len(left) == len(right) and all(_json_equal(a, b) for a, b in zip(left, right))
+    if isinstance(left, dict):
+        return set(left) == set(right) and all(_json_equal(left[key], right[key]) for key in left)
+    return left == right
+
+
 def evaluate(spec, inputs, max_operations=10000):
     """Evaluate a JSON expression grammar, with no IO or dynamic code execution."""
     if not isinstance(spec, dict) or set(spec) - {"name", "inputs", "outputs", "description", "conditions", "limitations"}:
@@ -100,7 +113,7 @@ def evaluate(spec, inputs, max_operations=10000):
                 raise ValueError("Comparison needs two operands.")
             a, b = args
             if op == "eq":
-                result = (type(a) is type(b) or (type(a) in {int, float} and type(b) in {int, float})) and a == b
+                result = _json_equal(a, b)
             else:
                 a, b = number(a), number(b)
                 result = a < b if op == "lt" else a <= b if op == "lte" else a > b if op == "gt" else a >= b

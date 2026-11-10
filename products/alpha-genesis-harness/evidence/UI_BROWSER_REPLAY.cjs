@@ -56,7 +56,7 @@ const crypto = require('node:crypto');
     server.once('error', onError);
     server.once('exit', onExit);
   }) : Promise.resolve(new URL(external).origin);
-  const errors = [], checks = [], screenshots = [], exports = [];
+  const errors = [], checks = [], screenshots = [], exports = [], http_failures = [];
   try {
     // The child announces its own ephemeral port. A stale listener cannot be
     // mistaken for the source under test merely because a fixed port is open.
@@ -66,6 +66,11 @@ const crypto = require('node:crypto');
     browser = await chromium.launch({ executablePath, headless: true, args: process.platform === 'linux' ? ['--no-sandbox'] : [] });
     page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
     page.on('pageerror', error => errors.push(error.message));
+    page.on('response', response => {
+      const url = new URL(response.url());
+      if (url.origin === origin && url.pathname.startsWith('/api/') && response.status() >= 400)
+        http_failures.push({ path: url.pathname, status: response.status() });
+    });
     const response = await page.goto(origin);
     assert.equal(response.status(), 200);
     const shot = async name => { await page.screenshot({ path: path.join(output, name), fullPage: true }); screenshots.push(name); };
@@ -77,7 +82,13 @@ const crypto = require('node:crypto');
     checks.push('keyboard skip link reaches workspace');
     await shot('HARNESS-01-start-en.png');
     checks.push('first-run rendered');
+    await page.waitForFunction(() => !document.querySelector('#bridge-controls').classList.contains('hidden'));
+    checks.push('browser completed authenticated local connection');
+    const genesisStatusResponse = page.waitForResponse(response => response.url().endsWith('/api/genesis-next/status'));
     await page.locator('#start-genesis-next').click();
+    const genesisStatus = await genesisStatusResponse;
+    const genesisState = await genesisStatus.json();
+    assert.equal(genesisStatus.status(), 200, 'GENESIS status rejected: ' + JSON.stringify(genesisState.error || {}));
     await page.waitForFunction(() => document.querySelector('#omega-capabilities')?.textContent?.includes('bounded-verification'));
     assert.equal(await page.locator('#omega-run').isEnabled(), false);
     await shot('HARNESS-07-genesis-next-en.png');
@@ -208,19 +219,20 @@ const crypto = require('node:crypto');
       checks.push('START-HERE opens local files; offline experiment completes without any HTTP requests');
     } finally { await offlineContext.close(); }
     assert.deepEqual(errors, []);
+    assert.deepEqual(http_failures, [], 'Unexpected API errors disqualify browser verification');
     if (server) {
       assert.equal(serverError, undefined);
       assert.equal(server.exitCode, null);
       assert.equal(server.signalCode, null);
     }
-    fs.writeFileSync(path.join(output, 'BROWSER-VERIFICATION.json'), JSON.stringify({ status: 'PASS', source_revision: process.env.EXPECTED_SOURCE || null, origin, browser: await browser.version(), platform: process.platform, architecture: process.arch, headless: true, server_mode: external ? 'external-native-launcher' : 'spawned-source-launcher', checks, screenshots, exports, errors, scope: 'Headless graphical checks on the recorded host OS, including runnable source launcher and offline files. No live model, signed installer, Finder/Explorer double-click or other OS qualification.' }, null, 2));
+    fs.writeFileSync(path.join(output, 'BROWSER-VERIFICATION.json'), JSON.stringify({ status: 'PASS', source_revision: process.env.EXPECTED_SOURCE || null, origin, browser: await browser.version(), platform: process.platform, architecture: process.arch, headless: true, server_mode: external ? 'external-native-launcher' : 'spawned-source-launcher', checks, screenshots, exports, errors, http_failures, scope: 'Headless graphical checks on the recorded host OS, including runnable source launcher and offline files. No live model, signed installer, Finder/Explorer double-click or other OS qualification.' }, null, 2));
     console.log(JSON.stringify({ status: 'PASS', platform: process.platform, checks, screenshots, exports }));
   } catch (error) {
     if (page && !page.isClosed()) {
       try { await page.screenshot({ path: path.join(output, 'HARNESS-FAILURE.png'), fullPage: true }); screenshots.push('HARNESS-FAILURE.png'); }
       catch (_) { /* Preserve the original failure even if rendering stopped. */ }
     }
-    fs.writeFileSync(path.join(output, 'BROWSER-VERIFICATION.json'), JSON.stringify({ status: 'FAIL', source_revision: process.env.EXPECTED_SOURCE || null, origin, platform: process.platform, architecture: process.arch, headless: true, server_mode: external ? 'external-native-launcher' : 'spawned-source-launcher', checks, screenshots, exports, errors, server_stderr: serverStderr, failure: error.message }, null, 2));
+    fs.writeFileSync(path.join(output, 'BROWSER-VERIFICATION.json'), JSON.stringify({ status: 'FAIL', source_revision: process.env.EXPECTED_SOURCE || null, origin, platform: process.platform, architecture: process.arch, headless: true, server_mode: external ? 'external-native-launcher' : 'spawned-source-launcher', checks, screenshots, exports, errors, http_failures, server_stderr: serverStderr, failure: error.message, failure_stack: error.stack }, null, 2));
     throw error;
   } finally {
     try { if (browser) await browser.close(); }

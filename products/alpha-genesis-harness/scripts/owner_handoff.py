@@ -369,6 +369,7 @@ def assemble(args):
     screenshots = []
     screenshot_bindings = []
     browser_exports = []
+    platform_startup_diagnostics = []
     platforms = []
     browser = None
     for directory_index, directory in enumerate(screenshot_dirs, 1):
@@ -411,6 +412,29 @@ def assemble(args):
                     log = directory / f'{platform_name}-operation-{index}.{suffix}.txt'
                     if log.is_file() and not log.is_symlink() and log.stat().st_size < 5_000_000:
                         copy_bytes(folder, '05-VERIFICATION/operation-logs/' + log.name, log.read_bytes())
+        for platform_name,(platform_record,_target) in platform_receipts.items():
+            diagnostic = directory/(platform_name+'-GENESIS-STARTUP-DIAGNOSTIC.json')
+            if not diagnostic.exists():
+                continue
+            if diagnostic.is_symlink() or not diagnostic.is_file() or diagnostic.stat().st_size >= 5_000_000:
+                raise ValueError('Unsafe native startup diagnostic')
+            record = read_json(diagnostic)
+            expected = platform_record.get('checks',{}).get('genesis_startup_diagnostic')
+            if expected is not None:
+                if record != expected:
+                    raise ValueError('Startup diagnostic differs from its source-bound platform receipt')
+            elif record.get('status') != 'FAIL' or platform_record.get('status') != 'FAIL':
+                raise ValueError('Unassociated successful startup diagnostic')
+            target = '05-VERIFICATION/'+diagnostic.name
+            if (folder/target).exists() and (folder/target).read_bytes() != diagnostic.read_bytes():
+                raise ValueError('Conflicting native startup diagnostic')
+            copy_bytes(folder,target,diagnostic.read_bytes())
+            if not any(row['path']==target for row in platform_startup_diagnostics):
+                platform_startup_diagnostics.append({'path':target,'sha256':digest(diagnostic.read_bytes()),'status':record['status']})
+            for stream in ('stdout','stderr'):
+                file = directory/f'{platform_name}-genesis-startup.{stream}.txt'
+                if file.is_file() and not file.is_symlink() and file.stat().st_size < 5_000_000:
+                    copy_bytes(folder,'05-VERIFICATION/operation-logs/'+file.name,file.read_bytes())
         for prefix, graphical in [('',candidate)] + [(name+'-',record) for name,(value,_target) in platform_receipts.items() for record in [value.get('browser_report')]]:
             if not graphical or not graphical.get('exports'):
                 continue
@@ -494,7 +518,7 @@ def assemble(args):
                         raise ValueError('Conflicting native Codex diagnostic filename')
                     copy_bytes(folder, log_target, log.read_bytes())
     source_probe_receipts = []
-    for name in ('FRONTIER-MONITOR-VERIFICATION.json','UPGRADE-FOUNDRY-HOST-VERIFICATION.json'):
+    for name in ('FRONTIER-MONITOR-VERIFICATION.json','UPGRADE-FOUNDRY-HOST-VERIFICATION.json','Darwin-UPGRADE-FOUNDRY-HOST-VERIFICATION.json'):
         file = asset_dir/name
         if not file.exists():
             continue
@@ -551,7 +575,7 @@ def assemble(args):
         '20': ['02-EXPLORE-THE-EDITION/docs/EDITION.md'],
         '22': ['05-VERIFICATION/PUBLISHED-OPERATION.json'],
     }
-    required_paths['13'].extend(row['path'] for row in browser_exports+source_probe_receipts)
+    required_paths['13'].extend(row['path'] for row in browser_exports+source_probe_receipts+platform_startup_diagnostics)
     inventory = []
     for number, label, path in items:
         paths = [path] + required_paths.get(number, [])
@@ -570,6 +594,7 @@ def assemble(args):
                 'model_evidence_archive': model_evidence_view,
                 'published_operation_evidence': operation_evidence,
                 'browser_exports':browser_exports, 'source_probe_receipts':source_probe_receipts,
+                'platform_startup_diagnostics':platform_startup_diagnostics,
                 'squarespace_activity':'NONE; explicitly reserved to Vincent',
                 'required_deliverables':inventory, 'remaining_criteria':remaining,
                 'scope':'The customer ZIP is copied byte-for-byte. The expanded copy is for owner inspection. This bundle does not certify live access or promote candidate/commercial status.'}

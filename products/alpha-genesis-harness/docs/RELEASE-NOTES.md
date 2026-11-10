@@ -15,9 +15,12 @@ This edition continues HARNESS 0.2 and makes **GENESIS itself the required impro
 
 See [the Ω GENESIS NEXT walkthrough](OMEGA-GENESIS-NEXT.md), [the fixed protocol](../evidence/OMEGA-PROTOCOL.md), [the fresh-successor protocol](../evidence/OMEGA-FRESH-SUCCESSOR-PROTOCOL.md) and [the qualification matrix](../evidence/QUALIFICATION-MATRIX.md). This bounded route does not establish autonomous invention of arbitrary HARNESS improvements, general compounding intelligence or an economic return. Those implementation and research gaps are distinct from missing external credentials.
 
+The Ω workspace waits for connector initialization before its first load. Native qualification checks the requested workspace, preserves staged startup diagnostics and resolves its own macOS temporary-path alias while retaining customer-workspace symbolic-link guards. New native results must match the final source; these fixes do not predeclare a platform PASS.
+
 ## Integrated workflow and release capabilities
 
 - Seven executable strategies: single model, actor/critic, researcher/builder/verifier, strategist/economist, parallel exploration, adaptive routing and adversarial review.
+- Recursive JSON equality distinguishes nested booleans from numbers while preserving numeric equivalence. New foundry registrations use explicit protocol v2 with 48 fresh affine cases, four malformed cases and 12 public fixed equality cases; historical protocols and receipts retain their original scope.
 - Frozen acceptance, explicit tool permissions, shared allocations, durable checkpoints, cancellation and integrity-checked imports/exports. Parallel losers and consumed calls remain visible; adaptive routing cannot expand its authority.
 - Native API/local adapters, official ChatGPT OAuth/PKCE and separate Codex construction with explicit execution/write consent. Native sandbox probes do not establish an authenticated Codex model turn.
 - A paired source-acquisition fixture preserves honest abstention, authorized retrieval and a competent zero-model-call conventional control. It demonstrates evidence access, not general research superiority.
@@ -47,3 +50,5 @@ Les sept stratégies agentiques, les contrôles d’acceptation, la reprise pers
 Le précédent essai local 0.3 conservé présente un échec global du constructeur seul et une réussite constructeur–critique. Ces résultats conservent leur ancienne identité source; les preuves de la source fusionnée doivent être produites séparément.
 
 L’instrument de devis est un exemple additionnel. Son résultat réel demeure distinct du parcours GENESIS et de l’historique des essais échoués ou interrompus. Les accès API, ChatGPT et Codex authentifiés, l’autorisation commerciale applicable et les résultats marchands conservent leurs propres critères. La remise propriétaire comporte 22 catégories, mais le produit reste candidat tant que les exigences non satisfaites subsistent. Toute action Squarespace demeure exclusivement manuelle et sous le contrôle de Vincent.
+
+Le chargement initial attend maintenant l’initialisation du connecteur. Les essais natifs contrôlent le dossier demandé, conservent les diagnostics de démarrage et résolvent leur propre alias temporaire macOS. Leurs résultats doivent correspondre à la source finale.

@@ -100,7 +100,7 @@ def source_hashes_match(record, content):
 def browser_passed(record, source, directory=None, image_prefix=''):
     if record.get('source_revision') != source:
         raise ValueError('Browser receipt has a different source revision')
-    if record.get('status') != 'PASS' or record.get('errors') != []:
+    if record.get('status') != 'PASS' or record.get('errors') != [] or record.get('http_failures') != []:
         return False
     required_checks = set(BROWSER_CHECKS)
     if record.get('server_mode') == 'external-native-launcher':
@@ -520,10 +520,17 @@ def reconcile(args):
                 actual_os = actual_os and platform.get('browser_report', {}).get('platform') == expected_browser_os
                 auth = platform.get('checks',{}).get('loopback_authentication',{})
                 interpreter = platform.get('launcher_interpreter',{})
+                startup = platform.get('checks',{}).get('genesis_startup_diagnostic',{})
+                workspace = platform.get('checks',{}).get('native_workspace',{})
+                startup_ok = (startup.get('status') == 'PASS' and startup.get('stage') == 'complete'
+                    and startup.get('interpreter') == interpreter.get('executable')
+                    and startup.get('completed_stages') == ['imports','workflow_initialization','genesis_initialization','genesis_status']
+                    and not any(key in startup for key in ('traceback','cleanup_traceback','exception_type')))
                 live_native = (platform.get('launcher') == launcher_name and platform.get('browser_report',{}).get('server_mode') == 'external-native-launcher'
                     and auth.get('bootstrap') == 'PASS' and type(auth.get('unauthenticated_status')) is int and auth['unauthenticated_status'] == 403
                     and type(auth.get('authenticated_status')) is int and auth['authenticated_status'] == 200
-                    and isinstance(interpreter.get('version'),str) and isinstance(interpreter.get('executable'),str))
+                    and isinstance(interpreter.get('version'),str) and isinstance(interpreter.get('executable'),str)
+                    and startup_ok and workspace.get('genesis_state_created_at_requested_path') is True)
                 if not (actual_os and native and live_native and engine and rendered
                         and browser_passed(platform.get('browser_report',{}), args.source_sha, asset_dir, system+'-')
                         and browser_exports_passed(platform.get('browser_report',{}), asset_dir, system+'-')):
@@ -541,8 +548,11 @@ def reconcile(args):
         status = frontier_status(read_json(frontier_path),content,args.source_sha,archive_hash)
         set_row('O13',status,'Executed one explicitly permitted official HTTPS observation and checked its source identities, byte hash and reported-only replay.',
                 frontier_path.name,'Retrieval and reported evidence only; no freshness guarantee, frontier coverage, reproduced capability, removed bottleneck or commercial approval.')
-    foundry_path = asset_dir/'UPGRADE-FOUNDRY-HOST-VERIFICATION.json'
-    if foundry_path.is_file():
+    foundry_probes = []
+    for filename in ('UPGRADE-FOUNDRY-HOST-VERIFICATION.json','Darwin-UPGRADE-FOUNDRY-HOST-VERIFICATION.json'):
+        foundry_path = asset_dir/filename
+        if not foundry_path.is_file():
+            continue
         record_input(foundry_path)
         foundry = read_json(foundry_path)
         if (foundry.get('schema') != 'harness-foundry-native-probe/v1' or foundry.get('source_revision') != args.source_sha
@@ -555,8 +565,10 @@ def reconcile(args):
             path = 'bridge/'+name
             if path not in content or digest(content[path]) != value:
                 raise ValueError('Foundry evaluator source differs from the exact archive')
-        set_row('O11','BLOCKED','Recorded native original-interpreter probe: '+foundry['status']+'. No authenticated model-written candidate was requested.',
-                foundry_path.name,'Eligible official authentication and a real sandboxed model-written upgrade remain required; credential-free native operation cannot satisfy this gate.')
+        foundry_probes.append((foundry_path.name,foundry['status']))
+    if foundry_probes:
+        set_row('O11','BLOCKED','Recorded native original-interpreter probe: '+'; '.join(status+' ('+name+')' for name,status in foundry_probes)+'. No authenticated model-written candidate was requested.',
+                '; '.join(name for name,_status in foundry_probes),'Eligible official authentication and a real sandboxed model-written upgrade remain required; credential-free native operation cannot satisfy this gate.')
     docs_ok = REQUIRED_FILES.issubset(content) and any(name.startswith('examples/') for name in content)
     listing = content.get('commercial/listing.md', b'').decode('utf-8')
     docs_ok = docs_ok and '## English' in listing and '## Français' in listing

@@ -85,10 +85,13 @@ class OwnerHandoffTests(unittest.TestCase):
   receipt['exports']=[{'file':file.name,'bytes':len(data),'sha256':module.digest(data)}];receipt_path.write_text(json.dumps(receipt))
   probe={'source_revision':SOURCE,'archive_sha256':module.digest(self.archive.read_bytes()),'status':'BLOCKED','scope':'Synthetic receipt only'}
   probe_path=self.assets/'FRONTIER-MONITOR-VERIFICATION.json';probe_path.write_text(json.dumps(probe))
+  mac_path=self.assets/'Darwin-UPGRADE-FOUNDRY-HOST-VERIFICATION.json';mac_path.write_text(json.dumps(probe))
   result=module.assemble(self.args);folder=Path(result['owner_directory']);identity=json.loads((folder/'OWNER-HANDOFF.json').read_text())
   self.assertEqual(result['included_deliverable_types'],22)
   self.assertEqual((folder/'05-VERIFICATION/browser-exports'/file.name).read_bytes(),data)
   self.assertEqual((folder/'05-VERIFICATION'/probe_path.name).read_bytes(),probe_path.read_bytes())
+  self.assertEqual((folder/'05-VERIFICATION'/mac_path.name).read_bytes(),mac_path.read_bytes())
+  self.assertEqual(len(identity['source_probe_receipts']),2)
   self.assertEqual(identity['source_probe_receipts'][0]['status'],'BLOCKED')
   self.assertEqual(identity['browser_exports'][0]['sha256'],module.digest(data))
   foundry=next(row for row in identity['required_deliverables'] if row['id']=='11')
@@ -100,7 +103,7 @@ class OwnerHandoffTests(unittest.TestCase):
   receipt['exports']=[{'file':file.name,'bytes':2,'sha256':'0'*64}];receipt_path.write_text(json.dumps(receipt))
   with self.assertRaisesRegex(ValueError,'Browser export bytes'):module.assemble(self.args)
  def test_foreign_extension_probe_is_refused(self):
-  (self.assets/'UPGRADE-FOUNDRY-HOST-VERIFICATION.json').write_text(json.dumps({'source_revision':'c'*40,'archive_sha256':module.digest(self.archive.read_bytes()),'status':'PASS'}))
+  (self.assets/'Darwin-UPGRADE-FOUNDRY-HOST-VERIFICATION.json').write_text(json.dumps({'source_revision':'c'*40,'archive_sha256':module.digest(self.archive.read_bytes()),'status':'PASS'}))
   with self.assertRaisesRegex(ValueError,'Extension probe'):module.assemble(self.args)
  def test_22_categories_include_genesis_source_and_untouched_fresh_successor_evidence(self):
   result=module.assemble(self.args);folder=Path(result['owner_directory'])
@@ -209,6 +212,22 @@ class OwnerHandoffTests(unittest.TestCase):
   self.assertEqual((folder/'05-VERIFICATION'/platform.name).read_bytes(),platform.read_bytes())
   self.assertTrue((folder/'04-SCREENSHOTS/Windows-HARNESS-platform.png').exists())
   self.assertIn('432 Node tests executed on this platform',(folder/'00-OWNER-START.html').read_text())
+ def test_failed_native_startup_diagnostic_and_logs_preserved_as_failed_evidence(self):
+  file=self.platform_fixture();record=json.loads(file.read_text());record['status']='FAIL';file.write_text(json.dumps(record))
+  diagnostic={'status':'FAIL','stage':'workflow_initialization','errno':13,'traceback':'synthetic diagnostic traceback'}
+  source=self.assets/'Windows-GENESIS-STARTUP-DIAGNOSTIC.json';source.write_text(json.dumps(diagnostic))
+  log=self.assets/'Windows-genesis-startup.stdout.txt';log.write_text(json.dumps(diagnostic)+'\n')
+  result=module.assemble(self.args);folder=Path(result['owner_directory']);identity=json.loads((folder/'OWNER-HANDOFF.json').read_text())
+  self.assertEqual((folder/'05-VERIFICATION'/source.name).read_bytes(),source.read_bytes())
+  self.assertEqual((folder/'05-VERIFICATION/operation-logs'/log.name).read_bytes(),log.read_bytes())
+  self.assertEqual(identity['platform_startup_diagnostics'][0]['status'],'FAIL')
+  self.assertEqual(identity['platform_qualifications'][0]['status'],'FAIL')
+  self.assertFalse(identity['commercially_ready'])
+ def test_native_startup_diagnostic_substitution_is_refused(self):
+  file=self.platform_fixture();record=json.loads(file.read_text())
+  record['checks']={'genesis_startup_diagnostic':{'status':'PASS','interpreter':'selected-python'}};file.write_text(json.dumps(record))
+  (self.assets/'Windows-GENESIS-STARTUP-DIAGNOSTIC.json').write_text(json.dumps({'status':'PASS','interpreter':'other-python'}))
+  with self.assertRaisesRegex(ValueError,'Startup diagnostic differs'):module.assemble(self.args)
  def test_platform_receipt_other_archive_refused(self):
   file=self.platform_fixture();value=json.loads(file.read_text());value['archive_sha256']='f'*64;file.write_text(json.dumps(value))
   with self.assertRaisesRegex(ValueError,'Platform receipt'):module.assemble(self.args)

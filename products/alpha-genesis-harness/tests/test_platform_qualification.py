@@ -35,15 +35,17 @@ class NativeQualificationBoundaryTests(unittest.TestCase):
             self.assertEqual(mac[:2], ["/bin/sh", str(product / "Launch-HARNESS.command")])
             self.assertEqual(mac[-2:], ["--workspace", str(workspace)])
             windows = q.native_launcher(product, workspace, 8765, "Windows")
-            self.assertEqual(windows[1:4], ["/d", "/s", "/c"])
-            self.assertTrue(windows[-1].startswith("Launch-HARNESS.cmd --port 8765 --no-browser"))
+            self.assertEqual(windows[1:], ["/d", "/c", "Launch-HARNESS.cmd", "--port", "8765", "--no-browser", "--workspace", str(workspace)])
+            serialized = subprocess.list2cmdline(windows)
+            self.assertNotIn('\\"', serialized, "cmd must not receive escaped quotes from a combined command argument")
+            self.assertIn('"' + str(workspace) + '"', serialized, "A workspace containing spaces remains one argument")
             linux = q.native_launcher(product, workspace, 8765, "Linux")
             self.assertEqual(linux[1], str(product / "Launch-HARNESS.sh"))
 
     def test_windows_shell_metacharacters_are_refused_before_launch(self):
         with tempfile.TemporaryDirectory() as root:
             product = self.launchers(root)
-            for character in ('%', '!', '&', '|', '<', '>', '^', '"', '\n'):
+            for character in ('%', '!', '&', '|', '<', '>', '^', '(', ')', '"', '\n'):
                 with self.subTest(character=character), self.assertRaisesRegex(ValueError, "shell-safe"):
                     q.native_launcher(product, Path(root) / ("unsafe" + character + "path"), 8765, "Windows")
 
@@ -74,6 +76,44 @@ class NativeQualificationBoundaryTests(unittest.TestCase):
                     q.qualify(archive, "a" * 64, SOURCE, Path(root) / "result", Path(root), Path(root))
                 start.assert_not_called()
 
+    def test_authentication_failure_retains_http_code_without_response_payload(self):
+        process = Mock()
+        process.poll.return_value = None
+        responses = [(200, {"token": "private-token-must-not-be-reported"}), (403, {}),
+                     (400, {"error": {"code": "LOCAL_SETUP_INPUT", "message": "do not retain arbitrary response"}})]
+        with patch.object(q, "request", side_effect=responses):
+            with self.assertRaisesRegex(ValueError, "HTTP 400; LOCAL_SETUP_INPUT") as caught:
+                q.authenticate(8765, process)
+        self.assertNotIn("private-token", str(caught.exception))
+        self.assertNotIn("arbitrary response", str(caught.exception))
+
+    def test_initialization_diagnostic_runs_source_in_selected_interpreter(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary).resolve()
+            result = q.probe_genesis_startup(PRODUCT, root / "private-workspace", root,
+                                             sys.executable, q.private_environment())
+            self.assertEqual(result["status"], "PASS")
+            self.assertEqual(result["completed_stages"], ["imports", "workflow_initialization", "genesis_initialization", "genesis_status"])
+            self.assertEqual(Path(result["interpreter"]).resolve(), Path(sys.executable).resolve())
+            self.assertIn("not browser", result["scope"])
+
+    def test_initialization_failure_retains_stage_and_traceback_without_browser_pass(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary).resolve()
+            product = root / "synthetic-product"
+            (product / "bridge").mkdir(parents=True)
+            (product / "bridge/__init__.py").write_text("")
+            (product / "bridge/workflows.py").write_text("class WorkflowService:\n def __init__(self, *args):\n  raise OSError(13, 'synthetic denied initialization')\n")
+            (product / "bridge/genesis_next.py").write_text("class GenesisNextService: pass\n")
+            with self.assertRaisesRegex(ValueError, "workflow_initialization"):
+                q.probe_genesis_startup(product, root / "private-workspace", root, sys.executable, q.private_environment())
+            result = json.loads((root / "GENESIS-STARTUP-DIAGNOSTIC.json").read_text())
+            self.assertEqual(result["status"], "FAIL")
+            self.assertEqual(result["errno"], 13)
+            self.assertEqual(result["completed_stages"], ["imports"])
+            self.assertIn("synthetic denied initialization", result["traceback"])
+            self.assertFalse((root / "browser/BROWSER-VERIFICATION.json").exists())
+
     def test_zero_exit_does_not_convert_wrong_platform_receipt_to_pass(self):
         with tempfile.TemporaryDirectory() as root:
             root = Path(root)
@@ -100,7 +140,8 @@ class NativeQualificationBoundaryTests(unittest.TestCase):
                 return subprocess.CompletedProcess(command, 0, "fixture", "")
             with patch.object(q.platform, "platform", return_value="platform-fixture"), patch.object(q.platform, "machine", return_value="fixture"), \
                  patch.object(q, "free_port", return_value=8765), patch.object(q, "authenticate", return_value={"fixture": True}), \
-                 patch.object(q, "launcher_interpreter", return_value={"fixture": True}), patch.object(q, "stop_owned_process"), \
+                 patch.object(q, "launcher_interpreter", return_value={"executable":sys.executable}), patch.object(q, "stop_owned_process"), \
+                 patch.object(q,"probe_genesis_startup",return_value={"fixture":True}), \
                  patch.object(q.subprocess, "Popen", return_value=Mock()), patch.object(q.subprocess, "run", side_effect=wrong_receipt):
                 with self.assertRaisesRegex(ValueError, "exact platform"):
                     q.qualify(archive, hashlib.sha256(package).hexdigest(), SOURCE, output, modules, browser, "node")
@@ -120,7 +161,7 @@ class NativeQualificationBoundaryTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError,'not refused'):
                 q.authenticate(8765,Mock(poll=Mock(return_value=None)))
 
-    def native_run_fixture(self, cleanup_failure=None):
+    def native_run_fixture(self, cleanup_failure=None, missing_workspace=False):
         with tempfile.TemporaryDirectory() as directory:
             root=Path(directory); actual=root/'actual';actual.mkdir(); alias=root/'alias';alias.symlink_to(actual,target_is_directory=True)
             package=archive_fixture(extra_files={
@@ -140,6 +181,8 @@ class NativeQualificationBoundaryTests(unittest.TestCase):
                 if '--help' in command:return subprocess.CompletedProcess(command,0,'usage: fixture --workspace','')
                 if '--test' in command:return subprocess.CompletedProcess(command,0,'# tests 1','')
                 self.assertEqual(kwargs['env']['HARNESS_BASE_URL'],'http://127.0.0.1:8765')
+                if not missing_workspace:
+                    state=actual/'private-workspace/genesis-next/state.json';state.parent.mkdir(parents=True,exist_ok=True);state.write_text('{}')
                 (output/'BROWSER-VERIFICATION.json').write_text(json.dumps(report))
                 (output/'HARNESS-fixture.png').write_bytes(b'\x89PNG\r\n\x1a\nfixture')
                 (output/'GENESIS-NEXT-browser-export.json').write_bytes(export)
@@ -147,7 +190,14 @@ class NativeQualificationBoundaryTests(unittest.TestCase):
             with patch.object(q.platform,'system',return_value='Linux'), patch.object(q.platform,'platform',return_value='Linux-synthetic'), patch.object(q.tempfile,'TemporaryDirectory',return_value=nullcontext(str(alias))), \
                  patch.object(q,'free_port',return_value=8765), patch.object(q,'authenticate',return_value={'bootstrap':'PASS','unauthenticated_status':403,'authenticated_status':200}), \
                  patch.object(q,'launcher_interpreter',return_value={'version':'3.12','executable':'synthetic'}), patch.object(q,'stop_owned_process') as stop, \
+                 patch.object(q,'probe_genesis_startup',return_value={'status':'PASS','scope':'synthetic fixture only'}), \
                  patch.object(q.subprocess,'Popen',return_value=Mock()) as start, patch.object(q.subprocess,'run',side_effect=execute):
+                if missing_workspace:
+                    with self.assertRaisesRegex(ValueError,'expected private workspace'):
+                        q.qualify(archive,hashlib.sha256(package).hexdigest(),SOURCE,output,modules,browser,'node')
+                    receipt=json.loads((output/'PLATFORM-Linux-VERIFICATION.json').read_text())
+                    self.assertEqual(receipt['status'],'FAIL')
+                    return
                 if cleanup_failure:
                     failure=RuntimeError('synthetic cleanup failed')
                     stop.side_effect=[failure,None] if cleanup_failure=='first' else [None,failure]
@@ -172,6 +222,9 @@ class NativeQualificationBoundaryTests(unittest.TestCase):
 
     def test_native_run_preserves_core_checks_resolves_temp_root_and_flattens_exports(self):
         self.native_run_fixture()
+
+    def test_browser_receipt_without_requested_native_workspace_cannot_pass(self):
+        self.native_run_fixture(missing_workspace=True)
 
     def test_owned_process_cleanup_failure_never_emits_platform_pass(self):
         self.native_run_fixture('first')

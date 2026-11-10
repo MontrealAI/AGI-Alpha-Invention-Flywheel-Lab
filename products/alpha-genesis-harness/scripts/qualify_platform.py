@@ -38,11 +38,13 @@ def native_launcher(product: Path, workspace: Path, port: int, system: str | Non
     if system == "Windows":
         # cmd syntax expands percent/exclamation even inside quotes. Refuse those
         # path spellings rather than relying on POSIX escaping or shell=True.
-        if re.search(r'[%!^&|<>"\r\n]', str(workspace)):
+        if re.search(r'[%!^&|<>()"\r\n]', str(workspace)):
             raise ValueError("Native Windows qualification needs a shell-safe temporary path")
         launcher = product / "Launch-HARNESS.cmd"
-        command = 'Launch-HARNESS.cmd --port ' + str(port) + ' --no-browser --workspace "' + str(workspace) + '"'
-        result = [os.environ.get("COMSPEC", "cmd.exe"), "/d", "/s", "/c", command]
+        # Popen applies CRT quoting to each argument. A prequoted combined
+        # command would introduce backslash-quotes that cmd does not decode.
+        # The fixed simple batch name needs no quoting or /s outer-quote removal.
+        result = [os.environ.get("COMSPEC", "cmd.exe"), "/d", "/c", launcher.name, *options]
     elif system == "Darwin":
         launcher = product / "Launch-HARNESS.command"
         result = ["/bin/sh", str(launcher), *options]
@@ -86,6 +88,61 @@ def free_port() -> int:
         return reservation.getsockname()[1]
 
 
+GENESIS_STARTUP_PROBE = r'''
+import json, sys, traceback
+from pathlib import Path
+result = {"status": "FAIL", "stage": "imports", "completed_stages": [],
+          "interpreter": sys.executable, "python_version": sys.version.split()[0],
+          "scope": "Credential-free initialization diagnostic only; not browser or native-launcher qualification."}
+workflows = None
+try:
+    from bridge.workflows import WorkflowService
+    from bridge.genesis_next import GenesisNextService
+    result["completed_stages"].append("imports")
+    result["stage"] = "workflow_initialization"
+    workflows = WorkflowService(None, Path(sys.argv[1]))
+    result["completed_stages"].append(result["stage"])
+    result["stage"] = "genesis_initialization"
+    genesis = GenesisNextService(workflows)
+    result["completed_stages"].append(result["stage"])
+    result["stage"] = "genesis_status"
+    status = genesis.status()
+    assert any(cap.get("id") == "bounded-verification" for cap in status.get("capabilities", [])), "Expected source-backed capability is missing"
+    result["completed_stages"].append(result["stage"])
+    result["status"] = "PASS"
+    result["stage"] = "complete"
+except Exception as error:
+    result.update({"exception_type": type(error).__name__, "errno": getattr(error, "errno", None),
+                   "winerror": getattr(error, "winerror", None), "traceback": traceback.format_exc()})
+finally:
+    if workflows is not None:
+        try:
+            workflows.close()
+        except Exception:
+            result["status"] = "FAIL"
+            result["cleanup_traceback"] = traceback.format_exc()
+    print(json.dumps(result))
+sys.exit(0 if result["status"] == "PASS" else 1)
+'''
+
+
+def probe_genesis_startup(product: Path, workspace: Path, output: Path, interpreter: str,
+                          environment: dict[str, str]) -> dict:
+    """Expose a hidden local initialization exception on exact trusted source bytes."""
+    result = subprocess.run([interpreter, "-c", GENESIS_STARTUP_PROBE, str(workspace)],
+                            cwd=product, env=environment, capture_output=True, text=True)
+    (output / "genesis-startup.stdout.txt").write_text(result.stdout, encoding="utf-8")
+    (output / "genesis-startup.stderr.txt").write_text(result.stderr, encoding="utf-8")
+    try:
+        diagnostic = json.loads(result.stdout)
+    except (ValueError, TypeError):
+        raise ValueError("GENESIS initialization diagnostic did not return a receipt; inspect its preserved output") from None
+    (output / "GENESIS-STARTUP-DIAGNOSTIC.json").write_text(json.dumps(diagnostic, indent=2) + "\n", encoding="utf-8")
+    if result.returncode or diagnostic.get("status") != "PASS":
+        raise ValueError("GENESIS initialization failed at " + str(diagnostic.get("stage")) + "; inspect its preserved traceback")
+    return diagnostic
+
+
 def request(port: int, path: str, headers: dict | None = None) -> tuple[int, dict]:
     connection = http.client.HTTPConnection("127.0.0.1", port, timeout=2)
     try:
@@ -119,7 +176,9 @@ def authenticate(port: int, process: subprocess.Popen) -> dict:
         raise ValueError("Unauthenticated status request was not refused")
     authorized, status = request(port, "/api/status", {"X-Harness-Token": session["token"]})
     if authorized != 200 or not isinstance(status, dict):
-        raise ValueError("Authenticated local status was unavailable")
+        code = status.get("error", {}).get("code") if isinstance(status, dict) else None
+        diagnostic = code if isinstance(code, str) and re.fullmatch(r"[A-Z0-9_]{1,80}", code) else "UNKNOWN"
+        raise ValueError(f"Authenticated local status was unavailable (HTTP {authorized}; {diagnostic})")
     # Never retain the token. Record only minimal observable readiness.
     return {"bootstrap": "PASS", "unauthenticated_status": denied, "authenticated_status": authorized,
             "configured_providers": len(status.get("providers", [])),
@@ -219,7 +278,7 @@ def qualify(archive: Path, expected_sha256: str, expected_source_revision: str, 
         with tempfile.TemporaryDirectory(prefix="harness-native-") as temporary:
             # macOS /var and caller-selected temp roots may be symlinks; only the
             # already-created owned root is resolved before workspace validation.
-            root = Path(temporary).resolve()
+            root = Path(temporary).resolve(strict=True)
             with zipfile.ZipFile(io.BytesIO(raw)) as bundle:
                 bundle.extractall(root / "extracted")
             roots = list((root / "extracted").iterdir())
@@ -257,10 +316,13 @@ def qualify(archive: Path, expected_sha256: str, expected_source_revision: str, 
             if 'usage:' not in help_result.stdout or '--workspace' not in help_result.stdout:
                 raise ValueError('Native launcher did not emit actual connector help')
             port = free_port()
-            command = native_launcher(product, root / 'private-workspace', port)
+            private_workspace = root / 'private-workspace'
+            command = native_launcher(product, private_workspace, port)
             receipt['launcher'] = launcher_name
             receipt['launcher_command'] = command
             receipt['launcher_interpreter'] = launcher_interpreter(environment)
+            receipt['checks']['genesis_startup_diagnostic'] = probe_genesis_startup(
+                product, root / 'diagnostic-workspace', output, receipt['launcher_interpreter']['executable'], environment)
             with (output / f'{system}-launcher.stdout.txt').open('w',encoding='utf-8') as stdout, (output / f'{system}-launcher.stderr.txt').open('w',encoding='utf-8') as stderr:
                 try:
                     process = subprocess.Popen(command, cwd=product, env=environment, stdout=stdout, stderr=stderr,
@@ -279,6 +341,12 @@ def qualify(archive: Path, expected_sha256: str, expected_source_revision: str, 
                             or browser_receipt.get('server_mode') != 'external-native-launcher' or browser_receipt.get('errors') != []):
                         raise ValueError('Native browser receipt does not establish this exact platform/source/launcher')
                     validate_browser_files(browser_receipt, output)
+                    native_state = private_workspace / 'genesis-next' / 'state.json'
+                    if native_state.is_symlink() or not native_state.is_file():
+                        raise ValueError('Native launcher did not create GENESIS state in the expected private workspace')
+                    receipt['checks']['native_workspace'] = {
+                        'genesis_state_created_at_requested_path': True,
+                        'scope':'Existence after actual launcher/browser operation only; no workspace contents or integrity key retained.'}
                     receipt['browser_report'] = browser_receipt
                 finally:
                     stop_owned_process(process)
@@ -292,7 +360,8 @@ def qualify(archive: Path, expected_sha256: str, expected_source_revision: str, 
         try:
             stop_owned_process(process)
             # Flat uniquely prefixed files fit the existing release and owner contracts.
-            names = {p.name for p in output.glob('HARNESS-*.png')} | {'BROWSER-VERIFICATION.json','GENESIS-NEXT-browser-export.json'}
+            names = {p.name for p in output.glob('HARNESS-*.png')} | {'BROWSER-VERIFICATION.json','GENESIS-NEXT-browser-export.json',
+                     'GENESIS-STARTUP-DIAGNOSTIC.json','genesis-startup.stdout.txt','genesis-startup.stderr.txt'}
             names.update(item['file'] for item in browser_receipt.get('exports',[]) if isinstance(item,dict)
                          and isinstance(item.get('file'),str) and Path(item['file']).name == item['file'])
             for name in names:

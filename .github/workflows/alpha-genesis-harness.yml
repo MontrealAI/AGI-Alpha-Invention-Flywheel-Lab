@@ -256,6 +256,7 @@ jobs:
         run: |
           python products/alpha-genesis-harness/scripts/qualify_platform.py "$RUNNER_TEMP/harness-platform-received/$ARCHIVE_NAME" --expected-sha256 "$ARCHIVE_SHA" --expected-source-revision "$SOURCE_SHA" --visual-modules "$RUNNER_TEMP/harness-platform-visual/node_modules" --browser-executable "$HARNESS_NATIVE_BROWSER" --output "$RUNNER_TEMP/harness-platform-operation"
       - name: Record native Codex isolation on this OS without authentication
+        if: ${{ always() && !cancelled() }}
         env:
           SOURCE_SHA: ${{ needs.qualify.outputs.source_sha }}
           ARCHIVE_SHA: ${{ needs.qualify.outputs.archive_sha }}
@@ -268,12 +269,22 @@ jobs:
           from pathlib import Path
           root = Path(os.environ['RUNNER_TEMP'])
           modules = root / 'harness-platform-codex/node_modules/@openai'
-          native_name = 'codex.exe' if os.name == 'nt' else 'codex'
-          candidates = [p for package in modules.glob('codex-*') for p in package.rglob(native_name) if p.is_file() and p.parent.name == 'codex']
-          if len(candidates) != 1:
-              raise RuntimeError('Expected exactly one installed official native Codex executable')
-          result = subprocess.run([sys.executable, 'products/alpha-genesis-harness/scripts/probe_codex_sandbox.py', '--executable', str(candidates[0]), '--work-root', str(Path.cwd() / 'harness-sandbox-probe')], capture_output=True, text=True, encoding='utf-8')
+          if os.name == 'nt':
+              architecture = {'amd64':'x64','x86_64':'x64','arm64':'arm64','aarch64':'arm64'}.get(platform.machine().lower())
+              assert architecture, 'Unrecognized Windows architecture'
+              package = modules / ('codex-win32-' + architecture)
+              candidates = [p for p in package.rglob('codex.exe') if p.is_file() and not p.is_symlink()]
+              if len(candidates) != 1:
+                  raise RuntimeError('Expected exactly one installed official native Windows Codex executable')
+              executable = candidates[0]
+          else:
+              # The official npm launcher resolves the installed platform layout;
+              # do not assume a vendor subdirectory spelling on macOS.
+              executable = root / 'harness-platform-codex/node_modules/.bin/codex'
+              assert executable.is_file(), 'Official installed Codex launcher is missing'
+          result = subprocess.run([sys.executable, 'products/alpha-genesis-harness/scripts/probe_codex_sandbox.py', '--executable', str(executable), '--work-root', str(Path.cwd() / 'harness-sandbox-probe')], capture_output=True, text=True, encoding='utf-8')
           output = root / 'harness-platform-operation'
+          output.mkdir(parents=True, exist_ok=True)
           (output / (platform.system() + '-CODEX-HOST-VERIFICATION.stdout.txt')).write_text(result.stdout, encoding='utf-8')
           (output / (platform.system() + '-CODEX-HOST-VERIFICATION.stderr.txt')).write_text(result.stderr, encoding='utf-8')
           assert result.returncode in (0, 2), result.stderr
@@ -283,6 +294,19 @@ jobs:
           receipt.update(source_revision=os.environ['SOURCE_SHA'], archive_sha256=os.environ['ARCHIVE_SHA'], host=platform.platform())
           (output / (platform.system() + '-CODEX-HOST-VERIFICATION.json')).write_text(json.dumps(receipt, indent=2), encoding='utf-8')
           print(json.dumps({'host': platform.system(), 'status': receipt['status'], 'code': receipt.get('code')}))
+          if platform.system() == 'Darwin':
+              path = output / 'Darwin-UPGRADE-FOUNDRY-HOST-VERIFICATION.json'
+              foundry = subprocess.run([sys.executable, 'products/alpha-genesis-harness/scripts/probe_upgrade_foundry.py', '--executable', str(executable), '--output', str(path)], capture_output=True, text=True, encoding='utf-8')
+              (output / 'Darwin-UPGRADE-FOUNDRY-HOST-VERIFICATION.stdout.txt').write_text(foundry.stdout, encoding='utf-8')
+              (output / 'Darwin-UPGRADE-FOUNDRY-HOST-VERIFICATION.stderr.txt').write_text(foundry.stderr, encoding='utf-8')
+              assert foundry.returncode in (0, 2), foundry.stderr
+              value = json.loads(path.read_text(encoding='utf-8'))
+              assert (foundry.returncode, value['status']) in ((0, 'PASS'), (2, 'BLOCKED'))
+              assert value['live_model_construction'] == 'NOT_TESTED' and value['generated_code_executed'] is False
+              value.update(source_revision=os.environ['SOURCE_SHA'], archive_sha256=os.environ['ARCHIVE_SHA'], host=platform.platform())
+              path.write_text(json.dumps(value, indent=2) + '\n', encoding='utf-8')
+              print(json.dumps({'host':'Darwin', 'foundry_status':value['status'], 'live_model_construction':'NOT_TESTED'}))
+
           PY
       - name: Preserve platform evidence including failures
         if: always()

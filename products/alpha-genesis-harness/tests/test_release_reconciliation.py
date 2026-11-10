@@ -47,7 +47,7 @@ class ReconciliationTests(unittest.TestCase):
             (['python','-B','-m','bridge.strategy_demo','--workspace',str(f.root/'paired'), '--output',str(f.op/'STRATEGY-DEMONSTRATION.json')], '{}', ''),
         ]
         self.write_operations()
-        self.browser = {'source_revision':owner_fixture.SOURCE,'status':'PASS','errors':[],
+        self.browser = {'source_revision':owner_fixture.SOURCE,'status':'PASS','errors':[],'http_failures':[],
                         'platform':'linux','checks':sorted(reconcile.BROWSER_CHECKS),'screenshots':['HARNESS-fixture.png']}
         (f.assets/'BROWSER-VERIFICATION.json').write_text(json.dumps(self.browser))
         self.paired = {'schema':'alpha-genesis-paired-retrieval/v1',
@@ -119,7 +119,10 @@ class ReconciliationTests(unittest.TestCase):
                 'host':'macOS-15-synthetic' if system == 'Darwin' else 'Windows-2025-synthetic',
                 'scope':'Synthetic receipt fixture; no actual OS evidence', 'browser_report':browser,
                 'launcher':launcher,'launcher_interpreter':{'version':'3.12','executable':'synthetic'},
-                'checks':{'loopback_authentication':{'bootstrap':'PASS','unauthenticated_status':403,'authenticated_status':200}},
+                'checks':{'loopback_authentication':{'bootstrap':'PASS','unauthenticated_status':403,'authenticated_status':200},
+                          'native_workspace':{'genesis_state_created_at_requested_path':True},
+                          'genesis_startup_diagnostic':{'status':'PASS','stage':'complete','interpreter':'synthetic',
+                              'completed_stages':['imports','workflow_initialization','genesis_initialization','genesis_status']}},
                 'operations':[{'command':['node','--test','tests/fixture.test.cjs'],'returncode':0},
                               {'command':[launcher,'--help'],'returncode':0},
                               {'command':['node','evidence/UI_BROWSER_REPLAY.cjs'],'returncode':0}]}
@@ -167,6 +170,17 @@ class ReconciliationTests(unittest.TestCase):
         self.browser['checks'].remove('saved project survives reload; downloaded JSON reopens in fresh browser storage')
         (self.fixture.assets/'BROWSER-VERIFICATION.json').write_text(json.dumps(self.browser))
         self.assertEqual(self.rows()[0]['A1']['status'],'NOT TESTED')
+
+    def test_browser_missing_or_failed_http_proof_cannot_qualify_linux_or_native(self):
+        for evidence in ({}, {'http_failures':[{'path':'/api/genesis-next/status','status':500}]}):
+            self.browser.pop('http_failures',None)
+            self.browser.update(evidence)
+            (self.fixture.assets/'BROWSER-VERIFICATION.json').write_text(json.dumps(self.browser))
+            self.platform_receipts()
+            rows,_,_=self.rows()
+            with self.subTest(evidence=evidence):
+                for identifier in ('A1','I1','I2'):
+                    self.assertEqual(rows[identifier]['status'],'NOT TESTED',identifier)
 
     def test_failed_graphical_receipt_is_preserved_as_fail(self):
         self.browser['status']='FAIL'
@@ -281,9 +295,12 @@ class ReconciliationTests(unittest.TestCase):
         self.assertEqual(self.rows()[0]['O13']['status'],'BLOCKED')
 
     def test_native_help_without_live_wrapper_session_or_export_cannot_pass(self):
-        for change in ('session','export'):
+        for change in ('session','export','workspace','startup','interpreter'):
             self.platform_receipts();path=self.fixture.assets/'PLATFORM-Windows-VERIFICATION.json';value=json.loads(path.read_text())
             if change=='session':value['checks']['loopback_authentication']['authenticated_status']=403
+            elif change=='workspace':value['checks'].pop('native_workspace')
+            elif change=='startup':value['checks'].pop('genesis_startup_diagnostic')
+            elif change=='interpreter':value['checks']['genesis_startup_diagnostic']['interpreter']='different'
             else:(self.fixture.assets/'Windows-GENESIS-NEXT-browser-export.json').write_bytes(b'tampered')
             path.write_text(json.dumps(value))
             with self.subTest(change=change):self.assertEqual(self.rows()[0]['I2']['status'],'NOT TESTED')
@@ -293,7 +310,13 @@ class ReconciliationTests(unittest.TestCase):
             'archive_sha256':self.archive_hash,'live_model_construction':'NOT_TESTED','generated_code_executed':False,
             'source_manifest':{'bridge/upgrade_foundry.py':hashlib.sha256(self.fixture.content['bridge/upgrade_foundry.py']).hexdigest()}}
         (self.fixture.assets/'UPGRADE-FOUNDRY-HOST-VERIFICATION.json').write_text(json.dumps(record))
+        mac=dict(record,status='BLOCKED')
+        (self.fixture.assets/'Darwin-UPGRADE-FOUNDRY-HOST-VERIFICATION.json').write_text(json.dumps(mac))
         rows,_,_=self.rows();self.assertEqual(rows['O11']['status'],'BLOCKED');self.assertIn('probe: PASS',rows['O11']['actual_test_or_required_procedure'])
+        self.assertIn('Darwin-UPGRADE-FOUNDRY-HOST-VERIFICATION.json',rows['O11']['evidence_location'])
+        mac['archive_sha256']='0'*64
+        (self.fixture.assets/'Darwin-UPGRADE-FOUNDRY-HOST-VERIFICATION.json').write_text(json.dumps(mac))
+        with self.assertRaisesRegex(ValueError,'exact-source'):self.rows()
 
 
 class GenesisRawProofTests(unittest.TestCase):

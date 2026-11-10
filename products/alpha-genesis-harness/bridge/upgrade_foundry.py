@@ -95,8 +95,8 @@ def _manifest(files):
 def _protocol(seed):
     """Freeze fresh instances before the model sees construction source.
 
-    Direct scalar arithmetic is the competent conventional oracle. It shares
-    outcomes and inputs; it does not use the candidate evaluator's code.
+    Direct scalar arithmetic is the competent conventional oracle. Fixed JSON
+    equality expectations are declared independently of either interpreter.
     """
     rng = random.Random(seed)
     cases = []
@@ -114,10 +114,30 @@ def _protocol(seed):
         if change == "op": case["instrument"]["outputs"]["result"]["op"] = "unsupported_operation"
         if change == "budget": case["max_operations"] = 1
         cases.append(case)
-    return {"schema": "harness-interpreter-upgrade-protocol/v1", "seed": seed, "cases": cases,
-            "acceptance": "Every fresh valid case matches the independent direct arithmetic oracle; every declared malformed case is rejected.",
-            "comparison": "Original HARNESS, candidate and competent direct scalar arithmetic on matching valid cases; costs measured separately.",
-            "limits": "Finite sampled affine/interpreter regression scope; no proof of all expressions or general capability improvement."}
+    equality_cases = [
+        ("list-bool-number", [True], [1], False),
+        ("object-bool-number", {"value": False}, {"value": 0}, False),
+        ("nested-bool-number", {"rows": [{"value": [True]}]}, {"rows": [{"value": [1.0]}]}, False),
+        ("nested-number-bool", [[{"value": 0.0}]], [[{"value": False}]], False),
+        ("nested-numeric", {"values": [1, -0.0, 2.5]}, {"values": [1.0, 0, 2.5]}, True),
+        ("object-order", {"a": [1], "b": False}, {"b": False, "a": [1.0]}, True),
+        ("list-order", [1, 2], [2, 1], False),
+        ("list-length", [1], [1, 2], False),
+        ("object-keys", {"a": None}, {"b": None}, False),
+        ("container-type", [], {}, False),
+        ("null-bool", None, False, False),
+        ("unicode-exact", "\u00e9", "e\u0301", False),
+    ]
+    for name, left, right, expected in equality_cases:
+        cases.append({"id": "equality-" + name,
+                      "instrument": {"name": "Fixed JSON equality regression", "inputs": ["left", "right"],
+                                     "outputs": {"result": {"op": "eq", "args": [{"field": "left"}, {"field": "right"}]}}},
+                      "inputs": {"left": left, "right": right}, "max_operations": 10000,
+                      "expected": {"result": expected}})
+    return {"schema": "harness-interpreter-upgrade-protocol/v2", "seed": seed, "cases": cases,
+            "acceptance": "Every fresh affine case matches the independent direct arithmetic oracle; fixed JSON equality cases match declared booleans; every declared malformed case is rejected.",
+            "comparison": "Original HARNESS and candidate on all cases; competent direct scalar arithmetic on the matching affine subset; costs measured separately.",
+            "limits": "Finite sampled affine and fixed JSON/interpreter regression scope; no proof of all expressions or general capability improvement."}
 
 
 class _SeededCodex(CodexService):
@@ -440,7 +460,7 @@ class UpgradeFoundryService:
                         for c in exp["protocol"]["cases"] if "reference" in c]
             valid = [c for c in exp["protocol"]["cases"] if "reference" in c]
             arms["ordinary_direct_arithmetic"] = {**self._judge(valid, ordinary), "wall_seconds": time.perf_counter() - started,
-                "scope": "Competent direct arithmetic on the same valid scalar outcomes; interpreter malformed-input contracts belong to the two interpreter arms."}
+                "scope": "Competent direct arithmetic on the same affine outcomes; JSON equality and malformed-input contracts belong to the two interpreter arms."}
             self._bind(exp); _source_guard()
             require(not cancel.is_set(), "Qualification cancelled; no candidate activated.", "FOUNDRY_CANCELLED")
             with self.lock:
@@ -449,7 +469,7 @@ class UpgradeFoundryService:
                 passed = all(arm["passed"] for arm in arms.values())
                 current["status"] = "qualified" if passed else "rejected"
                 current["qualification"] = {"correctness": "PASS" if passed else "FAIL", "arms": arms, "protocol_sha256": exp["protocol_sha256"],
-                    "candidate_sha256": exp["candidate_sha256"], "independent_evaluation": "Host compares sandbox outputs to preregistered direct arithmetic; child verdicts are never authority.",
+                    "candidate_sha256": exp["candidate_sha256"], "independent_evaluation": "Host compares sandbox outputs to preregistered direct arithmetic and fixed JSON equality expectations; child verdicts are never authority.",
                     "general_improvement": "NOT_ESTABLISHED", "objective_achievement": "NOT_ESTABLISHED_BY_REGRESSION_PASS", "complete_cost_advantage": "UNKNOWN", "production_promotion": False}
                 current["events"].append({"kind": "qualified" if passed else "rejected", "at": timestamp()}); self._save(state)
                 return {"experiment": self._public({"experiments": [current]})["experiments"][0], "state": self._public(state)}
