@@ -136,5 +136,38 @@ class PreregisteredAccessTests(unittest.TestCase):
                     verify(INPUT, html, manifest)
 
 
+    def _rehash_mutated_html(self, mutate):
+        html, manifest = self.files()
+        original = html.read_bytes()
+        changed = mutate(original)
+        self.assertNotEqual(original, changed)
+        html.write_bytes(changed)
+        m = json.loads(manifest.read_text(encoding='utf-8'))
+        m['html_sha256'] = hashlib.sha256(changed).hexdigest()
+        manifest.write_text(json.dumps(m), encoding='utf-8')
+        return html, manifest
+
+    def test_T12_rehashed_premature_main_close_rejected(self):
+        # Original verifier counted <main> but did not require content inside it.
+        def tamper(original):
+            changed = original.replace(b'<main id="main">', b'<main id="main"></main>', 1)
+            return b''.join(changed.rsplit(b'</main>', 1))
+        html, manifest = self._rehash_mutated_html(tamper)
+        with self.assertRaisesRegex(ValueError, 'SEMANTIC_NESTING_REJECTED'):
+            verify(INPUT, html, manifest)
+
+    def test_T13_rehashed_missing_required_close_rejected(self):
+        html, manifest = self._rehash_mutated_html(
+            lambda original: original.replace(b'</body>', b'', 1))
+        with self.assertRaisesRegex(ValueError, 'SEMANTIC_NESTING_REJECTED'):
+            verify(INPUT, html, manifest)
+
+    def test_T14_rehashed_nested_table_section_rejected(self):
+        html, manifest = self._rehash_mutated_html(
+            lambda original: original.replace(b'</thead>', b'', 1))
+        with self.assertRaisesRegex(ValueError, 'SEMANTIC_NESTING_REJECTED'):
+            verify(INPUT, html, manifest)
+
+
 if __name__ == '__main__':
     unittest.main()
