@@ -315,6 +315,11 @@ class Runtime:
 
     def discover(self, ident):
         p = self.provider(ident)
+        # Model-list retrieval is still an authenticated remote API request,
+        # even if the provider does not charge for metadata. Preserve the
+        # explicit remote-request consent boundary before any sender call.
+        if p.remote and not self.allow_paid:
+            raise BridgeError("PERMISSION", "Remote model discovery is disabled until explicitly authorized in local configuration.", 403)
         if p.remote and not p.key:
             raise BridgeError("CREDENTIAL", "Set the provider credential in its configured environment variable.")
         response = self.sender(p.models_request(), p.headers(), timeout=self.timeout)

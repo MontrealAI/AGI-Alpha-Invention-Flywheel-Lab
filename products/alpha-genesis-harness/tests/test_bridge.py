@@ -391,5 +391,83 @@ class NativeBoundaryTests(unittest.TestCase):
         self.assertEqual(native.source.read_bytes(), before)
 
 
+
+class RemoteDiscoveryConsent122Tests(unittest.TestCase):
+    """Frozen remote-API consent regressions: injected senders, zero network."""
+
+    def test_r1_remote_discovery_without_consent_never_calls_sender(self):
+        calls = []
+
+        def sender(url, headers, **_):
+            calls.append((url, headers))
+            return {"data": [{"id": "model-a"}]}
+
+        config = configuration("openai", remote=True, budget=0)
+        config["allow_paid_requests"] = False
+        with patch.dict(os.environ, {"HARNESS_TEST_KEY": "synthetic-placeholder-not-a-credential"}):
+            runtime = Runtime(config, sender=sender)
+            self.assertFalse(runtime.status()["providers"][0]["ready"])
+            with self.assertRaises(BridgeError) as caught:
+                runtime.discover("test")
+        self.assertEqual((caught.exception.code, caught.exception.status), ("PERMISSION", 403))
+        self.assertEqual(calls, [])
+        self.assertEqual(runtime.budget.view()["committed"], 0)
+
+    def test_r2_authorized_remote_discovery_uses_only_injected_sender(self):
+        calls = []
+
+        def sender(url, headers, **_):
+            calls.append(url)
+            return {"data": [{"id": "model-a"}]}
+
+        with patch.dict(os.environ, {"HARNESS_TEST_KEY": "synthetic-placeholder-not-a-credential"}):
+            runtime = Runtime(configuration("openai", remote=True, budget=0), sender=sender)
+            result = runtime.discover("test")
+        self.assertEqual(calls, ["https://api.example.com/v1/models"])
+        self.assertEqual(result["models"], [{"id": "model-a", "configured": True}])
+
+    def test_r3_local_ollama_discovery_needs_no_paid_consent(self):
+        calls = []
+
+        def sender(url, headers, **_):
+            calls.append(url)
+            return {"models": [{"name": "model-a"}]}
+
+        config = configuration("ollama", remote=False, budget=0)
+        config["allow_paid_requests"] = False
+        with patch.dict(os.environ, {"HARNESS_TEST_KEY": ""}):
+            runtime = Runtime(config, sender=sender)
+            result = runtime.discover("test")
+        self.assertEqual(calls, ["http://127.0.0.1:11434/api/tags"])
+        self.assertEqual(result["models"], [{"id": "model-a", "configured": True}])
+
+    def test_r4_remote_generation_guard_is_unchanged(self):
+        calls = []
+
+        def sender(*args, **kwargs):
+            calls.append(args)
+            return response("openai")
+
+        config = configuration("openai", remote=True, budget=0)
+        config["allow_paid_requests"] = False
+        with patch.dict(os.environ, {"HARNESS_TEST_KEY": "synthetic-placeholder-not-a-credential"}):
+            runtime = Runtime(config, sender=sender)
+            with self.assertRaises(BridgeError) as caught:
+                runtime.generate(request("remoteconsent122"))
+        self.assertEqual((caught.exception.code, caught.exception.status), ("PERMISSION", 403))
+        self.assertEqual(calls, [])
+        self.assertEqual(runtime.budget.view()["committed"], 0)
+
+    def test_r5_blank_default_cannot_discover_unconfigured_remote(self):
+        calls = []
+        runtime = Runtime(sender=lambda *args, **kwargs: calls.append(args))
+        self.assertEqual(runtime.status()["providers"], [])
+        with self.assertRaises(BridgeError) as caught:
+            runtime.discover("remote-not-configured")
+        self.assertEqual(caught.exception.code, "PROVIDER")
+        self.assertEqual(calls, [])
+
+
+
 if __name__ == "__main__":
     unittest.main()
