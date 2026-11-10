@@ -12,6 +12,7 @@ import socket
 import stat
 import subprocess
 import sys
+import sysconfig
 import tarfile
 import time
 import urllib.request
@@ -73,8 +74,24 @@ def same_json(left, right):
     return left == right
 
 
+def verify_cache_manifest(before, after, manifest):
+    prefix = 'python/lib/python3.15/'
+    entries = manifest['compiled']
+    expected = {prefix + row['pyc']: row['pyc_sha256'] for row in entries}
+    added = set(after) - set(before)
+    return (len(expected) == len(entries) and set(expected) == added
+            and all(after.get(name) == value for name, value in before.items())
+            and all(after[name].get('sha256') == digest for name, digest in expected.items())
+            and all(before.get(prefix + row['source'], {}).get('sha256') == row['source_sha256']
+                    for row in entries))
+
+
+def worker_clean(result):
+    return result.get('worker_returncode') == 0 and result.get('cleanup', {}).get('complete') is True
+
+
 def guest_payload(result):
-    if result.get('worker_returncode') != 0 or result.get('output_overflow'):
+    if not worker_clean(result) or result.get('output_overflow'):
         raise ValueError('Guest worker failed or exceeded output capacity')
     if result.get('outcome') != 'RETURN' and not (result.get('outcome') == 'EXIT' and result.get('exit_code') == 0):
         raise ValueError('Guest did not complete successfully')
@@ -138,7 +155,7 @@ def main(args):
     started = time.time()
     record = {'schema': 'harness-wasi-baseline-qualification/v1', 'status': 'FAIL',
               'stage': 'preflight', 'started_at_unix': started, 'downloads': [], 'commands': [],
-              'capability_checks': {}, 'resource_checks': {}, 'baseline_cases': [],
+              'lifecycle_checks': {}, 'capability_checks': {}, 'resource_checks': {}, 'baseline_cases': [],
               'model_calls': 0, 'candidate_execution': False, 'native_codex_gate_changed': False,
               'complete_cost_known': False, 'api_paid_requests': 0}
     source_before = {}
@@ -251,7 +268,30 @@ def main(args):
         (stage / 'fixture.txt').write_text('public WASI read fixture\n')
         outside = work / 'outside.txt'; outside.write_text('PUBLIC SYNTHETIC OUTSIDE SENTINEL\n')
         (stage / 'escape-link').symlink_to(outside)
-        stage_before = snapshot(stage); outside_hash = sha(outside)
+        before_cache = snapshot(stage); outside_hash = sha(outside)
+        dump(evidence / 'STAGING-INVENTORY-before-cache.json', before_cache)
+        record['stage'] = 'trusted_stdlib_cache'; save()
+        native = source / 'cross-build' / sysconfig.get_config_var('BUILD_GNU_TYPE') / 'python'
+        if not native.is_file():
+            raise ValueError('Official native build Python was not found')
+        cache_manifest = evidence / 'STDLIB-CACHE-MANIFEST.json'
+        command([native, '-I', '-S', '-B', HERE / 'prepare_stdlib.py',
+                 '--source-lib', source / 'Lib', '--staged-lib', library,
+                 '--manifest', cache_manifest], work, build_env)
+        cache = strict_json(cache_manifest.read_text())
+        if cache.get('source_unchanged') is not True or not cache.get('compiled'):
+            raise ValueError('Trusted stdlib cache manifest is incomplete')
+        stage_before = snapshot(stage)
+        added = set(stage_before) - set(before_cache)
+        if (not verify_cache_manifest(before_cache, stage_before, cache)
+                or any(not name.startswith('python/lib/python3.15/') or '/__pycache__/' not in name
+                       or not name.endswith('.pyc') for name in added)
+                or sha(outside) != outside_hash):
+            raise ValueError('Cache construction changed more than declared stdlib cache files')
+        record['stdlib_cache'] = {'manifest_sha256': sha(cache_manifest),
+            'compiled_files': len(cache['compiled']), 'excluded_files': len(cache['excluded']),
+            'pyc_bytes': sum(item['pyc_bytes'] for item in cache['compiled']),
+            'compiler': cache['compiler']}
         dump(evidence / 'STAGING-INVENTORY.json', stage_before)
         worker_counter = 0
         def invoke(mode, guest=None, timeout=None):
@@ -281,6 +321,18 @@ def main(args):
             result['progress'] = strict_json(progress.read_text()) if progress.exists() else None
             dump(evidence / ('worker-%03d.json' % worker_counter), result)
             return result
+        record['stage'] = 'output_lifecycle'; save()
+        for mode, expected in [('lifecycle_return', 'RETURN'), ('lifecycle_trap', 'TRAP')]:
+            result = invoke(mode)
+            accepted = (worker_clean(result) and result.get('outcome') == expected
+                        and not result.get('output_overflow')
+                        and result.get('stdout') == 'lifecycle-out\n'
+                        and result.get('stderr') == 'lifecycle-err\n'
+                        and (expected != 'TRAP' or result.get('trap_code') == 'TrapCode.UNREACHABLE'))
+            record['lifecycle_checks'][mode] = accepted; save()
+            if not accepted:
+                raise ValueError('Trusted output lifecycle probe failed: ' + mode)
+        record['stage'] = 'capability_negatives'; save()
         listener = socket.socket(); listener.bind(('127.0.0.1', 0)); listener.listen(1); listener.settimeout(0.1)
         try:
             result = invoke('python', {'mode':'capabilities', 'outside_path':str(outside), 'port':listener.getsockname()[1]})
@@ -306,11 +358,12 @@ def main(args):
             result = invoke(mode)
             accepted = (result.get('outcome') == 'RETURN' and result.get('value') == {'within':1, 'beyond':-1}) if mode == 'memory' else (
                 result.get('outcome') == 'TRAP' and expected in result.get('trap_code', ''))
+            accepted = worker_clean(result) and accepted
             record['resource_checks'][mode] = accepted
             if not accepted:
                 raise ValueError('Resource boundary failed: ' + mode)
         result = invoke('python', {'mode':'output_limit'})
-        record['resource_checks']['output_limit'] = result.get('output_overflow') is True
+        record['resource_checks']['output_limit'] = worker_clean(result) and result.get('output_overflow') is True
         if not record['resource_checks']['output_limit']:
             raise ValueError('Output limit did not stop the real guest output route')
         # Exercise supervisor cancellation independently of fuel/epoch completion.

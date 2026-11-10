@@ -29,7 +29,7 @@ jobs:
       - name: Run preregistered capability negatives and unchanged baseline
         env:
           SOURCE_SHA: ${{ github.event.pull_request.head.sha }}
-          PROTOCOL_SHA256: 0fb753c1e94c93b712b6f9f4008cd1ee61f74e647ea85008ad5d556a3d1872de
+          PROTOCOL_SHA256: 80b809790713f890835a6cb22f6d66d357aac9fbd7d5d5d19c674fc2edbd6abd
         run: >-
           python -B experiments/harness-wasi-v1/run.py
           --work "$RUNNER_TEMP/harness-wasi-v1"

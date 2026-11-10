@@ -1,0 +1,169 @@
+{
+  "schema": "harness-wasi-baseline-qualification/v1",
+  "status": "FAIL",
+  "stage": "capability_negatives",
+  "started_at_unix": 1794300561.7792766,
+  "downloads": [
+    {
+      "file": "Python-3.15.2.tar.xz",
+      "bytes": 27960396,
+      "sha256": "8b5536d280142ecf6cdfe15d12a21ba1c65e300bbf7b28a8d0cdb849575797de",
+      "url": "https://www.python.org/ftp/python/3.15.2/Python-3.15.2.tar.xz"
+    },
+    {
+      "file": "wasi-sdk-33.0-x86_64-linux.tar.gz",
+      "bytes": 193563606,
+      "sha256": "0ba8b5bfaeb2adf3f29bab5841d76cf5318ab8e1642ea195f88baba1abd47bce",
+      "url": "https://github.com/WebAssembly/wasi-sdk/releases/download/wasi-sdk-33/wasi-sdk-33.0-x86_64-linux.tar.gz"
+    },
+    {
+      "file": "wasmtime-50.0.1-py3-none-manylinux1_x86_64.whl",
+      "bytes": 9586999,
+      "sha256": "cc14c3a17654e0394e0225b11813532ef0cd7bd1e222a0c5494cdedaabeddac4",
+      "url": "https://files.pythonhosted.org/packages/d5/9d/97c109d4a25c716c4045644398d7e684e1d4fa5ec6c99412b5cba35a9a98/wasmtime-50.0.1-py3-none-manylinux1_x86_64.whl"
+    }
+  ],
+  "commands": [
+    {
+      "argv": [
+        "cc",
+        "--version"
+      ],
+      "returncode": 0,
+      "wall_seconds": 0.2397664370000001,
+      "log_sha256": "3e8cc208c40f60832f67377aa1b03c3e7e858f20cd5d365464944700c0bd7ad1",
+      "log_bytes": 245,
+      "published_log_scope": "Last128KiB; full original log hash and byte count retained"
+    },
+    {
+      "argv": [
+        "/home/runner/work/_temp/harness-wasi-v1/sdk/wasi-sdk-33.0-x86_64-linux/bin/clang",
+        "--version"
+      ],
+      "returncode": 0,
+      "wall_seconds": 0.016134132999994222,
+      "log_sha256": "14271eb84a334c76baa4a89f806afe51c001ad6ebbfd6ea66ed4b97a2d931265",
+      "log_bytes": 354,
+      "published_log_scope": "Last128KiB; full original log hash and byte count retained"
+    },
+    {
+      "argv": [
+        "/opt/hostedtoolcache/Python/3.12.16/x64/bin/python",
+        "Platforms/WASI",
+        "build-python",
+        "--",
+        "--without-ensurepip"
+      ],
+      "returncode": 0,
+      "wall_seconds": 112.92549407200002,
+      "log_sha256": "0a3b566defd0335045da308dec4a2d730b005d493aebfca806fbda92c3f41808",
+      "log_bytes": 255375,
+      "published_log_scope": "Last128KiB; full original log hash and byte count retained"
+    },
+    {
+      "argv": [
+        "/opt/hostedtoolcache/Python/3.12.16/x64/bin/python",
+        "Platforms/WASI",
+        "configure-host",
+        "--wasi-sdk",
+        "/home/runner/work/_temp/harness-wasi-v1/sdk/wasi-sdk-33.0-x86_64-linux",
+        "--host-runner",
+        "false",
+        "--",
+        "--prefix=/sandbox/python",
+        "--without-ensurepip",
+        "--disable-test-modules"
+      ],
+      "returncode": 0,
+      "wall_seconds": 31.342339543999998,
+      "log_sha256": "3f2a748d2f2ebcd3ad8be60aef0f2d3e6cbb948984e538381589be2b609c4b7c",
+      "log_bytes": 36072,
+      "published_log_scope": "Last128KiB; full original log hash and byte count retained"
+    },
+    {
+      "argv": [
+        "make",
+        "--jobs",
+        "4",
+        "all"
+      ],
+      "returncode": 0,
+      "wall_seconds": 73.423498601,
+      "log_sha256": "4353295595b7d8ddac6441d090d54cf5a8f55532e0b3c6d42355cb54c3605af4",
+      "log_bytes": 208009,
+      "published_log_scope": "Last128KiB; full original log hash and byte count retained"
+    },
+    {
+      "argv": [
+        "/opt/hostedtoolcache/Python/3.12.16/x64/bin/python",
+        "-m",
+        "venv",
+        "/home/runner/work/_temp/harness-wasi-v1/venv"
+      ],
+      "returncode": 0,
+      "wall_seconds": 2.8204934569999978,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "log_bytes": 0,
+      "published_log_scope": "Last128KiB; full original log hash and byte count retained"
+    },
+    {
+      "argv": [
+        "/home/runner/work/_temp/harness-wasi-v1/venv/bin/python",
+        "-m",
+        "pip",
+        "install",
+        "--no-index",
+        "--no-deps",
+        "/home/runner/work/_temp/harness-wasi-v1/downloads/wasmtime-50.0.1-py3-none-manylinux1_x86_64.whl"
+      ],
+      "returncode": 0,
+      "wall_seconds": 0.6657363319999945,
+      "log_sha256": "8b449d98637ae58a0aded3f7c707b66f9ff4226cc0099336d92336ff706abf43",
+      "log_bytes": 149,
+      "published_log_scope": "Last128KiB; full original log hash and byte count retained"
+    }
+  ],
+  "capability_checks": {},
+  "resource_checks": {},
+  "baseline_cases": [],
+  "model_calls": 0,
+  "candidate_execution": false,
+  "native_codex_gate_changed": false,
+  "complete_cost_known": false,
+  "api_paid_requests": 0,
+  "attempt_id": "wasi-baseline-002",
+  "source_revision": "663f33e3df8fbc0b070993c163506ed37d4f2673",
+  "source_product_tree": "fa6fe606d73d8dbd1ec909de893e42131b099b9c",
+  "source_sha256": {
+    "experiments/harness-wasi-v1/PROTOCOL.json": "0fb753c1e94c93b712b6f9f4008cd1ee61f74e647ea85008ad5d556a3d1872de",
+    "experiments/harness-wasi-v1/run.py": "452fef303c1611f57fdbc1b778c783f781065e237792c204b60e0e06b800850a",
+    "experiments/harness-wasi-v1/README.md": "f91ec817d99b89a5dde866753ffef2e96d314063bad83f59152aafc1abd433eb",
+    "experiments/harness-wasi-v1/CASES.json": "180d601781b95c7a1289ffa50071a9e6e6111c0c5149fed6da2fb5971c5a4b92",
+    "experiments/harness-wasi-v1/test_preparation.py": "ee82c89dc986ae441766cef2867fa46855b609d026bfba377697655d977b3a93",
+    "experiments/harness-wasi-v1/guest_driver.py": "5529212db89f59015e7d3ce97ccaa44e5d90060a7442955f76e75df17151b65d",
+    "experiments/harness-wasi-v1/worker.py": "9dbc02d0f7c197d9aaee28d92735b734266d1326cb72996103d4692770b54018",
+    ".github/workflows/harness-wasi-v1.yml": "788320f4652a24f7876b3b0bf2ea34b2cddab3f15fd36dd1bf0520c256c77f53",
+    "products/alpha-genesis-harness/bridge/instruments.py": "cca18a8703a03448cd9bf035223226d513ed58bb544f018949e31603e7c8c2e5",
+    "products/alpha-genesis-harness/bridge/upgrade_foundry.py": "d4334196411651a99ff21ca08853ff1b0c2a85ae9b6334186894666e5ccd6d07"
+  },
+  "protocol_sha256": "0fb753c1e94c93b712b6f9f4008cd1ee61f74e647ea85008ad5d556a3d1872de",
+  "baseline_revision": "48d3f80781d1f2d732d0cc5e6cbab0dbc6a387d8",
+  "host": {
+    "platform": "Linux-7.0.0-1017-azure-x86_64-with-glibc2.39",
+    "python": "3.12.16 (main, Oct 26 2026, 02:50:49) [GCC 13.3.0]"
+  },
+  "ci": {
+    "GITHUB_RUN_ID": "42785601400",
+    "GITHUB_RUN_ATTEMPT": "1",
+    "GITHUB_SHA": "da4d3b63b8bcd16f529c0bf6dbebba161e8c734e"
+  },
+  "finished_at_unix": 1794300807.7352521,
+  "wall_seconds": 245.9559760093689,
+  "child_cpu_seconds": 708.199188,
+  "wasm_sha256": "c0d1186d679abe78f38793e1beaea4a3bcd83ccb9a50d99acfb5c25084844ff2",
+  "failure": {
+    "type": "ValueError",
+    "message": "Guest worker failed or exceeded output capacity"
+  },
+  "source_unchanged": true
+}

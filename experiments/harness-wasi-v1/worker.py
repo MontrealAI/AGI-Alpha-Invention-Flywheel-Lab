@@ -11,6 +11,50 @@ import threading
 import time
 
 
+def collect_output(output, overflow, lock, limit, stream, data):
+    # stdout/stderr can arrive on distinct native threads. This whole capacity
+    # decision and mutation is one shared critical section, not a GIL assumption.
+    with lock:
+        remaining = limit - sum(len(value) for value in output.values())
+        if len(data) > remaining:
+            output[stream].extend(data[:max(remaining, 0)])
+            overflow.append(True)
+            return -1
+        output[stream].extend(data)
+        return len(data)
+
+
+def close_resources(named):
+    """Supported deterministic closes; this does not promise a Tokio task drain."""
+    closed, errors = [], []
+    for name, value in named:
+        if value is None:
+            continue
+        try:
+            value.close()
+            closed.append(name)
+        except Exception as error:
+            errors.append({'resource': name, 'type': type(error).__name__, 'message': str(error)[:512]})
+    return {'complete': not errors, 'closed': closed, 'errors': errors,
+            'scope': 'Supported close calls returned; no async drain guarantee. Ordinary process exit is required.'}
+
+
+def lifecycle_wat(trap=False):
+    # Trusted output-only probe, with no guest filesystem/environment operations.
+    return r'''(module
+      (import "wasi_snapshot_preview1" "fd_write" (func $write (param i32 i32 i32 i32) (result i32)))
+      (memory (export "memory") 1)
+      (data (i32.const 16) "lifecycle-out\0a")
+      (data (i32.const 32) "lifecycle-err\0a")
+      (func (export "_start")
+        i32.const 0 i32.const 16 i32.store
+        i32.const 4 i32.const 14 i32.store
+        i32.const 1 i32.const 0 i32.const 1 i32.const 48 call $write drop
+        i32.const 0 i32.const 32 i32.store
+        i32.const 2 i32.const 0 i32.const 1 i32.const 48 call $write drop
+    ''' + ('unreachable' if trap else '') + '))'
+
+
 def run(request):
     import wasmtime
     import wasmtime._wasi
@@ -54,15 +98,12 @@ def run(request):
     timer = threading.Thread(target=interrupt, daemon=True)
     output = {'stdout': bytearray(), 'stderr': bytearray()}
     overflow = []
+    output_lock = threading.Lock()
+    callbacks = []
+    wasi = linker = module = None
     def collect(stream):
         def write(data):
-            remaining = limits['output_bytes'] - sum(len(v) for v in output.values())
-            if len(data) > remaining:
-                output[stream].extend(data[:max(remaining, 0)])
-                overflow.append(True)
-                return -1
-            output[stream].extend(data)
-            return len(data)
+            return collect_output(output, overflow, output_lock, limits['output_bytes'], stream, data)
         return write
     timer.start()
     started = time.monotonic()
@@ -93,12 +134,14 @@ def run(request):
             wasi.argv = ['/sandbox/python/bin/python3.15', '-I', '-S', '-B',
                          '/sandbox/guest_driver.py', json.dumps(request['guest'], separators=(',', ':'))]
             wasi.env = []
-            wasi.stdout_custom = collect('stdout')
-            wasi.stderr_custom = collect('stderr')
+            callbacks.extend([collect('stdout'), collect('stderr')])
+            wasi.stdout_custom = callbacks[0]
+            wasi.stderr_custom = callbacks[1]
             # Exactly one preopen. This explicit argument is mandatory.
             wasi.preopen_dir(request['stage'], '/sandbox', fs_mutable=False)
             store.set_wasi(wasi)
-            module = wasmtime.Module(engine, wasm.read_bytes())
+            module = wasmtime.Module(engine, wasmtime.wat2wasm(lifecycle_wat(mode == 'lifecycle_trap'))
+                                     if mode in {'lifecycle_return', 'lifecycle_trap'} else wasm.read_bytes())
             imports = [(item.module, item.name) for item in module.imports]
             if any(namespace != 'wasi_snapshot_preview1' for namespace, _ in imports):
                 raise ValueError('Unexpected host import namespace')
@@ -117,11 +160,21 @@ def run(request):
         result.update(outcome='ERROR', error_type=type(error).__name__, message=str(error)[:2048])
     finally:
         stop.set()
-        timer.join(timeout=1)
-    result.update(wall_seconds=time.monotonic() - started, remaining_fuel=store.get_fuel(),
-                  stdout=bytes(output['stdout']).decode('utf-8', errors='replace'),
-                  stderr=bytes(output['stderr']).decode('utf-8', errors='replace'),
-                  output_overflow=bool(overflow), peak_rss_kib=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss)
+        timer.join()
+        # Read accounting before closing Store. Every close runs while callback globals
+        # and explicit callback references remain alive; no gc/sleep/os._exit shortcut.
+        result['remaining_fuel'] = store.get_fuel()
+        result['cleanup'] = close_resources([
+            ('store', store), ('linker', linker), ('module', module),
+            ('wasi', wasi), ('engine', engine), ('config', config)])
+        if not result['cleanup']['complete']:
+            result['outcome'] = 'ERROR'
+            result['error_type'] = 'ResourceCleanupError'
+    with output_lock:
+        result.update(wall_seconds=time.monotonic() - started,
+                      stdout=bytes(output['stdout']).decode('utf-8', errors='replace'),
+                      stderr=bytes(output['stderr']).decode('utf-8', errors='replace'),
+                      output_overflow=bool(overflow), peak_rss_kib=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss)
     return result
 
 

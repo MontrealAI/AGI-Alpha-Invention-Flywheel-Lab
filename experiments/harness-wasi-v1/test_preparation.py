@@ -9,6 +9,7 @@ from pathlib import Path
 import random
 import tarfile
 import tempfile
+import threading
 import unittest
 from unittest.mock import Mock, patch
 
@@ -45,7 +46,7 @@ class Preparation(unittest.TestCase):
                 runner.strict_json(text)
         self.assertFalse(runner.same_json({'x':[True]}, {'x':[1]}))
         self.assertTrue(runner.same_json({'x':[1]}, {'x':[1.0]}))
-        successful = {'worker_returncode':0, 'outcome':'EXIT', 'exit_code':0, 'stdout':'{"result":2}'}
+        successful = {'worker_returncode':0, 'outcome':'EXIT', 'exit_code':0, 'stdout':'{"result":2}', 'cleanup':{'complete':True}}
         self.assertEqual(runner.guest_payload(successful), {'result':2})
         for change in [{'outcome':'ERROR'}, {'worker_returncode':1}, {'exit_code':1}, {'output_overflow':True}]:
             with self.assertRaises(ValueError):
@@ -84,27 +85,30 @@ class Preparation(unittest.TestCase):
             kill.assert_called_once_with(54321, runner.signal.SIGKILL)
             child.wait.assert_called_once_with()
 
-    def test_attempt002_preserves_previous_protocol_and_actual_failure(self):
-        history = HERE / 'evidence/attempt001'
+    def test_attempt003_preserves_previous_limits_and_failures(self):
+        history = HERE / 'evidence/attempt002'
         previous = json.loads((history / 'PROTOCOL.json').read_text())
         current = json.loads((HERE / 'PROTOCOL.json').read_text())
         self.assertEqual(runner.sha(history / 'PROTOCOL.json'),
-                         'dbb270d343a2ff0fb0615721d577bf3b282e0ff3e1feac9943b1b63cf4e51108')
-        self.assertEqual(current['schema'], 'harness-wasi-baseline-preregistration/v2')
-        self.assertEqual(current['attempt_id'], 'wasi-baseline-002')
-        for key, value in previous.items():
-            if key != 'schema':
-                self.assertEqual(current[key], value, key)
+                         '0fb753c1e94c93b712b6f9f4008cd1ee61f74e647ea85008ad5d556a3d1872de')
+        self.assertEqual(current['schema'], 'harness-wasi-baseline-preregistration/v3')
+        self.assertEqual(current['attempt_id'], 'wasi-baseline-003')
+        for key in ('baseline_revision', 'baseline_source_sha256', 'cases_sha256', 'downloads',
+                    'wasmtime_python_wasi_source_sha256', 'readonly_api', 'readonly_native_mapping',
+                    'guest_limits', 'required_capability_checks', 'resource_checks', 'limit_scope',
+                    'attempts', 'platform', 'model_calls', 'current_codex_controls', 'claims_excluded'):
+            self.assertEqual(current[key], previous[key], key)
+        self.assertEqual(current['guest_limits']['fuel'], 2000000000)
+        self.assertEqual(current['output_lifecycle']['required_probes'],
+                         ['lifecycle_return', 'lifecycle_trap'])
         summary = json.loads((history / 'SUMMARY.json').read_text())
         self.assertEqual(summary['status'], 'FAIL')
-        self.assertEqual(summary['stage'], 'trusted_build')
+        self.assertEqual(summary['observations']['worker_returncode'], -6)
+        self.assertEqual(summary['observations']['remaining_fuel'], 0)
+        self.assertEqual(summary['observations']['baseline_cases_executed'], 0)
         self.assertEqual(summary['source_revision'], current['previous_attempt']['source_revision'])
-        self.assertEqual(summary['protocol_sha256'], current['previous_attempt']['protocol_sha256'])
-        self.assertEqual(summary['artifact']['sha256'], current['previous_attempt']['artifact_sha256'])
-        self.assertEqual(summary['artifact']['raw_member_count'], 8)
-        self.assertEqual(summary['baseline_cases_executed'], 0)
-        self.assertEqual(summary['model_calls'], 0)
-        self.assertFalse(summary['candidate_execution'])
+        self.assertEqual(runner.sha(HERE / 'evidence/attempt001/PROTOCOL.json'),
+                         'dbb270d343a2ff0fb0615721d577bf3b282e0ff3e1feac9943b1b63cf4e51108')
         workflow = (REPO / '.github/workflows/harness-wasi-v1.yml').read_text()
         self.assertIn('PROTOCOL_SHA256: ' + runner.sha(HERE / 'PROTOCOL.json'), workflow)
 
@@ -121,6 +125,91 @@ class Preparation(unittest.TestCase):
         text = (HERE / 'run.py').read_text()
         self.assertNotIn("'make-host'", text)
         self.assertIn("'--host-runner', 'false'", text)
+
+    def test_cache_manifest_must_match_exact_staging_delta(self):
+        name = 'python/lib/python3.15/public.py'
+        cache_name = 'python/lib/python3.15/__pycache__/public.cpython-315.pyc'
+        before = {name: {'sha256': 'source'}}
+        after = {**before, cache_name: {'sha256': 'cache'}}
+        manifest = {'compiled': [{'source': 'public.py', 'source_sha256': 'source',
+                                 'pyc': '__pycache__/public.cpython-315.pyc', 'pyc_sha256': 'cache'}]}
+        self.assertTrue(runner.verify_cache_manifest(before, after, manifest))
+        self.assertFalse(runner.verify_cache_manifest(before, {**after, 'extra.pyc': {'sha256': 'x'}}, manifest))
+        self.assertFalse(runner.verify_cache_manifest(before, {**after, cache_name: {'sha256': 'wrong'}}, manifest))
+        self.assertFalse(runner.verify_cache_manifest(before, after, {'compiled': manifest['compiled'] * 2}))
+
+    def test_completed_worker_requires_cleanup_and_ordinary_exit(self):
+        clean = {'worker_returncode': 0, 'cleanup': {'complete': True}}
+        self.assertTrue(runner.worker_clean(clean))
+        for changed in ({'worker_returncode': -6}, {'cleanup': {'complete': False}}, {'cleanup': {}}):
+            self.assertFalse(runner.worker_clean({**clean, **changed}))
+
+    def test_supported_closes_preserve_order_and_failure(self):
+        worker_spec = importlib.util.spec_from_file_location('wasi_worker_preparation', HERE / 'worker.py')
+        worker = importlib.util.module_from_spec(worker_spec); worker_spec.loader.exec_module(worker)
+        first, second, third = Mock(), Mock(), Mock()
+        second.close.side_effect = ValueError('synthetic close failure')
+        result = worker.close_resources([('store', first), ('linker', second), ('module', third), ('absent', None)])
+        self.assertFalse(result['complete'])
+        self.assertEqual(result['closed'], ['store', 'module'])
+        self.assertEqual(result['errors'][0]['resource'], 'linker')
+        first.close.assert_called_once_with(); second.close.assert_called_once_with(); third.close.assert_called_once_with()
+
+    def test_concurrent_output_callbacks_share_one_atomic_capacity(self):
+        worker_spec = importlib.util.spec_from_file_location('wasi_worker_collector', HERE / 'worker.py')
+        worker = importlib.util.module_from_spec(worker_spec); worker_spec.loader.exec_module(worker)
+        entered, second_extended = threading.Event(), threading.Event()
+        class FirstBuffer(bytearray):
+            def extend(self, data):
+                entered.set()
+                # Force the previous unlocked check/extend race. A locked second
+                # writer waits until this finite test-only pause ends.
+                second_extended.wait(0.2)
+                super().extend(data)
+        class SecondBuffer(bytearray):
+            def extend(self, data):
+                super().extend(data)
+                second_extended.set()
+        output = {'stdout': FirstBuffer(), 'stderr': SecondBuffer()}
+        overflow, lock, returned = [], threading.Lock(), {}
+        def write(stream):
+            returned[stream] = worker.collect_output(output, overflow, lock, 1, stream, b'x')
+        first = threading.Thread(target=write, args=('stdout',), daemon=True)
+        second = threading.Thread(target=write, args=('stderr',), daemon=True)
+        first.start()
+        self.assertTrue(entered.wait(1))
+        second.start(); first.join(1); second.join(1)
+        self.assertFalse(first.is_alive() or second.is_alive())
+        self.assertEqual(sum(map(len, output.values())), 1)
+        self.assertEqual(returned, {'stdout': 1, 'stderr': -1})
+        self.assertTrue(overflow)
+
+    def test_stdlib_selection_source_equality_symlinks_and_header(self):
+        helper_spec = importlib.util.spec_from_file_location('wasi_stdlib_preparation', HERE / 'prepare_stdlib.py')
+        helper = importlib.util.module_from_spec(helper_spec); helper_spec.loader.exec_module(helper)
+        self.assertTrue(helper.selected(Path('json/decoder.py')))
+        for path in ('test/bad.py', 'unittest/test/fixture.py', 'idlelib/idle_test/test_x.py',
+                     'badsyntax_123.py', 'site-packages/external.py', 'module.txt'):
+            self.assertFalse(helper.selected(Path(path)))
+        # This checks header validation logic only, not cross-runtime bytecode compatibility.
+        source = b'x = 1\n'
+        header = helper.MAGIC + (3).to_bytes(4, 'little') + helper.importlib.util.source_hash(source) + b'body'
+        helper.check_header(header, source)
+        for damaged in (b'bad!' + header[4:], header[:4] + (1).to_bytes(4, 'little') + header[8:]):
+            with self.assertRaises(ValueError):
+                helper.check_header(damaged, source)
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory); original = root / 'Lib'; staged = root / 'stage'
+            original.mkdir(); staged.mkdir()
+            (original / 'public.py').write_bytes(source); (staged / 'public.py').write_bytes(source)
+            self.assertEqual(len(helper.source_files(original, staged)), 1)
+            (staged / 'public.py').write_text('changed')
+            with self.assertRaises(ValueError):
+                helper.source_files(original, staged)
+            (staged / 'public.py').write_bytes(source)
+            (staged / '__pycache__').symlink_to(root, target_is_directory=True)
+            with self.assertRaises(ValueError):
+                helper.source_files(original, staged)
 
 
 if __name__ == '__main__':
