@@ -572,7 +572,8 @@ class WorkflowService:
                         require(not set(response) - {"summary", "actions", "done"} and isinstance(response.get("actions"), list) and len(response["actions"]) <= 8, "Builder response must contain at most eight actions.")
                         for action in response["actions"]:
                             if state["actions"] >= state["spec"]["max_actions"]:
-                                raise BridgeError("WORKFLOW_BUDGET", "Declared action bound reached.")
+                                self._event(state, "actions_truncated", {"reason": "Declared action bound reached; remaining proposed actions were not executed."})
+                                break
                             state["actions"] += 1
                             try:
                                 outcome = self._tool(state, action)

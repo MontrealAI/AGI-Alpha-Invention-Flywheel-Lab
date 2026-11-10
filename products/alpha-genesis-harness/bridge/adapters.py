@@ -512,6 +512,8 @@ class Runtime:
         one = (Decimal(input_bound)*m.input_price + Decimal(limit)*m.output_price) / 1_000_000
         reserved = one*self.attempts
         with self._lock:
+            if self.providers.get(p.id) is not p:
+                raise BridgeError("PROVIDER_CHANGED", "The local connection changed while this request was prepared. Select the current connection and submit a new request.", 409)
             if run_id in self._runs:
                 raise BridgeError("RUN_ID", "This run_id has already been used; duplicate dispatch is refused.", 409)
             if len(self._active) >= self.max_concurrent:

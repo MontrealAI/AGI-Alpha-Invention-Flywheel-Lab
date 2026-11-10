@@ -114,7 +114,7 @@ class Uncached:
         return {"accepted": value["passed"], "result": value, "reused": False}
 
 
-def run_arm(name, index, initial, successor, initialize=True):
+def run_arm(name, index, initial, successor, withdraw_inheritance=False):
     from bridge.instruments import evaluate
     start_wall, start_cpu = time.perf_counter(), time.process_time()
     construction_calls = [0]
@@ -128,11 +128,13 @@ def run_arm(name, index, initial, successor, initialize=True):
             actual = evaluate(spec["instrument"], spec["input"])["output"]
             return {"passed": actual == spec["expected"], "output": actual}
         return index.check(record["spec"], record["dependencies"], observe)
-    if initialize:
-        for record in initial:
-            result = check_record(record, construction_calls)
-            if not result["accepted"] or result["result"] != oracle(record):
-                raise AssertionError("Initial observation failed independent arithmetic acceptance.")
+    for record in initial:
+        result = check_record(record, construction_calls)
+        if not result["accepted"] or result["result"] != oracle(record):
+            raise AssertionError("Initial observation failed independent arithmetic acceptance.")
+    if withdraw_inheritance:
+        # Removing the retained asset does not erase its acquisition cost.
+        index.invalidate(sorted({key for record in initial for key in record["dependencies"]}))
     decisions = []
     for record in successor:
         try:
@@ -165,7 +167,7 @@ def qualify(freeze_path, output_path):
         run_arm("uncached_baseline", Uncached(), initial, successor),
         run_arm("inherited_candidate", EvidenceIndex(checker_id), initial, successor),
         run_arm("strong_ordinary_memoization", OrdinaryMemoization(checker_id), initial, successor),
-        run_arm("inheritance_withdrawn", EvidenceIndex(checker_id), initial, successor, initialize=False),
+        run_arm("inheritance_withdrawn", EvidenceIndex(checker_id), initial, successor, withdraw_inheritance=True),
     ]
     candidate, ordinary = arms[1], arms[2]
     failures = [f"{arm['arm']}: incorrect decisions" for arm in arms if arm["errors"]]
