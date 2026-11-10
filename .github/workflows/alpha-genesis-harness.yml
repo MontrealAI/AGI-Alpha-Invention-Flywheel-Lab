@@ -33,6 +33,8 @@ jobs:
       - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
         with:
           python-version: '3.12'
+      - name: Freeze-check no-network release asset transport regressions (HARNESS124)
+        run: python -B -m unittest tests.test_harness_release_assets124 -v
       - name: Execute product and independent adversarial tests
         working-directory: products/alpha-genesis-harness
         run: |
@@ -404,6 +406,12 @@ jobs:
           with open(os.environ['GITHUB_OUTPUT'], 'a') as out:
               out.write('name=' + archive.name + '\nsha256=' + digest + '\n')
           PY
+      - name: Preflight exact positive release assets and preserve zero-byte stderr exclusions (HARNESS124)
+        env:
+          SOURCE_SHA: ${{ needs.qualify.outputs.source_sha }}
+        run: |
+          python -B -m unittest tests.test_harness_release_assets124 -v
+          python -B scripts/harness_release_assets124.py --directory "$RUNNER_TEMP/harness-received" --source "$SOURCE_SHA" --paths0 "$RUNNER_TEMP/harness-received-operation/HARNESS-RELEASE-ASSETS.paths0"
       - name: Publish source-specific prerelease without replacing prior releases
         env:
           GH_TOKEN: ${{ github.token }}
@@ -411,7 +419,10 @@ jobs:
           SOURCE_SHA: ${{ needs.qualify.outputs.source_sha }}
         run: |
           tag="alpha-genesis-harness-v0.3.0-rc-${SOURCE_SHA:0:12}"
-          gh release create "$tag" "$RUNNER_TEMP/harness-received/"* --target "$SOURCE_SHA" --prerelease --latest=false --title "ALPHA GENESIS HARNESS 0.3.0 — release candidate" --notes-file products/alpha-genesis-harness/docs/RELEASE-NOTES.md
+          mapfile -d '' -t release_assets < "$RUNNER_TEMP/harness-received-operation/HARNESS-RELEASE-ASSETS.paths0"
+          test "${#release_assets[@]}" -gt 0
+          for asset in "${release_assets[@]}"; do test -s "$asset"; done
+          gh release create "$tag" "${release_assets[@]}" --target "$SOURCE_SHA" --prerelease --latest=false --title "ALPHA GENESIS HARNESS 0.3.0 — release candidate" --notes-file products/alpha-genesis-harness/docs/RELEASE-NOTES.md
       - name: Download the published archive
         env:
           GH_TOKEN: ${{ github.token }}
