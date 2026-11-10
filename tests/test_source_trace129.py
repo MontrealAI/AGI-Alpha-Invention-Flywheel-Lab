@@ -128,5 +128,73 @@ class SourceTrace129Test(unittest.TestCase):
         self.assertEqual(safe_id("ws50000-doc1"), "WS50000-DOC1")
 
 
+    def test_atomic_path_replacement_keeps_parsed_bytes_bound_to_digest(self):
+        """A rename between open and parse may not misattribute a new record."""
+        import hashlib
+        import os
+        from unittest.mock import patch
+        with tempfile.TemporaryDirectory() as d:
+            a, t, replacement = (Path(d) / name for name in ("a.csv", "t.csv", "replacement.csv"))
+            original = to_csv([TITLE, SOLICITATION],
+                              [["WCAG remediation", "WS100001"]])
+            changed = to_csv([TITLE, SOLICITATION],
+                             [["Recycling collection", "WS200002"]])
+            a.write_bytes(original)
+            replacement.write_bytes(changed)
+            t.write_bytes(to_csv([SOLICITATION, REFERENCE],
+                                 [["WS100001", "WS100001-Doc1"],
+                                  ["WS200002", "WS200002-Doc1"]]))
+            real_open = Path.open
+            replaced = [False]
+
+            def interleaved_open(p, *args, **kwargs):
+                descriptor = real_open(p, *args, **kwargs)
+                if p == a and not replaced[0]:
+                    os.replace(replacement, a)
+                    replaced[0] = True
+                return descriptor
+
+            with patch.object(Path, "open", interleaved_open):
+                result = analyze(a, t)
+            self.assertTrue(replaced[0], "injected swap must really occur")
+            self.assertEqual(a.read_bytes(), changed)
+            self.assertEqual(result["sources"]["awards"]["sha256"],
+                             hashlib.sha256(original).hexdigest())
+            self.assertEqual(result["sources"]["awards"]["bytes"], len(original))
+            self.assertEqual(result["counts"]["family_rows_not_unique_buyers"]
+                             ["accessible_publication"], 1)
+            self.assertEqual(result["counts"]["family_rows_not_unique_buyers"]
+                             ["material_recovery"], 0)
+            self.assertEqual(result["leads"][0]["solicitation_id"], "WS100001")
+
+    def test_in_place_modification_during_parse_rejected(self):
+        """Active descriptor mutation is not an admissible successful snapshot."""
+        from unittest.mock import patch
+        from scripts.trace_solicitations129 import _HashingStream
+        with tempfile.TemporaryDirectory() as d:
+            a, t = Path(d) / "a.csv", Path(d) / "t.csv"
+            a.write_bytes(to_csv([TITLE, SOLICITATION],
+                                 [["WCAG remediation", "WS100001"]]))
+            t.write_bytes(to_csv([SOLICITATION, REFERENCE],
+                                 [["WS100001", "WS100001-Doc1"]]))
+            real_readinto = _HashingStream.readinto
+            real_open = Path.open
+            mutated = [False]
+
+            def interleaved_readinto(stream, buf):
+                n = real_readinto(stream, buf)
+                if stream.path == a and n and not mutated[0]:
+                    with real_open(a, "ab") as f:
+                        f.write(b"\n")
+                    mutated[0] = True
+                return n
+
+            with patch.object(_HashingStream, "readinto", interleaved_readinto):
+                with self.assertRaisesRegex(SourceRejected, "SOURCE_CHANGED_DURING_PARSE"):
+                    analyze(a, t)
+            self.assertTrue(mutated[0], "injected active-descriptor mutation must occur")
+
+
+
 if __name__ == "__main__":
     unittest.main()

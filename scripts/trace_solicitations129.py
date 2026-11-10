@@ -2,6 +2,8 @@
 from __future__ import annotations
 import argparse
 import csv
+import io
+import os
 import hashlib
 import json
 import re
@@ -36,38 +38,77 @@ def safe_id(s):
     return value.upper() if SAFE_ID.fullmatch(value) and any(c.isdigit() for c in value) else None
 
 
-def digest(path):
-    h = hashlib.sha256()
-    length = 0
-    with path.open("rb") as f:
-        for chunk in iter(lambda: f.read(1048576), b""):
-            h.update(chunk)
-            length += len(chunk)
-    if length == 0:
-        raise SourceRejected("EMPTY_SOURCE")
-    return {"sha256": h.hexdigest(), "bytes": length}
+class _HashingStream(io.RawIOBase):
+    """Hash the actual bytes delivered to a CSV parser on ONE descriptor."""
+    def __init__(self, source, path):
+        self.source = source
+        self.path = path
+        self.sha = hashlib.sha256()
+        self.size = 0
+        self.eof = False
+
+    def readable(self):
+        return True
+
+    def readinto(self, buf):
+        n = self.source.readinto(buf)
+        if n is None:
+            raise SourceRejected("SOURCE_READ_UNAVAILABLE")
+        if n > 0:
+            self.sha.update(memoryview(buf)[:n])
+            self.size += n
+        else:
+            self.eof = True
+        return n
 
 
-def rows(path, required):
+def _file_identity(info):
+    return (info.st_dev, info.st_ino, info.st_size,
+            info.st_mtime_ns, info.st_ctime_ns)
+
+
+def rows(path, required, receipt):
+    """Stream, parse and SHA256-pin one opened source, never hash a different read.
+
+    The receipt is populated only after full CSV exhaustion and a stable
+    descriptor-stat check. An atomic pathname replacement cannot switch the
+    open descriptor's content. A changed active descriptor fails closed.
+    """
     csv.field_size_limit(64 * 1024 * 1024)
     try:
-        with path.open("r", encoding="utf-8-sig", errors="strict", newline="") as f:
-            reader = csv.reader(f, strict=True)
-            try:
-                headers = next(reader)
-            except StopIteration as e:
-                raise SourceRejected("EMPTY_OR_HEADERLESS_SOURCE") from e
-            if not headers or any(not normalize(x) for x in headers):
-                raise SourceRejected("BLANK_HEADER")
-            if len(set(map(normalize, headers))) != len(headers):
-                raise SourceRejected("DUPLICATE_HEADER")
-            if any(headers.count(key) != 1 for key in required):
-                raise SourceRejected("MISSING_OR_AMBIGUOUS_REQUIRED_COLUMN")
-            indices = {key: headers.index(key) for key in required}
-            for i, row in enumerate(reader, 2):
-                if len(row) != len(headers):
-                    raise SourceRejected(f"ROW_WIDTH_MISMATCH_AT_{i}")
-                yield i, {key: row[n] for key, n in indices.items()}
+        with path.open("rb") as raw:
+            initial = _file_identity(os.fstat(raw.fileno()))
+            counted = _HashingStream(raw, path)
+            with io.TextIOWrapper(io.BufferedReader(counted),
+                                  encoding="utf-8-sig", errors="strict",
+                                  newline="") as text:
+                reader = csv.reader(text, strict=True)
+                try:
+                    headers = next(reader)
+                except StopIteration as e:
+                    raise SourceRejected(
+                        "EMPTY_SOURCE" if counted.size == 0
+                        else "EMPTY_OR_HEADERLESS_SOURCE"
+                    ) from e
+                if not headers or any(not normalize(x) for x in headers):
+                    raise SourceRejected("BLANK_HEADER")
+                if len(set(map(normalize, headers))) != len(headers):
+                    raise SourceRejected("DUPLICATE_HEADER")
+                if any(headers.count(key) != 1 for key in required):
+                    raise SourceRejected("MISSING_OR_AMBIGUOUS_REQUIRED_COLUMN")
+                indices = {key: headers.index(key) for key in required}
+                for i, row in enumerate(reader, 2):
+                    if len(row) != len(headers):
+                        if _file_identity(os.fstat(raw.fileno())) != initial:
+                            raise SourceRejected("SOURCE_CHANGED_DURING_PARSE")
+                        raise SourceRejected(f"ROW_WIDTH_MISMATCH_AT_{i}")
+                    yield i, {key: row[n] for key, n in indices.items()}
+                if not counted.eof:
+                    raise SourceRejected("SOURCE_NOT_FULLY_CONSUMED")
+                if _file_identity(os.fstat(raw.fileno())) != initial:
+                    raise SourceRejected("SOURCE_CHANGED_DURING_PARSE")
+                receipt.update({"sha256": counted.sha.hexdigest(),
+                                "bytes": counted.size})
     except (csv.Error, UnicodeError) as e:
         raise SourceRejected("INVALID_CSV_OR_UTF8") from e
     except OSError as e:
@@ -75,11 +116,11 @@ def rows(path, required):
 
 
 def analyze(award_path: Path, tender_path: Path) -> dict:
-    award_hash, tender_hash = digest(award_path), digest(tender_path)
+    award_hash, tender_hash = {}, {}
     total_awards = total_tenders = blank = missing_ids = unsafe_refs = overlap = 0
     counts = {key: 0 for key in FAMILIES}
     leads = []
-    for n, fields in rows(award_path, (TITLE, SOLICITATION)):
+    for n, fields in rows(award_path, (TITLE, SOLICITATION), award_hash):
         total_awards += 1
         title = normalize(fields[TITLE])
         if not title:
@@ -98,7 +139,7 @@ def analyze(award_path: Path, tender_path: Path) -> dict:
     if not total_awards:
         raise SourceRejected("NO_AWARD_ROWS")
     refs = {lead["solicitation_id"]: [] for lead in leads if lead["solicitation_id"]}
-    for n, fields in rows(tender_path, (SOLICITATION, REFERENCE)):
+    for n, fields in rows(tender_path, (SOLICITATION, REFERENCE), tender_hash):
         total_tenders += 1
         ident = safe_id(fields[SOLICITATION])
         if ident not in refs:
