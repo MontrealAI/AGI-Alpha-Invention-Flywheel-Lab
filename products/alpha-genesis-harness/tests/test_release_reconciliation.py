@@ -145,6 +145,34 @@ class ReconciliationTests(unittest.TestCase):
         self.assertEqual(audit['archive_sha256'],self.archive_hash)
         self.assertIn(owner_fixture.SOURCE,reconcile.markdown_report(matrix))
 
+    def test_g1_excludes_only_documented_repository_composer_skip_and_discloses_it(self):
+        cmd,out,err = self.entries[1]
+        self.entries[1] = (cmd,out,err + reconcile.G1_OUT_OF_SCOPE_SKIP + '\n')
+        self.write_operations()
+        rows,matrix,_ = self.rows()
+        self.assertEqual(rows['G1']['status'], 'PASS')
+        self.assertIn('repository-only canonical composer test was skipped', rows['G1']['remaining_dependency_or_scope'])
+        self.assertFalse(matrix['commercially_validated'])
+        for identifier in reconcile.BLOCKED:
+            self.assertEqual(rows[identifier]['status'], 'BLOCKED')
+
+    def test_g1_skip_exception_cannot_hide_another_reason_identity_or_result(self):
+        passed = 'test_fixture (test_bridge.Tests.test_fixture) ... ok\n'
+        exact = reconcile.G1_OUT_OF_SCOPE_SKIP
+        self.assertTrue(reconcile.module_passed(passed + exact, 'test_bridge', 'G1'))
+        for line in [exact.replace('Canonical research source is intentionally absent from standalone distribution', 'missing credentials'),
+                     exact.replace('NativeBoundaryTests', 'HTTPBoundaryTests'),
+                     exact.replace('test_existing_composer_is_read_only_and_scope_is_explicit', 'test_post_requires_token_and_json'),
+                     exact.replace("skipped 'Canonical research source is intentionally absent from standalone distribution'", 'FAIL'),
+                     exact + ' unverified suffix']:
+            with self.subTest(line=line):
+                self.assertFalse(reconcile.module_passed(passed + line, 'test_bridge', 'G1'))
+        self.assertFalse(reconcile.module_passed(passed + exact + '\n' + exact, 'test_bridge', 'G1'))
+        self.assertFalse(reconcile.module_passed(exact, 'test_bridge', 'G1'))
+        self.assertFalse(reconcile.module_passed(passed + exact, 'test_bridge'))
+        self.assertFalse(reconcile.module_passed(passed + exact, 'test_bridge', 'G4'))
+        self.assertFalse(reconcile.module_passed('test_fixture (test_providers.Tests.test_fixture) ... skipped missing transport', 'test_providers', 'G1'))
+
     def test_operation_lookup_is_by_command_after_new_operation_inserted(self):
         self.entries.insert(0,(['python','-c','pass'],'',''))
         self.write_operations()
