@@ -1,0 +1,38 @@
+name: Blue Sky 120 source-bound conservation / no-deploy gate
+on:
+  pull_request:
+    paths:
+      - 'campaign/blue-sky-120/**'
+      - 'research/regolith120.py'
+      - 'tests/test_regolith120.py'
+      - '.github/workflows/blue-sky-regolith120.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  conservation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Record platform execution start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Exactly preregistered unit tests
+        run: python -m unittest tests.test_regolith120 -v
+      - name: Produce key-free finite conservation result
+        run: python -m research.regolith120 --output "$RUNNER_TEMP/RESULT.json"
+      - name: Retain compact source-bound receipt
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: blue-sky120-envelopes-${{ github.sha }}-attempt-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/RESULT.json
+          if-no-files-found: warn
