@@ -1,0 +1,37 @@
+name: Accessibility127 public-evidence research qualification
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/accessibility127.yml'
+      - 'research/accessibility127.py'
+      - 'research/verify_accessibility127.py'
+      - 'tests/test_accessibility127.py'
+      - 'campaign/accessibility127/**'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: accessibility127-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
+jobs:
+  source-bound-offline-public-evidence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record platform job execution start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Preregistered adversarial and positive tests
+        run: python -m unittest discover -s tests -p 'test_accessibility127.py' -v
+      - name: Reproduce exact public research packet and independent audit
+        shell: bash
+        run: |
+          python -m research.accessibility127 --input campaign/accessibility127/PUBLIC_FACTS.json --output "$RUNNER_TEMP/accessibility127"
+          python -m research.verify_accessibility127 --input campaign/accessibility127/PUBLIC_FACTS.json --html "$RUNNER_TEMP/accessibility127/fact_sheet.html" --manifest "$RUNNER_TEMP/accessibility127/MANIFEST.json"
