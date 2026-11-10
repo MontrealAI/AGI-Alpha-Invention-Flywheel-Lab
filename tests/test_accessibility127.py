@@ -107,5 +107,34 @@ class PreregisteredAccessTests(unittest.TestCase):
             verify(INPUT, html, manifest)
 
 
+    def test_T10_rehashed_extra_commercial_claim_rejected(self):
+        html, manifest = self.files()
+        original = html.read_bytes()
+        modified = original.replace(
+            b'</main>', b'<p>Government signed a million-dollar order with us.</p></main>', 1)
+        self.assertNotEqual(original, modified)
+        html.write_bytes(modified)
+        m = json.loads(manifest.read_text())
+        m['html_sha256'] = hashlib.sha256(modified).hexdigest()
+        manifest.write_text(json.dumps(m))
+        with self.assertRaisesRegex(ValueError, 'UNEXPECTED_STATIC_TEXT'):
+            verify(INPUT, html, manifest)
+
+    def test_T11_rehashed_active_browser_markup_rejected(self):
+        for injection in (b'<meta http-equiv="refresh" content="0;url=https://example.org/">',
+                          b'<link rel="stylesheet" href="https://example.org/style.css">'):
+            with self.subTest(injection=injection):
+                html, manifest = self.files()
+                original = html.read_bytes()
+                modified = original.replace(b'<head>', b'<head>' + injection, 1)
+                self.assertNotEqual(original, modified)
+                html.write_bytes(modified)
+                m = json.loads(manifest.read_text())
+                m['html_sha256'] = hashlib.sha256(modified).hexdigest()
+                manifest.write_text(json.dumps(m))
+                with self.assertRaisesRegex(ValueError, 'UNSAFE_HTML_TAG_OR_ATTRIBUTE'):
+                    verify(INPUT, html, manifest)
+
+
 if __name__ == '__main__':
     unittest.main()
