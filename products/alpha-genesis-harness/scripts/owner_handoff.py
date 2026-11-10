@@ -302,10 +302,10 @@ def assemble(args):
     if model_archive is not None:
         model_archive = Path(model_archive).resolve(strict=True)
         model_evidence = model_evidence_snapshot(model_archive, args.source_sha, manifest['source_product_tree'])
-    name = f'ALPHA_GENESIS_HARNESS_OWNER_HANDOFF_{version}_{args.source_sha[:12]}'
+    bundle_name = f'ALPHA_GENESIS_HARNESS_OWNER_HANDOFF_{version}_{args.source_sha[:12]}'
     output = args.output.resolve()
-    folder = output / name
-    if folder.exists() or (output / (name + '.zip')).exists():
+    folder = output / bundle_name
+    if folder.exists() or (output / (bundle_name + '.zip')).exists():
         raise ValueError('Choose a new output directory; existing handoffs are not overwritten')
     folder.mkdir(parents=True)
     customer_zip_path = copy_bytes(folder, '01-CUSTOMER-DOWNLOAD/' + archive.name, raw)
@@ -619,12 +619,12 @@ def assemble(args):
         if file.is_file():
             file_records.append({'path':file.relative_to(folder).as_posix(),'bytes':file.stat().st_size,'sha256':digest(file.read_bytes())})
     json_write(folder / 'OWNER-FILE-MANIFEST.json', {'schema':'alpha-harness-owner-manifest/v1','source_revision':args.source_sha,'customer_archive_sha256':archive_hash,'files':file_records,'self_excluded':True})
-    owner_zip=output/(name+'.zip')
+    owner_zip=output/(bundle_name+'.zip')
     with zipfile.ZipFile(owner_zip,'w',compression=zipfile.ZIP_DEFLATED,compresslevel=9) as bundle:
         for file in sorted(folder.rglob('*')):
             if not file.is_file():
                 continue
-            info=zipfile.ZipInfo(name+'/'+file.relative_to(folder).as_posix(),date_time=(2026,1,1,0,0,0))
+            info=zipfile.ZipInfo(bundle_name+'/'+file.relative_to(folder).as_posix(),date_time=(2026,1,1,0,0,0))
             info.create_system=3;info.external_attr=(0o100000|(file.stat().st_mode&0o777))<<16
             info.compress_type=zipfile.ZIP_DEFLATED
             bundle.writestr(info,file.read_bytes(),compress_type=zipfile.ZIP_DEFLATED,compresslevel=9)
@@ -634,7 +634,7 @@ def assemble(args):
             'commercially_ready':False,'included_deliverable_types':sum(i['included'] for i in inventory),
             'expected_deliverable_types':len(items),'published_operation_status':operation_view['status']}
     owner_zip.with_suffix('.zip.sha256').write_text(result['owner_zip_sha256']+'  '+owner_zip.name+'\n')
-    json_write(output/(name+'.receipt.json'),result)
+    json_write(output/(bundle_name+'.receipt.json'),result)
     return result
 
 

@@ -13,7 +13,7 @@
       "status": "NOT TESTED",
       "actual_test_or_required_procedure": "node --test tests/*.test.cjs; graphical first-use test",
       "evidence_location": "tests/acceptance.test.cjs",
-      "remaining_dependency_or_scope": "Final 0.2.0 source and graphical evidence"
+      "remaining_dependency_or_scope": "Final integrated 0.3 source and graphical evidence"
     },
     {
       "id": "A2",
@@ -69,11 +69,11 @@
       "id": "B6",
       "requirement": "Current 0.3 source end-to-end real local-model retest",
       "status": "NOT TESTED",
-      "actual_test_or_required_procedure": "Run actual onboarding/discovery/configuration and inference on the final integrated source. Preserved prior 0.3 receipt failed overall (single-builder failure; actor/critic pass); do not replace that result with a later or differently scoped pass.",
-      "evidence_location": "scripts/probe_local_onboarding.py; evidence/live-local-workflows-v0.3.json",
+      "actual_test_or_required_procedure": "Run actual onboarding/discovery/configuration and inference on the final integrated source. Preserved prior 0.3 receipt failed overall (single-builder failure; actor/critic pass); do not replace that result with a later or differently scoped pass. The equality-corrected historical run also failed overall despite a three-call actor/critic repair and success.",
+      "evidence_location": "scripts/probe_local_onboarding.py; evidence/live-local-workflows-v0.3.json; evidence/live-local-workflows-v0.3-equality-fixed.json; evidence/LIVE-LOCAL-REPLAY-NOTES.md",
       "remaining_dependency_or_scope": "Final integrated 0.3 source receipt required. Exact current source-byte run, not a live-model run from the later extracted ZIP. The first declared 8192-context preflight refusal is preserved; a server/configured16384 context succeeded. Other engines and multi-provider combinations lack live qualification. Ordinary arithmetic/reuse ties; full economic costs unknown.",
-      "historical_status": "PASS",
-      "historical_scope": "Final-source actual HTTP onboarding and live Qwen3-1.7B via pinned llama.cpp b12242: single builder exhausted all three calls after invalid input-field artifacts; actor/critic completed in two calls, exported x=17→34 and retained reuse x=41→82. Aggregate result FAIL; the successful actor/critic path remains a scoped PASS. The final run is source-byte identified, not a live-model run from a later extracted ZIP. Earlier both-policy PASS and the initial 8192-context refusal remain in live-local-workflows-v0.3-before-final-integration.json. The final server/configured context was 16384. Ordinary arithmetic/reuse ties; other engines, provider mixtures and complete economic costs remain unqualified or unknown."
+      "historical_status": "FAIL",
+      "historical_scope": "Final-source actual HTTP onboarding and live Qwen3-1.7B via pinned llama.cpp b12242: single builder exhausted all three calls after invalid input-field artifacts; actor/critic completed in two calls, exported x=17→34 and retained reuse x=41→82. Aggregate result FAIL; the successful actor/critic path remains a scoped PASS. The final run is source-byte identified, not a live-model run from a later extracted ZIP. Earlier both-policy PASS and the initial 8192-context refusal remain in live-local-workflows-v0.3-before-final-integration.json. The final server/configured context was 16384. Ordinary arithmetic/reuse ties; other engines, provider mixtures and complete economic costs remain unqualified or unknown. Later equality-corrected source also failed overall: single builder exhausted three calls; actor/critic passed in three calls after malformed-output repair. This separately preserved run is not final integrated-source inference."
     },
     {
       "id": "C1",
@@ -256,7 +256,7 @@
       "requirement": "Actual bounded self-upgrade construction against HARNESS acceptance",
       "status": "NOT TESTED",
       "actual_test_or_required_procedure": "Isolated source subclass ran the actual HARNESS checker: baseline 7 verification calls, candidate 5, competent ordinary reuse 5; incorrect/changed/missing cases refused.",
-      "evidence_location": "bridge/genesis_next.py; evidence/OMEGA-PROTOCOL.md; evidence/OMEGA-INDEPENDENT-REVIEW.md",
+      "evidence_location": "bridge/genesis_next.py; evidence/OMEGA-PROTOCOL.md; evidence/OMEGA-INDEPENDENT-REVIEW.md; evidence/OMEGA-REVALIDATION.md",
       "remaining_dependency_or_scope": "Final integrated 0.3 source receipt required. Authored bounded recipe; no automatic production promotion. Original checker/evaluator remain outside candidate edit authority. Exact archive reruns this demonstration.",
       "historical_status": "PASS",
       "historical_scope": "Authored bounded recipe; no automatic production promotion. Original checker/evaluator remain outside candidate edit authority. Exact archive reruns this demonstration."
@@ -266,17 +266,17 @@
       "requirement": "Different successor task and causal reuse comparison",
       "status": "NOT TESTED",
       "actual_test_or_required_procedure": "Fresh nonce sampled after public source freeze: candidate and ordinary control correctly adjudicated 32/32 successor cases using 20 new checks plus 12 reuses; uncached and inheritance-withdrawn arms adjudicated 20/32 with 20 checks. Zero errors in all arms.",
-      "evidence_location": "evidence/OMEGA-FRESH-RESULTS.json; evidence/OMEGA-FRESH-SOURCE-FREEZE.json; evidence/OMEGA-INDEPENDENT-REVIEW.md",
+      "evidence_location": "evidence/OMEGA-FRESH-RESULTS.json; evidence/OMEGA-FRESH-SOURCE-FREEZE.json; evidence/OMEGA-INDEPENDENT-REVIEW.md; evidence/OMEGA-FRESH-RESULTS-REVALIDATION.json; evidence/OMEGA-FRESH-SOURCE-FREEZE-REVALIDATION.json; evidence/OMEGA-REVALIDATION.md",
       "remaining_dependency_or_scope": "Final integrated 0.3 source receipt required. Distinct internal selection task with fresh generated instances, not a new external task family. All arms incur 24 initial plus 20 successor calls. Strong ordinary control ties; no complete-cost superiority.",
       "historical_status": "PASS",
-      "historical_scope": "Distinct internal selection task with fresh generated instances, not a new external task family. All arms incur 24 initial plus 20 successor calls. Strong ordinary control ties; no complete-cost superiority."
+      "historical_scope": "Distinct internal selection task with fresh generated instances, not a new external task family. All arms incur 24 initial plus 20 successor calls. Strong ordinary control ties; no complete-cost superiority. A second undiscarded nonce after public source freeze 0398ea3196f57b9adb6ed77a691e24738a5f2d86 produced the same scoped tie; its source hashes and original evidence remain separately preserved."
     },
     {
       "id": "O4",
       "requirement": "Complete-cost self-upgrade advantage",
       "status": "FAIL",
       "actual_test_or_required_procedure": "Executed successor comparison ties competent conventional memoization; all arms incurred 24 initial plus 20 successor evaluator calls. Directly evaluating only the 32 successor cases would use 32 calls.",
-      "evidence_location": "evidence/OMEGA-FRESH-RESULTS.json; evidence/OMEGA-INDEPENDENT-REVIEW.md",
+      "evidence_location": "evidence/OMEGA-FRESH-RESULTS.json; evidence/OMEGA-INDEPENDENT-REVIEW.md; evidence/OMEGA-FRESH-RESULTS-REVALIDATION.json; evidence/OMEGA-REVALIDATION.md",
       "remaining_dependency_or_scope": "Complete-cost superiority is not established. Engineering, verification, transfer, maintenance and host economic costs remain unknown. A comparison can pass correctness while failing this advantage gate."
     },
     {
@@ -328,16 +328,16 @@
       "requirement": "Model-driven bounded source-upgrade lifecycle and independent evaluator boundary",
       "status": "NOT TESTED",
       "actual_test_or_required_procedure": "Run the named regression modules from the final source-bound extracted archive; earlier fixture results remain historical.",
-      "evidence_location": "bridge/upgrade_foundry.py; tests/test_upgrade_foundry.py; tests/test_extension_security.py; evidence/EXTENSION-INDEPENDENT-REVIEW.md",
+      "evidence_location": "bridge/upgrade_foundry.py; tests/test_upgrade_foundry.py; tests/test_extension_security.py; evidence/EXTENSION-INDEPENDENT-REVIEW.md; evidence/INSTRUMENT-EQUALITY-INDEPENDENT-REVIEW.json",
       "remaining_dependency_or_scope": "Contract fixtures do not establish actual authenticated model construction. The candidate never executes in the host evaluator; finite arithmetic correctness does not prove the operator’s objective, general improvement or economic advantage.",
-      "historical_scope": "Thirteen foundry contract tests plus five independently prepared security tests exercise isolated source scope, frozen authority, baseline/candidate oracle comparison, explicit activation, source invalidation, cancellation, rollback and sandbox-only retained execution.",
+      "historical_scope": "Thirteen foundry contract tests plus five independently prepared security tests exercise isolated source scope, frozen authority, baseline/candidate oracle comparison, explicit activation, source invalidation, cancellation, rollback and sandbox-only retained execution. The later protocol v2 has 64 cases: 48 fresh affine, four malformed and 12 public fixed JSON equality cases; the direct arithmetic comparator covers only the affine subset. Its historical independent review is retained.",
       "historical_status": "PASS"
     },
     {
       "id": "O11",
       "requirement": "Live authenticated model-written source upgrade under the native sandbox",
       "status": "BLOCKED",
-      "actual_test_or_required_procedure": "Actual local native boundary probe returned host_sandbox_operation_not_permitted before candidate/model execution. Hosted credential-free evaluator probe is recorded separately and cannot establish model construction.",
+      "actual_test_or_required_procedure": "Earlier local and hosted Linux/macOS native boundary probes recorded host_sandbox_operation_not_permitted before candidate/model execution. Those receipts describe their earlier source and 52-case protocol; they are not a native run of the equality-corrected 64-case evaluator. Current hosted credential-free results are supplied separately.",
       "evidence_location": "scripts/probe_upgrade_foundry.py; docs/UPGRADE-FOUNDRY.md",
       "remaining_dependency_or_scope": "Working native sandbox plus eligible official Codex/ChatGPT authorization. No credentials, model-written candidate or live retained improvement was exercised in the local probe.",
       "historical_scope": "Actual local native boundary probe returned host_sandbox_operation_not_permitted before candidate/model execution. Hosted credential-free evaluator probe is recorded separately and cannot establish model construction."
@@ -356,7 +356,7 @@
       "id": "O13",
       "requirement": "Actual authorized public-source observation through the monitor",
       "status": "BLOCKED",
-      "actual_test_or_required_procedure": "One actual local official-source observation was attempted and returned SOURCE_URL before verified HTTP dispatch. Its blocked receipt is preserved; the hosted environment runs a separate no-retry probe.",
+      "actual_test_or_required_procedure": "The preserved pre-equality-repair local official-source observation returned SOURCE_URL before verified HTTP dispatch. Its receipt is historical. Each hosted source-specific run performs a separate no-retry probe and reports its own outcome in the release supplement.",
       "evidence_location": "scripts/probe_frontier_monitor.py; evidence/FRONTIER-LOCAL-OBSERVATION.json; docs/FRONTIER-MONITOR.md",
       "remaining_dependency_or_scope": "A retrieval PASS qualifies byte observation and reported-only replay, not frontier coverage, factual verification, independent capability reproduction or an unblocked opportunity.",
       "historical_scope": "One actual local official-source observation was attempted and returned SOURCE_URL before verified HTTP dispatch. Its blocked receipt is preserved; the hosted environment runs a separate no-retry probe."

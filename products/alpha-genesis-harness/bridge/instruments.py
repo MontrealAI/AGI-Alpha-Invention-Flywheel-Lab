@@ -40,8 +40,23 @@ def _json_equal(left, right):
 
 def evaluate(spec, inputs, max_operations=10000):
     """Evaluate a JSON expression grammar, with no IO or dynamic code execution."""
-    if not isinstance(spec, dict) or set(spec) - {"name", "inputs", "outputs", "description", "conditions", "limitations"}:
-        raise ValueError("Unsupported instrument specification.")
+    allowed_keys = {"name", "inputs", "outputs", "description", "conditions", "limitations"}
+    if not isinstance(spec, dict):
+        kind = {type(None): "null", bool: "boolean", int: "number", float: "number", str: "string", list: "array"}.get(type(spec), "non-JSON type")
+        raise ValueError("Unsupported instrument specification. Expected a JSON object at the root; received " + kind + ".")
+    unsupported_keys = set(spec) - allowed_keys
+    if unsupported_keys:
+        names = sorted(key for key in unsupported_keys if isinstance(key, str))
+        # Names are untrusted too: escape controls, bound size, and never render values.
+        shown = [key if len(key) <= 64 else key[:64] + "...[truncated]" for key in names[:8]]
+        details = json.dumps(shown)
+        if len(names) > len(shown):
+            details += " (" + str(len(names) - len(shown)) + " additional key names omitted)"
+        if len(unsupported_keys) != len(names):
+            details += "; " + str(len(unsupported_keys) - len(names)) + " <non-string key> entries"
+        raise ValueError("Unsupported instrument specification. Unsupported top-level keys: " + details
+                         + ". Allowed top-level keys: " + json.dumps(sorted(allowed_keys))
+                         + '. Named calculations belong inside the "outputs" object, not at the instrument root.')
     if not isinstance(spec.get("inputs"), list) or any(not isinstance(k, str) for k in spec["inputs"]):
         raise ValueError("Instrument inputs must be field names.")
     if not isinstance(inputs, dict) or any(k not in inputs for k in spec["inputs"]):

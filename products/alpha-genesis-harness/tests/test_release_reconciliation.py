@@ -260,6 +260,35 @@ class ReconciliationTests(unittest.TestCase):
         self.live_files['LOCAL-WORKFLOWS-HOSTED.json']=json.dumps(raw).encode();self.write_live(value)
         with self.assertRaisesRegex(ValueError,'completed model event'):self.rows()
 
+    def test_current_quote_trial_requires_005_driver_and_raw_receipt(self):
+        value=self.live_receipt()
+        value['qualifications']={key:('PASS' if key=='local_inference' else 'NOT_TESTED') for key in reconcile.LIVE_KEYS}
+        value['commands']=[{'entrypoint':'qualify_quote_workflow_005.py','returncode':1,'timed_out':False}]
+        raw=json.dumps({'source_revision':owner_fixture.SOURCE,'product_tree_sha':'b'*40,
+                        'arms':[{'events':[{'kind':'model_completed'}]}]}).encode()
+        self.live_files={'LOCAL-QUOTE-QUALIFICATION-005.json':raw}
+        self.write_live(value)
+        rows,_,_=self.rows()
+        self.assertEqual(rows['B2']['status'],'PASS')
+        self.assertEqual(rows['D1']['status'],'NOT TESTED')
+        self.live_files={'LOCAL-QUOTE-QUALIFICATION-004.json':raw}
+        self.write_live(value)
+        with self.assertRaisesRegex(ValueError,'completed model event'):self.rows()
+        self.live_files={'LOCAL-QUOTE-QUALIFICATION-005.json':raw}
+        value['commands'][0]['entrypoint']='qualify_quote_workflow_004.py'
+        self.write_live(value)
+        with self.assertRaisesRegex(ValueError,'actual inference driver execution'):self.rows()
+
+    def test_trial_005_preserves_registered_004_acceptance_and_resources(self):
+        before=json.loads((HERE.parent/'evidence/LOCAL-QUOTE-PROTOCOL-004.json').read_text())
+        after=json.loads((HERE.parent/'evidence/LOCAL-QUOTE-PROTOCOL-005.json').read_text())
+        metadata={'schema','trial_id','predecessor_summary','predecessor_summaries',
+                  'scaffolding_disclosure','diagnostic_revision','changes_from_fourth_trial'}
+        self.assertEqual({key:value for key,value in before.items() if key not in metadata},
+                         {key:value for key,value in after.items() if key not in metadata})
+        self.assertEqual(after['trial_id'],'quote-trial-005')
+        self.assertEqual(after['diagnostic_revision']['source'],'bridge/instruments.py')
+
     def test_empty_external_digest_refused(self):
         self.args.expected_sha256=''
         with self.assertRaisesRegex(ValueError,'digest'):self.rows()

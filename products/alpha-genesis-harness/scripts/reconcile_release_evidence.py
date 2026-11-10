@@ -28,7 +28,7 @@ LIVE_KEYS = {'local_inference', 'single_agent', 'multi_agent', 'parallel_explora
 LIVE_SOURCE_FILES = {'bridge/adapters.py', 'bridge/streaming.py', 'bridge/workflows.py',
                      'bridge/workflow_strategies.py', 'bridge/instruments.py',
                      'scripts/qualify_hosted_local.py', 'scripts/probe_local_workflows.py',
-                     'scripts/qualify_quote_workflow_004.py'}
+                     'scripts/qualify_quote_workflow_005.py'}
 BLOCKED = {'B1', 'B3', 'B4', 'B5', 'O11'}
 FRONTIER_SOURCE_FILES = {'bridge/adapters.py','bridge/workflows.py','bridge/instruments.py','bridge/genesis_next.py','bridge/frontier_monitor.py','scripts/probe_frontier_monitor.py'}
 FRONTIER_URL = 'https://developers.openai.com/siwc/token-sharing-open-source'
@@ -217,11 +217,11 @@ def validate_live_provenance(record, files, content):
     if not DIGEST.fullmatch(str(downloads.get('runtime_binary_sha256', ''))):
         raise ValueError('Live PASS lacks the runtime executable hash')
     commands = record.get('commands', [])
-    core_commands = [row for row in commands if Path(str(row.get('entrypoint',''))).name in {'probe_local_workflows.py', 'qualify_quote_workflow_004.py'}]
+    core_commands = [row for row in commands if Path(str(row.get('entrypoint',''))).name in {'probe_local_workflows.py', 'qualify_quote_workflow_005.py'}]
     if not core_commands or any(type(row.get('returncode')) is not int or type(row.get('timed_out')) is not bool for row in core_commands):
         raise ValueError('Live PASS lacks recorded actual inference driver execution')
     raw_records = []
-    for name, tree_key in [('LOCAL-WORKFLOWS-HOSTED.json','source_product_tree'), ('LOCAL-QUOTE-QUALIFICATION-004.json','product_tree_sha')]:
+    for name, tree_key in [('LOCAL-WORKFLOWS-HOSTED.json','source_product_tree'), ('LOCAL-QUOTE-QUALIFICATION-005.json','product_tree_sha')]:
         if name in files:
             raw = json.loads(files[name])
             if raw.get('source_revision') != record['source_revision'] or raw.get(tree_key) != record['source_product_tree']:

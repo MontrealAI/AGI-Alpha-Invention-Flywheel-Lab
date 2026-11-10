@@ -160,9 +160,9 @@ def main():
               'claims': {'novelty': 'NOT_ESTABLISHED', 'economic_superiority': 'NOT_ESTABLISHED', 'commercial_validation': 'NOT_ESTABLISHED'},
               'qualification_rule': 'Each PASS is derived from actual completed model invocations, frozen-case verification and exported evaluator outcomes. A driver exit code alone is insufficient. Previous workspace trials are separate historical observations.'}
     write(public/'HOSTED-LOCAL-QUALIFICATION.json', record)
-    protocol_path = PRODUCT/'evidence/LOCAL-QUOTE-PROTOCOL-004.json'
+    protocol_path = PRODUCT/'evidence/LOCAL-QUOTE-PROTOCOL-005.json'
     protocol = read(protocol_path)
-    for name in ['LOCAL-QUOTE-PROTOCOL.json', 'LOCAL-QUOTE-PROTOCOL-002-RECOVERED.json', 'LOCAL-QUOTE-PROTOCOL-003.json', 'LOCAL-QUOTE-PROTOCOL-004.json', 'LOCAL-QUOTE-OBSERVED-HISTORY.json']:
+    for name in ['LOCAL-QUOTE-PROTOCOL.json', 'LOCAL-QUOTE-PROTOCOL-002-RECOVERED.json', 'LOCAL-QUOTE-PROTOCOL-003.json', 'LOCAL-QUOTE-PROTOCOL-004.json', 'LOCAL-QUOTE-PROTOCOL-005.json', 'LOCAL-QUOTE-OBSERVED-HISTORY.json']:
         path = PRODUCT/'evidence'/name
         if path.is_file():
             shutil.copyfile(path, public/name)
@@ -199,14 +199,14 @@ def main():
         # No GitHub token, cloud credentials, subscription sessions or arbitrary inherited variables reach inference.
         environment = {key: os.environ[key] for key in ['PATH', 'HOME', 'LANG', 'LC_ALL', 'TMPDIR'] if key in os.environ}
         environment.update(PYTHONUNBUFFERED='1', LD_LIBRARY_PATH=str(binary.parent), NO_PROXY='127.0.0.1,localhost')
-        quote_dir = work/'quote004'
+        quote_dir = work/'quote005'
         assert_port_free(18767)
-        record['commands'].append(run([sys.executable, str(PRODUCT/'scripts/qualify_quote_workflow_004.py'),
+        record['commands'].append(run([sys.executable, str(PRODUCT/'scripts/qualify_quote_workflow_005.py'),
             '--binary', str(binary), '--model', str(weights), '--model-receipt', str(work/'MODEL-DOWNLOAD.json'),
             '--output', str(quote_dir)], work/'quote-command.log', 2700, environment))
         quote = read(quote_dir/'RESULT.json')
         if quote is not None:
-            shutil.copyfile(quote_dir/'RESULT.json', public/'LOCAL-QUOTE-QUALIFICATION-004.json')
+            shutil.copyfile(quote_dir/'RESULT.json', public/'LOCAL-QUOTE-QUALIFICATION-005.json')
         write(public/'HOSTED-LOCAL-QUALIFICATION.json', record)
         workflow_dir = work/'workflows'
         assert_port_free(18766)

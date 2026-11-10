@@ -40,6 +40,8 @@ The optional local connector adds protocol-aware API and local-model connections
 - Synthetic sample mission and guided manual-model workflow.
 - Bounded instrument, assumption and economics inspection, project and dossier export.
 - Ω GENESIS NEXT workspace, reproducible internal upgrade experiment and successor comparison.
+- Optional source-upgrade foundry: bounded model-written edits, independent checks and explicit isolated research selection. Live authenticated construction remains blocked pending its recorded authorization and native-sandbox gates.
+- Frontier Observatory: explicitly authorized polling of configured public sources while the local connector runs. Changed source bytes reopen questions; they do not establish reproduced capabilities.
 - Source launchers, English/French installation, operator, troubleshooting and FAQ guides.
 - Source code, Apache-2.0 licence notices, privacy and connection guides.
 - Version manifest, file-integrity information and reproducible checks.
@@ -48,7 +50,7 @@ The optional local connector adds protocol-aware API and local-model connections
 
 Unzip the entire download and open START-HERE.html in a current desktop browser with JavaScript enabled. The manual core requires no terminal or Python. The optional local bridge requires separately installed Python 3.10+ and a configured provider or local inference service. Consult the release evidence for tested platforms; no signed native installer is included.
 
-The purchase covers the version shown at checkout. Future editions, updates, model compute, continuous monitoring, personal consulting and a support service level are not included. The included source is also available under Apache 2.0; buying the official package is not required to obtain the rights that licence grants. Applicable consumer rights and third-party licences remain unchanged.
+The purchase covers the version shown at checkout. Future editions, updates, model compute, a hosted monitoring service, personal consulting and a support service level are not included. The included source is also available under Apache 2.0; buying the official package is not required to obtain the rights that licence grants. Applicable consumer rights and third-party licences remain unchanged.
 
 Results depend on your inputs and evidence. A passed scoped check does not establish real customer demand, scientific novelty, guaranteed returns or general autonomous invention. This product does not execute payments, contracts, financing or outreach.
 
@@ -94,6 +96,8 @@ Le connecteur local facultatif ajoute des connexions API et modèles locaux, une
 - Mission synthétique et parcours guidé avec votre service d'IA.
 - Instrument à exécution limitée, examen des hypothèses et des coûts, exportation du projet et du dossier.
 - Espace Ω GENESIS NEXT, expérience interne reproductible et comparaison sur une tâche suivante.
+- Fonderie source facultative : modifications limitées proposées par un modèle, contrôles indépendants et sélection explicite en recherche isolée. La construction authentifiée réelle reste bloquée avant les autorisations et contrôles natifs requis.
+- Observatoire de la frontière : consultation périodique expressément autorisée des sources configurées pendant l’exécution du connecteur local. Un changement de contenu rouvre une question sans établir une capacité reproduite.
 - Lanceurs source, guides bilingues d’installation, d’exploitation, de dépannage et FAQ.
 - Sources, avis Apache 2.0, guides de confidentialité et de connexion.
 - Manifeste de version, informations d'intégrité et vérifications reproductibles.
@@ -102,7 +106,7 @@ Le connecteur local facultatif ajoute des connexions API et modèles locaux, une
 
 Décompressez tout le téléchargement, puis ouvrez START-HERE.html dans un navigateur de bureau actuel avec JavaScript activé. Le parcours manuel ne demande ni terminal ni Python. Le connecteur facultatif nécessite Python 3.10+ installé séparément et un fournisseur ou service local configuré. Consultez les preuves de version pour connaître les plateformes testées. Aucun installateur natif signé n'est inclus.
 
-L'achat comprend la version affichée au paiement. Les futures éditions, mises à jour, coûts de modèles, veille continue, consultations individuelles et engagements de délai de soutien sont exclus de cette offre. Le code couvert est également disponible sous Apache 2.0 : l'achat du paquet officiel n'est pas nécessaire pour obtenir les droits de cette licence. Les droits impératifs des consommateurs et les licences tierces demeurent applicables.
+L'achat comprend la version affichée au paiement. Les futures éditions, mises à jour, coûts de modèles, service de veille hébergé, consultations individuelles et engagements de délai de soutien sont exclus de cette offre. Le code couvert est également disponible sous Apache 2.0 : l'achat du paquet officiel n'est pas nécessaire pour obtenir les droits de cette licence. Les droits impératifs des consommateurs et les licences tierces demeurent applicables.
 
 Les résultats dépendent des données et des preuves fournies. Une vérification réussie dans un cadre précis ne prouve ni demande commerciale réelle, ni nouveauté scientifique, ni rendement garanti, ni invention autonome générale. Le produit n'exécute aucun paiement, contrat, financement ou démarchage.
 

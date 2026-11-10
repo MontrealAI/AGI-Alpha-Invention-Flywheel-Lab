@@ -87,6 +87,18 @@ class OwnerHandoffTests(unittest.TestCase):
   probe_path=self.assets/'FRONTIER-MONITOR-VERIFICATION.json';probe_path.write_text(json.dumps(probe))
   mac_path=self.assets/'Darwin-UPGRADE-FOUNDRY-HOST-VERIFICATION.json';mac_path.write_text(json.dumps(probe))
   result=module.assemble(self.args);folder=Path(result['owner_directory']);identity=json.loads((folder/'OWNER-HANDOFF.json').read_text())
+  expected_name='ALPHA_GENESIS_HARNESS_OWNER_HANDOFF_0.3.0_'+SOURCE[:12]
+  expected_zip=self.args.output/(expected_name+'.zip')
+  self.assertEqual(folder.name,expected_name)
+  self.assertEqual(Path(result['owner_zip']),expected_zip)
+  self.assertEqual(expected_zip.with_suffix('.zip.sha256').read_text(),
+                   module.digest(expected_zip.read_bytes())+'  '+expected_zip.name+'\n')
+  self.assertEqual(json.loads((self.args.output/(expected_name+'.receipt.json')).read_text()),result)
+  with zipfile.ZipFile(expected_zip) as archive:
+   self.assertEqual({name.split('/')[0] for name in archive.namelist()},{expected_name})
+   self.assertEqual(json.loads(archive.read(expected_name+'/OWNER-HANDOFF.json')),identity)
+   self.assertEqual(json.loads(archive.read(expected_name+'/OWNER-FILE-MANIFEST.json')),
+                    json.loads((folder/'OWNER-FILE-MANIFEST.json').read_text()))
   self.assertEqual(result['included_deliverable_types'],22)
   self.assertEqual((folder/'05-VERIFICATION/browser-exports'/file.name).read_bytes(),data)
   self.assertEqual((folder/'05-VERIFICATION'/probe_path.name).read_bytes(),probe_path.read_bytes())
@@ -270,7 +282,7 @@ class OwnerHandoffTests(unittest.TestCase):
  def model_fixture(self, status='FAIL'):
   self.args.model_evidence_archive=self.assets/'LOCAL-MODEL-EVIDENCE-fixture.zip'
   self.model_files={'quote/manufacturing_construct/quote.json':b'{"fixture":"not executed"}',
-                    'LOCAL-QUOTE-PROTOCOL-003.json':b'{"fixture":true}'}
+                    'LOCAL-QUOTE-PROTOCOL-005.json':b'{"fixture":true}'}
   self.model_manifest={'schema':'alpha-harness/hosted-local-qualification/v1','status':status,
                        'source_revision':SOURCE,'source_product_tree':self.manifest['source_product_tree'],
                        'source_unchanged':True,'qualifications':{'local_inference':'FAIL'},
@@ -307,8 +319,8 @@ class OwnerHandoffTests(unittest.TestCase):
    with self.subTest(mutation=mutation):
     self.model_fixture()
     if mutation=='extra':self.model_files['unlisted.txt']=b'unlisted'
-    elif mutation=='missing':self.model_files.pop('LOCAL-QUOTE-PROTOCOL-003.json')
-    else:self.model_files['LOCAL-QUOTE-PROTOCOL-003.json']=b'changed'
+    elif mutation=='missing':self.model_files.pop('LOCAL-QUOTE-PROTOCOL-005.json')
+    else:self.model_files['LOCAL-QUOTE-PROTOCOL-005.json']=b'changed'
     self.write_model_archive()
     with self.assertRaisesRegex(ValueError,'Model evidence (inventory|file hash)'):module.assemble(self.args)
     self.assertFalse(self.args.output.exists())

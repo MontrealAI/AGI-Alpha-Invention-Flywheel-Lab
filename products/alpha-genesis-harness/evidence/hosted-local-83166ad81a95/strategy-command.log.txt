@@ -1,0 +1,21 @@
+{
+  "arms": [
+    {
+      "arm": "no-retrieval",
+      "status": "complete",
+      "model_calls": 2,
+      "actions": 2,
+      "resolved_coefficient": null,
+      "honest_abstention": true
+    },
+    {
+      "arm": "retrieval",
+      "status": "complete",
+      "model_calls": 2,
+      "actions": 2,
+      "resolved_coefficient": 5,
+      "honest_abstention": false
+    }
+  ],
+  "finding": "The authorized source arm resolved the withheld synthetic fact; the no-retrieval arm honestly abstained under the same budgets. A competent deterministic source reader also resolved it with zero model calls. This demonstrates information access and safe evidence plumbing, not an agent reasoning advantage or general research advantage."
+}
