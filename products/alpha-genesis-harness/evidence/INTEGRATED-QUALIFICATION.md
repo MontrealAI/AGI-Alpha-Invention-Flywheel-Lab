@@ -39,3 +39,15 @@ The two synthetic missions demonstrate executable instruments, conditional econo
 The available cloud browser refused local-file URLs and could not reach the workspace's loopback HTTP server. Initial rendered-browser review therefore awaits the allowlisted public candidate preview. Windows/macOS launch tests, signing/notarization and real provider qualification remain unexecuted. The browser application has no native installer and requires no installation for its manual workflow.
 
 Squarespace administration presented its login screen. No store draft, uploaded customer archive, checkout test, sale or publication has occurred. Final listing copy and configuration instructions are prepared in `commercial/`; a draft is not a deployment.
+
+## PR 320 review correction and final local regression
+
+GitHub review of source `74d8b5fe435a6a0cd670d57158adb5f68ebd5cc0` exposed three additional issues, independently reproduced before correction:
+
+1. JSON escaping and pretty printing could make an accepted project export larger than the old serialized import bound. Decoded processing limits and a conservative 64 MiB UTF-8 transport envelope are now distinct. Export preflights actual reopening semantics, and response installation remains transactional. Escaped and Unicode roundtrips, oversized encoded documents and aggregate growth are independently covered.
+2. Integer add/sum could overflow and later return to a seemingly safe but wrong result. Every numeric integer input and intermediate is now checked, including multiplication followed by zero; invalid arithmetic cannot earn a successful execution verdict.
+3. Workflow-only and arrangement-only proposals were hidden behind an unrelated instrument requirement. The three artifact panels are now independent. Replacement clears stale active workflow aliases while retaining historical contributions and results; malformed saved workflows remain inspectable and fail on compilation.
+
+After these corrections, root integration executed **60 Node tests** (26 development, 34 independent), **45 Python tests**, **12 DOM application flows** and **9 mocked parallel-model checks**; all passed. DOM emulation still does not establish graphical or cross-OS launch qualification. The original failures and source identities remain in the independent review evidence.
+
+A separate single live public-source attempt reached the real loopback source route, but public-address validation refused the request before TLS. No remote content, hash, freshness or changed-source result was observed. `live-source-qualification.json` preserves the exact result and unchanged bridge-source identities. Protocol fixtures and this refused live attempt do not establish working Internet retrieval in this execution environment. No alternate routing, API credentials or paid requests were used.

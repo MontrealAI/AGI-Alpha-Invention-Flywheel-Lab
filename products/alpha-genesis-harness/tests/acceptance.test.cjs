@@ -247,3 +247,67 @@ test('malformed project collection rows are rejected before UI state can be repl
     }
   }
 });
+
+test('accepted escaped response remains portable, or encoded-size rejection is atomic',()=>{
+  const p=E.createProject({title:'Escaped response portability',objective:'Every saved project must reopen'});
+  const before=E.exportProject(p);
+  let rejected=false;
+  try{E.importResponse(p,'\\'.repeat(2600000),{model:'independent size fixture'});}catch{rejected=true;}
+  if(rejected){assert.equal(E.exportProject(p),before);return;}
+  const serialized=E.exportProject(p);
+  assert.ok(Buffer.byteLength(serialized,'utf8')<=E.PROJECT_MAX_BYTES,'Accepted project must fit the shared encoded UTF-8 envelope');
+  assert.equal(E.importProject(serialized).modelOutputs.length,1);
+});
+
+test('UTF-8 response size uses encoded bytes and preserves existing state on rejection',()=>{
+  const p=E.createProject({title:'Unicode portability',objective:'Retain prior work on oversized imports'});
+  E.importResponse(p,'Prior useful observation',{model:'first'});
+  const before=E.exportProject(p);
+  let rejected=false;
+  try{E.importResponse(p,'é'.repeat(2600000),{model:'independent unicode fixture'});}catch{rejected=true;}
+  if(rejected){assert.equal(E.exportProject(p),before);return;}
+  const serialized=E.exportProject(p);
+  assert.ok(Buffer.byteLength(serialized,'utf8')<=E.PROJECT_MAX_BYTES,'Code-unit length cannot bypass UTF-8 envelope');
+  assert.equal(E.importProject(serialized).modelOutputs.length,2);
+});
+
+test('safe-size escaped and Unicode data preserve exact content through export/import',()=>{
+  const p=E.createProject({objective:'Preserve exact content'});
+  const text='\\"🌌\né'.repeat(10000);
+  E.importResponse(p,text,{model:'independent portable fixture'});
+  const serialized=E.exportProject(p);
+  assert.equal(E.importProject(serialized).modelOutputs[0].text,text);
+});
+
+test('integer reductions cannot round an unsafe intermediate into a false successful result',()=>{
+  for(const values of [[Number.MAX_SAFE_INTEGER,2,-2],[-Number.MAX_SAFE_INTEGER,-2,2]]){
+    const exact=Number(values.reduce((total,value)=>total+BigInt(value),0n));
+    for(const op of ['add','sum']){
+      const expression=op==='add'?{op,args:values}:{op,args:[{field:'values'}]};
+      const instrument=E.constructInstrument({name:'Independent intermediate precision '+op,inputs:['values'],outputs:{result:expression}});
+      const result=E.executeInstrument(instrument,{values});
+      if(result.verdict==='PASSED IN SCOPE')assert.equal(result.outputs.result,exact,'Every claimed integer result must equal independent BigInt arithmetic');
+      else assert.equal(result.verdict,'INVALID','Unsupported exact intermediate must fail explicitly');
+    }
+  }
+});
+
+
+test('valid JSON beyond the shared serialized envelope is rejected before recovery',()=>{
+  assert.ok(Number.isSafeInteger(E.PROJECT_MAX_BYTES)&&E.PROJECT_MAX_BYTES>0);
+  const small=E.exportProject(E.createProject({objective:'Reject oversized encoded files'}));
+  const oversized=' '.repeat(E.PROJECT_MAX_BYTES-Buffer.byteLength(small,'utf8')+1)+small;
+  assert.equal(Buffer.byteLength(oversized,'utf8'),E.PROJECT_MAX_BYTES+1);
+  assert.throws(()=>E.importProject(oversized));
+});
+
+test('combined decoded oversize rejects the new contribution and keeps prior work exportable',()=>{
+  const p=E.createProject({objective:'Keep the last valid project intact'});
+  E.importResponse(p,'a'.repeat(2600000),{model:'first bounded contribution'});
+  const before=E.exportProject(p);
+  assert.throws(()=>E.importResponse(p,'b'.repeat(2600000),{model:'second bounded contribution'}));
+  assert.equal(E.exportProject(p),before);
+  const restored=E.importProject(before);
+  assert.equal(restored.modelOutputs.length,1);
+  assert.equal(restored.modelOutputs[0].text,'a'.repeat(2600000));
+});

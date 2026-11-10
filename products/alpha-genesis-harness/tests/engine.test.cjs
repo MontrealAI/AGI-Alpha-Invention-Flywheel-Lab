@@ -144,3 +144,28 @@ test('optional parallel provider records reject malformed rows but remain option
   }
   assert.equal(H.importProject(H.exportProject(H.createProject())).providerRuns,undefined);
 });
+
+test('escaped and Unicode project exports reopen under the shared serialized byte envelope', () => {
+  for (const response of ['\\'.repeat(2600000),'測'.repeat(2600000),'\u0000'.repeat(900000)]) {
+    const p=H.createProject();H.importResponse(p,response,{model:'encoding regression'});
+    const saved=H.exportProject(p);assert.ok(Buffer.byteLength(saved,'utf8')<=H.PROJECT_MAX_BYTES);
+    const restored=H.importProject(saved);assert.equal(restored.modelOutputs[0].text,response);
+  }
+  const p=H.createProject();let nested='\u0001'.repeat(1000);for(let i=0;i<55;i++)nested={child:nested};p.extra=nested;
+  assert.deepEqual(H.importProject(H.exportProject(p)).extra,nested);
+});
+test('large numeric and null object keys cannot bypass the decoded text envelope', () => {
+  for(const value of [0,null,false]) assert.throws(()=>H.canonicalJSON({['k'.repeat(5000001)]:value}),/text processing envelope/);
+});
+test('integer overflow cannot be hidden by a later cancelling add, sum or zero multiply', () => {
+  const max=Number.MAX_SAFE_INTEGER;
+  for(const expr of [{op:'add',args:[max,2,-2]},{op:'mul',args:[max,2,0]},{op:'mul',args:[1e308,1e308,0]}]) {
+    const instrument=H.constructInstrument({name:'Precision regression',inputs:['unused'],outputs:{value:expr}});
+    assert.equal(H.executeInstrument(instrument,{unused:0}).verdict,'INVALID');
+  }
+  const sum=H.constructInstrument({name:'Sum precision',inputs:['rows'],outputs:{value:{op:'sum',args:[{field:'rows'}]}}});
+  assert.equal(H.executeInstrument(sum,{rows:[max,2,-2]}).verdict,'INVALID');
+  assert.equal(H.executeInstrument(sum,{rows:[max,-2,2]}).outputs.value,max);
+  const precise=H.constructInstrument({name:'Ordinary arithmetic',inputs:['x'],outputs:{value:{op:'mul',args:[{field:'x'},2,3]}}});
+  assert.equal(H.executeInstrument(precise,{x:7}).outputs.value,42);
+});

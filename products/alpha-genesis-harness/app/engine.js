@@ -9,6 +9,10 @@
 })(typeof globalThis !== 'undefined' ? globalThis : this, function () {
   'use strict';
   const VERSION = '0.1.0';
+  // Encoded JSON can expand each decoded UTF-16 unit to six ASCII bytes,
+  // plus pretty-print indentation for at most 100,000 nodes at depth 64.
+  // Keep this transport envelope separate from the decoded processing limits.
+  const PROJECT_MAX_BYTES = 64 * 1024 * 1024;
   const VERDICTS = Object.freeze(['PASSED IN SCOPE', 'REJECTED', 'UNKNOWN', 'INVALID']);
   const forbidden = new Set(['__proto__', 'prototype', 'constructor']);
   const DEMO_CONFIRMATION = Object.freeze({ id: 'demo-price-quantity-qualification-v1', preparedBy: 'Separate qualification agent', independence: 'independently-prepared', scope: 'Exact price × quantity + setup arithmetic on three independently prepared synthetic examples; no commerce, universal validity or external certification.', cases: [ { input: { price: 127, quantity: 3, setup: 29 }, expected: { total: 410 } }, { input: { price: 0, quantity: 29, setup: 47 }, expected: { total: 47 } }, { input: { price: 41, quantity: 17, setup: 101 }, expected: { total: 798 } } ] });
@@ -38,7 +42,7 @@
     if (typeof x === 'number') { assert(Number.isFinite(x), 'Numbers must be finite.'); return meter.nodes; }
     assert(typeof x === 'object' && (Array.isArray(x) || plain(x)), 'Only plain JSON data is accepted.');
     const keys = Object.keys(x); assert(keys.length <= 100000, 'Input container exceeds the processing envelope.');
-    for (const k of keys) { assert(!forbidden.has(k), 'Unsafe object key: ' + k); meter.characters += k.length; validateData(x[k], depth + 1, meter); }
+    for (const k of keys) { assert(!forbidden.has(k), 'Unsafe object key: ' + k); meter.characters += k.length; assert(meter.characters <= 5000000, 'Input exceeds the per-document text processing envelope.'); validateData(x[k], depth + 1, meter); }
     return meter.nodes;
   }
   function clone(x) { validateData(x); return JSON.parse(JSON.stringify(x)); }
@@ -98,15 +102,41 @@
     if (plain(value)) { const out = {}; for (const [k, v] of Object.entries(value)) out[k] = sanitizeExport(v, k); return out; }
     return value;
   }
-  function exportProject(p) { validateProject(p); return JSON.stringify(sanitizeExport(p), null, 2); }
-  function importProject(raw) {
-    assert(typeof raw === 'string', 'Project file must contain JSON text.');
-    assert(raw.length <= 5000000, 'Project file exceeds the supported per-document processing envelope.');
-    const p = validateProject(JSON.parse(raw));
+  function utf8ByteLength(value) {
+    let bytes = 0;
+    for (let i = 0; i < value.length; i++) {
+      const code = value.charCodeAt(i);
+      if (code < 0x80) bytes++;
+      else if (code < 0x800) bytes += 2;
+      else if (code >= 0xD800 && code <= 0xDBFF && i + 1 < value.length && value.charCodeAt(i + 1) >= 0xDC00 && value.charCodeAt(i + 1) <= 0xDFFF) { bytes += 4; i++; }
+      else bytes += 3;
+      assert(bytes <= PROJECT_MAX_BYTES, 'Project file exceeds the supported serialized byte envelope.');
+    }
+    return bytes;
+  }
+  function markImportedProject(p) {
     if (p.confirmation) p.confirmation.independence = 'development';
     // Persisted receipts are historical data, never an authorization token for a new verification.
     for (const c of p.capabilities) { c.imported = true; c.currentVerification = 'UNKNOWN'; }
-    return clone(p);
+    return validateProject(p);
+  }
+  function exportProject(p) {
+    validateProject(p);
+    const safe = sanitizeExport(p);
+    validateProject(safe);
+    // Redaction and recovery metadata can change decoded size. Preflight the
+    // exact reopening semantics before accepting a save or an import mutation.
+    markImportedProject(clone(safe));
+    const serialized = JSON.stringify(safe, null, 2);
+    utf8ByteLength(serialized);
+    return serialized;
+  }
+  function importProject(raw) {
+    assert(typeof raw === 'string', 'Project file must contain JSON text.');
+    assert(raw.length <= PROJECT_MAX_BYTES, 'Project file exceeds the supported serialized byte envelope.');
+    utf8ByteLength(raw);
+    const p = validateProject(JSON.parse(raw));
+    return clone(markImportedProject(p));
   }
   function buildPrompt(project, options = {}) {
     validateProject(project);
@@ -154,7 +184,7 @@
     project.proposedCapabilities = (project.proposedCapabilities || []).concat(proposed.map(c => ({ ...c, id: record.id + '/' + c.id, sourceId: c.id, contributionId: record.id, verification: 'UNKNOWN' })));
     if (parsed && Array.isArray(parsed.uncertainties)) project.assumptions.push(...parsed.uncertainties.map(x => typeof x === 'string' ? x : stable(x)));
     project.updatedAt = now();
-    validateProject(project); // Combined growth must remain exportable before any original state changes.
+    exportProject(project); // Combined decoded and serialized growth must remain reopenable before any original state changes.
     for (const key of Object.keys(destination)) if (!Object.prototype.hasOwnProperty.call(project, key)) delete destination[key];
     Object.assign(destination, project); return record;
   }
@@ -246,29 +276,40 @@
     Object.values(spec.outputs).forEach(e => checkExpression(e, spec.inputs));
     return freeze({ schema: 'alpha-genesis-instrument/v1', name: spec.name, inputs: clone(spec.inputs), outputs: clone(spec.outputs), effects: [], authority: 'pure-data-only', limitations: 'Finite numeric and logical expressions; not arbitrary generated code. Binary floating-point arithmetic except safe integer operations.' });
   }
+  function checkedNumber(value) {
+    assert(typeof value === 'number' && Number.isFinite(value), 'Numeric input or intermediate must be finite.');
+    assert(!Number.isInteger(value) || Number.isSafeInteger(value), 'Exact integer input or intermediate exceeds safe representation.');
+    return value;
+  }
+  function reduceNumbers(values, multiply) {
+    let value = multiply ? 1 : 0;
+    for (const next of values) {
+      checkedNumber(next);
+      value = checkedNumber(multiply ? value * next : value + next);
+    }
+    return value;
+  }
   function evalExpression(expr, input, budget) {
-    budget.tick(); if (typeof expr !== 'object') return expr;
-    if (Object.prototype.hasOwnProperty.call(expr, 'field')) return get(input, expr.field);
+    budget.tick(); if (typeof expr !== 'object') return typeof expr === 'number' ? checkedNumber(expr) : expr;
+    if (Object.prototype.hasOwnProperty.call(expr, 'field')) { const value = get(input, expr.field); return typeof value === 'number' ? checkedNumber(value) : value; }
     const vals = expr.args.map(a => evalExpression(a, input, budget)); const op = expr.op;
     if (op === 'count' || op === 'sum') {
       assert(Array.isArray(vals[0]), op + ' requires an array.'); budget.tick(vals[0].length);
       if (op === 'count') return vals[0].length;
       assert(vals[0].every(x => typeof x === 'number' && Number.isFinite(x)), 'sum requires finite numbers.');
-      const value = vals[0].reduce((a, b) => a + b, 0); assert(Number.isFinite(value), 'Numeric overflow.');
-      if (vals[0].every(Number.isSafeInteger)) assert(Number.isSafeInteger(value), 'Exact integer overflow.'); return value;
+      return reduceNumbers(vals[0], false);
     }
     if (op === 'eq') return stable(vals[0]) === stable(vals[1]);
     if (['and', 'or', 'not'].includes(op)) { assert(vals.every(v => typeof v === 'boolean'), 'Logical inputs must be booleans.'); return op === 'and' ? vals.every(Boolean) : op === 'or' ? vals.some(Boolean) : !vals[0]; }
     assert(vals.every(v => typeof v === 'number' && Number.isFinite(v)), op + ' requires finite numeric inputs.');
     if (op === 'lt') return vals[0] < vals[1]; if (op === 'lte') return vals[0] <= vals[1]; if (op === 'gt') return vals[0] > vals[1]; if (op === 'gte') return vals[0] >= vals[1];
     let result;
-    if (op === 'add') result = vals.reduce((a, b) => a + b, 0);
+    if (op === 'add') result = reduceNumbers(vals, false);
     if (op === 'sub') result = vals[0] - vals[1];
-    if (op === 'mul') result = vals.reduce((a, b) => a * b, 1);
+    if (op === 'mul') result = reduceNumbers(vals, true);
     if (op === 'div') { assert(vals[1] !== 0, 'Division by zero is undefined.'); result = vals[0] / vals[1]; }
     if (op === 'min') result = Math.min(...vals); if (op === 'max') result = Math.max(...vals);
-    assert(Number.isFinite(result), 'Numeric overflow or unsupported arithmetic.');
-    if (op !== 'div' && vals.every(Number.isSafeInteger)) assert(Number.isSafeInteger(result), 'Exact integer overflow.'); return result;
+    return checkedNumber(result);
   }
   function executeInstrument(instrument, input, options = {}) {
     const b = makeBudget(options.budget, options.signal);
@@ -451,5 +492,5 @@
     const result = { id: uid('run'), kind: 'synthetic-demo', createdAt: now(), economics, plantedError: adversarial, instrument, execution, verification, opportunities: discover(project), successor: testInheritance({ instrument }, project.freshCases), costs: { actualInferenceMinor: 0, actualHostMinor: null, humanWorkMinutes: null, note: 'No model call is made by this demo. Host and preparation costs are unmeasured.' }, scope: 'Working computations on synthetic customer-editable inputs. No autonomous discovery, real demand, consent or commercial superiority established.' };
     project.runs.push(result); project.updatedAt = now(); return result;
   }
-  return Object.freeze({ VERSION, VERDICTS, MECHANISMS, COST_CATEGORIES, WORKFLOW_OPS, createProject, validateProject, demoProject, runDemo, buildPrompt, importResponse, discover, evaluateArrangement, constructInstrument, executeInstrument, freezeConfirmation, verifyInstrument, compileWorkflow, runWorkflow, synthesizePlan, structuralTransfer, reframe, uncertainty, abstractInstrument, retainCapability, retireCapability, testInheritance, sourceSnapshot, sourceDiff, exportProject, importProject, exportDossier, canonicalJSON: stable });
+  return Object.freeze({ VERSION, PROJECT_MAX_BYTES, VERDICTS, MECHANISMS, COST_CATEGORIES, WORKFLOW_OPS, createProject, validateProject, demoProject, runDemo, buildPrompt, importResponse, discover, evaluateArrangement, constructInstrument, executeInstrument, freezeConfirmation, verifyInstrument, compileWorkflow, runWorkflow, synthesizePlan, structuralTransfer, reframe, uncertainty, abstractInstrument, retainCapability, retireCapability, testInheritance, sourceSnapshot, sourceDiff, exportProject, importProject, exportDossier, canonicalJSON: stable });
 });

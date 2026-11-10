@@ -68,8 +68,8 @@
       "id": 9,
       "name": "Customer delivery",
       "verdict": "UNKNOWN",
-      "demonstrated": "Project export/import API works; archive boundary tests pass.",
-      "not_demonstrated": "Extracted actual package browser session, macOS and Windows native/browser testing pending."
+      "demonstrated": "Independent DOM emulation completes manual instrument, standalone workflow and standalone arrangement operations; save/reopen and replacement artifact selection are checked. Escaped and Unicode project serialization is tested against the shared encoded-byte envelope.",
+      "not_demonstrated": "Graphical browser operation on extracted final package and native macOS/Windows testing require separate qualification; DOM emulation is not equivalent."
     },
     {
       "id": 10,
@@ -82,7 +82,7 @@
   "release_recommendation": "Do not equate these bounded engineering checks with completion of the full commercial mandate. Official sale requires its remaining product and delivery qualification.",
   "observed_tests": {
     "independent_engine": {
-      "passed": 28,
+      "passed": 34,
       "failed": 0
     },
     "independent_release_boundary": {
@@ -124,5 +124,36 @@
       "tests/acceptance.test.cjs": "3ef3cd3507b2e2fe225d8d38487e97d3185d629f55c94547fe2614509b16c208"
     },
     "dom_and_browser_tests": "Recorded separately by their executing owners"
+  },
+  "pr320_supplemental_review": {
+    "baseline_revision": "74d8b5fe435a6a0cd670d57158adb5f68ebd5cc0",
+    "original_findings_reproduced": [
+      "Escaped response export failed reopen",
+      "Unsafe intermediate integer arithmetic returned a wrong successful result",
+      "Workflow-only and arrangement-only imports hid all experiment controls"
+    ],
+    "additional_related_finding": "Previously run workflowSpec/workflowInputs overrode a newly imported workflow",
+    "repaired_independent_engine_checks": {
+      "passed": 34,
+      "failed": 0
+    },
+    "independent_dom_emulation_checks": [
+      "workflow-only visible and executable",
+      "new workflow replaces stale active definition and inputs",
+      "replacement workflow saves and reopens with result36",
+      "arrangement-only visible and checkable",
+      "arrangement-only saves and reopens",
+      "parallel arrangement selection clears previous instrument/workflow/input bundle",
+      "both rival contributions retained after selection",
+      "selected project remains exportable and reopenable"
+    ],
+    "environment": "Node tests plus jsdom26.1.0 in-memory DOM/bridge emulation; no graphical browser or authenticated model request",
+    "encoded_size_policy": "Shared 64MiB serialized UTF-8 limit, separate decoded5M text/node/depth bounds; actual exported bytes reopen under the same limit",
+    "source_sha256": {
+      "app/engine.js": "42600100d8a61e3623db8e1a66645b417ca0c139b0814597219d68069412ded8",
+      "app/app.js": "6ee08d391e3755ce77df99d8f7fcd956a7c9cc071d358f5600ae472c80b9ee0e",
+      "app/index.html": "84fb6b8c8048d7296bbccda17ca2544c4bf3f6d8b272fa44d584fe5ed9867369",
+      "tests/acceptance.test.cjs": "a936981898ff276b2f59e486c309e5de59d9763bb8109dc302d488f7d9f860a0"
+    }
   }
 }
