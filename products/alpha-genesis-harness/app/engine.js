@@ -98,7 +98,12 @@
     if (plain(value)) { const out = {}; for (const [k, v] of Object.entries(value)) out[k] = sanitizeExport(v, k); return out; }
     return value;
   }
-  function exportProject(p) { validateProject(p); return JSON.stringify(sanitizeExport(p), null, 2); }
+  function exportProject(p) {
+    validateProject(p);
+    const serialized = JSON.stringify(sanitizeExport(p), null, 2);
+    assert(serialized.length <= 5000000, 'Project export exceeds the supported restorable JSON envelope. Split large contributions into separately retained source files.');
+    return serialized;
+  }
   function importProject(raw) {
     assert(typeof raw === 'string', 'Project file must contain JSON text.');
     assert(raw.length <= 5000000, 'Project file exceeds the supported per-document processing envelope.');
@@ -155,6 +160,7 @@
     if (parsed && Array.isArray(parsed.uncertainties)) project.assumptions.push(...parsed.uncertainties.map(x => typeof x === 'string' ? x : stable(x)));
     project.updatedAt = now();
     validateProject(project); // Combined growth must remain exportable before any original state changes.
+    exportProject(project); // Bound escaped and pretty-printed JSON before committing an imported response.
     for (const key of Object.keys(destination)) if (!Object.prototype.hasOwnProperty.call(project, key)) delete destination[key];
     Object.assign(destination, project); return record;
   }
@@ -246,6 +252,16 @@
     Object.values(spec.outputs).forEach(e => checkExpression(e, spec.inputs));
     return freeze({ schema: 'alpha-genesis-instrument/v1', name: spec.name, inputs: clone(spec.inputs), outputs: clone(spec.outputs), effects: [], authority: 'pure-data-only', limitations: 'Finite numeric and logical expressions; not arbitrary generated code. Binary floating-point arithmetic except safe integer operations.' });
   }
+  function checkedNumericAccumulation(vals, start, combine) {
+    const exactIntegerTerms = vals.every(Number.isSafeInteger);
+    let accumulated = start;
+    for (const value of vals) {
+      accumulated = combine(accumulated, value);
+      assert(Number.isFinite(accumulated), 'Numeric overflow.');
+      if (exactIntegerTerms) assert(Number.isSafeInteger(accumulated), 'Exact integer intermediate overflow.');
+    }
+    return accumulated;
+  }
   function evalExpression(expr, input, budget) {
     budget.tick(); if (typeof expr !== 'object') return expr;
     if (Object.prototype.hasOwnProperty.call(expr, 'field')) return get(input, expr.field);
@@ -254,17 +270,16 @@
       assert(Array.isArray(vals[0]), op + ' requires an array.'); budget.tick(vals[0].length);
       if (op === 'count') return vals[0].length;
       assert(vals[0].every(x => typeof x === 'number' && Number.isFinite(x)), 'sum requires finite numbers.');
-      const value = vals[0].reduce((a, b) => a + b, 0); assert(Number.isFinite(value), 'Numeric overflow.');
-      if (vals[0].every(Number.isSafeInteger)) assert(Number.isSafeInteger(value), 'Exact integer overflow.'); return value;
+      return checkedNumericAccumulation(vals[0], 0, (a, b) => a + b);
     }
     if (op === 'eq') return stable(vals[0]) === stable(vals[1]);
     if (['and', 'or', 'not'].includes(op)) { assert(vals.every(v => typeof v === 'boolean'), 'Logical inputs must be booleans.'); return op === 'and' ? vals.every(Boolean) : op === 'or' ? vals.some(Boolean) : !vals[0]; }
     assert(vals.every(v => typeof v === 'number' && Number.isFinite(v)), op + ' requires finite numeric inputs.');
     if (op === 'lt') return vals[0] < vals[1]; if (op === 'lte') return vals[0] <= vals[1]; if (op === 'gt') return vals[0] > vals[1]; if (op === 'gte') return vals[0] >= vals[1];
     let result;
-    if (op === 'add') result = vals.reduce((a, b) => a + b, 0);
+    if (op === 'add') result = checkedNumericAccumulation(vals, 0, (a, b) => a + b);
     if (op === 'sub') result = vals[0] - vals[1];
-    if (op === 'mul') result = vals.reduce((a, b) => a * b, 1);
+    if (op === 'mul') result = checkedNumericAccumulation(vals, 1, (a, b) => a * b);
     if (op === 'div') { assert(vals[1] !== 0, 'Division by zero is undefined.'); result = vals[0] / vals[1]; }
     if (op === 'min') result = Math.min(...vals); if (op === 'max') result = Math.max(...vals);
     assert(Number.isFinite(result), 'Numeric overflow or unsupported arithmetic.');
