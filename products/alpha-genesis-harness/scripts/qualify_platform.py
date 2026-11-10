@@ -38,11 +38,13 @@ def native_launcher(product: Path, workspace: Path, port: int, system: str | Non
     if system == "Windows":
         # cmd syntax expands percent/exclamation even inside quotes. Refuse those
         # path spellings rather than relying on POSIX escaping or shell=True.
-        if re.search(r'[%!^&|<>"\r\n]', str(workspace)):
+        if re.search(r'[%!^&|<>()"\r\n]', str(workspace)):
             raise ValueError("Native Windows qualification needs a shell-safe temporary path")
         launcher = product / "Launch-HARNESS.cmd"
-        command = 'Launch-HARNESS.cmd --port ' + str(port) + ' --no-browser --workspace "' + str(workspace) + '"'
-        result = [os.environ.get("COMSPEC", "cmd.exe"), "/d", "/s", "/c", command]
+        # Popen applies CRT quoting to each argument. A prequoted combined
+        # command would introduce backslash-quotes that cmd does not decode.
+        # The fixed simple batch name needs no quoting or /s outer-quote removal.
+        result = [os.environ.get("COMSPEC", "cmd.exe"), "/d", "/c", launcher.name, *options]
     elif system == "Darwin":
         launcher = product / "Launch-HARNESS.command"
         result = ["/bin/sh", str(launcher), *options]
@@ -84,6 +86,61 @@ def free_port() -> int:
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as reservation:
         reservation.bind(("127.0.0.1", 0))
         return reservation.getsockname()[1]
+
+
+GENESIS_STARTUP_PROBE = r'''
+import json, sys, traceback
+from pathlib import Path
+result = {"status": "FAIL", "stage": "imports", "completed_stages": [],
+          "interpreter": sys.executable, "python_version": sys.version.split()[0],
+          "scope": "Credential-free initialization diagnostic only; not browser or native-launcher qualification."}
+workflows = None
+try:
+    from bridge.workflows import WorkflowService
+    from bridge.genesis_next import GenesisNextService
+    result["completed_stages"].append("imports")
+    result["stage"] = "workflow_initialization"
+    workflows = WorkflowService(None, Path(sys.argv[1]))
+    result["completed_stages"].append(result["stage"])
+    result["stage"] = "genesis_initialization"
+    genesis = GenesisNextService(workflows)
+    result["completed_stages"].append(result["stage"])
+    result["stage"] = "genesis_status"
+    status = genesis.status()
+    assert any(cap.get("id") == "bounded-verification" for cap in status.get("capabilities", [])), "Expected source-backed capability is missing"
+    result["completed_stages"].append(result["stage"])
+    result["status"] = "PASS"
+    result["stage"] = "complete"
+except Exception as error:
+    result.update({"exception_type": type(error).__name__, "errno": getattr(error, "errno", None),
+                   "winerror": getattr(error, "winerror", None), "traceback": traceback.format_exc()})
+finally:
+    if workflows is not None:
+        try:
+            workflows.close()
+        except Exception:
+            result["status"] = "FAIL"
+            result["cleanup_traceback"] = traceback.format_exc()
+    print(json.dumps(result))
+sys.exit(0 if result["status"] == "PASS" else 1)
+'''
+
+
+def probe_genesis_startup(product: Path, workspace: Path, output: Path, interpreter: str,
+                          environment: dict[str, str]) -> dict:
+    """Expose a hidden local initialization exception on exact trusted source bytes."""
+    result = subprocess.run([interpreter, "-c", GENESIS_STARTUP_PROBE, str(workspace)],
+                            cwd=product, env=environment, capture_output=True, text=True)
+    (output / "genesis-startup.stdout.txt").write_text(result.stdout, encoding="utf-8")
+    (output / "genesis-startup.stderr.txt").write_text(result.stderr, encoding="utf-8")
+    try:
+        diagnostic = json.loads(result.stdout)
+    except (ValueError, TypeError):
+        raise ValueError("GENESIS initialization diagnostic did not return a receipt; inspect its preserved output") from None
+    (output / "GENESIS-STARTUP-DIAGNOSTIC.json").write_text(json.dumps(diagnostic, indent=2) + "\n", encoding="utf-8")
+    if result.returncode or diagnostic.get("status") != "PASS":
+        raise ValueError("GENESIS initialization failed at " + str(diagnostic.get("stage")) + "; inspect its preserved traceback")
+    return diagnostic
 
 
 def request(port: int, path: str, headers: dict | None = None) -> tuple[int, dict]:
@@ -192,10 +249,14 @@ def qualify(archive: Path, expected_sha256: str, expected_source_revision: str, 
             if installed_visual != expected_visual:
                 raise ValueError("Native browser driver differs from the packaged pinned requirement")
             port = free_port()
-            command = native_launcher(product, root / "private-workspace", port)
+            private_workspace = root / "private-workspace"
+            command = native_launcher(product, private_workspace, port)
             receipt["launcher"] = Path("Launch-HARNESS.cmd" if platform.system() == "Windows" else "Launch-HARNESS.command" if platform.system() == "Darwin" else "Launch-HARNESS.sh").name
             environment = private_environment()
             receipt["launcher_interpreter"] = launcher_interpreter(environment)
+            receipt["checks"]["genesis_startup_diagnostic"] = probe_genesis_startup(
+                product, root / "diagnostic-workspace", output,
+                receipt["launcher_interpreter"]["executable"], environment)
             with (output / "launcher.stdout.txt").open("w", encoding="utf-8") as stdout, (output / "launcher.stderr.txt").open("w", encoding="utf-8") as stderr:
                 try:
                     process = subprocess.Popen(command, cwd=product, env=environment, stdout=stdout, stderr=stderr,
@@ -219,6 +280,12 @@ def qualify(archive: Path, expected_sha256: str, expected_source_revision: str, 
                         raise ValueError("Native browser receipt does not establish this exact platform/source/launcher")
                     if not browser_receipt.get("exports"):
                         raise ValueError("Native browser did not qualify an actual output download")
+                    native_state = private_workspace / "genesis-next" / "state.json"
+                    if native_state.is_symlink() or not native_state.is_file():
+                        raise ValueError("Native launcher did not create GENESIS state in the expected private workspace")
+                    receipt["checks"]["native_workspace"] = {
+                        "genesis_state_created_at_requested_path": True,
+                        "scope": "Existence only after the actual launcher/browser experiment; no workspace contents or integrity key retained."}
                     receipt["checks"]["browser"] = browser_receipt
                     receipt["status"] = "PASS"
                 finally:

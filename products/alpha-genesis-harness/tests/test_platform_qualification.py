@@ -35,15 +35,17 @@ class NativeQualificationBoundaryTests(unittest.TestCase):
             self.assertEqual(mac[:2], ["/bin/sh", str(product / "Launch-HARNESS.command")])
             self.assertEqual(mac[-2:], ["--workspace", str(workspace)])
             windows = q.native_launcher(product, workspace, 8765, "Windows")
-            self.assertEqual(windows[1:4], ["/d", "/s", "/c"])
-            self.assertTrue(windows[-1].startswith("Launch-HARNESS.cmd --port 8765 --no-browser"))
+            self.assertEqual(windows[1:], ["/d", "/c", "Launch-HARNESS.cmd", "--port", "8765", "--no-browser", "--workspace", str(workspace)])
+            serialized = subprocess.list2cmdline(windows)
+            self.assertNotIn('\\"', serialized, "cmd must not receive escaped quotes from a combined command argument")
+            self.assertIn('"' + str(workspace) + '"', serialized, "A workspace containing spaces remains one argument")
             linux = q.native_launcher(product, workspace, 8765, "Linux")
             self.assertEqual(linux[1], str(product / "Launch-HARNESS.sh"))
 
     def test_windows_shell_metacharacters_are_refused_before_launch(self):
         with tempfile.TemporaryDirectory() as root:
             product = self.launchers(root)
-            for character in ('%', '!', '&', '|', '<', '>', '^', '"', '\n'):
+            for character in ('%', '!', '&', '|', '<', '>', '^', '(', ')', '"', '\n'):
                 with self.subTest(character=character), self.assertRaisesRegex(ValueError, "shell-safe"):
                     q.native_launcher(product, Path(root) / ("unsafe" + character + "path"), 8765, "Windows")
 
@@ -85,13 +87,43 @@ class NativeQualificationBoundaryTests(unittest.TestCase):
         self.assertNotIn("private-token", str(caught.exception))
         self.assertNotIn("arbitrary response", str(caught.exception))
 
+    def test_initialization_diagnostic_runs_source_in_selected_interpreter(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary).resolve()
+            result = q.probe_genesis_startup(PRODUCT, root / "private-workspace", root,
+                                             sys.executable, q.private_environment())
+            self.assertEqual(result["status"], "PASS")
+            self.assertEqual(result["completed_stages"], ["imports", "workflow_initialization", "genesis_initialization", "genesis_status"])
+            self.assertEqual(Path(result["interpreter"]).resolve(), Path(sys.executable).resolve())
+            self.assertIn("not browser", result["scope"])
+
+    def test_initialization_failure_retains_stage_and_traceback_without_browser_pass(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary).resolve()
+            product = root / "synthetic-product"
+            (product / "bridge").mkdir(parents=True)
+            (product / "bridge/__init__.py").write_text("")
+            (product / "bridge/workflows.py").write_text("class WorkflowService:\n def __init__(self, *args):\n  raise OSError(13, 'synthetic denied initialization')\n")
+            (product / "bridge/genesis_next.py").write_text("class GenesisNextService: pass\n")
+            with self.assertRaisesRegex(ValueError, "workflow_initialization"):
+                q.probe_genesis_startup(product, root / "private-workspace", root, sys.executable, q.private_environment())
+            result = json.loads((root / "GENESIS-STARTUP-DIAGNOSTIC.json").read_text())
+            self.assertEqual(result["status"], "FAIL")
+            self.assertEqual(result["errno"], 13)
+            self.assertEqual(result["completed_stages"], ["imports"])
+            self.assertIn("synthetic denied initialization", result["traceback"])
+            self.assertFalse((root / "browser/BROWSER-VERIFICATION.json").exists())
+
     def test_zero_exit_does_not_convert_wrong_platform_receipt_to_pass(self):
         self._wrong_receipt_case()
 
     def test_generated_temp_directory_is_canonical_before_workspace_validation(self):
         self._wrong_receipt_case(symbolic_parent=True)
 
-    def _wrong_receipt_case(self, symbolic_parent=False):
+    def test_browser_receipt_without_expected_native_workspace_cannot_pass(self):
+        self._wrong_receipt_case(expected_platform=True)
+
+    def _wrong_receipt_case(self, symbolic_parent=False, expected_platform=False):
         with tempfile.TemporaryDirectory() as root:
             root = Path(root)
             package = archive_fixture(extra_files={
@@ -123,14 +155,16 @@ class NativeQualificationBoundaryTests(unittest.TestCase):
                 return original_launcher(product, workspace, port)
             def wrong_receipt(command, **kwargs):
                 (output / "browser").mkdir()
-                (output / "browser/BROWSER-VERIFICATION.json").write_text(json.dumps({"status": "PASS", "platform": "invented", "source_revision": SOURCE,
+                receipt_platform = {"Windows": "win32", "Darwin": "darwin", "Linux": "linux"}[q.platform.system()] if expected_platform else "invented"
+                (output / "browser/BROWSER-VERIFICATION.json").write_text(json.dumps({"status": "PASS", "platform": receipt_platform, "source_revision": SOURCE,
                     "server_mode": "external-native-launcher", "exports": [{"file": "fixture.json"}]}))
                 return subprocess.CompletedProcess(command, 0, "fixture", "")
             with temporary_override, patch.object(q, "native_launcher", side_effect=checked_launcher), patch.object(q.platform, "platform", return_value="platform-fixture"), patch.object(q.platform, "machine", return_value="fixture"), \
                  patch.object(q, "free_port", return_value=8765), patch.object(q, "authenticate", return_value={"fixture": True}), \
-                 patch.object(q, "launcher_interpreter", return_value={"fixture": True}), patch.object(q, "stop_owned_process"), \
+                 patch.object(q, "launcher_interpreter", return_value={"executable": sys.executable}), patch.object(q, "stop_owned_process"), \
+                 patch.object(q, "probe_genesis_startup", return_value={"fixture": True}), \
                  patch.object(q.subprocess, "Popen", return_value=Mock()), patch.object(q.subprocess, "run", side_effect=wrong_receipt):
-                with self.assertRaisesRegex(ValueError, "exact platform"):
+                with self.assertRaisesRegex(ValueError, "expected private workspace" if expected_platform else "exact platform"):
                     q.qualify(archive, hashlib.sha256(package).hexdigest(), SOURCE, output, modules, browser, "node")
             receipt = json.loads((output / "PLATFORM-QUALIFICATION.json").read_text())
             self.assertEqual(receipt["status"], "FAIL")
