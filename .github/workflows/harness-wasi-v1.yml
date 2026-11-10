@@ -1,0 +1,43 @@
+name: HARNESS WASI baseline experiment v1
+on:
+  pull_request:
+    paths:
+      - 'experiments/harness-wasi-v1/**'
+      - '.github/workflows/harness-wasi-v1.yml'
+permissions:
+  contents: read
+concurrency:
+  group: harness-wasi-v1-${{ github.event.pull_request.head.sha }}-${{ github.run_id }}
+  cancel-in-progress: false
+jobs:
+  baseline:
+    if: github.repository == 'MontrealAI/AGI-Alpha-Invention-Flywheel-Lab' && github.event.repository.private == false && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record actual platform execution start
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Run preregistered capability negatives and unchanged baseline
+        env:
+          SOURCE_SHA: ${{ github.event.pull_request.head.sha }}
+          PROTOCOL_SHA256: dbb270d343a2ff0fb0615721d577bf3b282e0ff3e1feac9943b1b63cf4e51108
+        run: >-
+          python -B experiments/harness-wasi-v1/run.py
+          --work "$RUNNER_TEMP/harness-wasi-v1"
+          --source-sha "$SOURCE_SHA"
+          --protocol-sha256 "$PROTOCOL_SHA256"
+      - name: Preserve compact success or failure evidence only
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: harness-wasi-v1-${{ github.event.pull_request.head.sha }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/harness-wasi-v1/evidence/
+          if-no-files-found: warn
+          retention-days: 14
