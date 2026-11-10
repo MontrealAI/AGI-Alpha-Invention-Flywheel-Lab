@@ -2,7 +2,7 @@
 
 ## English
 
-**ALPHA GENESIS FLYWHEEL Ω HARNESS — Official Edition** is the name of the intended packaged commercial release. The price is **CAD $299, one-time**. The current 0.2.0 artifact is a release candidate until the qualification and merchant publication steps are complete.
+**ALPHA GENESIS FLYWHEEL Ω HARNESS — Official Edition** is the name of the intended packaged commercial release. The price is **CAD $299, one-time**. The current 0.3.0 artifact is a release candidate until the qualification and merchant publication steps are complete.
 
 A purchase supplies the downloadable version identified on the product page at the time of purchase, including its application files, guided sample missions, documentation, source and licence notices, and release integrity information. Keep your downloaded archive and purchase receipt.
 
@@ -16,7 +16,7 @@ Before sale, the merchant must confirm the displayed taxes, refund/cancellation 
 
 ## Français
 
-**ALPHA GENESIS FLYWHEEL Ω HARNESS — Édition officielle** désigne l'édition commerciale préparée. Son prix est de **299 $ CA, en un seul paiement**. Le fichier 0.2.0 demeure une version candidate tant que la qualification et la publication commerciale ne sont pas terminées.
+**ALPHA GENESIS FLYWHEEL Ω HARNESS — Édition officielle** désigne l'édition commerciale préparée. Son prix est de **299 $ CA, en un seul paiement**. Le fichier 0.3.0 demeure une version candidate tant que la qualification et la publication commerciale ne sont pas terminées.
 
 L'achat donne accès à la version téléchargeable indiquée sur la fiche au moment de l'achat : application, exemples guidés, documentation, sources, avis de licence et informations d'intégrité. Conservez le fichier téléchargé et votre reçu.
 

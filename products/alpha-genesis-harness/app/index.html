@@ -27,9 +27,10 @@
     <button class="nav-item" data-view="capabilities"><span class="nav-number">06</span><span data-i18n="navCapabilities">Capability Library</span></button>
     <button class="nav-item" data-view="verification"><span class="nav-number">07</span><span data-i18n="navVerification">Verification Lab</span></button>
     <button class="nav-item" data-view="economy"><span class="nav-number">08</span><span data-i18n="navEconomy">Economy Studio</span></button>
+    <button class="nav-item omega-nav" data-view="genesis-next"><span aria-hidden="true">Ω</span><span data-i18n="navGenesisNext">GENESIS NEXT</span></button>
     <button class="nav-item" data-view="history"><span class="nav-number">09</span><span data-i18n="navHistory">Run History</span></button>
   </nav>
-  <div class="sidebar-bottom"><span class="private-dot" aria-hidden="true"></span><span data-i18n="localPrivate">Your work stays on this device</span><p data-i18n="localNote">You choose what to export or send to a model.</p><span id="version" class="version">Release candidate · 0.2.0</span></div>
+  <div class="sidebar-bottom"><span class="private-dot" aria-hidden="true"></span><span data-i18n="localPrivate">Your work stays on this device</span><p data-i18n="localNote">You choose what to export or send to a model.</p><span id="version" class="version">Release candidate · 0.3.0</span></div>
 </aside>
 <div class="workspace">
 <header class="topbar">
@@ -48,13 +49,18 @@
   <div class="hero">
     <div class="hero-content">
       <div class="eyebrow"><span class="gold-line"></span><span data-i18n="heroEyebrow">THE NEXT POSSIBILITY STARTS HERE</span></div>
-      <h1 id="start-title" data-i18n="heroTitle">Build what<br>becomes possible.</h1>
+      <h1 id="start-title" data-i18n="heroTitle">What would you like<br>to make possible?</h1>
       <p class="hero-copy" data-i18n="heroCopy">Bring your ambition. Explore a different way forward. Construct a small, decisive test—and keep the evidence that tells you what works.</p>
       <div class="button-row"><button class="button primary" id="start-mission"><span data-i18n="startMission">Start with your ambition</span><span aria-hidden="true">↗</span></button><button class="button hero-secondary" id="load-demo" data-i18n="tryDemo">Explore the working demo</button></div>
       <p class="hero-footnote" data-i18n="heroFootnote">No account. No API key. Start with the AI chat you already use.</p>
     </div>
     <div class="orbital" aria-hidden="true"><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="orbit orbit-three"></div><span class="orbit-point point-one"></span><span class="orbit-point point-two"></span><span class="orbit-point point-three"></span><span class="omega">Ω</span><span class="orbit-word word-past" data-i18n="past">THE PAST</span><span class="orbit-word word-present" data-i18n="present">THE PRESENT</span><span class="orbit-word word-possible" data-i18n="possible">THE POSSIBLE</span></div>
   </div>
+  <button id="start-genesis-next" class="omega-entry">
+    <span class="omega-entry-symbol" aria-hidden="true">Ω⁺¹</span>
+    <span class="omega-entry-copy"><span class="omega-entry-kicker" data-i18n="omegaEntryKicker">A SECOND HORIZON</span><strong data-i18n="omegaEntryTitle">What could GENESIS itself become capable of next?</strong><span data-i18n="omegaEntryCopy">Find a shared limitation. Build the missing capability. Let the next experiment decide.</span></span>
+    <span class="omega-entry-arrow" aria-hidden="true">↗</span>
+  </button>
   <div class="intro-heading"><h2 data-i18n="oneLoop">One useful outcome. A new starting point.</h2><span class="subtle" data-i18n="youControl">You control the objective, models and decisions.</span></div>
   <div class="feature-grid">
     <article class="feature-card"><span class="feature-index">01 /</span><h3 data-i18n="featureOneTitle">Discover a missing move</h3><p data-i18n="featureOneCopy">Challenge the assumed route. Compare independent ideas and look for the capability or arrangement that changes what is feasible.</p></article>
@@ -87,6 +93,27 @@
   <button class="access-card" data-access="chatgpt" aria-pressed="false"><span class="access-symbol" aria-hidden="true">◎</span><strong data-i18n="accessChatGPT">ChatGPT plan</strong><span data-i18n="accessChatGPTCopy">Official sign-in for eligible connections. Separate plan allowance.</span></button>
  </div>
  <p id="access-status" class="connection-note" role="status"></p>
+<div class="panel local-model-setup hidden" id="local-model-setup">
+  <div class="section-heading"><h3 data-i18n="localSetupTitle">Connect an installed local model</h3><span class="tag" data-i18n="localSetupBadge">NO CLOUD KEY</span></div>
+  <p class="subtle" data-i18n="localSetupHint">Start your local model server, choose it here, then discover its models. Your connection settings stay on this device.</p>
+  <div class="form-grid">
+    <div><label for="local-engine" data-i18n="localEngine">Local engine</label><select id="local-engine"><option value="ollama">Ollama</option><option value="lm-studio">LM Studio</option><option value="llama-cpp">llama.cpp</option><option value="vllm">vLLM</option><option value="mlx">MLX</option><option value="custom">Custom compatible server</option></select></div>
+    <div><label for="local-port" data-i18n="localPort">Local server port</label><input id="local-port" type="number" min="1" max="65535" value="11434" inputmode="numeric"></div>
+  </div>
+  <button class="button secondary" type="button" id="local-discover" data-i18n="localDiscover">Discover installed models</button>
+  <div class="bounded-details" id="local-discovery-result" aria-live="polite"></div>
+  <label for="local-model" data-i18n="localModel">Exact model identifier</label><input id="local-model" data-placeholder="localModelPlaceholder" type="text" list="local-model-list" placeholder="Choose a discovered model or enter its exact name" autocomplete="off"><datalist id="local-model-list"></datalist>
+  <details><summary data-i18n="localAdvanced">Model capabilities and limits</summary>
+    <p class="bounded-details" data-i18n="localCapabilityHint">Enable only features supported by your installed server and model. A catalog listing does not verify these features.</p>
+    <label class="check-label"><input type="checkbox" id="local-json"> <span data-i18n="localJson">JSON output</span></label>
+    <label class="check-label"><input type="checkbox" id="local-streaming"> <span data-i18n="localStreaming">Streaming</span></label>
+    <label class="check-label"><input type="checkbox" id="local-tools"> <span data-i18n="localTools">Function calling</span></label>
+    <div class="form-grid"><div><label for="local-output-limit" data-i18n="localOutput">Maximum output tokens</label><input id="local-output-limit" type="number" min="1" value="4096"></div><div><label for="local-context" data-i18n="localContext">Context window (optional)</label><input id="local-context" data-placeholder="localContextPlaceholder" type="number" min="1" placeholder="Unknown"></div></div>
+  </details>
+  <p class="bounded-details" data-i18n="localSetupConsent">Connect authorizes requests to this local server and saves its non-secret settings. It does not download a model or enable cloud inference. Ensure the server itself runs locally rather than forwarding to a cloud provider.</p>
+  <div class="button-row"><button class="button primary" type="button" id="local-connect" data-i18n="localConnect">Connect local model</button><button class="button text-button" type="button" id="local-disconnect" data-i18n="localDisconnect">Remove saved connection</button></div>
+  <p class="bounded-details" id="local-setup-result" aria-live="polite"></p>
+</div>
  <div id="chatgpt-panel" class="panel hidden">
   <div class="section-heading"><h2 data-i18n="planHeading">Use your eligible ChatGPT plan</h2><span class="tag" data-i18n="planOfficial">OFFICIAL AUTHORIZATION</span></div>
   <p data-i18n="planScope" class="subtle">Open-source local access and paid-edition access have different eligibility requirements. The connection reports what is enabled. Your password and tokens never enter this workspace.</p>
@@ -94,7 +121,7 @@
   <div class="button-row"><button class="button primary" id="chatgpt-connect" data-i18n="planConnect" disabled>Continue with ChatGPT</button><button class="button secondary" id="chatgpt-refresh" data-i18n="refreshConnection">Refresh connection</button></div>
   <div id="chatgpt-connected" class="hidden">
    <div class="form-grid"><div><label for="chatgpt-account" data-i18n="planAccount">Authorized account</label><select id="chatgpt-account"></select></div><div><label for="chatgpt-model" data-i18n="planModel">Available model</label><select id="chatgpt-model"></select></div></div>
-   <div class="button-row"><button class="button secondary" id="chatgpt-models" data-i18n="discoverModels">Discover available models</button><button class="button text-button" id="chatgpt-disconnect" data-i18n="disconnect">Disconnect account</button></div>
+   <div class="button-row"><button class="button secondary" id="chatgpt-models" data-i18n="discoverModels">Discover available models</button><button class="button text-button" id="chatgpt-disconnect" data-i18n="disconnect">Disconnect account</button><button class="button text-button" id="chatgpt-reauthorize" data-i18n="planReauthorize" disabled>Reauthorize selected account</button><button class="button text-button" id="chatgpt-reconsent" data-i18n="planReconsent" disabled>Enable plan permission</button></div>
    <label for="chatgpt-role" data-i18n="responsibility">Responsibility</label><select id="chatgpt-role"><option value="actor" data-i18n="roleActor">Construct a strong proposal</option><option value="critic" data-i18n="roleCritic">Find a checkable weakness</option><option value="verifier" data-i18n="roleVerifier">Design an independent check</option><option value="alternative" data-i18n="roleAlternative">Develop an independent alternative</option></select>
    <details><summary data-i18n="inspectSentBrief">Inspect the brief that will be sent</summary><textarea id="chatgpt-prompt" rows="8" class="code-text" readonly aria-label="ChatGPT mission brief"></textarea></details>
    <div class="button-row"><button class="button primary" id="chatgpt-generate" data-i18n="runPlan" disabled>Send mission using plan allowance</button><button class="button secondary" id="chatgpt-cancel" data-i18n="cancel" disabled>Cancel</button></div>
@@ -173,6 +200,37 @@
 <section class="view hidden" id="view-economy" aria-labelledby="economy-title">
  <div class="page-heading"><div class="eyebrow" data-i18n="economyEyebrow">ECONOMY STUDIO</div><h1 id="economy-title" data-i18n="economyTitle">Build an arrangement worth participating in.</h1><p data-i18n="economyCopy">Compare full declared costs, funding and each participant's outside option. Conditional calculations remain separate from actual sales and funds.</p></div>
  <div class="panel"><div class="section-heading"><h2 data-i18n="economyScenario">Your complete scenario</h2><button class="button secondary" id="economy-template" data-i18n="economyTemplate">Start a blank scenario</button></div><label for="economy-scenario" data-i18n="economyJSON">Participants, costs, funding and capable alternatives</label><textarea id="economy-scenario" class="code-text" rows="16"></textarea><div class="button-row"><button class="button primary" id="economy-evaluate" data-i18n="checkEconomics">Check the arrangement</button><button class="button secondary" id="economy-export" data-i18n="exportScenario">Export scenario</button></div></div><div id="economy-evaluation"></div>
+ <div class="panel proof-market-panel"><div class="section-heading"><div><div class="eyebrow" data-i18n="proofEyebrow">PROOF TO MARKET</div><h2 data-i18n="proofTitle">Who could make the missing capability viable?</h2></div><span class="tag" data-i18n="proofScope">PLANNING · NO TRANSACTIONS</span></div><p class="subtle" data-i18n="proofCopy">Connect a useful outcome to voluntary participation, staged funding, delivery and independent acceptance. Keep forecasts, commitments, collections and earned revenue separate.</p><button id="proof-example" class="button secondary" data-i18n="proofExample">Load an illustrative GENESIS arrangement</button><p class="bounded-details" data-i18n="proofExampleScope">The example uses invented planning assumptions. It establishes no buyer, funding, quotation or commercial success.</p><label for="proof-outcome" data-i18n="proofOutcome">Useful outcome</label><input id="proof-outcome" maxlength="4000"><label for="proof-acceptance" data-i18n="proofAcceptance">Independent acceptance</label><textarea id="proof-acceptance" rows="3" maxlength="4000"></textarea><details><summary data-i18n="proofInspect">Inspect participants, funding, costs and evidence</summary><label for="proof-plan" data-i18n="proofPlan">Complete arrangement (JSON)</label><textarea id="proof-plan" class="code-text" rows="18"></textarea></details><div class="button-row"><button id="proof-assess" class="button primary" data-i18n="proofAssess" disabled>Assess the proposed arrangement</button><button id="proof-export" class="button secondary" data-i18n="proofExport" disabled>Export plan and assessment</button></div><div id="proof-result" aria-live="polite"></div></div>
+</section>
+<section class="view hidden omega-workspace" id="view-genesis-next" aria-labelledby="omega-title">
+ <div class="omega-hero">
+  <div><div class="eyebrow" data-i18n="omegaEyebrow">Ω GENESIS NEXT / IMPROVE THE INVENTOR</div><h1 id="omega-title" data-i18n="omegaTitle">Invent the next capability.</h1><p data-i18n="omegaSubtitle">Investigate what holds GENESIS back. Construct a bounded upgrade, challenge it against capable alternatives, and test what it makes possible next.</p><div class="button-row"><button id="omega-refresh" class="button primary" data-i18n="omegaRefresh">Inspect current capabilities</button><button id="omega-export" class="button hero-secondary" data-i18n="omegaExport" disabled>Export Ω evidence</button></div></div><span class="omega-hero-symbol" aria-hidden="true">Ω⁺¹</span>
+ </div>
+ <p id="omega-status" class="connection-note" role="status" aria-live="polite"></p>
+ <div id="omega-summary" class="metrics omega-metrics"></div>
+ <div class="omega-cycle" aria-label="Self-improvement sequence"><span><b>01</b><span data-i18n="omegaObserve">Observe the limitation</span></span><span><b>02</b><span data-i18n="omegaConstruct">Construct a candidate</span></span><span><b>03</b><span data-i18n="omegaChallenge">Challenge the result</span></span><span><b>04</b><span data-i18n="omegaInherit">Test the successor</span></span></div>
+ <div class="panel omega-foundry">
+  <div class="section-heading"><div><div class="eyebrow" data-i18n="omegaFoundryEyebrow">THE SELF-UPGRADE FOUNDRY</div><h2 data-i18n="omegaFoundryTitle">Can verified work make the next experiment easier?</h2></div><span class="tag" data-i18n="omegaLocalExperiment">LOCAL EXPERIMENT · NO MODEL CALLS</span></div>
+  <p class="subtle" data-i18n="omegaFoundryCopy">Construct and evaluate a bounded evidence-reuse upgrade against the current HARNESS and a conventional cache. Then use the retained mechanism on a different experiment-selection task. Source changes, invalidation tests, resource measurements and the decision remain inspectable.</p>
+  <div class="omega-contract"><div><strong data-i18n="omegaScopeTitle">What you authorize</strong><p data-i18n="omegaScopeCopy">An isolated local candidate and a fixed qualification protocol. No production promotion, credentials, external requests or unrestricted generated code.</p></div><div><strong data-i18n="omegaProofTitle">What the result must establish</strong><p data-i18n="omegaProofCopy">Correctness, stale-evidence rejection and a fair successor comparison. A tie remains a tie. Unknown complete costs prevent a profitability or complete-cost advantage claim.</p></div></div>
+  <label class="omega-consent"><input id="omega-authorize" type="checkbox"><span data-i18n="omegaAuthorize">Authorize this bounded local construction and its independent checks.</span></label>
+  <div class="button-row"><button class="button primary" id="omega-run" data-i18n="omegaRun" disabled>Construct and challenge the upgrade</button><button class="button secondary" id="omega-discover" data-i18n="omegaDiscover" disabled>Find shared bottlenecks</button></div>
+  <p id="omega-run-status" class="bounded-details" role="status" aria-live="polite"></p>
+ </div>
+ <div id="omega-results" class="omega-results" aria-live="polite"></div>
+ <div class="section-heading omega-section-heading"><div><div class="eyebrow" data-i18n="omegaMapEyebrow">CAPABILITY MAP</div><h2 data-i18n="omegaMapTitle">What can GENESIS actually do?</h2></div><span class="subtle" data-i18n="omegaMapHint">Implementation, tests and independent qualification are distinct.</span></div>
+ <div id="omega-capabilities" class="omega-capability-grid"></div>
+ <div class="section-heading omega-section-heading"><div><div class="eyebrow" data-i18n="omegaBottleneckEyebrow">MISSING-CAPABILITY DISCOVERY</div><h2 data-i18n="omegaBottleneckTitle">One missing means. Several possible successors.</h2></div></div>
+ <div id="omega-candidates" class="omega-capability-grid"></div>
+ <div class="two-columns omega-two-columns">
+  <div class="panel"><div class="eyebrow" data-i18n="omegaVaultEyebrow">POSSIBILITY VAULT</div><h2 data-i18n="omegaVaultTitle">Keep the possibility. Record the obstacle.</h2><p class="subtle" data-i18n="omegaVaultCopy">A blocked opportunity is a question to revisit when a required capability changes.</p><div id="omega-opportunities" class="item-list"></div>
+   <details class="omega-add"><summary data-i18n="omegaAddOpportunity">Record an opportunity</summary><form id="omega-opportunity-form"><label for="omega-opportunity-title" data-i18n="omegaOpportunityTitle">Desired outcome</label><input id="omega-opportunity-title" maxlength="300" required><label for="omega-opportunity-blocker" data-i18n="omegaOpportunityBlocker">What prevents it today?</label><textarea id="omega-opportunity-blocker" maxlength="4000" rows="3" required></textarea><label for="omega-opportunity-capability" data-i18n="omegaRequiredCapabilities">Required capability IDs (comma-separated)</label><input id="omega-opportunity-capability" maxlength="1000" required><p class="bounded-details" data-i18n="omegaNoForecast">Prospective value and construction costs remain unknown until supported estimates are supplied.</p><button id="omega-opportunity-submit" type="submit" class="button secondary" data-i18n="omegaSaveOpportunity" disabled>Save to the vault</button></form></details>
+  </div>
+  <div class="panel"><div class="eyebrow" data-i18n="omegaFrontierEyebrow">FRONTIER REPLAY</div><h2 data-i18n="omegaFrontierTitle">What changed—and what deserves another look?</h2><p class="subtle" data-i18n="omegaFrontierCopy">Record a source-backed development and match it to blocked opportunities. Reported news can reopen an investigation; it cannot verify a capability.</p><div id="omega-frontier-events" class="item-list"></div>
+   <details class="omega-add"><summary data-i18n="omegaAddFrontier">Replay a reported development</summary><form id="omega-frontier-form"><label for="omega-frontier-title" data-i18n="omegaFrontierObservation">Development observed</label><input id="omega-frontier-title" maxlength="300" required><label for="omega-frontier-url" data-i18n="omegaFrontierURL">Public source URL</label><input id="omega-frontier-url" type="url" placeholder="https://…" required><label for="omega-frontier-hash" data-i18n="omegaFrontierHash">SHA-256 of the inspected source bytes</label><input id="omega-frontier-hash" class="code-text" pattern="[a-fA-F0-9]{64}" maxlength="64" required><label for="omega-frontier-capabilities" data-i18n="omegaFrontierCapabilities">Affected capability IDs (comma-separated)</label><input id="omega-frontier-capabilities" maxlength="1000" required><p class="bounded-details" data-i18n="omegaFrontierBoundary">The source and its digest are supplied by you. GENESIS records provenance without claiming to have retrieved or reproduced the development.</p><button id="omega-frontier-submit" class="button secondary" type="submit" data-i18n="omegaReplay" disabled>Record and replay</button></form></details>
+  </div>
+ </div>
+ <div class="panel omega-lineage-panel"><div class="section-heading"><div><div class="eyebrow" data-i18n="omegaLineageEyebrow">FLYWHEEL OBSERVATORY</div><h2 data-i18n="omegaLineageTitle">Which capability contributed to which successor?</h2></div></div><p class="subtle" data-i18n="omegaLineageCopy">Follow the recorded inheritance and measured contribution. Sequence alone does not establish compounding.</p><div id="omega-lineage"></div></div>
 </section>
 <section class="view hidden" id="view-history" aria-labelledby="history-title">
  <div class="page-heading"><div class="eyebrow" data-i18n="historyEyebrow">RUN HISTORY</div><h1 id="history-title" data-i18n="historyTitle">Continue from what actually happened.</h1><p data-i18n="historyCopy">Browser experiments belong to this project. Connected runs are stored by your local bridge and can be reopened after a restart.</p></div>

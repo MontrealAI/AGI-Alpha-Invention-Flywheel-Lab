@@ -1,6 +1,6 @@
 {
   "schema": "alpha-genesis-harness-qualification/v1",
-  "product_version": "0.2.0",
+  "product_version": "0.3.0",
   "status": "CANDIDATE_NOT_COMMERCIALLY_QUALIFIED",
   "source_revision": null,
   "scope": "The distribution manifest binds this record to packaged source. Local tests and authored protocol fixtures do not replace live authenticated provider, Pro, Codex, graphical OS or commercial authorization gates. Hosted exact-source receipts are reported separately.",
@@ -13,7 +13,7 @@
       "status": "NOT TESTED",
       "actual_test_or_required_procedure": "node --test tests/*.test.cjs; graphical first-use test",
       "evidence_location": "tests/acceptance.test.cjs",
-      "remaining_dependency_or_scope": "Final 0.2.0 source and graphical evidence"
+      "remaining_dependency_or_scope": "Final 0.3.0 source and graphical evidence"
     },
     {
       "id": "A2",
@@ -37,7 +37,7 @@
       "status": "PASS",
       "actual_test_or_required_procedure": "Real llama.cpp CPU model discovery, buffered completion and SSE completion without API credentials.",
       "evidence_location": "scripts/qualify_local_model.py; evidence/LOCAL-MODEL-VERIFICATION.json",
-      "remaining_dependency_or_scope": "Linux llama.cpp with pinned SmolLM2-135M protocol checks and Qwen3-1.7B construction. Other local runtimes are contract-configurable, not separately live-qualified. Preserved factual/malformed-output failures limit quality claims."
+      "remaining_dependency_or_scope": "Historical 0.2 source-bound live inference evidence; current 0.3 end-to-end live retest is separate (B6). Linux llama.cpp with pinned SmolLM2-135M protocol checks and Qwen3-1.7B construction. Other local runtimes are contract-configurable, not separately live-qualified. Preserved factual/malformed-output failures limit quality claims."
     },
     {
       "id": "B3",
@@ -64,12 +64,20 @@
       "remaining_dependency_or_scope": "Eligible SIWC consent and a host permitting native sandbox setup. Named permission profiles are supported by current CLI releases; this container denies the required namespace operation. No authenticated turn claimed."
     },
     {
+      "id": "B6",
+      "requirement": "Current 0.3 source end-to-end real local-model retest",
+      "status": "PASS",
+      "actual_test_or_required_procedure": "Actual HTTP onboarding, discovery/configuration, single builder (one inference call), separate builder/critic (two calls), export with external result x=17→34 and retained reuse x=41→82 through pinned llama.cpp b12242 and Qwen3-1.7B-Q4_K_M on Linux CPU.",
+      "evidence_location": "scripts/probe_local_onboarding.py; evidence/live-local-workflows-v0.3.json",
+      "remaining_dependency_or_scope": "Exact current source-byte run, not a live-model run from the later extracted ZIP. The first declared 8192-context preflight refusal is preserved; a server/configured16384 context succeeded. Other engines and multi-provider combinations lack live qualification. Ordinary arithmetic/reuse ties; full economic costs unknown."
+    },
+    {
       "id": "C1",
       "requirement": "Actual single-model and multi-agent orchestration",
       "status": "PASS",
       "actual_test_or_required_procedure": "Actual local Qwen3-1.7B single-builder (one inference call) and builder/critic (two distinct inference calls) completed frozen arithmetic construction.",
       "evidence_location": "evidence/live-local-workflows.json",
-      "remaining_dependency_or_scope": "Separate roles share one local model; multi-provider combinations are contract-tested. Narrow arithmetic task, not general reasoning or invention superiority."
+      "remaining_dependency_or_scope": "Historical 0.2 source-bound live inference evidence; current 0.3 end-to-end live retest is separate (B6). Separate roles share one local model; multi-provider combinations are contract-tested. Narrow arithmetic task, not general reasoning or invention superiority."
     },
     {
       "id": "D1",
@@ -77,7 +85,7 @@
       "status": "PASS",
       "actual_test_or_required_procedure": "Live local model constructed calculator.json; frozen checks passed; exported RUN_INSTRUMENT.py executed outside HARNESS and returned 34 for x=17.",
       "evidence_location": "evidence/live-local-workflows.json; evidence/workflow-qualification.json",
-      "remaining_dependency_or_scope": "Bounded arithmetic grammar. A useful executable construction, not arbitrary-code or open-world scientific validation."
+      "remaining_dependency_or_scope": "Historical 0.2 source-bound live inference evidence; current 0.3 end-to-end live retest is separate (B6). Bounded arithmetic grammar. A useful executable construction, not arbitrary-code or open-world scientific validation."
     },
     {
       "id": "E1",
@@ -163,7 +171,7 @@
       "id": "H3",
       "requirement": "Current Squarespace single-file size constraint",
       "status": "PASS",
-      "actual_test_or_required_procedure": "Official public Download-products documentation inspection, 2026-11-09",
+      "actual_test_or_required_procedure": "Official public Download-products documentation inspection, 2026-11-10",
       "evidence_location": "https://support.squarespace.com/hc/en-us/articles/206540787-Download-products",
       "remaining_dependency_or_scope": "One file under 300 MB; packager conservatively enforces <300000000 bytes; no account activity"
     },
@@ -190,6 +198,85 @@
       "actual_test_or_required_procedure": "Reconcile this matrix, final report and exact source/archive identity",
       "evidence_location": "evidence/QUALIFICATION-MATRIX.json",
       "remaining_dependency_or_scope": "Final acceptance evidence"
+    },
+    {
+      "id": "O1",
+      "requirement": "Ω capability map, possibility vault, frontier replay and shared bottleneck discovery",
+      "status": "PASS",
+      "actual_test_or_required_procedure": "Engine and independent regressions exercised persistent map/vault state, source conditions, shared bottlenecks and reported-only frontier replay.",
+      "evidence_location": "tests/test_genesis_next.py; tests/test_genesis_next_independent.py; evidence/OMEGA-INDEPENDENT-REVIEW.md",
+      "remaining_dependency_or_scope": "Finite declared observations and dependency rules. No general autonomous opportunity-discovery claim."
+    },
+    {
+      "id": "O2",
+      "requirement": "Actual bounded self-upgrade construction against HARNESS acceptance",
+      "status": "PASS",
+      "actual_test_or_required_procedure": "Isolated source subclass ran the actual HARNESS checker: baseline 7 verification calls, candidate 5, competent ordinary reuse 5; incorrect/changed/missing cases refused.",
+      "evidence_location": "bridge/genesis_next.py; evidence/OMEGA-PROTOCOL.md; evidence/OMEGA-INDEPENDENT-REVIEW.md",
+      "remaining_dependency_or_scope": "Authored bounded recipe; no automatic production promotion. Original checker/evaluator remain outside candidate edit authority. Exact archive reruns this demonstration."
+    },
+    {
+      "id": "O3",
+      "requirement": "Different successor task and causal reuse comparison",
+      "status": "PASS",
+      "actual_test_or_required_procedure": "Fresh nonce sampled after public source freeze: candidate and ordinary control correctly adjudicated 32/32 successor cases using 20 new checks plus 12 reuses; uncached and inheritance-withdrawn arms adjudicated 20/32 with 20 checks. Zero errors in all arms.",
+      "evidence_location": "evidence/OMEGA-FRESH-RESULTS.json; evidence/OMEGA-FRESH-SOURCE-FREEZE.json; evidence/OMEGA-INDEPENDENT-REVIEW.md",
+      "remaining_dependency_or_scope": "Distinct internal selection task with fresh generated instances, not a new external task family. All arms incur 24 initial plus 20 successor calls. Strong ordinary control ties; no complete-cost superiority."
+    },
+    {
+      "id": "O4",
+      "requirement": "Complete-cost self-upgrade advantage",
+      "status": "FAIL",
+      "actual_test_or_required_procedure": "Executed successor comparison ties competent conventional memoization; all arms incurred 24 initial plus 20 successor evaluator calls. Directly evaluating only the 32 successor cases would use 32 calls.",
+      "evidence_location": "evidence/OMEGA-FRESH-RESULTS.json; evidence/OMEGA-INDEPENDENT-REVIEW.md",
+      "remaining_dependency_or_scope": "Complete-cost superiority is not established. Engineering, verification, transfer, maintenance and host economic costs remain unknown. A comparison can pass correctness while failing this advantage gate."
+    },
+    {
+      "id": "O5",
+      "requirement": "Bilingual Ω user journey, authorization and evidence export",
+      "status": "PASS",
+      "actual_test_or_required_procedure": "Thirteen DOM scenarios exercise bilingual Ω entry, permission refusal/consent, observed capability/vault/replay behavior, conventional tie display, export and offline/error recovery.",
+      "evidence_location": "evidence/UI_GENESIS_NEXT_REPLAY.cjs",
+      "remaining_dependency_or_scope": "DOM route fixtures; source construction and fresh successor are independently exercised by the CLI and reviewer protocol. Actual rendered-browser status remains separately tracked under I1."
+    },
+    {
+      "id": "O6",
+      "requirement": "General autonomous discovery and construction of arbitrary HARNESS improvements",
+      "status": "FAIL",
+      "actual_test_or_required_procedure": "The implemented foundry uses a fixed authored source recipe. It does not autonomously discover and implement arbitrary HARNESS source changes.",
+      "evidence_location": "docs/OMEGA-GENESIS-NEXT.md",
+      "remaining_dependency_or_scope": "General model-driven missing-capability construction and unseen external-task validation remain implementation and research gaps, separate from external account credentials."
+    },
+    {
+      "id": "O7",
+      "requirement": "Live source-backed frontier monitoring and removal of real blocked conditions",
+      "status": "NOT TESTED",
+      "actual_test_or_required_procedure": "Authorized current-source retrieval, timestamped provenance, targeted reproduction and condition reevaluation",
+      "evidence_location": "bridge/adapters.py; bridge/genesis_next.py",
+      "remaining_dependency_or_scope": "Reported source changes are not independently reproduced capability changes"
+    },
+    {
+      "id": "O8",
+      "requirement": "Externally validated market and complete-cost commercial success",
+      "status": "NOT TESTED",
+      "actual_test_or_required_procedure": "Voluntary customer acceptance, executed rights/agreements, actual collections and complete-cost profit",
+      "evidence_location": "docs/OPERATOR.md",
+      "remaining_dependency_or_scope": "Economic models and declared values are not customers, funds or profit"
+    },
+    {
+      "id": "O9",
+      "requirement": "Proof-to-Market conditional arrangement planner",
+      "status": "PASS",
+      "actual_test_or_required_procedure": "Six planner tests and loopback HTTP/UI checks exercise explicit participants, outside options, complete-cost categories, contingent funding, staged commercial records and changed-scenario invalidation.",
+      "evidence_location": "bridge/proof_to_market.py; tests/test_proof_to_market.py; tests/test_genesis_http.py; evidence/UI_GENESIS_NEXT_REPLAY.cjs",
+      "remaining_dependency_or_scope": "Conditional numerical planning with operator declarations; no actual customer, executed financing, money movement or commercial success is established. O8 remains separate."
     }
-  ]
+  ],
+  "prior_source_context": {
+    "revision": "8d69f4f84d0b7e64fe7b55bc7a607294ecac08fa",
+    "pull_request": 324,
+    "harness_workflow": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/42756911389",
+    "observed_status": "success",
+    "scope": "Prior 0.2 source evidence; it does not qualify newly added 0.3 source."
+  }
 }

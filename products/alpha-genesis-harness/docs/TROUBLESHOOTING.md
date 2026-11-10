@@ -16,6 +16,7 @@
 | Quota exhausted | Stop, wait for the plan's documented reset or choose another explicitly authorized resource | No automatic purchase or API fallback |
 | Request timeout/outage | Inspect whether the provider may have accepted it; retry only under configured policy | Uncertain cost remains unknown |
 | Unsupported tool/JSON capability | Choose a demonstrably capable model or supported text workflow | Capability refusal, not forced dispatch |
+| CONTEXT preflight refusal | Shorten the prompt or requested output, or configure a larger context supported by both the running server and model; keep the declared limit accurate | This conservative estimate includes UTF-8 input bytes, framing allowance and output budget; it is not a universal hardware minimum |
 | Malformed model output | Inspect validation errors and ask for a corrected artifact within the schema | Failed attempt and unchanged acceptance target |
 | Tool execution rejected | Review the allowlist, paths, input bounds and acceptance contract | Do not enable unrestricted shell to force success |
 | Run interrupted/cancelled | Inspect durable state; resume supported steps from the same workspace | Checkpoint, previous attempts and any uncertain dispatch |
@@ -32,5 +33,7 @@ Décompressez d'abord tous les fichiers. Pour un problème de connexion, utilise
 Un refus OAuth doit être respecté. Une autorisation expirée se renouvelle par le parcours officiel. Un quota épuisé n'autorise ni achat de crédits ni changement automatique vers une API payante. L'accès au forfait ChatGPT dans une édition commerciale reste conditionnel à l'approbation applicable.
 
 Une sortie invalide doit être corrigée selon son schéma; ne modifiez pas le critère d'acceptation après le résultat. Après interruption, inspectez le point de reprise et conservez les essais précédents. Une empreinte incorrecte impose de retrouver les octets de confiance avant exécution.
+
+Un refus **CONTEXT** peut survenir avant toute inférence. Réduisez la demande ou la sortie prévue, ou configurez une fenêtre plus grande réellement prise en charge par le serveur et le modèle. L'estimation prudente inclut les octets d'entrée, une réserve de formatage et la sortie; elle ne définit pas un minimum matériel universel.
 
 Pour signaler un défaut, indiquez la version exacte, le système, le navigateur/Python, le résultat attendu et une reproduction synthétique. Ne transmettez jamais de clé, code d'autorisation, jeton ni donnée privée.

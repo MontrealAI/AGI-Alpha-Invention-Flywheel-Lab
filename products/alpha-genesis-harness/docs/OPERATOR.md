@@ -6,6 +6,8 @@ Specify the desired artifact, permitted inputs, input/output meaning, independen
 
 ## Choose the smallest adequate team
 
+Local model connections can be created through the Intelligence workspace after the customer's inference server is running. Presets address `127.0.0.1` on the selected port. Model catalog discovery, context/output settings and JSON/streaming/tool-use declarations are separate from successful inference. **Remove saved connection** removes the HARNESS connection settings; it does not stop or uninstall the external model server. No API key, model download or cloud activation is part of this local setup.
+
 Use one model when it can perform the task and independent checks can establish correctness. Add a critic to challenge assumptions; a researcher to gather evidence; a builder to construct an artifact; or an economist to inspect complete costs and participation. Assign exact provider/model identities and keep each provider authorization explicit. Never infer permission to send private context to a fallback provider.
 
 The executable workflow implements bounded propose → act → observe → critique → revise. Its permitted tools construct constrained, inspectable artifacts. It does not grant model text shell access or authority to send messages, spend money or sign contracts. A trusted local executor and its input grammar are part of the security boundary; review that grammar before relying on a new artifact type.

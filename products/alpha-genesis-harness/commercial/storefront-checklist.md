@@ -6,7 +6,7 @@
 
 Use the exact source-bound customer ZIP and its separate SHA-256 receipt from the qualified release. A working-tree candidate is not an authenticated release. If the acceptance matrix still marks required gates BLOCKED, FAIL or NOT TESTED, preserve that status and do not describe the complete commercial mandate as satisfied.
 
-The download should remain one ZIP with an ASCII filename. The official Squarespace help page checked on 9 November 2026 permits one file per Download product and sets a 300 MB ceiling. The packager enforces the more conservative **strictly under 300,000,000 bytes** rule. Split downloads are unnecessary for this product's small source distribution. Source: https://support.squarespace.com/hc/en-us/articles/206540787-Download-products
+The download should remain one ZIP with an ASCII filename. The official Squarespace help page checked on 10 November 2026 permits one file per Download product and sets a 300 MB ceiling. The packager enforces the more conservative **strictly under 300,000,000 bytes** rule. Split downloads are unnecessary for this product's small source distribution. Source: https://support.squarespace.com/hc/en-us/articles/206540787-Download-products
 
 ## Vincent's final manual steps
 

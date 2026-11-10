@@ -51,6 +51,7 @@ jobs:
           node products/alpha-genesis-harness/evidence/UI_CONNECTED_ACCEPTANCE.cjs
           node products/alpha-genesis-harness/evidence/UI_AGENTIC_REPLAY.cjs
           node products/alpha-genesis-harness/evidence/UI_HTTP_WORKFLOW_REPLAY.cjs
+          node products/alpha-genesis-harness/evidence/UI_GENESIS_NEXT_REPLAY.cjs
       - name: Record official Codex sandbox operation without model authentication
         run: |
           mkdir -p "$RUNNER_TEMP/harness-codex" "$RUNNER_TEMP/harness-assets"
@@ -156,8 +157,8 @@ jobs:
           GH_REPO: ${{ github.repository }}
           SOURCE_SHA: ${{ needs.qualify.outputs.source_sha }}
         run: |
-          tag="alpha-genesis-harness-v0.2.0-rc-${SOURCE_SHA:0:12}"
-          gh release create "$tag" "$RUNNER_TEMP/harness-received/"* --target "$SOURCE_SHA" --prerelease --latest=false --title "ALPHA GENESIS HARNESS 0.2.0 — release candidate" --notes-file products/alpha-genesis-harness/docs/RELEASE-NOTES.md
+          tag="alpha-genesis-harness-v0.3.0-rc-${SOURCE_SHA:0:12}"
+          gh release create "$tag" "$RUNNER_TEMP/harness-received/"* --target "$SOURCE_SHA" --prerelease --latest=false --title "ALPHA GENESIS HARNESS 0.3.0 — release candidate" --notes-file products/alpha-genesis-harness/docs/RELEASE-NOTES.md
       - name: Download the published archive
         env:
           GH_TOKEN: ${{ github.token }}
@@ -166,7 +167,7 @@ jobs:
           ARCHIVE_NAME: ${{ needs.qualify.outputs.archive_name }}
           ARCHIVE_SHA: ${{ needs.qualify.outputs.archive_sha }}
         run: |
-          tag="alpha-genesis-harness-v0.2.0-rc-${SOURCE_SHA:0:12}"
+          tag="alpha-genesis-harness-v0.3.0-rc-${SOURCE_SHA:0:12}"
           gh release download "$tag" --pattern "$ARCHIVE_NAME" --dir "$RUNNER_TEMP/harness-published"
       - name: Operate the published archive without publication credentials
         env:

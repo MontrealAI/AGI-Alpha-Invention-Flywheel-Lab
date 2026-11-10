@@ -314,7 +314,7 @@ class CodexService:
                 process.stdin.write(json.dumps(message, allow_nan=False) + "\n")
                 process.stdin.flush()
 
-            send("initialize", {"clientInfo": {"name": APP_NAME, "title": "ALPHA GENESIS HARNESS", "version": "0.2.0"}, "capabilities": {"experimentalApi": True}}, 0)
+            send("initialize", {"clientInfo": {"name": APP_NAME, "title": "ALPHA GENESIS HARNESS", "version": "0.3.0"}, "capabilities": {"experimentalApi": True}}, 0)
             thread_id, turn_id, text, completed, interrupted = None, None, "", False, None
             total = 0
             while True:

@@ -20,7 +20,7 @@ spec = importlib.util.spec_from_file_location("independent_release_target", SCRI
 package = importlib.util.module_from_spec(spec)
 assert spec and spec.loader
 spec.loader.exec_module(package)
-ROOT = "ALPHA_GENESIS_HARNESS_0.2.0/"
+ROOT = "ALPHA_GENESIS_HARNESS_0.3.0/"
 MANIFEST = ROOT + "RELEASE-MANIFEST.json"
 
 
@@ -30,10 +30,10 @@ class IndependentReleaseTests(unittest.TestCase):
         self.path = Path(self.tmp.name) / "fixture.zip"
         # Deliberately made by this evaluator, not by target build().
         self.files = {name: ("Independent fixture for " + name).encode() for name in package.REQUIRED}
-        self.files["VERSION.json"] = b'{"version":"0.2.0"}'
+        self.files["VERSION.json"] = b'{"version":"0.3.0"}'
         self.manifest = {
             "schema":"alpha-genesis-harness-release/v1",
-            "version":"0.2.0",
+            "version":"0.3.0",
             "source_revision":"0"*40,
             "source_product_tree":None,
             "build_mode":"candidate",

@@ -152,7 +152,7 @@ print(json.dumps(r,sort_keys=True))
                     return message["result"]
             raise ValueError()
 
-        rpc(0, "initialize", {"clientInfo": {"name": "alpha_genesis_harness", "title": "HARNESS sandbox check", "version": "0.2.0"},
+        rpc(0, "initialize", {"clientInfo": {"name": "alpha_genesis_harness", "title": "HARNESS sandbox check", "version": "0.3.0"},
                                "capabilities": {"experimentalApi": True}})
         process.stdin.write('{"method":"initialized","params":{}}\n')
         process.stdin.flush()

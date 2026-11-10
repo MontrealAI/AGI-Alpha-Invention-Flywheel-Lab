@@ -19,7 +19,7 @@ from pathlib import Path, PurePosixPath
 PRODUCT = Path(__file__).resolve().parents[1]
 REPOSITORY = PRODUCT.parents[1]
 PREFIX = "products/alpha-genesis-harness/"
-VERSION = "0.2.0"
+VERSION = "0.3.0"
 MAX_ARCHIVE = 300_000_000
 ALLOWED_DIRS = {"app", "bridge", "docs", "scripts", "tests", "evidence", "commercial", "examples"}
 ALLOWED_ROOT = {"LICENSE", "NOTICE", "README.md", "SECURITY.md", "CONTRIBUTING.md", "START-HERE.html", "GUIDE.html", "VERSION.json", "THIRD-PARTY.json", "launch.py", "Launch-HARNESS.command", "Launch-HARNESS.sh", "Launch-HARNESS.cmd", "requirements-chatgpt.txt"}

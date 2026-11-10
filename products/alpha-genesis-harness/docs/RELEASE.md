@@ -44,7 +44,7 @@ Keep the exact archive, public digest and release receipt for each sold version.
 
 ## Operate the exact archive with UI integration checks
 
-The qualifier extracts the verified immutable ZIP into a fresh temporary directory and runs its JavaScript acceptance tests, every Python component test, launcher help and workflow construction demonstration. The demonstration has authored model responses; it is not live inference.
+The qualifier extracts the verified immutable ZIP into a fresh temporary directory and runs its JavaScript acceptance tests, every Python component test, launcher help, the Linux source-launcher entry point where available, workflow construction, the Ω GENESIS NEXT experiment and a separately frozen fresh-instance successor comparison. The workflow demonstration has authored model responses; it is not live inference. The Ω experiment constructs an authored bounded source modification and measures actual checker operations. Neither demonstration establishes autonomous scientific discovery.
 
 For the complete DOM/HTTP integration gate, install the development-only dependency from the committed `tests/dom/package-lock.json` using `npm ci --ignore-scripts --no-audit --no-fund` in that directory. Pass its absolute `node_modules` directory explicitly:
 
@@ -56,8 +56,8 @@ python3 scripts/qualify_archive.py /absolute/release.zip \
   --dom-modules /absolute/development-node_modules
 ```
 
-The qualifier checks the installed jsdom version against the packaged requirement and runs all five UI replays against the extracted application. The HTTP replay starts the actual connector and workflow engine with authored model fixtures. Credentials are not inherited. Omitting `--dom-modules` leaves this UI criterion explicitly **NOT TESTED**. DOM emulation does not replace actual rendered-browser, assistive-technology or cross-OS testing.
+The qualifier checks the installed jsdom version against the packaged requirement and runs all six UI replays against the extracted application. The HTTP replay starts the actual connector and workflow engine with authored model fixtures. Credentials are not inherited. Omitting `--dom-modules` leaves this UI criterion explicitly **NOT TESTED**. DOM emulation does not replace actual rendered-browser, assistive-technology or cross-OS testing.
 
 ### Français
 
-Le qualificateur vérifie le ZIP exact, l’extrait dans un dossier neuf et exécute ses tests, son lanceur et la démonstration de construction. L’option `--dom-modules` ajoute les cinq scénarios d’interface sur les octets extraits, avec la version jsdom déclarée. Le scénario HTTP utilise le vrai connecteur et le moteur, mais des réponses de modèles préparées. Sans cette option, le critère d’interface reste explicitement non testé. Ces contrôles ne remplacent pas les essais graphiques et multiplateformes.
+Le qualificateur vérifie le ZIP exact, l’extrait dans un dossier neuf et exécute ses tests, son lanceur et la démonstration de construction. L’option `--dom-modules` ajoute les six scénarios d’interface sur les octets extraits, avec la version jsdom déclarée. Le scénario HTTP utilise le vrai connecteur et le moteur, mais des réponses de modèles préparées. Sans cette option, le critère d’interface reste explicitement non testé. Ces contrôles ne remplacent pas les essais graphiques et multiplateformes.

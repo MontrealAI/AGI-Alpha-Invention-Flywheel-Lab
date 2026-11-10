@@ -1,0 +1,552 @@
+{
+  "schema": "alpha-genesis-live-local-onboarding/v1",
+  "created_at": "2026-11-10T05:38:01.345792+00:00",
+  "platform": "Linux-6.18.57-x86_64-with-glibc2.41",
+  "source_sha256": {
+    "bridge/adapters.py": "9df37397ab9931d0738f0148ca15703f0ecbfa6c88149987684cf8f9f05ac22e",
+    "bridge/services.py": "fed69688610d2d8045d7fa95eb1c15eebea8f62ee8ccfed2920cf1dc6a67c0c6",
+    "bridge/server.py": "16579dbadcc0574fb0ec1182148cf39d8347b69e941fdd72e18d0e44deed2479",
+    "bridge/onboarding.py": "6a94b257aefa5d50a26ad394af3569d1435bb4cf17a9e2a452b0da2e488dfbdc",
+    "bridge/workflows.py": "05203df3906e44be13e4ed51e4b9766f9e260fd3ee8560bfd99ec3ed4a75cfd9",
+    "bridge/instruments.py": "787466086e1303599aa4576c1c677e732257efa10d2bf932b96a705a96ac03b9",
+    "bridge/streaming.py": "dd4cd766fb911e350358d4f31f7053b4d6847b189243cf1ce1108ebc834b21ec",
+    "scripts/probe_local_onboarding.py": "cc81746dd2a82c54a59786588fd6e205551773b9d4532bdcfad955dd99de4cc5"
+  },
+  "status": "PASS",
+  "runs": [
+    {
+      "policy": "single-model",
+      "status": "complete",
+      "wall_seconds": 8.601181257000007,
+      "model_calls": 1,
+      "iterations": 1,
+      "actions": 1,
+      "verification": {
+        "passed": true,
+        "checks": [
+          {
+            "artifact": "calculator.json",
+            "kind": "instrument",
+            "passed": true,
+            "actual": {
+              "result": 6
+            },
+            "expected": {
+              "result": 6
+            },
+            "operations": 3
+          },
+          {
+            "artifact": "calculator.json",
+            "kind": "instrument",
+            "passed": true,
+            "actual": {
+              "result": 0
+            },
+            "expected": {
+              "result": 0
+            },
+            "operations": 3
+          }
+        ],
+        "spec_hash": "d199f17bbcaa5ae0bd75459cd433314b6af451a760735b30a8ea3df686184ca0",
+        "artifact_hashes": {
+          "calculator.json": "415205a99a1b6906dd10c055f9ff5a2d3cc171f7af73791df03323af66e888e4",
+          "RUN_INSTRUMENT.py": "787466086e1303599aa4576c1c677e732257efa10d2bf932b96a705a96ac03b9"
+        },
+        "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification."
+      },
+      "artifacts": {
+        "calculator.json": {
+          "sha256": "415205a99a1b6906dd10c055f9ff5a2d3cc171f7af73791df03323af66e888e4",
+          "bytes": 190,
+          "kind": "instrument"
+        },
+        "RUN_INSTRUMENT.py": {
+          "sha256": "787466086e1303599aa4576c1c677e732257efa10d2bf932b96a705a96ac03b9",
+          "bytes": 6633,
+          "kind": "trusted_runner"
+        }
+      },
+      "events": [
+        {
+          "kind": "model_completed",
+          "detail": {
+            "role": "builder",
+            "provider": "local-llama-cpp",
+            "model": "Qwen3-1.7B-Q4_K_M",
+            "requested_model": "Qwen3-1.7B-Q4_K_M",
+            "reported_model": "Qwen3-1.7B-Q4_K_M",
+            "run_id": "wf_840c77e9b5dd95ba4b8202a0_9644f2de8567fbcb",
+            "usage": {
+              "input_tokens": 516,
+              "output_tokens": 55
+            },
+            "cost": {
+              "currency": "USD",
+              "amount": 0.0,
+              "accounted": 0.0,
+              "basis": "reported_usage_at_user_rates",
+              "attempts": 1,
+              "complete_cost_known": false
+            },
+            "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+            "response_sha256": "3b2159a23da30df0430eb747572293fd8485fa708d27366920cb9074dd31d850"
+          }
+        }
+      ],
+      "external_execution": {
+        "returncode": 0,
+        "result": {
+          "output": {
+            "result": 34
+          },
+          "operations": 3,
+          "scope": "Bounded declarative execution; acceptance must be checked separately."
+        },
+        "accepted": true
+      },
+      "reuse": {
+        "capability_id": "wf_840c77e9b5dd95ba4b8202a0",
+        "outputs": {
+          "calculator.json": {
+            "output": {
+              "result": 82
+            },
+            "operations": 3,
+            "scope": "Bounded declarative execution; acceptance must be checked separately."
+          }
+        },
+        "verification": "EXECUTED_NOT_SUCCESSOR_ACCEPTED",
+        "scope": "Original acceptance does not verify this new input's real-world meaning or applicability."
+      },
+      "reuse_accepted_on_frozen_case": true,
+      "strong_control": {
+        "output": {
+          "result": 82
+        },
+        "accepted": true,
+        "advantage": "NOT_ESTABLISHED; direct arithmetic and ordinary reuse tie."
+      },
+      "constructed_instrument": {
+        "name": "Multiply",
+        "inputs": [
+          "x"
+        ],
+        "outputs": {
+          "result": {
+            "op": "mul",
+            "args": [
+              {
+                "field": "x"
+              },
+              2
+            ]
+          }
+        }
+      }
+    },
+    {
+      "policy": "actor-critic",
+      "status": "complete",
+      "wall_seconds": 17.280605342999934,
+      "model_calls": 2,
+      "iterations": 1,
+      "actions": 1,
+      "verification": {
+        "passed": true,
+        "checks": [
+          {
+            "artifact": "calculator.json",
+            "kind": "instrument",
+            "passed": true,
+            "actual": {
+              "result": 6
+            },
+            "expected": {
+              "result": 6
+            },
+            "operations": 3
+          },
+          {
+            "artifact": "calculator.json",
+            "kind": "instrument",
+            "passed": true,
+            "actual": {
+              "result": 0
+            },
+            "expected": {
+              "result": 0
+            },
+            "operations": 3
+          }
+        ],
+        "spec_hash": "3eb1b84305237f3614c9a98663884ce7fe10bf2eaba6e793882be12d282a46dc",
+        "artifact_hashes": {
+          "RUN_INSTRUMENT.py": "787466086e1303599aa4576c1c677e732257efa10d2bf932b96a705a96ac03b9",
+          "calculator.json": "415205a99a1b6906dd10c055f9ff5a2d3cc171f7af73791df03323af66e888e4"
+        },
+        "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification."
+      },
+      "artifacts": {
+        "RUN_INSTRUMENT.py": {
+          "bytes": 6633,
+          "kind": "trusted_runner",
+          "sha256": "787466086e1303599aa4576c1c677e732257efa10d2bf932b96a705a96ac03b9"
+        },
+        "calculator.json": {
+          "bytes": 190,
+          "kind": "instrument",
+          "sha256": "415205a99a1b6906dd10c055f9ff5a2d3cc171f7af73791df03323af66e888e4"
+        }
+      },
+      "events": [
+        {
+          "kind": "model_completed",
+          "detail": {
+            "cost": {
+              "accounted": 0.0,
+              "amount": 0.0,
+              "attempts": 1,
+              "basis": "reported_usage_at_user_rates",
+              "complete_cost_known": false,
+              "currency": "USD"
+            },
+            "model": "Qwen3-1.7B-Q4_K_M",
+            "provider": "local-llama-cpp",
+            "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+            "reported_model": "Qwen3-1.7B-Q4_K_M",
+            "requested_model": "Qwen3-1.7B-Q4_K_M",
+            "response_sha256": "6cddd573055a46d50f4c155ef6d90712c784370ed3023adf1bfb75dba4c2d8e5",
+            "role": "builder",
+            "run_id": "wf_1dcc418d495a1c9da901cab6_ea30729f8d3df12b",
+            "usage": {
+              "input_tokens": 516,
+              "output_tokens": 115
+            }
+          }
+        },
+        {
+          "kind": "model_completed",
+          "detail": {
+            "role": "critic",
+            "provider": "local-llama-cpp",
+            "model": "Qwen3-1.7B-Q4_K_M",
+            "requested_model": "Qwen3-1.7B-Q4_K_M",
+            "reported_model": "Qwen3-1.7B-Q4_K_M",
+            "run_id": "wf_1dcc418d495a1c9da901cab6_e130639b80d0a350",
+            "usage": {
+              "input_tokens": 640,
+              "output_tokens": 61
+            },
+            "cost": {
+              "currency": "USD",
+              "amount": 0.0,
+              "accounted": 0.0,
+              "basis": "reported_usage_at_user_rates",
+              "attempts": 1,
+              "complete_cost_known": false
+            },
+            "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+            "response_sha256": "7b6353b1d450212afc48cb36afedb39e4438f231937900b0961f4272fdb64075"
+          }
+        },
+        {
+          "kind": "critique",
+          "detail": {
+            "verdict": "accept",
+            "feedback": "The artifact satisfies the deterministic checks against operator-frozen cases. The calculator.json correctly implements the function result = x * 2 as required, with the specified inputs and outputs. The checks are valid and meet the specified criteria.",
+            "independence": "Separate model invocation; model agreement is not independent verification."
+          }
+        }
+      ],
+      "external_execution": {
+        "returncode": 0,
+        "result": {
+          "output": {
+            "result": 34
+          },
+          "operations": 3,
+          "scope": "Bounded declarative execution; acceptance must be checked separately."
+        },
+        "accepted": true
+      },
+      "reuse": {
+        "capability_id": "wf_1dcc418d495a1c9da901cab6",
+        "outputs": {
+          "calculator.json": {
+            "output": {
+              "result": 82
+            },
+            "operations": 3,
+            "scope": "Bounded declarative execution; acceptance must be checked separately."
+          }
+        },
+        "verification": "EXECUTED_NOT_SUCCESSOR_ACCEPTED",
+        "scope": "Original acceptance does not verify this new input's real-world meaning or applicability."
+      },
+      "reuse_accepted_on_frozen_case": true,
+      "strong_control": {
+        "output": {
+          "result": 82
+        },
+        "accepted": true,
+        "advantage": "NOT_ESTABLISHED; direct arithmetic and ordinary reuse tie."
+      },
+      "constructed_instrument": {
+        "name": "Multiply",
+        "inputs": [
+          "x"
+        ],
+        "outputs": {
+          "result": {
+            "op": "mul",
+            "args": [
+              {
+                "field": "x"
+              },
+              2
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "scope": "Current source-byte local onboarding, construction, export and bounded reuse regression. Fixed arithmetic cases are public regression cases, not fresh research confirmation or a general invention advantage.",
+  "model": {
+    "configured_alias": "Qwen3-1.7B-Q4_K_M",
+    "weights_sha256": "d2387ca2dbfee2ffabce7120d3770dadca0b293052bc2f0e138fdc940d9bc7b5",
+    "weights_bytes": 1282439264,
+    "server_sha256": "fe211d00c4754aa67aaa492d2c755ab0f6ef60bf30eee3c0c74a3496189cde17",
+    "server_arguments": [
+      "-m",
+      "PINNED_MODEL.gguf",
+      "--host",
+      "127.0.0.1",
+      "--port",
+      "18767",
+      "-c",
+      "16384",
+      "-t",
+      "2",
+      "--n-gpu-layers",
+      "0",
+      "--no-webui",
+      "--alias",
+      "Qwen3-1.7B-Q4_K_M",
+      "--chat-template-kwargs",
+      "{\"enable_thinking\":false}",
+      "--reasoning-budget",
+      "0"
+    ]
+  },
+  "protocol": {
+    "policies": [
+      "single-model",
+      "actor-critic"
+    ],
+    "construction_cases": [
+      {
+        "x": 3,
+        "expected": 6
+      },
+      {
+        "x": 0,
+        "expected": 0
+      }
+    ],
+    "export_case": {
+      "x": 17,
+      "expected": 34
+    },
+    "reuse_case": {
+      "x": 41,
+      "expected": 82
+    },
+    "max_iterations": 3,
+    "max_actions": 10,
+    "max_output_tokens": 2048,
+    "context_window": 16384,
+    "strong_control": "Direct multiplication and ordinary equal-content reuse; both calculate 82. No advantage presumed."
+  },
+  "discovery": {
+    "models": [
+      {
+        "id": "Qwen3-1.7B-Q4_K_M",
+        "configured": false
+      }
+    ],
+    "scope": "Provider-reported first page; listing does not prove generation access or model capability.",
+    "has_more": false,
+    "engine": "llama-cpp",
+    "port": 18767,
+    "endpoint": "http://127.0.0.1:18767/v1"
+  },
+  "onboarding": {
+    "connected": true,
+    "saved": true,
+    "inference_verified": false,
+    "provider": {
+      "id": "local-llama-cpp",
+      "label": "llama.cpp · local",
+      "kind": "openai",
+      "models": [
+        "Qwen3-1.7B-Q4_K_M"
+      ],
+      "ready": true,
+      "reason": "Ready",
+      "capabilities": {
+        "text": true,
+        "json": false,
+        "streaming": false,
+        "tool_calling": false,
+        "discovery": true
+      },
+      "model_capabilities": {
+        "Qwen3-1.7B-Q4_K_M": {
+          "json": false,
+          "streaming": false,
+          "text": true,
+          "tool_calling": false
+        }
+      },
+      "local": true,
+      "remote": false,
+      "category": "local",
+      "usage_class": "local_compute",
+      "qualification": "CONTRACT_TESTED_ONLY"
+    }
+  },
+  "source_unchanged_during_execution": true,
+  "resources": {
+    "wall_seconds": 28.587282018999986,
+    "child_cpu_seconds": 53.80317599999999,
+    "separately_billed_model_requests": 0,
+    "complete_cost_known": false,
+    "unknown_costs": [
+      "hardware",
+      "electricity",
+      "engineering",
+      "maintenance",
+      "opportunity cost"
+    ]
+  },
+  "downloads": [
+    {
+      "name": "llama-b12242-bin-ubuntu-x64.tar.gz",
+      "url": "https://github.com/ggml-org/llama.cpp/releases/download/b12242/llama-b12242-bin-ubuntu-x64.tar.gz",
+      "bytes": 23158635,
+      "sha256": "909eef25cd53e6601c8a07c866d8dbb2983e74177088d55182137a8fb8255d62",
+      "expected_digest_source": "Existing pinned upstream-integrity receipt in evidence/LOCAL-MODEL-VERIFICATION.json",
+      "matches_expected": true
+    },
+    {
+      "name": "Qwen3-1.7B-Q4_K_M.gguf",
+      "url": "https://huggingface.co/ggml-org/Qwen3-1.7B-GGUF/resolve/daeb8e2d528a760970442092f6bf1e55c3b659eb/Qwen3-1.7B-Q4_K_M.gguf",
+      "bytes": 1282439264,
+      "sha256": "d2387ca2dbfee2ffabce7120d3770dadca0b293052bc2f0e138fdc940d9bc7b5",
+      "expected_digest_source": "Existing pinned upstream LFS receipt in evidence/live-local-workflows.json",
+      "matches_expected": true
+    }
+  ],
+  "prior_attempts": [
+    {
+      "status": "FAIL",
+      "created_at": "2026-11-10T05:37:08.967043+00:00",
+      "source_sha256": {
+        "bridge/adapters.py": "9df37397ab9931d0738f0148ca15703f0ecbfa6c88149987684cf8f9f05ac22e",
+        "bridge/services.py": "fed69688610d2d8045d7fa95eb1c15eebea8f62ee8ccfed2920cf1dc6a67c0c6",
+        "bridge/server.py": "16579dbadcc0574fb0ec1182148cf39d8347b69e941fdd72e18d0e44deed2479",
+        "bridge/onboarding.py": "6a94b257aefa5d50a26ad394af3569d1435bb4cf17a9e2a452b0da2e488dfbdc",
+        "bridge/workflows.py": "05203df3906e44be13e4ed51e4b9766f9e260fd3ee8560bfd99ec3ed4a75cfd9",
+        "bridge/instruments.py": "787466086e1303599aa4576c1c677e732257efa10d2bf932b96a705a96ac03b9",
+        "bridge/streaming.py": "dd4cd766fb911e350358d4f31f7053b4d6847b189243cf1ce1108ebc834b21ec",
+        "scripts/probe_local_onboarding.py": "4df35fed13ecdb5d83df2365fce64debf34e5719d057ff4eaa821eef7b03267b"
+      },
+      "runs": [
+        {
+          "policy": "single-model",
+          "status": "paused",
+          "wall_seconds": 0.004681659000198124,
+          "model_calls": 1,
+          "iterations": 1,
+          "actions": 0,
+          "verification": {
+            "checks": [],
+            "passed": false,
+            "scope": "No checks executed."
+          },
+          "artifacts": {},
+          "events": [
+            {
+              "kind": "model_error",
+              "detail": {
+                "code": "CONTEXT",
+                "message": "Model request failed. Its provider allowance or cost may have been consumed; inspect connection before explicitly resuming.",
+                "session_budget_snapshot": {
+                  "committed": 0.0,
+                  "currency": "USD",
+                  "limit": 0.0,
+                  "locked": false,
+                  "remaining": 0.0,
+                  "reserved": 0.0,
+                  "scope": "process-session"
+                },
+                "usage_status": "UNKNOWN"
+              }
+            }
+          ]
+        },
+        {
+          "policy": "actor-critic",
+          "status": "paused",
+          "wall_seconds": 0.004668389000016759,
+          "model_calls": 1,
+          "iterations": 1,
+          "actions": 0,
+          "verification": {
+            "checks": [],
+            "passed": false,
+            "scope": "No checks executed."
+          },
+          "artifacts": {},
+          "events": [
+            {
+              "kind": "model_error",
+              "detail": {
+                "code": "CONTEXT",
+                "message": "Model request failed. Its provider allowance or cost may have been consumed; inspect connection before explicitly resuming.",
+                "session_budget_snapshot": {
+                  "committed": 0.0,
+                  "currency": "USD",
+                  "limit": 0.0,
+                  "locked": false,
+                  "remaining": 0.0,
+                  "reserved": 0.0,
+                  "scope": "process-session"
+                },
+                "usage_status": "UNKNOWN"
+              }
+            }
+          ]
+        }
+      ],
+      "resources": {
+        "wall_seconds": 2.650671215000102,
+        "child_cpu_seconds": 1.772175,
+        "separately_billed_model_requests": 0,
+        "complete_cost_known": false,
+        "unknown_costs": [
+          "hardware",
+          "electricity",
+          "engineering",
+          "maintenance",
+          "opportunity cost"
+        ]
+      },
+      "lesson": "An 8192-token declared context refused both requests under conservative prompt-byte plus framing/output bounds before inference. The subsequent separate run used both an actual server context and configured context of 16384. Acceptance cases, safeguards and requested output were unchanged."
+    }
+  ],
+  "reproduce": "python3 scripts/probe_local_onboarding.py --server /path/to/llama-b12242/llama-server --model /path/to/Qwen3-1.7B-Q4_K_M.gguf --alias Qwen3-1.7B-Q4_K_M --output /absolute/new/proof",
+  "evidence_status": "Current executed source-byte identities are recorded above. Final packaged source must match these hashes; this receipt does not assert every unrelated product feature was exercised."
+}

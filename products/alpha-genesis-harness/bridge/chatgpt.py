@@ -46,15 +46,27 @@ def _decode(value):
     return base64.b64decode(value + "=" * (-len(value) % 4), altchars=b"-_", validate=True)
 
 
-def _error(raw, status):
-    """Keep stable codes and HTTP status, never echo arbitrary remote text or tokens."""
+def _error(raw, status, request_id=None, sensitive=()):
+    """Preserve useful error metadata without returning arbitrary remote text/tokens."""
     code = "CHATGPT_HTTP"
+    param, shape = None, "non-json"
+    def safe_identifier(value):
+        if (isinstance(value, str) and re.fullmatch(r"[A-Za-z0-9_.:/\[\]-]{1,160}", value)
+                and not any(secret and secret in value for secret in sensitive)):
+            return value
+        return None
     try:
         value = strict_json(raw)
-        error = value.get("error", {})
+        if isinstance(value, dict):
+            shape = "error-object" if isinstance(value.get("error"), dict) else "error-string" if isinstance(value.get("error"), str) else "detail-object" if "detail" in value else "object"
+        else:
+            shape = "json-" + type(value).__name__
+        error = value.get("error", {}) if isinstance(value, dict) else {}
         candidate = error if isinstance(error, str) else error.get("code")
-        if isinstance(candidate, str) and re.fullmatch(r"[A-Za-z0-9_.-]{1,120}", candidate):
+        if safe_identifier(candidate) and re.fullmatch(r"[A-Za-z0-9_.-]{1,120}", candidate):
             code = candidate
+        if isinstance(error, dict):
+            param = safe_identifier(error.get("param"))
     except (BridgeError, AttributeError, TypeError):
         pass
     messages = {
@@ -64,7 +76,18 @@ def _error(raw, status):
         "subscription_sharing_unsupported_capability": "The selected model or request capability is unsupported by ChatGPT plan usage.",
         "access_denied": "ChatGPT authorization was declined. No inference was sent.",
     }
-    return BridgeError(code, messages.get(code, f"ChatGPT request failed (HTTP {status}; {code}). Check the connection and its permissions."), status if 400 <= status <= 599 else 502)
+    request_id = safe_identifier(request_id)
+    message = messages.get(code, f"ChatGPT request failed (HTTP {status}; {code}). Check the connection and its permissions.")
+    if param:
+        message += f" Parameter: {param}."
+    if request_id:
+        message += f" Request ID: {request_id}."
+    if shape == "detail-object":
+        message += " The provider returned a direct-admission detail response."
+    error = BridgeError(code, message, status if 400 <= status <= 599 else 502)
+    error.diagnostics = {"http_status": status, "body_shape": shape, "request_id": request_id,
+                         "error_code": code, "error_param": param}
+    return error
 
 
 class PlanTransport:
@@ -90,8 +113,10 @@ class PlanTransport:
             return build_opener(ProxyHandler({}), NoRedirect()).open(Request(url, data=data, headers=headers), timeout=self.timeout)
         except HTTPError as exc:
             raw, status = exc.read(16384), exc.code
+            request_id = exc.headers.get("x-request-id") if exc.headers else None
             exc.close()
-            raise _error(raw, status) from None
+            sensitive = [token] + ([str(v) for k, v in form.items() if k in {"code", "code_verifier", "refresh_token", "token"}] if form else [])
+            raise _error(raw, status, request_id=request_id, sensitive=sensitive) from None
         except (URLError, OSError, TimeoutError):
             raise BridgeError("CHATGPT_CONNECTION", "ChatGPT connection failed. Sent requests may have consumed plan allowance; no automatic retry or billing fallback occurred.", 502) from None
 
@@ -149,7 +174,9 @@ def verify_identity(token, client_id, nonce, transport, expected_subject=None, n
     try:
         header_raw, payload_raw, signature = token.split(".")
         header, claims = strict_json(_decode(header_raw)), strict_json(_decode(payload_raw))
-        if header.get("alg") != "RS256" or not isinstance(header.get("kid"), str):
+        if (not isinstance(header, dict) or not isinstance(claims, dict) or
+                header.get("alg") != "RS256" or not isinstance(header.get("kid"), str) or
+                not header["kid"] or "crit" in header or header.get("b64", True) is not True):
             raise ValueError()
         metadata = transport.json(ISSUER + "/.well-known/openid-configuration")
         jwks_uri = metadata["jwks_uri"]
@@ -167,11 +194,13 @@ def verify_identity(token, client_id, nonce, transport, expected_subject=None, n
         audience = claims.get("aud")
         audiences = audience if isinstance(audience, list) else [audience]
         if (claims.get("iss") != ISSUER or client_id not in audiences or
+                not audiences or any(not isinstance(a, str) or not a for a in audiences) or
+                len(audiences) != len(set(audiences)) or
                 (len(audiences) > 1 and claims.get("azp") != client_id) or
                 (claims.get("azp") is not None and claims["azp"] != client_id) or
                 type(claims.get("exp")) not in {int, float} or claims["exp"] <= current or
                 type(claims.get("iat")) not in {int, float} or claims["iat"] > current + 60 or
-                (claims.get("nbf") is not None and claims["nbf"] > current + 60) or
+                (claims.get("nbf") is not None and (type(claims["nbf"]) not in {int, float} or claims["nbf"] > current + 60)) or
                 not isinstance(claims.get("sub"), str) or not claims["sub"] or
                 (nonce is not None and not hmac.compare_digest(str(claims.get("nonce", "")), nonce)) or
                 (expected_subject is not None and claims["sub"] != expected_subject)):
@@ -446,16 +475,21 @@ class ChatGPTPlanService:
         # Preserve the issued registration even if its single-use code later fails.
         with self.store.locked():
             state = self.store.read()
-            state["accounts"].setdefault(issued, {"client_id": issued, "label": issued})
+            existing = state["accounts"].setdefault(issued, {"client_id": issued, "label": issued})
+            # A repeated issued ID must stay bound to its validated identity,
+            # even when the attempt began as a new dynamic registration.
+            expected_subject = existing.get("subject") or attempt.get("subject")
             self.store.write(state)
         data = self.transport.json(TOKEN, form={"grant_type": "authorization_code", "client_id": issued,
                     "code": code, "code_verifier": attempt["verifier"], "redirect_uri": attempt["redirect_uri"], "resource": RESOURCE})
-        identity = self.identity_verifier(data.get("id_token", ""), issued, attempt["nonce"], self.transport, attempt.get("subject"))
+        identity = self.identity_verifier(data.get("id_token", ""), issued, attempt["nonce"], self.transport, expected_subject)
         with self._lock, self.store.locked():
             if attempt.get("status") != "pending":
                 raise BridgeError("CHATGPT_STATE", "Authorization attempt was cancelled.", 403)
             state = self.store.read()
             account = state["accounts"][issued]
+            if account.get("subject") and account["subject"] != identity["subject"]:
+                raise BridgeError("CHATGPT_IDENTITY", "This registration belongs to a different validated identity. Its credentials were not replaced.", 403)
             account.update(identity, client_id=issued, label=(identity["email"] or identity["subject"]) + " · " + issued[-8:])
             self._save_tokens(account, data, initial=True)
             state["active"] = issued
@@ -631,12 +665,31 @@ class ChatGPTPlanService:
                     if not isinstance(response, dict) or response.get("status") != "completed":
                         raise BridgeError("CHATGPT_INCOMPLETE", "ChatGPT did not complete the response.", 502)
                     reported = response.get("usage", {})
+                    if reported is None:
+                        reported = {}
+                    if not isinstance(reported, dict):
+                        raise BridgeError("CHATGPT_STREAM", "Malformed ChatGPT usage event.", 502)
                     usage = {key: reported.get(key) if type(reported.get(key)) is int and reported[key] >= 0 else None for key in usage}
                     completed = True
                     break
                 elif kind in {"response.failed", "error"}:
-                    error = event.get("response", event).get("error", event)
-                    raise _error(json.dumps({"error": error}).encode(), 429 if error.get("code") == "subscription_sharing_usage_limit_exceeded" else 502)
+                    failure = event.get("response", event)
+                    if not isinstance(failure, dict):
+                        raise BridgeError("CHATGPT_STREAM", "Malformed ChatGPT failure event.", 502)
+                    error = failure.get("error", event)
+                    code = error.get("code") if isinstance(error, dict) else error
+                    code = code if isinstance(code, str) else None
+                    status = {"subscription_sharing_usage_limit_exceeded": 429,
+                              "subscription_sharing_usage_unavailable": 503,
+                              "subscription_sharing_user_unavailable": 503,
+                              "subscription_sharing_user_not_eligible": 403,
+                              "subscription_sharing_route_not_supported": 403,
+                              "subscription_sharing_invalid_user": 401,
+                              "subscription_sharing_unsupported_capability": 400,
+                              "chatpass_v2_scope_not_authorized": 403,
+                              "chatpass_v2_invalid_authorization_context": 403}.get(code, 502)
+                    raise _error(json.dumps({"error": error}).encode(), status,
+                                 sensitive=[account.get(key) for key in ("access_token", "refresh_token", "id_token")])
                 elif kind == "response.incomplete":
                     raise BridgeError("CHATGPT_INCOMPLETE", "ChatGPT returned an incomplete response. No completed result was accepted.", 502)
             if not completed:

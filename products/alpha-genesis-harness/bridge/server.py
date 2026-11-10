@@ -75,7 +75,9 @@ class HarnessServer(ThreadingHTTPServer):
         self.workspace = Path(workspace or Path.home() / ".alpha-genesis-harness" / "workspaces").absolute()
         self.runtime = AccessRuntime(runtime, self.config)
         self._workflows = None
-        self._workflow_lock = threading.Lock()
+        self._genesis_next = None
+        self._local_connections = None
+        self._workflow_lock = threading.RLock()
         self.token = secrets.token_urlsafe(32)
         self.app_path = Path(app_path).resolve()
         self.native = NativeMechanism()
@@ -96,6 +98,22 @@ class HarnessServer(ThreadingHTTPServer):
             self._workflows.close()
         self.runtime.close()
         super().server_close()
+
+    @property
+    def genesis_next(self):
+        with self._workflow_lock:
+            if self._genesis_next is None:
+                from bridge.genesis_next import GenesisNextService
+                self._genesis_next = GenesisNextService(self.workflows)
+            return self._genesis_next
+
+    @property
+    def local_connections(self):
+        with self._workflow_lock:
+            if self._local_connections is None:
+                from bridge.onboarding import LocalConnectionService
+                self._local_connections = LocalConnectionService(self.runtime, self.workspace)
+            return self._local_connections
 
 
 class Handler(BaseHTTPRequestHandler):
@@ -172,10 +190,16 @@ class Handler(BaseHTTPRequestHandler):
                 return self.json(200, {"token": self.server.token})
             if self.path == "/api/status":
                 self.boundary(authenticated=True)
+                # Restoring previously consented local settings performs no inference.
+                self.server.local_connections
                 data = self.server.runtime.status()
                 data["native_mechanism_available"] = self.server.native.available()
                 data["workflow_engine_available"] = True
+                data["genesis_next_available"] = True
                 return self.json(200, data)
+            if self.path == "/api/genesis-next/status":
+                self.boundary(authenticated=True)
+                return self.json(200, self.server.genesis_next.status())
             if self.path in {"/api/chatgpt/status", "/api/codex/status"}:
                 self.boundary(authenticated=True)
                 return self.json(200, self.connection_status(self.path.split("/")[2]))
@@ -222,6 +246,13 @@ class Handler(BaseHTTPRequestHandler):
                 result = self.workflow_action(self.path.rsplit("/", 1)[1], data)
             elif self.path == "/api/capabilities":
                 result = self.server.workflows.capabilities()
+            elif self.path.startswith("/api/genesis-next/"):
+                result = self.genesis_next_action(self.path.rsplit("/", 1)[1], data)
+            elif self.path.startswith("/api/local-models/"):
+                result = self.local_model_action(self.path.rsplit("/", 1)[1], data)
+            elif self.path == "/api/proof-to-market/assess":
+                from bridge.proof_to_market import assess
+                result = assess(data)
             elif self.path.startswith("/api/chatgpt/") or self.path.startswith("/api/codex/"):
                 result = self.connection_action(self.path.split("/")[2], self.path.rsplit("/", 1)[1], data)
             else:
@@ -248,7 +279,10 @@ class Handler(BaseHTTPRequestHandler):
         if action == "status":
             return self.connection_status(category)
         if action == "connect":
-            return service.start_sign_in(data.get("account_id"))
+            reconsent = data.get("reconsent", False)
+            if type(reconsent) is not bool:
+                raise BridgeError("INPUT", "Reconsent must be true or false.")
+            return service.start_sign_in(data.get("account_id"), reconsent=reconsent)
         if action == "select":
             return service.select_account(data.get("account_id"))
         if action == "disconnect":
@@ -320,6 +354,37 @@ class Handler(BaseHTTPRequestHandler):
         if action not in {"start", "step", "pause", "cancel", "resume", "get", "export"}:
             raise BridgeError("NOT_FOUND", "Unknown workflow action.", 404)
         return getattr(self.server.workflows, action)(data.get("run_id"))
+
+    def genesis_next_action(self, action, data):
+        # Fixed routes retain independent evaluator and source authority.
+        if action not in {"status", "opportunity", "replay", "discover", "demo", "export", "verify"}:
+            raise BridgeError("NOT_FOUND", "Unknown GENESIS NEXT action.", 404)
+        service = self.server.genesis_next
+        if action == "status":
+            return service.status()
+        if action == "opportunity":
+            return service.add_opportunity(data)
+        if action == "replay":
+            return service.replay(data)
+        if action == "discover":
+            return service.discover()
+        if action == "demo":
+            return service.run_demo(data)
+        if action == "verify":
+            return service.verify_instrument(data)
+        return service.export()
+
+    def local_model_action(self, action, data):
+        if action not in {"presets", "discover", "connect", "disconnect"}:
+            raise BridgeError("NOT_FOUND", "Unknown local connection action.", 404)
+        service = self.server.local_connections
+        if action == "presets":
+            return service.presets()
+        if action == "discover":
+            return service.discover(data)
+        if action == "connect":
+            return service.connect(data)
+        return service.disconnect(data)
 
     def do_OPTIONS(self):
         self.json(403, {"error": {"code": "CORS", "message": "Cross-origin access is disabled."}})

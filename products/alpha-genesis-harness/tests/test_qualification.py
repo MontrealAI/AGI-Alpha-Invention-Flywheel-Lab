@@ -25,14 +25,14 @@ import package_release as packaging
 import qualify_archive as qualification
 
 SOURCE = "a" * 40
-ROOT = "ALPHA_GENESIS_HARNESS_0.2.0"
+ROOT = "ALPHA_GENESIS_HARNESS_0.3.0"
 FAKE_SECRET_NAMES = ["GH_TOKEN", "GITHUB_TOKEN", "HARNESS_OPENAI_API_KEY", "AWS_SECRET_ACCESS_KEY", "OPENAI_API_KEY"]
 
 
-def archive_fixture(marker="VERIFIED_SNAPSHOT", *, should_fail=False, extra_test_failure=False):
+def archive_fixture(marker="VERIFIED_SNAPSHOT", *, should_fail=False, extra_test_failure=False, extra_files=None):
     """A separately authored tiny archive satisfying the integrity schema only."""
     files = {name: b"synthetic release-boundary fixture\n" for name in packaging.REQUIRED}
-    files["VERSION.json"] = b'{"version":"0.2.0"}\n'
+    files["VERSION.json"] = b'{"version":"0.3.0"}\n'
     if should_fail:
         node = "throw new Error('REPLACEMENT_MUST_NOT_EXECUTE');\n"
         python = "raise AssertionError('REPLACEMENT_MUST_NOT_EXECUTE')\n"
@@ -50,7 +50,9 @@ def archive_fixture(marker="VERIFIED_SNAPSHOT", *, should_fail=False, extra_test
     files["tests/test_bridge.py"] = python.encode()
     if extra_test_failure:
         files["tests/test_new_service.py"] = b"import unittest\nclass NewService(unittest.TestCase):\n    def test_required_component(self):\n        self.fail('NEW_SERVICE_MUST_BE_CHECKED')\n"
-    manifest = {"schema": "alpha-genesis-harness-release/v1", "version": "0.2.0", "build_mode": "source-bound",
+    if extra_files:
+        files.update(extra_files)
+    manifest = {"schema": "alpha-genesis-harness-release/v1", "version": "0.3.0", "build_mode": "source-bound",
                 "source_revision": SOURCE, "source_product_tree": "b" * 40, "source_matches_commit": True,
                 "files": [{"path": name, "bytes": len(data), "sha256": hashlib.sha256(data).hexdigest()}
                           for name, data in sorted(files.items())]}
@@ -63,6 +65,40 @@ def archive_fixture(marker="VERIFIED_SNAPSHOT", *, should_fail=False, extra_test
 
 
 class ArchiveQualificationBoundaryTests(unittest.TestCase):
+    def test_zero_exit_status_does_not_hide_a_failed_omega_receipt(self):
+        with tempfile.TemporaryDirectory() as folder:
+            archive, output = Path(folder) / "download.zip", Path(folder) / "receipt"
+            entries = {name: b"independent inert fixture\n" for name in (
+                "bridge/genesis_next.py", "docs/OMEGA-GENESIS-NEXT.md", "evidence/OMEGA-PROTOCOL.md",
+                "tests/test_genesis_next.py", "tests/test_genesis_next_independent.py",
+                "evidence/OMEGA-FRESH-SUCCESSOR-PROTOCOL.md", "scripts/qualify_genesis_successor.py")}
+            raw = archive_fixture(extra_files=entries)
+            archive.write_bytes(raw)
+            def zero_exit(command, **kwargs):
+                if "bridge.genesis_next" in command:
+                    (output / "OMEGA-DEMONSTRATION.json").write_text(json.dumps({"experiment": {"qualification": {"correctness": "FAIL"}}}))
+                if "run" in command and "scripts/qualify_genesis_successor.py" in command:
+                    (output / "OMEGA-FRESH-SUCCESSOR.json").write_text('{"status":"PASS"}')
+                return subprocess.CompletedProcess(command, 0, "", "")
+            with patch.object(qualification.subprocess, "run", side_effect=zero_exit):
+                with self.assertRaisesRegex(ValueError, "fixed correctness requirements"):
+                    qualification.qualify(archive, hashlib.sha256(raw).hexdigest(), SOURCE, output)
+            receipt = json.loads((output / "QUALIFICATION.json").read_text())
+            self.assertEqual(receipt["verdict"], "INVALID")
+            self.assertTrue(all(operation["returncode"] == 0 for operation in receipt["operations"]))
+
+    def test_omega_source_without_independent_qualification_cannot_execute(self):
+        with tempfile.TemporaryDirectory() as folder:
+            archive, output = Path(folder) / "download.zip", Path(folder) / "receipt"
+            raw = archive_fixture(extra_files={"bridge/genesis_next.py": b"raise AssertionError('MUST_NOT_EXECUTE')\n"})
+            archive.write_bytes(raw)
+            with patch.object(qualification.subprocess, "run") as run:
+                with self.assertRaisesRegex(ValueError, "qualification dependency"):
+                    qualification.qualify(archive, hashlib.sha256(raw).hexdigest(), SOURCE, output)
+                run.assert_not_called()
+            receipt = json.loads((output / "QUALIFICATION.json").read_text())
+            self.assertEqual(receipt["verdict"], "INVALID")
+
     def test_explicit_dom_qualification_cannot_silently_skip_missing_packaged_suite(self):
         with tempfile.TemporaryDirectory() as folder:
             archive, output = Path(folder) / "download.zip", Path(folder) / "receipt"

@@ -26,9 +26,13 @@ Inspect the output and its declared scope. Reopen the workspace through the conn
 
 ## Bring your own objective
 
+To investigate the HARNESS itself, start the local connector and open **Ω GENESIS NEXT**. Inspect the capability map and shared bottleneck proposal, authorize the bounded experiment, then compare its result with ordinary reuse and the different successor task. Follow the [complete Ω guide](OMEGA-GENESIS-NEXT.md). The included recipe is authored; the comparison is allowed to reject it.
+
 Use an outcome you can inspect: “Build a unit conversion instrument and prove its boundary behavior”, for example. Define input and output meanings, independent check cases, constraints and the ordinary complete alternative. Select only connections you authorize, give each role a specific responsibility and set stop conditions before running. Preserve a failed test instead of silently changing the target.
 
 For actual model operation, start the connector and follow [model connections](MODEL-CONNECTIONS.md). The live qualification matrix tells you which pathways were actually exercised with real accounts. Local inference requires a running model; the offline fixture is not local LLM inference.
+
+An installed local model can be connected directly in the Intelligence workspace: choose **Local**, select its engine and port, discover or enter its exact model ID, then choose **Connect local model**. In the Construction Workshop, select that saved connection for the builder and optional critic, define the acceptance cases and run. Export the artifacts and inspect the actual result. Connection settings can be changed without editing the application source.
 
 ## Français
 
@@ -39,3 +43,5 @@ Ouvrez ensuite `examples/customer-mission.json`. Une erreur arithmétique volont
 La commande ci-dessus exécute le parcours agentique avec des réponses de modèles **préparées à l'avance**. Elle construit, vérifie, corrige et conserve un instrument. Elle ne prouve ni l'utilisation d'un modèle local ni une connexion authentifiée. Pour un vrai modèle, choisissez un accès autorisé et consultez les preuves de la version.
 
 Votre première mission personnelle doit avoir un résultat vérifiable, des cas de test indépendants et une alternative compétente. Fixez les limites avant l'exécution. Une vérification échouée ne doit pas disparaître parce qu'elle dérange le résultat souhaité.
+
+Pour étudier le HARNESS lui-même, lancez le connecteur et ouvrez **Ω GENESIS NEXT**. Examinez ses capacités et l'obstacle partagé, autorisez l'expérience limitée, puis comparez le résultat avec la réutilisation ordinaire et la tâche suivante. Le [guide Ω](OMEGA-GENESIS-NEXT.md) précise les commandes et les limites de cette recette préparée.

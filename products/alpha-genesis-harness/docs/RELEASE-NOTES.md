@@ -1,24 +1,29 @@
-# 0.2.0 — HARNESS integration candidate
+# 0.3.0 — Ω GENESIS NEXT candidate
 
-This edition extends the existing 0.1.0 HARNESS rather than replacing its browser engine or canonical research/financial runtime. It remains a candidate until its recorded release gates pass.
+This edition continues the existing HARNESS 0.2 branch and its persistent model-driven workflows. It adds a bounded internal improvement experiment and an English/French workspace for investigating what GENESIS could build next. It remains a release candidate.
 
-## Scope of this integration
+## Changes
 
-- Official ChatGPT-plan and Codex pathway engineering, with eligibility and commercial authorization kept explicit.
-- Expanded local/API protocol handling and capability-aware execution.
-- Persistent bounded agentic construction, critique, verification and retained artifacts.
-- English/French connection and operating experience.
-- Source launchers and expanded installation, quick-start, operator, troubleshooting, FAQ and owner handoff materials.
-- Full extracted-archive Python and JavaScript acceptance testing; Windows-compatible qualifier import and Python invocation.
+- Ω capability inspection, deferred opportunities and frontier replay feed shared missing-capability discovery.
+- A bounded foundry constructs an isolated evidence-reuse candidate against the actual workflow acceptance path. An evaluator compares the existing route, the candidate and competent conventional reuse.
+- A separate successor experiment asks whether the retained mechanism helps select experiments under a declared operation budget. The result can be a tie or a rejection.
+- The interface exposes authorization, evidence, costs, limitations, lineage and export. Persistent workspace data stays outside the distributed source.
+- Exact-archive qualification includes the Ω experiment and its interface replay. Source identities, negative outcomes and unknown costs remain explicit.
 
-The exact implemented and tested behavior is determined by the source and requirement matrix, not this feature summary. Live API/local LLM/Pro inference, cross-OS graphical launch and any external commercial approval require separately recorded evidence. No paid service, customer transaction or Squarespace activity is performed by this release process.
+See [Ω GENESIS NEXT](OMEGA-GENESIS-NEXT.md) for operation and [the qualification matrix](../evidence/QUALIFICATION-MATRIX.md) for the tested boundaries. The experiment uses an authored bounded construction recipe. It does not prove general autonomous invention, an independent scientific breakthrough or a financial return. A result tied with ordinary reuse is not a discovery advantage.
 
-## Upgrade and evidence
+## Inherited 0.2 capabilities
 
-Keep the prior version and private exports. Install into a new folder and inspect work before continuing. Historical 0.1.0 results remain evidence for their original source only. Candidate integrity checks do not establish general invention superiority or commercial demand. A tied or losing conventional comparison remains a valid result.
+Official ChatGPT authorization and separate Codex pathways, configured API/local adapters, persistent builder–critic workflows, artifact export/import, scoped acceptance, English/French interfaces and source launchers remain available within their recorded qualification. Real local Qwen3 execution has prior source-bound evidence. Live APIs, live ChatGPT Pro consent, applicable paid-edition OpenAI authorization and authenticated sandboxed Codex retain separate external gates. No paid provider call, customer transaction or Squarespace action is part of this release process.
+
+## Upgrade
+
+Keep the prior version and private exports. Extract this version into a new directory. Inspect imported projects before continuing. Historical results retain their original source and scope. Use the published checksum and full commit to verify the exact archive; source matching is separate from customer readiness.
 
 ## Français
 
-Cette édition prolonge le HARNESS 0.1.0 existant. Elle ajoute des parcours d'intégration officiels, des connexions modèles, une construction agentique persistante et une documentation bilingue. La portée exacte dépend du code et de la matrice de qualification.
+La version 0.3.0 prolonge le HARNESS 0.2. Elle ajoute Ω GENESIS NEXT : inspection des capacités, possibilités différées, réexamen à partir de nouvelles observations, construction d'une modification limitée et comparaison indépendante. L'espace bilingue présente les autorisations, les preuves, les coûts, les limites et la filiation.
 
-Les connexions réelles, les lancements graphiques sur d'autres systèmes et les autorisations commerciales restent des preuves distinctes. Aucune action Squarespace, transaction client ou activation de service payant n'est effectuée. Conservez votre ancienne version et vos exports avant la mise à niveau.
+L'expérience applique une recette de construction préparée au vérificateur réel du HARNESS, puis mesure son transfert à une tâche différente. Une égalité avec la réutilisation ordinaire demeure une égalité. Ce résultat ne prouve ni invention générale autonome, ni percée scientifique, ni rentabilité.
+
+Les connexions authentifiées, l'autorisation commerciale OpenAI et les plateformes non exercées restent des critères distincts. Conservez l'ancienne édition et vos exports, extrayez cette version dans un nouveau dossier et vérifiez l'archive exacte. Aucune action Squarespace n'est effectuée.

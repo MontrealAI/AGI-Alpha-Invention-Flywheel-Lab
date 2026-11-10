@@ -69,10 +69,25 @@ def qualify(archive: Path, expected_sha256: str, expected_revision: str, output:
                 raise ValueError("Archive contains no provider fixture regression suite")
             if (product / "launch.py").is_file():
                 commands.append([sys.executable, "-B", "launch.py", "--help"])
+            if platform.system() == "Linux" and (product / "Launch-HARNESS.sh").is_file():
+                commands.append(["sh", "Launch-HARNESS.sh", "--help"])
             if (product / "bridge/workflows.py").is_file():
                 commands.append([sys.executable, "-B", "-m", "bridge.workflows", "demo",
                                  "--workspace", str(Path(folder) / "private-demo"),
                                  "--output", str(output.resolve() / "WORKFLOW-DEMONSTRATION.json")])
+            if (product / "bridge/genesis_next.py").is_file():
+                for required in ("docs/OMEGA-GENESIS-NEXT.md", "evidence/OMEGA-PROTOCOL.md",
+                                 "tests/test_genesis_next.py", "tests/test_genesis_next_independent.py",
+                                 "evidence/OMEGA-FRESH-SUCCESSOR-PROTOCOL.md", "scripts/qualify_genesis_successor.py"):
+                    if not (product / required).is_file():
+                        raise ValueError("Archive lacks an Ω qualification dependency: " + required)
+                commands.append([sys.executable, "-B", "-m", "bridge.genesis_next", "demo",
+                                 "--workspace", str(Path(folder) / "private-omega-demo"), "--authorize",
+                                 "--output", str(output.resolve() / "OMEGA-DEMONSTRATION.json")])
+                frozen = str(output.resolve() / "OMEGA-FRESH-SOURCE-FREEZE.json")
+                commands.append([sys.executable, "-B", "scripts/qualify_genesis_successor.py", "freeze", "--output", frozen])
+                commands.append([sys.executable, "-B", "scripts/qualify_genesis_successor.py", "run", "--freeze", frozen,
+                                 "--output", str(output.resolve() / "OMEGA-FRESH-SUCCESSOR.json")])
             if dom_modules is not None:
                 dom_modules = dom_modules.resolve(strict=True)
                 expected = json.loads((product / "tests/dom/package.json").read_text())["dependencies"]["jsdom"]
@@ -81,6 +96,8 @@ def qualify(archive: Path, expected_sha256: str, expected_revision: str, output:
                     raise ValueError("DOM dependency version differs from the packaged exact requirement")
                 replays = ["UI_REPLAY.cjs", "UI_PARALLEL_REPLAY.cjs", "UI_CONNECTED_ACCEPTANCE.cjs",
                            "UI_AGENTIC_REPLAY.cjs", "UI_HTTP_WORKFLOW_REPLAY.cjs"]
+                if (product / "bridge/genesis_next.py").is_file():
+                    replays.append("UI_GENESIS_NEXT_REPLAY.cjs")
                 for replay in replays:
                     path = product / "evidence" / replay
                     if not path.is_file() or path.is_symlink():
@@ -106,6 +123,20 @@ def qualify(archive: Path, expected_sha256: str, expected_revision: str, output:
                                               "wall_seconds": round(time.monotonic()-phase, 6)})
                 if process.returncode:
                     raise ValueError(f"Extracted operation {index} failed; preserved logs identify the failure")
+            if (product / "bridge/genesis_next.py").is_file():
+                omega = json.loads((output / "OMEGA-DEMONSTRATION.json").read_text())["experiment"]
+                fresh = json.loads((output / "OMEGA-FRESH-SUCCESSOR.json").read_text())
+                if omega["qualification"]["correctness"] != "PASS" or fresh["status"] != "PASS":
+                    raise ValueError("Extracted Ω qualification did not pass its fixed correctness requirements")
+                receipt["omega_qualification"] = {
+                    "correctness": omega["qualification"]["correctness"],
+                    "scientific_verdict": omega["qualification"]["scientific_verdict"],
+                    "fresh_successor_status": fresh["status"],
+                    "strong_control_advantage": fresh["strong_control_advantage"],
+                    "complete_costs_known": fresh["complete_costs_known"],
+                    "source_sha256": fresh["source_sha256"],
+                    "evidence_files": ["OMEGA-DEMONSTRATION.json", "OMEGA-FRESH-SOURCE-FREEZE.json", "OMEGA-FRESH-SUCCESSOR.json"],
+                }
             receipt["verdict"] = "PASSED IN SCOPE"
             if dom_modules is not None:
                 receipt["dom_qualification"] = "PASS: extracted-byte DOM and actual loopback HTTP replays; authored model fixtures, not graphical or live-provider qualification"

@@ -2,7 +2,7 @@
 
 **Turn an ambition into alternatives, a testable instrument and inspectable evidence.**
 
-Version **0.2.0 — release candidate**. The intended Official Edition price is **CAD $299, one-time, bring your own AI models**. This candidate is not a claim of a completed commercial deployment. Read the current [qualification matrix](evidence/QUALIFICATION-MATRIX.md) before relying on a release claim.
+Version **0.3.0 — release candidate**. The intended Official Edition price is **CAD $299, one-time, bring your own AI models**. This candidate is not a claim of a completed commercial deployment. Read the current [qualification matrix](evidence/QUALIFICATION-MATRIX.md) before relying on a release claim.
 
 ## Open the application
 
@@ -23,6 +23,7 @@ For model connections and persistent agentic construction, use the source launch
 - A bounded declarative interpreter and inspectable instruments; generated arbitrary code is not executed.
 - Explicit economic assumptions, participant outside options and complete-cost fields, without moving money or creating a second enterprise ledger.
 - Versioned project export/import, a capability record and scope-limited comparison procedures.
+- Ω GENESIS NEXT: a bounded internal evidence-reuse upgrade, independent comparison, deferred-opportunity replay and a separate successor experiment. The built-in recipe is authored; ordinary reuse may tie or win.
 - A local connector for configured provider APIs/local inference, bounded persistent agentic construction and official eligible ChatGPT/Codex pathways. See [model connections](docs/MODEL-CONNECTIONS.md); real authenticated integrations remain unqualified unless the release evidence specifically says otherwise.
 
 The synthetic example demonstrates software behavior. It does not establish a new invention, actual market demand, customers, profitability or generally improved inventive intelligence. A model-generated idea is a hypothesis until independently tested. A recorded source URL alone does not verify its content or freshness.
@@ -35,6 +36,8 @@ The synthetic example demonstrates software behavior. It does not establish a ne
 - [Provider protocols and local-only configuration](docs/PROVIDER-PROTOCOLS.md)
 - [Official ChatGPT-plan and Codex setup](docs/CHATGPT-PLAN.md)
 - [Agentic workflow specifications](docs/AGENTIC-WORKFLOWS.md)
+- [Ω GENESIS NEXT: improve and challenge the HARNESS](docs/OMEGA-GENESIS-NEXT.md)
+- [Proof-to-Market: test a conditional economic arrangement](docs/PROOF-TO-MARKET.md)
 - [Advanced operators, verification and inheritance](docs/OPERATOR.md)
 - [Troubleshooting](docs/TROUBLESHOOTING.md) and [FAQ](docs/FAQ.md)
 - [Exact requirement matrix](evidence/QUALIFICATION-MATRIX.md)
@@ -91,4 +94,4 @@ Storefront: https://www.quebecartificialintelligence.com/shop
 
 Décompressez le fichier ZIP au complet, puis ouvrez **START-HERE.html**. Le parcours principal fonctionne dans un navigateur, sans terminal ni clé API. Choisissez le français dans l'application, ouvrez la démonstration synthétique, examinez les hypothèses, exécutez l'instrument et exportez votre projet.
 
-Cette version 0.2.0 est une **candidate à la publication**. Les idées produites restent des hypothèses; les exemples synthétiques ne prouvent ni une percée, ni une demande réelle, ni une rentabilité. L'édition officielle envisagée coûte 299 $ CA, en un seul paiement. Les frais de modèles externes, les futures éditions et la consultation personnelle sont distincts. Les droits accordés par Apache 2.0 restent accessibles sans achat.
+Cette version 0.3.0 est une **candidate à la publication**. Les idées produites restent des hypothèses; les exemples synthétiques ne prouvent ni une percée, ni une demande réelle, ni une rentabilité. L'édition officielle envisagée coûte 299 $ CA, en un seul paiement. Les frais de modèles externes, les futures éditions et la consultation personnelle sont distincts. Les droits accordés par Apache 2.0 restent accessibles sans achat.

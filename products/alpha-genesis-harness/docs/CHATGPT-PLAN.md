@@ -140,6 +140,15 @@ Quota exhaustion pauses new dispatch. Partial, failed and interrupted streams
 are not accepted as successful. Error codes remain distinct from API-provider
 errors. No automatic paid fallback or repeated inference retry occurs.
 
+The 2026-11-10 protocol review additionally tests malformed terminal events,
+missing usage, unknown error shapes, signed invalid identity claims and attempts
+to replace an existing registration's identity. Such failures cannot become
+successful completions or overwrite a different validated account. Admission
+errors retain their HTTP status, response shape, safe request identifier and
+unsupported parameter when supplied. Arbitrary remote error text and credential
+values are omitted from public diagnostics. These adversarial checks are offline
+contract evidence, not proof of a successful authenticated Pro request.
+
 | Symptom | Action |
 |---|---|
 | Connection disabled | Check actual eligibility and explicit local configuration. |
@@ -308,3 +317,5 @@ aucun contournement automatique n'est proposé.
 
 Tests: `python3 -m unittest discover -s tests -p 'test_chatgpt.py' -v` and
 `python3 -m unittest discover -s tests -p 'test_codex.py' -v` from this product.
+The additional security/protocol regressions run with
+`python3 -m unittest discover -s tests -p 'test_chatgpt_hardening.py' -v`.

@@ -2,7 +2,7 @@
 
 ## What does CAD $299 buy?
 
-The identified downloadable Official Edition: application source, launchers, examples, guides, integrity manifest and the qualification evidence supplied with that version. It is a one-time purchase. The current 0.2.0 artifact remains a release candidate while its stated qualification gates are open.
+The identified downloadable Official Edition: application source, launchers, examples, guides, integrity manifest and the qualification evidence supplied with that version. It is a one-time purchase. The current 0.3.0 artifact remains a release candidate while its stated qualification gates are open.
 
 ## Does it require a recurring subscription?
 
@@ -38,7 +38,7 @@ The package supplies a coherent identified release, onboarding, examples, guides
 
 ## Français
 
-**Que comprend le paiement de 299 $ CA?** La version téléchargeable identifiée, avec application, sources, lanceurs, exemples, documentation et preuves fournies. La version 0.2.0 reste candidate tant que ses critères annoncés ne sont pas tous satisfaits.
+**Que comprend le paiement de 299 $ CA?** La version téléchargeable identifiée, avec application, sources, lanceurs, exemples, documentation et preuves fournies. La version 0.3.0 reste candidate tant que ses critères annoncés ne sont pas tous satisfaits.
 
 **Faut-il un abonnement?** Le HARNESS n'impose aucun service récurrent. Les modèles locaux nécessitent leurs propres ressources. Les API, ChatGPT et Codex ont leurs conditions, quotas et frais distincts.
 

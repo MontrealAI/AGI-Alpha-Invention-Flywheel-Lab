@@ -9,6 +9,8 @@ import hashlib
 import http.client
 import json
 from pathlib import Path
+import shutil
+import subprocess
 import sys
 import tempfile
 import threading
@@ -30,6 +32,29 @@ def instrument():
 
 
 class CandidateVerificationReview(unittest.TestCase):
+    def test_lazy_genesis_import_rejects_previously_loaded_stale_evaluator(self):
+        with tempfile.TemporaryDirectory() as temp:
+            product = Path(temp)
+            package = product / "bridge"
+            package.mkdir()
+            for source in (genesis_module.PRODUCT / "bridge").glob("*.py"):
+                shutil.copyfile(source, package / source.name)
+            script = """from pathlib import Path
+import bridge.workflows
+from bridge.adapters import BridgeError
+path = Path('bridge/instruments.py')
+path.write_bytes(path.read_bytes() + b'\\n# later disk version before lazy GENESIS initialization\\n')
+try:
+    import bridge.genesis_next
+except BridgeError as error:
+    assert error.code == 'GENESIS_SOURCE_DRIFT', error.code
+else:
+    raise AssertionError('Old evaluator was bound to new disk source identity')
+"""
+            result = subprocess.run([sys.executable, "-c", script], cwd=product,
+                                    capture_output=True, text=True, timeout=10)
+            self.assertEqual(result.returncode, 0, result.stderr)
+
     def test_checker_disk_drift_cannot_bind_old_loaded_code_to_new_identity(self):
         expected = genesis_module.source_identity()
         original = genesis_module.PRODUCT
