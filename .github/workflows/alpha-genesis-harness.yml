@@ -127,11 +127,11 @@ jobs:
     defaults:
       run:
         shell: bash
-    env:
-      PLAYWRIGHT_BROWSERS_PATH: ${{ runner.temp }}/harness-browser
     steps:
       - name: Record platform job execution start
-        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+        run: |
+          echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+          echo "PLAYWRIGHT_BROWSERS_PATH=$RUNNER_TEMP/harness-browser" >> "$GITHUB_ENV"
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           ref: ${{ needs.qualify.outputs.source_sha }}
