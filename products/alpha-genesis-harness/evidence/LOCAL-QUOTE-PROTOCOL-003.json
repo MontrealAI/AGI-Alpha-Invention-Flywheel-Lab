@@ -1,0 +1,277 @@
+{
+  "schema": "alpha-harness/live-quote-protocol/v3",
+  "registered_at": null,
+  "status": "PROSPECTIVE_FROZEN_BY_SOURCE_COMMIT_BEFORE_HOSTED_EXECUTION",
+  "purpose": "Construct a portable declared-cost and capacity planning instrument through an actual local model, independently check fixed cases, retain/reopen it and test applicability to a distinct laboratory batch-service successor.",
+  "original_domain": "Small-batch manufacturing quotation planning",
+  "successor_domain": "Laboratory batch-service quotation planning (synthetic costs, not medical or scientific interpretation)",
+  "fields": [
+    "quantity",
+    "unit_cost_cents",
+    "setup_cents",
+    "verification_cents",
+    "maintenance_cents",
+    "capacity"
+  ],
+  "contract": {
+    "valid": "All six numerical inputs are nonnegative. Negative inputs produce valid=false, declared_cost_cents=null and within_capacity=false.",
+    "declared_cost_cents": "When valid, quantity * unit_cost_cents + setup_cents + verification_cents + maintenance_cents. Quantity zero still incurs declared fixed costs.",
+    "within_capacity": "When valid, quantity <= capacity; otherwise false.",
+    "limits": "Whole-cent input cost assumptions. Fractional quantities permitted. Finite portable numerical range and operation/depth limits from the exported evaluator remain binding. No rounding, tax, financing, profit, market demand, actual payment, or missing-cost estimate."
+  },
+  "manufacturing_cases": [
+    {
+      "name": "positive",
+      "input": {
+        "quantity": 10,
+        "unit_cost_cents": 120,
+        "setup_cents": 500,
+        "verification_cents": 200,
+        "maintenance_cents": 100,
+        "capacity": 12
+      },
+      "expected": {
+        "valid": true,
+        "declared_cost_cents": 2000,
+        "within_capacity": true
+      }
+    },
+    {
+      "name": "zero_quantity_fixed_costs",
+      "input": {
+        "quantity": 0,
+        "unit_cost_cents": 120,
+        "setup_cents": 500,
+        "verification_cents": 200,
+        "maintenance_cents": 100,
+        "capacity": 12
+      },
+      "expected": {
+        "valid": true,
+        "declared_cost_cents": 800,
+        "within_capacity": true
+      }
+    },
+    {
+      "name": "all_zero",
+      "input": {
+        "quantity": 0,
+        "unit_cost_cents": 0,
+        "setup_cents": 0,
+        "verification_cents": 0,
+        "maintenance_cents": 0,
+        "capacity": 0
+      },
+      "expected": {
+        "valid": true,
+        "declared_cost_cents": 0,
+        "within_capacity": true
+      }
+    },
+    {
+      "name": "negative_quantity",
+      "input": {
+        "quantity": -1,
+        "unit_cost_cents": 120,
+        "setup_cents": 500,
+        "verification_cents": 200,
+        "maintenance_cents": 100,
+        "capacity": 12
+      },
+      "expected": {
+        "valid": false,
+        "declared_cost_cents": null,
+        "within_capacity": false
+      }
+    },
+    {
+      "name": "negative_unit_cost",
+      "input": {
+        "quantity": 10,
+        "unit_cost_cents": -1,
+        "setup_cents": 500,
+        "verification_cents": 200,
+        "maintenance_cents": 100,
+        "capacity": 12
+      },
+      "expected": {
+        "valid": false,
+        "declared_cost_cents": null,
+        "within_capacity": false
+      }
+    },
+    {
+      "name": "over_capacity",
+      "input": {
+        "quantity": 10,
+        "unit_cost_cents": 120,
+        "setup_cents": 500,
+        "verification_cents": 200,
+        "maintenance_cents": 100,
+        "capacity": 8
+      },
+      "expected": {
+        "valid": true,
+        "declared_cost_cents": 2000,
+        "within_capacity": false
+      }
+    },
+    {
+      "name": "fractional_quantity",
+      "input": {
+        "quantity": 1.5,
+        "unit_cost_cents": 200,
+        "setup_cents": 100,
+        "verification_cents": 20,
+        "maintenance_cents": 30,
+        "capacity": 2
+      },
+      "expected": {
+        "valid": true,
+        "declared_cost_cents": 450,
+        "within_capacity": true
+      }
+    }
+  ],
+  "lab_cases": [
+    {
+      "name": "ninety_six_samples",
+      "input": {
+        "quantity": 96,
+        "unit_cost_cents": 175,
+        "setup_cents": 1800,
+        "verification_cents": 400,
+        "maintenance_cents": 200,
+        "capacity": 96
+      },
+      "expected": {
+        "valid": true,
+        "declared_cost_cents": 19200,
+        "within_capacity": true
+      }
+    },
+    {
+      "name": "over_batch_capacity",
+      "input": {
+        "quantity": 12,
+        "unit_cost_cents": 250,
+        "setup_cents": 1000,
+        "verification_cents": 300,
+        "maintenance_cents": 100,
+        "capacity": 8
+      },
+      "expected": {
+        "valid": true,
+        "declared_cost_cents": 4400,
+        "within_capacity": false
+      }
+    },
+    {
+      "name": "negative_verification",
+      "input": {
+        "quantity": 1,
+        "unit_cost_cents": 10,
+        "setup_cents": 0,
+        "verification_cents": -1,
+        "maintenance_cents": 0,
+        "capacity": 1
+      },
+      "expected": {
+        "valid": false,
+        "declared_cost_cents": null,
+        "within_capacity": false
+      }
+    },
+    {
+      "name": "zero_samples_fixed_costs",
+      "input": {
+        "quantity": 0,
+        "unit_cost_cents": 250,
+        "setup_cents": 1000,
+        "verification_cents": 300,
+        "maintenance_cents": 100,
+        "capacity": 8
+      },
+      "expected": {
+        "valid": true,
+        "declared_cost_cents": 1400,
+        "within_capacity": true
+      }
+    }
+  ],
+  "arms": [
+    {
+      "id": "manufacturing_construct",
+      "inheritance": false
+    },
+    {
+      "id": "lab_inherit",
+      "inheritance": "accepted manufacturing artifact; skip if original fails"
+    },
+    {
+      "id": "lab_fresh",
+      "inheritance": false
+    },
+    {
+      "id": "ordinary_direct_formula",
+      "model_calls": 0,
+      "information": "Same complete contract, costs, capacity and cases; ordinary direct arithmetic, not a weakened incumbent."
+    }
+  ],
+  "finite_inference_budget": {
+    "local_model": "Qwen3-4B-Instruct-2507 Q4_K_M",
+    "max_builder_iterations_per_arm": 2,
+    "max_model_calls_per_arm": 4,
+    "max_output_tokens_per_call": 4096,
+    "max_tool_actions_per_arm": 8,
+    "max_attempts_per_provider_request": 1,
+    "max_inference_arms": 3,
+    "no_retries_outside_protocol": true,
+    "http_timeout_seconds": 600
+  },
+  "acceptance_rules": [
+    "Only engine completion with every frozen case passing qualifies that arm. Critic agreement alone is insufficient.",
+    "Reopen/export accepted artifact. Execute its trusted exported evaluator in a separate subprocess outside the HARNESS, compare every output with both frozen expected values and ordinary direct arithmetic.",
+    "Check an input integer above 2^53-1 is refused; this is numerical range protection, not a claimed physical-scale ceiling.",
+    "Never manually edit model-generated artifact into success. Preserve every failed arm and unaccepted output.",
+    "Declare successor advantage only if accepted outcomes and comparable complete costs support it; model-call/time differences alone do not establish economic advantage."
+  ],
+  "full_cost_boundaries": {
+    "known": "API charges zero because local CPU inference; actual tokens and elapsed/CPU telemetry recorded. Declared planning costs are explicitly authored inputs.",
+    "unknown": [
+      "electricity and hardware depreciation",
+      "human authoring/review/setup/download costs",
+      "future maintenance and validation",
+      "taxes, financing and acquisition not supplied in the input contract",
+      "actual demand, buyer acceptance and collected revenue"
+    ],
+    "comparison": "Original construction costs remain visible for inheritance. No economic superiority, profitability, novelty or autonomous scientific invention is presumed."
+  },
+  "trial_id": "quote-trial-003",
+  "changes_from_first_trial": [
+    "HTTP timeout 300 -> 600 seconds, because measured generation of approximately 8-16 tokens per second can require over 300 seconds for the unchanged 4096-token output limit.",
+    "Explicit single-artifact format scaffolding, preserving the complete calculation, input contract and every expected value.",
+    "Inherited arm may inspect/reuse without reconstruction. If it constructs, the same single-artifact format applies."
+  ],
+  "construction_format_instruction": "Return one JSON object with actions containing exactly one construct_instrument action named quote.json. Put all six inputs and all three output expressions in this single spec. Do not create sum.json, cost.json, or other component files. Do not include read, run, or write actions in this construction response.",
+  "inheritance_format_instruction": "A verified predecessor quote.json is already available. Inspect and reuse it when applicable; do not reconstruct a correct instrument merely to claim work. If construction is needed, return exactly one construct_instrument action named quote.json with all six inputs and all three output expressions in this single spec. Never create component files.",
+  "scaffolding_disclosure": "This is a prospective stronger-model trial after observed failures. Same exact acceptance cases and explicit format instruction as trial002; no manual artifact repair, no novelty or full-cost superiority claim.",
+  "registration": "The immutable Git commit containing this file is the preregistration; the runner records that commit and tree before inference.",
+  "model": {
+    "original": "Qwen/Qwen3-4B-Instruct-2507",
+    "original_revision": "cdbee75f17c01a7cc42f958dc650907174af0554",
+    "license": "Apache-2.0",
+    "quantization_repository": "bartowski/Qwen_Qwen3-4B-Instruct-2507-GGUF",
+    "quantization_revision": "ae44f08e1392f39c0e474af10c3ff8355c8b6688",
+    "filename": "Qwen_Qwen3-4B-Instruct-2507-Q4_K_M.gguf",
+    "bytes": 2497280736,
+    "sha256": "2fde00ce69dd4899c70d020845e2638353015bba0fdf161b3eb965f2bca4464e"
+  },
+  "changes_from_second_trial": [
+    "New pinned 4B dedicated non-thinking model; original1.7B failure/unknown history retained.",
+    "GitHub-hosted Ubuntu CPU replaces unavailable workspace CPU. Hardware and sampling are not matched; no causal superiority attribution is made.",
+    "Driver records exact source revision/product tree and stdout+stderr runtime version, bounded server cleanup; no acceptance/comparator changes.",
+    "Safe publisher copies only actual receipts, preregistered protocols and qualified portable artifacts; it never publishes model weights, binary archives or private workspace keys."
+  ],
+  "predecessor_summary": "LOCAL-QUOTE-OBSERVED-HISTORY.json"
+}

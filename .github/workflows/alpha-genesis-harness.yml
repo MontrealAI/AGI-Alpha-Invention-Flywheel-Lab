@@ -52,6 +52,8 @@ jobs:
           node products/alpha-genesis-harness/evidence/UI_AGENTIC_REPLAY.cjs
           node products/alpha-genesis-harness/evidence/UI_HTTP_WORKFLOW_REPLAY.cjs
       - name: Record official Codex sandbox operation without model authentication
+        env:
+          SOURCE_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
         run: |
           mkdir -p "$RUNNER_TEMP/harness-codex" "$RUNNER_TEMP/harness-assets"
           cp products/alpha-genesis-harness/tests/codex/package*.json "$RUNNER_TEMP/harness-codex/"
@@ -61,7 +63,18 @@ jobs:
           probe_status=$?
           set -e
           test "$probe_status" -eq 0 || test "$probe_status" -eq 2
-          cat "$RUNNER_TEMP/harness-assets/CODEX-HOST-VERIFICATION.json"
+          PROBE_STATUS="$probe_status" python - <<'PY'
+          import json, os
+          from pathlib import Path
+          path = Path(os.environ['RUNNER_TEMP']) / 'harness-assets/CODEX-HOST-VERIFICATION.json'
+          receipt = json.loads(path.read_text())
+          assert (int(os.environ['PROBE_STATUS']), receipt['status']) in ((0, 'PASS'), (2, 'BLOCKED'))
+          assert receipt['inference_calls'] == 0 and receipt['real_credentials_used'] is False
+          receipt['source_revision'] = os.environ['SOURCE_SHA']
+          receipt['binding_scope'] = 'Credential-free probe of the committed source checkout; archive digest added only after source-bound packaging.'
+          path.write_text(json.dumps(receipt, indent=2) + '\n')
+          print(json.dumps(receipt))
+          PY
           # Exit 2 is recorded BLOCKED, never authenticated or sandbox-qualified PASS.
       - name: Render and exercise the customer interface in Chromium
         env:
@@ -89,6 +102,11 @@ jobs:
           from pathlib import Path
           receipt = json.loads((Path(os.environ['RUNNER_TEMP'])/'harness-build.json').read_text())
           assert receipt['source_matches_commit'] is True
+          probe_path = Path(os.environ['RUNNER_TEMP']) / 'harness-assets/CODEX-HOST-VERIFICATION.json'
+          probe = json.loads(probe_path.read_text())
+          assert probe['source_revision'] == os.environ['EXPECTED_SOURCE']
+          probe['archive_sha256'] = receipt['archive_sha256']
+          probe_path.write_text(json.dumps(probe, indent=2) + '\n')
           with open(os.environ['GITHUB_OUTPUT'], 'a') as out:
               out.write('source_sha='+os.environ['EXPECTED_SOURCE']+'\n')
               out.write('archive_sha='+receipt['archive_sha256']+'\n')
@@ -116,6 +134,27 @@ jobs:
             ${{ runner.temp }}/harness-assets/CODEX-HOST-VERIFICATION.json
             ${{ runner.temp }}/harness-assets/HARNESS-*.png
           if-no-files-found: warn
+  local-model-qualification:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 360
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Execute preregistered local-model construction and successor trials
+        run: |
+          python -B products/alpha-genesis-harness/scripts/qualify_hosted_local.py --work "$RUNNER_TEMP/harness-local-work" --publish "$RUNNER_TEMP/harness-local-public"
+      - name: Preserve only allowlisted model evidence and accepted portable artifacts
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: alpha-genesis-harness-local-${{ github.event.pull_request.head.sha || github.sha }}-attempt-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/harness-local-public
+          if-no-files-found: error
   platform-first-use:
     needs: qualify
     strategy:
@@ -123,7 +162,7 @@ jobs:
       matrix:
         os: [macos-15, windows-2025]
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 30
+    timeout-minutes: 360
     defaults:
       run:
         shell: bash
@@ -192,7 +231,7 @@ jobs:
           path: ${{ runner.temp }}/harness-platform-operation
           if-no-files-found: warn
   release-candidate:
-    needs: [qualify, platform-first-use]
+    needs: [qualify, platform-first-use, local-model-qualification]
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     runs-on: ubuntu-latest
     timeout-minutes: 360
@@ -220,12 +259,20 @@ jobs:
           mkdir -p "$RUNNER_TEMP/harness-dom"
           cp products/alpha-genesis-harness/tests/dom/package*.json "$RUNNER_TEMP/harness-dom/"
           npm ci --prefix "$RUNNER_TEMP/harness-dom" --ignore-scripts --no-audit --no-fund
+          mkdir -p "$RUNNER_TEMP/harness-owner-visual-deps"
+          cp products/alpha-genesis-harness/tests/visual/package*.json "$RUNNER_TEMP/harness-owner-visual-deps/"
+          npm ci --prefix "$RUNNER_TEMP/harness-owner-visual-deps" --ignore-scripts --no-audit --no-fund
       - name: Receive source-matched macOS and Windows operation evidence
         uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
         with:
           pattern: alpha-genesis-harness-platform-*-${{ needs.qualify.outputs.source_sha }}-attempt-${{ github.run_attempt }}
           path: ${{ runner.temp }}/harness-received
           merge-multiple: true
+      - name: Receive exact-source local inference evidence
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: alpha-genesis-harness-local-${{ needs.qualify.outputs.source_sha }}-attempt-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/harness-local-public
       - name: Verify exact immutable artifact before publication
         env:
           ARCHIVE_NAME: ${{ needs.qualify.outputs.archive_name }}
@@ -234,6 +281,43 @@ jobs:
         run: |
           python -B products/alpha-genesis-harness/scripts/package_release.py verify "$RUNNER_TEMP/harness-received/$ARCHIVE_NAME" --expected-sha256 "$ARCHIVE_SHA" --expected-source-revision "$SOURCE_SHA" --compare-source-revision "$SOURCE_SHA"
           python -B products/alpha-genesis-harness/scripts/qualify_archive.py "$RUNNER_TEMP/harness-received/$ARCHIVE_NAME" --expected-sha256 "$ARCHIVE_SHA" --expected-source-revision "$SOURCE_SHA" --output "$RUNNER_TEMP/harness-received-operation" --dom-modules "$RUNNER_TEMP/harness-dom/node_modules"
+      - name: Package the allowlisted local-model evidence
+        id: model_archive
+        env:
+          SOURCE_SHA: ${{ needs.qualify.outputs.source_sha }}
+        run: |
+          python - <<'PY'
+          import hashlib, json, os, shutil, subprocess, zipfile
+          from pathlib import Path, PurePosixPath
+          root = Path(os.environ['RUNNER_TEMP'])
+          public = root / 'harness-local-public'
+          record = json.loads((public / 'HOSTED-LOCAL-QUALIFICATION.json').read_text())
+          source = os.environ['SOURCE_SHA']
+          tree = subprocess.check_output(['git', 'rev-parse', source + ':products/alpha-genesis-harness'], text=True).strip()
+          assert record['source_revision'] == source and record['source_product_tree'] == tree and record['source_unchanged'] is True
+          assert record['status'] == 'PASS'
+          expected = record['published_sha256']
+          files = {p.relative_to(public).as_posix(): p for p in public.rglob('*') if p.is_file()}
+          assert set(files) == set(expected) | {'HOSTED-LOCAL-QUALIFICATION.json'}
+          for name, path in files.items():
+              relative = PurePosixPath(name)
+              assert not path.is_symlink() and not relative.is_absolute() and '..' not in relative.parts and '\\' not in name
+              if name in expected:
+                  assert hashlib.sha256(path.read_bytes()).hexdigest() == expected[name]
+          archive = root / 'harness-received' / ('LOCAL-MODEL-EVIDENCE_' + source[:12] + '.zip')
+          with zipfile.ZipFile(archive, 'w', compression=zipfile.ZIP_DEFLATED, compresslevel=9) as out:
+              for name, path in sorted(files.items()):
+                  info = zipfile.ZipInfo(name, date_time=(2026, 1, 1, 0, 0, 0))
+                  info.create_system = 3
+                  info.external_attr = 0o100644 << 16
+                  info.compress_type = zipfile.ZIP_DEFLATED
+                  out.writestr(info, path.read_bytes())
+          digest = hashlib.sha256(archive.read_bytes()).hexdigest()
+          archive.with_suffix('.zip.sha256').write_text(digest + '  ' + archive.name + '\n')
+          shutil.copyfile(public / 'HOSTED-LOCAL-QUALIFICATION.json', archive.parent / 'HOSTED-LOCAL-QUALIFICATION.json')
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as out:
+              out.write('name=' + archive.name + '\nsha256=' + digest + '\n')
+          PY
       - name: Publish source-specific prerelease without replacing prior releases
         env:
           GH_TOKEN: ${{ github.token }}
@@ -251,7 +335,20 @@ jobs:
           ARCHIVE_SHA: ${{ needs.qualify.outputs.archive_sha }}
         run: |
           tag="alpha-genesis-harness-v0.2.0-rc-${SOURCE_SHA:0:12}"
-          gh release download "$tag" --pattern "$ARCHIVE_NAME" --dir "$RUNNER_TEMP/harness-published"
+          gh release download "$tag" --dir "$RUNNER_TEMP/harness-published"
+      - name: Verify downloaded local-model evidence
+        env:
+          MODEL_ARCHIVE_NAME: ${{ steps.model_archive.outputs.name }}
+          MODEL_ARCHIVE_SHA: ${{ steps.model_archive.outputs.sha256 }}
+        run: |
+          python - <<'PY'
+          import hashlib, os
+          from pathlib import Path
+          root = Path(os.environ['RUNNER_TEMP'])
+          data = (root / 'harness-published' / os.environ['MODEL_ARCHIVE_NAME']).read_bytes()
+          assert hashlib.sha256(data).hexdigest() == os.environ['MODEL_ARCHIVE_SHA']
+          # Reconciliation and owner assembly independently validate the contained manifest and every member.
+          PY
       - name: Operate the published archive without publication credentials
         env:
           SOURCE_SHA: ${{ needs.qualify.outputs.source_sha }}
@@ -259,6 +356,28 @@ jobs:
           ARCHIVE_SHA: ${{ needs.qualify.outputs.archive_sha }}
         run: |
           python -B products/alpha-genesis-harness/scripts/qualify_archive.py "$RUNNER_TEMP/harness-published/$ARCHIVE_NAME" --expected-sha256 "$ARCHIVE_SHA" --expected-source-revision "$SOURCE_SHA" --output "$RUNNER_TEMP/harness-published-operation" --dom-modules "$RUNNER_TEMP/harness-dom/node_modules"
+      - name: Reconcile actual evidence and assemble the bilingual owner handoff
+        env:
+          SOURCE_SHA: ${{ needs.qualify.outputs.source_sha }}
+          ARCHIVE_NAME: ${{ needs.qualify.outputs.archive_name }}
+          ARCHIVE_SHA: ${{ needs.qualify.outputs.archive_sha }}
+          MODEL_ARCHIVE_NAME: ${{ steps.model_archive.outputs.name }}
+          NODE_PATH: ${{ runner.temp }}/harness-owner-visual-deps/node_modules
+        run: |
+          product_tree=$(git rev-parse "$SOURCE_SHA:products/alpha-genesis-harness")
+          tag="alpha-genesis-harness-v0.2.0-rc-${SOURCE_SHA:0:12}"
+          python -B products/alpha-genesis-harness/scripts/reconcile_release_evidence.py --archive "$RUNNER_TEMP/harness-published/$ARCHIVE_NAME" --expected-sha256 "$ARCHIVE_SHA" --source-sha "$SOURCE_SHA" --source-product-tree "$product_tree" --operation-receipt "$RUNNER_TEMP/harness-published-operation/QUALIFICATION.json" --asset-dir "$RUNNER_TEMP/harness-published" --live-receipt "$RUNNER_TEMP/harness-published/HOSTED-LOCAL-QUALIFICATION.json" --model-evidence-archive "$RUNNER_TEMP/harness-published/$MODEL_ARCHIVE_NAME" --output "$RUNNER_TEMP/harness-final-evidence"
+          python -B products/alpha-genesis-harness/scripts/owner_handoff.py --source-sha "$SOURCE_SHA" --release-url "https://github.com/$GITHUB_REPOSITORY/releases/tag/$tag" --asset-dir "$RUNNER_TEMP/harness-published" --expected-sha256 "$ARCHIVE_SHA" --operation-receipt "$RUNNER_TEMP/harness-published-operation/QUALIFICATION.json" --matrix "$RUNNER_TEMP/harness-final-evidence/QUALIFICATION-MATRIX.json" --model-evidence-archive "$RUNNER_TEMP/harness-published/$MODEL_ARCHIVE_NAME" --pull-request-url "https://github.com/$GITHUB_REPOSITORY/pull/324" --output "$RUNNER_TEMP/harness-owner" > "$RUNNER_TEMP/harness-owner-build.json"
+          owner_dir=$(python -c 'import json,os; from pathlib import Path; print(json.loads((Path(os.environ["RUNNER_TEMP"])/"harness-owner-build.json").read_text())["owner_directory"])')
+          node products/alpha-genesis-harness/scripts/verify_owner_handoff.cjs "$owner_dir" "$RUNNER_TEMP/harness-owner-visual" "$SOURCE_SHA"
+      - name: Publish the verified owner download and final qualification evidence
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          SOURCE_SHA: ${{ needs.qualify.outputs.source_sha }}
+        run: |
+          tag="alpha-genesis-harness-v0.2.0-rc-${SOURCE_SHA:0:12}"
+          gh release upload "$tag" "$RUNNER_TEMP/harness-owner/"*.zip "$RUNNER_TEMP/harness-owner/"*.sha256 "$RUNNER_TEMP/harness-owner/"*.receipt.json "$RUNNER_TEMP/harness-final-evidence/"*.json "$RUNNER_TEMP/harness-final-evidence/"*.md "$RUNNER_TEMP/harness-owner-visual/"*
       - name: Preserve released-byte operation evidence
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
@@ -267,4 +386,7 @@ jobs:
           path: |
             ${{ runner.temp }}/harness-received-operation
             ${{ runner.temp }}/harness-published-operation
+            ${{ runner.temp }}/harness-final-evidence
+            ${{ runner.temp }}/harness-owner-build.json
+            ${{ runner.temp }}/harness-owner-visual
           if-no-files-found: warn

@@ -1,0 +1,65 @@
+{
+  "schema": "alpha-harness/quote-trial-observation-recovery/v1",
+  "evidence_class": "OBSERVED_SUMMARY_NOT_RAW_RECEIPTS",
+  "reason": "Execution environment became unavailable after trial001 completed and during trial002. This summary preserves only facts visible in recorded tool output; complete raw receipts were not recovered. No missing transcript is reconstructed or claimed verified.",
+  "trial001": {
+    "status": "FAIL",
+    "protocol_sha256": "b96fb72b2050da769d0192ab56fbf27768a4d2dc10fa8f0135540b374129e720",
+    "driver_sha256": "7002c53cb06371b2056f2aa246e886ce99e9a5790dbd97e0942c19c73d39eaab",
+    "model": "Qwen3-1.7B Q4_K_M",
+    "arms": [
+      {
+        "id": "manufacturing_construct",
+        "status": "paused",
+        "model_calls": 3,
+        "actions": 5,
+        "observed_failure": "Required quote.json absent after component artifact construction; second builder timed out at 300 seconds."
+      },
+      {
+        "id": "lab_inherit",
+        "status": "BLOCKED",
+        "reason": "No accepted predecessor."
+      },
+      {
+        "id": "lab_fresh",
+        "status": "exhausted",
+        "model_calls": 4,
+        "actions": 5,
+        "observed_failure": "Required quote.json absent."
+      }
+    ],
+    "ordinary_control": {
+      "status": "PASS",
+      "cases": 11,
+      "model_calls": 0
+    },
+    "source_unchanged": true,
+    "child_cpu_seconds": 963.3770800000001,
+    "api_paid_requests": 0,
+    "full_compute_cost": null,
+    "useful_artifact_constructed": false,
+    "successor_reuse_accepted": false
+  },
+  "trial002": {
+    "status": "UNKNOWN_FINAL_RESULT",
+    "protocol_sha256": "54cee6d890c152173a9ed2de0fa1ed78b6b5f3a7287cd9462411407848dee156",
+    "driver_sha256": "6dbb791746cd501adcdbf084535f7ed6e4424841e55d532f6cd419f0daebf1d9",
+    "model": "Qwen3-1.7B Q4_K_M",
+    "last_observed": {
+      "manufacturing_construct": "exhausted; first response malformed, second created quote.json but all 7 cases rejected: Boolean operation needs boolean operands.",
+      "lab_inherit": "No accepted predecessor was available; no inheritance success observed.",
+      "lab_fresh": "First quote.json rejected by all 4 cases with same Boolean operand error; second builder was running when environment was lost."
+    },
+    "final_model_calls": null,
+    "final_elapsed": null,
+    "accepted_artifact_observed": false,
+    "api_paid_requests_observed": 0
+  },
+  "model_1_7b_sha256": "d2387ca2dbfee2ffabce7120d3770dadca0b293052bc2f0e138fdc940d9bc7b5",
+  "claims": {
+    "novelty": "NOT_ESTABLISHED",
+    "economic_superiority": "NOT_ESTABLISHED",
+    "commercial_validation": "NOT_ESTABLISHED"
+  },
+  "scope": "A later prospective hosted trial is a new execution, with changed model/hardware. It must not be relabeled as completion or success of either original trial."
+}
