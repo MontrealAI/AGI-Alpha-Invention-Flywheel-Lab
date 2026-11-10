@@ -21,6 +21,33 @@ from connected_enterprise.platform_runtime import command_budget
 
 LIMIT_BYTES=256_000_000
 
+# A source distribution that includes developer tests must also contain their
+# explicitly referenced, key-free input closure. These are non-operating files:
+# never synthesize historical evidence or change account/source authorities.
+TEST_ONLY_INPUTS = {
+    'tests/test_connected_p0_source_guard.py': ('tools/p0_source_guard.py',),
+    'tests/test_connected_release.py': (
+        'evidence/strategic024-publication/COMPOSED_SOURCE_BINDING.json',
+        # Original, public, key-free historical publication fixture bytes.
+        # These are consumed by composed_asset_fixture() when this test ships.
+        'docs/completion015/PAPER.pdf',
+        'docs/completion015/PAPER.tex',
+        'docs/completion015/index.html',
+        'docs/completion015/REPORT.md',
+        'docs/completion015/PUBLICATION.json',
+        'docs/completion015/PDF_QA.json',
+    ),
+}
+
+
+def with_test_source_closure(names):
+    """Add only test-only dependencies of tests already present in the archive."""
+    result = set(names)
+    for test, required in TEST_ONLY_INPUTS.items():
+        if test in result:
+            result.update(required)
+    return result
+
 def sha(raw):return hashlib.sha256(raw).hexdigest()
 def read(path):return json.loads(Path(path).read_text())
 def write(path,value):Path(path).write_text(json.dumps(value,indent=2,sort_keys=True)+'\n')
@@ -105,7 +132,7 @@ def qualify(output,smoke,timeout_seconds=None):
             dependencies[package]=actual
         receipt['runtime']={'python':sys.version,'dependencies':dependencies,'dependency_installation':'NOT_PERFORMED; exact preinstalled pinned runtime checked. Fresh dependency installation must be qualified separately.'}
         frozen_source=identity(REPOSITORY)
-        names=set(source_paths(REPOSITORY))|{'AGENTS.md','requirements-commercial010.txt','scripts/qualify_connected014.py','docs/connected014/OPERATOR.md'}
+        names=with_test_source_closure(set(source_paths(REPOSITORY))|{'AGENTS.md','requirements-commercial010.txt','scripts/qualify_connected014.py','docs/connected014/OPERATOR.md'})
         # Explicit non-executing prior bytes for historical paper verification.
         names.update(p.relative_to(REPOSITORY).as_posix() for p in (REPOSITORY/'historical/strategic024-prior-source').rglob('*.txt') if p.is_file())
         files={}
