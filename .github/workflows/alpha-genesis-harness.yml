@@ -114,8 +114,65 @@ jobs:
             ${{ runner.temp }}/harness-build.json
             ${{ runner.temp }}/harness-operation
           if-no-files-found: warn
-  release-candidate:
+  native-platforms:
+    # The owner's cross-platform release mandate covers standard public-repository
+    # runners only; no larger/custom/private paid runner or billing change.
     needs: qualify
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 360
+    defaults:
+      run:
+        shell: bash
+    env:
+      PLAYWRIGHT_BROWSERS_PATH: ${{ runner.temp }}/harness-browser
+    steps:
+      - name: Record platform job execution start
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ needs.qualify.outputs.source_sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          artifact-ids: ${{ needs.qualify.outputs.artifact_id }}
+          path: ${{ runner.temp }}/harness-received
+          merge-multiple: true
+      - name: Prepare pinned browser verification dependency
+        working-directory: products/alpha-genesis-harness/tests/visual
+        run: |
+          npm ci --ignore-scripts --no-audit --no-fund
+          node node_modules/playwright-core/cli.js install chromium
+          python - <<'PY'
+          import os, subprocess
+          from pathlib import Path
+          browser = subprocess.check_output(['node', '-e', "process.stdout.write(require('playwright-core').chromium.executablePath())"], text=True)
+          with open(os.environ['GITHUB_ENV'], 'a', encoding='utf-8') as output:
+              output.write('HARNESS_NATIVE_BROWSER=' + browser + '\n')
+              output.write('HARNESS_VISUAL_MODULES=' + str(Path('node_modules').resolve()) + '\n')
+          PY
+      - name: Operate exact archive through native source launcher and Chromium
+        env:
+          ARCHIVE_NAME: ${{ needs.qualify.outputs.archive_name }}
+          ARCHIVE_SHA: ${{ needs.qualify.outputs.archive_sha }}
+          SOURCE_SHA: ${{ needs.qualify.outputs.source_sha }}
+        run: |
+          python -B products/alpha-genesis-harness/scripts/qualify_platform.py "$RUNNER_TEMP/harness-received/$ARCHIVE_NAME" --expected-sha256 "$ARCHIVE_SHA" --expected-source-revision "$SOURCE_SHA" --output "$RUNNER_TEMP/harness-native-operation" --visual-modules "$HARNESS_VISUAL_MODULES" --browser-executable "$HARNESS_NATIVE_BROWSER"
+      - name: Preserve native platform scope and results
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: alpha-genesis-harness-native-${{ matrix.os }}-${{ needs.qualify.outputs.source_sha }}-attempt-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/harness-native-operation
+          if-no-files-found: warn
+  release-candidate:
+    needs: [qualify, native-platforms]
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     runs-on: ubuntu-latest
     timeout-minutes: 360

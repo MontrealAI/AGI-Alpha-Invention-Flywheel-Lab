@@ -1,27 +1,32 @@
 /* SPDX-License-Identifier: Apache-2.0 */
-// Graphical Linux browser verification. No external models, authentication or user files.
+// Native-OS headless browser verification. No external model authentication or user files.
 const { chromium } = require('playwright-core');
 const fs = require('node:fs');
 const path = require('node:path');
 const { spawn, execFileSync } = require('node:child_process');
 const assert = require('node:assert/strict');
 const os = require('node:os');
+const crypto = require('node:crypto');
 
 (async () => {
   const product = path.resolve(__dirname, '..');
   const output = path.resolve(process.env.HARNESS_SCREENSHOT_DIR || path.join(os.tmpdir(), 'harness-visual'));
   fs.mkdirSync(output, { recursive: true });
   const temporary = fs.mkdtempSync(path.join(os.tmpdir(), 'harness-visual-work-'));
-  const server = spawn(process.env.PYTHON || 'python3', [path.join(product, 'bridge/server.py'), '--port', '18765', '--no-browser', '--workspace', path.join(temporary, 'work')], { stdio: 'ignore' });
+  const external = process.env.HARNESS_BASE_URL;
+  const base = new URL(external || 'http://127.0.0.1:18765');
+  assert.ok(base.protocol === 'http:' && base.hostname === '127.0.0.1' && !base.username && !base.password && base.pathname === '/' && !base.search && !base.hash, 'Browser qualification accepts only the exact loopback application');
+  const server = external ? null : spawn(process.env.PYTHON || 'python3', [path.join(product, 'bridge/server.py'), '--port', base.port, '--no-browser', '--workspace', path.join(temporary, 'work')], { stdio: 'ignore' });
   let browser;
-  const errors = [], checks = [], screenshots = [];
+  const errors = [], checks = [], screenshots = [], exports = [];
   try {
-    const executablePath = process.env.CHROME_BIN || execFileSync('which', ['google-chrome']).toString().trim();
-    browser = await chromium.launch({ executablePath, headless: true, args: ['--no-sandbox'] });
+    const executablePath = process.env.CHROME_BIN || (process.platform === 'linux' ? execFileSync('which', ['google-chrome']).toString().trim() : chromium.executablePath());
+    assert.ok(fs.existsSync(executablePath), 'Set CHROME_BIN to the installed native Chromium executable');
+    browser = await chromium.launch({ executablePath, headless: true, args: process.platform === 'linux' ? ['--no-sandbox'] : [] });
     const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
     page.on('pageerror', error => errors.push(error.message));
     for (let i = 0; ; i++) {
-      try { await page.goto('http://127.0.0.1:18765'); break; }
+      try { await page.goto(base.href); break; }
       catch (error) { if (i >= 20) throw error; await new Promise(resolve => setTimeout(resolve, 100)); }
     }
     const shot = async name => { await page.screenshot({ path: path.join(output, name), fullPage: true }); screenshots.push(name); };
@@ -44,6 +49,15 @@ const os = require('node:os');
     await page.waitForFunction(() => document.querySelector('#omega-results')?.textContent?.includes('NO_SUPERIORITY_ESTABLISHED'));
     assert.equal(await page.locator('#omega-run').isEnabled(), false);
     await shot('HARNESS-08-genesis-next-result-en.png');
+    const omegaDownload = page.waitForEvent('download');
+    await page.locator('#omega-export').click();
+    const omegaExport = await omegaDownload;
+    const omegaExportPath = path.join(output, 'GENESIS-NEXT-browser-export.json');
+    await omegaExport.saveAs(omegaExportPath);
+    const omegaExportBytes = fs.readFileSync(omegaExportPath);
+    assert.ok(JSON.parse(omegaExportBytes).experiments.some(item => item.id === omegaResult.experiment.id), 'Downloaded evidence must contain the actual completed experiment');
+    exports.push({ file: path.basename(omegaExportPath), sha256: crypto.createHash('sha256').update(omegaExportBytes).digest('hex'), bytes: omegaExportBytes.length });
+    checks.push('actual browser evidence download contains the completed local self-upgrade experiment');
     checks.push('actual local self-upgrade HTTP experiment; consent, independent checks, conventional tie and unknown complete costs');
     await page.locator('[data-view="economy"]').click();
     await page.locator('#proof-example').click();
@@ -94,14 +108,14 @@ const os = require('node:os');
     checks.push('GENESIS NEXT French mobile results without page overflow');
 
     assert.deepEqual(errors, []);
-    fs.writeFileSync(path.join(output, 'BROWSER-VERIFICATION.json'), JSON.stringify({ status: 'PASS', source_revision: process.env.EXPECTED_SOURCE || null, browser: await browser.version(), platform: process.platform, checks, screenshots, errors, scope: 'Linux Chromium graphical checks; no live model or other OS qualification.' }, null, 2));
-    console.log(JSON.stringify({ status: 'PASS', checks, screenshots }));
+    fs.writeFileSync(path.join(output, 'BROWSER-VERIFICATION.json'), JSON.stringify({ status: 'PASS', source_revision: process.env.EXPECTED_SOURCE || null, browser: await browser.version(), platform: process.platform, architecture: process.arch, headless: true, server_mode: external ? 'external-native-launcher' : 'direct-python', checks, screenshots, exports, errors, scope: 'Headless native-OS Chromium checks only; no Finder/Explorer double-click, signing, notarization, live model or other OS qualification.' }, null, 2));
+    console.log(JSON.stringify({ status: 'PASS', platform: process.platform, checks, screenshots, exports }));
   } catch (error) {
-    fs.writeFileSync(path.join(output, 'BROWSER-VERIFICATION.json'), JSON.stringify({ status: 'FAIL', checks, screenshots, errors, failure: error.message }, null, 2));
+    fs.writeFileSync(path.join(output, 'BROWSER-VERIFICATION.json'), JSON.stringify({ status: 'FAIL', platform: process.platform, checks, screenshots, exports, errors, failure: error.message }, null, 2));
     throw error;
   } finally {
     if (browser) await browser.close();
-    server.kill('SIGTERM');
+    if (server) server.kill('SIGTERM');
     fs.rmSync(temporary, { recursive: true, force: true });
   }
 })().catch(error => { console.error(error.message); process.exitCode = 1; });
