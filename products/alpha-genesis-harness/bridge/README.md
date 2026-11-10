@@ -3,7 +3,7 @@
 The application’s offline/manual workflow opens by double-clicking
 `app/index.html`. It needs no Python, installation, account or API key.
 This optional connector is for customers who want their own local model or
-authorized API access. It requires Python 3.10+ with its standard library.
+authorized API access. It requires Python 3.10+ with its standard library for API/local protocols. ChatGPT authorization additionally requires the pinned cryptography package; see the separate ChatGPT guide.
 It does not install models, create accounts, activate billing, purchase access
 or perform any enterprise transaction.
 
@@ -56,8 +56,7 @@ connector does not estimate vendor-specific discounts. Then set a deliberate
 `session_budget_usd`, change `allow_paid_requests` to `true`, and supply the
 credential through the named environment variable using your operating
 system’s private process/environment mechanism. Do not paste it into the app,
-project, command history, source repository or report. Consumer chat
-subscriptions are separate from API credentials and billing.
+project, command history, source repository or report. ChatGPT subscriptions are separate from API credentials and billing; use the dedicated authorized ChatGPT connection, not an API preset, for plan access.
 
 Start using that private configuration:
 
@@ -75,29 +74,43 @@ environment. Close the connector when finished.
 
 | Adapter | Request | Current scope |
 |---|---|---|
-| OpenAI-compatible | `/chat/completions`, `/models` | Text; optional configured JSON-object mode; configurable `max_completion_tokens` or legacy `max_tokens` field |
-| Anthropic | `/messages`, `/models` | Text Messages API; default version `2026-10-21`, configurable; no structured-output mode claimed |
-| Google Gemini | `/models/{id}:generateContent`, `/models` | Text; optional configured JSON MIME mode; candidate and thinking usage included when reported |
-| Ollama | `/api/chat`, `/api/tags` | Local-loopback text; optional JSON format; installed models only |
+| OpenAI Responses | `/responses`, `/models` | Native Responses text and declared function calls; no server storage requested |
+| OpenAI-compatible | `/chat/completions`, `/models` | Text and declared function calls; compatible local, xAI and Mistral presets |
+| Anthropic | `/messages`, `/models` | Messages text and declared tool use; configured API version |
+| Google Gemini | `:generateContent`, `:streamGenerateContent`, `/models` | Generate Content text and declared function calls |
+| Ollama | `/api/chat`, `/api/tags` | Native loopback text and declared function calls, installed models only |
 
-These adapters have **fixture-based protocol and local HTTP boundary tests**.
-No authenticated live model was used to qualify this release. A provider model
-list is provider-reported availability, not proof of generation entitlement,
-correctness or supported model features. Only explicitly configured model IDs
-may generate; discovering an ID does not grant permission or set its price.
-JSON mode still requires local schema validation after generation.
+These adapters have protocol and actual loopback HTTP boundary tests. The
+llama.cpp compatible path was additionally exercised with real local CPU
+inference using SmolLM2-135M-Instruct Q4_K_M in buffered and streamed modes:
+[evidence](../evidence/LOCAL-MODEL-VERIFICATION.json). This tiny model produced
+an inaccurate answer in the preserved output. The result qualifies that
+connection operation, not answer accuracy or frontier reasoning. No
+cloud API provider has authenticated live qualification in this release.
 
-Responses are buffered, not streamed. Timeouts are configurable per request.
-`max_concurrent_requests` defaults to 2 and bounds simultaneous model requests
-on this machine; it is configurable independently of the number of models.
-Models requiring other APIs, modalities, tools or vendor-specific fields are
-not supported by this version. A compatible interface does not mean every
-model behind that interface has been verified.
+A model list reports availability, not generation entitlement or features.
+Only explicitly configured IDs may generate. Each model declares JSON,
+streaming and tool-calling capabilities independently. Local validation still
+applies to every returned function call or JSON artifact.
+
+Streaming is implemented incrementally as SSE for supported cloud/compatible
+protocols and NDJSON for Ollama, with mandatory terminal-success evidence.
+`Runtime.generate(data, on_event)` emits text progress. `/api/generate-stream`
+returns actual NDJSON progress to an operator/client; ordinary `/api/generate`
+remains a buffered compatibility endpoint. Workflow jobs retain phase progress. Tool calls are returned as untrusted structured requests
+and never executed by the provider adapter. Unsupported modalities, hosted
+tools and vendor-specific extensions are refused rather than assumed.
+
+`max_concurrent_requests` defaults to 2. Models, output/context limits and
+stage assignments remain configurable; no silent provider/model fallback or
+paid-service activation occurs. The
+[provider guide](../docs/PROVIDER-PROTOCOLS.md) describes the precise contracts,
+local-only presets, capability declarations and current primary references.
 
 ## Cost, retry and cancellation behavior
 
 Before dispatch, a lock atomically reserves the configured attempt count times
-the conservative token estimate: one input token per UTF-8 prompt byte plus
+the conservative token estimate: one input token per UTF-8 prompt/schema byte plus
 the declared input overhead, together with the requested output-token limit.
 No concurrent request may consume that reservation. Successful reported
 usage is priced at the user-declared rates. Missing usage, malformed replies,
@@ -127,10 +140,14 @@ costs remain unknown. No native enterprise account or journal is created.
   browser credential forms and arbitrary filesystem paths are rejected.
 - Only the four packaged app assets are served. No directory listing, private
   configuration or environment access is exposed.
-- Model output and retrieved content are untrusted data. The connector cannot
-  run generated Python, JavaScript, shell commands, tools or financial actions.
-- No telemetry, prompt/output logs, cookies, proxies or redirect following are
-  enabled. Known configured credentials are redacted from JSON responses.
+- Model output and retrieved content are untrusted data. Provider adapters never
+  execute returned function calls. The separate workflow engine enforces its
+  own bounded artifact tools and permissions; no financial action or unrestricted
+  shell is authorized by a model response.
+- API/local provider transport uses no telemetry, prompt logs, cookies, proxies or
+  redirect following. Known configured credentials are redacted from responses
+  and buffered across streaming fragments to prevent split-secret leakage.
+  Workflow progress and artifact evidence are recorded within their project.
 - Request/response byte limits and HTTP timeouts bound transport resources.
 
 ## Attributable current sources
@@ -172,7 +189,7 @@ From the product directory:
 python3 -m unittest discover -s tests -p 'test_bridge.py' -v
 ```
 
-Tests send no external inference requests. They include all four wire formats,
+Automated protocol tests send no external inference requests. They include all five wire formats,
 usage accounting, missing credentials, permission refusal, atomic reservations,
 retries, malformed responses, duplicate dispatch, cancellation, credential
 redaction, Host/Origin/token/CSRF boundaries, source provenance, and private-IP

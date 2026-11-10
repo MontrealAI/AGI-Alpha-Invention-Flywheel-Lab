@@ -1,0 +1,3070 @@
+{
+  "schema": "omega-fresh-successor-qualification/v1",
+  "status": "PASS",
+  "failures": [],
+  "source_sha256": {
+    "candidate": "c5007a8a5c30cb1446118e275b6ea89f9ef5f5c7eec44badd0a13129ce142907",
+    "evaluator": "8298ea07363904103266f326c23e476eb206765ec2bf5d84879b2a4281b30a86",
+    "protocol": "b0d93574f9fecb5f2b9374ba6371ffacb687c3466ec1bc6d64fe5629fe5b44a8",
+    "original_protocol": "5d4b2141e8bf02f398e6a9a8508417d53105f6927b186ca49a92b1a42ddf12d5",
+    "interpreter": "787466086e1303599aa4576c1c677e732257efa10d2bf932b96a705a96ac03b9",
+    "workflow_helpers": "05203df3906e44be13e4ed51e4b9766f9e260fd3ee8560bfd99ec3ed4a75cfd9",
+    "provider_contracts": "9df37397ab9931d0738f0148ca15703f0ecbfa6c88149987684cf8f9f05ac22e"
+  },
+  "freeze_sha256": "ffdfdb04fbf0fd5140f83615a2785df4e67c12c935d71aab502b9f4c836d4d5d",
+  "seed_generated_after_source_freeze": "e2c5c6371b4758cef503d7d51ff76b28e879dbae8092bdf03d4fdbc4b817e730",
+  "initial_instances": [
+    {
+      "id": "initial-00",
+      "spec": {
+        "instrument": {
+          "name": "Bounded addition instrument",
+          "inputs": [
+            "x",
+            "offset"
+          ],
+          "outputs": {
+            "result": {
+              "op": "add",
+              "args": [
+                {
+                  "field": "x"
+                },
+                {
+                  "field": "offset"
+                }
+              ]
+            }
+          },
+          "conditions": "Exact supplied finite integer arithmetic.",
+          "limitations": "No empirical semantics."
+        },
+        "input": {
+          "x": -5401,
+          "offset": 819
+        },
+        "expected": {
+          "result": -4582
+        }
+      },
+      "dependencies": {
+        "bridge/instruments.py": "787466086e1303599aa4576c1c677e732257efa10d2bf932b96a705a96ac03b9",
+        "source": "8b38977c8f8567311d65ff2b4402579a02d289238cdc0baaf9cef3fecd9eff85"
+      }
+    },
+    {
+      "id": "initial-01",
+      "spec": {
+        "instrument": {
+          "name": "Bounded addition instrument",
+          "inputs": [
+            "x",
+            "offset"
+          ],
+          "outputs": {
+            "result": {
+              "op": "add",
+              "args": [
+                {
+                  "field": "x"
+                },
+                {
+                  "field": "offset"
+                }
+              ]
+            }
+          },
+          "conditions": "Exact supplied finite integer arithmetic.",
+          "limitations": "No empirical semantics."
+        },
+        "input": {
+          "x": -9861,
+          "offset": -880
+        },
+        "expected": {
+          "result": -10741
+        }
+      },
+      "dependencies": {
+        "bridge/instruments.py": "787466086e1303599aa4576c1c677e732257efa10d2bf932b96a705a96ac03b9",
+        "source": "1c3ecec7a3c2a534b913fd39a06a73a184c8383be29c2512c56add2708da0bb3"
+      }
+    },
+    {
+      "id": "initial-02",
+      "spec": {
+        "instrument": {
+          "name": "Bounded addition instrument",
+          "inputs": [
+            "x",
+            "offset"
+          ],
+          "outputs": {
+            "result": {
+              "op": "add",
+              "args": [
+                {
+                  "field": "x"
+                },
+                {
+                  "field": "offset"
+                }
+              ]
+            }
+          },
+          "conditions": "Exact supplied finite integer arithmetic.",
+          "limitations": "No empirical semantics."
+        },
+        "input": {
+          "x": 3235,
+          "offset": 554
+        },
+        "expected": {
+          "result": 3789
+        }
+      },
+      "dependencies": {
+        "bridge/instruments.py": "787466086e1303599aa4576c1c677e732257efa10d2bf932b96a705a96ac03b9",
+        "source": "a3bee0fcf8778a6b5f34e43c962f489fce1f3ae140a28a389787ac5199d96064"
+      }
+    },
+    {
+      "id": "initial-03",
+      "spec": {
+        "instrument": {
+          "name": "Bounded addition instrument",
+          "inputs": [
+            "x",
+            "offset"
+          ],
+          "outputs": {
+            "result": {
+              "op": "add",
+              "args": [
+                {
+                  "field": "x"
+                },
+                {
+                  "field": "offset"
+                }
+              ]
+            }
+          },
+          "conditions": "Exact supplied finite integer arithmetic.",
+          "limitations": "No empirical semantics."
+        },
+        "input": {
+          "x": 813,
+          "offset": -736
+        },
+        "expected": {
+          "result": 77
+        }
+      },
+      "dependencies": {
+        "bridge/instruments.py": "787466086e1303599aa4576c1c677e732257efa10d2bf932b96a705a96ac03b9",
+        "source": "40d1877b4bbd87e6f384cac95d3e8dcb21a7fe0e7fc0cfcf0b45ecd9e0d95dbe"
+      }
+    },
+    {
+      "id": "initial-04",
+      "spec": {
+        "instrument": {
+          "name": "Bounded addition instrument",
+          "inputs": [
+            "x",
+            "offset"
+          ],
+          "outputs": {
+            "result": {
+              "op": "add",
+              "args": [
+                {
+                  "field": "x"
+                },
+                {
+                  "field": "offset"
+                }
+              ]
+            }
+          },
+          "conditions": "Exact supplied finite integer arithmetic.",
+          "limitations": "No empirical semantics."
+        },
+        "input": {
+          "x": 2717,
+          "offset": 867
+        },
+        "expected": {
+          "result": 3584
+        }
+      },
+      "dependencies": {
+        "bridge/instruments.py": "787466086e1303599aa4576c1c677e732257efa10d2bf932b96a705a96ac03b9",
+        "source": "3dbc4fae60ef163944b2edb58c61177cb800b1b347053de482dd0600265582da"
+      }
+    },
+    {
+      "id": "initial-05",
+      "spec": {
+        "instrument": {
+          "name": "Bounded addition instrument",
+          "inputs": [
+            "x",
+            "offset"
+          ],
+          "outputs": {
+            "result": {
+              "op": "add",
+              "args": [
+                {
+                  "field": "x"
+                },
+                {
+                  "field": "offset"
+                }
+              ]
+            }
+          },
+          "conditions": "Exact supplied finite integer arithmetic.",
+          "limitations": "No empirical semantics."
+        },
+        "input": {
+          "x": -2683,
+          "offset": -379
+        },
+        "expected": {
+          "result": -3062
+        }
+      },
+      "dependencies": {
+        "bridge/instruments.py": "787466086e1303599aa4576c1c677e732257efa10d2bf932b96a705a96ac03b9",
+        "source": "d50826b181262918351f747dd9f29dad900434d63f8b32108719be90e819ad36"
+      }
+    },
+    {
+      "id": "initial-06",
+      "spec": {
+        "instrument": {
+          "name": "Bounded addition instrument",
+          "inputs": [
+            "x",
+            "offset"
+          ],
+          "outputs": {
+            "result": {
+              "op": "add",
+              "args": [
+                {
+                  "field": "x"
+                },
+                {
+                  "field": "offset"
+                }
+              ]
+            }
+          },
+          "conditions": "Exact supplied finite integer arithmetic.",
+          "limitations": "No empirical semantics."
+        },
+        "input": {
+          "x": -107,
+          "offset": 956
+        },
+        "expected": {
+          "result": 849
+        }
+      },
+      "dependencies": {
+        "bridge/instruments.py": "787466086e1303599aa4576c1c677e732257efa10d2bf932b96a705a96ac03b9",
+        "source": "ff204fe354f87021a17507321eb309771fb6a40bb80351a080532c11fc7c7da2"
+      }
+    },
+    {
+      "id": "initial-07",
+      "spec": {
+        "instrument": {
+          "name": "Bounded addition instrument",
+          "inputs": [
+            "x",
+            "offset"
+          ],
+          "outputs": {
+            "result": {
+              "op": "add",
+              "args": [
+                {
+                  "field": "x"
+                },
+                {
+                  "field": "offset"
+                }
+              ]
+            }
+          },
+          "conditions": "Exact supplied finite integer arithmetic.",
+          "limitations": "No empirical semantics."
+        },
+        "input": {
+          "x": -5356,
+          "offset": 885
+        },
+        "expected": {
+          "result": -4471
+        }
+      },
+      "dependencies": {
+        "bridge/instruments.py": "787466086e1303599aa4576c1c677e732257efa10d2bf932b96a705a96ac03b9",
+        "source": "f45aa27c211331d7c8d31482aab94ec1db4392246217565f09f7838dba664c95"
+      }
+    },
+    {
+      "id": "initial-08",
+      "spec": {
+        "instrument": {
+          "name": "Bounded addition instrument",
+          "inputs": [
+            "x",
+            "offset"
+          ],
+          "outputs": {
+            "result": {
+              "op": "add",
+              "args": [
+                {
+                  "field": "x"
+                },
+                {
+                  "field": "offset"
+                }
+              ]
+            }
+          },
+          "conditions": "Exact supplied finite integer arithmetic.",
+          "limitations": "No empirical semantics."
+        },
+        "input": {
+          "x": -5715,
+          "offset": 960
+        },
+        "expected": {
+          "result": -4755
+        }
+      },
+      "dependencies": {
+        "bridge/instruments.py": "787466086e1303599aa4576c1c677e732257efa10d2bf932b96a705a96ac03b9",
+        "source": "a7c1d237d53f5ec3f95279a28d070e4b8b67c889122ec10bffe472dd1e63a437"
+      }
+    },
+    {
+      "id": "initial-09",
+      "spec": {
+        "instrument": {
+          "name": "Bounded addition instrument",
+          "inputs": [
+            "x",
+            "offset"
+          ],
+          "outputs": {
+            "result": {
+              "op": "add",
+              "args": [
+                {
+                  "field": "x"
+                },
+                {
+                  "field": "offset"
+                }
+              ]
+            }
+          },
+          "conditions": "Exact supplied finite integer arithmetic.",
+          "limitations": "No empirical semantics."
+        },
+        "input": {
+          "x": 7812,
+          "offset": -746
+        },
+        "expected": {
+          "result": 7066
+        }
+      },
+      "dependencies": {
+        "bridge/instruments.py": "787466086e1303599aa4576c1c677e732257efa10d2bf932b96a705a96ac03b9",
+        "source": "537b3199703ff6420edf6384d3c88ad9e42330b4282c4113f732e72af943aa78"
+      }
+    },
+    {
+      "id": "initial-10",
+      "spec": {
+        "instrument": {
+          "name": "Bounded addition instrument",
+          "inputs": [
+            "x",
+            "offset"
+          ],
+          "outputs": {
+            "result": {
+              "op": "add",
+              "args": [
+                {
+                  "field": "x"
+                },
+                {
+                  "field": "offset"
+                }
+              ]
+            }
+          },
+          "conditions": "Exact supplied finite integer arithmetic.",
+          "limitations": "No empirical semantics."
+        },
+        "input": {
+          "x": -9059,
+          "offset": 759
+        },
+        "expected": {
+          "result": -8300
+        }
+      },
+      "dependencies": {
+        "bridge/instruments.py": "787466086e1303599aa4576c1c677e732257efa10d2bf932b96a705a96ac03b9",
+        "source": "2d8ae0de05457b12a4d94d7853298bd62fddc8c5ea197530807952a8b2e199f4"
+      }
+    },
+    {
+      "id": "initial-11",
+      "spec": {
+        "instrument": {
+          "name": "Bounded addition instrument",
+          "inputs": [
+            "x",
+            "offset"
+          ],
+          "outputs": {
+            "result": {
+              "op": "add",
+              "args": [
+                {
+                  "field": "x"
+                },
+                {
+                  "field": "offset"
+                }
+              ]
+            }
+          },
+          "conditions": "Exact supplied finite integer arithmetic.",
+          "limitations": "No empirical semantics."
+        },
+        "input": {
+          "x": 7561,
+          "offset": 399
+        },
+        "expected": {
+          "result": 7960
+        }
+      },
+      "dependencies": {
+        "bridge/instruments.py": "787466086e1303599aa4576c1c677e732257efa10d2bf932b96a705a96ac03b9",
+        "source": "de57293b0a7c39dc56173362dfe0b4756b72b858981e43316f976dd3f1ceebba"
+      }
+    },
+    {
+      "id": "initial-12",
+      "spec": {
+        "instrument": {
+          "name": "Bounded addition instrument",
+          "inputs": [
+            "x",
+            "offset"
+          ],
+          "outputs": {
+            "result": {
+              "op": "add",
+              "args": [
+                {
+                  "field": "x"
+                },
+                {
+                  "field": "offset"
+                }
+              ]
+            }
+          },
+          "conditions": "Exact supplied finite integer arithmetic.",
+          "limitations": "No empirical semantics."
+        },
+        "input": {
+          "x": 1011,
+          "offset": -536
+        },
+        "expected": {
+          "result": 475
+        }
+      },
+      "dependencies": {
+        "bridge/instruments.py": "787466086e1303599aa4576c1c677e732257efa10d2bf932b96a705a96ac03b9",
+        "source": "de8f6e23299cd4ccee19dea0dcda94066c8e5da4f108f99e46e898135db189c8"
+      }
+    },
+    {
+      "id": "initial-13",
+      "spec": {
+        "instrument": {
+          "name": "Bounded addition instrument",
+          "inputs": [
+            "x",
+            "offset"
+          ],
+          "outputs": {
+            "result": {
+              "op": "add",
+              "args": [
+                {
+                  "field": "x"
+                },
+                {
+                  "field": "offset"
+                }
+              ]
+            }
+          },
+          "conditions": "Exact supplied finite integer arithmetic.",
+          "limitations": "No empirical semantics."
+        },
+        "input": {
+          "x": 8761,
+          "offset": -420
+        },
+        "expected": {
+          "result": 8341
+        }
+      },
+      "dependencies": {
+        "bridge/instruments.py": "787466086e1303599aa4576c1c677e732257efa10d2bf932b96a705a96ac03b9",
+        "source": "fdf783d92d212dc7431b2b51098667405c5180f009ac154a198dbcb135de673a"
+      }
+    },
+    {
+      "id": "initial-14",
+      "spec": {
+        "instrument": {
+          "name": "Bounded addition instrument",
+          "inputs": [
+            "x",
+            "offset"
+          ],
+          "outputs": {
+            "result": {
+              "op": "add",
+              "args": [
+                {
+                  "field": "x"
+                },
+                {
+                  "field": "offset"
+                }
+              ]
+            }
+          },
+          "conditions": "Exact supplied finite integer arithmetic.",
+          "limitations": "No empirical semantics."
+        },
+        "input": {
+          "x": 636,
+          "offset": -673
+        },
+        "expected": {
+          "result": -37
+        }
+      },
+      "dependencies": {
+        "bridge/instruments.py": "787466086e1303599aa4576c1c677e732257efa10d2bf932b96a705a96ac03b9",
+        "source": "b1daa06c1d9b342aa15be70b079764888a45fac779b0214eb28df34250b81214"
+      }
+    },
+    {
+      "id": "initial-15",
+      "spec": {
+        "instrument": {
+          "name": "Bounded addition instrument",
+          "inputs": [
+            "x",
+            "offset"
+          ],
+          "outputs": {
+            "result": {
+              "op": "add",
+              "args": [
+                {
+                  "field": "x"
+                },
+                {
+                  "field": "offset"
+                }
+              ]
+            }
+          },
+          "conditions": "Exact supplied finite integer arithmetic.",
+          "limitations": "No empirical semantics."
+        },
+        "input": {
+          "x": 4445,
+          "offset": -651
+        },
+        "expected": {
+          "result": 3794
+        }
+      },
+      "dependencies": {
+        "bridge/instruments.py": "787466086e1303599aa4576c1c677e732257efa10d2bf932b96a705a96ac03b9",
+        "source": "ebe3acaecdd40cae6f93b06cfe163ed80820b6fdb4a47cee51baf89f241d3c4d"
+      }
+    },
+    {
+      "id": "initial-16",
+      "spec": {
+        "instrument": {
+          "name": "Bounded addition instrument",
+          "inputs": [
+            "x",
+            "offset"
+          ],
+          "outputs": {
+            "result": {
+              "op": "add",
+              "args": [
+                {
+                  "field": "x"
+                },
+                {
+                  "field": "offset"
+                }
+              ]
+            }
+          },
+          "conditions": "Exact supplied finite integer arithmetic.",
+          "limitations": "No empirical semantics."
+        },
+        "input": {
+          "x": 5772,
+          "offset": 450
+        },
+        "expected": {
+          "result": 6222
+        }
+      },
+      "dependencies": {
+        "bridge/instruments.py": "787466086e1303599aa4576c1c677e732257efa10d2bf932b96a705a96ac03b9",
+        "source": "5863bd1a9f7a167302e27de888aa85401bdb5436144e9ee17562eec29eb485f6"
+      }
+    },
+    {
+      "id": "initial-17",
+      "spec": {
+        "instrument": {
+          "name": "Bounded addition instrument",
+          "inputs": [
+            "x",
+            "offset"
+          ],
+          "outputs": {
+            "result": {
+              "op": "add",
+              "args": [
+                {
+                  "field": "x"
+                },
+                {
+                  "field": "offset"
+                }
+              ]
+            }
+          },
+          "conditions": "Exact supplied finite integer arithmetic.",
+          "limitations": "No empirical semantics."
+        },
+        "input": {
+          "x": 71,
+          "offset": 507
+        },
+        "expected": {
+          "result": 578
+        }
+      },
+      "dependencies": {
+        "bridge/instruments.py": "787466086e1303599aa4576c1c677e732257efa10d2bf932b96a705a96ac03b9",
+        "source": "8b1538ed23dd418916c0a1a45039d7cfc0c92b0986463c8de772be65388bb4ca"
+      }
+    },
+    {
+      "id": "initial-18",
+      "spec": {
+        "instrument": {
+          "name": "Bounded addition instrument",
+          "inputs": [
+            "x",
+            "offset"
+          ],
+          "outputs": {
+            "result": {
+              "op": "add",
+              "args": [
+                {
+                  "field": "x"
+                },
+                {
+                  "field": "offset"
+                }
+              ]
+            }
+          },
+          "conditions": "Exact supplied finite integer arithmetic.",
+          "limitations": "No empirical semantics."
+        },
+        "input": {
+          "x": -2063,
+          "offset": -638
+        },
+        "expected": {
+          "result": -2701
+        }
+      },
+      "dependencies": {
+        "bridge/instruments.py": "787466086e1303599aa4576c1c677e732257efa10d2bf932b96a705a96ac03b9",
+        "source": "3cca560f6f94378dd324ca94c7411b0918cd0c25d5d11d23557bd7acc2c5f827"
+      }
+    },
+    {
+      "id": "initial-19",
+      "spec": {
+        "instrument": {
+          "name": "Bounded addition instrument",
+          "inputs": [
+            "x",
+            "offset"
+          ],
+          "outputs": {
+            "result": {
+              "op": "add",
+              "args": [
+                {
+                  "field": "x"
+                },
+                {
+                  "field": "offset"
+                }
+              ]
+            }
+          },
+          "conditions": "Exact supplied finite integer arithmetic.",
+          "limitations": "No empirical semantics."
+        },
+        "input": {
+          "x": -6393,
+          "offset": -422
+        },
+        "expected": {
+          "result": -6815
+        }
+      },
+      "dependencies": {
+        "bridge/instruments.py": "787466086e1303599aa4576c1c677e732257efa10d2bf932b96a705a96ac03b9",
+        "source": "3a8517eb9ad44a9277d2b442ba8b7ae3cb4d3b4ea3afdf2fbfff30c1d0e1e5e0"
+      }
+    },
+    {
+      "id": "initial-20",
+      "spec": {
+        "instrument": {
+          "name": "Bounded addition instrument",
+          "inputs": [
+            "x",
+            "offset"
+          ],
+          "outputs": {
+            "result": {
+              "op": "add",
+              "args": [
+                {
+                  "field": "x"
+                },
+                {
+                  "field": "offset"
+                }
+              ]
+            }
+          },
+          "conditions": "Exact supplied finite integer arithmetic.",
+          "limitations": "No empirical semantics."
+        },
+        "input": {
+          "x": 9359,
+          "offset": 892
+        },
+        "expected": {
+          "result": 10251
+        }
+      },
+      "dependencies": {
+        "bridge/instruments.py": "787466086e1303599aa4576c1c677e732257efa10d2bf932b96a705a96ac03b9",
+        "source": "2d84f0d47bf2db35ce9f763cd1fa9cfeba4da3d89fe5f4cbde2c0ad15c286b85"
+      }
+    },
+    {
+      "id": "initial-21",
+      "spec": {
+        "instrument": {
+          "name": "Bounded addition instrument",
+          "inputs": [
+            "x",
+            "offset"
+          ],
+          "outputs": {
+            "result": {
+              "op": "add",
+              "args": [
+                {
+                  "field": "x"
+                },
+                {
+                  "field": "offset"
+                }
+              ]
+            }
+          },
+          "conditions": "Exact supplied finite integer arithmetic.",
+          "limitations": "No empirical semantics."
+        },
+        "input": {
+          "x": 3577,
+          "offset": 89
+        },
+        "expected": {
+          "result": 3666
+        }
+      },
+      "dependencies": {
+        "bridge/instruments.py": "787466086e1303599aa4576c1c677e732257efa10d2bf932b96a705a96ac03b9",
+        "source": "864c3ba0d302ed6ae6b5331f843f93adbecea8ffdadf332ae4c64e2bbf8882ca"
+      }
+    },
+    {
+      "id": "initial-22",
+      "spec": {
+        "instrument": {
+          "name": "Bounded addition instrument",
+          "inputs": [
+            "x",
+            "offset"
+          ],
+          "outputs": {
+            "result": {
+              "op": "add",
+              "args": [
+                {
+                  "field": "x"
+                },
+                {
+                  "field": "offset"
+                }
+              ]
+            }
+          },
+          "conditions": "Exact supplied finite integer arithmetic.",
+          "limitations": "No empirical semantics."
+        },
+        "input": {
+          "x": -5830,
+          "offset": 353
+        },
+        "expected": {
+          "result": -5477
+        }
+      },
+      "dependencies": {
+        "bridge/instruments.py": "787466086e1303599aa4576c1c677e732257efa10d2bf932b96a705a96ac03b9",
+        "source": "585d438b2331e83304e3e1897962a2785c515d4c1c266b5967c687b79589c858"
+      }
+    },
+    {
+      "id": "initial-23",
+      "spec": {
+        "instrument": {
+          "name": "Bounded addition instrument",
+          "inputs": [
+            "x",
+            "offset"
+          ],
+          "outputs": {
+            "result": {
+              "op": "add",
+              "args": [
+                {
+                  "field": "x"
+                },
+                {
+                  "field": "offset"
+                }
+              ]
+            }
+          },
+          "conditions": "Exact supplied finite integer arithmetic.",
+          "limitations": "No empirical semantics."
+        },
+        "input": {
+          "x": -9913,
+          "offset": 193
+        },
+        "expected": {
+          "result": -9720
+        }
+      },
+      "dependencies": {
+        "bridge/instruments.py": "787466086e1303599aa4576c1c677e732257efa10d2bf932b96a705a96ac03b9",
+        "source": "9407d6eafc8420d95f38f7406d67a8494ca93b2e9800d446310a951031240098"
+      }
+    }
+  ],
+  "successor_instances": [
+    {
+      "id": "new-01",
+      "spec": {
+        "instrument": {
+          "name": "Bounded addition instrument",
+          "inputs": [
+            "x",
+            "offset"
+          ],
+          "outputs": {
+            "result": {
+              "op": "add",
+              "args": [
+                {
+                  "field": "x"
+                },
+                {
+                  "field": "offset"
+                }
+              ]
+            }
+          },
+          "conditions": "Exact supplied finite integer arithmetic.",
+          "limitations": "No empirical semantics."
+        },
+        "input": {
+          "x": 8173,
+          "offset": -128
+        },
+        "expected": {
+          "result": 8046
+        }
+      },
+      "dependencies": {
+        "bridge/instruments.py": "787466086e1303599aa4576c1c677e732257efa10d2bf932b96a705a96ac03b9",
+        "source": "38656d002f11542670e9fa2ae449a965ec4ae5b062eae3d34ddaada664fb5611"
+      }
+    },
+    {
+      "id": "new-11",
+      "spec": {
+        "instrument": {
+          "name": "Bounded addition instrument",
+          "inputs": [
+            "x",
+            "offset"
+          ],
+          "outputs": {
+            "result": {
+              "op": "add",
+              "args": [
+                {
+                  "field": "x"
+                },
+                {
+                  "field": "offset"
+                }
+              ]
+            }
+          },
+          "conditions": "Exact supplied finite integer arithmetic.",
+          "limitations": "No empirical semantics."
+        },
+        "input": {
+          "x": -7420,
+          "offset": 680
+        },
+        "expected": {
+          "result": -6740
+        }
+      },
+      "dependencies": {
+        "bridge/instruments.py": "787466086e1303599aa4576c1c677e732257efa10d2bf932b96a705a96ac03b9",
+        "source": "003fb9ef376298bad33e483ccae455f979033a34d138f6397f69b4f8cde65f8b"
+      }
+    },
+    {
+      "id": "initial-08",
+      "spec": {
+        "instrument": {
+          "name": "Bounded addition instrument",
+          "inputs": [
+            "x",
+            "offset"
+          ],
+          "outputs": {
+            "result": {
+              "op": "add",
+              "args": [
+                {
+                  "field": "x"
+                },
+                {
+                  "field": "offset"
+                }
+              ]
+            }
+          },
+          "conditions": "Exact supplied finite integer arithmetic.",
+          "limitations": "No empirical semantics."
+        },
+        "input": {
+          "x": -5715,
+          "offset": 960
+        },
+        "expected": {
+          "result": -4755
+        }
+      },
+      "dependencies": {
+        "bridge/instruments.py": "787466086e1303599aa4576c1c677e732257efa10d2bf932b96a705a96ac03b9",
+        "source": "a7c1d237d53f5ec3f95279a28d070e4b8b67c889122ec10bffe472dd1e63a437"
+      }
+    },
+    {
+      "id": "initial-20-source-changed",
+      "spec": {
+        "instrument": {
+          "name": "Bounded addition instrument",
+          "inputs": [
+            "x",
+            "offset"
+          ],
+          "outputs": {
+            "result": {
+              "op": "add",
+              "args": [
+                {
+                  "field": "x"
+                },
+                {
+                  "field": "offset"
+                }
+              ]
+            }
+          },
+          "conditions": "Exact supplied finite integer arithmetic.",
+          "limitations": "No empirical semantics."
+        },
+        "input": {
+          "x": -5373,
+          "offset": 377
+        },
+        "expected": {
+          "result": -4996
+        }
+      },
+      "dependencies": {
+        "bridge/instruments.py": "787466086e1303599aa4576c1c677e732257efa10d2bf932b96a705a96ac03b9",
+        "source": "094d4026080d218dd72d0c0871abbbaf3b04df46add3ed6f4b26c37b88d7211b"
+      }
+    },
+    {
+      "id": "new-08",
+      "spec": {
+        "instrument": {
+          "name": "Bounded addition instrument",
+          "inputs": [
+            "x",
+            "offset"
+          ],
+          "outputs": {
+            "result": {
+              "op": "add",
+              "args": [
+                {
+                  "field": "x"
+                },
+                {
+                  "field": "offset"
+                }
+              ]
+            }
+          },
+          "conditions": "Exact supplied finite integer arithmetic.",
+          "limitations": "No empirical semantics."
+        },
+        "input": {
+          "x": 5434,
+          "offset": -652
+        },
+        "expected": {
+          "result": 4782
+        }
+      },
+      "dependencies": {
+        "bridge/instruments.py": "787466086e1303599aa4576c1c677e732257efa10d2bf932b96a705a96ac03b9",
+        "source": "1296b3976e59bea0bab33b5d205d33d6d4dfdaf93809474eb73f2de446709e0e"
+      }
+    },
+    {
+      "id": "initial-09",
+      "spec": {
+        "instrument": {
+          "name": "Bounded addition instrument",
+          "inputs": [
+            "x",
+            "offset"
+          ],
+          "outputs": {
+            "result": {
+              "op": "add",
+              "args": [
+                {
+                  "field": "x"
+                },
+                {
+                  "field": "offset"
+                }
+              ]
+            }
+          },
+          "conditions": "Exact supplied finite integer arithmetic.",
+          "limitations": "No empirical semantics."
+        },
+        "input": {
+          "x": 7812,
+          "offset": -746
+        },
+        "expected": {
+          "result": 7066
+        }
+      },
+      "dependencies": {
+        "bridge/instruments.py": "787466086e1303599aa4576c1c677e732257efa10d2bf932b96a705a96ac03b9",
+        "source": "537b3199703ff6420edf6384d3c88ad9e42330b4282c4113f732e72af943aa78"
+      }
+    },
+    {
+      "id": "new-05",
+      "spec": {
+        "instrument": {
+          "name": "Bounded addition instrument",
+          "inputs": [
+            "x",
+            "offset"
+          ],
+          "outputs": {
+            "result": {
+              "op": "add",
+              "args": [
+                {
+                  "field": "x"
+                },
+                {
+                  "field": "offset"
+                }
+              ]
+            }
+          },
+          "conditions": "Exact supplied finite integer arithmetic.",
+          "limitations": "No empirical semantics."
+        },
+        "input": {
+          "x": -6991,
+          "offset": 158
+        },
+        "expected": {
+          "result": -6833
+        }
+      },
+      "dependencies": {
+        "bridge/instruments.py": "787466086e1303599aa4576c1c677e732257efa10d2bf932b96a705a96ac03b9",
+        "source": "8eda2c7ce840b6611286e04590648e9ddd7a63e22ef12fcfabbcfa8ead954695"
+      }
+    },
+    {
+      "id": "initial-13",
+      "spec": {
+        "instrument": {
+          "name": "Bounded addition instrument",
+          "inputs": [
+            "x",
+            "offset"
+          ],
+          "outputs": {
+            "result": {
+              "op": "add",
+              "args": [
+                {
+                  "field": "x"
+                },
+                {
+                  "field": "offset"
+                }
+              ]
+            }
+          },
+          "conditions": "Exact supplied finite integer arithmetic.",
+          "limitations": "No empirical semantics."
+        },
+        "input": {
+          "x": 8761,
+          "offset": -420
+        },
+        "expected": {
+          "result": 8341
+        }
+      },
+      "dependencies": {
+        "bridge/instruments.py": "787466086e1303599aa4576c1c677e732257efa10d2bf932b96a705a96ac03b9",
+        "source": "fdf783d92d212dc7431b2b51098667405c5180f009ac154a198dbcb135de673a"
+      }
+    },
+    {
+      "id": "initial-18-source-changed",
+      "spec": {
+        "instrument": {
+          "name": "Bounded addition instrument",
+          "inputs": [
+            "x",
+            "offset"
+          ],
+          "outputs": {
+            "result": {
+              "op": "add",
+              "args": [
+                {
+                  "field": "x"
+                },
+                {
+                  "field": "offset"
+                }
+              ]
+            }
+          },
+          "conditions": "Exact supplied finite integer arithmetic.",
+          "limitations": "No empirical semantics."
+        },
+        "input": {
+          "x": -3441,
+          "offset": 635
+        },
+        "expected": {
+          "result": -2806
+        }
+      },
+      "dependencies": {
+        "bridge/instruments.py": "787466086e1303599aa4576c1c677e732257efa10d2bf932b96a705a96ac03b9",
+        "source": "ff18262d820f985272a15ef5f0a2b6507681264ad5126d6807764c976c71647e"
+      }
+    },
+    {
+      "id": "initial-14-source-changed",
+      "spec": {
+        "instrument": {
+          "name": "Bounded addition instrument",
+          "inputs": [
+            "x",
+            "offset"
+          ],
+          "outputs": {
+            "result": {
+              "op": "add",
+              "args": [
+                {
+                  "field": "x"
+                },
+                {
+                  "field": "offset"
+                }
+              ]
+            }
+          },
+          "conditions": "Exact supplied finite integer arithmetic.",
+          "limitations": "No empirical semantics."
+        },
+        "input": {
+          "x": 2694,
+          "offset": -44
+        },
+        "expected": {
+          "result": 2651
+        }
+      },
+      "dependencies": {
+        "bridge/instruments.py": "787466086e1303599aa4576c1c677e732257efa10d2bf932b96a705a96ac03b9",
+        "source": "54fa232d01e36d4134714e08027b71056c248d6659b98dccedacdfa6735b5324"
+      }
+    },
+    {
+      "id": "initial-05",
+      "spec": {
+        "instrument": {
+          "name": "Bounded addition instrument",
+          "inputs": [
+            "x",
+            "offset"
+          ],
+          "outputs": {
+            "result": {
+              "op": "add",
+              "args": [
+                {
+                  "field": "x"
+                },
+                {
+                  "field": "offset"
+                }
+              ]
+            }
+          },
+          "conditions": "Exact supplied finite integer arithmetic.",
+          "limitations": "No empirical semantics."
+        },
+        "input": {
+          "x": -2683,
+          "offset": -379
+        },
+        "expected": {
+          "result": -3062
+        }
+      },
+      "dependencies": {
+        "bridge/instruments.py": "787466086e1303599aa4576c1c677e732257efa10d2bf932b96a705a96ac03b9",
+        "source": "d50826b181262918351f747dd9f29dad900434d63f8b32108719be90e819ad36"
+      }
+    },
+    {
+      "id": "new-03",
+      "spec": {
+        "instrument": {
+          "name": "Bounded addition instrument",
+          "inputs": [
+            "x",
+            "offset"
+          ],
+          "outputs": {
+            "result": {
+              "op": "add",
+              "args": [
+                {
+                  "field": "x"
+                },
+                {
+                  "field": "offset"
+                }
+              ]
+            }
+          },
+          "conditions": "Exact supplied finite integer arithmetic.",
+          "limitations": "No empirical semantics."
+        },
+        "input": {
+          "x": -8895,
+          "offset": -507
+        },
+        "expected": {
+          "result": -9401
+        }
+      },
+      "dependencies": {
+        "bridge/instruments.py": "787466086e1303599aa4576c1c677e732257efa10d2bf932b96a705a96ac03b9",
+        "source": "0f802aaf3070d7ab0af395a5acdc1851496ad1fe8a22510914e98682579e5822"
+      }
+    },
+    {
+      "id": "initial-12-source-changed",
+      "spec": {
+        "instrument": {
+          "name": "Bounded addition instrument",
+          "inputs": [
+            "x",
+            "offset"
+          ],
+          "outputs": {
+            "result": {
+              "op": "add",
+              "args": [
+                {
+                  "field": "x"
+                },
+                {
+                  "field": "offset"
+                }
+              ]
+            }
+          },
+          "conditions": "Exact supplied finite integer arithmetic.",
+          "limitations": "No empirical semantics."
+        },
+        "input": {
+          "x": 4108,
+          "offset": -412
+        },
+        "expected": {
+          "result": 3697
+        }
+      },
+      "dependencies": {
+        "bridge/instruments.py": "787466086e1303599aa4576c1c677e732257efa10d2bf932b96a705a96ac03b9",
+        "source": "133da3526b736292204337abfa4fce497da19ab0e6d9208fa859a9d19643c38e"
+      }
+    },
+    {
+      "id": "new-09",
+      "spec": {
+        "instrument": {
+          "name": "Bounded addition instrument",
+          "inputs": [
+            "x",
+            "offset"
+          ],
+          "outputs": {
+            "result": {
+              "op": "add",
+              "args": [
+                {
+                  "field": "x"
+                },
+                {
+                  "field": "offset"
+                }
+              ]
+            }
+          },
+          "conditions": "Exact supplied finite integer arithmetic.",
+          "limitations": "No empirical semantics."
+        },
+        "input": {
+          "x": 9063,
+          "offset": -93
+        },
+        "expected": {
+          "result": 8970
+        }
+      },
+      "dependencies": {
+        "bridge/instruments.py": "787466086e1303599aa4576c1c677e732257efa10d2bf932b96a705a96ac03b9",
+        "source": "8b9a9cd1b9859bd18593d366bb688d9c6ea7f2e24bf8a5eb561197daa367d403"
+      }
+    },
+    {
+      "id": "initial-15-source-changed",
+      "spec": {
+        "instrument": {
+          "name": "Bounded addition instrument",
+          "inputs": [
+            "x",
+            "offset"
+          ],
+          "outputs": {
+            "result": {
+              "op": "add",
+              "args": [
+                {
+                  "field": "x"
+                },
+                {
+                  "field": "offset"
+                }
+              ]
+            }
+          },
+          "conditions": "Exact supplied finite integer arithmetic.",
+          "limitations": "No empirical semantics."
+        },
+        "input": {
+          "x": -8201,
+          "offset": -988
+        },
+        "expected": {
+          "result": -9189
+        }
+      },
+      "dependencies": {
+        "bridge/instruments.py": "787466086e1303599aa4576c1c677e732257efa10d2bf932b96a705a96ac03b9",
+        "source": "3130b453aa145f70114c4951b09d6cd10ce65215b74eed55bae938f69c997dc4"
+      }
+    },
+    {
+      "id": "new-07",
+      "spec": {
+        "instrument": {
+          "name": "Bounded addition instrument",
+          "inputs": [
+            "x",
+            "offset"
+          ],
+          "outputs": {
+            "result": {
+              "op": "add",
+              "args": [
+                {
+                  "field": "x"
+                },
+                {
+                  "field": "offset"
+                }
+              ]
+            }
+          },
+          "conditions": "Exact supplied finite integer arithmetic.",
+          "limitations": "No empirical semantics."
+        },
+        "input": {
+          "x": 1353,
+          "offset": 787
+        },
+        "expected": {
+          "result": 2140
+        }
+      },
+      "dependencies": {
+        "bridge/instruments.py": "787466086e1303599aa4576c1c677e732257efa10d2bf932b96a705a96ac03b9",
+        "source": "374169f1708107cd07e03e223c2195eb9694ab69543bed4c422d055e704005f2"
+      }
+    },
+    {
+      "id": "initial-02",
+      "spec": {
+        "instrument": {
+          "name": "Bounded addition instrument",
+          "inputs": [
+            "x",
+            "offset"
+          ],
+          "outputs": {
+            "result": {
+              "op": "add",
+              "args": [
+                {
+                  "field": "x"
+                },
+                {
+                  "field": "offset"
+                }
+              ]
+            }
+          },
+          "conditions": "Exact supplied finite integer arithmetic.",
+          "limitations": "No empirical semantics."
+        },
+        "input": {
+          "x": 3235,
+          "offset": 554
+        },
+        "expected": {
+          "result": 3789
+        }
+      },
+      "dependencies": {
+        "bridge/instruments.py": "787466086e1303599aa4576c1c677e732257efa10d2bf932b96a705a96ac03b9",
+        "source": "a3bee0fcf8778a6b5f34e43c962f489fce1f3ae140a28a389787ac5199d96064"
+      }
+    },
+    {
+      "id": "initial-19",
+      "spec": {
+        "instrument": {
+          "name": "Bounded addition instrument",
+          "inputs": [
+            "x",
+            "offset"
+          ],
+          "outputs": {
+            "result": {
+              "op": "add",
+              "args": [
+                {
+                  "field": "x"
+                },
+                {
+                  "field": "offset"
+                }
+              ]
+            }
+          },
+          "conditions": "Exact supplied finite integer arithmetic.",
+          "limitations": "No empirical semantics."
+        },
+        "input": {
+          "x": -6393,
+          "offset": -422
+        },
+        "expected": {
+          "result": -6815
+        }
+      },
+      "dependencies": {
+        "bridge/instruments.py": "787466086e1303599aa4576c1c677e732257efa10d2bf932b96a705a96ac03b9",
+        "source": "3a8517eb9ad44a9277d2b442ba8b7ae3cb4d3b4ea3afdf2fbfff30c1d0e1e5e0"
+      }
+    },
+    {
+      "id": "new-10",
+      "spec": {
+        "instrument": {
+          "name": "Bounded addition instrument",
+          "inputs": [
+            "x",
+            "offset"
+          ],
+          "outputs": {
+            "result": {
+              "op": "add",
+              "args": [
+                {
+                  "field": "x"
+                },
+                {
+                  "field": "offset"
+                }
+              ]
+            }
+          },
+          "conditions": "Exact supplied finite integer arithmetic.",
+          "limitations": "No empirical semantics."
+        },
+        "input": {
+          "x": 7441,
+          "offset": 72
+        },
+        "expected": {
+          "result": 7513
+        }
+      },
+      "dependencies": {
+        "bridge/instruments.py": "787466086e1303599aa4576c1c677e732257efa10d2bf932b96a705a96ac03b9",
+        "source": "b5e960bf1afdaf84546727b49fa5d17ffdd9909b05fba5641090811cafd1d605"
+      }
+    },
+    {
+      "id": "initial-16",
+      "spec": {
+        "instrument": {
+          "name": "Bounded addition instrument",
+          "inputs": [
+            "x",
+            "offset"
+          ],
+          "outputs": {
+            "result": {
+              "op": "add",
+              "args": [
+                {
+                  "field": "x"
+                },
+                {
+                  "field": "offset"
+                }
+              ]
+            }
+          },
+          "conditions": "Exact supplied finite integer arithmetic.",
+          "limitations": "No empirical semantics."
+        },
+        "input": {
+          "x": 5772,
+          "offset": 450
+        },
+        "expected": {
+          "result": 6222
+        }
+      },
+      "dependencies": {
+        "bridge/instruments.py": "787466086e1303599aa4576c1c677e732257efa10d2bf932b96a705a96ac03b9",
+        "source": "5863bd1a9f7a167302e27de888aa85401bdb5436144e9ee17562eec29eb485f6"
+      }
+    },
+    {
+      "id": "initial-22-source-changed",
+      "spec": {
+        "instrument": {
+          "name": "Bounded addition instrument",
+          "inputs": [
+            "x",
+            "offset"
+          ],
+          "outputs": {
+            "result": {
+              "op": "add",
+              "args": [
+                {
+                  "field": "x"
+                },
+                {
+                  "field": "offset"
+                }
+              ]
+            }
+          },
+          "conditions": "Exact supplied finite integer arithmetic.",
+          "limitations": "No empirical semantics."
+        },
+        "input": {
+          "x": -9139,
+          "offset": 859
+        },
+        "expected": {
+          "result": -8279
+        }
+      },
+      "dependencies": {
+        "bridge/instruments.py": "787466086e1303599aa4576c1c677e732257efa10d2bf932b96a705a96ac03b9",
+        "source": "15d2a58b4e17e4aa799857f91deaafe531f6c30c39d00673239058af29b80940"
+      }
+    },
+    {
+      "id": "new-00",
+      "spec": {
+        "instrument": {
+          "name": "Bounded addition instrument",
+          "inputs": [
+            "x",
+            "offset"
+          ],
+          "outputs": {
+            "result": {
+              "op": "add",
+              "args": [
+                {
+                  "field": "x"
+                },
+                {
+                  "field": "offset"
+                }
+              ]
+            }
+          },
+          "conditions": "Exact supplied finite integer arithmetic.",
+          "limitations": "No empirical semantics."
+        },
+        "input": {
+          "x": 7105,
+          "offset": 205
+        },
+        "expected": {
+          "result": 7311
+        }
+      },
+      "dependencies": {
+        "bridge/instruments.py": "787466086e1303599aa4576c1c677e732257efa10d2bf932b96a705a96ac03b9",
+        "source": "10f5b634932ba18bb78180fa02848c87818d98dad1fd189dfa95642b66cedf7b"
+      }
+    },
+    {
+      "id": "initial-01-source-changed",
+      "spec": {
+        "instrument": {
+          "name": "Bounded addition instrument",
+          "inputs": [
+            "x",
+            "offset"
+          ],
+          "outputs": {
+            "result": {
+              "op": "add",
+              "args": [
+                {
+                  "field": "x"
+                },
+                {
+                  "field": "offset"
+                }
+              ]
+            }
+          },
+          "conditions": "Exact supplied finite integer arithmetic.",
+          "limitations": "No empirical semantics."
+        },
+        "input": {
+          "x": -3877,
+          "offset": 355
+        },
+        "expected": {
+          "result": -3521
+        }
+      },
+      "dependencies": {
+        "bridge/instruments.py": "787466086e1303599aa4576c1c677e732257efa10d2bf932b96a705a96ac03b9",
+        "source": "4e4b735ae8aa175d86bf5e83b2fd622172f7ebb64a1c65bdf09720bd3ee34140"
+      }
+    },
+    {
+      "id": "initial-06",
+      "spec": {
+        "instrument": {
+          "name": "Bounded addition instrument",
+          "inputs": [
+            "x",
+            "offset"
+          ],
+          "outputs": {
+            "result": {
+              "op": "add",
+              "args": [
+                {
+                  "field": "x"
+                },
+                {
+                  "field": "offset"
+                }
+              ]
+            }
+          },
+          "conditions": "Exact supplied finite integer arithmetic.",
+          "limitations": "No empirical semantics."
+        },
+        "input": {
+          "x": -107,
+          "offset": 956
+        },
+        "expected": {
+          "result": 849
+        }
+      },
+      "dependencies": {
+        "bridge/instruments.py": "787466086e1303599aa4576c1c677e732257efa10d2bf932b96a705a96ac03b9",
+        "source": "ff204fe354f87021a17507321eb309771fb6a40bb80351a080532c11fc7c7da2"
+      }
+    },
+    {
+      "id": "new-06",
+      "spec": {
+        "instrument": {
+          "name": "Bounded addition instrument",
+          "inputs": [
+            "x",
+            "offset"
+          ],
+          "outputs": {
+            "result": {
+              "op": "add",
+              "args": [
+                {
+                  "field": "x"
+                },
+                {
+                  "field": "offset"
+                }
+              ]
+            }
+          },
+          "conditions": "Exact supplied finite integer arithmetic.",
+          "limitations": "No empirical semantics."
+        },
+        "input": {
+          "x": -2162,
+          "offset": -462
+        },
+        "expected": {
+          "result": -2624
+        }
+      },
+      "dependencies": {
+        "bridge/instruments.py": "787466086e1303599aa4576c1c677e732257efa10d2bf932b96a705a96ac03b9",
+        "source": "f4ea6c7350791a6f7b4c713875dc971720bc2bef4c29c81fd67e0696139e4be7"
+      }
+    },
+    {
+      "id": "new-04",
+      "spec": {
+        "instrument": {
+          "name": "Bounded addition instrument",
+          "inputs": [
+            "x",
+            "offset"
+          ],
+          "outputs": {
+            "result": {
+              "op": "add",
+              "args": [
+                {
+                  "field": "x"
+                },
+                {
+                  "field": "offset"
+                }
+              ]
+            }
+          },
+          "conditions": "Exact supplied finite integer arithmetic.",
+          "limitations": "No empirical semantics."
+        },
+        "input": {
+          "x": -4886,
+          "offset": -488
+        },
+        "expected": {
+          "result": -5374
+        }
+      },
+      "dependencies": {
+        "bridge/instruments.py": "787466086e1303599aa4576c1c677e732257efa10d2bf932b96a705a96ac03b9",
+        "source": "bc02014a4e6b3a9c0d5456f4a599293b101e1855b41b849184fa209ce596c002"
+      }
+    },
+    {
+      "id": "initial-21-source-changed",
+      "spec": {
+        "instrument": {
+          "name": "Bounded addition instrument",
+          "inputs": [
+            "x",
+            "offset"
+          ],
+          "outputs": {
+            "result": {
+              "op": "add",
+              "args": [
+                {
+                  "field": "x"
+                },
+                {
+                  "field": "offset"
+                }
+              ]
+            }
+          },
+          "conditions": "Exact supplied finite integer arithmetic.",
+          "limitations": "No empirical semantics."
+        },
+        "input": {
+          "x": -4303,
+          "offset": 728
+        },
+        "expected": {
+          "result": -3575
+        }
+      },
+      "dependencies": {
+        "bridge/instruments.py": "787466086e1303599aa4576c1c677e732257efa10d2bf932b96a705a96ac03b9",
+        "source": "c93d0387a813cf5e17b26b4feb9eb8e5698f511be51210afe432cf174f75def1"
+      }
+    },
+    {
+      "id": "new-02",
+      "spec": {
+        "instrument": {
+          "name": "Bounded addition instrument",
+          "inputs": [
+            "x",
+            "offset"
+          ],
+          "outputs": {
+            "result": {
+              "op": "add",
+              "args": [
+                {
+                  "field": "x"
+                },
+                {
+                  "field": "offset"
+                }
+              ]
+            }
+          },
+          "conditions": "Exact supplied finite integer arithmetic.",
+          "limitations": "No empirical semantics."
+        },
+        "input": {
+          "x": -3212,
+          "offset": -837
+        },
+        "expected": {
+          "result": -4048
+        }
+      },
+      "dependencies": {
+        "bridge/instruments.py": "787466086e1303599aa4576c1c677e732257efa10d2bf932b96a705a96ac03b9",
+        "source": "ad392522556b72c80ae3693db9c69e81bd18a895c3e2be2a246ada0adaeb04fd"
+      }
+    },
+    {
+      "id": "initial-17",
+      "spec": {
+        "instrument": {
+          "name": "Bounded addition instrument",
+          "inputs": [
+            "x",
+            "offset"
+          ],
+          "outputs": {
+            "result": {
+              "op": "add",
+              "args": [
+                {
+                  "field": "x"
+                },
+                {
+                  "field": "offset"
+                }
+              ]
+            }
+          },
+          "conditions": "Exact supplied finite integer arithmetic.",
+          "limitations": "No empirical semantics."
+        },
+        "input": {
+          "x": 71,
+          "offset": 507
+        },
+        "expected": {
+          "result": 578
+        }
+      },
+      "dependencies": {
+        "bridge/instruments.py": "787466086e1303599aa4576c1c677e732257efa10d2bf932b96a705a96ac03b9",
+        "source": "8b1538ed23dd418916c0a1a45039d7cfc0c92b0986463c8de772be65388bb4ca"
+      }
+    },
+    {
+      "id": "initial-03",
+      "spec": {
+        "instrument": {
+          "name": "Bounded addition instrument",
+          "inputs": [
+            "x",
+            "offset"
+          ],
+          "outputs": {
+            "result": {
+              "op": "add",
+              "args": [
+                {
+                  "field": "x"
+                },
+                {
+                  "field": "offset"
+                }
+              ]
+            }
+          },
+          "conditions": "Exact supplied finite integer arithmetic.",
+          "limitations": "No empirical semantics."
+        },
+        "input": {
+          "x": 813,
+          "offset": -736
+        },
+        "expected": {
+          "result": 77
+        }
+      },
+      "dependencies": {
+        "bridge/instruments.py": "787466086e1303599aa4576c1c677e732257efa10d2bf932b96a705a96ac03b9",
+        "source": "40d1877b4bbd87e6f384cac95d3e8dcb21a7fe0e7fc0cfcf0b45ecd9e0d95dbe"
+      }
+    },
+    {
+      "id": "initial-11",
+      "spec": {
+        "instrument": {
+          "name": "Bounded addition instrument",
+          "inputs": [
+            "x",
+            "offset"
+          ],
+          "outputs": {
+            "result": {
+              "op": "add",
+              "args": [
+                {
+                  "field": "x"
+                },
+                {
+                  "field": "offset"
+                }
+              ]
+            }
+          },
+          "conditions": "Exact supplied finite integer arithmetic.",
+          "limitations": "No empirical semantics."
+        },
+        "input": {
+          "x": 7561,
+          "offset": 399
+        },
+        "expected": {
+          "result": 7960
+        }
+      },
+      "dependencies": {
+        "bridge/instruments.py": "787466086e1303599aa4576c1c677e732257efa10d2bf932b96a705a96ac03b9",
+        "source": "de57293b0a7c39dc56173362dfe0b4756b72b858981e43316f976dd3f1ceebba"
+      }
+    },
+    {
+      "id": "initial-07",
+      "spec": {
+        "instrument": {
+          "name": "Bounded addition instrument",
+          "inputs": [
+            "x",
+            "offset"
+          ],
+          "outputs": {
+            "result": {
+              "op": "add",
+              "args": [
+                {
+                  "field": "x"
+                },
+                {
+                  "field": "offset"
+                }
+              ]
+            }
+          },
+          "conditions": "Exact supplied finite integer arithmetic.",
+          "limitations": "No empirical semantics."
+        },
+        "input": {
+          "x": -5356,
+          "offset": 885
+        },
+        "expected": {
+          "result": -4471
+        }
+      },
+      "dependencies": {
+        "bridge/instruments.py": "787466086e1303599aa4576c1c677e732257efa10d2bf932b96a705a96ac03b9",
+        "source": "f45aa27c211331d7c8d31482aab94ec1db4392246217565f09f7838dba664c95"
+      }
+    }
+  ],
+  "instances_sha256": "45aca2d9661abfceac15f8c68d15c98eeec1123c054d0f13b1ff58bacf11ca0f",
+  "successor_evaluator_allowance": 20,
+  "arms": [
+    {
+      "arm": "uncached_baseline",
+      "initial_verification_calls": 24,
+      "successor_verification_calls": 20,
+      "total_verification_calls": 44,
+      "adjudicated": 20,
+      "correct_decisions": 20,
+      "errors": 0,
+      "reused": 0,
+      "decisions": [
+        {
+          "id": "new-01",
+          "status": "ADJUDICATED",
+          "accepted": false,
+          "reused": false,
+          "correct": true
+        },
+        {
+          "id": "new-11",
+          "status": "ADJUDICATED",
+          "accepted": true,
+          "reused": false,
+          "correct": true
+        },
+        {
+          "id": "initial-08",
+          "status": "ADJUDICATED",
+          "accepted": true,
+          "reused": false,
+          "correct": true
+        },
+        {
+          "id": "initial-20-source-changed",
+          "status": "ADJUDICATED",
+          "accepted": true,
+          "reused": false,
+          "correct": true
+        },
+        {
+          "id": "new-08",
+          "status": "ADJUDICATED",
+          "accepted": true,
+          "reused": false,
+          "correct": true
+        },
+        {
+          "id": "initial-09",
+          "status": "ADJUDICATED",
+          "accepted": true,
+          "reused": false,
+          "correct": true
+        },
+        {
+          "id": "new-05",
+          "status": "ADJUDICATED",
+          "accepted": true,
+          "reused": false,
+          "correct": true
+        },
+        {
+          "id": "initial-13",
+          "status": "ADJUDICATED",
+          "accepted": true,
+          "reused": false,
+          "correct": true
+        },
+        {
+          "id": "initial-18-source-changed",
+          "status": "ADJUDICATED",
+          "accepted": true,
+          "reused": false,
+          "correct": true
+        },
+        {
+          "id": "initial-14-source-changed",
+          "status": "ADJUDICATED",
+          "accepted": false,
+          "reused": false,
+          "correct": true
+        },
+        {
+          "id": "initial-05",
+          "status": "ADJUDICATED",
+          "accepted": true,
+          "reused": false,
+          "correct": true
+        },
+        {
+          "id": "new-03",
+          "status": "ADJUDICATED",
+          "accepted": false,
+          "reused": false,
+          "correct": true
+        },
+        {
+          "id": "initial-12-source-changed",
+          "status": "ADJUDICATED",
+          "accepted": false,
+          "reused": false,
+          "correct": true
+        },
+        {
+          "id": "new-09",
+          "status": "ADJUDICATED",
+          "accepted": true,
+          "reused": false,
+          "correct": true
+        },
+        {
+          "id": "initial-15-source-changed",
+          "status": "ADJUDICATED",
+          "accepted": true,
+          "reused": false,
+          "correct": true
+        },
+        {
+          "id": "new-07",
+          "status": "ADJUDICATED",
+          "accepted": true,
+          "reused": false,
+          "correct": true
+        },
+        {
+          "id": "initial-02",
+          "status": "ADJUDICATED",
+          "accepted": true,
+          "reused": false,
+          "correct": true
+        },
+        {
+          "id": "initial-19",
+          "status": "ADJUDICATED",
+          "accepted": true,
+          "reused": false,
+          "correct": true
+        },
+        {
+          "id": "new-10",
+          "status": "ADJUDICATED",
+          "accepted": true,
+          "reused": false,
+          "correct": true
+        },
+        {
+          "id": "initial-16",
+          "status": "ADJUDICATED",
+          "accepted": true,
+          "reused": false,
+          "correct": true
+        },
+        {
+          "id": "initial-22-source-changed",
+          "status": "UNKNOWN_BUDGET_EXHAUSTED",
+          "correct": null
+        },
+        {
+          "id": "new-00",
+          "status": "UNKNOWN_BUDGET_EXHAUSTED",
+          "correct": null
+        },
+        {
+          "id": "initial-01-source-changed",
+          "status": "UNKNOWN_BUDGET_EXHAUSTED",
+          "correct": null
+        },
+        {
+          "id": "initial-06",
+          "status": "UNKNOWN_BUDGET_EXHAUSTED",
+          "correct": null
+        },
+        {
+          "id": "new-06",
+          "status": "UNKNOWN_BUDGET_EXHAUSTED",
+          "correct": null
+        },
+        {
+          "id": "new-04",
+          "status": "UNKNOWN_BUDGET_EXHAUSTED",
+          "correct": null
+        },
+        {
+          "id": "initial-21-source-changed",
+          "status": "UNKNOWN_BUDGET_EXHAUSTED",
+          "correct": null
+        },
+        {
+          "id": "new-02",
+          "status": "UNKNOWN_BUDGET_EXHAUSTED",
+          "correct": null
+        },
+        {
+          "id": "initial-17",
+          "status": "UNKNOWN_BUDGET_EXHAUSTED",
+          "correct": null
+        },
+        {
+          "id": "initial-03",
+          "status": "UNKNOWN_BUDGET_EXHAUSTED",
+          "correct": null
+        },
+        {
+          "id": "initial-11",
+          "status": "UNKNOWN_BUDGET_EXHAUSTED",
+          "correct": null
+        },
+        {
+          "id": "initial-07",
+          "status": "UNKNOWN_BUDGET_EXHAUSTED",
+          "correct": null
+        }
+      ],
+      "wall_seconds": 0.0005067930001132481,
+      "cpu_seconds": 0.0005035680000000028
+    },
+    {
+      "arm": "inherited_candidate",
+      "initial_verification_calls": 24,
+      "successor_verification_calls": 20,
+      "total_verification_calls": 44,
+      "adjudicated": 32,
+      "correct_decisions": 32,
+      "errors": 0,
+      "reused": 12,
+      "decisions": [
+        {
+          "id": "new-01",
+          "status": "ADJUDICATED",
+          "accepted": false,
+          "reused": false,
+          "correct": true
+        },
+        {
+          "id": "new-11",
+          "status": "ADJUDICATED",
+          "accepted": true,
+          "reused": false,
+          "correct": true
+        },
+        {
+          "id": "initial-08",
+          "status": "ADJUDICATED",
+          "accepted": true,
+          "reused": true,
+          "correct": true
+        },
+        {
+          "id": "initial-20-source-changed",
+          "status": "ADJUDICATED",
+          "accepted": true,
+          "reused": false,
+          "correct": true
+        },
+        {
+          "id": "new-08",
+          "status": "ADJUDICATED",
+          "accepted": true,
+          "reused": false,
+          "correct": true
+        },
+        {
+          "id": "initial-09",
+          "status": "ADJUDICATED",
+          "accepted": true,
+          "reused": true,
+          "correct": true
+        },
+        {
+          "id": "new-05",
+          "status": "ADJUDICATED",
+          "accepted": true,
+          "reused": false,
+          "correct": true
+        },
+        {
+          "id": "initial-13",
+          "status": "ADJUDICATED",
+          "accepted": true,
+          "reused": true,
+          "correct": true
+        },
+        {
+          "id": "initial-18-source-changed",
+          "status": "ADJUDICATED",
+          "accepted": true,
+          "reused": false,
+          "correct": true
+        },
+        {
+          "id": "initial-14-source-changed",
+          "status": "ADJUDICATED",
+          "accepted": false,
+          "reused": false,
+          "correct": true
+        },
+        {
+          "id": "initial-05",
+          "status": "ADJUDICATED",
+          "accepted": true,
+          "reused": true,
+          "correct": true
+        },
+        {
+          "id": "new-03",
+          "status": "ADJUDICATED",
+          "accepted": false,
+          "reused": false,
+          "correct": true
+        },
+        {
+          "id": "initial-12-source-changed",
+          "status": "ADJUDICATED",
+          "accepted": false,
+          "reused": false,
+          "correct": true
+        },
+        {
+          "id": "new-09",
+          "status": "ADJUDICATED",
+          "accepted": true,
+          "reused": false,
+          "correct": true
+        },
+        {
+          "id": "initial-15-source-changed",
+          "status": "ADJUDICATED",
+          "accepted": true,
+          "reused": false,
+          "correct": true
+        },
+        {
+          "id": "new-07",
+          "status": "ADJUDICATED",
+          "accepted": true,
+          "reused": false,
+          "correct": true
+        },
+        {
+          "id": "initial-02",
+          "status": "ADJUDICATED",
+          "accepted": true,
+          "reused": true,
+          "correct": true
+        },
+        {
+          "id": "initial-19",
+          "status": "ADJUDICATED",
+          "accepted": true,
+          "reused": true,
+          "correct": true
+        },
+        {
+          "id": "new-10",
+          "status": "ADJUDICATED",
+          "accepted": true,
+          "reused": false,
+          "correct": true
+        },
+        {
+          "id": "initial-16",
+          "status": "ADJUDICATED",
+          "accepted": true,
+          "reused": true,
+          "correct": true
+        },
+        {
+          "id": "initial-22-source-changed",
+          "status": "ADJUDICATED",
+          "accepted": false,
+          "reused": false,
+          "correct": true
+        },
+        {
+          "id": "new-00",
+          "status": "ADJUDICATED",
+          "accepted": false,
+          "reused": false,
+          "correct": true
+        },
+        {
+          "id": "initial-01-source-changed",
+          "status": "ADJUDICATED",
+          "accepted": false,
+          "reused": false,
+          "correct": true
+        },
+        {
+          "id": "initial-06",
+          "status": "ADJUDICATED",
+          "accepted": true,
+          "reused": true,
+          "correct": true
+        },
+        {
+          "id": "new-06",
+          "status": "ADJUDICATED",
+          "accepted": true,
+          "reused": false,
+          "correct": true
+        },
+        {
+          "id": "new-04",
+          "status": "ADJUDICATED",
+          "accepted": true,
+          "reused": false,
+          "correct": true
+        },
+        {
+          "id": "initial-21-source-changed",
+          "status": "ADJUDICATED",
+          "accepted": true,
+          "reused": false,
+          "correct": true
+        },
+        {
+          "id": "new-02",
+          "status": "ADJUDICATED",
+          "accepted": false,
+          "reused": false,
+          "correct": true
+        },
+        {
+          "id": "initial-17",
+          "status": "ADJUDICATED",
+          "accepted": true,
+          "reused": true,
+          "correct": true
+        },
+        {
+          "id": "initial-03",
+          "status": "ADJUDICATED",
+          "accepted": true,
+          "reused": true,
+          "correct": true
+        },
+        {
+          "id": "initial-11",
+          "status": "ADJUDICATED",
+          "accepted": true,
+          "reused": true,
+          "correct": true
+        },
+        {
+          "id": "initial-07",
+          "status": "ADJUDICATED",
+          "accepted": true,
+          "reused": true,
+          "correct": true
+        }
+      ],
+      "wall_seconds": 0.003533086000061303,
+      "cpu_seconds": 0.0035345530000000028
+    },
+    {
+      "arm": "strong_ordinary_memoization",
+      "initial_verification_calls": 24,
+      "successor_verification_calls": 20,
+      "total_verification_calls": 44,
+      "adjudicated": 32,
+      "correct_decisions": 32,
+      "errors": 0,
+      "reused": 12,
+      "decisions": [
+        {
+          "id": "new-01",
+          "status": "ADJUDICATED",
+          "accepted": false,
+          "reused": false,
+          "correct": true
+        },
+        {
+          "id": "new-11",
+          "status": "ADJUDICATED",
+          "accepted": true,
+          "reused": false,
+          "correct": true
+        },
+        {
+          "id": "initial-08",
+          "status": "ADJUDICATED",
+          "accepted": true,
+          "reused": true,
+          "correct": true
+        },
+        {
+          "id": "initial-20-source-changed",
+          "status": "ADJUDICATED",
+          "accepted": true,
+          "reused": false,
+          "correct": true
+        },
+        {
+          "id": "new-08",
+          "status": "ADJUDICATED",
+          "accepted": true,
+          "reused": false,
+          "correct": true
+        },
+        {
+          "id": "initial-09",
+          "status": "ADJUDICATED",
+          "accepted": true,
+          "reused": true,
+          "correct": true
+        },
+        {
+          "id": "new-05",
+          "status": "ADJUDICATED",
+          "accepted": true,
+          "reused": false,
+          "correct": true
+        },
+        {
+          "id": "initial-13",
+          "status": "ADJUDICATED",
+          "accepted": true,
+          "reused": true,
+          "correct": true
+        },
+        {
+          "id": "initial-18-source-changed",
+          "status": "ADJUDICATED",
+          "accepted": true,
+          "reused": false,
+          "correct": true
+        },
+        {
+          "id": "initial-14-source-changed",
+          "status": "ADJUDICATED",
+          "accepted": false,
+          "reused": false,
+          "correct": true
+        },
+        {
+          "id": "initial-05",
+          "status": "ADJUDICATED",
+          "accepted": true,
+          "reused": true,
+          "correct": true
+        },
+        {
+          "id": "new-03",
+          "status": "ADJUDICATED",
+          "accepted": false,
+          "reused": false,
+          "correct": true
+        },
+        {
+          "id": "initial-12-source-changed",
+          "status": "ADJUDICATED",
+          "accepted": false,
+          "reused": false,
+          "correct": true
+        },
+        {
+          "id": "new-09",
+          "status": "ADJUDICATED",
+          "accepted": true,
+          "reused": false,
+          "correct": true
+        },
+        {
+          "id": "initial-15-source-changed",
+          "status": "ADJUDICATED",
+          "accepted": true,
+          "reused": false,
+          "correct": true
+        },
+        {
+          "id": "new-07",
+          "status": "ADJUDICATED",
+          "accepted": true,
+          "reused": false,
+          "correct": true
+        },
+        {
+          "id": "initial-02",
+          "status": "ADJUDICATED",
+          "accepted": true,
+          "reused": true,
+          "correct": true
+        },
+        {
+          "id": "initial-19",
+          "status": "ADJUDICATED",
+          "accepted": true,
+          "reused": true,
+          "correct": true
+        },
+        {
+          "id": "new-10",
+          "status": "ADJUDICATED",
+          "accepted": true,
+          "reused": false,
+          "correct": true
+        },
+        {
+          "id": "initial-16",
+          "status": "ADJUDICATED",
+          "accepted": true,
+          "reused": true,
+          "correct": true
+        },
+        {
+          "id": "initial-22-source-changed",
+          "status": "ADJUDICATED",
+          "accepted": false,
+          "reused": false,
+          "correct": true
+        },
+        {
+          "id": "new-00",
+          "status": "ADJUDICATED",
+          "accepted": false,
+          "reused": false,
+          "correct": true
+        },
+        {
+          "id": "initial-01-source-changed",
+          "status": "ADJUDICATED",
+          "accepted": false,
+          "reused": false,
+          "correct": true
+        },
+        {
+          "id": "initial-06",
+          "status": "ADJUDICATED",
+          "accepted": true,
+          "reused": true,
+          "correct": true
+        },
+        {
+          "id": "new-06",
+          "status": "ADJUDICATED",
+          "accepted": true,
+          "reused": false,
+          "correct": true
+        },
+        {
+          "id": "new-04",
+          "status": "ADJUDICATED",
+          "accepted": true,
+          "reused": false,
+          "correct": true
+        },
+        {
+          "id": "initial-21-source-changed",
+          "status": "ADJUDICATED",
+          "accepted": true,
+          "reused": false,
+          "correct": true
+        },
+        {
+          "id": "new-02",
+          "status": "ADJUDICATED",
+          "accepted": false,
+          "reused": false,
+          "correct": true
+        },
+        {
+          "id": "initial-17",
+          "status": "ADJUDICATED",
+          "accepted": true,
+          "reused": true,
+          "correct": true
+        },
+        {
+          "id": "initial-03",
+          "status": "ADJUDICATED",
+          "accepted": true,
+          "reused": true,
+          "correct": true
+        },
+        {
+          "id": "initial-11",
+          "status": "ADJUDICATED",
+          "accepted": true,
+          "reused": true,
+          "correct": true
+        },
+        {
+          "id": "initial-07",
+          "status": "ADJUDICATED",
+          "accepted": true,
+          "reused": true,
+          "correct": true
+        }
+      ],
+      "wall_seconds": 0.0008780709999882674,
+      "cpu_seconds": 0.0008784659999999944
+    },
+    {
+      "arm": "inheritance_withdrawn",
+      "initial_verification_calls": 24,
+      "successor_verification_calls": 20,
+      "total_verification_calls": 44,
+      "adjudicated": 20,
+      "correct_decisions": 20,
+      "errors": 0,
+      "reused": 0,
+      "decisions": [
+        {
+          "id": "new-01",
+          "status": "ADJUDICATED",
+          "accepted": false,
+          "reused": false,
+          "correct": true
+        },
+        {
+          "id": "new-11",
+          "status": "ADJUDICATED",
+          "accepted": true,
+          "reused": false,
+          "correct": true
+        },
+        {
+          "id": "initial-08",
+          "status": "ADJUDICATED",
+          "accepted": true,
+          "reused": false,
+          "correct": true
+        },
+        {
+          "id": "initial-20-source-changed",
+          "status": "ADJUDICATED",
+          "accepted": true,
+          "reused": false,
+          "correct": true
+        },
+        {
+          "id": "new-08",
+          "status": "ADJUDICATED",
+          "accepted": true,
+          "reused": false,
+          "correct": true
+        },
+        {
+          "id": "initial-09",
+          "status": "ADJUDICATED",
+          "accepted": true,
+          "reused": false,
+          "correct": true
+        },
+        {
+          "id": "new-05",
+          "status": "ADJUDICATED",
+          "accepted": true,
+          "reused": false,
+          "correct": true
+        },
+        {
+          "id": "initial-13",
+          "status": "ADJUDICATED",
+          "accepted": true,
+          "reused": false,
+          "correct": true
+        },
+        {
+          "id": "initial-18-source-changed",
+          "status": "ADJUDICATED",
+          "accepted": true,
+          "reused": false,
+          "correct": true
+        },
+        {
+          "id": "initial-14-source-changed",
+          "status": "ADJUDICATED",
+          "accepted": false,
+          "reused": false,
+          "correct": true
+        },
+        {
+          "id": "initial-05",
+          "status": "ADJUDICATED",
+          "accepted": true,
+          "reused": false,
+          "correct": true
+        },
+        {
+          "id": "new-03",
+          "status": "ADJUDICATED",
+          "accepted": false,
+          "reused": false,
+          "correct": true
+        },
+        {
+          "id": "initial-12-source-changed",
+          "status": "ADJUDICATED",
+          "accepted": false,
+          "reused": false,
+          "correct": true
+        },
+        {
+          "id": "new-09",
+          "status": "ADJUDICATED",
+          "accepted": true,
+          "reused": false,
+          "correct": true
+        },
+        {
+          "id": "initial-15-source-changed",
+          "status": "ADJUDICATED",
+          "accepted": true,
+          "reused": false,
+          "correct": true
+        },
+        {
+          "id": "new-07",
+          "status": "ADJUDICATED",
+          "accepted": true,
+          "reused": false,
+          "correct": true
+        },
+        {
+          "id": "initial-02",
+          "status": "ADJUDICATED",
+          "accepted": true,
+          "reused": false,
+          "correct": true
+        },
+        {
+          "id": "initial-19",
+          "status": "ADJUDICATED",
+          "accepted": true,
+          "reused": false,
+          "correct": true
+        },
+        {
+          "id": "new-10",
+          "status": "ADJUDICATED",
+          "accepted": true,
+          "reused": false,
+          "correct": true
+        },
+        {
+          "id": "initial-16",
+          "status": "ADJUDICATED",
+          "accepted": true,
+          "reused": false,
+          "correct": true
+        },
+        {
+          "id": "initial-22-source-changed",
+          "status": "UNKNOWN_BUDGET_EXHAUSTED",
+          "correct": null
+        },
+        {
+          "id": "new-00",
+          "status": "UNKNOWN_BUDGET_EXHAUSTED",
+          "correct": null
+        },
+        {
+          "id": "initial-01-source-changed",
+          "status": "UNKNOWN_BUDGET_EXHAUSTED",
+          "correct": null
+        },
+        {
+          "id": "initial-06",
+          "status": "UNKNOWN_BUDGET_EXHAUSTED",
+          "correct": null
+        },
+        {
+          "id": "new-06",
+          "status": "UNKNOWN_BUDGET_EXHAUSTED",
+          "correct": null
+        },
+        {
+          "id": "new-04",
+          "status": "UNKNOWN_BUDGET_EXHAUSTED",
+          "correct": null
+        },
+        {
+          "id": "initial-21-source-changed",
+          "status": "UNKNOWN_BUDGET_EXHAUSTED",
+          "correct": null
+        },
+        {
+          "id": "new-02",
+          "status": "UNKNOWN_BUDGET_EXHAUSTED",
+          "correct": null
+        },
+        {
+          "id": "initial-17",
+          "status": "UNKNOWN_BUDGET_EXHAUSTED",
+          "correct": null
+        },
+        {
+          "id": "initial-03",
+          "status": "UNKNOWN_BUDGET_EXHAUSTED",
+          "correct": null
+        },
+        {
+          "id": "initial-11",
+          "status": "UNKNOWN_BUDGET_EXHAUSTED",
+          "correct": null
+        },
+        {
+          "id": "initial-07",
+          "status": "UNKNOWN_BUDGET_EXHAUSTED",
+          "correct": null
+        }
+      ],
+      "wall_seconds": 0.0021344200001749414,
+      "cpu_seconds": 0.0021348429999999974
+    }
+  ],
+  "direct_successor_without_construction_calls": 32,
+  "complete_costs_known": false,
+  "unknown_costs": [
+    "engineering",
+    "search",
+    "independent qualification",
+    "integration",
+    "maintenance",
+    "host/electricity",
+    "economic opportunity cost"
+  ],
+  "strong_control_advantage": "NOT_ESTABLISHED",
+  "verdict": "Fresh post-freeze instances exercised a distinct internal selection task. Conventional exact-content reuse is the strong control; a tie does not establish general compounding superiority.",
+  "scope": "Finite generated instances, no new external task family, no live model inference, no actual commerce, no general self-improving intelligence claim."
+}

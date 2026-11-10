@@ -1,0 +1,71 @@
+{
+  "schema": "omega-json-equality-independent-review/v1",
+  "source_revision": "0398ea3196f57b9adb6ed77a691e24738a5f2d86",
+  "status": "PASS_IN_SCOPE",
+  "source_sha256": {
+    "bridge/instruments.py": "0a7fb53f8559f04f8b5d9e49ed91b235651541ec7cca87af8152f23c39b551f8",
+    "bridge/upgrade_foundry.py": "fed4c33ae9f4492484f3cee3d9f5ad4c2f19d387194b4427071c751c6c3bf3c2",
+    "app/engine.js": "739fcab43c8f72f8f5373b60c7cbef32de01ad85450d24fd68368a439b87ecb7",
+    "tests/test_instrument_equality.py": "841356d7df51c97023a1bcf2ee3b3fe6740abb4ff66715a4acc45ae53088dcd5",
+    "tests/test_instrument_equality_independent.py": "e9ef21f1462fae08edf4da7a3761a087327f309f71ba0e54f89775e2b171decc",
+    "tests/test_upgrade_foundry.py": "680804e3c5d71c0e1db5541f536bf12d13d00010e6954fc7413450f0515af9fc"
+  },
+  "original_failure": {
+    "source_revision": "e40c6d42f7f2505d4cbfc90d21f2afe2a018adb8",
+    "source_sha256": "787466086e1303599aa4576c1c677e732257efa10d2bf932b96a705a96ac03b9",
+    "input": {
+      "left": {
+        "approved": [
+          true
+        ]
+      },
+      "right": {
+        "approved": [
+          1
+        ]
+      }
+    },
+    "expected_equal": false,
+    "observed_equal": true,
+    "status": "FAIL_FALSE_EQUALITY"
+  },
+  "corrected_observation": {
+    "expected_equal": false,
+    "observed_equal": false,
+    "status": "PASS"
+  },
+  "case_groups": [
+    {
+      "label": "Repair-author explicit expected cases with Python and browser parity",
+      "cases": 51
+    },
+    {
+      "label": "Independent Cartesian JSON value pairs, Python versus actual shipped JavaScript",
+      "cases": 361
+    },
+    {
+      "label": "Independent explicit nested and structural adversaries",
+      "cases": 8
+    }
+  ],
+  "test_methods": {
+    "equality": 4,
+    "foundry": 14,
+    "status": "PASS"
+  },
+  "count_scope": "Groups are reported separately; cases overlap and are not independent empirical trials or unique tasks.",
+  "foundry_protocol": {
+    "schema": "harness-interpreter-upgrade-protocol/v2",
+    "interpreter_cases": 64,
+    "fresh_affine_cases": 48,
+    "fixed_malformed_cases": 4,
+    "fixed_equality_cases": 12,
+    "ordinary_control_cases": 48,
+    "ordinary_control_scope": "Direct scalar arithmetic on the affine subset only; no claim it supplies the full interpreter safety contract."
+  },
+  "limits": [
+    "Finite JSON equality repair and runtime parity, not a general interpreter correctness proof.",
+    "Native model-written foundry execution remains dependent on authenticated access and a sandbox-capable host.",
+    "Old failed source remains failed; fresh successor revalidation is recorded separately."
+  ]
+}

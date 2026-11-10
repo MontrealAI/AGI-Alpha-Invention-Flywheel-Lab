@@ -20,6 +20,40 @@
       "use": "Development and automated JavaScript tests only",
       "bundled": false,
       "license": "Supplied separately; consult Node.js distribution LICENSE"
+    },
+    {
+      "name": "cryptography",
+      "version": "50.0.2",
+      "use": "Optional ChatGPT OIDC/JWKS signature verification",
+      "bundled": false,
+      "license": "Apache-2.0 OR BSD-3-Clause; consult installed distribution notices for compiled components",
+      "source": "https://github.com/pyca/cryptography/blob/main/LICENSE",
+      "dependency_file": "requirements-chatgpt.txt"
+    },
+    {
+      "name": "cffi",
+      "version": "2.1.1",
+      "use": "Optional cryptography dependency",
+      "bundled": false,
+      "license": "MIT-0; component-specific exceptions retain their own notices",
+      "source": "https://github.com/python-cffi/cffi/blob/main/LICENSE",
+      "dependency_file": "requirements-chatgpt.txt"
+    },
+    {
+      "name": "pycparser",
+      "version": "3.11",
+      "use": "Optional cffi dependency",
+      "bundled": false,
+      "license": "BSD-3-Clause",
+      "source": "https://github.com/eliben/pycparser/blob/main/LICENSE",
+      "dependency_file": "requirements-chatgpt.txt"
+    },
+    {
+      "name": "Codex CLI",
+      "use": "Optional official app-server engineering pathway",
+      "bundled": false,
+      "license": "External installed distribution and provider terms apply",
+      "source": "https://github.com/openai/codex"
     }
   ],
   "external_services": [
@@ -47,6 +81,16 @@
       "name": "Manual AI chat account",
       "bundled": false,
       "terms": "Customer chooses their service; subscription does not itself grant API access"
+    },
+    {
+      "name": "Official ChatGPT plan access",
+      "bundled": false,
+      "terms": "Eligible account, explicit official consent, plan allowance and applicable commercial authorization required; conventional API billing remains separate"
+    },
+    {
+      "name": "Compatible local inference servers",
+      "bundled": false,
+      "terms": "LM Studio, llama.cpp, vLLM, MLX and model-specific licences apply separately; no model weights or server binaries are included"
     }
   ],
   "datasets": [
@@ -64,17 +108,37 @@
     "Credentials",
     "Private recovery state"
   ],
-  "audit_limit": "This inventory covers the scoped distribution. It is not a license audit or relicensing of the full research repository. Recheck on every dependency change.",
+  "audit_limit": "Inventory for this scoped source distribution. Optional packages, compiled dependencies, external CLI binaries and model weights are not bundled. Their installed notices remain authoritative. Dependency pinning is not a vulnerability audit or an authenticated integration test.",
   "development_dependencies": [
     {
       "name": "jsdom",
       "version": "26.1.0",
       "license": "MIT",
       "bundled": false,
-      "use": "Locked development-only DOM-emulation replays in evidence/UI_REPLAY.cjs, UI_PARALLEL_REPLAY.cjs and UI_CONNECTED_ACCEPTANCE.cjs, including hosted qualification; not a graphical browser or customer runtime dependency",
+      "use": "Locked development-only DOM and actual-loopback integration replays in evidence/UI_REPLAY.cjs, UI_PARALLEL_REPLAY.cjs, UI_CONNECTED_ACCEPTANCE.cjs, UI_AGENTIC_REPLAY.cjs and UI_HTTP_WORKFLOW_REPLAY.cjs; not a graphical browser or customer runtime dependency",
       "source": "https://github.com/jsdom/jsdom/tree/26.1.0",
       "transitive_modules_bundled": false,
       "lockfile": "tests/dom/package-lock.json"
+    },
+    {
+      "name": "playwright-core",
+      "version": "1.62.1",
+      "license": "Apache-2.0",
+      "bundled": false,
+      "use": "Development-only Linux Chromium graphical qualification and screenshots in evidence/UI_BROWSER_REPLAY.cjs. Uses separately installed browser; no live model requests.",
+      "source": "https://github.com/microsoft/playwright/tree/v1.62.1",
+      "transitive_modules_bundled": false,
+      "lockfile": "tests/dom/package-lock.json"
+    },
+    {
+      "name": "@openai/codex",
+      "version": "0.167.0",
+      "license": "Apache-2.0",
+      "bundled": false,
+      "use": "Pinned official CLI for credential-free hosted permission-profile sandbox verification; no model inference or customer runtime bundling",
+      "source": "https://github.com/openai/codex",
+      "lockfile": "tests/codex/package-lock.json",
+      "transitive_modules_bundled": false
     }
   ]
 }

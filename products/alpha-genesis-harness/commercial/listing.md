@@ -1,6 +1,6 @@
 # Storefront listing — prepared copy, not published
 
-This copy describes the 0.1.0 candidate's actual scope. Keep the product in draft until the release and merchant checklist is satisfied. Do not label it as fully qualified while acceptance gaps remain. Provider connection claims must follow the exact release evidence.
+This copy describes the 0.3.0 candidate's actual scope. These are owner-only prepared listing materials. Vincent performs any eventual upload and commercial activation himself after the release and merchant checks are satisfied. Do not label it as fully qualified while acceptance gaps remain. Provider connection claims must follow the exact release evidence.
 
 ## English
 
@@ -30,13 +30,19 @@ Build an inspectable opportunity dossier: objective, source references, alternat
 
 The initial executable instrument checks a declared shared-resource arrangement. You can change the inputs, examine outside options and compare complete alternatives. It is a practical way to make an idea testable; it is not a promise that every idea is new, feasible or profitable.
 
-Optional developer-oriented connections provide protocol adapters for OpenAI-compatible APIs, Anthropic, Google Gemini and Ollama. Read the release's live-test status before relying on an integration. API accounts, local models and third-party usage charges are separate; a chat subscription does not automatically include API access.
+Ω GENESIS NEXT turns that scrutiny toward the HARNESS itself. Inspect capability limits and deferred opportunities, identify a shared bottleneck, authorize a bounded internal upgrade and compare it against the existing checker and competent ordinary reuse. A different successor task tests what the retained mechanism contributes. The included construction recipe is authored; its evidence can support a scoped improvement, a tie or a rejection.
+
+The optional local connector adds protocol-aware API and local-model connections, bounded agentic construction, durable execution records and official ChatGPT-plan/Codex pathway engineering. Read the release's live-test status before relying on an integration. API accounts, local models and third-party usage charges are separate. ChatGPT-plan use requires eligible official consent; paid-edition use remains blocked pending applicable commercial approval and live verification. No ChatGPT Pro entitlement is bundled.
 
 **Included in the identified download**
 
 - Browser application with English/French interface and a simple START HERE guide.
 - Synthetic sample mission and guided manual-model workflow.
 - Bounded instrument, assumption and economics inspection, project and dossier export.
+- Ω GENESIS NEXT workspace, reproducible internal upgrade experiment and successor comparison.
+- Optional source-upgrade foundry: bounded model-written edits, independent checks and explicit isolated research selection. Live authenticated construction remains blocked pending its recorded authorization and native-sandbox gates.
+- Frontier Observatory: explicitly authorized polling of configured public sources while the local connector runs. Changed source bytes reopen questions; they do not establish reproduced capabilities.
+- Source launchers, English/French installation, operator, troubleshooting and FAQ guides.
 - Source code, Apache-2.0 licence notices, privacy and connection guides.
 - Version manifest, file-integrity information and reproducible checks.
 
@@ -44,7 +50,7 @@ Optional developer-oriented connections provide protocol adapters for OpenAI-com
 
 Unzip the entire download and open START-HERE.html in a current desktop browser with JavaScript enabled. The manual core requires no terminal or Python. The optional local bridge requires separately installed Python 3.10+ and a configured provider or local inference service. Consult the release evidence for tested platforms; no signed native installer is included.
 
-The purchase covers the version shown at checkout. Future editions, updates, model compute, continuous monitoring, personal consulting and a support service level are not included. The included source is also available under Apache 2.0; buying the official package is not required to obtain the rights that licence grants. Applicable consumer rights and third-party licences remain unchanged.
+The purchase covers the version shown at checkout. Future editions, updates, model compute, a hosted monitoring service, personal consulting and a support service level are not included. The included source is also available under Apache 2.0; buying the official package is not required to obtain the rights that licence grants. Applicable consumer rights and third-party licences remain unchanged.
 
 Results depend on your inputs and evidence. A passed scoped check does not establish real customer demand, scientific novelty, guaranteed returns or general autonomous invention. This product does not execute payments, contracts, financing or outreach.
 
@@ -80,13 +86,19 @@ Constituez un dossier examinable : objectif, références, stratégies concurren
 
 L'instrument initial vérifie un arrangement de ressources partagées à partir de valeurs déclarées. Modifiez les entrées, examinez les autres options des participants et comparez les solutions complètes. Il rend une idée testable, sans promettre que chaque idée sera nouvelle, réalisable ou rentable.
 
-Des connexions facultatives destinées aux utilisateurs techniques proposent des adaptateurs de protocole pour les API compatibles OpenAI, Anthropic, Google Gemini et Ollama. Consultez les résultats réels d'intégration de la version. Les comptes API, modèles locaux et frais des fournisseurs sont distincts. Un abonnement de clavardage ne comprend pas automatiquement l'accès API.
+Ω GENESIS NEXT applique cet examen au HARNESS lui-même. Examinez ses limites et les possibilités différées, trouvez un obstacle partagé, autorisez une modification interne limitée et comparez-la au vérificateur existant et à une réutilisation ordinaire compétente. Une tâche suivante différente teste l'apport du mécanisme conservé. La recette de construction est préparée; les preuves peuvent établir un progrès limité, une égalité ou un rejet.
+
+Le connecteur local facultatif ajoute des connexions API et modèles locaux, une construction agentique limitée à un cadre précis, des traces persistantes et l’ingénierie des parcours officiels ChatGPT/Codex. Consultez les résultats réels d'intégration de la version. Les comptes API, modèles locaux et frais des fournisseurs sont distincts. L’accès au forfait ChatGPT exige le consentement officiel admissible. Son usage dans l’édition payante reste bloqué avant l’autorisation commerciale applicable et une vérification réelle. Aucun abonnement ChatGPT Pro n’est inclus.
 
 **Contenu du téléchargement identifié**
 
 - Application de navigateur en français et en anglais, avec guide START HERE.
 - Mission synthétique et parcours guidé avec votre service d'IA.
 - Instrument à exécution limitée, examen des hypothèses et des coûts, exportation du projet et du dossier.
+- Espace Ω GENESIS NEXT, expérience interne reproductible et comparaison sur une tâche suivante.
+- Fonderie source facultative : modifications limitées proposées par un modèle, contrôles indépendants et sélection explicite en recherche isolée. La construction authentifiée réelle reste bloquée avant les autorisations et contrôles natifs requis.
+- Observatoire de la frontière : consultation périodique expressément autorisée des sources configurées pendant l’exécution du connecteur local. Un changement de contenu rouvre une question sans établir une capacité reproduite.
+- Lanceurs source, guides bilingues d’installation, d’exploitation, de dépannage et FAQ.
 - Sources, avis Apache 2.0, guides de confidentialité et de connexion.
 - Manifeste de version, informations d'intégrité et vérifications reproductibles.
 
@@ -94,7 +106,7 @@ Des connexions facultatives destinées aux utilisateurs techniques proposent des
 
 Décompressez tout le téléchargement, puis ouvrez START-HERE.html dans un navigateur de bureau actuel avec JavaScript activé. Le parcours manuel ne demande ni terminal ni Python. Le connecteur facultatif nécessite Python 3.10+ installé séparément et un fournisseur ou service local configuré. Consultez les preuves de version pour connaître les plateformes testées. Aucun installateur natif signé n'est inclus.
 
-L'achat comprend la version affichée au paiement. Les futures éditions, mises à jour, coûts de modèles, veille continue, consultations individuelles et engagements de délai de soutien sont exclus de cette offre. Le code couvert est également disponible sous Apache 2.0 : l'achat du paquet officiel n'est pas nécessaire pour obtenir les droits de cette licence. Les droits impératifs des consommateurs et les licences tierces demeurent applicables.
+L'achat comprend la version affichée au paiement. Les futures éditions, mises à jour, coûts de modèles, service de veille hébergé, consultations individuelles et engagements de délai de soutien sont exclus de cette offre. Le code couvert est également disponible sous Apache 2.0 : l'achat du paquet officiel n'est pas nécessaire pour obtenir les droits de cette licence. Les droits impératifs des consommateurs et les licences tierces demeurent applicables.
 
 Les résultats dépendent des données et des preuves fournies. Une vérification réussie dans un cadre précis ne prouve ni demande commerciale réelle, ni nouveauté scientifique, ni rendement garanti, ni invention autonome générale. Le produit n'exécute aucun paiement, contrat, financement ou démarchage.
 

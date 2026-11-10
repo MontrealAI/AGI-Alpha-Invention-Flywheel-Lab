@@ -1,28 +1,42 @@
-# 0.1.0 — HARNESS release candidate
+# 0.3.0 — Ω GENESIS NEXT candidate
 
-This candidate introduces a standalone English/French browser workspace connecting a mission, manually supplied model contributions, structured opportunities, a bounded experiment, inspectable evidence and retained capabilities. The application is distributed as ordinary source files and opens locally without installation or an API key.
+This edition continues the existing HARNESS 0.2 branch and its persistent model-driven workflows. It adds a bounded internal improvement experiment and an English/French workspace for investigating what GENESIS could build next. It remains a release candidate.
 
-The initial instrument evaluates a synthetic shared-resource arrangement using declared participant costs and outside options. The application supports changing assumptions, comparing alternatives, saving/reopening project files and exporting a dossier. Its workflow interpreter accepts a bounded declarative language. It does not execute arbitrary generated scripts, payments, contracts or outreach.
+## Changes
 
-An optional loopback Python bridge implements provider protocol adapters for OpenAI-compatible endpoints, Anthropic, Gemini and Ollama. Configuration, model availability, pricing and credential authority remain customer responsibilities. Protocol fixture tests are not real authenticated provider qualification.
+- Ω capability inspection, deferred opportunities and frontier replay feed shared missing-capability discovery. An explicitly authorized local monitor observes configured public sources periodically and replays changed hashes as reports, with pause/restart controls.
+- A bounded foundry constructs an isolated evidence-reuse candidate against the actual workflow acceptance path. An evaluator compares the existing route, the candidate and competent conventional reuse.
+- A separate successor experiment asks whether the retained mechanism helps select experiments under a declared operation budget. The result can be a tie or a rejection.
+- A separate model-driven Upgrade Foundry permits new edits to one isolated interpreter module, with native-sandbox evaluation, independent host adjudication, exact-hash research selection and rollback. Authenticated live construction and sandbox operation require their own evidence.
+- The interface exposes authorization, evidence, costs, limitations, lineage and export. Persistent workspace data stays outside the distributed source.
+- Nested JSON equality now distinguishes booleans from numbers inside lists and objects. The source-foundry contract adds externally specified equality cases: 64 total checks, with direct arithmetic comparison limited to its 48 affine cases. Historical 52-case protocols remain historical.
+- Exact-archive qualification includes the Ω experiment and its interface replay. Source identities, negative outcomes and unknown costs remain explicit.
+- The Ω workspace waits for connector initialization before its first load, repairing the startup race observed on Windows. Native qualification resolves its own macOS temporary-path alias while preserving customer-workspace symbolic-link guards. Native retesting remains pending; these fixes do not predeclare a platform PASS.
 
-The source package includes scoped Apache-2.0 licensing, an external dependency inventory, privacy and model-connection guidance, release verification tools and separately prepared acceptance tests. Archive checks bind included file bytes to the release manifest; the public digest and selected source commit provide the independent identity anchors.
+See [Ω GENESIS NEXT](OMEGA-GENESIS-NEXT.md) for operation and [the qualification matrix](../evidence/QUALIFICATION-MATRIX.md) for the tested boundaries. The experiment uses an authored bounded construction recipe. It does not prove general autonomous invention, an independent scientific breakthrough or a financial return. A result tied with ordinary reuse is not a discovery advantage.
 
-## Claim limits
+## Observed local model result
 
-- The bundled mission is synthetic and developer-prepared. It is not autonomous open-world opportunity discovery or evidence of a commercially superior game.
-- A manual model contribution has declared attribution, not independently proven model identity or independence.
-- Economic feasibility is conditional on supplied values. There are no real participant commitments, financing, customers, payments or verified demand.
-- Retention and matched comparison procedures do not establish general recursive superiority. A conventional alternative can tie or win.
-- No live authenticated model call, account-wide billing audit or included API allowance is claimed by this release note.
-- Desktop-browser portability is a design target. Actual browser/OS combinations and limitations belong in the executed evidence; no signed native installer or notarization is included.
-- The wider research programme remains broader than this candidate. Mechanism names, presets and a working interface are not proof that every research mechanism is fully implemented.
-- The QUÉBEC.AI store administration route presented a login screen in the available browser. No authenticated draft, delivery upload, checkout test or publication was completed through that session.
+The current equality-corrected source live regression is **FAIL overall**: its single builder exhausted three attempts after invalid input-field artifacts. Its builder–critic path passed in three calls after a malformed builder response, automatic repair and a separate critique, including independent acceptance, external export and reuse. This records bounded repair, not reliable general construction. [The current receipt](../evidence/live-local-workflows-v0.3-equality-fixed.json) identifies the executed source; all earlier passes, failures and consumed calls remain [historical evidence](../evidence/LIVE-LOCAL-REPLAY-NOTES.md). Ordinary reuse ties and complete economic costs remain unknown.
 
-The version remains a **release candidate**. Read `evidence/INDEPENDENT_REVIEW.md` and the test receipts for actual observed results and unresolved findings. The intended CAD $299 Official Edition must not be represented as fully qualified merely because this archive can be downloaded.
+Exact-source hosted and native platform results are supplied as separate release receipts after the source freeze. Read their archive digest and scope; the included matrix does not predeclare a later run successful.
 
-## Packaging lessons retained
+## Inherited 0.2 capabilities
 
-The first working-tree package attempt was correctly stopped by the private-key marker check because a security test contained an intentionally fake PEM marker. The fixture now constructs the marker at test runtime; the distribution scanner remains strict and the malicious-archive test still rejects it. No actual credential was present in that fixture.
+Official ChatGPT authorization and separate Codex pathways, configured API/local adapters, persistent builder–critic workflows, artifact export/import, scoped acceptance, English/French interfaces and source launchers remain available within their recorded qualification. Real local Qwen3 execution has prior source-bound evidence. Live APIs, live ChatGPT Pro consent, applicable paid-edition OpenAI authorization and authenticated sandboxed Codex retain separate external gates. No paid provider call, customer transaction or Squarespace action is part of this release process.
 
-Independent review also found that a separate digest read and ZIP open could refer to different files after a path replacement. The verifier now hashes and parses the same bounded immutable byte snapshot. A deterministic path-swap regression checks that external digest verification cannot be rebound to a replacement archive. An archive's own source claim is also reported separately from actual Git-byte comparison.
+## Upgrade
+
+Keep the prior version and private exports. Extract this version into a new directory. Inspect imported projects before continuing. Historical results retain their original source and scope. Use the published checksum and full commit to verify the exact archive; source matching is separate from customer readiness.
+
+## Français
+
+La version 0.3.0 prolonge le HARNESS 0.2. Elle ajoute Ω GENESIS NEXT : inspection des capacités, possibilités différées, réexamen à partir de nouvelles observations, construction d'une modification limitée et comparaison indépendante. L'espace bilingue présente les autorisations, les preuves, les coûts, les limites et la filiation.
+
+L'expérience applique une recette de construction préparée au vérificateur réel du HARNESS, puis mesure son transfert à une tâche différente. Une égalité avec la réutilisation ordinaire demeure une égalité. Ce résultat ne prouve ni invention générale autonome, ni percée scientifique, ni rentabilité.
+
+Le dernier essai local présente un **échec global** : le constructeur seul a épuisé trois tentatives avec un artefact invalide; le parcours constructeur–critique a réussi en trois appels après rejet d’un JSON malformé, réparation automatique et critique distincte, export et réutilisation compris. Les essais antérieurs conservent leurs identités source et leurs échecs. L’égalité JSON imbriquée distingue maintenant booléens et nombres; le protocole de fonderie v2 vérifie 64 cas finis, sans preuve de supériorité générale. Les reçus hébergés et multiplateformes sont fournis séparément après le gel du code.
+
+Le chargement initial de Ω attend maintenant l’initialisation du connecteur. Le qualificateur résout son propre chemin temporaire macOS sans affaiblir les protections des espaces clients. Ces correctifs exigent encore leurs nouveaux essais natifs.
+
+Les connexions authentifiées, l'autorisation commerciale OpenAI et les plateformes non exercées restent des critères distincts. Conservez l'ancienne édition et vos exports, extrayez cette version dans un nouveau dossier et vérifiez l'archive exacte. Aucune action Squarespace n'est effectuée.

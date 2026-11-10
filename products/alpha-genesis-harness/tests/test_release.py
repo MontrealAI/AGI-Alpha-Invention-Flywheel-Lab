@@ -20,7 +20,7 @@ spec = importlib.util.spec_from_file_location("independent_release_target", SCRI
 package = importlib.util.module_from_spec(spec)
 assert spec and spec.loader
 spec.loader.exec_module(package)
-ROOT = "ALPHA_GENESIS_HARNESS_0.1.0/"
+ROOT = "ALPHA_GENESIS_HARNESS_0.3.0/"
 MANIFEST = ROOT + "RELEASE-MANIFEST.json"
 
 
@@ -30,10 +30,10 @@ class IndependentReleaseTests(unittest.TestCase):
         self.path = Path(self.tmp.name) / "fixture.zip"
         # Deliberately made by this evaluator, not by target build().
         self.files = {name: ("Independent fixture for " + name).encode() for name in package.REQUIRED}
-        self.files["VERSION.json"] = b'{"version":"0.1.0"}'
+        self.files["VERSION.json"] = b'{"version":"0.3.0"}'
         self.manifest = {
             "schema":"alpha-genesis-harness-release/v1",
-            "version":"0.1.0",
+            "version":"0.3.0",
             "source_revision":"0"*40,
             "source_product_tree":None,
             "build_mode":"candidate",
@@ -169,6 +169,20 @@ class IndependentReleaseTests(unittest.TestCase):
         for record in self.manifest["files"]:
             if record["path"]=="app/engine.js":record.update(bytes=len(data),sha256=hashlib.sha256(data).hexdigest())
         self.write();self.rejects()
+
+    def test_reviewed_launchers_remain_executable_after_packaging(self):
+        files = dict(self.files)
+        for name in ["Launch-HARNESS.sh", "Launch-HARNESS.command"]:
+            files[name] = b"#!/bin/sh\nexit 0\n"
+        files["Launch-HARNESS.cmd"] = b"@echo off\r\n"
+        files["launch.py"] = b"print('fixture')\n"
+        with mock.patch.object(package, "collect", side_effect=lambda *_: (dict(files), "a" * 40, "b" * 40)):
+            result = package.build(Path(self.tmp.name) / "built", "a" * 40)
+        with zipfile.ZipFile(result["archive"]) as bundle:
+            for name in ["Launch-HARNESS.sh", "Launch-HARNESS.command"]:
+                self.assertEqual((bundle.getinfo(ROOT + name).external_attr >> 16) & 0o777, 0o755)
+            for name in ["Launch-HARNESS.cmd", "launch.py", "app/engine.js"]:
+                self.assertEqual((bundle.getinfo(ROOT + name).external_attr >> 16) & 0o777, 0o644)
 
 
 if __name__ == "__main__":
