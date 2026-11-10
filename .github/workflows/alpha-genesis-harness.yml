@@ -33,6 +33,8 @@ jobs:
       - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
         with:
           python-version: '3.12'
+      - name: Freeze-check no-network release asset transport regressions (HARNESS124)
+        run: python -B -m unittest tests.test_harness_release_assets124 -v
       - name: Execute product and independent adversarial tests
         working-directory: products/alpha-genesis-harness
         run: |
@@ -315,6 +317,67 @@ jobs:
           name: alpha-genesis-harness-platform-${{ matrix.os }}-${{ needs.qualify.outputs.source_sha }}-attempt-${{ github.run_attempt }}
           path: ${{ runner.temp }}/harness-platform-operation
           if-no-files-found: warn
+  release-assets-dry-run:
+    needs: [qualify, platform-first-use, local-model-qualification]
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - name: Record platform job execution start
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          artifact-ids: ${{ needs.qualify.outputs.artifact_id }}
+          path: ${{ runner.temp }}/harness-preflight-input
+          merge-multiple: true
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          pattern: alpha-genesis-harness-platform-*-${{ needs.qualify.outputs.source_sha }}-attempt-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/harness-preflight-input
+          merge-multiple: true
+      - name: Dry-run the actual merged release asset inventory without publishing
+        env:
+          SOURCE_SHA: ${{ needs.qualify.outputs.source_sha }}
+          ARCHIVE_SHA: ${{ needs.qualify.outputs.archive_sha }}
+          ARCHIVE_NAME: ${{ needs.qualify.outputs.archive_name }}
+        run: |
+          python -B -m unittest tests.test_harness_release_assets124 -v
+          python -B scripts/harness_release_assets124.py --directory "$RUNNER_TEMP/harness-preflight-input" --source "$SOURCE_SHA" --paths0 "$RUNNER_TEMP/harness-preflight-paths0"
+          python - <<'PY'
+          import hashlib, json, os
+          from pathlib import Path
+          root = Path(os.environ['RUNNER_TEMP'])
+          source = root / 'harness-preflight-input'
+          inventory = json.loads((source / 'HARNESS-PUBLICATION-ASSET-INVENTORY.json').read_text())
+          archive = source / os.environ['ARCHIVE_NAME']
+          assert archive.is_file() and archive.stat().st_size > 0
+          assert hashlib.sha256(archive.read_bytes()).hexdigest() == os.environ['ARCHIVE_SHA']
+          assert inventory['source_commit'] == os.environ['SOURCE_SHA']
+          manifest_names = {row['name'] for row in inventory['included']}
+          excluded = {row['name'] for row in inventory['omitted_only_empty_stderr']}
+          assert os.environ['ARCHIVE_NAME'] in manifest_names
+          assert all(name.endswith('.stderr.txt') for name in excluded)
+          actual = {p.name for p in source.iterdir() if p.name != 'HARNESS-PUBLICATION-ASSET-INVENTORY.json'}
+          assert manifest_names.isdisjoint(excluded) and actual == manifest_names | excluded
+          print(json.dumps({'result':'DRY_RUN_ONLY','included':len(manifest_names),'omitted_empty_stderr':len(excluded),'original_source_sha':os.environ['ARCHIVE_SHA']},sort_keys=True))
+          PY
+      - name: Retain prospective preflight manifest without altering source artifacts
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: alpha-genesis-harness-release-asset-preflight-${{ github.event.pull_request.head.sha }}-attempt-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/harness-preflight-input/HARNESS-PUBLICATION-ASSET-INVENTORY.json
+          if-no-files-found: warn
   release-candidate:
     needs: [qualify, platform-first-use, local-model-qualification]
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
@@ -404,6 +467,12 @@ jobs:
           with open(os.environ['GITHUB_OUTPUT'], 'a') as out:
               out.write('name=' + archive.name + '\nsha256=' + digest + '\n')
           PY
+      - name: Preflight exact positive release assets and preserve zero-byte stderr exclusions (HARNESS124)
+        env:
+          SOURCE_SHA: ${{ needs.qualify.outputs.source_sha }}
+        run: |
+          python -B -m unittest tests.test_harness_release_assets124 -v
+          python -B scripts/harness_release_assets124.py --directory "$RUNNER_TEMP/harness-received" --source "$SOURCE_SHA" --paths0 "$RUNNER_TEMP/harness-received-operation/HARNESS-RELEASE-ASSETS.paths0"
       - name: Publish source-specific prerelease without replacing prior releases
         env:
           GH_TOKEN: ${{ github.token }}
@@ -411,7 +480,10 @@ jobs:
           SOURCE_SHA: ${{ needs.qualify.outputs.source_sha }}
         run: |
           tag="alpha-genesis-harness-v0.3.0-rc-${SOURCE_SHA:0:12}"
-          gh release create "$tag" "$RUNNER_TEMP/harness-received/"* --target "$SOURCE_SHA" --prerelease --latest=false --title "ALPHA GENESIS HARNESS 0.3.0 — release candidate" --notes-file products/alpha-genesis-harness/docs/RELEASE-NOTES.md
+          mapfile -d '' -t release_assets < "$RUNNER_TEMP/harness-received-operation/HARNESS-RELEASE-ASSETS.paths0"
+          test "${#release_assets[@]}" -gt 0
+          for asset in "${release_assets[@]}"; do test -s "$asset"; done
+          gh release create "$tag" "${release_assets[@]}" --target "$SOURCE_SHA" --prerelease --latest=false --title "ALPHA GENESIS HARNESS 0.3.0 — release candidate" --notes-file products/alpha-genesis-harness/docs/RELEASE-NOTES.md
       - name: Download the published archive
         env:
           GH_TOKEN: ${{ github.token }}
