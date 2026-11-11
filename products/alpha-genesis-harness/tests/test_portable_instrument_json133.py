@@ -63,6 +63,20 @@ class PortableInstrumentJSON133Tests(unittest.TestCase):
                     '{"x":7}',
                 )
 
+    def test_finite_json_exponent_overflow_in_inert_metadata_is_refused(self):
+        for token in ("1e309", "-1e309"):
+            with self.subTest(token=token):
+                self.assert_refused(
+                    '{"inputs":["x"],"outputs":{"value":{"field":"x"}},'
+                    '"description":' + token + '}',
+                    '{"x":7}',
+                )
+
+    def test_finite_scientific_notation_remains_accepted(self):
+        result = self.run_runner(VALID_SPEC, '{"x":1e2}')
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(json.loads(result.stdout)["output"], {"value": 100})
+
     def test_valid_portable_execution_is_unchanged(self):
         result = self.run_runner(VALID_SPEC, '{"x":7}')
         self.assertEqual(result.returncode, 0, result.stderr)
