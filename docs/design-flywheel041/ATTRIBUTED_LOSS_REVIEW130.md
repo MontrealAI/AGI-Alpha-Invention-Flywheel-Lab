@@ -1,0 +1,23 @@
+# Design041 attributable-loss review130 — frozen adversarial contract
+**Review scope:** independent, additive stacked review of [PR #77](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/pull/77), pinned source `cd5281b0ae7b484572bfb35ccb7e51ef5b3be4b3`; NOT main, PR #40, an original account, a release, or real commerce.
+**Evidence status:** preregistered before changing `connected_enterprise/design_flywheel.py`. Original 341014/341015 development/confirmation and their hosted results remain untouched. New tests use synthetic *unit fixtures*, not new economic observations.
+
+## Material falsifier
+`find_native_successor` currently derives an investment's reported net from **only positive-margin SETTLED linked orders**, subtracting the investment price. This may claim a positive paid-access or capacity contribution while silently omitting resources paid for linked rejected/refunded/uncollected orders. A complete native seller can incur the source-linked loss while keeping total enterprise profit positive using unrelated orders. Such a witness must NOT be promoted as a profitable source-linked expansion.
+
+## Precommitted synthetic cases (micro-units)
+1. Prior accepted/collected order: 20 price, 10 cost, collected hour 40. Acquired new order: 40 price, 12 cost, qualified hour 120 and collected hour 160. Earned-funded acquisition: cost 2, purchased hour 80, active hour 96. Expected original clean net **26**, positive.
+2. Same case plus a **source-linked, qualified refunded order** with no collection and 90 in complete precommitted order costs; expected conservative attributable order net `28 - 90 - 2 = -64`, **no positive contribution gate** even with the profitable collected successor.
+3. Same case plus a **source-linked, settled loss order** with price 5 and complete cost 75; expected net `28 - 70 - 2 = -44`, **no positive gate**. This third case is a future-proofing unit counterexample: the current native admission generally rejects knowingly negative-margin new orders.
+4. Same case plus an **unlinked** failed order: still **26**, proving irrelevant business losses cannot be arbitrarily attributed to this investment. Enterprise-wide profitability remains a separate mandatory native audited check.
+5. The independently recomputed public confirmation flag must remain false when a linked losing/refunded order makes the source-linked lower-bound net nonpositive.
+
+**Correctness rule:** For source-linked *qualified* orders eligible after investment activation, count each actual collected SETTLED price once, and subtract **all** such orders' registered complete costs, regardless of outcome; additionally subtract the actual investment invoice once. Keep a distinct positive collected successor as evidence of a real order, but never filter losing orders from the contribution calculation. The unsuccessful-order cost is conservatively charged at `complete_cost` even where a refunded payment fee might not in fact be retained; the quantity is a lower bound on modeled attributed order contribution, **not an exact journal reconciliation or causal incremental channel value**. No cross-selling forecasts, added buyers, billing assumptions or other fabricated favorable data. Keep cumulative/enterprise-wide profit and native account verification separate. Trace the contributing settled and failed order IDs.
+
+**Decision:** fix only the proof gate, do not alter engine, account, source guard, orders, seller policies, native verifier, archived source, external funds or thresholds. If the original PR #77 exposed engineering fixture loses its positive claim under the stricter check, preserve that failure and report it; never reseed or soften tests.
+
+**Economic alternatives considered:** current baseline (retained), earned-funded channel, competitive-growth and no deployment. The correction cannot itself select any of these in commerce. Strong human/conventional software, autonomous competitors and self-service remain valid outside options; no actual buyer/partner agreements.
+
+**Qualification:** original Design041 tests plus exact frozen new adversarial tests and clean hosted source-specific CI. Original failed jobs remain failed. Integration remains with the PR #77 owner; this review branch must not be merged wholesale into main without qualified semantic composition, audit and release.
+
+**Limits:** full refunded-transaction journal costs, unsuccessful quotes and enterprise overhead require the independent native auditor; this conservative order attribution does not prove complete customer lifetime value, causal incrementality, demand, profitability, invention or the US$3B target.
