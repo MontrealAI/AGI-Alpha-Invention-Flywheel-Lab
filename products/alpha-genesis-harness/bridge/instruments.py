@@ -155,13 +155,37 @@ def evaluate(spec, inputs, max_operations=10000):
     return {"output": result, "operations": count, "scope": "Bounded declarative execution; acceptance must be checked separately."}
 
 
+
+def strict_portable_json(raw):
+    """Refuse ambiguous or nonstandard JSON before standalone artifact execution."""
+    def unique_members(pairs):
+        result = {}
+        for key, value in pairs:
+            if key in result:
+                raise ValueError("Invalid JSON: duplicate object member.")
+            result[key] = value
+        return result
+
+    def nonfinite_constant(_token):
+        raise ValueError("Invalid JSON: non-finite number token.")
+
+    def finite_float(token):
+        value = float(token)
+        if not math.isfinite(value):
+            raise ValueError("Invalid JSON: floating-point overflow.")
+        return value
+
+    return json.loads(raw, object_pairs_hook=unique_members,
+                      parse_constant=nonfinite_constant, parse_float=finite_float)
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("instrument", type=Path)
     parser.add_argument("input", type=Path)
     parser.add_argument("--max-operations", type=int, default=10000)
     args = parser.parse_args()
-    print(json.dumps(evaluate(json.loads(args.instrument.read_text()), json.loads(args.input.read_text()), args.max_operations), ensure_ascii=False, allow_nan=False, indent=2))
+    print(json.dumps(evaluate(strict_portable_json(args.instrument.read_text()), strict_portable_json(args.input.read_text()), args.max_operations), ensure_ascii=False, allow_nan=False, indent=2))
 
 
 if __name__ == "__main__":
