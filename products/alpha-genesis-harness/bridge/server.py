@@ -27,7 +27,7 @@ from bridge.services import AccessRuntime
 PRODUCT = Path(__file__).resolve().parent.parent
 APP = PRODUCT / "app"
 STATIC_FILES = {"/": "index.html", "/index.html": "index.html", "/app.js": "app.js",
-                "/engine.js": "engine.js", "/styles.css": "styles.css"}
+                "/engine.js": "engine.js", "/styles.css": "styles.css", "/workshop.js": "workshop.js"}
 
 
 class NativeMechanism:
@@ -265,6 +265,9 @@ class Handler(BaseHTTPRequestHandler):
                         bundle.writestr("artifacts/" + name, content.encode("utf-8"))
                     bundle.writestr("WORKFLOW-EXPORT.json", json.dumps(exported, ensure_ascii=False, allow_nan=False, indent=2).encode("utf-8"))
                 return self.send_bytes(200, output.getvalue(), "application/zip")
+            if self.path == "/api/workshop/bundle":
+                from bridge.workshop import bundle
+                return self.send_bytes(200, bundle(self.server.workflows, data), "application/zip")
             if self.path == "/api/generate":
                 result = self.server.runtime.generate(data)
                 result["budget"] = self.server.runtime.budget.view()
@@ -280,6 +283,9 @@ class Handler(BaseHTTPRequestHandler):
                 result = self.server.native.compose(data.get("spec"))
             elif self.path.startswith("/api/workflows/"):
                 result = self.workflow_action(self.path.rsplit("/", 1)[1], data)
+            elif self.path.startswith("/api/workshop/"):
+                from bridge.workshop import operate
+                result = operate(self.server.workflows, self.path.rsplit("/", 1)[1], data)
             elif self.path == "/api/capabilities":
                 result = self.server.workflows.capabilities()
             elif self.path.startswith("/api/genesis-next/"):

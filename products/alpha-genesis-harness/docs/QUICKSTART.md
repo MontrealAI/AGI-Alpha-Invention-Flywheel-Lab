@@ -1,5 +1,7 @@
 # Your first useful result / Votre premier résultat utile
 
+[Instrument workshop · Atelier des instruments](WORKSHOP.md)
+
 ## Five-minute offline introduction
 
 This introduction uses synthetic data, makes no model calls and incurs no provider charge. It is a demonstration of the software's checks, not of market demand or scientific novelty.

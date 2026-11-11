@@ -251,7 +251,7 @@ class PreviewSourceBoundaryTests(unittest.TestCase):
         self.script = self.product / "scripts/publish_preview.py"
         shutil.copyfile(PRODUCT / "scripts/publish_preview.py", self.script)
         self.original = {}
-        for name in ["index.html", "app.js", "engine.js", "styles.css"]:
+        for name in ["index.html", "app.js", "engine.js", "styles.css", "workshop.js"]:
             data = ("committed public asset: " + name + "\n").encode()
             (self.product / "app" / name).write_bytes(data)
             self.original[name] = data

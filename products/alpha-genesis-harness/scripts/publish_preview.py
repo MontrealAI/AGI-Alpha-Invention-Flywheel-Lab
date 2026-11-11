@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Publish exactly the four public browser assets; never bridge config or user data.
+"""Publish the allowlisted public browser assets; never bridge config or user data.
 
 SPDX-License-Identifier: Apache-2.0
 Copyright 2026 Vincent Boucher
@@ -11,7 +11,7 @@ from pathlib import Path
 import re
 import subprocess
 
-ASSETS = ("index.html", "app.js", "engine.js", "styles.css")
+ASSETS = ("index.html", "app.js", "engine.js", "styles.css", "workshop.js")
 
 
 def main():

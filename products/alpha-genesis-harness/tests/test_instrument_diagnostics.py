@@ -31,7 +31,7 @@ class InstrumentDiagnosticTests(unittest.TestCase):
         message = str(caught.exception)
         self.assertTrue(message.startswith("Unsupported instrument specification."))
         self.assertIn('Unsupported top-level keys: ["a_note", "z_status"]', message)
-        self.assertIn('Allowed top-level keys: ["conditions", "description", "inputs", "limitations", "name", "outputs"]', message)
+        self.assertIn('Allowed top-level keys: ["bindings", "conditions", "description", "inputs", "limitations", "name", "outputs"]', message)
         self.assertIn('Named calculations belong inside the "outputs" object', message)
         self.assertNotIn("private-spec-value", message)
         self.assertNotIn("private-input-value", message)
