@@ -97,6 +97,14 @@ G1_OUT_OF_SCOPE_SKIP = (
 
 def module_passed(log, module, criterion=None):
     lines = [line for line in log.splitlines() if re.match(r'^test_\w+ \(' + re.escape(module) + r'\.', line)]
+    # A single unittest run must not certify one method twice. This includes
+    # an exempt G1 skip followed by an incompatible PASS for that identity.
+    identities = set()
+    for line in lines:
+        prefix, separator, _verdict = line.partition(') ... ')
+        if not separator or prefix + ')' in identities:
+            return False
+        identities.add(prefix + ')')
     if criterion == 'G1' and module == 'test_bridge':
         if lines.count(G1_OUT_OF_SCOPE_SKIP) > 1:
             return False
