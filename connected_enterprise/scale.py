@@ -264,32 +264,56 @@ def trailing_profit(tape, *, operating_end_hour, operating_complete, aggregation
 
 
 def _milestones(tape, aggregation, epoch):
-    records = []
-    for dollars in TARGETS_USD:
-        threshold = dollars * MICRO
-        revenue_crossing = qualified_crossing = None
-        for item in aggregation['collections']:
-            hour = item['hour']
-            amount = sum(row['amount'] for row in aggregation['collections'] if hour - YEAR_HOURS < row['hour'] <= hour and row['action_index'] <= item['action_index'])
-            if amount < threshold:
-                continue
-            index = item['action_index']
-            summary = tape['actions'][index]['after']
-            record = {'hour': hour, 'calendar_utc': _calendar(epoch, hour),
-                      'trailing_365_day_collections_microUSD': amount,
-                      'complete_365_day_history': hour >= YEAR_HOURS,
-                      'state_microUSD': _point(summary, _receivables(tape['actions'][:index + 1]))}
-            if revenue_crossing is None:
-                revenue_crossing = record
-            if qualified_crossing is None and summary['profit'] > 0 and _covered(summary):
-                qualified_crossing = record
-        records.append({'target_usd': dollars, 'target_microUSD': threshold,
-                        'revenue_attainment': revenue_crossing,
-                        'profitable_obligation_covered_attainment': qualified_crossing,
-                        'status': 'REACHED' if revenue_crossing else 'NOT_REACHED_WITHIN_EXECUTED_HORIZON',
-                        'subsequent_terminal_obligation_covered': _covered(tape['summary']),
-                        'subsequent_terminal_profit_microUSD': tape['summary']['profit']})
-    return records
+    """First native historical threshold crossings in one exact rolling pass.
+
+    This is an observer only: funding, operating source, account ownership and
+    native audit are unchanged. The queue contains signed collection deltas
+    ordered by the already audited (hour, native action-index) prefix.
+    """
+    crossings = {dollars: {'revenue': None, 'qualified': None} for dollars in TARGETS_USD}
+    window = deque()  # One exact signed subtotal per observed hour.
+    rolling = 0
+    for item in aggregation['collections']:
+        hour = item['hour']
+        rolling += item['amount']
+        if window and window[-1][0] == hour:
+            window[-1][1] += item['amount']
+        else:
+            window.append([hour, item['amount']])
+        while window and window[0][0] <= hour - YEAR_HOURS:
+            rolling -= window.popleft()[1]
+
+        pending = [dollars for dollars in TARGETS_USD
+                   if rolling >= dollars * MICRO
+                   and (crossings[dollars]['revenue'] is None
+                        or crossings[dollars]['qualified'] is None)]
+        if not pending:
+            continue
+        index = item['action_index']
+        summary = tape['actions'][index]['after']
+        covered_and_profitable = summary['profit'] > 0 and _covered(summary)
+        if not covered_and_profitable and all(crossings[d]['revenue'] is not None for d in pending):
+            continue
+
+        # Materialize a native financial state only for a newly attained gate,
+        # not once per collection and not once per target threshold.
+        record = {'hour': hour, 'calendar_utc': _calendar(epoch, hour),
+                  'trailing_365_day_collections_microUSD': rolling,
+                  'complete_365_day_history': hour >= YEAR_HOURS,
+                  'state_microUSD': _point(summary, _receivables(tape['actions'][:index + 1]))}
+        for dollars in pending:
+            if crossings[dollars]['revenue'] is None:
+                crossings[dollars]['revenue'] = record
+            if covered_and_profitable and crossings[dollars]['qualified'] is None:
+                crossings[dollars]['qualified'] = record
+
+    return [{'target_usd': dollars, 'target_microUSD': dollars * MICRO,
+             'revenue_attainment': crossings[dollars]['revenue'],
+             'profitable_obligation_covered_attainment': crossings[dollars]['qualified'],
+             'status': 'REACHED' if crossings[dollars]['revenue'] else 'NOT_REACHED_WITHIN_EXECUTED_HORIZON',
+             'subsequent_terminal_obligation_covered': _covered(tape['summary']),
+             'subsequent_terminal_profit_microUSD': tape['summary']['profit']}
+            for dollars in TARGETS_USD]
 
 
 def _cohorts(result):
