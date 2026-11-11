@@ -271,12 +271,15 @@ def _milestones(tape, aggregation, epoch):
     ordered by the already audited (hour, native action-index) prefix.
     """
     crossings = {dollars: {'revenue': None, 'qualified': None} for dollars in TARGETS_USD}
-    window = deque()
+    window = deque()  # One exact signed subtotal per observed hour.
     rolling = 0
     for item in aggregation['collections']:
         hour = item['hour']
         rolling += item['amount']
-        window.append((hour, item['amount']))
+        if window and window[-1][0] == hour:
+            window[-1][1] += item['amount']
+        else:
+            window.append([hour, item['amount']])
         while window and window[0][0] <= hour - YEAR_HOURS:
             rolling -= window.popleft()[1]
 
