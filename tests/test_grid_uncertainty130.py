@@ -4,6 +4,7 @@ import hashlib
 import json
 import math
 import unittest
+from unittest import mock
 from pathlib import Path
 
 from research.grid_uncertainty130 import InvalidModel, case, radii_for
@@ -106,6 +107,18 @@ class GridUncertainty130(unittest.TestCase):
         with self.assertRaises(InvalidModel):case(model,[0,0])
         model=triangle();model["buses"]=[1,1,3]
         with self.assertRaises(InvalidModel):case(model,[0,0])
+
+    def test_t12_independent_reference_rejects_correlated_producer_matrix_defect(self):
+        from research import grid_uncertainty130 as producer
+        m=triangle()
+        original=producer._matrix
+        def incorrect_admittance(*args, **kwargs):
+            active, a, w, shift, B=original(*args,**kwargs)
+            return active, a, w*1.17, shift, B
+        with mock.patch.object(producer, "_matrix", incorrect_admittance):
+            corrupt=producer.case(m,[0.4,1.2])
+        with self.assertRaises(AssertionError):
+            independently_verify(m, corrupt)
 
     def test_t11_unmodified_source_remains_untouched(self):
         model=triangle();before=json.dumps(model,sort_keys=True)
