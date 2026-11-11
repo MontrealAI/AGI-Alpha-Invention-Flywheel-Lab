@@ -1,0 +1,35 @@
+name: Electrolysis131 frozen physical-data scope (research/no deploy)
+on:
+  pull_request:
+    paths:
+      - 'campaign/electrolysis131/**'
+      - 'tests/test_electrolysis131.py'
+      - '.github/workflows/electrolysis131.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  physical-source-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Run pinned-source admission/negative regressions
+        run: python -B -m unittest discover -s tests -p 'test_electrolysis131.py' -v
+      - name: Download exactly one pinned upstream public physical run; emit compact receipt
+        run: python -B -m campaign.electrolysis131.physical_scope --output "$RUNNER_TEMP/ELECTROLYSIS131.json"
+      - name: Preserve compact result, never copy raw measurements
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: electrolysis131-scope-${{ github.event.pull_request.head.sha || github.sha }}-attempt-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/ELECTROLYSIS131.json
+          if-no-files-found: warn
