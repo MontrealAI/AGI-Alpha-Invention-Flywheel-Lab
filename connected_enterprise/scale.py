@@ -448,11 +448,35 @@ def analyze(result):
                        'Host inference billing unavailable; costs remain disclosed modeled envelopes, not measured provider receipts.']}
 
 
+# Policy differences are allowed treatments; all external market and cost inputs
+# must be held equal to call a pair matched. This reader does not validate either
+# native account; independent native and operating audit remain prerequisites.
+COMPARISON_TREATMENT_KEYS = frozenset((
+    'strategic_policy', 'strategic_allocation_policy', 'mechanism_policy',
+    'channel_menu_policy', 'refusal_recourse_policy', 'startup_acquisition_policy',
+))
+
+
+def _comparison_environment(config):
+    if not isinstance(config, dict):
+        raise ValueError('MATCHED_EXTERNAL_CONFIGURATION_REQUIRED')
+    return {name: value for name, value in config.items()
+            if name not in COMPARISON_TREATMENT_KEYS}
+
+
 def compare(results, baseline='baseline', candidate='growth'):
-    """Compare equal-capital exact businesses without pooling their cash."""
+    """Compare matched simulated opportunities, NOT just coincident seed numbers.
+
+    Policy treatments may differ, but buyer values, external channel contracts,
+    prices, costs, time horizons and source identities must agree. Source equality
+    here is only an analytical parity check, never a substitute native audit.
+    """
     indexed = {}
     for result in results:
-        key = (result.get('seed'), result.get('world', result.get('case', 'central')), result.get('config', {}).get('customer_pool'))
+        cfg = result.get('config')
+        external = _comparison_environment(cfg)
+        key = (result.get('seed'), result.get('world', result.get('case', 'central')),
+               external.get('customer_pool'))
         arm = result['arm']
         if arm in indexed.setdefault(key, {}):
             raise ValueError('DUPLICATE_MATCHED_BUSINESS_IDENTITY')
@@ -462,19 +486,30 @@ def compare(results, baseline='baseline', candidate='growth'):
         if baseline not in arms or candidate not in arms:
             continue
         old, new = arms[baseline], arms[candidate]
+        old_environment = _comparison_environment(old['config'])
+        new_environment = _comparison_environment(new['config'])
+        if old_environment != new_environment:
+            raise ValueError('UNMATCHED_EXTERNAL_MARKET_OR_COMPLETE_COSTS')
+        if ('source' in old) != ('source' in new) or old.get('source') != new.get('source'):
+            raise ValueError('UNMATCHED_SOURCE_OR_SERVICE_MANIFEST')
         old_tape, new_tape = old['owned_account']['ledger'], new['owned_account']['ledger']
         if old_tape['config']['opening'] != new_tape['config']['opening']:
             raise ValueError('EQUAL_STARTING_CAPITAL_REQUIRED')
         before, after = old_tape['summary'], new_tape['summary']
+        changed_policies = sorted(name for name in COMPARISON_TREATMENT_KEYS
+                                  if old['config'].get(name) != new['config'].get(name))
         pairs.append({'identity': list(key), 'baseline_arm': baseline, 'candidate_arm': candidate,
                       'opening_microUSD': old_tape['config']['opening'],
+                      'matched_external_configuration_sha256': _digest(old_environment),
+                      'matched_source_sha256': _digest(old['source']) if 'source' in old else None,
+                      'declared_treatment_policy_fields': changed_policies,
                       'collected_delivery_delta': sum(row['state'] == 'released' for row in new_tape['orders']) - sum(row['state'] == 'released' for row in old_tape['orders']),
                       'collections_delta_microUSD': after['collections'] - before['collections'],
                       'profit_delta_microUSD': after['profit'] - before['profit'],
                       'unrestricted_earned_delta_microUSD': after['unrestrictedEarned'] - before['unrestrictedEarned'],
                       'baseline_obligation_covered': _covered(before), 'candidate_obligation_covered': _covered(after)})
     return {'schema': 'agi-alpha/connected014-matched-growth/v1', 'pairs': pairs,
-            'scope': 'Exact separate-business paired outcomes; no accounts pooled and no universal market probability inferred.'}
+            'scope': 'Analytical matched-exogenous-input comparison of separate native businesses; no audit, accounts pooled, observed buyer demand or universal probability inferred.'}
 
 
 def frontier(results):
