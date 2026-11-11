@@ -1,0 +1,56 @@
+{
+  "schema": "agi-alpha/p0-composition135-owner-safe-readonly-checkpoint/v1",
+  "date_utc": "2026-11-11",
+  "main_commit": "7287ed23aee97e52cc822bbb2c22688cc0dc71b7",
+  "protected_owner_pr": 40,
+  "protected_owner_head": "ced6c1cb004887dcdafaea59a2976020be649f8e",
+  "protocol_preimplementation_commit": "6c791c9f9f33a5e4c5f4ad3ad679887edd5bafd9",
+  "status": "HOLD_EXISTING_MAIN_CONTROLS_ALREADY_COVER_MOST_FROZEN_TOPICS",
+  "source_review": "READ_ONLY_MAIN_AND_PR40_FILE_COMPARISON_NOT_A_NEW_FINANCIAL_EXECUTION",
+  "existing_controls": [
+    {
+      "path": "tests/test_connected_registration_exact.py",
+      "verified_scope": "Read exact checked-in current-main tests: mixed engine refusal; exact/legacy binding; registered operate/resume/audit; downgrade and wrong-version manifest rejection."
+    },
+    {
+      "path": "tests/test_connected_large_money.py",
+      "verified_scope": "Read exact checked-in current-main tests: fresh exact-permanent and exact-prospective runs with independent audit; wrong native-engine early refusal before account.sqlite; large-number, maturity, signed replay."
+    },
+    {
+      "path": "tests/test_connected_complete_offer.py",
+      "verified_scope": "Identified current-main complete-offer suite; not executed or independently reviewed line-by-line in this checkpoint."
+    }
+  ],
+  "main_only_capabilities": [
+    "engine.fresh_account_config",
+    "engine._offer_menu",
+    "engine._resource_units",
+    "registration.native_engine",
+    "runner._service_manifest",
+    "runner.genesis_release_paths",
+    "runner.quote_release_paths"
+  ],
+  "immutable_blob_refs": {
+    "main_engine": "a18c8c1bf9f8baf795e9c78d1a56ffe5b501afdd",
+    "pr40_engine": "94550f078a6bb0ea8bda95682bdf3c6472c9749a",
+    "main_runner": "02aebd24b9c1dc1e2d4bea40f387acbf1312829e",
+    "pr40_runner": "020fcf81500c8e8843594d0bfd5d81dd815a151c",
+    "main_registration": "ed16c91e55b1df4848c56d7fac57f3e3de055d81",
+    "pr40_registration": "1ff2fc9e861c915576b18eb8225691e93af61d95"
+  },
+  "original_task_lookup": "AUTOMATIONS_GET_404_AND_PEEK_NOT_FOUND_OR_ACCESSIBLE; NOT_PROOF_OF_INACTIVITY_OR_TASK_DELETION",
+  "original_account_checkpoint": "UNAVAILABLE",
+  "source_transition": "NOT_ATTEMPTED",
+  "account_or_key_or_queue_mutation": false,
+  "repository_main_mutation": false,
+  "independent_tests_executed": 0,
+  "CI_dispatched": 0,
+  "new_external_customers": 0,
+  "newly_verified_commercial_profit_usd": null,
+  "trailing_365_complete_cost_profit_target_achieved": false,
+  "prior_frozen_failures": "UNCHANGED",
+  "decision": "DO_NOT_IMPLEMENT_DUPLICATE_135_TESTS_OR_MERGE_BRANCH; PR40_OWNER_MUST_SEMANTICALLY_FORWARD_PORT_EXISTING_MAIN_CONTROLS_AND_EXECUTE_AUTHENTICATED_NONEMPTY_QUEUE_MIGRATION_WITH_PRIVATE_CUSTODY_CHECKPOINT",
+  "referenced_owner_review": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/pull/40#issuecomment-6801198751",
+  "financial_cost_usd": "UNKNOWN_NOT_ZERO",
+  "resource_cost": "Source/connector review and included model inference; whole-run billing unknown."
+}
