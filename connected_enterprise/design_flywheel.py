@@ -122,7 +122,19 @@ def find_native_successor(result):
                       and o["collection_time"] > investment["purchased_time"]]
         if not successors:
             continue
-        net = sum(_margin(o) for o in successors) - investment["cost"]
+        # A positive paid successor is only an existence witness. A refunded,
+        # rejected or loss-making *linked* order still consumes native-funded
+        # resources. Retain every qualified linked order in the conservative
+        # attributable contribution; never cherry-pick profitable settlements.
+        # The separate native auditor verifies the complete journal and costs.
+        attributed = [o for o in result["orders"] if linked(o)
+                      and o["qualified_time"] >= investment["activation_time"]]
+        linked_settled = [o for o in attributed
+                          if o["outcome"] == "SETTLED" and o["collection_time"] is not None]
+        linked_unsettled = [o for o in attributed if o not in linked_settled]
+        attributable_contribution = (sum(o["price"] for o in linked_settled)
+                                     - sum(o["complete_cost"] for o in attributed))
+        net = attributable_contribution - investment["cost"]
         for first in settled:
             if first["collection_time"] >= investment["purchased_time"]:
                 continue
@@ -144,9 +156,14 @@ def find_native_successor(result):
                 "successor_customer": second["customer_id"],
                 "successor_collection_hour": second["collection_time"],
                 "successor_margin_microUSD": _margin(second),
-                "source_linked_paid_order_ids": [o["id"] for o in successors],
-                "source_linked_total_order_contribution_microUSD": sum(_margin(o) for o in successors),
+                "source_linked_paid_order_ids": [o["id"] for o in linked_settled],
+                "source_linked_unsettled_order_ids": [o["id"] for o in linked_unsettled],
+                "source_linked_incurred_unsettled_cost_microUSD":
+                    sum(o["complete_cost"] for o in linked_unsettled),
+                "source_linked_total_order_contribution_microUSD": attributable_contribution,
                 "net_after_native_investment_microUSD": net,
+                "attribution_scope": ("Conservative modeled source-linked order-cost lower bound; "
+                                      "not causal incremental LTV or a replacement for native audit."),
                 "distinct_opportunity": True,
                 "positive_incremental_collected_contribution": net > 0,
                 "strictly_better_per_order_margin": _margin(second) > _margin(first),
