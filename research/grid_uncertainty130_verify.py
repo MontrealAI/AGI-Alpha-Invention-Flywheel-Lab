@@ -10,12 +10,81 @@ from pathlib import Path
 import numpy as np
 from scipy.optimize import linprog
 
-from research.grid_uncertainty130 import _matrix, connected, validate
+# Intentionally do not import the producer's topology, validation or matrix helpers.
+# These are independent full-equation reference reconstructions.
+
+def _finite(x):
+    return type(x) in (int, float) and math.isfinite(x)
+
+
+def independently_validate(model):
+    if not isinstance(model, dict) or set(model) != {"base_mva", "buses", "p_mw", "branches"}:
+        raise AssertionError("MODEL_SCHEMA")
+    buses, p, branches = model["buses"], model["p_mw"], model["branches"]
+    if (not isinstance(buses, list) or not 2 <= len(buses) <= 200 or
+        any(type(b) is not int for b in buses) or len(set(buses)) != len(buses) or
+        not isinstance(p, list) or len(p) != len(buses) or
+        not all(_finite(x) for x in p) or not _finite(model["base_mva"]) or model["base_mva"] <= 0 or
+        not isinstance(branches, list) or not 1 <= len(branches) <= 500):
+        raise AssertionError("MODEL_INVALID")
+    found = set()
+    for branch in branches:
+        if not isinstance(branch, dict) or set(branch) != {"id","from_bus","to_bus","x","tap","shift_deg","rate_mw","status"}:
+            raise AssertionError("BRANCH_SCHEMA")
+        if (type(branch["id"]) is not int or branch["id"] in found or
+            any(type(branch[k]) is not int or branch[k] not in buses for k in ("from_bus", "to_bus")) or
+            branch["from_bus"] == branch["to_bus"] or
+            any(not _finite(branch[k]) for k in ("x", "tap", "shift_deg", "rate_mw")) or
+            branch["x"] <= 0 or branch["tap"] <= 0 or branch["rate_mw"] < 0 or
+            type(branch["status"]) is not int or branch["status"] not in (0, 1)):
+            raise AssertionError("BRANCH_INVALID")
+        found.add(branch["id"])
+
+
+def independently_connected(model, outage=None):
+    buses = model["buses"]
+    neighbours = {bus: set() for bus in buses}
+    for index, branch in enumerate(model["branches"]):
+        if index != outage and branch["status"] == 1:
+            neighbours[branch["from_bus"]].add(branch["to_bus"])
+            neighbours[branch["to_bus"]].add(branch["from_bus"])
+    reached = set()
+    frontier = {buses[0]}
+    while frontier:
+        bus = frontier.pop()
+        if bus not in reached:
+            reached.add(bus)
+            frontier.update(neighbours[bus] - reached)
+    return len(reached) == len(buses)
+
+
+def independently_build_equations(model, outage):
+    ordered_buses = list(model["buses"])
+    live = [(index, branch) for index, branch in enumerate(model["branches"])
+            if index != outage and branch["status"] == 1]
+    n = len(ordered_buses) - 1
+    incidence = np.zeros((len(live), n), dtype=float)
+    admittance = np.empty(len(live), dtype=float)
+    phase = np.empty(len(live), dtype=float)
+    for row, (_, branch) in enumerate(live):
+        source = ordered_buses.index(branch["from_bus"])
+        target = ordered_buses.index(branch["to_bus"])
+        if source > 0:
+            incidence[row, source - 1] = 1.0
+        if target > 0:
+            incidence[row, target - 1] = -1.0
+        admittance[row] = 1.0 / float(branch["x"]) / float(branch["tap"])
+        phase[row] = math.pi * float(branch["shift_deg"]) / 180.0
+    nodal = (incidence.T * admittance) @ incidence
+    if not np.isfinite(nodal).all() or np.linalg.cond(nodal) > 1e12:
+        raise AssertionError("INDEPENDENT_ILL_CONDITIONED_DC")
+    return live, incidence, admittance, phase, nodal
+
 
 
 def independently_verify(model, candidate, tolerance=1e-5):
-    validate(model)
-    if not connected(model):
+    independently_validate(model)
+    if not independently_connected(model):
         raise AssertionError("DISCONNECTED_BASE")
     u = np.array(candidate["radii_non_slack_mw"], dtype=float)
     if u.shape != (len(model["buses"]) - 1,) or not np.isfinite(u).all() or np.any(u < 0):
@@ -32,12 +101,12 @@ def independently_verify(model, candidate, tolerance=1e-5):
         outage = next((i for i,b in enumerate(model["branches"]) if b["id"] == obj["outage_id"]), None)
         if obj["outage_id"] is not None and outage is None:
             raise AssertionError("UNKNOWN_OUTAGE")
-        if not connected(model, outage):
+        if not independently_connected(model, outage):
             islands += 1
             if obj["status"] != "ISLANDING_UNKNOWN" or obj["rated"] or obj["unrated_ids"]:
                 raise AssertionError("ISLANDING_MISLABEL")
             continue
-        active, a, w, shift, B = _matrix(model, outage)
+        active, a, w, shift, B = independently_build_equations(model, outage)
         rated = [b for _,b in active if b["rate_mw"] > 0]
         no_rating = [b["id"] for _,b in active if b["rate_mw"] == 0]
         if [x["branch_id"] for x in obj["rated"]] != [b["id"] for b in rated] or obj["unrated_ids"] != no_rating:
