@@ -169,8 +169,14 @@ def strict_portable_json(raw):
     def nonfinite_constant(_token):
         raise ValueError("Invalid JSON: non-finite number token.")
 
+    def finite_float(token):
+        value = float(token)
+        if not math.isfinite(value):
+            raise ValueError("Invalid JSON: floating-point overflow.")
+        return value
+
     return json.loads(raw, object_pairs_hook=unique_members,
-                      parse_constant=nonfinite_constant)
+                      parse_constant=nonfinite_constant, parse_float=finite_float)
 
 
 def main():
