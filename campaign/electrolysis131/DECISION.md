@@ -1,0 +1,19 @@
+# Electrolysis131 — STOP before unnecessary engineering
+
+Protocol identity: `35265af922486f4008325b35447fcb7071f32321` (unchanged).
+
+**Disposition: REFUTED CONSTRUCTION ADVANTAGE / NO BID / NO DEPLOY.** No model was fitted, no frozen 60/20/20 held-out performance computed, no hardware instrument constructed, no buyer inferred and no financial account touched.
+
+## Decisive prospective admissibility check
+
+The preregistered challenger is a nonnegative multi-channel causal-lag ridge estimator of hydrogen flow from the existing channels. The **strong ordinary comparator was expressly granted the same channels, lags, training budget, ridge grid and nonnegative prediction**. The candidate's entire function class is thus contained in the ordinary comparator's feasible set. Denote their same-split minimum held-out error bounds by `L(candidate)` and `L(ordinary)`. If ordinary can select the candidate's coefficients and clipping, then `min L(ordinary) <= min L(candidate)` as an *oracle feasible-set inequality*. The protocol nevertheless requires the candidate to be at least 5% strictly better than that complete incumbent. The proposed exclusive algorithmic advantage has **no proved residual**. Actual training/validation selection noise could generate a favorable measured comparison, but would not establish newly feasible sensing: that same construction is available to a competent ordinary engineer. More tuning/seed sampling would be misleading.
+
+The public 60-kW PEM trace is useful as a reference dataset (Veatch et al., Dryad 2026-09-03, DOI `10.5061/dryad.8931zcs64`, underlying pinned Git commit and measurement blobs in PROTOCOL.md). Independent metadata inspection found 15,068 aligned 1-Hz sample rows, physical H2 flow, and existing electrical channels, but no *new independent observation* created by our proposal. The original NRC 25-58133 closed tender was for two physical **AEM** electrolyzer stations with approvals, EIS, commissioning and support; a single **PEM** offline inference exercise is not a substitute for that equipment or a certified hydrogen safety sensor.
+
+This is an analytical model-class nesting objection, **not an empirical holdout failure or a proof that virtual metering is useless**. A rigorous physical acceptance study could still compare competent ordinary virtual metering with independently calibrated additional measurement channels, physical cost, operating safety and beneficiary decisions. The actual new channel and qualified physical transfer are missing. Do not relax the pinned protocol to manufacture a candidate win; a distinct construction requires new preregistration before any new data-driven comparison.
+
+## Next/avoid
+
+Avoid building another same-input estimator claiming a breakthrough against an incumbent allowed to reproduce it. Investigate only **additional independently observable catalyst-layer, electrical or chemical states that change a previously unanswerable physical decision**, plus an accepted industrial use and full matched hardware/control economics. Existing published dual-reference AEM diagnostics are a particularly strong ordinary alternative; they cannot be relabeled as AGI ALPHA's newly invented instrument. A fresh physical experiment or independently accepted transfer is a real missing prerequisite. This branch is evidence, not a released runtime and must not be merged wholesale into main.
+
+**Acceptance matrix:** source provenance preliminary ACHIEVED; registration ACHIEVED; candidate superiority REFUTED at the class-inclusion stage; empirical held-out quality NOT RUN; independently constructed new measurement operation NOT BUILT; original physical-equipment acceptance UNQUALIFIED; commercial buyer/funding/native T365 UNQUALIFIED. No spending or exposure of credentials/financial records.
