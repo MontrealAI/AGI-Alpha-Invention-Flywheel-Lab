@@ -33,7 +33,7 @@ TIMESTAMP_FORMAT = "%d-%b-%Y %H:%M:%S"
 
 
 def git_blob_sha(data: bytes) -> str:
-    return hashlib.sha1(b"blob " + str(len(data)).encode("ascii") + b"\\0" + data).hexdigest()
+    return hashlib.sha1(b"blob " + str(len(data)).encode("ascii") + b"\0" + data).hexdigest()
 
 
 def verify_source(path: str, data: bytes) -> dict:
@@ -86,7 +86,7 @@ def parse_model_bound(source: bytes) -> dict:
     except UnicodeError as exc:
         raise ValueError("INVALID_MODEL") from exc
     # Contractually inspect exact source statements, never infer a value from title.
-    pattern = lambda field: rf"stack\\.{field}\\s*=\\s*([0-9]+(?:\\.[0-9]+)?)\\s*;"
+    pattern = lambda field: rf"stack\.{field}\s*=\s*([0-9]+(?:\.[0-9]+)?)\s*;"
     matches = [re.search(pattern(name), s) for name in
                ("P_rated_kW", "P_max_kW", "turndown_ratio")]
     if any(m is None for m in matches) or not all(token in s for token in
@@ -163,7 +163,7 @@ def main() -> None:
         raise ValueError("CREATE_ONLY_OUTPUT")
     with args.output.open("x", encoding="utf-8") as stream:
         json.dump(result, stream, indent=2, sort_keys=True)
-        stream.write("\\n")
+        stream.write("\n")
     print(json.dumps({"status": "PHYSICAL_SCOPE_ONLY", "rows": result["measured_seconds"],
                       "counts": result["counts"], "source_commit": COMMIT}, sort_keys=True))
 
