@@ -176,6 +176,30 @@ def assess(input_data):
                 "reason": reason,
             })
 
+    # Reconcile every registered assertion. A cross-scope claim must never
+    # silently disappear from an otherwise apparently complete impact report.
+    # These identifiers are data references, never independent review decisions.
+    referenced_evidence_ids = {
+        finding[field]
+        for finding in findings
+        for field in ("evidence_id", "historical_evidence_id")
+        if finding.get(field) is not None
+    }
+    registered_evidence_ids = {item["id"] for item in evidence.values()}
+    if not referenced_evidence_ids <= registered_evidence_ids:
+        raise ValueError("UNREGISTERED_EVIDENCE_IN_FINDINGS")
+    quarantined_evidence = [
+        {"id": item["id"], "system_id": item["system_id"],
+         "requirement_id": item["requirement_id"], "version": item["version"],
+         "reason": "NO_APPLICABLE_REQUIREMENT_FOR_SYSTEM_AND_VERSION",
+         "authorization": "NO_COMPLIANCE_OR_REVIEW_APPROVAL"}
+        for item in sorted(evidence.values(), key=lambda row: row["id"])
+        if item["id"] not in referenced_evidence_ids
+    ]
+    if (len(referenced_evidence_ids) + len(quarantined_evidence)
+            != len(registered_evidence_ids)):
+        raise ValueError("UNRECONCILED_EVIDENCE_IDENTITIES")
+
     result = {
         "schema": SCHEMA,
         "scope": "OFFLINE_SYNTHETIC_ENGINEERING_ONLY",
@@ -183,6 +207,12 @@ def assess(input_data):
         "changes": changes,
         "impacted_systems": sorted(impacted),
         "findings": findings,
+        "quarantined_evidence": quarantined_evidence,
+        "evidence_reconciliation": {
+            "input_evidence_count": len(registered_evidence_ids),
+            "referenced_evidence_count": len(referenced_evidence_ids),
+            "quarantined_evidence_count": len(quarantined_evidence),
+        },
         "authorization": "NO_AUTHENTICATED_REVIEW_OR_COMPLIANCE_CERTIFICATE",
         "hash_limit": "SHA256 is not a signature; compare to independently anchored digest",
     }
