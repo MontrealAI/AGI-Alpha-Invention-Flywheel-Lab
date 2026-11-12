@@ -3,6 +3,9 @@ import http.client
 import io
 import json
 from pathlib import Path
+import shutil
+import subprocess
+import sys
 import tempfile
 import threading
 import time
@@ -178,6 +181,43 @@ class WorkshopTests(unittest.TestCase):
             self.assertEqual(stale["docket"]["accepted"], 3)
             with self.assertRaises(BridgeError):
                 service.reuse(state["id"], {"x": 3})
+
+    def test_stale_loaded_dependencies_cannot_claim_replacement_source(self):
+        # Run without this test process's eager workshop import. The HTTP
+        # service has already loaded the old module when its file is replaced.
+        root = Path(self.folder.name)
+        shutil.copytree(Path(workshop.__file__).parent, root / "bridge",
+                        ignore=shutil.ignore_patterns("__pycache__"))
+        for name in ("workflows", "output_schema", "workflow_strategies", "streaming", "server"):
+            with self.subTest(dependency=name):
+                result = subprocess.run([sys.executable, "-B", "-c", """
+import importlib
+from pathlib import Path
+import sys
+
+from bridge.adapters import BridgeError
+from bridge.server import HarnessServer
+
+name = sys.argv[1]
+module = importlib.import_module(f'bridge.{name}')
+path = Path(module.__file__)
+before = path.read_bytes()
+path.write_bytes(before + b'\\n# Changed after import\\n')
+try:
+    from bridge import workshop
+    workspace = Path('private') / name
+    with HarnessServer(('127.0.0.1', 0), workspace=workspace) as server:
+        try:
+            workshop.register(server.workflows, {'request_id': 'a' * 32})
+        except BridgeError as error:
+            assert error.code == 'WORKSHOP_STALE', error.code
+        else:
+            raise AssertionError('stale source was accepted')
+    assert not list(workspace.glob('wf_*'))
+finally:
+    path.write_bytes(before)
+""", name], cwd=root, capture_output=True, text=True, timeout=10)
+                self.assertEqual(result.returncode, 0, result.stderr)
 
     def test_late_model_result_cannot_apply_after_cancellation(self):
         entered, release = threading.Event(), threading.Event()

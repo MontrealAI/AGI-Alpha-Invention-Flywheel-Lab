@@ -98,6 +98,7 @@ def trial(api, output, family, ambition, *, model, prior=None, trial_name=None, 
         write(root / "REPLAY.json", {"exit_code": process.returncode, "stdout": process.stdout, "stderr": process.stderr})
         replay = process.returncode
     receipt = {"name": name, "id": state["id"], "status": state["status"], "docket": state["docket"],
+               "sources_sha256": state["source_sha256"],
                "requests": state["requests"], "events": state["events"], "replay_exit": replay,
                "bundle_sha256": hashlib.sha256(raw).hexdigest(), "wall_seconds": time.monotonic() - start}
     print(json.dumps({key: receipt[key] for key in ("name", "status", "docket", "replay_exit")}), flush=True)
@@ -128,7 +129,7 @@ def run(args):
     runtime_env = dict(environment, LD_LIBRARY_PATH=str(args.runtime.parent), NO_PROXY="127.0.0.1")
     log = output / "llama.log"
     receipt = {"schema": "alpha-genesis/workshop-local-qualification/v1", "source_revision": source,
-               "source_product_tree": tree, "sources_sha256": workshop.LOADED_SOURCES,
+               "source_product_tree": tree, "sources_sha256": workshop.source_hashes(),
                "runtime_sha256": sha(args.runtime), "model_sha256": model_sha,
                "route": "Loopback llama.cpp CPU", "platform": sys.platform, "expected_model": model, "scope": args.scope,
                "complete_economic_cost": None, "cases": [], "status": "RUNNING"}
@@ -174,7 +175,7 @@ def run(args):
             record("contrast", "Check scoped accessibility evidence and exceptions without rounding.")
         expected = {"all": 5, "vertical": 4, "contrast": 1}[args.scope]
         receipt["status"] = "PASS" if (len(receipt["cases"]) == expected and (not vertical or receipt["unchanged_artifact_reuse"]) and
-            all(row["status"] == "complete" and row["replay_exit"] == 0 and
+            all(row["status"] == "complete" and row["replay_exit"] == 0 and row["sources_sha256"] == receipt["sources_sha256"] and
                 any(event["kind"] == "model_completed" and event["detail"]["reported_model"] == model
                     for event in row["events"]) for row in receipt["cases"])) else "FAIL"
         if args.browser:

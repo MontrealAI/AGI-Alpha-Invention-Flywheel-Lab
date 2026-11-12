@@ -19,6 +19,8 @@ from urllib.parse import urlsplit
 import webbrowser
 import zipfile
 
+LOADED_SOURCE_SHA256 = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
+
 if not __package__:
     sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from bridge.adapters import BridgeError, MAX_BODY, Runtime, retrieve_source, strict_json
@@ -100,7 +102,7 @@ class HarnessServer(ThreadingHTTPServer):
         with self._workflow_lock:
             if self._workflows is None:
                 from bridge.workflows import WorkflowService
-                self._workflows = WorkflowService(self.runtime, self.workspace)
+                self._workflows = WorkflowService(self.runtime, self.workspace, server_source_sha256=LOADED_SOURCE_SHA256)
             return self._workflows
 
     def server_close(self):

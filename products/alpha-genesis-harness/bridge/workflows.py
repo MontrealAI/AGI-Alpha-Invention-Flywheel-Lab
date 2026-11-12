@@ -130,11 +130,12 @@ def _atomic(path, data):
 
 class WorkflowService:
     """One local service owns each private root. No shell, payments, or external tools."""
-    def __init__(self, runtime, private_root):
+    def __init__(self, runtime, private_root, *, server_source_sha256=None):
         if isinstance(runtime, Runtime):
             from .services import AccessRuntime
             runtime = AccessRuntime(runtime)
         self.runtime = runtime
+        self.server_source_sha256 = server_source_sha256
         self.root = Path(private_root).expanduser().absolute()
         require(not any(p.is_symlink() for p in [self.root, *self.root.parents]), "Workspace parents must not be symlinks.")
         self.root.mkdir(parents=True, exist_ok=True, mode=0o700)
@@ -566,7 +567,7 @@ class WorkflowService:
         current = True
         if state.get("workshop"):
             from .workshop import current_evidence
-            current = current_evidence(state)
+            current = current_evidence(self, state)
         state["verification"] = {"passed": current and bool(checks) and all(c["passed"] for c in checks), "checks": checks,
             "spec_hash": state["spec_hash"], "artifact_hashes": {k: v["sha256"] for k, v in state["artifacts"].items()},
             "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification."}
@@ -642,7 +643,7 @@ class WorkflowService:
             self._check_routes(state["spec"])
             if state.get("workshop"):
                 from .workshop import require_current_evidence
-                require_current_evidence(state)
+                require_current_evidence(self, state)
             role = state["phase"]
             if state["model_calls"] >= state.get("model_call_limit", call_limit(state["spec"])):
                 state["status"] = "exhausted"
@@ -736,7 +737,7 @@ class WorkflowService:
             stale_sources = False
             if current.get("workshop"):
                 from .workshop import current_evidence
-                stale_sources = not current_evidence(current)
+                stale_sources = not current_evidence(self, current)
             if current["epoch"] != epoch or current["status"] in {"cancelled", "paused"} or stale_sources:
                 if stale_sources and current["status"] == "running":
                     current["status"] = "needs_review"
@@ -1027,7 +1028,7 @@ class WorkflowService:
                 state = self._load(summary["id"])
                 if state.get("workshop"):
                     from .workshop import current_evidence
-                    if not current_evidence(state):
+                    if not current_evidence(self, state):
                         continue
                 records.append({"id": state["id"], "objective": state["spec"]["objective"], "version": state["spec_hash"], "artifacts": state["artifacts"], "validation": state["verification"],
                     "conditions": "Only the recorded operator cases are qualified; every successor rechecks its own acceptance.", "provenance": {"run": state["id"], "events_sha256": digest(state["events"]), "roles": state["spec"]["roles"]},
@@ -1042,7 +1043,7 @@ class WorkflowService:
             require(prior["status"] == "complete" and prior["verification"]["passed"], "Only a locally verified complete capability may be inherited.")
             if prior.get("workshop"):
                 from .workshop import require_compatible
-                require_compatible(state, prior)
+                require_compatible(self, state, prior)
             for name, meta in prior["artifacts"].items():
                 self._write(state, name, self._read_artifact(prior, name).decode(), meta["kind"])
         self._event(state, "inherited", {"capability_id": capability_id, "source_spec_hash": prior["spec_hash"], "prior_verification_inherited": False})
@@ -1054,7 +1055,7 @@ class WorkflowService:
             require(state["status"] == "complete" and state["verification"]["passed"], "Capability is not locally verified.")
             if state.get("workshop"):
                 from .workshop import require_current_evidence
-                require_current_evidence(state)
+                require_current_evidence(self, state)
             require(isinstance(inputs, dict), "Capability input must be an object.")
             outputs = {}
             for name, meta in state["artifacts"].items():

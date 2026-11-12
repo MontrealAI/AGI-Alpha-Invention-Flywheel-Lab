@@ -9,11 +9,14 @@ from __future__ import annotations
 import argparse
 import csv
 from fractions import Fraction
+import hashlib
 import io
 import json
 import math
 from pathlib import Path
 from statistics import linear_regression
+
+LOADED_SOURCE_SHA256 = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
 
 ARTIFACT = "instrument.json"
 NIST = "https://www.itl.nist.gov/div898/handbook/mpc/section3/mpc37.htm"

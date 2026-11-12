@@ -10,10 +10,15 @@ from pathlib import Path
 import re
 import zipfile
 
-from .adapters import BridgeError
-from .instruments import LOADED_SOURCE_SHA256 as EVALUATOR_SHA256, finite, strict_portable_json
 from . import workshop_protocol as protocol
-from .workflows import RUN, _regular, digest, encoded, now, portable_digest, require
+from .adapters import LOADED_SOURCE_SHA256 as ADAPTER_SHA256, BridgeError
+from .instruments import LOADED_SOURCE_SHA256 as EVALUATOR_SHA256, finite, strict_portable_json
+from .output_schema import LOADED_SOURCE_SHA256 as OUTPUT_SCHEMA_SHA256
+from .services import LOADED_SOURCE_SHA256 as SERVICES_SHA256
+from .streaming import LOADED_SOURCE_SHA256 as STREAMING_SHA256
+from .workflow_schemas import LOADED_SOURCE_SHA256 as SCHEMAS_SHA256
+from .workflow_strategies import LOADED_SOURCE_SHA256 as STRATEGIES_SHA256
+from .workflows import LOADED_SOURCE_SHA256 as WORKFLOWS_SHA256, RUN, _regular, digest, encoded, now, portable_digest, require
 
 REQUEST_ID = re.compile(r"[0-9a-f]{32}\Z")
 CONSTRUCTION_SCOPE = "bounded-json/v1"
@@ -35,33 +40,54 @@ BUILDER_SCHEMA = {
     "required": ["inputs", "bindings", "outputs", "summary"],
     "additionalProperties": False,
 }
-SOURCE_FILES = (Path(__file__), Path(protocol.__file__), *(Path(__file__).with_name(name) for name in
-                ("instruments.py", "workflows.py", "workflow_schemas.py", "server.py", "services.py", "adapters.py")))
+LOADED_SOURCES = {
+    "workshop.py": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+    "workshop_protocol.py": protocol.LOADED_SOURCE_SHA256,
+    "instruments.py": EVALUATOR_SHA256,
+    "workflows.py": WORKFLOWS_SHA256,
+    "workflow_schemas.py": SCHEMAS_SHA256,
+    "workflow_strategies.py": STRATEGIES_SHA256,
+    "output_schema.py": OUTPUT_SCHEMA_SHA256,
+    "services.py": SERVICES_SHA256,
+    "adapters.py": ADAPTER_SHA256,
+    "streaming.py": STREAMING_SHA256,
+}
 
 
 def source_hashes():
-    return {path.name: hashlib.sha256(_regular(path)).hexdigest() for path in SOURCE_FILES}
+    return {name: hashlib.sha256(_regular(Path(__file__).with_name(name))).hexdigest()
+            for name in (*LOADED_SOURCES, "server.py")}
 
 
-LOADED_SOURCES = source_hashes()
+def _loaded_sources(service):
+    loaded = dict(LOADED_SOURCES)
+    if service.server_source_sha256 is not None:
+        # launch.py can run the HTTP module as __main__. Use the identity
+        # supplied by that live server instead of importing another copy.
+        loaded["server.py"] = service.server_source_sha256
+    return loaded
 
 
-def current_evidence(state):
-    meta = state["workshop"]
-    if meta.get("revoked_at") or meta["sources_sha256"] != LOADED_SOURCES:
-        return False
+def _sources_match(loaded):
     try:
-        return EVALUATOR_SHA256 == LOADED_SOURCES["instruments.py"] and source_hashes() == LOADED_SOURCES
+        disk = source_hashes()
     except BridgeError:
         return False
+    return all(disk.get(name) == identity for name, identity in loaded.items())
 
 
-def require_current_evidence(state):
-    require(current_evidence(state), "A dependency changed or the capability was revoked. Open a new mission and requalify.", "WORKSHOP_STALE")
+def current_evidence(service, state):
+    meta = state["workshop"]
+    loaded = _loaded_sources(service)
+    return not meta.get("revoked_at") and meta["sources_sha256"] == loaded and _sources_match(loaded)
 
 
-def require_compatible(state, prior):
-    require_current_evidence(prior)
+def require_current_evidence(service, state):
+    require(current_evidence(service, state), "A dependency changed or the capability was revoked. Open a new mission and requalify.", "WORKSHOP_STALE")
+
+
+def require_compatible(service, state, prior):
+    require_current_evidence(service, prior)
     current, earlier = state.get("workshop"), prior["workshop"]
     require(current and current["scope"] == earlier["scope"] and current["family"] == earlier["family"],
             "The previous capability does not cover this scope.", "WORKSHOP_SCOPE")
@@ -223,6 +249,8 @@ def register(service, data):
             existing = _state(service, ident)
             require(existing["workshop"]["request_hash"] == request_hash, "This request identity was used for another mission.", "WORKSHOP_CONFLICT")
             return view(service, existing)
+        loaded = _loaded_sources(service)
+        require(_sources_match(loaded), "Connector source changed after loading. Restart it before creating a mission.", "WORKSHOP_STALE")
         objective, user_context, definition, rows, challenge_start = _definition(data)
         route, local, mode = _model(service, data)
         family, inherited = data["family"], data.get("inherit")
@@ -242,7 +270,7 @@ def register(service, data):
         if inherited:
             spec["inherited_capability"] = inherited
         meta = {"family": family, "loop": loop, "mode": mode, "scope": definition["scope"],
-                "sources_sha256": LOADED_SOURCES, "request_hash": request_hash,
+                "sources_sha256": loaded, "request_hash": request_hash,
                 "uncertainty": definition["uncertainty"], "routes": definition["routes"], "sources": definition["sources"],
                 "limits": definition["limits"], "case_ids": [row["id"] for row in rows], "fresh": data.get("fresh", False),
                 "challenge_start": challenge_start,
@@ -305,9 +333,9 @@ def _graph(state, docket, requests):
     return {"nodes": nodes, "edges": edges}
 
 
-def _docket(state):
+def _docket(service, state):
     verification = state["verification"]
-    current = current_evidence(state)
+    current = current_evidence(service, state)
     passed = bool(verification["passed"]) and current
     status = "revoked" if state["workshop"].get("revoked_at") else "stale" if not current else (
         "admitted" if state["status"] == "complete" and passed else
@@ -319,7 +347,7 @@ def _docket(state):
 
 def view(service, state):
     meta = state["workshop"]
-    docket = _docket(state)
+    docket = _docket(service, state)
     requests = service._request_costs(state)
     events = []
     for event in state["events"]:
@@ -348,7 +376,7 @@ def list_missions(service):
         state = service.get(row["id"])
         if state.get("workshop"):
             missions.append({"id": state["id"], "objective": state["objective"], "family": state["workshop"]["family"],
-                             "updated_at": state["updated_at"], "docket": _docket(state)["status"],
+                             "updated_at": state["updated_at"], "docket": _docket(service, state)["status"],
                              "status": state["status"]})
     return {"missions": sorted(missions, key=lambda row: row["updated_at"], reverse=True)}
 
@@ -368,11 +396,11 @@ def operate(service, action, data):
             return view(service, state)
         require(data.get("revision") == _revision(state), "The mission changed. Reopen its current revision.", "WORKSHOP_CONFLICT")
         if action in {"start", "resume"}:
-            require_current_evidence(state)
+            require_current_evidence(service, state)
         if action == "start" and state["worker_active"]:
             return view(service, state)
         if action == "revoke":
-            require(_docket(state)["status"] == "admitted", "Only a currently admitted capability can be revoked.")
+            require(_docket(service, state)["status"] == "admitted", "Only a currently admitted capability can be revoked.")
             durable = service._load(ident)
             durable["workshop"]["revoked_at"] = now()
             service._event(durable, "revoked", {"reason": "Operator revoked the reusable capability."})
@@ -390,7 +418,7 @@ def bundle(service, data):
         require(not state["worker_active"], "Pause and wait for the worker to finish before exporting.", "WORKFLOW_BUSY")
         archive = service.export(ident)
         meta = state["workshop"]
-        current = current_evidence(state)
+        current = current_evidence(service, state)
         cases = [{"id": ident, "input": case["input"], "expected": case["expected"],
                   "stage": "final" if index >= meta["challenge_start"] else "development",
                   **meta["raw_observations"].get(ident, {})}
