@@ -182,5 +182,79 @@ class GovernanceImpact140(unittest.TestCase):
         self.assertTrue(finding(report, "finance", "R1")["change_impacts_system"])
 
 
+    def test_unapplied_registered_evidence_never_silently_disappears(self):
+        data = sample()
+        data["evidence"].append({
+            "id": "cross-scope-claim", "system_id": "plant",
+            "requirement_id": "R2", "version": "v1", "claimed_status": "met",
+            "review_claim": "approved",
+        })
+        receipt = assess(data)
+        quarantine = receipt["quarantined_evidence"]
+        self.assertEqual(len(quarantine), 1)
+        self.assertEqual(quarantine[0]["id"], "cross-scope-claim")
+        self.assertEqual(quarantine[0]["system_id"], "plant")
+        self.assertEqual(quarantine[0]["requirement_id"], "R2")
+        self.assertEqual(quarantine[0]["version"], "v1")
+        self.assertEqual(
+            quarantine[0]["reason"],
+            "NO_APPLICABLE_REQUIREMENT_FOR_SYSTEM_AND_VERSION")
+        self.assertEqual(
+            quarantine[0]["authorization"], "NO_COMPLIANCE_OR_REVIEW_APPROVAL")
+        self.assertEqual(receipt["evidence_reconciliation"], {
+            "input_evidence_count": 5,
+            "referenced_evidence_count": 4,
+            "quarantined_evidence_count": 1,
+        })
+        self.assertFalse(any(
+            row.get("evidence_id") == "cross-scope-claim" or
+            row.get("historical_evidence_id") == "cross-scope-claim"
+            for row in receipt["findings"]))
+        self.assertTrue(verify_receipt(
+            receipt, anchored_input_sha256=sha256(data),
+            anchored_receipt_sha256=receipt["receipt_sha256"]))
+
+    def test_reconciliation_counts_shared_historical_and_current_id_once(self):
+        data = sample()
+        data["requirements_after"][0]["version"] = "v1"
+        data["evidence"] = [
+            x for x in data["evidence"] if x["id"] != "ev-new"]
+        receipt = assess(data)
+        row = finding(receipt, "finance", "R1")
+        self.assertEqual(row["historical_evidence_id"], "ev-old")
+        self.assertEqual(row["evidence_id"], "ev-old")
+        self.assertEqual(row["status"], "unable_to_determine")
+        self.assertEqual(receipt["evidence_reconciliation"], {
+            "input_evidence_count": 3,
+            "referenced_evidence_count": 3,
+            "quarantined_evidence_count": 0,
+        })
+
+    def test_quarantine_order_and_referenced_identity_partition(self):
+        data = sample()
+        data["evidence"].extend([
+            {"id": "zz-unapplied", "system_id": "finance",
+             "requirement_id": "R3", "version": "v1", "claimed_status": "met"},
+            {"id": "aa-unapplied", "system_id": "plant",
+             "requirement_id": "R2", "version": "v1", "claimed_status": "met"},
+        ])
+        receipt = assess(data)
+        quarantine_ids = [x["id"] for x in receipt["quarantined_evidence"]]
+        self.assertEqual(quarantine_ids, ["aa-unapplied", "zz-unapplied"])
+        referenced = {
+            row[field] for row in receipt["findings"]
+            for field in ("evidence_id", "historical_evidence_id")
+            if row.get(field) is not None
+        }
+        submitted = {item["id"] for item in data["evidence"]}
+        self.assertFalse(referenced & set(quarantine_ids))
+        self.assertEqual(referenced | set(quarantine_ids), submitted)
+        self.assertEqual(receipt["evidence_reconciliation"], {
+            "input_evidence_count": 6,
+            "referenced_evidence_count": 4,
+            "quarantined_evidence_count": 2,
+        })
+
+
 if __name__ == "__main__":
     unittest.main()
