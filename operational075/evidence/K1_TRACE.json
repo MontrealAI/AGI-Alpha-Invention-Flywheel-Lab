@@ -1,0 +1,60 @@
+{
+  "applicability": {
+    "line_capacity_redundant_for_any_cardinality_legal_wave": true,
+    "max_lines": 10000,
+    "max_slot_top_k_line_sum": 289
+  },
+  "artifact_sha256": "19dc10f922ba65a1483540c713869113c3a2363ccc73dcb51e49cdf1bee85c83",
+  "attempts": [
+    {
+      "method": "ordinary bipartite maximum flow, then SKU-overlap grouping",
+      "status": "constructed"
+    }
+  ],
+  "counts": {
+    "lines": 30547,
+    "orders": 2101,
+    "slots": 132
+  },
+  "decision": "constructed_pending_original_client_acceptance",
+  "final_local_check": {
+    "accepted": true,
+    "orders": 2101,
+    "overlap_rate": 0.27911087831865644,
+    "score": -0.27911087831865644,
+    "sku_lines": 30547,
+    "unique_sku_lines": 22021,
+    "waves": 565
+  },
+  "generation": "Actual included-agent development; deterministic frozen ordinary software execution",
+  "initial_local_check": {
+    "accepted": true,
+    "orders": 2101,
+    "overlap_rate": 0.26346286051003376,
+    "score": -0.26346286051003376,
+    "sku_lines": 30547,
+    "unique_sku_lines": 22499,
+    "waves": 570
+  },
+  "input_sha256": "e83ed58b5045d24963f494fd1f935ddd8a3be9cc93b4ce0cbb034fc7b0b4e5c6",
+  "local_search": {
+    "accepted_strict_improvements": 260,
+    "passes": 10,
+    "termination": "no improving eligible pair move/swap; local optimum only"
+  },
+  "primitive_calls": [
+    "canonical_contract",
+    "canonical_identity",
+    "exact_cover",
+    "validate_wave"
+  ],
+  "procedure": "typed-capacity-wave-construction-v1",
+  "resources": {
+    "actual_billing": null,
+    "max_rss_kib": 43068,
+    "model_api_calls": 0,
+    "process_cpu_seconds": 5.7828557929999995,
+    "wall_seconds": 5.783467172004748
+  },
+  "retained_supplied": false
+}

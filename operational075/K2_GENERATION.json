@@ -1,0 +1,700 @@
+{
+  "actual_retained_call_path": [
+    "decide->_input->wave.canonical_identity",
+    "decide->_input->_cover->wave.exact_cover",
+    "decide->_cover->wave.exact_cover",
+    "decide->deferred_witness->wave.exact_cover"
+  ],
+  "construction_iterations": {
+    "authored_fixture_attempts_total": 25,
+    "code_corrections_before_freeze": 2,
+    "failed": 1,
+    "failing_attempt_retained": true,
+    "initial_generated_implementations": 1,
+    "passed": 24,
+    "scope": "Actual included-agent source edits and logged fixture calls, not model training or model-weight updates."
+  },
+  "corrections": [
+    {
+      "issue": "For more than 12500 pending orders, an initial 2N plus 2N safety reserve could exceed 50000 and discard a feasible incumbent.",
+      "number": 1,
+      "repair": "Construct current singletons before optional next witnesses; stop optional next checks at cap; use proven stored Route when no final evaluation remains; skip search immediately when no budget remains. This does not guarantee arbitrary feasible instances can be constructed within finite budget.",
+      "trigger": "Independent source review, before fixture execution"
+    },
+    {
+      "fixture": "12 unit-demand orders; offdiagonal arcs1 except depot->customer1=100; customer1 closes3650, all others/depot10000; round1 ready0 then round2 ready3600.",
+      "issue": "Whole-route next-round witness could be feasible while one singleton was not; next decide discarded that witness and failed for more than11 pending orders.",
+      "number": 2,
+      "repair": "Revalidate previous own next_round_witness at the current exact departure and retain those checked routes in the incumbent; current singleton construction covers only remaining/new orders.",
+      "trigger": "Independent evidence reviewer authored counterexample, before official K2 or root freeze"
+    }
+  ],
+  "development_fixture_summary": {
+    "attempts_in_this_run": 23,
+    "cpu_seconds": 0.560057051,
+    "failed": 0,
+    "independent_checker": "Direct order-row directed temporal simulation, exact history/dispatch/witness coverage, and instrumented Oracle/K1 invocation counts; no original client/K2 data used.",
+    "passed": 23,
+    "production_cap_after_fixture": 50000,
+    "wall_seconds": 0.5611142609632225
+  },
+  "equal_content_control": "Ordinary receives all the same K1 facts and executable primitives and competent conventional routing; tie or loss is allowed. This author has not read ordinary.py.",
+  "final_reviewed_source_sha256": "34fb33dbdbe4c5644c6d5bf8305710f4990ffc4c7e4dbdd4cfc8aaeec2d2593d",
+  "fixture_attempts": [
+    {
+      "author": "evidence_review child agent",
+      "cpu_seconds": null,
+      "expected": "Preserve feasible prior whole-route witness at round2",
+      "name": "independent_review_nonmetric_12_order_witness_before_fix",
+      "observed": "Round1 defers all12 with checked route [o02,o01,o03,...,o12]; round2 old implementation raises unresolved because singleton_o01 infeasible and N>11.",
+      "passed": false,
+      "route_checks_round1": 991,
+      "scope": "Authored synthetic public-schema fixture, no original K2 input/outcomes.",
+      "wall_seconds": null
+    },
+    {
+      "cpu_seconds": 0.004808467999999996,
+      "error": null,
+      "name": "empty_three_day_episode",
+      "observation": {
+        "cover_calls": 54,
+        "rounds": 18,
+        "route_checks": 0
+      },
+      "passed": true,
+      "recipe": "Three synthetic days, six one-hour rounds each; no orders.",
+      "scope": "Authored synthetic public-schema fixture only; independent temporal/coverage checker and instrumented Oracle/K1 calls.",
+      "wall_seconds": 0.004811151993635576
+    },
+    {
+      "cpu_seconds": 0.0007227610000000023,
+      "error": null,
+      "name": "directed_asymmetry_and_driving_objective",
+      "observation": {
+        "actual_k1_cover_calls": 3,
+        "actual_k1_identity_calls": 10,
+        "cost": 22,
+        "deferred": 0,
+        "route_checks": 17,
+        "safety_reused": 0,
+        "sent": 2
+      },
+      "passed": true,
+      "recipe": "0->a=10,a->b=2,b->0=10 versus b->a=90; both close100, ready0.",
+      "scope": "Authored synthetic public-schema fixture only; independent temporal/coverage checker and instrumented Oracle/K1 calls.",
+      "wall_seconds": 0.0007349739971687086
+    },
+    {
+      "cpu_seconds": 0.0005058490000000027,
+      "error": null,
+      "name": "inclusive_service_start_and_depot_return",
+      "observation": {
+        "actual_k1_cover_calls": 3,
+        "actual_k1_identity_calls": 5,
+        "cost": 5,
+        "deferred": 0,
+        "route_checks": 4,
+        "safety_reused": 0,
+        "sent": 1
+      },
+      "passed": true,
+      "recipe": "Arrival2 waits until10, starts at closing10, service5, return3 reaches depot deadline18; driving5.",
+      "scope": "Authored synthetic public-schema fixture only; independent temporal/coverage checker and instrumented Oracle/K1 calls.",
+      "wall_seconds": 0.0005142429945408367
+    },
+    {
+      "cpu_seconds": 0.00047803699999999366,
+      "error": null,
+      "name": "indivisible_capacity_split",
+      "observation": {
+        "actual_k1_cover_calls": 3,
+        "actual_k1_identity_calls": 10,
+        "cost": 4,
+        "deferred": 0,
+        "route_checks": 53,
+        "safety_reused": 0,
+        "sent": 2
+      },
+      "passed": true,
+      "recipe": "Two demand600 orders; capacity1000 prevents merging; all directed legs1.",
+      "scope": "Authored synthetic public-schema fixture only; independent temporal/coverage checker and instrumented Oracle/K1 calls.",
+      "wall_seconds": 0.00048634099948685616
+    },
+    {
+      "cpu_seconds": 0.0003707890000000033,
+      "error": null,
+      "name": "multiple_orders_use_order_attributes",
+      "observation": {
+        "actual_k1_cover_calls": 3,
+        "actual_k1_identity_calls": 10,
+        "cost": 6,
+        "deferred": 0,
+        "route_checks": 17,
+        "safety_reused": 0,
+        "sent": 2
+      },
+      "passed": true,
+      "recipe": "Two orders at customer1 with exact starts2 and7, service5 and3; deliberately wrong customer defaults999; depot deadline14.",
+      "scope": "Authored synthetic public-schema fixture only; independent temporal/coverage checker and instrumented Oracle/K1 calls.",
+      "wall_seconds": 0.0003786990055232309
+    },
+    {
+      "cpu_seconds": 0.00044148299999999946,
+      "error": null,
+      "name": "nonmetric_singleton_failure_recovered",
+      "observation": {
+        "actual_k1_cover_calls": 3,
+        "actual_k1_identity_calls": 10,
+        "cost": 3,
+        "deferred": 0,
+        "route_checks": 18,
+        "safety_reused": 0,
+        "sent": 2
+      },
+      "passed": true,
+      "recipe": "a solo arrives100 after close20, but 0->b->a->0 takes3 and is feasible.",
+      "scope": "Authored synthetic public-schema fixture only; independent temporal/coverage checker and instrumented Oracle/K1 calls.",
+      "wall_seconds": 0.000450055995315779
+    },
+    {
+      "cpu_seconds": 0.008796733000000001,
+      "error": null,
+      "name": "nonmetric_12_order_witness_after_fix",
+      "observation": {
+        "retained_witness_orders": 12,
+        "round1": {
+          "actual_k1_cover_calls": 3,
+          "actual_k1_identity_calls": 84,
+          "cost": 0,
+          "deferred": 12,
+          "route_checks": 991,
+          "safety_reused": 0,
+          "sent": 0
+        },
+        "round2": {
+          "actual_k1_cover_calls": 3,
+          "actual_k1_identity_calls": 60,
+          "cost": 13,
+          "deferred": 0,
+          "route_checks": 629,
+          "safety_reused": 0,
+          "sent": 12
+        }
+      },
+      "passed": true,
+      "recipe": "Independent review counterexample repeated: n12, offdiagonal1 except0->1=100; order1 closes3650, others/depot10000; ready0 then3600.",
+      "scope": "Authored synthetic public-schema fixture only; independent temporal/coverage checker and instrumented Oracle/K1 calls.",
+      "wall_seconds": 0.008803331998933572
+    },
+    {
+      "cpu_seconds": 0.0005619920000000111,
+      "error": null,
+      "name": "small_cap_analogue_of_high_cardinality_safety",
+      "observation": {
+        "actual_k1_cover_calls": 3,
+        "actual_k1_identity_calls": 124,
+        "cost": 16,
+        "deferred": 12,
+        "route_checks": 32,
+        "safety_reused": 8,
+        "sent": 8
+      },
+      "passed": true,
+      "recipe": "Temporarily set module route-check cap32 for20 individually feasible orders; this is a synthetic resource-boundary test, production remains50000.",
+      "scope": "Authored synthetic public-schema fixture only; independent temporal/coverage checker and instrumented Oracle/K1 calls.",
+      "wall_seconds": 0.0005958259935141541
+    },
+    {
+      "cpu_seconds": 0.009201251999999993,
+      "error": null,
+      "name": "rolling_cumulative_history_and_final_clearance",
+      "observation": {
+        "rounds": [
+          {
+            "actual_k1_cover_calls": 3,
+            "actual_k1_identity_calls": 21,
+            "cost": 0,
+            "deferred": 3,
+            "route_checks": 56,
+            "safety_reused": 0,
+            "sent": 0
+          },
+          {
+            "actual_k1_cover_calls": 3,
+            "actual_k1_identity_calls": 42,
+            "cost": 0,
+            "deferred": 6,
+            "route_checks": 196,
+            "safety_reused": 0,
+            "sent": 0
+          },
+          {
+            "actual_k1_cover_calls": 3,
+            "actual_k1_identity_calls": 45,
+            "cost": 42,
+            "deferred": 0,
+            "route_checks": 605,
+            "safety_reused": 0,
+            "sent": 9
+          },
+          {
+            "actual_k1_cover_calls": 3,
+            "actual_k1_identity_calls": 66,
+            "cost": 0,
+            "deferred": 3,
+            "route_checks": 56,
+            "safety_reused": 0,
+            "sent": 0
+          },
+          {
+            "actual_k1_cover_calls": 3,
+            "actual_k1_identity_calls": 87,
+            "cost": 0,
+            "deferred": 6,
+            "route_checks": 245,
+            "safety_reused": 0,
+            "sent": 0
+          },
+          {
+            "actual_k1_cover_calls": 3,
+            "actual_k1_identity_calls": 90,
+            "cost": 81,
+            "deferred": 0,
+            "route_checks": 387,
+            "safety_reused": 0,
+            "sent": 9
+          }
+        ],
+        "total_driving_seconds": 123
+      },
+      "passed": true,
+      "recipe": "Six rounds add3 orders each; original release row retained; deadlines release+8000; asymmetric formula durations (13i+7j)%31+1.",
+      "scope": "Authored synthetic public-schema fixture only; independent temporal/coverage checker and instrumented Oracle/K1 calls.",
+      "wall_seconds": 0.009209824995195959
+    },
+    {
+      "cpu_seconds": 0.0010864289999999999,
+      "error": null,
+      "name": "round_six_forces_complete_dispatch",
+      "observation": {
+        "actual_k1_cover_calls": 3,
+        "actual_k1_identity_calls": 5,
+        "cost": 5,
+        "deferred": 0,
+        "route_checks": 2,
+        "safety_reused": 0,
+        "sent": 1
+      },
+      "passed": true,
+      "recipe": "Empty first5 rounds then one very late-window order in round6; still dispatch now.",
+      "scope": "Authored synthetic public-schema fixture only; independent temporal/coverage checker and instrumented Oracle/K1 calls.",
+      "wall_seconds": 0.0010958769998978823
+    },
+    {
+      "cpu_seconds": 0.00039657700000000906,
+      "error": null,
+      "name": "expiring_consolidation_with_safe_next_solos",
+      "observation": {
+        "actual_k1_cover_calls": 3,
+        "actual_k1_identity_calls": 10,
+        "cost": 35,
+        "deferred": 0,
+        "route_checks": 17,
+        "safety_reused": 0,
+        "sent": 2
+      },
+      "passed": true,
+      "recipe": "Current bundlecost35, next solo arrivals3610 feasible but next bundle secondarrival3625 misses3620; dispatch known saving5 now.",
+      "scope": "Authored synthetic public-schema fixture only; independent temporal/coverage checker and instrumented Oracle/K1 calls.",
+      "wall_seconds": 0.0004046480025863275
+    },
+    {
+      "cpu_seconds": 0.0019487260000000117,
+      "error": null,
+      "name": "authored_random_directed_seed_70100",
+      "observation": {
+        "actual_k1_cover_calls": 3,
+        "actual_k1_identity_calls": 30,
+        "cost": 136,
+        "deferred": 0,
+        "route_checks": 657,
+        "safety_reused": 0,
+        "sent": 6
+      },
+      "passed": true,
+      "recipe": {
+        "depot_end": 4000,
+        "matrix": "row-major offdiagonal randint(1,70), diagonal0",
+        "n": 6,
+        "rng": "stdlib random.Random",
+        "row_draws": "tw_start randint(0,100), service randint(0,20), demand randint(20,600), tw_end=max(start,d[0][i])+randint(40,700)",
+        "seed": 70100
+      },
+      "scope": "Authored synthetic public-schema fixture only; independent temporal/coverage checker and instrumented Oracle/K1 calls.",
+      "wall_seconds": 0.0019563609967008233
+    },
+    {
+      "cpu_seconds": 0.004698425000000006,
+      "error": null,
+      "name": "authored_random_directed_seed_70101",
+      "observation": {
+        "actual_k1_cover_calls": 3,
+        "actual_k1_identity_calls": 45,
+        "cost": 165,
+        "deferred": 0,
+        "route_checks": 1551,
+        "safety_reused": 0,
+        "sent": 9
+      },
+      "passed": true,
+      "recipe": {
+        "depot_end": 4000,
+        "matrix": "row-major offdiagonal randint(1,70), diagonal0",
+        "n": 9,
+        "rng": "stdlib random.Random",
+        "row_draws": "tw_start randint(0,100), service randint(0,20), demand randint(20,600), tw_end=max(start,d[0][i])+randint(40,700)",
+        "seed": 70101
+      },
+      "scope": "Authored synthetic public-schema fixture only; independent temporal/coverage checker and instrumented Oracle/K1 calls.",
+      "wall_seconds": 0.004728307998448145
+    },
+    {
+      "cpu_seconds": 0.008374285999999995,
+      "error": null,
+      "name": "authored_random_directed_seed_70102",
+      "observation": {
+        "actual_k1_cover_calls": 3,
+        "actual_k1_identity_calls": 60,
+        "cost": 402,
+        "deferred": 0,
+        "route_checks": 3996,
+        "safety_reused": 0,
+        "sent": 12
+      },
+      "passed": true,
+      "recipe": {
+        "depot_end": 4000,
+        "matrix": "row-major offdiagonal randint(1,70), diagonal0",
+        "n": 12,
+        "rng": "stdlib random.Random",
+        "row_draws": "tw_start randint(0,100), service randint(0,20), demand randint(20,600), tw_end=max(start,d[0][i])+randint(40,700)",
+        "seed": 70102
+      },
+      "scope": "Authored synthetic public-schema fixture only; independent temporal/coverage checker and instrumented Oracle/K1 calls.",
+      "wall_seconds": 0.008604743998148479
+    },
+    {
+      "cpu_seconds": 0.023455152000000007,
+      "error": null,
+      "name": "authored_random_directed_seed_70103",
+      "observation": {
+        "actual_k1_cover_calls": 3,
+        "actual_k1_identity_calls": 75,
+        "cost": 242,
+        "deferred": 0,
+        "route_checks": 9128,
+        "safety_reused": 0,
+        "sent": 15
+      },
+      "passed": true,
+      "recipe": {
+        "depot_end": 4000,
+        "matrix": "row-major offdiagonal randint(1,70), diagonal0",
+        "n": 15,
+        "rng": "stdlib random.Random",
+        "row_draws": "tw_start randint(0,100), service randint(0,20), demand randint(20,600), tw_end=max(start,d[0][i])+randint(40,700)",
+        "seed": 70103
+      },
+      "scope": "Authored synthetic public-schema fixture only; independent temporal/coverage checker and instrumented Oracle/K1 calls.",
+      "wall_seconds": 0.023463181001716293
+    },
+    {
+      "cpu_seconds": 0.017178029999999997,
+      "error": null,
+      "name": "authored_random_directed_seed_70104",
+      "observation": {
+        "actual_k1_cover_calls": 3,
+        "actual_k1_identity_calls": 90,
+        "cost": 487,
+        "deferred": 0,
+        "route_checks": 7260,
+        "safety_reused": 0,
+        "sent": 18
+      },
+      "passed": true,
+      "recipe": {
+        "depot_end": 4000,
+        "matrix": "row-major offdiagonal randint(1,70), diagonal0",
+        "n": 18,
+        "rng": "stdlib random.Random",
+        "row_draws": "tw_start randint(0,100), service randint(0,20), demand randint(20,600), tw_end=max(start,d[0][i])+randint(40,700)",
+        "seed": 70104
+      },
+      "scope": "Authored synthetic public-schema fixture only; independent temporal/coverage checker and instrumented Oracle/K1 calls.",
+      "wall_seconds": 0.01743675099714892
+    },
+    {
+      "cpu_seconds": 0.03300745399999999,
+      "error": null,
+      "name": "authored_random_directed_seed_70105",
+      "observation": {
+        "actual_k1_cover_calls": 3,
+        "actual_k1_identity_calls": 105,
+        "cost": 416,
+        "deferred": 0,
+        "route_checks": 15396,
+        "safety_reused": 0,
+        "sent": 21
+      },
+      "passed": true,
+      "recipe": {
+        "depot_end": 4000,
+        "matrix": "row-major offdiagonal randint(1,70), diagonal0",
+        "n": 21,
+        "rng": "stdlib random.Random",
+        "row_draws": "tw_start randint(0,100), service randint(0,20), demand randint(20,600), tw_end=max(start,d[0][i])+randint(40,700)",
+        "seed": 70105
+      },
+      "scope": "Authored synthetic public-schema fixture only; independent temporal/coverage checker and instrumented Oracle/K1 calls.",
+      "wall_seconds": 0.03301854400342563
+    },
+    {
+      "cpu_seconds": 0.03510486900000001,
+      "error": null,
+      "name": "authored_random_directed_seed_70106",
+      "observation": {
+        "actual_k1_cover_calls": 3,
+        "actual_k1_identity_calls": 120,
+        "cost": 583,
+        "deferred": 0,
+        "route_checks": 16934,
+        "safety_reused": 0,
+        "sent": 24
+      },
+      "passed": true,
+      "recipe": {
+        "depot_end": 4000,
+        "matrix": "row-major offdiagonal randint(1,70), diagonal0",
+        "n": 24,
+        "rng": "stdlib random.Random",
+        "row_draws": "tw_start randint(0,100), service randint(0,20), demand randint(20,600), tw_end=max(start,d[0][i])+randint(40,700)",
+        "seed": 70106
+      },
+      "scope": "Authored synthetic public-schema fixture only; independent temporal/coverage checker and instrumented Oracle/K1 calls.",
+      "wall_seconds": 0.035114794998662546
+    },
+    {
+      "cpu_seconds": 0.044115388000000005,
+      "error": null,
+      "name": "authored_random_directed_seed_70107",
+      "observation": {
+        "actual_k1_cover_calls": 3,
+        "actual_k1_identity_calls": 135,
+        "cost": 532,
+        "deferred": 0,
+        "route_checks": 21610,
+        "safety_reused": 0,
+        "sent": 27
+      },
+      "passed": true,
+      "recipe": {
+        "depot_end": 4000,
+        "matrix": "row-major offdiagonal randint(1,70), diagonal0",
+        "n": 27,
+        "rng": "stdlib random.Random",
+        "row_draws": "tw_start randint(0,100), service randint(0,20), demand randint(20,600), tw_end=max(start,d[0][i])+randint(40,700)",
+        "seed": 70107
+      },
+      "scope": "Authored synthetic public-schema fixture only; independent temporal/coverage checker and instrumented Oracle/K1 calls.",
+      "wall_seconds": 0.04413624700100627
+    },
+    {
+      "cpu_seconds": 0.09963496799999999,
+      "error": null,
+      "name": "authored_random_directed_seed_70108",
+      "observation": {
+        "actual_k1_cover_calls": 3,
+        "actual_k1_identity_calls": 150,
+        "cost": 573,
+        "deferred": 0,
+        "route_checks": 47001,
+        "safety_reused": 0,
+        "sent": 30
+      },
+      "passed": true,
+      "recipe": {
+        "depot_end": 4000,
+        "matrix": "row-major offdiagonal randint(1,70), diagonal0",
+        "n": 30,
+        "rng": "stdlib random.Random",
+        "row_draws": "tw_start randint(0,100), service randint(0,20), demand randint(20,600), tw_end=max(start,d[0][i])+randint(40,700)",
+        "seed": 70108
+      },
+      "scope": "Authored synthetic public-schema fixture only; independent temporal/coverage checker and instrumented Oracle/K1 calls.",
+      "wall_seconds": 0.09979876799479825
+    },
+    {
+      "cpu_seconds": 0.10492057300000002,
+      "error": null,
+      "name": "authored_random_directed_seed_70109",
+      "observation": {
+        "actual_k1_cover_calls": 3,
+        "actual_k1_identity_calls": 165,
+        "cost": 610,
+        "deferred": 0,
+        "route_checks": 47878,
+        "safety_reused": 0,
+        "sent": 33
+      },
+      "passed": true,
+      "recipe": {
+        "depot_end": 4000,
+        "matrix": "row-major offdiagonal randint(1,70), diagonal0",
+        "n": 33,
+        "rng": "stdlib random.Random",
+        "row_draws": "tw_start randint(0,100), service randint(0,20), demand randint(20,600), tw_end=max(start,d[0][i])+randint(40,700)",
+        "seed": 70109
+      },
+      "scope": "Authored synthetic public-schema fixture only; independent temporal/coverage checker and instrumented Oracle/K1 calls.",
+      "wall_seconds": 0.10495077299856348
+    },
+    {
+      "cpu_seconds": 0.06941490099999997,
+      "error": null,
+      "name": "authored_random_directed_seed_70110",
+      "observation": {
+        "actual_k1_cover_calls": 3,
+        "actual_k1_identity_calls": 180,
+        "cost": 728,
+        "deferred": 0,
+        "route_checks": 33479,
+        "safety_reused": 0,
+        "sent": 36
+      },
+      "passed": true,
+      "recipe": {
+        "depot_end": 4000,
+        "matrix": "row-major offdiagonal randint(1,70), diagonal0",
+        "n": 36,
+        "rng": "stdlib random.Random",
+        "row_draws": "tw_start randint(0,100), service randint(0,20), demand randint(20,600), tw_end=max(start,d[0][i])+randint(40,700)",
+        "seed": 70110
+      },
+      "scope": "Authored synthetic public-schema fixture only; independent temporal/coverage checker and instrumented Oracle/K1 calls.",
+      "wall_seconds": 0.06942425899615046
+    },
+    {
+      "cpu_seconds": 0.09083390899999999,
+      "error": null,
+      "name": "authored_random_directed_seed_70111",
+      "observation": {
+        "actual_k1_cover_calls": 3,
+        "actual_k1_identity_calls": 195,
+        "cost": 765,
+        "deferred": 0,
+        "route_checks": 43712,
+        "safety_reused": 0,
+        "sent": 39
+      },
+      "passed": true,
+      "recipe": {
+        "depot_end": 4000,
+        "matrix": "row-major offdiagonal randint(1,70), diagonal0",
+        "n": 39,
+        "rng": "stdlib random.Random",
+        "row_draws": "tw_start randint(0,100), service randint(0,20), demand randint(20,600), tw_end=max(start,d[0][i])+randint(40,700)",
+        "seed": 70111
+      },
+      "scope": "Authored synthetic public-schema fixture only; independent temporal/coverage checker and instrumented Oracle/K1 calls.",
+      "wall_seconds": 0.0909965570026543
+    },
+    {
+      "author": "evidence_review child agent",
+      "cpu_seconds": null,
+      "driving_seconds_round2": 13,
+      "name": "independent_review_nonmetric_12_order_witness_after_fix",
+      "observed": "Independently reran same authored public-schema counterexample: repaired round2 valid, route_checks629, driving_seconds13.",
+      "passed": true,
+      "route_checks_round2": 629,
+      "scope": "Independent authored fixture only; no original K2 input/outcomes.",
+      "wall_seconds": null
+    }
+  ],
+  "forbidden_material_read": false,
+  "generation": "Actual included-agent source construction in this session, followed later by deterministic frozen CPU execution. No model callable, model APIs, network, credential access, physical effects or model-weight changes.",
+  "implementation_attempts": [
+    {
+      "description": "Initial actual included-agent source implementation.",
+      "number": 1
+    }
+  ],
+  "k1_observed_result": {
+    "accepted": true,
+    "objective": -0.27911087831865644,
+    "scope": "unmodified computational client, not physical warehouse outcomes"
+  },
+  "model_api_calls": 0,
+  "new_primitive": {
+    "construction": "Conventional directed savings merge, four adaptive descent neighborhoods, two bounded route-fragment rebuilds. No algorithmic novelty, causal necessity or retained superiority claim.",
+    "entry": "operational075.retained.Oracle.check",
+    "purpose": "Directed order-level temporal route feasibility and driving-only objective with exact capacity and depot return; K1 typed-slot matching does not provide these semantics."
+  },
+  "ordinary_policy_implementation_read": false,
+  "original_k2_windows_or_outcomes_read": false,
+  "permitted_material_read": [
+    "AGENTS.md",
+    "operational075/CONTRACT.md",
+    "operational075/wave.py",
+    "operational075/RETAINED.json",
+    "operational075/DEVELOPMENT.md",
+    "operational075/K1_FREEZE.json",
+    "K1_TRACE.json",
+    "K1_CLIENT.json",
+    "docs/harness/DEVELOPER_GUIDE.md",
+    "docs/connected014/OPERATOR.md",
+    "docs/harness/RESOURCE_POLICY.md"
+  ],
+  "policy": "directed-merge-fragment-neighborhood-v1",
+  "resource_counter": {
+    "budget_end": "Search preserves a checked feasible incumbent. Optional next checks stop at hard cap, absent next witness causes current dispatch; final safety reuses previously checked same-departure immutable Routes if no checks remain. If no complete feasible cover has been constructed within budget, the policy reports unresolved, never proved infeasible.",
+    "economic_cost": "Measured later by broker; actual host/model billing unknown. Included generation is not zero economic cost.",
+    "limit_per_round": 50000,
+    "scope": "Every Oracle.check invocation, including infeasible/empty candidates, current singleton construction, next-departure singleton safety, nonmetric enumeration, merge, all local candidates, fragment safety, next-route deferral witnesses and fresh final safety. Stored immutable evaluated Routes and their cost sums are reused without another complete-route evaluation. Raw directed arc/deadline shortlists and partial-path pruning do not evaluate complete routes.",
+    "unit": "complete route feasibility/objective evaluation"
+  },
+  "reviews": [
+    {
+      "initial_finding": "Temporal semantics, directed costs, typed K1 calls, own history and no privileged I/O sound. High-cardinality safety reserve issue identified and corrected.",
+      "reviewer": "routing_review child agent",
+      "scope": "Only permitted public contract/K1 material and retained.py; no K2 original or ordinary implementation"
+    },
+    {
+      "finding": "No regression in directed temporal/capacity/return logic, actual typed K1 calls, coverage/history or I/O exclusion. Both witness carry-forward and budget-end incumbent preservation corrected. Initial incumbent construction remains finite and can be unresolved.",
+      "reviewed_source_sha256": "34fb33dbdbe4c5644c6d5bf8305710f4990ffc4c7e4dbdd4cfc8aaeec2d2593d",
+      "reviewer": "routing_review child agent final read-only review"
+    },
+    {
+      "finding": "Reviewed own witness revalidation, immutable checked Route reuse, fullroute counter, deferral/final safety and typed coverage. Independent 12-order fixture repaired: round2 valid,629 checks,driving13. No further consequential blocker found.",
+      "reviewed_source_sha256": "34fb33dbdbe4c5644c6d5bf8305710f4990ffc4c7e4dbdd4cfc8aaeec2d2593d",
+      "reviewer": "evidence_review child agent final independent review"
+    }
+  ],
+  "schema": "operational075.k2-included-agent-construction.v1",
+  "source_review": {
+    "imports": [
+      "__future__:annotations",
+      "dataclasses:dataclass",
+      "heapq",
+      "math",
+      ".wave:canonical_identity,exact_cover"
+    ],
+    "prohibited_direct_named_call_ast_check": "passed",
+    "scope": "Static inventory plus two independent human-readable source reviews; not a hostile-code sandbox proof."
+  },
+  "source_sha256": {
+    "operational075/RETAINED_POLICY.md": "d22b76f94595479c5a94cf2d1514131e3e60dfa1a42a0ab0c28b4ecd735aed38",
+    "operational075/retained.py": "34fb33dbdbe4c5644c6d5bf8305710f4990ffc4c7e4dbdd4cfc8aaeec2d2593d",
+    "operational075/wave.py": "4894764ab11266b4c72f78ea6ed8d6f7420bbea2b9f0a4b3f20b9cb2e123f696"
+  },
+  "status": "reviewed_source_ready_for_root_freeze_before_any_original_K2_submission"
+}

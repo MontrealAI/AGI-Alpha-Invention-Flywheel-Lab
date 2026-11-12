@@ -1,0 +1,558 @@
+{
+  "scope": "Independent post-run raw submission and unchanged original-client replay; no policy execution",
+  "original_clients": {
+    "ordinary": {
+      "schema": "operational075/rolling-replay/v1",
+      "accepted": true,
+      "computational_delivery_accepted": true,
+      "original_submissions_replayed": 18,
+      "source_manifest_sha256": "b37d97e74c69e9898c2d7845fe690951b525aac1248cf158fb14e475d994eea2",
+      "locked_receipts_sha256": "2091927dd90031bf160601385fafda8326895fdca1ab966b7751591b3442d2ae",
+      "transcript_sha256": "2e011edce414d1cc1cc5930ea3e8c52563ba1d7187b02b34223c5644cdaaa18c",
+      "original_client": {
+        "accepted": true,
+        "objective": 516223.6666666667,
+        "original_evaluator": "evaluator.evaluate",
+        "original_verifier": "verifier.verify",
+        "reason": "",
+        "scope": "UPSTREAM_COMPUTATIONAL_CLIENT_ONLY",
+        "upstream_commit": "2bda4b8d6ddd4bd1cb62b89acee0c7c2f1914d47",
+        "source_manifest_sha256": "b37d97e74c69e9898c2d7845fe690951b525aac1248cf158fb14e475d994eea2",
+        "submission_sha256": "2e011edce414d1cc1cc5930ea3e8c52563ba1d7187b02b34223c5644cdaaa18c",
+        "original_client_process_returncode": 0
+      },
+      "scope": "Independent original-client and immutable-submission replay; no policy rerun or intermediate feedback."
+    },
+    "retained": {
+      "schema": "operational075/rolling-replay/v1",
+      "accepted": true,
+      "computational_delivery_accepted": true,
+      "original_submissions_replayed": 18,
+      "source_manifest_sha256": "b37d97e74c69e9898c2d7845fe690951b525aac1248cf158fb14e475d994eea2",
+      "locked_receipts_sha256": "4b319f2c39dd08db813a75c82005a8873215cf4ab98b24cac799130f43aa3228",
+      "transcript_sha256": "af1aaabaa214e7350f212bde0ee17d8de4ac427cf546140c1f893c79919c7500",
+      "original_client": {
+        "accepted": true,
+        "objective": 493553.0,
+        "original_evaluator": "evaluator.evaluate",
+        "original_verifier": "verifier.verify",
+        "reason": "",
+        "scope": "UPSTREAM_COMPUTATIONAL_CLIENT_ONLY",
+        "upstream_commit": "2bda4b8d6ddd4bd1cb62b89acee0c7c2f1914d47",
+        "source_manifest_sha256": "b37d97e74c69e9898c2d7845fe690951b525aac1248cf158fb14e475d994eea2",
+        "submission_sha256": "af1aaabaa214e7350f212bde0ee17d8de4ac427cf546140c1f893c79919c7500",
+        "original_client_process_returncode": 0
+      },
+      "scope": "Independent original-client and immutable-submission replay; no policy rerun or intermediate feedback."
+    }
+  },
+  "frozen_source_verified": "b37d97e74c69e9898c2d7845fe690951b525aac1248cf158fb14e475d994eea2",
+  "remote_source_identity": {
+    "commit": "dd7d0766d8cf1d60d2da56a41b547c92db414f11",
+    "git_blobs_compared": 24,
+    "mismatches": []
+  },
+  "per_round_review": {
+    "protocol_file_sha256": "68309b77ced13f70b96615f42d811f8856724d53cd2d88766214ba5453ab52aa",
+    "arms": {
+      "ordinary": {
+        "errors": [],
+        "periods": 18,
+        "independent_total_directed_driving_seconds": 1548671,
+        "maximum_route_checks_in_one_round": 49911,
+        "minimum_route_checks_in_one_round": 100,
+        "total_route_checks": 795947,
+        "reported_budget_pass": true,
+        "rounds": [
+          {
+            "epoch": 0,
+            "service_day_id": "GD01",
+            "dispatch_round": 1,
+            "route_checks": 100,
+            "directed_driving_seconds": 0,
+            "raw_submission_sha256": "c5402db2b8551e79de91e67cf07a2d703e16a75a401be8c8894a37f685ae368e",
+            "search_checks": 0,
+            "safety_checks": 100
+          },
+          {
+            "epoch": 1,
+            "service_day_id": "GD01",
+            "dispatch_round": 2,
+            "route_checks": 49635,
+            "directed_driving_seconds": 117520,
+            "raw_submission_sha256": "60be0a1f981d766fe9f45feb6d77a0a70f5d6231f3c6926376e9d14d7a9095e8",
+            "search_checks": 49200,
+            "safety_checks": 435
+          },
+          {
+            "epoch": 2,
+            "service_day_id": "GD01",
+            "dispatch_round": 3,
+            "route_checks": 49782,
+            "directed_driving_seconds": 91859,
+            "raw_submission_sha256": "4f90ea0f20ca18f4b156eb6c424b3ecf60e751bc5c8879369def3de5693eae17",
+            "search_checks": 49496,
+            "safety_checks": 286
+          },
+          {
+            "epoch": 3,
+            "service_day_id": "GD01",
+            "dispatch_round": 4,
+            "route_checks": 49868,
+            "directed_driving_seconds": 83115,
+            "raw_submission_sha256": "7f46eae09a652f8f3d678395076cf280bbc153986453b36621b2ddcecb6a9e4b",
+            "search_checks": 49688,
+            "safety_checks": 180
+          },
+          {
+            "epoch": 4,
+            "service_day_id": "GD01",
+            "dispatch_round": 5,
+            "route_checks": 49893,
+            "directed_driving_seconds": 55234,
+            "raw_submission_sha256": "b844c66d7a19fcabb09933b24239c665a88f16c5f20d5870f3b99ea86054aac5",
+            "search_checks": 49748,
+            "safety_checks": 145
+          },
+          {
+            "epoch": 5,
+            "service_day_id": "GD01",
+            "dispatch_round": 6,
+            "route_checks": 49862,
+            "directed_driving_seconds": 66715,
+            "raw_submission_sha256": "9288f69f4c42ecf24022648421edbd02fbd38e5289e348b3004817d96ddc392b",
+            "search_checks": 49784,
+            "safety_checks": 78
+          },
+          {
+            "epoch": 6,
+            "service_day_id": "GD02",
+            "dispatch_round": 1,
+            "route_checks": 49811,
+            "directed_driving_seconds": 19616,
+            "raw_submission_sha256": "0f2a50a5bd8d2a58d07235629e2f2ac8db0500429da224986c93b03c0ba24942",
+            "search_checks": 49600,
+            "safety_checks": 211
+          },
+          {
+            "epoch": 7,
+            "service_day_id": "GD02",
+            "dispatch_round": 2,
+            "route_checks": 49671,
+            "directed_driving_seconds": 216245,
+            "raw_submission_sha256": "ab1616c35cbaaf6fb3ed66f8cf499c4c29774cddbe3b0041448e9f212b848803",
+            "search_checks": 49256,
+            "safety_checks": 415
+          },
+          {
+            "epoch": 8,
+            "service_day_id": "GD02",
+            "dispatch_round": 3,
+            "route_checks": 49830,
+            "directed_driving_seconds": 104722,
+            "raw_submission_sha256": "c6bafdd86f0233e4d00398ac2714a90a67982c0a3fdb73e41f9154a66e4f8e2c",
+            "search_checks": 49608,
+            "safety_checks": 222
+          },
+          {
+            "epoch": 9,
+            "service_day_id": "GD02",
+            "dispatch_round": 4,
+            "route_checks": 49862,
+            "directed_driving_seconds": 183201,
+            "raw_submission_sha256": "27d0740fcecf12f9fe38d49bc39f88b55301c7549169c4741b1978e2b774ce3e",
+            "search_checks": 49640,
+            "safety_checks": 222
+          },
+          {
+            "epoch": 10,
+            "service_day_id": "GD02",
+            "dispatch_round": 5,
+            "route_checks": 48546,
+            "directed_driving_seconds": 44793,
+            "raw_submission_sha256": "d39c710968e50e2318feda9c322c1cc0ca6e3d93ad6011e439245eaf3130bf2c",
+            "search_checks": 48450,
+            "safety_checks": 96
+          },
+          {
+            "epoch": 11,
+            "service_day_id": "GD02",
+            "dispatch_round": 6,
+            "route_checks": 49879,
+            "directed_driving_seconds": 115670,
+            "raw_submission_sha256": "d3fa52d928aa00381d4759f7e18b0ecacd991a913597cf2d68a0a6fa229568a3",
+            "search_checks": 49796,
+            "safety_checks": 83
+          },
+          {
+            "epoch": 12,
+            "service_day_id": "GD03",
+            "dispatch_round": 1,
+            "route_checks": 100,
+            "directed_driving_seconds": 0,
+            "raw_submission_sha256": "ff0180a3380ebf4dd0748d5c794e6816225da1110b67a0164b881f2e59b29788",
+            "search_checks": 0,
+            "safety_checks": 100
+          },
+          {
+            "epoch": 13,
+            "service_day_id": "GD03",
+            "dispatch_round": 2,
+            "route_checks": 49633,
+            "directed_driving_seconds": 152157,
+            "raw_submission_sha256": "cfc086dab9cb0d52708da6daa50e1d32371e035ce19c3831857c7d371c63c5c5",
+            "search_checks": 49200,
+            "safety_checks": 433
+          },
+          {
+            "epoch": 14,
+            "service_day_id": "GD03",
+            "dispatch_round": 3,
+            "route_checks": 49838,
+            "directed_driving_seconds": 64375,
+            "raw_submission_sha256": "0333c75eb611a6ed9c47fa6f929359a2fb035546b0e09fdf2cc0fc1aa39ae1e5",
+            "search_checks": 49644,
+            "safety_checks": 194
+          },
+          {
+            "epoch": 15,
+            "service_day_id": "GD03",
+            "dispatch_round": 4,
+            "route_checks": 49856,
+            "directed_driving_seconds": 91877,
+            "raw_submission_sha256": "6a35d0f8934b6d5437ce78d62c0c934c1146fd79b999982c0388045d2af02cd3",
+            "search_checks": 49680,
+            "safety_checks": 176
+          },
+          {
+            "epoch": 16,
+            "service_day_id": "GD03",
+            "dispatch_round": 5,
+            "route_checks": 49911,
+            "directed_driving_seconds": 58917,
+            "raw_submission_sha256": "05e1e40b950a1194e474d25151d126e70480a0a1d7bff2a50ac3124ca447d758",
+            "search_checks": 49792,
+            "safety_checks": 119
+          },
+          {
+            "epoch": 17,
+            "service_day_id": "GD03",
+            "dispatch_round": 6,
+            "route_checks": 49870,
+            "directed_driving_seconds": 82655,
+            "raw_submission_sha256": "5167c081df7257970b6bd2576ed86d5bd7b7860d6b3421c3b610c995ec17ce91",
+            "search_checks": 49800,
+            "safety_checks": 70
+          }
+        ]
+      },
+      "retained": {
+        "errors": [],
+        "periods": 18,
+        "independent_total_directed_driving_seconds": 1480659,
+        "maximum_route_checks_in_one_round": 49577,
+        "minimum_route_checks_in_one_round": 23372,
+        "total_route_checks": 805870,
+        "reported_budget_pass": true,
+        "rounds": [
+          {
+            "epoch": 0,
+            "service_day_id": "GD01",
+            "dispatch_round": 1,
+            "route_checks": 46720,
+            "directed_driving_seconds": 27864,
+            "raw_submission_sha256": "825beddd6257773b1b91f9b2f84fd9bf2254228883caa08826a0f124724ad46f",
+            "primitive_call_path_entries": [
+              "decide->_input->wave.canonical_identity",
+              "decide->_input->_cover->wave.exact_cover",
+              "decide->_cover->wave.exact_cover",
+              "decide->deferred_witness->wave.exact_cover"
+            ],
+            "checks_by_phase_sum": 46720,
+            "retained_next_witness_orders_revalidated": 0
+          },
+          {
+            "epoch": 1,
+            "service_day_id": "GD01",
+            "dispatch_round": 2,
+            "route_checks": 49367,
+            "directed_driving_seconds": 94481,
+            "raw_submission_sha256": "babf17850cd83f9f80e8debc9aac566a9cba7acc2f32c3cdd39add7596411428",
+            "primitive_call_path_entries": [
+              "decide->_input->wave.canonical_identity",
+              "decide->_input->_cover->wave.exact_cover",
+              "decide->_cover->wave.exact_cover",
+              "decide->deferred_witness->wave.exact_cover"
+            ],
+            "checks_by_phase_sum": 49367,
+            "retained_next_witness_orders_revalidated": 64
+          },
+          {
+            "epoch": 2,
+            "service_day_id": "GD01",
+            "dispatch_round": 3,
+            "route_checks": 47593,
+            "directed_driving_seconds": 64324,
+            "raw_submission_sha256": "f78861abd24aea32ecd6215352739862a4d6a291da720b1627d3504ef972d794",
+            "primitive_call_path_entries": [
+              "decide->_input->wave.canonical_identity",
+              "decide->_input->_cover->wave.exact_cover",
+              "decide->_cover->wave.exact_cover",
+              "decide->deferred_witness->wave.exact_cover"
+            ],
+            "checks_by_phase_sum": 47593,
+            "retained_next_witness_orders_revalidated": 17
+          },
+          {
+            "epoch": 3,
+            "service_day_id": "GD01",
+            "dispatch_round": 4,
+            "route_checks": 46052,
+            "directed_driving_seconds": 58970,
+            "raw_submission_sha256": "7a3cc11e048890e4419721b8d871b60b759af60a805c684aba49ca988303bca6",
+            "primitive_call_path_entries": [
+              "decide->_input->wave.canonical_identity",
+              "decide->_input->_cover->wave.exact_cover",
+              "decide->_cover->wave.exact_cover",
+              "decide->deferred_witness->wave.exact_cover"
+            ],
+            "checks_by_phase_sum": 46052,
+            "retained_next_witness_orders_revalidated": 0
+          },
+          {
+            "epoch": 4,
+            "service_day_id": "GD01",
+            "dispatch_round": 5,
+            "route_checks": 43215,
+            "directed_driving_seconds": 46585,
+            "raw_submission_sha256": "31eeeed8286282a4097582aa69bbf10fecbf5b4999d365676f769c19facf79a5",
+            "primitive_call_path_entries": [
+              "decide->_input->wave.canonical_identity",
+              "decide->_input->_cover->wave.exact_cover",
+              "decide->_cover->wave.exact_cover",
+              "decide->deferred_witness->wave.exact_cover"
+            ],
+            "checks_by_phase_sum": 43215,
+            "retained_next_witness_orders_revalidated": 0
+          },
+          {
+            "epoch": 5,
+            "service_day_id": "GD01",
+            "dispatch_round": 6,
+            "route_checks": 40131,
+            "directed_driving_seconds": 44622,
+            "raw_submission_sha256": "b2bdec1111d8bcd6edfee59c2b18441a2d6aae00609313660fe37529594bdc5e",
+            "primitive_call_path_entries": [
+              "decide->_input->wave.canonical_identity",
+              "decide->_input->_cover->wave.exact_cover",
+              "decide->_cover->wave.exact_cover",
+              "decide->deferred_witness->wave.exact_cover"
+            ],
+            "checks_by_phase_sum": 40131,
+            "retained_next_witness_orders_revalidated": 0
+          },
+          {
+            "epoch": 6,
+            "service_day_id": "GD02",
+            "dispatch_round": 1,
+            "route_checks": 47312,
+            "directed_driving_seconds": 83770,
+            "raw_submission_sha256": "65bc20c328820ac5d6d8fc99126ca85ae09af13a8bfb4ac42f8e6830d35325d7",
+            "primitive_call_path_entries": [
+              "decide->_input->wave.canonical_identity",
+              "decide->_input->_cover->wave.exact_cover",
+              "decide->_cover->wave.exact_cover",
+              "decide->deferred_witness->wave.exact_cover"
+            ],
+            "checks_by_phase_sum": 47312,
+            "retained_next_witness_orders_revalidated": 0
+          },
+          {
+            "epoch": 7,
+            "service_day_id": "GD02",
+            "dispatch_round": 2,
+            "route_checks": 49415,
+            "directed_driving_seconds": 179841,
+            "raw_submission_sha256": "419d7a2a4d882f2d08d5adc75af943de88be8f62792996c95f127e9e69973f0b",
+            "primitive_call_path_entries": [
+              "decide->_input->wave.canonical_identity",
+              "decide->_input->_cover->wave.exact_cover",
+              "decide->_cover->wave.exact_cover",
+              "decide->deferred_witness->wave.exact_cover"
+            ],
+            "checks_by_phase_sum": 49415,
+            "retained_next_witness_orders_revalidated": 44
+          },
+          {
+            "epoch": 8,
+            "service_day_id": "GD02",
+            "dispatch_round": 3,
+            "route_checks": 47394,
+            "directed_driving_seconds": 128438,
+            "raw_submission_sha256": "8f9e8f6058489450dc3cb81e9883fec55c72dc1b8dc8a55fd720c4b220fefb01",
+            "primitive_call_path_entries": [
+              "decide->_input->wave.canonical_identity",
+              "decide->_input->_cover->wave.exact_cover",
+              "decide->_cover->wave.exact_cover",
+              "decide->deferred_witness->wave.exact_cover"
+            ],
+            "checks_by_phase_sum": 47394,
+            "retained_next_witness_orders_revalidated": 16
+          },
+          {
+            "epoch": 9,
+            "service_day_id": "GD02",
+            "dispatch_round": 4,
+            "route_checks": 47252,
+            "directed_driving_seconds": 155536,
+            "raw_submission_sha256": "4bd890a63f7a1c2863e640e79b605dd1272731754e7d99dbbd42abf4dca40e5c",
+            "primitive_call_path_entries": [
+              "decide->_input->wave.canonical_identity",
+              "decide->_input->_cover->wave.exact_cover",
+              "decide->_cover->wave.exact_cover",
+              "decide->deferred_witness->wave.exact_cover"
+            ],
+            "checks_by_phase_sum": 47252,
+            "retained_next_witness_orders_revalidated": 0
+          },
+          {
+            "epoch": 10,
+            "service_day_id": "GD02",
+            "dispatch_round": 5,
+            "route_checks": 41164,
+            "directed_driving_seconds": 74187,
+            "raw_submission_sha256": "7c01ab47978d35278b34ca177cd8e60c1dc9db32b54c875f9049cf26b76d1599",
+            "primitive_call_path_entries": [
+              "decide->_input->wave.canonical_identity",
+              "decide->_input->_cover->wave.exact_cover",
+              "decide->_cover->wave.exact_cover",
+              "decide->deferred_witness->wave.exact_cover"
+            ],
+            "checks_by_phase_sum": 41164,
+            "retained_next_witness_orders_revalidated": 0
+          },
+          {
+            "epoch": 11,
+            "service_day_id": "GD02",
+            "dispatch_round": 6,
+            "route_checks": 23372,
+            "directed_driving_seconds": 84951,
+            "raw_submission_sha256": "59b6165e48974301c3a5778deb16f9eb4134f1d9d03b756d5a2250c8cc8572ab",
+            "primitive_call_path_entries": [
+              "decide->_input->wave.canonical_identity",
+              "decide->_input->_cover->wave.exact_cover",
+              "decide->_cover->wave.exact_cover",
+              "decide->deferred_witness->wave.exact_cover"
+            ],
+            "checks_by_phase_sum": 23372,
+            "retained_next_witness_orders_revalidated": 0
+          },
+          {
+            "epoch": 12,
+            "service_day_id": "GD03",
+            "dispatch_round": 1,
+            "route_checks": 49239,
+            "directed_driving_seconds": 19848,
+            "raw_submission_sha256": "996656521dc1c54ddf188b2becc80c27f9eb0df8ca9272b8e2445f0ef6355013",
+            "primitive_call_path_entries": [
+              "decide->_input->wave.canonical_identity",
+              "decide->_input->_cover->wave.exact_cover",
+              "decide->_cover->wave.exact_cover",
+              "decide->deferred_witness->wave.exact_cover"
+            ],
+            "checks_by_phase_sum": 49239,
+            "retained_next_witness_orders_revalidated": 0
+          },
+          {
+            "epoch": 13,
+            "service_day_id": "GD03",
+            "dispatch_round": 2,
+            "route_checks": 49577,
+            "directed_driving_seconds": 150032,
+            "raw_submission_sha256": "4ec979550aec4a1455f15893dd0108db3c3ec555370d40f4e5f3d627a54dc777",
+            "primitive_call_path_entries": [
+              "decide->_input->wave.canonical_identity",
+              "decide->_input->_cover->wave.exact_cover",
+              "decide->_cover->wave.exact_cover",
+              "decide->deferred_witness->wave.exact_cover"
+            ],
+            "checks_by_phase_sum": 49577,
+            "retained_next_witness_orders_revalidated": 79
+          },
+          {
+            "epoch": 14,
+            "service_day_id": "GD03",
+            "dispatch_round": 3,
+            "route_checks": 48973,
+            "directed_driving_seconds": 75065,
+            "raw_submission_sha256": "eb9ee1f92adb7aa253fb0390f4d74aee6f0ae06687aa62275e683a058a79a62f",
+            "primitive_call_path_entries": [
+              "decide->_input->wave.canonical_identity",
+              "decide->_input->_cover->wave.exact_cover",
+              "decide->_cover->wave.exact_cover",
+              "decide->deferred_witness->wave.exact_cover"
+            ],
+            "checks_by_phase_sum": 48973,
+            "retained_next_witness_orders_revalidated": 23
+          },
+          {
+            "epoch": 15,
+            "service_day_id": "GD03",
+            "dispatch_round": 4,
+            "route_checks": 45571,
+            "directed_driving_seconds": 69569,
+            "raw_submission_sha256": "35bd103f9922e023713948be0283ced5984b24fe81bda638c27b7c191fc42122",
+            "primitive_call_path_entries": [
+              "decide->_input->wave.canonical_identity",
+              "decide->_input->_cover->wave.exact_cover",
+              "decide->_cover->wave.exact_cover",
+              "decide->deferred_witness->wave.exact_cover"
+            ],
+            "checks_by_phase_sum": 45571,
+            "retained_next_witness_orders_revalidated": 5
+          },
+          {
+            "epoch": 16,
+            "service_day_id": "GD03",
+            "dispatch_round": 5,
+            "route_checks": 44366,
+            "directed_driving_seconds": 56728,
+            "raw_submission_sha256": "1b5fe9a12e654d530b297ee0d6af3f23fb87429f0960296f6d07790df8524a1e",
+            "primitive_call_path_entries": [
+              "decide->_input->wave.canonical_identity",
+              "decide->_input->_cover->wave.exact_cover",
+              "decide->_cover->wave.exact_cover",
+              "decide->deferred_witness->wave.exact_cover"
+            ],
+            "checks_by_phase_sum": 44366,
+            "retained_next_witness_orders_revalidated": 0
+          },
+          {
+            "epoch": 17,
+            "service_day_id": "GD03",
+            "dispatch_round": 6,
+            "route_checks": 39157,
+            "directed_driving_seconds": 65848,
+            "raw_submission_sha256": "e72ffb39c008963b101402a744b0f606a7e901f06383f6a673a69edd1d6d4e96",
+            "primitive_call_path_entries": [
+              "decide->_input->wave.canonical_identity",
+              "decide->_input->_cover->wave.exact_cover",
+              "decide->_cover->wave.exact_cover",
+              "decide->deferred_witness->wave.exact_cover"
+            ],
+            "checks_by_phase_sum": 39157,
+            "retained_next_witness_orders_revalidated": 0
+          }
+        ]
+      }
+    }
+  },
+  "no_prefinal_feedback_review": {
+    "source_reviewed": true,
+    "receipts_with_feedback": 0,
+    "worker_bundle": "Explicit bound __init__/ordinary/retained/wave/RETAINED files; no upstream clients or order-confirmation table copied to workers.",
+    "broker_call_order": "Original final client invoked only after eighteen locked raw submissions; RollingEpisode.commit never invoked.",
+    "source_and_effect_limit": "Supported by source closure and actual receipts; Python audit-hook/process separation is not external blinding or hostile-native-code isolation.",
+    "retained_primitive_interpretation": "All18states record4callpaths; frozen source has direct calls to K1 wave.canonical_identity and wave.exact_cover. This establishes executable reuse, not its causal necessity or a discovery advantage."
+  }
+}
