@@ -1,0 +1,19 @@
+# Release146 — native business-design 041 actual-public-byte proof
+
+## Preregistered engineering boundary (before qualification workflow)
+
+**Qualified source anchor at registration:** protected main `cb20f29c3d274063d2d7d7f97fa8eebc7589670f` after normal merge of PR351, whose exact PR head `4ade4b6a9caf7f317cb9cce3d05f4d8f80258630` completed 24/24 applicable workflow runs successfully. All historical failed runs stay failed.
+
+**Question:** Does the *actual immutable public Connected014 source release* for the exact main SHA contain the newly integrated native-design controller plus regressions, and can those exact downloaded bytes (not a fresh GitHub checkout masquerading as a package) execute the original exposed fixed-seed synthetic `demo`, independently `verify`, and preserve the bounded successful earned-funded source-linked successor and matched-incumbent checks?
+
+**Mechanism:** A read-only post-publication job runs only when the normal Connected014 `main` push release workflow concludes successfully. The existing pinned released-asset downloader obtains the actual published bytes for the event's exact `head_sha` with the GitHub-provided short-lived token. The existing immutable release verifier checks the tag, asset/source SHA-256 manifests and source-member identities. A safe extracted source archive must include `connected_enterprise/design_flywheel.py` and `tests/test_connected_design_flywheel041.py`. Tests, simulation and independent audit are then run from that extracted source as the working directory, not from checkout. Only key-free source/download/resource/verdict receipts and `PUBLIC.json` may be uploaded; never private simulated keys, accounts, queue states or state archives.
+
+**Protocol:** First evaluate the workflow on a fresh isolated PR exact head using the registered 341014 development and 341015 confirmation seeds, 14 days and its original unchanged native test suite. On normal merge, wait for its actual main Connected014 publication workflow `workflow_run` event. Never reinterpret PR-level source tests or the prepublication archive as an actual public download. If any release validation, source inclusion, independent audit or positive fixed-seed gate fails, retain the failed run unchanged; diagnose and fix without changing the original seed, tests, historical financial facts or source guards. No automatic reruns or seed shopping.
+
+**Restrictions:** No modifications to Account, JournalAccount, engine, runner, verifier, financial source, original signer/queues, release archive guards, PR40, or other owners. No new spending, API keys, paid APIs, outreach, real transactions or deployment. Use only standard `ubuntu-latest` public runner with platform clock and 360-minute GitHub job ceiling.
+
+**Claims:** Passing proves released-byte engineering reproduction for exactly the published source. It does *not* establish authenticated original-account migration, fresh commercial demand, externally paid revenue, general statistical superiority, causally enabled invention, annual profit or the US$3B trailing-365 objective. Complete service/model/host billing remains unknown; measured runner telemetry is not a business invoice.
+
+**Acceptance:** (A) source-map inclusion and all 21 tests plus native `demo`/`verify` on PR head; (B) success of prior GitHub main publication, actual public HTTP asset download/manifest checks, released-path 21 tests, native demo/verify, immutable public digest receipt on exact released bytes; (C) clean no-credential disclosure and failure preservation. No passing workflow or release tag will be asserted until observed.
+
+**Next:** Once passed, move commercial effort to actual reachable paid needs, proof-backed complete alternatives and independently source-bound native economics; finish original signer-dependent P0 only upon authoritative handoff.
