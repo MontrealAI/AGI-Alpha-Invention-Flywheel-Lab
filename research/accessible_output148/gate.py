@@ -354,6 +354,8 @@ def compare_bytes(baseline, candidate):
     second = audit_bytes(*candidate)
     if first["document_id"] != second["document_id"]:
         raise ValueError("DOCUMENT_IDENTITY_CHANGED")
+    if first["structure"]["lang"] != second["structure"]["lang"]:
+        raise ValueError("DOCUMENT_LANGUAGE_CHANGED_BETWEEN_RELEASES")
     for kind in ("heading", "paragraph", "link", "image", "table"):
         if second["counts"][kind] < first["counts"][kind]:
             raise ValueError("STRUCTURAL_ROLE_COUNT_REGRESSED_" + kind.upper())
