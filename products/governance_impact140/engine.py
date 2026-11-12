@@ -190,6 +190,37 @@ def assess(input_data):
     return result
 
 
+def verify_receipt(receipt, *, anchored_receipt_sha256, anchored_input_sha256):
+    """Verify integrity *against independent anchors*, not reviewer authenticity.
+
+    The caller must obtain both expected digests independently of the receipt.
+    A self-contained SHA256 field alone supplies no trust; this function neither
+    authenticates reviewers nor establishes compliance or source provenance.
+    """
+    if not isinstance(receipt, dict):
+        raise ValueError("INVALID_RECEIPT")
+    if receipt.get("schema") != SCHEMA or receipt.get("scope") != "OFFLINE_SYNTHETIC_ENGINEERING_ONLY":
+        raise ValueError("UNSUPPORTED_RECEIPT_SCHEMA_OR_SCOPE")
+    if receipt.get("authorization") != "NO_AUTHENTICATED_REVIEW_OR_COMPLIANCE_CERTIFICATE":
+        raise ValueError("UNSUPPORTED_RECEIPT_AUTHORITY")
+    if not all(isinstance(x, str) and len(x) == 64 and
+               all(c in "0123456789abcdef" for c in x)
+               for x in (anchored_receipt_sha256, anchored_input_sha256)):
+        raise ValueError("EXTERNAL_SHA256_ANCHORS_REQUIRED")
+    import hmac
+    if not hmac.compare_digest(receipt.get("source_input_sha256", ""),
+                               anchored_input_sha256):
+        raise ValueError("INPUT_ANCHOR_MISMATCH")
+    without_digest = dict(receipt)
+    observed = without_digest.pop("receipt_sha256", None)
+    if not isinstance(observed, str) or not hmac.compare_digest(
+            observed, anchored_receipt_sha256):
+        raise ValueError("RECEIPT_ANCHOR_MISMATCH")
+    if not hmac.compare_digest(sha256(without_digest), anchored_receipt_sha256):
+        raise ValueError("RECEIPT_CONTENT_CHANGED")
+    return True
+
+
 def _strict_object(pairs):
     obj = {}
     for key, value in pairs:
