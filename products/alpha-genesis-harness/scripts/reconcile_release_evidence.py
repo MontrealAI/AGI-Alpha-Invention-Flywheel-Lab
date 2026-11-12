@@ -4,10 +4,12 @@
 from __future__ import annotations
 import argparse
 import copy
+import io
 import json
 from pathlib import Path
 import re
 import sys
+import zipfile
 
 from owner_handoff import DIGEST, SHA, archive_snapshot, digest, json_write, model_evidence_snapshot, operation_summary, read_json, safe_path
 from qualify_genesis_successor import PATHS as GENESIS_SOURCE_PATHS
@@ -25,6 +27,13 @@ STRATEGIES = {'single-model', 'researcher-builder-verifier', 'strategist-economi
               'parallel-exploration', 'adaptive', 'adversarial-review'}
 LIVE_KEYS = {'local_inference', 'single_agent', 'multi_agent', 'parallel_exploration',
              'quote_construction', 'successor_reuse', 'independent_export'}
+WORKSHOP_SCOPES = {'vertical': {'foundry': 18, 'foundry-fresh': 6, 'arrangement': 10, 'custom': 4},
+                   'contrast': {'contrast': 9}}
+WORKSHOP_SOURCES = {'adapters.py', 'instruments.py', 'output_schema.py', 'server.py', 'services.py',
+                    'streaming.py', 'workflow_schemas.py', 'workflow_strategies.py', 'workflows.py',
+                    'workshop.py', 'workshop_protocol.py'}
+WORKSHOP_BUNDLE = {'instrument.json', 'RUN_INSTRUMENT.py', 'RUN_WORKSHOP.py', 'PROOF.json',
+                   'WORKFLOW-EXPORT.json', 'READ-ME.txt'}
 LIVE_SOURCE_FILES = {'bridge/adapters.py', 'bridge/streaming.py', 'bridge/workflows.py', 'bridge/workflow_schemas.py', 'bridge/output_schema.py',
                      'bridge/workflow_strategies.py', 'bridge/instruments.py',
                      'scripts/qualify_hosted_local.py', 'scripts/probe_local_workflows.py',
@@ -254,6 +263,68 @@ def validate_live_provenance(record, files, content):
                     or external.get('result',{}).get('output') != {'result':34}
                     or row.get('strong_control',{}).get('accepted') is not True):
                 raise ValueError('Live workflow PASS contradicts its retained verification')
+
+
+def validate_workshop_provenance(record, files, content):
+    commands = [item for item in record['commands'] if Path(item['entrypoint']).name == 'qualify_workshop.py']
+    if (record.get('workshop_scopes') != dict.fromkeys(WORKSHOP_SCOPES, True)
+            or len(commands) != len(WORKSHOP_SCOPES)
+            or any(item['returncode'] != 0 or item['timed_out'] is not False for item in commands)):
+        raise ValueError('Workshop PASS requires both successful live qualification commands')
+    downloads = record['downloads']
+    instruments = {}
+    for scope, expected in WORKSHOP_SCOPES.items():
+        raw = files.get('WORKSHOP-' + scope.upper() + '-QUALIFICATION.json')
+        if raw is None:
+            raise ValueError('Workshop PASS lacks the ' + scope + ' receipt')
+        trial = json.loads(raw)
+        hashes = trial.get('sources_sha256', {})
+        if (trial.get('schema') != 'alpha-genesis/workshop-local-qualification/v1'
+                or trial.get('source_revision') != record['source_revision']
+                or trial.get('source_product_tree') != record['source_product_tree']
+                or trial.get('model_sha256') != downloads['model']['sha256']
+                or trial.get('runtime_sha256') != downloads['runtime_binary_sha256']
+                or trial.get('scope') != scope or trial.get('status') != 'PASS'
+                or trial.get('platform') != 'linux' or not trial.get('expected_model')
+                or not WORKSHOP_SOURCES.issubset(hashes)):
+            raise ValueError('Workshop receipt does not identify the released source and runtime')
+        source_hashes_match({'source_sha256': {'bridge/' + name: value for name, value in hashes.items()}}, content)
+        cases = {case['name']: case for case in trial['cases']}
+        if set(cases) != set(expected) or len(trial['cases']) != len(expected):
+            raise ValueError('Workshop receipt case inventory differs from the qualified scope')
+        for name, count in expected.items():
+            case = cases[name]
+            docket = case['docket']
+            completed = [event.get('detail', {}) for event in case['events'] if event['kind'] == 'model_completed']
+            bundle = files.get('workshop/' + name + '.zip', b'')
+            if (case.get('status') != 'complete' or case.get('replay_exit') != 0
+                    or case.get('sources_sha256') != hashes or docket.get('status') != 'admitted'
+                    or docket.get('current') is not True or docket.get('passed') is not True
+                    or any(docket.get(field) != count for field in ('checked', 'accepted', 'planned'))
+                    or not any(event.get('provider') == 'local' and event.get('reported_model') == trial['expected_model']
+                               for event in completed)
+                    or not bundle or digest(bundle) != case.get('bundle_sha256')):
+                raise ValueError('Workshop receipt lacks admitted execution or an exact replay bundle for ' + name)
+            try:
+                with zipfile.ZipFile(io.BytesIO(bundle)) as archive:
+                    entries = archive.infolist()
+                    if (len(entries) != len(WORKSHOP_BUNDLE) or set(archive.namelist()) != WORKSHOP_BUNDLE
+                            or sum(item.file_size for item in entries) > 32 * 1024 * 1024):
+                        raise ValueError('Unsafe workshop replay bundle inventory')
+                    proof = json.loads(archive.read('PROOF.json'))
+                    instrument = digest(archive.read('instrument.json'))
+                    if (proof['mission']['id'] != case['id'] or proof['mission']['docket'] != docket
+                            or proof['mission']['source_sha256'] != hashes or len(proof['observations']) != count
+                            or docket['artifact_hashes']['instrument.json'] != instrument
+                            or archive.read('RUN_INSTRUMENT.py') != content['bridge/instruments.py']
+                            or archive.read('RUN_WORKSHOP.py') != content['bridge/workshop_protocol.py']):
+                        raise ValueError('Workshop replay bundle does not match its receipt for ' + name)
+                    instruments[name] = instrument
+            except zipfile.BadZipFile as error:
+                raise ValueError('Invalid workshop replay bundle for ' + name) from error
+        if scope == 'vertical' and (trial.get('unchanged_artifact_reuse') is not True
+                or instruments['foundry'] != instruments['foundry-fresh']):
+            raise ValueError('Workshop successor did not requalify the same artifact bytes')
 
 
 def canonical_digest(value):
@@ -603,10 +674,13 @@ def reconcile(args):
             raise ValueError('Live receipt is not from the final source and product tree')
         source_hashes_match(live, content)
         qualifications = live.get('qualifications', {})
-        if (live.get('status') not in {'PASS','FAIL','RUNNING'} or set(qualifications) != LIVE_KEYS
+        expected_keys = LIVE_KEYS | {'workshop'} if 'bridge/workshop.py' in content else LIVE_KEYS
+        if (live.get('status') not in {'PASS','FAIL','RUNNING'} or set(qualifications) != expected_keys
                 or any(value not in {'PASS','FAIL','NOT_TESTED'} for value in qualifications.values())):
             raise ValueError('Malformed live qualification statuses')
         validate_live_provenance(live, model_files, content)
+        if qualifications.get('workshop') == 'PASS':
+            validate_workshop_provenance(live, model_files, content)
         trusted = live.get('source_unchanged') is True and live['status'] in {'PASS','FAIL'}
         live_summary = {'status':live['status'] if trusted else 'NOT TESTED', 'reported_status':live['status'], 'source_unchanged':live.get('source_unchanged'),
                         'qualifications':qualifications, 'model_evidence_sha256':model_digest,
@@ -623,6 +697,10 @@ def reconcile(args):
                 Path(args.live_receipt).name, 'Same pinned local model; no general reasoning or strategy superiority. Live parallel qualification: '+qualifications['parallel_exploration']+'.')
         set_row('D1', live_status(['single_agent']), 'Actual local model constructed and externally executed a bounded arithmetic artifact.',
                 Path(args.live_receipt).name, 'Narrow frozen task. Practical quote construction: '+qualifications['quote_construction']+'; independent quote export: '+qualifications['independent_export']+'; quote successor reuse: '+qualifications['successor_reuse']+'. Conditional authored economics are not empirical economic validation.')
+        if 'W1' in rows and 'workshop' in qualifications:
+            set_row('W1', live_status(['workshop']), 'Checked exact-source local model dispatch, 47 frozen cases, five exported replays and byte-identical successor reuse.',
+                    'WORKSHOP-VERTICAL-QUALIFICATION.json; WORKSHOP-CONTRAST-QUALIFICATION.json',
+                    'Synthetic inspection and economic inputs, a pinned contrast rule and one authored contract. No physical, authenticated frontier or construction-method superiority claim.')
     set_row('J1', 'PASS', 'Generated exact-source machine-readable JSON and readable Markdown from the selected actual receipts.',
             'QUALIFICATION-MATRIX.json; QUALIFICATION-MATRIX.md; RECONCILIATION.json',
             'Owner HTML and its visual receipt are generated separately. No commercial readiness is inferred.')

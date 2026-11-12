@@ -8,8 +8,8 @@ on:
       - 'tests/test_alpha_site.cjs'
       - 'tests/test_surf_reader.cjs'
       - '.github/workflows/research-pages.yml'
-      - 'products/alpha-genesis-harness/app/**'
-      - 'products/alpha-genesis-harness/scripts/publish_preview.py'
+      - 'products/alpha-genesis-harness/**'
+      - '.github/workflows/alpha-genesis-harness.yml'
   push:
     branches: [main]
     paths:
@@ -19,8 +19,8 @@ on:
       - 'tests/test_alpha_site.cjs'
       - 'tests/test_surf_reader.cjs'
       - '.github/workflows/research-pages.yml'
-      - 'products/alpha-genesis-harness/app/**'
-      - 'products/alpha-genesis-harness/scripts/publish_preview.py'
+      - 'products/alpha-genesis-harness/**'
+      - '.github/workflows/alpha-genesis-harness.yml'
   workflow_dispatch:
 permissions:
   contents: read
