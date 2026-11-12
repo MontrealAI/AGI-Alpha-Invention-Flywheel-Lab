@@ -16,18 +16,62 @@ import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-from scripts.release_connected014 import checked_members, verify_assets
+from scripts.release_connected014 import asset_names, checked_members, verify_assets
 
 SCHEMA = "agi-alpha/native-design041-actual-public-release-proof/v1"
 REQUIRED = {"connected_enterprise/design_flywheel.py", "tests/test_connected_design_flywheel041.py"}
 
 
+def _unique_object(pairs):
+    value = {}
+    for key, element in pairs:
+        if key in value:
+            raise ValueError("DUPLICATE_PUBLIC_RECEIPT_FIELD")
+        value[key] = element
+    return value
+
+
 def _read(path: Path) -> dict:
-    return json.loads(path.read_text())
+    if not path.is_file() or path.is_symlink():
+        raise ValueError("UNSYMLINKED_PUBLIC_RECEIPT_REQUIRED")
+    value = json.loads(path.read_text(), object_pairs_hook=_unique_object)
+    if not isinstance(value, dict):
+        raise ValueError("PUBLIC_RECEIPT_OBJECT_REQUIRED")
+    return value
 
 
 def _hash(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def validate_download_receipt(assets: Path, commit: str, published: dict,
+                              download_receipt: Path) -> str:
+    """Bind the source to the existing actual-HTTP downloader's immutable record.
+
+    The downloader and GitHub Actions step provenance remain the authoritative
+    evidence that an HTTP retrieval occurred; this check authenticates their
+    recorded identity/asset hashes, not the network event independently.
+    """
+    observed = _read(download_receipt)
+    required = {"schema", "actual_release_download", "source_commit",
+                "source_sha256", "tag", "release_url", "files"}
+    expected_tag = "connected014-" + commit
+    expected_url = ("https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab"
+                    "/releases/tag/" + expected_tag)
+    if (set(observed) != required
+            or observed.get("schema") != "agi-alpha/connected014-actual-release-download/v1"
+            or observed.get("actual_release_download") is not True
+            or observed.get("source_commit") != commit
+            or observed.get("source_sha256") != published["source_sha256"]
+            or observed.get("tag") != expected_tag
+            or observed.get("release_url") != expected_url):
+        raise ValueError("AUTHENTICATED_RELEASE_DOWNLOAD_RECEIPT_REQUIRED")
+    if not isinstance(observed["files"], dict) or set(observed["files"]) != asset_names(assets):
+        raise ValueError("COMPLETE_RELEASE_DOWNLOAD_ASSETS_REQUIRED")
+    for name, expected_hash in observed["files"].items():
+        if expected_hash != _hash(assets / name):
+            raise ValueError("RELEASE_DOWNLOAD_RECEIPT_ASSET_CHANGED:" + name)
+    return _hash(download_receipt)
 
 
 def extract(assets: Path, commit: str, source: Path) -> None:
@@ -53,8 +97,9 @@ def extract(assets: Path, commit: str, source: Path) -> None:
                       "required_native_files": sorted(REQUIRED)}, sort_keys=True))
 
 
-def seal(assets: Path, commit: str, source: Path, public_path: Path, receipt: Path, public_copy: Path) -> None:
+def seal(assets: Path, commit: str, source: Path, public_path: Path, receipt: Path, public_copy: Path, download_receipt: Path) -> None:
     published = verify_assets(assets, commit)
+    download_receipt_sha256 = validate_download_receipt(assets, commit, published, download_receipt)
     manifest = _read(source / "SOURCE_MANIFEST.json")
     public = _read(public_path)
     expected = published["source_sha256"]
@@ -74,10 +119,11 @@ def seal(assets: Path, commit: str, source: Path, public_path: Path, receipt: Pa
         "schema": SCHEMA, "source_commit": commit, "source_sha256": expected,
         "release_source_archive_sha256": _hash(assets / "connected014-source.zip"),
         "native_public_sha256": _hash(public_path),
+        "authenticated_download_receipt_sha256": download_receipt_sha256,
         "actual_public_release_download": True,
         "executed_bytes": "verified_and_extracted_exact_published_source_archive",
-        "native_adversarial_regressions": "passed_as_separate_workflow_step",
-        "independent_native_audit": "passed_as_separate_workflow_step",
+        "native_adversarial_regressions": "GITHUB_WORKFLOW_STEP_OBSERVATION_NOT_INDEPENDENT_CERTIFICATION",
+        "independent_native_audit": "GITHUB_WORKFLOW_STEP_OBSERVATION_NOT_INDEPENDENT_CERTIFICATION",
         "registered_development_seed": 341014, "registered_confirmation_seed": 341015,
         "modeled_matched_profit_delta_microUSD": public["matched_confirmation_profit_delta_microUSD"],
         "modeled_connected_funded_successor": public["confirmed_positive_funded_successor_opportunity"],
@@ -98,15 +144,16 @@ def main() -> None:
     p.add_argument("--source-commit", required=True)
     p.add_argument("--source", type=Path, required=True)
     p.add_argument("--public", type=Path)
+    p.add_argument("--download-receipt", type=Path)
     p.add_argument("--receipt", type=Path)
     p.add_argument("--public-copy", type=Path)
     a = p.parse_args()
     if a.mode == "extract":
         extract(a.assets, a.source_commit, a.source)
     else:
-        if not all((a.public, a.receipt, a.public_copy)):
-            p.error("seal requires public, receipt and public-copy")
-        seal(a.assets, a.source_commit, a.source, a.public, a.receipt, a.public_copy)
+        if not all((a.public, a.receipt, a.public_copy, a.download_receipt)):
+            p.error("seal requires public, receipt, public-copy and download-receipt")
+        seal(a.assets, a.source_commit, a.source, a.public, a.receipt, a.public_copy, a.download_receipt)
 
 
 if __name__ == "__main__":
