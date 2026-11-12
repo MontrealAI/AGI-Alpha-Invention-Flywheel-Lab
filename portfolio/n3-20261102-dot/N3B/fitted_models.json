@@ -1,0 +1,133 @@
+{
+  "models": {
+    "point0": {
+      "kind": "point",
+      "scale": 0,
+      "alpha": 1.0,
+      "coef": [
+        0.0662983189227706,
+        54.91750775577142,
+        -88.81774650839286,
+        83.58199528479022
+      ],
+      "resolution": 64,
+      "scope": "effective spatial response same resin/engine/fixed5s; not mechanistic uncertainty guarantee"
+    },
+    "blur1": {
+      "kind": "blur",
+      "scale": 1,
+      "alpha": 1.0,
+      "coef": [
+        -0.06203671938475453,
+        47.97131265789252,
+        -89.16445625183468,
+        104.24960936830236
+      ],
+      "resolution": 64,
+      "scope": "effective spatial response same resin/engine/fixed5s; not mechanistic uncertainty guarantee"
+    },
+    "blur2": {
+      "kind": "blur",
+      "scale": 2,
+      "alpha": 1.0,
+      "coef": [
+        0.023721092610930236,
+        -0.333267307536034,
+        41.93555150869693,
+        41.76599089727336
+      ],
+      "resolution": 64,
+      "scope": "effective spatial response same resin/engine/fixed5s; not mechanistic uncertainty guarantee"
+    },
+    "blur3": {
+      "kind": "blur",
+      "scale": 3,
+      "alpha": 1.0,
+      "coef": [
+        0.14080176259061852,
+        -19.042738364429944,
+        27.537560346151125,
+        167.66960055092176
+      ],
+      "resolution": 64,
+      "scope": "effective spatial response same resin/engine/fixed5s; not mechanistic uncertainty guarantee"
+    },
+    "blur4": {
+      "kind": "blur",
+      "scale": 4,
+      "alpha": 1.0,
+      "coef": [
+        0.07395586663812168,
+        4.9150152091267305,
+        -150.12344999195147,
+        525.842774646966
+      ],
+      "resolution": 64,
+      "scope": "effective spatial response same resin/engine/fixed5s; not mechanistic uncertainty guarantee"
+    },
+    "spatial0": {
+      "kind": "spatial",
+      "scale": 0,
+      "alpha": 1.0,
+      "coef": [
+        -0.016737238585278487,
+        -13.975724480070658,
+        51.19854905026613,
+        -62.7402182465931,
+        11.388132013125537,
+        17.838962089479597,
+        6.10966396522838,
+        -76.08552687395289,
+        35.60065193706676,
+        110.15015846828196,
+        -224.38156543276799,
+        64.05996116406746,
+        -5.2306180432845935,
+        -18.865267040784122,
+        59.895929045987046,
+        349.32908268550443,
+        -116.00523983091672,
+        211.75828761173943,
+        -230.04602717312815,
+        144.6873423719528
+      ],
+      "resolution": 64,
+      "scope": "effective spatial response same resin/engine/fixed5s; not mechanistic uncertainty guarantee"
+    }
+  },
+  "development_errors": {
+    "point0": {
+      "rmse_um": 12.500005737227715,
+      "mean_patch_rmse_um": 12.296432257809803
+    },
+    "blur1": {
+      "rmse_um": 12.080710244573224,
+      "mean_patch_rmse_um": 11.880192517161174
+    },
+    "blur2": {
+      "rmse_um": 11.209176551449266,
+      "mean_patch_rmse_um": 10.999841729934245
+    },
+    "blur3": {
+      "rmse_um": 9.554392557729427,
+      "mean_patch_rmse_um": 9.316577085919842
+    },
+    "blur4": {
+      "rmse_um": 9.880258529684406,
+      "mean_patch_rmse_um": 9.683983285641256
+    },
+    "spatial0": {
+      "rmse_um": 9.001275109070454,
+      "mean_patch_rmse_um": 8.776516123869449
+    }
+  },
+  "best_blur": "blur3",
+  "candidate": "spatial0",
+  "frozen_family": "multiscale cubic+center-neighbor interactions, ridgealpha1",
+  "training_seconds": 10.521757584996521,
+  "training_patches": 1030,
+  "development_patches": 114,
+  "test_patches_seen": 0,
+  "source_height_unit": "\u00b5m via0..255\u21920..280.83",
+  "coarse_model_resolution": "64\u00b2; physicaltruth andauthorbaselinefinalmetrics at128\u00b2"
+}
