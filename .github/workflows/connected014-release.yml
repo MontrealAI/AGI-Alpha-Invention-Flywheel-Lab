@@ -42,6 +42,29 @@ jobs:
           python -B -m unittest -v tests.test_connected_design_flywheel041
           python -B -m connected_enterprise.design_flywheel demo --output "$RUNNER_TEMP/native-design041-prepublication"
           python -B -m connected_enterprise.design_flywheel verify --output "$RUNNER_TEMP/native-design041-prepublication"
+      - name: Verify exact extracted-source membership after native-design
+        working-directory: ${{ runner.temp }}/connected014-qualified/extracted-source
+        run: |
+          python -B - <<'PY_EXACT'
+          import hashlib, json
+          from pathlib import Path
+          root = Path.cwd()
+          manifest = json.loads((root / "SOURCE_MANIFEST.json").read_text())
+          expected = set(manifest["files"]) | {"SOURCE_MANIFEST.json"}
+          actual = {p.relative_to(root).as_posix() for p in root.rglob("*") if p.is_file()}
+          def safe_name(name):
+              if any(token in name.lower() for token in ("key", "secret", "private", "credential", "sqlite", "account")):
+                  return "REDACTED_SHA256:" + hashlib.sha256(name.encode()).hexdigest()[:16]
+              return name
+          unexpected = sorted(actual - expected)
+          missing = sorted(expected - actual)
+          print(json.dumps({"stage":"native-design", "unexpected_count":len(unexpected),
+                            "unexpected":list(map(safe_name,unexpected[:40])),
+                            "missing_count":len(missing),
+                            "missing":list(map(safe_name,missing[:40]))},sort_keys=True))
+          if unexpected or missing:
+              raise SystemExit("EXACT_EXTRACTED_SOURCE_REQUIRED_AFTER_NATIVE_DESIGN")
+          PY_EXACT
       - name: Verify bundled developer regressions from exact clean source (closure 123)
         working-directory: ${{ runner.temp }}/connected014-qualified/extracted-source
         run: |
@@ -54,6 +77,29 @@ jobs:
         run: |
           python "$RUNNER_TEMP/connected014-qualified/extracted-source/scripts/qualify_omega_release.py" --source "$RUNNER_TEMP/connected014-qualified/extracted-source" --archive "$RUNNER_TEMP/connected014-qualified/connected014-source.zip" --output "$RUNNER_TEMP/omega-v4-qualified" --source-commit "${{ github.event.pull_request.head.sha || github.sha }}"
           cp "$RUNNER_TEMP/omega-v4-qualified/QUALIFICATION.json" "$RUNNER_TEMP/connected014-qualified/OMEGA_V4_QUALIFICATION.json"
+      - name: Verify exact extracted-source membership after omega-v4
+        working-directory: ${{ runner.temp }}/connected014-qualified/extracted-source
+        run: |
+          python -B - <<'PY_EXACT'
+          import hashlib, json
+          from pathlib import Path
+          root = Path.cwd()
+          manifest = json.loads((root / "SOURCE_MANIFEST.json").read_text())
+          expected = set(manifest["files"]) | {"SOURCE_MANIFEST.json"}
+          actual = {p.relative_to(root).as_posix() for p in root.rglob("*") if p.is_file()}
+          def safe_name(name):
+              if any(token in name.lower() for token in ("key", "secret", "private", "credential", "sqlite", "account")):
+                  return "REDACTED_SHA256:" + hashlib.sha256(name.encode()).hexdigest()[:16]
+              return name
+          unexpected = sorted(actual - expected)
+          missing = sorted(expected - actual)
+          print(json.dumps({"stage":"omega-v4", "unexpected_count":len(unexpected),
+                            "unexpected":list(map(safe_name,unexpected[:40])),
+                            "missing_count":len(missing),
+                            "missing":list(map(safe_name,missing[:40]))},sort_keys=True))
+          if unexpected or missing:
+              raise SystemExit("EXACT_EXTRACTED_SOURCE_REQUIRED_AFTER_OMEGA_V4")
+          PY_EXACT
       - name: Qualify GENESIS from the exact clean source archive
         run: |
           python "$RUNNER_TEMP/connected014-qualified/extracted-source/scripts/qualify_genesis_release.py" --source "$RUNNER_TEMP/connected014-qualified/extracted-source" --archive "$RUNNER_TEMP/connected014-qualified/connected014-source.zip" --output "$RUNNER_TEMP/genesis-qualified" --source-commit "${{ github.event.pull_request.head.sha || github.sha }}"
