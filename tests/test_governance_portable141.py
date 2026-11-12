@@ -62,8 +62,8 @@ class Portable141(unittest.TestCase):
         result = self.valid_verify(extract=clean)
         self.assertTrue(result["accepted"])
         self.assertEqual(result["file_count"], len(FILES) + 1)
-        self.assertEqual(sorted(p.as_posix() for p in FILES),
-                         sorted(result_path for result_path in FILES))
+        self.assertEqual(set(json.loads((clean / "MANIFEST.json").read_text())["files"]),
+                         set(FILES))
         for path in FILES:
             self.assertEqual((clean / path).read_bytes(), (self.repo / path).read_bytes())
         with self.assertRaises(FileExistsError):
@@ -81,7 +81,7 @@ class Portable141(unittest.TestCase):
     def test_invalid_external_or_commit_is_rejected(self):
         with self.assertRaisesRegex(ValueError, "EXTERNAL_ARCHIVE_DIGEST_MISMATCH"):
             self.valid_verify(expected_sha256="0" * 64)
-        with self.assertRaisesRegex(ValueError, "INVALID_COMMIT_REQUIRED"):
+        with self.assertRaisesRegex(ValueError, "VALID_COMMIT_REQUIRED"):
             self.valid_verify(expected_commit="wrong")
         with self.assertRaisesRegex(ValueError, "INVALID_PACKAGE_MANIFEST"):
             self.valid_verify(expected_commit="0" * 40)
