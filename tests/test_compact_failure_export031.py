@@ -175,10 +175,10 @@ class CompactFailureTests(unittest.TestCase):
                   text.replace('downloaded-operation-keyfree.zip','failed-operation-keyfree.zip'),
                   text.replace("steps.native_seal.outcome == 'success'", "steps.native_seal.outcome != 'success'"),
                   text.replace(" && steps.released_native_design.outcome == 'success'", ''),
-                  text.replace('NATIVE_DESIGN041_PUBLIC.json','private/native.json'),
-                  text.replace('NATIVE_DESIGN041_RELEASE_RECEIPT.json','*.json'),
-                  text.replace('NATIVE_DESIGN041_RELEASE_RECEIPT.json','account/STATE.json'),
-                  text.replace('NATIVE_DESIGN041_PUBLIC.json','NATIVE_DESIGN041_PUBLIC.json\n            ${{ runner.temp }}/private/authority.key'),
+                  text.replace('${{ runner.temp }}/NATIVE_DESIGN041_PUBLIC.json','${{ runner.temp }}/private/native.json'),
+                  text.replace('${{ runner.temp }}/NATIVE_DESIGN041_RELEASE_RECEIPT.json','${{ runner.temp }}/*.json'),
+                  text.replace('${{ runner.temp }}/NATIVE_DESIGN041_RELEASE_RECEIPT.json','${{ runner.temp }}/account/STATE.json'),
+                  text.replace('${{ runner.temp }}/NATIVE_DESIGN041_PUBLIC.json','${{ runner.temp }}/NATIVE_DESIGN041_PUBLIC.json\n            ${{ runner.temp }}/private/authority.key'),
                   text.replace('native-design041-released-', 'unreviewed-native-archive-')):
    with self.assertRaises(AssertionError): self.assert_workflow_upload_contract(changed)
  def test_commitment_upload_refuses_private_paths_and_unchecked_archives(self):
