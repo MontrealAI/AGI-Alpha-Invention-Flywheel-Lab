@@ -1,0 +1,142 @@
+"""Frozen public-demand140 T1–T9 adversarial synthetic checks."""
+import copy
+import json
+import tempfile
+import unittest
+from pathlib import Path
+
+from products.governance_impact140.engine import assess, canonical, main, sha256
+
+
+def sample():
+    return {
+        "systems": [
+            {"id": "finance", "tags": ["finance"]},
+            {"id": "plant", "tags": ["production"]},
+            {"id": "other", "tags": ["operations"]},
+        ],
+        "requirements_before": [
+            {"id": "R1", "version": "v1", "control": "log", "applies_to": ["finance"]},
+            {"id": "R3", "version": "v1", "control": "archive", "applies_to": ["production"]},
+            {"id": "R4", "version": "v1", "control": "inventory", "applies_to": ["operations"]},
+        ],
+        "requirements_after": [
+            {"id": "R1", "version": "v2", "control": "log+review", "applies_to": ["finance"]},
+            {"id": "R2", "version": "v1", "control": "explain", "applies_to": ["finance"]},
+            {"id": "R4", "version": "v1", "control": "inventory", "applies_to": ["operations"]},
+        ],
+        "evidence": [
+            {"id": "ev-old", "system_id": "finance", "requirement_id": "R1",
+             "version": "v1", "claimed_status": "met", "review_claim": "approved"},
+            {"id": "ev-new", "system_id": "finance", "requirement_id": "R1",
+             "version": "v2", "claimed_status": "met", "review_claim": "approved"},
+            {"id": "ev-plant", "system_id": "plant", "requirement_id": "R3",
+             "version": "v1", "claimed_status": "partial"},
+            {"id": "ev-other", "system_id": "other", "requirement_id": "R4",
+             "version": "v1", "claimed_status": "met", "review_claim": "passed"},
+        ],
+    }
+
+
+def finding(report, sid, rid):
+    return next(row for row in report["findings"] if
+                row["system_id"] == sid and row["requirement_id"] == rid)
+
+
+class GovernanceImpact140(unittest.TestCase):
+    def test_T1_duplicate_and_bad_claims_fail_closed(self):
+        for mutate in (
+            lambda p: p["systems"].append(copy.deepcopy(p["systems"][0])),
+            lambda p: p["requirements_after"].append(
+                copy.deepcopy(p["requirements_after"][0])),
+            lambda p: p["evidence"][0].update(claimed_status="verified"),
+        ):
+            data = sample()
+            mutate(data)
+            with self.assertRaises(ValueError):
+                assess(data)
+
+    def test_T2_new_rule_is_not_auto_satisfied(self):
+        report = assess(sample())
+        r = finding(report, "finance", "R2")
+        self.assertEqual(r["status"], "unable_to_determine")
+        self.assertIsNone(r["evidence_id"])
+        self.assertEqual(report["authorization"],
+                         "NO_AUTHENTICATED_REVIEW_OR_COMPLIANCE_CERTIFICATE")
+
+    def test_T3_prior_evidence_is_invalidated_by_new_version(self):
+        report = assess(sample())
+        r = finding(report, "finance", "R1")
+        self.assertEqual(r["status"], "unable_to_determine")
+        self.assertTrue(r["change_impacts_system"])
+        self.assertEqual(r["reason"], "changed_requirement_invalidates_prior_evidence")
+
+    def test_T4_retirement_preserves_before_identity(self):
+        report = assess(sample())
+        self.assertEqual(finding(report, "plant", "R3")["status"], "not_applicable")
+        retire = next(row for row in report["changes"] if row["id"] == "R3")
+        self.assertEqual(retire["kind"], "retired")
+        self.assertEqual(retire["before"]["version"], "v1")
+
+    def test_T5_unrelated_system_stays_unaffected(self):
+        report = assess(sample())
+        self.assertEqual(report["impacted_systems"], ["finance", "plant"])
+        r = finding(report, "other", "R4")
+        self.assertFalse(r["change_impacts_system"])
+        self.assertEqual(r["status"], "pending_review")
+
+    def test_T6_self_asserted_approval_never_becomes_compliance(self):
+        report = assess(sample())
+        for sid, rid in (("finance", "R1"), ("other", "R4")):
+            self.assertTrue(finding(report, sid, rid)["reported_approval_ignored"])
+            self.assertNotEqual(finding(report, sid, rid)["status"], "met")
+
+    def test_T7_deterministic_independently_recomputable_receipt(self):
+        a, b = assess(sample()), assess(sample())
+        self.assertEqual(canonical(a), canonical(b))
+        digest = a.pop("receipt_sha256")
+        self.assertEqual(digest, sha256(a))
+        a["changes"][0]["kind"] = "false"
+        self.assertNotEqual(digest, sha256(a))
+
+    def test_T8_no_cross_system_evidence_and_unknown_refs_fail(self):
+        data = sample()
+        data["evidence"].append({
+            "id": "fake", "system_id": "plant", "requirement_id": "R2",
+            "version": "v1", "claimed_status": "met"})
+        report = assess(data)
+        self.assertFalse(any(x["evidence_id"] == "fake" for x in report["findings"]))
+        self.assertEqual(finding(report, "finance", "R2")["status"],
+                         "unable_to_determine")
+        data["evidence"][-1]["requirement_id"] = "UNREGISTERED"
+        with self.assertRaisesRegex(ValueError, "UNKNOWN_EVIDENCE"):
+            assess(data)
+
+    def test_T9_empty_invalid_and_duplicate_json_fail(self):
+        for payload in (None, {}, {"systems": []}, []):
+            with self.assertRaises(ValueError):
+                assess(payload)
+        data = sample()
+        with tempfile.TemporaryDirectory() as tmp:
+            src, dest = Path(tmp) / "in.json", Path(tmp) / "out.json"
+            src.write_text(json.dumps(data), encoding="utf-8")
+            main(["--input", str(src), "--output", str(dest)])
+            self.assertEqual(json.loads(dest.read_text())["receipt_sha256"],
+                             assess(data)["receipt_sha256"])
+            with self.assertRaises(FileExistsError):
+                main(["--input", str(src), "--output", str(dest)])
+            src.write_text('{"systems":[],"systems":[]}', encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "DUPLICATE_JSON_FIELD"):
+                main(["--input", str(src), "--output", str(Path(tmp) / "fail.json")])
+
+    def test_change_without_version_bump_still_invalidates_evidence(self):
+        data = sample()
+        data["requirements_after"][0]["version"] = "v1"
+        report = assess(data)
+        self.assertEqual(finding(report, "finance", "R1")["status"],
+                         "unable_to_determine")
+        self.assertTrue(finding(report, "finance", "R1")["change_impacts_system"])
+
+
+if __name__ == "__main__":
+    unittest.main()
