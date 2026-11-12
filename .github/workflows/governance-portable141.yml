@@ -1,0 +1,143 @@
+name: Governance Portable141 research artifact and clean downloaded operation
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/governance-portable141.yml'
+      - 'scripts/package_governance_impact141.py'
+      - 'tests/test_governance_portable141.py'
+      - 'tests/test_governance_impact140.py'
+      - 'products/governance_impact140/**'
+      - 'campaign/governance-portable141/**'
+      - 'campaign/public-demand140/**'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/governance-portable141.yml'
+      - 'scripts/package_governance_impact141.py'
+      - 'tests/test_governance_portable141.py'
+      - 'tests/test_governance_impact140.py'
+      - 'products/governance_impact140/**'
+      - 'campaign/governance-portable141/**'
+      - 'campaign/public-demand140/**'
+permissions:
+  contents: read
+concurrency:
+  group: governance-portable141-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+      SOURCE_COMMIT: ${{ github.event.pull_request.head.sha || github.sha }}
+    outputs:
+      archive_sha: ${{ steps.package.outputs.archive_sha }}
+      manifest_sha: ${{ steps.package.outputs.manifest_sha }}
+    steps:
+      - name: Record job start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Exact checkout identity and all current focused regressions
+        run: |
+          test "$(git rev-parse HEAD)" = "$SOURCE_COMMIT"
+          python -B -m unittest discover -s tests -p 'test_governance_impact140.py' -v
+          python -B -m unittest discover -s tests -p 'test_governance_portable141.py' -v
+      - name: Build deterministic key-free research archive and source receipt
+        id: package
+        run: |
+          mkdir -p "$RUNNER_TEMP/governance-portable141"
+          python -B scripts/package_governance_impact141.py build --root . \
+            --archive "$RUNNER_TEMP/governance-portable141/governance-portable141.zip" \
+            --receipt "$RUNNER_TEMP/governance-portable141/RECEIPT.json" \
+            --source-commit "$SOURCE_COMMIT"
+          python -B - <<'PY'
+          import json, os
+          from pathlib import Path
+          d = json.loads((Path(os.environ["RUNNER_TEMP"]) / "governance-portable141/RECEIPT.json").read_text())
+          with Path(os.environ["GITHUB_OUTPUT"]).open("a") as f:
+              f.write("archive_sha=" + d["archive_sha256"] + "\n")
+              f.write("manifest_sha=" + d["manifest_sha256"] + "\n")
+          PY
+      - name: Preserve allowlisted immutable research artifact and receipt
+        if: success()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: governance-portable141-${{ github.event.pull_request.head.sha || github.sha }}
+          path: ${{ runner.temp }}/governance-portable141/
+          if-no-files-found: error
+  verify-downloaded:
+    needs: [build]
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+      SOURCE_COMMIT: ${{ github.event.pull_request.head.sha || github.sha }}
+      EXPECTED_ARCHIVE: ${{ needs.build.outputs.archive_sha }}
+      EXPECTED_MANIFEST: ${{ needs.build.outputs.manifest_sha }}
+    steps:
+      - name: Record job start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Independently receive prior job artifact
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: governance-portable141-${{ github.event.pull_request.head.sha || github.sha }}
+          path: ${{ runner.temp }}/governance-portable141-received
+      - name: Verify archive against job anchors and isolate clean extracted bytes
+        run: |
+          python -B scripts/package_governance_impact141.py verify \
+            --archive "$RUNNER_TEMP/governance-portable141-received/governance-portable141.zip" \
+            --expected-sha256 "$EXPECTED_ARCHIVE" \
+            --expected-manifest-sha256 "$EXPECTED_MANIFEST" \
+            --expected-commit "$SOURCE_COMMIT" \
+            --extract "$RUNNER_TEMP/governance-portable141-clean"
+      - name: Run inherited adversarial cases and CLI using only extracted source
+        run: |
+          cd "$RUNNER_TEMP/governance-portable141-clean"
+          python -B -m unittest discover -s tests -p 'test_governance_impact140.py' -v
+          python -B - <<'PY'
+          import json
+          from pathlib import Path
+          example = {
+            "systems": [{"id": "example", "tags": ["finance"]}],
+            "requirements_before": [],
+            "requirements_after": [{"id": "R", "version": "1",
+                                     "control": "inspect model outputs",
+                                     "applies_to": ["finance"]}],
+            "evidence": [],
+          }
+          Path("synthetic-input.json").write_text(json.dumps(example))
+          PY
+          python -B -m products.governance_impact140.engine \
+            --input synthetic-input.json --output synthetic-output.json
+          python -B - <<'PY'
+          import json
+          from pathlib import Path
+          report = json.loads(Path("synthetic-output.json").read_text())
+          assert report["scope"] == "OFFLINE_SYNTHETIC_ENGINEERING_ONLY"
+          assert report["findings"][0]["status"] == "unable_to_determine"
+          assert report["authorization"] == "NO_AUTHENTICATED_REVIEW_OR_COMPLIANCE_CERTIFICATE"
+          print("CLEAN_DOWNLOADED_SYNTHETIC_CLI_PASS")
+          PY
+      - name: State exact source identity and bounded claim
+        run: |
+          echo "SOURCE_COMMIT=$SOURCE_COMMIT"
+          echo "ARCHIVE_SHA256=$EXPECTED_ARCHIVE"
+          echo "MANIFEST_SHA256=$EXPECTED_MANIFEST"
+          echo "QUALIFICATION=OFFLINE_RESEARCH_PORTABILITY_ONLY"
+          echo "COMMERCIAL=NO_BID_NO_DEPLOY"
