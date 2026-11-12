@@ -36,12 +36,61 @@ jobs:
         run: python -m unittest discover -s tests -p 'test_genesis*.py' -v
       - name: Operate exact clean package, resume and independently audit public copy
         run: python scripts/qualify_connected014.py --smoke --output "$RUNNER_TEMP/connected014-qualified"
+      - name: Isolate prepublication native design source without modifying canonical extracted release
+        run: |
+          python -B - <<'PY_NATIVE_SOURCE'
+          import json, os
+          from pathlib import Path
+          from zipfile import ZipFile
+          from scripts.release_connected014 import archive_manifest, checked_members
+          temp = Path(os.environ['RUNNER_TEMP'])
+          archive = temp / 'connected014-qualified/connected014-source.zip'
+          destination = temp / 'native-design041-prepublication-source'
+          if destination.exists() or destination.is_symlink():
+              raise FileExistsError('FRESH_ISOLATED_NATIVE_SOURCE_REQUIRED')
+          manifest = archive_manifest(archive)
+          with ZipFile(archive) as z:
+              checked_members(z)
+              z.extractall(destination)
+          expected = set(manifest['files']) | {'SOURCE_MANIFEST.json'}
+          actual = {p.relative_to(destination).as_posix() for p in destination.rglob('*') if p.is_file()}
+          if actual != expected or json.loads((destination / 'SOURCE_MANIFEST.json').read_text()) != manifest:
+              raise ValueError('ISOLATED_SOURCE_SNAPSHOT_MISMATCH')
+          if any((p / '.git').exists() for p in (destination, *destination.parents)):
+              raise ValueError('ISOLATED_SOURCE_MUST_NOT_HAVE_GIT')
+          print(json.dumps({'scope':'isolated_source_for_synthetic_service_fixture_generation',
+                            'phase':'prepublication', 'files':len(manifest['files']),
+                            'source_sha256':manifest['executing_source']['sha256']},sort_keys=True))
+          PY_NATIVE_SOURCE
       - name: Qualify native design041 from the exact clean prepublication archive
-        working-directory: ${{ runner.temp }}/connected014-qualified/extracted-source
+        working-directory: ${{ runner.temp }}/native-design041-prepublication-source
         run: |
           python -B -m unittest -v tests.test_connected_design_flywheel041
           python -B -m connected_enterprise.design_flywheel demo --output "$RUNNER_TEMP/native-design041-prepublication"
           python -B -m connected_enterprise.design_flywheel verify --output "$RUNNER_TEMP/native-design041-prepublication"
+      - name: Verify exact extracted-source membership after native-design
+        working-directory: ${{ runner.temp }}/connected014-qualified/extracted-source
+        run: |
+          python -B - <<'PY_EXACT'
+          import hashlib, json
+          from pathlib import Path
+          root = Path.cwd()
+          manifest = json.loads((root / "SOURCE_MANIFEST.json").read_text())
+          expected = set(manifest["files"]) | {"SOURCE_MANIFEST.json"}
+          actual = {p.relative_to(root).as_posix() for p in root.rglob("*") if p.is_file()}
+          def safe_name(name):
+              if any(token in name.lower() for token in ("key", "secret", "private", "credential", "sqlite", "account")):
+                  return "REDACTED_SHA256:" + hashlib.sha256(name.encode()).hexdigest()[:16]
+              return name
+          unexpected = sorted(actual - expected)
+          missing = sorted(expected - actual)
+          print(json.dumps({"stage":"native-design", "unexpected_count":len(unexpected),
+                            "unexpected":list(map(safe_name,unexpected[:40])),
+                            "missing_count":len(missing),
+                            "missing":list(map(safe_name,missing[:40]))},sort_keys=True))
+          if unexpected or missing:
+              raise SystemExit("EXACT_EXTRACTED_SOURCE_REQUIRED_AFTER_NATIVE_DESIGN")
+          PY_EXACT
       - name: Verify bundled developer regressions from exact clean source (closure 123)
         working-directory: ${{ runner.temp }}/connected014-qualified/extracted-source
         run: |
@@ -54,6 +103,29 @@ jobs:
         run: |
           python "$RUNNER_TEMP/connected014-qualified/extracted-source/scripts/qualify_omega_release.py" --source "$RUNNER_TEMP/connected014-qualified/extracted-source" --archive "$RUNNER_TEMP/connected014-qualified/connected014-source.zip" --output "$RUNNER_TEMP/omega-v4-qualified" --source-commit "${{ github.event.pull_request.head.sha || github.sha }}"
           cp "$RUNNER_TEMP/omega-v4-qualified/QUALIFICATION.json" "$RUNNER_TEMP/connected014-qualified/OMEGA_V4_QUALIFICATION.json"
+      - name: Verify exact extracted-source membership after omega-v4
+        working-directory: ${{ runner.temp }}/connected014-qualified/extracted-source
+        run: |
+          python -B - <<'PY_EXACT'
+          import hashlib, json
+          from pathlib import Path
+          root = Path.cwd()
+          manifest = json.loads((root / "SOURCE_MANIFEST.json").read_text())
+          expected = set(manifest["files"]) | {"SOURCE_MANIFEST.json"}
+          actual = {p.relative_to(root).as_posix() for p in root.rglob("*") if p.is_file()}
+          def safe_name(name):
+              if any(token in name.lower() for token in ("key", "secret", "private", "credential", "sqlite", "account")):
+                  return "REDACTED_SHA256:" + hashlib.sha256(name.encode()).hexdigest()[:16]
+              return name
+          unexpected = sorted(actual - expected)
+          missing = sorted(expected - actual)
+          print(json.dumps({"stage":"omega-v4", "unexpected_count":len(unexpected),
+                            "unexpected":list(map(safe_name,unexpected[:40])),
+                            "missing_count":len(missing),
+                            "missing":list(map(safe_name,missing[:40]))},sort_keys=True))
+          if unexpected or missing:
+              raise SystemExit("EXACT_EXTRACTED_SOURCE_REQUIRED_AFTER_OMEGA_V4")
+          PY_EXACT
       - name: Qualify GENESIS from the exact clean source archive
         run: |
           python "$RUNNER_TEMP/connected014-qualified/extracted-source/scripts/qualify_genesis_release.py" --source "$RUNNER_TEMP/connected014-qualified/extracted-source" --archive "$RUNNER_TEMP/connected014-qualified/connected014-source.zip" --output "$RUNNER_TEMP/genesis-qualified" --source-commit "${{ github.event.pull_request.head.sha || github.sha }}"
@@ -174,23 +246,52 @@ jobs:
         id: operation
         run: |
           python scripts/release_connected014.py operate-download --assets "$RUNNER_TEMP/actual-release-download" --source-commit "$GITHUB_SHA" --output "$RUNNER_TEMP/downloaded-release-operation" --actual-release-download
+      - name: Isolate published native design source without modifying canonical extracted release
+        run: |
+          python -B - <<'PY_NATIVE_SOURCE'
+          import json, os
+          from pathlib import Path
+          from zipfile import ZipFile
+          from scripts.release_connected014 import archive_manifest, checked_members
+          temp = Path(os.environ['RUNNER_TEMP'])
+          archive = temp / 'actual-release-download/connected014-source.zip'
+          destination = temp / 'native-design041-released-source'
+          if destination.exists() or destination.is_symlink():
+              raise FileExistsError('FRESH_ISOLATED_NATIVE_SOURCE_REQUIRED')
+          manifest = archive_manifest(archive)
+          with ZipFile(archive) as z:
+              checked_members(z)
+              z.extractall(destination)
+          expected = set(manifest['files']) | {'SOURCE_MANIFEST.json'}
+          actual = {p.relative_to(destination).as_posix() for p in destination.rglob('*') if p.is_file()}
+          if actual != expected or json.loads((destination / 'SOURCE_MANIFEST.json').read_text()) != manifest:
+              raise ValueError('ISOLATED_SOURCE_SNAPSHOT_MISMATCH')
+          if any((p / '.git').exists() for p in (destination, *destination.parents)):
+              raise ValueError('ISOLATED_SOURCE_MUST_NOT_HAVE_GIT')
+          print(json.dumps({'scope':'isolated_source_for_synthetic_service_fixture_generation',
+                            'phase':'published', 'files':len(manifest['files']),
+                            'source_sha256':manifest['executing_source']['sha256']},sort_keys=True))
+          PY_NATIVE_SOURCE
       - name: Independently exercise native design041 on actual downloaded published bytes
-        working-directory: ${{ runner.temp }}/downloaded-release-operation/source
+        id: released_native_design
+        working-directory: ${{ runner.temp }}/native-design041-released-source
         run: |
           /usr/bin/time -f 'RELEASED_DESIGN_REGRESSIONS cpu_user=%U cpu_system=%S wall=%e' python -B -m unittest -v tests.test_connected_design_flywheel041
           /usr/bin/time -f 'RELEASED_DESIGN_DEMO cpu_user=%U cpu_system=%S wall=%e' python -B -m connected_enterprise.design_flywheel demo --output "$RUNNER_TEMP/native-design041-actual-public"
           /usr/bin/time -f 'RELEASED_DESIGN_VERIFY cpu_user=%U cpu_system=%S wall=%e' python -B -m connected_enterprise.design_flywheel verify --output "$RUNNER_TEMP/native-design041-actual-public"
       - name: Seal immutable source-bound key-free released native design receipt
+        id: native_seal
         run: |
           python scripts/qualify_native_design_public_release.py seal \
             --assets "$RUNNER_TEMP/actual-release-download" \
             --source-commit "$GITHUB_SHA" \
             --source "$RUNNER_TEMP/downloaded-release-operation/source" \
             --public "$RUNNER_TEMP/native-design041-actual-public/PUBLIC.json" \
+            --download-receipt "$RUNNER_TEMP/RELEASE_DOWNLOAD.json" \
             --receipt "$RUNNER_TEMP/NATIVE_DESIGN041_RELEASE_RECEIPT.json" \
             --public-copy "$RUNNER_TEMP/NATIVE_DESIGN041_PUBLIC.json"
       - name: Retain only key-free actual released native feature evidence
-        if: always()
+        if: always() && steps.operation.outcome == 'success' && steps.released_native_design.outcome == 'success' && steps.native_seal.outcome == 'success'
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: native-design041-released-${{ github.sha }}-attempt-${{ github.run_attempt }}
@@ -198,7 +299,7 @@ jobs:
             ${{ runner.temp }}/NATIVE_DESIGN041_RELEASE_RECEIPT.json
             ${{ runner.temp }}/NATIVE_DESIGN041_PUBLIC.json
             ${{ runner.temp }}/RELEASE_DOWNLOAD.json
-          if-no-files-found: warn
+          if-no-files-found: error
       - name: Operate public quote admission from the actual downloaded source
         id: released_public_quote
         working-directory: ${{ runner.temp }}/downloaded-release-operation/source
