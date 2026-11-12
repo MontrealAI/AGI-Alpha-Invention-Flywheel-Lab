@@ -1,0 +1,50 @@
+name: Market identifiability 076 (public metadata, synthetic witness)
+on:
+  pull_request:
+    paths:
+      - 'experiments/market_identifiability076/**'
+      - 'tests/test_market_identifiability076.py'
+      - '.github/workflows/market-identifiability076.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  public-data-information-bound:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record platform job start before checkout
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - name: Checkout exact candidate
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - name: Use included Python 3.12
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Verify preregistration identity
+        run: |
+          test "$(git hash-object experiments/market_identifiability076/PREREGISTRATION.json)" = 48edacd0134bda2ca92cdd4340590b268de05bc6
+          test "$(git rev-parse HEAD)" = "${{ github.event.pull_request.head.sha || github.sha }}"
+      - name: Run six adversarial source-bound tests
+        run: python3 -m unittest discover -v -s tests -p 'test_market_identifiability076.py'
+      - name: Produce independently inspectable refusal certificate
+        run: |
+          python3 -m experiments.market_identifiability076.proof --output "$RUNNER_TEMP/market076.json"
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          r=json.loads((Path(os.environ["RUNNER_TEMP"])/"market076.json").read_text())
+          assert r["decision"]=="NO_DEPLOY" and r["world_count"]==2
+          assert r["both_worlds_same_public_input"] and not r["public_only_identifiability"]
+          assert r["native_account_run"] is False and r["collected_revenue_usd"]==0
+          assert r["target_3000000000_achieved"] is False
+          with open(os.environ["GITHUB_STEP_SUMMARY"],"a") as f:
+              f.write("## Market076 conditional impossibility witness\n")
+              f.write("One preregistered synthetic pair, same public CMS-shaped aggregates, different private duplicate-ID truth.\n")
+              f.write("Decision: NO_DEPLOY. Real buyers: 0, account operation: none, native profit: null.\n")
+              f.write("This is NOT a clinical fraud verdict, buyer data permission, purchased contract or model advantage.\n")
+          PY
