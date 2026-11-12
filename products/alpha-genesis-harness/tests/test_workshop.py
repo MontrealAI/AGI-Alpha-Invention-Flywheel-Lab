@@ -110,6 +110,13 @@ class WorkshopTests(unittest.TestCase):
         self.assertEqual(first["docket"]["status"], "admitted")
         with self.assertRaises(BridgeError):
             workshop.register(service, dict(authored_request("2"), inherit=first["id"], loop="successor"))
+        with self.assertRaisesRegex(BridgeError, "fresh independent"):
+            workshop.register(service, dict(authored_request("5", (1.0, 2.0, 90317.0)), inherit=first["id"], loop="successor"))
+        new_interface = authored_request("6", (14, 16, 19))
+        for case in new_interface["cases"]:
+            case["expected"] = {"different": case["expected"]["result"]}
+        with self.assertRaisesRegex(BridgeError, "does not cover this scope"):
+            workshop.register(service, dict(new_interface, inherit=first["id"], loop="successor"))
         second = workshop.register(service, dict(authored_request("3", (14, 16, 19)), inherit=first["id"], loop="successor"))
         self.assertEqual(second["docket"]["status"], "open")
         self.assertEqual(service.step(second["id"])["status"], "complete")

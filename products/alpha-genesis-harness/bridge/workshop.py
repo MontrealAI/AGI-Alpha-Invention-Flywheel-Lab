@@ -13,7 +13,7 @@ import zipfile
 from .adapters import BridgeError
 from .instruments import LOADED_SOURCE_SHA256 as EVALUATOR_SHA256, finite, strict_portable_json
 from . import workshop_protocol as protocol
-from .workflows import RUN, _regular, digest, encoded, now, require
+from .workflows import RUN, _regular, digest, encoded, now, portable_digest, require
 
 REQUEST_ID = re.compile(r"[0-9a-f]{32}\Z")
 CONSTRUCTION_SCOPE = "bounded-json/v1"
@@ -65,8 +65,8 @@ def require_compatible(state, prior):
     current, earlier = state.get("workshop"), prior["workshop"]
     require(current and current["scope"] == earlier["scope"] and current["family"] == earlier["family"],
             "The previous capability does not cover this scope.", "WORKSHOP_SCOPE")
-    old_inputs = {digest(c["input"]) for c in prior["spec"]["acceptance"]}
-    new_inputs = {digest(c["input"]) for c in state["spec"]["acceptance"]}
+    old_inputs = {portable_digest(c["input"]) for c in prior["spec"]["acceptance"]}
+    new_inputs = {portable_digest(c["input"]) for c in state["spec"]["acceptance"]}
     require(bool(new_inputs) and new_inputs.isdisjoint(old_inputs),
             "A successor needs fresh independent cases, disjoint from the previous qualification.", "WORKSHOP_SCOPE")
 
@@ -172,9 +172,10 @@ def _definition(data):
             except ValueError as error:
                 raise BridgeError("WORKSHOP_CASES", str(error)) from None
             rows.append({"id": f"U{index:02}", **case})
+        interfaces = sorted({(tuple(sorted(row["input"])), tuple(sorted(row["expected"]))) for row in rows})
         definition = {
             "contract": "Construct instrument.json for the operator's declared input/output contract in Mission details.",
-            "scope": CONSTRUCTION_SCOPE + ":" + digest(sorted(rows[0]["input"])),
+            "scope": CONSTRUCTION_SCOPE + ":" + digest(interfaces),
             "uncertainty": "Does the new instrument satisfy the independently supplied examples?",
             "routes": ["Use an existing tool", "Construct a bounded instrument", "Gather missing evidence"],
             "sources": [], "limits": "Operator-authored cases and source descriptions. External validity has not been inferred.",
