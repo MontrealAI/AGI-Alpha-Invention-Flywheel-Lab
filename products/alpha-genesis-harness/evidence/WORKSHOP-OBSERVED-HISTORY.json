@@ -1,0 +1,322 @@
+{
+  "schema": "alpha-genesis/workshop-observed-history/v1",
+  "scope": "Synthetic public qualification inputs. Historical failures are preserved under their original source; runtime source identities are in each native proof bundle.",
+  "attempts": [
+    {
+      "experiment": "first-live",
+      "local_git_revision": "d454512d00a618374a6e25f58846c068c11bedb3",
+      "reported_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+      "model_sha256": "2fde00ce69dd4899c70d020845e2638353015bba0fdf161b3eb965f2bca4464e",
+      "runtime_archive_sha256": "909eef25cd53e6601c8a07c866d8dbb2983e74177088d55182137a8fb8255d62",
+      "cases": [
+        {
+          "family": "foundry",
+          "terminal_status": "exhausted",
+          "accepted": 0,
+          "planned": 18,
+          "standalone_replay_exit": 1,
+          "wall_seconds": 423.56,
+          "model_calls_completed": 3,
+          "proof_bundle_sha256": "49087249c119c4f54e950743f46cb6e224c60569ab6f4498b1128853f3526ce1"
+        },
+        {
+          "family": "contrast",
+          "terminal_status": "paused",
+          "accepted": 0,
+          "planned": 9,
+          "standalone_replay_exit": null,
+          "wall_seconds": 188.31,
+          "model_calls_completed": 1,
+          "proof_bundle_sha256": "d2e31ea7a48e7cea4600da50a23ec26d81c38e3fa0206d5a56a3ca746612c538"
+        },
+        {
+          "family": "arrangement",
+          "terminal_status": "paused",
+          "accepted": 0,
+          "planned": 10,
+          "standalone_replay_exit": null,
+          "wall_seconds": 0.52,
+          "model_calls_completed": 0,
+          "proof_bundle_sha256": "522e1448a0a620bed37b1ae9b07ae2552c6d5eece0a4a6f18ea339e99ddd3c13"
+        },
+        {
+          "family": "custom",
+          "terminal_status": "paused",
+          "accepted": 0,
+          "planned": 4,
+          "standalone_replay_exit": null,
+          "wall_seconds": 0.53,
+          "model_calls_completed": 0,
+          "proof_bundle_sha256": "fb3fe01951335aa69dbc66e53bc854104808ad968614f44b8c98cad16eeb5af6"
+        }
+      ],
+      "foundry_first_response": {
+        "response": "{\"actions\":[{\"name\":\"instrument.json\",\"spec\":{\"bindings\":{\"midpoint\":{\"args\":[{\"field\":\"low\"},{\"field\":\"high\"}],\"op\":\"add\"},\"half_span\":{\"args\":[{\"field\":\"high\"},{\"field\":\"low\"}],\"op\":\"sub\"},\"span\":{\"args\":[{\"field\":\"half_span\"},{\"op\":\"mul\",\"args\":[{\"field\":\"2\"}]}],\"op\":\"mul\"},\"corrected\":{\"args\":[{\"field\":\"reading\"},{\"field\":\"low\"},{\"field\":\"high\"}],\"op\":\"div\"},\"is_supported\":{\"args\":[{\"field\":\"observed\"},{\"field\":\"trusted\"},{\"field\":\"affine\"}],\"op\":\"and\"},\"is_in_span\":{\"args\":[{\"field\":\"midpoint\"},{\"field\":\"low\"},{\"field\":\"high\"}],\"op\":\"and\"},\"is_mid_within_residual\":{\"args\":[{\"field\":\"midpoint\"},{\"field\":\"low\"},{\"field\":\"high\"}],\"op\":\"and\"},\"is_defect\":{\"args\":[{\"field\":\"corrected\"},{\"field\":\"lower\"},{\"field\":\"upper\"}],\"op\":\"lt\"},\"is_drift\":{\"args\":[{\"field\":\"low\"},{\"field\":\"maxDrift\"}],\"op\":\"gt\"},\"is_drift_high\":{\"args\":[{\"field\":\"high\"},{\"field\":\"maxDrift\"}],\"op\":\"gt\"},\"is_supported_and_span\":{\"args\":[{\"field\":\"is_supported\"},{\"field\":\"high\"},{\"field\":\"low\"}],\"op\":\"and\"},\"is_span_valid\":{\"args\":[{\"field\":\"high\"},{\"field\":\"low\"},{\"field\":\"minSpan\"}],\"op\":\"gte\"},\"is_mid_valid\":{\"args\":[{\"field\":\"midpoint\"},{\"field\":\"maxResidual\"}],\"op\":\"lte\"},\"status\":{\"op\":\"if\",\"args\":[{\"field\":\"is_supported_and_span\"},{\"field\":\"is_span_valid\"},{\"field\":\"is_mid_valid\"},{\"field\":\"is_mid_within_residual\"},{\"field\":\"supported\"},{\"field\":\"unsupported\"}]},\"corrected_output\":{\"op\":\"if\",\"args\":[{\"field\":\"is_supported_and_span\"},{\"field\":\"corrected\"},{\"field\":\"null\"}]},\"defect_output\":{\"op\":\"if\",\"args\":[{\"field\":\"is_supported_and_span\"},{\"field\":\"is_defect\"},{\"field\":\"null\"}]},\"drift_output\":{\"op\":\"if\",\"args\":[{\"field\":\"is_supported_and_span\"},{\"field\":\"is_drift\"},{\"field\":\"null\"}]}},\"inputs\":[\"observed\",\"trusted\",\"affine\",\"low\",\"mid\",\"high\",\"reading\",\"lower\",\"upper\",\"maxResidual\",\"maxDrift\",\"minSpan\"],\"outputs\":{\"status\":{\"ref\":\"status\"},\"corrected\":{\"ref\":\"corrected_output\"},\"defect\":{\"ref\":\"defect_output\"},\"drift\":{\"ref\":\"drift_output\"}}},\"tool\":\"construct_instrument\"}],\"done\":true,\"summary\":\"A viable ordinary route would fit a linear model using endpoint readings (low, high) to estimate the true value and check if the reading falls within a defined [lower, upper] band. This approach assumes the sensor behavior is linear and relies on endpoint calibration. However, it lacks validation of the midpoint, which may be affected by drift. Our route introduces an independent midpoint check (mid) to verify the linearity assumption: if the midpoint deviates from the expected (low+high)/2 by more than maxResidual, it signals potential sensor drift. This independent check strengthens the distinction between true defects and sensor drift, ensuring robustness against non-linear or drifting behavior. Only when all three booleans (observed, trusted, affine) are true, the span meets minSpan, and the midpoint is within residual bounds is the case considered supported. In such cases, corrected value is computed and defect/drift flags are evaluated. Otherwise, outputs are null.\"}",
+        "response_sha256": "0b65c4a5daf9ec8b71b6f9afd2c995389e02cfadb7344e35a39d9ee03e5019a1",
+        "reported_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+        "usage": {
+          "input_tokens": 609,
+          "output_tokens": 714
+        }
+      },
+      "foundry_first_check": {
+        "accepted": 0,
+        "checked": 18,
+        "first_error": "if needs three operands."
+      },
+      "runtime_sources_sha256": {
+        "instruments.py": "6f9716d050abcb59bf8941a372b37a944568c75d649aecd1683e3ed31803ff54",
+        "workflow_schemas.py": "04790639d8ac5eeaddb17f0ed0d4cc0ba088b1985dc733e322b2140973790b6b",
+        "workflows.py": "ee954d11bdc640646296962c17887b4d41aa84aa772127dd8fb9634195b0a656",
+        "workshop.py": "7d1a741937f8375d7753f73c2ee370cfb0c452cb741ffcd369081bf4c787a80e",
+        "workshop_protocol.py": "d5507381757fce3033c5d45a4a3f5039a7381ca08361061cd36c44f8c39e7e29"
+      }
+    },
+    {
+      "experiment": "formula-live",
+      "local_git_revision": "08c5b90343bf2f57aaa62c2ab8dfc8f668442287",
+      "reported_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+      "model_sha256": "2fde00ce69dd4899c70d020845e2638353015bba0fdf161b3eb965f2bca4464e",
+      "runtime_archive_sha256": "909eef25cd53e6601c8a07c866d8dbb2983e74177088d55182137a8fb8255d62",
+      "cases": [
+        {
+          "family": "foundry",
+          "terminal_status": "exhausted",
+          "accepted": 0,
+          "planned": 18,
+          "standalone_replay_exit": 1,
+          "wall_seconds": 108.1,
+          "model_calls_completed": 3,
+          "proof_bundle_sha256": "a77d19f3df7fd4489c8e062f02001dd4bbc010072a6e7fe39bc4ac6b8e4af83f"
+        },
+        {
+          "family": "contrast",
+          "terminal_status": "exhausted",
+          "accepted": 0,
+          "planned": 9,
+          "standalone_replay_exit": 1,
+          "wall_seconds": 101.81,
+          "model_calls_completed": 3,
+          "proof_bundle_sha256": "f9f5b2510a45d424130cf072ba15c5feca26b742f54b5d9dc1c9e58919585f4d"
+        },
+        {
+          "family": "arrangement",
+          "terminal_status": "paused",
+          "accepted": 0,
+          "planned": 10,
+          "standalone_replay_exit": 1,
+          "wall_seconds": 65.91,
+          "model_calls_completed": 1,
+          "proof_bundle_sha256": "3a5a77a691d4d8d956dcf607e0388f0f839261c2e3632223063c4ec5cb9f3fd9"
+        },
+        {
+          "family": "custom",
+          "terminal_status": "paused",
+          "accepted": 0,
+          "planned": 4,
+          "standalone_replay_exit": null,
+          "wall_seconds": 0.63,
+          "model_calls_completed": 0,
+          "proof_bundle_sha256": "96f9ca4ea2ebf8fac706cca48f4a02eab1c6691eecf89c5b79103c2d900e5429"
+        }
+      ]
+    },
+    {
+      "experiment": "constrained-live",
+      "local_git_revision": "24cdaf334765a0d072b58ce59b155c4f1eb429f9",
+      "reported_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+      "model_sha256": "2fde00ce69dd4899c70d020845e2638353015bba0fdf161b3eb965f2bca4464e",
+      "runtime_archive_sha256": "909eef25cd53e6601c8a07c866d8dbb2983e74177088d55182137a8fb8255d62",
+      "cases": [
+        {
+          "family": "foundry",
+          "terminal_status": "exhausted",
+          "accepted": 0,
+          "planned": 18,
+          "standalone_replay_exit": 1,
+          "wall_seconds": 149.21,
+          "model_calls_completed": 3,
+          "proof_bundle_sha256": "89863466c881ad11b52204d834113f2d8f5f9a1912f1b037b467ea116e6b24da"
+        },
+        {
+          "family": "contrast",
+          "terminal_status": "paused",
+          "accepted": 0,
+          "planned": 9,
+          "standalone_replay_exit": 1,
+          "wall_seconds": 81.57,
+          "model_calls_completed": 2,
+          "proof_bundle_sha256": "b504a332b98de02057147c8487202d5f09a62e3964a0a432d5c09687dae08a8f"
+        },
+        {
+          "family": "arrangement",
+          "terminal_status": "paused",
+          "accepted": 0,
+          "planned": 10,
+          "standalone_replay_exit": null,
+          "wall_seconds": 0.53,
+          "model_calls_completed": 0,
+          "proof_bundle_sha256": "3574c36851a4063608e3f701e323335691dc2dcf4c1971db18a1be35465e0103"
+        },
+        {
+          "family": "custom",
+          "terminal_status": "paused",
+          "accepted": 0,
+          "planned": 4,
+          "standalone_replay_exit": null,
+          "wall_seconds": 0.52,
+          "model_calls_completed": 0,
+          "proof_bundle_sha256": "8442327438a73d838a89ff8446e6e8eaa64178f5f417d181eb79ebc933b18e22"
+        }
+      ]
+    },
+    {
+      "experiment": "portable-live",
+      "local_git_revision": "0463eb6bb4bcf8aae4af2d0a20b5301533885796",
+      "reported_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+      "model_sha256": "2fde00ce69dd4899c70d020845e2638353015bba0fdf161b3eb965f2bca4464e",
+      "runtime_archive_sha256": "909eef25cd53e6601c8a07c866d8dbb2983e74177088d55182137a8fb8255d62",
+      "cases": [
+        {
+          "family": "foundry",
+          "terminal_status": "complete",
+          "accepted": 18,
+          "planned": 18,
+          "standalone_replay_exit": 0,
+          "wall_seconds": 45.35,
+          "model_calls_completed": 1,
+          "proof_bundle_sha256": "c7d1025081fc6ff2c4b3eaaf9c07a58e7198afb102c4bf4c92d931a3b4b71af6"
+        },
+        {
+          "family": "foundry-fresh",
+          "terminal_status": "complete",
+          "accepted": 6,
+          "planned": 6,
+          "standalone_replay_exit": 0,
+          "wall_seconds": 55.85,
+          "model_calls_completed": 1,
+          "proof_bundle_sha256": "d82e48f01249cdc20f829e32df53ce1528f7fbfa91ef4ba95948cb9c9c70a3d9"
+        },
+        {
+          "family": "contrast",
+          "terminal_status": "exhausted",
+          "accepted": 0,
+          "planned": 9,
+          "standalone_replay_exit": 1,
+          "wall_seconds": 118.99,
+          "model_calls_completed": 3,
+          "proof_bundle_sha256": "433dc5ae61fa280f413354f5b7bea191d8f923965811f4f58b5e38f56dcb1eaa"
+        },
+        {
+          "family": "arrangement",
+          "terminal_status": "exhausted",
+          "accepted": 5,
+          "planned": 10,
+          "standalone_replay_exit": 1,
+          "wall_seconds": 120.33,
+          "model_calls_completed": 3,
+          "proof_bundle_sha256": "bbb50f99092c295774847188b90607ddb75ae47a65bbf82c6625fa454d7f794b"
+        },
+        {
+          "family": "custom",
+          "terminal_status": "complete",
+          "accepted": 4,
+          "planned": 4,
+          "standalone_replay_exit": 0,
+          "wall_seconds": 11.71,
+          "model_calls_completed": 1,
+          "proof_bundle_sha256": "048d21b1bb68476051a7e55671144df1cab028d4734b934621e345cb1255a7c6"
+        }
+      ],
+      "foundry_first_response": {
+        "response": "{\n  \"inputs\": [\n    \"observed\",\n    \"trusted\",\n    \"affine\",\n    \"low\",\n    \"mid\",\n    \"high\",\n    \"lower\",\n    \"upper\",\n    \"maxResidual\",\n    \"maxDrift\",\n    \"minSpan\",\n    \"reading\"\n  ],\n  \"bindings\": {\n    \"span\": \"max(high, low) - min(high, low)\",\n    \"mid_center\": \"(low + high) / 2\",\n    \"span_ge_minSpan\": \"span >= minSpan\",\n    \"reading_in_range\": \"reading >= low && reading <= high\",\n    \"mid_close_to_center\": \"abs(mid - mid_center) <= maxResidual\",\n    \"all_booleans_true\": \"observed && trusted && affine\",\n    \"supported\": \"all_booleans_true && span_ge_minSpan && reading_in_range && mid_close_to_center\",\n    \"corrected\": \"choose(supported, 10 * (reading - low) / (high - low), None)\",\n    \"defect\": \"choose(supported, corrected < lower || corrected > upper, None)\",\n    \"drift\": \"choose(supported, abs(low) > maxDrift || abs(high - 10) > maxDrift, None)\"\n  },\n  \"outputs\": {\n    \"status\": \"choose(supported, 'supported', 'unsupported')\",\n    \"corrected\": \"corrected\",\n    \"defect\": \"defect\",\n    \"drift\": \"drift\"\n  },\n  \"summary\": \"The ordinary route uses simple linear regression to fit a baseline and detect deviations. Our route directly computes corrected values using normalized sensor readings and strict physical constraints (midpoint proximity, span, and bounds), ensuring alignment with the physical standards (0, 5, 10). It avoids regression assumptions, instead relying on explicit geometric and logical checks, making it more robust against sensor drift and better aligned with the physical model. This approach is more precise and directly addresses the contract's requirements without overfitting or relying on external assumptions.\"\n}",
+        "response_sha256": "62d9d928122ec72cd2bb1bfed0ff5959cc40bd03ce80760023191bb93d94eabb",
+        "reported_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+        "usage": {
+          "input_tokens": 606,
+          "output_tokens": 428
+        }
+      },
+      "foundry_first_check": {
+        "accepted": 12,
+        "checked": 12,
+        "first_error": null
+      },
+      "runtime_sources_sha256": {
+        "adapters.py": "a05127970eb11bb08cc98ed7ef9e05f9a723f51c66f9a5bfaa9f2242bb6275a6",
+        "instruments.py": "103ccefb16b2923d04677b56d3f2178e63346855d533fb897b946f68cbd64bb0",
+        "server.py": "8071198cc85d9738718e77be6268b618b886759f38fb21fa41e0a44a59e8e169",
+        "services.py": "41b71b3f946f0912898558995f2c83f1f09b0cb2d5f9203bfecbef301de4a081",
+        "workflow_schemas.py": "74951ad4dedc2519a64ae8a8853da2fbe83c642e73ad12c36542a01f8b4ba58b",
+        "workflows.py": "f2796aeec4ccf73c164a94445ca565b60844b294512e51691ce8f9fc96eaa836",
+        "workshop.py": "0e2e8575a51689ddddb9adf6e1aae88755965629dd003d1ca7b64533c74aee29",
+        "workshop_protocol.py": "8c250937bc13003041ab97776afaca51576c2dbee03cad04fdc83f13439691fa"
+      }
+    },
+    {
+      "experiment": "repaired-live",
+      "local_git_revision": "e251a60c109164810fea51e371a02bd28f719e3d",
+      "reported_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+      "model_sha256": "2fde00ce69dd4899c70d020845e2638353015bba0fdf161b3eb965f2bca4464e",
+      "runtime_archive_sha256": "909eef25cd53e6601c8a07c866d8dbb2983e74177088d55182137a8fb8255d62",
+      "cases": [
+        {
+          "family": "foundry",
+          "terminal_status": "complete",
+          "accepted": 18,
+          "planned": 18,
+          "standalone_replay_exit": 0,
+          "wall_seconds": 40.59,
+          "model_calls_completed": 1,
+          "proof_bundle_sha256": "bf93cd740475f24229c7f7dcaee513a324f059bf9b1c1768cd04e33e3898b728"
+        },
+        {
+          "family": "foundry-fresh",
+          "terminal_status": "complete",
+          "accepted": 6,
+          "planned": 6,
+          "standalone_replay_exit": 0,
+          "wall_seconds": 57.36,
+          "model_calls_completed": 1,
+          "proof_bundle_sha256": "d552838a9bf744e7de14cdfac637b8378919537f39ea23cb68b36cf279b19852"
+        },
+        {
+          "family": "contrast",
+          "terminal_status": "exhausted",
+          "accepted": 4,
+          "planned": 9,
+          "standalone_replay_exit": 1,
+          "wall_seconds": 101.86,
+          "model_calls_completed": 3,
+          "proof_bundle_sha256": "061a7d800bd5c53abee3207fafb41a6ac97d44e1c867c0716443dca02d84fef7"
+        },
+        {
+          "family": "arrangement",
+          "terminal_status": "paused",
+          "accepted": 0,
+          "planned": 10,
+          "standalone_replay_exit": null,
+          "wall_seconds": 13.25,
+          "model_calls_completed": 0,
+          "proof_bundle_sha256": "7816e91c17d63e0ad0dca3b4e022b38934b3b967992f6b6d3d36b29b09127bdc"
+        },
+        {
+          "family": "custom",
+          "terminal_status": "paused",
+          "accepted": 0,
+          "planned": 4,
+          "standalone_replay_exit": null,
+          "wall_seconds": 0.58,
+          "model_calls_completed": 0,
+          "proof_bundle_sha256": "0cfad653e9e788e46481f3b8cdb72b4ed2cd34d5f10b8fe18fe9767caf29dfc9"
+        }
+      ]
+    }
+  ],
+  "lesson": [
+    "The initial expression tree contained an invalid conditional. A formula interface reduced the syntax burden. Early model proposals still used malformed envelopes and unsupported boolean notation.",
+    "The host now attaches a single construction tool to a strict proposal schema and the evaluator accepts tokenized boolean aliases. The three-adapter foundry passed 18 checks and standalone replay. The exact instrument bytes passed six fresh logger checks.",
+    "The standard-library regression and exact interpolation controls also passed the foundry cases. The raw sample alone aliases two different decisions. No measured method or cost advantage follows.",
+    "Earlier contrast and arrangement candidates missed thresholds, guards or liquidity semantics. Later transport interruptions have unknown upstream completion."
+  ]
+}

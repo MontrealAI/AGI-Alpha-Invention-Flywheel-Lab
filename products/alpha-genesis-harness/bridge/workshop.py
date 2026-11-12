@@ -71,12 +71,19 @@ def require_compatible(state, prior):
             "A successor needs fresh independent cases, disjoint from the previous qualification.", "WORKSHOP_SCOPE")
 
 
-def blind_feedback(verification):
-    rows = verification["checks"]
+def development_feedback(state):
+    result = state["verification"]
+    rows = result["checks"]
     errors = Counter(row["error"] for row in rows if row.get("error"))
-    return "Independent checks: %d/%d passed. %s" % (
+    summary = "Independent checks: %d/%d passed. %s" % (
         sum(row["passed"] for row in rows), len(rows),
         "; ".join(f"{count}× {error}" for error, count in errors.most_common(3)))
+    if state["workshop"]["family"] == "custom" or result.get("stage") != "development":
+        return summary
+    examples = [{"input": case["input"], "actual": row["actual"], "expected": case["expected"]}
+                for case, row in zip(state["spec"]["acceptance"], rows)
+                if not row["passed"] and "actual" in row]
+    return summary + ("\nSynthetic development counterexamples: " + encoded(examples[:2]).decode() if examples else "")
 
 
 def construction_response(text, existing):
@@ -114,7 +121,7 @@ def model_prompt(state, role, artifacts):
                 'Return only JSON {"verdict":"accept" or "revise","feedback":"specific reason"}. '
                 'A model verdict grants no authority.\nUNTRUSTED_DATA\n' + encoded({
                     "contract": spec["context"], "candidate": artifacts,
-                    "independent_feedback": blind_feedback(state["verification"]),
+                    "independent_feedback": development_feedback(state),
                 }).decode())
     example = {"inputs": ["a", "b"], "bindings": {"total": "a + b"},
                "outputs": {"sum": "choose(total >= 0, total, None)"},
@@ -125,7 +132,7 @@ def model_prompt(state, role, artifacts):
             "Do not request credentials, shell, external actions, a changed evaluator or broader authority. "
             "Return one JSON object with exactly inputs, bindings, outputs, and summary. No actions or tool wrapper. "
             "Bindings and outputs map names directly to formula strings. Formulas support declared input names, "
-            "local bindings, numbers, quoted strings, True, False, None, + - * /, == < <= > >=, "
+            "local bindings, numbers, quoted strings, True/true, False/false, None/null, + - * /, == < <= > >=, "
             "and/or/not (&& and || are also accepted), abs(x), min(a,b), max(a,b), sum(list), count(list), and choose(condition, yes, no). "
             "choose evaluates only its selected branch. Boolean and/or evaluate all operands. "
             "Use bindings for common calculations and exact output names from the public contract. "
@@ -202,6 +209,8 @@ def _model(service, data):
 def register(service, data):
     allowed = {"request_id", "family", "objective", "context", "provider", "model", "consent", "fresh", "inherit", "loop", "cases"}
     require(not set(data) - allowed, "Unexpected mission fields.")
+    material = encoded(data).decode()
+    require(service.runtime.redact(material) == material, "Remove the configured credential from the mission before proceeding.", "WORKSHOP_SECRET")
     key = data.get("request_id")
     require(isinstance(key, str) and REQUEST_ID.fullmatch(key), "Invalid mission request identity.")
     ident = "wf_" + digest({"workshop_request": key})[:24]

@@ -45,6 +45,7 @@ def _json_equal(left, right):
 _BINARY = {ast.Add: "add", ast.Sub: "sub", ast.Mult: "mul", ast.Div: "div"}
 _COMPARISONS = {ast.Eq: "eq", ast.Lt: "lt", ast.LtE: "lte", ast.Gt: "gt", ast.GtE: "gte"}
 _FUNCTIONS = {"abs", "min", "max", "sum", "count", "choose"}
+_JSON_LITERALS = {"true": True, "false": False, "null": None}
 
 
 def compile_formula(source, bindings):
@@ -81,6 +82,8 @@ def compile_formula(source, bindings):
         if isinstance(node, ast.Constant) and type(node.value) in {type(None), bool, int, float, str}:
             return finite(node.value)
         if isinstance(node, ast.Name):
+            if node.id in _JSON_LITERALS:
+                return _JSON_LITERALS[node.id]
             return {"ref" if node.id in bindings else "field": node.id}
         if isinstance(node, ast.List):
             return [child(item) for item in node.elts]

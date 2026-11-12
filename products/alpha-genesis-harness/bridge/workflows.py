@@ -768,6 +768,7 @@ class WorkflowService:
                         text = text[7:-3].strip()
                     if state.get("workshop") and role == "builder":
                         from .workshop import construction_response
+                        require(self.runtime.redact(text) == text, "The proposal contained a configured credential.", "WORKSHOP_SECRET")
                         response = construction_response(text, "instrument.json" in state["artifacts"])
                     else:
                         response = strict_json(text)
@@ -872,8 +873,8 @@ class WorkflowService:
         else:
             state["phase"] = "builder"
             if state.get("workshop"):
-                from .workshop import blind_feedback
-                state["feedback"] += "\n" + blind_feedback(state["verification"])
+                from .workshop import development_feedback
+                state["feedback"] += "\n" + development_feedback(state)
             else:
                 state["feedback"] += "\nDeterministic acceptance: " + encoded(state["verification"]).decode()
 

@@ -85,12 +85,19 @@ An ordinary regression with the same independent midpoint check is a strong comp
 
 CONTRAST_CONTRACT = """Construct instrument.json for a preflight of WCAG 2.2 criterion 1.4.3.
 Inputs: sourceCurrent, measured, largeText, logo, incidental (booleans); ratio (number).
-A known current criterion is required even when an exception appears to apply. A logo/logotype or
-independently classified incidental text is an exception and needs no ratio. Incidental here means
+Decide in this order:
+1. If sourceCurrent is false, finding is review and minimum is null.
+2. Otherwise logo or incidental makes finding exception and minimum null. Incidental here means
 an inactive control, pure decoration, text invisible to everyone, or text incidental to a picture
-with significant other visual content. Brand styling alone is not an exception. Ordinary text needs
-a minimum of 4.5, large text a minimum of 3. Do not round a ratio. Unmeasured or impossible
-ratios (outside [1,21]) require review for non-exempt text.
+with significant other visual content. Brand styling alone is not an exception.
+3. Otherwise an unmeasured ratio or a ratio outside [1,21] makes finding review and minimum null.
+4. Otherwise minimum is 3 for largeText and 4.5 for ordinary text. Finding is pass exactly when
+ratio >= minimum, else fail. Compare the unrounded ratio.
+Use one threshold binding so both outputs apply the same rule. A compact decision expression
+is choose(not sourceCurrent, 'review', choose(exempt, 'exception', choose(not usable,
+'review', choose(ratio >= threshold, 'pass', 'fail')))). Here exempt means logo or incidental
+and usable means measured and 1 <= ratio <= 21. The minimum is the threshold only when
+sourceCurrent and usable and not exempt. Large text still requires a ratio at least 3.
 Emit exactly {"finding":"review|exception|pass|fail","minimum":number or null}.
 The minimum is null for review or exception. This is a scoped preflight, not a whole-site audit."""
 
@@ -100,10 +107,14 @@ Inputs: costItems (array of all full-horizon nonnegative costs for the shared ro
 before delivery), laterPromises (uncollected and never available now), feeA/feeB, budgetA/budgetB,
 outsideA/outsideB (outside route cost of each participant), acceptsA/acceptsB (hypothetical acceptance),
 rightsReady, privacyReady (booleans). All money is integer cents with no separate ledger.
-The modeled full cost is sum(costItems). Per participant, the fee must fit both budget and outside
-option. Both must accept, rights/privacy and liquidity must pass, and modeled fees must cover full
-cost. Only then can a shared route be feasible; select it only if full cost is strictly less than
-separateCost. Otherwise prefer the separate-or-stop decision, which does not authorize spending.
+Calculate independent outputs first:
+- fullCost = sum(costItems).
+- liquid = cashNow >= cashDueNow. This output depends on these two inputs only.
+- voluntary = acceptsA and acceptsB and feeA <= budgetA and feeA <= outsideA
+  and feeB <= budgetB and feeB <= outsideB.
+Select shared exactly when liquid and voluntary and rightsReady and privacyReady
+and feeA + feeB >= fullCost and fullCost < separateCost.
+Otherwise select separate_or_stop. Neither result authorizes spending.
 Emit exactly {"fullCost":number,"liquid":boolean,"voluntary":boolean,"decision":"shared|separate_or_stop"}.
 Voluntary is the conjunction of both acceptances and both fee tests. Labels are conditional only."""
 

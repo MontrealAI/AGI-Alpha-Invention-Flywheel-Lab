@@ -6,6 +6,7 @@
   const el = id => document.getElementById('workshop-' + id);
   const copy = {
     title: ['The instrument workshop', 'L’atelier des instruments'],
+    openWorkshop: ['Open the instrument workshop', 'Ouvrir l’atelier des instruments'],
     intro: ['Give an ambition a testable outcome. Build an instrument, inspect the checks and take the result with you.', 'Donnez à votre ambition un résultat vérifiable. Construisez un instrument, examinez les essais et emportez le résultat.'],
     mission: ['Mission', 'Mission'], bench: ['Workbench', 'Atelier'], evidence: ['Evidence', 'Preuves'],
     ambition: ['What would you like to make possible?', 'Qu’aimeriez-vous rendre possible?'],
@@ -33,6 +34,8 @@
     pause: ['Pause', 'Mettre en pause'], resume: ['Resume', 'Reprendre'], cancel: ['Cancel', 'Annuler'],
     fresh: ['Prepare a fresh logger mission', 'Préparer une nouvelle mission de calibration'],
     export: ['Download instrument and proof', 'Télécharger l’instrument et les preuves'],
+    revoke: ['Revoke reuse', 'Révoquer la réutilisation'],
+    secret: ['Remove the configured credential from the mission before continuing.', 'Retirez l’identifiant confidentiel configuré de la mission avant de continuer.'],
     offline: ['Offline', 'Hors ligne'], manual: ['Open the manual workspace', 'Ouvrir l’espace de travail manuel'],
     local: ['Local model', 'Modèle local'], api: ['Configured API', 'API configurée'],
     connected: ['Private connector', 'Connecteur privé'], checking: ['Checking the connector…', 'Vérification du connecteur…'],
@@ -174,6 +177,7 @@
     report(error.code === 'WORKSHOP_CONFLICT' ? 'conflict' :
       error.code === 'WORKSHOP_STALE' ? 'stale' :
       error.code === 'WORKSHOP_CONSENT' ? 'consentMissing' :
+      error.code === 'WORKSHOP_SECRET' ? 'secret' :
       error.code === 'WORKFLOW_BUSY' ? 'incomplete' :
       !token ? 'unavailable' : 'refused');
   }
@@ -202,6 +206,7 @@
   }
   function language() {
     root.querySelectorAll('[data-workshop]').forEach(n => { n.textContent = t(n.dataset.workshop); });
+    document.getElementById('go-workshop').textContent = t('openWorkshop');
     el('views').setAttribute('aria-label', french() ? 'Vues de l’atelier' : 'Workshop views');
     el('invitations').setAttribute('aria-label', french() ? 'Invitations de mission' : 'Mission invitations');
     if (el('model').options[0]) el('model').options[0].textContent = t('noModel');
@@ -237,6 +242,8 @@
     el('export').disabled = active || inProgress || !token;
     el('fresh').hidden = docket.status !== 'admitted' || m.family !== 'foundry' || m.fresh;
     el('fresh').disabled = !token || inProgress;
+    el('revoke').hidden = docket.status !== 'admitted';
+    el('revoke').disabled = !token || inProgress;
     // Polling should not announce identical text through the live region.
     const summaryKey = [m.revision, m.worker_active, docket.status, french()].join('/');
     if (summary.dataset.rendered !== summaryKey) {
@@ -313,10 +320,16 @@
   }
   async function request(action, payload) {
     if (!token) throw new Error('Disconnected');
-    const response = await fetch('/api/workshop/' + action, {
-      method: 'POST', cache: 'no-store', credentials: 'omit',
-      headers: {'Content-Type': 'application/json', 'X-Harness-Token': token}, body: JSON.stringify(payload),
-    });
+    let response;
+    try {
+      response = await fetch('/api/workshop/' + action, {
+        method: 'POST', cache: 'no-store', credentials: 'omit',
+        headers: {'Content-Type': 'application/json', 'X-Harness-Token': token}, body: JSON.stringify(payload),
+      });
+    } catch (error) {
+      token = null; providers = []; connection = 'unavailable'; renderSetup(); render();
+      throw error;
+    }
     if (!response.ok) {
       const reply = await response.json().catch(() => ({}));
       if (reply.error?.code === 'TOKEN') {
@@ -475,7 +488,7 @@
       inProgress = false; renderSetup(); render();
     }
   }
-  for (const action of ['pause', 'resume', 'cancel']) el(action).addEventListener('click', () => act(action));
+  for (const action of ['pause', 'resume', 'cancel', 'revoke']) el(action).addEventListener('click', () => act(action));
   el('export').addEventListener('click', () => act('bundle'));
   el('fresh').addEventListener('click', () => {
     inheritance = mission.id;
