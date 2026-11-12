@@ -124,6 +124,13 @@ class GovernanceImpact140(unittest.TestCase):
         for payload in (None, {}, {"systems": []}, []):
             with self.assertRaises(ValueError):
                 assess(payload)
+        with self.assertRaisesRegex(ValueError, "NONEMPTY_GOVERNANCE"):
+            assess({"systems": [], "requirements_before": [],
+                    "requirements_after": [], "evidence": []})
+        data = sample()
+        data["evidence"][0]["version"] = "never-registered"
+        with self.assertRaisesRegex(ValueError, "UNKNOWN_EVIDENCE_REQUIREMENT_VERSION"):
+            assess(data)
         data = sample()
         with tempfile.TemporaryDirectory() as tmp:
             src, dest = Path(tmp) / "in.json", Path(tmp) / "out.json"
