@@ -5,7 +5,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from products.governance_impact140.engine import assess, canonical, main, sha256
+from products.governance_impact140.engine import assess, canonical, main, sha256, verify_receipt
 
 
 def sample():
@@ -143,6 +143,33 @@ class GovernanceImpact140(unittest.TestCase):
             src.write_text('{"systems":[],"systems":[]}', encoding="utf-8")
             with self.assertRaisesRegex(ValueError, "DUPLICATE_JSON_FIELD"):
                 main(["--input", str(src), "--output", str(Path(tmp) / "fail.json")])
+
+    def test_external_receipt_anchor_rejects_rehashed_tampering_and_cross_input(self):
+        original = sample()
+        report = assess(original)
+        receipt_anchor = report["receipt_sha256"]
+        input_anchor = sha256(original)
+        self.assertTrue(verify_receipt(
+            report, anchored_receipt_sha256=receipt_anchor,
+            anchored_input_sha256=input_anchor))
+        tampered = copy.deepcopy(report)
+        tampered["findings"][0]["status"] = "met"
+        tampered["receipt_sha256"] = sha256(
+            {key: val for key, val in tampered.items() if key != "receipt_sha256"})
+        with self.assertRaisesRegex(ValueError, "RECEIPT_ANCHOR_MISMATCH"):
+            verify_receipt(tampered, anchored_receipt_sha256=receipt_anchor,
+                           anchored_input_sha256=input_anchor)
+        with self.assertRaisesRegex(ValueError, "INPUT_ANCHOR_MISMATCH"):
+            verify_receipt(report, anchored_receipt_sha256=receipt_anchor,
+                           anchored_input_sha256="0" * 64)
+        missing = copy.deepcopy(report)
+        del missing["receipt_sha256"]
+        with self.assertRaisesRegex(ValueError, "RECEIPT_ANCHOR_MISMATCH"):
+            verify_receipt(missing, anchored_receipt_sha256=receipt_anchor,
+                           anchored_input_sha256=input_anchor)
+        with self.assertRaisesRegex(ValueError, "EXTERNAL_SHA256_ANCHORS_REQUIRED"):
+            verify_receipt(report, anchored_receipt_sha256=receipt_anchor,
+                           anchored_input_sha256="untrusted")
 
     def test_change_without_version_bump_still_invalidates_evidence(self):
         data = sample()
