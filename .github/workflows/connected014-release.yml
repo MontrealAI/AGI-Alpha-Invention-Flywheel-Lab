@@ -36,8 +36,34 @@ jobs:
         run: python -m unittest discover -s tests -p 'test_genesis*.py' -v
       - name: Operate exact clean package, resume and independently audit public copy
         run: python scripts/qualify_connected014.py --smoke --output "$RUNNER_TEMP/connected014-qualified"
+      - name: Isolate prepublication native design source without modifying canonical extracted release
+        run: |
+          python -B - <<'PY_NATIVE_SOURCE'
+          import json, os
+          from pathlib import Path
+          from zipfile import ZipFile
+          from scripts.release_connected014 import archive_manifest, checked_members
+          temp = Path(os.environ['RUNNER_TEMP'])
+          archive = temp / 'connected014-qualified/connected014-source.zip'
+          destination = temp / 'native-design041-prepublication-source'
+          if destination.exists() or destination.is_symlink():
+              raise FileExistsError('FRESH_ISOLATED_NATIVE_SOURCE_REQUIRED')
+          manifest = archive_manifest(archive)
+          with ZipFile(archive) as z:
+              checked_members(z)
+              z.extractall(destination)
+          expected = set(manifest['files']) | {'SOURCE_MANIFEST.json'}
+          actual = {p.relative_to(destination).as_posix() for p in destination.rglob('*') if p.is_file()}
+          if actual != expected or json.loads((destination / 'SOURCE_MANIFEST.json').read_text()) != manifest:
+              raise ValueError('ISOLATED_SOURCE_SNAPSHOT_MISMATCH')
+          if any((p / '.git').exists() for p in (destination, *destination.parents)):
+              raise ValueError('ISOLATED_SOURCE_MUST_NOT_HAVE_GIT')
+          print(json.dumps({'scope':'isolated_source_for_synthetic_service_fixture_generation',
+                            'phase':'prepublication', 'files':len(manifest['files']),
+                            'source_sha256':manifest['executing_source']['sha256']},sort_keys=True))
+          PY_NATIVE_SOURCE
       - name: Qualify native design041 from the exact clean prepublication archive
-        working-directory: ${{ runner.temp }}/connected014-qualified/extracted-source
+        working-directory: ${{ runner.temp }}/native-design041-prepublication-source
         run: |
           python -B -m unittest -v tests.test_connected_design_flywheel041
           python -B -m connected_enterprise.design_flywheel demo --output "$RUNNER_TEMP/native-design041-prepublication"
@@ -220,9 +246,35 @@ jobs:
         id: operation
         run: |
           python scripts/release_connected014.py operate-download --assets "$RUNNER_TEMP/actual-release-download" --source-commit "$GITHUB_SHA" --output "$RUNNER_TEMP/downloaded-release-operation" --actual-release-download
+      - name: Isolate published native design source without modifying canonical extracted release
+        run: |
+          python -B - <<'PY_NATIVE_SOURCE'
+          import json, os
+          from pathlib import Path
+          from zipfile import ZipFile
+          from scripts.release_connected014 import archive_manifest, checked_members
+          temp = Path(os.environ['RUNNER_TEMP'])
+          archive = temp / 'actual-release-download/connected014-source.zip'
+          destination = temp / 'native-design041-released-source'
+          if destination.exists() or destination.is_symlink():
+              raise FileExistsError('FRESH_ISOLATED_NATIVE_SOURCE_REQUIRED')
+          manifest = archive_manifest(archive)
+          with ZipFile(archive) as z:
+              checked_members(z)
+              z.extractall(destination)
+          expected = set(manifest['files']) | {'SOURCE_MANIFEST.json'}
+          actual = {p.relative_to(destination).as_posix() for p in destination.rglob('*') if p.is_file()}
+          if actual != expected or json.loads((destination / 'SOURCE_MANIFEST.json').read_text()) != manifest:
+              raise ValueError('ISOLATED_SOURCE_SNAPSHOT_MISMATCH')
+          if any((p / '.git').exists() for p in (destination, *destination.parents)):
+              raise ValueError('ISOLATED_SOURCE_MUST_NOT_HAVE_GIT')
+          print(json.dumps({'scope':'isolated_source_for_synthetic_service_fixture_generation',
+                            'phase':'published', 'files':len(manifest['files']),
+                            'source_sha256':manifest['executing_source']['sha256']},sort_keys=True))
+          PY_NATIVE_SOURCE
       - name: Independently exercise native design041 on actual downloaded published bytes
         id: released_native_design
-        working-directory: ${{ runner.temp }}/downloaded-release-operation/source
+        working-directory: ${{ runner.temp }}/native-design041-released-source
         run: |
           /usr/bin/time -f 'RELEASED_DESIGN_REGRESSIONS cpu_user=%U cpu_system=%S wall=%e' python -B -m unittest -v tests.test_connected_design_flywheel041
           /usr/bin/time -f 'RELEASED_DESIGN_DEMO cpu_user=%U cpu_system=%S wall=%e' python -B -m connected_enterprise.design_flywheel demo --output "$RUNNER_TEMP/native-design041-actual-public"
