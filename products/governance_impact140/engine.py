@@ -76,6 +76,7 @@ def _applies(requirement, system):
 
 def _read_evidence(rows, systems, before, after):
     observed = {}
+    seen_ids = set()
     for item in rows:
         if not isinstance(item, dict):
             raise ValueError("INVALID_EVIDENCE_ROW")
@@ -84,6 +85,9 @@ def _read_evidence(rows, systems, before, after):
             raise ValueError("INVALID_EVIDENCE_FIELDS")
         for field in ("id", "system_id", "requirement_id", "version", "claimed_status"):
             _text(item, field)
+        if item["id"] in seen_ids:
+            raise ValueError("DUPLICATE_EVIDENCE_ID")
+        seen_ids.add(item["id"])
         sid, rid, version = item["system_id"], item["requirement_id"], item["version"]
         if sid not in systems or rid not in before and rid not in after:
             raise ValueError("UNKNOWN_EVIDENCE_SYSTEM_OR_REQUIREMENT")
@@ -143,11 +147,13 @@ def assess(input_data):
                     new["version"] if new else None, "change_impacts_system": changed,
                     "status": "not_applicable", "review_status": "no_current_requirement",
                     "claimed_status": None, "evidence_id": None,
+                    "historical_evidence_id": (evidence.get((sid, rid, old["version"]), {}).get("id")
+                                               if old else None),
                     "reason": "retired_or_out_of_scope; prior history retained in changes",
                 })
                 continue
             current = evidence.get((sid, rid, new["version"]))
-            historical = bool(old and evidence.get((sid, rid, old["version"])))
+            historical = evidence.get((sid, rid, old["version"])) if old else None
             reason = ("requirement_added_or_modified; prior claims do not authorize"
                       if changed else "independent_reviewer_not_integrated"
                       if current else "no_evidence")
@@ -162,6 +168,7 @@ def assess(input_data):
                 "review_status": "pending_authorized_independent_review",
                 "claimed_status": current["claimed_status"] if current else None,
                 "evidence_id": current["id"] if current else None,
+                "historical_evidence_id": historical["id"] if historical else None,
                 "reported_approval_ignored": bool(current and
                     current.get("review_claim", "").lower() in {"approved", "passed"}),
                 "reason": reason,
