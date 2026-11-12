@@ -140,6 +140,8 @@ class GovernanceImpact140(unittest.TestCase):
     def test_change_without_version_bump_still_invalidates_evidence(self):
         data = sample()
         data["requirements_after"][0]["version"] = "v1"
+        # A second v2 assertion would be invalid after removing v2 from the source.
+        data["evidence"] = [row for row in data["evidence"] if row["id"] != "ev-new"]
         report = assess(data)
         self.assertEqual(finding(report, "finance", "R1")["status"],
                          "unable_to_determine")
