@@ -56,6 +56,12 @@ class GovernanceImpact140(unittest.TestCase):
             with self.assertRaises(ValueError):
                 assess(data)
 
+    def test_duplicate_evidence_id_across_distinct_systems_fails_closed(self):
+        data = sample()
+        data["evidence"][1]["id"] = data["evidence"][0]["id"]
+        with self.assertRaisesRegex(ValueError, "DUPLICATE_EVIDENCE_ID"):
+            assess(data)
+
     def test_T2_new_rule_is_not_auto_satisfied(self):
         report = assess(sample())
         r = finding(report, "finance", "R2")
@@ -70,6 +76,7 @@ class GovernanceImpact140(unittest.TestCase):
         self.assertEqual(r["status"], "unable_to_determine")
         self.assertTrue(r["change_impacts_system"])
         self.assertEqual(r["reason"], "changed_requirement_invalidates_prior_evidence")
+        self.assertEqual(r["historical_evidence_id"], "ev-old")
 
     def test_T4_retirement_preserves_before_identity(self):
         report = assess(sample())
@@ -77,6 +84,7 @@ class GovernanceImpact140(unittest.TestCase):
         retire = next(row for row in report["changes"] if row["id"] == "R3")
         self.assertEqual(retire["kind"], "retired")
         self.assertEqual(retire["before"]["version"], "v1")
+        self.assertEqual(finding(report, "plant", "R3")["historical_evidence_id"], "ev-plant")
 
     def test_T5_unrelated_system_stays_unaffected(self):
         report = assess(sample())
