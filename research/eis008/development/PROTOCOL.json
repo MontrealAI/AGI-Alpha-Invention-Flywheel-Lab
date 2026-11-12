@@ -1,0 +1,22 @@
+{
+  "campaign":"overnight-008, same original allocation and claim history",
+  "lane":"DEVELOPMENT; alpha allocation0; no protected confirmation or budget/error reset",
+  "created_before_numeric_data_download_and_execution":true,
+  "purpose":"Cheapest complete-baseline/readiness challenge of a proposed nonstationary electrochemical-impedance measurement instrument. Do not admit if existing dynamic/operando methods already provide the capability.",
+  "candidate_causal_lever":"Jointly separate slow charging drift from excited sinusoidal response rather than equating a changing-cell sweep with a stationary response. This is a hypothesis with known multisine/local-polynomial precedents, not novel by assertion.",
+  "consequential_activity":"Non-destructive measurement of evolving battery/fuel-cell processes during operation without interrupting for equilibrium. Battery materials/process developers are potential users; no buyer or order is asserted.",
+  "strong_complete_baseline":"Published odd-random-phase operando impedance/LTV methods, including the supplied time-varying impedance array and multisine acquisition procedure; 2025 three-electrode operando+overvoltage experiments and 2026 dynamic fuel-cell methods remain stronger complete alternatives. A stationary-only FFT is a diagnostic ablation, not the strongest baseline.",
+  "source_repository":"noelhallemans/EIS-beyond-linearity-and-stationarity",
+  "source_revision":"ab4538a44f37c90006a904ff2f06202daacbe7ca",
+  "single_dataset":"Data Samsung 48X/operandoEIS_5degrees.mat",
+  "single_dataset_size_bytes":14330409,
+  "selection_before_numeric_values":"Choose smaller public5degree operando file under download ceiling; use all usable interior periods, no favorable case selection.",
+  "calibration_rule":"Upstream explicit README warning forbids interpreting impedance at frequencies10Hz or above because potentiostat current oversampling affects phase. Use only positive excited frequencies strictly below10Hz.",
+  "readiness_checks":["Verify exact upstream Git blob identity and record SHA256","Read only numeric arrays via installed SciPy MAT reader; never execute downloaded MATLAB or other source programs","Check fs/P/Hexc/i/v/Zwt/tZ shapes and finite values","Verify sampled period count and harmonic/frequency identities before numerical comparison"],
+  "probe_methods":["Published time-varying impedance is the available complete-baseline output, not independent physical ground truth","Ordinary per-period Fourier ratio for stationary ablation","Ordinary per-period joint sinusoid+constant/linear/quadratic drift least squares via Fourier/Schur complement; all source excited tones retained in nuisance separation, results interpreted only below10Hz"],
+  "recorded_endpoints":["Coverage and time variation of published dynamic result at allowed frequencies","Relative complex disagreement of ordinary estimates with provided dynamic estimates at period centers, interior10%-90% only","Conditioning and current-excitation magnitude; any unexcited/invalid bins explicitly counted","CPU, wall, RSS, downloaded bytes, code/source hashes and raw diagnostic outputs"],
+  "no_success_inference":"Agreement with a provided algorithm estimate is reproduction only; disagreement is not proof that either is physically wrong. No new measurement capability, repeatable demand, economic threshold crossing or flywheel may be declared from this probe.",
+  "admission_stop_rule":"If public complete dynamic methods already satisfy the broad claimed capability, reject that lever as flagship. A remaining opportunity requires a new independently important obligation, physical/calibration validation and equally capable controls before construction, never a posthoc harder fixture.",
+  "resource_ceiling":{"cpu_seconds":400,"wall_minutes":30,"memory_gib":2,"download_mib":32,"new_paid_spend":0,"paid_api_calls":0,"outreach":false,"real_commerce":false},
+  "remaining_boundary":"No instrument commissioning, acquisition hardware, reference electrode, new physical experiment or independent transient impedance calibration is available in this scope. Public data do not imply known complete costs or willingness to pay."
+}

@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "/workspace/scratch/557a27c9cfaf/research_science/compile_petab_forcing.py", line 218, in <module>
+    if __name__=='__main__':main()
+                            ^^^^^^
+  File "/workspace/scratch/557a27c9cfaf/research_science/compile_petab_forcing.py", line 209, in main
+    output.mkdir(parents=True);begin=time.monotonic();model=load(source);names,rows,unit,zeros=constraints(model);n=len(names);basis=gp.nullspace(rows,n)
+                                                            ^^^^^^^^^^^^
+  File "/workspace/scratch/557a27c9cfaf/research_science/compile_petab_forcing.py", line 60, in load
+    if any(x!=1. for x in constants.values()):raise ValueError('UNIT_COMPARTMENT_ONLY')
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: UNIT_COMPARTMENT_ONLY

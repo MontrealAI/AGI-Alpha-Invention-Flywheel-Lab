@@ -1,0 +1,51 @@
+{
+  "schema": "agi-alpha/trusted-experiment-run006/v3",
+  "run_id": "recovery-NASA-coordinate-fixed-field-review",
+  "command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+    "/workspace/scratch/557a27c9cfaf/verification_recovery/check_nasa_coordinate_repair.py",
+    "--old",
+    "/workspace/scratch/557a27c9cfaf/energy_recovery",
+    "--repair",
+    "/workspace/scratch/557a27c9cfaf/energy_recovery_coordinate_r2",
+    "--records",
+    "/workspace/scratch/557a27c9cfaf/energy_recovery_coordinate_r2/bound/artifacts",
+    "--output",
+    "/workspace/scratch/557a27c9cfaf/verification_recovery/nasa-coordinate-bound/artifacts"
+  ],
+  "requested_command": [
+    "python3",
+    "/workspace/scratch/557a27c9cfaf/verification_recovery/check_nasa_coordinate_repair.py",
+    "--old",
+    "/workspace/scratch/557a27c9cfaf/energy_recovery",
+    "--repair",
+    "/workspace/scratch/557a27c9cfaf/energy_recovery_coordinate_r2",
+    "--records",
+    "/workspace/scratch/557a27c9cfaf/energy_recovery_coordinate_r2/bound/artifacts",
+    "--output",
+    "/workspace/scratch/557a27c9cfaf/verification_recovery/nasa-coordinate-bound/artifacts"
+  ],
+  "normalized_command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+    "/workspace/scratch/557a27c9cfaf/verification_recovery/check_nasa_coordinate_repair.py",
+    "--old",
+    "/workspace/scratch/557a27c9cfaf/energy_recovery",
+    "--repair",
+    "/workspace/scratch/557a27c9cfaf/energy_recovery_coordinate_r2",
+    "--records",
+    "/workspace/scratch/557a27c9cfaf/energy_recovery_coordinate_r2/bound/artifacts",
+    "--output",
+    "/workspace/scratch/557a27c9cfaf/verification_recovery/nasa-coordinate-bound/artifacts"
+  ],
+  "reservation_created": true,
+  "cwd": "/workspace/scratch/557a27c9cfaf",
+  "limits": {
+    "wall_seconds": 90,
+    "cpu_seconds": 20,
+    "memory_bytes": 2147483648,
+    "output_bytes": 33554432,
+    "storage_bytes": 67108864
+  },
+  "wrapper_sha256": "8a10193e2cc29ca277560c7b2153d616e8cb46e64fbc7f54c102518dc2b71cbd",
+  "state": "pending"
+}

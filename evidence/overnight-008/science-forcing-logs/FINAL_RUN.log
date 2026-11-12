@@ -1,0 +1,103 @@
+{
+  "data_rows": 58,
+  "known_scaling_ambiguity_dimension": 3,
+  "constructed_observation_plan": [
+    "GFP",
+    "GFP_mRNA",
+    "X_protein"
+  ],
+  "ordinary_exhaustive_minimum_observations": 3,
+  "constructed_plan_ties_ordinary": true,
+  "numerical_witnesses": [
+    {
+      "lambda": 0.5,
+      "feasible_log_lambda_interval": [
+        -13.146593586799463,
+        2.029237232821193
+      ],
+      "within_declared_parameter_bounds": true,
+      "parameter_scaling": {
+        "eff_GFP": "-1",
+        "init_GFP_mRNA": "1"
+      },
+      "relative_output_disagreement": 5.724564338573118e-09,
+      "relative_state_symmetry_error": 2.3231498558964575e-10,
+      "solver_calls": 3022,
+      "observation_contract_unchanged": true,
+      "virtual_intervention": {
+        "pulse_time": 300.0,
+        "state": "GFP_mRNA",
+        "amount": 100.0,
+        "maximum_fluorescence_log10_disagreement": 0.04951162385990166,
+        "disagreement_over_nominal_sigma": 0.6891794192128488,
+        "solver_calls": 7092,
+        "physically_acquired_or_demonstrated_feasible": false
+      },
+      "material_parameter_separation": true
+    },
+    {
+      "lambda": 1.0045172772574167,
+      "feasible_log_lambda_interval": [
+        -0.00013183895079352113,
+        0.005633881228739593
+      ],
+      "within_declared_parameter_bounds": true,
+      "parameter_scaling": {
+        "KM": "1",
+        "eff": "1",
+        "init_X_protein": "1",
+        "init_Y_protein": "1",
+        "init_Z_protein": "1"
+      },
+      "relative_output_disagreement": 1.7476721886535734e-11,
+      "relative_state_symmetry_error": 1.55152411935997e-12,
+      "solver_calls": 3002,
+      "observation_contract_unchanged": true,
+      "virtual_intervention": {
+        "pulse_time": 300.0,
+        "state": "X_protein",
+        "amount": 100.0,
+        "maximum_fluorescence_log10_disagreement": 0.0004285085930437575,
+        "disagreement_over_nominal_sigma": 0.005964645880273464,
+        "solver_calls": 5396,
+        "physically_acquired_or_demonstrated_feasible": false
+      },
+      "material_parameter_separation": false
+    },
+    {
+      "lambda": 1.0000000432073102,
+      "feasible_log_lambda_interval": [
+        -8.819944774568526e-12,
+        5.4009136592265575e-08
+      ],
+      "within_declared_parameter_bounds": true,
+      "parameter_scaling": {
+        "eff": "-1",
+        "eff_GFP": "1",
+        "init_GFP": "1",
+        "init_X_mRNA": "1",
+        "init_Y_mRNA": "1",
+        "init_Z_mRNA": "1",
+        "scale": "-1",
+        "tps_active": "1",
+        "tps_repr": "1"
+      },
+      "relative_output_disagreement": 5.003397937306205e-09,
+      "relative_state_symmetry_error": 1.6133687722273314e-11,
+      "solver_calls": 3022,
+      "observation_contract_unchanged": true,
+      "virtual_intervention": {
+        "pulse_time": 300.0,
+        "state": "GFP",
+        "amount": 100.0,
+        "maximum_fluorescence_log10_disagreement": 1.83905415340746e-08,
+        "disagreement_over_nominal_sigma": 2.559880235260876e-07,
+        "solver_calls": 5281,
+        "physically_acquired_or_demonstrated_feasible": false
+      },
+      "material_parameter_separation": false
+    }
+  ],
+  "runtime_seconds": 2.956671763997292,
+  "decision": "NOT_ADMITTED: conventional exact observation-subset route ties constructive plan; no qualified economic failure cohort; demand unmeasured"
+}

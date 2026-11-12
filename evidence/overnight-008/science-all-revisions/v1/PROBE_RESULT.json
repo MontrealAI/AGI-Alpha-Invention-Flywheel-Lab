@@ -1,0 +1,192 @@
+{
+  "scope": "Executed exploratory probe on public measured repressilator model; scale ambiguities only, not complete identifiability or physical experiment validation",
+  "source_sha256": {
+    "measurements.tsv": "8752ac4930fcd679ca6cbe21b15f4c55e99c350ae27b5d2a1a7d71f167e68881",
+    "parameters.tsv": "5ec3d5b177e067b3c149c7e82ed43b1780dfe754bb1c04df0c80b417f30fa426",
+    "model.xml": "104936ae8ff193ee47c8919a46d2716807faaf19f7e9885dea1278932c7884f9",
+    "conditions.tsv": "204ec94d2c17106122a94e58daa52253ddae2b31293db9a515951b5d87b2dca6",
+    "LICENSE": "4276f6cf5c65c143ef3cd2095271d5fb6cd85843befa60b63f8af6c4162488aa",
+    "observables.tsv": "a6c869a8f7e5b84d75d7c756c53691f9cc449592184c1f71cc34956ab8e1039d"
+  },
+  "data_rows": 58,
+  "states": 8,
+  "parameters": 21,
+  "known_scaling_ambiguity_dimension": 3,
+  "generators": [
+    {
+      "GFP_mRNA": "1",
+      "eff_GFP": "-1",
+      "init_GFP_mRNA": "1"
+    },
+    {
+      "X_protein": "1",
+      "Y_protein": "1",
+      "Z_protein": "1",
+      "KM": "1",
+      "eff": "1",
+      "init_X_protein": "1",
+      "init_Y_protein": "1",
+      "init_Z_protein": "1"
+    },
+    {
+      "GFP": "1",
+      "X_mRNA": "1",
+      "Y_mRNA": "1",
+      "Z_mRNA": "1",
+      "eff": "-1",
+      "eff_GFP": "1",
+      "init_GFP": "1",
+      "init_X_mRNA": "1",
+      "init_Y_mRNA": "1",
+      "init_Z_mRNA": "1",
+      "scale": "-1",
+      "tps_active": "1",
+      "tps_repr": "1"
+    }
+  ],
+  "constructed_observation_plan": [
+    "GFP",
+    "GFP_mRNA",
+    "X_protein"
+  ],
+  "construction_trace": [
+    {
+      "ambiguity_before": 3,
+      "add_calibrated_absolute_observable": "GFP",
+      "ambiguity_after": 2
+    },
+    {
+      "ambiguity_before": 2,
+      "add_calibrated_absolute_observable": "GFP_mRNA",
+      "ambiguity_after": 1
+    },
+    {
+      "ambiguity_before": 1,
+      "add_calibrated_absolute_observable": "X_protein",
+      "ambiguity_after": 0
+    }
+  ],
+  "ordinary_exhaustive_minimum_observations": 3,
+  "ordinary_optimal_sets": [
+    [
+      "X_protein",
+      "GFP",
+      "GFP_mRNA"
+    ],
+    [
+      "X_protein",
+      "X_mRNA",
+      "GFP_mRNA"
+    ],
+    [
+      "X_protein",
+      "Y_mRNA",
+      "GFP_mRNA"
+    ],
+    [
+      "X_protein",
+      "Z_mRNA",
+      "GFP_mRNA"
+    ],
+    [
+      "Y_protein",
+      "GFP",
+      "GFP_mRNA"
+    ],
+    [
+      "Y_protein",
+      "X_mRNA",
+      "GFP_mRNA"
+    ],
+    [
+      "Y_protein",
+      "Y_mRNA",
+      "GFP_mRNA"
+    ],
+    [
+      "Y_protein",
+      "Z_mRNA",
+      "GFP_mRNA"
+    ],
+    [
+      "Z_protein",
+      "GFP",
+      "GFP_mRNA"
+    ],
+    [
+      "Z_protein",
+      "X_mRNA",
+      "GFP_mRNA"
+    ],
+    [
+      "Z_protein",
+      "Y_mRNA",
+      "GFP_mRNA"
+    ],
+    [
+      "Z_protein",
+      "Z_mRNA",
+      "GFP_mRNA"
+    ]
+  ],
+  "ordinary_subsets_tested": 93,
+  "constructed_plan_ties_ordinary": true,
+  "known_ambiguities_after_plan": 0,
+  "numerical_witnesses": [
+    {
+      "lambda": 0.5,
+      "within_declared_parameter_bounds": true,
+      "parameter_scaling": {
+        "eff_GFP": "-1",
+        "init_GFP_mRNA": "1"
+      },
+      "relative_output_disagreement": 5.724564338573118e-09,
+      "relative_state_symmetry_error": 2.3231498558964575e-10,
+      "solver_calls": 3022,
+      "observation_contract_unchanged": true
+    },
+    {
+      "lambda": 1.000000001,
+      "within_declared_parameter_bounds": false,
+      "parameter_scaling": {
+        "KM": "1",
+        "eff": "1",
+        "init_X_protein": "1",
+        "init_Y_protein": "1",
+        "init_Z_protein": "1"
+      },
+      "relative_output_disagreement": 8.625470423662507e-14,
+      "relative_state_symmetry_error": 4.921411277548595e-15,
+      "solver_calls": 3002,
+      "observation_contract_unchanged": true
+    },
+    {
+      "lambda": 1.000000001,
+      "within_declared_parameter_bounds": false,
+      "parameter_scaling": {
+        "eff": "-1",
+        "eff_GFP": "1",
+        "init_GFP": "1",
+        "init_X_mRNA": "1",
+        "init_Y_mRNA": "1",
+        "init_Z_mRNA": "1",
+        "scale": "-1",
+        "tps_active": "1",
+        "tps_repr": "1"
+      },
+      "relative_output_disagreement": 3.4726553097126874e-09,
+      "relative_state_symmetry_error": 8.864544412481536e-11,
+      "solver_calls": 3011,
+      "observation_contract_unchanged": true
+    }
+  ],
+  "nominal_log10_RMSE_on_real_data": 0.07184151533817075,
+  "nominal_sigma": 0.071841413831614,
+  "nominal_solver_calls": 3002,
+  "remaining_caveat": "Removing all detected scaling symmetries does not establish structural or practical identifiability. Additional nonlinear symmetries and sloppy finite-data directions may remain. Direct calibrated measurements were only specified, not physically acquired.",
+  "human_supplied_mapping": "Researcher/assistant proposed gauge fixing; code derives exact constant-exponent scaling directions from parsed SBML and generates observation plan. No autonomous donor discovery claim.",
+  "decision": "NOT_ADMITTED: conventional exact observation-subset route ties constructive plan; no qualified economic failure cohort; demand unmeasured",
+  "runtime_seconds": 2.4000450589956017,
+  "cpu_seconds": 3.656388,
+  "maximum_rss_kib": 62228
+}

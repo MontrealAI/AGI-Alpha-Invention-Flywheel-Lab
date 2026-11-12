@@ -1,0 +1,152 @@
+{
+  "id": "observation/public-NASA-repair-and-durable-array-publication-r1",
+  "event_type": "observation",
+  "pool": "verification_publication",
+  "conservative_budget_charge_CPU_seconds": 0,
+  "charge_is_measured_cost": false,
+  "origin": {
+    "authority": "Integration owner actual observation task2026-10-30; no new reservation, refund or monetary bound"
+  },
+  "covered_by_existing_events": {
+    "NASA_public_numerical_replay": 26,
+    "durable_array_publication": 25
+  },
+  "actual_NASA_replay": {
+    "receipt": {
+      "path": "nasa-public-2205-bound/RECEIPT.json",
+      "sha256": "7815c6f59628fc8380092e795b9af030504e14ded5fe496ada4a100ecba62df6"
+    },
+    "canonical_semantic_receipt_sha256": "293c4db83ba25572cee4f7224d58c2ba7517063cf955923b3c909d0c83095a8f",
+    "state": "complete",
+    "limits": {
+      "wall_seconds": 900,
+      "cpu_seconds": 300,
+      "memory_bytes": 2147483648,
+      "output_bytes": 268435456,
+      "storage_bytes": 1073741824
+    },
+    "reported_waited_CPU_seconds": 49.192056,
+    "supervisor_CPU_seconds": 42.725669613,
+    "output_bytes": 992355006,
+    "full_group_CPU_attribution_complete": false,
+    "phase_report": {
+      "path": "nasa-public-2205-bound/artifacts/REPORT.json",
+      "sha256": "56145620afec5887620361ecc93dc2d7676d7af6fc98ac4d8d4da78ce88f3f23"
+    },
+    "stages": [
+      {
+        "phase": "restore",
+        "returncode": 0,
+        "waited_cpu_seconds": 3.047104,
+        "wall_seconds": 3.0756241740000405,
+        "cpu_limit": 60
+      },
+      {
+        "phase": "repair",
+        "returncode": 0,
+        "waited_cpu_seconds": 40.053450000000005,
+        "wall_seconds": 40.10802319399954,
+        "cpu_limit": 60
+      },
+      {
+        "phase": "separate-review",
+        "returncode": 0,
+        "waited_cpu_seconds": 3.8900649999999954,
+        "wall_seconds": 3.929217831000642,
+        "cpu_limit": 20
+      }
+    ],
+    "stage_CPU_included_in_waited_parent_not_added_again": true,
+    "source_commit": "2205bf896b6c72e109b56f6521207a90ff468bcc",
+    "data_commit": "5d5fb96d1421d5c1f5fd6cf8ea6c96fcfbd5b045",
+    "source_git_blobs_verified": 8588,
+    "data_git_blobs_verified": 25,
+    "all_blobs_verified_before_execution": true,
+    "source_bytes_unchanged": true,
+    "restoration": {
+      "report": {
+        "path": "nasa-public-2205-bound/artifacts/restore/REPORT.json",
+        "sha256": "1bad9a3eab4114e845ae4d87d9d0b8203394ba13a64755a2aeaf232cb586a7fb"
+      },
+      "count": 47,
+      "all_original_hashes_match": true
+    },
+    "separate_check": {
+      "report": {
+        "path": "nasa-public-2205-bound/artifacts/separate-review/REPORT.json",
+        "sha256": "8b11393543774f1101f80ea7bd833bb0cf482e40016a1505b6a2a0a4421ab3a9"
+      },
+      "all_checks_passed": true,
+      "source_sha256": "48cd04ae4bf6447d952c89e16c45d7ac2353bb3c105e3e6af9100f1fe5887ac1",
+      "protocol_sha256": "26e92db9b0f5b2195c3844db384b15921b7eaac9031dd8ebee6035771490c61c",
+      "result_sha256": "47a8e498a76954ccd50f2744a5c194f7ef4af3805cd03fea8614527c17a4d946",
+      "verifier_source_sha256": "dd2dc7438bd5740ea082b011da40762cd342666b35d7ccab4fb83bfa89fd1693",
+      "scope": "Fixed-saved-field coordinate/affine/arithmetic review only; no registration optimization or candidate imports"
+    }
+  },
+  "acquired_archives": [
+    {
+      "archive_path": "source2205.tar.gz",
+      "bytes": 112524837,
+      "sha256": "302e69e480f1121f2d0095abf635c9cd7d11403d95f9acdc61650122478b491a",
+      "metadata": {
+        "path": "source2205-download.json",
+        "sha256": "7d9189e386a908aa604d81f2160dfb10bd52b9cbafbec074467efdb12496a781"
+      },
+      "observed_url": "https://codeload.github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/tar.gz/2205bf896b6c72e109b56f6521207a90ff468bcc",
+      "local_bytes_verified": true
+    },
+    {
+      "archive_path": "data5d5.tar.gz",
+      "bytes": 79649652,
+      "sha256": "d54b6b218d4f148a354ef45da2edc4abd338f408454407abb9c0ab4b9f62b445",
+      "metadata": {
+        "path": "data5d5-download.json",
+        "sha256": "b0962c17606c141b0c3312c59e808b26325f8b72efad3aca8f652cde620d9a2c"
+      },
+      "observed_url": "https://codeload.github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/tar.gz/5d5fb96d1421d5c1f5fd6cf8ea6c96fcfbd5b045",
+      "local_bytes_verified": true
+    },
+    {
+      "archive_path": "nasa-data-9121.tar.gz",
+      "source_commit_prefix": "9121",
+      "bytes": 66259059,
+      "sha256": "18ebfdae27e1442a3c2caf766bbd27a0d1a38793fdad7f5e7caca0538a7935dc",
+      "local_bytes_verified": true,
+      "earlier_scope": "All6 fields verified per integration publication record; new5d5 data adds unchanged11support files"
+    }
+  ],
+  "archive_received_bytes_subtotal_for_these3_receipts": 258433548,
+  "complete_campaign_network_received_bytes": null,
+  "publisher_encoding_observations": {
+    "reported_successful_encoding_CPU_seconds_exact": [
+      "34.12900613",
+      "34.241954824",
+      "13.945246792"
+    ],
+    "successful_encoding_subtotal_CPU_seconds_exact": "82.316207746",
+    "covered_by_event25_reservation_CPU_seconds": 200,
+    "failed_large_blob_encoding_CPU_seconds": null,
+    "failed_large_blob_CPU_unknown_is_not_zero": true,
+    "known_successful_subtotal_is_not_complete_publisher_CPU_or_monetary_cost": true
+  },
+  "preserved_publication_failures": [
+    {
+      "kind": "large_blob",
+      "outcome": "Returned SHA mismatch reported; full adapter response was not captured",
+      "complete_original_response_available": false,
+      "repair": "Lossless smaller parts succeeded; original data bytes unchanged"
+    },
+    {
+      "kind": "ref_update",
+      "outcome": "422 ReferenceDoesNotExist",
+      "repair": "Used already available create_branch capability under existing repository authority"
+    }
+  ],
+  "refund_CPU_seconds": 0,
+  "all_previous_reservations_unchanged": true,
+  "complete_monetary_cost_USD": null,
+  "no_new_monetary_upper_bound_inferred_from_CPU": true,
+  "qualified_simulated_commercial_earnings_microUSD": 0,
+  "claim_scope": "Actual numerical repair/publication qualification, no physical/business/enabling advantage or commercial success"
+}

@@ -1,0 +1,20 @@
+{
+  "scope": "EXPOSED_DEVELOPMENT_ORDINARY_BASELINE_NO_CONFIRMATION",
+  "written_utc": "2026-10-30T07:23:50Z",
+  "source": "NASA NTRS20240002767 physical Ti6Al4V disk reconstructed XCT and separate optical profilometry",
+  "functional_delivery": "registered opaque top-visible surface depth field and validity mask; useful for diagnosing segmentation-induced surface measurement deviations",
+  "primary_endpoint": "mean absolute height difference in mm against separate profilometry over geometric overlap with valid finite measurements, accompanied by overlap and missingness; no success threshold, buyer tolerance, hard error guarantee or internal-pore truth supplied",
+  "secondary": "signed residual distribution; declared depth strata; registration and threshold sensitivity",
+  "source_complete_methods": "NASA2024 Otsu/RF/kNN/MLP, 3D filling, Sobel, RANSAC plane, RBF projection, rigid RANSAC co-registration, manual18pore domains; NASA2025 opaque ray intersection and ImageJ Segment Anything surface domains",
+  "available_ordinary_controls": "natural globalOtsu; robust plane/opaque ray first intersection; rigid registration; ordinary threshold sensitivity/calibration as budget permits",
+  "unavailable_controls": "published hand-labeled classification images, manual18pore masks and exact fitted transforms not provided in accessible dataset listing; no installed SegmentAnything weights or skimage; do not call Otsu alone strongest demonstrated method",
+  "calibration_limits": "7.4um profilometry XY sampling and nominal10um vertical resolution are not a measured hard envelope; reconstructed lowres XCT25.8478um is bicubically resampled from original12.9um data; no raw rays or complete repeatability, registration or traceability budget available",
+  "no_model_or_claim_changes_after_evaluation": true,
+  "budget": {
+    "wall_minutes": 30,
+    "cpu_seconds": 600,
+    "download_bytes": 268435456,
+    "memory_bytes": 2147483648
+  },
+  "decision_rule": "Execute competent ordinary route first. Reject enabling-gap admission if route already delivers measurement or gap cannot be physically grounded. Any candidate requires separate causal justification and protected protocol before confirmation."
+}

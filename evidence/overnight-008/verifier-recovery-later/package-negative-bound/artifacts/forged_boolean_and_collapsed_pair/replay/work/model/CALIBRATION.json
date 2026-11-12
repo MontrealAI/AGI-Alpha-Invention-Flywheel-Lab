@@ -1,0 +1,58 @@
+{
+  "edition": "XCT008_RECOVERY_MODEL_R1_NEW_BYTES",
+  "scope": "EXPOSED_DEVELOPMENT_NOT_PROTECTED",
+  "affine_parameters": [
+    0.1383073483445313,
+    -0.015937926915817732
+  ],
+  "affine_fit": {
+    "method": "scipy.optimize.least_squares; x0=[.1,0]; clipped affine nonnegative reference",
+    "success": true,
+    "nfev": 8,
+    "message": "`ftol` termination condition is satisfied.",
+    "bounds": {
+      "scale_min": 0,
+      "offset": "unbounded"
+    },
+    "tolerances": 1e-12
+  },
+  "matrix_shape": [
+    9840,
+    6724
+  ],
+  "matrix_nnz": 970344,
+  "data_sha256": "03a35c57ae52026f980ffcf540a4243a02f198b3fcdd8dff72cb251f70b067cc",
+  "groundtruth_sha256": "88cc17c0b9706a9cf88f615e490d0254e59e89ee88740d293d06c16a1d6005bd",
+  "source_sha256": "87b4bfde786f58fcd2c2eaf2dd96785a69b0734790e342df7d95cee9815df389",
+  "reference_roi_float": 0.02155260596493485,
+  "relative_residual_l2": 0.04539051944614118,
+  "max_abs_residual": 0.21170023238849953,
+  "eps_rule": "1.05*max(abs((A@reference-y).reshape(82,120,order=F)),axis=1)+1e-6",
+  "roi": {
+    "rows": [
+      38,
+      44
+    ],
+    "cols": [
+      38,
+      44
+    ],
+    "order": "F",
+    "coefficient_float": 0.027777777777777776
+  },
+  "arrays": {
+    "reference": "849380ff3930a96c8241578c85e20be49c96aa14c206cd08f70089a46372e3ed",
+    "eps": "ab51515cb3d65a600f143da8fe9b350e4060a3bd329ef428d250c3cdd4e544cf",
+    "objective": "8db715d70c0131cb660af38435d3bc6a06227f3c0c2e78f9cb7ff39976a68e77"
+  },
+  "resources": {
+    "cpu_seconds": 0.942245881,
+    "wall_seconds": 0.17925666600012846,
+    "peak_rss_kib": 139472
+  },
+  "limitations": [
+    "Lost prior calibration bytes cannot be recovered from their hash; this is a declared reconstructed edition.",
+    "All120 source views and full1200-view reference exposed; empirical model discrepancy has no independent physical coverage.",
+    "The reference is feasible by construction. No physical/material/industrial/customer claim."
+  ]
+}
