@@ -1,0 +1,192 @@
+[
+  {
+    "development_case": 0,
+    "public": {
+      "version": "grid074.thermal-k1.v1",
+      "physical_model": "C*dtheta/dt = power - loss*theta, theta(0)=0; optional piecewise loss above hidden threshold",
+      "measurement": "20 + offset + gain*theta + bounded noise; reference 20+theta+bounded noise",
+      "power_range": [
+        0.0,
+        4.0
+      ],
+      "time_range": [
+        0.0,
+        120.0
+      ],
+      "decision_horizon": 120.0,
+      "temperature_rise_limit": 10.0,
+      "budget": 24.0,
+      "meter_cost": 1.0,
+      "reference_cost": 8.0,
+      "meter_noise_bound": 0.02,
+      "reference_noise_bound": 0.01,
+      "prior_bounds": {
+        "loss": [
+          0.12,
+          0.4
+        ],
+        "capacity": [
+          5.0,
+          24.0
+        ],
+        "gain": [
+          0.6,
+          1.8
+        ],
+        "offset": [
+          -0.3,
+          0.3
+        ],
+        "transition_rise": [
+          3.0,
+          7.0
+        ],
+        "extra_loss_fraction": [
+          -0.5,
+          1.0
+        ]
+      },
+      "hypotheses": {
+        "H1": "constant loss, calibrated thermometer",
+        "H2": "constant loss, biased thermometer",
+        "neither": "temperature-dependent piecewise loss",
+        "abstain": "underdetermined"
+      },
+      "primary_metric": "safe qualification and total acquisition cost; unsafe probe or claim fails safety gate",
+      "decision": "cap is maximum permitted constant heating power for every power in [0,cap] and time in [0,120] starting at equilibrium"
+    },
+    "observations": [
+      {
+        "power": 0.5,
+        "time": 30,
+        "kind": "meter",
+        "measured_temperature": 20.98176853285881,
+        "noise_bound": 0.02,
+        "cost": 1.0,
+        "remaining_budget": 23.0
+      },
+      {
+        "power": 1.0,
+        "time": 60,
+        "kind": "meter",
+        "measured_temperature": 23.16299368958601,
+        "noise_bound": 0.02,
+        "cost": 1.0,
+        "remaining_budget": 22.0
+      },
+      {
+        "power": 1.0,
+        "time": 120,
+        "kind": "meter",
+        "measured_temperature": 24.340292007177887,
+        "noise_bound": 0.02,
+        "cost": 1.0,
+        "remaining_budget": 21.0
+      },
+      {
+        "power": 1.0,
+        "time": 60,
+        "kind": "reference",
+        "measured_temperature": 23.159915795544784,
+        "noise_bound": 0.01,
+        "cost": 8.0,
+        "remaining_budget": 13.0
+      }
+    ]
+  },
+  {
+    "development_case": 1,
+    "public": {
+      "version": "grid074.thermal-k1.v1",
+      "physical_model": "C*dtheta/dt = power - loss*theta, theta(0)=0; optional piecewise loss above hidden threshold",
+      "measurement": "20 + offset + gain*theta + bounded noise; reference 20+theta+bounded noise",
+      "power_range": [
+        0.0,
+        4.0
+      ],
+      "time_range": [
+        0.0,
+        120.0
+      ],
+      "decision_horizon": 120.0,
+      "temperature_rise_limit": 10.0,
+      "budget": 24.0,
+      "meter_cost": 1.0,
+      "reference_cost": 8.0,
+      "meter_noise_bound": 0.02,
+      "reference_noise_bound": 0.01,
+      "prior_bounds": {
+        "loss": [
+          0.12,
+          0.4
+        ],
+        "capacity": [
+          5.0,
+          24.0
+        ],
+        "gain": [
+          0.6,
+          1.8
+        ],
+        "offset": [
+          -0.3,
+          0.3
+        ],
+        "transition_rise": [
+          3.0,
+          7.0
+        ],
+        "extra_loss_fraction": [
+          -0.5,
+          1.0
+        ]
+      },
+      "hypotheses": {
+        "H1": "constant loss, calibrated thermometer",
+        "H2": "constant loss, biased thermometer",
+        "neither": "temperature-dependent piecewise loss",
+        "abstain": "underdetermined"
+      },
+      "primary_metric": "safe qualification and total acquisition cost; unsafe probe or claim fails safety gate",
+      "decision": "cap is maximum permitted constant heating power for every power in [0,cap] and time in [0,120] starting at equilibrium"
+    },
+    "observations": [
+      {
+        "power": 0.5,
+        "time": 30,
+        "kind": "meter",
+        "measured_temperature": 20.98176853285881,
+        "noise_bound": 0.02,
+        "cost": 1.0,
+        "remaining_budget": 23.0
+      },
+      {
+        "power": 1.0,
+        "time": 60,
+        "kind": "meter",
+        "measured_temperature": 23.16299368958601,
+        "noise_bound": 0.02,
+        "cost": 1.0,
+        "remaining_budget": 22.0
+      },
+      {
+        "power": 1.0,
+        "time": 120,
+        "kind": "meter",
+        "measured_temperature": 24.340292007177887,
+        "noise_bound": 0.02,
+        "cost": 1.0,
+        "remaining_budget": 21.0
+      },
+      {
+        "power": 1.0,
+        "time": 60,
+        "kind": "reference",
+        "measured_temperature": 22.106381530830518,
+        "noise_bound": 0.01,
+        "cost": 8.0,
+        "remaining_budget": 13.0
+      }
+    ]
+  }
+]

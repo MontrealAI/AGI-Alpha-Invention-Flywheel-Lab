@@ -1,0 +1,14 @@
+{
+  "variables": ["theta", "C", "loss", "gain", "power", "time", "reading"],
+  "equations": [
+    [{"C":1,"theta":1,"time":-1}, {"power":1}, {"loss":1,"theta":1}],
+    [{"reading":1}, {"gain":1,"theta":1}]
+  ],
+  "fixed": ["power", "time", "reading"],
+  "target": {"theta":1},
+  "allowed_references": [
+    {"name":"calibrated_temperature_reference", "monomial":{"theta":1}, "cost":8}
+  ],
+  "construction_budget":24,
+  "adapter_limits":"constant-loss positive-temperature sector, measured offset removed; does not cover unknown piecewise losses or arbitrary sensor nonlinearities"
+}
