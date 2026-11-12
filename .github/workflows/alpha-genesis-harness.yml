@@ -473,6 +473,16 @@ jobs:
         run: |
           python -B -m unittest tests.test_harness_release_assets124 -v
           python -B scripts/harness_release_assets124.py --directory "$RUNNER_TEMP/harness-received" --source "$SOURCE_SHA" --paths0 "$RUNNER_TEMP/harness-received-operation/HARNESS-RELEASE-ASSETS.paths0"
+      - name: Verify the exact archive and evidence can be reconciled before publication
+        env:
+          SOURCE_SHA: ${{ needs.qualify.outputs.source_sha }}
+          ARCHIVE_NAME: ${{ needs.qualify.outputs.archive_name }}
+          ARCHIVE_SHA: ${{ needs.qualify.outputs.archive_sha }}
+          MODEL_ARCHIVE_NAME: ${{ steps.model_archive.outputs.name }}
+        run: |
+          product_tree=$(git rev-parse "$SOURCE_SHA:products/alpha-genesis-harness")
+          received="$RUNNER_TEMP/harness-received"
+          python -B products/alpha-genesis-harness/scripts/reconcile_release_evidence.py --archive "$received/$ARCHIVE_NAME" --expected-sha256 "$ARCHIVE_SHA" --source-sha "$SOURCE_SHA" --source-product-tree "$product_tree" --operation-receipt "$RUNNER_TEMP/harness-received-operation/QUALIFICATION.json" --asset-dir "$received" --live-receipt "$received/HOSTED-LOCAL-QUALIFICATION.json" --model-evidence-archive "$received/$MODEL_ARCHIVE_NAME" --output "$RUNNER_TEMP/harness-prepublication-evidence"
       - name: Publish source-specific prerelease without replacing prior releases
         env:
           GH_TOKEN: ${{ github.token }}
@@ -544,6 +554,7 @@ jobs:
           path: |
             ${{ runner.temp }}/harness-received-operation
             ${{ runner.temp }}/harness-published-operation
+            ${{ runner.temp }}/harness-prepublication-evidence
             ${{ runner.temp }}/harness-final-evidence
             ${{ runner.temp }}/harness-owner-build.json
             ${{ runner.temp }}/harness-owner-visual

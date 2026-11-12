@@ -3,6 +3,7 @@ import argparse
 import copy
 import hashlib
 import importlib.util
+import io
 import json
 from pathlib import Path
 import sys
@@ -233,6 +234,56 @@ class ReconciliationTests(unittest.TestCase):
         self.assertIn('quote construction: FAIL',rows['D1']['remaining_dependency_or_scope'])
         self.assertEqual(matrix['live_qualification_summary']['status'],'FAIL')
         for identifier in reconcile.BLOCKED:self.assertEqual(rows[identifier]['status'],'BLOCKED')
+
+    def test_workshop_receipts_reconcile_and_refuse_stale_source(self):
+        fixture = self.fixture
+        for name in reconcile.WORKSHOP_SOURCES:
+            fixture.content.setdefault('bridge/' + name, name.encode())
+        fixture.write_archive()
+        self.archive_hash = self.args.expected_sha256 = reconcile.digest(fixture.archive.read_bytes())
+        self.write_operations()
+        live = self.live_receipt()
+        live['qualifications']['workshop'] = 'PASS'
+        live['workshop_scopes'] = dict.fromkeys(reconcile.WORKSHOP_SCOPES, True)
+        source_hashes = {name: reconcile.digest(fixture.content['bridge/' + name]) for name in reconcile.WORKSHOP_SOURCES}
+        for scope, names in reconcile.WORKSHOP_SCOPES.items():
+            live['commands'].append({'entrypoint': 'qualify_workshop.py', 'returncode': 0, 'timed_out': False})
+            receipt = {'schema': 'alpha-genesis/workshop-local-qualification/v1', 'scope': scope,
+                       'status': 'PASS', 'platform': 'linux', 'expected_model': 'fixture',
+                       'source_revision': live['source_revision'], 'source_product_tree': live['source_product_tree'],
+                       'sources_sha256': source_hashes, 'model_sha256': live['downloads']['model']['sha256'],
+                       'runtime_sha256': live['downloads']['runtime_binary_sha256'],
+                       'unchanged_artifact_reuse': True, 'cases': []}
+            for name, count in names.items():
+                docket = dict.fromkeys(('checked', 'accepted', 'planned'), count)
+                docket.update(status='admitted', current=True, passed=True,
+                              artifact_hashes={'instrument.json': reconcile.digest(b'{}')})
+                mission = {'id': name, 'docket': docket, 'source_sha256': source_hashes}
+                proof = {'mission': mission, 'observations': [{}] * count}
+                artifact = io.BytesIO()
+                members = dict.fromkeys(reconcile.WORKSHOP_BUNDLE, b'{}')
+                members.update({'PROOF.json': json.dumps(proof).encode(),
+                                'RUN_INSTRUMENT.py': fixture.content['bridge/instruments.py'],
+                                'RUN_WORKSHOP.py': fixture.content['bridge/workshop_protocol.py']})
+                with zipfile.ZipFile(artifact, 'w') as bundle:
+                    for member, data in members.items():
+                        bundle.writestr(member, data)
+                self.live_files['workshop/' + name + '.zip'] = artifact.getvalue()
+                receipt['cases'].append({'name': name, 'id': name, 'status': 'complete', 'docket': docket,
+                                         'sources_sha256': source_hashes, 'replay_exit': 0,
+                                         'bundle_sha256': reconcile.digest(artifact.getvalue()),
+                                         'events': [{'kind': 'model_completed', 'detail': {
+                                             'provider': 'local', 'reported_model': 'fixture'}}]})
+            self.live_files['WORKSHOP-' + scope.upper() + '-QUALIFICATION.json'] = json.dumps(receipt).encode()
+        self.write_live(live)
+        self.assertEqual(self.rows()[0]['W1']['status'], 'PASS')
+        report = 'WORKSHOP-CONTRAST-QUALIFICATION.json'
+        contrast = json.loads(self.live_files[report])
+        contrast['sources_sha256']['server.py'] = 'a' * 64
+        self.live_files[report] = json.dumps(contrast).encode()
+        self.write_live(live)
+        with self.assertRaisesRegex(ValueError, 'Evidence source hash differs'):
+            self.rows()
 
     def test_old_commit_live_receipt_cannot_inherit_pass(self):
         value=self.live_receipt();value['source_revision']='c'*40;self.write_live(value)
