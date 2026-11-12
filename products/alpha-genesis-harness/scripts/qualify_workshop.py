@@ -130,7 +130,7 @@ def run(args):
     receipt = {"schema": "alpha-genesis/workshop-local-qualification/v1", "source_revision": source,
                "source_product_tree": tree, "sources_sha256": workshop.LOADED_SOURCES,
                "runtime_sha256": sha(args.runtime), "model_sha256": model_sha,
-               "route": "Loopback llama.cpp CPU", "platform": sys.platform, "expected_model": model,
+               "route": "Loopback llama.cpp CPU", "platform": sys.platform, "expected_model": model, "scope": args.scope,
                "complete_economic_cost": None, "cases": [], "status": "RUNNING"}
     write(output / "RESULT.json", receipt)
     processes = []
@@ -156,20 +156,24 @@ def run(args):
             receipt["cases"].append(result)
             write(output / "RESULT.json", receipt)
             return result
-        foundry = record("foundry", "Distinguish sensor drift from defects for three independent inspection users.")
-        if foundry["docket"]["status"] == "admitted":
-            record("foundry", "Requalify the cold-chain logger at field-handoff conditions.", prior=foundry["id"], fresh=True)
-        record("contrast", "Check scoped accessibility evidence and exceptions without rounding.")
-        record("arrangement", "Decide whether a shared inspection core can be offered voluntarily within current cash.")
-        record("custom", "Give a repair cooperative a reusable way to triage its next parts delivery.",
-               context='Inputs arrived and reserved are nonnegative counts. Output exactly {"ready":boolean,"remaining":number}. '
-                       'ready means arrived is at least reserved. remaining is max(0, arrived minus reserved).',
-               cases=[{"input": {"arrived": a, "reserved": b},
-                       "expected": {"ready": a >= b, "remaining": max(0, a - b)}} for a, b in [(3, 4), (17, 4), (2, 2), (0, 0)]])
-        first_hash = foundry["docket"]["artifact_hashes"].get("instrument.json")
-        successor = next((row for row in receipt["cases"] if row["name"] == "foundry-fresh"), {})
-        receipt["unchanged_artifact_reuse"] = bool(first_hash and first_hash == successor.get("docket", {}).get("artifact_hashes", {}).get("instrument.json"))
-        receipt["status"] = "PASS" if (len(receipt["cases"]) == 5 and receipt["unchanged_artifact_reuse"] and
+        vertical = args.scope in {"all", "vertical"}
+        if vertical:
+            foundry = record("foundry", "Distinguish sensor drift from defects for three independent inspection users.")
+            if foundry["docket"]["status"] == "admitted":
+                record("foundry", "Requalify the cold-chain logger at field-handoff conditions.", prior=foundry["id"], fresh=True)
+            record("arrangement", "Decide whether a shared inspection core can be offered voluntarily within current cash.")
+            record("custom", "Give a repair cooperative a reusable way to triage its next parts delivery.",
+                   context='Inputs arrived and reserved are nonnegative counts. Output exactly {"ready":boolean,"remaining":number}. '
+                           'ready means arrived is at least reserved. remaining is max(0, arrived minus reserved).',
+                   cases=[{"input": {"arrived": a, "reserved": b},
+                           "expected": {"ready": a >= b, "remaining": max(0, a - b)}} for a, b in [(3, 4), (17, 4), (2, 2), (0, 0)]])
+            first_hash = foundry["docket"]["artifact_hashes"].get("instrument.json")
+            successor = next((row for row in receipt["cases"] if row["name"] == "foundry-fresh"), {})
+            receipt["unchanged_artifact_reuse"] = bool(first_hash and first_hash == successor.get("docket", {}).get("artifact_hashes", {}).get("instrument.json"))
+        if args.scope in {"all", "contrast"}:
+            record("contrast", "Check scoped accessibility evidence and exceptions without rounding.")
+        expected = {"all": 5, "vertical": 4, "contrast": 1}[args.scope]
+        receipt["status"] = "PASS" if (len(receipt["cases"]) == expected and (not vertical or receipt["unchanged_artifact_reuse"]) and
             all(row["status"] == "complete" and row["replay_exit"] == 0 and
                 any(event["kind"] == "model_completed" and event["detail"]["reported_model"] == model
                     for event in row["events"]) for row in receipt["cases"])) else "FAIL"
@@ -180,7 +184,9 @@ def run(args):
             receipt["browser_exit"] = browser.returncode
             if browser.returncode != 0:
                 receipt["status"] = "FAIL"
-        if args.study:
+        if args.study and not any(row["name"] == "foundry" and row["docket"]["status"] == "admitted" for row in receipt["cases"]):
+            receipt["builder_study_status"] = "NOT_TESTED: requires an admitted predecessor"
+        elif args.study:
             from scripts.workshop_builder_study import run as study
             def generate(prompt):
                 return request(app_url + "/api/generate", {
@@ -216,6 +222,8 @@ def main():
     parser.add_argument("--model", type=lambda value: Path(value).resolve(), required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--threads", type=int, choices=range(1, 33), default=4)
+    parser.add_argument("--scope", choices=("all", "vertical", "contrast"), default="all",
+                        help="Qualification scope. The hosted release requires both scoped runs on matching source.")
     parser.add_argument("--browser", action="store_true", help="Also operate a rendered Chromium client against the real connector.")
     parser.add_argument("--study", action="store_true", help="Run the separate matched study of reusable builder guidance.")
     return run(parser.parse_args())

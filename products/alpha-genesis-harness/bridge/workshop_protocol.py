@@ -93,12 +93,14 @@ with significant other visual content. Brand styling alone is not an exception.
 3. Otherwise an unmeasured ratio or a ratio outside [1,21] makes finding review and minimum null.
 4. Otherwise minimum is 3 for largeText and 4.5 for ordinary text. Finding is pass exactly when
 ratio >= minimum, else fail. Compare the unrounded ratio.
-Use one threshold binding so both outputs apply the same rule. A compact decision expression
-is choose(not sourceCurrent, 'review', choose(exempt, 'exception', choose(not usable,
-'review', choose(ratio >= threshold, 'pass', 'fail')))). Here exempt means logo or incidental
-and usable means measured and 1 <= ratio <= 21. The minimum is the threshold only when
-sourceCurrent and usable and not exempt. Large text still requires a ratio at least 3.
-Emit exactly {"finding":"review|exception|pass|fail","minimum":number or null}.
+The W3C rule can be transcribed as this implementation blueprint. Use these formulas without
+combining the threshold and applicability checks:
+bindings.exempt = "logo or incidental"
+bindings.usable = "measured and 1 <= ratio <= 21"
+bindings.threshold = "choose(largeText, 3, 4.5)"
+outputs.finding = "choose(not sourceCurrent, 'review', choose(exempt, 'exception', choose(not usable, 'review', choose(ratio >= threshold, 'pass', 'fail'))))"
+outputs.minimum = "choose(sourceCurrent and usable and not exempt, threshold, None)"
+Emit only finding and minimum as outputs. The independent observations are held outside this blueprint.
 The minimum is null for review or exception. This is a scoped preflight, not a whole-site audit."""
 
 ARRANGEMENT_CONTRACT = """Construct instrument.json for a voluntary shared-instrument planning screen.

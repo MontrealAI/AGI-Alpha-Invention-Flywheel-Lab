@@ -35,9 +35,6 @@ MODEL_SHA = '2fde00ce69dd4899c70d020845e2638353015bba0fdf161b3eb965f2bca4464e'
 MODEL_BYTES = 2497280736
 WORKSHOP_MODEL_ALIAS = 'Qwen2.5-Coder-7B-Instruct-Q4_K_M'
 WORKSHOP_MODEL_SHA = '509287f78cb4d4cf6b3843734733b914b2c158e43e22a7f4bf5e963800894d3c'
-WORKSHOP_MODEL_BYTES = 4683073536
-WORKSHOP_MODEL_URL = ('https://huggingface.co/Qwen/Qwen2.5-Coder-7B-Instruct-GGUF/resolve/'
-                      '13fb94bfda8c8cf22497dc57b78f391a9acb426a/qwen2.5-coder-7b-instruct-q4_k_m.gguf')
 ORIGINAL_REVISION = 'cdbee75f17c01a7cc42f958dc650907174af0554'
 LICENSE_URL = 'https://huggingface.co/Qwen/Qwen3-4B-Instruct-2507/resolve/' + ORIGINAL_REVISION + '/LICENSE'
 REQUIRED_RELEASE_CHECKS = ('local_inference', 'single_agent', 'multi_agent', 'parallel_exploration', 'workshop')
@@ -289,29 +286,34 @@ def main():
                 if any(event.get('kind') == 'model_completed' for event in entry.get('events', [])):
                     record['qualifications']['local_inference'] = 'PASS'
         record['quote_overall_status'] = quote.get('status') if quote else 'NOT_TESTED'
-        workshop_dir = work/'workshop'
-        workshop_weights = work/'workshop-coder7b.gguf'
-        record['downloads']['workshop_model'] = download(WORKSHOP_MODEL_URL, workshop_weights, WORKSHOP_MODEL_SHA, WORKSHOP_MODEL_BYTES)
-        workshop_run = run([sys.executable, str(PRODUCT/'scripts/qualify_workshop.py'), '--runtime', str(binary),
-                            '--model', str(workshop_weights), '--threads', '2', '--output', str(workshop_dir)],
-                           work/'workshop-command.log', 8100, environment)
-        record['commands'].append(workshop_run)
-        workshop = read(workshop_dir/'RESULT.json')
-        workshop_valid = bool(workshop and workshop.get('source_revision') == record['source_revision']
-                              and workshop.get('source_product_tree') == record['source_product_tree']
-                              and workshop.get('model_sha256') == WORKSHOP_MODEL_SHA
-                              and workshop.get('expected_model') == WORKSHOP_MODEL_ALIAS)
-        record['qualifications']['workshop'] = 'PASS' if (workshop_valid and workshop_run['returncode'] == 0
-            and workshop.get('status') == 'PASS') else 'FAIL'
-        if workshop_valid:
-            shutil.copyfile(workshop_dir/'RESULT.json', public/'WORKSHOP-LOCAL-QUALIFICATION.json')
-            for entry in workshop.get('cases', []):
-                name = entry.get('name')
-                if name in {'foundry', 'foundry-fresh', 'contrast', 'arrangement', 'custom'} and entry.get('status') == 'complete':
-                    archive = workshop_dir/(name + '.zip')
-                    if sha(archive) == entry.get('bundle_sha256') and entry.get('replay_exit') == 0:
-                        (public/'workshop').mkdir(exist_ok=True)
-                        shutil.copyfile(archive, public/'workshop'/archive.name)
+        workshop_scopes = {'vertical': {'foundry', 'foundry-fresh', 'arrangement', 'custom'},
+                           'contrast': {'contrast'}}
+        workshop_results = {}
+        for scope, expected_names in workshop_scopes.items():
+            workshop_dir = work/('workshop-' + scope)
+            workshop_run = run([sys.executable, str(PRODUCT/'scripts/qualify_workshop.py'), '--runtime', str(binary),
+                                '--model', str(weights), '--threads', '2', '--scope', scope, '--output', str(workshop_dir)],
+                               work/('workshop-' + scope + '.log'), 8100, environment)
+            record['commands'].append(workshop_run)
+            workshop = read(workshop_dir/'RESULT.json')
+            workshop_valid = bool(workshop and workshop.get('source_revision') == record['source_revision']
+                                  and workshop.get('source_product_tree') == record['source_product_tree']
+                                  and workshop.get('model_sha256') == MODEL_SHA and workshop.get('scope') == scope)
+            accepted = set()
+            if workshop_valid:
+                shutil.copyfile(workshop_dir/'RESULT.json', public/('WORKSHOP-' + scope.upper() + '-QUALIFICATION.json'))
+                for entry in workshop.get('cases', []):
+                    name = entry.get('name')
+                    if name in expected_names and entry.get('status') == 'complete' and entry.get('replay_exit') == 0:
+                        archive = workshop_dir/(name + '.zip')
+                        if sha(archive) == entry.get('bundle_sha256'):
+                            (public/'workshop').mkdir(exist_ok=True)
+                            shutil.copyfile(archive, public/'workshop'/archive.name)
+                            accepted.add(name)
+            workshop_results[scope] = bool(workshop_valid and workshop_run['returncode'] == 0 and
+                                           workshop.get('status') == 'PASS' and accepted == expected_names)
+        record['workshop_scopes'] = workshop_results
+        record['qualifications']['workshop'] = 'PASS' if all(workshop_results.values()) else 'FAIL'
         record['raw_output_notice'] = 'Raw model responses and event transcripts in receipts are untrusted provenance, not accepted claims. Portable quote artifacts are published only when their frozen cases pass; a failed arm publishes no accepted artifact. Extra model-authored project files are not published.'
     except Exception as error:
         record['error'] = {'type': type(error).__name__, 'message': sanitized_log(str(error))[:1000]}
@@ -328,7 +330,7 @@ def main():
             and all(value == 'PASS' for value in record['qualifications'].values())
             and record.get('quote_overall_status') == 'PASS') else 'FAIL'
         record['release_qualification'] = release_qualification(record)
-        for log_name in ['quote-command.log', 'workflow-command.log', 'strategy-command.log', 'workshop-command.log']:
+        for log_name in ['quote-command.log', 'workflow-command.log', 'strategy-command.log', 'workshop-vertical.log', 'workshop-contrast.log']:
             log_path = work/log_name
             if log_path.is_file():
                 with log_path.open('rb') as stream:
