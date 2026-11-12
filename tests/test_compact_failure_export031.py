@@ -52,7 +52,148 @@ class CompactFailureTests(unittest.TestCase):
   self.assertEqual(len(operation),1)
   steps=re.split(r'(?m)^      - ',operation[0])
   uploads=[step for step in steps if re.search(r'(?m)^        uses: actions/upload-artifact@',step)]
-  self.assertEqual(len(uploads),9)
+  # Existing nine strict exports stay intact; the tenth has an exact public allowlist.
+  self.assertEqual(len(uploads),10)
+  native=[step for step in uploads if 'name: native-design041-released-' in step]
+  self.assertEqual(len(native),1)
+  self.assertIn("        if: always() && steps.operation.outcome == 'success' && steps.released_native_design.outcome == 'success' && steps.native_seal.outcome == 'success'\n",native[0])
+  self.assertIn('          if-no-files-found: error\n',native[0])
+  self.assertEqual(re.findall(r'(?m)^            (.+)  quote=[step for step in uploads if 'name: public-quote-released-operation-' in step]
+  self.assertEqual(len(quote),1)
+  self.assertIn("        if: always() && steps.released_public_quote.outcome == 'success'\n",quote[0])
+  self.assertEqual(re.findall(r'(?m)^            (.+)$',quote[0]),[
+   '${{ runner.temp }}/released-public-quote/RESULT.json',
+   '${{ runner.temp }}/released-public-quote/AUDIT.json',
+   '${{ runner.temp }}/released-public-quote/fixed/PUBLIC.json.gz',
+   '${{ runner.temp }}/released-public-quote/ordinary/PUBLIC.json.gz',
+   '${{ runner.temp }}/released-public-quote/constructor/PUBLIC.json.gz'])
+  failure=[step for step in uploads if re.search(r'(?m)^        if: failure\(\)',step)]
+  self.assertEqual(len(failure),1)
+  self.assertIn("        if: failure() && steps.operation.outcome != 'success' && steps.compact_failure.outcome == 'success'\n",failure[0])
+  self.assertEqual(re.findall(r'(?m)^          path: (.+)$',failure[0]),['${{ runner.temp }}/downloaded-release-operation/FAILURE_LESSON.json'])
+  success=[step for step in uploads if 'name: connected014-published-operation-' in step]
+  wheel=[step for step in uploads if 'name: connected014-wheel-utility-' in step]
+  self.assertEqual(len(wheel),1)
+  for step in success+wheel:
+   self.assertIn("        if: always() && steps.operation.outcome == 'success'\n",step)
+  self.assertEqual(re.findall(r'(?m)^          path: (.+)$',wheel[0]),['${{ runner.temp }}/RELEASED_WHEEL.json'])
+  blue_sky=[step for step in uploads if 'name: blue-sky064-released-operation-' in step]
+  self.assertEqual(len(blue_sky),1)
+  self.assertIn("        if: always() && steps.released_blue_sky.outcome == 'success'\n",blue_sky[0])
+  self.assertEqual(re.findall(r'(?m)^          path: (.+)$',blue_sky[0]),['${{ runner.temp }}/released-blue-sky064/RESULT.json'])
+  self.assertEqual(len(success),1)
+  self.assertEqual(re.findall(r'(?m)^            (.+)$',success[0]),[
+   '${{ runner.temp }}/RELEASE_DOWNLOAD.json',
+   '${{ runner.temp }}/downloaded-release-operation/DOWNLOADED_RELEASE_RUN.json',
+   '${{ runner.temp }}/downloaded-release-operation/downloaded-operation-keyfree.zip'])
+  self.assertIn('          path: |\n',success[0])
+  flexibility=[step for step in uploads if 'name: transformational063-released-operation-' in step]
+  self.assertEqual(len(flexibility),1)
+  self.assertIn("        if: always() && steps.released_flexibility.outcome == 'success'\n",flexibility[0])
+  self.assertEqual(re.findall(r'(?m)^            (.+)$',flexibility[0]),[
+   '${{ runner.temp }}/released-transformational063/REPORT.json',
+   '${{ runner.temp }}/released-transformational063/PROTOCOL.json',
+   '${{ runner.temp }}/released-transformational063/SOURCE.json',
+   '${{ runner.temp }}/released-transformational063/AUDIT.json',
+   '${{ runner.temp }}/released-transformational063/source',
+   '${{ runner.temp }}/released-transformational063/public'])
+  portfolio=[step for step in uploads if 'name: public-portfolio-released-operation-' in step]
+  self.assertEqual(len(portfolio),1)
+  self.assertIn("        if: always() && steps.released_portfolio.outcome == 'success'\n",portfolio[0])
+  self.assertEqual(re.findall(r'(?m)^            (.+)$',portfolio[0]),[
+   '${{ runner.temp }}/released-portfolio-guards.json',
+   '${{ runner.temp }}/historical-portfolio-source.json',
+   '${{ runner.temp }}/released-portfolio-artifacts.json',
+   '${{ runner.temp }}/released-portfolio-finance.json',
+   '${{ runner.temp }}/released-portfolio-recovered-four.json',
+   '${{ runner.temp }}/released-portfolio-recovered-two.json'])
+  genesis=[step for step in uploads if 'name: genesis002-released-operation-' in step]
+  self.assertEqual(len(genesis),1)
+  self.assertIn("        if: always() && steps.released_genesis.outcome == 'success'\n",genesis[0])
+  self.assertEqual(re.findall(r'(?m)^            (.+)$',genesis[0]),[
+   '${{ runner.temp }}/released-genesis/QUALIFICATION.json',
+   '${{ runner.temp }}/released-genesis/public'])
+  commitment=[step for step in uploads if 'name: commitment001-released-operation-' in step]
+  self.assertEqual(len(commitment),1)
+  self.assertIn('        if: always()\n',commitment[0])
+  self.assertIn('          if-no-files-found: error\n',commitment[0])
+  self.assertEqual(re.findall(r'(?m)^            (.+)$',commitment[0]),[
+   '${{ runner.temp }}/released-commitment001/REPORT.json',
+   '${{ runner.temp }}/released-commitment001/AUDIT.json',
+   '${{ runner.temp }}/released-commitment001-positive/REPORT.json',
+   '${{ runner.temp }}/released-commitment001-positive/AUDIT.json',
+   '${{ runner.temp }}/released-commitment001-public.zip',
+   '${{ runner.temp }}/released-commitment001-positive-public.zip'])
+  # The account directories contain private recovery authority. Only the
+  # package command's audited exact allowlist may produce these uploaded ZIPs;
+  # a generic archive of the operating directory is not an equivalent export.
+  producers=[step for step in steps if step.startswith('name: Operate the capacity-backed turn from actual downloaded release bytes\n')]
+  self.assertEqual(len(producers),1)
+  producer=producers[0]
+  self.assertIn('        working-directory: ${{ runner.temp }}/downloaded-release-operation/source\n',producer)
+  self.assertIn('        run: |\n',producer)
+  self.assertEqual(re.findall(r'(?m)^          (.+)$',producer),[
+   'python -m campaign.genesis_commitment001.runner run --output "$RUNNER_TEMP/released-commitment001" --scenario central --arm retained',
+   'python -m campaign.genesis_commitment001.runner audit --output "$RUNNER_TEMP/released-commitment001"',
+   'python -m campaign.genesis_commitment001.runner resume --output "$RUNNER_TEMP/released-commitment001" --scenario central --arm retained',
+   'python -m campaign.genesis_commitment001.runner run --output "$RUNNER_TEMP/released-commitment001-positive" --scenario favorable_envelope --arm retained',
+   'python -m campaign.genesis_commitment001.runner audit --output "$RUNNER_TEMP/released-commitment001-positive"',
+   'python -m campaign.genesis_commitment001.runner resume --output "$RUNNER_TEMP/released-commitment001-positive" --scenario favorable_envelope --arm retained',
+   'python -m campaign.genesis_commitment001.runner package --output "$RUNNER_TEMP/released-commitment001" --archive "$RUNNER_TEMP/released-commitment001-public.zip"',
+   'python -m campaign.genesis_commitment001.runner package --output "$RUNNER_TEMP/released-commitment001-positive" --archive "$RUNNER_TEMP/released-commitment001-positive-public.zip"',
+   'python -m zipfile -e "$RUNNER_TEMP/released-commitment001-positive-public.zip" "$RUNNER_TEMP/released-commitment001-positive-public"',
+   'cd "$RUNNER_TEMP/released-commitment001-positive-public/source"',
+   'python -m campaign.genesis_commitment001.runner audit --output "$RUNNER_TEMP/released-commitment001-positive-public"'])
+  self.assertFalse(any('*.stdout' in step or '*.stderr' in step or 'failed-operation-keyfree' in step for step in uploads))
+ def test_workflow_exports_only_compact_failure(self):
+  text=(P.parents[1]/'.github/workflows/connected014-release.yml').read_text()
+  self.assert_workflow_upload_contract(text)
+  for changed in (text.replace(" && steps.compact_failure.outcome == 'success'",''),
+                  text.replace('/FAILURE_LESSON.json','/*.stderr'),
+                  text.replace('/RELEASED_WHEEL.json','/*.stdout'),
+                  text.replace("always() && steps.released_blue_sky.outcome == 'success'",'always()'),
+                  text.replace('/released-blue-sky064/RESULT.json','/released-blue-sky064/private'),
+                  text.replace("always() && steps.released_flexibility.outcome == 'success'",'always()'),
+                  text.replace('/released-transformational063/public','/released-transformational063/private'),
+                  text.replace("always() && steps.released_portfolio.outcome == 'success'",'always()'),
+                  text.replace('/released-portfolio-finance.json','/released-portfolio/private'),
+                  text.replace("always() && steps.released_genesis.outcome == 'success'",'always()'),
+                  text.replace('/released-genesis/public','/released-genesis/engineering-account'),
+                  text.replace('/released-genesis/QUALIFICATION.json','/released-genesis/*.stderr'),
+                  text.replace("always() && steps.operation.outcome == 'success'",'always()'),
+                  text.replace('downloaded-operation-keyfree.zip','failed-operation-keyfree.zip'),
+                  text.replace("steps.native_seal.outcome == 'success'", "steps.native_seal.outcome != 'success'"),
+                  text.replace(" && steps.released_native_design.outcome == 'success'", ''),
+                  text.replace('NATIVE_DESIGN041_PUBLIC.json','private/native.json'),
+                  text.replace('NATIVE_DESIGN041_RELEASE_RECEIPT.json','*.json'),
+                  text.replace('NATIVE_DESIGN041_RELEASE_RECEIPT.json','account/STATE.json'),
+                  text.replace('NATIVE_DESIGN041_PUBLIC.json','NATIVE_DESIGN041_PUBLIC.json\n            ${{ runner.temp }}/private/authority.key'),
+                  text.replace('native-design041-released-', 'unreviewed-native-archive-')):
+   with self.assertRaises(AssertionError): self.assert_workflow_upload_contract(changed)
+ def test_commitment_upload_refuses_private_paths_and_unchecked_archives(self):
+  text=(P.parents[1]/'.github/workflows/connected014-release.yml').read_text()
+  self.assert_workflow_upload_contract(text)
+  package='python -m campaign.genesis_commitment001.runner package --output "$RUNNER_TEMP/released-commitment001" --archive "$RUNNER_TEMP/released-commitment001-public.zip"'
+  for changed in (
+    text.replace('${{ runner.temp }}/released-commitment001/REPORT.json','${{ runner.temp }}/released-commitment001/private'),
+    text.replace('${{ runner.temp }}/released-commitment001-positive-public.zip','${{ runner.temp }}/released-commitment001-positive/*'),
+    text.replace(package,''),
+    text.replace(package,'python -m zipfile -c "$RUNNER_TEMP/released-commitment001-public.zip" "$RUNNER_TEMP/released-commitment001/private"'),
+    text.replace('working-directory: ${{ runner.temp }}/downloaded-release-operation/source\n        run: |\n          python -m campaign.genesis_commitment001.runner','working-directory: ${{ github.workspace }}\n        run: |\n          python -m campaign.genesis_commitment001.runner'),
+    text.replace('${{ runner.temp }}/historical-portfolio-source.json','${{ runner.temp }}/historical-portfolio-source/private')):
+   self.assertNotEqual(changed,text)
+   with self.assertRaises(AssertionError): self.assert_workflow_upload_contract(changed)
+,native[0]),[
+   '${{ runner.temp }}/NATIVE_DESIGN041_RELEASE_RECEIPT.json',
+   '${{ runner.temp }}/NATIVE_DESIGN041_PUBLIC.json',
+   '${{ runner.temp }}/RELEASE_DOWNLOAD.json'])
+  native_run=[step for step in steps if step.startswith('name: Independently exercise native design041 on actual downloaded published bytes\n')]
+  native_seal=[step for step in steps if step.startswith('name: Seal immutable source-bound key-free released native design receipt\n')]
+  self.assertEqual(len(native_run),1);self.assertEqual(len(native_seal),1)
+  self.assertIn('        id: released_native_design\n',native_run[0])
+  self.assertIn('        working-directory: ${{ runner.temp }}/downloaded-release-operation/source\n',native_run[0])
+  self.assertIn('        id: native_seal\n',native_seal[0])
+  self.assertIn('            --download-receipt "$RUNNER_TEMP/RELEASE_DOWNLOAD.json" \\\n',native_seal[0])
   quote=[step for step in uploads if 'name: public-quote-released-operation-' in step]
   self.assertEqual(len(quote),1)
   self.assertIn("        if: always() && steps.released_public_quote.outcome == 'success'\n",quote[0])
