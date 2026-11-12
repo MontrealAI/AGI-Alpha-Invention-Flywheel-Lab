@@ -66,7 +66,13 @@ class CompactFailureTests(unittest.TestCase):
   native_seal=[step for step in steps if step.startswith('name: Seal immutable source-bound key-free released native design receipt\n')]
   self.assertEqual(len(native_run),1);self.assertEqual(len(native_seal),1)
   self.assertIn('        id: released_native_design\n',native_run[0])
-  self.assertIn('        working-directory: ${{ runner.temp }}/downloaded-release-operation/source\n',native_run[0])
+  self.assertIn('        working-directory: ${{ runner.temp }}/native-design041-released-source\n',native_run[0])
+   isolation=[step for step in steps if step.startswith('name: Isolate published native design source without modifying canonical extracted release\n')]
+   self.assertEqual(len(isolation),1)
+   self.assertIn("'actual-release-download/connected014-source.zip'",isolation[0])
+   self.assertIn("'native-design041-released-source'",isolation[0])
+   self.assertIn('archive_manifest(archive)',isolation[0])
+   self.assertIn('ISOLATED_SOURCE_SNAPSHOT_MISMATCH',isolation[0])
   self.assertIn('        id: native_seal\n',native_seal[0])
   self.assertIn('            --download-receipt "$RUNNER_TEMP/RELEASE_DOWNLOAD.json" \\\n',native_seal[0])
   quote=[step for step in uploads if 'name: public-quote-released-operation-' in step]
@@ -179,8 +185,26 @@ class CompactFailureTests(unittest.TestCase):
                   text.replace('${{ runner.temp }}/NATIVE_DESIGN041_RELEASE_RECEIPT.json','${{ runner.temp }}/*.json'),
                   text.replace('${{ runner.temp }}/NATIVE_DESIGN041_RELEASE_RECEIPT.json','${{ runner.temp }}/account/STATE.json'),
                   text.replace('${{ runner.temp }}/NATIVE_DESIGN041_PUBLIC.json','${{ runner.temp }}/NATIVE_DESIGN041_PUBLIC.json\n            ${{ runner.temp }}/private/authority.key'),
-                  text.replace('native-design041-released-', 'unreviewed-native-archive-')):
+                  text.replace('native-design041-released-', 'unreviewed-native-archive-'),
+                  text.replace('working-directory: ${{ runner.temp }}/native-design041-released-source',
+                               'working-directory: ${{ runner.temp }}/downloaded-release-operation/source'),
+                  text.replace("'actual-release-download/connected014-source.zip'",
+                               "'unverified-local-source.zip'")):
    with self.assertRaises(AssertionError): self.assert_workflow_upload_contract(changed)
+ def test_prepublication_native_demo_cannot_contaminate_genesis_archive_source(self):
+  text=(P.parents[1]/'.github/workflows/connected014-release.yml').read_text()
+  isolation='name: Isolate prepublication native design source without modifying canonical extracted release'
+  native='name: Qualify native design041 from the exact clean prepublication archive'
+  genesis='name: Qualify GENESIS from the exact clean source archive'
+  self.assertEqual(text.count(isolation),1)
+  self.assertLess(text.index(isolation),text.index(native))
+  self.assertLess(text.index(native),text.index(genesis))
+  self.assertIn('working-directory: ${{ runner.temp }}/native-design041-prepublication-source',text)
+  self.assertIn("'connected014-qualified/connected014-source.zip'",text)
+  self.assertIn("'native-design041-prepublication-source'",text)
+  self.assertIn('name: Verify exact extracted-source membership after native-design',text)
+  self.assertIn('name: Verify exact extracted-source membership after omega-v4',text)
+
  def test_commitment_upload_refuses_private_paths_and_unchecked_archives(self):
   text=(P.parents[1]/'.github/workflows/connected014-release.yml').read_text()
   self.assert_workflow_upload_contract(text)
