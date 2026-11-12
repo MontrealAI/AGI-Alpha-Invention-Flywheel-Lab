@@ -1,0 +1,68 @@
+{
+  "accepted": true,
+  "actions_sha256": "790e9e78eb392a1cd1ddba65cb44889b264fc1d441be7977d2ae23a17b635ac8",
+  "actual_records": 257,
+  "checks": [
+    "typed_native_collection_and_refund_full_replay",
+    "actual_output_tamper_rejected",
+    "same_account_authenticated_reopen",
+    "changed_manifest_refused_no_reseed"
+  ],
+  "horizon_hours": [
+    0,
+    8760
+  ],
+  "orders": [
+    {
+      "id": "collected",
+      "state": "released"
+    },
+    {
+      "id": "refund",
+      "state": "refunded"
+    }
+  ],
+  "original_catalog_transition": false,
+  "original_mutations": 0,
+  "prospective_native_files_sha256": {
+    "commercial/ledger.py": "dbe12cbc077a348eb1b2c4a02442cb474381a4b2f295119ae11c9546e7898213",
+    "connected_enterprise/finance.py": "b77ae321fa7fd010af564c73027edabee2293ea46caae873530684b4169b855c"
+  },
+  "scope": "fresh native engineering fixture; not original continuation or market calibration",
+  "source_sha256": {
+    "enterprise078/transactional_native/__init__.py": "3dd131a3c1614c2312baa02562569c08eaec8652cd0149cd2e872ad90bb738c8",
+    "enterprise078/transactional_native/fixture.py": "30f8b068585ce60636a8a0b37052a66696cf3f83b7e541ee420a7bd97dd0f25e",
+    "enterprise078/transactional_native/service.py": "cfc026633d499e33ad2c2fb9498a921889406bbd91aac51b97850531fed5ac8d",
+    "enterprise078/transactional_native/stage.py": "5e3e5787cc0ce16d6717c9d7a0ce4242889a6ea912225253a7a2acf92353e9e9",
+    "enterprise078/transactional_native/test_native.py": "0a6ac53965e2bbee24ba7f2e37c0050921fb7ac48c6d425d667e9e6afa0b39c1"
+  },
+  "summary": {
+    "assuranceScope": "Local provider assumption only; full late-debit reserve retained for conservative investment",
+    "available": 1069600000,
+    "cash": 1079600000,
+    "collections": 200000000,
+    "conditionalEarned": 79600000,
+    "custodyReserve": 0,
+    "custodyRestricted": 0,
+    "earnedProtectionBacking": 0,
+    "equityProtectionBacking": 10000000,
+    "expensePaid": 120400000,
+    "expenses": 120400000,
+    "fundingScope": "Bounded principal-plus-fee exposure; arbitrary additional debits are not guaranteed",
+    "investmentStopped": false,
+    "netEarnedAfterIncurredObligations": 79600000,
+    "payables": 0,
+    "profit": 79600000,
+    "recoveryIncome": 0,
+    "reservedInvestment": 0,
+    "revenue": 200000000,
+    "strictEarnedControl": 69600000,
+    "tailReserve": 10000000,
+    "unrestrictedEarned": 79600000,
+    "workingCapital": 0
+  },
+  "whole_development_host_model_cost": "UNKNOWN",
+  "preregistration": "12b90371231c6a3fb04e6bac05a66931700545f5",
+  "combined_regressions_passed": 64,
+  "original_export_verified_unchanged": "66da91b5c4849a08d1e6b443202aaf81f8bf86a30bd2e392ec5feda5c6a9fc9f"
+}

@@ -1,0 +1,32 @@
+{
+  "schema": "enterprise078/typed-delivery-receipt/v1",
+  "request_sha256": "5ebbeb19b7778cd499e2403a55d3c8e96f168537df69c45ef498cd7dcabff1bc",
+  "type": "enterprise078/transactional-database-and-derived-csv/v1",
+  "database_sha256": "8a7284ff5902e27a2a2a42626932bc4a2c0561c3469e21dc2895719ed93697c1",
+  "database_bytes": 5947392,
+  "csv_sha256": "767c382cff92e76bf353652cac0d51f092e2f4b5698b48c7715ec566f0578945",
+  "csv_bytes": 596,
+  "acceptance": {
+    "accepted": true,
+    "errors": [],
+    "unique_events": 100000,
+    "groups": 31,
+    "total_units": 47,
+    "scope": "actual local SQLite and CSV; synthetic nonfinancial records"
+  },
+  "accepted": true,
+  "native_catalog_admitted": false,
+  "cpu_seconds": 0.535016451,
+  "wall_seconds": 0.5409064569976181,
+  "source_rows_after": 100000,
+  "writer_connection_remained_open": true,
+  "source_wal_bytes": 5974032,
+  "original_financial_actions": 0,
+  "whole_development_host_model_cost": "UNKNOWN",
+  "evidence_role": "development; ordinary SQLite backup; not fresh commerce",
+  "preregistration": "fad21fecfeae75ed9a695cc5389531a46c8513c1",
+  "source_files_sha256": {
+    "snapshot.py": "4d76cf1d88be144b836cac275bc9c185ea5404d43254a4f4a8498eb7cc9ab7d2",
+    "test_snapshot.py": "41f931899f5f32ff91a50ccf14a988c59f283bf1edb0b9f31a679101f3fe223b"
+  }
+}

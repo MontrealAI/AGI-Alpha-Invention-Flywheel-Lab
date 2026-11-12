@@ -1,0 +1,70 @@
+{
+  "schema": "enterprise078/transactional-successor/protocol-v1",
+  "status": "PROSPECTIVE_NOT_YET_EXECUTED",
+  "purpose": "Replace unsupported physical-laboratory scale assumptions with a useful purely computational successor: persistent event import and derived-view construction under retry and interruption.",
+  "scope": "Synthetic, nonfinancial local SQLite data only. No live customer or operating-account mutation.",
+  "cases": [
+    {
+      "id": "normal",
+      "events": 257,
+      "mode": "normal",
+      "expected": "exact_unique_rows"
+    },
+    {
+      "id": "lost_reply",
+      "events": 257,
+      "mode": "commit_then_reply_loss",
+      "expected": "same_output_after_retry"
+    },
+    {
+      "id": "mid_batch_crash",
+      "events": 257,
+      "mode": "rollback_partial_batch",
+      "expected": "no_partial_output_then_exact_retry"
+    },
+    {
+      "id": "reordered_duplicate",
+      "events": 257,
+      "mode": "reverse_and_duplicate",
+      "expected": "order_independent_same_state"
+    },
+    {
+      "id": "conflicting_duplicate",
+      "events": 257,
+      "mode": "same_id_different_value",
+      "expected": "refuse_and_preserve_prior_state"
+    },
+    {
+      "id": "invalid_event",
+      "events": 257,
+      "mode": "missing_identity",
+      "expected": "refuse_before_mutation"
+    },
+    {
+      "id": "derived_restart",
+      "events": 257,
+      "mode": "interrupted_projection_then_resume",
+      "expected": "complete_exact_view_after_restart"
+    },
+    {
+      "id": "largest_gateway",
+      "events": 100000,
+      "mode": "commit_then_reply_loss",
+      "expected": "accepted_database_and_csv"
+    }
+  ],
+  "constructor": "Developer-written ordinary SQLite transaction/unique-event mechanism. No model API and no claimed new algorithm.",
+  "outputs": [
+    "persisted SQLite event database",
+    "persisted materialized account/category totals",
+    "deterministic CSV with source and output hashes"
+  ],
+  "acceptance": "Validate actual persisted rows, unique identities, exact integer totals and atomic rollback with a separate reference computation plus actual SQLite queries. Count/refuse conflicts and malformed input; successful status alone is insufficient.",
+  "comparators": "Strong ordinary transactional SQL with equal input/content. Retain it if a proposed construction ties; do not weaken baseline to blind append.",
+  "observations": "Declared fixtures and fault boundary only. No hidden future draws or buyer reservation values.",
+  "primary_metric": "Exact accepted outputs and preservation of pre-failure durable state, including largest real artifact. Any false acceptance rejects the construction.",
+  "costs": "Measure wall time, CPU, SQLite version, output bytes and row counts. Construction/inference billing and customer economics remain unknown and cannot be counted as zero or booked as profit.",
+  "financial_boundary": "No new capital or balances. Original078 authorities are currently unavailable; native funded successor and commercial scale remain unexecuted pending genuine account access and source-compatible admission.",
+  "stopping": "Exactly eight cases once after source freeze; retain every failure. Fix implementation defects only as separately labelled revisions. No seed search or outcome replacement.",
+  "decision": "A correct artifact permits a later funded offer/admission test; failure stops this implementation. Neither result establishes US$3B, market adoption or discovery advantage."
+}

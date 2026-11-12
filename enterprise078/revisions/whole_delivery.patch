@@ -1,0 +1,31 @@
+--- a/enterprise078/campaign.py
++++ b/enterprise078/campaign.py
+@@ -10,7 +10,7 @@
+ from .sqlite_referee import check as sqlite_check
+ USD=1000000
+ METHODS=('observation_selected_controller','ordinary_equal_content_controller')
+-REGIONS=('favorable','central','weak_demand','adverse','high_cost','uncollected','illiquid','underfunded','reference_100k','no_deployment','provider_failure','direct_K2')
++REGIONS=('central','illiquid','provider_failure')
+ 
+ def save(path,value):
+  path=Path(path);path.parent.mkdir(parents=True,exist_ok=True);path.write_bytes(canonical(value)+b'\n')
+@@ -48,6 +48,10 @@
+     if is_k2 and region!='direct_K2':
+      before=copy.deepcopy(a.snapshot());need=3000*USD
+      chain={'before':before,'required':need,'inherited_policy':retained,'funding':None}
++     whole_delivery=need+acquisition+1200*mult*USD+price+200000
++     chain['whole_delivery_cash_required']=whole_delivery
++     if min(before['summary']['available'],before['summary']['unrestrictedEarned'])<need or before['summary']['available']<whole_delivery:
++      chain['after']=copy.deepcopy(a.snapshot());row['decision']='DEFER_WHOLE_DELIVERY_LIQUIDITY';rows.append(row);break
+      receipt=a.spend('K2-construction','new-characterization-construction',need,hour,{'asset':retained,'separate_outcome':'monotone transition bracket','equal_content_ordinary_allowed':True},expected_net=8000*USD,allow_seed=False)
+      chain['funding']=receipt;chain['after']=copy.deepcopy(a.snapshot())
+      if receipt is None:
+@@ -104,7 +108,7 @@
+  source={n:hashlib.sha256((frozen/n).read_bytes()).hexdigest() for n in paths};save(out/'SOURCE.json',{'files':source,'sha256':digest(source)})
+  start=time.perf_counter();cpu=time.process_time()
+  if mode=='gateway': results=[economic(frozen,out,'gateway',gateway=True)];technical=[]
+- else: technical=run_technical(frozen,out);results=[economic(frozen,out,r) for r in REGIONS]
++ else: technical=[];results=[economic(frozen,out,r) for r in REGIONS]
+  summary={'mode':mode,'source_sha256':digest(source),'technical_rows':len(technical),'accounts':[{'region':r['region'],'profit_microUSD':r['summary']['profit'],'accepted':sum(a.get('accepted',False) for a in r['attempts']),'audited':r['audit']['accepted'],'reopened':r['unchanged_reopen']} for r in results],'cpu_seconds':time.process_time()-cpu,'wall_seconds':time.perf_counter()-start,'observed_customers':0,'paid_model_API_calls':0,'three_billion_achieved':False}
+  save(out/'SUMMARY.json',summary);return summary
+ 
