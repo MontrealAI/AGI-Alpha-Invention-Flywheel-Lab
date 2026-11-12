@@ -67,12 +67,12 @@ class CompactFailureTests(unittest.TestCase):
   self.assertEqual(len(native_run),1);self.assertEqual(len(native_seal),1)
   self.assertIn('        id: released_native_design\n',native_run[0])
   self.assertIn('        working-directory: ${{ runner.temp }}/native-design041-released-source\n',native_run[0])
-   isolation=[step for step in steps if step.startswith('name: Isolate published native design source without modifying canonical extracted release\n')]
-   self.assertEqual(len(isolation),1)
-   self.assertIn("'actual-release-download/connected014-source.zip'",isolation[0])
-   self.assertIn("'native-design041-released-source'",isolation[0])
-   self.assertIn('archive_manifest(archive)',isolation[0])
-   self.assertIn('ISOLATED_SOURCE_SNAPSHOT_MISMATCH',isolation[0])
+  isolation=[step for step in steps if step.startswith('name: Isolate published native design source without modifying canonical extracted release\n')]
+  self.assertEqual(len(isolation),1)
+  self.assertIn("'actual-release-download/connected014-source.zip'",isolation[0])
+  self.assertIn("'native-design041-released-source'",isolation[0])
+  self.assertIn('archive_manifest(archive)',isolation[0])
+  self.assertIn('ISOLATED_SOURCE_SNAPSHOT_MISMATCH',isolation[0])
   self.assertIn('        id: native_seal\n',native_seal[0])
   self.assertIn('            --download-receipt "$RUNNER_TEMP/RELEASE_DOWNLOAD.json" \\\n',native_seal[0])
   quote=[step for step in uploads if 'name: public-quote-released-operation-' in step]
