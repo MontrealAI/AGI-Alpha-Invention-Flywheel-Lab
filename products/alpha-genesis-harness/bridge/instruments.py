@@ -94,8 +94,10 @@ def compile_formula(source, bindings):
         if isinstance(node, ast.BoolOp):
             return operation("and" if isinstance(node.op, ast.And) else "or", *(child(item) for item in node.values))
         if isinstance(node, ast.Compare) and all(type(op) in _COMPARISONS for op in node.ops):
-            operands = [node.left, *node.comparators]
-            terms = [operation(_COMPARISONS[type(op)], child(operands[i]), child(operands[i + 1])) for i, op in enumerate(node.ops)]
+            # Adjacent comparisons share the middle expression. Compiling it
+            # twice would expand nested chains exponentially before evaluation.
+            operands = [child(part) for part in (node.left, *node.comparators)]
+            terms = [operation(_COMPARISONS[type(op)], operands[i], operands[i + 1]) for i, op in enumerate(node.ops)]
             return terms[0] if len(terms) == 1 else operation("and", *terms)
         if isinstance(node, ast.IfExp):
             return operation("if", child(node.test), child(node.body), child(node.orelse))

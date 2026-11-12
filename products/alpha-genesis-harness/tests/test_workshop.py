@@ -11,7 +11,7 @@ from unittest.mock import patch
 import zipfile
 
 from bridge.adapters import BridgeError
-from bridge.instruments import evaluate
+from bridge.instruments import compile_formula, evaluate
 from bridge.server import HarnessServer
 from bridge.workflows import WorkflowService
 from bridge import workshop, workshop_protocol
@@ -50,6 +50,20 @@ def authored_request(marker="1", values=(1, 2, 90317)):
 
 
 class FormulaTests(unittest.TestCase):
+    def test_nested_comparison_operands_share_one_compilation(self):
+        formula = "True"
+        for _ in range(22):
+            formula = f"True == ({formula}) == True"
+        compiled = compile_formula(formula, {})
+        for _ in range(22):
+            left, right = compiled["args"]
+            shared = left["args"][1]
+            self.assertIs(shared, right["args"][0])
+            compiled = shared
+        self.assertIs(compiled, True)
+        with self.assertRaisesRegex(ValueError, "operation or nesting bound"):
+            evaluate({"inputs": [], "outputs": {"result": {"formula": formula}}}, {}, max_operations=30)
+
     def test_formula_bindings_and_lazy_branch(self):
         spec = {"inputs": ["x"], "bindings": {"twice": {"formula": "2 * x"}},
                 "outputs": {"result": {"formula": "twice if 0 <= x <= 10 else None"}}}
