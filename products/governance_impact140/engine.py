@@ -71,7 +71,7 @@ def _indexed(rows, kind):
 def _applies(requirement, system):
     return bool(requirement and
                 ("*" in requirement["applies_to"] or
-                 bool(set(requirement["applies_to"]) & set(system["tags"])))
+                 bool(set(requirement["applies_to"]) & set(system["tags"]))))
 
 
 def _read_evidence(rows, systems, before, after):
