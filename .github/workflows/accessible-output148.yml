@@ -55,17 +55,21 @@ jobs:
             > "$RUNNER_TEMP/accessible148/RESULT.json"
       - name: Verify claim tier and produce key-free public receipt
         shell: bash
+        env:
+          EXECUTING_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
         run: |
           python -B - <<'PY'
-          import json, os, hashlib
+          import json, os, hashlib, subprocess
           from pathlib import Path
           root = Path(os.environ['RUNNER_TEMP'])/'accessible148'
           result=json.loads((root/'RESULT.json').read_text())
           assert result['verdict']=='PASS_STRUCTURAL_ONLY'
           assert result['requires_semantic_and_assistive_technology_review'] is True
           assert result['commercial_verdict']=='NOT_ESTABLISHED'
+          literal_head=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()
+          assert literal_head == os.environ['EXECUTING_SHA'], 'RECEIPT_MUST_BIND_EXACT_CHECKOUT'
           public={"schema":"accessible-output148/hosted-qualification/v1",
-                  "source_commit":os.environ['GITHUB_SHA'],
+                  "source_commit":literal_head,
                   "claim":"synthetic_offline_structural_engineering_only",
                   "result":result,
                   "source_file_sha256":hashlib.sha256(Path('research/accessible_output148/gate.py').read_bytes()).hexdigest(),
@@ -79,7 +83,7 @@ jobs:
         if: success()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: accessibility148-${{ github.sha }}-${{ github.run_attempt }}
+          name: accessibility148-${{ github.event.pull_request.head.sha || github.sha }}-${{ github.run_attempt }}
           path: ${{ runner.temp }}/accessible148/PUBLIC.json
           if-no-files-found: error
           retention-days: 7
