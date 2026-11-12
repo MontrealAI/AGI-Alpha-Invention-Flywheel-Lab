@@ -1,0 +1,19 @@
+# Review143 — prospectively frozen adverse attribution falsifier
+
+**Status:** adversarial, synthetic, evidence-only. Not a financial account integration, purchase, product, commercial validation or recommendation to merge. This review isolates one accounting claim in native design041 against a complete source-linked loss scenario.
+
+**Frozen sources:** main `fe8ac39b56bc70c6b07555eed54574bd23ea2cc4`; PR77 design search `cd5281b0ae7b484572bfb35ccb7e51ef5b3be4b3`. Review branch `review/native-design041-adverse-attribution143-20261112`. Keep both sources unchanged. This is an additive test only; the PR77 author/PR40 financial integration owner retain their branches and authority.
+
+## Registered decisive cases (all cases, no seed search)
+
+1. **Positive collected control:** a previously collected first order, one post-activation collected different-customer/service order with margin 28 modeled units, and one EARNED acquisition invoice costing 2 units. Original witness and independent one-plan net must both report +26; no losses.
+2. **Shared-plan quality rejection:** append one source-linked order with no collection and 90 units of incurred failed service cost to that exact same plan. Original witness is expected to remain +26 *because it filters only settled positive-margin orders*. Conservative plan-package net must be 28 − 90 − 2 = **−64**. That discrepancy falsifies the claim that the old witness alone covers all source-linked costs; it is not a failed native ledger audit or an actual customer case.
+3. **Unrelated-loss control:** put the otherwise identical 90-unit rejected order on a different unconnected plan. A one-plan package should remain +26, not charge unrelated orders.
+4. **Multiple affected invoices:** add another EARNED invoice costing 5 linked to a valid second plan on the same successor; the independently costed connected package must charge it once, returning +21 if no losses and −69 if the shared-plan rejected order remains. If the source metadata is insufficient to resolve a complete component, fail closed rather than award a positive causal/investment claim.
+5. **Invalid/unknown costs:** missing, negative or noninteger costs, duplicate order or plan identities and unclassified source links must fail closed. No external price, demand, liquidity or market condition can be inferred.
+
+Execute exact source unchanged in an isolated public GitHub Actions job; verify pinned SHAs, no collision, no account import/download. An expected counterexample counts as *successful falsification*, not a passing economic mechanism. Preserve red/failed jobs with original conclusion; repair only execution/provenance defects prospectively. The witness's **existing limited assertion of positive collected linked-order contribution** may still be arithmetically correct; the false upgrade being tested is to **complete connected investment contribution** and causal new economic value.
+
+The comparator is the strongest cost-complete source-linked accounting available, not a price-weak alternative. PR #115 already records a related shared/transitive-enabler problem on different historical source; do not claim this issue is unprecedented. Neither these synthetic examples nor a self-authored independent checker demonstrates empirical commerce, real profit, recovered liabilities, original-account source migration, a superior discovery process or USD3B trailing-365 result.
+
+**Stopping rule:** execute exactly the registered cases; retain all results regardless of sign. **Required verdict:** `ADVERSE_COUNTEREXAMPLE_REPRODUCED` if original witness stays positive and connected package net is nonpositive under the declared shared-loss case; otherwise report actual observed discrepancy/failure without revising examples post hoc. This branch must remain review-only, not merged wholesale. No paid APIs, spending, keys, outreach or transactions.
