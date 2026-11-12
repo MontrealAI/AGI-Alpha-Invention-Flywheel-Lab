@@ -3,10 +3,14 @@
 from __future__ import annotations
 
 import argparse
+import ast
 import hashlib
+from io import StringIO
 import json
 import math
 from pathlib import Path
+import re
+import tokenize
 
 
 # Pin source at this module's own load, before a later lazy GENESIS import.
@@ -38,9 +42,75 @@ def _json_equal(left, right):
     return left == right
 
 
+_BINARY = {ast.Add: "add", ast.Sub: "sub", ast.Mult: "mul", ast.Div: "div"}
+_COMPARISONS = {ast.Eq: "eq", ast.Lt: "lt", ast.LtE: "lte", ast.Gt: "gt", ast.GtE: "gte"}
+_FUNCTIONS = {"abs", "min", "max", "sum", "count", "choose"}
+_JSON_LITERALS = {"true": True, "false": False, "null": None}
+
+
+def compile_formula(source, bindings):
+    """Translate a small expression syntax to evaluator operations. Never compile Python bytecode."""
+    if not isinstance(source, str) or not 0 < len(source) <= 1024:
+        raise ValueError("Formula text must be between 1 and 1024 characters.")
+    source = source.strip()
+    if "\n" in source or "\r" in source:
+        raise ValueError("Each formula must fit on one line.")
+    try:
+        if "&&" in source or "||" in source:
+            # Accept common boolean spellings only at operator tokens, never
+            # inside a literal or an identifier.
+            tokens = list(tokenize.generate_tokens(StringIO(source).readline))
+            aliases = {"&": " and ", "|": " or "}
+            replacements = [(left.start[1], right.end[1], aliases[left.string])
+                            for left, right in zip(tokens, tokens[1:])
+                            if left.type == right.type == tokenize.OP and left.string in aliases
+                            and left.string == right.string and left.end == right.start]
+            for start, end, replacement in reversed(replacements):
+                source = source[:start] + replacement + source[end:]
+        expression = ast.parse(source, mode="eval").body
+    except (SyntaxError, RecursionError, tokenize.TokenError) as error:
+        raise ValueError("Formula syntax is invalid.") from error
+
+    def operation(name, *args):
+        return {"op": name, "args": list(args)}
+
+    def translate(node, depth=0):
+        if depth > 24:
+            raise ValueError("Formula nesting bound exhausted.")
+        def child(value):
+            return translate(value, depth + 1)
+        if isinstance(node, ast.Constant) and type(node.value) in {type(None), bool, int, float, str}:
+            return finite(node.value)
+        if isinstance(node, ast.Name):
+            if node.id in _JSON_LITERALS:
+                return _JSON_LITERALS[node.id]
+            return {"ref" if node.id in bindings else "field": node.id}
+        if isinstance(node, ast.List):
+            return [child(item) for item in node.elts]
+        if isinstance(node, ast.BinOp) and type(node.op) in _BINARY:
+            return operation(_BINARY[type(node.op)], child(node.left), child(node.right))
+        if isinstance(node, ast.UnaryOp) and isinstance(node.op, (ast.Not, ast.USub)):
+            return operation("not", child(node.operand)) if isinstance(node.op, ast.Not) else operation("sub", 0, child(node.operand))
+        if isinstance(node, ast.BoolOp):
+            return operation("and" if isinstance(node.op, ast.And) else "or", *(child(item) for item in node.values))
+        if isinstance(node, ast.Compare) and all(type(op) in _COMPARISONS for op in node.ops):
+            # Adjacent comparisons share the middle expression. Compiling it
+            # twice would expand nested chains exponentially before evaluation.
+            operands = [child(part) for part in (node.left, *node.comparators)]
+            terms = [operation(_COMPARISONS[type(op)], operands[i], operands[i + 1]) for i, op in enumerate(node.ops)]
+            return terms[0] if len(terms) == 1 else operation("and", *terms)
+        if isinstance(node, ast.IfExp):
+            return operation("if", child(node.test), child(node.body), child(node.orelse))
+        if isinstance(node, ast.Call) and isinstance(node.func, ast.Name) and node.func.id in _FUNCTIONS and not node.keywords:
+            return operation("if" if node.func.id == "choose" else node.func.id, *(child(arg) for arg in node.args))
+        raise ValueError("Formula uses an unsupported expression or function.")
+
+    return translate(expression)
+
+
 def evaluate(spec, inputs, max_operations=10000):
     """Evaluate a JSON expression grammar, with no IO or dynamic code execution."""
-    allowed_keys = {"name", "inputs", "outputs", "description", "conditions", "limitations"}
+    allowed_keys = {"name", "inputs", "outputs", "description", "conditions", "limitations", "bindings"}
     if not isinstance(spec, dict):
         kind = {type(None): "null", bool: "boolean", int: "number", float: "number", str: "string", list: "array"}.get(type(spec), "non-JSON type")
         raise ValueError("Unsupported instrument specification. Expected a JSON object at the root; received " + kind + ".")
@@ -65,6 +135,12 @@ def evaluate(spec, inputs, max_operations=10000):
         raise ValueError("An instrument needs named output expressions.")
     if type(max_operations) is not int or max_operations < 1:
         raise ValueError("A positive operation bound is required.")
+    bindings = spec.get("bindings", {})
+    if not isinstance(bindings, dict) or len(bindings) > 128 or any(
+        not isinstance(key, str) or re.fullmatch(r"[A-Za-z][A-Za-z0-9_]{0,63}", key) is None for key in bindings
+    ):
+        raise ValueError("Instrument bindings require up to 128 simple names.")
+    resolved, resolving, compiled = {}, set(), {}
     count = 0
 
     def number(v):
@@ -83,6 +159,26 @@ def evaluate(spec, inputs, max_operations=10000):
             return [visit(v, depth + 1, f"{location}[{index}]") for index, v in enumerate(value)]
         if not isinstance(value, dict):
             raise ValueError("Only JSON expressions are supported.")
+        if set(value) == {"formula"}:
+            source = value["formula"]
+            if not isinstance(source, str):
+                raise ValueError("Formula text is required.")
+            if source not in compiled:
+                compiled[source] = compile_formula(source, bindings)
+            return visit(compiled[source], depth + 1, location + ".formula")
+        if set(value) == {"ref"}:
+            name = value["ref"]
+            if not isinstance(name, str) or name not in bindings:
+                raise ValueError("Unknown instrument binding.")
+            if name in resolving:
+                raise ValueError("Instrument bindings cannot reference a cycle.")
+            if name not in resolved:
+                resolving.add(name)
+                try:
+                    resolved[name] = visit(bindings[name], depth + 1, "$.bindings." + name)
+                finally:
+                    resolving.remove(name)
+            return resolved[name]
         if set(value) == {"field"}:
             path = value["field"]
             if not isinstance(path, str) or not path:
@@ -123,6 +219,10 @@ def evaluate(spec, inputs, max_operations=10000):
             if op == "div" and b == 0:
                 raise ValueError("Division by zero.")
             result = a - b if op == "sub" else a / b
+        elif op == "abs":
+            if len(args) != 1:
+                raise ValueError("abs needs one numeric operand.")
+            result = abs(number(args[0]))
         elif op in {"eq", "lt", "lte", "gt", "gte"}:
             if len(args) != 2:
                 raise ValueError("Comparison needs two operands.")

@@ -33,9 +33,11 @@ MODEL_FILE = 'Qwen_Qwen3-4B-Instruct-2507-Q4_K_M.gguf'
 MODEL_URL = 'https://huggingface.co/' + MODEL_REPO + '/resolve/' + MODEL_REVISION + '/' + MODEL_FILE
 MODEL_SHA = '2fde00ce69dd4899c70d020845e2638353015bba0fdf161b3eb965f2bca4464e'
 MODEL_BYTES = 2497280736
+WORKSHOP_MODEL_ALIAS = 'Qwen2.5-Coder-7B-Instruct-Q4_K_M'
+WORKSHOP_MODEL_SHA = '509287f78cb4d4cf6b3843734733b914b2c158e43e22a7f4bf5e963800894d3c'
 ORIGINAL_REVISION = 'cdbee75f17c01a7cc42f958dc650907174af0554'
 LICENSE_URL = 'https://huggingface.co/Qwen/Qwen3-4B-Instruct-2507/resolve/' + ORIGINAL_REVISION + '/LICENSE'
-REQUIRED_RELEASE_CHECKS = ('local_inference', 'single_agent', 'multi_agent', 'parallel_exploration')
+REQUIRED_RELEASE_CHECKS = ('local_inference', 'single_agent', 'multi_agent', 'parallel_exploration', 'workshop')
 
 
 def write(path, value):
@@ -143,7 +145,7 @@ def main():
     record = {'schema': 'alpha-harness/hosted-local-qualification/v1', 'status': 'RUNNING',
               'release_qualification': 'NOT_TESTED',
               'required_release_qualifications': list(REQUIRED_RELEASE_CHECKS),
-              'release_gate': 'Prospectively declared before hosted execution: required core checks are local inference, single-agent, actor/critic multi-agent and parallel exploration. Release qualification additionally requires unchanged sources and no orchestration error. Quote construction, independent quote export and quote successor reuse are additional examples; their original acceptance checks and overall status remain unchanged and any failure remains visible.',
+              'release_gate': 'Required core checks are local inference, single-agent, actor/critic multi-agent, parallel exploration and exact-source workshop construction and replay. Release qualification also requires unchanged sources and no orchestration error. Quote construction, export and successor examples keep their original separate verdicts.',
               'started_at': datetime.datetime.now(datetime.timezone.utc).isoformat(),
               'source_revision': git('rev-parse', 'HEAD'),
               'source_product_tree': git('rev-parse', 'HEAD:' + PRODUCT_REL),
@@ -153,7 +155,7 @@ def main():
               'ci': {key: os.environ.get(key) for key in ['GITHUB_REPOSITORY', 'GITHUB_RUN_ID', 'GITHUB_RUN_ATTEMPT', 'GITHUB_SHA']},
               'host': {'platform': sys.platform, 'python': sys.version.split()[0], 'cpu_count_reported': os.cpu_count(),
                        'inference_threads': 2, 'accelerator': 'CPU'},
-              'qualifications': {key: 'NOT_TESTED' for key in ['local_inference', 'single_agent', 'multi_agent', 'parallel_exploration', 'quote_construction', 'successor_reuse', 'independent_export']},
+              'qualifications': {key: 'NOT_TESTED' for key in [*REQUIRED_RELEASE_CHECKS, 'quote_construction', 'successor_reuse', 'independent_export']},
               'commands': [], 'downloads': {}, 'api_paid_requests': 0,
               'complete_cost_known': False,
               'cost_scope': 'Local CPU requests only. Hosted runner allowance, electricity, setup, human review, maintenance and all prior failures are not represented as zero full cost.',
@@ -284,6 +286,34 @@ def main():
                 if any(event.get('kind') == 'model_completed' for event in entry.get('events', [])):
                     record['qualifications']['local_inference'] = 'PASS'
         record['quote_overall_status'] = quote.get('status') if quote else 'NOT_TESTED'
+        workshop_scopes = {'vertical': {'foundry', 'foundry-fresh', 'arrangement', 'custom'},
+                           'contrast': {'contrast'}}
+        workshop_results = {}
+        for scope, expected_names in workshop_scopes.items():
+            workshop_dir = work/('workshop-' + scope)
+            workshop_run = run([sys.executable, str(PRODUCT/'scripts/qualify_workshop.py'), '--runtime', str(binary),
+                                '--model', str(weights), '--threads', '2', '--scope', scope, '--output', str(workshop_dir)],
+                               work/('workshop-' + scope + '.log'), 8100, environment)
+            record['commands'].append(workshop_run)
+            workshop = read(workshop_dir/'RESULT.json')
+            workshop_valid = bool(workshop and workshop.get('source_revision') == record['source_revision']
+                                  and workshop.get('source_product_tree') == record['source_product_tree']
+                                  and workshop.get('model_sha256') == MODEL_SHA and workshop.get('scope') == scope)
+            accepted = set()
+            if workshop_valid:
+                shutil.copyfile(workshop_dir/'RESULT.json', public/('WORKSHOP-' + scope.upper() + '-QUALIFICATION.json'))
+                for entry in workshop.get('cases', []):
+                    name = entry.get('name')
+                    if name in expected_names and entry.get('status') == 'complete' and entry.get('replay_exit') == 0:
+                        archive = workshop_dir/(name + '.zip')
+                        if sha(archive) == entry.get('bundle_sha256'):
+                            (public/'workshop').mkdir(exist_ok=True)
+                            shutil.copyfile(archive, public/'workshop'/archive.name)
+                            accepted.add(name)
+            workshop_results[scope] = bool(workshop_valid and workshop_run['returncode'] == 0 and
+                                           workshop.get('status') == 'PASS' and accepted == expected_names)
+        record['workshop_scopes'] = workshop_results
+        record['qualifications']['workshop'] = 'PASS' if all(workshop_results.values()) else 'FAIL'
         record['raw_output_notice'] = 'Raw model responses and event transcripts in receipts are untrusted provenance, not accepted claims. Portable quote artifacts are published only when their frozen cases pass; a failed arm publishes no accepted artifact. Extra model-authored project files are not published.'
     except Exception as error:
         record['error'] = {'type': type(error).__name__, 'message': sanitized_log(str(error))[:1000]}
@@ -295,11 +325,12 @@ def main():
                 if value == 'PASS':
                     record['qualifications'][key] = 'FAIL'
             shutil.rmtree(public/'quote', ignore_errors=True)
+            shutil.rmtree(public/'workshop', ignore_errors=True)
         record['status'] = 'PASS' if (not record.get('error') and record['source_unchanged']
             and all(value == 'PASS' for value in record['qualifications'].values())
             and record.get('quote_overall_status') == 'PASS') else 'FAIL'
         record['release_qualification'] = release_qualification(record)
-        for log_name in ['quote-command.log', 'workflow-command.log', 'strategy-command.log']:
+        for log_name in ['quote-command.log', 'workflow-command.log', 'strategy-command.log', 'workshop-vertical.log', 'workshop-contrast.log']:
             log_path = work/log_name
             if log_path.is_file():
                 with log_path.open('rb') as stream:
@@ -309,7 +340,7 @@ def main():
                     content = stream.read().decode('utf-8', errors='replace')
                 prefix = '[Earlier log content omitted; last 1MiB retained.]\n' if size > 1024 * 1024 else ''
                 (public/log_name).write_text(prefix + sanitized_log(content))
-        record['published_logs_notice'] = 'Only three allowlisted command logs, bounded to their final 1MiB and sanitized for credential-shaped fields/URL queries. No private workspace or arbitrary log tree is published.'
+        record['published_logs_notice'] = 'Only allowlisted command logs, bounded to their final 1MiB and sanitized for credential-shaped fields/URL queries. No private workspace or arbitrary log tree is published.'
         record['published_sha256'] = {path.relative_to(public).as_posix(): sha(path) for path in sorted(public.rglob('*'))
                                       if path.is_file() and path.name != 'HOSTED-LOCAL-QUALIFICATION.json'}
         write(public/'HOSTED-LOCAL-QUALIFICATION.json', record)

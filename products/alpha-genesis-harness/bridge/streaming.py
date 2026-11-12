@@ -2,10 +2,14 @@
 """Bounded incremental SSE/NDJSON decoding; no model or tool execution authority."""
 from __future__ import annotations
 
+import hashlib
 import http.client
 import json
+from pathlib import Path
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, build_opener, ProxyHandler
+
+LOADED_SOURCE_SHA256 = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
 
 
 def stream_transport(url, headers, body, *, kind, timeout, cancel, on_text):

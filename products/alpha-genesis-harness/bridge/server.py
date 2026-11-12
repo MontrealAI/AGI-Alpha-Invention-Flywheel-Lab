@@ -19,6 +19,8 @@ from urllib.parse import urlsplit
 import webbrowser
 import zipfile
 
+LOADED_SOURCE_SHA256 = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
+
 if not __package__:
     sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from bridge.adapters import BridgeError, MAX_BODY, Runtime, retrieve_source, strict_json
@@ -27,7 +29,7 @@ from bridge.services import AccessRuntime
 PRODUCT = Path(__file__).resolve().parent.parent
 APP = PRODUCT / "app"
 STATIC_FILES = {"/": "index.html", "/index.html": "index.html", "/app.js": "app.js",
-                "/engine.js": "engine.js", "/styles.css": "styles.css"}
+                "/engine.js": "engine.js", "/styles.css": "styles.css", "/workshop.js": "workshop.js"}
 
 
 class NativeMechanism:
@@ -100,7 +102,7 @@ class HarnessServer(ThreadingHTTPServer):
         with self._workflow_lock:
             if self._workflows is None:
                 from bridge.workflows import WorkflowService
-                self._workflows = WorkflowService(self.runtime, self.workspace)
+                self._workflows = WorkflowService(self.runtime, self.workspace, server_source_sha256=LOADED_SOURCE_SHA256)
             return self._workflows
 
     def server_close(self):
@@ -265,6 +267,9 @@ class Handler(BaseHTTPRequestHandler):
                         bundle.writestr("artifacts/" + name, content.encode("utf-8"))
                     bundle.writestr("WORKFLOW-EXPORT.json", json.dumps(exported, ensure_ascii=False, allow_nan=False, indent=2).encode("utf-8"))
                 return self.send_bytes(200, output.getvalue(), "application/zip")
+            if self.path == "/api/workshop/bundle":
+                from bridge.workshop import bundle
+                return self.send_bytes(200, bundle(self.server.workflows, data), "application/zip")
             if self.path == "/api/generate":
                 result = self.server.runtime.generate(data)
                 result["budget"] = self.server.runtime.budget.view()
@@ -280,6 +285,9 @@ class Handler(BaseHTTPRequestHandler):
                 result = self.server.native.compose(data.get("spec"))
             elif self.path.startswith("/api/workflows/"):
                 result = self.workflow_action(self.path.rsplit("/", 1)[1], data)
+            elif self.path.startswith("/api/workshop/"):
+                from bridge.workshop import operate
+                result = operate(self.server.workflows, self.path.rsplit("/", 1)[1], data)
             elif self.path == "/api/capabilities":
                 result = self.server.workflows.capabilities()
             elif self.path.startswith("/api/genesis-next/"):

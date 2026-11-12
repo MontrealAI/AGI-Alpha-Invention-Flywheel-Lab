@@ -1,5 +1,7 @@
 # Security and responsible operation
 
+The [instrument workshop boundary](docs/WORKSHOP.md#operator-interface) uses the existing loopback session and a bounded formula interpreter. Local proof bundles contain mission inputs and model output. Review them before sharing.
+
 The primary security boundary is deliberately narrow: the core browser application interprets a declared bounded language and treats model responses and imported projects as data. It must not execute arbitrary JavaScript, Python, shell commands or HTML supplied by a model. The local workflow engine constructs bounded instrument JSON, documents and datasets using allowlisted tools; its standalone Python artifact is the fixed trusted evaluator supplied with this edition, never arbitrary model-authored Python. The optional official Codex pathway is a separate explicitly enabled boundary with its own restricted workspace and sandbox. It is not enabled by an imported model response.
 
 Use only your own trusted copy of the application. A hostile extension, modified local application, compromised operating system or compromised provider is outside the application's ability to secure. Do not open private projects on a shared device. Project exports and browser storage are not encrypted.

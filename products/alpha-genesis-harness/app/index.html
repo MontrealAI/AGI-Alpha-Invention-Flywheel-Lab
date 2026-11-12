@@ -10,6 +10,7 @@
 <link rel="stylesheet" href="styles.css">
 <script src="engine.js" defer></script>
 <script src="app.js" defer></script>
+<script src="workshop.js" defer></script>
 </head>
 <body>
 <a class="skip-link" href="#main" data-i18n="skip">Skip to workspace</a>
@@ -52,11 +53,88 @@
       <div class="eyebrow"><span class="gold-line"></span><span data-i18n="heroEyebrow">THE NEXT POSSIBILITY STARTS HERE</span></div>
       <h1 id="start-title" data-i18n="heroTitle">What would you like<br>to make possible?</h1>
       <p class="hero-copy" data-i18n="heroCopy">Bring your ambition. Explore a different way forward. Construct a small, decisive test—and keep the evidence that tells you what works.</p>
-      <div class="button-row"><button class="button primary" id="start-mission"><span data-i18n="startMission">Start with your ambition</span><span aria-hidden="true">↗</span></button><button class="button hero-secondary" id="load-demo" data-i18n="tryDemo">Explore the working demo</button></div>
+      <div class="button-row"><a class="button primary" href="#workshop" id="go-workshop">Open the instrument workshop</a><button class="button hero-secondary" id="start-mission"><span data-i18n="startMission">Start with your ambition</span><span aria-hidden="true">↗</span></button><button class="button hero-secondary" id="load-demo" data-i18n="tryDemo">Explore the working demo</button></div>
       <p class="hero-footnote" data-i18n="heroFootnote">No account. No API key. Start with the AI chat you already use.</p>
     </div>
     <div class="orbital" aria-hidden="true"><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="orbit orbit-three"></div><span class="orbit-point point-one"></span><span class="orbit-point point-two"></span><span class="orbit-point point-three"></span><span class="omega">Ω</span><span class="orbit-word word-past" data-i18n="past">THE PAST</span><span class="orbit-word word-present" data-i18n="present">THE PRESENT</span><span class="orbit-word word-possible" data-i18n="possible">THE POSSIBLE</span></div>
   </div>
+  <section id="workshop" class="panel mission-workshop" aria-labelledby="workshop-title">
+    <header class="workshop-heading">
+      <div><h2 id="workshop-title" data-workshop="title">The instrument workshop</h2>
+        <p class="subtle" data-workshop="intro">Give an ambition a testable outcome. Build an instrument, inspect the checks and take the result with you.</p></div>
+      <span class="tag" id="workshop-mode" data-workshop="offline">Offline</span>
+    </header>
+    <nav class="workshop-views" aria-label="Workshop views" id="workshop-views">
+      <button type="button" class="button secondary small" data-workshop-view="mission" aria-controls="workshop-mission" aria-pressed="true" data-workshop="mission">Mission</button>
+      <button type="button" class="button secondary small" data-workshop-view="bench" aria-controls="workshop-bench" aria-pressed="false" data-workshop="bench">Workbench</button>
+      <button type="button" class="button secondary small" data-workshop-view="evidence" aria-controls="workshop-evidence" aria-pressed="false" data-workshop="evidence">Evidence</button>
+    </nav>
+    <p class="bounded-details" id="workshop-connection" aria-live="polite"></p>
+    <div id="workshop-message" class="bounded-details" role="status"></div>
+    <div id="workshop-mission">
+      <form id="workshop-form">
+        <label for="workshop-ambition" data-workshop="ambition">What would you like to make possible?</label>
+        <textarea id="workshop-ambition" required rows="3" maxlength="12000"></textarea>
+        <div class="workshop-invitations" aria-label="Mission invitations" id="workshop-invitations">
+          <button type="button" class="button secondary small" data-workshop-idea="business" data-workshop="business">Create a new business</button>
+          <button type="button" class="button secondary small" data-workshop-idea="access" data-workshop="access">Make an inaccessible service possible</button>
+          <button type="button" class="button secondary small" data-workshop-idea="expertise" data-workshop="expertise">Turn expertise into a new capability</button>
+          <button type="button" class="button secondary small" data-workshop-idea="shared" data-workshop="shared">Address a challenge affecting many people</button>
+        </div>
+        <div class="form-grid workshop-form-grid">
+          <div><label for="workshop-family" data-workshop="contract">What should the instrument do?</label>
+            <select id="workshop-family">
+              <option value="custom" data-workshop="custom">Use my own input and output</option>
+              <option value="foundry" data-workshop="foundry">Instrument Foundry · defect or sensor drift</option>
+              <option value="contrast" data-workshop="contrast">Source-grounded check · WCAG text contrast</option>
+              <option value="arrangement" data-workshop="arrangement">Shared design · cost, consent and liquidity</option>
+            </select></div>
+          <div><label for="workshop-model" data-workshop="model">Model connection</label><select id="workshop-model" disabled></select></div>
+        </div>
+        <p id="workshop-protocol" class="bounded-details"></p>
+        <details id="workshop-details">
+          <summary data-workshop="details">Mission details and independent checks</summary>
+          <label for="workshop-context" data-workshop="context">Who benefits, what can you use and what limits matter?</label>
+          <textarea id="workshop-context" rows="3" maxlength="12000"></textarea>
+          <div id="workshop-cases-row">
+            <label for="workshop-cases" data-workshop="cases">Independent input and output examples (JSON)</label>
+            <p class="bounded-details" data-workshop="casesHelp">Describe the input and output fields above. Supply separate examples here. Their answers stay outside the model request.</p>
+            <textarea id="workshop-cases" rows="4" maxlength="60000" spellcheck="false" placeholder='[{"input":{"x":2},"expected":{"result":4}}]'></textarea>
+          </div>
+          <label for="workshop-loop" data-workshop="loop">Optional approach</label>
+          <select id="workshop-loop">
+            <option value="" data-workshop="chooseLoop">Use the shortest useful route</option>
+            <option value="compass" data-workshop="compass">Counterexample Compass</option>
+            <option value="escape" data-workshop="escape">Constraint Escape</option>
+            <option value="proof" data-workshop="proof">Proof Factory</option>
+            <option value="successor" data-workshop="successor" disabled>Successor Engine</option>
+            <option value="surplus" data-workshop="surplus">Positive-Sum Multiplier</option>
+          </select>
+        </details>
+        <label class="check-label" id="workshop-consent-row" hidden><input id="workshop-consent" type="checkbox"> <span id="workshop-consent-text"></span></label>
+        <div class="button-row">
+          <button type="submit" class="button primary" id="workshop-start" disabled data-workshop="start">Build and test</button>
+          <button type="button" class="button secondary" id="workshop-save" data-workshop="save">Save draft</button>
+          <button type="button" class="button text-button" id="workshop-connect" data-workshop="connect">Model connection settings</button>
+        </div>
+      </form>
+      <div class="workshop-reopen" id="workshop-reopen" hidden>
+        <label for="workshop-history" data-workshop="history">Reopen a saved mission</label>
+        <select id="workshop-history"><option value=""></option></select>
+      </div>
+      <div id="workshop-summary" class="workshop-result" aria-live="polite"></div>
+      <div class="button-row" id="workshop-actions" hidden>
+        <button type="button" id="workshop-pause" class="button secondary small" data-workshop="pause">Pause</button>
+        <button type="button" id="workshop-resume" class="button secondary small" data-workshop="resume">Resume</button>
+        <button type="button" id="workshop-cancel" class="button text-button" data-workshop="cancel">Cancel</button>
+        <button type="button" id="workshop-fresh" class="button secondary small" data-workshop="fresh" hidden>Prepare a fresh logger mission</button>
+        <button type="button" id="workshop-export" class="button secondary small" data-workshop="export">Download instrument and proof</button>
+        <button type="button" id="workshop-revoke" class="button text-button" data-workshop="revoke" hidden>Revoke reuse</button>
+      </div>
+    </div>
+    <div id="workshop-bench" hidden></div>
+    <div id="workshop-evidence" hidden></div>
+  </section>
   <button id="start-genesis-next" class="omega-entry">
     <span class="omega-entry-symbol" aria-hidden="true">Ω⁺¹</span>
     <span class="omega-entry-copy"><span class="omega-entry-kicker" data-i18n="omegaEntryKicker">A SECOND HORIZON</span><strong data-i18n="omegaEntryTitle">What could GENESIS itself become capable of next?</strong><span data-i18n="omegaEntryCopy">Find a shared limitation. Build the missing capability. Let the next experiment decide.</span></span>

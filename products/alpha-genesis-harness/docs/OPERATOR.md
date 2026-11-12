@@ -1,5 +1,7 @@
 # Advanced operator guide / Guide d'exploitation avancée
 
+[Instrument workshop operation and replay · Exploitation et reproduction](WORKSHOP.md#operator-interface)
+
 ## Define acceptance before generation
 
 Specify the desired artifact, permitted inputs, input/output meaning, independent checks, material constraints and a competent conventional alternative. Separate factual evidence from assumptions. The same model may perform multiple roles, but role names do not establish independent verification. Programmatic acceptance checks are distinct from a critic's opinion.
