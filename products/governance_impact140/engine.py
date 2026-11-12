@@ -119,6 +119,8 @@ def assess(input_data):
     systems = _indexed(_sequence(input_data, "systems"), "system")
     before = _indexed(_sequence(input_data, "requirements_before"), "requirement")
     after = _indexed(_sequence(input_data, "requirements_after"), "requirement")
+    if not systems or not (before or after):
+        raise ValueError("NONEMPTY_GOVERNANCE_SYSTEMS_AND_REQUIREMENTS_REQUIRED")
     evidence = _read_evidence(_sequence(input_data, "evidence"), systems, before, after)
 
     changes = []
