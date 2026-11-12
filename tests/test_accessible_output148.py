@@ -57,7 +57,8 @@ class AccessibilityGate148Tests(unittest.TestCase):
         html, _ = g.compile_bytes(raw(x))
         self.assertIn(b"&lt;script&gt;", html)
         self.assertNotIn(b"<script>", html)
-        self.assertNotIn(b" onclick=", html)
+        self.assertNotIn(b"<h2 onclick=", html)
+        self.assertIn(b"&quot; onclick=&quot;bad", html)
         self.assertTrue(g.audit_bytes(raw(x), html, g.compile_bytes(raw(x))[1])["accepted"])
 
     def test_03_unknown_raw_html_field_rejected(self):
