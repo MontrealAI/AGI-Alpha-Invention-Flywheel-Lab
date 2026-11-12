@@ -46,8 +46,12 @@ def _finite(value):
 
 def validate_config(config):
     template = default_config()
-    if not isinstance(config, dict) or set(config) != set(template):
+    if not isinstance(config, dict) or not set(template) <= set(config) or set(config) - set(template) - {'net_settlement_fees', 'cash_receipt_tax_proxy_bps'}:
         raise ValueError('EXACT_SCALE_CONFIG_REQUIRED')
+    if 'net_settlement_fees' in config and type(config['net_settlement_fees']) is not bool:
+        raise ValueError('EXPLICIT_NET_SETTLEMENT_FEE_CONTRACT_REQUIRED')
+    if 'cash_receipt_tax_proxy_bps' in config and (type(config['cash_receipt_tax_proxy_bps']) is not int or not 0 <= config['cash_receipt_tax_proxy_bps'] <= 10000):
+        raise ValueError('CASH_RECEIPT_TAX_PROXY_REQUIRED')
     for name in ('schema', 'scope', 'currency', 'money_unit'):
         if config[name] != template[name]:
             raise ValueError('SCALE_SCHEMA_SCOPE_UNIT')
@@ -130,8 +134,13 @@ def simulate_scale(config, seed):
         receivables = [x for x in receivables if x['due'] > month]
         collected = sum(x['net_revenue_cents'] for x in receipts)
         collected_tax = sum(x['tax_cents'] for x in receipts)
-        cash += collected + collected_tax
-        cash -= collected_tax
+        settled_fee = sum(x.get('payment_fee_cents', 0) for x in receipts)
+        # Conservative cash-funded tax/levy proxy on gross receipts, not a statutory tax computation.
+        receipt_tax = collected * c.get('cash_receipt_tax_proxy_bps', 0) // 10000
+        if settled_fee + receipt_tax > collected:
+            raise ValueError('CASH_SETTLEMENT_DEDUCTIONS_EXCEED_RECEIPTS')
+        cash += collected - settled_fee - receipt_tax
+        expenses += settled_fee + receipt_tax
         cumulative_collected += collected
         for receipt in receipts:
             reserve = receipt['net_revenue_cents'] * c['reserve_bps'] // 10_000
@@ -204,17 +213,24 @@ def simulate_scale(config, seed):
         refund_amount = refunds * price
         net = gross - refund_amount
         fees = gross * c['payment_fee_bps'] // 10_000 + paid * c['payment_fixed_cents']
-        if fees > cash - restricted:
+        net_fee_contract = c.get('net_settlement_fees', False)
+        if not net_fee_contract:
+            if fees > cash - restricted:
+                survived = False
+                peak_need = max(peak_need, fees - max(0, cash - restricted))
+                binding.add('payment_fee_cash')
+                terminal_reason = 'PAYMENT_FEE_CASH_FAILURE'
+                break
+            cash -= fees
+            expenses += fees
+        elif net < fees:
             survived = False
-            peak_need = max(peak_need, fees - max(0, cash - restricted))
-            binding.add('payment_fee_cash')
-            terminal_reason = 'PAYMENT_FEE_CASH_FAILURE'
+            binding.add('processor_negative_payout')
+            terminal_reason = 'PROCESSOR_NEGATIVE_NET_PAYOUT'
             break
-        cash -= fees
-        expenses += fees
         recognized += net
         if net:
-            receivables.append({'due': month + max(1, c['settlement_months']), 'net_revenue_cents': net, 'tax_cents': net * c['sales_tax_bps'] // 10_000})
+            receivables.append({'due': month + max(1, c['settlement_months']), 'net_revenue_cents': net, 'tax_cents': net * c['sales_tax_bps'] // 10_000, **({'payment_fee_cents': fees} if net_fee_contract else {})})
         available = max(0, cash - restricted - c['liquidity_floor_cents'])
         acquisition_budget = int(available * c['acquisition_budget_fraction'])
         headroom = max(0, c['reachable_market_customers'] - ever_acquired)
@@ -246,8 +262,8 @@ def simulate_scale(config, seed):
             raise AssertionError('SCALE_RESTRICTED_CASH_CONSERVATION')
         if cash != c['opening_cash_cents'] + cumulative_collected - expenses:
             raise AssertionError('SCALE_CASH_CONSERVATION')
-        monthly.append({'month': month, 'active_customers': active, 'ever_acquired_customers': ever_acquired, 'new_activated': activated, 'contacts': contacts, 'qualified': qualified, 'choice_wins': won, 'onboarded': affordable_arrivals, 'desired_work_products': desired, 'executed_projection_attempts': attempts, 'accepted_projection_work_products': accepted, 'collected_projection_jobs': paid - refunds, 'failed_or_rejected_projection_attempts': attempts - accepted, 'uncollected_projection_jobs': accepted - paid, 'refunded_projection_jobs': refunds, 'supplier_available_jobs': supplier_limit, 'capacity_jobs': capacity, 'capacity_investment_cents': capacity_cost, 'collected_revenue_cents': collected, 'trailing_12_collected_revenue_cents': trailing, 'annualized_collected_run_rate_cents': run_rate, 'cumulative_collected_revenue_cents': cumulative_collected, 'cumulative_recognized_revenue_cents': recognized, 'cumulative_cost_cents': expenses, 'cumulative_profit_cents': recognized - expenses, 'cash_cents': cash, 'restricted_cash_cents': restricted, 'available_cash_cents': cash - restricted, 'tax_collected_and_remitted_cents': collected_tax})
-    return {'scope': SCOPE, 'schema': c['schema'], 'config_sha256': _identity(c), 'seed': seed, 'cash_survival': survived, 'terminal_reason': terminal_reason, 'months_completed': len(monthly), 'monthly': monthly, 'milestones': milestones, 'milestone_basis': 'First month with at least 12 completed projection months and trailing-12 net collected revenue at threshold; annualized run rate does not qualify.', 'peak_additional_capital_needed_cents': peak_need, 'capital_needs_basis': 'Largest single unfunded desired onboarding/capacity block or operating shortfall. This is a policy funding-gap diagnostic, not a solved minimum external-capital requirement; no external capital is injected.', 'cumulative_collected_revenue_cents': cumulative_collected, 'cumulative_profit_cents': recognized - expenses, 'cumulative_cost_cents': expenses, 'ending_cash_cents': cash, 'terminal_receivables_cents': sum(x['net_revenue_cents'] for x in receivables), 'restricted_cash_cents': sum(x['cents'] for x in reserves), 'ending_unrestricted_cash_cents': cash - sum(x['cents'] for x in reserves), 'binding_constraints': sorted(binding), 'small_cohort_anchor': c['small_cohort_anchor'], 'anchor_scope': 'Provenance only. Scale assumptions are separately declared and are not inferred from the small executed cohort.', 'assumptions': c['assumptions'], 'liquidity_floor_cents': c['liquidity_floor_cents'], 'liquidity_floor_basis': 'Investment, acquisition and delivery admission preserve this working buffer. Already owed fixed bills may consume the buffer; cash survival means obligations remain funded, not that the buffer never falls.', 'seed_capital_still_supports_reserves': True}
+        monthly.append({'month': month, 'active_customers': active, 'ever_acquired_customers': ever_acquired, 'new_activated': activated, 'contacts': contacts, 'qualified': qualified, 'choice_wins': won, 'onboarded': affordable_arrivals, 'desired_work_products': desired, 'executed_projection_attempts': attempts, 'accepted_projection_work_products': accepted, 'collected_projection_jobs': paid - refunds, 'failed_or_rejected_projection_attempts': attempts - accepted, 'uncollected_projection_jobs': accepted - paid, 'refunded_projection_jobs': refunds, 'supplier_available_jobs': supplier_limit, 'capacity_jobs': capacity, 'capacity_investment_cents': capacity_cost, 'collected_revenue_cents': collected, 'trailing_12_collected_revenue_cents': trailing, 'annualized_collected_run_rate_cents': run_rate, 'cumulative_collected_revenue_cents': cumulative_collected, 'cumulative_recognized_revenue_cents': recognized, 'cumulative_cost_cents': expenses, 'cumulative_profit_cents': recognized - expenses, 'cash_cents': cash, 'restricted_cash_cents': restricted, 'available_cash_cents': cash - restricted, 'tax_collected_and_remitted_cents': collected_tax, **({'tax_proxy_from_receipts_cents': receipt_tax, 'processor_fees_net_settled_cents': settled_fee} if 'cash_receipt_tax_proxy_bps' in c or 'net_settlement_fees' in c else {})})
+    return {'scope': SCOPE, 'schema': c['schema'], 'config_sha256': _identity(c), 'seed': seed, 'cash_survival': survived, 'terminal_reason': terminal_reason, 'months_completed': len(monthly), 'monthly': monthly, 'milestones': milestones, 'milestone_basis': 'First month with at least 12 completed projection months and trailing-12 net collected revenue at threshold; annualized run rate does not qualify.', 'peak_additional_capital_needed_cents': peak_need, 'capital_needs_basis': 'Largest single unfunded desired onboarding/capacity block or operating shortfall. This is a policy funding-gap diagnostic, not a solved minimum external-capital requirement; no external capital is injected.', 'cumulative_collected_revenue_cents': cumulative_collected, 'cumulative_profit_cents': recognized - expenses, 'cumulative_cost_cents': expenses, 'ending_cash_cents': cash, 'terminal_receivables_cents': sum(x['net_revenue_cents'] for x in receivables), **({'terminal_processor_fees_cents': sum(x.get('payment_fee_cents', 0) for x in receivables)} if 'net_settlement_fees' in c else {}), 'restricted_cash_cents': sum(x['cents'] for x in reserves), 'ending_unrestricted_cash_cents': cash - sum(x['cents'] for x in reserves), 'binding_constraints': sorted(binding), 'small_cohort_anchor': c['small_cohort_anchor'], 'anchor_scope': 'Provenance only. Scale assumptions are separately declared and are not inferred from the small executed cohort.', 'assumptions': c['assumptions'], 'liquidity_floor_cents': c['liquidity_floor_cents'], 'liquidity_floor_basis': 'Investment, acquisition and delivery admission preserve this working buffer. Already owed fixed bills may consume the buffer; cash survival means obligations remain funded, not that the buffer never falls.', 'seed_capital_still_supports_reserves': True}
 
 
 def _quantile(values, probability):
