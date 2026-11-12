@@ -471,6 +471,8 @@ def compare(results, baseline='baseline', candidate='growth'):
     prices, costs, time horizons and source identities must agree. Source equality
     here is only an analytical parity check, never a substitute native audit.
     """
+    if baseline == candidate:
+        raise ValueError('DISTINCT_COMPARISON_ARMS_REQUIRED')
     indexed = {}
     for result in results:
         cfg = result.get('config')
@@ -483,8 +485,10 @@ def compare(results, baseline='baseline', candidate='growth'):
         indexed[key][arm] = result
     pairs = []
     for key, arms in sorted(indexed.items(), key=lambda item: str(item[0])):
+        if baseline not in arms and candidate not in arms:
+            continue  # unrelated third-party arms are not part of this comparison
         if baseline not in arms or candidate not in arms:
-            continue
+            raise ValueError('UNMATCHED_REQUESTED_ARM_DENOMINATOR')
         old, new = arms[baseline], arms[candidate]
         old_environment = _comparison_environment(old['config'])
         new_environment = _comparison_environment(new['config'])
@@ -508,8 +512,16 @@ def compare(results, baseline='baseline', candidate='growth'):
                       'profit_delta_microUSD': after['profit'] - before['profit'],
                       'unrestricted_earned_delta_microUSD': after['unrestrictedEarned'] - before['unrestrictedEarned'],
                       'baseline_obligation_covered': _covered(before), 'candidate_obligation_covered': _covered(after)})
+    if not pairs:
+        raise ValueError('NO_MATCHED_REQUESTED_ARM_PAIRS')
+    denominator = {'baseline_businesses': sum(baseline in arms for arms in indexed.values()),
+                   'candidate_businesses': sum(candidate in arms for arms in indexed.values()),
+                   'pairs': len(pairs)}
+    if denominator['baseline_businesses'] != len(pairs) or denominator['candidate_businesses'] != len(pairs):
+        raise ValueError('UNMATCHED_REQUESTED_ARM_DENOMINATOR')
     return {'schema': 'agi-alpha/connected014-matched-growth/v1', 'pairs': pairs,
-            'scope': 'Analytical matched-exogenous-input comparison of separate native businesses; no audit, accounts pooled, observed buyer demand or universal probability inferred.'}
+            'matched_denominator': denominator,
+            'scope': 'Analytical matched-exogenous-input comparison of separate native businesses; no audit, accounts pooled, observed buyer demand or universal probability inferred. Caller must verify completeness against independently frozen registered protocol.'}
 
 
 def frontier(results):
