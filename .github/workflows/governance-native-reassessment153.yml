@@ -1,0 +1,162 @@
+name: Governance native reassessment153 exact-source and clean-download qualification
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/governance-native-reassessment153.yml'
+      - 'products/governance_impact140/native_reassessment153.py'
+      - 'tests/test_governance_native_reassessment153.py'
+      - 'campaign/governance-native-reassessment153/**'
+      - 'products/governance_impact140/engine.py'
+      - 'products/governance_impact140/native_risk152.py'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/governance-native-reassessment153.yml'
+      - 'products/governance_impact140/native_reassessment153.py'
+      - 'tests/test_governance_native_reassessment153.py'
+      - 'campaign/governance-native-reassessment153/**'
+      - 'products/governance_impact140/engine.py'
+      - 'products/governance_impact140/native_risk152.py'
+permissions:
+  contents: read
+concurrency:
+  group: governance-native-reassessment153-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+jobs:
+  exact-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    env:
+      SOURCE_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+      PYTHONDONTWRITEBYTECODE: '1'
+    outputs:
+      archive_sha: ${{ steps.bundle.outputs.archive_sha }}
+    steps:
+      - name: Record start
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Test source-bound policy reassessment (normal and optimized)
+        run: |
+          test "$(git rev-parse HEAD)" = "$SOURCE_SHA"
+          python -B -m unittest tests.test_governance_native_reassessment153 -v
+          python -O -B -m unittest tests.test_governance_native_reassessment153 -v
+          python -B -m unittest tests.test_governance_native_risk152 tests.test_governance_impact140 -v
+      - name: Build key-free minimal deterministic source bundle
+        id: bundle
+        run: |
+          python -B - <<'PY'
+          import hashlib, json, os, zipfile
+          from pathlib import Path
+          paths = (
+              "products/governance_impact140/__init__.py",
+              "products/governance_impact140/engine.py",
+              "products/governance_impact140/native_risk152.py",
+              "products/governance_impact140/native_reassessment153.py",
+              "tests/test_governance_native_reassessment153.py",
+              "campaign/governance-native-reassessment153/PROTOCOL.md",
+          )
+          data = {}
+          for name in paths:
+              path = Path(name)
+              if not path.is_file() or path.is_symlink():
+                  raise ValueError("INVALID_SOURCE_FILE")
+              data[name] = path.read_bytes()
+          manifest = {"schema":"agi-alpha/native-reassessment153/source-v1",
+                      "source_commit":os.environ["SOURCE_SHA"],
+                      "files":{n:hashlib.sha256(b).hexdigest() for n,b in sorted(data.items())},
+                      "limit":"offline synthetic only; no source authenticity or compliance authority"}
+          data["MANIFEST.json"] = (json.dumps(manifest, sort_keys=True, indent=2)+"\n").encode()
+          out = Path(os.environ["RUNNER_TEMP"]) / "governance153"
+          out.mkdir(exist_ok=False)
+          archive = out / "native-reassessment153-source.zip"
+          with zipfile.ZipFile(archive, "w") as z:
+              for name, raw in sorted(data.items()):
+                  info = zipfile.ZipInfo(name, (1980,1,1,0,0,0))
+                  info.compress_type = zipfile.ZIP_DEFLATED
+                  info.external_attr = 0o100644 << 16
+                  z.writestr(info,raw)
+          sha = hashlib.sha256(archive.read_bytes()).hexdigest()
+          with Path(os.environ["GITHUB_OUTPUT"]).open("a") as f:
+              f.write("archive_sha="+sha+"\n")
+          print(json.dumps({"archive_sha256":sha,"source_commit":os.environ["SOURCE_SHA"],
+                            "files":len(manifest["files"])},sort_keys=True))
+          PY
+      - name: Publish allowlisted source only
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: governance-native-reassessment153-${{ github.event.pull_request.head.sha || github.sha }}
+          path: ${{ runner.temp }}/governance153/native-reassessment153-source.zip
+          if-no-files-found: error
+  independent-download:
+    needs: [exact-source]
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    env:
+      SOURCE_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+      ARCHIVE_SHA: ${{ needs.exact-source.outputs.archive_sha }}
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Record start
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: governance-native-reassessment153-${{ github.event.pull_request.head.sha || github.sha }}
+          path: ${{ runner.temp }}/governance153-download
+      - name: Independently verify and unpack exact published source
+        run: |
+          test "$(git rev-parse HEAD)" = "$SOURCE_SHA"
+          python -B - <<'PY'
+          import hashlib,json,os,stat,zipfile
+          from pathlib import Path
+          archive=Path(os.environ["RUNNER_TEMP"])/"governance153-download/native-reassessment153-source.zip"
+          assert hashlib.sha256(archive.read_bytes()).hexdigest()==os.environ["ARCHIVE_SHA"]
+          root=Path(os.environ["RUNNER_TEMP"])/"governance153-clean"
+          root.mkdir(exist_ok=False)
+          with zipfile.ZipFile(archive) as z:
+              info=z.infolist()
+              names=[m.filename for m in info]
+              assert len(names)==len(set(names))
+              assert all(not n.startswith("/") and ".." not in Path(n).parts for n in names)
+              assert all(stat.S_IFMT(m.external_attr>>16)==stat.S_IFREG for m in info)
+              manifest=json.loads(z.read("MANIFEST.json"))
+              assert manifest["schema"]=="agi-alpha/native-reassessment153/source-v1"
+              assert manifest["source_commit"]==os.environ["SOURCE_SHA"]
+              assert set(names)==set(manifest["files"])|{"MANIFEST.json"}
+              for name, sha in manifest["files"].items():
+                  raw=z.read(name)
+                  assert hashlib.sha256(raw).hexdigest()==sha
+                  assert raw==Path(name).read_bytes()
+                  output=root/name
+                  output.parent.mkdir(parents=True,exist_ok=True)
+                  output.write_bytes(raw)
+          print("EXACT_PUBLISHED_SOURCE_INDEPENDENT_SHA_MATCH",os.environ["SOURCE_SHA"])
+          PY
+      - name: Reexecute extracted source and check frozen adverse policy treatment
+        run: |
+          cd "$RUNNER_TEMP/governance153-clean"
+          python -B -m unittest discover -s tests -p 'test_governance_native_reassessment153.py' -v
+          python -O -B -m unittest discover -s tests -p 'test_governance_native_reassessment153.py' -v
+          python -B - <<'PY'
+          from tests.test_governance_native_reassessment153 import sample
+          from products.governance_impact140.native_reassessment153 import reassess
+          r=reassess(sample())
+          row=r["current_reassessments"][0]
+          assert row["native_signal"]["signal"]=="ADVERSE_SYNTHETIC_THRESHOLD"
+          assert row["old_native_signal"]["signal"]=="WITHIN_UNVERIFIED_SYNTHETIC_THRESHOLD"
+          assert row["governance_status_unchanged"]=="unable_to_determine"
+          assert len(r["current_findings_without_native_risk_policy"])==1
+          print("CLEAN_BYTE_FIRST_PARTY_REASSESSMENT_PASS")
+          PY
