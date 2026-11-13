@@ -60,11 +60,21 @@ class PrepareUpgradeRace154(unittest.TestCase):
                     policy=default_policy(), expected_checkpoint_sha256=checkpoint_sha,
                     ident=ident)
 
+            # Serialize only individual atomic file writes to rule out a
+            # coincidental readback race. This does NOT serialize validation
+            # or the source/authority decision under test.
+            original_write = operations._write
+            write_lock = threading.Lock()
+            def serialized_file_write(path, value):
+                with write_lock:
+                    return original_write(path, value)
+
             with (patch('connected_enterprise.upgrades.authorize_upgrade', side_effect=mocked_authorizer),
                   patch('connected_enterprise.upgrades.validate_ticket', return_value=None),
                   patch('connected_enterprise.runner.identity', return_value=target_source),
                   patch.object(operations, '_copy_source', return_value=target_source),
-                  patch.object(operations, '_copy_inputs', return_value=None)):
+                  patch.object(operations, '_copy_inputs', return_value=None),
+                  patch.object(operations, '_write', side_effect=serialized_file_write)):
                 with concurrent.futures.ThreadPoolExecutor(max_workers=2) as pool:
                     futures = [pool.submit(prepare, 'writer-A'), pool.submit(prepare, 'writer-B')]
                     outcomes = []
