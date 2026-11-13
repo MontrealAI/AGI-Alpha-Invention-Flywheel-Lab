@@ -14,6 +14,9 @@ import sys
 import time
 from pathlib import Path
 
+# Script mode (python scripts/...) must import the exact working repository, not site packages.
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
 from commercial.ledger import canonical, digest
 from connected_enterprise.design_flywheel import SCHEMA as DESIGN_SCHEMA
 from connected_enterprise.design_flywheel import example_spec, execute, validate, verify
