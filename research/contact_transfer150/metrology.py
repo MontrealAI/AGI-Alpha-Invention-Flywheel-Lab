@@ -6,7 +6,8 @@ safety, WCAG, buyer acceptance or a physical device.
 """
 from __future__ import annotations
 import argparse
-from decimal import Decimal, InvalidOperation, localcontext
+from decimal import Decimal, InvalidOperation, ROUND_FLOOR, ROUND_CEILING, ROUND_HALF_EVEN, localcontext
+from fractions import Fraction
 from hashlib import sha256
 import json
 from pathlib import Path
@@ -58,6 +59,18 @@ def decimal_text(value, *, positive=False):
     return number
 
 
+def _display_fraction(value: Fraction, rounding) -> str:
+    """Display an exact rational with a directed rounding guarantee at 80 digits.
+
+    The acceptance comparison itself is performed on the exact Fraction,
+    never on this presentation string.
+    """
+    with localcontext() as context:
+        context.prec = 80
+        context.rounding = rounding
+        return str(Decimal(value.numerator) / Decimal(value.denominator))
+
+
 def measure(record):
     if type(record) is not dict or frozenset(record) != KEYS:
         raise ValueError("EXACT_RECORD_FIELDS_REQUIRED")
@@ -84,20 +97,16 @@ def measure(record):
         ed = decimal_text(state["dynamic_error_N"])
         if es >= s or ed >= d:
             raise ValueError("POSITIVE_FORCE_INTERVAL_REQUIRED")
-        with localcontext() as context:
-            context.prec = 45
-            lower = (s - es) / (d + ed)
-            upper = (s + es) / (d - ed)
+        lower = Fraction(s - es) / Fraction(d + ed)
+        upper = Fraction(s + es) / Fraction(d - ed)
         if lower > upper:
             raise ValueError("INVALID_RATIO_BOUNDS")
         states.append({"ratio_lower": lower, "ratio_upper": upper,
-                       "ratio_nominal": s / d})
-    with localcontext() as context:
-        context.prec = 45
-        lower_change = states[1]["ratio_lower"] - states[0]["ratio_upper"]
-        upper_change = states[1]["ratio_upper"] - states[0]["ratio_lower"]
-        nominal_change = states[1]["ratio_nominal"] - states[0]["ratio_nominal"]
-    sufficient = lower_change >= THRESHOLD
+                       "ratio_nominal": Fraction(s) / Fraction(d)})
+    lower_change = states[1]["ratio_lower"] - states[0]["ratio_upper"]
+    upper_change = states[1]["ratio_upper"] - states[0]["ratio_lower"]
+    nominal_change = states[1]["ratio_nominal"] - states[0]["ratio_nominal"]
+    sufficient = lower_change >= Fraction(THRESHOLD)
     return {
         "schema": "contact-transfer150/numeric-contract-result/v1",
         "declared_input_scope": record["scope"],
@@ -105,10 +114,16 @@ def measure(record):
         "source_fixture_sha256": SOURCE_FIXTURE_SHA256,
         "registration_sha256": REGISTRATION_SHA256,
         "threshold": str(THRESHOLD),
-        "load_ratios": [{k: str(v) for k, v in state.items()} for state in states],
-        "nominal_change": str(nominal_change),
-        "lower_change": str(lower_change),
-        "upper_change": str(upper_change),
+        "load_ratios": [
+            {k: _display_fraction(v, ROUND_FLOOR if k == "ratio_lower"
+                                   else ROUND_CEILING if k == "ratio_upper"
+                                   else ROUND_HALF_EVEN)
+             for k, v in state.items()} for state in states
+        ],
+        "nominal_change": _display_fraction(nominal_change, ROUND_HALF_EVEN),
+        "lower_change": _display_fraction(lower_change, ROUND_FLOOR),
+        "upper_change": _display_fraction(upper_change, ROUND_CEILING),
+        "precision_contract": "EXACT_RATIONAL_DECISION_80_DIGIT_OUTWARD_ROUNDED_BOUNDS",
         "numeric_verdict": "SUFFICIENT_WITHIN_DECLARED_BOUNDS" if sufficient else "HOLD_DECLARED_BOUNDS_ALLOW_FAILURE",
         "physical_transfer_verified": False,
         "error_model_independently_validated": False,

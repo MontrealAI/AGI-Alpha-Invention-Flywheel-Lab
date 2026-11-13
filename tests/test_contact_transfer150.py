@@ -57,6 +57,24 @@ class TestContactTransfer150(unittest.TestCase):
         d["states"][1]["static_N"] = "1.049999"
         self.assertEqual(measure(d)["numeric_verdict"], "HOLD_DECLARED_BOUNDS_ALLOW_FAILURE")
 
+    def test_exact_threshold_comparison_cannot_round_false_positive(self):
+        # This number is strictly below 1.05, but a 45-digit rounded
+        # ratio/difference incorrectly reports 0.05 and would accept.
+        d = self.sample()
+        d["states"][0].update(static_N="1", dynamic_N="1",
+                              static_error_N="0", dynamic_error_N="0")
+        d["states"][1].update(static_N="1.04" + "9" * 70, dynamic_N="1",
+                              static_error_N="0", dynamic_error_N="0")
+        below = measure(d)
+        self.assertEqual(below["numeric_verdict"], "HOLD_DECLARED_BOUNDS_ALLOW_FAILURE")
+        self.assertLess(Decimal(below["lower_change"]), Decimal("0.05"))
+        self.assertEqual(below["precision_contract"],
+                         "EXACT_RATIONAL_DECISION_80_DIGIT_OUTWARD_ROUNDED_BOUNDS")
+        d["states"][1]["static_N"] = "1.05" + "0" * 70 + "1"
+        above = measure(d)
+        self.assertEqual(above["numeric_verdict"], "SUFFICIENT_WITHIN_DECLARED_BOUNDS")
+        self.assertGreater(Decimal(above["lower_change"]), Decimal("0.05"))
+
     def test_nonpositive_force_interval(self):
         d = self.sample()
         d["states"][0]["dynamic_error_N"] = d["states"][0]["dynamic_N"]
