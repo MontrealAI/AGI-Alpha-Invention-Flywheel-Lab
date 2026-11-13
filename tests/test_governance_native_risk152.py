@@ -89,6 +89,25 @@ class NativeRisk152(unittest.TestCase):
         self.assertEqual(evaluate(x)["signals"]["tpr_gap"]["signal"], "UNABLE_TO_DETERMINE")
         self.assertIn("NOT_FAIRNESS_PROOF", evaluate(sample())["group_metric_scope"])
 
+    def test_T6_regression_zero_positive_group_cannot_disappear_from_tpr_support(self):
+        # Preserve the original frozen T6 requirement for every observed group.
+        # A group represented only by negatives has no defined TPR.
+        x = sample()
+        x["rows"].append({"case_id": "C-0", "truth": 0, "prediction": 0,
+                          "group": "C", "repeat_prediction": 0,
+                          "claimed_violation": False})
+        r = evaluate(x)
+        self.assertEqual(r["observed_denominators"]["positive_cases_per_group"],
+                         {"A": 2, "B": 2, "C": 0})
+        self.assertIsNone(r["signals"]["tpr_gap"]["observed"])
+        self.assertEqual(r["signals"]["tpr_gap"]["signal"], "UNABLE_TO_DETERMINE")
+        x["rows"].append({"case_id": "C-1", "truth": 1, "prediction": 1,
+                          "group": "C", "repeat_prediction": 1,
+                          "claimed_violation": False})
+        r = evaluate(x)
+        self.assertEqual(r["observed_denominators"]["positive_cases_per_group"]["C"], 1)
+        self.assertEqual(r["signals"]["tpr_gap"]["signal"], "UNABLE_TO_DETERMINE")
+
     def test_T7_adverse_thresholds_are_retained_not_filtered(self):
         x = sample()
         x["rows"][0]["prediction"] = 0  # group A TPR 0.5 vs group B 1
