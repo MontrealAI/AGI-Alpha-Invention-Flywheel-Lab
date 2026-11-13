@@ -97,8 +97,8 @@ def measure(record):
         ed = decimal_text(state["dynamic_error_N"])
         if es >= s or ed >= d:
             raise ValueError("POSITIVE_FORCE_INTERVAL_REQUIRED")
-        lower = Fraction(s - es) / Fraction(d + ed)
-        upper = Fraction(s + es) / Fraction(d - ed)
+        lower = (Fraction(s) - Fraction(es)) / (Fraction(d) + Fraction(ed))
+        upper = (Fraction(s) + Fraction(es)) / (Fraction(d) - Fraction(ed))
         if lower > upper:
             raise ValueError("INVALID_RATIO_BOUNDS")
         states.append({"ratio_lower": lower, "ratio_upper": upper,
