@@ -117,13 +117,17 @@ def evaluate(data):
                 for row in normalized if row["repeat_prediction"] is not None)
     correct = sum(row["truth"] == row["prediction"] for row in normalized
                   if row["truth"] is not None)
-    group_counts = {}
-    group_hits = {}
+    # Count every observed group, including groups without positive labels.
+    # Otherwise unsupported groups vanish and TPR clearance can be fabricated.
+    group_counts = {group: 0 for group in sorted({
+        row["group"] for row in normalized if row["group"] is not None
+    })}
+    group_hits = dict.fromkeys(group_counts, 0)
     for row in normalized:
         if row["truth"] == 1 and row["group"] is not None:
             g = row["group"]
-            group_counts[g] = group_counts.get(g, 0) + 1
-            group_hits[g] = group_hits.get(g, 0) + (row["prediction"] == 1)
+            group_counts[g] += 1
+            group_hits[g] += (row["prediction"] == 1)
     group_supported = (incomplete_truth == 0 and all(row["group"] is not None for row in normalized)
                        and len(group_counts) >= 2
                        and all(v >= minimum for v in group_counts.values()))
