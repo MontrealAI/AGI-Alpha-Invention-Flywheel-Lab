@@ -1,0 +1,101 @@
+name: Accessibility149 standalone exact-source and clean ZIP qualification
+on:
+  pull_request:
+    paths:
+      - 'research/accessible_output149/**'
+      - 'research/accessible_output148/**'
+      - 'tests/test_accessible_output149.py'
+      - '.github/workflows/accessible-output149.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'research/accessible_output149/**'
+      - 'research/accessible_output148/**'
+      - 'tests/test_accessible_output149.py'
+      - '.github/workflows/accessible-output149.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  research149-isolated-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Record actual platform job start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - name: Exact checkout without persisted credentials
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - name: Use standard Python 3.12 (no paid APIs)
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Verify exact source head
+        env:
+          EXPECTED_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          test "$(git rev-parse HEAD)" = "$EXPECTED_SHA"
+          test -f research/accessible_output149/standalone.py
+          test -f research/accessible_output149/review.py
+      - name: Execute existing and new independent adversarial regressions
+        run: |
+          python -B -m unittest -v tests.test_accessible_output148 tests.test_accessible_output149
+      - name: Build create-only standalone source and audit immutable manifest
+        run: |
+          python -B -m research.accessible_output149.standalone build --archive "$RUNNER_TEMP/accessibility149-source.zip" > "$RUNNER_TEMP/BUILD.json"
+          python -B -m research.accessible_output149.standalone verify --archive "$RUNNER_TEMP/accessibility149-source.zip" > "$RUNNER_TEMP/VERIFY.json"
+      - name: Operate from extracted ZIP only (no Git, original account or keys)
+        run: |
+          python -B -m research.accessible_output149.standalone smoke --archive "$RUNNER_TEMP/accessibility149-source.zip" > "$RUNNER_TEMP/SMOKE.json"
+      - name: Seal public key-free exact-head evidence
+        env:
+          EXPECTED_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          python -B - <<'PY'
+          import json, hashlib, os, subprocess
+          from pathlib import Path
+          root = Path(os.environ['RUNNER_TEMP'])
+          def read(name):
+              return json.loads((root/name).read_text())
+          build, verify, smoke = (read(n) for n in ('BUILD.json','VERIFY.json','SMOKE.json'))
+          assert build == verify
+          assert smoke['archive_sha256'] == build['archive_sha256']
+          assert smoke['source_root_sha256'] == build['source_root_sha256']
+          assert smoke['clean_extracted_test_and_cli'] == 'PASS'
+          assert smoke['registered_fixture_continuity_verdict'] == 'HOLD_AUTHORED_CONTENT_CHANGED_REVIEW_REQUIRED'
+          sha = hashlib.sha256((root/'accessibility149-source.zip').read_bytes()).hexdigest()
+          assert sha == build['archive_sha256']
+          head = subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()
+          assert head == os.environ['EXPECTED_SHA']
+          public = {'schema':'agi-alpha/accessibility149-hosted-v1',
+                    'source_commit':head,
+                    'archive_sha256':sha,
+                    'source_root_sha256':build['source_root_sha256'],
+                    'source_files':build['source_files'],
+                    'clean_extracted_test_and_cli':'PASS',
+                    'registered_fixture_continuity_verdict':smoke['registered_fixture_continuity_verdict'],
+                    'claim':'offline_synthetic_structural_and_content_identity_only',
+                    'independent_semantic_review':'NOT_PERFORMED',
+                    'assistive_technology_testing':'NOT_PERFORMED',
+                    'complete_buyer_delivery':'NOT_ESTABLISHED',
+                    'actual_paid_commerce':None,
+                    'actual_model_or_host_billing_usd':None,
+                    'native_financial_account_accessed':False,
+                    'deployment_authorized':False}
+          (root/'PUBLIC.json').write_text(json.dumps(public,indent=2,sort_keys=True)+'\n')
+          PY
+      - name: Publish bounded source ZIP and key-free proof (not deployed)
+        if: success()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: accessibility149-${{ github.event.pull_request.head.sha || github.sha }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/accessibility149-source.zip
+            ${{ runner.temp }}/PUBLIC.json
+          if-no-files-found: error
+          retention-days: 7
