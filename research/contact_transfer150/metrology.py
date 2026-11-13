@@ -47,13 +47,13 @@ def parse(raw: bytes):
 
 
 def decimal_text(value, *, positive=False):
-    if not isinstance(value, str) or len(value) > 45:
+    if not isinstance(value, str) or len(value) > 120:
         raise ValueError("FINITE_DECIMAL_STRING_REQUIRED")
     try:
         number = Decimal(value)
     except (InvalidOperation, ValueError) as exc:
         raise ValueError("FINITE_DECIMAL_STRING_REQUIRED") from exc
-    if not number.is_finite() or number < 0 or (positive and number == 0) or number > Decimal("1e9"):
+    if not number.is_finite() or number < 0 or (positive and number == 0) or (number and number.adjusted() < -100) or number > Decimal("1e9"):
         raise ValueError("POSITIVE_FINITE_BOUNDED_NUMBER_REQUIRED")
     return number
 
