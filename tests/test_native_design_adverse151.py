@@ -65,10 +65,10 @@ class NativeAdverse151Tests(unittest.TestCase):
     def test_missing_or_extra_case_rejected(self):
         cases = {name: {"native_challenger": None} for name, _ in specifications()}
         cases.pop(next(iter(cases)))
-        with self.assertRaisesRegex(ValueError, "EXACT_SIX_CASE"):
+        with self.assertRaisesRegex(ValueError, "REGISTERED_SIX_CASE"):
             robust_verdict(cases)
         cases["spurious"] = {"native_challenger": "earned_distribution"}
-        with self.assertRaisesRegex(ValueError, "EXACT_SIX_CASE"):
+        with self.assertRaisesRegex(ValueError, "REGISTERED_SIX_CASE"):
             robust_verdict(cases)
 
     def _native(self, spec, selected="earned_distribution", accepted=True):
