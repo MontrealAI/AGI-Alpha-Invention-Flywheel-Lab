@@ -199,6 +199,29 @@ class NativeReassessment153(unittest.TestCase):
             target.verify_receipt(out, anchored_receipt_sha256="not-a-hash",
                                   anchored_governance_sha256=gov_anchor)
 
+    def test_T11_raw_only_digest_binds_unmeasured_cases_and_is_policy_invariant(self):
+        data = sample()
+        a = target.reassess(data)
+        self.assertEqual(a["prior_policy_results"][0]["raw_case_sha256"],
+                         a["current_reassessments"][0]["raw_case_sha256"])
+        self.assertNotEqual(a["prior_policy_results"][0]["source_input_sha256"],
+                            a["current_reassessments"][0]["source_input_sha256"])
+        self.assertEqual(a["raw_case_digests"]["finance"],
+                         a["current_reassessments"][0]["raw_case_sha256"])
+        data["observations"].append({"system_id": "warehouse", "rows": [
+            {"case_id": "z", "truth": 1, "prediction": 1,
+             "group": "A", "repeat_prediction": 1, "claimed_violation": False}]})
+        b = target.reassess(data)
+        self.assertNotEqual(a["receipt_sha256"], b["receipt_sha256"])
+        self.assertIn("warehouse", b["raw_case_digests"])
+        data["observations"][-1]["rows"][0]["prediction"] = 0
+        c = target.reassess(data)
+        self.assertNotEqual(b["raw_case_digests"]["warehouse"], c["raw_case_digests"]["warehouse"])
+        self.assertNotEqual(b["receipt_sha256"], c["receipt_sha256"])
+        data["observations"][-1]["rows"][0]["prediction"] = 42
+        with self.assertRaises(ValueError):
+            target.reassess(data)
+
     def test_T10_native_receipt_recomputed_by_existing_evaluator(self):
         data = sample()
         out = target.reassess(data)

@@ -37,8 +37,26 @@ def _observations(value, known):
             raise ValueError("UNKNOWN_OR_DUPLICATE_OBSERVATION_SYSTEM")
         if type(item["rows"]) is not list or not item["rows"]:
             raise ValueError("NONEMPTY_RAW_OBSERVATIONS_REQUIRED")
+        # Even an unbound system's registered rows must be validated and
+        # included in the signed-offline-report content digest. A threshold-
+        # dependent native source_input_sha256 is not a raw-only digest.
+        risk.evaluate({
+            "schema": risk.SCHEMA, "system_id": sid, "rows": item["rows"],
+            "thresholds": {
+                "max_missing_label_rate": "1", "min_accuracy": "0",
+                "max_tpr_gap": "1", "max_flip_rate": "1",
+                "max_claimed_violation_rate": "1", "min_group_positives": 1,
+            },
+        })
         out[sid] = item["rows"]
-    return out
+    hashes = {
+        sid: impact.sha256({
+            "schema": "agi-alpha/native-reassessment153/raw-cases-v1",
+            "system_id": sid,
+            "rows": sorted(rows, key=lambda row: row["case_id"]),
+        }) for sid, rows in sorted(out.items())
+    }
+    return out, hashes
 
 
 def _policies(value, stage, requirements, systems):
@@ -92,7 +110,7 @@ def reassess(data):
     systems = {r["id"]: r for r in governance["systems"]}
     before = {r["id"]: r for r in governance["requirements_before"]}
     after = {r["id"]: r for r in governance["requirements_after"]}
-    raw = _observations(data["observations"], systems)
+    raw, raw_case_digests = _observations(data["observations"], systems)
     prior = _policies(data["before_policies"], "before", before, systems)
     current = _policies(data["after_policies"], "after", after, systems)
     findings = {(r["system_id"], r["requirement_id"]): r for r in original["findings"]}
@@ -117,6 +135,7 @@ def reassess(data):
                 "system_id": sid, "requirement_id": rid, "version": policy["version"],
                 "metric": metric, "policy_thresholds": policy["thresholds"],
                 "source_input_sha256": report["source_input_sha256"] if report else None,
+                "raw_case_sha256": raw_case_digests.get(sid),
                 "native_receipt_sha256": report["receipt_sha256"] if report else None,
                 "native_case_count": report["case_count"] if report else 0,
                 "native_signal": signal,
@@ -172,6 +191,7 @@ def reassess(data):
         "current_reassessments": reassessments,
         "current_findings_without_native_risk_policy": uncovered,
         "input_observation_systems": sorted(raw),
+        "raw_case_digests": raw_case_digests,
         "authorization": AUTHORIZATION,
         "limitation": "Authored data/policy bindings, unknown real compliance, review, platform integration and costs",
     }
