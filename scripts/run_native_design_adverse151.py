@@ -10,6 +10,7 @@ import argparse
 import json
 import os
 import resource
+import shutil
 import sys
 import time
 from pathlib import Path
@@ -20,6 +21,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from commercial.ledger import canonical, digest
 from connected_enterprise.design_flywheel import SCHEMA as DESIGN_SCHEMA
 from connected_enterprise.design_flywheel import example_spec, execute, validate, verify
+from connected_enterprise.runner import identity as native_source_identity, source_paths as native_source_paths
 
 REPORT_SCHEMA = "agi-alpha/native-design-adverse151/v1"
 M = 1_000_000
@@ -147,6 +149,37 @@ def robust_verdict(cases):
     }
 
 
+
+def separate_exact_native_source(checkout, destination):
+    """Create one exact, private source closure per independently seeded cohort.
+
+    design_flywheel.execute creates service-inputs/ exclusively under its supplied
+    root. Sharing a checkout between different cohort seeds is invalid; never
+    overwrite source inputs or make a new signing authority for an OLD account.
+    This copies only canonical public source identities (no credentials/.git),
+    then proves the full native closure is identical *before* native operation.
+    """
+    checkout, destination = Path(checkout).resolve(), Path(destination)
+    if destination.exists() or destination.is_symlink():
+        raise ValueError("FRESH_CANONICAL_CASE_SOURCE_REQUIRED")
+    original = tuple(native_source_paths(checkout))
+    if not original or len(original) != len(set(original)):
+        raise ValueError("COMPLETE_UNIQUE_CANONICAL_SOURCE_REQUIRED")
+    for name in original:
+        p = Path(name)
+        old = checkout / p
+        if p.is_absolute() or ".." in p.parts or not old.is_file() or old.is_symlink():
+            raise ValueError("CANONICAL_SOURCE_PATH_UNSAFE")
+        new = destination / p
+        new.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(old, new)
+    if tuple(native_source_paths(destination)) != original:
+        raise ValueError("CASE_SOURCE_INVENTORY_CHANGED")
+    if native_source_identity(destination) != native_source_identity(checkout):
+        raise ValueError("CASE_CANONICAL_EXECUTING_BYTES_CHANGED")
+    return destination
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--output", required=True,
@@ -171,8 +204,9 @@ def main(argv=None):
     started = time.monotonic()
     for name, spec in registered:
         # Each design-flywheel executes and independently audits native accounts.
-        raw = execute(spec, root, out / name)
-        checked = verify(root, out / name)
+        case_source = separate_exact_native_source(root, out / ("source-" + name))
+        raw = execute(spec, case_source, out / name)
+        checked = verify(case_source, out / name)
         if raw != checked:
             raise ValueError("REPLAYED_NATIVE_DESIGN_REPORT_CHANGED")
         rows[name] = interpret(spec, checked)
