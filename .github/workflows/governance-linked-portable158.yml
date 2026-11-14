@@ -34,6 +34,9 @@ jobs:
       archive_sha: ${{ steps.build.outputs.archive_sha }}
       manifest_sha: ${{ steps.build.outputs.manifest_sha }}
     steps:
+      - name: Record job start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
@@ -80,6 +83,9 @@ jobs:
       ARCHIVE_SHA: ${{ needs.exact-source.outputs.archive_sha }}
       MANIFEST_SHA: ${{ needs.exact-source.outputs.manifest_sha }}
     steps:
+      - name: Record job start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
