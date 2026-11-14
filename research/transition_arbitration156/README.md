@@ -53,3 +53,17 @@ This protocol is fixed **before new test and implementation edits**. A returned 
 Frozen preregistration: `89dde04d3933f3e79664ec2fd6ed720a9e83cb00`. The deterministic added test executed on unchanged Transition156 gate at `8ec1c2c1fb9ad2a12ad4f77b2b9caeeac6176373`: [actual hosted job](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/43539390907/job/132276127987) **FAILED**, with seven original tests passing and one new `AssertionError: Refusal not raised`. That failure is immutable and not retroactively repaired.
 
 The subsequent source change at `6b8f0a2ee1265a2e36192dfcb164f82666e660cd` checks the observed old checkpoint once more under the held synthetic lock immediately before returning an unchanged cached receipt. Expected: unchanged-source identical retry remains idempotent; source-changed identical retry rejects before a new signer callback or file mutation. This is reference-only. The old red receipt remains relevant, all full-head checks must be observed on the final head, and the owner-held authenticated original-account migration is still unqualified.
+
+## Transition163: experimental shared operate/prepare epoch
+
+A separate [preregistered protocol](PROTOCOL163.md) and new `test_epoch163.py` address
+the owner-source Transition162 operate-versus-prepare failure. They extend this
+**nonfinancial** fixture's single POSIX lease across an entire synthetic operation,
+durably record its intent before callback, and block new source preparation after
+an interrupted operation. Completed operation receipts must match the currently
+observed checkpoint; identical retries do not rerun synthetic effects. A later
+matching-source preparation requires completed operation records.
+
+Run with `PYTHONDONTWRITEBYTECODE=1 python -B -m unittest -v research.transition_arbitration156.test_gate research.transition_arbitration156.test_epoch163`.
+The reference remains **single-operation only**, not usable by the real native
+runner, not authenticated account recovery or a solution for owner PR40.

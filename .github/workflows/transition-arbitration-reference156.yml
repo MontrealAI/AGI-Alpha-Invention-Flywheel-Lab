@@ -25,4 +25,4 @@ jobs:
         with:
           python-version: '3.12'
       - name: Execute eight fixed nonfinancial arbitration/stale-replay regressions
-        run: python -B -m unittest -v research.transition_arbitration156.test_gate
+        run: python -B -m unittest -v research.transition_arbitration156.test_gate research.transition_arbitration156.test_epoch163
