@@ -39,3 +39,11 @@ The production pending record must be bound to all material inputs (authenticate
 | US$3B native trailing-365-day complete-cost profit | **NOT ACHIEVED** |
 
 This is a constructive engineering mechanism, **not** a Blue Sky flagship, actual commerce, benchmark superiority, authenticated-source migration or recursive-discovery benefit. No costs are represented as zero: whole-campaign/model/host bills remain unmeasured.
+
+## Transition157 preregistration — stale identical replay after checkpoint change (pre-test freeze)
+
+**Frozen parent:** Transition156 passing exact-head `f4107c75bf97a9faf9c1361452b10dab27d4263f`; seven tests and 16 applicable workflows succeeded. New research question: an earlier prepared request should not return a fresh successful preparation if the *observed authoritative source checkpoint has advanced* between first preparation and its identical retry. Stale/forked/replayed descriptors must fail closed without calling a signer, changing files, rolling back the checkpoint or claiming a completed financial migration.
+
+**Fixed test:** In one disposable reference directory, call `prepare_once(A)` with observed checkpoint `'a'*64`, verify a single mock authorization and durable intent/result. Change the observation to `'c'*64` without modifying A or either record. Invoke `prepare_once(A)` again. Required result: `Refusal('STALE_PREPARE_CHECKPOINT_REFUSED')`; exactly one total authorization call and byte-identical intent/result. The original seven tests remain unchanged. No seed choices or safety-threshold relaxation. Run the fixed test first on unchanged Transition156 source; if it fails, retain that failed exact head, then apply the smallest correction and run the same test plus original tests on a new exact head. All claims remain nonfinancial/synthetic.
+
+This protocol is fixed **before new test and implementation edits**. A returned cached receipt despite changed observed source is a *stale-replay control gap in this reference*, not evidence of compromised live account credentials, business losses, a failure of PR40 beyond its independently frozen Transition154/155 results, or authorization to access the original ledger.
