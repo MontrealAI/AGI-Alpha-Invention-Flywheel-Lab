@@ -1,0 +1,9 @@
+# Prospective schema002 parser exception repair — registered after first actual FAIL
+
+**Historical first run:** exact source `6b1ceebcce6a7760b89e6a4787dcf4bea2b57cca`, GitHub Actions #42442272300, job `128613817232`, **FAILED before public ZIP retrieval**, with seven of eight synthetic cases passing and one uncaught exception. Preserve that workflow as **FAILED**; it did not run the fixed physical-source schema gate or create a result artifact.
+
+**Observed reproduction:** the fixed malformed-.mat synthetic test correctly induced SciPy 1.17 `scipy.io.matlab.MatReadError('Mat file appears to be truncated')`, but `schema.inspect_mat_schema` caught `ValueError, TypeError, IndexError, OSError, NotImplementedError` and omitted `MatReadError`. The error escaped rather than being converted to the source-bound `SchemaError('MAT_DIRECTORY_PARSE_FAILED')` for the independent scientific fail-closed report. This is an exception transport defect, **not** a finding about the dataset, source hashes or physical function.
+
+**Single prospective repair before code:** import the supported `MatReadError` from `scipy.io.matlab` and include it in the existing exception handler. Do not relax exact-ten-member, shared-variable, hashes, data-not-read, malformed-file rejection or commercial HOLD. Do not alter SciPy/NumPy pins, fixture data, experiment arms, thresholds, scientific parser method, accounts or author ZIP. Original eight synthetic tests (normal and optimized) and same exact scientific-source attempt must run on a separately committed head. If that run finds more issues, retain each prior failure and diagnose prospectively.
+
+The malformed scientific file must still be rejected; the only intended behavior change is an explicit auditable rejection code. No new spending, API, outreach, real transactions, user data or credentials. NO DEPLOY.
