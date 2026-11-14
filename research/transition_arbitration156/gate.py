@@ -130,6 +130,10 @@ def prepare_once(directory, request, *, observed_checkpoint, authorization_callb
                 or prepared["request_sha256"] != intent["request_sha256"]
                 or _sha(prepared["receipt"]) != prepared["receipt_sha256"]):
                 raise Refusal("CORRUPT_PREPARED_RECORD_REFUSED")
+            # Idempotent only while the original checkpoint is still current.
+            # A cached successful prepare is not evidence of an advanced source.
+            if observed_checkpoint() != request["expected_checkpoint_sha256"]:
+                raise Refusal("STALE_PREPARE_CHECKPOINT_REFUSED")
             return prepared["receipt"]
         if prepared is not None:
             raise Refusal("ORPHAN_PREPARED_RECORD_REFUSED")
