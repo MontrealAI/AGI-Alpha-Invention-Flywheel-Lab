@@ -116,6 +116,23 @@ class PrepareGateReference156(unittest.TestCase):
                              authorization_callback=lambda r:calls.append(r))
             self.assertEqual(calls,[])
 
+    def test_157_identical_replay_after_checkpoint_advance_refused(self):
+        with tempfile.TemporaryDirectory() as td:
+            current = ["a" * 64]
+            signed = []
+            def authorize(request):
+                signed.append(request["id"])
+                return {"id": request["id"]}
+            kwargs = {"observed_checkpoint": lambda: current[0],
+                      "authorization_callback": authorize}
+            self.assertEqual(prepare_once(td, A, **kwargs), {"id": "writer-A"})
+            before = [(name, (Path(td) / name).read_bytes()) for name in (INTENT, PREPARED)]
+            current[0] = "c" * 64
+            with self.assertRaisesRegex(Refusal, "STALE_PREPARE_CHECKPOINT_REFUSED"):
+                prepare_once(td, A, **kwargs)
+            self.assertEqual(signed, ["writer-A"])
+            self.assertEqual(before, [(name, (Path(td) / name).read_bytes()) for name in (INTENT, PREPARED)])
+
     def test_symlink_intent_does_not_get_followed(self):
         with tempfile.TemporaryDirectory() as td:
             (Path(td)/INTENT).symlink_to(Path(td)/"outside.json")
