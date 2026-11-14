@@ -24,5 +24,5 @@ jobs:
       - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
         with:
           python-version: '3.12'
-      - name: Execute seven fixed nonfinancial intent/race/crash regressions
+      - name: Execute eight fixed nonfinancial arbitration/stale-replay regressions
         run: python -B -m unittest -v research.transition_arbitration156.test_gate
