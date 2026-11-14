@@ -1,0 +1,69 @@
+name: Source Trace129 original solicitation join
+on:
+  push:
+    paths:
+      - 'campaign/source-trace129/**'
+      - 'scripts/trace_solicitations129.py'
+      - 'tests/test_source_trace129.py'
+      - '.github/workflows/source-trace129.yml'
+  pull_request:
+    paths:
+      - 'campaign/source-trace129/**'
+      - 'scripts/trace_solicitations129.py'
+      - 'tests/test_source_trace129.py'
+      - '.github/workflows/source-trace129.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  original-solicitation-source-trace:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record actual runner start
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@v4
+      - name: Execute 16 frozen integrity and privacy regressions
+        run: python3 -m unittest discover -s tests -p 'test_source_trace129.py' -v
+      - name: Acquire exactly two original official files without retry or fallback
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/source-trace129"
+          if ! curl --fail --location --silent --show-error --retry 0 --max-time 600 \
+            --user-agent 'AGIAlphaSourceTrace129/1.0' \
+            'https://canadabuys.canada.ca/opendata/pub/2026-2027-awardNotice-avisAttribution.csv' \
+            -o "$RUNNER_TEMP/source-trace129/awards.csv"; then
+            echo '{"accepted":false,"failed_stage":"AWARDS_ACQUISITION","decision":"NO_BID_NO_DEPLOY"}' > "$RUNNER_TEMP/source-trace129/FAILURE.json"
+            exit 1
+          fi
+          if ! curl --fail --location --silent --show-error --retry 0 --max-time 600 \
+            --user-agent 'AGIAlphaSourceTrace129/1.0' \
+            'https://canadabuys.canada.ca/opendata/pub/tenderNoticeComplete-avisAppelOffresComplet.csv' \
+            -o "$RUNNER_TEMP/source-trace129/tenders.csv"; then
+            echo '{"accepted":false,"failed_stage":"TENDERS_ACQUISITION","decision":"NO_BID_NO_DEPLOY"}' > "$RUNNER_TEMP/source-trace129/FAILURE.json"
+            exit 1
+          fi
+      - name: Stream full source and join exact identifiers without contact data
+        shell: bash
+        run: |
+          set -euo pipefail
+          if ! python3 scripts/trace_solicitations129.py \
+            --awards "$RUNNER_TEMP/source-trace129/awards.csv" \
+            --tenders "$RUNNER_TEMP/source-trace129/tenders.csv" \
+            --output "$RUNNER_TEMP/source-trace129/RESULT.json"; then
+            echo '{"accepted":false,"failed_stage":"PARSE_OR_SCHEMA","decision":"NO_BID_NO_DEPLOY"}' > "$RUNNER_TEMP/source-trace129/FAILURE.json"
+            exit 1
+          fi
+      - name: Publish only compact source-bound records, never raw CSV or contacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: source-trace129-compact
+          path: |
+            ${{ runner.temp }}/source-trace129/RESULT.json
+            ${{ runner.temp }}/source-trace129/FAILURE.json
+          if-no-files-found: warn
+          retention-days: 30
