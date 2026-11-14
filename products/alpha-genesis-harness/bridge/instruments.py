@@ -184,6 +184,11 @@ def evaluate(spec, inputs, max_operations=10000):
             if not isinstance(path, str) or not path:
                 raise ValueError("Invalid input field.")
             if path.split(".")[0] not in spec["inputs"]:
+                # A model once used {"field":"2"} for the number 2. Keep the
+                # evaluator fail-closed, but make its retry feedback actionable.
+                # Do not echo arbitrary untrusted field paths into model context.
+                if len(path) <= 32 and re.fullmatch(r"-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?(?:[eE][+-]?[0-9]+)?", path):
+                    raise ValueError('Input field root was not declared. A numeric constant is a raw JSON number (for example 2), not {"field":"2"}. Only declared input names use {"field":"name"}.')
                 raise ValueError("Input field root was not declared.")
             at = inputs
             for part in path.split("."):
