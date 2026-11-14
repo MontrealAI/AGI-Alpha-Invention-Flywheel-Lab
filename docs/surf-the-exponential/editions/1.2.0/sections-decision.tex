@@ -1,0 +1,125 @@
+\section{The deeper missing move: know enough, or need to know less}
+\label{sec:decision}
+\subsection{An answer to every situation is not one usable policy}
+A proposal may show a good response for each possible situation while quietly choosing each response using facts the operator will not possess. This is a different missing chapter from an incorrect answer. The issue is \emph{whether the proposed actions can be selected from the evidence actually available}. In compact form,
+\begin{equation}
+\big[\forall w\;\exists a:\ a\in\mathcal A(w)\big]\quad\not\Longrightarrow\quad\big[\exists\pi\;\forall w:\ \pi(h(w))\in\mathcal A(w)\big].
+\label{eq:quantifier}
+\end{equation}
+The distinction is familiar in planning under uncertainty and adjustable robust optimization \citep{bental2004adjustable}. Its constructive consequence is especially useful here: the missing move can be an observation that makes a decision possible, \emph{or a new productive action that makes the observation unnecessary}. A stronger critic should search both directions.
+
+\begin{thesisbox}
+\textbf{Do not only ask what you must know to succeed.\\Ask what you could build so that you no longer need to know it.}
+\end{thesisbox}
+
+Consider a finite, deterministic model with possible worlds $W$, a permitted observation $h:W\to Y$, and a set $\mathcal A(w)$ of actions that satisfy the original purpose in world $w$. These sets must already incorporate the stated quality, rights and resource conditions. An action can be an entire externally executable plan, provided its own information access and resource use are included rather than supplied by a hidden oracle. A policy $\pi:Y\to A$ sees the observation, not the hidden world. For this result, observation does not change the world; consequential experiments instead need transitions in an extended model.
+
+\begin{proposition}[Decision-sufficient evidence]
+\label{prop:decision}
+A policy satisfying $\pi(h(w))\in\mathcal A(w)$ for every $w\in W$ exists if and only if
+\begin{equation}
+\bigcap_{w\in h^{-1}(y)}\mathcal A(w)\ne\varnothing
+\qquad\text{for every realized observation }y.
+\label{eq:intersection}
+\end{equation}
+\end{proposition}
+\begin{proof}
+An implementable policy selects the same action in all worlds with the same observation. That action must belong to their intersection. Conversely, choosing one member of each nonempty intersection defines a valid policy. This proof is finite and constructive; it does not establish that the model or action sets describe reality.
+\end{proof}
+
+The criterion needs neither certainty about the complete world nor agreement among judges. It needs enough justified information to select a valid action. Conversely, no observation can help a world with $\mathcal A(w)=\varnothing$ until a new action or other permitted construction changes that set. Better information and better production are complementary levers, not interchangeable achievements.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[every node/.style={align=center,font=\small},
+ b/.style={draw=Rule,rounded corners=3pt,text width=2.63in,minimum height=.74in,inner sep=7pt},
+ a/.style={-{Latex[length=2mm]},line width=.85pt,color=Sea}]
+\node[b,fill=Ivory] (learn) {\textbf{LEARN ENOUGH}\\Separate situations that\\require different actions.};
+\node[b,fill=Sea!5,right=.3in of learn] (build) {\textbf{NEED TO KNOW LESS}\\Construct an action that works\\across the remaining possibilities.};
+\node[below=.47in of $(learn.south)!.5!(build.south)$,text width=5.8in] (outcome) {\textbf{One unchanged purpose. Two constructive levers.}\\Compare the complete outcome, cost and commitments.};
+\draw[a] (learn.south)--++(0,-.15in)-|(outcome.north);
+\draw[a] (build.south)--++(0,-.15in)-|(outcome.north);
+\end{tikzpicture}
+\caption{Evidence and production can be designed together. Robustness covers only the declared uncertainty set; neither branch grants unobserved capacity or permission.}
+\label{fig:twolevers}
+\end{figure}
+
+\subsection{A three-way counterexample that pairwise review misses}
+A customer needs one unit of output. Three distinct sources, A, B and C, can each supply one unit, and exactly one is unavailable. Initially consider the low-cost formulation that permits selecting one source without observing which source failed:
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+\textbf{Possible situation} & \textbf{Actions that work} & \textbf{What the operator knows}\\
+\midrule
+A is unavailable & Use B or C & One source is unavailable.\\
+B is unavailable & Use A or C & One source is unavailable.\\
+C is unavailable & Use A or B & One source is unavailable.\\
+\bottomrule
+\end{tabular}
+\end{center}
+Every situation has a solution. Every \emph{pair} of situations even has a common solution. Yet all three share none. A reviewer checking only individual situations or pairwise compatibility can miss the obstruction to an executable policy. This is a specified information limit, not evidence that all continuity services are impossible.
+
+A single truthful status question---``Is A unavailable?''---splits the possibilities into two cells. If yes, use B; if no, use A. Two distinguishable messages suffice; identifying all three failure states would be unnecessary for the one-unit purpose. The observation must actually be obtainable, current, permitted and trustworthy. A language model does not create this information by naming the question.
+
+Define a \emph{minimal incompatible set} as a nonempty $S\subseteq W$ with $\bigcap_{w\in S}\mathcal A(w)=\varnothing$, while every proper nonempty subset has a nonempty intersection. In this example the three worlds together form the only such set. More generally, these sets can contain more than two worlds.
+
+\begin{corollary}[The full obstruction, not only its pairs]
+\label{cor:obstruction}
+In a finite model, an observation supports a valid policy exactly when none of its cells contains a minimal incompatible set. Thus a replacement observation must split every incompatible set that the original observation leaves together, unless a changed construction makes a common action admissible.
+\end{corollary}
+\begin{proof}
+If a cell contains an incompatible set, its intersection is empty. If its intersection is empty, finite deletion of unnecessary worlds yields a minimal incompatible subset. Apply Proposition~\ref{prop:decision}.
+\end{proof}
+
+This provides an executable challenge certificate. It specifies \emph{which distinctions an observation must preserve}, or \emph{which common action a productive redesign must supply}. It does not prescribe a new model, more agents, or more detailed information indiscriminately. Several sufficient observation partitions can be incomparable; there need not be one uniquely coarsest useful representation as in an exact-answer quotient.
+
+\subsection{An executed decision compiler, with ordinary competitors}
+The new companion constructs status-query sets and observation-conditioned dispatch policies. Production actions are built from subsets of the three sources. A selected source costs four arbitrary model units, whether or not it proves available; surplus output is permitted and its reservation is still paid. A separately supplied fallback can deliver the complete demand in every modeled world at cost $f$ per unit. Each selected truthful status predicate costs $q$; its stipulated price represents the observation-and-interface charge for this activation. Every predicate is paid before dispatch, with no free state information or receipt available to finance earlier work.
+
+For each authorized predicate subset, the constructor forms its possible observations, chooses a valid dispatch for each observation, and emits the policy, delivered quantities, branch costs and required prefunding. The objective is minimum worst-case total modeled cost. A separate conventional oracle enumerates \emph{all observation-conditioned policies}, rather than importing the constructor or its cellwise selection rule. It can choose the same observation, redundancy, fallback or non-entry. Conventional equality is a result, not a weakened comparator.
+
+With all three status predicates authorized and the fallback available, the exact cost minima for demands $d=1$ and $d=2$ in this particular grammar are
+\begin{align}
+C_1(q,f)&=\min\{4+q,\;8,\;f\},\\
+C_2(q,f)&=\min\{8+2q,\;12,\;2f\}.
+\label{eq:decisioncost}
+\end{align}
+For one unit, one status bit permits a valid four-unit dispatch; reserving two sources guarantees at least one without observation. For two units, distinguishing the failed source permits reserving the two available sources; without sufficient information, reserving all three costs twelve. The fallback remains eligible. Two status predicates distinguish all three states. Extra predicates cannot improve these minima when $q\geq0$. These formulas concern this complete finite catalogue, not all ways to produce or insure the outcome.
+
+\begin{table}[H]
+\centering\small
+\begin{tabularx}{\linewidth}{YrrrrY}
+\toprule
+\textbf{Case} & $d$ & $q$ & $f$ & \textbf{Cost} & \textbf{Best complete response}\\
+\midrule
+Before the stipulated frontier change & 1 & 5 & 7 & 7 & Fallback; no status query.\\
+After the stipulated frontier change & 1 & 1 & 7 & 5 & One query; one selected source.\\
+Redesign removes the information need & 1 & 1 & 4 & 4 & Cheaper all-world fallback; no query.\\
+Changed successor purpose & 2 & 1 & 7 & 10 & Two queries; two selected sources.\\
+Successor restricted to the inherited query & 2 & 1 & 7 & 12 & Retire the query; reserve all three.\\
+\bottomrule
+\end{tabularx}
+\caption{Executed finite-model minima. Every cell is an authored condition, not a measured model release or supplier quote. The successor's larger demand changes the acceptance relation, not merely the name of the original task.}
+\label{tab:decision}
+\end{table}
+
+The study also checks the general intersection criterion on \textbf{all 512 three-world, three-action admissibility relations and all five observation partitions}: 2,560 relation--partition checks. Exactly 169 relations have no feasible policy under any observation because some world has no allowed action; 169 require a minimum of one observation label, 168 require two and six require three. Six relations have a three-way obstruction but no incompatible pair. A valid action is emitted for every accepted cell and checked by direct policy enumeration.
+
+\subsection{When an information advance actually changes an opportunity}
+In the one-unit example, suppose an authorized hypothetical offer collects six units only after accepted delivery. Before the stipulated change, even the strongest complete route costs seven: the offer has no positive margin. Lowering $q$ from five to one changes the minimum to five. A five-unit opening budget now funds every represented branch, followed by six collected model units and a one-unit surplus. A budget of four still fails. Reducing the acceptable receipt to four, for example because outside options improved, removes the surplus despite the technical gain.
+
+This is \emph{model-conditional Frontier Replay}: a specified capability-cost change removes a named decision obstruction and crosses a price-and-prefunding boundary. It does not report a newly available physical instrument or actual willing buyer. At $f=7$, positive surplus for the six-unit quote requires $q<2$; funding from opening cash five requires $q\leq1$. A new model's name provides neither inequality. Real qualification must measure the relevant cost change and independently establish the observation and delivery semantics.
+
+The changed two-unit purpose has a new hypothetical quote of eleven and opening cash ten. The retained one-question channel cannot support an economically accepted route at those terms: the best allowed alternative costs twelve and correctly stops using the unhelpful query. Recompiling with the permitted status predicates yields a ten-unit route with three observation labels. The observation values are reacquired and paid for; yesterday's source status is not reused as today's fact. An equally informed conventional constructor obtains the same result. This demonstrates a \emph{changed applicability boundary and a usable recompiled policy}, not an improved inventor or reduced discovery cost.
+
+A second exhaustive grid varies query cost, fallback cost, demand, quote and opening cash over 840 stated combinations. The independent oracle agrees throughout: 286 are admitted within the model, 222 lack positive surplus and 332 are profitable on delivery but unfunded. These counts are properties of the declared grid, not estimates of market prevalence. The finite accounting includes every listed cost; actual research, procurement, qualification, support, taxes and liability costs are unmeasured. No real sale or native operating account is claimed.
+
+\subsection{Constructive challenge without the certainty trap}
+The preceding artifact shows three legitimate responses to uncertainty. \textbf{Learn enough} to select a cheaper action. \textbf{Construct a robust route} so that the disputed distinction no longer affects success. Or \textbf{decline} when neither complete route earns its costs and obligations. A successful challenger must be able to discover the second response as well as demand the first.
+
+\begin{seabox}
+\textbf{The constructive frontier is joint.}\par
+A new observation changes which existing action can be selected. A new productive action changes which observations are necessary. A viable arrangement must pay for the combination and preserve the customer's purpose.
+\end{seabox}
+
+The all-world quantifier covers \emph{only the declared worlds}. Two simultaneous source failures, delayed or dishonest signals, incompatible output, forbidden surplus, shared infrastructure and a provider that withdraws are outside this model unless added explicitly. In a real continuity service those may be decisive. The next empirical test is not to give a model these three worlds and celebrate the correct table: it is to see whether it can find a materially missing situation, construct an affordable observation or response, and obtain an accepted outcome under a serious complete alternative. The theorem makes a construction target precise; it does not certify the world model.
