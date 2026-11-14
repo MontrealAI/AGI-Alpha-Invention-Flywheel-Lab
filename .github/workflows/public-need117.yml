@@ -1,0 +1,47 @@
+name: Public Need 117 — offline source-bound sample audit (engineering only)
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  sample-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Record platform job execution start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - name: Execute five exposed synthetic acceptance/adversarial cases
+        run: |
+          cd campaign/public-need117
+          python3 -B -m unittest -v test_interpret
+      - name: Build and independently replay offline audited sample
+        run: |
+          cd campaign/public-need117
+          python3 -B interpret.py --csv demo.csv --output "$RUNNER_TEMP/public-need117" --role EXPOSED_DEMO --label-review UNVERIFIED --population-frame UNKNOWN
+          python3 -B verify.py --csv demo.csv --report "$RUNNER_TEMP/public-need117/RESULT.json"
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          d=json.loads((Path(os.environ["RUNNER_TEMP"])/'public-need117/RESULT.json').read_text())
+          assert d['status']=='UNQUALIFIED_DEMONSTRATION'
+          assert d['actual_revenue_usd'] is None and d['commercial_acceptance'] is None
+          assert d['rows']==8 and len(d['groups'])==2
+          PY
+          sha256sum demo.csv interpret.py verify.py test_interpret.py > "$RUNNER_TEMP/public-need117/SOURCE_HASHES.txt"
+      - name: Preserve key-free demo and exact source hashes
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: public-need117-${{ github.event.pull_request.head.sha || github.sha }}-attempt-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/public-need117
+          if-no-files-found: warn
