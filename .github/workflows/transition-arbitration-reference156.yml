@@ -1,0 +1,28 @@
+name: Transition156 isolated pending authority reference (nonfinancial)
+on:
+  pull_request:
+    paths:
+      - research/transition_arbitration156/**
+      - .github/workflows/transition-arbitration-reference156.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  isolated-reference-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Record job start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Execute eight fixed nonfinancial arbitration/stale-replay regressions
+        run: python -B -m unittest -v research.transition_arbitration156.test_gate
