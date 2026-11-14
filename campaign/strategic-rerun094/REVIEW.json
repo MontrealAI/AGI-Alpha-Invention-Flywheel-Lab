@@ -1,0 +1,131 @@
+{
+  "schema": "strategic094-independent-review/v1",
+  "verdict": "PASS_FOR_REGISTERED_CONDITIONAL_PROJECTION_SCOPE",
+  "source_file": "research/strategic094/model.py",
+  "source_sha256": "a458dffebef7467313db54ad984d5b35e1cbe2015f0a0d23731d8ca4eb9e52db",
+  "source_unchanged_during_review": true,
+  "review_type": "Independent engineering checks; no native accounts or confirmation seeds",
+  "engineering_seeds": [
+    94003
+  ],
+  "confirmation_seeds_used": [],
+  "checks": [
+    {
+      "name": "Independent finite game oracle",
+      "status": "PASS",
+      "cases": 30,
+      "method": "Exact decimal buyer utilities and independently reconstructed expected payoff matrices, then exhaustive pessimistic follower and leader selection."
+    },
+    {
+      "name": "Independent financial reconciliation",
+      "status": "PASS",
+      "cells": 30,
+      "monthly_prefixes": 360,
+      "seed": 94003,
+      "months": 12,
+      "capitals": [
+        100000,
+        1000000000
+      ],
+      "scenarios": [
+        "central",
+        "cost_value_stress",
+        "aggressive_rival",
+        "slow_payment",
+        "zero_demand"
+      ],
+      "policies": [
+        "organic",
+        "staged",
+        "adaptive"
+      ],
+      "checks": [
+        "Revenue minus incurred costs equals profit",
+        "Revenue minus collections equals receivables",
+        "Cash reconciles including tax payables",
+        "Book equity identity",
+        "Production reserves stay funded",
+        "Accepted counts never exceed ordered counts",
+        "Trailing-year sum"
+      ]
+    },
+    {
+      "name": "Zero acceptance",
+      "status": "PASS"
+    },
+    {
+      "name": "Unfunded tax and permanent shutdown",
+      "status": "PASS",
+      "seed": 94003,
+      "scope": "Adversarial engineering fixture, not a registered market outcome",
+      "minimum_available": -573329.757629,
+      "arrears_eventually_paid": true,
+      "shutdown_platform_costs_do_not_restart": true
+    },
+    {
+      "name": "Capital option inclusion smoke check",
+      "status": "PASS",
+      "scenarios": 5,
+      "cash_levels": [
+        100000,
+        1000000,
+        10000000,
+        100000000,
+        1000000000
+      ],
+      "scope": "Registered starting conditions only; not global dynamic capital optimization."
+    }
+  ],
+  "maximum_absolute_reconciliation_errors": {
+    "independent_game_value": 1.1175870895385742e-08,
+    "prefix_profit": 1.4551915228366852e-11,
+    "prefix_receivables": 4.547473508864641e-13,
+    "prefix_cash": 3.5762786865234375e-07,
+    "prefix_book_equity": 2.384185791015625e-07,
+    "trailing_year": 0,
+    "adverse_accounting": 0
+  },
+  "price_grid_refinement": {
+    "scenario": "central",
+    "contacts": [
+      100,
+      10,
+      1
+    ],
+    "method": "Independent normalized-type oracle with explicit numerical utility tie tolerance; sensitivity evidence, not selection from confirmation results.",
+    "results": [
+      {
+        "price_step": 0.01,
+        "leader_price": 0.32,
+        "rival_price": 0.29,
+        "leader_expected_contribution": 5156.6244235948825,
+        "rival_expected_contribution": 23270.12615016979
+      },
+      {
+        "price_step": 0.005,
+        "leader_price": 0.33,
+        "rival_price": 0.305,
+        "leader_expected_contribution": 5506.668281449858,
+        "rival_expected_contribution": 26245.49894193707
+      },
+      {
+        "price_step": 0.001,
+        "leader_price": 0.327,
+        "rival_price": 0.306,
+        "leader_expected_contribution": 5401.655124093364,
+        "rival_expected_contribution": 26443.85712805488
+      }
+    ]
+  },
+  "limitations": [
+    "Conditional hypothetical market and cost model, not market calibration or actual commerce.",
+    "Finite one-period pricing optimization is not global dynamic enterprise, continuous-price or capital optimality.",
+    "Price-grid refinement changes equilibrium choices and payoffs.",
+    "Market opportunities do not implement persistent individual-buyer wallets.",
+    "Keyed monthly shocks are shared across policies; binomial counts with different parameters are not identical individual customer draws.",
+    "Book equity before future delivery is not distributable liquidation proceeds or an executed financing agreement.",
+    "No aggregate projection unit is certified as a native independently accepted delivery.",
+    "This review does not qualify a release, hosted operation, full confirmation matrix or native billion-dollar profit."
+  ],
+  "elapsed_seconds": 11.495014396030456
+}

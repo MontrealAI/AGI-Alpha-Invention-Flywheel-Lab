@@ -1,0 +1,29 @@
+name: Strategic commercial 094 checks
+on:
+  pull_request:
+    paths:
+      - 'research/strategic094/**'
+      - 'campaign/strategic-rerun094/**'
+      - '.github/workflows/strategic094.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record platform job execution start
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install numpy==2.3.5 scipy==1.17.0
+      - name: Test strategic decisions and projected accounting
+        env:
+          OPENBLAS_NUM_THREADS: '1'
+          PYTHONDONTWRITEBYTECODE: '1'
+        run: python -m unittest research.strategic094.test_model -v
+      - name: Verify complete retained confirmation rows
+        run: python -m research.strategic094.audit_csv campaign/strategic-rerun094
