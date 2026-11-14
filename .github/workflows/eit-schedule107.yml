@@ -1,0 +1,64 @@
+name: EIT107 frozen ternary physical observation schedule
+on:
+  pull_request:
+    paths:
+      - 'research/eit_schedule107/**'
+      - 'tests/test_eit_schedule107.py'
+      - '.github/workflows/eit-schedule107.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  frozen-source-ternary-schedule:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Record actual platform start
+        run: echo "AGI_JOB_START_EPOCH=$(date -u +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - name: Confirm exact executing source
+        run: test "$(git rev-parse HEAD)" = "${{ github.event.pull_request.head.sha || github.sha }}"
+      - name: Test synthetic counterexamples in ordinary and optimized Python
+        run: |
+          python3 -m unittest tests.test_eit_schedule107 -v
+          python3 -O -m unittest tests.test_eit_schedule107 -v
+      - name: Execute one verified public source diagnostic and retain either verdict
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m research.eit_schedule107.diagnose > "$RUNNER_TEMP/EIT107_SOURCE_SCHEDULE.json"
+          python3 - "$RUNNER_TEMP/EIT107_SOURCE_SCHEDULE.json" "$(git rev-parse HEAD)" <<'PY'
+          import json,sys
+          file,head=sys.argv[1:]
+          with open(file,encoding="utf-8") as f: r=json.load(f)
+          assert r["schema"]=="eit107/frozen-source-ternary-schedule/v1"
+          assert r["source"]["md5"]=="262a968766cd034914155ac2bfcd121e"
+          assert r["protocol_freeze_commit"]=="929f0b0fb1fb70a9298d520bfa668536b4133b27"
+          assert r["diagnostic"]["all_missing_left_unimputed"] is True
+          assert r["diagnostic"]["blank_E_kept_distinct_from_NA"] is True
+          assert r["diagnostic"]["measurement_rows_not_independent_specimens"]>0
+          assert r["diagnostic"]["physical_acquisition_semantics_qualified"] is False
+          assert r["physical_end_use"]=="UNQUALIFIED"
+          assert r["commercial_profit"] is None
+          assert r["decision"]=="HOLD_NO_BID_NO_DEPLOY"
+          assert r["diagnostic"]["customer_acceptances"]==0
+          assert r["historical_eit105_masked"]=="FAILED_RETAINED_42551635036"
+          r["executing_source_commit"]=head
+          with open(file,"w",encoding="utf-8") as f: json.dump(r,f,indent=2,sort_keys=True)
+          print("FROZEN_EIT107_H1_DECISION",r["diagnostic"]["H1_pair_only_mask_schedule"])
+          print("AUDIT_SOURCE_BOUND_DIAGNOSTIC_ONLY")
+          PY
+          sha256sum "$RUNNER_TEMP/EIT107_SOURCE_SCHEDULE.json"
+          cat "$RUNNER_TEMP/EIT107_SOURCE_SCHEDULE.json"
+      - name: Upload compact source-bound diagnostic artifact
+        if: success()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: eit107-ternary-mask-schedule
+          path: ${{ runner.temp }}/EIT107_SOURCE_SCHEDULE.json
+          if-no-files-found: error
