@@ -22,7 +22,7 @@ From the repository root on POSIX/Linux with standard-library Python:
 PYTHONDONTWRITEBYTECODE=1 python -B -m unittest -v research.transition_arbitration156.test_gate
 ```
 
-Seven tests exercise serial A/B rejection, byte-preserving A retries, a separate two-process race, synthetic exception interruption, actual process death mid-authorization, stale/corrupt records and symlink refusal. They use disposable directories and no private source, commercial revenue, money, account, real signer or paid API. Their pass means only this isolated reference obeys the stated properties. The original PR #360 tests stay **failed on their unchanged financial-parent source**, not retroactively rescued by this reference.
+Eight tests exercise serial A/B rejection, byte-preserving A retries, a separate two-process race, synthetic exception interruption, actual process death mid-authorization, stale/corrupt records, symlink refusal, and refusal of an identical cached request after source-checkpoint advancement. They use disposable directories and no private source, commercial revenue, money, account, real signer or paid API. Their pass means only this isolated reference obeys the stated properties. The original PR #360 tests stay **failed on their unchanged financial-parent source**, not retroactively rescued by this reference.
 
 ## Non-negotiable integration boundary
 
@@ -47,3 +47,9 @@ This is a constructive engineering mechanism, **not** a Blue Sky flagship, actua
 **Fixed test:** In one disposable reference directory, call `prepare_once(A)` with observed checkpoint `'a'*64`, verify a single mock authorization and durable intent/result. Change the observation to `'c'*64` without modifying A or either record. Invoke `prepare_once(A)` again. Required result: `Refusal('STALE_PREPARE_CHECKPOINT_REFUSED')`; exactly one total authorization call and byte-identical intent/result. The original seven tests remain unchanged. No seed choices or safety-threshold relaxation. Run the fixed test first on unchanged Transition156 source; if it fails, retain that failed exact head, then apply the smallest correction and run the same test plus original tests on a new exact head. All claims remain nonfinancial/synthetic.
 
 This protocol is fixed **before new test and implementation edits**. A returned cached receipt despite changed observed source is a *stale-replay control gap in this reference*, not evidence of compromised live account credentials, business losses, a failure of PR40 beyond its independently frozen Transition154/155 results, or authorization to access the original ledger.
+
+## Transition157 executed RED and narrow repair (not an original-account repair)
+
+Frozen preregistration: `89dde04d3933f3e79664ec2fd6ed720a9e83cb00`. The deterministic added test executed on unchanged Transition156 gate at `8ec1c2c1fb9ad2a12ad4f77b2b9caeeac6176373`: [actual hosted job](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/43539390907/job/132276127987) **FAILED**, with seven original tests passing and one new `AssertionError: Refusal not raised`. That failure is immutable and not retroactively repaired.
+
+The subsequent source change at `6b8f0a2ee1265a2e36192dfcb164f82666e660cd` checks the observed old checkpoint once more under the held synthetic lock immediately before returning an unchanged cached receipt. Expected: unchanged-source identical retry remains idempotent; source-changed identical retry rejects before a new signer callback or file mutation. This is reference-only. The old red receipt remains relevant, all full-head checks must be observed on the final head, and the owner-held authenticated original-account migration is still unqualified.
