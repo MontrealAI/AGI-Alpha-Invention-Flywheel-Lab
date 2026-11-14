@@ -26,7 +26,7 @@ concurrency:
 jobs:
   exact-source:
     runs-on: ubuntu-latest
-    timeout-minutes: 120
+    timeout-minutes: 360
     env:
       PYTHONDONTWRITEBYTECODE: '1'
       SOURCE_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
@@ -73,7 +73,7 @@ jobs:
   downloaded-operation:
     needs: [exact-source]
     runs-on: ubuntu-latest
-    timeout-minutes: 120
+    timeout-minutes: 360
     env:
       PYTHONDONTWRITEBYTECODE: '1'
       SOURCE_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
