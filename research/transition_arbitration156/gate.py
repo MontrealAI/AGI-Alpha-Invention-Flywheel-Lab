@@ -114,6 +114,8 @@ def prepare_once(directory, request, *, observed_checkpoint, authorization_callb
         if not stat.S_ISREG(os.fstat(lockfd).st_mode):
             raise Refusal("REGULAR_WRITER_LOCK_REQUIRED")
         fcntl.flock(lockfd, fcntl.LOCK_EX)
+        # Shared source epoch: no prepare across interrupted/invalid operation.
+        _check_operation_records(root, observed_checkpoint)
         intent = _read(root, INTENT)
         prepared = _read(root, PREPARED)
         if prepared is not None and intent is None:
@@ -151,6 +153,99 @@ def prepare_once(directory, request, *, observed_checkpoint, authorization_callb
                     "request_sha256": intent["request_sha256"],
                     "receipt": receipt, "receipt_sha256": _sha(receipt)}
         _create(root, PREPARED, prepared)
+        return receipt
+    finally:
+        fcntl.flock(lockfd, fcntl.LOCK_UN)
+        os.close(lockfd)
+
+# Isolated synthetic operation-epoch records; never a native account authority.
+OP_INTENT = "OPERATION_INTENT.json"
+OP_DONE = "OPERATION_RESULT.json"
+
+
+def _check_operation_records(root, observed_checkpoint):
+    """Verify one *synthetic* completed operation; refuse interrupted work."""
+    intent = _read(root, OP_INTENT)
+    done = _read(root, OP_DONE)
+    if intent is None:
+        if done is not None:
+            raise Refusal("ORPHAN_OPERATION_RESULT_REFUSED")
+        return None
+    if (set(intent) != {"schema", "operation", "operation_sha256"}
+        or intent["schema"] != "transition163/operation-intent/v1"
+        or not isinstance(intent["operation"], dict)
+        or _sha(intent["operation"]) != intent["operation_sha256"]):
+        raise Refusal("CORRUPT_OPERATION_INTENT_REFUSED")
+    if done is None:
+        raise Refusal("INCOMPLETE_OPERATION_REQUIRES_OWNER_RECOVERY")
+    if (set(done) != {"schema", "operation_sha256", "receipt", "receipt_sha256"}
+        or done["schema"] != "transition163/operation-done/v1"
+        or done["operation_sha256"] != intent["operation_sha256"]
+        or not isinstance(done["receipt"], dict)
+        or set(done["receipt"]) != {"after_checkpoint_sha256", "outcome"}
+        or type(done["receipt"]["after_checkpoint_sha256"]) is not str
+        or len(done["receipt"]["after_checkpoint_sha256"]) != 64
+        or any(c not in "0123456789abcdef" for c in done["receipt"]["after_checkpoint_sha256"])
+        or type(done["receipt"]["outcome"]) is not str
+        or _sha(done["receipt"]) != done["receipt_sha256"]):
+        raise Refusal("CORRUPT_OPERATION_RESULT_REFUSED")
+    if observed_checkpoint() != done["receipt"]["after_checkpoint_sha256"]:
+        raise Refusal("STALE_OPERATION_RESULT_CHECKPOINT_REFUSED")
+    return intent["operation"], done["receipt"]
+
+
+def operate_once(directory, operation, *, observed_checkpoint, operation_callback):
+    """Single synthetic operation under the SAME lease as prepare_once.
+
+    Creates an immutable pre-callback intent and durable completion. A crashed
+    operation is intentionally NOT auto-replayed/recovered; the owner must
+    authenticate and reconcile real finance separately. No native CLI, signer,
+    HMAC, JournalAccount, private funds or real source transition is touched.
+    """
+    if (not isinstance(operation, dict)
+        or set(operation) != {"id", "expected_checkpoint_sha256"}
+        or type(operation["id"]) is not str
+        or not 1 <= len(operation["id"]) <= 128
+        or not all(c.isalnum() or c in "-_" for c in operation["id"])
+        or type(operation["expected_checkpoint_sha256"]) is not str
+        or len(operation["expected_checkpoint_sha256"]) != 64
+        or any(c not in "0123456789abcdef"
+               for c in operation["expected_checkpoint_sha256"])):
+        raise Refusal("EXACT_SYNTHETIC_OPERATION_REQUIRED")
+    root = _safe_root(directory)
+    lockfd = os.open(root / LOCK, os.O_RDWR | os.O_CREAT | os.O_NOFOLLOW | os.O_CLOEXEC, 0o600)
+    try:
+        if not stat.S_ISREG(os.fstat(lockfd).st_mode):
+            raise Refusal("REGULAR_WRITER_LOCK_REQUIRED")
+        fcntl.flock(lockfd, fcntl.LOCK_EX)
+        if _read(root, INTENT) is not None or _read(root, PREPARED) is not None:
+            raise Refusal("PENDING_PREPARE_REFUSES_OPERATION")
+        completed = _check_operation_records(root, observed_checkpoint)
+        if completed is not None:
+            recorded_operation, recorded_receipt = completed
+            if operation != recorded_operation:
+                raise Refusal("DIFFERENT_OPERATION_REFUSED")
+            return recorded_receipt  # No new callback or rewritten record.
+        if observed_checkpoint() != operation["expected_checkpoint_sha256"]:
+            raise Refusal("STALE_OPERATION_CHECKPOINT_REFUSED")
+        intent = {"schema": "transition163/operation-intent/v1",
+                  "operation": operation, "operation_sha256": _sha(operation)}
+        _create(root, OP_INTENT, intent)  # fsynced before any simulated effect.
+        receipt = operation_callback(operation)
+        if (not isinstance(receipt, dict)
+            or set(receipt) != {"after_checkpoint_sha256", "outcome"}
+            or type(receipt["after_checkpoint_sha256"]) is not str
+            or len(receipt["after_checkpoint_sha256"]) != 64
+            or any(c not in "0123456789abcdef"
+                   for c in receipt["after_checkpoint_sha256"])
+            or type(receipt["outcome"]) is not str):
+            raise Refusal("EXACT_SYNTHETIC_OPERATION_RECEIPT_REQUIRED")
+        if observed_checkpoint() != receipt["after_checkpoint_sha256"]:
+            raise Refusal("OPERATION_EFFECT_NOT_RECONCILED")
+        done = {"schema": "transition163/operation-done/v1",
+                "operation_sha256": intent["operation_sha256"],
+                "receipt": receipt, "receipt_sha256": _sha(receipt)}
+        _create(root, OP_DONE, done)
         return receipt
     finally:
         fcntl.flock(lockfd, fcntl.LOCK_UN)
