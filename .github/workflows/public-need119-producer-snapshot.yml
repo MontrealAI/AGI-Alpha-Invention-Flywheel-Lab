@@ -1,0 +1,42 @@
+name: Qualification119 — pinned PR316 producer-source snapshot negative witness
+on:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  producer-snapshot119:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Record platform job execution start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - name: Independently checkout unchanged pinned owner PR316
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          repository: MontrealAI/AGI-Alpha-Invention-Flywheel-Lab
+          ref: 9e9b501c84ffe7b7969027c43eb465aff81f8499
+          path: original-owner-pr316
+          persist-credentials: false
+      - name: Execute exact fixed diagnostic (green workflow is NOT a verifier pass)
+        shell: bash
+        run: |
+          PYTHONPATH="$PWD/original-owner-pr316/campaign/public-need117" python3 -B qualification/public-need119-producer-snapshot/producer_snapshot_witness.py
+          sha256sum original-owner-pr316/campaign/public-need117/interpret.py original-owner-pr316/campaign/public-need117/verify.py qualification/public-need119-producer-snapshot/producer_snapshot_witness.py > qualification/public-need119-producer-snapshot/SOURCE_HASHES.txt
+      - name: Preserve compact key-free evidence including security failures
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: public-need119-producer-snapshot-${{ github.event.pull_request.head.sha || github.sha }}-attempt-${{ github.run_attempt }}
+          path: |
+            qualification/public-need119-producer-snapshot/PROTOCOL.md
+            qualification/public-need119-producer-snapshot/RESULT.json
+            qualification/public-need119-producer-snapshot/SOURCE_HASHES.txt
+          if-no-files-found: warn
