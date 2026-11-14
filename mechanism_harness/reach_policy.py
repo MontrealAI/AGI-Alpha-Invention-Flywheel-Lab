@@ -13,7 +13,7 @@ from connected_enterprise.channels import default_contracts
 from . import cart_program
 
 
-ARMS = ('organic', 'pilot')
+ARMS = ('organic', 'pilot', 'trial_once')
 SCENARIOS = ('central', 'weak', 'copycat', 'no_demand', 'failed_activation')
 COHORT_SEED = 2026110401
 CHANNEL_SEED = 2026110403
@@ -193,6 +193,10 @@ def decide(arm, day, available_microUSD, earned_microUSD, warm_settled,
         expected = attribution
     if arm == 'organic':
         reason = 'ORGANIC_CONTROL'
+    elif arm == 'trial_once' and day == DECISION_DAYS[1]:
+        # A precommitted no-renewal ablation, irrespective of favorable evidence.
+        # Continue computing and recording all dated evidence for independent audit.
+        reason = 'REGISTERED_ONE_TRANCHE'
     elif not warm_settled:
         reason = 'NO_WARM_COLLECTION'
     elif day == DECISION_DAYS[1] and not first_invoice_microUSD:
