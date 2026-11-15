@@ -23,6 +23,7 @@ ANCHORS = (
     "catalog_before_sha256", "catalog_after_sha256",
     "scope_before_sha256", "systems_before_sha256",
 )
+OPTIONAL_SUCCESSOR_INVENTORY_ANCHOR = "systems_after_sha256"
 
 
 def _systems(rows):
@@ -48,8 +49,10 @@ def propose(data):
     } or data["schema"] != SCHEMA:
         raise ValueError("EXACT_SOURCE_CONTINUITY_INPUT_REQUIRED")
     anchors = data["anchors"]
-    if type(anchors) is not dict or set(anchors) != set(ANCHORS):
-        raise ValueError("FOUR_EXTERNAL_SOURCE_ANCHORS_REQUIRED")
+    if type(anchors) is not dict or set(anchors) not in (
+        set(ANCHORS), set(ANCHORS) | {OPTIONAL_SUCCESSOR_INVENTORY_ANCHOR}
+    ):
+        raise ValueError("FOUR_OR_FIVE_EXTERNAL_SOURCE_ANCHORS_REQUIRED")
     for label, source in (
         ("catalog_before_sha256", data["before_catalog"]),
         ("catalog_after_sha256", data["after_catalog"]),
@@ -57,6 +60,13 @@ def propose(data):
         ("systems_before_sha256", data["before_systems"]),
     ):
         _anchor(anchors[label], source, label)
+    # A fifth independently pinned expected digest is required for any claim
+    # that the *successor* system inventory is source-bound. Four-anchor legacy
+    # inputs remain mechanical, unbound research only (never approval).
+    successor_inventory_bound = OPTIONAL_SUCCESSOR_INVENTORY_ANCHOR in anchors
+    if successor_inventory_bound:
+        _anchor(anchors[OPTIONAL_SUCCESSOR_INVENTORY_ANCHOR],
+                data["after_systems"], OPTIONAL_SUCCESSOR_INVENTORY_ANCHOR)
 
     prior_systems = _systems(data["before_systems"])
     target_systems = _systems(data["after_systems"])
@@ -100,6 +110,8 @@ def propose(data):
         "external_anchor_values": copy.deepcopy(anchors),
         "same_registered_system_inventory": inventory_unchanged,
         "same_catalog_root_uuid": catalog_identity_unchanged,
+        "successor_inventory_digest_witness_present": successor_inventory_bound,
+        "successor_inventory_digest_witness_is_signature": False,
         "provisional": provisional,
         "review_required": required,
         "retired": retired,
