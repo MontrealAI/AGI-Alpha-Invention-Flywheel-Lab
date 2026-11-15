@@ -101,7 +101,16 @@ def analyze_arrays(currents_first, currents_second, voltage_first, voltage_secon
     no_large_regression = all((p <= 2.*v if v > 0. else p == 0.)
                               for p, v in zip(proposed_cols, raw_cols))
     improvement = (ordinary-candidate)/ordinary if ordinary > 0 else None
-    structured = (improvement is not None and improvement >= 0.10
+    # A ratio between two machine-roundoff residuals is not evidence of
+    # incremental structure. Scale the IEEE-754 tolerance to the observed
+    # heldout voltage amplitudes rather than imposing a voltage-unit floor.
+    precision_floor = float(
+        64. * np.finfo(np.float64).eps *
+        max(float(np.max(np.abs(x_hold))), float(np.max(np.abs(y_hold))))
+    )
+    ordinary_at_machine_precision = ordinary <= precision_floor
+    structured = (not ordinary_at_machine_precision
+                  and improvement is not None and improvement >= 0.10
                   and no_large_regression)
     return {
         "matrix_shape": list(x.shape),
@@ -111,6 +120,8 @@ def analyze_arrays(currents_first, currents_second, voltage_first, voltage_secon
         "models": out,
         "ordinary_best_name": best_name,
         "incremental_heldout_rms_reduction_over_best_ordinary": improvement,
+        "ordinary_precision_floor": precision_floor,
+        "ordinary_at_machine_precision": ordinary_at_machine_precision,
         "per_channel_no_more_than_double_raw_rms": no_large_regression,
         "decision": "CONDITIONAL_REPEAT_STRUCTURE_ONLY" if structured
                     else "REJECT_INCREMENTAL_STRUCTURE",
