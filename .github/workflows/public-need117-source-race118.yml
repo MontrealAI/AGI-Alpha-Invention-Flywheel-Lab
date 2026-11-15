@@ -1,0 +1,42 @@
+name: Qualification118 — pinned PR316 same-path source-identity negative witness
+on:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-race118:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Record platform job start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - name: Read only original PR316 pinned independent owner source
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          repository: MontrealAI/AGI-Alpha-Invention-Flywheel-Lab
+          ref: 9e9b501c84ffe7b7969027c43eb465aff81f8499
+          path: target-pr316
+          persist-credentials: false
+      - name: Prove source-identity result (not a security pass)
+        shell: bash
+        run: |
+          PYTHONPATH="$PWD/target-pr316/campaign/public-need117" python3 -B qualification/public-need117-source-race118/source_race_witness.py
+          sha256sum target-pr316/campaign/public-need117/interpret.py target-pr316/campaign/public-need117/verify.py qualification/public-need117-source-race118/source_race_witness.py > qualification/public-need117-source-race118/SOURCE_HASHES.txt
+      - name: Retain all key-free negative/positive evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: public-need117-source-race118-${{ github.event.pull_request.head.sha || github.sha }}-attempt-${{ github.run_attempt }}
+          path: |
+            qualification/public-need117-source-race118/PROTOCOL.md
+            qualification/public-need117-source-race118/SOURCE_RACE_RESULT.json
+            qualification/public-need117-source-race118/SOURCE_HASHES.txt
+          if-no-files-found: warn
