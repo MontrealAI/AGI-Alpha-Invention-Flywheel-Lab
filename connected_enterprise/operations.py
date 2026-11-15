@@ -115,6 +115,8 @@ def prepare_upgrade(root, historical_root, manifest_path, output, *, policy, exp
     output = Path(output).absolute(); historical_root = Path(historical_root).absolute()
     manifest = _read(manifest_path); checkpoint = _read(output / 'STATE.json')
     policy = validate_policy(policy)
+    if digest(checkpoint) != expected_checkpoint_sha256:
+        raise ValueError('STALE_OPERATING_UPGRADE_CHECKPOINT')
     request = {'historical_root': str(historical_root), 'policy': policy,
                'expected_checkpoint_sha256': expected_checkpoint_sha256, 'id': ident}
     previous = None
@@ -128,8 +130,6 @@ def prepare_upgrade(root, historical_root, manifest_path, output, *, policy, exp
                 raise ValueError('OPERATING_UPGRADE_RETRY_TARGET_CHANGED')
             return d
         previous = d
-    if digest(checkpoint) != expected_checkpoint_sha256:
-        raise ValueError('STALE_OPERATING_UPGRADE_CHECKPOINT')
     # Authenticate and measure the new representation before descriptor/source
     # mutation. The owner subprocess keeps the existing key private.
     from .upgrades import authorize_upgrade, validate_ticket
