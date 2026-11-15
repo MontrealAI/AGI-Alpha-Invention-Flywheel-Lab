@@ -70,7 +70,7 @@ def load_official_fixture(path):
     require(path.is_file() and not path.is_symlink(), "OFFICIAL_REGULAR_FILE_REQUIRED")
     raw = path.read_bytes()
     require(0 < len(raw) <= bridge.MAX_BYTES, "OFFICIAL_SOURCE_OUT_OF_BOUNDS")
-    git_payload = b"blob " + str(len(raw)).encode("ascii") + b"\\0" + raw
+    git_payload = b"blob " + str(len(raw)).encode("ascii") + b"\0" + raw
     git_blob = hashlib.sha1(git_payload).hexdigest()
     require(git_blob == SOURCE_GIT_BLOB_SHA1, "PINNED_GIT_BLOB_CHANGED")
     source = json.loads(raw.decode("utf-8"), object_pairs_hook=bridge.strict_object,
@@ -194,7 +194,7 @@ def main():
     receipt = run(args.fixture)
     with args.output.open("x", encoding="utf-8") as out:
         json.dump(receipt, out, indent=2, ensure_ascii=False, sort_keys=True, allow_nan=False)
-        out.write("\\n")
+        out.write("\n")
     print(json.dumps({"verdict": receipt["verdict"], "controls": receipt["controls"],
                       "source_sha256": receipt["fixture"]["raw_sha256"],
                       "commercial_decision": receipt["commercial_decision"]}, sort_keys=True))
