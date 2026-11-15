@@ -33,7 +33,7 @@ jobs:
       - name: Frozen tests and original engine parity
         run: |
           set -euo pipefail
-          python3 -B -m unittest tests.test_governance_scope172 tests.test_governance_oscal171 tests.test_governance_impact140 -v
+          python3 -B -m unittest tests.test_governance_scope172 tests.test_governance_scope173 tests.test_governance_oscal171 tests.test_governance_impact140 -v
       - name: Retrieve only public exact-pinned original NIST catalog
         run: |
           set -euo pipefail
