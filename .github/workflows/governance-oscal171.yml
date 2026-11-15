@@ -1,0 +1,39 @@
+name: Governance OSCAL171 narrow source-bound interoperability (research)
+on:
+  pull_request:
+    paths:
+      - 'research/governance_oscal171.py'
+      - 'tests/test_governance_oscal171.py'
+      - 'campaign/governance-oscal171/**'
+      - '.github/workflows/governance-oscal171.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  oscal171-engineering:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Record execution start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Fixed OSCAL171 independent-source regression
+        run: python3 -B -m unittest tests.test_governance_oscal171 -v
+      - name: Unmodified canonical governance impact140 regressions
+        run: python3 -B -m unittest tests.test_governance_impact140 -v
+      - name: Optimized interpreter cannot bypass OSCAL171 checks
+        run: python3 -O -B -m unittest tests.test_governance_oscal171 -v
+      - name: Exact source and resource scope
+        run: |
+          git rev-parse HEAD
+          sha256sum campaign/governance-oscal171/PROTOCOL.md research/governance_oscal171.py tests/test_governance_oscal171.py
+          echo "Research-only standard public runner. No native account, commerce, paid API, bid, or measured host/model bill."
