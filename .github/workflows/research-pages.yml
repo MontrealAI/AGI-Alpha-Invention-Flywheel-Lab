@@ -3,6 +3,7 @@ on:
   pull_request:
     paths:
       - 'docs/research/**'
+      - 'experiments/frontier-conclave/**'
       - 'scripts/build_research_site.py'
       - 'tests/test_research_site.py'
       - 'tests/test_alpha_site.cjs'
@@ -14,6 +15,7 @@ on:
     branches: [main]
     paths:
       - 'docs/research/**'
+      - 'experiments/frontier-conclave/**'
       - 'scripts/build_research_site.py'
       - 'tests/test_research_site.py'
       - 'tests/test_alpha_site.cjs'
@@ -40,6 +42,7 @@ jobs:
           persist-credentials: false
           sparse-checkout: |
             docs/research
+            experiments/frontier-conclave
             scripts/build_research_site.py
             tests/test_research_site.py
             tests/test_alpha_site.cjs
@@ -50,6 +53,11 @@ jobs:
             products/alpha-genesis-harness/tests/acceptance.test.cjs
             products/alpha-genesis-harness/examples/customer-mission.json
           sparse-checkout-cone-mode: false
+      - name: Qualify prepared Conclave experiment
+        working-directory: experiments/frontier-conclave
+        run: |
+          python3 RUN_WORKSHOP.py check
+          python3 -m unittest test_experiment -v
       - name: Validate original PDFs, links and publication boundary
         run: python3 -m unittest discover -s tests -p 'test_research_site.py' -v
       - name: Check interactive research calculations and decisions

@@ -99,7 +99,7 @@ class ResearchSiteTests(unittest.TestCase):
         collection = (self.source / 'out-series.html').read_text()
         homepage = (self.source / 'index.html').read_text()
         self.assertEqual(len(site.PAPERS), 29)
-        self.assertEqual(len(site.PAGES), 33)
+        self.assertEqual(len(site.PAGES), 34)
         self.assertIn('out-series.html', homepage)
         for slug in slugs:
             reader = 'out-' + slug + '.html'
@@ -421,7 +421,7 @@ class ResearchSiteTests(unittest.TestCase):
             self.assertIn('prefers-reduced-motion', styles)
             self.assertIn('@media(max-width:', styles)
             self.assertNotIn('↗', text)
-            if name not in ('index.html', 'out-series.html', 'studio.html', 'continuity-omega-media.html', 'continuity-omega-media-fr.html'):
+            if name not in ('frontier-conclave.html', 'index.html', 'out-series.html', 'studio.html', 'continuity-omega-media.html', 'continuity-omega-media-fr.html'):
                 self.assertIn('type="application/pdf"', text)
                 self.assertIn('download>', text)
                 self.assertIn('Votre navigateur n’affiche pas les PDF intégrés' if french else 'Your browser does not display embedded PDFs', text)
@@ -474,3 +474,21 @@ class ResearchSiteTests(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+
+class ConclavePublicationTests(unittest.TestCase):
+    def test_archive_and_source_agree(self):
+        import zipfile
+        import json
+        kit = ROOT / 'experiments/frontier-conclave'
+        archive = ROOT / 'docs/research/FRONTIER_CONCLAVE_COMPLETE.zip'
+        self.assertEqual(hashlib.sha256(archive.read_bytes()).hexdigest(), '2bb402163ceb53b5e1c563dcfcfd7dc45dd3800b07a59b31c88b7ab5f2eac5ab')
+        manifest = json.loads((kit / 'DISTRIBUTION_SHA256SUMS.json').read_text())
+        with zipfile.ZipFile(archive) as z:
+            for name, digest in manifest.items():
+                payload = z.read('FRONTIER_CONCLAVE_OMEGA_001/' + name)
+                self.assertEqual(payload, (kit / name).read_bytes())
+                self.assertEqual(hashlib.sha256(payload).hexdigest(), digest)
+        page = (ROOT / 'docs/research/frontier-conclave.html').read_text()
+        for claim in ('illustrative, not live candidate execution', 'No authenticated Pro-to-HARNESS connector', 'not event registration'):
+            self.assertIn(claim, page)

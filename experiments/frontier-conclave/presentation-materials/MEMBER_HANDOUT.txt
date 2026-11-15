@@ -1,0 +1,51 @@
+THE FRONTIER CONCLAVE Ω
+Ω.001 · THE SHARED-FUNDING EXPERIMENT
+MEMBER FIELD NOTE
+
+THE QUESTION
+Can a system turn a clear specification into a small instrument that survives independent challenge and remains useful after export?
+
+THE WORLD
+Three fictional teams want one shared tool. Their contribution caps are A120, B160 and C220 whole units. The tool costs420; contingency adds30. Required funding is450. Together the caps total500. One feasible proposal is A90 + B140 + C220 =450.
+These are synthetic units and authored assumptions, not money, real demand or evidence of commercial profit.
+
+THE INSTRUMENT
+A proposal acceptance checker. You supply each cap and contribution, three consent flags, project cost and contingency. It calculates total, required funding, funding gap/surplus, cap compliance, consent compliance and acceptance.
+Accept only when every numeric input is a nonnegative whole number, each contribution is within its cap, all three participants consent, and the contributions cover cost plus contingency. Missing fields, fractions, strings or booleans in numeric fields are invalid. Consent must be true/false, not text or numbers. All three must consent even if someone contributes zero.
+Overfunding is allowed; allocating or refunding the surplus is not part of this checker. A proposal can fail even if another proposal could pass.
+
+YOUR CHALLENGES
+• Baseline90/140/220: should pass.
+• Remove one unit: should fail for a funding gap.
+• Change to121/109/220: still funded, but should fail A’s cap.
+• Withdraw C’s consent: should fail even though funded.
+• Raise cost to471 with reserve30: need501, beyond the combined caps500.
+• Enter a negative number, fraction, numeric text or missing input: must not pass.
+• Zero cost, zero reserve, zero contributions, all consent true: should pass under this policy.
+Ask which rule caused each result. Change one thing at a time.
+
+WHAT TO LOOK FOR
+Did the implementation follow the policy rather than merely pass familiar examples? Were test expectations fixed before construction? Were failures retained? Were repairs and human help disclosed? Does an exported copy work in a fresh session? Can the operator explain what the evidence does not show?
+Published examples are not held-out tests. Once a test is used for repair, it is no longer held out. Passing a finite suite does not prove all possible inputs correct.
+
+EVIDENCE LABELS
+LIVE MODEL CONSTRUCTION: a model is building the instrument now.
+PREPARED INSTRUMENT / LIVE EXECUTION: an existing checker is running on new inputs now; its construction is not live.
+RECORDED REPLAY: a previous run is being shown.
+FAULT INJECTION: an intentionally flawed example, not an observed model failure.
+A fallback can preserve the discussion without establishing the capability that failed.
+
+WHAT THIS DOES NOT ESTABLISH
+No real transaction, authenticated consent, contract, negotiated agreement, willingness to pay, autonomous business, general invention or self-improvement. A spreadsheet can do this arithmetic. The experiment makes a specification-to-instrument-to-evidence workflow inspectable.
+The checker's output is only as meaningful as the rules and inputs. A consent flag cannot replace an actual person's agreement. A contingency allowance does not establish adequate risk coverage.
+
+TAKE IT FORWARD
+Choose a different small decision. State all rules. Write independent examples and boundary cases before building. Preserve the first attempt, including failures. Repair visibly if needed. Export and test in a fresh session. Keep a record of versions, time, interventions and known/unknown costs.
+If you change a rule, version the policy and change the expected tests explicitly. Do not retroactively redefine a failure as a success.
+
+MY FIELD NOTES
+Prediction before build: ____________________________________
+Most revealing challenge: __________________________________
+Observed result and evidence mode: __________________________
+Unresolved assumption: _____________________________________
+Next bounded experiment: ___________________________________
