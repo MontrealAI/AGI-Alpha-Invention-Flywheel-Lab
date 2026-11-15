@@ -1,0 +1,33 @@
+{
+  "inputs": [
+    "cap_a",
+    "cap_b",
+    "cap_c",
+    "a",
+    "b",
+    "c",
+    "cost",
+    "contingency",
+    "consent_a",
+    "consent_b",
+    "consent_c"
+  ],
+  "bindings": {
+    "total": "a + b + c",
+    "required": "cost + contingency",
+    "caps_ok": "a <= cap_a and b <= cap_b and c <= cap_c",
+    "consent_ok": "consent_a and consent_b and consent_c",
+    "nonnegative": "cap_a >= 0 and cap_b >= 0 and cap_c >= 0 and a >= 0 and b >= 0 and c >= 0 and cost >= 0 and contingency >= 0"
+  },
+  "outputs": {
+    "total": "total",
+    "required": "required",
+    "gap": "max(0, required - total)",
+    "surplus": "max(0, total - required)",
+    "within_caps": "caps_ok",
+    "all_consent": "consent_ok",
+    "accepted": "nonnegative and caps_ok and consent_ok and total >= required",
+    "capacity_sufficient": "cap_a + cap_b + cap_c >= required"
+  },
+  "summary": "Prepared reference checker; not a recorded local-model construction."
+}

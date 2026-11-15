@@ -52,6 +52,8 @@ CONTINUITY_MEDIA = tuple(
     for suffix in ('.gif', '-poster.png')
 )
 ASSETS += CONTINUITY_MEDIA + ('continuity-omega-media-manifest.json',)
+PAGES += ('frontier-conclave.html',)
+ASSETS += ('frontier-conclave-hero.png', 'FRONTIER_CONCLAVE_COMPLETE.zip')
 FILES = PAPERS + PAGES + ASSETS + ('publication-manifest.json',)
 PUBLIC_SITE = 'https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/'
 EXTERNAL_RESEARCH_REFERENCES = frozenset({
