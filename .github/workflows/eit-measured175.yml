@@ -1,0 +1,44 @@
+name: EIT175 fixed real experimental ZIP and HDF5 replicate preflight
+on:
+  pull_request:
+    paths:
+      - 'campaign/eit-measured175/**'
+      - 'research/eit_measured175.py'
+      - 'tests/test_eit_measured175.py'
+      - '.github/workflows/eit-measured175.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: eit175-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  frozen-real-data:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Record platform job execution start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Install pinned standard numerical binary wheels
+        run: python3 -m pip install --only-binary=:all: numpy==2.3.5 h5py==3.15.1
+      - name: Execute immutable synthetic safety and HDF5 regression controls
+        run: python3 -B -m unittest -v tests.test_eit_measured175
+      - name: Download one exact publisher archive and read fixed first physical replicate
+        run: python3 -B -m research.eit_measured175 --output "$RUNNER_TEMP/EIT175_RECEIPT.json"
+      - name: Preserve small authentic source receipt (or failed attempt)
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: eit175-${{ github.event.pull_request.head.sha || github.sha }}-attempt-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/EIT175_RECEIPT.json
+          if-no-files-found: warn
