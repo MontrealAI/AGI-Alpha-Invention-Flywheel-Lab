@@ -161,5 +161,18 @@ class FrozenScope172(unittest.TestCase):
             self.assertNotEqual(subprocess.run(cmd + [str(parent / "new.json")], capture_output=True).returncode, 0)
 
 
+    def test_t11_changed_catalog_uuid_must_refuse_prior_proposals(self):
+        data = sample()
+        data["after_catalog"]["catalog"]["uuid"] = "22222222-2222-4222-8222-222222222222"
+        anchor_new(data)
+        result = scope.propose(data)
+        self.assertTrue(result["same_registered_system_inventory"])
+        self.assertEqual(result["provisional"], [])
+        self.assertEqual([x["id"] for x in result["review_required"]], ["c1", "c2"])
+        self.assertEqual([x["reason"] for x in result["review_required"]],
+                         ["CATALOG_IDENTITY_CHANGED"] * 2)
+        self.assertEqual(result["authorization"], "NO_AUTHENTICATED_POLICY_OR_COMPLIANCE_APPROVAL")
+
+
 if __name__ == "__main__":
     unittest.main()
