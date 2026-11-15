@@ -67,10 +67,11 @@ def propose(data):
     oscal.explicit_requirements(old, data["before_scope"], prior_systems)
 
     inventory_unchanged = native.sha256(prior_systems) == native.sha256(target_systems)
+    catalog_identity_unchanged = bmeta["catalog_uuid"] == ameta["catalog_uuid"]
     provisional, required, retired = [], [], []
     for ident in sorted(new):
         ancestor = old.get(ident)
-        if inventory_unchanged and ancestor is not None and (
+        if inventory_unchanged and catalog_identity_unchanged and ancestor is not None and (
             ancestor["semantic_sha256"] == new[ident]["semantic_sha256"]
         ):
             provisional.append({
@@ -81,6 +82,7 @@ def propose(data):
             })
         else:
             why = ("SYSTEM_INVENTORY_CHANGED" if not inventory_unchanged else
+                   "CATALOG_IDENTITY_CHANGED" if not catalog_identity_unchanged else
                    "CONTROL_ADDED" if ancestor is None else
                    "CONTROL_OR_CONTEXT_CHANGED")
             required.append({"id": ident, "reason": why,
@@ -97,6 +99,7 @@ def propose(data):
         "source_input_sha256": native.sha256(data),
         "external_anchor_values": copy.deepcopy(anchors),
         "same_registered_system_inventory": inventory_unchanged,
+        "same_catalog_root_uuid": catalog_identity_unchanged,
         "provisional": provisional,
         "review_required": required,
         "retired": retired,
