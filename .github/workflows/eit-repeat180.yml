@@ -30,7 +30,8 @@ jobs:
         with:
           python-version: '3.12'
       - name: Install only fixed binary numeric/HDF5 wheels
-        run: python -m pip install --only-binary=:all: numpy==2.3.5 h5py==3.15.1
+        run: |
+          python -m pip install --only-binary=:all: numpy==2.3.5 h5py==3.15.1
       - name: Run fourteen frozen fail-closed development and source identity controls
         run: python -B -m unittest -v tests.test_eit_repeat180
       - name: One and only one exact real AgarChest publisher source run
