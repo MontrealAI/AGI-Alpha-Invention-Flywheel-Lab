@@ -482,7 +482,7 @@ class ConclavePublicationTests(unittest.TestCase):
         import json
         kit = ROOT / 'experiments/frontier-conclave'
         archive = ROOT / 'docs/research/FRONTIER_CONCLAVE_COMPLETE.zip'
-        self.assertEqual(hashlib.sha256(archive.read_bytes()).hexdigest(), '2bb402163ceb53b5e1c563dcfcfd7dc45dd3800b07a59b31c88b7ab5f2eac5ab')
+        self.assertEqual(hashlib.sha256(archive.read_bytes()).hexdigest(), 'dc4d124f63d8417016db3e004c6389620544f83b254d02bc64c39d493d8a89c6')
         manifest = json.loads((kit / 'DISTRIBUTION_SHA256SUMS.json').read_text())
         with zipfile.ZipFile(archive) as z:
             for name, digest in manifest.items():

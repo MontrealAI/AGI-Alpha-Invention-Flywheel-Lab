@@ -10,6 +10,18 @@ class Tests(unittest.TestCase):
   with self.assertRaises(ValueError):run(base,spec|{'outputs':{'accepted':{'formula':'true'}}})
   bad=spec|{'outputs':spec['outputs']|{'gap':{'formula':'999'}}}
   self.assertLess(check(bad)['passed'],10)
+ def test_missing_nonnegative_guard_detected(self):
+  spec=load(ROOT/'instrument.json')
+  spec['outputs']['accepted']['formula']='caps_ok and consent_ok and total >= required'
+  case=load(ROOT/'inputs/negative.json')
+  self.assertTrue(run(case,spec)['accepted'])
+  self.assertFalse(run(case)['accepted'])
+  self.assertTrue(run(case)['within_caps'])
+  self.assertTrue(run(case)['all_consent'])
+  self.assertEqual(run(case)['gap'],0)
+  report=check(spec)
+  self.assertEqual(report['passed'],9)
+  self.assertFalse(next(row for row in report['results'] if row['name']=='negative')['passed'])
  def test_boundaries(self):
   base=load(ROOT/'inputs/funded.json')
   for value in [True,None,1.5,'90',10**9+1]:

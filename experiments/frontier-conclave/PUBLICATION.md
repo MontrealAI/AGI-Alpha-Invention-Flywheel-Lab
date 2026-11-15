@@ -1,10 +1,7 @@
-# Public experiment publication
+# Public experiment revision Ω.001-r1
 
-The website distributes the original complete kit byte-for-byte.
-SHA-256: 2bb402163ceb53b5e1c563dcfcfd7dc45dd3800b07a59b31c88b7ab5f2eac5ab
+Supersedes original complete ZIP SHA256 2bb402163ceb53b5e1c563dcfcfd7dc45dd3800b07a59b31c88b7ab5f2eac5ab, retained at Git commit 8b5ea7e4862458bb5ddc5973b70cb3703a3b55d9.
 
-`DISTRIBUTION_SHA256SUMS.json` covers all extracted original files, including presentation materials. The internal original manifest covers the original experiment subset.
+Tried: candidate qualification with original negative case. Outcome: missing-nonnegativity mutant passed 10/10 because the negative case also breached a cap. Repair: isolate negative contribution with valid caps, funding and consent; add a mutation regression. Revised result: reference 10/10, deliberately weakened candidate 9/10, nine unit tests pass. This does not prove exhaustive correctness.
 
-Presenter clarification: bounded negative integer inputs parse successfully but make a proposal unacceptable (`accepted:false`, exit 0); malformed types produce input errors. “INVALID” in the presenter shorthand describes a proposal rejection, not necessarily a parser error.
-
-This is a supporting educational experiment, not a new Blue Sky flagship or demonstrated live frontier-model construction. No authenticated Pro integration is claimed.
+Bounded negative integers parse but reject acceptance; malformed types are parser errors. Presenter INVALID shorthand refers to proposal rejection. No live frontier-model or commercial qualification claim.

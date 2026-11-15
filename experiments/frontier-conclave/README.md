@@ -42,7 +42,7 @@ Funding capacity is only arithmetic, not willingness or allocation feasibility u
 
 ## What is tested
 
-`evidence/TESTS.txt`: eight checks, including 2,000 seeded comparisons against a separate direct boolean oracle, invalid type/JSON rejection, sandbox constraints, fault detection, ZIP extraction and execution on fresh-reopen input. This is testing, not universal proof. `REFERENCE.json`: ten authored scenarios. `LABELED-FAULT.json`: deliberate total-only mutation, clearly not a real model failure. `IMPORTED-REFERENCE.json`: manual-response conversion succeeds.
+`evidence/TESTS.txt`: nine checks, including 2,000 seeded comparisons against a separate direct boolean oracle, invalid type/JSON rejection, sandbox constraints, fault detection including removal of the nonnegativity guard, ZIP extraction and execution on fresh-reopen input. This is testing, not universal proof. `REFERENCE.json`: ten authored scenarios. `LABELED-FAULT.json`: deliberate total-only mutation, clearly not a real model failure. `IMPORTED-REFERENCE.json`: manual-response conversion succeeds.
 
 Prepared reference is authored in this implementation session using the unmodified released HARNESS evaluator. No local or external frontier inference was run during these tests, no operating-system GUI rehearsal is claimed, and tests were executed on this Linux workspace only. Initial integration mistake (accessing evaluator envelope as direct output) was corrected before final suite; raw artifact evidence does not claim a flawless development history.
 
@@ -51,3 +51,7 @@ Prepared reference is authored in this implementation session using the unmodifi
 `vendor/instruments.py` is byte-identical to release 9f469d129dae71cf939e1be8a7d30ab824906cb4. Exact customer ZIP SHA256 is in PROVENANCE.json. Apache-2.0 LICENSE/NOTICE are preserved in vendor. The run adapter, case suites, prompts and presenter script are new experiment materials. No release-wide commercial qualification is conferred. The released product remains a candidate.
 
 Export: copy or ZIP this entire folder, extract elsewhere, run the fresh-reopen command above. The automated test performs exactly this in a clean temporary folder. Preserve hashes if comparing versions. Do not treat a digest as a signature or independent certification.
+
+## Public revision Ω.001-r1
+
+Review found the original negative challenge also exceeded a cap, allowing a candidate with no nonnegativity guard to pass 10/10. The revised challenge has a=-1, b=1, c=0 and zero cost/contingency; caps, funding and consent otherwise pass. A new mutation regression confirms the weakened candidate now fails (9/10), while the prepared reference passes 10/10. This repairs challenge coverage, not a defect in the reference formula. Nine unit tests pass. The finite suite remains disclosed, not exhaustive.
