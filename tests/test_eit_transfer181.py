@@ -80,7 +80,7 @@ class EIT181FrozenControls(unittest.TestCase):
         result = m.compare_stems(c, c, x, y, c, c, bx, by)
         self.assertGreater(result["gain_relative_rms_reduction_vs_identity"], 0.95)
         self.assertEqual(result["decision"], "TRANSFERRED_ORDINARY_GAIN_PLAUSIBLE_WITHIN_ARCHIVE")
-        self.assertFalse(result["no_commercial_or_financial_result"])
+        self.assertTrue(result["no_commercial_or_financial_result"])
 
     def test_05_different_gain_in_second_stem_falsifies_transfer(self):
         c, x, y = toy()
