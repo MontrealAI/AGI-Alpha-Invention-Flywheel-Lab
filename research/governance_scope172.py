@@ -17,7 +17,7 @@ from research import governance_oscal171 as oscal
 
 SCHEMA = "agi-alpha/governance-scope-continuity172/input-v1"
 RESULT_SCHEMA = "agi-alpha/governance-scope-continuity172/result-v1"
-HEX = re.compile(r"[0-9a-f]{64}\\Z")
+HEX = re.compile(r"[0-9a-f]{64}\Z")
 MAX_BYTES = 2_000_000
 ANCHORS = (
     "catalog_before_sha256", "catalog_after_sha256",
