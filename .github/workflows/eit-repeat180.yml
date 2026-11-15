@@ -1,0 +1,45 @@
+name: EIT180 source-bound cross-replicate diagnostic against ordinary baselines
+on:
+  pull_request:
+    paths:
+      - 'campaign/eit-repeat180/**'
+      - 'research/eit_repeat180.py'
+      - 'tests/test_eit_repeat180.py'
+      - '.github/workflows/eit-repeat180.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: eit-repeat180-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  paired-repeat-structure:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Record platform job execution start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Install only fixed binary numeric/HDF5 wheels
+        run: |
+          python -m pip install --only-binary=:all: numpy==2.3.5 h5py==3.15.1
+      - name: Run fourteen frozen fail-closed development and source identity controls
+        run: python -B -m unittest -v tests.test_eit_repeat180
+      - name: One and only one exact real AgarChest publisher source run
+        run: python -B -m research.eit_repeat180 --output "$RUNNER_TEMP/EIT180_RECEIPT.json"
+      - name: Preserve original success or failure; no retries
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: eit180-${{ github.event.pull_request.head.sha || github.sha }}-attempt-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/EIT180_RECEIPT.json
+          if-no-files-found: warn
