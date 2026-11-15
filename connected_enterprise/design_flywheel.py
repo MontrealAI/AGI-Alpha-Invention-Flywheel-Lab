@@ -126,6 +126,19 @@ def find_native_successor(result):
         if any(p is not None and (not isinstance(p, str) or not p) for p in raw):
             raise ValueError("INVALID_NATIVE_ORDER_PLAN_LINKS")
         plans = frozenset(p for p in raw if p is not None)
+        # Defense in depth for this independent, non-authoritative witness.
+        # Actual delivery/source timing is still established only by the
+        # canonical native verifier; a candidate report must never turn
+        # premature or expired capacity into a positive successor claim.
+        for plan in plans:
+            asset = by_plan.get(plan)
+            if asset is not None and asset["kind"] == "capacity":
+                qualified = order["qualified_time"]
+                produced = order.get("production_time", qualified)
+                if (qualified < asset["activation_time"]
+                        or (asset.get("expiry_time") is not None
+                            and produced >= asset["expiry_time"])):
+                    raise ValueError("NATIVE_CAPACITY_SOURCE_TIME_ORDER_INVALID")
         links_by_order.append(plans)
         for plan in sorted(plans):
             orders_for_plan.setdefault(plan, []).append(index)
