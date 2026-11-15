@@ -1,0 +1,36 @@
+name: Transition166 isolated cached-prepare source guard
+on:
+  pull_request:
+    paths:
+      - 'connected_enterprise/operations.py'
+      - 'docs/transition-stale-prepared-reference166/**'
+      - 'tests/test_transition_stale_prepared165.py'
+      - '.github/workflows/transition-stale-prepared-reference166.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  isolated-source-guard:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Record platform execution start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Unchanged owner authorization-reuse controls
+        run: python -B -m unittest -v tests.test_transition_authorization_reuse
+      - name: Unchanged original failing T165 stale cached-prepare case
+        run: python -B -m unittest -v tests.test_transition_stale_prepared165
+      - name: Report isolated reference limitations
+        run: |
+          echo 'Only synthetic prepared-descriptor timing is exercised.'
+          echo 'No HMAC/native Account or authoritative writer-lease qualification.'
