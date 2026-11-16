@@ -46,7 +46,7 @@ class SelfContainedSnapshot189(unittest.TestCase):
         self.assertEqual(digest(snapshot.reopen_ticket()), original_digest)
         with snapshot.evidence():
             resolved = te.ticket_body(snapshot.reopen_ticket())
-            self.assertEqual(resolved["source_transitions"]["parent"], parent)
+            self.assertEqual(resolved["prior_record"]["source_transitions"]["parent"], parent)
             self.assertEqual(te.ticket_body(parent)["schema"], te.V1)
         self.assertFalse(hasattr(snapshot, "authorize_upgrade"))
         self.assertFalse(hasattr(snapshot, "accepted"))
