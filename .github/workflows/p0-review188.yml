@@ -1,0 +1,52 @@
+name: P0-188 immutable history closure snapshot and frozen unsafe-path controls
+on:
+  pull_request:
+    paths:
+      - 'campaign/p0-review188/**'
+      - 'connected_enterprise/history_snapshot188.py'
+      - 'tests/test_history_snapshot188.py'
+      - '.github/workflows/p0-review188.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: p0-review188-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  snapshot-construction:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Record execution start
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Fixed immutable snapshot controls
+        run: |
+          git rev-parse HEAD
+          sha256sum campaign/p0-review188/PROTOCOL.md connected_enterprise/history_snapshot188.py tests/test_history_snapshot188.py
+          python -B -m unittest -v tests.test_history_snapshot188
+  original-unsafe-path-controls:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Record execution start
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Preserve unchanged P0-187 race red and earlier controls
+        run: python -B -m unittest -v tests.test_transition_store184 tests.test_transition_cache186 tests.test_transition_cache187
