@@ -4,7 +4,7 @@ Reads every step value as an *exact binary64 rational*, using one common
 power-of-two denominator; independently checks EVERY autoconvolution knot
 with Python integers. It does not import the numerical optimizer or SciPy.
 
-A passing certificate below the published SCiEL bound is a mathematically
+A passing certificate below the strongest recorded open-PR bound as of 2026-11-16 is a mathematically
 valid tighter *upper bound*, conditional on source attribution and literature
 currency. It is NOT a proof that the value of the constant is exact.
 """
@@ -17,8 +17,8 @@ import json
 import math
 from pathlib import Path
 
-BEST = Fraction(9900630255081376929482866688,
-                6805830738283663732311831361)
+BEST = Fraction(21267647941510998263770007610303168512,
+                14626277862557668614837367632277156521)
 EXPECTED_SCHEMA = "montreal-ai/goal-genesis/c1d-candidate/v1"
 
 
