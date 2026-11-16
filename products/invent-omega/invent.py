@@ -166,7 +166,7 @@ def main(argv=None):
                 project = make_demo(Path(temp))
                 folder = project / "incumbents"; folder.mkdir()
                 (folder / "reference_incumbent.py").write_text((project / "reference.py").read_text())
-                (project / "frontier.json").write_text(json.dumps({"min_best_speedup": 1.05, "max_worst_regression": 1.1}))
+                (project / "frontier.json").write_text(json.dumps({"min_best_speedup": 2.5, "max_worst_regression": 1.1}))
                 weak = evaluate(project, project / "candidate.py", mode)
                 shutil.copy2(project / "candidate.py", folder / "reference_incumbent.py")
                 strong = evaluate(project, project / "candidate.py", mode)
