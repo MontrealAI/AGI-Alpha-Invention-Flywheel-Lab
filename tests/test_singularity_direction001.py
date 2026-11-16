@@ -8,7 +8,7 @@ class RealityProbeTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.cases={}
-        cls.evidence={'schema':'montreal-ai/reality-probe-001/v1', 'stress':engine.STRESS, 'cases':[]}
+        cls.evidence={'schema':'montreal-ai/reality-probe-001/v2', 'stress':engine.STRESS, 'cases':[]}
         # Local/CI tests use the exact repository PGLIB sources.
         for n in ('14','30'):
             case=engine.parse_case(n)
@@ -37,6 +37,10 @@ class RealityProbeTests(unittest.TestCase):
             self.assertEqual(r['selected_additional_switch'],min(r['responses'],key=lambda row:(row['unserved_mw'],row['switch']))['switch'])
             self.assertLess(r['switched']['unserved_mw'],r['baseline']['unserved_mw'])
             self.assertGreaterEqual(min(q['unserved_mw'] for q in r['responses']),-1e-5)
+            self.assertEqual(len(r['responses']),19 if r['case']=='14' else 40)
+            for q in r['responses']:
+                self.assertIn('primal',q['witness'])
+                self.assertIn('dual',q['witness'])
 
     def test_adversarial_tampering_is_rejected(self):
         edits=(lambda x:x['cases'][0]['switched']['primal'].__setitem__(0,9999),
@@ -49,6 +53,51 @@ class RealityProbeTests(unittest.TestCase):
             with self.subTest(edit=repr(edit)):
                 with self.assertRaises((ValueError,KeyError,AssertionError)):
                     checker.verify(altered)
+
+    def test_full_ranking_receipts_are_independently_certified(self):
+        report=checker.verify(self.evidence)
+        self.assertEqual([r['certified_alternative_switches'] for r in report['results']],
+                         [19,40])
+        for r in report['results']:
+            self.assertEqual(r['ranking_certificate'],
+                             'ALL_ONE_EXTRA_SWITCH_LP_OPTIMA_VERIFIED')
+            self.assertLessEqual(r['maximum_candidate_objective_dual_gap_mw'],
+                                 checker.TOL)
+
+    def test_tampered_nonwinning_scalar_cannot_fake_best_choice(self):
+        # Previously this forged inflation could pass: the other candidates'
+        # scalar costs were trusted without their independent LP certificates.
+        corrupted=copy.deepcopy(self.evidence)
+        case=corrupted['cases'][0]
+        row=next(x for x in case['responses']
+                 if x['switch']!=case['selected_additional_switch'])
+        row['unserved_mw'] += 10000.0
+        with self.assertRaisesRegex(ValueError,'RESPONSE_WITNESS_MISMATCH'):
+            checker.verify(corrupted)
+
+    def test_tampered_nonwinning_primal_cannot_fake_global_ranking(self):
+        corrupted=copy.deepcopy(self.evidence)
+        case=corrupted['cases'][1]
+        row=next(x for x in case['responses']
+                 if x['switch']!=case['selected_additional_switch'])
+        row['witness']['primal'][0] += 10.0
+        with self.assertRaises(ValueError):
+            checker.verify(corrupted)
+
+    def test_tampered_nonwinning_dual_cannot_fake_global_ranking(self):
+        corrupted=copy.deepcopy(self.evidence)
+        case=corrupted['cases'][1]
+        row=next(x for x in case['responses']
+                 if x['switch']!=case['selected_additional_switch'])
+        row['witness']['dual']['equalities'][1] += 10.0
+        with self.assertRaises(ValueError):
+            checker.verify(corrupted)
+
+    def test_case_substitution_is_rejected(self):
+        corrupted=copy.deepcopy(self.evidence)
+        corrupted['cases'][1]=copy.deepcopy(corrupted['cases'][0])
+        with self.assertRaisesRegex(ValueError,'CASE_COVERAGE'):
+            checker.verify(corrupted)
 
     def test_negative_control_not_all_switches_help(self):
         case=self.cases['14']
