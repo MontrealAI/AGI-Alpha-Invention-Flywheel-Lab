@@ -64,3 +64,51 @@ class TestProofOmega(unittest.TestCase):
         with self.assertRaises(SpecificationError): validate(bad)
 
 if __name__=='__main__': unittest.main()
+
+# Additional compiled-executable conformance tests are imported by unittest discovery
+# from a second TestCase. Only the repository-owned synthetic fixtures execute locally.
+class TestBoundedBinaryConformance(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        import shutil
+        import subprocess
+        import tempfile
+        if not (cc := (shutil.which('cc') or shutil.which('gcc'))):
+            raise unittest.SkipTest('C compiler unavailable')
+        cls.tmp = tempfile.TemporaryDirectory()
+        cls.good = Path(cls.tmp.name) / 'good'
+        cls.bad = Path(cls.tmp.name) / 'bad'
+        src = ROOT / 'examples' / 'escrow_oracle.c'
+        subprocess.run([cc, '-O2', '-o', str(cls.good), str(src)], check=True)
+        subprocess.run([cc, '-DBAD_ESCROW', '-O2', '-o', str(cls.bad), str(src)], check=True)
+        cls.cert = explore(GOOD)
+
+    @classmethod
+    def tearDownClass(cls):
+        if hasattr(cls, 'tmp'):
+            cls.tmp.cleanup()
+
+    def test_compiled_good_is_exact_on_all_reachable_actions(self):
+        from binary_contract import binary_conformance
+        result = binary_conformance(GOOD,self.cert,self.good,unsafe_local=True)
+        self.assertEqual(result['status'],'PASS_BOUNDED_EXECUTABLE_CONFORMANCE')
+        self.assertEqual(result['cases'],12)
+
+    def test_compiled_bad_has_specific_witness(self):
+        from binary_contract import binary_conformance
+        result = binary_conformance(GOOD,self.cert,self.bad,unsafe_local=True)
+        self.assertEqual(result['status'],'FAIL_MISMATCH')
+        self.assertEqual(result['mismatches'][0]['request']['action'],'settle')
+
+    def test_compiled_untrusted_no_docker_refuses(self):
+        from binary_contract import binary_conformance, ContractError
+        from unittest.mock import patch
+        import binary_contract
+        with patch.object(binary_contract.shutil,'which',return_value=None):
+            with self.assertRaises(ContractError):
+                binary_conformance(GOOD,self.cert,self.good)
+
+    def test_compiled_bounded_cap_never_passes(self):
+        from binary_contract import binary_conformance, ContractError
+        with self.assertRaises(ContractError):
+            binary_conformance(GOOD,self.cert,self.good,max_cases=1)

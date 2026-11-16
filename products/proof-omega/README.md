@@ -2,17 +2,21 @@
 
 **One input:** a bounded payment, escrow or authorization policy. **One deliverable:** a passing, independently replayable proof certificate and a runtime that executes only certified transitions, or a shortest counterexample and a HOLD.
 
-This is a real, usable *finite-state* assurance kernel. It is **not** Google DeepMind's AlphaProof Code; it does not verify third-party compiled code or solve arbitrary cryptographic security properties. The November 10, 2026 publication creates a compelling frontier opportunity to pursue progressively stronger agent-assisted specification/proof, not an earned claim that this implementation has comparable breadth.
+This is a real, usable *finite-state* assurance kernel with an additional compiled-executable conformance gate. It is **not** Google DeepMind's AlphaProof Code; it does not verify third-party compiled code or solve arbitrary cryptographic security properties. The November 10, 2026 publication creates a compelling frontier opportunity to pursue progressively stronger agent-assisted specification/proof, not an earned claim that this implementation has comparable breadth.
 
-## Run in a minute (Python 3.10+, standard library only)
+## Run in a minute (Python 3.10+, a C compiler, and Docker; no paid API)
 
 ```bash
 python3 products/proof-omega/proof_omega.py demo --out /tmp/proof-omega-demo
+# Without Docker: only for the public trusted synthetic fixture:
+python3 products/proof-omega/proof_omega.py demo --unsafe-local --out /tmp/proof-omega-trusted-demo
 python3 products/proof-omega/proof_omega.py prove products/proof-omega/examples/escrow.json --out /tmp/escrow-proof.json
 python3 products/proof-omega/proof_omega.py audit products/proof-omega/examples/escrow.json /tmp/escrow-proof.json
 python3 products/proof-omega/proof_omega.py apply products/proof-omega/examples/escrow.json /tmp/escrow-proof.json reserve '{"buyer":2,"escrow":0,"seller":0,"settled":0,"refunded":0}'
 python3 -m unittest discover -s products/proof-omega/tests -v
 ```
+
+The compiled C executable is also run against every certified reachable state × action pair (12 requests); the good binary matches exactly, and a deliberately altered compiled binary produces a concrete divergent witness. On real customer binaries Docker isolation is mandatory by default; the '--unsafe-local' switch is for the checked-in fixture only, NEVER customer code. This is a full finite-contract comparison, not a proof about all binary inputs.
 
 The safe sample provably conserves funds (in its **specified integer, atomic, finite-state semantics**) and forbids both refund and settlement; an intentionally defective variant violates conservation after `reserve → settle`, producing a reproducible counterexample. `prove` enumerates *all reachable states* and outgoing transitions under declared bounds, not just finite random test cases. If it exceeds `--max-states`, fails validation or finds a violation, it never emits a passing certificate. `audit` independently reconstructs reachability using separate transition semantics and detects omitted states, altered edges and stale policies. `apply` executes only an edge from that certified graph and refuses an unproven action/state.
 
@@ -28,6 +32,8 @@ The safe sample provably conserves funds (in its **specified integer, atomic, fi
 ### Interface and semantics
 
 JSON policy `proof-omega.finite-policy.v1` declares bounded integer variables, one initial state, named guarded atomic transitions and named safety invariants. Expressions use only integers, booleans, declared variables and whitelisted `add/sub/mul/eq/ne/lt/le/gt/ge/and/or/not` operators. They are interpreted without `eval` or network access; arithmetic is exact mathematical integers, never machine overflow. State and action names are sanitized. A guard returning something other than Boolean is not accepted by the independent audit.
+
+The separate `bind-binary` command checks an owned/authorized deterministic JSONL executable against every certified state-action result. The preconditions exclude I/O side effects, undeclared environment inputs and concurrency; the binary SHA-256 and case count are recorded in its verdict. It is a bounded executable conformance check, not a machine-code formal proof.
 
 The certified artifact stores every reachable state and edge, allowing a client to check and run the proofed finite-state behavior. The certificate is SHA-256-bound to canonical policy JSON. The SHA is for source identity, **not a cryptographic proof of correctness by itself**. No third-party data or credentials are required or transmitted.
 
