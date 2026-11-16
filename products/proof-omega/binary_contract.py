@@ -65,7 +65,7 @@ def binary_conformance(model, cert, executable, *, unsafe_local=False, max_cases
     mismatches = []
     executed = 0
     for traversal, probes, expected_answers in traversals:
-        payload = "\\n".join(canonical(req) for req in probes) + "\\n"
+        payload = "\n".join(canonical(req) for req in probes) + "\n"
         if len(payload.encode()) > 8_000_000:
             raise ContractError("input too large")
         try:
