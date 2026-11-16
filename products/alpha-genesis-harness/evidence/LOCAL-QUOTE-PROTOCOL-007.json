@@ -222,7 +222,7 @@
     "local_model": "Qwen3-4B-Instruct-2507 Q4_K_M",
     "max_builder_iterations_per_arm": 2,
     "max_model_calls_per_arm": 4,
-    "max_output_tokens_per_call": 4096,
+    "max_output_tokens_per_call": 2048,
     "max_tool_actions_per_arm": 8,
     "max_attempts_per_provider_request": 1,
     "max_inference_arms": 3,
@@ -340,6 +340,12 @@
     "interpretation": "Strategy-only prospective exposed-task engineering comparison. No statistical superiority, fresh commercial outcome, frontier model or Pro claim. Both arms retain actual cost/time and failure evidence. Early acceptance may use fewer calls; report actual counts. Successor is attempted only with accepted predecessor and exact immutable reuse checked separately. No adaptive rerun or changing frozen cases after observing output.",
     "outside_control": "Unchanged conventional formula, zero inference; no alleged advantage if simpler control suffices.",
     "wall_limit_seconds_per_strategy": 5400,
-    "network": "Only pinned model/runtime downloads. Inference loopback only, no API keys/paid calls."
+    "network": "Only pinned model/runtime downloads. Inference loopback only, no API keys/paid calls.",
+    "shared_resource_adjustment": {
+      "context_tokens": 8192,
+      "max_output_tokens_per_call": 2048,
+      "reason": "Before first inference: observed available memory5.4GiB after moving own worktrees off tmpfs.8k fp16 KV estimated1.125GiB vs16k2.25GiB; model2.33GiB plus buffers. Both fresh strategies share these settings; historical006 is context only, not matched hardware/config baseline.",
+      "no_inference_before_amendment": true
+    }
   }
 }
