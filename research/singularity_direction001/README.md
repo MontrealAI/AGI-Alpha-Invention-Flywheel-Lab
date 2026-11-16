@@ -36,7 +36,7 @@ python3 -m research.singularity_direction001.experiment --output /tmp/reality-pr
 python3 -m research.singularity_direction001.verify --evidence /tmp/reality-probe-001.json
 ~~~
 
-Select a new path for the output if it already exists. CI runs the same checks against the exact candidate Git SHA and retains both the source-bound evidence and separate proof verdict as publicly inspectable workflow artifacts.
+Select a new path for the output if it already exists. The established **AGI ALPHA website** CI executes the same checks against an exact candidate Git SHA, including adversarial tests, and retains both source-bound evidence and independent proof verdict as inspectable workflow artifacts. [The November 16 qualifying run passed](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/43888159570) on commit `7c2b937a1a9037c5b0142d89604759f618f473d8`. Its compact [verdict record](VERDICT-20261116.json) preserves the numerical result, source run and limitations after GitHub's temporary artifacts expire.
 
 Original case data: [IEEE-14](../pglib_opf_case14_ieee.m), [IEEE-30](../pglib_opf_case30_ieee.m), [PGLib attribution and licence](../PGLIB_LICENSE.txt), IEEE PES Power Grid Library v23.07, CC BY 4.0. Both original source files are checked against their Git blob identities before computation.
 

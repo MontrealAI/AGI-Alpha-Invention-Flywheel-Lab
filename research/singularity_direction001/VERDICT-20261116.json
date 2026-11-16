@@ -1,0 +1,47 @@
+{
+  "schema": "montreal-ai/goal-genesis-omega/ci-verdict-summary/v1",
+  "report_date": "2026-11-16",
+  "provenance": "Transcribed from publicly inspectable GitHub Actions logs and independent-checker output; NOT the full raw solver artifact.",
+  "qualified_commit": "7c2b937a1a9037c5b0142d89604759f618f473d8",
+  "workflow_run_url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/43888159570",
+  "workflow_run_id": 43888159570,
+  "status": "PASS_SCOPED_DC_PROOF",
+  "scope": "Lossless linear DC active-power model on exact PGLib 14- and 30-bus case files; fixed post-exploration stress and outages; source-bound SciPy/HiGHS LP plus separate scalar primal/dual verification.",
+  "modeling_assumptions": {
+    "demand_multiplier": 1.2,
+    "thermal_rating_multiplier": 0.75,
+    "initial_outages_selected_post_exploration": true,
+    "ac_qualification": false,
+    "physical_validation": false
+  },
+  "cases": [
+    {
+      "name": "IEEE-14",
+      "initial_outage_branch": "2-5",
+      "extra_open_branch": "4-5",
+      "baseline_unserved_mw": 11.55573817,
+      "baseline_dual_lower_bound_mw": 11.55573817,
+      "after_unserved_mw": 0,
+      "improvement_mw": 11.55573817
+    },
+    {
+      "name": "IEEE-30",
+      "initial_outage_branch": "12-16",
+      "extra_open_branch": "2-4",
+      "baseline_unserved_mw": 69.13939554,
+      "baseline_dual_lower_bound_mw": 69.13939554,
+      "after_unserved_mw": 40.45,
+      "improvement_mw": 28.68939554
+    }
+  ],
+  "unsupported_claims": [
+    "new physics",
+    "Braess effect discovery priority",
+    "AC grid feasibility",
+    "real device operation",
+    "economic value or revenue",
+    "autonomous goal discovery",
+    "fresh successor superiority",
+    "institutional global leadership"
+  ]
+}

@@ -1,5 +1,7 @@
 # 🌌♾️ ALPHA GENESIS FLYWHEEL Ω
 
+> **[🌌♾️ GOAL GENESIS Ω — The intelligence that discovers what should become possible next](docs/research/goal-genesis-omega.html)** · A new institutional frontier initiative. Its first proof-of-method compares a counterintuitive topology intervention against a globally optimal fixed-topology benchmark, with a separate certificate checker and exact public CI evidence. **Scientific scope is confined to a stressed lossless DC model; autonomous open-ended discovery remains an objective, not an achieved claim.** [Inspect the qualifying run](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/43888159570) · [Explore the flagship proposal](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/pull/397).
+
 ### Turn the next advance in AI into your next ability to autonomously discover at scale.
 
 **Invent the means. Expand what becomes possible. Compound the ability to discover.**
