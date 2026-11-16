@@ -85,4 +85,4 @@ This is a **commercial implementation lane**, not a GOAL GENESIS Ω scientific b
 
 The software's strongest current asset is **local control + source-grounded review artifacts + rapid, inspectable adoption without deep ERP integration**. That is a testable commercial wedge, not an automatic moat.
 
-© MONTREAL.AI. This pilot is supplied for evaluation; business and software use requires agreement on applicable licence/terms. No representation of compliance certification or licensed forensic accounting is made.
+**Licence:** The product software and the synthetic fixtures are available under [Apache License 2.0](LICENSE) with the [brand and service boundary](NOTICE). An external company may run the software locally, including commercially, under that licence; purchasing professional audit/recovery services is optional and separately contracted. **The software licence does not grant any MONTREAL.AI trademark rights or imply a certified audit.** No representation of professional accounting certification is made.
