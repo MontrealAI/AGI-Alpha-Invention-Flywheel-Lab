@@ -23,7 +23,7 @@ class ExactMathTests(unittest.TestCase):
         self.assertEqual(a,b)
 
     def test_malformed_and_forged_witnesses(self):
-        for sample in ([],[1.0],[1.0,float("nan")],[1.0,0.0],
+        for sample in ([],[1.0],[1.0,float("nan")],[1.0,-1.0],
                        [1,1],[0.0,0.0]):
             with self.subTest(sample=repr(sample)):
                 with self.assertRaises(ValueError):
