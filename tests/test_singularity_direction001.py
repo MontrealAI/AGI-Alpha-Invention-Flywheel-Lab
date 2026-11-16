@@ -93,6 +93,16 @@ class RealityProbeTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             checker.verify(corrupted)
 
+    def test_candidate_order_does_not_influence_certification(self):
+        original=checker.verify(self.evidence)
+        reordered=copy.deepcopy(self.evidence)
+        reordered['cases'].reverse()
+        for case in reordered['cases']:
+            case['responses'].reverse()
+        second=checker.verify(reordered)
+        by_case=lambda results:{r['case']:r for r in results}
+        self.assertEqual(by_case(original['results']),by_case(second['results']))
+
     def test_case_substitution_is_rejected(self):
         corrupted=copy.deepcopy(self.evidence)
         corrupted['cases'][1]=copy.deepcopy(corrupted['cases'][0])
