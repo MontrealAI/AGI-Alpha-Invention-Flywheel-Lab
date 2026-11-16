@@ -1,11 +1,22 @@
 name: ALPHA Economic Engine integration
 on:
-  push:
-    branches: ['feature/alpha-economic-engine-full-20261116']
-    paths: ['.github/workflows/alpha-economic-engine.yml', 'connected_enterprise/alpha_economic/**', 'tests/test_alpha_economic*', 'scripts/alpha_economic*']
+  pull_request:
+    paths:
+      - '.github/workflows/alpha-economic-engine.yml'
+      - 'connected_enterprise/alpha_economic/**'
+      - 'commercial/ledger.py'
+      - 'connected_enterprise/finance.py'
+      - 'tests/test_alpha_economic*'
+      - 'scripts/alpha_economic*'
   workflow_dispatch:
+    inputs:
+      local_model:
+        description: 'Run pinned local CPU model qualification (no paid API)'
+        required: false
+        type: boolean
+        default: false
 permissions:
-  contents: write
+  contents: read
 jobs:
   engine:
     runs-on: ubuntu-latest
@@ -15,7 +26,7 @@ jobs:
         run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
-          ref: ${{ github.sha }}
+          persist-credentials: false
           sparse-checkout: |
             connected_enterprise
             adaptive_enterprise
@@ -34,17 +45,9 @@ jobs:
             tests
             scripts
             docs/alpha-economic-engine
-            .alpha-transfer
-      - name: Assemble authorized exact public source
-        if: ${{ github.ref == 'refs/heads/feature/alpha-economic-engine-full-20261116' }}
-        run: |
-          if [ -f scripts/alpha_economic_assemble.py ]; then
-            python3 scripts/alpha_economic_assemble.py
-          fi
-      - name: Qualify exact integrated source
+      - name: Qualify exact integrated source and extracted package
         run: |
           set -euo pipefail
-          test -f connected_enterprise/alpha_economic/__main__.py
           mkdir -p "$RUNNER_TEMP/alpha-public"
           git rev-parse HEAD > "$RUNNER_TEMP/alpha-public/SOURCE-REVISION.txt"
           python3 -m unittest discover -s tests -p 'test_alpha_economic*.py' -v 2>&1 | tee "$RUNNER_TEMP/alpha-public/ENGINE-TESTS.txt"
@@ -59,6 +62,7 @@ jobs:
           python3 -m unittest discover -s tests -p 'test_alpha_economic*.py' -v 2>&1 | tee "$RUNNER_TEMP/alpha-public/EXTRACTED-TESTS.txt"
           python3 -m connected_enterprise.alpha_economic demo --output "$RUNNER_TEMP/alpha-extracted-demo" > "$RUNNER_TEMP/alpha-public/EXTRACTED-DEMO.txt"
       - name: Actual pinned local CPU model in the connected operating loop
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.local_model }}
         run: python3 scripts/alpha_economic_local_model.py --work "$RUNNER_TEMP/alpha-local-model-work" --public "$RUNNER_TEMP/alpha-public/local-model"
       - name: Preserve only public code and bounded evidence
         if: always()
