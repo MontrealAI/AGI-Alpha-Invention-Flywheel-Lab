@@ -4,6 +4,7 @@ on:
     paths:
       - 'products/trust-omega/**'
       - 'tests/test_trust_omega.py'
+      - 'tests/test_trust_omega_reply_review.py'
       - '.github/workflows/trust-omega.yml'
   workflow_dispatch:
 permissions:
@@ -13,7 +14,7 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
-      - run: python3 -m unittest discover -s tests -p test_trust_omega.py -v
+      - run: python3 -m unittest discover -s tests -p 'test_trust_omega*.py' -v
   upstream-accept-reject:
     runs-on: ubuntu-24.04
     timeout-minutes: 15
