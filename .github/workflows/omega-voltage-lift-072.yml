@@ -1,0 +1,40 @@
+name: Omega 072 finite voltage-lift scientific replay
+on:
+  push:
+    branches:
+      - research/omega-voltage-lift-072-20261116
+  pull_request:
+    paths:
+      - 'research/omega_voltage_lift_072/**'
+      - '.github/workflows/omega-voltage-lift-072.yml'
+permissions:
+  contents: read
+jobs:
+  independent-source-matched-replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record actual platform-window start
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@v4
+      - name: Independent regression tests
+        run: python3 -m unittest discover -v -s research/omega_voltage_lift_072 -p 'test_research.py'
+      - name: Compile exact saved source
+        run: g++ -std=c++17 -O3 -Wall -Wextra research/omega_voltage_lift_072/search.cpp -o omega72-search
+      - name: Execute all frozen proposals and independently verify
+        run: |
+          set -eu
+          /usr/bin/time -v ./omega72-search omega72-run.json
+          python3 -S research/omega_voltage_lift_072/verify.py --input omega72-run.json --output omega72-verdict.json
+          cmp research/omega_voltage_lift_072/RUN.json omega72-run.json
+          cmp research/omega_voltage_lift_072/VERDICT.json omega72-verdict.json
+      - name: Preserve actual comparison evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: omega-voltage-lift-072-actual
+          path: |
+            omega72-run.json
+            omega72-verdict.json
+          retention-days: 30
+          if-no-files-found: warn
