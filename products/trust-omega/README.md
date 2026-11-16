@@ -13,7 +13,7 @@ The released implementation is marked **not maintained**, describes important [k
 ## Implemented (scope and limitations)
 
 - [verify.py](verify.py) invokes **upstream** FlashProve's check_proof.py, which invokes the real cp_verify binary. This project does not roll its own cryptography.
-- Client must independently pre-pin the model commitment ID, exact-match policy, end token IDs, allowed proof-of-work accounting, SHA-256 hashes for the checking script, compiled verifier and configuration files. The string naming the independent source does **not** itself authenticate its publisher.
+- Client must independently pre-pin the model commitment ID, exact-match policy, end token IDs, allowed proof-of-work accounting, SHA-256 hashes for the checking script, compiled verifier and configuration files. The **reviewer v2** anchor also pins all public verification-key file names and bytes. The string naming the independent source does **not** itself authenticate its publisher. Earlier v1 anchors remain compatible but do **not** bind the key directory and must not be represented as complete verifier-input assurance.
 - The checker receives a client-constructed request file, a response proof and next-token file, and checks the exact token range, end token and policy. UPSTREAM_EXACT_ACCEPTED means only that the pinned upstream implementation accepted that specific claim under its own documented limitations.
 - Failed, malformed, missing, clipped-gap or inconclusive outputs **do not** pass as exact proof. The record is unsigned JSON with evidence hashes and warnings, and is **not a proof in isolation**.
 - [Unit tests](../../tests/test_trust_omega.py) test strict classification and the anchor schema locally. The [GitHub Actions job](../../.github/workflows/trust-omega.yml) is intended to compile the pinned upstream verifier and check its *stored synthetic* accepted proof and an incorrect commitment ID. It is not real-model proof generation and does not demonstrate production capability.
@@ -26,7 +26,7 @@ Create a client-controlled JSON anchor, using real independently checked values 
 
 ~~~json
 {
-  "schema": "trust-omega-anchor-v1",
+  "schema": "trust-omega-anchor-v2",
   "model_label": "Independently identified quantized integer model",
   "independent_source": "An independently checked, pre-request public commitment",
   "commitment_id": "<64 lowercase hex characters>",
@@ -38,10 +38,13 @@ Create a client-controlled JSON anchor, using real independently checked values 
     "verifier_binary": "<64 lowercase hex characters>",
     "parameter_file": "<64 lowercase hex characters>",
     "scales_file": "<64 lowercase hex characters>",
-    "layout_file": "<64 lowercase hex characters>"
+    "layout_file": "<64 lowercase hex characters>",
+    "public_key_tree": "<64 lowercase hex characters>"
   }
 }
 ~~~
+
+For v2, independently pin `public_key_tree` **before** seeing the provider response. Compute it from the complete verification-key directory: recursively enumerate regular files; reject symlinks; sort each relative POSIX path; make a JSON array of `[relative_path, sha256_file]` pairs serialized with `ensure_ascii=True, separators=(",", ":")`; then SHA-256 the UTF-8 serialized bytes. Missing, extra, renamed or modified key files cause v2 refusal before upstream execution. This commits local verifier inputs, **not** independent model identity, the soundness of the underlying checker, or immunity to concurrent filesystem changes. V1 remains a legacy compatibility mode and cannot support the stronger v2 claim. The v2 engineering correction is in the dependent reviewer PR #416 and remains subject to current exact-head qualification and product-owner integration.
 
 Create the binary request from your **own tokenized prompt and received reply**; require the correct end token. The provider sends proof material under response/proof.bin and response/y.bin. Keep every file required for independent replay.
 
@@ -55,7 +58,8 @@ python3 products/trust-omega/verify.py \
   --parameter-file /trusted/config/policy.txt \
   --scales-file /trusted/config/KL.bin \
   --layout-file /trusted/config/layout.txt \
-  --prompt-tokens 120 --reply-tokens 40 --out evidence.json
+  --prompt-tokens 120 --reply-tokens 40 \
+  --next-token 2 --out evidence.json
 ~~~
 
 This example is syntax, not an independently verified model response. The evidence JSON is an unsigned local observation, not proof of the claimed publisher or time unless third parties establish those facts independently.
