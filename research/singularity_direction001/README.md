@@ -31,7 +31,7 @@ From repository root, with Python 3.11+:
 
 ~~~sh
 python3 -m pip install --only-binary=:all: numpy==2.3.5 scipy==1.17.0
-python3 -m unittest tests.test_singularity_direction001 -v
+python3 -m unittest discover -s tests -p 'test_singularity_direction001.py' -v
 python3 -m research.singularity_direction001.experiment --output /tmp/reality-probe-001.json
 python3 -m research.singularity_direction001.verify --evidence /tmp/reality-probe-001.json
 ~~~
