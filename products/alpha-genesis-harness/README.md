@@ -101,3 +101,7 @@ Storefront: https://www.quebecartificialintelligence.com/shop
 Décompressez le fichier ZIP au complet, puis ouvrez **START-HERE.html**. Le parcours principal fonctionne dans un navigateur, sans terminal ni clé API. Choisissez le français dans l'application, ouvrez la démonstration synthétique, examinez les hypothèses, exécutez l'instrument et exportez votre projet.
 
 Cette version 0.3.0 est une **candidate à la publication**. Les idées produites restent des hypothèses; les exemples synthétiques ne prouvent ni une percée, ni une demande réelle, ni une rentabilité. L'édition officielle envisagée coûte 299 $ CA, en un seul paiement. Les frais de modèles externes, les futures éditions et la consultation personnelle sont distincts. Les droits accordés par Apache 2.0 restent accessibles sans achat.
+
+### Local deployment and support lifecycle
+
+Qualified bounded JSON instruments can be installed, executed, checked and rolled back in an owner-controlled local target using `python3 -m bridge.deployment`. See [local deployment and support](docs/LOCAL_DEPLOYMENT.md) for the acceptance contract, explicit local approval and security limitations. This is not arbitrary enterprise deployment or external production authorization.
