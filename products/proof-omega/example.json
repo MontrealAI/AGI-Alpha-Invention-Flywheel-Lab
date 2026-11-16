@@ -1,0 +1,26 @@
+{
+  "schema": 1,
+  "name": "Illustrative metered-invoice rule (integer cents)",
+  "domain": {
+    "hours": [
+      0,
+      20
+    ],
+    "rate": [
+      0,
+      30
+    ],
+    "rebate": [
+      0,
+      10
+    ]
+  },
+  "reference": "hours * rate - hours * rebate",
+  "candidate": "hours * rate - hours * rebate",
+  "preconditions": [
+    "rebate <= rate"
+  ],
+  "invariants": [
+    "out >= 0"
+  ]
+}
