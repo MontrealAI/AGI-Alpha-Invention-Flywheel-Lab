@@ -1,0 +1,130 @@
+name: Native design041 current-main composition review142
+on:
+  pull_request:
+    paths:
+      - "campaign/native-design-compat142/**"
+      - ".github/workflows/native-design-compat142.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: native-design-compat142-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
+jobs:
+  pinned-compatibility:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record platform job execution start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - name: Checkout frozen protected-main source
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: fe8ac39b56bc70c6b07555eed54574bd23ea2cc4
+          path: baseline
+          persist-credentials: false
+      - name: Checkout frozen experimental design source (read-only)
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: cd5281b0ae7b484572bfb35ccb7e51ef5b3be4b3
+          path: upstream-design
+          persist-credentials: false
+          sparse-checkout: |
+            connected_enterprise/design_flywheel.py
+            tests/test_connected_design_flywheel041.py
+      - name: Set up Python without model API access
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: "3.12"
+      - name: Compose only strictly additive candidate files and record exact source hashes
+        shell: bash
+        run: |
+          python - <<'PY'
+          import hashlib, json, os, pathlib, shutil, subprocess
+          base = pathlib.Path("baseline")
+          src = pathlib.Path("upstream-design")
+          expected = {"baseline": "fe8ac39b56bc70c6b07555eed54574bd23ea2cc4",
+                      "upstream-design": "cd5281b0ae7b484572bfb35ccb7e51ef5b3be4b3"}
+          for folder, sha in expected.items():
+              actual = subprocess.check_output(["git", "-C", folder, "rev-parse", "HEAD"], text=True).strip()
+              if actual != sha:
+                  raise SystemExit("PINNED_GIT_COMMIT_CHANGED:" + folder)
+          paths = ("connected_enterprise/design_flywheel.py", "tests/test_connected_design_flywheel041.py")
+          hashes = {}
+          for name in paths:
+              destination, origin = base/name, src/name
+              if not origin.is_file() or destination.exists() or origin.is_symlink() or destination.is_symlink():
+                  raise SystemExit("CANDIDATE_MISSING_OR_MAIN_SOURCE_COLLISION:" + name)
+              raw = origin.read_bytes()
+              if not raw:
+                  raise SystemExit("EMPTY_CANDIDATE_SOURCE:" + name)
+              hashes[name] = hashlib.sha256(raw).hexdigest()
+              shutil.copyfile(origin, destination)
+              if destination.read_bytes() != raw:
+                  raise SystemExit("OVERLAY_SOURCE_BYTES_CHANGED:" + name)
+          receipt = {"schema": "agi-alpha/native-design-compat142/v1",
+                     "status": "UNQUALIFIED_BEFORE_EXECUTION",
+                     "frozen_main": expected["baseline"],
+                     "frozen_design041": expected["upstream-design"],
+                     "reviewed_overlaid_source_sha256": hashes,
+                     "original_main_files_replaced": [],
+                     "study": "existing exposed seeds 341014 and 341015",
+                     "authority": "local isolated synthetic Account only; no original account migration",
+                     "claimed_real_customers": 0, "claimed_external_revenue_usd": 0}
+          pathlib.Path(os.environ["RUNNER_TEMP"], "COMPAT142_SOURCE.json").write_text(
+              json.dumps(receipt, sort_keys=True, indent=2) + "\n")
+          print("Composed additive files:", hashes)
+          PY
+      - name: Install exactly current-main declared native dependencies
+        working-directory: baseline
+        run: python -m pip install -r requirements-commercial010.txt
+      - name: Execute frozen independent design041 safety and selection tests
+        working-directory: baseline
+        run: |
+          /usr/bin/time -v -o "$RUNNER_TEMP/COMPAT142_TEST_TIME.txt" \
+            python -m unittest -v tests.test_connected_design_flywheel041
+      - name: Execute the original two frozen seeds against current main, then independently verify
+        working-directory: baseline
+        run: |
+          /usr/bin/time -v -o "$RUNNER_TEMP/COMPAT142_RUN_TIME.txt" \
+            python -m connected_enterprise.design_flywheel demo \
+              --output "$RUNNER_TEMP/native-design041-review142"
+          /usr/bin/time -v -o "$RUNNER_TEMP/COMPAT142_VERIFY_TIME.txt" \
+            python -m connected_enterprise.design_flywheel verify \
+              --output "$RUNNER_TEMP/native-design041-review142"
+      - name: Gate native source-linked earning and positive same-world matched delta
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json, os, pathlib
+          root = pathlib.Path(os.environ["RUNNER_TEMP"])
+          p = root/"native-design041-review142/PUBLIC.json"
+          outcome = json.loads(p.read_text())
+          assert outcome["spec_sha256"] and outcome["source_sha256"], "SOURCE_IDENTITY_MISSING"
+          assert outcome["confirmed_positive_funded_successor_opportunity"], "FROZEN_NATIVE_SUCCESSOR_WITNESS_DID_NOT_PASS"
+          assert outcome["comparative_advantage_on_one_fresh_seed"], "FROZEN_MATCHED_COMPETITOR_DELTA_DID_NOT_PASS"
+          assert outcome["matched_confirmation_profit_delta_microUSD"] > 0, "FROZEN_MATCHED_PROFIT_DELTA_NONPOSITIVE"
+          print("ENGINEERING_COMPATIBILITY_ONLY: positive same-world successor and matched delta")
+          print("DO_NOT_PROMOTE: real buyers, migration, causal invention, scaling, annual profit all unqualified")
+          PY
+      - name: Retain ONLY key-free public output and source/time receipts (never native accounts)
+        if: always()
+        shell: bash
+        run: |
+          if [ -f "$RUNNER_TEMP/native-design041-review142/PUBLIC.json" ]; then
+            cp "$RUNNER_TEMP/native-design041-review142/PUBLIC.json" "$RUNNER_TEMP/COMPAT142_PUBLIC.json"
+          fi
+          echo "No account, keys, recovery data, or original native state is uploaded." >> "$GITHUB_STEP_SUMMARY"
+      - name: Preserve compact bounded review receipts including failed results
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: native-design041-compat142-${{ github.sha }}-attempt-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/COMPAT142_SOURCE.json
+            ${{ runner.temp }}/COMPAT142_PUBLIC.json
+            ${{ runner.temp }}/COMPAT142_TEST_TIME.txt
+            ${{ runner.temp }}/COMPAT142_RUN_TIME.txt
+            ${{ runner.temp }}/COMPAT142_VERIFY_TIME.txt
+          if-no-files-found: warn
