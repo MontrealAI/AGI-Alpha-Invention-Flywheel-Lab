@@ -1,0 +1,45 @@
+name: Goal Genesis Omega — degree diameter open frontier attempt
+on:
+  push:
+    branches:
+      - research/omega-open-degree-diameter-20261116
+    paths:
+      - 'research/omega_degree_diameter/**'
+      - '.github/workflows/omega-degree-diameter.yml'
+  pull_request:
+    paths:
+      - 'research/omega_degree_diameter/**'
+      - '.github/workflows/omega-degree-diameter.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: omega-degree-diameter-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+          sparse-checkout: |
+            research/omega_degree_diameter
+          sparse-checkout-cone-mode: false
+      - name: Negative controls and source-bound incumbent
+        working-directory: research/omega_degree_diameter
+        run: python3 -m unittest -v test_research.py
+      - name: Re-run every bounded augmentation and independent verifier
+        working-directory: research/omega_degree_diameter
+        run: python3 reproduce.py --output-dir "$RUNNER_TEMP/omega-degree-diameter"
+      - name: Preserve the failing scientific evidence, never relabel it success
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: omega-degree-diameter-hold-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/omega-degree-diameter/candidate_72.json
+            ${{ runner.temp }}/omega-degree-diameter/search_receipt.json
+            ${{ runner.temp }}/omega-degree-diameter/verdict.json
+          retention-days: 30
+          if-no-files-found: error
