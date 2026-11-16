@@ -248,7 +248,12 @@ def main(argv=None):
         elif args.action == "replay":
             contract = read(args.contract)
             verified = prove(contract)
-            report = {"status": "REPLAY_VERIFIED" if verified["status"] == "VERIFIED_BOUNDED" and verified == read(args.report) else "HOLD",
+            supplied = read(args.report)
+            if (isinstance(supplied, dict) and supplied.get("admission") == "LOWER_STATIC_PROXY_ONLY_NOT_MEASURED_SPEED"
+                and verified["status"] == "VERIFIED_BOUNDED"
+                and verified["candidate_cost_proxy"] < verified["reference_cost_proxy"]):
+                verified["admission"] = "LOWER_STATIC_PROXY_ONLY_NOT_MEASURED_SPEED"
+            report = {"status": "REPLAY_VERIFIED" if verified["status"] == "VERIFIED_BOUNDED" and verified == supplied else "HOLD",
                       "contract_sha256": sha(contract)}
         elif args.action == "invent":
             proposed, report = invent(read(args.contract))
