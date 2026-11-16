@@ -1,0 +1,21 @@
+# EIT177 — frozen real AgarChest repeatability and information preflight (15 November 2026)
+
+## Source, owner and why this is separate
+
+Pre-code, pre-download registration. Start from exact main `75f8f722c923e448d8f1fb44aa762b6ba0cd5a46`, with EIT174 metadata observation `69f31a43c2dbea8457cafcc4ed7a4250238495acf0df41339e030b5fe502c82c`. EIT175 owner separately investigates **AgarCylinderPhantom.zip** (original HTTP 406 remains FAILED); EIT176 separately authenticated access to that cylinder using `Accept: */*`. **This experiment is on a distinct phantom, AgarChestPhantom**, and must not change PR375, PR376, native-finance owner PR40, original account, queues, main or release. No overlap with cylinder data, owner tests or original archive modifications.
+
+Fixed publisher version DOI `10.5281/zenodo.24120439` and *one* archive URL:
+`https://zenodo.org/api/records/24120439/files/AgarChestPhantom.zip/content`.
+Published metadata claims exact size **24,539,080 bytes**, MD5 **8514af69c0277f339d5576dd4eb9a598** (these are assertions until observed bytes match). One HTTPS-only same-host GET; headers `Accept: */*`, `User-Agent: AGI-ALPHA-EIT177-chest/1`; 60s timeout; bounded 32MiB read; no mirror, alternate source, retry, range request, paid API or keys. A new SHA-256 requires actual verified bytes. An HTTP error or checksum mismatch is a genuine FAILED source result, not a permission to switch archives or rerun to get a pass.
+
+## One finite experiment, no adapting after outcome
+
+Refuse corrupt/encrypted/unsafe ZIPs, traversal, symlink, duplicate casefold member, >2000 entries, >500MiB cumulative declared decompressed content and >64MiB selected member. Find all regular `Data/**` MAT filenames with literal suffix `_1.mat` and `_2.mat`; choose the **lexicographically first exact shared stem** once, no selection by size, results or cosmetic path. If none, FAIL for the registered repeatability test. MATLAB v7.3 is required in each selected member, with numeric real rank-two `currents_matrix`, `voltages_matrix`, and `units_info`; no inferred transposition/unit conversion; <=2,000,000 values per matrix, finite values, identical paired shapes. Preserve member SHA256, shape, RMS direct difference, maximum absolute difference, mean absolute voltage, and normalized RMS discrepancy (denominator is pooled mean-square amplitude; null if zero). These are **direct paired observations**, not a calibrated noise distribution, EIT reconstruction, forward operator or identification of a hidden conductivity field. No biological/patient data are expected or permitted.
+
+Preregister 12+ offline tests: exact publisher length/checksum, invalid ZIP, unsafe member/traversal and symlink, duplicate names, encrypted flag, declared decompression budget, missing pair, lexicographic pair precedence, missing HDF5 fields, nonfinite field, shape mismatch, archive request exactness and output create-only protection. A standalone standard `ubuntu-latest` GitHub Actions job with first `AGI_JOB_START_EPOCH` marker, 360-minute platform limit, contents-read-only, pinned standard setup actions, binary-only pinned NumPy/h5py wheels executes tests then the single actual-source step, preserving compact JSON receipt even on failure. Do not claim a passed real-source result until inspected.
+
+## Alternatives and decisions
+
+Before claiming a new interior-property observation: authors' own linear-difference images/code, competent CEM-based GN/TV/regularized human software, and a possible new calibration/measurement-choice instrument must each have complete matched budget, independent physical withheld acceptance and uncertainty. Conventional processing of the same archive is not a discovered new information channel. No ability to resolve the inverse null space is assumed. No threshold on measured differences is retrospectively chosen.
+
+Three separate verdicts: (1) authentic raw chest source and pair parsed, PASS/FAIL; (2) newly enabling interior inference, **UNTESTED**; (3) real contract, native finance, customer acceptance and US$3B T365 complete-cost profit, **UNQUALIFIED/UNACHIEVED**. NO BID / NO DEPLOY; no outreach, spending, physical actuation, keys or real commerce. The next decision is based on actual archive outcome and strong-baseline feasibility, not a synthetic win.
