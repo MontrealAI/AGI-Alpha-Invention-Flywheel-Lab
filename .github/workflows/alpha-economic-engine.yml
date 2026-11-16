@@ -1,0 +1,65 @@
+name: ALPHA Economic Engine integration
+on:
+  push:
+    branches: ['feature/alpha-economic-engine-full-20261116']
+    paths: ['.github/workflows/alpha-economic-engine.yml', 'connected_enterprise/alpha_economic/**', 'tests/test_alpha_economic*', 'scripts/alpha_economic*']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  engine:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record platform window
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            connected_enterprise
+            adaptive_enterprise
+            commercial
+            enterprise
+            vendor
+            experiments
+            portfolio25
+            verification
+            production060
+            inventory061
+            flexibility063
+            mechanisms
+            flywheel
+            products/alpha-genesis-harness/bridge
+            tests
+            scripts
+      - name: Produce exact public development sources
+        run: |
+          python3 - <<'PY'
+          import hashlib, json, pathlib, subprocess, zipfile
+          root=pathlib.Path('.')
+          names=subprocess.check_output(['git','ls-files','-z']).decode().split('\0')
+          chosen=[]
+          for name in names:
+              p=root/name
+              if name and p.is_file() and not p.is_symlink() and (p.suffix in {'.py','.json','.yaml','.txt'} or name=='AGENTS.md') and not name.startswith(('campaign/','docs/','artifacts/','evidence/','historical/','inventions/','events/')):
+                  chosen.append(name)
+          with zipfile.ZipFile('/tmp/alpha-source.zip','w',zipfile.ZIP_DEFLATED) as z:
+              hashes={}
+              for name in chosen:
+                  data=(root/name).read_bytes()
+                  z.writestr(name,data); hashes[name]=hashlib.sha256(data).hexdigest()
+              z.writestr('SOURCE-IDENTITY.json',json.dumps({'revision':subprocess.check_output(['git','rev-parse','HEAD']).decode().strip(),'files':hashes},sort_keys=True))
+          print('Exported',len(chosen),'public tracked source files; no account state or credentials.')
+          PY
+      - name: Qualify integrated engine when present
+        run: |
+          if [ -f connected_enterprise/alpha_economic/__main__.py ]; then
+            python3 -m unittest discover -s tests -p 'test_alpha_economic*.py' -v
+          else
+            echo 'Source-transfer bootstrap only; no integrated-engine qualification claimed.'
+          fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: alpha-source-${{ github.sha }}
+          path: /tmp/alpha-source.zip
+          retention-days: 1
