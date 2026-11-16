@@ -114,6 +114,13 @@ class ContractValueTests(unittest.TestCase):
         self.assertIn("&lt;script&gt;",html)
         self.assertNotIn("<script>alert(1)</script>",html)
 
+    def test_spreadsheet_formula_injection_is_rejected_at_input(self):
+        p=self.inputs/"invoices.csv"
+        old=p.read_text()
+        p.write_text(old.replace("SYNTHETIC-INVOICE-NS-200","=HYPERLINK(1)",1))
+        with self.assertRaisesRegex(core.InputError,"invalid identity"):
+            core.validate(self.inputs)
+
     def test_malformed_amounts_and_forged_credits_rejected(self):
         p=self.inputs/"invoices.csv"
         original=p.read_text()
