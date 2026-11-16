@@ -1,0 +1,43 @@
+name: GOAL GENESIS Omega - independently verify signed-autoconvolution bound
+on:
+  pull_request:
+    paths:
+      - 'research/goal_genesis_c1d_20261116/**'
+      - '.github/workflows/omega-c1d.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'research/goal_genesis_c1d_20261116/**'
+      - '.github/workflows/omega-c1d.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: omega-c1d-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  exact-certification:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+          sparse-checkout: |
+            research/goal_genesis_c1d_20261116
+          sparse-checkout-cone-mode: false
+      - name: Verify mathematical proof, both independent methods and adversarial controls
+        working-directory: research/goal_genesis_c1d_20261116
+        run: |
+          python3 -S -m unittest -v test_proof.py
+          python3 -S reproduce.py --output-dir "$RUNNER_TEMP/c1d-replay"
+      - name: Retain independently checkable exact verdicts
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: c1d-exact-verification-${{ github.event.pull_request.head.sha || github.sha }}
+          path: |
+            ${{ runner.temp }}/c1d-replay/kronecker.json
+            ${{ runner.temp }}/c1d-replay/ntt_crt.json
+          retention-days: 30
+          if-no-files-found: error
