@@ -1,0 +1,19 @@
+name: RESURRECT OMEGA authorized binary-to-replacement qualification
+on:
+  pull_request:
+    paths:
+      - 'products/resurrect-omega/**'
+      - '.github/workflows/resurrect-omega.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Adversarial native-binary reconstruction tests
+        run: python3 -m unittest discover -s products/resurrect-omega/tests -v
+      - name: Independently replay black-box behavior through restricted Docker
+        run: python3 products/resurrect-omega/resurrect.py demo --out /tmp/resurrect-omega-ci
