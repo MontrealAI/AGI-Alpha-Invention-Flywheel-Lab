@@ -98,6 +98,11 @@ def verify(evidence):
     require(evidence['schema']=='montreal-ai/reality-probe-001/v1','SCHEMA')
     require(evidence['stress']==STRESS,'STRESS_CHANGED')
     require(len(evidence['cases'])==len(SOURCE),'CASE_COUNT')
+    # Length alone admits a duplicated, independently valid IEEE-14 case in
+    # place of IEEE-30. The complete source set must appear exactly once.
+    claimed_cases=[item['case'] for item in evidence['cases']]
+    require(set(claimed_cases)==set(SOURCE) and
+            len(set(claimed_cases))==len(claimed_cases),'CASE_COVERAGE')
     outcomes=[]
     for result in evidence['cases']:
         case=parse_case(result['case'])
@@ -115,13 +120,25 @@ def verify(evidence):
         require(near(result['modeled_gain_mw'],no-after) and no-after>0.01,'NO_PROVED_GAIN')
         rows=result['responses'];ids=[x['switch'] for x in rows]
         require(sorted(ids)==[i for i in range(len(case['lines'])) if i!=outage],'INCOMPLETE_SWITCH_SEARCH')
+        verified_scores=[]
+        for response in rows:
+            # A complete switch-search proof must independently recheck EVERY
+            # reported alternative, not only the source-selected winner.
+            # check_dual also checks primal feasibility, dual signs,
+            # stationarity and zero gap for this specific changed topology.
+            independently_proved=check_dual(
+                case, {outage,response['switch']}, response['witness'])
+            require(near(independently_proved,response['unserved_mw']),
+                    'UNVERIFIED_SWITCH_SCORE')
+            verified_scores.append((independently_proved,response['switch']))
         selected=next(x['unserved_mw'] for x in rows if x['switch']==sw)
         require(near(selected,after),'RESPONSE_MISMATCH')
-        # This ranking is an index assertion, not proof of the other candidates' optima.
-        require(all(r['unserved_mw']>=after-TOL for r in rows),'SELECTED_NOT_REPORTED_BEST')
+        require(all(value>=after-TOL for value,_ in verified_scores),
+                'SELECTED_NOT_PROVED_BEST')
         outcomes.append({'case':case['case'],'baseline_primal_mw':round(no,8),
                          'baseline_dual_lower_mw':round(no_lower,8),
                          'new_topology_primal_mw':round(after,8),'gain_mw':round(no-after,8),
+                         'certified_extra_switch_count':len(verified_scores),
                          'status':'PASS_SCOPED_DC_PROOF'})
     return {'status':'PASS_SCOPED_DC_PROOF','results':outcomes,
             'not_established':'Real grid operation; AC feasibility, control authorization, innovation priority, payments, or institution-wide advantage'}
