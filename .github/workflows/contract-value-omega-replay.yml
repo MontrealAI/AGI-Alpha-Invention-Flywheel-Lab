@@ -1,0 +1,38 @@
+name: Contract Value Omega independent financial source replay
+on:
+  pull_request:
+    paths:
+      - 'research/contract-value-omega-replay/**'
+      - 'products/contract_value_omega/verify_replay.py'
+      - 'tests/test_contract_value_omega_replay.py'
+      - '.github/workflows/contract-value-omega-replay.yml'
+  push:
+    branches:
+      - 'review/contract-value-omega-source-replay-20261116'
+    paths:
+      - 'research/contract-value-omega-replay/**'
+      - 'products/contract_value_omega/verify_replay.py'
+      - 'tests/test_contract_value_omega_replay.py'
+      - '.github/workflows/contract-value-omega-replay.yml'
+permissions:
+  contents: read
+jobs:
+  source-replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record actual hosted execution window
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Existing buyer financial regression suite
+        run: python3 -m unittest discover -s tests -p 'test_contract_value_omega.py' -v
+      - name: Frozen independent financial-source replay regression suite
+        run: python3 -m unittest discover -s tests -p 'test_contract_value_omega_replay.py' -v
+      - name: Actual clean buyer demo and original verifier
+        run: |
+          python3 -m products.contract_value_omega.run --input products/contract_value_omega/demo --output "$RUNNER_TEMP/review"
+          python3 -m products.contract_value_omega.verify --input products/contract_value_omega/demo --report "$RUNNER_TEMP/review"
+      - name: Supplemental source-derived replay of released-shape buyer review
+        run: python3 -m products.contract_value_omega.verify_replay --input products/contract_value_omega/demo --report "$RUNNER_TEMP/review"
