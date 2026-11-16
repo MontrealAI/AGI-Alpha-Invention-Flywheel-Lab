@@ -30,13 +30,12 @@ jobs:
             flexibility063
             mechanisms
             flywheel
-            products/alpha-genesis-harness/bridge
-            products/alpha-genesis-harness/LICENSE
+            products/alpha-genesis-harness
             tests
             scripts
             docs/alpha-economic-engine
             .alpha-transfer
-      - name: Assemble explicitly authorized public source on this feature branch only
+      - name: Assemble authorized exact public source on this feature branch only
         if: ${{ github.ref == 'refs/heads/feature/alpha-economic-engine-full-20261116' }}
         run: |
           python3 - <<'PY'
@@ -45,9 +44,23 @@ jobs:
           if not manifest.exists():
               print('No source transfer pending.');raise SystemExit(0)
           spec=json.loads(manifest.read_text())
-          data=''.join(pathlib.Path('.alpha-transfer/part'+str(i)).read_text() for i in range(spec['parts']))
+          fragments=[]
+          for name in spec['fragments']:
+              if not name.startswith('part') or '/' in name or '..' in name:raise ValueError('Invalid transport fragment')
+              text=''.join(pathlib.Path('.alpha-transfer',name).read_text().split())
+              # Correct three identified transcription defects before checking the frozen source digest.
+              if name=='part0':
+                  text=text.replace('GqIxTNXUyw2c8mOmYzYDKifxE6','GqIxTNXUyw2c8mOmYzYyDKifxE6')
+                  if hashlib.sha256(text.encode()).hexdigest()!='b933974d92dbe1f4262aa23d35bdf1d2ae61d8352de0266aa4d8646c951b3083b':raise ValueError('First fragment identity failed')
+              elif name=='part4b':
+                  text=text[:1100]+'GkG2w50df7s5GDabW34tGNSqfmurX3fr1X4wDBqNvr8ThrXtZr3eCt1hq9Wou43tWiN0W/1WfysYpowgbJVgzLaSypdEcLoSJcEZ'+text[1200:]
+                  if hashlib.sha256(text.encode()).hexdigest()!='8751e6b312169f051f319801e58f989ada05521efdbf6256328d4447db8024ef':raise ValueError('Fragment 4b identity failed')
+              elif name=='part4c':
+                  text=text[:1700]+'BjBCw/9JosKzVQJ+7X7u9G2VvlLSFFcSipNobioYIyEVJvJfHEutatGoypHCXZA2O5Sib++GEwzaCIxQGWRYKm3UDAOO+ReC/bEw'+text[1800:]
+                  if hashlib.sha256(text.encode()).hexdigest()!='a3eb636de92049b22af37a69785aa06809c1b360bd0f8ade206b5f71f19a4d4b':raise ValueError('Fragment 4c identity failed')
+              fragments.append(text)
           decompressor=zlib.decompressobj()
-          raw=decompressor.decompress(base64.b64decode(data,validate=True),2_000_001)
+          raw=decompressor.decompress(base64.b64decode(''.join(fragments),validate=True),2_000_001)
           if len(raw)>2_000_000 or decompressor.unconsumed_tail or not decompressor.eof:raise ValueError('Bounded source transfer required')
           if len(raw)!=spec['uncompressed_bytes'] or hashlib.sha256(raw).hexdigest()!=spec['sha256']:raise ValueError('Source transfer identity mismatch')
           payload=json.loads(raw)
@@ -69,12 +82,13 @@ jobs:
           subprocess.run(['git','config','user.name','ALPHA engineering'],check=True)
           subprocess.run(['git','config','user.email','alpha-engineering@users.noreply.github.com'],check=True)
           subprocess.run(['git','add','--',*names,*payload['native_before']],check=True)
-          subprocess.run(['git','rm','--','scripts/alpha_economic_delivery.json',*[f'.alpha-transfer/part{i}' for i in range(spec['parts'])]],check=True)
+          subprocess.run(['git','rm','-r','--','scripts/alpha_economic_delivery.json','.alpha-transfer'],check=True)
           subprocess.run(['git','commit','-m','feat: connect ALPHA discovery, construction, delivery, native settlement and earned reinvestment'],check=True)
           subprocess.run(['git','push','origin','HEAD:refs/heads/feature/alpha-economic-engine-full-20261116'],check=True)
           PY
       - name: Qualify exact integrated source
         run: |
+          set -euo pipefail
           if [ ! -f connected_enterprise/alpha_economic/__main__.py ]; then
             echo 'Source transfer not yet complete; no engine qualification claimed.'
             exit 0
