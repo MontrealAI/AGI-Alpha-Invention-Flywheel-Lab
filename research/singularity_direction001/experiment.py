@@ -140,11 +140,19 @@ def probe_case(case):
     """Compare full LP redispatch and every one-line corrective opening."""
     outage = OUTAGES[case['case']]
     baseline = solve(case, {outage})
-    responses = [{'switch': i, 'unserved_mw': solve(case, {outage, i})['unserved_mw']}
-                 for i in range(len(case['lines'])) if i != outage]
+    responses = []
+    for i in range(len(case['lines'])):
+        if i == outage:
+            continue
+        proof = solve(case, {outage, i})
+        # Every alternative, including a losing one, carries an independently
+        # replayable primal/dual optimality certificate. A scalar score alone
+        # is never evidence that a complete switch search was verified.
+        responses.append({'switch': i, 'unserved_mw': proof['unserved_mw'],
+                          'witness': proof})
     winner = min(responses, key=lambda row: (row['unserved_mw'], row['switch']))
     switch = winner['switch']
-    after = solve(case, {outage, switch})
+    after = winner['witness']
     return {'case': case['case'], 'source': {'path':case['source'],
                 'git_blob_sha1':case['source_git_blob_sha1'], 'sha256':case['source_sha256']},
             'bus_count':len(case['loads_mw']), 'line_count':len(case['lines']),
