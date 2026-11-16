@@ -38,6 +38,12 @@ Ask qualified private CFO/procurement buyers for an actual paid scoping agreemen
 
 A successful first pilot requires a signed agreement **and real collected payment**. Count identified dollars, validated claims, accepted credits, actual collections, fees, operating costs and unrestricted profit separately. Do not silently call any one another.
 
+### Revenue-execution prerequisites
+
+Before issuing a paid invoice, identify the **actual legal contracting entity** (MONTREAL.AI is a public-facing institutional name; do not assume it and QUEBEC.AI are interchangeable legal obligors), the recipient of client payments, appropriate tax treatment, ownership of delivered findings, insurance/professional-service limits, NDA and data-processing obligations. Obtain a signed scope and written buyer data authorization, including the permitted audit period and security/retention controls.
+
+There is no recognized receivable, customer contract, cash receipt or realized profit in this repository. If these conditions are absent, the next step is **customer qualification**, not declaring a sale. Never include private customer records in public GitHub assets.
+
 ### Unit economics (explicit illustrative arithmetic, not forecast)
 
 One hypothetical CAD 25k diagnostic with CAD 3k analyst/review support, CAD 2k selling and onboarding, CAD 1k compute/tool/security allocations, CAD 2k independent QA and CAD 2k support/insurance/overhead produces CAD 15k pre-tax operating contribution **if** fully collected and all costs have been counted. These costs are authored illustrative placeholders, not a sourced expense forecast or actual invoices.
