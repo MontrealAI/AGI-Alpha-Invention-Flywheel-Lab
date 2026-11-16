@@ -11,6 +11,8 @@ on:
       - '.github/workflows/research-pages.yml'
       - 'products/alpha-genesis-harness/**'
       - 'events/alpha-genesis-live/**'
+      - 'research/singularity_direction001/**'
+      - 'tests/test_singularity_direction001.py'
       - '.github/workflows/alpha-genesis-harness.yml'
   push:
     branches: [main]
@@ -24,6 +26,8 @@ on:
       - '.github/workflows/research-pages.yml'
       - 'products/alpha-genesis-harness/**'
       - 'events/alpha-genesis-live/**'
+      - 'research/singularity_direction001/**'
+      - 'tests/test_singularity_direction001.py'
       - '.github/workflows/alpha-genesis-harness.yml'
   workflow_dispatch:
 permissions:
@@ -47,6 +51,10 @@ jobs:
             experiments/frontier-conclave
             scripts/build_research_site.py
             tests/test_research_site.py
+            research/singularity_direction001
+            research/pglib_opf_case14_ieee.m
+            research/pglib_opf_case30_ieee.m
+            tests/test_singularity_direction001.py
             tests/test_alpha_site.cjs
             tests/test_surf_reader.cjs
             events/alpha-genesis-live
@@ -66,6 +74,21 @@ jobs:
           node --test events/alpha-genesis-live/engine/tests/*.test.mjs events/alpha-genesis-live/lab/test/*.test.mjs events/alpha-genesis-live/06_QA/stage_engine.test.mjs
           node events/alpha-genesis-live/00_STAGE/run_show.mjs --mode preview --focus confidence --out "$RUNNER_TEMP/alpha-genesis-live-preview"
           node events/alpha-genesis-live/engine/verify_receipt.mjs "$RUNNER_TEMP/alpha-genesis-live-preview/agent-receipt.json"
+      - name: Independently qualify GOAL GENESIS Omega computational finding
+        run: |
+          python3 -m pip install --only-binary=:all: numpy==2.3.5 scipy==1.17.0
+          python3 -m unittest discover -s tests -p 'test_singularity_direction001.py' -v
+          python3 -m research.singularity_direction001.experiment --output "$RUNNER_TEMP/goal-genesis-omega.json"
+          python3 -m research.singularity_direction001.verify --evidence "$RUNNER_TEMP/goal-genesis-omega.json" | tee "$RUNNER_TEMP/goal-genesis-verdict.json"
+      - name: Preserve proposed Goal Genesis evidence for PR review
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: goal-genesis-proof-${{ github.event.pull_request.head.sha || github.sha }}
+          path: |
+            ${{ runner.temp }}/goal-genesis-omega.json
+            ${{ runner.temp }}/goal-genesis-verdict.json
+          retention-days: 30
+          if-no-files-found: error
       - name: Validate original PDFs, links and publication boundary
         run: python3 -m unittest discover -s tests -p 'test_research_site.py' -v
       - name: Check interactive research calculations and decisions
