@@ -1,0 +1,758 @@
+{
+  "schema": "alpha-harness/live-quote-qualification/v7",
+  "trial_id": "quote-trial-007-single-model",
+  "strategy": "single-model",
+  "structured_output": {
+    "configuration": "json_schema:true on the explicitly configured local model; json_mode retained as a separate capability",
+    "wire_request": {
+      "response_format": {
+        "type": "json_schema",
+        "json_schema": {
+          "name": "harness_output",
+          "strict": true,
+          "schema": "Generic schema constructed by bridge/workflow_schemas.py for the active role and enabled tools"
+        }
+      }
+    },
+    "scope": "Generation constrained to the declared tool/DSL syntax, followed by local schema validation and unchanged independent semantic/case checks. This is not evidence that schema adherence ensures task correctness.",
+    "primary_documentation": "https://github.com/ggml-org/llama.cpp/blob/b12242/tools/server/README.md"
+  },
+  "diagnostic_revision": {
+    "id": "instrument-root-spec-diagnostics-v1",
+    "scope": "Instrument root validation distinguishes a non-object specification from unsupported top-level keys, names unsupported and permitted keys, and states that named output expressions belong inside outputs. Accepted grammar, evaluation semantics, bounds, model settings, budgets and frozen acceptance cases are unchanged.",
+    "source": "bridge/instruments.py"
+  },
+  "source_revision": "34be64fb7cf72ba5f9a0f1c0d24ea29809d6e71b",
+  "product_tree_sha": "f76efed7c90944048a57e38276275db149ce94f2",
+  "protocol_sha256": "fd6080602dd4b66b98c86c82f948711b2ffa9c17a3fab3950d7360f7c8d406ac",
+  "source_sha256": {
+    "bridge/adapters.py": "a05127970eb11bb08cc98ed7ef9e05f9a723f51c66f9a5bfaa9f2242bb6275a6",
+    "bridge/streaming.py": "81e028e405d3da93a8186d151e3183f1a640780d03234efcfe783a8af1551837",
+    "bridge/workflows.py": "0a61b224a6576d1661a7883ad19d2a702017985092cf97afa5c6f7ae511f6a73",
+    "bridge/services.py": "41b71b3f946f0912898558995f2c83f1f09b0cb2d5f9203bfecbef301de4a081",
+    "bridge/workflow_strategies.py": "bb639bfe6467c1da816149fc5918f785f9df8053b3e5fc841f9e0cdef3115124",
+    "bridge/instruments.py": "46d43d4a017f1d32fcd9e05b32316a6fffac27e1a9572ab9ffbbf87338f00322",
+    "bridge/workflow_schemas.py": "74951ad4dedc2519a64ae8a8853da2fbe83c642e73ad12c36542a01f8b4ba58b",
+    "bridge/output_schema.py": "9877d088cad20b89b6b8d7322c4472840f21098e6b5bcb3eb008d84bfccc28cf",
+    "scripts/qualify_quote_workflow_007.py": "36cb89f747d2ed32b73d0c1cea55f1a3a736a776518767d4ea953e34ea84aaf5",
+    "evidence/LOCAL-QUOTE-PROTOCOL-007.json": "fd6080602dd4b66b98c86c82f948711b2ffa9c17a3fab3950d7360f7c8d406ac"
+  },
+  "runtime_binary_sha256": "fe211d00c4754aa67aaa492d2c755ab0f6ef60bf30eee3c0c74a3496189cde17",
+  "runtime_version": "version: 0.9.0-dev (build 12242, commit 3b4d6ab3f)\nbuilt with GNU 11.4.0 for Linux x86_64",
+  "model_download": {
+    "url": "https://huggingface.co/bartowski/Qwen_Qwen3-4B-Instruct-2507-GGUF/resolve/ae44f08e1392f39c0e474af10c3ff8355c8b6688/Qwen_Qwen3-4B-Instruct-2507-Q4_K_M.gguf",
+    "bytes": 2497280736,
+    "sha256": "2fde00ce69dd4899c70d020845e2638353015bba0fdf161b3eb965f2bca4464e",
+    "verified": true,
+    "wall_seconds": 83.23427049499878,
+    "model_license": "Apache-2.0",
+    "original_model": "https://huggingface.co/Qwen/Qwen3-4B-Instruct-2507",
+    "original_revision": "cdbee75f17c01a7cc42f958dc650907174af0554",
+    "quantization_source": "bartowski/Qwen_Qwen3-4B-Instruct-2507-GGUF",
+    "quantization_revision": "ae44f08e1392f39c0e474af10c3ff8355c8b6688",
+    "license_url": "https://huggingface.co/Qwen/Qwen3-4B-Instruct-2507/resolve/cdbee75f17c01a7cc42f958dc650907174af0554/LICENSE",
+    "license_sha256": "832dd9e00a68dd83b3c3fb9f5588dad7dcf337a0db50f7d9483f310cd292e92e",
+    "upstream_lfs": {
+      "sha256": "2fde00ce69dd4899c70d020845e2638353015bba0fdf161b3eb965f2bca4464e",
+      "size": 2497280736
+    },
+    "upstream_digest_matches": true
+  },
+  "model_sha256_matches_receipt": true,
+  "arms": [
+    {
+      "id": "manufacturing_construct",
+      "status": "paused",
+      "wall_seconds": 600.1820220060035,
+      "model_calls": 1,
+      "actions": 0,
+      "verification": {
+        "checks": [],
+        "passed": false,
+        "scope": "No checks executed."
+      },
+      "state_id": "wf_dbd32f2901c4049a7d0b9a62",
+      "events": [
+        {
+          "at": "2026-11-16T15:33:31.952405+00:00",
+          "detail": {
+            "acceptance_source": "Operator-frozen conditions; independence is not inferred.",
+            "spec_hash": "d3c009ef8109234a7cef6d8e4ad1e21a2a7335d46cd30734f52eecfc7ab72992"
+          },
+          "index": 0,
+          "kind": "created",
+          "previous": "0000000000000000000000000000000000000000000000000000000000000000",
+          "sha256": "eb4d5ecc774d20045fd77cd668e171e368030115692dc047a600f226721df453"
+        },
+        {
+          "at": "2026-11-16T15:33:31.957789+00:00",
+          "detail": {
+            "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+            "provider": "local",
+            "role": "builder",
+            "scope": "Waiting for selected service capacity; no model call or construction iteration consumed."
+          },
+          "index": 1,
+          "kind": "model_queued",
+          "previous": "eb4d5ecc774d20045fd77cd668e171e368030115692dc047a600f226721df453",
+          "sha256": "207a008457b49c40f7f98ffac1cde234b9a0a4f29f294552e36e976845d29448"
+        },
+        {
+          "at": "2026-11-16T15:33:31.960667+00:00",
+          "detail": {
+            "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+            "provider": "local",
+            "role": "builder",
+            "run_id": "wf_dbd32f2901c4049a7d0b9a62_7a38b918077a1f24"
+          },
+          "index": 2,
+          "kind": "model_started",
+          "previous": "207a008457b49c40f7f98ffac1cde234b9a0a4f29f294552e36e976845d29448",
+          "sha256": "a0d6172163141c32101faef8e2d99ec999a5b5f734822180a58ed47fac819690"
+        },
+        {
+          "index": 3,
+          "at": "2026-11-16T15:43:32.108930+00:00",
+          "kind": "model_error",
+          "detail": {
+            "run_id": "wf_dbd32f2901c4049a7d0b9a62_7a38b918077a1f24",
+            "role": "builder",
+            "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+            "provider": "local",
+            "code": "PROVIDER_CONNECTION",
+            "message": "Model request failed. Its provider allowance or cost may have been consumed; inspect connection before explicitly resuming.",
+            "usage_status": "UNKNOWN",
+            "session_budget_snapshot": {
+              "currency": "USD",
+              "limit": 0.0,
+              "committed": 0.0,
+              "reserved": 0.0,
+              "remaining": 0.0,
+              "locked": false,
+              "scope": "process-session"
+            }
+          },
+          "previous": "a0d6172163141c32101faef8e2d99ec999a5b5f734822180a58ed47fac819690",
+          "sha256": "446322f26de9aaf6c40b27c17e070e171034ec0f35f845a2ee99bf1cb66e665a"
+        }
+      ],
+      "observations": [
+        {
+          "run_id": "wf_dbd32f2901c4049a7d0b9a62_7a38b918077a1f24",
+          "prompt_sha256": "5f2cca0214199364891517c1556f0611367738b275682ba533f57caf2bf6c93c",
+          "request_schema_sha256": "a7fcb99ddc5b8461cdc42e272b16500cdff1c47ac0d25311eb2dec944fad24bb",
+          "error_code": "PROVIDER_CONNECTION",
+          "wall_seconds": 600.132876882999
+        }
+      ],
+      "artifact_hashes": {},
+      "archive_sha256": "0816bab771c19be8f2e78f58bf2fb15ad4867bb928529f28d50da395e062dc5b"
+    },
+    {
+      "id": "lab_inherit",
+      "status": "BLOCKED",
+      "reason": "Original construction did not pass; no verified capability to inherit."
+    },
+    {
+      "id": "lab_fresh",
+      "status": "paused",
+      "wall_seconds": 1177.1096405119897,
+      "model_calls": 3,
+      "actions": 3,
+      "verification": {
+        "artifact_hashes": {
+          "RUN_INSTRUMENT.py": "46d43d4a017f1d32fcd9e05b32316a6fffac27e1a9572ab9ffbbf87338f00322",
+          "quote.json": "75509a0cf9f4d53d311d8577eb9700269961a084dab2c3d9bec9c7ba431d171d"
+        },
+        "checks": [
+          {
+            "actual": {
+              "declared_cost_cents": 19200
+            },
+            "artifact": "quote.json",
+            "expected": {
+              "declared_cost_cents": 19200,
+              "valid": true,
+              "within_capacity": true
+            },
+            "kind": "instrument",
+            "operations": 7,
+            "passed": false
+          },
+          {
+            "actual": {
+              "declared_cost_cents": 4400
+            },
+            "artifact": "quote.json",
+            "expected": {
+              "declared_cost_cents": 4400,
+              "valid": true,
+              "within_capacity": false
+            },
+            "kind": "instrument",
+            "operations": 7,
+            "passed": false
+          },
+          {
+            "actual": {
+              "declared_cost_cents": 9
+            },
+            "artifact": "quote.json",
+            "expected": {
+              "declared_cost_cents": null,
+              "valid": false,
+              "within_capacity": false
+            },
+            "kind": "instrument",
+            "operations": 7,
+            "passed": false
+          },
+          {
+            "actual": {
+              "declared_cost_cents": 1400
+            },
+            "artifact": "quote.json",
+            "expected": {
+              "declared_cost_cents": 1400,
+              "valid": true,
+              "within_capacity": true
+            },
+            "kind": "instrument",
+            "operations": 7,
+            "passed": false
+          }
+        ],
+        "passed": false,
+        "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification.",
+        "spec_hash": "64982ef4b1c146bc9081019ee106cc840ad789519ad36e5600be8c1981454c6a"
+      },
+      "state_id": "wf_b38e63d70a96754f2747d7a1",
+      "events": [
+        {
+          "at": "2026-11-16T15:43:32.123558+00:00",
+          "detail": {
+            "acceptance_source": "Operator-frozen conditions; independence is not inferred.",
+            "spec_hash": "64982ef4b1c146bc9081019ee106cc840ad789519ad36e5600be8c1981454c6a"
+          },
+          "index": 0,
+          "kind": "created",
+          "previous": "0000000000000000000000000000000000000000000000000000000000000000",
+          "sha256": "632ec31e33d60777a8d812696012798212794765eb190cee0e0ab8f1521d2188"
+        },
+        {
+          "at": "2026-11-16T15:43:32.126236+00:00",
+          "detail": {
+            "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+            "provider": "local",
+            "role": "builder",
+            "scope": "Waiting for selected service capacity; no model call or construction iteration consumed."
+          },
+          "index": 1,
+          "kind": "model_queued",
+          "previous": "632ec31e33d60777a8d812696012798212794765eb190cee0e0ab8f1521d2188",
+          "sha256": "0f89524410f60a898506650772a7f925dc3ae61ecaf7edbf1cf84245a10044cf"
+        },
+        {
+          "at": "2026-11-16T15:43:32.129767+00:00",
+          "detail": {
+            "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+            "provider": "local",
+            "role": "builder",
+            "run_id": "wf_b38e63d70a96754f2747d7a1_fca442fc6b93d938"
+          },
+          "index": 2,
+          "kind": "model_started",
+          "previous": "0f89524410f60a898506650772a7f925dc3ae61ecaf7edbf1cf84245a10044cf",
+          "sha256": "eca19bfeb0371329665068d8f2f906bee05e896c61fcc580c7c1cd1679f2f45b"
+        },
+        {
+          "at": "2026-11-16T15:46:47.108259+00:00",
+          "detail": {
+            "cost": {
+              "accounted": 0.0,
+              "amount": 0.0,
+              "attempts": 1,
+              "basis": "reported_usage_at_user_rates",
+              "complete_cost_known": false,
+              "currency": "USD"
+            },
+            "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+            "provider": "local",
+            "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+            "reported_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+            "requested_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+            "response_sha256": "6caa61606dc080d524fedc6b95b14ef9d82cf4376401d8ee1b8e222ec315ecf0",
+            "role": "builder",
+            "run_id": "wf_b38e63d70a96754f2747d7a1_fca442fc6b93d938",
+            "usage": {
+              "input_tokens": 1297,
+              "output_tokens": 251
+            }
+          },
+          "index": 3,
+          "kind": "model_completed",
+          "previous": "eca19bfeb0371329665068d8f2f906bee05e896c61fcc580c7c1cd1679f2f45b",
+          "sha256": "2bb490ef11987aac89b95fbdadc0c9ad14cf477920a46a7d828db73bd5be89a7"
+        },
+        {
+          "at": "2026-11-16T15:46:47.117014+00:00",
+          "detail": {
+            "outcome": {
+              "artifact": "quote.json",
+              "bytes": 1473,
+              "kind": "instrument",
+              "run": "python3 RUN_INSTRUMENT.py quote.json input.json",
+              "sha256": "2e251db448e1d1c0027d33921ac573eade7f36713d02962461653871d8eba819"
+            },
+            "tool": "construct_instrument"
+          },
+          "index": 4,
+          "kind": "tool_completed",
+          "previous": "2bb490ef11987aac89b95fbdadc0c9ad14cf477920a46a7d828db73bd5be89a7",
+          "sha256": "4361398bdd6b6c766b4459ad25e7305d01ad8b9d8ab1f1ec964801a68bf3c076"
+        },
+        {
+          "at": "2026-11-16T15:46:47.121651+00:00",
+          "detail": {
+            "outcome": {
+              "operations": 17,
+              "output": {
+                "declared_cost_cents": 19200,
+                "valid": false
+              },
+              "scope": "Bounded declarative execution; acceptance must be checked separately."
+            },
+            "tool": "run_instrument"
+          },
+          "index": 5,
+          "kind": "tool_completed",
+          "previous": "4361398bdd6b6c766b4459ad25e7305d01ad8b9d8ab1f1ec964801a68bf3c076",
+          "sha256": "2d214d986737b01a24072a01de6e5f1056b9c1c5df5541cbea04577bc73b2366"
+        },
+        {
+          "at": "2026-11-16T15:46:47.124777+00:00",
+          "detail": {
+            "artifact_hashes": {
+              "RUN_INSTRUMENT.py": "46d43d4a017f1d32fcd9e05b32316a6fffac27e1a9572ab9ffbbf87338f00322",
+              "quote.json": "2e251db448e1d1c0027d33921ac573eade7f36713d02962461653871d8eba819"
+            },
+            "checks": [
+              {
+                "actual": {
+                  "declared_cost_cents": 19200,
+                  "valid": false
+                },
+                "artifact": "quote.json",
+                "expected": {
+                  "declared_cost_cents": 19200,
+                  "valid": true,
+                  "within_capacity": true
+                },
+                "kind": "instrument",
+                "operations": 17,
+                "passed": false
+              },
+              {
+                "actual": {
+                  "declared_cost_cents": 4400,
+                  "valid": false
+                },
+                "artifact": "quote.json",
+                "expected": {
+                  "declared_cost_cents": 4400,
+                  "valid": true,
+                  "within_capacity": false
+                },
+                "kind": "instrument",
+                "operations": 17,
+                "passed": false
+              },
+              {
+                "actual": {
+                  "declared_cost_cents": 9,
+                  "valid": true
+                },
+                "artifact": "quote.json",
+                "expected": {
+                  "declared_cost_cents": null,
+                  "valid": false,
+                  "within_capacity": false
+                },
+                "kind": "instrument",
+                "operations": 17,
+                "passed": false
+              },
+              {
+                "actual": {
+                  "declared_cost_cents": 1400,
+                  "valid": false
+                },
+                "artifact": "quote.json",
+                "expected": {
+                  "declared_cost_cents": 1400,
+                  "valid": true,
+                  "within_capacity": true
+                },
+                "kind": "instrument",
+                "operations": 17,
+                "passed": false
+              }
+            ],
+            "passed": false,
+            "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification.",
+            "spec_hash": "64982ef4b1c146bc9081019ee106cc840ad789519ad36e5600be8c1981454c6a"
+          },
+          "index": 6,
+          "kind": "verification",
+          "previous": "2d214d986737b01a24072a01de6e5f1056b9c1c5df5541cbea04577bc73b2366",
+          "sha256": "f923c881de4a4dd8a3b8331e284aa574f063179d6e124514781d6b8f8677df5c"
+        },
+        {
+          "at": "2026-11-16T15:46:47.132766+00:00",
+          "detail": {
+            "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+            "provider": "local",
+            "role": "builder",
+            "scope": "Waiting for selected service capacity; no model call or construction iteration consumed."
+          },
+          "index": 7,
+          "kind": "model_queued",
+          "previous": "f923c881de4a4dd8a3b8331e284aa574f063179d6e124514781d6b8f8677df5c",
+          "sha256": "480c03a47ab27f9ce47ab05282919e3d3772c952b93de1db3462f2148ce9f19a"
+        },
+        {
+          "at": "2026-11-16T15:46:47.137853+00:00",
+          "detail": {
+            "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+            "provider": "local",
+            "role": "builder",
+            "run_id": "wf_b38e63d70a96754f2747d7a1_8cfe711c5c2cd1c0"
+          },
+          "index": 8,
+          "kind": "model_started",
+          "previous": "480c03a47ab27f9ce47ab05282919e3d3772c952b93de1db3462f2148ce9f19a",
+          "sha256": "b95c2383300407d8f517bfbce6e108323e20a51ab4b7e0976ac2a583552be074"
+        },
+        {
+          "at": "2026-11-16T15:53:09.025058+00:00",
+          "detail": {
+            "cost": {
+              "accounted": 0.0,
+              "amount": 0.0,
+              "attempts": 1,
+              "basis": "reported_usage_at_user_rates",
+              "complete_cost_known": false,
+              "currency": "USD"
+            },
+            "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+            "provider": "local",
+            "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+            "reported_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+            "requested_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+            "response_sha256": "2f705fad931ba07988b4a58656899eabfc072a8f44c355756f587764539e3901",
+            "role": "builder",
+            "run_id": "wf_b38e63d70a96754f2747d7a1_8cfe711c5c2cd1c0",
+            "usage": {
+              "input_tokens": 2618,
+              "output_tokens": 410
+            }
+          },
+          "index": 9,
+          "kind": "model_completed",
+          "previous": "b95c2383300407d8f517bfbce6e108323e20a51ab4b7e0976ac2a583552be074",
+          "sha256": "96f80603768d3d5512b19a91ba9b384034fc867ccfad7d1126095a0519da8888"
+        },
+        {
+          "at": "2026-11-16T15:53:09.030944+00:00",
+          "detail": {
+            "outcome": {
+              "artifact": "quote.json",
+              "bytes": 3309,
+              "kind": "instrument",
+              "run": "python3 RUN_INSTRUMENT.py quote.json input.json",
+              "sha256": "75509a0cf9f4d53d311d8577eb9700269961a084dab2c3d9bec9c7ba431d171d"
+            },
+            "tool": "construct_instrument"
+          },
+          "index": 10,
+          "kind": "tool_completed",
+          "previous": "96f80603768d3d5512b19a91ba9b384034fc867ccfad7d1126095a0519da8888",
+          "sha256": "a3bd9d34ff32369b243aa0bc83e93a225dfcc9569d4f587b2ac56be25ecf7855"
+        },
+        {
+          "at": "2026-11-16T15:53:09.036490+00:00",
+          "detail": {
+            "artifact_hashes": {
+              "RUN_INSTRUMENT.py": "46d43d4a017f1d32fcd9e05b32316a6fffac27e1a9572ab9ffbbf87338f00322",
+              "quote.json": "75509a0cf9f4d53d311d8577eb9700269961a084dab2c3d9bec9c7ba431d171d"
+            },
+            "checks": [
+              {
+                "actual": {
+                  "declared_cost_cents": 19200
+                },
+                "artifact": "quote.json",
+                "expected": {
+                  "declared_cost_cents": 19200,
+                  "valid": true,
+                  "within_capacity": true
+                },
+                "kind": "instrument",
+                "operations": 7,
+                "passed": false
+              },
+              {
+                "actual": {
+                  "declared_cost_cents": 4400
+                },
+                "artifact": "quote.json",
+                "expected": {
+                  "declared_cost_cents": 4400,
+                  "valid": true,
+                  "within_capacity": false
+                },
+                "kind": "instrument",
+                "operations": 7,
+                "passed": false
+              },
+              {
+                "actual": {
+                  "declared_cost_cents": 9
+                },
+                "artifact": "quote.json",
+                "expected": {
+                  "declared_cost_cents": null,
+                  "valid": false,
+                  "within_capacity": false
+                },
+                "kind": "instrument",
+                "operations": 7,
+                "passed": false
+              },
+              {
+                "actual": {
+                  "declared_cost_cents": 1400
+                },
+                "artifact": "quote.json",
+                "expected": {
+                  "declared_cost_cents": 1400,
+                  "valid": true,
+                  "within_capacity": true
+                },
+                "kind": "instrument",
+                "operations": 7,
+                "passed": false
+              }
+            ],
+            "passed": false,
+            "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification.",
+            "spec_hash": "64982ef4b1c146bc9081019ee106cc840ad789519ad36e5600be8c1981454c6a"
+          },
+          "index": 11,
+          "kind": "verification",
+          "previous": "a3bd9d34ff32369b243aa0bc83e93a225dfcc9569d4f587b2ac56be25ecf7855",
+          "sha256": "c591502e064d637f49ac1670ef25254ef21864261c1dfe50acc2cc639a68c6c3"
+        },
+        {
+          "at": "2026-11-16T15:53:09.044679+00:00",
+          "detail": {
+            "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+            "provider": "local",
+            "role": "builder",
+            "scope": "Waiting for selected service capacity; no model call or construction iteration consumed."
+          },
+          "index": 12,
+          "kind": "model_queued",
+          "previous": "c591502e064d637f49ac1670ef25254ef21864261c1dfe50acc2cc639a68c6c3",
+          "sha256": "b12f96faa01f20b925f244f3a82e143868a1fe35993821369994c89b08cc4a14"
+        },
+        {
+          "at": "2026-11-16T15:53:09.053850+00:00",
+          "detail": {
+            "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+            "provider": "local",
+            "role": "builder",
+            "run_id": "wf_b38e63d70a96754f2747d7a1_9bb15b8eea4816df"
+          },
+          "index": 13,
+          "kind": "model_started",
+          "previous": "b12f96faa01f20b925f244f3a82e143868a1fe35993821369994c89b08cc4a14",
+          "sha256": "e96f07ad610fb5c083f900a88c9dc59bca94bbe77ecbfbde903363e9fed1ddd3"
+        },
+        {
+          "index": 14,
+          "at": "2026-11-16T16:03:09.216944+00:00",
+          "kind": "model_error",
+          "detail": {
+            "run_id": "wf_b38e63d70a96754f2747d7a1_9bb15b8eea4816df",
+            "role": "builder",
+            "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+            "provider": "local",
+            "code": "PROVIDER_CONNECTION",
+            "message": "Model request failed. Its provider allowance or cost may have been consumed; inspect connection before explicitly resuming.",
+            "usage_status": "UNKNOWN",
+            "session_budget_snapshot": {
+              "currency": "USD",
+              "limit": 0.0,
+              "committed": 0.0,
+              "reserved": 0.0,
+              "remaining": 0.0,
+              "locked": false,
+              "scope": "process-session"
+            }
+          },
+          "previous": "e96f07ad610fb5c083f900a88c9dc59bca94bbe77ecbfbde903363e9fed1ddd3",
+          "sha256": "df5cd38933c4bc4a1e28140b3059efe18170cc47c62987487ccb50b6ca56e1e2"
+        }
+      ],
+      "observations": [
+        {
+          "run_id": "wf_b38e63d70a96754f2747d7a1_fca442fc6b93d938",
+          "prompt_sha256": "6f6046316f664f94c55564eadbbfd25f62968c767c9465984f110bea860506a9",
+          "request_schema_sha256": "a7fcb99ddc5b8461cdc42e272b16500cdff1c47ac0d25311eb2dec944fad24bb",
+          "response": {
+            "run_id": "wf_b38e63d70a96754f2747d7a1_fca442fc6b93d938",
+            "provider": "local",
+            "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+            "requested_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+            "reported_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+            "text": "{\"summary\":\"Construct quote.json calculator with six inputs and three outputs as specified\",\"actions\":[{\"tool\":\"construct_instrument\",\"name\":\"quote.json\",\"spec\":{\"inputs\":[\"quantity\",\"unit_cost_cents\",\"setup_cents\",\"verification_cents\",\"maintenance_cents\",\"capacity\"],\"outputs\":{\"declared_cost_cents\":{\"op\":\"add\",\"args\":[{\"op\":\"mul\",\"args\":[{\"field\":\"quantity\"},{\"field\":\"unit_cost_cents\"}]},{\"field\":\"setup_cents\"},{\"field\":\"verification_cents\"},{\"field\":\"maintenance_cents\"}]},\"valid\":{\"op\":\"and\",\"args\":[{\"op\":\"gt\",\"args\":[{\"field\":\"quantity\"},{\"op\":\"add\",\"args\":[{\"field\":\"setup_cents\"},{\"field\":\"verification_cents\"},{\"field\":\"maintenance_cents\"}]}]},{\"op\":\"gte\",\"args\":[{\"field\":\"quantity\"},{\"field\":\"capacity\"}]}]}},\"description\":\"Calculates declared cost and validity based on inputs with nonnegative constraints.\"}},{\"tool\":\"run_instrument\",\"name\":\"quote.json\",\"input\":{\"quantity\":96,\"unit_cost_cents\":175,\"setup_cents\":1800,\"verification_cents\":400,\"maintenance_cents\":200,\"capacity\":96}}],\"done\":true}",
+            "usage": {
+              "input_tokens": 1297,
+              "output_tokens": 251
+            },
+            "tool_calls": [],
+            "usage_class": "local_compute",
+            "cost": {
+              "currency": "USD",
+              "amount": 0.0,
+              "accounted": 0.0,
+              "basis": "reported_usage_at_user_rates",
+              "attempts": 1,
+              "complete_cost_known": false
+            },
+            "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+            "structured_output": {
+              "mode": "json_schema",
+              "validated": true,
+              "schema_sha256": "a7fcb99ddc5b8461cdc42e272b16500cdff1c47ac0d25311eb2dec944fad24bb"
+            }
+          },
+          "wall_seconds": 194.95449701699545
+        },
+        {
+          "run_id": "wf_b38e63d70a96754f2747d7a1_8cfe711c5c2cd1c0",
+          "prompt_sha256": "37cbd1ae99732dfbb8274280960709ef15909d057ffed9774c3ae599bdf66f01",
+          "request_schema_sha256": "c24b79f4cd20f18a4b55467374ff2cb4ad0957e201822a76b4014f9620275f17",
+          "response": {
+            "run_id": "wf_b38e63d70a96754f2747d7a1_8cfe711c5c2cd1c0",
+            "provider": "local",
+            "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+            "requested_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+            "reported_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+            "text": "{\"summary\":\"Construct corrected quote calculator with proper validity and capacity checks\",\"actions\":[{\"tool\":\"construct_instrument\",\"name\":\"quote.json\",\"spec\":{\"inputs\":[\"quantity\",\"unit_cost_cents\",\"setup_cents\",\"verification_cents\",\"maintenance_cents\",\"capacity\"],\"outputs\":{\"declared_cost_cents\":{\"op\":\"add\",\"args\":[{\"op\":\"mul\",\"args\":[{\"field\":\"quantity\"},{\"field\":\"unit_cost_cents\"}]},{\"field\":\"setup_cents\"},{\"field\":\"verification_cents\"},{\"field\":\"maintenance_cents\"}]}},\"description\":\"Calculates declared cost and validity based on inputs with nonnegative constraints. valid is true only when all six numeric inputs are nonnegative. If valid, declared_cost_cents = quantity*unit_cost_cents + setup_cents + verification_cents + maintenance_cents; within_capacity = quantity <= capacity. If invalid, return valid=false, declared_cost_cents=null, within_capacity=false. Quantity zero still includes fixed costs.\",\"conditions\":[{\"op\":\"and\",\"args\":[{\"op\":\"gte\",\"args\":[{\"field\":\"quantity\"},{\"literal\":0}]},{\"op\":\"gte\",\"args\":[{\"field\":\"unit_cost_cents\"},{\"literal\":0}]},{\"op\":\"gte\",\"args\":[{\"field\":\"setup_cents\"},{\"literal\":0}]},{\"op\":\"gte\",\"args\":[{\"field\":\"verification_cents\"},{\"literal\":0}]},{\"op\":\"gte\",\"args\":[{\"field\":\"maintenance_cents\"},{\"literal\":0}]},{\"op\":\"gte\",\"args\":[{\"field\":\"capacity\"},{\"literal\":0}]}]},{\"op\":\"and\",\"args\":[{\"op\":\"gt\",\"args\":[{\"field\":\"quantity\"},{\"op\":\"add\",\"args\":[{\"field\":\"setup_cents\"},{\"field\":\"verification_cents\"},{\"field\":\"maintenance_cents\"}]}]},{\"op\":\"gte\",\"args\":[{\"field\":\"quantity\"},{\"field\":\"capacity\"}]}]}],\"limitations\":[\"valid is only true when all inputs are nonnegative\",\"quantity zero includes fixed costs\",\"declared_cost_cents is null when valid is false\",\"within_capacity is false when quantity > capacity\"]}}],\"done\":true}",
+            "usage": {
+              "input_tokens": 2618,
+              "output_tokens": 410
+            },
+            "tool_calls": [],
+            "usage_class": "local_compute",
+            "cost": {
+              "currency": "USD",
+              "amount": 0.0,
+              "accounted": 0.0,
+              "basis": "reported_usage_at_user_rates",
+              "attempts": 1,
+              "complete_cost_known": false
+            },
+            "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+            "structured_output": {
+              "mode": "json_schema",
+              "validated": true,
+              "schema_sha256": "c24b79f4cd20f18a4b55467374ff2cb4ad0957e201822a76b4014f9620275f17"
+            }
+          },
+          "wall_seconds": 381.8741955959995
+        },
+        {
+          "run_id": "wf_b38e63d70a96754f2747d7a1_9bb15b8eea4816df",
+          "prompt_sha256": "4614d449fd26dfdfdbe77e936aec98528ecb483d6b7aaba9e0288eb4a39a33d2",
+          "request_schema_sha256": "679a1644f95952227495121764b76ec68aea37c2ddf5c40a341a2b3ff9bf60d0",
+          "error_code": "PROVIDER_CONNECTION",
+          "wall_seconds": 600.1390514669911
+        }
+      ],
+      "artifact_hashes": {
+        "RUN_INSTRUMENT.py": {
+          "bytes": 15742,
+          "kind": "trusted_runner",
+          "sha256": "46d43d4a017f1d32fcd9e05b32316a6fffac27e1a9572ab9ffbbf87338f00322"
+        },
+        "quote.json": {
+          "bytes": 3309,
+          "kind": "instrument",
+          "sha256": "75509a0cf9f4d53d311d8577eb9700269961a084dab2c3d9bec9c7ba431d171d"
+        }
+      },
+      "archive_sha256": "9eea8d992fb9a737287ba1f36b037e361a198d9babe7fec2aa6e7f18d38567db"
+    }
+  ],
+  "outside_execution": [],
+  "numerical_boundary": [],
+  "status": "FAIL",
+  "claims": {
+    "live_local_inference": true,
+    "useful_artifact_constructed": false,
+    "successor_reuse_accepted": false,
+    "economic_superiority": "NOT_ESTABLISHED",
+    "novelty": "NOT_ESTABLISHED",
+    "commercial_validation": "NOT_ESTABLISHED"
+  },
+  "full_cost_boundaries": {
+    "known": "API charges zero because local CPU inference; actual tokens and elapsed/CPU telemetry recorded. Declared planning costs are explicitly authored inputs.",
+    "unknown": [
+      "electricity and hardware depreciation",
+      "human authoring/review/setup/download costs",
+      "future maintenance and validation",
+      "taxes, financing and acquisition not supplied in the input contract",
+      "actual demand, buyer acceptance and collected revenue"
+    ],
+    "comparison": "Original construction costs remain visible for inheritance. No economic superiority, profitability, novelty or autonomous scientific invention is presumed."
+  },
+  "ordinary_control": {
+    "status": "PASS",
+    "model_calls": 0,
+    "cases": 11,
+    "method": "Direct conventional scalar arithmetic and sign/capacity comparisons, same contract and inputs.",
+    "cost_scope": "No inference requests. Human implementation, review and operating cost are unmeasured, not zero."
+  },
+  "discovery": {
+    "models": [
+      {
+        "id": "Qwen3-4B-Instruct-2507-Q4_K_M",
+        "configured": true
+      }
+    ],
+    "scope": "Provider-reported first page; listing does not prove generation access or model capability.",
+    "has_more": false
+  },
+  "source_unchanged": true,
+  "final_source_sha256": {
+    "bridge/adapters.py": "a05127970eb11bb08cc98ed7ef9e05f9a723f51c66f9a5bfaa9f2242bb6275a6",
+    "bridge/streaming.py": "81e028e405d3da93a8186d151e3183f1a640780d03234efcfe783a8af1551837",
+    "bridge/workflows.py": "0a61b224a6576d1661a7883ad19d2a702017985092cf97afa5c6f7ae511f6a73",
+    "bridge/services.py": "41b71b3f946f0912898558995f2c83f1f09b0cb2d5f9203bfecbef301de4a081",
+    "bridge/workflow_strategies.py": "bb639bfe6467c1da816149fc5918f785f9df8053b3e5fc841f9e0cdef3115124",
+    "bridge/instruments.py": "46d43d4a017f1d32fcd9e05b32316a6fffac27e1a9572ab9ffbbf87338f00322",
+    "bridge/workflow_schemas.py": "74951ad4dedc2519a64ae8a8853da2fbe83c642e73ad12c36542a01f8b4ba58b",
+    "bridge/output_schema.py": "9877d088cad20b89b6b8d7322c4472840f21098e6b5bcb3eb008d84bfccc28cf",
+    "scripts/qualify_quote_workflow_007.py": "36cb89f747d2ed32b73d0c1cea55f1a3a736a776518767d4ea953e34ea84aaf5",
+    "evidence/LOCAL-QUOTE-PROTOCOL-007.json": "fd6080602dd4b66b98c86c82f948711b2ffa9c17a3fab3950d7360f7c8d406ac"
+  },
+  "resource": {
+    "child_cpu_seconds": 3322.920017,
+    "api_paid_requests": 0,
+    "local_compute_full_cost": null
+  },
+  "comparison_verdict": "One prospective observation per strategy, not statistical superiority. Conventional direct arithmetic accepts every fixed case with zero inference. Inheritance can reuse a verified artifact, but no superior outcome or complete-cost advantage over that capable control is established. Initial construction and all failed attempts remain charged/visible."
+}
