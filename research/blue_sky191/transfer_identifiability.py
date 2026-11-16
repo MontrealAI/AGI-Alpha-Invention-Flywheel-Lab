@@ -145,6 +145,32 @@ def predicted_force(coefficients, a, b, phase):
     return sum(x * y for x, y in zip(vals, design_row(a, b, phase)))
 
 
+def within_world_ratio(coefficients, state):
+    """Static/dynamic ratio at one hypothetical, explicitly specified contact state."""
+    if not isinstance(state, (tuple, list)) or len(state) != 2:
+        raise Refused("TWO_CONTACT_AREAS_REQUIRED")
+    a, b = state
+    static = predicted_force(coefficients, a, b, "s")
+    dynamic = predicted_force(coefficients, a, b, "d")
+    if dynamic <= 0:
+        raise Refused("POSITIVE_DYNAMIC_FORCE_REQUIRED")
+    return static / dynamic
+
+
+def within_world_improvement(coefficients, low, high):
+    """Change of contact response *inside the same coefficient world*.
+
+    Across-world comparisons at fixed geometry are not the 5% load-selective
+    criterion. Low/high areas are abstract test states, not measured indentation
+    geometry or source-fitted transfer coefficients.
+    """
+    low_ratio = within_world_ratio(coefficients, low)
+    high_ratio = within_world_ratio(coefficients, high)
+    if low_ratio <= 0:
+        raise Refused("POSITIVE_LOW_STATIC_DYNAMIC_RATIO_REQUIRED")
+    return high_ratio / low_ratio - 1
+
+
 def toy_contrast():
     world0 = [2, 4, 0, 1, 2, 0]
     world1 = [2, 4, 1, 1, 2, 0]
@@ -153,18 +179,35 @@ def toy_contrast():
             for a, b in ((area, 0), (0, area)):
                 if predicted_force(world0, a, b, phase) != predicted_force(world1, a, b, phase):
                     raise Refused("PURE_OBSERVATION_NONIDENTITY")
-    ratio0 = predicted_force(world0, 1, 1, "s") / predicted_force(world0, 1, 1, "d")
-    ratio1 = predicted_force(world1, 1, 1, "s") / predicted_force(world1, 1, 1, "d")
-    improvement = ratio1 / ratio0 - 1
-    if (ratio0, ratio1, improvement) != (Fraction(2), Fraction(13, 6), Fraction(1, 12)):
-        raise Refused("CONTRAST_ARITHMETIC_CHANGED")
+    low, high = (1, 0), (1, 1)
+    low0, high0 = within_world_ratio(world0, low), within_world_ratio(world0, high)
+    low1, high1 = within_world_ratio(world1, low), within_world_ratio(world1, high)
+    change0 = within_world_improvement(world0, low, high)
+    change1 = within_world_improvement(world1, low, high)
+    target = Fraction(1, 20)
+    if (low0, high0, change0, low1, high1, change1) != (
+        Fraction(2), Fraction(2), Fraction(0),
+        Fraction(2), Fraction(13, 6), Fraction(1, 12)
+    ):
+        raise Refused("WITHIN_WORLD_CONTRAST_ARITHMETIC_CHANGED")
+    if not (change0 < target <= change1):
+        raise Refused("WITHIN_WORLD_TARGET_SPLIT_NOT_ESTABLISHED")
     return {"pure_observations_indistinguishable": True,
-            "baseline_mixed_ratio": str(ratio0),
-            "alternative_mixed_ratio": str(ratio1),
-            "relative_improvement": str(improvement),
-            "source_target": str(Fraction(1, 20)),
-            "world0_passes_target": False, "world1_passes_target": True,
-            "world_coefficients_are_synthetic_not_source_estimates": True}
+            "baseline_mixed_ratio": str(high0),
+            "alternative_mixed_ratio": str(high1),
+            "relative_improvement": str(change1),
+            "source_target": str(target),
+            "world0_passes_target": change0 >= target,
+            "world1_passes_target": change1 >= target,
+            "world_coefficients_are_synthetic_not_source_estimates": True,
+            "within_world_target": {
+                "states": {"low": [1, 0], "high": [1, 1]},
+                "world0": {"low_ratio": str(low0), "high_ratio": str(high0),
+                           "improvement": str(change0), "target_met": change0 >= target},
+                "world1": {"low_ratio": str(low1), "high_ratio": str(high1),
+                           "improvement": str(change1), "target_met": change1 >= target},
+                "contact_states_are_hypothetical_not_measured": True,
+                "between_world_comparison_not_acceptance": True}}
 
 
 def analyze(fixture, registration):
