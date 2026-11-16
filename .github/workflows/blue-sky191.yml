@@ -33,7 +33,7 @@ jobs:
         run: |
           git rev-parse HEAD
           sha256sum research/blue_sky064/public_calibration.json campaign/blue-sky-064/friction-probe/MIXED_REGISTRATION.json
-          git show 783a14d5f966a193973d6be741cfa2e2999c6a18:campaign/blue-sky-191/PROTOCOL.md >/dev/null
+          test "$(git hash-object campaign/blue-sky-191/PROTOCOL.md)" = "7814b392f2474c6eafbc23f8009b9cf4d4e1170a"
       - name: Exact matrix-rank and counterexample regressions
         run: python3 -B -m unittest -v tests.test_blue_sky191
       - name: Create source-pinned compact research result (no financial operation)
