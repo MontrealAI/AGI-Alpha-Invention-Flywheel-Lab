@@ -13,8 +13,10 @@ class QuoteTrial007Tests(unittest.TestCase):
         old_path = PRODUCT/'evidence/LOCAL-QUOTE-PROTOCOL-006.json'
         old = json.loads(old_path.read_text())
         new = json.loads((PRODUCT/'evidence/LOCAL-QUOTE-PROTOCOL-007.json').read_text())
-        for key in old.keys() - {'schema', 'purpose', 'registered_at'}:
+        for key in old.keys() - {'schema', 'purpose', 'registered_at', 'finite_inference_budget'}:
             self.assertEqual(new[key], old[key], key)
+        expected_budget = dict(old['finite_inference_budget'], max_output_tokens_per_call=2048)
+        self.assertEqual(new['finite_inference_budget'], expected_budget)
         self.assertEqual(new['strategy_comparison']['original_protocol_sha256'], hashlib.sha256(old_path.read_bytes()).hexdigest())
 
     def test_equal_call_allocation_with_different_role_allocation(self):
