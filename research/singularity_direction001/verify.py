@@ -2,7 +2,8 @@
 
 Does not call scipy.optimize or trust its solver success flag. It reconstructs
 the lossless DC constraints and checks primal feasibility plus a certified
-no-switch LP lower bound using signed dual multipliers. Tolerance: 2e-5 MW.
+no-switch and every allowed one-opening LP optimum using signed dual multipliers.
+Tolerance: 2e-5 MW; this remains DC-only and retrospectively selected.
 """
 from __future__ import annotations
 
@@ -95,9 +96,10 @@ def check_dual(case, unavailable, witness):
 
 
 def verify(evidence):
-    require(evidence['schema']=='montreal-ai/reality-probe-001/v1','SCHEMA')
+    require(evidence['schema']=='montreal-ai/reality-probe-001/v2','SCHEMA')
     require(evidence['stress']==STRESS,'STRESS_CHANGED')
     require(len(evidence['cases'])==len(SOURCE),'CASE_COUNT')
+    require(sorted(r['case'] for r in evidence['cases'])==sorted(SOURCE),'CASE_COVERAGE')
     outcomes=[]
     for result in evidence['cases']:
         case=parse_case(result['case'])
@@ -114,14 +116,31 @@ def verify(evidence):
         check_dual(case,{outage,sw},result['switched'])
         require(near(result['modeled_gain_mw'],no-after) and no-after>0.01,'NO_PROVED_GAIN')
         rows=result['responses'];ids=[x['switch'] for x in rows]
-        require(sorted(ids)==[i for i in range(len(case['lines'])) if i!=outage],'INCOMPLETE_SWITCH_SEARCH')
-        selected=next(x['unserved_mw'] for x in rows if x['switch']==sw)
-        require(near(selected,after),'RESPONSE_MISMATCH')
-        # This ranking is an index assertion, not proof of the other candidates' optima.
-        require(all(r['unserved_mw']>=after-TOL for r in rows),'SELECTED_NOT_REPORTED_BEST')
+        require(sorted(ids)==[i for i in range(len(case['lines'])) if i!=outage],
+                'INCOMPLETE_SWITCH_SEARCH')
+        # Each alternative must have a complete *independently checked* optimum.
+        # Scalar-only rankings can be forged while retaining the selected witness.
+        max_gap=0.0
+        for row in rows:
+            idx=row['switch']
+            witness=row['witness']
+            require(near(row['unserved_mw'],witness['unserved_mw']),
+                    'RESPONSE_WITNESS_MISMATCH')
+            optimum_lower=check_dual(case,{outage,idx},witness)
+            require(near(row['unserved_mw'],optimum_lower),
+                    'RESPONSE_DUAL_MISMATCH')
+            max_gap=max(max_gap,abs(row['unserved_mw']-optimum_lower))
+            require(optimum_lower>=after-TOL,
+                    'COMPETING_SWITCH_BEATS_SELECTED')
+        selected=next(x for x in rows if x['switch']==sw)
+        require(near(selected['unserved_mw'],after) and
+                near(selected['witness']['unserved_mw'],after),'RESPONSE_MISMATCH')
         outcomes.append({'case':case['case'],'baseline_primal_mw':round(no,8),
                          'baseline_dual_lower_mw':round(no_lower,8),
                          'new_topology_primal_mw':round(after,8),'gain_mw':round(no-after,8),
+                         'certified_alternative_switches':len(rows),
+                         'maximum_candidate_objective_dual_gap_mw':round(max_gap,10),
+                         'ranking_certificate':'ALL_ONE_EXTRA_SWITCH_LP_OPTIMA_VERIFIED',
                          'status':'PASS_SCOPED_DC_PROOF'})
     return {'status':'PASS_SCOPED_DC_PROOF','results':outcomes,
             'not_established':'Real grid operation; AC feasibility, control authorization, innovation priority, payments, or institution-wide advantage'}
