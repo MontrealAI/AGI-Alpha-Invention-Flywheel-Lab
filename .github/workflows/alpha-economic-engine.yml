@@ -5,7 +5,7 @@ on:
     paths: ['.github/workflows/alpha-economic-engine.yml', 'connected_enterprise/alpha_economic/**', 'tests/test_alpha_economic*', 'scripts/alpha_economic*']
   workflow_dispatch:
 permissions:
-  contents: read
+  contents: write
 jobs:
   engine:
     runs-on: ubuntu-latest
@@ -13,8 +13,9 @@ jobs:
     steps:
       - name: Record platform window
         run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
+          ref: ${{ github.sha }}
           sparse-checkout: |
             connected_enterprise
             adaptive_enterprise
@@ -30,36 +31,79 @@ jobs:
             mechanisms
             flywheel
             products/alpha-genesis-harness/bridge
+            products/alpha-genesis-harness/LICENSE
             tests
             scripts
-      - name: Produce exact public development sources
+            docs/alpha-economic-engine
+            .alpha-transfer
+      - name: Assemble explicitly authorized public source on this feature branch only
+        if: ${{ github.ref == 'refs/heads/feature/alpha-economic-engine-full-20261116' }}
         run: |
           python3 - <<'PY'
-          import hashlib, json, pathlib, subprocess, zipfile
-          root=pathlib.Path('.')
-          names=subprocess.check_output(['git','ls-files','-z']).decode().split('\0')
-          chosen=[]
-          for name in names:
-              p=root/name
-              if name and p.is_file() and not p.is_symlink() and (p.suffix in {'.py','.json','.yaml','.txt'} or name=='AGENTS.md') and not name.startswith(('campaign/','docs/','artifacts/','evidence/','historical/','inventions/','events/')):
-                  chosen.append(name)
-          with zipfile.ZipFile('/tmp/alpha-source.zip','w',zipfile.ZIP_DEFLATED) as z:
-              hashes={}
-              for name in chosen:
-                  data=(root/name).read_bytes()
-                  z.writestr(name,data); hashes[name]=hashlib.sha256(data).hexdigest()
-              z.writestr('SOURCE-IDENTITY.json',json.dumps({'revision':subprocess.check_output(['git','rev-parse','HEAD']).decode().strip(),'files':hashes},sort_keys=True))
-          print('Exported',len(chosen),'public tracked source files; no account state or credentials.')
+          import base64, hashlib, json, pathlib, subprocess, zlib
+          manifest=pathlib.Path('scripts/alpha_economic_delivery.json')
+          if not manifest.exists():
+              print('No source transfer pending.');raise SystemExit(0)
+          spec=json.loads(manifest.read_text())
+          data=''.join(pathlib.Path('.alpha-transfer/part'+str(i)).read_text() for i in range(spec['parts']))
+          decompressor=zlib.decompressobj()
+          raw=decompressor.decompress(base64.b64decode(data,validate=True),2_000_001)
+          if len(raw)>2_000_000 or decompressor.unconsumed_tail or not decompressor.eof:raise ValueError('Bounded source transfer required')
+          if len(raw)!=spec['uncompressed_bytes'] or hashlib.sha256(raw).hexdigest()!=spec['sha256']:raise ValueError('Source transfer identity mismatch')
+          payload=json.loads(raw)
+          if payload['schema']!='alpha-economic/public-source-transfer/v1':raise ValueError('Unexpected source transfer schema')
+          allowed=('connected_enterprise/alpha_economic/','tests/test_alpha_economic','scripts/alpha_economic','docs/alpha-economic-engine/')
+          names=[]
+          for item in payload['files']:
+              p=pathlib.Path(item['path'])
+              if p.is_absolute() or '..' in p.parts or not item['path'].startswith(allowed) or p.exists() or p.suffix not in ('.py','.md','.json'):raise ValueError('Source destination outside authorized new files')
+              data=item['content'].encode()
+              if hashlib.sha256(data).hexdigest()!=item['sha256']:raise ValueError('Source file identity mismatch')
+              names.append(str(p));p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(data)
+          if set(payload['native_before'])!={'commercial/ledger.py','connected_enterprise/finance.py'}:raise ValueError('Unexpected native integration scope')
+          for name,expected in payload['native_before'].items():
+              if hashlib.sha256(pathlib.Path(name).read_bytes()).hexdigest()!=expected:raise ValueError('Native source changed; reconcile before integration')
+          subprocess.run(['git','apply','--check','-'],input=payload['native_patch'].encode(),check=True)
+          subprocess.run(['git','apply','-'],input=payload['native_patch'].encode(),check=True)
+          subprocess.run(['python3','-m','unittest','discover','-s','tests','-p','test_alpha_economic*.py','-v'],check=True)
+          subprocess.run(['git','config','user.name','ALPHA engineering'],check=True)
+          subprocess.run(['git','config','user.email','alpha-engineering@users.noreply.github.com'],check=True)
+          subprocess.run(['git','add','--',*names,*payload['native_before']],check=True)
+          subprocess.run(['git','rm','--','scripts/alpha_economic_delivery.json',*[f'.alpha-transfer/part{i}' for i in range(spec['parts'])]],check=True)
+          subprocess.run(['git','commit','-m','feat: connect ALPHA discovery, construction, delivery, native settlement and earned reinvestment'],check=True)
+          subprocess.run(['git','push','origin','HEAD:refs/heads/feature/alpha-economic-engine-full-20261116'],check=True)
           PY
-      - name: Qualify integrated engine when present
+      - name: Qualify exact integrated source
         run: |
-          if [ -f connected_enterprise/alpha_economic/__main__.py ]; then
-            python3 -m unittest discover -s tests -p 'test_alpha_economic*.py' -v
-          else
-            echo 'Source-transfer bootstrap only; no integrated-engine qualification claimed.'
+          if [ ! -f connected_enterprise/alpha_economic/__main__.py ]; then
+            echo 'Source transfer not yet complete; no engine qualification claimed.'
+            exit 0
           fi
-      - uses: actions/upload-artifact@v4
+          mkdir -p "$RUNNER_TEMP/alpha-public"
+          git rev-parse HEAD > "$RUNNER_TEMP/alpha-public/SOURCE-REVISION.txt"
+          python3 -m unittest discover -s tests -p 'test_alpha_economic*.py' -v 2>&1 | tee "$RUNNER_TEMP/alpha-public/ENGINE-TESTS.txt"
+          python3 -m unittest discover -s tests -p 'test_connected_finance.py' -v 2>&1 | tee "$RUNNER_TEMP/alpha-public/NATIVE-REGRESSION.txt"
+          python3 -m unittest discover -s tests -p 'test_alpha_runtime_ignition.py' -v 2>&1 | tee "$RUNNER_TEMP/alpha-public/IGNITION-REGRESSION.txt"
+          python3 -m connected_enterprise.alpha_economic demo --output "$RUNNER_TEMP/alpha-demo" > "$RUNNER_TEMP/alpha-public/DEMO-LOG.txt"
+          cp "$RUNNER_TEMP/alpha-demo/RESULTS.json" "$RUNNER_TEMP/alpha-public/RESULTS.json"
+          python3 scripts/alpha_economic_package.py --output "$RUNNER_TEMP/alpha-public/ALPHA_ECONOMIC_ENGINE_0.2.0.zip" > "$RUNNER_TEMP/alpha-public/PACKAGE.json"
+          mkdir -p "$RUNNER_TEMP/alpha-extracted"
+          python3 -m zipfile -e "$RUNNER_TEMP/alpha-public/ALPHA_ECONOMIC_ENGINE_0.2.0.zip" "$RUNNER_TEMP/alpha-extracted"
+          cd "$RUNNER_TEMP/alpha-extracted"
+          python3 -m unittest discover -s tests -p 'test_alpha_economic*.py' -v 2>&1 | tee "$RUNNER_TEMP/alpha-public/EXTRACTED-TESTS.txt"
+          python3 -m connected_enterprise.alpha_economic demo --output "$RUNNER_TEMP/alpha-extracted-demo" > "$RUNNER_TEMP/alpha-public/EXTRACTED-DEMO.txt"
+      - name: Actual pinned local CPU model in the connected operating loop
+        run: |
+          if [ -f scripts/alpha_economic_local_model.py ]; then
+            python3 scripts/alpha_economic_local_model.py --work "$RUNNER_TEMP/alpha-local-model-work" --public "$RUNNER_TEMP/alpha-public/local-model"
+          else
+            echo 'No integrated local-model source yet; no inference qualification claimed.'
+          fi
+      - name: Preserve only public code and bounded evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: alpha-source-${{ github.sha }}
-          path: /tmp/alpha-source.zip
-          retention-days: 1
+          name: alpha-economic-engine-${{ github.run_id }}
+          path: ${{ runner.temp }}/alpha-public
+          if-no-files-found: warn
+          retention-days: 7
