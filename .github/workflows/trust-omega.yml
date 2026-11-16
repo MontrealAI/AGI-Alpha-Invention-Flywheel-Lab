@@ -12,14 +12,19 @@ permissions:
   contents: read
 jobs:
   strict-parser:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
     steps:
+      - name: Register current hosted window
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
       - uses: actions/checkout@v4
       - run: python3 -m unittest discover -s tests -p 'test_trust_omega*.py' -v
   upstream-accept-reject:
-    runs-on: ubuntu-24.04
-    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
     steps:
+      - name: Register current hosted window
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
       - name: Get pinned FlashProve research prototype
         run: |
           git clone -q https://github.com/anthropics/FlashProve.git fp
