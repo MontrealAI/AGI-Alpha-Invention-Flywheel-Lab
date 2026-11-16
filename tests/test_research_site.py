@@ -443,7 +443,7 @@ class ResearchSiteTests(unittest.TestCase):
             self.assertIn('prefers-reduced-motion', styles)
             self.assertIn('@media(max-width:', styles)
             self.assertNotIn('↗', text)
-            if name not in ('frontier-conclave.html', 'index.html', 'out-series.html', 'studio.html', 'continuity-omega-media.html', 'continuity-omega-media-fr.html', 'alpha-genesis-live.html', 'alpha-genesis-live-studio.html'):
+            if name not in ('frontier-conclave.html', 'index.html', 'out-series.html', 'studio.html', 'continuity-omega-media.html', 'continuity-omega-media-fr.html', 'alpha-genesis-live.html', 'alpha-genesis-live-studio.html', 'goal-genesis-omega.html'):
                 self.assertIn('type="application/pdf"', text)
                 self.assertIn('download>', text)
                 self.assertIn('Votre navigateur n’affiche pas les PDF intégrés' if french else 'Your browser does not display embedded PDFs', text)
