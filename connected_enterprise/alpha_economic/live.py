@@ -42,6 +42,33 @@ class LiveEngine(Engine):
     def _advance_one(self,row):
         c,job,data,stage=row['body'],row['id'],row['data'],row['state']
         if stage=='CONSENTED':
+            # An accepted quote is not authority to create a new charge after expiry.
+            # An existing Checkout must be re-read: an expired contract can still
+            # have a provider-observed payment which requires a refund, not a
+            # silent decline or an unauthorized late production run.
+            if int(self.clock()) > c['expires_at']:
+                if not data.get('checkout'):
+                    self.state.move(job,'DECLINED',{'reason':'CONSENT_EXPIRED_BEFORE_CHECKOUT'})
+                    return True
+                observed=self.stripe.checkout_status(c,data['checkout']['id'])
+                if observed.get('pending'):
+                    if observed.get('expired'):
+                        self.state.move(job,'DECLINED',{'reason':'PROVIDER_CONFIRMED_CHECKOUT_EXPIRED_UNPAID'})
+                        return True
+                    # A non-expired/indeterminate Checkout may still collect.
+                    # Stop rather than abandon a potentially funded obligation.
+                    self.state.log(job,'EXPIRED_CHECKOUT_REQUIRES_RECONCILIATION',
+                                   {'checkout_id':data['checkout']['id'],'automatic_revenue':False})
+                    self.state.pause(True)
+                    return False
+                if observed.get('payment_intent') and observed.get('contract_sha256')==digest(c):
+                    self.state.move(job,'REFUND_PENDING',
+                                    {'provider_payment':observed,'reason':'PAYMENT_AFTER_CONTRACT_EXPIRY'})
+                    return True
+                self.state.log(job,'EXPIRED_CHECKOUT_AMBIGUOUS_PROVIDER_EVIDENCE',
+                               {'checkout_id':data['checkout']['id'],'automatic_revenue':False})
+                self.state.pause(True)
+                return False
             if not data.get('checkout'):
                 session=self._external_effect(job+'-checkout',{'operation':'checkout','job':job,'contract':digest(c)},lambda day:self.stripe.checkout(c,self.success_url,self.cancel_url))
                 self.state.update(job,{'checkout':session});return True
@@ -49,7 +76,11 @@ class LiveEngine(Engine):
                 notice=self._external_effect(job+'-payment-notice',{'operation':'payment-notice','job':job},lambda day:self.buyer.payment(c,data['checkout']))
                 self.state.update(job,{'payment_notice':{'sent':True,'reply':notice}});return True
             paid=self.stripe.checkout_status(c,data['checkout']['id'])
-            if paid.get('pending'):return False
+            if paid.get('pending'):
+                if paid.get('expired'):
+                    self.state.move(job,'DECLINED',{'reason':'PROVIDER_CONFIRMED_CHECKOUT_EXPIRED_UNPAID'})
+                    return True
+                return False
             # Persist provider observation before financial recognition. Gateway
             # independently re-verifies the provider reference and actual costs.
             self.state.update(job,{'provider_payment':paid})
