@@ -1,0 +1,19 @@
+name: PROOF OMEGA exact policy assurance
+on:
+  pull_request:
+    paths:
+      - 'products/proof-omega/**'
+      - '.github/workflows/proof-omega.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Adversarial certificate and runtime tests
+        run: python3 -m unittest discover -s products/proof-omega/tests -v
+      - name: Independently audit a complete finite policy proof and a counterexample
+        run: python3 products/proof-omega/proof_omega.py demo --out /tmp/proof-omega-demo

@@ -1,0 +1,174 @@
+{
+  "schema": "proof-omega.finite-policy.v1",
+  "name": "escrow_bug_double_hold",
+  "variables": {
+    "buyer": [
+      0,
+      2
+    ],
+    "escrow": [
+      0,
+      1
+    ],
+    "seller": [
+      0,
+      1
+    ],
+    "settled": [
+      0,
+      1
+    ],
+    "refunded": [
+      0,
+      1
+    ]
+  },
+  "initial": {
+    "buyer": 2,
+    "escrow": 0,
+    "seller": 0,
+    "settled": 0,
+    "refunded": 0
+  },
+  "actions": [
+    {
+      "name": "reserve",
+      "when": [
+        "and",
+        [
+          "eq",
+          "escrow",
+          0
+        ],
+        [
+          "and",
+          [
+            "eq",
+            "settled",
+            0
+          ],
+          [
+            "and",
+            [
+              "eq",
+              "refunded",
+              0
+            ],
+            [
+              "ge",
+              "buyer",
+              1
+            ]
+          ]
+        ]
+      ],
+      "set": {
+        "buyer": [
+          "sub",
+          "buyer",
+          1
+        ],
+        "escrow": [
+          "add",
+          "escrow",
+          1
+        ]
+      }
+    },
+    {
+      "name": "settle",
+      "when": [
+        "and",
+        [
+          "eq",
+          "escrow",
+          1
+        ],
+        [
+          "eq",
+          "settled",
+          0
+        ]
+      ],
+      "set": {
+        "escrow": [
+          "add",
+          "escrow",
+          1
+        ],
+        "seller": [
+          "add",
+          "seller",
+          1
+        ],
+        "settled": 1
+      }
+    },
+    {
+      "name": "refund",
+      "when": [
+        "and",
+        [
+          "eq",
+          "escrow",
+          1
+        ],
+        [
+          "eq",
+          "refunded",
+          0
+        ]
+      ],
+      "set": {
+        "escrow": [
+          "sub",
+          "escrow",
+          1
+        ],
+        "buyer": [
+          "add",
+          "buyer",
+          1
+        ],
+        "refunded": 1
+      }
+    }
+  ],
+  "invariants": [
+    {
+      "name": "conservation",
+      "assert": [
+        "eq",
+        [
+          "add",
+          [
+            "add",
+            "buyer",
+            "escrow"
+          ],
+          "seller"
+        ],
+        2
+      ]
+    },
+    {
+      "name": "not_refunded_and_settled",
+      "assert": [
+        "not",
+        [
+          "and",
+          [
+            "eq",
+            "refunded",
+            1
+          ],
+          [
+            "eq",
+            "settled",
+            1
+          ]
+        ]
+      ]
+    }
+  ]
+}
