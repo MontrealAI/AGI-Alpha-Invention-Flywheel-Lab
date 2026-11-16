@@ -31,6 +31,8 @@ The included dataset is **100% fictional/synthetic**: ten invoice lines, two fic
 
 **Executive sales assets:** [Private-company buyer proposal](BUYER_PROPOSAL.md) · [Pricing, competitor comparison and demand gates](COMMERCIAL.md) · [Software licence](LICENSE). The CAD $25,000 and CAD $120,000 offers are *hypotheses*, not sales.
 
+**Enterprise-scale synthetic QA:** `python3 -m products.contract_value_omega.stress --lines 25000` generates a completely fictional 25,000-line, 20-supplier case with 250 planted rate anomalies, incomplete payment evidence and applied credits. The engine and its separate reconciler must agree on the **CAD 2,375** net **synthetic** review amount, split into CAD 2,000 on fully paid sample invoices and CAD 375 on incomplete-payment samples, with **zero recovered cash**. This is a capacity and financial-integrity test, not real buyer value, external demand or a peer benchmark.
+
 ### Use on authorized private-customer data
 
 Prepare a directory containing exactly five named input CSVs. Copy the headers from the demo, maintaining the exact meaning below. Exports remain on the buyer's infrastructure unless a separate, legitimate disclosure arrangement is made.
