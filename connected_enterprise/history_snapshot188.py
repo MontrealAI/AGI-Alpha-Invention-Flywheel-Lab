@@ -8,7 +8,7 @@ from dataclasses import dataclass
 from types import MappingProxyType
 from typing import Mapping
 
-from commercial.ledger import digest
+from commercial.ledger import digest, strict_json
 from connected_enterprise import transition_evidence as te
 
 
@@ -19,9 +19,33 @@ _MAX_NODES = 150_000
 @dataclass(frozen=True)
 class HistoryEvidenceSnapshot:
     root_ticket_digest: str
+    root_ticket_bytes: bytes
     closure_digest: str
     ticket_count: int
     blobs: Mapping[str, bytes]
+
+    def reopen_ticket(self):
+        """Strictly reconstruct the captured historical ticket and full CAS proof.
+
+        This authenticates only byte integrity and closure consistency. HMAC,
+        account/source authority and writer leases are deliberately absent.
+        No original mutable evidence directory is consulted.
+        """
+        raw = self.root_ticket_bytes
+        if type(raw) is not bytes or len(raw) > te.MAX_TICKET_BYTES:
+            raise ValueError("HISTORY_SNAPSHOT_ROOT_BYTES_INVALID")
+        ticket = strict_json(raw)
+        if te.canonical(ticket) != raw or digest(ticket) != self.root_ticket_digest:
+            raise ValueError("HISTORY_SNAPSHOT_ROOT_CHANGED")
+        with self.evidence():
+            rebuilt = capture_historical_evidence(ticket)
+        if (rebuilt.root_ticket_digest != self.root_ticket_digest
+                or rebuilt.root_ticket_bytes != raw
+                or rebuilt.closure_digest != self.closure_digest
+                or rebuilt.ticket_count != self.ticket_count
+                or rebuilt.blobs.keys() != self.blobs.keys()):
+            raise ValueError("HISTORY_SNAPSHOT_CLOSURE_CHANGED")
+        return ticket
 
     @contextmanager
     def evidence(self):
@@ -111,6 +135,7 @@ def capture_historical_evidence(ticket):
                  for name, raw in sorted(blobs.items())]
     closure_digest = digest({"root_ticket": root_digest, "blobs": inventory})
     return HistoryEvidenceSnapshot(root_ticket_digest=root_digest,
+                                   root_ticket_bytes=te.canonical(ticket),
                                    closure_digest=closure_digest,
                                    ticket_count=len(verified_tickets),
                                    blobs=MappingProxyType(dict(sorted(blobs.items()))))
