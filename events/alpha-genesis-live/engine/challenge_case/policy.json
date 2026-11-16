@@ -1,0 +1,13 @@
+{
+  "schema": "montrealai-procurement-policy/v1",
+  "case": "Northstar Launch - synthetic procurement release gate",
+  "currency": "CAD",
+  "maxPriceIncreaseBps": 500,
+  "latestAcceptableDeliverySlipDays": 0,
+  "requireFullUnits": true,
+  "requireStatus": "CONFIRMED",
+  "requireQualityStatus": "CLEAR",
+  "dispositionRule": "An exception means HOLD_FOR_REVIEW. A clean line means READY_FOR_HUMAN_APPROVAL. Neither status authorizes payment, release, purchase or contact.",
+  "priorityRule": "P0 for quality hold/missing confirmation; P1 for other exceptions; P2 for clean lines.",
+  "approvalAuthority": "Named human procurement owner only; never the agent or verifier"
+}

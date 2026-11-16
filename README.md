@@ -4,6 +4,8 @@
 
 **Invent the means. Expand what becomes possible. Compound the ability to discover.**
 
+**Live professional experience:** [🌌 ALPHA GENESIS FLYWHEEL Ω — LIVE](https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/alpha-genesis-live.html) — from an ambitious question to a real investigation, a constructed instrument, independent testing and a better next move. [Inspect the event source and delivery package](events/alpha-genesis-live/README.md). The published experience is a preview; live-model execution, tickets and schedule require their own qualification.
+
 ALPHA GENESIS FLYWHEEL Ω is the flagship programme of the AGI ALPHA Invention Flywheel Lab. We are building a self-sustaining enterprise that becomes exceptionally effective at seeing what has just become possible, building what is most valuable, and improving its ability to discover the next extraordinary opportunity.
 
 **Start with the flagship:** [Read the paper](https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/alpha-genesis-flywheel-omega-v2.html) · [PDF](docs/research/alpha-genesis-flywheel-omega-v2.pdf) · [Editable source and reproducible analysis](docs/alpha-genesis/) · [Explore the website](https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/).
