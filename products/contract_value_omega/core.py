@@ -104,7 +104,7 @@ def read_table(folder,name):
 
 
 def require_id(raw,where):
-    if not raw or len(raw)>160 or any(ord(c)<32 for c in raw):
+    if not raw or len(raw)>160 or raw.lstrip().startswith(("=","+","-","@")) or any(ord(c)<32 for c in raw):
         raise InputError(where+": missing or invalid identity")
     return raw
 
