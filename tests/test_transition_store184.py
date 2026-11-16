@@ -21,6 +21,9 @@ class HistoricalEvidenceStoreRebindingTests(unittest.TestCase):
         body.update(
             schema=te.V1,
             counter=1,
+            from_source={"files": {"synthetic.py": "f" * 64}, "sha256": "a" * 64},
+            to_source={"files": {"synthetic.py": "f" * 64}, "sha256": "b" * 64},
+            historical_root=str(Path.cwd().absolute()),
             prior_record=prior_record,
             prior_envelope={"body": {"entries": []}},
             verifier_files={"synthetic.py": "f" * 64},
