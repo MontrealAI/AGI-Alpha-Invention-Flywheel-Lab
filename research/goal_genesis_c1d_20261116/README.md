@@ -1,6 +1,8 @@
-# 🌌♾️ GOAL GENESIS Ω — A strictly improved signed-autoconvolution bound
+# 🌌♾️ GOAL GENESIS Ω — Exact signed-autoconvolution witness (NOT state of the art)
 
 **MONTREAL.AI · November 16, 2026 · Mathematically certified candidate, independent academic review pending**
+
+> **CORRECTED PRIOR-ART STATUS — HOLD_NOT_STATE_OF_ART (16 Nov 2026).** This witness improves the weaker *merged registry page* but not the strongest publicly posted construction. [PR #372](https://github.com/teorth/optimizationproblems/pull/372) submitted 15 Nov reports **1.4540711000681048**; other open PRs (#371, #345, #270, #312) also provide better claimed bounds. The earlier claim of a first frontier-expanding mathematical achievement is withdrawn. Both exact verifier implementations remain useful as source-bound computational evidence. This proof is NOT evidence of universal optimality, independent priority, or institutional leadership.
 
 ## Result
 
@@ -19,7 +21,7 @@ C_1d ≤ 2798811552689704931099200 / 1919999999995200000000003
      = 1.4577143503628656...
 ```
 
-This is **strictly less** than the strongest bound `1.4578548849219886...` listed on November 16, 2026 in the optimization-constants registry (a self-archived 800-cell result of SCiEL, October 21). The exact difference is positive by integer cross-multiplication; the numerical improvement is approximately `0.000140534559123`.
+This is **strictly less than the value on the registry's merged page, but is not better than its published open submissions**; the merged bound was `1.4578548849219886...` listed on November 16, 2026 in the optimization-constants registry (a self-archived 800-cell result of SCiEL, October 21). The exact difference is positive by integer cross-multiplication; the numerical improvement is approximately `0.000140534559123`.
 
 **Scope:** A new explicit finite *upper-bound witness*, not an exact determination of `C_1d`, a physical discovery, automatically peer-reviewed mathematics, or evidence that MONTREAL.AI is the world's leading AI institution. The discovery process used seeded L-BFGS-B numerical optimization, but **no solver output is trusted in the mathematical proof**.
 
@@ -71,12 +73,12 @@ The seeded reference was the *publicly accessible* 600-cell `[AER2026]` construc
 
 The optional `discovery.py` searches for new real-valued witnesses from the published, quantized 600-cell `seed600.json` (NumPy/SciPy required). It is **not an exact historical optimization replay** and is not an input to either final proof verifier. The precise frozen integer certificate is the only mathematical witness needed. An additional local downloadable research bundle retains the intermediate `best4800.npy` floating-point array for provenance; that binary is not necessary for reproducing the exact inequality. The optimization history is an exploration record, not a fully deterministic reproduction claim across different numerical libraries/platforms. The final integer witness and complete exact verification *are* deterministic.
 
-The incumbent's **actual strongest listed value** is used, not an intentionally weak public-seed comparator. We have not established that the old self-archived incumbent is independently reproducible, because its raw Zenodo attachment was restricted when checked, and we have not established that no unpublished better construction exists.
+The merged registry page's bound was used as the comparison, **but this was insufficient**: the stronger unmerged public submissions must be included in any frontier claim. The strongest then-visible open C1d submission was **1.4540711000681048** from PR #372, which is better than this witness. We have not established that the old self-archived incumbent is independently reproducible, because its raw Zenodo attachment was restricted when checked, and we have not established that no unpublished better construction exists.
 
 ## Admission and external review
 
-1. **Mathematics:** the new exact upper bound passes two computationally independent exact checkers on all 9,599 knots, with negative controls. This qualifies the narrowly defined mathematical witness.
-2. **Novelty/prior art:** current maintained registry checked November 16, 2026 lists a weaker bound, but mathematical priority is not confirmed until domain-expert/maintainer review and wider literature search.
+1. **Mathematics:** the valid but not state-of-art exact upper-bound witness passes two computationally independent exact checkers on all 9,599 knots, with negative controls. This qualifies the narrowly defined mathematical witness.
+2. **Novelty/prior art:** **HOLD_NOT_STATE_OF_ART.** The merged main page was weaker, but open submissions on the very same repository already give better reported bounds. No new record or frontier expansion was achieved.
 3. **Institution:** one valid mathematical improvement does **not** establish eight-mechanism causal superiority, recursive successor benefits, external commercial outcomes or `#1 in AI` status.
 4. **Next step:** have independent mathematicians and the registry maintainers review the exact rational inequality and certificate; test fresh unselected optimization problems under matched budgets to establish repeatability rather than relying on one case.
 
