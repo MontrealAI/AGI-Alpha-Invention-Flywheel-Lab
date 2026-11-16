@@ -1,0 +1,56 @@
+name: Omega complete one-switch certificate
+on:
+  push:
+    branches:
+      - research/omega-complete-switch-certificate-20261116
+    paths:
+      - 'research/singularity_direction001/**'
+      - 'tests/test_singularity_direction001.py'
+      - '.github/workflows/omega-complete-switch-certificate.yml'
+  pull_request:
+    paths:
+      - 'research/singularity_direction001/**'
+      - 'tests/test_singularity_direction001.py'
+      - '.github/workflows/omega-complete-switch-certificate.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: omega-switch-certificate-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      OPENBLAS_NUM_THREADS: '1'
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+      PYTHONHASHSEED: '0'
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+          sparse-checkout: |
+            research/singularity_direction001
+            research/pglib_opf_case14_ieee.m
+            research/pglib_opf_case30_ieee.m
+            tests/test_singularity_direction001.py
+          sparse-checkout-cone-mode: false
+      - name: Pin numerical implementation
+        run: python3 -m pip install --only-binary=:all: numpy==2.3.5 scipy==1.17.0
+      - name: Run independent adversarial checks
+        run: python3 -m unittest discover -s tests -p 'test_singularity_direction001.py' -v
+      - name: Produce every candidate optimum witness
+        run: python3 -m research.singularity_direction001.experiment --output "$RUNNER_TEMP/omega-switch-v2.json"
+      - name: Verify complete finite ranking without optimizer calls
+        run: python3 -m research.singularity_direction001.verify --evidence "$RUNNER_TEMP/omega-switch-v2.json" | tee "$RUNNER_TEMP/omega-switch-v2-verdict.json"
+      - name: Retain source-bound witness and independent verdict
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: omega-complete-switch-certificate-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/omega-switch-v2.json
+            ${{ runner.temp }}/omega-switch-v2-verdict.json
+          retention-days: 30
+          if-no-files-found: error
