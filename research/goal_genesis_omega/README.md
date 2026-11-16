@@ -32,6 +32,18 @@
 
 **Rights:** The STEPS2026 repo has no visible explicit licence. We fetch its published data read-only for experimentation rather than copying the file into this repo; any public derivative certificate requires an appropriate rights review. Author credit remains attached regardless. Third-party numerical records and implementations are not represented as wholly original.
 
+## Independently replayed external mathematical result — **PASS**
+
+On **16 November 2026**, the [public GitHub Actions run #43899269511](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/43899269511), candidate commit `8c39f8cdd11b0c7d11d35a8bdf4792abbd83fdce`, successfully executed `external_ntt_verify.py` against the exact source-bounded **51,200-cell certificate** provided by the authors of the [15 November hackathon submission #372](https://github.com/teorth/optimizationproblems/pull/372).
+
+A **new, independently authored implementation** computes all 102,399 signed autoconvolution coefficients using five independent number-theoretic-transform prime moduli, reconstructs each coefficient uniquely with a proved Chinese remainder bound, and recomputes the critical knot directly using ordinary Python integers. It reproduces the precise published fraction:
+
+`21267647941510998263770007610303168512 / 14626277862557668614837367632277156521` = **1.4540711000681048...**
+
+[Exact external-audit receipt](EXTERNAL_REPLAY-20261116.json) · [Source program](external_ntt_verify.py) · [Original authors' certificate](https://github.com/ArthurAnache/Hackathon-AI-Reasearch/tree/c0f8d1837e65d9194350edb7c029897cf031908d) · [Complete reproducible CI run](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/43899269511).
+
+**Novel contribution here:** independent computational replication and a separately constructed exact verification path for a just-published AI-assisted mathematical certificate. This **does not** improve the mathematical upper bound, establish its optimality, substitute for expert peer review, prove autonomous goal discovery by MONTREAL.AI, or constitute an expansion of humanity's attainable technological frontier. The complete numerical search by this branch itself remains **HOLD / no record**.
+
 ## First complete result and status
 
 The initial complete run [GitHub Actions #43895829210](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/43895829210) created a 2,400-cell candidate **1.4596966810728871**. Its exact-rational verifier passed but returned **DOES_NOT_BEAT_REPORTED_FRONTIER** against the original October baseline. A later adversarial prior-art search discovered stronger November claims. This candidate is strictly inferior to **1.4540711000681048** as well. It is **not humanity-frontier progress**. The permanent numerical receipt is [`RESULT-20261116.json`](RESULT-20261116.json); full candidate and executable source were retained as short-lived GitHub Actions artifacts. The November 15 comparator itself remains unmerged and externally unverified.
