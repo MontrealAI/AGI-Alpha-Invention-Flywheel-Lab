@@ -5,6 +5,7 @@ on:
       - 'products/trust-omega/**'
       - 'tests/test_trust_omega.py'
       - 'tests/test_trust_omega_reply_review.py'
+      - 'tests/trust_omega_upstream_smoke.py'
       - '.github/workflows/trust-omega.yml'
   workflow_dispatch:
 permissions:
@@ -47,3 +48,5 @@ jobs:
             echo 'FAIL: wrong commitment accepted'; exit 1
           fi
           echo 'Expected rejection observed. The stored model is synthetic.'
+      - name: Check complete client-bound synthetic reply through actual TRUST Omega adapter
+        run: python3 tests/trust_omega_upstream_smoke.py fp
