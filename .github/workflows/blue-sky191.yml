@@ -1,0 +1,51 @@
+name: Blue Sky 191 mixed-contact transfer identifiability
+on:
+  pull_request:
+    paths:
+      - 'research/blue_sky191/**'
+      - 'campaign/blue-sky-191/**'
+      - 'tests/test_blue_sky191.py'
+      - '.github/workflows/blue-sky191.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: blue-sky191-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
+jobs:
+  pinned-mixed-transfer-proof:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Record actual start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Exact protocol and input byte identities
+        run: |
+          git rev-parse HEAD
+          sha256sum research/blue_sky064/public_calibration.json campaign/blue-sky-064/friction-probe/MIXED_REGISTRATION.json
+          git show 783a14d5f966a193973d6be741cfa2e2999c6a18:campaign/blue-sky-191/PROTOCOL.md >/dev/null
+      - name: Exact matrix-rank and counterexample regressions
+        run: python3 -B -m unittest -v tests.test_blue_sky191
+      - name: Create source-pinned compact research result (no financial operation)
+        shell: bash
+        run: |
+          python3 -B -m research.blue_sky191.transfer_identifiability --output "$RUNNER_TEMP/BLUE_SKY191_RESULT.json"
+          cat "$RUNNER_TEMP/BLUE_SKY191_RESULT.json"
+      - name: Retain compact result, including negative verdict
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: blue-sky191-result-${{ github.run_id }}
+          path: ${{ runner.temp }}/BLUE_SKY191_RESULT.json
+          if-no-files-found: warn
+          retention-days: 7
