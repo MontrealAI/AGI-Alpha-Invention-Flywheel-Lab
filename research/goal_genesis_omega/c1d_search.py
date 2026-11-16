@@ -32,8 +32,8 @@ UPSTREAM = (
     "9a091494facc801eaf6b92b175b63c58b7c3b30b/construction.json"
 )
 SOURCE_SHA256 = "3dd39fae744555179b0356b84e752db724e892bd23dda51403976edfb5b3a28c"
-REPORTED_BEST_NUM = 38534420343892614563110610373646557184000
-REPORTED_BEST_DEN = 26432274393314964174848236787785831382961
+REPORTED_BEST_NUM = 9900630255081376929482866688
+REPORTED_BEST_DEN = 6805830738283663732311831361
 
 
 def read_upstream(source=None):
@@ -161,7 +161,7 @@ def run(source=None, max_n=2400, iters=750, seed=711021):
             "upstream_rights": "No explicit license detected; data fetched for read-only research; derivative rights review remains necessary."
         },
         "incumbent": {"exact_num": str(REPORTED_BEST_NUM), "exact_den": str(REPORTED_BEST_DEN),
-                      "attribution": "SCiEL2026, 800-cell publicly reported bound, Oct 21 2026"},
+                      "attribution": "J2026, stronger 81,920-cell bound claimed in open teorth/optimizationproblems PR #312, Nov 3 2026; not a merged, peer-certified theorem"},
         "algorithm": {"seed":seed,"max_n":max_n,"iterations_per_stage_and_temperature":iters,
                       "objective":"2*n*max(|convolve(values,values)|)/(sum(values)^2)",
                       "method":"projected smooth-minimax L-BFGS-B with independent controls; not a claim of global optimality"},

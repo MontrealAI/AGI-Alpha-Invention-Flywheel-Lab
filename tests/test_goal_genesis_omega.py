@@ -53,7 +53,8 @@ class ExactMathTests(unittest.TestCase):
 
     def test_claims_cannot_change_external_best(self):
         self.assertTrue(proof.BEST > 1)
-        self.assertTrue(proof.BEST < 1.46)
+        self.assertTrue(proof.BEST < 1.455)
+        self.assertEqual(proof.BEST.numerator,9900630255081376929482866688)
 
 
 if __name__=="__main__":

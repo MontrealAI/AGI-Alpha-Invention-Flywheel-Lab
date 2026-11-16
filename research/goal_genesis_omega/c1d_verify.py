@@ -17,8 +17,8 @@ import json
 import math
 from pathlib import Path
 
-BEST = Fraction(38534420343892614563110610373646557184000,
-                26432274393314964174848236787785831382961)
+BEST = Fraction(9900630255081376929482866688,
+                6805830738283663732311831361)
 EXPECTED_SCHEMA = "montreal-ai/goal-genesis/c1d-candidate/v1"
 
 

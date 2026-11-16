@@ -12,7 +12,7 @@
 
 | Candidate | Consequential question | What the best incumbent already does | Discriminating gate |
 | --- | --- | --- | --- |
-| **C₁d signed autoconvolution (SELECTED)** | Can we construct a signed function with a rigorous, smaller max autoconvolution/integral² ratio? | SCiEL's 800-cell October 21 certificate reports an upper bound **1.4578548849219886...**. The publicly retrievable STEPS2026 600-cell construction reaches **1.460217284022874**. | Produce a **strictly smaller value than the SCiEL fraction**, computed by an independent exact-integer checker over every knot. This is a bounded upper-bound improvement only, NOT a proof of the constant's exact value. |
+| **C₁d signed autoconvolution (SELECTED)** | Can we construct a signed function with a rigorous, smaller max autoconvolution/integral² ratio? | SCiEL's 800-cell October 21 certificate reports **1.4578548849219886...**, but that is superseded by an **open, unmerged November 3 claim of 1.45472766452875065... (81,920 cells)**. This newer claim is the more demanding external comparison; it has not been independently peer-certified. The publicly retrievable STEPS2026 600-cell construction reaches **1.460217284022874**. | Produce a **strictly smaller value than the November 3 J2026 fraction**, computed by an independent exact-integer checker over every knot. This is a bounded upper-bound improvement only, NOT a proof of the constant's exact value. |
 | **Electrical capacitance tomography / interior observatory (HOLD)** | Could a new observation make an unidentifiable property inferable on *real measured data*? | ECT-Bench (Scientific Data, May 2026) supplies 54,739 real measurements and strong physical / deep-learning reference implementations. | Need rights, independently held-out measurement data, and equal-strength incumbent inversion under the same sensors. No synthetic success counts. |
 | **Erdős #23: triangle-free graph to bipartite deletion (HOLD)** | Find a new exact upper bound, or a genuine finite counterexample. | A published universal bound **1.064 n²** (Balogh–Clemen–Lidický) and known sharp C₅ blow-up family. | A new rigorous bound below 1.064 or independently certified finite counterexample, not brute-force inspection of familiar small cases. |
 
@@ -32,7 +32,7 @@
 
 ## Two independently developed methods
 
-1. **Search:** the numerical constructor is a projected, smooth-minimax optimizer of a signed step function, across 600, 1200, and 2400 cells, with separate smoothing schedules and perturbed starts. It records best-known baselines, construction history and all outcome scores. Optimization uses SciPy but no model API.
+1. **Search:** the numerical constructor is a projected, smooth-minimax optimizer of a signed step function, across 600, 1200, and 2400 cells, with separate smoothing schedules and perturbed starts. It records best-known baselines, construction history and all outcome scores. Optimization uses SciPy but no model API. The registered November 3 incumbent could not be used as the initial construction here; only its external reported exact bound was available for comparison.
 2. **Verification:** a *separate standard-library-only checker*, with no import of the optimizer or floating-point convolution implementation, turns every binary64 value into an **exact integer ratio**, evaluates every autoconvolution knot and compares the exact maximum against the literature fraction. Tampered candidates, nonfinite values, zero integral and false scores must fail.
 
 **Acceptance statuses:**
