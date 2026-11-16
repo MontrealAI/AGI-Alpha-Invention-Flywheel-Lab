@@ -1,0 +1,36 @@
+name: PROOF Omega scoped verification
+on:
+  pull_request:
+    paths:
+      - 'products/proof_omega/**'
+      - '.github/workflows/proof-omega.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'products/proof_omega/**'
+      - '.github/workflows/proof-omega.yml'
+permissions:
+  contents: read
+jobs:
+  qualify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Register platform window
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pinned solver
+        run: pip install -r products/proof_omega/requirements.txt
+      - name: Adversarial and semantic tests
+        run: python -m unittest discover -s products/proof_omega/tests -v
+      - name: Clean source extraction and independent process replay
+        run: |
+          git archive HEAD products/proof_omega | tar -x -C "$RUNNER_TEMP"
+          cd "$RUNNER_TEMP"
+          python -m products.proof_omega check --source products/proof_omega/examples/fee_reference.py --contract products/proof_omega/examples/fee.contract.json --output "$RUNNER_TEMP/fee-proof"
+          python -m products.proof_omega verify "$RUNNER_TEMP/fee-proof"
+          python -m products.proof_omega check --source products/proof_omega/examples/withdraw_reference.py --contract products/proof_omega/examples/withdraw.contract.json --output "$RUNNER_TEMP/withdraw-proof"
+          python -m products.proof_omega verify "$RUNNER_TEMP/withdraw-proof"

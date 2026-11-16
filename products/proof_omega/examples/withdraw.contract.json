@@ -1,0 +1,7 @@
+{
+  "schema": 1,
+  "function": "withdraw",
+  "inputs": {"balance": [0, 1000000000000], "amount": [-1000000000000, 1000000000000]},
+  "expected": "balance - amount if 0 <= amount <= balance else balance",
+  "output_range": [0, 1000000000000]
+}
