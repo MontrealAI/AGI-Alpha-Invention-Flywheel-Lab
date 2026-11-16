@@ -1,5 +1,6 @@
 from __future__ import annotations
 import copy
+import contextlib
 import json
 import os
 from pathlib import Path
@@ -10,7 +11,7 @@ import tempfile
 import time
 import unittest
 from unittest.mock import patch
-from connected_enterprise.alpha_runtime import Engine, load, filehash, validate_request, source_identity
+from connected_enterprise.alpha_runtime import Engine, load, filehash, validate_request, source_identity, variant, index_sql, read_source
 from connected_enterprise.alpha_demo import make_workload, request
 from connected_enterprise.alpha_verify import verify
 
@@ -235,6 +236,51 @@ class RuntimeTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, 'differs from disk'):
                 source_identity()
 
+
+    def test_freelist_pages_count_against_zero_storage_allowance(self):
+        # One fixed example and a real free-page pool; no post-hoc seeds.
+        with sqlite3.connect(self.source) as c:
+            c.execute('CREATE TABLE scratch(payload BLOB)')
+            c.execute('INSERT INTO scratch VALUES(zeroblob(1048576))')
+            c.execute('DROP TABLE scratch')
+            c.commit()
+            self.assertGreater(c.execute('PRAGMA freelist_count').fetchone()[0], 0)
+        self.req['max_index_bytes'] = 0
+        with contextlib.closing(read_source(self.source)) as source:
+            with variant(source, self.req, self.req['equals'] + [self.req['range'], self.req['measure']]) as (c, size, _):
+                self.assertGreater(size, 0, 'Existing freelist pages still consume real index storage')
+                try:
+                    allocated = c.execute("SELECT SUM(pgsize) FROM dbstat WHERE name LIKE 'alpha_%'").fetchone()[0]
+                except sqlite3.OperationalError:
+                    allocated = None
+                if allocated is not None:
+                    self.assertGreaterEqual(size, allocated)
+        self.submit()
+        self.engine.run()
+        self.assertEqual(self.engine.status()['jobs'][0]['status'], 'DECLINED')
+        self.assertEqual(self.engine.status()['capabilities'], 0)
+
+    def test_already_applied_deterministic_index_declines_not_fails(self):
+        apply_sql, _ = index_sql(self.req, self.req['equals'] + [self.req['range'], self.req['measure']])
+        with sqlite3.connect(self.source) as c:
+            c.execute(apply_sql)
+            c.commit()
+        self.submit()
+        self.engine.run()
+        self.assertEqual(self.engine.status()['jobs'][0]['status'], 'DECLINED')
+        self.assertEqual(self.engine.audit()['audit'], 'PASS')
+
+    def test_delivered_event_cannot_be_reset_to_queued(self):
+        self.complete()
+        with self.engine.db() as c:
+            c.execute("UPDATE jobs SET status='QUEUED' WHERE id='job-one'")
+        before = self.engine.status()['events']
+        with self.assertRaisesRegex(ValueError, '[Hh]istory|[Ss]tate'):
+            self.engine.audit()
+        with self.assertRaisesRegex(ValueError, '[Hh]istory|[Ss]tate'):
+            self.engine.run()
+        self.assertEqual(before, self.engine.status()['events'],
+                         'A corrupt status must not trigger a duplicate processing/delivery')
 
 if __name__ == '__main__':
     unittest.main()

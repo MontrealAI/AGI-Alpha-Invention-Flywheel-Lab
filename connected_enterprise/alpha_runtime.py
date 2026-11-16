@@ -202,14 +202,27 @@ def variant(source, r, cols):
     try:
         source.backup(c)
         c.execute("PRAGMA trusted_schema=OFF")
-        before = c.execute("PRAGMA page_count").fetchone()[0]
+        # Count allocated pages, not file growth: CREATE INDEX can use the
+        # source snapshot's freelist without increasing page_count.
+        before = (c.execute("PRAGMA page_count").fetchone()[0]
+                  - c.execute("PRAGMA freelist_count").fetchone()[0])
         start = time.perf_counter_ns()
         if cols:
-            c.execute(index_sql(r, cols)[0])
+            apply_sql, _ = index_sql(r, cols)
+            name = "alpha_" + digest({"table": r["table"], "columns": cols})[:20]
+            existing = c.execute("SELECT sql FROM sqlite_master WHERE type='index' AND name=?", (name,)).fetchone()
+            if existing:
+                if not existing[0] or existing[0].strip().rstrip(";") != apply_sql.strip().rstrip(";"):
+                    raise ValueError("Conflicting preexisting index definition")
+                # The exact same owner-applied index is already present:
+                # measuring it as a fresh build would fail the entire job.
+            else:
+                c.execute(apply_sql)
             c.execute("ANALYZE")
         build_ns = time.perf_counter_ns() - start
-        pages = c.execute("PRAGMA page_count").fetchone()[0] - before
-        size = max(0, pages * c.execute("PRAGMA page_size").fetchone()[0])
+        after = (c.execute("PRAGMA page_count").fetchone()[0]
+                 - c.execute("PRAGMA freelist_count").fetchone()[0])
+        size = max(0, (after - before) * c.execute("PRAGMA page_size").fetchone()[0])
         yield c, size, build_ns
     finally:
         c.close()
@@ -450,6 +463,9 @@ class Engine:
 
     def run(self, watch=False, poll=1.0):
         with self.lock():
+            # Refuse a forged status before recover()/step() can retry and
+            # duplicate a previously committed delivery.
+            self.reconcile_history()
             self.recover()
             while not STOP:
                 worked = self.step()
@@ -467,18 +483,69 @@ class Engine:
                     "commercial_cycle_proven": False, "live_payment_adapter": "NOT_CONNECTED",
                     "real_revenue_evidence": "NONE", "financial_account_created": False}
 
-    def audit(self):
-        from .alpha_verify import verify
-        self.scan()
-        previous = "0" * 64
+    def reconcile_history(self):
+        """Read-only consistency check: hash chain, legal transitions, all job states.
+
+        Hashes are LOCAL integrity evidence, not an authenticated signature.
+        """
         with self.db() as c:
             events = c.execute("SELECT * FROM events ORDER BY seq").fetchall()
-            jobs = c.execute("SELECT * FROM jobs WHERE status IN ('DELIVERED_AWAITING_SETTLEMENT','DECLINED')").fetchall()
-        for ev in events:
-            content = {"job": ev["job"], "kind": ev["kind"], "body": json.loads(ev["body"]), "previous": previous}
+            jobs = {j["id"]: j for j in c.execute("SELECT * FROM jobs").fetchall()}
+        transitions = {
+            "DISCOVERED": (None, "QUEUED"),
+            "ATTEMPT_STARTED": ("QUEUED", "RUNNING"),
+            "INTERRUPTED_ATTEMPT": ("RUNNING", "QUEUED"),
+            "TESTED": ("RUNNING", "VERIFIED"),
+            "FAILED": ("RUNNING", "FAILED"),
+            "DECLINED": ("VERIFIED", "DECLINED"),
+            "DELIVERED_AWAITING_SETTLEMENT": ("VERIFIED", "DELIVERED_AWAITING_SETTLEMENT"),
+        }
+        states, capabilities, previous = {}, set(), "0" * 64
+        for expected_seq, ev in enumerate(events, 1):
+            if ev["seq"] != expected_seq:
+                raise ValueError("Event history sequence mismatch")
+            body = json.loads(ev["body"])
+            if not isinstance(body, dict):
+                raise ValueError("Event history body mismatch")
+            content = {"job": ev["job"], "kind": ev["kind"], "body": body, "previous": previous}
             if ev["previous"] != previous or ev["hash"] != digest(content):
                 raise ValueError("Event chain mismatch")
             previous = ev["hash"]
+            job, kind = ev["job"], ev["kind"]
+            if job not in jobs:
+                raise ValueError("Event history references missing job")
+            current = states.get(job)
+            if kind == "CAPABILITY_RETAINED":
+                if current != "DELIVERED_AWAITING_SETTLEMENT" or job in capabilities:
+                    raise ValueError("Event history invalid retained capability")
+                capabilities.add(job)
+                continue
+            if kind not in transitions:
+                raise ValueError("Event history unknown transition")
+            required, successor = transitions[kind]
+            if current != required:
+                raise ValueError("Event history invalid state transition")
+            if kind in ("DECLINED", "DELIVERED_AWAITING_SETTLEMENT"):
+                payload = jobs[job]["payload"]
+                if not payload or body.get("receipt_sha256") != digest(json.loads(payload)):
+                    raise ValueError("Event history delivered receipt mismatch")
+            states[job] = successor
+        if set(states) != set(jobs):
+            raise ValueError("Event history missing job states")
+        for job, row in jobs.items():
+            if row["status"] != states[job]:
+                raise ValueError("Event history / job state mismatch")
+            if row["status"] == "DELIVERED_AWAITING_SETTLEMENT" and job not in capabilities:
+                raise ValueError("Event history missing retained-capability event")
+        checked = [j for j in jobs.values()
+                   if j["status"] in ("DELIVERED_AWAITING_SETTLEMENT", "DECLINED")]
+        return events, checked, previous
+
+    def audit(self):
+        from .alpha_verify import verify
+        self.reconcile_history()  # Refuse unsafe history before scanning new inputs.
+        self.scan()
+        events, jobs, previous = self.reconcile_history()
         for j in jobs:
             payload = json.loads(j["payload"])
             out = self.root / "outbox" / j["id"]
