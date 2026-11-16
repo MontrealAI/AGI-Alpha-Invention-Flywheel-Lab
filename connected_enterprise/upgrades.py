@@ -52,6 +52,53 @@ def source_inventory(root):
     return files
 
 
+def _cached_history_evidence_available(ticket):
+    """Re-resolve nested v2 CAS before *any* historical-audit cache reuse.
+
+    This is an isolated review candidate, not a complete writer-lease or
+    authenticated-account integration. The bounded traversal only decides
+    whether the existing independent historical verifier must run again.
+    Nested tickets in prior records, envelopes or operating state cannot be
+    treated as verified because their outer ticket's CAS resolved.
+    """
+    from connected_enterprise.transition_evidence import V1, V2
+    pending = [ticket]
+    visited = set()
+    remaining_nodes = 150_000
+    try:
+        while pending:
+            current = pending.pop()
+            if not isinstance(current, dict) or set(current) != {'body', 'signature'}:
+                return False
+            fingerprint = digest(current)
+            if fingerprint in visited:
+                continue
+            visited.add(fingerprint)
+            if len(visited) > 64:
+                return False
+            body = ticket_body(current)
+            stack = [body.get('prior_record'), body.get('prior_envelope'),
+                     body.get('operating')]
+            while stack:
+                remaining_nodes -= 1
+                if remaining_nodes < 0:
+                    return False  # Do not cache when verification exceeds budget.
+                item = stack.pop()
+                if isinstance(item, dict):
+                    if (set(item) == {'body', 'signature'}
+                            and isinstance(item['body'], dict)
+                            and item['body'].get('schema') in {V1, V2}):
+                        pending.append(item)
+                    else:
+                        stack.extend(item.values())
+                elif isinstance(item, list):
+                    stack.extend(item)
+        return True
+    except (ValueError, TypeError, KeyError, RecursionError, OverflowError):
+        # Never turn an unresolvable CAS into a successful cached approval.
+        return False
+
+
 def verify_historical(ticket, manifest, *, root=None):
     body = ticket_body(ticket)
     candidates = [Path(body['historical_root']).absolute()]
@@ -72,7 +119,8 @@ def verify_historical(ticket, manifest, *, root=None):
     load_jobs(root, manifest)
     cache_key = digest({'ticket': ticket, 'manifest': manifest, 'root': str(root),
                         'verifier_files': body['verifier_files']})
-    if cache_key in _HISTORICAL_AUDITS:
+    if (cache_key in _HISTORICAL_AUDITS
+            and _cached_history_evidence_available(ticket)):
         return copy.deepcopy(_HISTORICAL_AUDITS[cache_key])
     payload = {'record': body['prior_record'], 'manifest': manifest, 'root': str(root), 'evidence_dir': current_store_directory()}
     code = """import json,sys,contextlib,importlib.util
@@ -93,6 +141,11 @@ with scope:
     receipt = json.loads(done.stdout)
     if not receipt.get('accepted'):
         raise ValueError('PINNED_HISTORICAL_AUDIT_NOT_ACCEPTED')
+    # A historical subprocess may be incorrectly mocked or may race evidence
+    # deletion. Never install a successful reusable receipt for an incomplete
+    # v2 proof closure, even if its immediate outer ticket resolved.
+    if not _cached_history_evidence_available(ticket):
+        raise ValueError('PINNED_HISTORICAL_AUDIT_FAILED:CAS_CLOSURE_UNAVAILABLE')
     if source_inventory(root) != body['verifier_files']:
         raise ValueError('HISTORICAL_VERIFIER_CHANGED_DURING_AUDIT')
     load_jobs(root, manifest)
