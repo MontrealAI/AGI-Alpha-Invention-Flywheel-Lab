@@ -19,6 +19,28 @@ HEX_ID = re.compile(r"^[0-9a-f]{64}$")
 OUTCOME = re.compile(r"^result: outcome=([a-z-]+)(?: |$)")
 MAX_LOG_BYTES = 2_000_000
 
+def public_key_tree_sha256(folder: Path) -> str:
+    """Canonical SHA256 over every ordinary public-key file path and content hash.
+
+    This commits a verifier's *input files*; it does not independently establish
+    model identity, proof-system soundness, or resist concurrent filesystem races.
+    """
+    if folder.is_symlink() or not folder.is_dir():
+        raise ValueError("public key root must be a real directory, not a symlink")
+    entries = []
+    for path in sorted(folder.rglob("*")):
+        if path.is_symlink():
+            raise ValueError("public key directory may not contain symlinks")
+        if path.is_dir():
+            continue
+        if not path.is_file():
+            raise ValueError("public key directory contains a non-regular entry")
+        entries.append([path.relative_to(folder).as_posix(), sha256_file(path)])
+    if not entries:
+        raise ValueError("public key directory has no files")
+    serialized = json.dumps(entries, ensure_ascii=True, separators=(",", ":")).encode("utf-8")
+    return hashlib.sha256(serialized).hexdigest()
+
 
 def sha256_file(path: Path) -> str:
     digest = hashlib.sha256()
@@ -57,7 +79,7 @@ def parse_checker_output(returncode: int, stdout: str) -> tuple[str, str]:
 
 def read_anchor(path: Path) -> dict:
     data = json.loads(path.read_text(encoding="utf-8"))
-    if not isinstance(data, dict) or data.get("schema") != "trust-omega-anchor-v1":
+    if not isinstance(data, dict) or data.get("schema") not in ("trust-omega-anchor-v1", "trust-omega-anchor-v2"):
         raise ValueError("unknown anchor schema")
     if not HEX_ID.fullmatch(str(data.get("commitment_id", ""))):
         raise ValueError("invalid, missing, or unpinned model commitment ID")
@@ -76,6 +98,9 @@ def read_anchor(path: Path) -> dict:
     pins = data.get("trusted_sha256")
     if not isinstance(pins, dict) or any(not HEX_ID.fullmatch(str(pins.get(k, ""))) for k in required):
         raise ValueError("independently pinned checker, verifier and config SHA256 hashes required")
+    if data["schema"] == "trust-omega-anchor-v2":
+        if not HEX_ID.fullmatch(str(pins.get("public_key_tree", ""))):
+            raise ValueError("v2 requires a client-pinned public key directory tree SHA256")
     return data
 
 
@@ -105,6 +130,8 @@ def verify(args: argparse.Namespace) -> tuple[int, dict]:
         raise ValueError("client next-token must be a uint32 token ID")
     files = evidence_files(args)
     hashes = {name: sha256_file(path) for name, path in files.items()}
+    if anchor["schema"] == "trust-omega-anchor-v2":
+        hashes["public_key_tree"] = public_key_tree_sha256(args.public_key_dir)
     for key, trusted_digest in anchor["trusted_sha256"].items():
         if key not in hashes or hashes[key] != trusted_digest:
             raise ValueError(f"trusted hash mismatch for {key}: fail closed")
@@ -140,6 +167,7 @@ def verify(args: argparse.Namespace) -> tuple[int, dict]:
         outcome, detail, exit_code, upstream_exit, stderr = "NO_VERDICT", "checker timed out", 1, None, ""
     receipt = {
         "schema": "trust-omega-evidence-v1",
+        "anchor_schema": anchor["schema"],
         "result": outcome,
         "detail": detail,
         "observed_at_utc": datetime.now(timezone.utc).isoformat(),
@@ -161,6 +189,7 @@ def verify(args: argparse.Namespace) -> tuple[int, dict]:
             "No guarantee of natural-language correctness, model safety, or hardware use",
             "No claim about unchecked tokens or uncommitted server configuration",
             "Client must independently pin commitment, tokenize input/output and validate EOS",
+            "Legacy v1 does not pin public verification-key directory; do not treat v1 as complete independent input binding" if anchor["schema"] == "trust-omega-anchor-v1" else "v2 pins the observed key directory contents, not public model identity or concurrent key filesystem immutability",
         ],
         "checker_stderr_excerpt": stderr,
     }
