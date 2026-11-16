@@ -10,8 +10,10 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-    timeout-minutes: 10
+    timeout-minutes: 360
     steps:
+      - name: Record platform start
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
       - uses: actions/checkout@v4
       - name: Run adversarial tests of audited fixtures
         run: python3 -m unittest discover -s products/unlock-omega/tests -v

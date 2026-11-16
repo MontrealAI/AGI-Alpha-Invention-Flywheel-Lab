@@ -13,3 +13,11 @@
   workflow; consult the exact candidate run, not an unrelated green badge.
 - No buyer acceptance, novel algorithm, autonomous profitable operation, commercial
   pricing validation, production service or new mathematical frontier is established.
+
+Repository policy follow-through: the inherited UNLOCK workflow initially failed
+`CurrentWorkflowPlatformTests` (10-minute timeout versus required 360). The
+INVENT dependent branch alone restores the standard 360-minute platform window
+and initial clock marker. This does not alter PR406's owner branch or any
+candidate acceptance threshold. All 18 platform policy tests, 24 INVENT tests
+and 7 inherited UNLOCK tests pass after this focused repair. Initial failure
+remains disclosed here.
