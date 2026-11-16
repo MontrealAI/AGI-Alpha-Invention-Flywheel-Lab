@@ -27,6 +27,10 @@ Open **/tmp/contract-value-review/index.html** in a browser. View **review.csv**
 
 The included dataset is **100% fictional/synthetic**: ten invoice lines, two fictional vendors, fake contracts and intentionally inserted discrepancies. Its candidate amounts are **test oracles, not real money owed**. Never use those amounts in marketing as recovered funds.
 
+**Simpler macOS/Linux launch:** `bash products/contract_value_omega/start.sh` reproduces the synthetic example and automatically checks its source-bound output. For buyer-owned files, run `bash products/contract_value_omega/start.sh /absolute/path/to/five-CSVs /absolute/path/to/new-output`. The second output path must not already exist. The downloadable standalone ZIP contains all required source and the synthetic demo; no system-wide installation or paid service is required.
+
+**Executive sales assets:** [Private-company buyer proposal](BUYER_PROPOSAL.md) · [Pricing, competitor comparison and demand gates](COMMERCIAL.md) · [Software licence](LICENSE). The CAD $25,000 and CAD $120,000 offers are *hypotheses*, not sales.
+
 ### Use on authorized private-customer data
 
 Prepare a directory containing exactly five named input CSVs. Copy the headers from the demo, maintaining the exact meaning below. Exports remain on the buyer's infrastructure unless a separate, legitimate disclosure arrangement is made.
