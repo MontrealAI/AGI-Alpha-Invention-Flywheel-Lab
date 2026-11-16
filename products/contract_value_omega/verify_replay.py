@@ -183,7 +183,13 @@ def verify_report(input_dir, report_dir):
     # then compare exact file bytes, not merely self-reported checksums.
     with TemporaryDirectory(prefix="contract-value-replay-") as temporary:
         shadow = Path(temporary)/"reference"
-        run.write(shadow, actual)
+        # The original writer builds its HTML source list in HEADERS insertion
+        # order, while the canonical JSON loader sorts manifest keys. Recover
+        # the validated source order so a key-free replay is byte-for-byte.
+        for_render = dict(actual)
+        for_render["input_manifest"] = {name: actual["input_manifest"][name]
+                                        for name in origin["sources"]}
+        run.write(shadow, for_render)
         def inventory(folder):
             result = {}
             for path in folder.rglob("*"):
