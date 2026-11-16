@@ -1,0 +1,75 @@
+name: GOAL GENESIS Omega - open mathematical frontier trial
+
+on:
+  push:
+    branches: [research/goal-genesis-omega-open-constant-001]
+    paths:
+      - 'research/goal_genesis_omega/**'
+      - 'tests/test_goal_genesis_omega.py'
+      - '.github/workflows/goal-genesis-open-constant.yml'
+  pull_request:
+    paths:
+      - 'research/goal_genesis_omega/**'
+      - 'tests/test_goal_genesis_omega.py'
+      - '.github/workflows/goal-genesis-open-constant.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: goal-genesis-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  search-and-certify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+      OPENBLAS_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+      OMP_NUM_THREADS: '1'
+    steps:
+      - name: Check out exact candidate revision
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+          sparse-checkout: |
+            research/goal_genesis_omega
+            tests/test_goal_genesis_omega.py
+          sparse-checkout-cone-mode: false
+      - name: Install pinned numerical library dependencies
+        run: python3 -m pip install --only-binary=:all: numpy==2.3.5 scipy==1.17.0
+      - name: Run independent exact mathematical falsification tests
+        run: python3 -m unittest discover -s tests -p 'test_goal_genesis_omega.py' -v
+      - name: Search mathematical open problem against October 2026 best
+        run: |
+          python3 -m research.goal_genesis_omega.c1d_search \
+            --max-cells 2400 --iterations 750 \
+            --output "$RUNNER_TEMP/goal-genesis-candidate.json"
+      - name: Reconstruct complete certificate with exact integer arithmetic
+        run: |
+          python3 -m research.goal_genesis_omega.c1d_verify \
+            --candidate "$RUNNER_TEMP/goal-genesis-candidate.json" \
+            --output "$RUNNER_TEMP/goal-genesis-independent-verdict.json"
+      - name: Classify without inflating unsupported outcomes
+        run: |
+          python3 - "$RUNNER_TEMP/goal-genesis-independent-verdict.json" <<'PY'
+          import json,sys
+          record=json.load(open(sys.argv[1]))
+          print("SCIENTIFIC_STATUS",record["status"])
+          print("EXACT_SCORE",record["candidate_decimal_16"])
+          print("INCUMBENT",record["incumbent_decimal_16"])
+          print("A mathematical improvement claim is not warranted unless BEATS_REPORTED_FRONTIER.")
+          PY
+      - name: Retain independent evidence for review
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: goal-genesis-open-math-${{ github.event.pull_request.head.sha || github.sha }}
+          path: |
+            ${{ runner.temp }}/goal-genesis-candidate.json
+            ${{ runner.temp }}/goal-genesis-independent-verdict.json
+          if-no-files-found: error
+          retention-days: 30
