@@ -40,6 +40,13 @@ def make_demo(path):
         cases.append({'id': f'holdout-perf-{i}', 'kind': 'performance',
                       'input': {'values': [rng.randrange(-100000, 100000) for _ in range(n)],
                                 'distance': [13, 971][i]}})
+    # A separately supplied exact oracle for this special case lets the large
+    # workload be checked without running an impractically slow reference.
+    # This does NOT establish a specialist barrier: the mathematics is standard.
+    n = 100000
+    cases.append({'id': 'known-frontier-example', 'kind': 'frontier',
+                  'input': {'values': [0] * n, 'distance': 0},
+                  'expected': n * (n - 1) // 2, 'max_ms': 300})
     (path / 'heldout.json').write_text(json.dumps(cases, separators=(',', ':')))
     return path
 

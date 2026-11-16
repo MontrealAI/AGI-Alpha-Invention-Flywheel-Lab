@@ -33,12 +33,19 @@ def read_project(project):
         raise ValueError('heldout must contain 3–1000 cases')
     ids = []
     for case in cases:
-        if not isinstance(case, dict) or set(case) != {'id', 'input', 'kind'}:
-            raise ValueError('case requires exactly id, input and kind')
+        if not isinstance(case, dict) or not {'id', 'input', 'kind'} <= set(case):
+            raise ValueError('case requires id, input and kind')
+        if set(case) != ({'id', 'input', 'kind', 'expected', 'max_ms'} if case['kind'] == 'frontier' else {'id', 'input', 'kind'}):
+            raise ValueError('case fields do not match its kind')
         if not isinstance(case['id'], str) or len(case['id']) > 80:
             raise ValueError('case id must be a short string')
-        if case['kind'] not in ('correctness', 'performance'):
+        if case['kind'] not in ('correctness', 'performance', 'frontier'):
             raise ValueError('invalid case kind')
+        if case['kind'] == 'frontier':
+            cap = case['max_ms']
+            if not isinstance(cap, (float, int)) or isinstance(cap, bool) or not 0 < cap <= 120000:
+                raise ValueError('frontier max_ms must be in (0,120000]')
+            json.dumps(case['expected'], allow_nan=False)
         ids.append(case['id'])
     if len(set(ids)) != len(ids):
         raise ValueError('case ids must be unique')
@@ -103,24 +110,46 @@ def verify(project, candidate, mode='docker'):
         'qualification': 'LOCAL_EVALUATION_ONLY_NOT_EXTERNAL_AUDIT',
     }
     try:
-        baseline = execute(reference, cases, mode, name='reference')
+        ordinary = [c for c in cases if c['kind'] != 'frontier']
+        baseline = execute(reference, ordinary, mode, name='reference')
         challenger = execute(candidate, cases, mode, name='candidate')
+        baseline_by_id = {x['id']: x for x in baseline}
+        challenger_by_id = {x['id']: x for x in challenger}
+        if set(challenger_by_id) != set(inputs) or set(baseline_by_id) != {c['id'] for c in ordinary}:
+            raise RuntimeError('case identity mismatch or missing results')
         diffs = []
         perf = []
-        for a, b in zip(baseline, challenger):
-            if a['id'] != b['id'] or a['response'] != b['response']:
-                diffs.append(a['id'])
-            if inputs[a['id']]['kind'] == 'performance':
+        frontier = []
+        exact_ratio = []
+        for case in cases:
+            key = case['id']
+            b = challenger_by_id[key]
+            if case['kind'] == 'frontier':
+                truth = json.dumps(case['expected'], sort_keys=True, separators=(',', ':'), allow_nan=False)
+                correct = (b['response'] == truth)
+                ms = b['median_ns'] / 1e6
+                frontier.append({'id': key, 'correct': correct, 'within_deadline': ms <= case['max_ms'],
+                                 'candidate_ms': round(ms, 4), 'max_ms': case['max_ms']})
+                if not correct:
+                    diffs.append(key)
+                continue
+            a = baseline_by_id[key]
+            if a['response'] != b['response']:
+                diffs.append(key)
+            if case['kind'] == 'performance':
                 ratio = a['median_ns'] / max(b['median_ns'], 1)
-                perf.append({'id': a['id'], 'baseline_ms': round(a['median_ns'] / 1e6, 4),
+                exact_ratio.append(ratio)
+                perf.append({'id': key, 'baseline_ms': round(a['median_ns'] / 1e6, 4),
                              'candidate_ms': round(b['median_ns'] / 1e6, 4),
                              'speedup': round(ratio, 4)})
-        speedup = math.exp(sum(math.log(a['median_ns'] / max(b['median_ns'], 1)) for a, b in zip(baseline, challenger) if inputs[a['id']]['kind'] == 'performance') / len(perf))
-        minimum = min(a['median_ns'] / max(b['median_ns'], 1) for a, b in zip(baseline, challenger) if inputs[a['id']]['kind'] == 'performance')
+        speedup = math.exp(sum(math.log(x) for x in exact_ratio) / len(exact_ratio))
+        minimum = min(exact_ratio)
+        frontier_pass = all(x['correct'] and x['within_deadline'] for x in frontier)
         passed = (not diffs and speedup >= acceptance['min_speedup']
-                  and minimum >= 1 / acceptance['max_perf_regression'])
+                  and minimum >= 1 / acceptance['max_perf_regression'] and frontier_pass)
         metadata.update({'status': 'PASS' if passed else 'HOLD',
                          'correctness': {'tested': len(cases), 'mismatches': diffs},
+                         'frontier': {'tested': len(frontier), 'passed': frontier_pass, 'cases': frontier},
                          'performance': {'geomean_speedup': round(speedup, 4),
                                          'slowest_case_speedup': round(minimum, 4),
                                          'cases': perf}})

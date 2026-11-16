@@ -23,6 +23,9 @@ class AcceptanceTests(unittest.TestCase):
         for case in cases:
             if case['kind'] == 'performance':
                 case['input']['values'] = case['input']['values'][:100]
+            if case['kind'] == 'frontier':
+                case['input']['values'] = case['input']['values'][:100]
+                case['expected'] = 100 * 99 // 2
         (self.project / 'heldout.json').write_text(json.dumps(cases))
         (self.project / 'acceptance.json').write_text(json.dumps({'min_speedup': 1.01}))
 
@@ -49,6 +52,23 @@ class AcceptanceTests(unittest.TestCase):
         (self.project / 'heldout.json').write_text(json.dumps(cases))
         with self.assertRaises(ValueError):
             read_project(self.project)
+
+    def test_frontier_oracle_is_mandatory(self):
+        cases = json.loads((self.project / 'heldout.json').read_text())
+        item = next(c for c in cases if c['kind'] == 'frontier')
+        item['expected'] += 1
+        (self.project / 'heldout.json').write_text(json.dumps(cases))
+        result = verify(self.project, self.project / 'candidate.py', 'local')
+        self.assertEqual(result['status'], 'HOLD')
+        self.assertFalse(result['frontier']['passed'])
+
+    def test_missed_frontier_deadline_is_hold(self):
+        cases = json.loads((self.project / 'heldout.json').read_text())
+        next(c for c in cases if c['kind'] == 'frontier')['max_ms'] = 0.00001
+        (self.project / 'heldout.json').write_text(json.dumps(cases))
+        result = verify(self.project, self.project / 'candidate.py', 'local')
+        self.assertEqual(result['status'], 'HOLD')
+        self.assertFalse(result['frontier']['passed'])
 
     def test_docker_absence_fails_closed(self):
         with patch('unlock.shutil.which', return_value=None):

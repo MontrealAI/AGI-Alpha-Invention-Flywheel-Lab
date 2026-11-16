@@ -19,7 +19,7 @@ Create a project directory:
 
 - `reference.py`: trusted baseline algorithm with `solve(payload)`, returning a JSON-serializable result.
 - `examples.json`: public examples that the proposer may read.
-- `heldout.json`: array of `{"id":"...","input":{...},"kind":"correctness"}` or `kind: "performance"`; at least one correctness and two performance cases. **The proposing agent never sees this file.** Store it outside the generation workspace; for real commercial acceptance, an independent evaluator should control fresh held-out cases.
+- `heldout.json`: array of `{"id":"...","input":{...},"kind":"correctness"}` or `kind: "performance"`; at least one correctness and two performance cases. Optional `kind: "frontier"` takes an independently provided `expected` output and `max_ms` deadline, and is tested **without running the infeasible reference at that scale**. **The proposing agent never sees this file.** Store it outside the generation workspace; for real commercial acceptance, an independent evaluator should control fresh held-out cases.
 - `acceptance.json`: `{"min_speedup":3.0,"max_perf_regression":1.10}`. Specify target hardware, business deadline and strong incumbent separately in a prospectively signed customer acceptance contract. These two threshold fields are for the bounded software check.
 
 Then execute:
@@ -33,7 +33,7 @@ python3 products/unlock-omega/unlock.py invent /path/to/project
 
 ### Output
 
-The JSON report pins SHA-256 hashes of the reference, candidate, held-out cases and acceptance fields; per-case functional comparison, per-case baseline/candidate latency, geometric-mean speedup and performance regression gate. Exact JSON result comparison is mandatory; this **does not prove full semantic equivalence on all possible inputs**. Reports produced on a single local machine are not independently audited. The Docker sandbox is a defense-in-depth baseline, not a certification for hostile multi-tenant use; production needs hardened dedicated workers, pinned container digests and customer security review.
+The JSON report pins SHA-256 hashes of the reference, candidate, held-out cases and acceptance fields; per-case functional comparison, baseline/candidate latency, geometric-mean speedup, performance regression and separate exact-oracle frontier deadline gates. The large-scale frontier case never silently extrapolates reference performance; baseline infeasibility versus the strongest specialist alternative is an independent empirical claim to establish. Exact JSON result comparison is mandatory; this **does not prove full semantic equivalence on all possible inputs**. Reports produced on a single local machine are not independently audited. The Docker sandbox is a defense-in-depth baseline, not a certification for hostile multi-tenant use; production needs hardened dedicated workers, pinned container digests and customer security review.
 
 ### What buyers would pay for
 
