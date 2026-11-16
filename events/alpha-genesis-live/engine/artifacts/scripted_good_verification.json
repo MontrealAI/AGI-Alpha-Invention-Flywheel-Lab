@@ -1,0 +1,30 @@
+{
+  "schema": "montrealai-independent-verification/v1",
+  "verifierVersion": "northstar-independent-policy-verifier/1.0.0",
+  "runId": "4f610392-4784-4017-97e4-bfbcca2a4a3f",
+  "receiptSHA256": "2ae685321e54e7856b6097d26c56a12260bed25d084ee6526f4d8ea34f26d631",
+  "traceSHA256": "ad41e5a310c6b996a47cdc6448e0e9dd93e584454c903d93af36b6a8170be065",
+  "verdict": "CHECKS_PASS",
+  "sourceSHA256": {
+    "orders.csv": "0aa955ddcffc4d0b07d4f1e265200c2b87b8b2149bf25d98975f93df831921ad",
+    "confirmations.csv": "899a1ff6b5fb70300574f098ac3183ff7a5c3486cd2a762dd25d639a05f25dc4",
+    "supplier_notes.csv": "5a379fc9a65a53ac8574cb01cf7315759c3e1b9c20e760ca5fcaf6680433688b",
+    "policy.json": "af2c1a32361fdbbe6eb830f96a9344c7c3078fbc9c6fe47c7a20a4869aba36ed"
+  },
+  "issues": [],
+  "checkedLineCount": 8,
+  "expectedTotals": {
+    "orderCount": 8,
+    "readyCount": 2,
+    "holdCount": 6,
+    "plannedCommitmentCents": 2247000,
+    "atRiskApprovedCommitmentCents": 1677000,
+    "observedQuotePremiumCents": 45000,
+    "outOfTolerancePremiumCents": 36000,
+    "shortfallUnits": 35
+  },
+  "agentMode": "SCRIPTED_FIXTURE",
+  "actuallyUsedModel": false,
+  "observedModelCalls": 0,
+  "scope": "Independent process against exact four input files and approved synthetic policy; no external auditor or human approval. Self-consistent hashes do not authenticate the producer."
+}

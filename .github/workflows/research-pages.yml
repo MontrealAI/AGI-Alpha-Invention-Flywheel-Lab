@@ -10,6 +10,7 @@ on:
       - 'tests/test_surf_reader.cjs'
       - '.github/workflows/research-pages.yml'
       - 'products/alpha-genesis-harness/**'
+      - 'events/alpha-genesis-live/**'
       - '.github/workflows/alpha-genesis-harness.yml'
   push:
     branches: [main]
@@ -22,6 +23,7 @@ on:
       - 'tests/test_surf_reader.cjs'
       - '.github/workflows/research-pages.yml'
       - 'products/alpha-genesis-harness/**'
+      - 'events/alpha-genesis-live/**'
       - '.github/workflows/alpha-genesis-harness.yml'
   workflow_dispatch:
 permissions:
@@ -47,6 +49,7 @@ jobs:
             tests/test_research_site.py
             tests/test_alpha_site.cjs
             tests/test_surf_reader.cjs
+            events/alpha-genesis-live
             products/alpha-genesis-harness/app
             products/alpha-genesis-harness/scripts/publish_preview.py
             products/alpha-genesis-harness/tests/engine.test.cjs
@@ -58,6 +61,11 @@ jobs:
         run: |
           python3 RUN_WORKSHOP.py check
           python3 -m unittest test_experiment -v
+      - name: Verify ALPHA GENESIS LIVE agent, construction and evidence
+        run: |
+          node --test events/alpha-genesis-live/engine/tests/*.test.mjs events/alpha-genesis-live/lab/test/*.test.mjs events/alpha-genesis-live/06_QA/stage_engine.test.mjs
+          node events/alpha-genesis-live/00_STAGE/run_show.mjs --mode preview --focus confidence --out "$RUNNER_TEMP/alpha-genesis-live-preview"
+          node events/alpha-genesis-live/engine/verify_receipt.mjs "$RUNNER_TEMP/alpha-genesis-live-preview/agent-receipt.json"
       - name: Validate original PDFs, links and publication boundary
         run: python3 -m unittest discover -s tests -p 'test_research_site.py' -v
       - name: Check interactive research calculations and decisions

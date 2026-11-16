@@ -67,6 +67,17 @@ class ResearchSiteTests(unittest.TestCase):
         self.assertIn(entry['sha256'], page)
         self.assertEqual(entry['sha256'], '4bd6400c247b5fea0d336e2cba11e69890b0596e24ebd51931ada257fe78414f')
 
+    def test_alpha_genesis_live_event_preview(self):
+        event = (self.source / 'alpha-genesis-live.html').read_text()
+        studio = (self.source / 'alpha-genesis-live-studio.html').read_text()
+        index = (self.source / 'index.html').read_text()
+        self.assertIn('ALPHA GENESIS FLYWHEEL Ω — LIVE', event)
+        self.assertIn('Registration not open', event)
+        self.assertIn('scripted', event.lower())
+        self.assertIn('alpha-genesis-live.html', index)
+        self.assertIn('ALPHA GENESIS FLYWHEEL', studio)
+        self.assertIn('SCRIPTED PREVIEW', studio)
+
     def test_changed_pdf_is_rejected(self):
         with (self.source / site.PAPERS[0]).open('ab') as stream:
             stream.write(b'changed')

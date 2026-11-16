@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PROOF LAB | AI Agents That Prove Their Work | MONTREAL.AI</title>
+<meta name="description" content="A standalone, offline workshop for testing structured AI claims against independently computed CSV evidence.">
+<style>
+:root{--bg:#080611;--panel:#141023;--panel2:#1c1730;--line:#40355c;--gold:#f0d48e;--purple:#bca3ff;--white:#f5f1ff;--muted:#bcb2d2;--green:#a3f1d1;--red:#ffadbd;--blue:#a3d6ff}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(ellipse at 70% -15%,#45276b 0,transparent 45%),radial-gradient(ellipse at -10% 25%,#1c2859 0,transparent 38%),var(--bg);color:var(--white);font:16px/1.6 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}a{color:var(--gold);text-underline-offset:4px}button,textarea{font:inherit}button{border:1px solid #665480;background:#251d3f;color:var(--white);font-weight:700;border-radius:10px;cursor:pointer;padding:12px 17px;transition:transform .1s,background .1s}button:hover{background:#35294f}button:active{transform:translateY(1px)}button.gold{background:linear-gradient(125deg,#f1d693,#d8b86f);color:#20142b;border-color:#ecd69d}button.ghost{background:transparent}button:focus-visible,textarea:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid #93f2df;outline-offset:4px}header,main,footer{max-width:1200px;margin:auto;padding:0 25px}header{padding-top:24px}main{padding-bottom:70px}footer{color:var(--muted);font-size:13px;border-top:1px solid var(--line);padding:22px 25px 36px}.top{display:flex;align-items:center;justify-content:space-between;gap:22px;flex-wrap:wrap}.brand{font-size:12px;letter-spacing:.24em;font-weight:800;color:var(--gold)}.edition{font-size:12px;color:var(--muted);border:1px solid var(--line);border-radius:100px;padding:5px 12px}.hero{margin:65px 0 34px}.kicker{color:var(--purple);letter-spacing:.2em;font-size:12px;font-weight:800}.hero h1{font-size:clamp(43px,6vw,76px);line-height:1.04;letter-spacing:-.065em;max-width:920px;margin:14px 0 15px;font-weight:790}.hero h1 span{color:var(--gold)}.lead{font-size:clamp(17px,2.1vw,21px);color:var(--muted);max-width:780px;margin:0 0 25px}.hero-line{height:1px;background:linear-gradient(90deg,var(--gold),#58407e,transparent);margin:32px 0}.steps{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}.step{border:1px solid var(--line);background:rgba(24,17,44,.8);border-radius:12px;padding:15px}.step strong{display:block;color:var(--gold);font-size:12px;letter-spacing:.1em}.step span{color:var(--muted);font-size:13px}section{margin-top:38px}.eyebrow{font-size:12px;letter-spacing:.16em;text-transform:uppercase;font-weight:800;color:var(--gold)}h2{font-size:27px;line-height:1.25;margin:9px 0 8px}h3{font-size:18px;margin:0 0 10px}.desc{color:var(--muted);margin:0 0 16px}.columns{display:grid;grid-template-columns:1fr 1fr;gap:18px}.card{border:1px solid var(--line);border-radius:16px;background:rgba(19,15,34,.92);padding:21px;box-shadow:0 10px 30px rgba(0,0,0,.13)}.tag{display:inline-block;font-size:11px;text-transform:uppercase;font-weight:800;color:var(--blue);letter-spacing:.08em;margin-bottom:7px}textarea{width:100%;min-height:175px;background:#0a0916;border:1px solid #65547e;color:var(--white);border-radius:10px;padding:14px;resize:vertical;line-height:1.5;font:13px/1.5 ui-monospace,SFMono-Regular,Consolas,monospace}textarea.claim{min-height:210px}.actionbar{display:flex;flex-wrap:wrap;gap:9px;align-items:center;margin-top:16px}.note{color:var(--muted);font-size:13px}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:16px 0}.stat{background:var(--panel2);border:1px solid var(--line);border-radius:13px;padding:17px}.stat .value{font-size:29px;color:var(--gold);font-weight:800;font-variant-numeric:tabular-nums}.stat .lbl{font-size:12px;color:var(--muted)}.hidden{display:none!important}.status{border:1px solid #807098;background:#201936;padding:12px 15px;border-radius:9px;margin:12px 0;color:var(--white);font-size:14px}.status.good{border-color:#4f9f83;color:var(--green)}.status.bad{border-color:#a55d77;color:var(--red)}.status.warning{border-color:#8e8057;color:var(--gold)}.evid-grid{display:grid;grid-template-columns:1.5fr 1fr;gap:14px}.tablewrap{overflow:auto;max-height:390px;border:1px solid var(--line);border-radius:10px}table{border-collapse:collapse;width:100%;font-size:13px}th,td{border-bottom:1px solid #3d3254;text-align:left;padding:10px;white-space:nowrap}th{position:sticky;top:0;background:#27203d;color:var(--gold)}.list{margin:0;padding-left:23px}.list li{margin:5px 0}.verdict{border:1px solid var(--line);background:#0e0c1d;border-radius:13px;padding:17px;margin-top:12px;font-size:14px}.check{padding:10px 0;border-bottom:1px solid #322845}.check:last-child{border-bottom:0}.check b{color:var(--gold)}.claim-summary{font-size:14px;color:var(--muted);margin-top:8px}.legal{font-size:12px;color:var(--muted);line-height:1.7}.anchorlinks{display:flex;gap:20px;flex-wrap:wrap}.smallgold{color:var(--gold);font-weight:700}label{display:block;font-weight:700;font-size:14px;margin-bottom:9px}.pill{display:inline-block;border:1px solid var(--line);border-radius:100px;padding:2px 9px;color:var(--muted);font-size:12px}.divider{border:0;border-top:1px solid var(--line);margin:20px 0}
+@media(max-width:800px){.steps{grid-template-columns:repeat(2,1fr)}.columns,.evid-grid{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}.hero{margin-top:42px}}@media(max-width:430px){header,main,footer{padding-left:17px;padding-right:17px}.card{padding:15px}.steps{grid-template-columns:1fr 1fr;gap:6px}.step{padding:11px}.hero h1{font-size:42px}}@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+</style>
+</head>
+<body>
+<header><div class="top"><div class="brand">MONTREAL.AI <span style="color:#8e80a8">/</span> PROFESSIONAL LABS</div><div class="edition">OFFLINE · LOCAL DATA · NO ACCOUNT</div></div></header>
+<main>
+<section class="hero" style="margin-top:61px"><div class="kicker">LAB 01 · CLAIMS UNDER PRESSURE</div><h1>AI AGENTS <span>THAT PROVE</span> THEIR WORK.</h1><p class="lead">A beautifully simple test of a serious question: when AI reports a business finding, what evidence would justify acting on it?</p><div class="anchorlinks"><a href="#sources">Start the lab</a><a href="#claim">Challenge an AI claim</a><a href="#resources">Open MONTREAL.AI original projects</a></div><div class="hero-line"></div><div class="steps" aria-label="Workshop learning sequence"><div class="step"><strong>01 · DEFINE</strong><span>Set the task and claims</span></div><div class="step"><strong>02 · GENERATE</strong><span>Use an actual AI model</span></div><div class="step"><strong>03 · COMPARE</strong><span>Run deterministic checks</span></div><div class="step"><strong>04 · CHALLENGE</strong><span>Find unsupported claims</span></div><div class="step"><strong>05 · RETAIN</strong><span>Export reviewable evidence</span></div></div></section>
+<section id="sources" aria-labelledby="sourceh"><div class="eyebrow">01 / The business case</div><h2 id="sourceh">Two datasets. One decision. No blind trust.</h2><p class="desc">A fictional operations team receives two supplier catalog exports. It needs to know which SKU values disagree before acting. All data is synthetic and remains in your browser.</p><div class="columns"><div class="card"><div class="tag">Source A · Internal catalog</div><label for="left">Catalog A · CSV</label><textarea spellcheck="false" id="left"></textarea></div><div class="card"><div class="tag">Source B · Supplier feed</div><label for="right">Catalog B · CSV</label><textarea spellcheck="false" id="right"></textarea></div></div><div class="actionbar"><button class="gold" id="compare">Run independent comparison</button><button id="reset" class="ghost">Restore initial case</button><span class="note">Identifiers and field values are compared as exact text. No source is assumed correct.</span></div><div id="compareStatus" class="status warning" role="status" aria-live="polite">Ready. Compute the reference findings before deciding what to trust.</div><div class="stats hidden" id="stats" aria-label="Comparison summary"><div class="stat"><div class="value" id="stat-matches">–</div><div class="lbl">Matched identifiers</div></div><div class="stat"><div class="value" id="stat-diffs">–</div><div class="lbl">Conflicting fields</div></div><div class="stat"><div class="value" id="stat-left">–</div><div class="lbl">Only in Source A</div></div><div class="stat"><div class="value" id="stat-right">–</div><div class="lbl">Only in Source B</div></div></div><div class="evid-grid hidden" id="evidence"><div class="card"><h3>Traceable discrepancies</h3><p class="note">Actual field values, with input CSV row references. Row 1 is the header.</p><div class="tablewrap"><table><thead><tr><th>SKU</th><th>Field</th><th>Source A</th><th>Source B</th><th>Rows A/B</th></tr></thead><tbody id="evidenceRows"></tbody></table></div></div><div class="card"><h3>Unmatched and unexamined</h3><div id="unmatched"></div><hr class="divider"><p class="legal">The checker proves differences under the declared exact-text comparison rules—not which source is accurate. Human review remains required.</p></div></div></section>
+<section id="claim" aria-labelledby="claimh"><div class="eyebrow">02 / The AI challenge</div><h2 id="claimh">Will the AI's conclusions survive scrutiny?</h2><p class="desc">Run a real AI model using the supplied prompt in a model account you control, or load the clearly labeled rehearsal fixture. Paste its structured JSON below. The verifier checks only the structured claims, never declares a business decision correct.</p><div class="columns"><div class="card"><div class="tag">Model instruction</div><label for="prompt">Live AI task prompt · includes synthetic inputs</label><textarea id="prompt" spellcheck="false" style="min-height:220px" readonly></textarea><div class="actionbar"><button id="copyPrompt">Copy model prompt</button><span class="note">Paste in a model of your choice. A subscription/API cost may apply depending on that service.</span></div></div><div class="card"><div class="tag">Evidence claim</div><label for="claimJson">AI-produced JSON (or rehearsal fixture)</label><textarea class="claim" id="claimJson" spellcheck="false" placeholder='Paste JSON containing summary, unmatchedLeft, unmatchedRight and conflicts.'></textarea><div class="actionbar"><button id="wrongFixture" class="ghost">Load intentionally wrong claim</button><button id="referenceFixture" class="ghost">Load reference fixture</button></div><p class="legal">The reference fixture is a solved example, not a live model run.</p></div></div><div class="actionbar"><button class="gold" id="verify">Verify structured AI claims</button><button id="export" class="ghost">Export evidence receipt (.json)</button></div><div id="claimStatus" class="status warning" role="status" aria-live="polite">No claim checked. First run the independent comparison.</div><div class="verdict hidden" id="claimVerdict" aria-live="polite"></div></section>
+<section id="resources" aria-labelledby="resourceh"><div class="eyebrow">03 / Build on MONTREAL.AI</div><h2 id="resourceh">From a teaching example to serious systems.</h2><div class="columns"><div class="card"><div class="tag">Original browser tool</div><h3>AGI Alpha Agent — Two Lists</h3><p class="desc">Compare nonpersonal CSV files with an existing MONTREAL.AI engine and export a reusable offline workspace. This session's supplementary checker is an independent, event-specific implementation with narrower duplicate handling.</p><a href="https://montrealai.github.io/AGI-Alpha-Agent-v0/try/" target="_blank" rel="noopener noreferrer">Open the original tool</a></div><div class="card"><div class="tag">Proof governance</div><h3>GoalOS · Proof Gradient</h3><p class="desc">Explore mission contracts, independent replay, evidence dockets and human acceptance. Public examples illustrate principles; they are not an external audit of this task.</p><a href="https://github.com/MontrealAI/proof-gradient" target="_blank" rel="noopener noreferrer">Explore the proof architecture</a></div></div><p class="legal">This standalone lab is original supplemental event code (MIT); it is not represented as the released MONTREAL.AI comparator. All arithmetic/record outcomes are computed locally. The AI prompt does not run a model. Source identities in exported receipts are provided where browser hashing is supported. No network requests, cookies or analytics are made by this lab. External source links navigate only if clicked.</p></section>
+</main><footer><div class="brand">MONTREAL.AI · PROFESSIONAL LABS</div><p>Proof is a discipline. The computer can check a claim; accountable people decide whether it is sufficient to act.</p><p>© MONTREAL.AI workshop material · v1.0 · Synthetic teaching scenario</p></footer>
+<script>
+// Self-contained exact parser, comparison and claim checking from the standalone package.
+// SPDX-License-Identifier: MIT
+// MONTREAL.AI event-specific ORIGINAL supplementary verifier; not the Alpha Agent engine.
+const CORE_VERSION = 'proof-lab/v1.0.0';
+const MAX_TEXT = 300000;
+const MAX_ROWS = 1500;
+const MAX_COLS = 32;
+const MAX_CELL = 4096;
+
+function parseCSV(input) {
+  if (typeof input !== 'string' || !input.trim()) throw new Error('CSV must be nonempty text.');
+  if (input.length > MAX_TEXT) throw new Error('CSV is too large for the workshop checker.');
+  let text = input.charCodeAt(0) === 0xfeff ? input.slice(1) : input;
+  const rows = []; let row = []; let cell = ''; let quote = false; let started = false;
+  function addCell() {
+    if (cell.length > MAX_CELL) throw new Error('CSV cell exceeds the workshop limit.');
+    row.push(cell); cell = ''; started = false;
+    if (row.length > MAX_COLS) throw new Error('Too many columns.');
+  }
+  function addRow() {
+    addCell();
+    if (row.some(x => x !== '') || rows.length > 0) rows.push(row);
+    row = [];
+    if (rows.length > MAX_ROWS + 1) throw new Error('Too many data rows.');
+  }
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (quote) {
+      if (c === '"') { if (text[i + 1] === '"') { cell += '"'; i++; } else { quote = false; } }
+      else { cell += c; }
+    } else if (c === '"') {
+      if (cell.length || started) throw new Error('Invalid quoted CSV field.');
+      quote = true; started = true;
+    } else if (c === ',') addCell();
+    else if (c === '\n' || c === '\r') { if (c === '\r' && text[i + 1] === '\n') i++; addRow(); }
+    else { if (started) throw new Error('Unexpected data after a quoted field.'); cell += c; }
+    if (cell.length > MAX_CELL) throw new Error('CSV cell exceeds the workshop limit.');
+  }
+  if (quote) throw new Error('Unclosed CSV quotation.');
+  if (cell.length || row.length || started) addRow();
+  if (rows.length < 2) throw new Error('CSV requires a header and at least one data row.');
+  const header = rows[0];
+  if (header.some(x => !x)) throw new Error('CSV header fields must not be empty.');
+  if (new Set(header).size !== header.length) throw new Error('Duplicate column names are not allowed.');
+  const records = rows.slice(1).map((r, i) => {
+    if (r.length !== header.length) throw new Error(`CSV row ${i + 2} has ${r.length} columns; expected ${header.length}.`);
+    return {line: i + 2, values: Object.fromEntries(header.map((h, j) => [h, r[j]]))};
+  });
+  return {header, records};
+}
+
+const sorted = xs => [...xs].sort((a, b) => a.localeCompare(b, 'en'));
+const identity = x => String(x.sku) + '\u0000' + String(x.field);
+function repeats(records, key) {
+  const seen = new Set(), dup = new Set();
+  for (const r of records) { const k = r.values[key]; if (seen.has(k)) dup.add(k); seen.add(k); }
+  return sorted(dup);
+}
+
+function compareCSV(aText, bText, key='sku') {
+  const a = parseCSV(aText), b = parseCSV(bText);
+  if (!a.header.includes(key) || !b.header.includes(key)) throw new Error(`Both CSVs need the ${key} key column.`);
+  for (const [label, x] of [['A', a], ['B', b]]) {
+    if (x.records.some(r => !r.values[key])) throw new Error(`Source ${label} contains an empty identifier.`);
+  }
+  const duplicateLeft = repeats(a.records, key), duplicateRight = repeats(b.records, key);
+  const common = a.header.filter(x => x !== key && b.header.includes(x));
+  const unexaminedLeft = a.header.filter(x => x !== key && !b.header.includes(x));
+  const unexaminedRight = b.header.filter(x => x !== key && !a.header.includes(x));
+  if (duplicateLeft.length || duplicateRight.length) {
+    return {version:CORE_VERSION,status:'BLOCKED',key,reason:'Duplicate identifiers need human key-resolution; this supplementary checker does not multiply ambiguous pairs.',duplicateLeft,duplicateRight,unexaminedLeft,unexaminedRight,stats:{leftRows:a.records.length,rightRows:b.records.length},expectation:null};
+  }
+  const am = new Map(a.records.map(r => [r.values[key], r]));
+  const bm = new Map(b.records.map(r => [r.values[key], r]));
+  const unmatchedLeft = sorted([...am.keys()].filter(x => !bm.has(x)));
+  const unmatchedRight = sorted([...bm.keys()].filter(x => !am.has(x)));
+  const conflicts = [];
+  for (const [k, ar] of am) if (bm.has(k)) {
+    const br = bm.get(k);
+    for (const field of common) if (ar.values[field] !== br.values[field]) {
+      conflicts.push({sku:k,field,left:ar.values[field],right:br.values[field],leftLine:ar.line,rightLine:br.line});
+    }
+  }
+  conflicts.sort((x,y) => identity(x).localeCompare(identity(y),'en'));
+  const expectation = {unmatchedLeft,unmatchedRight,conflicts:conflicts.map(({sku,field})=>({sku,field}))};
+  return {version:CORE_VERSION,status:'COMPUTED_NOT_APPROVED',key,duplicateLeft,duplicateRight,unexaminedLeft,unexaminedRight,stats:{leftRows:a.records.length,rightRows:b.records.length,matchedIdentifiers:a.records.length-unmatchedLeft.length,conflicts:conflicts.length,unmatchedLeft:unmatchedLeft.length,unmatchedRight:unmatchedRight.length},conflicts,unmatchedLeft,unmatchedRight,expectation};
+}
+
+function normalizeIDs(x, label) {
+  if (!Array.isArray(x) || x.some(y => typeof y !== 'string')) throw new Error(`${label} must be an array of identifier strings.`);
+  if (x.length !== new Set(x).size) throw new Error(`${label} contains duplicate claims.`);
+  return sorted(x);
+}
+function normalizeConflicts(x) {
+  if (!Array.isArray(x) || x.some(y => !y || typeof y.sku !== 'string' || typeof y.field !== 'string')) throw new Error('conflicts must be objects with sku and field strings.');
+  const ids=x.map(identity);
+  if (ids.length !== new Set(ids).size) throw new Error('conflicts contains duplicate claims.');
+  return sorted(ids);
+}
+function delta(found,expected) {
+  const f=new Set(found), e=new Set(expected);
+  return {missing:expected.filter(x=>!f.has(x)),unsupported:found.filter(x=>!e.has(x)),pass:found.length===expected.length && found.every(x=>e.has(x))};
+}
+function verifyClaim(compare, claim) {
+  if (!compare || compare.status==='BLOCKED') return {status:'BLOCKED',reason:compare?.reason||'No verified comparison.',checks:[]};
+  if (!claim || typeof claim !== 'object') throw new Error('AI claim must be a JSON object.');
+  const expected=compare.expectation;
+  const checks=[
+    {label:'Only in A',...delta(normalizeIDs(claim.unmatchedLeft,'unmatchedLeft'),expected.unmatchedLeft)},
+    {label:'Only in B',...delta(normalizeIDs(claim.unmatchedRight,'unmatchedRight'),expected.unmatchedRight)},
+    {label:'Conflicting fields',...delta(normalizeConflicts(claim.conflicts),normalizeConflicts(expected.conflicts))}
+  ];
+  return {status:checks.every(x=>x.pass)?'CHECKS_PASS':'CHECKS_FAIL',checks,scope:'Only the structured claims were checked against exact text equality. Free-text summary, source truth, economic impact and decision authority were NOT independently verified.'};
+}
+
+function canonicalClaim(comparison) {
+  if (!comparison.expectation) throw new Error('Blocked comparison has no canonical claim.');
+  return {summary:'Calculated differences only; source authority remains unresolved.',...comparison.expectation};
+}
+
+const defaultA="sku,product,unit_price,stock,status\nX-101,Arcline Adapter,12.50,20,active\nX-102,Quantum Cable,9.95,40,active\nX-103,Ops Sensor,85.00,12,active\nX-104,Secure Hub,39.00,8,active\nX-105,Legacy Pack,14.00,5,retired\nX-106,Flux Meter,119.00,3,active\nX-007,Mini Valve,5.00,100,active\n";
+const defaultB="sku,product,unit_price,stock,status\nX-101,Arcline Adapter,12.50,18,active\nX-102,Quantum Cable,11.95,40,active\nX-103,Ops Sensor,85.00,12,active\nX-104,Secure Hub,39.00,8,paused\nX-106,Flux Meter,119.00,3,active\nX-107,New Fixture,18.00,20,active\n";
+const wrongClaim={"summary":"Everything important matches except the price of X-101.","unmatchedLeft":["X-105"],"unmatchedRight":[],"conflicts":[{"sku":"X-101","field":"unit_price"}]};
+const referenceClaim={"summary":"Three conflicting fields and three unmatched identifiers need review; the records do not establish which source is authoritative.","unmatchedLeft":["X-105","X-007"],"unmatchedRight":["X-107"],"conflicts":[{"sku":"X-101","field":"stock"},{"sku":"X-102","field":"unit_price"},{"sku":"X-104","field":"status"}]};
+const $=id=>document.getElementById(id);let lastComparison=null,lastVerification=null;
+function setStatus(id,t,kind='warning'){const e=$(id);e.textContent=t;e.className='status '+kind;}
+function fillDefaults(){ $('left').value=defaultA;$('right').value=defaultB; $('claimJson').value=''; lastComparison=null;lastVerification=null;$('stats').classList.add('hidden');$('evidence').classList.add('hidden');$('claimVerdict').classList.add('hidden');setStatus('compareStatus','Restored the original synthetic inputs. Run the comparison.');setStatus('claimStatus','No claim checked. First compute the comparison.');updatePrompt();}
+function updatePrompt(){ $('prompt').value='You are an AI operations analyst. Use only the two SYNTHETIC CSV sources below. Identify the unmatched SKUs and conflicting fields. Treat identifiers as exact strings, including leading zeroes. Do not infer which source is correct, invent financial impact, or claim authorization. Return ONLY valid JSON with this exact shape: {"summary":"brief explanation","unmatchedLeft":["SKU"],"unmatchedRight":["SKU"],"conflicts":[{"sku":"SKU","field":"FIELD"}]}. Every conflict must name the exact SKU and column name. If uncertain, say so in summary rather than fabricate.\n\nSOURCE A:\n'+$('left').value+'\nSOURCE B:\n'+$('right').value;}
+function appendLine(parent,strong,text){const p=document.createElement('p');const b=document.createElement('strong');b.textContent=strong+' ';p.append(b,document.createTextNode(text));parent.append(p)}
+function compare(){try{updatePrompt();const result=compareCSV($('left').value,$('right').value);lastComparison=result;lastVerification=null;$('claimVerdict').classList.add('hidden');if(result.status==='BLOCKED'){$('stats').classList.add('hidden');$('evidence').classList.add('hidden');setStatus('compareStatus','BLOCKED: '+result.reason+' Duplicates in A: '+result.duplicateLeft.join(', ')+'; B: '+result.duplicateRight.join(', '),'bad');return;}const s=result.stats;[['stat-matches',s.matchedIdentifiers],['stat-diffs',s.conflicts],['stat-left',s.unmatchedLeft],['stat-right',s.unmatchedRight]].forEach(([id,v])=>$(id).textContent=String(v));$('stats').classList.remove('hidden');$('evidence').classList.remove('hidden');const tbody=$('evidenceRows');tbody.replaceChildren();for(const r of result.conflicts){const tr=document.createElement('tr');for(const v of [r.sku,r.field,r.left,r.right,String(r.leftLine)+' / '+String(r.rightLine)]){const td=document.createElement('td');td.textContent=v;tr.append(td)}tbody.append(tr)}const un=$('unmatched');un.replaceChildren();appendLine(un,'Only A:',result.unmatchedLeft.join(', ')||'None');appendLine(un,'Only B:',result.unmatchedRight.join(', ')||'None');appendLine(un,'A-only columns:',result.unexaminedLeft.join(', ')||'None');appendLine(un,'B-only columns:',result.unexaminedRight.join(', ')||'None');setStatus('compareStatus','Computed '+s.conflicts+' conflicting field(s) and '+(s.unmatchedLeft+s.unmatchedRight)+' unmatched identifier(s). Findings are not a business authorization.','good');setStatus('claimStatus','Comparison computed. Paste an AI JSON claim to challenge it.');}catch(e){lastComparison=null;lastVerification=null;$('stats').classList.add('hidden');$('evidence').classList.add('hidden');$('claimVerdict').classList.add('hidden');setStatus('compareStatus','Comparison refused: '+String(e.message||e),'bad');}}
+function verify(){try{if(!lastComparison){setStatus('claimStatus','Run independent comparison first.','bad');return;}const claim=JSON.parse($('claimJson').value);const result=verifyClaim(lastComparison,claim);lastVerification=result;const view=$('claimVerdict');view.replaceChildren();view.classList.remove('hidden');for(const c of result.checks||[]){const box=document.createElement('div');box.className='check';const top=document.createElement('b');top.textContent=(c.pass?'PASS':'FAIL')+' · '+c.label;box.append(top);if(c.missing.length)appendLine(box,'Missing:',c.missing.join(', '));if(c.unsupported.length)appendLine(box,'Unsupported:',c.unsupported.join(', '));if(c.pass)appendLine(box,'Result:','All structured claims in this category match the deterministic calculation.');view.append(box);}if(result.scope)appendLine(view,'Scope:',result.scope);setStatus('claimStatus',result.status==='CHECKS_PASS'?'STRUCTURED CHECKS PASS — not business approval':result.status==='CHECKS_FAIL'?'STRUCTURED CHECKS FAIL — inspect the unsupported and missing claims':result.reason,result.status==='CHECKS_PASS'?'good':'bad');}catch(e){lastVerification=null;$('claimVerdict').classList.add('hidden');setStatus('claimStatus','Claim checking refused: '+String(e.message||e),'bad');}}
+async function sha256(text){try{if(!crypto?.subtle)return null;const arr=new TextEncoder().encode(text);const d=await crypto.subtle.digest('SHA-256',arr);return Array.from(new Uint8Array(d)).map(x=>x.toString(16).padStart(2,'0')).join('');}catch{return null}}
+async function save(){if(!lastComparison){setStatus('claimStatus','Compute the comparison before exporting evidence.','bad');return;}const la=$('left').value,rb=$('right').value;const obj={schema:'montrealai-event-browser-receipt/v1',generatedAt:new Date().toISOString(),case:'Sable Supply synthetic catalog reconciliation',executionMode:'browser-deterministic; no model was invoked by the lab',coreVersion:CORE_VERSION,inputs:{sourceA:la,sourceB:rb,sha256:{A:await sha256(la),B:await sha256(rb)}},comparison:lastComparison,claim: (()=>{try{return JSON.parse($('claimJson').value)}catch{return null}})(),verification:lastVerification,humanAcceptance:null,claimBoundary:'Only exact-text structured evidence is computed; model truth, source authority, financial impact and operational approval remain outside this test.'};const blob=new Blob([JSON.stringify(obj,null,2)+'\n'],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='MONTREALAI-proof-evidence-'+new Date().toISOString().slice(0,10)+'.json';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1000);setStatus('claimStatus','Evidence exported. This is a local check record, not a certified attestation.','good');}
+$('compare').addEventListener('click',compare);$('reset').addEventListener('click',fillDefaults);$('left').addEventListener('input',()=>{lastComparison=null;lastVerification=null;setStatus('compareStatus','Inputs changed. Rerun independent comparison.','warning');$('stats').classList.add('hidden');$('evidence').classList.add('hidden');$('claimVerdict').classList.add('hidden');updatePrompt();});$('right').addEventListener('input',()=>{lastComparison=null;lastVerification=null;setStatus('compareStatus','Inputs changed. Rerun independent comparison.','warning');$('stats').classList.add('hidden');$('evidence').classList.add('hidden');$('claimVerdict').classList.add('hidden');updatePrompt();});
+$('wrongFixture').addEventListener('click',()=>{$('claimJson').value=JSON.stringify(wrongClaim,null,2);setStatus('claimStatus','Loaded INTENTIONALLY WRONG REHEARSAL FIXTURE. This is not a live model output.');});$('referenceFixture').addEventListener('click',()=>{$('claimJson').value=JSON.stringify(referenceClaim,null,2);setStatus('claimStatus','Loaded SOLVED REFERENCE FIXTURE. This is not a live model output.');});$('verify').addEventListener('click',verify);$('export').addEventListener('click',save);$('copyPrompt').addEventListener('click',async()=>{updatePrompt();try{await navigator.clipboard.writeText($('prompt').value);setStatus('claimStatus','Prompt copied. It uses only synthetic data.','good')}catch{$('prompt').focus();$('prompt').select();setStatus('claimStatus','Clipboard blocked in this browser. The prompt is selected; press Ctrl/Cmd+C.','warning')}});
+fillDefaults();
+</script>
+</body></html>
