@@ -90,7 +90,7 @@ def main():
     config = {'local_only': True, 'session_budget_usd': 0, 'allow_paid_requests': False, 'timeout_seconds': 600,
               'max_attempts': 1, 'providers': {'local': {'kind': 'openai', 'base_url': 'http://127.0.0.1:18767/v1',
               'output_limit_field': 'max_tokens', 'models': {model_id: {'input_per_million': 0, 'output_per_million': 0,
-              'max_output_tokens': 4096, 'input_token_overhead': 4096, 'json_mode': True, 'json_schema': True}}}}}
+              'max_output_tokens': 2048, 'input_token_overhead': 4096, 'json_mode': True, 'json_schema': True}}}}}
     observations = []
     class ObservedRuntime(Runtime):
         def generate(self, data, on_event=None, *, cancelled_before_dispatch=None, expected_provider=None):
@@ -109,7 +109,7 @@ def main():
                 observation['wall_seconds'] = time.monotonic() - start
                 observations.append(observation)
     runtime = ObservedRuntime(config)
-    command = [str(args.binary), '-m', str(args.model), '--host', '127.0.0.1', '--port', '18767', '-c', '16384',
+    command = [str(args.binary), '-m', str(args.model), '--host', '127.0.0.1', '--port', '18767', '-c', '8192',
                '-t', '2', '--parallel', '1', '--n-gpu-layers', '0', '--no-webui', '--reasoning-budget', '0',
                '--chat-template-kwargs', '{"enable_thinking":false}', '--alias', model_id]
     objective = ('Construct quote.json, a declared-cost and capacity planning calculator. Inputs: quantity, unit_cost_cents, setup_cents, verification_cents, maintenance_cents, capacity. '
@@ -150,7 +150,7 @@ def main():
                 spec = {'objective': objective, 'context': ('Manufacturing quote planning.' if arm['id'] == 'manufacturing_construct' else
                     'Distinct successor application: batch laboratory service pricing/capacity. quantity=samples, unit cost=consumables per sample, setup=assay setup, verification=QC, maintenance=allocated instrument maintenance, capacity=available batch slots. All numbers are authored examples, not measured market data. Same additive mechanism; current acceptance must be rechecked.'),
                     **strategy_parameters(args.strategy, model_id), 'acceptance': [{'kind': 'instrument', 'artifact': 'quote.json', 'input': c['input'], 'expected': c['expected']} for c in cases],
-                    'max_actions': 8, 'max_output_tokens': 4096, 'local_only': True,
+                    'max_actions': 8, 'max_output_tokens': 2048, 'local_only': True,
                     'tool_permissions': ['construct_instrument', 'run_instrument', 'read_artifact', 'write_document', 'write_dataset']}
                 if arm['id'] == 'lab_inherit':
                     spec['inherited_capability'] = initial_id
