@@ -14,15 +14,13 @@
 | 4 | **MODELPROOF Ω** — cryptographic assurance about actual AI model inference | Anthropic FlashProve zkSNARK provable inference, **Nov 2** | Attest specified model execution with accepted overhead and integrity guarantees | Research hypothesis; **not built**; computational overhead and specialized hardware |
 | 5 | **DECISION Ω** — bounded high-volume multimodal decisions with calibrated confidence and recourse | Google Gemini Decisions API, **Nov 11**, 1,000 task scoring / price and speed announcement | Contracts for a high-volume, objectively auditable decision task with calibrated error bounds | Research hypothesis; **not built**; commercial and model risk |
 
-Primary sources:
-- Google Research, *Teamwork makes the algorithm work*, Nov 13: https://research.google/blog/teamwork-makes-the-algorithm-work/
-- Google, Antigravity/Gemini 4 Carbon announcements, Nov 10 (product capabilities should be verified before integration).
-- Google DeepMind, AI-assisted verification of Signal cryptographic code, Nov 10: https://deepmind.google/discover/blog/
-- OpenAI Security Research, autonomous Linux finding/patching, Nov 4: https://openai.com/index/
-- Anthropic, *FlashProve*, Nov 2: https://www.anthropic.com/research/
-- Google Gemini Decisions API, Nov 11: https://developers.googleblog.com/
-
-*Source URLs above identify the organizations or official entrypoints; find exact dated primary articles before publishing claims externally. See the live research citations in the accompanying investigation.*
+Primary dated sources (all Nov 2–13, 2026):
+- [Google Research, **Advancing science & engineering with Antigravity’s /teamwork** — Nov 13](https://www.research.google/blog/advancing-science-engineering-with-antigravitys-teamwork-feature/): large-team search, **dedicated falsifiers**, math, distributed systems and kernel optimization; work with human experts.
+- [Google Antigravity, **Gemini 4 Carbon and /swarm** — Nov 10](https://antigravity.google/blog/gemini-4-carbon-in-google-antigravity): coordinated agents, isolated worktrees and adversarial verifiers; consumption/quota is a material operating cost.
+- [Google DeepMind, **Introducing AlphaProof Code** — Nov 10](https://deepmind.google/blog/introducing-alphaproof-code/): human-guided, Lean-checked properties of compiled Signal cryptography; not general proof of absence of every defect.
+- [OpenAI, **A thousand fewer paths to root** — Nov 4](https://openai.com/index/a-thousand-fewer-paths-to-root/): 2,308 candidate Linux findings, 1,724 dynamically reproduced cases, 948 exploitation/patching candidates, **US$1.2 million** reported API cost; do not generalize as cheap automatic patching.
+- [Anthropic, **Progress on provable inference for large language models** — Nov 2](https://www.anthropic.com/research/provable-inference): FlashProve open source prototype; 400B mixture-of-experts model with proof overhead about 70–95× vLLM GPU time.
+- [Google, **Gemini Decisions API: Fast, calibrated multimodal decisions** — Nov 11](https://blog.google/innovation-and-ai/technology/developers-tools/gemini-decisions-api/): up to 1,000 closed-set decisions, 150–250ms reported, US$0.10/1m input tokens reported; product and pricing terms may change.
 
 ## What we have actually built
 
