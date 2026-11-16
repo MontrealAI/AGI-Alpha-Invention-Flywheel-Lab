@@ -101,6 +101,8 @@ def verify(args: argparse.Namespace) -> tuple[int, dict]:
     anchor = read_anchor(args.anchor)
     if args.prompt_tokens < 1 or args.reply_tokens < 1:
         raise ValueError("positive prompt/reply token counts required (reply includes EOS)")
+    if args.next_token is not None and not (0 <= args.next_token < 2 ** 32):
+        raise ValueError("client next-token must be a uint32 token ID")
     files = evidence_files(args)
     hashes = {name: sha256_file(path) for name, path in files.items()}
     for key, trusted_digest in anchor["trusted_sha256"].items():
@@ -118,6 +120,8 @@ def verify(args: argparse.Namespace) -> tuple[int, dict]:
         "--layout-file", str(args.layout_file.resolve()),
         "--verifier", str(args.verifier.resolve()),
     ]
+    if args.next_token is not None:
+        command.extend(("--next-token", str(args.next_token)))
     if not anchor["allow_proof_of_work"]:
         command.append("--no-proof-of-work")
     try:
@@ -144,7 +148,8 @@ def verify(args: argparse.Namespace) -> tuple[int, dict]:
         "commitment_id": anchor["commitment_id"],
         "proof_statement": "client-specified reply range exact-match accepted by upstream checker",
         "checked_token_range_requested": {
-            "prompt_tokens": args.prompt_tokens, "reply_tokens": args.reply_tokens
+            "prompt_tokens": args.prompt_tokens, "reply_tokens": args.reply_tokens,
+            "client_next_token": args.next_token,
         },
         "allow_proof_of_work": anchor["allow_proof_of_work"],
         "upstream_exit_code": upstream_exit,
@@ -177,6 +182,7 @@ def main(argv=None) -> int:
     parser.add_argument("--public-key-dir", type=Path, required=True)
     parser.add_argument("--prompt-tokens", type=int, required=True)
     parser.add_argument("--reply-tokens", type=int, required=True)
+    parser.add_argument("--next-token", type=int, help="client-confirmed token after request, when full checked reply reaches request end")
     parser.add_argument("--timeout", type=int, default=120)
     parser.add_argument("--out", type=Path)
     args = parser.parse_args(argv)
