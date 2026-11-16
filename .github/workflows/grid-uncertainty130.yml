@@ -1,0 +1,59 @@
+name: Blue Sky grid130 fixed-DC box certificate / independent LP
+on:
+  pull_request:
+    paths:
+      - 'campaign/grid-uncertainty130/**'
+      - 'research/grid_uncertainty130*.py'
+      - 'tests/test_grid_uncertainty130.py'
+      - '.github/workflows/grid-uncertainty130.yml'
+  push:
+    branches:
+      - experiment/grid-uncertainty-certificate130-20261110
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source_bound_finite:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Record platform start time
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+          fetch-depth: 20
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Require original protocol ancestor; reject rewritten frozen PGLib blobs
+        shell: bash
+        run: |
+          git merge-base --is-ancestor e197e7f54c07e3cf122f7e88790943870e4e885a HEAD
+          python -m pip install --only-binary=:all: -r requirements-cycle004.txt
+          python -m unittest tests.test_grid_uncertainty130 -v
+          PYTHONOPTIMIZE=1 python -m unittest tests.test_grid_uncertainty130 -v
+      - name: Actually compute all six frozen source-dependent worlds
+        shell: bash
+        run: |
+          /usr/bin/time -v -o "$RUNNER_TEMP/CANDIDATE_RESOURCE.txt" python -m research.grid_uncertainty130 --output "$RUNNER_TEMP/CANDIDATE.json"
+      - name: Independent full post-outage LP and attaining-witness verification
+        shell: bash
+        run: |
+          /usr/bin/time -v -o "$RUNNER_TEMP/VERIFIER_RESOURCE.txt" python -m research.grid_uncertainty130_verify --candidate "$RUNNER_TEMP/CANDIDATE.json" --output "$RUNNER_TEMP/RESULT.json"
+          python -m json.tool "$RUNNER_TEMP/RESULT.json" >/dev/null
+          cat "$RUNNER_TEMP/RESULT.json"
+      - name: Compact independent result and source-bound resource telemetry
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: grid130-independent-lp-${{ github.sha }}-attempt-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/RESULT.json
+            ${{ runner.temp }}/CANDIDATE_RESOURCE.txt
+            ${{ runner.temp }}/VERIFIER_RESOURCE.txt
+          if-no-files-found: warn
