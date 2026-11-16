@@ -1,0 +1,152 @@
+{
+  "limits": [
+    "Invented sensor is an authored hypothetical measurement operation, not a built/calibrated physical device.",
+    "Values and costs are illustrative dimensionless units, not actual funding, bids, prices, revenue or profit.",
+    "Same-information no-go follows from an authored linear observation model and does not prove a claim about real-world tomography.",
+    "A good existing supplier wins when it offers the same accepted outcome at lower complete cost.",
+    "This exact finite optimization does not establish an optimal research strategy in the open world.",
+    "No model API is used; this does not demonstrate autonomous LLM direction invention."
+  ],
+  "nullspace_certificate": {
+    "dot_product": 0.0,
+    "installed_sensor": [
+      0.7071067811865475,
+      0.7071067811865475
+    ],
+    "posterior_target_variance_after_1000_installed_readings": 1.0,
+    "statement": "The target is orthogonal to the installed observation channel; no number of repeats on it adds information about the target under this model.",
+    "target": [
+      0.7071067811865475,
+      -0.7071067811865475
+    ]
+  },
+  "proposition": "Direction changes when information channel changes, not by repeating the same observation.",
+  "schema": "montreal-ai.omega.direction.v0",
+  "scope": "exactly solved authored 2D linear-Gaussian hypothetical experiment; no physical invention or autonomous research achievement",
+  "seed": 20261116,
+  "source_sha256": "bbd29f0bc745f2fa8638af9630a1d606fc977346744a8035a6fdda81050104f6",
+  "sources": [
+    "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/main/campaign/blue-sky-064/CANDIDATES.md",
+    "https://arxiv.org/abs/2610.19159",
+    "https://www.nature.com/articles/s43586-026-00534-y"
+  ],
+  "trials": 4000,
+  "worlds": [
+    {
+      "accepted_value_units": 9,
+      "budget_units": 5,
+      "noise_std": 0.2,
+      "plan": {
+        "accepted_evidence": "CONDITIONAL_MODEL_ONLY",
+        "budget_feasible_plans": 9,
+        "cost_units": 4,
+        "counts": {
+          "constructed_orthogonal_channel": 1,
+          "installed_same_channel": 0
+        },
+        "empirical_target_mse": 0.0379361,
+        "enumerated_plans": 18,
+        "incumbent_used": false,
+        "model_acceptance": true,
+        "net_utility_units": 5,
+        "posterior_target_variance": 0.038461538462,
+        "proposed_instrument_used": true
+      },
+      "target_variance_limit": 0.05,
+      "world": "new_measurement_opens_a_previously_unobservable_property"
+    },
+    {
+      "accepted_value_units": 9,
+      "budget_units": 5,
+      "noise_std": 0.2,
+      "plan": {
+        "accepted_evidence": "CONDITIONAL_MODEL_ONLY",
+        "budget_feasible_plans": 15,
+        "cost_units": 3,
+        "counts": {
+          "constructed_orthogonal_channel": 0,
+          "existing_supplier_channel": 1,
+          "installed_same_channel": 0
+        },
+        "empirical_target_mse": 0.0379361,
+        "enumerated_plans": 72,
+        "incumbent_used": true,
+        "model_acceptance": true,
+        "net_utility_units": 6,
+        "posterior_target_variance": 0.038461538462,
+        "proposed_instrument_used": false
+      },
+      "target_variance_limit": 0.05,
+      "world": "existing_complete_supplier_dominates_new_construction"
+    },
+    {
+      "accepted_value_units": 9,
+      "budget_units": 3,
+      "noise_std": 0.2,
+      "plan": {
+        "accepted_evidence": "CONDITIONAL_MODEL_ONLY",
+        "budget_feasible_plans": 4,
+        "cost_units": 0,
+        "counts": {
+          "constructed_orthogonal_channel": 0,
+          "installed_same_channel": 0
+        },
+        "empirical_target_mse": 0.9837039,
+        "enumerated_plans": 4,
+        "incumbent_used": false,
+        "model_acceptance": false,
+        "net_utility_units": 0,
+        "posterior_target_variance": 1.0,
+        "proposed_instrument_used": false
+      },
+      "target_variance_limit": 0.05,
+      "world": "unfunded_construction_does_not_become_feasible"
+    },
+    {
+      "accepted_value_units": 2,
+      "budget_units": 5,
+      "noise_std": 0.2,
+      "plan": {
+        "accepted_evidence": "CONDITIONAL_MODEL_ONLY",
+        "budget_feasible_plans": 9,
+        "cost_units": 0,
+        "counts": {
+          "constructed_orthogonal_channel": 0,
+          "installed_same_channel": 0
+        },
+        "empirical_target_mse": 0.9837039,
+        "enumerated_plans": 18,
+        "incumbent_used": false,
+        "model_acceptance": false,
+        "net_utility_units": 0,
+        "posterior_target_variance": 1.0,
+        "proposed_instrument_used": false
+      },
+      "target_variance_limit": 0.05,
+      "world": "low_value_outcome_does_not_warrant_construction"
+    },
+    {
+      "accepted_value_units": 9,
+      "budget_units": 5,
+      "noise_std": 0.2,
+      "plan": {
+        "accepted_evidence": "CONDITIONAL_MODEL_ONLY",
+        "budget_feasible_plans": 12,
+        "cost_units": 0,
+        "counts": {
+          "installed_same_channel": 0,
+          "proposed_but_uninformative_channel": 0
+        },
+        "empirical_target_mse": 0.9837039,
+        "enumerated_plans": 24,
+        "incumbent_used": false,
+        "model_acceptance": false,
+        "net_utility_units": 0,
+        "posterior_target_variance": 1.0,
+        "proposed_instrument_used": false
+      },
+      "target_variance_limit": 0.05,
+      "world": "new_label_without_new_information_fails"
+    }
+  ]
+}
