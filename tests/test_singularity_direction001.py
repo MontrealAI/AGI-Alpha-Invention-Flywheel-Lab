@@ -1,6 +1,8 @@
 """Scope-aware metamorphic and adversarial tests for Ω Reality Probe 001."""
 import copy
 import unittest
+import subprocess
+import sys
 from research.singularity_direction001 import experiment as engine, verify as checker
 
 
@@ -92,6 +94,17 @@ class RealityProbeTests(unittest.TestCase):
         row['witness']['dual']['equalities'][1] += 10.0
         with self.assertRaises(ValueError):
             checker.verify(corrupted)
+
+    def test_independent_verifier_needs_no_optimizer_packages(self):
+        # -S omits site packages. The independent proof checker must not
+        # import the constructor or a third-party numerical optimizer.
+        command=("import sys; from research.singularity_direction001 import verify; "
+                 "assert 'numpy' not in sys.modules; "
+                 "assert 'scipy' not in sys.modules; "
+                 "assert verify.TOL > 0")
+        result=subprocess.run([sys.executable,'-S','-c',command],
+                              capture_output=True,text=True,check=False)
+        self.assertEqual(result.returncode,0,result.stderr)
 
     def test_candidate_order_does_not_influence_certification(self):
         original=checker.verify(self.evidence)
