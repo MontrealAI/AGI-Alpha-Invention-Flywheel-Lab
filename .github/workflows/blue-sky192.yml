@@ -33,7 +33,7 @@ jobs:
         shell: bash
         run: |
           git rev-parse HEAD
-          test "$(git hash-object campaign/blue-sky-192/PROTOCOL.md)" = "$(git rev-parse cfcdbdfabed7a1b1cc514b629b9259f3f11af8a2:campaign/blue-sky-192/PROTOCOL.md)"
+          test "$(git hash-object campaign/blue-sky-192/PROTOCOL.md)" = ""43f7c103ff80163badd50b5bbf1d2a6c259e5756""
           sha256sum research/blue_sky064/public_calibration.json campaign/blue-sky-064/friction-probe/MIXED_REGISTRATION.json
           test "$(sha256sum research/blue_sky064/public_calibration.json | cut -d' ' -f1)" = "7aedc8e4c3e7181e381055d3815378b3f5bfe7b5b9386fd5748803d495ab1ced"
           test "$(sha256sum campaign/blue-sky-064/friction-probe/MIXED_REGISTRATION.json | cut -d' ' -f1)" = "6eece869fb53ed7d6977a88b01ce0ba78af6a5d6931aea9df99c51b4c6f348fa"
