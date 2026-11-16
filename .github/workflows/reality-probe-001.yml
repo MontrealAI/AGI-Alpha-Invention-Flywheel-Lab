@@ -42,7 +42,7 @@ jobs:
       - name: Install bounded numerical dependency
         run: python3 -m pip install --only-binary=:all: numpy==2.3.5 scipy==1.17.0
       - name: Execute counterfactual and adversarial tests
-        run: python3 -m unittest tests.test_singularity_direction001 -v
+        run: python3 -m unittest discover -s tests -p 'test_singularity_direction001.py' -v
       - name: Generate exact source-bound proof and independently verify
         run: |
           python3 -m research.singularity_direction001.experiment --output "$RUNNER_TEMP/reality-probe-001.json"
