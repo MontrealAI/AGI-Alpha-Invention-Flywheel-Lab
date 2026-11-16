@@ -1,0 +1,17 @@
+{
+  "initial_runtime_sha256": "ed3ecee2cfaede2d261283f34bf7240e9dbeffd74c7f10f1dc887803e4d11f6d",
+  "initial_cycle_001": {
+    "accepted": false,
+    "search_candidates": 8,
+    "vm_work_reduction_factor": 1608.0,
+    "ordinary_work_ratio": 0.6666666666666666,
+    "wall_ratio_observation": 388.7756169308711,
+    "total_cpu_ns": 830212437,
+    "total_wall_ns": 830607015
+  },
+  "initial_statuses": ["DECLINED", "DELIVERED_AWAITING_SETTLEMENT", "DECLINED"],
+  "failure": "Progress callback every 100 VM instructions was too coarse on selective indexed queries; discovery chose a noncovering index that lost on confirmation.",
+  "intermediate_fix": "A conventional-index tie preference alone did not repair the full-size case.",
+  "repair": "Count every VM instruction, preserve conventional-first ties, add the 80000-row regression.",
+  "scope": "Same authored workload is a correction/regression, not fresh scientific confirmation or evidence of novel indexing."
+}
