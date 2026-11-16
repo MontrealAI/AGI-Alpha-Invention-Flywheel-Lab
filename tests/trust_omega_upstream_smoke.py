@@ -23,6 +23,24 @@ def sha(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def independent_key_tree_sha(path: Path) -> str:
+    if path.is_symlink():
+        raise AssertionError("synthetic public key root must not be a symlink")
+    entries = []
+    for p in sorted(path.rglob("*")):
+        if p.is_symlink():
+            raise AssertionError("synthetic public key tree contains symlink")
+        if p.is_file():
+            entries.append([p.relative_to(path).as_posix(), sha(p)])
+        elif not p.is_dir():
+            raise AssertionError("synthetic public key tree contains special entry")
+    if not entries:
+        raise AssertionError("no public key files")
+    return hashlib.sha256(
+        json.dumps(entries, ensure_ascii=True, separators=(",", ":")).encode("utf-8")
+    ).hexdigest()
+
+
 def run() -> None:
     if len(sys.argv) != 2:
         raise SystemExit("usage: trust_omega_upstream_smoke.py UPSTREAM_FOLDER")
@@ -46,14 +64,17 @@ def run() -> None:
         shutil.copyfile(example / "example.proof", response / "proof.bin")
         shutil.copyfile(example / "example.y", response / "y.bin")
         anchor = {
-            "schema": "trust-omega-anchor-v1",
+            "schema": "trust-omega-anchor-v2",
             "model_label": "OFFICIAL STORED SYNTHETIC EXAMPLE: not live inference",
             "independent_source": "CI fixture checked out at pinned upstream revision; not external model attestation",
             "commitment_id": PINNED_COMMITMENT,
             "end_token_ids": [199],  # artificial fixture EOS used for a full-range check
             "policy": "exact-match",
             "allow_proof_of_work": True,  # official sample counts declared PoW; NOT production policy
-            "trusted_sha256": {k: sha(v) for k, v in paths.items()},
+            "trusted_sha256": {
+                **{k: sha(v) for k, v in paths.items()},
+                "public_key_tree": independent_key_tree_sha(example / "ivk"),
+            },
         }
         anchor_file = folder / "anchor.json"
         anchor_file.write_text(json.dumps(anchor, sort_keys=True), encoding="utf-8")
