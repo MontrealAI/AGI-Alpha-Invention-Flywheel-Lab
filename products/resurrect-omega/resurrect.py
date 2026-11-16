@@ -302,6 +302,13 @@ def main(argv=None):
     ver.add_argument("manifest")
     ver.add_argument("candidate")
     ver.add_argument("--out")
+    agent = sub.add_parser("agent", help="Opt-in Codex agent reconstruction + independent Docker replay")
+    agent.add_argument("manifest")
+    agent.add_argument("observations")
+    agent.add_argument("--out", required=True)
+    agent.add_argument("--authorize-disclosure", action="store_true",
+                       help="Explicitly permit selected examples to be sent to authenticated Codex provider")
+    agent.add_argument("--rounds", type=int, default=2)
     dm = sub.add_parser("demo")
     dm.add_argument("--out", default="/tmp/resurrect-omega-demo")
     for item in (cap, ver, dm):
@@ -313,9 +320,15 @@ def main(argv=None):
         elif args.cmd == "verify":
             out = verify(args.manifest, args.candidate, args.unsafe_local)
             if args.out: save(args.out, out)
+        elif args.cmd == "agent":
+            from agentic import develop_with_codex
+            out = develop_with_codex(args.manifest,args.observations,args.out,
+                                     authorize_disclosure=args.authorize_disclosure,
+                                     rounds=args.rounds)
         elif args.cmd == "demo": out = demo(args.out, args.unsafe_local)
         print(json.dumps(out, sort_keys=True, indent=2))
         if args.cmd == "verify" and out["status"] != "PASS_FINITE_DOMAIN": return 2
+        if args.cmd == "agent" and out["status"] != "AGENT_CANDIDATE_FINITE_DOMAIN_ACCEPTED": return 2
         if args.cmd == "demo" and out["verification"]["status"] != "PASS_FINITE_DOMAIN": return 2
         return 0
     except (Hold, OSError, subprocess.CalledProcessError, ValueError, TypeError, KeyError) as exc:

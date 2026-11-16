@@ -66,3 +66,24 @@ class Tests(unittest.TestCase):
             with self.assertRaises(r.Hold): r.process(self.candidate,'candidate',[{'region':'NA','seats':1,'tier':'PRO'}],False)
 
 if __name__=='__main__': unittest.main()
+
+class TestAgentSafety(unittest.TestCase):
+    def test_external_disclosure_requires_opt_in(self):
+        from agentic import develop_with_codex
+        with self.assertRaises(r.Hold):
+            develop_with_codex('none','none','none',authorize_disclosure=False)
+
+    def test_missing_codex_fails_closed(self):
+        from agentic import develop_with_codex
+        from unittest.mock import patch
+        import agentic
+        with patch.object(agentic.shutil,'which',return_value=None):
+            with self.assertRaises(r.Hold):
+                develop_with_codex('none','none','none',authorize_disclosure=True)
+
+    def test_agent_saw_only_subset(self):
+        from agentic import selected_examples
+        cases=[{'input':{'x':i},'output':i} for i in range(60)]
+        samples=selected_examples(cases)
+        self.assertLess(len(samples),len(cases))
+        self.assertTrue(samples)

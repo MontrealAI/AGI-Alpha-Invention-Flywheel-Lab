@@ -39,7 +39,18 @@ python3 products/resurrect-omega/resurrect.py synthesize my_manifest.json /tmp/o
 python3 products/resurrect-omega/resurrect.py verify my_manifest.json /tmp/replacement.py --out /tmp/REPLAY.json
 ```
 
-A complete manifest domain of at most 25,000 combinations is captured and compared. Axes that are provably irrelevant over this finite domain are removed before generating the lookup implementation. Domain misses produce `HOLD`; they never silently extrapolate. `capture`, `synthesize` and `verify` bind manifest and binary hashes. Any binary change, license-right change or expanded request domain requires recapture and requalification. No LLM or paid API is required for this fully executable bounded path; a frontier coding agent can propose a more general and maintainable implementation, but it must clear a **separate** verification of fresh customer-controlled cases. That frontier-agent workflow has **not** been executed here.
+### Optional frontier-agent reconstruction
+
+The deterministic code generator above is useful for narrow contract migration but **is not the 2026 frontier leap by itself**. There is now an optional 'agent' path that invokes the user's **already installed, independently authenticated Codex CLI**, with explicit permission to transmit selected behavior examples to the model provider. The agent receives a deliberately limited subset of observations and no binary or binary path, attempts to create a more general maintainable 'solution.py', and receives up to three mismatch examples if its independent Docker replay fails. Only a candidate that passes the complete fresh declared-domain replay is returned; otherwise the result is HOLD. This feature is implemented but its live provider execution remains untested here because this environment has no Codex CLI login. Do not confuse a ChatGPT Pro plan with authorization to use separately billable APIs.
+
+```bash
+python3 products/resurrect-omega/resurrect.py agent my_manifest.json /tmp/observations.json \
+  --out /tmp/agent_replacement.py --rounds 2 --authorize-disclosure
+```
+
+**Security:** Codex's 'workspace-write' sandbox is not a high-assurance confidentiality boundary; only use authorized nonsecret examples in a dedicated environment. Agent-generated programs are **never** executed directly on the host by this workflow. The Docker evaluator is constrained but not a fully audited malicious-code containment solution.
+
+A complete manifest domain of at most 25,000 combinations is captured and compared. Axes that are provably irrelevant over this finite domain are removed before generating the lookup implementation. Domain misses produce `HOLD`; they never silently extrapolate. `capture`, `synthesize` and `verify` bind manifest and binary hashes. Any binary change, license-right change or expanded request domain requires recapture and requalification. No LLM or paid API is required for the deterministic bounded path. The optional Codex agent path is **not** automatically run, qualified or billed by this repository; it requires explicit operator consent and an existing authenticated local Codex session. Additional fresh customer-held-out cases remain required beyond the finite-domain replay.
 
 ### Commercial acceptance
 
