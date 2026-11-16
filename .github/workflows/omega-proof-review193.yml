@@ -1,0 +1,50 @@
+name: Omega Reality Probe 193 independent proof coverage
+on:
+  push:
+    branches:
+      - review/omega-proof-closure193-20261116
+  pull_request:
+    paths:
+      - 'research/singularity_direction001/**'
+      - 'tests/test_singularity_direction001_audit193.py'
+      - '.github/workflows/omega-proof-review193.yml'
+permissions:
+  contents: read
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4 pinned
+        with:
+          persist-credentials: false
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          sparse-checkout: |
+            research/singularity_direction001
+            research/pglib_opf_case14_ieee.m
+            research/pglib_opf_case30_ieee.m
+            tests/test_singularity_direction001.py
+            tests/test_singularity_direction001_audit193.py
+          sparse-checkout-cone-mode: false
+      - name: Verify exact executing source and frozen protocol
+        run: |
+          test "$(git rev-parse HEAD)" = "${{ github.event.pull_request.head.sha || github.sha }}"
+          git rev-parse HEAD
+          test -s research/singularity_direction001/PROOF_REVIEW_193.md
+      - name: Reproduce registered independent adversarial controls
+        shell: bash
+        run: |
+          set -o pipefail
+          python3 -m pip install --only-binary=:all: numpy==2.3.5 scipy==1.17.0
+          python3 -m unittest discover -s tests -p 'test_singularity_direction001_audit193.py' -v 2>&1 | tee "$RUNNER_TEMP/review193-adversarial.log"
+      - name: Preserve unchanged original regression controls
+        if: success()
+        run: python3 -m unittest discover -s tests -p 'test_singularity_direction001.py' -v
+      - name: Retain red/green test record
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4 pinned
+        with:
+          name: omega-proof193-${{ github.event.pull_request.head.sha || github.sha }}
+          path: ${{ runner.temp }}/review193-adversarial.log
+          retention-days: 30
+          if-no-files-found: warn
