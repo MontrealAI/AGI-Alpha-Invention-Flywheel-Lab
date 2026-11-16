@@ -11,6 +11,8 @@ on:
       - '.github/workflows/research-pages.yml'
       - 'products/alpha-genesis-harness/**'
       - 'events/alpha-genesis-live/**'
+      - 'products/contract_value_omega/**'
+      - 'tests/test_contract_value_omega.py'
       - '.github/workflows/alpha-genesis-harness.yml'
   push:
     branches: [main]
@@ -24,6 +26,8 @@ on:
       - '.github/workflows/research-pages.yml'
       - 'products/alpha-genesis-harness/**'
       - 'events/alpha-genesis-live/**'
+      - 'products/contract_value_omega/**'
+      - 'tests/test_contract_value_omega.py'
       - '.github/workflows/alpha-genesis-harness.yml'
   workflow_dispatch:
 permissions:
@@ -47,6 +51,8 @@ jobs:
             experiments/frontier-conclave
             scripts/build_research_site.py
             tests/test_research_site.py
+            products/contract_value_omega
+            tests/test_contract_value_omega.py
             tests/test_alpha_site.cjs
             tests/test_surf_reader.cjs
             events/alpha-genesis-live
@@ -66,6 +72,15 @@ jobs:
           node --test events/alpha-genesis-live/engine/tests/*.test.mjs events/alpha-genesis-live/lab/test/*.test.mjs events/alpha-genesis-live/06_QA/stage_engine.test.mjs
           node events/alpha-genesis-live/00_STAGE/run_show.mjs --mode preview --focus confidence --out "$RUNNER_TEMP/alpha-genesis-live-preview"
           node events/alpha-genesis-live/engine/verify_receipt.mjs "$RUNNER_TEMP/alpha-genesis-live-preview/agent-receipt.json"
+      - name: Qualify private-company CONTRACT VALUE Omega financial review
+        run: |
+          python3 -m unittest discover -s tests -p 'test_contract_value_omega.py' -v
+          python3 -m products.contract_value_omega.run \
+            --input products/contract_value_omega/demo \
+            --output "$RUNNER_TEMP/contract-value-demo-review"
+          python3 -m products.contract_value_omega.verify \
+            --input products/contract_value_omega/demo \
+            --report "$RUNNER_TEMP/contract-value-demo-review"
       - name: Validate original PDFs, links and publication boundary
         run: python3 -m unittest discover -s tests -p 'test_research_site.py' -v
       - name: Check interactive research calculations and decisions
