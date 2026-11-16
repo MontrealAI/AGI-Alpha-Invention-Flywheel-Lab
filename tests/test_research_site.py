@@ -78,6 +78,16 @@ class ResearchSiteTests(unittest.TestCase):
         self.assertIn('ALPHA GENESIS FLYWHEEL', studio)
         self.assertIn('SCRIPTED PREVIEW', studio)
 
+    def test_goal_genesis_flagship_scoped_publication(self):
+        page = (self.source / 'goal-genesis-omega.html').read_text()
+        home = (self.source / 'index.html').read_text()
+        self.assertIn('GOAL GENESIS', page)
+        self.assertIn('independently', page)
+        self.assertIn('not', page.lower())
+        self.assertIn('data-case="14"', page)
+        self.assertIn('data-case="30"', page)
+        self.assertIn('goal-genesis-omega.html', home)
+
     def test_changed_pdf_is_rejected(self):
         with (self.source / site.PAPERS[0]).open('ab') as stream:
             stream.write(b'changed')
@@ -110,7 +120,7 @@ class ResearchSiteTests(unittest.TestCase):
         collection = (self.source / 'out-series.html').read_text()
         homepage = (self.source / 'index.html').read_text()
         self.assertEqual(len(site.PAPERS), 29)
-        self.assertEqual(len(site.PAGES), 36)
+        self.assertEqual(len(site.PAGES), 37)
         self.assertTrue({'alpha-genesis-live.html', 'alpha-genesis-live-studio.html'}.issubset(site.PAGES))
         self.assertIn('out-series.html', homepage)
         for slug in slugs:
