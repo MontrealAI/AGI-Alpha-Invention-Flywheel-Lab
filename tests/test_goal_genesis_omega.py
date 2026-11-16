@@ -51,6 +51,28 @@ class ExactMathTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError,"PINNED_SOURCE_HASH_MISMATCH"):
                 read_upstream(path)
 
+    def test_independent_external_ntt_crt_against_direct_integer_convolution(self):
+        from research.goal_genesis_omega.external_ntt_verify import signed_convolution
+        for v in ([1,1],[-3,2,4,-1],[0,0,1,-2,3,0,-2],[3,-1,5,-2,0,1,6]):
+            exact,receipt=signed_convolution(v)
+            direct=[sum(v[i]*v[k-i] for i in range(max(0,k-len(v)+1),min(len(v),k+1)))
+                    for k in range(2*len(v)-1)]
+            self.assertEqual(exact,direct)
+            self.assertTrue(receipt["crt_uniqueness_proved"])
+            self.assertEqual(len(receipt["primes"]),5)
+
+    def test_external_auditor_rejects_modified_source_and_wrong_claim_shape(self):
+        from research.goal_genesis_omega.external_ntt_verify import read_pinned, verify
+        import tempfile
+        from pathlib import Path
+        with tempfile.TemporaryDirectory() as folder:
+            source=Path(folder)/"fraud.json"
+            source.write_text('{"values":[1,2,3]}')
+            with self.assertRaisesRegex(ValueError,"SOURCE_HASH_MISMATCH"):
+                read_pinned(source)
+        with self.assertRaisesRegex(ValueError,"WRONG_CERTIFICATE"):
+            verify([1,2,3])
+
     def test_claims_cannot_change_external_best(self):
         self.assertTrue(proof.BEST > 1)
         self.assertTrue(proof.BEST < 1.4541)
