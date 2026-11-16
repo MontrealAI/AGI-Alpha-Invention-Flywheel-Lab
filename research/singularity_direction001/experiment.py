@@ -140,11 +140,18 @@ def probe_case(case):
     """Compare full LP redispatch and every one-line corrective opening."""
     outage = OUTAGES[case['case']]
     baseline = solve(case, {outage})
-    responses = [{'switch': i, 'unserved_mw': solve(case, {outage, i})['unserved_mw']}
-                 for i in range(len(case['lines'])) if i != outage]
+    # Retain a complete primal/dual witness for *every* allowed corrective opening.
+    # Reporting only unverified scalar objectives would not certify the ranking.
+    responses = []
+    for i in range(len(case['lines'])):
+        if i == outage:
+            continue
+        witness = solve(case, {outage, i})
+        responses.append({'switch': i, 'unserved_mw': witness['unserved_mw'],
+                          'witness': witness})
     winner = min(responses, key=lambda row: (row['unserved_mw'], row['switch']))
     switch = winner['switch']
-    after = solve(case, {outage, switch})
+    after = winner['witness']
     return {'case': case['case'], 'source': {'path':case['source'],
                 'git_blob_sha1':case['source_git_blob_sha1'], 'sha256':case['source_sha256']},
             'bus_count':len(case['loads_mw']), 'line_count':len(case['lines']),
@@ -153,11 +160,11 @@ def probe_case(case):
             'responses':responses, 'baseline':baseline,'switched':after,
             'modeled_gain_mw':baseline['unserved_mw']-after['unserved_mw'],
             'scenario_policy':'Outage and stress chosen after exploratory analysis, not prospectively or blinded; all single additional openings exhaustively compared',
-            'comparators':'Complete linear-programming redispatch with arbitrary generator reallocation and load shedding under the SAME fixed topology'}
+            'comparators':'Complete LP redispatch under fixed topology, plus exhaustive certified optimal one-additional-opening dispatch; this is an established optimal transmission switching design class, not a novel competitive advantage'}
 
 
 def experiment():
-    return {'schema':'montreal-ai/reality-probe-001/v1',
+    return {'schema':'montreal-ai/reality-probe-001/v2',
             'title':'The counterintuitive switch: a documented DC-model possibility',
             'date':'2026-11-16', 'stress':STRESS,
             'method':'Lossless DC active-power proxy; no AC voltages/reactive power, thermal transients, protection, dynamics or stability; phase limit +/-30 deg; one pre-existing outage and at most one additional opened line',
