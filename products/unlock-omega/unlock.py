@@ -72,7 +72,7 @@ def execute(source, cases, mode, name, repeats=3, warmups=1):
         job = {'cases': cases, 'repeats': repeats, 'warmups': warmups}
         if mode == 'docker':
             cmd = [
-                'docker', 'run', '--rm', '--network=none', '--read-only',
+                'docker', 'run', '--rm', '-i', '--network=none', '--read-only',
                 '--cap-drop=ALL', '--security-opt=no-new-privileges',
                 '--pids-limit=64', '--memory=512m', '--cpus=1',
                 '--user=65534:65534', '--tmpfs=/tmp:rw,noexec,nosuid,size=16m',
