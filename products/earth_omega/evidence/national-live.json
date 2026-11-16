@@ -1,0 +1,38 @@
+{
+  "schema": "earth-national-comparison/1",
+  "as_of": "2026-11-16T18:54:37.968678+00:00",
+  "source": {
+    "attribution": "Point d\u2019Acc\u00e8s National transport.data.gouv.fr and original data producers",
+    "bytes": 129418305,
+    "license": "Licence Ouverte2.0",
+    "license_url": "https://www.etalab.gouv.fr/licence-ouverte-open-licence/",
+    "metadata": "https://transport.data.gouv.fr/datasets/base-nationale-des-points-de-recharge-pour-vehicules-electriques-en-france-irve",
+    "mode": "actual_http_download",
+    "sha256": "fbd1f86dfaaa2145fd32f1953ba793891e8f2b53386117c4647a5adcc7e12230",
+    "url": "https://proxy.transport.data.gouv.fr/resource/consolidation-transport-irve-statique",
+    "retrieval_started_at": "2026-11-16T18:54:37.968678+00:00",
+    "retrieved_at": null,
+    "timestamp_note": "Initial executed collector recorded request start; completion timestamp not separately retained. Subsequent collector preserves both."
+  },
+  "rows_scanned": 180698,
+  "invalid_rows_by_reason": {
+    "unconfirmed_coordinates": 27222
+  },
+  "duplicate_point_ids_quarantined": 2,
+  "spatially_retained_unique_points": 8742,
+  "qualified_commercial_sites": 0,
+  "limitations": [
+    "Static inventory is not live availability, utilization, grid capacity or demand",
+    "Source is national consolidation but completeness is not guaranteed",
+    "Producer observation date controls freshness; consolidation or retrieval does not refresh old facts",
+    "Belib and national layers overlap; no additive combined count or exclusive additional-site claim",
+    "No economics, ranking promotion, outreach or commercial qualification derives from these counts"
+  ],
+  "replay_note": "Updated parser replayed same SHA256 public bytes after independent review; actual HTTP collector already passed.",
+  "compared_leads": 120,
+  "leads_with_national_matches": 120,
+  "leads_with_fresh_national_matches": 103,
+  "leads_with_national_count_above_belib": 115,
+  "future_points_excluded": 0,
+  "count_scope": "Separate overlapping static inventory layers, not confirmed operating/public-access competition; no additive total or economic qualification."
+}

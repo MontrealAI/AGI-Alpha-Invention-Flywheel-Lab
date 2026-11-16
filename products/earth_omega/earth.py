@@ -186,12 +186,16 @@ def main():
     p=argparse.ArgumentParser(description=__doc__); sub=p.add_subparsers(dest='cmd',required=True)
     a=sub.add_parser('screen'); a.add_argument('mission'); a.add_argument('--out',required=True)
     a=sub.add_parser('verify'); a.add_argument('mission'); a.add_argument('report')
+    a=sub.add_parser('complement'); a.add_argument('discovery'); a.add_argument('--out',required=True); a.add_argument('--snapshot'); a.add_argument('--max-age-days',type=int,default=90)
     a=sub.add_parser('discover'); a.add_argument('--out',required=True); a.add_argument('--min-spaces',type=int,default=100); a.add_argument('--max-age-days',type=int,default=90)
     a=sub.add_parser('normalize'); a.add_argument('kind',choices=('paris','chargers','utilization')); a.add_argument('snapshot'); a.add_argument('--observed-at'); a.add_argument('--out',required=True)
     a=sub.add_parser('investigate'); a.add_argument('mission'); a.add_argument('--out',required=True)
     a=sub.add_parser('collect'); a.add_argument('kind',choices=SOURCES); a.add_argument('--out',required=True)
     args=p.parse_args()
     try:
+        if args.cmd=='complement':
+            from .national import complement
+            print(json.dumps(complement(args.discovery,args.out,args.snapshot,args.max_age_days))); return
         if args.cmd=='discover':
             from .discovery import discover
             result=discover(args.out,args.min_spaces,args.max_age_days)

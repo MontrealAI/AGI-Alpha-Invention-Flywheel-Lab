@@ -32,6 +32,20 @@ The source's EV-space field excludes accessible/PMR EV spaces. Its complement is
 
 Derived discovery databases are ODbL1.0 with attribution and share-alike; code retains repository license. The output includes attribution. Check license obligations before combining with proprietary databases or distributing derived outputs. Raw transient downloads are not committed.
 
+### Add national multi-operator evidence
+
+```sh
+python -m products.earth_omega.earth complement /tmp/earth-discovery/discovery.json --out /tmp/earth-national
+```
+
+The complementary source is the [current national PAN consolidated static IRVE dataset](https://transport.data.gouv.fr/datasets/base-nationale-des-points-de-recharge-pour-vehicules-electriques-en-france-irve), under Licence Ouverte2.0. It covers many operators, not only Belib. The actual collector downloaded129,418,305bytes; the streaming parser inspected180,698rows and retained8,742unique valid-coordinate points around the lead cohort. All120leads had nearby national inventory;103had at least one fresh national observation. See [exact receipt](evidence/national-live.json).
+
+`national-comparison.json` provides per-lead spatial matches, an observation table with original producer dataset/resource IDs, dates, access restrictions and hours, plus source SHA256. Future-declared commissioning points are separately listed and excluded from default counts. Missing commissioning/access information stays unknown. Counts remain **static declared inventory, not confirmed operating or public-access competition**. Belib and national layers overlap: do not add them or infer that every count difference represents an additional competitor. The national source does not cure stale parking facts, absent demand or missing grid/land permissions.
+
+27,222rows had unconfirmed coordinates and were conservatively excluded; two duplicated point IDs were quarantined globally. Exclusions and partial coverage prevent absence claims. Producer `date_maj` governs freshness, not nightly consolidation. The retained record fields preserve upstream provenance, not authentication of source truth.
+
+The collector uses its one fixed reviewed HTTPS endpoint, forbids redirects, validates full200response/content length, streams under256MiB/500,000row bounds and discards the transient national file after processing. These separate bounds support the observed129MB national source without loosening the32MiB general collector. Spatial indexing,100,000retained-point and100,000match limits bound result expansion; narrow geography/cohort when exceeded. It supports mainland France, not worldwide coverage. `--snapshot /path/file.csv` supports offline reproduction but explicitly labels the origin unverified rather than claiming a fresh HTTP retrieval. No raw national dataset is committed.
+
 ### Collect actual public evidence
 
 ```sh
