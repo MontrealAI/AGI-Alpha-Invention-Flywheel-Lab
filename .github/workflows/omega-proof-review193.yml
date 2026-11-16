@@ -40,11 +40,20 @@ jobs:
       - name: Preserve unchanged original regression controls
         if: success()
         run: python3 -m unittest discover -s tests -p 'test_singularity_direction001.py' -v
+      - name: Produce and independently verify complete source-matched alternative proofs
+        if: success()
+        run: |
+          python3 -m research.singularity_direction001.experiment --output "$RUNNER_TEMP/omega-proof193-complete.json"
+          python3 -m research.singularity_direction001.verify --evidence "$RUNNER_TEMP/omega-proof193-complete.json" > "$RUNNER_TEMP/omega-proof193-verdict.json"
+          python3 -c 'import json,sys; p=json.load(open(sys.argv[1])); assert p["status"] == "PASS_SCOPED_DC_PROOF" and {r["case"] for r in p["results"]} == {"14","30"} and all(r["certified_extra_switch_count"]>0 for r in p["results"])' "$RUNNER_TEMP/omega-proof193-verdict.json"
       - name: Retain red/green test record
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4 pinned
         with:
           name: omega-proof193-${{ github.event.pull_request.head.sha || github.sha }}
-          path: ${{ runner.temp }}/review193-adversarial.log
+          path: |
+            ${{ runner.temp }}/review193-adversarial.log
+            ${{ runner.temp }}/omega-proof193-complete.json
+            ${{ runner.temp }}/omega-proof193-verdict.json
           retention-days: 30
           if-no-files-found: warn
