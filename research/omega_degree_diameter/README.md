@@ -14,11 +14,11 @@ The Moore bound is 94; no optimality theorem settles the cell. A useful necessar
 
 We compared three complete local two-vertex augmentation families of the *real* incumbent:
 
-| Family | Distinct labeled constructions evaluated | Best unordered vertex pairs still separated by >5 edges |
+| Family | Constructions evaluated (identifying the two new vertex labels up to exchange) | Best unordered vertex pairs still separated by >5 edges |
 |---|---:|---:|
-| Delete two disjoint incumbent edges, attach new vertices to their endpoints and each other | 10,500 (all) | 34 |
+| Delete two disjoint incumbent edges, attach new vertices to their endpoints and each other | 10,500 (all symmetry-reduced assignments) | 34 |
 | Delete three pairwise vertex-disjoint incumbent edges, connect their endpoints to two new degree-3 vertices | 665,560 (all, modulo swapping the two new vertices) | 46 |
-| Replace one degree-3 incumbent vertex by a triangle on three vertices, reattaching its former neighbors | 210 (all, modulo the two new vertex labels) | 64 |
+| Replace one degree-3 incumbent vertex by a triangle on three vertices, reattaching its former neighbors | 210 (all, modulo exchanging new vertices) | 64 |
 
 A separate deterministic, degree-preserving double-edge-swap simulated-annealing attempt used 12 restart batches under seed `20261116`. It proposed 10,966 valid swaps, accepted 2, and found no improvement on the best graph. Search-score numbers are **computed**, and the selected candidate is independently checked by a stdlib-only BFS verifier; the entire bounded exhaustive search is replayed in `reproduce.py` rather than represented as a theorem about all graphs.
 
