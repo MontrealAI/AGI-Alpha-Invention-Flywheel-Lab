@@ -12,7 +12,7 @@ import json
 import math
 from pathlib import Path
 
-from .experiment import SOURCE, OUTAGES, STRESS, parse_case
+from .source import SOURCE, OUTAGES, STRESS, parse_case
 
 TOL = 2e-5
 
