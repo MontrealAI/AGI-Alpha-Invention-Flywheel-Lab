@@ -133,7 +133,10 @@ def state_dict(model, state):
 
 def step(model, old, action):
     """Return new state or None if guard false. All updates are atomic."""
-    if evaluate(action["when"], old) is not True:
+    guard = evaluate(action["when"], old)
+    if type(guard) is not bool:
+        raise SpecificationError("action guard must evaluate to a Boolean")
+    if not guard:
         return None
     new = dict(old)
     for field, expr in action["set"].items():
@@ -176,7 +179,12 @@ def explore(model, max_states=100_000):
         source = queue.popleft()
         old = dict(zip(vars_, source))
         for action in sorted(model["actions"], key=lambda a: a["name"]):
-            updated = step(model, old, action)
+            try:
+                updated = step(model, old, action)
+            except SpecificationError as exc:
+                return {"schema": "proof-omega.certificate.v1", "status": "HOLD_INVALID_POLICY",
+                        "model_sha256": fingerprint(model), "observed_states": len(reached),
+                        "checked_guards": checks + 1, "reason": str(exc)}
             checks += 1
             if updated is None:
                 continue

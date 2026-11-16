@@ -10,10 +10,16 @@ permissions:
 jobs:
   verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 360
     steps:
+      - name: Record platform start
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
       - uses: actions/checkout@v4
       - name: Adversarial certificate and runtime tests
         run: python3 -m unittest discover -s products/proof-omega/tests -v
+      - name: Prepare public Docker sandbox image before strict executable stderr check
+        run: |
+          docker pull --quiet python:3.12-slim >/dev/null
+          docker image inspect python:3.12-slim --format '{{.Id}}'
       - name: Independently audit a complete finite policy proof and a counterexample
         run: python3 products/proof-omega/proof_omega.py demo --out /tmp/proof-omega-demo

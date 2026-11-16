@@ -38,9 +38,16 @@ def binary_conformance(model, cert, executable, *, unsafe_local=False, max_cases
             requests.append({"state": dict(zip(varnames, state)), "action": action})
             key = (tuple(state), action)
             wants.append({"state": dict(zip(varnames, graph[key]))} if key in graph else {"rejected": True})
-    payload = "\n".join(canonical(req) for req in requests) + "\n"
-    if len(payload.encode()) > 8_000_000:
-        raise ContractError("input too large")
+    # The old single fixed traversal permits a binary to memorize the verifier's
+    # ordered transcript while ignoring each request. Probe per-request semantics
+    # across reversed and repeated inputs as a limited regression, not as a claim
+    # of formal machine-code equivalence.
+    traversals = [
+        ("canonical", requests, wants),
+        ("reversed", list(reversed(requests)), list(reversed(wants))),
+        ("rotated_repeated", requests[1:] + requests[:1] + requests[:1],
+         wants[1:] + wants[:1] + wants[:1]),
+    ]
     if unsafe_local:
         command = [str(executable)]
         mode = "UNSAFE_LOCAL_TRUSTED_FIXTURE_ONLY"
@@ -54,28 +61,42 @@ def binary_conformance(model, cert, executable, *, unsafe_local=False, max_cases
                    "--mount", f"type=bind,src={executable},dst=/job/oracle,readonly",
                    "python:3.12-slim", "/job/oracle"]
         mode = "DOCKER_NO_NETWORK_RESTRICTED"
-    try:
-        proc = subprocess.run(command, input=payload, text=True, capture_output=True, timeout=120, check=False)
-    except (OSError, subprocess.TimeoutExpired) as exc:
-        raise ContractError(f"execution failed safely: {exc}") from exc
-    if proc.returncode != 0 or proc.stderr.strip() or len(proc.stdout.encode()) > 8_000_000:
-        raise ContractError(f"binary errored, produced stderr or exceeded cap: rc={proc.returncode}")
-    lines = proc.stdout.splitlines()
-    if len(lines) != len(wants):
-        raise ContractError(f"binary response count mismatch: {len(lines)} versus {len(wants)}")
+    original_binary_sha = hashlib.sha256(executable.read_bytes()).hexdigest()
     mismatches = []
-    for idx, (line, want) in enumerate(zip(lines, wants)):
+    executed = 0
+    for traversal, probes, expected_answers in traversals:
+        payload = "\n".join(canonical(req) for req in probes) + "\n"
+        if len(payload.encode()) > 8_000_000:
+            raise ContractError("input too large")
         try:
-            observed = json.loads(line)
-        except json.JSONDecodeError as exc:
-            raise ContractError("non-JSON executable output") from exc
-        if canonical(observed) != canonical(want):
-            mismatches.append({"request": requests[idx], "expected": want, "observed": observed})
-            if len(mismatches) == 3:
-                break
+            proc = subprocess.run(command, input=payload, text=True, capture_output=True,
+                                  timeout=120, check=False)
+        except (OSError, subprocess.TimeoutExpired) as exc:
+            raise ContractError(f"execution failed safely: {exc}") from exc
+        if proc.returncode != 0 or proc.stderr.strip() or len(proc.stdout.encode()) > 8_000_000:
+            raise ContractError(f"binary errored, produced stderr or exceeded cap: rc={proc.returncode}")
+        lines = proc.stdout.splitlines()
+        if len(lines) != len(expected_answers):
+            raise ContractError(
+                f"binary response count mismatch for {traversal}: {len(lines)} versus {len(expected_answers)}"
+            )
+        executed += len(probes)
+        for idx, (line, want) in enumerate(zip(lines, expected_answers)):
+            try:
+                observed = json.loads(line)
+            except json.JSONDecodeError as exc:
+                raise ContractError("non-JSON executable output") from exc
+            if canonical(observed) != canonical(want) and len(mismatches) < 3:
+                mismatches.append({"traversal": traversal, "request": probes[idx],
+                                   "expected": want, "observed": observed})
+    if hashlib.sha256(executable.read_bytes()).hexdigest() != original_binary_sha:
+        raise ContractError("executable changed between source fingerprint and execution")
     return {"schema": "proof-omega.binary-conformance.v1",
             "status": "PASS_BOUNDED_EXECUTABLE_CONFORMANCE" if not mismatches else "FAIL_MISMATCH",
             "model_sha256": cert["model_sha256"],
-            "binary_sha256": hashlib.sha256(executable.read_bytes()).hexdigest(),
-            "cases": len(requests), "mode": mode, "mismatches": mismatches,
-            "scope": "all reachable certified states x declared actions; deterministic JSONL adapter only"}
+            "binary_sha256": original_binary_sha,
+            "cases": len(requests), "executed_requests": executed,
+            "traversals": [t[0] for t in traversals],
+            "mode": mode, "mismatches": mismatches,
+            "scope": "complete reachable-state-action domain in three fixed orderings;"
+                     " black-box replay is not a formal proof of deterministic machine semantics"}
