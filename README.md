@@ -1,5 +1,7 @@
 # 🌌♾️ ALPHA GENESIS FLYWHEEL Ω
 
+**Private-sector commercial product:** [CONTRACT VALUE Ω — source-grounded supplier contract-to-cash assurance](docs/research/contract-value-omega.html). [Run the working software locally](products/contract_value_omega/README.md) with authorized contract, invoice, service-quantity, payment and credit exports. Confidential offline review; no government procurement. Paid diagnostic and enterprise pricing are **hypotheses**, not actual orders or profit. This commercial execution lane does **not** claim a new scientific frontier breakthrough.
+
 ### Turn the next advance in AI into your next ability to autonomously discover at scale.
 
 **Invent the means. Expand what becomes possible. Compound the ability to discover.**

@@ -78,6 +78,18 @@ class ResearchSiteTests(unittest.TestCase):
         self.assertIn('ALPHA GENESIS FLYWHEEL', studio)
         self.assertIn('SCRIPTED PREVIEW', studio)
 
+    def test_contract_value_private_enterprise_page_is_scoped_and_available(self):
+        page=(self.source / 'contract-value-omega.html').read_text()
+        home=(self.source / 'index.html').read_text()
+        self.assertIn('CONTRACT VALUE',page)
+        self.assertIn('CAD $25,000',page)
+        self.assertIn('CAD $120,000',page)
+        self.assertIn('Actual cash recovered',page)
+        self.assertIn('CAD $0',page)
+        self.assertIn('No government contracts',page)
+        self.assertIn('No fictional profits',page)
+        self.assertIn('contract-value-omega.html',home)
+
     def test_changed_pdf_is_rejected(self):
         with (self.source / site.PAPERS[0]).open('ab') as stream:
             stream.write(b'changed')
@@ -110,7 +122,7 @@ class ResearchSiteTests(unittest.TestCase):
         collection = (self.source / 'out-series.html').read_text()
         homepage = (self.source / 'index.html').read_text()
         self.assertEqual(len(site.PAPERS), 29)
-        self.assertEqual(len(site.PAGES), 36)
+        self.assertEqual(len(site.PAGES), 37)
         self.assertTrue({'alpha-genesis-live.html', 'alpha-genesis-live-studio.html'}.issubset(site.PAGES))
         self.assertIn('out-series.html', homepage)
         for slug in slugs:
@@ -433,7 +445,7 @@ class ResearchSiteTests(unittest.TestCase):
             self.assertIn('prefers-reduced-motion', styles)
             self.assertIn('@media(max-width:', styles)
             self.assertNotIn('↗', text)
-            if name not in ('frontier-conclave.html', 'index.html', 'out-series.html', 'studio.html', 'continuity-omega-media.html', 'continuity-omega-media-fr.html', 'alpha-genesis-live.html', 'alpha-genesis-live-studio.html'):
+            if name not in ('frontier-conclave.html', 'index.html', 'out-series.html', 'studio.html', 'continuity-omega-media.html', 'continuity-omega-media-fr.html', 'alpha-genesis-live.html', 'alpha-genesis-live-studio.html', 'contract-value-omega.html'):
                 self.assertIn('type="application/pdf"', text)
                 self.assertIn('download>', text)
                 self.assertIn('Votre navigateur n’affiche pas les PDF intégrés' if french else 'Your browser does not display embedded PDFs', text)
