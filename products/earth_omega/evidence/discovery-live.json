@@ -1,0 +1,111 @@
+{
+  "schema": "earth-discovery/1",
+  "method": "AUTOMATED_RULE_BASED_PUBLIC_INVENTORY_DISCOVERY_NOT_LLM",
+  "as_of": "2026-11-16T18:44:51.992045+00:00",
+  "input_counts": {
+    "parking": 125,
+    "charging_points": 1969,
+    "invalid_charging_records": 3
+  },
+  "policy": {
+    "maximum_age_days": 90,
+    "minimum_spaces": 100,
+    "nearby_radius_km": 0.5
+  },
+  "sources": {
+    "paris_all": {
+      "attribution": "Ville de Paris / source publisher in metadata",
+      "bytes": 2953107,
+      "coverage": "Belib network only, not full market",
+      "freshness": "retrieval date does not establish observation date",
+      "license": "Open Database License (ODbL)",
+      "observed_at": null,
+      "retrieved_at": "2026-11-16T18:44:51.932236+00:00",
+      "sha256": "5df3848ea0b4cb116fb994ac2ceb09cfbb515059655a75ec05ec7fe1003912ad",
+      "source": "https://opendata.paris.fr/api/explore/v2.1/catalog/datasets/belib-points-de-recharge-pour-vehicules-electriques-donnees-statiques/exports/json"
+    },
+    "paris_metadata": {
+      "attribution": "Ville de Paris / source publisher in metadata",
+      "bytes": 25844,
+      "coverage": "metadata only",
+      "freshness": "retrieval date does not establish observation date",
+      "license": "Open Database License (ODbL)",
+      "observed_at": null,
+      "retrieved_at": "2026-11-16T18:44:42.676439+00:00",
+      "sha256": "84620ad3f9e5d150257477cb41b820c5ba669e854f2d1c41b5278e31dc7ad35a",
+      "source": "https://opendata.paris.fr/api/explore/v2.1/catalog/datasets/belib-points-de-recharge-pour-vehicules-electriques-donnees-statiques"
+    },
+    "parking": {
+      "attribution": "Ville de Paris / source publisher in metadata",
+      "bytes": 297024,
+      "coverage": "Paris municipal concession parking only",
+      "freshness": "retrieval date does not establish observation date",
+      "license": "Open Database License (ODbL)",
+      "observed_at": null,
+      "retrieved_at": "2026-11-16T18:44:46.137239+00:00",
+      "sha256": "36654a671fec06824b03fde1a9d2584c4e9f0582a4750d46f8c376cff85ed318",
+      "source": "https://opendata.paris.fr/api/explore/v2.1/catalog/datasets/stationnement-en-ouvrage/exports/json"
+    },
+    "parking_metadata": {
+      "attribution": "Ville de Paris / source publisher in metadata",
+      "bytes": 30777,
+      "coverage": "metadata only",
+      "freshness": "retrieval date does not establish observation date",
+      "license": "Open Database License (ODbL)",
+      "observed_at": null,
+      "retrieved_at": "2026-11-16T18:44:39.345685+00:00",
+      "sha256": "7c332a0d846b7008ddf3e53decd2263b4c6c6c25ef4be403cb5029b6554c580b",
+      "source": "https://opendata.paris.fr/api/explore/v2.1/catalog/datasets/stationnement-en-ouvrage"
+    }
+  },
+  "database_license": {
+    "attribution": "Ville de Paris, Direction de la Voirie et des D\u00e9placements; Belib static-data publisher. Contains information from Paris Data under ODbL.",
+    "name": "ODbL1.0",
+    "url": "https://opendatacommons.org/licenses/odbl/1-0/"
+  },
+  "trace": [
+    {
+      "bytes": 30777,
+      "sha256": "7c332a0d846b7008ddf3e53decd2263b4c6c6c25ef4be403cb5029b6554c580b",
+      "source_key": "parking_metadata",
+      "tool": "collect_reviewed_source"
+    },
+    {
+      "bytes": 25844,
+      "sha256": "84620ad3f9e5d150257477cb41b820c5ba669e854f2d1c41b5278e31dc7ad35a",
+      "source_key": "paris_metadata",
+      "tool": "collect_reviewed_source"
+    },
+    {
+      "bytes": 297024,
+      "sha256": "36654a671fec06824b03fde1a9d2584c4e9f0582a4750d46f8c376cff85ed318",
+      "source_key": "parking",
+      "tool": "collect_reviewed_source"
+    },
+    {
+      "bytes": 2953107,
+      "sha256": "5df3848ea0b4cb116fb994ac2ceb09cfbb515059655a75ec05ec7fe1003912ad",
+      "source_key": "paris_all",
+      "tool": "collect_reviewed_source"
+    },
+    {
+      "leads": 120,
+      "qualified": 0,
+      "tool": "discover_and_cross_reference"
+    }
+  ],
+  "qualified_commercial_sites": 0,
+  "limitations": [
+    "Only municipal concession parking and Belib stations; not all properties or competitors",
+    "No outreach, investment, lease or grid reservation",
+    "Public operator names do not imply willingness to partner",
+    "Missing charging count is unknown, never zero",
+    "Reported EV spaces exclude accessible EV spaces; complement is not proven uncharged capacity",
+    "No commercial opportunity is qualified by this run"
+  ],
+  "discovered_leads": 120,
+  "fresh_parking_records": 0,
+  "known_on_site_charging_counts": 0,
+  "note": "Live source-derived discovery, not a synthetic economic run. No commercial qualification; all120 lead inventories stale under90day policy and charging counts unknown.",
+  "post_review_recomputation": "same retained public bytes; missing identifiers quarantined, fractional freshness, source category semantics fixed"
+}

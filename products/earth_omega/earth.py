@@ -1,10 +1,14 @@
 """Bounded, auditable EV charging site screening. Python 3.11+, stdlib only."""
 from __future__ import annotations
-import argparse, csv, hashlib, html, io, itertools, json, math, pathlib, sys
+import argparse, csv, gzip, hashlib, html, io, itertools, json, math, pathlib, sys
 from datetime import datetime, timezone
 from urllib.request import build_opener, HTTPRedirectHandler, Request
 
 SOURCES = {
+    'parking': 'https://opendata.paris.fr/api/explore/v2.1/catalog/datasets/stationnement-en-ouvrage/exports/json',
+    'paris_all': 'https://opendata.paris.fr/api/explore/v2.1/catalog/datasets/belib-points-de-recharge-pour-vehicules-electriques-donnees-statiques/exports/json',
+    'parking_metadata': 'https://opendata.paris.fr/api/explore/v2.1/catalog/datasets/stationnement-en-ouvrage',
+    'paris_metadata': 'https://opendata.paris.fr/api/explore/v2.1/catalog/datasets/belib-points-de-recharge-pour-vehicules-electriques-donnees-statiques',
     'paris': 'https://opendata.paris.fr/api/explore/v2.1/catalog/datasets/belib-points-de-recharge-pour-vehicules-electriques-donnees-statiques/records?limit=100',
     'chargers': 'https://donnees.montreal.ca/dataset/c999d1a9-8333-4871-9226-7d3a53f490a6/resource/b502cee9-ff87-44fa-9a8e-722285202b0d/download/bornes-recharge-publiques.geojson',
     'utilization': 'https://donnees.montreal.ca/fr/dataset/4b2f9b4c-abac-4c36-997a-85c22e22bf0b/resource/a9050c7b-2337-4cc2-ae07-6a53c99e01f6/download/chargeurs_statistiques.csv',
@@ -162,10 +166,13 @@ def collect(kind,out):
     with build_opener(NoRedirect()).open(req,timeout=60) as response:
         raw=response.read(MAX_BYTES+1)
         if len(raw)>MAX_BYTES: raise Invalid('source exceeds32MiB bound; use documented bounded extract')
+    if raw[:2]==b'\x1f\x8b':
+        with gzip.GzipFile(fileobj=io.BytesIO(raw)) as compressed: raw=compressed.read(MAX_BYTES+1)
+        if len(raw)>MAX_BYTES: raise Invalid('decompressed source exceeds32MiB bound')
     dest=pathlib.Path(out); dest.mkdir(parents=True,exist_ok=False)
     (dest/'source.raw').write_bytes(raw)
     receipt={'source':url,'retrieved_at':datetime.now(timezone.utc).isoformat(),'bytes':len(raw),'sha256':hashlib.sha256(raw).hexdigest(),
-             'license':'verify source metadata' if kind=='paris' else 'CC BY 4.0','attribution':'Ville de Paris / Belib' if kind=='paris' else 'Ville de Montréal','coverage':'first100 records only; NOT complete inventory' if kind=='paris' else 'public municipal chargers only',
+             'license':'Open Database License (ODbL)' if kind in ('paris','paris_all','parking','parking_metadata','paris_metadata') else 'CC BY 4.0','attribution':'Ville de Paris / source publisher in metadata' if kind in ('paris','paris_all','parking','parking_metadata','paris_metadata') else 'Ville de Montréal','coverage':{'paris':'first100 records only; NOT complete inventory','parking':'Paris municipal concession parking only','paris_all':'Belib static inventory only; not all competitors','parking_metadata':'dataset metadata, not field observations','paris_metadata':'dataset metadata, not field observations'}.get(kind,'public municipal chargers only'),
              'observed_at':None,'freshness':'retrieval date does not establish observation date'}
     (dest/'receipt.json').write_bytes(canonical(receipt))
     return receipt
@@ -179,11 +186,16 @@ def main():
     p=argparse.ArgumentParser(description=__doc__); sub=p.add_subparsers(dest='cmd',required=True)
     a=sub.add_parser('screen'); a.add_argument('mission'); a.add_argument('--out',required=True)
     a=sub.add_parser('verify'); a.add_argument('mission'); a.add_argument('report')
-    a=sub.add_parser('normalize'); a.add_argument('kind',choices=SOURCES); a.add_argument('snapshot'); a.add_argument('--observed-at'); a.add_argument('--out',required=True)
+    a=sub.add_parser('discover'); a.add_argument('--out',required=True); a.add_argument('--min-spaces',type=int,default=100); a.add_argument('--max-age-days',type=int,default=90)
+    a=sub.add_parser('normalize'); a.add_argument('kind',choices=('paris','chargers','utilization')); a.add_argument('snapshot'); a.add_argument('--observed-at'); a.add_argument('--out',required=True)
     a=sub.add_parser('investigate'); a.add_argument('mission'); a.add_argument('--out',required=True)
     a=sub.add_parser('collect'); a.add_argument('kind',choices=SOURCES); a.add_argument('--out',required=True)
     args=p.parse_args()
     try:
+        if args.cmd=='discover':
+            from .discovery import discover
+            result=discover(args.out,args.min_spaces,args.max_age_days)
+            print(json.dumps(result)); return
         if args.cmd=='collect': print(json.dumps(collect(args.kind,args.out))); return
         if args.cmd=='normalize':
             from .importers import normalize

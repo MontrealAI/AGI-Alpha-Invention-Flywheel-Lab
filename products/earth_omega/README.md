@@ -18,6 +18,20 @@ python -m products.earth_omega.earth investigate products/earth_omega/examples/m
 
 Open `/tmp/earth-dossier/index.html` locally. Output paths must be new: existing deliverables are not silently overwritten. The example is **entirely synthetic**, not a recommendation about any actual property. It demonstrates a profitable scenario excluded for unknown grid access, exclusion of overlapping catchments, a negative-NPV no-build option, and selection of the better qualifying scenario under capital limits. CAD/EUR are supported as separate input units, never implicitly converted.
 
+### Discover actual candidate facilities without supplying a site list
+
+```sh
+python -m products.earth_omega.earth discover --out /tmp/earth-discovery --min-spaces 100 --max-age-days 90
+```
+
+The automated discovery path retrieves the official Paris parking and Belib metadata, checks ODbL licenses, downloads full bounded exports, checks counts, identifies candidate facilities, joins nearby public charging stations, assesses row freshness, and produces `discovery.json`, GIS-ready `leads.geojson`, and an offline `index.html`. It gathers source evidence and generates leads **without an operator-provided candidate list**. This is genuine rule-based automated discovery, not demonstrated frontier-model reasoning or commercial qualification.
+
+A live November 16 run fetched **125 parking facilities and 1,969 charging records**, generated **120 leads** meeting the requested capacity threshold, and qualified **zero commercially viable sites**. All120 parking rows were older than the90-day freshness rule, and all120 lacked the reported EV-space count. Three charging records with missing station/point IDs are quarantined, not treated as a station named `None`. [Live receipt](evidence/discovery-live.json).
+
+The source's EV-space field excludes accessible/PMR EV spaces. Its complement is not proven uncharged capacity. Unknown counts are never zero. Leads are ordered for evidence gathering by freshness, known reported EV-space fraction and facility capacity, **not by profit or demand**. Existing municipal concessions do not imply private property availability or operator willingness. This first discovery geography is Paris; it is not a worldwide property search. Use source-derived leads to investigate permissions, demand, connection terms and costs before creating an economic mission.
+
+Derived discovery databases are ODbL1.0 with attribution and share-alike; code retains repository license. The output includes attribution. Check license obligations before combining with proprietary databases or distributing derived outputs. Raw transient downloads are not committed.
+
 ### Collect actual public evidence
 
 ```sh
@@ -49,7 +63,7 @@ Use the example as schema. Every candidate needs:
 - Capital cost, fixed annual cost, unit selling price/variable cost, residual value, discount rate, horizon and **explicit daily-kWh range**. Amounts use the mission currency. Include all applicable tax, lease, grid, maintenance, insurance, finance, failure, decommissioning and customer-acquisition costs. Explicit unpriced costs block eligibility. A required `cost_coverage` object records `included` or `not_applicable` and a nonempty `basis` for installation, grid, land, energy, maintenance, network, insurance, tax, financing, decommissioning and acquisition. Missing declarations block eligibility. These declarations are auditable assertions, not independent proof of completeness.
 - Budget means **installation capital allocation**, not full operating liquidity. No borrowing or spending occurs.
 
-The system ranks only the supplied candidate set. It does not obtain property rights or autonomously enumerate all available parcels. An operator-provided scenario is not independently verified demand. Source references can be forged; the verifier does not authenticate documents or substitute for legal/engineering due diligence. No sensitive customer records are necessary for the public example. Keep private data and generated customer reports out of Git.
+The economic screen ranks its supplied candidate set. The separate discovery command generates leads from public municipal facility inventory; neither obtains property rights nor enumerates all available parcels. An operator-provided scenario is not independently verified demand. Source references can be forged; the verifier does not authenticate documents or substitute for legal/engineering due diligence. No sensitive customer records are necessary for the public example. Keep private data and generated customer reports out of Git.
 
 ### Economics and reproducibility
 
@@ -71,7 +85,7 @@ An exact finite enumeration chooses the largest sum of positive downside NPVs un
 
 ### Public data and licensing
 
-- [Paris Belib static data](https://opendata.paris.fr/explore/dataset/belib-points-de-recharge-pour-vehicules-electriques-donnees-statiques/): Ville de Paris / Belib. See current official metadata for reuse license. No complete raw dataset is redistributed by this draft.
+- [Paris Belib static data](https://opendata.paris.fr/explore/dataset/belib-points-de-recharge-pour-vehicules-electriques-donnees-statiques/): Ville de Paris / Belib. Official API metadata verified Open Database License (ODbL). No complete raw dataset is redistributed by this draft.
 - [Montreal charger metadata](https://donnees.artm.quebec/catalogue/dataset/bornes-recharge-publiques): Ville de Montréal, CC BY 4.0. Approximate public municipal locations, incomplete market coverage.
 - [Montreal utilization metadata](https://donnees.artm.quebec/catalogue/dataset/utilisation-bornes-recharge-publique-voiture-electrique): Ville de Montréal, CC BY 4.0. Monthly aggregate public charger use, potentially stale.
 
