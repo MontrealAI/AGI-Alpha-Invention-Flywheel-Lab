@@ -20,7 +20,7 @@ SCHEMA="montreal-ai/contract-value-omega/1.0"
 HEADERS={
     "contracts.csv":("contract_id","supplier_id","service_code","currency","valid_from","valid_to","max_unit_rate","term_ref"),
     "invoices.csv":("line_id","invoice_id","supplier_id","supplier_invoice_no","invoice_date","service_period","service_code","quantity","unit_rate","line_amount","currency","invoice_ref"),
-    "usage.csv":("supplier_id","service_code","service_period","billable_quantity","usage_ref"),
+    "usage.csv":("supplier_id","service_code","service_period","currency","billable_quantity","usage_ref"),
     "payments.csv":("payment_id","invoice_id","paid_amount","currency","payment_ref"),
     "credits.csv":("credit_id","line_id","credit_amount","currency","credit_ref")
 }
@@ -183,7 +183,8 @@ def validate(folder):
         for k in ("supplier_id","service_code","usage_ref"):
             require_id(x[k],where+" "+k)
         period_bounds(x["service_period"],where)
-        key=(x["supplier_id"],x["service_code"],x["service_period"])
+        currency(x["currency"],where)
+        key=(x["supplier_id"],x["service_code"],x["service_period"],x["currency"])
         if key in entitlements:
             raise InputError(where+": ambiguous multiple independent usage limits for the same period")
         x["_limit"]=quantity(x["billable_quantity"],where)
@@ -232,7 +233,7 @@ def audit(loaded):
     # candidates; they do not additionally consume usage quota.
     used={};items=[]
     for x in sorted(loaded["invoices"],key=lambda r:(r["invoice_date"],r["invoice_id"],r["line_id"])):
-        key=(x["supplier_id"],x["service_code"],x["service_period"])
+        key=(x["supplier_id"],x["service_code"],x["service_period"],x["currency"])
         lo,hi=period_bounds(x["service_period"],"invoice period")
         matching=[r for r in loaded["contracts"]
                   if r["supplier_id"]==x["supplier_id"] and r["service_code"]==x["service_code"]
