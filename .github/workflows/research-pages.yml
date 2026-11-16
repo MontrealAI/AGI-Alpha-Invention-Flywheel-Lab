@@ -11,6 +11,8 @@ on:
       - '.github/workflows/research-pages.yml'
       - 'products/alpha-genesis-harness/**'
       - 'events/alpha-genesis-live/**'
+      - 'products/contract_value_omega/**'
+      - 'tests/test_contract_value_omega.py'
       - '.github/workflows/alpha-genesis-harness.yml'
   push:
     branches: [main]
@@ -24,6 +26,8 @@ on:
       - '.github/workflows/research-pages.yml'
       - 'products/alpha-genesis-harness/**'
       - 'events/alpha-genesis-live/**'
+      - 'products/contract_value_omega/**'
+      - 'tests/test_contract_value_omega.py'
       - '.github/workflows/alpha-genesis-harness.yml'
   workflow_dispatch:
 permissions:
@@ -47,6 +51,8 @@ jobs:
             experiments/frontier-conclave
             scripts/build_research_site.py
             tests/test_research_site.py
+            products/contract_value_omega
+            tests/test_contract_value_omega.py
             tests/test_alpha_site.cjs
             tests/test_surf_reader.cjs
             events/alpha-genesis-live
@@ -66,6 +72,53 @@ jobs:
           node --test events/alpha-genesis-live/engine/tests/*.test.mjs events/alpha-genesis-live/lab/test/*.test.mjs events/alpha-genesis-live/06_QA/stage_engine.test.mjs
           node events/alpha-genesis-live/00_STAGE/run_show.mjs --mode preview --focus confidence --out "$RUNNER_TEMP/alpha-genesis-live-preview"
           node events/alpha-genesis-live/engine/verify_receipt.mjs "$RUNNER_TEMP/alpha-genesis-live-preview/agent-receipt.json"
+      - name: Qualify private-company CONTRACT VALUE Omega financial review
+        run: |
+          python3 -m unittest discover -s tests -p 'test_contract_value_omega.py' -v
+          python3 -m products.contract_value_omega.run \
+            --input products/contract_value_omega/demo \
+            --output "$RUNNER_TEMP/contract-value-demo-review"
+          python3 -m products.contract_value_omega.verify \
+            --input products/contract_value_omega/demo \
+            --report "$RUNNER_TEMP/contract-value-demo-review"
+      - name: Qualify 25k synthetic contract lines without external data
+        run: python3 -m products.contract_value_omega.stress --lines 25000
+      - name: Package standalone CONTRACT VALUE Omega buyer edition
+        run: |
+          python3 - "$RUNNER_TEMP/contract-value-omega.zip" <<'PY'
+          from pathlib import Path
+          import subprocess,sys,zipfile
+          destination=Path(sys.argv[1]);root=Path("products/contract_value_omega")
+          source=subprocess.check_output(["git","rev-parse","HEAD"],text=True).strip()
+          with zipfile.ZipFile(destination,"w",compression=zipfile.ZIP_DEFLATED,compresslevel=9) as archive:
+              for file in sorted(root.rglob("*")):
+                  if not file.is_file() or "__pycache__" in file.parts or file.suffix==".pyc":
+                      continue
+                  info=zipfile.ZipInfo(file.as_posix(),date_time=(2026,11,16,0,0,0))
+                  info.compress_type=zipfile.ZIP_DEFLATED
+                  info.external_attr=0o644<<16
+                  archive.writestr(info,file.read_bytes())
+              info=zipfile.ZipInfo("SOURCE-REVISION.txt",date_time=(2026,11,16,0,0,0))
+              info.compress_type=zipfile.ZIP_DEFLATED
+              archive.writestr(info,source+"\\n")
+          print("Standalone private-enterprise ZIP",destination,"bytes",destination.stat().st_size)
+          PY
+          mkdir "$RUNNER_TEMP/contract-value-extracted"
+          unzip -q "$RUNNER_TEMP/contract-value-omega.zip" -d "$RUNNER_TEMP/contract-value-extracted"
+          (
+            cd "$RUNNER_TEMP/contract-value-extracted"
+            python3 -m products.contract_value_omega.run --input products/contract_value_omega/demo --output "$RUNNER_TEMP/contract-value-extracted-replay"
+            python3 -m products.contract_value_omega.verify --input products/contract_value_omega/demo --report "$RUNNER_TEMP/contract-value-extracted-replay"
+          )
+      - name: Upload buyer installation and synthetic verification evidence
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: contract-value-omega-buyer-edition-${{ github.event.pull_request.head.sha || github.sha }}
+          path: |
+            ${{ runner.temp }}/contract-value-omega.zip
+            ${{ runner.temp }}/contract-value-demo-review/
+          if-no-files-found: error
+          retention-days: 30
       - name: Validate original PDFs, links and publication boundary
         run: python3 -m unittest discover -s tests -p 'test_research_site.py' -v
       - name: Check interactive research calculations and decisions
