@@ -55,7 +55,7 @@ jobs:
                   archive.writestr(info,f.read_bytes())
               info=zipfile.ZipInfo("SOURCE-REVISION.txt",date_time=(2026,11,16,0,0,0))
               info.compress_type=zipfile.ZIP_DEFLATED
-              archive.writestr(info,source+"\\n")
+              archive.writestr(info,source+chr(10))
           print("Buyer source ZIP bytes",out.stat().st_size,"source",source)
           PY
           mkdir -p "$RUNNER_TEMP/extracted-review"
