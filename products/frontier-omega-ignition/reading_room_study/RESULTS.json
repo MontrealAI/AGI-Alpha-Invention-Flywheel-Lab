@@ -1,0 +1,229 @@
+{
+  "study": "RR-01",
+  "registration_commit": "c326679543960c3d364f1582d91e9cb0e61d406f",
+  "input_sha256": {
+    "html": "237e73a6dfb99ddfaf4d2d184e8783c87ba0332e77e1fb655dce1a3557facd71",
+    "pdf": "4c303bc5a9c4cafbbb11b4d84a0fb4ceb8f7b95822fbdf935c6560f658807c01",
+    "adverse_pdf": "a6be50975d64ea9a2b76e79c6f6e6be6694bfd887db9b7396b41c859c51aa8d9",
+    "adverse_json": "6cbc2479f050c3f409ca7256a6a7645bf45e30343cd5a119f48f3b472eb5a3df"
+  },
+  "code_sha256": {
+    "edition.py": "f4d38a94174896d6330c4559de13e6ae105cf72c1df456cd3968f02b0437d9bc",
+    "run.py": "e599824721e05fdf8726b9466a4197a630a1c42949480931fba97ccbbfdaa45e",
+    "compare.py": "504d4a26b3dbf8eb5dd6f72e7cae6edd09518e24d021601447d4e0b4a01cbd18",
+    "control.py": "931540ac545609d21a221d5684a71efd150ff9bf609d45a1004e70f1c9d5db7b"
+  },
+  "tool_versions": {
+    "python": "3.12.14",
+    "mupdf_binding": "1.26.6",
+    "lxml": "6.1.1",
+    "pdftotext": "pdftotext version 25.03.0"
+  },
+  "verdicts": {
+    "portable_delivery": true,
+    "passage_acceptance": true,
+    "adverse_controls": true,
+    "whole_document_accessibility": "unqualified",
+    "economic_value": "unmeasured",
+    "institutional_or_frontier_advantage": "unestablished"
+  },
+  "paper": {
+    "source_html": {
+      "blocks": 37,
+      "tables": 3,
+      "math": 2,
+      "lists": 1,
+      "existing_pdf_page_links": 0
+    },
+    "candidate": {
+      "total": 37,
+      "counts": {
+        "matched": 34,
+        "missing": 3
+      },
+      "correct_links": 34,
+      "wrong_links": 0,
+      "reference_pages_linked": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "failed_rows": [],
+      "all_blocks_present_in_receipt_and_html_order": true,
+      "unchanged_pdf": true,
+      "correctly_linked_indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        30,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37
+      ],
+      "unresolved_indices": [
+        19,
+        29,
+        31
+      ]
+    },
+    "conventional": {
+      "total": 37,
+      "correct_links": 31,
+      "wrong_links": 0,
+      "linked_indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        27,
+        28,
+        30,
+        32,
+        33,
+        34,
+        36,
+        37
+      ],
+      "preserves_author_markup": true
+    },
+    "poppler_text": {
+      "pages_with_text": 5,
+      "characters_each_page": [
+        2437,
+        4048,
+        3647,
+        3095,
+        925
+      ]
+    }
+  },
+  "adverse": {
+    "total": 5,
+    "passed": 5,
+    "rows": [
+      {
+        "index": 1,
+        "observed": "matched",
+        "page": 2,
+        "passed": true
+      },
+      {
+        "index": 2,
+        "observed": "ambiguous",
+        "page": null,
+        "passed": true
+      },
+      {
+        "index": 3,
+        "observed": "missing",
+        "page": null,
+        "passed": true
+      },
+      {
+        "index": 4,
+        "observed": "missing",
+        "page": null,
+        "passed": true
+      },
+      {
+        "index": 5,
+        "observed": "matched",
+        "page": 1,
+        "passed": true
+      }
+    ]
+  },
+  "process_costs": {
+    "candidate": {
+      "exit_code": 0,
+      "wall_seconds": 0.083501,
+      "child_cpu_seconds": 0.083133,
+      "stderr": "",
+      "output_bytes": 257587
+    },
+    "adverse": {
+      "exit_code": 0,
+      "wall_seconds": 0.059315,
+      "child_cpu_seconds": 0.059297,
+      "stderr": "",
+      "output_bytes": 6029
+    },
+    "conventional": {
+      "exit_code": 0,
+      "wall_seconds": 0.14799,
+      "child_cpu_seconds": 0.147616,
+      "stderr": "",
+      "output_bytes": 223016
+    },
+    "poppler_text": {
+      "exit_code": 0,
+      "wall_seconds": 0.02015,
+      "child_cpu_seconds": 0.019856,
+      "stderr": ""
+    }
+  },
+  "evaluation_errors": {},
+  "unmeasured_costs": [
+    "included Codex engineering time and inference bill",
+    "human comparator",
+    "assistive technology study",
+    "acquisition, maintenance and support"
+  ],
+  "publication_receipt": {
+    "recipient_sha256": {
+      "index.html": "ac2e21feae3b4f707c3613efad7532768d56d3d678f4c8026616a47cbf02f73e",
+      "manuscript.original.txt": "237e73a6dfb99ddfaf4d2d184e8783c87ba0332e77e1fb655dce1a3557facd71",
+      "receipt.json": "807775a24eb2172fc9883b6ba788826e55246baa87752eb8a40616bb939118ca",
+      "source.pdf": "4c303bc5a9c4cafbbb11b4d84a0fb4ceb8f7b95822fbdf935c6560f658807c01"
+    },
+    "scoring_wall_seconds": 0.46647,
+    "scoring_cpu_seconds_including_children": 0.466914
+  }
+}
