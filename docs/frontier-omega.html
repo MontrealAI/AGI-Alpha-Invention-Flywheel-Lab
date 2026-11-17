@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0a1020">
+<meta name="description" content="FRONTIER Ω — an evidence-gated living inventory of economically valuable problems becoming solvable as AI advances.">
+<title>FRONTIER Ω — Living Opportunity Inventory | MONTREAL.AI</title>
+<style>
+:root{color-scheme:dark;--bg:#080d17;--surface:#111a2a;--line:#344356;--text:#edf2f7;--muted:#a7b4c4;--gold:#e8c489;--aqua:#8ed4db;--red:#a95f65;--max:1330px}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;color:var(--text);background:radial-gradient(ellipse at 55% -8%,#213451 0,transparent 38%),radial-gradient(ellipse at 100% 25%,#311c32 0,transparent 33%),var(--bg);font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;line-height:1.55}
+a{color:var(--gold);text-decoration:none}a:hover{text-decoration:underline}button,input,select{font:inherit}button{cursor:pointer}
+nav{min-height:76px;border-bottom:1px solid #ffffff1b;display:flex;justify-content:space-between;align-items:center;gap:18px;max-width:var(--max);margin:auto;padding:15px 30px}.brand{font-size:14px;letter-spacing:.18em;font-weight:800;color:#fff}.brand span{color:var(--gold)}nav .links{display:flex;gap:25px;align-items:center;font-size:13px;letter-spacing:.05em}
+main{max-width:var(--max);margin:auto;padding:65px 30px 85px}.eyebrow{text-transform:uppercase;letter-spacing:.24em;font-weight:700;color:var(--gold);font-size:11px;display:flex;gap:12px;align-items:center}.eyebrow:before{content:"";width:31px;height:1px;background:var(--gold)}
+h1{font-size:clamp(60px,9vw,132px);line-height:.96;letter-spacing:-.09em;margin:25px 0 15px;font-weight:600}h1 em{font-weight:500;color:var(--gold);font-style:normal}h2{font-weight:600;letter-spacing:-.035em}h3{font-weight:600;letter-spacing:-.022em}.subtitle{font-size:clamp(19px,2.5vw,28px);max-width:840px;color:#c9d4e0;line-height:1.42;letter-spacing:-.023em}.subtitle strong{color:#fff;font-weight:600}
+.sourcing{margin:30px 0 40px;border-left:2px solid var(--gold);padding:10px 18px;background:#e8c4890a;color:#e3d6c1;font-size:13px;max-width:970px}
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:45px 0 57px}.metric{border:1px solid var(--line);border-radius:12px;padding:18px 21px;background:#111a2a9b;min-height:112px}.metric strong{font-size:40px;font-weight:550;line-height:1.2;letter-spacing:-.055em}.metric span{display:block;color:var(--muted);font-size:12px;margin-top:7px}.metric .zero{color:#a9b0c0}
+.sectionline{display:flex;align-items:end;justify-content:space-between;gap:15px;margin:0 0 17px}.sectionline h2{font-size:30px;margin:0}.sectionline p{color:var(--muted);font-size:13px;margin:0}
+.controls{display:grid;grid-template-columns:minmax(200px,1fr) 220px 200px;gap:10px;margin:20px 0}.controls input,.controls select{color:#eef3f9;background:#152236;border:1px solid #4c5e72;border-radius:9px;padding:13px 15px;min-width:0;outline:none}.controls input:focus,.controls select:focus{border-color:var(--gold);box-shadow:0 0 0 2px #e8c48930}
+.pills{display:flex;gap:9px;flex-wrap:wrap;margin:0 0 30px}.pill{border:1px solid #475364;background:#111b2b;color:#c4d0df;border-radius:30px;font-size:12px;padding:8px 13px}.pill.active{border-color:var(--gold);color:#191710;background:var(--gold)}
+#count{color:var(--muted);font-size:12px;margin:16px 0 14px}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.opportunity{text-align:left;background:linear-gradient(142deg,#1c2940,#101927 88%);color:inherit;border:1px solid #4c5c70;border-radius:13px;padding:22px;min-height:285px;transition:transform .18s,border-color .18s,background .18s;display:flex;flex-direction:column;gap:10px}.opportunity:hover{transform:translateY(-3px);border-color:var(--gold);background:#23304a}.op-top{display:flex;justify-content:space-between;gap:8px;align-items:center}.op-id{color:var(--gold);font-size:11px;letter-spacing:.17em;font-weight:700}.op-score{font-size:11px;color:#a9bccb}.opportunity h3{font-size:22px;line-height:1.19;margin:2px 0;letter-spacing:-.035em}.opportunity p{font-size:13px;margin:0;color:#afbfce;line-height:1.55}.op-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:auto;padding-top:14px;border-top:1px solid #ffffff20}.op-foot b{font-weight:600;letter-spacing:.12em;font-size:10px;color:var(--aqua)}.op-foot small{color:#c0a77b;font-size:11px}
+.flag{display:inline-block;font-weight:700;font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:#e9d5aa;background:#54402445;padding:4px 8px;border-radius:4px}
+.footnote{margin:44px 0;border-top:1px solid #ffffff28;padding-top:23px;font-size:12px;color:#aabac9}.footnote strong{color:#f1d6ad}
+dialog{border:1px solid #647187;border-radius:16px;background:#111b2b;color:#e9f0f7;max-width:790px;width:calc(100vw - 32px);max-height:88vh;overflow:auto;box-shadow:0 28px 110px #000c;padding:30px}dialog::backdrop{background:#000c;backdrop-filter:blur(5px)}.dialog-close{float:right;background:#35445b;color:#fff;border:1px solid #5b6d7f;border-radius:8px;padding:5px 12px}.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:22px}.detail-card{background:#1b293c;border:1px solid #3d5267;border-radius:10px;padding:15px}.detail-card.full{grid-column:1/-1}.detail-card b{font-size:11px;color:var(--gold);text-transform:uppercase;letter-spacing:.12em;display:block;margin-bottom:7px}.detail-card p{margin:0;font-size:14px;color:#dfebf8}.detail-card a{word-break:break-word}.detail-status{color:var(--aqua);font-size:12px;letter-spacing:.1em}.detail-caption{color:#a9b7c7;font-size:12px}
+#loadstate{padding:14px;color:var(--muted);background:#111d2d;border:1px solid #34475d;border-radius:9px}
+@media(max-width:1050px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:730px){nav{padding:15px 18px}.links{display:none!important}main{padding:48px 18px 70px}.metrics{grid-template-columns:repeat(2,1fr);gap:9px}.metric{min-height:95px}.metric strong{font-size:34px}.controls{grid-template-columns:1fr}.grid{grid-template-columns:1fr}.detail-grid{grid-template-columns:1fr}.detail-card.full{grid-column:auto}.sectionline{align-items:start;flex-direction:column}dialog{padding:17px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<nav>
+  <a class="brand" href="https://montreal.ai">MONTREAL<span>.</span>AI <span>—</span> AGI ALPHA</a>
+  <div class="links"><a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab">Source and evidence</a><a href="https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/">Research programme</a></div>
+</nav>
+<main>
+  <div class="eyebrow">The advancing frontier · the economic opportunity</div>
+  <h1>FRONTIER <em>Ω</em></h1>
+  <div class="subtitle"><strong>The Living Opportunity Inventory.</strong> A growing map of valuable problems that become solvable as AI advances—and the exact experiments required to know when.</div>
+  <div class="sourcing"><strong>Evidence boundary.</strong> Entries are testable commercial hypotheses, not verified five-week impossibilities or observed customer orders. A frontier announcement triggers investigation, not technical or commercial qualification. All pilot prices and triage scores are illustrative decision inputs.</div>
+  <div class="metrics">
+    <div class="metric"><strong id="metric-opps">—</strong><span>Buyer problems tracked</span></div>
+    <div class="metric"><strong id="metric-signals">—</strong><span>Dated source signals</span></div>
+    <div class="metric"><strong class="zero">0</strong><span>Independently confirmed new crossings</span></div>
+    <div class="metric"><strong class="zero">0</strong><span>Verified paid outcomes</span></div>
+  </div>
+  <div class="sectionline"><h2>Opportunity landscape</h2><p>Editorial experiment priority, not ROI or valuation</p></div>
+  <div class="controls">
+    <input id="search" type="search" placeholder="Search buyer, problem, solution or acceptance..." aria-label="Search opportunities">
+    <select id="engine" aria-label="Filter engine">
+      <option value="ALL">All five engines</option><option>MIGRATE</option><option>PROVE</option><option>OPERATE</option><option>TRUST</option><option>ENGINEER</option>
+    </select>
+    <select id="order" aria-label="Sort opportunities"><option value="score">Highest experiment priority</option><option value="price">Lowest pilot quote hypothesis</option><option value="title">Alphabetical</option></select>
+  </div>
+  <div class="pills" role="group" aria-label="Engine filters">
+    <button type="button" class="pill active" data-engine="ALL">All opportunities</button>
+    <button type="button" class="pill" data-engine="MIGRATE">MIGRATE Ω</button>
+    <button type="button" class="pill" data-engine="PROVE">PROVE Ω</button>
+    <button type="button" class="pill" data-engine="OPERATE">OPERATE Ω</button>
+    <button type="button" class="pill" data-engine="TRUST">TRUST Ω</button>
+    <button type="button" class="pill" data-engine="ENGINEER">ENGINEER Ω</button>
+  </div>
+  <div id="count" aria-live="polite"></div>
+  <div id="loadstate" role="status">Loading the canonical GitHub inventory…</div>
+  <div id="cards" class="grid"></div>
+  <div class="footnote">Open-source research instrument for <strong>MONTREAL.AI / ALPHA GENESIS FLYWHEEL Ω</strong>. The canonical opportunity and source JSON is retrieved from the repository. A passing simulated fixture is never customer demand, collected payment, an independent scientific result, or a proof of unattended autonomy. Original public sources, measurements and permission constraints matter.</div>
+</main>
+<dialog id="detail" aria-labelledby="detail-title">
+  <button type="button" class="dialog-close" id="close">Close</button>
+  <p class="eyebrow" id="detail-engine">Experiment opportunity</p>
+  <h2 id="detail-title" style="font-size:clamp(27px,4.5vw,39px);line-height:1.12;margin-top:17px"></h2>
+  <div class="detail-status">STATUS: NOT YET INDEPENDENTLY QUALIFIED</div>
+  <div id="detail-cards" class="detail-grid"></div>
+</dialog>
+<script>
+(function(){
+"use strict";
+var BASE="https://raw.githubusercontent.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/";
+var ref=new URLSearchParams(location.search).get("ref")||"main";
+if(!/^[A-Za-z0-9._/-]+$/.test(ref) || ref.indexOf("..")!==-1)ref="main";
+var records=[],signalById={};
+var input=document.getElementById("search"),engine=document.getElementById("engine"),order=document.getElementById("order");
+var cards=document.getElementById("cards"),count=document.getElementById("count"),loadstate=document.getElementById("loadstate"),dialog=document.getElementById("detail");
+function el(tag,className,text){var x=document.createElement(tag);if(className)x.className=className;if(text!==undefined)x.textContent=String(text);return x;}
+function score(o){var d=o.ordinal_hypotheses;return 4*d.buyer_urgency+3*d.autonomy_fit+4*d.acceptance_clarity+3*d.repeatability+3*d.differentiation-2*d.capital_intensity-2*d.sales_friction;}
+function setFilter(value){engine.value=value;document.querySelectorAll(".pill").forEach(function(p){p.classList.toggle("active",p.dataset.engine===value);});render();}
+document.querySelectorAll(".pill").forEach(function(p){p.addEventListener("click",function(){setFilter(p.dataset.engine);});});
+input.addEventListener("input",render);engine.addEventListener("change",function(){setFilter(engine.value);});order.addEventListener("change",render);
+document.getElementById("close").addEventListener("click",function(){dialog.close();});
+function detailCard(label,value,full){var card=el("div","detail-card"+(full?" full":""));card.append(el("b","",label),el("p","",value));return card;}
+function openDetail(o){
+  document.getElementById("detail-title").textContent=o.title;
+  document.getElementById("detail-engine").textContent=o.id+" · "+o.engine+" Ω";
+  var target=document.getElementById("detail-cards");target.replaceChildren();
+  [["Buyer",o.buyer],["Previously difficult or costly problem",o.blocked_problem],["Deliverable",o.deliverable],["Acceptance contract",o.acceptance_test],["Strongest complete alternative",o.strongest_complete_alternative],["First decisive test",o.first_discriminating_test]].forEach(function(r){target.append(detailCard(r[0],r[1],r[0]==="Acceptance contract"||r[0]==="First decisive test"));});
+  var t=o.crossing_threshold;
+  target.append(detailCard("Hypothetical pilot quote (not a sale)","US$"+Number(o.pilot_quote_usd_hypothesis).toLocaleString("en-US")));
+  target.append(detailCard("Technical crossing threshold",String(t.minimum_matched_cases)+" matched cases, ≥"+(100*t.minimum_acceptance_fraction).toFixed(0)+"% accepted, ≤US$"+t.max_complete_cost_per_accepted_usd+" all-in per accepted result, ≤"+t.max_p95_turnaround_hours+"h p95"));
+  var wrap=el("div","detail-card full");wrap.append(el("b","","Dated source signals"));
+  o.frontier_signal_ids.forEach(function(id){var s=signalById[id];if(!s)return;var line=el("p");var a=el("a","",s.date+" · "+s.title);a.href=s.url;a.target="_blank";a.rel="noopener noreferrer";line.append(a);wrap.append(line);});
+  target.append(wrap);
+  target.append(detailCard("Evidence boundary","No independently reproduced five-week crossing, signed commercial acceptance, confirmed paid revenue or strict unattended production claimed.",true));
+  dialog.showModal();
+}
+function render(){
+  if(!records.length)return;
+  var q=input.value.trim().toLowerCase();
+  var rows=records.filter(function(o){return (engine.value==="ALL"||o.engine===engine.value) && (!q||[o.title,o.buyer,o.blocked_problem,o.deliverable,o.acceptance_test,o.strongest_complete_alternative].join(" ").toLowerCase().includes(q));});
+  rows.sort(function(a,b){if(order.value==="price")return a.pilot_quote_usd_hypothesis-b.pilot_quote_usd_hypothesis;if(order.value==="title")return a.title.localeCompare(b.title);return score(b)-score(a)||a.id.localeCompare(b.id);});
+  count.textContent=rows.length+" of "+records.length+" opportunities · select a card for the buyer problem, acceptance test and dated sources";
+  var frag=document.createDocumentFragment();
+  rows.forEach(function(o){
+    var b=el("button","opportunity");b.type="button";
+    var header=el("div","op-top");header.append(el("span","op-id",o.id),el("span","op-score","Priority "+score(o)));b.append(header);
+    b.append(el("h3","",o.title),el("p","",o.blocked_problem));
+    var foot=el("div","op-foot");foot.append(el("b","",o.engine+" Ω"),el("small","","TEST REQUIRED"));b.append(foot);
+    b.addEventListener("click",function(){openDetail(o);});frag.append(b);
+  });
+  cards.replaceChildren(frag);
+}
+var stem=BASE+ref+"/frontier_omega/";
+Promise.all([
+ fetch(stem+"opportunities.json",{cache:"no-store"}).then(function(r){if(!r.ok)throw Error("Inventory unavailable ("+r.status+")");return r.json();}),
+ fetch(stem+"signals.json",{cache:"no-store"}).then(function(r){if(!r.ok)throw Error("Source catalogue unavailable ("+r.status+")");return r.json();})
+]).then(function(items){
+  records=items[0].results;
+  items[1].signals.forEach(function(s){signalById[s.id]=s;});
+  document.getElementById("metric-opps").textContent=records.length;
+  document.getElementById("metric-signals").textContent=items[1].signals.length;
+  loadstate.remove();render();
+}).catch(function(err){
+  loadstate.textContent="The canonical GitHub inventory could not be loaded. Read the data and reproduction instructions directly in the repository. "+err.message;
+  var a=el("a","","Open the inventory source");a.href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/tree/"+encodeURIComponent(ref)+"/frontier_omega";a.target="_blank";a.rel="noopener noreferrer";loadstate.append(document.createTextNode(" "),a);
+});
+})();
+</script>
+</body>
+</html>
