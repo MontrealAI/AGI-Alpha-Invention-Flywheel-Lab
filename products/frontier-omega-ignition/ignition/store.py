@@ -1,0 +1,202 @@
+"""Local durable mission revisions. SQLite transactions own the state, never the model."""
+from __future__ import annotations
+
+import contextlib
+import hashlib
+import json
+import os
+import re
+import sqlite3
+import uuid
+from datetime import datetime, timezone
+from pathlib import Path
+
+PRODUCT = Path(__file__).resolve().parents[1]
+
+
+class StateError(ValueError):
+    """Bad input or stale client state."""
+
+
+class Conflict(StateError):
+    """A revision or idempotency key no longer matches."""
+
+
+class Missing(StateError):
+    """The requested private mission does not exist in this workspace."""
+
+
+def timestamp():
+    return datetime.now(timezone.utc).isoformat(timespec="milliseconds")
+
+
+def canonical(data):
+    return json.dumps(data, sort_keys=True, ensure_ascii=False, separators=(",", ":"), allow_nan=False)
+
+
+def digest(data):
+    return hashlib.sha256(canonical(data).encode()).hexdigest()
+
+
+def strict_json(data):
+    def unique(pairs):
+        mapping = {}
+        for key, value in pairs:
+            if key in mapping:
+                raise StateError("Duplicate JSON key")
+            mapping[key] = value
+        return mapping
+    def invalid(_):
+        raise StateError("Non-finite number")
+    return json.loads(data, object_pairs_hook=unique, parse_constant=invalid)
+
+
+def runtime_source():
+    paths = list((PRODUCT / "ignition").glob("*.py"))
+    bridge = PRODUCT.parent / "alpha-genesis-harness" / "bridge"
+    paths += [bridge / name for name in ("__init__.py", "adapters.py", "streaming.py", "output_schema.py")]
+    return digest({str(p.relative_to(PRODUCT.parent)): hashlib.sha256(p.read_bytes()).hexdigest()
+                   for p in sorted(paths) if p.is_file()})
+
+
+def clean_mission(mission):
+    if not isinstance(mission, dict):
+        raise StateError("mission must be an object")
+    allowed = {"purpose", "beneficiary", "requirements", "authority", "resources", "time", "construction_spec"}
+    if set(mission) - allowed:
+        raise StateError("Unknown mission fields")
+    purpose = mission.get("purpose")
+    if not isinstance(purpose, str) or not purpose.strip() or len(purpose) > 12000:
+        raise StateError("Provide a purpose of 1–12000 characters")
+    result = dict(mission, purpose=purpose.strip())
+    beneficiary = result.setdefault("beneficiary", "")
+    requirements = result.setdefault("requirements", [])
+    if not isinstance(beneficiary, str) or not isinstance(requirements, list) or any(
+            not isinstance(r, str) or not r.strip() for r in requirements):
+        raise StateError("Invalid beneficiary or requirements")
+    for field in ("authority", "resources", "time", "construction_spec"):
+        if not isinstance(result.setdefault(field, {}), dict):
+            raise StateError(f"{field} must be an object")
+    auth = result["authority"]
+    if set(auth) - {"local_model", "assisted_model", "public_sources"} or any(type(v) is not bool for v in auth.values()):
+        raise StateError("Only explicit boolean permissions for a local model, assisted handoff and public sources are supported")
+    spec = result["construction_spec"]
+    if spec and spec.get("purpose") != result["purpose"]:
+        raise StateError("Construction specification must bind the exact mission purpose")
+    return result
+
+
+def event(state, stage, message, status=None):
+    state["stage"] = stage
+    if status:
+        state["status"] = status
+    state["events"].append({"stage": stage, "at": timestamp(), "message": message})
+
+
+class Store:
+    def __init__(self, directory):
+        self.root = Path(directory).expanduser()
+        self.root.mkdir(parents=True, exist_ok=True, mode=0o700)
+        if self.root.is_symlink() or (os.name == "posix" and
+                (self.root.stat().st_mode & 0o077 or self.root.stat().st_uid != os.getuid())):
+            raise StateError("Use a private, user-owned state directory (mode 0700)")
+        self.db = self.root / "missions.sqlite3"
+        with self.connection() as db:
+            db.executescript("""
+                CREATE TABLE IF NOT EXISTS revisions (
+                  id TEXT NOT NULL, version INTEGER NOT NULL, data TEXT NOT NULL, PRIMARY KEY(id, version));
+                CREATE TABLE IF NOT EXISTS requests (
+                  key TEXT PRIMARY KEY, fingerprint TEXT NOT NULL, id TEXT NOT NULL, version INTEGER NOT NULL);
+            """)
+
+    @contextlib.contextmanager
+    def connection(self):
+        db = sqlite3.connect(self.db, timeout=15)
+        try:
+            with db:
+                yield db
+        finally:
+            db.close()
+
+    def create(self, body, provider, runtime, *, run_id=None, base=None):
+        if not isinstance(body, dict) or set(body) - {"mission", "sources", "request_id", "version"}:
+            raise StateError("Unexpected mission request")
+        key = body.get("request_id")
+        if not isinstance(key, str) or not re.fullmatch(r"[A-Za-z0-9_-]{8,120}", key):
+            raise StateError("A stable request_id of 8–120 letters, digits, underscores or hyphens is required")
+        mission = clean_mission(body.get("mission"))
+        sources = body.get("sources", [])
+        if not isinstance(sources, list) or len(sources) > 64 or any(not isinstance(s, dict) for s in sources):
+            raise StateError("sources must be an array of up to 64 evidence records")
+        if len(canonical([mission, sources]).encode()) > 2_000_000:
+            raise StateError("Mission and source snapshot exceed transport limit")
+        fp = digest([run_id, base, mission, sources])
+        with self.connection() as db:
+            db.execute("BEGIN IMMEDIATE")
+            previous = db.execute("SELECT fingerprint,id,version FROM requests WHERE key=?", (key,)).fetchone()
+            if previous:
+                if previous[0] != fp:
+                    raise Conflict("request_id was used with different inputs")
+                return previous[1:]
+            if run_id is None:
+                run_id = uuid.uuid4().hex
+                version = 1
+            else:
+                head = self._get(db, run_id)
+                if type(base) is not int or head["version"] != base:
+                    raise Conflict("Mission changed. Refresh before amending")
+                version = base + 1
+            state = dict(id=run_id, version=version, mission=mission, sources=sources, provider=provider,
+                         runtime=runtime, input_sha256=digest([mission, sources]), status="queued", stage="intake",
+                         events=[], calls={}, exchanges={}, source_result=None, research=None, contract=None,
+                         proposed_contract=None, contract_sha256=None, artifact=None, evaluation=None,
+                         handoff=None, error=None, created_at=timestamp())
+            event(state, "intake", "Mission and permission snapshot saved")
+            db.execute("INSERT INTO revisions VALUES(?,?,?)", (run_id,version,canonical(state)))
+            db.execute("INSERT INTO requests VALUES(?,?,?,?)", (key,fp,run_id,version))
+            return run_id, version
+
+    @staticmethod
+    def _get(db, run_id, version=None):
+        if not isinstance(run_id, str) or not re.fullmatch(r"[a-f0-9]{32}", run_id):
+            raise Missing("Unknown mission")
+        if version is None:
+            row = db.execute("SELECT data FROM revisions WHERE id=? ORDER BY version DESC LIMIT 1", (run_id,)).fetchone()
+        else:
+            row = db.execute("SELECT data FROM revisions WHERE id=? AND version=?", (run_id,version)).fetchone()
+        if row is None:
+            raise Missing("Unknown mission")
+        return json.loads(row[0])
+
+    def get(self, run_id, version=None):
+        with self.connection() as db:
+            return self._get(db, run_id, version)
+
+    def save(self, state):
+        with self.connection() as db:
+            db.execute("BEGIN IMMEDIATE")
+            head = db.execute("SELECT MAX(version) FROM revisions WHERE id=?", (state["id"],)).fetchone()[0]
+            if state["version"] != head:
+                raise Conflict("This work was superseded by a new mission revision")
+            db.execute("UPDATE revisions SET data=? WHERE id=? AND version=?",
+                       (canonical(state),state["id"],state["version"]))
+
+    def history(self, run_id):
+        with self.connection() as db:
+            self._get(db, run_id)
+            return [json.loads(row[0]) for row in db.execute(
+                "SELECT data FROM revisions WHERE id=? ORDER BY version", (run_id,))]
+
+    @contextlib.contextmanager
+    def work_lock(self, run_id):
+        """An OS-released SQLite write lock per run spans expensive inference, never other missions."""
+        self.get(run_id)
+        guard = sqlite3.connect(self.root / (run_id + ".lock"), timeout=0)
+        try:
+            try:
+                guard.execute("BEGIN IMMEDIATE")
+            except sqlite3.OperationalError as exc:
+                raise Conflict("A worker already owns this mission") from exc
+            yield
+        finally:
+            guard.close()
