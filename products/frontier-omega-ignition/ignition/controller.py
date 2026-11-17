@@ -5,15 +5,15 @@ import sys
 import time
 from datetime import datetime, timezone
 
-from . import construction, evaluation, delivery, research
+from . import construction, evaluation, delivery, research, routing
 from .economics import assessment
 from .provider import HandoffRequired, ManualProvider, ModelProvider, ProviderUnavailable
 from .store import Conflict, StateError, digest, event, runtime_source, timestamp
 
-CONSTRUCT_INSTRUCTION = "Construct an executable program for the selected purpose. Return exactly {kind,program}. For a manifest audit the program is {manifest:{...}}. For record migration, program has columns, extra_fields and optional input_fields. Each column uses source,target,type, optional split:{separator,index}, or sources,separator,target,type for a join. Produce no shell, executable Python, URLs or external actions."
+CONSTRUCT_INSTRUCTION = "Construct an executable program for the selected purpose. Return exactly {kind,program}. For a manifest audit use {use_frozen_manifest:true} to bind the exact trusted manifest from the contract. Never invent or retype trust anchors. For record migration, program has columns, extra_fields and optional input_fields. Each column uses source,target,type, optional split:{separator,index}, or sources,separator,target,type for a join. Produce no shell, executable Python, URLs or external actions."
 
 FINISHED = {"verified", "failed", "deferred"}
-PRIVATE_FIELDS = {"calls", "exchanges"}
+PRIVATE_FIELDS = {"calls", "exchanges", "last_proposal"}
 SPEC_FORMAT = {
     "record_migration": {"definition": {"input_fields": ["legacy_key"], "targets": [{"name": "new_key","type": "text"}],
                                        "extra_fields": "reject", "demonstrations": "separate development cases"},
@@ -23,10 +23,16 @@ SPEC_FORMAT = {
 }
 
 
+class ModelBudgetExhausted(StateError):
+    """The next uncached inference exceeds the mission authorization."""
+
+
 class Controller:
     def __init__(self, store, provider_factory=None, assisted=None):
         self.store = store
         self.source = runtime_source()
+        from .pairing_specialist import identity as pairing_identity
+        self.pairing_source = pairing_identity()
         self.factory = provider_factory or ModelProvider.from_environment
         self.assisted = assisted
 
@@ -41,8 +47,9 @@ class Controller:
     def create(self, body, run_id=None):
         if run_id is not None:
             with self.store.work_lock(run_id):
-                return self.store.create(body, self.identity(), self.source, run_id=run_id, base=body.get("version"))
-        return self.store.create(body, self.identity(), self.source)
+                return self.store.create(body, self.identity(), self.source, run_id=run_id, base=body.get("version"),
+                                         specialist_source=self.pairing_source)
+        return self.store.create(body, self.identity(), self.source, specialist_source=self.pairing_source)
 
     def successor(self, run_id, version, body, rights):
         if not isinstance(rights,str) or not rights.strip() or len(rights)>2000:
@@ -54,11 +61,17 @@ class Controller:
                 raise Conflict("Source capability requires an accepted current revision")
             if s["mission"]["authority"].get("allow_program_reuse") is not True:
                 raise StateError("Source mission did not grant local program reuse")
+            if s["artifact"]["kind"] == "pairing_lab":
+                raise StateError("Reuse the portable Pairing Lab instrument through a fresh specialist mission")
             inherited = {"source_id":run_id, "source_version":version, "artifact_sha256":s["artifact"]["sha256"],
                          "rights":rights, "kind":s["artifact"]["kind"], "program":s["artifact"]["program"]}
-            return self.store.create(body,self.identity(),self.source,inherited=inherited)
+            return self.store.create(body,self.identity(),self.source,inherited=inherited,specialist_source=self.pairing_source)
 
     def obsolete(self, s):
+        if "pairing_lab" in s["mission"]["resources"]:
+            from .pairing_specialist import identity
+            if s.get("specialist_source") != self.pairing_source or identity() != self.pairing_source or (s.get("contract") and s["contract"].get("specialist_sha256") != self.pairing_source):
+                return True
         return (runtime_source() != self.source or s["runtime"] != self.source
                 or s["provider"] != self.identity())
 
@@ -166,22 +179,31 @@ class Controller:
         provider = self.provider(s["exchanges"])
         mode = provider.identity().get("mode")
         self._check_time(mission)
+        if "pairing_lab" in mission["resources"]:
+            from .pairing_specialist import run
+            return run(self, s)
+        if s.get("routing") is None:
+            s["routing"] = routing.route(mission)
+            self._step(s, "routing", s["routing"]["reason"])
+        choice = s["routing"]
+        if choice["route"] == "clarify":
+            return self._step(s, "clarification", choice["reason"], "deferred")
         if s["source_result"] is None:
             retrieved = {"sources": [], "failures": [], "feeds": []}
-            if auth.get("public_sources") is True:
+            if choice["route"] == "research" and auth.get("public_sources") is True:
                 self._step(s, "sources", "Reading the operator-permitted public release feeds")
                 retrieved = research.discover_sources(mission)
             s["source_result"] = dict(retrieved, observed_at=timestamp())
             self._step(s, "sources", f"Recorded {len(s['sources'])} supplied and {len(retrieved['sources'])} retrieved source records")
-        if mode in ("blocked", "unavailable", "unconfigured", "disabled"):
-            raise StateError("No live model configured. Choose a local provider or explicitly start an assisted session")
-        permission = "assisted_model" if self.assisted else "local_model"
-        if auth.get(permission) is not True:
-            raise StateError(f"Mission does not authorize {permission}")
 
         def propose(stage, payload):
             self._guard(s)
             self._check_time(mission)
+            if mode in ("blocked", "unavailable", "unconfigured", "disabled"):
+                raise StateError("No live model configured. Choose a local provider or explicitly start an assisted session")
+            permission = "assisted_model" if self.assisted else "local_model"
+            if auth.get(permission) is not True:
+                raise StateError(f"Mission does not authorize {permission}")
             bound = dict(payload, run_id=s["id"], revision=s["version"], mission_sha256=s["input_sha256"])
             key = digest([stage, bound, s["provider"]])
             if key in s["calls"]:
@@ -191,9 +213,9 @@ class Controller:
                 raise StateError("max_model_calls must be a nonnegative integer")
             # Handoff preparation has no inference side effect. Count the supplied response once.
             counted = not self.assisted or provider.request(stage,bound)["sha256"] in s["exchanges"]
+            if limit is not None and s.get("attempts", 0) >= limit:
+                raise ModelBudgetExhausted("Mission model-call budget exhausted")
             if counted:
-                if limit is not None and s.get("attempts", 0) >= limit:
-                    raise StateError("Mission model-call budget exhausted")
                 s["attempts"] = s.get("attempts", 0) + 1
             self._step(s, stage, f"Requested {stage} from the configured provider")
             start = time.monotonic()
@@ -220,15 +242,27 @@ class Controller:
         model_mission = dict(mission, construction_spec={k:v for k,v in spec.items() if k != "cases"})
         model_mission["resources"] = {k:v for k,v in mission["resources"].items() if k!="commercial_case"}
         if s["research"] is None:
-            sources = s["sources"] + s["source_result"]["sources"]
-            s["research"] = research.investigate(model_mission, sources, propose, as_of=s["source_result"]["observed_at"])
-            prior = [record["research"] for record in self.store.history(s["id"])
-                     if record["version"] < s["version"] and record["research"]]
-            s["research"]["retest_leads"] = research.reopen_inventory(prior, s["research"]["signals"])
+            if choice["route"] == "direct":
+                s["research"] = routing.direct_selection(mission, choice)
+            else:
+                sources = s["sources"] + s["source_result"]["sources"]
+                s["research"] = research.investigate(model_mission, sources, propose, as_of=s["source_result"]["observed_at"])
+                prior = [record["research"] for record in self.store.history(s["id"])
+                         if record["version"] < s["version"] and record["research"]]
+                s["research"]["retest_leads"] = research.reopen_inventory(prior, s["research"]["signals"])
             self._step(s, "selection", s["research"]["decision_reason"])
         result = s["research"]
         if result["decision"] != "build":
-            return self._step(s, "selection", result["decision_reason"], "deferred")
+            if mission["resources"].get("direct_after_research") is not True or not spec or spec.get("kind") not in SPEC_FORMAT:
+                return self._step(s, "selection", result["decision_reason"], "deferred")
+            if not choice.get("fallback"):
+                fallback = routing.route(dict(mission, resources=dict(mission["resources"], execution_strategy="direct")))
+                if fallback["route"] != "direct":
+                    return self._step(s, "selection", fallback["reason"], "deferred")
+                choice["fallback"] = fallback
+                self._step(s, "routing", "Preserved the research verdict. The operator separately requested a direct attempt on the frozen specification.")
+            choice = choice["fallback"]
+            result = routing.direct_selection(mission, choice)
         if result.get("kind") not in SPEC_FORMAT:
             raise StateError("The selected construction needs an execution capability outside the installed grammar")
         if s["contract"] is None:
@@ -253,20 +287,70 @@ class Controller:
                 s["contract_sha256"] = digest(s["proposed_contract"])
                 return self._step(s, "contract", "Review the proposed scope, acceptance cases and their independence before approval", "awaiting_contract")
         contract = s["contract"]
-        if s["artifact"] is None:
-            response = propose("construct", {
-                "instruction":CONSTRUCT_INSTRUCTION,
-                "selected":result["selected"], "purpose":mission["purpose"], "requirements":mission["requirements"],
-                "kind":result["kind"], "definition":construction.build_view(contract)["definition"],
-                "retained_program":{k:v for k,v in (s.get("inherited") or {}).items() if k in {"kind","program"}} or None})
-            s["artifact"] = construction.build(contract, response)
-            self._step(s, "construction", "Compiled the proposed instructions into a portable bounded program")
-        self._check_time(mission)
-        self._step(s, "verification", "Executing the frozen cases, conventional comparator and negative controls")
-        s["evaluation"] = evaluation.evaluate(contract, s["artifact"])
-        passed = s["evaluation"]["status"] == "pass"
-        self._step(s, "delivery", "Verified within the frozen contract" if passed else "Independent acceptance failed",
-                   "verified" if passed else "failed")
+        payload = {"instruction": CONSTRUCT_INSTRUCTION, "purpose": mission["purpose"],
+                   "requirements": mission["requirements"], "kind": result["kind"],
+                   "definition": construction.build_view(contract)["definition"],
+                   "retained_program": {k:v for k,v in (s.get("inherited") or {}).items() if k in {"kind","program"}} or None}
+        if choice["route"] == "research":
+            payload["selected"] = result["selected"]
+        self._construct(s, contract, choice, payload, propose)
+
+    def _construct(self, s, contract, choice, payload, propose):
+        mission = s["mission"]
+        resources = mission["resources"]
+        attempts = s.setdefault("construction_attempts", [])
+        specialist = choice["method"] == "specialist"
+        # Attempts and model calls are separately checkpointed. Resuming a handoff reuses its
+        # exact request, and a terminal rejection cannot be converted into a fresh budget.
+        while True:
+            self._check_time(mission)
+            if attempts:
+                last = attempts[-1]
+                if last["status"] == "accepted":
+                    return self._step(s, "delivery", "Verified within the frozen contract", "verified")
+                if specialist or not last["repairable"] or len(attempts) > resources.get("max_repairs", 1):
+                    return self._step(s, "delivery", "Independent acceptance failed. The rejected construction is retained for inspection.", "failed")
+            if specialist:
+                self._step(s, "construction", "Compiling the operator's declared operations with the installed local specialist")
+                response = {"kind": payload["kind"], "program": payload["definition"]}
+            elif attempts:
+                last = attempts[-1]
+                try:
+                    response = propose("repair", {**payload, "attempt": len(attempts) + 1,
+                        "instruction": CONSTRUCT_INSTRUCTION + " Repair the previous proposal using the confirmed diagnostics. The frozen acceptance remains unchanged.",
+                        "previous_proposal": s["last_proposal"], "verified_failure": last["feedback"]})
+                except ModelBudgetExhausted:
+                    return self._step(s, "delivery", "Independent acceptance failed and the model-call budget allows no further repair.", "failed")
+            else:
+                response = propose("construct", payload)
+            started = time.monotonic()
+            attempt = {"attempt": len(attempts) + 1, "contract_sha256": contract["sha256"],
+                       "proposal_sha256": digest(response), "method": "specialist" if specialist else "model",
+                       "artifact_sha256": None, "receipt_sha256": None, "feedback": None, "repairable": True}
+            try:
+                artifact = construction.build(contract, response)
+            except construction.ConstructionError as exc:
+                s["artifact"] = None
+                s["evaluation"] = None
+                attempt.update(status="rejected", feedback={"compiler_code": exc.code, "detail": str(exc)})
+            else:
+                self._step(s, "verification", "Executing the frozen cases, conventional comparator and negative controls")
+                s["artifact"] = artifact
+                receipt = evaluation.evaluate(contract, artifact)
+                s["evaluation"] = receipt
+                accepted = receipt["status"] == "pass"
+                attempt.update(status="accepted" if accepted else "rejected", artifact_sha256=artifact["sha256"],
+                               receipt_sha256=receipt["receipt_sha256"], checks=len(receipt["cases"]),
+                               passed_checks=sum(c["candidate_pass"] for c in receipt["cases"]),
+                               comparison=receipt["comparison"]["outcome"],
+                               repairable=not accepted and receipt["comparison"]["oracles_agree"],
+                               feedback=None if accepted else routing.diagnostic(contract, artifact, receipt))
+            if any(previous["proposal_sha256"] == attempt["proposal_sha256"] for previous in attempts):
+                attempt["repairable"] = False
+            attempt["elapsed_seconds"] = round(time.monotonic() - started, 6)
+            s["last_proposal"] = response
+            attempts.append(attempt)
+            self._step(s, "assessment", f"Construction attempt {len(attempts)} {attempt['status']} under the frozen acceptance contract")
 
     @staticmethod
     def _check_time(mission):
@@ -289,11 +373,15 @@ class Controller:
                 raise Conflict("Mission has been amended")
             if s["status"] != "verified":
                 raise Conflict("Current revision has no accepted artifact")
+            if s["artifact"]["kind"] == "pairing_lab":
+                from .pairing_specialist import deliver
+                return deliver(self, s, payload, trial)
             if trial:
                 return construction.execute(s["artifact"], payload)
             ctx = {"mission_id":s["id"], "version":s["version"], "mission":s["mission"], "input_sha256":s["input_sha256"],
                    "source_sha256":s["runtime"], "provider":s["provider"], "python":sys.version.split()[0],
-                   "research":s["research"], "acceptance_origin":s.get("acceptance_origin"),
+                   "research":s["research"], "routing":s.get("routing"), "construction_attempts":s.get("construction_attempts", []),
+                   "acceptance_origin":s.get("acceptance_origin"),
                    "inherited_from":{k:v for k,v in (s.get("inherited") or {}).items() if k!="program"}, "sources":s["sources"] + s["source_result"]["sources"],
                    "source_failures":s["source_result"]["failures"], "events":s["events"],
                    "model_calls":[{k:v for k,v in c.items() if k!="response"} for c in s["calls"].values()],

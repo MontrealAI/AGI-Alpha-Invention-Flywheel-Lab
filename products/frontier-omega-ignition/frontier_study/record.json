@@ -1,0 +1,347 @@
+{
+  "schema": 1,
+  "purpose": "Select a self-hosted coding model and harness worth piloting on repository issues under a mean charged-token allowance, and inspect the decision on issues withheld from selection.",
+  "beneficiary": "MONTREAL.AI engineering operator",
+  "question": "coding-pilot",
+  "required": [
+    "all-attempt-token-volume",
+    "issue-outcomes",
+    "matched-configurations",
+    "task-disjoint-audit"
+  ],
+  "as_of": "2026-11-17",
+  "observed_on": "2026-11-17",
+  "mission_sha256": "ad95a766568e6a7c04ed7649c5a8e6ae108040d240e8e647ce567a155d5e5ce3",
+  "atlas_sha256": "28c97e28b959cab49eee145e5673d827ee013fa6361995989db2efc49c48830b",
+  "evidence_sha256": "8871beb1100e60a22dbe47544bcac1efa1b1fd6124319639165ff175db93ccb9",
+  "source_ids": [
+    "archive",
+    "budget-paper",
+    "fan",
+    "flashprove",
+    "hal",
+    "pairing-paper",
+    "science"
+  ],
+  "sources": [
+    {
+      "id": "hal",
+      "title": "Holistic Agent Leaderboard",
+      "url": "https://arxiv.org/abs/2510.11977",
+      "published": "2025-10-13",
+      "publisher": "Kapoor et al.",
+      "observation": "Cost-aware agent benchmarking and a reusable harness existed a year before this study. The authors describe 21,730 rollouts across nine benchmarks.",
+      "scope": "HAL datasets and configurations. Different pricing and cache conventions can affect comparisons."
+    },
+    {
+      "id": "fan",
+      "title": "An Empirical Study of Harness Design for Coding Agents",
+      "url": "https://arxiv.org/abs/2609.20804",
+      "published": "2026-09-17",
+      "publisher": "Fan et al.",
+      "observation": "Four models were evaluated across 176 matched settings on SWE-bench Verified and Terminal-Bench 2.1.",
+      "scope": "Component-level changes inside a controlled harness. This demonstrates older feasibility of matched comparisons."
+    },
+    {
+      "id": "pairing-paper",
+      "title": "Pairing Matters",
+      "url": "https://arxiv.org/abs/2610.32131",
+      "published": "2026-10-23",
+      "publisher": "Zhao, Poskitt and Lo",
+      "observation": "The study applies a common grader and metering setup to six harnesses and three lightweight coding models on 100 shared issues.",
+      "scope": "One observed trial for each issue and pairing. The 100 issues and controlled configurations define the population actually observed."
+    },
+    {
+      "id": "archive",
+      "title": "Pairing Matters research artifact, version 1",
+      "url": "https://doi.org/10.6084/m9.figshare.34744362.v1",
+      "published": "2026-10-22",
+      "publisher": "Zhao, Poskitt and Lo / Figshare",
+      "observation": "The Figshare version and DataCite's Issued date agree on October 22. The GitHub companion appeared October 23. Its task-level table includes failures and common token accounting.",
+      "scope": "Charged tokens include repeated and cached context at full weight. Unreported usage is not imputed. Energy, accelerator occupancy, verification labor, billed cash and live client transfer are unmeasured."
+    },
+    {
+      "id": "budget-paper",
+      "title": "Beyond Leaderboard Ranks",
+      "url": "https://arxiv.org/abs/2611.21515",
+      "published": "2026-11-16",
+      "publisher": "Srinivasan and Menzies",
+      "observation": "The authors study budget-constrained selection from 58,197 HAL run-task records and compare successive halving and other allocation policies.",
+      "scope": "A direct competitor on agent selection, with cost and statistical uncertainty. Its data and pricing are distinct from the registered self-hosted cohort."
+    },
+    {
+      "id": "flashprove",
+      "title": "Progress on provable inference for large language models",
+      "url": "https://www.anthropic.com/research/provable-inference",
+      "published": "2026-11-02",
+      "publisher": "Anthropic and collaborators",
+      "observation": "The authors demonstrate proofs of committed inference for a large mixture-of-experts model. Their verifier has lower hardware requirements than the prover.",
+      "scope": "Upstream demonstration. A local hash, benchmark verdict or copy of the paper is insufficient to authenticate a particular response."
+    },
+    {
+      "id": "science",
+      "title": "Artificial Analysis Intelligence Index v5",
+      "url": "https://artificialanalysis.ai/articles/artificial-analysis-intelligence-index-v5",
+      "published": "2026-10-27",
+      "publisher": "Artificial Analysis",
+      "observation": "The index introduced an evaluation covering 70 scientific terminal workflows alongside other benchmark changes.",
+      "scope": "A suite for testing agents on defined tasks. Real experimental discoveries and applicability to a beneficiary's workflow require independent evidence."
+    }
+  ],
+  "witnesses": {
+    "public-run-matrix": {
+      "available": true,
+      "sha256": "c60d0b58ab109ba900e36465a0ffadaaeb4c8a2743abc744eb17f3f596842118",
+      "rows": 1800,
+      "tasks": 100,
+      "configurations": 18,
+      "reason": "Complete matched rows with registered identity."
+    }
+  },
+  "candidates": [
+    {
+      "id": "headline",
+      "title": "Adopt the highest observed resolution rate",
+      "value": "Quickly nominate a starting point for a self-hosted pilot.",
+      "method": "Read the authors' all-task summary table.",
+      "tradeoff": "Training and audit issues are pooled; the mean resource ceiling is unchecked.",
+      "test": "Compare the headline winner's audit issue scores and all-attempt tokens with the frozen allowance.",
+      "effort": "Read one table.",
+      "source_ids": [
+        "pairing-paper"
+      ],
+      "satisfied": [
+        "matched-configurations"
+      ],
+      "missing": [
+        "all-attempt-token-volume",
+        "issue-outcomes",
+        "task-disjoint-audit"
+      ],
+      "permissions_missing": [],
+      "unavailable_sources": [],
+      "eligible": false
+    },
+    {
+      "id": "specialist",
+      "title": "Adopt an established cost-aware evaluator",
+      "value": "Reuse mature evaluation infrastructure for future local triage.",
+      "method": "Use the HAL evaluator and its existing public records.",
+      "tradeoff": "The public HAL cohort does not establish this exact 18-way grid. Cash and charged-token units differ.",
+      "test": "Match the requested systems, tasks, grader and accounting definitions before transporting a result.",
+      "effort": "Inspect task and configuration overlap before any new run.",
+      "source_ids": [
+        "hal"
+      ],
+      "satisfied": [
+        "issue-outcomes"
+      ],
+      "missing": [
+        "all-attempt-token-volume",
+        "matched-configurations",
+        "task-disjoint-audit"
+      ],
+      "permissions_missing": [],
+      "unavailable_sources": [],
+      "eligible": false
+    },
+    {
+      "id": "local-rerun",
+      "title": "Remeasure all systems on a private backlog",
+      "value": "Measure fit to the actual institution, with its own grader.",
+      "method": "Run a prospectively metered factorial trial on approved machines and issues.",
+      "tradeoff": "Requires models, compute, data rights, independent grading and the cost of every attempted cell.",
+      "test": "Obtain permission, freeze task selection and record a complete pilot block before expansion.",
+      "effort": "One new model run per issue and selected configuration, plus independent grading.",
+      "source_ids": [
+        "fan"
+      ],
+      "satisfied": [
+        "all-attempt-token-volume",
+        "issue-outcomes",
+        "matched-configurations",
+        "task-disjoint-audit"
+      ],
+      "missing": [],
+      "permissions_missing": [
+        "operate-model-fleet",
+        "use-private-backlog"
+      ],
+      "unavailable_sources": [],
+      "eligible": false
+    },
+    {
+      "id": "failure-review",
+      "title": "Target the failure mode worth repairing",
+      "value": "Find a targeted repair worth instrumenting on the next trial.",
+      "method": "Use the authors' reviewed failure categories to formulate a falsifiable intervention.",
+      "tradeoff": "Diagnosis does not measure repair efficacy or choose an affordable deployment configuration.",
+      "test": "Freeze a repair, run fresh issues and compare with unchanged harness behavior.",
+      "effort": "Review published categories first; a treatment effect needs new executions.",
+      "source_ids": [
+        "pairing-paper"
+      ],
+      "satisfied": [
+        "matched-configurations"
+      ],
+      "missing": [
+        "all-attempt-token-volume",
+        "issue-outcomes",
+        "task-disjoint-audit"
+      ],
+      "permissions_missing": [],
+      "unavailable_sources": [],
+      "eligible": false
+    },
+    {
+      "id": "budget-specialist",
+      "title": "Acquire just enough trials to choose a system",
+      "value": "Save evaluation effort when a full fresh matrix is expensive.",
+      "method": "Use the HAL-based study's allocation baselines, including successive halving.",
+      "tradeoff": "Prospective cost information and correctly priced, comparable trials matter. Its 48 shared SWE Mini issues differ from this cohort.",
+      "test": "Check performance with and without advance cell costs on new governed trials.",
+      "effort": "Reuse existing selection code or acquire additional samples under a registered budget.",
+      "source_ids": [
+        "budget-paper"
+      ],
+      "satisfied": [
+        "issue-outcomes"
+      ],
+      "missing": [
+        "all-attempt-token-volume",
+        "matched-configurations",
+        "task-disjoint-audit"
+      ],
+      "permissions_missing": [],
+      "unavailable_sources": [],
+      "eligible": false
+    }
+  ],
+  "challengers": [
+    {
+      "id": "paired-replay",
+      "title": "Replay every pairing on the same withheld issues",
+      "value": "Choose a configuration or pair under a resource allowance without buying another round of inference.",
+      "method": "Partition issues once, choose on calibration rows, charge every recorded attempt, then evaluate the locked choice on audit issues.",
+      "tradeoff": "Replay depends on the published grader and sample. A two-system portfolio requires an equivalent oracle to select a passing patch in practice.",
+      "test": "Hold out issues, compare with an independent exhaustive SQL implementation and keep unfavourable outcomes.",
+      "effort": "Read 1,800 licensed measurements and run a finite offline search. SQL can compute the same result.",
+      "source_ids": [
+        "archive"
+      ],
+      "satisfied": [
+        "all-attempt-token-volume",
+        "issue-outcomes",
+        "matched-configurations",
+        "task-disjoint-audit"
+      ],
+      "missing": [],
+      "permissions_missing": [],
+      "unavailable_sources": [],
+      "eligible": true,
+      "resource_id": "public-run-matrix"
+    }
+  ],
+  "decision": {
+    "status": "select",
+    "candidate_id": "paired-replay",
+    "reason": "This route alone meets every specified property with the available evidence and permissions."
+  },
+  "watch": "initial",
+  "previous_evidence_sha256": null,
+  "limits": "Authored source inventory and bounded replay. Publication dates do not establish previous impossibility. No model, deployment, inference billing or buyer transaction.",
+  "registered_comparisons": {
+    "matrix_withdrawn": {
+      "decision": {
+        "status": "defer",
+        "candidate_id": null,
+        "reason": "No supported route satisfies the current evidence and permission requirements."
+      },
+      "watch": "suspended",
+      "evidence_sha256": "9c6db49777f6a628cca440cd616b2d8ef02eaf362cb5fc6867d0028920f0aff0",
+      "candidates": [
+        "headline",
+        "specialist",
+        "local-rerun",
+        "failure-review",
+        "budget-specialist"
+      ]
+    },
+    "reintroduced": {
+      "decision": {
+        "status": "select",
+        "candidate_id": "paired-replay",
+        "reason": "This route alone meets every specified property with the available evidence and permissions."
+      },
+      "watch": "reopened",
+      "evidence_sha256": "8871beb1100e60a22dbe47544bcac1efa1b1fd6124319639165ff175db93ccb9",
+      "candidates": [
+        "headline",
+        "specialist",
+        "local-rerun",
+        "failure-review",
+        "budget-specialist",
+        "paired-replay"
+      ]
+    },
+    "unchanged": {
+      "decision": {
+        "status": "select",
+        "candidate_id": "paired-replay",
+        "reason": "This route alone meets every specified property with the available evidence and permissions."
+      },
+      "watch": "unchanged",
+      "evidence_sha256": "8871beb1100e60a22dbe47544bcac1efa1b1fd6124319639165ff175db93ccb9",
+      "candidates": [
+        "headline",
+        "specialist",
+        "local-rerun",
+        "failure-review",
+        "budget-specialist",
+        "paired-replay"
+      ]
+    },
+    "cash": {
+      "decision": {
+        "status": "defer",
+        "candidate_id": null,
+        "reason": "No supported route satisfies the current evidence and permission requirements."
+      },
+      "watch": "new-mission",
+      "evidence_sha256": "8871beb1100e60a22dbe47544bcac1efa1b1fd6124319639165ff175db93ccb9",
+      "candidates": [
+        "headline",
+        "specialist",
+        "local-rerun",
+        "failure-review",
+        "budget-specialist",
+        "paired-replay"
+      ]
+    },
+    "proof": {
+      "decision": {
+        "status": "defer",
+        "candidate_id": null,
+        "reason": "No supported route satisfies the current evidence and permission requirements."
+      },
+      "watch": "new-mission",
+      "evidence_sha256": "9c6db49777f6a628cca440cd616b2d8ef02eaf362cb5fc6867d0028920f0aff0",
+      "candidates": [
+        "verify-receipt"
+      ]
+    },
+    "cutoff": {
+      "decision": {
+        "status": "defer",
+        "candidate_id": null,
+        "reason": "No supported route satisfies the current evidence and permission requirements."
+      },
+      "watch": "initial",
+      "evidence_sha256": "9d6da5f5860dd8ad99cb43bae791026af268be4a62e2b07728d6f4c9fca5e936",
+      "candidates": [
+        "specialist",
+        "local-rerun"
+      ]
+    }
+  }
+}

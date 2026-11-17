@@ -118,11 +118,12 @@ function results(run) {
   commercialEvidence(run.economics);
 }
 // END SHARED READ-ONLY EVIDENCE VIEW
-const authorityKeys = ["local_model", "assisted_model", "public_sources"];
+const authorityKeys = ["local_model", "assisted_model", "public_sources", "allow_program_reuse"];
 const detailKeys = ["construction_spec", "resources", "time"];
 const transient = new Set(["queued", "running"]);
 let replay = false, providerLabel = "", liveView=null;
 let current, examples = [], timer, dirty = false, busy = false, online = false;
+let renderedAttempts = null, renderedStudy = null;
 let extraMission = {}, requestId, lastHandoff, lastTrial, lastProposal, generation = 0, editNumber = 0;
 
 function remember(id) {
@@ -155,20 +156,69 @@ function parseField(id, array) {
     throw Error(id.replaceAll("_"," ") + (array ? " must be an array." : " must be an object."));
   return value;
 }
+const routeDescriptions = {
+  adaptive: "A supported specification can go straight to construction. An open ambition can enter frontier research.",
+  direct: "Attempt the supplied construction specification. If the checker cannot accept it, the run can request clarification.",
+  research: "Investigate opportunities and challenge the candidates before choosing whether to build."
+};
+function updateStrategyHelp() {
+  $("strategy-help").textContent = routeDescriptions[$("strategy").value];
+  $("fallback-option").hidden = $("strategy").value === "direct";
+}
+$("strategy").addEventListener("change", updateStrategyHelp);
+
+function pairingNumber(id) {
+  const field = $(id);
+  if (field.value.trim() === "" || !Number.isSafeInteger(field.valueAsNumber) || !field.checkValidity()) {
+    throw Error("Enter a valid whole number for " + document.querySelector('label[for="' + id + '"]').textContent + ".");
+  }
+  return field.valueAsNumber;
+}
+function loadPairing(params) {
+  $("pairing-controls").hidden = !params;
+  $("pairing-controls").disabled = !params;
+  if (!params) return;
+  $("pairing-budget").value = params.budget;
+  $("pairing-width").value = String(params.width);
+  $("pairing-percent").value = params.min_percent;
+  $("pairing-model").value = params.model || "";
+  $("pairing-repository").value = params.repository || "";
+}
 function readMission() {
   const mission = {...extraMission, purpose:$("purpose").value.trim(), beneficiary:$("beneficiary").value.trim(),
     requirements:$("requirements").value.split("\n").map(s=>s.trim()).filter(Boolean),
     authority:Object.fromEntries(authorityKeys.map(k=>[k,$(k).checked]))};
   for (const k of detailKeys) mission[k] = parseField(k, false);
+  if (!$("pairing-controls").hidden) {
+    if (Object.hasOwn(mission.resources, "pairing_lab")) throw Error("Use the coding-stack pilot criteria above to change the public study.");
+    mission.resources.pairing_lab = {
+      budget: pairingNumber("pairing-budget"), width: Number($("pairing-width").value),
+      min_percent: pairingNumber("pairing-percent"), model: $("pairing-model").value || null,
+      repository: $("pairing-repository").value.trim() || null
+    };
+  }
+  if (Object.hasOwn(mission.resources, "execution_strategy") || Object.hasOwn(mission.resources, "direct_method") || Object.hasOwn(mission.resources, "direct_after_research")) {
+    throw Error("Use the route controls above. Remove their execution_strategy, direct_method or direct_after_research keys from Other resources.");
+  }
+  mission.resources.execution_strategy = $("strategy").value;
+  if ($("direct-method").value) mission.resources.direct_method = $("direct-method").value;
+  if (!$("fallback-option").hidden && $("direct-after").checked) mission.resources.direct_after_research = true;
   return {mission,sources:parseField("sources",true)};
 }
-function loadBrief(mission = {}, sources = []) {
+function loadBrief(mission = {}, sources = [], useSavedPermissions = true) {
   extraMission = {...mission};
   $("purpose").value = mission.purpose || "";
   $("beneficiary").value = mission.beneficiary || "";
   $("requirements").value = (mission.requirements || []).join("\n");
   for (const k of detailKeys) $(k).value = json(mission[k] || {});
-  for (const k of authorityKeys) $(k).checked = mission.authority?.[k] === true;
+  const {execution_strategy: strategy, direct_method: method, direct_after_research: fallback, pairing_lab: pairing, ...resources} = mission.resources || {};
+  loadPairing(pairing);
+  $("resources").value = json(resources);
+  $("strategy").value = Object.hasOwn(routeDescriptions, strategy) ? strategy : "adaptive";
+  $("direct-method").value = ["model", "specialist"].includes(method) ? method : "";
+  $("direct-after").checked = fallback === true;
+  updateStrategyHelp();
+  for (const k of authorityKeys) $(k).checked = useSavedPermissions && mission.authority?.[k] === true;
   $("sources").value = json(sources);
 }
 function buttons() {
@@ -178,20 +228,23 @@ function buttons() {
   $("history").hidden = replay;
   $("mission").hidden = replay;
   if (replay) {
+    $("bundle").removeAttribute("href");
     for (const key of ["resume","review","handoff","actions"]) $(key).hidden=true;
     return;
   }
   $("fresh").hidden = !current;
-  $("start").textContent = current ? "Submit amended mission →" : "Start investigation →";
+  $("start").textContent = current ? "Submit amended mission →" : "Start mission →";
   $("start").disabled = !online || busy || Boolean(current && !dirty);
   $("resume").hidden = !current || current.status !== "blocked" || dirty;
   $("review").hidden = !current?.proposed_contract || current.status !== "awaiting_contract" || dirty;
   $("handoff").hidden = !current?.handoff || current.status !== "awaiting_model" || dirty;
   $("actions").hidden = current?.status !== "verified" || dirty;
+  if ($("actions").hidden) $("bundle").removeAttribute("href");
   for (const id of ["resume","respond","approve","try"]) $(id).disabled = busy;
 }
 function edited() {
   editNumber++;
+  $("run-status").dataset.tone = "";
   requestId = null;
   if (current) {
     dirty = true;
@@ -204,8 +257,132 @@ function edited() {
 $("brief").addEventListener("input", edited);
 $("example").addEventListener("change", () => {
   const selected = examples.find(x => x.id === $("example").value);
-  loadBrief(selected?.mission, selected?.sources); edited();
+  loadBrief(selected?.mission, selected?.sources, false); edited();
 });
+const routeNames = {direct: "Direct ignition", research: "Frontier investigation", clarify: "Clarification needed"};
+function stageLabel(stage) {
+  const text = String(stage || "").replaceAll("_", " ");
+  return text.charAt(0).toUpperCase() + text.slice(1);
+}
+function studyView(study) {
+  $("opportunity-study").hidden = !study;
+  if (!study) return;
+  const identity = json(study);
+  if (identity === renderedStudy) return;
+  renderedStudy = identity;
+  const candidates = Array.isArray(study.candidates) ? study.candidates : [];
+  const challengers = Array.isArray(study.challengers) ? study.challengers : [];
+  const sources = new Map((Array.isArray(study.sources) ? study.sources : []).map(s => [s.id, s]));
+  const selected = study.decision?.candidate_id;
+  const winner = [...candidates, ...challengers].find(c => c.id === selected);
+  $("study-choice").textContent = winner?.title || stageLabel(study.decision?.status || "Opportunity study");
+  $("study-basis").textContent = study.decision?.reason || "";
+  const host = $("study-candidates");
+  host.replaceChildren();
+  for (const [group, label] of [[candidates, "Opportunity"], [challengers, "Challenger"]]) {
+    for (const candidate of group) {
+      const item = elem("details");
+      const chosen = selected === candidate.id;
+      item.open = chosen;
+      item.append(elem("summary", label + (chosen ? " selected · " : " · ") + candidate.title));
+      const grid = elem("dl");
+      for (const [key, text] of [["value", "Potential value"], ["method", "Construction"],
+        ["tradeoff", "Limitation"], ["test", "Decisive test"]]) {
+        if (candidate[key]) grid.append(elem("dt", text), elem("dd", candidate[key]));
+      }
+      item.append(grid);
+      const sourceList = elem("ul");
+      for (const id of candidate.source_ids || []) {
+        const source = sources.get(id), li = elem("li");
+        const link = source && urlLink(source.url);
+        if (link) {
+          link.textContent = source.title || id;
+          li.append(link, elem("small", source.published ? " · " + source.published : ""));
+        } else li.textContent = "Source record · " + id;
+        sourceList.append(li);
+      }
+      if (sourceList.childElementCount) item.append(sourceList);
+      host.append(item);
+    }
+  }
+}
+function pairingView(run) {
+  const study = run.pairing_result;
+  $("pairing-result").hidden = !study;
+  $("pilot-next").hidden = study?.qualifies !== true;
+  $("trial-label").hidden = Boolean(study);
+  $("trial").hidden = Boolean(study);
+  $("try").textContent = study ? "Reproduce decision" : "Run input";
+  $("actions-title").textContent = study ? "Take the decision with you" : "Operate the artifact";
+  $("recipient-command").textContent = study ? "python3 -B verify_decision.py" : "python3 -I run.py verify";
+  if (!study) return;
+  const verdicts = {audit_pass:"Pilot criteria met", audit_failed:"Pilot criteria missed",
+    no_feasible_calibration_policy:"No policy fits the calibration budget"};
+  $("pairing-verdict").textContent = verdicts[study.verdict] || "Inspect the study verdict";
+  $("pairing-result").dataset.tone = study.qualifies === true ? "pass" : "fail";
+  $("pairing-stacks").textContent = Array.isArray(study.selected) && study.selected.length
+    ? "Selected on calibration issues · " + study.selected.join(" + ") : "No stack selected.";
+  const metrics = $("pairing-metrics");
+  metrics.replaceChildren();
+  if (study.audit) {
+    const {solved, tasks, tokens} = study.audit;
+    for (const [label, value] of [
+      ["Held-out issues resolved", solved + " of " + tasks],
+      ["Total tokens charged", Number(tokens).toLocaleString("en-US")],
+      ["Mean tokens per held-out issue", (tokens / tasks).toLocaleString("en-US", {maximumFractionDigits: 1})]
+    ]) metrics.append(elem("dt", label), elem("dd", value));
+  }
+  const agreement = replay ? "The recording reports independent SQL agreement. " : "Independent SQL reproduced the decision. ";
+  $("pairing-qualification").textContent = (study.sql_agreement ? agreement : "") +
+    "These are historical grader outcomes. A fresh pilot requires new issues and separately obtained grades.";
+}
+function executionView(run) {
+  const routing = run.routing;
+  $("route-receipt").hidden = !routing;
+  if (routing) {
+    $("route-title").textContent = routeNames[routing.route] || stageLabel(routing.route);
+    const method = {specialist:"Built-in specialist", model:"Configured model"}[routing.method];
+    $("route-method").hidden = !method;
+    $("route-method").textContent = method || "";
+    $("route-reason").textContent = routing.reason || "";
+    $("route-fallback").hidden = !routing.fallback;
+    if (routing.fallback) {
+      const outcome = run.status === "verified" ? "The direct construction passed verification." :
+        (run.status === "failed" ? "The direct construction failed verification." : "A separately authorized direct attempt follows.");
+      $("route-fallback").textContent = "Research verdict · " + stageLabel(run.research?.decision) + ". " + outcome;
+    }
+    $("route-detail").textContent = json(routing);
+  }
+  const checkpoints = (run.events || []).slice(-3);
+  $("forge").hidden = !checkpoints.length;
+  $("checkpoints").replaceChildren(...checkpoints.map(ev => {
+    const li = elem("li");
+    const time = elem("time", ev.at);
+    time.dateTime = ev.at;
+    li.append(elem("strong", stageLabel(ev.stage)), elem("p", ev.message), time);
+    return li;
+  }));
+  const attempts = Array.isArray(run.construction_attempts) ? run.construction_attempts : [];
+  $("attempts").hidden = !attempts.length;
+  const list = $("attempt-list");
+  const attemptIdentity = json(attempts);
+  if (renderedAttempts !== attemptIdentity) {
+    renderedAttempts = attemptIdentity;
+    list.replaceChildren();
+    for (const attempt of attempts) {
+      const article = elem("article", undefined, "attempt");
+      article.dataset.status = attempt.status;
+      article.append(elem("h4", "Attempt " + attempt.attempt + " · " + stageLabel(attempt.status)));
+      if (attempt.feedback) {
+        if (typeof attempt.feedback === "string") article.append(elem("p", attempt.feedback));
+        else detail(article, "Evaluator feedback", attempt.feedback);
+      }
+      detail(article, "Attempt receipt", attempt);
+      list.append(article);
+    }
+  }
+  $("handoff-title").textContent = run.handoff?.stage === "repair" ? "Repair the rejected construction" : "Operator-assisted execution";
+}
 function show(run, open = false) {
   if (!run?.id) throw Error("The service returned an incomplete run record.");
   if (current && current.id !== run.id) {dirty=false;lastHandoff=null;lastTrial=null;}
@@ -217,6 +394,10 @@ function show(run, open = false) {
   $("run-id").textContent=`Revision ${run.version} · ${run.id}`;
   $("raw").textContent=json(run);
   if (!dirty && !replay && run.status==="stale") runNotice("The execution source or provider changed. Amend the mission to run it against the current configuration.");
+  $("run-status").dataset.tone = dirty ? "" : ({verified:"pass", failed:"fail"})[run.status] || "";
+  executionView(run);
+  pairingView(run);
+  studyView(run.opportunity_study);
   $("events").replaceChildren(...(run.events||[]).map(ev=>{
     const li=elem("li");li.append(elem("strong",ev.stage),elem("p",ev.message),elem("small",ev.at));return li;
   }));
@@ -232,7 +413,10 @@ function show(run, open = false) {
   }
   $("bundle").href=apiPath(run.id,"/bundle")+"?version="+encodeURIComponent(run.version);
   buttons();
-  if (open) $("investigation").scrollIntoView({block:"start"});
+  if (open) {
+    $("record-title").focus({preventScroll:true});
+    $("investigation").scrollIntoView({block:"start"});
+  }
   clearTimeout(timer);
   if (!replay && transient.has(run.status)) timer=setTimeout(()=>refresh(run.id,generation),950);
 }
@@ -294,7 +478,7 @@ $("copy-prompt").addEventListener("click",async()=>{
   catch { $("prompt").parentElement.open=true; const range=document.createRange();range.selectNodeContents($("prompt"));getSelection().removeAllRanges();getSelection().addRange(range);runNotice("Prompt selected. Use your browser’s copy command."); }
 });
 $("try").addEventListener("click",()=>{
-  try {const input=JSON.parse($("trial").value); action("try",{input});}
+  try {const input=current?.pairing_result ? {} : JSON.parse($("trial").value); action("try",{input});}
   catch { $("output").textContent="Enter a valid JSON input."; }
 });
 $("trial").addEventListener("input",()=>{$("output").textContent="";});
@@ -309,6 +493,20 @@ function openReplay(data, label, packagedId) {
      !Number.isSafeInteger(data.version) || typeof data.mission?.purpose!=="string" ||
      !Array.isArray(data.events) || data.events.some(e=>!e || typeof e!=="object"))
     throw Error("Choose a saved IGNITION run record.");
+  if (data.routing && (!Object.hasOwn(routeNames, data.routing.route) ||
+      typeof data.routing.reason !== "string")) throw Error("Invalid route decision in this record.");
+  if (data.construction_attempts && (!Array.isArray(data.construction_attempts) ||
+      data.construction_attempts.some(attempt => !attempt || !Number.isInteger(attempt.attempt) ||
+        !["rejected", "accepted"].includes(attempt.status)))) throw Error("Invalid construction attempts in this record.");
+  if (data.opportunity_study) {
+    const study = data.opportunity_study;
+    const invalidCandidate = c => !c || typeof c.id !== "string" || typeof c.title !== "string" ||
+      !Array.isArray(c.source_ids) || c.source_ids.some(id => typeof id !== "string");
+    if (![study.candidates, study.challengers].every(group => Array.isArray(group) && group.every(c => !invalidCandidate(c))) ||
+        (study.sources && (!Array.isArray(study.sources) || study.sources.some(s => !s || typeof s.id !== "string")))) {
+      throw Error("Invalid opportunity study in this record.");
+    }
+  }
   const r=data.research || {};
   for (const k of ["signals","candidates","objections","mechanisms"])
     if (r[k] && (!Array.isArray(r[k]) || r[k].some(o=>!o || typeof o!=="object"))) throw Error("Invalid research records.");
@@ -372,10 +570,14 @@ document.addEventListener("visibilitychange",()=>{
   }
 });
 async function init() {
+  updateStrategyHelp();
   try {
-    if(location.protocol==="file:") throw Error("Open a saved record, or start the loopback service to run an investigation.");
+    if (location.protocol === "file:") {
+      $("public-showcase").hidden = true;
+      throw Error("Open a saved record, or start the loopback service to run a mission.");
+    }
     const status=await api("/api/status");online=true;
-    const modeLabels={manual:"Operator-assisted model execution",local:"Live local model configured",unavailable:"Model unavailable"};
+    const modeLabels={manual:"Operator-assisted model execution",local:"Live local model configured",unavailable:"Local tools available · Model unavailable"};
     providerLabel=[modeLabels[status.mode] || status.mode || "Execution service",status.provider?.provider,status.provider?.model].filter(Boolean).join(" · ");
     if(!replay) $("mode").textContent=providerLabel;
     const data=await api("/api/examples");examples=data.examples || [];
@@ -383,7 +585,7 @@ async function init() {
     $("presets").hidden=!examples.length;
     try {const pub=await api("/api/replays");
       $("public-replays").replaceChildren(...(pub.examples || []).map(publicReplayButton));
-      if(status.mode==="unavailable" && pub.examples?.length) $("replays").open=true;
+
     } catch(e) {$("replay-message").textContent="Packaged recordings are unavailable. " + e.message;}
     const restored=earlierRun();
     if(restored && !replay) {try {const r=await api(apiPath(restored));loadBrief(r.mission,r.sources || []);show(r);}

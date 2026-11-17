@@ -2,14 +2,16 @@
 <html lang="en"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="color-scheme" content="dark"><title>FRONTIER Ω — IGNITION | MONTREAL.AI × QUEBEC.AI</title>
-<link rel="stylesheet" href="style.css"><script src="app.js" defer></script>
-</head><body>
+<link rel="stylesheet" href="style.css"><link rel="stylesheet" href="operator.css"><script src="app.js" defer></script>
+</head><body class="operator">
 <a class="skip" href="#mission">Skip to mission</a>
-<header><a class="brand" href="#top"><span class="mark" aria-hidden="true">Ω</span> FRONTIER <span>Ω</span></a><nav aria-label="Main"><a href="#mission">Mission</a><a href="#investigation">Evidence</a></nav></header>
+<header><a class="brand" href="#top"><span class="mark" aria-hidden="true">Ω</span> FRONTIER <span>Ω</span></a><nav aria-label="Main"><a href="#mission">Brief</a><a href="#investigation">Run record</a></nav></header>
 <main id="top">
-<section class="hero"><div><p class="eyebrow">MONTREAL.AI × QUEBEC.AI</p><h1>Frontier <em>Ignition.</em></h1><p class="intro">Bring an ambition. Investigate what has changed, construct a working artifact and test it against a capable alternative.</p><p class="connection"><span class="light" aria-hidden="true"></span><span id="mode" role="status">Checking execution service…</span></p></div>
-<div class="horizon" aria-hidden="true"><div class="disc"></div></div></section>
-<details class="replay-picker" id="replays"><summary>Open a recorded run</summary><div id="public-replays" class="action-row" aria-label="Public recorded missions"></div><p>Inspect a saved JSON record locally. Replays preserve reported outcomes and never contact a model or operate an artifact.</p>
+<section class="operator-hero"><div><p class="eyebrow">MONTREAL.AI × QUEBEC.AI</p><h1>Ignition<span>.</span></h1>
+<p class="intro">Bring an ambition to the frontier. Build what you can specify. Investigate what you still need to discover.</p></div>
+<aside class="service-card" aria-labelledby="workspace-label"><p class="eyebrow" id="workspace-label">Private workspace</p>
+<p id="mode" role="status">Checking execution service…</p><a href="#mission">Open mission brief <span aria-hidden="true">↓</span></a><a id="public-showcase" href="/showcase" target="_blank" rel="noopener noreferrer">View public flagship <span aria-hidden="true">↗</span></a></aside></section>
+<details class="replay-picker" id="replays"><summary>Open a recorded run</summary><div id="public-replays" class="action-row" aria-label="Public recorded missions"></div><p>Inspect a saved JSON record locally. Replays preserve reported outcomes and can be inspected without running a model.</p>
 <label for="replay-file">Run record <span>JSON file · up to 4 MiB</span></label>
 <input id="replay-file" type="file" accept="application/json,.json"><p class="notice" role="status" id="replay-message"></p>
 </details>
@@ -20,20 +22,47 @@
 <label for="purpose">Ambition</label><textarea id="purpose" required rows="3" maxlength="12000" placeholder="Describe the outcome and who needs it."></textarea>
 <div class="fields"><div><label for="beneficiary">Beneficiary</label><input id="beneficiary" type="text" placeholder="Who will use the result?"></div>
 <div><label for="requirements">Acceptance conditions <span>One per line</span></label><textarea id="requirements" rows="2" placeholder="What must a working result do?"></textarea></div></div>
+<fieldset id="pairing-controls" hidden><legend>Coding-stack pilot criteria</legend>
+<p class="muted">Choose the thresholds the stack must meet on held-out issues from the published study. Both attempts in a pair count toward the budget.</p>
+<div class="fields"><div><label for="pairing-budget">Average token budget per issue</label>
+<input id="pairing-budget" type="number" min="0" step="1" inputmode="numeric"></div>
+<div><label for="pairing-width">Maximum stacks per issue</label>
+<select id="pairing-width"><option value="1">One stack</option><option value="2">Up to two stacks</option></select></div>
+<div><label for="pairing-percent">Minimum issues resolved (%)</label><input id="pairing-percent" type="number" min="0" max="100" step="1" inputmode="numeric"></div>
+<div><label for="pairing-model">Model cohort</label><select id="pairing-model"><option value="">All observed models</option><option value="devstral">Devstral</option><option value="glm">GLM</option><option value="qwen">Qwen</option></select></div></div>
+<label for="pairing-repository">Repository cohort <span>Optional · benchmark owner__name</span></label><input id="pairing-repository" type="text" placeholder="All study repositories">
+</fieldset>
+<div class="route-control"><label for="strategy">Execution strategy</label>
+<select id="strategy" aria-describedby="strategy-help">
+<option value="adaptive">Adaptive · choose from the brief</option>
+<option value="direct">Direct · build the specified outcome</option>
+<option value="research">Frontier · investigate opportunities first</option>
+</select><p id="strategy-help" class="muted">A supported specification can go straight to construction.</p></div>
 <details class="advanced" id="settings"><summary>Sources, construction and permissions</summary><p>Review the mission’s source records, construction specification and permitted actions. Use public or rights-authorized data. This local workspace stores submitted missions and their evidence.</p>
+<label for="direct-method">Construction method for a direct route</label><select id="direct-method"><option value="">Let the route choose</option><option value="model">Request the configured model</option><option value="specialist">Request the built-in specialist</option></select>
+<div class="fallback-option" id="fallback-option" hidden><label><input type="checkbox" id="direct-after"> If research defers, also attempt the frozen specification directly</label></div>
 <div class="json-fields"><label>Source records <textarea id="sources" spellcheck="false" rows="4">[]</textarea></label>
 <label>Construction specification <textarea id="construction_spec" spellcheck="false" rows="4">{}</textarea></label>
 
-<label>Resources <textarea id="resources" spellcheck="false" rows="2">{}</textarea></label>
+<label>Other resources <textarea id="resources" spellcheck="false" rows="2">{}</textarea></label>
 <label>Time and baseline <textarea id="time" spellcheck="false" rows="2">{}</textarea></label></div></details>
-<fieldset><legend>Permission for this mission</legend><label><input type="checkbox" id="local_model"> Process mission content with the configured local model</label><label><input type="checkbox" id="assisted_model"> Prepare prompts for operator-assisted model execution</label><label><input type="checkbox" id="public_sources"> Retrieve public sources through the approved source adapter</label></fieldset>
-<div class="action-row"><button class="primary" type="submit" id="start" disabled>Start investigation <span aria-hidden="true">→</span></button><button type="button" id="fresh" hidden>New mission</button></div>
+<fieldset><legend>Permission for this mission</legend><label><input type="checkbox" id="local_model"> Process mission content with the configured local model</label><label><input type="checkbox" id="assisted_model"> Prepare prompts for operator-assisted model execution</label><label><input type="checkbox" id="public_sources"> Retrieve public sources through the approved source adapter</label><label><input type="checkbox" id="allow_program_reuse"> Permit reuse of this program in a separately authorized local mission</label></fieldset>
+<div class="action-row"><button class="primary" type="submit" id="start" disabled>Start mission <span aria-hidden="true">→</span></button><button type="button" id="fresh" hidden>New mission</button></div>
 <p id="form-message" class="notice" role="status"></p></form></section>
-<section class="workspace" id="investigation"><div class="section-title"><p class="eyebrow">Investigation record</p><h2 id="record-title">Execution &amp; evidence</h2></div>
+<section class="workspace" id="investigation"><div class="section-title"><p class="eyebrow">Investigation record</p><h2 id="record-title" tabindex="-1">Execution &amp; evidence</h2></div>
 <p id="empty" class="muted">Submit a mission to see its sources, construction and independent checks here.</p>
-<div id="record" hidden><div class="record-head"><button type="button" id="close-replay" hidden>Close replay</button><strong id="run-status"></strong><span id="run-id"></span><button type="button" id="resume" hidden>Resume run</button></div><p id="amend-note" class="notice" role="status"></p><div id="results"></div>
+<div id="record" hidden><div class="record-head"><button type="button" id="close-replay" hidden>Close replay</button><strong id="run-status" role="status"></strong><span id="run-id"></span><button type="button" id="resume" hidden>Resume run</button></div><p id="amend-note" class="notice" role="status"></p><div id="route-receipt" class="route-receipt" hidden><p class="eyebrow">Route decision</p><h3 id="route-title"></h3><p id="route-method" class="method-label" hidden></p><p id="route-reason"></p><p id="route-fallback" class="notice" hidden></p><details><summary>Mission interpretation and decision record</summary><pre id="route-detail"></pre></details></div>
+<section id="forge" class="forge" hidden><p class="eyebrow">Execution trace</p><h3>Latest checkpoints</h3><ol id="checkpoints"></ol></section>
+<section id="attempts" hidden><h3>Construction &amp; repair</h3><div id="attempt-list"></div></section>
+<section id="opportunity-study" hidden><p class="eyebrow">Frontier investigation</p><h3 id="study-choice"></h3><p id="study-basis"></p><div id="study-candidates"></div></section>
+<section id="pairing-result" class="pairing-result" hidden aria-labelledby="pairing-verdict"><p class="eyebrow">Held-out benchmark decision</p>
+<h3 id="pairing-verdict"></h3><p id="pairing-stacks"></p><dl id="pairing-metrics"></dl>
+<p id="pairing-qualification" class="muted"></p></section>
 <section id="review" hidden><h3>Review the acceptance contract</h3><p>Review the model’s proposed specification and development examples. Enter fresh acceptance cases with independently obtained expected outputs. Include at least one successful case. The evaluator withholds these inputs from the builder.</p><details><summary>Read proposed contract and examples</summary><pre id="proposal"></pre></details><label for="confirmations">Fresh acceptance cases <span>JSON array</span></label><textarea id="confirmations" spellcheck="false" rows="5" placeholder='[{"name":"Fresh success","input":{},"expected":{}}]'></textarea><p class="muted">Give every case a unique name, an input, and either an expected result or an error code. The examples in the proposed contract cannot be reused.</p><button type="button" id="approve">Approve contract and freeze cases</button></section>
-<section id="handoff" hidden><h3>Operator-assisted execution</h3><p>Review the prompt and share it only with the model permitted for this mission. Return its JSON response to continue.</p><details><summary>Inspect the prompt</summary><pre id="prompt"></pre></details><button type="button" id="copy-prompt">Copy prompt</button><label for="response">Model response <span>JSON object</span></label><textarea id="response" spellcheck="false" rows="4"></textarea><button type="button" id="respond">Submit response</button></section>
-<section id="actions" hidden><h3>Operate the artifact</h3><label for="trial">Test input <span>JSON</span></label><textarea spellcheck="false" id="trial" rows="4"></textarea><div class="action-row"><button id="try" type="button">Run input</button><a id="bundle" class="primary button" download>Download verified bundle</a></div><pre id="output" role="status"></pre></section>
-<details><summary>Execution history</summary><ol id="events"></ol></details><div class="action-row"><a id="recorded-bundle" class="primary button" download hidden>Download recorded artifact</a><button id="snapshot" type="button" hidden>Save run record as JSON</button></div><details id="history"><summary>Earlier mission revisions</summary><pre id="versions"></pre></details><details><summary>Inspect run record</summary><pre id="raw"></pre></details></div>
+<section id="handoff" hidden><h3 id="handoff-title">Operator-assisted execution</h3><p>Review the prompt and share it only with the model permitted for this mission. Return its JSON response to continue.</p><details><summary>Inspect the prompt</summary><pre id="prompt"></pre></details><button type="button" id="copy-prompt">Copy prompt</button><label for="response">Model response <span>JSON object</span></label><textarea id="response" spellcheck="false" rows="4"></textarea><button type="button" id="respond">Submit response</button></section>
+<section id="actions" hidden><h3 id="actions-title">Operate the artifact</h3><label for="trial" id="trial-label">Test input <span>JSON</span></label><textarea spellcheck="false" id="trial" rows="4"></textarea><div class="action-row"><button id="try" type="button">Run input</button><a id="bundle" class="primary button" download>Download verified bundle</a></div><pre id="output" role="status"></pre><p class="muted" id="recipient-help">To repeat the checks offline, extract the bundle and run <code id="recipient-command">python3 -I run.py verify</code> inside its directory.</p>
+<details id="pilot-next" hidden><summary>Run a fresh pilot on your own issues</summary>
+<p>List new issue identifiers in a text file and obtain the SHA-256 identity of your independent grader. Register the pilot before observing outcomes. Retain the printed commitment separately.</p>
+<pre>python3 -B pilot.py register --help</pre><p>After running and grading every registered attempt, audit the observation CSV against that commitment. The recipient README includes the expected columns and commands.</p><pre>python3 -B pilot.py audit --help</pre></details></section>
+<div id="results"></div><details><summary>Complete execution history</summary><ol id="events"></ol></details><div class="action-row"><a id="recorded-bundle" class="primary button" download hidden>Download recorded artifact</a><button id="snapshot" type="button" hidden>Save run record as JSON</button></div><details id="history"><summary>Earlier mission revisions</summary><pre id="versions"></pre></details><details><summary>Inspect run record</summary><pre id="raw"></pre></details></div>
 </section></main><footer><span>MONTREAL.AI × QUEBEC.AI</span><span>Built in Montréal</span></footer></body></html>

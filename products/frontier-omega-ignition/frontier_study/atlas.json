@@ -1,0 +1,151 @@
+{
+  "schema": 1,
+  "observed_on": "2026-11-17",
+  "sources": [
+    {
+      "id": "hal", "title": "Holistic Agent Leaderboard", "published": "2025-10-13",
+      "url": "https://arxiv.org/abs/2510.11977", "publisher": "Kapoor et al.",
+      "observation": "Cost-aware agent benchmarking and a reusable harness existed a year before this study. The authors describe 21,730 rollouts across nine benchmarks.",
+      "scope": "HAL datasets and configurations. Different pricing and cache conventions can affect comparisons."
+    },
+    {
+      "id": "fan", "title": "An Empirical Study of Harness Design for Coding Agents", "published": "2026-09-17",
+      "url": "https://arxiv.org/abs/2609.20804", "publisher": "Fan et al.",
+      "observation": "Four models were evaluated across 176 matched settings on SWE-bench Verified and Terminal-Bench 2.1.",
+      "scope": "Component-level changes inside a controlled harness. This demonstrates older feasibility of matched comparisons."
+    },
+    {
+      "id": "pairing-paper", "title": "Pairing Matters", "published": "2026-10-23",
+      "url": "https://arxiv.org/abs/2610.32131", "publisher": "Zhao, Poskitt and Lo",
+      "observation": "The study applies a common grader and metering setup to six harnesses and three lightweight coding models on 100 shared issues.",
+      "scope": "One observed trial for each issue and pairing. The 100 issues and controlled configurations define the population actually observed."
+    },
+    {
+      "id": "archive", "title": "Pairing Matters research artifact, version 1", "published": "2026-10-22",
+      "url": "https://doi.org/10.6084/m9.figshare.34744362.v1", "publisher": "Zhao, Poskitt and Lo / Figshare",
+      "archive_issued_utc": "2026-10-22T06:45:19Z",
+      "metadata_url": "https://api.figshare.com/v2/articles/34744362/versions/1",
+      "cross_check": "https://api.datacite.org/dois/10.6084/m9.figshare.34744362.v1",
+      "companion_url": "https://github.com/lisazhao-gz/pairing-matters/commit/48444d3aa8383c90de0135c55138528c90eeb8e0",
+      "upstream_blob": "59cb87ce1be885936e21037c9f0699bd9dff5cb0",
+      "upstream_sha256": "a3fafa234f5498b235de1a7d0c3fbdc6e10c2496465b078f359f1bd1dba595d1",
+      "projection_sha256": "c60d0b58ab109ba900e36465a0ffadaaeb4c8a2743abc744eb17f3f596842118",
+      "observation": "The Figshare version and DataCite's Issued date agree on October 22. The GitHub companion appeared October 23. Its task-level table includes failures and common token accounting.",
+      "scope": "Charged tokens include repeated and cached context at full weight. Unreported usage is not imputed. Energy, accelerator occupancy, verification labor, billed cash and live client transfer are unmeasured."
+    },
+    {
+      "id": "budget-paper", "title": "Beyond Leaderboard Ranks", "published": "2026-11-16",
+      "url": "https://arxiv.org/abs/2611.21515", "publisher": "Srinivasan and Menzies",
+      "observation": "The authors study budget-constrained selection from 58,197 HAL run-task records and compare successive halving and other allocation policies.",
+      "scope": "A direct competitor on agent selection, with cost and statistical uncertainty. Its data and pricing are distinct from the registered self-hosted cohort."
+    },
+    {
+      "id": "flashprove", "title": "Progress on provable inference for large language models", "published": "2026-11-02",
+      "url": "https://www.anthropic.com/research/provable-inference", "publisher": "Anthropic and collaborators",
+      "observation": "The authors demonstrate proofs of committed inference for a large mixture-of-experts model. Their verifier has lower hardware requirements than the prover.",
+      "scope": "Upstream demonstration. A local hash, benchmark verdict or copy of the paper is insufficient to authenticate a particular response."
+    },
+    {
+      "id": "science", "title": "Artificial Analysis Intelligence Index v5", "published": "2026-10-27",
+      "url": "https://artificialanalysis.ai/articles/artificial-analysis-intelligence-index-v5", "publisher": "Artificial Analysis",
+      "repository": "https://github.com/harbor-framework/terminal-bench-science",
+      "observation": "The index introduced an evaluation covering 70 scientific terminal workflows alongside other benchmark changes.",
+      "scope": "A suite for testing agents on defined tasks. Real experimental discoveries and applicability to a beneficiary's workflow require independent evidence."
+    }
+  ],
+  "flagship_options": [
+    {
+      "title": "Select a self-hosted coding system that merits a pilot",
+      "before": "A team could evaluate locally with an agent harness, or use the paired comparisons and HAL research available by October 13.",
+      "after": "A publicly archived 18-way, task-matched matrix makes a budget-specific retrospective comparison on these 100 issues possible without commissioning those runs.",
+      "obstruction": "Headline scores conceal the overlap between solved tasks and charges for unsuccessful attempts.",
+      "source_ids": ["fan", "archive", "budget-paper"], "disposition": "Construct the offline retrospective pilot selector.",
+      "economic_test": "Have a team bring a representative private backlog, an independent acceptance oracle and measured hardware and staff costs; compare technical and complete-cost decisions.",
+      "alternative": "A capable analyst with the same matrix and SQL. HAL and the budget-selection research provide broader existing methods."
+    },
+    {
+      "title": "Verify which model produced a computation",
+      "before": "A customer could run a local trusted model, rely on provider attestations, or use prior proof systems within their supported model scope.",
+      "after": "FlashProve extends a proof approach to a reported 400-billion-parameter mixture-of-experts model.",
+      "obstruction": "A response alone does not establish committed-model provenance. The input/output statement, model commitment, proof and compatible verifier must match.",
+      "source_ids": ["flashprove"], "disposition": "Keep on watch for an actual independently verifiable customer receipt or a public proof set in scope.",
+      "economic_test": "Measure recipient verification and issuer proof costs against running or trusting the incumbent under the same confidentiality requirement.",
+      "alternative": "Use FlashProve's own verifier directly. Full local replay may suffice for a recipient with the model."
+    },
+    {
+      "title": "Qualify a research workflow for independent scientific replay",
+      "before": "HAL, CORE-Bench and reproducible scripts supported computational replication before the window.",
+      "after": "The October scientific terminal benchmark adds a set of independently scored workflows that can guide experiment selection.",
+      "obstruction": "A benchmark pass may fail to transfer to an institution's actual scientific endpoint or validated instrument.",
+      "source_ids": ["hal", "science"], "disposition": "Defer a beneficiary-specific trial pending an authorized task, environment and reference measurement.",
+      "economic_test": "Replay one eligible computational workflow against a conventional expert script and charge environment setup, checking and review.",
+      "alternative": "Use the published Harbor task and verifier directly after task and license review."
+    }
+  ],
+  "offers": [
+    {
+      "id": "headline", "question": "coding-pilot", "title": "Adopt the highest observed resolution rate", "source_ids": ["pairing-paper"],
+      "properties": ["matched-configurations"], "permissions": ["read-public-evidence"],
+      "value": "Quickly nominate a starting point for a self-hosted pilot.", "method": "Read the authors' all-task summary table.",
+      "tradeoff": "Training and audit issues are pooled; the mean resource ceiling is unchecked.", "test": "Compare the headline winner's audit issue scores and all-attempt tokens with the frozen allowance.",
+      "effort": "Read one table."
+    },
+    {
+      "id": "specialist", "question": "coding-pilot", "title": "Adopt an established cost-aware evaluator", "source_ids": ["hal"],
+      "properties": ["issue-outcomes"], "permissions": ["read-public-evidence"],
+      "value": "Reuse mature evaluation infrastructure for future local triage.", "method": "Use the HAL evaluator and its existing public records.",
+      "tradeoff": "The public HAL cohort does not establish this exact 18-way grid. Cash and charged-token units differ.", "test": "Match the requested systems, tasks, grader and accounting definitions before transporting a result.",
+      "effort": "Inspect task and configuration overlap before any new run."
+    },
+    {
+      "id": "local-rerun", "question": "coding-pilot", "title": "Remeasure all systems on a private backlog", "source_ids": ["fan"],
+      "properties": ["matched-configurations", "issue-outcomes", "all-attempt-token-volume", "task-disjoint-audit"], "permissions": ["compute-offline", "operate-model-fleet", "use-private-backlog"],
+      "value": "Measure fit to the actual institution, with its own grader.", "method": "Run a prospectively metered factorial trial on approved machines and issues.",
+      "tradeoff": "Requires models, compute, data rights, independent grading and the cost of every attempted cell.", "test": "Obtain permission, freeze task selection and record a complete pilot block before expansion.",
+      "effort": "One new model run per issue and selected configuration, plus independent grading."
+    },
+    {
+      "id": "failure-review", "question": "coding-pilot", "title": "Target the failure mode worth repairing", "source_ids": ["pairing-paper"],
+      "properties": ["matched-configurations"], "permissions": ["read-public-evidence"],
+      "value": "Find a targeted repair worth instrumenting on the next trial.", "method": "Use the authors' reviewed failure categories to formulate a falsifiable intervention.",
+      "tradeoff": "Diagnosis does not measure repair efficacy or choose an affordable deployment configuration.", "test": "Freeze a repair, run fresh issues and compare with unchanged harness behavior.",
+      "effort": "Review published categories first; a treatment effect needs new executions."
+    },
+    {
+      "id": "budget-specialist", "question": "coding-pilot", "title": "Acquire just enough trials to choose a system", "source_ids": ["budget-paper"],
+      "properties": ["issue-outcomes"], "permissions": ["read-public-evidence"],
+      "value": "Save evaluation effort when a full fresh matrix is expensive.", "method": "Use the HAL-based study's allocation baselines, including successive halving.",
+      "tradeoff": "Prospective cost information and correctly priced, comparable trials matter. Its 48 shared SWE Mini issues differ from this cohort.", "test": "Check performance with and without advance cell costs on new governed trials.",
+      "effort": "Reuse existing selection code or acquire additional samples under a registered budget."
+    },
+    {
+      "id": "verify-receipt", "question": "model-provenance", "title": "Verify a committed inference receipt", "source_ids": ["flashprove"],
+      "properties": ["published-proof-system"], "permissions": ["read-public-evidence", "compute-offline"],
+      "value": "Determine whether a precisely identified computation matches the service commitment.", "method": "Assemble a matching public statement, commitment, proof and compatible upstream verifier.",
+      "tradeoff": "No beneficiary proof, verified commitment or matching transcript accompanies this study.", "test": "Pass an authentic receipt and reject a statement that differs from the committed one.",
+      "effort": "Inspect statement compatibility, then run the upstream verifier when the bundle exists."
+    },
+    {
+      "id": "science-replication", "question": "science-replay", "title": "Replay a scientific workflow under an independent verifier", "source_ids": ["science"],
+      "properties": ["published-science-suite"], "permissions": ["read-public-evidence"],
+      "value": "Measure which research steps a terminal agent can actually complete.", "method": "Freeze one appropriate public workload and its independent scientific criterion.",
+      "tradeoff": "A production scientific endpoint needs its own data rights, environment and acceptance.", "test": "Run the same scientific endpoint with a competent conventional script.",
+      "effort": "Inspect one task's data rights, environment and verifier before executing."
+    }
+  ],
+  "resources": [
+    {"id": "public-run-matrix", "source_id": "archive", "question": "coding-pilot",
+     "format": "paired-outcome-cost-table", "properties": ["matched-configurations", "issue-outcomes", "all-attempt-token-volume"]}
+  ],
+  "transformations": [
+    {
+      "id": "paired-replay", "input_format": "paired-outcome-cost-table", "title": "Replay every pairing on the same withheld issues",
+      "produces": ["task-disjoint-audit"], "permissions": ["read-public-evidence", "compute-offline"],
+      "value": "Choose a configuration or pair under a resource allowance without buying another round of inference.",
+      "method": "Partition issues once, choose on calibration rows, charge every recorded attempt, then evaluate the locked choice on audit issues.",
+      "tradeoff": "Replay depends on the published grader and sample. A two-system portfolio requires an equivalent oracle to select a passing patch in practice.",
+      "test": "Hold out issues, compare with an independent exhaustive SQL implementation and keep unfavourable outcomes.",
+      "effort": "Read 1,800 licensed measurements and run a finite offline search. SQL can compute the same result."
+    }
+  ]
+}

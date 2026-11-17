@@ -1,0 +1,157 @@
+{
+  "schema": "pairing-lab-direct-comparison/1",
+  "direct_source_commit": "a2c20c40856c7493c5c675c0674b0fab42bac5e9",
+  "direct_source_sha256": "cc8737702bcc9c02b4bac100131ea0b9566c61cf62de5e32ebe94de2e0e167d0",
+  "comparison_source_sha256": "3093a8ce143708de7f01369e1ef44411d4c5c8bc6b98b7e8c05af718e1f830a7",
+  "receiver_qualification_receipt_sha256": "bbb616da3f9ca135aaa52721c1f6ba6a742e3b4d0a14ed1ecccd3db573fae5ed",
+  "receiver_archive_sha256": "cfe351fe647ee1738a8069e3c1752e739ec0642467c9b1fe075ba5a508a52d62",
+  "receiver_file_count": 14,
+  "portable_checks": {
+    "unittest_discovery": "passed",
+    "registered_sql_cohort": "passed",
+    "frozen_repair_check": {
+      "mode": "deliberately injected source defect",
+      "verified_problem": "failed attempts undercharged",
+      "frozen_check": "test_pairing_lab.PairingChecks.test_all_attempts_count_and_double_success_is_one",
+      "rejected_exit": 1,
+      "repaired_exit": 0,
+      "repair_author": "explicit deterministic source correction",
+      "autonomous_diagnosis_demonstrated": false
+    },
+    "byte_identical_reexport": true
+  },
+  "evidence": "Direct included-Codex Python from the pre-outcome decision rule, independent executable SQL, and the portable selector agreed on the registered inputs.",
+  "cost_scope": "No new model inference or paid service during replay. Public grading is historical. Development labor, underlying meter omissions, hosting, grader operation and complete economic cost were not measured. No causal advantage follows from matching outputs.",
+  "arms": {
+    "500000/1": {
+      "selected": [
+        "qwen/agentless"
+      ],
+      "calibration": {
+        "qualifies": false,
+        "solved": 23,
+        "tasks": 60,
+        "tokens": 1355385
+      },
+      "audit": {
+        "qualifies": false,
+        "solved": 16,
+        "tasks": 40,
+        "tokens": 878663
+      },
+      "direct_receiver_sql_agree": true
+    },
+    "500000/2": {
+      "selected": [
+        "glm/acr",
+        "qwen/agentless"
+      ],
+      "calibration": {
+        "qualifies": true,
+        "solved": 27,
+        "tasks": 60,
+        "tokens": 21216433
+      },
+      "audit": {
+        "qualifies": true,
+        "solved": 18,
+        "tasks": 40,
+        "tokens": 14642768
+      },
+      "direct_receiver_sql_agree": true
+    },
+    "2000000/1": {
+      "selected": [
+        "qwen/agentless"
+      ],
+      "calibration": {
+        "qualifies": false,
+        "solved": 23,
+        "tasks": 60,
+        "tokens": 1355385
+      },
+      "audit": {
+        "qualifies": false,
+        "solved": 16,
+        "tasks": 40,
+        "tokens": 878663
+      },
+      "direct_receiver_sql_agree": true
+    },
+    "2000000/2": {
+      "selected": [
+        "glm/acr",
+        "qwen/agentless"
+      ],
+      "calibration": {
+        "qualifies": true,
+        "solved": 27,
+        "tasks": 60,
+        "tokens": 21216433
+      },
+      "audit": {
+        "qualifies": true,
+        "solved": 18,
+        "tasks": 40,
+        "tokens": 14642768
+      },
+      "direct_receiver_sql_agree": true
+    },
+    "5000000/1": {
+      "selected": [
+        "devstral/openhands"
+      ],
+      "calibration": {
+        "qualifies": true,
+        "solved": 34,
+        "tasks": 60,
+        "tokens": 141278257
+      },
+      "audit": {
+        "qualifies": true,
+        "solved": 20,
+        "tasks": 40,
+        "tokens": 92703408
+      },
+      "direct_receiver_sql_agree": true
+    },
+    "5000000/2": {
+      "selected": [
+        "devstral/openhands",
+        "glm/openhands"
+      ],
+      "calibration": {
+        "qualifies": true,
+        "solved": 39,
+        "tasks": 60,
+        "tokens": 271811438
+      },
+      "audit": {
+        "qualifies": true,
+        "solved": 22,
+        "tasks": 40,
+        "tokens": 176696676
+      },
+      "direct_receiver_sql_agree": true
+    },
+    "successor": {
+      "selected": [
+        "devstral/acr",
+        "devstral/sweagent"
+      ],
+      "calibration": {
+        "qualifies": true,
+        "solved": 10,
+        "tasks": 21,
+        "tokens": 30734735
+      },
+      "audit": {
+        "qualifies": false,
+        "solved": 5,
+        "tasks": 12,
+        "tokens": 39647841
+      },
+      "direct_receiver_sql_agree": true
+    }
+  }
+}

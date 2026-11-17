@@ -1,0 +1,463 @@
+{
+  "schema": "pairing-lab-cohort/1",
+  "study": {
+    "rows": 1800,
+    "tasks": 100,
+    "configurations": 18,
+    "source": "https://github.com/lisazhao-gz/pairing-matters/tree/48444d3aa8383c90de0135c55138528c90eeb8e0",
+    "archive": "https://doi.org/10.6084/m9.figshare.34744362.v1",
+    "data_sha256": "c60d0b58ab109ba900e36465a0ffadaaeb4c8a2743abc744eb17f3f596842118",
+    "registration_sha256": "61c8a906d173cf627438938cd5f00162a2534c9969265d3c2b3eeff25d197cc5",
+    "source_sha256": {
+      "pairing_lab.py": "3aee1ebb93d3e27b747f4cf367594f858e447621250d64acbdfc1986e5863a20",
+      "conventional.py": "28d4f121cb4ee5e649165dc836ce85294a4b5b817e91faa3ee32d5aef47b235f",
+      "qualify.py": "f46dcdecc157b2ea3384b58d929718698f52b6058e7a3f4008a65cf8936f0f76",
+      "test_pairing_lab.py": "425872f2f1afc4bb7d56c69648b14bd006b20ed5963e51c52574da100b48e3b2"
+    },
+    "mode": "reanalysis of recorded grader outcomes",
+    "original_inference_reexecuted": false
+  },
+  "arms": {
+    "500000/1": {
+      "schema": "pairing-lab/1",
+      "method": "retrospective task-disjoint audit",
+      "data_sha256": "c60d0b58ab109ba900e36465a0ffadaaeb4c8a2743abc744eb17f3f596842118",
+      "public_source": "https://github.com/lisazhao-gz/pairing-matters/tree/48444d3aa8383c90de0135c55138528c90eeb8e0",
+      "program_sha256": "3aee1ebb93d3e27b747f4cf367594f858e447621250d64acbdfc1986e5863a20",
+      "parameters": {
+        "budget": 500000,
+        "width": 1,
+        "min_percent": 45,
+        "model": null,
+        "repository": null
+      },
+      "split": {
+        "calibration_count": 60,
+        "audit_count": 40,
+        "calibration_ids_sha256": "76afccce2a97abf8feaa7ffc0c1c3d526237dc58240d92fb1e728f535c046f38",
+        "audit_ids_sha256": "fa12d5dc6d4356d7c9467106fd526912689042e4dae21b98527329d79daf7420"
+      },
+      "policies_considered": 18,
+      "selected": [
+        "qwen/agentless"
+      ],
+      "calibration": {
+        "tasks": 60,
+        "solved": 23,
+        "tokens": 1355385
+      },
+      "audit": {
+        "tasks": 40,
+        "solved": 16,
+        "tokens": 878663
+      },
+      "qualifies": false,
+      "verdict": "audit_failed",
+      "hindsight_best": [
+        "qwen/agentless"
+      ],
+      "hindsight_audit": {
+        "tasks": 40,
+        "solved": 16,
+        "tokens": 878663
+      },
+      "uncapped_single": {
+        "selected": [
+          "qwen/openhands"
+        ],
+        "audit": {
+          "tasks": 40,
+          "solved": 23,
+          "tokens": 387113098
+        }
+      },
+      "scope": "Historical benchmark. Paired coverage assumes independent executable acceptance. Metered token volume excludes hardware, grader overhead and commercial cost.",
+      "budget_pass": true,
+      "resolution_pass": false,
+      "conventional_sql": {
+        "agreement": true,
+        "policies_compared": 18,
+        "score_rows_compared": 36
+      }
+    },
+    "500000/2": {
+      "schema": "pairing-lab/1",
+      "method": "retrospective task-disjoint audit",
+      "data_sha256": "c60d0b58ab109ba900e36465a0ffadaaeb4c8a2743abc744eb17f3f596842118",
+      "public_source": "https://github.com/lisazhao-gz/pairing-matters/tree/48444d3aa8383c90de0135c55138528c90eeb8e0",
+      "program_sha256": "3aee1ebb93d3e27b747f4cf367594f858e447621250d64acbdfc1986e5863a20",
+      "parameters": {
+        "budget": 500000,
+        "width": 2,
+        "min_percent": 45,
+        "model": null,
+        "repository": null
+      },
+      "split": {
+        "calibration_count": 60,
+        "audit_count": 40,
+        "calibration_ids_sha256": "76afccce2a97abf8feaa7ffc0c1c3d526237dc58240d92fb1e728f535c046f38",
+        "audit_ids_sha256": "fa12d5dc6d4356d7c9467106fd526912689042e4dae21b98527329d79daf7420"
+      },
+      "policies_considered": 171,
+      "selected": [
+        "glm/acr",
+        "qwen/agentless"
+      ],
+      "calibration": {
+        "tasks": 60,
+        "solved": 27,
+        "tokens": 21216433
+      },
+      "audit": {
+        "tasks": 40,
+        "solved": 18,
+        "tokens": 14642768
+      },
+      "qualifies": true,
+      "verdict": "audit_pass",
+      "hindsight_best": [
+        "devstral/acr",
+        "qwen/agentless"
+      ],
+      "hindsight_audit": {
+        "tasks": 40,
+        "solved": 19,
+        "tokens": 11090306
+      },
+      "uncapped_single": {
+        "selected": [
+          "qwen/openhands"
+        ],
+        "audit": {
+          "tasks": 40,
+          "solved": 23,
+          "tokens": 387113098
+        }
+      },
+      "scope": "Historical benchmark. Paired coverage assumes independent executable acceptance. Metered token volume excludes hardware, grader overhead and commercial cost.",
+      "budget_pass": true,
+      "resolution_pass": true,
+      "conventional_sql": {
+        "agreement": true,
+        "policies_compared": 171,
+        "score_rows_compared": 342
+      }
+    },
+    "2000000/1": {
+      "schema": "pairing-lab/1",
+      "method": "retrospective task-disjoint audit",
+      "data_sha256": "c60d0b58ab109ba900e36465a0ffadaaeb4c8a2743abc744eb17f3f596842118",
+      "public_source": "https://github.com/lisazhao-gz/pairing-matters/tree/48444d3aa8383c90de0135c55138528c90eeb8e0",
+      "program_sha256": "3aee1ebb93d3e27b747f4cf367594f858e447621250d64acbdfc1986e5863a20",
+      "parameters": {
+        "budget": 2000000,
+        "width": 1,
+        "min_percent": 45,
+        "model": null,
+        "repository": null
+      },
+      "split": {
+        "calibration_count": 60,
+        "audit_count": 40,
+        "calibration_ids_sha256": "76afccce2a97abf8feaa7ffc0c1c3d526237dc58240d92fb1e728f535c046f38",
+        "audit_ids_sha256": "fa12d5dc6d4356d7c9467106fd526912689042e4dae21b98527329d79daf7420"
+      },
+      "policies_considered": 18,
+      "selected": [
+        "qwen/agentless"
+      ],
+      "calibration": {
+        "tasks": 60,
+        "solved": 23,
+        "tokens": 1355385
+      },
+      "audit": {
+        "tasks": 40,
+        "solved": 16,
+        "tokens": 878663
+      },
+      "qualifies": false,
+      "verdict": "audit_failed",
+      "hindsight_best": [
+        "qwen/agentless"
+      ],
+      "hindsight_audit": {
+        "tasks": 40,
+        "solved": 16,
+        "tokens": 878663
+      },
+      "uncapped_single": {
+        "selected": [
+          "qwen/openhands"
+        ],
+        "audit": {
+          "tasks": 40,
+          "solved": 23,
+          "tokens": 387113098
+        }
+      },
+      "scope": "Historical benchmark. Paired coverage assumes independent executable acceptance. Metered token volume excludes hardware, grader overhead and commercial cost.",
+      "budget_pass": true,
+      "resolution_pass": false,
+      "conventional_sql": {
+        "agreement": true,
+        "policies_compared": 18,
+        "score_rows_compared": 36
+      }
+    },
+    "2000000/2": {
+      "schema": "pairing-lab/1",
+      "method": "retrospective task-disjoint audit",
+      "data_sha256": "c60d0b58ab109ba900e36465a0ffadaaeb4c8a2743abc744eb17f3f596842118",
+      "public_source": "https://github.com/lisazhao-gz/pairing-matters/tree/48444d3aa8383c90de0135c55138528c90eeb8e0",
+      "program_sha256": "3aee1ebb93d3e27b747f4cf367594f858e447621250d64acbdfc1986e5863a20",
+      "parameters": {
+        "budget": 2000000,
+        "width": 2,
+        "min_percent": 45,
+        "model": null,
+        "repository": null
+      },
+      "split": {
+        "calibration_count": 60,
+        "audit_count": 40,
+        "calibration_ids_sha256": "76afccce2a97abf8feaa7ffc0c1c3d526237dc58240d92fb1e728f535c046f38",
+        "audit_ids_sha256": "fa12d5dc6d4356d7c9467106fd526912689042e4dae21b98527329d79daf7420"
+      },
+      "policies_considered": 171,
+      "selected": [
+        "glm/acr",
+        "qwen/agentless"
+      ],
+      "calibration": {
+        "tasks": 60,
+        "solved": 27,
+        "tokens": 21216433
+      },
+      "audit": {
+        "tasks": 40,
+        "solved": 18,
+        "tokens": 14642768
+      },
+      "qualifies": true,
+      "verdict": "audit_pass",
+      "hindsight_best": [
+        "devstral/acr",
+        "qwen/agentless"
+      ],
+      "hindsight_audit": {
+        "tasks": 40,
+        "solved": 19,
+        "tokens": 11090306
+      },
+      "uncapped_single": {
+        "selected": [
+          "qwen/openhands"
+        ],
+        "audit": {
+          "tasks": 40,
+          "solved": 23,
+          "tokens": 387113098
+        }
+      },
+      "scope": "Historical benchmark. Paired coverage assumes independent executable acceptance. Metered token volume excludes hardware, grader overhead and commercial cost.",
+      "budget_pass": true,
+      "resolution_pass": true,
+      "conventional_sql": {
+        "agreement": true,
+        "policies_compared": 171,
+        "score_rows_compared": 342
+      }
+    },
+    "5000000/1": {
+      "schema": "pairing-lab/1",
+      "method": "retrospective task-disjoint audit",
+      "data_sha256": "c60d0b58ab109ba900e36465a0ffadaaeb4c8a2743abc744eb17f3f596842118",
+      "public_source": "https://github.com/lisazhao-gz/pairing-matters/tree/48444d3aa8383c90de0135c55138528c90eeb8e0",
+      "program_sha256": "3aee1ebb93d3e27b747f4cf367594f858e447621250d64acbdfc1986e5863a20",
+      "parameters": {
+        "budget": 5000000,
+        "width": 1,
+        "min_percent": 45,
+        "model": null,
+        "repository": null
+      },
+      "split": {
+        "calibration_count": 60,
+        "audit_count": 40,
+        "calibration_ids_sha256": "76afccce2a97abf8feaa7ffc0c1c3d526237dc58240d92fb1e728f535c046f38",
+        "audit_ids_sha256": "fa12d5dc6d4356d7c9467106fd526912689042e4dae21b98527329d79daf7420"
+      },
+      "policies_considered": 18,
+      "selected": [
+        "devstral/openhands"
+      ],
+      "calibration": {
+        "tasks": 60,
+        "solved": 34,
+        "tokens": 141278257
+      },
+      "audit": {
+        "tasks": 40,
+        "solved": 20,
+        "tokens": 92703408
+      },
+      "qualifies": true,
+      "verdict": "audit_pass",
+      "hindsight_best": [
+        "devstral/openhands"
+      ],
+      "hindsight_audit": {
+        "tasks": 40,
+        "solved": 20,
+        "tokens": 92703408
+      },
+      "uncapped_single": {
+        "selected": [
+          "qwen/openhands"
+        ],
+        "audit": {
+          "tasks": 40,
+          "solved": 23,
+          "tokens": 387113098
+        }
+      },
+      "scope": "Historical benchmark. Paired coverage assumes independent executable acceptance. Metered token volume excludes hardware, grader overhead and commercial cost.",
+      "budget_pass": true,
+      "resolution_pass": true,
+      "conventional_sql": {
+        "agreement": true,
+        "policies_compared": 18,
+        "score_rows_compared": 36
+      }
+    },
+    "5000000/2": {
+      "schema": "pairing-lab/1",
+      "method": "retrospective task-disjoint audit",
+      "data_sha256": "c60d0b58ab109ba900e36465a0ffadaaeb4c8a2743abc744eb17f3f596842118",
+      "public_source": "https://github.com/lisazhao-gz/pairing-matters/tree/48444d3aa8383c90de0135c55138528c90eeb8e0",
+      "program_sha256": "3aee1ebb93d3e27b747f4cf367594f858e447621250d64acbdfc1986e5863a20",
+      "parameters": {
+        "budget": 5000000,
+        "width": 2,
+        "min_percent": 45,
+        "model": null,
+        "repository": null
+      },
+      "split": {
+        "calibration_count": 60,
+        "audit_count": 40,
+        "calibration_ids_sha256": "76afccce2a97abf8feaa7ffc0c1c3d526237dc58240d92fb1e728f535c046f38",
+        "audit_ids_sha256": "fa12d5dc6d4356d7c9467106fd526912689042e4dae21b98527329d79daf7420"
+      },
+      "policies_considered": 171,
+      "selected": [
+        "devstral/openhands",
+        "glm/openhands"
+      ],
+      "calibration": {
+        "tasks": 60,
+        "solved": 39,
+        "tokens": 271811438
+      },
+      "audit": {
+        "tasks": 40,
+        "solved": 22,
+        "tokens": 176696676
+      },
+      "qualifies": true,
+      "verdict": "audit_pass",
+      "hindsight_best": [
+        "glm/openhands",
+        "qwen/agentless"
+      ],
+      "hindsight_audit": {
+        "tasks": 40,
+        "solved": 22,
+        "tokens": 84871931
+      },
+      "uncapped_single": {
+        "selected": [
+          "qwen/openhands"
+        ],
+        "audit": {
+          "tasks": 40,
+          "solved": 23,
+          "tokens": 387113098
+        }
+      },
+      "scope": "Historical benchmark. Paired coverage assumes independent executable acceptance. Metered token volume excludes hardware, grader overhead and commercial cost.",
+      "budget_pass": true,
+      "resolution_pass": true,
+      "conventional_sql": {
+        "agreement": true,
+        "policies_compared": 171,
+        "score_rows_compared": 342
+      }
+    },
+    "successor": {
+      "schema": "pairing-lab/1",
+      "method": "retrospective task-disjoint audit",
+      "data_sha256": "c60d0b58ab109ba900e36465a0ffadaaeb4c8a2743abc744eb17f3f596842118",
+      "public_source": "https://github.com/lisazhao-gz/pairing-matters/tree/48444d3aa8383c90de0135c55138528c90eeb8e0",
+      "program_sha256": "3aee1ebb93d3e27b747f4cf367594f858e447621250d64acbdfc1986e5863a20",
+      "parameters": {
+        "budget": 2000000,
+        "width": 2,
+        "min_percent": 45,
+        "model": "devstral",
+        "repository": "django__django"
+      },
+      "split": {
+        "calibration_count": 21,
+        "audit_count": 12,
+        "calibration_ids_sha256": "f25c53ab524fcaf96c846e34a22abcc7bc11106c726bc86c0125c1b64c4bf047",
+        "audit_ids_sha256": "9629850e5db752359e4c2fa332993f19673c8e730200d67b9733e46a3dbf6dd4"
+      },
+      "policies_considered": 21,
+      "selected": [
+        "devstral/acr",
+        "devstral/sweagent"
+      ],
+      "calibration": {
+        "tasks": 21,
+        "solved": 10,
+        "tokens": 30734735
+      },
+      "audit": {
+        "tasks": 12,
+        "solved": 5,
+        "tokens": 39647841
+      },
+      "qualifies": false,
+      "verdict": "audit_failed",
+      "hindsight_best": [
+        "devstral/acr"
+      ],
+      "hindsight_audit": {
+        "tasks": 12,
+        "solved": 4,
+        "tokens": 3945816
+      },
+      "uncapped_single": {
+        "selected": [
+          "devstral/openhands"
+        ],
+        "audit": {
+          "tasks": 12,
+          "solved": 6,
+          "tokens": 51638105
+        }
+      },
+      "scope": "Historical benchmark. Paired coverage assumes independent executable acceptance. Metered token volume excludes hardware, grader overhead and commercial cost.",
+      "budget_pass": false,
+      "resolution_pass": false,
+      "conventional_sql": {
+        "agreement": true,
+        "policies_compared": 21,
+        "score_rows_compared": 42
+      }
+    }
+  }
+}

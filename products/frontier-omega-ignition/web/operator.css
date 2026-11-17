@@ -1,0 +1,80 @@
+.operator {
+  --ground: #100f15;
+  --panel: #17151e;
+  --line: #403b48;
+  --paper: #f5ede6;
+  --mint: #bbd5c9;
+  --rose: #edb6af;
+  background: radial-gradient(ellipse at 90% 0%, #2c21303d, transparent 36rem), var(--ground);
+}
+.operator main, .operator header, .operator footer {width: min(1060px, calc(100% - 48px))}
+.operator-hero {
+  display: grid;
+  align-items: end;
+  gap: clamp(24px, 6vw, 88px);
+  grid-template-columns: minmax(0, 1fr) minmax(210px, .43fr);
+  padding: clamp(42px, 7vw, 88px) 0 38px;
+}
+.operator-hero h1 {
+  color: var(--paper);
+  font: normal clamp(4.15rem, 11vw, 8rem)/.92 'Instrument Serif', 'Times New Roman', serif;
+  letter-spacing: -.075em;
+  margin: .13em 0 .17em;
+}
+.operator-hero h1 span {color: var(--gold)}
+.operator .intro {max-width: 38em; margin: 0}
+.service-card {
+  padding: 0 0 2px 21px;
+  border-left: 1px solid #9e8264;
+  min-width: 0;
+}
+.service-card p:not(.eyebrow) {color: var(--ink); margin: 7px 0 15px; overflow-wrap: anywhere}
+.service-card a {display: inline-block; margin: 2px 12px 2px 0; font-size: .82rem}
+.operator .workspace {border-radius: 4px; padding: clamp(22px, 4vw, 44px)}
+.operator .section-title {padding-bottom: 22px}
+.route-control {margin: 18px 0; max-width: 625px}
+.route-control p {margin: 6px 0 0; font-size: .85rem}
+.operator .record-head {justify-content: flex-start; margin: 4px 0 18px}
+#run-status {padding: .32em .7em; border-radius: 3px; border: 1px solid currentColor}
+#run-status[data-tone="pass"] {color: var(--mint)}
+#run-status[data-tone="fail"] {color: var(--rose)}
+.route-receipt, .forge {margin: 20px 0; padding: 20px 0; border-top: 1px solid var(--line)}
+.route-receipt h3, .forge h3 {margin: 7px 0 12px}
+.method-label {width: fit-content; padding: 2px 9px; border-left: 2px solid var(--gold); color: var(--gold); font-size: .85rem}
+.route-receipt p:last-of-type {margin-bottom: 0}
+#checkpoints {list-style: none; margin: 18px 0 0; padding: 0}
+#checkpoints li {display: grid; grid-template-columns: minmax(100px, .3fr) minmax(0, 1fr); gap: 3px 18px; padding: 11px 0; border-top: 1px solid var(--line); margin: 0}
+#checkpoints strong {color: var(--paper); font-size: .88rem}
+#checkpoints p {margin: 0}
+#checkpoints time {grid-column: 2; font: .74rem/1.5 'IBM Plex Mono', monospace; color: var(--muted)}
+.attempt {padding: 14px 18px; margin: 12px 0; background: #191a20; border-left: 2px solid var(--mint)}
+.attempt[data-status="rejected"] {border-color: var(--rose); background: #231d23}
+.attempt p {margin: 0}
+.attempt details, .route-receipt details {margin: 14px 0 0}
+#handoff, #review, #actions {padding: 2px 18px 16px; border: 1px solid #6b5b65; border-radius: 4px; margin: 18px 0}
+#handoff textarea, #review textarea {font: .83rem/1.55 'IBM Plex Mono', monospace}
+#actions label {margin-top: 0}
+#handoff button, #review button {margin-top: 12px}
+#results section {border-top: 1px solid var(--line); margin-top: 22px}
+.operator code {overflow-wrap: anywhere}
+.operator details > summary {width: fit-content; max-width: 100%}
+@media (max-width: 700px) {
+  .operator-hero {grid-template-columns: 1fr; align-items: start; gap: 24px}
+  .service-card {padding-left: 14px}
+}
+@media (max-width: 500px) {
+  .operator main, .operator header, .operator footer {width: calc(100% - 28px)}
+  .operator .workspace {padding: 22px 15px}
+  #checkpoints li {display: block}
+  #checkpoints time {display: block; margin-top: 3px}
+  #handoff, #review, #actions {padding-inline: 12px}
+  .operator .record-head {align-items: start}
+}
+
+#pairing-controls label {display: block; margin-top: 9px}
+#pairing-controls select, #pairing-repository {max-width: 38rem}
+.pairing-result {border-left: 2px solid var(--mint); padding: 14px 18px; background: #19221e; margin: 20px 0}
+.pairing-result[data-tone="fail"] {border-color: var(--rose); background: #231d23}
+.pairing-result h3 {margin: 5px 0 12px}
+
+.fallback-option label {display: flex; align-items: center; gap: .6rem; font-weight: normal}

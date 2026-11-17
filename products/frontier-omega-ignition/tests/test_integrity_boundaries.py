@@ -36,7 +36,7 @@ def proposal():
 
 def body(explicit=True):
     supplied = datetime.now(timezone.utc) - timedelta(days=1)
-    mission = {"purpose": PURPOSE, "requirements": [REQUIREMENT], "authority": {"assisted_model": True}}
+    mission = {"purpose": PURPOSE, "requirements": [REQUIREMENT], "resources": {"execution_strategy": "research"}, "authority": {"assisted_model": True}}
     if explicit:
         mission["construction_spec"] = spec([confirmation("Private confirmation", "CONFIRMATION-ONLY-1257", "PRIVATE-MAP-871")])
     return {"request_id": "integrity-test-create", "mission": mission, "sources": [

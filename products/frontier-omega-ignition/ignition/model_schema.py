@@ -69,7 +69,7 @@ def construction_proposal(payload):
     if kind == "manifest_audit":
         manifest = {"type":"object","properties":{},"required":[],
                     "additionalProperties":{"type":"string","minLength":64,"maxLength":64}}
-        program = obj({"manifest":manifest})
+        program = {"anyOf": [obj({"use_frozen_manifest": {"const": True}}), obj({"manifest":manifest})]}
     elif kind == "record_migration":
         if "demonstrations" in definition:
             fields = definition["input_fields"]
@@ -98,7 +98,7 @@ def for_stage(stage, payload):
         return discovery(payload)
     if stage == "challenge":
         return challenge(payload)
-    if stage in ("construct","direct_construct"):
+    if stage in ("construct","direct_construct","repair"):
         return construction_proposal(payload)
     # A new specification is free-form JSON pending fresh operator checks.
     return None

@@ -1,0 +1,29 @@
+# Adaptive IGNITION • prospective qualification • 2026-11-17
+
+The first run of each named cell is the primary observation. Retain exhausted, deferred, failed and infrastructure-blocked cells. Later reruns or code revisions are separate observations. All inputs and comparisons below are public repository fixtures. This study grants no deployments, paid endpoints, private inputs or new credentials.
+
+## A • Matched construction
+
+For each unchanged original fixture, `examples/migration.json` and `examples/integrity.json`, run forced direct, forced research, and default adaptive on the candidate source via the normal Controller. The only routing intervention is the declared strategy. Use the identical original contract and available sources. Set an equal maximum of four inference calls and one evaluator-guided repair per arm. One fresh standard CPU runner, fresh model process and empty mission workspace per cell. Pin Qwen3-4B-Instruct-2507 Q4_K_M and the same llama.cpp CPU archive as the historical study, seed 6144, temperature zero, 32,768 context, maximum 8,192 response tokens. Calls carry real mission IDs. Bootstrap and mission wall are reported separately. Host allocation, tokenization, provider budgets, warm OS caches, and different prompts can affect measurements. Two supported tasks, one run per cell, support no population-level inference.
+
+An accepted delivery requires the original frozen contract, intact source-bound verifier, independent recipient execution of both verify and run, and genuine recorded model execution. Count the pre-existing deterministic comparison separately. Research may defer, fail, or lose. Adaptive and direct can choose identical strategies. A successful direct fallback never turns a lost investigation into successful discovery.
+
+## B • Included assistant, direct construction
+
+Using the same registered original migration and integrity definitions, the included Codex session will supply a typed candidate from the build-visible specification through each actual pending assisted exchange on the revised direct/runtime path. Record request and response identities, source identity, evaluator outcome and independent recipient execution. Use the provider/model identity actually exposed by the session. This is an operator-assisted comparison, not a server-side autonomous model, a blind trial, or a clean model-only causal contrast. The fixture and prior receipts are public. Model compute, engineering labor and plan allocation are not independently metered. Replay of an answer is labeled separately. No billable API.
+
+## E • Confirmed defect and repair
+
+Use the original integrity fixture. Independently plant the bounded program that changes the trusted SHA-256 for its first alphabetically sorted path to 64 zeroes. The interpreter must accept the grammar, the separate evaluator must reject the resulting behaviour and the conventional reference must satisfy the original cases. Record the original contract, failed cases and defect fingerprint; withhold hidden inputs and labels from model prompts. Give the revised direct and adaptive repair routes one actual Qwen repair each against the same planted candidate. Identify the planted first stage as a synthetic intervention and count it separately from real inference. Include a deterministic conventional repair using the authorized trusted input and check it with the identical verifier. Stop after one repair. Publish only the registered typed program and bounded product-owned evidence on this public fixture.
+
+## Historical failure reproduction
+
+Use the original immutable implementation 89f2196d552810bc56696a7f380ae66c55f8763a with the two original fixtures in new, separate forensic jobs. Re-execute the original research path with its original prompts, weights, sampler and equal access to supplied information. Preserve both fresh scientific verdicts and original recorded failures. Compare request and response fingerprints; new mission IDs, observation time, OS and decoding details can make a behavioural re-execution nonidentical. Only a matching proposal digest identifies the earlier failed program exactly. The original public failure receipt retained identities but omitted unsuccessful proposal bytes and per-case results. Do not assign a particular file, copied character, model belief or historical gate unless evidence supports it.
+
+## Measures and interpretation
+
+For every campaign cell publish its checkout SHA, fixture/contract/implementation identities, route, actual call counts/timing/tokens/repairs, setup and mission wall time, acceptance and conventional result, portable result and observed failures. Model calls and elapsed checking time are observed. Operator work in an unattended job is zero during the run, and prior engineering, runner electricity, plan allocation, customer economics, revenues and complete costs are unmeasured. No five-week crossing, demand or institutional advantage follows from technical acceptance. The workflow's observation gate is separate from its per-mission scientific verdict. A missing/invalid receipt or unavailable model is an infrastructure failure and cannot count as an observed outcome.
+
+### Before-run matching clarification
+
+The final routing contract offers a zero-call native specialist for an exact declared manifest. For the matched-model A and E arms, set the same `resources.direct_method="model"` in every arm, with no routing strategy override in the adaptive cells. This makes the registered same-model requirement executable. Also measure an additional pragmatic integrity cell with the actual default method and strategy. It may legitimately choose the native specialist; identify that route separately, require zero inference for a specialist claim and run the same portable checks. Keep this extra observation outside the six primary A cells. No model result was available when specifying this distinction.
