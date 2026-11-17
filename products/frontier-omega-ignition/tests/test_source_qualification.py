@@ -1,7 +1,7 @@
 import unittest
 from datetime import datetime, timezone
 
-from qualify_sources import FEEDS, FEED_KEYS, qualify
+from qualify_sources import OPERATOR_KEY, OPERATOR_URL, REGISTERED, qualify
 
 
 START = datetime(2026, 11, 17, 10, tzinfo=timezone.utc)
@@ -11,11 +11,12 @@ CLEAN = {"revision": "a" * 40, "clean": True, "status": "PASS"}
 
 def observations():
     rows = []
-    for key in FEED_KEYS:
-        repo = FEEDS[key][0]
+    for key, repo in REGISTERED.items():
         for release in (True, False):
             query = "releases?per_page=3" if release else "commits?per_page=1&until=2026-10-13T23:59:59Z"
             rows.append({"feed": key, "role": "Published release" if release else "Earlier snapshot",
+                         "acquisition": "operator-authorized public repository" if key == OPERATOR_KEY else "curated publisher feed",
+                         "repository_url": f"https://github.com/{repo}",
                          "version": "v1" if release else "a" * 40, "publisher": repo.split("/")[0],
                          "origin": f"https://api.github.com/repos/{repo}/{query}",
                          "url": f"https://github.com/{repo}/" + ("releases/tag/v1" if release else "commit/" + "a" * 40),
@@ -35,11 +36,14 @@ class LiveSourcesQualificationTests(unittest.TestCase):
         self.assertFalse(any(r["reported_event_inside_window"] for r in report["observations"]))
         self.assertIsNone(report["observations"][1]["published_at"])
         self.assertNotIn("text", report["observations"][0])
+        self.assertEqual(report["operator_repositories"], [OPERATOR_URL])
+        rows[-1]["acquisition"] = "curated publisher feed"
+        self.assertEqual(qualify({"sources": rows, "failures": []}, START, END, CLEAN)["status"], "FAIL")
 
     def test_failures_preserve_other_observations_and_never_use_canned_evidence(self):
         data = {"sources": observations()[:2], "failures": [{"feed": "distribution", "role": "current", "reason": "HTTP failure"}]}
         report = qualify(data, START, END, CLEAN)
-        self.assertEqual((report["status"], len(report["observations"]), len(report["missing_roles"])), ("BLOCKED", 2, 2))
+        self.assertEqual((report["status"], len(report["observations"]), len(report["missing_roles"])), ("BLOCKED", 2, 4))
         data = {"sources": observations(), "failures": []}
         for edit in ({"retrieved_at": "2025-01-01T00:00:00Z"}, {"origin": "https://other.invalid"},
                      {"published_at": None}, {"source_response_sha256": "bad"}):

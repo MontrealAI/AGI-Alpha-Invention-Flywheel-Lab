@@ -15,9 +15,11 @@ import uuid
 HARNESS = Path(__file__).resolve().parents[2] / "alpha-genesis-harness"
 sys.path.insert(0, str(HARNESS))
 from bridge.adapters import BridgeError, LOADED_SOURCE_SHA256, Runtime, strict_json, transport
+from . import model_schema
 
 PROTOCOL = "ignition/model-request/1"
 MAX_REPLY = 512 * 1024
+_UNSET = object()
 STAGE = re.compile(r"[a-z][a-z0-9_-]{0,63}\Z")
 SHA = re.compile(r"[0-9a-f]{64}\Z")
 PREAMBLE = (
@@ -91,8 +93,11 @@ class ModelProvider:
             port = int(env.get("IGNITION_MODEL_PORT", 11434 if kind == "ollama" else 8080))
             output = int(env.get("IGNITION_MODEL_OUTPUT_TOKENS", 4096))
             timeout = int(env.get("IGNITION_MODEL_TIMEOUT", 300))
+            schema = env.get("IGNITION_MODEL_SCHEMA", "0")
+            if schema not in {"0", "1"}:
+                raise ValueError("IGNITION_MODEL_SCHEMA must be 0 or 1.")
             return LocalProvider(kind, env.get("IGNITION_MODEL_ID"), port,
-                                 env.get("IGNITION_MODEL_SHA256") or None, output, timeout)
+                                 env.get("IGNITION_MODEL_SHA256") or None, output, timeout, schema_output=schema == "1")
         except (ValueError, TypeError) as error:
             raise ProviderUnavailable(f"Invalid local model configuration: {error}") from None
 
@@ -152,7 +157,7 @@ class LocalProvider(ModelProvider):
     """The shared HARNESS sends one text/JSON request to an operator's installed loopback model."""
 
     def __init__(self, kind, model, port, declared_sha256=None, output_tokens=4096,
-                 timeout=300, *, sender=transport):
+                 timeout=300, *, sender=transport, schema_output=False):
         super().__init__()
         if kind not in {"ollama", "llama-cpp"}:
             raise ValueError("Unsupported local model provider.")
@@ -167,13 +172,16 @@ class LocalProvider(ModelProvider):
             raise ValueError("Select an output limit between 1 and 131072 tokens.")
         self.kind, self.port, self.declared_sha256 = kind, port, declared_sha256
         self.output_tokens, self.timeout = output_tokens, timeout
+        if type(schema_output) is not bool:
+            raise ValueError("Local model schema support must be explicitly declared.")
+        self.schema_output = schema_output
         self.base = f"http://127.0.0.1:{port}"
         self.sender = sender
         p = {"kind": "ollama" if kind == "ollama" else "openai",
              "base_url": self.base + ("" if kind == "ollama" else "/v1"),
              "output_limit_field": "max_tokens",
              "models": {self.model: {"input_per_million": 0, "output_per_million": 0,
-                                     "max_output_tokens": output_tokens, "json_mode": True}}}
+                                     "max_output_tokens": output_tokens, "json_mode": True, "json_schema": schema_output}}}
         self.runtime = Runtime({"local_only": True, "allow_paid_requests": False,
                                 "session_budget_usd": 0, "max_attempts": 1,
                                 "timeout_seconds": timeout, "providers": {kind: p}},
@@ -198,6 +206,7 @@ class LocalProvider(ModelProvider):
                 "endpoint": self.base, "declared_model_sha256": self.declared_sha256,
                 "weights_identity": "operator-declared" if self.declared_sha256 else "unmeasured",
                 "output_tokens": self.output_tokens, "timeout_seconds": self.timeout,
+                "schema_output": self.schema_output, "schema_implementation": model_schema.LOADED_SOURCE_SHA256,
                 "harness_adapter_sha256": LOADED_SOURCE_SHA256}
 
     def _check_installed_ollama(self):
@@ -208,19 +217,33 @@ class LocalProvider(ModelProvider):
                 or not isinstance(details.get("model_info"), dict) or not details["model_info"]):
             raise BridgeError("MODEL_NOT_LOCAL", "Ollama must report locally installed model metadata.")
 
+    def request(self, stage, payload, *, schema=_UNSET):
+        request = super().request(stage, payload)
+        if schema is _UNSET:
+            schema = model_schema.for_stage(stage, payload) if self.schema_output else None
+        if schema is not None:
+            request.pop("sha256")
+            request["response_schema_sha256"] = fingerprint(schema)
+            request["sha256"] = fingerprint(request)
+        return request
+
     def propose(self, stage, payload):
-        request = self.request(stage, payload)
+        schema = model_schema.for_stage(stage, payload) if self.schema_output else None
+        request = self.request(stage, payload, schema=schema)
         run_id = "ignition_" + uuid.uuid4().hex
         start = time.monotonic()
         row = self._record(request, run_id=run_id, status="started", usage=None,
-                           response_sha256=None, application_model_calls=0)
+                           response_sha256=None, application_model_calls=0,
+                           response_schema_sha256=request.get("response_schema_sha256"))
         try:
             if self.kind == "ollama":
                 self._check_installed_ollama()
             row["application_model_calls"] = 1
-            result = self.runtime.generate({"run_id": run_id, "provider": self.kind,
-                                            "model": self.model, "prompt": request["prompt"],
-                                            "max_output_tokens": self.output_tokens, "json_mode": True})
+            generation = {"run_id":run_id, "provider":self.kind, "model":self.model,
+                          "prompt":request["prompt"], "max_output_tokens":self.output_tokens, "json_mode":True}
+            if schema is not None:
+                generation["json_schema"] = schema
+            result = self.runtime.generate(generation)
             row.update(usage=result["usage"], reported_model=result["reported_model"],
                        raw_response_sha256=hashlib.sha256(result["text"].encode()).hexdigest())
             response = _response(strict_json(result["text"]))

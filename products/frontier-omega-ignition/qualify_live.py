@@ -34,7 +34,7 @@ EXAMPLE = PRODUCT / "examples" / "migration.json"
 STAGES = {"discover", "challenge", "construct"}
 PUBLIC_ROUTES = {key for key in (
     "stage", "status", "provider", "model", "reported_model", "mode", "run_id", "request_sha256",
-    "raw_response_sha256", "response_sha256", "error_code", "usage", "application_model_calls",
+    "response_schema_sha256", "raw_response_sha256", "response_sha256", "error_code", "usage", "application_model_calls",
     "complete_cost_known", "wall_seconds", "recorded_at")}
 CHECKOUT_PATHS = [PRODUCT.relative_to(REPO).as_posix(), "products/alpha-genesis-harness/bridge",
                   "products/alpha-genesis-harness/scripts/package_release.py",
@@ -47,6 +47,16 @@ class Blocked(Exception):
 
 def stamp():
     return datetime.now(timezone.utc).isoformat()
+
+
+def available_threads():
+    count = len(os.sched_getaffinity(0)) if hasattr(os, "sched_getaffinity") else (os.cpu_count() or 1)
+    cpu_limit = Path("/sys/fs/cgroup/cpu.max")
+    if cpu_limit.is_file():
+        quota, period = cpu_limit.read_text().strip().split()
+        if quota.isdigit() and period.isdigit() and int(period) > 0:
+            count = min(count, (int(quota) + int(period) - 1) // int(period))
+    return max(1, count)
 
 
 def runner_window():
@@ -358,14 +368,16 @@ def main():
             # No inherited credentials, CLI homes, proxies or code evaluation tools.
             env = {"PATH": os.defpath, "LD_LIBRARY_PATH": str(binary.parent), "HOME": str(work),
                    "LANG": "C.UTF-8", "NO_PROXY": "127.0.0.1"}
+            threads = available_threads()
+            record["inference_threads"] = threads
             args = [str(binary), "-m", str(weights), "--alias", MODEL_ALIAS, "--host", "127.0.0.1",
-                    "--port", str(port), "--ctx-size", "32768", "--threads", "2", "--parallel", "1",
+                    "--port", str(port), "--ctx-size", "32768", "--threads", str(threads), "--threads-batch", str(threads), "--parallel", "1",
                     "--n-gpu-layers", "0", "--seed", "6144", "--temp", "0"]
             server = subprocess.Popen(args, cwd=work, env=env, stdin=subprocess.DEVNULL, stdout=log, stderr=log)
             try:
                 wait_ready(server, port)
                 model = LocalProvider("llama-cpp", MODEL_ALIAS, port, pinned.MODEL_SHA,
-                                      output_tokens=8192, timeout=600)
+                                      output_tokens=8192, timeout=600, schema_output=True)
                 campaign(work, model, record)
             finally:
                 server.terminate()

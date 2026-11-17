@@ -3,7 +3,7 @@ import json
 import unittest
 
 from ignition.construction import build, freeze_contract
-from ignition.research import assess_comparison, discover_sources, investigate, reopen_inventory
+from ignition.research import assess_comparison, discover_sources, investigate, reopen_inventory, validate_public_repositories
 
 
 MISSION = {"purpose": "Convert vendor records to a typed archive index", "beneficiary": "archive owner",
@@ -151,6 +151,54 @@ class ResearchTests(unittest.TestCase):
         failed = discover_sources(MISSION, feeds=["schema"], fetch=lambda url: {"text": "{}", "retrieved_at": AS_OF})
         self.assertEqual(len(failed["failures"]), 2)
         self.assertEqual(failed["sources"], [])
+
+    def test_operator_repository_validation_precedes_egress(self):
+        root = "https://github.com/"
+        for url in ["http://github.com/example/demo", "https://api.github.com/repos/example/demo",
+                    "https://secret@github.com/a/b", "https://github.com:443/a/b",
+                    root+"a/b?token=x", root+"a/b#ref", root+"a/b.git", root+"a/b/",
+                    root+"a/b/tree/main", root+"a/..", root+"a/b%2Fname", root+"a/βeta",
+                    root+"example.org/a/b", root+"a/b\n"]:
+            invoked = []
+            resources = {"public_repositories": [root+"a/good", url]}
+            with self.subTest(url=url), self.assertRaises(ValueError):
+                discover_sources(MISSION | {"resources": resources}, feeds=["schema"], fetch=lambda u: invoked.append(u))
+            self.assertEqual(invoked, [])
+        with self.assertRaises(ValueError):
+            validate_public_repositories([root+"a/b"] * 5)
+        with self.assertRaises(ValueError):
+            discover_sources(MISSION | {"authority": {}, "resources": {"public_repositories": [root+"a/b"]}}, fetch=lambda u: self.fail())
+        self.assertEqual(validate_public_repositories([root+"Acme/Library", root+"acme/library"]), [root+"Acme/Library"])
+
+    def test_operator_repository_and_no_model_selected_destination(self):
+        address = "https://github.com/ExampleOrg/New.Project"
+        mission = MISSION | {"purpose": "https://github.com/unapproved/private",
+                             "resources": {"public_repositories": [address]}}
+        track = []
+        def fetch(url):
+            track.append(url)
+            if "releases?" in url:
+                entries = [{"published_at": "2026-11-15T10:00:00Z", "tag_name": "v1", "body": "Publisher observation",
+                            "html_url": address+"/releases/tag/v1"}]
+            else:
+                entries = [{"sha": "b"*40, "commit": {"committer": {"date": "2026-10-07T00:00:00Z"}, "message": "Earlier commit"},
+                            "html_url": address + "/commit/" + "b"*40}]
+            raw = json.dumps(entries)
+            return {"text": raw, "sha256": hashlib.sha256(raw.encode()).hexdigest(), "retrieved_at": AS_OF}
+        result = discover_sources(mission, feeds=[], fetch=fetch, as_of=AS_OF)
+        self.assertFalse(result["failures"])
+        self.assertEqual(result["feeds"], ["github:exampleorg/new.project"])
+        self.assertEqual(len(result["sources"]), 2)
+        self.assertEqual(result["sources"][0]["repository_url"], address)
+        self.assertEqual(result["sources"][0]["acquisition"], "operator-authorized public repository")
+        self.assertTrue(all(url.startswith("https://api.github.com/repos/exampleorg/new.project/") for url in track))
+        self.assertEqual(len(track), 2)
+        failed = discover_sources(mission, feeds=[], fetch=lambda u: {"text": "[]"}, as_of=AS_OF)
+        self.assertEqual(len(failed["failures"]), 2)
+        self.assertEqual(failed["failures"][0]["repository_url"], address)
+        too_many = discover_sources(mission, feeds=[], fetch=lambda u: {"text": "[0,0,0,0]"}, as_of=AS_OF)
+        self.assertEqual(too_many["sources"], [])
+        self.assertTrue(all("length" in item["reason"] for item in too_many["failures"]))
 
     def test_matched_before_after_runs_both_executables(self):
         kind = "manifest_audit"

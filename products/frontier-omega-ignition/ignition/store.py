@@ -58,7 +58,7 @@ def runtime_source():
     # Hash the trusted computation, including the checker and portable recipient path.
     # Editing a stylesheet or command-line help does not change an accepted calculation.
     paths = [PRODUCT / "ignition" / f"{n}.py" for n in
-             ("construction","evaluation","delivery","portable","provider","research","controller","store","economics")]
+             ("construction","evaluation","delivery","portable","provider","research","controller","store","economics","model_schema")]
     bridge = PRODUCT.parent / "alpha-genesis-harness" / "bridge"
     paths += [bridge / name for name in ("__init__.py", "adapters.py", "output_schema.py")]
     return digest({"python": [sys.implementation.name, *sys.version_info[:3]],
@@ -89,6 +89,12 @@ def clean_mission(mission):
     auth = result["authority"]
     if set(auth) - {"local_model", "assisted_model", "public_sources", "allow_program_reuse"} or any(type(v) is not bool for v in auth.values()):
         raise StateError("Unsupported permission or non-boolean permission value")
+    if "public_repositories" in result["resources"]:
+        from .research import validate_public_repositories
+        urls = validate_public_repositories(result["resources"]["public_repositories"])
+        if urls and auth.get("public_sources") is not True:
+            raise StateError("Public repository acquisition requires the mission's public_sources permission")
+        result["resources"] = dict(result["resources"],public_repositories=urls)
     spec = result["construction_spec"]
     if spec and spec.get("purpose") != result["purpose"]:
         raise StateError("Construction specification must bind the exact mission purpose")

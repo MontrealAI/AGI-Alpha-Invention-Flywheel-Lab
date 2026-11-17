@@ -19,6 +19,8 @@ The engineering decision is **proceed with the bounded workbench and hold the Bl
 | What is outside this qualification? | General-purpose code generation, cryptographic proof of model inference, tenant-isolated hosted service, general project migration, physical actuation, payment, customer outreach, operational customer acceptance, and measured improvements across successor missions. |
 | What is published? | A draft source change stacked on the existing research edition, public examples and reproducible packages. Review, integration, release and deployment require their own evidence. |
 
+A subsequent deterministic whole-directory receiver qualified the original research edition’s full 15-file delivery. Its externally pinned inventory caught a replaced page, missing test and unexpected file. It also identified both the modified README and a rewritten received manifest. The conventional inventory tied on all three scenarios. [Release handoff evidence](../evidence/release-handoff.json) · [Hosted qualifications by source](HOSTED-EVIDENCE.md)
+
 ## Reproduction and independence
 
 From the product directory run:

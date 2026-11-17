@@ -258,7 +258,7 @@ class Controller:
                 "instruction":CONSTRUCT_INSTRUCTION,
                 "selected":result["selected"], "purpose":mission["purpose"], "requirements":mission["requirements"],
                 "kind":result["kind"], "definition":construction.build_view(contract)["definition"],
-                "retained_program":s.get("inherited")})
+                "retained_program":{k:v for k,v in (s.get("inherited") or {}).items() if k in {"kind","program"}} or None})
             s["artifact"] = construction.build(contract, response)
             self._step(s, "construction", "Compiled the proposed instructions into a portable bounded program")
         self._check_time(mission)

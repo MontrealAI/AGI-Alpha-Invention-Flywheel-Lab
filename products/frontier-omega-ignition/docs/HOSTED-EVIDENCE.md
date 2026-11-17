@@ -1,0 +1,19 @@
+# Hosted qualification evidence
+
+## Engineering and source acquisition at 109d04f6
+
+GitHub Actions tested commit `109d04f6b6bfab36122a505b9183c95598c78153` on 17 November 2026. Results below apply to that checkout. [Exact source](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/tree/109d04f6b6bfab36122a505b9183c95598c78153/products/frontier-omega-ignition) · [Draft PR #439](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/pull/439)
+
+| Check | Observed outcome | Evidence |
+|---|---|---|
+| Application and browser | 49 Python tests passed. Three Chromium suites exercised the original and assembled research pages, the live loopback interface with authored model replies, mobile layouts, stale-input invalidation, and the standalone offline preview. The preview exposed three recorded sessions and downloaded both recipient ZIPs byte-for-byte with networking disabled. | [Engineering job](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/44153934583/job/134289447417) |
+| Downloadable public preview | The downloaded archive contained a single 186,750-byte HTML file. Its SHA-256 was `8855f5733f289807daec59f891833d6db05fcf8551d0e69a86a5bf876e534cee`. Open the extracted HTML locally. | [Download replay](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/44153934583/artifacts/14360102571) |
+| Recipient execution | Both recorded programs were rebuilt from the frozen contracts and separately executed from exported ZIPs. The manifest verifier and record migration each passed 9 checks. The physical mission retained its deferral. This replay made zero model calls. | [Recipient and comparator receipts](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/44153934583/artifacts/14359738215) |
+| Conventional alternatives | Hosted sha256sum (uutils coreutils) 0.10.0 plus file-set comparison matched 5/5 audit cases. jq 1.8.1 matched 4/4 migration cases. The original local experiment used GNU coreutils 9.7 and jq 1.7 with the same outcomes. Engineering time, complete delivery economics and demand remain unmeasured. | [Hosted receipts](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/44153934583/artifacts/14359738215) · [Local comparison](../evidence/conventional-comparison.json) |
+| Live primary sources | Eight dated records across Hugging Face Transformers and PyPA build, including six releases and two commit references for the 13 October baseline. Zero failed requests and zero integrity errors. The probe measured source acquisition. Earlier and later product performance remain unresolved. | [Source job](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/44153934583/job/134289447847) · [Source receipt](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/44153934583/artifacts/14360416703) |
+
+## First local-model trial at 0cbf2757
+
+The registered run on `0cbf2757dfbb575561fd486d410c22312888b003` loaded the pinned Qwen3-4B-Instruct-2507 Q4_K_M weights. Two real calls returned responses, for discovery and challenge. Challenge validation rejected the response and the trial ended **FAIL** before construction or recipient evaluation. The operator-assisted recordings are separate runs. [Model job](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/44151148461/job/134279518280) · [Failure receipt](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/44151148461/artifacts/14360935462)
+
+GitHub Actions downloads require repository access and expire under its artifact retention policy. The public examples, manifests and reproduction commands remain in the [source tree](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/tree/109d04f6b6bfab36122a505b9183c95598c78153/products/frontier-omega-ignition).

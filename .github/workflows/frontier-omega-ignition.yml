@@ -64,6 +64,32 @@ jobs:
           test "$(git rev-parse HEAD)" = "$EXPECTED_SOURCE"
           python -B -m unittest discover -s tests -p 'test_*.py' -v
 
+      - name: Receive the pinned research edition as an independent sender reference
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          repository: MontrealAI/AGI-Alpha-Invention-Flywheel-Lab
+          ref: 09e611c6df506ab24fba494b1ec41716e3721049
+          path: ignition-reference
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /docs/research/frontier-omega-world-lab.html
+            /docs/frontier-omega-ignition/research-edition/
+      - name: Build and test the full public-edition receiver
+        working-directory: products/frontier-omega-ignition
+        run: |
+          test "$(git -C "$GITHUB_WORKSPACE/ignition-reference" rev-parse HEAD)" = 09e611c6df506ab24fba494b1ec41716e3721049
+          python -B examples/qualify_release_handoff.py \
+            --reference-tree "$GITHUB_WORKSPACE/ignition-reference" \
+            --output "$RUNNER_TEMP/ignition-handoff" > /dev/null
+      - name: Offer the exact full-edition receiver and qualification receipt
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: ignition-edition-receiver-${{ env.EXPECTED_SOURCE }}-attempt-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/ignition-handoff/research-edition-receiver.zip
+            ${{ runner.temp }}/ignition-handoff/release-handoff.json
+          if-no-files-found: error
       - name: Run competent conventional alternatives and requalify recorded deliveries
         working-directory: products/frontier-omega-ignition
         run: |
@@ -80,6 +106,7 @@ jobs:
       - name: Install locked browser test driver and reopen downloaded artifacts
         env:
           NODE_PATH: ${{ runner.temp }}/ignition-browser-tools/node_modules
+          IGNITION_VISUAL_REVIEW: ${{ runner.temp }}/ignition-visual-review
         run: |
           mkdir "$RUNNER_TEMP/ignition-browser-tools"
           cp products/alpha-genesis-harness/tests/visual/package*.json "$RUNNER_TEMP/ignition-browser-tools/"
@@ -94,6 +121,15 @@ jobs:
         with:
           name: ignition-public-replay-${{ env.EXPECTED_SOURCE }}-attempt-${{ github.run_attempt }}
           path: ${{ runner.temp }}/FRONTIER_OMEGA_IGNITION.html
+          if-no-files-found: error
+
+      - name: Preserve desktop and mobile views of the public integrity replay
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: ignition-visual-review-${{ env.EXPECTED_SOURCE }}-attempt-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/ignition-visual-review/integrity-desktop.png
+            ${{ runner.temp }}/ignition-visual-review/integrity-mobile.png
           if-no-files-found: error
 
   model:

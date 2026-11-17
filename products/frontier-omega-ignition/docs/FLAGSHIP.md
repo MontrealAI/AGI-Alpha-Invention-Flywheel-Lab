@@ -66,3 +66,23 @@ For a fresh investigation, start the loopback service with an explicitly selecte
 ## Requalify the recorded artifacts against this checkout
 
 Run `python3 examples/requalify_recorded.py --output /tmp/ignition-recipient-replay` from the product directory, using a new output directory each time. The command verifies the archived run IDs, runtime mapping, input and archive identities. It freezes the original mission specifications again, evaluates the recorded programs using today's implementation, builds separate ZIPs, then starts each new recipient outside the source tree and checks its example output. No model calls or new research take place. Its new receipt identifies the historic runtime, current runtime, replay script, Python version and newly emitted bundles. Comparable verdicts and output data reproduce; fresh timing observations can change bundle bytes. [Historic per-file source identities](../evidence/assisted-runtime.json)
+
+## Try the receiver on a complete research edition
+
+The whole-directory qualification rebuilt the original PR #436 research edition from 15 pinned source files, and delivered a fresh, offline receiver for the resulting 15 files (239,857 bytes). Its reference includes a separately pinned digest for the sender's `ASSEMBLY.json` as well as the files that manifest lists. The received copy never supplies the trusted reference.
+
+| Delivery | Actual receiver observation | Exit |
+|---|---|---|
+| Original publication tree | All 15 files matched | 0 |
+| Modified HTML, missing browser test and extra stylesheet | Named `index.html` as changed, `tests/test_browser.py` as missing, `unlisted.css` as unexpected | 1 |
+| Replaced README and revised the received manifest to fit the replacement | Named both `README.md` and `ASSEMBLY.json` as changed | 1 |
+
+GNU Coreutils 9.7 with an independent full inventory returned the same three classifications. All source bytes and changes are public or synthetic. This is a deterministic integration check on a reconstructed publication tree; it establishes the receiver's file-level behavior. The experiment used zero model calls and no external customer delivery. [Full measurements and source identities](../evidence/release-handoff.json)
+
+From the product directory in a Git checkout containing `09e611c6df506ab24fba494b1ec41716e3721049`, run:
+
+```sh
+python3 examples/qualify_release_handoff.py --output /tmp/ignition-edition-handoff
+```
+
+If the original commit is in a separate checkout, supply `--reference-tree /path/to/that/checkout`. The script checks the exact input identities before executing the assembler. Open the fresh `research-edition-receiver.zip` in the output directory, extract it to a new location, and use `python3 -I run.py audit-directory /path/to/received-edition`. A nonmatching inventory returns exit 1; invalid input returns 2. This full-directory operation belongs to the new receiver. The two small historical ZIPs above preserve their earlier command interfaces.

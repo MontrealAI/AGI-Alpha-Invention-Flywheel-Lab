@@ -213,6 +213,11 @@ def _audit(program, payload):
             raise ConstructionError("invalid_value", "invalid base64 file bytes") from None
         require(base64.b64encode(data).decode("ascii") == encoded, "invalid_value", "noncanonical base64")
         actual[path] = hashlib.sha256(data).hexdigest()
+    return classify_manifest(trusted, actual)
+
+
+def classify_manifest(trusted, actual):
+    """Classify measured file identities against the same independently supplied manifest."""
     common = trusted.keys() & actual.keys()
     matched = sorted(name for name in common if actual[name] == trusted[name])
     changed = sorted(common - set(matched))

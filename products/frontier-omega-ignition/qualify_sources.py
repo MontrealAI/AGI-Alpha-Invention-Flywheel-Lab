@@ -16,8 +16,11 @@ from ignition.research import FEEDS, discover_sources
 PRODUCT = Path(__file__).resolve().parent
 REPO = PRODUCT.parents[1]
 FEED_KEYS = ["model-tooling", "distribution"]
+OPERATOR_URL = "https://github.com/jqlang/jq"
+OPERATOR_KEY = "github:jqlang/jq"
+REGISTERED = {**{key: FEEDS[key][0] for key in FEED_KEYS}, OPERATOR_KEY: "jqlang/jq"}
 MISSION = {"purpose": "Find publicly reported changes to local model tooling and package delivery.",
-           "requirements": [], "authority": {"public_sources": True}}
+           "requirements": [], "authority": {"public_sources": True}, "resources": {"public_repositories": [OPERATOR_URL]}}
 PATHS = [str(path.relative_to(REPO)) for path in (
     Path(__file__).resolve(), PRODUCT / "ignition/research.py", PRODUCT / "ignition/__init__.py",
     PRODUCT.parent / "alpha-genesis-harness/bridge")]
@@ -60,9 +63,12 @@ def qualify(data, began, ended, identity):
     for item in data["sources"]:
         try:
             key = item["feed"]
-            if key not in FEED_KEYS:
+            if key not in REGISTERED:
                 raise ValueError("Unregistered source feed")
-            repository = FEEDS[key][0]
+            repository = REGISTERED[key]
+            if key == OPERATOR_KEY and (item.get("acquisition") != "operator-authorized public repository"
+                                         or item.get("repository_url") != OPERATOR_URL):
+                raise ValueError("The operator repository arm lost its authority provenance")
             release = item.get("role") == "Published release"
             origin = f"https://api.github.com/repos/{repository}/"
             query = ("releases?per_page=3" if release else
@@ -91,7 +97,7 @@ def qualify(data, began, ended, identity):
                     raise ValueError("Earlier repository snapshot lacks a commit ID")
             if not isinstance(item["text"], str) or not item["text"].strip():
                 raise ValueError("No publisher text observed")
-            records.append({"feed": key, "publisher": item["publisher"], "version": item["version"],
+            records.append({"feed": key, "acquisition": item.get("acquisition"), "publisher": item["publisher"], "version": item["version"],
                             "role": "release" if release else "earlier commit", "source": item["url"],
                             "request": item["origin"], "published_at": item.get("published_at"),
                             "event_at": item["event_at"], "retrieved_at": item["retrieved_at"],
@@ -102,7 +108,7 @@ def qualify(data, began, ended, identity):
         except (KeyError, TypeError, ValueError) as exc:
             errors.append(str(exc))
     missing = []
-    for key in FEED_KEYS:
+    for key in REGISTERED:
         for role in ("release", "earlier commit"):
             if not any(r["feed"] == key and r["role"] == role for r in records):
                 missing.append({"feed": key, "role": role})
@@ -112,12 +118,12 @@ def qualify(data, began, ended, identity):
         status = "BLOCKED"
     else:
         status = "PASS"
-    return {"schema": "ignition-public-source-qualification/1", "status": status,
+    return {"schema": "ignition-public-source-qualification/2", "status": status,
             "source_identity": identity, "started_at": began.isoformat(), "finished_at": ended.isoformat(),
-            "window_start": cutoff.isoformat(), "registered_feeds": FEED_KEYS,
+            "window_start": cutoff.isoformat(), "registered_feeds": FEED_KEYS, "operator_repositories": [OPERATOR_URL],
             "observations": records, "failed_requests": data["failures"], "missing_roles": missing,
             "integrity_errors": errors, "capability_comparison": "unresolved",
-            "scope": "Checks dated live publisher observations and an earlier repository pointer for both feeds. "
+            "scope": "Checks dated live publisher observations and an earlier repository pointer for two curated feeds and one operator-specified repository. "
                      "Committer time does not certify public availability. No capability, product, cost, demand "
                      "or historical-impossibility test ran."}
 

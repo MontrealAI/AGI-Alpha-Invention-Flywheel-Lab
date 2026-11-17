@@ -41,6 +41,8 @@ Start from company purpose, beneficiary, and acceptance requirements. The brief 
 
 An existing specification supplies exact acceptance inputs before model construction. For a freeform ambition, the system can propose a bounded specification. Review it and supply fresh confirmation inputs before approving it. The builder receives public development examples and schema definitions. The verifier sees the frozen confirmation workload. A provider may share external context with an operator, so independence of the operator remains separately disclosed.
 
+A freshly generated release receiver also supports `python3 -I run.py audit-directory /path/to/release`. It streams real files and reports the complete inventory. The [full-edition experiment](evidence/release-handoff.json) exercises a 15-file delivery, including a deliberately rewritten manifest. A freshly exported migration supports `python3 -I run.py migrate-jsonl < input.jsonl > output.jsonl`; a bad row stops execution after the preceding valid prefix. The original recorded ZIPs retain their original commands. Generate current-source recipients with `python3 -B examples/requalify_recorded.py --output NEW_DIRECTORY`.
+
 Use `--state PATH` before the subcommand to choose a private directory. The default is `~/.frontier-ignition`. Use the same state path and provider options across CLI invocations.
 
 | Operation | CLI |
@@ -56,6 +58,8 @@ Use `--state PATH` before the subcommand to choose a private directory. The defa
 | Use a retained program as a candidate means in a new investigation | `python3 -m ignition successor RUN_ID new-mission.json --version 1 --request-id unique-successor-001 --rights "Specific rights basis"` |
 
 Reuse requires the original mission’s `allow_program_reuse` grant. The successor supplies its own authority and new acceptance conditions. Locally recorded program reuse does not prove an economic or discovery improvement. Each artifact link exposed by the live application requires an accepted current revision. The operator can inspect historical evidence separately.
+
+The [mechanism map](docs/MECHANISMS.md) traces the Eight Fundamental Mechanisms into research decisions, tests and their limits. To investigate a public repository beyond the curated monitors, specify its canonical GitHub repository URL in `resources.public_repositories` and explicitly grant public-source retrieval.
 
 ## Implementation and deployment
 

@@ -1,0 +1,127 @@
+{
+  "format": "ignition/public-release-handoff/v1",
+  "created_at": "2026-11-17T19:07:19.635092+00:00",
+  "source_url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/tree/09e611c6df506ab24fba494b1ec41716e3721049",
+  "revision": "09e611c6df506ab24fba494b1ec41716e3721049",
+  "assembler_inputs_sha256": "d19a7d9e0217e3d741e4b6e23705315c54c64209390fe862dc2e4421d062db49",
+  "pinned_assembly_sha256": "ddabff0bec7715860ee894d77607ff9570e836076a3626a9ab5de33a0b5d0f39",
+  "current_runtime_sha256": "88967a3fec44cbaf26e36aaf50c91b1402d3329a7d0f0e5842b8cb86d18255a7",
+  "qualification_script_sha256": "063d86bc4aa3ff11a64d9ae73788b9871d0a1795ddd3efe2a6094640cefdc3b3",
+  "python": "3.12.14",
+  "conventional": "sha256sum (GNU coreutils) 9.7 plus complete file-set comparison",
+  "execution": "New deterministic sender and recipient execution on public bytes; deliberately modified receiver copies.",
+  "trust": "The expected inventory and the digest of ASSEMBLY.json are fixed outside the received directories.",
+  "model_calls": 0,
+  "complete_cost": "unmeasured",
+  "cases": [
+    {
+      "scenario": "clean",
+      "result": {
+        "changed": [],
+        "matched": [
+          "ASSEMBLY.json",
+          "DEMO_SCRIPT.md",
+          "README.md",
+          "construction-core.js",
+          "ignition-ui.js",
+          "ignition.css",
+          "ignition.html",
+          "independent_check.py",
+          "index.html",
+          "studio-ui.js",
+          "studio.css",
+          "studio.html",
+          "tests/test_browser.py",
+          "tests/test_construction.cjs",
+          "tests/test_ignition.py"
+        ],
+        "missing": [],
+        "ok": true,
+        "unexpected": []
+      },
+      "matched_ordinary": true,
+      "receiver_exit": 0,
+      "receiver_wall_ns": 21357619,
+      "ordinary_wall_ns": 2990336
+    },
+    {
+      "scenario": "changed_missing_extra",
+      "result": {
+        "changed": [
+          "index.html"
+        ],
+        "matched": [
+          "ASSEMBLY.json",
+          "DEMO_SCRIPT.md",
+          "README.md",
+          "construction-core.js",
+          "ignition-ui.js",
+          "ignition.css",
+          "ignition.html",
+          "independent_check.py",
+          "studio-ui.js",
+          "studio.css",
+          "studio.html",
+          "tests/test_construction.cjs",
+          "tests/test_ignition.py"
+        ],
+        "missing": [
+          "tests/test_browser.py"
+        ],
+        "ok": false,
+        "unexpected": [
+          "unlisted.css"
+        ]
+      },
+      "matched_ordinary": true,
+      "receiver_exit": 1,
+      "receiver_wall_ns": 20506955,
+      "ordinary_wall_ns": 2643590
+    },
+    {
+      "scenario": "rewritten_received_reference",
+      "result": {
+        "changed": [
+          "ASSEMBLY.json",
+          "README.md"
+        ],
+        "matched": [
+          "DEMO_SCRIPT.md",
+          "construction-core.js",
+          "ignition-ui.js",
+          "ignition.css",
+          "ignition.html",
+          "independent_check.py",
+          "index.html",
+          "studio-ui.js",
+          "studio.css",
+          "studio.html",
+          "tests/test_browser.py",
+          "tests/test_construction.cjs",
+          "tests/test_ignition.py"
+        ],
+        "missing": [],
+        "ok": false,
+        "unexpected": []
+      },
+      "matched_ordinary": true,
+      "receiver_exit": 1,
+      "receiver_wall_ns": 19240382,
+      "ordinary_wall_ns": 2736459
+    }
+  ],
+  "artifact_sha256": "2b1d3352783660fb9b332e4937fc27190bd7c1f35e0f928e060f716a434bc795",
+  "contract_sha256": "6ee901f903d8cc5e42e0eff3db5530ad2e6681cd82466301a3c146eb53f243ab",
+  "package_sha256": "09a70c84dd05dc7a9124acc87ae32a8655a0110e0f6e0f5b26a9b7ae618d414d",
+  "public_files": 15,
+  "public_bytes": 239857,
+  "receiver_verification": {
+    "status": "pass",
+    "contract_sha256": "6ee901f903d8cc5e42e0eff3db5530ad2e6681cd82466301a3c146eb53f243ab",
+    "artifact_sha256": "2b1d3352783660fb9b332e4937fc27190bd7c1f35e0f928e060f716a434bc795",
+    "cases": 6,
+    "comparison": "tie"
+  },
+  "total_wall_ns": 175813416,
+  "economics": "Both routes met all three frozen file-level outcomes. Single local timings cover process and data handling only. Buyer demand, installation, review, engineering and support costs were not measured."
+}
