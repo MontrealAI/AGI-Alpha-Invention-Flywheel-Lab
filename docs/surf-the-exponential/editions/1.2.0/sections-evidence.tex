@@ -1,0 +1,141 @@
+\section{Exact review audit: useful challenge has a boundary}
+\label{sec:study}
+\subsection{What was executed}
+Complementing the executed construction in Section~\ref{sec:construction}, the review audit uses Python's standard library and exact rational arithmetic for one pre-specified defect proposition per episode. One implementation evaluates Equation~\eqref{eq:value}; a separately written checker enumerates the eight truth/criticism/acceptance branches, with zero mass assigned to acceptance when no criticism exists. The checker verifies probability conservation, true and false acceptance, escaped material flaws, expected utility and each prescribed decision. It reads the published protocol and results without importing the producer's calculation functions.
+
+This is an authored arithmetic experiment. The supplied parameters describe possible regimes; they are not estimates of any model, reviewer, industry or customer. They validate the implementation of the conditional accounting and make favorable and unfavorable consequences reproducible. The independent computation is a separate code path within the same publication process, not independent institutional replication. No statistical confidence interval or measured LLM-accuracy claim follows from enumerating a supplied distribution.
+
+\subsection{Six scenarios, including five reasons to stop reviewing}
+In the reference case, material flaws occur with probability $\pi=0.25$, a critic detects them with $d=0.80$, and adjudication accepts detected true criticisms with $a=0.90$. The false-criticism rate is $f=0.10$, false acceptance is $b=0.05$, the conditional gain is $G=100$, the conditional harm is $H=30$, and total expected review cost is $K=8$. All payoffs use \emph{arbitrary utility units}. The complete change is
+\begin{equation}
+0.25(0.80)(0.90)(100)-0.75(0.10)(0.05)(30)-8=9.8875.
+\end{equation}
+The material-flaw mass escaping accepted challenge is $0.25(1-0.80\cdot0.90)=0.07$. The result is useful within its assumptions, while leaving a nonzero discovery failure.
+
+\begin{table}[htbp]
+\centering\small
+\input{evidence/results_table.tex}
+\caption{Exact authored scenarios. The baseline is retaining the incumbent without additional review, with incremental value zero. ``Escaped'' denotes the target material defect receiving no accepted challenge under the evaluated review route. It is not a post-repair error rate or the realized defect rate of the selected action. If review is declined, the corresponding target-defect mass remains $\pi$. The full parameters and rational values are in the companion.}
+\label{tab:results}
+\end{table}
+
+The shared-blind-spot case changes detection to $d=0.10$, making review lose $5.8625$. A weak-adjudication case combines rare true flaws with frequent false criticisms and harmful false repairs, losing $21.9$. Expensive review, low-consequence omissions, and a perfect checker paired with poor discovery also lose. These cases are part of the result. They show why ``add another critic'' is not a complete operating principle.
+
+\subsection{Conventional controls must be allowed to win}
+Accepting every criticism in the reference case, using the same stipulated total review cost, yields $9.75$. Selective adjudication gains only $0.1375$ in that specific comparison. An additional verification charge larger than that amount would reverse this small advantage if the other parameters remained unchanged. Strong adjudication is useful when the harm it prevents justifies its expense and any rejected true repairs.
+
+An equally equipped conventional review process with identical conditional rates, payoff effects and costs ties at $9.8875$. The same process with review cost $K=7$ wins at $10.8875$. A cost-free perfect-information control reaches $25$ only as an explicitly unavailable idealization. It is an upper reference for this specified repair payoff, not a deployable competitor or a bound on every possible invention.
+
+\begin{seabox}
+\textbf{The arithmetic rewards useful evidence, not the name of the machinery.}\par
+When ordinary review supplies the same evidence at lower complete cost, ordinary review is the better route. A claim of added intelligence must identify and measure the difference it actually creates.
+\end{seabox}
+
+\subsection{Sensitivity and independence checks}
+The protocol fixes 2,304 combinations of target-defect prevalence, detection, false criticism, true acceptance, false acceptance and review cost. Exactly 431 have positive incremental review value, 224 have zero value, and 1,649 have negative value. The companion checks every combination against independent branch enumeration. The output records the exact grid cardinality, positive/zero/negative counts, and equality checks. These counts describe the declared parameter grid; they are not frequencies of useful review in the real world, and a uniformly enumerated grid is not an empirical prior over operating conditions.
+
+The companion also evaluates the two-critic calculation in Equation~\eqref{eq:correlation} and basic union bounds without assuming independent errors. Boundary and mutation tests check impossible probabilities, negative disallowed costs, exact conservation and corrupted result rejection. A successful audit establishes that the implementation matches the declared model, not that the model describes current frontier systems.
+
+\subsection{What remains outside this result}
+No model generated these scenario parameters by observing a task population. No book was sampled for a controlled summary experiment. No industrial instrument was qualified, no buyer accepted terms, and no revenue was collected. The finite constructor demonstrates an artifact and a successor within supplied task semantics; this review audit demonstrates an accounting boundary. Neither establishes superiority to a direct frontier agent, new-market discovery, or improved future invention. Those stronger claims require the following campaign-level comparisons.
+
+\section{The experiment that could establish the stronger claim}
+\label{sec:empirical}
+\subsection{Begin with three separate task families}
+\textbf{Source-grounded understanding.} Use public-domain or otherwise authorized books and long documents with fixed editions. Define the intended reader, question, output format, length and attention budget. Independent assessors identify material omissions and reasonable omissions before viewing arm identities. Include naturally occurring mistakes, planted mistakes and already-adequate summaries. Artificial defects test sensitivity; they do not substitute for the natural-error distribution.
+
+\textbf{Constructive technical work.} Use tasks with executable acceptance checks and consequential counterexamples. Require the system to build or procure a working response, not merely identify a flaw. Include cases in which the best response changes the representation or information procedure and cases in which the existing implementation should remain. Hide complete task families during development.
+
+\textbf{Productive arrangements.} Use explicit outcome, participant, rights, cash and failure contracts. Separate supplied-model experiments from authorized real engagements. A candidate market must pass the technical and commercial acceptance appropriate to its claim. Do not average a failed physical condition or missing consent away with a favorable language score.
+
+The result for one family does not certify the others. Source-grounded omission detection is a useful first test precisely because its reference boundary is clearer than the space of possible scientific or economic constructions.
+
+\subsection{Comparators that isolate the mechanism}
+The experiment should compare the following complete routes under matched permitted source access, tools, acceptance requirements and resource envelopes. Report actual resources consumed; do not force an efficient method to waste its unused budget.
+\begin{table}[htbp]
+\small
+\begin{tabularx}{\textwidth}{P{1.52in}Y}
+\toprule
+\textbf{Route} & \textbf{Question it helps answer}\\
+\midrule
+Direct frontier execution & Does added machinery beat competent direct use of the same capability?\\
+Matched extra search or self-review & Is any gain explained by more computation or another attempt?\\
+Independent sampling with selection or voting & Is interaction useful beyond a strong ensemble with the same resources?\\
+Constructive alternatives without adversarial wording & Is the effect due to critical orientation, or simply asking for a better complete route?\\
+Evidence-grounded challenge plus adjudication & Does locating and verifying consequential gaps improve the complete outcome?\\
+Evidence-preserving production & Is it better to organize the source and dependencies before generating the candidate?\\
+Competent conventional construction & Can an equally informed established method or specialist achieve the result more effectively?\\
+Retain the incumbent or do not enter & Is any change justified after its cost and introduced risk?\\
+\bottomrule
+\end{tabularx}
+\caption{A claim-matched comparison set. A task may omit an inapplicable arm with an explicit reason, but should not weaken a serious alternative to manufacture advantage.}
+\end{table}
+
+Prior work motivates both positive and skeptical controls. Multiagent debate improved investigated reasoning and factual tasks \citep{multidebate}; another study found that majority voting explained much of debate's gain across seven NLP benchmarks \citep{voting}. Those findings concern their tested systems and conditions. They neither guarantee nor rule out useful evidence-producing challenge here. Experiments on intrinsic self-correction also motivate measuring harmful revisions instead of assuming that reflection improves an answer \citep{selfcorrection}.
+
+If reporting economic labor productivity, keep the project's primary comparison distinct: competent frontier AI operation versus competent human workers using conventional software without frontier AI. Preserve conventional software's genuine automation and count human wages and overhead where modeled. Human-plus-AI providers, other autonomous providers, self-service and non-entry remain separately important market outside options. A methodological ablation against the same model answers a different causal question; it does not replace the human productivity comparison.
+
+\subsection{Separate discovery, adjudication and repair}
+Measure at least three conditional transitions: whether the challenger found a material issue; whether the adjudicator correctly accepted or rejected it; and whether the response improved the final required outcome. Report false accusations, valid but immaterial criticisms, unresolved cases, harmful revisions, and costs at each transition. A score for well-written objections cannot stand in for any of these outcomes.
+
+Include source inspection before seeing the producer's answer as well as afterward, to measure anchoring. To isolate discovery from repair, supply the \emph{same validated witness} to each repair arm. To isolate evidence access from critical framing, give a non-adversarial constructor the same source and tool permissions. To test whether source-first production helps, compare its complete construction and maintenance costs with post-hoc criticism. To test aggregation, compare voting or selection with the same number and resource envelope of independent candidate generations. Clearly identify which roles actually used distinct model families and which were separate instances of one model.
+
+Controlled information-asymmetry experiments suggest debate can help less-informed judges evaluate better-informed experts \citep{debate_truth}. The corresponding lesson here is to specify the evidence available to every role. A critic given additional pages, tools or time may win because it received better information. That can be operationally valuable; it does not isolate the benefit of adversarial interaction.
+
+\subsection{Define the outcome before the campaign}
+A suitable primary measure is independently confirmed improvement in a declared task utility after all incremental costs, with acceptance constraints enforced separately. Where no accepted scalar utility exists, report outcome quality, time, resource consumption and harmful-revision rates together. Raw objection count is not a useful primary metric.
+
+Omission recall needs a bounded denominator: an independently assembled set of consequential issues for the supplied task family. It never measures recall over the universe of possible inventions. Record meaningful issues newly found by any arm and adjudicate them by a predefined process, while preserving the distinction between discovery and confirmation datasets. Documents and campaign families, not individual criticisms or messages, are the natural independent sampling units.
+
+Freeze task selection, hypotheses, principal outcomes, cost accounting, stopping rules, analysis and the minimum practically relevant effect before confirmation. Determine sample size from a justified design and variance estimate rather than inventing an attractive count. Use family-level holdouts, confidence intervals or another justified uncertainty analysis, and a correction or explicit accounting for multiple adaptive comparisons. Report all registered arms, failed attempts and interventions. Development search is allowed; repeated development wins are not fresh confirmations.
+
+\subsection{Adversarially test the review process itself}
+The confirmation set should include a correct candidate paired with a persuasive false criticism, a true but irrelevant omission, a misquoted source, a valid diagnosis with a harmful remedy, and a shared-source failure that misleads several reviewers. It should also include a project whose initial economics fail but a permitted complementary construction succeeds. This last case detects the \emph{pessimism trap}: a system that becomes skilled at objections while failing to search for enabling responses.
+
+Blind arm identities and randomize presentation where appropriate. Model judges can display position, verbosity and self-enhancement biases \citep{judge}. Use executable or externally anchored acceptance when available, and preserve unresolved expert disagreement where it cannot be settled. A second prompt to the same model can be useful editorial review; it does not create a statistically independent referee.
+
+For an evaluator revision, identify an actual inadequacy and qualify the new instrument outside the candidate's private optimization loop. Keep a common comparison across arms. The desired claim is that the world, source or required outcome supports the improvement, not that the candidate learned to satisfy its preferred judge.
+
+\section{Compound the means, then test the inventor}
+\label{sec:compound}
+\subsection{Three assets can survive a successful turn}
+A productive response can leave a \emph{working instrument}: code, a test, a measurement procedure, an interface or a qualified production method. It can leave an \emph{applicability model}: when the instrument is useful, which assumptions matter, and what invalidates it. It can also leave a \emph{constructor}: an executable procedure that builds or adapts related instruments. These are different assets, and each can be retained or retired independently \citep[\S3.3]{boucher_genesis}.
+
+FunSearch supplies an instructive established example of searching for programs that generate solutions and checking them with a systematic evaluator in particular mathematical and algorithmic domains \citep{funsearch}. It motivates retaining useful executable structure. It does not establish that the present institution can invent its own reliable evaluator, form markets, or finance an open-ended discovery process.
+
+Archive a compact useful asset with its source identity, required interfaces, evidence, full acquisition cost and invalidation conditions. Section~\ref{sec:construction} shows why the smallest current observation is not automatically the most useful inheritance: the successor can require a distinction already discarded. Retaining raw data, a richer representation or a constructor has different rights, storage and adaptation costs. Preserve essential negative results as compact tests or lessons. Retention is not a requirement to preserve every transcript, and deleting redundant transcripts is not permission to erase incurred costs or unfavorable outcomes.
+
+\subsection{Financed by, enabled by, and discovered better}
+A successor can be related to earlier work in three materially different ways:
+\begin{enumerate}
+\item \textbf{Financed by.} Actual unrestricted earnings from the earlier activity fund a specified later action after obligations are protected. The claim needs a reconciled cash history.
+\item \textbf{Enabled by.} A capability or relationship created earlier makes the successor feasible or meaningfully better. Compare with the strongest feasible route without that asset, including fresh reconstruction, under matched starting resources.
+\item \textbf{Discovered better.} The updated discovery procedure finds or constructs valuable successors more effectively on fresh campaigns with equivalent information, tools and resources. Extra equipment or a supplied solution does not by itself establish this claim.
+\end{enumerate}
+Chronology proves none of them. A later success can benefit from a newly released foundation model, a hand-designed repair or a larger budget. Report those contributions. Program accounting includes acquisition, unsuccessful development and maintenance. Prospective reuse decisions should not charge the same historical sunk cost again, but must include incremental adaptation, validation, replacement and opportunity costs.
+
+\subsection{A complete turn of the proposed flywheel}
+A demanding but comprehensible operating demonstration is:
+\begin{thesisbox}
+\textbf{Find a valuable problem. Construct what solves it. Deliver an accepted result. Use the earnings and what was learned to unlock a different opportunity.}
+\end{thesisbox}
+For the new mechanism, add a traceable causal link: a supported challenge exposed the missing condition; a tested response addressed it; the complete route beat a serious available alternative or satisfied a previously blocked requirement; and the successor comparison identifies what the retained means actually changed. Where external agreement or delivery has not occurred, preserve the result as research rather than filling in the missing transaction.
+
+The machinery should be capable of abandoning its own inventions. A new model can make an elaborate workflow obsolete. A retained tool can become too expensive to revalidate. A conventional alternative can overtake the institution. Retiring inferior machinery is consistent with compounding useful capability: the object is better attainable outcomes, not a steadily growing archive or agent population.
+
+\subsection{Surfing the exponential is a strategy, not a growth theorem}
+An external frontier can advance quickly while an enterprise stalls on measurement, integration, demand, financing or physical execution. Let a useful operating advantage depend on the value of a verified capability delta, the delay until accepted deployment, the duration before alternatives catch up, and the complete cost of conversion. Better frontier awareness alone improves none of those factors automatically. Constructive challenge aims to shorten avoidable delay and reveal valuable alternatives while preserving evidence and cost discipline.
+
+The horizon can extend from software instruments to scientific tools, new manufacturing capabilities and greater productive capacity. Each step must acquire its own physical evidence, resources, acceptance and obligations. A computational result does not install a machine, and a successful first machine does not establish unlimited scale. Open-ended ambition is compatible with finite, consequential tests that show exactly which next capability became reachable.
+
+The deepest proposed advantage is therefore not ownership of a permanent best model. It is a tested ability to recognize valuable changes, construct the missing connections, realize their benefits, and improve the next search. The paper calls that ambition \emph{surfing the exponential}; it does not infer an exponential business trajectory from the phrase.
+
+\section{Conclusion: make the next possibility real}
+The book-summary example reveals an important asymmetry. A second intelligence can sometimes expose a decisive omission that the reader could not easily find alone. Its criticism becomes useful when evidence makes it inspectable. The next step is constructive: determine whether the verified gap points to a fact to recover, an instrument to invent, a capability to build, or an arrangement to redesign.
+
+Within ALPHA GENESIS FLYWHEEL $\Omega$, this turns challenge into a bridge between the frontier and productive possibility. Transformational Intelligence keeps the intended outcome separate from inherited means. Invent the Economy makes cooperation, risk and timing part of the construction. Frontier Replay asks when a change in available intelligence makes a consequential missing move newly affordable.
+
+The executed case supplies a concrete beginning: a missing distinction becomes a verified instrument; a changed question reveals its limit; the constructor produces a successor while conventional methods tie. The decision compiler goes further: it constructs enough information to choose a valid action, or adopts a robust action that removes the information dependency. Its three-way witness also shows why individually or pairwise plausible plans may lack a common implementable policy. The refund counterexample then exposes a different omission: a successful cash path can hide an unfunded promise. The review audit establishes a further boundary: criticism can create value, waste resources or cause harm. The proposed empirical programme asks whether the complete mechanism improves consequential work under capable alternatives and fresh conditions. Its stronger achievement would be visible in accepted outcomes, justified costs, useful inherited means and better subsequent discoveries.
+\begin{thesisbox}
+\large\bfseries Find what the answer missed.\\Build what the world is missing.
+\end{thesisbox}

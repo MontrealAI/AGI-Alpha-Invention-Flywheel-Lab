@@ -1,0 +1,64 @@
+{
+  "schema_version": "1.0.0",
+  "case_id": "task-relative-construction-and-refundable-cash",
+  "status": "authored_finite_demonstration",
+  "domain": {
+    "reading_values": [60, 80, 100],
+    "readings_per_state": 2,
+    "state_order": "lexicographic_ordered_pairs"
+  },
+  "primary": {
+    "predicate": "every_reading_at_most_threshold",
+    "thresholds": [60, 80, 90, 100]
+  },
+  "successor": {
+    "predicate": "every_reading_in_closed_interval",
+    "intervals": [[60, 60], [60, 80], [60, 100], [80, 80], [80, 100], [100, 100]]
+  },
+  "patch_threshold": 90,
+  "representations": [
+    "mean_only",
+    "constructed_primary",
+    "conventional_maximum",
+    "mean_plus_flag",
+    "constructed_successor",
+    "conventional_minimum_maximum",
+    "raw_ordered_pair"
+  ],
+  "construction_contract": {
+    "input": "Complete declared finite source domain and required query semantics.",
+    "output": "Canonical state-to-label encoder, label-to-answer decoder, and pairwise separating query witnesses.",
+    "label_order": "First appearance of each answer signature in lexicographic state order.",
+    "query_timing": "Choose one representation before knowing which query will be asked; it must serve the complete declared task family.",
+    "successor_source_access": "Fresh authorized source states are available; discarded readings cannot be recovered from old labels.",
+    "control_source_access": "Conventional controls receive the identical source states and query semantics.",
+    "cost_measure": "Number of distinguishable labels only; no byte, token, compute, engineering, or market cost claim."
+  },
+  "finance": {
+    "unit": "illustrative_units",
+    "construction_cost": 60,
+    "delivery_cost_per_buyer": 15,
+    "buyers": [
+      {"id": "buyer_1", "value_relative_to_outside_option": 70, "price_on_acceptance": 60},
+      {"id": "buyer_2", "value_relative_to_outside_option": 70, "price_on_acceptance": 60}
+    ],
+    "refundable_advance_total": 40,
+    "opening_cash_values": [50, 90],
+    "cost_timing": "Pay all construction and delivery costs before final acceptance and any remaining receipts.",
+    "success_contract": "Every buyer receives an accurate accepted artifact and pays the stated total price, including any advance.",
+    "failure_contract": "Failure occurs after all stipulated costs; no remaining receipts are paid and the entire advance is refunded.",
+    "cost_scope": "All modeled preparation, delivery, coordination, checking, and support are included in these costs; no further service or replacement obligation is promised.",
+    "comparison_scope": "Separate construction pays the fixed cost for each buyer; an ordinary shared provider has exactly the same costs as the shared construction.",
+    "participation_model": "Risk-neutral operator with outside option zero; buyers have no delay or risk costs, receive value only on successful delivery, and receive full refunds on failure. Inequalities establish modeled incentives, not actual consent.",
+    "success_probability_points": ["0", "1/2", "3/4", "1"],
+    "construction_cost_sweep": {"minimum": 0, "maximum": 120, "step": 1},
+    "sweep_opening_cash": 50
+  },
+  "scope": [
+    "An authored deterministic finite example, not measured model performance, physical measurement, or an executed commercial transaction.",
+    "The constructor uses ordinary task-relative partition construction; conventional maximum and minimum/maximum controls match the appropriate label counts.",
+    "No empirical improvement in invention ability, total cost, or business value is claimed.",
+    "Financial amounts, participant values, timing, and the two outcome paths are stipulated assumptions, not observed market evidence or probabilities.",
+    "Cash sufficiency covers the two declared complete paths only; no expected return, other outcome distribution, or broader risk model is inferred."
+  ]
+}
