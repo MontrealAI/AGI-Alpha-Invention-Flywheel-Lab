@@ -70,7 +70,7 @@ def validate(root: Path = ROOT):
                     "first_discriminating_test"):
             if not isinstance(o.get(key), str) or not o[key].strip():
                 raise InventoryError(o["id"] + ": missing " + key)
-        if o["engine"] not in {"MIGRATE", "PROVE", "OPERATE", "TRUST", "ENGINEER", "DISCOVER"}:
+        if o["engine"] not in {"MIGRATE", "PROVE", "OPERATE", "TRUST", "ENGINEER", "DISCOVER", "COMPUTE"}:
             raise InventoryError(o["id"] + ": unknown engine")
         if not o["frontier_signal_ids"] or any(x not in signals for x in o["frontier_signal_ids"]):
             raise InventoryError(o["id"] + ": unknown/missing source signal")
