@@ -56,3 +56,5 @@ For continuous polling, omit --once; the default polling interval is one hour, a
 Only exact configured owner/repository identifiers are permitted. URLs are constructed for api.github.com and redirects are refused. Upstream responses are bounded; source errors create no capability claim. Stable release identities are deduplicated across days, preserving the original observation date, and create only the preexisting inventory's INVESTIGATE_ONLY matching triggers.
 
 A GitHub release announcement is *never* a benchmark: the stored availability status is REPORTED. Successful agent performance, historical reproducibility, customer demand, costs and payment must be tested separately. Polling makes only explicit, authorized public GET requests and has no financial authority.
+
+**Single-writer operation:** When using continuous release sensing, run the release-radar watch as the sole process for that private inventory. It ingests local inbox records and polls the configured public release endpoints within the same writer lease. Do not start the original inbox-only watch simultaneously on the same private directory.
