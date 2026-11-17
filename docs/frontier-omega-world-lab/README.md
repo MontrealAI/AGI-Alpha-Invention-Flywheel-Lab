@@ -6,7 +6,7 @@
 
 ## Open the lab
 
-Double-click `index.html` in a modern browser. No server, API key, subscription, account, network connection or installation is needed for the **offline functionality**. Clicking primary-source links requires an internet connection.
+In a checked-out repository, open `docs/research/frontier-omega-world-lab.html` in a modern browser. The accompanying standalone ZIP also provides an `index.html` and an offline independent Python replay. No server, API key, subscription, account, network connection or installation is needed for the **offline functionality**. Clicking primary-source links requires an internet connection.
 
 The experience has two distinct, clearly labeled layers:
 
@@ -19,11 +19,15 @@ The experience has two distinct, clearly labeled layers:
 3. **Invent the Economy.** Recomputes the exact, stipulated four-buyer case: expected contribution +120 illustrative units, with a prerequisite 900-unit prefunding cash path. Change buyer count, construction cost, qualification probability or actual starting cash and the decision can fail. Competent unrestricted commercial construction may reach the same arrangement. These are *not observed buyers, sales or profit*.
 4. **Learning to Build.** Compiles arithmetic measurement instruments from the original 1.0.0 authored four specification schemas, with original coefficients and acceptance thresholds. Exhaustively checks 125 + 125 + 625 + 3125 = 4,000 input records against a separate reference interpreter. Downloads a real standalone HTML instrument for any selected task. The compiler is developer-supplied, not learned by AI; ordinary interpretation ties. No open-ended autonomous invention claim.
 
-`independent_replay.py` is a *separate Python reimplementation* of the underlying finite experiments, using exact rational arithmetic for the market and the original public author-specified affine calibration rules. It writes `EVIDENCE.json`, including an SHA-256 checksum for the HTML. This checksum binds file bytes, not model provenance or third-party validation.
+The standalone ZIP includes `independent_replay.py`, a *separate Python reimplementation* of the underlying finite experiments, using exact rational arithmetic for the market and the original public author-specified affine calibration rules. It writes `EVIDENCE.json`, including an SHA-256 checksum for the HTML. This checksum binds file bytes, not model provenance or third-party validation.
 
 ### Test commands
 
 ```bash
+# Repo: run the published dependency-free JavaScript research tests
+node --test tests/test_frontier_omega_world_lab.cjs
+
+# Standalone ZIP: independent Python replay and optional browser test
 python3 independent_replay.py
 python3 -m unittest discover -s tests -v
 ```
