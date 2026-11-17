@@ -46,8 +46,11 @@ def ignite(engine, reservoir, poll, *, cycles=None):
         name="frontier-qualified-inbox", daemon=True,
         target=lambda: worker(lambda: inbox.watch(
             interval=poll, stopped=stop.is_set)))
-    signal.signal(signal.SIGTERM, lambda *_: stop.set())
-    signal.signal(signal.SIGINT, lambda *_: stop.set())
+    old_signals = {}
+    if threading.current_thread() is threading.main_thread():
+        for sig in (signal.SIGTERM, signal.SIGINT):
+            old_signals[sig] = signal.getsignal(sig)
+            signal.signal(sig, lambda *_: stop.set())
     sensor.start()
     converter.start()
     try:
@@ -57,6 +60,8 @@ def ignite(engine, reservoir, poll, *, cycles=None):
         stop.set()
         sensor.join(timeout=10)
         converter.join(timeout=10)
+        for sig, previous in old_signals.items():
+            signal.signal(sig, previous)
         if sensor.is_alive() or converter.is_alive():
             raise RuntimeError("FRONTIER_WORKER_FAILED_TO_STOP")
     if errors:
@@ -93,7 +98,7 @@ def main():
         result = {
             "alpha_engine": doctor(cfg),
             "conversion": "NO_PURCHASE_FROM_FRONTIER_SIGNAL_ALONE",
-            "external_payment_and_treasury_ready": False
+            "external_payment_and_treasury_qualification": "NOT_EVALUATED_OFFLINE"
         }
     else:
         reservoir = Reservoir(args.reservoir_root)

@@ -132,7 +132,7 @@ class ConversionTests(unittest.TestCase):
         second = submit_qualified(self.engine, self.reservoir, self.bundle, now=self.now)
         self.assertEqual(first["job"], second["job"])
         self.assertEqual(len(self.engine.state.summary()["jobs"]), 1)
-        self.assertEqual(list((self.engine.root / "frontier-links").glob("*.json")).__len__(), 1)
+        self.assertEqual(len(list((self.engine.root / "frontier-links").glob("*.json"))), 1)
 
     def test_public_source_signal_without_trails_never_creates_paid_order(self):
         with self.assertRaisesRegex(ValueError, "MATCHED_REPORTED_CROSSING_REQUIRED"):
@@ -216,7 +216,6 @@ class ConversionTests(unittest.TestCase):
         self.register()
         class ExternalStub:
             policy = {"scope": "EXTERNAL_LIVE"}
-            root = Path(self.root) if False else None
         external = ExternalStub()
         external.root = self.root / "external"
         with self.assertRaisesRegex(PermissionError, "SCENARIO_NOT_LIVE"):
@@ -280,6 +279,214 @@ class ConversionTests(unittest.TestCase):
         self.assertEqual(output["engine"]["actual_collections"], 0)
         self.assertTrue((self.engine.root / "outbox" / identifier(self.c) / "solution.zip").exists())
 
+    def test_reported_costs_below_engine_worst_case_are_refused(self):
+        self.reservoir.add(make_trial(
+            self.c, PROBLEM, BEFORE, "frozen-old", self.old,
+            run_on="2026-11-16", costs_microUSD=numeric(13_000_000),
+            acceptance_probability_bps=9500, scope="AUTHORED_SCENARIO"))
+        self.reservoir.add(make_trial(
+            self.c, PROBLEM, AFTER, "frozen-new", self.current,
+            run_on="2026-11-16", costs_microUSD=numeric(500_000),
+            acceptance_probability_bps=9500, scope="AUTHORED_SCENARIO"))
+        with self.assertRaisesRegex(ValueError, "FULL_COST_UNDERSTATES"):
+            self.preflight()
+
+    def test_signed_purchase_with_unacceptable_outside_option_refused(self):
+        self.register()
+        altered = copy.deepcopy(self.bundle)
+        c = altered["buyer_envelope"]["body"]["contract"]
+        c["outside_option_microUSD"] = c["price_microUSD"] - 1
+        altered["buyer_envelope"] = sign(altered["buyer_envelope"]["body"], KEY)
+        with self.assertRaisesRegex(ValueError, "OUTSIDE_OPTION_LOSES"):
+            admission_preflight(self.reservoir, altered, {self.c["buyer"]: KEY}, now=self.now)
+
+    def test_customer_signs_request_then_independently_checks_delivered_bytes(self):
+        from connected_enterprise.alpha_economic.frontier_buyer import (
+            sign_request, sign_verified_delivery, verify_archive)
+        from connected_enterprise.alpha_economic.delivery import package
+        from connected_enterprise.alpha_economic.commerce import acceptance
+        from connected_enterprise.alpha_economic.core import authenticate
+        envelope = sign_request(self.c, KEY, now=self.now)
+        self.assertEqual(
+            authenticate(envelope, KEY, kind="request", now=self.now)["buyer"],
+            self.c["buyer"])
+        artifact = {
+            "schema": "alpha-economic/artifact/v1",
+            "contract_sha256": digest(self.c),
+            "instrument": self.current,
+            "provenance": {"kind": "AUTHORED_BUYER_FIXTURE_NOT_INDEPENDENT_CUSTOMER"}
+        }
+        receipt = package(self.c, artifact, self.root / "buyer-delivery")
+        archive = (self.root / "buyer-delivery" / "solution.zip").read_bytes()
+        result = verify_archive(archive, receipt, artifact, self.c)
+        self.assertTrue(result["verified"])
+        signed = sign_verified_delivery(
+            self.c, artifact, receipt, archive, KEY, now=self.now)
+        self.assertTrue(
+            acceptance(signed, self.c, artifact, receipt, KEY, self.now)["accepted"])
+
+    def test_buyer_fails_closed_on_modified_package_and_claimed_acceptance(self):
+        from connected_enterprise.alpha_economic.frontier_buyer import (
+            sign_verified_delivery)
+        from connected_enterprise.alpha_economic.delivery import package
+        artifact = {
+            "schema": "alpha-economic/artifact/v1",
+            "contract_sha256": digest(self.c),
+            "instrument": self.current,
+            "provenance": {"kind": "AUTHORED_FIXTURE"}
+        }
+        receipt = package(self.c, artifact, self.root / "buyer-delivery")
+        archive = (self.root / "buyer-delivery" / "solution.zip").read_bytes()
+        with self.assertRaisesRegex(ValueError, "PACKAGE_DIGEST_CHANGED"):
+            sign_verified_delivery(
+                self.c, artifact, receipt, archive[:-1] + b"x", KEY, now=self.now)
+        changed_receipt = copy.deepcopy(receipt)
+        changed_receipt["files"]["instrument.json"] = "0" * 64
+        with self.assertRaisesRegex(ValueError, "MANIFEST_CHANGED"):
+            sign_verified_delivery(
+                self.c, artifact, changed_receipt, archive, KEY, now=self.now)
+        changed_artifact = copy.deepcopy(artifact)
+        changed_artifact["instrument"]["outputs"]["served"] = 999
+        with self.assertRaises(ValueError):
+            sign_verified_delivery(
+                self.c, changed_artifact, receipt, archive, KEY, now=self.now)
+        with self.assertRaisesRegex(ValueError, "DEADLINE_EXPIRED"):
+            sign_verified_delivery(
+                self.c, artifact, receipt, archive, KEY,
+                now=self.c["expires_at"])
+
+    def test_buyer_refuses_checker_rejected_delivery_even_with_valid_archive(self):
+        from unittest.mock import patch
+        from connected_enterprise.alpha_economic.frontier_buyer import sign_verified_delivery
+        from connected_enterprise.alpha_economic.delivery import package
+        artifact = {
+            "schema": "alpha-economic/artifact/v1",
+            "contract_sha256": digest(self.c),
+            "instrument": self.current,
+            "provenance": {"kind": "AUTHORED_FIXTURE"}
+        }
+        receipt = package(self.c, artifact, self.root / "buyer-decision")
+        archive = (self.root / "buyer-decision" / "solution.zip").read_bytes()
+        with patch("connected_enterprise.alpha_economic.frontier_buyer.checker.verify",
+                   return_value={"accepted": False}):
+            with self.assertRaisesRegex(ValueError, "BUYER_CHECKER_REJECTED_DELIVERY"):
+                sign_verified_delivery(
+                    self.c, artifact, receipt, archive, KEY, now=self.now)
+
+    def test_customer_owned_cli_generates_request_and_verified_acceptance(self):
+        import os
+        import subprocess
+        import sys
+        from connected_enterprise.alpha_economic.delivery import package
+        from connected_enterprise.alpha_economic.commerce import acceptance
+        folder = self.root / "buyer"
+        folder.mkdir(mode=0o700)
+        contract_path = folder / "contract.json"
+        contract_path.write_text(json.dumps(self.c))
+        archive_folder = folder / "delivery"
+        artifact = {
+            "schema": "alpha-economic/artifact/v1",
+            "contract_sha256": digest(self.c),
+            "instrument": self.current,
+            "provenance": {"kind": "AUTHORED_FIXTURE"}
+        }
+        receipt = package(self.c, artifact, archive_folder)
+        artifact_path = folder / "artifact.json"
+        artifact_path.write_text(json.dumps(artifact))
+        receipt_path = folder / "receipt.json"
+        receipt_path.write_text(json.dumps(receipt))
+        archive_path = archive_folder / "solution.zip"
+        keyvar = "ALPHA_CUSTOMER_TEST_KEY"
+        environment = dict(os.environ, **{keyvar: KEY.decode()})
+        common = [
+            sys.executable, "-m",
+            "connected_enterprise.alpha_economic.frontier_buyer_cli",
+            "--contract", str(contract_path), "--buyer-key-env", keyvar
+        ]
+        signed_request = folder / "buyer-request.json"
+        proc = subprocess.run(common + ["request", "--output", str(signed_request)],
+                              cwd=Path(__file__).resolve().parents[1], env=environment,
+                              text=True, capture_output=True, timeout=30)
+        self.assertEqual(proc.returncode, 0, proc.stderr)
+        self.assertTrue(signed_request.exists())
+        self.assertEqual(signed_request.stat().st_mode & 0o077, 0)
+        self.assertNotIn(KEY.decode(), proc.stdout)
+        signed_delivery = folder / "buyer-acceptance.json"
+        proc = subprocess.run(common + [
+            "accept", "--artifact", str(artifact_path),
+            "--receipt", str(receipt_path), "--archive", str(archive_path),
+            "--output", str(signed_delivery)
+        ], cwd=Path(__file__).resolve().parents[1], env=environment,
+           text=True, capture_output=True, timeout=30)
+        self.assertEqual(proc.returncode, 0, proc.stderr)
+        envelope = json.loads(signed_delivery.read_text())
+        self.assertTrue(
+            acceptance(envelope, self.c, artifact, receipt, KEY, self.now)["accepted"])
+
+    def test_external_test_payment_protocol_is_wired_after_qualified_intake(self):
+        """End to end through EXTERNAL_TEST, with authored fake provider receipts.
+
+        Neither a real Stripe call nor an independent buyer or a live treasury
+        is exercised. This checks gate sequencing, not actual money.
+        """
+        from unittest.mock import patch
+        from test_alpha_economic_external_loop import ProtocolTreasury, ProtocolPayments
+        from connected_enterprise.alpha_economic.agents import HarnessAgent
+        from connected_enterprise.alpha_economic.commerce import HTTPBuyer
+        from connected_enterprise.alpha_economic.live import LiveEngine
+        self.reservoir.add(make_trial(
+            self.c, PROBLEM, BEFORE, "frozen-old", self.old,
+            run_on="2026-11-16", costs_microUSD=numeric(13_000_000),
+            acceptance_probability_bps=9500, scope="OPERATOR_REPORTED_UNVERIFIED"))
+        self.reservoir.add(make_trial(
+            self.c, PROBLEM, AFTER, "frozen-new", self.current,
+            run_on="2026-11-16", costs_microUSD=numeric(2_000_000),
+            acceptance_probability_bps=9500, scope="OPERATOR_REPORTED_UNVERIFIED"))
+        now = [self.now]
+        policy = default_policy()
+        policy.update(scope="EXTERNAL_TEST", opening_microUSD=0, startup_microUSD=0)
+        agent = HarnessAgent({"kind": "harness", "runtime": {}, "routes": {}})
+        buyer = HTTPBuyer(
+            {self.c["buyer"]: "https://example.org"}, {self.c["buyer"]: KEY},
+            enabled=True)
+        simulated_counterparty = SimulatedBuyer({self.c["buyer"]: KEY})
+        treasury, stripe = ProtocolTreasury(), ProtocolPayments()
+        with patch.object(agent, "construct", return_value=(
+                 self.current, {"scope": "AUTHORED_PROTOCOL_FIXTURE_NO_MODEL_INFERENCE"})), \
+             patch.object(buyer, "quote", side_effect=simulated_counterparty.quote), \
+             patch.object(buyer, "deliver", side_effect=simulated_counterparty.deliver), \
+             patch.object(buyer, "payment", return_value={"received": True}):
+            external = LiveEngine(
+                self.root / "external-test", policy, agent, buyer,
+                {self.c["buyer"]: KEY}, treasury, stripe,
+                success_url="https://example.org/yes",
+                cancel_url="https://example.org/no",
+                authorized=True, clock=lambda: now[0])
+            try:
+                result = submit_qualified(
+                    external, self.reservoir, self.bundle, now=self.now)
+                with external.state.lock():
+                    for _ in range(60):
+                        stage = external.state.get(result["job"])["state"]
+                        if stage == "SETTLED":
+                            now[0] += 26 * 3600
+                        if stage == "COMPLETE":
+                            break
+                        external.step()
+                self.assertEqual(
+                    external.state.get(result["job"])["state"], "COMPLETE")
+                self.assertEqual(
+                    [x[0] for x in treasury.operations
+                     if x[0] in ("begin", "prepare", "release", "reinvest")],
+                    ["begin", "prepare", "release", "reinvest"])
+                self.assertFalse((external.root / "account").exists())
+                report = external.report()
+                self.assertEqual(report["scope"], "EXTERNAL_TEST")
+                self.assertFalse(report["native_simulation_used"])
+                self.assertEqual(result["actual_paid_customer_established"], False)
+            finally:
+                external.close()
+
     def test_buyer_decline_is_not_fake_revenue(self):
         self.register()
         self.engine.buyer.decline = True
@@ -288,8 +495,6 @@ class ConversionTests(unittest.TestCase):
         self.assertEqual(self.engine.state.get(result["job"])["state"], "DECLINED")
         self.assertEqual(output["native_summary"]["collections"], 0)
         self.assertEqual(output["actual_collections"], 0)
-
-
     def test_current_trial_cannot_predate_observed_capability(self):
         # Frozen review case: after signal is dated 2026-11-09,
         # yet its otherwise-valid recorded host replay claims 2026-11-08.
@@ -318,8 +523,6 @@ class ConversionTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "TRIAL_CHRONOLOGY"):
             self.preflight()
         self.assertEqual(self.engine.state.summary()["jobs"], [])
-
-
 
 if __name__ == "__main__":
     unittest.main()

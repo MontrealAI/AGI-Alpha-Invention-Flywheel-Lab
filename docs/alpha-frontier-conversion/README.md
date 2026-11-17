@@ -43,6 +43,33 @@ python3 -m connected_enterprise.alpha_economic.frontier_conversion_cli \
 
 Or submit the same bundle using the submit subcommand, or place it (owner-only mode 0600) in the private folder alpha-private/frontier-intake/inbox. The worker repeatedly checks deferred requests after new evidence arrives; invalid signatures are rejected, and committed submissions are idempotent.
 
+## The customer's independently controlled signature and acceptance
+
+The buyer must control its own pre-registered signing key and inspect its own customer contract; the seller cannot manufacture genuine buyer consent with an authored fixture. The optional offline buyer CLI issues an exact HMAC request envelope **only on the buyer's machine**:
+
+~~~sh
+python3 -m connected_enterprise.alpha_economic.frontier_buyer_cli \
+  --contract ./private-contract.json \
+  --buyer-key-env CUSTOMER_SIGNING_KEY \
+  request --output ./private/buyer-request.json
+~~~
+
+After a delivered bounded instrument arrives with its full artifact, manifest receipt and solution ZIP, the same buyer-controlled CLI can independently re-run the frozen tests, inspect every archive byte and generate a signed delivery-acceptance envelope:
+
+~~~sh
+python3 -m connected_enterprise.alpha_economic.frontier_buyer_cli \
+  --contract ./private-contract.json \
+  --buyer-key-env CUSTOMER_SIGNING_KEY \
+  accept --artifact ./private/artifact.json \
+  --receipt ./private/receipt.json \
+  --archive ./private/solution.zip \
+  --output ./private/buyer-acceptance.json
+~~~
+
+The output directory must be owner-only (0700). Buyer secrets are never embedded in files or printed to stdout. The verification logic rejects mutated ZIP bytes, manifests, instruments and improperly bound acceptance receipts. The customer must obtain the checker from an independently trusted source rather than treating supplier-supplied executable bytes as trusted.
+
+These commands create **local cryptographic messages**, not a charge, buyer independence attestation, legally binding purchase agreement or automatic bank reconciliation. The customer must independently operate or authorize the registered HTTPS quote/payment/delivery gateway; this CLI does not silently start one.
+
 ## Commercial gates enforced by this implementation
 
 **Host replay:** The system re-executes the supplied historical and current bounded instruments against identical acceptance tests. Trial evidence is bound to exact instrument hashes, buyer contract, evaluator and checker source hashes. A prior instrument may fail the declared cases, or pass at an operator-reported economically negative cost. The current instrument must pass. Unchanged competent ordinary alternatives remain qualified controls. **This does not prove that the broader customer outcome was previously impossible or that current reported costs are real.**
