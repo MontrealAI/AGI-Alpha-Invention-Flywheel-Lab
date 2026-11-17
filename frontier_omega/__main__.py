@@ -30,6 +30,8 @@ def main():
     compare.add_argument("--before", required=True)
     compare.add_argument("--after", required=True)
     sub.add_parser("report", help="Emit readable machine JSON report; contains no earned money claim")
+    browser = sub.add_parser("dashboard", help="Build a private, searchable browser inventory")
+    browser.add_argument("--name", default="FRONTIER-OMEGA.html", help="Filename within private state directory")
     sub.add_parser("audit", help="Audit local hash records and relationships")
     args = p.parse_args()
     if getattr(args, "cycles", None) is not None and args.cycles < 1:
@@ -51,6 +53,10 @@ def main():
         result = machine.watch(args.interval, args.cycles, stop.is_set)
     elif args.cmd == "compare":
         result = machine.compare(args.problem, args.before, args.after)
+    elif args.cmd == "dashboard":
+        from .dashboard import write_dashboard
+        with machine.lock():
+            result = write_dashboard(machine, args.name)
     elif args.cmd == "audit":
         with machine.lock():
             result = machine.audit()
