@@ -1,6 +1,7 @@
 """Single-operator loopback workbench. Private workspace data never enters the public site."""
 from __future__ import annotations
 
+import hashlib
 import json
 import logging
 import re
@@ -90,6 +91,25 @@ class Handler(BaseHTTPRequestHandler):
             return self._json({"mode":provider["mode"],"provider":provider,"runtime":ctrl.source})
         if not post and route == "/api/examples":
             return self._json({"examples":[json.loads(p.read_text()) for p in sorted((PRODUCT/"examples").glob("*.json"))]})
+        if not post and route == "/api/replays":
+            items = [{"id":i, "title": json.loads((PRODUCT/"examples"/f"{i}.json").read_bytes())["title"]}
+                     for i in ("integrity","migration","unsupported")]
+            return self._json({"examples":items})
+        replay = re.fullmatch(r"/api/replays/(integrity|migration|unsupported)(/bundle)?",route)
+        if replay and not post:
+            name, bundle = replay.groups()
+            records = PRODUCT/"evidence"
+            case = next(c for c in json.loads((records/"recipient-checks.json").read_bytes())["cases"] if c["mission"]==name)
+            if bundle and not case.get("bundle_sha256"):
+                raise Missing("This example ended without a verified bundle")
+            field = "bundle_sha256" if bundle else "run_evidence_sha256"
+            filename = f"{name}-artifact.zip" if bundle else f"{name}-run.json"
+            data = (records/filename).read_bytes()
+            if hashlib.sha256(data).hexdigest() != case[field]:
+                raise Conflict("The archived example differs from its published receipt")
+            if bundle:
+                return self._send(200,"application/zip",data,filename)
+            return self._send(200,"application/json; charset=utf-8",data)
         if post and route == "/api/runs":
             run_id, version = ctrl.create(body)
             self.server.enqueue(run_id,version)

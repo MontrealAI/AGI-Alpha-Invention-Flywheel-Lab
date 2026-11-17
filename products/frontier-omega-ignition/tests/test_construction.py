@@ -158,6 +158,11 @@ class ConstructionTests(unittest.TestCase):
         c["spec"]["purpose"] = s["purpose"]
         with self.assertRaisesRegex(ConstructionError, "stale_contract"):
             build(c, p)
+        timing_tamper = copy.deepcopy(r)
+        timing_tamper["telemetry_ns"]["candidate"] = -1
+        original, _ = mapping()
+        with self.assertRaisesRegex(ConstructionError, "stale_receipt"):
+            export_bundle(freeze_contract(original), a, timing_tamper)
         r["comparison"]["outcome"] = "candidate_wins"
         c, p = mapping()
         with self.assertRaisesRegex(ConstructionError, "stale_receipt"):

@@ -248,6 +248,9 @@ def _examples_definition(definition):
         for row, out in zip(source, dest):
             require(type(row) is dict and row.keys() == fields and type(out) is dict and out.keys() == names,
                     "invalid_contract", "development row schema differs")
+            for value in (*row.values(), *out.values()):
+                require(value is None or type(value) in (bool, int) or type(value) is str and len(value) <= 1024,
+                        "budget", "development cells require scalar data and at most 1024 characters")
             for target in targets:
                 value = out[target["name"]]
                 require(type(value) is {"text": str, "boolean": bool, "integer": int}[target["type"]],

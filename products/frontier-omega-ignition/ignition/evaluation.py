@@ -185,10 +185,36 @@ def _probes(spec):
     return probes
 
 
+def _witness(observation):
+    if observation is None:
+        return None
+    raw = canonical(observation)
+    if len(raw) <= 2048:
+        return observation
+    return {"observation_sha256": hashlib.sha256(raw).hexdigest(), "canonical_bytes": len(raw),
+            "reproduce": "Run the artifact on the named frozen input."}
+
+
+def check_receipt_integrity(receipt):
+    if type(receipt) is not dict or receipt.get("receipt_sha256") != fingerprint(
+            {k: v for k, v in receipt.items() if k != "receipt_sha256"}):
+        raise ConstructionError("stale_receipt", "archived receipt bytes changed")
+
+
 def evaluator_identity():
     here = Path(__file__).resolve().parent
     return {filename: hashlib.sha256((here / filename).read_bytes()).hexdigest()
             for filename in ("construction.py", "evaluation.py")}
+
+
+def _declared_migration(program):
+    """Target order is immaterial. The fields, conversions and input policy are contractual."""
+    fields = set(program.get("input_fields", ()))
+    operations = {}
+    for column in program["columns"]:
+        fields.update(column["sources"] if "sources" in column else [column["source"]])
+        operations[column["target"]] = {k: v for k, v in column.items() if k != "target"}
+    return {"required": sorted(fields), "extra_fields": program["extra_fields"], "operations": operations}
 
 
 def evaluate(contract, artifact):
@@ -239,7 +265,7 @@ def evaluate(contract, artifact):
         if expected is None:
             raise ConstructionError("invalid_contract", "control has no independent oracle")
         cases.append({"name": name, "group": group, "input_sha256": fingerprint(payload),
-                      "expected": expected, "candidate": candidate, "reference": reference_result,
+                      "expected": _witness(expected), "candidate": _witness(candidate), "reference": _witness(reference_result),
                       "candidate_pass": canonical(candidate) == canonical(expected),
                       "reference_pass": canonical(reference_result) == canonical(expected) if reference_result is not None else None})
     candidate_pass = all(c["candidate_pass"] for c in cases)
@@ -249,24 +275,34 @@ def evaluate(contract, artifact):
     oracles_agree = learned or reference_pass
     program = artifact.get("program")
     if spec["kind"] == "manifest_audit":
-        candidate_pass &= program == definition  # All trusted hashes must be pinned, including unseen files.
-    elif not learned and type(program) is dict:
-        candidate_pass &= program.get("extra_fields") == definition["extra_fields"]
+        contract_conforms = program == definition  # Pin every trusted hash, including unseen files.
+    elif learned:
+        contract_conforms = type(program) is dict and program.get("extra_fields") == definition["extra_fields"]
+    else:
+        # Frozen source-to-target mappings are an explicit requirement even when two
+        # source columns happen to have identical values on every confirmation row.
+        try:
+            contract_conforms = _declared_migration(program) == _declared_migration(definition)
+        except (TypeError, KeyError, AttributeError):
+            contract_conforms = False
+    candidate_pass &= contract_conforms
     if reference_obstruction or not oracles_agree:
         comparison = "incomparable"
     elif candidate_pass == reference_pass:
         comparison = "tie"
     else:
         comparison = "candidate_wins" if candidate_pass else "baseline_wins"
-    return {"format": "ignition-local-evaluation/1", "status": "pass" if candidate_pass and oracles_agree else "fail",
+    result = {"format": "ignition-local-evaluation/1", "status": "pass" if candidate_pass and oracles_agree else "fail",
             "contract_sha256": contract["sha256"], "artifact_sha256": artifact.get("sha256"),
             "implementation_sha256": evaluator_identity(), "cases": cases,
+            "declared_program_conforms": contract_conforms,
             "comparison": {"name": ("enumerative example-based migration" if learned else
                                     "direct stdlib manifest diff" if spec["kind"] == "manifest_audit" else
                                     "direct conventional schema migration"),
                            "outcome": comparison, "reference_pass": reference_pass,
                            "reference_obstruction": reference_obstruction, "oracles_agree": oracles_agree,
-                           "criterion": "complete correctness on the frozen workload; latency is telemetry only"},
+                           "criterion": "conformance to declared operations and complete correctness on the frozen workload; latency is telemetry only"},
             "scope": "Local software acceptance on frozen confirmations and controls. Custody, demand, economic advantage and frontier crossing are unestablished.",
             "telemetry_ns": {"candidate": candidate_elapsed, "reference": reference_elapsed,
                              "local_evaluation": time.perf_counter_ns() - start}}
+    return {**result, "receipt_sha256": fingerprint(result)}

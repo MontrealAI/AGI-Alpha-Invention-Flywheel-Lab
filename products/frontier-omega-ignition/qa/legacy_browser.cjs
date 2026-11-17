@@ -64,6 +64,11 @@ async function gate(page, scratch) {
   await page.locator('#discover').click();
   await page.locator('[data-select]').first().click();
   await page.locator('#go-build').click();
+  await page.locator('#value').fill('1000000000');
+  await page.locator('#prob').fill('100');
+  await page.locator('#run-checks').click();
+  await page.waitForFunction(() => !document.getElementById('export').disabled);
+  assert.match(await page.locator('#test-count').textContent(), /^6\/6 pass/);
 
   // Pause the digest at precisely the boundary where a later edit used to resurrect evidence.
   await page.evaluate(() => {
@@ -84,18 +89,18 @@ async function gate(page, scratch) {
   await download(page, '#artifact', portable);
   await page.goto(pathToFileURL(portable).href);
   const prob = page.locator('[data-key="probability"]');
-  for (const unsupported of ['', '-0.01', '1.01', '0.123']) {
+  for (const unsupported of ['', '-0.01', '1.01']) {
     await prob.fill(unsupported);
     assert.equal(await page.locator('#download').isDisabled(), true);
     assert.equal(await page.locator('#result').textContent(), '—');
     assert.doesNotMatch(await page.locator('#check').textContent(), /PASS/);
     assert.equal(await page.evaluate(() => window.latest), null);
   }
-  await prob.fill('0.3');
+  await prob.fill('0.555');
   const receipt = path.join(scratch, 'gate.json');
   await download(page, '#download', receipt);
   const result = JSON.parse(await fs.readFile(receipt, 'utf8'));
-  assert.equal(result.assumptions.probability, 0.3);
+  assert.equal(result.assumptions.probability, 0.555);
   assert.equal(result.arithmetic_passed, true);
 }
 

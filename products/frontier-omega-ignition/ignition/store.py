@@ -7,9 +7,12 @@ import json
 import os
 import re
 import sqlite3
+import sys
 import uuid
 from datetime import datetime, timezone
 from pathlib import Path
+
+from .economics import validate_case
 
 PRODUCT = Path(__file__).resolve().parents[1]
 
@@ -52,11 +55,15 @@ def strict_json(data):
 
 
 def runtime_source():
-    paths = list((PRODUCT / "ignition").glob("*.py"))
+    # Hash the trusted computation, including the checker and portable recipient path.
+    # Editing a stylesheet or command-line help does not change an accepted calculation.
+    paths = [PRODUCT / "ignition" / f"{n}.py" for n in
+             ("construction","evaluation","delivery","portable","provider","research","controller","store","economics")]
     bridge = PRODUCT.parent / "alpha-genesis-harness" / "bridge"
-    paths += [bridge / name for name in ("__init__.py", "adapters.py", "streaming.py", "output_schema.py")]
-    return digest({str(p.relative_to(PRODUCT.parent)): hashlib.sha256(p.read_bytes()).hexdigest()
-                   for p in sorted(paths) if p.is_file()})
+    paths += [bridge / name for name in ("__init__.py", "adapters.py", "output_schema.py")]
+    return digest({"python": [sys.implementation.name, *sys.version_info[:3]],
+                   "files": {str(p.relative_to(PRODUCT.parent)): hashlib.sha256(p.read_bytes()).hexdigest()
+                             for p in sorted(paths)}})
 
 
 def clean_mission(mission):
@@ -77,9 +84,11 @@ def clean_mission(mission):
     for field in ("authority", "resources", "time", "construction_spec"):
         if not isinstance(result.setdefault(field, {}), dict):
             raise StateError(f"{field} must be an object")
+    if "commercial_case" in result["resources"]:
+        validate_case(result["resources"]["commercial_case"])
     auth = result["authority"]
-    if set(auth) - {"local_model", "assisted_model", "public_sources"} or any(type(v) is not bool for v in auth.values()):
-        raise StateError("Only explicit boolean permissions for a local model, assisted handoff and public sources are supported")
+    if set(auth) - {"local_model", "assisted_model", "public_sources", "allow_program_reuse"} or any(type(v) is not bool for v in auth.values()):
+        raise StateError("Unsupported permission or non-boolean permission value")
     spec = result["construction_spec"]
     if spec and spec.get("purpose") != result["purpose"]:
         raise StateError("Construction specification must bind the exact mission purpose")
@@ -118,7 +127,7 @@ class Store:
         finally:
             db.close()
 
-    def create(self, body, provider, runtime, *, run_id=None, base=None):
+    def create(self, body, provider, runtime, *, run_id=None, base=None, inherited=None):
         if not isinstance(body, dict) or set(body) - {"mission", "sources", "request_id", "version"}:
             raise StateError("Unexpected mission request")
         key = body.get("request_id")
@@ -130,7 +139,7 @@ class Store:
             raise StateError("sources must be an array of up to 64 evidence records")
         if len(canonical([mission, sources]).encode()) > 2_000_000:
             raise StateError("Mission and source snapshot exceed transport limit")
-        fp = digest([run_id, base, mission, sources])
+        fp = digest([run_id, base, mission, sources, inherited])
         with self.connection() as db:
             db.execute("BEGIN IMMEDIATE")
             previous = db.execute("SELECT fingerprint,id,version FROM requests WHERE key=?", (key,)).fetchone()
@@ -150,7 +159,7 @@ class Store:
                          runtime=runtime, input_sha256=digest([mission, sources]), status="queued", stage="intake",
                          events=[], calls={}, exchanges={}, source_result=None, research=None, contract=None,
                          proposed_contract=None, contract_sha256=None, artifact=None, evaluation=None,
-                         handoff=None, error=None, created_at=timestamp())
+                         handoff=None, error=None, inherited=inherited, created_at=timestamp())
             event(state, "intake", "Mission and permission snapshot saved")
             db.execute("INSERT INTO revisions VALUES(?,?,?)", (run_id,version,canonical(state)))
             db.execute("INSERT INTO requests VALUES(?,?,?,?)", (key,fp,run_id,version))
@@ -187,11 +196,30 @@ class Store:
             return [json.loads(row[0]) for row in db.execute(
                 "SELECT data FROM revisions WHERE id=? ORDER BY version", (run_id,))]
 
+    def inventory(self):
+        """Private operator summary; this read grants no reuse authority."""
+        with self.connection() as db:
+            rows = db.execute("""SELECT r.data FROM revisions r
+                              JOIN (SELECT id, MAX(version) version FROM revisions GROUP BY id) h
+                              ON r.id=h.id AND r.version=h.version ORDER BY r.rowid DESC""")
+            for (raw,) in rows:
+                state = json.loads(raw)
+                report = state["research"] or {}
+                yield {"id": state["id"], "version": state["version"], "purpose": state["mission"]["purpose"],
+                       "observed_status": state["status"], "recorded_at": state["events"][-1]["at"],
+                       "decision": report.get("decision"), "frontier": report.get("frontier"),
+                       "obstruction": state["error"] or report.get("decision_reason"),
+                       "candidates": [{"title":c["title"], "obstruction":c["obstruction"], "test":c["test"]}
+                                      for c in report.get("candidates", [])]}
+
     @contextlib.contextmanager
-    def work_lock(self, run_id):
+    def work_lock(self, run_id, revision=None):
         """An OS-released SQLite write lock per run spans expensive inference, never other missions."""
         self.get(run_id)
-        guard = sqlite3.connect(self.root / (run_id + ".lock"), timeout=0)
+        if revision is not None and (type(revision) is not int or revision < 1):
+            raise Conflict("Invalid mission revision")
+        label = "delivery" if revision is None else str(revision)
+        guard = sqlite3.connect(self.root / f"{run_id}.{label}.lock", timeout=0)
         try:
             try:
                 guard.execute("BEGIN IMMEDIATE")

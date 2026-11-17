@@ -16,20 +16,23 @@ def main():
     parser.add_argument("--assisted", nargs=2, metavar=("PROVIDER","MODEL"),
                         help="enable an explicitly operator-assisted model exchange")
     sub = parser.add_subparsers(dest="command",required=True)
+    sub.add_parser("inventory")
     sub.add_parser("serve").add_argument("--port",type=int,default=8784)
     p = sub.add_parser("start")
     p.add_argument("file",type=Path)
     p.add_argument("--request-id",default=None)
-    for cmd in ("show","resume","respond","approve","export","amend","try","history"):
+    for cmd in ("show","resume","respond","approve","export","amend","try","history","successor"):
         p = sub.add_parser(cmd)
         p.add_argument("id")
-        if cmd in {"respond","amend","try","export"}:
+        if cmd in {"respond","amend","try","export","successor","approve"}:
             p.add_argument("file",type=Path)
         if cmd in {"respond","approve"}:
             p.add_argument("--sha256",required=True)
-        if cmd in {"amend","resume","respond","approve","try","export"}:
+        if cmd in {"amend","resume","respond","approve","try","export","successor"}:
             p.add_argument("--version",type=int,required=True)
-        if cmd == "amend":
+        if cmd == "successor":
+            p.add_argument("--rights",required=True)
+        if cmd in {"amend","successor"}:
             p.add_argument("--request-id",required=True)
     args = parser.parse_args()
     ctrl = Controller(Store(args.state),assisted=args.assisted)
@@ -42,13 +45,18 @@ def main():
             except KeyboardInterrupt:
                 pass
         return
-    if cmd in {"start","amend"}:
+    if cmd == "inventory":
+        value = list(ctrl.store.inventory())
+    elif cmd in {"start","amend","successor"}:
         doc = strict_json(args.file.read_bytes())
         body = {k:doc[k] for k in ("mission","sources") if k in doc}
         body["request_id"] = args.request_id or uuid.uuid4().hex
         if cmd == "amend":
             body["version"] = args.version
-        rid, version = ctrl.create(body,getattr(args,"id",None))
+        if cmd == "successor":
+            rid,version = ctrl.successor(args.id,args.version,body,args.rights)
+        else:
+            rid, version = ctrl.create(body,getattr(args,"id",None))
         value = ctrl.advance(rid,version)
     elif cmd == "show":
         value = ctrl.view(args.id)
@@ -65,7 +73,8 @@ def main():
         if cmd == "respond":
             ctrl.intervene(args.id,args.version,cmd,{"sha256":args.sha256,"response":strict_json(args.file.read_bytes())})
         if cmd == "approve":
-            ctrl.intervene(args.id,args.version,cmd,{"contract_sha256":args.sha256})
+            ctrl.intervene(args.id,args.version,cmd,{"contract_sha256":args.sha256,
+                                                      "confirmations":strict_json(args.file.read_bytes())})
         value = ctrl.advance(args.id,args.version)
     print(json.dumps(value,ensure_ascii=False,indent=2))
 

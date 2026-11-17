@@ -7,7 +7,7 @@ import zipfile
 from pathlib import Path
 
 from .construction import ConstructionError, canonical
-from .evaluation import evaluate
+from .evaluation import check_receipt_integrity, evaluate
 from .portable import MEMBERS, semantic_receipt
 
 
@@ -17,8 +17,9 @@ def _json(data):
 
 def export_bundle(contract, artifact, receipt, context=None):
     """Only export current verified artifacts. Evidence belongs to the requesting mission."""
+    check_receipt_integrity(receipt)
     fresh = evaluate(contract, artifact)
-    if fresh["status"] != "pass" or not isinstance(receipt, dict) or canonical(semantic_receipt(receipt)) != canonical(semantic_receipt(fresh)):
+    if fresh["status"] != "pass" or canonical(semantic_receipt(receipt)) != canonical(semantic_receipt(fresh)):
         raise ConstructionError("stale_receipt", "delivery requires matching independently reproduced acceptance")
     here = Path(__file__).resolve().parent
     first_case = next(c for c in contract["spec"]["cases"] if "expected" in c)

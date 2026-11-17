@@ -120,6 +120,11 @@ class ResearchTests(unittest.TestCase):
         self.assertEqual(len(leads), 5)
         self.assertEqual(leads[0]["obstruction"], "conformance untested")
         self.assertNotEqual(leads[0]["previous_sha256"], leads[0]["current_sha256"])
+        feed = SOURCE | {"role": "Published release", "feed": "schema"}
+        old_feed, _ = trial(sources=[feed])
+        new_feed, _ = trial(sources=[feed | {"url": SOURCE["url"] + "/v2", "event_at": "2026-11-16"}])
+        successor = reopen_inventory([old_feed], new_feed["signals"])[0]
+        self.assertNotEqual(successor["url"], successor["previous_url"])
 
     def test_named_feeds_keep_mission_and_authority_off_network(self):
         seen = []

@@ -28,7 +28,7 @@ def _strict(raw):
 
 def semantic_receipt(receipt):
     # Wall-clock timing is an observation of one run, not a reproducible identity.
-    return {k: v for k, v in receipt.items() if k != "telemetry_ns"}
+    return {k: v for k, v in receipt.items() if k not in ("telemetry_ns", "receipt_sha256")}
 
 
 def main():
@@ -44,11 +44,12 @@ def main():
             raise ValueError(f"bundle content differs: {name}")
     sys.path.insert(0, str(base))
     from ignition.construction import ConstructionError, MAX_BYTES, canonical, execute
-    from ignition.evaluation import evaluate
+    from ignition.evaluation import check_receipt_integrity, evaluate
     artifact = _strict((base / "artifact.json").read_bytes())
     if sys.argv[1] == "verify":
         contract = _strict((base / "contract.json").read_bytes())
         archived = _strict((base / "receipt.json").read_bytes())
+        check_receipt_integrity(archived)
         new = evaluate(contract, artifact)
         if new["status"] != "pass" or canonical(semantic_receipt(archived)) != canonical(semantic_receipt(new)):
             raise ValueError("reproduction failed or accepted scope changed")

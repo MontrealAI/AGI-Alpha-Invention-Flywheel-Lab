@@ -6,8 +6,11 @@ import time
 from datetime import datetime, timezone
 
 from . import construction, evaluation, delivery, research
+from .economics import assessment
 from .provider import HandoffRequired, ManualProvider, ModelProvider, ProviderUnavailable
 from .store import Conflict, StateError, digest, event, runtime_source, timestamp
+
+CONSTRUCT_INSTRUCTION = "Construct an executable program for the selected purpose. Return exactly {kind,program}. For a manifest audit the program is {manifest:{...}}. For record migration, program has columns, extra_fields and optional input_fields. Each column uses source,target,type, optional split:{separator,index}, or sources,separator,target,type for a join. Produce no shell, executable Python, URLs or external actions."
 
 FINISHED = {"verified", "failed", "deferred"}
 PRIVATE_FIELDS = {"calls", "exchanges"}
@@ -36,7 +39,24 @@ class Controller:
         return self.provider().identity()
 
     def create(self, body, run_id=None):
-        return self.store.create(body, self.identity(), self.source, run_id=run_id, base=body.get("version"))
+        if run_id is not None:
+            with self.store.work_lock(run_id):
+                return self.store.create(body, self.identity(), self.source, run_id=run_id, base=body.get("version"))
+        return self.store.create(body, self.identity(), self.source)
+
+    def successor(self, run_id, version, body, rights):
+        if not isinstance(rights,str) or not rights.strip() or len(rights)>2000:
+            raise StateError("Provide the authorization basis for this specific reuse")
+        with self.store.work_lock(run_id):
+            s = self.store.get(run_id)
+            self._guard(s)
+            if type(version) is not int or s["version"] != version or s["status"] != "verified":
+                raise Conflict("Source capability requires an accepted current revision")
+            if s["mission"]["authority"].get("allow_program_reuse") is not True:
+                raise StateError("Source mission did not grant local program reuse")
+            inherited = {"source_id":run_id, "source_version":version, "artifact_sha256":s["artifact"]["sha256"],
+                         "rights":rights, "kind":s["artifact"]["kind"], "program":s["artifact"]["program"]}
+            return self.store.create(body,self.identity(),self.source,inherited=inherited)
 
     def obsolete(self, s):
         return (runtime_source() != self.source or s["runtime"] != self.source
@@ -60,11 +80,14 @@ class Controller:
             raise Conflict("Mission was amended")
 
     def _step(self, s, stage, message, status="running"):
+        if status in FINISHED | {"blocked"}:
+            s["economics"] = assessment(s["mission"],s["research"],
+                                        {"completed":list(s["calls"].values()),"failed":s.get("unsuccessful_calls",[])})
         event(s, stage, message, status)
         self.store.save(s)
 
     def intervene(self, run_id, version, operation, body):
-        with self.store.work_lock(run_id):
+        with self.store.work_lock(run_id,version):
             s = self.store.get(run_id)
             if type(version) is not int or s["version"] != version:
                 raise Conflict("Stale mission version")
@@ -72,6 +95,9 @@ class Controller:
             if operation == "respond":
                 h = s["handoff"]
                 value = body.get("response")
+                prior = s["exchanges"].get(body.get("sha256")) if isinstance(body.get("sha256"),str) else None
+                if prior is not None and prior == {"response":value}:
+                    return
                 if not h or s["status"] != "awaiting_model" or h["sha256"] != body.get("sha256"):
                     raise Conflict("Response does not match the pending model request")
                 if not isinstance(value, dict):
@@ -80,16 +106,37 @@ class Controller:
                 s["handoff"] = None
                 self._step(s, h["stage"], "Operator supplied a response bound to the pending request", "queued")
             elif operation == "approve":
+                if s.get("approval_fingerprint") == digest(body):
+                    return
                 if (s["status"] != "awaiting_contract" or not s["proposed_contract"]
                         or body.get("contract_sha256") != s["contract_sha256"]):
                     raise Conflict("Approval does not match the proposed acceptance contract")
-                s["contract"] = s["proposed_contract"]
-                self._step(s, "contract", "Operator approved the proposed acceptance specification", "queued")
+                confirmations = body.get("confirmations")
+                if not isinstance(confirmations,list) or not any(isinstance(c,dict) and "expected" in c for c in confirmations):
+                    raise StateError("Supply fresh confirmation cases including a positive case from an independent source")
+                draft = s["proposed_contract"]["spec"]
+                def input_units(data):
+                    if isinstance(data,dict) and isinstance(data.get("rows"),list) and data["rows"]:
+                        return {digest(row) for row in data["rows"]}
+                    return {digest(data)}
+                shown = set()
+                for case in draft["cases"] + draft["definition"].get("demonstrations",[]):
+                    shown |= input_units(case["input"])
+                for case in confirmations:
+                    if not isinstance(case,dict) or "input" not in case or shown & input_units(case["input"]):
+                        raise StateError("A confirmation input duplicates a case already seen by the proposer")
+                s["contract"] = construction.freeze_contract(dict(draft,cases=draft["cases"]+confirmations))
+                s["contract_sha256"] = s["contract"]["sha256"]
+                s["approval_fingerprint"] = digest(body)
+                s["acceptance_origin"] = {"model_proposed_cases": len(draft["cases"]),
+                                          "operator_supplemental_cases": len(confirmations),
+                                          "independence":"Operator reports fresh confirmation inputs. External independence unmeasured."}
+                self._step(s, "contract", "Operator approved the specification and supplied fresh confirmation cases", "queued")
             else:
                 raise StateError("Unknown intervention")
 
     def advance(self, run_id, version):
-        with self.store.work_lock(run_id):
+        with self.store.work_lock(run_id,version):
             s = self.store.get(run_id)
             if type(version) is not int or version != s["version"]:
                 raise Conflict("Stale mission version")
@@ -107,6 +154,10 @@ class Controller:
             except (StateError, ProviderUnavailable, ValueError, KeyError, TypeError) as exc:
                 s["error"] = str(exc)[:1200]
                 self._step(s, s["stage"], s["error"] or "Invalid stage output", "blocked")
+            except Exception as exc:
+                s["error"] = f"Unexpected {type(exc).__name__} at {s['stage']}. Inspect the private operator log."
+                self._step(s, s["stage"], s["error"], "blocked")
+                raise
             return self.public(s)
 
     def _work(self, s):
@@ -120,7 +171,7 @@ class Controller:
             if auth.get("public_sources") is True:
                 self._step(s, "sources", "Reading the operator-permitted public release feeds")
                 retrieved = research.discover_sources(mission)
-            s["source_result"] = retrieved
+            s["source_result"] = dict(retrieved, observed_at=timestamp())
             self._step(s, "sources", f"Recorded {len(s['sources'])} supplied and {len(retrieved['sources'])} retrieved source records")
         if mode in ("blocked", "unavailable", "unconfigured", "disabled"):
             raise StateError("No live model configured. Choose a local provider or explicitly start an assisted session")
@@ -167,9 +218,13 @@ class Controller:
         spec = mission.get("construction_spec", {})
         # The research and builder prompts never receive the predeclared confirmation inputs.
         model_mission = dict(mission, construction_spec={k:v for k,v in spec.items() if k != "cases"})
+        model_mission["resources"] = {k:v for k,v in mission["resources"].items() if k!="commercial_case"}
         if s["research"] is None:
             sources = s["sources"] + s["source_result"]["sources"]
-            s["research"] = research.investigate(model_mission, sources, propose, as_of=s["created_at"][:10])
+            s["research"] = research.investigate(model_mission, sources, propose, as_of=s["source_result"]["observed_at"])
+            prior = [record["research"] for record in self.store.history(s["id"])
+                     if record["version"] < s["version"] and record["research"]]
+            s["research"]["retest_leads"] = research.reopen_inventory(prior, s["research"]["signals"])
             self._step(s, "selection", s["research"]["decision_reason"])
         result = s["research"]
         if result["decision"] != "build":
@@ -181,6 +236,9 @@ class Controller:
                 if spec.get("kind") != result["kind"]:
                     raise StateError("Selected construction and authorized specification differ")
                 s["contract"] = construction.freeze_contract(spec)
+                s["contract_sha256"] = s["contract"]["sha256"]
+                s["acceptance_origin"] = {"operator_supplied_cases":len(spec["cases"]),
+                                          "independence":"Checker executes separately. Operator controls confirmation inputs."}
                 self._step(s, "contract", "Froze the mission-specific specification and acceptance cases")
             else:
                 proposed = propose("specification", {
@@ -197,9 +255,10 @@ class Controller:
         contract = s["contract"]
         if s["artifact"] is None:
             response = propose("construct", {
-                "instruction":"Construct an executable program for the selected purpose. Return exactly {kind,program}. For a manifest audit the program is {manifest:{...}}. For record migration, program has columns, extra_fields and optional input_fields. Each column uses source,target,type, optional split:{separator,index}, or sources,separator,target,type for a join. Produce no shell, executable Python, URLs or external actions.",
+                "instruction":CONSTRUCT_INSTRUCTION,
                 "selected":result["selected"], "purpose":mission["purpose"], "requirements":mission["requirements"],
-                "kind":result["kind"], "definition":contract["spec"]["definition"]})
+                "kind":result["kind"], "definition":construction.build_view(contract)["definition"],
+                "retained_program":s.get("inherited")})
             s["artifact"] = construction.build(contract, response)
             self._step(s, "construction", "Compiled the proposed instructions into a portable bounded program")
         self._check_time(mission)
@@ -234,10 +293,11 @@ class Controller:
                 return construction.execute(s["artifact"], payload)
             ctx = {"mission_id":s["id"], "version":s["version"], "mission":s["mission"], "input_sha256":s["input_sha256"],
                    "source_sha256":s["runtime"], "provider":s["provider"], "python":sys.version.split()[0],
-                   "research":s["research"], "sources":s["sources"] + s["source_result"]["sources"],
+                   "research":s["research"], "acceptance_origin":s.get("acceptance_origin"),
+                   "inherited_from":{k:v for k,v in (s.get("inherited") or {}).items() if k!="program"}, "sources":s["sources"] + s["source_result"]["sources"],
                    "source_failures":s["source_result"]["failures"], "events":s["events"],
                    "model_calls":[{k:v for k,v in c.items() if k!="response"} for c in s["calls"].values()],
                    "unsuccessful_calls":s.get("unsuccessful_calls",[]),
-                   "economics":{"payment_received":False,"commercial_acceptance":"unmeasured","complete_cost":"unknown"},
+                   "economics":s.get("economics"),
                    "inheritance":"Use only under separately established data and software rights. Requalify on each new mission."}
             return delivery.export_bundle(s["contract"],s["artifact"],s["evaluation"],ctx)

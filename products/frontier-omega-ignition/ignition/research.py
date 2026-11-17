@@ -369,7 +369,14 @@ def investigate(mission, sources, propose, *, as_of=None):
 
 def reopen_inventory(previous_reports, current_signals):
     """Changed evidence can reopen an earlier specific obstruction, never its acceptance."""
-    current = {s["url"]: s for s in current_signals}
+    current = {}
+    releases = {}
+    for signal in sorted(current_signals, key=lambda row: row["retrieved_at"]):
+        current[signal["url"]] = signal
+        if signal.get("role") == "Published release" and signal.get("feed") and signal.get("event_at"):
+            key = signal["feed"]
+            if key not in releases or _now(signal["event_at"]) > _now(releases[key]["event_at"]):
+                releases[key] = signal
     leads = []
     for report in previous_reports:
         previous = {s["id"]: s for s in report["signals"]}
@@ -377,9 +384,14 @@ def reopen_inventory(previous_reports, current_signals):
             for ref in candidate["sources"]:
                 old = previous.get(ref)
                 new = current.get(old["url"]) if old else None
-                if new and any(new[key] != old[key] for key in ("sha256", "access", "status")):
+                later = releases.get(old.get("feed")) if old else None
+                if (later and old.get("role") == "Published release" and old.get("event_at")
+                        and _now(later["event_at"]) > _now(old["event_at"])):
+                    new = later
+                if new and any(new[key] != old[key] for key in ("sha256", "url", "access", "status")):
                     leads.append({"candidate": candidate["title"], "obstruction": candidate["obstruction"],
-                                  "test": candidate["test"], "url": new["url"], "previous_sha256": old["sha256"],
+                                  "test": candidate["test"], "url": new["url"], "previous_url": old["url"],
+                                  "previous_sha256": old["sha256"],
                                   "current_sha256": new["sha256"], "state": "retest suggested"})
     return leads
 
