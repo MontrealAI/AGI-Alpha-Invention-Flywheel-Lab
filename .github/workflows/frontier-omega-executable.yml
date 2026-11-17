@@ -19,6 +19,7 @@ jobs:
           persist-credentials: false
           sparse-checkout: |
             frontier_omega
+            examples/frontier-omega
             products/alpha-genesis-harness
             tests
       - name: Run original inventory and executable replay tests
