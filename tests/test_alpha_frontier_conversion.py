@@ -18,7 +18,7 @@ from connected_enterprise.alpha_economic.frontier_bridge import (
 )
 
 KEY = b"actual-buyer-key-must-be-external-and-confidential-fixture"
-PROBLEM = "enterprise-modernization-migrations"
+PROBLEM = "bounded-capacity-fulfillment"
 BEFORE = "historical-pinned-agent-20261012"
 AFTER = "claude-fable-52-20261109"
 SEED = Path(__file__).resolve().parents[1] / "examples/frontier-omega/public-opportunities-20261116.json"
@@ -49,6 +49,32 @@ class ConversionTests(unittest.TestCase):
         self.c["expires_at"] = self.now + 86400
         self.c["nonce"] = "actual-buyer-fixture-1"
         self.c["ordinary"] = ordinary()
+        self.c["scope_key"] = PROBLEM
+        self.c["purpose"] = "Construct a bounded digital capacity-fulfillment instrument with independently checked arithmetic."
+        self.reservoir.add({
+            "schema": "frontier-omega/problem/v1",
+            "id": PROBLEM,
+            "title": "Authored fixture for bounded capacity fulfillment",
+            "beneficiary": "An explicitly synthetic buyer in a bounded test",
+            "outcome": self.c["purpose"],
+            "acceptance": "Frozen capacity-arithmetic test cases with a separate evaluator",
+            "blocker": "An authored historical instrument fails the exact acceptance cases.",
+            "tags": ["long-horizon-agents"],
+            "demand": {"status": "HYPOTHESIS",
+                       "basis": "Authored fixture with no customer consent or external demand.",
+                       "ceiling_microUSD": None, "deadline": None,
+                       "terms_sha256": None, "consent_verification": "NOT_VERIFIED"},
+            "alternatives": [
+                {"name": "Competent specialist", "route": "Known arithmetic algorithm",
+                 "unknowns": "External labor and integration quotes not measured."},
+                {"name": "Human-plus-AI", "route": "Expert using a conventional interpreter",
+                 "unknowns": "No actual customer comparative costs measured."},
+                {"name": "No purchase", "route": "Buyer declines the example",
+                 "unknowns": "No external buyer exists in this test."}
+            ],
+            "source_urls": ["https://example.org/fixture"],
+            "next_test": "Measure one finite host-replayed instrument before any commercial claim."
+        })
         self.old = old_instrument(self.c)
         self.current = instrument()
         baseline = {
@@ -77,7 +103,7 @@ class ConversionTests(unittest.TestCase):
             acceptance_probability_bps=9500, scope="AUTHORED_SCENARIO"))
         self.reservoir.add(make_trial(
             self.c, PROBLEM, AFTER, "frozen-new", self.current,
-            run_on="2026-11-16", costs_microUSD=numeric(1_500_000),
+            run_on="2026-11-16", costs_microUSD=numeric(2_000_000),
             acceptance_probability_bps=9500, scope="AUTHORED_SCENARIO"))
 
     def preflight(self):
@@ -135,19 +161,20 @@ class ConversionTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             admission_preflight(self.reservoir, altered, {self.c["buyer"]: KEY}, now=self.now)
 
-    def test_already_solvable_historical_case_is_not_eligible_frontier_crossing(self):
+    def test_cost_only_crossing_is_distinguished_from_new_technical_capability(self):
         self.reservoir.add(make_trial(
             self.c, PROBLEM, BEFORE, "frozen-old", self.current,
             run_on="2026-11-16", costs_microUSD=numeric(13_000_000),
             acceptance_probability_bps=9500, scope="AUTHORED_SCENARIO"))
         self.reservoir.add(make_trial(
             self.c, PROBLEM, AFTER, "frozen-new", self.current,
-            run_on="2026-11-16", costs_microUSD=numeric(1_500_000),
+            run_on="2026-11-16", costs_microUSD=numeric(2_000_000),
             acceptance_probability_bps=9500, scope="AUTHORED_SCENARIO"))
         altered = copy.deepcopy(self.bundle)
         altered["historical_instrument"] = self.current
-        with self.assertRaisesRegex(ValueError, "HISTORICAL_METHOD_DID_NOT_FAIL"):
-            admission_preflight(self.reservoir, altered, {self.c["buyer"]: KEY}, now=self.now)
+        report = admission_preflight(self.reservoir, altered, {self.c["buyer"]: KEY}, now=self.now)
+        self.assertEqual(report["crossing_mechanism"], "ECONOMIC_UNBLOCKING_REPORTED_COSTS")
+        self.assertFalse(report["economic_crossing_established"])
 
     def test_changed_acceptance_cases_requires_frozen_registered_trial(self):
         self.register()
