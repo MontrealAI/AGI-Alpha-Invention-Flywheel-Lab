@@ -1,0 +1,145 @@
+{
+  "report": "conventional-example-comparison-v1",
+  "arms": [
+    {
+      "id": "integrity",
+      "tool": "sha256sum (GNU coreutils) 9.7",
+      "fixture_sha256": "f3c5981afbc3e61f57cbd7331bc6f1a4398c6b076aa794fc6bbda8e3c0f44425",
+      "cases": [
+        {
+          "case": "Clean receipt for both real source blobs",
+          "matched_frozen_expectation": true,
+          "elapsed_ns": 4635341,
+          "observed": {
+            "ok": true,
+            "changed": [],
+            "missing": [],
+            "unexpected": [],
+            "matched": [
+              "ignition.css",
+              "studio.css"
+            ]
+          }
+        },
+        {
+          "case": "A one-byte replacement, an omission and an extra file",
+          "matched_frozen_expectation": true,
+          "elapsed_ns": 3194269,
+          "observed": {
+            "ok": false,
+            "changed": [
+              "ignition.css"
+            ],
+            "missing": [
+              "studio.css"
+            ],
+            "unexpected": [
+              "extra.css"
+            ],
+            "matched": []
+          }
+        },
+        {
+          "case": "No files delivered",
+          "matched_frozen_expectation": true,
+          "elapsed_ns": 3204,
+          "observed": {
+            "ok": false,
+            "changed": [],
+            "missing": [
+              "ignition.css",
+              "studio.css"
+            ],
+            "unexpected": [],
+            "matched": []
+          }
+        },
+        {
+          "case": "Malformed base64",
+          "matched_frozen_expectation": true,
+          "elapsed_ns": 4507,
+          "observed": {
+            "error": "invalid_value"
+          }
+        },
+        {
+          "case": "Unsafe observed name",
+          "matched_frozen_expectation": true,
+          "elapsed_ns": 821,
+          "observed": {
+            "error": "invalid_path"
+          }
+        }
+      ]
+    },
+    {
+      "id": "migration",
+      "tool": "jq-1.7",
+      "fixture_sha256": "8058a3ea8b97ce7deb1927fae70bd71ac7e9639317814e048db28aade4ee1595",
+      "cases": [
+        {
+          "case": "Withheld actual observatory card",
+          "matched_frozen_expectation": true,
+          "elapsed_ns": 2174463,
+          "observed": {
+            "rows": [
+              {
+                "record_id": "interior-property-observatory",
+                "area": "interior",
+                "headline": "Make inaccessible interior physical properties measurable",
+                "decision": "HOLD"
+              }
+            ]
+          }
+        },
+        {
+          "case": "Withheld actual resource card",
+          "matched_frozen_expectation": true,
+          "elapsed_ns": 1843540,
+          "observed": {
+            "rows": [
+              {
+                "record_id": "resource-to-capital-closure",
+                "area": "resource",
+                "headline": "Turn unusable feedstock into further productive means",
+                "decision": "HOLD"
+              }
+            ]
+          }
+        },
+        {
+          "case": "Mixed state and stable order",
+          "matched_frozen_expectation": true,
+          "elapsed_ns": 2873461,
+          "observed": {
+            "rows": [
+              {
+                "record_id": "water-sensing",
+                "area": "water",
+                "headline": "A withheld editorial row",
+                "decision": "DEFER"
+              },
+              {
+                "record_id": "sound-test",
+                "area": "sound",
+                "headline": "Second withheld editorial row",
+                "decision": "OPEN"
+              }
+            ]
+          }
+        },
+        {
+          "case": "Refuse malformed row in a batch",
+          "matched_frozen_expectation": true,
+          "elapsed_ns": 1862048,
+          "observed": {
+            "error": "invalid_value"
+          }
+        }
+      ]
+    }
+  ],
+  "complete_delivery_cost": "unmeasured",
+  "cost_scope": "Wall time includes each comparator process, input preparation inside the case and output parsing. Engineering, model time, evaluation development, operator review, integration and customer acceptance are outside these timings.",
+  "all_matched": true
+}

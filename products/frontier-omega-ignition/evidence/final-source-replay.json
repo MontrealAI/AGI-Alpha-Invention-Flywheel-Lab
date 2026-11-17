@@ -1,0 +1,95 @@
+{
+  "format": "ignition/recorded-artifact-requalification-v1",
+  "mode": "replay with fresh evaluation and recipient execution",
+  "model_calls": 0,
+  "research_repeated": false,
+  "historical_runtime_sha256": "374eac5734a674901b9c02bb6db7264dced16a173a99eea6d661ff8954b23ffd",
+  "current_runtime_sha256": "88967a3fec44cbaf26e36aaf50c91b1402d3329a7d0f0e5842b8cb86d18255a7",
+  "replay_script_sha256": "edfdb4a8ba54aaf8c9a7f586ff61ee38c5e343665f1b64c7c613952387deaaf7",
+  "python": "3.12.14",
+  "created_at": "2026-11-17T19:08:39.401539+00:00",
+  "cases": [
+    {
+      "mission": "integrity",
+      "original_run": "4775ad36ea964a6a99adb582bba4f659",
+      "original_run_sha256": "df8bfda09f864dd6b655f0ef1fc9cbcfd95e4d9abc89f0f65fbc03b774f35b6f",
+      "original_bundle_sha256": "5bd2cb3fb853cb45229ae1ba106f3f3d90a05fb341aad9511932ff8e348a2730",
+      "new_replay_bundle_sha256": "e8bedbc8d4d265705b5f36d7d62961e8617808df2f499508a624d885ec2c2f88",
+      "fresh_implementation_sha256": {
+        "construction.py": "4aaa99cae0faa42d300ee13f2ea59d5f6625e64d3692e83f227d81d74a2a5b47",
+        "evaluation.py": "50a13c7a52aca4ddaed813705f64bfe1f8767b520da5f75a3f8b32451fe78a41"
+      },
+      "recipient": {
+        "verify": {
+          "status": "pass",
+          "contract_sha256": "9349cab7eed8ad480458c3f1655f659fc36455aaccb11b4e8fb56cb9094070a4",
+          "artifact_sha256": "e1eabae71e107b2a46b6c94d9ef5e4cad506fd3d6356288d0c697b232fc62bf5",
+          "cases": 9,
+          "comparison": "tie"
+        },
+        "example": {
+          "changed": [],
+          "matched": [
+            "ignition.css",
+            "studio.css"
+          ],
+          "missing": [],
+          "ok": true,
+          "unexpected": []
+        }
+      },
+      "comparison": {
+        "name": "direct stdlib manifest diff",
+        "outcome": "tie",
+        "reference_pass": true,
+        "reference_obstruction": null,
+        "oracles_agree": true,
+        "criterion": "conformance to declared operations and complete correctness on the frozen workload; latency is telemetry only"
+      }
+    },
+    {
+      "mission": "migration",
+      "original_run": "e435f2be84104538bdcd7cee662280e7",
+      "original_run_sha256": "18042d86bbb2d2c2410bfe0c40a5e8107e25d1ec904d3dedeffc5199e1a81eea",
+      "original_bundle_sha256": "6aeed44d96b0aa72ecacd037a08179f07eed428eff7fa31c9a8659bba4626fd6",
+      "new_replay_bundle_sha256": "f515d7b9a22dad871ed9c966c686ffcd1e652053289cb8f05a715c6eb64078ac",
+      "fresh_implementation_sha256": {
+        "construction.py": "4aaa99cae0faa42d300ee13f2ea59d5f6625e64d3692e83f227d81d74a2a5b47",
+        "evaluation.py": "50a13c7a52aca4ddaed813705f64bfe1f8767b520da5f75a3f8b32451fe78a41"
+      },
+      "recipient": {
+        "verify": {
+          "status": "pass",
+          "contract_sha256": "17e1dcf5c5f062a89db070dda03e6df21c6965bf7dbb5b7dff06e62803cf057d",
+          "artifact_sha256": "0af77bc6067025e9d005d5c9cc6c472e450f4742b97f67bf77452771c3d9cac2",
+          "cases": 9,
+          "comparison": "incomparable"
+        },
+        "example": {
+          "rows": [
+            {
+              "area": "interior",
+              "decision": "HOLD",
+              "headline": "Make inaccessible interior physical properties measurable",
+              "record_id": "interior-property-observatory"
+            }
+          ]
+        }
+      },
+      "comparison": {
+        "name": "enumerative example-based migration",
+        "outcome": "incomparable",
+        "reference_pass": false,
+        "reference_obstruction": "ambiguous minimum-cost development hypotheses",
+        "oracles_agree": true,
+        "criterion": "conformance to declared operations and complete correctness on the frozen workload; latency is telemetry only"
+      }
+    },
+    {
+      "mission": "unsupported",
+      "original_run": "438107b75bb64ae5b3b821008365cdb7",
+      "original_run_sha256": "10dc8e7e586c1c71ec230aaf9620e5d747f55ba6fd079d8f0942c537abaefe9c",
+      "scope": "historical deferral checked; no executable artifact"
+    }
+  ]
+}

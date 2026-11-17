@@ -1,0 +1,196 @@
+name: FRONTIER Ω IGNITION qualification
+
+on:
+  pull_request:
+    paths:
+      - 'products/frontier-omega-ignition/**'
+      - 'products/alpha-genesis-harness/bridge/**'
+      - 'products/alpha-genesis-harness/scripts/qualify_hosted_local.py'
+      - 'products/alpha-genesis-harness/scripts/package_release.py'
+      - 'products/alpha-genesis-harness/tests/visual/package*.json'
+      - 'docs/research/frontier-omega*.html'
+      - 'docs/frontier-omega-ignition/research-edition/**'
+      - '.github/workflows/frontier-omega-ignition.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'products/frontier-omega-ignition/**'
+      - 'products/alpha-genesis-harness/bridge/**'
+      - 'products/alpha-genesis-harness/scripts/qualify_hosted_local.py'
+      - 'products/alpha-genesis-harness/scripts/package_release.py'
+      - 'products/alpha-genesis-harness/tests/visual/package*.json'
+      - 'docs/research/frontier-omega*.html'
+      - 'docs/frontier-omega-ignition/research-edition/**'
+      - '.github/workflows/frontier-omega-ignition.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ignition-${{ github.event.pull_request.number || github.ref }}-${{ github.event.pull_request.head.sha || github.sha }}
+  cancel-in-progress: false
+
+env:
+  EXPECTED_SOURCE: ${{ github.event.pull_request.head.sha || github.sha }}
+  PYTHONDONTWRITEBYTECODE: '1'
+
+jobs:
+  engineering:
+    name: Exact-source application tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record job start
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ env.EXPECTED_SOURCE }}
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /products/frontier-omega-ignition/
+            /products/alpha-genesis-harness/bridge/
+            /products/alpha-genesis-harness/scripts/
+            /products/alpha-genesis-harness/tests/visual/package*.json
+            /docs/research/frontier-omega*.html
+            /docs/frontier-omega-ignition/research-edition/
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Confirm source and execute application regressions
+        working-directory: products/frontier-omega-ignition
+        run: |
+          test "$(git rev-parse HEAD)" = "$EXPECTED_SOURCE"
+          python -B -m unittest discover -s tests -p 'test_*.py' -v
+
+      - name: Receive the pinned research edition as an independent sender reference
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          repository: MontrealAI/AGI-Alpha-Invention-Flywheel-Lab
+          ref: 09e611c6df506ab24fba494b1ec41716e3721049
+          path: ignition-reference
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /docs/research/frontier-omega-world-lab.html
+            /docs/frontier-omega-ignition/research-edition/
+      - name: Build and test the full public-edition receiver
+        working-directory: products/frontier-omega-ignition
+        run: |
+          test "$(git -C "$GITHUB_WORKSPACE/ignition-reference" rev-parse HEAD)" = 09e611c6df506ab24fba494b1ec41716e3721049
+          python -B examples/qualify_release_handoff.py \
+            --reference-tree "$GITHUB_WORKSPACE/ignition-reference" \
+            --output "$RUNNER_TEMP/ignition-handoff" > /dev/null
+      - name: Offer the exact full-edition receiver and qualification receipt
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: ignition-edition-receiver-${{ env.EXPECTED_SOURCE }}-attempt-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/ignition-handoff/research-edition-receiver.zip
+            ${{ runner.temp }}/ignition-handoff/release-handoff.json
+          if-no-files-found: error
+      - name: Run competent conventional alternatives and requalify recorded deliveries
+        working-directory: products/frontier-omega-ignition
+        run: |
+          python -B examples/compare_conventional.py > "$RUNNER_TEMP/ignition-conventional.json"
+          python -B examples/requalify_recorded.py --output "$RUNNER_TEMP/ignition-replay" > /dev/null
+      - name: Preserve exact-head public comparator and recipient results
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: ignition-recipient-${{ env.EXPECTED_SOURCE }}-attempt-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/ignition-conventional.json
+            ${{ runner.temp }}/ignition-replay/replay-receipt.json
+          if-no-files-found: error
+      - name: Install locked browser test driver and reopen downloaded artifacts
+        env:
+          NODE_PATH: ${{ runner.temp }}/ignition-browser-tools/node_modules
+          IGNITION_VISUAL_REVIEW: ${{ runner.temp }}/ignition-visual-review
+        run: |
+          mkdir "$RUNNER_TEMP/ignition-browser-tools"
+          cp products/alpha-genesis-harness/tests/visual/package*.json "$RUNNER_TEMP/ignition-browser-tools/"
+          npm ci --prefix "$RUNNER_TEMP/ignition-browser-tools" --ignore-scripts --no-audit --no-fund
+          export CHROMIUM_PATH="$(command -v google-chrome)"
+          node products/frontier-omega-ignition/qa/legacy_browser.cjs
+          node products/frontier-omega-ignition/qa/workbench_browser.cjs
+          python3 -B products/frontier-omega-ignition/build_preview.py --output "$RUNNER_TEMP/FRONTIER_OMEGA_IGNITION.html"
+          node products/frontier-omega-ignition/qa/preview_browser.cjs "$RUNNER_TEMP/FRONTIER_OMEGA_IGNITION.html"
+      - name: Offer the qualified standalone public replay
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: ignition-public-replay-${{ env.EXPECTED_SOURCE }}-attempt-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/FRONTIER_OMEGA_IGNITION.html
+          if-no-files-found: error
+
+      - name: Preserve desktop and mobile views of the public integrity replay
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: ignition-visual-review-${{ env.EXPECTED_SOURCE }}-attempt-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/ignition-visual-review/integrity-desktop.png
+            ${{ runner.temp }}/ignition-visual-review/integrity-mobile.png
+          if-no-files-found: error
+
+  model:
+    name: Public synthetic mission with pinned local inference
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record job start
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ env.EXPECTED_SOURCE }}
+          persist-credentials: false
+          sparse-checkout: |
+            products/frontier-omega-ignition
+            products/alpha-genesis-harness/bridge
+            products/alpha-genesis-harness/scripts
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Execute registered model trial
+        run: |
+          test "$(git rev-parse HEAD)" = "$EXPECTED_SOURCE"
+          python -B products/frontier-omega-ignition/qualify_live.py \
+            --work "$RUNNER_TEMP/ignition-inference" \
+            --output "$RUNNER_TEMP/ignition-model-receipt.json"
+      - name: Preserve compact trial receipt, including failure
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: ignition-model-${{ env.EXPECTED_SOURCE }}-attempt-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/ignition-model-receipt.json
+          if-no-files-found: error
+
+  sources:
+    name: Public primary-source acquisition
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record job start
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ env.EXPECTED_SOURCE }}
+          persist-credentials: false
+          sparse-checkout: |
+            products/frontier-omega-ignition
+            products/alpha-genesis-harness/bridge
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Inspect live public sources for the registered mission
+        run: |
+          test "$(git rev-parse HEAD)" = "$EXPECTED_SOURCE"
+          python -B products/frontier-omega-ignition/qualify_sources.py \
+            --expected-source "$EXPECTED_SOURCE" \
+            --output "$RUNNER_TEMP/ignition-sources-receipt.json"
+      - name: Preserve compact source receipt, including failure
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: ignition-sources-${{ env.EXPECTED_SOURCE }}-attempt-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/ignition-sources-receipt.json
+          if-no-files-found: error

@@ -1,0 +1,253 @@
+{
+  "id": "migration",
+  "title": "Migrate the Blue Sky candidate register",
+  "mission": {
+    "purpose": "Convert the public Blue Sky candidate fields id, name and status into an editorial queue, preserving the title and decision while extracting the first identifier segment as the area.",
+    "beneficiary": "MONTREAL.AI research editor",
+    "requirements": [
+      "Produce record_id, area, headline and decision for each row in order.",
+      "Keep decision text unchanged and reject invalid batches as a whole."
+    ],
+    "authority": {
+      "local_model": true,
+      "assisted_model": true,
+      "public_sources": false
+    },
+    "resources": {
+      "assets": "Included public evidence and local standard-library interpreter",
+      "budget": "No purchases or new paid services"
+    },
+    "time": {
+      "as_of": "2026-11-17",
+      "baseline": "2026-10-13"
+    },
+    "construction_spec": {
+      "kind": "record_migration",
+      "purpose": "Convert the public Blue Sky candidate fields id, name and status into an editorial queue, preserving the title and decision while extracting the first identifier segment as the area.",
+      "definition": {
+        "input_fields": [
+          "id",
+          "name",
+          "status"
+        ],
+        "targets": [
+          {
+            "name": "record_id",
+            "type": "text"
+          },
+          {
+            "name": "area",
+            "type": "text"
+          },
+          {
+            "name": "headline",
+            "type": "text"
+          },
+          {
+            "name": "decision",
+            "type": "text"
+          }
+        ],
+        "extra_fields": "reject",
+        "demonstrations": [
+          {
+            "input": {
+              "rows": [
+                {
+                  "id": "passive-mechanical-function",
+                  "name": "Construct passive mechanical behavior from contact geometry",
+                  "status": "HOLD"
+                },
+                {
+                  "id": "optical-monitor",
+                  "name": "Synthetic optical fixture",
+                  "status": "OPEN"
+                }
+              ]
+            },
+            "expected": {
+              "rows": [
+                {
+                  "record_id": "passive-mechanical-function",
+                  "area": "passive",
+                  "headline": "Construct passive mechanical behavior from contact geometry",
+                  "decision": "HOLD"
+                },
+                {
+                  "record_id": "optical-monitor",
+                  "area": "optical",
+                  "headline": "Synthetic optical fixture",
+                  "decision": "OPEN"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "cases": [
+        {
+          "name": "Withheld actual observatory card",
+          "input": {
+            "rows": [
+              {
+                "id": "interior-property-observatory",
+                "name": "Make inaccessible interior physical properties measurable",
+                "status": "HOLD"
+              }
+            ]
+          },
+          "expected": {
+            "rows": [
+              {
+                "record_id": "interior-property-observatory",
+                "area": "interior",
+                "headline": "Make inaccessible interior physical properties measurable",
+                "decision": "HOLD"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Withheld actual resource card",
+          "input": {
+            "rows": [
+              {
+                "id": "resource-to-capital-closure",
+                "name": "Turn unusable feedstock into further productive means",
+                "status": "HOLD"
+              }
+            ]
+          },
+          "expected": {
+            "rows": [
+              {
+                "record_id": "resource-to-capital-closure",
+                "area": "resource",
+                "headline": "Turn unusable feedstock into further productive means",
+                "decision": "HOLD"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Mixed state and stable order",
+          "input": {
+            "rows": [
+              {
+                "id": "water-sensing",
+                "name": "A withheld editorial row",
+                "status": "DEFER"
+              },
+              {
+                "id": "sound-test",
+                "name": "Second withheld editorial row",
+                "status": "OPEN"
+              }
+            ]
+          },
+          "expected": {
+            "rows": [
+              {
+                "record_id": "water-sensing",
+                "area": "water",
+                "headline": "A withheld editorial row",
+                "decision": "DEFER"
+              },
+              {
+                "record_id": "sound-test",
+                "area": "sound",
+                "headline": "Second withheld editorial row",
+                "decision": "OPEN"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Refuse malformed row in a batch",
+          "input": {
+            "rows": [
+              {
+                "id": "interior-property-observatory",
+                "name": "Make inaccessible interior physical properties measurable",
+                "status": "HOLD"
+              },
+              {
+                "id": "resource-to-capital-closure",
+                "name": "Turn unusable feedstock into further productive means",
+                "status": false
+              }
+            ]
+          },
+          "error": "invalid_value"
+        }
+      ]
+    }
+  },
+  "sources": [
+    {
+      "title": "Three public candidate records, including scope and status",
+      "publisher": "MONTREAL.AI",
+      "url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/09e611c6df506ab24fba494b1ec41716e3721049/campaign/blue-sky-064/CANDIDATES.json",
+      "text": "Provisional productive possibilities, not registered experiments, demonstrated inventions or commercial offers.",
+      "published_at": null,
+      "event_at": null,
+      "retrieved_at": "2026-11-17T18:40:20.024Z",
+      "version": "09e611c6df506ab24fba494b1ec41716e3721049",
+      "access": "available",
+      "status": "active",
+      "rights": "Public primary-source excerpt with attribution. See linked source for reuse terms.",
+      "sha256": "84bf4872c5405a345da96da71847eb434a3b200ce9dfe4eb4f123041050c9a7a"
+    },
+    {
+      "title": "Blue Sky 064 charter",
+      "publisher": "MONTREAL.AI",
+      "url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/09e611c6df506ab24fba494b1ec41716e3721049/campaign/blue-sky-064/CHARTER.md",
+      "text": "Compare at least three materially different productive possibilities before commitment.",
+      "published_at": null,
+      "event_at": null,
+      "retrieved_at": "2026-11-17T18:40:20.298Z",
+      "version": "09e611c6df506ab24fba494b1ec41716e3721049",
+      "access": "available",
+      "status": "active",
+      "rights": "Public primary-source excerpt with attribution. See linked source for reuse terms.",
+      "sha256": "c3052dda86cd4696df57c6d25c817179bcdcf1146e9846ac744e05c98d39a494"
+    },
+    {
+      "title": "jq 1.7 release",
+      "publisher": "jq maintainers",
+      "url": "https://github.com/jqlang/jq/releases/tag/jq-1.7",
+      "text": "Release builds for:",
+      "published_at": null,
+      "event_at": "2023-09-06",
+      "retrieved_at": "2026-11-17T18:40:20.339Z",
+      "version": "jq-1.7",
+      "access": "available",
+      "status": "active",
+      "rights": "Public primary-source excerpt with attribution. See linked source for reuse terms.",
+      "sha256": "2e2c90ae24c2da7281410055284bba89b8f24af6883b4fd18c53cd468d203ed5"
+    },
+    {
+      "title": "Codex CLI 0.169.0 inspector change",
+      "publisher": "OpenAI",
+      "url": "https://github.com/openai/codex/releases/tag/rust-v0.169.0",
+      "text": "Press `Ctrl+S` in the terminal report editor to save a diagnostic ZIP locally, even when uploads are disabled.",
+      "published_at": "2026-11-13",
+      "event_at": "2026-11-13",
+      "retrieved_at": "2026-11-17T18:40:20.397Z",
+      "version": "0.169.0",
+      "access": "available",
+      "status": "active",
+      "rights": "Public primary-source excerpt with attribution. See linked source for reuse terms.",
+      "sha256": "3b71e804f1b0645cd1be4c2675cc8ccfcf61ed695176e3ee6b5c41fe42499f62"
+    }
+  ],
+  "source_context": {
+    "revision": "09e611c6df506ab24fba494b1ec41716e3721049",
+    "repository": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab",
+    "retrieval": "First-party GitHub Contents API; sample source bytes verified against the Git blob object ID. Excerpts have separate UTF-8 SHA-256 identities.",
+    "runtime_qualification": "Independent controlled execution is required. Source publication alone does not qualify this software.",
+    "origin": "campaign/blue-sky-064/CANDIDATES.json",
+    "git_blob": "a338e684bfbbba8192bd691c1a41d41706d38a2f",
+    "scope": "The three public id/name/status projections are original source data. The optical-monitor development row, water-sensing and sound-test rows and malformed row are synthetic. Status is pass-through; financial and scientific judgements remain out of scope."
+  }
+}

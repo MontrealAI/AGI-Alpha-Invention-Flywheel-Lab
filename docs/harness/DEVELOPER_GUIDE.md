@@ -2,6 +2,10 @@
 
 Start with [AGENTS.md](../../AGENTS.md). Reuse the canonical enterprise and existing mechanisms; do not build a parallel framework or ledger. This map distinguishes executable code, qualified operation, economic advantage and the broader mission.
 
+### FRONTIER Ω IGNITION mission workbench
+
+The [local IGNITION application](../../products/frontier-omega-ignition/README.md) connects source-linked discovery and challenge to a task-specific record migration or byte-manifest audit, independent comparison and a portable recipient package. It reuses the HARNESS local model and public-source transport. The public research editions remain authored demonstrations. Inspect the [public mission evidence](../../products/frontier-omega-ignition/docs/FLAGSHIP.md) and exact-source qualification before making a broader claim.
+
 ### Customer HARNESS application
 
 The scoped [ALPHA GENESIS HARNESS](../../products/alpha-genesis-harness/README.md) continues the existing browser application with private model adapters, explicit ChatGPT-plan authorization, a separate Codex engineering path, and persistent bounded construction workflows. Its [operator guide](../../products/alpha-genesis-harness/docs/OPERATOR.md) and [workflow guide](../../products/alpha-genesis-harness/docs/AGENTIC-WORKFLOWS.md) document the actual call paths. It does not replace the native enterprise account or grant financial authority.
