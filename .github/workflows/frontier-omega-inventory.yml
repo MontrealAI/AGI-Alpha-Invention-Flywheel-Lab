@@ -1,0 +1,60 @@
+name: FRONTIER Omega living inventory
+on:
+  push:
+    branches: ['feature/frontier-omega-living-inventory-20261116']
+    paths: ['frontier_omega/**', 'tests/test_frontier_omega*', 'examples/frontier-omega/**', 'docs/frontier-omega/**', '.github/workflows/frontier-omega-inventory.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  inventory:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record platform window
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+          sparse-checkout: |
+            frontier_omega
+            tests
+            examples/frontier-omega
+            docs/frontier-omega
+            products/alpha-genesis-harness/bridge
+      - name: Exercise canonical reservoir and executable replay
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/frontier-public"
+          python3 -m unittest discover -s tests -p 'test_frontier_omega*.py' -v 2>&1 | tee "$RUNNER_TEMP/frontier-public/TESTS.txt"
+          python3 -m frontier_omega.executable --demo > "$RUNNER_TEMP/frontier-public/REPLAY.json"
+          if [ -f frontier_omega/inventory.py ]; then
+            python3 -m frontier_omega.inventory demo --output "$RUNNER_TEMP/frontier-demo"
+            cp "$RUNNER_TEMP/frontier-demo/RESULTS.json" "$RUNNER_TEMP/frontier-public/RESULTS.json"
+            cp "$RUNNER_TEMP/frontier-demo/INVENTORY.html" "$RUNNER_TEMP/frontier-public/INVENTORY.html"
+          fi
+      - name: Package exact public source only
+        if: always()
+        run: |
+          mkdir -p "$RUNNER_TEMP/frontier-public"
+          python3 - <<'PY'
+          import os, pathlib, subprocess, zipfile, hashlib, json
+          root=pathlib.Path('.')
+          names=subprocess.check_output(['git','ls-files','-z']).decode().split('\0')
+          prefixes=('frontier_omega/','tests/test_frontier_omega','examples/frontier-omega/','docs/frontier-omega/')
+          chosen=[n for n in names if n and (n.startswith(prefixes) or n in ('products/alpha-genesis-harness/bridge/instruments.py','products/alpha-genesis-harness/LICENSE','AGENTS.md')) and (root/n).is_file() and not (root/n).is_symlink()]
+          hashes={n:hashlib.sha256((root/n).read_bytes()).hexdigest() for n in chosen}
+          out=pathlib.Path(os.environ['RUNNER_TEMP'])/'frontier-public'
+          manifest={'revision':subprocess.check_output(['git','rev-parse','HEAD']).decode().strip(),'files':hashes,'private_state_included':False}
+          with zipfile.ZipFile(out/'FRONTIER_OMEGA_CANONICAL.zip','w',zipfile.ZIP_DEFLATED) as z:
+              for n in chosen:z.writestr(n,(root/n).read_bytes())
+              z.writestr('SOURCE-MANIFEST.json',json.dumps(manifest,sort_keys=True,indent=2))
+          (out/'SOURCE-REVISION.txt').write_text(manifest['revision']+'\n')
+          PY
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: frontier-inventory-${{ github.sha }}
+          path: ${{ runner.temp }}/frontier-public
+          retention-days: 7
+          if-no-files-found: error
