@@ -1,0 +1,1112 @@
+{
+  "schema": "ignition-primary-model-observations/1",
+  "registration": "0210c2509ebc019024946cfa60c666a16a7f37a6",
+  "product": "4719005c957e53716ccd3f328688d8a9c40ee4cc",
+  "actions_run": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/44181650064",
+  "scope": "One preregistered observation per cell. The frozen-* cells ran the original product. Complete operating costs and economic superiority are unmeasured.",
+  "cells": {
+    "integrity-research": {
+      "observation": "COMPLETE",
+      "mission_verdict": "ACCEPTED",
+      "mission_status": "verified",
+      "route": "research",
+      "method": null,
+      "fixture_sha256": "f3c5981afbc3e61f57cbd7331bc6f1a4398c6b076aa794fc6bbda8e3c0f44425",
+      "contract_sha256": "9349cab7eed8ad480458c3f1655f659fc36455aaccb11b4e8fb56cb9094070a4",
+      "setup_wall_seconds": 17.723852,
+      "mission_wall_seconds": 759.415929,
+      "study_wall_seconds": 778.308749,
+      "actual_local_model_calls": 3,
+      "repair_calls": 0,
+      "tokens": {
+        "input_tokens": 6343,
+        "output_tokens": 2155
+      },
+      "independent_evaluation": {
+        "status": "pass",
+        "case_count": 9,
+        "candidate_cases_passed": 9,
+        "reference_cases_passed": 9,
+        "failed_case_names": [],
+        "contract_conforms": true,
+        "comparison": {
+          "criterion": "conformance to declared operations and complete correctness on the frozen workload; latency is telemetry only",
+          "name": "direct stdlib manifest diff",
+          "oracles_agree": true,
+          "outcome": "tie",
+          "reference_obstruction": null,
+          "reference_pass": true
+        },
+        "telemetry_ns": {
+          "candidate": 490990,
+          "local_evaluation": 3110141,
+          "reference": 204328
+        },
+        "receipt_sha256": "9f2ad300a066fae9e57d5c3312a1b2913d69c243cdcfcc12b9c628cd29d1d710"
+      },
+      "portable": {
+        "verified_exit": 0,
+        "example_exit": 0,
+        "example_output_sha256": "dd64def02abdcb655d6db41c9f042d5dce5c15429dfffb3ff8c63e7763bb6c85"
+      },
+      "conventional_baseline": {
+        "tool": "sha256sum",
+        "version": "sha256sum (uutils coreutils) 0.10.0",
+        "original_declared_cases": [
+          {
+            "name": "Clean receipt for both real source blobs",
+            "passed": true
+          },
+          {
+            "name": "A one-byte replacement, an omission and an extra file",
+            "passed": true
+          },
+          {
+            "name": "No files delivered",
+            "passed": true
+          },
+          {
+            "name": "Malformed base64",
+            "passed": true
+          },
+          {
+            "name": "Unsafe observed name",
+            "passed": true
+          }
+        ],
+        "accepted_on_declared_cases": true,
+        "wall_seconds": 0.010068,
+        "scope": "Existing hand-authored conventional route and original declared cases; model-evaluator controls are reported separately."
+      },
+      "selection": {
+        "decision": "build",
+        "kind": "manifest_audit",
+        "candidate_count": 5,
+        "model_recommendation": "build",
+        "reason_sha256": "e2e4cee1ee2bba3d47ae46ee661d3fa73a1dab3ca9f38d718245ee646e0bf0c0"
+      },
+      "attempts": [
+        {
+          "attempt": 1,
+          "contract_sha256": "9349cab7eed8ad480458c3f1655f659fc36455aaccb11b4e8fb56cb9094070a4",
+          "proposal_sha256": "b769c3c1aa3591de74074115983e1000057677edf23a8af1f2ce5f13bf1acccb",
+          "artifact_sha256": "e1eabae71e107b2a46b6c94d9ef5e4cad506fd3d6356288d0c697b232fc62bf5",
+          "receipt_sha256": "9f2ad300a066fae9e57d5c3312a1b2913d69c243cdcfcc12b9c628cd29d1d710",
+          "status": "accepted",
+          "checks": 9,
+          "passed_checks": 9,
+          "repairable": false,
+          "comparison": "tie",
+          "elapsed_seconds": 0.006504
+        }
+      ],
+      "delivery_sha256": "d944c0b4629065d51d548b35192b5da1585a74d505b39445b27731b0a4ef2ad3",
+      "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+      "model_revision": "ae44f08e1392f39c0e474af10c3ff8355c8b6688",
+      "verified_model_file_sha256": "2fde00ce69dd4899c70d020845e2638353015bba0fdf161b3eb965f2bca4464e",
+      "verified_runtime_binary_sha256": "fe211d00c4754aa67aaa492d2c755ab0f6ef60bf30eee3c0c74a3496189cde17",
+      "complete_cost_known": false,
+      "product_revision": "4719005c957e53716ccd3f328688d8a9c40ee4cc",
+      "raw_sha256": "c81bce3bf749db5427471e3794a45f097a47b5df37f5456f5a0d14915f4cb2db",
+      "download": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/44181650064/artifacts/14374663071",
+      "artifact_id": 14374663071
+    },
+    "migration-adaptive": {
+      "observation": "COMPLETE",
+      "mission_verdict": "NOT_ACCEPTED",
+      "mission_status": "failed",
+      "route": "direct",
+      "method": "model",
+      "fixture_sha256": "8058a3ea8b97ce7deb1927fae70bd71ac7e9639317814e048db28aade4ee1595",
+      "contract_sha256": "17e1dcf5c5f062a89db070dda03e6df21c6965bf7dbb5b7dff06e62803cf057d",
+      "setup_wall_seconds": 13.328366,
+      "mission_wall_seconds": 55.282793,
+      "study_wall_seconds": 69.625623,
+      "actual_local_model_calls": 2,
+      "repair_calls": 1,
+      "tokens": {
+        "input_tokens": 1717,
+        "output_tokens": 368
+      },
+      "independent_evaluation": {
+        "status": "fail",
+        "case_count": 9,
+        "candidate_cases_passed": 5,
+        "reference_cases_passed": 0,
+        "failed_case_names": [
+          "Withheld actual observatory card",
+          "Withheld actual resource card",
+          "Mixed state and stable order",
+          "development 1"
+        ],
+        "contract_conforms": true,
+        "comparison": {
+          "criterion": "conformance to declared operations and complete correctness on the frozen workload; latency is telemetry only",
+          "name": "enumerative example-based migration",
+          "oracles_agree": true,
+          "outcome": "incomparable",
+          "reference_obstruction": "ambiguous minimum-cost development hypotheses",
+          "reference_pass": false
+        },
+        "telemetry_ns": {
+          "candidate": 1169408,
+          "local_evaluation": 1709653,
+          "reference": 1302
+        },
+        "receipt_sha256": "0798fdb7764220986ac95efe157c2c15f5cf8464e2d3f05fc54e1a615012f5b0"
+      },
+      "portable": null,
+      "conventional_baseline": {
+        "tool": "jq",
+        "version": "jq-1.8.1",
+        "original_declared_cases": [
+          {
+            "name": "Withheld actual observatory card",
+            "passed": true
+          },
+          {
+            "name": "Withheld actual resource card",
+            "passed": true
+          },
+          {
+            "name": "Mixed state and stable order",
+            "passed": true
+          },
+          {
+            "name": "Refuse malformed row in a batch",
+            "passed": true
+          }
+        ],
+        "accepted_on_declared_cases": true,
+        "wall_seconds": 0.015103,
+        "scope": "Existing hand-authored conventional route and original declared cases; model-evaluator controls are reported separately."
+      },
+      "selection": {
+        "decision": "build",
+        "kind": "record_migration",
+        "candidate_count": 0,
+        "reason_sha256": "e94cba64251418c3cdfb42d15ea209055f9892f90f9b7263df5b417fb7c964c9"
+      },
+      "attempts": [
+        {
+          "attempt": 1,
+          "contract_sha256": "17e1dcf5c5f062a89db070dda03e6df21c6965bf7dbb5b7dff06e62803cf057d",
+          "proposal_sha256": "355cf2f91fe2079421dc7f6b400d14b2315af5ba54f19720b9bd60d5b92e901f",
+          "artifact_sha256": "af05374e53b854847bf7a79e54c2a7ef0a0b691611579ba167324b5f01cc0c90",
+          "receipt_sha256": "b4e806d2e54150c2e4c3279bbc22f0785aa8638584c12c866f08f1aef2396184",
+          "status": "rejected",
+          "checks": 9,
+          "passed_checks": 5,
+          "repairable": true,
+          "comparison": "incomparable",
+          "elapsed_seconds": 0.004426
+        },
+        {
+          "attempt": 2,
+          "contract_sha256": "17e1dcf5c5f062a89db070dda03e6df21c6965bf7dbb5b7dff06e62803cf057d",
+          "proposal_sha256": "9353460cae209c5ee2e7aa43d9b45bcc93fa77136c8743391cb9ffa106e3ed2e",
+          "artifact_sha256": "64b0b7baf883925b797136d81691089cdbe7833e3aea882e54854de3ccf93053",
+          "receipt_sha256": "0798fdb7764220986ac95efe157c2c15f5cf8464e2d3f05fc54e1a615012f5b0",
+          "status": "rejected",
+          "checks": 9,
+          "passed_checks": 5,
+          "repairable": true,
+          "comparison": "incomparable",
+          "elapsed_seconds": 0.006596
+        }
+      ],
+      "delivery_sha256": null,
+      "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+      "model_revision": "ae44f08e1392f39c0e474af10c3ff8355c8b6688",
+      "verified_model_file_sha256": "2fde00ce69dd4899c70d020845e2638353015bba0fdf161b3eb965f2bca4464e",
+      "verified_runtime_binary_sha256": "fe211d00c4754aa67aaa492d2c755ab0f6ef60bf30eee3c0c74a3496189cde17",
+      "complete_cost_known": false,
+      "product_revision": "4719005c957e53716ccd3f328688d8a9c40ee4cc",
+      "raw_sha256": "5c60f025d79a016ca7885c7e8772f283c78d71118b6a223a6bc288e2a9420826",
+      "download": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/44181650064/artifacts/14374485046",
+      "artifact_id": 14374485046
+    },
+    "integrity-default": {
+      "observation": "COMPLETE",
+      "mission_verdict": "ACCEPTED",
+      "mission_status": "verified",
+      "route": "direct",
+      "method": "specialist",
+      "fixture_sha256": "f3c5981afbc3e61f57cbd7331bc6f1a4398c6b076aa794fc6bbda8e3c0f44425",
+      "contract_sha256": "9349cab7eed8ad480458c3f1655f659fc36455aaccb11b4e8fb56cb9094070a4",
+      "setup_wall_seconds": 0.315994,
+      "mission_wall_seconds": 0.241647,
+      "study_wall_seconds": 0.610785,
+      "actual_local_model_calls": 0,
+      "repair_calls": 0,
+      "tokens": {
+        "input_tokens": null,
+        "output_tokens": null
+      },
+      "independent_evaluation": {
+        "status": "pass",
+        "case_count": 9,
+        "candidate_cases_passed": 9,
+        "reference_cases_passed": 9,
+        "failed_case_names": [],
+        "contract_conforms": true,
+        "comparison": {
+          "criterion": "conformance to declared operations and complete correctness on the frozen workload; latency is telemetry only",
+          "name": "direct stdlib manifest diff",
+          "oracles_agree": true,
+          "outcome": "tie",
+          "reference_obstruction": null,
+          "reference_pass": true
+        },
+        "telemetry_ns": {
+          "candidate": 512550,
+          "local_evaluation": 1657243,
+          "reference": 196530
+        },
+        "receipt_sha256": "557fdcfe4f4468fc025a3a3ebbcfee5301dcb8a0436511f5725dd175a7262c8f"
+      },
+      "portable": {
+        "verified_exit": 0,
+        "example_exit": 0,
+        "example_output_sha256": "dd64def02abdcb655d6db41c9f042d5dce5c15429dfffb3ff8c63e7763bb6c85"
+      },
+      "conventional_baseline": {
+        "tool": "sha256sum",
+        "version": "sha256sum (uutils coreutils) 0.10.0",
+        "original_declared_cases": [
+          {
+            "name": "Clean receipt for both real source blobs",
+            "passed": true
+          },
+          {
+            "name": "A one-byte replacement, an omission and an extra file",
+            "passed": true
+          },
+          {
+            "name": "No files delivered",
+            "passed": true
+          },
+          {
+            "name": "Malformed base64",
+            "passed": true
+          },
+          {
+            "name": "Unsafe observed name",
+            "passed": true
+          }
+        ],
+        "accepted_on_declared_cases": true,
+        "wall_seconds": 0.012437,
+        "scope": "Existing hand-authored conventional route and original declared cases; model-evaluator controls are reported separately."
+      },
+      "selection": {
+        "decision": "build",
+        "kind": "manifest_audit",
+        "candidate_count": 0,
+        "reason_sha256": "72789ea343d0539919f0f3037d7dff969626e4080af17844e52eaa8052097829"
+      },
+      "attempts": [
+        {
+          "attempt": 1,
+          "contract_sha256": "9349cab7eed8ad480458c3f1655f659fc36455aaccb11b4e8fb56cb9094070a4",
+          "proposal_sha256": "05dffa3bed4a8ec7f19f20e7b1b1a9cc3ed6fb313df0abcecaa1abfc960d8c2b",
+          "artifact_sha256": "e1eabae71e107b2a46b6c94d9ef5e4cad506fd3d6356288d0c697b232fc62bf5",
+          "receipt_sha256": "557fdcfe4f4468fc025a3a3ebbcfee5301dcb8a0436511f5725dd175a7262c8f",
+          "status": "accepted",
+          "checks": 9,
+          "passed_checks": 9,
+          "repairable": false,
+          "comparison": "tie",
+          "elapsed_seconds": 0.004519
+        }
+      ],
+      "delivery_sha256": "b2cf67985f6d0bd3badb66b2f7053e98eb6ffaaf5204c541f0fbf4fa49465b62",
+      "model": null,
+      "model_revision": null,
+      "verified_model_file_sha256": null,
+      "verified_runtime_binary_sha256": null,
+      "complete_cost_known": false,
+      "product_revision": "4719005c957e53716ccd3f328688d8a9c40ee4cc",
+      "raw_sha256": "dd07f643212a0b36652af8cb413b1420e1bed6cb6d7dc9c5ad391b69868d33b2",
+      "download": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/44181650064/artifacts/14374141811",
+      "artifact_id": 14374141811
+    },
+    "frozen-migration": {
+      "observation": "COMPLETE",
+      "mission_verdict": "NOT_ACCEPTED",
+      "mission_status": "deferred",
+      "route": null,
+      "method": null,
+      "fixture_sha256": "8058a3ea8b97ce7deb1927fae70bd71ac7e9639317814e048db28aade4ee1595",
+      "contract_sha256": "17e1dcf5c5f062a89db070dda03e6df21c6965bf7dbb5b7dff06e62803cf057d",
+      "setup_wall_seconds": 14.640283,
+      "mission_wall_seconds": 361.118508,
+      "study_wall_seconds": 376.759709,
+      "actual_local_model_calls": 2,
+      "repair_calls": 0,
+      "tokens": {
+        "input_tokens": 5688,
+        "output_tokens": 2216
+      },
+      "independent_evaluation": null,
+      "portable": null,
+      "conventional_baseline": {
+        "tool": "jq",
+        "version": "jq-1.8.1",
+        "original_declared_cases": [
+          {
+            "name": "Withheld actual observatory card",
+            "passed": true
+          },
+          {
+            "name": "Withheld actual resource card",
+            "passed": true
+          },
+          {
+            "name": "Mixed state and stable order",
+            "passed": true
+          },
+          {
+            "name": "Refuse malformed row in a batch",
+            "passed": true
+          }
+        ],
+        "accepted_on_declared_cases": true,
+        "wall_seconds": 0.008608,
+        "scope": "Existing hand-authored conventional route and original declared cases; model-evaluator controls are reported separately."
+      },
+      "selection": {
+        "decision": "defer",
+        "kind": null,
+        "candidate_count": 5,
+        "model_recommendation": "build",
+        "reason_sha256": "5e572cfea62bef5b3a882d4696ca9153c89f6fa92d5544b26b7e5f48340c5ee6"
+      },
+      "attempts": [],
+      "delivery_sha256": null,
+      "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+      "model_revision": "ae44f08e1392f39c0e474af10c3ff8355c8b6688",
+      "verified_model_file_sha256": "2fde00ce69dd4899c70d020845e2638353015bba0fdf161b3eb965f2bca4464e",
+      "verified_runtime_binary_sha256": "fe211d00c4754aa67aaa492d2c755ab0f6ef60bf30eee3c0c74a3496189cde17",
+      "complete_cost_known": false,
+      "product_revision": "89f2196d552810bc56696a7f380ae66c55f8763a",
+      "raw_sha256": "df3e958133b3a769c6979f4909aa0554688014594812f867aa9ccde196c62926",
+      "download": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/44181650064/artifacts/14373960544",
+      "artifact_id": 14373960544
+    },
+    "integrity-adaptive": {
+      "observation": "COMPLETE",
+      "mission_verdict": "ACCEPTED",
+      "mission_status": "verified",
+      "route": "direct",
+      "method": "model",
+      "fixture_sha256": "f3c5981afbc3e61f57cbd7331bc6f1a4398c6b076aa794fc6bbda8e3c0f44425",
+      "contract_sha256": "9349cab7eed8ad480458c3f1655f659fc36455aaccb11b4e8fb56cb9094070a4",
+      "setup_wall_seconds": 33.818978,
+      "mission_wall_seconds": 27.040751,
+      "study_wall_seconds": 62.288763,
+      "actual_local_model_calls": 1,
+      "repair_calls": 0,
+      "tokens": {
+        "input_tokens": 544,
+        "output_tokens": 27
+      },
+      "independent_evaluation": {
+        "status": "pass",
+        "case_count": 9,
+        "candidate_cases_passed": 9,
+        "reference_cases_passed": 9,
+        "failed_case_names": [],
+        "contract_conforms": true,
+        "comparison": {
+          "criterion": "conformance to declared operations and complete correctness on the frozen workload; latency is telemetry only",
+          "name": "direct stdlib manifest diff",
+          "oracles_agree": true,
+          "outcome": "tie",
+          "reference_obstruction": null,
+          "reference_pass": true
+        },
+        "telemetry_ns": {
+          "candidate": 513009,
+          "local_evaluation": 1640301,
+          "reference": 192180
+        },
+        "receipt_sha256": "973dc45871264702e283ee8b2afc3e452d4549c588ac6a0f3ee784186751979c"
+      },
+      "portable": {
+        "verified_exit": 0,
+        "example_exit": 0,
+        "example_output_sha256": "dd64def02abdcb655d6db41c9f042d5dce5c15429dfffb3ff8c63e7763bb6c85"
+      },
+      "conventional_baseline": {
+        "tool": "sha256sum",
+        "version": "sha256sum (uutils coreutils) 0.10.0",
+        "original_declared_cases": [
+          {
+            "name": "Clean receipt for both real source blobs",
+            "passed": true
+          },
+          {
+            "name": "A one-byte replacement, an omission and an extra file",
+            "passed": true
+          },
+          {
+            "name": "No files delivered",
+            "passed": true
+          },
+          {
+            "name": "Malformed base64",
+            "passed": true
+          },
+          {
+            "name": "Unsafe observed name",
+            "passed": true
+          }
+        ],
+        "accepted_on_declared_cases": true,
+        "wall_seconds": 0.012327,
+        "scope": "Existing hand-authored conventional route and original declared cases; model-evaluator controls are reported separately."
+      },
+      "selection": {
+        "decision": "build",
+        "kind": "manifest_audit",
+        "candidate_count": 0,
+        "reason_sha256": "e94cba64251418c3cdfb42d15ea209055f9892f90f9b7263df5b417fb7c964c9"
+      },
+      "attempts": [
+        {
+          "attempt": 1,
+          "contract_sha256": "9349cab7eed8ad480458c3f1655f659fc36455aaccb11b4e8fb56cb9094070a4",
+          "proposal_sha256": "b769c3c1aa3591de74074115983e1000057677edf23a8af1f2ce5f13bf1acccb",
+          "artifact_sha256": "e1eabae71e107b2a46b6c94d9ef5e4cad506fd3d6356288d0c697b232fc62bf5",
+          "receipt_sha256": "973dc45871264702e283ee8b2afc3e452d4549c588ac6a0f3ee784186751979c",
+          "status": "accepted",
+          "checks": 9,
+          "passed_checks": 9,
+          "repairable": false,
+          "comparison": "tie",
+          "elapsed_seconds": 0.005486
+        }
+      ],
+      "delivery_sha256": "bd78f9c81caebde3dc7aa86b9a96c0647c0a4d8dc1155ad13befbb5d492db940",
+      "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+      "model_revision": "ae44f08e1392f39c0e474af10c3ff8355c8b6688",
+      "verified_model_file_sha256": "2fde00ce69dd4899c70d020845e2638353015bba0fdf161b3eb965f2bca4464e",
+      "verified_runtime_binary_sha256": "fe211d00c4754aa67aaa492d2c755ab0f6ef60bf30eee3c0c74a3496189cde17",
+      "complete_cost_known": false,
+      "product_revision": "4719005c957e53716ccd3f328688d8a9c40ee4cc",
+      "raw_sha256": "152774b62afc505ee1fc8e7aa55e2d90c64bfd0064c54da8005c4dad091a0025",
+      "download": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/44181650064/artifacts/14373465789",
+      "artifact_id": 14373465789
+    },
+    "migration-direct": {
+      "observation": "COMPLETE",
+      "mission_verdict": "NOT_ACCEPTED",
+      "mission_status": "failed",
+      "route": "direct",
+      "method": "model",
+      "fixture_sha256": "8058a3ea8b97ce7deb1927fae70bd71ac7e9639317814e048db28aade4ee1595",
+      "contract_sha256": "17e1dcf5c5f062a89db070dda03e6df21c6965bf7dbb5b7dff06e62803cf057d",
+      "setup_wall_seconds": 14.278344,
+      "mission_wall_seconds": 83.75144,
+      "study_wall_seconds": 98.646414,
+      "actual_local_model_calls": 2,
+      "repair_calls": 1,
+      "tokens": {
+        "input_tokens": 1719,
+        "output_tokens": 368
+      },
+      "independent_evaluation": {
+        "status": "fail",
+        "case_count": 9,
+        "candidate_cases_passed": 5,
+        "reference_cases_passed": 0,
+        "failed_case_names": [
+          "Withheld actual observatory card",
+          "Withheld actual resource card",
+          "Mixed state and stable order",
+          "development 1"
+        ],
+        "contract_conforms": true,
+        "comparison": {
+          "criterion": "conformance to declared operations and complete correctness on the frozen workload; latency is telemetry only",
+          "name": "enumerative example-based migration",
+          "oracles_agree": true,
+          "outcome": "incomparable",
+          "reference_obstruction": "ambiguous minimum-cost development hypotheses",
+          "reference_pass": false
+        },
+        "telemetry_ns": {
+          "candidate": 1496855,
+          "local_evaluation": 2289577,
+          "reference": 1542
+        },
+        "receipt_sha256": "b09cd990e75f720776876456d50e678dc47ef565f5480cb39bac359f8e999739"
+      },
+      "portable": null,
+      "conventional_baseline": {
+        "tool": "jq",
+        "version": "jq-1.8.1",
+        "original_declared_cases": [
+          {
+            "name": "Withheld actual observatory card",
+            "passed": true
+          },
+          {
+            "name": "Withheld actual resource card",
+            "passed": true
+          },
+          {
+            "name": "Mixed state and stable order",
+            "passed": true
+          },
+          {
+            "name": "Refuse malformed row in a batch",
+            "passed": true
+          }
+        ],
+        "accepted_on_declared_cases": true,
+        "wall_seconds": 0.010045,
+        "scope": "Existing hand-authored conventional route and original declared cases; model-evaluator controls are reported separately."
+      },
+      "selection": {
+        "decision": "build",
+        "kind": "record_migration",
+        "candidate_count": 0,
+        "reason_sha256": "e94cba64251418c3cdfb42d15ea209055f9892f90f9b7263df5b417fb7c964c9"
+      },
+      "attempts": [
+        {
+          "attempt": 1,
+          "contract_sha256": "17e1dcf5c5f062a89db070dda03e6df21c6965bf7dbb5b7dff06e62803cf057d",
+          "proposal_sha256": "355cf2f91fe2079421dc7f6b400d14b2315af5ba54f19720b9bd60d5b92e901f",
+          "artifact_sha256": "af05374e53b854847bf7a79e54c2a7ef0a0b691611579ba167324b5f01cc0c90",
+          "receipt_sha256": "ef49c7f26bdba3d7ce2f7cc42e90fdbdf09ec6de28f89507ed79f30e26c35ddd",
+          "status": "rejected",
+          "checks": 9,
+          "passed_checks": 5,
+          "repairable": true,
+          "comparison": "incomparable",
+          "elapsed_seconds": 0.327432
+        },
+        {
+          "attempt": 2,
+          "contract_sha256": "17e1dcf5c5f062a89db070dda03e6df21c6965bf7dbb5b7dff06e62803cf057d",
+          "proposal_sha256": "9353460cae209c5ee2e7aa43d9b45bcc93fa77136c8743391cb9ffa106e3ed2e",
+          "artifact_sha256": "64b0b7baf883925b797136d81691089cdbe7833e3aea882e54854de3ccf93053",
+          "receipt_sha256": "b09cd990e75f720776876456d50e678dc47ef565f5480cb39bac359f8e999739",
+          "status": "rejected",
+          "checks": 9,
+          "passed_checks": 5,
+          "repairable": true,
+          "comparison": "incomparable",
+          "elapsed_seconds": 0.005573
+        }
+      ],
+      "delivery_sha256": null,
+      "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+      "model_revision": "ae44f08e1392f39c0e474af10c3ff8355c8b6688",
+      "verified_model_file_sha256": "2fde00ce69dd4899c70d020845e2638353015bba0fdf161b3eb965f2bca4464e",
+      "verified_runtime_binary_sha256": "fe211d00c4754aa67aaa492d2c755ab0f6ef60bf30eee3c0c74a3496189cde17",
+      "complete_cost_known": false,
+      "product_revision": "4719005c957e53716ccd3f328688d8a9c40ee4cc",
+      "raw_sha256": "37edb6980c26b9c312f5d2b5737ddd048af6fe3def674e4f0131574b48d0bd1d",
+      "download": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/44181650064/artifacts/14373380932",
+      "artifact_id": 14373380932
+    },
+    "integrity-direct": {
+      "observation": "COMPLETE",
+      "mission_verdict": "ACCEPTED",
+      "mission_status": "verified",
+      "route": "direct",
+      "method": "model",
+      "fixture_sha256": "f3c5981afbc3e61f57cbd7331bc6f1a4398c6b076aa794fc6bbda8e3c0f44425",
+      "contract_sha256": "9349cab7eed8ad480458c3f1655f659fc36455aaccb11b4e8fb56cb9094070a4",
+      "setup_wall_seconds": 13.148622,
+      "mission_wall_seconds": 26.304255,
+      "study_wall_seconds": 40.901957,
+      "actual_local_model_calls": 1,
+      "repair_calls": 0,
+      "tokens": {
+        "input_tokens": 550,
+        "output_tokens": 27
+      },
+      "independent_evaluation": {
+        "status": "pass",
+        "case_count": 9,
+        "candidate_cases_passed": 9,
+        "reference_cases_passed": 9,
+        "failed_case_names": [],
+        "contract_conforms": true,
+        "comparison": {
+          "criterion": "conformance to declared operations and complete correctness on the frozen workload; latency is telemetry only",
+          "name": "direct stdlib manifest diff",
+          "oracles_agree": true,
+          "outcome": "tie",
+          "reference_obstruction": null,
+          "reference_pass": true
+        },
+        "telemetry_ns": {
+          "candidate": 521250,
+          "local_evaluation": 1636946,
+          "reference": 189682
+        },
+        "receipt_sha256": "0e445081476f9e85261c6c7f409a21a052635e522d13b29bd3891848302c0255"
+      },
+      "portable": {
+        "verified_exit": 0,
+        "example_exit": 0,
+        "example_output_sha256": "dd64def02abdcb655d6db41c9f042d5dce5c15429dfffb3ff8c63e7763bb6c85"
+      },
+      "conventional_baseline": {
+        "tool": "sha256sum",
+        "version": "sha256sum (uutils coreutils) 0.10.0",
+        "original_declared_cases": [
+          {
+            "name": "Clean receipt for both real source blobs",
+            "passed": true
+          },
+          {
+            "name": "A one-byte replacement, an omission and an extra file",
+            "passed": true
+          },
+          {
+            "name": "No files delivered",
+            "passed": true
+          },
+          {
+            "name": "Malformed base64",
+            "passed": true
+          },
+          {
+            "name": "Unsafe observed name",
+            "passed": true
+          }
+        ],
+        "accepted_on_declared_cases": true,
+        "wall_seconds": 0.012791,
+        "scope": "Existing hand-authored conventional route and original declared cases; model-evaluator controls are reported separately."
+      },
+      "selection": {
+        "decision": "build",
+        "kind": "manifest_audit",
+        "candidate_count": 0,
+        "reason_sha256": "e94cba64251418c3cdfb42d15ea209055f9892f90f9b7263df5b417fb7c964c9"
+      },
+      "attempts": [
+        {
+          "attempt": 1,
+          "contract_sha256": "9349cab7eed8ad480458c3f1655f659fc36455aaccb11b4e8fb56cb9094070a4",
+          "proposal_sha256": "b769c3c1aa3591de74074115983e1000057677edf23a8af1f2ce5f13bf1acccb",
+          "artifact_sha256": "e1eabae71e107b2a46b6c94d9ef5e4cad506fd3d6356288d0c697b232fc62bf5",
+          "receipt_sha256": "0e445081476f9e85261c6c7f409a21a052635e522d13b29bd3891848302c0255",
+          "status": "accepted",
+          "checks": 9,
+          "passed_checks": 9,
+          "repairable": false,
+          "comparison": "tie",
+          "elapsed_seconds": 0.004945
+        }
+      ],
+      "delivery_sha256": "db31cf55ee66b505afb2593812d3b54c8bae5fb8f8022b58632ae051e8113241",
+      "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+      "model_revision": "ae44f08e1392f39c0e474af10c3ff8355c8b6688",
+      "verified_model_file_sha256": "2fde00ce69dd4899c70d020845e2638353015bba0fdf161b3eb965f2bca4464e",
+      "verified_runtime_binary_sha256": "fe211d00c4754aa67aaa492d2c755ab0f6ef60bf30eee3c0c74a3496189cde17",
+      "complete_cost_known": false,
+      "product_revision": "4719005c957e53716ccd3f328688d8a9c40ee4cc",
+      "raw_sha256": "b3c2f097c37dbcd40251a23e31b87bf4e56522817cc9d188c56546a336027ace",
+      "download": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/44181650064/artifacts/14373223377",
+      "artifact_id": 14373223377
+    },
+    "migration-research": {
+      "observation": "COMPLETE",
+      "mission_verdict": "NOT_ACCEPTED",
+      "mission_status": "deferred",
+      "route": "research",
+      "method": null,
+      "fixture_sha256": "8058a3ea8b97ce7deb1927fae70bd71ac7e9639317814e048db28aade4ee1595",
+      "contract_sha256": "17e1dcf5c5f062a89db070dda03e6df21c6965bf7dbb5b7dff06e62803cf057d",
+      "setup_wall_seconds": 12.705371,
+      "mission_wall_seconds": 623.287981,
+      "study_wall_seconds": 636.962171,
+      "actual_local_model_calls": 2,
+      "repair_calls": 0,
+      "tokens": {
+        "input_tokens": 5901,
+        "output_tokens": 2421
+      },
+      "independent_evaluation": null,
+      "portable": null,
+      "conventional_baseline": {
+        "tool": "jq",
+        "version": "jq-1.8.1",
+        "original_declared_cases": [
+          {
+            "name": "Withheld actual observatory card",
+            "passed": true
+          },
+          {
+            "name": "Withheld actual resource card",
+            "passed": true
+          },
+          {
+            "name": "Mixed state and stable order",
+            "passed": true
+          },
+          {
+            "name": "Refuse malformed row in a batch",
+            "passed": true
+          }
+        ],
+        "accepted_on_declared_cases": true,
+        "wall_seconds": 0.009993,
+        "scope": "Existing hand-authored conventional route and original declared cases; model-evaluator controls are reported separately."
+      },
+      "selection": {
+        "decision": "defer",
+        "kind": null,
+        "candidate_count": 5,
+        "model_recommendation": "build",
+        "reason_sha256": "5e572cfea62bef5b3a882d4696ca9153c89f6fa92d5544b26b7e5f48340c5ee6"
+      },
+      "attempts": [],
+      "delivery_sha256": null,
+      "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+      "model_revision": "ae44f08e1392f39c0e474af10c3ff8355c8b6688",
+      "verified_model_file_sha256": "2fde00ce69dd4899c70d020845e2638353015bba0fdf161b3eb965f2bca4464e",
+      "verified_runtime_binary_sha256": "fe211d00c4754aa67aaa492d2c755ab0f6ef60bf30eee3c0c74a3496189cde17",
+      "complete_cost_known": false,
+      "product_revision": "4719005c957e53716ccd3f328688d8a9c40ee4cc",
+      "raw_sha256": "7d78d8d604550228045e46b1cb0482828c23e71e92be33f8a860ab7eb7d9041e",
+      "download": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/44181650064/artifacts/14372554748",
+      "artifact_id": 14372554748
+    },
+    "frozen-integrity": {
+      "observation": "COMPLETE",
+      "mission_verdict": "NOT_ACCEPTED",
+      "mission_status": "failed",
+      "route": null,
+      "method": null,
+      "fixture_sha256": "f3c5981afbc3e61f57cbd7331bc6f1a4398c6b076aa794fc6bbda8e3c0f44425",
+      "contract_sha256": "9349cab7eed8ad480458c3f1655f659fc36455aaccb11b4e8fb56cb9094070a4",
+      "setup_wall_seconds": 14.962556,
+      "mission_wall_seconds": 699.563608,
+      "study_wall_seconds": 714.826349,
+      "actual_local_model_calls": 3,
+      "repair_calls": 0,
+      "tokens": {
+        "input_tokens": 6381,
+        "output_tokens": 2296
+      },
+      "independent_evaluation": {
+        "status": "fail",
+        "case_count": 9,
+        "candidate_cases_passed": 8,
+        "reference_cases_passed": 9,
+        "failed_case_names": [
+          "Clean receipt for both real source blobs"
+        ],
+        "contract_conforms": false,
+        "comparison": {
+          "criterion": "conformance to declared operations and complete correctness on the frozen workload; latency is telemetry only",
+          "name": "direct stdlib manifest diff",
+          "oracles_agree": true,
+          "outcome": "baseline_wins",
+          "reference_obstruction": null,
+          "reference_pass": true
+        },
+        "telemetry_ns": {
+          "candidate": 297663,
+          "local_evaluation": 984884,
+          "reference": 125120
+        },
+        "receipt_sha256": "3334e13ef7e7252040fe60ebbbb8fe20165bac6adce3fbf14f6e564cde9193ae"
+      },
+      "portable": null,
+      "conventional_baseline": {
+        "tool": "sha256sum",
+        "version": "sha256sum (uutils coreutils) 0.10.0",
+        "original_declared_cases": [
+          {
+            "name": "Clean receipt for both real source blobs",
+            "passed": true
+          },
+          {
+            "name": "A one-byte replacement, an omission and an extra file",
+            "passed": true
+          },
+          {
+            "name": "No files delivered",
+            "passed": true
+          },
+          {
+            "name": "Malformed base64",
+            "passed": true
+          },
+          {
+            "name": "Unsafe observed name",
+            "passed": true
+          }
+        ],
+        "accepted_on_declared_cases": true,
+        "wall_seconds": 0.009287,
+        "scope": "Existing hand-authored conventional route and original declared cases; model-evaluator controls are reported separately."
+      },
+      "selection": {
+        "decision": "build",
+        "kind": "manifest_audit",
+        "candidate_count": 5,
+        "model_recommendation": "build",
+        "reason_sha256": "10cb13d78f5e05f177b26880adb875698770e9dedcdf6d66ee4019c1d53e0dc4"
+      },
+      "attempts": [],
+      "delivery_sha256": null,
+      "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+      "model_revision": "ae44f08e1392f39c0e474af10c3ff8355c8b6688",
+      "verified_model_file_sha256": "2fde00ce69dd4899c70d020845e2638353015bba0fdf161b3eb965f2bca4464e",
+      "verified_runtime_binary_sha256": "fe211d00c4754aa67aaa492d2c755ab0f6ef60bf30eee3c0c74a3496189cde17",
+      "complete_cost_known": false,
+      "product_revision": "89f2196d552810bc56696a7f380ae66c55f8763a",
+      "raw_sha256": "e73a3be30402f57b827596d0ea0e097aa6b82c3a945791f49016ed90b35805e0",
+      "download": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/44181650064/artifacts/14372429495",
+      "artifact_id": 14372429495
+    },
+    "repair-adaptive": {
+      "observation": "COMPLETE",
+      "mission_verdict": "ACCEPTED",
+      "mission_status": "verified",
+      "route": "direct",
+      "method": "model",
+      "fixture_sha256": "f3c5981afbc3e61f57cbd7331bc6f1a4398c6b076aa794fc6bbda8e3c0f44425",
+      "contract_sha256": "9349cab7eed8ad480458c3f1655f659fc36455aaccb11b4e8fb56cb9094070a4",
+      "setup_wall_seconds": 9.84018,
+      "mission_wall_seconds": 15.869607,
+      "study_wall_seconds": 26.508633,
+      "actual_local_model_calls": 1,
+      "repair_calls": 1,
+      "tokens": {
+        "input_tokens": 812,
+        "output_tokens": 27
+      },
+      "independent_evaluation": {
+        "status": "pass",
+        "case_count": 9,
+        "candidate_cases_passed": 9,
+        "reference_cases_passed": 9,
+        "failed_case_names": [],
+        "contract_conforms": true,
+        "comparison": {
+          "criterion": "conformance to declared operations and complete correctness on the frozen workload; latency is telemetry only",
+          "name": "direct stdlib manifest diff",
+          "oracles_agree": true,
+          "outcome": "tie",
+          "reference_obstruction": null,
+          "reference_pass": true
+        },
+        "telemetry_ns": {
+          "candidate": 987805,
+          "local_evaluation": 1657429,
+          "reference": 121754
+        },
+        "receipt_sha256": "3de41d9ba576f96a5deeffb1e9119c23b6903f66fe12a9e640647476a73e02e4"
+      },
+      "portable": {
+        "verified_exit": 0,
+        "example_exit": 0,
+        "example_output_sha256": "dd64def02abdcb655d6db41c9f042d5dce5c15429dfffb3ff8c63e7763bb6c85"
+      },
+      "conventional_baseline": {
+        "tool": "sha256sum",
+        "version": "sha256sum (uutils coreutils) 0.10.0",
+        "original_declared_cases": [
+          {
+            "name": "Clean receipt for both real source blobs",
+            "passed": true
+          },
+          {
+            "name": "A one-byte replacement, an omission and an extra file",
+            "passed": true
+          },
+          {
+            "name": "No files delivered",
+            "passed": true
+          },
+          {
+            "name": "Malformed base64",
+            "passed": true
+          },
+          {
+            "name": "Unsafe observed name",
+            "passed": true
+          }
+        ],
+        "accepted_on_declared_cases": true,
+        "wall_seconds": 0.01058,
+        "scope": "Existing hand-authored conventional route and original declared cases; model-evaluator controls are reported separately."
+      },
+      "selection": {
+        "decision": "build",
+        "kind": "manifest_audit",
+        "candidate_count": 0,
+        "reason_sha256": "e94cba64251418c3cdfb42d15ea209055f9892f90f9b7263df5b417fb7c964c9"
+      },
+      "attempts": [
+        {
+          "attempt": 1,
+          "contract_sha256": "9349cab7eed8ad480458c3f1655f659fc36455aaccb11b4e8fb56cb9094070a4",
+          "proposal_sha256": "ae5de4df1e412809125e2c4a9a3868fd87c5b1b605dff3a8951cf74af33b0ee4",
+          "artifact_sha256": "2a3506c32e58cdc0da753f9fc4a15e90ad45ddd01d872e197908ed04630c11eb",
+          "receipt_sha256": "cfdefb312af9a2aaeef736d7cf461724bb34320f64c0b011e857f61a15e448a6",
+          "status": "rejected",
+          "checks": 9,
+          "passed_checks": 8,
+          "repairable": true,
+          "comparison": "baseline_wins",
+          "elapsed_seconds": 0.271879
+        },
+        {
+          "attempt": 2,
+          "contract_sha256": "9349cab7eed8ad480458c3f1655f659fc36455aaccb11b4e8fb56cb9094070a4",
+          "proposal_sha256": "b769c3c1aa3591de74074115983e1000057677edf23a8af1f2ce5f13bf1acccb",
+          "artifact_sha256": "e1eabae71e107b2a46b6c94d9ef5e4cad506fd3d6356288d0c697b232fc62bf5",
+          "receipt_sha256": "3de41d9ba576f96a5deeffb1e9119c23b6903f66fe12a9e640647476a73e02e4",
+          "status": "accepted",
+          "checks": 9,
+          "passed_checks": 9,
+          "repairable": false,
+          "comparison": "tie",
+          "elapsed_seconds": 0.004895
+        }
+      ],
+      "delivery_sha256": "55fbb7e2252955c35997d131dd546414f469130338874d4fb07e018808856bb4",
+      "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+      "model_revision": "ae44f08e1392f39c0e474af10c3ff8355c8b6688",
+      "verified_model_file_sha256": "2fde00ce69dd4899c70d020845e2638353015bba0fdf161b3eb965f2bca4464e",
+      "verified_runtime_binary_sha256": "fe211d00c4754aa67aaa492d2c755ab0f6ef60bf30eee3c0c74a3496189cde17",
+      "complete_cost_known": false,
+      "product_revision": "4719005c957e53716ccd3f328688d8a9c40ee4cc",
+      "raw_sha256": "44251c3778d4d0a062687077af05f036c469f9f2fc4cfc039dfd6ca5ac484371",
+      "download": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/44181650064/artifacts/14372238886",
+      "artifact_id": 14372238886
+    },
+    "repair-direct": {
+      "observation": "COMPLETE",
+      "mission_verdict": "ACCEPTED",
+      "mission_status": "verified",
+      "route": "direct",
+      "method": "model",
+      "fixture_sha256": "f3c5981afbc3e61f57cbd7331bc6f1a4398c6b076aa794fc6bbda8e3c0f44425",
+      "contract_sha256": "9349cab7eed8ad480458c3f1655f659fc36455aaccb11b4e8fb56cb9094070a4",
+      "setup_wall_seconds": 14.072772,
+      "mission_wall_seconds": 58.630492,
+      "study_wall_seconds": 74.306571,
+      "actual_local_model_calls": 1,
+      "repair_calls": 1,
+      "tokens": {
+        "input_tokens": 814,
+        "output_tokens": 156
+      },
+      "independent_evaluation": {
+        "status": "pass",
+        "case_count": 9,
+        "candidate_cases_passed": 9,
+        "reference_cases_passed": 9,
+        "failed_case_names": [],
+        "contract_conforms": true,
+        "comparison": {
+          "criterion": "conformance to declared operations and complete correctness on the frozen workload; latency is telemetry only",
+          "name": "direct stdlib manifest diff",
+          "oracles_agree": true,
+          "outcome": "tie",
+          "reference_obstruction": null,
+          "reference_pass": true
+        },
+        "telemetry_ns": {
+          "candidate": 1113861,
+          "local_evaluation": 2133300,
+          "reference": 197232
+        },
+        "receipt_sha256": "8651a71e9bee3e21d62cef60aedf90d3665a523a853b4f516f9d0170786afbf2"
+      },
+      "portable": {
+        "verified_exit": 0,
+        "example_exit": 0,
+        "example_output_sha256": "dd64def02abdcb655d6db41c9f042d5dce5c15429dfffb3ff8c63e7763bb6c85"
+      },
+      "conventional_baseline": {
+        "tool": "sha256sum",
+        "version": "sha256sum (uutils coreutils) 0.10.0",
+        "original_declared_cases": [
+          {
+            "name": "Clean receipt for both real source blobs",
+            "passed": true
+          },
+          {
+            "name": "A one-byte replacement, an omission and an extra file",
+            "passed": true
+          },
+          {
+            "name": "No files delivered",
+            "passed": true
+          },
+          {
+            "name": "Malformed base64",
+            "passed": true
+          },
+          {
+            "name": "Unsafe observed name",
+            "passed": true
+          }
+        ],
+        "accepted_on_declared_cases": true,
+        "wall_seconds": 0.014219,
+        "scope": "Existing hand-authored conventional route and original declared cases; model-evaluator controls are reported separately."
+      },
+      "selection": {
+        "decision": "build",
+        "kind": "manifest_audit",
+        "candidate_count": 0,
+        "reason_sha256": "e94cba64251418c3cdfb42d15ea209055f9892f90f9b7263df5b417fb7c964c9"
+      },
+      "attempts": [
+        {
+          "attempt": 1,
+          "contract_sha256": "9349cab7eed8ad480458c3f1655f659fc36455aaccb11b4e8fb56cb9094070a4",
+          "proposal_sha256": "ae5de4df1e412809125e2c4a9a3868fd87c5b1b605dff3a8951cf74af33b0ee4",
+          "artifact_sha256": "2a3506c32e58cdc0da753f9fc4a15e90ad45ddd01d872e197908ed04630c11eb",
+          "receipt_sha256": "34e1e174cd2aaa21e9d5c7ecbff3a2fbb2f89d1b34df5be7dc46502f237cd170",
+          "status": "rejected",
+          "checks": 9,
+          "passed_checks": 8,
+          "repairable": true,
+          "comparison": "baseline_wins",
+          "elapsed_seconds": 0.005506
+        },
+        {
+          "attempt": 2,
+          "contract_sha256": "9349cab7eed8ad480458c3f1655f659fc36455aaccb11b4e8fb56cb9094070a4",
+          "proposal_sha256": "05dffa3bed4a8ec7f19f20e7b1b1a9cc3ed6fb313df0abcecaa1abfc960d8c2b",
+          "artifact_sha256": "e1eabae71e107b2a46b6c94d9ef5e4cad506fd3d6356288d0c697b232fc62bf5",
+          "receipt_sha256": "8651a71e9bee3e21d62cef60aedf90d3665a523a853b4f516f9d0170786afbf2",
+          "status": "accepted",
+          "checks": 9,
+          "passed_checks": 9,
+          "repairable": false,
+          "comparison": "tie",
+          "elapsed_seconds": 0.005412
+        }
+      ],
+      "delivery_sha256": "9664b5fb53dd24b1f6b28a613a47324602eeeb0a1f80ee8404234988dae65afa",
+      "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+      "model_revision": "ae44f08e1392f39c0e474af10c3ff8355c8b6688",
+      "verified_model_file_sha256": "2fde00ce69dd4899c70d020845e2638353015bba0fdf161b3eb965f2bca4464e",
+      "verified_runtime_binary_sha256": "fe211d00c4754aa67aaa492d2c755ab0f6ef60bf30eee3c0c74a3496189cde17",
+      "complete_cost_known": false,
+      "product_revision": "4719005c957e53716ccd3f328688d8a9c40ee4cc",
+      "raw_sha256": "dfc9fdc92e7859f2c78ed446f9d134fa6c877decd4067a13496de3284ff8ffe5",
+      "download": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/44181650064/artifacts/14371159753",
+      "artifact_id": 14371159753
+    }
+  }
+}
