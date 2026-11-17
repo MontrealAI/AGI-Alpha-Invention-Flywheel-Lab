@@ -1,0 +1,400 @@
+{
+  "protocol": "ignition/bounded-choice/1",
+  "started_at": "2026-11-17T22:12:32.290088+00:00",
+  "observation": "COMPLETE",
+  "mission_verdict": "ACCEPTED",
+  "complete_cost_known": false,
+  "actions_run": "44187377022",
+  "actions_attempt": "1",
+  "human_interventions_in_unattended_cells": 0,
+  "source": "50fe9fea71bc8880fb2c2ff7b4dff9a8af767c1c",
+  "registration_sha256": "970c21e26092e342b4c1d57438f1938349d8e7eb682eb98f42233254f5d3ab38",
+  "driver_sha256": "e1c721bd1e85999850e74788b135770b7d4ddde5b43140e4fc129abed5a7507d",
+  "runtime_sha256": "fcba3c6e6891af64cbbb7923316c3cb0693c29b02ab49260b777edb2028b4876",
+  "evaluator": {
+    "construction.py": "17ceb7e84280cad65690c540bb6abc041e50ca121ab4ca7a9b0dfa2fb9b5fa71",
+    "evaluation.py": "50a13c7a52aca4ddaed813705f64bfe1f8767b520da5f75a3f8b32451fe78a41"
+  },
+  "preflight": {
+    "parcel": {
+      "fixture_sha256": "2932689bbdd315189f07ab20219b3dd5ee1ae1736288956bffa5f58b0f8442d5",
+      "contract_sha256": "41e161e8df39e55f99618871541b7fbf48141a7311d55565980881e41fed97df",
+      "menus": {
+        "ascending": [
+          {
+            "id": "H-9d654016fc37",
+            "description": "sorting_mark: take the first component of parcel_code split on hyphen as text"
+          },
+          {
+            "id": "H-cc5a9ab5a510",
+            "description": "sorting_mark: take the second component of routing_note split on space as text"
+          }
+        ],
+        "descending": [
+          {
+            "id": "H-cc5a9ab5a510",
+            "description": "sorting_mark: take the second component of routing_note split on space as text"
+          },
+          {
+            "id": "H-9d654016fc37",
+            "description": "sorting_mark: take the first component of parcel_code split on hyphen as text"
+          }
+        ]
+      },
+      "complete_conventional": {
+        "route": "Hand-authored bounded parcel mapping; recipient evaluator",
+        "evaluation": {
+          "status": "pass",
+          "case_count": 9,
+          "candidate_cases_passed": 9,
+          "reference_cases_passed": 0,
+          "failed_case_names": [],
+          "contract_conforms": true,
+          "comparison": {
+            "name": "enumerative example-based migration",
+            "outcome": "incomparable",
+            "reference_pass": false,
+            "reference_obstruction": "ambiguous minimum-cost development hypotheses",
+            "oracles_agree": true,
+            "criterion": "conformance to declared operations and complete correctness on the frozen workload; latency is telemetry only"
+          },
+          "telemetry_ns": {
+            "candidate": 339262,
+            "reference": 1211,
+            "local_evaluation": 964406
+          },
+          "receipt_sha256": "2d5d472a593f5683222c01a083236231098e6cf5d652cf085946089e654f1787"
+        }
+      },
+      "public_only_learner": "ambiguous"
+    },
+    "editorial": {
+      "fixture_sha256": "8058a3ea8b97ce7deb1927fae70bd71ac7e9639317814e048db28aade4ee1595",
+      "contract_sha256": "17e1dcf5c5f062a89db070dda03e6df21c6965bf7dbb5b7dff06e62803cf057d",
+      "menus": {
+        "ascending": [
+          {
+            "id": "H-0bd0bf6e0684",
+            "description": "area: take the second component of name split on space as text"
+          },
+          {
+            "id": "H-2dde44844c90",
+            "description": "area: take the first component of id split on hyphen as text"
+          }
+        ],
+        "descending": [
+          {
+            "id": "H-2dde44844c90",
+            "description": "area: take the first component of id split on hyphen as text"
+          },
+          {
+            "id": "H-0bd0bf6e0684",
+            "description": "area: take the second component of name split on space as text"
+          }
+        ]
+      },
+      "complete_conventional": {
+        "tool": "jq",
+        "version": "jq-1.8.1",
+        "original_declared_cases": [
+          {
+            "name": "Withheld actual observatory card",
+            "passed": true
+          },
+          {
+            "name": "Withheld actual resource card",
+            "passed": true
+          },
+          {
+            "name": "Mixed state and stable order",
+            "passed": true
+          },
+          {
+            "name": "Refuse malformed row in a batch",
+            "passed": true
+          }
+        ],
+        "accepted_on_declared_cases": true,
+        "wall_seconds": 0.009938,
+        "scope": "Existing hand-authored conventional route and original declared cases; model-evaluator controls are reported separately."
+      },
+      "public_only_learner": "ambiguous"
+    }
+  },
+  "cells": [
+    {
+      "fixture": "editorial",
+      "order": "ascending",
+      "observation": "COMPLETE",
+      "mission_verdict": "ACCEPTED",
+      "mission_status": "verified",
+      "ordered_ids": [
+        "H-0bd0bf6e0684",
+        "H-2dde44844c90"
+      ],
+      "calls": [
+        {
+          "raw_response_sha256": "da996857bdbd8e88a31fbc659c18469609e46fa47c2019793fa5fb79fd1034a5",
+          "recorded_at": "2026-11-17T22:12:46.604125+00:00",
+          "application_model_calls": 1,
+          "provider": "llama-cpp",
+          "mode": "local",
+          "stage": "choose_hypothesis",
+          "run_id": "ignition_026189d5815a434e9f7d7e1f77452719",
+          "usage": {
+            "input_tokens": 458,
+            "output_tokens": 21
+          },
+          "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+          "reported_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+          "response_sha256": "5d6d24829a015781bc628745ce64cca5c8f7f63b339ff3975f7d5c11dbd4f8a6",
+          "status": "completed",
+          "request_sha256": "ec67316705538c3b077eb979cdb0e322086300d1644c26e5e99a9aad60c70153",
+          "complete_cost_known": false,
+          "wall_seconds": 13.01665,
+          "response_schema_sha256": "68856a31f4918ce2acc49bad140abf56ad68608e9fa127167eb49b36cd25e732"
+        }
+      ],
+      "elapsed_seconds": 16.889495,
+      "evaluator": {
+        "status": "pass",
+        "case_count": 9,
+        "candidate_cases_passed": 9,
+        "reference_cases_passed": 0,
+        "failed_case_names": [],
+        "contract_conforms": true,
+        "comparison": {
+          "criterion": "conformance to declared operations and complete correctness on the frozen workload; latency is telemetry only",
+          "name": "enumerative example-based migration",
+          "oracles_agree": true,
+          "outcome": "incomparable",
+          "reference_obstruction": "ambiguous minimum-cost development hypotheses",
+          "reference_pass": false
+        },
+        "telemetry_ns": {
+          "candidate": 522729,
+          "local_evaluation": 1814972,
+          "reference": 1114
+        },
+        "receipt_sha256": "c1629f0f288e3e41f254c7a34e95221bde5eaec43a273c7b6326c8666cc65f2c"
+      },
+      "portable": {
+        "verified_exit": 0,
+        "example_exit": 0,
+        "example_output_sha256": "297f14d7aa725c47a4f82d7de8fcfa3dfdcb4014b1db54c6ef943100d9ae2b9f"
+      },
+      "choice": "H-2dde44844c90",
+      "choice_position": 2,
+      "artifact_sha256": "7877e3bb6c6c13d40e5bb363b4f59001e9515e62790de214374251e2bd5cff22",
+      "public_zip_sha256": "d8ea89218bd04eb2a8a278623a8f7dffea7ce27da11445dfb0e47feff161e670"
+    },
+    {
+      "fixture": "parcel",
+      "order": "descending",
+      "observation": "COMPLETE",
+      "mission_verdict": "ACCEPTED",
+      "mission_status": "verified",
+      "ordered_ids": [
+        "H-cc5a9ab5a510",
+        "H-9d654016fc37"
+      ],
+      "calls": [
+        {
+          "raw_response_sha256": "fab30edf0f8d00376f876365d0ac218cea820a7b4cd21737c58e87fff3a4d5e0",
+          "recorded_at": "2026-11-17T22:12:59.949512+00:00",
+          "application_model_calls": 1,
+          "provider": "llama-cpp",
+          "mode": "local",
+          "stage": "choose_hypothesis",
+          "run_id": "ignition_8188d90c6f024028a1f8917bd76a9cf0",
+          "usage": {
+            "input_tokens": 447,
+            "output_tokens": 21
+          },
+          "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+          "reported_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+          "response_sha256": "c4c54d1bfb9112d7e53cde03aa59b2197f4af1208f778452677edaa7e44998b2",
+          "status": "completed",
+          "request_sha256": "e08d5569be7f5e296b17175f8eb144378968bb9998c28410517f538603730108",
+          "complete_cost_known": false,
+          "wall_seconds": 10.135403,
+          "response_schema_sha256": "6da69aa1392c40cf2b7c03aa688b67b1cbde75977a9a200dd3623e22b9a1c2bf"
+        }
+      ],
+      "elapsed_seconds": 10.357074,
+      "evaluator": {
+        "status": "pass",
+        "case_count": 9,
+        "candidate_cases_passed": 9,
+        "reference_cases_passed": 0,
+        "failed_case_names": [],
+        "contract_conforms": true,
+        "comparison": {
+          "criterion": "conformance to declared operations and complete correctness on the frozen workload; latency is telemetry only",
+          "name": "enumerative example-based migration",
+          "oracles_agree": true,
+          "outcome": "incomparable",
+          "reference_obstruction": "ambiguous minimum-cost development hypotheses",
+          "reference_pass": false
+        },
+        "telemetry_ns": {
+          "candidate": 352553,
+          "local_evaluation": 1647909,
+          "reference": 1321
+        },
+        "receipt_sha256": "05a863a00f98ffd50f4fb870f54d74adbfa583291cbd297f88f335eb785ab46a"
+      },
+      "portable": {
+        "verified_exit": 0,
+        "example_exit": 0,
+        "example_output_sha256": "8343d6d8f3bcf569e8de9ed62117381a9a4bd8f25e0bace8456b41cdfccf3ee9"
+      },
+      "choice": "H-cc5a9ab5a510",
+      "choice_position": 1,
+      "artifact_sha256": "5409d3ac327049711a5a3ea0ba835cdf1dbf6e7bca0c348815ca1d4c0630f19f",
+      "public_zip_sha256": "6cea289d4824564ffb9d5511f3a3dc0f969bda0f020dcf9e9954f82985946dd7"
+    },
+    {
+      "fixture": "editorial",
+      "order": "descending",
+      "observation": "COMPLETE",
+      "mission_verdict": "ACCEPTED",
+      "mission_status": "verified",
+      "ordered_ids": [
+        "H-2dde44844c90",
+        "H-0bd0bf6e0684"
+      ],
+      "calls": [
+        {
+          "raw_response_sha256": "da996857bdbd8e88a31fbc659c18469609e46fa47c2019793fa5fb79fd1034a5",
+          "recorded_at": "2026-11-17T22:13:10.321003+00:00",
+          "application_model_calls": 1,
+          "provider": "llama-cpp",
+          "mode": "local",
+          "stage": "choose_hypothesis",
+          "run_id": "ignition_97c3a6baf94c4f83968048447bafbf80",
+          "usage": {
+            "input_tokens": 462,
+            "output_tokens": 21
+          },
+          "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+          "reported_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+          "response_sha256": "5d6d24829a015781bc628745ce64cca5c8f7f63b339ff3975f7d5c11dbd4f8a6",
+          "status": "completed",
+          "request_sha256": "874856e1f431a58cd3356b0ba93dafcaa4daaec9023d6d63094653acbeebbfb2",
+          "complete_cost_known": false,
+          "wall_seconds": 10.417081,
+          "response_schema_sha256": "cb9e081d1aaf805d5ef14adfc78c88ae2c8923288101c730eab511fc79a2a372"
+        }
+      ],
+      "elapsed_seconds": 10.645415,
+      "evaluator": {
+        "status": "pass",
+        "case_count": 9,
+        "candidate_cases_passed": 9,
+        "reference_cases_passed": 0,
+        "failed_case_names": [],
+        "contract_conforms": true,
+        "comparison": {
+          "criterion": "conformance to declared operations and complete correctness on the frozen workload; latency is telemetry only",
+          "name": "enumerative example-based migration",
+          "oracles_agree": true,
+          "outcome": "incomparable",
+          "reference_obstruction": "ambiguous minimum-cost development hypotheses",
+          "reference_pass": false
+        },
+        "telemetry_ns": {
+          "candidate": 510019,
+          "local_evaluation": 1847731,
+          "reference": 1272
+        },
+        "receipt_sha256": "a0e1f640ef55f3c0d1d8a4788cad9aafee4b60f55681e3efdc2bc801815b7ed4"
+      },
+      "portable": {
+        "verified_exit": 0,
+        "example_exit": 0,
+        "example_output_sha256": "297f14d7aa725c47a4f82d7de8fcfa3dfdcb4014b1db54c6ef943100d9ae2b9f"
+      },
+      "choice": "H-2dde44844c90",
+      "choice_position": 1,
+      "artifact_sha256": "7877e3bb6c6c13d40e5bb363b4f59001e9515e62790de214374251e2bd5cff22",
+      "public_zip_sha256": "a494c8a18780ea194286f9a3d6ad8b01a72915e72e7e102da529f717078cd418"
+    },
+    {
+      "fixture": "parcel",
+      "order": "ascending",
+      "observation": "COMPLETE",
+      "mission_verdict": "ACCEPTED",
+      "mission_status": "verified",
+      "ordered_ids": [
+        "H-9d654016fc37",
+        "H-cc5a9ab5a510"
+      ],
+      "calls": [
+        {
+          "raw_response_sha256": "fab30edf0f8d00376f876365d0ac218cea820a7b4cd21737c58e87fff3a4d5e0",
+          "recorded_at": "2026-11-17T22:13:20.953404+00:00",
+          "application_model_calls": 1,
+          "provider": "llama-cpp",
+          "mode": "local",
+          "stage": "choose_hypothesis",
+          "run_id": "ignition_ed6650dc216742018bafdd55f76e431a",
+          "usage": {
+            "input_tokens": 440,
+            "output_tokens": 21
+          },
+          "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+          "reported_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+          "response_sha256": "c4c54d1bfb9112d7e53cde03aa59b2197f4af1208f778452677edaa7e44998b2",
+          "status": "completed",
+          "request_sha256": "47c77ba35ff6343d6b44a9a41d549282bfa73eaee8671100cc33ee0658260e9a",
+          "complete_cost_known": false,
+          "wall_seconds": 10.01447,
+          "response_schema_sha256": "f6aadc2284beb0fb6bd7c0a75bc19733d3d2dd5d5bfa7350e906e8e7bab9554d"
+        }
+      ],
+      "elapsed_seconds": 10.221103,
+      "evaluator": {
+        "status": "pass",
+        "case_count": 9,
+        "candidate_cases_passed": 9,
+        "reference_cases_passed": 0,
+        "failed_case_names": [],
+        "contract_conforms": true,
+        "comparison": {
+          "criterion": "conformance to declared operations and complete correctness on the frozen workload; latency is telemetry only",
+          "name": "enumerative example-based migration",
+          "oracles_agree": true,
+          "outcome": "incomparable",
+          "reference_obstruction": "ambiguous minimum-cost development hypotheses",
+          "reference_pass": false
+        },
+        "telemetry_ns": {
+          "candidate": 1157889,
+          "local_evaluation": 1712127,
+          "reference": 1162
+        },
+        "receipt_sha256": "410df3773ac7414ec2247a3f95202a97b3f5bc2cf06422d02ec6e9a34a29027c"
+      },
+      "portable": {
+        "verified_exit": 0,
+        "example_exit": 0,
+        "example_output_sha256": "8343d6d8f3bcf569e8de9ed62117381a9a4bd8f25e0bace8456b41cdfccf3ee9"
+      },
+      "choice": "H-cc5a9ab5a510",
+      "choice_position": 2,
+      "artifact_sha256": "5409d3ac327049711a5a3ea0ba835cdf1dbf6e7bca0c348815ca1d4c0630f19f",
+      "public_zip_sha256": "d7f990c0fc955cb1ecd77452e10dc6f3addfe849de44cc6f94fa73e0404a8070"
+    }
+  ],
+  "verified_runtime_archive_sha256": "909eef25cd53e6601c8a07c866d8dbb2983e74177088d55182137a8fb8255d62",
+  "verified_model_file_sha256": "2fde00ce69dd4899c70d020845e2638353015bba0fdf161b3eb965f2bca4464e",
+  "verified_runtime_binary_sha256": "fe211d00c4754aa67aaa492d2c755ab0f6ef60bf30eee3c0c74a3496189cde17",
+  "threads": 4,
+  "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+  "model_revision": "ae44f08e1392f39c0e474af10c3ff8355c8b6688",
+  "setup_seconds": 10.487862,
+  "four_verified_order_invariant_recipients": true,
+  "finished_at": "2026-11-17T22:13:31.678940+00:00",
+  "total_seconds": 59.388869
+}

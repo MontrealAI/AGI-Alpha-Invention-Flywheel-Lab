@@ -1,0 +1,340 @@
+{
+  "protocol": "ignition/hosted-local/1",
+  "status": "FAIL",
+  "started_at": "2026-11-17T22:23:40.888005+00:00",
+  "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+  "model_revision": "ae44f08e1392f39c0e474af10c3ff8355c8b6688",
+  "runtime_url": "https://github.com/ggml-org/llama.cpp/releases/download/b12242/llama-b12242-bin-ubuntu-x64.tar.gz",
+  "model_url": "https://huggingface.co/bartowski/Qwen_Qwen3-4B-Instruct-2507-GGUF/resolve/ae44f08e1392f39c0e474af10c3ff8355c8b6688/Qwen_Qwen3-4B-Instruct-2507-Q4_K_M.gguf",
+  "complete_cost_known": false,
+  "new_paid_services": 0,
+  "fixture_model_responses": 0,
+  "calls": [
+    {
+      "recorded_at": "2026-11-17T22:28:33.899802+00:00",
+      "complete_cost_known": false,
+      "run_id": "ignition_4e9d53e924184b6290aad99d4225c14c",
+      "application_model_calls": 1,
+      "stage": "challenge",
+      "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+      "wall_seconds": 311.122956,
+      "provider": "llama-cpp",
+      "request_sha256": "64d2e119e3a0a535ebf3004d8aedb5b2d8ad95310e616ae85aa5e212fc59544c",
+      "reported_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+      "response_schema_sha256": "053674a0e44df81fe3c552db0598042828abb86ed8d662f247b74cb7fe79240d",
+      "response_sha256": "f457bb3829c7413ef9c0f986af2f47230ba4e9f9ddeb021864e91ba4335867e7",
+      "mode": "local",
+      "usage": {
+        "input_tokens": 3647,
+        "output_tokens": 861
+      },
+      "raw_response_sha256": "2c7e019a083c5cd89ac47ef7f958a8eef0cba28ad1e6a78bb120a68112afd9a6",
+      "status": "completed"
+    },
+    {
+      "recorded_at": "2026-11-17T22:23:56.134254+00:00",
+      "complete_cost_known": false,
+      "run_id": "ignition_9b81d3b2e0d346d4979e8c20f5d8a182",
+      "application_model_calls": 1,
+      "stage": "discover",
+      "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+      "wall_seconds": 277.715883,
+      "provider": "llama-cpp",
+      "request_sha256": "64ed6a48983c232d9b0d29f90a9e81953c78257159e05623aeefdb753fc85217",
+      "reported_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+      "response_schema_sha256": "0067efd282b2e6fc1092d44e972b4473488bc9124ef831c6c2e87b08955a15c4",
+      "response_sha256": "2874973e066c8b9204208ad3ce6ee483a9d6373dbb33de0a3d3136061d69364b",
+      "mode": "local",
+      "usage": {
+        "input_tokens": 2050,
+        "output_tokens": 1269
+      },
+      "raw_response_sha256": "83b609352dffe699e850e4aae7d8160b396b6fb3cef5677f5be58653b2ae106f",
+      "status": "completed"
+    }
+  ],
+  "commercial_result": "unmeasured",
+  "frontier_crossing": "unproven",
+  "human_baseline": "unmeasured",
+  "comparison_scope": "Executable frozen acceptance and conventional comparator",
+  "mission_fixture_sha256": "8058a3ea8b97ce7deb1927fae70bd71ac7e9639317814e048db28aade4ee1595",
+  "actions_run": "44187376790",
+  "source_revision": "50fe9fea71bc8880fb2c2ff7b4dff9a8af767c1c",
+  "runtime_source_sha256": "fcba3c6e6891af64cbbb7923316c3cb0693c29b02ab49260b777edb2028b4876",
+  "verified_runtime_archive_sha256": "909eef25cd53e6601c8a07c866d8dbb2983e74177088d55182137a8fb8255d62",
+  "verified_model_file_sha256": "2fde00ce69dd4899c70d020845e2638353015bba0fdf161b3eb965f2bca4464e",
+  "verified_runtime_binary_sha256": "fe211d00c4754aa67aaa492d2c755ab0f6ef60bf30eee3c0c74a3496189cde17",
+  "inference_threads": 4,
+  "contract_sha256": null,
+  "mission_status": "deferred",
+  "last_stage": "selection",
+  "diagnostic": {
+    "category": "selection declined construction",
+    "decision": "defer",
+    "candidate_count": 5,
+    "executable_contract_frozen": false,
+    "artifact_built": false
+  },
+  "call_count": 2,
+  "spec_sha256": "b204d8c4615710c8777da15707132338ee723bebba5ee512fc1fd507d43c8b91",
+  "evidence_inputs": "Frozen public source excerpts supplied with the mission",
+  "failure_message_sha256": null,
+  "arm_wall_seconds": 589.311425,
+  "tokens": {
+    "input_tokens": 5697,
+    "output_tokens": 2130
+  },
+  "registered_primary": {
+    "status": "FAIL",
+    "calls": [
+      {
+        "recorded_at": "2026-11-17T22:28:33.899802+00:00",
+        "complete_cost_known": false,
+        "run_id": "ignition_4e9d53e924184b6290aad99d4225c14c",
+        "application_model_calls": 1,
+        "stage": "challenge",
+        "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+        "wall_seconds": 311.122956,
+        "provider": "llama-cpp",
+        "request_sha256": "64d2e119e3a0a535ebf3004d8aedb5b2d8ad95310e616ae85aa5e212fc59544c",
+        "reported_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+        "response_schema_sha256": "053674a0e44df81fe3c552db0598042828abb86ed8d662f247b74cb7fe79240d",
+        "response_sha256": "f457bb3829c7413ef9c0f986af2f47230ba4e9f9ddeb021864e91ba4335867e7",
+        "mode": "local",
+        "usage": {
+          "input_tokens": 3647,
+          "output_tokens": 861
+        },
+        "raw_response_sha256": "2c7e019a083c5cd89ac47ef7f958a8eef0cba28ad1e6a78bb120a68112afd9a6",
+        "status": "completed"
+      },
+      {
+        "recorded_at": "2026-11-17T22:23:56.134254+00:00",
+        "complete_cost_known": false,
+        "run_id": "ignition_9b81d3b2e0d346d4979e8c20f5d8a182",
+        "application_model_calls": 1,
+        "stage": "discover",
+        "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+        "wall_seconds": 277.715883,
+        "provider": "llama-cpp",
+        "request_sha256": "64ed6a48983c232d9b0d29f90a9e81953c78257159e05623aeefdb753fc85217",
+        "reported_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+        "response_schema_sha256": "0067efd282b2e6fc1092d44e972b4473488bc9124ef831c6c2e87b08955a15c4",
+        "response_sha256": "2874973e066c8b9204208ad3ce6ee483a9d6373dbb33de0a3d3136061d69364b",
+        "mode": "local",
+        "usage": {
+          "input_tokens": 2050,
+          "output_tokens": 1269
+        },
+        "raw_response_sha256": "83b609352dffe699e850e4aae7d8160b396b6fb3cef5677f5be58653b2ae106f",
+        "status": "completed"
+      }
+    ],
+    "contract_sha256": null,
+    "mission_status": "deferred",
+    "last_stage": "selection",
+    "diagnostic": {
+      "category": "selection declined construction",
+      "decision": "defer",
+      "candidate_count": 5,
+      "executable_contract_frozen": false,
+      "artifact_built": false
+    },
+    "call_count": 2,
+    "spec_sha256": "b204d8c4615710c8777da15707132338ee723bebba5ee512fc1fd507d43c8b91",
+    "evidence_inputs": "Frozen public source excerpts supplied with the mission",
+    "failure_message_sha256": null,
+    "arm_wall_seconds": 589.311425,
+    "tokens": {
+      "input_tokens": 5697,
+      "output_tokens": 2130
+    }
+  },
+  "direct_comparator": {
+    "status": "FAIL",
+    "calls": [
+      {
+        "recorded_at": "2026-11-17T22:33:45.031517+00:00",
+        "complete_cost_known": false,
+        "run_id": "ignition_5f1a33fb1dbc4e2f9002ed78520bd462",
+        "application_model_calls": 1,
+        "stage": "direct_construct",
+        "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+        "wall_seconds": 76.627843,
+        "provider": "llama-cpp",
+        "request_sha256": "e1fcafa96948d5abae8e411ddbcff698dd8ec993189e5d183749ee4392083572",
+        "reported_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+        "response_schema_sha256": "ec8879008e4b2a44e03235beba1249bb54b0f05aa6505753ebef9272287ab55d",
+        "response_sha256": "d3ac9770f036afe18c5a8bd884e6fbe84bf1dbc4cfb983e93ffe070e91ea02dc",
+        "mode": "local",
+        "usage": {
+          "input_tokens": 1801,
+          "output_tokens": 194
+        },
+        "raw_response_sha256": "8f52dc3cb17616684f591fbd7d5ccf1b9a0e3c7f6875e1a016c902ea7fdbdf17",
+        "status": "completed"
+      }
+    ],
+    "contract_sha256": "17e1dcf5c5f062a89db070dda03e6df21c6965bf7dbb5b7dff06e62803cf057d",
+    "case_count": 9,
+    "artifact_sha256": "27aa0a35e0cb0302051d87bd06194cb72e5cfb8a4ff62019eb62fd83f64b5c9a",
+    "accepted": false,
+    "evaluation_sha256": "ff20df2087466ff2cabc567541773c110f201aac29e028f521b7c0118f5b6b5b",
+    "arm_wall_seconds": 76.635161,
+    "tokens": {
+      "input_tokens": 1801,
+      "output_tokens": 194
+    }
+  },
+  "direct_comparison": {
+    "outcome": "neither accepted",
+    "order": [
+      "primary",
+      "direct",
+      "live_sources"
+    ],
+    "timing_scope": "Arm wall includes preparation, inference, checks and portable use. Download and startup are shared. A warm server can favor later arms.",
+    "economic_advantage": "unmeasured",
+    "human_comparison": "unmeasured"
+  },
+  "live_source_trial": {
+    "status": "FAIL",
+    "calls": [
+      {
+        "recorded_at": "2026-11-17T22:43:44.907226+00:00",
+        "complete_cost_known": false,
+        "run_id": "ignition_f1654200b37947f9bd319adafb421cbe",
+        "application_model_calls": 1,
+        "stage": "challenge",
+        "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+        "wall_seconds": 466.26321,
+        "provider": "llama-cpp",
+        "request_sha256": "a51a20b12c76ef5743594f7e1c3c5ed98830234dfb60aa3304110bccb56b22cf",
+        "reported_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+        "response_schema_sha256": "5530a794550a5ff7642f9c60f3084e739f89481da5192aab13bd1aef352786b6",
+        "response_sha256": "acb480f03693297bfa6f6c0bf3277ecf3655501fbc7c37287571ad504d8bb7a5",
+        "mode": "local",
+        "usage": {
+          "input_tokens": 6548,
+          "output_tokens": 665
+        },
+        "raw_response_sha256": "2fcdfa31b97b573fa6d66e218e32d095f521b80cfbfd2459f4356bc2bf1a5a77",
+        "status": "completed"
+      },
+      {
+        "recorded_at": "2026-11-17T22:35:02.536212+00:00",
+        "complete_cost_known": false,
+        "run_id": "ignition_0d3eccfa8a22468db47b70b32802a51a",
+        "application_model_calls": 1,
+        "stage": "discover",
+        "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+        "wall_seconds": 522.363373,
+        "provider": "llama-cpp",
+        "request_sha256": "04b0f0e97b4a43383bcb4c3e366b145ebe3e9416416bf4577108fa8a55558c12",
+        "reported_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+        "response_schema_sha256": "ca18becf550b8787d12496e2f19e35deeabb7f00fcc772a7399513e75d8465ad",
+        "response_sha256": "3ad7ef8bf0235823e2f35468e8d1026fc38bd7a441ab5ead4b8b879273c9378d",
+        "mode": "local",
+        "usage": {
+          "input_tokens": 4948,
+          "output_tokens": 1272
+        },
+        "raw_response_sha256": "4496c25f3e75ec64ca9d0d86f75571b3a38d012f5bb71a4c102e5c7e4aea5342",
+        "status": "completed"
+      }
+    ],
+    "contract_sha256": null,
+    "mission_status": "deferred",
+    "last_stage": "selection",
+    "diagnostic": {
+      "category": "selection declined construction",
+      "decision": "defer",
+      "candidate_count": 5,
+      "executable_contract_frozen": false,
+      "artifact_built": false
+    },
+    "call_count": 2,
+    "spec_sha256": "b7e08e7a69a279581ad5e505f982d083d78d1198c437683d80ea03be22d57104",
+    "evidence_inputs": "Supplied excerpts plus live allowlisted source retrieval",
+    "failure_message_sha256": null,
+    "construction_status": "FAIL",
+    "acquisition_and_investigation": {
+      "status": "FAIL",
+      "feeds": [
+        "local-inference",
+        "schema"
+      ],
+      "observations": [
+        {
+          "feed": "local-inference",
+          "url": "https://github.com/ggml-org/llama.cpp/releases/tag/b12483",
+          "role": "Published release",
+          "version": "b12483",
+          "retrieved_at": "2026-11-17T22:35:01.986984+00:00",
+          "event_at": "2026-11-17T20:05:20Z",
+          "source_response_sha256": "b63f43422a5e7a0a4886928e434df40fb021e5221f7862255cfce8309fdf7909"
+        },
+        {
+          "feed": "local-inference",
+          "url": "https://github.com/ggml-org/llama.cpp/releases/tag/b12482",
+          "role": "Published release",
+          "version": "b12482",
+          "retrieved_at": "2026-11-17T22:35:01.986984+00:00",
+          "event_at": "2026-11-17T19:51:00Z",
+          "source_response_sha256": "b63f43422a5e7a0a4886928e434df40fb021e5221f7862255cfce8309fdf7909"
+        },
+        {
+          "feed": "local-inference",
+          "url": "https://github.com/ggml-org/llama.cpp/releases/tag/b12481",
+          "role": "Published release",
+          "version": "b12481",
+          "retrieved_at": "2026-11-17T22:35:01.986984+00:00",
+          "event_at": "2026-11-17T19:36:01Z",
+          "source_response_sha256": "b63f43422a5e7a0a4886928e434df40fb021e5221f7862255cfce8309fdf7909"
+        },
+        {
+          "feed": "local-inference",
+          "url": "https://github.com/ggml-org/llama.cpp/commit/fcac19079f3f2985fe74ed845f0880e7e9a8030a",
+          "role": "Earlier snapshot; capability at this revision requires testing",
+          "version": "fcac19079f3f2985fe74ed845f0880e7e9a8030a",
+          "retrieved_at": "2026-11-17T22:35:02.151772+00:00",
+          "event_at": "2026-10-13T23:24:23Z",
+          "source_response_sha256": "80762acaa22e0292e86536c5ce31a8ca994ccfb33caef13d7938b3b619a3f96a"
+        },
+        {
+          "feed": "schema",
+          "url": "https://github.com/json-schema-org/json-schema-spec/commit/5bcf672a0fa2af6fde349f74ece9c426b4a10815",
+          "role": "Earlier snapshot; capability at this revision requires testing",
+          "version": "5bcf672a0fa2af6fde349f74ece9c426b4a10815",
+          "retrieved_at": "2026-11-17T22:35:02.493807+00:00",
+          "event_at": "2026-10-13T18:23:21Z",
+          "source_response_sha256": "440421c503f21950ad705fc2b883517c1739e467918bdfe494740bedca0223af"
+        }
+      ],
+      "source_failures": [
+        {
+          "feed": "schema",
+          "role": "current"
+        }
+      ],
+      "matched_temporal_sources": true,
+      "feeds_with_both_dates": [
+        "local-inference"
+      ],
+      "candidates_citing_live_sources": [],
+      "selected_cites_live_source": false,
+      "model_stages": [
+        "challenge",
+        "discover"
+      ],
+      "frontier_crossing": "unproven"
+    },
+    "arm_wall_seconds": 989.514434,
+    "tokens": {
+      "input_tokens": 11496,
+      "output_tokens": 1937
+    }
+  },
+  "finished_at": "2026-11-17T22:51:31.769999+00:00",
+  "wall_seconds": 1670.882
+}

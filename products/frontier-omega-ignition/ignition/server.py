@@ -90,11 +90,12 @@ class Handler(BaseHTTPRequestHandler):
             name = route.lstrip("/") or "index.html"
             media = {"index.html":"text/html","app.js":"text/javascript","style.css":"text/css","operator.css":"text/css"}[name]
             return self._send(200,media+"; charset=utf-8",(PRODUCT/"web"/name).read_bytes())
-        if not post and route == "/showcase":
+        if not post and route in {"/showcase", "/exhibition"}:
             # The exhibit reads only its repository's public inputs. Its opaque
             # origin and independent no-connect CSP isolate private workspace APIs.
             from showcase.build import render, policy
-            page = render()
+            page = (render() if route == "/showcase" else
+                    (PRODUCT.parents[1] / "docs/frontier-omega-ignition/continuation/FRONTIER_IGNITION.html").read_text(encoding="utf-8"))
             csp = (policy(page) + "; frame-ancestors 'none'; "
                    "sandbox allow-scripts allow-downloads allow-popups allow-popups-to-escape-sandbox")
             return self._send(200, "text/html; charset=utf-8", page.encode("utf-8"), csp=csp)
@@ -126,7 +127,7 @@ class Handler(BaseHTTPRequestHandler):
             run_id, version = ctrl.create(body)
             self.server.enqueue(run_id,version)
             return self._json(ctrl.view(run_id),202)
-        match = re.fullmatch(r"/api/runs/([a-f0-9]{32})(?:/(history|bundle|try|resume|amend|respond|approve))?",route)
+        match = re.fullmatch(r"/api/runs/([a-f0-9]{32})(?:/(history|bundle|try|resume|amend|respond|approve|choose))?",route)
         if not match:
             raise Missing("Unknown route")
         run_id, action = match.groups()
@@ -142,11 +143,11 @@ class Handler(BaseHTTPRequestHandler):
             return self._send(200,"application/zip",data,f"ignition-{run_id}.zip")
         if post and action == "try":
             return self._json({"output":ctrl.deliver(run_id,body["version"],body["input"],trial=True)})
-        if post and action in {"amend","respond","approve","resume"}:
+        if post and action in {"amend","respond","approve","choose","resume"}:
             version = body.get("version")
             if action == "amend":
                 _,version = ctrl.create(body,run_id)
-            elif action in {"respond","approve"}:
+            elif action in {"respond","approve","choose"}:
                 ctrl.intervene(run_id,version,action,body)
             elif type(version) is not int or version != ctrl.store.get(run_id)["version"]:
                 raise Conflict("Resume requires the current version")

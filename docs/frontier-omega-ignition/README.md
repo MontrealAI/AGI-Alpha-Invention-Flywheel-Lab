@@ -1,5 +1,7 @@
 # FRONTIER Ω · Capturing the Exponential — Interactive demonstration
 
+[Open the bilingual public flagship](continuation/FRONTIER_IGNITION.html) after downloading the HTML file. [Five-minute walkthrough and reproduction](../../products/frontier-omega-ignition/showcase/FRONTIER.md).
+
 MONTREAL.AI × QUEBEC.AI · November 17, 2026
 
 ## Launch

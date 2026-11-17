@@ -1,0 +1,101 @@
+name: IGNITION Reading Room · qualified public recipient
+on:
+  pull_request:
+    paths:
+      - 'products/frontier-omega-ignition/**'
+      - 'docs/frontier-omega-ignition/continuation/**'
+      - 'docs/research/cycle-001.*'
+      - 'docs/research/cycle-007.*'
+      - '.github/workflows/frontier-ignition-reading-room.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+env:
+  EXPECTED_SOURCE: ${{ github.event.pull_request.head.sha || github.sha }}
+  PYTHONDONTWRITEBYTECODE: '1'
+jobs:
+  reading:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record runner start
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ env.EXPECTED_SOURCE }}
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /products/frontier-omega-ignition/
+            /products/alpha-genesis-harness/bridge/
+            /products/alpha-genesis-harness/scripts/
+            /products/alpha-genesis-harness/tests/visual/package*.json
+            /docs/frontier-omega-ignition/continuation/
+            /docs/research/cycle-001.html
+            /docs/research/cycle-001.pdf
+            /docs/research/cycle-007.html
+            /docs/research/cycle-007.pdf
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Prepare the registered public tools
+        run: |
+          test "$(git rev-parse HEAD)" = "$EXPECTED_SOURCE"
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends poppler-utils tesseract-ocr jq
+          python -m pip install 'PyMuPDF==1.26.6' 'lxml==6.1.1'
+          mkdir -p "$RUNNER_TEMP/browser" "$RUNNER_TEMP/public"
+          cp products/alpha-genesis-harness/tests/visual/package*.json "$RUNNER_TEMP/browser/"
+          npm ci --prefix "$RUNNER_TEMP/browser" --ignore-scripts --no-audit --no-fund
+      - name: Exercise local recipients, adaptive catalog and pilot
+        working-directory: products/frontier-omega-ignition
+        run: |
+          python -B -m unittest discover -s flagship -p 'test*.py' -v
+          python -B -m unittest discover -s reading_room -p 'test*.py' -v
+          python -B -m unittest discover -s table_desk -p 'test*.py' -v
+          python -B table_desk/parser_matrix.py --observation table_desk/evidence/nemotron --author ../../docs/research/cycle-001.html --output "$RUNNER_TEMP/nemotron-recipient"
+          cmp table_desk/evidence/cycle-001.csv "$RUNNER_TEMP/nemotron-recipient/table.csv"
+          python -B -m ignition reading-edition --pdf ../../docs/research/cycle-001.pdf --source ../../docs/research/cycle-001.html --output "$RUNNER_TEMP/private-reading-edition"
+          python -B ../../docs/frontier-omega-ignition/continuation/adaptive-catalog/replay.py
+      - name: Reproduce the registered studies on the installed toolchain
+        working-directory: products/frontier-omega-ignition
+        run: |
+          python -B reading_room_study/run.py --output "$RUNNER_TEMP/rr01"
+          python -B reading_room_study/successor.py --output "$RUNNER_TEMP/rr02"
+          python -B reading_room_study/check_recipient.py "$RUNNER_TEMP/rr02"
+          python -B - "$RUNNER_TEMP" <<'PY'
+          import json, sys
+          from pathlib import Path
+          root = Path(sys.argv[1])
+          one = json.loads((root / 'rr01/RESULTS.json').read_bytes())
+          two = json.loads((root / 'rr02/SUCCESSOR_RESULTS.json').read_bytes())
+          assert all(one['verdicts'][k] for k in ('portable_delivery','passage_acceptance','adverse_controls')), one['verdicts']
+          delivered = json.loads((root / 'rr02/RECIPIENT_QUALIFICATION.json').read_bytes())
+          assert all(row['accepted'] for row in delivered['results'].values()), delivered
+          for paper in two['results'].values():
+              assert all(paper['negative_controls'].values()), paper['negative_controls']
+              for arm in ('annotated','direct'):
+                  assert paper['verdicts'][arm]['accepted'], paper['verdicts'][arm]
+              assert paper['verdicts']['mupdf']['wrong'] == 0, paper['verdicts']['mupdf']
+          PY
+          cp "$RUNNER_TEMP/rr01/RESULTS.json" "$RUNNER_TEMP/rr02/SUCCESSOR_RESULTS.json" "$RUNNER_TEMP/rr02/RECIPIENT_QUALIFICATION.json" "$RUNNER_TEMP/public/"
+      - name: Inspect the bilingual exhibition and reproduce its recipient
+        working-directory: products/frontier-omega-ignition
+        env:
+          NODE_PATH: ${{ runner.temp }}/browser/node_modules
+        run: |
+          export CHROMIUM_PATH="$(command -v google-chrome)"
+          cp ../../docs/frontier-omega-ignition/continuation/FRONTIER_IGNITION.html "$RUNNER_TEMP/public/"
+          cp ../../docs/frontier-omega-ignition/continuation/PAIRING_LAB.html "$RUNNER_TEMP/public/"
+          python -B -m ignition --state "$RUNNER_TEMP/frontier-private" serve --port 8784 >"$RUNNER_TEMP/frontier-server.log" 2>&1 &
+          service_pid=$!
+          trap 'kill "$service_pid" 2>/dev/null || true' EXIT
+          curl --silent --show-error --fail --retry 15 --retry-delay 1 --retry-connrefused --output /dev/null http://127.0.0.1:8784/exhibition
+          node showcase/frontier_browser.cjs "$RUNNER_TEMP/public/FRONTIER_IGNITION.html" "$RUNNER_TEMP/public/views" http://127.0.0.1:8784/ | tee "$RUNNER_TEMP/public/browser-check.json"
+      - name: Offer the two exhibitions, screenshots and independent results
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: frontier-ignition-reading-room-${{ env.EXPECTED_SOURCE }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/public/
+          if-no-files-found: warn

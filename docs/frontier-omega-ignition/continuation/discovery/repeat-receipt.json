@@ -1,0 +1,110 @@
+{
+  "protocol": "ignition/opportunity-observation/1",
+  "source_revision": "4719005c957e53716ccd3f328688d8a9c40ee4cc",
+  "protocol_revision": "a53ecadfcbb0f25329713f7f3fdda432c57a6a46",
+  "driver_sha256": "41715327563c376caa05c065bfeb4711b44b1d8ea614b4c65cfc23731fc14ad5",
+  "registered_sha256": "64f1d57a8fc6fff8df7d632dc7c407646f68c51a05f3e505c3246aa93c09086e",
+  "started_at": "2026-11-17T22:29:13.155639+00:00",
+  "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+  "model_url": "https://huggingface.co/bartowski/Qwen_Qwen3-4B-Instruct-2507-GGUF/resolve/ae44f08e1392f39c0e474af10c3ff8355c8b6688/Qwen_Qwen3-4B-Instruct-2507-Q4_K_M.gguf",
+  "runtime_url": "https://github.com/ggml-org/llama.cpp/releases/download/b12242/llama-b12242-bin-ubuntu-x64.tar.gz",
+  "workload": "One public text-only opportunity exchange. Model has no tools.",
+  "actions_run": "44188874627",
+  "actions_attempt": "1",
+  "cash_spend": "unmeasured",
+  "complete_cost_known": false,
+  "model_calls": 1,
+  "observation": "rejected_structure",
+  "semantic_verdict": "unassessed",
+  "verified_runtime_archive_sha256": "909eef25cd53e6601c8a07c866d8dbb2983e74177088d55182137a8fb8255d62",
+  "verified_model_file_sha256": "2fde00ce69dd4899c70d020845e2638353015bba0fdf161b3eb965f2bca4464e",
+  "verified_runtime_binary_sha256": "fe211d00c4754aa67aaa492d2c755ab0f6ef60bf30eee3c0c74a3496189cde17",
+  "threads": 4,
+  "prompt_sha256": "6437cc913eb50d9363ffe6b39597abc432df75e004c58b5b02e946885c58e053",
+  "request_sha256": "8c3ecea1395cbff941cd38be0a8aae83ef937043e8d004c7ec2c5ac436a13fb5",
+  "model_text": "{\n  \"challenger\": null,\n  \"decision\": \"No pilot is warranted at this stage due to insufficient evidence of self-hosted systems with demonstrable, issue-level performance advantages under bounded token costs. The available records do not provide direct comparisons of self-hosted coding systems against alternatives in terms of reliability, cost efficiency, or outcome quality under controlled token budgets. Without issue-level outcome data from self-hosted systems, any claim of merit remains speculative.\",\n  \"incumbent\": \"Publicly available open-source harnesses (e.g., those evaluated in Record B) with proven performance on verified SWE-bench issues under common serving conditions represent the strongest existing alternative. These systems are transparent, benchmarked, and have demonstrated up to 44% higher resolution for one model, indicating operational viability.\",\n  \"limitations\": [\n    \"No record provides direct evidence of self-hosted coding systems (e.g., self-hosted LLMs or agents) performing better than open-source harnesses on verified issues under token budget constraints.\",\n    \"All performance claims are aggregated or model-level; no issue-level, per-run, or per-task outcome data from self-hosted systems is available.\",\n    \"Token cost accounting in Record D is sensitive to assumptions and does not establish a baseline for self-hosted systems.\",\n    \"Missing usage data in Record C (no imputation) limits reliability of token cost modeling.\"\n  ],\n  \"opportunities\": [\n    {\n      \"move\": \"Conduct a targeted analysis of Record B to identify which open-source harnesses achieve the highest resolution on SWE-bench issues with minimal token usage, and propose a pilot using one of those harnesses as a baseline for comparison with self-hosted alternatives in future stages.\",\n      \"sources\": [\n        \"B\"\n      ],\n      \"title\": \"Baseline Performance Analysis of Open-Source Harnesses\"\n    },\n    {\n      \"move\": \"Extract and analyze the per-run token usage and failure labels from Record C to build a public, issue-level benchmark dataset for token cost modeling, enabling future evaluation of self-hosted systems under bounded token allowances.\",\n      \"sources\": [\n        \"C\"\n      ],\n      \"title\": \"Issue-Level Token Cost Benchmarking from Public Run Records\"\n    },\n    {\n      \"move\": \"Formally evaluate whether any of the models in Record A (context management, planning, action space) show consistent performance gains across benchmarks that could be ported to self-hosted agents, with a focus on context window and planning efficiency.\",\n      \"sources\": [\n        \"A\"\n      ],\n      \"title\": \"Model-Level Context and Planning Efficiency Analysis\"\n    },\n    {\n      \"move\": \"Use Record D’s trial acquisition and budget-constrained agent selection framework to model how agent selection under token limits might be optimized—without assuming self-hosted superiority—providing a framework for future pilot design.\",\n      \"sources\": [\n        \"D\"\n      ],\n      \"title\": \"Budget-Constrained Agent Selection Framework\"\n    },\n    {\n      \"move\": \"Propose a pilot of a self-hosted coding system (e.g., a lightweight agent using a public model like Llama 3 or CodeLlama) only if a specific, issue-level performance claim is made with supporting data from Record C or B, and if the claim is independently verifiable via public run logs.\",\n      \"sources\": [\n        \"B\",\n        \"C\"\n      ],\n      \"title\": \"Conditional Pilot Proposal with Issue-Level Verification\"\n    }\n  ],\n  \"test\": \"Smallest discriminating test: For any proposed self-hosted system, demonstrate that it resolves at least one verified SWE-bench issue (from Record C) with a lower per-issue token cost than the best-performing open-source harness (from Record B), and that the outcome is reproducible across at least two independent runs with identical prompts and context.\"\n}",
+  "finish_reason": "stop",
+  "response": {
+    "challenger": null,
+    "decision": "No pilot is warranted at this stage due to insufficient evidence of self-hosted systems with demonstrable, issue-level performance advantages under bounded token costs. The available records do not provide direct comparisons of self-hosted coding systems against alternatives in terms of reliability, cost efficiency, or outcome quality under controlled token budgets. Without issue-level outcome data from self-hosted systems, any claim of merit remains speculative.",
+    "incumbent": "Publicly available open-source harnesses (e.g., those evaluated in Record B) with proven performance on verified SWE-bench issues under common serving conditions represent the strongest existing alternative. These systems are transparent, benchmarked, and have demonstrated up to 44% higher resolution for one model, indicating operational viability.",
+    "limitations": [
+      "No record provides direct evidence of self-hosted coding systems (e.g., self-hosted LLMs or agents) performing better than open-source harnesses on verified issues under token budget constraints.",
+      "All performance claims are aggregated or model-level; no issue-level, per-run, or per-task outcome data from self-hosted systems is available.",
+      "Token cost accounting in Record D is sensitive to assumptions and does not establish a baseline for self-hosted systems.",
+      "Missing usage data in Record C (no imputation) limits reliability of token cost modeling."
+    ],
+    "opportunities": [
+      {
+        "move": "Conduct a targeted analysis of Record B to identify which open-source harnesses achieve the highest resolution on SWE-bench issues with minimal token usage, and propose a pilot using one of those harnesses as a baseline for comparison with self-hosted alternatives in future stages.",
+        "sources": [
+          "B"
+        ],
+        "title": "Baseline Performance Analysis of Open-Source Harnesses"
+      },
+      {
+        "move": "Extract and analyze the per-run token usage and failure labels from Record C to build a public, issue-level benchmark dataset for token cost modeling, enabling future evaluation of self-hosted systems under bounded token allowances.",
+        "sources": [
+          "C"
+        ],
+        "title": "Issue-Level Token Cost Benchmarking from Public Run Records"
+      },
+      {
+        "move": "Formally evaluate whether any of the models in Record A (context management, planning, action space) show consistent performance gains across benchmarks that could be ported to self-hosted agents, with a focus on context window and planning efficiency.",
+        "sources": [
+          "A"
+        ],
+        "title": "Model-Level Context and Planning Efficiency Analysis"
+      },
+      {
+        "move": "Use Record D’s trial acquisition and budget-constrained agent selection framework to model how agent selection under token limits might be optimized—without assuming self-hosted superiority—providing a framework for future pilot design.",
+        "sources": [
+          "D"
+        ],
+        "title": "Budget-Constrained Agent Selection Framework"
+      },
+      {
+        "move": "Propose a pilot of a self-hosted coding system (e.g., a lightweight agent using a public model like Llama 3 or CodeLlama) only if a specific, issue-level performance claim is made with supporting data from Record C or B, and if the claim is independently verifiable via public run logs.",
+        "sources": [
+          "B",
+          "C"
+        ],
+        "title": "Conditional Pilot Proposal with Issue-Level Verification"
+      }
+    ],
+    "test": "Smallest discriminating test: For any proposed self-hosted system, demonstrate that it resolves at least one verified SWE-bench issue (from Record C) with a lower per-issue token cost than the best-performing open-source harness (from Record B), and that the outcome is reproducible across at least two independent runs with identical prompts and context."
+  },
+  "structural_check": {
+    "valid": false,
+    "initial_count": 5,
+    "challenger_present": false,
+    "errors": [
+      "Missing or empty limitations."
+    ],
+    "semantic_verdict": "Independent source review required."
+  },
+  "exchanges": [
+    {
+      "mode": "local",
+      "provider": "llama-cpp",
+      "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+      "stage": "opportunity-observation",
+      "request_sha256": "8c3ecea1395cbff941cd38be0a8aae83ef937043e8d004c7ec2c5ac436a13fb5",
+      "recorded_at": "2026-11-17T22:29:23.654833+00:00",
+      "complete_cost_known": false,
+      "run_id": "ignition_02224549868c4825926ac7e85c12bbe7",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 790,
+        "output_tokens": 795
+      },
+      "response_sha256": "204201ed7345be85184903c42b94daaaad4129b8b3434f6c2287d5b5227cc6ac",
+      "application_model_calls": 1,
+      "response_schema_sha256": null,
+      "reported_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+      "raw_response_sha256": "3349774244c00d285735ed0a2133cfdb313f64253bccc33a11d58ba6ffc74392",
+      "wall_seconds": 109.755858
+    }
+  ],
+  "wall_seconds": 120.483996
+}

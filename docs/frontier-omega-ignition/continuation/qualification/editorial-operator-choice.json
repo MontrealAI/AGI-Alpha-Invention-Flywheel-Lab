@@ -1,0 +1,135 @@
+{
+  "schema": "ignition/operator-choice-observation/1",
+  "scope": "One known public editorial migration, selected by Codex acting in the operator role. The purpose explicitly names the first identifier segment. No unattended model result or human-subject evaluation.",
+  "procedure": "Freeze the original public fixture and an independent new receiver example. Inspect the displayed operation descriptions. Submit the intended ID through the private Controller's normal choose intervention, export via deliver, extract into a fresh directory, then execute verify and run.",
+  "source": {
+    "fixture": "products/frontier-omega-ignition/examples/migration.json",
+    "fixture_sha256": "8058a3ea8b97ce7deb1927fae70bd71ac7e9639317814e048db28aade4ee1595",
+    "runtime_sha256": "606c143c698b1a436cfaf8c236ddefe45ef50c5bcd34ab4729571b225f8ce7ec",
+    "python": "3.12.14",
+    "evaluator_identity": {
+      "construction.py": "17ceb7e84280cad65690c540bb6abc041e50ca121ab4ca7a9b0dfa2fb9b5fa71",
+      "evaluation.py": "50a13c7a52aca4ddaed813705f64bfe1f8767b520da5f75a3f8b32451fe78a41"
+    },
+    "git_commit": "50fe9fea71bc8880fb2c2ff7b4dff9a8af767c1c",
+    "source_check": "All 16 files bound by runtime_source() and the original fixture matched their Git blob identities at the stated commit."
+  },
+  "configuration": {
+    "strategy": "direct",
+    "method": "operator_choice",
+    "max_model_calls": 0,
+    "max_repairs": 0,
+    "permissions": {
+      "allow_program_reuse": false,
+      "assisted_model": false,
+      "local_model": false,
+      "public_sources": false
+    },
+    "actual_model_provider": {
+      "mode": "unavailable",
+      "model": null,
+      "provider": null
+    }
+  },
+  "mission": {
+    "id": "49885ea78ed343e49974bb7936b70ead",
+    "revision": 1,
+    "input_sha256": "ac897352028f1d33ddb15def297b5df41baef39e236ff265db033e00f7464a9a",
+    "frozen_contract_sha256": "17e1dcf5c5f062a89db070dda03e6df21c6965bf7dbb5b7dff06e62803cf057d",
+    "purpose": "Convert the public Blue Sky candidate fields id, name and status into an editorial queue, preserving the title and decision while extracting the first identifier segment as the area.",
+    "source_record_count": 4
+  },
+  "selection": {
+    "menu_sha256": "884219def4864d956a7722ddf0c7183360e42f9cb22bfbb4f0acfcad4fa341fb",
+    "ordered_options": [
+      {
+        "id": "H-0bd0bf6e0684",
+        "description": "area: take the second component of name split on space as text"
+      },
+      {
+        "id": "H-2dde44844c90",
+        "description": "area: take the first component of id split on hyphen as text"
+      }
+    ],
+    "origin": "operator",
+    "choice": "H-2dde44844c90",
+    "basis": "The named beneficiary outcome requests the first segment of the identifier. The alternative uses a word of the descriptive name."
+  },
+  "verification": {
+    "status": "pass",
+    "receipt_sha256": "0cc7e5f13343f450ff84d54a01c99de2d60daa196343a652c902624e7452fd7b",
+    "artifact_sha256": "7877e3bb6c6c13d40e5bb363b4f59001e9515e62790de214374251e2bd5cff22",
+    "cases": 9,
+    "passed": 9,
+    "comparison": "incomparable",
+    "reference_cases_observed": 0,
+    "reference_obstruction": "ambiguous minimum-cost development hypotheses"
+  },
+  "recipient": {
+    "archive": "Editorial_Mapping_Operator_Choice.zip",
+    "archive_sha256": "4cafe9863f332d0aa5ebae16d49887e417decb5ef3021cbe7bacbff28a110e00",
+    "archive_bytes": 23495,
+    "fresh_extraction": true,
+    "verify_command": "python3 -I run.py verify",
+    "verify_exit": 0,
+    "verify_result": {
+      "status": "pass",
+      "contract_sha256": "17e1dcf5c5f062a89db070dda03e6df21c6965bf7dbb5b7dff06e62803cf057d",
+      "artifact_sha256": "7877e3bb6c6c13d40e5bb363b4f59001e9515e62790de214374251e2bd5cff22",
+      "cases": 9,
+      "comparison": "incomparable"
+    },
+    "run_command": "python3 -I run.py run",
+    "run_exit": 0,
+    "case_sha256": "3576704933f448822c36fcddede0234735afb65325351d60b93661780376ae76",
+    "input": {
+      "rows": [
+        {
+          "id": "alder-release-review",
+          "name": "Independent transfer observation",
+          "status": "OPEN"
+        }
+      ]
+    },
+    "observed": {
+      "rows": [
+        {
+          "area": "alder",
+          "decision": "OPEN",
+          "headline": "Independent transfer observation",
+          "record_id": "alder-release-review"
+        }
+      ]
+    },
+    "expected": {
+      "rows": [
+        {
+          "record_id": "alder-release-review",
+          "area": "alder",
+          "headline": "Independent transfer observation",
+          "decision": "OPEN"
+        }
+      ]
+    }
+  },
+  "control": {
+    "id": "59c1c80a77264cdc8e0f2b836e7150fe",
+    "revision": 1,
+    "menu_sha256": "888b5716e4d0cdbbcc7f2ef12b3c677b5a61a971e09c44117b64c30ab01051d1",
+    "refused_other_mission_menu": true,
+    "choice": "abstain",
+    "origin": "operator",
+    "outcome": "deferred",
+    "artifact_created": false
+  },
+  "cost": {
+    "application_model_calls": 0,
+    "operator_choices_in_positive_mission": 1,
+    "actual_operator_time_and_cost": "Unmetered and unpriced.",
+    "measured_segment": "From accepted operator submission through fresh recipient verify/run, excluding review, mission preparation and negative control.",
+    "measured_wall_seconds": 0.0942,
+    "measured_parent_process_cpu_seconds": 0.0155,
+    "full_economic_cost": null
+  },
+  "limits": "The known purpose disambiguates two fitting programs. The development-only reference abstained, leaving this receipt’s comparison incomparable. One operator decision establishes delivery for this fixture. General selection accuracy, autonomy, costs and demand remain unmeasured."
+}

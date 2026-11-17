@@ -1,0 +1,344 @@
+{
+  "registration": "c326679543960c3d364f1582d91e9cb0e61d406f",
+  "code": "971abc64c3545d5e476c9cb36e71ed8bf41eb925",
+  "python": "3.12.14",
+  "fixture_sha256": "ebfe1708fbd2a18f30c5536282977d23d097fc03f35ffcceaa0cd0cbe0f3c49d",
+  "fresh_recipient_input": {
+    "rows": [
+      {
+        "title": "Édition boréale",
+        "folder_language": "it",
+        "edition_language": "fr-CA",
+        "catalog_language": "en-US"
+      }
+    ]
+  },
+  "fresh_expected": {
+    "rows": [
+      {
+        "publication": "Édition boréale",
+        "reading_language": "fr-CA"
+      }
+    ]
+  },
+  "arms": [
+    {
+      "arm": "adaptive",
+      "run_id": "127a16141e604e0b90cc1799e22dc7cb",
+      "source_runtime_sha256": "508efc28cca8f8c0762f519f176672cbda620f793b2f6435343ead69e69379d6",
+      "provider": {
+        "attribution": "operator-declared",
+        "mode": "manual",
+        "model": "Codex (session model label unverified)",
+        "provider": "OpenAI ChatGPT Work"
+      },
+      "start_unix_s": 1794956977.520812,
+      "stage": "choose_hypothesis",
+      "prompt_sha256": "ac1774d084a2443008acea9ea557e8b4ec484b84ac8ce4db886491a289908fd0",
+      "request_sha256": "4761419301de123e715dd56bf11eac8cb392f90ccd21c9d918ae415a5c941abf",
+      "response": {
+        "choice": "H-24ed4b77831f"
+      },
+      "status": "verified",
+      "route": {
+        "cost_basis": "Complete marginal cost and monetary decision value unmeasured",
+        "method": "model_choice",
+        "reason": "The examples admit multiple mappings and the brief supplies distinguishing cues. Request one authorized bounded selection.",
+        "research_economics": null,
+        "route": "direct",
+        "strategy": "adaptive"
+      },
+      "error": null,
+      "attempts": 1,
+      "unsuccessful_calls": [],
+      "construction_attempts": [
+        {
+          "attempt": 1,
+          "contract_sha256": "79e65e7f7f93fe54494f034892009e8b65ab41610a7b5dc4dc0344d046cf872a",
+          "proposal_sha256": "1485799ae60c8b127f8d522251b57609ca84029fa34c2507b7ed11542a8acbc8",
+          "method": "model_choice",
+          "artifact_sha256": "d17f45814652e58ee4cc9e4cfcde86a144aaae4b36225de5be2799cb10899e8c",
+          "receipt_sha256": "c1d5f1b9cf8fb45591cfc0e20b8d757a0f2b7ba34b565268155d4807244780b5",
+          "feedback": null,
+          "repairable": false,
+          "status": "accepted",
+          "checks": 9,
+          "passed_checks": 9,
+          "comparison": "incomparable",
+          "elapsed_seconds": 0.002377
+        }
+      ],
+      "contract_sha256": "79e65e7f7f93fe54494f034892009e8b65ab41610a7b5dc4dc0344d046cf872a",
+      "checks": 9,
+      "checks_passed": 9,
+      "evaluator": {
+        "construction.py": "17ceb7e84280cad65690c540bb6abc041e50ca121ab4ca7a9b0dfa2fb9b5fa71",
+        "evaluation.py": "50a13c7a52aca4ddaed813705f64bfe1f8767b520da5f75a3f8b32451fe78a41"
+      },
+      "comparison": {
+        "name": "enumerative example-based migration",
+        "outcome": "incomparable",
+        "reference_pass": false,
+        "reference_obstruction": "ambiguous minimum-cost development hypotheses",
+        "oracles_agree": true,
+        "criterion": "conformance to declared operations and complete correctness on the frozen workload; latency is telemetry only"
+      },
+      "receipt_sha256": "c1d5f1b9cf8fb45591cfc0e20b8d757a0f2b7ba34b565268155d4807244780b5",
+      "artifact_sha256": "d17f45814652e58ee4cc9e4cfcde86a144aaae4b36225de5be2799cb10899e8c",
+      "telemetry_ns": {
+        "candidate": 272995,
+        "reference": 912,
+        "local_evaluation": 579572
+      },
+      "recipient_zip_sha256": "4e234442029d6bfdfd03dcab0928cdd048d5096b8760b73caa668f7aded36914",
+      "receipts": [
+        {
+          "elapsed_seconds": 0.0,
+          "receipt": [
+            {
+              "application_model_calls": 0,
+              "attribution": "operator-declared",
+              "complete_cost_known": false,
+              "mode": "manual",
+              "model": "Codex (session model label unverified)",
+              "provider": "OpenAI ChatGPT Work",
+              "recorded_at": "2026-11-17T23:10:24.163543+00:00",
+              "request_sha256": "4761419301de123e715dd56bf11eac8cb392f90ccd21c9d918ae415a5c941abf",
+              "response_sha256": "4b672f4b0bdb8aed0ff73a90440b31fdfc55500f99074bfc4f4ca7151c1939e2",
+              "stage": "choose_hypothesis",
+              "status": "reviewed_exchange",
+              "usage": null
+            }
+          ],
+          "response_sha256": "4b672f4b0bdb8aed0ff73a90440b31fdfc55500f99074bfc4f4ca7151c1939e2",
+          "stage": "choose_hypothesis"
+        }
+      ],
+      "recipient_verify_exit": 0,
+      "recipient_fresh_exit": 0,
+      "recipient_fresh_output": {
+        "rows": [
+          {
+            "publication": "Édition boréale",
+            "reading_language": "fr-CA"
+          }
+        ]
+      },
+      "recipient_pass": true,
+      "elapsed_to_recipient_seconds": 46.704
+    },
+    {
+      "arm": "direct",
+      "run_id": "fefe098cc2ed4234bae6a3ce7f5b3584",
+      "source_runtime_sha256": "508efc28cca8f8c0762f519f176672cbda620f793b2f6435343ead69e69379d6",
+      "provider": {
+        "attribution": "operator-declared",
+        "mode": "manual",
+        "model": "Codex (session model label unverified)",
+        "provider": "OpenAI ChatGPT Work"
+      },
+      "start_unix_s": 1794956977.5363412,
+      "stage": "construct",
+      "prompt_sha256": "3528b909e66facd9a2217cec23f3e0d530700a321329b3139f65f684f7045919",
+      "request_sha256": "498b53b3af7bddc1116d1a7731f36517e4522e64249e2cf228ecfea4e087e8fe",
+      "response": {
+        "kind": "record_migration",
+        "program": {
+          "columns": [
+            {
+              "source": "title",
+              "target": "publication",
+              "type": "text"
+            },
+            {
+              "source": "edition_language",
+              "target": "reading_language",
+              "type": "text"
+            }
+          ],
+          "extra_fields": "reject",
+          "input_fields": [
+            "title",
+            "folder_language",
+            "edition_language",
+            "catalog_language"
+          ]
+        }
+      },
+      "status": "verified",
+      "route": {
+        "cost_basis": "Complete marginal cost and monetary decision value unmeasured",
+        "method": "model",
+        "reason": "The supplied software contract can be attempted and checked directly.",
+        "research_economics": null,
+        "route": "direct",
+        "strategy": "direct"
+      },
+      "error": null,
+      "attempts": 1,
+      "unsuccessful_calls": [],
+      "construction_attempts": [
+        {
+          "attempt": 1,
+          "contract_sha256": "79e65e7f7f93fe54494f034892009e8b65ab41610a7b5dc4dc0344d046cf872a",
+          "proposal_sha256": "1485799ae60c8b127f8d522251b57609ca84029fa34c2507b7ed11542a8acbc8",
+          "method": "model",
+          "artifact_sha256": "d17f45814652e58ee4cc9e4cfcde86a144aaae4b36225de5be2799cb10899e8c",
+          "receipt_sha256": "6cd6c468f85d813f8c756fcf9626cfc511dc474d9b22fdee6e0cf38fa84c7e80",
+          "feedback": null,
+          "repairable": false,
+          "status": "accepted",
+          "checks": 9,
+          "passed_checks": 9,
+          "comparison": "incomparable",
+          "elapsed_seconds": 0.003141
+        }
+      ],
+      "contract_sha256": "79e65e7f7f93fe54494f034892009e8b65ab41610a7b5dc4dc0344d046cf872a",
+      "checks": 9,
+      "checks_passed": 9,
+      "evaluator": {
+        "construction.py": "17ceb7e84280cad65690c540bb6abc041e50ca121ab4ca7a9b0dfa2fb9b5fa71",
+        "evaluation.py": "50a13c7a52aca4ddaed813705f64bfe1f8767b520da5f75a3f8b32451fe78a41"
+      },
+      "comparison": {
+        "name": "enumerative example-based migration",
+        "outcome": "incomparable",
+        "reference_pass": false,
+        "reference_obstruction": "ambiguous minimum-cost development hypotheses",
+        "oracles_agree": true,
+        "criterion": "conformance to declared operations and complete correctness on the frozen workload; latency is telemetry only"
+      },
+      "receipt_sha256": "6cd6c468f85d813f8c756fcf9626cfc511dc474d9b22fdee6e0cf38fa84c7e80",
+      "artifact_sha256": "d17f45814652e58ee4cc9e4cfcde86a144aaae4b36225de5be2799cb10899e8c",
+      "telemetry_ns": {
+        "candidate": 347489,
+        "reference": 901,
+        "local_evaluation": 1005875
+      },
+      "recipient_zip_sha256": "11b57e04fa47fbaf9e080b74f9805441cf6637113caf24a791f1b7b426bbfb1a",
+      "receipts": [
+        {
+          "elapsed_seconds": 0.0,
+          "receipt": [
+            {
+              "application_model_calls": 0,
+              "attribution": "operator-declared",
+              "complete_cost_known": false,
+              "mode": "manual",
+              "model": "Codex (session model label unverified)",
+              "provider": "OpenAI ChatGPT Work",
+              "recorded_at": "2026-11-17T23:10:24.234170+00:00",
+              "request_sha256": "498b53b3af7bddc1116d1a7731f36517e4522e64249e2cf228ecfea4e087e8fe",
+              "response_sha256": "1485799ae60c8b127f8d522251b57609ca84029fa34c2507b7ed11542a8acbc8",
+              "stage": "construct",
+              "status": "reviewed_exchange",
+              "usage": null
+            }
+          ],
+          "response_sha256": "1485799ae60c8b127f8d522251b57609ca84029fa34c2507b7ed11542a8acbc8",
+          "stage": "construct"
+        }
+      ],
+      "recipient_verify_exit": 0,
+      "recipient_fresh_exit": 0,
+      "recipient_fresh_output": {
+        "rows": [
+          {
+            "publication": "Édition boréale",
+            "reading_language": "fr-CA"
+          }
+        ]
+      },
+      "recipient_pass": true,
+      "elapsed_to_recipient_seconds": 46.76
+    },
+    {
+      "arm": "specialist",
+      "run_id": "58111e598c8a456abf5f6c96bdddba11",
+      "source_runtime_sha256": "508efc28cca8f8c0762f519f176672cbda620f793b2f6435343ead69e69379d6",
+      "provider": {
+        "attribution": "operator-declared",
+        "mode": "manual",
+        "model": "Codex (session model label unverified)",
+        "provider": "OpenAI ChatGPT Work"
+      },
+      "start_unix_s": 1794956977.5491924,
+      "status": "deferred",
+      "route": {
+        "cost_basis": "Complete marginal cost and monetary decision value unmeasured",
+        "method": "specialist",
+        "reason": "Use only public development examples to infer direct projections or splits. Abstain if multiple equally simple operations fit.",
+        "research_economics": null,
+        "route": "direct",
+        "strategy": "direct"
+      },
+      "error": "Public development examples for reading_language: 3 equally simple hypotheses fit. Supply a discriminating example or select the model to interpret the intended operation.",
+      "attempts": 0,
+      "unsuccessful_calls": [],
+      "construction_attempts": [],
+      "contract_sha256": "79e65e7f7f93fe54494f034892009e8b65ab41610a7b5dc4dc0344d046cf872a"
+    }
+  ],
+  "conventional_jq": {
+    "tool": "jq-1.7",
+    "source_sha256": "f199d40e0c63e598072963012aed10c482168c81228a5056d69e8aeebcaaced0",
+    "checks": [
+      {
+        "case": "Parallel editions named separately",
+        "matched": true,
+        "elapsed_ns": 2887573
+      },
+      {
+        "case": "Script and region survive",
+        "matched": true,
+        "elapsed_ns": 4522107
+      },
+      {
+        "case": "Refuse a malformed second record",
+        "matched": true,
+        "elapsed_ns": 4484377
+      },
+      {
+        "case": "Refuse an unregistered source field",
+        "matched": true,
+        "elapsed_ns": 2151098
+      },
+      {
+        "case": "empty batch",
+        "matched": true,
+        "elapsed_ns": 2905039
+      },
+      {
+        "case": "missing columns",
+        "matched": true,
+        "elapsed_ns": 2262304
+      },
+      {
+        "case": "wrong envelope",
+        "matched": true,
+        "elapsed_ns": 2128093
+      },
+      {
+        "case": "extra column policy",
+        "matched": true,
+        "elapsed_ns": 1956869
+      },
+      {
+        "case": "development 1",
+        "matched": true,
+        "elapsed_ns": 2021395
+      },
+      {
+        "case": "fresh recipient input",
+        "matched": true,
+        "elapsed_ns": 7079445
+      }
+    ]
+  },
+  "replay_verdicts": {
+    "adaptive": "verified",
+    "direct": "verified",
+    "specialist": "deferred"
+  }
+}

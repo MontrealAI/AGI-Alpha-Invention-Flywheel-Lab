@@ -72,8 +72,9 @@ class AdaptiveTests(unittest.TestCase):
             self.assertEqual(context["construction_attempts"][0]["checks"], 9)
             self.assertEqual(context["model_calls"], [])
 
-    def test_adaptive_example_based_migration_uses_only_builder_and_preserves_holdout(self):
+    def test_explicit_free_form_migration_uses_only_builder_and_preserves_holdout(self):
         fixture = public_fixture("migration")
+        fixture["mission"]["resources"]["direct_method"] = "model"
         spec = fixture["mission"]["construction_spec"]
         rid, rev = self.ctrl.create(fixture)
         example = PRODUCT.parents[1] / "docs/frontier-omega-ignition/qualification/89f2196d/direct-proposal.json"

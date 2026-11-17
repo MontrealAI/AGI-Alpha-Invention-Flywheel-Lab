@@ -1,6 +1,6 @@
 # Direct construction and verified repair
 
-A release reviewer who already has an independently trusted list of file hashes can receive a working verifier without a model call. A research editor whose input/output examples leave the mapping to infer can ask the configured model to construct it immediately. Both paths freeze the mission contract before construction, check the actual candidate against it, and issue a portable program only after acceptance.
+A release reviewer who already has an independently trusted list of file hashes can receive a working verifier without a model call. A research editor can supply example rows and an outcome. Adaptive routing compiles an unambiguous mapping, presents competing mappings for a decision, or reaches the authorized typed builder when the examples require another operation. Both paths freeze the mission contract before construction, check the actual candidate against it, and issue a portable program only after acceptance.
 
 ## Operating the private workspace
 
@@ -8,16 +8,30 @@ Start the local service from the product directory with `python3 -B -m ignition 
 
 | Resource option | Effect |
 |---|---|
-| `execution_strategy: "adaptive"` | Default. A supported, specified mission takes the direct route. The installed specialist compiles exact declared operations. Example-induced mappings use the permitted model. An open ambition with sufficient direction enters research. A missing objective or uncovered requested effect can return a clarification. |
+| `execution_strategy: "adaptive"` | Default. A supported, specified mission takes the direct route. The installed specialist compiles exact declared operations. Example-based migrations compile a unique fit locally. A small ambiguous menu goes to a permitted model only when the brief supplies a distinguishing cue for each ambiguous target. Otherwise the operator can choose or abstain. An oversized menu requests a discriminating example. When no projection or split fits, an authorized typed builder can try other supported operations, including a join. An open ambition with sufficient direction enters research. A missing objective or uncovered requested effect can return a clarification. |
 | `execution_strategy: "direct"` | Request a model construction from the purpose-bound software contract. A missing supported contract returns a targeted clarification. |
 | `execution_strategy: "research"` | Request discovery, challenge and selection. A source-linked proposal, incumbent, deferral and stop remain distinct outcomes. |
 | `direct_method: "model"` | Use the same construction interface and model in direct and adaptive comparison arms. A declared local or assisted permission and an available provider are still necessary. |
-| `direct_method: "specialist"` | Compile literal data-only operations. A mapping that has to be inferred from examples is outside this exact-specification specialist. |
+| `direct_method: "specialist"` | Compile literal data-only operations. For a mapping described by examples, opt in to ordinary projection/split inference. If equally simple operations fit or the operation is outside these two families, the specialist abstains. Arbitrary joins remain available to the model under the existing typed grammar. |
+| `direct_method: "model_choice"` | For an example-based migration, enumerate a bounded complete set of fitting projections or splits, then request one selection or abstention. The model receives semantic descriptions and registered IDs. The engine compiles the selected operations and re-executes the full independent checker. |
+| `direct_method: "operator_choice"` | Present the same alternatives to the private operator. A confirmed choice is bound to the mission, source, revision and exact menu. Explicit abstention stops the run. No model permission is needed. |
 | `direct_after_research: true` | Separately authorize a direct attempt on an existing supported specification after an unsuccessful selection. The original research verdict remains inspectable. |
 | `max_model_calls` and `max_repairs` | Enforce integer budgets within this mission. By default one fresh repair is possible. Unchanged rejected proposals, contradictory reference answers, an exhausted call budget or limits on the selected specialist stop repair. |
 | `research_economics` | Supply `unit`, `decision_value` and `marginal_cost` on the same basis. An adaptive open investigation whose estimated value does not cover its marginal cost returns clarification. Without estimates, monetary value remains unmeasured. |
 
 The data-only model language supports record migration and checking file bytes against a trusted manifest. The private workspace also offers a separately scoped Pairing Lab specialist. Frozen software acceptance covers the enumerated behaviors. The operator should inspect requirements outside the frozen cases. The router identifies selected explicit physical and external actions that a passing software table or digest comparison cannot verify. It does not understand all possible natural-language contradictions.
+
+### Resolve a private mapping from the command line
+
+Start the multilingual catalog example with local tools. Its demonstration rows have identical folder, edition and catalog languages. The intended source matters for translations. On a machine without a configured model the default route pauses with the complete menu.
+
+```sh
+python3 -B -m ignition --state ./private-catalog start examples/reading-catalog.json
+python3 -B -m ignition --state ./private-catalog choose RUN_ID CANDIDATE_ID --version 1 --sha256 MENU_SHA256
+python3 -B -m ignition --state ./private-catalog export RUN_ID catalog.zip --version 1
+```
+
+Use the run ID, revision, candidate ID and menu digest printed by the first command. Use `abstain` in place of a candidate ID to record an unresolved choice. Repeating the same choice for the same menu is idempotent. The independent checker still evaluates whichever mapping was selected. A bundle is available only for an accepted result. Requesting `direct_method: "model"` still bypasses enumeration when a competent direct-model comparison is wanted.
 
 ## The original failures
 
@@ -55,6 +69,14 @@ print(contract["sha256"], artifact["sha256"], receipt["comparison"]["outcome"])
 print([(case["name"], case["candidate_pass"]) for case in receipt["cases"]])
 ```
 
+## Repair from visible development evidence
+
+The first revised direct Qwen migration failed acceptance. Its initial and repaired programs each passed five of nine checks. The archived second proposal used a colon to split the identifier. A new diagnostic isolates each proposed field operation on the already visible development rows, reports an observed value or typed error alongside the expected value, and enumerates equally simple matching projections or single-field splits. No held-out values, identities or case names are supplied.
+
+For this migration, two operations fit the visible examples. The first hyphen-separated component of the identifier and the second word of the title coincide on both examples. A specialist using only those examples abstains. The builder can consult the original requirement to extract the *first identifier segment*. Correcting the program must still pass the same frozen checker. A new parcel-bin regression exercises direct specialist delivery on a separate, unambiguous mapping, including an integer from the last component of variable-length locations. [Registered follow-up and exact rejected proposal](../../../docs/frontier-omega-ignition/continuation/development-repair/REGISTRATION.md)
+
+The follow-up Qwen repair reproduced the original wrong program byte-for-byte despite the new field-level evidence. The bounded disambiguation path asks the model or operator to choose an identified complete mapping. Hypothesis IDs derive from program content and remain stable when the order changes. The menu includes every fitting copy and observed split in its supported grammar, up to sixteen complete combinations. A coincidental copy can mask an intended split in the simpler conventional learner. Adaptive routing checks both families before selecting a unique fit. Larger sets or unsupported transformations require new evidence. If the purpose lacks a distinguishing source or operation cue, the model path defers. The lexical check is conservative and cannot establish semantic intent on its own. A wrong valid choice still fails the unchanged independent checker. The public-example specialist and general one-shot model route keep their original roles. [Preregistered choice experiment](../../../docs/frontier-omega-ignition/continuation/bounded-choice/REGISTRATION.md)
+
 ## What the mechanisms changed
 
 | Decision or instrument | Executable consequence | Remaining uncertainty |
@@ -63,3 +85,14 @@ print([(case["name"], case["candidate_pass"]) for case in receipt["cases"]])
 | Transfer the binding of a trusted reference into construction | An exact reference to the frozen manifest removes model transcription of long digest strings. | The operator still needs an independent ground of trust for the manifest. |
 | Challenge the artifact with independent observations | The exact historic bad program is rejected despite eight passing checks. Conflicting reference answers quarantine the candidate. | More extensive tests can expose additional faults. |
 | Repair from verified failure and preserve evidence | Each trial reports proposal, artifact and evaluator receipt identities, observed check counts, comparison, contract identity and result. The current source re-executes acceptance on export. | Correction within one frozen contract establishes task performance within that scope. General construction, demand and historical frontier advantage require separate evidence. |
+
+### Source-linked publications
+
+The private CLI accepts an authorized PDF and manuscript and constructs an offline recipient in a new directory. From the product root:
+
+```sh
+python3 -B -m ignition reading-edition --pdf ../../docs/research/cycle-001.pdf \
+  --source ../../docs/research/cycle-001.html --output /tmp/ignition-edition-new
+```
+
+Open the recipient's `index.html`; the adjacent PDF and JSON receipt make each accepted page link inspectable. This direct local operation makes no model call and creates no mission account. [Instrument and supported content](../reading_room/README.md) · [Registered qualification and full-markup alternative](../reading_room_study/README.md)

@@ -1,0 +1,171 @@
+{
+  "protocol": "ignition/conditional-development-repair/1",
+  "observation": "COMPLETE",
+  "mission_verdict": "NOT_ACCEPTED",
+  "started_at": "2026-11-17T21:59:49.945335+00:00",
+  "actions_run": "44183992862",
+  "actions_attempt": "1",
+  "complete_cost_known": false,
+  "source": "eeed9284dd3e7b9cbdf848ec9f8cc33a85d672d1",
+  "fixture_sha256": "8058a3ea8b97ce7deb1927fae70bd71ac7e9639317814e048db28aade4ee1595",
+  "original_product": "4719005c957e53716ccd3f328688d8a9c40ee4cc",
+  "seed_response_sha256": "9353460cae209c5ee2e7aa43d9b45bcc93fa77136c8743391cb9ffa106e3ed2e",
+  "contract_sha256": "17e1dcf5c5f062a89db070dda03e6df21c6965bf7dbb5b7dff06e62803cf057d",
+  "independent_evaluator_sha256": "50a13c7a52aca4ddaed813705f64bfe1f8767b520da5f75a3f8b32451fe78a41",
+  "old_evaluation": {
+    "status": "fail",
+    "case_count": 9,
+    "candidate_cases_passed": 5,
+    "reference_cases_passed": 0,
+    "failed_case_names": [
+      "Withheld actual observatory card",
+      "Withheld actual resource card",
+      "Mixed state and stable order",
+      "development 1"
+    ],
+    "contract_conforms": true,
+    "comparison": {
+      "name": "enumerative example-based migration",
+      "outcome": "incomparable",
+      "reference_pass": false,
+      "reference_obstruction": "ambiguous minimum-cost development hypotheses",
+      "oracles_agree": true,
+      "criterion": "conformance to declared operations and complete correctness on the frozen workload; latency is telemetry only"
+    },
+    "telemetry_ns": {
+      "candidate": 576997,
+      "reference": 1353,
+      "local_evaluation": 1074501
+    },
+    "receipt_sha256": "05f03d4167d1fa98323e5875a16633bf5aa6ee19b2ece91bd0897a321423a4a3"
+  },
+  "runtime_sha256": "9727beb677e3b3be02f5db9362583b91aa1c0fc2244078ff590719ffa13e3169",
+  "driver_sha256": "22725fd6354f2542a2851d384a8e92905ceb0c9eaef04a03e448b05d8408d4cf",
+  "registration_sha256": "7048d13e10499a8fa77bf30d65efa83fa5cfdc088ff65b9a7d04e83812fd4e5c",
+  "conventional": {
+    "tool": "jq",
+    "version": "jq-1.8.1",
+    "original_declared_cases": [
+      {
+        "name": "Withheld actual observatory card",
+        "passed": true
+      },
+      {
+        "name": "Withheld actual resource card",
+        "passed": true
+      },
+      {
+        "name": "Mixed state and stable order",
+        "passed": true
+      },
+      {
+        "name": "Refuse malformed row in a batch",
+        "passed": true
+      }
+    ],
+    "accepted_on_declared_cases": true,
+    "wall_seconds": 0.00848,
+    "scope": "Existing hand-authored conventional route and original declared cases; model-evaluator controls are reported separately."
+  },
+  "specialist": {
+    "mission_status": "deferred",
+    "route": {
+      "route": "direct",
+      "method": "specialist"
+    },
+    "portable": null,
+    "attempts": [],
+    "evaluation": null,
+    "accepted": false,
+    "elapsed_seconds": 0.029382,
+    "actual_model_calls": 0
+  },
+  "verified_runtime_archive_sha256": "909eef25cd53e6601c8a07c866d8dbb2983e74177088d55182137a8fb8255d62",
+  "verified_model_file_sha256": "2fde00ce69dd4899c70d020845e2638353015bba0fdf161b3eb965f2bca4464e",
+  "verified_runtime_binary_sha256": "fe211d00c4754aa67aaa492d2c755ab0f6ef60bf30eee3c0c74a3496189cde17",
+  "threads": 4,
+  "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+  "model_revision": "ae44f08e1392f39c0e474af10c3ff8355c8b6688",
+  "setup_seconds": 14.598184,
+  "model_result": {
+    "mission_status": "failed",
+    "route": {
+      "route": "direct",
+      "method": "model"
+    },
+    "portable": null,
+    "attempts": [
+      {
+        "attempt": 1,
+        "proposal_sha256": "9353460cae209c5ee2e7aa43d9b45bcc93fa77136c8743391cb9ffa106e3ed2e",
+        "status": "rejected",
+        "checks": 9,
+        "passed_checks": 5,
+        "receipt_sha256": "0f363998a5267e3ece25f874769141bb94205b1b835f26ede8624cc4c0cb4657"
+      },
+      {
+        "attempt": 2,
+        "proposal_sha256": "9353460cae209c5ee2e7aa43d9b45bcc93fa77136c8743391cb9ffa106e3ed2e",
+        "status": "rejected",
+        "checks": 9,
+        "passed_checks": 5,
+        "receipt_sha256": "245094915f9556d2817c1acfc887a3f6c85fd2f757cacd8bf1e4353c0a77b01f"
+      }
+    ],
+    "evaluation": {
+      "status": "fail",
+      "case_count": 9,
+      "candidate_cases_passed": 5,
+      "reference_cases_passed": 0,
+      "failed_case_names": [
+        "Withheld actual observatory card",
+        "Withheld actual resource card",
+        "Mixed state and stable order",
+        "development 1"
+      ],
+      "contract_conforms": true,
+      "comparison": {
+        "criterion": "conformance to declared operations and complete correctness on the frozen workload; latency is telemetry only",
+        "name": "enumerative example-based migration",
+        "oracles_agree": true,
+        "outcome": "incomparable",
+        "reference_obstruction": "ambiguous minimum-cost development hypotheses",
+        "reference_pass": false
+      },
+      "telemetry_ns": {
+        "candidate": 433543,
+        "local_evaluation": 1661288,
+        "reference": 1397
+      },
+      "receipt_sha256": "245094915f9556d2817c1acfc887a3f6c85fd2f757cacd8bf1e4353c0a77b01f"
+    },
+    "accepted": false,
+    "elapsed_seconds": 56.742951
+  },
+  "calls": [
+    {
+      "response_sha256": "9353460cae209c5ee2e7aa43d9b45bcc93fa77136c8743391cb9ffa106e3ed2e",
+      "raw_response_sha256": "eda416d873d3bf29d57890007d49f20a37d75760358dc09ded78282556d23f85",
+      "usage": {
+        "input_tokens": 1340,
+        "output_tokens": 174
+      },
+      "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+      "application_model_calls": 1,
+      "reported_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+      "run_id": "ignition_5ef071852b844a2dbb650c9e4632c5d1",
+      "complete_cost_known": false,
+      "wall_seconds": 55.118169,
+      "response_schema_sha256": "ec8879008e4b2a44e03235beba1249bb54b0f05aa6505753ebef9272287ab55d",
+      "provider": "llama-cpp",
+      "recorded_at": "2026-11-17T22:00:06.633266+00:00",
+      "request_sha256": "8c8c1d0a71fab7aa9d95a6185dd14192e86208a13690b1799b69e3560da9265a",
+      "status": "completed",
+      "mode": "local",
+      "stage": "repair"
+    }
+  ],
+  "feedback_sha256": "2f875d6461fc51eb730f57964a9f860ffa9fa54ed4b6994c0918c84eaec59c8a",
+  "elapsed_seconds": 72.094182,
+  "finished_at": "2026-11-17T22:01:02.039550+00:00"
+}

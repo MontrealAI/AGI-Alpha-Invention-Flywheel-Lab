@@ -1,0 +1,178 @@
+[
+  {
+    "attempt": 1,
+    "status": "BLOCKED",
+    "artifact": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/44182393072/artifacts/14372283250",
+    "source_identity": {
+      "revision": "ea44ea1b0c3d7404c2a13d11f12f8770d402c634",
+      "clean": true,
+      "status": "PASS"
+    },
+    "started_at": "2026-11-17T21:44:12.299831+00:00",
+    "finished_at": "2026-11-17T21:44:12.873983+00:00",
+    "observations": [],
+    "request_failures": [
+      {
+        "feed": "model-tooling",
+        "role": "current",
+        "repository_url": "https://github.com/huggingface/transformers",
+        "acquisition": "curated publisher feed",
+        "reason_code": "SOURCE_HTTP",
+        "reason": "Source did not return HTTP 200. Redirects are not followed."
+      },
+      {
+        "feed": "model-tooling",
+        "role": "baseline",
+        "repository_url": "https://github.com/huggingface/transformers",
+        "acquisition": "curated publisher feed",
+        "reason_code": "SOURCE_HTTP",
+        "reason": "Source did not return HTTP 200. Redirects are not followed."
+      },
+      {
+        "feed": "distribution",
+        "role": "current",
+        "repository_url": "https://github.com/pypa/build",
+        "acquisition": "curated publisher feed",
+        "reason_code": "SOURCE_HTTP",
+        "reason": "Source did not return HTTP 200. Redirects are not followed."
+      },
+      {
+        "feed": "distribution",
+        "role": "baseline",
+        "repository_url": "https://github.com/pypa/build",
+        "acquisition": "curated publisher feed",
+        "reason_code": "SOURCE_HTTP",
+        "reason": "Source did not return HTTP 200. Redirects are not followed."
+      },
+      {
+        "feed": "github:jqlang/jq",
+        "role": "current",
+        "repository_url": "https://github.com/jqlang/jq",
+        "acquisition": "operator-authorized public repository",
+        "reason_code": "SOURCE_HTTP",
+        "reason": "Source did not return HTTP 200. Redirects are not followed."
+      },
+      {
+        "feed": "github:jqlang/jq",
+        "role": "baseline",
+        "repository_url": "https://github.com/jqlang/jq",
+        "acquisition": "operator-authorized public repository",
+        "reason_code": "SOURCE_HTTP",
+        "reason": "Source did not return HTTP 200. Redirects are not followed."
+      }
+    ],
+    "integrity_errors": []
+  },
+  {
+    "attempt": 2,
+    "status": "PASS",
+    "artifact": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/44182393072/artifacts/14373304496",
+    "source_identity": {
+      "revision": "ea44ea1b0c3d7404c2a13d11f12f8770d402c634",
+      "clean": true,
+      "status": "PASS"
+    },
+    "started_at": "2026-11-17T22:00:02.057914+00:00",
+    "finished_at": "2026-11-17T22:00:04.010054+00:00",
+    "observations": [
+      {
+        "feed": "model-tooling",
+        "role": "release",
+        "version": "v5.23.0",
+        "published_at": "2026-11-13T14:10:57Z",
+        "source": "https://github.com/huggingface/transformers/releases/tag/v5.23.0",
+        "source_response_sha256": "f977ad3a9e2f42469f11714f97f448645d1c220a2d10ed13099074e5e8b14ff9"
+      },
+      {
+        "feed": "model-tooling",
+        "role": "release",
+        "version": "v5.22.2",
+        "published_at": "2026-11-06T15:43:27Z",
+        "source": "https://github.com/huggingface/transformers/releases/tag/v5.22.2",
+        "source_response_sha256": "f977ad3a9e2f42469f11714f97f448645d1c220a2d10ed13099074e5e8b14ff9"
+      },
+      {
+        "feed": "model-tooling",
+        "role": "release",
+        "version": "v5.22.1",
+        "published_at": "2026-10-30T09:36:03Z",
+        "source": "https://github.com/huggingface/transformers/releases/tag/v5.22.1",
+        "source_response_sha256": "f977ad3a9e2f42469f11714f97f448645d1c220a2d10ed13099074e5e8b14ff9"
+      },
+      {
+        "feed": "model-tooling",
+        "role": "earlier commit",
+        "version": "28034545c35acac05793695bd5c878f66e6b544e",
+        "published_at": null,
+        "source": "https://github.com/huggingface/transformers/commit/28034545c35acac05793695bd5c878f66e6b544e",
+        "source_response_sha256": "a52ac935ce5adc82dc3ce44216cc3a36e6e95fcd017f19cb4d470cf251c8312a"
+      },
+      {
+        "feed": "distribution",
+        "role": "release",
+        "version": "1.6.1",
+        "published_at": "2026-09-10T07:55:45Z",
+        "source": "https://github.com/pypa/build/releases/tag/1.6.1",
+        "source_response_sha256": "b8d33c71a52669e2299e9ce0142186b0964667676bf890011a794fdc311dadab"
+      },
+      {
+        "feed": "distribution",
+        "role": "release",
+        "version": "1.6.0",
+        "published_at": "2026-08-27T21:01:00Z",
+        "source": "https://github.com/pypa/build/releases/tag/1.6.0",
+        "source_response_sha256": "b8d33c71a52669e2299e9ce0142186b0964667676bf890011a794fdc311dadab"
+      },
+      {
+        "feed": "distribution",
+        "role": "release",
+        "version": "1.5.1",
+        "published_at": "2026-07-09T06:21:48Z",
+        "source": "https://github.com/pypa/build/releases/tag/1.5.1",
+        "source_response_sha256": "b8d33c71a52669e2299e9ce0142186b0964667676bf890011a794fdc311dadab"
+      },
+      {
+        "feed": "distribution",
+        "role": "earlier commit",
+        "version": "5dd138ec07788b295524d708480d764197aa835c",
+        "published_at": null,
+        "source": "https://github.com/pypa/build/commit/5dd138ec07788b295524d708480d764197aa835c",
+        "source_response_sha256": "1992a61a1cf6de911705c3af2473dc91add20b0f38a95e1a881c37e03c854473"
+      },
+      {
+        "feed": "github:jqlang/jq",
+        "role": "release",
+        "version": "jq-1.8.2",
+        "published_at": "2026-06-20T14:11:27Z",
+        "source": "https://github.com/jqlang/jq/releases/tag/jq-1.8.2",
+        "source_response_sha256": "3542ece990300108f2045226882cde2e992ff633bc84221bf4591ab3555350fe"
+      },
+      {
+        "feed": "github:jqlang/jq",
+        "role": "release",
+        "version": "jq-1.8.1",
+        "published_at": "2025-07-01T11:50:06Z",
+        "source": "https://github.com/jqlang/jq/releases/tag/jq-1.8.1",
+        "source_response_sha256": "3542ece990300108f2045226882cde2e992ff633bc84221bf4591ab3555350fe"
+      },
+      {
+        "feed": "github:jqlang/jq",
+        "role": "release",
+        "version": "jq-1.8.0",
+        "published_at": "2025-06-01T06:05:01Z",
+        "source": "https://github.com/jqlang/jq/releases/tag/jq-1.8.0",
+        "source_response_sha256": "3542ece990300108f2045226882cde2e992ff633bc84221bf4591ab3555350fe"
+      },
+      {
+        "feed": "github:jqlang/jq",
+        "role": "earlier commit",
+        "version": "6b53f8031161db96387b64b5f412845cd23491f6",
+        "published_at": null,
+        "source": "https://github.com/jqlang/jq/commit/6b53f8031161db96387b64b5f412845cd23491f6",
+        "source_response_sha256": "a3e538f619e0390c47bdf20f324246173d098945ef1d9ee34983cbc90d550b58"
+      }
+    ],
+    "request_failures": [],
+    "integrity_errors": []
+  }
+]

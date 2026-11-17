@@ -1,0 +1,160 @@
+{
+  "protocol": "ignition/independent-bounded-recipient-reproduction/1",
+  "product_revision": "50fe9fea71bc8880fb2c2ff7b4dff9a8af767c1c",
+  "study_run": "44187377022",
+  "hosted_artifact": 14373729786,
+  "hosted_receipt_sha256": "6a14b67e4527aa8b4241017ff46171b520609761766588eeb8b170ec9e01514d",
+  "buyer_payments_observed": false,
+  "cells": [
+    {
+      "fixture": "editorial",
+      "order": "ascending",
+      "choice_position": 2,
+      "choice": "H-2dde44844c90",
+      "mission_verdict": "ACCEPTED",
+      "artifact_sha256": "7877e3bb6c6c13d40e5bb363b4f59001e9515e62790de214374251e2bd5cff22",
+      "elapsed_seconds": 16.889495,
+      "public_zip_sha256": "d8ea89218bd04eb2a8a278623a8f7dffea7ce27da11445dfb0e47feff161e670"
+    },
+    {
+      "fixture": "parcel",
+      "order": "descending",
+      "choice_position": 1,
+      "choice": "H-cc5a9ab5a510",
+      "mission_verdict": "ACCEPTED",
+      "artifact_sha256": "5409d3ac327049711a5a3ea0ba835cdf1dbf6e7bca0c348815ca1d4c0630f19f",
+      "elapsed_seconds": 10.357074,
+      "public_zip_sha256": "6cea289d4824564ffb9d5511f3a3dc0f969bda0f020dcf9e9954f82985946dd7"
+    },
+    {
+      "fixture": "editorial",
+      "order": "descending",
+      "choice_position": 1,
+      "choice": "H-2dde44844c90",
+      "mission_verdict": "ACCEPTED",
+      "artifact_sha256": "7877e3bb6c6c13d40e5bb363b4f59001e9515e62790de214374251e2bd5cff22",
+      "elapsed_seconds": 10.645415,
+      "public_zip_sha256": "a494c8a18780ea194286f9a3d6ad8b01a72915e72e7e102da529f717078cd418"
+    },
+    {
+      "fixture": "parcel",
+      "order": "ascending",
+      "choice_position": 2,
+      "choice": "H-cc5a9ab5a510",
+      "mission_verdict": "ACCEPTED",
+      "artifact_sha256": "5409d3ac327049711a5a3ea0ba835cdf1dbf6e7bca0c348815ca1d4c0630f19f",
+      "elapsed_seconds": 10.221103,
+      "public_zip_sha256": "d7f990c0fc955cb1ecd77452e10dc6f3addfe849de44cc6f94fa73e0404a8070"
+    }
+  ],
+  "recipient_checks": [
+    {
+      "fixture": "editorial",
+      "filename": "Qwen_Editorial_Receiver.zip",
+      "zip_sha256": "d8ea89218bd04eb2a8a278623a8f7dffea7ce27da11445dfb0e47feff161e670",
+      "zip_bytes": 19384,
+      "case_count": 9,
+      "verify_exit": 0,
+      "example_exit": 0,
+      "fresh_input_exit": 0,
+      "example_output_sha256": "297f14d7aa725c47a4f82d7de8fcfa3dfdcb4014b1db54c6ef943100d9ae2b9f",
+      "fresh_input": {
+        "rows": [
+          {
+            "id": "atlas-operating-2026",
+            "name": "Independently supplied example without matching area",
+            "status": "REVIEW"
+          }
+        ]
+      },
+      "fresh_observed": {
+        "rows": [
+          {
+            "area": "atlas",
+            "decision": "REVIEW",
+            "headline": "Independently supplied example without matching area",
+            "record_id": "atlas-operating-2026"
+          }
+        ]
+      },
+      "public_only_learner": "ambiguous",
+      "conventional": {
+        "tool": "jq",
+        "version": "jq-1.8.1",
+        "original_declared_cases": [
+          {
+            "name": "Withheld actual observatory card",
+            "passed": true
+          },
+          {
+            "name": "Withheld actual resource card",
+            "passed": true
+          },
+          {
+            "name": "Mixed state and stable order",
+            "passed": true
+          },
+          {
+            "name": "Refuse malformed row in a batch",
+            "passed": true
+          }
+        ],
+        "accepted_on_declared_cases": true,
+        "wall_seconds": 0.009938,
+        "scope": "Existing hand-authored conventional route and original declared cases; model-evaluator controls are reported separately."
+      }
+    },
+    {
+      "fixture": "parcel",
+      "filename": "Qwen_Parcel_Receiver.zip",
+      "zip_sha256": "d7f990c0fc955cb1ecd77452e10dc6f3addfe849de44cc6f94fa73e0404a8070",
+      "zip_bytes": 18872,
+      "case_count": 9,
+      "verify_exit": 0,
+      "example_exit": 0,
+      "fresh_input_exit": 0,
+      "example_output_sha256": "8343d6d8f3bcf569e8de9ed62117381a9a4bd8f25e0bace8456b41cdfccf3ee9",
+      "fresh_input": {
+        "rows": [
+          {
+            "parcel_code": "atlantic-299-x",
+            "routing_note": "sort mauve after inspection"
+          }
+        ]
+      },
+      "fresh_observed": {
+        "rows": [
+          {
+            "sorting_mark": "mauve"
+          }
+        ]
+      },
+      "public_only_learner": "ambiguous",
+      "conventional": {
+        "route": "Hand-authored bounded parcel mapping; recipient evaluator",
+        "evaluation": {
+          "status": "pass",
+          "case_count": 9,
+          "candidate_cases_passed": 9,
+          "reference_cases_passed": 0,
+          "failed_case_names": [],
+          "contract_conforms": true,
+          "comparison": {
+            "name": "enumerative example-based migration",
+            "outcome": "incomparable",
+            "reference_pass": false,
+            "reference_obstruction": "ambiguous minimum-cost development hypotheses",
+            "oracles_agree": true,
+            "criterion": "conformance to declared operations and complete correctness on the frozen workload; latency is telemetry only"
+          },
+          "telemetry_ns": {
+            "candidate": 339262,
+            "reference": 1211,
+            "local_evaluation": 964406
+          },
+          "receipt_sha256": "2d5d472a593f5683222c01a083236231098e6cf5d652cf085946089e654f1787"
+        }
+      }
+    }
+  ]
+}

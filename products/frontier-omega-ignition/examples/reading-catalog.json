@@ -1,0 +1,167 @@
+{
+  "id": "reading-catalog",
+  "title": "Prepare a multilingual reading catalog",
+  "mission": {
+    "purpose": "Prepare the reading catalog. Copy edition_language into reading_language. Preserve each publication title and the source row order.",
+    "beneficiary": "Research editor publishing a bilingual collection",
+    "requirements": [
+      "Produce publication and reading_language for each row. Preserve language tags exactly.",
+      "Reject the entire batch if any row is malformed or contains undeclared fields."
+    ],
+    "authority": {
+      "local_model": false,
+      "assisted_model": true,
+      "public_sources": false
+    },
+    "resources": {
+      "max_model_calls": 1,
+      "max_repairs": 0
+    },
+    "time": {},
+    "construction_spec": {
+      "purpose": "Prepare the reading catalog. Copy edition_language into reading_language. Preserve each publication title and the source row order.",
+      "kind": "record_migration",
+      "definition": {
+        "input_fields": [
+          "title",
+          "folder_language",
+          "edition_language",
+          "catalog_language"
+        ],
+        "targets": [
+          {
+            "name": "publication",
+            "type": "text"
+          },
+          {
+            "name": "reading_language",
+            "type": "text"
+          }
+        ],
+        "extra_fields": "reject",
+        "demonstrations": [
+          {
+            "input": {
+              "rows": [
+                {
+                  "title": "Orbits",
+                  "folder_language": "en",
+                  "edition_language": "en",
+                  "catalog_language": "en"
+                },
+                {
+                  "title": "Spectres",
+                  "folder_language": "fr",
+                  "edition_language": "fr",
+                  "catalog_language": "fr"
+                }
+              ]
+            },
+            "expected": {
+              "rows": [
+                {
+                  "publication": "Orbits",
+                  "reading_language": "en"
+                },
+                {
+                  "publication": "Spectres",
+                  "reading_language": "fr"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "cases": [
+        {
+          "name": "Parallel editions named separately",
+          "input": {
+            "rows": [
+              {
+                "title": "Light",
+                "folder_language": "en",
+                "edition_language": "fr",
+                "catalog_language": "de"
+              },
+              {
+                "title": "Lumière",
+                "folder_language": "fr",
+                "edition_language": "en",
+                "catalog_language": "it"
+              }
+            ]
+          },
+          "expected": {
+            "rows": [
+              {
+                "publication": "Light",
+                "reading_language": "fr"
+              },
+              {
+                "publication": "Lumière",
+                "reading_language": "en"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Script and region survive",
+          "input": {
+            "rows": [
+              {
+                "title": "Sound",
+                "folder_language": "zh",
+                "edition_language": "zh-Hant",
+                "catalog_language": "en-US"
+              }
+            ]
+          },
+          "expected": {
+            "rows": [
+              {
+                "publication": "Sound",
+                "reading_language": "zh-Hant"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Refuse a malformed second record",
+          "input": {
+            "rows": [
+              {
+                "title": "Valid",
+                "folder_language": "fr",
+                "edition_language": "fr",
+                "catalog_language": "fr"
+              },
+              {
+                "title": "Invalid",
+                "folder_language": "fr",
+                "edition_language": false,
+                "catalog_language": "fr"
+              }
+            ]
+          },
+          "error": "invalid_value"
+        },
+        {
+          "name": "Refuse an unregistered source field",
+          "input": {
+            "rows": [
+              {
+                "title": "Extra",
+                "folder_language": "en",
+                "edition_language": "en",
+                "catalog_language": "en",
+                "edition_id": 14
+              }
+            ]
+          },
+          "error": "extra_field"
+        }
+      ]
+    }
+  },
+  "sources": []
+}

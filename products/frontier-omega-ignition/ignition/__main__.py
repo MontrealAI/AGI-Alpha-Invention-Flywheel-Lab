@@ -17,26 +17,37 @@ def main():
                         help="enable an explicitly operator-assisted model exchange")
     sub = parser.add_subparsers(dest="command",required=True)
     sub.add_parser("inventory")
+    edition = sub.add_parser("reading-edition", help="build a local page-linked reading edition")
+    edition.add_argument("--pdf", type=Path, required=True)
+    edition.add_argument("--source", type=Path, required=True)
+    edition.add_argument("--output", type=Path, required=True, help="new local recipient directory")
     sub.add_parser("serve").add_argument("--port",type=int,default=8784)
     p = sub.add_parser("start")
     p.add_argument("file",type=Path)
     p.add_argument("--request-id",default=None)
-    for cmd in ("show","resume","respond","approve","export","amend","try","history","successor"):
+    for cmd in ("show","resume","respond","approve","choose","export","amend","try","history","successor"):
         p = sub.add_parser(cmd)
         p.add_argument("id")
         if cmd in {"respond","amend","try","export","successor","approve"}:
             p.add_argument("file",type=Path)
-        if cmd in {"respond","approve"}:
+        if cmd == "choose":
+            p.add_argument("choice", help="registered mapping ID or abstain")
+        if cmd in {"respond","approve","choose"}:
             p.add_argument("--sha256",required=True)
-        if cmd in {"amend","resume","respond","approve","try","export","successor"}:
+        if cmd in {"amend","resume","respond","approve","choose","try","export","successor"}:
             p.add_argument("--version",type=int,required=True)
         if cmd == "successor":
             p.add_argument("--rights",required=True)
         if cmd in {"amend","successor"}:
             p.add_argument("--request-id",required=True)
     args = parser.parse_args()
-    ctrl = Controller(Store(args.state),assisted=args.assisted)
     cmd = args.command
+    if cmd == "reading-edition":
+        from reading_room.edition import build
+        summary = build(args.pdf, args.source, args.output)
+        print(json.dumps({"directory": str(args.output), **summary}, ensure_ascii=False, indent=2))
+        return
+    ctrl = Controller(Store(args.state),assisted=args.assisted)
     if cmd == "serve":
         with Service(ctrl,args.port) as server:
             print(f"FRONTIER Ω IGNITION  http://127.0.0.1:{server.server_port}  |  {ctrl.identity()['mode']}",flush=True)
@@ -70,6 +81,8 @@ def main():
     elif cmd == "try":
         value = ctrl.deliver(args.id,args.version,strict_json(args.file.read_bytes()),trial=True)
     else:
+        if cmd == "choose":
+            ctrl.intervene(args.id,args.version,cmd,{"sha256":args.sha256,"choice":args.choice})
         if cmd == "respond":
             ctrl.intervene(args.id,args.version,cmd,{"sha256":args.sha256,"response":strict_json(args.file.read_bytes())})
         if cmd == "approve":

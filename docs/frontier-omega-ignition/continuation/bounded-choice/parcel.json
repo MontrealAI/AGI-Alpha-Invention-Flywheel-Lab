@@ -1,0 +1,135 @@
+{
+  "id": "parcel",
+  "mission": {
+    "purpose": "Prepare a parcel sorting sheet. Put the second space-separated word of the operator's routing_note into sorting_mark. Parcel identifiers are retained for other systems and do not determine this mark.",
+    "beneficiary": "Parcel dispatch coordinator preparing operator-assigned sorting marks for an internal batch",
+    "requirements": [
+      "Use the second word of routing_note for sorting_mark in every output row, preserving input order.",
+      "Reject the entire batch if an input cannot yield the required second word or contains undeclared columns."
+    ],
+    "authority": {
+      "local_model": true,
+      "assisted_model": false,
+      "public_sources": false
+    },
+    "resources": {
+      "assets": "Public synthetic parcel records and bounded local interpreter",
+      "budget": "No purchases or paid services"
+    },
+    "time": {},
+    "construction_spec": {
+      "kind": "record_migration",
+      "purpose": "Prepare a parcel sorting sheet. Put the second space-separated word of the operator's routing_note into sorting_mark. Parcel identifiers are retained for other systems and do not determine this mark.",
+      "definition": {
+        "input_fields": [
+          "parcel_code",
+          "routing_note"
+        ],
+        "targets": [
+          {
+            "name": "sorting_mark",
+            "type": "text"
+          }
+        ],
+        "extra_fields": "reject",
+        "demonstrations": [
+          {
+            "input": {
+              "rows": [
+                {
+                  "parcel_code": "north-214",
+                  "routing_note": "route north overnight"
+                },
+                {
+                  "parcel_code": "south-117-B",
+                  "routing_note": "scan south customer priority"
+                }
+              ]
+            },
+            "expected": {
+              "rows": [
+                {
+                  "sorting_mark": "north"
+                },
+                {
+                  "sorting_mark": "south"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "cases": [
+        {
+          "name": "Purchase order and handling lane disagree",
+          "input": {
+            "rows": [
+              {
+                "parcel_code": "west-400",
+                "routing_note": "transfer amber express"
+              }
+            ]
+          },
+          "expected": {
+            "rows": [
+              {
+                "sorting_mark": "amber"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Independent routing marks preserve dispatch order",
+          "input": {
+            "rows": [
+              {
+                "parcel_code": "euro-11-A",
+                "routing_note": "dispatch violet"
+              },
+              {
+                "parcel_code": "euro-37",
+                "routing_note": "use teal after inspection"
+              }
+            ]
+          },
+          "expected": {
+            "rows": [
+              {
+                "sorting_mark": "violet"
+              },
+              {
+                "sorting_mark": "teal"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Missing second routing word refuses complete batch",
+          "input": {
+            "rows": [
+              {
+                "parcel_code": "east-31",
+                "routing_note": "only"
+              }
+            ]
+          },
+          "error": "invalid_value"
+        },
+        {
+          "name": "Unregistered source column",
+          "input": {
+            "rows": [
+              {
+                "parcel_code": "ABC-2",
+                "routing_note": "use ivory",
+                "extra": "x"
+              }
+            ]
+          },
+          "error": "extra_field"
+        }
+      ]
+    }
+  },
+  "sources": []
+}
