@@ -54,10 +54,16 @@ CONTINUITY_MEDIA = tuple(
 ASSETS += CONTINUITY_MEDIA + ('continuity-omega-media-manifest.json',)
 PAGES += ('frontier-conclave.html',)
 ASSETS += ('frontier-conclave-hero.png', 'frontier-conclave-salon.png', 'FRONTIER_CONCLAVE_COMPLETE.zip')
-PAGES += ('alpha-genesis-live.html', 'alpha-genesis-live-studio.html', 'frontier-omega.html')
+PAGES += ('alpha-genesis-live.html', 'alpha-genesis-live-studio.html', 'frontier-omega.html', 'frontier-omega-world-lab.html')
 FILES = PAPERS + PAGES + ASSETS + ('publication-manifest.json',)
 PUBLIC_SITE = 'https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/'
 EXTERNAL_RESEARCH_REFERENCES = frozenset({
+    'https://montrealai.github.io/aidebate/',
+    'https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-4-carbon-now-available/',
+    'https://openai.com/index/accelerating-engineering-for-the-physical-world/',
+    'https://deepmind.google/blog/introducing-alphaproof-code/',
+    'https://www.anthropic.com/claude-fable-and-mythos-5-2',
+    'https://www.anthropic.com/research/provable-inference',
     'https://bbbc.broadinstitute.org/BBBC007',
     'https://www.montreal.ai/',
     'https://www.quebec.ai/',
