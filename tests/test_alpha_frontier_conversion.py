@@ -223,6 +223,63 @@ class ConversionTests(unittest.TestCase):
             submit_qualified(external, self.reservoir, self.bundle,
                              buyer_keys={self.c["buyer"]: KEY}, now=self.now)
 
+    def test_qualified_inbox_defers_until_frozen_replay_then_admits(self):
+        from connected_enterprise.alpha_economic.frontier_intake import QualifiedInbox
+        inbox = QualifiedInbox(self.engine, self.reservoir)
+        request = inbox.inbox / "buyer-request.json"
+        request.write_text(json.dumps(self.bundle))
+        request.chmod(0o600)
+        first = inbox.watch(interval=.05, cycles=1)
+        self.assertEqual(first["receipts"][0]["status"], "DEFERRED_NOT_YET_QUALIFIED")
+        self.assertTrue(request.exists())
+        self.assertEqual(self.engine.state.summary()["jobs"], [])
+        self.register()
+        second = inbox.watch(interval=.05, cycles=1)
+        self.assertEqual(second["receipts"][0]["status"], "ORDER_ADMITTED_NOT_PAID")
+        self.assertFalse(request.exists())
+        self.assertEqual(len(list(inbox.processed.iterdir())), 1)
+        self.assertEqual(len(self.engine.state.summary()["jobs"]), 1)
+
+    def test_qualified_inbox_rejects_forged_customer_signature(self):
+        from connected_enterprise.alpha_economic.frontier_intake import QualifiedInbox
+        self.register()
+        inbox = QualifiedInbox(self.engine, self.reservoir)
+        request = inbox.inbox / "forged.json"
+        altered = copy.deepcopy(self.bundle)
+        altered["buyer_envelope"]["signature"] = "f" * 64
+        request.write_text(json.dumps(altered))
+        request.chmod(0o600)
+        receipts = inbox.watch(interval=.05, cycles=1)["receipts"]
+        self.assertEqual(receipts[0]["status"], "REJECTED")
+        self.assertEqual(self.engine.state.summary()["jobs"], [])
+        self.assertEqual(len(list(inbox.rejected.iterdir())), 1)
+
+    def test_qualified_inbox_refuses_world_readable_buyer_material(self):
+        from connected_enterprise.alpha_economic.frontier_intake import QualifiedInbox
+        self.register()
+        inbox = QualifiedInbox(self.engine, self.reservoir)
+        request = inbox.inbox / "not-private.json"
+        request.write_text(json.dumps(self.bundle))
+        request.chmod(0o644)
+        status = inbox.scan()[0]["status"]
+        self.assertEqual(status, "REFUSED_UNSAFE_FILE")
+        self.assertEqual(self.engine.state.summary()["jobs"], [])
+
+    def test_one_command_ignition_runs_sensor_intake_and_simulated_engine(self):
+        from connected_enterprise.alpha_economic.frontier_intake import QualifiedInbox
+        from connected_enterprise.alpha_economic.frontier_conversion_cli import ignite
+        self.register()
+        inbox = QualifiedInbox(self.engine, self.reservoir)
+        request = inbox.inbox / "authorized.json"
+        request.write_text(json.dumps(self.bundle))
+        request.chmod(0o600)
+        output = ignite(self.engine, self.reservoir, .05, cycles=120)
+        self.assertEqual(output["financial_scope"], "SIMULATED")
+        self.assertFalse(output["real_payment_established_by_ignition"])
+        self.assertEqual(self.engine.state.get(identifier(self.c))["state"], "COMPLETE")
+        self.assertEqual(output["engine"]["actual_collections"], 0)
+        self.assertTrue((self.engine.root / "outbox" / identifier(self.c) / "solution.zip").exists())
+
     def test_buyer_decline_is_not_fake_revenue(self):
         self.register()
         self.engine.buyer.decline = True
