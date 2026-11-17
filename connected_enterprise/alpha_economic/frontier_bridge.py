@@ -232,6 +232,15 @@ def admission_preflight(reservoir, bundle, buyer_keys, *, now=None):
     if not comparison.get("reported_crossing"):
         raise ValueError("MATCHED_REPORTED_CROSSING_REQUIRED")
     old, new = _trial_pair(reservoir, before, after, comparison)
+    # A recorded host replay cannot precede its claimed capability observation
+    # or arrive from the future relative to this authenticated intake. These
+    # bounds check chronology, not whether an authored run really happened.
+    submit_day = datetime.fromtimestamp(now, timezone.utc).date().isoformat()
+    if (old["run_on"] < frontiers[before]["observed_on"]
+        or new["run_on"] < frontiers[after]["observed_on"]
+        or old["run_on"] > submit_day
+        or new["run_on"] > submit_day):
+        raise ValueError("TRIAL_CHRONOLOGY_INVALID")
     if (old["problem_id"] != problem_id or new["problem_id"] != problem_id
         or old["terms_sha256"] != digest(c)
         or new["terms_sha256"] != digest(c)
