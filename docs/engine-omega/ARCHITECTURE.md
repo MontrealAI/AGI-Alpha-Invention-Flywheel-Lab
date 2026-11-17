@@ -5,7 +5,7 @@
 > Frontier progress creates new technical possibilities. ENGINE Ω constructs the smallest complete, voluntary, independently verifiable, fundable arrangement that turns a consequential possibility into accepted economic value—and tests whether the results make a different successor possible.
 
 **System boundary:**
-- **FRONTIER Ω** owns the evidence-linked opportunity graph, changing frontier signals, independent crossing hypotheses and provisional ignition timing. See ../frontier_omega/IGNITION.md.
+- **FRONTIER Ω** owns the evidence-linked opportunity graph, changing frontier signals, independent crossing hypotheses and provisional ignition timing. See ../../frontier_omega/IGNITION.md.
 - **ENGINE Ω** owns the constructive investigation, candidate route design, source-bound production plan, external acceptance interface, delivered product, and method/capability succession. It can *propose* actions; actual external effects require their separate authorization.
 - **Native enterprise** owns protected cash, funded commitments, collections, obligations, idempotent recovery and financial audit. Reuse connected_enterprise, JournalAccount and adaptive Account. ENGINE Ω never creates a competing ledger.
 - **Independent checker** owns acceptance and evaluator challenge, not the candidate builder. An evaluator proposed by the builder is not automatically trusted.
@@ -54,7 +54,7 @@ These motifs are strategic options, not five workflows to execute on every case.
 
 ## III. The construction object: a Complete Capability Contract
 
-The opportunity graph's atomic node is not an idea. It is a **signed-when-appropriate, source-versioned, testable contract** joining an outcome, means, evidence and economics. The mandatory fields:
+The opportunity graph's atomic node is not merely an idea. It is a **signed-when-appropriate, source-versioned, testable contract** joining an outcome, means, evidence and economics. The mandatory fields:
 
 - **Outcome:** beneficiary, permitted input, accepted output, success quality, failure/recovery, reliability and deadlines. Freeze before comparison.
 - **Claim scope:** what's claimed as present feasibility, a five-week crossing, a new frontier capability, commercial profitability, or improved invention; these remain separately classified.
@@ -135,7 +135,7 @@ FRONTIER Ω  ── signal + buyer-problem + timing hypotheses ──┐
 2. **Outcome-and-deal compiler.** Generates complete executable production arrangements, *not* merely task lists. May change production route and incentive arrangement, not the agreed buyer outcome.
 3. **Mechanism composer / policy selector.** Chooses candidate moves and expected information gain under actual rights/resources. Can use frontier models as tools; does not require a fixed multiagent cast.
 4. **Independent experiment and evidence service.** Freezes raw inputs, validators and costs; holds out data; challenges checker with adversarial mutants; independently reproduces accepted outputs.
-5. **Actuation boundary.** External connectors enforce customer scope, tool permissions, spending budgets, time limits, rollback and isolation independent of model-generated text. Memory retains knowledge, never authority.
+5. **Actuation boundary.** External connectors enforce customer scope, tool permissions, spending budgets, actual execution windows, rollback and isolation independent of model-generated text. Memory retains knowledge, never authority.
 6. **Commercial operating boundary.** Reuse connected_enterprise, protected account, signed checkpoints, receipt-bound settlements, refund/obligation reserves, interruption recovery and audit. No shadow ledger or pooled business accounts.
 7. **Capability vault.** Each retained artifact includes content identity, original task, license/rights, tests, required inputs, no-go cases, measured cost and expiry/invalidation triggers.
 8. **Policy challenger.** Can propose improvements to the search/constructor/evaluator, but never judge its own promotion. An unchanged competent model plus ordinary reuse is the control.
