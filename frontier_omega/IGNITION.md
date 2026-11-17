@@ -2,7 +2,7 @@
 
 **FRONTIER Ω must determine when to investigate, run an experiment, initiate a paid pilot, or retain cash. A model release alone never ignites a business.**
 
-This is a READ-ONLY ignition decision prototype on top of 56 structured buyer problems, implemented in [ignition.py](ignition.py). It does not call a paid model, authorize outreach, deploy products, move funds, merge code or change native enterprise accounts.
+This is a READ-ONLY ignition decision prototype on top of 57 structured buyer problems, implemented in [ignition.py](ignition.py). It does not call a paid model, authorize outreach, deploy products, move funds, merge code or change native enterprise accounts.
 
 ## Operating sequence
 
@@ -17,7 +17,7 @@ There is no universal optimality claim. If evidence is missing, the correct deci
 
 ## Current inventory
 
-56 candidate buyer problems, 12 dated signals, **zero verified new five-week technical crossings and zero independently confirmed real paid outcomes**. The current result for every entry is PROBE_CANDIDATE. A source change alone does not alter the commercial stage.
+57 candidate buyer problems, 12 dated signals, **zero verified new five-week technical crossings and zero independently confirmed real paid outcomes**. The current result for every entry is PROBE_CANDIDATE. A source change alone does not alter the commercial stage.
 
 ## Run
 
@@ -25,7 +25,7 @@ Use Python 3.10+, with no paid API call or third-party package:
 
 ~~~sh
 python3 -m frontier_omega.ignition --limit 20
-python3 -m frontier_omega.ignition --limit 56 > /tmp/frontier-omega-ignition.json
+python3 -m frontier_omega.ignition --limit 57 > /tmp/frontier-omega-ignition.json
 python3 -m unittest discover -s tests -p 'test_frontier_omega*.py' -v
 ~~~
 
@@ -73,7 +73,7 @@ A negative margin yields WAIT_FOR_COST_OR_PRICE_CROSSING. Inadequate existing ca
 
 ## First two decisive experiments
 
-**O002 (MIGRATE):** attempt complete behavior-preserving Python-to-Rust migration with exact semantics, measured latency and equal-resource competent human/agent alternatives. A vendor's dramatic startup-speed improvement is not general performance parity, 26x economic value, or observed buyer demand.
+**O057 (COMPUTE) as the selected first economic qualification; O002 (MIGRATE):** attempt complete behavior-preserving Python-to-Rust migration with exact semantics, measured latency and equal-resource competent human/agent alternatives. A vendor's dramatic startup-speed improvement is not general performance parity, 26x economic value, or observed buyer demand.
 
 **O050 (DISCOVER):** attempt a reproducible numerical-method improvement on an open engineering solver, compare its accuracy and complete cost with mature expert alternatives, and independently check every claimed scientific improvement. No algorithmic novelty or physical result is inferred from model capability news.
 
