@@ -42,9 +42,13 @@ def main():
     if args.command == "request":
         value = sign_request(c, key)
     else:
+        from .frontier_buyer import MAX_PACKAGE_BYTES
+        archive = safe(args.archive)
+        if not archive.is_file() or not 1 <= archive.stat().st_size <= MAX_PACKAGE_BYTES:
+            raise ValueError("BOUNDED_CUSTOMER_PACKAGE_REQUIRED")
         value = sign_verified_delivery(
             c, read(args.artifact), read(args.receipt),
-            safe(args.archive).read_bytes(), key)
+            archive.read_bytes(), key)
     path = _private_output(args.output)
     atomic(path, json.dumps(value, sort_keys=True, separators=(",", ":")).encode("utf-8"))
     print(json.dumps({
