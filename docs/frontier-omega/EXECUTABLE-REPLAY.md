@@ -34,3 +34,25 @@ A passing finite task test does not establish model-generated authorship, model 
 No untrusted Python or shell from a model is executed. The source-pinned, bounded JSON evaluator refuses dynamic imports and unrestricted operations. The comparison does not create customers, authorize production or spending, change native ALPHA accounting or issue payment instructions.
 
 A genuine five-week commercial crossing requires independently verified historical/current availability, controlled real tasks, competent competing methods, real demand and complete economic measurements. This module is a **sensor and verification dependency**, not a self-financing enterprise.
+
+## Continuous opt-in frontier release sensor
+
+To monitor permitted public, open-source release metadata, create a JSON configuration outside the repository:
+
+    {
+      "schema": "frontier-omega/github-release-sources/v1",
+      "repositories": [
+        {"repository":"ggml-org/llama.cpp","tags":["coding","local-inference"]},
+        {"repository":"ollama/ollama","tags":["local-inference"]}
+      ]
+    }
+
+Then invoke (with a private inventory already seeded from PR #422):
+
+    python3 -m frontier_omega.releases --root ./frontier-omega-private --config release-sources.json --once
+
+For continuous polling, omit --once; the default polling interval is one hour, adjustable with --poll-seconds between 300 and 86400 seconds. The process must remain running under a suitable owner-controlled service manager. No process or scheduled paid runner is left running by the implementation.
+
+Only exact configured owner/repository identifiers are permitted. URLs are constructed for api.github.com and redirects are refused. Upstream responses are bounded; source errors create no capability claim. Stable release identities are deduplicated across days, preserving the original observation date, and create only the preexisting inventory's INVESTIGATE_ONLY matching triggers.
+
+A GitHub release announcement is *never* a benchmark: the stored availability status is REPORTED. Successful agent performance, historical reproducibility, customer demand, costs and payment must be tested separately. Polling makes only explicit, authorized public GET requests and has no financial authority.
