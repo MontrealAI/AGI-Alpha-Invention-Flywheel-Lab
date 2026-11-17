@@ -51,7 +51,7 @@ def uncovered_effect(mission):
 
 def adaptive_mapping(mission, model_permitted):
     definition = mission["construction_spec"]["definition"]
-    fits = [development.fitting_columns(definition, target) for target in definition["targets"]]
+    fits = development.choice_columns(definition)
     if not all(fits):
         if model_permitted:
             return "model", "The projection and split families cannot express the demonstrated rows. Try the authorized general typed builder."
@@ -60,7 +60,7 @@ def adaptive_mapping(mission, model_permitted):
     if obstruction:
         return None, obstruction
     if len(menu["candidates"]) == 1:
-        return "specialist", "The supplied examples identify one minimum-complexity mapping in the supported families. Compile it locally and check the frozen contract."
+        return "specialist", "The supplied examples identify one mapping among the supported copy and observed split operations. Compile it locally and check the frozen contract."
     if model_permitted and development.has_distinguishing_evidence(mission, menu):
         return "model_choice", "The examples admit multiple mappings and the brief supplies distinguishing cues. Request one authorized bounded selection."
     return "operator_choice", "Multiple mappings fit. The private operator can select a specific mapping or abstain without inference."

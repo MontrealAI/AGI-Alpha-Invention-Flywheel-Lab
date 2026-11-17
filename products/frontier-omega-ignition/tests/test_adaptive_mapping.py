@@ -53,6 +53,39 @@ class AdaptiveMappingTests(unittest.TestCase):
             self.assertEqual((state["routing"]["method"], state["status"]), ("operator_choice", "awaiting_choice"))
             self.assertEqual(state.get("attempts", 0), 0)
 
+    def test_default_route_preserves_intended_split_when_a_copy_fits(self):
+        path = PRODUCT.parents[1] / "docs/frontier-omega-ignition/continuation/bounded-choice/parcel.json"
+        for by_model in (False, True):
+            m = json.loads(path.read_bytes())["mission"]
+            m["resources"] = {}
+            m["authority"] = {"assisted_model": by_model}
+            spec = m["construction_spec"]
+            definition = spec["definition"]
+            definition["input_fields"].append("reported_mark")
+            for demo in definition["demonstrations"]:
+                for source, target in zip(demo["input"]["rows"], demo["expected"]["rows"]):
+                    source["reported_mark"] = target["sorting_mark"]
+            for case in spec["cases"]:
+                for source in case["input"]["rows"]:
+                    source["reported_mark"] = "incorrect"
+            rid, revision = self.ctrl.create({"request_id": f"adaptive-incidental-copy-{by_model}", "mission": m})
+            state = self.ctrl.advance(rid, revision)
+            self.assertEqual(state["routing"]["method"], "model_choice" if by_model else "operator_choice")
+            menu = state["mapping_choice"]
+            choices = {item["description"]: item["id"] for item in menu["candidates"]}
+            self.assertTrue(any("copy reported_mark" in desc for desc in choices))
+            selected = next(identifier for desc, identifier in choices.items() if "second component of routing_note" in desc)
+            if by_model:
+                self.assertEqual(state["handoff"]["stage"], "choose_hypothesis")
+                self.ctrl.intervene(rid, revision, "respond", {"sha256": state["handoff"]["sha256"],
+                                                              "response": {"choice": selected}})
+            else:
+                self.ctrl.intervene(rid, revision, "choose", {"sha256": menu["sha256"], "choice": selected})
+            state = self.ctrl.advance(rid, revision)
+            self.assertEqual(state["status"], "verified", state.get("error"))
+            self.assertEqual(state["construction_attempts"][0]["passed_checks"], 9)
+            self.assertEqual(state.get("attempts", 0), int(by_model))
+
     def test_unrepresentable_join_and_oversized_space(self):
         fixture = public_fixture("reading-catalog")
         definition = fixture["mission"]["construction_spec"]["definition"]

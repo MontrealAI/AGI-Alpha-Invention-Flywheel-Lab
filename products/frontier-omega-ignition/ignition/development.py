@@ -21,15 +21,20 @@ def _matches(values, expected, kind):
     return True
 
 
-def fitting_columns(definition, target):
-    """All minimum-complexity fits in the stated two families; positive and negative indices stay distinct."""
+def fitting_columns(definition, target, *, include_splits_when_copy=False):
+    """Prefer a copy for the conventional learner, but retain all visible fits for explicit choice.
+
+    A copied field can accidentally agree with a transformed field on development
+    rows. In the choice menu that coincidence must not remove the intended split.
+    Positive and negative split indices remain distinct on fresh records.
+    """
     pairs = tuple(rows(definition))
     expected = [out[target["name"]] for _, _, _, out in pairs]
     values = {source: [row[source] for _, _, row, _ in pairs] for source in definition["input_fields"]}
     base = {"target": target["name"], "type": target["type"]}
     copied = [{"source": source, **base} for source, observations in values.items()
               if _matches(observations, expected, target["type"])]
-    if copied:
+    if copied and not include_splits_when_copy:
         return copied
     splits = []
     for source, observations in values.items():
@@ -46,7 +51,7 @@ def fitting_columns(definition, target):
                 for index in positions:
                     if _matches((parts[index] for parts in groups), expected, target["type"]):
                         splits.append({"source": source, "split": {"separator": separator, "index": index}, **base})
-    return splits
+    return copied + splits
 
 
 def learn(definition):
@@ -128,13 +133,17 @@ def describe(column):
     return {"target": target, "description": f"{target}: {operation} as {column['type']}", "column": column}
 
 
+def choice_columns(definition):
+    return [fitting_columns(definition, target, include_splits_when_copy=True) for target in definition["targets"]]
+
+
 def menu(definition, order, *, fits_by_target=None):
-    """Bounded Cartesian product of the complete minimum-complexity possibilities per target."""
+    """Bounded Cartesian product of all supported observable copy and split fits per target."""
     from itertools import product
 
     fixed, ambiguous, size = [], [], 1
     if fits_by_target is None:
-        fits_by_target = [fitting_columns(definition, target) for target in definition["targets"]]
+        fits_by_target = choice_columns(definition)
     for target, fits in zip(definition["targets"], fits_by_target):
         if not fits:
             return None, f"No public projection or split fits {target['name']}. Supply a new specification."

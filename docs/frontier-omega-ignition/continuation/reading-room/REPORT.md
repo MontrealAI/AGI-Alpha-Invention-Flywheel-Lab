@@ -20,6 +20,8 @@ The paper authors' original HTML is an available complete alternative. The sourc
 
 A post-study HTML5 check uncovered an important difference between the XML representation and a browser: six empty anchors on the fresh paper were serialized differently. The final recipient applies additive insertions and checks that removing them restores the original HTML bytes. An intermediate repair failed the earlier structure check; its failure remains recorded. Both corrected editions satisfy both checks. [Final recipient qualification](../../../../products/frontier-omega-ignition/reading_room_study/RECIPIENT_QUALIFICATION.json)
 
+During integration, a [new independent review](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/pull/445) found that a coincidentally matching copy could conceal a split that the user explicitly requested. In a normal-route reproduction the automatic specialist passed only six of nine checks and its output was withheld. The corrected menu retains both choices, asks for a decision when necessary and passes nine of nine on the controlled operator and assisted test paths. The original benchmark and conventional specialist keep their historical identities.
+
 ## Operate the candidate
 
 Open the downloaded standalone exhibition in a browser. Switch languages, choose an opportunity, inspect a passage or table crop and download the instrument. The source language of a quoted passage is preserved. A full checkout also provides the original Pairing Lab. The private lab can serve the public exhibition from `/exhibition` and the Pairing Lab from `/showcase`. Public assets contain only recorded public outcomes and local interactive calculations.
