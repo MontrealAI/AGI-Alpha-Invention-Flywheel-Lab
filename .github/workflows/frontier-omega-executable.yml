@@ -26,6 +26,7 @@ jobs:
           set -euo pipefail
           python3 -m unittest discover -s tests -p 'test_frontier_omega.py' -v
           python3 -m unittest discover -s tests -p 'test_frontier_omega_executable.py' -v
+          python3 -m unittest discover -s tests -p 'test_frontier_omega_releases.py' -v
       - name: Reproduce an executed strong-historical-alternative demonstration
         run: |
           set -euo pipefail
