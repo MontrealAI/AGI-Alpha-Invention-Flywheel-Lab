@@ -23,7 +23,7 @@ async function main(){
     page.on('console',m=>{if(m.type()==='error') errors.push(m.text());});
     await page.goto(pathToFileURL(path.resolve(source)).href);
     const score=page.locator('#score');
-    await score.getByText('18 / 40',{exact:true}).waitFor();
+    await page.waitForFunction(()=>document.querySelector('#score').textContent==='18 / 40');
     assert.equal(await page.locator('#loom path').count(),40);
     assert.equal(await page.locator('html').getAttribute('lang'),'en');
     if(output) await page.screenshot({path:path.join(output,'desktop.png'),animations:'disabled'});
