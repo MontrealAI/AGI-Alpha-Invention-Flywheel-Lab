@@ -245,7 +245,7 @@ A growing database, more autonomous agents and higher simulated profit alone do 
 
 **Not achieved by this RFC:** actual algorithmic invention, a new physical capability, a newly funded voluntary market, measured model-based learning, customer permission, signed contract, collected payment, qualified production release, fully unattended operation, or a one-person billion-dollar enterprise.
 
-**Next construction:** A frozen COMPUTE Ω test contract with a capable incumbent on a public/permissioned workload, independently reproducible acceptance, complete cost envelope and real execution receipts. In parallel, compare two materially different consequential outcomes; do not assume COMPUTE wins because this paper names it.
+**Next construction:** Use the registered candidate [O057](../../frontier_omega/opportunities.json) to freeze a COMPUTE Ω test contract with a capable incumbent on a public/permissioned workload, independently reproducible acceptance, complete cost envelope and real execution receipts. In parallel, compare two materially different consequential outcomes; do not assume COMPUTE wins because this paper names it.
 
 **Success criterion:** an externally valuable newly reachable capability, independently tested, actually chosen and paid for, leaving an asset that causally improves a fresh different successor with all costs accounted.
 
