@@ -54,3 +54,20 @@ The exact-head public-feed probe on the QA-corrected source first received six n
 ## Run the two model-selected programs
 
 Download either archive and follow its included instructions in a fresh directory. The editorial recipient returned `atlas` from a previously unseen identifier. The parcel recipient returned `mauve` from its routing note even though the identifier started with `atlantic`. Both also passed the full nine frozen cases. [Editorial program](Qwen_Editorial_Receiver.zip) · [Parcel program](Qwen_Parcel_Receiver.zip) · [Independent executions and artifact hashes](bounded-choice-recipient-checks.json)
+
+## Automatic repetitions and release qualification
+
+The original **3/6** matched route-by-mission observations remain the primary comparison. All 33 secondary observations finished across three source revisions, including all six matched cells at each revision. They reuse the same two tasks. Changes between source revisions and variations in the hosted CPU and model responses preclude a pooled causal estimate. All four studies used the frozen case checks. The native control made zero model calls.
+
+| Source | Direct migration | Adaptive migration | Research migration | Direct integrity | Adaptive integrity | Research integrity | Accepted |
+|---|---|---|---|---|---|---|---:|
+| Primary 4719005c | 5/9 | 5/9 | Deferred | 9/9 | 9/9 | 9/9 | 3/6 |
+| Repeat ea44ea1b | 5/9 | 9/9 | Deferred | 9/9 | 9/9 | Deferred | 3/6 |
+| Repeat eeed9284 | 5/9 | 5/9 | Deferred | 9/9 | 9/9 | Deferred | 2/6 |
+| Final 50fe9fea | 5/9 | 9/9 | Deferred | 9/9 | 9/9 | 9/9 | 4/6 |
+
+The final adaptive construction produced independently usable recipients on both original missions with one local model call each, 24.40 seconds for migration and 18.06 for integrity. On the same source, forced direct migration failed after 129.01 seconds; research-led migration deferred after 730.16. Research-led integrity took 638.62 seconds with three calls. The standard adaptive migration route succeeded twice and missed twice across these four observations. The four separately registered selections tested above use a different construction method. The latest developer-feedback and prior frozen controls also remain distinct from those four selections. [Secondary receipts, response identities and source runs](secondary-observations.json)
+
+The final engineering job exercised 81 application tests, three Chromium suites, conventional comparisons and fresh recipients. The flagship job separately checked the exhibition, its portable program and the source projection. [Engineering and browsers on 50fe9fea](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/44187376790/job/134407403383) · [Flagship source and recipient](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/44187376895/job/134407402066)
+
+The final source-acquisition job recorded six non-success HTTP responses on its first attempt. Its retry verified twelve public observations, with zero failed requests, missing roles or integrity errors. The independent legacy model study on the same source still failed. Its research arm produced five proposals and deferred after 589.31 seconds, its one-call direct arm failed verification after 76.64 seconds, and the live-source model arm deferred after 989.51 seconds. That last arm received five public records and cited none in the generated proposals. Retrieval and the model's use of the retrieved evidence were measured separately. [Both verified source-probe receipts](final-source-acquisition.json) · [Legacy scientific result](final-legacy-model.json) · [Repeated independent discovery test](../discovery/REVIEW.md)
