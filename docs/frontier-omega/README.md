@@ -28,6 +28,8 @@ The seed contains **six original problem dossiers** and **five public capability
 
 The records are **hypotheses** supported by public technical publications and industry evidence, not claimed actual customer contracts or historical proofs that a particular commercial outcome was impossible five weeks ago.
 
+Each demand record includes a nullable **reported maximum acceptable price** (`ceiling_microUSD`), `deadline`, proposed `terms_sha256`, and `consent_verification`. The public dossiers leave all buyer-specific values null and set consent to `NOT_VERIFIED`. A private customer-submitted dossier may contain asserted terms, but the reservoir refuses any JSON assertion of verified buyer consent and never creates a payment authorization. Matched replay additionally rejects a trial price above the reported buyer ceiling.
+
 ## The six starting problems
 
 | Problem | What must become independently deliverable? | Missing means to investigate |
