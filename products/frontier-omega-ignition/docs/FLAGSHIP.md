@@ -27,3 +27,42 @@ From the product directory, execute `python3 examples/compare_conventional.py` w
 GNU Coreutils 9.7 predates the 13 October 2026 five-week baseline. jq 1.7 is also an established available alternative. The local comparison reuses those older versions today. It establishes a direct ordinary route to the frozen outputs. We have no matched historical record of operator time, full costs, or access on 13 October. Codex 0.169.0 added local diagnostic ZIP export within the window; its announcement provides no evidence of a change in byte verification or record projection. [GNU 9.7 release history](https://github.com/coreutils/coreutils/blob/v9.7/NEWS) · [jq 1.7 release](https://github.com/jqlang/jq/releases/tag/jq-1.7) · [Codex CLI release](https://github.com/openai/codex/releases/tag/rust-v0.169.0)
 
 A publishing team could compare time per accepted handoff, packaging and review labor, incident rework, installation cost, model use and retained maintenance under identical delivery requirements. No buyer was observed, contacted or charged. The reference manifest, executable construction language and evaluator may be reused subject to rights. Each new package requires its own trusted reference, scoped permissions and acceptance. The evidence does not establish commercial compounding or an economic frontier crossing.
+
+## What actually ran
+
+The included ChatGPT Work session supplied eight fresh structured replies through the application's operator-assisted exchange. Three replies served each software mission and two served the physical control. The application made zero programmable model calls in this qualification. Each recipient program subsequently ran without a model. The operator who prepared the public fixtures also submitted the replies. The construction packets excluded confirmation cases, but the exercise was not blinded to that operator. The reported model family is GPT-6, as identified by the active session; its exact backend and token usage were unavailable.
+
+| Mission | Observed outcome | Conventional comparison |
+|---|---|---|
+| Release receipt | A sixth candidate superseded the original signer-verification favourite. The portable verifier passed nine cases including controls. | Independent stdlib inventory comparison tied. GNU Coreutils plus a file inventory also matched all five declared cases. |
+| Research register | The model supplied a field mapping and split operation. The portable verifier passed nine cases including controls. | The example-only learner abstained because two mappings fit training. Strict jq, which could use the stated purpose, matched all four declared cases. |
+| Physical wear | Research stopped at selection. The run contains its missing-measurement explanation. | No physical comparison took place. |
+
+The reference evidence was captured against runtime digest `374eac5734a674901b9c02bb6db7264dced16a173a99eea6d661ff8954b23ffd`. Both ZIPs ran through their own extracted command line outside the source tree with Python isolated mode. The bundled interpreter and evaluator allow that qualification to be repeated against the exact delivered code. An implementation revision or future release requires its own qualification. [Recipient checks](../evidence/recipient-checks.json) · [Release receipt artifact](../evidence/integrity-artifact.zip) · [Editorial migration artifact](../evidence/migration-artifact.zip)
+
+## Present the investigation in five minutes
+
+1. **Start with the decision.** Ask the audience what they would do if the expected research styles arrived under familiar names, with one file modified and one unexpected. Open `web/index.html` locally and import `evidence/integrity-run.json` as a saved run. Identify the recorded-replay label. Show the dated sources and the transition from verifying a signature to comparing received bytes with an independent reference.
+2. **Hand the artifact to the recipient.** Extract `evidence/integrity-artifact.zip` into a fresh directory and run the commands below there. The first command rechecks the frozen contract. The second supplies intact example bytes. The third supplies an actual, different input. Point out the difference between “missing,” “changed” and “unexpected.” A receiver who must authenticate the publisher still needs a trusted identity and appropriate signature material.
+
+   ```sh
+   python3 -I run.py verify
+   python3 -I run.py run < example-input.json
+   echo '{"files":{"ignition.css":"YQ==","extra.css":"Yg=="}}' | python3 -I run.py run
+   ```
+
+3. **Change the ambition.** Open the recorded migration and extract `evidence/migration-artifact.zip` into another fresh directory. Show how this program maps an actual research card into an editorial row and leaves the decision untouched. Ask the audience for a new record and run it through the published artifact. Then replace a required text value with a boolean and show the whole batch refuse.
+
+   ```sh
+   python3 -I run.py verify
+   echo '{"rows":[{"id":"optics-sensor","name":"An audience example","status":"DEFER"}]}' | python3 -I run.py run
+   ```
+
+4. **Give the ordinary alternative equal footing.** Present the jq and GNU outcomes next to the candidates. The example-only learner faced a real ambiguity. A competent specialist with the same stated purpose could resolve it. There is no independent evidence here for a productivity, earnings or historical novelty claim.
+5. **Ask for an observation the software cannot make.** Open `evidence/unsupported-run.json`. Read the original physical-measurement requirement and its missing specimen and instrumentation. There is no accepted artifact to export. A future experiment needs genuine observations from the intended surface.
+
+For a fresh investigation, start the loopback service with an explicitly selected local or assisted provider as described in the operator guide. Load a public example or enter a new purpose. On an assisted run use each new request, return its reviewed JSON and inspect the current progress. The saved run files are for recorded review only. The system should refuse exports after a material amendment until the new revision passes fresh checks.
+
+## Requalify the recorded artifacts against this checkout
+
+Run `python3 examples/requalify_recorded.py --output /tmp/ignition-recipient-replay` from the product directory, using a new output directory each time. The command verifies the archived run IDs, runtime mapping, input and archive identities. It freezes the original mission specifications again, evaluates the recorded programs using today's implementation, builds separate ZIPs, then starts each new recipient outside the source tree and checks its example output. No model calls or new research take place. Its new receipt identifies the historic runtime, current runtime, replay script, Python version and newly emitted bundles. Comparable verdicts and output data reproduce; fresh timing observations can change bundle bytes. [Historic per-file source identities](../evidence/assisted-runtime.json)

@@ -1,0 +1,343 @@
+{
+  "artifact": null,
+  "attempts": 2,
+  "contract": null,
+  "contract_sha256": null,
+  "created_at": "2026-11-17T18:43:00.054+00:00",
+  "error": null,
+  "evaluation": null,
+  "events": [
+    {
+      "at": "2026-11-17T18:43:00.054+00:00",
+      "message": "Mission and permission snapshot saved",
+      "stage": "intake"
+    },
+    {
+      "at": "2026-11-17T18:43:00.057+00:00",
+      "message": "Recorded 2 supplied and 0 retrieved source records",
+      "stage": "sources"
+    },
+    {
+      "at": "2026-11-17T18:43:00.060+00:00",
+      "message": "Requested discover from the configured provider",
+      "stage": "discover"
+    },
+    {
+      "at": "2026-11-17T18:43:00.061+00:00",
+      "message": "Awaiting an explicitly attributed, operator-assisted model response",
+      "stage": "discover"
+    },
+    {
+      "at": "2026-11-17T18:44:08.410+00:00",
+      "message": "Operator supplied a response bound to the pending request",
+      "stage": "discover"
+    },
+    {
+      "at": "2026-11-17T18:44:08.414+00:00",
+      "message": "Requested discover from the configured provider",
+      "stage": "discover"
+    },
+    {
+      "at": "2026-11-17T18:44:08.418+00:00",
+      "message": "Requested challenge from the configured provider",
+      "stage": "challenge"
+    },
+    {
+      "at": "2026-11-17T18:44:08.419+00:00",
+      "message": "Awaiting an explicitly attributed, operator-assisted model response",
+      "stage": "challenge"
+    },
+    {
+      "at": "2026-11-17T18:44:42.460+00:00",
+      "message": "Operator supplied a response bound to the pending request",
+      "stage": "challenge"
+    },
+    {
+      "stage": "challenge",
+      "at": "2026-11-17T18:44:42.465+00:00",
+      "message": "Requested challenge from the configured provider"
+    },
+    {
+      "stage": "selection",
+      "at": "2026-11-17T18:44:42.467+00:00",
+      "message": "Preserve physical qualification as the original goal. No offered route can measure this specimen using the supplied assets. Resume only when a calibrated instrument, identified specimen, wear protocol and authorized observations exist."
+    },
+    {
+      "stage": "selection",
+      "at": "2026-11-17T18:44:42.469+00:00",
+      "message": "Preserve physical qualification as the original goal. No offered route can measure this specimen using the supplied assets. Resume only when a calibrated instrument, identified specimen, wear protocol and authorized observations exist."
+    }
+  ],
+  "handoff": null,
+  "id": "438107b75bb64ae5b3b821008365cdb7",
+  "input_sha256": "15a6083e5f31f16d47d165b6cbeba62d6d35763e7925de4c5b337e8fae4a54e3",
+  "mission": {
+    "authority": {
+      "assisted_model": true,
+      "local_model": true,
+      "public_sources": false
+    },
+    "beneficiary": "MONTREAL.AI physical research operator",
+    "construction_spec": {
+      "kind": "physical_qualification",
+      "purpose": "Physically qualify a newly fabricated passive contact surface for holding a specified load through repeated wear."
+    },
+    "purpose": "Physically qualify a newly fabricated passive contact surface for holding a specified load through repeated wear.",
+    "requirements": [
+      "Measure actual force before and after wear using calibrated equipment."
+    ],
+    "resources": {
+      "assets": "Included public evidence and local standard-library interpreter",
+      "budget": "No purchases or new paid services"
+    },
+    "time": {
+      "as_of": "2026-11-17",
+      "baseline": "2026-10-13"
+    }
+  },
+  "proposed_contract": null,
+  "provider": {
+    "attribution": "operator-declared",
+    "mode": "manual",
+    "model": "GPT-6 (session-reported family)",
+    "provider": "OpenAI Codex Work"
+  },
+  "research": {
+    "signals": [
+      {
+        "id": "S1",
+        "url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/09e611c6df506ab24fba494b1ec41716e3721049/campaign/blue-sky-064/CANDIDATES.json",
+        "title": "Three public candidate records, including scope and status",
+        "publisher": "MONTREAL.AI",
+        "text": "Provisional productive possibilities, not registered experiments, demonstrated inventions or commercial offers.",
+        "sha256": "84bf4872c5405a345da96da71847eb434a3b200ce9dfe4eb4f123041050c9a7a",
+        "retrieved_at": "2026-11-17T18:40:20.024000+00:00",
+        "published_at": null,
+        "event_at": null,
+        "access": "available",
+        "status": "active",
+        "rights": "Public primary-source excerpt with attribution. See linked source for reuse terms.",
+        "version": "09e611c6df506ab24fba494b1ec41716e3721049",
+        "runtime_access": "untested",
+        "age_days": 0,
+        "event_in_window": false
+      },
+      {
+        "id": "S2",
+        "url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/09e611c6df506ab24fba494b1ec41716e3721049/campaign/blue-sky-064/CHARTER.md",
+        "title": "Blue Sky 064 charter",
+        "publisher": "MONTREAL.AI",
+        "text": "Compare at least three materially different productive possibilities before commitment.",
+        "sha256": "c3052dda86cd4696df57c6d25c817179bcdcf1146e9846ac744e05c98d39a494",
+        "retrieved_at": "2026-11-17T18:40:20.298000+00:00",
+        "published_at": null,
+        "event_at": null,
+        "access": "available",
+        "status": "active",
+        "rights": "Public primary-source excerpt with attribution. See linked source for reuse terms.",
+        "version": "09e611c6df506ab24fba494b1ec41716e3721049",
+        "runtime_access": "untested",
+        "age_days": 0,
+        "event_in_window": false
+      }
+    ],
+    "candidates": [
+      {
+        "title": "Measure a fabricated contact sample",
+        "beneficiary": "Physical research operator",
+        "outcome": "Observe holding force before and after controlled wear.",
+        "change": "The candidate register identifies a possibility; it supplies no measured specimen here.",
+        "obstruction": "No physical apparatus, calibrated sensor or specimen available.",
+        "route": "Preregister forces, calibration and repeated wear measurements on an identified sample.",
+        "value": "Could support a functional qualification; fabrication and lab costs are unknown.",
+        "alternative": "An independent testing laboratory or an existing measured component.",
+        "scale": "Repeat per material and operating range with physical process limits.",
+        "test": "Run one calibrated before/after wear cycle with uncertainty records.",
+        "kind": "physical_qualification",
+        "sources": [
+          "S1"
+        ],
+        "usable_sources": [
+          "S1"
+        ],
+        "ineligible_sources": [],
+        "id": "C1",
+        "standing": "source-linked hypothesis"
+      },
+      {
+        "title": "Source an independently tested component",
+        "beneficiary": "Physical research operator",
+        "outcome": "Compare an already qualified passive component against the intended operating range.",
+        "change": "No accessible component data or matching operating envelope is supplied.",
+        "obstruction": "An off-the-shelf sample is not the newly fabricated surface.",
+        "route": "Obtain rights-authorized exact-part evidence and compare the test conditions.",
+        "value": "May reduce development cost but does not necessarily settle this specimen.",
+        "alternative": "Commission matched measurements on the new sample.",
+        "scale": "Reuse covers documented matching conditions only.",
+        "test": "Check evidence identifies the same sample, force and wear protocol.",
+        "kind": "existing",
+        "sources": [],
+        "usable_sources": [],
+        "ineligible_sources": [],
+        "id": "C2",
+        "standing": "speculative"
+      },
+      {
+        "title": "Design a measurement instrument",
+        "beneficiary": "Lab technician",
+        "outcome": "Prepare a test design for the eventual calibrated experiment.",
+        "change": "The charter allows a previously missing acceptance instrument as a research hypothesis.",
+        "obstruction": "A design cannot establish measured load behavior.",
+        "route": "Build a data capture specification linked to calibration and specimen identity.",
+        "value": "May reduce future setup cost; no actual result or funding is observed.",
+        "alternative": "Use an existing calibrated laboratory protocol.",
+        "scale": "Reusable protocol still requires physical trials.",
+        "test": "Independently demonstrate the instrument meets calibration requirements.",
+        "kind": "instrument_design",
+        "sources": [
+          "S2"
+        ],
+        "usable_sources": [
+          "S2"
+        ],
+        "ineligible_sources": [],
+        "id": "C3",
+        "standing": "source-linked hypothesis"
+      }
+    ],
+    "initial_favourite": "C1",
+    "objections": [
+      {
+        "candidate": "C1",
+        "target": "answer",
+        "claim": "The inventory describes provisional work, not an experiment on a specific specimen.",
+        "source": "S1",
+        "quote": "Provisional productive possibilities",
+        "status": "unresolved",
+        "witness": "exact source excerpt"
+      },
+      {
+        "candidate": "C3",
+        "target": "test",
+        "claim": "A test plan or simulation is not a force measurement.",
+        "source": null,
+        "quote": null,
+        "status": "unresolved",
+        "witness": "no matching excerpt"
+      },
+      {
+        "candidate": "C2",
+        "target": "set",
+        "claim": "Evidence about a purchased component would require proof it measured the exact requested surface.",
+        "source": null,
+        "quote": null,
+        "status": "unresolved",
+        "witness": "no matching excerpt"
+      }
+    ],
+    "fit": [
+      {
+        "check": "Independently check instrument calibration and measured force on the actual sample, before and after wear. Neither sample nor measurements were supplied.",
+        "requirement": "Measure actual force before and after wear using calibrated equipment.",
+        "status": "unsupported"
+      }
+    ],
+    "selected": null,
+    "kind": null,
+    "decision": "defer",
+    "decision_reason": "Preserve physical qualification as the original goal. No offered route can measure this specimen using the supplied assets. Resume only when a calibrated instrument, identified specimen, wear protocol and authorized observations exist.",
+    "selection_recommendation": "Preserve physical qualification as the original goal. No offered route can measure this specimen using the supplied assets. Resume only when a calibrated instrument, identified specimen, wear protocol and authorized observations exist.",
+    "mechanisms": [
+      {
+        "name": "adversarial discovery",
+        "action": "Challenge the initial set and its tests",
+        "result": {
+          "initial": "C1",
+          "challenger": null,
+          "objection_count": 3
+        }
+      },
+      {
+        "name": "self-correcting evidence",
+        "action": "Check references, reported source status and quotation witnesses",
+        "result": {
+          "ineligible_references": 0,
+          "witnessed_objections": 1
+        }
+      },
+      {
+        "name": "epistemic invention",
+        "action": "Propose a decisive observation for each construction route",
+        "result": [
+          {
+            "id": "C1",
+            "test": "Run one calibrated before/after wear cycle with uncertainty records."
+          },
+          {
+            "id": "C2",
+            "test": "Check evidence identifies the same sample, force and wear protocol."
+          },
+          {
+            "id": "C3",
+            "test": "Independently demonstrate the instrument meets calibration requirements."
+          }
+        ]
+      },
+      {
+        "name": "recursive economic and strategic selection",
+        "action": "Compare full delivery routes and enforce the construction boundary",
+        "result": {
+          "recommendation": "defer",
+          "gate": null,
+          "rationale": "Preserve physical qualification as the original goal. No offered route can measure this specimen using the supplied assets. Resume only when a calibrated instrument, identified specimen, wear protocol and authorized observations exist."
+        }
+      }
+    ],
+    "frontier": {
+      "status": "unresolved",
+      "baseline_date": "2026-10-13",
+      "reason": "Source-linked hypotheses require independently executed, matched earlier/later comparisons."
+    },
+    "investigated_at": "2026-11-17T23:59:59.999999+00:00",
+    "commercial_validation": "no buyer, payment or complete-cost evidence"
+  },
+  "runtime": "374eac5734a674901b9c02bb6db7264dced16a173a99eea6d661ff8954b23ffd",
+  "source_result": {
+    "failures": [],
+    "feeds": [],
+    "sources": []
+  },
+  "sources": [
+    {
+      "access": "available",
+      "event_at": null,
+      "published_at": null,
+      "publisher": "MONTREAL.AI",
+      "retrieved_at": "2026-11-17T18:40:20.024Z",
+      "rights": "Public primary-source excerpt with attribution. See linked source for reuse terms.",
+      "sha256": "84bf4872c5405a345da96da71847eb434a3b200ce9dfe4eb4f123041050c9a7a",
+      "status": "active",
+      "text": "Provisional productive possibilities, not registered experiments, demonstrated inventions or commercial offers.",
+      "title": "Three public candidate records, including scope and status",
+      "url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/09e611c6df506ab24fba494b1ec41716e3721049/campaign/blue-sky-064/CANDIDATES.json",
+      "version": "09e611c6df506ab24fba494b1ec41716e3721049"
+    },
+    {
+      "access": "available",
+      "event_at": null,
+      "published_at": null,
+      "publisher": "MONTREAL.AI",
+      "retrieved_at": "2026-11-17T18:40:20.298Z",
+      "rights": "Public primary-source excerpt with attribution. See linked source for reuse terms.",
+      "sha256": "c3052dda86cd4696df57c6d25c817179bcdcf1146e9846ac744e05c98d39a494",
+      "status": "active",
+      "text": "Compare at least three materially different productive possibilities before commitment.",
+      "title": "Blue Sky 064 charter",
+      "url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/09e611c6df506ab24fba494b1ec41716e3721049/campaign/blue-sky-064/CHARTER.md",
+      "version": "09e611c6df506ab24fba494b1ec41716e3721049"
+    }
+  ],
+  "stage": "selection",
+  "status": "deferred",
+  "version": 1
+}

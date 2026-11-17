@@ -1,0 +1,1144 @@
+{
+  "artifact": {
+    "format": "ignition-artifact/1",
+    "contract_sha256": "17e1dcf5c5f062a89db070dda03e6df21c6965bf7dbb5b7dff06e62803cf057d",
+    "kind": "record_migration",
+    "program": {
+      "columns": [
+        {
+          "source": "id",
+          "target": "record_id",
+          "type": "text"
+        },
+        {
+          "source": "id",
+          "split": {
+            "index": 0,
+            "separator": "-"
+          },
+          "target": "area",
+          "type": "text"
+        },
+        {
+          "source": "name",
+          "target": "headline",
+          "type": "text"
+        },
+        {
+          "source": "status",
+          "target": "decision",
+          "type": "text"
+        }
+      ],
+      "extra_fields": "reject",
+      "input_fields": [
+        "id",
+        "name",
+        "status"
+      ]
+    },
+    "sha256": "0af77bc6067025e9d005d5c9cc6c472e450f4742b97f67bf77452771c3d9cac2"
+  },
+  "attempts": 3,
+  "contract": {
+    "format": "ignition-contract/1",
+    "sha256": "17e1dcf5c5f062a89db070dda03e6df21c6965bf7dbb5b7dff06e62803cf057d",
+    "spec": {
+      "cases": [
+        {
+          "expected": {
+            "rows": [
+              {
+                "area": "interior",
+                "decision": "HOLD",
+                "headline": "Make inaccessible interior physical properties measurable",
+                "record_id": "interior-property-observatory"
+              }
+            ]
+          },
+          "input": {
+            "rows": [
+              {
+                "id": "interior-property-observatory",
+                "name": "Make inaccessible interior physical properties measurable",
+                "status": "HOLD"
+              }
+            ]
+          },
+          "name": "Withheld actual observatory card"
+        },
+        {
+          "expected": {
+            "rows": [
+              {
+                "area": "resource",
+                "decision": "HOLD",
+                "headline": "Turn unusable feedstock into further productive means",
+                "record_id": "resource-to-capital-closure"
+              }
+            ]
+          },
+          "input": {
+            "rows": [
+              {
+                "id": "resource-to-capital-closure",
+                "name": "Turn unusable feedstock into further productive means",
+                "status": "HOLD"
+              }
+            ]
+          },
+          "name": "Withheld actual resource card"
+        },
+        {
+          "expected": {
+            "rows": [
+              {
+                "area": "water",
+                "decision": "DEFER",
+                "headline": "A withheld editorial row",
+                "record_id": "water-sensing"
+              },
+              {
+                "area": "sound",
+                "decision": "OPEN",
+                "headline": "Second withheld editorial row",
+                "record_id": "sound-test"
+              }
+            ]
+          },
+          "input": {
+            "rows": [
+              {
+                "id": "water-sensing",
+                "name": "A withheld editorial row",
+                "status": "DEFER"
+              },
+              {
+                "id": "sound-test",
+                "name": "Second withheld editorial row",
+                "status": "OPEN"
+              }
+            ]
+          },
+          "name": "Mixed state and stable order"
+        },
+        {
+          "error": "invalid_value",
+          "input": {
+            "rows": [
+              {
+                "id": "interior-property-observatory",
+                "name": "Make inaccessible interior physical properties measurable",
+                "status": "HOLD"
+              },
+              {
+                "id": "resource-to-capital-closure",
+                "name": "Turn unusable feedstock into further productive means",
+                "status": false
+              }
+            ]
+          },
+          "name": "Refuse malformed row in a batch"
+        }
+      ],
+      "definition": {
+        "demonstrations": [
+          {
+            "expected": {
+              "rows": [
+                {
+                  "area": "passive",
+                  "decision": "HOLD",
+                  "headline": "Construct passive mechanical behavior from contact geometry",
+                  "record_id": "passive-mechanical-function"
+                },
+                {
+                  "area": "optical",
+                  "decision": "OPEN",
+                  "headline": "Synthetic optical fixture",
+                  "record_id": "optical-monitor"
+                }
+              ]
+            },
+            "input": {
+              "rows": [
+                {
+                  "id": "passive-mechanical-function",
+                  "name": "Construct passive mechanical behavior from contact geometry",
+                  "status": "HOLD"
+                },
+                {
+                  "id": "optical-monitor",
+                  "name": "Synthetic optical fixture",
+                  "status": "OPEN"
+                }
+              ]
+            }
+          }
+        ],
+        "extra_fields": "reject",
+        "input_fields": [
+          "id",
+          "name",
+          "status"
+        ],
+        "targets": [
+          {
+            "name": "record_id",
+            "type": "text"
+          },
+          {
+            "name": "area",
+            "type": "text"
+          },
+          {
+            "name": "headline",
+            "type": "text"
+          },
+          {
+            "name": "decision",
+            "type": "text"
+          }
+        ]
+      },
+      "kind": "record_migration",
+      "purpose": "Convert the public Blue Sky candidate fields id, name and status into an editorial queue, preserving the title and decision while extracting the first identifier segment as the area."
+    }
+  },
+  "contract_sha256": null,
+  "created_at": "2026-11-17T18:43:00.029+00:00",
+  "error": null,
+  "evaluation": {
+    "format": "ignition-local-evaluation/1",
+    "status": "pass",
+    "contract_sha256": "17e1dcf5c5f062a89db070dda03e6df21c6965bf7dbb5b7dff06e62803cf057d",
+    "artifact_sha256": "0af77bc6067025e9d005d5c9cc6c472e450f4742b97f67bf77452771c3d9cac2",
+    "implementation_sha256": {
+      "construction.py": "32cb672ed9fae12d99c31e1bdcc90a998fa7e5bbb81ec631fa8b68c2846ba24f",
+      "evaluation.py": "910a6f1d563282f21fd49bec84985089308858e203fd279fbe2f26beb8770f54"
+    },
+    "cases": [
+      {
+        "name": "Withheld actual observatory card",
+        "group": "confirmation",
+        "input_sha256": "b418006fd09cb9140edbde42b80797f1267ebd91004d6146a2d1faf321bd8c95",
+        "expected": {
+          "output": {
+            "rows": [
+              {
+                "area": "interior",
+                "decision": "HOLD",
+                "headline": "Make inaccessible interior physical properties measurable",
+                "record_id": "interior-property-observatory"
+              }
+            ]
+          }
+        },
+        "candidate": {
+          "output": {
+            "rows": [
+              {
+                "record_id": "interior-property-observatory",
+                "area": "interior",
+                "headline": "Make inaccessible interior physical properties measurable",
+                "decision": "HOLD"
+              }
+            ]
+          }
+        },
+        "reference": null,
+        "candidate_pass": true,
+        "reference_pass": null
+      },
+      {
+        "name": "Withheld actual resource card",
+        "group": "confirmation",
+        "input_sha256": "a137cb4b2b1b903b4b357bb67e57ef080b5425bf24c7922bb74d86ae42651943",
+        "expected": {
+          "output": {
+            "rows": [
+              {
+                "area": "resource",
+                "decision": "HOLD",
+                "headline": "Turn unusable feedstock into further productive means",
+                "record_id": "resource-to-capital-closure"
+              }
+            ]
+          }
+        },
+        "candidate": {
+          "output": {
+            "rows": [
+              {
+                "record_id": "resource-to-capital-closure",
+                "area": "resource",
+                "headline": "Turn unusable feedstock into further productive means",
+                "decision": "HOLD"
+              }
+            ]
+          }
+        },
+        "reference": null,
+        "candidate_pass": true,
+        "reference_pass": null
+      },
+      {
+        "name": "Mixed state and stable order",
+        "group": "confirmation",
+        "input_sha256": "ccf6dd588d0cc23786c3bf66de40ccd37cca5fad2e59f66a1d1714ec0cea6530",
+        "expected": {
+          "output": {
+            "rows": [
+              {
+                "area": "water",
+                "decision": "DEFER",
+                "headline": "A withheld editorial row",
+                "record_id": "water-sensing"
+              },
+              {
+                "area": "sound",
+                "decision": "OPEN",
+                "headline": "Second withheld editorial row",
+                "record_id": "sound-test"
+              }
+            ]
+          }
+        },
+        "candidate": {
+          "output": {
+            "rows": [
+              {
+                "record_id": "water-sensing",
+                "area": "water",
+                "headline": "A withheld editorial row",
+                "decision": "DEFER"
+              },
+              {
+                "record_id": "sound-test",
+                "area": "sound",
+                "headline": "Second withheld editorial row",
+                "decision": "OPEN"
+              }
+            ]
+          }
+        },
+        "reference": null,
+        "candidate_pass": true,
+        "reference_pass": null
+      },
+      {
+        "name": "Refuse malformed row in a batch",
+        "group": "confirmation",
+        "input_sha256": "f774023822e46e35bf27f3894d2507d17c3e362208c6e73247a96685185847a9",
+        "expected": {
+          "error": "invalid_value"
+        },
+        "candidate": {
+          "error": "invalid_value"
+        },
+        "reference": null,
+        "candidate_pass": true,
+        "reference_pass": null
+      },
+      {
+        "name": "empty batch",
+        "group": "derived negative/control",
+        "input_sha256": "1633902c6cbba5e7770dbed172df754a25078bb76efe1f23474edc87f1a47655",
+        "expected": {
+          "output": {
+            "rows": []
+          }
+        },
+        "candidate": {
+          "output": {
+            "rows": []
+          }
+        },
+        "reference": null,
+        "candidate_pass": true,
+        "reference_pass": null
+      },
+      {
+        "name": "missing columns",
+        "group": "derived negative/control",
+        "input_sha256": "be3af032c78b126cce1c1ba3e291b8e1d6ab8b3e0ea5613f43e805bf3fde7b4d",
+        "expected": {
+          "error": "missing_field"
+        },
+        "candidate": {
+          "error": "missing_field"
+        },
+        "reference": null,
+        "candidate_pass": true,
+        "reference_pass": null
+      },
+      {
+        "name": "wrong envelope",
+        "group": "derived negative/control",
+        "input_sha256": "cfc752caad4a3550b131b6441a45516cafbf1a41b4c38ce2317fbab8a3586b02",
+        "expected": {
+          "error": "invalid_input"
+        },
+        "candidate": {
+          "error": "invalid_input"
+        },
+        "reference": null,
+        "candidate_pass": true,
+        "reference_pass": null
+      },
+      {
+        "name": "extra column policy",
+        "group": "derived negative/control",
+        "input_sha256": "55f7724afda61abafd2ff3dadac0a3444d032718db9ce0255c3da43b6f28188e",
+        "expected": {
+          "error": "extra_field"
+        },
+        "candidate": {
+          "error": "extra_field"
+        },
+        "reference": null,
+        "candidate_pass": true,
+        "reference_pass": null
+      },
+      {
+        "name": "development 1",
+        "group": "development",
+        "input_sha256": "21a80e146bce453232535f643c527975886d7b3dc895cb02a105524d6029e092",
+        "expected": {
+          "output": {
+            "rows": [
+              {
+                "area": "passive",
+                "decision": "HOLD",
+                "headline": "Construct passive mechanical behavior from contact geometry",
+                "record_id": "passive-mechanical-function"
+              },
+              {
+                "area": "optical",
+                "decision": "OPEN",
+                "headline": "Synthetic optical fixture",
+                "record_id": "optical-monitor"
+              }
+            ]
+          }
+        },
+        "candidate": {
+          "output": {
+            "rows": [
+              {
+                "record_id": "passive-mechanical-function",
+                "area": "passive",
+                "headline": "Construct passive mechanical behavior from contact geometry",
+                "decision": "HOLD"
+              },
+              {
+                "record_id": "optical-monitor",
+                "area": "optical",
+                "headline": "Synthetic optical fixture",
+                "decision": "OPEN"
+              }
+            ]
+          }
+        },
+        "reference": null,
+        "candidate_pass": true,
+        "reference_pass": null
+      }
+    ],
+    "comparison": {
+      "name": "enumerative example-based migration",
+      "outcome": "incomparable",
+      "reference_pass": false,
+      "reference_obstruction": "ambiguous minimum-cost development hypotheses",
+      "oracles_agree": true,
+      "criterion": "complete correctness on the frozen workload; latency is telemetry only"
+    },
+    "scope": "Local software acceptance on frozen confirmations and controls. Custody, demand, economic advantage and frontier crossing are unestablished.",
+    "telemetry_ns": {
+      "candidate": 306628,
+      "reference": 991,
+      "local_evaluation": 621785
+    }
+  },
+  "events": [
+    {
+      "at": "2026-11-17T18:43:00.029+00:00",
+      "message": "Mission and permission snapshot saved",
+      "stage": "intake"
+    },
+    {
+      "at": "2026-11-17T18:43:00.032+00:00",
+      "message": "Recorded 4 supplied and 0 retrieved source records",
+      "stage": "sources"
+    },
+    {
+      "at": "2026-11-17T18:43:00.034+00:00",
+      "message": "Requested discover from the configured provider",
+      "stage": "discover"
+    },
+    {
+      "at": "2026-11-17T18:43:00.035+00:00",
+      "message": "Awaiting an explicitly attributed, operator-assisted model response",
+      "stage": "discover"
+    },
+    {
+      "at": "2026-11-17T18:44:08.283+00:00",
+      "message": "Operator supplied a response bound to the pending request",
+      "stage": "discover"
+    },
+    {
+      "at": "2026-11-17T18:44:08.287+00:00",
+      "message": "Requested discover from the configured provider",
+      "stage": "discover"
+    },
+    {
+      "at": "2026-11-17T18:44:08.291+00:00",
+      "message": "Requested challenge from the configured provider",
+      "stage": "challenge"
+    },
+    {
+      "at": "2026-11-17T18:44:08.292+00:00",
+      "message": "Awaiting an explicitly attributed, operator-assisted model response",
+      "stage": "challenge"
+    },
+    {
+      "at": "2026-11-17T18:44:42.322+00:00",
+      "message": "Operator supplied a response bound to the pending request",
+      "stage": "challenge"
+    },
+    {
+      "at": "2026-11-17T18:44:42.326+00:00",
+      "message": "Requested challenge from the configured provider",
+      "stage": "challenge"
+    },
+    {
+      "at": "2026-11-17T18:44:42.330+00:00",
+      "message": "Stage the example-derived construction and execute the strict jq route on the same held-out rows. The supplied environment includes a portable standard-library interpreter; jq availability for the eventual recipient and total delivery costs are unknown. A functional tie is a legitimate outcome, with no basis for displacing jq commercially.",
+      "stage": "selection"
+    },
+    {
+      "at": "2026-11-17T18:44:42.331+00:00",
+      "message": "Froze the mission-specific specification and acceptance cases",
+      "stage": "contract"
+    },
+    {
+      "at": "2026-11-17T18:44:42.334+00:00",
+      "message": "Requested construct from the configured provider",
+      "stage": "construct"
+    },
+    {
+      "at": "2026-11-17T18:44:42.335+00:00",
+      "message": "Awaiting an explicitly attributed, operator-assisted model response",
+      "stage": "construct"
+    },
+    {
+      "at": "2026-11-17T18:44:53.191+00:00",
+      "message": "Operator supplied a response bound to the pending request",
+      "stage": "construct"
+    },
+    {
+      "stage": "construct",
+      "at": "2026-11-17T18:44:53.195+00:00",
+      "message": "Requested construct from the configured provider"
+    },
+    {
+      "stage": "construction",
+      "at": "2026-11-17T18:44:53.198+00:00",
+      "message": "Compiled the proposed instructions into a portable bounded program"
+    },
+    {
+      "stage": "verification",
+      "at": "2026-11-17T18:44:53.200+00:00",
+      "message": "Executing the frozen cases, conventional comparator and negative controls"
+    },
+    {
+      "stage": "delivery",
+      "at": "2026-11-17T18:44:53.202+00:00",
+      "message": "Verified within the frozen contract"
+    }
+  ],
+  "handoff": null,
+  "id": "e435f2be84104538bdcd7cee662280e7",
+  "input_sha256": "47016d5a64099617b848fec718a4a8a576701e9b7f21e6881dca71c54c21e79b",
+  "mission": {
+    "authority": {
+      "assisted_model": true,
+      "local_model": true,
+      "public_sources": false
+    },
+    "beneficiary": "MONTREAL.AI research editor",
+    "construction_spec": {
+      "cases": [
+        {
+          "expected": {
+            "rows": [
+              {
+                "area": "interior",
+                "decision": "HOLD",
+                "headline": "Make inaccessible interior physical properties measurable",
+                "record_id": "interior-property-observatory"
+              }
+            ]
+          },
+          "input": {
+            "rows": [
+              {
+                "id": "interior-property-observatory",
+                "name": "Make inaccessible interior physical properties measurable",
+                "status": "HOLD"
+              }
+            ]
+          },
+          "name": "Withheld actual observatory card"
+        },
+        {
+          "expected": {
+            "rows": [
+              {
+                "area": "resource",
+                "decision": "HOLD",
+                "headline": "Turn unusable feedstock into further productive means",
+                "record_id": "resource-to-capital-closure"
+              }
+            ]
+          },
+          "input": {
+            "rows": [
+              {
+                "id": "resource-to-capital-closure",
+                "name": "Turn unusable feedstock into further productive means",
+                "status": "HOLD"
+              }
+            ]
+          },
+          "name": "Withheld actual resource card"
+        },
+        {
+          "expected": {
+            "rows": [
+              {
+                "area": "water",
+                "decision": "DEFER",
+                "headline": "A withheld editorial row",
+                "record_id": "water-sensing"
+              },
+              {
+                "area": "sound",
+                "decision": "OPEN",
+                "headline": "Second withheld editorial row",
+                "record_id": "sound-test"
+              }
+            ]
+          },
+          "input": {
+            "rows": [
+              {
+                "id": "water-sensing",
+                "name": "A withheld editorial row",
+                "status": "DEFER"
+              },
+              {
+                "id": "sound-test",
+                "name": "Second withheld editorial row",
+                "status": "OPEN"
+              }
+            ]
+          },
+          "name": "Mixed state and stable order"
+        },
+        {
+          "error": "invalid_value",
+          "input": {
+            "rows": [
+              {
+                "id": "interior-property-observatory",
+                "name": "Make inaccessible interior physical properties measurable",
+                "status": "HOLD"
+              },
+              {
+                "id": "resource-to-capital-closure",
+                "name": "Turn unusable feedstock into further productive means",
+                "status": false
+              }
+            ]
+          },
+          "name": "Refuse malformed row in a batch"
+        }
+      ],
+      "definition": {
+        "demonstrations": [
+          {
+            "expected": {
+              "rows": [
+                {
+                  "area": "passive",
+                  "decision": "HOLD",
+                  "headline": "Construct passive mechanical behavior from contact geometry",
+                  "record_id": "passive-mechanical-function"
+                },
+                {
+                  "area": "optical",
+                  "decision": "OPEN",
+                  "headline": "Synthetic optical fixture",
+                  "record_id": "optical-monitor"
+                }
+              ]
+            },
+            "input": {
+              "rows": [
+                {
+                  "id": "passive-mechanical-function",
+                  "name": "Construct passive mechanical behavior from contact geometry",
+                  "status": "HOLD"
+                },
+                {
+                  "id": "optical-monitor",
+                  "name": "Synthetic optical fixture",
+                  "status": "OPEN"
+                }
+              ]
+            }
+          }
+        ],
+        "extra_fields": "reject",
+        "input_fields": [
+          "id",
+          "name",
+          "status"
+        ],
+        "targets": [
+          {
+            "name": "record_id",
+            "type": "text"
+          },
+          {
+            "name": "area",
+            "type": "text"
+          },
+          {
+            "name": "headline",
+            "type": "text"
+          },
+          {
+            "name": "decision",
+            "type": "text"
+          }
+        ]
+      },
+      "kind": "record_migration",
+      "purpose": "Convert the public Blue Sky candidate fields id, name and status into an editorial queue, preserving the title and decision while extracting the first identifier segment as the area."
+    },
+    "purpose": "Convert the public Blue Sky candidate fields id, name and status into an editorial queue, preserving the title and decision while extracting the first identifier segment as the area.",
+    "requirements": [
+      "Produce record_id, area, headline and decision for each row in order.",
+      "Keep decision text unchanged and reject invalid batches as a whole."
+    ],
+    "resources": {
+      "assets": "Included public evidence and local standard-library interpreter",
+      "budget": "No purchases or new paid services"
+    },
+    "time": {
+      "as_of": "2026-11-17",
+      "baseline": "2026-10-13"
+    }
+  },
+  "proposed_contract": null,
+  "provider": {
+    "attribution": "operator-declared",
+    "mode": "manual",
+    "model": "GPT-6 (session-reported family)",
+    "provider": "OpenAI Codex Work"
+  },
+  "research": {
+    "candidates": [
+      {
+        "alternative": "A short jq filter.",
+        "beneficiary": "Research editor",
+        "change": "The existing public card structure can become a reusable schema-level operation; evidence does not date this capability.",
+        "id": "C1",
+        "ineligible_sources": [],
+        "kind": "record_migration",
+        "obstruction": "A prefix policy must come from the agreed identifier rule.",
+        "outcome": "Produce the required editorial fields while keeping the research decision intact.",
+        "route": "Infer column projection, strict typing and first-segment extraction; reject malformed batches.",
+        "scale": "Independent rows can be processed in batches subject to tested resource bounds.",
+        "sources": [
+          "S1",
+          "S2"
+        ],
+        "standing": "source-linked hypothesis",
+        "test": "Apply the map to unseen cards and one invalid batch; preserve order, title and status.",
+        "title": "Infer a portable editorial mapping from examples",
+        "usable_sources": [
+          "S1",
+          "S2"
+        ],
+        "value": "Could reduce repetitive editing when formats recur; maintenance and review are unpriced."
+      },
+      {
+        "alternative": "Generate a portable program from paired example rows.",
+        "beneficiary": "Research editor",
+        "change": "jq 1.7 predates the 35-day research window.",
+        "id": "C2",
+        "ineligible_sources": [],
+        "kind": "existing",
+        "obstruction": "A naïve projection might emit nulls for missing fields.",
+        "outcome": "Obtain a machine-readable queue from the same approved records.",
+        "route": "Use an explicit strict filter over every row and the exact four requested fields.",
+        "scale": "One pass per batch; external users need jq plus the filter.",
+        "sources": [
+          "S1",
+          "S3"
+        ],
+        "standing": "source-linked hypothesis",
+        "test": "Check output and error parity on the same cases.",
+        "title": "Run the editor’s jq transformation",
+        "usable_sources": [
+          "S1",
+          "S3"
+        ],
+        "value": "A credible low-cost self-service choice for an editor already comfortable with jq."
+      },
+      {
+        "alternative": "Local projection without modifying upstream publication.",
+        "beneficiary": "Research programme maintainer",
+        "change": "The register already has a canonical source.",
+        "id": "C3",
+        "ineligible_sources": [],
+        "kind": "upstream_view",
+        "obstruction": "Upstream maintenance ownership and authorization are absent.",
+        "outcome": "Eliminate repeated downstream conversion by providing the editorial view as part of the source release.",
+        "route": "Propose an additional versioned export to the source owner with content-equivalence checks.",
+        "scale": "Amortized delivery across subscribers with clear schema versions.",
+        "sources": [
+          "S1"
+        ],
+        "standing": "source-linked hypothesis",
+        "test": "Independently reconstitute the required current queue from a generated view.",
+        "title": "Publish the editorial view at source",
+        "usable_sources": [
+          "S1"
+        ],
+        "value": "Reusable for many consumers; changes impose maintenance and change-coordination costs."
+      },
+      {
+        "alternative": "A deterministic local mapping.",
+        "beneficiary": "Occasional editor",
+        "change": "No documented frontier change is necessary for a three-card selection.",
+        "id": "C4",
+        "ineligible_sources": [],
+        "kind": "existing",
+        "obstruction": "Repeatability, invalid-batch refusal and ordered output are difficult to enforce by hand.",
+        "outcome": "Prepare a small queue with manual verification of every status.",
+        "route": "Use a verified import and a reviewed four-column export.",
+        "scale": "Per-row operator review grows with the number of records.",
+        "sources": [
+          "S1"
+        ],
+        "standing": "source-linked hypothesis",
+        "test": "Time one full handoff including corrections.",
+        "title": "Map the records in a review worksheet",
+        "usable_sources": [
+          "S1"
+        ],
+        "value": "Minimal startup effort may win for one use; complete operator time matters."
+      },
+      {
+        "alternative": "Use a simple unit test on the current export and review diffs.",
+        "beneficiary": "Editor maintaining successive releases",
+        "change": "Source-stable records permit a before/after comparison in principle.",
+        "id": "C5",
+        "ineligible_sources": [],
+        "kind": "schema_monitor",
+        "obstruction": "Only one revision is in the packet.",
+        "outcome": "Detect whether a future revision still supplies the expected input and preserves decisions.",
+        "route": "Collect another authorized source snapshot and compare the migration contract with a retained reference.",
+        "scale": "One check per source revision with recurring review for changes.",
+        "sources": [
+          "S1",
+          "S2"
+        ],
+        "standing": "source-linked hypothesis",
+        "test": "Evaluate a real later schema change on held-back rows.",
+        "title": "Establish a schema-change acceptance gate",
+        "usable_sources": [
+          "S1",
+          "S2"
+        ],
+        "value": "Potentially reduces future silent drift; usefulness depends on another release."
+      }
+    ],
+    "commercial_validation": "no buyer, payment or complete-cost evidence",
+    "decision": "build",
+    "decision_reason": "Stage the example-derived construction and execute the strict jq route on the same held-out rows. The supplied environment includes a portable standard-library interpreter; jq availability for the eventual recipient and total delivery costs are unknown. A functional tie is a legitimate outcome, with no basis for displacing jq commercially.",
+    "fit": [
+      {
+        "check": "Check exact four-column objects, first-segment extraction and stability of order on predeclared unseen records.",
+        "requirement": "Produce record_id, area, headline and decision for each row in order.",
+        "status": "supported"
+      },
+      {
+        "check": "Compare unmodified decision strings and require whole-batch rejection when one row lacks a valid field.",
+        "requirement": "Keep decision text unchanged and reject invalid batches as a whole.",
+        "status": "supported"
+      }
+    ],
+    "frontier": {
+      "baseline_date": "2026-10-13",
+      "reason": "Source-linked hypotheses require independently executed, matched earlier/later comparisons.",
+      "status": "unresolved"
+    },
+    "initial_favourite": "C2",
+    "investigated_at": "2026-11-17T23:59:59.999999+00:00",
+    "kind": "record_migration",
+    "mechanisms": [
+      {
+        "action": "Challenge the initial set and its tests",
+        "name": "adversarial discovery",
+        "result": {
+          "challenger": null,
+          "initial": "C2",
+          "objection_count": 3
+        }
+      },
+      {
+        "action": "Check references, reported source status and quotation witnesses",
+        "name": "self-correcting evidence",
+        "result": {
+          "ineligible_references": 0,
+          "witnessed_objections": 1
+        }
+      },
+      {
+        "action": "Propose a decisive observation for each construction route",
+        "name": "epistemic invention",
+        "result": [
+          {
+            "id": "C1",
+            "test": "Apply the map to unseen cards and one invalid batch; preserve order, title and status."
+          },
+          {
+            "id": "C2",
+            "test": "Check output and error parity on the same cases."
+          },
+          {
+            "id": "C3",
+            "test": "Independently reconstitute the required current queue from a generated view."
+          },
+          {
+            "id": "C4",
+            "test": "Time one full handoff including corrections."
+          },
+          {
+            "id": "C5",
+            "test": "Evaluate a real later schema change on held-back rows."
+          }
+        ]
+      },
+      {
+        "action": "Compare full delivery routes and enforce the construction boundary",
+        "name": "recursive economic and strategic selection",
+        "result": {
+          "gate": null,
+          "rationale": "Stage the example-derived construction and execute the strict jq route on the same held-out rows. The supplied environment includes a portable standard-library interpreter; jq availability for the eventual recipient and total delivery costs are unknown. A functional tie is a legitimate outcome, with no basis for displacing jq commercially.",
+          "recommendation": "build"
+        }
+      }
+    ],
+    "objections": [
+      {
+        "candidate": "C1",
+        "claim": "The output must retain the provisional research decision verbatim. It cannot upgrade a lead to an admitted outcome.",
+        "quote": "not registered experiments, demonstrated inventions or commercial offers",
+        "source": "S1",
+        "status": "unresolved",
+        "target": "answer",
+        "witness": "exact source excerpt"
+      },
+      {
+        "candidate": "C2",
+        "claim": "Compare the fully strict implementation rather than a deliberately permissive jq one-liner.",
+        "quote": null,
+        "source": null,
+        "status": "unresolved",
+        "target": "test",
+        "witness": "no matching excerpt"
+      },
+      {
+        "candidate": "C5",
+        "claim": "A new schema gate needs another source revision, while the editor currently needs an export of this revision.",
+        "quote": null,
+        "source": null,
+        "status": "unresolved",
+        "target": "set",
+        "witness": "no matching excerpt"
+      }
+    ],
+    "selected": {
+      "alternative": "A short jq filter.",
+      "beneficiary": "Research editor",
+      "change": "The existing public card structure can become a reusable schema-level operation; evidence does not date this capability.",
+      "id": "C1",
+      "ineligible_sources": [],
+      "kind": "record_migration",
+      "obstruction": "A prefix policy must come from the agreed identifier rule.",
+      "outcome": "Produce the required editorial fields while keeping the research decision intact.",
+      "route": "Infer column projection, strict typing and first-segment extraction; reject malformed batches.",
+      "scale": "Independent rows can be processed in batches subject to tested resource bounds.",
+      "sources": [
+        "S1",
+        "S2"
+      ],
+      "standing": "source-linked hypothesis",
+      "test": "Apply the map to unseen cards and one invalid batch; preserve order, title and status.",
+      "title": "Infer a portable editorial mapping from examples",
+      "usable_sources": [
+        "S1",
+        "S2"
+      ],
+      "value": "Could reduce repetitive editing when formats recur; maintenance and review are unpriced."
+    },
+    "selection_recommendation": "Stage the example-derived construction and execute the strict jq route on the same held-out rows. The supplied environment includes a portable standard-library interpreter; jq availability for the eventual recipient and total delivery costs are unknown. A functional tie is a legitimate outcome, with no basis for displacing jq commercially.",
+    "signals": [
+      {
+        "access": "available",
+        "age_days": 0,
+        "event_at": null,
+        "event_in_window": false,
+        "id": "S1",
+        "published_at": null,
+        "publisher": "MONTREAL.AI",
+        "retrieved_at": "2026-11-17T18:40:20.024000+00:00",
+        "rights": "Public primary-source excerpt with attribution. See linked source for reuse terms.",
+        "runtime_access": "untested",
+        "sha256": "84bf4872c5405a345da96da71847eb434a3b200ce9dfe4eb4f123041050c9a7a",
+        "status": "active",
+        "text": "Provisional productive possibilities, not registered experiments, demonstrated inventions or commercial offers.",
+        "title": "Three public candidate records, including scope and status",
+        "url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/09e611c6df506ab24fba494b1ec41716e3721049/campaign/blue-sky-064/CANDIDATES.json",
+        "version": "09e611c6df506ab24fba494b1ec41716e3721049"
+      },
+      {
+        "access": "available",
+        "age_days": 0,
+        "event_at": null,
+        "event_in_window": false,
+        "id": "S2",
+        "published_at": null,
+        "publisher": "MONTREAL.AI",
+        "retrieved_at": "2026-11-17T18:40:20.298000+00:00",
+        "rights": "Public primary-source excerpt with attribution. See linked source for reuse terms.",
+        "runtime_access": "untested",
+        "sha256": "c3052dda86cd4696df57c6d25c817179bcdcf1146e9846ac744e05c98d39a494",
+        "status": "active",
+        "text": "Compare at least three materially different productive possibilities before commitment.",
+        "title": "Blue Sky 064 charter",
+        "url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/09e611c6df506ab24fba494b1ec41716e3721049/campaign/blue-sky-064/CHARTER.md",
+        "version": "09e611c6df506ab24fba494b1ec41716e3721049"
+      },
+      {
+        "access": "available",
+        "age_days": 0,
+        "event_at": "2023-09-06",
+        "event_in_window": false,
+        "id": "S3",
+        "published_at": null,
+        "publisher": "jq maintainers",
+        "retrieved_at": "2026-11-17T18:40:20.339000+00:00",
+        "rights": "Public primary-source excerpt with attribution. See linked source for reuse terms.",
+        "runtime_access": "untested",
+        "sha256": "2e2c90ae24c2da7281410055284bba89b8f24af6883b4fd18c53cd468d203ed5",
+        "status": "active",
+        "text": "Release builds for:",
+        "title": "jq 1.7 release",
+        "url": "https://github.com/jqlang/jq/releases/tag/jq-1.7",
+        "version": "jq-1.7"
+      },
+      {
+        "access": "available",
+        "age_days": 0,
+        "event_at": "2026-11-13",
+        "event_in_window": true,
+        "id": "S4",
+        "published_at": "2026-11-13",
+        "publisher": "OpenAI",
+        "retrieved_at": "2026-11-17T18:40:20.397000+00:00",
+        "rights": "Public primary-source excerpt with attribution. See linked source for reuse terms.",
+        "runtime_access": "untested",
+        "sha256": "3b71e804f1b0645cd1be4c2675cc8ccfcf61ed695176e3ee6b5c41fe42499f62",
+        "status": "active",
+        "text": "Press `Ctrl+S` in the terminal report editor to save a diagnostic ZIP locally, even when uploads are disabled.",
+        "title": "Codex CLI 0.169.0 inspector change",
+        "url": "https://github.com/openai/codex/releases/tag/rust-v0.169.0",
+        "version": "0.169.0"
+      }
+    ]
+  },
+  "runtime": "374eac5734a674901b9c02bb6db7264dced16a173a99eea6d661ff8954b23ffd",
+  "source_result": {
+    "failures": [],
+    "feeds": [],
+    "sources": []
+  },
+  "sources": [
+    {
+      "access": "available",
+      "event_at": null,
+      "published_at": null,
+      "publisher": "MONTREAL.AI",
+      "retrieved_at": "2026-11-17T18:40:20.024Z",
+      "rights": "Public primary-source excerpt with attribution. See linked source for reuse terms.",
+      "sha256": "84bf4872c5405a345da96da71847eb434a3b200ce9dfe4eb4f123041050c9a7a",
+      "status": "active",
+      "text": "Provisional productive possibilities, not registered experiments, demonstrated inventions or commercial offers.",
+      "title": "Three public candidate records, including scope and status",
+      "url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/09e611c6df506ab24fba494b1ec41716e3721049/campaign/blue-sky-064/CANDIDATES.json",
+      "version": "09e611c6df506ab24fba494b1ec41716e3721049"
+    },
+    {
+      "access": "available",
+      "event_at": null,
+      "published_at": null,
+      "publisher": "MONTREAL.AI",
+      "retrieved_at": "2026-11-17T18:40:20.298Z",
+      "rights": "Public primary-source excerpt with attribution. See linked source for reuse terms.",
+      "sha256": "c3052dda86cd4696df57c6d25c817179bcdcf1146e9846ac744e05c98d39a494",
+      "status": "active",
+      "text": "Compare at least three materially different productive possibilities before commitment.",
+      "title": "Blue Sky 064 charter",
+      "url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/09e611c6df506ab24fba494b1ec41716e3721049/campaign/blue-sky-064/CHARTER.md",
+      "version": "09e611c6df506ab24fba494b1ec41716e3721049"
+    },
+    {
+      "access": "available",
+      "event_at": "2023-09-06",
+      "published_at": null,
+      "publisher": "jq maintainers",
+      "retrieved_at": "2026-11-17T18:40:20.339Z",
+      "rights": "Public primary-source excerpt with attribution. See linked source for reuse terms.",
+      "sha256": "2e2c90ae24c2da7281410055284bba89b8f24af6883b4fd18c53cd468d203ed5",
+      "status": "active",
+      "text": "Release builds for:",
+      "title": "jq 1.7 release",
+      "url": "https://github.com/jqlang/jq/releases/tag/jq-1.7",
+      "version": "jq-1.7"
+    },
+    {
+      "access": "available",
+      "event_at": "2026-11-13",
+      "published_at": "2026-11-13",
+      "publisher": "OpenAI",
+      "retrieved_at": "2026-11-17T18:40:20.397Z",
+      "rights": "Public primary-source excerpt with attribution. See linked source for reuse terms.",
+      "sha256": "3b71e804f1b0645cd1be4c2675cc8ccfcf61ed695176e3ee6b5c41fe42499f62",
+      "status": "active",
+      "text": "Press `Ctrl+S` in the terminal report editor to save a diagnostic ZIP locally, even when uploads are disabled.",
+      "title": "Codex CLI 0.169.0 inspector change",
+      "url": "https://github.com/openai/codex/releases/tag/rust-v0.169.0",
+      "version": "0.169.0"
+    }
+  ],
+  "stage": "delivery",
+  "status": "verified",
+  "version": 1
+}
