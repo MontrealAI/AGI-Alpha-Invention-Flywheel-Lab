@@ -300,6 +300,61 @@ class ConversionTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "OUTSIDE_OPTION_LOSES"):
             admission_preflight(self.reservoir, altered, {self.c["buyer"]: KEY}, now=self.now)
 
+    def test_customer_signs_request_then_independently_checks_delivered_bytes(self):
+        from connected_enterprise.alpha_economic.frontier_buyer import (
+            sign_request, sign_verified_delivery, verify_archive)
+        from connected_enterprise.alpha_economic.delivery import package
+        from connected_enterprise.alpha_economic.commerce import acceptance
+        from connected_enterprise.alpha_economic.core import authenticate
+        envelope = sign_request(self.c, KEY, now=self.now)
+        self.assertEqual(
+            authenticate(envelope, KEY, kind="request", now=self.now)["buyer"],
+            self.c["buyer"])
+        artifact = {
+            "schema": "alpha-economic/artifact/v1",
+            "contract_sha256": digest(self.c),
+            "instrument": self.current,
+            "provenance": {"kind": "AUTHORED_BUYER_FIXTURE_NOT_INDEPENDENT_CUSTOMER"}
+        }
+        receipt = package(self.c, artifact, self.root / "buyer-delivery")
+        archive = (self.root / "buyer-delivery" / "solution.zip").read_bytes()
+        result = verify_archive(archive, receipt, artifact, self.c)
+        self.assertTrue(result["verified"])
+        signed = sign_verified_delivery(
+            self.c, artifact, receipt, archive, KEY, now=self.now)
+        self.assertTrue(
+            acceptance(signed, self.c, artifact, receipt, KEY, self.now)["accepted"])
+
+    def test_buyer_fails_closed_on_modified_package_and_claimed_acceptance(self):
+        from connected_enterprise.alpha_economic.frontier_buyer import (
+            sign_verified_delivery)
+        from connected_enterprise.alpha_economic.delivery import package
+        artifact = {
+            "schema": "alpha-economic/artifact/v1",
+            "contract_sha256": digest(self.c),
+            "instrument": self.current,
+            "provenance": {"kind": "AUTHORED_FIXTURE"}
+        }
+        receipt = package(self.c, artifact, self.root / "buyer-delivery")
+        archive = (self.root / "buyer-delivery" / "solution.zip").read_bytes()
+        with self.assertRaisesRegex(ValueError, "PACKAGE_DIGEST_CHANGED"):
+            sign_verified_delivery(
+                self.c, artifact, receipt, archive[:-1] + b"x", KEY, now=self.now)
+        changed_receipt = copy.deepcopy(receipt)
+        changed_receipt["files"]["instrument.json"] = "0" * 64
+        with self.assertRaisesRegex(ValueError, "MANIFEST_CHANGED"):
+            sign_verified_delivery(
+                self.c, artifact, changed_receipt, archive, KEY, now=self.now)
+        changed_artifact = copy.deepcopy(artifact)
+        changed_artifact["instrument"]["outputs"]["served"] = 999
+        with self.assertRaises(ValueError):
+            sign_verified_delivery(
+                self.c, changed_artifact, receipt, archive, KEY, now=self.now)
+        with self.assertRaisesRegex(ValueError, "DEADLINE_EXPIRED"):
+            sign_verified_delivery(
+                self.c, artifact, receipt, archive, KEY,
+                now=self.c["expires_at"])
+
     def test_buyer_decline_is_not_fake_revenue(self):
         self.register()
         self.engine.buyer.decline = True
