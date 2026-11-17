@@ -15,7 +15,12 @@ function extract(name,kind='function'){
  const j=src.indexOf('\n',i);
  return src.slice(i,j<0?src.length:j);
 }
+const strategyStart=src.indexOf('function strategisePolicy(');
+const strategyEnd=src.indexOf('function drawStrategy(',strategyStart);
+assert.ok(strategyStart>=0&&strategyEnd>strategyStart,'strategy functions exposed in the actual published source');
+const strategyCode=src.slice(strategyStart,strategyEnd);
 const program=[
+ strategyCode,
  extract('MARKET','const'),extract('TASKS','const'),
  extract('causalCompute'),extract('marketFormula'),extract('marketIndependent'),
  extract('builderSource'),extract('referenceValue'),extract('compiledValue'),extract('enumerateBuild')
@@ -23,8 +28,9 @@ const program=[
 const ctx=vm.createContext({});
 vm.runInContext(program,ctx);
 const run=expression=>vm.runInContext(expression,ctx);
-test('Frontier World Lab: five primary-source leads and three live laboratories',()=>{
- for(const term of ['FlashProve','Claude Fable 5.2','AlphaProof Code','Engineering for the Physical World','Gemini 4 Carbon','id="lab-causal"','id="lab-market"','id="lab-builder"'])assert.ok(html.includes(term),term);
+test('Frontier World Lab: five primary-source leads and four live laboratories, no prior event references',()=>{
+ assert.ok(!/Bengio|Marcus|AI Debate|aidebate|2019/.test(html));
+ for(const term of ['FlashProve','Claude Fable 5.2','AlphaProof Code','Engineering for the Physical World','Gemini 4 Carbon','id="lab-strategy"','id="lab-causal"','id="lab-market"','id="lab-builder"'])assert.ok(html.includes(term),term);
  assert.ok(html.includes('No AI model inference occurred'));
 });
 test('Transformational Intelligence: exact intervention versus passive ceiling',()=>{
@@ -46,4 +52,22 @@ test('Learning to Build: original four finite authored schemas pass 4000 checks'
  assert.equal(r.detail.map(x=>x.count).join(','),'125,125,625,3125');
  assert.equal(run('TASKS[0].threshold'),2);assert.equal(run('TASKS[1].threshold'),7);
  assert.equal(run('TASKS[2].constant'),6);assert.equal(run('TASKS[3].constant'),7);
+});
+
+test('Out-Strategise: full-world network construction achieves exact 7/11/20 costs',()=>{
+ const r=run('strategiseEvaluate(4,4,9,false,false)');
+ assert.equal(r.worlds,16);assert.equal(r.passed,16);assert.ok(r.qualified);
+ assert.equal(r.costs.joint,7);assert.equal(r.costs.repair_only,11);assert.equal(r.costs.no_observation,20);
+});
+test('Out-Strategise: full 1024-world replay matches exact 7/67/160 source model',()=>{
+ const r=run('strategiseEvaluate(32,32,517,false,false)');
+ assert.equal(r.worlds,1024);assert.equal(r.passed,1024);assert.ok(r.qualified);
+ assert.equal(r.costs.joint,7);assert.equal(r.costs.repair_only,67);assert.equal(r.costs.no_observation,160);
+});
+test('Out-Strategise: old strategy rejected after purpose or assumption change',()=>{
+ const checkpoint=run('strategiseEvaluate(4,4,9,true,false)');
+ const second=run('strategiseEvaluate(4,4,9,false,true)');
+ assert.equal(checkpoint.qualified,false);assert.equal(checkpoint.passed,0);
+ assert.equal(second.qualified,false);assert.equal(second.passed,0);
+ assert.throws(()=>run('strategisePolicy(33,33)'));
 });
