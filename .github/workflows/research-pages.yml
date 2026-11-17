@@ -3,11 +3,14 @@ on:
   pull_request:
     paths:
       - 'docs/research/**'
+      - 'docs/frontier-omega-ignition/research-edition/**'
       - 'experiments/frontier-conclave/**'
       - 'scripts/build_research_site.py'
       - 'tests/test_research_site.py'
       - 'tests/test_alpha_site.cjs'
       - 'tests/test_surf_reader.cjs'
+      - 'tests/test_frontier_omega_demo.cjs'
+      - 'tests/test_frontier_omega_world_lab.cjs'
       - '.github/workflows/research-pages.yml'
       - 'products/alpha-genesis-harness/**'
       - 'events/alpha-genesis-live/**'
@@ -16,6 +19,7 @@ on:
     branches: [main]
     paths:
       - 'docs/research/**'
+      - 'docs/frontier-omega-ignition/research-edition/**'
       - 'experiments/frontier-conclave/**'
       - 'scripts/build_research_site.py'
       - 'tests/test_research_site.py'
@@ -44,11 +48,14 @@ jobs:
           persist-credentials: false
           sparse-checkout: |
             docs/research
+            docs/frontier-omega-ignition/research-edition
             experiments/frontier-conclave
             scripts/build_research_site.py
             tests/test_research_site.py
             tests/test_alpha_site.cjs
             tests/test_surf_reader.cjs
+            tests/test_frontier_omega_demo.cjs
+            tests/test_frontier_omega_world_lab.cjs
             events/alpha-genesis-live
             products/alpha-genesis-harness/app
             products/alpha-genesis-harness/scripts/publish_preview.py
@@ -69,7 +76,14 @@ jobs:
       - name: Validate original PDFs, links and publication boundary
         run: python3 -m unittest discover -s tests -p 'test_research_site.py' -v
       - name: Check interactive research calculations and decisions
-        run: node --test tests/test_alpha_site.cjs tests/test_surf_reader.cjs
+        run: node --test tests/test_alpha_site.cjs tests/test_surf_reader.cjs tests/test_frontier_omega_demo.cjs tests/test_frontier_omega_world_lab.cjs
+      - name: Assemble and qualify the FRONTIER research and IGNITION edition
+        run: |
+          python3 docs/frontier-omega-ignition/research-edition/assemble.py --base docs/research/frontier-omega-world-lab.html --output "$RUNNER_TEMP/frontier-omega-review"
+          node --test "$RUNNER_TEMP/frontier-omega-review/tests/test_construction.cjs"
+          python3 "$RUNNER_TEMP/frontier-omega-review/independent_check.py"
+          cp "$RUNNER_TEMP/frontier-omega-review/index.html" docs/research/frontier-omega-world-lab.html
+          python3 -m unittest discover -s tests -p 'test_research_site.py' -v
       - name: Reproduce OUT-ACCELERATE exact worked example
         run: |
           python3 docs/research/out-accelerate/acceleration_witness.py --output-dir "$RUNNER_TEMP/out-accelerate-replay"
