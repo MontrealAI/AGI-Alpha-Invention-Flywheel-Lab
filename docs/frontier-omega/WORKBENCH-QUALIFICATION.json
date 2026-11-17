@@ -1,0 +1,57 @@
+{
+  "scope": "PRIVATE_INVENTORY_ENGINEERING_NOT_ECONOMIC_QUALIFICATION",
+  "upstream_commit": "277605490464431bc989752c08f6f39320871b12",
+  "working_tree_tests": {
+    "count": 45,
+    "result": "PASS"
+  },
+  "extracted_kit_tests": {
+    "count": 45,
+    "result": "PASS",
+    "same_suite_not_additional_cases": true
+  },
+  "browser": {
+    "scope": "CHROMIUM_DOM_WITH_IN_PROCESS_API_ADAPTER_HTTP_TESTED_SEPARATELY",
+    "checks": [
+      "Desktop: 12 dossiers; no horizontal overflow (in-process API adapter).",
+      "390px mobile: no horizontal overflow.",
+      "Client-side search filters dossiers correctly.",
+      "Research-stage dropdown filters through real selectable options.",
+      "Browser form through in-process API adapter updates persistent research profile and priority.",
+      "Retest completion persists its evidence note without execution authority.",
+      "Add-problem form persists a new dossier; malicious markup stays inert.",
+      "Radar stays off without explicit network authorization.",
+      "Standalone read-only HTML preview renders all 12 dossiers.",
+      "No browser JavaScript errors."
+    ],
+    "result": "PASS",
+    "checks_passed": 10
+  },
+  "browser_limitation": "Initial real-browser HTTP navigation to a loopback test server was refused by the environment with ERR_BLOCKED_BY_ADMINISTRATOR. No browser policy was changed. HTTP handlers are separately exercised with Python http.client. Browser layout and interaction tests use set_content and an explicitly in-process API transport fixture; they do not establish browser-to-HTTP network integration or live source access.",
+  "source_sha256": {
+    "frontier_omega/workbench.py": "78b772edafd8ab8c7478ae2d5f4ec917fd347329aa775007a0f1e388e80c3b48",
+    "frontier_omega/workbench.html": "f919359fdd33998be0a7ebd4aa1ea0139e92b54663605f2a4a2058a39ad5034c",
+    "tests/test_frontier_workbench.py": "771264bf5fd2401abe0d36f2b33bc06ee447d1242d067b30f3d60538b8c2d2ef",
+    "examples/frontier-omega/expanded-opportunities-20261116.json": "cf1c0bf93a4e30d6ff618e6442ebfa53e5663a136d37ab6c3ea7946ce600f5e5"
+  },
+  "package": {
+    "archive": "/mnt/data/FRONTIER_OMEGA_Workbench_v1.zip",
+    "files": 14,
+    "bytes": 50627,
+    "sha256": "a4a0ba29a7436454ce64ea0bf10366a53bf87441368bb619d902b3db98d2e42e"
+  },
+  "commercial_claims": {
+    "verified_buyers": false,
+    "verified_crossings": false,
+    "earned_revenue": false,
+    "live_external_radar_executed_by_this_qualification": false
+  },
+  "hosted_ci": "NOT_YET_RUN_ON_NEW_BRANCH",
+  "corrections": [
+    {
+      "defect": "Stage filter option markup omitted opening tags.",
+      "fix": "Added explicit option elements, HTML parser regression and browser stage-selection check.",
+      "final_status": "PASS"
+    }
+  ]
+}

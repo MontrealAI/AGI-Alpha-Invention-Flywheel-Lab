@@ -1,0 +1,35 @@
+name: FRONTIER OMEGA private inventory workbench
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/frontier-omega-workbench.yml'
+      - 'frontier_omega/**'
+      - 'start_frontier.py'
+      - 'scripts/package_frontier_workbench.py'
+      - 'tests/test_frontier_workbench.py'
+      - 'examples/frontier-omega/**'
+      - 'docs/frontier-omega/WORKBENCH.md'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  workbench:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record standard platform window
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: New workbench and inherited reservoir/radar regressions
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p 'test_frontier_workbench.py' -v
+          python3 -m unittest discover -s tests -p 'test_frontier_omega.py' -v
+          python3 -m unittest discover -s tests -p 'test_frontier_omega_releases.py' -v
+          python3 scripts/package_frontier_workbench.py --output "$RUNNER_TEMP/frontier-workbench.zip"
+          mkdir -p "$RUNNER_TEMP/frontier-workbench-extracted"
+          python3 -m zipfile -e "$RUNNER_TEMP/frontier-workbench.zip" "$RUNNER_TEMP/frontier-workbench-extracted"
+          cd "$RUNNER_TEMP/frontier-workbench-extracted"
+          python3 -m unittest discover -s tests -p 'test_frontier_workbench.py' -v

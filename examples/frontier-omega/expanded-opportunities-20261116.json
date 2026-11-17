@@ -1,0 +1,267 @@
+{
+  "schema": "frontier-omega/seed/v1",
+  "problems": [
+    {
+      "schema": "frontier-omega/problem/v1",
+      "id": "gpu-kernels-verified-savings",
+      "title": "Correct, faster GPU kernels for expensive production workloads",
+      "beneficiary": "Inference providers and AI infrastructure teams with measurable recurring GPU expenditure",
+      "outcome": "Deliver a drop-in kernel for a frozen workload and hardware target, with correctness evidence, repeatable timing and an integration-ready rollback path.",
+      "acceptance": "Proposed pilot: pass every withheld shape/dtype/adversarial correctness case and beat the best qualified library, compiler and expert baseline after warm-up. Include development, validation, deployment and maintenance in payback; numeric thresholds are negotiated, not assumed.",
+      "blocker": "Fast candidates can exploit incomplete tests or lose when compilation, numerical corner cases and production integration are counted.",
+      "tags": [
+        "gpu-kernels",
+        "cost-reduction",
+        "long-horizon-agents"
+      ],
+      "demand": {
+        "status": "HYPOTHESIS",
+        "basis": "KernelBench provides public tasks and an evaluation approach. The buyer, production workload, savings, value threshold and commercial demand here remain hypotheses.",
+        "ceiling_microUSD": null,
+        "deadline": null,
+        "terms_sha256": null,
+        "consent_verification": "NOT_VERIFIED"
+      },
+      "alternatives": [
+        {
+          "name": "Competent specialist",
+          "route": "Specialist GPU engineer with vendor libraries, Triton and compiler autotuning.",
+          "unknowns": "Complete quoted cost, contractual acceptance, delivery time and residual obligations are not measured."
+        },
+        {
+          "name": "Human-plus-AI provider",
+          "route": "An infrastructure team uses current coding agents plus rigorous hardware benchmarks.",
+          "unknowns": "Current frontier-assisted specialist delivery may already satisfy the complete outcome; benchmark on equal terms."
+        },
+        {
+          "name": "No purchase",
+          "route": "Buyer continues existing process or defers the project.",
+          "unknowns": "Actual willingness to pay and opportunity cost of inaction are unverified."
+        }
+      ],
+      "source_urls": [
+        "https://github.com/ScalingIntelligence/KernelBench",
+        "https://github.com/meta-pytorch/KernelAgent"
+      ],
+      "next_test": "Obtain a permissioned workload, freeze its test distribution and cost baseline, run isolated benchmarks on the same hardware and independently check net savings."
+    },
+    {
+      "schema": "frontier-omega/problem/v1",
+      "id": "memory-safety-proof-repair",
+      "title": "Proof-carrying repairs for a critical memory-safe parsing boundary",
+      "beneficiary": "Software vendors maintaining high-exposure parsers and foundational libraries",
+      "outcome": "Deliver a scoped repair and independently replayable proof of agreed memory-safety or input-validation properties without changing required behavior.",
+      "acceptance": "Freeze the exact source/binary, compiler, assumptions, specification and behavior corpus. A trusted checker accepts the proof and rejects known-invalid variants; specialists assess whether the statement covers the intended property.",
+      "blocker": "Automated proof construction can still be expensive, and an accepted proof can establish a weaker property than the buyer needs.",
+      "tags": [
+        "formal-verification",
+        "software-assurance",
+        "long-horizon-agents"
+      ],
+      "demand": {
+        "status": "HYPOTHESIS",
+        "basis": "Anthropic reported broader LLM-assisted formal verification on October 22, 2026. That motivates a scoped pilot; it is not evidence of this proposed service succeeding or a customer agreeing to pay.",
+        "ceiling_microUSD": null,
+        "deadline": null,
+        "terms_sha256": null,
+        "consent_verification": "NOT_VERIFIED"
+      },
+      "alternatives": [
+        {
+          "name": "Competent specialist",
+          "route": "Formal-methods specialists using mature provers, static analysis and fuzz testing.",
+          "unknowns": "Complete quoted cost, contractual acceptance, delivery time and residual obligations are not measured."
+        },
+        {
+          "name": "Human-plus-AI provider",
+          "route": "The maintainers use the publicly described AI-assisted verification pipeline themselves.",
+          "unknowns": "Current frontier-assisted specialist delivery may already satisfy the complete outcome; benchmark on equal terms."
+        },
+        {
+          "name": "No purchase",
+          "route": "Buyer continues existing process or defers the project.",
+          "unknowns": "Actual willingness to pay and opportunity cost of inaction are unverified."
+        }
+      ],
+      "source_urls": [
+        "https://www.anthropic.com/research/formal-verification"
+      ],
+      "next_test": "Choose one authorized open-source parsing component, freeze the target property and behavior tests, and measure proof/repair cost against capable specialist alternatives."
+    },
+    {
+      "schema": "frontier-omega/problem/v1",
+      "id": "adaptive-compute-scheduling",
+      "title": "Constraint-safe scheduling improvements for a new operating regime",
+      "beneficiary": "Private cloud operators and compute-heavy businesses facing changing workload mixes",
+      "outcome": "Deliver a scheduler that improves a declared throughput or latency objective while respecting all resource, fairness and service-level constraints.",
+      "acceptance": "Replay frozen historical and held-out traces under identical hardware/capacity assumptions. Independently check every constraint, adverse shifts and complete transition costs; compare production scheduler, operations-research solver and expert-plus-AI design.",
+      "blocker": "An algorithm that wins one trace may fail on distribution shifts, violate a service obligation or not repay the cost of production migration.",
+      "tags": [
+        "algorithm-discovery",
+        "cost-reduction",
+        "long-horizon-agents"
+      ],
+      "demand": {
+        "status": "HYPOTHESIS",
+        "basis": "AlphaEvolve is an existing algorithm-discovery comparator, announced in May 2025. This card does not claim scheduling became possible only recently; a new complete outcome and favorable economics must be demonstrated.",
+        "ceiling_microUSD": null,
+        "deadline": null,
+        "terms_sha256": null,
+        "consent_verification": "NOT_VERIFIED"
+      },
+      "alternatives": [
+        {
+          "name": "Competent specialist",
+          "route": "Operations-research specialist and mature scheduling solvers.",
+          "unknowns": "Complete quoted cost, contractual acceptance, delivery time and residual obligations are not measured."
+        },
+        {
+          "name": "Human-plus-AI provider",
+          "route": "The operator uses an existing algorithm-evolution system with its own evaluators.",
+          "unknowns": "Current frontier-assisted specialist delivery may already satisfy the complete outcome; benchmark on equal terms."
+        },
+        {
+          "name": "No purchase",
+          "route": "Buyer continues existing process or defers the project.",
+          "unknowns": "Actual willingness to pay and opportunity cost of inaction are unverified."
+        }
+      ],
+      "source_urls": [
+        "https://deepmind.google/blog/alphaevolve-a-gemini-powered-coding-agent-for-designing-advanced-algorithms/"
+      ],
+      "next_test": "Freeze a valuable unmet service requirement and permitted telemetry, then compare matched old/current construction routes with strong complete alternatives and no deployment as controls."
+    },
+    {
+      "schema": "frontier-omega/problem/v1",
+      "id": "engineering-surrogate-transfer",
+      "title": "Reliable simulation surrogates for a new engineering design family",
+      "beneficiary": "Private engineering firms that repeatedly evaluate similar thermal or fluid designs",
+      "outcome": "Deliver a bounded surrogate plus uncertainty/refusal logic that shortens an agreed design loop without accepting unsafe out-of-domain predictions.",
+      "acceptance": "Use independently held-out geometries and boundary conditions, trusted numerical references and prospective error limits; refuse out-of-distribution inputs. Account for training data, computation, engineering validation and updates.",
+      "blocker": "A model may be fast in-domain but unreliable on the new design family; obtaining reference simulations and validation can erase the economic advantage.",
+      "tags": [
+        "physics-surrogates",
+        "physical-validation",
+        "cost-reduction"
+      ],
+      "demand": {
+        "status": "HYPOTHESIS",
+        "basis": "NVIDIA PhysicsNeMo supplies established physics-ML tooling. Commercial value, transfer reliability and a frontier-induced threshold crossing are unverified for this proposed task.",
+        "ceiling_microUSD": null,
+        "deadline": null,
+        "terms_sha256": null,
+        "consent_verification": "NOT_VERIFIED"
+      },
+      "alternatives": [
+        {
+          "name": "Competent specialist",
+          "route": "Conventional high-fidelity simulation, reduced-order modeling and established CAE suppliers.",
+          "unknowns": "Complete quoted cost, contractual acceptance, delivery time and residual obligations are not measured."
+        },
+        {
+          "name": "Human-plus-AI provider",
+          "route": "A domain specialist trains a surrogate with existing PhysicsNeMo and uncertainty methods.",
+          "unknowns": "Current frontier-assisted specialist delivery may already satisfy the complete outcome; benchmark on equal terms."
+        },
+        {
+          "name": "No purchase",
+          "route": "Buyer continues existing process or defers the project.",
+          "unknowns": "Actual willingness to pay and opportunity cost of inaction are unverified."
+        }
+      ],
+      "source_urls": [
+        "https://developer.nvidia.com/PhysicsNeMo",
+        "https://developer.nvidia.com/blog/how-to-run-ai-powered-cae-simulations/"
+      ],
+      "next_test": "Choose a non-safety-critical design study, freeze acceptable error and refusal criteria before fitting, and compare complete cost on unseen geometries."
+    },
+    {
+      "schema": "frontier-omega/problem/v1",
+      "id": "rtl-module-verified-delivery",
+      "title": "Specification-to-RTL modules with independent design assurance",
+      "beneficiary": "Private semiconductor and FPGA teams with precisely scoped digital-design backlogs",
+      "outcome": "Deliver an agreed synthesizable module with reproducible testbenches, equivalence/property checks and a declared timing/area envelope.",
+      "acceptance": "Freeze the specification, toolchain and reference semantics. Pass held-out simulation, formal properties and synthesis checks; compare specialist RTL and current agent-assisted design. Prototype checks do not establish fabricated silicon safety.",
+      "blocker": "Passing generated testbenches does not prove specification fidelity, all-state behavior, synthesis quality or downstream hardware suitability.",
+      "tags": [
+        "electronic-design",
+        "formal-verification",
+        "long-horizon-agents"
+      ],
+      "demand": {
+        "status": "HYPOTHESIS",
+        "basis": "NVIDIA public Verilog evaluation tooling supports a testable route. The target buyer, specification, full delivery economics and historical frontier crossing remain unknown.",
+        "ceiling_microUSD": null,
+        "deadline": null,
+        "terms_sha256": null,
+        "consent_verification": "NOT_VERIFIED"
+      },
+      "alternatives": [
+        {
+          "name": "Competent specialist",
+          "route": "Experienced RTL designer using established EDA tools.",
+          "unknowns": "Complete quoted cost, contractual acceptance, delivery time and residual obligations are not measured."
+        },
+        {
+          "name": "Human-plus-AI provider",
+          "route": "A design team combines frontier coding models with its own simulation/formal flow.",
+          "unknowns": "Current frontier-assisted specialist delivery may already satisfy the complete outcome; benchmark on equal terms."
+        },
+        {
+          "name": "No purchase",
+          "route": "Buyer continues existing process or defers the project.",
+          "unknowns": "Actual willingness to pay and opportunity cost of inaction are unverified."
+        }
+      ],
+      "source_urls": [
+        "https://github.com/NVlabs/verilog-eval",
+        "https://github.com/NVlabs/cvdp_benchmark"
+      ],
+      "next_test": "Select one bounded non-critical digital module, preregister hidden properties and competent baselines, and compare full accepted-delivery cost."
+    },
+    {
+      "schema": "frontier-omega/problem/v1",
+      "id": "binding-rank-experimental-triage",
+      "title": "Experimentally calibrated ranking of benign research compounds",
+      "beneficiary": "Private research teams prioritizing lawful, nonhazardous early-stage molecular experiments",
+      "outcome": "Deliver a calibrated ranked shortlist with uncertainty and explicit applicability boundaries that improves a prospectively specified experimental decision.",
+      "acceptance": "Use permissioned nonhazardous targets, pre-registered held-out compounds and independent measurements. Compare established docking/FEP and specialist methods; predicted affinity is not a clinical, safety or efficacy result.",
+      "blocker": "Computational rankings can be miscalibrated under target or chemistry shifts; laboratory validation, data rights and experimental costs dominate real usefulness.",
+      "tags": [
+        "molecular-modeling",
+        "physical-validation",
+        "cost-reduction"
+      ],
+      "demand": {
+        "status": "HYPOTHESIS",
+        "basis": "The official Boltz repository supplies biomolecular interaction models. This is a research-service hypothesis, not a drug recommendation, demonstrated wet-lab result or verified customer demand.",
+        "ceiling_microUSD": null,
+        "deadline": null,
+        "terms_sha256": null,
+        "consent_verification": "NOT_VERIFIED"
+      },
+      "alternatives": [
+        {
+          "name": "Competent specialist",
+          "route": "Qualified research specialists using established computational and experimental methods.",
+          "unknowns": "Complete quoted cost, contractual acceptance, delivery time and residual obligations are not measured."
+        },
+        {
+          "name": "Human-plus-AI provider",
+          "route": "An in-house team uses public Boltz models with its existing validation pipeline.",
+          "unknowns": "Current frontier-assisted specialist delivery may already satisfy the complete outcome; benchmark on equal terms."
+        },
+        {
+          "name": "No purchase",
+          "route": "Buyer continues existing process or defers the project.",
+          "unknowns": "Actual willingness to pay and opportunity cost of inaction are unverified."
+        }
+      ],
+      "source_urls": [
+        "https://github.com/jwohlwend/boltz"
+      ],
+      "next_test": "With an authorized research partner, preregister a benign held-out ranking study and measure decision improvement, calibration and full cost before offering a paid outcome."
+    }
+  ],
+  "frontiers": []
+}
