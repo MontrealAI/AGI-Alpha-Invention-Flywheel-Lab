@@ -21,14 +21,16 @@ def main():
     p = sub.add_parser("start")
     p.add_argument("file",type=Path)
     p.add_argument("--request-id",default=None)
-    for cmd in ("show","resume","respond","approve","export","amend","try","history","successor"):
+    for cmd in ("show","resume","respond","approve","choose","export","amend","try","history","successor"):
         p = sub.add_parser(cmd)
         p.add_argument("id")
         if cmd in {"respond","amend","try","export","successor","approve"}:
             p.add_argument("file",type=Path)
-        if cmd in {"respond","approve"}:
+        if cmd == "choose":
+            p.add_argument("choice", help="registered mapping ID or abstain")
+        if cmd in {"respond","approve","choose"}:
             p.add_argument("--sha256",required=True)
-        if cmd in {"amend","resume","respond","approve","try","export","successor"}:
+        if cmd in {"amend","resume","respond","approve","choose","try","export","successor"}:
             p.add_argument("--version",type=int,required=True)
         if cmd == "successor":
             p.add_argument("--rights",required=True)
@@ -70,6 +72,8 @@ def main():
     elif cmd == "try":
         value = ctrl.deliver(args.id,args.version,strict_json(args.file.read_bytes()),trial=True)
     else:
+        if cmd == "choose":
+            ctrl.intervene(args.id,args.version,cmd,{"sha256":args.sha256,"choice":args.choice})
         if cmd == "respond":
             ctrl.intervene(args.id,args.version,cmd,{"sha256":args.sha256,"response":strict_json(args.file.read_bytes())})
         if cmd == "approve":

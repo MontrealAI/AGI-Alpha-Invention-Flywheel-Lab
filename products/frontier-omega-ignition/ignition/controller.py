@@ -197,7 +197,10 @@ class Controller:
             from .pairing_specialist import run
             return run(self, s)
         if s.get("routing") is None:
-            s["routing"] = routing.route(mission)
+            model_permission = "assisted_model" if self.assisted else "local_model"
+            model_permitted = (mode in ("manual", "local") and auth.get(model_permission) is True
+                               and mission["resources"].get("max_model_calls") != 0)
+            s["routing"] = routing.route(mission, model_permitted=model_permitted)
             self._step(s, "routing", s["routing"]["reason"])
         choice = s["routing"]
         if choice["route"] == "clarify":

@@ -1,6 +1,6 @@
 # Direct construction and verified repair
 
-A release reviewer who already has an independently trusted list of file hashes can receive a working verifier without a model call. A research editor whose input/output examples leave the mapping to infer can ask the configured model to construct it immediately. Both paths freeze the mission contract before construction, check the actual candidate against it, and issue a portable program only after acceptance.
+A release reviewer who already has an independently trusted list of file hashes can receive a working verifier without a model call. A research editor can supply example rows and an outcome. Adaptive routing compiles an unambiguous mapping, presents competing mappings for a decision, or reaches the authorized typed builder when the examples require another operation. Both paths freeze the mission contract before construction, check the actual candidate against it, and issue a portable program only after acceptance.
 
 ## Operating the private workspace
 
@@ -8,7 +8,7 @@ Start the local service from the product directory with `python3 -B -m ignition 
 
 | Resource option | Effect |
 |---|---|
-| `execution_strategy: "adaptive"` | Default. A supported, specified mission takes the direct route. The installed specialist compiles exact declared operations. Example-induced mappings use the permitted model. An open ambition with sufficient direction enters research. A missing objective or uncovered requested effect can return a clarification. |
+| `execution_strategy: "adaptive"` | Default. A supported, specified mission takes the direct route. The installed specialist compiles exact declared operations. Example-based migrations compile a unique fit locally. A small ambiguous menu goes to a permitted model only when the brief supplies a distinguishing cue for each ambiguous target. Otherwise the operator can choose or abstain. An oversized menu requests a discriminating example. When no projection or split fits, an authorized typed builder can try other supported operations, including a join. An open ambition with sufficient direction enters research. A missing objective or uncovered requested effect can return a clarification. |
 | `execution_strategy: "direct"` | Request a model construction from the purpose-bound software contract. A missing supported contract returns a targeted clarification. |
 | `execution_strategy: "research"` | Request discovery, challenge and selection. A source-linked proposal, incumbent, deferral and stop remain distinct outcomes. |
 | `direct_method: "model"` | Use the same construction interface and model in direct and adaptive comparison arms. A declared local or assisted permission and an available provider are still necessary. |
@@ -20,6 +20,18 @@ Start the local service from the product directory with `python3 -B -m ignition 
 | `research_economics` | Supply `unit`, `decision_value` and `marginal_cost` on the same basis. An adaptive open investigation whose estimated value does not cover its marginal cost returns clarification. Without estimates, monetary value remains unmeasured. |
 
 The data-only model language supports record migration and checking file bytes against a trusted manifest. The private workspace also offers a separately scoped Pairing Lab specialist. Frozen software acceptance covers the enumerated behaviors. The operator should inspect requirements outside the frozen cases. The router identifies selected explicit physical and external actions that a passing software table or digest comparison cannot verify. It does not understand all possible natural-language contradictions.
+
+### Resolve a private mapping from the command line
+
+Start the multilingual catalog example with local tools. Its demonstration rows have identical folder, edition and catalog languages. The intended source matters for translations. On a machine without a configured model the default route pauses with the complete menu.
+
+```sh
+python3 -B -m ignition --state ./private-catalog start examples/reading-catalog.json
+python3 -B -m ignition --state ./private-catalog choose RUN_ID CANDIDATE_ID --version 1 --sha256 MENU_SHA256
+python3 -B -m ignition --state ./private-catalog export RUN_ID catalog.zip --version 1
+```
+
+Use the run ID, revision, candidate ID and menu digest printed by the first command. Use `abstain` in place of a candidate ID to record an unresolved choice. Repeating the same choice for the same menu is idempotent. The independent checker still evaluates whichever mapping was selected. A bundle is available only for an accepted result. Requesting `direct_method: "model"` still bypasses enumeration when a competent direct-model comparison is wanted.
 
 ## The original failures
 
@@ -63,7 +75,7 @@ The first revised direct Qwen migration failed acceptance. Its initial and repai
 
 For this migration, two operations fit the visible examples. The first hyphen-separated component of the identifier and the second word of the title coincide on both examples. A specialist using only those examples abstains. The builder can consult the original requirement to extract the *first identifier segment*. Correcting the program must still pass the same frozen checker. A new parcel-bin regression exercises direct specialist delivery on a separate, unambiguous mapping, including an integer from the last component of variable-length locations. [Registered follow-up and exact rejected proposal](../../../docs/frontier-omega-ignition/continuation/development-repair/REGISTRATION.md)
 
-The follow-up Qwen repair reproduced the original wrong program byte-for-byte despite the new field-level evidence. A separate opt-in disambiguation path asks the model or operator to choose an identified complete mapping. Hypothesis IDs derive from program content and remain stable when the order changes. The menu includes all minimum-complexity candidates in the declared projection and split families up to sixteen complete combinations. Larger sets or unsupported transformations require new evidence. If the purpose lacks a distinguishing source or operation cue, the model path defers. The lexical check is conservative and cannot establish semantic intent on its own. A wrong valid choice still fails the unchanged independent checker. The public-example specialist and general one-shot model route keep their original roles. [Preregistered choice experiment](../../../docs/frontier-omega-ignition/continuation/bounded-choice/REGISTRATION.md)
+The follow-up Qwen repair reproduced the original wrong program byte-for-byte despite the new field-level evidence. The bounded disambiguation path asks the model or operator to choose an identified complete mapping. Hypothesis IDs derive from program content and remain stable when the order changes. The menu includes all minimum-complexity candidates in the declared projection and split families up to sixteen complete combinations. Larger sets or unsupported transformations require new evidence. If the purpose lacks a distinguishing source or operation cue, the model path defers. The lexical check is conservative and cannot establish semantic intent on its own. A wrong valid choice still fails the unchanged independent checker. The public-example specialist and general one-shot model route keep their original roles. [Preregistered choice experiment](../../../docs/frontier-omega-ignition/continuation/bounded-choice/REGISTRATION.md)
 
 ## What the mechanisms changed
 

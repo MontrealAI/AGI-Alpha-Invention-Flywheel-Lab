@@ -128,13 +128,14 @@ def describe(column):
     return {"target": target, "description": f"{target}: {operation} as {column['type']}", "column": column}
 
 
-def menu(definition, order):
+def menu(definition, order, *, fits_by_target=None):
     """Bounded Cartesian product of the complete minimum-complexity possibilities per target."""
     from itertools import product
 
     fixed, ambiguous, size = [], [], 1
-    for target in definition["targets"]:
-        fits = fitting_columns(definition, target)
+    if fits_by_target is None:
+        fits_by_target = [fitting_columns(definition, target) for target in definition["targets"]]
+    for target, fits in zip(definition["targets"], fits_by_target):
         if not fits:
             return None, f"No public projection or split fits {target['name']}. Supply a new specification."
         if len(fits) == 1:
@@ -191,15 +192,27 @@ def has_distinguishing_evidence(mission, menu):
                 cues.add(ORDINALS[index] if index >= 0 else "last" if index == -1 else "end")
                 cues.add(SEPARATOR_NAMES[bit["separator"]])
             by_target.setdefault(column["target"], {})[construction.fingerprint(column)] = cues
-    for alternatives in by_target.values():
+    for target, alternatives in by_target.items():
         groups = list(alternatives.values())
         if len(groups) < 2:
             continue
         shared = set.intersection(*groups)
-        groups = [cues - shared for cues in groups]
-        # A field inventory alone does not identify a desired operation. Require a stated
-        # extraction/copy cue as well as evidence that separates at least two hypotheses.
-        if not any(words & terms and 0 < sum(bool(words & cues) for cues in groups) < len(groups)
-                   for words in clauses):
+        distinct = [cues - shared for cues in groups]
+        vocabulary = set.union(*distinct)
+        observed = set()
+        for words in clauses:
+            if not words & terms or (len(by_target) > 1 and target.lower() not in words):
+                continue
+            if words & {"reject", "refuse", "invalid", "malformed"}:
+                continue
+            evidence = words & vocabulary
+            if not evidence:
+                continue
+            if words & {"or", "either", "not", "never", "except"}:
+                return False
+            observed.update(evidence)
+        # Evidence must distinguish one operation for each ambiguous target. A cue
+        # that excludes only one of three fits does not license a model to guess.
+        if not observed or sum(observed <= cues for cues in distinct) != 1:
             return False
     return True

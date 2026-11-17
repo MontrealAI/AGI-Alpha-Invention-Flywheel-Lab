@@ -157,7 +157,7 @@ function parseField(id, array) {
   return value;
 }
 const routeDescriptions = {
-  adaptive: "A supported specification can go straight to construction. An open ambition can enter frontier research.",
+  adaptive: "A specified mission can compile locally, request an authorized model, or ask you to resolve competing mappings. An open ambition can enter frontier research.",
   direct: "Attempt the supplied construction specification. If the checker cannot accept it, the run can request clarification.",
   research: "Investigate opportunities and challenge the candidates before choosing whether to build."
 };

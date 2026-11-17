@@ -49,7 +49,24 @@ def uncovered_effect(mission):
     return None
 
 
-def route(mission):
+def adaptive_mapping(mission, model_permitted):
+    definition = mission["construction_spec"]["definition"]
+    fits = [development.fitting_columns(definition, target) for target in definition["targets"]]
+    if not all(fits):
+        if model_permitted:
+            return "model", "The projection and split families cannot express the demonstrated rows. Try the authorized general typed builder."
+        return None, "A target has no fitting projection or split. Supply its declared operation or authorize a general typed builder."
+    menu, obstruction = development.menu(definition, mission["resources"].get("choice_order", "ascending"), fits_by_target=fits)
+    if obstruction:
+        return None, obstruction
+    if len(menu["candidates"]) == 1:
+        return "specialist", "The supplied examples identify one minimum-complexity mapping in the supported families. Compile it locally and check the frozen contract."
+    if model_permitted and development.has_distinguishing_evidence(mission, menu):
+        return "model_choice", "The examples admit multiple mappings and the brief supplies distinguishing cues. Request one authorized bounded selection."
+    return "operator_choice", "Multiple mappings fit. The private operator can select a specific mapping or abstain without inference."
+
+
+def route(mission, *, model_permitted=False):
     resources = mission["resources"]
     strategy = resources.get("execution_strategy", "adaptive")
     spec = mission.get("construction_spec", {})
@@ -84,9 +101,14 @@ def route(mission):
     elif supported:
         action = "direct"
         reason = "The supplied software contract can be attempted and checked directly."
-        if method in ("operator_choice", "model_choice"):
+        if strategy == "adaptive" and not exact and not resources.get("direct_method"):
+            method, reason = adaptive_mapping(mission, model_permitted)
+            if method is None:
+                action = "clarify"
+                interpretation["obstruction"] = reason
+        elif method in ("operator_choice", "model_choice"):
             reason = "Enumerate all fitting projections and splits within the interactive envelope, then resolve the mapping under the original purpose."
-        if method == "specialist":
+        elif method == "specialist":
             reason = ("Compile the exact declared operations with the installed specialist." if exact else
                       "Use only public development examples to infer direct projections or splits. Abstain if multiple equally simple operations fit.")
     elif strategy == "direct":
