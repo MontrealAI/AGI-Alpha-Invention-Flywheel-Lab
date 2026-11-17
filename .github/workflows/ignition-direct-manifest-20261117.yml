@@ -1,0 +1,55 @@
+name: IGNITION direct no-model manifest receiver
+on:
+  pull_request:
+    paths:
+      - 'campaign/ignition-direct-manifest-20261117/**'
+      - '.github/workflows/ignition-direct-manifest-20261117.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'campaign/ignition-direct-manifest-20261117/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ignition-direct-${{ github.event.pull_request.number || github.ref }}-${{ github.event.pull_request.head.sha || github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  fixed-public-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    env:
+      EXPECTED_SOURCE: ${{ github.event.pull_request.head.sha || github.sha }}
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Record platform job start
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ env.EXPECTED_SOURCE }}
+          persist-credentials: false
+          sparse-checkout: |
+            campaign/ignition-direct-manifest-20261117
+            products/frontier-omega-ignition
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Confirm source and execute fixed acceptance regressions
+        run: |
+          test "$(git rev-parse HEAD)" = "$EXPECTED_SOURCE"
+          python -B -m unittest discover -s campaign/ignition-direct-manifest-20261117 -p 'test_*.py' -v
+      - name: Execute new recipient construction without a model
+        run: |
+          python -B campaign/ignition-direct-manifest-20261117/direct_manifest.py \
+            --output "$RUNNER_TEMP/ignition-direct-release" --strong-conventional
+      - name: Preserve the separately qualified receiver and immutable receipt
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: ignition-direct-receiver-${{ env.EXPECTED_SOURCE }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/ignition-direct-release/receiver.zip
+            ${{ runner.temp }}/ignition-direct-release/RESULT.json
+          if-no-files-found: error
