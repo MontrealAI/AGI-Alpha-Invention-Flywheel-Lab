@@ -1,0 +1,1682 @@
+{
+  "schema": "frontier-omega/economic-crossing-catalog/v1",
+  "as_of": "2026-11-16",
+  "historical_baseline": "2026-10-12",
+  "scope": "DATED_CAPABILITY_SIGNALS_PLUS_RESEARCH_HYPOTHESES_NOT_VALIDATED_COMMERCIAL_CROSSINGS",
+  "five_week_strict_impossibility_proven": false,
+  "engines": [
+    {
+      "id": "migrate-omega",
+      "rank": 1,
+      "name": "MIGRATE Ω",
+      "label": "Autonomous Software Modernization",
+      "release_id": "claude-fable-52-20261109",
+      "released_on": "2026-11-09",
+      "reference": "https://www.anthropic.com/claude-fable-and-mythos-5-2",
+      "source_mechanism": "Reported Fable 5.2 long-horizon coding, multi-agent development and a production Python-to-Rust migration. Does not establish arbitrary migrations.",
+      "tags": [
+        "long-horizon-agents",
+        "software-migration",
+        "software-assurance"
+      ],
+      "product": "Versioned, independently accepted migration packages with rollbacks; recurring compatibility and patch subscriptions.",
+      "why_now": "More long-horizon technical work becomes a candidate for bounded autonomous completion and lower complete cost.",
+      "competitive_risk": "Internal frontier agents and migration consultancies can already deliver many of the same outcomes.",
+      "moat": "Per-customer contract test corpus, dependency maps, deployment/rollback receipts and validated maintenance relationships.",
+      "scalability": "Reusable migration tools and domain adapters; internal human engineering per accepted customer must decline with volume.",
+      "threshold": "Prove full behavior preservation and lower complete costs than a competent human-plus-AI provider, including failures and support.",
+      "first_sale": "Buyer-approved small migration with a fixed acceptance suite and explicit rollback obligations."
+    },
+    {
+      "id": "prove-omega",
+      "rank": 2,
+      "name": "PROVE Ω",
+      "label": "Machine-Checked Software Assurance",
+      "release_id": "alphaproof-code-20261110",
+      "released_on": "2026-11-10",
+      "reference": "https://deepmind.google/blog/introducing-alphaproof-code/",
+      "source_mechanism": "DeepMind reported human-guided specification and AI-generated Lean proofs of selected compiled Signal security guarantees. Not a general available assurance agent.",
+      "tags": [
+        "formal-verification",
+        "software-assurance",
+        "long-horizon-agents"
+      ],
+      "product": "Verified theorem-and-executable bundles with independent proof replay and regression assurance.",
+      "why_now": "Proof automation may lower human proof-engineering cost for precisely specified software properties.",
+      "competitive_risk": "Expert formal-methods teams, existing provers, and conventional tests may be superior on many scopes.",
+      "moat": "Customer-approved specifications, trusted proof checkers and repeatable evidence on compiled releases.",
+      "scalability": "Reuse theorem templates and proof infrastructure; independent specification expertise remains a material bottleneck.",
+      "threshold": "Independent proof recheck on an authorized bounded target plus known-bug mutants, and fully loaded economics versus specialists.",
+      "first_sale": "Narrow signed verification scope of a selected library property and exact compiled artifact."
+    },
+    {
+      "id": "trust-omega",
+      "rank": 3,
+      "name": "TRUST Ω",
+      "label": "Verifiable Model Inference",
+      "release_id": "flashprove-prototype-20261102",
+      "released_on": "2026-11-02",
+      "reference": "https://www.anthropic.com/research/provable-inference",
+      "source_mechanism": "FlashProve open source large-MoE zkSNARK prototype; 400B model 110 proved tokens/s on H100 under quantized greedy conditions, with reported 70-95x GPU overhead.",
+      "tags": [
+        "provable-inference",
+        "model-integrity",
+        "formal-verification"
+      ],
+      "product": "Portable independent verification receipts for explicitly supported inference configurations and audited workloads.",
+      "why_now": "Open prototype dramatically lowers barriers to experimenting with large-model cryptographic receipts.",
+      "competitive_risk": "Provider signatures, TEEs, selective recomputation, audits and alternative proof providers are much cheaper for many buyers.",
+      "moat": "Verification integrations, managed statements, low-friction receipt checking and customer-specific assurance profiles.",
+      "scalability": "Reusable verifier SDK and asynchronous selective proving; proof costs are paid, not magically eliminated.",
+      "threshold": "Proof verifier accepts genuine receipt, rejects tampering, meets actual cost/latency/privacy constraints and beats buyers’ best alternatives.",
+      "first_sale": "Paid enterprise pilot of post-hoc proofs for a tightly scoped sensitive workload."
+    },
+    {
+      "id": "lab-omega",
+      "rank": 4,
+      "name": "LAB Ω",
+      "label": "Autonomous Design-to-Prototype",
+      "release_id": "claude-fable-52-20261109",
+      "released_on": "2026-11-09",
+      "reference": "https://www.anthropic.com/claude-fable-and-mythos-5-2",
+      "source_mechanism": "Anthropic reported three Fable 5.2-designed PCB/software/enclosure devices manufactured with partner Diode; independent transferability and unit economics unproved.",
+      "tags": [
+        "electronic-design",
+        "long-horizon-agents",
+        "physical-validation"
+      ],
+      "product": "Design-to-independent-bench-accepted electronics with versioned manufacturing files, firmware and reuse licenses.",
+      "why_now": "Agentic design/EDA integration can shorten qualified hardware design iteration for low-risk devices.",
+      "competitive_risk": "Experienced electronics contractors, CAD automation and electronics design platforms already operate efficiently.",
+      "moat": "Verified test fixtures, design rule libraries, component availability and manufacturer relationships.",
+      "scalability": "Contract manufacturing scales beyond a sole founder but retains real external human assembly and physical QA costs.",
+      "threshold": "Three held-out design/test scenarios on a fixed budget with qualified bench evidence and zero undisclosed safety assumptions.",
+      "first_sale": "Customer-funded low-risk measurement or interface board with pre-agreed bench tests."
+    },
+    {
+      "id": "workcell-omega",
+      "rank": 5,
+      "name": "WORKCELL Ω",
+      "label": "Verified Cross-Application Outcomes",
+      "release_id": "terra-computer-use-20261026",
+      "released_on": "2026-10-26",
+      "reference": "https://openai.com/index/introducing-gpt-6-1-terra/",
+      "source_mechanism": "Terra release reports lower cost per computer-use task and higher benchmark accuracy; no individual production SOP is independently qualified.",
+      "tags": [
+        "computer-use",
+        "cost-reduction",
+        "agent-governance"
+      ],
+      "product": "Outcome-priced reconciliations and cross-application workflows with independent state receipts and recovery.",
+      "why_now": "Improved visual understanding and cost can bring some previously uneconomic exception-heavy workflows within reach.",
+      "competitive_risk": "APIs, Zapier-style platforms, established RPA, internal IT and other computer-use agents can win on complete costs.",
+      "moat": "Customer-approved action policies, resilient connectors, state-checking oracles, exception-case memory.",
+      "scalability": "Self-service workflow configuration, reused connectors and subscription contracts with bounded exceptions.",
+      "threshold": "Unseen cross-app state acceptance, retries and idempotence outperform API/RPA with complete support and remediation costs.",
+      "first_sale": "A fully permissioned recurring two-system reconciliation with before/after state-based acceptance."
+    }
+  ],
+  "problems": [
+    {
+      "id": "crossing-migrate-python-rust-core",
+      "engine_id": "migrate-omega",
+      "title": "Production Python-to-Rust service migration",
+      "beneficiary": "SaaS infrastructure operators",
+      "outcome": "Reimplement one latency-sensitive service in Rust while preserving all externally visible behavior.",
+      "blocker": "Undocumented runtime assumptions and concurrency semantics can cause subtle divergence.",
+      "acceptance": "Run frozen contract, property and throughput suites; demonstrate rollback after interrupted rollout.",
+      "strong_incumbent": "Senior Rust engineers with profiling and conventional transpilation tools.",
+      "buyer_validation": "What verified latency, reliability or cost saving would justify migration?",
+      "delivery_unit": "One signed-off production service",
+      "successor_asset": "Cross-language behavior oracle and dependency inventory",
+      "downside": "Undetected data corruption and incident response.",
+      "current_hypothesis": "Reported Fable 5.2 long-horizon coding, multi-agent development and a production Python-to-Rust migration. Does not establish arbitrary migrations.",
+      "next_experiment": "Freeze an authorized task and hidden acceptance suite; run matched Oct 12 baseline versus current accessible methods and the strongest incumbent, then obtain actual buyer terms and compare all delivery/obligation costs.",
+      "proposed_metrics": [
+        {
+          "metric": "heldout-critical-failures",
+          "operator": "=",
+          "target": 0,
+          "unit": "failures",
+          "test": "Count critical acceptance violations on the independently frozen task; not an observed result."
+        },
+        {
+          "metric": "unsupported-claims",
+          "operator": "=",
+          "target": 0,
+          "unit": "claims",
+          "test": "Exclude unsupported scope, historical infeasibility, payment, provenance and cost assertions."
+        }
+      ],
+      "purchaser_verified": false,
+      "real_revenue_microUSD": null,
+      "real_complete_cost_microUSD": null,
+      "last_verified_crossing": null,
+      "source_urls": [
+        "https://www.anthropic.com/claude-fable-and-mythos-5-2"
+      ]
+    },
+    {
+      "id": "crossing-migrate-monolith-split",
+      "engine_id": "migrate-omega",
+      "title": "Recoverable monolith-to-service decomposition",
+      "beneficiary": "B2B application owners",
+      "outcome": "Split a selected bounded module into a separately deployable service without breaking transaction integrity.",
+      "blocker": "Data consistency, deployment ordering and hidden call paths create distributed failure modes.",
+      "acceptance": "Rehearse transaction cutover, fault injection and exact rollback with frozen integration consumers.",
+      "strong_incumbent": "Experienced systems architects using established strangler patterns.",
+      "buyer_validation": "Which bottleneck or deployment delay is worth eliminating, and who accepts the compatibility promise?",
+      "delivery_unit": "One cutover-ready service module",
+      "successor_asset": "Interface contracts, deploy automation and cutover recovery methods",
+      "downside": "Distributed data inconsistencies and unforeseen support.",
+      "current_hypothesis": "Reported Fable 5.2 long-horizon coding, multi-agent development and a production Python-to-Rust migration. Does not establish arbitrary migrations.",
+      "next_experiment": "Freeze an authorized task and hidden acceptance suite; run matched Oct 12 baseline versus current accessible methods and the strongest incumbent, then obtain actual buyer terms and compare all delivery/obligation costs.",
+      "proposed_metrics": [
+        {
+          "metric": "heldout-critical-failures",
+          "operator": "=",
+          "target": 0,
+          "unit": "failures",
+          "test": "Count critical acceptance violations on the independently frozen task; not an observed result."
+        },
+        {
+          "metric": "unsupported-claims",
+          "operator": "=",
+          "target": 0,
+          "unit": "claims",
+          "test": "Exclude unsupported scope, historical infeasibility, payment, provenance and cost assertions."
+        }
+      ],
+      "purchaser_verified": false,
+      "real_revenue_microUSD": null,
+      "real_complete_cost_microUSD": null,
+      "last_verified_crossing": null,
+      "source_urls": [
+        "https://www.anthropic.com/claude-fable-and-mythos-5-2"
+      ]
+    },
+    {
+      "id": "crossing-migrate-etl-modernize",
+      "engine_id": "migrate-omega",
+      "title": "Verified legacy ETL pipeline replatforming",
+      "beneficiary": "Data-intensive mid-market businesses",
+      "outcome": "Migrate scheduled ETL into a modern governed pipeline with matched downstream business totals.",
+      "blocker": "Changing timestamp, null and join semantics can silently alter economic reports.",
+      "acceptance": "Replay frozen historical batches and unseen edge cases; compare totals and lineage exactly.",
+      "strong_incumbent": "Data engineering firm with mature migration tooling.",
+      "buyer_validation": "Which data product and material finance metrics must remain invariant?",
+      "delivery_unit": "One end-to-end migrated ETL pipeline",
+      "successor_asset": "Dataset invariants and transformation checker",
+      "downside": "Wrong metrics, duplicated records and data privacy.",
+      "current_hypothesis": "Reported Fable 5.2 long-horizon coding, multi-agent development and a production Python-to-Rust migration. Does not establish arbitrary migrations.",
+      "next_experiment": "Freeze an authorized task and hidden acceptance suite; run matched Oct 12 baseline versus current accessible methods and the strongest incumbent, then obtain actual buyer terms and compare all delivery/obligation costs.",
+      "proposed_metrics": [
+        {
+          "metric": "heldout-critical-failures",
+          "operator": "=",
+          "target": 0,
+          "unit": "failures",
+          "test": "Count critical acceptance violations on the independently frozen task; not an observed result."
+        },
+        {
+          "metric": "unsupported-claims",
+          "operator": "=",
+          "target": 0,
+          "unit": "claims",
+          "test": "Exclude unsupported scope, historical infeasibility, payment, provenance and cost assertions."
+        }
+      ],
+      "purchaser_verified": false,
+      "real_revenue_microUSD": null,
+      "real_complete_cost_microUSD": null,
+      "last_verified_crossing": null,
+      "source_urls": [
+        "https://www.anthropic.com/claude-fable-and-mythos-5-2"
+      ]
+    },
+    {
+      "id": "crossing-migrate-erp-customization",
+      "engine_id": "migrate-omega",
+      "title": "Legacy ERP customization modernization",
+      "beneficiary": "Manufacturing and wholesale operators",
+      "outcome": "Replace a high-maintenance ERP customization while preserving permitted procurement flows.",
+      "blocker": "Hidden business rules and vendor integrations resist simple code translation.",
+      "acceptance": "Independent end-to-end acceptance of invoice, returns and procurement exception pathways.",
+      "strong_incumbent": "ERP systems integrator using vendor migration guides.",
+      "buyer_validation": "What is the approved scope, current maintenance burden and buyer acceptance authority?",
+      "delivery_unit": "One verified ERP customization",
+      "successor_asset": "Workflow dependency mapping and bounded ERP regression cases",
+      "downside": "Financial transaction errors and integration downtime.",
+      "current_hypothesis": "Reported Fable 5.2 long-horizon coding, multi-agent development and a production Python-to-Rust migration. Does not establish arbitrary migrations.",
+      "next_experiment": "Freeze an authorized task and hidden acceptance suite; run matched Oct 12 baseline versus current accessible methods and the strongest incumbent, then obtain actual buyer terms and compare all delivery/obligation costs.",
+      "proposed_metrics": [
+        {
+          "metric": "heldout-critical-failures",
+          "operator": "=",
+          "target": 0,
+          "unit": "failures",
+          "test": "Count critical acceptance violations on the independently frozen task; not an observed result."
+        },
+        {
+          "metric": "unsupported-claims",
+          "operator": "=",
+          "target": 0,
+          "unit": "claims",
+          "test": "Exclude unsupported scope, historical infeasibility, payment, provenance and cost assertions."
+        }
+      ],
+      "purchaser_verified": false,
+      "real_revenue_microUSD": null,
+      "real_complete_cost_microUSD": null,
+      "last_verified_crossing": null,
+      "source_urls": [
+        "https://www.anthropic.com/claude-fable-and-mythos-5-2"
+      ]
+    },
+    {
+      "id": "crossing-migrate-desktop-to-web",
+      "engine_id": "migrate-omega",
+      "title": "Desktop line-of-business application conversion",
+      "beneficiary": "Industrial service and professional software owners",
+      "outcome": "Move a legacy desktop workflow to a secure web implementation with matched input/output results.",
+      "blocker": "Local filesystem behavior, printing, legacy libraries and identity assumptions complicate migration.",
+      "acceptance": "Frozen functional traces, permissions and document exports must reproduce with rollback.",
+      "strong_incumbent": "Conventional product engineering and desktop-to-web migration framework.",
+      "buyer_validation": "What workflow is business-critical and what is the cost of leaving it unchanged?",
+      "delivery_unit": "One scoped desktop workflow",
+      "successor_asset": "Migration adapters and UI golden-trace suite",
+      "downside": "Security differences and disrupted user operations.",
+      "current_hypothesis": "Reported Fable 5.2 long-horizon coding, multi-agent development and a production Python-to-Rust migration. Does not establish arbitrary migrations.",
+      "next_experiment": "Freeze an authorized task and hidden acceptance suite; run matched Oct 12 baseline versus current accessible methods and the strongest incumbent, then obtain actual buyer terms and compare all delivery/obligation costs.",
+      "proposed_metrics": [
+        {
+          "metric": "heldout-critical-failures",
+          "operator": "=",
+          "target": 0,
+          "unit": "failures",
+          "test": "Count critical acceptance violations on the independently frozen task; not an observed result."
+        },
+        {
+          "metric": "unsupported-claims",
+          "operator": "=",
+          "target": 0,
+          "unit": "claims",
+          "test": "Exclude unsupported scope, historical infeasibility, payment, provenance and cost assertions."
+        }
+      ],
+      "purchaser_verified": false,
+      "real_revenue_microUSD": null,
+      "real_complete_cost_microUSD": null,
+      "last_verified_crossing": null,
+      "source_urls": [
+        "https://www.anthropic.com/claude-fable-and-mythos-5-2"
+      ]
+    },
+    {
+      "id": "crossing-migrate-db-schema-cutover",
+      "engine_id": "migrate-omega",
+      "title": "Zero-loss database schema evolution",
+      "beneficiary": "Fintech and enterprise SaaS operators",
+      "outcome": "Plan and deliver backward-compatible schema migration with reversible phased rollout.",
+      "blocker": "Mixed software versions and millions of records make rollback difficult.",
+      "acceptance": "Rehearse non-destructive dual-version upgrade, backfill consistency and fault recovery on representative data.",
+      "strong_incumbent": "Experienced DBA using proven expansion/contraction patterns.",
+      "buyer_validation": "What downtime and data-loss budgets apply and who may approve the cutover?",
+      "delivery_unit": "One schema change rollout package",
+      "successor_asset": "Schema drift checker and dual-write repair strategies",
+      "downside": "Corruption, irreversible destructive changes and liability.",
+      "current_hypothesis": "Reported Fable 5.2 long-horizon coding, multi-agent development and a production Python-to-Rust migration. Does not establish arbitrary migrations.",
+      "next_experiment": "Freeze an authorized task and hidden acceptance suite; run matched Oct 12 baseline versus current accessible methods and the strongest incumbent, then obtain actual buyer terms and compare all delivery/obligation costs.",
+      "proposed_metrics": [
+        {
+          "metric": "heldout-critical-failures",
+          "operator": "=",
+          "target": 0,
+          "unit": "failures",
+          "test": "Count critical acceptance violations on the independently frozen task; not an observed result."
+        },
+        {
+          "metric": "unsupported-claims",
+          "operator": "=",
+          "target": 0,
+          "unit": "claims",
+          "test": "Exclude unsupported scope, historical infeasibility, payment, provenance and cost assertions."
+        }
+      ],
+      "purchaser_verified": false,
+      "real_revenue_microUSD": null,
+      "real_complete_cost_microUSD": null,
+      "last_verified_crossing": null,
+      "source_urls": [
+        "https://www.anthropic.com/claude-fable-and-mythos-5-2"
+      ]
+    },
+    {
+      "id": "crossing-migrate-framework-version",
+      "engine_id": "migrate-omega",
+      "title": "Complex application framework upgrade",
+      "beneficiary": "SaaS firms with end-of-life dependencies",
+      "outcome": "Upgrade a dependency-heavy application framework without losing authentication, core UX or deployment support.",
+      "blocker": "Conflicting APIs and transitive dependencies create many interacting breakages.",
+      "acceptance": "Execute hidden functional, security and performance checks on old/current builds and verify rollback.",
+      "strong_incumbent": "Internal engineers using official upgrade codemods and linters.",
+      "buyer_validation": "Which support deadline and upgrade liabilities justify outside delivery?",
+      "delivery_unit": "One supported framework migration",
+      "successor_asset": "Versioned dependency and regression adapter",
+      "downside": "Patch compatibility, license issues and downtime.",
+      "current_hypothesis": "Reported Fable 5.2 long-horizon coding, multi-agent development and a production Python-to-Rust migration. Does not establish arbitrary migrations.",
+      "next_experiment": "Freeze an authorized task and hidden acceptance suite; run matched Oct 12 baseline versus current accessible methods and the strongest incumbent, then obtain actual buyer terms and compare all delivery/obligation costs.",
+      "proposed_metrics": [
+        {
+          "metric": "heldout-critical-failures",
+          "operator": "=",
+          "target": 0,
+          "unit": "failures",
+          "test": "Count critical acceptance violations on the independently frozen task; not an observed result."
+        },
+        {
+          "metric": "unsupported-claims",
+          "operator": "=",
+          "target": 0,
+          "unit": "claims",
+          "test": "Exclude unsupported scope, historical infeasibility, payment, provenance and cost assertions."
+        }
+      ],
+      "purchaser_verified": false,
+      "real_revenue_microUSD": null,
+      "real_complete_cost_microUSD": null,
+      "last_verified_crossing": null,
+      "source_urls": [
+        "https://www.anthropic.com/claude-fable-and-mythos-5-2"
+      ]
+    },
+    {
+      "id": "crossing-migrate-api-contracts",
+      "engine_id": "migrate-omega",
+      "title": "Third-party API transition factory",
+      "beneficiary": "Platforms depending on expiring partner APIs",
+      "outcome": "Migrate integration calls to a new API contract with exact idempotency and failure semantics.",
+      "blocker": "Rate limits, auth, pagination and eventual consistency differ across vendors.",
+      "acceptance": "Use recorded sandbox traces, malicious/missing fields, retries and state-based acceptance.",
+      "strong_incumbent": "API integration team using ordinary SDKs and migration docs.",
+      "buyer_validation": "Which expiring partner endpoint has a payable transition deadline?",
+      "delivery_unit": "One live-ready third-party integration",
+      "successor_asset": "Schema mapping and API contract-test harness",
+      "downside": "Lost orders, double charges or unsupported data access.",
+      "current_hypothesis": "Reported Fable 5.2 long-horizon coding, multi-agent development and a production Python-to-Rust migration. Does not establish arbitrary migrations.",
+      "next_experiment": "Freeze an authorized task and hidden acceptance suite; run matched Oct 12 baseline versus current accessible methods and the strongest incumbent, then obtain actual buyer terms and compare all delivery/obligation costs.",
+      "proposed_metrics": [
+        {
+          "metric": "heldout-critical-failures",
+          "operator": "=",
+          "target": 0,
+          "unit": "failures",
+          "test": "Count critical acceptance violations on the independently frozen task; not an observed result."
+        },
+        {
+          "metric": "unsupported-claims",
+          "operator": "=",
+          "target": 0,
+          "unit": "claims",
+          "test": "Exclude unsupported scope, historical infeasibility, payment, provenance and cost assertions."
+        }
+      ],
+      "purchaser_verified": false,
+      "real_revenue_microUSD": null,
+      "real_complete_cost_microUSD": null,
+      "last_verified_crossing": null,
+      "source_urls": [
+        "https://www.anthropic.com/claude-fable-and-mythos-5-2"
+      ]
+    },
+    {
+      "id": "crossing-prove-binary-parser",
+      "engine_id": "prove-omega",
+      "title": "Proof-carrying binary parser",
+      "beneficiary": "Cloud infrastructure and data-format maintainers",
+      "outcome": "Generate machine-checkable memory and bounds safety claims for a pinned binary parser.",
+      "blocker": "Formal semantics and proof environment for optimized compiled artifacts are costly.",
+      "acceptance": "Check formal specifications and inserted out-of-bounds fault variants against the exact binary.",
+      "strong_incumbent": "Formal-methods specialist with proven SMT and proof assistant workflow.",
+      "buyer_validation": "Who commits to the exact safety property and maintains the specification?",
+      "delivery_unit": "One checked parser binary",
+      "successor_asset": "Reusable proof-of-bounds templates",
+      "downside": "Unproven threat paths and unchecked compiler changes.",
+      "current_hypothesis": "DeepMind reported human-guided specification and AI-generated Lean proofs of selected compiled Signal security guarantees. Not a general available assurance agent.",
+      "next_experiment": "Freeze an authorized task and hidden acceptance suite; run matched Oct 12 baseline versus current accessible methods and the strongest incumbent, then obtain actual buyer terms and compare all delivery/obligation costs.",
+      "proposed_metrics": [
+        {
+          "metric": "heldout-critical-failures",
+          "operator": "=",
+          "target": 0,
+          "unit": "failures",
+          "test": "Count critical acceptance violations on the independently frozen task; not an observed result."
+        },
+        {
+          "metric": "unsupported-claims",
+          "operator": "=",
+          "target": 0,
+          "unit": "claims",
+          "test": "Exclude unsupported scope, historical infeasibility, payment, provenance and cost assertions."
+        }
+      ],
+      "purchaser_verified": false,
+      "real_revenue_microUSD": null,
+      "real_complete_cost_microUSD": null,
+      "last_verified_crossing": null,
+      "source_urls": [
+        "https://deepmind.google/blog/introducing-alphaproof-code/"
+      ]
+    },
+    {
+      "id": "crossing-prove-secure-boot",
+      "engine_id": "prove-omega",
+      "title": "Verified secure-boot chain properties",
+      "beneficiary": "Enterprise device firmware vendors",
+      "outcome": "Bind agreed boot-measurement and rollback-prevention properties to a compiled firmware component.",
+      "blocker": "Hardware and boot assumptions make proof translation difficult.",
+      "acceptance": "Check approved finite boot-state model, known-bad downgrade mutants and binary identity.",
+      "strong_incumbent": "Embedded security certification team with model checkers.",
+      "buyer_validation": "Which platform and boot trust assumptions are contractually acceptable?",
+      "delivery_unit": "One compiled boot module with proof",
+      "successor_asset": "Boot-state formalization and mutation harness",
+      "downside": "Hardware roots of trust outside the proof scope.",
+      "current_hypothesis": "DeepMind reported human-guided specification and AI-generated Lean proofs of selected compiled Signal security guarantees. Not a general available assurance agent.",
+      "next_experiment": "Freeze an authorized task and hidden acceptance suite; run matched Oct 12 baseline versus current accessible methods and the strongest incumbent, then obtain actual buyer terms and compare all delivery/obligation costs.",
+      "proposed_metrics": [
+        {
+          "metric": "heldout-critical-failures",
+          "operator": "=",
+          "target": 0,
+          "unit": "failures",
+          "test": "Count critical acceptance violations on the independently frozen task; not an observed result."
+        },
+        {
+          "metric": "unsupported-claims",
+          "operator": "=",
+          "target": 0,
+          "unit": "claims",
+          "test": "Exclude unsupported scope, historical infeasibility, payment, provenance and cost assertions."
+        }
+      ],
+      "purchaser_verified": false,
+      "real_revenue_microUSD": null,
+      "real_complete_cost_microUSD": null,
+      "last_verified_crossing": null,
+      "source_urls": [
+        "https://deepmind.google/blog/introducing-alphaproof-code/"
+      ]
+    },
+    {
+      "id": "crossing-prove-zk-verifier",
+      "engine_id": "prove-omega",
+      "title": "Auditable zero-knowledge verifier implementation",
+      "beneficiary": "Enterprise cryptography and blockchain infrastructure vendors",
+      "outcome": "Prove specified verifier acceptance rules for a versioned compiled implementation.",
+      "blocker": "Proof-system mathematics and optimized implementation can drift.",
+      "acceptance": "Run independent proof checker on approved statement and counterfeit proof corpus.",
+      "strong_incumbent": "Independent cryptography audit and standard verifier test vectors.",
+      "buyer_validation": "Which trust property must be proved beyond existing audited implementations?",
+      "delivery_unit": "One pinned verifier version",
+      "successor_asset": "Statement-to-code proof replay artifacts",
+      "downside": "Incorrect formal statements or unreviewed assumptions.",
+      "current_hypothesis": "DeepMind reported human-guided specification and AI-generated Lean proofs of selected compiled Signal security guarantees. Not a general available assurance agent.",
+      "next_experiment": "Freeze an authorized task and hidden acceptance suite; run matched Oct 12 baseline versus current accessible methods and the strongest incumbent, then obtain actual buyer terms and compare all delivery/obligation costs.",
+      "proposed_metrics": [
+        {
+          "metric": "heldout-critical-failures",
+          "operator": "=",
+          "target": 0,
+          "unit": "failures",
+          "test": "Count critical acceptance violations on the independently frozen task; not an observed result."
+        },
+        {
+          "metric": "unsupported-claims",
+          "operator": "=",
+          "target": 0,
+          "unit": "claims",
+          "test": "Exclude unsupported scope, historical infeasibility, payment, provenance and cost assertions."
+        }
+      ],
+      "purchaser_verified": false,
+      "real_revenue_microUSD": null,
+      "real_complete_cost_microUSD": null,
+      "last_verified_crossing": null,
+      "source_urls": [
+        "https://deepmind.google/blog/introducing-alphaproof-code/"
+      ]
+    },
+    {
+      "id": "crossing-prove-compiler-pass",
+      "engine_id": "prove-omega",
+      "title": "Semantics-preserving compiler optimization proof",
+      "beneficiary": "Language runtime teams and industrial compilers",
+      "outcome": "Produce a checkable equivalence certificate for a narrowly scoped optimization pass.",
+      "blocker": "Optimizations interact with undefined behavior, compiler flags and target semantics.",
+      "acceptance": "Replay held-out programs with a formal semantic relation and counterexample mutants.",
+      "strong_incumbent": "Compiler experts using translation validation and differential fuzzing.",
+      "buyer_validation": "Which performance optimization has expensive correctness review?",
+      "delivery_unit": "One certified optimization pass",
+      "successor_asset": "Translation validator and differential corpus",
+      "downside": "Unsupported language semantics.",
+      "current_hypothesis": "DeepMind reported human-guided specification and AI-generated Lean proofs of selected compiled Signal security guarantees. Not a general available assurance agent.",
+      "next_experiment": "Freeze an authorized task and hidden acceptance suite; run matched Oct 12 baseline versus current accessible methods and the strongest incumbent, then obtain actual buyer terms and compare all delivery/obligation costs.",
+      "proposed_metrics": [
+        {
+          "metric": "heldout-critical-failures",
+          "operator": "=",
+          "target": 0,
+          "unit": "failures",
+          "test": "Count critical acceptance violations on the independently frozen task; not an observed result."
+        },
+        {
+          "metric": "unsupported-claims",
+          "operator": "=",
+          "target": 0,
+          "unit": "claims",
+          "test": "Exclude unsupported scope, historical infeasibility, payment, provenance and cost assertions."
+        }
+      ],
+      "purchaser_verified": false,
+      "real_revenue_microUSD": null,
+      "real_complete_cost_microUSD": null,
+      "last_verified_crossing": null,
+      "source_urls": [
+        "https://deepmind.google/blog/introducing-alphaproof-code/"
+      ]
+    },
+    {
+      "id": "crossing-prove-policy-engine",
+      "engine_id": "prove-omega",
+      "title": "Verified critical authorization policy enforcement",
+      "beneficiary": "Enterprise platform identity teams",
+      "outcome": "Bind a stated access-control invariant to an authorization engine implementation.",
+      "blocker": "Policy ambiguity, overlapping rules and configuration-driven code make proof difficult.",
+      "acceptance": "Machine-check allow/deny specifications; reject known privilege-escalation mutants and config drift.",
+      "strong_incumbent": "IAM consultancy with mature policy analyzers and formal methods.",
+      "buyer_validation": "Which exact rights and denial properties would procurement accept?",
+      "delivery_unit": "One policy engine version",
+      "successor_asset": "Reusable policy theorem library",
+      "downside": "Specification error and side channels.",
+      "current_hypothesis": "DeepMind reported human-guided specification and AI-generated Lean proofs of selected compiled Signal security guarantees. Not a general available assurance agent.",
+      "next_experiment": "Freeze an authorized task and hidden acceptance suite; run matched Oct 12 baseline versus current accessible methods and the strongest incumbent, then obtain actual buyer terms and compare all delivery/obligation costs.",
+      "proposed_metrics": [
+        {
+          "metric": "heldout-critical-failures",
+          "operator": "=",
+          "target": 0,
+          "unit": "failures",
+          "test": "Count critical acceptance violations on the independently frozen task; not an observed result."
+        },
+        {
+          "metric": "unsupported-claims",
+          "operator": "=",
+          "target": 0,
+          "unit": "claims",
+          "test": "Exclude unsupported scope, historical infeasibility, payment, provenance and cost assertions."
+        }
+      ],
+      "purchaser_verified": false,
+      "real_revenue_microUSD": null,
+      "real_complete_cost_microUSD": null,
+      "last_verified_crossing": null,
+      "source_urls": [
+        "https://deepmind.google/blog/introducing-alphaproof-code/"
+      ]
+    },
+    {
+      "id": "crossing-prove-payment-state",
+      "engine_id": "prove-omega",
+      "title": "Formal payment-state machine assurance",
+      "beneficiary": "Private payments software maintainers",
+      "outcome": "Show machine-checked invariants for idempotent payment transitions in a bounded service.",
+      "blocker": "Concurrency and retry boundaries make financial state changes error-prone.",
+      "acceptance": "Prove no double-release and test delayed/duplicate message mutants; separate external rail guarantees.",
+      "strong_incumbent": "Payments specialists using TLA+, state-machine testing and production reconciliations.",
+      "buyer_validation": "What transaction property and insurer/customer acceptance scope is worth buying?",
+      "delivery_unit": "One verified transition component",
+      "successor_asset": "Payment-state theorem and state replay",
+      "downside": "Outside-rail settlement and regulatory reliance.",
+      "current_hypothesis": "DeepMind reported human-guided specification and AI-generated Lean proofs of selected compiled Signal security guarantees. Not a general available assurance agent.",
+      "next_experiment": "Freeze an authorized task and hidden acceptance suite; run matched Oct 12 baseline versus current accessible methods and the strongest incumbent, then obtain actual buyer terms and compare all delivery/obligation costs.",
+      "proposed_metrics": [
+        {
+          "metric": "heldout-critical-failures",
+          "operator": "=",
+          "target": 0,
+          "unit": "failures",
+          "test": "Count critical acceptance violations on the independently frozen task; not an observed result."
+        },
+        {
+          "metric": "unsupported-claims",
+          "operator": "=",
+          "target": 0,
+          "unit": "claims",
+          "test": "Exclude unsupported scope, historical infeasibility, payment, provenance and cost assertions."
+        }
+      ],
+      "purchaser_verified": false,
+      "real_revenue_microUSD": null,
+      "real_complete_cost_microUSD": null,
+      "last_verified_crossing": null,
+      "source_urls": [
+        "https://deepmind.google/blog/introducing-alphaproof-code/"
+      ]
+    },
+    {
+      "id": "crossing-prove-crypto-upgrade",
+      "engine_id": "prove-omega",
+      "title": "Post-quantum protocol implementation assurance",
+      "beneficiary": "Private communications product teams",
+      "outcome": "Establish approved handshake and key-use claims for a specific compiled post-quantum transition.",
+      "blocker": "Combining protocol proofs with machine-level code and key lifecycle is labor-intensive.",
+      "acceptance": "Independent theorem replay against exact bytes; test previously fixed bug reintroductions.",
+      "strong_incumbent": "Cryptography researchers with existing protocol tools.",
+      "buyer_validation": "What approved protocol configuration is deployed and what residual risk can be accepted?",
+      "delivery_unit": "One versioned handshake module",
+      "successor_asset": "Reproducible crypto formal-spec corpus",
+      "downside": "Proof scope vs side-channel claims.",
+      "current_hypothesis": "DeepMind reported human-guided specification and AI-generated Lean proofs of selected compiled Signal security guarantees. Not a general available assurance agent.",
+      "next_experiment": "Freeze an authorized task and hidden acceptance suite; run matched Oct 12 baseline versus current accessible methods and the strongest incumbent, then obtain actual buyer terms and compare all delivery/obligation costs.",
+      "proposed_metrics": [
+        {
+          "metric": "heldout-critical-failures",
+          "operator": "=",
+          "target": 0,
+          "unit": "failures",
+          "test": "Count critical acceptance violations on the independently frozen task; not an observed result."
+        },
+        {
+          "metric": "unsupported-claims",
+          "operator": "=",
+          "target": 0,
+          "unit": "claims",
+          "test": "Exclude unsupported scope, historical infeasibility, payment, provenance and cost assertions."
+        }
+      ],
+      "purchaser_verified": false,
+      "real_revenue_microUSD": null,
+      "real_complete_cost_microUSD": null,
+      "last_verified_crossing": null,
+      "source_urls": [
+        "https://deepmind.google/blog/introducing-alphaproof-code/"
+      ]
+    },
+    {
+      "id": "crossing-prove-firmware-update",
+      "engine_id": "prove-omega",
+      "title": "Device update rollback and authenticity proof",
+      "beneficiary": "Connected-device software maintainers",
+      "outcome": "Prove selected authenticity and rollback safety properties for an update verifier binary.",
+      "blocker": "Power failures and mismatched firmware formats produce difficult state spaces.",
+      "acceptance": "Independent proof checker plus simulated interrupted firmware updates and unsigned payloads.",
+      "strong_incumbent": "Firmware security engineers using static analysis and secure update frameworks.",
+      "buyer_validation": "Which device, signing policy and failure states must be included?",
+      "delivery_unit": "One bounded update verifier proof",
+      "successor_asset": "Verified update-state model",
+      "downside": "Bootloader and physical threats outside specification.",
+      "current_hypothesis": "DeepMind reported human-guided specification and AI-generated Lean proofs of selected compiled Signal security guarantees. Not a general available assurance agent.",
+      "next_experiment": "Freeze an authorized task and hidden acceptance suite; run matched Oct 12 baseline versus current accessible methods and the strongest incumbent, then obtain actual buyer terms and compare all delivery/obligation costs.",
+      "proposed_metrics": [
+        {
+          "metric": "heldout-critical-failures",
+          "operator": "=",
+          "target": 0,
+          "unit": "failures",
+          "test": "Count critical acceptance violations on the independently frozen task; not an observed result."
+        },
+        {
+          "metric": "unsupported-claims",
+          "operator": "=",
+          "target": 0,
+          "unit": "claims",
+          "test": "Exclude unsupported scope, historical infeasibility, payment, provenance and cost assertions."
+        }
+      ],
+      "purchaser_verified": false,
+      "real_revenue_microUSD": null,
+      "real_complete_cost_microUSD": null,
+      "last_verified_crossing": null,
+      "source_urls": [
+        "https://deepmind.google/blog/introducing-alphaproof-code/"
+      ]
+    },
+    {
+      "id": "crossing-trust-model-routing",
+      "engine_id": "trust-omega",
+      "title": "Verifiable AI model routing claims",
+      "beneficiary": "Enterprises purchasing high-assurance AI inference",
+      "outcome": "Issue cryptographic evidence that a request used a committed supported model rather than an undeclared substitute.",
+      "blocker": "Ordinary signatures attest the provider, not the actual model computation.",
+      "acceptance": "Verify genuine proof and reject substituted committed model, token stream and verifier key.",
+      "strong_incumbent": "Trusted execution environment attestations and provider audit logs.",
+      "buyer_validation": "Which substitution risk matters and how much overhead is the buyer prepared to pay?",
+      "delivery_unit": "One model-bound inference receipt",
+      "successor_asset": "Proof-validation SDK and model commitment registry",
+      "downside": "Model identity, privacy and high GPU proving cost.",
+      "current_hypothesis": "FlashProve open source large-MoE zkSNARK prototype; 400B model 110 proved tokens/s on H100 under quantized greedy conditions, with reported 70-95x GPU overhead.",
+      "next_experiment": "Freeze an authorized task and hidden acceptance suite; run matched Oct 12 baseline versus current accessible methods and the strongest incumbent, then obtain actual buyer terms and compare all delivery/obligation costs.",
+      "proposed_metrics": [
+        {
+          "metric": "heldout-critical-failures",
+          "operator": "=",
+          "target": 0,
+          "unit": "failures",
+          "test": "Count critical acceptance violations on the independently frozen task; not an observed result."
+        },
+        {
+          "metric": "unsupported-claims",
+          "operator": "=",
+          "target": 0,
+          "unit": "claims",
+          "test": "Exclude unsupported scope, historical infeasibility, payment, provenance and cost assertions."
+        }
+      ],
+      "purchaser_verified": false,
+      "real_revenue_microUSD": null,
+      "real_complete_cost_microUSD": null,
+      "last_verified_crossing": null,
+      "source_urls": [
+        "https://www.anthropic.com/research/provable-inference"
+      ]
+    },
+    {
+      "id": "crossing-trust-evaluation-integrity",
+      "engine_id": "trust-omega",
+      "title": "Verified AI benchmark computation",
+      "beneficiary": "Model auditors and private AI procurement teams",
+      "outcome": "Produce receipt-bound evidence for randomly selected model evaluation results.",
+      "blocker": "Unverified claimed scores can disguise configuration drift or routing changes.",
+      "acceptance": "Verifier checks randomly chosen inference traces against frozen prompts and model commitment.",
+      "strong_incumbent": "Signed evaluator logs and independent reruns.",
+      "buyer_validation": "Would selected independently verifiable evaluation slices change a real procurement decision?",
+      "delivery_unit": "One proof-backed evaluation slice",
+      "successor_asset": "Sampling protocol and audit receipt bundle",
+      "downside": "Nonrepresentative sampling and restricted supported decoding.",
+      "current_hypothesis": "FlashProve open source large-MoE zkSNARK prototype; 400B model 110 proved tokens/s on H100 under quantized greedy conditions, with reported 70-95x GPU overhead.",
+      "next_experiment": "Freeze an authorized task and hidden acceptance suite; run matched Oct 12 baseline versus current accessible methods and the strongest incumbent, then obtain actual buyer terms and compare all delivery/obligation costs.",
+      "proposed_metrics": [
+        {
+          "metric": "heldout-critical-failures",
+          "operator": "=",
+          "target": 0,
+          "unit": "failures",
+          "test": "Count critical acceptance violations on the independently frozen task; not an observed result."
+        },
+        {
+          "metric": "unsupported-claims",
+          "operator": "=",
+          "target": 0,
+          "unit": "claims",
+          "test": "Exclude unsupported scope, historical infeasibility, payment, provenance and cost assertions."
+        }
+      ],
+      "purchaser_verified": false,
+      "real_revenue_microUSD": null,
+      "real_complete_cost_microUSD": null,
+      "last_verified_crossing": null,
+      "source_urls": [
+        "https://www.anthropic.com/research/provable-inference"
+      ]
+    },
+    {
+      "id": "crossing-trust-private-agent-claims",
+      "engine_id": "trust-omega",
+      "title": "Provable high-trust agent decision subset",
+      "beneficiary": "Enterprise organizations using sensitive decision support",
+      "outcome": "Verify selected committed-model response steps while retaining private weights.",
+      "blocker": "Agent tool calls and changing contexts exceed present zkML proof scope.",
+      "acceptance": "Prove short isolated inference steps; never claim the entire agent transaction is proved.",
+      "strong_incumbent": "Audit logs, access controls, TEE claims and controlled reruns.",
+      "buyer_validation": "Which individual computation deserves a cryptographic receipt instead of a signed workflow log?",
+      "delivery_unit": "One verified supported inference subset",
+      "successor_asset": "Task/proof scope segmentation and receipt browser",
+      "downside": "Unproved tool results and large-context proof gaps.",
+      "current_hypothesis": "FlashProve open source large-MoE zkSNARK prototype; 400B model 110 proved tokens/s on H100 under quantized greedy conditions, with reported 70-95x GPU overhead.",
+      "next_experiment": "Freeze an authorized task and hidden acceptance suite; run matched Oct 12 baseline versus current accessible methods and the strongest incumbent, then obtain actual buyer terms and compare all delivery/obligation costs.",
+      "proposed_metrics": [
+        {
+          "metric": "heldout-critical-failures",
+          "operator": "=",
+          "target": 0,
+          "unit": "failures",
+          "test": "Count critical acceptance violations on the independently frozen task; not an observed result."
+        },
+        {
+          "metric": "unsupported-claims",
+          "operator": "=",
+          "target": 0,
+          "unit": "claims",
+          "test": "Exclude unsupported scope, historical infeasibility, payment, provenance and cost assertions."
+        }
+      ],
+      "purchaser_verified": false,
+      "real_revenue_microUSD": null,
+      "real_complete_cost_microUSD": null,
+      "last_verified_crossing": null,
+      "source_urls": [
+        "https://www.anthropic.com/research/provable-inference"
+      ]
+    },
+    {
+      "id": "crossing-trust-inference-billing",
+      "engine_id": "trust-omega",
+      "title": "Cryptographically checkable premium inference metering",
+      "beneficiary": "AI hosting intermediaries and enterprise buyers",
+      "outcome": "Reconcile premium verified inference units to independently checked computation receipts.",
+      "blocker": "Proof overhead can exceed the price premium and billing scope can diverge from output semantics.",
+      "acceptance": "Match receipt identity, token count, charge and signed purchaser agreement; reject replay.",
+      "strong_incumbent": "Metering logs, usage attestations and provider reconciliation.",
+      "buyer_validation": "What fee schedule and verification premium is payable for proof-backed usage?",
+      "delivery_unit": "One settled-verifiable usage batch",
+      "successor_asset": "Receipt ledger integration without independent money creation",
+      "downside": "Inaccurate billing or mistaken proof-to-charge claims.",
+      "current_hypothesis": "FlashProve open source large-MoE zkSNARK prototype; 400B model 110 proved tokens/s on H100 under quantized greedy conditions, with reported 70-95x GPU overhead.",
+      "next_experiment": "Freeze an authorized task and hidden acceptance suite; run matched Oct 12 baseline versus current accessible methods and the strongest incumbent, then obtain actual buyer terms and compare all delivery/obligation costs.",
+      "proposed_metrics": [
+        {
+          "metric": "heldout-critical-failures",
+          "operator": "=",
+          "target": 0,
+          "unit": "failures",
+          "test": "Count critical acceptance violations on the independently frozen task; not an observed result."
+        },
+        {
+          "metric": "unsupported-claims",
+          "operator": "=",
+          "target": 0,
+          "unit": "claims",
+          "test": "Exclude unsupported scope, historical infeasibility, payment, provenance and cost assertions."
+        }
+      ],
+      "purchaser_verified": false,
+      "real_revenue_microUSD": null,
+      "real_complete_cost_microUSD": null,
+      "last_verified_crossing": null,
+      "source_urls": [
+        "https://www.anthropic.com/research/provable-inference"
+      ]
+    },
+    {
+      "id": "crossing-trust-model-upgrade",
+      "engine_id": "trust-omega",
+      "title": "Verifiable committed model transition",
+      "beneficiary": "Enterprise model deployment governance teams",
+      "outcome": "Document which independently checkable inference calls used the pre- or post-upgrade model.",
+      "blocker": "Silent upgrades make strict deployment policies difficult to audit.",
+      "acceptance": "Freeze two commitments and independently check proof/period binding on selected calls.",
+      "strong_incumbent": "Immutable signed change-management records and TEE attestations.",
+      "buyer_validation": "Does a buyer require cryptographic rather than organizational attestation?",
+      "delivery_unit": "One model-transition evidence package",
+      "successor_asset": "Commitment rotation and verifier migration tools",
+      "downside": "False continuity promises and unsupported architectures.",
+      "current_hypothesis": "FlashProve open source large-MoE zkSNARK prototype; 400B model 110 proved tokens/s on H100 under quantized greedy conditions, with reported 70-95x GPU overhead.",
+      "next_experiment": "Freeze an authorized task and hidden acceptance suite; run matched Oct 12 baseline versus current accessible methods and the strongest incumbent, then obtain actual buyer terms and compare all delivery/obligation costs.",
+      "proposed_metrics": [
+        {
+          "metric": "heldout-critical-failures",
+          "operator": "=",
+          "target": 0,
+          "unit": "failures",
+          "test": "Count critical acceptance violations on the independently frozen task; not an observed result."
+        },
+        {
+          "metric": "unsupported-claims",
+          "operator": "=",
+          "target": 0,
+          "unit": "claims",
+          "test": "Exclude unsupported scope, historical infeasibility, payment, provenance and cost assertions."
+        }
+      ],
+      "purchaser_verified": false,
+      "real_revenue_microUSD": null,
+      "real_complete_cost_microUSD": null,
+      "last_verified_crossing": null,
+      "source_urls": [
+        "https://www.anthropic.com/research/provable-inference"
+      ]
+    },
+    {
+      "id": "crossing-trust-independent-inference",
+      "engine_id": "trust-omega",
+      "title": "Portable third-party inference verification",
+      "beneficiary": "Businesses integrating third-party hosted models",
+      "outcome": "Supply an independent public verifier that checks supported proof receipts without hosting model weights.",
+      "blocker": "Current systems depend on narrow arithmetic and fixed model/decoding configurations.",
+      "acceptance": "Replay prover outputs against the upstream verification implementation and tampered controls.",
+      "strong_incumbent": "Open-source upstream verifier plus manual audit.",
+      "buyer_validation": "What integration, support and SLA value exists beyond simply using upstream code?",
+      "delivery_unit": "One verifier integration with signed acceptance",
+      "successor_asset": "Verifier SDK and reproducible fixtures",
+      "downside": "Security assumptions and upstream compatibility.",
+      "current_hypothesis": "FlashProve open source large-MoE zkSNARK prototype; 400B model 110 proved tokens/s on H100 under quantized greedy conditions, with reported 70-95x GPU overhead.",
+      "next_experiment": "Freeze an authorized task and hidden acceptance suite; run matched Oct 12 baseline versus current accessible methods and the strongest incumbent, then obtain actual buyer terms and compare all delivery/obligation costs.",
+      "proposed_metrics": [
+        {
+          "metric": "heldout-critical-failures",
+          "operator": "=",
+          "target": 0,
+          "unit": "failures",
+          "test": "Count critical acceptance violations on the independently frozen task; not an observed result."
+        },
+        {
+          "metric": "unsupported-claims",
+          "operator": "=",
+          "target": 0,
+          "unit": "claims",
+          "test": "Exclude unsupported scope, historical infeasibility, payment, provenance and cost assertions."
+        }
+      ],
+      "purchaser_verified": false,
+      "real_revenue_microUSD": null,
+      "real_complete_cost_microUSD": null,
+      "last_verified_crossing": null,
+      "source_urls": [
+        "https://www.anthropic.com/research/provable-inference"
+      ]
+    },
+    {
+      "id": "crossing-trust-proof-sampling",
+      "engine_id": "trust-omega",
+      "title": "Cost-bounded selective inference proving",
+      "beneficiary": "AI service operators with costly full audit requirements",
+      "outcome": "Design a transparent post-hoc sampling policy that proves a specified fraction of supported requests.",
+      "blocker": "Proofing every request may be prohibitively expensive.",
+      "acceptance": "Precommit selection method, compare full audit confidence assumptions, measure real H100 costs and failure responses.",
+      "strong_incumbent": "Conventional random audits and provider signatures.",
+      "buyer_validation": "What risk reduction and sampled coverage would justify the true proofing bill?",
+      "delivery_unit": "One precommitted verified sample",
+      "successor_asset": "Transparent sampler and audit report compiler",
+      "downside": "Statistical guarantees cannot imply full traffic correctness.",
+      "current_hypothesis": "FlashProve open source large-MoE zkSNARK prototype; 400B model 110 proved tokens/s on H100 under quantized greedy conditions, with reported 70-95x GPU overhead.",
+      "next_experiment": "Freeze an authorized task and hidden acceptance suite; run matched Oct 12 baseline versus current accessible methods and the strongest incumbent, then obtain actual buyer terms and compare all delivery/obligation costs.",
+      "proposed_metrics": [
+        {
+          "metric": "heldout-critical-failures",
+          "operator": "=",
+          "target": 0,
+          "unit": "failures",
+          "test": "Count critical acceptance violations on the independently frozen task; not an observed result."
+        },
+        {
+          "metric": "unsupported-claims",
+          "operator": "=",
+          "target": 0,
+          "unit": "claims",
+          "test": "Exclude unsupported scope, historical infeasibility, payment, provenance and cost assertions."
+        }
+      ],
+      "purchaser_verified": false,
+      "real_revenue_microUSD": null,
+      "real_complete_cost_microUSD": null,
+      "last_verified_crossing": null,
+      "source_urls": [
+        "https://www.anthropic.com/research/provable-inference"
+      ]
+    },
+    {
+      "id": "crossing-trust-private-verifier",
+      "engine_id": "trust-omega",
+      "title": "Lean-replayed security assurance for proof verifier",
+      "beneficiary": "Security software providers operating zkML infrastructure",
+      "outcome": "Package a reference-verifier comparison and explicit list of proof trust assumptions.",
+      "blocker": "Fast C++ verifier may not be formally equivalent to the reference Lean protocol.",
+      "acceptance": "Replay true/false proofs through independent verifiers; block claims of formally verified C++ equivalence without proof.",
+      "strong_incumbent": "Manual specialist source audit and the existing Lean verifier.",
+      "buyer_validation": "Would a conformance suite reduce procurement friction enough to pay for support?",
+      "delivery_unit": "One verifier-assurance conformance pack",
+      "successor_asset": "Verifier differential test suite",
+      "downside": "Unproven fast-code equivalence.",
+      "current_hypothesis": "FlashProve open source large-MoE zkSNARK prototype; 400B model 110 proved tokens/s on H100 under quantized greedy conditions, with reported 70-95x GPU overhead.",
+      "next_experiment": "Freeze an authorized task and hidden acceptance suite; run matched Oct 12 baseline versus current accessible methods and the strongest incumbent, then obtain actual buyer terms and compare all delivery/obligation costs.",
+      "proposed_metrics": [
+        {
+          "metric": "heldout-critical-failures",
+          "operator": "=",
+          "target": 0,
+          "unit": "failures",
+          "test": "Count critical acceptance violations on the independently frozen task; not an observed result."
+        },
+        {
+          "metric": "unsupported-claims",
+          "operator": "=",
+          "target": 0,
+          "unit": "claims",
+          "test": "Exclude unsupported scope, historical infeasibility, payment, provenance and cost assertions."
+        }
+      ],
+      "purchaser_verified": false,
+      "real_revenue_microUSD": null,
+      "real_complete_cost_microUSD": null,
+      "last_verified_crossing": null,
+      "source_urls": [
+        "https://www.anthropic.com/research/provable-inference"
+      ]
+    },
+    {
+      "id": "crossing-lab-sensor-board",
+      "engine_id": "lab-omega",
+      "title": "Low-risk sensor interface design-to-bench",
+      "beneficiary": "Industrial measurement device developers",
+      "outcome": "Produce a custom low-voltage measurement board with calibration and manufacturing documentation.",
+      "blocker": "Schematic-to-PCB, firmware, noise and component selection can require multiple expert iterations.",
+      "acceptance": "Independent bench validates accuracy on held-out input ranges, thermal load and faults.",
+      "strong_incumbent": "Electronics engineering contractor using conventional EDA.",
+      "buyer_validation": "What calibrated accuracy and budget make a prototype commercially valuable?",
+      "delivery_unit": "One measured circuit-board prototype",
+      "successor_asset": "Calibration rig and known-good design library",
+      "downside": "Physical measurement uncertainty and parts availability.",
+      "current_hypothesis": "Anthropic reported three Fable 5.2-designed PCB/software/enclosure devices manufactured with partner Diode; independent transferability and unit economics unproved.",
+      "next_experiment": "Freeze an authorized task and hidden acceptance suite; run matched Oct 12 baseline versus current accessible methods and the strongest incumbent, then obtain actual buyer terms and compare all delivery/obligation costs.",
+      "proposed_metrics": [
+        {
+          "metric": "heldout-critical-failures",
+          "operator": "=",
+          "target": 0,
+          "unit": "failures",
+          "test": "Count critical acceptance violations on the independently frozen task; not an observed result."
+        },
+        {
+          "metric": "unsupported-claims",
+          "operator": "=",
+          "target": 0,
+          "unit": "claims",
+          "test": "Exclude unsupported scope, historical infeasibility, payment, provenance and cost assertions."
+        }
+      ],
+      "purchaser_verified": false,
+      "real_revenue_microUSD": null,
+      "real_complete_cost_microUSD": null,
+      "last_verified_crossing": null,
+      "source_urls": [
+        "https://www.anthropic.com/claude-fable-and-mythos-5-2"
+      ]
+    },
+    {
+      "id": "crossing-lab-lab-daq",
+      "engine_id": "lab-omega",
+      "title": "Custom laboratory data-acquisition interface",
+      "beneficiary": "Commercial research-tool vendors",
+      "outcome": "Deliver a configurable low-risk DAQ interface with tested firmware and data export.",
+      "blocker": "Hardware timing and analog accuracy can fail despite passing simulated tests.",
+      "acceptance": "Bench tests validate timestamp drift, input range and safe error handling.",
+      "strong_incumbent": "Established DAQ hardware and expert system integrators.",
+      "buyer_validation": "Why not purchase an existing USB DAQ product and what bespoke feature pays?",
+      "delivery_unit": "One tested DAQ device",
+      "successor_asset": "Reference firmware and signal test harness",
+      "downside": "Reliability and certification limits.",
+      "current_hypothesis": "Anthropic reported three Fable 5.2-designed PCB/software/enclosure devices manufactured with partner Diode; independent transferability and unit economics unproved.",
+      "next_experiment": "Freeze an authorized task and hidden acceptance suite; run matched Oct 12 baseline versus current accessible methods and the strongest incumbent, then obtain actual buyer terms and compare all delivery/obligation costs.",
+      "proposed_metrics": [
+        {
+          "metric": "heldout-critical-failures",
+          "operator": "=",
+          "target": 0,
+          "unit": "failures",
+          "test": "Count critical acceptance violations on the independently frozen task; not an observed result."
+        },
+        {
+          "metric": "unsupported-claims",
+          "operator": "=",
+          "target": 0,
+          "unit": "claims",
+          "test": "Exclude unsupported scope, historical infeasibility, payment, provenance and cost assertions."
+        }
+      ],
+      "purchaser_verified": false,
+      "real_revenue_microUSD": null,
+      "real_complete_cost_microUSD": null,
+      "last_verified_crossing": null,
+      "source_urls": [
+        "https://www.anthropic.com/claude-fable-and-mythos-5-2"
+      ]
+    },
+    {
+      "id": "crossing-lab-industrial-gateway",
+      "engine_id": "lab-omega",
+      "title": "Interoperable industrial protocol gateway prototype",
+      "beneficiary": "Manufacturing systems integrators",
+      "outcome": "Produce a lab-only gateway prototype that safely translates specified non-safety-critical telemetry.",
+      "blocker": "Protocol timing and data loss require physical equipment and test harnesses.",
+      "acceptance": "Measure bounded loss, delay and reboot recovery on permitted lab devices; explicitly exclude safety-control use.",
+      "strong_incumbent": "Commercial gateways and industrial automation specialists.",
+      "buyer_validation": "What interoperable use case cannot an existing gateway satisfy?",
+      "delivery_unit": "One telemetry-only gateway prototype",
+      "successor_asset": "Protocol adapter and replay lab",
+      "downside": "Unsafe interaction if used for production control.",
+      "current_hypothesis": "Anthropic reported three Fable 5.2-designed PCB/software/enclosure devices manufactured with partner Diode; independent transferability and unit economics unproved.",
+      "next_experiment": "Freeze an authorized task and hidden acceptance suite; run matched Oct 12 baseline versus current accessible methods and the strongest incumbent, then obtain actual buyer terms and compare all delivery/obligation costs.",
+      "proposed_metrics": [
+        {
+          "metric": "heldout-critical-failures",
+          "operator": "=",
+          "target": 0,
+          "unit": "failures",
+          "test": "Count critical acceptance violations on the independently frozen task; not an observed result."
+        },
+        {
+          "metric": "unsupported-claims",
+          "operator": "=",
+          "target": 0,
+          "unit": "claims",
+          "test": "Exclude unsupported scope, historical infeasibility, payment, provenance and cost assertions."
+        }
+      ],
+      "purchaser_verified": false,
+      "real_revenue_microUSD": null,
+      "real_complete_cost_microUSD": null,
+      "last_verified_crossing": null,
+      "source_urls": [
+        "https://www.anthropic.com/claude-fable-and-mythos-5-2"
+      ]
+    },
+    {
+      "id": "crossing-lab-usb-utility",
+      "engine_id": "lab-omega",
+      "title": "Custom USB desktop accessory to qualified prototype",
+      "beneficiary": "Device makers and small electronics brands",
+      "outcome": "Deliver a specified USB-powered accessory with firmware, casing and manufacturing file bundle.",
+      "blocker": "Electrical signal quality, USB enumeration and enclosure tolerances can invalidate designs.",
+      "acceptance": "Independent USB enumeration, current limits, firmware recovery and mechanical fit bench tests.",
+      "strong_incumbent": "Device design firm plus off-the-shelf USB reference boards.",
+      "buyer_validation": "What unique ergonomic or functional benefit warrants customization?",
+      "delivery_unit": "One tested USB accessory",
+      "successor_asset": "USB compliance harness and PCB design modules",
+      "downside": "Certification and production yield.",
+      "current_hypothesis": "Anthropic reported three Fable 5.2-designed PCB/software/enclosure devices manufactured with partner Diode; independent transferability and unit economics unproved.",
+      "next_experiment": "Freeze an authorized task and hidden acceptance suite; run matched Oct 12 baseline versus current accessible methods and the strongest incumbent, then obtain actual buyer terms and compare all delivery/obligation costs.",
+      "proposed_metrics": [
+        {
+          "metric": "heldout-critical-failures",
+          "operator": "=",
+          "target": 0,
+          "unit": "failures",
+          "test": "Count critical acceptance violations on the independently frozen task; not an observed result."
+        },
+        {
+          "metric": "unsupported-claims",
+          "operator": "=",
+          "target": 0,
+          "unit": "claims",
+          "test": "Exclude unsupported scope, historical infeasibility, payment, provenance and cost assertions."
+        }
+      ],
+      "purchaser_verified": false,
+      "real_revenue_microUSD": null,
+      "real_complete_cost_microUSD": null,
+      "last_verified_crossing": null,
+      "source_urls": [
+        "https://www.anthropic.com/claude-fable-and-mythos-5-2"
+      ]
+    },
+    {
+      "id": "crossing-lab-environment-monitor",
+      "engine_id": "lab-omega",
+      "title": "Industrial environment data-logger prototype",
+      "beneficiary": "Private industrial maintenance teams",
+      "outcome": "Build a non-safety-critical temperature/humidity data logger with traceable calibration.",
+      "blocker": "Sensor response, battery lifetime and real-world environmental drift are hard to predict.",
+      "acceptance": "Holdout calibration points, environmental cycling and storage recovery tests.",
+      "strong_incumbent": "Commercial loggers and specialist electronics teams.",
+      "buyer_validation": "Which measurement conditions exceed the available commercial products?",
+      "delivery_unit": "One bench-accepted logger",
+      "successor_asset": "Calibration models and enclosure patterns",
+      "downside": "Field robustness and data trust.",
+      "current_hypothesis": "Anthropic reported three Fable 5.2-designed PCB/software/enclosure devices manufactured with partner Diode; independent transferability and unit economics unproved.",
+      "next_experiment": "Freeze an authorized task and hidden acceptance suite; run matched Oct 12 baseline versus current accessible methods and the strongest incumbent, then obtain actual buyer terms and compare all delivery/obligation costs.",
+      "proposed_metrics": [
+        {
+          "metric": "heldout-critical-failures",
+          "operator": "=",
+          "target": 0,
+          "unit": "failures",
+          "test": "Count critical acceptance violations on the independently frozen task; not an observed result."
+        },
+        {
+          "metric": "unsupported-claims",
+          "operator": "=",
+          "target": 0,
+          "unit": "claims",
+          "test": "Exclude unsupported scope, historical infeasibility, payment, provenance and cost assertions."
+        }
+      ],
+      "purchaser_verified": false,
+      "real_revenue_microUSD": null,
+      "real_complete_cost_microUSD": null,
+      "last_verified_crossing": null,
+      "source_urls": [
+        "https://www.anthropic.com/claude-fable-and-mythos-5-2"
+      ]
+    },
+    {
+      "id": "crossing-lab-test-fixture",
+      "engine_id": "lab-omega",
+      "title": "Custom automated electronics test fixture",
+      "beneficiary": "Hardware product manufacturers",
+      "outcome": "Deliver a production-line fixture design with independent pass/fail tests and traceable records.",
+      "blocker": "Fixture alignment and tolerances can make automated tests flaky or destructive.",
+      "acceptance": "Exercise known-good and seeded-fault boards, jammed connectors and throughput; mark false passes.",
+      "strong_incumbent": "Test-engineering contractor with fixture software.",
+      "buyer_validation": "Which manufacturing yield or manual QA bottleneck justifies investment?",
+      "delivery_unit": "One bench-tested test fixture",
+      "successor_asset": "Fixture recipes and acceptance dataset",
+      "downside": "False acceptance and component damage.",
+      "current_hypothesis": "Anthropic reported three Fable 5.2-designed PCB/software/enclosure devices manufactured with partner Diode; independent transferability and unit economics unproved.",
+      "next_experiment": "Freeze an authorized task and hidden acceptance suite; run matched Oct 12 baseline versus current accessible methods and the strongest incumbent, then obtain actual buyer terms and compare all delivery/obligation costs.",
+      "proposed_metrics": [
+        {
+          "metric": "heldout-critical-failures",
+          "operator": "=",
+          "target": 0,
+          "unit": "failures",
+          "test": "Count critical acceptance violations on the independently frozen task; not an observed result."
+        },
+        {
+          "metric": "unsupported-claims",
+          "operator": "=",
+          "target": 0,
+          "unit": "claims",
+          "test": "Exclude unsupported scope, historical infeasibility, payment, provenance and cost assertions."
+        }
+      ],
+      "purchaser_verified": false,
+      "real_revenue_microUSD": null,
+      "real_complete_cost_microUSD": null,
+      "last_verified_crossing": null,
+      "source_urls": [
+        "https://www.anthropic.com/claude-fable-and-mythos-5-2"
+      ]
+    },
+    {
+      "id": "crossing-lab-robotics-eval",
+      "engine_id": "lab-omega",
+      "title": "Reproducible robotics evaluation apparatus",
+      "beneficiary": "Robotics startups and university spinouts",
+      "outcome": "Design a low-risk tabletop robotic evaluation jig with standardized stimuli and measurement records.",
+      "blocker": "Control policies can appear successful in simulation while physical repeatability is poor.",
+      "acceptance": "Independent timed trials under perturbations, emergency-stop and repeatability checks.",
+      "strong_incumbent": "Robotics engineers using existing commercial evaluation kits.",
+      "buyer_validation": "Which embodied-agent benchmark cannot be run with an existing kit?",
+      "delivery_unit": "One validated lab evaluation jig",
+      "successor_asset": "Motion trace, calibration and safety test scripts",
+      "downside": "Real-world operating safety and lab personnel.",
+      "current_hypothesis": "Anthropic reported three Fable 5.2-designed PCB/software/enclosure devices manufactured with partner Diode; independent transferability and unit economics unproved.",
+      "next_experiment": "Freeze an authorized task and hidden acceptance suite; run matched Oct 12 baseline versus current accessible methods and the strongest incumbent, then obtain actual buyer terms and compare all delivery/obligation costs.",
+      "proposed_metrics": [
+        {
+          "metric": "heldout-critical-failures",
+          "operator": "=",
+          "target": 0,
+          "unit": "failures",
+          "test": "Count critical acceptance violations on the independently frozen task; not an observed result."
+        },
+        {
+          "metric": "unsupported-claims",
+          "operator": "=",
+          "target": 0,
+          "unit": "claims",
+          "test": "Exclude unsupported scope, historical infeasibility, payment, provenance and cost assertions."
+        }
+      ],
+      "purchaser_verified": false,
+      "real_revenue_microUSD": null,
+      "real_complete_cost_microUSD": null,
+      "last_verified_crossing": null,
+      "source_urls": [
+        "https://www.anthropic.com/claude-fable-and-mythos-5-2"
+      ]
+    },
+    {
+      "id": "crossing-lab-edge-vision",
+      "engine_id": "lab-omega",
+      "title": "Embedded edge-vision inspection demonstrator",
+      "beneficiary": "Manufacturing QA vendors",
+      "outcome": "Produce a low-voltage camera inspection device demonstrating scoped defect detection on an approved fixture.",
+      "blocker": "Lighting, sensor placement and real false negatives create integration risk.",
+      "acceptance": "Held-out physical components under lighting changes; measure false negatives, latency and thermal budget.",
+      "strong_incumbent": "Vision system integrator with off-the-shelf industrial cameras.",
+      "buyer_validation": "Which defect has economic loss large enough to justify a dedicated device?",
+      "delivery_unit": "One lab-qualified inspection demonstrator",
+      "successor_asset": "Dataset versioning and optical calibration fixture",
+      "downside": "False-negative business losses.",
+      "current_hypothesis": "Anthropic reported three Fable 5.2-designed PCB/software/enclosure devices manufactured with partner Diode; independent transferability and unit economics unproved.",
+      "next_experiment": "Freeze an authorized task and hidden acceptance suite; run matched Oct 12 baseline versus current accessible methods and the strongest incumbent, then obtain actual buyer terms and compare all delivery/obligation costs.",
+      "proposed_metrics": [
+        {
+          "metric": "heldout-critical-failures",
+          "operator": "=",
+          "target": 0,
+          "unit": "failures",
+          "test": "Count critical acceptance violations on the independently frozen task; not an observed result."
+        },
+        {
+          "metric": "unsupported-claims",
+          "operator": "=",
+          "target": 0,
+          "unit": "claims",
+          "test": "Exclude unsupported scope, historical infeasibility, payment, provenance and cost assertions."
+        }
+      ],
+      "purchaser_verified": false,
+      "real_revenue_microUSD": null,
+      "real_complete_cost_microUSD": null,
+      "last_verified_crossing": null,
+      "source_urls": [
+        "https://www.anthropic.com/claude-fable-and-mythos-5-2"
+      ]
+    },
+    {
+      "id": "crossing-workcell-ap-ar-match",
+      "engine_id": "workcell-omega",
+      "title": "AP invoice and receiving reconciliation",
+      "beneficiary": "Wholesale finance teams",
+      "outcome": "Read authorized purchase orders, invoices and goods receipts, then propose a state-verified match with exceptions.",
+      "blocker": "Visual documents and differing business apps create nontrivial exception-handling costs.",
+      "acceptance": "Independent ledger-like sandbox state checks, duplicate invoice rejection and no unapproved settlement.",
+      "strong_incumbent": "ERP API integration or deterministic three-way matching software.",
+      "buyer_validation": "Which high-volume exceptions remain after ordinary three-way matching?",
+      "delivery_unit": "One approved exception-handled reconciliation",
+      "successor_asset": "Connector and state-diff oracle",
+      "downside": "Double payment, privacy and accounting review.",
+      "current_hypothesis": "Terra release reports lower cost per computer-use task and higher benchmark accuracy; no individual production SOP is independently qualified.",
+      "next_experiment": "Freeze an authorized task and hidden acceptance suite; run matched Oct 12 baseline versus current accessible methods and the strongest incumbent, then obtain actual buyer terms and compare all delivery/obligation costs.",
+      "proposed_metrics": [
+        {
+          "metric": "heldout-critical-failures",
+          "operator": "=",
+          "target": 0,
+          "unit": "failures",
+          "test": "Count critical acceptance violations on the independently frozen task; not an observed result."
+        },
+        {
+          "metric": "unsupported-claims",
+          "operator": "=",
+          "target": 0,
+          "unit": "claims",
+          "test": "Exclude unsupported scope, historical infeasibility, payment, provenance and cost assertions."
+        }
+      ],
+      "purchaser_verified": false,
+      "real_revenue_microUSD": null,
+      "real_complete_cost_microUSD": null,
+      "last_verified_crossing": null,
+      "source_urls": [
+        "https://openai.com/index/introducing-gpt-6-1-terra/"
+      ]
+    },
+    {
+      "id": "crossing-workcell-sku-sync",
+      "engine_id": "workcell-omega",
+      "title": "Cross-marketplace product catalog reconciliation",
+      "beneficiary": "Multichannel retailers",
+      "outcome": "Synchronize approved stockkeeping units and attribute mappings across two permitted seller apps.",
+      "blocker": "GUI interfaces change and asynchronous stock updates create duplicate or stale listings.",
+      "acceptance": "Reconcile unique SKUs and seller-state after retries, changed layouts and connection losses.",
+      "strong_incumbent": "Marketplace APIs and inventory-management suites.",
+      "buyer_validation": "Which channels lack reliable API sync and what error cost is tolerable?",
+      "delivery_unit": "One verified catalog sync cycle",
+      "successor_asset": "Product mapping and retry journal",
+      "downside": "Incorrect stock commitments.",
+      "current_hypothesis": "Terra release reports lower cost per computer-use task and higher benchmark accuracy; no individual production SOP is independently qualified.",
+      "next_experiment": "Freeze an authorized task and hidden acceptance suite; run matched Oct 12 baseline versus current accessible methods and the strongest incumbent, then obtain actual buyer terms and compare all delivery/obligation costs.",
+      "proposed_metrics": [
+        {
+          "metric": "heldout-critical-failures",
+          "operator": "=",
+          "target": 0,
+          "unit": "failures",
+          "test": "Count critical acceptance violations on the independently frozen task; not an observed result."
+        },
+        {
+          "metric": "unsupported-claims",
+          "operator": "=",
+          "target": 0,
+          "unit": "claims",
+          "test": "Exclude unsupported scope, historical infeasibility, payment, provenance and cost assertions."
+        }
+      ],
+      "purchaser_verified": false,
+      "real_revenue_microUSD": null,
+      "real_complete_cost_microUSD": null,
+      "last_verified_crossing": null,
+      "source_urls": [
+        "https://openai.com/index/introducing-gpt-6-1-terra/"
+      ]
+    },
+    {
+      "id": "crossing-workcell-crm-contract",
+      "engine_id": "workcell-omega",
+      "title": "Contract-to-CRM obligation alignment",
+      "beneficiary": "B2B subscription businesses",
+      "outcome": "Extract approved contract milestones and reconcile them to CRM opportunities and support workflows.",
+      "blocker": "Unstructured clauses and permissioned apps make blind automation unsafe.",
+      "acceptance": "Held-out source-cited obligations and allowed CRM state transitions; abstain on ambiguity.",
+      "strong_incumbent": "CRM native workflows and human legal ops review.",
+      "buyer_validation": "Which mismatches cause measurable renewals or operational losses?",
+      "delivery_unit": "One checked contract/CRM alignment batch",
+      "successor_asset": "Clause traceability and CRM field checker",
+      "downside": "Misinterpreted contract obligations.",
+      "current_hypothesis": "Terra release reports lower cost per computer-use task and higher benchmark accuracy; no individual production SOP is independently qualified.",
+      "next_experiment": "Freeze an authorized task and hidden acceptance suite; run matched Oct 12 baseline versus current accessible methods and the strongest incumbent, then obtain actual buyer terms and compare all delivery/obligation costs.",
+      "proposed_metrics": [
+        {
+          "metric": "heldout-critical-failures",
+          "operator": "=",
+          "target": 0,
+          "unit": "failures",
+          "test": "Count critical acceptance violations on the independently frozen task; not an observed result."
+        },
+        {
+          "metric": "unsupported-claims",
+          "operator": "=",
+          "target": 0,
+          "unit": "claims",
+          "test": "Exclude unsupported scope, historical infeasibility, payment, provenance and cost assertions."
+        }
+      ],
+      "purchaser_verified": false,
+      "real_revenue_microUSD": null,
+      "real_complete_cost_microUSD": null,
+      "last_verified_crossing": null,
+      "source_urls": [
+        "https://openai.com/index/introducing-gpt-6-1-terra/"
+      ]
+    },
+    {
+      "id": "crossing-workcell-construction-submittal",
+      "engine_id": "workcell-omega",
+      "title": "Construction drawing and submittal tracking",
+      "beneficiary": "Private construction contractors",
+      "outcome": "Reconcile authorized submittals, drawings and project-system statuses with source-backed exceptions.",
+      "blocker": "Document revisions and approval chains are difficult to interpret visually.",
+      "acceptance": "Compare frozen document revisions and project-state checks; do not invent engineer approvals.",
+      "strong_incumbent": "Construction project management APIs and human coordinators.",
+      "buyer_validation": "Which submittal bottleneck has a funded owner and independent acceptance?",
+      "delivery_unit": "One source-linked project reconciliation",
+      "successor_asset": "Revision graph and status-state checker",
+      "downside": "Safety and permit authority lies with humans.",
+      "current_hypothesis": "Terra release reports lower cost per computer-use task and higher benchmark accuracy; no individual production SOP is independently qualified.",
+      "next_experiment": "Freeze an authorized task and hidden acceptance suite; run matched Oct 12 baseline versus current accessible methods and the strongest incumbent, then obtain actual buyer terms and compare all delivery/obligation costs.",
+      "proposed_metrics": [
+        {
+          "metric": "heldout-critical-failures",
+          "operator": "=",
+          "target": 0,
+          "unit": "failures",
+          "test": "Count critical acceptance violations on the independently frozen task; not an observed result."
+        },
+        {
+          "metric": "unsupported-claims",
+          "operator": "=",
+          "target": 0,
+          "unit": "claims",
+          "test": "Exclude unsupported scope, historical infeasibility, payment, provenance and cost assertions."
+        }
+      ],
+      "purchaser_verified": false,
+      "real_revenue_microUSD": null,
+      "real_complete_cost_microUSD": null,
+      "last_verified_crossing": null,
+      "source_urls": [
+        "https://openai.com/index/introducing-gpt-6-1-terra/"
+      ]
+    },
+    {
+      "id": "crossing-workcell-supplier-onboarding",
+      "engine_id": "workcell-omega",
+      "title": "Multi-app supplier onboarding checks",
+      "beneficiary": "Procurement operations teams",
+      "outcome": "Reconcile approved supplier documents and vendor-master entries without submitting unapproved financial changes.",
+      "blocker": "Different portals and missing documents cause repeated exceptions and data entry.",
+      "acceptance": "Run permitted sandbox cases; verify unique vendor identities and never bypass approval.",
+      "strong_incumbent": "Vendor master APIs and supplier onboarding products.",
+      "buyer_validation": "Which vendors and exception classes are too costly for existing tooling?",
+      "delivery_unit": "One validated onboarding record",
+      "successor_asset": "Vendor-data validation and exception templates",
+      "downside": "Fraud and inadvertent vendor payment authorization.",
+      "current_hypothesis": "Terra release reports lower cost per computer-use task and higher benchmark accuracy; no individual production SOP is independently qualified.",
+      "next_experiment": "Freeze an authorized task and hidden acceptance suite; run matched Oct 12 baseline versus current accessible methods and the strongest incumbent, then obtain actual buyer terms and compare all delivery/obligation costs.",
+      "proposed_metrics": [
+        {
+          "metric": "heldout-critical-failures",
+          "operator": "=",
+          "target": 0,
+          "unit": "failures",
+          "test": "Count critical acceptance violations on the independently frozen task; not an observed result."
+        },
+        {
+          "metric": "unsupported-claims",
+          "operator": "=",
+          "target": 0,
+          "unit": "claims",
+          "test": "Exclude unsupported scope, historical infeasibility, payment, provenance and cost assertions."
+        }
+      ],
+      "purchaser_verified": false,
+      "real_revenue_microUSD": null,
+      "real_complete_cost_microUSD": null,
+      "last_verified_crossing": null,
+      "source_urls": [
+        "https://openai.com/index/introducing-gpt-6-1-terra/"
+      ]
+    },
+    {
+      "id": "crossing-workcell-inventory-audit",
+      "engine_id": "workcell-omega",
+      "title": "Warehouse inventory variance investigation",
+      "beneficiary": "Private warehouse operators",
+      "outcome": "Collect approved inventory records from multiple applications and prepare independently checked variance explanations.",
+      "blocker": "Cycle counts, unit conversions and delayed updates create inconsistent states.",
+      "acceptance": "Check held-out reconciliation totals, units and evidence; require approval before inventory adjustment.",
+      "strong_incumbent": "WMS integrations and SQL/reporting automation.",
+      "buyer_validation": "Which discrepancies remain unaddressed by current WMS tools?",
+      "delivery_unit": "One evidence-backed variance report",
+      "successor_asset": "Unit conversion and event lineage library",
+      "downside": "Wrong stock decisions.",
+      "current_hypothesis": "Terra release reports lower cost per computer-use task and higher benchmark accuracy; no individual production SOP is independently qualified.",
+      "next_experiment": "Freeze an authorized task and hidden acceptance suite; run matched Oct 12 baseline versus current accessible methods and the strongest incumbent, then obtain actual buyer terms and compare all delivery/obligation costs.",
+      "proposed_metrics": [
+        {
+          "metric": "heldout-critical-failures",
+          "operator": "=",
+          "target": 0,
+          "unit": "failures",
+          "test": "Count critical acceptance violations on the independently frozen task; not an observed result."
+        },
+        {
+          "metric": "unsupported-claims",
+          "operator": "=",
+          "target": 0,
+          "unit": "claims",
+          "test": "Exclude unsupported scope, historical infeasibility, payment, provenance and cost assertions."
+        }
+      ],
+      "purchaser_verified": false,
+      "real_revenue_microUSD": null,
+      "real_complete_cost_microUSD": null,
+      "last_verified_crossing": null,
+      "source_urls": [
+        "https://openai.com/index/introducing-gpt-6-1-terra/"
+      ]
+    },
+    {
+      "id": "crossing-workcell-customer-support",
+      "engine_id": "workcell-omega",
+      "title": "Complex refund eligibility research",
+      "beneficiary": "Online subscription service providers",
+      "outcome": "Investigate bounded policy-based customer cases and propose an auditable eligibility decision.",
+      "blocker": "Policy exceptions and scattered account records defeat simple FAQ bots.",
+      "acceptance": "Hold out ambiguous and adversarial cases; forbid financial actions without explicit customer/provider authorization.",
+      "strong_incumbent": "Support desk macros, conventional policy engines and human agents.",
+      "buyer_validation": "What accepted research outcome is worth paying for independent of final refund approval?",
+      "delivery_unit": "One audited eligibility research packet",
+      "successor_asset": "Policy test harness and case lineage",
+      "downside": "Unauthorized refunds and customer harm.",
+      "current_hypothesis": "Terra release reports lower cost per computer-use task and higher benchmark accuracy; no individual production SOP is independently qualified.",
+      "next_experiment": "Freeze an authorized task and hidden acceptance suite; run matched Oct 12 baseline versus current accessible methods and the strongest incumbent, then obtain actual buyer terms and compare all delivery/obligation costs.",
+      "proposed_metrics": [
+        {
+          "metric": "heldout-critical-failures",
+          "operator": "=",
+          "target": 0,
+          "unit": "failures",
+          "test": "Count critical acceptance violations on the independently frozen task; not an observed result."
+        },
+        {
+          "metric": "unsupported-claims",
+          "operator": "=",
+          "target": 0,
+          "unit": "claims",
+          "test": "Exclude unsupported scope, historical infeasibility, payment, provenance and cost assertions."
+        }
+      ],
+      "purchaser_verified": false,
+      "real_revenue_microUSD": null,
+      "real_complete_cost_microUSD": null,
+      "last_verified_crossing": null,
+      "source_urls": [
+        "https://openai.com/index/introducing-gpt-6-1-terra/"
+      ]
+    },
+    {
+      "id": "crossing-workcell-regulatory-forms",
+      "engine_id": "workcell-omega",
+      "title": "Private compliance evidence assembly",
+      "beneficiary": "B2B technology vendors preparing routine audits",
+      "outcome": "Assemble cited control evidence from permitted software and flag gaps without certifying compliance.",
+      "blocker": "Fragmented access systems and screenshots can cause stale or unsupported evidence.",
+      "acceptance": "Independent cross-check of access states and source dates; explicitly decline unverified compliance claims.",
+      "strong_incumbent": "GRC software, APIs and qualified security auditors.",
+      "buyer_validation": "Which recurring evidence task lacks a cheaper API/GRC route?",
+      "delivery_unit": "One source-linked readiness packet",
+      "successor_asset": "Control mapping and provenance diff engine",
+      "downside": "False compliance statements.",
+      "current_hypothesis": "Terra release reports lower cost per computer-use task and higher benchmark accuracy; no individual production SOP is independently qualified.",
+      "next_experiment": "Freeze an authorized task and hidden acceptance suite; run matched Oct 12 baseline versus current accessible methods and the strongest incumbent, then obtain actual buyer terms and compare all delivery/obligation costs.",
+      "proposed_metrics": [
+        {
+          "metric": "heldout-critical-failures",
+          "operator": "=",
+          "target": 0,
+          "unit": "failures",
+          "test": "Count critical acceptance violations on the independently frozen task; not an observed result."
+        },
+        {
+          "metric": "unsupported-claims",
+          "operator": "=",
+          "target": 0,
+          "unit": "claims",
+          "test": "Exclude unsupported scope, historical infeasibility, payment, provenance and cost assertions."
+        }
+      ],
+      "purchaser_verified": false,
+      "real_revenue_microUSD": null,
+      "real_complete_cost_microUSD": null,
+      "last_verified_crossing": null,
+      "source_urls": [
+        "https://openai.com/index/introducing-gpt-6-1-terra/"
+      ]
+    }
+  ],
+  "note": "All prices, buyer budgets, actual baseline comparators and end-to-end economics require independent measurement. This catalog is not an instruction to spend or contact people."
+}
