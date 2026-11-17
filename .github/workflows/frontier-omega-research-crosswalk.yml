@@ -1,0 +1,58 @@
+name: FRONTIER Ω — pinned research-study canonical proposal review
+on:
+  pull_request:
+    paths:
+      - 'frontier_omega/research_crosswalk.py'
+      - 'tests/test_frontier_omega_research_crosswalk.py'
+      - 'docs/frontier-omega/CANONICAL-CROSSWALK-REVIEW.md'
+      - '.github/workflows/frontier-omega-research-crosswalk.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-proposals:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record platform job execution start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Test non-mutating crosswalk and rejection paths
+        run: python3 -m unittest discover -s tests -p 'test_frontier_omega_research_crosswalk.py' -v
+      - name: Fetch exact public research snapshot, verify Git blobs, generate research-only proposals
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir "$RUNNER_TEMP/pinned-study"
+          ref=41b1b61f17f455189123bbde82497ed8150a7710
+          origin="https://raw.githubusercontent.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/$ref/frontier_omega"
+          curl --fail --silent --show-error --location --max-time 60 --retry 0 \
+            "$origin/opportunities.json" -o "$RUNNER_TEMP/pinned-study/opportunities.json"
+          curl --fail --silent --show-error --location --max-time 60 --retry 0 \
+            "$origin/signals.json" -o "$RUNNER_TEMP/pinned-study/signals.json"
+          test "$(git hash-object "$RUNNER_TEMP/pinned-study/opportunities.json")" = "ff3deec66229252efca80fed42cbffcdfc243c2c"
+          test "$(git hash-object "$RUNNER_TEMP/pinned-study/signals.json")" = "d3b7133a4453e57732235c5f6dc8266989a51fa6"
+          python3 -m frontier_omega.research_crosswalk \
+            --opportunities "$RUNNER_TEMP/pinned-study/opportunities.json" \
+            --signals "$RUNNER_TEMP/pinned-study/signals.json" \
+            > "$RUNNER_TEMP/canonical-proposals.json"
+          python3 - "$RUNNER_TEMP/canonical-proposals.json" <<'PY'
+          import json, sys
+          from frontier_omega.core import validate_problem
+          report=json.load(open(sys.argv[1]))
+          assert report["case_count"]==57 and report["signal_count"]==12
+          assert not report["canonical_reservoir_modified"]
+          assert report["disposition"]=="READ_ONLY_UNIMPORTED_REVIEW_ONLY"
+          assert report["financial_authority"]=="NONE"
+          assert not report["actual_buyers_or_paid_outcomes_established"]
+          for p in report["candidate_problems"]:
+              validate_problem(p)
+              assert p["demand"]["status"]=="HYPOTHESIS"
+              assert p["demand"]["consent_verification"]=="NOT_VERIFIED"
+          print("57 pinned source studies converted to validated UNIMPORTED research-only proposals; no buyer or account actions")
+          print("Source SHA256:", report["source_sha256"])
+          PY
+          sha256sum "$RUNNER_TEMP/canonical-proposals.json"
