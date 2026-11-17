@@ -77,6 +77,15 @@ class TreasuryGateway:
         snapshot=self.snapshot()
         if snapshot['unrestrictedEarned']<c['reinvestment_microUSD']:return {'funding':'NONE','reason':'INSUFFICIENT_UNRESTRICTED_EARNINGS'}
         return self.spend('retain-'+identifier(c),c['reinvestment_microUSD'],day,{'artifact_sha256':digest(artifact),'scope':c['scope_key']},c['reuse_benefit_microUSD']-c['reinvestment_microUSD'],False) or {'funding':'NONE'}
-    def advance(self,day):return self.command('reconcile-obligations',{'time_hour':day},'reconcile-hour-'+str(day))
+    def advance(self,day):
+        # An authenticated transport ACK is not a positive financial clearance.
+        # LiveEngine.step() invokes this before new production transitions; a
+        # negative or ambiguous signed business result must stop that step.
+        result=self.command('reconcile-obligations',{'time_hour':day},'reconcile-hour-'+str(day))
+        if result.get('obligations_covered') is not True:
+            raise PermissionError('TREASURY_OBLIGATIONS_NOT_COVERED')
+        if result.get('costs_reconciled') is not True:
+            raise PermissionError('TREASURY_COSTS_NOT_RECONCILED')
+        return result
     def audit(self):return self.command('audit',{})
     def close(self):pass
