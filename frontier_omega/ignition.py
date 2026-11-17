@@ -59,8 +59,18 @@ def ignition(o, evidence=None):
     if "matched_test" not in evidence:
         return result(o, "RUN_MATCHED_CROSSING_TEST", "No comparable historical and current test.")
     test = dict(evidence["matched_test"])
-    test["opportunity_id"] = o["id"]
-    test["synthetic"] = False
+    # An outer nonsynthetic declaration cannot erase a nested rehearsal flag.
+    # Preserve any pre-bound evidence identity rather than laundering it
+    # into a different opportunity's acceptance threshold.
+    if "opportunity_id" in test and test["opportunity_id"] != o["id"]:
+        raise InventoryError("Nested benchmark opportunity ID mismatch")
+    if "synthetic" in test and type(test["synthetic"]) is not bool:
+        raise InventoryError("Nested benchmark synthetic flag must be Boolean")
+    if test.get("synthetic") is True:
+        return result(o, "SYNTHETIC_REHEARSAL",
+                      "A synthetic matched benchmark cannot support a real pilot.")
+    test.setdefault("opportunity_id", o["id"])
+    test.setdefault("synthetic", False)
     finding = assess_one(o, test)
     tech = finding["stage"]
     if tech in {"BLOCKED_CURRENT_BELOW_ACCEPTANCE_COST_OR_TIME_GATE",
