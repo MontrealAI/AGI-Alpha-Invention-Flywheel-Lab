@@ -424,7 +424,7 @@ class Reservoir:
                 records = c.execute("SELECT * FROM " + table + " ORDER BY id").fetchall()
             for row in records:
                 value = parse(row["body"])
-                if value["id"] != row["id"] or sha(value) != row["hash"]:
+                if type(value) is not dict or value.get("id") != row["id"] or sha(value) != row["hash"]:
                     raise ValueError("RESERVOIR_RECORD_INTEGRITY_FAILED")
                 if table == "problems":
                     validate_problem(value)
@@ -444,10 +444,17 @@ class Reservoir:
         for trial in self.rows("trials"):
             if trial["problem_id"] not in problems or trial["frontier_id"] not in frontiers:
                 raise ValueError("BROKEN_TRIAL_RELATION")
+        stored = {x["id"]: x for x in self._trigger_rows()}
         for row in self.rows("triggers"):
+            if row["problem_id"] not in problems or row["frontier_id"] not in frontiers:
+                raise ValueError("BROKEN_TRIGGER_SOURCE_BINDING")
             p, e = problems[row["problem_id"]], frontiers[row["frontier_id"]]
-            if (sha(p) != next(x["problem_hash"] for x in self._trigger_rows() if x["id"] == row["id"]) or
-                sha(e) != next(x["frontier_hash"] for x in self._trigger_rows() if x["id"] == row["id"]) or
+            bound = stored.get(row["id"])
+            ph, fh = sha(p), sha(e)
+            expected_id = sha({"problem": p["id"], "frontier": e["id"],
+                               "problem_hash": ph, "frontier_hash": fh})
+            if (bound is None or row["id"] != expected_id or
+                ph != bound["problem_hash"] or fh != bound["frontier_hash"] or
                 not set(p["tags"]).intersection(e["tags"])):
                 raise ValueError("BROKEN_TRIGGER_SOURCE_BINDING")
         return {"audit": "PASS", "counts": counts, "financial_authority": "NONE",
