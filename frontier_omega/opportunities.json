@@ -2136,6 +2136,46 @@
       "strict_unattended_autonomy": "NOT_DEMONSTRATED",
       "customer_authority": "REQUIRES_CONTRACT_AND_ACCESS",
       "note": "Novel IP, licensing rights, willingness to pay and successful transfer are unverified. All prices and scores are hypotheses."
+    },
+    {
+      "id": "O057",
+      "engine": "COMPUTE",
+      "title": "Quality-preserving AI inference cost frontier",
+      "buyer": "Enterprises and AI product operators with recurring, significant inference workloads",
+      "blocked_problem": "A quality/latency/reliability-constrained AI workload is too costly to operate profitably or at its desired volume; current production configurations and fully optimized alternative runtimes may already meet the goal and must be checked.",
+      "deliverable": "Deployable and reversible serving configuration, runtime adaptation or optimization artifact, with representative benchmark receipts, independent quality verification, workload-level cost accounting and incident rollback.",
+      "acceptance_test": "Blind held-out request-quality parity and approved model/configuration constraints; fixed-volume and representative traffic; independently measured p95/p99 latency, actual $ per accepted request, reliability, utilization, capacity and rollback; compares tuned vLLM/TensorRT-LLM, capable specialist, buy/partner and no change with matching permissions and complete lifecycle costs.",
+      "strongest_complete_alternative": "Competently tuned vLLM or TensorRT-LLM, cloud managed inference optimizer, qualified human+AI serving team, specialist performance consultancy and no change.",
+      "frontier_signal_ids": [
+        "S001",
+        "S003",
+        "S006",
+        "S010"
+      ],
+      "first_discriminating_test": "Freeze one permissioned or open inference workload, quality/latency contract, production-equivalent traffic and billable cost method; run independent matched tests against best tuned incumbent, isolate accepted cost/capacity benefit, test two deliberate quality/latency failure mutants, and identify a previously blocked workload now within an actual budget (if any).",
+      "pilot_quote_usd_hypothesis": 125000,
+      "pilot_quote_status": "UNTESTED_PRICE_HYPOTHESIS_NOT_A_CUSTOMER_OFFER",
+      "crossing_threshold": {
+        "minimum_matched_cases": 20,
+        "minimum_acceptance_fraction": 0.99,
+        "max_complete_cost_per_accepted_usd": 43750,
+        "max_p95_turnaround_hours": 168
+      },
+      "ordinal_hypotheses": {
+        "buyer_urgency": 5,
+        "autonomy_fit": 4,
+        "acceptance_clarity": 5,
+        "repeatability": 5,
+        "differentiation": 3,
+        "capital_intensity": 2,
+        "sales_friction": 4
+      },
+      "initial_state": "WATCH_NO_MATCHED_BENCHMARK",
+      "technical_old_vs_new": "NOT_TESTED",
+      "observed_paid_demand": "NONE",
+      "strict_unattended_autonomy": "NOT_DEMONSTRATED",
+      "customer_authority": "REQUIRES_CONTRACT_AND_ACCESS",
+      "note": "First ENGINE Ω commercial wedge hypothesis; a vendor demo or model release does not establish five-week novel optimization. Pilot price is an illustrative untested offer hypothesis. The cost-per-accepted threshold in this catalog is a coarse planning gate, not a measured deployment metric; the acceptance contract must use application-level $/accepted-request and actual cash savings or additional usable capacity. No customer, permission, benchmark result or paid outcome is represented."
     }
   ]
 }
