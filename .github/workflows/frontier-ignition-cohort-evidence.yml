@@ -1,0 +1,82 @@
+name: IGNITION frozen public mission cohort
+
+on:
+  pull_request:
+    paths:
+      - 'docs/frontier-omega-ignition/qualification/89f2196d/cohort.py'
+      - '.github/workflows/frontier-ignition-cohort-evidence.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ignition-cohort-${{ github.event.pull_request.number }}-${{ github.event.pull_request.head.sha }}
+  cancel-in-progress: false
+
+env:
+  PRODUCT_REVISION: 89f2196d552810bc56696a7f380ae66c55f8763a
+  EXPECTED_SOURCE: ${{ github.event.pull_request.head.sha }}
+  PYTHONDONTWRITEBYTECODE: '1'
+
+jobs:
+  qualify:
+    name: Frozen mission · ${{ matrix.arm }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    strategy:
+      fail-fast: false
+      matrix:
+        arm: [integrity, unsupported]
+    steps:
+      - name: Record platform job start
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - name: Receive immutable product and its existing CPU inference dependencies
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          repository: MontrealAI/AGI-Alpha-Invention-Flywheel-Lab
+          ref: 89f2196d552810bc56696a7f380ae66c55f8763a
+          path: product
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /products/frontier-omega-ignition/
+            /products/alpha-genesis-harness/bridge/
+            /products/alpha-genesis-harness/scripts/qualify_hosted_local.py
+            /products/alpha-genesis-harness/scripts/package_release.py
+      - name: Receive only the evidence driver from the exact candidate revision
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ env.EXPECTED_SOURCE }}
+          path: review
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: /docs/frontier-omega-ignition/qualification/89f2196d/cohort.py
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Run the preregistered public mission
+        env:
+          COHORT_ARM: ${{ matrix.arm }}
+          IGNITION_PRODUCT_ROOT: ${{ github.workspace }}/product
+          IGNITION_EVIDENCE_SOURCE: ${{ env.EXPECTED_SOURCE }}
+        working-directory: review
+        run: |
+          test "$(git -C "$IGNITION_PRODUCT_ROOT" rev-parse HEAD)" = "$PRODUCT_REVISION"
+          test "$(git rev-parse HEAD)" = "$EXPECTED_SOURCE"
+          python -B docs/frontier-omega-ignition/qualification/89f2196d/cohort.py \
+            --arm "$COHORT_ARM" --work "$RUNNER_TEMP/ignition-openweights" \
+            --output "$RUNNER_TEMP/ignition-public"
+      - name: Retain the compact public result for this arm and attempt
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: ignition-cohort-${{ matrix.arm }}-${{ env.EXPECTED_SOURCE }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/ignition-public/receipt.json
+          if-no-files-found: error
+      - name: Offer the verified integrity recipient
+        if: success() && matrix.arm == 'integrity'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: ignition-cohort-integrity-recipient-${{ env.EXPECTED_SOURCE }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/ignition-public/artifact.zip
+          if-no-files-found: error

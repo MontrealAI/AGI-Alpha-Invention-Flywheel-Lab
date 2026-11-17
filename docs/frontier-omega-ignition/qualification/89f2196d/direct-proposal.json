@@ -1,0 +1,37 @@
+{
+  "kind": "record_migration",
+  "program": {
+    "extra_fields": "reject",
+    "columns": [
+      {
+        "source": "id",
+        "target": "record_id",
+        "type": "text"
+      },
+      {
+        "source": "name",
+        "target": "headline",
+        "type": "text"
+      },
+      {
+        "source": "status",
+        "target": "decision",
+        "type": "text"
+      },
+      {
+        "source": "id",
+        "target": "area",
+        "type": "text",
+        "split": {
+          "index": 0,
+          "separator": "-"
+        }
+      }
+    ],
+    "input_fields": [
+      "id",
+      "name",
+      "status"
+    ]
+  }
+}
