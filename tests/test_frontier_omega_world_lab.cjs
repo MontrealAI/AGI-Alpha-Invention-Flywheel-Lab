@@ -103,3 +103,54 @@ test('registered World Lab no-deploy is mandatory at break-even or inadequate pr
  const unfinanced=run('marketFormula({n:4,k:600,p:.8,cash:899})');
  assert.equal(unfinanced.qualified_model_route,false);
 });
+
+
+// Registered before implementation: market receipts must track CURRENT visitor
+// controls, not the previously calculated S.market snapshot. Execute the
+// actual inline producer/event-binding source with a deliberately minimal DOM.
+function marketReceiptSession() {
+ const first=src.indexOf('function runMarket(');
+ const last=src.indexOf('/* REAL LAB C:',first);
+ assert.ok(first>=0&&last>first,'real market event handlers must be extracted');
+ const handlers={}; const elements={}; const downloads=[];
+ const defaults={'market-buyers':'4','market-cost':'600','market-prob':'80','market-cash':'900'};
+ function element(id) {
+  if (!elements[id]) elements[id]={
+   value: defaults[id]??'',textContent:'',classList:{toggle(){}},
+   addEventListener(type,fn){(handlers[id]??={})[type]=fn;}
+  };
+  return elements[id];
+ }
+ const sandbox={S:{market:null},$:element,save:(payload)=>downloads.push(JSON.parse(payload))};
+ const isolated=vm.createContext(sandbox);
+ vm.runInContext([extract('MARKET','const'),extract('marketFormula'),
+                  extract('marketIndependent'),src.slice(first,last)].join('\n'),isolated);
+ return {
+  set(id,value) {const target=element(id);target.value=String(value);
+   assert.equal(typeof handlers[id]?.input,'function','input handler must exist');
+   handlers[id].input({target});},
+  calculate() {handlers['run-market'].click();return sandbox.S.market;},
+  download() {handlers['download-market'].click();return downloads.at(-1);},
+  independent(a) {return vm.runInContext('marketIndependent('+JSON.stringify(a)+')',isolated);}
+ };
+}
+test('registered receipt freshness F1: editing probability invalidates the previous downloadable decision',()=>{
+ const s=marketReceiptSession();
+ assert.equal(s.calculate().input.p,.8);
+ const same=s.download();assert.equal(same.input.p,.8,'no-change positive control');
+ s.set('market-prob',55);
+ const fresh=s.download();
+ assert.equal(fresh.input.p,.55,'exported probability must match current visitor control');
+ assert.equal(fresh.reference.expected_delta,s.independent(fresh.input).expected_delta,
+   'downloaded economic result must match a fresh independent cash-path replay');
+});
+test('registered receipt freshness F2: changing buyers and available cash must not preserve stale inputs',()=>{
+ const s=marketReceiptSession();
+ s.calculate();s.set('market-prob',55);s.download();
+ s.set('market-buyers',5);s.set('market-cash',1500);
+ const fresh=s.download();
+ assert.equal(fresh.input.n,5,'download must bind current buyer-count control');
+ assert.equal(fresh.input.cash,1500,'download must bind current available-cash control');
+ assert.equal(fresh.input.p,.55);
+ assert.equal(fresh.reference.expected_delta,s.independent(fresh.input).expected_delta);
+});
