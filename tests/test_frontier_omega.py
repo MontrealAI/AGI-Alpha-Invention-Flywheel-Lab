@@ -212,6 +212,36 @@ class FrontierTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "SOURCE_BINDING"):
             self.engine.audit()
 
+    def test_private_browser_dashboard_is_accessible_and_source_grounded(self):
+        from frontier_omega.dashboard import write_dashboard
+        self.seed()
+        result = write_dashboard(self.engine)
+        view = Path(result["private_dashboard"])
+        text = view.read_text()
+        self.assertIn("FRONTIER", text)
+        self.assertIn("Opportunity inventory", text)
+        self.assertIn("compiled", text.lower())
+        self.assertIn("PUBLIC SIGNAL", text)
+        self.assertIn("No dossiers match", text)
+        self.assertIn('rel="noopener noreferrer"', text)
+        self.assertEqual(result["external_assets"], 0)
+        self.assertEqual(view.stat().st_mode & 0o077, 0)
+        self.assertGreater(result["bytes"], 2000)
+
+    def test_dashboard_escapes_untrusted_dossier_text(self):
+        from frontier_omega.dashboard import dashboard
+        d = load_file(SEED)["problems"][0]
+        d["title"] = '<img src=x onerror=alert(1)>'
+        self.engine.add(d)
+        html_text = dashboard(self.engine.report())
+        self.assertIn("&lt;img", html_text)
+        self.assertNotIn("<img src=x", html_text)
+
+    def test_dashboard_cannot_write_outside_private_reservoir(self):
+        from frontier_omega.dashboard import write_dashboard
+        with self.assertRaisesRegex(ValueError, "PRIVATE_OUTPUT_FILENAME_REQUIRED"):
+            write_dashboard(self.engine, "../PUBLIC.html")
+
     def test_private_inbox_watch_ingests_records_without_remote_actions(self):
         problem = load_file(SEED)["problems"][0]
         inbox = self.engine.root / "inbox"
