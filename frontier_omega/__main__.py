@@ -8,6 +8,7 @@ from __future__ import annotations
 import csv
 import hashlib
 import json
+import math
 import os
 import sys
 from datetime import date, datetime, timezone
@@ -117,8 +118,10 @@ def _run(run, o):
         raise InventoryError("Too few matched cases")
     if type(run.get("accepted")) is not int or not 0 <= run["accepted"] <= run["cases"]:
         raise InventoryError("Invalid acceptance numerator")
-    if type(run.get("p95_turnaround_hours")) not in (int, float) or run["p95_turnaround_hours"] < 0:
-        raise InventoryError("Missing/invalid p95 time")
+    if (type(run.get("p95_turnaround_hours")) not in (int, float)
+            or not math.isfinite(run["p95_turnaround_hours"])
+            or run["p95_turnaround_hours"] < 0):
+        raise InventoryError("Missing/invalid or nonfinite p95 time")
     costs = run.get("costs_usd")
     if type(costs) is not dict or set(costs) != set(COST_CATEGORIES):
         raise InventoryError("All full-lifecycle cost categories required")
