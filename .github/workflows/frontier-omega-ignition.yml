@@ -1,0 +1,107 @@
+name: FRONTIER Ω IGNITION qualification
+
+on:
+  pull_request:
+    paths:
+      - 'products/frontier-omega-ignition/**'
+      - 'products/alpha-genesis-harness/bridge/**'
+      - 'products/alpha-genesis-harness/scripts/qualify_hosted_local.py'
+      - 'products/alpha-genesis-harness/scripts/package_release.py'
+      - 'products/alpha-genesis-harness/tests/visual/package*.json'
+      - 'docs/research/frontier-omega*.html'
+      - 'docs/frontier-omega-ignition/research-edition/**'
+      - '.github/workflows/frontier-omega-ignition.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'products/frontier-omega-ignition/**'
+      - 'products/alpha-genesis-harness/bridge/**'
+      - 'products/alpha-genesis-harness/scripts/qualify_hosted_local.py'
+      - 'products/alpha-genesis-harness/scripts/package_release.py'
+      - 'products/alpha-genesis-harness/tests/visual/package*.json'
+      - 'docs/research/frontier-omega*.html'
+      - 'docs/frontier-omega-ignition/research-edition/**'
+      - '.github/workflows/frontier-omega-ignition.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ignition-${{ github.event.pull_request.number || github.ref }}-${{ github.event.pull_request.head.sha || github.sha }}
+  cancel-in-progress: false
+
+env:
+  EXPECTED_SOURCE: ${{ github.event.pull_request.head.sha || github.sha }}
+  PYTHONDONTWRITEBYTECODE: '1'
+
+jobs:
+  engineering:
+    name: Exact-source application tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record job start
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ env.EXPECTED_SOURCE }}
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /products/frontier-omega-ignition/
+            /products/alpha-genesis-harness/bridge/
+            /products/alpha-genesis-harness/scripts/
+            /products/alpha-genesis-harness/tests/visual/package*.json
+            /docs/research/frontier-omega*.html
+            /docs/frontier-omega-ignition/research-edition/
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Confirm source and execute application regressions
+        working-directory: products/frontier-omega-ignition
+        run: |
+          test "$(git rev-parse HEAD)" = "$EXPECTED_SOURCE"
+          python -B -m unittest discover -s tests -p 'test_*.py' -v
+
+      - name: Install locked browser test driver and reopen downloaded artifacts
+        env:
+          NODE_PATH: ${{ runner.temp }}/ignition-browser-tools/node_modules
+        run: |
+          mkdir "$RUNNER_TEMP/ignition-browser-tools"
+          cp products/alpha-genesis-harness/tests/visual/package*.json "$RUNNER_TEMP/ignition-browser-tools/"
+          npm ci --prefix "$RUNNER_TEMP/ignition-browser-tools" --ignore-scripts --no-audit --no-fund
+          export CHROMIUM_PATH="$(command -v google-chrome)"
+          node products/frontier-omega-ignition/qa/legacy_browser.cjs
+
+  model:
+    name: Public synthetic mission with pinned local inference
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record job start
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ env.EXPECTED_SOURCE }}
+          persist-credentials: false
+          sparse-checkout: |
+            products/frontier-omega-ignition
+            products/alpha-genesis-harness/bridge
+            products/alpha-genesis-harness/scripts
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Execute registered model trial
+        run: |
+          test "$(git rev-parse HEAD)" = "$EXPECTED_SOURCE"
+          python -B products/frontier-omega-ignition/qualify_live.py \
+            --work "$RUNNER_TEMP/ignition-inference" \
+            --output "$RUNNER_TEMP/ignition-model-receipt.json"
+      - name: Preserve compact trial receipt, including failure
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: ignition-model-${{ env.EXPECTED_SOURCE }}-attempt-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/ignition-model-receipt.json
+          if-no-files-found: error

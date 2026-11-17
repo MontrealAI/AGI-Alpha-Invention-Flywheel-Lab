@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="dark"><title>FRONTIER Ω — IGNITION | MONTREAL.AI × QUEBEC.AI</title>
+<link rel="stylesheet" href="style.css"><script src="app.js" defer></script>
+</head><body>
+<a class="skip" href="#mission">Skip to mission</a>
+<header><a class="brand" href="#top"><span class="mark" aria-hidden="true">Ω</span> FRONTIER <span>Ω</span></a><nav aria-label="Main"><a href="#mission">Mission</a><a href="#investigation">Evidence</a></nav></header>
+<main id="top">
+<section class="hero"><div><p class="eyebrow">MONTREAL.AI × QUEBEC.AI</p><h1>Frontier <em>Ignition.</em></h1><p class="intro">Bring an ambition. Investigate what has changed, construct a working artifact and test it against a capable alternative.</p><p class="connection"><span class="light" aria-hidden="true"></span><span id="mode" role="status">Checking execution service…</span></p></div>
+<div class="horizon" aria-hidden="true"><div class="disc"></div></div></section>
+<details class="replay-picker"><summary>Open a recorded run</summary><p>Inspect a saved JSON record locally. Replays preserve reported outcomes and never contact a model or operate an artifact.</p>
+<label for="replay-file">Run record <span>JSON file · up to 4 MiB</span></label>
+<input id="replay-file" type="file" accept="application/json,.json"><p class="notice" role="status" id="replay-message"></p>
+</details>
+<section class="workspace" id="mission">
+<div class="section-title"><p class="eyebrow">Mission brief</p><h2>What should become possible?</h2></div>
+<form id="brief">
+<div class="presets" id="presets" hidden><label for="example">Start from a public example</label><select id="example"><option value="">Write my own mission</option></select></div>
+<label for="purpose">Ambition</label><textarea id="purpose" required rows="3" maxlength="12000" placeholder="Describe the outcome and who needs it."></textarea>
+<div class="fields"><div><label for="beneficiary">Beneficiary</label><input id="beneficiary" type="text" placeholder="Who will use the result?"></div>
+<div><label for="requirements">Acceptance conditions <span>One per line</span></label><textarea id="requirements" rows="2" placeholder="What must a working result do?"></textarea></div></div>
+<details class="advanced" id="settings"><summary>Sources, construction and permissions</summary><p>Review the mission’s source records, construction specification and permitted actions. Use public or rights-authorized data. This local workspace stores submitted missions and their evidence.</p>
+<div class="json-fields"><label>Source records <textarea id="sources" spellcheck="false" rows="4">[]</textarea></label>
+<label>Construction specification <textarea id="construction_spec" spellcheck="false" rows="4">{}</textarea></label>
+
+<label>Resources <textarea id="resources" spellcheck="false" rows="2">{}</textarea></label>
+<label>Time and baseline <textarea id="time" spellcheck="false" rows="2">{}</textarea></label></div></details>
+<fieldset><legend>Permission for this mission</legend><label><input type="checkbox" id="local_model"> Process mission content with the configured local model</label><label><input type="checkbox" id="assisted_model"> Prepare prompts for operator-assisted model execution</label><label><input type="checkbox" id="public_sources"> Retrieve public sources through the approved source adapter</label></fieldset>
+<div class="action-row"><button class="primary" type="submit" id="start" disabled>Start investigation <span aria-hidden="true">→</span></button><button type="button" id="fresh" hidden>New mission</button></div>
+<p id="form-message" class="notice" role="status"></p></form></section>
+<section class="workspace" id="investigation"><div class="section-title"><p class="eyebrow">Investigation record</p><h2 id="record-title">Execution &amp; evidence</h2></div>
+<p id="empty" class="muted">Submit a mission to see its sources, construction and independent checks here.</p>
+<div id="record" hidden><div class="record-head"><button type="button" id="close-replay" hidden>Close replay</button><strong id="run-status"></strong><span id="run-id"></span><button type="button" id="resume" hidden>Resume run</button></div><p id="amend-note" class="notice" role="status"></p><div id="results"></div>
+<section id="review" hidden><h3>Review the acceptance contract</h3><p>Check the spec, test cases and allowed scope before freezing this contract for construction.</p><pre id="proposal"></pre><button type="button" id="approve">Approve this contract</button></section>
+<section id="handoff" hidden><h3>Operator-assisted execution</h3><p>Review the prompt and share it only with the model permitted for this mission. Return its JSON response to continue.</p><details><summary>Inspect the prompt</summary><pre id="prompt"></pre></details><button type="button" id="copy-prompt">Copy prompt</button><label for="response">Model response <span>JSON object</span></label><textarea id="response" spellcheck="false" rows="4"></textarea><button type="button" id="respond">Submit response</button></section>
+<section id="actions" hidden><h3>Operate the artifact</h3><label for="trial">Test input <span>JSON</span></label><textarea spellcheck="false" id="trial" rows="4"></textarea><div class="action-row"><button id="try" type="button">Run input</button><a id="bundle" class="primary button" download>Download verified bundle</a></div><pre id="output" role="status"></pre></section>
+<details><summary>Execution history</summary><ol id="events"></ol></details><div class="action-row"><button id="snapshot" type="button" hidden>Save run record as JSON</button></div><details id="history"><summary>Earlier mission revisions</summary><pre id="versions"></pre></details><details><summary>Inspect run record</summary><pre id="raw"></pre></details></div>
+</section></main><footer><span>MONTREAL.AI × QUEBEC.AI</span><span>Built in Montréal</span></footer></body></html>
