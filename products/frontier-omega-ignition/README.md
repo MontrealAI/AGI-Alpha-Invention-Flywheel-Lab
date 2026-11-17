@@ -4,11 +4,13 @@
 
 IGNITION runs on the operator’s machine. It reads an authorized mission, investigates attributed sources, proposes opportunities, challenges them, and builds the selected construction when the installed interpreter can perform it. The first two executable families are typed record migrations and byte-level manifest audits. Research may select an existing solution, request a testable specification, or stop with a specific obstruction.
 
+Open the [bilingual public flagship](../../docs/frontier-omega-ignition/continuation/FRONTIER_IGNITION.html) as a local HTML file or choose **Explore FRONTIER Ω IGNITION** in the workbench. Inspect five sourced research opportunities, trace passages from the first campaign paper to its PDF, and take home the working offline edition. [Reproduction and presenter notes](showcase/FRONTIER.md).
+
 ## Direct construction and Pairing Lab
 
 Start the private workbench and choose **Choose a self-hosted coding stack for a pilot** to run the flagship on the public cohort. The operator controls the token allowance, maximum number of attempts, required resolution and optional repository/model scope. The local engine checks the locked decision against independent SQL. Its accepted delivery includes a source-bound report and a program for the recipient. A negative pilot recommendation remains visible. **Export** and run `python3 verify_decision.py` after extraction.
 
-For the public English/French demonstration open **Public showcase** in the workbench or build the self-contained page. The public kit and exhibition can be used without an account, model connection or private workspace.
+For the public English/French demonstration open **Open the Pairing Lab** in the workbench or build the self-contained page. The public kit and exhibition can be used without an account, model connection or private workspace.
 
 ```sh
 python3 -B showcase/build.py --output FRONTIER_OMEGA_Pairing_Lab.html

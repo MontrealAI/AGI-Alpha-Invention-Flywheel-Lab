@@ -1,6 +1,8 @@
 """Attach verified physical-page citations to one of two pinned public author editions."""
 import argparse
 import hashlib
+from html import escape
+from html.parser import HTMLParser
 import json
 import os
 from pathlib import Path
@@ -34,27 +36,68 @@ def read_markup(data):
     return etree.fromstring(data, parser=etree.XMLParser(no_network=True, resolve_entities=False))
 
 
+class InsertionPoints(HTMLParser):
+    """Find the original character offsets without serializing or changing author tags."""
+
+    def __init__(self, source):
+        super().__init__(convert_charrefs=False)
+        self.source = source
+        self.lines = [0]
+        for index, char in enumerate(source):
+            if char == "\n":
+                self.lines.append(index + 1)
+        self.head_end = None
+        self.block_ends = []
+
+    def position(self):
+        line, column = self.getpos()
+        return self.lines[line - 1] + column
+
+    def handle_starttag(self, tag, attrs):
+        if tag == "head":
+            self.head_end = self.position() + len(self.get_starttag_text())
+
+    def handle_endtag(self, tag):
+        if XHTML + tag in BLOCKS:
+            self.block_ends.append(self.source.index(">", self.position()) + 1)
+
+
 def anchors(markup, mapping):
-    """A pure renderer over the allowlisted, inactive author markup."""
+    """Insert only trusted local links into the original, exact allowlisted UTF-8 bytes."""
+    if sha(markup) not in PAPERS:
+        raise ValueError("Unknown publication markup.")
     root = read_markup(markup)
-    policy = etree.Element(XHTML + "meta", attrib={"http-equiv": "Content-Security-Policy",
-                                                  "content": CSP, MARK: "policy"})
-    root.find(XHTML + "head").insert(0, policy)
     elements = [e for e in root.find(XHTML + "body").iter() if e.tag in BLOCKS]
-    if len(elements) != len(mapping):
+    source = markup.decode("utf-8")
+    points = InsertionPoints(source)
+    points.feed(source)
+    points.close()
+    if points.head_end is None or len(elements) != len(mapping) or len(points.block_ends) != len(mapping):
         raise ValueError("Receipt does not cover the author manuscript.")
-    for index, (element, block) in enumerate(zip(elements, mapping), 1):
+    policy = (f'<meta {MARK}="policy" http-equiv="Content-Security-Policy" '
+              f'content="{escape(CSP, quote=True)}" />')
+    inserts = [(points.head_end, policy)]
+    for index, (element, block, end) in enumerate(zip(elements, mapping, points.block_ends), 1):
         original = " ".join("".join(element.itertext()).split())
         if block["index"] != index or " ".join(block["text"].split()) != original:
             raise ValueError(f"Receipt passage {index} differs from the author manuscript.")
         if block["page"] is not None:
             n = block["page"]
-            link = etree.Element(XHTML + "a", attrib={MARK: str(index), "href": f"source.pdf#page={n}",
-                                 "aria-label": f"Passage {index}, source PDF page {n}"})
-            link.text = f"[PDF p. {n}]"
-            element.addnext(link)
-    return etree.tostring(root, encoding="UTF-8", doctype="<!DOCTYPE html>", method="xml")
-
+            if type(n) is not int or n < 1:
+                raise ValueError("Invalid physical page.")
+            inserts.append((end, f'<a {MARK}="{index}" href="source.pdf#page={n}" '
+                                 f'aria-label="Passage {index}, source PDF page {n}">[PDF p. {n}]</a>'))
+    chunks = []
+    start = 0
+    for pos, insertion in sorted(inserts):
+        # Preserve the original parent or sibling whitespace tail when a DOM
+        # consumer removes our marker element.
+        while pos < len(source) and source[pos].isspace():
+            pos += 1
+        chunks.extend([source[start:pos], insertion])
+        start = pos
+    chunks.append(source[start:])
+    return "".join(chunks).encode("utf-8")
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)

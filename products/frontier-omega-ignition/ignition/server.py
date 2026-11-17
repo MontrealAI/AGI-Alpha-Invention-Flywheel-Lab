@@ -90,11 +90,12 @@ class Handler(BaseHTTPRequestHandler):
             name = route.lstrip("/") or "index.html"
             media = {"index.html":"text/html","app.js":"text/javascript","style.css":"text/css","operator.css":"text/css"}[name]
             return self._send(200,media+"; charset=utf-8",(PRODUCT/"web"/name).read_bytes())
-        if not post and route == "/showcase":
+        if not post and route in {"/showcase", "/exhibition"}:
             # The exhibit reads only its repository's public inputs. Its opaque
             # origin and independent no-connect CSP isolate private workspace APIs.
             from showcase.build import render, policy
-            page = render()
+            page = (render() if route == "/showcase" else
+                    (PRODUCT.parents[1] / "docs/frontier-omega-ignition/continuation/FRONTIER_IGNITION.html").read_text(encoding="utf-8"))
             csp = (policy(page) + "; frame-ancestors 'none'; "
                    "sandbox allow-scripts allow-downloads allow-popups allow-popups-to-escape-sandbox")
             return self._send(200, "text/html; charset=utf-8", page.encode("utf-8"), csp=csp)
