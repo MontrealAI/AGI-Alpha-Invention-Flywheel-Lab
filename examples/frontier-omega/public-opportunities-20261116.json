@@ -1,0 +1,348 @@
+{
+  "schema": "frontier-omega/seed/v1",
+  "problems": [
+    {
+      "schema": "frontier-omega/problem/v1",
+      "id": "compiled-crypto-assurance",
+      "title": "Machine-checked security guarantees for deployed cryptographic binaries",
+      "beneficiary": "Private-sector communications, payments and security software maintainers",
+      "outcome": "Deliver a reproducible proof connecting agreed security properties to a pinned compiled executable, including precise assumptions and exclusions.",
+      "acceptance": "Independent proof checker validates the agreed theorem against exact binary, compiler and specification hashes; seeded faulty variants are refused.",
+      "blocker": "Formal specification and machine-code proof historically require expensive specialist effort and close control of the trusted computing base.",
+      "tags": [
+        "formal-verification",
+        "software-assurance",
+        "long-horizon-agents"
+      ],
+      "demand": {
+        "status": "PUBLIC_SIGNAL",
+        "basis": "DeepMind's published Signal verification motivates an investigation; no prospective customer, contract, price or independent replication is established.",
+        "ceiling_microUSD": null,
+        "deadline": null,
+        "terms_sha256": null,
+        "consent_verification": "NOT_VERIFIED"
+      },
+      "alternatives": [
+        {
+          "name": "Competent specialist",
+          "route": "Specialist formal-methods laboratory develops and checks protocol/code proofs.",
+          "unknowns": "Complete quoted cost, contractual acceptance, delivery time and residual obligations are not measured."
+        },
+        {
+          "name": "Human-plus-AI provider",
+          "route": "A security engineering team uses existing provers and frontier models under expert supervision.",
+          "unknowns": "Current frontier-assisted specialist delivery may already satisfy the complete outcome; benchmark on equal terms."
+        },
+        {
+          "name": "No purchase",
+          "route": "Buyer continues existing process or defers the project.",
+          "unknowns": "Actual willingness to pay and opportunity cost of inaction are unverified."
+        }
+      ],
+      "source_urls": [
+        "https://deepmind.google/blog/introducing-alphaproof-code/",
+        "https://google-deepmind.github.io/code-verification/"
+      ],
+      "next_test": "Select an authorized, modest cryptographic library target and freeze the binary, theorem and known-bug mutation test; compare complete specialist delivery."
+    },
+    {
+      "schema": "frontier-omega/problem/v1",
+      "id": "private-inference-provenance",
+      "title": "Portable cryptographic receipts for committed-model inference",
+      "beneficiary": "AI inference providers and private enterprises that purchase high-assurance inference",
+      "outcome": "Supply independently verifiable receipts binding an inference output to the declared committed model and scoped computation without disclosing model weights.",
+      "acceptance": "Independent verifier accepts genuine pinned-prototype proof and rejects changed model commitment, token stream and public verification key; calculate complete GPU and integration costs.",
+      "blocker": "Practical proof cost, quantization scope, model identity attestation and verifier assurance limit economically deployable provable inference.",
+      "tags": [
+        "provable-inference",
+        "model-integrity",
+        "cost-reduction",
+        "formal-verification"
+      ],
+      "demand": {
+        "status": "PUBLIC_SIGNAL",
+        "basis": "Anthropic's FlashProve release documents a technical verification need and high proof-generation overhead; customer demand remains unproven.",
+        "ceiling_microUSD": null,
+        "deadline": null,
+        "terms_sha256": null,
+        "consent_verification": "NOT_VERIFIED"
+      },
+      "alternatives": [
+        {
+          "name": "Competent specialist",
+          "route": "TEE attestation, recomputation and conventional signed provider logs.",
+          "unknowns": "Complete quoted cost, contractual acceptance, delivery time and residual obligations are not measured."
+        },
+        {
+          "name": "Human-plus-AI provider",
+          "route": "Assurance specialist integrates existing zkML or TEE proofs with a customer's auditable pipeline.",
+          "unknowns": "Current frontier-assisted specialist delivery may already satisfy the complete outcome; benchmark on equal terms."
+        },
+        {
+          "name": "No purchase",
+          "route": "Buyer continues existing process or defers the project.",
+          "unknowns": "Actual willingness to pay and opportunity cost of inaction are unverified."
+        }
+      ],
+      "source_urls": [
+        "https://www.anthropic.com/research/provable-inference"
+      ],
+      "next_test": "Replay a fixed model and 1,000 prospectively selected challenges using upstream verifier; include adversarial substitution, costs and stronger alternatives."
+    },
+    {
+      "schema": "frontier-omega/problem/v1",
+      "id": "enterprise-modernization-migrations",
+      "title": "Verifiable long-horizon modernization of complex private-sector software",
+      "beneficiary": "Companies carrying legacy application, integration and dependency maintenance obligations",
+      "outcome": "Migrate a scoped, authorized legacy service while preserving its agreed external behavior and producing independently checked deployment and rollback artifacts.",
+      "acceptance": "Withheld production-like fixtures and contract tests pass across old and migrated systems; security, performance, migration failures, rollout and rollback are independently checked.",
+      "blocker": "Large migrations require sustained reasoning, complete dependency mapping, reliable integration and recoverable multi-day execution.",
+      "tags": [
+        "long-horizon-agents",
+        "software-migration",
+        "computer-use"
+      ],
+      "demand": {
+        "status": "PUBLIC_SIGNAL",
+        "basis": "Anthropic reports otherwise-infeasible migrations in prerelease work, while industry surveys show widespread build-versus-buy decisions; neither source establishes a particular buyer or a commercially qualified migration.",
+        "ceiling_microUSD": null,
+        "deadline": null,
+        "terms_sha256": null,
+        "consent_verification": "NOT_VERIFIED"
+      },
+      "alternatives": [
+        {
+          "name": "Competent specialist",
+          "route": "Experienced modernization consultancy using conventional migration tooling.",
+          "unknowns": "Complete quoted cost, contractual acceptance, delivery time and residual obligations are not measured."
+        },
+        {
+          "name": "Human-plus-AI provider",
+          "route": "Internal engineers use frontier coding agents, framework migration tools and automated regression suites.",
+          "unknowns": "Current frontier-assisted specialist delivery may already satisfy the complete outcome; benchmark on equal terms."
+        },
+        {
+          "name": "No purchase",
+          "route": "Buyer continues existing process or defers the project.",
+          "unknowns": "Actual willingness to pay and opportunity cost of inaction are unverified."
+        }
+      ],
+      "source_urls": [
+        "https://www.anthropic.com/claude-fable-and-mythos-5-2",
+        "https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai"
+      ],
+      "next_test": "Freeze one permissively licensed representative system with an independent compatibility oracle; compare end-to-end restoration, quality and complete costs."
+    },
+    {
+      "schema": "frontier-omega/problem/v1",
+      "id": "enterprise-sop-verifiable-agents",
+      "title": "Agent-operated procedures with independently checked business outcomes",
+      "beneficiary": "Private enterprises with recurring multi-step, tool-using standard operating procedures",
+      "outcome": "Produce and verify a scoped business-process outcome through permitted tools under explicit policy, recovery and refusal requirements.",
+      "acceptance": "Held-out SOP task suite with realistic tools demonstrates correctness, policy compliance, restart recovery, audit evidence and bounded support obligations.",
+      "blocker": "Tasks mix ambiguous instructions, tool calls, exceptions and domain-specific criteria; headline model scores do not establish reliable end-to-end service.",
+      "tags": [
+        "sop-evaluation",
+        "long-horizon-agents",
+        "computer-use",
+        "agent-governance"
+      ],
+      "demand": {
+        "status": "PUBLIC_SIGNAL",
+        "basis": "Amazon SOP-Bench documents genuine procedure-level reliability gaps, not committed purchase demand for an autonomous provider.",
+        "ceiling_microUSD": null,
+        "deadline": null,
+        "terms_sha256": null,
+        "consent_verification": "NOT_VERIFIED"
+      },
+      "alternatives": [
+        {
+          "name": "Competent specialist",
+          "route": "Trained operators perform the existing SOP through established business software.",
+          "unknowns": "Complete quoted cost, contractual acceptance, delivery time and residual obligations are not measured."
+        },
+        {
+          "name": "Human-plus-AI provider",
+          "route": "Internal process team deploys conventional automation plus supervised agents and independent checks.",
+          "unknowns": "Current frontier-assisted specialist delivery may already satisfy the complete outcome; benchmark on equal terms."
+        },
+        {
+          "name": "No purchase",
+          "route": "Buyer continues existing process or defers the project.",
+          "unknowns": "Actual willingness to pay and opportunity cost of inaction are unverified."
+        }
+      ],
+      "source_urls": [
+        "https://www.amazon.science/blog/sop-bench-a-new-benchmark-for-evaluating-ai-agents-on-real-business-procedures"
+      ],
+      "next_test": "Pre-register a permitted public SOP benchmark subset and hidden perturbations; compare model/tool configurations and current incumbent costs."
+    },
+    {
+      "schema": "frontier-omega/problem/v1",
+      "id": "computer-use-business-workcells",
+      "title": "Reliable computer-use workcells replacing brittle manual integration",
+      "beneficiary": "Private-sector software operators with repetitive cross-application reconciliations and reporting",
+      "outcome": "Deliver a specified cross-application outcome with verified state changes, replay-safe steps and complete recovery receipts rather than unverified clicks.",
+      "acceptance": "Independent before/after application-state checks, adversarial UI changes, permission checks and repeat-run idempotence demonstrate the agreed result.",
+      "blocker": "Computer-use reliability, tool friction, recovery and cost can make superficially simple cross-software automations uneconomic.",
+      "tags": [
+        "computer-use",
+        "cost-reduction",
+        "agent-governance"
+      ],
+      "demand": {
+        "status": "PUBLIC_SIGNAL",
+        "basis": "OpenAI's October 26 release documents expanded computer-use availability; business use and willingness to pay remain unverified.",
+        "ceiling_microUSD": null,
+        "deadline": null,
+        "terms_sha256": null,
+        "consent_verification": "NOT_VERIFIED"
+      },
+      "alternatives": [
+        {
+          "name": "Competent specialist",
+          "route": "Enterprise RPA integrator builds explicit API/RPA automation.",
+          "unknowns": "Complete quoted cost, contractual acceptance, delivery time and residual obligations are not measured."
+        },
+        {
+          "name": "Human-plus-AI provider",
+          "route": "In-house team uses existing computer-use models and workflow software.",
+          "unknowns": "Current frontier-assisted specialist delivery may already satisfy the complete outcome; benchmark on equal terms."
+        },
+        {
+          "name": "No purchase",
+          "route": "Buyer continues existing process or defers the project.",
+          "unknowns": "Actual willingness to pay and opportunity cost of inaction are unverified."
+        }
+      ],
+      "source_urls": [
+        "https://help.openai.com/en/articles/9624314-model-release-notes",
+        "https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai"
+      ],
+      "next_test": "Freeze a legal/public sandbox workflow with deterministic state checker and independent API-based/RPA competitor; measure full completion cost."
+    },
+    {
+      "schema": "frontier-omega/problem/v1",
+      "id": "electronic-design-to-bench",
+      "title": "Autonomous electronic-device design with independent physical acceptance",
+      "beneficiary": "Hardware innovators who need design-to-tested-prototype cycles",
+      "outcome": "Create a bounded electronic subsystem design and manufacturing/test package that achieves independently measured performance and safety limits.",
+      "acceptance": "Third-party bench measurements on produced boards match prospectively frozen electrical, thermal and fault-handling requirements; test fixture and BOM are included.",
+      "blocker": "AI can propose device designs, but fabrication, toolchains, physical measurements and iterative corrections remain costly and uncertain.",
+      "tags": [
+        "long-horizon-agents",
+        "physical-validation",
+        "electronic-design"
+      ],
+      "demand": {
+        "status": "PUBLIC_SIGNAL",
+        "basis": "Anthropic reports working electronic-device designs in prerelease research, but no general reproducibility, independent physical qualification or buyer demand is established here.",
+        "ceiling_microUSD": null,
+        "deadline": null,
+        "terms_sha256": null,
+        "consent_verification": "NOT_VERIFIED"
+      },
+      "alternatives": [
+        {
+          "name": "Competent specialist",
+          "route": "Electronics design consultancy with established simulation and prototyping tools.",
+          "unknowns": "Complete quoted cost, contractual acceptance, delivery time and residual obligations are not measured."
+        },
+        {
+          "name": "Human-plus-AI provider",
+          "route": "Expert engineer uses model-assisted EDA, conventional design automation and a fabrication laboratory.",
+          "unknowns": "Current frontier-assisted specialist delivery may already satisfy the complete outcome; benchmark on equal terms."
+        },
+        {
+          "name": "No purchase",
+          "route": "Buyer continues existing process or defers the project.",
+          "unknowns": "Actual willingness to pay and opportunity cost of inaction are unverified."
+        }
+      ],
+      "source_urls": [
+        "https://www.anthropic.com/claude-fable-and-mythos-5-2"
+      ],
+      "next_test": "Choose a low-risk lab demonstrator with open BOM and independent test bench; compare physical yields and full human-plus-AI alternative cost."
+    }
+  ],
+  "frontiers": [
+    {
+      "schema": "frontier-omega/capability/v1",
+      "id": "terra-computer-use-20261026",
+      "title": "GPT-6.1 Terra computer-use release",
+      "observed_on": "2026-10-26",
+      "description": "OpenAI documented a model aimed at precise computer use and high-volume work. Availability and task-specific economic improvement require independent testing.",
+      "tags": [
+        "computer-use",
+        "cost-reduction"
+      ],
+      "source_urls": [
+        "https://help.openai.com/en/articles/9624314-model-release-notes"
+      ],
+      "availability": "REPORTED"
+    },
+    {
+      "schema": "frontier-omega/capability/v1",
+      "id": "flashprove-prototype-20261102",
+      "title": "FlashProve open-source inference-proving prototype",
+      "observed_on": "2026-11-02",
+      "description": "Anthropic reported cryptographic proof generation for a committed quantized model; high GPU overhead and bounded assumptions remain.",
+      "tags": [
+        "provable-inference",
+        "model-integrity",
+        "formal-verification"
+      ],
+      "source_urls": [
+        "https://www.anthropic.com/research/provable-inference"
+      ],
+      "availability": "REPORTED"
+    },
+    {
+      "schema": "frontier-omega/capability/v1",
+      "id": "claude-fable-52-20261109",
+      "title": "Claude Fable 5.2 technical-work release",
+      "observed_on": "2026-11-09",
+      "description": "Anthropic reported improved long-horizon technical work and construction; these are release claims, not independent customer outcome measurements.",
+      "tags": [
+        "long-horizon-agents",
+        "software-migration",
+        "electronic-design"
+      ],
+      "source_urls": [
+        "https://www.anthropic.com/claude-fable-and-mythos-5-2"
+      ],
+      "availability": "REPORTED"
+    },
+    {
+      "schema": "frontier-omega/capability/v1",
+      "id": "alphaproof-code-20261110",
+      "title": "AlphaProof Code machine-code verification report",
+      "observed_on": "2026-11-10",
+      "description": "DeepMind reported machine-checked selected Signal protocol guarantees with human-reviewed specifications; general transferability and cost need testing.",
+      "tags": [
+        "formal-verification",
+        "software-assurance"
+      ],
+      "source_urls": [
+        "https://deepmind.google/blog/introducing-alphaproof-code/",
+        "https://google-deepmind.github.io/code-verification/"
+      ],
+      "availability": "REPORTED"
+    },
+    {
+      "schema": "frontier-omega/capability/v1",
+      "id": "sop-bench-20260821",
+      "title": "Amazon SOP-Bench public evaluation framework",
+      "observed_on": "2026-08-21",
+      "description": "Earlier benchmark source showing realistic SOP failures and domain-specific task evaluation; it is not a November frontier release.",
+      "tags": [
+        "sop-evaluation",
+        "agent-governance"
+      ],
+      "source_urls": [
+        "https://www.amazon.science/blog/sop-bench-a-new-benchmark-for-evaluating-ai-agents-on-real-business-procedures"
+      ],
+      "availability": "REPORTED"
+    }
+  ]
+}

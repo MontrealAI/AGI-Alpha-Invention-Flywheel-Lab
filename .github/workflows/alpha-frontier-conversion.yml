@@ -1,0 +1,42 @@
+name: ALPHA Frontier conversion proof-gated integration
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/alpha-frontier-conversion.yml"
+      - "connected_enterprise/alpha_economic/frontier_*.py"
+      - "frontier_omega/**"
+      - "tests/test_alpha_frontier_conversion.py"
+      - "tests/test_frontier_omega.py"
+      - "examples/frontier-omega/**"
+      - "docs/alpha-frontier-conversion/**"
+      - "scripts/alpha_economic_package.py"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  conversion:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record permitted standard-runner window
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Execute actual source-matched conversion and financial regressions
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p 'test_alpha_frontier_conversion.py' -v
+          python3 -m unittest discover -s tests -p 'test_frontier_omega.py' -v
+          python3 -m unittest discover -s tests -p 'test_alpha_economic*.py' -v
+          python3 -m unittest discover -s tests -p 'test_connected_finance.py' -v
+          python3 -m unittest discover -s tests -p 'test_alpha_runtime_ignition.py' -v
+          python3 scripts/alpha_economic_package.py --output "$RUNNER_TEMP/alpha-frontier-source.zip"
+          mkdir -p "$RUNNER_TEMP/alpha-frontier-extracted"
+          python3 -m zipfile -e "$RUNNER_TEMP/alpha-frontier-source.zip" "$RUNNER_TEMP/alpha-frontier-extracted"
+          (
+            cd "$RUNNER_TEMP/alpha-frontier-extracted"
+            python3 -m unittest discover -s tests -p 'test_alpha_frontier_conversion.py' -v
+            python3 -m unittest discover -s tests -p 'test_frontier_omega.py' -v
+          )
+          echo "No real payer, Stripe transaction, treasury or model inference is exercised."

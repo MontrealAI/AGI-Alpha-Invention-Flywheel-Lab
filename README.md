@@ -8,6 +8,8 @@
 
 ALPHA GENESIS FLYWHEEL Ω is the flagship programme of the AGI ALPHA Invention Flywheel Lab. We are building a self-sustaining enterprise that becomes exceptionally effective at seeing what has just become possible, building what is most valuable, and improving its ability to discover the next extraordinary opportunity.
 
+**FRONTIER Ω → ALPHA commercial conversion (experimental):** [Opportunity Reservoir](docs/frontier-omega/README.md) · [Qualified buyer-to-engine intake and one-command ignition](docs/alpha-frontier-conversion/README.md). Currently unmerged development engineering. The only completed paid-order demonstrations are authored/simulated; independently established frontier crossings, real buyers, real collections and earned-funded live expansion remain unproven.
+
 **Start with the flagship:** [Read the paper](https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/alpha-genesis-flywheel-omega-v2.html) · [PDF](docs/research/alpha-genesis-flywheel-omega-v2.pdf) · [Editable source and reproducible analysis](docs/alpha-genesis/) · [Explore the website](https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/).
 
 The intended loop connects three capabilities: **see the frontier**, **construct valuable possibilities**, and **improve the means of discovery**. Frontier Replay revisits important blocked opportunities when newly accessible capabilities could change their prospects. Use the best complete solution, whether an existing frontier agent, a proven method, a partnership or a new construction. Retain an invention only when its useful contribution justifies its full costs.
