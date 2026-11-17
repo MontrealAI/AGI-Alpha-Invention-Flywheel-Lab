@@ -118,7 +118,12 @@ def main(argv=None):
     inventory=Reservoir(args.root)
     with inventory.lock():
         while True:
-            print(json.dumps(poll(inventory,sources),sort_keys=True,ensure_ascii=False),flush=True)
+            # One writer owns BOTH inbox intake and source monitoring, avoiding
+            # competing perpetual locks from two separate watch processes.
+            inbox_receipts=inventory.ingest_inbox()
+            report=poll(inventory,sources)
+            report['inbox_processed']=len(inbox_receipts)
+            print(json.dumps(report,sort_keys=True,ensure_ascii=False),flush=True)
             if args.once:break
             time.sleep(args.poll_seconds)
 
