@@ -8,6 +8,7 @@ on:
       - 'tests/test_research_site.py'
       - 'tests/test_alpha_site.cjs'
       - 'tests/test_surf_reader.cjs'
+      - 'tests/test_frontier_omega_demo.cjs'
       - '.github/workflows/research-pages.yml'
       - 'products/alpha-genesis-harness/**'
       - 'events/alpha-genesis-live/**'
@@ -49,6 +50,7 @@ jobs:
             tests/test_research_site.py
             tests/test_alpha_site.cjs
             tests/test_surf_reader.cjs
+            tests/test_frontier_omega_demo.cjs
             events/alpha-genesis-live
             products/alpha-genesis-harness/app
             products/alpha-genesis-harness/scripts/publish_preview.py
@@ -69,7 +71,7 @@ jobs:
       - name: Validate original PDFs, links and publication boundary
         run: python3 -m unittest discover -s tests -p 'test_research_site.py' -v
       - name: Check interactive research calculations and decisions
-        run: node --test tests/test_alpha_site.cjs tests/test_surf_reader.cjs
+        run: node --test tests/test_alpha_site.cjs tests/test_surf_reader.cjs tests/test_frontier_omega_demo.cjs
       - name: Reproduce OUT-ACCELERATE exact worked example
         run: |
           python3 docs/research/out-accelerate/acceleration_witness.py --output-dir "$RUNNER_TEMP/out-accelerate-replay"
