@@ -96,15 +96,19 @@ def ignition(o, evidence=None):
     cash = _nonnegative(pilot["liquid_unrestricted_cash_usd"], "liquid_unrestricted_cash_usd")
     residual_reserve = _nonnegative(pilot["remaining_obligations_reserved_usd"], "remaining_obligations_reserved_usd")
     complete_upper = _complete_cost(pilot.get("upper_complete_costs_usd"))
-    gross_surplus_floor = round(price - complete_upper - residual_reserve, 2)
+    # Tail cash reserves are liquidity protection, not an additional expense.
+    # The complete-cost envelope already contains residual_obligations.
+    if residual_reserve > _nonnegative(pilot["upper_complete_costs_usd"]["residual_obligations"], "residual_obligations"):
+        raise InventoryError("Reserved tail obligations exceed the costed tail; expand the full-cost envelope")
+    gross_surplus_floor = round(price - complete_upper, 2)
     envelope = {
         "new_five_week_crossing_reported": recent,
         "contract_price_usd_reported": price,
         "pessimistic_complete_cost_usd": complete_upper,
-        "additional_residual_reserve_usd": residual_reserve,
+        "tail_cash_reserved_within_complete_cost_usd": residual_reserve,
         "contracted_surplus_floor_usd_not_profit": gross_surplus_floor,
         "unrestricted_cash_usd_reported": cash,
-        "break_even_unit_cost_usd": round(price - residual_reserve, 2),
+        "break_even_unit_cost_usd": price,
     }
     if pilot.get("customer_rights_confirmed") is not True:
         return result(o, "AWAIT_CUSTOMER_DATA_RIGHTS",
@@ -112,10 +116,10 @@ def ignition(o, evidence=None):
                       reported_metrics=envelope)
     if gross_surplus_floor <= 0:
         return result(o, "WAIT_FOR_COST_OR_PRICE_CROSSING",
-                      "Complete pessimistic delivery cost plus separately reserved tail obligations meets or exceeds contract value.",
+                      "Complete pessimistic delivery cost (including tail exposure) meets or exceeds contract value.",
                       reported_metrics=envelope,
                       next_action="Reduce measured all-in cost, improve contracted customer value, or redesign the deliverable.")
-    if cash < complete_upper + residual_reserve:
+    if cash < complete_upper:
         return result(o, "AWAIT_FUNDED_EXECUTION",
                       "The projected signed order cannot be prefunded using reported unrestricted cash.",
                       reported_metrics=envelope,
