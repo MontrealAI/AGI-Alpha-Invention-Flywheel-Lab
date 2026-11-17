@@ -1,0 +1,74 @@
+name: FRONTIER OMEGA — 35-day commercial crossing inventory
+on:
+  push:
+    branches:
+      - feature/frontier-omega-35day-economic-crossings-20261116
+    paths:
+      - 'frontier_omega/crossings.py'
+      - 'examples/frontier-omega/economic-crossings-20261116.json'
+      - 'tests/test_frontier_omega_crossings.py'
+      - 'docs/frontier-omega/CAPTURING-THE-EXPONENTIAL.md'
+      - '.github/workflows/frontier-omega-crossings.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  sensor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+          sparse-checkout: |
+            frontier_omega
+            tests
+            examples/frontier-omega
+            docs/frontier-omega
+            products/alpha-genesis-harness/bridge
+      - name: All frontier reservoir, executable, release radar and economic crossing tests
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p 'test_frontier_omega*.py' -v 2>&1 | tee "$RUNNER_TEMP/frontier-tests.txt"
+      - name: Reproduce independent offline inventory from fresh durable state
+        run: |
+          set -euo pipefail
+          python3 -m frontier_omega.crossings demo --output "$RUNNER_TEMP/frontier-demo" > "$RUNNER_TEMP/frontier-demo-run.json"
+          python3 -m frontier_omega.crossings --root "$RUNNER_TEMP/frontier-demo" audit > "$RUNNER_TEMP/frontier-audit.json"
+          python3 -m frontier_omega.crossings --root "$RUNNER_TEMP/frontier-demo" refresh > "$RUNNER_TEMP/frontier-refresh.json"
+      - name: Package allowlisted source and reproducible evidence
+        if: always()
+        env:
+          RUNNER_TEMP: ${{ runner.temp }}
+        run: |
+          python3 - <<'PY'
+          import hashlib,json,os,pathlib,subprocess,zipfile
+          root=pathlib.Path('.');out=pathlib.Path(os.environ['RUNNER_TEMP'])
+          chosen=[x for x in subprocess.check_output(['git','ls-files','-z']).decode().split('\0')
+                  if x and x.startswith(('frontier_omega/','tests/test_frontier_omega','examples/frontier-omega/','docs/frontier-omega/'))
+                  and (root/x).is_file() and not (root/x).is_symlink()]
+          for name in ['products/alpha-genesis-harness/bridge/instruments.py']:
+              if (root/name).is_file():chosen.append(name)
+          names=sorted(set(chosen));hashes={n:hashlib.sha256((root/n).read_bytes()).hexdigest() for n in names}
+          receipt={'revision':subprocess.check_output(['git','rev-parse','HEAD']).decode().strip(),
+                   'files':hashes,'real_revenue_established':False,'private_state_included':False}
+          with zipfile.ZipFile(out/'FRONTIER_OMEGA_CROSSINGS_SOURCE.zip','w',zipfile.ZIP_DEFLATED) as z:
+              for n in names:z.writestr(n,(root/n).read_bytes())
+              z.writestr('SOURCE-MANIFEST.json',json.dumps(receipt,sort_keys=True,indent=2))
+          (out/'SOURCE-MANIFEST.json').write_text(json.dumps(receipt,sort_keys=True,indent=2)+'\n')
+          PY
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: frontier-omega-crossings-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/frontier-tests.txt
+            ${{ runner.temp }}/frontier-demo-run.json
+            ${{ runner.temp }}/frontier-audit.json
+            ${{ runner.temp }}/frontier-refresh.json
+            ${{ runner.temp }}/frontier-demo/FRONTIER-ECONOMIC-OPPORTUNITIES.html
+            ${{ runner.temp }}/frontier-demo/FRONTIER-ECONOMIC-OPPORTUNITIES.json
+            ${{ runner.temp }}/FRONTIER_OMEGA_CROSSINGS_SOURCE.zip
+            ${{ runner.temp }}/SOURCE-MANIFEST.json
+          if-no-files-found: warn
+          retention-days: 7
