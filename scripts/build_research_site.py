@@ -54,11 +54,13 @@ CONTINUITY_MEDIA = tuple(
 ASSETS += CONTINUITY_MEDIA + ('continuity-omega-media-manifest.json',)
 PAGES += ('frontier-conclave.html',)
 ASSETS += ('frontier-conclave-hero.png', 'frontier-conclave-salon.png', 'FRONTIER_CONCLAVE_COMPLETE.zip')
-PAGES += ('alpha-genesis-live.html', 'alpha-genesis-live-studio.html')
+PAGES += ('alpha-genesis-live.html', 'alpha-genesis-live-studio.html', 'frontier-omega.html')
 FILES = PAPERS + PAGES + ASSETS + ('publication-manifest.json',)
 PUBLIC_SITE = 'https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/'
 EXTERNAL_RESEARCH_REFERENCES = frozenset({
     'https://bbbc.broadinstitute.org/BBBC007',
+    'https://www.montreal.ai/',
+    'https://www.quebec.ai/',
 })
 
 
