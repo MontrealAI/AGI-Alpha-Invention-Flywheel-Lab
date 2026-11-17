@@ -87,6 +87,14 @@ jobs:
           export CHROMIUM_PATH="$(command -v google-chrome)"
           node products/frontier-omega-ignition/qa/legacy_browser.cjs
           node products/frontier-omega-ignition/qa/workbench_browser.cjs
+          python3 -B products/frontier-omega-ignition/build_preview.py --output "$RUNNER_TEMP/FRONTIER_OMEGA_IGNITION.html"
+          node products/frontier-omega-ignition/qa/preview_browser.cjs "$RUNNER_TEMP/FRONTIER_OMEGA_IGNITION.html"
+      - name: Offer the qualified standalone public replay
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: ignition-public-replay-${{ env.EXPECTED_SOURCE }}-attempt-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/FRONTIER_OMEGA_IGNITION.html
+          if-no-files-found: error
 
   model:
     name: Public synthetic mission with pinned local inference

@@ -24,7 +24,8 @@ HARNESS = PRODUCT.parent / "alpha-genesis-harness"
 sys.path.insert(0, str(HARNESS))
 from scripts import qualify_hosted_local as pinned
 
-from ignition.controller import Controller
+from ignition import construction, delivery, evaluation
+from ignition.controller import CONSTRUCT_INSTRUCTION, Controller
 from ignition.provider import LocalProvider
 from ignition.store import Store, digest, runtime_source
 
@@ -117,6 +118,33 @@ def compact_calls(state):
     return calls
 
 
+def diagnostic(state, calls):
+    """Return only product-owned categories, even if the model itself supplied a stop reason."""
+    status, stage = state["status"], state["stage"]
+    research = state.get("research") or {}
+    decision = research.get("decision")
+    if decision not in {"build", "incumbent", "defer", "stop"}:
+        decision = None
+    if status == "verified":
+        reason = "accepted"
+    elif status == "deferred":
+        reason = "selection declined construction"
+    elif status == "failed":
+        reason = "frozen acceptance failed"
+    elif calls and calls[-1].get("status") == "failed":
+        reason = "local provider rejected or failed the call"
+    elif stage in {"discover", "challenge", "construct"}:
+        reason = {"discover": "discovery response failed the candidate contract",
+                  "challenge": "challenge response failed the adjudication contract",
+                  "construct": "construction response failed the artifact grammar"}[stage]
+    else:
+        reason = "mission prerequisite unavailable"
+    return {"category": reason, "decision": decision,
+            "candidate_count": len(research.get("candidates", [])),
+            "executable_contract_frozen": bool(state.get("contract")),
+            "artifact_built": bool(state.get("artifact"))}
+
+
 def result_status(state, calls, portable):
     if state["status"] != "verified":
         return "FAIL"
@@ -161,9 +189,12 @@ def check_portable(archive, work):
             "example_output_sha256": hashlib.sha256(result.stdout).hexdigest()}
 
 
-def run_mission(work, model, record):
+def run_mission(work, model, record, *, live_sources=False):
     # This public mission and its tests were recorded before this worker's model run.
     example = json.loads(EXAMPLE.read_bytes())
+    if live_sources:
+        # A separate prospective run grants only the repository's allowlisted public retrieval.
+        example["mission"]["authority"].update(public_sources=True, assisted_model=False)
     state_store = Store(work/"missions")
     controller = Controller(state_store, provider_factory=lambda: model)
     run_id, version = controller.create({"mission": example["mission"], "sources": example["sources"],
@@ -171,9 +202,12 @@ def run_mission(work, model, record):
     controller.advance(run_id, version)
     state = state_store.get(run_id)
     calls = compact_calls(state)
-    record.update(mission_status=state["status"], last_stage=state["stage"], calls=calls,
+    record.update(contract_sha256=state["contract"]["sha256"] if state.get("contract") else None,
+                  mission_status=state["status"], last_stage=state["stage"], calls=calls,
+                  diagnostic=diagnostic(state, calls),
                   call_count=state.get("attempts", 0), spec_sha256=state["input_sha256"],
-                  evidence_inputs="Frozen public source excerpts supplied with the mission",
+                  evidence_inputs=("Supplied excerpts plus live allowlisted source retrieval" if live_sources
+                                   else "Frozen public source excerpts supplied with the mission"),
                   failure_message_sha256=digest(state["error"]) if state.get("error") else None)
     portable = False
     if state["status"] == "verified":
@@ -185,6 +219,112 @@ def run_mission(work, model, record):
         record["evaluation"] = {"status": evaluation["status"], "case_count": len(evaluation["cases"]),
                                 "sha256": digest(evaluation)}
     record["status"] = result_status(state, calls, portable)
+    if live_sources:
+        record["construction_status"] = record["status"]
+        record["acquisition_and_investigation"] = acquired_investigation(state, calls)
+        record["status"] = record["acquisition_and_investigation"]["status"]
+
+
+def acquired_investigation(state, calls):
+    sources = state.get("source_result") or {}
+    research = state.get("research") or {}
+    acquired = sources.get("sources", [])
+    sources_by_id = {row["id"]: row for row in research.get("signals", [])}
+    retrieved = {row["source_response_sha256"] for row in acquired}
+    covered = {key for key, row in sources_by_id.items() if row.get("source_response_sha256") in retrieved}
+    attributed = [c["id"] for c in research.get("candidates", []) if set(c.get("usable_sources", [])) & covered]
+    stages = {c.get("stage") for c in calls if c.get("mode") == "local" and c.get("status") == "completed"
+              and c.get("reported_model") == MODEL_ALIAS}
+    required_roles = {"Published release", "Earlier snapshot; capability at this revision requires testing"}
+    matched_feeds = [feed for feed in sources.get("feeds", []) if required_roles <=
+                     {row["role"] for row in acquired if row["feed"] == feed}]
+    matched = bool(matched_feeds)
+    status = "BLOCKED" if not acquired else ("PASS" if matched and attributed and {"discover", "challenge"} <= stages else "FAIL")
+    return {"status": status, "feeds": sources.get("feeds", []),
+            "observations": [{k:row[k] for k in ("feed", "url", "role", "version", "retrieved_at",
+                                                  "event_at", "source_response_sha256") if k in row} for row in acquired],
+            "source_failures": [{k:row.get(k) for k in ("feed","role")} for row in sources.get("failures", [])],
+            "matched_temporal_sources": matched, "feeds_with_both_dates": matched_feeds, "candidates_citing_live_sources": attributed,
+            "selected_cites_live_source": bool(set((research.get("selected") or {}).get("usable_sources", [])) & covered),
+            "model_stages": sorted(stages), "frontier_crossing": "unproven"}
+
+
+def run_direct(work, model, record):
+    # Same visible mission, evidence, capability, test contract and interpreter. One direct model invocation.
+    example = json.loads(EXAMPLE.read_bytes())
+    mission = example["mission"]
+    contract = construction.freeze_contract(mission["construction_spec"])
+    visible = construction.build_view(contract)
+    record.update(contract_sha256=contract["sha256"], status="FAIL")
+    pos = len(model.receipts)
+    try:
+        proposal = model.propose("direct_construct", {"instruction": CONSTRUCT_INSTRUCTION,
+            "purpose": mission["purpose"], "requirements": mission["requirements"], "beneficiary": mission["beneficiary"],
+            "resources": mission["resources"], "time": mission["time"], "sources": example["sources"],
+            "kind":visible["kind"], "definition":visible["definition"]})
+        artifact = construction.build(contract, proposal)
+        result = evaluation.evaluate(contract, artifact)
+        record.update(case_count=len(result["cases"]), artifact_sha256=artifact["sha256"],
+                      accepted=result["status"] == "pass", evaluation_sha256=digest(result))
+        if record["accepted"]:
+            bundle = delivery.export_bundle(contract, artifact, result, {"comparison":"direct same-model arm"})
+            record["portable"] = check_portable(bundle, work)
+            if record["portable"]["verified_exit"] == record["portable"]["example_exit"] == 0:
+                record["status"] = "PASS"
+    finally:
+        record["calls"] = [{k:r[k] for k in PUBLIC_ROUTES if k in r} for r in model.receipts[pos:]]
+        if (len(record["calls"]) != 1 or record["calls"][0].get("reported_model") != MODEL_ALIAS or
+                record["calls"][0].get("status") != "completed"):
+            record["status"] = "FAIL"
+
+
+def timed_arm(root, name, function, model):
+    path = root / name
+    path.mkdir(mode=0o700)
+    record = {"status":"FAIL", "calls":[]}
+    start = time.monotonic()
+    try:
+        runner_window()
+        function(path, model, record)
+    except Blocked as error:
+        record.update(status="BLOCKED", obstruction=str(error))
+    except Exception as error:
+        record.update(status="FAIL", error_category=type(error).__name__)
+    record["arm_wall_seconds"] = round(time.monotonic()-start, 6)
+    usage = [r.get("usage") or {} for r in record["calls"]]
+    record["tokens"] = {key:sum(x[key] for x in usage) if usage and all(type(x.get(key)) is int for x in usage)
+                         else None for key in ("input_tokens", "output_tokens")}
+    return record
+
+
+def campaign(work, model, record):
+    primary = timed_arm(work, "primary", run_mission, model)
+    # Keep the original primary result, even when the direct arm succeeds.
+    record.update(primary)
+    record["registered_primary"] = primary
+    direct = timed_arm(work, "direct", run_direct, model)
+    record["direct_comparator"] = direct
+    proven = primary["status"] == "PASS", direct["status"] == "PASS"
+    outcome = {(True, True):"both accepted", (False, False):"neither accepted",
+               (True, False):"only primary accepted", (False, True):"only direct accepted"}[proven]
+    record["direct_comparison"] = {"outcome":outcome, "order":["primary","direct","live_sources"],
+        "timing_scope":"Arm wall includes preparation, inference, checks and portable use. Download and startup are shared. A warm server can favor later arms.",
+        "economic_advantage":"unmeasured", "human_comparison":"unmeasured"}
+    def live(path, selected, receipt):
+        return run_mission(path, selected, receipt, live_sources=True)
+    record["live_source_trial"] = timed_arm(work, "live_sources", live, model)
+    live_status = record["live_source_trial"]["status"]
+    # The direct arm can legitimately win or lose. The new integration gate requires actual acquisition AND use.
+    if primary["status"] != "PASS":
+        record["status"] = primary["status"]
+    elif live_status != "PASS":
+        record["status"] = live_status
+    elif direct.get("error_category") and not direct.get("calls"):
+        record["status"] = "FAIL"
+    elif not direct.get("contract_sha256") or direct["contract_sha256"] != primary.get("contract_sha256"):
+        record["status"] = "FAIL"
+    elif record["live_source_trial"].get("mission_status") in {"blocked", "failed"}:
+        record["status"] = "FAIL"
 
 
 def main():
@@ -226,7 +366,7 @@ def main():
                 wait_ready(server, port)
                 model = LocalProvider("llama-cpp", MODEL_ALIAS, port, pinned.MODEL_SHA,
                                       output_tokens=8192, timeout=600)
-                run_mission(work, model, record)
+                campaign(work, model, record)
             finally:
                 server.terminate()
                 try:
@@ -245,7 +385,16 @@ def main():
             print(f"Private diagnostic: {type(exc).__name__}: {exc}", file=sys.stderr)
     record.update(finished_at=stamp(), wall_seconds=round(time.monotonic()-start, 3))
     output.write_text(json.dumps(record, indent=2, ensure_ascii=False, allow_nan=False)+"\n")
-    print(json.dumps({k:record[k] for k in ("status", "model", "wall_seconds")}))
+    summary = {k:record[k] for k in ("status", "model", "wall_seconds")}
+    for key in ("source_revision", "last_stage", "diagnostic", "obstruction", "error_category"):
+        if key in record:
+            summary[key] = record[key]
+    for key in ("registered_primary", "direct_comparator", "live_source_trial"):
+        if key in record:
+            item = record[key]
+            summary[key] = {k:item[k] for k in ("status", "arm_wall_seconds", "last_stage", "tokens", "diagnostic",
+                                               "construction_status", "error_category") if k in item}
+    print(json.dumps(summary))
     return {"PASS":0,"BLOCKED":2,"FAIL":1}[record["status"]]
 
 

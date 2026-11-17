@@ -1,101 +1,14 @@
 "use strict";
+// BEGIN SHARED READ-ONLY EVIDENCE VIEW
 const $ = id => document.getElementById(id);
 const json = value => JSON.stringify(value, null, 2);
-const authorityKeys = ["local_model", "assisted_model", "public_sources"];
-const detailKeys = ["construction_spec", "resources", "time"];
-const transient = new Set(["queued", "running"]);
-let replay = false, providerLabel = "", liveView=null;
-let current, examples = [], timer, dirty = false, busy = false, online = false;
-let extraMission = {}, requestId, lastHandoff, lastTrial, lastProposal, generation = 0, editNumber = 0;
-
+function lineText(v) {return typeof v === "string" ? v : json(v);}
 function elem(tag, text, cls) {
   const e = document.createElement(tag);
   if (text !== undefined) e.textContent = text;
   if (cls) e.className = cls;
   return e;
 }
-function remember(id) {
-  try { if (id) sessionStorage.setItem("ignition-run", id); else sessionStorage.removeItem("ignition-run"); } catch {}
-}
-function earlierRun() {try {return sessionStorage.getItem("ignition-run");} catch {return null;}}
-function lineText(v) {return typeof v === "string" ? v : json(v);}
-function message(text) { $("form-message").textContent = text || ""; }
-function runNotice(text) { $("amend-note").textContent = text || ""; }
-const apiPath = (id, action = "") => "/api/runs/" + encodeURIComponent(id) + action;
-
-async function api(path, body) {
-  const init = {cache: "no-store", credentials: "same-origin", redirect: "error"};
-  if (body !== undefined) Object.assign(init, {method: "POST", headers: {
-    "Content-Type": "application/json", "X-Ignition-Request": "1"
-  }, body: JSON.stringify(body)});
-  const r = await fetch(path, init);
-  if (!r.headers.get("content-type")?.includes("application/json")) throw Error("The execution service did not return JSON.");
-  const data = await r.json();
-  if (!r.ok) {
-    const error=Error(lineText(data.error || data.message || `Request failed (HTTP ${r.status})`));
-    error.status=r.status; throw error;
-  }
-  return data;
-}
-function parseField(id, array) {
-  let value;
-  try { value = JSON.parse($(id).value); }
-  catch { throw Error("Enter valid JSON in " + id.replaceAll("_"," ") + "."); }
-  if (array ? !Array.isArray(value) : !value || typeof value !== "object" || Array.isArray(value))
-    throw Error(id.replaceAll("_"," ") + (array ? " must be an array." : " must be an object."));
-  return value;
-}
-function readMission() {
-  const mission = {...extraMission, purpose:$("purpose").value.trim(), beneficiary:$("beneficiary").value.trim(),
-    requirements:$("requirements").value.split("\n").map(s=>s.trim()).filter(Boolean),
-    authority:Object.fromEntries(authorityKeys.map(k=>[k,$(k).checked]))};
-  for (const k of detailKeys) mission[k] = parseField(k, false);
-  return {mission,sources:parseField("sources",true)};
-}
-function loadBrief(mission = {}, sources = []) {
-  extraMission = {...mission};
-  $("purpose").value = mission.purpose || "";
-  $("beneficiary").value = mission.beneficiary || "";
-  $("requirements").value = (mission.requirements || []).join("\n");
-  for (const k of detailKeys) $(k).value = json(mission[k] || {});
-  for (const k of authorityKeys) $(k).checked = mission.authority?.[k] === true;
-  $("sources").value = json(sources);
-}
-function buttons() {
-  $("snapshot").hidden = replay || !current || ["queued","running","awaiting_model","awaiting_contract"].includes(current.status) || dirty;
-  $("close-replay").hidden = !replay;
-  $("recorded-bundle").hidden = true;
-  $("history").hidden = replay;
-  $("mission").hidden = replay;
-  if (replay) {
-    for (const key of ["resume","review","handoff","actions"]) $(key).hidden=true;
-    return;
-  }
-  $("fresh").hidden = !current;
-  $("start").textContent = current ? "Submit amended mission →" : "Start investigation →";
-  $("start").disabled = !online || busy || Boolean(current && !dirty);
-  $("resume").hidden = !current || current.status !== "blocked" || dirty;
-  $("review").hidden = !current?.proposed_contract || current.status !== "awaiting_contract" || dirty;
-  $("handoff").hidden = !current?.handoff || current.status !== "awaiting_model" || dirty;
-  $("actions").hidden = current?.status !== "verified" || dirty;
-  for (const id of ["resume","respond","approve","try"]) $(id).disabled = busy;
-}
-function edited() {
-  editNumber++;
-  requestId = null;
-  if (current) {
-    dirty = true;
-    $("run-status").textContent="Historical record · " + current.status.replaceAll("_"," ");
-    runNotice("Edited brief. The record below belongs to the submitted revision. Submit the amendment to run fresh checks.");
-    $("output").textContent = "";
-  }
-  buttons();
-}
-$("brief").addEventListener("input", edited);
-$("example").addEventListener("change", () => {
-  const selected = examples.find(x => x.id === $("example").value);
-  loadBrief(selected?.mission, selected?.sources); edited();
-});
 function section(title) {
   const s = elem("section"); s.append(elem("h3",title)); $("results").append(s); return s;
 }
@@ -109,6 +22,7 @@ function detail(host,title,value) {
 }
 function urlLink(url) {
   try { const u = new URL(url); if (u.protocol !== "https:" || u.username || u.password) return null;
+    if ($("public-preview-data")) return elem("code",u.href);
     const a=elem("a","Inspect primary source →"); a.href=u.href; a.rel="noreferrer noopener"; a.target="_blank"; return a;
   } catch {return null;}
 }
@@ -203,6 +117,95 @@ function results(run) {
   }
   commercialEvidence(run.economics);
 }
+// END SHARED READ-ONLY EVIDENCE VIEW
+const authorityKeys = ["local_model", "assisted_model", "public_sources"];
+const detailKeys = ["construction_spec", "resources", "time"];
+const transient = new Set(["queued", "running"]);
+let replay = false, providerLabel = "", liveView=null;
+let current, examples = [], timer, dirty = false, busy = false, online = false;
+let extraMission = {}, requestId, lastHandoff, lastTrial, lastProposal, generation = 0, editNumber = 0;
+
+function remember(id) {
+  try { if (id) sessionStorage.setItem("ignition-run", id); else sessionStorage.removeItem("ignition-run"); } catch {}
+}
+function earlierRun() {try {return sessionStorage.getItem("ignition-run");} catch {return null;}}
+function message(text) { $("form-message").textContent = text || ""; }
+function runNotice(text) { $("amend-note").textContent = text || ""; }
+const apiPath = (id, action = "") => "/api/runs/" + encodeURIComponent(id) + action;
+
+async function api(path, body) {
+  const init = {cache: "no-store", credentials: "same-origin", redirect: "error"};
+  if (body !== undefined) Object.assign(init, {method: "POST", headers: {
+    "Content-Type": "application/json", "X-Ignition-Request": "1"
+  }, body: JSON.stringify(body)});
+  const r = await fetch(path, init);
+  if (!r.headers.get("content-type")?.includes("application/json")) throw Error("The execution service did not return JSON.");
+  const data = await r.json();
+  if (!r.ok) {
+    const error=Error(lineText(data.error || data.message || `Request failed (HTTP ${r.status})`));
+    error.status=r.status; throw error;
+  }
+  return data;
+}
+function parseField(id, array) {
+  let value;
+  try { value = JSON.parse($(id).value); }
+  catch { throw Error("Enter valid JSON in " + id.replaceAll("_"," ") + "."); }
+  if (array ? !Array.isArray(value) : !value || typeof value !== "object" || Array.isArray(value))
+    throw Error(id.replaceAll("_"," ") + (array ? " must be an array." : " must be an object."));
+  return value;
+}
+function readMission() {
+  const mission = {...extraMission, purpose:$("purpose").value.trim(), beneficiary:$("beneficiary").value.trim(),
+    requirements:$("requirements").value.split("\n").map(s=>s.trim()).filter(Boolean),
+    authority:Object.fromEntries(authorityKeys.map(k=>[k,$(k).checked]))};
+  for (const k of detailKeys) mission[k] = parseField(k, false);
+  return {mission,sources:parseField("sources",true)};
+}
+function loadBrief(mission = {}, sources = []) {
+  extraMission = {...mission};
+  $("purpose").value = mission.purpose || "";
+  $("beneficiary").value = mission.beneficiary || "";
+  $("requirements").value = (mission.requirements || []).join("\n");
+  for (const k of detailKeys) $(k).value = json(mission[k] || {});
+  for (const k of authorityKeys) $(k).checked = mission.authority?.[k] === true;
+  $("sources").value = json(sources);
+}
+function buttons() {
+  $("snapshot").hidden = replay || !current || ["queued","running","awaiting_model","awaiting_contract"].includes(current.status) || dirty;
+  $("close-replay").hidden = !replay;
+  $("recorded-bundle").hidden = true;
+  $("history").hidden = replay;
+  $("mission").hidden = replay;
+  if (replay) {
+    for (const key of ["resume","review","handoff","actions"]) $(key).hidden=true;
+    return;
+  }
+  $("fresh").hidden = !current;
+  $("start").textContent = current ? "Submit amended mission →" : "Start investigation →";
+  $("start").disabled = !online || busy || Boolean(current && !dirty);
+  $("resume").hidden = !current || current.status !== "blocked" || dirty;
+  $("review").hidden = !current?.proposed_contract || current.status !== "awaiting_contract" || dirty;
+  $("handoff").hidden = !current?.handoff || current.status !== "awaiting_model" || dirty;
+  $("actions").hidden = current?.status !== "verified" || dirty;
+  for (const id of ["resume","respond","approve","try"]) $(id).disabled = busy;
+}
+function edited() {
+  editNumber++;
+  requestId = null;
+  if (current) {
+    dirty = true;
+    $("run-status").textContent="Historical record · " + current.status.replaceAll("_"," ");
+    runNotice("Edited brief. The record below belongs to the submitted revision. Submit the amendment to run fresh checks.");
+    $("output").textContent = "";
+  }
+  buttons();
+}
+$("brief").addEventListener("input", edited);
+$("example").addEventListener("change", () => {
+  const selected = examples.find(x => x.id === $("example").value);
+  loadBrief(selected?.mission, selected?.sources); edited();
+});
 function show(run, open = false) {
   if (!run?.id) throw Error("The service returned an incomplete run record.");
   if (current && current.id !== run.id) {dirty=false;lastHandoff=null;lastTrial=null;}

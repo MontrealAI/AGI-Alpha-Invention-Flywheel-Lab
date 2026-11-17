@@ -25,6 +25,8 @@ Open **http://127.0.0.1:8784**. The workbench starts with inference disabled. Op
 
 Extract either ZIP to a fresh directory and run `python3 -I run.py verify`. To try the artifact on its first example, run `python3 -I run.py run < example-input.json`. Edit a copy of the input to test a new case. These files contain the exact historical evaluator and program that recipients exercised. Both public records used explicitly attributed, operator-assisted Codex exchanges. The separately registered automated local-model trial has its own source-specific GitHub Actions receipt.
 
+For a single, offline presentation file, run `python3 -B build_preview.py --output FRONTIER_OMEGA_IGNITION.html`. Open the result in a browser. Only the three hash-pinned public records and their two original ZIPs can enter the generated preview. [Qualification and limits](docs/QUALIFICATION.md)
+
 ## Operator guide
 
 For a trusted, installed loopback inference server, set the exact provider and model ID as described in [Model routes](docs/MODEL-ROUTES.md), then run `serve`. For an explicitly authorized operator-assisted exchange:
