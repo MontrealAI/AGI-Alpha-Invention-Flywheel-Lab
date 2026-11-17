@@ -119,7 +119,8 @@ class Inventory:
     def _comparison(p,frontiers,trials,as_of,cutoff):
         """Best eligible historical arm versus latest matched current arm; reported only."""
         scoped=[t for t in trials if t['problem_id']==p['id'] and t['run_on']<=as_of
-                and t['frontier_id'] in frontiers and frontiers[t['frontier_id']]['observed_on']<=as_of
+                and t['frontier_id'] in frontiers
+                and frontiers[t['frontier_id']]['observed_on']<=t['run_on']
                 and t['acceptance_sha256']==sha(p['acceptance'])]
         pairs=[]
         for old in scoped:
