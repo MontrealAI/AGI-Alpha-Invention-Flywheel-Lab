@@ -27,6 +27,8 @@ The canonical data files are **frontier_omega/opportunities.json** (56 cases) an
 
 The Python standard-library-only module **frontier_omega/__main__.py** validates joins and evidence gates, ranks experiments, exports the 56 opportunities as CSV, assesses reported historical/current crossings, and watches a bounded set of public official release indexes. **tests/test_frontier_omega.py** contains deterministic negative tests against false promotion and incomplete cost accounting. **.github/workflows/frontier-omega.yml** runs those tests for PRs and, after merge, schedules a read-only daily watch. The repository's existing local [Frontier Monitor](../products/alpha-genesis-harness/docs/FRONTIER-MONITOR.md) remains available for authorization-gated monitoring and replay.
 
+The related [Ignition Timing Contract](IGNITION.md) and standard-library [ignition policy](ignition.py) recommend the earliest evidence-gated action for each candidate, including signed-buyer, competitor-alternative, complete-cost, liquidity and rights tests. They are strictly read-only and cannot certify receipts or authorize real-world actions. Run: python3 -m frontier_omega.ignition --limit 20.
+
 ## Reproduce without paid model APIs
 
 From the repository root (Python 3.10+, no third-party packages):
@@ -75,4 +77,4 @@ A source signal reopens a problem. Measured matched tests can show a technical c
 
 Revenue, ARR, profit, unrestricted cash, valuation and frontier-expanding capability are different measures. For illustration only, $100 million ARR at a 10x revenue multiple equals $1 billion enterprise value; neither input is an achieved result or forecast.
 
-**Current result:** a source-bound and inspectable 48-opportunity inventory, ranking tool, technical-crossing assessment logic, regression suite and conditional daily source monitor; no paid autonomous outcome is claimed.
+**Current result:** a source-bound and inspectable 56-opportunity inventory, ranking tool, technical-crossing assessment logic, regression suite and conditional daily source monitor; no paid autonomous outcome is claimed.
