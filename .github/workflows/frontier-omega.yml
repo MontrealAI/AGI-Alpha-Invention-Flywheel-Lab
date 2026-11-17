@@ -1,0 +1,46 @@
+name: FRONTIER OMEGA opportunity reservoir
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/frontier-omega.yml"
+      - "frontier_omega/**"
+      - "examples/frontier-omega/**"
+      - "docs/frontier-omega/**"
+      - "tests/test_frontier_omega.py"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  private-reservoir:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record standard-runner window
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Unit tests and real private SQLite ingestion
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p 'test_frontier_omega.py' -v
+          python3 -m frontier_omega --root "$RUNNER_TEMP/frontier-omega" seed \
+            --file examples/frontier-omega/public-opportunities-20261116.json
+          python3 -m frontier_omega --root "$RUNNER_TEMP/frontier-omega" audit
+          python3 -m frontier_omega --root "$RUNNER_TEMP/frontier-omega" watch \
+            --cycles 1 --interval 0.05
+          python3 -m frontier_omega --root "$RUNNER_TEMP/frontier-omega" report \
+            > "$RUNNER_TEMP/frontier-report.json"
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          report=json.loads((Path(os.environ['RUNNER_TEMP'])/'frontier-report.json').read_text())
+          assert report['counts']['problems']==6, report['counts']
+          assert report['counts']['capability_observations']==5
+          assert report['counts']['retest_signals']>=6
+          assert report['claims']['financial_authority']=='NONE'
+          assert all(x['decision']=='INVESTIGATE_ONLY' and not x['execution_authorized']
+                     for x in report['retest_signals'])
+          print('Qualified local sensor, six public hypotheses and read-only crossings; no real commerce.')
+          PY
