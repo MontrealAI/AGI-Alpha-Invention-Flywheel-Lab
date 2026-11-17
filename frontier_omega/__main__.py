@@ -42,8 +42,21 @@ class InventoryError(ValueError):
 
 
 def read_json(path: Path):
+    """Read unambiguous JSON; caller-supplied labels may never be overwritten."""
+    def unique_members(pairs):
+        row = {}
+        for key, value in pairs:
+            if key in row:
+                raise InventoryError("Duplicate JSON member: " + key)
+            row[key] = value
+        return row
+
+    def refuse_nonfinite(token):
+        raise InventoryError("Nonfinite JSON number: " + token)
+
     with path.open(encoding="utf-8") as handle:
-        return json.load(handle)
+        return json.load(handle, object_pairs_hook=unique_members,
+                         parse_constant=refuse_nonfinite)
 
 
 def validate(root: Path = ROOT):
