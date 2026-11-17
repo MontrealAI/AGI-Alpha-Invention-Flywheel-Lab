@@ -1,0 +1,345 @@
+{
+  "protocol": "ignition/hosted-local/1",
+  "status": "FAIL",
+  "started_at": "2026-11-17T19:09:20.814580+00:00",
+  "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+  "model_revision": "ae44f08e1392f39c0e474af10c3ff8355c8b6688",
+  "runtime_url": "https://github.com/ggml-org/llama.cpp/releases/download/b12242/llama-b12242-bin-ubuntu-x64.tar.gz",
+  "model_url": "https://huggingface.co/bartowski/Qwen_Qwen3-4B-Instruct-2507-GGUF/resolve/ae44f08e1392f39c0e474af10c3ff8355c8b6688/Qwen_Qwen3-4B-Instruct-2507-Q4_K_M.gguf",
+  "complete_cost_known": false,
+  "new_paid_services": 0,
+  "fixture_model_responses": 0,
+  "calls": [
+    {
+      "request_sha256": "718dc0df920fad3f62b1bf622178744e6992a7860cf2c92819585c32f2c6b299",
+      "mode": "local",
+      "raw_response_sha256": "41501cedfad07a1525c37ae255002b31975548259876320ea08e4885a972b064",
+      "response_sha256": "8c6975f99a1b35ca79df1dbfee6d71dce0eca8a87099cfa09cffd6704e5e6c3d",
+      "recorded_at": "2026-11-17T19:09:33.276477+00:00",
+      "reported_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+      "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+      "complete_cost_known": false,
+      "application_model_calls": 1,
+      "status": "completed",
+      "wall_seconds": 257.578911,
+      "run_id": "ignition_77787da2317b44f8b77d94f059c88bc9",
+      "response_schema_sha256": "0067efd282b2e6fc1092d44e972b4473488bc9124ef831c6c2e87b08955a15c4",
+      "provider": "llama-cpp",
+      "usage": {
+        "input_tokens": 2052,
+        "output_tokens": 1174
+      },
+      "stage": "discover"
+    },
+    {
+      "request_sha256": "63e0d3b3e560e9e2b23a404ed86341722fae1eefb752d8d120e3ab7c671f5db1",
+      "mode": "local",
+      "raw_response_sha256": "0ef7c71bbd17bad70f56f233a7df2106ebc727489cd88f23bb57083ff2ff17b8",
+      "response_sha256": "ec85e3f02eb4cdabe9b228a8379e891cbde74f840c6896c56b8e8f51dea0c78f",
+      "recorded_at": "2026-11-17T19:13:50.861861+00:00",
+      "reported_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+      "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+      "complete_cost_known": false,
+      "application_model_calls": 1,
+      "status": "completed",
+      "wall_seconds": 337.813483,
+      "run_id": "ignition_9b61c63b282c4460b7af29893b587e8b",
+      "response_schema_sha256": "053674a0e44df81fe3c552db0598042828abb86ed8d662f247b74cb7fe79240d",
+      "provider": "llama-cpp",
+      "usage": {
+        "input_tokens": 3554,
+        "output_tokens": 1086
+      },
+      "stage": "challenge"
+    }
+  ],
+  "commercial_result": "unmeasured",
+  "frontier_crossing": "unproven",
+  "human_baseline": "unmeasured",
+  "comparison_scope": "Executable frozen acceptance and conventional comparator",
+  "mission_fixture_sha256": "8058a3ea8b97ce7deb1927fae70bd71ac7e9639317814e048db28aade4ee1595",
+  "actions_run": "44155490455",
+  "source_revision": "89f2196d552810bc56696a7f380ae66c55f8763a",
+  "runtime_source_sha256": "f26462054d4a84121c6299fcc4e9ebc6dea8c663da897acadd11b2e50691218f",
+  "verified_runtime_archive_sha256": "909eef25cd53e6601c8a07c866d8dbb2983e74177088d55182137a8fb8255d62",
+  "verified_model_file_sha256": "2fde00ce69dd4899c70d020845e2638353015bba0fdf161b3eb965f2bca4464e",
+  "verified_runtime_binary_sha256": "fe211d00c4754aa67aaa492d2c755ab0f6ef60bf30eee3c0c74a3496189cde17",
+  "inference_threads": 4,
+  "contract_sha256": null,
+  "mission_status": "deferred",
+  "last_stage": "selection",
+  "diagnostic": {
+    "category": "selection declined construction",
+    "decision": "defer",
+    "candidate_count": 5,
+    "executable_contract_frozen": false,
+    "artifact_built": false
+  },
+  "call_count": 2,
+  "spec_sha256": "47016d5a64099617b848fec718a4a8a576701e9b7f21e6881dca71c54c21e79b",
+  "evidence_inputs": "Frozen public source excerpts supplied with the mission",
+  "failure_message_sha256": null,
+  "arm_wall_seconds": 597.078655,
+  "tokens": {
+    "input_tokens": 5606,
+    "output_tokens": 2260
+  },
+  "registered_primary": {
+    "status": "FAIL",
+    "calls": [
+      {
+        "request_sha256": "718dc0df920fad3f62b1bf622178744e6992a7860cf2c92819585c32f2c6b299",
+        "mode": "local",
+        "raw_response_sha256": "41501cedfad07a1525c37ae255002b31975548259876320ea08e4885a972b064",
+        "response_sha256": "8c6975f99a1b35ca79df1dbfee6d71dce0eca8a87099cfa09cffd6704e5e6c3d",
+        "recorded_at": "2026-11-17T19:09:33.276477+00:00",
+        "reported_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+        "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+        "complete_cost_known": false,
+        "application_model_calls": 1,
+        "status": "completed",
+        "wall_seconds": 257.578911,
+        "run_id": "ignition_77787da2317b44f8b77d94f059c88bc9",
+        "response_schema_sha256": "0067efd282b2e6fc1092d44e972b4473488bc9124ef831c6c2e87b08955a15c4",
+        "provider": "llama-cpp",
+        "usage": {
+          "input_tokens": 2052,
+          "output_tokens": 1174
+        },
+        "stage": "discover"
+      },
+      {
+        "request_sha256": "63e0d3b3e560e9e2b23a404ed86341722fae1eefb752d8d120e3ab7c671f5db1",
+        "mode": "local",
+        "raw_response_sha256": "0ef7c71bbd17bad70f56f233a7df2106ebc727489cd88f23bb57083ff2ff17b8",
+        "response_sha256": "ec85e3f02eb4cdabe9b228a8379e891cbde74f840c6896c56b8e8f51dea0c78f",
+        "recorded_at": "2026-11-17T19:13:50.861861+00:00",
+        "reported_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+        "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+        "complete_cost_known": false,
+        "application_model_calls": 1,
+        "status": "completed",
+        "wall_seconds": 337.813483,
+        "run_id": "ignition_9b61c63b282c4460b7af29893b587e8b",
+        "response_schema_sha256": "053674a0e44df81fe3c552db0598042828abb86ed8d662f247b74cb7fe79240d",
+        "provider": "llama-cpp",
+        "usage": {
+          "input_tokens": 3554,
+          "output_tokens": 1086
+        },
+        "stage": "challenge"
+      }
+    ],
+    "contract_sha256": null,
+    "mission_status": "deferred",
+    "last_stage": "selection",
+    "diagnostic": {
+      "category": "selection declined construction",
+      "decision": "defer",
+      "candidate_count": 5,
+      "executable_contract_frozen": false,
+      "artifact_built": false
+    },
+    "call_count": 2,
+    "spec_sha256": "47016d5a64099617b848fec718a4a8a576701e9b7f21e6881dca71c54c21e79b",
+    "evidence_inputs": "Frozen public source excerpts supplied with the mission",
+    "failure_message_sha256": null,
+    "arm_wall_seconds": 597.078655,
+    "tokens": {
+      "input_tokens": 5606,
+      "output_tokens": 2260
+    }
+  },
+  "direct_comparator": {
+    "status": "PASS",
+    "calls": [
+      {
+        "request_sha256": "38495240410db44c57055dbb1c09c4ec00e8ed47503e196222f660c9e20e7ce3",
+        "mode": "local",
+        "raw_response_sha256": "44e608d5272e64e34328c9938dad1b449d4a0d7102671aebeeb1a9555445fdb9",
+        "response_sha256": "a4e9aec06816e0b1049c25f014e2772e6ba5288401e16bb5eaf4d9a4e8166d05",
+        "recorded_at": "2026-11-17T19:19:28.686767+00:00",
+        "reported_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+        "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+        "complete_cost_known": false,
+        "application_model_calls": 1,
+        "status": "completed",
+        "wall_seconds": 71.064712,
+        "run_id": "ignition_47f69dbece924bf9aae9770a95a41515",
+        "response_schema_sha256": "ec8879008e4b2a44e03235beba1249bb54b0f05aa6505753ebef9272287ab55d",
+        "provider": "llama-cpp",
+        "usage": {
+          "input_tokens": 1784,
+          "output_tokens": 174
+        },
+        "stage": "direct_construct"
+      }
+    ],
+    "contract_sha256": "17e1dcf5c5f062a89db070dda03e6df21c6965bf7dbb5b7dff06e62803cf057d",
+    "case_count": 9,
+    "artifact_sha256": "e29999bfd4e0c75c21784094cac73e97d08a80ed9be006cbd5b62ae38951bd54",
+    "accepted": true,
+    "evaluation_sha256": "de50d7fc173dcb90c0269dfa3b020382c35e64d7ea1344c18e713cac56dddf36",
+    "portable": {
+      "verified_exit": 0,
+      "example_exit": 0,
+      "example_output_sha256": "297f14d7aa725c47a4f82d7de8fcfa3dfdcb4014b1db54c6ef943100d9ae2b9f"
+    },
+    "arm_wall_seconds": 71.155294,
+    "tokens": {
+      "input_tokens": 1784,
+      "output_tokens": 174
+    }
+  },
+  "direct_comparison": {
+    "outcome": "only direct accepted",
+    "order": [
+      "primary",
+      "direct",
+      "live_sources"
+    ],
+    "timing_scope": "Arm wall includes preparation, inference, checks and portable use. Download and startup are shared. A warm server can favor later arms.",
+    "economic_advantage": "unmeasured",
+    "human_comparison": "unmeasured"
+  },
+  "live_source_trial": {
+    "status": "FAIL",
+    "calls": [
+      {
+        "request_sha256": "b2e27857720aed4a3e1766929c585a723094a78cd706446456acecb38c7cc365",
+        "mode": "local",
+        "raw_response_sha256": "73cd0cec17825029d0dab3ab71f6801ba4fc56e3dbb6998036c8b697c85541d0",
+        "response_sha256": "16e70400eb2a91b33e15da44f1e60a3d38ca9ffb9105a14a04aba15c3b9bdea6",
+        "recorded_at": "2026-11-17T19:20:40.828733+00:00",
+        "reported_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+        "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+        "complete_cost_known": false,
+        "application_model_calls": 1,
+        "status": "completed",
+        "wall_seconds": 497.292561,
+        "run_id": "ignition_f20a9c6c27824fcab09f46967f725f80",
+        "response_schema_sha256": "ca18becf550b8787d12496e2f19e35deeabb7f00fcc772a7399513e75d8465ad",
+        "provider": "llama-cpp",
+        "usage": {
+          "input_tokens": 4902,
+          "output_tokens": 1285
+        },
+        "stage": "discover"
+      },
+      {
+        "request_sha256": "5e91d8c488372904b31988a605145b1a2605daacf04212e3dc1e1e654471bd0d",
+        "mode": "local",
+        "raw_response_sha256": "dbc4c87ace4f515e539229c2374d0e38a5bf9be8e8b3ed66bf944c66f9201b88",
+        "response_sha256": "8e05ed8ac6d2aec0d6413c99c9259834456da2057c20207e92844f60c8b0a34f",
+        "recorded_at": "2026-11-17T19:28:58.130884+00:00",
+        "reported_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+        "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+        "complete_cost_known": false,
+        "application_model_calls": 1,
+        "status": "completed",
+        "wall_seconds": 450.900046,
+        "run_id": "ignition_9458a9bd6200427fabdd0abe008e7e17",
+        "response_schema_sha256": "5530a794550a5ff7642f9c60f3084e739f89481da5192aab13bd1aef352786b6",
+        "provider": "llama-cpp",
+        "usage": {
+          "input_tokens": 6515,
+          "output_tokens": 600
+        },
+        "stage": "challenge"
+      }
+    ],
+    "contract_sha256": null,
+    "mission_status": "deferred",
+    "last_stage": "selection",
+    "diagnostic": {
+      "category": "selection declined construction",
+      "decision": "stop",
+      "candidate_count": 5,
+      "executable_contract_frozen": false,
+      "artifact_built": false
+    },
+    "call_count": 2,
+    "spec_sha256": "bb5254b79a2567ffbb1548198e5c683996dabedc683d3171aaddf0bbfefc0e45",
+    "evidence_inputs": "Supplied excerpts plus live allowlisted source retrieval",
+    "failure_message_sha256": null,
+    "construction_status": "FAIL",
+    "acquisition_and_investigation": {
+      "status": "FAIL",
+      "feeds": [
+        "local-inference",
+        "schema"
+      ],
+      "observations": [
+        {
+          "feed": "local-inference",
+          "url": "https://github.com/ggml-org/llama.cpp/releases/tag/b12480",
+          "role": "Published release",
+          "version": "b12480",
+          "retrieved_at": "2026-11-17T19:20:40.132631+00:00",
+          "event_at": "2026-11-17T19:11:21Z",
+          "source_response_sha256": "547f6eb2868e874a28aed4c15e2f5547db0d9685d7b66186346359d6503bb40b"
+        },
+        {
+          "feed": "local-inference",
+          "url": "https://github.com/ggml-org/llama.cpp/releases/tag/b12479",
+          "role": "Published release",
+          "version": "b12479",
+          "retrieved_at": "2026-11-17T19:20:40.132631+00:00",
+          "event_at": "2026-11-17T18:51:24Z",
+          "source_response_sha256": "547f6eb2868e874a28aed4c15e2f5547db0d9685d7b66186346359d6503bb40b"
+        },
+        {
+          "feed": "local-inference",
+          "url": "https://github.com/ggml-org/llama.cpp/releases/tag/b12478",
+          "role": "Published release",
+          "version": "b12478",
+          "retrieved_at": "2026-11-17T19:20:40.132631+00:00",
+          "event_at": "2026-11-17T17:32:37Z",
+          "source_response_sha256": "547f6eb2868e874a28aed4c15e2f5547db0d9685d7b66186346359d6503bb40b"
+        },
+        {
+          "feed": "local-inference",
+          "url": "https://github.com/ggml-org/llama.cpp/commit/fcac19079f3f2985fe74ed845f0880e7e9a8030a",
+          "role": "Earlier snapshot; capability at this revision requires testing",
+          "version": "fcac19079f3f2985fe74ed845f0880e7e9a8030a",
+          "retrieved_at": "2026-11-17T19:20:40.349368+00:00",
+          "event_at": "2026-10-13T23:24:23Z",
+          "source_response_sha256": "80762acaa22e0292e86536c5ce31a8ca994ccfb33caef13d7938b3b619a3f96a"
+        },
+        {
+          "feed": "schema",
+          "url": "https://github.com/json-schema-org/json-schema-spec/commit/5bcf672a0fa2af6fde349f74ece9c426b4a10815",
+          "role": "Earlier snapshot; capability at this revision requires testing",
+          "version": "5bcf672a0fa2af6fde349f74ece9c426b4a10815",
+          "retrieved_at": "2026-11-17T19:20:40.802169+00:00",
+          "event_at": "2026-10-13T18:23:21Z",
+          "source_response_sha256": "440421c503f21950ad705fc2b883517c1739e467918bdfe494740bedca0223af"
+        }
+      ],
+      "source_failures": [
+        {
+          "feed": "schema",
+          "role": "current"
+        }
+      ],
+      "matched_temporal_sources": true,
+      "feeds_with_both_dates": [
+        "local-inference"
+      ],
+      "candidates_citing_live_sources": [],
+      "selected_cites_live_source": false,
+      "model_stages": [
+        "challenge",
+        "discover"
+      ],
+      "frontier_crossing": "unproven"
+    },
+    "arm_wall_seconds": 949.240295,
+    "tokens": {
+      "input_tokens": 11417,
+      "output_tokens": 1885
+    }
+  },
+  "finished_at": "2026-11-17T19:36:29.615967+00:00",
+  "wall_seconds": 1628.801
+}
