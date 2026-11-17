@@ -5,7 +5,7 @@ import sys
 import time
 from datetime import datetime, timezone
 
-from . import construction, evaluation, delivery, research, routing
+from . import construction, evaluation, delivery, development, research, routing
 from .economics import assessment
 from .provider import HandoffRequired, ManualProvider, ModelProvider, ProviderUnavailable
 from .store import Conflict, StateError, digest, event, runtime_source, timestamp
@@ -118,6 +118,20 @@ class Controller:
                 s["exchanges"][h["sha256"]] = {"response": value}
                 s["handoff"] = None
                 self._step(s, h["stage"], "Operator supplied a response bound to the pending request", "queued")
+            elif operation == "choose":
+                menu = s.get("mapping_choice")
+                if not menu or body.get("sha256") != menu["sha256"]:
+                    raise Conflict("Selection does not match the current mapping choice")
+                choice = body.get("choice")
+                if not isinstance(choice, str) or choice not in [c["id"] for c in menu["candidates"]] + ["abstain"]:
+                    raise StateError("Choose a listed hypothesis or abstain")
+                resolution = {"choice": choice, "origin": "operator", "menu_sha256": menu["sha256"]}
+                if s.get("mapping_resolution") == resolution:
+                    return
+                if s["status"] != "awaiting_choice" or s.get("mapping_resolution"):
+                    raise Conflict("A mapping selection is no longer pending")
+                s["mapping_resolution"] = resolution
+                self._step(s, "selection", "Operator recorded a choice bound to the current mission and hypothesis set", "queued")
             elif operation == "approve":
                 if s.get("approval_fingerprint") == digest(body):
                     return
@@ -154,7 +168,7 @@ class Controller:
             if type(version) is not int or version != s["version"]:
                 raise Conflict("Stale mission version")
             self._guard(s)
-            if s["status"] in FINISHED | {"awaiting_model", "awaiting_contract"}:
+            if s["status"] in FINISHED | {"awaiting_model", "awaiting_contract", "awaiting_choice"}:
                 return self.public(s)
             s["error"] = None
             try:
@@ -216,6 +230,10 @@ class Controller:
             if limit is not None and s.get("attempts", 0) >= limit:
                 raise ModelBudgetExhausted("Mission model-call budget exhausted")
             if counted:
+                if stage == "choose_hypothesis":
+                    if s.get("choice_call_started"):
+                        raise StateError("A bounded choice call started without a reusable answer. Amend before a new attempt.")
+                    s["choice_call_started"] = key
                 s["attempts"] = s.get("attempts", 0) + 1
             self._step(s, stage, f"Requested {stage} from the configured provider")
             start = time.monotonic()
@@ -295,11 +313,59 @@ class Controller:
             payload["selected"] = result["selected"]
         self._construct(s, contract, choice, payload, propose)
 
+    def _choose_mapping(self, s, payload, method, propose):
+        mission = s["mission"]
+        definition = payload["definition"]
+        menu = s.get("mapping_choice")
+        if menu is None:
+            menu, error = development.menu(definition, mission["resources"].get("choice_order", "ascending"))
+            if error:
+                self._step(s, "selection", error, "deferred")
+                return None
+            menu["sha256"] = digest([s["id"], s["version"], s["runtime"], s["input_sha256"], s["contract_sha256"], menu])
+            s["mapping_choice"] = menu
+            self._step(s, "selection", f"Observed {len(menu['candidates'])} complete public-example mapping hypotheses")
+        if not s.get("mapping_resolution"):
+            if len(menu["candidates"]) == 1:
+                choice, origin = menu["candidates"][0]["id"], "unique_public_fit"
+            elif method == "operator_choice":
+                self._step(s, "selection", menu["question"], "awaiting_choice")
+                return None
+            elif not development.has_distinguishing_evidence(mission, menu):
+                self._step(s, "selection", "The stated objective lacks a discriminating source or operation for this set. Clarify the purpose or request operator selection.", "deferred")
+                return None
+            else:
+                packet = {"instruction": "Choose the one mapping identified by the original objective. If the supplied intent does not distinguish a complete mapping, answer abstain. Return only the registered choice identifier in the JSON choice field.",
+                          "purpose": mission["purpose"], "requirements": mission["requirements"],
+                          "fixed_operations": [op["description"] for op in menu["fixed_operations"]],
+                          "candidates": [{"id": c["id"], "description": c["description"]} for c in menu["candidates"]]}
+                try:
+                    response = propose("choose_hypothesis", packet)
+                except HandoffRequired:
+                    raise
+                except (StateError, ProviderUnavailable, ValueError):
+                    if not s.get("choice_call_started"):
+                        raise
+                    self._step(s, "selection", "The single bounded choice attempt produced no usable response. No program was selected.", "deferred")
+                    return None
+                choice, origin = response.get("choice"), "model"
+                if set(response) != {"choice"} or choice not in [c["id"] for c in menu["candidates"]] + ["abstain"]:
+                    self._step(s, "selection", "Model response did not identify a registered hypothesis. No program was selected.", "deferred")
+                    return None
+            s["mapping_resolution"] = {"choice": choice, "origin": origin, "menu_sha256": menu["sha256"]}
+            self.store.save(s)
+        chosen = s["mapping_resolution"]["choice"]
+        if chosen == "abstain":
+            self._step(s, "selection", "No mapping was selected. Supply a discriminating example or clarify the intended operation.", "deferred")
+            return None
+        return {"kind": "record_migration", "program": development.program_for(definition, menu, chosen)}
+
     def _construct(self, s, contract, choice, payload, propose):
         mission = s["mission"]
         resources = mission["resources"]
         attempts = s.setdefault("construction_attempts", [])
         specialist = choice["method"] == "specialist"
+        bounded = choice["method"] in ("operator_choice", "model_choice")
         # Attempts and model calls are separately checkpointed. Resuming a handoff reuses its
         # exact request, and a terminal rejection cannot be converted into a fresh budget.
         while True:
@@ -308,11 +374,21 @@ class Controller:
                 last = attempts[-1]
                 if last["status"] == "accepted":
                     return self._step(s, "delivery", "Verified within the frozen contract", "verified")
-                if specialist or not last["repairable"] or len(attempts) > resources.get("max_repairs", 1):
+                if specialist or bounded or not last["repairable"] or len(attempts) > resources.get("max_repairs", 1):
                     return self._step(s, "delivery", "Independent acceptance failed. The rejected construction is retained for inspection.", "failed")
-            if specialist:
-                self._step(s, "construction", "Compiling the operator's declared operations with the installed local specialist")
-                response = {"kind": payload["kind"], "program": payload["definition"]}
+            if bounded:
+                response = self._choose_mapping(s, payload, choice["method"], propose)
+                if response is None:
+                    return
+            elif specialist:
+                program = payload["definition"]
+                self._step(s, "construction", "Running the installed local specialist on the builder-visible specification")
+                if "demonstrations" in program:
+                    program, obstruction = development.learn(program)
+                    if obstruction:
+                        s["error"] = obstruction
+                        return self._step(s, "selection", obstruction, "deferred")
+                response = {"kind": payload["kind"], "program": program}
             elif attempts:
                 last = attempts[-1]
                 try:
@@ -325,7 +401,7 @@ class Controller:
                 response = propose("construct", payload)
             started = time.monotonic()
             attempt = {"attempt": len(attempts) + 1, "contract_sha256": contract["sha256"],
-                       "proposal_sha256": digest(response), "method": "specialist" if specialist else "model",
+                       "proposal_sha256": digest(response), "method": choice["method"] if bounded or specialist else "model",
                        "artifact_sha256": None, "receipt_sha256": None, "feedback": None, "repairable": True}
             try:
                 artifact = construction.build(contract, response)
@@ -381,6 +457,7 @@ class Controller:
             ctx = {"mission_id":s["id"], "version":s["version"], "mission":s["mission"], "input_sha256":s["input_sha256"],
                    "source_sha256":s["runtime"], "provider":s["provider"], "python":sys.version.split()[0],
                    "research":s["research"], "routing":s.get("routing"), "construction_attempts":s.get("construction_attempts", []),
+                   "mapping_choice":s.get("mapping_choice"), "mapping_resolution":s.get("mapping_resolution"),
                    "acceptance_origin":s.get("acceptance_origin"),
                    "inherited_from":{k:v for k,v in (s.get("inherited") or {}).items() if k!="program"}, "sources":s["sources"] + s["source_result"]["sources"],
                    "source_failures":s["source_result"]["failures"], "events":s["events"],

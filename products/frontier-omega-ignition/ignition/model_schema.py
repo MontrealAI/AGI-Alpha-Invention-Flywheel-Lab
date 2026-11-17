@@ -94,6 +94,8 @@ def construction_proposal(payload):
 
 
 def for_stage(stage, payload):
+    if stage == "choose_hypothesis":
+        return obj({"choice": one([row["id"] for row in payload["candidates"]] + ["abstain"])})
     if stage == "discover":
         return discovery(payload)
     if stage == "challenge":

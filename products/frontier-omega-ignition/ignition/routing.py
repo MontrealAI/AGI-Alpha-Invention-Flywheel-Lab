@@ -4,15 +4,17 @@ from __future__ import annotations
 from math import isfinite
 import re
 
-from . import construction
+from . import construction, development
 
 
 def validate_options(resources):
     strategy = resources.get("execution_strategy", "adaptive")
     if strategy not in ("adaptive", "direct", "research"):
         raise ValueError("execution_strategy must be adaptive, direct or research")
-    if "direct_method" in resources and resources["direct_method"] not in ("specialist", "model"):
-        raise ValueError("direct_method must be specialist or model")
+    if "direct_method" in resources and resources["direct_method"] not in ("specialist", "model", "operator_choice", "model_choice"):
+        raise ValueError("Unsupported direct construction method")
+    if resources.get("choice_order", "ascending") not in ("ascending", "descending"):
+        raise ValueError("choice_order must be ascending or descending")
     if "direct_after_research" in resources and type(resources["direct_after_research"]) is not bool:
         raise ValueError("direct_after_research must be a boolean")
     for name in ("max_repairs", "max_model_calls"):
@@ -76,14 +78,20 @@ def route(mission):
     elif strategy == "research":
         action = "research"
         reason = "The operator requested a frontier investigation and comparison of complete routes."
-    elif supported and (method != "specialist" or exact):
-        action = "direct"
-        reason = ("The operator supplied exact executable operations. Compile them locally without model inference."
-                  if method == "specialist" else "The supplied software contract can be attempted and checked directly.")
-    elif strategy == "direct" or (supported and method == "specialist"):
+    elif method in ("operator_choice", "model_choice") and not (supported and kind == "record_migration" and not exact):
         action = "clarify"
-        reason = ("The exact-specification specialist needs declared operations. Select the model to infer a mapping."
-                  if supported else "Supply a supported, purpose-bound specification with independent acceptance cases, or select frontier research.")
+        reason = "Bounded mapping choices require a record migration with public development examples."
+    elif supported:
+        action = "direct"
+        reason = "The supplied software contract can be attempted and checked directly."
+        if method in ("operator_choice", "model_choice"):
+            reason = "Enumerate all fitting projections and splits within the interactive envelope, then resolve the mapping under the original purpose."
+        if method == "specialist":
+            reason = ("Compile the exact declared operations with the installed specialist." if exact else
+                      "Use only public development examples to infer direct projections or splits. Abstain if multiple equally simple operations fit.")
+    elif strategy == "direct":
+        action = "clarify"
+        reason = "Supply a supported, purpose-bound specification with independent acceptance cases, or select frontier research."
     elif estimate and estimate["decision_value"] <= estimate["marginal_cost"]:
         action = "clarify"
         reason = "The operator's estimated decision value does not cover the stated marginal research cost. Clarify a cheaper decisive test."
@@ -129,4 +137,9 @@ def diagnostic(contract, artifact, receipt):
             details["repair_instruction"] = "Compare every declared source, target, conversion and extra-field rule with the public definition."
     elif failed:
         details["repair_instruction"] = "Check the development mapping, types, field policy and refusal behavior against the public specification."
+    if (artifact["kind"] == "record_migration" and failed.get("development")
+            and "demonstrations" in contract["spec"]["definition"]):
+        details["public_development"] = development.mismatches(contract["spec"]["definition"], artifact["program"])
+        details["repair_instruction"] = ("Correct the listed public development mismatches. Inspect fitting columns "
+                                         "against the original purpose. Preserve correct columns and the input policy.")
     return details

@@ -123,7 +123,7 @@ const detailKeys = ["construction_spec", "resources", "time"];
 const transient = new Set(["queued", "running"]);
 let replay = false, providerLabel = "", liveView=null;
 let current, examples = [], timer, dirty = false, busy = false, online = false;
-let renderedAttempts = null, renderedStudy = null;
+let renderedAttempts = null, renderedStudy = null, renderedChoice = null;
 let extraMission = {}, requestId, lastHandoff, lastTrial, lastProposal, generation = 0, editNumber = 0;
 
 function remember(id) {
@@ -215,21 +215,21 @@ function loadBrief(mission = {}, sources = [], useSavedPermissions = true) {
   loadPairing(pairing);
   $("resources").value = json(resources);
   $("strategy").value = Object.hasOwn(routeDescriptions, strategy) ? strategy : "adaptive";
-  $("direct-method").value = ["model", "specialist"].includes(method) ? method : "";
+  $("direct-method").value = ["model", "specialist", "operator_choice", "model_choice"].includes(method) ? method : "";
   $("direct-after").checked = fallback === true;
   updateStrategyHelp();
   for (const k of authorityKeys) $(k).checked = useSavedPermissions && mission.authority?.[k] === true;
   $("sources").value = json(sources);
 }
 function buttons() {
-  $("snapshot").hidden = replay || !current || ["queued","running","awaiting_model","awaiting_contract"].includes(current.status) || dirty;
+  $("snapshot").hidden = replay || !current || ["queued","running","awaiting_model","awaiting_contract","awaiting_choice"].includes(current.status) || dirty;
   $("close-replay").hidden = !replay;
   $("recorded-bundle").hidden = true;
   $("history").hidden = replay;
   $("mission").hidden = replay;
   if (replay) {
     $("bundle").removeAttribute("href");
-    for (const key of ["resume","review","handoff","actions"]) $(key).hidden=true;
+    for (const key of ["resume","review","handoff","mapping-choice","actions"]) $(key).hidden=true;
     return;
   }
   $("fresh").hidden = !current;
@@ -237,6 +237,10 @@ function buttons() {
   $("start").disabled = !online || busy || Boolean(current && !dirty);
   $("resume").hidden = !current || current.status !== "blocked" || dirty;
   $("review").hidden = !current?.proposed_contract || current.status !== "awaiting_contract" || dirty;
+  $("mapping-choice").hidden = !current?.mapping_choice || current.status !== "awaiting_choice" || dirty;
+  $("choice-options").disabled = busy || $("mapping-choice").hidden;
+  $("apply-choice").disabled = busy || $("mapping-choice").hidden || !$("choice-options").querySelector("input:checked");
+  $("abstain-choice").disabled = busy || $("mapping-choice").hidden;
   $("handoff").hidden = !current?.handoff || current.status !== "awaiting_model" || dirty;
   $("actions").hidden = current?.status !== "verified" || dirty;
   if ($("actions").hidden) $("bundle").removeAttribute("href");
@@ -336,15 +340,68 @@ function pairingView(run) {
   $("pairing-qualification").textContent = (study.sql_agreement ? agreement : "") +
     "These are historical grader outcomes. A fresh pilot requires new issues and separately obtained grades.";
 }
+function mappingChoiceView(run) {
+  const choice = !replay && run.status === "awaiting_choice" ? run.mapping_choice : null;
+  if (!choice) {
+    renderedChoice = null;
+    return;
+  }
+  const identity = json([run.id, run.version, choice.sha256]);
+  if (renderedChoice === identity) return;
+  renderedChoice = identity;
+  $("choice-question").textContent = choice.question;
+  const examples = run.mission?.construction_spec?.definition?.demonstrations || [];
+  $("choice-examples").hidden = examples.length === 0;
+  $("choice-examples").open = false;
+  $("choice-examples-content").textContent = json(examples);
+  const legend = elem("legend", "Candidate rules");
+  $("choice-options").replaceChildren(legend);
+  for (const candidate of choice.candidates) {
+    const row = elem("div", undefined, "rule-option");
+    const label = elem("label");
+    const radio = elem("input");
+    radio.type = "radio";
+    radio.name = "mapping-rule";
+    radio.value = candidate.id;
+    label.append(radio, elem("strong", candidate.description));
+    row.append(label);
+    detail(row, "Inspect exact operations", candidate.operations.map(op => op.column));
+    $("choice-options").append(row);
+  }
+  const fixed = choice.fixed_operations || [];
+  $("fixed-rules").hidden = !fixed.length;
+  $("fixed-rules").open = false;
+  $("fixed-list").replaceChildren(...fixed.map(op => elem("li", op.description)));
+}
+$("choice-options").addEventListener("change", buttons);
+function chooseRule(abstain) {
+  if (!current?.mapping_choice || current.status !== "awaiting_choice" || dirty || replay || busy) return;
+  const request = current.mapping_choice;
+  if (renderedChoice !== json([current.id, current.version, request.sha256])) return;
+  const choice = abstain ? "abstain" : $("choice-options").querySelector("input:checked")?.value;
+  if (choice) action("choose", {sha256:request.sha256, choice});
+}
+$("apply-choice").addEventListener("click", () => chooseRule(false));
+$("abstain-choice").addEventListener("click", () => chooseRule(true));
 function executionView(run) {
   const routing = run.routing;
   $("route-receipt").hidden = !routing;
   if (routing) {
     $("route-title").textContent = routeNames[routing.route] || stageLabel(routing.route);
-    const method = {specialist:"Built-in specialist", model:"Configured model"}[routing.method];
+    const method = {specialist:"Built-in specialist", model:"Configured model",
+      operator_choice:"Operator clarification", model_choice:"Model selection among fitting rules"}[routing.method];
     $("route-method").hidden = !method;
     $("route-method").textContent = method || "";
     $("route-reason").textContent = routing.reason || "";
+    const resolution = run.mapping_resolution;
+    $("mapping-resolution").hidden = !resolution;
+    if (resolution) {
+      const options = run.mapping_choice?.candidates;
+      const candidate = Array.isArray(options) ? options.find(c => c?.id === resolution.choice) : null;
+      const actor = resolution.origin === "operator" ? "Operator" : resolution.origin === "model" ? "Model" : "Specialist";
+      $("mapping-resolution").textContent = resolution.choice === "abstain" ? actor + " abstained." :
+        actor + " selected · " + (candidate?.description || resolution.choice);
+    }
     $("route-fallback").hidden = !routing.fallback;
     if (routing.fallback) {
       const outcome = run.status === "verified" ? "The direct construction passed verification." :
@@ -381,7 +438,8 @@ function executionView(run) {
       list.append(article);
     }
   }
-  $("handoff-title").textContent = run.handoff?.stage === "repair" ? "Repair the rejected construction" : "Operator-assisted execution";
+  const handoffTitles = {repair:"Repair the rejected construction", choose_hypothesis:"Review the model’s mapping choice"};
+  $("handoff-title").textContent = handoffTitles[run.handoff?.stage] || "Operator-assisted execution";
 }
 function show(run, open = false) {
   if (!run?.id) throw Error("The service returned an incomplete run record.");
@@ -396,6 +454,7 @@ function show(run, open = false) {
   if (!dirty && !replay && run.status==="stale") runNotice("The execution source or provider changed. Amend the mission to run it against the current configuration.");
   $("run-status").dataset.tone = dirty ? "" : ({verified:"pass", failed:"fail"})[run.status] || "";
   executionView(run);
+  mappingChoiceView(run);
   pairingView(run);
   studyView(run.opportunity_study);
   $("events").replaceChildren(...(run.events||[]).map(ev=>{

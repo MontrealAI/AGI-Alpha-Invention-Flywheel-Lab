@@ -11,6 +11,7 @@ const { createInterface } = require('node:readline');
 const { pathToFileURL } = require('node:url');
 const { chromium } = require('playwright-core');
 const product = path.resolve(__dirname, '..');
+const { qualifyMappingChoice } = require('./mapping_choice.cjs');
 const { qualifyAdaptiveRepair, qualifyPairingDecision, qualifyPublicBoundary } = require('./adaptive_operator.cjs');
 
 async function assertLayout(page, width) {
@@ -141,6 +142,7 @@ async function main() {
     await qualifyAdaptiveRepair(page, send, assertLayout, sample);
     await qualifyPairingDecision(page, assertLayout);
     await qualifyPublicBoundary(page);
+    await qualifyMappingChoice(page, work, assertLayout, receive, send);
     await page.goto(pathToFileURL(path.join(product,'web','index.html')).href);
     await page.locator('.replay-picker summary').click();
     recording.mission.purpose='<img src=x onerror="document.body.dataset.injected=1">';
