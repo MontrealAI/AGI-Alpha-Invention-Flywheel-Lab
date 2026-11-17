@@ -355,6 +355,56 @@ class ConversionTests(unittest.TestCase):
                 self.c, artifact, receipt, archive, KEY,
                 now=self.c["expires_at"])
 
+    def test_customer_owned_cli_generates_request_and_verified_acceptance(self):
+        import os
+        import subprocess
+        import sys
+        from connected_enterprise.alpha_economic.delivery import package
+        from connected_enterprise.alpha_economic.commerce import acceptance
+        folder = self.root / "buyer"
+        folder.mkdir(mode=0o700)
+        contract_path = folder / "contract.json"
+        contract_path.write_text(json.dumps(self.c))
+        archive_folder = folder / "delivery"
+        artifact = {
+            "schema": "alpha-economic/artifact/v1",
+            "contract_sha256": digest(self.c),
+            "instrument": self.current,
+            "provenance": {"kind": "AUTHORED_FIXTURE"}
+        }
+        receipt = package(self.c, artifact, archive_folder)
+        artifact_path = folder / "artifact.json"
+        artifact_path.write_text(json.dumps(artifact))
+        receipt_path = folder / "receipt.json"
+        receipt_path.write_text(json.dumps(receipt))
+        archive_path = archive_folder / "solution.zip"
+        keyvar = "ALPHA_CUSTOMER_TEST_KEY"
+        environment = dict(os.environ, **{keyvar: KEY.decode()})
+        common = [
+            sys.executable, "-m",
+            "connected_enterprise.alpha_economic.frontier_buyer_cli",
+            "--contract", str(contract_path), "--buyer-key-env", keyvar
+        ]
+        signed_request = folder / "buyer-request.json"
+        proc = subprocess.run(common + ["request", "--output", str(signed_request)],
+                              cwd=Path(__file__).resolve().parents[1], env=environment,
+                              text=True, capture_output=True, timeout=30)
+        self.assertEqual(proc.returncode, 0, proc.stderr)
+        self.assertTrue(signed_request.exists())
+        self.assertEqual(signed_request.stat().st_mode & 0o077, 0)
+        self.assertNotIn(KEY.decode(), proc.stdout)
+        signed_delivery = folder / "buyer-acceptance.json"
+        proc = subprocess.run(common + [
+            "accept", "--artifact", str(artifact_path),
+            "--receipt", str(receipt_path), "--archive", str(archive_path),
+            "--output", str(signed_delivery)
+        ], cwd=Path(__file__).resolve().parents[1], env=environment,
+           text=True, capture_output=True, timeout=30)
+        self.assertEqual(proc.returncode, 0, proc.stderr)
+        envelope = json.loads(signed_delivery.read_text())
+        self.assertTrue(
+            acceptance(envelope, self.c, artifact, receipt, KEY, self.now)["accepted"])
+
     def test_buyer_decline_is_not_fake_revenue(self):
         self.register()
         self.engine.buyer.decline = True
