@@ -1,0 +1,80 @@
+name: IGNITION independent opportunity observation
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/frontier-ignition-opportunity-observation.yml'
+      - 'docs/frontier-omega-ignition/continuation/discovery/observation.py'
+      - 'docs/frontier-omega-ignition/continuation/discovery/REGISTRATION.md'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ignition-opportunity-observation-${{ github.event.pull_request.head.sha || github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  observation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    env:
+      PROTOCOL_REVISION: ${{ github.event.pull_request.head.sha || github.sha }}
+      FROZEN: 4719005c957e53716ccd3f328688d8a9c40ee4cc
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Record available platform time
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - name: Read evidence protocol
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ env.PROTOCOL_REVISION }}
+          path: protocol
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /docs/frontier-omega-ignition/continuation/discovery/observation.py
+            /docs/frontier-omega-ignition/continuation/discovery/REGISTRATION.md
+      - name: Read immutable IGNITION provider and registered runtime
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ env.FROZEN }}
+          path: frozen
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /products/frontier-omega-ignition/
+            /products/alpha-genesis-harness/bridge/
+            /products/alpha-genesis-harness/scripts/qualify_hosted_local.py
+            /products/alpha-genesis-harness/scripts/package_release.py
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Check protocol identity and collect one observation
+        working-directory: protocol/docs/frontier-omega-ignition/continuation/discovery
+        run: |
+          sha256sum -c - <<'DIGESTS'
+          41715327563c376caa05c065bfeb4711b44b1d8ea614b4c65cfc23731fc14ad5  observation.py
+          64f1d57a8fc6fff8df7d632dc7c407646f68c51a05f3e505c3246aa93c09086e  REGISTRATION.md
+          DIGESTS
+          python -B observation.py --protocol-revision "$PROTOCOL_REVISION" --product "$GITHUB_WORKSPACE/frozen" \
+            --work "$RUNNER_TEMP/opportunity-model" --output "$RUNNER_TEMP/opportunity-public/receipt.json"
+      - name: Preserve public exchange and outcome
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: ignition-opportunity-${{ env.PROTOCOL_REVISION }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/opportunity-public/receipt.json
+          if-no-files-found: error
+      - name: Distinguish a recorded model failure from unavailable infrastructure
+        if: always()
+        run: |
+          python - <<'PY'
+          import json, os, pathlib
+          p = pathlib.Path(os.environ['RUNNER_TEMP']) / 'opportunity-public/receipt.json'
+          r = json.loads(p.read_bytes())
+          print(r['observation'], '| calls:', r['model_calls'], '| content quality awaits independent review')
+          if r['model_calls'] != 1 or not (r.get('model_text') or r.get('response')):
+              raise SystemExit('No completed opportunity content received.')
+          PY
