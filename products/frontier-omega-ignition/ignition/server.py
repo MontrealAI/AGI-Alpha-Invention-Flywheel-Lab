@@ -126,7 +126,7 @@ class Handler(BaseHTTPRequestHandler):
             run_id, version = ctrl.create(body)
             self.server.enqueue(run_id,version)
             return self._json(ctrl.view(run_id),202)
-        match = re.fullmatch(r"/api/runs/([a-f0-9]{32})(?:/(history|bundle|try|resume|amend|respond|approve))?",route)
+        match = re.fullmatch(r"/api/runs/([a-f0-9]{32})(?:/(history|bundle|try|resume|amend|respond|approve|choose))?",route)
         if not match:
             raise Missing("Unknown route")
         run_id, action = match.groups()
@@ -142,11 +142,11 @@ class Handler(BaseHTTPRequestHandler):
             return self._send(200,"application/zip",data,f"ignition-{run_id}.zip")
         if post and action == "try":
             return self._json({"output":ctrl.deliver(run_id,body["version"],body["input"],trial=True)})
-        if post and action in {"amend","respond","approve","resume"}:
+        if post and action in {"amend","respond","approve","choose","resume"}:
             version = body.get("version")
             if action == "amend":
                 _,version = ctrl.create(body,run_id)
-            elif action in {"respond","approve"}:
+            elif action in {"respond","approve","choose"}:
                 ctrl.intervene(run_id,version,action,body)
             elif type(version) is not int or version != ctrl.store.get(run_id)["version"]:
                 raise Conflict("Resume requires the current version")

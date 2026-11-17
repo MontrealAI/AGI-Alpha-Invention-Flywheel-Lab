@@ -11,8 +11,10 @@ def validate_options(resources):
     strategy = resources.get("execution_strategy", "adaptive")
     if strategy not in ("adaptive", "direct", "research"):
         raise ValueError("execution_strategy must be adaptive, direct or research")
-    if "direct_method" in resources and resources["direct_method"] not in ("specialist", "model"):
-        raise ValueError("direct_method must be specialist or model")
+    if "direct_method" in resources and resources["direct_method"] not in ("specialist", "model", "operator_choice", "model_choice"):
+        raise ValueError("Unsupported direct construction method")
+    if resources.get("choice_order", "ascending") not in ("ascending", "descending"):
+        raise ValueError("choice_order must be ascending or descending")
     if "direct_after_research" in resources and type(resources["direct_after_research"]) is not bool:
         raise ValueError("direct_after_research must be a boolean")
     for name in ("max_repairs", "max_model_calls"):
@@ -76,9 +78,14 @@ def route(mission):
     elif strategy == "research":
         action = "research"
         reason = "The operator requested a frontier investigation and comparison of complete routes."
+    elif method in ("operator_choice", "model_choice") and not (supported and kind == "record_migration" and not exact):
+        action = "clarify"
+        reason = "Bounded mapping choices require a record migration with public development examples."
     elif supported:
         action = "direct"
         reason = "The supplied software contract can be attempted and checked directly."
+        if method in ("operator_choice", "model_choice"):
+            reason = "Enumerate all fitting projections and splits within the interactive envelope, then resolve the mapping under the original purpose."
         if method == "specialist":
             reason = ("Compile the exact declared operations with the installed specialist." if exact else
                       "Use only public development examples to infer direct projections or splits. Abstain if multiple equally simple operations fit.")

@@ -105,3 +105,101 @@ def mismatches(definition, program):
                          "fitting_columns": fits[:6]})
     return {"mismatched_targets": mismatched_targets, "targets": findings,
             "scope": "Visible development examples only. Fitting columns are minimum-complexity projection or observed split hypotheses; other operations may fit. Use the original requirement to resolve ambiguity."}
+
+
+# This is the interactive response/transport envelope. Never drop a fitting candidate
+# and present an incomplete menu as if it were exhaustive.
+MAX_CHOICES = 16
+ORDINALS = ("first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth")
+SEPARATOR_NAMES = {" ": "space", "-": "hyphen", "_": "underscore", "/": "slash",
+                   ".": "period", ",": "comma", ":": "colon", "|": "pipe"}
+
+
+def describe(column):
+    source, target = column["source"], column["target"]
+    if "split" in column:
+        part = column["split"]
+        index, name = part["index"], SEPARATOR_NAMES[part["separator"]]
+        position = (ORDINALS[index] if index >= 0 else "last" if index == -1 else
+                    ORDINALS[-index - 1] + " from the end")
+        operation = f"take the {position} component of {source} split on {name}"
+    else:
+        operation = f"copy {source}"
+    return {"target": target, "description": f"{target}: {operation} as {column['type']}", "column": column}
+
+
+def menu(definition, order):
+    """Bounded Cartesian product of the complete minimum-complexity possibilities per target."""
+    from itertools import product
+
+    fixed, ambiguous, size = [], [], 1
+    for target in definition["targets"]:
+        fits = fitting_columns(definition, target)
+        if not fits:
+            return None, f"No public projection or split fits {target['name']}. Supply a new specification."
+        if len(fits) == 1:
+            fixed.append(describe(fits[0]))
+        else:
+            size *= len(fits)
+            if size > MAX_CHOICES:
+                return None, f"The public examples admit more than {MAX_CHOICES} complete mappings. Supply a discriminating development example."
+            ambiguous.append(fits)
+    candidates = []
+    for chosen in product(*ambiguous):
+        operations = [describe(column) for column in chosen]
+        columns = sorted([x["column"] for x in fixed + operations], key=lambda x: x["target"])
+        identity = construction.fingerprint({"columns": columns, "input_fields": sorted(definition["input_fields"]),
+                                             "extra_fields": definition["extra_fields"]})
+        candidates.append({"id": "H-" + identity[:12], "operations": operations,
+                           "description": " · ".join(x["description"] for x in operations) or "Unique public-example fit"})
+    if len({c["id"] for c in candidates}) != len(candidates):
+        return None, "Candidate identifiers collide. The ambiguous mapping cannot be verified."
+    return {"question": "Which complete mapping matches the original purpose? Abstain if it does not establish a choice.",
+            "fixed_operations": fixed, "candidates": sorted(candidates, key=lambda c: c["id"], reverse=order == "descending")}, None
+
+
+def program_for(definition, menu, chosen):
+    candidate = next((c for c in menu["candidates"] if c["id"] == chosen), None)
+    if candidate is None:
+        raise ValueError("Selection must identify a registered hypothesis")
+    columns = [op["column"] for op in menu["fixed_operations"] + candidate["operations"]]
+    return {"columns": sorted(columns, key=lambda col: col["target"]), "input_fields": definition["input_fields"],
+            "extra_fields": definition["extra_fields"]}
+
+
+def has_distinguishing_evidence(mission, menu):
+    """Conservative lexical admission check. A match permits asking the model, never selects its answer."""
+    import re
+
+    texts = [mission["purpose"], *mission["requirements"]]
+    if any(re.search(r"\b(?:either is acceptable|choose either|no preference|unspecified operation|source is ambiguous)\b", text, re.I) for text in texts):
+        return False
+    clauses = [set(re.findall(r"[a-z0-9_]+", clause.lower()))
+               for text in texts for clause in re.split(r"[;,.!?]|\b(?:and|but|while)\b", text, flags=re.I)]
+    terms = {"extract", "extracting", "take", "use", "using", "from", "copy", "copying", "copies",
+             "select", "read", "segment", "component", "word", "part", "field", "column", "portion", "position"}
+    by_target = {}
+    for candidate in menu["candidates"]:
+        for operation in candidate["operations"]:
+            column = operation["column"]
+            cues = {column["source"].lower(), column["source"].lower().replace("_", " ")}
+            if "id" in cues:
+                cues.add("identifier")
+            if "split" in column:
+                bit = column["split"]
+                index = bit["index"]
+                cues.add(ORDINALS[index] if index >= 0 else "last" if index == -1 else "end")
+                cues.add(SEPARATOR_NAMES[bit["separator"]])
+            by_target.setdefault(column["target"], {})[construction.fingerprint(column)] = cues
+    for alternatives in by_target.values():
+        groups = list(alternatives.values())
+        if len(groups) < 2:
+            continue
+        shared = set.intersection(*groups)
+        groups = [cues - shared for cues in groups]
+        # A field inventory alone does not identify a desired operation. Require a stated
+        # extraction/copy cue as well as evidence that separates at least two hypotheses.
+        if not any(words & terms and 0 < sum(bool(words & cues) for cues in groups) < len(groups)
+                   for words in clauses):
+            return False
+    return True
