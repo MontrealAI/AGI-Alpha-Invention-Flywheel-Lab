@@ -5,7 +5,7 @@ import sys
 import time
 from datetime import datetime, timezone
 
-from . import construction, evaluation, delivery, research, routing
+from . import construction, evaluation, delivery, development, research, routing
 from .economics import assessment
 from .provider import HandoffRequired, ManualProvider, ModelProvider, ProviderUnavailable
 from .store import Conflict, StateError, digest, event, runtime_source, timestamp
@@ -311,8 +311,14 @@ class Controller:
                 if specialist or not last["repairable"] or len(attempts) > resources.get("max_repairs", 1):
                     return self._step(s, "delivery", "Independent acceptance failed. The rejected construction is retained for inspection.", "failed")
             if specialist:
-                self._step(s, "construction", "Compiling the operator's declared operations with the installed local specialist")
-                response = {"kind": payload["kind"], "program": payload["definition"]}
+                program = payload["definition"]
+                self._step(s, "construction", "Running the installed local specialist on the builder-visible specification")
+                if "demonstrations" in program:
+                    program, obstruction = development.learn(program)
+                    if obstruction:
+                        s["error"] = obstruction
+                        return self._step(s, "selection", obstruction, "deferred")
+                response = {"kind": payload["kind"], "program": program}
             elif attempts:
                 last = attempts[-1]
                 try:

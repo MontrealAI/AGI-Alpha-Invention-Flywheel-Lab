@@ -12,7 +12,7 @@ Start the local service from the product directory with `python3 -B -m ignition 
 | `execution_strategy: "direct"` | Request a model construction from the purpose-bound software contract. A missing supported contract returns a targeted clarification. |
 | `execution_strategy: "research"` | Request discovery, challenge and selection. A source-linked proposal, incumbent, deferral and stop remain distinct outcomes. |
 | `direct_method: "model"` | Use the same construction interface and model in direct and adaptive comparison arms. A declared local or assisted permission and an available provider are still necessary. |
-| `direct_method: "specialist"` | Compile literal data-only operations. A mapping that has to be inferred from examples is outside this exact-specification specialist. |
+| `direct_method: "specialist"` | Compile literal data-only operations. For a mapping described by examples, opt in to ordinary projection/split inference. If equally simple operations fit or the operation is outside these two families, the specialist abstains. Arbitrary joins remain available to the model under the existing typed grammar. |
 | `direct_after_research: true` | Separately authorize a direct attempt on an existing supported specification after an unsuccessful selection. The original research verdict remains inspectable. |
 | `max_model_calls` and `max_repairs` | Enforce integer budgets within this mission. By default one fresh repair is possible. Unchanged rejected proposals, contradictory reference answers, an exhausted call budget or limits on the selected specialist stop repair. |
 | `research_economics` | Supply `unit`, `decision_value` and `marginal_cost` on the same basis. An adaptive open investigation whose estimated value does not cover its marginal cost returns clarification. Without estimates, monetary value remains unmeasured. |
@@ -54,6 +54,12 @@ receipt = evaluation.evaluate(contract, artifact)
 print(contract["sha256"], artifact["sha256"], receipt["comparison"]["outcome"])
 print([(case["name"], case["candidate_pass"]) for case in receipt["cases"]])
 ```
+
+## Repair from visible development evidence
+
+The first revised direct Qwen migration failed acceptance. Its initial and repaired programs each passed five of nine checks. The archived second proposal used a colon to split the identifier. A new diagnostic isolates each proposed field operation on the already visible development rows, reports an observed value or typed error alongside the expected value, and enumerates equally simple matching projections or single-field splits. No held-out values, identities or case names are supplied.
+
+For this migration, two operations fit the visible examples. The first hyphen-separated component of the identifier and the second word of the title coincide on both examples. A specialist using only those examples abstains. The builder can consult the original requirement to extract the *first identifier segment*. Correcting the program must still pass the same frozen checker. A new parcel-bin regression exercises direct specialist delivery on a separate, unambiguous mapping, including an integer from the last component of variable-length locations. [Registered follow-up and exact rejected proposal](../../../docs/frontier-omega-ignition/continuation/development-repair/REGISTRATION.md)
 
 ## What the mechanisms changed
 

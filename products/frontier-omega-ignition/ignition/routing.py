@@ -4,7 +4,7 @@ from __future__ import annotations
 from math import isfinite
 import re
 
-from . import construction
+from . import construction, development
 
 
 def validate_options(resources):
@@ -76,14 +76,15 @@ def route(mission):
     elif strategy == "research":
         action = "research"
         reason = "The operator requested a frontier investigation and comparison of complete routes."
-    elif supported and (method != "specialist" or exact):
+    elif supported:
         action = "direct"
-        reason = ("The operator supplied exact executable operations. Compile them locally without model inference."
-                  if method == "specialist" else "The supplied software contract can be attempted and checked directly.")
-    elif strategy == "direct" or (supported and method == "specialist"):
+        reason = "The supplied software contract can be attempted and checked directly."
+        if method == "specialist":
+            reason = ("Compile the exact declared operations with the installed specialist." if exact else
+                      "Use only public development examples to infer direct projections or splits. Abstain if multiple equally simple operations fit.")
+    elif strategy == "direct":
         action = "clarify"
-        reason = ("The exact-specification specialist needs declared operations. Select the model to infer a mapping."
-                  if supported else "Supply a supported, purpose-bound specification with independent acceptance cases, or select frontier research.")
+        reason = "Supply a supported, purpose-bound specification with independent acceptance cases, or select frontier research."
     elif estimate and estimate["decision_value"] <= estimate["marginal_cost"]:
         action = "clarify"
         reason = "The operator's estimated decision value does not cover the stated marginal research cost. Clarify a cheaper decisive test."
@@ -129,4 +130,9 @@ def diagnostic(contract, artifact, receipt):
             details["repair_instruction"] = "Compare every declared source, target, conversion and extra-field rule with the public definition."
     elif failed:
         details["repair_instruction"] = "Check the development mapping, types, field policy and refusal behavior against the public specification."
+    if (artifact["kind"] == "record_migration" and failed.get("development")
+            and "demonstrations" in contract["spec"]["definition"]):
+        details["public_development"] = development.mismatches(contract["spec"]["definition"], artifact["program"])
+        details["repair_instruction"] = ("Correct the listed public development mismatches. Inspect fitting columns "
+                                         "against the original purpose. Preserve correct columns and the input policy.")
     return details

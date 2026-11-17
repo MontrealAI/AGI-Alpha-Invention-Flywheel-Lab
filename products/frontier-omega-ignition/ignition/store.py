@@ -59,7 +59,7 @@ def runtime_source():
     # Hash the trusted computation, including the checker and portable recipient path.
     # Editing a stylesheet or command-line help does not change an accepted calculation.
     paths = [PRODUCT / "ignition" / f"{n}.py" for n in
-             ("construction","evaluation","delivery","portable","provider","research","controller","store","economics","model_schema","routing","pairing_specialist")]
+             ("construction","evaluation","delivery","portable","provider","research","controller","store","economics","model_schema","routing","development","pairing_specialist")]
     bridge = PRODUCT.parent / "alpha-genesis-harness" / "bridge"
     paths += [bridge / name for name in ("__init__.py", "adapters.py", "output_schema.py")]
     return digest({"python": [sys.implementation.name, *sys.version_info[:3]],

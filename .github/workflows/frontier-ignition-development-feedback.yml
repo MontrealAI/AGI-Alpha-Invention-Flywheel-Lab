@@ -1,0 +1,60 @@
+name: IGNITION conditional development-example repair
+
+on:
+  pull_request:
+    paths:
+      - 'docs/frontier-omega-ignition/continuation/development-repair/**'
+      - '.github/workflows/frontier-ignition-development-feedback.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ignition-development-repair-${{ github.event.pull_request.number || github.ref }}-${{ github.event.pull_request.head.sha || github.sha }}
+  cancel-in-progress: false
+
+env:
+  EXPECTED_SOURCE: ${{ github.event.pull_request.head.sha || github.sha }}
+  PYTHONDONTWRITEBYTECODE: '1'
+
+jobs:
+  observe:
+    name: One genuine Qwen migration repair
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record platform window
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ env.EXPECTED_SOURCE }}
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /products/frontier-omega-ignition/
+            /products/alpha-genesis-harness/bridge/
+            /products/alpha-genesis-harness/scripts/qualify_hosted_local.py
+            /products/alpha-genesis-harness/scripts/package_release.py
+            /docs/frontier-omega-ignition/continuation/development-repair/
+            /.github/workflows/frontier-ignition-development-feedback.yml
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Test diagnostic isolation and conventional controls
+        working-directory: products/frontier-omega-ignition
+        run: |
+          test -f tests/test_development_repair.py
+          python -B -m unittest discover -s tests -p 'test_development_repair.py' -v
+      - name: Evaluate the archived seed and collect the single fresh repair
+        run: |
+          test "$(git rev-parse HEAD)" = "$EXPECTED_SOURCE"
+          python -B docs/frontier-omega-ignition/continuation/development-repair/observe.py \
+            --work "$RUNNER_TEMP/private-repair" --output "$RUNNER_TEMP/public-repair"
+      - name: Retain conditional verdict and any accepted recipient
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: ignition-development-repair-${{ env.EXPECTED_SOURCE }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/public-repair/
+          if-no-files-found: error
