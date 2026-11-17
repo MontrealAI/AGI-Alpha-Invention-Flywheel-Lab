@@ -41,9 +41,10 @@ test('Transformational Intelligence: exact intervention versus passive ceiling',
 test('Invent the Economy: expected contribution, cash and rejection control',()=>{
  const a=run('marketFormula({n:4,k:600,p:.8,cash:900})');
  const b=run('marketIndependent({n:4,k:600,p:.8,cash:900})');
- assert.equal(a.expected_contribution,120);assert.equal(a.required_prefunding,900);assert.ok(a.qualified_model_route);
- assert.equal(b.expected_delta,120);assert.equal(b.min_cash_prefix,0);
- assert.equal(a.modes.join(','),'0,0,0,120');
+ assert.equal(a.expected_contribution,60);assert.equal(a.required_prefunding,900);assert.ok(a.qualified_model_route);
+ assert.equal(a.conditional_cost_source_contribution,120,'historical contingent-cost author case preserved separately');
+ assert.equal(b.expected_delta,60);assert.equal(b.min_cash_prefix,0);
+ assert.equal(a.modes.join(','),'0,0,0,60');
  assert.equal(run('marketFormula({n:4,k:600,p:.8,cash:600})').qualified_model_route,false);
 });
 test('Learning to Build: original four finite authored schemas pass 4000 checks',()=>{
