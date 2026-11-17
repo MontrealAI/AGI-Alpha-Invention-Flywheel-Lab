@@ -28,6 +28,7 @@ jobs:
           python3 -m frontier_omega --root "$RUNNER_TEMP/frontier-omega" seed \
             --file examples/frontier-omega/public-opportunities-20261116.json
           python3 -m frontier_omega --root "$RUNNER_TEMP/frontier-omega" audit
+          python3 -m frontier_omega --root "$RUNNER_TEMP/frontier-omega" dashboard
           python3 -m frontier_omega --root "$RUNNER_TEMP/frontier-omega" watch \
             --cycles 1 --interval 0.05
           python3 -m frontier_omega --root "$RUNNER_TEMP/frontier-omega" report \
@@ -38,6 +39,7 @@ jobs:
           report=json.loads((Path(os.environ['RUNNER_TEMP'])/'frontier-report.json').read_text())
           assert report['counts']['problems']==6, report['counts']
           assert report['counts']['capability_observations']==5
+          assert (Path(os.environ['RUNNER_TEMP'])/'frontier-omega'/'FRONTIER-OMEGA.html').is_file()
           assert report['counts']['retest_signals']>=6
           assert report['claims']['financial_authority']=='NONE'
           assert all(x['decision']=='INVESTIGATE_ONLY' and not x['execution_authorized']
