@@ -2,13 +2,13 @@
 
 **Capture the exponential by tracking valuable unsolved buyer problems, not model releases.**
 
-As of **16 November 2026**, this seed contains **48 distinct buyer-problem hypotheses**, five proposed autonomous engine families and **12 dated primary-source signals**. Established at this stage: **zero independently verified five-week threshold crossings, zero customer-accepted paid outcomes and zero proven autonomously operating companies**.
+As of **16 November 2026**, this seed contains **56 distinct buyer-problem hypotheses**, six candidate engine families (including DISCOVER Ω) and **12 dated primary-source signals**. Established at this stage: **zero independently verified five-week threshold crossings, zero customer-accepted paid outcomes and zero proven autonomously operating companies**.
 
 This is a supporting operational discovery instrument for the existing AGI ALPHA flagship—not a new Blue Sky breakthrough, model leaderboard, market-size estimate or revenue system.
 
 Interactive viewer: https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/frontier-omega.html (available after PR merge and GitHub Pages publication).
 
-## Five economic engines
+## Five proposed new-frontier engines, plus a recurring-operations wedge
 
 | Engine | Buyer-valued outcome | Recent trigger | Critical obstacle |
 | --- | --- | --- | --- |
@@ -17,14 +17,15 @@ Interactive viewer: https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-La
 | OPERATE Ω | Completed and reconciled enterprise administrative work | Terra on 26 Oct; Hydrogen on 12 Nov | Permissions, independent acceptance, entrenched competitors |
 | TRUST Ω | Cryptographic receipts for covered inference | FlashProve on 2 Nov | 70–95x inference cost, narrow support, unproven buyer demand |
 | ENGINEER Ω | Qualified CAD, simulation and engineering deliverables | Physical engineering updates on 3 Nov | Physical validity, professional approvals and expensive failures |
+| DISCOVER Ω | Reproducible scientific algorithms, research instruments and licensed computational methods | Fable 5.2 theoretical-physics and mathematical formalization demonstrations on 9 Nov | Genuine novelty, independent replication, buyer demand and rights |
 
 A new model release is not proof that the complete business was impossible on October 12. The testable event is a **matched task-specific technical and economic crossing** with a documented historical baseline. A new result without a pre-period baseline can establish present feasibility but cannot establish a five-week newly feasible crossing.
 
 ## Inventory contents
 
-The canonical data files are **frontier_omega/opportunities.json** (48 cases) and **frontier_omega/signals.json** (12 dated signals). Every opportunity records the buyer, blocked outcome, required deliverable, independent acceptance test, strongest complete alternative, first executable probe, frontier signal and explicit price/test threshold hypotheses. Price tests are **not** actual price quotes, orders, market observations or profits. Initial scores are ordinal editorial priors, not probabilities or valuation models.
+The canonical data files are **frontier_omega/opportunities.json** (56 cases) and **frontier_omega/signals.json** (12 dated signals). Every opportunity records the buyer, blocked outcome, required deliverable, independent acceptance test, strongest complete alternative, first executable probe, frontier signal and explicit price/test threshold hypotheses. Price tests are **not** actual price quotes, orders, market observations or profits. Initial scores are ordinal editorial priors, not probabilities or valuation models.
 
-The Python standard-library-only module **frontier_omega/__main__.py** validates joins and evidence gates, ranks experiments, exports the 48 opportunities as CSV, assesses reported historical/current crossings, and watches a bounded set of public official release indexes. **tests/test_frontier_omega.py** contains deterministic negative tests against false promotion and incomplete cost accounting. **.github/workflows/frontier-omega.yml** runs those tests for PRs and, after merge, schedules a read-only daily watch. The repository's existing local [Frontier Monitor](../products/alpha-genesis-harness/docs/FRONTIER-MONITOR.md) remains available for authorization-gated monitoring and replay.
+The Python standard-library-only module **frontier_omega/__main__.py** validates joins and evidence gates, ranks experiments, exports the 56 opportunities as CSV, assesses reported historical/current crossings, and watches a bounded set of public official release indexes. **tests/test_frontier_omega.py** contains deterministic negative tests against false promotion and incomplete cost accounting. **.github/workflows/frontier-omega.yml** runs those tests for PRs and, after merge, schedules a read-only daily watch. The repository's existing local [Frontier Monitor](../products/alpha-genesis-harness/docs/FRONTIER-MONITOR.md) remains available for authorization-gated monitoring and replay.
 
 ## Reproduce without paid model APIs
 
