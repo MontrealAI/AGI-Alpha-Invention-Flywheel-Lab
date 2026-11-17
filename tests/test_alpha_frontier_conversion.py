@@ -355,6 +355,24 @@ class ConversionTests(unittest.TestCase):
                 self.c, artifact, receipt, archive, KEY,
                 now=self.c["expires_at"])
 
+    def test_buyer_refuses_checker_rejected_delivery_even_with_valid_archive(self):
+        from unittest.mock import patch
+        from connected_enterprise.alpha_economic.frontier_buyer import sign_verified_delivery
+        from connected_enterprise.alpha_economic.delivery import package
+        artifact = {
+            "schema": "alpha-economic/artifact/v1",
+            "contract_sha256": digest(self.c),
+            "instrument": self.current,
+            "provenance": {"kind": "AUTHORED_FIXTURE"}
+        }
+        receipt = package(self.c, artifact, self.root / "buyer-decision")
+        archive = (self.root / "buyer-decision" / "solution.zip").read_bytes()
+        with patch("connected_enterprise.alpha_economic.frontier_buyer.checker.verify",
+                   return_value={"accepted": False}):
+            with self.assertRaisesRegex(ValueError, "BUYER_CHECKER_REJECTED_DELIVERY"):
+                sign_verified_delivery(
+                    self.c, artifact, receipt, archive, KEY, now=self.now)
+
     def test_customer_owned_cli_generates_request_and_verified_acceptance(self):
         import os
         import subprocess

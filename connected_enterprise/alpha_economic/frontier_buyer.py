@@ -94,6 +94,8 @@ def verify_archive(archive, receipt, artifact, c):
     if files.get("instrument.json") != canonical(artifact["instrument"]):
         raise ValueError("DELIVERED_INSTRUMENT_NOT_BOUND_TO_ARTIFACT")
     independent = checker.verify(c, artifact)
+    if independent.get("accepted") is not True:
+        raise ValueError("BUYER_CHECKER_REJECTED_DELIVERY")
     if (receipt["artifact_sha256"] != digest(artifact)
         or receipt["acceptance"] != independent
         or manifest.get("acceptance.json") != hashlib.sha256(canonical(independent)).hexdigest()):
