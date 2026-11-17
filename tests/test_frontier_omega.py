@@ -32,11 +32,11 @@ class FrontierOmegaTests(unittest.TestCase):
                 "same_frozen_suite": True, "baseline": base, "current": current,
                 "review": {"independent_verifier": True, "report_url": "https://example.org/review"}}
 
-    def test_seed_48_unverified_buyer_problems(self):
-        self.assertEqual(len(self.opportunities), 48)
+    def test_seed_56_unverified_buyer_problems(self):
+        self.assertEqual(len(self.opportunities), 56)
         self.assertEqual(len(self.signals), 12)
         self.assertEqual(set(o["engine"] for o in self.opportunities),
-                         {"MIGRATE", "PROVE", "OPERATE", "TRUST", "ENGINEER"})
+                         {"MIGRATE", "PROVE", "OPERATE", "TRUST", "ENGINEER", "DISCOVER"})
         self.assertTrue(all(o["observed_paid_demand"] == "NONE" for o in self.opportunities))
 
     def test_triage_is_deterministic_not_claimed_roi(self):
@@ -48,7 +48,7 @@ class FrontierOmegaTests(unittest.TestCase):
     def test_csv_exports_every_problem(self):
         out = io.StringIO()
         export_csv(self.opportunities, out)
-        self.assertEqual(len(out.getvalue().splitlines()), 49)
+        self.assertEqual(len(out.getvalue().splitlines()), 57)
 
     def test_synthetic_fixture_cannot_promote(self):
         report = assess_one(self.o, self.run_case(synthetic=True))
