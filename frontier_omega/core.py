@@ -125,10 +125,23 @@ def validate_problem(obj):
         title(obj[k])
     tags(obj["tags"])
     sources(obj["source_urls"])
-    exact(obj["demand"], {"status", "basis"})
+    exact(obj["demand"], {"status", "basis", "ceiling_microUSD",
+                          "deadline", "terms_sha256", "consent_verification"})
     if obj["demand"]["status"] not in ("HYPOTHESIS", "PUBLIC_SIGNAL", "CUSTOMER_REPORTED_UNVERIFIED"):
         raise ValueError("UNSUPPORTED_DEMAND_EVIDENCE")
     title(obj["demand"]["basis"])
+    if obj["demand"]["consent_verification"] != "NOT_VERIFIED":
+        raise ValueError("PURCHASE_CONSENT_CANNOT_BE_ASSERTED_BY_JSON")
+    if obj["demand"]["ceiling_microUSD"] is not None:
+        nonnegative(obj["demand"]["ceiling_microUSD"])
+    if obj["demand"]["deadline"] is not None:
+        day(obj["demand"]["deadline"])
+    if obj["demand"]["terms_sha256"] is not None:
+        if type(obj["demand"]["terms_sha256"]) is not str or not SHA.fullmatch(obj["demand"]["terms_sha256"]):
+            raise ValueError("DECLARED_TERMS_HASH_REQUIRED")
+    if obj["demand"]["status"] in ("HYPOTHESIS", "PUBLIC_SIGNAL"):
+        if any(obj["demand"][k] is not None for k in ("ceiling_microUSD", "deadline", "terms_sha256")):
+            raise ValueError("PUBLIC_SIGNAL_CANNOT_IMPERSONATE_BUYER_TERMS")
     if type(obj["alternatives"]) is not list or len(obj["alternatives"]) < 2:
         raise ValueError("COMPETENT_ALTERNATIVES_AND_NO_PURCHASE_REQUIRED")
     names = set()
@@ -380,6 +393,11 @@ class Reservoir:
         old, new = pairs[0]
         a, b = self._value(old), self._value(new)
         crossing = a <= 0 < b and new["passed"] and new["independent_check"]
+        demand = problems[problem_id]["demand"]
+        ceiling_exceeded = (demand["ceiling_microUSD"] is not None and
+                            new["price_microUSD"] > demand["ceiling_microUSD"])
+        if ceiling_exceeded:
+            crossing = False
         # Caller-supplied claims and scenario numbers are not independently
         # audited and cannot establish actual demand, profit or novel frontier.
         return {"problem_id": problem_id, "before": before_id, "after": after_id,
@@ -387,7 +405,8 @@ class Reservoir:
                 "matched_terms_and_protocol": True,
                 "before_margin_numerator": a, "after_margin_numerator": b,
                 "reported_crossing": crossing,
-                "verdict": ("REPORTED_CROSSING_UNVERIFIED" if crossing else
+                "verdict": ("REPORTED_BUYER_CEILING_EXCEEDED" if ceiling_exceeded else
+                            "REPORTED_CROSSING_UNVERIFIED" if crossing else
                             "NO_POSITIVE_MATCHED_CROSSING"),
                 "economic_crossing_established": False,
                 "workorder_authorized": False,
