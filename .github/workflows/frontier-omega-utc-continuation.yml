@@ -1,0 +1,33 @@
+name: FRONTIER OMEGA UTC continuation preregistered adversarial review
+on:
+  pull_request:
+    branches:
+      - review/frontier-omega-429-standard-runner-20261117
+    paths:
+      - 'frontier_omega/crossings.py'
+      - 'tests/test_frontier_omega_utc_continuation.py'
+      - 'docs/frontier-omega/UTC-CONTINUATION-REVIEW-20261117.md'
+      - '.github/workflows/frontier-omega-utc-continuation.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  utc-continuation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record execution start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+          sparse-checkout: |
+            frontier_omega
+            tests/test_frontier_omega_utc_continuation.py
+            examples/frontier-omega
+      - name: Run exact frozen three-case clock continuation comparison
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p 'test_frontier_omega_utc_continuation.py' -v
