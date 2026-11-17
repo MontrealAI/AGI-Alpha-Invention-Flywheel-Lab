@@ -83,7 +83,7 @@ class ControllerTests(unittest.TestCase):
             strict_json('{"x":NaN}')
 
     def test_resource_budget_and_fresh_source_bindings(self):
-        self.body["mission"]["resources"] = {"max_model_calls":1}
+        self.body["mission"]["resources"] = {"max_model_calls":1,"execution_strategy":"research"}
         rid,ver = self.ctrl.create(self.body)
         first = self.ctrl.advance(rid,ver)
         self.assertEqual(first["status"],"blocked")
@@ -91,7 +91,7 @@ class ControllerTests(unittest.TestCase):
         revised = copy.deepcopy(self.body)
         revised.update(version=1,request_id="amend-the-source")
         revised["sources"][0]["text"] += " Revised publisher statement."
-        revised["mission"]["resources"] = {"max_model_calls":3}
+        revised["mission"]["resources"] = {"max_model_calls":3,"execution_strategy":"research"}
         self.ctrl.create(revised,rid)
         with self.assertRaises(Conflict):
             self.ctrl.deliver(rid,1)

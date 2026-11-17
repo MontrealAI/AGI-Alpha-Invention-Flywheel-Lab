@@ -23,3 +23,13 @@ Anyone who can change the workflow or qualification scripts can change what thos
 - [OWASP Top 10 for Agentic Applications (2026)](https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/)
 - [OWASP GitHub Actions Security Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/GitHub_Actions_Security_Cheat_Sheet.html)
 - [GitHub guidance on pull-request workflows and trust boundaries](https://docs.github.com/en/actions/reference/security/securely-using-pull_request_target)
+
+## Continuation qualification
+
+The private service still binds to loopback. The operator explicitly chooses the benchmark specialist or supplies a typed construction contract. Public presets populate fields without turning on model calls, retrieval, or reuse permission. A repaired construction is a new candidate under the original evaluator. Frozen reference values can be bound directly from the trusted operator contract. The builder receives a count and category of failures plus differences from its public development definition; the held-out inputs and labels stay with the independent checker.
+
+The public Pairing Lab exhibition reads only fixed, licensed repository files. The service returns it at `/showcase` with an opaque sandbox origin and a separate content security policy. Its scripts and styles are content-hashed. The standalone exhibition has no private API connection. The public recipient ZIP explicitly enumerates its files. Private benchmark export adds the verified numeric decision; a mission's free-form intake, conversation and authorization data are excluded.
+
+Fresh pilots require a separately retained commitment before observation. The auditor reconstructs the plan on its exact selection data and executable, checks the requested stacks and thresholds, and distinguishes an incomplete set of observations from a failed pilot. The source and labels of external grades remain the operator's responsibility. CSV grade import grants no authority to execute arbitrary code. The original research agents' patch submissions are outside the downloadable kit.
+
+Relevant regressions are `tests/test_adaptive.py`, `tests/test_pairing_mission.py`, `flagship/test_pilot.py` and the private/public Chromium checks. The review covers the repository implementation and these exercised boundaries. A public multi-tenant service, a production grader for untrusted patches, and a paid inference connector require separate designs and qualification.

@@ -13,6 +13,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from .economics import validate_case
+from .routing import validate_options
 
 PRODUCT = Path(__file__).resolve().parents[1]
 
@@ -58,7 +59,7 @@ def runtime_source():
     # Hash the trusted computation, including the checker and portable recipient path.
     # Editing a stylesheet or command-line help does not change an accepted calculation.
     paths = [PRODUCT / "ignition" / f"{n}.py" for n in
-             ("construction","evaluation","delivery","portable","provider","research","controller","store","economics","model_schema")]
+             ("construction","evaluation","delivery","portable","provider","research","controller","store","economics","model_schema","routing","pairing_specialist")]
     bridge = PRODUCT.parent / "alpha-genesis-harness" / "bridge"
     paths += [bridge / name for name in ("__init__.py", "adapters.py", "output_schema.py")]
     return digest({"python": [sys.implementation.name, *sys.version_info[:3]],
@@ -84,6 +85,10 @@ def clean_mission(mission):
     for field in ("authority", "resources", "time", "construction_spec"):
         if not isinstance(result.setdefault(field, {}), dict):
             raise StateError(f"{field} must be an object")
+    try:
+        validate_options(result["resources"])
+    except ValueError as exc:
+        raise StateError(str(exc)) from exc
     if "commercial_case" in result["resources"]:
         validate_case(result["resources"]["commercial_case"])
     auth = result["authority"]
@@ -133,7 +138,7 @@ class Store:
         finally:
             db.close()
 
-    def create(self, body, provider, runtime, *, run_id=None, base=None, inherited=None):
+    def create(self, body, provider, runtime, *, run_id=None, base=None, inherited=None, specialist_source=None):
         if not isinstance(body, dict) or set(body) - {"mission", "sources", "request_id", "version"}:
             raise StateError("Unexpected mission request")
         key = body.get("request_id")
@@ -164,8 +169,11 @@ class Store:
             state = dict(id=run_id, version=version, mission=mission, sources=sources, provider=provider,
                          runtime=runtime, input_sha256=digest([mission, sources]), status="queued", stage="intake",
                          events=[], calls={}, exchanges={}, source_result=None, research=None, contract=None,
+                         routing=None, construction_attempts=[],
                          proposed_contract=None, contract_sha256=None, artifact=None, evaluation=None,
                          handoff=None, error=None, inherited=inherited, created_at=timestamp())
+            if "pairing_lab" in mission["resources"]:
+                state["specialist_source"] = specialist_source
             event(state, "intake", "Mission and permission snapshot saved")
             db.execute("INSERT INTO revisions VALUES(?,?,?)", (run_id,version,canonical(state)))
             db.execute("INSERT INTO requests VALUES(?,?,?,?)", (key,fp,run_id,version))

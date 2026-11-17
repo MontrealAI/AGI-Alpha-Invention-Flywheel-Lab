@@ -11,6 +11,7 @@ const { createInterface } = require('node:readline');
 const { pathToFileURL } = require('node:url');
 const { chromium } = require('playwright-core');
 const product = path.resolve(__dirname, '..');
+const { qualifyAdaptiveRepair, qualifyPairingDecision, qualifyPublicBoundary } = require('./adaptive_operator.cjs');
 
 async function assertLayout(page, width) {
   await page.setViewportSize({ width, height: 820 });
@@ -44,6 +45,7 @@ async function publicReplayCheck(browser,work) {
     const page=await context.newPage();const mutations=[];
     page.on('request',req=>{if(req.method()!=='GET')mutations.push(req.url());});
     await page.goto(origin);
+    await page.locator('#replays summary').click();
     await page.locator('[data-public-replay="integrity"]').waitFor();
     assert.match(await page.locator('#mode').textContent(),/unavailable/i);
     await page.locator('#purpose').fill('Preserve my unsent draft');
@@ -97,6 +99,8 @@ async function main() {
     await page.keyboard.press('Tab');
     assert.equal(await page.evaluate(()=>document.activeElement.className),'skip');
     await page.locator('#example').selectOption('integrity');
+    await page.locator('#strategy').selectOption('research');
+    await page.locator('#assisted_model').check();
     const sample=JSON.parse(await fs.readFile(path.join(product,'examples','integrity.json'),'utf8'));
     await page.locator('#start').click();
     const candidate={title:'Offline manifest inspection',beneficiary:sample.mission.beneficiary,
@@ -133,6 +137,9 @@ async function main() {
     await page.waitForFunction(()=>document.getElementById('run-id').textContent.includes('Revision 2'));
     await page.locator('#history summary').click();
     await page.waitForFunction(()=>document.getElementById('versions').textContent.includes('"verified"'));
+    await qualifyAdaptiveRepair(page, send, assertLayout, sample);
+    await qualifyPairingDecision(page, assertLayout);
+    await qualifyPublicBoundary(page);
     await page.goto(pathToFileURL(path.join(product,'web','index.html')).href);
     await page.locator('.replay-picker summary').click();
     recording.mission.purpose='<img src=x onerror="document.body.dataset.injected=1">';

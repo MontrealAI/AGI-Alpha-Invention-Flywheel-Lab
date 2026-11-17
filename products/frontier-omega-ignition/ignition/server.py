@@ -35,6 +35,10 @@ class Service(ThreadingHTTPServer):
         self.pool.shutdown(wait=True)
 
 
+PRIVATE_CSP = ("default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; "
+               "connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'")
+
+
 class Handler(BaseHTTPRequestHandler):
     server_version = "Ignition"
     sys_version = ""
@@ -43,13 +47,13 @@ class Handler(BaseHTTPRequestHandler):
     def log_message(self, format, *args):
         pass  # Mission IDs, paths and payloads stay out of access logs.
 
-    def _send(self, status, media, content, attachment=None):
+    def _send(self, status, media, content, attachment=None, *, csp=PRIVATE_CSP):
         self.send_response(status)
         for key, value in {
             "Content-Type":media, "Content-Length":str(len(content)),
             "X-Content-Type-Options":"nosniff", "Referrer-Policy":"no-referrer",
             "Cache-Control":"no-store", "X-Frame-Options":"DENY",
-            "Content-Security-Policy":"default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'"
+            "Content-Security-Policy":csp
         }.items():
             self.send_header(key, value)
         if attachment:
@@ -82,10 +86,18 @@ class Handler(BaseHTTPRequestHandler):
             body = strict_json(self.rfile.read(size))
             if not isinstance(body,dict):
                 raise StateError("Expected an object")
-        if not post and route in {"/", "/index.html", "/app.js", "/style.css"}:
+        if not post and route in {"/", "/index.html", "/app.js", "/style.css", "/operator.css"}:
             name = route.lstrip("/") or "index.html"
-            media = {"index.html":"text/html","app.js":"text/javascript","style.css":"text/css"}[name]
+            media = {"index.html":"text/html","app.js":"text/javascript","style.css":"text/css","operator.css":"text/css"}[name]
             return self._send(200,media+"; charset=utf-8",(PRODUCT/"web"/name).read_bytes())
+        if not post and route == "/showcase":
+            # The exhibit reads only its repository's public inputs. Its opaque
+            # origin and independent no-connect CSP isolate private workspace APIs.
+            from showcase.build import render, policy
+            page = render()
+            csp = (policy(page) + "; frame-ancestors 'none'; "
+                   "sandbox allow-scripts allow-downloads allow-popups allow-popups-to-escape-sandbox")
+            return self._send(200, "text/html; charset=utf-8", page.encode("utf-8"), csp=csp)
         if not post and route == "/api/status":
             provider = ctrl.identity()
             return self._json({"mode":provider["mode"],"provider":provider,"runtime":ctrl.source})

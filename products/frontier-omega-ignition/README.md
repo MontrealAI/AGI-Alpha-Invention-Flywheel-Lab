@@ -4,7 +4,22 @@
 
 IGNITION runs on the operator’s machine. It reads an authorized mission, investigates attributed sources, proposes opportunities, challenges them, and builds the selected construction when the installed interpreter can perform it. The first two executable families are typed record migrations and byte-level manifest audits. Research may select an existing solution, request a testable specification, or stop with a specific obstruction.
 
-## Try it
+## Direct construction and Pairing Lab
+
+Start the private workbench and choose **Choose a self-hosted coding stack for a pilot** to run the flagship on the public cohort. The operator controls the token allowance, maximum number of attempts, required resolution and optional repository/model scope. The local engine checks the locked decision against independent SQL. Its accepted delivery includes a source-bound report and a program for the recipient. A negative pilot recommendation remains visible. **Export** and run `python3 verify_decision.py` after extraction.
+
+For the public English/French demonstration open **Public showcase** in the workbench or build the self-contained page. The public kit and exhibition can be used without an account, model connection or private workspace.
+
+```sh
+python3 -B showcase/build.py --output FRONTIER_OMEGA_Pairing_Lab.html
+python3 -B flagship/package.py Pairing_Lab.zip
+```
+
+A defined task can also take a direct path through the original software constructors. An exact manifest can be compiled without model permission. A model can infer missing operations from authorized examples. Select **Frontier investigation** for open-ended work. When an evaluator confirms a repairable defect, the constructor can retry within the mission's budget. The failed attempt and its independent verdict remain in the record.
+
+[Continuation evidence, acceptance and campaign](../../docs/frontier-omega-ignition/continuation/REPORT.md) · [Pairing Lab recipient guide and source attribution](flagship/README.md) · [Prospective matched model trials](trials/REGISTRATION.md)
+
+## Original research workbench
 
 Use a full checkout of the pull request, including the sibling ALPHA GENESIS HARNESS, and Python 3.12. No dependency installation is needed to launch the application.
 

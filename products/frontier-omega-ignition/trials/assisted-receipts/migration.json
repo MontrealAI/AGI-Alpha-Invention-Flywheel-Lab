@@ -1,0 +1,125 @@
+{
+  "protocol": "ignition/included-assisted/1",
+  "mode": "LIVE_ASSISTED",
+  "exercise": "migration",
+  "mission_verdict": "ACCEPTED",
+  "provider": {
+    "attribution": "operator-declared",
+    "mode": "manual",
+    "model": "GPT-6 family; precise backend revision unreported",
+    "provider": "OpenAI Codex in ChatGPT Work"
+  },
+  "exact_backend_independently_attested": false,
+  "fixture_sha256": "8058a3ea8b97ce7deb1927fae70bd71ac7e9639317814e048db28aade4ee1595",
+  "application_sources_sha256": "c3390591c98bb92916b9caad8dbc64d61438ced4ce48e25d7885b49fbe05fbf6",
+  "application_source_files": {
+    "__init__.py": "f63d295b9a1c8bc8a430f3b9620086d9ff450aa2815af78fc25b5f25b5884dad",
+    "__main__.py": "65f316d10a2b0e6e4f2db27f1a7974ae184fec17f5c28fe585ef112d032f4054",
+    "compare.py": "f79fac0e386a291c69954c7389e8366391d90e09d82491b5ab7e25b901868109",
+    "construction.py": "17ceb7e84280cad65690c540bb6abc041e50ca121ab4ca7a9b0dfa2fb9b5fa71",
+    "controller.py": "c86628149da8494ce6b1a4d609756342859f197f200c47a27c18dc2340969721",
+    "delivery.py": "204cc4540d68c80e71e76df76a0afffb04073fe05d3659db6bbc07e67e4a9c49",
+    "economics.py": "3478e8ce0bf071ab2c59db4ea60b705782528eec65661f92322ddf7969397097",
+    "evaluation.py": "50a13c7a52aca4ddaed813705f64bfe1f8767b520da5f75a3f8b32451fe78a41",
+    "model_schema.py": "d10a5cc63f0a39cf6ddc9b5e23b37c58b55d9fe2457602118cd6ad577f735613",
+    "pairing_specialist.py": "762628d28e8d05172325d0cb1cd6d678c251adc87a727783c7eb5ab8513812cf",
+    "portable.py": "5c86a9651bb87bb47241af8ca8e2027135d2d0b4b4e5e4f80f5005b6045aa098",
+    "provider.py": "4f0905de84fb77c2ac901752ee2d3da7356bd15dcf2bab90080128980d8649bd",
+    "research.py": "97ec6b5a6a57484fc66913556ff43f8a7e45c40bb293785300e98d7e72e99be5",
+    "routing.py": "bfd6fcc9dd4dea313674e0c4861267ddbfbee362e073f8b2f0b8fdf02e34ea46",
+    "server.py": "c7739978761eca160da1523621d5f61c82ec797d3734d7c369def100ece3da59",
+    "store.py": "d4d3211f537ee94b816dee2c71c692cd778f60ca130fadb17695c5299dea9e94"
+  },
+  "runtime_sha256": "78edcd8f449dcc2dc7e2bb191292428aa9f25240c86311851a118ba2a9ee30b5",
+  "contract_sha256": "17e1dcf5c5f062a89db070dda03e6df21c6965bf7dbb5b7dff06e62803cf057d",
+  "request_sha256": "7aebd7f58496b32990b66174bd995b286d94017d73fbb532eb8676d62b6b9ab4",
+  "answer_sha256": "3f0f6faaa6577454275f0acac69c302bcaa60b3aa85e5fe95c39955ccaa0d6bb",
+  "answer": {
+    "kind": "record_migration",
+    "program": {
+      "input_fields": [
+        "id",
+        "name",
+        "status"
+      ],
+      "extra_fields": "reject",
+      "columns": [
+        {
+          "source": "id",
+          "target": "record_id",
+          "type": "text"
+        },
+        {
+          "source": "id",
+          "target": "area",
+          "type": "text",
+          "split": {
+            "separator": "-",
+            "index": 0
+          }
+        },
+        {
+          "source": "name",
+          "target": "headline",
+          "type": "text"
+        },
+        {
+          "source": "status",
+          "target": "decision",
+          "type": "text"
+        }
+      ]
+    }
+  },
+  "calls": [
+    {
+      "mode": "manual",
+      "complete_cost_known": false,
+      "provider": "OpenAI Codex in ChatGPT Work",
+      "request_sha256": "7aebd7f58496b32990b66174bd995b286d94017d73fbb532eb8676d62b6b9ab4",
+      "status": "reviewed_exchange",
+      "stage": "construct",
+      "recorded_at": "2026-11-17T21:21:44.948083+00:00",
+      "application_model_calls": 0,
+      "model": "GPT-6 family; precise backend revision unreported",
+      "response_sha256": "3f0f6faaa6577454275f0acac69c302bcaa60b3aa85e5fe95c39955ccaa0d6bb",
+      "usage": null
+    }
+  ],
+  "started_at": "2026-11-17T21:21:32.240369+00:00",
+  "finished_at": "2026-11-17T21:21:45.014409+00:00",
+  "exchange_wall_seconds": 12.77404,
+  "model_only_latency_seconds": null,
+  "model_token_usage": null,
+  "complete_cost_known": false,
+  "operator_assisted": true,
+  "prior_public_fixtures_known": true,
+  "accepted_recipient": {
+    "verified_exit": 0,
+    "example_exit": 0,
+    "example_output_sha256": "297f14d7aa725c47a4f82d7de8fcfa3dfdcb4014b1db54c6ef943100d9ae2b9f"
+  },
+  "independent_evaluation": {
+    "status": "pass",
+    "case_count": 9,
+    "candidate_cases_passed": 9,
+    "reference_cases_passed": 0,
+    "failed_case_names": [],
+    "contract_conforms": true,
+    "comparison": {
+      "criterion": "conformance to declared operations and complete correctness on the frozen workload; latency is telemetry only",
+      "name": "enumerative example-based migration",
+      "oracles_agree": true,
+      "outcome": "incomparable",
+      "reference_obstruction": "ambiguous minimum-cost development hypotheses",
+      "reference_pass": false
+    },
+    "telemetry_ns": {
+      "candidate": 302642,
+      "local_evaluation": 666841,
+      "reference": 930
+    },
+    "receipt_sha256": "6934307a408a2fdd052c78041b34a3f71787b689ebbc4b283fb9011ee5ca9199"
+  },
+  "artifact_sha256": "0af77bc6067025e9d005d5c9cc6c472e450f4742b97f67bf77452771c3d9cac2"
+}

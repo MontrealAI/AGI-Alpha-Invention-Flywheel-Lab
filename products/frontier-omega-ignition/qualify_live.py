@@ -202,6 +202,8 @@ def check_portable(archive, work):
 def run_mission(work, model, record, *, live_sources=False):
     # This public mission and its tests were recorded before this worker's model run.
     example = json.loads(EXAMPLE.read_bytes())
+    # This historical comparator specifically exercises research-led discovery.
+    example["mission"]["resources"]["execution_strategy"] = "research"
     if live_sources:
         # A separate prospective run grants only the repository's allowlisted public retrieval.
         example["mission"]["authority"].update(public_sources=True, assisted_model=False)

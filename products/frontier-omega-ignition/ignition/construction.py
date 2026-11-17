@@ -337,6 +337,9 @@ def build(contract, proposal):
     require(proposal["kind"] == spec["kind"], "wrong_kind", "solution family differs from frozen mission")
     program = proposal["program"]
     if spec["kind"] == "manifest_audit":
+        # The builder can refer to trusted operator bytes without retranscribing a cryptographic identity.
+        if type(program) is dict and set(program) == {"use_frozen_manifest"} and program["use_frozen_manifest"] is True:
+            program = spec["definition"]
         _manifest(program)
     else:
         fields = _migration(program)
