@@ -71,3 +71,34 @@ test('Out-Strategise: old strategy rejected after purpose or assumption change',
  assert.equal(second.qualified,false);assert.equal(second.passed,0);
  assert.throws(()=>run('strategisePolicy(33,33)'));
 });
+
+test('registered World Lab cash integrity: no unearned refund in failed-world ledger',()=>{
+ const r=run('marketIndependent({n:4,k:600,p:.8,cash:900})');
+ assert.equal(r.prepayment_cash,0,'full construction and four adaptation debits precede receipts');
+ assert.equal(r.success_cash,1200);
+ assert.equal(r.failure_cash,0,'failed world cannot silently refund incurred adaptation');
+ assert.equal(r.min_cash_prefix,0);
+});
+test('registered World Lab cash integrity: complete non-refundable expected contribution is 60',()=>{
+ const a=run('marketFormula({n:4,k:600,p:.8,cash:900})');
+ const b=run('marketIndependent({n:4,k:600,p:.8,cash:900})');
+ assert.equal(a.expected_contribution,60,'960 collected expected receipts less 600+300 incurred debits');
+ assert.equal(b.expected_delta,60,'distinct event-branch arithmetic must reconcile');
+ assert.equal(a.required_prefunding,900);
+ assert.equal(a.qualified_model_route,true);
+});
+test('registered World Lab zero acceptance cannot recover adaptation without a recorded entitlement',()=>{
+ const a=run('marketFormula({n:4,k:600,p:0,cash:900})');
+ const b=run('marketIndependent({n:4,k:600,p:0,cash:900})');
+ assert.equal(a.expected_contribution,-900);
+ assert.equal(b.failure_cash,0);
+ assert.equal(b.expected_delta,-900);
+ assert.equal(a.qualified_model_route,false);
+});
+test('registered World Lab no-deploy is mandatory at break-even or inadequate prefunding',()=>{
+ const flat=run('marketFormula({n:4,k:600,p:.75,cash:900})');
+ assert.equal(flat.expected_contribution,0);
+ assert.equal(flat.qualified_model_route,false);
+ const unfinanced=run('marketFormula({n:4,k:600,p:.8,cash:899})');
+ assert.equal(unfinanced.qualified_model_route,false);
+});
