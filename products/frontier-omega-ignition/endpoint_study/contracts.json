@@ -1,0 +1,110 @@
+{
+  "interactive_gpt": {
+    "model": "GPT-OSS 120B",
+    "dataset": "perf",
+    "max_ttft_p90_ms": "500",
+    "min_tps_per_user": "100",
+    "min_concurrency": 1,
+    "load_mode": "reported",
+    "rate_metric": "reported_tps_per_user",
+    "require_point_accuracy": false,
+    "require_price": false,
+    "require_access": false
+  },
+  "interactive_deepseek": {
+    "model": "deepseek-v4_1-flash",
+    "dataset": "mlperf_agentic_inference_dataset",
+    "max_ttft_p90_ms": "500",
+    "min_tps_per_user": "100",
+    "min_concurrency": 1,
+    "load_mode": "online",
+    "rate_metric": "reported_tps_per_user",
+    "require_point_accuracy": false,
+    "require_price": false,
+    "require_access": false
+  },
+  "tail_rate_deepseek": {
+    "model": "deepseek-v4_1-flash",
+    "dataset": "mlperf_agentic_inference_dataset",
+    "max_ttft_p90_ms": "500",
+    "min_tps_per_user": "100",
+    "min_concurrency": 1,
+    "load_mode": "online",
+    "rate_metric": "inverse_p90_tpot",
+    "require_point_accuracy": false,
+    "require_price": false,
+    "require_access": false
+  },
+  "strict_gpt": {
+    "model": "GPT-OSS 120B",
+    "dataset": "perf",
+    "max_ttft_p90_ms": "0.001",
+    "min_tps_per_user": "100",
+    "min_concurrency": 1,
+    "load_mode": "reported",
+    "rate_metric": "reported_tps_per_user",
+    "require_point_accuracy": false,
+    "require_price": false,
+    "require_access": false
+  },
+  "explicit_online_gpt": {
+    "model": "GPT-OSS 120B",
+    "dataset": "perf",
+    "max_ttft_p90_ms": "500",
+    "min_tps_per_user": "100",
+    "min_concurrency": 1,
+    "load_mode": "online",
+    "rate_metric": "reported_tps_per_user",
+    "require_point_accuracy": false,
+    "require_price": false,
+    "require_access": false
+  },
+  "wrong_distribution": {
+    "model": "GPT-OSS 120B",
+    "dataset": "own-MontrealAI-traffic",
+    "max_ttft_p90_ms": "500",
+    "min_tps_per_user": "100",
+    "min_concurrency": 1,
+    "load_mode": "reported",
+    "rate_metric": "reported_tps_per_user",
+    "require_point_accuracy": false,
+    "require_price": false,
+    "require_access": false
+  },
+  "require_accuracy": {
+    "model": "GPT-OSS 120B",
+    "dataset": "perf",
+    "max_ttft_p90_ms": "500",
+    "min_tps_per_user": "100",
+    "min_concurrency": 1,
+    "load_mode": "reported",
+    "rate_metric": "reported_tps_per_user",
+    "require_point_accuracy": true,
+    "require_price": false,
+    "require_access": false
+  },
+  "require_price": {
+    "model": "GPT-OSS 120B",
+    "dataset": "perf",
+    "max_ttft_p90_ms": "500",
+    "min_tps_per_user": "100",
+    "min_concurrency": 1,
+    "load_mode": "reported",
+    "rate_metric": "reported_tps_per_user",
+    "require_point_accuracy": false,
+    "require_price": true,
+    "require_access": false
+  },
+  "require_access": {
+    "model": "GPT-OSS 120B",
+    "dataset": "perf",
+    "max_ttft_p90_ms": "500",
+    "min_tps_per_user": "100",
+    "min_concurrency": 1,
+    "load_mode": "reported",
+    "rate_metric": "reported_tps_per_user",
+    "require_point_accuracy": false,
+    "require_price": false,
+    "require_access": true
+  }
+}
