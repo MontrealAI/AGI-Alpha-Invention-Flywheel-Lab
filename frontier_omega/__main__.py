@@ -8,6 +8,7 @@ from __future__ import annotations
 import csv
 import hashlib
 import json
+import math
 import os
 import sys
 from datetime import date, datetime, timezone
@@ -41,8 +42,21 @@ class InventoryError(ValueError):
 
 
 def read_json(path: Path):
+    """Read unambiguous JSON; caller-supplied labels may never be overwritten."""
+    def unique_members(pairs):
+        row = {}
+        for key, value in pairs:
+            if key in row:
+                raise InventoryError("Duplicate JSON member: " + key)
+            row[key] = value
+        return row
+
+    def refuse_nonfinite(token):
+        raise InventoryError("Nonfinite JSON number: " + token)
+
     with path.open(encoding="utf-8") as handle:
-        return json.load(handle)
+        return json.load(handle, object_pairs_hook=unique_members,
+                         parse_constant=refuse_nonfinite)
 
 
 def validate(root: Path = ROOT):
@@ -117,8 +131,10 @@ def _run(run, o):
         raise InventoryError("Too few matched cases")
     if type(run.get("accepted")) is not int or not 0 <= run["accepted"] <= run["cases"]:
         raise InventoryError("Invalid acceptance numerator")
-    if type(run.get("p95_turnaround_hours")) not in (int, float) or run["p95_turnaround_hours"] < 0:
-        raise InventoryError("Missing/invalid p95 time")
+    if (type(run.get("p95_turnaround_hours")) not in (int, float)
+            or not math.isfinite(run["p95_turnaround_hours"])
+            or run["p95_turnaround_hours"] < 0):
+        raise InventoryError("Missing/invalid or nonfinite p95 time")
     costs = run.get("costs_usd")
     if type(costs) is not dict or set(costs) != set(COST_CATEGORIES):
         raise InventoryError("All full-lifecycle cost categories required")

@@ -162,6 +162,36 @@ class IgnitionTests(unittest.TestCase):
         e["matched_test"]["current"]["accepted"] = 14
         self.assertEqual(ignition(self.o, e)["decision"], "RETEST_OR_REDESIGN")
 
+    def test_nested_synthetic_benchmark_never_becomes_pilot(self):
+        # A real-looking outer record must not erase the inner rehearsal label.
+        e = self.fixture()
+        e["matched_test"]["synthetic"] = True
+        self.assertEqual(ignition(self.o, e)["decision"], "SYNTHETIC_REHEARSAL")
+
+    def test_nested_benchmark_opportunity_identity_is_preserved(self):
+        e = self.fixture()
+        e["matched_test"]["opportunity_id"] = "O050"
+        with self.assertRaises(InventoryError):
+            ignition(self.o, e)
+
+    def test_nonboolean_nested_synthetic_flag_rejected(self):
+        e = self.fixture()
+        e["matched_test"]["synthetic"] = "false"
+        with self.assertRaises(InventoryError):
+            ignition(self.o, e)
+
+    def test_nonfinite_benchmark_p95_cannot_create_crossing(self):
+        from frontier_omega.__main__ import assess_one
+        for field in ("baseline", "current"):
+            for nonfinite in (float("nan"), float("inf"), float("-inf")):
+                with self.subTest(field=field, nonfinite=str(nonfinite)):
+                    e = self.fixture(old_accepted=20)["matched_test"]
+                    e["opportunity_id"] = self.o["id"]
+                    e["synthetic"] = False
+                    e[field]["p95_turnaround_hours"] = nonfinite
+                    with self.assertRaises(InventoryError):
+                        assess_one(self.o, e)
+
     def test_all_57_are_candidates_and_none_are_live_sales(self):
         rows = portfolio_decisions(self.opportunities, {}, limit=48)
         self.assertEqual(rows["count"], 57)
