@@ -113,9 +113,36 @@ class FrontierTests(unittest.TestCase):
     def test_buyer_promise_not_inferred_from_source(self):
         data = load_file(SEED)
         problem = deepcopy(data["problems"][0])
-        problem["demand"] = {"status": "SIGNED_COMMITMENT", "basis": "asserted"}
+        problem["demand"]["status"] = "SIGNED_COMMITMENT"
         with self.assertRaisesRegex(ValueError, "UNSUPPORTED_DEMAND"):
             self.engine.add(problem)
+
+    def test_public_demand_cannot_impersonate_accepted_buyer_terms(self):
+        p = load_file(SEED)["problems"][0]
+        p["demand"]["ceiling_microUSD"] = 50_000_000
+        with self.assertRaisesRegex(ValueError, "PUBLIC_SIGNAL_CANNOT"):
+            self.engine.add(p)
+        p = load_file(SEED)["problems"][0]
+        p["demand"]["consent_verification"] = "VERIFIED"
+        with self.assertRaisesRegex(ValueError, "CANNOT_BE_ASSERTED"):
+            self.engine.add(p)
+
+    def test_reported_buyer_price_ceiling_blocks_a_false_crossing(self):
+        p = load_file(SEED)["problems"][0]
+        self.assertEqual(p["id"], "compiled-crypto-assurance")
+        p["demand"].update({"status": "CUSTOMER_REPORTED_UNVERIFIED",
+                             "ceiling_microUSD": 5_000_000,
+                             "terms_sha256": "a" * 64,
+                             "deadline": "2026-12-31"})
+        self.engine.add(p)
+        self.engine.add(fixture_event("capability-old", "2026-10-12"))
+        self.engine.add(fixture_event("capability-new", "2026-11-10"))
+        self.engine.add(trial("old-trial", "capability-old", costs=14_000_000))
+        self.engine.add(trial("new-trial", "capability-new", costs=3_000_000))
+        report = self.engine.compare("compiled-crypto-assurance", "capability-old", "capability-new")
+        self.assertEqual(report["verdict"], "REPORTED_BUYER_CEILING_EXCEEDED")
+        self.assertFalse(report["workorder_authorized"])
+        self.assertFalse(report["reported_crossing"])
 
     def test_no_purchase_is_required_strong_comparator(self):
         data = load_file(SEED)
