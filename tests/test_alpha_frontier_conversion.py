@@ -132,7 +132,7 @@ class ConversionTests(unittest.TestCase):
         second = submit_qualified(self.engine, self.reservoir, self.bundle, now=self.now)
         self.assertEqual(first["job"], second["job"])
         self.assertEqual(len(self.engine.state.summary()["jobs"]), 1)
-        self.assertEqual(list((self.engine.root / "frontier-links").glob("*.json")).__len__(), 1)
+        self.assertEqual(len(list((self.engine.root / "frontier-links").glob("*.json"))), 1)
 
     def test_public_source_signal_without_trails_never_creates_paid_order(self):
         with self.assertRaisesRegex(ValueError, "MATCHED_REPORTED_CROSSING_REQUIRED"):
@@ -216,7 +216,6 @@ class ConversionTests(unittest.TestCase):
         self.register()
         class ExternalStub:
             policy = {"scope": "EXTERNAL_LIVE"}
-            root = Path(self.root) if False else None
         external = ExternalStub()
         external.root = self.root / "external"
         with self.assertRaisesRegex(PermissionError, "SCENARIO_NOT_LIVE"):
@@ -279,6 +278,27 @@ class ConversionTests(unittest.TestCase):
         self.assertEqual(self.engine.state.get(identifier(self.c))["state"], "COMPLETE")
         self.assertEqual(output["engine"]["actual_collections"], 0)
         self.assertTrue((self.engine.root / "outbox" / identifier(self.c) / "solution.zip").exists())
+
+    def test_reported_costs_below_engine_worst_case_are_refused(self):
+        self.reservoir.add(make_trial(
+            self.c, PROBLEM, BEFORE, "frozen-old", self.old,
+            run_on="2026-11-16", costs_microUSD=numeric(13_000_000),
+            acceptance_probability_bps=9500, scope="AUTHORED_SCENARIO"))
+        self.reservoir.add(make_trial(
+            self.c, PROBLEM, AFTER, "frozen-new", self.current,
+            run_on="2026-11-16", costs_microUSD=numeric(500_000),
+            acceptance_probability_bps=9500, scope="AUTHORED_SCENARIO"))
+        with self.assertRaisesRegex(ValueError, "FULL_COST_UNDERSTATES"):
+            self.preflight()
+
+    def test_signed_purchase_with_unacceptable_outside_option_refused(self):
+        self.register()
+        altered = copy.deepcopy(self.bundle)
+        c = altered["buyer_envelope"]["body"]["contract"]
+        c["outside_option_microUSD"] = c["price_microUSD"] - 1
+        altered["buyer_envelope"] = sign(altered["buyer_envelope"]["body"], KEY)
+        with self.assertRaisesRegex(ValueError, "OUTSIDE_OPTION_LOSES"):
+            admission_preflight(self.reservoir, altered, {self.c["buyer"]: KEY}, now=self.now)
 
     def test_buyer_decline_is_not_fake_revenue(self):
         self.register()

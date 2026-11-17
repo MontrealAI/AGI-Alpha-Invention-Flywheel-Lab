@@ -3,7 +3,7 @@ on:
   pull_request:
     paths:
       - ".github/workflows/alpha-frontier-conversion.yml"
-      - "connected_enterprise/alpha_economic/frontier_bridge.py"
+      - "connected_enterprise/alpha_economic/frontier_*.py"
       - "frontier_omega/**"
       - "tests/test_alpha_frontier_conversion.py"
       - "tests/test_frontier_omega.py"
@@ -29,4 +29,5 @@ jobs:
           python3 -m unittest discover -s tests -p 'test_frontier_omega.py' -v
           python3 -m unittest discover -s tests -p 'test_alpha_economic*.py' -v
           python3 -m unittest discover -s tests -p 'test_connected_finance.py' -v
+          python3 -m unittest discover -s tests -p 'test_alpha_runtime_ignition.py' -v
           echo "No real payer, Stripe transaction, treasury or model inference is exercised."
