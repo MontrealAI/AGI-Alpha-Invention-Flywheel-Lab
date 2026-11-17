@@ -186,11 +186,18 @@ class ConversionTests(unittest.TestCase):
             admission_preflight(self.reservoir, altered, {self.c["buyer"]: KEY}, now=self.now)
 
     def test_strong_current_alternative_must_pass_host_checker(self):
-        self.register()
         altered = copy.deepcopy(self.bundle)
         c = altered["buyer_envelope"]["body"]["contract"]
         c["ordinary"] = self.old
         altered["buyer_envelope"] = sign(altered["buyer_envelope"]["body"], KEY)
+        self.reservoir.add(make_trial(
+            c, PROBLEM, BEFORE, "frozen-old", self.old,
+            run_on="2026-11-16", costs_microUSD=numeric(13_000_000),
+            acceptance_probability_bps=9500, scope="AUTHORED_SCENARIO"))
+        self.reservoir.add(make_trial(
+            c, PROBLEM, AFTER, "frozen-new", self.current,
+            run_on="2026-11-16", costs_microUSD=numeric(2_000_000),
+            acceptance_probability_bps=9500, scope="AUTHORED_SCENARIO"))
         with self.assertRaisesRegex(ValueError, "COMPETENT_ORDINARY_CONTROL_MUST_PASS"):
             admission_preflight(self.reservoir, altered, {self.c["buyer"]: KEY}, now=self.now)
 
