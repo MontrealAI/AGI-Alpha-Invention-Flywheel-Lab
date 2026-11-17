@@ -1,0 +1,110 @@
+{
+  "protocol": "ignition/opportunity-observation/1",
+  "source_revision": "4719005c957e53716ccd3f328688d8a9c40ee4cc",
+  "protocol_revision": "257c0541b3168092700848c52ab2b899c3e51a87",
+  "driver_sha256": "41715327563c376caa05c065bfeb4711b44b1d8ea614b4c65cfc23731fc14ad5",
+  "registered_sha256": "64f1d57a8fc6fff8df7d632dc7c407646f68c51a05f3e505c3246aa93c09086e",
+  "started_at": "2026-11-17T21:44:47.752154+00:00",
+  "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+  "model_url": "https://huggingface.co/bartowski/Qwen_Qwen3-4B-Instruct-2507-GGUF/resolve/ae44f08e1392f39c0e474af10c3ff8355c8b6688/Qwen_Qwen3-4B-Instruct-2507-Q4_K_M.gguf",
+  "runtime_url": "https://github.com/ggml-org/llama.cpp/releases/download/b12242/llama-b12242-bin-ubuntu-x64.tar.gz",
+  "workload": "One public text-only opportunity exchange. Model has no tools.",
+  "actions_run": "44182954390",
+  "actions_attempt": "1",
+  "cash_spend": "unmeasured",
+  "complete_cost_known": false,
+  "model_calls": 1,
+  "observation": "rejected_structure",
+  "semantic_verdict": "unassessed",
+  "verified_runtime_archive_sha256": "909eef25cd53e6601c8a07c866d8dbb2983e74177088d55182137a8fb8255d62",
+  "verified_model_file_sha256": "2fde00ce69dd4899c70d020845e2638353015bba0fdf161b3eb965f2bca4464e",
+  "verified_runtime_binary_sha256": "fe211d00c4754aa67aaa492d2c755ab0f6ef60bf30eee3c0c74a3496189cde17",
+  "threads": 4,
+  "prompt_sha256": "6437cc913eb50d9363ffe6b39597abc432df75e004c58b5b02e946885c58e053",
+  "request_sha256": "b5a618b23773efe5efc9ead6b65aa89a5345b6e55deb3dae07a09f12275e7383",
+  "model_text": "{\n  \"challenger\": null,\n  \"decision\": \"No pilot is warranted at this stage due to insufficient evidence of distinct performance advantages or cost-effectiveness of self-hosted coding systems under mean charged-token constraints. The available records do not provide issue-level, model-specific, or cost-accurate comparisons that would allow for independent acceptance of a private repository maintenance pilot.\",\n  \"incumbent\": \"Existing open-source harnesses (e.g., those evaluated by Zhao et al.) with proven performance on verified SWE-bench issues under common serving conditions represent a stronger, more reliable baseline.\",\n  \"limitations\": [\n    \"No record provides direct comparison of self-hosted systems against hosted alternatives on token cost or issue resolution under bounded charging.\",\n    \"All performance claims are aggregated or model-agnostic; no issue-level breakdowns exist for self-hosted systems.\",\n    \"Missing data on token usage patterns (e.g., caching, repetition) in self-hosted environments prevents accurate cost modeling.\",\n    \"No evidence of private backlog or operational overheads in self-hosted systems that would justify pilot costs.\"\n  ],\n  \"opportunities\": [\n    {\n      \"move\": \"Conduct a targeted analysis of Figshare v1’s issue-level outcomes to identify patterns in failure rates and token usage across models, then use those to benchmark against known open-source harnesses. This would establish a baseline for what constitutes a 'performance gap' under token constraints.\",\n      \"sources\": [\n        \"C\"\n      ],\n      \"title\": \"Issue-level token and failure pattern analysis from public benchmark data\"\n    },\n    {\n      \"move\": \"Re-examine Zhao, Poskitt and Lo’s findings to isolate the harness that achieved a 44% improvement in resolution and evaluate whether it operates efficiently under token budgeting. This could inform whether any lightweight model-harness pairing is viable without hosting overhead.\",\n      \"sources\": [\n        \"B\"\n      ],\n      \"title\": \"Evaluation of high-resolution harness performance under token constraints\"\n    },\n    {\n      \"move\": \"Synthesize Fan et al.’s context management findings to assess whether dynamic window budgeting or planning could improve efficiency in self-hosted agents, even without direct token cost data.\",\n      \"sources\": [\n        \"A\"\n      ],\n      \"title\": \"Context-aware planning as a potential efficiency lever in self-hosted agents\"\n    },\n    {\n      \"move\": \"Use Srinivasan and Menzies’ trial acquisition data to model statistical uncertainty in agent performance under budget constraints, and assess whether any observed differences are robust or attributable to noise.\",\n      \"sources\": [\n        \"D\"\n      ],\n      \"title\": \"Statistical validation of performance differences under budget constraints\"\n    },\n    {\n      \"move\": \"Propose a minimal pilot design that compares one lightweight coding model (e.g., from B) with a known open-source harness on a subset of 10 verified SWE-bench issues, using only public token records from Figshare (C) to estimate cost. This would test feasibility without committing to full private maintenance.\",\n      \"sources\": [\n        \"B\",\n        \"C\"\n      ],\n      \"title\": \"Minimal feasibility pilot on a subset of verified issues\"\n    }\n  ],\n  \"test\": \"For any proposed self-hosted system, the smallest discriminating test is whether it resolves at least 90% of the issues in a 10-issue SWE-bench subset with a mean charged-token cost per issue that is 10% lower than the best open-source harness under identical conditions. This test must be grounded solely in public records and must not assume private data or operational control.\"\n}",
+  "finish_reason": "stop",
+  "response": {
+    "challenger": null,
+    "decision": "No pilot is warranted at this stage due to insufficient evidence of distinct performance advantages or cost-effectiveness of self-hosted coding systems under mean charged-token constraints. The available records do not provide issue-level, model-specific, or cost-accurate comparisons that would allow for independent acceptance of a private repository maintenance pilot.",
+    "incumbent": "Existing open-source harnesses (e.g., those evaluated by Zhao et al.) with proven performance on verified SWE-bench issues under common serving conditions represent a stronger, more reliable baseline.",
+    "limitations": [
+      "No record provides direct comparison of self-hosted systems against hosted alternatives on token cost or issue resolution under bounded charging.",
+      "All performance claims are aggregated or model-agnostic; no issue-level breakdowns exist for self-hosted systems.",
+      "Missing data on token usage patterns (e.g., caching, repetition) in self-hosted environments prevents accurate cost modeling.",
+      "No evidence of private backlog or operational overheads in self-hosted systems that would justify pilot costs."
+    ],
+    "opportunities": [
+      {
+        "move": "Conduct a targeted analysis of Figshare v1’s issue-level outcomes to identify patterns in failure rates and token usage across models, then use those to benchmark against known open-source harnesses. This would establish a baseline for what constitutes a 'performance gap' under token constraints.",
+        "sources": [
+          "C"
+        ],
+        "title": "Issue-level token and failure pattern analysis from public benchmark data"
+      },
+      {
+        "move": "Re-examine Zhao, Poskitt and Lo’s findings to isolate the harness that achieved a 44% improvement in resolution and evaluate whether it operates efficiently under token budgeting. This could inform whether any lightweight model-harness pairing is viable without hosting overhead.",
+        "sources": [
+          "B"
+        ],
+        "title": "Evaluation of high-resolution harness performance under token constraints"
+      },
+      {
+        "move": "Synthesize Fan et al.’s context management findings to assess whether dynamic window budgeting or planning could improve efficiency in self-hosted agents, even without direct token cost data.",
+        "sources": [
+          "A"
+        ],
+        "title": "Context-aware planning as a potential efficiency lever in self-hosted agents"
+      },
+      {
+        "move": "Use Srinivasan and Menzies’ trial acquisition data to model statistical uncertainty in agent performance under budget constraints, and assess whether any observed differences are robust or attributable to noise.",
+        "sources": [
+          "D"
+        ],
+        "title": "Statistical validation of performance differences under budget constraints"
+      },
+      {
+        "move": "Propose a minimal pilot design that compares one lightweight coding model (e.g., from B) with a known open-source harness on a subset of 10 verified SWE-bench issues, using only public token records from Figshare (C) to estimate cost. This would test feasibility without committing to full private maintenance.",
+        "sources": [
+          "B",
+          "C"
+        ],
+        "title": "Minimal feasibility pilot on a subset of verified issues"
+      }
+    ],
+    "test": "For any proposed self-hosted system, the smallest discriminating test is whether it resolves at least 90% of the issues in a 10-issue SWE-bench subset with a mean charged-token cost per issue that is 10% lower than the best open-source harness under identical conditions. This test must be grounded solely in public records and must not assume private data or operational control."
+  },
+  "structural_check": {
+    "valid": false,
+    "initial_count": 5,
+    "challenger_present": false,
+    "errors": [
+      "Missing or empty limitations."
+    ],
+    "semantic_verdict": "Independent source review required."
+  },
+  "exchanges": [
+    {
+      "mode": "local",
+      "provider": "llama-cpp",
+      "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+      "stage": "opportunity-observation",
+      "request_sha256": "b5a618b23773efe5efc9ead6b65aa89a5345b6e55deb3dae07a09f12275e7383",
+      "recorded_at": "2026-11-17T21:45:07.260724+00:00",
+      "complete_cost_known": false,
+      "run_id": "ignition_8f3a139bf6844be5aafd03042a135acc",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 790,
+        "output_tokens": 751
+      },
+      "response_sha256": "0f4a873d3246abedecf7b5ccbdb168bce4612250fe4190a728bad87a2cf54d8d",
+      "application_model_calls": 1,
+      "response_schema_sha256": null,
+      "reported_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+      "raw_response_sha256": "6d705df3604411832ee80821e8b39d2888bc1e3cdab37d81caef9fe95990f0a0",
+      "wall_seconds": 121.426358
+    }
+  ],
+  "wall_seconds": 141.209522
+}
