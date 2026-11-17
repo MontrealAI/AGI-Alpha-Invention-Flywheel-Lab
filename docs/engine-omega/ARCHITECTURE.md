@@ -44,13 +44,25 @@ They are **operations that may be composed in any order**, not eight mandatory s
 
 ### Five high-value compositions
 
-1. **Counterexample Compass (01+02+06+07):** discover a transferable structure, challenge its blind spots, independently check the failure and retain an improved applicability rule.
-2. **Constraint Escape (02+03+04):** identify a false necessity; redesign the production method, partner arrangement or interface while retaining the accepted outcome.
-3. **Proof Factory (02+05+06+07):** when a critical question lacks decisive evidence, invent the instrument that measures it; verify the instrument; retain it for different later tasks.
-4. **Successor Engine (01+03+05+07):** turn one accepted construction into a transferable constructor; test on a fresh task with a powerful equal-resource no-inheritance control.
-5. **Positive-Sum Multiplier (03+04+06+07+08):** invent the product, verification and economically voluntary cooperation together; stage real financing and share surplus only as earned.
+1. **Cross-Domain Failure Atlas (01+02+06+07):** discover a transferable structure, challenge its blind spots, independently check the failure and retain an improved applicability rule.
+2. **Constraint-Redesign Path (02+03+04):** identify a false necessity; redesign the production method, partner arrangement or interface while retaining the accepted outcome.
+3. **Independent Instrument Loop (02+05+06+07):** when a critical question lacks decisive evidence, invent the instrument that measures it; verify the instrument; retain it for different later tasks.
+4. **Second-Generation Constructor (01+03+05+07):** turn one accepted construction into a transferable constructor; test on a fresh task with a powerful equal-resource no-inheritance control.
+5. **Cooperative Capability Multiplier (03+04+06+07+08):** invent the product, verification and economically voluntary cooperation together; stage real financing and share surplus only as earned.
 
 These motifs are strategic options, not five workflows to execute on every case.
+
+
+### The nonlinear move: create a market by building its missing evidence
+
+Suppose three industrial buyers separately need costly qualification of different designs. Their projects have a shared obstruction: they lack a credible, reusable measurement-and-acceptance facility. Merely reducing AI inference cost will not unlock their activities. Nor will creating a test fixture without a legitimate buyer/funding route.
+
+ENGINE Ω should test the **joint construction**: (a) common validated instrument, (b) scoped adapters, (c) independent acceptance, (d) voluntary conditional demand and (e) stage-funded deployment. The product is the **complete productive arrangement**, not the standalone AI model, fixture, or joint payment plan.
+
+The high-value economic comparison is not “three projects are expensive, therefore bundle them.” It is whether a feasible coordinated route leaves each participant better off than its strongest complete outside option, including their right to withdraw, while achieving independently acceptable outputs within genuinely available capital. A combined success may be qualitatively different from optimizing any one participant's existing operation. No buyer commitments, funding or new physical capabilities are assumed to exist.
+
+ENGINE Ω should therefore search **shared-obstruction hyperedges**: several opportunity nodes that become jointly reachable after one missing enabling capability is built. Retain that enabler only if real incremental value exceeds build, adaptation, verification, acquisition and maintenance costs and the strongest alternative can no longer deliver the same result more cheaply.
+
 
 ## III. The construction object: a Complete Capability Contract
 
