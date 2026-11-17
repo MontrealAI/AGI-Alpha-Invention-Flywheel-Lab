@@ -45,7 +45,7 @@ async function publicReplayCheck(browser,work) {
     const page=await context.newPage();const mutations=[];
     page.on('request',req=>{if(req.method()!=='GET')mutations.push(req.url());});
     await page.goto(origin);
-    await page.locator('#replays summary').click();
+    await page.locator('#replays').evaluate(el => { el.open = true; });
     await page.locator('[data-public-replay="integrity"]').waitFor();
     assert.match(await page.locator('#mode').textContent(),/unavailable/i);
     await page.locator('#purpose').fill('Preserve my unsent draft');
@@ -100,6 +100,7 @@ async function main() {
     assert.equal(await page.evaluate(()=>document.activeElement.className),'skip');
     await page.locator('#example').selectOption('integrity');
     await page.locator('#strategy').selectOption('research');
+    await page.locator('#settings').evaluate(el => { el.open = true; });
     await page.locator('#assisted_model').check();
     const sample=JSON.parse(await fs.readFile(path.join(product,'examples','integrity.json'),'utf8'));
     await page.locator('#start').click();

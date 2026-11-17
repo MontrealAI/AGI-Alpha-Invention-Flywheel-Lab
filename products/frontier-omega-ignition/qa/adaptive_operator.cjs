@@ -21,8 +21,8 @@ async function qualifyAdaptiveRepair(page, send, assertLayout, sample) {
   assert.equal(specialist.events.some(e => e.stage === 'discover'), false);
   await page.locator('#fresh').click();
   await page.locator('#example').selectOption('integrity');
-  await page.locator('#assisted_model').check();
   await page.locator('#settings').evaluate(el => { el.open = true; });
+  await page.locator('#assisted_model').check();
   await page.locator('#direct-method').selectOption('model');
   const resources = JSON.parse(await page.locator('#resources').inputValue());
   resources.max_repairs = 1;
