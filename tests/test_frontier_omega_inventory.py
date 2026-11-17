@@ -224,4 +224,21 @@ class InventoryTests(unittest.TestCase):
         r=next(r for r in self.inv.plan(NOW)['inventory'] if r['problem']['id']==p['id'])
         self.assertIsNone(r['comparison'])
 
+
+    def test_frozen_inventory_pre_observation_current_trial_excluded(self):
+        self.event('old-release', '2026-10-12')
+        self.event()
+        self.trial('old-release', 'old-observed', 12_000_000)
+        self.trial('new-release', 'new-before-observed', 5_000_000,
+                   run_on='2026-11-09')
+        self.assertIsNone(self.row()['comparison'])
+
+    def test_frozen_inventory_pre_observation_historical_trial_excluded(self):
+        self.event('old-release', '2026-10-12')
+        self.event()
+        self.trial('old-release', 'old-before-observed', 12_000_000,
+                   run_on='2026-10-11')
+        self.trial('new-release', 'new-observed', 5_000_000)
+        self.assertIsNone(self.row()['comparison'])
+
 if __name__=='__main__':unittest.main()

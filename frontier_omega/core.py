@@ -377,8 +377,18 @@ class Reservoir:
                 and t["frontier_id"] in (before_id, after_id)]
         pairs = []
         for old in (t for t in arms if t["frontier_id"] == before_id):
+            # A replay may happen much later, but never before its cited
+            # capability was observable. Preserve invalid historic rows;
+            # exclude them from economic crossing evidence.
+            if old["run_on"] < events[before_id]["observed_on"]:
+                continue
             for new in (t for t in arms if t["frontier_id"] == after_id):
-                keys = ("terms_sha256", "acceptance_sha256", "protocol_sha256")
+                if new["run_on"] < events[after_id]["observed_on"]:
+                    continue
+                # Price uplift or a switch between authored/operator scope
+                # is not a capability gain under fixed voluntary terms.
+                keys = ("terms_sha256", "acceptance_sha256", "protocol_sha256",
+                        "price_microUSD", "scope")
                 if all(old[k] == new[k] for k in keys):
                     pairs.append((old, new))
         if not pairs:

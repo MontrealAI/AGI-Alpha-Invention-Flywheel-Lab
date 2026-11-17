@@ -304,5 +304,41 @@ class FrontierTests(unittest.TestCase):
             load_file(link)
 
 
+    def test_frozen_price_only_uplift_cannot_create_reported_crossing(self):
+        self.comparison_setup()
+        self.engine.add(trial("old-price", "capability-old", costs=14_000_000))
+        high = trial("new-price", "alphaproof-code-20261110", costs=14_000_000)
+        high["price_microUSD"] = 20_000_000
+        self.engine.add(high)
+        result = self.engine.compare("compiled-crypto-assurance", "capability-old",
+                                     "alphaproof-code-20261110")
+        self.assertEqual(result["verdict"], "MATCHED_HISTORICAL_AND_NEW_TEST_REQUIRED")
+        self.assertFalse(result["economic_crossing_established"])
+        self.assertFalse(result["workorder_authorized"])
+
+    def test_frozen_evidence_scope_change_cannot_create_reported_crossing(self):
+        self.comparison_setup()
+        self.engine.add(trial("old-scope", "capability-old", costs=14_000_000))
+        changed = trial("new-scope", "alphaproof-code-20261110", costs=3_000_000,
+                        scope="OPERATOR_REPORTED_UNVERIFIED")
+        self.engine.add(changed)
+        result = self.engine.compare("compiled-crypto-assurance", "capability-old",
+                                     "alphaproof-code-20261110")
+        self.assertEqual(result["verdict"], "MATCHED_HISTORICAL_AND_NEW_TEST_REQUIRED")
+        self.assertFalse(result["workorder_authorized"])
+
+    def test_frozen_core_pre_observation_current_trial_cannot_cross(self):
+        self.comparison_setup()
+        self.engine.add(trial("old-valid", "capability-old", costs=14_000_000))
+        impossible = trial("new-pre-observation", "alphaproof-code-20261110",
+                           costs=3_000_000)
+        impossible["run_on"] = "2026-11-09"
+        self.engine.add(impossible)
+        result = self.engine.compare("compiled-crypto-assurance", "capability-old",
+                                     "alphaproof-code-20261110")
+        self.assertEqual(result["verdict"], "MATCHED_HISTORICAL_AND_NEW_TEST_REQUIRED")
+        self.assertFalse(result["workorder_authorized"])
+
+
 if __name__ == "__main__":
     unittest.main()
