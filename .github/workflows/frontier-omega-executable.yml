@@ -1,0 +1,42 @@
+name: FRONTIER Omega executable historical/current replay
+on:
+  pull_request:
+    paths:
+      - 'frontier_omega/executable.py'
+      - 'tests/test_frontier_omega_executable.py'
+      - 'docs/frontier-omega/EXECUTABLE-REPLAY.md'
+      - '.github/workflows/frontier-omega-executable.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  finite-replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+          sparse-checkout: |
+            frontier_omega
+            examples/frontier-omega
+            products/alpha-genesis-harness
+            tests
+      - name: Run original inventory and executable replay tests
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p 'test_frontier_omega.py' -v
+          python3 -m unittest discover -s tests -p 'test_frontier_omega_executable.py' -v
+          python3 -m unittest discover -s tests -p 'test_frontier_omega_releases.py' -v
+      - name: Reproduce an executed strong-historical-alternative demonstration
+        run: |
+          set -euo pipefail
+          python3 -m frontier_omega.executable --demo > "$RUNNER_TEMP/first.json"
+          python3 -m frontier_omega.executable --demo > "$RUNNER_TEMP/second.json"
+          cmp "$RUNNER_TEMP/first.json" "$RUNNER_TEMP/second.json"
+          python3 -c "import json,sys; r=json.load(open(sys.argv[1])); assert r['verdict']=='HISTORICALLY_FEASIBLE_VIA_STRONG_ALTERNATIVE' and r['financial_operations']==0 and r['customer_demand_verified'] is False" "$RUNNER_TEMP/first.json"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: frontier-omega-executable-replay
+          path: ${{ runner.temp }}/first.json
+          retention-days: 7
