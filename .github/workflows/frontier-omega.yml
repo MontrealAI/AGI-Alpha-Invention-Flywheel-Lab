@@ -1,0 +1,73 @@
+name: "FRONTIER Ω — living buyer-problem inventory"
+
+on:
+  pull_request:
+    paths:
+      - "frontier_omega/**"
+      - "tests/test_frontier_omega.py"
+      - "docs/frontier-omega.html"
+      - ".github/workflows/frontier-omega.yml"
+  workflow_dispatch:
+  schedule:
+    - cron: "19 11 * * *"  # daily 11:19 UTC; runs only after merge to default branch
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate the inventory and dated source joins
+        run: python3 -m frontier_omega validate
+      - name: Execute independent, offline regression tests
+        run: python3 -m unittest discover -s tests -p test_frontier_omega.py -v
+      - name: Produce editable ranking (NOT profit or paid demand)
+        run: python3 -m frontier_omega rank --limit 20
+
+  watch:
+    if: github.event_name != 'pull_request'
+    needs: validate
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Restore previous page fingerprints
+        uses: actions/cache/restore@v4
+        with:
+          path: .frontier-omega-watch/state.json
+          key: frontier-omega-source-state-${{ github.run_id }}
+          restore-keys: |
+            frontier-omega-source-state-
+      - name: Observe official provider release indexes (bounded, read-only)
+        run: |
+          python3 -m frontier_omega watch \
+            --state .frontier-omega-watch/state.json \
+            --out frontier-omega-observation.json
+      - name: Cache state for the next run
+        uses: actions/cache/save@v4
+        with:
+          path: .frontier-omega-watch/state.json
+          key: frontier-omega-source-state-${{ github.run_id }}
+      - name: Save bounded observation, even if no changes
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontier-omega-observation-${{ github.run_id }}
+          path: frontier-omega-observation.json
+          retention-days: 30
+      - name: Write audit-friendly source-change summary
+        run: |
+          python3 - <<'PY' >> "$GITHUB_STEP_SUMMARY"
+          import json
+          r = json.load(open("frontier-omega-observation.json", encoding="utf-8"))
+          print("## FRONTIER Ω source monitor")
+          print("Changed/initial page bytes:", len(r["events"]))
+          print("Fetch failures:", len(r["failures"]))
+          print("A page change is **not** an ability crossing, accepted delivery or paid demand.")
+          for e in r["events"]:
+              print("- " + e["source"] + ": " + e["event"])
+          for k,v in r["failures"].items():
+              print("- Failed " + k + ": " + v[:160])
+          PY
