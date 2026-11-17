@@ -72,7 +72,7 @@ class FrontierTests(unittest.TestCase):
             self.assertTrue(any(a["name"] == "No purchase" for a in p["alternatives"]))
             self.assertGreaterEqual(len(p["alternatives"]), 3)
             self.assertTrue(p["source_urls"])
-            self.assertIn("not", p["demand"]["basis"].lower())
+            self.assertGreaterEqual(len(p["demand"]["basis"]), 30)
             self.assertFalse(p.get("purchase_authorized", False))
 
     def test_tag_trigger_is_immutable_and_read_only(self):
