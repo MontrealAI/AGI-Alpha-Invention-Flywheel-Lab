@@ -1,0 +1,44 @@
+name: FRONTIER OMEGA frozen comparison integrity review
+on:
+  push:
+    branches: ['review/frontier-crossing-frozen-price-chronology-20261117']
+    paths:
+      - 'frontier_omega/core.py'
+      - 'frontier_omega/inventory.py'
+      - 'tests/test_frontier_omega.py'
+      - 'tests/test_frontier_omega_inventory.py'
+      - 'docs/frontier-omega/COMPARISON_REVIEW_20261117.md'
+      - '.github/workflows/frontier-omega-comparison-review.yml'
+  pull_request:
+    paths:
+      - 'frontier_omega/core.py'
+      - 'frontier_omega/inventory.py'
+      - 'tests/test_frontier_omega.py'
+      - 'tests/test_frontier_omega_inventory.py'
+      - 'docs/frontier-omega/COMPARISON_REVIEW_20261117.md'
+      - '.github/workflows/frontier-omega-comparison-review.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  comparison-integrity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record standard-runner execution start
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Execute both frozen source-bound suites, preserving failures
+        shell: bash
+        run: |
+          set +e
+          python3 -m unittest discover -s tests -p 'test_frontier_omega.py' -v > "$RUNNER_TEMP/core-tests.txt" 2>&1
+          core=$?
+          python3 -m unittest discover -s tests -p 'test_frontier_omega_inventory.py' -v > "$RUNNER_TEMP/inventory-tests.txt" 2>&1
+          inventory=$?
+          cat "$RUNNER_TEMP/core-tests.txt"
+          cat "$RUNNER_TEMP/inventory-tests.txt"
+          printf 'core_exit=%s\ninventory_exit=%s\n' "$core" "$inventory"
+          test "$core" -eq 0 && test "$inventory" -eq 0
