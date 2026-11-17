@@ -270,7 +270,7 @@ def main(argv=None):
     sub=parser.add_subparsers(dest='command',required=True)
     sub.add_parser('seed');sub.add_parser('audit')
     for name in ('refresh','list'):
-        x=sub.add_parser(name);x.add_argument('--as-of',default='2026-11-16')
+        x=sub.add_parser(name);x.add_argument('--as-of',default=datetime.now(timezone.utc).date().isoformat())
         if name=='list':x.add_argument('--limit',type=int,default=8)
     demo=sub.add_parser('demo');demo.add_argument('--output',required=True,type=Path)
     watch=sub.add_parser('watch');watch.add_argument('--interval',type=float,default=30)
