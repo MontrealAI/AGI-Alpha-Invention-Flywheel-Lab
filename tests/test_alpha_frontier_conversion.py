@@ -495,7 +495,34 @@ class ConversionTests(unittest.TestCase):
         self.assertEqual(self.engine.state.get(result["job"])["state"], "DECLINED")
         self.assertEqual(output["native_summary"]["collections"], 0)
         self.assertEqual(output["actual_collections"], 0)
+    def test_current_trial_cannot_predate_observed_capability(self):
+        # Frozen review case: after signal is dated 2026-11-09,
+        # yet its otherwise-valid recorded host replay claims 2026-11-08.
+        self.reservoir.add(make_trial(
+            self.c, PROBLEM, BEFORE, "frozen-old", self.old,
+            run_on="2026-11-16", costs_microUSD=numeric(13_000_000),
+            acceptance_probability_bps=9500, scope="AUTHORED_SCENARIO"))
+        self.reservoir.add(make_trial(
+            self.c, PROBLEM, AFTER, "frozen-new", self.current,
+            run_on="2026-11-08", costs_microUSD=numeric(2_000_000),
+            acceptance_probability_bps=9500, scope="AUTHORED_SCENARIO"))
+        with self.assertRaisesRegex(ValueError, "TRIAL_CHRONOLOGY"):
+            self.preflight()
+        self.assertEqual(self.engine.state.summary()["jobs"], [])
 
+    def test_future_dated_host_trials_cannot_authorize_present_intake(self):
+        # Frozen review case: replay not yet performed as of signed request.
+        self.reservoir.add(make_trial(
+            self.c, PROBLEM, BEFORE, "frozen-old", self.old,
+            run_on="2099-01-01", costs_microUSD=numeric(13_000_000),
+            acceptance_probability_bps=9500, scope="AUTHORED_SCENARIO"))
+        self.reservoir.add(make_trial(
+            self.c, PROBLEM, AFTER, "frozen-new", self.current,
+            run_on="2099-01-01", costs_microUSD=numeric(2_000_000),
+            acceptance_probability_bps=9500, scope="AUTHORED_SCENARIO"))
+        with self.assertRaisesRegex(ValueError, "TRIAL_CHRONOLOGY"):
+            self.preflight()
+        self.assertEqual(self.engine.state.summary()["jobs"], [])
 
 if __name__ == "__main__":
     unittest.main()
