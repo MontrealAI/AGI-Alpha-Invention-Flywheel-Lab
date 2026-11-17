@@ -423,6 +423,70 @@ class ConversionTests(unittest.TestCase):
         self.assertTrue(
             acceptance(envelope, self.c, artifact, receipt, KEY, self.now)["accepted"])
 
+    def test_external_test_payment_protocol_is_wired_after_qualified_intake(self):
+        """End to end through EXTERNAL_TEST, with authored fake provider receipts.
+
+        Neither a real Stripe call nor an independent buyer or a live treasury
+        is exercised. This checks gate sequencing, not actual money.
+        """
+        from unittest.mock import patch
+        from test_alpha_economic_external_loop import ProtocolTreasury, ProtocolPayments
+        from connected_enterprise.alpha_economic.agents import HarnessAgent
+        from connected_enterprise.alpha_economic.commerce import HTTPBuyer
+        from connected_enterprise.alpha_economic.live import LiveEngine
+        self.reservoir.add(make_trial(
+            self.c, PROBLEM, BEFORE, "frozen-old", self.old,
+            run_on="2026-11-16", costs_microUSD=numeric(13_000_000),
+            acceptance_probability_bps=9500, scope="OPERATOR_REPORTED_UNVERIFIED"))
+        self.reservoir.add(make_trial(
+            self.c, PROBLEM, AFTER, "frozen-new", self.current,
+            run_on="2026-11-16", costs_microUSD=numeric(2_000_000),
+            acceptance_probability_bps=9500, scope="OPERATOR_REPORTED_UNVERIFIED"))
+        now = [self.now]
+        policy = default_policy()
+        policy.update(scope="EXTERNAL_TEST", opening_microUSD=0, startup_microUSD=0)
+        agent = HarnessAgent({"kind": "harness", "runtime": {}, "routes": {}})
+        buyer = HTTPBuyer(
+            {self.c["buyer"]: "https://example.org"}, {self.c["buyer"]: KEY},
+            enabled=True)
+        simulated_counterparty = SimulatedBuyer({self.c["buyer"]: KEY})
+        treasury, stripe = ProtocolTreasury(), ProtocolPayments()
+        with patch.object(agent, "construct", return_value=(
+                 self.current, {"scope": "AUTHORED_PROTOCOL_FIXTURE_NO_MODEL_INFERENCE"})), \
+             patch.object(buyer, "quote", side_effect=simulated_counterparty.quote), \
+             patch.object(buyer, "deliver", side_effect=simulated_counterparty.deliver), \
+             patch.object(buyer, "payment", return_value={"received": True}):
+            external = LiveEngine(
+                self.root / "external-test", policy, agent, buyer,
+                {self.c["buyer"]: KEY}, treasury, stripe,
+                success_url="https://example.org/yes",
+                cancel_url="https://example.org/no",
+                authorized=True, clock=lambda: now[0])
+            try:
+                result = submit_qualified(
+                    external, self.reservoir, self.bundle, now=self.now)
+                with external.state.lock():
+                    for _ in range(60):
+                        stage = external.state.get(result["job"])["state"]
+                        if stage == "SETTLED":
+                            now[0] += 26 * 3600
+                        if stage == "COMPLETE":
+                            break
+                        external.step()
+                self.assertEqual(
+                    external.state.get(result["job"])["state"], "COMPLETE")
+                self.assertEqual(
+                    [x[0] for x in treasury.operations
+                     if x[0] in ("begin", "prepare", "release", "reinvest")],
+                    ["begin", "prepare", "release", "reinvest"])
+                self.assertFalse((external.root / "account").exists())
+                report = external.report()
+                self.assertEqual(report["scope"], "EXTERNAL_TEST")
+                self.assertFalse(report["native_simulation_used"])
+                self.assertEqual(result["actual_paid_customer_established"], False)
+            finally:
+                external.close()
+
     def test_buyer_decline_is_not_fake_revenue(self):
         self.register()
         self.engine.buyer.decline = True
