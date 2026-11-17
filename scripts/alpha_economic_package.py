@@ -19,6 +19,15 @@ def paths():
     names.update(p.relative_to(ROOT).as_posix() for p in (ROOT/'tests').glob('test_alpha_economic*.py'))
     names.update(p.relative_to(ROOT).as_posix() for p in (ROOT/'scripts').glob('alpha_economic*.py'))
     names.update(p.relative_to(ROOT).as_posix() for p in (ROOT/'docs/alpha-economic-engine').glob('*') if p.is_file())
+    # Include the newly integrated FRONTIER conversion CLI, private sensor and
+    # source-bound regression tests. Never package runtime roots or buyer files.
+    names.update(p.relative_to(ROOT).as_posix() for p in (ROOT/'connected_enterprise/alpha_economic').glob('frontier_*.py'))
+    names.update(p.relative_to(ROOT).as_posix() for p in (ROOT/'frontier_omega').glob('*.py'))
+    names.update(p.relative_to(ROOT).as_posix() for p in (ROOT/'tests').glob('test_alpha_frontier_conversion.py'))
+    names.update(p.relative_to(ROOT).as_posix() for p in (ROOT/'tests').glob('test_frontier_omega.py'))
+    names.update(p.relative_to(ROOT).as_posix() for p in (ROOT/'docs/alpha-frontier-conversion').glob('*') if p.is_file())
+    names.update(p.relative_to(ROOT).as_posix() for p in (ROOT/'docs/frontier-omega').glob('*') if p.is_file())
+    names.update(p.relative_to(ROOT).as_posix() for p in (ROOT/'examples/frontier-omega').glob('*.json'))
     # Include local imports of the approved source closure; no runtime directory scan.
     todo=list(names);seen=set()
     while todo:
@@ -58,7 +67,7 @@ def build(output):
               'scope':'BOUNDED_ENGINE_SOURCE_AND_TESTS_NOT_LIVE_DEPLOYMENT_OR_FULL_REPOSITORY',
               'files':{n:hashlib.sha256(b).hexdigest() for n,b in files.items()}}
     files['ENGINE-SOURCE-MANIFEST.json']=json.dumps(manifest,sort_keys=True,indent=2).encode()
-    files['START-HERE.txt']=b'ALPHA Economic Engine 0.2.0\n\nRead docs/alpha-economic-engine/README.md first.\nRun: python3 -m connected_enterprise.alpha_economic demo --output ./my-demo\n\nThe native monetary demonstration is SIMULATED. External treasury integration is unfinished.\nNo real customer, profit, deployment or general autonomous invention is certified.\n'
+    files['START-HERE.txt']=b'ALPHA Economic Engine 0.2.0\n\nRead docs/alpha-economic-engine/README.md first.\nRun: python3 -m connected_enterprise.alpha_economic demo --output ./my-demo\n\nThe native monetary demonstration is SIMULATED. Read docs/alpha-frontier-conversion/README.md to use the proof-gated intake.\nExternal treasury integration is unfinished. No real customer, profit, deployment or general autonomous invention is certified.\n'
     with zipfile.ZipFile(output,'w',zipfile.ZIP_DEFLATED) as z:
         for name,data in sorted(files.items()):
             info=zipfile.ZipInfo(name,(2026,11,16,0,0,0));info.compress_type=zipfile.ZIP_DEFLATED;info.external_attr=0o100644<<16;z.writestr(info,data)
