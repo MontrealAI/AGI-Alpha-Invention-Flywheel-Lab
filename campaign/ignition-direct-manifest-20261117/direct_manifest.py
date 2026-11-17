@@ -25,16 +25,15 @@ PRODUCT = REPO / "products/frontier-omega-ignition"
 FIXTURE = PRODUCT / "examples/integrity.json"
 FIXTURE_SHA256 = "f3c5981afbc3e61f57cbd7331bc6f1a4398c6b076aa794fc6bbda8e3c0f44425"
 SOURCE_BLOBS = {
+    "ignition/__init__.py": "6b417cbb6465f5b24a5439217e0a118b8b92b9a2",
     "ignition/construction.py": "d8ce91c0800cf444a61dc37f546eb84fcd2ca13b",
     "ignition/evaluation.py": "d9e241fddbd8be485ad708a49023809191658a4d",
     "ignition/delivery.py": "9634bb17dffa6f9771178165249656fd0be52a9c",
     "ignition/portable.py": "1b9fb991a784af343c5dab643dd929444d77647a",
     "examples/integrity.json": "90b778d84e7b586d6a0e59465c7e4459f892f6c0",
+    "examples/compare_conventional.py": "94fa4a46fd2c4d5c979585d21736dfc175d68d24",
 }
-sys.path.insert(0, str(PRODUCT))
-from ignition.construction import build, freeze_contract  # noqa: E402
-from ignition.delivery import export_bundle  # noqa: E402
-from ignition.evaluation import evaluate  # noqa: E402
+# No product module may execute before the exact source-closure check.
 
 
 def sha256(data: bytes) -> str:
@@ -142,6 +141,10 @@ def qualify(destination: Path, *, strong_conventional: bool) -> dict:
     if destination.exists() or destination.is_symlink():
         raise ValueError("FRESH_OUTPUT_DIRECTORY_REQUIRED")
     source = source_lock()
+    sys.path.insert(0, str(PRODUCT))
+    from ignition.construction import build, freeze_contract
+    from ignition.delivery import export_bundle
+    from ignition.evaluation import evaluate
     fixture = json.loads(FIXTURE.read_bytes())
     if fixture.get("id") != "integrity":
         raise ValueError("WRONG_PUBLIC_MISSION")
