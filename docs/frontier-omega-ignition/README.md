@@ -22,4 +22,4 @@ This demonstration is a transparent, working **frontier-to-decision experience**
 
 ## Reproducibility
 
-Run `python3 -m unittest discover -s tests -v` if Playwright and Chromium are available. Tests exercise the actual HTML in Chromium and include cases for custom input, five hypotheses, selection, economic recomputation, tamper rejection, and export.
+Run `node --test tests/test_frontier_omega_demo.cjs` to exercise the exact published source using Node's built-in test runner. The repository's `research-pages.yml` runs this gate alongside its strict public-site allowlist and existing tests. The downloadable standalone demo bundle also includes a separate six-test Chromium/Playwright interaction suite covering custom missions, five hypotheses, mechanism selection, actual arithmetic, generated executable artifact, export and mobile layout. Browser suite results are local and are not misrepresented as hosted end-to-end checks.
