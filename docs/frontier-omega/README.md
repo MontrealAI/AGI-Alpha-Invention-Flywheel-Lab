@@ -13,12 +13,16 @@ python3 -m frontier_omega --root ./frontier-omega-private seed \
   --file examples/frontier-omega/public-opportunities-20261116.json
 
 python3 -m frontier_omega --root ./frontier-omega-private report
+python3 -m frontier_omega --root ./frontier-omega-private dashboard
 python3 -m frontier_omega --root ./frontier-omega-private list problems
 python3 -m frontier_omega --root ./frontier-omega-private list triggers
 python3 -m frontier_omega --root ./frontier-omega-private audit
 
 python3 -m unittest discover -s tests -p 'test_frontier_omega.py' -v
 ~~~
+
+
+The `dashboard` command writes an offline, responsive, searchable **FRONTIER-OMEGA.html** inside the private state folder. Open it locally in a browser to inspect blockers, test requirements, independent alternatives, source links, and pending capability matches. It loads no external fonts, scripts or assets. **Never publish a customer-populated dashboard.**
 
 The seed contains **six original problem dossiers** and **five public capability observations**, linked to source publications. Every problem identifies a potential beneficiary, desired outcome, independently testable acceptance criterion, binding obstacle, capability tags, strongest plausible complete routes, no-purchase alternative, next discriminating experiment, and demand status. There are **zero verified customer purchase commitments or complete-cost valuations** in this seed.
 
