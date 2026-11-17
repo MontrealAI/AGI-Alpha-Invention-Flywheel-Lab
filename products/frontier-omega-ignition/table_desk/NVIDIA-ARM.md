@@ -1,0 +1,3 @@
+# TD01 optional model arm
+
+Before inference, fix one pass per independently presented registered crop, using the official accessible NVIDIA parser with its documented parsing task prompt, a limit of 2,048 generated tokens per crop and no target-specific tuning. Preserve both raw outputs, actual model revision, dependency/runtime versions, generation settings, load/inference timing and incomplete attempts. A successful model load alone contributes no accepted matrix. The grader requires the same full matrix as the other arms. If the model returns markup, identify the deterministic table extraction and repeated-header handling separately.
