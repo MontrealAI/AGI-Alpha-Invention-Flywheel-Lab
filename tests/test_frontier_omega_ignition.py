@@ -162,9 +162,9 @@ class IgnitionTests(unittest.TestCase):
         e["matched_test"]["current"]["accepted"] = 14
         self.assertEqual(ignition(self.o, e)["decision"], "RETEST_OR_REDESIGN")
 
-    def test_all_56_are_candidates_and_none_are_live_sales(self):
+    def test_all_57_are_candidates_and_none_are_live_sales(self):
         rows = portfolio_decisions(self.opportunities, {}, limit=48)
-        self.assertEqual(rows["count"], 56)
+        self.assertEqual(rows["count"], 57)
         self.assertEqual(rows["actual_ignitions_executed"], 0)
         self.assertEqual(rows["actual_revenue_certified"], 0)
         self.assertTrue(all(r["decision"] == "PROBE_CANDIDATE" for r in rows["candidates"]))
