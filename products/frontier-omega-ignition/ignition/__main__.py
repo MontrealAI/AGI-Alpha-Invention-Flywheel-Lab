@@ -17,6 +17,10 @@ def main():
                         help="enable an explicitly operator-assisted model exchange")
     sub = parser.add_subparsers(dest="command",required=True)
     sub.add_parser("inventory")
+    edition = sub.add_parser("reading-edition", help="build a local page-linked reading edition")
+    edition.add_argument("--pdf", type=Path, required=True)
+    edition.add_argument("--source", type=Path, required=True)
+    edition.add_argument("--output", type=Path, required=True, help="new local recipient directory")
     sub.add_parser("serve").add_argument("--port",type=int,default=8784)
     p = sub.add_parser("start")
     p.add_argument("file",type=Path)
@@ -37,8 +41,13 @@ def main():
         if cmd in {"amend","successor"}:
             p.add_argument("--request-id",required=True)
     args = parser.parse_args()
-    ctrl = Controller(Store(args.state),assisted=args.assisted)
     cmd = args.command
+    if cmd == "reading-edition":
+        from reading_room.edition import build
+        summary = build(args.pdf, args.source, args.output)
+        print(json.dumps({"directory": str(args.output), **summary}, ensure_ascii=False, indent=2))
+        return
+    ctrl = Controller(Store(args.state),assisted=args.assisted)
     if cmd == "serve":
         with Service(ctrl,args.port) as server:
             print(f"FRONTIER Ω IGNITION  http://127.0.0.1:{server.server_port}  |  {ctrl.identity()['mode']}",flush=True)

@@ -36,3 +36,23 @@ The [registered protocol](https://github.com/MontrealAI/AGI-Alpha-Invention-Flyw
 With the native extractor used here, the three additional correct links over the conventional comparator were blocks 9, 26 and 35. The registered paper has five physical pages and no heading/paragraph blocks on page 5. The independent comparator is preferable for a reader relying on the original tables or MathML. This conditional technical difference did not establish task-time savings, general superiority, a frontier crossing, an economic advantage or buyer acceptance.
 
 The observer around the scorer timed the four arms and adjudication together and hashed every file in the delivered recipient. Reproduce the observation with `python3 products/frontier-omega-ignition/reading_room_study/observe.py --output /tmp/rr01-observation-new`; compare the `publication_receipt.recipient_sha256` field in `observed.json`. Building the actual paper took 0.084 s and the conventional clickable version took 0.148 s on the observed host; these single measurements are implementation telemetry and have no human-productivity interpretation. Engineering effort and complete delivery costs remain unknown.
+
+## Complete author edition
+
+The new [registered transfer](SUCCESSOR_PROTOCOL.md) adopts the conventional author's markup, then adds checked local page links. In a completed Reading Room recipient for either pinned publication, run:
+
+```sh
+python3 products/frontier-omega-ignition/reading_room_study/annotate.py --edition /tmp/rr01-new/candidate
+```
+
+Open the resulting `annotated-author.html` beside `source.pdf`. The original headings, tables, lists, MathML, bibliography and inline links are retained. Only the two identified public papers are admitted by digest. The annotator replays the frozen instrument, verifies the entire received evidence, accepts only a new destination file, and adds a policy disabling scripts and network subresources. External citations can still be opened deliberately.
+
+Reproduce both complete alternatives and all second-paper checks with `python3 products/frontier-omega-ignition/reading_room_study/successor.py --output /tmp/rr02-new`. Use a new directory. Read the [recorded results](SUCCESSOR_RESULTS.json) and [pre-execution registration](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/commit/0cae51f4c759ebd44776c1efb6819039e88bfc75).
+
+| Complete clickable edition | Original 37 blocks | Fresh 71 blocks |
+| --- | ---: | ---: |
+| Replayed Reading Room receipt and original markup | 34 correct, 0 wrong | 64 correct, 0 wrong |
+| Conventional direct Poppler and original markup | 34 correct, 0 wrong | 64 correct, 0 wrong |
+| Conventional direct MuPDF and original markup | 31 correct, 0 wrong | 63 correct, 0 wrong |
+
+The Poppler comparator produced byte-identical annotated HTML on both papers. For reading the full publication, take the annotated original. Where only the linked paper is wanted, conventional matching was sufficient. Use the receipt when rebuilding or auditing the exact inputs and checking why a passage was withheld. Four altered-input/receipt attempts were refused as registered. The fresh paper's full original DOM was preserved, including two tables and a MathML equation. No reader or human worker has yet taken part in a timed task.

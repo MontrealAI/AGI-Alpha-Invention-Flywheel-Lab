@@ -85,3 +85,14 @@ The follow-up Qwen repair reproduced the original wrong program byte-for-byte de
 | Transfer the binding of a trusted reference into construction | An exact reference to the frozen manifest removes model transcription of long digest strings. | The operator still needs an independent ground of trust for the manifest. |
 | Challenge the artifact with independent observations | The exact historic bad program is rejected despite eight passing checks. Conflicting reference answers quarantine the candidate. | More extensive tests can expose additional faults. |
 | Repair from verified failure and preserve evidence | Each trial reports proposal, artifact and evaluator receipt identities, observed check counts, comparison, contract identity and result. The current source re-executes acceptance on export. | Correction within one frozen contract establishes task performance within that scope. General construction, demand and historical frontier advantage require separate evidence. |
+
+### Source-linked publications
+
+The private CLI accepts an authorized PDF and manuscript and constructs an offline recipient in a new directory. From the product root:
+
+```sh
+python3 -B -m ignition reading-edition --pdf ../../docs/research/cycle-001.pdf \
+  --source ../../docs/research/cycle-001.html --output /tmp/ignition-edition-new
+```
+
+Open the recipient's `index.html`; the adjacent PDF and JSON receipt make each accepted page link inspectable. This direct local operation makes no model call and creates no mission account. [Instrument and supported content](../reading_room/README.md) · [Registered qualification and full-markup alternative](../reading_room_study/README.md)

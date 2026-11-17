@@ -1,0 +1,46 @@
+{
+  "model": "nvidia/Nemotron-3.5-Parse",
+  "revision": "ea2e1fe486bea3e7d0d505df9bafa4ad562407a0",
+  "model_sha256": "81dd7609c589f3694ce75520c25af5010953231358de6aec4d03e8c6aac787e9",
+  "device": "cpu",
+  "dtype": "float32",
+  "prompt": "</s><s><predict_bbox><predict_classes><output_markdown><predict_text_in_pic>",
+  "max_new_tokens": 2048,
+  "do_sample": false,
+  "num_beams": 1,
+  "repetition_penalty": 1.1,
+  "crops": [
+    {
+      "page": 1,
+      "image_sha256": "c044d33d4e29b3481165ad4ee987c18a6eee5a43a5ccc5882fe49b7d21583d19",
+      "raw_sha256": "7c7708ca319edb7fd360b53b228786696589b9dc0b605ca0720d66a905a2b2ad",
+      "returned_ids": 148,
+      "input_ids": 6,
+      "wall_seconds": 20.2282,
+      "cpu_seconds": 67.1458
+    },
+    {
+      "page": 2,
+      "image_sha256": "c6d79dcb776a8a9ac919ce1e300db94e96b958098ec0a5d7dbded7e5f06e1e0b",
+      "raw_sha256": "1c0565b71989bd27b766d08822d94f665b4290f14b2a975a5ba9eb7f23456d8d",
+      "returned_ids": 95,
+      "input_ids": 6,
+      "wall_seconds": 10.6643,
+      "cpu_seconds": 36.0054
+    }
+  ],
+  "threads": 4,
+  "versions": {
+    "torch": "2.13.0+cpu",
+    "torchvision": "0.28.0+cpu",
+    "transformers": "5.19.0",
+    "timm": "1.0.22",
+    "pillow": "12.3.0",
+    "tokenizers": "0.23.3"
+  },
+  "load_wall_seconds": 1.0881,
+  "status": "completed",
+  "wall_seconds": 39.1139,
+  "cpu_seconds": 111.714,
+  "linux_peak_rss_kib": 3079996
+}
