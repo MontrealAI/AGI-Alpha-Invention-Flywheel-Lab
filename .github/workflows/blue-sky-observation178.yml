@@ -1,0 +1,121 @@
+name: Blue Sky 178 paired-load measurement contract
+on:
+  push:
+    branches:
+      - experiment/blue-sky-two-load-observation178-20261118
+    paths:
+      - "research/blue_sky064/OBSERVATION178_PROTOCOL.md"
+      - "research/blue_sky064/observation178.py"
+      - "tests/test_blue_sky_observation178.py"
+      - ".github/workflows/blue-sky-observation178.yml"
+  pull_request:
+    paths:
+      - "research/blue_sky064/OBSERVATION178_PROTOCOL.md"
+      - "research/blue_sky064/observation178.py"
+      - "tests/test_blue_sky_observation178.py"
+      - ".github/workflows/blue-sky-observation178.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-bound:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record platform job start
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - name: Verify exact source checkout
+        shell: bash
+        env:
+          EXPECTED_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: test "$(git rev-parse HEAD)" = "$EXPECTED_SHA"
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Install existing public scientific dependencies
+        run: python -m pip install -r requirements-cycle004.txt
+      - name: Registered new and original source controls
+        run: python -B -m unittest -v tests.test_blue_sky_observation178 tests.test_blue_sky064
+      - name: Generate exposed source-derived measurement design (not real observations)
+        shell: bash
+        run: |
+          python -B -m research.blue_sky064.observation178 --output "$RUNNER_TEMP/OBSERVATION178_RESULT.json"
+          python -B - <<'PY'
+          import json,os
+          from pathlib import Path
+          d=json.loads((Path(os.environ["RUNNER_TEMP"])/"OBSERVATION178_RESULT.json").read_text())
+          assert d["decision"] == "HOLD_OBTAIN_ASSEMBLY_MEASUREMENTS_AND_COMPLETE_ALTERNATIVE"
+          assert d["actual_physical_device_or_measurement"] is False
+          assert d["source_calibration_robust_pass"] is False
+          assert d["maximum_certifying_absolute_force_error"]["maximum_epsilon_N_lower_bound"] is not None
+          print(json.dumps({"decision":d["decision"],"mode":d["mode"],
+            "model_only_force_error_requirement_N":d["maximum_certifying_absolute_force_error"]["maximum_epsilon_N_lower_bound"],
+            "real_observations":False},sort_keys=True))
+          PY
+      - name: Package explicit public-only extracted source
+        shell: bash
+        run: |
+          cd "$GITHUB_WORKSPACE"
+          tar -czf "$RUNNER_TEMP/OBSERVATION178_SOURCE.tar.gz" \
+            research/blue_sky064/probe.py \
+            research/blue_sky064/observation178.py \
+            research/blue_sky064/public_calibration.json \
+            research/blue_sky064/OBSERVATION178_PROTOCOL.md \
+            campaign/blue-sky-064/friction-probe/REGISTRATION.json \
+            campaign/blue-sky-064/friction-probe/MIXED_REGISTRATION.json \
+            tests/test_blue_sky_observation178.py \
+            requirements-cycle004.txt
+          (cd "$RUNNER_TEMP"; sha256sum OBSERVATION178_SOURCE.tar.gz > OBSERVATION178_SOURCE.sha256)
+      - name: Preserve compact public exact-head evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: blue-sky-observation178-${{ github.event.pull_request.head.sha || github.sha }}
+          path: |
+            ${{ runner.temp }}/OBSERVATION178_SOURCE.tar.gz
+            ${{ runner.temp }}/OBSERVATION178_SOURCE.sha256
+            ${{ runner.temp }}/OBSERVATION178_RESULT.json
+          if-no-files-found: warn
+  independent-clean-source:
+    needs: source-bound
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record platform job start
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: blue-sky-observation178-${{ github.event.pull_request.head.sha || github.sha }}
+          path: ${{ runner.temp }}/public-slice
+      - name: Verify public archive and extract without Git
+        shell: bash
+        run: |
+          cd "$RUNNER_TEMP/public-slice"
+          sha256sum -c OBSERVATION178_SOURCE.sha256
+          mkdir source
+          tar -xzf OBSERVATION178_SOURCE.tar.gz -C source
+          test ! -e source/.git
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Install declared dependencies from extracted source only
+        working-directory: ${{ runner.temp }}/public-slice/source
+        run: python -m pip install -r requirements-cycle004.txt
+      - name: Independent original-acceptance calculation from extracted source
+        working-directory: ${{ runner.temp }}/public-slice/source
+        run: |
+          python -B -m unittest discover -s tests -p 'test_blue_sky_observation178.py' -v
+          python -B -m research.blue_sky064.observation178 --output "$RUNNER_TEMP/CLEAN_OBSERVATION178.json"
+          python -B - <<'PY'
+          import json,os
+          from pathlib import Path
+          produced=json.loads((Path(os.environ["RUNNER_TEMP"])/"public-slice/OBSERVATION178_RESULT.json").read_text())
+          recreated=json.loads((Path(os.environ["RUNNER_TEMP"])/"CLEAN_OBSERVATION178.json").read_text())
+          assert produced == recreated, "DOWNLOADED_MODEL_ONLY_REPORT_DIFFERS"
+          assert recreated["actual_physical_device_or_measurement"] is False
+          print("INDEPENDENT_CLEAN_SOURCE_REPLAY_PASS")
+          PY
