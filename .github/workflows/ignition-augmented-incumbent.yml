@@ -1,0 +1,72 @@
+name: IGNITION competent augmented multi-broker packet control
+on:
+  pull_request:
+    paths:
+      - 'products/frontier-omega-ignition/evolution_trials/NUCLEUSWATCH_AUGMENTED_PROTOCOL.md'
+      - 'products/frontier-omega-ignition/evolution_trials/incumbent_augmented_probe.py'
+      - 'tests/test_ignition_augmented_incumbent_v2.py'
+      - '.github/workflows/ignition-augmented-incumbent.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  augmented-original-packet-control:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+      PIP_DISABLE_PIP_VERSION_CHECK: '1'
+    steps:
+      - name: Record platform job execution start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Download and pin original 2026-10-25 nucleuswatch wheel
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/nucleuswatch-wheel"
+          python -m pip download --only-binary=:all: --no-deps --dest "$RUNNER_TEMP/nucleuswatch-wheel" 'nucleuswatch==1.2.0'
+          wheel="$RUNNER_TEMP/nucleuswatch-wheel/nucleuswatch-1.2.0-py3-none-any.whl"
+          test -f "$wheel"
+          echo "7c578e37ec958008424d02cef843d856f773c87ce4158186e19c836900403ed0  $wheel" | sha256sum --check --status
+          python -m pip install "$wheel"
+      - name: Execute all frozen exposed-byte controls without broker or paid API calls
+        run: python -B -m unittest -v tests.test_ignition_augmented_incumbent_v2
+      - name: Create original-packet and process-resource receipt
+        shell: bash
+        run: |
+          set -euo pipefail
+          wheel="$RUNNER_TEMP/nucleuswatch-wheel/nucleuswatch-1.2.0-py3-none-any.whl"
+          python -B products/frontier-omega-ignition/evolution_trials/incumbent_augmented_probe.py --verified-wheel "$wheel" --output "$RUNNER_TEMP/AUGMENTED_INCUMBENT_RESULT.json"
+          python -B - <<'PY'
+          import hashlib, json, os
+          from pathlib import Path
+          p = Path(os.environ['RUNNER_TEMP']) / 'AUGMENTED_INCUMBENT_RESULT.json'
+          r = json.loads(p.read_bytes())
+          reference = json.loads(Path('products/frontier-omega-ignition/evolution_trials/BROKER_CONTROL.json').read_bytes())
+          assert r['original_packet_sha256'] == reference['source_sha256']['packets']
+          assert r['witness_ids'] == {
+              band: reference['result']['bands'][band]['witness']['candid']
+              for band in ('g','r')
+          }
+          assert r['candidate_count'] == r['original_packet_count'] == 6
+          assert r['original_byte_tamper_rejected'] and r['synthetic_off_reference_rejected_augmented']
+          assert r['economic_verdict'] == 'NO_DEPLOY'
+          assert r['new_collected_revenue_usd'] == 0
+          print(json.dumps({'source_digest':r['original_index_sha256'],
+                            'receipt_sha256':hashlib.sha256(p.read_bytes()).hexdigest(),
+                            'passed':True,'incremental_economic_claim':False},sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: ignition-augmented-incumbent-receipt
+          path: ${{ runner.temp }}/AUGMENTED_INCUMBENT_RESULT.json
+          retention-days: 30
+          if-no-files-found: error
