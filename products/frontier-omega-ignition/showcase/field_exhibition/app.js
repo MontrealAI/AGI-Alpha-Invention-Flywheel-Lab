@@ -118,7 +118,7 @@
     const c = data.opportunities.find(row => row.id===candidate);
     const {title,finding,limit,test} = c[lang];
     document.querySelectorAll('#choices button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.id === candidate)));
-    el('opp-state').textContent=t(c.id==='transient'?'chosen':'hypothesis');
+    el('opp-state').textContent=t(c.id===data.nextBuild?'chosen':'hypothesis');
     el('opp-title').textContent=title; el('opp-claim').textContent=finding;
     const details=el('opp-detail');details.replaceChildren();
     term(details,t('limitLabel'),limit);term(details,t('testLabel'),test);
@@ -194,6 +194,20 @@
   }
   function proof() {
     const list=el('verdicts');list.replaceChildren();
+    const gallery=data.actionDesk, paired=gallery.census.paired;
+    const rehearsal=gallery.shadow, accepted=rehearsal.accepted;
+    term(list,t('shadowComparison'),fill(t('shadowComparisonText'),{
+      slots:num(rehearsal.slots),deliveries:num(rehearsal.deliveries),witnesses:num(rehearsal.witnesses),
+      conventional:num(accepted.B),field:num(accepted.C),direct:num(accepted.D),none:num(accepted.E),
+      humans:num(rehearsal.participants),used:num(rehearsal.real_decisions)}),true);
+    term(list,t('noticeComparison'),fill(t('noticeComparisonText'),{
+      n:num(gallery.review.primary),id:gallery.review.control,matched:num(gallery.review.agreement),total:num(gallery.review.checks)}),true);
+    term(list,t('benchmarkComparison'),fill(t('benchmarkComparisonText'),{
+      both:num(paired.both),onlya:num(paired.A_only),onlyb:num(paired.B_only),neither:num(paired.neither)}),true);
+    const stopped=gallery.costs.stopped, full=gallery.costs.complete;
+    term(list,t('measuredAcquisition'),fill(t('measuredAcquisitionText'),{
+      partial:num(stopped.reports),full:num(full.reports),stoppedtime:num(stopped.wall_seconds,3),fulltime:num(full.wall_seconds,3),
+      stoppedbytes:num(stopped.response_body_bytes,0),fullbytes:num(full.response_body_bytes,0)}),true);
     for(const series of data.changeSeries){
       const last=series.days.at(-1), pairs=last.coverage.reduce((n,r)=>n+r.comparisons,0);
       const measured=last.alerts.filter(a=>a.followup).length;
@@ -265,7 +279,8 @@
       const arrow=element('span','↗');arrow.setAttribute('aria-hidden','true');button.append(element('span',c[lang].label || c[lang].title),arrow);
       button.addEventListener('click',()=>{candidate=c.id;opportunity();});el('choices').append(button);
     }
-    el('research-source').href=data.opportunities.find(o=>o.id==='transient').url;
+    el('frontier-selection').textContent=data.selection[lang];
+    el('research-source').href=data.opportunities.find(o=>o.id===data.nextBuild).url;
     options('budget',[...new Set(cases.map(c=>c.budget))].sort((a,b)=>a-b),n=>`${num(n)} ${t('budgetOption')}`,current.budget);
     options('coverage',[...new Set(cases.map(c=>c.visits))].sort((a,b)=>a-b),n=>t(n===1?'coverageOne':'coverageTwo'),current.visits);
     el('csv').textContent=t('csv');el('receipt').textContent=t('receipt');
@@ -275,7 +290,7 @@
     options('gap',data.sky.exploratory_color_counts.map(x=>x.max_gap_minutes),n=>`${num(n)} min`,gap);
     const loads=[...new Set(data.field.arms.map(a=>a.concurrency))].sort((a,b)=>a-b);
     options('service-load',loads,num,Number(el('service-load').value)||loads[0]);
-    opportunity();worklist();photometry();secondWeekFinding();proof();changeDesk.render();
+    opportunity();worklist();photometry();secondWeekFinding();proof();changeDesk.render();actionDesk.render();
   }
   for(const id of ['budget','coverage']) el(id).addEventListener('change',()=>{
     current=cases.find(c=>c.budget===Number(el('budget').value)&&c.visits===Number(el('coverage').value));worklist();
@@ -284,7 +299,9 @@
   el('gap').addEventListener('change',()=>{gap=Number(el('gap').value);photometry();});
   el('lang').addEventListener('click',()=>{lang=lang==='en'?'fr':'en';render();});
   const changeDesk = createChangeDesk(data.changeSeries, {el, t, num, fill, element, svg, options, setBlob, locale:()=>lang});
+  const actionDesk = createActionDesk(data.actionDesk, {el, t, num, fill, element, svg, options, setBlob, openNotice:changeDesk.openNotice, locale:()=>lang});
   if (location.hash === '#forge' || location.hash === '#measurements') el('supporting').open = true;
+  setBlob('presenter-download',data.presenter,'text/markdown;charset=utf-8','PRESENT.md');
   setBlob('second-source',data.secondWeekReport,'application/json','fink-second-week.json');
   setBlob('pilot-summary',data.pilotReport,'application/json','qwen-cpu-pilot.json');
   setBlob('download',Uint8Array.from(atob(data.archive.bytes),v=>v.charCodeAt(0)),'application/zip','FRONTIER_INSTRUMENT.zip');

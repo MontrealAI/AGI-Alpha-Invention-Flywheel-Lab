@@ -75,6 +75,27 @@ The local Qwen pilot's observed results are included in `field_trials/recorded/s
 
 Les mesures de l’essai Qwen local figurent dans `field_trials/recorded/summary.json`. La commande `python3 -B products/frontier-omega-ignition/field_trials/replay_cpu.py` régénère ces résultats à partir des flux publics compressés dans la révision correspondante du dépôt. Chaque client a reçu six flux complets à chaque charge. Cinq réponses sur six ont satisfait le critère de qualité. L’accès en production et le coût d’exploitation complet restent à établir.
 
-The catalog and holdout use public Fink/Zwicky Transient Facility data. URLs, acquisition periods and content identities appear in `invention/catalog.json` and `invention/sources/holdout-source.json`. `successor_field/SOURCES.json` identifies the IERS bulletins. `discovery_field/decision_study/sources.json` identifies the primary evidence for the five research possibilities. Each study’s registered scope and control appear alongside its code. `SHA256SUMS` records the bytes included in this recipient.
+The catalog and holdout use public Fink/Zwicky Transient Facility data. URLs, acquisition periods and content identities appear in `invention/catalog.json` and `invention/sources/holdout-source.json`. `successor_field/SOURCES.json` identifies the IERS bulletins. `action_study/opportunities/sources.json` identifies the primary evidence for the current five choices. The earlier discovery study retains its own records under `discovery_field/decision_study/`. Each study’s registered scope and control appear alongside its code. `SHA256SUMS` records the bytes included in this recipient.
 
-Le catalogue et les observations ultérieures proviennent des données publiques Fink/Zwicky Transient Facility. Les adresses, périodes d’acquisition et empreintes sont indiquées dans `invention/catalog.json` et `invention/sources/holdout-source.json`. `successor_field/SOURCES.json` identifie les bulletins de l’IERS. `discovery_field/decision_study/sources.json` identifie les sources primaires des cinq pistes de recherche. Le périmètre et le témoin de chaque essai figurent à côté de son code. `SHA256SUMS` recense les empreintes du dossier.
+Le catalogue et les observations ultérieures proviennent des données publiques Fink/Zwicky Transient Facility. Les adresses, périodes d’acquisition et empreintes sont indiquées dans `invention/catalog.json` et `invention/sources/holdout-source.json`. `successor_field/SOURCES.json` identifie les bulletins de l’IERS. `action_study/opportunities/sources.json` identifie les sources primaires des cinq pistes actuelles. L’étude antérieure conserve ses propres sources dans `discovery_field/decision_study/`. Le périmètre et le témoin de chaque essai figurent à côté de son code. `SHA256SUMS` recense les empreintes du dossier.
+
+## Evidence to action / De la preuve à la décision
+
+Save the decision from the purpose selector as `decision.json` inside the extracted instrument. The receipt records its mission, sources, cutoff, evidence, action and fingerprints. Verify it, generate a new engineering mission, change its repository budget, then compute a fresh result. Each command runs offline with the Python standard library. The source-scoped verifier rejects an altered receipt. The remaining commands reconstruct both reference-stream controls, compare issue-time decisions with SQLite, repeat the engineering census and check the shadow rehearsal.
+
+Dans le dossier décompressé, enregistrez sous `decision.json` la décision choisie dans le sélecteur d’objectif. Le reçu conserve la mission, les sources, l’échéance, les observations, la décision et leurs empreintes. Vérifiez-le, générez une mission d’évaluation technique, modifiez son nombre maximal de dépôts et calculez un nouveau résultat. Ces commandes s’exécutent hors ligne avec la bibliothèque standard de Python. Les dernières commandes reconstruisent les deux contrôles de référence ZTF, comparent les décisions à l’émission avec SQLite, répètent le recensement des dépôts et vérifient la répétition du suivi.
+
+```sh
+python3 -IB action_study/desk.py verify decision.json
+python3 -IB action_study/desk.py example engineering-qualification > mission.json
+python3 -IB action_study/desk.py decide mission.json > fresh.json
+python3 -IB action_study/desk.py verify fresh.json --mission mission.json
+python3 -IB action_cases.py
+python3 -IB action_study/observing/desk.py --check
+python3 -IB action_study/qualification_choice/verify.py
+python3 -IB action_study/shadow/shadow.py check
+```
+
+The public five-minute guide is in `PRESENT.md`. A publication timestamp, an observer’s receipt and an actual telescope instruction are distinct records. Use the human-review registration before any participant study. The downloaded instrument evaluates public evidence offline.
+
+Le guide public de cinq minutes figure dans `PRESENT.md`. L’heure d’émission, la réception par une équipe et la commande d’un télescope constituent des traces distinctes. Le protocole d’évaluation humaine précède toute étude avec des participants. L’instrument téléchargé examine les sources publiques hors ligne.
