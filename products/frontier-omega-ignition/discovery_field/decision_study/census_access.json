@@ -1,0 +1,80 @@
+{
+  "schema": "ignition/division-census-access/1",
+  "scope": "Public-data prerequisite check for a proposed cell-division census on archived microscopy movies. No model fitted or movie-level events scored.",
+  "registration": "ENABLING_CHECK.md",
+  "archives": [
+    {
+      "url": "https://data.celltrackingchallenge.net/training-datasets/Fluo-N2DL-HeLa.zip",
+      "started_utc": "2026-11-18T04:34:39.661367+00:00",
+      "status": 206,
+      "range": "bytes 198289359-199337934/199337935",
+      "range_bytes": 1048576,
+      "tail_sha256": "3d29fcedaa757ac6e2b908ac62ed8b51d708638cd7c0e26de1a22a146b6163c8",
+      "members": [
+        {
+          "path": "Fluo-N2DL-HeLa/01_GT/TRA/man_track.txt",
+          "uncompressed_bytes": 3620,
+          "crc32": "5f190bd0"
+        },
+        {
+          "path": "Fluo-N2DL-HeLa/02_GT/TRA/man_track.txt",
+          "uncompressed_bytes": 9225,
+          "crc32": "f3d73bda"
+        }
+      ],
+      "heldout_label_values_opened": false,
+      "elapsed_wall_seconds": 8.778
+    },
+    {
+      "url": "https://data.celltrackingchallenge.net/training-datasets/Fluo-N2DH-SIM+.zip",
+      "started_utc": "2026-11-18T04:34:39.662212+00:00",
+      "status": 206,
+      "range": "bytes 97985817-99034392/99034393",
+      "range_bytes": 1048576,
+      "tail_sha256": "0384c664576cfbc15070c9fbc8fa05a3f1b587ffa81542e08f2bf8947df9e4be",
+      "members": [
+        {
+          "path": "Fluo-N2DH-SIM+/01_GT/TRA/man_track.txt",
+          "uncompressed_bytes": 1047,
+          "crc32": "1dd7d9f7"
+        },
+        {
+          "path": "Fluo-N2DH-SIM+/02_GT/TRA/man_track.txt",
+          "uncompressed_bytes": 1403,
+          "crc32": "62fbb297"
+        }
+      ],
+      "heldout_label_values_opened": false,
+      "elapsed_wall_seconds": 12.061
+    }
+  ],
+  "reference_definition": "The challenge documents gold tracking coverage with exceptions on real data, and exact digital lineages for its simulated data. Official challenge test labels are private. Each registered training ZIP index contains reference lineage files for sequences 01 and 02. A candidate split can therefore use 01 for tuning and 02 as locally held out across the two datasets. Sequence-specific scoring regions and division definitions need validation before using any counts.",
+  "access_attempts": "HeLa initially returned HTTP 200 for HEAD; the first simulated-file HEAD timed out at connect. Both subsequent HEADs returned HTTP 200 with byte ranges. Two subsequent HTTP 206 GETs supplied only the last 1 MiB of each archive. Only central-directory member metadata was inspected. Byte counts are transport lengths, and the retained SHA-256 values describe the returned tails only.",
+  "tracker_evidence": {
+    "repository_commit": "ea35c35cbc4a93fd11b02406cf844b06da3aae14",
+    "construction_url": "https://github.com/royerlab/celltrack-bench/blob/ea35c35cbc4a93fd11b02406cf844b06da3aae14/construction/README.md",
+    "construction_sha256": "c067dba49796ddf44d8736d199462437f3c94bd6affc13d93c75379f597b38d3",
+    "data_url": "https://github.com/royerlab/celltrack-bench/blob/ea35c35cbc4a93fd11b02406cf844b06da3aae14/data/README.md",
+    "data_sha256": "37972a270dfe32bae9c21c523d5e06b3882066cc5c1032b8e341ab7515872a86",
+    "finding": "The three archived trackers were run on reference detections in all frames. Both public neighbourhood constructions select links by difficulty. Even the broader set samples only up to 256 links per dataset and split."
+  },
+  "verdict": "defer operational census comparison",
+  "reason": "Whole-movie trackers proposed for the operational arm must derive detections independently of held-out lineage references. The documented candidate outputs share reference inputs on unsampled blocks. They can study association errors conditional on supplied detections, but they cannot qualify the complete image-to-count workflow on its original information boundary.",
+  "next": "Run two independently sourced image-to-track pipelines on authorized raw movies. Freeze whole-movie splits, scored regions, positive block sampling probabilities, interval construction, test budget and adjudication before opening held-out labels. Verify both arms against the original operating thresholds. Obtain separate consent before any timed operator trial.",
+  "primary_sources": [
+    "https://celltrackingchallenge.net/annotations/",
+    "https://celltrackingchallenge.net/2d-datasets/"
+  ],
+  "human_minutes": null,
+  "demand": null,
+  "observed_division_counts": null,
+  "benefit": null,
+  "prospective_comparison": {
+    "unit": "whole movies with complete lineage references in declared scored regions",
+    "audit_budget": "20 percent of equal-length blocks",
+    "draws_per_movie": 500,
+    "proposed_go_thresholds": "at least 20% lower average absolute division-count error than the tuned single-tracker audit; at least 92% empirical coverage for nominal 95% intervals on every held-out movie; mean interval width no larger than the incumbent",
+    "status": "operator-proposed pilot criteria in the model answer; none tested",
+    "statistical_open": "Freeze a design-valid interval estimator, probabilities for every block, border/abnormal-division rules, and the event-time convention. Paired draws are repeated audits of a movie, not additional independent movies."
+  }
+}

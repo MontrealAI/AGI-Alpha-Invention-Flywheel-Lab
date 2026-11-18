@@ -1,0 +1,317 @@
+{
+  "schema": "ignition/scoped-qwen-observation/1",
+  "started_utc": "2026-11-18T04:14:50.241904+00:00",
+  "git_head_at_launch": "fdb3d5623080e4e33b696c00662771f69212fa35",
+  "source_hashes": {
+    "missions.json": "7b69efe338670536dda78d3ca859f6a467415ffca153db87f42e5c31452dfb9a",
+    "sources.json": "1423668b80c1736244a36c2b0a33aee80308690c824d3d8d0d84d1b0e4892240",
+    "evaluate.py": "135f7b2d6eac74de6545d3473e9d436d6329d46738a27aa310d97d1f0c4d8357",
+    "observe.py": "cf4d1584ffa779eb4a234aa70133959dfc69616fc576205a2f69cd86793e043f"
+  },
+  "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+  "hardware": {
+    "processor": "AMD EPYC 9V45 96-Core Processor",
+    "architecture": "x86_64",
+    "platform": "Linux",
+    "threads": 4,
+    "gpu_layers": 0
+  },
+  "complete_cost_known": false,
+  "price": null,
+  "cases": [
+    {
+      "context": 1,
+      "route": "direct",
+      "packet_sha256": "aeaa991e223992dac84f8167d892cd50b79977a71a4ad979bf8ec3c1a6b531b0",
+      "answer": {
+        "action": "Conduct a controlled benchmark comparing a sufficiently parallelized conventional CPU solver against ML surrogates on a standard power flow scenario using identical hardware and input conditions",
+        "claim": "A sufficiently parallelized conventional solver matches or exceeds the throughput of tested ML surrogates in bulk offline AC power-flow calculations",
+        "decision": "unresolved",
+        "quote": null,
+        "source": null,
+        "test": "If the conventional solver completes the power flow in less time than the ML surrogate under identical conditions, the claim is supported; otherwise, it is refuted. A failure to match throughput despite parallelization would indicate the ML surrogate outperforms conventional methods.",
+        "uncertainty": "The sources do not specify the exact hardware, scenario complexity, or parallelization details of the conventional solver, nor do they provide empirical throughput data for direct comparison with ML surrogates."
+      },
+      "answer_sha256": "289b33136c2ceacb115fac6e58eff2189c3ac801c31736a7bfd28e4dcb87163f",
+      "failure": null,
+      "execution": {
+        "request_sha256": "337c05a9c1a7eb70449f1bb35b86d18943ef1f405ddc3678c9f7c05f9b199f81",
+        "response_sha256": "289b33136c2ceacb115fac6e58eff2189c3ac801c31736a7bfd28e4dcb87163f",
+        "raw_response_sha256": "59abd501a4088aaf8301d14a179b3b58de107edbd67a612ae28aa275f961cafd",
+        "reported_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+        "usage": {
+          "input_tokens": 433,
+          "output_tokens": 187
+        },
+        "status": "completed",
+        "application_model_calls": 1,
+        "wall_seconds": 190.426802,
+        "transport_mode": "streaming-sse/1",
+        "harness_adapter_sha256": "a05127970eb11bb08cc98ed7ef9e05f9a723f51c66f9a5bfaa9f2242bb6275a6",
+        "harness_streaming_sha256": "c94164c9b5539e08ff731b9d23063ac5357351264e86ad081f24a4ebed181986"
+      }
+    },
+    {
+      "context": 1,
+      "route": "prepared",
+      "packet_sha256": "a28cdc2ebaf8ad0f87e11bc6b3181a507e1a916cfa4d0c72e0fca4e92ad49a1d",
+      "answer": {
+        "action": "Conduct a controlled experiment comparing the throughput of a sufficiently parallelized conventional CPU solver against the tested ML surrogates on the IEEE 118-bus system under one hourly scenario.",
+        "claim": "A sufficiently parallelized conventional solver matches or exceeds the throughput of the tested ML surrogates in bulk offline AC power-flow calculations.",
+        "decision": "unresolved",
+        "quote": null,
+        "source": null,
+        "test": "If the conventional solver completes the power flow calculation in less time than or equal to the fastest ML surrogate across multiple grid sizes, the claim is supported; otherwise, it is refuted.",
+        "uncertainty": "The sources confirm the claim in principle but do not provide empirical evidence of actual throughput comparison on a specific benchmark or system configuration."
+      },
+      "answer_sha256": "a07772807c2fa8cc90132e918c6d5af33e91d06108f599cbf693160a6db9ba76",
+      "failure": null,
+      "execution": {
+        "request_sha256": "8b13c2e50a4e12e49da08039accdb5ea7ff84c4b2d017b7b6a260f6328812b08",
+        "response_sha256": "a07772807c2fa8cc90132e918c6d5af33e91d06108f599cbf693160a6db9ba76",
+        "raw_response_sha256": "ff3afa03e36b5fa8a562ae16653c89f0fd6d2731cb7c79714116f60e1766a9e1",
+        "reported_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+        "usage": {
+          "input_tokens": 501,
+          "output_tokens": 170
+        },
+        "status": "completed",
+        "application_model_calls": 1,
+        "wall_seconds": 166.053693,
+        "transport_mode": "streaming-sse/1",
+        "harness_adapter_sha256": "a05127970eb11bb08cc98ed7ef9e05f9a723f51c66f9a5bfaa9f2242bb6275a6",
+        "harness_streaming_sha256": "c94164c9b5539e08ff731b9d23063ac5357351264e86ad081f24a4ebed181986"
+      }
+    },
+    {
+      "context": 2,
+      "route": "prepared",
+      "packet_sha256": "316674effe41971339b33de4e1c7a56166f3cf36eda970ceaabf756f42c8e54d",
+      "answer": {
+        "action": "Construct a controlled experiment comparing algorithmic tracker performance on real microscopy videos with artificially introduced hard cell associations, such as overlapping or ambiguous cell boundaries, to assess whether failures are shared across trackers.",
+        "claim": "The benchmark does not specify that hard cell associations were selected by requiring failures shared by different algorithmic trackers; such a criterion is not established in the provided source.",
+        "decision": "unresolved",
+        "quote": null,
+        "source": null,
+        "test": "If multiple trackers fail on the same hard cell association, and this failure is due to shared structural ambiguity, then the claim is supported; otherwise, the claim is refuted.",
+        "uncertainty": "The sources do not describe any specific selection criterion for hard cell associations or shared failures among trackers."
+      },
+      "answer_sha256": "276afaf7577c53e4cc792cf90927e88603d63f7c6294a360f5d2364ca84b47fb",
+      "failure": null,
+      "execution": {
+        "request_sha256": "2b0b362e5ab38b23e99ad3e8bc429a20b59a804ea31b508e082d5457d9f028bc",
+        "response_sha256": "276afaf7577c53e4cc792cf90927e88603d63f7c6294a360f5d2364ca84b47fb",
+        "raw_response_sha256": "6e1f2f9648826460eac21f18c319b8f5466daa9200acd499731edbc61914ac87",
+        "reported_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+        "usage": {
+          "input_tokens": 398,
+          "output_tokens": 167
+        },
+        "status": "completed",
+        "application_model_calls": 1,
+        "wall_seconds": 165.881057,
+        "transport_mode": "streaming-sse/1",
+        "harness_adapter_sha256": "a05127970eb11bb08cc98ed7ef9e05f9a723f51c66f9a5bfaa9f2242bb6275a6",
+        "harness_streaming_sha256": "c94164c9b5539e08ff731b9d23063ac5357351264e86ad081f24a4ebed181986"
+      }
+    },
+    {
+      "context": 2,
+      "route": "direct",
+      "packet_sha256": "97c611d2326bcca90f8ac0736d526710023dfadc211e44436c60ff8a17e0b954",
+      "answer": {
+        "action": "Construct a controlled experiment comparing algorithmic tracker performance on synthetic cell association failures across different microscopy time-lapse datasets",
+        "claim": "The provided source does not establish that a benchmark selected hard cell associations by requiring failures shared by different algorithmic trackers",
+        "decision": "unresolved",
+        "quote": null,
+        "source": null,
+        "test": "If multiple trackers fail on the same hard cell associations in synthetic data, the claim is supported; otherwise, the benchmark did not require such shared failures",
+        "uncertainty": "It is unknown whether any benchmark specifically required shared failures across trackers to define hard cell associations"
+      },
+      "answer_sha256": "5a99b2c07e3b19a4e559aaa9b5d045e2ad2d3a2e2f930c72acc64d228bfd3ef3",
+      "failure": null,
+      "execution": {
+        "request_sha256": "d9f48e68176c47dda76d8e2369bd0c9179280fe922896a5980e55befeac39160",
+        "response_sha256": "5a99b2c07e3b19a4e559aaa9b5d045e2ad2d3a2e2f930c72acc64d228bfd3ef3",
+        "raw_response_sha256": "3085b3184cba59afe9c781262ea506b98c3b1da2bb0aa4c16863c62068e2db57",
+        "reported_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+        "usage": {
+          "input_tokens": 377,
+          "output_tokens": 137
+        },
+        "status": "completed",
+        "application_model_calls": 1,
+        "wall_seconds": 136.20102,
+        "transport_mode": "streaming-sse/1",
+        "harness_adapter_sha256": "a05127970eb11bb08cc98ed7ef9e05f9a723f51c66f9a5bfaa9f2242bb6275a6",
+        "harness_streaming_sha256": "c94164c9b5539e08ff731b9d23063ac5357351264e86ad081f24a4ebed181986"
+      }
+    },
+    {
+      "context": 3,
+      "route": "direct",
+      "packet_sha256": "b4561b5194615901472a8765217dec7b9ef595999809dbd41ac04aeb6bdcefc0",
+      "answer": {
+        "action": "Construct a benchmark that evaluates algorithmic trackers by requiring them to correctly handle failures shared across distinct tracking methods, using real and synthetic microscopy videos.",
+        "claim": "A benchmark did select hard cell associations by requiring failures shared by different algorithmic trackers.",
+        "decision": "unresolved",
+        "quote": null,
+        "source": null,
+        "test": "If the benchmark explicitly requires handling shared failures across trackers, and such failures are documented as part of the evaluation set, then the claim is supported; otherwise, it remains unsupported.",
+        "uncertainty": "The sources do not specify whether the shared failures were actual failures in the data or merely a design feature of the benchmark, nor whether the failures were observed in real biological data."
+      },
+      "answer_sha256": "01ddbde6f47ae8cecdc85dccbaf4dc0070692b08095ba8f25597f9ec75e7f1a0",
+      "failure": null,
+      "execution": {
+        "request_sha256": "b127f66dc42190c8151c059907c6ee2dfa655cbd78154e621370ff96c8b601f0",
+        "response_sha256": "01ddbde6f47ae8cecdc85dccbaf4dc0070692b08095ba8f25597f9ec75e7f1a0",
+        "raw_response_sha256": "99147ab28a60e4abc53babeb5326a7456e9dc69442c33be1332b4c8ebf5e6753",
+        "reported_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+        "usage": {
+          "input_tokens": 412,
+          "output_tokens": 159
+        },
+        "status": "completed",
+        "application_model_calls": 1,
+        "wall_seconds": 178.334095,
+        "transport_mode": "streaming-sse/1",
+        "harness_adapter_sha256": "a05127970eb11bb08cc98ed7ef9e05f9a723f51c66f9a5bfaa9f2242bb6275a6",
+        "harness_streaming_sha256": "c94164c9b5539e08ff731b9d23063ac5357351264e86ad081f24a4ebed181986"
+      }
+    },
+    {
+      "context": 3,
+      "route": "prepared",
+      "packet_sha256": "60d7e78ee0d1eca877f2a56766face0c85f9b880f78849b87bb25a60db04aa65",
+      "answer": {
+        "action": "Construct a controlled experiment comparing algorithmic tracking performance on hard cell associations with shared failures across distinct trackers, using real microscopy data.",
+        "claim": "A benchmark did select hard cell associations by requiring failures shared by different algorithmic trackers, as explicitly stated in the curated scope.",
+        "decision": "established",
+        "quote": "We selected a hard subset requiring greater reasoning effort by identifying failures shared across distinct algorithmic trackers.",
+        "source": "C",
+        "test": "If the subset of failures is indeed shared across distinct trackers and correlates with known algorithmic error patterns, the proposal is validated; otherwise, the selection may be based on other criteria.",
+        "uncertainty": "The specific nature of the shared failures and whether they are truly representative of hard cell associations remains unverified in the source data."
+      },
+      "answer_sha256": "9ab6f9b822e0ad6cb5ed52bd0c61f3ef44928e133a3901032a1e858162377f9e",
+      "failure": null,
+      "execution": {
+        "request_sha256": "93971aa3fc64aa31ef647961a7ff3baa17dc3832c6766720eb3f331b8f9abcf9",
+        "response_sha256": "9ab6f9b822e0ad6cb5ed52bd0c61f3ef44928e133a3901032a1e858162377f9e",
+        "raw_response_sha256": "1cc1aa34398cc712eca6da7689605d8d8b21d7f90218dfdfcc3a31f117b3de5d",
+        "reported_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+        "usage": {
+          "input_tokens": 474,
+          "output_tokens": 174
+        },
+        "status": "completed",
+        "application_model_calls": 1,
+        "wall_seconds": 192.881739,
+        "transport_mode": "streaming-sse/1",
+        "harness_adapter_sha256": "a05127970eb11bb08cc98ed7ef9e05f9a723f51c66f9a5bfaa9f2242bb6275a6",
+        "harness_streaming_sha256": "c94164c9b5539e08ff731b9d23063ac5357351264e86ad081f24a4ebed181986"
+      }
+    },
+    {
+      "context": 4,
+      "route": "prepared",
+      "packet_sha256": "95b4997adc6edd14a89f20b94c0f66a2edd6f324dfbba8a6cd163bc876bb3a9b",
+      "answer": {
+        "action": "Conduct a comparative study using a conventional power flow solver (e.g., Newton-Raphson) parallelized for multi-core CPUs, benchmarked against ML surrogates on the IEEE 118-bus system under standard offline conditions.",
+        "claim": "No evidence exists in the provided sources that a parallelized conventional solver matches or exceeds ML surrogates in throughput for bulk offline AC power flow calculations.",
+        "decision": "unresolved",
+        "quote": "null",
+        "source": "null",
+        "test": "If the conventional solver completes an hourly scenario in less time than the ML surrogate on the same system, the claim is supported; otherwise, it is refuted.",
+        "uncertainty": "The sources do not include any comparison between conventional solvers and ML surrogates in terms of throughput or execution time."
+      },
+      "answer_sha256": "f75d2a475995a4be34d2b8107f5c70721574074c7bd156e5ab3525a0fc34bd60",
+      "failure": null,
+      "execution": {
+        "request_sha256": "a459083b494235f6eee6b96d93d26337384762d0b75333446f17a0780209d46b",
+        "response_sha256": "f75d2a475995a4be34d2b8107f5c70721574074c7bd156e5ab3525a0fc34bd60",
+        "raw_response_sha256": "ebe851d2053d074b41ae207e5978463b497b149784e850796f95701c7be43541",
+        "reported_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+        "usage": {
+          "input_tokens": 425,
+          "output_tokens": 181
+        },
+        "status": "completed",
+        "application_model_calls": 1,
+        "wall_seconds": 192.103631,
+        "transport_mode": "streaming-sse/1",
+        "harness_adapter_sha256": "a05127970eb11bb08cc98ed7ef9e05f9a723f51c66f9a5bfaa9f2242bb6275a6",
+        "harness_streaming_sha256": "c94164c9b5539e08ff731b9d23063ac5357351264e86ad081f24a4ebed181986"
+      }
+    },
+    {
+      "context": 4,
+      "route": "direct",
+      "packet_sha256": "225f95fc218651f860fcefe04479c38da26dde73061c2eab7855b735ee4e6fc0",
+      "answer": {
+        "action": "Conduct a comparative benchmarking study using a conventional power-flow solver (e.g., Newton-Raphson) parallelized on a multi-core CPU, against a tested ML surrogate, both on identical ordinary power flow scenarios with fixed load conditions.",
+        "claim": "The available source does not establish whether a parallelized conventional solver matches or exceeds ML surrogates in throughput for bulk offline AC power-flow calculations.",
+        "decision": "unresolved",
+        "quote": null,
+        "source": null,
+        "test": "If the conventional solver completes the same power flow scenario in less time than the ML surrogate under identical conditions, the claim is supported; otherwise, the ML surrogate outperforms, indicating the conventional solver is insufficient.",
+        "uncertainty": "The provided source only reports edge inference performance on a Jetson Orin Nano and does not address bulk offline AC power flow, parallelization, or comparative throughput against ML models."
+      },
+      "answer_sha256": "d806a01b055f27e3489da4c52e1488216c3ff1ced521573dd62024c4e18941f0",
+      "failure": null,
+      "execution": {
+        "request_sha256": "8971ffc46f9fd74a23ee03d7c621b411e7b7bc456401b5f420d14c6614e4bfcb",
+        "response_sha256": "d806a01b055f27e3489da4c52e1488216c3ff1ced521573dd62024c4e18941f0",
+        "raw_response_sha256": "2c5c96a8b57a49b2ab07cdff49345f9311aec8460dcc4bded3a5ee617ebd7f60",
+        "reported_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+        "usage": {
+          "input_tokens": 391,
+          "output_tokens": 198
+        },
+        "status": "completed",
+        "application_model_calls": 1,
+        "wall_seconds": 232.428514,
+        "transport_mode": "streaming-sse/1",
+        "harness_adapter_sha256": "a05127970eb11bb08cc98ed7ef9e05f9a723f51c66f9a5bfaa9f2242bb6275a6",
+        "harness_streaming_sha256": "c94164c9b5539e08ff731b9d23063ac5357351264e86ad081f24a4ebed181986"
+      }
+    }
+  ],
+  "assets": {
+    "weights_sha256": "2fde00ce69dd4899c70d020845e2638353015bba0fdf161b3eb965f2bca4464e",
+    "weights_bytes": 2497280736,
+    "model_repository": "bartowski/Qwen_Qwen3-4B-Instruct-2507-GGUF",
+    "model_revision": "ae44f08e1392f39c0e474af10c3ff8355c8b6688",
+    "runtime_archive_sha256": "909eef25cd53e6601c8a07c866d8dbb2983e74177088d55182137a8fb8255d62",
+    "runtime_archive_bytes": 23158635,
+    "server_sha256": "fe211d00c4754aa67aaa492d2c755ab0f6ef60bf30eee3c0c74a3496189cde17",
+    "weights_preparation_wall_seconds": 2.5181
+  },
+  "serving_configuration": [
+    "--ctx-size",
+    "6144",
+    "--parallel",
+    "1",
+    "--threads",
+    "4",
+    "--threads-batch",
+    "4",
+    "--n-gpu-layers",
+    "0",
+    "--seed",
+    "6144",
+    "--temp",
+    "0",
+    "--no-repack",
+    "--batch-size",
+    "128",
+    "--ubatch-size",
+    "64",
+    "--no-webui"
+  ],
+  "server_exit_before_shutdown": null,
+  "wall_seconds_including_setup": 1460.9861,
+  "child_cpu_seconds": 4250.7696,
+  "client_cpu_seconds": 3.1894,
+  "child_peak_rss_kib": 2680576,
+  "finished_utc": "2026-11-18T04:39:11.230182+00:00"
+}

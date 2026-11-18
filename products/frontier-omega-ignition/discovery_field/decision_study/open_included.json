@@ -1,0 +1,147 @@
+{
+  "schema": "ignition/open-facilities-observation/1",
+  "packet_sha256": "4d8286fcb99071b0da4bde04a911c5f4105334cb5e1261d5bec41a12935c012b",
+  "submitted_json_file_sha256": "bc81e07ae9282d47047b822f83e401feb23aaaa0a546528e5f1ac0a270bf38f7",
+  "answer_sha256": "67a8b3a9c0ae2b9f68e8509af20ce418140ef5dffe6ed5ea72bb717c102530f5",
+  "answer": {
+    "candidates": [
+      {
+        "title": "A division census with an audit sample",
+        "beneficiary": "A microscopy core analyst deciding whether a reported count of cell divisions in an archived movie is precise enough to release.",
+        "claim": "C reports that shared tracker failures helped select difficult examples. D describes a time-lapse tracking benchmark. I propose estimating the total division count, including events absent from every tracker's output, with a probability sample of the image record.",
+        "citations": [
+          {
+            "source": "C",
+            "quote": "identifying failures shared across distinct algorithmic trackers"
+          },
+          {
+            "source": "D",
+            "quote": "both real and computer-generated (2D and 3D) time-lapse microscopy videos"
+          }
+        ],
+        "uncertainty": "A reference must mark divisions completely within its scored region. Tracker disagreement may predict little about count error, and a real reviewer may miss events that an archive labels.",
+        "action": "Partition scored transition frames into equal-length blocks. Assign a division to the first frame showing both daughters and show adjacent frames for context. Freeze a tracker count per block. Stratify using tracker conflict and image density, giving every block a known positive selection probability. In sampled blocks recount all divisions, including those with no predicted link. Add the sum of sampled (reference minus tracker) counts divided by their inclusion probabilities to the full tracker total. Release the count, sampling interval, block map, seed and per-block corrections for independent replay.",
+        "alternative": "A calibrated single tracker with a probability audit stratified by its own confidence and image density, using the same count correction and interval calculation. Tune both sampling allocations on separate movies.",
+        "test": "On whole held-out movies with complete public references, simulate 500 paired draws per movie at a budget of 20% of equal-length blocks. Hide unsampled labels from each estimator. Compare absolute error in divisions per movie, empirical coverage of nominal 95% intervals, interval width and CPU time, with the movie as the reporting unit. Identical sampled-block budgets measure the number of reviews. Human review time is a separate measurement.",
+        "economics": "Running multiple trackers and reviewing crowded blocks may cost more than the avoided reviews. Actual minutes per block and whether cores value a movie-level count enough to fund review are unmeasured."
+      },
+      {
+        "title": "How many hours could an archived survey have seen a flash?",
+        "beneficiary": "An observatory analyst choosing which archival fields can support an occurrence-rate study for a specified class of optical flashes.",
+        "claim": "F documents an uncertainty on magnitude rate. I propose another quantity, the number of possible flash-start hours that satisfy a stated two-visit brightness rule under an explicit light-curve template.",
+        "citations": [
+          {
+            "source": "F",
+            "quote": "magnitude rate error estimation (mag/day)"
+          }
+        ],
+        "uncertainty": "The cited row does not establish an exposure inventory, limiting magnitudes, sky footprints or recovery probability. Missing visits, varying depth within a field and the assumed template can change the answer.",
+        "action": "For a fixed sky position, filter, start-time window and single-peaked piecewise-linear template, translate each usable visit's time and limiting magnitude into the interval of flash start times it could see. Sweep interval endpoints and sum the time covered by two qualifying distinct visit groups. Return hours, exact intervals, visit IDs, assumptions and witness visits. Compute separate results at bracketing depths if calibrated depth bounds exist.",
+        "alternative": "A survey analyst's direct template injection into the same archived cadence and depth table, using a converged fine grid of start times or adaptive sampling and the identical two-visit rule.",
+        "test": "At equal error tolerance compare CPU seconds and discrepancies in eligible hours per position and template. A separate checker evaluates the original brightness inequalities at all interval endpoints and one point inside every resulting segment. Exercise gaps, coincident visits and equality at threshold. Advance to a public field only if the visit inventory includes usable limits. Physical detection efficiency would require separately calibrated recovery data.",
+        "economics": "Reconstructing historical exposure metadata could dominate computation. The product has a user only if a survey needs this template-specific exposure denominator."
+      },
+      {
+        "title": "Locate the first voltage-limit crossing between simulated load cases",
+        "beneficiary": "A facility power engineer deciding which modeled load interval warrants closer study before a proposed equipment addition.",
+        "claim": "A reports a device-specific solution time. B reports a competitive parallel CPU baseline for the ordinary power-flow comparison. I propose returning a verified load interval for the first crossing of a specified bus-voltage limit under a specified regulator law.",
+        "citations": [
+          {
+            "source": "A",
+            "quote": "solves an hourly scenario in 12.2 ms"
+          },
+          {
+            "source": "B",
+            "quote": "a sufficiently parallelized CPU solver or gpusim2grid matches or exceeds the throughput of the ML surrogates we test"
+          }
+        ],
+        "uncertainty": "A feeder description, an initial controller state and a rule for following a solution branch are necessary to define 'first'. Tap changes can jump across a limit. Neither speed result establishes that a threshold can be certified.",
+        "action": "Start with a fully specified small radial model and a monotone load ramp. Follow the branch from a declared initial solution and isolate both regulator-switching events and voltage crossings. Publish a load bracket, state and equation residuals on each side, and interval checks over earlier segments. Return unresolved intervals if the checks cannot establish branch continuity or rule out an earlier crossing.",
+        "alternative": "CPU continuation power flow with event location, step refinement, bisection and consistency checks under the same regulator law and starting state.",
+        "test": "Use analytically solvable small cases and small finite-controller cases with independent event enumeration. Include switch-induced jumps and cases with no crossing. At the same requested bracket width of 0.001 per-unit load, compare false first-crossing reports, correctly resolved cases, replayable evidence and total CPU seconds. An unresolved case counts against coverage for both methods.",
+        "economics": "Obtaining a trustworthy model and controller settings may outweigh solver cost. Facility-specific study or physical action would require its own access and authorization."
+      },
+      {
+        "title": "What does a pooled calibration table actually determine?",
+        "beneficiary": "A network metrologist deciding whether a reported improvement in pass rate also holds when every facility receives equal weight.",
+        "claim": "M reports an accepted-error comparison on its evaluated methods. Separately, I propose a sharp bound on an equal-facility difference when a report releases site sample sizes and pooled outcome counts. This is a new analysis target, with no claim about how M weighted its results.",
+        "citations": [
+          {
+            "source": "M",
+            "quote": "our method achieves the lowest accepted-error rate among the evaluated methods"
+          }
+        ],
+        "uncertainty": "A released table needs positive site-by-method denominators and interpretable pooled totals. The bounds concern the recorded trials. Uncertainty about future performance is a different estimand.",
+        "action": "Enumerate or optimize over feasible integer site pass counts. Return the minimum and maximum equal-site difference and a compatible table attaining each. A constructed example already gives a check: A's site sizes are (8,2) with 8 total passes, B's are (2,8) with 7. For A minus B, the equal-site extrema are −5/16 and +7/16. The site pass counts attaining them are A=(8,0), B=(2,5) and A=(6,2), B=(0,7), respectively. Each pair preserves the reported 8/10 and 7/10 totals.",
+        "alternative": "A metrologist applying standard partial-identification bounds with an integer or network-flow solver, retaining the same extremal tables. The potential improvement is reusable table ingestion and verifiable output.",
+        "test": "Blindly compare endpoint values, witness feasibility and analyst minutes per table against an independent solver on small exhaustively enumerable tables, then on one compatible public report if available. Require exact endpoint agreement and replay of every published witness. Verify the constructed example by checking its nine possible allocations.",
+        "economics": "Extracting the denominators accurately can cost more than the optimization. Distinct value depends on compatible public tables and on whether equal-site weighting would affect an actual decision."
+      },
+      {
+        "title": "Map periodic counting bias in a digital detector readout",
+        "beneficiary": "A detector electronics group deciding whether an archived digital readout can measure a periodic calibration pulser without a phase-dependent count correction.",
+        "claim": "H reports physical sign-off for two particular designs. I propose measuring input-to-count bias in simulation for a specified public digital counter and periodic stimulus. H supplies no counter design, pulse records or performance for this experiment.",
+        "citations": [
+          {
+            "source": "H",
+            "quote": "Two division-winning designs completed physical sign-off in the SkyWater 130 nm (Sky130) process"
+          }
+        ],
+        "uncertainty": "An openly usable counter description and its reset, sampling and dead-time semantics may be unavailable. The digital result depends on time resolution and omits analog pulse shapes and metastability.",
+        "action": "Generate ideal pulses with declared rational periods, pulse widths and phase offsets on a finite simulation grid. For each case, detect repetition of the joint stimulus phase and readout state. Publish counts per repeat, fractional count bias and a short replay trace for each distinct bias. Use a constructed counter with an analytic answer before interpreting an archived design.",
+        "alternative": "A verification engineer's cycle-accurate reference scoreboard and exhaustive phase sweep with state recurrence or a finite-state model checker, producing the same counts, bias and traces.",
+        "test": "Compare exact counts and witness replay across all offsets on small grids, then total CPU time and resolved cases at equal grid resolution on larger ones. Test zero dead time and pulses spanning a clock edge. If either calculation fails to establish a repeat within the budget, mark that case unresolved.",
+        "economics": "Obtaining and interpreting instrument-specific logic may dominate any simulation savings. An independent physical timing study would need access to the readout and a pulser."
+      }
+    ],
+    "first_experiment": "Build A division census with an audit sample first. A public lineage reference can stand in for a block reviewer and also score the full count, so this first decision needs only archival records and a CPU. Before implementation, check for at least two held-out movies with independently intelligible, complete division marks in declared regions, separate movies for tuning, and two runnable or archived tracker outputs. Stop if this cannot be established. Freeze the split, allocations and metrics before opening held-out labels. Abandon the extra-tracker audit if it reduces mean absolute count error across held-out movies by less than 20% versus the tuned single-tracker audit at the same review budget, if the proposed intervals cover the reference in fewer than 92% of draws on any held-out movie, or if their mean width exceeds the incumbent's. These are pilot decision thresholds. Passing supports a timed review pilot for which participation would be sought separately."
+  },
+  "model": "Independent included Codex assistant, described by its runtime as based on GPT-6. Exact served model, reasoning setting, token accounting, price and account limits unavailable.",
+  "external_tools": "None for research; one registered packet read, local clock, original JSON save and validation. The participant saw neither curated opportunities nor scoring logic.",
+  "started_utc": "2026-11-18T04:24:35.757284182Z",
+  "written_utc": "2026-11-18T04:29:26.495174921Z",
+  "elapsed_wall_seconds_reported": 290.737890739,
+  "input_tokens": null,
+  "output_tokens": null,
+  "price": null,
+  "independent_review": {
+    "role": "Workstream evaluator who prepared the source packet, did not generate these proposals, read each answer against its cited sources and comparator. It is a nonblinded scientific judgment and is not a human cohort.",
+    "by_candidate_sha256": {
+      "57c322fdb0d6ede92eec827c8ec7395f07939e68e2a00c3ac4bfa43de435e94e": {
+        "claim_supported": true,
+        "material": true,
+        "test_decisive": true,
+        "role": "design",
+        "reason": "Selecting hard links for shared failures provides a reason to audit apparently unremarkable blocks as well as disagreements. The nonzero sampling probability and matched one-tracker control directly address common omissions. It still requires complete hidden references and independent tracker outputs."
+      },
+      "83abeeacc14e65765c617778458de54869b0faf553d25a02a599ff68f302c538": {
+        "claim_supported": true,
+        "material": false,
+        "test_decisive": true,
+        "role": "context only",
+        "reason": "The quoted uncertainty on a magnitude rate says nothing about the availability, depths or completeness of a field's visit inventory. The interval sweep has a falsifiable numerical control but its enabling source is missing."
+      },
+      "7eb45500160f457016d43ed1105221b117987d4309fd1a44102ca219048bb0ce": {
+        "claim_supported": true,
+        "material": true,
+        "test_decisive": true,
+        "role": "comparator only",
+        "reason": "Reported physics throughput and edge latency justify taking a tuned conventional method seriously. Neither paper establishes first-crossing certification. Event enumeration and exclusion of earlier crossings can test that additional hypothesis on the stated finite models."
+      },
+      "64c08e734587f70438f835d3fdc64cba66662831bd8cffd80a2ea3978c8be09f": {
+        "claim_supported": true,
+        "material": false,
+        "test_decisive": true,
+        "role": "context only",
+        "reason": "The methods ranking in the paper does not establish site denominators, pooling, or an estimand. The response explicitly offers a separate mathematical construction with exact, falsifiable numerical witnesses."
+      },
+      "57502ca3726da129f4d06c5193dacad9140c4f9a73aaf5224efa587f1ea40876": {
+        "claim_supported": true,
+        "material": false,
+        "test_decisive": true,
+        "role": "context only",
+        "reason": "Sign-off on two unrelated digital designs does not establish detector bias or supply a readout. The proposed finite pulse-phase comparison can be performed on a declared simulator and a qualifying digital design."
+      }
+    }
+  }
+}

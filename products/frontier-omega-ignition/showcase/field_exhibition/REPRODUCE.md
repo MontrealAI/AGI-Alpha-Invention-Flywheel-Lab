@@ -13,6 +13,16 @@ python3 -B invention/evolution/alert.py --as-of 2026-11-13T00:00:00Z --out novem
 python3 -B evolution_trials/verify.py --as-of 2026-11-13T00:00:00Z --check november.json
 python3 -B evolution_trials/early.py --as-of 2026-10-26T00:00:00Z --check first-notices.json
 python3 -B invention/early_survey/exposures/verify.py --check
+python3 -IB evolution_trials/broker_control.py --check
+```
+
+For a different target, copy `evolution_trials/broker_sources/alternate-notice.json` and supply its baseline and triggering detection IDs, filter and UTC window. The first command below prints the public archive queries offline. The guide in `evolution_trials/BROKER_REPLAY.md` shows how to check locally saved packets or request fresh public measurements using `--live`. The second command tests the separate equal-site comparison from pooled counts against exhaustive SQLite enumeration.
+
+Pour une autre cible, copiez `evolution_trials/broker_sources/alternate-notice.json` et renseignez les identifiants des détections initiale et déclenchante, le filtre et la fenêtre UTC. La première commande affiche les requêtes sans connexion. Le guide `evolution_trials/BROKER_REPLAY.md` explique comment vérifier des paquets déjà téléchargés ou consulter les archives publiques avec `--live`. La seconde commande compare les bornes calculées à partir de totaux agrégés à une énumération exhaustive sous SQLite, en donnant le même poids à chaque site.
+
+```sh
+python3 -IB evolution_trials/broker_control.py --queries --notice evolution_trials/broker_sources/alternate-notice.json
+python3 -IB discovery_field/decision_study/calibration_bounds.py --check
 ```
 
 New output paths must be unused. Import the 19-digit detection IDs in CSV as text. The four October targets were selected by Fink's machine-generated “Early SN Ia candidate” tag. The original Fink record has a later coverage gap. Two public ZTF exposures recovered through ALeRCE independently meet the registered persistence rule. The downloadable case retains the Fink result and adds a source-labelled second-archive section when selected. Both brokers describe the same survey. Their prospective usefulness requires a new beneficiary study.

@@ -45,8 +45,13 @@ FILES = {
                                         "sources/index.json", "sources/detections.json", "sources/astrometry.json.gz",
                                         "sources/coverage.csv.gz", "sources/empty-geometry.csv.gz", "sources/empty-stream.csv.gz",
                                         "sources/forced.json.gz", "sources/g.avro.gz", "sources/r.avro.gz", "sources/history.avro.gz"],
-    "evolution_trials": ["REGISTRATION.md", "verify.py", "select.sql", "early.py"],
-    "discovery_field/decision_study": ["sources.json", "missions.json", "possibilities.json", "REGISTRATION.md", "evaluate.py", "included.json"],
+    "evolution_trials": ["REGISTRATION.md", "verify.py", "select.sql", "early.py",
+                         "broker_control.py", "BROKER_CONTROL.json", "BROKER_REPLAY.md",
+                         "broker_sources/alerce-window.vot", "broker_sources/alternate-notice.json",
+                         *[f"broker_sources/{candid}.avro.gz" for candid in
+                           ("3579392285815015017", "3580268845815015008", "3584356425815015004", "3584382785815015006")]],
+    "discovery_field/decision_study": ["sources.json", "missions.json", "possibilities.json", "REGISTRATION.md", "evaluate.py", "included.json",
+                                       "calibration_bounds.py", "calibration_observation.json"],
     "discovery_field": ["catalog.json", "REGISTRATION.md"],
 }
 def opportunities():

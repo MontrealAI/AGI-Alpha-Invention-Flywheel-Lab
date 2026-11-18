@@ -62,7 +62,7 @@ def runtime_source():
              ("construction","evaluation","delivery","portable","provider","research","controller","store","economics","model_schema","routing","development","pairing_specialist","endpoint_specialist","followup_specialist","change_specialist","fixed_delivery","change_recipient")]
     paths += [PRODUCT / "discovery_field" / name for name in ("protocol.py", "catalog.json")]
     paths += [PRODUCT / "discovery_field" / "decision_study" / name
-              for name in ("private_sources.py", "evaluate.py", "missions.json", "sources.json")]
+              for name in ("private_sources.py", "evaluate.py", "missions.json", "sources.json", "publisher_observations.json")]
     bridge = PRODUCT.parent / "alpha-genesis-harness" / "bridge"
     paths += [bridge / name for name in ("__init__.py", "adapters.py", "output_schema.py", "streaming.py")]
     return digest({"python": [sys.implementation.name, *sys.version_info[:3]],

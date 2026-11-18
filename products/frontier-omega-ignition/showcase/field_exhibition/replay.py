@@ -57,6 +57,8 @@ def replay(case_path=None, snapshot_path=None):
     result["early_candidate_queues"] = read(early / "RESULT.json")["summary"]
     subprocess.run([sys.executable, "-B", str(early / "exposures/verify.py"), "--check"],
                    check=True, stdout=subprocess.DEVNULL)
+    subprocess.run([sys.executable, "-IB", str(PRODUCT / "evolution_trials/broker_control.py"), "--check"],
+                   check=True, stdout=subprocess.DEVNULL)
     confirmed = read(early / "exposures/RESULT.json")["witnesses"]
     result["additional_archive"] = {band: {"source": row["source"], "status": row["status"],
                                             "candid": row["witness"]["candid"], "utc": row["witness"]["utc"],
@@ -64,6 +66,8 @@ def replay(case_path=None, snapshot_path=None):
                                             "formal_error_mag": row["formal_error_mag"]}
                                       for band, row in confirmed.items() if row["witness"]}
     decision_study = PRODUCT / "discovery_field/decision_study"
+    bounds = json.loads(subprocess.check_output([sys.executable, "-IB", str(decision_study / "calibration_bounds.py"), "--check"]))
+    result["equal_site_example"] = {label: witness["difference"] for label, witness in bounds["sharp_bounds"].items()}
     subprocess.run([sys.executable, "-B", str(decision_study / "evaluate.py"), "replay", str(decision_study / "included.json")],
                    check=True, stdout=subprocess.DEVNULL)
     if snapshot_path:

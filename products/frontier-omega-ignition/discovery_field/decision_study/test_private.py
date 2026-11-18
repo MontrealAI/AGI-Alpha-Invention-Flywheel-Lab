@@ -45,6 +45,13 @@ class PrivateResearchTest(unittest.TestCase):
                 self.assertEqual(decide(1, 1, edit_source=mutate, bind=bind)["decision"], "defer")
         self.assertEqual(decide(1, 1, bind=False)["decision"], "defer")
 
+    def test_later_primary_response_must_match_the_source_and_observation_time(self):
+        row = private.export(1, reacquired=True)["sources"][1]
+        self.assertEqual(private.source_slot(row), "B")
+        self.assertIsNone(private.source_slot(dict(row, retrieved_at=private.OBSERVED_BY)))
+        self.assertIsNone(private.source_slot(dict(row, source_response_sha256="0" * 64)))
+        self.assertEqual(private.source_slot(private.export(1)["sources"][1]), "B")
+
     def test_arbitrary_sources_and_other_missions_keep_ordinary_behavior(self):
         row = private.export(1)["sources"][1]
         self.assertIsNone(protocol.observe(dict(row, role="ordinary import")))

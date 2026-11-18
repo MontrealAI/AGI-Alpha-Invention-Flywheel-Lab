@@ -65,6 +65,7 @@ def main():
         python("evolution_trials/early.py", "--check", "invention/early_survey/RESULT.json",
                capture=record / "direct-october-change-decisions.json")
         python("invention/early_survey/exposures/verify.py", "--check", capture=record / "cross-broker-check.json")
+        python("evolution_trials/broker_control.py", "--check", capture=record / "conventional-packet-replay.txt")
         recovered = out / "recovered-observations.json"
         python("invention/early_survey/exposures/verify.py", "--out", recovered)
         sys.path.insert(0, str(PRODUCT))
@@ -84,6 +85,9 @@ def main():
         shutil.copyfile(temp / "http/PUBLIC.json", record / "fresh-http.json")
         python("-m", "discovery_field.study", "replay", capture=record / "discovery.json")
         python("-m", "discovery_field.regrade", "--check", capture=record / "discovery-regrade.json")
+        python("-m", "discovery_field.decision_study.open_decisions", capture=record / "open-opportunity-review.json")
+        python("-m", "discovery_field.decision_study.report", capture=record / "source-withdrawal-review.json")
+        python("discovery_field/decision_study/calibration_bounds.py", "--check", capture=record / "equal-site-bounds.json")
         python("numeric_study/transient_table/study.py", capture=record / "transient-table.json")
         python("numeric_study/transient_table/nomai.py", capture=record / "historical-classifications.json")
         python("successor_field/observe.py", "--output", temp / "archive")
