@@ -1,9 +1,12 @@
 """Owner-invoked observation of a single live direct Stripe charge, with no financial writes."""
 import base64
 import http.client
+from datetime import datetime
+import math
 import os
 import re
 import ssl
+import time
 
 from .store import StateError, digest, strict_json
 
@@ -20,19 +23,22 @@ def _identifier(value, prefix):
 
 def parties(request):
     """Use privately confirmed expected IDs from the owner and counterparty before offering."""
-    if not isinstance(request, dict) or set(request) not in ({"merchant", "customer"}, {"merchant", "customer", "charge"}):
-        raise StateError("Supply the expected merchant and customer; reconciliation also requires the charge.")
-    return digest(["stripe-direct-parties/1", _identifier(request["merchant"], "acct"),
-                   _identifier(request["customer"], "cus")])
+    enrollment = {"merchant", "customer", "payment_intent"}
+    if not isinstance(request, dict) or set(request) not in (enrollment, enrollment | {"charge"}):
+        raise StateError("Supply expected merchant, customer and PaymentIntent; reconciliation also requires the charge.")
+    return digest(["stripe-direct-enrollment/1", _identifier(request["merchant"], "acct"),
+                   _identifier(request["customer"], "cus"), _identifier(request["payment_intent"], "pi")])
 
 
 def minor_amount(price, currency):
     if currency not in MINOR_UNITS:
         raise StateError("This direct-charge adapter supports CAD, USD, EUR, GBP and JPY.")
+    if not isinstance(price, str) or not re.fullmatch(r"(?:0|[1-9][0-9]*)(?:\.[0-9]+)?", price):
+        raise StateError("The offer price must be an unsigned decimal string.")
     whole, _, fraction = price.partition(".")
     digits = MINOR_UNITS[currency]
     fraction = fraction.rstrip("0")
-    if len(fraction) > digits or not re.fullmatch("[0-9]+", whole) or (fraction and not fraction.isascii()):
+    if len(fraction) > digits:
         raise StateError("The offer amount is not exact in this currency's minor unit.")
     amount = int(whole) * 10**digits + int(fraction.ljust(digits, "0") or 0)
     if amount <= 0:
@@ -97,7 +103,8 @@ def reconcile_charge(charge, request, offer):
         raise StateError("Stripe merchant and customer differ from the accepted offer.")
     expected_amount = minor_amount(terms["amount"], terms["currency"])
     expected = {"id": _identifier(request.get("charge"), "ch"), "object": "charge", "customer": request["customer"],
-                "status": "succeeded", "currency": terms["currency"].lower(), "livemode": True,
+                "payment_intent": request["payment_intent"], "status": "succeeded",
+                "currency": terms["currency"].lower(), "livemode": True,
                 "captured": True, "paid": True, "disputed": False, "refunded": False,
                 "amount": expected_amount, "amount_captured": expected_amount, "amount_refunded": 0,
                 "transfer_data": None, "on_behalf_of": None, "source_transfer": None, "application_fee": None,
@@ -118,9 +125,18 @@ def reconcile_charge(charge, request, offer):
     fee, net = tx.get("fee"), tx.get("net")
     if type(fee) is not int or type(net) is not int or fee < 0 or net <= 0 or net + fee != expected_amount:
         raise StateError("Provider fee or available net does not reconcile to gross.")
+    # Stripe metadata is merchant-editable. The enrolled PaymentIntent ID and charge creation time
+    # are independently checked. Reject an ambiguous charge in the fractional offer second.
+    enrolled = math.ceil(datetime.fromisoformat(offer["recorded_at"]).timestamp())
+    created, posted, available = charge.get("created"), tx.get("created"), tx.get("available_on")
+    observed = math.floor(time.time())
+    if (any(type(t) is not int for t in (created, posted, available)) or
+            not enrolled <= created <= posted <= observed or not 0 < available <= observed):
+        raise StateError("Charge and settlement timestamps must support payment after prospective enrollment.")
     return {"provider": "stripe", "scope": "Available in the authenticated merchant's Stripe payments balance",
             "currency": terms["currency"], "minor_unit_digits": MINOR_UNITS[terms["currency"]],
             "gross_minor": expected_amount, "provider_fee_minor": fee, "available_net_minor": net,
             "charge_fingerprint": digest(["stripe-direct-charge/1", request["merchant"], charge["id"]]),
             "balance_transaction_fingerprint": digest(["stripe-balance-transaction/1", request["merchant"], tx_id]),
+            "charge_created_epoch": created, "balance_created_epoch": posted, "available_on_epoch": available,
             "bank_payout_verified": False, "later_reversals_monitored": False}
