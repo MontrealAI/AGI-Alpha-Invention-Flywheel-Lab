@@ -178,6 +178,8 @@ def capture(destination):
     if __package__:
         from .acquire import acquire, save
     else:
+        import sys
+        sys.path.insert(0, str(Path(__file__).resolve().parent))
         from acquire import acquire, save
     readme, schema_receipt = acquire(HF + "README.md")
     schema = readme.decode("utf8")

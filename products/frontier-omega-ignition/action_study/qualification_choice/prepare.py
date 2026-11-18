@@ -10,6 +10,8 @@ if __package__:
     from .acquire import A, B, BUCKET, LEADERBOARD, LOGS, STATUS, digest
     from .roster import URL, decode_prefix
 else:
+    import sys
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
     from acquire import A, B, BUCKET, LEADERBOARD, LOGS, STATUS, digest
     from roster import URL, decode_prefix
 

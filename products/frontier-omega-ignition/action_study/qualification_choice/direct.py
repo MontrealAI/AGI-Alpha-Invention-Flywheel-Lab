@@ -10,6 +10,8 @@ import sqlite3
 if __package__:
     from .roster import decode_prefix
 else:
+    import sys
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
     from roster import decode_prefix
 
 HERE = Path(__file__).resolve().parent

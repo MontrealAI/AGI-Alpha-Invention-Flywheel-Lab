@@ -116,6 +116,8 @@ def collect(destination, until_decision=None):
             from .adapter import interval, sign
             from .roster import decode_prefix
         else:
+            import sys
+            sys.path.insert(0, str(Path(__file__).resolve().parent))
             from adapter import interval, sign
             from roster import decode_prefix
         source_roster = decode_prefix((until_decision / "roster.parquet-prefix").read_bytes())
