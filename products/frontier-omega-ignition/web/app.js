@@ -347,14 +347,15 @@ function studyView(study) {
 }
 function pairingView(run) {
   const study = run.pairing_result;
-  const decision = study || run.endpoint_result;
+  const decision = study || run.endpoint_result || run.followup_result;
   $("pairing-result").hidden = !study;
   $("pilot-next").hidden = study?.qualifies !== true;
   $("trial-label").hidden = Boolean(decision);
   $("trial").hidden = Boolean(decision);
   $("try").textContent = decision ? "Reproduce decision" : "Run input";
   $("actions-title").textContent = decision ? "Take the decision with you" : "Operate the artifact";
-  $("recipient-command").textContent = run.endpoint_result ? "python3 -B endpoint_lab/replay_delivery.py" :
+  $("recipient-command").textContent = run.followup_result ? "python3 -IB review_followup.py" :
+    run.endpoint_result ? "python3 -B endpoint_lab/replay_delivery.py" :
     study ? "python3 -B verify_decision.py" : "python3 -I run.py verify";
   if (!study) return;
   const verdicts = {audit_pass:"Pilot criteria met", audit_failed:"Pilot criteria missed",
@@ -661,7 +662,7 @@ $("copy-prompt").addEventListener("click",async()=>{
   catch { $("prompt").parentElement.open=true; const range=document.createRange();range.selectNodeContents($("prompt"));getSelection().removeAllRanges();getSelection().addRange(range);runNotice("Prompt selected. Use your browser’s copy command."); }
 });
 $("try").addEventListener("click",()=>{
-  try {const input=current?.pairing_result || current?.endpoint_result ? {} : JSON.parse($("trial").value); action("try",{input});}
+  try {const input=current?.pairing_result || current?.endpoint_result || current?.followup_result ? {} : JSON.parse($("trial").value); action("try",{input});}
   catch { $("output").textContent="Enter a valid JSON input."; }
 });
 $("trial").addEventListener("input",()=>{$("output").textContent="";});

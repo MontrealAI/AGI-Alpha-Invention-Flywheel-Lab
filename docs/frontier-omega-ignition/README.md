@@ -1,6 +1,8 @@
 # FRONTIER Ω · Capturing the Exponential — Interactive demonstration
 
-[Open the bilingual public flagship](continuation/FRONTIER_IGNITION.html) after downloading the HTML file. [Five-minute walkthrough and reproduction](../../products/frontier-omega-ignition/showcase/FRONTIER.md).
+[Open Observing Night / Nuit d’observation](continuation/FRONTIER_FIELD.html) after downloading the standalone HTML. Construct a historical observing worklist, inspect later archival measurements and take home the executable and scientific CSV. [Five-minute EN/FR presenter guide](../../products/frontier-omega-ignition/showcase/field_exhibition/PRESENT.md) · [Recipient reproduction](../../products/frontier-omega-ignition/showcase/field_exhibition/REPRODUCE.md).
+
+[Earlier Reading Room exhibition](continuation/FRONTIER_IGNITION.html) · [Endpoint Lab](continuation/FRONTIER_LAB.html) · [Original walkthrough](../../products/frontier-omega-ignition/showcase/FRONTIER.md).
 
 MONTREAL.AI × QUEBEC.AI · November 17, 2026
 

@@ -1,0 +1,3 @@
+# Prospective prepared-evidence arm
+
+Registered after scoring the direct open response and before requesting a new response from a different included assistant. Use the identical shared-instrument mission, authority, original primary fragments and free candidate contract. Add only the observed predicate, value and population computed from each public fragment. The new assistant may inspect just the resulting packet and issue a single response. No worked design, direct response or assessment goes to the new assistant. Apply the same typed factual and independent scientific review. This prospective arm is unrandomized, and assistant-instance and preparation effects are confounded.

@@ -1,0 +1,85 @@
+{
+  "schema": 1,
+  "method": "source decimals; topocentric get_body Sun; one-second AltAz; binary HiGHS MILP",
+  "script_sha256": "9b9b9342debeebfe32290480a118df57ab72ea25e12a0a8cd88c30e6a0727a57",
+  "packages": {
+    "numpy": "2.2.6",
+    "scipy": "1.17.0",
+    "astropy": "7.2.0",
+    "pyerfa": "2.0.1.5",
+    "astropy-iers-data": "0.2026.11.16.0.37.44"
+  },
+  "input_sha256": {
+    "mission.json": "bb64b5d2a5a8b8b401acc5fa17b17c3590f1b5ce45d8c55492b4942ce3bf3060",
+    "catalog.json": "0048b9b6c3b32e858df9dcb62df02fc77133cb0e89834a3c9d6c9676442d1e53",
+    "public.json": "deb34ab3df7ba3cf301f475e1e501fbb45f55280ef8574408e91d9193b017d90",
+    "sources/fink-alerts.json": "bd0e18b40abb8d0371411481537485f065eb2b894df45ff1aa1fecf6422850ae",
+    "sources/fink-holdout.json": "376d09cd44958c07be13641f0a3d6957607b54c1060eecc9ad2cda43badf0cad",
+    "sources/holdout-source.json": "d8677d608223f3119eb13c5f54d820d4f5f5b064da23cd1d5da310db75d91597"
+  },
+  "archival_photometry": {
+    "retained_rows": 44,
+    "targets_with_detections": 6,
+    "accepted_pairs": {
+      "ZTF26abrluog": {
+        "g_candid": "3593442261415015023",
+        "r_candid": "3593419391415015012",
+        "separation_minutes": "32.9333760",
+        "g_minus_r_mag": "0.585675",
+        "sigma_mag": "0.114639"
+      },
+      "ZTF26abydvon": {
+        "g_candid": "3595213290615015001",
+        "r_candid": "3595207920615015002",
+        "separation_minutes": "7.7333760",
+        "g_minus_r_mag": "0.794160",
+        "sigma_mag": "0.172344"
+      },
+      "ZTF26abyuvfs": {
+        "g_candid": "3595336494815015004",
+        "r_candid": "3595319426115015000",
+        "separation_minutes": "24.5833920",
+        "g_minus_r_mag": "0.456838",
+        "sigma_mag": "0.217936"
+      },
+      "ZTF26abyzipz": {
+        "g_candid": "3596322084715015007",
+        "r_candid": "3596378904715015008",
+        "separation_minutes": "81.8167680",
+        "g_minus_r_mag": "0.256088",
+        "sigma_mag": "0.137822"
+      }
+    },
+    "missing_pair": [
+      "ZTF23abjvdcg",
+      "ZTF26abwpoui"
+    ]
+  },
+  "geometry": {
+    "offered_windows": 6,
+    "sample_period_s": 1,
+    "fully_modeled": true,
+    "max_dense_vs_reference_sun_deg": 9.7e-06,
+    "max_dense_vs_reference_target_deg": 5e-07
+  },
+  "maximum_targets_by_visits_and_budget": {
+    "1": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      5
+    ],
+    "2": [
+      0,
+      0,
+      1,
+      1,
+      2,
+      2,
+      3
+    ]
+  }
+}

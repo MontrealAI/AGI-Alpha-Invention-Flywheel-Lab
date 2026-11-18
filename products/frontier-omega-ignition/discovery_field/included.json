@@ -1,0 +1,12 @@
+{
+  "route": "included_direct",
+  "attribution": "Included Codex assistant in the integration session; model family per session, exact serving build and weights unavailable. The assistant had prior context about the five opportunity domains and read the frozen two-case packet before the adjudicated results.",
+  "packet_sha256": "c2fc0a6370b329c85e03077d4dcd7a1aada083ea3ee1a26064facf76fcfae41f",
+  "calls": 1,
+  "wall_seconds": null,
+  "usage": null,
+  "answers": {
+    "queue": {"source":"A","metric":"recovered_fraction","value":"22/24","scope":"active_labeled_upper_limit","decision":"offline_test","uncertainty":"Recovery in the active labeled set leaves unlabeled misses, false triggers, visibility and exposure costs unknown.","action":"Replay a later night with a frozen timestamp cutoff, visibility limits and two visits per target.","test":"Check each visit against the clock and sky position, prohibit future labels, and compare feasible completed target pairs against a broker filter with the same slots."},
+    "metrology": {"source":"B","metric":"mean_reward","value":"61.03","scope":"benchmark_graded_score","decision":"offline_test","uncertainty":"This percentage of graded reward does not identify how many candidate parts regenerate or meet the drawing tolerances.","action":"Generate editable models for unseen dimensioned drawings, then perturb one named parameter per model.","test":"Independently recompute each part in FreeCAD, measure the specified critical dimensions before and after the edit, and compare accepted parts with direct parametric construction."}
+  }
+}

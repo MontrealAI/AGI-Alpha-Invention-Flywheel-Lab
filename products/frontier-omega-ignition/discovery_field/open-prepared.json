@@ -1,0 +1,59 @@
+{
+  "candidates": [
+    {
+      "title": "Accept a transferred setup from measurements made after the move",
+      "source": "ecmwf",
+      "metric": "initialisation",
+      "value": "observations",
+      "scope": "experimental_realtime_case",
+      "uncertainty": "The forecast case shows that a system can start from observations in its own domain. A few local readings might leave the instrument's zero offset and gain or its alignment and drift indistinguishable.",
+      "action": "Let the recipient specify a measurement tolerance. Build a short sequence of reference readings at distinct levels that can identify the error modes relevant to that experiment. Issue a reuse decision only for the resulting measurement range. A transport log can explain a failure without serving as evidence that today's setup passed.",
+      "test": "Freeze a library of shifted and unchanged instrument states, including paired faults that cancel on one reference level. Blind the handoff decision to fault identity. Check each accepted state on separate reference levels that the decision never saw and compare false accepts and occupied bench minutes with a complete recalibration.",
+      "alternative": "A manufacturer's recalibration procedure or a conventional two-level check with control charts using the same reference standards."
+    },
+    {
+      "title": "A fitting decision before the receiving team takes the bench",
+      "source": "cadbench",
+      "metric": "mean_reward",
+      "value": "61.03",
+      "scope": "benchmark_graded_score",
+      "uncertainty": "Graded CAD performance does not give the probability of a safe physical fit. Inventories may omit the actual connector envelope, tolerance or access needed to insert the instrument.",
+      "action": "Turn a recipient's clearance envelope and measured mounting dimensions into a candidate adapter drawing plus a list of dimension checks. Accept the drawing only after exact geometric checks. Explicitly identify a missing measurement when two feasible drawings require different values.",
+      "test": "On held-out publicly specified mounting pairs, include mixed units, flipped handedness, an obstructed insertion path and an incomplete dimension. An independent geometry checker must recover each known fit, reject interference and withhold on the missing value. Compare effort and acceptance with a direct parametric drawing; physical fit awaits authorized fabrication and metrology.",
+      "alternative": "An experienced technician selecting an existing catalog adapter or using a conventional parameterized CAD template."
+    },
+    {
+      "title": "A transferable receipt for a private calibration computation",
+      "source": "flash",
+      "metric": "proof_prefill_tokens_per_second",
+      "value": "110",
+      "scope": "reported_single_h100_prefill",
+      "uncertainty": "That H100 measurement applies to integer prefill in a reported system. Proof coverage, cost, model rights and independent input authenticity for the instrument's actual correction procedure are unknown.",
+      "action": "Separate two handoff questions. Bind reference observations to the instrument and edition, then attach a verifiable computation receipt only if a private correction model would otherwise prevent the next team from checking how the reported correction was produced. Leave physical validity to independent reference readings.",
+      "test": "With an authorized local prover and verifier, change the input commitment, model version and claimed corrected value one at a time. The verifier must reject each substitution, and approved public test vectors must match independent arithmetic. Include proof construction and verification in total handoff time. Defer the proof experiment if local support is absent.",
+      "alternative": "Disclose a conventional correction formula and recompute it from signed measurements, or use a signed calibration report if that already satisfies the recipient."
+    },
+    {
+      "title": "Reserve scarce handoff time only for alerts whose follow-up can still succeed",
+      "source": "nomai",
+      "metric": "recovered_fraction",
+      "value": "22/24",
+      "scope": "active_labeled_upper_limit",
+      "uncertainty": "Recovery among already labeled active superluminous supernovae gives an upper limit for that set. It leaves the base rate, false alerts, achievable follow-up and cost of disrupting other teams unresolved.",
+      "action": "Build a shadow decision that can hold, release or decline a short opportunity to observe, taking the current configuration, conversion time, observing window and displaced teaching or metrology activity as inputs. Keep a denominator for every eligible alert and every displaced request.",
+      "test": "Replay an untouched historical interval in arrival order against the facility's ordinary schedule. Independent adjudicators use information available at each decision and later follow-up records separately. Score timely scientifically usable observations, unconfirmed alerts, lost bench availability and unknown outcomes. An apparent gain that vanishes when missed and unresolved cases are included fails the test.",
+      "alternative": "Existing observation planning plus an operator-controlled on-call slot, or leave the current allocation intact."
+    },
+    {
+      "title": "Find the least expensive qualification sequence that still detects costly faults",
+      "source": "evolve-source",
+      "metric": "parallel_evaluation",
+      "value": "cloud_batch",
+      "scope": "cloud_recipe",
+      "uncertainty": "The published parallel evaluator uses a cloud service and API. It gives a design pattern but no evidence that search beats conventional test selection for these faults or that cloud use is permitted here.",
+      "action": "Represent candidate handoff tests by their setup transitions, time and which failure modes they distinguish. Evaluate candidate sequences locally against frozen public or expressly authorized fault traces. Retain a candidate only if independent trials preserve required detection while respecting incompatible setups and resource order.",
+      "test": "Hold out fault combinations and a new equipment configuration. Give the search, a conventional exact set-cover and scheduling solver, and the existing checklist the same tests and constraints. Count false acceptance, occupied bench time, search, verification and maintenance. Keep the direct solver if its complete outcome ties or improves on search.",
+      "alternative": "An exact coverage solver followed by conventional scheduling, with exhaustive enumeration on small cases and the current technician checklist as an operating baseline."
+    }
+  ]
+}

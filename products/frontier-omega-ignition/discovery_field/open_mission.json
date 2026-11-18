@@ -1,0 +1,58 @@
+{
+  "version": "instrument-sharing-open/1",
+  "beneficiary": "A small university scientific-instrument sharing facility (prospective public design case; no agreement with a facility).",
+  "mission": "A shared mobile instrument repeatedly moves between teaching, metrology and observational-science teams. Handoffs consume scarce bench time and recipients often cannot decide whether to trust or reuse a previous setup. Invent up to five materially different capabilities that could make a useful next experiment or handoff attainable. Go beyond a list of public technologies. A new arrangement, test or direct conventional route is welcome. Fewer or no opportunities are acceptable.",
+  "authority": "Offline design and public-source preparation only. Real usage, facility conditions, owner participation, price and economic advantage are unknown. No remote execution, purchase, fabrication or observing-time allocation.",
+  "sources": [
+    {
+      "source": "nomai",
+      "publisher": "Russeil et al. / Astronomy & Astrophysics; abstract hosted by Caltech/IPAC",
+      "title": "NOMAI in the Fink alert broker",
+      "url": "https://doi.org/10.1051/0004-6361/202660399",
+      "fragment": "successfully recovered 22 of the 24 active SLSNe reported on the Transient Name Server, providing an upper limit on its real-time completeness"
+    },
+    {
+      "source": "ecmwf",
+      "publisher": "ECMWF AI-DOP team",
+      "title": "Real-time AI-DOP",
+      "url": "https://www.ecmwf.int/en/about/media-centre/aifs-blog/2026/observations-forecasts-bringing-ai-dop-real-time",
+      "fragment": "initialised directly from the latest observations | without an atmospheric analysis | a single case is not a systematic evaluation"
+    },
+    {
+      "source": "flash",
+      "publisher": "Anthropic and research collaborators",
+      "title": "Progress on provable inference",
+      "url": "https://www.anthropic.com/research/provable-inference",
+      "fragment": "a single H100 GPU generates proofs at around 110 tokens/second | using integer arithmetic in prefill"
+    },
+    {
+      "source": "cadbench",
+      "publisher": "gNucleus AI study authors",
+      "title": "Parametric CAD Bench v3",
+      "url": "https://dev.gnucleus.ai/cad-bench/news/cad-bench-v3-paper",
+      "fragment": "61.03% mean reward across the benchmark | rather than a binary task-success rate"
+    },
+    {
+      "source": "evolve-source",
+      "publisher": "Google Cloud HPC solution authors",
+      "title": "AlphaEvolve on Cloud Batch",
+      "url": "https://cloud.google.com/blog/topics/hpc/whats-new-in-hpc-and-ai-at-sc26",
+      "fragment": "Candidates are evaluated for correctness and performance in parallel as Cloud Batch jobs. | The controller invokes the AlphaEvolve API"
+    }
+  ],
+  "shape": {
+    "candidates": [
+      {
+        "title": "original capability",
+        "source": "supplied source ID or null",
+        "metric": "recovered_fraction, mean_reward, proof_prefill_tokens_per_second, initialisation, parallel_evaluation, or an original hypothesized metric",
+        "value": "as reported; use text, e.g. a fraction, percent without unit, numeric magnitude, or a categorical value (observations / cloud_batch)",
+        "scope": "active_labeled_upper_limit, benchmark_graded_score, reported_single_h100_prefill, experimental_realtime_case, cloud_recipe or an original scope",
+        "uncertainty": "remaining empirical or coordination condition",
+        "action": "specific change to the means of the shared facility, in your own words",
+        "test": "independently falsifiable next experiment, in your own words",
+        "alternative": "a competent existing route or no entry"
+      }
+    ]
+  }
+}

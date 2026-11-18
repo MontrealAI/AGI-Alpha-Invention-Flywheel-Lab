@@ -64,7 +64,11 @@ def expected(epochs, limit):
                     row[6:] = ["reprocess", "above_margin"]
                 else:
                     row[6:] = ["review", "inside_margin"]
-        yield row
+        ticks = threshold * 10000
+        if ticks.denominator != 1 or ticks < 0:
+            raise ValueError("Unsupported policy precision")
+        threshold_label = f"{ticks.numerator//10000}.{ticks.numerator%10000:04d}"
+        yield [*row, "IERS-A-XXXIX-031", "IERS-B-464", threshold_label]
 
 
 def check(rows, epochs, limit):

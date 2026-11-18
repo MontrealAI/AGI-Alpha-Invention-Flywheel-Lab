@@ -1,11 +1,14 @@
 import copy
 import json
 import math
+import tempfile
+from pathlib import Path
 import unittest
 
 from photometry import compare_sql, evaluate, measure
 from plan import build
 from qualify import ROOT, qualification
+from reference import construct_catalog
 from verify import verify
 
 
@@ -87,6 +90,17 @@ class FollowupTests(unittest.TestCase):
             measure(cat,rows+[row],bounds)
         with self.assertRaisesRegex(ValueError,"outside"):
             measure(cat,[{**row,"i:jd":bounds[1]}],bounds)
+
+    def test_new_bytes_require_their_own_source_descriptor(self):
+        descriptor = json.loads((ROOT/"sources/alerts-source.json").read_text())
+        altered = (ROOT/"sources/fink-alerts.json").read_bytes() + b" "
+        with self.assertRaisesRegex(ValueError,"hash/length"):
+            construct_catalog(self.mission,altered,descriptor)
+        with tempfile.TemporaryDirectory() as tmp:
+            altered_rows = Path(tmp)/"rows.json"
+            altered_rows.write_bytes((ROOT/"sources/fink-holdout.json").read_bytes()+b" ")
+            with self.assertRaisesRegex(ValueError,"differ from source"):
+                evaluate(observed_path=altered_rows)
 
     def test_sql_rejects_mutated_source_error_and_identity(self):
         results = evaluate()

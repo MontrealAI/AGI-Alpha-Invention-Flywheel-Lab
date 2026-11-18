@@ -77,7 +77,7 @@ def measure(catalog, observed, interval, max_gap_minutes=120):
 def compare_sql(catalog, observed, interval, product_result, max_gap_minutes=120):
     validate_gap(max_gap_minutes)
     # A conventional row-number window on a two-band self join, without the producer's filter,
-    # pair formatter, UTC conversion, or selection function. Integer candidate IDs remain exact.
+    # pair formatter, UTC conversion, or selection function. Integer ZTF subtraction-detection identifiers remain exact.
     db = sqlite3.connect(":memory:")
     try:
         db.execute("CREATE TABLE target(name TEXT PRIMARY KEY)")
@@ -135,10 +135,19 @@ def compare_sql(catalog, observed, interval, product_result, max_gap_minutes=120
     return {"agrees": True, "accepted_pairs": len(candidates), "with_detections": len(first)}
 
 
-def evaluate(max_gap_minutes=120):
-    catalog = json.loads((ROOT/"catalog.json").read_text())
-    observed = json.loads((ROOT/"sources/fink-holdout.json").read_text())
-    interval = json.loads((ROOT/"sources/holdout-source.json").read_text())["interval_jd"]
+def evaluate(max_gap_minutes=120, catalog_path=ROOT/"catalog.json", observed_path=ROOT/"sources/fink-holdout.json",
+             source_path=ROOT/"sources/holdout-source.json"):
+    import hashlib
+    catalog = json.loads(catalog_path.read_text())
+    raw = observed_path.read_bytes()
+    source = json.loads(source_path.read_text())
+    if source["projection_sha256"] != hashlib.sha256(raw).hexdigest():
+        raise ValueError("observations differ from source descriptor")
+    observed = json.loads(raw)
+    interval = source["interval_jd"]
+    if (len(interval) != 2 or not all(type(x) in (float,int) and math.isfinite(x) for x in interval)
+            or interval[0] >= interval[1] or source["retained_rows"] != len(observed)):
+        raise ValueError("invalid source interval or observed row count")
     result = measure(catalog, observed, interval, max_gap_minutes)
     result["direct_sql"] = compare_sql(catalog, observed, interval, result, max_gap_minutes)
     return result
@@ -148,8 +157,12 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--out", required=True, type=Path, help="new CSV path")
     parser.add_argument("--max-gap-minutes", type=float, default=120, help="largest allowed g/r separation")
+    parser.add_argument("--catalog", type=Path, default=ROOT/"catalog.json")
+    parser.add_argument("--observations", type=Path, default=ROOT/"sources/fink-holdout.json")
+    parser.add_argument("--source", type=Path, default=ROOT/"sources/holdout-source.json",
+                        help="observational interval and identity for the supplied measurements")
     args = parser.parse_args()
-    result = evaluate(args.max_gap_minutes)
+    result = evaluate(args.max_gap_minutes,args.catalog,args.observations,args.source)
     with args.out.open("x", newline="") as stream:
         writer = csv.DictWriter(stream, fieldnames=FIELDS)
         writer.writeheader()

@@ -1,0 +1,13 @@
+{
+  "packet_version": "discovery-decisions/1",
+  "authority": "Design a reversible, offline experiment using these public observations. No telescope reservation, manufacturing order, provider purchase or deployment.",
+  "source_fragments": {
+    "A": {"id": "nomai", "text": "successfully recovered 22 of the 24 active SLSNe reported on the Transient Name Server, providing an upper limit on its real-time completeness"},
+    "B": {"id": "cadbench", "text": "61.03% mean reward across the benchmark | rather than a binary task-success rate"}
+  },
+  "tasks": [
+    {"id": "queue", "question": "A science team wants to turn a transient discovery feed into a feasible observing queue. Which reported quantity bears on candidate selection and what use can it support? Give an original next action and an independently falsifiable test."},
+    {"id": "metrology", "question": "An instrument designer wants to convert drawings to editable FreeCAD parts before a physical build. Which published overall result can inform that decision and how should it be used? Give an original next action and an independently falsifiable test."}
+  ],
+  "shape": {"source": "A or B", "metric": "recovered_fraction, mean_reward or production_yield", "value": "exact fraction or decimal number as text, without %", "scope": "active_labeled_upper_limit, benchmark_graded_score or field_acceptance", "decision": "offline_test, operational_adoption or dismiss", "uncertainty": "short free text", "action": "short free text", "test": "short free text"}
+}

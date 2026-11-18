@@ -35,3 +35,9 @@ Fresh pilots require a separately retained commitment before observation. The au
 Relevant regressions are `tests/test_adaptive.py`, `tests/test_pairing_mission.py`, `flagship/test_pilot.py` and the private/public Chromium checks. The review covers the repository implementation and these exercised boundaries. A public multi-tenant service, a production grader for untrusted patches, and a paid inference connector require separate designs and qualification.
 
 The public Reading Room exhibition at `/exhibition` serves a prebuilt HTML file with the same opaque sandbox policy. Its only embedded recipient contains the named public research sources, instrument and registered evaluation. The browser reads local bytes and requires no private workspace or model connection.
+
+## Private astronomical follow-up
+
+Open `/follow-up` or `/follow-up?lang=fr` on the loopback workbench. The planner can vary the number of available windows and the required visits per target in its installed historical catalog. The worker sends a fixed local Python recipient the public catalog, modeled site, modeled windows and selected planning parameters. It supplies no private beneficiary text, model credentials, prompts or telescope interface to that process.
+
+A revision binds the brief, the public inputs and the exact planner and independent evaluator. Revising the cadence or resource allowance requires fresh acceptance. History remains inspectable after amendment and a superseded export is refused. The downloaded recipient contains the public input, the selected planning scope, the worklist, the independent comparison and their fixed code. Extract it and run `python3 -IB review_followup.py`. The recipient reproduces the geometric plan. Obtaining telescope time and executing observations are separate operations.

@@ -152,7 +152,7 @@ def sql_rows(epochs, limit):
                 yield (day, str(mjd), pred, value, error, signed, action, reason)
 
 
-def make_queue(route, epochs, limit):
+def _decisions(route, epochs, limit):
     if route == "direct":
         return list(sql_rows(epochs, limit))
     views = {}
@@ -168,6 +168,12 @@ def make_queue(route, epochs, limit):
         views[name] = grid
     return [(day.isoformat(), str((day - EPOCH).days),
              *policy(views["forecast"].get(day), views["reference"].get(day), limit)) for day in epochs]
+
+
+
+def make_queue(route, epochs, limit):
+    provenance = ("IERS-A-XXXIX-031", "IERS-B-464", format(limit, ".4f"))
+    return [(*row, *provenance) for row in _decisions(route, epochs, limit)]
 
 
 def main():

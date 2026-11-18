@@ -21,7 +21,7 @@ class ReprocessingQueue(unittest.TestCase):
         with (HERE / "archive-queue.csv").open(newline="") as fh:
             frozen = list(csv.reader(fh))
         self.assertEqual(sha((HERE / "archive-queue.csv").read_bytes()),
-                         "288145a6b9a8ea2ddcb91903571f963cc74b247b078ebe58479ce01f6774a71a")
+                         "da1207ab0681ca14d5cea123d114774401d5efd3ca33fb152afe8d466e95e8f0")
         for route in ("retained", "ordinary", "direct"):
             rows = [FIELDS, *triage.make_queue(route, DATES, Decimal(1))]
             audit.check(rows, DATES, 1)
@@ -30,7 +30,7 @@ class ReprocessingQueue(unittest.TestCase):
     def test_preliminary_and_absent(self):
         by_date = {r[0]: r for r in triage.make_queue("direct", DATES, Decimal(1))}
         for epoch, reason in [("2026-09-02", "reference_preliminary"), ("2026-10-02", "reference_absent")]:
-            self.assertEqual(by_date[epoch][3:], ("", "", "", "defer", reason))
+            self.assertEqual(by_date[epoch][3:8], ("", "", "", "defer", reason))
         self.assertEqual(by_date["2026-09-01"][5:7], ("-1.0466", "reprocess"))
 
     def test_distinct_purpose_changes_decisions(self):
@@ -54,6 +54,10 @@ class ReprocessingQueue(unittest.TestCase):
         rows = [list(FIELDS), *map(list, triage.make_queue("ordinary", DATES, Decimal("1")))]
         corrupted = [list(r) for r in rows]
         corrupted[-4][5] = "1.0466"
+        with self.assertRaises(ValueError):
+            audit.check(corrupted, DATES, 1)
+        corrupted[-4][5] = rows[-4][5]
+        corrupted[-4][8] = "IERS-A-another-vintage"
         with self.assertRaises(ValueError):
             audit.check(corrupted, DATES, 1)
         for bad in [rows[:-1], [*rows, rows[-1]], [rows[0], rows[2], rows[1], *rows[3:]]]:

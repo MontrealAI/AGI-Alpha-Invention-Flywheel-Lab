@@ -6,6 +6,8 @@ Start with [AGENTS.md](../../AGENTS.md). Reuse the canonical enterprise and exis
 
 The [local IGNITION application](../../products/frontier-omega-ignition/README.md) connects source-linked discovery and challenge to a task-specific record migration or byte-manifest audit, independent comparison and a portable recipient package. It reuses the HARNESS local model and public-source transport. The public research editions remain authored demonstrations. Inspect the [public mission evidence](../../products/frontier-omega-ignition/docs/FLAGSHIP.md) and exact-source qualification before making a broader claim.
 
+The [field and invention continuation](../frontier-omega-ignition/continuation/field-invention/REPORT.md) adds a private, revisioned historical observing worklist, independent ephemeris and allocation checks, archival two-band photometry, and real loopback inference measurement with a separate service-quality decision. Rebuild the public recipient with `field_trials/qualify.py` from the IGNITION product. Its scope, matched alternatives, dated observations and outstanding adoption test are recorded with the instrument.
+
 ### Customer HARNESS application
 
 The scoped [ALPHA GENESIS HARNESS](../../products/alpha-genesis-harness/README.md) continues the existing browser application with private model adapters, explicit ChatGPT-plan authorization, a separate Codex engineering path, and persistent bounded construction workflows. Its [operator guide](../../products/alpha-genesis-harness/docs/OPERATOR.md) and [workflow guide](../../products/alpha-genesis-harness/docs/AGENTIC-WORKFLOWS.md) document the actual call paths. It does not replace the native enterprise account or grant financial authority.

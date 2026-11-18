@@ -83,7 +83,8 @@ def server(binary, weights, work, record, arm):
     threads = str(record["hardware"]["threads"])
     slots = "3" if arm in {"field", "conventional"} else "1"
     config = ["--ctx-size", "6144", "--parallel", slots, "--threads", threads, "--threads-batch",
-              threads, "--n-gpu-layers", "0", "--seed", "6144", "--temp", "0"]
+              threads, "--n-gpu-layers", "0", "--seed", "6144", "--temp", "0",
+              "--no-repack", "--batch-size", "128", "--ubatch-size", "64", "--no-webui"]
     record["serving_configuration"] = config
     args = [str(binary), "-m", str(weights), "--host", "127.0.0.1", "--port", str(port),
             "--alias", local.MODEL_ALIAS, *config]
@@ -95,6 +96,7 @@ def server(binary, weights, work, record, arm):
             local.wait_ready(proc, port)
             yield port
         finally:
+            record["server_exit_before_shutdown"] = proc.poll()
             proc.terminate()
             try:
                 proc.wait(timeout=15)
@@ -129,10 +131,11 @@ def run_arm(arm, port, record, work, output):
                           "--authority", permit, "--output", trace], work / "client.log")
         if code:
             return {"client_exit": code}
-        verify = run_child([FIELD / "verify.py", "--workload", WORKLOAD, "--receipt", trace,
-                            "--retokenize-authority", permit],
-                           work / "verify.log")
-        return {"client_exit": code, "independent_replay_exit": verify, "receipt_sha256": PINS.sha(trace)}
+        command = [FIELD / "verify.py", "--workload", WORKLOAD, "--receipt", trace]
+        verify = run_child(command, work / "verify.log")
+        retokenize = run_child([*command, "--retokenize-authority", permit], work / "tokenizer.log")
+        return {"client_exit": code, "independent_replay_exit": verify, "live_tokenizer_exit": retokenize,
+                "receipt_sha256": PINS.sha(trace)}
     dest = output / (arm + ".json")
     code = run_child(["-m", "discovery_field.study", "live", "--port", port, "--model",
                       local.MODEL_ALIAS, "--weights-sha256", PINS.MODEL_SHA, "--mode", arm,
@@ -179,6 +182,7 @@ def main():
             except (OSError, ValueError, local.Blocked) as exc:
                 result = {"execution_obstruction": str(exc)[:250]}
             result.update(serving_configuration=record.get("serving_configuration"),
+                          server_exit_before_shutdown=record.pop("server_exit_before_shutdown", None),
                           wall_seconds_with_startup=round(time.monotonic() - phase, 4),
                           child_cpu_seconds_including_server=round(child_cpu() - before, 4))
             record["arms"][arm] = result
@@ -188,7 +192,9 @@ def main():
     record.update(finished_at=now(), wall_seconds=round(time.monotonic() - start, 4),
                   cpu_seconds_including_children=round(child_cpu() + time.process_time() - cpu, 4))
     record["executed"] = len(record["arms"]) == len(arms) and all(
-        a.get("client_exit") == 0 and a.get("independent_replay_exit", 0) == 0 for a in record["arms"].values())
+        a.get("client_exit") == 0 and a.get("independent_replay_exit", 0) == 0 and
+        a.get("live_tokenizer_exit", 0) == 0 and a.get("server_exit_before_shutdown") is None
+        for a in record["arms"].values())
     write(output / "operation.json", record)
     print(json.dumps({"executed": record["executed"], "arms": record["arms"],
                       "obstruction": record.get("execution_obstruction")}))

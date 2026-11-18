@@ -1,0 +1,190 @@
+{
+  "schema": "ignition/public-discovery-field/1",
+  "opportunities": [
+    {
+      "id": "sky",
+      "title": "Observable transient follow-up",
+      "source": "nomai",
+      "outcome": "A transient-science group can turn public candidates into an auditable observing plan before scarce observing time is allocated.",
+      "uncertainty": "How many physically feasible, science-useful visits survive priority, visibility and cadence constraints?",
+      "action": "Compile a site- and night-specific worklist with eligibility witnesses per visit.",
+      "test": "Independently recompute visibility, time conflicts and cadence. Compare with direct scheduling on identical candidates and slots.",
+      "alternative": "An existing broker plus an astronomer using a conventional scheduler, or the same scheduler used directly.",
+      "scale": "Batch new nights from public candidates; observatory priorities and availability still belong to their operators.",
+      "economics": "Count broker access, ephemerides, schedule validation, expert review, handoff and the cost of occupying a slot. No allocation, demand or revenue observed."
+    },
+    {
+      "id": "weather",
+      "title": "Forecasts from incomplete observation streams",
+      "source": "ecmwf",
+      "outcome": "Operators planning weather-sensitive field instruments could price the value of a forecast issued earlier from partial observations.",
+      "uncertainty": "Will the lead-time gain survive archive delay, missing sensors and station-level error?",
+      "action": "Build a shadow-mode replay of issue-time weather predictions and station observations.",
+      "test": "Freeze station/event splits and compare matched availability, error, missed windows and lead time against archived IFS/AIFS and persistence.",
+      "alternative": "Use existing IFS or AIFS forecasts and a conventional issue-time station replay.",
+      "scale": "Repeat across historical windows and sites with documented data rights; target-specific calibration and maintenance remain.",
+      "economics": "Compare cost per correctly identified usable window, including compute, station feeds, false alarms and human review. No local forecasting advantage measured."
+    },
+    {
+      "id": "proof",
+      "title": "Independent checks of committed-model output",
+      "source": "flash",
+      "outcome": "An evaluator could check whether a reported token agrees with the greedy output of a committed integer model for the bound input, while the weights remain private.",
+      "uncertainty": "Can the evaluator authenticate the commitment, cover the needed tokens and justify the complete proving cost under the protocol assumptions?",
+      "action": "Check a genuine published sample with the upstream verifier and independently change each public input; request no paid service.",
+      "test": "Verify a genuine proof and reject altered bound public inputs. Separately measure total proof costs against rerunning the exact accessible reference model and check which tokens the proof covers.",
+      "alternative": "Upstream FlashProve verifier, direct rerun of accessible weights, or signed provider attestation with its weaker trust assumption.",
+      "scale": "Reuse one verifier across compatible commitments. Each supported model and numerical convention needs qualification.",
+      "economics": "Count proof production, verification, commitment distribution, transfer and support. A private-weight provider and a customer have not agreed to participate."
+    },
+    {
+      "id": "cad",
+      "title": "Editable scientific instrument fixtures",
+      "source": "cadbench",
+      "outcome": "An instrumentation laboratory could generate and repeatedly revise bespoke passive mounting fixtures from dimensioned drawings.",
+      "uncertainty": "Do unseen parts rebuild with editable constraints, acceptable material tolerances and a safe engineering review?",
+      "action": "Construct native source models from unseen public drawings and request a controlled dimension change.",
+      "test": "Compare the CAD model and edited variant with direct parametric construction; independently inspect dimensions, constraint history and regeneration.",
+      "alternative": "An experienced CAD designer with a parametric library, or direct use of the public FreeCAD verifier and existing agents.",
+      "scale": "Reusable parametric families could spread design costs over variants. Physical qualification and excluded high-risk uses remain separate.",
+      "economics": "Include modeller time, rework, simulation or physical metrology, maintenance and responsibility for defects. No manufacturing order or adoption observed."
+    },
+    {
+      "id": "kernel",
+      "title": "Verified replacements for recurring numerical kernels",
+      "source": "evolve-source",
+      "outcome": "A research-software group could amortize correctness-checked performance improvements across repeated simulations.",
+      "uncertainty": "Can an optimized kernel improve end-to-end time while preserving invariants across unseen architectures and data?",
+      "action": "Test one separable numerical kernel on an authorized CPU against a tuned library and compiler; count the search.",
+      "test": "Blind input families, precision and conservation checks; compare full workloads, compute crossover volume and stability.",
+      "alternative": "A tuned library with vectorization/BLAS, a conventional optimizer, existing AlphaEvolve if separately authorized, or keeping the current implementation.",
+      "scale": "Redistribute accepted replacements only under compatible licences; each new hardware target invalidates performance qualification.",
+      "economics": "Measure total search and integration costs, end-to-end CPU savings, verification, portability and support. No usage volume or net margin observed."
+    }
+  ],
+  "sources": [
+    {
+      "id": "nomai",
+      "title": "NOMAI in the Fink alert broker",
+      "publisher": "Russeil et al. / Astronomy & Astrophysics; abstract hosted by Caltech/IPAC",
+      "url": "https://www.ipac.caltech.edu/publication/2026A%26A...713A.141R",
+      "publication": "https://doi.org/10.1051/0004-6361/202660399",
+      "published_at": "2026-09-11",
+      "observed_at": "2026-11-18T01:11:42.023736+00:00",
+      "version": "A&A 713, A141",
+      "access": "available",
+      "locator": "Abstract, first two months of reported operation",
+      "fragments": [
+        "successfully recovered 22 of the 24 active SLSNe reported on the Transient Name Server, providing an upper limit on its real-time completeness"
+      ],
+      "excerpt_sha256": "4d429a84c8feded41b30af5c2bf44edb5152aa65c96375aca831479ed7f98504",
+      "source_response_sha256": "e4e1e31c83df6831c9516fd7a2f708b9c0aab08e4b19e079e4f7e4af5ff666d6",
+      "source_response_bytes": 30810,
+      "direct_claim": "In a two-month sample on ZTF, NOMAI recovered 22 of 24 active labeled SLSNe. The authors interpret this as an upper bound on real-time completeness.",
+      "earlier_condition": "The broker had operated the classifier since December 2025. The September publication did not introduce classification five weeks ago.",
+      "limitation": "Population misses, false positives, response time and observatory allocation all affect follow-up yield. The paper distinguishes ZTF operation from future Rubin adaptation.",
+      "rights": "Public attributed source fragments for inspection. Rights to underlying models, data, hardware, execution or redistribution are separate and unverified here.",
+      "execution_access": "not exercised"
+    },
+    {
+      "id": "ecmwf",
+      "title": "Real-time AI-DOP",
+      "publisher": "ECMWF AI-DOP team",
+      "url": "https://www.ecmwf.int/en/about/media-centre/aifs-blog/2026/observations-forecasts-bringing-ai-dop-real-time",
+      "publication": "https://www.ecmwf.int/en/about/media-centre/aifs-blog/2026/observations-forecasts-bringing-ai-dop-real-time",
+      "published_at": "2026-11-03",
+      "observed_at": "2026-11-18T01:11:44.534900+00:00",
+      "version": "3 November prototype account",
+      "access": "available",
+      "locator": "Recent forecasts, Storm Boelo comparison",
+      "fragments": [
+        "initialised directly from the latest observations",
+        "without an atmospheric analysis",
+        "a single case is not a systematic evaluation"
+      ],
+      "excerpt_sha256": "8cba699b67ba7e2af3c0c4886a562a99373949c8a6f76b7134a9ac7fc342d1fb",
+      "source_response_sha256": "f9f1ab9fa37d0134c7df13c82f1868831942d31111d70eb4501ff68abc08ce19",
+      "source_response_bytes": 62310,
+      "direct_claim": "ECMWF connected an experimental model to its observation processing chain and compared one event with existing operational forecasts.",
+      "earlier_condition": "Earlier retrospective studies and ECMWF’s operational IFS/AIFS are comparators. Here the newly observed change is real-time connection.",
+      "limitation": "Operational site accuracy during missing or delayed observations requires separate multi-event validation.",
+      "rights": "Public attributed source fragments for inspection. Rights to underlying models, data, hardware, execution or redistribution are separate and unverified here.",
+      "execution_access": "not exercised"
+    },
+    {
+      "id": "flash",
+      "title": "Progress on provable inference",
+      "publisher": "Anthropic and research collaborators",
+      "url": "https://www.anthropic.com/research/provable-inference",
+      "publication": "https://www.anthropic.com/research/provable-inference",
+      "published_at": "2026-11-02",
+      "observed_at": "2026-11-18T01:11:41.896748+00:00",
+      "version": "FlashProve research release, 2 November",
+      "access": "available",
+      "locator": "Executive summary, item 1.1; see Evaluation for prompt batching",
+      "fragments": [
+        "a single H100 GPU generates proofs at around 110 tokens/second",
+        "using integer arithmetic in prefill"
+      ],
+      "excerpt_sha256": "7ff4d2e62584c233e2029028f8e1673c08a426b44b0ed392d33d3d59ab450830",
+      "source_response_sha256": "91ee03ad243a9c0f9ec702c7c51f4ce4e5ca79a31011de1109f40f19d2cec3b8",
+      "source_response_bytes": 249417,
+      "direct_claim": "The authors benchmark proof generation for 4-bit Llama 4 Maverick on one H100, including approximately 110 prefill tokens per second under the reported conditions.",
+      "earlier_condition": "The release compares with earlier slower open proof generators. Rerunning a public reference model has long been an available alternative for some uses.",
+      "limitation": "A post-hoc proof checks consistency for covered tokens under integer-model and greedy-decoding assumptions. Identifying the original serving process, establishing content accuracy and auditing the fast executable require separate evidence. Full costs and demand are unknown.",
+      "rights": "Public attributed source fragments for inspection. Rights to underlying models, data, hardware, execution or redistribution are separate and unverified here.",
+      "execution_access": "not exercised"
+    },
+    {
+      "id": "cadbench",
+      "title": "Parametric CAD Bench v3",
+      "publisher": "gNucleus AI study authors",
+      "url": "https://dev.gnucleus.ai/cad-bench/news/cad-bench-v3-paper",
+      "publication": "https://dev.gnucleus.ai/cad-bench/news/cad-bench-v3-paper",
+      "published_at": "2026-11-02",
+      "observed_at": "2026-11-18T01:11:42.603221+00:00",
+      "version": "v3 paper; 24 September 2026 leaderboard snapshot",
+      "access": "available",
+      "locator": "Evaluating parametric CAD authoring; Findings from the September 24 snapshot",
+      "fragments": [
+        "61.03% mean reward across the benchmark",
+        "rather than a binary task-success rate"
+      ],
+      "excerpt_sha256": "6f4a06ad98d7cfeae1c91b365c8f5f337547a73b8f237475ef0bd2e788883488",
+      "source_response_sha256": "bc47e4299fbf3b0add5b7eae2f28d50c886a39d714077fbad106dc2606dd5814",
+      "source_response_bytes": 187435,
+      "direct_claim": "The leading tested configuration scored 61.03% mean continuous reward on 100 CAD tasks. Its native outputs were separately graded.",
+      "earlier_condition": "The same v3 benchmark and results already existed in September. A November paper documents that earlier observation.",
+      "limitation": "Averaged grades do not supply binary part acceptance, safety certification, or physical manufacturability. New geometry and an edit must be checked.",
+      "rights": "Public attributed source fragments for inspection. Rights to underlying models, data, hardware, execution or redistribution are separate and unverified here.",
+      "execution_access": "not exercised"
+    },
+    {
+      "id": "evolve-source",
+      "title": "AlphaEvolve on Cloud Batch",
+      "publisher": "Google Cloud HPC solution authors",
+      "url": "https://raw.githubusercontent.com/GoogleCloudPlatform/hpc-solutions/bafc4ebfccf603d0593fe70db6f16e54a9a7e476/solutions/alphaevolve/README.md",
+      "publication": "https://cloud.google.com/blog/topics/hpc/whats-new-in-hpc-and-ai-at-sc26",
+      "published_at": null,
+      "observed_at": "2026-11-18T01:13:00.825024+00:00",
+      "version": "Git bafc4ebfccf603d0593fe70db6f16e54a9a7e476",
+      "access": "available",
+      "locator": "How AlphaEvolve works, generation and evaluation",
+      "fragments": [
+        "Candidates are evaluated for correctness and performance in parallel as Cloud Batch jobs.",
+        "The controller invokes the AlphaEvolve API"
+      ],
+      "excerpt_sha256": "b2f8b209077f8bd3410eb0fc107fb1781e1ac8fca9080372cfcf65c3a49d0f66",
+      "source_response_sha256": "00eb5bebede79f5bf42485c27bdb2dad7f9b81264aa349f664f2b40613e6c519",
+      "source_response_bytes": 9316,
+      "direct_claim": "A published deployment recipe separates Gemini-generated candidates from parallel correctness/performance evaluation. The architecture requires provisioned cloud services.",
+      "earlier_condition": "Google announced AlphaEvolve general availability in July 2026. The November SC26 report presents an operational scale-out recipe.",
+      "limitation": "No local speedup, resource allocation, permission to call the provider, or cost advantage follows from the recipe.",
+      "publication_at": "2026-11-13",
+      "earlier_source": "https://cloud.google.com/blog/products/ai-machine-learning/alphaevolve-is-available-for-everyone",
+      "retrieval_note": "The SC26 article was readable in the public web index. The separate direct HTTP fetch returned a 195-byte unavailability notice with status 200. The hash above belongs only to the named, pinned README.",
+      "rights": "Public attributed source fragments for inspection. Rights to underlying models, data, hardware, execution or redistribution are separate and unverified here.",
+      "execution_access": "not exercised"
+    }
+  ]
+}

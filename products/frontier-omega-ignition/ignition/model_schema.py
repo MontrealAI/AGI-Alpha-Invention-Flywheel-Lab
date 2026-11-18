@@ -38,7 +38,11 @@ def candidate(payload):
     ids = source_refs(payload)
     fields = {key:TEXT for key in CANDIDATE_FIELDS}
     fields["sources"] = array(one(ids) if ids else TEXT, len(ids))
-    return obj(fields)
+    facts = [signal["observed_premise"] for signal in payload["signals"] if signal.get("observed_premise")]
+    if facts:
+        fields["evidence"] = array(obj({"source": one(ids), "metric": TEXT, "value": TEXT, "scope": TEXT,
+                                        "polarity": one(["asserted", "denied"])}), 32)
+    return obj(fields, optional=("evidence",))
 
 
 def discovery(payload):
