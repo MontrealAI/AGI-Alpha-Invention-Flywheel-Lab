@@ -55,8 +55,17 @@ def challenge(payload):
     ids = [row["id"] for row in payload["candidates"]]
     refs = source_refs(payload)
     requirements = payload["mission"]["requirements"]
-    fit = obj({"requirement":one(requirements) if 0<len(requirements)<=256 and sum(map(len,requirements))<8000 else TEXT,
+    legacy_fit = obj({"requirement":one(requirements) if 0<len(requirements)<=256 and sum(map(len,requirements))<8000 else TEXT,
                "check":TEXT, "status":one(["supported","unresolved","unsupported"])})
+    fit = array(legacy_fit, 100)
+    if "requirement_ids" in payload:
+        keys = payload["requirement_ids"]
+        if keys != {f"R{i}": r for i, r in enumerate(requirements, 1)} or len(keys) > 100:
+            raise ValueError("Requirement identifiers must bind the unchanged original requirements")
+        observation = obj({"check": TEXT, "status": one(["supported", "unresolved", "unsupported"])})
+        # A complete native report has one slot per requirement. An explicit empty
+        # report permits abstention; the controller separately decides whether any build is eligible.
+        fit = {"anyOf": [obj({key: observation for key in keys}), array(observation, 0)]}
     def branch(has_challenger):
         # A C(n+1) choice is syntactically possible only in the branch actually supplying that candidate.
         valid = ids + ([f"C{len(ids)+1}"] if has_challenger else [])
@@ -66,7 +75,7 @@ def challenge(payload):
         return obj({"challenger":candidate(payload) if has_challenger else NIL,
                     "objections":array(objection, 24 if valid else 0),
                     "decision":one(["build","incumbent","defer","stop"]),
-                    "selected":maybe(one(valid)) if valid else NIL, "reason":TEXT, "fit":array(fit,100)})
+                    "selected":maybe(one(valid)) if valid else NIL, "reason":TEXT, "fit":fit})
     return {"anyOf":[branch(False),branch(True)]}
 
 

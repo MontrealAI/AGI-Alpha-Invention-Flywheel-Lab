@@ -74,6 +74,21 @@ class ResearchTests(unittest.TestCase):
                 result, _ = trial(second={"fit": invalid}, mission=mission)
                 self.assertEqual(result["decision"], "defer")
 
+    def test_requirement_keys_preserve_model_checks_and_cannot_promote_incomplete_evidence(self):
+        mission = dict(MISSION, requirements=["Identify matching files", "Export the receiver"])
+        checks = {"R1": {"status": "supported", "check": "Compare the returned file names to the manifest"},
+                  "R2": {"status": "supported", "check": "Run the downloaded package in a clean process"}}
+        result, calls = trial(second={"fit": checks}, mission=mission)
+        self.assertEqual(calls[1][1]["requirement_ids"], dict(zip(checks, mission["requirements"])))
+        self.assertEqual(result["decision"], "build")
+        self.assertEqual(result["fit"][1], {"requirement": mission["requirements"][1], **checks["R2"]})
+        for invalid in ({}, {"R1": checks["R1"]}, {**checks, "R2": {**checks["R2"], "status": "unsupported"}},
+                        {**checks, "R2": {"status": "supported", "check": "  "}}):
+            result, _ = trial(second={"fit": invalid}, mission=mission)
+            self.assertEqual(result["decision"], "defer")
+        with self.assertRaisesRegex(ValueError, "unknown identifier"):
+            trial(second={"fit": {**checks, "R3": checks["R1"]}}, mission=mission)
+
     def test_sixth_candidate_can_defeat_favourite_without_privilege(self):
         result, calls = trial(second={"challenger": candidate(6), "selected": "C6"})
         self.assertEqual((result["initial_favourite"], result["selected"]["id"], result["decision"]), ("C1", "C6", "build"))

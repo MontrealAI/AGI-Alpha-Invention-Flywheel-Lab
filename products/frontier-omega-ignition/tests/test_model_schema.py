@@ -28,6 +28,21 @@ class WireGrammarTests(unittest.TestCase):
         with self.assertRaises(SchemaError):
             validate_output({**self.response,"selected":"C2"},schema)
 
+    def test_keyed_coverage_excludes_the_observed_surplus_report_without_deciding_fit(self):
+        requirements = ["Classify the files.", "Export the receiver."]
+        tagged = {**self.payload, "mission": {"requirements": requirements},
+                  "requirement_ids": {"R1": requirements[0], "R2": requirements[1]}}
+        schema = prepare_schema(model_schema.for_stage("challenge", tagged))
+        observation = {"check": "Compare an independently withheld output", "status": "unresolved"}
+        full = {"R1": observation, "R2": {**observation, "status": "supported"}}
+        validate_output({**self.response, "fit": full}, schema)
+        validate_output(self.response, schema)  # No evidence; declining remains possible.
+        old_rows = [{"requirement": r, **observation} for r in [*requirements, requirements[-1]]]
+        for invalid in (old_rows, {"R1": observation}, {**full, "R3": observation},
+                        {"R1": {**observation, "status": "guaranteed"}, "R2": observation}):
+            with self.subTest(invalid=invalid), self.assertRaises(SchemaError):
+                validate_output({**self.response, "fit": invalid}, schema)
+
     def test_exact_schema_checked_after_native_response_no_fallback(self):
         sent = []
         def sender(url, headers, body, timeout):
