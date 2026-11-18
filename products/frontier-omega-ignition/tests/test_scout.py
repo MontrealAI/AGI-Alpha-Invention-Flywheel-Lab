@@ -2,9 +2,11 @@
 import copy
 import hashlib
 import json
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 import tempfile
+import threading
 import unittest
 from unittest.mock import patch
 
@@ -122,7 +124,7 @@ class ScoutTest(unittest.TestCase):
         self.assertEqual(len(self.calls), before)
 
     def test_rejected_artifact_is_not_reported_as_verified(self):
-        def failed(run_id, version):
+        def failed(run_id, version, *, pending_only):
             state = self.controller.store.get(run_id, version)
             return dict(state, status="failed", artifact={"kind": "manifest_audit"}, evaluation={"status": "fail"})
 
@@ -130,3 +132,47 @@ class ScoutTest(unittest.TestCase):
             result = self.poll(initial=True)
         self.assertEqual(result["missions"][0]["status"], "failed")
         self.assertFalse(result["missions"][0]["verified_artifact"])
+
+    def test_overlapping_workers_do_not_repeat_a_blocked_model_attempt(self):
+        with patch.object(self.controller, "create", side_effect=RuntimeError("interrupted")):
+            with self.assertRaises(RuntimeError):
+                self.poll(initial=True)
+        other = Controller(Store(self.directory.name), provider_factory=lambda: self.model)
+        ready, resume = threading.Event(), threading.Event()
+        original_advance = self.controller.advance
+        reports = []
+
+        def delayed_advance(*args, **kwargs):
+            ready.set()
+            if not resume.wait(10):
+                raise AssertionError("second observer did not finish")
+            return original_advance(*args, **kwargs)
+
+        def reject(stage, payload):
+            self.model.stages.append(stage)
+            raise ValueError("fixture transient model failure")
+
+        with patch.object(self.controller, "advance", side_effect=delayed_advance), patch.object(self.model, "propose", side_effect=reject):
+            with ThreadPoolExecutor(max_workers=1) as workers:
+                slow = workers.submit(scout._drain, self.controller, "lab")
+                try:
+                    self.assertTrue(ready.wait(10))
+                    reports.extend(scout._drain(other, "lab"))
+                finally:
+                    resume.set()
+                reports.extend(slow.result(10))
+        self.assertEqual(len(reports), 1)
+        self.assertEqual(reports[0]["status"], "blocked")
+        self.assertEqual(self.model.stages, ["discover"])
+
+    def test_busy_mission_stays_pending_until_owner_releases_it(self):
+        with patch.object(self.controller, "create", side_effect=RuntimeError("interrupted")):
+            with self.assertRaises(RuntimeError):
+                self.poll(initial=True)
+        with self.controller.store.connection() as db:
+            body, = db.execute("SELECT body FROM scout_work").fetchone()
+        mission_id, version = self.controller.create(json.loads(body))
+        with self.controller.store.work_lock(mission_id, version):
+            self.assertEqual(scout._drain(self.controller, "lab"), [])
+        self.assertEqual(scout._drain(self.controller, "lab")[0]["mission_id"], mission_id)
+        self.assertEqual(self.model.stages, ["discover", "challenge"])
