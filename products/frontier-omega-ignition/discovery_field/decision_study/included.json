@@ -1,0 +1,94 @@
+{
+  "schema": "ignition/scoped-included-observation/1",
+  "model_identity": "Two fresh included Codex assistant instances, GPT-6 family as provided. Exact served model ID and provider usage were not exposed.",
+  "arm": "direct",
+  "scientific_scope": "Four decisions in two assistant turns. One saw the two complete packets from different domains, the other the two packets with the supporting source absent. They saw no same-domain counterpart, expected labels, or external sources. The local Qwen protocol supplies one packet per call. The included arm is exploratory.",
+  "participant_reported_resources": [
+    {
+      "contexts": [
+        1,
+        3
+      ],
+      "elapsed_wall_seconds_to_each_write": [
+        21.27,
+        21.883
+      ],
+      "elapsed_wall_seconds_to_last_write": 21.883,
+      "notes": "Times overlap. One shared read, two writes."
+    },
+    {
+      "contexts": [
+        2,
+        4
+      ],
+      "elapsed_wall_seconds_to_last_validation": 33.66,
+      "notes": "One shared read and post-write check. Per-case times unavailable."
+    }
+  ],
+  "billing": null,
+  "input_tokens": null,
+  "output_tokens": null,
+  "complete_cost_known": false,
+  "cases": [
+    {
+      "route": "direct",
+      "context": 1,
+      "packet_sha256": "aeaa991e223992dac84f8167d892cd50b79977a71a4ad979bf8ec3c1a6b531b0",
+      "answer": {
+        "decision": "established",
+        "source": "B",
+        "quote": "a sufficiently parallelized CPU solver or gpusim2grid matches or exceeds the throughput of the ML surrogates we test",
+        "claim": "The study reports that a sufficiently parallelized conventional solver matched or exceeded the tested ML surrogates in bulk power-flow throughput.",
+        "uncertainty": "The excerpt does not establish whether the throughput ranking holds for the lab’s grid sizes, hardware budget and accuracy requirements.",
+        "action": "Benchmark a tuned parallel CPU solver, gpusim2grid and the fastest available ML surrogate on the same held-out AC cases, counting solutions that meet a common accuracy threshold per wall-clock second.",
+        "test": "If the ML surrogate consistently produces more qualifying solutions per second than both tuned conventional solvers under the same hardware budget, the reported ranking does not carry over to the lab’s workload."
+      },
+      "answer_sha256": "6322ec2c0342494bc0273a59bb8a6403c1abfb12c6d40a472fab837bc44e5653"
+    },
+    {
+      "route": "direct",
+      "context": 2,
+      "packet_sha256": "97c611d2326bcca90f8ac0736d526710023dfadc211e44436c60ff8a17e0b954",
+      "answer": {
+        "decision": "unresolved",
+        "source": null,
+        "quote": null,
+        "claim": "The excerpt describes microscopy tracking methods and videos but gives no rule for selecting hard cell associations.",
+        "uncertainty": "The original inclusion rule would show whether several trackers had to miss the same reference link.",
+        "action": "Have experts verify reference links, then use two tracker families to select shared failures and reserve other families for evaluation.",
+        "test": "Drop the shared-failure rule if held-out trackers err no more often on those links than on links missed by one family, matched by movie and event type."
+      },
+      "answer_sha256": "06d4ea953c355680614ac5bfca8e91c9d430db63e1ad2e4713c434108e4b0e13"
+    },
+    {
+      "route": "direct",
+      "context": 3,
+      "packet_sha256": "b4561b5194615901472a8765217dec7b9ef595999809dbd41ac04aeb6bdcefc0",
+      "answer": {
+        "decision": "established",
+        "source": "C",
+        "quote": "We selected a hard subset requiring greater reasoning effort by identifying failures shared across distinct algorithmic trackers.",
+        "claim": "The benchmark used failures shared by distinct trackers to select its hard subset of cell associations.",
+        "uncertainty": "The excerpt leaves open whether those associations also challenge trackers that played no part in selection.",
+        "action": "Construct a shared-failure set and an expert-selected comparison set matched for size and imaging conditions, with cell identities adjudicated blind to selection method.",
+        "test": "If independent trackers make no more linking errors on the shared-failure set than on the expert-selected set, the proposed advantage over expert selection is unsupported."
+      },
+      "answer_sha256": "5dc6235b3c48c196237d735d37080a80d2d13c4a726ec00d7408a8bb257c4f1e"
+    },
+    {
+      "route": "direct",
+      "context": 4,
+      "packet_sha256": "225f95fc218651f860fcefe04479c38da26dde73061c2eab7855b735ee4e6fc0",
+      "answer": {
+        "decision": "unresolved",
+        "source": null,
+        "quote": null,
+        "claim": "The reported 12.2 ms for one hourly scenario gives no comparison of bulk throughput between a conventional solver and ML surrogates.",
+        "uncertainty": "The excerpt provides neither the conventional solver's throughput at saturation nor a common accuracy criterion for comparing completed cases.",
+        "action": "Benchmark a tuned sparse Newton–Raphson solver parallelized across cases against batched ML surrogates on identical ordinary AC power-flow workloads with a fixed hardware budget.",
+        "test": "A reproducible lead for the fastest surrogate in cases meeting the same AC mismatch tolerance per wall-clock second, after tuning both methods to peak throughput, would defeat parity on that workload."
+      },
+      "answer_sha256": "c9f373ccd94900e5b7eeeed1fb85f15a8af38d09a385ffd91459790624b81020"
+    }
+  ]
+}

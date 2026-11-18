@@ -95,9 +95,9 @@ class Handler(BaseHTTPRequestHandler):
             body = strict_json(self.rfile.read(size))
             if not isinstance(body,dict):
                 raise StateError("Expected an object")
-        if not post and route in {"/follow-up", "/followup.js"}:
-            name = "followup.html" if route == "/follow-up" else "followup.js"
-            media = "text/html" if route == "/follow-up" else "text/javascript"
+        if not post and route in {"/follow-up", "/followup.js", "/change-desk", "/change-desk.js"}:
+            name = {"/follow-up": "followup.html", "/change-desk": "change-desk.html"}.get(route, route.lstrip("/"))
+            media = "text/html" if name.endswith(".html") else "text/javascript"
             return self._send(200, media + "; charset=utf-8", (PRODUCT / "web" / name).read_bytes())
         if not post and route in {"/", "/index.html", "/app.js", "/style.css", "/operator.css"}:
             name = route.lstrip("/") or "index.html"

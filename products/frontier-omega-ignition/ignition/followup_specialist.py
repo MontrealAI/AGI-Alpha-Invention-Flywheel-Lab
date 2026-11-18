@@ -1,12 +1,7 @@
 """Bind the historical sky-planning instrument to a local, revisioned operator mission."""
 import hashlib
-import io
 import json
-from pathlib import Path
-import subprocess
-import sys
-import tempfile
-from zipfile import ZIP_DEFLATED, ZipFile, ZipInfo
+from .fixed_delivery import archive, receive
 
 from .store import PRODUCT, Conflict, StateError, canonical, digest
 
@@ -62,19 +57,7 @@ def checked(state):
         raise Conflict("Source or mission identity changed. Open a new revision.")
     model = contract(state, files)
     files["mission.json"] = (canonical(model) + "\n").encode()
-    with tempfile.TemporaryDirectory(prefix="ignition-followup-") as directory:
-        root = Path(directory)
-        for name, content in files.items():
-            path = root / name
-            path.parent.mkdir(parents=True, exist_ok=True)
-            path.write_bytes(content)
-        process = subprocess.run([sys.executable, "-IB", str(root / "review_followup.py"), "--construct"],
-                                 cwd=root, env={}, capture_output=True)
-        if process.returncode:
-            last = process.stderr.decode("utf-8", errors="replace").splitlines()
-            reason = last[-1][len("ValueError: "):] if last and last[-1].startswith("ValueError: ") else f"recipient exit {process.returncode}"
-            raise StateError("The installed planner or independent check rejected this worklist. " + reason[:320])
-        result = json.loads(process.stdout)
+    result = receive(files, "review_followup.py", "The installed planner or independent check rejected this worklist.")
     binding = {"mission_sha256": digest(model), "input_sha256": state["input_sha256"], "specialist_sha256": bound}
     return files, binding, result
 
@@ -117,9 +100,4 @@ def deliver(state, payload, trial):
         "Planning only. No telescope dispatch, observation, time allocation or purchase.\n"
         "Planification seulement. Aucune commande, observation, attribution de temps ou transaction.\n"
     ).encode()
-    out = io.BytesIO()
-    with ZipFile(out, "w") as archive:
-        for name, content in sorted(files.items()):
-            item = ZipInfo(name, (2026, 11, 17, 0, 0, 0))
-            archive.writestr(item, content, compress_type=ZIP_DEFLATED)
-    return out.getvalue()
+    return archive(files)

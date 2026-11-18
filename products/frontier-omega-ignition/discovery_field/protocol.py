@@ -14,6 +14,8 @@ from functools import lru_cache
 from pathlib import Path
 from urllib.parse import urlsplit
 
+from .decision_study import private_sources
+
 HERE = Path(__file__).resolve().parent
 PAIR_URL = "https://doi.org/10.6084/m9.figshare.34744362.v1"
 PAIR_TEXT = ("Figshare v1 provides 1,800 completed run records, issue-level outcomes, per-run token aggregates "
@@ -114,6 +116,8 @@ def release_premise(signal):
 
 def observe(signal):
     """Bind an acquired excerpt to the reviewed source URL, bytes, predicate and scope."""
+    if signal.get("role") == private_sources.ROLE:
+        return private_sources.observe(signal)
     key = record_key(signal.get("url"))
     if key is None:
         return release_premise(signal)
@@ -240,7 +244,10 @@ def adjudicate(claim, signal, purpose):
         return "unregistered_or_changed"
     if claim.get("source") != premise["source"] or claim.get("metric") != premise["metric"]:
         return "wrong_attribution"
-    if not relevant(signal["url"], purpose):
+    if signal.get("role") == private_sources.ROLE:
+        if not private_sources.supports_decision(signal, purpose):
+            return "immaterial"
+    elif not relevant(signal["url"], purpose):
         return "immaterial"
     return binding(claim, premise)
 
@@ -290,6 +297,14 @@ def review(candidate, signals, purpose, eligible_refs):
                     and relevant(signal["url"], purpose)):
                 checks.append({"claim": {"source": signal["id"], "metric": "issue_level_outcomes",
                                          "value": "absent"}, "status": "contradicted"})
+    # These opt-in excerpts carry a narrow, registered comparison. A citation-only
+    # candidate must not receive identity-only credit when its passage is missing or altered.
+    checked = {row["claim"]["source"] for row in checks}
+    for ref in candidate.get("sources", []):
+        signal = indexed.get(ref)
+        if signal and signal.get("role") == private_sources.ROLE and ref not in checked:
+            checks.append({"claim": {"source": ref}, "status": "unbound_scoped_decision"})
+
     supported = {c["claim"]["source"] for c in checks if c["status"] == "supported"}
     return {"checks": checks, "supported_sources": sorted(supported),
             "unbound_sources": sorted(set(candidate.get("sources", [])) - supported),

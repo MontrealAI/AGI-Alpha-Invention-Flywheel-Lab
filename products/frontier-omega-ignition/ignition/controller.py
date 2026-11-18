@@ -56,8 +56,11 @@ class Controller:
         mission = body.get("mission") if isinstance(body, dict) else None
         resources = mission.get("resources") if isinstance(mission, dict) else None
         if isinstance(resources, dict):
-            if len({"pairing_lab", "endpoint_lab", "followup"} & resources.keys()) > 1:
+            if len({"pairing_lab", "endpoint_lab", "followup", "change_desk"} & resources.keys()) > 1:
                 raise StateError("Select one specialist for this mission.")
+            if "change_desk" in resources:
+                from .change_specialist import identity
+                return identity(resources["change_desk"])
             if "followup" in resources:
                 from .followup_specialist import identity
                 return identity()
@@ -80,6 +83,8 @@ class Controller:
                 raise StateError("Reuse the portable Pairing Lab instrument through a fresh specialist mission")
             if s["artifact"]["kind"] == "endpoint_evidence":
                 raise StateError("Open a fresh endpoint study to requalify a changed operating requirement.")
+            if s["artifact"]["kind"] == "dated_archive_queue":
+                raise StateError("Open a new archive mission to qualify its data cutoff and history.")
             if s["artifact"]["kind"] == "followup_worklist":
                 raise StateError("Open a fresh follow-up mission to check a new worklist.")
             inherited = {"source_id":run_id, "source_version":version, "artifact_sha256":s["artifact"]["sha256"],
@@ -88,13 +93,15 @@ class Controller:
 
     def obsolete(self, s):
         resources = s["mission"]["resources"]
-        if "followup" in resources or "endpoint_lab" in resources:
-            if "followup" in resources:
+        if {"followup", "endpoint_lab", "change_desk"} & resources.keys():
+            if "change_desk" in resources:
+                from .change_specialist import identity
+            elif "followup" in resources:
                 from .followup_specialist import identity
             else:
                 from .endpoint_specialist import identity
             try:
-                current = identity()
+                current = identity(resources["change_desk"]) if "change_desk" in resources else identity()
             except (OSError, ValueError):
                 return True
             if s.get("specialist_source") != current:
@@ -111,6 +118,7 @@ class Controller:
         if version is None and self.obsolete(s):
             s.pop("endpoint_result", None)
             s.pop("followup_result", None)
+            s.pop("change_result", None)
             s.update(status="stale", error="Provider or application source changed. Amend to open a fresh revision.",
                      handoff=None, artifact=None, evaluation=None)
         return self.public(s)
@@ -226,6 +234,9 @@ class Controller:
         provider = self.provider(s["exchanges"])
         mode = provider.identity().get("mode")
         self._check_time(mission)
+        if "change_desk" in mission["resources"]:
+            from .change_specialist import run
+            return run(self, s)
         if "followup" in mission["resources"]:
             from .followup_specialist import run
             return run(self, s)
@@ -491,6 +502,9 @@ class Controller:
                 raise Conflict("Mission has been amended")
             if s["status"] != "verified":
                 raise Conflict("Current revision has no accepted artifact")
+            if s["artifact"]["kind"] == "dated_archive_queue":
+                from .change_specialist import deliver
+                return deliver(s, payload, trial)
             if s["artifact"]["kind"] == "followup_worklist":
                 from .followup_specialist import deliver
                 return deliver(s, payload, trial)
