@@ -1,0 +1,26 @@
+# Frozen augmented-incumbent engineering comparison — 18 November 2026
+
+**Registration before implementation.** Parent review PR #453 source: `a02b64bdae56f6b8649012e5222f2c1ac943913c`. Original independent product owner PR #451 source: `ffd8a0ebf1000173ca2446b9475be128463d6c17`. This review must not change either owner source or any native account. Prior stock-only result is fixed and may not be rescored as failure of the competent product.
+
+## Hypothesis and strongest relevant route
+
+The stock public `nucleuswatch==1.2.0` adapter drops reference and detector fields, but a competent operator can use its candidate/object view **plus independently obtained original broker TAP index and six original ZTF Avro packets** to satisfy the same narrow October notice. The complete augmented workflow is not equivalent to stock-only output. This is an **offline assembly of a competent conventional route** over published exposed bytes, not a claim that nucleuswatch originally shipped this specific adapter, not a newly observed sky event, and not a timed independent human service. Its original-packet adjudication deliberately reuses the separately constructed conventional `broker_control.py` rather than asserting two independent verification algorithms. No automated astrophysical discovery claim follows from a functional tie.
+
+## Fixed inputs and acceptance
+
+- Pin upstream `nucleuswatch 1.2.0`, 2026-10-25 PyPI wheel SHA-256 `7c578e37ec958008424d02cef843d856f773c87ce4158186e19c836900403ed0`, source commit `fe3b81da66c3bd24fdd0dd4942bb01e4e0a45018`. Download/verify exact wheel in included public runner; do not invoke paid services or real broker endpoints.
+- Use **only** `broker_sources/alerce-window.vot`, the four pinned baseline/trigger `broker_sources/*.avro.gz` and the two already published `invention/early_survey/exposures/sources/{g,r}.avro.gz`. Require all original SHA-256 identities in `BROKER_CONTROL.json`; never substitute case-specific records or seed variants.
+- Exact original October notice: both `g` and `r` for `ZTF26acbezdh`, `2026-10-26T00:00:00Z` through `2026-10-29T00:00:00Z`. Main acceptance is both published witness detection IDs, status, same field/readout/reference, direction, signed magnitude change and quoted uncertainties, including complete-index and original-packet confirmation.
+- Construct the **stock** ALeRCE per-candidate view from the six decoded authentic packet rows using the unmodified upstream adapter; require candidate IDs and bands survive, but do not pretend stock preserves `rfid` or independently provides the raw packets.
+- Augment the stock candidate list with source-verified raw packet/index acquisition already available to the conventional operator. Compare all original witness IDs, statuses and numeric values with `BROKER_CONTROL.json` after the independently conventional `adjudicate` path. No product-side code is imported.
+- Negative control 1: one byte-changed packet fails its pinned SHA before adjudication. Negative control 2: in an explicitly **synthetic in-memory** copy, move the g-band repeat to a different reference in both TAP and packet rows, leaving its photometry unchanged; stock candidate view cannot see this, while conventional source-bound adjudication must no longer certify the g-band persistence.
+- No direct network calls except the pinned wheel download at CI setup. No secret, signing/account data, new money, new customers, outreach, physical observation or production.
+- A normal successful outcome establishes **only** that the augmented conventional route can reconstruct both exposed scientific decisions with sufficiently rich data. If it ties the product on these fixtures, say *no residual scientific-output advantage proven*, not that it wins on total cost, time, beneficiary acceptance or future contexts.
+
+## Comparator and costs
+
+Four distinct decisions remain in scope: no deploy; direct original-packet conventional operator (already measured historical request wall 11.147 s, not re-run); nucleuswatch plus competent operator plus source packet retrieval (this test); and FRONTIER FIELD portable receiver (original qualified source only). Count exact archived packets and actual test CPU/wall, and separately list **unknown** human analyst time, acquisition/maintenance, host/model billing, real buyer value, consent, support and liabilities. Do not assign hypothetical wages, savings, prices, sales or new native capital. Do not call this a matched live prospective trial.
+
+## Stopping and decision
+
+One unchanged six-packet exposed comparison, two fixed negative controls, and one pin/version failure control. Preserve any failure in CI and fix only prospective engineering errors; no alternate packet selection, new seed, changed scientific threshold or rerun until favorable. A functionally tied augmented ordinary alternative blocks any incremental **output** claim on this case. An economically justified deploy requires independently observed buyer-accepted incremental benefit after complete costs against this stronger route. Default commercial decision remains **NO DEPLOY**. Original-owner integration, normal full CI, release and independently downloaded audit are separate and cannot be claimed by this review.
