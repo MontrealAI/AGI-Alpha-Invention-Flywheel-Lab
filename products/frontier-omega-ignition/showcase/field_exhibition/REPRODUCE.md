@@ -6,7 +6,12 @@ Utilisez Python 3.12 sur les fichiers publics décompressés. La commande par d�
 
 ```sh
 python3 -B replay.py
+python3 -B invention/next_week/replay.py
 ```
+
+The second command rechecks the separate November 10–17 archive window, its two-hour and ten-minute deliveries, and the overlap with the earlier cohort. The frozen public alert and observation responses needed for this check are included in `invention/next_week/sources/`.
+
+La seconde commande revérifie la fenêtre d’archives distincte du 10 au 17 novembre (borne de fin exclue), les résultats à deux heures et à dix minutes, ainsi que les cibles communes à la première cohorte. Les réponses publiques nécessaires figurent dans `invention/next_week/sources/`.
 
 To check the case you selected in the Forge, place the downloaded JSON beside `replay.py` and substitute its filename below. To construct the registered primary worklist or regenerate the scientific CSV, use fresh output paths. The CSV contains 19-digit observation identifiers. Import these columns as text in spreadsheet software.
 

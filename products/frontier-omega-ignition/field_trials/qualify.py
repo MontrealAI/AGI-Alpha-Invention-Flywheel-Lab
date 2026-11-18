@@ -58,6 +58,8 @@ def main():
         python("invention/qualify.py", "--check")
         python("invention/plan.py", "--out", out / "worklist")
         python("invention/photometry.py", "--out", out / "photometry.csv")
+        python("invention/next_week/replay.py", capture=record / "temporal-replication.json")
+        shutil.copyfile(PRODUCT / "invention/next_week/photometry-120m.csv", out / "photometry-following-week.csv")
         python("field_lab/verify.py", "--public", "field_lab/PUBLIC.json", capture=record / "fixture-replay.json")
         python("field_trials/replay_cpu.py", capture=record / "recorded-cpu-pilot.json")
         python("field_lab/field.py", "fixture", "--output", temp / "http")
@@ -77,6 +79,10 @@ def main():
         python("-I", temp / "recipient/replay.py", cwd=temp / "recipient", capture=record / "recipient.json")
         shutil.copyfile(SHOW / "PRESENT.md", out / "PRESENTER.md")
         if options.browser:
+            rebuilt = temp / "recipient-catalog.json"
+            python("invention/reference.py", "--out", rebuilt, cwd=temp / "recipient")
+            if rebuilt.read_bytes() != (temp / "recipient/invention/catalog.json").read_bytes():
+                raise ValueError("The delivered source and ephemeris differ from the registered catalog")
             run(["node", SHOW / "browser.cjs", page, out / "views"], capture=record / "exhibition-browser.json")
             run(["node", PRODUCT / "qa/workbench_browser.cjs"])
     manifest = {p.relative_to(out).as_posix(): digest(p) for p in sorted(out.rglob("*")) if p.is_file()}

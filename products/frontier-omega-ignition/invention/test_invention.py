@@ -1,4 +1,5 @@
 import copy
+import hashlib
 import json
 import math
 import shutil
@@ -7,8 +8,9 @@ import sys
 import tempfile
 from pathlib import Path
 import unittest
+from unittest.mock import patch
 
-from geometry import digest, geometry_scope, mission_digest
+from geometry import digest, geometry_scope, julian, mission_digest, utc
 from photometry import compare_sql, evaluate, measure
 from plan import build
 from qualify import ROOT, qualification
@@ -145,6 +147,63 @@ class FollowupTests(unittest.TestCase):
             altered_rows.write_bytes((ROOT/"sources/fink-holdout.json").read_bytes()+b" ")
             with self.assertRaisesRegex(ValueError,"differ from source"):
                 evaluate(observed_path=altered_rows)
+
+    def test_source_window_precedes_ranking_deduplication_and_cap(self):
+        source = json.loads((ROOT/"sources/alerts-source.json").read_bytes())
+        start, end = (julian(utc(source[k])) for k in ("selection_start_utc", "cutoff_utc"))
+        base = json.loads((ROOT/"sources/fink-alerts.json").read_bytes())
+        a,b,c,x,y = base[:5]
+        rows = [{**a,"i:jd":end}, {**x,"i:jd":end+1}, {**y,"i:jd":start-1},
+                {**a,"i:jd":end-1}, {**a,"i:jd":start+1}, {**b,"i:jd":start}, {**c,"i:jd":end-2}]
+        raw = json.dumps(rows).encode()
+        source.update(alerts_sha256=hashlib.sha256(raw).hexdigest(),raw_bytes=len(raw),max_targets=3)
+        with patch("reference.make_reference", side_effect=lambda m,cat: {"scope_sha256":geometry_scope(m,cat)}):
+            full = construct_catalog(self.mission,raw,source)
+            self.assertEqual([t["id"] for t in full["targets"]], [a["i:objectId"],c["i:objectId"],b["i:objectId"]])
+            self.assertEqual([t["alert_jd"] for t in full["targets"]], [end-1,end-2,start])
+            self.assertEqual(full["source_selection"], {
+                "source_rows":7,"before_start_rows":1,"at_or_after_cutoff_rows":2,"in_window_rows":4,
+                "distinct_in_window_targets":3,"duplicate_in_window_rows":1,"over_cap_targets":0,"selected_targets":3})
+            limited = construct_catalog(self.mission,raw,{**source, "max_targets":2})
+            self.assertEqual(limited["targets"],full["targets"][:2])
+            self.assertEqual(limited["source_selection"]["over_cap_targets"],1)
+            # An excluded row remains bound by its original raw identity.
+            rows[0]["i:jd"] = end+2
+            other = json.dumps(rows).encode()
+            with self.assertRaisesRegex(ValueError,"hash/length"):
+                construct_catalog(self.mission,other,source)
+            rebound = construct_catalog(self.mission,other, {**source,"raw_bytes":len(other),
+                                                              "alerts_sha256":hashlib.sha256(other).hexdigest()})
+            self.assertEqual(full["reference"],rebound["reference"])
+            self.assertNotEqual(digest(full),digest(rebound))
+
+    def test_source_window_withholds_empty_cohort_and_rejects_malformed_dates(self):
+        source = json.loads((ROOT/"sources/alerts-source.json").read_bytes())
+        end = julian(utc(source["cutoff_utc"]))
+        row = json.loads((ROOT/"sources/fink-alerts.json").read_bytes())[0]
+        def receive(rows):
+            raw = json.dumps(rows).encode()
+            provenance = {**source,"alerts_sha256":hashlib.sha256(raw).hexdigest(),"raw_bytes":len(raw),"max_targets":1}
+            return construct_catalog(self.mission,raw,provenance)
+        with patch("reference.make_reference",return_value={}):
+            for rows in ([], [{**row,"i:jd":end}]):
+                catalog = receive(rows)
+                self.assertEqual(catalog["targets"],[])
+                self.assertEqual(catalog["source_selection"]["source_rows"],len(rows))
+                self.assertEqual(catalog["source_selection"]["in_window_rows"],0)
+            for value in (False, None, "2461345.0", float("nan"), float("inf"), float("-inf"), [], {}):
+                with self.subTest(value=value), self.assertRaisesRegex(ValueError,"finite numerical i:jd"):
+                    receive([row, {**row,"i:jd":value}])
+            with self.assertRaisesRegex(ValueError,"finite numerical i:jd"):
+                receive([row, {k:v for k,v in row.items() if k != "i:jd"}])
+
+    def test_primary_selection_preserves_original_catalog_bytes(self):
+        source = json.loads((ROOT/"sources/alerts-source.json").read_bytes())
+        raw = (ROOT/"sources/fink-alerts.json").read_bytes()
+        with patch("reference.make_reference",return_value=self.catalog["reference"]):
+            result = construct_catalog(self.mission,raw,source)
+        self.assertNotIn("source_selection", result)
+        self.assertEqual((json.dumps(result,indent=2)+"\n").encode(),(ROOT/"catalog.json").read_bytes())
 
     def test_sql_rejects_mutated_source_error_and_identity(self):
         results = evaluate()

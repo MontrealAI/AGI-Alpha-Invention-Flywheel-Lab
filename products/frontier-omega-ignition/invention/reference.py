@@ -3,10 +3,11 @@ import argparse
 import hashlib
 import importlib.metadata
 import json
+import math
 from datetime import timedelta
 from pathlib import Path
 
-from geometry import geometry_scope, utc, validate
+from geometry import geometry_scope, julian, utc, validate
 
 
 def targets_from_alerts(source, max_targets=6):
@@ -19,6 +20,35 @@ def targets_from_alerts(source, max_targets=6):
                         "alert_jd": row["i:jd"], "reported_band": {1: "g", 2: "r", 3: "i"}[row["i:fid"]],
                         "reported_diff_mag": row["i:magpsf"], "reported_error_mag": row["i:sigmapsf"]})
     return targets
+
+
+def select_in_window(rows, source):
+    """Apply the authority's declared event-time interval before ranking or taking a sample."""
+    if not isinstance(rows, list):
+        raise ValueError("expected an array of source alerts")
+    start = julian(utc(source["selection_start_utc"]))
+    cutoff = julian(utc(source["cutoff_utc"]))
+    if start >= cutoff:
+        raise ValueError("empty selection interval")
+    eligible = []
+    before = after = 0
+    for row in rows:
+        jd = row.get("i:jd") if isinstance(row, dict) else None
+        if type(jd) not in (int, float) or (type(jd) is float and not math.isfinite(jd)):
+            raise ValueError("each source alert requires a finite numerical i:jd")
+        if jd < start:
+            before += 1
+        elif jd >= cutoff:
+            after += 1
+        else:
+            eligible.append(row)
+    targets = targets_from_alerts(eligible, source["max_targets"])
+    distinct = len({row["i:objectId"] for row in eligible})
+    counts = {"source_rows": len(rows), "before_start_rows": before, "at_or_after_cutoff_rows": after,
+              "in_window_rows": len(eligible), "distinct_in_window_targets": distinct,
+              "duplicate_in_window_rows": len(eligible) - distinct, "over_cap_targets": distinct - len(targets),
+              "selected_targets": len(targets)}
+    return targets, counts
 
 
 def make_reference(mission, catalog):
@@ -59,7 +89,9 @@ def construct_catalog(mission, raw, source):
     if type(source["max_targets"]) is not int or source["max_targets"] < 1:
         raise ValueError("source descriptor must declare the target sample size")
     catalog = {k:source[k] for k in fields}
-    catalog["targets"] = targets_from_alerts(json.loads(raw), source["max_targets"])
+    catalog["targets"], counts = select_in_window(json.loads(raw), source)
+    if not counts["source_rows"] or counts["source_rows"] != counts["selected_targets"]:
+        catalog["source_selection"] = counts
     validate(mission,catalog)
     catalog["reference"] = make_reference(mission, catalog)
     return catalog

@@ -21,6 +21,14 @@ def replay(case_path=None):
     sky = qualification()
     if sky != read(PRODUCT / "invention/public.json"):
         raise ValueError("Frozen worklists or archive photometry differ from fresh qualification")
+    repeat = PRODUCT / "invention/next_week"
+    subprocess.run([sys.executable, "-B", str(repeat / "replay.py")], check=True, stdout=subprocess.DEVNULL)
+    second = read(repeat / "RESULT.json")
+    previous_missing = set(sky["photometry"]["missing_pair"])
+    newly_measured = sorted(pair["target_id"] for pair in second["pairs_120"]
+                            if pair["target_id"] in second["overlap_with_first"] and pair["target_id"] in previous_missing)
+    if newly_measured != second["first_week_withheld_now_qualifies_120"]:
+        raise ValueError("Cross-cohort change differs from the two checked target populations")
     field = PRODUCT / "field_lab"
     subprocess.run([sys.executable, "-B", str(field / "verify.py"), "--public", str(field / "PUBLIC.json")],
                    check=True, stdout=subprocess.DEVNULL)
@@ -32,6 +40,8 @@ def replay(case_path=None):
     subprocess.run([sys.executable, "-B", str(successor / "audit.py"), str(queue),
                     "--tolerance-ms", recorded["tolerance_ms"]], check=True, stdout=subprocess.DEVNULL)
     result = {"registered_worklists": len(sky["cases"]), "photometry": sky["photometry"]["direct_sql"],
+              "second_week": {"targets": second["targets"], "pairs_120": len(second["pairs_120"]),
+                              "pairs_10": len(second["pairs_10"]), "previously_withheld_now_measured": newly_measured},
               "fixture_captures": len(read(field / "PUBLIC.json")["receipts"]), "archive_dates": recorded["summary"]["dates"]}
     if case_path:
         request = read(case_path)

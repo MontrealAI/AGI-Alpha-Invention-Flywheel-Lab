@@ -1,0 +1,156 @@
+{
+  "scope": "second historical public Fink/ZTF cohort; positive difference-image photometry",
+  "selection_start_utc": "2026-11-03T00:00:00Z",
+  "cutoff_utc": "2026-11-10T00:00:00Z",
+  "observation_end_utc": "2026-11-17T00:00:00Z",
+  "alert_rows": 26,
+  "eligible_alert_rows": 25,
+  "distinct_eligible_targets": 25,
+  "selection_counts": {
+    "source_rows": 26,
+    "before_start_rows": 0,
+    "at_or_after_cutoff_rows": 1,
+    "in_window_rows": 25,
+    "distinct_in_window_targets": 25,
+    "duplicate_in_window_rows": 0,
+    "over_cap_targets": 19,
+    "selected_targets": 6
+  },
+  "targets": 6,
+  "selected_target_ids": [
+    "ZTF26aaywncn",
+    "ZTF26abrmbme",
+    "ZTF26acbujyo",
+    "ZTF26acbuouq",
+    "ZTF26abrluog",
+    "ZTF26abwpoui"
+  ],
+  "overlap_with_first": [
+    "ZTF26abrluog",
+    "ZTF26abwpoui"
+  ],
+  "holdout_source_rows": 150,
+  "holdout_rows": 25,
+  "source_sha256": {
+    "alerts": "aea09a60cae1813b29d442e43549651b8aad710df9dc80394cbebeb1bdcaca5e",
+    "object_history": "f212212ae9541e20723134551f3fdec59f977bda716c9e2f6f30edc4c2b40060",
+    "in_window_projection": "be011a2a99d2babd145ca6362f1d2fa2e42c5703add574a849abaafe9faf1c6e"
+  },
+  "pairs_120": [
+    {
+      "target_id": "ZTF26aaywncn",
+      "g_candid": "3600507695315015014",
+      "r_candid": "3600496625315015028",
+      "g_jd": 2461355.0076968,
+      "r_jd": 2461354.9966204,
+      "g_utc": "2026-11-10T12:11:05.003Z",
+      "r_utc": "2026-11-10T11:55:08.002Z",
+      "g_diff_mag": 19.24914,
+      "r_diff_mag": 18.495237,
+      "g_error_mag": 0.1037599,
+      "r_error_mag": 0.07733147,
+      "separation_minutes": 15.95002,
+      "g_minus_r_diff_mag": 0.753903,
+      "formal_error_mag": 0.129407
+    },
+    {
+      "target_id": "ZTF26abrluog",
+      "g_candid": "3600379501415015027",
+      "r_candid": "3600357241415015016",
+      "g_jd": 2461354.8795023,
+      "r_jd": 2461354.8572454,
+      "g_utc": "2026-11-10T09:06:28.998Z",
+      "r_utc": "2026-11-10T08:34:26.002Z",
+      "g_diff_mag": 18.315273,
+      "r_diff_mag": 17.732054,
+      "g_error_mag": 0.069249295,
+      "r_error_mag": 0.07257421,
+      "separation_minutes": 32.04994,
+      "g_minus_r_diff_mag": 0.583219,
+      "formal_error_mag": 0.100312
+    },
+    {
+      "target_id": "ZTF26abwpoui",
+      "g_candid": "3600380924715015012",
+      "r_candid": "3600356304715015009",
+      "g_jd": 2461354.8809259,
+      "r_jd": 2461354.8563079,
+      "g_utc": "2026-11-10T09:08:31.997Z",
+      "r_utc": "2026-11-10T08:33:05.002Z",
+      "g_diff_mag": 19.616096,
+      "r_diff_mag": 19.4577,
+      "g_error_mag": 0.1023934,
+      "r_error_mag": 0.122664675,
+      "separation_minutes": 35.44992,
+      "g_minus_r_diff_mag": 0.158396,
+      "formal_error_mag": 0.159784
+    },
+    {
+      "target_id": "ZTF26acbujyo",
+      "g_candid": "3600393094615015008",
+      "r_candid": "3600373074615015006",
+      "g_jd": 2461354.8930903,
+      "r_jd": 2461354.8730787,
+      "g_utc": "2026-11-10T09:26:03.001Z",
+      "r_utc": "2026-11-10T08:57:13.999Z",
+      "g_diff_mag": 16.600254,
+      "r_diff_mag": 16.66964,
+      "g_error_mag": 0.04469809,
+      "r_error_mag": 0.03993616,
+      "separation_minutes": 28.8167,
+      "g_minus_r_diff_mag": -0.069386,
+      "formal_error_mag": 0.05994
+    },
+    {
+      "target_id": "ZTF26acbuouq",
+      "g_candid": "3600378564015015005",
+      "r_candid": "3600336084015015008",
+      "g_jd": 2461354.8785648,
+      "r_jd": 2461354.836088,
+      "g_utc": "2026-11-10T09:05:07.998Z",
+      "r_utc": "2026-11-10T08:03:58.003Z",
+      "g_diff_mag": 17.71354,
+      "r_diff_mag": 17.84371,
+      "g_error_mag": 0.04090615,
+      "r_error_mag": 0.04435527,
+      "separation_minutes": 61.16659,
+      "g_minus_r_diff_mag": -0.13017,
+      "formal_error_mag": 0.060338
+    }
+  ],
+  "no_pair_120": [
+    "ZTF26abrmbme"
+  ],
+  "independent_sql_120": {
+    "agrees": true,
+    "accepted_pairs": 5,
+    "with_detections": 6
+  },
+  "pairs_10": [],
+  "no_pair_10": [
+    "ZTF26aaywncn",
+    "ZTF26abrluog",
+    "ZTF26abrmbme",
+    "ZTF26abwpoui",
+    "ZTF26acbujyo",
+    "ZTF26acbuouq"
+  ],
+  "independent_sql_10": {
+    "agrees": true,
+    "accepted_pairs": 0,
+    "with_detections": 6
+  },
+  "positive_detections_by_target": {
+    "ZTF26aaywncn": 5,
+    "ZTF26abrluog": 6,
+    "ZTF26abrmbme": 1,
+    "ZTF26abwpoui": 4,
+    "ZTF26acbujyo": 5,
+    "ZTF26acbuouq": 4
+  },
+  "positive_detections": 25,
+  "targets_with_positive_detections": 6,
+  "first_week_withheld_now_qualifies_120": [
+    "ZTF26abwpoui"
+  ]
+}

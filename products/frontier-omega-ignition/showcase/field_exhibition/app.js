@@ -4,6 +4,7 @@
   const el = id => document.getElementById(id);
   const query = new URLSearchParams(location.search);
   const pilot = JSON.parse(data.pilotReport);
+  const secondWeek = JSON.parse(data.secondWeekReport);
   let lang = query.get('lang') === 'fr' ? 'fr' : 'en';
   let candidate = 'sky';
   const cases = data.sky.cases;
@@ -147,6 +148,27 @@
     setBlob('receipt',current.receipt_text,'application/json',current.id+'.json');
   }
   let gap = 120;
+  function datedWindow(startUTC, endUTC) {
+    const date = new Intl.DateTimeFormat(lang === 'en' ? 'en-GB' : 'fr-CA',
+      {day:'numeric',month:'short',year:'numeric',timeZone:'UTC'});
+    const lastDay = new Date(Date.parse(endUTC) - 1);
+    return `${date.formatRange(new Date(startUTC), lastDay)} UTC`;
+  }
+  function fill(template, values) {
+    return template.replace(/\{([a-z]+)\}/g, (_, key) => values[key]);
+  }
+  function secondWeekFinding() {
+    const s = secondWeek;
+    el('second-window').textContent=`${t('repeatTitle')} · ${datedWindow(s.cutoff_utc,s.observation_end_utc)}. `;
+    el('second-outcome').textContent=fill(t('repeatCount'), {overlap:s.overlap_with_first.length, rows:s.holdout_rows,
+      wide:s.pairs_120.length, tight:s.pairs_10.length, targets:s.targets});
+    const paired=s.pairs_120.find(row=>s.overlap_with_first.includes(row.target_id) && data.sky.photometry.missing_pair.includes(row.target_id));
+    if (paired) {
+      const signed=new Intl.NumberFormat(lang,{maximumFractionDigits:6,signDisplay:'always'});
+      el('second-example').textContent=fill(t('repeatExample'), {id:paired.target_id, color:signed.format(paired.g_minus_r_diff_mag),
+        error:num(paired.formal_error_mag,6), minutes:num(paired.separation_minutes,5)});
+    }
+  }
   function photometry() {
     const source=data.sky.photometry;
     const kept=source.pairs.filter(p=>Math.abs(p.g_jd-p.r_jd)*1440<=gap);
@@ -157,7 +179,7 @@
       row.append(element('td',p.target_id),element('td',num(p.g_minus_r_diff_mag,6)),element('td',num(p.formal_error_mag,6)),element('td',num(p.separation_minutes,5)));
       body.append(row);
     }
-    el('photo-count').textContent=`${kept.length}/${source.targets} ${t('photoCount')}`;
+    el('photo-count').textContent=`${datedWindow(...source.window_utc)} · ${kept.length}/${source.targets} ${t('photoCount')}`;
     el('withheld').textContent=`${t('withheld')} · ${missing.join(', ')}`;
     // Every field is a numeric value, a source ID or an ISO time from the verified projection.
     const csv=[source.columns.join(','),...kept.map(row=>source.columns.map(k=>String(row[k])).join(','))].join('\r\n')+'\r\n';
@@ -222,7 +244,7 @@
     options('gap',data.sky.exploratory_color_counts.map(x=>x.max_gap_minutes),n=>`${num(n)} min`,gap);
     const loads=[...new Set(data.field.arms.map(a=>a.concurrency))].sort((a,b)=>a-b);
     options('service-load',loads,num,Number(el('service-load').value)||loads[0]);
-    opportunity();worklist();photometry();proof();
+    opportunity();worklist();photometry();secondWeekFinding();proof();
   }
   for(const id of ['budget','coverage']) el(id).addEventListener('change',()=>{
     current=cases.find(c=>c.budget===Number(el('budget').value)&&c.visits===Number(el('coverage').value));worklist();
@@ -230,6 +252,7 @@
   el('service-load').addEventListener('change',proof);
   el('gap').addEventListener('change',()=>{gap=Number(el('gap').value);photometry();});
   el('lang').addEventListener('click',()=>{lang=lang==='en'?'fr':'en';render();});
+  setBlob('second-source',data.secondWeekReport,'application/json','fink-second-week.json');
   setBlob('pilot-summary',data.pilotReport,'application/json','qwen-cpu-pilot.json');
   setBlob('download',Uint8Array.from(atob(data.archive.bytes),v=>v.charCodeAt(0)),'application/zip','FRONTIER_OMEGA_Observing_Night.zip');
   render();

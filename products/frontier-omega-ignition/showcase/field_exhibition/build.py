@@ -13,7 +13,7 @@ HERE = Path(__file__).resolve().parent
 PRODUCT = HERE.parents[1]
 sys.path.insert(0, str(PRODUCT))
 sys.path.insert(0, str(PRODUCT / "invention"))
-from photometry import FIELDS
+from photometry import FIELDS, stamp
 from plan import build
 from verify import verify
 from showcase.build import csp_hash, sha
@@ -27,12 +27,14 @@ PRIOR = "b10de326ae6dad744ba26aa76cd7e2ec613e09f4/docs/frontier-omega-ignition/c
 # Only these public research and implementation files may be published by the renderer.
 FILES = {
     "invention": ["REGISTRATION.md", "README.md", "geometry.py", "plan.py", "verify.py", "reference.py", "qualify.py", "photometry.py",
-                  "mission.json", "catalog.json", "public.json", "sources/fink-alerts.json", "sources/fink-holdout.json", "sources/holdout-source.json"],
+                  "mission.json", "catalog.json", "public.json", "sources/fink-alerts.json", "sources/alerts-source.json", "sources/fink-holdout.json", "sources/holdout-source.json"],
     "field_lab": ["README.md", "REGISTRATION.md", "field.py", "protocol.py", "capture.py", "fixture_server.py", "verify.py", "workload.json", "PUBLIC.json",
                   *[f"evidence/{target}-{route}.json" for target in ("nominal", "adverse") for route in ("field", "conventional")]],
     "successor_field": ["REGISTRATION.md", "cohort.py", "audit.py", "triage.py", "SOURCES.json", "OBSERVATION.json", "archive-queue.csv",
                         *[f"facts/{series}.{ext}" for series in ("forecast", "reference") for ext in ("txt", "html", "csv")]],
     "table_desk": ["table_desk.py"],
+    "invention/next_week": ["README.md", "RESULT.json", "replay.py", "photometry-120m.csv", "photometry-10m.csv",
+                            "sources/alerts.json", "sources/objects.json", "sources/alerts-source.json", "sources/holdout-source.json"],
     "field_trials": ["recorded/summary.json"],
     "discovery_field": ["catalog.json", "REGISTRATION.md"],
 }
@@ -109,7 +111,9 @@ def exhibition():
     sky["primary"] = next(c["id"] for c in sky["cases"] if c["budget"] == mission["max_slots"] and c["visits"] == mission["visits_per_target"])
     photo = sky["photometry"]
     photo["columns"] = FIELDS
-    photo["source_url"] = read(PRODUCT / "invention/sources/holdout-source.json")["query"]
+    first_acquisition = read(PRODUCT / "invention/sources/holdout-source.json")
+    photo["source_url"] = first_acquisition["query"]
+    photo["window_utc"] = [stamp(jd) for jd in first_acquisition["interval_jd"]]
     sky["holdout"] = {"detected": len(photo["first_detections"]), "total": photo["targets"],
                       "note": {"en": "The survey acquired these measurements independently of the worklist.",
                                "fr": "Le relevé a acquis ces mesures indépendamment du programme calculé."}}
@@ -128,7 +132,7 @@ def exhibition():
             or len(pilot["arms"]) != 4 or any(r["requests"] != 6 for r in pilot["arms"])):
         raise ValueError("Update the bilingual pilot scope for the changed cohort")
     archive = recipient()
-    payload = {"pilotReport":pilot_text, "sky": sky, "field":read(PRODUCT / "field_lab/PUBLIC.json"), "successor":successor["summary"],
+    payload = {"secondWeekReport":(PRODUCT / "invention/next_week/RESULT.json").read_text(), "pilotReport":pilot_text, "sky": sky, "field":read(PRODUCT / "field_lab/PUBLIC.json"), "successor":successor["summary"],
                "opportunities":opportunities(), "copy":copy, "archive":{"sha256":sha(archive), "bytes":base64.b64encode(archive).decode("ascii")},
                "command":"python3 -B replay.py", "related":[{"label": k,"url":ORIGIN + PRIOR + f} for k,f in
                          [("oldEndpoint","FRONTIER_LAB.html"),("oldReading","FRONTIER_IGNITION.html"),("oldPairing","PAIRING_LAB.html")]]}

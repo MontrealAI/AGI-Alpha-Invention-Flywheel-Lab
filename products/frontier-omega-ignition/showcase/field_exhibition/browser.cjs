@@ -28,6 +28,8 @@ async function qualifySerializedExports(filename) {
     assert.equal(sha(archive), payload.archive.sha256);
     await writeFile(path.join(temp, 'received.zip'), archive);
     py(['-m', 'zipfile', '-e', 'received.zip', '.'], temp);
+    const provenance='invention/sources/alerts-source.json';
+    assert.deepEqual(await readFile(path.join(temp,provenance)),await readFile(path.resolve(__dirname,'../..',provenance)));
     for (const item of payload.sky.cases) {
       // The visitor receives exact bytes. Independent tools may equate 32.0 with 32 when
       // they read and reserialize the mission. Both recipients must still verify.
@@ -43,8 +45,15 @@ async function qualifySerializedExports(filename) {
       assert.equal(await readFile(path.join(temp, item.id, 'worklist.csv'), 'utf8'), item.csv);
     }
     assert.equal(await readFile(path.join(temp, 'field_trials/recorded/summary.json'), 'utf8'), payload.pilotReport);
+    assert.equal(await readFile(path.join(temp, 'invention/next_week/RESULT.json'), 'utf8'), payload.secondWeekReport);
+    const repeat=JSON.parse(payload.secondWeekReport);
+    const expectedNew=repeat.pairs_120.filter(row=>repeat.overlap_with_first.includes(row.target_id)
+      && payload.sky.photometry.missing_pair.includes(row.target_id)).map(row=>row.target_id).sort();
+    const repeated=JSON.parse(py(['replay.py'],temp)).second_week;
+    assert.deepEqual(repeated,{targets:repeat.targets,pairs_120:repeat.pairs_120.length,
+      pairs_10:repeat.pairs_10.length,previously_withheld_now_measured:expectedNew});
     console.log(JSON.stringify({serialized_cases:payload.sky.cases.length, exact_and_normalized:true,
-      regenerated_csvs:payload.sky.cases.length, recorded_model_arms:JSON.parse(payload.pilotReport).arms.length}));
+      regenerated_csvs:payload.sky.cases.length, recorded_model_arms:JSON.parse(payload.pilotReport).arms.length, second_week:repeated}));
   } finally { await rm(temp, {recursive:true,force:true}); }
 }
 
@@ -56,6 +65,8 @@ async function main() {
   const product=path.resolve(__dirname,'../..');
   const scientific=await readJSON(path.join(product,'invention/public.json'));
   const field=await readJSON(path.join(product,'field_lab/PUBLIC.json'));
+  const repeatFile=path.join(product,'invention/next_week/RESULT.json');
+  const repeated=await readJSON(repeatFile);
   const pilotFile=path.join(product,'field_trials/recorded/summary.json');
   const pilot=await readJSON(pilotFile);
   const catalog=await readJSON(path.join(product,'discovery_field/catalog.json'));
@@ -98,9 +109,13 @@ async function main() {
         assert.deepEqual(await page.locator('#worklist tr td:nth-child(2)').allTextContents(),sample.slots.map(s=>s.target_id));
         assert.deepEqual(await page.locator('#worklist time').evaluateAll(rows=>rows.map(r=>r.dateTime)),sample.slots.map(s=>s.utc));
       }
+      const laterFinding=await page.locator('#second-outcome').innerText();
+      assert(laterFinding.includes(`${repeated.pairs_120.length}/${repeated.targets}`));
+      assert(laterFinding.includes(`${repeated.pairs_10.length}/${repeated.targets}`));
       for(const row of scientific.exploratory_color_counts) {
         await page.selectOption('#gap',String(row.max_gap_minutes));
         assert.equal(await page.locator('#photometry tr').count(),row.accepted_pairs);
+        assert.equal(await page.locator('#second-outcome').innerText(),laterFinding);
         const kept=scientific.photometry.pairs.filter(p=>1440*Math.abs(p.g_jd-p.r_jd)<=row.max_gap_minutes);
         assert.deepEqual(await page.locator('#photometry tr td:first-child').allTextContents(),kept.map(p=>p.target_id));
         const missing=scientific.targets.filter(t=>!kept.some(p=>p.target_id===t.id));
@@ -124,6 +139,9 @@ async function main() {
         }
       }
       if(locale==='en') {
+        const secondary=path.join(temp,'later.json');
+        await download(page,'#second-source',secondary);
+        assert.deepEqual(await readFile(secondary),await readFile(repeatFile));
         const pilotDownload=path.join(temp,'qwen-cpu-pilot.json');
         await download(page,'#pilot-summary',pilotDownload);
         assert.deepEqual(await readFile(pilotDownload),await readFile(pilotFile));
@@ -172,7 +190,7 @@ async function main() {
     assert.match(await page.locator('#plan-number').innerText(),/^0 /);
     assert.deepEqual(errors,[]);assert.deepEqual(requests,[]);
     console.log(JSON.stringify({browser:browser.version(),languages:['en','fr'],widths,registered_contracts:scientific.cases.length,
-      photometry_intervals:scientific.exploratory_color_counts.length,checked_downloads:5,external_requests:requests.length,
+      photometry_intervals:scientific.exploratory_color_counts.length,checked_downloads:6,external_requests:requests.length,
       page_errors:errors.length,recipient:checked}));
   } finally {await browser.close();await rm(temp,{recursive:true,force:true});}
 }
