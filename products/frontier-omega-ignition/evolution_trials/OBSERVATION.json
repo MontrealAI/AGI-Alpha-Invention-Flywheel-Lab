@@ -1,0 +1,236 @@
+{
+  "scope": "two frozen SLSN-candidate research cohorts on recorded event time",
+  "source_sha256": {
+    "nov01": {
+      "class_response": "bd0e18b40abb8d0371411481537485f065eb2b894df45ff1aa1fecf6422850ae",
+      "observation_file": "376d09cd44958c07be13641f0a3d6957607b54c1060eecc9ad2cda43badf0cad",
+      "class_descriptor": "5a50023cc996b443ae4d4aea6d599d184f76caea9aa94f5e614e462793e5c250",
+      "observation_descriptor": "d8677d608223f3119eb13c5f54d820d4f5f5b064da23cd1d5da310db75d91597"
+    },
+    "nov10": {
+      "class_response": "aea09a60cae1813b29d442e43549651b8aad710df9dc80394cbebeb1bdcaca5e",
+      "observation_file": "f212212ae9541e20723134551f3fdec59f977bda716c9e2f6f30edc4c2b40060",
+      "class_descriptor": "a55a4d43d46ea18cec4a838504d6ac7058b753c7f1fae0119ac9a91e65788fcc",
+      "observation_descriptor": "e3e82fd193ded81c804c80e01fdfbc35ad88effb958ff73e72b7c3f442292ced"
+    }
+  },
+  "decisions": 24,
+  "scientific_summary": {
+    "alerts": 0,
+    "persisted": 0,
+    "reversed": 0,
+    "not_reproduced": 0,
+    "coverage_gap": 0,
+    "right_censored": 0,
+    "awaiting_repeat": 0
+  },
+  "scientific_comparisons": {
+    "nov01": 26,
+    "nov10": 14
+  },
+  "ordinary_reuse": {
+    "resolved_issuance_dispositions": 2,
+    "status_counts": {
+      "insufficient_information": 22,
+      "no_trigger_proven": 2
+    },
+    "retained_distinct_detections": {
+      "nov01": 14,
+      "nov10": 10
+    }
+  },
+  "resource_observation": {
+    "clock": "perf_counter_ns and process_time plus child CPU; normal command startup included",
+    "order": "three cyclic rotations; one fresh process per producer and per recipient; local filesystem cache shared",
+    "python": "3.12.14",
+    "platform": "Linux x86_64",
+    "observations": {
+      "retained": [
+        {
+          "production": {
+            "wall_ms": 113.919,
+            "cpu_ms": 111.715
+          },
+          "recipient": {
+            "wall_ms": 63.58,
+            "cpu_ms": 63.584
+          },
+          "accepted_delivery": {
+            "wall_ms": 177.499,
+            "cpu_ms": 175.299
+          }
+        },
+        {
+          "production": {
+            "wall_ms": 105.754,
+            "cpu_ms": 105.666
+          },
+          "recipient": {
+            "wall_ms": 58.141,
+            "cpu_ms": 58.068
+          },
+          "accepted_delivery": {
+            "wall_ms": 163.895,
+            "cpu_ms": 163.734
+          }
+        },
+        {
+          "production": {
+            "wall_ms": 92.269,
+            "cpu_ms": 90.886
+          },
+          "recipient": {
+            "wall_ms": 64.637,
+            "cpu_ms": 64.509
+          },
+          "accepted_delivery": {
+            "wall_ms": 156.906,
+            "cpu_ms": 155.395
+          }
+        }
+      ],
+      "direct_sql": [
+        {
+          "production": {
+            "wall_ms": 67.317,
+            "cpu_ms": 67.24
+          },
+          "recipient": {
+            "wall_ms": 115.443,
+            "cpu_ms": 115.057
+          },
+          "accepted_delivery": {
+            "wall_ms": 182.76,
+            "cpu_ms": 182.297
+          }
+        },
+        {
+          "production": {
+            "wall_ms": 79.764,
+            "cpu_ms": 78.783
+          },
+          "recipient": {
+            "wall_ms": 112.251,
+            "cpu_ms": 112.1
+          },
+          "accepted_delivery": {
+            "wall_ms": 192.015,
+            "cpu_ms": 190.883
+          }
+        },
+        {
+          "production": {
+            "wall_ms": 47.693,
+            "cpu_ms": 47.721
+          },
+          "recipient": {
+            "wall_ms": 91.075,
+            "cpu_ms": 90.92
+          },
+          "accepted_delivery": {
+            "wall_ms": 138.768,
+            "cpu_ms": 138.641
+          }
+        }
+      ],
+      "ordinary_reuse": [
+        {
+          "production": {
+            "wall_ms": 46.354,
+            "cpu_ms": 39.748
+          },
+          "recipient": {
+            "wall_ms": 97.413,
+            "cpu_ms": 96.616
+          },
+          "accepted_delivery": {
+            "wall_ms": 143.767,
+            "cpu_ms": 136.364
+          }
+        },
+        {
+          "production": {
+            "wall_ms": 52.655,
+            "cpu_ms": 52.501
+          },
+          "recipient": {
+            "wall_ms": 100.344,
+            "cpu_ms": 100.248
+          },
+          "accepted_delivery": {
+            "wall_ms": 152.999,
+            "cpu_ms": 152.749
+          }
+        },
+        {
+          "production": {
+            "wall_ms": 54.437,
+            "cpu_ms": 54.409
+          },
+          "recipient": {
+            "wall_ms": 108.368,
+            "cpu_ms": 107.927
+          },
+          "accepted_delivery": {
+            "wall_ms": 162.805,
+            "cpu_ms": 162.336
+          }
+        }
+      ]
+    },
+    "median_ms": {
+      "retained": {
+        "production": {
+          "wall_ms": 105.754,
+          "cpu_ms": 105.666
+        },
+        "recipient": {
+          "wall_ms": 63.58,
+          "cpu_ms": 63.584
+        },
+        "accepted_delivery": {
+          "wall_ms": 163.895,
+          "cpu_ms": 163.734
+        }
+      },
+      "direct_sql": {
+        "production": {
+          "wall_ms": 67.317,
+          "cpu_ms": 67.24
+        },
+        "recipient": {
+          "wall_ms": 112.251,
+          "cpu_ms": 112.1
+        },
+        "accepted_delivery": {
+          "wall_ms": 182.76,
+          "cpu_ms": 182.297
+        }
+      },
+      "ordinary_reuse": {
+        "production": {
+          "wall_ms": 52.655,
+          "cpu_ms": 52.501
+        },
+        "recipient": {
+          "wall_ms": 100.344,
+          "cpu_ms": 100.248
+        },
+        "accepted_delivery": {
+          "wall_ms": 152.999,
+          "cpu_ms": 152.749
+        }
+      }
+    },
+    "canonical_sha256": {
+      "retained": "23fcd3abd2602c91ac78cbc4e030e70b5904c7e0fea60823f7240ccb26d76932",
+      "direct_sql": "23fcd3abd2602c91ac78cbc4e030e70b5904c7e0fea60823f7240ccb26d76932",
+      "ordinary_reuse": "bbce71311c4eaacbb65576820b5fcb18f831217f7ad11da7f54bda01d3b85437"
+    },
+    "delivered_bytes": {
+      "retained": 23167,
+      "direct_sql": 23167,
+      "ordinary_reuse": 5542
+    }
+  }
+}

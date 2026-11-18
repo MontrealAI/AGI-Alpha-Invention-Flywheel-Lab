@@ -1,0 +1,41 @@
+{
+  "publisher": "Fink broker / Zwicky Transient Facility",
+  "selection": {
+    "class": "Early SN Ia candidate",
+    "n": 300,
+    "startdate": "2026-10-18",
+    "stopdate": "2026-10-25",
+    "columns": "i:objectId,i:jd",
+    "output-format": "json"
+  },
+  "start_jd": "2461331.5",
+  "cutoff_jd": "2461338.5",
+  "selected_targets": [
+    "ZTF26abzgjdb",
+    "ZTF26acbeqap",
+    "ZTF26acbezdh",
+    "ZTF26acbsqrq"
+  ],
+  "requests": [
+    {
+      "file": "class.json.gz",
+      "url": "https://api.ztf.fink-portal.org/api/v1/latests?class=Early+SN+Ia+candidate&n=300&startdate=2026-10-18&stopdate=2026-10-25&columns=i%3AobjectId%2Ci%3Ajd&output-format=json",
+      "status": 200,
+      "observed_utc": "2026-11-18T04:14:11.511438+00:00",
+      "sha256": "8aa20464fa445c0cdb946006149b919cdc2e02685456878e34b44db12410d86c",
+      "bytes": 219,
+      "rows": 4,
+      "wall_seconds": 5.7918
+    },
+    {
+      "file": "objects-1.json.gz",
+      "url": "https://api.ztf.fink-portal.org/api/v1/objects?objectId=ZTF26abzgjdb%2CZTF26acbeqap%2CZTF26acbezdh%2CZTF26acbsqrq&columns=i%3AobjectId%2Ci%3Acandid%2Ci%3Ajd%2Ci%3Afid%2Ci%3Amagpsf%2Ci%3Asigmapsf%2Ci%3Aisdiffpos%2Ci%3Aprogramid%2Ci%3Afield%2Ci%3Arcid%2Ci%3Ajdstartref%2Ci%3Ajdendref%2Cd%3Amag_rate%2Cd%3Asigma_rate%2Cd%3Adelta_time%2Cd%3Afrom_upper&output-format=json",
+      "status": 200,
+      "observed_utc": "2026-11-18T04:14:17.732636+00:00",
+      "sha256": "d701e8cec9956e82ef13fb99bda4d88f86e7575bc984e80af0bdf3a4b40bf236",
+      "bytes": 33792,
+      "rows": 95,
+      "wall_seconds": 6.2149
+    }
+  ]
+}

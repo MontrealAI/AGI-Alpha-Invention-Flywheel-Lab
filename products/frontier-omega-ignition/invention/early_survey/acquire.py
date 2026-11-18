@@ -48,6 +48,17 @@ def capture(folder, basename, method, query):
                   'wall_seconds': round(elapsed, 4)}
 
 
+def capture_references(folder, names):
+    requests = []
+    for offset in range(0, len(names), 6):
+        batch = names[offset:offset + 6]
+        _, receipt = capture(folder, 'reference-' + str(offset // 6 + 1), 'objects',
+                             {'objectId': ','.join(batch), 'columns': 'i:objectId,i:candid,i:field,i:rcid,i:rfid',
+                              'output-format': 'json'})
+        requests.append(receipt)
+    (folder / 'reference-index.json').write_text(json.dumps(requests, indent=2) + '\n')
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument('directory', type=Path, help='New directory for this observation')
@@ -67,6 +78,7 @@ def main():
              'start_jd': str(START_JD), 'cutoff_jd': str(CUTOFF_JD), 'selected_targets': names,
              'requests': acquisitions}
     (args.directory / 'index.json').write_text(json.dumps(index, indent=2) + '\n')
+    capture_references(args.directory, names)
     print(json.dumps({'class_rows': len(classes), 'selected': len(names),
                       'object_rows': sum(r['rows'] for r in acquisitions[1:])}))
 

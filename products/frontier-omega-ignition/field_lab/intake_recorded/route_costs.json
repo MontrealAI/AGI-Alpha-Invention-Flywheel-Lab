@@ -1,0 +1,31 @@
+{
+  "scope": "30 measured passes over all 12 briefs after one warmup; local process elapsed ns per batch including JSON serialization. Direct serializes its evidence too. Checked model operates on completed, already captured outputs.",
+  "supplemental_cold_cli": {
+    "scope": "12 new Python processes reading the brief on stdin through parent re-opening and scoring of stdout. No HTTP or model call.",
+    "correct": 12,
+    "attempted": 12,
+    "wall_us": [
+      38144,
+      25604,
+      26922,
+      28336,
+      32668,
+      28211,
+      34830,
+      29894,
+      48719,
+      40593,
+      49778,
+      33098
+    ],
+    "p90_complete_us": 48719
+  },
+  "workload_sha256": "e99cf0ae927510164ce7a52307fe02a6f04e27e2fd2b0430ef0eccf744ebcd46",
+  "grammar_sha256": "c65d7c29ff564930885c468f8db6596b13d76d60ce9dcd7a0eb3fdbfc29cabe0",
+  "median_batch_ns": {
+    "incumbent": 44085.5,
+    "model_checked": 158024.5,
+    "direct": 131070.5
+  },
+  "complete_operating_cost": null
+}

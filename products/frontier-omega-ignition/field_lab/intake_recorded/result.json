@@ -1,0 +1,360 @@
+{
+  "grammar_sha256": "c65d7c29ff564930885c468f8db6596b13d76d60ce9dcd7a0eb3fdbfc29cabe0",
+  "fresh": {
+    "scope": "12 public authored briefs, once at concurrency 1",
+    "routes": {
+      "incumbent": {
+        "correct": 6,
+        "unsafe_ready": 4,
+        "unnecessary_defer": 2,
+        "wrong_contract": 0,
+        "invalid": 0,
+        "incomplete": 0,
+        "attempted": 12,
+        "expected_ready": 6,
+        "expected_defer": 6
+      },
+      "model": {
+        "correct": 7,
+        "unsafe_ready": 5,
+        "unnecessary_defer": 0,
+        "wrong_contract": 0,
+        "invalid": 0,
+        "incomplete": 0,
+        "attempted": 12,
+        "expected_ready": 6,
+        "expected_defer": 6
+      },
+      "model_checked": {
+        "correct": 12,
+        "unsafe_ready": 0,
+        "unnecessary_defer": 0,
+        "wrong_contract": 0,
+        "invalid": 0,
+        "incomplete": 0,
+        "attempted": 12,
+        "expected_ready": 6,
+        "expected_defer": 6
+      },
+      "direct": {
+        "correct": 12,
+        "unsafe_ready": 0,
+        "unnecessary_defer": 0,
+        "wrong_contract": 0,
+        "invalid": 0,
+        "incomplete": 0,
+        "attempted": 12,
+        "expected_ready": 6,
+        "expected_defer": 6
+      }
+    },
+    "cases": [
+      {
+        "id": "en-decimal",
+        "expected": "ready",
+        "direct_reason": "two-explicit-supported-bounds",
+        "incumbent": "correct",
+        "direct": "correct",
+        "model": "correct",
+        "model_checked": "correct"
+      },
+      {
+        "id": "fr-decimal",
+        "expected": "ready",
+        "direct_reason": "two-explicit-supported-bounds",
+        "incumbent": "correct",
+        "direct": "correct",
+        "model": "correct",
+        "model_checked": "correct"
+      },
+      {
+        "id": "en-reordered",
+        "expected": "ready",
+        "direct_reason": "two-explicit-supported-bounds",
+        "incumbent": "correct",
+        "direct": "correct",
+        "model": "correct",
+        "model_checked": "correct"
+      },
+      {
+        "id": "fr-reordered",
+        "expected": "ready",
+        "direct_reason": "two-explicit-supported-bounds",
+        "incumbent": "unnecessary_defer",
+        "direct": "correct",
+        "model": "correct",
+        "model_checked": "correct"
+      },
+      {
+        "id": "en-mixed-events",
+        "expected": "defer",
+        "direct_reason": "unrecognized-or-extra-clause",
+        "incumbent": "unsafe_ready",
+        "direct": "correct",
+        "model": "correct",
+        "model_checked": "correct"
+      },
+      {
+        "id": "fr-global",
+        "expected": "defer",
+        "direct_reason": "unrecognized-or-extra-clause",
+        "incumbent": "correct",
+        "direct": "correct",
+        "model": "unsafe_ready",
+        "model_checked": "correct"
+      },
+      {
+        "id": "en-complete-turn",
+        "expected": "defer",
+        "direct_reason": "unrecognized-or-extra-clause",
+        "incumbent": "unsafe_ready",
+        "direct": "correct",
+        "model": "unsafe_ready",
+        "model_checked": "correct"
+      },
+      {
+        "id": "fr-upper-rate",
+        "expected": "defer",
+        "direct_reason": "unrecognized-or-extra-clause",
+        "incumbent": "unsafe_ready",
+        "direct": "correct",
+        "model": "unsafe_ready",
+        "model_checked": "correct"
+      },
+      {
+        "id": "en-upper-rate",
+        "expected": "defer",
+        "direct_reason": "unrecognized-or-extra-clause",
+        "incumbent": "unsafe_ready",
+        "direct": "correct",
+        "model": "unsafe_ready",
+        "model_checked": "correct"
+      },
+      {
+        "id": "fr-p95",
+        "expected": "defer",
+        "direct_reason": "unrecognized-or-extra-clause",
+        "incumbent": "correct",
+        "direct": "correct",
+        "model": "unsafe_ready",
+        "model_checked": "correct"
+      },
+      {
+        "id": "en-fronted-bound",
+        "expected": "ready",
+        "direct_reason": "two-explicit-supported-bounds",
+        "incumbent": "unnecessary_defer",
+        "direct": "correct",
+        "model": "correct",
+        "model_checked": "correct"
+      },
+      {
+        "id": "fr-milliseconds",
+        "expected": "ready",
+        "direct_reason": "two-explicit-supported-bounds",
+        "incumbent": "correct",
+        "direct": "correct",
+        "model": "correct",
+        "model_checked": "correct"
+      }
+    ],
+    "raw_service": [
+      {
+        "concurrency": 1,
+        "peak_in_flight": 1,
+        "requests": 12,
+        "attempts": 12,
+        "transport_complete": 12,
+        "quality_accepted": 7,
+        "first_attempt_failures": 0,
+        "visible_count": 12,
+        "rate_count": 12,
+        "p90_first_visible_ms": 1412.659,
+        "p90_turn_ms": 23300.579,
+        "p10_delivered_tokens_per_turn_second": 0.883,
+        "meets_task_quality": false,
+        "meets_first_attempt_reliability": true,
+        "meets_interactive_performance": false,
+        "decision": "withhold"
+      }
+    ],
+    "cpu_seconds_including_children": 709.12191,
+    "wall_seconds": 246.629764,
+    "capture": {
+      "client_wall_us": 238648125,
+      "client_process_cpu_us": 113194,
+      "post_replay_tokenizer_us": 7835,
+      "tokenizer_http_queries": 12,
+      "usage_complete_attempts": 12,
+      "reported_prompt_tokens_on_those_attempts": 1737,
+      "reported_completion_tokens_on_those_attempts": 245,
+      "capture_process_includes_fixture_server_threads": false,
+      "child_cpu_us": 0,
+      "external_inference_server_cpu_us": null,
+      "all_in_cost": null
+    }
+  },
+  "historical": {
+    "routes": {
+      "incumbent": {
+        "correct": 24,
+        "unsafe_ready": 0,
+        "unnecessary_defer": 0,
+        "wrong_contract": 0,
+        "invalid": 0,
+        "incomplete": 0,
+        "attempted": 24,
+        "expected_ready": 16,
+        "expected_defer": 8
+      },
+      "model": {
+        "correct": 20,
+        "unsafe_ready": 4,
+        "unnecessary_defer": 0,
+        "wrong_contract": 0,
+        "invalid": 0,
+        "incomplete": 0,
+        "attempted": 24,
+        "expected_ready": 16,
+        "expected_defer": 8
+      },
+      "model_checked": {
+        "correct": 20,
+        "unsafe_ready": 0,
+        "unnecessary_defer": 4,
+        "wrong_contract": 0,
+        "invalid": 0,
+        "incomplete": 0,
+        "attempted": 24,
+        "expected_ready": 16,
+        "expected_defer": 8
+      },
+      "direct": {
+        "correct": 20,
+        "unsafe_ready": 0,
+        "unnecessary_defer": 4,
+        "wrong_contract": 0,
+        "invalid": 0,
+        "incomplete": 0,
+        "attempted": 24,
+        "expected_ready": 16,
+        "expected_defer": 8
+      }
+    },
+    "groups": [
+      {
+        "client": "field",
+        "concurrency": 1,
+        "correct": {
+          "incumbent": 6,
+          "model": 5,
+          "model_checked": 5,
+          "direct": 5
+        },
+        "changed_by_check": [
+          "fr-interactive",
+          "fr-aggregate"
+        ]
+      },
+      {
+        "client": "field",
+        "concurrency": 3,
+        "correct": {
+          "incumbent": 6,
+          "model": 5,
+          "model_checked": 5,
+          "direct": 5
+        },
+        "changed_by_check": [
+          "fr-interactive",
+          "fr-aggregate"
+        ]
+      },
+      {
+        "client": "conventional",
+        "concurrency": 1,
+        "correct": {
+          "incumbent": 6,
+          "model": 5,
+          "model_checked": 5,
+          "direct": 5
+        },
+        "changed_by_check": [
+          "fr-interactive",
+          "fr-aggregate"
+        ]
+      },
+      {
+        "client": "conventional",
+        "concurrency": 3,
+        "correct": {
+          "incumbent": 6,
+          "model": 5,
+          "model_checked": 5,
+          "direct": 5
+        },
+        "changed_by_check": [
+          "fr-interactive",
+          "fr-aggregate"
+        ]
+      }
+    ]
+  },
+  "independent_challenge": {
+    "source_sha256": "c15e794e1be138e3938641a289374d8d33604e8cf3020b8bf4eb866bbfd9f60c",
+    "cases": [
+      {
+        "id": "desk-en-phase",
+        "expected": "defer",
+        "direct_reason": "unrecognized-or-extra-clause",
+        "incumbent": "unsafe_ready",
+        "direct": "correct"
+      },
+      {
+        "id": "desk-fr-order",
+        "expected": "ready",
+        "direct_reason": "unrecognized-or-extra-clause",
+        "incumbent": "correct",
+        "direct": "unnecessary_defer"
+      },
+      {
+        "id": "desk-en-extra",
+        "expected": "ready",
+        "direct_reason": "unrecognized-or-extra-clause",
+        "incumbent": "correct",
+        "direct": "unnecessary_defer"
+      },
+      {
+        "id": "desk-fr-aggregate",
+        "expected": "defer",
+        "direct_reason": "unrecognized-or-extra-clause",
+        "incumbent": "correct",
+        "direct": "correct"
+      }
+    ],
+    "routes": {
+      "incumbent": {
+        "correct": 3,
+        "unsafe_ready": 1,
+        "unnecessary_defer": 0,
+        "wrong_contract": 0,
+        "invalid": 0,
+        "incomplete": 0,
+        "attempted": 4,
+        "expected_ready": 2,
+        "expected_defer": 2
+      },
+      "direct": {
+        "correct": 2,
+        "unsafe_ready": 0,
+        "unnecessary_defer": 2,
+        "wrong_contract": 0,
+        "invalid": 0,
+        "incomplete": 0,
+        "attempted": 4,
+        "expected_ready": 2,
+        "expected_defer": 2
+      }
+    }
+  }
+}

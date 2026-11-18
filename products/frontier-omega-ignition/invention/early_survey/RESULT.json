@@ -1,0 +1,568 @@
+{
+  "scope": "paired historical early-supernova candidate archive study",
+  "as_of_utc": "2026-11-01T00:00:00Z",
+  "cohorts": [
+    {
+      "id": "early_cold",
+      "start_utc": "2026-10-25T00:00:00Z",
+      "end_utc": "2026-11-01T00:00:00Z",
+      "targets": [
+        "ZTF26abzgjdb",
+        "ZTF26acbeqap",
+        "ZTF26acbezdh",
+        "ZTF26acbsqrq"
+      ],
+      "source_rows": 9,
+      "eligible_rows": 9,
+      "alerts": [],
+      "coverage": [
+        {
+          "target_id": "ZTF26abzgjdb",
+          "band": "g",
+          "eligible_detections": 0,
+          "comparisons": 0,
+          "status": "no_trigger",
+          "action": "monitor_archive",
+          "strongest_comparison": null
+        },
+        {
+          "target_id": "ZTF26abzgjdb",
+          "band": "r",
+          "eligible_detections": 0,
+          "comparisons": 0,
+          "status": "no_trigger",
+          "action": "monitor_archive",
+          "strongest_comparison": null
+        },
+        {
+          "target_id": "ZTF26acbeqap",
+          "band": "g",
+          "eligible_detections": 2,
+          "comparisons": 1,
+          "status": "no_trigger",
+          "action": "monitor_archive",
+          "strongest_comparison": {
+            "issued_utc": "2026-10-27T00:00:00Z",
+            "baseline": {
+              "candid": "3584357884215015002",
+              "utc": "2026-10-25T08:35:20.996Z",
+              "jd": 2461338.8578819,
+              "mag": 16.999908,
+              "error_mag": 0.054556154,
+              "field": 454,
+              "rcid": 42
+            },
+            "trigger": {
+              "candid": "3585316554215015003",
+              "utc": "2026-10-26T07:35:49.997Z",
+              "jd": 2461339.8165509,
+              "mag": 17.005257,
+              "error_mag": 0.04789396,
+              "field": 454,
+              "rcid": 42
+            },
+            "delta_mag": 0.005349,
+            "formal_error_mag": 0.072596,
+            "rate_mag_per_day": 0.00558,
+            "gap_days": 0.958669,
+            "gates": {
+              "change": false,
+              "rate": false,
+              "formal_error": false
+            }
+          }
+        },
+        {
+          "target_id": "ZTF26acbeqap",
+          "band": "r",
+          "eligible_detections": 2,
+          "comparisons": 1,
+          "status": "no_trigger",
+          "action": "monitor_archive",
+          "strongest_comparison": {
+            "issued_utc": "2026-10-27T00:00:00Z",
+            "baseline": {
+              "candid": "3584381804215015003",
+              "utc": "2026-10-25T09:09:48.003Z",
+              "jd": 2461338.8818056,
+              "mag": 16.938019,
+              "error_mag": 0.034804787,
+              "field": 454,
+              "rcid": 42
+            },
+            "trigger": {
+              "candid": "3585399284215015007",
+              "utc": "2026-10-26T09:34:57.999Z",
+              "jd": 2461339.8992824,
+              "mag": 16.90769,
+              "error_mag": 0.034040462,
+              "field": 454,
+              "rcid": 42
+            },
+            "delta_mag": -0.030329,
+            "formal_error_mag": 0.048684,
+            "rate_mag_per_day": -0.029808,
+            "gap_days": 1.017477,
+            "gates": {
+              "change": false,
+              "rate": false,
+              "formal_error": false
+            }
+          }
+        },
+        {
+          "target_id": "ZTF26acbezdh",
+          "band": "g",
+          "eligible_detections": 1,
+          "comparisons": 0,
+          "status": "no_trigger",
+          "action": "monitor_archive",
+          "strongest_comparison": null
+        },
+        {
+          "target_id": "ZTF26acbezdh",
+          "band": "r",
+          "eligible_detections": 1,
+          "comparisons": 0,
+          "status": "no_trigger",
+          "action": "monitor_archive",
+          "strongest_comparison": null
+        },
+        {
+          "target_id": "ZTF26acbsqrq",
+          "band": "g",
+          "eligible_detections": 1,
+          "comparisons": 0,
+          "status": "no_trigger",
+          "action": "monitor_archive",
+          "strongest_comparison": null
+        },
+        {
+          "target_id": "ZTF26acbsqrq",
+          "band": "r",
+          "eligible_detections": 2,
+          "comparisons": 1,
+          "status": "no_trigger",
+          "action": "monitor_archive",
+          "strongest_comparison": {
+            "issued_utc": "2026-10-27T00:00:00Z",
+            "baseline": {
+              "candid": "3584380850015015012",
+              "utc": "2026-10-25T09:08:26.001Z",
+              "jd": 2461338.8808565,
+              "mag": 18.946753,
+              "error_mag": 0.12419873,
+              "field": 453,
+              "rcid": 0
+            },
+            "trigger": {
+              "candid": "3585431120015015028",
+              "utc": "2026-10-26T10:20:49.001Z",
+              "jd": 2461339.9311227,
+              "mag": 18.94018,
+              "error_mag": 0.13121894,
+              "field": 453,
+              "rcid": 0
+            },
+            "delta_mag": -0.006573,
+            "formal_error_mag": 0.180676,
+            "rate_mag_per_day": -0.006258,
+            "gap_days": 1.050266,
+            "gates": {
+              "change": false,
+              "rate": false,
+              "formal_error": false
+            }
+          }
+        }
+      ],
+      "source_sha256": {
+        "archive_index": "80829974c96cfae41ff587d5fad038229d05e50ae04ec99d80accd01c5b6fe7e",
+        "reference_index": "e5740fff884ba87a3779b373e2ed09e58d37fcd177c467e2c0ae22037c057ddb"
+      }
+    },
+    {
+      "id": "early_warm",
+      "start_utc": "2026-10-25T00:00:00Z",
+      "end_utc": "2026-11-01T00:00:00Z",
+      "targets": [
+        "ZTF26abzgjdb",
+        "ZTF26acbeqap",
+        "ZTF26acbezdh",
+        "ZTF26acbsqrq"
+      ],
+      "source_rows": 9,
+      "eligible_rows": 9,
+      "alerts": [
+        {
+          "target_id": "ZTF26acbezdh",
+          "band": "g",
+          "direction": "brightening",
+          "issued_utc": "2026-10-26T00:00:00Z",
+          "baseline": {
+            "candid": "3579392285815015017",
+            "utc": "2026-10-20T09:24:53.000Z",
+            "jd": 2461333.8922801,
+            "mag": 17.330221,
+            "error_mag": 0.041944318,
+            "field": 505,
+            "rcid": 58
+          },
+          "trigger": {
+            "candid": "3584356425815015004",
+            "utc": "2026-10-25T08:33:14.999Z",
+            "jd": 2461338.8564236,
+            "mag": 16.493477,
+            "error_mag": 0.037273757,
+            "field": 505,
+            "rcid": 58
+          },
+          "delta_mag": -0.836744,
+          "formal_error_mag": 0.056113,
+          "rate_mag_per_day": -0.168558,
+          "gap_days": 4.964144,
+          "gates": {
+            "change": true,
+            "rate": true,
+            "formal_error": true
+          },
+          "followup": null,
+          "followup_delta_mag": null,
+          "followup_formal_error_mag": null,
+          "status": "coverage_gap",
+          "deadline_utc": "2026-10-29T00:00:00Z",
+          "action": "seek_missing_in_window_data",
+          "reference_image": {
+            "status": "matched",
+            "rfids": [
+              "505120158",
+              "505120158"
+            ]
+          },
+          "broker_at_trigger": {
+            "rate_mag_per_day": -0.1623967093,
+            "sigma_mag_per_day": 0.0109539559,
+            "gap_days": 4.9641435002,
+            "from_upper": false
+          }
+        },
+        {
+          "target_id": "ZTF26acbezdh",
+          "band": "r",
+          "direction": "brightening",
+          "issued_utc": "2026-10-26T00:00:00Z",
+          "baseline": {
+            "candid": "3580268845815015008",
+            "utc": "2026-10-21T06:27:08.000Z",
+            "jd": 2461334.7688426,
+            "mag": 17.056013,
+            "error_mag": 0.043045446,
+            "field": 505,
+            "rcid": 58
+          },
+          "trigger": {
+            "candid": "3584382785815015006",
+            "utc": "2026-10-25T09:11:13.004Z",
+            "jd": 2461338.8827894,
+            "mag": 16.498058,
+            "error_mag": 0.030554708,
+            "field": 505,
+            "rcid": 58
+          },
+          "delta_mag": -0.557955,
+          "formal_error_mag": 0.052787,
+          "rate_mag_per_day": -0.135625,
+          "gap_days": 4.113947,
+          "gates": {
+            "change": true,
+            "rate": true,
+            "formal_error": true
+          },
+          "followup": null,
+          "followup_delta_mag": null,
+          "followup_formal_error_mag": null,
+          "status": "coverage_gap",
+          "deadline_utc": "2026-10-29T00:00:00Z",
+          "action": "seek_missing_in_window_data",
+          "reference_image": {
+            "status": "matched",
+            "rfids": [
+              "505120258",
+              "505120258"
+            ]
+          },
+          "broker_at_trigger": {
+            "rate_mag_per_day": -0.1323207473,
+            "sigma_mag_per_day": 0.0126473192,
+            "gap_days": 4.1139468001,
+            "from_upper": false
+          }
+        }
+      ],
+      "coverage": [
+        {
+          "target_id": "ZTF26abzgjdb",
+          "band": "g",
+          "eligible_detections": 0,
+          "comparisons": 0,
+          "status": "no_trigger",
+          "action": "monitor_archive",
+          "strongest_comparison": null
+        },
+        {
+          "target_id": "ZTF26abzgjdb",
+          "band": "r",
+          "eligible_detections": 0,
+          "comparisons": 0,
+          "status": "no_trigger",
+          "action": "monitor_archive",
+          "strongest_comparison": null
+        },
+        {
+          "target_id": "ZTF26acbeqap",
+          "band": "g",
+          "eligible_detections": 2,
+          "comparisons": 2,
+          "status": "no_trigger",
+          "action": "monitor_archive",
+          "strongest_comparison": {
+            "issued_utc": "2026-10-27T00:00:00Z",
+            "baseline": {
+              "candid": "3583489794215015003",
+              "utc": "2026-10-24T11:45:18.002Z",
+              "jd": 2461337.9897917,
+              "mag": 16.988367,
+              "error_mag": 0.037737273,
+              "field": 454,
+              "rcid": 42
+            },
+            "trigger": {
+              "candid": "3585316554215015003",
+              "utc": "2026-10-26T07:35:49.997Z",
+              "jd": 2461339.8165509,
+              "mag": 17.005257,
+              "error_mag": 0.04789396,
+              "field": 454,
+              "rcid": 42
+            },
+            "delta_mag": 0.01689,
+            "formal_error_mag": 0.060975,
+            "rate_mag_per_day": 0.009246,
+            "gap_days": 1.826759,
+            "gates": {
+              "change": false,
+              "rate": false,
+              "formal_error": false
+            }
+          }
+        },
+        {
+          "target_id": "ZTF26acbeqap",
+          "band": "r",
+          "eligible_detections": 2,
+          "comparisons": 2,
+          "status": "no_trigger",
+          "action": "monitor_archive",
+          "strongest_comparison": {
+            "issued_utc": "2026-10-26T00:00:00Z",
+            "baseline": {
+              "candid": "3579304524215015009",
+              "utc": "2026-10-20T07:18:31.003Z",
+              "jd": 2461333.8045255,
+              "mag": 17.263813,
+              "error_mag": 0.037968643,
+              "field": 454,
+              "rcid": 42
+            },
+            "trigger": {
+              "candid": "3584381804215015003",
+              "utc": "2026-10-25T09:09:48.003Z",
+              "jd": 2461338.8818056,
+              "mag": 16.938019,
+              "error_mag": 0.034804787,
+              "field": 454,
+              "rcid": 42
+            },
+            "delta_mag": -0.325794,
+            "formal_error_mag": 0.051507,
+            "rate_mag_per_day": -0.064167,
+            "gap_days": 5.07728,
+            "gates": {
+              "change": true,
+              "rate": false,
+              "formal_error": true
+            }
+          }
+        },
+        {
+          "target_id": "ZTF26acbezdh",
+          "band": "g",
+          "eligible_detections": 1,
+          "comparisons": 1,
+          "status": "coverage_gap",
+          "action": "seek_missing_in_window_data",
+          "strongest_comparison": {
+            "issued_utc": "2026-10-26T00:00:00Z",
+            "baseline": {
+              "candid": "3579392285815015017",
+              "utc": "2026-10-20T09:24:53.000Z",
+              "jd": 2461333.8922801,
+              "mag": 17.330221,
+              "error_mag": 0.041944318,
+              "field": 505,
+              "rcid": 58
+            },
+            "trigger": {
+              "candid": "3584356425815015004",
+              "utc": "2026-10-25T08:33:14.999Z",
+              "jd": 2461338.8564236,
+              "mag": 16.493477,
+              "error_mag": 0.037273757,
+              "field": 505,
+              "rcid": 58
+            },
+            "delta_mag": -0.836744,
+            "formal_error_mag": 0.056113,
+            "rate_mag_per_day": -0.168558,
+            "gap_days": 4.964144,
+            "gates": {
+              "change": true,
+              "rate": true,
+              "formal_error": true
+            }
+          }
+        },
+        {
+          "target_id": "ZTF26acbezdh",
+          "band": "r",
+          "eligible_detections": 1,
+          "comparisons": 1,
+          "status": "coverage_gap",
+          "action": "seek_missing_in_window_data",
+          "strongest_comparison": {
+            "issued_utc": "2026-10-26T00:00:00Z",
+            "baseline": {
+              "candid": "3580268845815015008",
+              "utc": "2026-10-21T06:27:08.000Z",
+              "jd": 2461334.7688426,
+              "mag": 17.056013,
+              "error_mag": 0.043045446,
+              "field": 505,
+              "rcid": 58
+            },
+            "trigger": {
+              "candid": "3584382785815015006",
+              "utc": "2026-10-25T09:11:13.004Z",
+              "jd": 2461338.8827894,
+              "mag": 16.498058,
+              "error_mag": 0.030554708,
+              "field": 505,
+              "rcid": 58
+            },
+            "delta_mag": -0.557955,
+            "formal_error_mag": 0.052787,
+            "rate_mag_per_day": -0.135625,
+            "gap_days": 4.113947,
+            "gates": {
+              "change": true,
+              "rate": true,
+              "formal_error": true
+            }
+          }
+        },
+        {
+          "target_id": "ZTF26acbsqrq",
+          "band": "g",
+          "eligible_detections": 1,
+          "comparisons": 1,
+          "status": "no_trigger",
+          "action": "monitor_archive",
+          "strongest_comparison": {
+            "issued_utc": "2026-10-26T00:00:00Z",
+            "baseline": {
+              "candid": "3583476930015015007",
+              "utc": "2026-10-24T11:26:47.002Z",
+              "jd": 2461337.9769329,
+              "mag": 19.049917,
+              "error_mag": 0.1564273,
+              "field": 453,
+              "rcid": 0
+            },
+            "trigger": {
+              "candid": "3584355940015015004",
+              "utc": "2026-10-25T08:32:34.002Z",
+              "jd": 2461338.8559491,
+              "mag": 18.94217,
+              "error_mag": 0.13444322,
+              "field": 453,
+              "rcid": 0
+            },
+            "delta_mag": -0.107747,
+            "formal_error_mag": 0.206263,
+            "rate_mag_per_day": -0.122577,
+            "gap_days": 0.879016,
+            "gates": {
+              "change": false,
+              "rate": true,
+              "formal_error": false
+            }
+          }
+        },
+        {
+          "target_id": "ZTF26acbsqrq",
+          "band": "r",
+          "eligible_detections": 2,
+          "comparisons": 2,
+          "status": "no_trigger",
+          "action": "monitor_archive",
+          "strongest_comparison": {
+            "issued_utc": "2026-10-26T00:00:00Z",
+            "baseline": {
+              "candid": "3580269310015015009",
+              "utc": "2026-10-21T06:27:48.997Z",
+              "jd": 2461334.7693171,
+              "mag": 19.41601,
+              "error_mag": 0.12427359,
+              "field": 453,
+              "rcid": 0
+            },
+            "trigger": {
+              "candid": "3584380850015015012",
+              "utc": "2026-10-25T09:08:26.001Z",
+              "jd": 2461338.8808565,
+              "mag": 18.946753,
+              "error_mag": 0.12419873,
+              "field": 453,
+              "rcid": 0
+            },
+            "delta_mag": -0.469257,
+            "formal_error_mag": 0.175696,
+            "rate_mag_per_day": -0.114132,
+            "gap_days": 4.111539,
+            "gates": {
+              "change": true,
+              "rate": true,
+              "formal_error": false
+            }
+          }
+        }
+      ],
+      "eligible_baseline_history_rows": 28,
+      "source_sha256": {
+        "archive_index": "80829974c96cfae41ff587d5fad038229d05e50ae04ec99d80accd01c5b6fe7e",
+        "reference_index": "e5740fff884ba87a3779b373e2ed09e58d37fcd177c467e2c0ae22037c057ddb"
+      }
+    }
+  ],
+  "summary": {
+    "early_cold": {
+      "comparisons": 3,
+      "alerts": 0
+    },
+    "early_warm": {
+      "comparisons": 9,
+      "alerts": 2,
+      "coverage_gap": 2
+    }
+  }
+}
