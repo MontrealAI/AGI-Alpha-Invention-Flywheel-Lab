@@ -1,0 +1,89 @@
+{
+  "schema": "frontier-ignition-commercial-simulation/1",
+  "classification": "SIMULATED ONLY. No real demand, acceptance, payment, contract or prize decision.",
+  "source_revision": "a44aa8535e7899aa197d6e17f567e86547792536",
+  "private_pilot": {
+    "counterparty": "Fictional Aster Imaging Lab (invented for simulation)",
+    "scope": "One offline compatibility check on an authorized unsigned-byte input against both pinned conventional operators.",
+    "incumbent": "Self-service using the freely available upstream operators.",
+    "offer_assumption_usd": 250,
+    "fee_assumption_usd": 8,
+    "fee_provenance": "Illustrative assumption, not a Stripe quote.",
+    "events": [
+      {
+        "stage": "identified",
+        "day_after_start": 0,
+        "commercial_evidence": "fictional"
+      },
+      {
+        "stage": "validated",
+        "day_after_start": 1,
+        "commercial_evidence": "fictional"
+      },
+      {
+        "stage": "offered",
+        "day_after_start": 2,
+        "commercial_evidence": "fictional"
+      },
+      {
+        "stage": "accepted",
+        "day_after_start": 4,
+        "commercial_evidence": "fictional"
+      },
+      {
+        "stage": "delivered",
+        "day_after_start": 8,
+        "commercial_evidence": "fictional"
+      },
+      {
+        "stage": "paid",
+        "day_after_start": 12,
+        "commercial_evidence": "fictional"
+      }
+    ],
+    "working_artifact": {
+      "type": "Offline scroll normalizer",
+      "sha256": "03f8dbea716abd7108a03b2c947b21a13eb36617750c601733b85ae3b04de7e3",
+      "measured_input": "100 self-authored bytes",
+      "source_input_sha256": "e1719616d0b17bb6cd6d1958990bce1c397db9e30be39fa309e5dc1291b45f93",
+      "observed_output_sha256": "35c9ce3e0ea2add5b280da45ffa9b15af0f66cf54474e3234f2fe625e81c50e3",
+      "compared_arms": [
+        "base",
+        "candidate",
+        "incumbent"
+      ],
+      "outcome": "Three operator outputs matched byte for byte on the synthetic input."
+    },
+    "simulated_funds": {
+      "currency": "USD",
+      "gross_minor": 25000,
+      "assumed_fee_minor": 800,
+      "net_before_fulfillment_costs_minor": 24200,
+      "bank_payout_verified": false,
+      "real_cash_collected_minor": 0,
+      "net_profit": "unmeasured"
+    },
+    "limits": "The price, demand, buyer decisions, settlement and elapsed commercial days are assumptions. This run measures only software behavior.",
+    "replay": "Second reconciliation returned the same receipt and journal length without another provider request."
+  },
+  "prize_no_award_case": {
+    "mechanism": "Discretionary scientific competition, evaluated separately from any service sale.",
+    "hypothesis": "Even after a hypothetical eligible submission, the sponsor selects another contribution.",
+    "conditional_prize_usd": 0,
+    "real_submission": false,
+    "real_adjudication_observed": false,
+    "service_sale": false,
+    "prize_probability": "unestimated",
+    "real_cash_collected_usd": 0
+  },
+  "isolation": {
+    "sqlite_open_guard": "All SQLite connection paths were under one newly created temporary directory.",
+    "guarded_unique_local_sqlite_paths": 3,
+    "production_journals_opened_by_simulator": 0,
+    "simulated_transport_requests": 2,
+    "provider_requests_sent": 0,
+    "real_credentials_used": false,
+    "parent_process_socket_or_dns_attempts": 0,
+    "disposable_journal_removed_on_exit": true
+  }
+}

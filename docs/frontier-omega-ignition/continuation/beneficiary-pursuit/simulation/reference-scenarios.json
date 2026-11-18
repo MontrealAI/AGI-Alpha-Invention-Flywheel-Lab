@@ -1,0 +1,110 @@
+{
+  "status": "SIMULATION_ONLY",
+  "code_candidate": "a44aa8535e7899aa197d6e17f567e86547792536",
+  "measured": {
+    "source": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/a44aa8535e7899aa197d6e17f567e86547792536/products/frontier-omega-ignition/invention/scroll_normalization/production_window/sample",
+    "tested": 24,
+    "component_ms": [
+      208.2684,
+      92.823
+    ],
+    "sparse_window_indices": [
+      22,
+      30
+    ],
+    "sparse_share_of_observed_savings": 0.987314
+  },
+  "upstream_observed": {
+    "source": "https://github.com/ScrollPrize/villa/pull/2521",
+    "reader_wall_s": 41.2,
+    "input_wait_s": 3.7,
+    "hardware": "RTX 3080, PHerc0139 w054, batch size 32"
+  },
+  "assumptions": {
+    "trial_full_output_parity": "assumed for adoption sensitivity; full recipient workload untested",
+    "sample_component_gain_transports_to_exposed_wait": true,
+    "required_full_run_percent": 3.0,
+    "assumed_uses": 10000,
+    "assumed_avoidable_USD_per_hour": 1.0,
+    "assumed_adoption_cost_USD": 250.0,
+    "nonlinear_batch_stalls": "unmodeled",
+    "beneficiary_response_observed": false
+  },
+  "sensitivity": [
+    {
+      "label": "fully hidden",
+      "wait_share_assumption": 0.0,
+      "overhead_seconds_assumption": 0.0,
+      "modeled_reader_seconds": 41.2,
+      "modeled_seconds_saved": 0.0,
+      "modeled_percent_reduction": 0.0,
+      "meets_assumed_time_threshold_if_outputs_match": false,
+      "modeled_machine_value_usd_at_assumed_usage": 0.0,
+      "runs_to_recover_assumed_adoption_cost": null
+    },
+    {
+      "label": "one-quarter exposed",
+      "wait_share_assumption": 0.25,
+      "overhead_seconds_assumption": 0.0,
+      "modeled_reader_seconds": 40.687263,
+      "modeled_seconds_saved": 0.512737,
+      "modeled_percent_reduction": 1.244508,
+      "meets_assumed_time_threshold_if_outputs_match": false,
+      "modeled_machine_value_usd_at_assumed_usage": 1.424271,
+      "runs_to_recover_assumed_adoption_cost": 1755285
+    },
+    {
+      "label": "half exposed",
+      "wait_share_assumption": 0.5,
+      "overhead_seconds_assumption": 0.0,
+      "modeled_reader_seconds": 40.174525,
+      "modeled_seconds_saved": 1.025475,
+      "modeled_percent_reduction": 2.489016,
+      "meets_assumed_time_threshold_if_outputs_match": false,
+      "modeled_machine_value_usd_at_assumed_usage": 2.848541,
+      "runs_to_recover_assumed_adoption_cost": 877643
+    },
+    {
+      "label": "all exposed",
+      "wait_share_assumption": 1.0,
+      "overhead_seconds_assumption": 0.0,
+      "modeled_reader_seconds": 39.14905,
+      "modeled_seconds_saved": 2.05095,
+      "modeled_percent_reduction": 4.978033,
+      "meets_assumed_time_threshold_if_outputs_match": true,
+      "modeled_machine_value_usd_at_assumed_usage": 5.697082,
+      "runs_to_recover_assumed_adoption_cost": 438822
+    }
+  ],
+  "selected": {
+    "label": "selected assumptions",
+    "wait_share_assumption": 0.25,
+    "overhead_seconds_assumption": 0.0,
+    "modeled_reader_seconds": 40.687263,
+    "modeled_seconds_saved": 0.512737,
+    "modeled_percent_reduction": 1.244508,
+    "meets_assumed_time_threshold_if_outputs_match": false,
+    "modeled_machine_value_usd_at_assumed_usage": 1.424271,
+    "runs_to_recover_assumed_adoption_cost": 1755285
+  },
+  "selected_hypothetical_disposition": "retain_incumbent",
+  "illustrative_regression": {
+    "label": "hidden gain and added quarter-second cost",
+    "wait_share_assumption": 0.0,
+    "overhead_seconds_assumption": 0.25,
+    "modeled_reader_seconds": 41.45,
+    "modeled_seconds_saved": -0.25,
+    "modeled_percent_reduction": -0.606796,
+    "meets_assumed_time_threshold_if_outputs_match": false,
+    "modeled_machine_value_usd_at_assumed_usage": -0.694444,
+    "runs_to_recover_assumed_adoption_cost": null
+  },
+  "economic_state": {
+    "real_recipient_stage": "identified",
+    "simulated_commercial_outcome": "no payment assumed",
+    "simulated_receipts_usd": 0,
+    "simulated_award_probability": null,
+    "real_transaction_reference": null,
+    "whole_run_executed_by_simulator": false
+  }
+}
