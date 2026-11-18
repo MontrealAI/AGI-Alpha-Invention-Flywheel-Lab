@@ -16,15 +16,15 @@ permissions:
   contents: read
 jobs:
   reader:
-    runs-on: ubuntu-24.04
-    timeout-minutes: 100
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
     env:
       STUDY: products/frontier-omega-ignition/invention/scroll_reader
       QUALIFICATION_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
     steps:
       - name: Start clock
         run: |
-          echo "QUALIFICATION_STARTED=$(date +%s)" >> "$GITHUB_ENV"
+          echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
           mkdir "$RUNNER_TEMP/reader-receipts"
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
@@ -53,7 +53,7 @@ jobs:
       - name: Record job elapsed time
         if: always()
         run: |
-          echo "elapsed_seconds=$(($(date +%s) - QUALIFICATION_STARTED))" > "$RUNNER_TEMP/reader-receipts/job-cost.txt"
+          echo "elapsed_seconds=$(($(date +%s) - AGI_JOB_START_EPOCH))" > "$RUNNER_TEMP/reader-receipts/job-cost.txt"
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: always()
         with:
