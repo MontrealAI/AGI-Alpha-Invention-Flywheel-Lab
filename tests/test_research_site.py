@@ -19,14 +19,26 @@ class ResearchSiteTests(unittest.TestCase):
         self.source = self.root / 'source'
         self.source.mkdir()
         for name in site.FILES:
+            (self.source / name).parent.mkdir(exist_ok=True, parents=True)
             shutil.copyfile(ROOT / 'docs/research' / name, self.source / name)
 
     def test_build_is_allowlisted_and_preserves_bytes(self):
         (self.source / 'private-account.json').write_text('not for publication')
         out = site.build(self.source, self.root / 'site')
-        self.assertEqual({p.name for p in out.iterdir()}, set(site.FILES) | {'.nojekyll'})
+        self.assertEqual({p.relative_to(out).as_posix() for p in out.rglob('*') if p.is_file()}, set(site.FILES) | {'.nojekyll'})
         for name in site.FILES:
             self.assertEqual((self.source / name).read_bytes(), (out / name).read_bytes())
+
+    def test_ignition_pages_exclude_private_files_and_reject_symlinked_subdirectory(self):
+        (self.source / 'ignition/private.json').write_text('private')
+        output = site.build(self.source, self.root / 'published')
+        self.assertEqual({p.name for p in (output / 'ignition').iterdir()},
+                         {'index.html', 'demo.html', 'public.js', 'studio.css'})
+        private = self.root / 'elsewhere'
+        (self.source / 'ignition').rename(private)
+        (self.source / 'ignition').symlink_to(private, target_is_directory=True)
+        with self.assertRaisesRegex(ValueError, 'regular'):
+            site.validate(self.source)
 
     def test_genesis_stable_reader_features_v2_and_preserves_prior_access(self):
         import json
@@ -110,7 +122,7 @@ class ResearchSiteTests(unittest.TestCase):
         collection = (self.source / 'out-series.html').read_text()
         homepage = (self.source / 'index.html').read_text()
         self.assertEqual(len(site.PAPERS), 29)
-        self.assertEqual(len(site.PAGES), 36)
+        self.assertEqual(len(site.PAGES), 38)
         self.assertTrue({'alpha-genesis-live.html', 'alpha-genesis-live-studio.html'}.issubset(site.PAGES))
         self.assertIn('out-series.html', homepage)
         for slug in slugs:
@@ -429,11 +441,16 @@ class ResearchSiteTests(unittest.TestCase):
             self.assertIn('name="viewport"', text)
             french = name in ('continuity-omega-fr.html', 'continuity-omega-media-fr.html')
             self.assertIn('Aller au contenu' if french else 'Skip to content', text)
-            styles = text if name != 'studio.html' else (self.source / 'alpha.css').read_text()
+            styles = text
+            if name == 'studio.html':
+                styles = (self.source / 'alpha.css').read_text()
+            elif name in ('ignition/index.html', 'ignition/demo.html'):
+                self.assertIn('href="studio.css"', text)
+                styles = (self.source / 'ignition/studio.css').read_text()
             self.assertIn('prefers-reduced-motion', styles)
             self.assertIn('@media(max-width:', styles)
             self.assertNotIn('↗', text)
-            if name not in ('frontier-conclave.html', 'index.html', 'out-series.html', 'studio.html', 'continuity-omega-media.html', 'continuity-omega-media-fr.html', 'alpha-genesis-live.html', 'alpha-genesis-live-studio.html'):
+            if name not in ('ignition/index.html', 'ignition/demo.html', 'frontier-conclave.html', 'index.html', 'out-series.html', 'studio.html', 'continuity-omega-media.html', 'continuity-omega-media-fr.html', 'alpha-genesis-live.html', 'alpha-genesis-live-studio.html'):
                 self.assertIn('type="application/pdf"', text)
                 self.assertIn('download>', text)
                 self.assertIn('Votre navigateur n’affiche pas les PDF intégrés' if french else 'Your browser does not display embedded PDFs', text)

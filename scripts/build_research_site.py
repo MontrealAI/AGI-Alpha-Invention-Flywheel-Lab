@@ -4,6 +4,7 @@ import argparse
 import hashlib
 from html.parser import HTMLParser
 import json
+import posixpath
 from pathlib import Path
 import shutil
 from urllib.parse import unquote, urlsplit
@@ -55,6 +56,8 @@ ASSETS += CONTINUITY_MEDIA + ('continuity-omega-media-manifest.json',)
 PAGES += ('frontier-conclave.html',)
 ASSETS += ('frontier-conclave-hero.png', 'frontier-conclave-salon.png', 'FRONTIER_CONCLAVE_COMPLETE.zip')
 PAGES += ('alpha-genesis-live.html', 'alpha-genesis-live-studio.html')
+PAGES += ('ignition/index.html', 'ignition/demo.html')
+ASSETS += ('ignition/studio.css', 'ignition/public.js')
 FILES = PAPERS + PAGES + ASSETS + ('publication-manifest.json',)
 PUBLIC_SITE = 'https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/'
 EXTERNAL_RESEARCH_REFERENCES = frozenset({
@@ -89,7 +92,7 @@ def validate(source):
     source = Path(source)
     for name in FILES:
         path = source / name
-        if path.is_symlink() or not path.is_file() or path.resolve().parent != source.resolve():
+        if path.is_symlink() or not path.is_file() or path.resolve() != source.resolve() / name:
             raise ValueError(f'Not a regular publication file: {name}')
     manifest = json.loads((source / 'publication-manifest.json').read_text())
     entries = manifest['papers']
@@ -121,7 +124,7 @@ def validate(source):
                 continue
             if url.netloc or url.query:
                 raise ValueError(f'Unexpected relative link: {link}')
-            target = unquote(url.path) or name
+            target = posixpath.normpath(posixpath.join(posixpath.dirname(name), unquote(url.path))) if url.path else name
             if target not in FILES:
                 raise ValueError(f'Link outside publication: {link}')
             if url.fragment and target in parsed and unquote(url.fragment) not in parsed[target].ids:
@@ -137,10 +140,12 @@ def build(source, output):
         raise ValueError('Output must be a new directory')
     output.mkdir(parents=True)
     for name in FILES:
+        (output / name).parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(source / name, output / name)
     (output / '.nojekyll').write_text('')
     validate(output)
-    if {p.name for p in output.iterdir()} != set(FILES) | {'.nojekyll'}:
+    published = {p.relative_to(output).as_posix() for p in output.rglob('*') if p.is_file()}
+    if published != set(FILES) | {'.nojekyll'}:
         raise ValueError('Unexpected published file')
     return output
 
