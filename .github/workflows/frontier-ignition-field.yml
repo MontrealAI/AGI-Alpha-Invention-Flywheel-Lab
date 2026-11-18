@@ -54,6 +54,7 @@ jobs:
           python -B field_trials/independent_sky.py --check field_trials/independent_sky_receipt.json
           python -B field_trials/qualify.py --browser --expected-head "$EXPECTED_SOURCE" --output "$RUNNER_TEMP/public"
       - name: Deliver public instruments, receipts, views and presenter guide
+        if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: frontier-field-exhibition-${{ env.EXPECTED_SOURCE }}-${{ github.run_attempt }}

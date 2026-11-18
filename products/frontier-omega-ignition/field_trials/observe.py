@@ -135,12 +135,17 @@ def run_arm(arm, port, record, work, output):
         verify = run_child(command, work / "verify.log")
         retokenize = run_child([*command, "--retokenize-authority", permit], work / "tokenizer.log")
         return {"client_exit": code, "independent_replay_exit": verify, "live_tokenizer_exit": retokenize,
+                "independently_checked_loads": json.loads(trace.read_bytes())["metrics"] if verify == 0 else None,
                 "receipt_sha256": PINS.sha(trace)}
     dest = output / (arm + ".json")
     code = run_child(["-m", "discovery_field.study", "live", "--port", port, "--model",
                       local.MODEL_ALIAS, "--weights-sha256", PINS.MODEL_SHA, "--mode", arm,
                       "--out", dest], work / "client.log")
-    return {"client_exit": code, "receipt_sha256": PINS.sha(dest) if dest.exists() else None}
+    cases = json.loads(dest.read_bytes())["cases"] if dest.is_file() else []
+    return {"client_exit": code, "receipt_sha256": PINS.sha(dest) if dest.is_file() else None,
+            "observations": [{"task": row["task"], "transport": row["receipt"].get("status"),
+                              "usage": row["receipt"].get("usage"), "assessment": row["assessment"]}
+                             for row in cases]}
 
 
 def main():

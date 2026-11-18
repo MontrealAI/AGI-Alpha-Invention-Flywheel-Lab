@@ -96,6 +96,7 @@ async function main() {
     await page.selectOption('#coverage','2');await page.selectOption('#gap','10');
     const archive=path.join(temp,'received.zip');
     await download(page,'#download',archive);
+    await page.locator('#instrument details summary').click();
     assert.equal(sha(await readFile(archive)),await page.locator('#kit-hash').innerText());
     await download(page,'#receipt',path.join(temp,'selected.json'));
     await download(page,'#csv',path.join(temp,'selected.csv'));
