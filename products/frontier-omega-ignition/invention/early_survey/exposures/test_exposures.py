@@ -4,6 +4,7 @@ from pathlib import Path
 import shutil
 import tempfile
 import unittest
+from unittest.mock import patch
 
 if __package__:
     from . import verify
@@ -66,6 +67,40 @@ class ArchiveTest(unittest.TestCase):
         at_last = verify.calculate("2026-11-03T07:00:00Z")["witnesses"]
         self.assertEqual(at_last["r"]["forced_photometry"]["carrier_candid"], "3593289315815015006")
         self.assertEqual(at_last["r"]["status"], "persisted")
+
+
+    def _replay_with_earlier_broker_row(self, reference_id):
+        """Add a synthetic alternative-stream row only to the in-memory projection."""
+        original_inputs = verify.inputs
+
+        def supplemented(folder, until=None):
+            index, raw, packets = original_inputs(folder, until)
+            rows = json.loads(raw["alerce-api"])
+            witness = next(row for row in rows["detections"]
+                           if row["candid"] == "3587249065815015015")
+            rows["detections"].append({
+                **witness,
+                "candid": "3586500000015000001",
+                "mjd": 61340.5,
+                "rfid": reference_id,
+            })
+            return index, {**raw, "alerce-api": json.dumps(rows).encode()}, packets
+
+        with patch.object(verify, "inputs", side_effect=supplemented):
+            return verify.calculate()
+
+    def test_unrelated_reference_does_not_preempt_first_witness(self):
+        # Not an observed event: an otherwise earlier same-band row from a
+        # different reference-processing stream must be outside this notice.
+        receipt = self._replay_with_earlier_broker_row(504120158)
+        self.assertEqual(verify.json_bytes(receipt), (verify.HERE/"RESULT.json").read_bytes())
+
+    def test_earlier_same_reference_without_packet_fails_closed(self):
+        # A truly earlier same-reference candidate cannot be waved away.
+        # Without source-qualified packet evidence the receiver must refuse.
+        with self.assertRaisesRegex(ValueError, "ambiguous or missing first alternative-broker witness"):
+            self._replay_with_earlier_broker_row(505120158)
+
 
 
 if __name__ == "__main__":
