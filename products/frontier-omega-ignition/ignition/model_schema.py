@@ -73,9 +73,8 @@ def challenge(payload):
 def construction_proposal(payload):
     kind, definition = payload["kind"], payload["definition"]
     if kind == "manifest_audit":
-        manifest = {"type":"object","properties":{},"required":[],
-                    "additionalProperties":{"type":"string","minLength":64,"maxLength":64}}
-        program = {"anyOf": [obj({"use_frozen_manifest": {"const": True}}), obj({"manifest":manifest})]}
+        # A trusted digest inventory is contract-owned data, never a model parameter.
+        program = obj({"use_frozen_manifest": {"const": True}})
     elif kind == "record_migration":
         if "demonstrations" in definition:
             fields = definition["input_fields"]

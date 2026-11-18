@@ -130,6 +130,19 @@ class ConstructionTests(unittest.TestCase):
         with self.assertRaisesRegex(ConstructionError, "reused"):
             freeze_contract(s)
 
+    def test_proposals_cannot_replace_add_or_omit_contract_owned_anchors(self):
+        spec, _ = manifests()
+        original = spec["definition"]["manifest"]
+        original["second.txt"] = hashlib.sha256(b"second").hexdigest()
+        frozen = freeze_contract(spec)
+        literal = {"kind": "manifest_audit", "program": {"manifest": dict(reversed(list(original.items())))}}
+        bound = {"kind": "manifest_audit", "program": {"use_frozen_manifest": True}}
+        self.assertEqual(build(frozen, literal), build(frozen, bound))
+        for changed in ({**original, "second.txt": "0"*64}, {"second.txt": original["second.txt"]},
+                        {**original, "new.txt": "c"*64}):
+            with self.assertRaisesRegex(ConstructionError, "immutable_manifest"):
+                build(frozen, {"kind": "manifest_audit", "program": {"manifest": changed}})
+
     def test_manifest_tamper_missing_extra_and_bad_paths(self):
         s, p = manifests()
         a = build(freeze_contract(s), p)

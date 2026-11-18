@@ -26,6 +26,7 @@ from ignition import construction, delivery, evaluation
 from ignition.controller import Controller
 from ignition.provider import LocalProvider, ModelProvider
 from ignition.store import Store, digest, runtime_source
+from controls import rejected_manifest
 
 FROZEN = "89f2196d552810bc56696a7f380ae66c55f8763a"
 RECORDED_RESPONSE = "9bef7cd8787ba4397137da29dce7e4b450f70c31eb26dacfa8910a6c38bf42b3"
@@ -103,7 +104,7 @@ def known_historic_defect(contract):
     proposal = json.loads((HERE/"historical-integrity-proposal.json").read_bytes())
     if digest(proposal) != RECORDED_RESPONSE:
         raise ValueError("Recovered proposal does not match the original record")
-    product = construction.build(contract,proposal)
+    product = rejected_manifest(contract,proposal)
     result = evaluation.evaluate(contract,product)
     measured = assessment(result)
     if (measured["status"] != "fail" or measured["candidate_cases_passed"] != 8
@@ -155,7 +156,7 @@ def observe(cell, work, public, actual, record):
     plant = planted(contract) if inject else None
     if inject:
         t0 = time.monotonic()
-        bad = evaluation.evaluate(contract,construction.build(contract,plant))
+        bad = evaluation.evaluate(contract,rejected_manifest(contract,plant))
         competent = evaluation.evaluate(contract,construction.build(contract,conventional(contract)))
         if bad["status"] != "fail" or not bad["comparison"]["reference_pass"] or competent["status"] != "pass":
             raise ValueError("Planted intervention was not independently confirmed")

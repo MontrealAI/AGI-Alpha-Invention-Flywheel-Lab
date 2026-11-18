@@ -3,6 +3,7 @@ import json
 import unittest
 
 from ignition.construction import build, freeze_contract
+from trials.controls import rejected_manifest
 from ignition.research import assess_comparison, discover_sources, investigate, reopen_inventory, validate_public_repositories
 
 
@@ -242,7 +243,7 @@ class ResearchTests(unittest.TestCase):
         protocol = {"frozen_contract": frozen, "resource_conditions": resources,
                     "baseline_date": "2026-10-13", "as_of": "2026-11-17"}
         old = {"version": "old", "source": SOURCE["url"], "available_on": "2026-10-10",
-               "resource_conditions": resources, "artifact": build(frozen, {"kind": kind, "program": bad})}
+               "resource_conditions": resources, "artifact": rejected_manifest(frozen, {"kind": kind, "program": bad})}
         new = {**old, "version": "new", "available_on": "2026-11-13",
                "artifact": build(frozen, {"kind": kind, "program": good})}
         report = assess_comparison(protocol, old, new)

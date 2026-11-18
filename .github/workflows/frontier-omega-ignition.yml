@@ -290,6 +290,12 @@ jobs:
         run: |
           python -B qa/qualify_model_dispatch.py --research --assets "$RUNNER_TEMP/assets" \
             --work "$RUNNER_TEMP/research" --output "$RUNNER_TEMP/research.json"
+      - name: Attempt signed-in research from a blank brief with independent confirmation
+        if: ${{ !cancelled() && steps.acquire.outcome == 'success' }}
+        working-directory: products/frontier-omega-ignition
+        run: |
+          python -B qa/qualify_model_dispatch.py --blank-studio --assets "$RUNNER_TEMP/assets" \
+            --work "$RUNNER_TEMP/blank-studio" --output "$RUNNER_TEMP/blank-studio.json"
       - name: Preserve public qualification decisions, including failures
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
@@ -300,4 +306,5 @@ jobs:
             ${{ runner.temp }}/selection.json
             ${{ runner.temp }}/invited.json
             ${{ runner.temp }}/research.json
+            ${{ runner.temp }}/blank-studio.json
           if-no-files-found: error

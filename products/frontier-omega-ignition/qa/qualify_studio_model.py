@@ -20,14 +20,11 @@ REPORT_PATH = "docs/frontier-omega-ignition/continuation/beneficiary-pursuit/REP
 REPORT_SHA = "dfe208fb567e6193b031c17f1313c386d455751acfad52c67a5094a52630cfd6"
 
 
-def exercise(work, model_port, record):
-    report = (q.REPO / REPORT_PATH).read_bytes()
-    if sha256(report).hexdigest() != REPORT_SHA:
-        raise ValueError("Unrecognized published report")
+def exercise(work, model_port, record, *, protocol=None):
     env = {**os.environ, "IGNITION_MODEL_PROVIDER": "llama-cpp", "IGNITION_MODEL_ID": q.MODEL_ALIAS,
            "IGNITION_MODEL_PORT": str(model_port), "IGNITION_MODEL_SHA256": q.pinned.MODEL_SHA,
            "IGNITION_MODEL_SCHEMA": "1", "IGNITION_MODEL_STREAM": "1", "IGNITION_MODEL_TIMEOUT": "300",
-           "IGNITION_MODEL_OUTPUT_TOKENS": "512"}
+           "IGNITION_MODEL_OUTPUT_TOKENS": "2048" if protocol else "512"}
     with subprocess.Popen([sys.executable, "-B", str(q.PRODUCT / "qa/studio_staging.py")], cwd=q.PRODUCT,
                           env=env, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
                           stderr=subprocess.DEVNULL, text=True) as child:
@@ -58,6 +55,11 @@ def exercise(work, model_port, record):
                 unavailable.close()
                 return False
             record["configuration"] = call("/api/status")["provider"]
+            if protocol is not None:
+                return protocol(work, call, record)
+            report = (q.REPO / REPORT_PATH).read_bytes()
+            if sha256(report).hexdigest() != REPORT_SHA:
+                raise ValueError("Unrecognized published report")
             purpose = "Verify the public scroll-normalizer delivery report against a separately pinned digest."
             payload = {"files": {"REPORT.md": base64.b64encode(report).decode("ascii")}}
             clean = {"matched": ["REPORT.md"], "changed": [], "missing": [], "unexpected": [], "ok": True}

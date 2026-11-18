@@ -56,6 +56,15 @@ class WireGrammarTests(unittest.TestCase):
             ModelProvider.from_environment({"IGNITION_MODEL_PROVIDER":"llama-cpp","IGNITION_MODEL_ID":"m",
                                             "IGNITION_MODEL_SCHEMA":"true"})
 
+    def test_native_builders_can_reference_but_never_generate_trust_anchors(self):
+        visible = {"kind": "manifest_audit", "definition": {"manifest": {"a": "a"*64}}}
+        for stage in ("construct", "direct_construct", "repair"):
+            schema = prepare_schema(model_schema.for_stage(stage, visible))
+            validate_output({"kind": "manifest_audit", "program": {"use_frozen_manifest": True}}, schema)
+            for program in (visible["definition"], {"manifest": {"a": "b"*64}}, {"use_frozen_manifest": False}):
+                with self.assertRaises(SchemaError):
+                    validate_output({"kind": "manifest_audit", "program": program}, schema)
+
     def test_discovery_allows_unsupported_hypothesis_and_no_evidence(self):
         s = prepare_schema(model_schema.for_stage("discover",{"signals":[]}))
         validate_output({"candidates":[],"favourite":None},s)

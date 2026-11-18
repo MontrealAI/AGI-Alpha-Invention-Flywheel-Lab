@@ -71,6 +71,18 @@ def exercise(folder, provider, record):
     calls = sorted(q.compact_calls(state), key=lambda c: c["recorded_at"])
     research = state.get("research") or {}
     chosen = research.get("selected") or {}
+    build_call = next((c for c in state["calls"].values() if c["stage"] == "construct"), {})
+    proposal = build_call.get("response", {})
+    frozen_reference = (proposal.get("kind") == "manifest_audit"
+                        and proposal.get("program") == {"use_frozen_manifest": True})
+    record["construction_provenance"] = {
+        "model_output_sha256": build_call.get("response_sha256"),
+        "references_frozen_manifest": frozen_reference,
+        "authority": "The original mission owns the reference files, digest inventory and withheld cases.",
+        "scope": "Research proposes and selects a family. For a frozen manifest, an installed deterministic "
+                 "compiler binds the authorized inventory and an existing evaluator checks the resulting tool. "
+                 "The builder response supplies no new checksum algorithm.",
+    }
     record.update(source_archive_sha256=DIGEST, source_url=body["sources"][0]["url"],
                   status=state["status"], error=state.get("error"), research_decision=research.get("decision"),
                   original_requirement_fit=research.get("fit"), reason=research.get("decision_reason"),
