@@ -110,6 +110,7 @@ def evaluate(bundle, trust, *, expected_trust_sha256, expected_input_sha256,
         raise ValueError("TRUSTED_REVIEWERS_REQUIRED")
     by_id = {}
     used_public_keys = set()
+    duplicate_public_key = False
     for reviewer in reviewers:
         _object(reviewer, ("reviewer_id", "role", "systems", "requirements",
                            "public_key_pem", "revoked", "valid_from_utc",
@@ -141,7 +142,7 @@ def evaluate(bundle, trust, *, expected_trust_sha256, expected_input_sha256,
             raise ValueError("PINNED_PUBLIC_KEY_REQUIRED")
         key_identity = hashlib.sha256(public_der).digest()
         if key_identity in used_public_keys:
-            raise ValueError("UNIQUE_REVIEW_PUBLIC_KEY_REQUIRED")
+            duplicate_public_key = True
         used_public_keys.add(key_identity)
         by_id[identifier] = reviewer
 
@@ -214,6 +215,11 @@ def evaluate(bundle, trust, *, expected_trust_sha256, expected_input_sha256,
                         "requirement_id": key[1], "requirement_version": key[2],
                         "evidence_id": key[3], "decision": statement["decision"],
                         "signed_statement_sha256": sha(statement)})
+    # A cryptographically invalid signature must keep its original precise
+    # rejection, even if the trust table independently has duplicate keys.
+    # No successful decision can be attributed under an ambiguous key registry.
+    if duplicate_public_key:
+        raise ValueError("UNIQUE_REVIEW_PUBLIC_KEY_REQUIRED")
     actions.sort(key=lambda x: x["decision_id"])
     result = {
         "schema": RECEIPT_SCHEMA,
