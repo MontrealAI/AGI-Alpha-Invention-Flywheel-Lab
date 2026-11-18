@@ -1,0 +1,5 @@
+# Recovery registration
+
+Frozen after the 6,144-token trial's discovery returned five proposals and its logged challenge ended at 6,143 tokens, before any recovery inference. Execute a new ordinary observer mission on release candidate a44aa8535e7899aa197d6e17f567e86547792536. Keep the same public release batch, earlier commit, brief, pinned weights/runtime archive, output allowance (2,048), zero temperature, seed 6144, and four local CPU threads. Change the server context to 12,288 tokens. Start after the independent direct comparator has shut down and allocate at most ten minutes. Do not reuse a previous model answer. Allow the original mission's gates to construct a supported artifact, decline, pause or block.
+
+The prospective technical acceptance criterion is a completed parseable discover-and-challenge pair, a recorded ordinary research verdict, and zero extra model calls or children on the same observation after restart. Preserve any rejection. Neither a model verdict nor a comparison of prompts establishes an end-user saving, package receipt, payment or other beneficiary outcome.

@@ -1,0 +1,593 @@
+{
+  "capture_paths": {
+    "connector_import_fresh_processes": [
+      {
+        "children": [
+          {
+            "candidates": 0,
+            "current_version": 1,
+            "decision": null,
+            "error": "No live model configured. Choose a local provider or explicitly start an assisted session",
+            "mission_id": "803425d6bf914a018d77101918e700ba",
+            "model_attempts": 0,
+            "operation_state": "active",
+            "status": "blocked",
+            "verified_artifact": false,
+            "version": 1
+          }
+        ],
+        "imported_responses": [
+          {
+            "imported_representation_sha256": "0507f19c21e37e0114d0c336b9436ad62bb5fe34357c0187c2610d4e1ae00d84",
+            "url": "https://api.github.com/repos/ggml-org/llama.cpp/releases?per_page=3"
+          },
+          {
+            "imported_representation_sha256": "e135991910cf02ccf06d8864eef962274dbe07310b6f914e3cb32cfd5ad28a98",
+            "url": "https://api.github.com/repos/ggml-org/llama.cpp/commits?per_page=1&until=2026-10-14T23:59:59Z"
+          }
+        ],
+        "release_identities": [
+          "45c6eb52b05c6dffd4037b39c4f5ad31ff975aadf1174dffa36b0cf61d450001",
+          "b33f46159d049d6a444fc8134109e6f956b02b74a8a194317a5bd762995fd5e7",
+          "c9db5df020fd8c316867b857f53bff5e8e37db32b81314c00208883eab47a06f"
+        ],
+        "status": "investigation_registered"
+      },
+      {
+        "children": [],
+        "imported_responses": [
+          {
+            "imported_representation_sha256": "92675a93eb1d398fef7dbcf86f2d936040d6df8595b4ee808e1a338869aa88ad",
+            "url": "https://api.github.com/repos/ggml-org/llama.cpp/releases?per_page=3"
+          },
+          {
+            "imported_representation_sha256": "e135991910cf02ccf06d8864eef962274dbe07310b6f914e3cb32cfd5ad28a98",
+            "url": "https://api.github.com/repos/ggml-org/llama.cpp/commits?per_page=1&until=2026-10-14T23:59:59Z"
+          }
+        ],
+        "release_identities": [
+          "45c6eb52b05c6dffd4037b39c4f5ad31ff975aadf1174dffa36b0cf61d450001",
+          "b33f46159d049d6a444fc8134109e6f956b02b74a8a194317a5bd762995fd5e7",
+          "c9db5df020fd8c316867b857f53bff5e8e37db32b81314c00208883eab47a06f"
+        ],
+        "status": "observed_unchanged"
+      }
+    ],
+    "direct_workspace_cli": [
+      {
+        "failures": [
+          {
+            "acquisition": "curated publisher feed",
+            "feed": "local-inference",
+            "reason": "Use an exact allowlisted HTTPS host resolving only to public addresses.",
+            "reason_code": "SOURCE_URL",
+            "repository_url": "https://github.com/ggml-org/llama.cpp",
+            "role": "current"
+          },
+          {
+            "acquisition": "curated publisher feed",
+            "feed": "local-inference",
+            "reason": "Use an exact allowlisted HTTPS host resolving only to public addresses.",
+            "reason_code": "SOURCE_URL",
+            "repository_url": "https://github.com/ggml-org/llama.cpp",
+            "role": "baseline"
+          }
+        ],
+        "missions": 0,
+        "status": "source_unavailable"
+      },
+      {
+        "failures": [
+          {
+            "acquisition": "curated publisher feed",
+            "feed": "local-inference",
+            "reason": "Use an exact allowlisted HTTPS host resolving only to public addresses.",
+            "reason_code": "SOURCE_URL",
+            "repository_url": "https://github.com/ggml-org/llama.cpp",
+            "role": "current"
+          },
+          {
+            "acquisition": "curated publisher feed",
+            "feed": "local-inference",
+            "reason": "Use an exact allowlisted HTTPS host resolving only to public addresses.",
+            "reason_code": "SOURCE_URL",
+            "repository_url": "https://github.com/ggml-org/llama.cpp",
+            "role": "baseline"
+          }
+        ],
+        "missions": 0,
+        "status": "source_unavailable"
+      }
+    ]
+  },
+  "executed_source_revision": "bd0ddc3dddb643856edcb8aa81cfb978713cc73a",
+  "mission_brief_sha256": "abccb6b3d06d216a14a850ca19a98d3c6ae06fc82b8d5018c118f2da279c9350",
+  "model_experiment": {
+    "arm_input_identity": {
+      "separate_direct_call": "9c2b3706cfc1cebe7a449eb3cb3418276dd37355bc7d13c0315f1a3017fb220c",
+      "workflow_discovery": "9c2b3706cfc1cebe7a449eb3cb3418276dd37355bc7d13c0315f1a3017fb220c"
+    },
+    "assets": {
+      "model_repository": "bartowski/Qwen_Qwen3-4B-Instruct-2507-GGUF",
+      "model_revision": "ae44f08e1392f39c0e474af10c3ff8355c8b6688",
+      "runtime_archive_bytes": 23158635,
+      "runtime_archive_sha256": "909eef25cd53e6601c8a07c866d8dbb2983e74177088d55182137a8fb8255d62",
+      "server_sha256": "fe211d00c4754aa67aaa492d2c755ab0f6ef60bf30eee3c0c74a3496189cde17",
+      "weights_bytes": 2497280736,
+      "weights_preparation_wall_seconds": 3.0061,
+      "weights_sha256": "2fde00ce69dd4899c70d020845e2638353015bba0fdf161b3eb965f2bca4464e"
+    },
+    "began_at": "2026-11-18T18:07:34.901866+00:00",
+    "challenge_terminal_log": [
+      "slot      release: id  0 | task 1978 | stop processing: n_tokens = 6143, truncated = 1"
+    ],
+    "completed_at": "2026-11-18T18:17:16.871427+00:00",
+    "configured_output_tokens_per_request": 2048,
+    "cpu_seconds_including_local_servers": 2295.283,
+    "direct": {
+      "candidates": [
+        "Offline Verification via Local Inference with ggml-cpp",
+        "Verification of SWA Layer Classification via OpenVINO Optimization",
+        "Verification of MoE Support via CUDA MMQ on V100",
+        "Verification of CLAMP on Non-Contiguous Views",
+        "Customer Self-Service: Local CPU Inference with Verified Model Release"
+      ],
+      "cpu_seconds": 978.96,
+      "digest": "fd6446daa40af534c84e1fda4afbc76f83e4e787d8c555003b4dc17e21686fdd",
+      "favourite": "C1",
+      "seconds": 245.845,
+      "timing_scope": "one fresh server launch, single direct discover call, and shutdown"
+    },
+    "elapsed_seconds": 581.969,
+    "failed_model_calls": [
+      {
+        "at": "2026-11-18T18:13:10.939+00:00",
+        "elapsed_seconds": 105.524,
+        "receipts": [
+          {
+            "application_model_calls": 1,
+            "complete_cost_known": false,
+            "declared_model_sha256": "2fde00ce69dd4899c70d020845e2638353015bba0fdf161b3eb965f2bca4464e",
+            "endpoint": "http://127.0.0.1:55279",
+            "error_code": "PROVIDER_STREAM",
+            "harness_adapter_sha256": "040c74262976c1c77822171d9a55937038f2b7977e12216f7d2fbef8ccc27014",
+            "harness_streaming_sha256": "c94164c9b5539e08ff731b9d23063ac5357351264e86ad081f24a4ebed181986",
+            "mode": "local",
+            "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+            "output_tokens": 2048,
+            "provider": "llama-cpp",
+            "recorded_at": "2026-11-18T18:11:25.416065+00:00",
+            "request_sha256": "ef2c6dd0cdf3fbfb655d57f08e85a558e9549f288ca61f22a705bd4141703281",
+            "response_schema_sha256": "02afc398eb94272ddd10edd5f7aaeb2badcf4d592c846686b5ee52256686dc5a",
+            "response_sha256": null,
+            "run_id": "ignition_9ebb2c6881424f9b88614c2fa6877ef3",
+            "schema_implementation": "9ad43ad6e9af37b222b01cf5e0ebd3e6cedbb50918bdff1d0ec07aeaa9c7bce4",
+            "schema_output": true,
+            "stage": "challenge",
+            "status": "failed",
+            "stream_fragments": 240,
+            "stream_output_bytes": 975,
+            "timeout_seconds": 240,
+            "transport_mode": "streaming-sse/1",
+            "usage": null,
+            "wall_seconds": 105.52328,
+            "weights_identity": "operator-declared"
+          }
+        ],
+        "request_sha256": "097a30c628796b32301918abafb647d7183b22360617d7639af99ae05ee97dd3",
+        "stage": "challenge"
+      }
+    ],
+    "full_workflow_gates": {
+      "candidates": [],
+      "decision_reason": null,
+      "research_decision": null,
+      "research_recommendation": null
+    },
+    "hardware": {
+      "architecture": "x86_64",
+      "gpu_layers": 0,
+      "platform": "Linux",
+      "processor": "AMD EPYC 9V45 96-Core Processor",
+      "threads": 4
+    },
+    "loopback_provider_identity": {
+      "declared_model_sha256": "2fde00ce69dd4899c70d020845e2638353015bba0fdf161b3eb965f2bca4464e",
+      "endpoint": "http://127.0.0.1:55279",
+      "harness_adapter_sha256": "040c74262976c1c77822171d9a55937038f2b7977e12216f7d2fbef8ccc27014",
+      "harness_streaming_sha256": "c94164c9b5539e08ff731b9d23063ac5357351264e86ad081f24a4ebed181986",
+      "mode": "local",
+      "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+      "output_tokens": 2048,
+      "provider": "llama-cpp",
+      "schema_implementation": "9ad43ad6e9af37b222b01cf5e0ebd3e6cedbb50918bdff1d0ec07aeaa9c7bce4",
+      "schema_output": true,
+      "timeout_seconds": 240,
+      "transport_mode": "streaming-sse/1",
+      "weights_identity": "operator-declared"
+    },
+    "model_outputs_by_sha256": {
+      "f7d66a31c66c353e288c256731bbc17653a6da846fd357cca4d9e76b6216d22b": {
+        "candidates": [
+          {
+            "alternative": "Use a CPU-only local inference release to verify data handoff without relying on cloud or external services.",
+            "beneficiary": "MONTREAL.AI engineers deciding which local research capability to qualify",
+            "change": "Evaluate the b12521 release for its ability to support offline, independently verifiable research data handoff through local inference on CPU-only systems.",
+            "evidence": [
+              {
+                "metric": "release_note",
+                "polarity": "asserted",
+                "scope": "publisher_reported_change",
+                "source": "S1",
+                "value": "webgpu: (fix CI) allow the FA mask to be broadcast over the Q batch (#32535)"
+              }
+            ],
+            "kind": "existing",
+            "obstruction": "No evidence that the b12521 release enables any measurable improvement in data handoff fidelity or latency over prior versions.",
+            "outcome": "An independently verifiable improvement in research data handoff via local inference using a published, CPU-only llama.cpp release.",
+            "route": "Download the b12521 release (CPU-only, Ubuntu x64/arm64) from https://github.com/ggml-org/llama.cpp/releases/download/b12521/llama-b12521-bin-ubuntu-x64.tar.gz. Run a local inference task on a research dataset using the provided model. Compare the output to a known baseline. If the output matches or improves, and the process is reproducible without external access, it constitutes a verifiable improvement.",
+            "scale": "Single research task per engineer; scalable with parallel testing.",
+            "sources": [
+              "S1"
+            ],
+            "test": "Compare the output of a research data handoff task using the b12521 release to a baseline from a prior version (e.g., b12502). Acceptance criterion: output accuracy improves by at least 5% (measured via human evaluation or pre-defined metric).",
+            "title": "Offline Verification via Local Inference with ggml-cpp",
+            "value": "A measurable improvement in data handoff fidelity or latency, verified independently."
+          },
+          {
+            "alternative": "Use a model with known sparse attention patterns to test whether SWA classification improves data fidelity.",
+            "beneficiary": "MONTREAL.AI engineers deciding which local research capability to qualify",
+            "change": "Assess whether the b12503 release's SWA layer classification improvements enable more accurate and efficient data handoff in sparse attention models.",
+            "evidence": [
+              {
+                "metric": "release_note",
+                "polarity": "asserted",
+                "scope": "publisher_reported_change",
+                "source": "S2",
+                "value": "ggml-openvino: expand model support, optimize NPU,GPU and memory usage (#32172)"
+              }
+            ],
+            "kind": "existing",
+            "obstruction": "The SWA classification changes are not tied to a measurable research data handoff outcome; no evidence links them to improved data transfer fidelity.",
+            "outcome": "A measurable improvement in research data handoff through optimized attention masking in SWA layer classification.",
+            "route": "Use the b12503 release to run a research task involving sparse attention models. Evaluate whether the SWA layer classification (based on mask window size and layer count) leads to more consistent and accurate data handoff compared to prior versions.",
+            "scale": "Per model type; limited to models with known SWA behavior.",
+            "sources": [
+              "S2"
+            ],
+            "test": "Measure data handoff consistency across 10 runs. Acceptance criterion: variance in handoff accuracy decreases by at least 10% compared to b12502.",
+            "title": "Verification of SWA Layer Classification via OpenVINO Optimization",
+            "value": "Improved consistency in data handoff due to better SWA layer classification."
+          },
+          {
+            "alternative": "Use a CPU-only inference path with no MoE support to confirm baseline performance.",
+            "beneficiary": "MONTREAL.AI engineers deciding which local research capability to qualify",
+            "change": "Evaluate whether the b12502 release's CUDA MMQ support enables more efficient MoE model inference, which could improve data handoff performance.",
+            "evidence": [
+              {
+                "metric": "release_note",
+                "polarity": "asserted",
+                "scope": "publisher_reported_change",
+                "source": "S3",
+                "value": "CUDA: use MMQ for MoE on V100 (#32504)"
+              }
+            ],
+            "kind": "existing",
+            "obstruction": "The CUDA MMQ support is for V100 hardware, which is not available locally. No evidence of local CPU or ARM64 support for MoE optimization.",
+            "outcome": "A measurable improvement in research data handoff through optimized MoE execution on V100 hardware.",
+            "route": "Assess whether MoE model inference on V100 hardware (via b12502) can be replicated in a local environment. If not, this route is not viable for local research.",
+            "scale": "Limited to V100 hardware; not applicable to local CPU environments.",
+            "sources": [
+              "S3"
+            ],
+            "test": "Run a MoE model inference task on V100 hardware. Acceptance criterion: inference time reduces by at least 15% compared to prior versions.",
+            "title": "Verification of MoE Support via CUDA MMQ on V100",
+            "value": "Improved inference speed or memory efficiency in MoE models."
+          },
+          {
+            "alternative": "Use a memory layout that avoids strided views to avoid testing edge cases.",
+            "beneficiary": "MONTREAL.AI engineers deciding which local research capability to qualify",
+            "change": "Evaluate whether the a0e6dc7384ed snapshot's CLAMP fix enables more reliable data handling in memory-strided research tasks.",
+            "evidence": [
+              {
+                "metric": "release_note",
+                "polarity": "asserted",
+                "scope": "publisher_reported_change",
+                "source": "S4",
+                "value": "opencl: support CLAMP on non-contiguous views (#30186)"
+              }
+            ],
+            "kind": "existing",
+            "obstruction": "The CLAMP fix applies only to non-contiguous views and does not directly relate to data handoff fidelity or research workflow.",
+            "outcome": "A measurable improvement in data handoff robustness due to correct handling of non-contiguous memory views.",
+            "route": "Test a research data handoff task using a strided memory layout. Compare performance and correctness with a prior version that lacks the CLAMP fix.",
+            "scale": "Limited to memory-layout-sensitive tasks.",
+            "sources": [
+              "S4"
+            ],
+            "test": "Run a data handoff task with a strided input. Acceptance criterion: no data corruption or misalignment; performance is stable.",
+            "title": "Verification of CLAMP on Non-Contiguous Views",
+            "value": "Improved robustness in data handoff under memory-strided conditions."
+          },
+          {
+            "alternative": "Rely on cloud-based inference for data handoff.",
+            "beneficiary": "MONTREAL.AI engineers deciding which local research capability to qualify",
+            "change": "Enable engineers to download and run a verified CPU-only llama.cpp release (e.g., b12521) to test local inference performance on their own hardware.",
+            "evidence": [
+              {
+                "metric": "release_note",
+                "polarity": "asserted",
+                "scope": "publisher_reported_change",
+                "source": "S1",
+                "value": "webgpu: (fix CI) allow the FA mask to be broadcast over the Q batch (#32535)"
+              }
+            ],
+            "kind": "customer_self_service",
+            "obstruction": "No evidence that any release enables a measurable improvement in data handoff beyond baseline performance.",
+            "outcome": "A self-service, independently verifiable path to evaluate local inference performance without relying on external services.",
+            "route": "Provide engineers with a clear, documented path to download and run the b12521 release on local CPU hardware. Define a test protocol: run a research data handoff task, record output, compare to a known baseline. Acceptance is based on measurable improvement.",
+            "scale": "Per engineer; scalable with documentation and training.",
+            "sources": [
+              "S1"
+            ],
+            "test": "Engineers run a test task and report output. Acceptance criterion: at least one engineer observes a measurable improvement in handoff accuracy or speed.",
+            "title": "Customer Self-Service: Local CPU Inference with Verified Model Release",
+            "value": "Empowers engineers to independently verify performance and data fidelity."
+          }
+        ],
+        "favourite": "C1"
+      }
+    },
+    "preparation": {
+      "billing": null,
+      "cpu_seconds": 7.125,
+      "external_dependencies": [
+        {
+          "expected_bytes": 23158635,
+          "expected_sha256": "909eef25cd53e6601c8a07c866d8dbb2983e74177088d55182137a8fb8255d62",
+          "name": "llama.tar.gz",
+          "origin": "https://github.com/ggml-org/llama.cpp/releases/download/b12242/llama-b12242-bin-ubuntu-x64.tar.gz",
+          "status": "verified_download"
+        },
+        {
+          "expected_bytes": 2497280736,
+          "expected_sha256": "2fde00ce69dd4899c70d020845e2638353015bba0fdf161b3eb965f2bca4464e",
+          "name": "model.gguf",
+          "origin": "https://huggingface.co/bartowski/Qwen_Qwen3-4B-Instruct-2507-GGUF/resolve/ae44f08e1392f39c0e474af10c3ff8355c8b6688/Qwen_Qwen3-4B-Instruct-2507-Q4_K_M.gguf",
+          "status": "verified_download"
+        }
+      ],
+      "wall_seconds": 370.2842
+    },
+    "restart": {
+      "missions": [],
+      "reserved": 1,
+      "status": "observed_unchanged"
+    },
+    "serving_configuration": [
+      "--ctx-size",
+      "6144",
+      "--parallel",
+      "1",
+      "--threads",
+      "4",
+      "--threads-batch",
+      "4",
+      "--n-gpu-layers",
+      "0",
+      "--seed",
+      "6144",
+      "--temp",
+      "0",
+      "--no-repack",
+      "--batch-size",
+      "128",
+      "--ubatch-size",
+      "64",
+      "--no-webui"
+    ],
+    "stage_receipts": {
+      "direct.discover": {
+        "application_model_calls": 1,
+        "complete_cost_known": false,
+        "declared_model_sha256": "2fde00ce69dd4899c70d020845e2638353015bba0fdf161b3eb965f2bca4464e",
+        "endpoint": "http://127.0.0.1:38423",
+        "harness_adapter_sha256": "040c74262976c1c77822171d9a55937038f2b7977e12216f7d2fbef8ccc27014",
+        "harness_streaming_sha256": "c94164c9b5539e08ff731b9d23063ac5357351264e86ad081f24a4ebed181986",
+        "mode": "local",
+        "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+        "output_tokens": 2048,
+        "provider": "llama-cpp",
+        "raw_response_sha256": "80a551fa4dff231e28bd73447849ddffcec70163b5d23b26e26bc1cf3275c5a2",
+        "recorded_at": "2026-11-18T18:13:12.030473+00:00",
+        "reported_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+        "request_sha256": "3a20080d4fdc0730fbc498d052441c7ff87bd336016858a35fdd2c6d67721f37",
+        "response_schema_sha256": "15bc5654c7e2a97113f7452e135e72109ab440dbb281d6ac4806175c3c8ab508",
+        "response_sha256": "f7d66a31c66c353e288c256731bbc17653a6da846fd357cca4d9e76b6216d22b",
+        "run_id": "ignition_dc135feb7fb44c609d6ec2d234956b3d",
+        "schema_implementation": "9ad43ad6e9af37b222b01cf5e0ebd3e6cedbb50918bdff1d0ec07aeaa9c7bce4",
+        "schema_output": true,
+        "stage": "discover",
+        "status": "completed",
+        "stream_fragments": 1950,
+        "stream_output_bytes": 8580,
+        "timeout_seconds": 240,
+        "transport_mode": "streaming-sse/1",
+        "usage": {
+          "input_tokens": 3439,
+          "output_tokens": 1951
+        },
+        "wall_seconds": 244.776283,
+        "weights_identity": "operator-declared"
+      },
+      "workflow.challenge": {
+        "application_model_calls": 1,
+        "complete_cost_known": false,
+        "declared_model_sha256": "2fde00ce69dd4899c70d020845e2638353015bba0fdf161b3eb965f2bca4464e",
+        "endpoint": "http://127.0.0.1:55279",
+        "error_code": "PROVIDER_STREAM",
+        "harness_adapter_sha256": "040c74262976c1c77822171d9a55937038f2b7977e12216f7d2fbef8ccc27014",
+        "harness_streaming_sha256": "c94164c9b5539e08ff731b9d23063ac5357351264e86ad081f24a4ebed181986",
+        "mode": "local",
+        "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+        "output_tokens": 2048,
+        "provider": "llama-cpp",
+        "recorded_at": "2026-11-18T18:11:25.416065+00:00",
+        "request_sha256": "ef2c6dd0cdf3fbfb655d57f08e85a558e9549f288ca61f22a705bd4141703281",
+        "response_schema_sha256": "02afc398eb94272ddd10edd5f7aaeb2badcf4d592c846686b5ee52256686dc5a",
+        "response_sha256": null,
+        "run_id": "ignition_9ebb2c6881424f9b88614c2fa6877ef3",
+        "schema_implementation": "9ad43ad6e9af37b222b01cf5e0ebd3e6cedbb50918bdff1d0ec07aeaa9c7bce4",
+        "schema_output": true,
+        "stage": "challenge",
+        "status": "failed",
+        "stream_fragments": 240,
+        "stream_output_bytes": 975,
+        "timeout_seconds": 240,
+        "transport_mode": "streaming-sse/1",
+        "usage": null,
+        "wall_seconds": 105.52328,
+        "weights_identity": "operator-declared"
+      },
+      "workflow.discover": {
+        "application_model_calls": 1,
+        "complete_cost_known": false,
+        "declared_model_sha256": "2fde00ce69dd4899c70d020845e2638353015bba0fdf161b3eb965f2bca4464e",
+        "endpoint": "http://127.0.0.1:55279",
+        "harness_adapter_sha256": "040c74262976c1c77822171d9a55937038f2b7977e12216f7d2fbef8ccc27014",
+        "harness_streaming_sha256": "c94164c9b5539e08ff731b9d23063ac5357351264e86ad081f24a4ebed181986",
+        "mode": "local",
+        "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+        "output_tokens": 2048,
+        "provider": "llama-cpp",
+        "raw_response_sha256": "80a551fa4dff231e28bd73447849ddffcec70163b5d23b26e26bc1cf3275c5a2",
+        "recorded_at": "2026-11-18T18:07:40.947436+00:00",
+        "reported_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+        "request_sha256": "5a65f642f571c869161b4438a4ff4a5fc579a2c3827c40593c88b22e5642dc03",
+        "response_schema_sha256": "15bc5654c7e2a97113f7452e135e72109ab440dbb281d6ac4806175c3c8ab508",
+        "response_sha256": "f7d66a31c66c353e288c256731bbc17653a6da846fd357cca4d9e76b6216d22b",
+        "run_id": "ignition_07f91e286bfa4ee7b29d05287a65e137",
+        "schema_implementation": "9ad43ad6e9af37b222b01cf5e0ebd3e6cedbb50918bdff1d0ec07aeaa9c7bce4",
+        "schema_output": true,
+        "stage": "discover",
+        "status": "completed",
+        "stream_fragments": 1950,
+        "stream_output_bytes": 8580,
+        "timeout_seconds": 240,
+        "transport_mode": "streaming-sse/1",
+        "usage": {
+          "input_tokens": 3439,
+          "output_tokens": 1951
+        },
+        "wall_seconds": 224.456301,
+        "weights_identity": "operator-declared"
+      }
+    },
+    "workflow": {
+      "attempts": 2,
+      "candidates": [],
+      "cpu_seconds": 1313.445,
+      "decision": null,
+      "error": "Local model step failed (PROVIDER_STREAM). No automatic retry was sent.",
+      "model_calls": [
+        "e8c77a6a628d01e82f9371461ecbc3db16db748dcd3acb217ccc0707eb67efd9"
+      ],
+      "reason": null,
+      "repeat_children": 0,
+      "repeat_status": "observed_unchanged",
+      "seconds": 333.116,
+      "status": "blocked",
+      "timing_scope": "whole mission and immediately repeated observation, fresh server launch and shutdown",
+      "verified": false
+    }
+  },
+  "original_experiment_driver_sha256": "e1bf6471da7d868f9c2d90f6f176feb816d397e1f40a69fed22e216fd75051d1",
+  "recovery_driver_sha256": "6b12136dcf8d928fff4199cd73327daf0a0aa05521fcd6f6fc534decabbdd644",
+  "recovery_registration_sha256": "5aca51aa403aa9cfaba0bde555ff7a89047b3cf323223473fe97bea6d8999ec5",
+  "registered_at_scope": "Registered and hashed before model inference; system UTC receipts report later acquisition and execution.",
+  "registration_sha256": "be0f00d57ca0e3dfa8f65f36c4bda9df125d28e1fd4ca1e4fbad94a641984559",
+  "schema": "ignition.source-observer.comparison/1",
+  "scope": {
+    "economic_record": "No customer acceptance, transaction, collected cash or measured beneficiary performance arose from the publisher experiment.",
+    "paid_model_calls": 0,
+    "realized_cash_verified": false,
+    "rights_and_reuse": "Record includes model answers and accountable source citations. Original publisher HTTP responses, upstream model weights and private state are excluded.",
+    "source_inference": "A public release title or report is distinct from a locally demonstrated technical effect.",
+    "unit_costs_known": false
+  },
+  "source_revision_with_race_correction": "a44aa8535e7899aa197d6e17f567e86547792536",
+  "sources": [
+    {
+      "access": "Public publisher metadata, local inspection. No right to resell inferred.",
+      "acquisition": "curated publisher feed",
+      "event_at": "2026-11-18T17:10:32Z",
+      "excerpt_truncated": false,
+      "feed": "local-inference",
+      "origin": "https://api.github.com/repos/ggml-org/llama.cpp/releases?per_page=3",
+      "pinned_api_url": "https://api.github.com/repos/ggml-org/llama.cpp/releases/450305209",
+      "published_at": "2026-11-18T17:10:32Z",
+      "publisher": "ggml-org",
+      "retrieved_at": "2026-11-18T18:07:40.932273+00:00",
+      "role": "Published release",
+      "source_excerpt_sha256": "fa6eb9a819e90d79380d2ef8f4fa96c45d8ab3d05d4b60215c12d1d02a317d3a",
+      "source_response_sha256": "92675a93eb1d398fef7dbcf86f2d936040d6df8595b4ee808e1a338869aa88ad",
+      "title": "b12521",
+      "url": "https://github.com/ggml-org/llama.cpp/releases/tag/b12521",
+      "version": "b12521"
+    },
+    {
+      "access": "Public publisher metadata, local inspection. No right to resell inferred.",
+      "acquisition": "curated publisher feed",
+      "event_at": "2026-11-18T08:28:45Z",
+      "excerpt_truncated": true,
+      "feed": "local-inference",
+      "origin": "https://api.github.com/repos/ggml-org/llama.cpp/releases?per_page=3",
+      "pinned_api_url": "https://api.github.com/repos/ggml-org/llama.cpp/releases/449701210",
+      "published_at": "2026-11-18T08:28:45Z",
+      "publisher": "ggml-org",
+      "retrieved_at": "2026-11-18T18:07:40.932273+00:00",
+      "role": "Published release",
+      "source_excerpt_sha256": "2e2810df251946be3b57bcf1c7741110019fc7a063f3c86dc6f3eefa3e596049",
+      "source_response_sha256": "92675a93eb1d398fef7dbcf86f2d936040d6df8595b4ee808e1a338869aa88ad",
+      "title": "b12503",
+      "url": "https://github.com/ggml-org/llama.cpp/releases/tag/b12503",
+      "version": "b12503"
+    },
+    {
+      "access": "Public publisher metadata, local inspection. No right to resell inferred.",
+      "acquisition": "curated publisher feed",
+      "event_at": "2026-11-18T08:09:23Z",
+      "excerpt_truncated": false,
+      "feed": "local-inference",
+      "origin": "https://api.github.com/repos/ggml-org/llama.cpp/releases?per_page=3",
+      "pinned_api_url": "https://api.github.com/repos/ggml-org/llama.cpp/releases/449683399",
+      "published_at": "2026-11-18T08:09:23Z",
+      "publisher": "ggml-org",
+      "retrieved_at": "2026-11-18T18:07:40.932273+00:00",
+      "role": "Published release",
+      "source_excerpt_sha256": "7b911e1722121d9972f6a02559d80c97ee175f71e930c33a33357cbd06c03e58",
+      "source_response_sha256": "92675a93eb1d398fef7dbcf86f2d936040d6df8595b4ee808e1a338869aa88ad",
+      "title": "b12502",
+      "url": "https://github.com/ggml-org/llama.cpp/releases/tag/b12502",
+      "version": "b12502"
+    },
+    {
+      "access": "Public publisher metadata, local inspection. No right to resell inferred.",
+      "acquisition": "curated publisher feed",
+      "event_at": "2026-10-14T20:02:27Z",
+      "excerpt_truncated": false,
+      "feed": "local-inference",
+      "origin": "https://api.github.com/repos/ggml-org/llama.cpp/commits?per_page=1&until=2026-10-14T23:59:59Z",
+      "pinned_api_url": "https://api.github.com/repos/ggml-org/llama.cpp/commits/a0e6dc7384edb8f5d927155e1d26c10b4a310e6d",
+      "published_at": null,
+      "publisher": "ggml-org",
+      "retrieved_at": "2026-11-18T18:07:40.933922+00:00",
+      "role": "Earlier snapshot; capability at this revision requires testing",
+      "source_excerpt_sha256": "8b1289c2d376c28775298598e8d4883bc763a6a1e20e6593385ea26924c6283f",
+      "source_response_sha256": "e135991910cf02ccf06d8864eef962274dbe07310b6f914e3cb32cfd5ad28a98",
+      "title": "Repository snapshot a0e6dc7384ed",
+      "url": "https://github.com/ggml-org/llama.cpp/commit/a0e6dc7384edb8f5d927155e1d26c10b4a310e6d",
+      "version": "a0e6dc7384edb8f5d927155e1d26c10b4a310e6d"
+    }
+  ]
+}
