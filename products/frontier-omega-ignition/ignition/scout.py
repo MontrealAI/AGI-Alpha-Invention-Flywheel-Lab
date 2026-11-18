@@ -60,16 +60,21 @@ def _drain(controller, name):
     for request, raw in pending:
         # Replay the identical snapshot after a crash, including original retrieval dates.
         run_id, version = controller.create(json.loads(raw))
-        state = controller.store.get(run_id)
-        if state["version"] == version and state.get("operation", {}).get("state", "active") == "active":
-            if state["status"] in {"queued", "running"}:
-                state = controller.advance(run_id, version)
+        head = controller.store.get(run_id)
+        current = head["version"] == version
+        state = head if current else controller.store.get(run_id, version)
+        if current and controller.obsolete(state):
+            state = controller.view(run_id)
+        elif current and state["operation"]["state"] == "active" and state["status"] in {"queued", "running"}:
+            state = controller.advance(run_id, version)
         research_result = state.get("research") or {}
-        result = {"mission_id": run_id, "version": version, "current_version": state["version"],
+        result = {"mission_id": run_id, "version": version, "current_version": head["version"],
                   "status": state["status"], "decision": research_result.get("decision"),
                   "candidates": len(research_result.get("candidates", [])), "error": state.get("error"),
                   "operation_state": state.get("operation", {}).get("state", "active"),
-                  "model_attempts": state.get("attempts", 0), "verified_artifact": bool(state.get("artifact"))}
+                  "model_attempts": state.get("attempts", 0),
+                  "verified_artifact": (state["status"] == "verified" and bool(state.get("artifact"))
+                                        and (state.get("evaluation") or {}).get("status") == "pass")}
         with controller.store.connection() as db:
             db.execute("UPDATE scout_work SET outcome=? WHERE name=? AND request=? AND outcome IS NULL",
                        (canonical(result), name, request))

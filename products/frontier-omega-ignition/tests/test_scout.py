@@ -120,3 +120,13 @@ class ScoutTest(unittest.TestCase):
         with self.assertRaises(Conflict):
             self.poll()
         self.assertEqual(len(self.calls), before)
+
+    def test_rejected_artifact_is_not_reported_as_verified(self):
+        def failed(run_id, version):
+            state = self.controller.store.get(run_id, version)
+            return dict(state, status="failed", artifact={"kind": "manifest_audit"}, evaluation={"status": "fail"})
+
+        with patch.object(self.controller, "advance", side_effect=failed):
+            result = self.poll(initial=True)
+        self.assertEqual(result["missions"][0]["status"], "failed")
+        self.assertFalse(result["missions"][0]["verified_artifact"])
