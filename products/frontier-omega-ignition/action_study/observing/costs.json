@@ -1,0 +1,69 @@
+{
+  "acquisition_components": {
+    "complete_common_roster": {
+      "requests": 1,
+      "body_bytes": 12284634,
+      "request_wall_seconds_sum": 39.316597
+    },
+    "complete_original_status_histories": {
+      "requests": 6,
+      "body_bytes": 82752,
+      "request_wall_seconds_sum": 29.187389
+    },
+    "conventional_mail_histories": {
+      "requests": 6,
+      "body_bytes": 16702,
+      "request_wall_seconds_sum": 27.510564
+    },
+    "corroborating_collaboration_circular": {
+      "requests": 1,
+      "body_bytes": 694,
+      "request_wall_seconds_sum": 4.591073
+    },
+    "truncated_initial_roster_read": {
+      "requests": 1,
+      "body_bytes": 8000001,
+      "request_wall_seconds_sum": 34.029252
+    }
+  },
+  "acquisition_total": {
+    "requests": 15,
+    "body_bytes": 20384783,
+    "request_wall_seconds_sum": 134.634875
+  },
+  "measurement": "Local warm-OS-cache serial replay of all cutoffs, 6 runs in alternating order. Every individual decision reloads and verifies its sources. Routing tries the restricted source then the complete history when necessary. Conventional SQL reads the same supplied sources and also cross-checks NASA's e-mail rendition. Common cutoff construction excluded. A production observer could cache both histories.",
+  "python": "3.12.14",
+  "sqlite": "3.53.1",
+  "processor_arch": "x86_64",
+  "registered_cutoffs_per_timing": 34,
+  "elapsed_seconds_per_34_cutoffs": {
+    "integrated_source_aware": [
+      0.049753,
+      0.039489,
+      0.049895,
+      0.054536,
+      0.054097,
+      0.051907
+    ],
+    "conventional_sql_cross_format": [
+      0.085405,
+      0.078292,
+      0.120436,
+      0.103814,
+      0.148339,
+      0.109632
+    ]
+  },
+  "median_seconds_per_34_cutoffs": {
+    "integrated_source_aware": 0.050901,
+    "conventional_sql_cross_format": 0.106723
+  },
+  "unmeasured_costs": [
+    "Complete investigator and engineering labor",
+    "Human correction and review time",
+    "Price of included compute and web research",
+    "Network egress and infrastructure",
+    "Maintenance, integration, support and adoption",
+    "Telescope time and realized science benefit"
+  ]
+}

@@ -77,12 +77,19 @@ jobs:
           ref: ${{ env.EXPECTED_SOURCE }}
           persist-credentials: false
           sparse-checkout: |
+            connected_enterprise
             products/frontier-omega-ignition
             products/alpha-genesis-harness/bridge
             products/alpha-genesis-harness/scripts
       - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
         with:
           python-version: '3.12'
+      - name: Prepare checksum-verified CPU inputs
+        run: |
+          test "$(git rev-parse HEAD)" = "$EXPECTED_SOURCE"
+          python -B products/frontier-omega-ignition/field_trials/test_prepare_cache.py
+          python -B products/frontier-omega-ignition/field_trials/prepare_cache.py \
+            --assets "$RUNNER_TEMP/assets" --receipt "$RUNNER_TEMP/model-preparation.json"
       - name: Observe public missions using verified local weights
         run: |
           test "$(git rev-parse HEAD)" = "$EXPECTED_SOURCE"
@@ -99,6 +106,13 @@ jobs:
         run: |
           python -B -m discovery_field.decision_study.observe --threads 4 --assets "$RUNNER_TEMP/assets" \
             --output "$RUNNER_TEMP/observations/scope-decisions.json"
+      - name: Attach acquisition receipt to the study
+        if: always()
+        run: |
+          if test -f "$RUNNER_TEMP/model-preparation.json"; then
+            mkdir -p "$RUNNER_TEMP/observations"
+            cp "$RUNNER_TEMP/model-preparation.json" "$RUNNER_TEMP/observations/model-preparation.json"
+          fi
       - name: Preserve public-prompt observations and source identities
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02

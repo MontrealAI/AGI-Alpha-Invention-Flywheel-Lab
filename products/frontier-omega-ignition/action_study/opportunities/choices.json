@@ -1,0 +1,110 @@
+{
+  "as_of": "2026-11-18",
+  "next_build": "agent-qualification",
+  "selection": {
+    "en": "Give one internal evaluation slot to a coding configuration. Its 500 published issue outcomes can be checked now, the organization controls the next qualification, and the decision can be reversed. Rehearse alert withdrawal alongside it. Telescope priorities and production model choice need fresh beneficiary evidence.",
+    "fr": "Attribuer une place au prochain essai interne d’une configuration de programmation. Ses résultats publiés sur 500 problèmes sont vérifiables dès maintenant, MONTREAL.AI maîtrise l’essai suivant et peut réviser son choix. Répéter en parallèle le retrait d’une alerte. Le choix d’un modèle de production et les priorités d’observation exigent de nouvelles données du bénéficiaire."
+  },
+  "opportunities": [
+    {
+      "id": "agent-qualification",
+      "source_ids": [
+        "hal-selection",
+        "swe-verified",
+        "swe-audit",
+        "hal-methods"
+      ],
+      "url": "https://arxiv.org/abs/2611.21515v1",
+      "en": {
+        "title": "Choose the next coding-agent trial",
+        "finding": "A November study found that 27 of 35 adjacent cost–accuracy trade-offs across seven agent benchmarks could not be distinguished statistically. An internal evaluator can ask a more specific question by giving each repository equal weight.",
+        "limit": "Published tests can reject correct fixes, and training exposure is documented. Historical results can prioritize a fresh trial. Local success rates and costs still need measurement.",
+        "test": "Compare two submissions on the same 500 issue IDs, disclose the per-repository results and reproduce the proposed trial order in SQL."
+      },
+      "fr": {
+        "title": "Choisir le prochain agent de programmation à évaluer",
+        "finding": "Une étude de novembre sur sept bancs d’essai n’a pu distinguer statistiquement 27 des 35 écarts entre configurations voisines sur la courbe coût–précision. Le laboratoire peut poser une question plus précise en donnant le même poids à chaque dépôt.",
+        "limit": "Des tests publics rejettent des correctifs valides. Certains problèmes figuraient dans les données d’entraînement. Ces résultats peuvent orienter un nouvel essai. La réussite et les coûts locaux restent à mesurer.",
+        "test": "Comparer deux soumissions sur les mêmes 500 problèmes, publier les résultats par dépôt et reproduire en SQL l’ordre d’essai proposé."
+      }
+    },
+    {
+      "id": "alert-revision",
+      "source_ids": [
+        "igwn-v30",
+        "gcn-lvk"
+      ],
+      "url": "https://rtd.igwn.org/projects/userguide/en/v30/changes.html",
+      "en": {
+        "title": "Withdraw a superseded observing priority",
+        "finding": "Gravitational-wave notices carry revisions and retractions. An August 2026 format change makes archive replay and current delivery two different engineering tasks.",
+        "limit": "An archived retraction records the collaboration’s judgment. It cannot tell us when a particular observer received it or how much telescope time a withdrawal saved.",
+        "test": "Replay a consecutive public cohort at fixed cutoffs. Check the shadow queue against the latest eligible official notice, including a later retraction."
+      },
+      "fr": {
+        "title": "Retirer une priorité d’observation devenue caduque",
+        "finding": "Les avis d’ondes gravitationnelles peuvent être révisés ou retirés. Depuis le changement de format d’août 2026, traiter les archives et recevoir les nouveaux avis requièrent deux dispositifs distincts.",
+        "limit": "Un retrait archivé consigne la décision de la collaboration scientifique. Il ne révèle ni le moment où un observateur l’a reçu ni le temps de télescope éventuellement économisé.",
+        "test": "Rejouer une série consécutive d’alertes à des échéances fixes. Comparer la file de suivi simulée au dernier avis officiel admissible, retrait compris."
+      }
+    },
+    {
+      "id": "forecast-cutoff",
+      "source_ids": [
+        "ai-dop",
+        "aifs"
+      ],
+      "url": "https://www.ecmwf.int/en/about/media-centre/aifs-blog/2026/observations-forecasts-bringing-ai-dop-real-time",
+      "en": {
+        "title": "Test an earlier forecast",
+        "finding": "ECMWF’s experimental AI-DOP now produces forecasts directly from the latest 30 hours of observations. A research desk could determine whether a usable forecast arrives before its decision cutoff.",
+        "limit": "A real-time prototype at ECMWF does not establish access to its timestamped historical grids or useful local skill at the extra lead time.",
+        "test": "Freeze stations, deadlines and a scoring rule. Compare forecasts actually available at each deadline with operational IFS and AIFS, then score against later station observations."
+      },
+      "fr": {
+        "title": "Tester une prévision disponible plus tôt",
+        "finding": "Le prototype AI-DOP du CEPMMT produit des prévisions à partir des 30 dernières heures d’observations. Une équipe de recherche pourrait vérifier si une prévision exploitable arrive avant son heure de décision.",
+        "limit": "Le prototype fonctionne au CEPMMT. L’accès à ses grilles historiques horodatées et la qualité locale de la prévision au délai supplémentaire restent à établir.",
+        "test": "Fixer les stations, les échéances et la règle de notation. Comparer aux prévisions opérationnelles IFS et AIFS disponibles à chaque échéance, puis vérifier les résultats sur les observations ultérieures des stations."
+      }
+    },
+    {
+      "id": "kernel-qualification",
+      "source_ids": [
+        "forge-kernel"
+      ],
+      "url": "https://arxiv.org/abs/2611.04998v1",
+      "en": {
+        "title": "Qualify a faster numerical kernel",
+        "finding": "ForgeKernel’s authors report a 25.1% geometric-mean gain over the best public implementation for each of eight operations on the public Ascend 910C cases. A repeated local operation could justify tuning.",
+        "limit": "The lab needs an authorized matching device, a real workload and a numerical tolerance. A benchmark gain cannot supply operating costs or application speedup.",
+        "test": "Interleave candidate and tuned vendor kernels on held-out shapes. Measure numerical errors, end-to-end runtime and occupied device time, including failed tuning runs."
+      },
+      "fr": {
+        "title": "Qualifier un noyau de calcul plus rapide",
+        "finding": "Pour huit opérations et leurs cas publics sur Ascend 910C, l’équipe de ForgeKernel rapporte un gain moyen géométrique de 25,1 % sur la meilleure implémentation publique de chacune. Une opération locale fréquente pourrait justifier ce travail.",
+        "limit": "Il faut disposer du matériel approprié avec autorisation, d’une charge réelle et d’une tolérance numérique. Les coûts et le gain à l’échelle de l’application restent à mesurer.",
+        "test": "Alterner le noyau candidat et le noyau optimisé du fournisseur sur des dimensions tenues à l’écart. Mesurer les erreurs numériques, la durée totale et le temps d’occupation de l’accélérateur, essais infructueux compris."
+      }
+    },
+    {
+      "id": "scientific-retention",
+      "source_ids": [
+        "stem-compression"
+      ],
+      "url": "https://arxiv.org/abs/2604.06221v1",
+      "en": {
+        "title": "Keep scientific data usable at acquisition speed",
+        "finding": "A 4D electron microscopy study benchmarked 13 lossless implementations on five datasets. On those inputs a readily available Blosc/Zstd option compressed faster than gzip-9 while offering a comparable compression ratio.",
+        "limit": "Established lossless tools may already solve the bottleneck. Discarding any measured information requires a separate test of each intended scientific inference.",
+        "test": "Replay an authorized acquisition stream, restore every value and measure sustained write speed, random-region read time and storage. Compare the best conventional codec before changing the representation."
+      },
+      "fr": {
+        "title": "Conserver des données scientifiques au rythme d’acquisition",
+        "finding": "Une étude en microscopie électronique 4D a comparé 13 implémentations sans perte sur cinq jeux de données. Sur ces données, Blosc/Zstd a compressé plus vite que gzip-9 avec un taux de compression comparable.",
+        "limit": "Les outils sans perte existants pourraient suffire. Toute suppression d’information mesurée exige un essai distinct pour chaque conclusion scientifique visée.",
+        "test": "Rejouer un flux d’acquisition autorisé, restituer chaque valeur, puis mesurer le débit d’écriture soutenu, le temps de lecture d’une région et le stockage. Comparer d’abord le meilleur codec classique."
+      }
+    }
+  ]
+}
