@@ -1,0 +1,80 @@
+name: Governance176 signed-review provenance — scoped offline qualification
+
+on:
+  pull_request:
+    paths:
+      - 'research/governance_review176.py'
+      - 'tests/test_governance_review176.py'
+      - 'campaign/governance-review176/**'
+      - '.github/workflows/governance-review176.yml'
+  push:
+    branches:
+      - review/governance-independent-attestation176-20261118
+
+permissions:
+  contents: read
+
+jobs:
+  execute-fixed-adversarial-suite:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    outputs:
+      archive_sha256: ${{ steps.pack.outputs.sha256 }}
+    steps:
+      - name: Start measured window
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - name: Enforce source checkout is the exact PR head
+        env:
+          EXPECTED_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          test "$(git rev-parse HEAD)" = "$EXPECTED_HEAD"
+          echo "Exact executing source: $EXPECTED_HEAD"
+      - name: Source and runtime inventory (no key material)
+        run: |
+          git rev-parse HEAD
+          python3 --version
+          openssl version
+      - name: Frozen T01–T12 and actual CLI; unchanged original impact verifier
+        run: |
+          python3 -B -m unittest -v tests.test_governance_review176
+          python3 -B -m unittest -v tests.test_governance_impact140
+      - name: Package strictly allowlisted public source (never test keys)
+        id: pack
+        run: |
+          tar -cf "$RUNNER_TEMP/governance-review176-source.tar" \
+            research/governance_review176.py \
+            tests/test_governance_review176.py \
+            products/governance_impact140/engine.py
+          sum="$(sha256sum "$RUNNER_TEMP/governance-review176-source.tar" | cut -d' ' -f1)"
+          echo "sha256=$sum" >> "$GITHUB_OUTPUT"
+          echo "Public source SHA256: $sum"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: governance-review176-source-${{ github.event.pull_request.head.sha || github.sha }}
+          path: ${{ runner.temp }}/governance-review176-source.tar
+          if-no-files-found: error
+          retention-days: 7
+
+  independent-clean-source-replay:
+    needs: execute-fixed-adversarial-suite
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Start measured window
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/download-artifact@v4
+        with:
+          name: governance-review176-source-${{ github.event.pull_request.head.sha || github.sha }}
+          path: ${{ runner.temp }}/verified-176
+      - name: Verify exact producer digest, extract and execute independently
+        run: |
+          cd "$RUNNER_TEMP/verified-176"
+          printf '%s  %s\n' '${{ needs.execute-fixed-adversarial-suite.outputs.archive_sha256 }}' 'governance-review176-source.tar' | sha256sum -c -
+          mkdir clean
+          tar -xf governance-review176-source.tar -C clean
+          cd clean
+          PYTHONPATH="$PWD" python3 -O -B -m unittest discover -s tests -p 'test_governance_review176.py' -v
+          echo 'Scoped source replay only, not released native enterprise operation or real reviewer approval.'
