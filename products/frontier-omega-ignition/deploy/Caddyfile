@@ -1,0 +1,6 @@
+{$IGNITION_PUBLIC_HOST} {
+    request_body {
+        max_size 2100000
+    }
+    reverse_proxy 127.0.0.1:{$IGNITION_PORT:8784}
+}

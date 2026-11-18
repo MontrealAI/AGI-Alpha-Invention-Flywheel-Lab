@@ -11,8 +11,10 @@ from ignition import construction, evaluation
 from ignition.controller import Controller
 from ignition.store import Conflict, StateError, Store, digest
 from test_integrity_boundaries import body
+from trials.controls import rejected_manifest
 
 PRODUCT = Path(__file__).resolve().parents[1]
+
 ORIGINAL_RESPONSE = "9bef7cd8787ba4397137da29dce7e4b450f70c31eb26dacfa8910a6c38bf42b3"
 ORIGINAL_CONTRACT = "9349cab7eed8ad480458c3f1655f659fc36455aaccb11b4e8fb56cb9094070a4"
 ORIGINAL_ARTIFACT = "2997e2978470afe5818f42a697c5797436ea077e46e683fc2bb53890e550bae8"
@@ -24,9 +26,7 @@ def public_fixture(name):
 
 
 def recovered_rejection():
-    expected = public_fixture("integrity")["mission"]["construction_spec"]["definition"]
-    proposal = {"kind": "manifest_audit", "program": expected}
-    expected["manifest"]["ignition.css"] = "23675657f7ffa6fbdbd0d085580ef56687f731e9066e28e1f6a5ad0c449b8668"
+    proposal = json.loads((PRODUCT / "trials/historical-integrity-proposal.json").read_bytes())
     if digest(proposal) != ORIGINAL_RESPONSE:
         raise AssertionError("Recovered proposal differs from the published Qwen receipt")
     return proposal
@@ -49,7 +49,9 @@ class AdaptiveTests(unittest.TestCase):
         spec = public_fixture("integrity")["mission"]["construction_spec"]
         contract = construction.freeze_contract(spec)
         self.assertEqual(contract["sha256"], ORIGINAL_CONTRACT)
-        artifact = construction.build(contract, recovered_rejection())
+        with self.assertRaisesRegex(construction.ConstructionError, "immutable_manifest"):
+            construction.build(contract, recovered_rejection())
+        artifact = rejected_manifest(contract, recovered_rejection())
         self.assertEqual(artifact["sha256"], ORIGINAL_ARTIFACT)
         receipt = evaluation.evaluate(contract, artifact)
         self.assertFalse(receipt["declared_program_conforms"])
@@ -94,9 +96,10 @@ class AdaptiveTests(unittest.TestCase):
         pending = self.ctrl.advance(rid, rev)
         before = pending["construction_attempts"][0]
         self.assertEqual(before["status"], "rejected")
-        self.assertEqual(before["artifact_sha256"], ORIGINAL_ARTIFACT)
-        self.assertEqual(before["feedback"]["public_specification_mismatches"], ["ignition.css"])
-        self.assertEqual(before["feedback"]["failed_check_counts"], {"confirmation": 1})
+        self.assertIsNone(before["artifact_sha256"])
+        self.assertIsNone(before["receipt_sha256"])
+        self.assertEqual(before["proposal_sha256"], ORIGINAL_RESPONSE)
+        self.assertEqual(before["feedback"]["compiler_code"], "immutable_manifest")
         with self.assertRaises(Conflict):
             self.ctrl.deliver(rid, rev)
         prompt = self.reply(rid, rev, "repair", {"kind": "manifest_audit", "program": {"use_frozen_manifest": True}})
@@ -108,7 +111,8 @@ class AdaptiveTests(unittest.TestCase):
         attempts = state["construction_attempts"]
         self.assertEqual([i["status"] for i in attempts], ["rejected", "accepted"])
         self.assertEqual({i["contract_sha256"] for i in attempts}, {ORIGINAL_CONTRACT})
-        self.assertEqual([i["passed_checks"] for i in attempts], [8, 9])
+        self.assertNotIn("passed_checks", attempts[0])
+        self.assertEqual(attempts[1]["passed_checks"], 9)
         self.assertEqual(state["attempts"], 2)
         self.assertEqual(state["evaluation"]["comparison"]["outcome"], "tie")
 

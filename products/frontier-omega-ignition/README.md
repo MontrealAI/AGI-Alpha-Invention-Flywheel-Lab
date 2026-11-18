@@ -1,5 +1,11 @@
 # 🌌♾️ FRONTIER Ω — IGNITION
 
+## Invitation-only Mission Studio
+
+The hosted candidate serves a bilingual public introduction at `/`, a curated historical experiment at `/demo`, and a private workspace at `/studio`. An operator issues each user an expiring invitation. The studio can review a bounded mission, dispatch it, reopen its durable record, compare evidence, and download a portable artifact and a private offer draft. A draft does not establish acceptance, delivery to a beneficiary, or payment.
+
+[Deployment, invitations, monitoring, backup and rollback](docs/HOSTED-STUDIO-OPERATIONS.md) · [Fresh transfer and independent replay](qa/transfer/README.md)
+
 ## Run the sponsor research missions
 
 The private worker ranks three real published opportunities, screens an already-served request, builds the registered candidates and advances after a failed economic premise. Its first output is a verified reversible circuit with a decision to withhold competition entry. Its second is a CPU patch for a real scroll ink reader. The operator can inspect the experiments, source rights, costs and the commercial decision for each. [Results and independent receiver](../../docs/frontier-omega-ignition/continuation/beneficiary-pursuit/REPORT.md) · [Download the offline scroll normalizer](../../docs/frontier-omega-ignition/continuation/beneficiary-pursuit/scroll-normalizer.zip)

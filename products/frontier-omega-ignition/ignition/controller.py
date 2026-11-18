@@ -5,7 +5,7 @@ import sys
 import time
 from datetime import datetime, timezone
 
-from . import construction, evaluation, delivery, development, research, routing
+from . import construction, evaluation, delivery, development, family_contracts, research, routing
 from .economics import assessment
 from .provider import HandoffRequired, ManualProvider, ModelProvider, ProviderUnavailable
 from .store import Conflict, StateError, digest, event, runtime_source, timestamp
@@ -14,12 +14,20 @@ CONSTRUCT_INSTRUCTION = "Construct an executable program for the selected purpos
 
 FINISHED = {"verified", "failed", "deferred"}
 PRIVATE_FIELDS = {"calls", "exchanges", "last_proposal"}
+
 SPEC_FORMAT = {
-    "record_migration": {"definition": {"input_fields": ["legacy_key"], "targets": [{"name": "new_key","type": "text"}],
-                                       "extra_fields": "reject", "demonstrations": "separate development cases"},
-                         "cases": "held-back named cases: input and expected, or error"},
-    "manifest_audit": {"definition": {"manifest": {"relative/path": "operator-supplied trusted sha256"}},
-                       "cases": "frozen named byte-input cases and exact expected classifications"}
+    "record_migration": {
+        "definition": {"columns": [{"source": "source_field", "target": "target_field", "type": "text"}],
+                       "extra_fields": "reject"},
+        "alternative_definition": {
+            "input_fields": ["source_field"], "targets": [{"name": "target_field", "type": "text"}],
+            "extra_fields": "reject", "demonstrations": [
+                {"input": {"rows": [{"source_field": "A"}, {"source_field": "B"}]},
+                 "expected": {"rows": [{"target_field": "A"}, {"target_field": "B"}]}}]},
+        "cases": "Named cases with input and expected, or input and error. Use distinct examples.",
+    },
+    "manifest_audit": {"definition": "An object with manifest equal to the supplied trusted_manifest",
+                       "cases": "Named byte-input cases with exact expected classifications."},
 }
 
 
@@ -80,7 +88,7 @@ class Controller:
                 return identity()
         return self.pairing_source
 
-    def successor(self, run_id, version, body, rights):
+    def successor(self, run_id, version, body, rights, *, replay_first=False):
         if not isinstance(rights,str) or not rights.strip() or len(rights)>2000:
             raise StateError("Provide the authorization basis for this specific reuse")
         with self.store.work_lock(run_id):
@@ -106,6 +114,32 @@ class Controller:
                 raise StateError("Open a fresh follow-up mission to check a new worklist.")
             inherited = {"source_id":run_id, "source_version":version, "artifact_sha256":s["artifact"]["sha256"],
                          "rights":rights, "kind":s["artifact"]["kind"], "program":s["artifact"]["program"]}
+            if replay_first:
+                target = body.get("mission") or {}
+                resources = target.get("resources") or {}
+                spec = target.get("construction_spec") or {}
+                if (resources.get("execution_strategy") != "direct" or resources.get("direct_method") != "specialist"
+                        or resources.get("max_model_calls") != 0 or resources.get("max_repairs") != 0
+                        or spec.get("kind") != inherited["kind"]):
+                    raise StateError("Replaying a retained program requires a matching fresh contract, direct specialist, zero calls and zero repairs")
+                contract = construction.freeze_contract(spec)["spec"]
+                previous = s["contract"]["spec"]
+                def units(case):
+                    value = case["input"]
+                    if isinstance(value.get("rows"), list):
+                        return {digest(row) for row in value["rows"] if row}
+                    if isinstance(value.get("files"), dict):
+                        return {digest([name, data]) for name, data in value["files"].items()}
+                    return set()
+                shown = set()
+                for case in previous["cases"] + previous["definition"].get("demonstrations", []):
+                    shown.update(units(case))
+                for case in contract["definition"].get("demonstrations", []):
+                    shown.update(units(case))
+                if not any("expected" in case and units(case) and not shown.intersection(units(case))
+                           for case in contract["cases"]):
+                    raise StateError("Supply a fresh nonempty confirmation input and expected output for this successor")
+                inherited["replay_unchanged"] = True
             return self.store.create(body,self.identity(),self.source,inherited=inherited,specialist_source=self._specialist_identity(body),
                                      source_sequence=s["operation"]["sequence"])
 
@@ -228,9 +262,13 @@ class Controller:
                     if isinstance(data,dict) and isinstance(data.get("rows"),list) and data["rows"]:
                         return {digest(row) for row in data["rows"]}
                     return {digest(data)}
-                shown = set()
-                for case in draft["cases"] + draft["definition"].get("demonstrations",[]):
-                    shown |= input_units(case["input"])
+                drafts = [draft]
+                if s.get("specification_failures"):
+                    # Earlier, rejected drafts may also contain inputs the proposer has seen.
+                    drafts.extend(call["response"].get("spec") for call in s["calls"].values()
+                                  if call["stage"] == "specification")
+                shown = {unit for proposal in drafts for data in self._proposal_inputs(proposal)
+                         for unit in input_units(data)}
                 for case in confirmations:
                     if not isinstance(case,dict) or "input" not in case or shown & input_units(case["input"]):
                         raise StateError("A confirmation input duplicates a case already seen by the proposer")
@@ -243,6 +281,18 @@ class Controller:
                 self._step(s, "contract", "Operator approved the specification and supplied fresh confirmation cases", "queued")
             else:
                 raise StateError("Unknown intervention")
+
+    @staticmethod
+    def _proposal_inputs(draft):
+        if not isinstance(draft, dict):
+            return
+        definition = draft.get("definition")
+        demos = definition.get("demonstrations") if isinstance(definition, dict) else None
+        for cases in (draft.get("cases"), demos):
+            if isinstance(cases, list):
+                for case in cases:
+                    if isinstance(case, dict) and isinstance(case.get("input"), dict):
+                        yield case["input"]
 
     def advance(self, run_id, version, *, pending_only=False):
         with self.store.work_lock(run_id,version):
@@ -339,6 +389,10 @@ class Controller:
                     if s.get("choice_call_started"):
                         raise StateError("A bounded choice call started without a reusable answer. Amend before a new attempt.")
                     s["choice_call_started"] = key
+                if stage == "specification" and "validation_error" in payload:
+                    if s.get("specification_repair_started"):
+                        raise StateError("The specification repair started without a reusable answer. Amend before a new attempt.")
+                    s["specification_repair_started"] = key
                 s["attempts"] = s.get("attempts", 0) + 1
             self._step(s, stage, f"Requested {stage} from the configured provider")
             start = time.monotonic()
@@ -376,7 +430,7 @@ class Controller:
             self._step(s, "selection", s["research"]["decision_reason"])
         result = s["research"]
         if result["decision"] != "build":
-            if mission["resources"].get("direct_after_research") is not True or not spec or spec.get("kind") not in SPEC_FORMAT:
+            if mission["resources"].get("direct_after_research") is not True or not spec or spec.get("kind") not in construction.KINDS:
                 return self._step(s, "selection", result["decision_reason"], "deferred")
             if not choice.get("fallback"):
                 fallback = routing.route(dict(mission, resources=dict(mission["resources"], execution_strategy="direct")))
@@ -386,7 +440,7 @@ class Controller:
                 self._step(s, "routing", "Preserved the research verdict. The operator separately requested a direct attempt on the frozen specification.")
             choice = choice["fallback"]
             result = routing.direct_selection(mission, choice)
-        if result.get("kind") not in SPEC_FORMAT:
+        if result.get("kind") not in construction.KINDS:
             raise StateError("The selected construction needs an execution capability outside the installed grammar")
         if s["contract"] is None:
             if spec:
@@ -398,17 +452,7 @@ class Controller:
                                           "independence":"Checker executes separately. Operator controls confirmation inputs."}
                 self._step(s, "contract", "Froze the mission-specific specification and acceptance cases")
             else:
-                proposed = propose("specification", {
-                    "instruction":"Suggest a testable specification addressing all original requirements. Do not invent trusted digests or private inputs. Return {spec: {purpose,kind,definition,cases}} or {obstruction: string}. The operator must review it before construction.",
-                    "mission":model_mission, "selected":result["selected"], "kind":result["kind"], "format":SPEC_FORMAT[result["kind"]]})
-                if "obstruction" in proposed:
-                    raise StateError(str(proposed["obstruction"]))
-                draft = proposed.get("spec")
-                if not isinstance(draft,dict) or draft.get("purpose") != mission["purpose"] or draft.get("kind") != result["kind"]:
-                    raise StateError("Proposed specification does not bind the purpose and selected capability")
-                s["proposed_contract"] = construction.freeze_contract(draft)
-                s["contract_sha256"] = digest(s["proposed_contract"])
-                return self._step(s, "contract", "Review the proposed scope, acceptance cases and their independence before approval", "awaiting_contract")
+                return self._blank_contract(s, model_mission, result, propose, mode)
         contract = s["contract"]
         payload = {"instruction": CONSTRUCT_INSTRUCTION, "purpose": mission["purpose"],
                    "requirements": mission["requirements"], "kind": result["kind"],
@@ -417,6 +461,61 @@ class Controller:
         if choice["route"] == "research":
             payload["selected"] = result["selected"]
         self._construct(s, contract, choice, payload, propose)
+
+    def _blank_contract(self, s, model_mission, result, propose, mode):
+        kind = result["kind"]
+        packet = {
+            "instruction": (
+                "Propose a testable contract that carries out the selected route and all original requirements. "
+                "Use the documented family shape and bind the exact mission purpose. Supply your own distinct "
+                "illustrative cases. Never invent trusted digests, operator inputs or independent confirmations. "
+                "Return {spec: {purpose,kind,definition,cases}} or {obstruction: string}. "
+                "The operator must review a valid proposal and provide fresh confirmation cases."
+            ),
+            "mission": model_mission, "selected": result["selected"], "kind": kind,
+            "format": SPEC_FORMAT[kind], "family_contract": family_contracts.catalog()[kind],
+        }
+        if kind == "manifest_audit":
+            evidence = family_contracts.extracted_manifest(result["signals"])
+            if not evidence["manifest"]:
+                raise StateError("A blank manifest audit requires an unambiguous, attributable supplied file digest inventory.")
+            packet.update(trusted_manifest=evidence["manifest"], manifest_sources=evidence["sources"])
+
+        resources = s["mission"]["resources"]
+        may_repair = (mode == "local" and not self.assisted and s["mission"]["authority"].get("local_model") is True
+                      and resources.get("max_repairs", 0) > 0 and resources.get("max_model_calls", 0) > 0)
+        for attempt in (1, 2):
+            try:
+                proposed = propose("specification", packet)
+            except ModelBudgetExhausted as exc:
+                if attempt == 2:
+                    raise StateError(f"{packet['validation_error']}. {exc}") from exc
+                raise
+            if "obstruction" in proposed:
+                raise StateError(str(proposed["obstruction"]))
+            draft = proposed.get("spec")
+            try:
+                construction.require(isinstance(draft, dict) and draft.get("purpose") == model_mission["purpose"]
+                                     and draft.get("kind") == kind, "invalid_contract",
+                                     "Proposed specification does not bind the purpose and selected capability")
+                contract = construction.freeze_contract(draft)
+                if kind == "manifest_audit":
+                    construction.require(draft["definition"]["manifest"] == packet["trusted_manifest"], "invalid_contract",
+                                         "Use the exact supplied trusted_manifest path and digest pairs")
+            except construction.ConstructionError as exc:
+                failures = s.setdefault("specification_failures", [])
+                detail = str(exc)
+                if len(failures) < attempt:
+                    failures.append({"attempt": attempt, "proposal_sha256": digest(proposed), "validation_error": detail})
+                    self._step(s, "specification", f"Rejected contract proposal {attempt}: {detail}")
+                if attempt == 2 or not may_repair:
+                    raise
+                packet = dict(packet, validation_error=detail, instruction=packet["instruction"] +
+                              " Correct the validation error in a new complete proposal, or report the obstruction.")
+                continue
+            s["proposed_contract"] = contract
+            s["contract_sha256"] = digest(contract)
+            return self._step(s, "contract", "Review the proposed scope, acceptance cases and their independence before approval", "awaiting_contract")
 
     def _choose_mapping(self, s, payload, method, propose):
         mission = s["mission"]
@@ -469,20 +568,25 @@ class Controller:
         mission = s["mission"]
         resources = mission["resources"]
         attempts = s.setdefault("construction_attempts", [])
+        replay_unchanged = (s.get("inherited") or {}).get("replay_unchanged") is True
         specialist = choice["method"] == "specialist"
         bounded = choice["method"] in ("operator_choice", "model_choice")
         evidence_projection = choice["method"] == "evidence_projection"
         # Attempts and model calls are separately checkpointed. Resuming a handoff reuses its
         # exact request, and a terminal rejection cannot be converted into a fresh budget.
+        repairs_left = resources.get("max_repairs", 1) - int(bool(s.get("specification_repair_started")))
         while True:
             self._check_time(mission)
             if attempts:
                 last = attempts[-1]
                 if last["status"] == "accepted":
                     return self._step(s, "delivery", "Verified within the frozen contract", "verified")
-                if specialist or bounded or evidence_projection or not last["repairable"] or len(attempts) > resources.get("max_repairs", 1):
+                if specialist or bounded or evidence_projection or not last["repairable"] or len(attempts) > repairs_left:
                     return self._step(s, "delivery", "Independent acceptance failed. The rejected construction is retained for inspection.", "failed")
-            if bounded:
+            if replay_unchanged:
+                self._step(s, "construction", "Replaying the authorized retained program unchanged under the new acceptance contract")
+                response = {"kind": s["inherited"]["kind"], "program": s["inherited"]["program"]}
+            elif bounded:
                 response = self._choose_mapping(s, payload, choice["method"], propose)
                 if response is None:
                     return
@@ -524,6 +628,8 @@ class Controller:
             attempt = {"attempt": len(attempts) + 1, "contract_sha256": contract["sha256"],
                        "proposal_sha256": digest(response), "method": choice["method"] if bounded or specialist or evidence_projection else "model",
                        "artifact_sha256": None, "receipt_sha256": None, "feedback": None, "repairable": True}
+            if replay_unchanged:
+                attempt["method"] = "retained_program"
             try:
                 artifact = construction.build(contract, response)
             except construction.ConstructionError as exc:
@@ -609,4 +715,6 @@ class Controller:
                "unsuccessful_calls":s.get("unsuccessful_calls",[]),
                "economics":s.get("economics"),
                "inheritance":"Use only under separately established data and software rights. Requalify on each new mission."}
+        if s.get("specification_failures"):
+            ctx["specification_failures"] = s["specification_failures"]
         return delivery.export_bundle(s["contract"],s["artifact"],s["evaluation"],ctx)

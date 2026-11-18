@@ -341,6 +341,8 @@ def build(contract, proposal):
         if type(program) is dict and set(program) == {"use_frozen_manifest"} and program["use_frozen_manifest"] is True:
             program = spec["definition"]
         _manifest(program)
+        require(program["manifest"] == spec["definition"]["manifest"], "immutable_manifest",
+                "A proposed file list or digest differs from the trusted contract. Use the frozen manifest reference.")
     else:
         fields = _migration(program)
         definition = spec["definition"]

@@ -1,0 +1,11 @@
+[Unit]
+Description=Take a verified Mission Studio snapshot every twelve hours
+
+[Timer]
+OnCalendar=*-*-* 03,15:00:00 UTC
+RandomizedDelaySec=3min
+Persistent=true
+Unit=ignition-backup.service
+
+[Install]
+WantedBy=timers.target

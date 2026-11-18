@@ -28,6 +28,21 @@ class WireGrammarTests(unittest.TestCase):
         with self.assertRaises(SchemaError):
             validate_output({**self.response,"selected":"C2"},schema)
 
+    def test_keyed_coverage_excludes_the_observed_surplus_report_without_deciding_fit(self):
+        requirements = ["Classify the files.", "Export the receiver."]
+        tagged = {**self.payload, "mission": {"requirements": requirements},
+                  "requirement_ids": {"R1": requirements[0], "R2": requirements[1]}}
+        schema = prepare_schema(model_schema.for_stage("challenge", tagged))
+        observation = {"check": "Compare an independently withheld output", "status": "unresolved"}
+        full = {"R1": observation, "R2": {**observation, "status": "supported"}}
+        validate_output({**self.response, "fit": full}, schema)
+        validate_output(self.response, schema)  # No evidence; declining remains possible.
+        old_rows = [{"requirement": r, **observation} for r in [*requirements, requirements[-1]]]
+        for invalid in (old_rows, {"R1": observation}, {**full, "R3": observation},
+                        {"R1": {**observation, "status": "guaranteed"}, "R2": observation}):
+            with self.subTest(invalid=invalid), self.assertRaises(SchemaError):
+                validate_output({**self.response, "fit": invalid}, schema)
+
     def test_exact_schema_checked_after_native_response_no_fallback(self):
         sent = []
         def sender(url, headers, body, timeout):
@@ -55,6 +70,48 @@ class WireGrammarTests(unittest.TestCase):
         with self.assertRaises(ProviderUnavailable):
             ModelProvider.from_environment({"IGNITION_MODEL_PROVIDER":"llama-cpp","IGNITION_MODEL_ID":"m",
                                             "IGNITION_MODEL_SCHEMA":"true"})
+
+    def test_native_builders_can_reference_but_never_generate_trust_anchors(self):
+        visible = {"kind": "manifest_audit", "definition": {"manifest": {"a": "a"*64}}}
+        for stage in ("construct", "direct_construct", "repair"):
+            schema = prepare_schema(model_schema.for_stage(stage, visible))
+            validate_output({"kind": "manifest_audit", "program": {"use_frozen_manifest": True}}, schema)
+            for program in (visible["definition"], {"manifest": {"a": "b"*64}}, {"use_frozen_manifest": False}):
+                with self.assertRaises(SchemaError):
+                    validate_output({"kind": "manifest_audit", "program": program}, schema)
+
+    def test_blank_draft_grammar_preserves_variable_examples_and_abstention(self):
+        from ignition.family_contracts import catalog
+        for kind, family in catalog().items():
+            packet = {"kind": kind, "mission": {"purpose": "An operator-specified outcome."}, "family_contract": family}
+            if kind == "manifest_audit":
+                trusted = {"sample": "1" * 64}
+                packet["trusted_manifest"] = trusted
+                definition = {"manifest": trusted}
+                case = {"name": "No files present", "input": {"files": {}}, "expected":
+                        {"ok": False, "matched": [], "missing": ["sample"], "changed": [], "unexpected": []}}
+            else:
+                definition = {"columns": [{"source": "variable", "target": "field", "type": "integer"}],
+                              "extra_fields": "reject"}
+                case = {"name": "Convert an integer string", "input": {"rows": [{"variable": "8"}]},
+                        "expected": {"rows": [{"field": 8}]}}
+            schema = prepare_schema(model_schema.for_stage("specification", packet))
+            proposed = {"purpose": packet["mission"]["purpose"], "kind": kind, "definition": definition, "cases": [case]}
+            validate_output({"spec": proposed}, schema)
+            validate_output({"obstruction": "The input entitlement remains uncertain."}, schema)
+            for key, value in (("purpose", "Replaced goal"), ("kind", "new_worker")):
+                with self.assertRaises(SchemaError):
+                    validate_output({"spec": {**proposed, key: value}}, schema)
+            if kind == "manifest_audit":
+                with self.assertRaises(SchemaError):
+                    validate_output({"spec": {**proposed, "definition": {"manifest": {"invented": "2" * 64}}}}, schema)
+
+    def test_blank_wire_grammar_can_admit_unsupported_mechanics(self):
+        from ignition.family_contracts import catalog
+        schema = prepare_schema(model_schema.for_stage("discover", {"signals": [], "installed_contracts": catalog()}))
+        candidate = {k: "Uninstalled hypothesis" for k in model_schema.CANDIDATE_FIELDS} | {
+            "sources": [], "mechanics": {"inputs": ["other"], "operations": ["other"], "outputs": ["other"]}}
+        validate_output({"requested_output": "other", "candidates": [candidate], "favourite": None}, schema)
 
     def test_discovery_allows_unsupported_hypothesis_and_no_evidence(self):
         s = prepare_schema(model_schema.for_stage("discover",{"signals":[]}))

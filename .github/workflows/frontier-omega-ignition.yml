@@ -67,6 +67,35 @@ jobs:
           test "$(git rev-parse HEAD)" = "$EXPECTED_SOURCE"
           python -B -m unittest discover -s tests -p 'test_*.py' -v
 
+      - name: Measure concurrent private sessions and drill independent recovery
+        working-directory: products/frontier-omega-ignition
+        run: |
+          python -B qa/qualify_hosted_operations.py --out "$RUNNER_TEMP/ignition-hosted-ops.json"
+          python -B qa/verify_operator_restore.py > "$RUNNER_TEMP/ignition-restore.json"
+
+      - name: Construct and independently replay two transferred research operations
+        working-directory: products/frontier-omega-ignition
+        run: |
+          test "$(git rev-parse HEAD)" = "$EXPECTED_SOURCE"
+          run_dir="$RUNNER_TEMP/ignition-fresh-transfer"
+          python -IB qa/transfer/hosted.py "$run_dir" > "$RUNNER_TEMP/ignition-transfer-source.json"
+          digest=$(jq -er '.manifest_sha256' "$RUNNER_TEMP/ignition-transfer-source.json")
+          python -IB qa/transfer/qualify.py receive "$run_dir" --manifest-sha256 "$digest" > "$RUNNER_TEMP/ignition-transfer-result.json"
+          python -IB qa/transfer/independent_receive.py "$run_dir" --manifest-sha256 "$digest" > "$RUNNER_TEMP/ignition-transfer-independent.json"
+          jq '{rows_correct_for_candidate_jq_and_reference, additional_repositories: [.additional_sources[].source]}' "$RUNNER_TEMP/ignition-transfer-independent.json"
+          jq '{source, records: ([.migration[].rows] | add), directory_verdicts: [.directory_acceptance[] | {condition, ok: .verdict.ok}], correctness_vs_conventional}' "$RUNNER_TEMP/ignition-transfer-result.json"
+
+      - name: Retain public test receipts for operations, transfer and independent replay
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: ignition-studio-verification-${{ env.EXPECTED_SOURCE }}-attempt-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/ignition-hosted-ops.json
+            ${{ runner.temp }}/ignition-restore.json
+            ${{ runner.temp }}/ignition-transfer-result.json
+            ${{ runner.temp }}/ignition-transfer-independent.json
+          if-no-files-found: error
+
       - name: Receive the pinned research edition as an independent sender reference
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
@@ -124,6 +153,25 @@ jobs:
         with:
           name: ignition-public-replay-${{ env.EXPECTED_SOURCE }}-attempt-${{ github.run_attempt }}
           path: ${{ runner.temp }}/FRONTIER_OMEGA_IGNITION.html
+          if-no-files-found: error
+
+      - name: Exercise invitation, bilingual browser delivery and accessibility on isolated HTTPS staging
+        working-directory: products/frontier-omega-ignition
+        env:
+          NODE_PATH: ${{ runner.temp }}/ignition-studio-drivers/node_modules
+        run: |
+          mkdir "$RUNNER_TEMP/ignition-studio-drivers"
+          cp qa/studio-browser/package*.json "$RUNNER_TEMP/ignition-studio-drivers/"
+          npm ci --prefix "$RUNNER_TEMP/ignition-studio-drivers" --ignore-scripts --no-audit --no-fund
+          export CHROMIUM_PATH="$(command -v google-chrome)"
+          set -o pipefail
+          node qa/studio_browser.cjs | tee "$RUNNER_TEMP/ignition-studio-browser.json"
+
+      - name: Preserve signed-in browser results for both languages and viewport sizes
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: ignition-studio-browser-${{ env.EXPECTED_SOURCE }}-attempt-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/ignition-studio-browser.json
           if-no-files-found: error
 
       - name: Preserve desktop and mobile views of the public integrity replay
@@ -196,4 +244,74 @@ jobs:
         with:
           name: ignition-sources-${{ env.EXPECTED_SOURCE }}-attempt-${{ github.run_attempt }}
           path: ${{ runner.temp }}/ignition-sources-receipt.json
+          if-no-files-found: error
+
+  selection:
+    name: Pinned selection, construction and abstention on public archive inputs
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record job start
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ env.EXPECTED_SOURCE }}
+          persist-credentials: false
+          sparse-checkout: |
+            products/frontier-omega-ignition
+            products/alpha-genesis-harness/bridge
+            products/alpha-genesis-harness/scripts
+            docs/frontier-omega-ignition/continuation/beneficiary-pursuit
+            connected_enterprise
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Verify the shared CPU model and runtime
+        id: acquire
+        working-directory: products/frontier-omega-ignition
+        run: |
+          test "$(git rev-parse HEAD)" = "$EXPECTED_SOURCE"
+          python -B field_trials/prepare_cache.py --assets "$RUNNER_TEMP/assets" --receipt "$RUNNER_TEMP/acquisition.json"
+      - name: Test bounded choice, independently replayed construction and abstention
+        if: ${{ !cancelled() && steps.acquire.outcome == 'success' }}
+        working-directory: products/frontier-omega-ignition
+        run: |
+          python -B qa/qualify_model_dispatch.py --assets "$RUNNER_TEMP/assets" \
+            --work "$RUNNER_TEMP/selection" --output "$RUNNER_TEMP/selection.json"
+      - name: Run the invited staging HTTPS path with real pinned construction
+        if: ${{ !cancelled() && steps.acquire.outcome == 'success' }}
+        working-directory: products/frontier-omega-ignition
+        run: |
+          python -B qa/qualify_model_dispatch.py --studio --assets "$RUNNER_TEMP/assets" \
+            --work "$RUNNER_TEMP/invited" --output "$RUNNER_TEMP/invited.json"
+      - name: Test research-led construction on the published archive
+        if: ${{ !cancelled() && steps.acquire.outcome == 'success' }}
+        working-directory: products/frontier-omega-ignition
+        run: |
+          python -B qa/qualify_model_dispatch.py --research --assets "$RUNNER_TEMP/assets" \
+            --work "$RUNNER_TEMP/research" --output "$RUNNER_TEMP/research.json"
+      - name: Attempt signed-in research from a blank brief with independent confirmation
+        if: ${{ !cancelled() && steps.acquire.outcome == 'success' }}
+        working-directory: products/frontier-omega-ignition
+        run: |
+          python -B qa/qualify_model_dispatch.py --blank-studio --assets "$RUNNER_TEMP/assets" \
+            --work "$RUNNER_TEMP/blank-studio" --output "$RUNNER_TEMP/blank-studio.json"
+      - name: Attempt independent archive handoff from a blank signed-in brief
+        if: ${{ !cancelled() && steps.acquire.outcome == 'success' }}
+        working-directory: products/frontier-omega-ignition
+        run: |
+          python -B qa/qualify_model_dispatch.py --blank-archive --assets "$RUNNER_TEMP/assets" \
+            --work "$RUNNER_TEMP/blank-archive" --output "$RUNNER_TEMP/blank-archive.json"
+      - name: Preserve public qualification decisions, including failures
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: ignition-selection-${{ env.EXPECTED_SOURCE }}-attempt-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/acquisition.json
+            ${{ runner.temp }}/selection.json
+            ${{ runner.temp }}/invited.json
+            ${{ runner.temp }}/research.json
+            ${{ runner.temp }}/blank-studio.json
+            ${{ runner.temp }}/blank-archive.json
           if-no-files-found: error

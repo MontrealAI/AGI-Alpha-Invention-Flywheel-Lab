@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="dark"><meta name="referrer" content="no-referrer">
+  <title data-en="Mission Studio · FRONTIER Ω" data-fr="Studio de missions · FRONTIER Ω">Mission Studio · FRONTIER Ω</title>
+  <link rel="stylesheet" href="/studio.css"><script defer src="/studio.js"></script>
+</head>
+<body data-page="studio">
+  <a href="#main" class="skip" data-en="Skip to content" data-fr="Aller au contenu">Skip to content</a>
+  <header class="mast">
+    <a class="brand" href="/welcome"><span class="logo" aria-hidden="true">Ω</span><span>FRONTIER Ω<span class="product">IGNITION</span></span></a>
+    <nav><a href="/demo" class="nav-demo" data-en="Public demo" data-fr="Démo publique">Public demo</a><a href="/studio" class="nav-studio" data-en="Mission Studio" data-fr="Studio de missions">Mission Studio</a><div class="languages" role="group" aria-label="Language · Langue"><button type="button" id="en" lang="en" aria-pressed="true">EN</button><button type="button" id="fr" lang="fr" aria-pressed="false">FR</button></div></nav>
+  </header>
+  <main id="main" tabindex="-1">
+    <section class="heading studio-heading">
+      <p class="kicker" data-en="Private workspace" data-fr="Espace privé">Private workspace</p><h1><span data-en="Mission Studio" data-fr="Studio de missions">Mission Studio</span><span class="dot">.</span></h1>
+      <div class="environment"><span id="environment"></span><button id="signout" class="text-action" type="button" hidden data-en="Sign out" data-fr="Se déconnecter">Sign out</button></div>
+    </section>
+    <div id="notices" role="status" aria-live="polite" tabindex="-1"></div>
+    <section class="surface signin" id="signin" hidden><h2 data-en="Use your invitation" data-fr="Utilisez votre invitation">Use your invitation</h2>
+      <p data-en="Enter the one-time invitation your operator gave you. A fresh invitation is required after you sign out or your session expires." data-fr="Saisissez l’invitation à usage unique fournie par votre responsable. Une nouvelle invitation sera nécessaire après la déconnexion ou l’expiration de la session.">Enter the one-time invitation your operator gave you. A fresh invitation is required after you sign out or your session expires.</p>
+      <form id="signin-form"><label for="invite"><span data-en="Access invitation" data-fr="Invitation d’accès">Access invitation</span></label><input id="invite" type="password" required autocomplete="off" spellcheck="false" maxlength="256"><button id="signin-button" type="submit" class="primary" data-en="Sign in" data-fr="Se connecter">Sign in</button></form>
+    </section>
+    <div id="workspace" hidden>
+      <section class="surface" id="intake">
+        <h2 data-en="Start a mission" data-fr="Lancer une mission">Start a mission</h2><p data-en="Choose a guided construction or describe an outcome of your own." data-fr="Choisissez une construction guidée ou décrivez le résultat que vous souhaitez obtenir.">Choose a guided construction or describe an outcome of your own.</p>
+        <form id="mission-form">
+          <label for="template"><span data-en="Starting point" data-fr="Point de départ">Starting point</span></label><select id="template"><option value="" data-en="Blank mission" data-fr="Mission libre">Blank mission</option><option value="integrity" data-en="Build a file verifier" data-fr="Construire un vérificateur de fichier">Build a file verifier</option><option value="migration" data-en="Build a record converter" data-fr="Construire un convertisseur de fiches">Build a record converter</option></select>
+          <p id="template-hint" class="hint"></p>
+          <label for="purpose"><span data-en="Outcome you want" data-fr="Résultat souhaité">Outcome you want</span></label><textarea id="purpose" required rows="3" maxlength="12000"></textarea>
+          <label for="beneficiary"><span data-en="Who will use the result?" data-fr="À qui le résultat sera-t-il utile ?">Who will use the result?</span></label><input id="beneficiary" required maxlength="1000">
+
+          <fieldset id="migration-fields" hidden disabled>
+            <legend data-en="Conversion to build" data-fr="Conversion à construire">Conversion to build</legend>
+            <p class="hint" data-en="Rename a text field while preserving its value. Supply a real example and its expected result for verification." data-fr="Renommez un champ texte en conservant sa valeur. Fournissez un exemple réel et son résultat attendu pour la vérification.">Rename a text field while preserving its value. Supply a real example and its expected result for verification.</p>
+            <div class="pair">
+              <label for="from-field" data-en="Source field" data-fr="Champ source">Source field</label><input id="from-field" maxlength="80" required>
+              <label for="to-field" data-en="Destination field" data-fr="Champ de destination">Destination field</label><input id="to-field" maxlength="80" required>
+            </div>
+            <label for="sample-value" data-en="Example input value" data-fr="Valeur d’entrée de l’exemple">Example input value</label><input id="sample-value" maxlength="2000" required>
+            <label for="expected-value" data-en="Expected output value" data-fr="Valeur de sortie attendue">Expected output value</label><input id="expected-value" maxlength="2000" required>
+          </fieldset>
+          <fieldset id="integrity-fields" hidden disabled>
+            <legend data-en="File to verify" data-fr="Fichier à vérifier">File to verify</legend>
+            <p class="hint" data-en="The private mission stores this file and your trusted digest for replay. Use an authorized file up to 64 KiB." data-fr="La mission privée conserve ce fichier et votre empreinte de référence afin de reproduire la vérification. Utilisez un fichier autorisé d’au plus 64 Kio.">The private mission stores this file and your trusted digest for replay. Use an authorized file up to 64 KiB.</p>
+            <label for="file" data-en="Select a file" data-fr="Sélectionner un fichier">Select a file</label><input id="file" type="file" required>
+            <label for="digest" data-en="Trusted SHA-256 from the publisher" data-fr="Empreinte SHA-256 fournie par l’éditeur">Trusted SHA-256 from the publisher</label><input id="digest" pattern="[A-Fa-f0-9]{64}" maxlength="64" spellcheck="false" required>
+          </fieldset>
+          <label class="check" id="guided-model-label" hidden><input id="guided-model" type="checkbox"><span data-en="Ask the configured local model to construct the tool (up to two calls, one repair)" data-fr="Confier la construction au modèle local configuré (deux appels et une correction au maximum)">Ask the configured local model to construct the tool (up to two calls, one repair)</span></label>
+          <div id="custom-fields">
+            <label for="requirements"><span data-en="How will you know it worked?" data-fr="Comment saurez-vous que la mission a réussi ?">How will you know it worked?</span></label><textarea id="requirements" rows="2" required></textarea>
+            <fieldset><legend><span data-en="Resources you authorize" data-fr="Ressources autorisées">Resources you authorize</span></legend>
+              <label class="check"><input id="model" type="checkbox"><span data-en="Use the configured local model" data-fr="Utiliser le modèle local configuré">Use the configured local model</span></label>
+              <label class="check"><input id="feeds" type="checkbox"><span data-en="Retrieve public release feeds" data-fr="Consulter les annonces de versions publiques">Retrieve public release feeds</span></label>
+            </fieldset>
+            <label for="call-budget"><span data-en="Maximum model calls" data-fr="Nombre maximal d’appels au modèle">Maximum model calls</span></label><input id="call-budget" type="number" min="0" max="8" value="8" step="1" required>
+            <details><summary data-en="Add evidence you have permission to use" data-fr="Ajouter une source que vous avez le droit d’utiliser">Add evidence you have permission to use</summary>
+              <label for="source-url" data-en="Public source URL" data-fr="Adresse publique de la source">Public source URL</label><input id="source-url" type="url" maxlength="1000">
+              <label for="source-publisher" data-en="Publisher" data-fr="Organisme éditeur">Publisher</label><input id="source-publisher" maxlength="200">
+              <label for="source-title" data-en="Source title" data-fr="Titre de la source">Source title</label><input id="source-title" maxlength="300">
+              <label for="source-date" data-en="Date the capability became usable" data-fr="Date de mise à disposition">Date the capability became usable</label><input id="source-date" type="date">
+              <label for="source-rights" data-en="Rights or permission to use the excerpt" data-fr="Droits ou autorisation d’utilisation de l’extrait">Rights or permission to use the excerpt</label><input id="source-rights" maxlength="400">
+              <label for="source-text" data-en="Source excerpt" data-fr="Extrait de la source">Source excerpt</label><textarea id="source-text" rows="3" maxlength="6000"></textarea>
+            </details>
+          </div>
+          <label for="time-budget" data-en="Time available from scope review (minutes)" data-fr="Délai à partir de l’examen de la portée (minutes)">Time available from scope review (minutes)</label><input id="time-budget" type="number" min="1" step="1" value="60" required>
+          <details id="offer-pricing"><summary data-en="Propose a price for the private offer draft (optional)" data-fr="Proposer un prix pour le projet d’offre privé (facultatif)">Propose a price for the private offer draft (optional)</summary>
+            <label for="offer-price" data-en="Amount per verified package" data-fr="Montant par paquet vérifié">Amount per verified package</label><input id="offer-price" inputmode="decimal" maxlength="64" autocomplete="off">
+            <label for="offer-currency" data-en="Currency (three-letter code)" data-fr="Devise (code de trois lettres)">Currency (three-letter code)</label><input id="offer-currency" value="CAD" maxlength="3" autocapitalize="characters" spellcheck="false">
+            <p class="hint" data-en="Vincent reviews the proposed price before any offer is sent." data-fr="Vincent examine le prix proposé avant tout envoi d’offre.">Vincent reviews the proposed price before any offer is sent.</p>
+          </details>
+          <label class="check"><input id="allow-reuse" type="checkbox"><span data-en="Allow this workspace to reuse the verified program on future missions, subject to a new rights review." data-fr="Autoriser cet espace à réutiliser le programme vérifié pour de futures missions, après un nouvel examen des droits.">Allow this workspace to reuse the verified program on future missions, subject to a new rights review.</span></label>
+          <div id="reuse-scope" hidden><label for="reuse-rights" data-en="Why may this workspace reuse the selected program?" data-fr="Quels droits permettent à cet espace de réutiliser le programme sélectionné ?">Why may this workspace reuse the selected program?</label><textarea id="reuse-rights" rows="2" maxlength="2000" disabled required></textarea><p id="reuse-origin" class="hint"></p></div>
+          <button id="review" type="submit" class="primary" data-en="Review scope and limits" data-fr="Examiner la portée et les limites">Review scope and limits</button>
+        </form>
+      </section>
+      <section id="review-panel" class="surface" hidden><p class="kicker" data-en="Before execution" data-fr="Avant l’exécution">Before execution</p><h2 id="review-title" tabindex="-1" data-en="Review this mission" data-fr="Examiner cette mission">Review this mission</h2><div id="review-content"></div><div class="actions"><button id="start" type="button" class="primary" data-en="Start mission" data-fr="Démarrer la mission">Start mission</button><button id="edit" type="button" class="" data-en="Edit scope" data-fr="Modifier la portée">Edit scope</button></div></section>
+      <section id="mission" class="surface" hidden>
+        <div class="rowhead"><p class="kicker" data-en="Mission record" data-fr="Dossier de mission">Mission record</p><button id="new-mission" type="button" class="" data-en="New mission" data-fr="Nouvelle mission">New mission</button></div>
+        <h2 id="run-title" tabindex="-1"></h2><p class="state" role="status" id="run-status"></p><p id="next"></p>
+        <div id="control-actions" class="actions"></div><div id="pending"></div>
+        <div id="delivery" hidden><h3 data-en="Use the result" data-fr="Utiliser le résultat">Use the result</h3><div class="actions"><a class="button primary" id="bundle" data-en="Download artifact and verifier" data-fr="Télécharger l’outil et sa vérification">Download artifact and verifier</a><a class="button" id="evidence" data-en="Download evidence" data-fr="Télécharger les résultats">Download evidence</a><a class="button" id="offer-draft" data-en="Prepare an unsent offer" data-fr="Préparer une offre à valider">Prepare an unsent offer</a><button type="button" id="reuse-program" hidden data-en="Use in a new mission" data-fr="Réutiliser dans une nouvelle mission">Use in a new mission</button></div>
+          <details id="try-panel"><summary><span data-en="Try the artifact here" data-fr="Essayer l’outil ici">Try the artifact here</span></summary><div id="typed-try"></div><form id="try-form"><label for="sample"><span data-en="Complete input (JSON)" data-fr="Entrée complète (JSON)">Input data (JSON)</span></label><textarea id="sample" rows="4" required spellcheck="false"></textarea><button id="try" type="submit" class="" data-en="Run on this input" data-fr="Exécuter sur ces données">Run on this input</button></form><pre id="output" role="status"></pre></details>
+        </div>
+        <section><h3><span data-en="Evidence and costs" data-fr="Résultats et coûts">Evidence and costs</span></h3><div id="outcome"></div><a id="run-evidence" class="text-action" data-en="Download mission evidence" data-fr="Télécharger les preuves de la mission">Download mission evidence</a></section>
+        <details><summary><span data-en="Execution history" data-fr="Historique d’exécution">Execution history</span></summary><ol id="events"></ol></details>
+        <details><summary><span data-en="Original technical record" data-fr="Dossier technique original">Original technical record</span></summary><pre id="record"></pre></details>
+      </section>
+      <section class="archive"><div class="rowhead"><h2 data-en="Your missions" data-fr="Vos missions">Your missions</h2><button id="reload" type="button" class="" data-en="Refresh" data-fr="Actualiser">Refresh</button></div><div id="inventory"></div></section>
+    </div>
+    <noscript>Enable JavaScript to use Mission Studio. Activez JavaScript pour utiliser le Studio.</noscript>
+  </main>
+  <footer><span>MONTREAL.AI <span class="muted">×</span> QUÉBEC.AI</span><a href="/welcome" class="" data-en="About IGNITION" data-fr="À propos d’IGNITION">About IGNITION</a></footer>
+</body></html>

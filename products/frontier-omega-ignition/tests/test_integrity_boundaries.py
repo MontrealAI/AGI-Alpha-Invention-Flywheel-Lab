@@ -45,12 +45,13 @@ def body(explicit=True):
          "retrieved_at": supplied.isoformat(), "event_at": supplied.date().isoformat(), "published_at": supplied.date().isoformat()}]}
 
 
-DISCOVERY = {"favourite": "C1", "candidates": [{
+DISCOVERY = {"requested_output": "mapped_json_rows", "favourite": "C1", "candidates": [{
     "title": "Verified records projection", "beneficiary": "catalogue editor", "outcome": "explicitly mapped records",
     "change": "proposed bounded construction", "obstruction": "unverified transformations",
     "route": "check a typed migration against operator examples", "value": "reduce review effort; unmeasured",
     "alternative": "handwritten Python", "scale": "one input record at a time", "kind": "record_migration",
-    "test": "check every identifier against the supplied target", "sources": ["S1"]}]}
+    "test": "check every identifier against the supplied target", "sources": ["S1"],
+    "mechanics": {"inputs": ["flat_json_rows"], "operations": ["project_fields"], "outputs": ["mapped_json_rows"]}}]}
 CHALLENGE = {"decision": "build", "selected": "C1", "reason": "Test source-field fidelity with independent records.",
              "objections": [], "fit": [{"requirement": REQUIREMENT, "status": "supported",
                                          "check": "compare both identifiers on confirmation inputs"}]}

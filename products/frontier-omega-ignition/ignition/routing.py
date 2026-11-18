@@ -8,6 +8,10 @@ from . import construction, development
 
 
 def validate_options(resources):
+    if "max_initial_candidates" in resources:
+        limit = resources["max_initial_candidates"]
+        if type(limit) is not int or not 1 <= limit <= 5:
+            raise ValueError("max_initial_candidates must be an integer from 1 to 5")
     strategy = resources.get("execution_strategy", "adaptive")
     if strategy not in ("adaptive", "direct", "research"):
         raise ValueError("execution_strategy must be adaptive, direct or research")

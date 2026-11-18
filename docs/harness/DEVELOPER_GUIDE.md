@@ -4,6 +4,8 @@ Start with [AGENTS.md](../../AGENTS.md). Reuse the canonical enterprise and exis
 
 ### FRONTIER Ω IGNITION mission workbench
 
+The [hosted Mission Studio runbook](../../products/frontier-omega-ignition/docs/HOSTED-STUDIO-OPERATIONS.md) covers the invitation-only service, operational controls and private recovery. The bilingual studio and public curated replay use separate data paths.
+
 The [local IGNITION application](../../products/frontier-omega-ignition/README.md) connects source-linked discovery and challenge to a task-specific record migration or byte-manifest audit, independent comparison and a portable recipient package. It reuses the HARNESS local model and public-source transport. The public research editions remain authored demonstrations. Inspect the [public mission evidence](../../products/frontier-omega-ignition/docs/FLAGSHIP.md) and exact-source qualification before making a broader claim.
 
 The [field and invention continuation](../frontier-omega-ignition/continuation/field-invention/REPORT.md) adds a private, revisioned historical observing worklist, independent ephemeris and allocation checks, archival two-band photometry, and real loopback inference measurement with a separate service-quality decision. Rebuild the public recipient with `field_trials/qualify.py` from the IGNITION product. Its scope, matched alternatives, dated observations and outstanding adoption test are recorded with the instrument.

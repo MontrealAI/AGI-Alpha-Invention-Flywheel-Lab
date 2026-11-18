@@ -3,6 +3,7 @@ import json
 import unittest
 
 from ignition.construction import build, freeze_contract
+from trials.controls import rejected_manifest
 from ignition.research import assess_comparison, discover_sources, investigate, reopen_inventory, validate_public_repositories
 
 
@@ -43,6 +44,51 @@ def trial(first=None, second=None, sources=None, mission=None):
 
 
 class ResearchTests(unittest.TestCase):
+    def test_candidate_budget_applies_to_provider_and_semantic_validation(self):
+        from ignition.model_schema import discovery
+        from ignition.routing import validate_options
+        limited = dict(MISSION, resources={"max_initial_candidates": 2})
+        with self.assertRaises(ValueError):
+            trial(mission=limited)
+        for value in (0, True, 6, "2"):
+            with self.assertRaises(ValueError):
+                validate_options({"max_initial_candidates": value})
+        result, calls = trial(mission=limited, first={"candidates": [candidate(1)], "favourite": "C1"})
+        self.assertEqual(result["decision"], "build")
+        schema = discovery(calls[0][1])
+        self.assertEqual(schema["properties"]["candidates"]["maxItems"], 2)
+
+    def test_coverage_binds_every_requirement_by_identity_in_any_order(self):
+        requirements = ["Retain the identifier", "Reject invalid rows"]
+        checks = [{"requirement": r, "status": "supported", "check": "Compare the held-out receipt"}
+                  for r in reversed(requirements)]
+        mission = dict(MISSION, requirements=requirements)
+        valid, calls = trial(second={"fit": checks}, mission=mission)
+        self.assertEqual(valid["decision"], "build")
+        self.assertEqual(calls[0][1]["execution"]["authorized_contract_family"], "record_migration")
+        self.assertNotIn("SECRET_CASE", json.dumps(calls))
+        for invalid in ([checks[0]] * 2, [*checks, checks[0]], checks[:1],
+                        [checks[0], {**checks[1], "requirement": ["unexpected"]}],
+                        [checks[0], {**checks[1], "status": "unresolved"}]):
+            with self.subTest(invalid=invalid):
+                result, _ = trial(second={"fit": invalid}, mission=mission)
+                self.assertEqual(result["decision"], "defer")
+
+    def test_requirement_keys_preserve_model_checks_and_cannot_promote_incomplete_evidence(self):
+        mission = dict(MISSION, requirements=["Identify matching files", "Export the receiver"])
+        checks = {"R1": {"status": "supported", "check": "Compare the returned file names to the manifest"},
+                  "R2": {"status": "supported", "check": "Run the downloaded package in a clean process"}}
+        result, calls = trial(second={"fit": checks}, mission=mission)
+        self.assertEqual(calls[1][1]["requirement_ids"], dict(zip(checks, mission["requirements"])))
+        self.assertEqual(result["decision"], "build")
+        self.assertEqual(result["fit"][1], {"requirement": mission["requirements"][1], **checks["R2"]})
+        for invalid in ({}, {"R1": checks["R1"]}, {**checks, "R2": {**checks["R2"], "status": "unsupported"}},
+                        {**checks, "R2": {"status": "supported", "check": "  "}}):
+            result, _ = trial(second={"fit": invalid}, mission=mission)
+            self.assertEqual(result["decision"], "defer")
+        with self.assertRaisesRegex(ValueError, "unknown identifier"):
+            trial(second={"fit": {**checks, "R3": checks["R1"]}}, mission=mission)
+
     def test_sixth_candidate_can_defeat_favourite_without_privilege(self):
         result, calls = trial(second={"challenger": candidate(6), "selected": "C6"})
         self.assertEqual((result["initial_favourite"], result["selected"]["id"], result["decision"]), ("C1", "C6", "build"))
@@ -66,12 +112,38 @@ class ResearchTests(unittest.TestCase):
 
     def test_new_mission_with_no_contract_can_request_approval(self):
         request = {"purpose": "Check an archive against my trusted digests.", "requirements": []}
-        first = {"candidates": [candidate(1, kind="manifest_audit")], "favourite": "C1"}
-        report, _ = trial(first=first, second={"fit": []}, mission=request)
+        mechanics = {"inputs": ["trusted_sha256_manifest", "named_file_bytes"], "operations": ["compare_sha256_by_path"],
+                     "outputs": ["path_discrepancy_report"]}
+        first = {"requested_output": "path_discrepancy_report", "favourite": "C1",
+                 "candidates": [dict(candidate(1, kind="manifest_audit"), mechanics=mechanics)]}
+        permitted = {**SOURCE, "text": hashlib.sha256(b"local file").hexdigest() + "  release.txt",
+                     "rights": "Supplied by the operator for local evaluation."}
+        report, _ = trial(first=first, second={"fit": []}, mission=request, sources=[permitted])
         self.assertEqual((report["decision"], report["kind"]), ("build", "manifest_audit"))
         self.assertTrue(report["specification_required"])
+        no_digest, _ = trial(first=first, second={"fit": []}, mission=request)
+        self.assertEqual((no_digest["decision"], no_digest["specification_required"]), ("defer", False))
         prior, _ = trial()
         self.assertFalse(prior["specification_required"])
+
+    def test_blank_route_checks_true_operation_and_allows_independent_challenger(self):
+        request = {"purpose": "Rename one column on each event row.", "requirements": []}
+        mechanics = {"inputs": ["flat_json_rows"], "operations": ["project_fields"], "outputs": ["mapped_json_rows"]}
+        first = {"requested_output": "mapped_json_rows", "favourite": "C1",
+                 "candidates": [dict(candidate(1, kind="manifest_audit"), mechanics=mechanics)]}
+        report, calls = trial(first=first, second={"fit": []}, mission=request)
+        self.assertEqual(report["decision"], "defer")
+        verdict = calls[1][1]["candidates"][0]["family_assessment"]
+        self.assertEqual(verdict["status"], "unsupported")
+        newcomer = dict(candidate(2), mechanics=mechanics)
+        second = {"fit": [], "challenger": newcomer, "selected": "C2"}
+        valid, _ = trial(first=first, second=second, mission=request)
+        self.assertEqual((valid["decision"], valid["selected"]["id"]), ("build", "C2"))
+        for missing in ("other", None, []):
+            report, _ = trial(first={**first, "requested_output": missing}, second=second, mission=request)
+            self.assertEqual(report["decision"], "defer")
+        declined, _ = trial(first=first, second={**second, "decision": "defer"}, mission=request)
+        self.assertEqual(declined["decision"], "defer")
 
     def test_retraction_supersedes_earlier_source_and_surplus_entries_reported(self):
         withdrawn = SOURCE | {"status": "withdrawn", "retrieved_at": "2026-11-17T11:00:00Z"}
@@ -212,7 +284,7 @@ class ResearchTests(unittest.TestCase):
         protocol = {"frozen_contract": frozen, "resource_conditions": resources,
                     "baseline_date": "2026-10-13", "as_of": "2026-11-17"}
         old = {"version": "old", "source": SOURCE["url"], "available_on": "2026-10-10",
-               "resource_conditions": resources, "artifact": build(frozen, {"kind": kind, "program": bad})}
+               "resource_conditions": resources, "artifact": rejected_manifest(frozen, {"kind": kind, "program": bad})}
         new = {**old, "version": "new", "available_on": "2026-11-13",
                "artifact": build(frozen, {"kind": kind, "program": good})}
         report = assess_comparison(protocol, old, new)

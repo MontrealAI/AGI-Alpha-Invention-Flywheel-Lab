@@ -38,6 +38,11 @@ def candidate(payload):
     ids = source_refs(payload)
     fields = {key:TEXT for key in CANDIDATE_FIELDS}
     fields["sources"] = array(one(ids) if ids else TEXT, len(ids))
+    contracts = payload.get("installed_contracts")
+    if contracts:
+        fields["mechanics"] = obj({key: array(one(sorted({"other"} | {
+            value for contract in contracts.values() for value in contract[key]})), 12)
+                                   for key in ("inputs", "operations", "outputs")})
     facts = [signal["observed_premise"] for signal in payload["signals"] if signal.get("observed_premise")]
     if facts:
         fields["evidence"] = array(obj({"source": one(ids), "metric": TEXT, "value": TEXT, "scope": TEXT,
@@ -46,15 +51,31 @@ def candidate(payload):
 
 
 def discovery(payload):
-    return obj({"candidates":array(candidate(payload), 5), "favourite":maybe(one([f"C{i}" for i in range(1,6)]))})
+    limit = payload.get("max_initial_candidates", 5)
+    fields = {}
+    contracts = payload.get("installed_contracts")
+    if contracts:
+        # Describe the beneficiary's desired output independently, before choosing a route.
+        fields["requested_output"] = one(sorted({"other"} | {v for c in contracts.values() for v in c["outputs"]}))
+    fields.update(candidates=array(candidate(payload), limit), favourite=maybe(one([f"C{i}" for i in range(1, limit + 1)])))
+    return obj(fields)
 
 
 def challenge(payload):
     ids = [row["id"] for row in payload["candidates"]]
     refs = source_refs(payload)
     requirements = payload["mission"]["requirements"]
-    fit = obj({"requirement":one(requirements) if 0<len(requirements)<=256 and sum(map(len,requirements))<8000 else TEXT,
+    legacy_fit = obj({"requirement":one(requirements) if 0<len(requirements)<=256 and sum(map(len,requirements))<8000 else TEXT,
                "check":TEXT, "status":one(["supported","unresolved","unsupported"])})
+    fit = array(legacy_fit, 100)
+    if "requirement_ids" in payload:
+        keys = payload["requirement_ids"]
+        if keys != {f"R{i}": r for i, r in enumerate(requirements, 1)} or len(keys) > 100:
+            raise ValueError("Requirement identifiers must bind the unchanged original requirements")
+        observation = obj({"check": TEXT, "status": one(["supported", "unresolved", "unsupported"])})
+        # A complete native report has one slot per requirement. An explicit empty
+        # report permits abstention; the controller separately decides whether any build is eligible.
+        fit = {"anyOf": [obj({key: observation for key in keys}), array(observation, 0)]}
     def branch(has_challenger):
         # A C(n+1) choice is syntactically possible only in the branch actually supplying that candidate.
         valid = ids + ([f"C{len(ids)+1}"] if has_challenger else [])
@@ -64,16 +85,54 @@ def challenge(payload):
         return obj({"challenger":candidate(payload) if has_challenger else NIL,
                     "objections":array(objection, 24 if valid else 0),
                     "decision":one(["build","incumbent","defer","stop"]),
-                    "selected":maybe(one(valid)) if valid else NIL, "reason":TEXT, "fit":array(fit,100)})
+                    "selected":maybe(one(valid)) if valid else NIL, "reason":TEXT, "fit":fit})
     return {"anyOf":[branch(False),branch(True)]}
+
+
+def column_program(source, target):
+    kind_type, separator = one(sorted(construction.TYPES)), one(construction.SEPARATORS)
+    split = obj({"separator": separator, "index": {"type": "integer", "minimum": -8, "maximum": 7}})
+    single = obj({"source": source, "target": target, "type": kind_type, "split": split}, optional=("split",))
+    joined = obj({"sources": {"type": "array", "items": source, "minItems": 2, "maxItems": 4},
+                  "separator": separator, "target": target, "type": kind_type})
+    return obj({"columns": array({"anyOf": [single, joined]}, construction.MAX_FIELDS),
+                "extra_fields": one(["drop", "reject"]), "input_fields": array(source, construction.MAX_FIELDS)},
+               optional=("input_fields",))
+
+
+def specification(payload):
+    """Constrain wire syntax. Column choices, examples, results and refusal stay with the proposer."""
+    kind = payload["kind"]
+    if kind == "record_migration":
+        scalar = {"anyOf": [{"type": t} for t in ("string", "number", "boolean", "null")]}
+        rows = obj({"rows": array({"type": "object", "additionalProperties": scalar})})
+        example = obj({"input": rows, "expected": rows})
+        by_example = obj({"input_fields": array(TEXT, 12),
+                          "targets": array(obj({"name": TEXT, "type": one(sorted(construction.TYPES))})),
+                          "extra_fields": one(["drop", "reject"]), "demonstrations": array(example, 32)})
+        definition = {"anyOf": [column_program(TEXT, TEXT), by_example]}
+        inputs, outputs = rows, rows
+    elif kind == "manifest_audit":
+        # The only available inventory is the operator-supplied inventory checked by the controller.
+        definition = obj({"manifest": {"const": payload["trusted_manifest"]}})
+        inputs = obj({"files": {"type": "object", "additionalProperties": {"type": "string"}}})
+        outputs = obj({"ok": {"type": "boolean"}, **{name: array(TEXT) for name in
+                                                     ("matched", "changed", "missing", "unexpected")}})
+    else:
+        raise ValueError("No installed specification grammar for this family.")
+    outcomes = one(["invalid_input", "missing_field", "extra_field", "invalid_value", "invalid_path", "budget"])
+    cases = array({"anyOf": [obj({"name": TEXT, "input": inputs, "expected": outputs}),
+                             obj({"name": TEXT, "input": inputs, "error": outcomes})]}, 64)
+    draft = obj({"purpose": {"const": payload["mission"]["purpose"]}, "kind": {"const": kind},
+                 "definition": definition, "cases": cases})
+    return {"anyOf": [obj({"spec": draft}), obj({"obstruction": TEXT})]}
 
 
 def construction_proposal(payload):
     kind, definition = payload["kind"], payload["definition"]
     if kind == "manifest_audit":
-        manifest = {"type":"object","properties":{},"required":[],
-                    "additionalProperties":{"type":"string","minLength":64,"maxLength":64}}
-        program = {"anyOf": [obj({"use_frozen_manifest": {"const": True}}), obj({"manifest":manifest})]}
+        # A trusted digest inventory is contract-owned data, never a model parameter.
+        program = obj({"use_frozen_manifest": {"const": True}})
     elif kind == "record_migration":
         if "demonstrations" in definition:
             fields = definition["input_fields"]
@@ -83,15 +142,7 @@ def construction_proposal(payload):
             fields = definition.get("input_fields") or sorted({field for col in columns
                 for field in (col["sources"] if "sources" in col else [col["source"]])})
             target_names = [col["target"] for col in columns]
-        source, target = one(fields), one(target_names)
-        kind_type, separator = one(sorted(construction.TYPES)), one(construction.SEPARATORS)
-        split = obj({"separator":separator,"index":{"type":"integer","minimum":-8,"maximum":7}})
-        single = obj({"source":source,"target":target,"type":kind_type,"split":split}, optional=("split",))
-        joined = obj({"sources":{"type":"array","items":source,"minItems":2,"maxItems":4},
-                      "separator":separator,"target":target,"type":kind_type})
-        program = obj({"columns":array({"anyOf":[single,joined]},construction.MAX_FIELDS),
-                       "extra_fields":one(["drop","reject"]),
-                       "input_fields":array(source,construction.MAX_FIELDS)},optional=("input_fields",))
+        program = column_program(one(fields), one(target_names))
     else:
         raise ValueError("No local output grammar is defined for the requested construction family.")
     return obj({"kind":{"const":kind},"program":program})
@@ -104,7 +155,8 @@ def for_stage(stage, payload):
         return discovery(payload)
     if stage == "challenge":
         return challenge(payload)
+    if stage == "specification" and payload.get("family_contract"):
+        return specification(payload)
     if stage in ("construct","direct_construct","repair"):
         return construction_proposal(payload)
-    # A new specification is free-form JSON pending fresh operator checks.
     return None
