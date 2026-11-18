@@ -53,8 +53,30 @@ The previous shared model acquisition took 303.135 seconds of wall time. This ru
 
 The raw Qwen service verdict is **withhold**. A checked output can be used as an intake record within the tested controlled grammar. Production traffic, availability, resource costs, representative operator acceptance, the operating owner and the matching GPT-OSS 140/272 allocation remain unresolved. The next beneficiary test is blind intake against the operator's existing structured form, counting unsafe contracts, unnecessary deferrals, manual correction time and complete cost per accepted request. That test needs an approved beneficiary traffic sample. A new public measurement on an owned CPU with the pinned cache can run `field_trials/intake_observe.py --assets CACHE --work NEW_WORK --output NEW_OUTPUT`. Fresh timings have their own clock and identity.
 
+## Same service brief on a second CPU run
+
+A separate hosted run at source `e05fd17715f808afac9075f56bd336ca16d605f3` repeated the twelve original briefs at concurrency one. The original weights, native tokenizer, runtime hashes, CPU thread count and serving configuration match. The wire measurements below are independently recomputed from each stream. The supplier's price and the cause of the timing difference are unknown. Neither run sampled production traffic.
+
+| Measured outcome | First CPU observation | Hosted repeat |
+| --- | ---: | ---: |
+| Requests completed on the first attempt | 12/12 | 12/12 |
+| Correct model answers | 7/12 | 7/12 |
+| P90 time to first visible output | 1.413 s | 0.480 s |
+| P90 complete turn | 23.301 s | 1.948 s |
+| P10 visible output tokens per complete turn-second | 0.883 | 7.906 |
+| All three interactive thresholds met | No | Yes |
+| Operating decision | Withhold | Withhold |
+
+The repeat took 23.401 elapsed seconds and 84.935 CPU-seconds including child processes. Five answers again admitted an unsupported contract. Rechecking these outputs against the clause evidence gives 12/12 on the original briefs. The sealed four-brief challenge and unknown production distribution still limit that improvement. The study can distinguish a failure of meaning from a failure of delivery speed. [Hosted run and all observations](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/44239110224) · [Measured operation](hosted_repeat/operation.json) · [Original wire and tokenizer observations](hosted_repeat/wire.json)
+
+```sh
+python3 -B field_lab/verify.py --workload field_lab/intake_workload.json --receipt field_lab/hosted_repeat/wire.json
+```
+
 ## Résultat en français
 
 Les douze réponses du modèle sont arrivées au complet. Sept respectaient la demande. Dans cinq cas, le modèle a accepté une exigence incompatible, par exemple un plafond de débit qu’il a transformé en minimum. La vérification du texte intégral a retrouvé les douze décisions attendues sur les cas rédigés pour l’essai. La grammaire seule a obtenu le même résultat.
 
 Sur quatre demandes préparées indépendamment, la nouvelle grammaire s’est abstenue quatre fois. Elle a évité une acceptation dangereuse, mais a aussi écarté deux demandes valides. La latence P90 du modèle jusqu’au premier contenu visible a atteint 1,413 seconde. Le service demeure en attente de qualification pour un usage réel. Le fichier remis permet d’examiner les mots précis qui soutiennent chaque exigence acceptée.
+
+Lors du second essai sur processeur, les douze réponses sont aussi arrivées au complet. Le P90 a atteint 0,480 seconde pour le premier contenu et 1,948 seconde pour le tour complet. Les trois seuils de performance ont été atteints. Cinq contrats demeuraient incorrects et la décision de mise en service reste en attente.

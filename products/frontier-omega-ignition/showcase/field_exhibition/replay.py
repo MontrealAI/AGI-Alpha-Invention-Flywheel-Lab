@@ -46,6 +46,18 @@ def replay(case_path=None, snapshot_path=None):
               "second_week": {"targets": second["targets"], "pairs_120": len(second["pairs_120"]),
                               "pairs_10": len(second["pairs_10"]), "previously_withheld_now_measured": newly_measured},
               "fixture_captures": len(read(field / "PUBLIC.json")["receipts"]), "archive_dates": recorded["summary"]["dates"]}
+    again = field / "hosted_repeat"
+    operation = (again / "operation.json").read_bytes()
+    if hashlib.sha256(operation).hexdigest() != "920c40abf16dac96fb489424a135333bcaf06df47637363c3d41e66b37a12e6a":
+        raise ValueError("Hosted CPU observation identity changed")
+    receipt = json.loads(operation)
+    wire = again / "wire.json"
+    if hashlib.sha256(wire.read_bytes()).hexdigest() != receipt["receipt_sha256"]:
+        raise ValueError("Hosted CPU wire evidence differs from its operation")
+    repeated, = json.loads(subprocess.check_output([
+        sys.executable, "-B", str(field / "verify.py"), "--workload", str(field / "intake_workload.json"),
+        "--receipt", str(wire)]))
+    result["hosted_intake_repeat"] = repeated
     evolution = PRODUCT / "invention/evolution"
     subprocess.run([sys.executable, "-B", str(PRODUCT / "evolution_trials/verify.py"), "--check", str(evolution / "RESULT.json")],
                    check=True, stdout=subprocess.DEVNULL)

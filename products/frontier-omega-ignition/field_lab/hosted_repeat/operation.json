@@ -1,0 +1,79 @@
+{
+  "schema": 1,
+  "executed": true,
+  "hosting": "local shared engineering CPU",
+  "started_utc": "2026-11-18T04:42:56.309744+00:00",
+  "hardware": {
+    "processor": "AMD EPYC 9V45 96-Core Processor",
+    "architecture": "x86_64",
+    "platform": "Linux",
+    "threads": 4,
+    "gpu_layers": 0
+  },
+  "registered_workload_sha256": "e99cf0ae927510164ce7a52307fe02a6f04e27e2fd2b0430ef0eccf744ebcd46",
+  "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+  "revision_at_launch": "e05fd17715f808afac9075f56bd336ca16d605f3",
+  "source_sha256": {
+    "field_lab/intake_workload.json": "e99cf0ae927510164ce7a52307fe02a6f04e27e2fd2b0430ef0eccf744ebcd46",
+    "field_lab/INTAKE_REGISTRATION.md": "bcc5a499af76cf2a4c01aa3afc792589ab28374a80480acc1ef88579f3c8e533",
+    "field_trials/intake_observe.py": "30dea456493428a34fff13661f57cff6bb374afe65e992bf8f610b86d1571271",
+    "field_trials/observe.py": "b0940e18476b5b31bdfb6ce5276e9a3e506b0aaaffa86828dc867f22b0d9bb52",
+    "qualify_live.py": "d647506f3cb35394d40dbd79cf39e88d58f2b256ce2c07eb23fb588b82676fb1",
+    "field_lab/capture.py": "3cd31bf12e73c0325efd3601f03a7684a2d3c7ab43378ea8bbfc941f5a00d200",
+    "field_lab/field.py": "06df5aa0fdbf01d473aaab9ede917d112168582c443607be2e138fe2a7c178c4",
+    "field_lab/verify.py": "c6e6c5988af6090886ccd85f53917b01d79d4aa096d11f0c94ae6aa53546eee8",
+    "field_lab/fixture_server.py": "7bce9993518743479ea1272831a0ccb038f2ae4a36f6ab3607ac79bb31aab729",
+    "field_lab/protocol.py": "ee810277eecb0bfa7265dd3ab076dbce26c29b5c1cca0b58467a6961106c9fb5",
+    "field_lab/REGISTRATION.md": "3057376aaf4ba23fdee689632f305f04fa428db42cd95c22e3143df0569b405a"
+  },
+  "scope": "12 public authored briefs, once at concurrency 1",
+  "observed_supplier_price": null,
+  "assets": {
+    "weights_sha256": "2fde00ce69dd4899c70d020845e2638353015bba0fdf161b3eb965f2bca4464e",
+    "weights_bytes": 2497280736,
+    "model_repository": "bartowski/Qwen_Qwen3-4B-Instruct-2507-GGUF",
+    "model_revision": "ae44f08e1392f39c0e474af10c3ff8355c8b6688",
+    "runtime_archive_sha256": "909eef25cd53e6601c8a07c866d8dbb2983e74177088d55182137a8fb8255d62",
+    "runtime_archive_bytes": 23158635,
+    "server_sha256": "fe211d00c4754aa67aaa492d2c755ab0f6ef60bf30eee3c0c74a3496189cde17",
+    "weights_preparation_wall_seconds": 1.5071
+  },
+  "serving_configuration": [
+    "--ctx-size",
+    "6144",
+    "--parallel",
+    "1",
+    "--threads",
+    "4",
+    "--threads-batch",
+    "4",
+    "--n-gpu-layers",
+    "0",
+    "--seed",
+    "6144",
+    "--temp",
+    "0",
+    "--no-repack",
+    "--batch-size",
+    "128",
+    "--ubatch-size",
+    "64",
+    "--no-webui"
+  ],
+  "measure": {
+    "exit_code": 0,
+    "wall_seconds": 20.672918
+  },
+  "wire_sql": {
+    "exit_code": 0,
+    "wall_seconds": 0.046237
+  },
+  "native_retokenization": {
+    "exit_code": 0,
+    "wall_seconds": 0.049854
+  },
+  "server_exit_before_shutdown": null,
+  "receipt_sha256": "bcc91431746daf14b28ed05e196560dbc71951482a05273f529ac767fef916d2",
+  "wall_seconds": 23.40102,
+  "cpu_seconds_including_children": 84.935463
+}

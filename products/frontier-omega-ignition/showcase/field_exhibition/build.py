@@ -30,6 +30,7 @@ FILES = {
     "invention": ["REGISTRATION.md", "README.md", "INDEPENDENT_GEOMETRY_REVIEW.md", "geometry.py", "plan.py", "verify.py", "reference.py", "qualify.py", "photometry.py",
                   "mission.json", "catalog.json", "public.json", "sources/fink-alerts.json", "sources/alerts-source.json", "sources/fink-holdout.json", "sources/holdout-source.json"],
     "field_lab": ["README.md", "REGISTRATION.md", "field.py", "protocol.py", "capture.py", "fixture_server.py", "verify.py", "workload.json", "PUBLIC.json", "intake.py", "intake_workload.json", "INTAKE_REGISTRATION.md", "intake_recorded/result.json", "intake_recorded/independent_challenge.json",
+                  "hosted_repeat/operation.json", "hosted_repeat/wire.json",
                   *[f"evidence/{target}-{route}.json" for target in ("nominal", "adverse") for route in ("field", "conventional")]],
     "successor_field": ["REGISTRATION.md", "cohort.py", "audit.py", "triage.py", "SOURCES.json", "OBSERVATION.json", "archive-queue.csv",
                         *[f"facts/{series}.{ext}" for series in ("forecast", "reference") for ext in ("txt", "html", "csv")]],
@@ -107,7 +108,7 @@ def recipient():
 
 
 def exhibition():
-    replay()
+    verified = replay()
     sky = read(PRODUCT / "invention/public.json")
     mission = sky["mission"]
     catalog = read(PRODUCT / "invention/catalog.json")
@@ -150,6 +151,7 @@ def exhibition():
         raise ValueError("Update the bilingual pilot scope for the changed cohort")
     archive = recipient()
     payload = {"changeSeries":archive_series(), "acquisition":recorded_acquisition(), "intake":read(PRODUCT / "field_lab/intake_recorded/result.json"), "secondWeekReport":(PRODUCT / "invention/next_week/RESULT.json").read_text(), "pilotReport":pilot_text, "sky": sky, "field":read(PRODUCT / "field_lab/PUBLIC.json"), "successor":successor["summary"],
+               "hostedIntake":verified["hosted_intake_repeat"],
                "opportunities":opportunities(), "copy":copy, "archive":{"sha256":sha(archive), "bytes":base64.b64encode(archive).decode("ascii")},
                "command":"python3 -B replay.py", "related":[{"label": k,"url":ORIGIN + PRIOR + f} for k,f in
                          [("oldEndpoint","FRONTIER_LAB.html"),("oldReading","FRONTIER_IGNITION.html"),("oldPairing","PAIRING_LAB.html")]]}

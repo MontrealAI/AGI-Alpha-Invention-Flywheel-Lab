@@ -63,6 +63,7 @@ L’option `--mission` accepte une copie de `invention/mission.json` avec un bud
 
 ```sh
 python3 -B field_lab/verify.py --public field_lab/PUBLIC.json
+python3 -B field_lab/verify.py --workload field_lab/intake_workload.json --receipt field_lab/hosted_repeat/wire.json
 python3 -B field_lab/field.py fixture --output my-service-fixture
 ```
 

@@ -186,6 +186,13 @@ async function main() {
       for(const [name,route] of Object.entries(intake.fresh.routes)) {
         assert((await page.locator(`#intake-results [data-route="${name}"]`).innerText()).includes(route.correct+'/'+route.attempted));
       }
+      const {metrics:[hosted]}=await readJSON(path.join(product,'field_lab/hosted_repeat/wire.json'));
+      assert.equal(hosted.meets_interactive_performance,true);
+      assert.equal(hosted.meets_task_quality,false);
+      const intakeText=await page.locator('#intake-cost').innerText();
+      for(const ms of [hosted.p90_first_visible_ms,hosted.p90_turn_ms]) {
+        assert(intakeText.includes(new Intl.NumberFormat(locale,{maximumFractionDigits:3}).format(ms/1000)));
+      }
       for(const load of [...new Set(field.arms.map(a=>a.concurrency))]) {
         await page.selectOption('#service-load',String(load));
         const matching=field.arms.filter(a=>a.concurrency===load);

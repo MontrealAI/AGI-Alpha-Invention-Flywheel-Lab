@@ -232,7 +232,12 @@
       card.append(element('h4',t('intake_'+name)),element('p',fill(t('intakeScore'),{ok:num(r.correct),all:num(r.attempted),unsafe:num(r.unsafe_ready)})));
       intake.append(card);
     }
-    el('intake-cost').textContent=fill(t('intakeCost'),{wall:num(data.intake.fresh.wall_seconds,2),cpu:num(data.intake.fresh.cpu_seconds_including_children,2)});
+    const repeated=data.hostedIntake;
+    el('intake-cost').textContent=fill(t('intakeCost'),{
+      wall:num(data.intake.fresh.wall_seconds,2),cpu:num(data.intake.fresh.cpu_seconds_including_children,2),
+      first:num(repeated.p90_first_visible_ms/1000,3),turn:num(repeated.p90_turn_ms/1000,3),
+      accepted:num(repeated.quality_accepted),all:num(repeated.requests)
+    });
     const challenge=data.intake.independent_challenge.routes;
     el('intake-challenge').textContent=fill(t('intakeChallenge'),{direct:challenge.direct.correct,incumbent:challenge.incumbent.correct,all:challenge.direct.attempted});
     const fields=el('field-results');fields.replaceChildren();
