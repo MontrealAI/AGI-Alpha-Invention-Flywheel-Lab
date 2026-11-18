@@ -67,12 +67,15 @@ class Handler(BaseHTTPRequestHandler):
     def _handle(self, post):
         port = self.server.server_port
         hosts = {f"127.0.0.1:{port}", f"localhost:{port}"}
+        parts = urlsplit(self.path)
+        # An opaque exhibit may navigate to another public page or download it.
+        public_document = (not post and parts.path in {"/frontier", "/exhibition", "/showcase"}
+                           and self.headers.get("Sec-Fetch-Mode") == "navigate")
         if (len(self.headers.get_all("Host",[])) != 1 or self.headers.get("Host") not in hosts
-                or self.headers.get("Origin") not in (None, "http://"+self.headers["Host"])
-                or self.headers.get("Sec-Fetch-Site") == "cross-site"):
+                or (not public_document and (self.headers.get("Origin") not in (None, "http://"+self.headers["Host"])
+                    or self.headers.get("Sec-Fetch-Site") == "cross-site"))):
             return self._json({"error":"This workspace accepts same-origin loopback requests only"},403)
         ctrl = self.server.controller
-        parts = urlsplit(self.path)
         route = parts.path
         if parts.scheme or parts.netloc:
             raise StateError("Use a local relative path")
@@ -90,15 +93,17 @@ class Handler(BaseHTTPRequestHandler):
             name = route.lstrip("/") or "index.html"
             media = {"index.html":"text/html","app.js":"text/javascript","style.css":"text/css","operator.css":"text/css"}[name]
             return self._send(200,media+"; charset=utf-8",(PRODUCT/"web"/name).read_bytes())
-        if not post and route in {"/showcase", "/exhibition"}:
+        if not post and route in {"/showcase", "/exhibition", "/frontier"}:
             # The exhibit reads only its repository's public inputs. Its opaque
             # origin and independent no-connect CSP isolate private workspace APIs.
             from showcase.build import render, policy
-            page = (render() if route == "/showcase" else
-                    (PRODUCT.parents[1] / "docs/frontier-omega-ignition/continuation/FRONTIER_IGNITION.html").read_text(encoding="utf-8"))
+            assets = {"/exhibition": "FRONTIER_IGNITION.html", "/frontier": "FRONTIER_LAB.html"}
+            directory = PRODUCT.parents[1] / "docs/frontier-omega-ignition/continuation"
+            page = render() if route == "/showcase" else (directory / assets[route]).read_text(encoding="utf-8")
             csp = (policy(page) + "; frame-ancestors 'none'; "
                    "sandbox allow-scripts allow-downloads allow-popups allow-popups-to-escape-sandbox")
-            return self._send(200, "text/html; charset=utf-8", page.encode("utf-8"), csp=csp)
+            attachment = assets["/frontier"] if route == "/frontier" and parts.query == "download=1" else None
+            return self._send(200, "text/html; charset=utf-8", page.encode("utf-8"), attachment, csp=csp)
         if not post and route == "/api/status":
             provider = ctrl.identity()
             return self._json({"mode":provider["mode"],"provider":provider,"runtime":ctrl.source})

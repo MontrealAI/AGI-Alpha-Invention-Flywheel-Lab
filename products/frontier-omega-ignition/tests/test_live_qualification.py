@@ -3,16 +3,31 @@ import json
 from pathlib import Path
 import tempfile
 import unittest
+from unittest.mock import patch
 import zipfile
 
 from ignition.construction import build, freeze_contract
 from ignition.delivery import export_bundle
 from ignition.evaluation import evaluate
-from qualify_live import EXAMPLE, MODEL_ALIAS, STAGES, acquired_investigation, check_portable, result_status, run_direct
+from qualify_live import EXAMPLE, LIVE_STREAM_ARM, MODEL_ALIAS, STAGES, acquired_investigation, campaign, check_portable, result_status, run_direct
 from ignition.provider import LocalProvider
 
 
 class HostedQualificationTests(unittest.TestCase):
+    def test_only_the_separate_live_source_arm_receives_the_streaming_provider(self):
+        buffered = LocalProvider("llama-cpp", MODEL_ALIAS, 8080, schema_output=True)
+        stream = LocalProvider("llama-cpp", MODEL_ALIAS, 8080, schema_output=True, streaming=True)
+        arms = []
+        def record_arm(work, name, function, model):
+            arms.append((name, model.streaming))
+            return {"status":"PASS", "contract_sha256":"same", "calls":[]}
+        record = {}
+        with patch("qualify_live.timed_arm", side_effect=record_arm):
+            campaign(Path("unused"), buffered, record, live_model=stream)
+        self.assertEqual(arms, [("primary", False), ("direct", False), (LIVE_STREAM_ARM, True)])
+        self.assertEqual(record["live_source_trial"]["arm_id"], LIVE_STREAM_ARM)
+        self.assertEqual(record["direct_comparison"]["order"], [name for name, _ in arms])
+
     def test_explicitly_completed_live_routes_only(self):
         state = {"status": "verified", "evaluation": {"status": "pass"}}
         calls = [{"stage": stage, "mode": "local", "status": "completed", "reported_model": MODEL_ALIAS,

@@ -12,14 +12,14 @@ from urllib.request import Request, build_opener, ProxyHandler
 LOADED_SOURCE_SHA256 = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
 
 
-def stream_transport(url, headers, body, *, kind, timeout, cancel, on_text):
+def stream_transport(url, headers, body, *, kind, timeout, cancel, on_text, accumulator_factory=None):
     try:
         from .adapters import BridgeError, NoRedirect, MAX_RESPONSE, strict_json
     except ImportError:
         from adapters import BridgeError, NoRedirect, MAX_RESPONSE, strict_json
     payload = json.dumps(body, ensure_ascii=False, allow_nan=False).encode()
     headers = dict(headers, Accept="application/x-ndjson" if kind == "ollama" else "text/event-stream")
-    accumulator = StreamAccumulator(kind, on_text)
+    accumulator = (accumulator_factory or StreamAccumulator)(kind, on_text)
     try:
         opener = build_opener(ProxyHandler({}), NoRedirect())
         with opener.open(Request(url, data=payload, headers=headers), timeout=timeout) as response:

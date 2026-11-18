@@ -1,0 +1,121 @@
+{
+  "protocol": "ignition/local-stream-transport-observation/1",
+  "scope": "A CPU-only protocol and native-schema smoke check. These two different tasks do not qualify the Qwen live-source mission or scientific decision quality.",
+  "model_url": "https://huggingface.co/bartowski/SmolLM2-135M-Instruct-GGUF/resolve/09816acd5d99df7be770d85ea30822623dab342c/SmolLM2-135M-Instruct-Q4_K_M.gguf",
+  "runtime_url": "https://github.com/ggml-org/llama.cpp/releases/download/b12242/llama-b12242-bin-ubuntu-x64.tar.gz",
+  "runtime_archive_sha256": "909eef25cd53e6601c8a07c866d8dbb2983e74177088d55182137a8fb8255d62",
+  "runtime_binary_sha256": "fe211d00c4754aa67aaa492d2c755ab0f6ef60bf30eee3c0c74a3496189cde17",
+  "weights_sha256": "2e8040ceae7815abe0dcb3540b9995eaa1fa0d2ca9e797d0a635ae4433c68c2d",
+  "provider_implementation_sha256": "bcd2696759bf660a3804de777ee134beb0b972bba547ac35ab4485b2d69be30f",
+  "server_threads": 2,
+  "seed": 6144,
+  "temperature": 0,
+  "model_bytes": 105454432,
+  "runtime_archive_bytes": 23158635,
+  "server_parameters": {
+    "ctx_size": 2048,
+    "n_gpu_layers": 0,
+    "parallel": 1,
+    "threads_batch": 2
+  },
+  "automatic_retries": 0,
+  "observations": [
+    {
+      "started_at": "2026-11-18T00:04:38.170551+00:00",
+      "input": {
+        "signals": [],
+        "instruction": "There are no signals. Return exactly the object with an empty candidates array and null favourite."
+      },
+      "expected": {
+        "candidates": [],
+        "favourite": null
+      },
+      "passed": false,
+      "call": {
+        "mode": "local",
+        "provider": "llama-cpp",
+        "model": "SmolLM2-135M-Instruct-Q4_K_M",
+        "transport_mode": "streaming-sse/1",
+        "harness_streaming_sha256": "c94164c9b5539e08ff731b9d23063ac5357351264e86ad081f24a4ebed181986",
+        "declared_model_sha256": "2e8040ceae7815abe0dcb3540b9995eaa1fa0d2ca9e797d0a635ae4433c68c2d",
+        "weights_identity": "operator-declared",
+        "output_tokens": 96,
+        "timeout_seconds": 30,
+        "schema_output": true,
+        "schema_implementation": "a3daafd72d3d715f155ea76d9466aea558c2261d638add19e31f37aebb983b38",
+        "harness_adapter_sha256": "a05127970eb11bb08cc98ed7ef9e05f9a723f51c66f9a5bfaa9f2242bb6275a6",
+        "stage": "discover",
+        "request_sha256": "a47f01d201613de51ca9f7dd3380841cdfa87b84adfc2cc84f8bf9a1a62b3e9b",
+        "recorded_at": "2026-11-18T00:04:38.189267+00:00",
+        "complete_cost_known": false,
+        "run_id": "ignition_8e2766da84f14cef85f1329ebf1b4c98",
+        "status": "failed",
+        "usage": null,
+        "response_sha256": null,
+        "application_model_calls": 1,
+        "response_schema_sha256": "f2ad2944a589ddcc1f1360ebc2589f6b5c976cf3b1080dd0488e99722e2084e3",
+        "stream_output_bytes": 254,
+        "stream_fragments": 96,
+        "error_code": "PROVIDER_STREAM",
+        "wall_seconds": 0.847412
+      },
+      "output": null,
+      "server_reported_prompt_and_generated_tokens": [
+        159,
+        96
+      ],
+      "interpretation": "The open discovery grammar reached its 96-token output allowance. The server timing log counted 96 generated tokens. Partial text was discarded."
+    },
+    {
+      "started_at": "2026-11-18T00:05:17.449413+00:00",
+      "input": {
+        "candidates": [],
+        "instruction": "Select an eligible candidate ID or abstain."
+      },
+      "expected": {
+        "choice": "abstain"
+      },
+      "passed": true,
+      "call": {
+        "mode": "local",
+        "provider": "llama-cpp",
+        "model": "SmolLM2-135M-Instruct-Q4_K_M",
+        "transport_mode": "streaming-sse/1",
+        "harness_streaming_sha256": "c94164c9b5539e08ff731b9d23063ac5357351264e86ad081f24a4ebed181986",
+        "declared_model_sha256": "2e8040ceae7815abe0dcb3540b9995eaa1fa0d2ca9e797d0a635ae4433c68c2d",
+        "weights_identity": "operator-declared",
+        "output_tokens": 96,
+        "timeout_seconds": 30,
+        "schema_output": true,
+        "schema_implementation": "a3daafd72d3d715f155ea76d9466aea558c2261d638add19e31f37aebb983b38",
+        "harness_adapter_sha256": "a05127970eb11bb08cc98ed7ef9e05f9a723f51c66f9a5bfaa9f2242bb6275a6",
+        "stage": "choose_hypothesis",
+        "request_sha256": "5faf3eac8e9e7c0f231a3c85c5c1ed1bb303c6a3f10e8935e4ff13802b2d1f2d",
+        "recorded_at": "2026-11-18T00:05:17.470569+00:00",
+        "complete_cost_known": false,
+        "run_id": "ignition_14e2a1b8ed7c454c8ef4c20a05e1a28f",
+        "status": "completed",
+        "usage": {
+          "input_tokens": 154,
+          "output_tokens": 16
+        },
+        "response_sha256": "0a5adb3ee8606db684c9c6431f8fc239c8819a50c38bca21bae9ebd7eb3ae6ab",
+        "application_model_calls": 1,
+        "response_schema_sha256": "df5132d774c5eb3ad18515a95a0838978cf77677776002998c31ff57a7a4e8c5",
+        "stream_output_bytes": 25,
+        "stream_fragments": 15,
+        "reported_model": "SmolLM2-135M-Instruct-Q4_K_M",
+        "raw_response_sha256": "0745228f2642c37bf67a1778e2d8071428f402e3ed83e0da393debd6d9fa7bf7",
+        "wall_seconds": 0.337595
+      },
+      "output": {
+        "choice": "abstain"
+      },
+      "server_reported_prompt_and_generated_tokens": [
+        154,
+        16
+      ],
+      "interpretation": "A distinct empty-choice routing grammar completed and its validated answer matched the expected abstention."
+    }
+  ]
+}

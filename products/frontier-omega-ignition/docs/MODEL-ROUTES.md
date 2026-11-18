@@ -14,7 +14,8 @@ Use a trusted, locally provisioned inference server under your control. A loopba
 | `IGNITION_MODEL_SHA256` | Optional immutable model digest independently obtained by the operator. Receipts label this declaration. The hosted driver measures the downloaded weights. |
 | `IGNITION_MODEL_OUTPUT_TOKENS` | Output-token limit for each generation. Default 4096. |
 | `IGNITION_MODEL_SCHEMA` | Set to `1` only for a provisioned server/model supporting native JSON schema. Default is `0`. Stores the exact grammar digest per call. |
-| `IGNITION_MODEL_TIMEOUT` | Per-request transport timeout in seconds, from 1 through 600. Default 300. |
+| `IGNITION_MODEL_STREAM` | Set to `1` to request incremental SSE from a local llama.cpp server. The default `0` uses the existing buffered route. |
+| `IGNITION_MODEL_TIMEOUT` | Connection and socket-read timeout in seconds, from 1 through 600. Default 300. A streaming generation can run longer while its connection continues to deliver bytes. |
 
 A mission changing providers requires a new revision. A stopped, incomplete, differently identified or invalid response fails the stage. Receipts preserve the declared and returned model IDs, request and response hashes, elapsed time and token counts if reported. An interrupted request can have used resources. CPU, electricity, maintenance and operator time have real costs even when no billable service is contacted.
 
@@ -43,6 +44,16 @@ The exit status is 0 for a complete verified run, 1 for failed qualification or 
 The original registered migration trial remains the primary result. Two separate arms run on the same loaded model after it. The direct arm receives the same declared task, public source excerpts, grammar, development examples and output-token allowance in one construction request. Its frozen confirmation cases, conventional comparator and portable verification are identical. The evidence reports both acceptance outcomes, per-arm wall time and reported tokens. Model startup and downloads are shared. Warmth, order effects and unmeasured operating costs limit inference from a single timing comparison.
 
 In the third arm, the same public mission separately permits live release-feed retrieval. The standard controller researches, challenges, selects and, if warranted, builds and verifies. Its receipt preserves current and approximately 35-day earlier observations, exact feed URLs, source response digests, model calls, and the candidate IDs that actually cited an eligible retrieved source. A valid decision to defer remains a research result. It establishes no construction. An empty source response or unused live evidence cannot qualify this integrated investigation.
+
+### Streaming the prospective live-source arm
+
+The earlier buffered live-source trial stopped with a provider connection error at its 600-second socket wait. The original observation still stands. Protocol `ignition/hosted-local/2` registers a separate arm, `live-sources-streaming-sse-v1`, on the same model, weights, schemas, output allowance and loopback server. Primary and direct controls retain their buffered transport. A new hosted run is necessary to determine the Qwen mission outcome under the streaming arm.
+
+Each JSON event must identify the configured model. Only a single text answer that finishes with `stop` and the SSE end marker can proceed to JSON and native-schema validation. The adapter counts output bytes and fragments, discards partial replies, and sends one model request. The socket idle limit, 512 KiB text limit, 4 MiB wire limit and output-token allowance still apply. A stalled request can consume local compute even when the provider supplies no final usage record.
+
+A pinned SmolLM2-135M CPU run exercised both terminal paths. The discovery generation consumed its 96-token allowance and produced no accepted response. A separate routing request with no eligible candidates completed in 0.338 seconds, using 154 input and 16 output tokens. Its validated answer was `{"choice":"abstain"}`. The receipt includes the inputs, expected results, model and runtime digests, per-call provenance and both outcomes. [Actual local streaming measurements](../evidence/local-stream-transport.json)
+
+To repeat those two transport checks, use the runtime and model linked in the receipt. Start `llama-server` on loopback with alias `SmolLM2-135M-Instruct-Q4_K_M`, two CPU threads, context 2048, seed 6144 and temperature 0. From the product directory, pass each observation's `call.stage` and `input` to `LocalProvider("llama-cpp", "SmolLM2-135M-Instruct-Q4_K_M", port, weights_sha256, output_tokens=96, timeout=30, schema_output=True, streaming=True).propose(stage, payload)`. Each original observation used a fresh server. The local unit suite also exercises fragmented HTTP replies that span several socket-read intervals and rejects idle, truncated, oversized and mixed-identity streams.
 
 
 ### First observed local-model failure
