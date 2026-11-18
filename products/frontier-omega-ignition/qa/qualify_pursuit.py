@@ -34,13 +34,18 @@ def produce(target, source):
     with tempfile.TemporaryDirectory() as folder:
         private = Path(folder) / "state"
         cli = [sys.executable, "-B", "-m", "ignition", "--state", str(private)]
-        cmd = [*cli, "pursue", "examples/public-research.shortlist", "--request-id", "qualify-public-research"]
+        cmd = [*cli, "pursue", "examples/public-research-ranked.shortlist", "--request-id", "qualify-public-research"]
         started = time.monotonic()
         first = output_json(cmd, PRODUCT)
+        selection = first["selection"]
+        screened = [item for item in selection["assessments"] if not item["eligible"]]
+        if (selection["ranked"] != ["quantum", "scroll"] or [item["candidate"] for item in screened] != ["expensify"]
+                or any(item["estimated_net_usd_cents"] is not None for item in selection["assessments"])):
+            raise ValueError("The sourced portfolio must select affordable proof and preserve unknown economics")
         second = output_json(cmd, PRODUCT)
         if first != second:
             raise ValueError("A process restart changed the accepted package, outcome or mission identity")
-        successor = output_json([*cli, "pursue", "examples/public-research.shortlist",
+        successor = output_json([*cli, "pursue", "examples/public-research-ranked.shortlist",
                                  "--request-id", "qualify-successor", "--reuse-from", "qualify-public-research"], PRODUCT)
         prior, fresh = successor["attempts"]
         if (prior.get("technical_status") != "reused_previous_negative" or prior.get("new_measurement") is not False

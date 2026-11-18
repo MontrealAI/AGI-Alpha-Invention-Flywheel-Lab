@@ -2,13 +2,15 @@
 
 ## Run the sponsor research missions
 
-The private worker compares two real published opportunities, builds the registered candidates and advances after a failed economic premise. Its first output is a verified reversible circuit with a decision to withhold competition entry. Its second is a CPU patch for a real scroll ink reader. The operator can inspect the experiments, source rights, costs and the commercial decision for each. [Results and independent receiver](../../docs/frontier-omega-ignition/continuation/beneficiary-pursuit/REPORT.md) · [Download the offline scroll normalizer](../../docs/frontier-omega-ignition/continuation/beneficiary-pursuit/scroll-normalizer.zip)
+The private worker ranks three real published opportunities, screens an already-served request, builds the registered candidates and advances after a failed economic premise. Its first output is a verified reversible circuit with a decision to withhold competition entry. Its second is a CPU patch for a real scroll ink reader. The operator can inspect the experiments, source rights, costs and the commercial decision for each. [Results and independent receiver](../../docs/frontier-omega-ignition/continuation/beneficiary-pursuit/REPORT.md) · [Download the offline scroll normalizer](../../docs/frontier-omega-ignition/continuation/beneficiary-pursuit/scroll-normalizer.zip)
 
 From this directory on Linux with Python 3.12, GNU C++20 and GNU patch:
 
 ```sh
-python3 -B -m ignition --state ~/.frontier-ignition pursue examples/public-research.shortlist --request-id sponsor-research-001
+python3 -B -m ignition --state ~/.frontier-ignition pursue examples/public-research-ranked.shortlist --request-id sponsor-ranked-001
 ```
+
+The ranked portfolio freezes the evidence and estimates for all three candidates. It screens experiments outside the objective, contingent on missing proof access or new spending, or with a negative upper expected net return. Among eligible experiments it prioritizes a positive lower expected return, then strength of demand, fit, upper time to collection, proof access and duration, and reuse. The expected interval in USD cents combines conditional gross receipts, collection probability and expected complete costs. Every unknown remains visible. The published awards alone give neither experiment an estimated net return. The older `examples/public-research.shortlist` and its original request IDs retain their declared proof order. Use a fresh ID for a changed portfolio.
 
 The command includes research-only acquisition of 18 registered public CT positions. Use `start examples/scroll.json` for the offline operator. Each candidate runs as a standard private mission with its own controls and evidence. Repeat the pursuit command with the same ID to recover the same missions. It rejects changed inputs under an existing ID. A successor can use `--reuse-from PRIOR_PURSUIT_ID` to reference a verified negative public quantum result if its grants, source, sponsor, date, contract and recipient bytes still match. That attempt reports `new_measurement: false`. The scroll experiment collects its own measurements. The result identifies the local ZIP in the state's `recipients` directory. A commercial state of **identified** means that a dated research note identifies the counterparty and need. A verified export qualifies a local artifact. Only external evidence can establish buyer acceptance.
 
