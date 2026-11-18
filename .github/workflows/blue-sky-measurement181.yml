@@ -1,0 +1,83 @@
+name: Blue Sky 181 descriptor-bound unverified input qualification
+on:
+  pull_request:
+    paths:
+      - "research/blue_sky064/measurement180.py"
+      - "research/blue_sky064/MEASUREMENT181_RACE_PROTOCOL.md"
+      - "tests/test_blue_sky_measurement181.py"
+      - ".github/workflows/blue-sky-measurement181.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-bound:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record platform job start
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - name: Verify exact requested commit
+        env:
+          EXPECTED_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: test "$(git rev-parse HEAD)" = "$EXPECTED_SHA"
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Run frozen race tests and unchanged parent tests
+        run: |
+          python -B -m unittest -v tests.test_blue_sky_measurement181
+          python -B -m unittest -v tests.test_blue_sky_measurement180
+      - name: Archive bounded source slice for independent clean replay
+        if: success()
+        run: |
+          tar -czf "$RUNNER_TEMP/MEASUREMENT181_SOURCE.tar.gz" \
+            research/blue_sky064/__init__.py \
+            research/blue_sky064/observation178.py \
+            research/blue_sky064/measurement180.py \
+            research/blue_sky064/MEASUREMENT181_RACE_PROTOCOL.md \
+            research/blue_sky064/MEASUREMENT180_PROTOCOL.md \
+            campaign/blue-sky-064/friction-probe/MIXED_REGISTRATION.json \
+            tests/test_blue_sky_measurement180.py \
+            tests/test_blue_sky_measurement181.py
+          (cd "$RUNNER_TEMP"; sha256sum MEASUREMENT181_SOURCE.tar.gz > MEASUREMENT181_SOURCE.sha256)
+      - name: Retain bounded source or failure logs
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: measurement181-source-${{ github.event.pull_request.head.sha || github.sha }}
+          path: |
+            ${{ runner.temp }}/MEASUREMENT181_SOURCE.tar.gz
+            ${{ runner.temp }}/MEASUREMENT181_SOURCE.sha256
+          if-no-files-found: warn
+  independent-clean-source:
+    needs: source-bound
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record platform job start
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: measurement181-source-${{ github.event.pull_request.head.sha || github.sha }}
+          path: ${{ runner.temp }}/source-slice
+      - name: Verify and extract only declared source
+        run: |
+          cd "$RUNNER_TEMP/source-slice"
+          sha256sum -c MEASUREMENT181_SOURCE.sha256
+          mkdir extracted
+          tar -xzf MEASUREMENT181_SOURCE.tar.gz -C extracted
+          test ! -e extracted/.git
+          test ! -e extracted/account.sqlite
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Reproduce exact synthetic race and existing refusal controls
+        working-directory: ${{ runner.temp }}/source-slice/extracted
+        run: |
+          python -B -m unittest discover -s tests -p 'test_blue_sky_measurement181.py' -v
+          python -B -m unittest discover -s tests -p 'test_blue_sky_measurement180.py' -v
+          echo "INDEPENDENT_DESCRIPTOR_BOUND_INPUT_REPLAY_PASS"
