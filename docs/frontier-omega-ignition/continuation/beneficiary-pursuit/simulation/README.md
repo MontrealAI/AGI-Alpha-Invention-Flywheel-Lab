@@ -15,6 +15,10 @@
 
 The two sparse cases were schedule indices 22 and 30. They could both affect the first 32-patch batch if loader ordering preserves the analyzed schedule. The sample covers one scroll surface. Cache state, batching and overlap may hide a speedup or make it cross a discrete queueing threshold.
 
+## Observed full-model control
+
+The release candidate was independently run through the upstream Reader V3 CPU CLI twelve times on three real 384 × 384 panels. Across two run orders, both arms produced identical encoded TIFFs and decoded pixels for each corresponding input and direction, 24 TIFFs in all. On the registered sparse panel, complete incumbent calls took 8.09 and 7.92 seconds. Candidate calls took 7.97 and 8.04 seconds. **Both averages were 8.005 seconds.** This small study established numerical interoperability and showed no mean whole-call gain on this panel. It ran on a hosted CPU and cannot directly measure full-scroll GPU input wait. The hosted job, including both native builds, took 1,274 seconds. [Exact-source job](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/44366864262/job/135022822330) · [Original and sparse receipts](native-evidence/) · [Original hosted archive](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/44366864262/artifacts/14460645912)
+
 ## Sensitivity of the full reader
 
 The exposed share is the assumed fraction of the measured 3.7-second wait to which a 55.43% component reduction transfers proportionally. The model holds everything else constant. Actual queues and overlap can behave nonlinearly. The upstream contributor measured an RTX 3080 and compared three complete runs. Their separate loader-throughput experiment used a different scroll surface and is excluded from this calculation.
