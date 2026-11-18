@@ -27,6 +27,7 @@ jobs:
           ref: ${{ env.EXPECTED_SOURCE }}
           persist-credentials: false
           sparse-checkout: |
+            connected_enterprise
             products/frontier-omega-ignition
             products/alpha-genesis-harness/bridge
             products/alpha-genesis-harness/scripts
