@@ -177,11 +177,32 @@ class Handler(BaseHTTPRequestHandler):
             run_id, version = ctrl.create(body)
             self.server.enqueue_for(ctrl, run_id, version)
             return self._json(ctrl.view(run_id),202)
-        match = re.fullmatch(r"/api/runs/([a-f0-9]{32})(?:/(history|bundle|evidence|offer|try|resume|amend|respond|approve|choose|operation|commercial))?",route)
+        match = re.fullmatch(r"/api/runs/([a-f0-9]{32})(?:/(history|bundle|evidence|offer|successor|try|resume|amend|respond|approve|choose|operation|commercial))?",route)
         if not match:
             raise Missing("Unknown route")
         run_id, action = match.groups()
         self._validate_action(ctrl, run_id, action, self.request_body)
+        if action == "successor":
+            if not post:
+                params = parse_qs(parts.query)
+                versions = params.get("version", [])
+                if set(params) != {"version"} or len(versions) != 1 or not versions[0].isdigit():
+                    raise StateError("Select one successor source revision")
+                parent = ctrl.view(run_id)
+                eligible = (parent["version"] == int(versions[0]) and parent["status"] == "verified"
+                            and parent["operation"]["state"] == "active"
+                            and parent["mission"]["authority"].get("allow_program_reuse") is True
+                            and (parent.get("artifact") or {}).get("kind") in {"manifest_audit", "record_migration"})
+                return self._json({"eligible": eligible, "source_id": run_id, "source_version": parent["version"],
+                                   "kind": (parent.get("artifact") or {}).get("kind")})
+            if set(body) != {"version", "rights", "mission", "sources", "request_id"}:
+                raise StateError("Supply the source revision, rights basis and a fresh mission request")
+            ctrl.store.get(run_id)  # Resolve the source in the authenticated workspace.
+            request = {k: body[k] for k in ("mission", "sources", "request_id")}
+            self._validate_create(ctrl, request)
+            child, version = ctrl.successor(run_id, body["version"], request, body["rights"], replay_first=True)
+            self.server.enqueue_for(ctrl, child, version)
+            return self._json(ctrl.view(child), 202)
         if not post and action == "offer":
             from .commercial_handoff import offer_draft
             params = parse_qs(parts.query, keep_blank_values=True)

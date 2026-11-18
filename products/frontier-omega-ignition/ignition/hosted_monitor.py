@@ -4,6 +4,8 @@ import contextlib
 from datetime import datetime, timezone
 import http.client
 import json
+import os
+import time
 from pathlib import Path
 import shutil
 import sqlite3
@@ -39,7 +41,7 @@ def metrics(state):
     return totals
 
 
-def check(state, origin, port, *, client=http.client.HTTPConnection):
+def check(state, origin, port, *, client=http.client.HTTPConnection, backup_required=False):
     result, alarms = {}, []
     try:
         with contextlib.closing(client("127.0.0.1", port, timeout=5)) as conn:
@@ -59,6 +61,15 @@ def check(state, origin, port, *, client=http.client.HTTPConnection):
             alarms.append("Active mission queued over five minutes: inspect workers and pause further admissions.")
     except (ValueError, OSError, sqlite3.Error, KeyError):
         alarms.append("Private storage unreadable: stop admission; inspect ownership, disk and the last verified backup.")
+    if backup_required:
+        try:
+            marker = json.loads((state / ".last-verified-backup.json").read_bytes())
+            age = int(time.time()) - marker["finished"]
+            if marker["verified_files"] < 1 or not 0 <= age <= 86400:
+                raise ValueError("Invalid or stale receipt")
+            result["last_verified_backup_age_seconds"] = age
+        except (ValueError, OSError, KeyError, TypeError):
+            alarms.append("No verified snapshot in the last 24 hours: check the encrypted mount and ignition-backup.service.")
     return {"measurements":result,"alarms":alarms}
 
 
@@ -68,7 +79,7 @@ def main():
     parser.add_argument("--origin", required=True)
     parser.add_argument("--port", type=int, default=8784)
     args = parser.parse_args()
-    result = check(args.state.resolve(), args.origin, args.port)
+    result = check(args.state.resolve(), args.origin, args.port, backup_required=os.environ.get("IGNITION_BACKUP_REQUIRED") == "1")
     print(json.dumps(result))
     return int(bool(result["alarms"]))
 

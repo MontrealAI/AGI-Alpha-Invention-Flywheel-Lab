@@ -164,7 +164,15 @@ jobs:
           cp qa/studio-browser/package*.json "$RUNNER_TEMP/ignition-studio-drivers/"
           npm ci --prefix "$RUNNER_TEMP/ignition-studio-drivers" --ignore-scripts --no-audit --no-fund
           export CHROMIUM_PATH="$(command -v google-chrome)"
-          node qa/studio_browser.cjs
+          set -o pipefail
+          node qa/studio_browser.cjs | tee "$RUNNER_TEMP/ignition-studio-browser.json"
+
+      - name: Preserve signed-in browser results for both languages and viewport sizes
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: ignition-studio-browser-${{ env.EXPECTED_SOURCE }}-attempt-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/ignition-studio-browser.json
+          if-no-files-found: error
 
       - name: Preserve desktop and mobile views of the public integrity replay
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
@@ -265,13 +273,19 @@ jobs:
           test "$(git rev-parse HEAD)" = "$EXPECTED_SOURCE"
           python -B field_trials/prepare_cache.py --assets "$RUNNER_TEMP/assets" --receipt "$RUNNER_TEMP/acquisition.json"
       - name: Test bounded choice, independently replayed construction and abstention
-        if: always() && steps.acquire.outcome == 'success'
+        if: ${{ !cancelled() && steps.acquire.outcome == 'success' }}
         working-directory: products/frontier-omega-ignition
         run: |
           python -B qa/qualify_model_dispatch.py --assets "$RUNNER_TEMP/assets" \
             --work "$RUNNER_TEMP/selection" --output "$RUNNER_TEMP/selection.json"
+      - name: Run the invited staging HTTPS path with real pinned construction
+        if: ${{ !cancelled() && steps.acquire.outcome == 'success' }}
+        working-directory: products/frontier-omega-ignition
+        run: |
+          python -B qa/qualify_model_dispatch.py --studio --assets "$RUNNER_TEMP/assets" \
+            --work "$RUNNER_TEMP/invited" --output "$RUNNER_TEMP/invited.json"
       - name: Test research-led construction on the published archive
-        if: always() && steps.acquire.outcome == 'success'
+        if: ${{ !cancelled() && steps.acquire.outcome == 'success' }}
         working-directory: products/frontier-omega-ignition
         run: |
           python -B qa/qualify_model_dispatch.py --research --assets "$RUNNER_TEMP/assets" \
@@ -284,5 +298,6 @@ jobs:
           path: |
             ${{ runner.temp }}/acquisition.json
             ${{ runner.temp }}/selection.json
+            ${{ runner.temp }}/invited.json
             ${{ runner.temp }}/research.json
           if-no-files-found: error

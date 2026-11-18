@@ -97,22 +97,47 @@ class HostedStudio(unittest.TestCase):
         self.auth.revoke("owner")
         self.assertEqual(self.call("/api/session", cookie=session)[1]["authenticated"], False)
 
-    def test_daily_idempotency_and_expiry(self):
+    def test_session_and_invite_expiry(self):
         with patch("ignition.hosted_auth.time.time", return_value=1000):
             code = self.auth.issue("x")
             session = self.auth.exchange(code)
             unused = self.auth.issue("x")
-            for i in range(DAILY_ADMISSIONS):
-                self.auth.admit("x", f"intent-{i:05}")
-            self.auth.admit("x", "intent-00000")
-            with self.assertRaises(StateError):
-                self.auth.admit("x", "too-many-requests")
         with patch("ignition.hosted_auth.time.time", return_value=1000+INVITE_TTL):
             self.assertIsNone(self.auth.exchange(unused))
         with patch("ignition.hosted_auth.time.time", return_value=1000+SESSION_TTL):
             self.assertIsNone(self.auth.principal(session))
         with self.assertRaises(StateError):
             Access(self.auth.root, "production")
+
+    def test_daily_quota_counts_committed_revisions_and_survives_cross_day_replays(self):
+        cookie = self.signin("quota")
+        def create(key, **extra):
+            return self.call("/api/runs", {"request_id": key, "mission": {"purpose": "Scope review"}, **extra}, cookie)
+
+        with patch("ignition.store.timestamp", return_value="2026-01-01T23:59:59.000+00:00"):
+            code, old, _ = create("earlier-day")
+            self.assertEqual(code, 202)
+        with patch("ignition.store.timestamp", return_value="2026-01-02T12:00:00.000+00:00"):
+            self.assertEqual(create("invalid-scope", sources="missing list")[0], 400)
+            amend_url = "/api/runs/" + old["id"] + "/amend"
+            amendment = {"request_id": "valid-amendment", "mission": {"purpose": "Revised scope"}, "version": 1}
+            self.assertEqual(self.call(amend_url, {**amendment, "version": 42}, cookie)[0], 409)
+            self.assertEqual(self.call(amend_url, amendment, cookie)[1]["version"], 2)
+            for i in range(DAILY_ADMISSIONS - 2):
+                self.assertEqual(create(f"current-{i:03}")[0], 202)
+            with concurrent.futures.ThreadPoolExecutor(max_workers=2) as callers:
+                responses = list(callers.map(create, ["last-slot-aa", "last-slot-bb"]))
+            self.assertEqual(sorted(r[0] for r in responses), [202, 400])
+            refused = next(r for r in responses if r[0] == 400)
+            self.assertIn("Daily workspace admission limit", refused[1]["error"])
+            self.assertEqual(self.call(amend_url, amendment, cookie)[1]["version"], 2)
+        with patch("ignition.store.timestamp", return_value="2026-01-03T00:00:00.000+00:00"):
+            # Yesterday's accepted intent is accessible without consuming today's capacity.
+            self.assertEqual(create("current-000")[0], 202)
+            for i in range(DAILY_ADMISSIONS):
+                self.assertEqual(create(f"tomorrow-{i:03}")[0], 202)
+            self.assertEqual(create("current-000")[0], 202)
+            self.assertEqual(create("day-three-overflow")[0], 400)
 
     def test_stopped_backup_restore_and_corruption(self):
         code = self.auth.issue("team")
@@ -211,6 +236,95 @@ class HostedStudio(unittest.TestCase):
         self.assertEqual(receipt["attempts"], 1)
         self.assertIsNone(receipt["artifact"].get("sha256"))
         self.assertEqual(self.call(f"/api/runs/{run}/offer?version=1", cookie=session)[0], 409)
+        control = f"/api/runs/{run}/operation"
+        for sequence, operation in enumerate(("pause", "resume")):
+            code, _, _ = self.call(control, {"version": 1, "sequence": sequence, "operation": operation}, session)
+            self.assertEqual(code, 200)
+        store = self.server.controller_for("bounded").store
+        wait_for(lambda: store.get(run)["status"] == "blocked")
+        self.assertEqual(self.call(f"/api/runs/{run}/resume", {"version": 1}, session)[0], 202)
+        wait_for(lambda: store.get(run)["status"] == "blocked")
+        self.assertEqual(store.get(run)["attempts"], 1)
+        self.assertEqual(model.stages, ["discover"])
+
+    def test_verified_program_requalifies_on_separate_rights_cleared_successor(self):
+        from test_studio_dispatch import wait_for
+        owner, other = self.signin("owner"), self.signin("other")
+        def mission(key, value, *, allow_reuse=False, target="serial"):
+            purpose = "Normalize the serial for collection " + key
+            mapping = {"columns":[{"source":"raw", "target":target, "type":"text"}], "extra_fields":"reject"}
+            case = {"name":"Fresh acceptance", "input":{"rows":[{"raw": value}]},
+                    "expected":{"rows":[{target: value}]}}
+            return {"request_id": key, "sources": [], "mission": {
+                "purpose": purpose, "authority": {"allow_program_reuse":allow_reuse},
+                "resources":{"execution_strategy":"direct", "direct_method":"specialist", "max_model_calls":0, "max_repairs":0},
+                "construction_spec":{"purpose":purpose, "kind":"record_migration", "definition":mapping, "cases":[case]}}}
+
+        code, stored, _ = self.call("/api/runs", mission("parent-serial", "A1", allow_reuse=True), owner)
+        self.assertEqual(code, 202)
+        run = stored["id"]
+        db = self.server.controller_for("owner").store
+        wait_for(lambda: db.get(run)["status"] == "verified")
+        url = "/api/runs/" + run + "/successor"
+        self.assertTrue(self.call(url + "?version=1", cookie=owner)[1]["eligible"])
+        def submit(sample, cookie=owner):
+            return self.call(url, {**sample, "version":1, "rights":"Owner authorizes reuse of the recorded conversion program only."}, cookie)
+        fresh = mission("second-collection", "B27")
+        self.assertEqual(submit(fresh, other)[0], 404)
+        self.assertEqual(submit(mission("repeated-sample", "A1"))[0], 400)
+        code, created, _ = submit(fresh)
+        self.assertEqual(code, 202)
+        child = created["id"]
+        self.assertNotEqual(run, child)
+        self.assertEqual(submit(fresh)[1]["id"], child)
+        wait_for(lambda: db.get(child)["status"] == "verified")
+        self.assertEqual(db.get(child)["artifact"]["program"], db.get(run)["artifact"]["program"])
+        self.assertEqual(db.get(child)["construction_attempts"][0]["method"], "retained_program")
+        self.assertEqual(db.get(child)["inherited"]["source_id"], run)
+        # A grant made by the source is not inherited by a new revision.
+        child_source = "/api/runs/" + child + "/successor"
+        self.assertFalse(self.call(child_source+"?version=1", cookie=owner)[1]["eligible"])
+        self.assertEqual(self.call(child_source,{**mission("no-grandchild", "C14"),"version":1, "rights":"new rights"},owner)[0],400)
+        code, incompatible, _ = submit(mission("incompatible-output", "D93", target="new_field"))
+        self.assertEqual(code, 202)
+        wait_for(lambda: db.get(incompatible["id"])["status"] == "failed")
+        self.assertEqual(db.get(run)["status"], "verified")
+        self.assertEqual(self.call(f'/api/runs/{incompatible["id"]}/bundle?version=1', cookie=owner)[0],409)
+
+    def test_sourced_blank_studio_mission_waits_for_new_confirmation_before_dispatch(self):
+        from ignition.controller import Controller
+        from test_controller import TestProvider
+        from test_integrity_boundaries import body, confirmation, spec
+        from test_studio_dispatch import wait_for
+        class ResearchAdapter(TestProvider):
+            def propose(self, stage, packet):
+                if stage == "specification":
+                    self.stages.append(stage)
+                    return {"spec":spec([confirmation("Draft check","demo-first","demo-second")])}
+                return super().propose(stage, packet)
+        adapter = ResearchAdapter()
+        self.server.factory = lambda store: Controller(store, lambda: adapter)
+        cookie = self.signin("research")
+        submission = body(explicit=False)
+        submission["mission"]["authority"] = {"local_model":True, "public_sources":False}
+        submission["mission"]["resources"]["max_model_calls"] = 4
+        code, created, _ = self.call("/api/runs", submission, cookie)
+        self.assertEqual(code, 202)
+        run = created["id"]
+        db = self.server.controller_for("research").store
+        wait_for(lambda: db.get(run)["status"] == "awaiting_contract")
+        card = self.call("/api/runs/"+run, cookie=cookie)[1]
+        self.assertIsNone(card["artifact"])
+        self.assertEqual(card["routing"]["route"],"research")
+        self.assertEqual(card["research"]["decision"], "build")
+        self.assertTrue(card["research"]["signals"])
+        fresh = confirmation("Recipient confirmation", "fresh-12", "fresh-47")
+        code, _, _ = self.call("/api/runs/"+run+"/approve", {
+            "version":1, "contract_sha256":card["contract_sha256"], "confirmations":[fresh]},cookie)
+        self.assertEqual(code, 202)
+        wait_for(lambda: db.get(run)["status"] == "verified")
+        self.assertEqual(adapter.stages,["discover","challenge","specification","construct"])
+        self.assertEqual(self.call("/api/runs/"+run+"/bundle?version=1",cookie=cookie)[0],200)
 
 
 if __name__ == "__main__":

@@ -164,7 +164,9 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     for key in ("work", "assets", "output"):
         parser.add_argument("--" + key, required=True, type=Path)
-    parser.add_argument("--research", action="store_true", help="Run open discovery, critique and construction on the published archive")
+    paths = parser.add_mutually_exclusive_group()
+    paths.add_argument("--studio", action="store_true", help="Use a real TLS staging login and a guided model construction")
+    paths.add_argument("--research", action="store_true", help="Run open discovery, critique and construction on the published archive")
     args = parser.parse_args()
     work, output = args.work.resolve(), args.output.resolve()
     if (work.exists() or output.exists() or work.is_relative_to(qualification.REPO)
@@ -182,6 +184,10 @@ def main():
         record.update(protocol="ignition.research-construction-selection.v1",
                       scope="Public instrument receipt. Real model discovery, selection and construction with "
                             "a supplied authorized contract. No purchased or deployed beneficiary infrastructure.")
+    if args.studio:
+        record.update(protocol="ignition.authenticated-model-construction.v1",
+                      scope="Locally trusted staging TLS and hosted HTTP endpoints, authenticated invitation, "
+                            "bounded local model, public source and independent package replay.")
     start, cpu = time.monotonic(), cpu_time()
     try:
         record["source_revision"] = qualification.checked_source()
@@ -192,7 +198,10 @@ def main():
             model = LocalProvider("llama-cpp", qualification.MODEL_ALIAS, port, observe.PINS.MODEL_SHA,
                                   output_tokens=2048 if args.research else 128, timeout=600 if args.research else 120,
                                   streaming=True, schema_output=True)
-            if args.research:
+            if args.studio:
+                from qa.qualify_studio_model import exercise as hosted
+                passed = hosted(work, port, record)
+            elif args.research:
                 from qa.qualify_research_dispatch import exercise as investigate
                 passed = investigate(work, model, record)
             else:

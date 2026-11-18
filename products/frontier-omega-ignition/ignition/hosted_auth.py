@@ -52,8 +52,6 @@ class Access:
                 CREATE TABLE IF NOT EXISTS sessions (token TEXT PRIMARY KEY, workspace TEXT NOT NULL,
                     expires INTEGER NOT NULL);
                 CREATE TABLE IF NOT EXISTS workspace (alias TEXT PRIMARY KEY);
-                CREATE TABLE IF NOT EXISTS admissions (workspace TEXT NOT NULL, day INTEGER NOT NULL,
-                    request TEXT NOT NULL, PRIMARY KEY(workspace,day,request));
                 CREATE TABLE IF NOT EXISTS audit (sequence INTEGER PRIMARY KEY, at INTEGER NOT NULL,
                     action TEXT NOT NULL, workspace TEXT);
             """)
@@ -129,21 +127,3 @@ class Access:
     def tenants(self):
         with self.connection() as db:
             return [r[0] for r in db.execute("SELECT alias FROM workspace ORDER BY alias")]
-
-    def admit(self, alias, request):
-        if not isinstance(request, str) or not re.fullmatch(r"[A-Za-z0-9_-]{8,120}", request):
-            raise StateError("Supply a stable request identifier")
-        now = int(time.time())
-        day = now // 86400
-        digest = hashlib.sha256(request.encode()).hexdigest()
-        with self.connection() as db:
-            db.execute("BEGIN IMMEDIATE")
-            db.execute("DELETE FROM admissions WHERE day<?", (day-1,))
-            if db.execute("SELECT 1 FROM admissions WHERE workspace=? AND day=? AND request=?",
-                          (alias, day, digest)).fetchone():
-                return
-            used = db.execute("SELECT COUNT(*) FROM admissions WHERE workspace=? AND day=?", (alias, day)).fetchone()[0]
-            if used >= DAILY_ADMISSIONS:
-                raise StateError("Daily workspace admission limit reached; existing missions remain accessible")
-            db.execute("INSERT INTO admissions VALUES (?,?,?)", (alias, day, digest))
-            self.record(db, now, "mission-request-admitted", alias)

@@ -1,0 +1,21 @@
+[Unit]
+Description=Verified offline Mission Studio backup
+After=local-fs.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/srv/ignition/current/products/frontier-omega-ignition
+EnvironmentFile=/etc/ignition/studio.env
+EnvironmentFile=/etc/ignition/backup.env
+RuntimeDirectory=ignition-backup
+RuntimeDirectoryMode=0700
+RuntimeDirectoryPreserve=yes
+UMask=0077
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+ReadWritePaths=/var/lib/ignition
+ExecStart=/usr/bin/python3 -I deploy/backup_supervisor.py backup
+ExecStopPost=/usr/bin/python3 -I deploy/backup_supervisor.py recover
+TimeoutStartSec=infinity
+TimeoutStopSec=420

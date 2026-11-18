@@ -126,7 +126,8 @@ def require_active(operation):
 
 
 class Store:
-    def __init__(self, directory):
+    def __init__(self, directory, *, daily_admissions=None):
+        self.daily_admissions = daily_admissions
         self.root = Path(directory).expanduser()
         self.root.mkdir(parents=True, exist_ok=True, mode=0o700)
         if self.root.is_symlink() or (os.name == "posix" and
@@ -143,6 +144,10 @@ class Store:
                 CREATE TABLE IF NOT EXISTS requests (
                   key TEXT PRIMARY KEY, fingerprint TEXT NOT NULL, id TEXT NOT NULL, version INTEGER NOT NULL);
             """)
+            if self.daily_admissions is not None:
+                # The index also covers revisions admitted by older releases.
+                db.execute("""CREATE INDEX IF NOT EXISTS revision_admission_day ON revisions(
+                    substr(json_extract(data,'$.created_at'),1,10))""")
 
     @contextlib.contextmanager
     def connection(self):
@@ -190,12 +195,21 @@ class Store:
                 if type(base) is not int or head["version"] != base:
                     raise Conflict("Mission changed. Refresh before amending")
                 version = base + 1
+            created_at = timestamp()
+            if self.daily_admissions is not None:
+                # Count only successful insertions in this workspace's UTC day. The write
+                # transaction serializes contenders for the last slot and idempotent retries
+                # already returned above, even when the original request was on a prior day.
+                used, = db.execute("""SELECT COUNT(*) FROM revisions
+                    WHERE substr(json_extract(data,'$.created_at'),1,10)=?""", (created_at[:10],)).fetchone()
+                if used >= self.daily_admissions:
+                    raise StateError("Daily workspace admission limit reached; existing missions remain accessible")
             state = dict(id=run_id, version=version, mission=mission, sources=sources, provider=provider,
                          runtime=runtime, input_sha256=digest([mission, sources]), status="queued", stage="intake",
                          operation=initial_operation(), events=[], calls={}, exchanges={}, source_result=None, research=None, contract=None,
                          routing=None, construction_attempts=[],
                          proposed_contract=None, contract_sha256=None, artifact=None, evaluation=None,
-                         handoff=None, error=None, inherited=inherited, created_at=timestamp())
+                         handoff=None, error=None, inherited=inherited, created_at=created_at)
             if {"pairing_lab", "endpoint_lab", "followup", "change_desk", "evidence_action", "scroll_normalization", "quantum_multiplier"} & mission["resources"].keys():
                 state["specialist_source"] = specialist_source
             event(state, "intake", "Mission and permission snapshot saved")

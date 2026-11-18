@@ -10,13 +10,14 @@ from pathlib import Path
 import re
 import subprocess
 import sqlite3
+import signal
 import threading
 import time
 from urllib.parse import urlsplit
 
 from .controller import Controller
 from .dispatcher import Dispatcher
-from .hosted_auth import Access, SESSION_TTL, private_dir, workspace_name
+from .hosted_auth import Access, DAILY_ADMISSIONS, SESSION_TTL, private_dir, workspace_name
 from .hosted_backup import exclusive, snapshot
 from .server import Handler
 from .store import PRODUCT, StateError, Store
@@ -129,7 +130,8 @@ class HostedService(ThreadingHTTPServer):
         workspace_name(tenant)
         with self.lock:
             if tenant not in self.controllers:
-                self.controllers[tenant] = self.factory(Store(self.access.workspaces / tenant))
+                self.controllers[tenant] = self.factory(Store(self.access.workspaces / tenant,
+                                                              daily_admissions=DAILY_ADMISSIONS))
             return self.controllers[tenant]
 
     def allow_login(self):
@@ -204,7 +206,6 @@ class HostedHandler(Handler):
 
     def _validate_create(self, ctrl, body):
         checked_scope(body)
-        self.server.access.admit(self.tenant, body.get("request_id"))
 
     def _validate_action(self, ctrl, run_id, action, body):
         if action == "respond":
@@ -305,10 +306,18 @@ def manage(args, access):
                 raise StateError("Hosted models must declare the operator-verified local weights digest")
         with HostedService(access, args.origin, args.port) as server:
             logging.warning("IGNITION service started; environment=%s", args.environment)
+            stopping = threading.Event()
+            def drain(signum, frame):
+                if not stopping.is_set():
+                    stopping.set()
+                    threading.Thread(target=server.shutdown, daemon=True).start()
+            previous = signal.signal(signal.SIGTERM, drain)
             try:
                 server.serve_forever()
             except KeyboardInterrupt:
                 pass
+            finally:
+                signal.signal(signal.SIGTERM, previous)
 
 
 if __name__ == "__main__":

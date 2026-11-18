@@ -80,7 +80,7 @@ class Controller:
                 return identity()
         return self.pairing_source
 
-    def successor(self, run_id, version, body, rights):
+    def successor(self, run_id, version, body, rights, *, replay_first=False):
         if not isinstance(rights,str) or not rights.strip() or len(rights)>2000:
             raise StateError("Provide the authorization basis for this specific reuse")
         with self.store.work_lock(run_id):
@@ -106,6 +106,32 @@ class Controller:
                 raise StateError("Open a fresh follow-up mission to check a new worklist.")
             inherited = {"source_id":run_id, "source_version":version, "artifact_sha256":s["artifact"]["sha256"],
                          "rights":rights, "kind":s["artifact"]["kind"], "program":s["artifact"]["program"]}
+            if replay_first:
+                target = body.get("mission") or {}
+                resources = target.get("resources") or {}
+                spec = target.get("construction_spec") or {}
+                if (resources.get("execution_strategy") != "direct" or resources.get("direct_method") != "specialist"
+                        or resources.get("max_model_calls") != 0 or resources.get("max_repairs") != 0
+                        or spec.get("kind") != inherited["kind"]):
+                    raise StateError("Replaying a retained program requires a matching fresh contract, direct specialist, zero calls and zero repairs")
+                contract = construction.freeze_contract(spec)["spec"]
+                previous = s["contract"]["spec"]
+                def units(case):
+                    value = case["input"]
+                    if isinstance(value.get("rows"), list):
+                        return {digest(row) for row in value["rows"] if row}
+                    if isinstance(value.get("files"), dict):
+                        return {digest([name, data]) for name, data in value["files"].items()}
+                    return set()
+                shown = set()
+                for case in previous["cases"] + previous["definition"].get("demonstrations", []):
+                    shown.update(units(case))
+                for case in contract["definition"].get("demonstrations", []):
+                    shown.update(units(case))
+                if not any("expected" in case and units(case) and not shown.intersection(units(case))
+                           for case in contract["cases"]):
+                    raise StateError("Supply a fresh nonempty confirmation input and expected output for this successor")
+                inherited["replay_unchanged"] = True
             return self.store.create(body,self.identity(),self.source,inherited=inherited,specialist_source=self._specialist_identity(body),
                                      source_sequence=s["operation"]["sequence"])
 
@@ -469,6 +495,7 @@ class Controller:
         mission = s["mission"]
         resources = mission["resources"]
         attempts = s.setdefault("construction_attempts", [])
+        replay_unchanged = (s.get("inherited") or {}).get("replay_unchanged") is True
         specialist = choice["method"] == "specialist"
         bounded = choice["method"] in ("operator_choice", "model_choice")
         evidence_projection = choice["method"] == "evidence_projection"
@@ -482,7 +509,10 @@ class Controller:
                     return self._step(s, "delivery", "Verified within the frozen contract", "verified")
                 if specialist or bounded or evidence_projection or not last["repairable"] or len(attempts) > resources.get("max_repairs", 1):
                     return self._step(s, "delivery", "Independent acceptance failed. The rejected construction is retained for inspection.", "failed")
-            if bounded:
+            if replay_unchanged:
+                self._step(s, "construction", "Replaying the authorized retained program unchanged under the new acceptance contract")
+                response = {"kind": s["inherited"]["kind"], "program": s["inherited"]["program"]}
+            elif bounded:
                 response = self._choose_mapping(s, payload, choice["method"], propose)
                 if response is None:
                     return
@@ -524,6 +554,8 @@ class Controller:
             attempt = {"attempt": len(attempts) + 1, "contract_sha256": contract["sha256"],
                        "proposal_sha256": digest(response), "method": choice["method"] if bounded or specialist or evidence_projection else "model",
                        "artifact_sha256": None, "receipt_sha256": None, "feedback": None, "repairable": True}
+            if replay_unchanged:
+                attempt["method"] = "retained_program"
             try:
                 artifact = construction.build(contract, response)
             except construction.ConstructionError as exc:

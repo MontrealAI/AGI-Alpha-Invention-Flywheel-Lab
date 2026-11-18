@@ -8,6 +8,7 @@ from pathlib import Path
 import shutil
 import sqlite3
 import tempfile
+import stat
 import time
 
 from .hosted_auth import Access, private_dir
@@ -29,7 +30,7 @@ def inventory(root):
     for item in sorted(root.rglob("*")):
         if item.is_symlink():
             raise StateError("Private state cannot include symbolic links")
-        if item.name.endswith(".lock") or item == root / "SNAPSHOT.json" or item.is_dir():
+        if item.name.endswith(".lock") or item in (root / "SNAPSHOT.json", root / ".last-verified-backup.json") or item.is_dir():
             continue
         if not item.is_file():
             raise StateError("Snapshot contains a special file")
@@ -47,12 +48,22 @@ def inventory(root):
     return files
 
 
-def snapshot(source, destination, environment, *, restore=False):
+def snapshot(source, destination, environment, *, restore=False, parent_fd=None):
     source, destination = Path(source).resolve(), Path(destination).absolute()
     if not source.is_dir() or destination.exists() or destination.is_symlink():
         raise StateError("Source must exist and destination must be new")
-    parent = private_dir(destination.parent)
-    if parent == source or parent.is_relative_to(source):
+    if parent_fd is None:
+        parent = private_dir(destination.parent)
+    else:
+        # Linux scheduled backups keep this descriptor open for all staging and
+        # publication operations, including during a host mount configuration change.
+        info = os.fstat(parent_fd)
+        parent = Path(f"/proc/self/fd/{parent_fd}")
+        if (not stat.S_ISDIR(info.st_mode) or info.st_uid != os.getuid() or info.st_mode & 0o077
+                or parent != destination.parent or restore):
+            raise StateError("Scheduled backup requires a private held destination directory")
+    resolved = parent.resolve()
+    if resolved == source or resolved.is_relative_to(source):
         raise StateError("Use a separate private parent for the destination")
     with exclusive(private_dir(source)):
         entries = inventory(source)

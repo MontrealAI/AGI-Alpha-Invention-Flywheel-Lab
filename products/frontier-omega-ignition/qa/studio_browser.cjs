@@ -73,6 +73,10 @@ async function qualify(config, index, local, root) {
     await page.locator('#to-field').fill('label');
     await page.locator('#sample-value').fill(text);
     await page.locator('#expected-value').fill(text);
+    await page.locator('#allow-reuse').check();
+    await page.locator('#offer-pricing summary').click();
+    await page.locator('#offer-price').fill('125.50');
+    await page.locator('#offer-currency').fill('CAD');
     await page.locator('#review').click();
     await page.locator('#review-panel').waitFor({ state: 'visible' });
     await page.locator('#start').click();
@@ -95,6 +99,13 @@ async function qualify(config, index, local, root) {
     assert.equal(evidence.status(), 200);
     assert.ok(Object.keys(await evidence.json()).length > 0);
     report.private_evidence_download = true;
+    const offer = await page.request.get(new URL(await page.locator('#offer-draft').getAttribute('href'), config.origin).href);
+    assert.equal(offer.status(), 200);
+    const draftText = await offer.text();
+    const digest = require('node:crypto').createHash('sha256').update(await fs.readFile(zipPath)).digest('hex');
+    assert.ok(draftText.includes(digest), 'Draft must name the exact offered artifact');
+    assert.ok(draftText.includes('CAD 125.50'), 'Draft should preserve the reviewed private offer amount');
+    report.private_offer_matches_export = true;
     await page.locator('#try-panel summary').click();
     await page.locator('#sample').fill(JSON.stringify({rows:[{finding:'fresh-é-' + index}]}));
     await page.locator('#try').click();
@@ -125,6 +136,21 @@ async function qualify(config, index, local, root) {
     await page.locator('#bundle').waitFor({state:'visible'});
     assert.equal(await page.locator('#bundle').getAttribute('href'), runLink);
     report.resume_after_browser_restart = true;
+    await page.locator('#reuse-program').click();
+    await page.locator('#purpose').fill(purpose + ' / 2');
+    await page.locator('#beneficiary').fill('MONTREAL.AI');
+    await page.locator('#from-field').fill('finding');
+    await page.locator('#to-field').fill('label');
+    await page.locator('#sample-value').fill(text + ' B');
+    await page.locator('#expected-value').fill(text + ' B');
+    await page.locator('#reuse-rights').fill('Internal qualification with our own public sample and authorized local program.');
+    await page.locator('#review').click();
+    await page.locator('#start').click();
+    await page.waitForFunction(first => {
+      const link = document.querySelector('#bundle');
+      return link && link.offsetWidth > 0 && link.getAttribute('href') && link.getAttribute('href') !== first;
+    }, runLink, {timeout: 45000});
+    report.verified_second_contract = true;
     return report;
   } finally { await browser.close(); }
 }

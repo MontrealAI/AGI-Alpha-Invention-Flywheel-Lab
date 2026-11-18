@@ -21,7 +21,7 @@
   const json = value => JSON.stringify(value, null, 2);
   const read = id => $(id).value.trim();
   let session = null, service = null, pending = null, current = null, runs = [], timer, busy = false, generation = 0;
-  let commercial = null, approvalKey = null, trialKey = null;
+  let commercial = null, approvalKey = null, trialKey = null, sourceRun = null;
   const announce = value => { $("notices").textContent = value; };
   const notKnown = () => t("Unmeasured","Non mesuré");
   function facts(list) {
@@ -117,6 +117,11 @@
   }
   function templateChanged() {
     const kind = $("template").value;
+    $("template").disabled=Boolean(sourceRun);
+    $("reuse-scope").hidden=$("reuse-rights").disabled=!sourceRun;
+    if(sourceRun) $("reuse-origin").textContent=t("Source mission · ","Mission source · ")+sourceRun.purpose+
+      t(". The original program is tested unchanged. Supply a fresh positive case. A changed mapping or trusted manifest can fail the new contract.",
+        ". Le programme d’origine est testé tel quel. Fournissez un nouveau cas positif. Une conversion ou un manifeste de référence différent peut faire échouer le nouveau contrat.");
     for (const id of ["migration","integrity"]) {
       const box = $(id+"-fields"); box.hidden = box.disabled = id !== kind;
     }
@@ -124,9 +129,9 @@
     for (const item of $("custom-fields").querySelectorAll("textarea,input")) item.disabled = Boolean(kind);
     $("call-budget").disabled = Boolean(kind) || !$("model").checked;
     const unavailable = !service || service.mode !== "local";
-    $("guided-model-label").hidden = !kind || unavailable;
-    $("guided-model").disabled = !kind || unavailable;
-    if (unavailable) $("guided-model").checked = false;
+    $("guided-model-label").hidden = !kind || unavailable || Boolean(sourceRun);
+    $("guided-model").disabled = !kind || unavailable || Boolean(sourceRun);
+    if (unavailable || sourceRun) $("guided-model").checked = false;
     $("model").disabled = Boolean(kind) || Boolean(unavailable);
     if (unavailable) { $("model").checked = false; $("call-budget").disabled = true; }
     $("template-hint").textContent = kind ? t("Build a new tool from your inputs. By default the built-in constructor works locally without model calls.","Construisez un nouvel outil à partir de vos données. Par défaut, le constructeur intégré s’exécute localement sans appel au modèle.") :
@@ -170,6 +175,11 @@
     const sources = [];
     const mission = {purpose:read("purpose"),beneficiary:read("beneficiary"),requirements:[],authority:{},resources:{},time:{},construction_spec:{}};
     if (!mission.purpose || !mission.beneficiary) throw Error(t("Enter an outcome and a beneficiary.","Indiquez un résultat et un bénéficiaire."));
+    const minutes = Number($("time-budget").value);
+    const deadline = new Date(Date.now() + minutes * 60000);
+    if (!Number.isSafeInteger(minutes) || minutes < 1 || !Number.isFinite(deadline.getTime()))
+      throw Error(t("Enter a valid time allowance in whole minutes.", "Indiquez un délai valide en minutes entières."));
+    mission.time.deadline = deadline.toISOString();
     if (!kind) {
       mission.requirements = read("requirements").split("\n").map(x=>x.trim()).filter(Boolean);
       if (!mission.requirements.length) throw Error(t("Add an acceptance requirement.","Ajoutez un critère de réussite."));
@@ -186,6 +196,7 @@
     } else {
       let definition, cases;
       mission.resources = {execution_strategy:"adaptive",max_model_calls:0,max_repairs:0};
+      if(sourceRun) Object.assign(mission.resources,{execution_strategy:"direct",direct_method:"specialist"});
       if($("guided-model").checked && !$("guided-model").disabled) {
         mission.authority.local_model=true;
         Object.assign(mission.resources,{direct_method:"model",max_model_calls:2,max_repairs:1});
@@ -194,8 +205,8 @@
         const from=fieldName("from-field"), to=fieldName("to-field");
         definition={columns:[{source:from,target:to,type:"text"}],extra_fields:"reject"};
         cases=[
-          {name:"Operator example",input:{rows:[{[from]:$("sample-value").value}]},expected:{rows:[{[to]:$("expected-value").value}]}},
-          {name:"Missing required field",input:{rows:[{}]},error:"missing_field"}
+          {name:t("Operator example","Exemple fourni"),input:{rows:[{[from]:$("sample-value").value}]},expected:{rows:[{[to]:$("expected-value").value}]}},
+          {name:t("Missing required field","Champ requis absent"),input:{rows:[{}]},error:"missing_field"}
         ];
         mission.requirements=[t("Rename the specified text field, preserve its value and reject an incomplete row.","Renommer le champ texte indiqué, conserver sa valeur et refuser les lignes incomplètes.")];
       } else {
@@ -208,18 +219,32 @@
         const match = measured === digest;
         definition={manifest:{[file.name]:digest}};
         cases=[
-          {name:"File received",input:{files:{[file.name]:btoa(raw)}},expected:{ok:match,matched:match?[file.name]:[],changed:match?[]:[file.name],missing:[],unexpected:[]}},
-          {name:"File absent",input:{files:{}},expected:{ok:false,matched:[],changed:[],missing:[file.name],unexpected:[]}}
+          {name:t("File received","Fichier reçu"),input:{files:{[file.name]:btoa(raw)}},expected:{ok:match,matched:match?[file.name]:[],changed:match?[]:[file.name],missing:[],unexpected:[]}},
+          {name:t("File absent","Fichier absent"),input:{files:{}},expected:{ok:false,matched:[],changed:[],missing:[file.name],unexpected:[]}}
         ];
         mission.requirements=[t("Classify the supplied file against the trusted digest and report an omitted file.","Comparer le fichier à l’empreinte de référence et signaler son absence.")];
       }
       mission.construction_spec={kind:kind==="migration" ? "record_migration":"manifest_audit",purpose:mission.purpose,definition,cases};
+    }
+    mission.authority.allow_program_reuse=$("allow-reuse").checked;
+    const price=read("offer-price").replace(",",".");
+    if(price){
+      const currency=read("offer-currency").toUpperCase();
+      if(!/^(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$/.test(price) || !/[1-9]/.test(price) || !/^[A-Z]{3}$/.test(currency)){
+        $("offer-pricing").open=true;
+        throw Error(t("Enter a positive proposed price and a three-letter currency code.","Indiquez un prix proposé positif et un code de devise de trois lettres."));
+      }
+      mission.resources.commercial_case={
+        currency,unit:t("verified package","paquet vérifié"),horizon:t("one delivery","une livraison"),
+        price:{low:price,high:price,provenance:"assumption",source:t("Proposed by the invited user for a private offer draft.","Prix proposé par la personne invitée pour un projet d’offre privé.")}
+      };
     }
     return {mission,sources,request_id:crypto.randomUUID()};
   }
   function review() {
     const m=pending.mission;
     const def=m.construction_spec.definition;
+    const terms=m.resources.commercial_case;
     const details=def?.columns ? def.columns.map(col=>[t("Conversion","Conversion"),col.source+" → "+col.target]) :
       def?.manifest ? Object.entries(def.manifest).map(([name,hash])=>[name,"SHA-256 · "+hash]):[];
     $("review-content").replaceChildren(facts([
@@ -227,9 +252,14 @@
       [t("Acceptance","Critères de réussite"),m.requirements.join(" · ")],
       ...details,
       [t("Supplied evidence","Sources fournies"),String(pending.sources.length)],
+      [t("Stop starting new work after","Cesser de lancer de nouvelles étapes après"),new Date(m.time.deadline).toLocaleString(language)],
+      [t("Paid provider budget","Budget de services payants"),"0 USD"],
       [t("Model-call limit","Appels au modèle"),String(m.resources.max_model_calls)],
       [t("Repair limit","Tentatives de correction"),String(m.resources.max_repairs)],
       [t("Source access","Accès aux sources"),m.authority.public_sources ? t("Approved public feeds","Flux publics approuvés"):t("Supplied inputs only","Données fournies uniquement")],
+      ...(sourceRun?[[t("Source program","Programme source"),sourceRun.purpose],[t("Basis for this reuse","Droits permettant cette réutilisation"),read("reuse-rights")]]:[]),
+      [t("Future program reuse","Réutilisation future"),m.authority.allow_program_reuse?t("Permitted after a fresh review","Autorisée après un nouvel examen"):t("No permission granted","Aucune autorisation accordée")],
+      ...(terms?[[t("Proposed price per verified package","Prix proposé par paquet vérifié"),terms.currency+" "+terms.price.low]]:[]),
       [t("Financial authority","Autorisation financière"),t("No purchases or payments. Vincent handles transactions.","Aucun achat ni paiement. Vincent effectue les transactions.")],
       [t("External contact","Contact externe"),t("None authorized","Aucun contact autorisé")]
     ]));
@@ -359,6 +389,7 @@
     $("delivery").hidden=!verified; $("run-evidence").hidden=verified;
     $("bundle").href=path+"/bundle"+version; $("evidence").href=$("run-evidence").href=path+"/evidence"+version;
     $("offer-draft").href=path+"/offer"+version+"&lang="+language;
+    $("reuse-program").hidden=!(verified && r.operation?.state==="active" && r.mission.authority?.allow_program_reuse===true && ["manifest_audit","record_migration"].includes(r.artifact?.kind));
     if(verified) trialEditor(r);
     const usage=r.economics?.usage, ev=r.evaluation, comp=ev?.comparison;
     const values=[
@@ -427,7 +458,7 @@
   function show(r, focus=false) {
     if (!r?.id) throw Error(t("The service returned an incomplete mission record.","Le service a renvoyé un dossier de mission incomplet."));
     const changed=r.id!==current?.id||r.version!==current?.version;
-    current=r; pending=null;
+    current=r; pending=null;sourceRun=null;
     $("review-panel").hidden=$("intake").hidden=true; $("mission").hidden=false;
     if (changed) {
       commercial=null; approvalKey=null;
@@ -499,12 +530,25 @@
     $("start").onclick=async()=>{
       if (busy||!pending)return;
       busy=true; const token=++generation; $("start").disabled=$("edit").disabled=true;
-      try {const r=await api("/api/runs",pending);if(token===generation){show(r,true);announce("");}}
+      const path=sourceRun?"/api/runs/"+sourceRun.id+"/successor":"/api/runs";
+      const request=sourceRun?{...pending,version:sourceRun.version,rights:read("reuse-rights")}:pending;
+      try {const r=await api(path,request);if(token===generation){show(r,true);announce("");}}
       catch(e){announce(localError(e));}
       finally {busy=false; $("start").disabled=$("edit").disabled=false;if(current&&token===generation){renderRun();if(active())schedule(current.id,token);else refreshCommercial(current.id,token);}}
     };
-    $("new-mission").onclick=()=>{if(busy)return;++generation;clearTimeout(timer);current=pending=null;commercial=null;
-      $("mission-form").reset();templateChanged();$("mission").hidden=$("review-panel").hidden=true;$("intake").hidden=false;history.replaceState(null,"",location.pathname+location.search);announce("");$("template").focus();};
+    function startAnother(previous=null) {
+      if(busy)return;
+      ++generation;clearTimeout(timer);current=pending=null;commercial=null;sourceRun=previous;
+      $("mission-form").reset();if(previous){
+        $("template").value=previous.kind==="record_migration"?"migration":"integrity";
+        $("beneficiary").value=previous.beneficiary;
+      }
+      templateChanged();$("mission").hidden=$("review-panel").hidden=true;$("intake").hidden=false;
+      history.replaceState(null,"",location.pathname+location.search);announce("");(previous?$("purpose"):$("template")).focus();
+    }
+    $("new-mission").onclick=()=>startAnother();
+    $("reuse-program").onclick=()=>{if(!current)return;startAnother({id:current.id,version:current.version,
+      purpose:current.mission.purpose,beneficiary:current.mission.beneficiary,kind:current.artifact.kind});};
     $("reload").onclick=async()=>{try{await refreshInventory();if(current)await openRun(current.id);else announce(t("Mission list updated.","Liste des missions actualisée."));}catch(e){announce(localError(e));}};
     $("try-form").onsubmit=async event=>{event.preventDefault();if(!current)return;const id=current.id;$("try").disabled=true;
       try{const input=JSON.parse($("sample").value);const data=await api("/api/runs/"+id+"/try",{version:current.version,input});if(current?.id===id)$("output").textContent=json(data.output);}
