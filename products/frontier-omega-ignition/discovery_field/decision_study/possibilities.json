@@ -1,0 +1,132 @@
+{
+  "schema": "ignition/decision-opportunities/1",
+  "opportunities": [
+    {
+      "id": "transient",
+      "source_ids": [
+        "F"
+      ],
+      "url": "https://doc.ztf.fink-broker.org/broker/science_modules/",
+      "en": {
+        "title": "Catch a change between survey visits",
+        "finding": "Fink already reports rates of change. Dated ZTF detections let an archive group reconstruct when a change first qualified and what the next observation showed.",
+        "limit": "Irregular visits, reference-image errors and missing later data can leave the direction or persistence unresolved.",
+        "test": "Issue each decision using only earlier detections. Open the next eligible same-band observation and compare the outcome with a direct archive query."
+      },
+      "fr": {
+        "title": "Repérer un changement entre deux visites",
+        "finding": "Fink fournit déjà des taux de variation. Les détections datées du ZTF permettent de déterminer quand un changement devenait détectable, puis de consulter la mesure suivante.",
+        "limit": "Des visites irrégulières, les erreurs liées à l’image de référence ou l’absence de mesure ultérieure peuvent laisser la persistance du signal indéterminée.",
+        "test": "Émettre chaque décision à partir des seules mesures antérieures. Examiner ensuite la prochaine mesure dans la même bande et comparer le résultat à une requête directe dans les archives."
+      },
+      "beneficiary": "An archival transient observer selecting candidates for review before the next available visit.",
+      "alternative": "Fink rate and uncertainty fields, an astronomer with the existing broker, direct same-band SQL on the same data, and deferral. The broker can use an upper limit; that is a different definition.",
+      "costs": "Retrospective CPU time and source acquisition are measurable. Observer review, false alerts, missed changes and follow-up allocation are unpriced. No buyer has agreed.",
+      "scale": "Repeat the same dated decision for new objects; each site supplies its own alert budget, data rights and acceptance rule.",
+      "rights": "Published survey detections only. No live telescope, classification, or right to commission follow-up is implied.",
+      "selection": "Constructed first. Existing SQL can plausibly win and frozen event times support an immediate falsification. Commercial rank remains unresolved."
+    },
+    {
+      "id": "grid",
+      "source_ids": [
+        "B",
+        "A"
+      ],
+      "url": "https://arxiv.org/abs/2610.27930",
+      "en": {
+        "title": "Find when a learned solver earns its computing time",
+        "finding": "Across 15 test grids, a parallel conventional solver could match or exceed the tested ML methods on ordinary power flow. A separate edge study timed one distilled model at 12.2 ms per scenario.",
+        "limit": "The studies answer different questions. Speed on an edge device cannot establish bulk throughput or adequate physical accuracy on the lab’s cases.",
+        "test": "Time complete batches on unseen public grids against tuned parallel solvers. Count only solutions that pass an independent current-balance check."
+      },
+      "fr": {
+        "title": "Déterminer quand un solveur appris justifie son coût",
+        "finding": "Sur 15 réseaux d’essai, un solveur classique parallélisé pouvait égaler ou dépasser les méthodes d’IA testées en calcul de répartition de puissance. Une autre étude mesure 12,2 ms par scénario sur un appareil embarqué.",
+        "limit": "Les deux études répondent à des questions différentes. Une latence embarquée ne garantit ni le débit en lots ni la précision physique sur les cas du laboratoire.",
+        "test": "Chronométrer des lots complets sur des réseaux publics inédits face à des solveurs parallèles optimisés. Ne compter que les solutions dont le bilan de courant est vérifié indépendamment."
+      },
+      "beneficiary": "A research-computing group comparing offline simulation methods for repeated studies on synthetic grids.",
+      "alternative": "Batched conventional CPU/GPU solvers with independent Kirchhoff current checks, or keeping the incumbent.",
+      "costs": "Training, tuning, hardware, batching, reference solutions, review and failures per accepted scenario. No validated workload volume or savings.",
+      "scale": "A routing rule validated across independent synthetic families could serve many research groups; out-of-distribution cases need qualification.",
+      "rights": "Public simulation only. Check model, benchmark and solver licences before reuse. No utility data or operating authority.",
+      "selection": "Retain the benchmark comparison. Both sources challenge a broad replacement claim; a workload-matched operating and funding case is missing."
+    },
+    {
+      "id": "lineage",
+      "source_ids": [
+        "C",
+        "D"
+      ],
+      "url": "https://arxiv.org/abs/2610.31566",
+      "en": {
+        "title": "Spend an imaging core’s review time on difficult links",
+        "finding": "CellTrack-Bench selected difficult associations where multiple trackers made the same mistake. Its authors also report that weaker models can worsen a repair.",
+        "limit": "A difficulty-selected sample cannot measure the error rate across an entire movie or justify re-reviewing every link.",
+        "test": "Freeze whole microscopy sequences, a fixed review budget and hidden annotations. Compare corrected links and newly introduced errors against a specialist tracker and its own confidence ranking."
+      },
+      "fr": {
+        "title": "Consacrer la relecture aux liens difficiles",
+        "finding": "CellTrack-Bench a choisi des associations où plusieurs algorithmes de suivi se trompaient ensemble. Les auteurs observent aussi que des modèles moins performants peuvent aggraver une correction.",
+        "limit": "Un sous-ensemble choisi pour sa difficulté ne permet pas d’estimer le taux d’erreur d’une séquence entière ni le bénéfice d’une relecture exhaustive.",
+        "test": "Réserver des séquences entières, masquer les annotations et fixer un budget de relecture. Comparer les liens corrigés et les erreurs introduites à un suivi spécialisé qui classe ses propres incertitudes."
+      },
+      "beneficiary": "A microscopy imaging core reviewing links between objects in existing, annotated, nonclinical time-lapse images.",
+      "alternative": "A specialized tracker, uncertainty-based inspection, the ordinary Cell Tracking Challenge linking benchmark, or leaving the track unchanged.",
+      "costs": "Expert minutes, review transport, segmentation quality, additional model compute, new errors and rights checks. No reviewed facility backlog or willingness to pay.",
+      "scale": "Reuse accepted prioritization across licensed datasets, while holding out sequences and imaging modalities for transfer checks.",
+      "rights": "Only approved annotated images; dataset and model licences and any clinical use need separate authority.",
+      "selection": "Potentially valuable expert-attention bottleneck. Novel beneficiary sequences, annotations and review times are needed for adoption."
+    },
+    {
+      "id": "formal",
+      "source_ids": [
+        "M"
+      ],
+      "url": "https://arxiv.org/abs/2610.20573",
+      "en": {
+        "title": "Catch the wrong theorem before a library release",
+        "finding": "Mei and Douglas report that combining semantic review with numerical and vacuity checks accepted the fewest incorrect statements among the tested methods on three labelled datasets.",
+        "limit": "A compiled proof can faithfully prove a mistranslation. Finite numerical samples and one benchmark family cannot establish a whole library’s fidelity.",
+        "test": "Blind notation and domain errors in unseen identities. Compare accepted incorrect translations against a Lean reviewer, the published verifier and independent high-precision evaluations."
+      },
+      "fr": {
+        "title": "Détecter un énoncé infidèle avant sa publication",
+        "finding": "Sur trois jeux annotés, Mei et Douglas rapportent que leur combinaison de relecture sémantique, de tests numériques et de contrôles de vacuité présente le plus faible taux d’acceptation d’énoncés erronés parmi les méthodes étudiées.",
+        "limit": "Une preuve compilée peut établir une traduction infidèle. Un échantillonnage numérique et une famille de tests ne garantissent pas la fidélité d’une bibliothèque entière.",
+        "test": "Masquer des erreurs de notation ou de domaine dans des identités inédites. Comparer les traductions fautives acceptées par un spécialiste de Lean, le vérificateur publié et des évaluations numériques indépendantes."
+      },
+      "beneficiary": "A maintainer admitting translated identities to a mathematical software library.",
+      "alternative": "Existing Lean/mathlib, upstream FLMF checking, a competent human mathematician, and rejecting an uncertain translation.",
+      "costs": "Authoritative translation, independent mathematical adjudication, diagnostics, maintainer review, toolchain pinning and future rechecking. No maintainers enrolled.",
+      "scale": "Share reusable mathematical checks across identities where assumptions and domains can be tracked exactly.",
+      "rights": "Publication and library licences require review; passing a kernel alone confers no authority to admit a library change.",
+      "selection": "Attractive because exact acceptance can be cheap after a faithful statement exists. Intended-statement labels remain an expensive dependency."
+    },
+    {
+      "id": "logic",
+      "source_ids": [
+        "H"
+      ],
+      "url": "https://arxiv.org/abs/2610.18891",
+      "en": {
+        "title": "Build verifiable logic for scientific instruments",
+        "finding": "Two winning student teams took LLM-assisted designs through Sky130 physical sign-off. The paper reports zero design-rule and layout-versus-schematic violations for those designs.",
+        "limit": "Sign-off does not show measured chips or autonomous design. A new laboratory block still has its own reset, timing and interface requirements.",
+        "test": "Generate one passive instrument counter from a fresh timing contract. Check equivalence, reset, synthesis and resource use against existing HDL IP and a direct expert implementation."
+      },
+      "fr": {
+        "title": "Construire une logique vérifiable pour un instrument",
+        "finding": "Deux équipes étudiantes lauréates ont fait valider physiquement leurs circuits Sky130 avec l’aide de modèles de langage. Leurs deux circuits respectaient les règles de dessin et correspondaient aux schémas.",
+        "limit": "La validation physique ne mesure pas une puce fabriquée et n’établit pas l’autonomie de la conception. Un nouveau bloc conserve ses exigences de réinitialisation, de temporisation et d’interface.",
+        "test": "Générer un compteur passif à partir d’un nouveau cahier des charges. Comparer équivalence, réinitialisation, synthèse et ressources avec un bloc existant et une réalisation directe par un spécialiste."
+      },
+      "beneficiary": "An instrumentation group integrating small digital counters into research equipment.",
+      "alternative": "A parameterized vendor or open-source IP block, an engineer using conventional EDA and a self-service design flow.",
+      "costs": "Specification, verification, debugging, EDA compute, IP review, integration and possibly hardware qualification. No quotes, device access or orders.",
+      "scale": "Reuse formally checked blocks for related envelopes; clock domains, interfaces and toolchains require independent requalification.",
+      "rights": "Evaluate a passive digital counter in simulation only; publication and redistribution require compatible IP/tool licences.",
+      "selection": "Retain as an option. The physical outcome remains outside present authority and an existing counter may meet the full need."
+    }
+  ]
+}
