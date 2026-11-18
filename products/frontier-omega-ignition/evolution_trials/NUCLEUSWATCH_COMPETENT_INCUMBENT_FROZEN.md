@@ -1,0 +1,28 @@
+# Frozen incumbent-interface qualification — 18 November 2026
+
+**Scope:** Independent, additive competitive review of PR #451 at frozen owner source `ffd8a0ebf1000173ca2446b9475be128463d6c17`. Original owner remains the only integration/release authority. This document freezes the *first* scope and interpretation before implementation or CI. This is an exposed-fixture engineering study, not a new held-out study, a price experiment, an observed buyer outcome or a full human-comparator result.
+
+## Product and provenance
+
+**Incumbent:** `nucleuswatch==1.2.0`, an MIT-licensed, third-party cross-broker scientific instrument published on PyPI on **2026-10-25**, before the October 26 notices. Upstream source commit `fe3b81da66c3bd24fdd0dd4942bb01e4e0a45018`. Published PyPI wheel digest `7c578e37ec958008424d02cef843d856f773c87ce4158186e19c836900403ed0`; download and recompute in CI, refusing a mismatch. Upstream package source: <https://github.com/bibinthomas123/nucleuswatch/tree/fe3b81da66c3bd24fdd0dd4942bb01e4e0a45018>. Release: <https://pypi.org/project/nucleuswatch/1.2.0/>. The package correctly targets broker harmonization, not necessarily this narrower astronomy contract.
+
+**Existing exposed missions (do not tune):** two band-specific persistence notices for `ZTF26acbezdh` issued 26 October 2026, and a separately published transfer example `ZTF24aalougs`. The prior direct conventional ALeRCE/Fink receiver already recovered the same accepted October answers in 11.147 elapsed seconds (seven public GETs) and the May 2024 example in 9.443 seconds (five GETs). These are historical observations, not new tests, and do not measure complete operator work or independent buyer acceptance. PR #451's source and its frozen evidence are immutable comparison inputs.
+
+## Four complete options, separately evaluated
+
+1. **No-deploy:** No claimed commercial value, paid buyer or new native reservation; zero new external capital commitment. Retains the original uncertainty, not an accepted answer.
+2. **Direct competent conventional route:** Source-qualified ALeRCE/Fink raw packet retrieval, same reference/filter/field/readout, first eligible later event, original magnitude/error rule and independent offline verification; retain its previously registered outcome and all actual measured request costs. A competent analyst and any downstream service/support costs remain unmeasured.
+3. **Existing multi-broker product plus competent operator:** Use stock `nucleuswatch==1.2.0` to identify the object, classify and expose cross-broker coverage; allow the analyst to query original public packets if the stock presentation omits scientific fields. Do **not** score the package as unsuccessful solely because a specialist adapter has a different purpose. Stock-only and augmented routes must be distinguished; analyst time, raw-fetch and complete costs must be counted before declaring an economic winner.
+4. **FRONTIER FIELD source-bound receiver:** Existing PR #451 portable verified reproduction, comparing identical source data and scientific acceptance; no new customer or price is inferred.
+
+## Primary falsifiable interface question
+
+Can the stock `nucleuswatch` harmonized ALeRCE `BrokerResult.lightcurve` and its `coverage()` interface *alone* certify the mandatory original-reference/field/readout/public-program/provenance requirements? Test the exact upstream package on **two synthetic raw detections with identical accepted photometric and candidate fields but different reference processing ID**, plus an independent field/readout difference. If the normalized output is identical in both worlds, stock output alone cannot distinguish contract eligibility; report `INSUFFICIENT_SOURCE_FIELDS`, **not** an incorrect answer or a failed upstream product. Also verify it preserves its genuine capability to reveal a candidate ID that ALeRCE has and Fink omits. Tests must not call model APIs, obtain Lasair tokens, transmit Zooniverse data, or run production workflows.
+
+A stock-only lack of sufficient information does not falsify a competent `nucleuswatch + raw broker packet + analyst` route. It does falsify an assertion that stock broker coverage already **proves** the exact signed reference-stream notice by itself. It does not establish any frontier-model novelty.
+
+## Frozen judgments / stop rule
+
+One pinned upstream version, one predeclared pair of synthetic reference/field contrasts and one coverage-positive control; run unchanged tests once on a normal included public GitHub runner. Preserve any failed runs as failures and repair only prospective correctness defects, with transparent source and receipt. No exploration of favorable seeds or price/demand fitting. If the stock representation is insufficient, publish the narrow result and **retain conventional augmented competitor as unqualified**, not a fabricated loss. If it does preserve all required fields, amend the hypothesis publicly with the observed output. The incumbent's actual technical breadth may exceed the scope of these tests. A complete matched blind beneficiary/productivity/commercial comparison remains required before an IGΝITION sales or Blue Sky admission claim.
+
+**Economic verdict:** `NO_DEPLOY` is the default until source-verifiable incremental accepted benefit, buyer consent, dated capacity, audited complete costs, realistic competitor options and funding are actually established. No new ledger, seed, top-up, forecast revenue, contact, transaction, spend or external agreement. Do not change protected accounts, historical failures, PR #451's scientific source, PR #452 or release.
