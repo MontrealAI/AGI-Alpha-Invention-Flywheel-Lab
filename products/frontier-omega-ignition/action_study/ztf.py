@@ -44,7 +44,12 @@ def inspect_source(scope, route):
     from invention.early_survey.exposures import verify
     index = json.loads((verify.HERE / "sources/index.json").read_bytes())
     used = ["astrometry", "alerce-api", "packet-" + band]
-    if scope["clock"] == "received" and any(datetime.fromisoformat(index[k]["observed_utc"]) > cutoff for k in used):
+    # This receiver reads both eligible bands and the forced sequence at the final
+    # deadline, even though only one PSF measurement is delivered. Gate all inputs read.
+    needed = set(used)
+    if scope["clock"] == "received":
+        needed.update(("packet-g", "packet-r", "alerce-force"))
+    if scope["clock"] == "received" and any(datetime.fromisoformat(index[k]["observed_utc"]) > cutoff for k in needed):
         return report("unavailable", "An original survey packet or its qualifying cross-archive record lacks a local acquisition by this cutoff.")
     try:
         row = verify.calculate(observation_time)["witnesses"][band]

@@ -1,0 +1,161 @@
+{
+  "arm": "live local direct Qwen construction",
+  "registration_revision": "66478c6c03fa74b44240d3ba89855021b7bb4235",
+  "product_runtime_sha256": "e6f999f4a4967ab20e38f5436d3c6b861ab3fca0a5e864fa5b92a1099e2e9fe7",
+  "hardware": {
+    "processor": "AMD EPYC 9V45 96-Core Processor",
+    "architecture": "x86_64",
+    "platform": "Linux",
+    "threads": 4,
+    "gpu_layers": 0
+  },
+  "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+  "registration_sha256": "951fc27f1b60180eca88ff623b965ff5590b36a95fc313f766c42725a71b0ce5",
+  "wall_time_model_setup_and_delivery_seconds": 344.286196,
+  "billed_amount": null,
+  "previous_run_sha256": "6bed6be3addc765f258d5c996e8da6db6b292340477f9ab0a8699f1481545a82",
+  "assets": {
+    "weights_sha256": "2fde00ce69dd4899c70d020845e2638353015bba0fdf161b3eb965f2bca4464e",
+    "weights_bytes": 2497280736,
+    "model_repository": "bartowski/Qwen_Qwen3-4B-Instruct-2507-GGUF",
+    "model_revision": "ae44f08e1392f39c0e474af10c3ff8355c8b6688",
+    "runtime_archive_sha256": "909eef25cd53e6601c8a07c866d8dbb2983e74177088d55182137a8fb8255d62",
+    "runtime_archive_bytes": 23158635,
+    "server_sha256": "fe211d00c4754aa67aaa492d2c755ab0f6ef60bf30eee3c0c74a3496189cde17",
+    "weights_preparation_wall_seconds": 3.6101
+  },
+  "serving_configuration": [
+    "--ctx-size",
+    "6144",
+    "--parallel",
+    "1",
+    "--threads",
+    "4",
+    "--threads-batch",
+    "4",
+    "--n-gpu-layers",
+    "0",
+    "--seed",
+    "6144",
+    "--temp",
+    "0",
+    "--no-repack",
+    "--batch-size",
+    "128",
+    "--ubatch-size",
+    "64",
+    "--no-webui"
+  ],
+  "status": "verified",
+  "obstruction": null,
+  "calls": [
+    {
+      "mode": "local",
+      "provider": "llama-cpp",
+      "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+      "endpoint": "http://127.0.0.1:57379",
+      "declared_model_sha256": "2fde00ce69dd4899c70d020845e2638353015bba0fdf161b3eb965f2bca4464e",
+      "weights_identity": "operator-declared",
+      "output_tokens": 1800,
+      "timeout_seconds": 550,
+      "schema_output": true,
+      "schema_implementation": "9ad43ad6e9af37b222b01cf5e0ebd3e6cedbb50918bdff1d0ec07aeaa9c7bce4",
+      "harness_adapter_sha256": "a05127970eb11bb08cc98ed7ef9e05f9a723f51c66f9a5bfaa9f2242bb6275a6",
+      "stage": "construct",
+      "request_sha256": "74ae80a1f2858cd2ad80eb0146767edccd54ba14e4f156d0e267b91a37075431",
+      "recorded_at": "2026-11-18T06:33:53.796865+00:00",
+      "complete_cost_known": false,
+      "run_id": "ignition_0557fc74268b4ad49756500b4516c33d",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 932,
+        "output_tokens": 242
+      },
+      "response_sha256": "f23c2f4eab4da2e8a9f02f8839115f6ac741606ef94f3eef1ac6d9cfaba49519",
+      "application_model_calls": 1,
+      "response_schema_sha256": "922f5501abef0faa6b49274addc6f9d743bd83a42003b85ad5ee9969f1430777",
+      "reported_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+      "raw_response_sha256": "4db165365872d18a77d8584327655021e67912977dfa1bc6e60fc9bd81a4d96b",
+      "wall_seconds": 336.490464
+    }
+  ],
+  "attempts": [
+    {
+      "attempt": 1,
+      "contract_sha256": "4f1f6a95cae3be2ec4452c47fe6fa4e0b6becdb7d4c8a8ae89ab45582ef61f4e",
+      "proposal_sha256": "f23c2f4eab4da2e8a9f02f8839115f6ac741606ef94f3eef1ac6d9cfaba49519",
+      "method": "model",
+      "artifact_sha256": "710c6525b3750c095352a49216830d73745beb2d05904c41c12a48fd6f2271fa",
+      "receipt_sha256": "34b8958a14d18116f3b21bc8e9d71081893ac0fd6ee837aa6f0908cb576429c8",
+      "feedback": null,
+      "repairable": false,
+      "status": "accepted",
+      "checks": 23,
+      "passed_checks": 23,
+      "comparison": "incomparable",
+      "elapsed_seconds": 0.006156
+    }
+  ],
+  "contract_sha256": "4f1f6a95cae3be2ec4452c47fe6fa4e0b6becdb7d4c8a8ae89ab45582ef61f4e",
+  "proposed": [
+    {
+      "stage": "construct",
+      "response": {
+        "kind": "record_migration",
+        "program": {
+          "columns": [
+            {
+              "source": "author_date",
+              "target": "written_date",
+              "type": "text"
+            },
+            {
+              "source": "author_hour",
+              "target": "written_hour",
+              "type": "integer"
+            },
+            {
+              "source": "author_minute",
+              "target": "written_minute",
+              "type": "integer"
+            },
+            {
+              "source": "committer_date",
+              "target": "landed_date",
+              "type": "text"
+            },
+            {
+              "source": "committer_hour",
+              "target": "landed_hour",
+              "type": "integer"
+            },
+            {
+              "source": "committer_minute",
+              "target": "landed_minute",
+              "type": "integer"
+            }
+          ],
+          "extra_fields": "reject",
+          "input_fields": [
+            "author_date",
+            "author_hour",
+            "author_minute",
+            "committer_date",
+            "committer_hour",
+            "committer_minute"
+          ]
+        }
+      }
+    }
+  ],
+  "acceptance_checks": 23,
+  "accepted_checks": 23,
+  "delivered_bytes": 24935,
+  "server_exit_before_shutdown": null,
+  "server_timing_lines": [
+    "5.40.527.584 I slot print_timing: id  0 | task 0 | prompt eval time =   18837.45 ms /   932 tokens (   20.21 ms per token,    49.48 tokens per second)",
+    "5.40.527.597 I slot print_timing: id  0 | task 0 |        eval time =  317642.56 ms /   242 tokens ( 1318.02 ms per token,     0.76 tokens per second)",
+    "5.40.527.597 I slot print_timing: id  0 | task 0 |       total time =  336480.00 ms /  1174 tokens"
+  ],
+  "process_and_child_cpu_seconds": 938.584306
+}

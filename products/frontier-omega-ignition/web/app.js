@@ -347,14 +347,39 @@ function studyView(study) {
 }
 function pairingView(run) {
   const study = run.pairing_result;
-  const decision = study || run.endpoint_result || run.followup_result || run.change_result;
+  const decision = study || run.endpoint_result || run.followup_result || run.change_result || run.evidence_result;
   $("pairing-result").hidden = !study;
   $("pilot-next").hidden = study?.qualifies !== true;
   $("trial-label").hidden = Boolean(decision);
   $("trial").hidden = Boolean(decision);
   $("try").textContent = decision ? "Reproduce decision" : "Run input";
   $("actions-title").textContent = decision ? "Take the decision with you" : "Operate the artifact";
-  $("recipient-command").textContent = run.change_result ? "python3 -IB review_change.py" :
+  $("evidence-result").hidden = !run.evidence_result;
+  if (run.evidence_result) {
+    const receipt = run.evidence_result;
+    const labels = {
+      retain_shadow_review: ["Retain the shadow review", "Maintenir l’examen en parallèle"],
+      withdraw_shadow_review: ["Withdraw the shadow review", "Retirer le dossier de la file parallèle"],
+      qualify_A_next: ["Qualify configuration A next", "Évaluer ensuite la configuration A"],
+      qualify_B_next: ["Qualify configuration B next", "Évaluer ensuite la configuration B"],
+      defer_tied_qualification: ["Defer the tied choice", "Reporter le choix entre les configurations ex æquo"],
+      deliver_persistence_measurement: ["Deliver the persistence measurement", "Livrer la mesure de persistance"],
+      escalate_reversal: ["Review the reversal", "Examiner l’inversion"],
+      close_unconfirmed_change: ["Close the unconfirmed change", "Clore la variation non confirmée"],
+      request_missing_evidence: ["Obtain the missing evidence", "Obtenir les éléments manquants"],
+      continue_monitoring: ["Continue monitoring", "Poursuivre le suivi"],
+      defer_until_access: ["Defer until access is available", "Reporter jusqu’à l’obtention de l’accès"],
+      escalate_to_review: ["Refer conflicting records for review", "Soumettre les données contradictoires à un examen"],
+      close_covered_search: ["Close the covered search", "Clore la recherche dans le périmètre couvert"]
+    };
+    const pair = labels[receipt.decision.action];
+    $("evidence-verdict").textContent = pair[0];
+    $("evidence-verdict-fr").textContent = pair[1];
+    $("evidence-attempts").replaceChildren(...receipt.attempts.map(a => elem("li", a.route + " · " + a.reason)));
+    $("evidence-sha").textContent = receipt.sha256;
+  }
+  $("recipient-command").textContent = run.evidence_result ? "python3 -IB action_study/desk.py verify decision.json --mission mission.json" :
+    run.change_result ? "python3 -IB review_change.py" :
     run.followup_result ? "python3 -IB review_followup.py" :
     run.endpoint_result ? "python3 -B endpoint_lab/replay_delivery.py" :
     study ? "python3 -B verify_decision.py" : "python3 -I run.py verify";
@@ -663,7 +688,7 @@ $("copy-prompt").addEventListener("click",async()=>{
   catch { $("prompt").parentElement.open=true; const range=document.createRange();range.selectNodeContents($("prompt"));getSelection().removeAllRanges();getSelection().addRange(range);runNotice("Prompt selected. Use your browser’s copy command."); }
 });
 $("try").addEventListener("click",()=>{
-  try {const input=current?.pairing_result || current?.endpoint_result || current?.followup_result || current?.change_result ? {} : JSON.parse($("trial").value); action("try",{input});}
+  try {const input=current?.pairing_result || current?.endpoint_result || current?.followup_result || current?.change_result || current?.evidence_result ? {} : JSON.parse($("trial").value); action("try",{input});}
   catch { $("output").textContent="Enter a valid JSON input."; }
 });
 $("trial").addEventListener("input",()=>{$("output").textContent="";});

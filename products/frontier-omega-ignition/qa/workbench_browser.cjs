@@ -102,6 +102,26 @@ async function main() {
     await assertLayout(page,360);await assertLayout(page,390);await assertLayout(page,1200);
     await page.keyboard.press('Tab');
     assert.equal(await page.evaluate(()=>document.activeElement.className),'skip');
+    const deskPage = await browser.newPage({reducedMotion:'reduce'});
+    await deskPage.route(/^https?:/, route => {
+      if (new URL(route.request().url()).origin === origin) return route.continue();
+      external.push(route.request().url()); return route.abort();
+    });
+    await deskPage.goto(origin);
+    await deskPage.locator('#presets').waitFor();
+    await deskPage.locator('#example').selectOption('evidence_action');
+    await deskPage.locator('#start').click();
+    await deskPage.locator('#evidence-result').waitFor();
+    assert.equal(await deskPage.locator('#evidence-verdict').textContent(), 'Withdraw the shadow review');
+    assert.match(await deskPage.locator('#evidence-verdict-fr').textContent(), /Retirer/);
+    await deskPage.locator('#try').click();
+    await deskPage.waitForFunction(()=>document.getElementById('output').textContent.includes('withdraw_shadow_review'));
+    const evidenceZip = path.join(work, 'scientific-decision.zip');
+    await receive(deskPage, '#bundle', evidenceZip);
+    execFileSync('python3', ['-c',
+      'import pathlib,subprocess,sys,zipfile; d=pathlib.Path(sys.argv[2]); zipfile.ZipFile(sys.argv[1]).extractall(d); subprocess.run([sys.executable,"-IB","action_study/desk.py","verify","decision.json","--mission","mission.json"],cwd=d,check=True)',
+      evidenceZip, path.join(work, 'received-decision')]);
+    await deskPage.close();
     await page.locator('#example').selectOption('integrity');
     await page.locator('#strategy').selectOption('research');
     await page.locator('#settings').evaluate(el => { el.open = true; });

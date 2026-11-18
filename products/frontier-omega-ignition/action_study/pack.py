@@ -44,4 +44,48 @@ def public_files():
     pool = json.loads((ROOT / pool_name).read_bytes())
     files.update(contents([pool_name, *(CHOICE + "sources/" + f for f in pool["attachments"]),
                            *(CHOICE + "sources/" + group["file"] for group in pool["groups"].values())]))
+    # Longitudinal checks and source identities accompany the public exhibition.
+    # The private recipient below packages only the sources used by its own mission.
+    extras = {
+        "action_study": ("REGISTRATION.md", "README.md", "test_desk.py"),
+        "action_study/observing": ("README.md", "REGISTRATION.md", "desk.py", "direct.py", "cost.py",
+                                   "result.json", "costs.json", "test_observing.py"),
+        "action_study/qualification_choice": ("README.md", "REGISTRATION.md", "direct.py", "prepare.py", "verify.py",
+                                              "result.json", "qualification_input.json", "economics.json"),
+        "action_study/opportunities": ("README.md", "choices.json", "sources.json", "verify.py", "model_operations.json",
+                                       "test_opportunity_sources.py"),
+        "action_study/construction": ("README.md", "REGISTRATION.md", "COHORT_REGISTRATION.md", "git-clock-converter.zip",
+                                      "conventional.py", "source_clocks.json", "native_clocks.json"),
+        "action_study/shadow": ("README.md", "REGISTRATION.md", "archive.py", "direct_inputs.py", "fieldkit.py",
+                                "shadow.py", "test_shadow.py"),
+        "invention/early_survey/exposures": ("STREAM_FIRST_REVIEW.md",),
+    }
+    files.update(contents([folder + "/" + name for folder, names in extras.items() for name in names]))
+    return files
+
+
+def scoped_files(mission, attempts):
+    """Only the public evidence needed to reproduce this revision's attempted routes."""
+    import json
+    profile, routes = mission["profile"], mission["sources"]
+    files = computation_files(profile, routes)
+    if not attempts:
+        return files
+    if profile == "ztf-persistence":
+        files.update(contents(ZTF_DATA))
+        if any(a["route"] == "alerce" for a in attempts):
+            files.update(contents(AVRO_DATA))
+    elif profile == "gw-status":
+        meta = json.loads(files[OBS + "sources.json"])
+        name = mission["scope"]["event"] + ".xml_fmt"
+        if name in meta["originals"]:
+            files.update(contents([OBS + "sources/" + name + ".gz"]))
+        if any(a["route"] == "status_history" for a in attempts):
+            files.update(contents([OBS + "sources/april.csv.gz"]))
+    else:
+        name = CHOICE + "sources/pool.json"
+        pool = json.loads((ROOT / name).read_bytes())
+        groups = {row["id"] for a in attempts for row in a["evidence"] if row.get("id") in pool["groups"]}
+        files.update(contents([name, *(CHOICE + "sources/" + f for f in pool["attachments"]),
+                               *(CHOICE + "sources/" + pool["groups"][g]["file"] for g in groups)]))
     return files

@@ -95,12 +95,23 @@ def validate(mission):
     return PROFILES[profile]
 
 
+def anchored(evidence):
+    for row in evidence:
+        if not isinstance(row, dict) or not row.get("publisher") or not (row.get("record_id") or row.get("id")):
+            continue
+        for source in [row, *row.get("sources", [])]:
+            if (isinstance(source, dict) and str(source.get("url", source.get("source_url", ""))).startswith("https://")
+                    and re.fullmatch("[0-9a-f]{64}", str(source.get("sha256", "")))):
+                return True
+    return False
+
+
 def checked_attempt(raw, rules):
     if not isinstance(raw, dict) or not isinstance(raw.get("reason"), str) or not raw["reason"].strip() or not isinstance(raw.get("evidence"), list):
         raise ValueError("A source returned an incomplete evidence record.")
     state, finding = raw.get("state"), raw.get("finding")
     if state == "observed":
-        if finding not in rules["actions"] or not raw["evidence"] or not all(isinstance(row, dict) and row for row in raw["evidence"]):
+        if finding not in rules["actions"] or not anchored(raw["evidence"]) or not all(isinstance(row, dict) and row for row in raw["evidence"]):
             raise ValueError("A scientific finding requires original source evidence and a registered meaning.")
     elif state not in FALLBACK or finding is not None:
         raise ValueError("Invalid uncertainty state or unsupported action.")
@@ -109,7 +120,7 @@ def checked_attempt(raw, rules):
         if (not isinstance(c, dict) or not all(isinstance(c.get(k), str) and c[k].strip() for k in ("population", "interval", "authority"))
                 or type(c.get("expected")) is not int or c["expected"] <= 0 or type(c.get("inspected")) is not int
                 or c["inspected"] != c["expected"] or type(c.get("matches")) is not int or c["matches"] != 0
-                or not raw["evidence"]):
+                or not anchored(raw["evidence"])):
             raise ValueError("Absence requires an evidenced complete census of the specified population and interval.")
     return raw
 
@@ -135,6 +146,16 @@ def case(mission):
         if route not in mission["sources"]:
             continue
         result = checked_attempt(source.inspect_source(mission["scope"], route), rules)
+        if mission["profile"] == "gw-status" and route == "status_history" and result["state"] == "observed" and result["finding"] == "active":
+            # The adapter already reconciled an uninterrupted serial prefix against the qualified public index.
+            rows = result["evidence"]
+            coverage = {"authority": rows[0]["publisher"] if "publisher" in rows[0] else "LVK public VOEvent stream",
+                        "population": mission["scope"]["event"] + " indexed public issuer revisions",
+                        "interval": rows[0]["issued_utc"] + " through " + mission["scope"]["as_of"],
+                        "expected": rows[-1]["serial"], "inspected": len(rows), "matches": sum(r["notice_type"] == "Retraction" for r in rows)}
+            absence = checked_attempt({"state": NEGATIVE, "finding": None, "evidence": rows, "coverage": coverage,
+                                       "reason": "Zero retraction packets in the reconciled publisher prefix."}, rules)
+            result = dict(result, retraction_search={"state": absence["state"], "coverage": coverage})
         attempts.append(dict(result, route=route))
         if result["state"] == "contradictory" or (result["state"] in ("observed", NEGATIVE) and not mission.get("crosscheck")):
             break

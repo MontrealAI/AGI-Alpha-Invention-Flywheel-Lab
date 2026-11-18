@@ -225,3 +225,115 @@ def has_distinguishing_evidence(mission, menu):
         if not observed or sum(observed <= cues for cues in distinct) != 1:
             return False
     return True
+
+
+def projection_scope(mission):
+    definition = mission["construction_spec"]["definition"]
+    return construction.fingerprint({"purpose": mission["purpose"], "beneficiary": mission.get("beneficiary", ""),
+                                     "requirements": mission.get("requirements", []),
+                                     "output_contract": {k: definition[k] for k in ("input_fields", "targets", "extra_fields")}})
+
+
+def resolve_projections(definition, evidence, scope_sha256, confirmation_fingerprints=()):
+    """Fit typed whole-field projections; acquire labels only for discriminating inputs.
+
+    The operator supplies a versioned pool and an externally pinned digest of its
+    canonical contents. That digest binds the observations and provenance the
+    operator approved. It does not establish the publisher's scientific authority.
+    """
+    from collections import Counter
+
+    receipt = {"origin": "operator_source_labels", "family": "typed_whole_field_projection",
+               "labels_examined": [], "obstruction": None}
+
+    def defer(reason):
+        receipt["obstruction"] = reason
+        return None, receipt
+
+    keys = {"source", "records", "decision_sha256", "sha256", "max_labels"}
+    if type(evidence) is not dict or set(evidence) != keys:
+        return defer("Supply source, records, decision_sha256, sha256 and max_labels for the approved observation pool.")
+    if evidence["decision_sha256"] != scope_sha256:
+        return defer("These labels were approved for a different beneficiary purpose, requirement or field contract.")
+    provenance = evidence["source"]
+    if (type(provenance) is not dict or set(provenance) != {"publisher", "locator", "version", "retrieved_at"}
+            or any(type(v) is not str or not v.strip() or len(v) > 2048 for v in provenance.values())):
+        return defer("The approved pool lacks a publisher, source locator, version or retrieval time.")
+    pool = evidence["records"]
+    budget = evidence["max_labels"]
+    if (type(pool) is not list or not 1 <= len(pool) <= 256
+            or type(budget) is not int or not 0 <= budget <= len(pool)):
+        return defer("Supply 1–256 source records and a nonnegative label budget within the pool.")
+    binding = construction.fingerprint({k: evidence[k] for k in ("source", "records", "decision_sha256")})
+    if binding != evidence["sha256"]:
+        return defer("Approved source metadata or record bytes changed. Requalify the source.")
+    receipt.update(source_sha256=binding, decision_sha256=scope_sha256, source=provenance, max_labels=budget)
+    fields = set(definition["input_fields"])
+    seen_ids = set()
+    for record in pool:
+        if (type(record) is not dict or set(record) != {"id", "input", "expected"}
+                or type(record["id"]) is not str or not 1 <= len(record["id"]) <= 512
+                or record["id"] in seen_ids or type(record["input"]) is not dict
+                or set(record["input"]) != fields):
+            return defer("Source records require distinct identities and the declared input schema.")
+        if construction.fingerprint(record["input"]) in confirmation_fingerprints:
+            return defer("A source input overlaps a frozen confirmation. Supply a disjoint observation pool.")
+        seen_ids.add(record["id"])
+
+    def value_key(value, kind):
+        try:
+            converted = construction._convert(value, kind)
+        except construction.ConstructionError:
+            return None
+        return type(converted), converted
+
+    targets = definition["targets"]
+    by_input = {}
+    for record in sorted(pool, key=lambda item: item["id"]):
+        by_input.setdefault(construction.fingerprint(record["input"]), []).append(record)
+    available = list(by_input.values())
+    fits = {t["name"]: [field for field in definition["input_fields"]
+                        if all(value_key(source[field], t["type"]) == (type(out[t["name"]]), out[t["name"]])
+                               for _, _, source, out in rows(definition))]
+            for t in targets}
+    receipt["initial_choices"] = {name: len(ops) for name, ops in fits.items()}
+    if not all(fits.values()):
+        return defer("Visible examples contradict the declared whole-field projection family.")
+
+    def discrimination(record):
+        gain = 0
+        for target in targets:
+            alternatives = fits[target["name"]]
+            predictions = Counter(value_key(record["input"][field], target["type"]) for field in alternatives)
+            gain += len(alternatives) - max(predictions.values())
+        return gain
+
+    while any(len(ops) != 1 for ops in fits.values()):
+        if len(receipt["labels_examined"]) >= budget:
+            return defer("Label budget exhausted while multiple projections remain.")
+        # Multiple source records can describe the same input. An inspected observation
+        # cannot silently evidence a mapping if another label for that same input disagrees.
+        informative = [(group, discrimination(group[0])) for group in available]
+        if not any(gain for group, gain in informative):
+            return defer("No approved input distinguishes the surviving projections.")
+        remaining = budget - len(receipt["labels_examined"])
+        affordable = [(group, gain) for group, gain in informative if gain and len(group) <= remaining]
+        if not affordable:
+            return defer("Label budget cannot cover the corroborating records for a discriminating input.")
+        group, _ = max(affordable, key=lambda item: item[1] / len(item[0]))
+        available.remove(group)
+        for record in group:
+            expected = record["expected"]
+            receipt["labels_examined"].append(record["id"])
+            if type(expected) is not dict or set(expected) != fits.keys():
+                return defer("Acquired label does not cover the declared output schema.")
+            for target in targets:
+                name = target["name"]
+                outcome = (type(expected[name]), expected[name])
+                fits[name] = [field for field in fits[name]
+                              if value_key(record["input"][field], target["type"]) == outcome]
+            if not all(fits.values()):
+                return defer("Acquired evidence contradicts every surviving projection for at least one target.")
+    columns = [{"target": t["name"], "type": t["type"], "source": fits[t["name"]][0]} for t in targets]
+    return {"columns": columns, "input_fields": definition["input_fields"],
+            "extra_fields": definition["extra_fields"]}, receipt

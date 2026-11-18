@@ -1,0 +1,30 @@
+{
+  "id": "evidence_action",
+  "title": "Decide whether to withdraw a scientific shadow review",
+  "mission": {
+    "purpose": "Should this LVK public alert remain on the shadow review list at the selected time?",
+    "beneficiary": "Archival observer maintaining a shadow alert review list",
+    "requirements": [
+      "Eligible public actual-event packets, correct event identity, source order and uninterrupted status history.",
+      "Use the selected publisher-issue or demonstrable local-receipt clock."
+    ],
+    "resources": {
+      "evidence_action": {
+        "profile": "gw-status",
+        "scope": {
+          "event": "S240420aw",
+          "as_of": "2024-04-20T05:06:23Z",
+          "clock": "issued"
+        },
+        "sources": [
+          "first_notice",
+          "status_history"
+        ]
+      }
+    },
+    "authority": {},
+    "time": {},
+    "construction_spec": {}
+  },
+  "sources": []
+}

@@ -56,8 +56,11 @@ class Controller:
         mission = body.get("mission") if isinstance(body, dict) else None
         resources = mission.get("resources") if isinstance(mission, dict) else None
         if isinstance(resources, dict):
-            if len({"pairing_lab", "endpoint_lab", "followup", "change_desk"} & resources.keys()) > 1:
+            if len({"pairing_lab", "endpoint_lab", "followup", "change_desk", "evidence_action"} & resources.keys()) > 1:
                 raise StateError("Select one specialist for this mission.")
+            if "evidence_action" in resources:
+                from .evidence_specialist import identity
+                return identity(resources["evidence_action"])
             if "change_desk" in resources:
                 from .change_specialist import identity
                 return identity(resources["change_desk"])
@@ -83,6 +86,8 @@ class Controller:
                 raise StateError("Reuse the portable Pairing Lab instrument through a fresh specialist mission")
             if s["artifact"]["kind"] == "endpoint_evidence":
                 raise StateError("Open a fresh endpoint study to requalify a changed operating requirement.")
+            if s["artifact"]["kind"] == "evidence_decision":
+                raise StateError("Open a fresh mission to qualify the new decision and permitted sources.")
             if s["artifact"]["kind"] == "dated_archive_queue":
                 raise StateError("Open a new archive mission to qualify its data cutoff and history.")
             if s["artifact"]["kind"] == "followup_worklist":
@@ -93,6 +98,13 @@ class Controller:
 
     def obsolete(self, s):
         resources = s["mission"]["resources"]
+        if "evidence_action" in resources:
+            from .evidence_specialist import identity
+            try:
+                if s.get("specialist_source") != identity(resources["evidence_action"]):
+                    return True
+            except (OSError, ValueError, KeyError):
+                return True
         if {"followup", "endpoint_lab", "change_desk"} & resources.keys():
             if "change_desk" in resources:
                 from .change_specialist import identity
@@ -119,6 +131,7 @@ class Controller:
             s.pop("endpoint_result", None)
             s.pop("followup_result", None)
             s.pop("change_result", None)
+            s.pop("evidence_result", None)
             s.update(status="stale", error="Provider or application source changed. Amend to open a fresh revision.",
                      handoff=None, artifact=None, evaluation=None)
         return self.public(s)
@@ -234,6 +247,9 @@ class Controller:
         provider = self.provider(s["exchanges"])
         mode = provider.identity().get("mode")
         self._check_time(mission)
+        if "evidence_action" in mission["resources"]:
+            from .evidence_specialist import run
+            return run(self, s)
         if "change_desk" in mission["resources"]:
             from .change_specialist import run
             return run(self, s)
@@ -311,7 +327,7 @@ class Controller:
         spec = mission.get("construction_spec", {})
         # The research and builder prompts never receive the predeclared confirmation inputs.
         model_mission = dict(mission, construction_spec={k:v for k,v in spec.items() if k != "cases"})
-        model_mission["resources"] = {k:v for k,v in mission["resources"].items() if k!="commercial_case"}
+        model_mission["resources"] = {k:v for k,v in mission["resources"].items() if k not in {"commercial_case", "mapping_evidence"}}
         if s["research"] is None:
             if choice["route"] == "direct":
                 s["research"] = routing.direct_selection(mission, choice)
@@ -419,6 +435,7 @@ class Controller:
         attempts = s.setdefault("construction_attempts", [])
         specialist = choice["method"] == "specialist"
         bounded = choice["method"] in ("operator_choice", "model_choice")
+        evidence_projection = choice["method"] == "evidence_projection"
         # Attempts and model calls are separately checkpointed. Resuming a handoff reuses its
         # exact request, and a terminal rejection cannot be converted into a fresh budget.
         while True:
@@ -427,12 +444,27 @@ class Controller:
                 last = attempts[-1]
                 if last["status"] == "accepted":
                     return self._step(s, "delivery", "Verified within the frozen contract", "verified")
-                if specialist or bounded or not last["repairable"] or len(attempts) > resources.get("max_repairs", 1):
+                if specialist or bounded or evidence_projection or not last["repairable"] or len(attempts) > resources.get("max_repairs", 1):
                     return self._step(s, "delivery", "Independent acceptance failed. The rejected construction is retained for inspection.", "failed")
             if bounded:
                 response = self._choose_mapping(s, payload, choice["method"], propose)
                 if response is None:
                     return
+            elif evidence_projection:
+                pool = resources["mapping_evidence"]
+                # The construction function receives no confirmation inputs or labels.
+                # Exclude any accidental reuse at this boundary before inspecting pool labels.
+                confirmation = {digest(row) for case in contract["spec"]["cases"]
+                                if isinstance(case["input"].get("rows"), list)
+                                for row in case["input"]["rows"] if isinstance(row, dict)}
+                program, resolution = development.resolve_projections(
+                    payload["definition"], pool, development.projection_scope(mission), confirmation)
+                s["mapping_resolution"] = resolution
+                if program is None:
+                    s["error"] = resolution["obstruction"]
+                    return self._step(s, "selection", s["error"], "deferred")
+                self._step(s, "construction", f"Resolved each projection using {len(resolution['labels_examined'])} approved source labels.")
+                response = {"kind": payload["kind"], "program": program}
             elif specialist:
                 program = payload["definition"]
                 self._step(s, "construction", "Running the installed local specialist on the builder-visible specification")
@@ -454,7 +486,7 @@ class Controller:
                 response = propose("construct", payload)
             started = time.monotonic()
             attempt = {"attempt": len(attempts) + 1, "contract_sha256": contract["sha256"],
-                       "proposal_sha256": digest(response), "method": choice["method"] if bounded or specialist else "model",
+                       "proposal_sha256": digest(response), "method": choice["method"] if bounded or specialist or evidence_projection else "model",
                        "artifact_sha256": None, "receipt_sha256": None, "feedback": None, "repairable": True}
             try:
                 artifact = construction.build(contract, response)
@@ -502,6 +534,9 @@ class Controller:
                 raise Conflict("Mission has been amended")
             if s["status"] != "verified":
                 raise Conflict("Current revision has no accepted artifact")
+            if s["artifact"]["kind"] == "evidence_decision":
+                from .evidence_specialist import deliver
+                return deliver(s, payload, trial)
             if s["artifact"]["kind"] == "dated_archive_queue":
                 from .change_specialist import deliver
                 return deliver(s, payload, trial)
