@@ -109,6 +109,7 @@ def evaluate(bundle, trust, *, expected_trust_sha256, expected_input_sha256,
     if not isinstance(reviewers, list) or not reviewers:
         raise ValueError("TRUSTED_REVIEWERS_REQUIRED")
     by_id = {}
+    used_public_keys = set()
     for reviewer in reviewers:
         _object(reviewer, ("reviewer_id", "role", "systems", "requirements",
                            "public_key_pem", "revoked", "valid_from_utc",
@@ -124,6 +125,24 @@ def evaluate(bundle, trust, *, expected_trust_sha256, expected_input_sha256,
                 raise ValueError("EXPLICIT_UNIQUE_REVIEW_SCOPE_REQUIRED")
         if _utc(reviewer["valid_until_utc"]) <= _utc(reviewer["valid_from_utc"]):
             raise ValueError("INVALID_REVIEWER_VALIDITY")
+        # Treat identical DER SubjectPublicKeyInfo bytes as one public identity,
+        # independently of PEM line wrapping; a key cannot identify two people.
+        pem = reviewer["public_key_pem"]
+        if not isinstance(pem, str) or len(pem) > 4096:
+            raise ValueError("PINNED_PUBLIC_KEY_REQUIRED")
+        lines = pem.strip().splitlines()
+        if len(lines) < 3 or lines[0] != "-----BEGIN PUBLIC KEY-----" or lines[-1] != "-----END PUBLIC KEY-----":
+            raise ValueError("PINNED_PUBLIC_KEY_REQUIRED")
+        try:
+            public_der = base64.b64decode("".join(lines[1:-1]), validate=True)
+        except (binascii.Error, ValueError) as e:
+            raise ValueError("PINNED_PUBLIC_KEY_REQUIRED") from e
+        if not public_der or len(public_der) > 4096:
+            raise ValueError("PINNED_PUBLIC_KEY_REQUIRED")
+        key_identity = hashlib.sha256(public_der).digest()
+        if key_identity in used_public_keys:
+            raise ValueError("UNIQUE_REVIEW_PUBLIC_KEY_REQUIRED")
+        used_public_keys.add(key_identity)
         by_id[identifier] = reviewer
 
     _object(bundle, ("schema", "source_receipt", "decisions"), "EXACT_REVIEW_BUNDLE_REQUIRED")
@@ -174,7 +193,10 @@ def evaluate(bundle, trust, *, expected_trust_sha256, expected_input_sha256,
         if (statement["source_receipt_sha256"] != expected_receipt_sha256 or
                 statement["source_input_sha256"] != expected_input_sha256):
             raise ValueError("REVIEW_ACTION_SOURCE_CHANGED")
-        if not (_utc(statement["issued_at_utc"]) <= when <= _utc(statement["expires_at_utc"])):
+        issued = _utc(statement["issued_at_utc"])
+        if not (_utc(reviewer["valid_from_utc"]) <= issued <= _utc(reviewer["valid_until_utc"])):
+            raise ValueError("REVIEW_ACTION_ISSUANCE_OUTSIDE_AUTHORIZED_PERIOD")
+        if not (issued <= when <= _utc(statement["expires_at_utc"])):
             raise ValueError("REVIEW_ACTION_EXPIRED_OR_FUTURE")
         key = (statement["system_id"], statement["requirement_id"],
                statement["requirement_version"], statement["evidence_id"])
