@@ -1,0 +1,54 @@
+name: TRUST Omega original-verifier incumbent comparison
+on:
+  pull_request:
+    paths:
+      - 'research/trust_omega_incumbent/**'
+      - '.github/workflows/trust-omega-original-verifier.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  pinned-original-incumbent:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record actual platform job start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - name: Check out exact submitted comparison source
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - name: Use included Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Pin independent public ordinary incumbent
+        shell: bash
+        run: |
+          set -euo pipefail
+          git clone --no-checkout https://github.com/anthropics/FlashProve.git "$RUNNER_TEMP/trust-omega-upstream"
+          git -C "$RUNNER_TEMP/trust-omega-upstream" checkout --detach 9e2bdd8ff5bf9c62f18263d7dac189b0400b260c
+          test "$(git -C "$RUNNER_TEMP/trust-omega-upstream" rev-parse HEAD)" = 9e2bdd8ff5bf9c62f18263d7dac189b0400b260c
+          g++ --version | head -1
+          test "$(g++ -dumpversion | cut -d. -f1)" -ge 13
+      - name: Run preregistered accepted proof and ten original negative controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/trust_omega_incumbent/check_official.py \
+            --upstream "$RUNNER_TEMP/trust-omega-upstream" \
+            --output "$RUNNER_TEMP/trust-omega-original"
+      - name: Preserve source-bound incumbent proof and every failed trace
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: trust-omega-stock-verifier-attempt-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/trust-omega-original/RESULT.json
+            ${{ runner.temp }}/trust-omega-original/*.stdout
+            ${{ runner.temp }}/trust-omega-original/*.stderr
+          if-no-files-found: warn
