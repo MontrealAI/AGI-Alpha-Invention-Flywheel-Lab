@@ -277,5 +277,28 @@ class Reviewer176Tests(unittest.TestCase):
             self.run_case(b, t)
 
 
+    def test_t13_actual_cli_with_separately_supplied_anchors(self):
+        from research.governance_review176 import main
+        b, t = self.setup_data()
+        with tempfile.TemporaryDirectory(prefix="review176-cli-public-") as td:
+            root = Path(td)
+            (root / "bundle.json").write_text(json.dumps(b), encoding="utf-8")
+            (root / "trust.json").write_text(json.dumps(t), encoding="utf-8")
+            command = [
+                "--bundle", str(root / "bundle.json"),
+                "--trust", str(root / "trust.json"),
+                "--expected-trust-sha256", sha(t),
+                "--expected-input-sha256", b["source_receipt"]["source_input_sha256"],
+                "--expected-receipt-sha256", b["source_receipt"]["receipt_sha256"],
+                "--at-utc", NOW, "--output", str(root / "result.json"),
+            ]
+            main(command)
+            result = json.loads((root / "result.json").read_text())
+            self.assertFalse(result["compliance_authorized"])
+            self.assertEqual(len(result["review_actions"]), 1)
+            with self.assertRaises(FileExistsError):
+                main(command)
+
+
 if __name__ == "__main__":
     unittest.main()
