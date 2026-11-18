@@ -1,0 +1,702 @@
+{
+  "schema": 1,
+  "issuer": "Fink / Zwicky Transient Facility",
+  "scope": "public-catalog desk rehearsal",
+  "dispatch_authorized": false,
+  "mission": {
+    "id": "ztf-followup-2026-11-01",
+    "scope": "public-catalog desk rehearsal",
+    "cutoff_utc": "2026-11-01T00:00:00Z",
+    "site": {
+      "latitude_deg": 32.0,
+      "longitude_deg": -111.0
+    },
+    "slots_utc": [
+      "2026-11-01T02:30:00Z",
+      "2026-11-01T05:30:00Z",
+      "2026-11-01T09:30:00Z",
+      "2026-11-02T02:30:00Z",
+      "2026-11-02T05:30:00Z",
+      "2026-11-02T09:30:00Z"
+    ],
+    "duration_minutes": 20,
+    "min_target_alt_deg": 30.0,
+    "max_sun_alt_deg": -18.0,
+    "guard_deg": 1.0,
+    "min_revisit_hours": 18.0,
+    "max_slots": 6,
+    "visits_per_target": 1
+  },
+  "catalog_sha256": "8d44a12a2164ef58744e77348e4b611556663186359ce54fe1471bdf3e6dc753",
+  "targets": [
+    {
+      "id": "ZTF26abwpoui",
+      "ra_deg": 80.1599989,
+      "dec_deg": -9.3127408,
+      "alert_jd": 2461342.9533681,
+      "reported_band": "g",
+      "reported_diff_mag": 19.303743,
+      "reported_error_mag": 0.1910359
+    },
+    {
+      "id": "ZTF26abyzipz",
+      "ra_deg": 59.5876231,
+      "dec_deg": -9.6708943,
+      "alert_jd": 2461339.9280787,
+      "reported_band": "r",
+      "reported_diff_mag": 18.876104,
+      "reported_error_mag": 0.11408828
+    },
+    {
+      "id": "ZTF26abyuvfs",
+      "ra_deg": 54.3996956,
+      "dec_deg": 0.8828447,
+      "alert_jd": 2461339.9276042,
+      "reported_band": "r",
+      "reported_diff_mag": 18.607714,
+      "reported_error_mag": 0.13765137
+    },
+    {
+      "id": "ZTF26abrluog",
+      "ra_deg": 72.7347487,
+      "dec_deg": -13.2378433,
+      "alert_jd": 2461339.9129745,
+      "reported_band": "r",
+      "reported_diff_mag": 17.63585,
+      "reported_error_mag": 0.063886695
+    },
+    {
+      "id": "ZTF23abjvdcg",
+      "ra_deg": 21.5980994,
+      "dec_deg": -12.6636764,
+      "alert_jd": 2461339.8773148,
+      "reported_band": "r",
+      "reported_diff_mag": 19.394278,
+      "reported_error_mag": 0.2082383
+    },
+    {
+      "id": "ZTF26abydvon",
+      "ra_deg": 2.2596253,
+      "dec_deg": 8.8106765,
+      "alert_jd": 2461339.6788657,
+      "reported_band": "r",
+      "reported_diff_mag": 18.99531,
+      "reported_error_mag": 0.21477795
+    }
+  ],
+  "source_url": "https://api.ztf.fink-portal.org/api/v1/latests?class=SLSN+candidate&n=100&startdate=2026-10-25&stopdate=2026-11-01&columns=i%3AobjectId%2Ci%3Ajd%2Ci%3Ara%2Ci%3Adec%2Ci%3Afid%2Ci%3Amagpsf%2Ci%3Asigmapsf&output-format=json",
+  "alerts_sha256": "bd0e18b40abb8d0371411481537485f065eb2b894df45ff1aa1fecf6422850ae",
+  "source_retrieved_utc": "2026-11-18T01:11:38Z",
+  "classification": "SLSN candidate",
+  "geometry_comparisons": 36,
+  "max_angle_difference_deg": 0.006394,
+  "cases": [
+    {
+      "id": "b0-v1",
+      "budget": 0,
+      "visits": 1,
+      "accepted": true,
+      "objective": 0,
+      "direct_objective": 0,
+      "slots": [],
+      "mission_sha256": "878e4891175c0438f12fd424a16975adc5944ebf719b9821270b720e2bff8c3f"
+    },
+    {
+      "id": "b1-v1",
+      "budget": 1,
+      "visits": 1,
+      "accepted": true,
+      "objective": 1,
+      "direct_objective": 1,
+      "slots": [
+        {
+          "target_id": "ZTF23abjvdcg",
+          "utc": "2026-11-01T05:30:00Z",
+          "ra_deg": 21.5980994,
+          "dec_deg": -12.6636764,
+          "min_alt_deg": 44.47539,
+          "max_sun_alt_deg": -61.64688
+        }
+      ],
+      "mission_sha256": "f568208d4434e1f4a6069816b39c001c3b7a01677c482fa158908ad3a72684ad"
+    },
+    {
+      "id": "b2-v1",
+      "budget": 2,
+      "visits": 1,
+      "accepted": true,
+      "objective": 2,
+      "direct_objective": 2,
+      "slots": [
+        {
+          "target_id": "ZTF23abjvdcg",
+          "utc": "2026-11-01T05:30:00Z",
+          "ra_deg": 21.5980994,
+          "dec_deg": -12.6636764,
+          "min_alt_deg": 44.47539,
+          "max_sun_alt_deg": -61.64688
+        },
+        {
+          "target_id": "ZTF26abrluog",
+          "utc": "2026-11-01T09:30:00Z",
+          "ra_deg": 72.7347487,
+          "dec_deg": -13.2378433,
+          "min_alt_deg": 44.631,
+          "max_sun_alt_deg": -49.10693
+        }
+      ],
+      "mission_sha256": "38d5459ac59dd47bef0af99ee0581a06a88badaa4232d827a07bf47c0ccfa97c"
+    },
+    {
+      "id": "b3-v1",
+      "budget": 3,
+      "visits": 1,
+      "accepted": true,
+      "objective": 3,
+      "direct_objective": 3,
+      "slots": [
+        {
+          "target_id": "ZTF23abjvdcg",
+          "utc": "2026-11-01T05:30:00Z",
+          "ra_deg": 21.5980994,
+          "dec_deg": -12.6636764,
+          "min_alt_deg": 44.47539,
+          "max_sun_alt_deg": -61.64688
+        },
+        {
+          "target_id": "ZTF26abrluog",
+          "utc": "2026-11-01T09:30:00Z",
+          "ra_deg": 72.7347487,
+          "dec_deg": -13.2378433,
+          "min_alt_deg": 44.631,
+          "max_sun_alt_deg": -49.10693
+        },
+        {
+          "target_id": "ZTF26abwpoui",
+          "utc": "2026-11-02T09:30:00Z",
+          "ra_deg": 80.1599989,
+          "dec_deg": -9.3127408,
+          "min_alt_deg": 48.12572,
+          "max_sun_alt_deg": -49.27294
+        }
+      ],
+      "mission_sha256": "0fa2c3cdcaaa942264a29c572632618c89e9d17dc417cf1423c10d32ba675366"
+    },
+    {
+      "id": "b4-v1",
+      "budget": 4,
+      "visits": 1,
+      "accepted": true,
+      "objective": 4,
+      "direct_objective": 4,
+      "slots": [
+        {
+          "target_id": "ZTF26abydvon",
+          "utc": "2026-11-01T02:30:00Z",
+          "ra_deg": 2.2596253,
+          "dec_deg": 8.8106765,
+          "min_alt_deg": 49.70978,
+          "max_sun_alt_deg": -24.8847
+        },
+        {
+          "target_id": "ZTF23abjvdcg",
+          "utc": "2026-11-01T05:30:00Z",
+          "ra_deg": 21.5980994,
+          "dec_deg": -12.6636764,
+          "min_alt_deg": 44.47539,
+          "max_sun_alt_deg": -61.64688
+        },
+        {
+          "target_id": "ZTF26abrluog",
+          "utc": "2026-11-01T09:30:00Z",
+          "ra_deg": 72.7347487,
+          "dec_deg": -13.2378433,
+          "min_alt_deg": 44.631,
+          "max_sun_alt_deg": -49.10693
+        },
+        {
+          "target_id": "ZTF26abwpoui",
+          "utc": "2026-11-02T09:30:00Z",
+          "ra_deg": 80.1599989,
+          "dec_deg": -9.3127408,
+          "min_alt_deg": 48.12572,
+          "max_sun_alt_deg": -49.27294
+        }
+      ],
+      "mission_sha256": "20ccd0d52574e3c5dd075b7867bffd13c4c95c56965807c9c7394c579cf5308e"
+    },
+    {
+      "id": "b5-v1",
+      "budget": 5,
+      "visits": 1,
+      "accepted": true,
+      "objective": 5,
+      "direct_objective": 5,
+      "slots": [
+        {
+          "target_id": "ZTF26abydvon",
+          "utc": "2026-11-01T02:30:00Z",
+          "ra_deg": 2.2596253,
+          "dec_deg": 8.8106765,
+          "min_alt_deg": 49.70978,
+          "max_sun_alt_deg": -24.8847
+        },
+        {
+          "target_id": "ZTF23abjvdcg",
+          "utc": "2026-11-01T05:30:00Z",
+          "ra_deg": 21.5980994,
+          "dec_deg": -12.6636764,
+          "min_alt_deg": 44.47539,
+          "max_sun_alt_deg": -61.64688
+        },
+        {
+          "target_id": "ZTF26abrluog",
+          "utc": "2026-11-01T09:30:00Z",
+          "ra_deg": 72.7347487,
+          "dec_deg": -13.2378433,
+          "min_alt_deg": 44.631,
+          "max_sun_alt_deg": -49.10693
+        },
+        {
+          "target_id": "ZTF26abyuvfs",
+          "utc": "2026-11-02T05:30:00Z",
+          "ra_deg": 54.3996956,
+          "dec_deg": 0.8828447,
+          "min_alt_deg": 39.91888,
+          "max_sun_alt_deg": -61.86477
+        },
+        {
+          "target_id": "ZTF26abwpoui",
+          "utc": "2026-11-02T09:30:00Z",
+          "ra_deg": 80.1599989,
+          "dec_deg": -9.3127408,
+          "min_alt_deg": 48.12572,
+          "max_sun_alt_deg": -49.27294
+        }
+      ],
+      "mission_sha256": "c9b5a79826bfbd137758190d3af9fdf9d00b582b2727ac8eb4af02766e523e2d"
+    },
+    {
+      "id": "b6-v1",
+      "budget": 6,
+      "visits": 1,
+      "accepted": true,
+      "objective": 5,
+      "direct_objective": 5,
+      "slots": [
+        {
+          "target_id": "ZTF26abydvon",
+          "utc": "2026-11-01T02:30:00Z",
+          "ra_deg": 2.2596253,
+          "dec_deg": 8.8106765,
+          "min_alt_deg": 49.70978,
+          "max_sun_alt_deg": -24.8847
+        },
+        {
+          "target_id": "ZTF23abjvdcg",
+          "utc": "2026-11-01T05:30:00Z",
+          "ra_deg": 21.5980994,
+          "dec_deg": -12.6636764,
+          "min_alt_deg": 44.47539,
+          "max_sun_alt_deg": -61.64688
+        },
+        {
+          "target_id": "ZTF26abrluog",
+          "utc": "2026-11-01T09:30:00Z",
+          "ra_deg": 72.7347487,
+          "dec_deg": -13.2378433,
+          "min_alt_deg": 44.631,
+          "max_sun_alt_deg": -49.10693
+        },
+        {
+          "target_id": "ZTF26abyuvfs",
+          "utc": "2026-11-02T05:30:00Z",
+          "ra_deg": 54.3996956,
+          "dec_deg": 0.8828447,
+          "min_alt_deg": 39.91888,
+          "max_sun_alt_deg": -61.86477
+        },
+        {
+          "target_id": "ZTF26abwpoui",
+          "utc": "2026-11-02T09:30:00Z",
+          "ra_deg": 80.1599989,
+          "dec_deg": -9.3127408,
+          "min_alt_deg": 48.12572,
+          "max_sun_alt_deg": -49.27294
+        }
+      ],
+      "mission_sha256": "5e47c4df1295347b00fce3cca388cda1b4cfc85fc8f8db249244950f552b10c2"
+    },
+    {
+      "id": "b0-v2",
+      "budget": 0,
+      "visits": 2,
+      "accepted": true,
+      "objective": 0,
+      "direct_objective": 0,
+      "slots": [],
+      "mission_sha256": "51fe25ef02c25c5367585b7054d35e2b40266125d5859a5b879d8e231ba75285"
+    },
+    {
+      "id": "b1-v2",
+      "budget": 1,
+      "visits": 2,
+      "accepted": true,
+      "objective": 0,
+      "direct_objective": 0,
+      "slots": [],
+      "mission_sha256": "3b9a39a5dc1538d8ebf8496864c3cf2fa0eb947c82942f0fdc28a2368fb5b3d0"
+    },
+    {
+      "id": "b2-v2",
+      "budget": 2,
+      "visits": 2,
+      "accepted": true,
+      "objective": 1,
+      "direct_objective": 1,
+      "slots": [
+        {
+          "target_id": "ZTF23abjvdcg",
+          "utc": "2026-11-01T05:30:00Z",
+          "ra_deg": 21.5980994,
+          "dec_deg": -12.6636764,
+          "min_alt_deg": 44.47539,
+          "max_sun_alt_deg": -61.64688
+        },
+        {
+          "target_id": "ZTF23abjvdcg",
+          "utc": "2026-11-02T05:30:00Z",
+          "ra_deg": 21.5980994,
+          "dec_deg": -12.6636764,
+          "min_alt_deg": 44.66273,
+          "max_sun_alt_deg": -61.86477
+        }
+      ],
+      "mission_sha256": "24d58aa8afd198aeb0994c6f18dc09a5acb006363bed9b15b1376a876de7813f"
+    },
+    {
+      "id": "b3-v2",
+      "budget": 3,
+      "visits": 2,
+      "accepted": true,
+      "objective": 1,
+      "direct_objective": 1,
+      "slots": [
+        {
+          "target_id": "ZTF23abjvdcg",
+          "utc": "2026-11-01T05:30:00Z",
+          "ra_deg": 21.5980994,
+          "dec_deg": -12.6636764,
+          "min_alt_deg": 44.47539,
+          "max_sun_alt_deg": -61.64688
+        },
+        {
+          "target_id": "ZTF23abjvdcg",
+          "utc": "2026-11-02T05:30:00Z",
+          "ra_deg": 21.5980994,
+          "dec_deg": -12.6636764,
+          "min_alt_deg": 44.66273,
+          "max_sun_alt_deg": -61.86477
+        }
+      ],
+      "mission_sha256": "12c54fb94d18ccadfbbfd2d9ddfb6298307c27d73abd9d21627782eccee63bb0"
+    },
+    {
+      "id": "b4-v2",
+      "budget": 4,
+      "visits": 2,
+      "accepted": true,
+      "objective": 2,
+      "direct_objective": 2,
+      "slots": [
+        {
+          "target_id": "ZTF23abjvdcg",
+          "utc": "2026-11-01T05:30:00Z",
+          "ra_deg": 21.5980994,
+          "dec_deg": -12.6636764,
+          "min_alt_deg": 44.47539,
+          "max_sun_alt_deg": -61.64688
+        },
+        {
+          "target_id": "ZTF26abrluog",
+          "utc": "2026-11-01T09:30:00Z",
+          "ra_deg": 72.7347487,
+          "dec_deg": -13.2378433,
+          "min_alt_deg": 44.631,
+          "max_sun_alt_deg": -49.10693
+        },
+        {
+          "target_id": "ZTF23abjvdcg",
+          "utc": "2026-11-02T05:30:00Z",
+          "ra_deg": 21.5980994,
+          "dec_deg": -12.6636764,
+          "min_alt_deg": 44.66273,
+          "max_sun_alt_deg": -61.86477
+        },
+        {
+          "target_id": "ZTF26abrluog",
+          "utc": "2026-11-02T09:30:00Z",
+          "ra_deg": 72.7347487,
+          "dec_deg": -13.2378433,
+          "min_alt_deg": 44.53839,
+          "max_sun_alt_deg": -49.27294
+        }
+      ],
+      "mission_sha256": "c1bf02f00529e77bbbcbc320c479ea986bccd874b787e972a4c509c5c252a346"
+    },
+    {
+      "id": "b5-v2",
+      "budget": 5,
+      "visits": 2,
+      "accepted": true,
+      "objective": 2,
+      "direct_objective": 2,
+      "slots": [
+        {
+          "target_id": "ZTF23abjvdcg",
+          "utc": "2026-11-01T05:30:00Z",
+          "ra_deg": 21.5980994,
+          "dec_deg": -12.6636764,
+          "min_alt_deg": 44.47539,
+          "max_sun_alt_deg": -61.64688
+        },
+        {
+          "target_id": "ZTF26abrluog",
+          "utc": "2026-11-01T09:30:00Z",
+          "ra_deg": 72.7347487,
+          "dec_deg": -13.2378433,
+          "min_alt_deg": 44.631,
+          "max_sun_alt_deg": -49.10693
+        },
+        {
+          "target_id": "ZTF23abjvdcg",
+          "utc": "2026-11-02T05:30:00Z",
+          "ra_deg": 21.5980994,
+          "dec_deg": -12.6636764,
+          "min_alt_deg": 44.66273,
+          "max_sun_alt_deg": -61.86477
+        },
+        {
+          "target_id": "ZTF26abrluog",
+          "utc": "2026-11-02T09:30:00Z",
+          "ra_deg": 72.7347487,
+          "dec_deg": -13.2378433,
+          "min_alt_deg": 44.53839,
+          "max_sun_alt_deg": -49.27294
+        }
+      ],
+      "mission_sha256": "fa343ed4124a086c307f85226c5a2812ab1e30de883a2f3c0e0789886fdff4d8"
+    },
+    {
+      "id": "b6-v2",
+      "budget": 6,
+      "visits": 2,
+      "accepted": true,
+      "objective": 3,
+      "direct_objective": 3,
+      "slots": [
+        {
+          "target_id": "ZTF26abydvon",
+          "utc": "2026-11-01T02:30:00Z",
+          "ra_deg": 2.2596253,
+          "dec_deg": 8.8106765,
+          "min_alt_deg": 49.70978,
+          "max_sun_alt_deg": -24.8847
+        },
+        {
+          "target_id": "ZTF23abjvdcg",
+          "utc": "2026-11-01T05:30:00Z",
+          "ra_deg": 21.5980994,
+          "dec_deg": -12.6636764,
+          "min_alt_deg": 44.47539,
+          "max_sun_alt_deg": -61.64688
+        },
+        {
+          "target_id": "ZTF26abrluog",
+          "utc": "2026-11-01T09:30:00Z",
+          "ra_deg": 72.7347487,
+          "dec_deg": -13.2378433,
+          "min_alt_deg": 44.631,
+          "max_sun_alt_deg": -49.10693
+        },
+        {
+          "target_id": "ZTF26abydvon",
+          "utc": "2026-11-02T02:30:00Z",
+          "ra_deg": 2.2596253,
+          "dec_deg": 8.8106765,
+          "min_alt_deg": 50.45166,
+          "max_sun_alt_deg": -25.04361
+        },
+        {
+          "target_id": "ZTF23abjvdcg",
+          "utc": "2026-11-02T05:30:00Z",
+          "ra_deg": 21.5980994,
+          "dec_deg": -12.6636764,
+          "min_alt_deg": 44.66273,
+          "max_sun_alt_deg": -61.86477
+        },
+        {
+          "target_id": "ZTF26abrluog",
+          "utc": "2026-11-02T09:30:00Z",
+          "ra_deg": 72.7347487,
+          "dec_deg": -13.2378433,
+          "min_alt_deg": 44.53839,
+          "max_sun_alt_deg": -49.27294
+        }
+      ],
+      "mission_sha256": "ebb6a7b7efa7ed85d6095535dcd85843d47befa72723c769385aa36335dbbd80"
+    }
+  ],
+  "photometry": {
+    "max_gap_minutes": 120,
+    "public_rows": 44,
+    "targets": 6,
+    "first_detections": [
+      {
+        "target_id": "ZTF23abjvdcg",
+        "utc": "2026-11-03T06:04:46.001Z",
+        "candid": "3593253310115015011",
+        "band": "g",
+        "difference_mag": 20.081911,
+        "formal_error_mag": 0.20934628
+      },
+      {
+        "target_id": "ZTF26abrluog",
+        "utc": "2026-11-02T10:04:23.998Z",
+        "candid": "3592419721415015016",
+        "band": "g",
+        "difference_mag": 18.226501,
+        "formal_error_mag": 0.07944803
+      },
+      {
+        "target_id": "ZTF26abwpoui",
+        "utc": "2026-11-03T10:34:50.001Z",
+        "candid": "3593440854715015012",
+        "band": "g",
+        "difference_mag": 19.644695,
+        "formal_error_mag": 0.16426046
+      },
+      {
+        "target_id": "ZTF26abydvon",
+        "utc": "2026-11-03T06:28:19.004Z",
+        "candid": "3593269660615015002",
+        "band": "g",
+        "difference_mag": 19.896702,
+        "formal_error_mag": 0.21074915
+      },
+      {
+        "target_id": "ZTF26abyuvfs",
+        "utc": "2026-11-02T10:22:23.998Z",
+        "candid": "3592432226115015002",
+        "band": "g",
+        "difference_mag": 19.071764,
+        "formal_error_mag": 0.14906767
+      },
+      {
+        "target_id": "ZTF26abyzipz",
+        "utc": "2026-11-02T10:23:05.003Z",
+        "candid": "3592432694715015006",
+        "band": "g",
+        "difference_mag": 19.055573,
+        "formal_error_mag": 0.13584404
+      }
+    ],
+    "pairs": [
+      {
+        "target_id": "ZTF26abrluog",
+        "g_candid": "3593442261415015023",
+        "r_candid": "3593419391415015012",
+        "g_jd": 2461347.9422685,
+        "r_jd": 2461347.9193981,
+        "g_utc": "2026-11-03T10:36:51.998Z",
+        "r_utc": "2026-11-03T10:03:55.995Z",
+        "g_diff_mag": 18.31264,
+        "r_diff_mag": 17.726965,
+        "g_error_mag": 0.091293804,
+        "r_error_mag": 0.069335856,
+        "separation_minutes": 32.93338,
+        "g_minus_r_diff_mag": 0.585675,
+        "formal_error_mag": 0.114639
+      },
+      {
+        "target_id": "ZTF26abydvon",
+        "g_candid": "3595213290615015001",
+        "r_candid": "3595207920615015002",
+        "g_jd": 2461349.7132986,
+        "r_jd": 2461349.7079282,
+        "g_utc": "2026-11-05T05:07:08.999Z",
+        "r_utc": "2026-11-05T04:59:24.996Z",
+        "g_diff_mag": 19.94085,
+        "r_diff_mag": 19.14669,
+        "g_error_mag": 0.1505524,
+        "r_error_mag": 0.08388326,
+        "separation_minutes": 7.73338,
+        "g_minus_r_diff_mag": 0.79416,
+        "formal_error_mag": 0.172344
+      },
+      {
+        "target_id": "ZTF26abyuvfs",
+        "g_candid": "3595336494815015004",
+        "r_candid": "3595319426115015000",
+        "g_jd": 2461349.8364931,
+        "r_jd": 2461349.8194213,
+        "g_utc": "2026-11-05T08:04:33.003Z",
+        "r_utc": "2026-11-05T07:39:58.000Z",
+        "g_diff_mag": 19.48595,
+        "r_diff_mag": 19.029112,
+        "g_error_mag": 0.19740856,
+        "r_error_mag": 0.0923368,
+        "separation_minutes": 24.58339,
+        "g_minus_r_diff_mag": 0.456838,
+        "formal_error_mag": 0.217936
+      },
+      {
+        "target_id": "ZTF26abyzipz",
+        "g_candid": "3596322084715015007",
+        "r_candid": "3596378904715015008",
+        "g_jd": 2461350.8220833,
+        "r_jd": 2461350.8789005,
+        "g_utc": "2026-11-06T07:43:47.997Z",
+        "r_utc": "2026-11-06T09:05:37.003Z",
+        "g_diff_mag": 19.020832,
+        "r_diff_mag": 18.764744,
+        "g_error_mag": 0.10753624,
+        "r_error_mag": 0.08620218,
+        "separation_minutes": 81.81677,
+        "g_minus_r_diff_mag": 0.256088,
+        "formal_error_mag": 0.137822
+      }
+    ],
+    "missing_pair": [
+      "ZTF23abjvdcg",
+      "ZTF26abwpoui"
+    ],
+    "direct_sql": {
+      "agrees": true,
+      "accepted_pairs": 4,
+      "with_detections": 6
+    }
+  },
+  "exploratory_color_counts": [
+    {
+      "max_gap_minutes": 5,
+      "accepted_pairs": 0
+    },
+    {
+      "max_gap_minutes": 10,
+      "accepted_pairs": 1
+    },
+    {
+      "max_gap_minutes": 30,
+      "accepted_pairs": 2
+    },
+    {
+      "max_gap_minutes": 60,
+      "accepted_pairs": 3
+    },
+    {
+      "max_gap_minutes": 120,
+      "accepted_pairs": 4
+    }
+  ]
+}

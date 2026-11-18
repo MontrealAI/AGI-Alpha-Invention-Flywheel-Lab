@@ -1,0 +1,130 @@
+{
+  "issuer": "Fink / Zwicky Transient Facility",
+  "classification": "SLSN candidate",
+  "selection_start_utc": "2026-10-25T00:00:00Z",
+  "cutoff_utc": "2026-11-01T00:00:00Z",
+  "alerts_sha256": "bd0e18b40abb8d0371411481537485f065eb2b894df45ff1aa1fecf6422850ae",
+  "source_url": "https://api.ztf.fink-portal.org/api/v1/latests?class=SLSN+candidate&n=100&startdate=2026-10-25&stopdate=2026-11-01&columns=i%3AobjectId%2Ci%3Ajd%2Ci%3Ara%2Ci%3Adec%2Ci%3Afid%2Ci%3Amagpsf%2Ci%3Asigmapsf&output-format=json",
+  "targets": [
+    {
+      "id": "ZTF26abwpoui",
+      "ra_deg": 80.1599989,
+      "dec_deg": -9.3127408,
+      "alert_jd": 2461342.9533681,
+      "reported_band": "g",
+      "reported_diff_mag": 19.303743,
+      "reported_error_mag": 0.1910359
+    },
+    {
+      "id": "ZTF26abyzipz",
+      "ra_deg": 59.5876231,
+      "dec_deg": -9.6708943,
+      "alert_jd": 2461339.9280787,
+      "reported_band": "r",
+      "reported_diff_mag": 18.876104,
+      "reported_error_mag": 0.11408828
+    },
+    {
+      "id": "ZTF26abyuvfs",
+      "ra_deg": 54.3996956,
+      "dec_deg": 0.8828447,
+      "alert_jd": 2461339.9276042,
+      "reported_band": "r",
+      "reported_diff_mag": 18.607714,
+      "reported_error_mag": 0.13765137
+    },
+    {
+      "id": "ZTF26abrluog",
+      "ra_deg": 72.7347487,
+      "dec_deg": -13.2378433,
+      "alert_jd": 2461339.9129745,
+      "reported_band": "r",
+      "reported_diff_mag": 17.63585,
+      "reported_error_mag": 0.063886695
+    },
+    {
+      "id": "ZTF23abjvdcg",
+      "ra_deg": 21.5980994,
+      "dec_deg": -12.6636764,
+      "alert_jd": 2461339.8773148,
+      "reported_band": "r",
+      "reported_diff_mag": 19.394278,
+      "reported_error_mag": 0.2082383
+    },
+    {
+      "id": "ZTF26abydvon",
+      "ra_deg": 2.2596253,
+      "dec_deg": 8.8106765,
+      "alert_jd": 2461339.6788657,
+      "reported_band": "r",
+      "reported_diff_mag": 18.99531,
+      "reported_error_mag": 0.21477795
+    }
+  ],
+  "reference": {
+    "scope_sha256": "423e2ab2a207b3d75a86bc959667de24327624c28f1768fe14fabf668a6e4dfa",
+    "packages": {
+      "astropy": "7.2.0",
+      "pyerfa": "2.0.1.5",
+      "astropy-iers-data": "0.2026.11.16.0.37.44"
+    },
+    "max_sun_alt_deg": [
+      -24.886322,
+      -61.648305,
+      -49.111935,
+      -25.045331,
+      -61.866256,
+      -49.277869
+    ],
+    "min_alt_deg": {
+      "ZTF26abwpoui": [
+        -24.855735,
+        12.814252,
+        47.96185,
+        -24.02232,
+        13.599612,
+        48.129349
+      ],
+      "ZTF26abyzipz": [
+        -7.600982,
+        28.190292,
+        45.245369,
+        -6.771148,
+        28.880781,
+        44.889053
+      ],
+      "ZTF26abyuvfs": [
+        2.338454,
+        39.188832,
+        52.435191,
+        3.174223,
+        39.917365,
+        51.904039
+      ],
+      "ZTF26abrluog": [
+        -20.522255,
+        16.203563,
+        44.635991,
+        -19.687872,
+        16.942737,
+        44.543446
+      ],
+      "ZTF23abjvdcg": [
+        21.071902,
+        44.477016,
+        20.903871,
+        21.785893,
+        44.664445,
+        20.183495
+      ],
+      "ZTF26abydvon": [
+        49.708619,
+        63.35878,
+        17.765192,
+        50.450581,
+        62.888491,
+        16.92931
+      ]
+    }
+  }
+}

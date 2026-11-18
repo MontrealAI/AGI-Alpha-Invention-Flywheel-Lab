@@ -1,0 +1,183 @@
+{
+  "experiment": "E — archival UT1 forecast-to-final triage",
+  "tolerance_ms": "1.0",
+  "recorded_utc": "2026-11-18T01:17:57.147245+00:00",
+  "runtime": {
+    "python": "3.12.14",
+    "machine": "x86_64",
+    "system": "Linux"
+  },
+  "summary": {
+    "dates": 35,
+    "reprocess": 1,
+    "review": 2,
+    "retain": 28,
+    "defer": 4
+  },
+  "accepted_routes": [
+    "retained",
+    "ordinary",
+    "direct"
+  ],
+  "independent_agreement": true,
+  "queue_sha256": "288145a6b9a8ea2ddcb91903571f963cc74b247b078ebe58479ce01f6774a71a",
+  "reason_counts": {
+    "reference_absent": 2,
+    "below_margin": 28,
+    "inside_margin": 2,
+    "above_margin": 1,
+    "reference_preliminary": 2
+  },
+  "initial_unadapted_table_reader": {
+    "forecast": "Spanning cells need an explicit rectangular reference.",
+    "reference": "Spanning cells need an explicit rectangular reference."
+  },
+  "rotation": "Fresh processes in three cyclic orders. Producer includes in-process ASCII check and file delivery. External auditor timed separately.",
+  "route_observations": {
+    "retained": [
+      {
+        "exit": 0,
+        "wall_s": 0.05418,
+        "child_cpu_s": 0.053619,
+        "recipient_bytes": 2375,
+        "matches_registered_bytes": true,
+        "independent_audit": {
+          "exit": 0,
+          "wall_s": 0.026174,
+          "child_cpu_s": 0.025536
+        }
+      },
+      {
+        "exit": 0,
+        "wall_s": 0.045844,
+        "child_cpu_s": 0.038303,
+        "recipient_bytes": 2375,
+        "matches_registered_bytes": true,
+        "independent_audit": {
+          "exit": 0,
+          "wall_s": 0.021617,
+          "child_cpu_s": 0.021439
+        }
+      },
+      {
+        "exit": 0,
+        "wall_s": 0.046889,
+        "child_cpu_s": 0.042756,
+        "recipient_bytes": 2375,
+        "matches_registered_bytes": true,
+        "independent_audit": {
+          "exit": 0,
+          "wall_s": 0.025629,
+          "child_cpu_s": 0.025373
+        }
+      }
+    ],
+    "ordinary": [
+      {
+        "exit": 0,
+        "wall_s": 0.035715,
+        "child_cpu_s": 0.032174,
+        "recipient_bytes": 2375,
+        "matches_registered_bytes": true,
+        "independent_audit": {
+          "exit": 0,
+          "wall_s": 0.036986,
+          "child_cpu_s": 0.028732
+        }
+      },
+      {
+        "exit": 0,
+        "wall_s": 0.037102,
+        "child_cpu_s": 0.035246,
+        "recipient_bytes": 2375,
+        "matches_registered_bytes": true,
+        "independent_audit": {
+          "exit": 0,
+          "wall_s": 0.025334,
+          "child_cpu_s": 0.025136
+        }
+      },
+      {
+        "exit": 0,
+        "wall_s": 0.036654,
+        "child_cpu_s": 0.033218,
+        "recipient_bytes": 2375,
+        "matches_registered_bytes": true,
+        "independent_audit": {
+          "exit": 0,
+          "wall_s": 0.029946,
+          "child_cpu_s": 0.029642
+        }
+      }
+    ],
+    "direct": [
+      {
+        "exit": 0,
+        "wall_s": 0.066548,
+        "child_cpu_s": 0.044163,
+        "recipient_bytes": 2375,
+        "matches_registered_bytes": true,
+        "independent_audit": {
+          "exit": 0,
+          "wall_s": 0.029851,
+          "child_cpu_s": 0.029462
+        }
+      },
+      {
+        "exit": 0,
+        "wall_s": 0.030903,
+        "child_cpu_s": 0.030637,
+        "recipient_bytes": 2375,
+        "matches_registered_bytes": true,
+        "independent_audit": {
+          "exit": 0,
+          "wall_s": 0.026913,
+          "child_cpu_s": 0.026682
+        }
+      },
+      {
+        "exit": 0,
+        "wall_s": 0.030784,
+        "child_cpu_s": 0.030574,
+        "recipient_bytes": 2375,
+        "matches_registered_bytes": true,
+        "independent_audit": {
+          "exit": 0,
+          "wall_s": 0.032132,
+          "child_cpu_s": 0.024639
+        }
+      }
+    ]
+  },
+  "failures": [],
+  "known_costs_and_unknowns": {
+    "full_download_bytes": 722332,
+    "sum_parallel_request_wall_seconds": 70.95822,
+    "distinct_projection_bytes": 40504,
+    "archive_queue_bytes": 2375,
+    "model_calls_in_three_production_routes": 0,
+    "engineering_discovery_and_agent_usage_cost": null,
+    "human_operating_labor_and_counterfactual": null,
+    "deployment_maintenance_support_cost": null,
+    "cash_price_or_payment": null,
+    "historical_table_desk_qualification": {
+      "nemotron_wall_s": 39.1139,
+      "nemotron_cpu_s": 111.714,
+      "tesseract_subprocess_wall_s": 1.016715,
+      "original_tool_development_and_qualification_price": null,
+      "source": "../table_desk/evidence/",
+      "allocation": "Earlier programme observations; no claim every use incurs those costs again."
+    }
+  },
+  "outcome_scope": "Policy simulation over published observations at 00:00 UTC; no beneficiary archive changed.",
+  "source_identities": {
+    "cohort.py": "99ef5091410bf1e4d857ea36267bb7fecd2ad98167d75701a0033430a80dd323",
+    "triage.py": "6fda5a8de20d7042f7c724fd169dc2730b90415970869528e5eb710ae3574957",
+    "audit.py": "a4a499d16db8cd2d66578502cddb3298e286192aeb2573a7cb91a5bfe48afad4",
+    "prepare.py": "605a74e1df69d2ea11911cc347350440a8ffa522411d8fc57a5a49b0c94208d7",
+    "observe.py": "1eb3308083cbd1fae26656f4063237ea475c707d3325b311e34221293aec5fd1",
+    "REGISTRATION.md": "b0ed502e98244bf93c0066b0d82571663f01f3dd80a8e796cfc66821bcddb9a2",
+    "SOURCES.json": "10e30577cedf7371ace2cd1f4ae9d2463143331d3ee39e97610d9d7c196fd2bb",
+    "table_desk.py": "1fbe0b830e87531eb64d39abb6d775e100936a5558bf3146bce521a946448873"
+  }
+}
