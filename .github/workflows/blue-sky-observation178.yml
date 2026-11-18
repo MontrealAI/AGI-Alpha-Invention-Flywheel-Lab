@@ -68,6 +68,7 @@ jobs:
             campaign/blue-sky-064/friction-probe/REGISTRATION.json \
             campaign/blue-sky-064/friction-probe/MIXED_REGISTRATION.json \
             tests/test_blue_sky_observation178.py \
+            requirements.txt \
             requirements-cycle004.txt
           (cd "$RUNNER_TEMP"; sha256sum OBSERVATION178_SOURCE.tar.gz > OBSERVATION178_SOURCE.sha256)
       - name: Preserve compact public exact-head evidence
