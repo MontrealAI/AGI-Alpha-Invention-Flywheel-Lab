@@ -1,0 +1,31 @@
+{
+  "schema": "ignition/scoped-decision-study/1",
+  "role": "You are advising a scientific beneficiary on a possible new offline experiment. Use only the supplied source excerpts. Decide whether they directly establish the specific factual premise below. An unsupported idea can still be proposed as a hypothesis. Copy a substantive short passage supporting the relation if it is established. Fill the remaining fields with your own uncertainty, action and decisive test. Name a credible comparison and say what observation could defeat your proposal. Answer each field in a single concise sentence.",
+  "shape": {
+    "decision": "established or unresolved",
+    "source": "one available ID when established, otherwise null",
+    "quote": "exact supporting excerpt when established, otherwise null",
+    "claim": "your interpretation of the premise",
+    "uncertainty": "what remains unknown",
+    "action": "what to construct, measure or defer",
+    "test": "decisive outcome and strongest relevant alternative"
+  },
+  "missions": [
+    {
+      "id": "grid",
+      "question": "For a research lab choosing a benchmark for bulk offline AC power-flow calculations, did a comparative study report a sufficiently parallelized conventional solver matching or exceeding tested ML surrogates in throughput on ordinary power flow?",
+      "source_slots": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "id": "lineage",
+      "question": "For a microscopy imaging core choosing an evaluation set, did a benchmark select hard cell associations by requiring failures shared by different algorithmic trackers?",
+      "source_slots": [
+        "C",
+        "D"
+      ]
+    }
+  ]
+}
