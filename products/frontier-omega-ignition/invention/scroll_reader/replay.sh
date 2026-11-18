@@ -34,5 +34,9 @@ for arm in histogram candidate; do
         -C "build-dir=$work/build-$arm" -w "$work/wheel-$arm" "$src/vc_reader"
     python -m pip install --no-deps --target "$work/installed-$arm" "$work/wheel-$arm"/*.whl
 done
-/usr/bin/time -f 'wall_seconds=%e user_cpu_seconds=%U system_cpu_seconds=%S peak_rss_kib=%M' \
-    -o "$receipts/comparison-cost.txt" python "$root/reader_cpu.py" "$src" "$work" "$receipts"
+status=0
+for study in reader_cpu reader_sparse; do
+    /usr/bin/time -f 'wall_seconds=%e user_cpu_seconds=%U system_cpu_seconds=%S peak_rss_kib=%M' \
+        -o "$receipts/$study-cost.txt" python "$root/$study.py" "$src" "$work" "$receipts" || status=1
+done
+exit "$status"
