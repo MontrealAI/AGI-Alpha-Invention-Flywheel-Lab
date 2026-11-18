@@ -19,14 +19,26 @@ class ResearchSiteTests(unittest.TestCase):
         self.source = self.root / 'source'
         self.source.mkdir()
         for name in site.FILES:
+            (self.source / name).parent.mkdir(exist_ok=True, parents=True)
             shutil.copyfile(ROOT / 'docs/research' / name, self.source / name)
 
     def test_build_is_allowlisted_and_preserves_bytes(self):
         (self.source / 'private-account.json').write_text('not for publication')
         out = site.build(self.source, self.root / 'site')
-        self.assertEqual({p.name for p in out.iterdir()}, set(site.FILES) | {'.nojekyll'})
+        self.assertEqual({p.relative_to(out).as_posix() for p in out.rglob('*') if p.is_file()}, set(site.FILES) | {'.nojekyll'})
         for name in site.FILES:
             self.assertEqual((self.source / name).read_bytes(), (out / name).read_bytes())
+
+    def test_ignition_pages_exclude_private_files_and_reject_symlinked_subdirectory(self):
+        (self.source / 'ignition/private.json').write_text('private')
+        output = site.build(self.source, self.root / 'published')
+        self.assertEqual({p.name for p in (output / 'ignition').iterdir()},
+                         {'index.html', 'demo.html', 'public.js', 'studio.css'})
+        private = self.root / 'elsewhere'
+        (self.source / 'ignition').rename(private)
+        (self.source / 'ignition').symlink_to(private, target_is_directory=True)
+        with self.assertRaisesRegex(ValueError, 'regular'):
+            site.validate(self.source)
 
     def test_genesis_stable_reader_features_v2_and_preserves_prior_access(self):
         import json
