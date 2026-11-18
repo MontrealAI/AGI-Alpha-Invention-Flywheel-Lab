@@ -20,6 +20,7 @@ def main():
     campaign = sub.add_parser("pursue", help="run a frozen shortlist through construction, checking and local commercial handoff")
     campaign.add_argument("shortlist", type=Path)
     campaign.add_argument("--request-id", required=True, help="stable private pursuit identity, also used on restart")
+    campaign.add_argument("--reuse-from", help="prior local pursuit with an unchanged verified negative quantum result")
     commercial_handoff.register_cli(sub)
     control = sub.add_parser("control", help="pause, resume or permanently stop a mission")
     control.add_argument("id")
@@ -71,7 +72,7 @@ def main():
         return
     if cmd == "pursue":
         from .pursuit import pursue
-        value = pursue(ctrl, args.shortlist, args.request_id)
+        value = pursue(ctrl, args.shortlist, args.request_id, reuse_from=args.reuse_from)
     elif cmd == "control":
         value = ctrl.set_operation(args.id, args.version, args.operation, args.reason,
                                    expected_sequence=args.sequence)
