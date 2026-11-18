@@ -20,6 +20,7 @@ jobs:
         with:
           ref: review/ignition-eligible-reference-stream-20261118
           persist-credentials: true
+          fetch-depth: 3
       - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
         with:
           python-version: '3.12'
@@ -28,7 +29,7 @@ jobs:
         run: |
           set -euo pipefail
           test "$GITHUB_REF" = "refs/heads/review/ignition-eligible-reference-stream-20261118"
-          test "$(git rev-parse HEAD^)" = "9d9bc71184bc56a0758be259b235f3e03ed26906"
+          test "$(git rev-parse HEAD~2)" = "9d9bc71184bc56a0758be259b235f3e03ed26906"
           test -z "$(git status --porcelain)"
           python -m pip install --only-binary=:all: 'numpy==2.2.6' 'scipy==1.17.0' 'astropy==7.2.0' 'pyerfa==2.0.1.5' 'fastavro==1.12.1' 'astropy-iers-data==0.2026.11.16.0.37.44'
           folder="$(mktemp -d)"
