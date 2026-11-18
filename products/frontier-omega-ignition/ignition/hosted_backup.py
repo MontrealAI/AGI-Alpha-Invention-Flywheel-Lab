@@ -12,7 +12,8 @@ import stat
 import time
 
 from .hosted_auth import Access, private_dir
-from .store import StateError
+from .controller import FINISHED
+from .store import StateError, Store
 
 
 @contextlib.contextmanager
@@ -46,6 +47,23 @@ def inventory(root):
     if "access.sqlite3" not in files:
         raise StateError("Expected a hosted state directory")
     return files
+
+
+def quarantine_unfinished(access):
+    """A restored snapshot cannot account for work performed on its original timeline."""
+    reason = ("This point-in-time restore closed the unfinished revision. Reconcile newer activity "
+              "and obtain fresh authorization before starting a new mission.")
+    for path in sorted(access.workspaces.glob("*/missions.sqlite3")):
+        store = Store(path.parent)
+        heads = [(row["id"], row["version"]) for row in store.inventory()
+                 if row["observed_status"] not in FINISHED and row["operation_state"] != "stopped"]
+        for run_id, version in heads:
+            # Existing permanent operator control covers startup recovery, manual retries,
+            # scoped approvals and CLI advancement without altering the recorded call count.
+            store.set_operation(run_id, version, "stop", reason)
+        if heads:
+            with access.connection() as db:
+                access.record(db, int(time.time()), "restore-unfinished-work-closed", path.parent.name)
 
 
 def snapshot(source, destination, environment, *, restore=False, parent_fd=None):
@@ -90,6 +108,7 @@ def snapshot(source, destination, environment, *, restore=False, parent_fd=None)
                 raise StateError("Snapshot copy differs")
             if restore:
                 access = Access(stage, environment)
+                quarantine_unfinished(access)
                 with access.connection() as db:
                     db.execute("DELETE FROM sessions")
                     db.execute("DELETE FROM invitations")

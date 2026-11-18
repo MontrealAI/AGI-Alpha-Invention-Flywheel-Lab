@@ -164,6 +164,47 @@ class HostedStudio(unittest.TestCase):
         with self.assertRaises((StateError, sqlite3.Error)):
             snapshot(backup, self.root / "restores" / "reject", "staging", restore=True)
 
+    def test_restored_unfinished_revision_cannot_resend_inference(self):
+        from ignition.controller import Controller
+        from test_controller import TestProvider
+        from test_integrity_boundaries import body
+
+        self.close_service()
+        self.auth.issue("restore-scope")
+        adapter = TestProvider()
+        def factory(store):
+            return Controller(store, lambda: adapter)
+        original = factory(Store(self.auth.workspaces / "restore-scope"))
+        submission = body()
+        submission["mission"]["authority"] = {"local_model": True}
+        submission["mission"]["resources"]["max_model_calls"] = 1
+        run, version = original.create(submission)
+        saved = self.root / "backups" / "before-work"
+        snapshot(self.auth.root, saved, "staging")
+        # The original timeline consumed its allowance after the backup.
+        original.advance(run, version)
+        self.assertEqual((original.store.get(run)["attempts"], adapter.stages), (1, ["discover"]))
+        restored = self.root / "restore" / "new-state"
+        snapshot(saved, restored, "staging", restore=True)
+        self.auth = Access(restored, "staging")
+        self.server = HostedService(self.auth, self.origin, 0, controller_factory=factory, ready_probe=lambda: False)
+        self.thread = threading.Thread(target=self.server.serve_forever, daemon=True)
+        self.thread.start()
+        cookie = self.signin("restore-scope")
+        path = f"/api/runs/{run}"
+        record = self.call(path, cookie=cookie)[1]
+        operation = record["operation"]
+        self.assertEqual(operation["state"], "stopped")
+        self.assertIn("point-in-time restore", operation["history"][-1]["reason"])
+        self.assertEqual(record.get("attempts", 0), 0)  # Preserve actual snapshot observations.
+        self.assertEqual(self.call(path + "/operation", {"version": version, "operation": "resume",
+                                                          "sequence": operation["sequence"]}, cookie)[0], 409)
+        self.assertEqual(self.call(path + "/resume", {"version": version}, cookie)[0], 409)
+        self.assertEqual(self.call(path + "/evidence?version=1", cookie=cookie)[0], 200)
+        with self.server.controller_for("restore-scope").store.connection() as db:
+            self.assertEqual(db.execute("SELECT COUNT(*) FROM dispatch_queue").fetchone()[0], 0)
+        self.assertEqual(adapter.stages, ["discover"])
+
     def test_no_provider_is_not_ready(self):
         with patch.dict("os.environ", {"IGNITION_MODEL_PROVIDER": "unavailable"},clear=False):
             self.assertFalse(model_ready())
