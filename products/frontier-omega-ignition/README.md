@@ -4,7 +4,9 @@
 
 IGNITION runs on the operator’s machine. It reads an authorized mission, investigates attributed sources, proposes opportunities, challenges them, and builds the selected construction when the installed interpreter can perform it. The first two executable families are typed record migrations and byte-level manifest audits. Research may select an existing solution, request a testable specification, or stop with a specific obstruction.
 
-Open the [bilingual public flagship](../../docs/frontier-omega-ignition/continuation/FRONTIER_IGNITION.html) as a local HTML file or choose **Explore FRONTIER Ω IGNITION** in the workbench. Inspect five sourced research opportunities, trace passages from the first campaign paper to its PDF, and take home the working offline edition. [Reproduction and presenter notes](showcase/FRONTIER.md).
+Open the [new bilingual Endpoint Lab](../../docs/frontier-omega-ignition/continuation/FRONTIER_LAB.html) to compare measured inference operating points, change a requirement and download the independently executable instrument. The [technical report](../../docs/frontier-omega-ignition/continuation/evidence-decision/REPORT.md) includes observed results, the reader study and exact reproduction commands. Start a private workload decision with `python3 -B -m ignition --state ~/.frontier-ignition start examples/endpoint.json`.
+
+Open the [earlier bilingual Reading Room exhibition](../../docs/frontier-omega-ignition/continuation/FRONTIER_IGNITION.html) as a local HTML file or choose **Explore FRONTIER Ω IGNITION** in the workbench. Inspect five sourced research opportunities, trace passages from the first campaign paper to its PDF, and take home the working offline edition. [Reproduction and presenter notes](showcase/FRONTIER.md).
 
 ## Direct construction and Pairing Lab
 

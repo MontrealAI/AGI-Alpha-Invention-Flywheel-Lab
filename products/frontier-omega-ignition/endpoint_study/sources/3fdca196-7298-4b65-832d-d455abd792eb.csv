@@ -1,0 +1,50 @@
+Field Name,Run 1,Run 2,Run 3,Run 4,Run 5,Run 6,Run 7,Run 8,Run 9
+Run Date,10/16/2026,10/16/2026,10/16/2026,10/16/2026,10/16/2026,10/16/2026,10/16/2026,10/16/2026,10/16/2026
+Concurrency,16,24,32,64,128,256,512,"1,024","2,048"
+System Tokens/Second,"2,928.8","4,002.3","4,964.1","8,544.9","13,677.7","21,067.7","32,947.8","49,342.9","54,206.0"
+Tokens/Second per User,183.0,166.8,155.1,133.5,106.9,82.3,64.4,48.2,26.5
+TTFT P90 (ms),119.2,124.1,127.1,143.0,165.1,212.4,339.2,6152.7,20722.4
+Utilization,5.4%,7.4%,9.2%,15.8%,25.2%,38.9%,60.8%,91.0%,100.0%
+Configuration Summary,deepseek-v4.1-flash-c16 · online,deepseek-v4.1-flash-c24 · online,deepseek-v4.1-flash-c32 · online,deepseek-v4.1-flash-c64 · online,deepseek-v4.1-flash-c128 · online,deepseek-v4.1-flash-c256 · online,deepseek-v4.1-flash-c512 · online,deepseek-v4.1-flash-c1024 · online,deepseek-v4.1-flash-c2048 · online
+Config Type,online,online,online,online,online,online,online,online,online
+Config Region,—,—,—,—,—,—,—,—,—
+Target QPS,—,—,—,—,—,—,—,—,—
+Result State,complete,complete,complete,complete,complete,complete,complete,complete,complete
+Measured Accuracy Score,—,—,—,—,—,—,—,—,—
+Benchmark Version,unknown,unknown,unknown,unknown,unknown,unknown,unknown,unknown,unknown
+Result Version,0.1.0,0.1.0,0.1.0,0.1.0,0.1.0,0.1.0,0.1.0,0.1.0,0.1.0
+Archive URI,gs://mlperf-endpoints-blob/runs/8c1d76a4-7b39-403e-9037-040b769870de/archive.tar.gz,gs://mlperf-endpoints-blob/runs/0b135b28-e0e8-4974-aa61-0f23cb3254c3/archive.tar.gz,gs://mlperf-endpoints-blob/runs/e36696f6-d034-43ab-97de-53592eb2bb0b/archive.tar.gz,gs://mlperf-endpoints-blob/runs/ee10b60a-2de2-4070-aff7-245c0420b238/archive.tar.gz,gs://mlperf-endpoints-blob/runs/d0fdf945-d4eb-43f1-ade2-db947ecf5f1b/archive.tar.gz,gs://mlperf-endpoints-blob/runs/af2a3e7a-538f-4b44-ac5d-9ae98ea4fec8/archive.tar.gz,gs://mlperf-endpoints-blob/runs/d4424c13-7409-4067-acf4-96c973e548dc/archive.tar.gz,gs://mlperf-endpoints-blob/runs/7f98d96a-28ef-46f3-bf32-2f00cabbda1f/archive.tar.gz,gs://mlperf-endpoints-blob/runs/ac96e3d8-fee2-4919-a342-8caf1cb218dc/archive.tar.gz
+QPS,3.1993,4.4013,5.3433,9.2499,14.8097,22.8986,36.0154,53.2072,49.3660
+Total Output Tokens,"17,966,497","17,518,552","17,515,016","35,924,975","34,343,638","68,763,956","135,335,662","269,375,972","149,036,216"
+Average Output Tokens,915.44,909.35,929.03,923.78,923.56,920.04,914.83,927.37,"1,098.04"
+Run Duration (s),"6,134.43","4,377.08","3,528.37","4,204.25","2,510.93","3,263.95","4,107.58","5,459.26","2,749.44"
+Total Queries,"19,626","19,265","18,853","38,889","37,186","74,740","147,936","290,472","135,729"
+Total Queries Issued,"19,626","19,265","18,853","38,889","37,186","74,740","147,936","290,472","135,729"
+Total Queries Failed,0,0,0,0,0,0,0,0,0
+Time to First Token (TTFT) (ms),,,,,,,,,
+Minimum,37.0,39.5,41.4,45.4,50.8,59.2,77.3,123.3,523.7
+Average,92.0,97.1,104.5,114.1,146.9,191.5,321.1,2572.2,17604.7
+P50,78.2,80.9,82.5,92.7,106.0,135.4,188.8,1752.0,16712.3
+P90,119.2,124.1,127.1,143.0,165.1,212.4,339.2,6152.7,20722.4
+P95,137.1,143.4,144.4,164.5,192.0,251.1,455.6,7009.1,22336.9
+P99,206.8,216.0,226.6,260.0,340.0,413.6,1014.8,8554.3,39051.8
+P999,2177.7,3409.4,8063.4,7090.3,9667.9,16719.1,29143.5,26718.4,61843.5
+Maximum,8330.9,9064.5,9867.0,11655.6,14403.9,18023.0,32910.7,33957.3,66613.6
+Time Per Output Token (TPOT) (ms),,,,,,,,,
+Minimum,1.27,1.30,1.35,1.63,0.57,0.03,0.03,0.01,-0.01
+Average,2.97,3.36,3.69,4.57,5.96,8.03,10.5,12.6,13.7
+P50,2.75,3.08,3.39,4.21,5.46,7.36,9.60,11.7,13.0
+P90,4.27,4.84,5.33,6.62,8.64,11.9,15.8,18.7,20.3
+P95,4.67,5.29,5.84,7.16,9.42,13.1,17.2,20.3,22.0
+P99,5.59,6.36,7.03,8.71,11.8,16.0,20.1,23.6,25.8
+P999,12.0,22.4,21.3,20.7,33.3,31.9,27.9,29.3,36.0
+Maximum,79.9,114.1,115.5,129.7,130.9,1553.9,547.0,2214.4,104.5
+Query Latency (ms),,,,,,,,,
+Minimum,110.6,108.5,121.0,113.6,149.9,178.5,236.9,391.9,7426.9
+Average,3384.9,3780.5,4273.0,5259.8,6854.3,9330.1,12263.8,17101.5,36359.8
+P50,600.2,657.2,722.3,891.9,1137.7,1526.9,2034.7,5598.1,20605.9
+P90,7982.2,9041.2,10214.6,12619.4,16642.0,22417.8,29222.3,37475.6,74857.1
+P95,22593.8,24975.2,31009.3,36912.4,47617.5,65135.4,85316.4,111238.6,163281.4
+P99,36414.5,40775.5,45050.7,56001.9,73320.8,101400.9,133411.6,161797.3,187456.1
+P999,40207.5,44216.3,48519.0,60121.0,78104.6,109096.3,143293.5,172518.6,205561.6
+Maximum,56411.6,61740.4,65012.2,73060.7,91453.7,125887.8,159392.5,191374.6,223954.9

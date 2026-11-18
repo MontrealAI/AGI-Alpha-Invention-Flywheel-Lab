@@ -1,8 +1,12 @@
 import hashlib
+from contextlib import contextmanager
+from http.server import BaseHTTPRequestHandler, HTTPServer
 import json
+import threading
+import time
 import unittest
 
-from ignition.provider import HandoffRequired, LocalProvider, ManualProvider, ModelProvider, ProviderUnavailable
+from ignition.provider import MAX_REPLY, HandoffRequired, LocalProvider, ManualProvider, ModelProvider, ProviderUnavailable
 
 
 def completed(model="unit-model", answer='{"result":1}', **changes):
@@ -10,6 +14,43 @@ def completed(model="unit-model", answer='{"result":1}', **changes):
         {"finish_reason": "stop", "message": {"content": answer}}],
         "usage": {"prompt_tokens": 21, "completion_tokens": 6}}
     return dict(response, **changes)
+
+
+def frame(content=None, finish=None, model="unit-model", **extra_delta):
+    delta = {} if content is None else {"content": content}
+    return {"model": model, "choices": [{"index": 0, "delta": {**delta, **extra_delta}, "finish_reason": finish}]}
+
+
+@contextmanager
+def local_sse(events, *, delays=(), timeout=1):
+    requests = []
+    class Handler(BaseHTTPRequestHandler):
+        def log_message(self, *args):
+            pass
+
+        def do_POST(self):
+            requests.append((self.path, dict(self.headers), json.loads(self.rfile.read(int(self.headers["Content-Length"])))))
+            self.send_response(200)
+            self.send_header("Content-Type", "text/event-stream")
+            self.end_headers()
+            for index, event in enumerate(events):
+                if index < len(delays):
+                    time.sleep(delays[index])
+                data = event if isinstance(event, str) else json.dumps(event)
+                try:
+                    self.wfile.write(("data: " + data + "\n\n").encode())
+                    self.wfile.flush()
+                except (BrokenPipeError, ConnectionResetError):
+                    return
+    with HTTPServer(("127.0.0.1", 0), Handler) as server:
+        thread = threading.Thread(target=server.serve_forever, kwargs={"poll_interval": .01}, daemon=True)
+        thread.start()
+        try:
+            yield LocalProvider("llama-cpp", "unit-model", server.server_port, timeout=timeout,
+                                schema_output=True, streaming=True), requests
+        finally:
+            server.shutdown()
+            thread.join()
 
 
 class ProviderTests(unittest.TestCase):
@@ -21,9 +62,67 @@ class ProviderTests(unittest.TestCase):
         self.assertEqual(provider.receipts, [])
         for env in [{"IGNITION_MODEL_PROVIDER": "https://elsewhere"},
                     {"IGNITION_MODEL_PROVIDER": "llama-cpp", "IGNITION_MODEL_PORT": "80/other"},
+                    {"IGNITION_MODEL_PROVIDER": "llama-cpp", "IGNITION_MODEL_ID": "m", "IGNITION_MODEL_STREAM": "yes"},
+                    {"IGNITION_MODEL_PROVIDER": "ollama", "IGNITION_MODEL_ID": "m", "IGNITION_MODEL_STREAM": "1"},
                     {"IGNITION_MODEL_PROVIDER": "ollama", "IGNITION_MODEL_ID": "abc:cloud"}]:
             with self.assertRaises(ProviderUnavailable):
                 ModelProvider.from_environment(env)
+
+    def test_stream_progress_may_outlast_an_idle_interval_and_preserves_schema_identity(self):
+        events = [frame('{"choice":'), frame('"abstain"}'), frame(finish="stop"),
+                  {"model": "unit-model", "choices": [], "usage": {"prompt_tokens": 20, "completion_tokens": 10}},
+                  "[DONE]"]
+        with local_sse(events, delays=(0, .6, .6)) as (route, requests):
+            self.assertEqual(route.propose("choose_hypothesis", {"candidates": []}), {"choice": "abstain"})
+            self.assertEqual(len(requests), 1)
+            path, headers, body = requests[0]
+            self.assertEqual(path, "/v1/chat/completions")
+            self.assertEqual(headers["Accept"], "text/event-stream")
+            self.assertNotIn("Authorization", headers)
+            self.assertNotIn("tools", body)
+            self.assertIs(body["stream"], True)
+            self.assertEqual(body["response_format"]["type"], "json_schema")
+            receipt = route.receipts[-1]
+            self.assertEqual(receipt["reported_model"], route.model)
+            self.assertEqual(receipt["transport_mode"], "streaming-sse/1")
+            self.assertEqual(receipt["stream_fragments"], 2)
+            self.assertEqual(receipt["usage"], {"input_tokens": 20, "output_tokens": 10})
+            self.assertGreater(receipt["wall_seconds"], route.timeout)
+
+    def test_stream_rejects_partial_wrong_identity_undeclared_tools_oversize_or_invalid_schema(self):
+        answer, stop = frame('{"choice":"abstain"}'), frame(finish="stop")
+        for label, events in {
+            "no terminal": [answer, "[DONE]"],
+            "no end marker": [answer, stop],
+            "early end marker": [answer, "[DONE]", stop],
+            "wrong earlier identity": [frame('{"choice":', model="other"), frame('"abstain"}'), stop, "[DONE]"],
+            "missing model": [{k:v for k,v in answer.items() if k != "model"}, stop, "[DONE]"],
+            "multiple choices": [dict(answer, choices=answer["choices"]*2), stop, "[DONE]"],
+            "truncated": [answer, frame(finish="length"), "[DONE]"],
+            "duplicate terminal": [answer, stop, stop, "[DONE]"],
+            "unexpected content type": [frame(0), answer, stop, "[DONE]"],
+            "late content": [answer, stop, frame(" "), "[DONE]"],
+            "tool": [answer, frame(tool_calls=[{"index":0}]), stop, "[DONE]"],
+            "legacy tool": [answer, frame(function_call={"name":"x"}), stop, "[DONE]"],
+            "schema mismatch": [frame('{"choice":"unknown"}'), stop, "[DONE]"],
+            "output bytes": [frame(" "*(MAX_REPLY+1)), stop, "[DONE]"],
+            "reported tokens": [answer, stop, {"model":"unit-model","choices":[],
+                                                "usage":{"prompt_tokens":20,"completion_tokens":4097}}, "[DONE]"],
+        }.items():
+            with self.subTest(label=label), local_sse(events) as (route, requests):
+                with self.assertRaises(ProviderUnavailable):
+                    route.propose("choose_hypothesis", {"candidates": []})
+                self.assertEqual(len(requests), 1)
+                self.assertEqual(route.receipts[-1]["status"], "failed")
+                self.assertIsNone(route.receipts[-1]["response_sha256"])
+
+    def test_stream_idle_before_completion_records_interruption_without_a_retry(self):
+        with local_sse([frame("{}"), frame(finish="stop"), "[DONE]"], delays=(0, 1.25)) as (route, requests):
+            with self.assertRaisesRegex(ProviderUnavailable, "PROVIDER_CONNECTION"):
+                route.propose("build", {})
+            self.assertEqual(len(requests), 1)
+            self.assertEqual(route.receipts[-1]["stream_fragments"], 1)
+            self.assertIsNone(route.receipts[-1]["response_sha256"])
 
     def test_request_binding_and_attribution(self):
         exchanges = {}

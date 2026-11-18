@@ -167,7 +167,7 @@ function updateStrategyHelp() {
 }
 $("strategy").addEventListener("change", updateStrategyHelp);
 
-function pairingNumber(id) {
+function wholeNumber(id) {
   const field = $(id);
   if (field.value.trim() === "" || !Number.isSafeInteger(field.valueAsNumber) || !field.checkValidity()) {
     throw Error("Enter a valid whole number for " + document.querySelector('label[for="' + id + '"]').textContent + ".");
@@ -184,16 +184,50 @@ function loadPairing(params) {
   $("pairing-model").value = params.model || "";
   $("pairing-repository").value = params.repository || "";
 }
+const endpointFields = {
+  model: "ep-model", dataset: "ep-dataset", max_ttft_p90_ms: "ep-ttft", min_tps_per_user: "ep-rate",
+  min_concurrency: "ep-concurrency", load_mode: "ep-load", rate_metric: "ep-metric",
+  require_point_accuracy: "ep-accuracy", require_price: "ep-price", require_access: "ep-access"
+};
+function loadEndpoint(params) {
+  const controls = $("endpoint-controls");
+  controls.hidden = controls.disabled = !params;
+  if (!params) return;
+  for (const [key, id] of Object.entries(endpointFields)) {
+    const field = $(id);
+    if (field.type === "checkbox") field.checked = params[key] === true;
+    else field.value = params[key] ?? "";
+  }
+}
+function readEndpoint() {
+  const contract = {...extraMission.resources?.endpoint_lab};
+  for (const [key, id] of Object.entries(endpointFields)) {
+    const field = $(id);
+    if (field.type === "checkbox") contract[key] = field.checked;
+    else if (key === "min_concurrency") contract[key] = wholeNumber(id);
+    else contract[key] = field.value.trim();
+  }
+  for (const key of ["max_ttft_p90_ms", "min_tps_per_user"]) {
+    if (!/^[0-9]+(?:\.[0-9]+)?$/.test(contract[key]) || !/[1-9]/.test(contract[key])) {
+      throw Error("Enter a positive decimal for " + document.querySelector('label[for="' + endpointFields[key] + '"]').textContent + ".");
+    }
+  }
+  return contract;
+}
 function readMission() {
   const mission = {...extraMission, purpose:$("purpose").value.trim(), beneficiary:$("beneficiary").value.trim(),
     requirements:$("requirements").value.split("\n").map(s=>s.trim()).filter(Boolean),
     authority:Object.fromEntries(authorityKeys.map(k=>[k,$(k).checked]))};
   for (const k of detailKeys) mission[k] = parseField(k, false);
+  if (!$("endpoint-controls").hidden) {
+    if (Object.hasOwn(mission.resources, "endpoint_lab")) throw Error("Edit the interactive inference requirements above and remove endpoint_lab from Other resources.");
+    mission.resources.endpoint_lab = readEndpoint();
+  }
   if (!$("pairing-controls").hidden) {
     if (Object.hasOwn(mission.resources, "pairing_lab")) throw Error("Use the coding-stack pilot criteria above to change the public study.");
     mission.resources.pairing_lab = {
-      budget: pairingNumber("pairing-budget"), width: Number($("pairing-width").value),
-      min_percent: pairingNumber("pairing-percent"), model: $("pairing-model").value || null,
+      budget: wholeNumber("pairing-budget"), width: Number($("pairing-width").value),
+      min_percent: wholeNumber("pairing-percent"), model: $("pairing-model").value || null,
       repository: $("pairing-repository").value.trim() || null
     };
   }
@@ -211,7 +245,8 @@ function loadBrief(mission = {}, sources = [], useSavedPermissions = true) {
   $("beneficiary").value = mission.beneficiary || "";
   $("requirements").value = (mission.requirements || []).join("\n");
   for (const k of detailKeys) $(k).value = json(mission[k] || {});
-  const {execution_strategy: strategy, direct_method: method, direct_after_research: fallback, pairing_lab: pairing, ...resources} = mission.resources || {};
+  const {execution_strategy: strategy, direct_method: method, direct_after_research: fallback, pairing_lab: pairing, endpoint_lab: endpoint, ...resources} = mission.resources || {};
+  loadEndpoint(endpoint);
   loadPairing(pairing);
   $("resources").value = json(resources);
   $("strategy").value = Object.hasOwn(routeDescriptions, strategy) ? strategy : "adaptive";
@@ -312,13 +347,15 @@ function studyView(study) {
 }
 function pairingView(run) {
   const study = run.pairing_result;
+  const decision = study || run.endpoint_result;
   $("pairing-result").hidden = !study;
   $("pilot-next").hidden = study?.qualifies !== true;
-  $("trial-label").hidden = Boolean(study);
-  $("trial").hidden = Boolean(study);
-  $("try").textContent = study ? "Reproduce decision" : "Run input";
-  $("actions-title").textContent = study ? "Take the decision with you" : "Operate the artifact";
-  $("recipient-command").textContent = study ? "python3 -B verify_decision.py" : "python3 -I run.py verify";
+  $("trial-label").hidden = Boolean(decision);
+  $("trial").hidden = Boolean(decision);
+  $("try").textContent = decision ? "Reproduce decision" : "Run input";
+  $("actions-title").textContent = decision ? "Take the decision with you" : "Operate the artifact";
+  $("recipient-command").textContent = run.endpoint_result ? "python3 -B endpoint_lab/replay_delivery.py" :
+    study ? "python3 -B verify_decision.py" : "python3 -I run.py verify";
   if (!study) return;
   const verdicts = {audit_pass:"Pilot criteria met", audit_failed:"Pilot criteria missed",
     no_feasible_calibration_policy:"No policy fits the calibration budget"};
@@ -339,6 +376,92 @@ function pairingView(run) {
   const agreement = replay ? "The recording reports independent SQL agreement. " : "Independent SQL reproduced the decision. ";
   $("pairing-qualification").textContent = (study.sql_agreement ? agreement : "") +
     "These are historical grader outcomes. A fresh pilot requires new issues and separately obtained grades.";
+}
+const endpointReasons = {
+  unverified_report: "Report is provisional",
+  outside_standardized_scope: "Report falls outside the standardized division",
+  outside_reported_deployment: "Deployment type differs",
+  unavailable_system_category: "System availability category differs",
+  different_model: "Model differs",
+  different_dataset: "Workload dataset differs",
+  price_evidence_unavailable: "Price evidence is missing",
+  lab_access_unproven: "Lab access is unconfirmed",
+  turn_end_to_end_unmeasured: "End-to-end agent turns were unmeasured",
+  incomplete_run: "Run is incomplete",
+  failed_or_unreported_queries: "Queries failed or completion evidence is missing",
+  offline_or_unknown_load: "Load is offline or unknown",
+  online_label_unavailable: "Explicit online label is missing",
+  point_accuracy_unreported: "Accuracy at this load is missing",
+  below_minimum_load: "Concurrency falls below the minimum",
+  missing_first_token: "First-token latency is missing",
+  first_token_too_slow: "P90 first-token latency exceeds the ceiling",
+  missing_token_rate: "Token rate is missing",
+  token_rate_too_low: "Token rate falls below the floor"
+};
+function endpointPoint(host, point) {
+  const a = elem("article", undefined, "endpoint-point");
+  const link = urlLink("https://results.mlcommons.org/endpoints/report?source=phase2&submission=" + encodeURIComponent(point.source));
+  if (link) {
+    link.textContent = "Official report · run " + point.run + " ↗";
+    a.append(link);
+  }
+  const metrics = elem("dl");
+  const fields = [["Concurrency", point.concurrency], ["P90 time to first token (ms)", point.ttft_p90_ms],
+    ["Reported tokens/s per user", point.tps_per_user], ["P90 time per output token (ms)", point.tpot_p90_ms],
+    ["System output (tokens/s)", point.system_tps], ["Load configuration", point.config_type],
+    ["Failed queries", point.failed]];
+  for (const [label, value] of fields) metrics.append(elem("dt", label), elem("dd", value ?? "Unreported"));
+  a.append(metrics);
+  if (point.reasons?.length) a.append(elem("p", point.reasons.map(code => endpointReasons[code] || code).join(" · ")));
+  host.append(a);
+}
+function endpointView(run) {
+  const result = run.endpoint_result, area = $("endpoint-result");
+  area.hidden = !result;
+  if (!result) return;
+  const contract = result.contract;
+  const selected = result.selected, supported = result.decision === "supported" && selected.length > 0;
+  area.dataset.tone = supported ? "pass" : "fail";
+  $("endpoint-verdict").textContent = supported ? selected[0].concurrency + " concurrent requests supported" : "Capacity decision withheld";
+  const metric = {reported_tps_per_user: "reported tokens/s per user", inverse_p90_tpot: "tokens/s from inverse P90 time per token", agentic_e2e: "tokens/s over a complete agent turn"};
+  $("endpoint-scope").textContent = contract.model + " · " + contract.dataset + " · P90 first token ≤ " + contract.max_ttft_p90_ms +
+    " ms · ≥ " + contract.min_tps_per_user + " " + metric[contract.rate_metric] + " · minimum load " + contract.min_concurrency +
+    " · " + (contract.load_mode === "online" ? "online only" : "reported submission or online");
+  const witnesses = $("endpoint-witnesses"), next = $("endpoint-next");
+  witnesses.replaceChildren();
+  next.replaceChildren();
+  witnesses.append(elem("p", result.eligible.length + " of " + (result.eligible.length + result.excluded.length) +
+    " measured configurations meet the full requirement."));
+  for (const point of selected) endpointPoint(witnesses, point);
+  if (!supported) {
+    const matching = result.excluded.filter(p =>
+      !p.reasons.some(reason => ["different_model", "different_dataset", "unverified_report"].includes(reason)));
+    if (matching.length) {
+      const details = elem("details");
+      details.append(elem("summary", "Inspect " + matching.length + " measured configurations on the matching workload"));
+      for (const p of matching) endpointPoint(details, p);
+      witnesses.append(details);
+    }
+  }
+  const test = result.next_test;
+  if (test.action === "measure_matching_workload") {
+    next.append(elem("p", "Run the specified model and dataset together. The evidence pack has no verified matching workload."));
+  } else if (test.action === "collect_missing_evidence") {
+    next.append(elem("p", "Resolve these conditions on a matching workload. A configuration can appear under several conditions."));
+    const list = elem("ul");
+    for (const [reason, count] of Object.entries(test.obstacles)) {
+      list.append(elem("li", (endpointReasons[reason] || reason) + " · " + count + (count === 1 ? " configuration" : " configurations")));
+    }
+    next.append(list);
+  } else {
+    const repeat = test.action === "verify_selected_point_on_intended_traffic";
+    next.append(elem("p", repeat ? "Repeat the selected load on the intended traffic and measure the same latency and rate." :
+      "Retest the next higher recorded load on the intended traffic. Its published result missed at least one threshold."));
+    if (!repeat) for (const point of test.targets) endpointPoint(next, point);
+  }
+  const verified = run.evaluation?.verification?.checked === true;
+  $("endpoint-verification").textContent = (verified ? (replay ? "The recording reports independent replay agreement. " : "Independent SQL replay agrees on the decision and selected measurements. ") : "") +
+    "The evidence covers the reported benchmark workload. Access, pricing and deployment require separate evidence.";
 }
 function mappingChoiceView(run) {
   const choice = !replay && run.status === "awaiting_choice" ? run.mapping_choice : null;
@@ -456,6 +579,7 @@ function show(run, open = false) {
   executionView(run);
   mappingChoiceView(run);
   pairingView(run);
+  endpointView(run);
   studyView(run.opportunity_study);
   $("events").replaceChildren(...(run.events||[]).map(ev=>{
     const li=elem("li");li.append(elem("strong",ev.stage),elem("p",ev.message),elem("small",ev.at));return li;
@@ -537,7 +661,7 @@ $("copy-prompt").addEventListener("click",async()=>{
   catch { $("prompt").parentElement.open=true; const range=document.createRange();range.selectNodeContents($("prompt"));getSelection().removeAllRanges();getSelection().addRange(range);runNotice("Prompt selected. Use your browser’s copy command."); }
 });
 $("try").addEventListener("click",()=>{
-  try {const input=current?.pairing_result ? {} : JSON.parse($("trial").value); action("try",{input});}
+  try {const input=current?.pairing_result || current?.endpoint_result ? {} : JSON.parse($("trial").value); action("try",{input});}
   catch { $("output").textContent="Enter a valid JSON input."; }
 });
 $("trial").addEventListener("input",()=>{$("output").textContent="";});
@@ -564,6 +688,22 @@ function openReplay(data, label, packagedId) {
     if (![study.candidates, study.challengers].every(group => Array.isArray(group) && group.every(c => !invalidCandidate(c))) ||
         (study.sources && (!Array.isArray(study.sources) || study.sources.some(s => !s || typeof s.id !== "string")))) {
       throw Error("Invalid opportunity study in this record.");
+    }
+  }
+  if (data.endpoint_result) {
+    const e = data.endpoint_result;
+    const numeric = n => typeof n === "number" || typeof n === "string" || n === null;
+    const point = p => p && typeof p.source === "string" && Number.isInteger(p.run) && Number.isInteger(p.concurrency) &&
+      [p.ttft_p90_ms, p.tps_per_user, p.tpot_p90_ms, p.system_tps, p.failed].every(numeric) &&
+      (p.reasons === undefined || Array.isArray(p.reasons) && p.reasons.every(r => typeof r === "string"));
+    if (e.schema !== "frontier-endpoints/decision/v1" || !["supported","withheld"].includes(e.decision) ||
+        !e.contract || typeof e.contract !== "object" || !Array.isArray(e.selected) || !e.selected.every(point) ||
+        !Array.isArray(e.eligible) || !Array.isArray(e.excluded) || !e.excluded.every(p => point(p) && Array.isArray(p.reasons)) || !e.next_test ||
+        (e.decision === "supported") !== Boolean(e.selected.length) ||
+        !["measure_matching_workload","collect_missing_evidence","verify_selected_point_on_intended_traffic","measure_next_recorded_load_on_intended_traffic"].includes(e.next_test.action) ||
+        (e.next_test.action === "collect_missing_evidence" && (!e.next_test.obstacles || typeof e.next_test.obstacles !== "object")) ||
+        (e.next_test.action === "measure_next_recorded_load_on_intended_traffic" && (!Array.isArray(e.next_test.targets) || !e.next_test.targets.every(point)))) {
+      throw Error("Invalid endpoint decision in this record.");
     }
   }
   const r=data.research || {};

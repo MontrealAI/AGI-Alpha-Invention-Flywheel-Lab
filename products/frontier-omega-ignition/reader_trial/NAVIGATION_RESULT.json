@@ -1,0 +1,234 @@
+{
+  "study": "RR-N1",
+  "kind": "local automated packet qualification; minimal DOM under Node, no real browser or human",
+  "registration_revision": "98886764a0322bc93d9ef94abe2a5cd4b94e7491",
+  "registered_queries": 15,
+  "first_passed": 2,
+  "repaired_passed": 15,
+  "first_concordance_sha256": "65964b618bbe15c625432b9bdcb5d4d062912333e776b782d1c8cf7a2ddd6663",
+  "repaired_concordance_sha256": "202f839df36ff5a89f6f94d9027b07f70a29d26809d9b41f359afede4e16eafc",
+  "vectors": [
+    {
+      "query": "−5.02",
+      "expected": [
+        1
+      ],
+      "first_observed": [
+        1,
+        2
+      ],
+      "repaired_observed": [
+        1
+      ]
+    },
+    {
+      "query": "-5.02",
+      "expected": [
+        1
+      ],
+      "first_observed": [
+        1,
+        2
+      ],
+      "repaired_observed": [
+        1
+      ]
+    },
+    {
+      "query": "+5.02",
+      "expected": [
+        2
+      ],
+      "first_observed": [
+        1,
+        2
+      ],
+      "repaired_observed": [
+        2
+      ]
+    },
+    {
+      "query": "5.02",
+      "expected": [],
+      "first_observed": [
+        1,
+        2
+      ],
+      "repaired_observed": []
+    },
+    {
+      "query": "90%",
+      "expected": [
+        1
+      ],
+      "first_observed": [
+        1,
+        2,
+        3
+      ],
+      "repaired_observed": [
+        1
+      ]
+    },
+    {
+      "query": "90",
+      "expected": [
+        2
+      ],
+      "first_observed": [
+        1,
+        2,
+        3
+      ],
+      "repaired_observed": [
+        2
+      ]
+    },
+    {
+      "query": "90.5%",
+      "expected": [
+        3
+      ],
+      "first_observed": [
+        1,
+        2,
+        3
+      ],
+      "repaired_observed": [
+        3
+      ]
+    },
+    {
+      "query": "2e-3",
+      "expected": [
+        1
+      ],
+      "first_observed": [
+        1,
+        2
+      ],
+      "repaired_observed": [
+        1
+      ]
+    },
+    {
+      "query": "2e+3",
+      "expected": [
+        2
+      ],
+      "first_observed": [
+        1,
+        2
+      ],
+      "repaired_observed": [
+        2
+      ]
+    },
+    {
+      "query": "\"x <= 5\"",
+      "expected": [
+        1
+      ],
+      "first_observed": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "repaired_observed": [
+        1
+      ]
+    },
+    {
+      "query": "\"5 ≤ x\"",
+      "expected": [
+        2
+      ],
+      "first_observed": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "repaired_observed": [
+        2
+      ]
+    },
+    {
+      "query": "\"x ≥ 5\"",
+      "expected": [
+        3
+      ],
+      "first_observed": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "repaired_observed": [
+        3
+      ]
+    },
+    {
+      "query": "\"x < 5\"",
+      "expected": [
+        4
+      ],
+      "first_observed": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "repaired_observed": [
+        4
+      ]
+    },
+    {
+      "query": "measured yield",
+      "expected": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "first_observed": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "repaired_observed": [
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    {
+      "query": "unknownword",
+      "expected": [],
+      "first_observed": [],
+      "repaired_observed": []
+    }
+  ],
+  "source_version_controls": {
+    "first": {
+      "en.original": true,
+      "en.html": true,
+      "en.pdf": true,
+      "fr.original": true,
+      "fr.html": true,
+      "fr.pdf": true
+    },
+    "repaired": {
+      "en.original": true,
+      "en.html": true,
+      "en.pdf": true,
+      "fr.original": true,
+      "fr.html": true,
+      "fr.pdf": true
+    }
+  },
+  "human_participants": 0
+}

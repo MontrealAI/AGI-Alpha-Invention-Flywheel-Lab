@@ -15,6 +15,7 @@ import uuid
 HARNESS = Path(__file__).resolve().parents[2] / "alpha-genesis-harness"
 sys.path.insert(0, str(HARNESS))
 from bridge.adapters import BridgeError, LOADED_SOURCE_SHA256, Runtime, strict_json, transport
+from bridge.streaming import LOADED_SOURCE_SHA256 as STREAMING_SOURCE_SHA256, StreamAccumulator, stream_transport
 from . import model_schema
 
 PROTOCOL = "ignition/model-request/1"
@@ -69,6 +70,37 @@ def _response(value):
         raise ValueError("The model response must be finite JSON.") from error
 
 
+class LocalTextStream(StreamAccumulator):
+    """A single, identified llama.cpp answer. HARNESS owns SSE framing and wire limits."""
+
+    def __init__(self, kind, on_text, expected_model):
+        super().__init__(kind, on_text)
+        self.expected_model = expected_model
+
+    def feed(self, event):
+        if (not isinstance(event, dict) or event.get("model") != self.expected_model
+                or event.get("modelVersion", self.expected_model) != self.expected_model):
+            raise BridgeError("MODEL_IDENTITY", "A stream frame failed to confirm the requested model.")
+        if self.end_marker:
+            self.fail()
+        choices = event.get("choices")
+        if choices == [] and self.complete and isinstance(event.get("usage"), dict):
+            return super().feed(event)
+        if self.complete or not isinstance(choices, list) or len(choices) != 1:
+            self.fail()
+        choice = choices[0]
+        if not isinstance(choice, dict) or type(choice.get("index")) is not int or choice["index"] != 0:
+            self.fail()
+        delta = choice.get("delta")
+        if not isinstance(delta, dict) or choice.get("finish_reason") not in (None, "stop"):
+            self.fail()
+        if delta.get("content") is not None and not isinstance(delta["content"], str):
+            self.fail()
+        if delta.get("tool_calls") or delta.get("function_call") or delta.get("refusal"):
+            self.fail()
+        super().feed(event)
+
+
 class ModelProvider:
     """No model is selected by default. Web input never supplies endpoints or configuration."""
 
@@ -96,8 +128,12 @@ class ModelProvider:
             schema = env.get("IGNITION_MODEL_SCHEMA", "0")
             if schema not in {"0", "1"}:
                 raise ValueError("IGNITION_MODEL_SCHEMA must be 0 or 1.")
+            streaming = env.get("IGNITION_MODEL_STREAM", "0")
+            if streaming not in {"0", "1"}:
+                raise ValueError("IGNITION_MODEL_STREAM must be 0 or 1.")
             return LocalProvider(kind, env.get("IGNITION_MODEL_ID"), port,
-                                 env.get("IGNITION_MODEL_SHA256") or None, output, timeout, schema_output=schema == "1")
+                                 env.get("IGNITION_MODEL_SHA256") or None, output, timeout,
+                                 schema_output=schema == "1", streaming=streaming == "1")
         except (ValueError, TypeError) as error:
             raise ProviderUnavailable(f"Invalid local model configuration: {error}") from None
 
@@ -157,7 +193,7 @@ class LocalProvider(ModelProvider):
     """The shared HARNESS sends one text/JSON request to an operator's installed loopback model."""
 
     def __init__(self, kind, model, port, declared_sha256=None, output_tokens=4096,
-                 timeout=300, *, sender=transport, schema_output=False):
+                 timeout=300, *, sender=transport, schema_output=False, streaming=False):
         super().__init__()
         if kind not in {"ollama", "llama-cpp"}:
             raise ValueError("Unsupported local model provider.")
@@ -174,18 +210,34 @@ class LocalProvider(ModelProvider):
         self.output_tokens, self.timeout = output_tokens, timeout
         if type(schema_output) is not bool:
             raise ValueError("Local model schema support must be explicitly declared.")
+        if type(streaming) is not bool or (streaming and kind != "llama-cpp"):
+            raise ValueError("Only a locally configured llama.cpp server supports this streaming route.")
         self.schema_output = schema_output
+        self.streaming = streaming
         self.base = f"http://127.0.0.1:{port}"
         self.sender = sender
         p = {"kind": "ollama" if kind == "ollama" else "openai",
              "base_url": self.base + ("" if kind == "ollama" else "/v1"),
              "output_limit_field": "max_tokens",
              "models": {self.model: {"input_per_million": 0, "output_per_million": 0,
-                                     "max_output_tokens": output_tokens, "json_mode": True, "json_schema": schema_output}}}
+                                     "max_output_tokens": output_tokens, "json_mode": True,
+                                     "json_schema": schema_output, "streaming": streaming}}}
         self.runtime = Runtime({"local_only": True, "allow_paid_requests": False,
                                 "session_budget_usd": 0, "max_attempts": 1,
                                 "timeout_seconds": timeout, "providers": {kind: p}},
-                               sender=self._send)
+                               sender=self._send, streamer=self._stream)
+
+    def _stream(self, url, headers, body, *, kind, timeout, cancel, on_text):
+        row = self.receipts[-1]
+        row.update(stream_output_bytes=0, stream_fragments=0)
+        def progress(fragment):
+            row["stream_output_bytes"] += len(fragment.encode("utf-8"))
+            if row["stream_output_bytes"] > MAX_REPLY:
+                raise BridgeError("PROVIDER_SIZE", "Local model output exceeded 512 KiB.")
+            row["stream_fragments"] += 1
+            on_text(fragment)
+        return stream_transport(url, headers, body, kind=kind, timeout=timeout, cancel=cancel, on_text=progress,
+                                accumulator_factory=lambda k, emit: LocalTextStream(k, emit, self.model))
 
     def _send(self, url, headers, body=None, timeout=60):
         response = self.sender(url, headers, body, timeout=timeout)
@@ -203,6 +255,8 @@ class LocalProvider(ModelProvider):
 
     def identity(self):
         return {"mode": "local", "provider": self.kind, "model": self.model,
+                **({"transport_mode": "streaming-sse/1", "harness_streaming_sha256": STREAMING_SOURCE_SHA256}
+                   if self.streaming else {}),
                 "endpoint": self.base, "declared_model_sha256": self.declared_sha256,
                 "weights_identity": "operator-declared" if self.declared_sha256 else "unmeasured",
                 "output_tokens": self.output_tokens, "timeout_seconds": self.timeout,
@@ -240,12 +294,16 @@ class LocalProvider(ModelProvider):
                 self._check_installed_ollama()
             row["application_model_calls"] = 1
             generation = {"run_id":run_id, "provider":self.kind, "model":self.model,
-                          "prompt":request["prompt"], "max_output_tokens":self.output_tokens, "json_mode":True}
+                          "prompt":request["prompt"], "max_output_tokens":self.output_tokens,
+                          "json_mode":True, "stream":self.streaming}
             if schema is not None:
                 generation["json_schema"] = schema
             result = self.runtime.generate(generation)
-            row.update(usage=result["usage"], reported_model=result["reported_model"],
-                       raw_response_sha256=hashlib.sha256(result["text"].encode()).hexdigest())
+            row.update(usage=result["usage"], reported_model=result["reported_model"])
+            output_count = result["usage"]["output_tokens"]
+            if self.streaming and output_count is not None and output_count > self.output_tokens:
+                raise BridgeError("OUTPUT_LIMIT", "Local server reported exceeding the output-token allowance.")
+            row["raw_response_sha256"] = hashlib.sha256(result["text"].encode()).hexdigest()
             response = _response(strict_json(result["text"]))
             row.update(status="completed", response_sha256=fingerprint(response))
             return response

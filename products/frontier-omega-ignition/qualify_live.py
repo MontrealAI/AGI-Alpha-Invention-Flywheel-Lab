@@ -32,10 +32,12 @@ from ignition.store import Store, digest, runtime_source
 MODEL_ALIAS = "Qwen3-4B-Instruct-2507-Q4_K_M"
 EXAMPLE = PRODUCT / "examples" / "migration.json"
 STAGES = {"discover", "challenge", "construct"}
+LIVE_STREAM_ARM = "live-sources-streaming-sse-v1"
 PUBLIC_ROUTES = {key for key in (
     "stage", "status", "provider", "model", "reported_model", "mode", "run_id", "request_sha256",
     "response_schema_sha256", "raw_response_sha256", "response_sha256", "error_code", "usage", "application_model_calls",
-    "complete_cost_known", "wall_seconds", "recorded_at")}
+    "complete_cost_known", "wall_seconds", "recorded_at", "transport_mode", "harness_streaming_sha256",
+    "stream_output_bytes", "stream_fragments")}
 CHECKOUT_PATHS = [PRODUCT.relative_to(REPO).as_posix(), "products/alpha-genesis-harness/bridge",
                   "products/alpha-genesis-harness/scripts/package_release.py",
                   "products/alpha-genesis-harness/scripts/qualify_hosted_local.py"]
@@ -235,6 +237,8 @@ def run_mission(work, model, record, *, live_sources=False):
         record["construction_status"] = record["status"]
         record["acquisition_and_investigation"] = acquired_investigation(state, calls)
         record["status"] = record["acquisition_and_investigation"]["status"]
+        if record["status"] == "PASS" and not all(c.get("transport_mode") == "streaming-sse/1" for c in calls):
+            record["status"] = "FAIL"
 
 
 def acquired_investigation(state, calls):
@@ -309,7 +313,7 @@ def timed_arm(root, name, function, model):
     return record
 
 
-def campaign(work, model, record):
+def campaign(work, model, record, *, live_model):
     primary = timed_arm(work, "primary", run_mission, model)
     # Keep the original primary result, even when the direct arm succeeds.
     record.update(primary)
@@ -319,12 +323,13 @@ def campaign(work, model, record):
     proven = primary["status"] == "PASS", direct["status"] == "PASS"
     outcome = {(True, True):"both accepted", (False, False):"neither accepted",
                (True, False):"only primary accepted", (False, True):"only direct accepted"}[proven]
-    record["direct_comparison"] = {"outcome":outcome, "order":["primary","direct","live_sources"],
+    record["direct_comparison"] = {"outcome":outcome, "order":["primary","direct",LIVE_STREAM_ARM],
         "timing_scope":"Arm wall includes preparation, inference, checks and portable use. Download and startup are shared. A warm server can favor later arms.",
         "economic_advantage":"unmeasured", "human_comparison":"unmeasured"}
     def live(path, selected, receipt):
         return run_mission(path, selected, receipt, live_sources=True)
-    record["live_source_trial"] = timed_arm(work, "live_sources", live, model)
+    record["live_source_trial"] = timed_arm(work, LIVE_STREAM_ARM, live, live_model)
+    record["live_source_trial"]["arm_id"] = LIVE_STREAM_ARM
     live_status = record["live_source_trial"]["status"]
     # The direct arm can legitimately win or lose. The new integration gate requires actual acquisition AND use.
     if primary["status"] != "PASS":
@@ -350,7 +355,8 @@ def main():
         parser.error("Supply fresh, separate output and work locations outside the checkout.")
     work.mkdir(parents=True, mode=0o700)
     output.parent.mkdir(parents=True, exist_ok=True)
-    record = dict(protocol="ignition/hosted-local/1", status="BLOCKED", started_at=stamp(),
+    record = dict(protocol="ignition/hosted-local/2", status="BLOCKED", started_at=stamp(),
+                  live_source_arm=LIVE_STREAM_ARM,
                   model=MODEL_ALIAS, model_revision=pinned.MODEL_REVISION, runtime_url=pinned.BINARY_URL,
                   model_url=pinned.MODEL_URL, complete_cost_known=False, new_paid_services=0,
                   fixture_model_responses=0, calls=[], commercial_result="unmeasured",
@@ -380,7 +386,9 @@ def main():
                 wait_ready(server, port)
                 model = LocalProvider("llama-cpp", MODEL_ALIAS, port, pinned.MODEL_SHA,
                                       output_tokens=8192, timeout=600, schema_output=True)
-                campaign(work, model, record)
+                live_model = LocalProvider("llama-cpp", MODEL_ALIAS, port, pinned.MODEL_SHA,
+                                           output_tokens=8192, timeout=600, schema_output=True, streaming=True)
+                campaign(work, model, record, live_model=live_model)
             finally:
                 server.terminate()
                 try:

@@ -1,0 +1,31 @@
+{
+  "id": "endpoint",
+  "title": "Test an interactive inference requirement against measured load",
+  "mission": {
+    "purpose": "Determine which published inference measurements support my interactive workload requirements.",
+    "beneficiary": "MONTREAL.AI research operator",
+    "requirements": [
+      "Match the stated model, workload, load mode, rate definition and evidence requirements.",
+      "Report the highest supported measured concurrency or explain why the evidence is insufficient.",
+      "Check the decision independently and export a reproducible recipient."
+    ],
+    "resources": {
+      "endpoint_lab": {
+        "model": "GPT-OSS 120B",
+        "dataset": "perf",
+        "max_ttft_p90_ms": "500",
+        "min_tps_per_user": "100",
+        "min_concurrency": 1,
+        "load_mode": "reported",
+        "rate_metric": "reported_tps_per_user",
+        "require_point_accuracy": false,
+        "require_price": false,
+        "require_access": false
+      }
+    },
+    "authority": {},
+    "time": {},
+    "construction_spec": {}
+  },
+  "sources": []
+}

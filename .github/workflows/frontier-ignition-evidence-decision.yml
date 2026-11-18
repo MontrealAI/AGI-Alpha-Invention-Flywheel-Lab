@@ -1,0 +1,111 @@
+name: IGNITION · evidence to decision
+on:
+  pull_request:
+    paths:
+      - 'products/frontier-omega-ignition/**'
+      - 'products/alpha-genesis-harness/bridge/**'
+      - 'docs/frontier-omega-ignition/continuation/**'
+      - 'docs/research/enterprise-011/**'
+      - 'docs/research/out-accelerate.*'
+      - 'docs/research/continuity-omega-fr.*'
+      - '.github/workflows/frontier-ignition-evidence-decision.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+env:
+  EXPECTED_SOURCE: ${{ github.event.pull_request.head.sha || github.sha }}
+  PYTHONDONTWRITEBYTECODE: '1'
+jobs:
+  qualify:
+    name: Independently replay instruments and inspect both workspaces
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record start
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ env.EXPECTED_SOURCE }}
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /products/frontier-omega-ignition/
+            /products/alpha-genesis-harness/bridge/
+            /products/alpha-genesis-harness/scripts/
+            /products/alpha-genesis-harness/tests/visual/package*.json
+            /docs/frontier-omega-ignition/continuation/
+            /docs/research/enterprise-011/
+            /docs/research/out-accelerate.html
+            /docs/research/out-accelerate.pdf
+            /docs/research/continuity-omega-fr.html
+            /docs/research/continuity-omega-fr.pdf
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Prepare the registered toolchain
+        run: |
+          test "$(git rev-parse HEAD)" = "$EXPECTED_SOURCE"
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends poppler-utils tesseract-ocr tesseract-ocr-eng
+          python -m pip install 'PyMuPDF==1.26.6' 'lxml==6.1.1' 'reportlab==4.4.9' 'Pillow==12.3.0'
+          mkdir -p "$RUNNER_TEMP/browser" "$RUNNER_TEMP/public/receipts"
+          cp products/alpha-genesis-harness/tests/visual/package*.json "$RUNNER_TEMP/browser/"
+          npm ci --prefix "$RUNNER_TEMP/browser" --ignore-scripts --no-audit --no-fund
+      - name: Re-evaluate nine operating contracts and both metric definitions
+        working-directory: products/frontier-omega-ignition
+        run: |
+          python -B -m unittest discover -s endpoint_lab -v
+          python -B -m unittest discover -s endpoint_study -v
+          python -B -m unittest discover -s tests -p 'test_endpoint_mission.py' -v
+          python -B endpoint_study/score.py --output "$RUNNER_TEMP/public/receipts/EP01.json"
+          python -B endpoint_lab/replay_exhibition.py --output "$RUNNER_TEMP/public-cases.json"
+          cmp endpoint_lab/evidence/public.json "$RUNNER_TEMP/public-cases.json"
+      - name: Reconstruct scientific tables and verify original model observations
+        working-directory: products/frontier-omega-ignition
+        run: |
+          python -B -m unittest discover -s numeric_study -v
+          python -B numeric_study/receive.py --output "$RUNNER_TEMP/nd02"
+          python -B numeric_study/audit.py "$RUNNER_TEMP/nd02" > "$RUNNER_TEMP/public/receipts/ND02-audit.json"
+          python -B numeric_study/recover.py --output "$RUNNER_TEMP/nd02-recovery"
+          python -B numeric_study/successor/replay.py --output "$RUNNER_TEMP/nd02-matched"
+          python - "$RUNNER_TEMP/public/receipts/ND02-audit.json" <<'PY'
+          import json, sys
+          q = json.load(open(sys.argv[1]))
+          for arm in ("direct", "native", "model"):
+              assert q["publication"][arm]["independently_matched_cells"] == 20
+          for arm in ("direct", "native"):
+              assert q["calibration"][arm] == {"independently_matched_cells": 25, "qualifying_notes": 2}
+          PY
+          cp "$RUNNER_TEMP/nd02/RESULTS.json" "$RUNNER_TEMP/public/receipts/ND02.json"
+          cp "$RUNNER_TEMP/nd02-recovery/RECOVERY.json" "$RUNNER_TEMP/public/receipts/ND02-recovery.json"
+      - name: Rebuild registered EN and FR reader materials
+        working-directory: products/frontier-omega-ignition
+        run: |
+          python -B -m unittest discover -s reader_trial -v
+          python -B reader_trial/qualify.py --output "$RUNNER_TEMP/reader-packets"
+          cp "$RUNNER_TEMP/reader-packets/QUALIFICATION.json" "$RUNNER_TEMP/public/receipts/RR-H1.json"
+      - name: Rebuild the public exhibition and exercise both entry points
+        working-directory: products/frontier-omega-ignition
+        env:
+          NODE_PATH: ${{ runner.temp }}/browser/node_modules
+        run: |
+          export CHROMIUM_PATH="$(command -v google-chrome)"
+          public="$RUNNER_TEMP/public"
+          src=../../docs/frontier-omega-ignition/continuation
+          python -B showcase/decision/build.py --output "$public/FRONTIER_LAB.html"
+          cmp "$src/FRONTIER_LAB.html" "$public/FRONTIER_LAB.html"
+          cp "$src/FRONTIER_IGNITION.html" "$src/PAIRING_LAB.html" "$public/"
+          cp showcase/decision/PRESENT.md "$public/PRESENTER.md"
+          python -B -m ignition --state "$RUNNER_TEMP/frontend-private" serve --port 8784 >"$RUNNER_TEMP/frontier-server.log" 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          curl --silent --show-error --fail --retry 15 --retry-delay 1 --retry-connrefused --output /dev/null http://127.0.0.1:8784/frontier
+          node reader_trial/browser.cjs "$RUNNER_TEMP/reader-packets" | tee "$public/receipts/reader-browser.json"
+          node showcase/decision/browser.cjs "$public/FRONTIER_LAB.html" "$public/views" http://127.0.0.1:8784/ | tee "$public/receipts/exhibition-browser.json"
+      - name: Preserve the exhibition and exact-source receipts
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: frontier-ignition-decision-${{ env.EXPECTED_SOURCE }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/public/
+          if-no-files-found: error

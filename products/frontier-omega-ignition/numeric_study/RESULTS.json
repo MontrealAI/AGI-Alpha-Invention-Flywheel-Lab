@@ -1,0 +1,102 @@
+{
+  "study": "ND02",
+  "inputs_sha256": "c5a5029630543f0ca53bc3096a62a39461a57640ae14d7676dadcffcdd56aa6e",
+  "receiver_sha256": "4266b7eaca67a3799320e9c92f8f179384138221f698783bc74d141cba29d675",
+  "crop_preparer_sha256": "a645393fd65e44f002a963b65185e7f4f41c4de05e6feb13d9561c0fc9d45ecd",
+  "model_observation_sha256": "9fb1fd9c898051a038bbdb19f2e6ffa0ba0e9cad627fd8103c5e9e0d68f78ddf",
+  "execution": {
+    "pymupdf": "1.26.6",
+    "ocr": "tesseract 5.5.0"
+  },
+  "scope": "Transcription of one simulated-outcome publication and one synthetic calibration table",
+  "tables": {
+    "publication": {
+      "direct": {
+        "accepted": true,
+        "correct_cells": 20,
+        "total_cells": 20,
+        "dimensions_match": true,
+        "footnotes_match": true,
+        "errors": [],
+        "observed_footnotes": [],
+        "csv_sha256": "d80c58e7a5aa84f6d854c0ce3438dbe8fb499318295ec4a3c588063c7769a68a",
+        "receiver_wall_seconds": 0.000261
+      },
+      "native": {
+        "accepted": true,
+        "correct_cells": 20,
+        "total_cells": 20,
+        "dimensions_match": true,
+        "footnotes_match": true,
+        "errors": [],
+        "observed_footnotes": [],
+        "csv_sha256": "d80c58e7a5aa84f6d854c0ce3438dbe8fb499318295ec4a3c588063c7769a68a",
+        "receiver_wall_seconds": 0.488043
+      },
+      "ocr": {
+        "accepted": true,
+        "correct_cells": 20,
+        "total_cells": 20,
+        "dimensions_match": true,
+        "footnotes_match": true,
+        "errors": [],
+        "observed_footnotes": [],
+        "csv_sha256": "d80c58e7a5aa84f6d854c0ce3438dbe8fb499318295ec4a3c588063c7769a68a",
+        "receiver_wall_seconds": 1.514294
+      },
+      "model": {
+        "accepted": true,
+        "correct_cells": 20,
+        "total_cells": 20,
+        "dimensions_match": true,
+        "footnotes_match": true,
+        "errors": [],
+        "observed_footnotes": [],
+        "csv_sha256": "d80c58e7a5aa84f6d854c0ce3438dbe8fb499318295ec4a3c588063c7769a68a",
+        "receiver_wall_seconds": 0.000511
+      }
+    },
+    "calibration": {
+      "direct": {
+        "accepted": true,
+        "correct_cells": 25,
+        "total_cells": 25,
+        "dimensions_match": true,
+        "footnotes_match": true,
+        "errors": [],
+        "observed_footnotes": [
+          "* Limit applies only at 20 C.",
+          "* Limit applies only at 20 C."
+        ],
+        "csv_sha256": "ee9cbc36b5836203a2ec84d4e5eeb81a5d4b3a5a4f663871fd8ceb5626ef659a",
+        "receiver_wall_seconds": 0.000215
+      },
+      "native": {
+        "accepted": true,
+        "correct_cells": 25,
+        "total_cells": 25,
+        "dimensions_match": true,
+        "footnotes_match": true,
+        "errors": [],
+        "observed_footnotes": [
+          "* Limit applies only at 20 C.",
+          "* Limit applies only at 20 C."
+        ],
+        "csv_sha256": "ee9cbc36b5836203a2ec84d4e5eeb81a5d4b3a5a4f663871fd8ceb5626ef659a",
+        "receiver_wall_seconds": 0.037301
+      },
+      "ocr": {
+        "accepted": false,
+        "reason": "Conflicting or missing two-row span anchor",
+        "total_cells": 25,
+        "receiver_wall_seconds": 2.142693
+      },
+      "model": {
+        "accepted": false,
+        "reason": "Unrecognized cell markup",
+        "total_cells": 25,
+        "receiver_wall_seconds": 0.00027
+      }
+    }
+  }
+}

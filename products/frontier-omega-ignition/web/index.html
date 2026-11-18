@@ -10,7 +10,7 @@
 <section class="operator-hero"><div><p class="eyebrow">MONTREAL.AI × QUEBEC.AI</p><h1>Ignition<span>.</span></h1>
 <p class="intro">Bring an ambition to the frontier. Build what you can specify. Investigate what you still need to discover.</p></div>
 <aside class="service-card" aria-labelledby="workspace-label"><p class="eyebrow" id="workspace-label">Private workspace</p>
-<p id="mode" role="status">Checking execution service…</p><a href="#mission">Open mission brief <span aria-hidden="true">↓</span></a><a href="/exhibition" target="_blank" rel="noopener noreferrer">Explore FRONTIER Ω IGNITION <span aria-hidden="true">↗</span></a><a id="public-showcase" href="/showcase" target="_blank" rel="noopener noreferrer">Open the Pairing Lab <span aria-hidden="true">↗</span></a></aside></section>
+<p id="mode" role="status">Checking execution service…</p><a href="#mission">Open mission brief <span aria-hidden="true">↓</span></a><a href="/frontier" target="_blank" rel="noopener noreferrer">Enter the Endpoint Lab <span aria-hidden="true">↗</span></a><a href="/exhibition" target="_blank" rel="noopener noreferrer">Explore FRONTIER Ω IGNITION <span aria-hidden="true">↗</span></a><a id="public-showcase" href="/showcase" target="_blank" rel="noopener noreferrer">Open the Pairing Lab <span aria-hidden="true">↗</span></a></aside></section>
 <details class="replay-picker" id="replays"><summary>Open a recorded run</summary><div id="public-replays" class="action-row" aria-label="Public recorded missions"></div><p>Inspect a saved JSON record locally. Replays preserve reported outcomes and can be inspected without running a model.</p>
 <label for="replay-file">Run record <span>JSON file · up to 4 MiB</span></label>
 <input id="replay-file" type="file" accept="application/json,.json"><p class="notice" role="status" id="replay-message"></p>
@@ -22,6 +22,22 @@
 <label for="purpose">Ambition</label><textarea id="purpose" required rows="3" maxlength="12000" placeholder="Describe the outcome and who needs it."></textarea>
 <div class="fields"><div><label for="beneficiary">Beneficiary</label><input id="beneficiary" type="text" placeholder="Who will use the result?"></div>
 <div><label for="requirements">Acceptance conditions <span>One per line</span></label><textarea id="requirements" rows="2" placeholder="What must a working result do?"></textarea></div></div>
+<fieldset id="endpoint-controls" hidden disabled><legend>Interactive inference requirements</legend>
+<p class="muted">Match a model and dataset exactly. The two verified MLPerf Endpoints reports cover GPT-OSS 120B on perf and deepseek-v4_1-flash on mlperf_agentic_inference_dataset.</p>
+<div class="fields">
+<div><label for="ep-model">Model</label><input id="ep-model" type="text" list="endpoint-models" required><datalist id="endpoint-models"><option value="GPT-OSS 120B"></option><option value="deepseek-v4_1-flash"></option></datalist></div>
+<div><label for="ep-dataset">Workload dataset</label><input id="ep-dataset" type="text" list="endpoint-datasets" required><datalist id="endpoint-datasets"><option value="perf"></option><option value="mlperf_agentic_inference_dataset"></option></datalist></div>
+<div><label for="ep-ttft">Maximum P90 time to first token (ms)</label><input id="ep-ttft" type="text" inputmode="decimal" pattern="[0-9]+([.][0-9]+)?" required></div>
+<div><label for="ep-rate">Minimum per-user rate (tokens/s)</label><input id="ep-rate" type="text" inputmode="decimal" pattern="[0-9]+([.][0-9]+)?" required></div>
+<div><label for="ep-metric">Rate definition</label><select id="ep-metric"><option value="reported_tps_per_user">Reported tokens/s per user</option><option value="inverse_p90_tpot">1,000 ÷ P90 time per output token (ms)</option><option value="agentic_e2e">End-to-end agent turn rate</option></select></div>
+<div><label for="ep-load">Eligible load configurations</label><select id="ep-load"><option value="reported">Reported submission or online</option><option value="online">Explicitly labeled online</option></select></div>
+<div><label for="ep-concurrency">Minimum concurrent requests</label><input id="ep-concurrency" type="number" step="1" min="1" required></div>
+</div>
+<fieldset><legend>Additional evidence required</legend>
+<label><input id="ep-accuracy" type="checkbox"> Accuracy at the selected load</label>
+<label><input id="ep-price" type="checkbox"> Price evidence</label>
+<label><input id="ep-access" type="checkbox"> Confirmed access for the lab</label></fieldset>
+</fieldset>
 <fieldset id="pairing-controls" hidden><legend>Coding-stack pilot criteria</legend>
 <p class="muted">Choose the thresholds the stack must meet on held-out issues from the published study. Both attempts in a pair count toward the budget.</p>
 <div class="fields"><div><label for="pairing-budget">Average token budget per issue</label>
@@ -55,6 +71,8 @@
 <section id="forge" class="forge" hidden><p class="eyebrow">Execution trace</p><h3>Latest checkpoints</h3><ol id="checkpoints"></ol></section>
 <section id="attempts" hidden><h3>Construction &amp; repair</h3><div id="attempt-list"></div></section>
 <section id="opportunity-study" hidden><p class="eyebrow">Frontier investigation</p><h3 id="study-choice"></h3><p id="study-basis"></p><div id="study-candidates"></div></section>
+<section id="endpoint-result" class="pairing-result" hidden aria-labelledby="endpoint-verdict"><p class="eyebrow">MLPerf Endpoints v1.0 · Measured load decision</p>
+<h3 id="endpoint-verdict"></h3><p id="endpoint-scope"></p><div id="endpoint-witnesses"></div><h4>Next measurement</h4><div id="endpoint-next"></div><p class="muted" id="endpoint-verification"></p></section>
 <section id="pairing-result" class="pairing-result" hidden aria-labelledby="pairing-verdict"><p class="eyebrow">Held-out benchmark decision</p>
 <h3 id="pairing-verdict"></h3><p id="pairing-stacks"></p><dl id="pairing-metrics"></dl>
 <p id="pairing-qualification" class="muted"></p></section>
