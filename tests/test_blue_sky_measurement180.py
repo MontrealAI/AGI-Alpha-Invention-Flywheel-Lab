@@ -22,7 +22,7 @@ def synthetic():
         "indentation_mm": {"low": 0.01, "high": 0.10},
         "force_readings_N": {
             "low": {"static_force_N": 2.0, "dynamic_force_N": 1.0},
-            "high": {"static_force_N": 5.0, "dynamic_force_N": 3.0},
+            "high": {"static_force_N": 7.0, "dynamic_force_N": 3.0},
         },
         "absolute_force_error_bound_N": 0.01,
         "measurement_authority": "UNVERIFIED_EXTERNAL_INPUT",
