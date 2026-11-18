@@ -17,12 +17,19 @@ RECEIVER_PATHS = (
 
 def receiver_files():
     names = list(RECEIVER_PATHS)
-    names.extend(str(p.relative_to(PRODUCT)) for p in sorted((PRODUCT / "endpoint_study/sources").glob("*.csv")))
-    return {name: (PRODUCT / name).read_bytes() for name in names}
+    from endpoint_study.reference import MANIFEST, bound_bytes
+    source = "endpoint_study/sources/"
+    manifest = bound_bytes(PRODUCT / source / "manifest.json", MANIFEST)
+    files = {name: (PRODUCT / name).read_bytes() for name in names}
+    files[source + "manifest.json"] = manifest
+    for item in json.loads(manifest):
+        name = source + item["table_file"]
+        files[name] = bound_bytes(PRODUCT / name, item["table_sha256"])
+    return files
 
 
-def identity():
-    files = receiver_files()
+def identity(files=None):
+    files = receiver_files() if files is None else dict(files)
     files["examples/endpoint.json"] = PRESET.read_bytes()
     return digest({key: hashlib.sha256(data).hexdigest() for key, data in files.items()})
 
@@ -45,8 +52,8 @@ def requirements(state):
     unknown = set(resources) - {"endpoint_lab", "execution_strategy", "direct_method", "direct_after_research", "max_model_calls"}
     if unknown:
         raise StateError("Unrepresented resource requirements: " + ", ".join(sorted(unknown)))
-    if "as_of" in mission["time"] and date.fromisoformat(mission["time"]["as_of"]) < date(2026, 11, 17):
-        raise StateError("The current review-status snapshot cannot establish a retrospective decision on that date.")
+    if "as_of" in mission["time"] and date.fromisoformat(mission["time"]["as_of"]) != date(2026, 11, 17):
+        raise StateError("Review status was observed on 2026-11-17. A decision on another date requires fresh evidence.")
     return resources["endpoint_lab"]
 
 
@@ -92,9 +99,15 @@ def deliver(state, payload, trial):
             raise StateError("Use {} for the accepted decision. Amend the mission to change its requirements.")
         return result
     files = receiver_files()
+    if identity(files) != state["specialist_source"]:
+        raise Conflict("The receiver source changed while preparing the download.")
+    from endpoint_study.reference import connect, selection
+    with connect() as db:
+        reference = selection(contract, db)
+    files["reference-result.json"] = (canonical(reference) + "\n").encode()
     files["contract.json"] = (canonical(contract) + "\n").encode()
     files["decision.json"] = (canonical(result) + "\n").encode()
-    files["README.txt"] = b"From the extracted directory, run: python3 -B endpoint_lab/replay_delivery.py\nPython 3.11 or later. Uses only local public evidence. A measured benchmark point does not establish procurement rights or performance on new traffic.\n"
+    files["README.txt"] = b"From the extracted directory, run: python3 -B endpoint_lab/replay_delivery.py\nPython 3.11 or later. Review status was observed 2026-11-17. Uses only local public evidence. A measured benchmark point does not establish procurement rights or performance on new traffic.\n"
     out = io.BytesIO()
     with ZipFile(out, "w") as z:
         for name, content in sorted(files.items()):

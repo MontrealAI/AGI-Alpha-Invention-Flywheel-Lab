@@ -1,0 +1,131 @@
+{
+  "study": "RR-H1",
+  "kind": "automated_pre_enrollment_qualification",
+  "actual_participants": 0,
+  "reader_accuracy": null,
+  "reader_time": null,
+  "assistive_technology_benefit": null,
+  "complete_cost_per_accepted_reader_outcome": null,
+  "source_pairs": {
+    "en": {
+      "source_pdf_sha256": "fbc59b486d7494ed97077adeaa81b6ee96bab5f27b3274ffd88df6edbf358669",
+      "source_html_sha256": "90fa295875f36894df242b26919088a9654bff3bf57937df492f5a2893173463",
+      "physical_pages": 21,
+      "source_checks": [
+        {
+          "id": "E1",
+          "physical_page": 9,
+          "reference_snippet_present": true
+        },
+        {
+          "id": "E2",
+          "physical_page": 11,
+          "reference_snippet_present": true
+        },
+        {
+          "id": "E3",
+          "physical_page": 8,
+          "reference_snippet_present": true
+        },
+        {
+          "id": "E4",
+          "physical_page": 19,
+          "reference_snippet_present": true
+        }
+      ],
+      "packets": {
+        "A": {
+          "build_wall_s": 0.002236,
+          "bytes": 194167
+        },
+        "B": {
+          "build_wall_s": 0.061021,
+          "bytes": 269035,
+          "indexed_pages": 21
+        },
+        "C": {
+          "build_wall_s": 0.139331,
+          "bytes": 400177,
+          "locator": {
+            "matched": 1,
+            "ambiguous": 2,
+            "missing": 27,
+            "total": 30
+          }
+        },
+        "D": {
+          "build_wall_s": 0.04416,
+          "bytes": 270921,
+          "indexed_pages": 21
+        }
+      }
+    },
+    "fr": {
+      "source_pdf_sha256": "616b9d77ed23e18e33ae9056921efd7b710ed77e721a1dc205c033cb583e603f",
+      "source_html_sha256": "8603dce9f041e7de39bcf7594f8ba5d5433fd6d664a67f3adfeac7da8ffcc9f4",
+      "physical_pages": 29,
+      "source_checks": [
+        {
+          "id": "F1",
+          "physical_page": 19,
+          "reference_snippet_present": true
+        },
+        {
+          "id": "F2",
+          "physical_page": 20,
+          "reference_snippet_present": true
+        },
+        {
+          "id": "F3",
+          "physical_page": 16,
+          "reference_snippet_present": true
+        },
+        {
+          "id": "F4",
+          "physical_page": 22,
+          "reference_snippet_present": true
+        }
+      ],
+      "packets": {
+        "A": {
+          "build_wall_s": 0.001595,
+          "bytes": 353970
+        },
+        "B": {
+          "build_wall_s": 0.068288,
+          "bytes": 463514,
+          "indexed_pages": 29
+        },
+        "C": {
+          "build_wall_s": 0.212657,
+          "bytes": 748340,
+          "locator": {
+            "matched": 9,
+            "ambiguous": 3,
+            "missing": 60,
+            "total": 72
+          }
+        },
+        "D": {
+          "build_wall_s": 0.066529,
+          "bytes": 464812,
+          "indexed_pages": 29
+        }
+      }
+    }
+  },
+  "registrations_sha256": "5c0518744972cfb110977549382287a2899ef644403b35ae4ce1c8305bd13c64",
+  "code_sha256": {
+    "materials.py": "b3bf62e10c899fc8ea983e7bf8a0c13bbee15286e131b7ae83ebaa07e8c3e381",
+    "trial.py": "e233b62a9314770e1d058ca0b4fc7580b021f8ff9b9d5ecee72d5e3370ffac04",
+    "concordance.js": "202f839df36ff5a89f6f94d9027b07f70a29d26809d9b41f359afede4e16eafc",
+    "form.js": "27e96f03aa699698995dc32821d0ec4823b4449b0ea4b4f9b422eab9c339abb6",
+    "qualify.py": "dc8a85dbfc092805e8360a5ef62e40fc0493dad02ca4ee679658a74489493362"
+  },
+  "tools": {
+    "pymupdf": "1.26.6",
+    "python": "3.12.14",
+    "poppler": "pdftotext version 25.03.0"
+  },
+  "qualification": "passed"
+}

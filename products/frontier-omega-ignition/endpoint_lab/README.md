@@ -6,6 +6,8 @@ The primary illustrated contract permits a P90 time to first token of 500 ms and
 
 The separate Google DeepSeek report gives an explicitly online run at **128 concurrent queries, 165.1 ms and 106.9 reported tokens/s/user** under the same headline limits on its own agentic dataset. The benchmark’s native agentic end-to-end rate requires a different observation. The two models and workloads serve as separate test cases. A user asking for strict online evidence on the GPT report receives an abstention because its configuration type is the less specific `submission`.
 
+The chosen metric can change the experiment to run next. On the DeepSeek sweep, with the same 500 ms latency limit, the highest qualifying measured load differed for **109 of 400** prespecified integer rate requirements. At 64 tokens/s, the displayed per-user field supported 512 concurrent queries; the inverse P90 token-time definition supported 256. At 100 tokens/s the two selected the same run. An independent SQL implementation agreed on all 800 selections. This describes sensitivity across the selected thresholds, not the frequency of errors in deployed systems.
+
 ## Run the recipient
 
 Python 3 and its standard library are sufficient. In the downloaded instrument directory:

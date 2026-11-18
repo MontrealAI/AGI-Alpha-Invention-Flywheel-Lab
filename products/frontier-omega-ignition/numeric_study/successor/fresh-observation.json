@@ -1,0 +1,40 @@
+{
+  "repository": "nvidia/Nemotron-3.5-Parse",
+  "revision": "ea2e1fe486bea3e7d0d505df9bafa4ad562407a0",
+  "model_sha256": "81dd7609c589f3694ce75520c25af5010953231358de6aec4d03e8c6aac787e9",
+  "driver_sha256": "fc3568bb3e9cf48dbcb8ce0cd4e25ee7360cec9fa9da331141497ecee5dcea41",
+  "registration_sha256": "c5a5029630543f0ca53bc3096a62a39461a57640ae14d7676dadcffcdd56aa6e",
+  "device": "cpu",
+  "dtype": "float32",
+  "threads": 4,
+  "max_new_tokens": 2048,
+  "greedy": true,
+  "calls": [
+    {
+      "crop": "page-2.png",
+      "png_sha256": "cb40b9fc30b45c9c281be8688055ea5f7a78040c4b0f81314b092a3b442f0f3c",
+      "raw_sha256": "1b9c6fb2c35abaeee2a3ade35ebf1a80ae2da4c54b288f278d7b4a0d27abb2ed",
+      "exit": 0,
+      "wall_seconds": 26.405323,
+      "cpu_seconds": 77.850505,
+      "largest_process_rss_kib_linux": 3015828
+    },
+    {
+      "crop": "page-3.png",
+      "png_sha256": "16ca34fb71508803d99bfe0daa66150f0123f5d6a26c41e930c1899d84695352",
+      "raw_sha256": "b1d9157f42968401515ad50fe08f86a647b09e52f40e6196ae223a1de1409f95",
+      "exit": 0,
+      "wall_seconds": 30.278336,
+      "cpu_seconds": 88.212588,
+      "largest_process_rss_kib_linux": 3022092
+    }
+  ],
+  "versions": {
+    "torch": "2.13.0+cpu",
+    "torchvision": "0.28.0+cpu",
+    "transformers": "5.19.0",
+    "timm": "1.0.22",
+    "pillow": "12.3.0",
+    "tokenizers": "0.23.3"
+  }
+}

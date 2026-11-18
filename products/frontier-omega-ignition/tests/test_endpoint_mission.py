@@ -65,8 +65,17 @@ class EndpointMission(unittest.TestCase):
         self.assertEqual(state["routing"]["route"], "direct")
         for changes in ({"return_value": "changed"}, {"side_effect": FileNotFoundError}):
             with patch("ignition.endpoint_specialist.identity", **changes):
-                self.assertEqual(self.controller.view(rid)["status"], "stale")
+                view = self.controller.view(rid)
+                self.assertEqual(view["status"], "stale")
+                self.assertNotIn("endpoint_result", view)
                 with self.assertRaises(Conflict):
                     self.controller.deliver(rid, rev)
         with self.assertRaises(StateError):
             self.controller.deliver(rid, rev, {"require_price": True}, trial=True)
+
+
+    def test_review_date_is_the_actual_snapshot(self):
+        self.mission["time"] = {"as_of": "2026-11-18"}
+        _, _, run = self.submit()
+        self.assertEqual(run["status"], "blocked")
+        self.assertIn("2026-11-17", run["error"])

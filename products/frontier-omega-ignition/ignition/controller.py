@@ -85,7 +85,7 @@ class Controller:
             from .endpoint_specialist import identity
             try:
                 current = identity()
-            except OSError:
+            except (OSError, ValueError):
                 return True
             if s.get("specialist_source") != current:
                 return True
@@ -99,6 +99,7 @@ class Controller:
     def view(self, run_id, version=None):
         s = self.store.get(run_id, version)
         if version is None and self.obsolete(s):
+            s.pop("endpoint_result", None)
             s.update(status="stale", error="Provider or application source changed. Amend to open a fresh revision.",
                      handoff=None, artifact=None, evaluation=None)
         return self.public(s)
