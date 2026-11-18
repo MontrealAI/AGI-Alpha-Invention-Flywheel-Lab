@@ -1,0 +1,214 @@
+{
+  "scope": "October historical public-program detections, independently checked broker rates and reference IDs",
+  "scientific_summary": {
+    "early_cold": {
+      "comparisons": 3,
+      "alerts": 0
+    },
+    "early_warm": {
+      "comparisons": 9,
+      "alerts": 2,
+      "coverage_gap": 2
+    }
+  },
+  "source_sha256": {
+    "archive_index": "80829974c96cfae41ff587d5fad038229d05e50ae04ec99d80accd01c5b6fe7e",
+    "reference_index": "e5740fff884ba87a3779b373e2ed09e58d37fcd177c467e2c0ae22037c057ddb"
+  },
+  "acquisition": {
+    "requests": 3,
+    "response_bytes": 44042,
+    "sum_recorded_request_seconds": 16.4957
+  },
+  "code_sha256": {
+    "invention/early_survey/survey.py": "96846215dee16370ff904e66607aefc764330f5fd4812f8377202eece00e18d7",
+    "evolution_trials/early.py": "3dfa137b7bf7cf763478e04c48295a9e9789cc443f43956a0e45315d485324f5",
+    "evolution_trials/observe.py": "cc7a0bb4e7cf1a65dd6c651b0db7ad1fa9cbeef46426ac651989979566318c56",
+    "evolution_trials/verify.py": "ef5f594a0e5f48db50a4d79dc3de6cf62ee88891d6e60d05fef3accb382d732d",
+    "evolution_trials/select.sql": "7ca6859f87e9dab2ea52fc101afdee3187638b73f5af2e290fbcfd8000364f78",
+    "invention/evolution/alert.py": "630cf3fbe840f80e3b0fdd8308394d5093ba3a027ef8d4f5607e724227804cd3",
+    "invention/early_survey/acquire.py": "46501ba215fe2b6a31ff70d586028da2b016420e5a7b54a94155480be718b027",
+    "invention/reference.py": "71e5a1472f5f3136bdcc7765580d2fb29ca320ca174c138c5f79d296d89c533f",
+    "invention/geometry.py": "20f608213f4091e56e903e339cc09eb576dbfe02f68080230f153bb356bb445d"
+  },
+  "resource_observation": {
+    "clock": "perf_counter_ns and process_time plus child CPU; normal command startup included",
+    "order": [
+      [
+        "retained",
+        "direct_sql"
+      ],
+      [
+        "direct_sql",
+        "retained"
+      ],
+      [
+        "retained",
+        "direct_sql"
+      ],
+      [
+        "direct_sql",
+        "retained"
+      ]
+    ],
+    "processes": "fresh process per producer and per counterpart recipient; local filesystem cache shared",
+    "python": "3.12.14",
+    "platform": "Linux x86_64",
+    "observations": {
+      "retained": [
+        {
+          "production": {
+            "wall_ms": 136.055,
+            "cpu_ms": 133.229
+          },
+          "recipient": {
+            "wall_ms": 112.218,
+            "cpu_ms": 111.105
+          },
+          "accepted_delivery": {
+            "wall_ms": 248.273,
+            "cpu_ms": 244.334
+          }
+        },
+        {
+          "production": {
+            "wall_ms": 146.576,
+            "cpu_ms": 146.311
+          },
+          "recipient": {
+            "wall_ms": 61.696,
+            "cpu_ms": 61.723
+          },
+          "accepted_delivery": {
+            "wall_ms": 208.272,
+            "cpu_ms": 208.034
+          }
+        },
+        {
+          "production": {
+            "wall_ms": 115.15,
+            "cpu_ms": 114.936
+          },
+          "recipient": {
+            "wall_ms": 67.507,
+            "cpu_ms": 67.381
+          },
+          "accepted_delivery": {
+            "wall_ms": 182.657,
+            "cpu_ms": 182.317
+          }
+        },
+        {
+          "production": {
+            "wall_ms": 138.694,
+            "cpu_ms": 138.332
+          },
+          "recipient": {
+            "wall_ms": 64.528,
+            "cpu_ms": 64.384
+          },
+          "accepted_delivery": {
+            "wall_ms": 203.222,
+            "cpu_ms": 202.716
+          }
+        }
+      ],
+      "direct_sql": [
+        {
+          "production": {
+            "wall_ms": 86.737,
+            "cpu_ms": 86.944
+          },
+          "recipient": {
+            "wall_ms": 132.868,
+            "cpu_ms": 130.83
+          },
+          "accepted_delivery": {
+            "wall_ms": 219.605,
+            "cpu_ms": 217.774
+          }
+        },
+        {
+          "production": {
+            "wall_ms": 59.197,
+            "cpu_ms": 57.917
+          },
+          "recipient": {
+            "wall_ms": 142.723,
+            "cpu_ms": 142.523
+          },
+          "accepted_delivery": {
+            "wall_ms": 201.92,
+            "cpu_ms": 200.44
+          }
+        },
+        {
+          "production": {
+            "wall_ms": 67.303,
+            "cpu_ms": 66.094
+          },
+          "recipient": {
+            "wall_ms": 121.504,
+            "cpu_ms": 121.16
+          },
+          "accepted_delivery": {
+            "wall_ms": 188.807,
+            "cpu_ms": 187.254
+          }
+        },
+        {
+          "production": {
+            "wall_ms": 56.134,
+            "cpu_ms": 56.09
+          },
+          "recipient": {
+            "wall_ms": 139.884,
+            "cpu_ms": 139.508
+          },
+          "accepted_delivery": {
+            "wall_ms": 196.018,
+            "cpu_ms": 195.598
+          }
+        }
+      ]
+    },
+    "median_ms": {
+      "retained": {
+        "production": {
+          "wall_ms": 137.3745,
+          "cpu_ms": 135.78050000000002
+        },
+        "recipient": {
+          "wall_ms": 66.01750000000001,
+          "cpu_ms": 65.8825
+        },
+        "accepted_delivery": {
+          "wall_ms": 205.747,
+          "cpu_ms": 205.375
+        }
+      },
+      "direct_sql": {
+        "production": {
+          "wall_ms": 63.25,
+          "cpu_ms": 62.0055
+        },
+        "recipient": {
+          "wall_ms": 136.37599999999998,
+          "cpu_ms": 135.169
+        },
+        "accepted_delivery": {
+          "wall_ms": 198.969,
+          "cpu_ms": 198.019
+        }
+      }
+    },
+    "canonical_sha256": {
+      "retained": "329d76d872195e194655ff6659430511ef2d5e05bab72e626c04e508fe83b09e",
+      "direct_sql": "329d76d872195e194655ff6659430511ef2d5e05bab72e626c04e508fe83b09e"
+    },
+    "delivered_bytes": {
+      "retained": 17368,
+      "direct_sql": 17368
+    }
+  }
+}

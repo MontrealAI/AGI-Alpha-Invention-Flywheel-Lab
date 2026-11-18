@@ -141,6 +141,23 @@ class DirectTests(unittest.TestCase):
             cutoff = stamp(ns)
             self.assertTrue(verify(calculate(cutoff), as_of=cutoff)["agrees"], cutoff)
 
+    def test_october_full_scientific_delivery_and_reference_at_each_revision(self):
+        from early import direct, END
+        sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+        from invention.early_survey.survey import calculate
+        statuses = set()
+        for date in ("2026-10-24", "2026-10-25", "2026-10-26", "2026-10-27",
+                     "2026-10-28", "2026-10-29", "2026-10-30", "2026-10-31", "2026-11-01"):
+            cutoff = date + "T00:00:00Z"
+            expected = direct(cutoff)
+            require_match(expected, calculate(cutoff))
+            statuses.update(a["status"] for c in expected["cohorts"] for a in c["alerts"])
+        self.assertEqual(statuses, {"awaiting_repeat", "coverage_gap"})
+        actual = calculate(END)
+        actual["cohorts"][1]["alerts"][0]["reference_image"]["rfids"][0] = "false-reference"
+        with self.assertRaisesRegex(ValueError, "rfids"):
+            require_match(direct(), actual)
+
     def test_open_frozen_scopes_and_edited_negative(self):
         self.assertEqual(conventional("2026-10-31T22:00:00Z")["cohorts"], [])
         self.assertEqual(len(conventional("2026-11-10T00:00:00Z")["cohorts"]), 2)
