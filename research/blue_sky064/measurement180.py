@@ -9,6 +9,7 @@ import argparse
 import hashlib
 import json
 import math
+import os
 from pathlib import Path
 import stat
 
@@ -22,18 +23,53 @@ REGISTRATION_PATH = ROOT / "campaign/blue-sky-064/friction-probe/MIXED_REGISTRAT
 
 
 def _regular_bytes(path: Path, maximum: int) -> bytes:
-    """Read bounded source/input bytes; reject symlinks and nonregular entries."""
-    if not path.is_absolute() or any(p.is_symlink() for p in (path, *path.parents)):
+    """Read one bounded regular inode through non-following, pinned descriptors.
+
+    Pathname prechecks alone race with a local writer changing a directory entry
+    before a subsequent Path.read_bytes(). Each directory is opened relative to
+    its already pinned parent, and the final file descriptor is read directly.
+    The caller receives bytes from that inode or an explicit failure; this does
+    not authenticate the submitter, capture a physical measurement or authorize
+    any economic action.
+    """
+    if not path.is_absolute() or any(part in {".", ".."} for part in path.parts[1:]):
         raise ValueError("ABSOLUTE_NON_SYMLINK_REGULAR_INPUT_REQUIRED")
-    if not path.is_file():
-        raise ValueError("REGULAR_INPUT_REQUIRED")
-    info = path.stat()
-    if not stat.S_ISREG(info.st_mode) or not 0 < info.st_size <= maximum:
-        raise ValueError("BOUNDED_REGULAR_INPUT_REQUIRED")
-    contents = path.read_bytes()
-    if not 0 < len(contents) <= maximum or len(contents) != info.st_size:
-        raise ValueError("INPUT_CHANGED_OR_OVERSIZED")
-    return contents
+    parent = os.open("/", os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW | os.O_CLOEXEC)
+    try:
+        try:
+            for component in path.parts[1:-1]:
+                child = os.open(component, os.O_RDONLY | os.O_DIRECTORY |
+                                os.O_NOFOLLOW | os.O_CLOEXEC, dir_fd=parent)
+                os.close(parent)
+                parent = child
+            file_fd = os.open(path.name, os.O_RDONLY | os.O_NOFOLLOW |
+                              os.O_NONBLOCK | os.O_CLOEXEC, dir_fd=parent)
+        except OSError as exc:
+            raise ValueError("ABSOLUTE_NON_SYMLINK_REGULAR_INPUT_REQUIRED") from exc
+        try:
+            initial = os.fstat(file_fd)
+            if not stat.S_ISREG(initial.st_mode) or not 0 < initial.st_size <= maximum:
+                raise ValueError("BOUNDED_REGULAR_INPUT_REQUIRED")
+            fragments = []
+            count = 0
+            while count <= maximum:
+                part = os.read(file_fd, min(16_384, maximum + 1 - count))
+                if not part:
+                    break
+                fragments.append(part)
+                count += len(part)
+            final = os.fstat(file_fd)
+            if (count != initial.st_size or count > maximum or
+                    (initial.st_dev, initial.st_ino, initial.st_size,
+                     initial.st_mtime_ns, initial.st_ctime_ns) !=
+                    (final.st_dev, final.st_ino, final.st_size,
+                     final.st_mtime_ns, final.st_ctime_ns)):
+                raise ValueError("INPUT_CHANGED_OR_OVERSIZED")
+            return b"".join(fragments)
+        finally:
+            os.close(file_fd)
+    finally:
+        os.close(parent)
 
 
 def _unique_pairs(pairs):
