@@ -46,7 +46,9 @@ def candidate(payload):
 
 
 def discovery(payload):
-    return obj({"candidates":array(candidate(payload), 5), "favourite":maybe(one([f"C{i}" for i in range(1,6)]))})
+    limit = payload.get("max_initial_candidates", 5)
+    return obj({"candidates": array(candidate(payload), limit),
+                "favourite": maybe(one([f"C{i}" for i in range(1, limit + 1)]))})
 
 
 def challenge(payload):

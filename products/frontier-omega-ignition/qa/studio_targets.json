@@ -1,0 +1,21 @@
+{
+  "scope": "Invited Mission Studio v1 candidate, one Linux operator host",
+  "currency": "USD",
+  "provider_spend_cap_per_mission": 0,
+  "max_global_workers": 2,
+  "max_model_calls_per_revision": 8,
+  "max_repairs_per_revision": 1,
+  "max_new_missions_per_tenant_utc_day": 20,
+  "http_request_slots": 16,
+  "staging_and_production_budgets": {
+    "p95_authenticated_status_ms_excluding_async_worker": 2000,
+    "status_sample_count": 30,
+    "required_passing_smoke_requests_percent": 100,
+    "duplicate_run_ids_per_retried_submission": 0,
+    "cross_tenant_missions_visible": 0,
+    "restore_time_objective_minutes": 30,
+    "backup_recovery_point_objective_hours": 24,
+    "availability_objective_percent_over_30_days": 99.5
+  },
+  "privacy": "Use only public engineering examples during hosted CI. Production target needs separately authorized, private accounts and public-safe test inputs. Invitation codes, session cookies, private prompts and full private logs never enter receipts."
+}

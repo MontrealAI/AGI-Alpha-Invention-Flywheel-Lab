@@ -137,6 +137,9 @@ class Store:
             db.executescript("""
                 CREATE TABLE IF NOT EXISTS revisions (
                   id TEXT NOT NULL, version INTEGER NOT NULL, data TEXT NOT NULL, PRIMARY KEY(id, version));
+                CREATE TABLE IF NOT EXISTS dispatch_queue (
+                  id TEXT NOT NULL, version INTEGER NOT NULL, epoch TEXT NOT NULL, token TEXT NOT NULL,
+                  ready_at REAL NOT NULL, PRIMARY KEY(id, version));
                 CREATE TABLE IF NOT EXISTS requests (
                   key TEXT PRIMARY KEY, fingerprint TEXT NOT NULL, id TEXT NOT NULL, version INTEGER NOT NULL);
             """)

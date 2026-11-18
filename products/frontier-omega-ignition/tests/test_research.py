@@ -43,6 +43,36 @@ def trial(first=None, second=None, sources=None, mission=None):
 
 
 class ResearchTests(unittest.TestCase):
+    def test_candidate_budget_applies_to_provider_and_semantic_validation(self):
+        from ignition.model_schema import discovery
+        from ignition.routing import validate_options
+        limited = dict(MISSION, resources={"max_initial_candidates": 2})
+        with self.assertRaises(ValueError):
+            trial(mission=limited)
+        for value in (0, True, 6, "2"):
+            with self.assertRaises(ValueError):
+                validate_options({"max_initial_candidates": value})
+        result, calls = trial(mission=limited, first={"candidates": [candidate(1)], "favourite": "C1"})
+        self.assertEqual(result["decision"], "build")
+        schema = discovery(calls[0][1])
+        self.assertEqual(schema["properties"]["candidates"]["maxItems"], 2)
+
+    def test_coverage_binds_every_requirement_by_identity_in_any_order(self):
+        requirements = ["Retain the identifier", "Reject invalid rows"]
+        checks = [{"requirement": r, "status": "supported", "check": "Compare the held-out receipt"}
+                  for r in reversed(requirements)]
+        mission = dict(MISSION, requirements=requirements)
+        valid, calls = trial(second={"fit": checks}, mission=mission)
+        self.assertEqual(valid["decision"], "build")
+        self.assertEqual(calls[0][1]["execution"]["authorized_contract_family"], "record_migration")
+        self.assertNotIn("SECRET_CASE", json.dumps(calls))
+        for invalid in ([checks[0]] * 2, [*checks, checks[0]], checks[:1],
+                        [checks[0], {**checks[1], "requirement": ["unexpected"]}],
+                        [checks[0], {**checks[1], "status": "unresolved"}]):
+            with self.subTest(invalid=invalid):
+                result, _ = trial(second={"fit": invalid}, mission=mission)
+                self.assertEqual(result["decision"], "defer")
+
     def test_sixth_candidate_can_defeat_favourite_without_privilege(self):
         result, calls = trial(second={"challenger": candidate(6), "selected": "C6"})
         self.assertEqual((result["initial_favourite"], result["selected"]["id"], result["decision"]), ("C1", "C6", "build"))

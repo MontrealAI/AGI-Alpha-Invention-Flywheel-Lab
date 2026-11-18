@@ -1,0 +1,17 @@
+[Unit]
+Description=FRONTIER OMEGA service alarms
+
+[Service]
+Type=oneshot
+User=ignition
+Group=ignition
+EnvironmentFile=/etc/ignition/studio.env
+Environment=PYTHONDONTWRITEBYTECODE=1
+WorkingDirectory=/srv/ignition/current/products/frontier-omega-ignition
+ExecStart=/usr/bin/python3 -m ignition.hosted_monitor --state ${IGNITION_STATE} --origin ${IGNITION_PUBLIC_ORIGIN} --port ${IGNITION_PORT}
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+StandardOutput=journal
+StandardError=journal

@@ -1,0 +1,35 @@
+[Unit]
+Description=FRONTIER OMEGA private mission worker
+After=network.target
+StartLimitIntervalSec=120
+StartLimitBurst=5
+
+[Service]
+User=ignition
+Group=ignition
+WorkingDirectory=/srv/ignition/current/products/frontier-omega-ignition
+EnvironmentFile=/etc/ignition/studio.env
+Environment=PYTHONDONTWRITEBYTECODE=1
+ExecStart=/usr/bin/python3 -m ignition.hosted --state ${IGNITION_STATE} --environment ${IGNITION_ENVIRONMENT} serve --origin ${IGNITION_PUBLIC_ORIGIN} --port ${IGNITION_PORT}
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=320
+UMask=0077
+NoNewPrivileges=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectSystem=strict
+ProtectHome=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictSUIDSGID=yes
+LockPersonality=yes
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+ReadWritePaths=/var/lib/ignition
+MemoryMax=2G
+TasksMax=64
+CPUQuota=200%
+
+[Install]
+WantedBy=multi-user.target

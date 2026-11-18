@@ -6,9 +6,11 @@ import hashlib
 import json
 import re
 import sys
+from collections import Counter
 from datetime import date, datetime, time, timedelta, timezone
 
 from discovery_field import protocol as factual
+from .construction import KINDS
 from pathlib import Path
 from urllib.parse import urlsplit
 
@@ -22,7 +24,6 @@ FEEDS = {
     "distribution": ("pypa/build", "package distribution archive integrity manifest"),
     "attestation": ("in-toto/attestation", "integrity provenance verification evidence"),
 }
-KINDS = {"record_migration", "manifest_audit"}
 CANDIDATE_FIELDS = ("title", "beneficiary", "outcome", "change", "obstruction",
                     "route", "value", "alternative", "scale", "test", "kind")
 SOURCE_LIMIT = 32
@@ -325,7 +326,10 @@ additional candidate when justified. For consequential objections cite a verbati
 For factual checks you may give a predicate of "source withdrawn" or "document unavailable".
 Compare complete alternatives, costs, outside options, rights, access and downside without invented numerical scores.
 Choose build, incumbent, defer or stop. Select a build only if the original outcome and every original requirement is served by
-the actual bounded construction specification. If no specification is supplied, propose a supported family only as a
+the actual bounded construction specification. A scoped experiment can be built to measure an unknown outcome:
+check that its inputs, authority, comparison and acceptance test exist before recommending the worker.
+Do not treat an unmeasured benefit as already achieved, or evidence of a release as evidence of benefit.
+If no specification is supplied, propose a supported family only as a
 direction for a new contract which the operator must approve. In fit, give each verbatim requirement, a concrete observable check and status
 supported, unresolved or unsupported. An incumbent may win. The candidate you select must exist; a challenger receives the
 next consecutive C identifier. Every objection.candidate must be the exact C identifier (no title or prose); target must
@@ -360,15 +364,24 @@ def investigate(mission, sources, propose, *, as_of=None):
         if premise and factual.qualified(source):
             public["observed_premise"] = {k: v for k, v in premise.items() if k != "excerpt_sha256"}
             public["verified_statement"] = factual.statement(premise)
-    payload = {"mission": context, "signals": model_signals, "baseline_date": str(when.date() - timedelta(days=35))}
+    payload = {"mission": context, "signals": model_signals, "baseline_date": str(when.date() - timedelta(days=35)),
+               "execution": {"installed_data_only_families": sorted(KINDS),
+                             "authorized_contract_family": public_spec.get("kind"),
+                             "new_contract_requires_approval": not bool(spec)}}
     candidate_shape = _CANDIDATE_SHAPE
     if any("observed_premise" in s for s in model_signals):
         candidate_shape = {**candidate_shape, "evidence": [{"source": "S ID", "metric": "observed metric",
                            "value": "reported value", "scope": "population and interpretation", "polarity": "asserted or denied"}]}
-    first = propose("discover", {**payload, "instructions": _DISCOVER, "response_shape": {
+    limit = mission.get("resources", {}).get("max_initial_candidates", 5)
+    if type(limit) is not int or not 1 <= limit <= 5:
+        raise ValueError("max_initial_candidates must be an integer from 1 to 5")
+    payload["max_initial_candidates"] = limit
+    instructions = _DISCOVER.replace("Generate five materially different routes",
+                                      f"Generate up to {limit} materially different routes")
+    first = propose("discover", {**payload, "instructions": instructions, "response_shape": {
         "candidates": [candidate_shape], "favourite": "C1"}})
-    if not isinstance(first, dict) or not isinstance(first.get("candidates"), list) or len(first["candidates"]) > 5:
-        raise ValueError("Discovery must return up to five initial candidates")
+    if not isinstance(first, dict) or not isinstance(first.get("candidates"), list) or len(first["candidates"]) > limit:
+        raise ValueError("Discovery exceeded the authorized initial candidate set or returned an invalid list")
     candidates = [_candidate(row, i + 1, signals, purpose) for i, row in enumerate(first["candidates"])]
     favourite = first.get("favourite")
     if favourite is not None and favourite not in [row["id"] for row in candidates]:
@@ -406,10 +419,11 @@ def investigate(mission, sources, propose, *, as_of=None):
         raise ValueError("Requirement coverage must be an array of observations")
     requirements = mission.get("requirements", [])
     has_spec = bool(spec)
-    complete_fit = bool((requirements or not has_spec) and len(fit) == len(requirements) and all(
-        row.get("requirement") == requirement and row.get("status") == "supported"
-        and isinstance(row.get("check"), str) and 0 < len(row["check"].strip()) <= 2000
-        for row, requirement in zip(fit, requirements)))
+    complete_fit = bool((requirements or not has_spec) and len(fit) == len(requirements)
+                        and all(isinstance(row.get("requirement"), str) and row.get("status") == "supported"
+                                and isinstance(row.get("check"), str) and 0 < len(row["check"].strip()) <= 2000
+                                for row in fit)
+                        and Counter(row["requirement"] for row in fit) == Counter(requirements))
     gate = None
     retrieved_ids = {s["id"] for s in signals if s.get("acquisition") in {
         "operator-authorized public repository", "curated publisher feed"}}

@@ -88,6 +88,71 @@ def status(store, run_id, version):
         return _summary(mission, _history(db, mission))
 
 
+
+def offer_draft(controller, run_id, version, language):
+    """Render a private, unsigned offer worksheet; no commercial event is recorded."""
+    if language not in ("en", "fr"):
+        raise StateError("Choose English or French")
+    # Use the ordinary delivery guard and exporter, including its independent
+    # validation and current revision, provider, artifact and operation checks.
+    archive_sha = hashlib.sha256(controller.deliver(run_id, version)).hexdigest()
+    state = controller.store.get(run_id, version)
+    controller.store.assert_operating(state)
+    record = status(controller.store, run_id, version)
+    french = language == "fr"
+
+    def text(en, fr):
+        return fr if french else en
+
+    def field(value):
+        # Free-form mission inputs stay on a single line in the worksheet.
+        return "".join(c for c in " ".join(str(value).split()) if c.isprintable())[:420]
+
+    mission = state["mission"]
+    terms = mission["resources"].get("commercial_case", {})
+    price = terms.get("price")
+    proposed = text("[Vincent to specify amount, currency and unit]", "[Montant, devise et unité à préciser par Vincent]")
+    if price:
+        amount = price["low"] if price["low"] == price["high"] else f'{price["low"]}–{price["high"]}'
+        proposed = f'{terms["currency"]} {amount} / {field(terms["unit"])}'
+    last_validated = next((row["event"] for row in reversed(record["history"])
+                           if row["event"]["stage"] == "validated"), {})
+    criteria = last_validated.get("details", {}).get("acceptance_criteria")
+    if not criteria:
+        criteria = " · ".join(field(req) for req in mission.get("requirements", [])[:8])
+    recipient = last_validated.get("counterparty") or text("[confirm legal recipient]", "[destinataire juridique à confirmer]")
+    lines = [
+        text("PRIVATE OFFER DRAFT · UNSENT", "PROJET D’OFFRE PRIVÉ · NON ENVOYÉ"),
+        "MONTREAL.AI × QUÉBEC.AI · FRONTIER Ω IGNITION",
+        "",
+        text("Offer reference", "Référence de l’offre") + f"  {run_id} / v{version}",
+        text("Proposed recipient", "Destinataire proposé") + "  " + field(recipient),
+        text("Intended beneficiary", "Bénéficiaire visé") + "  " + field(mission.get("beneficiary") or "—"),
+        text("Proposed outcome", "Résultat proposé") + "  " + field(mission["purpose"]),
+        text("Deliverable", "Livrable") + "  " + text("Portable verified package", "Paquet portable vérifié") + f' ({state["artifact"]["kind"]})',
+        text("Package SHA-256", "SHA-256 du paquet") + "  " + archive_sha,
+        text("Acceptance specification SHA-256", "SHA-256 de la spécification d’acceptation") + "  " + str(state.get("contract_sha256") or "—"),
+        text("Scope and criteria", "Périmètre et critères") + "  " + (field(criteria) if criteria else
+              text("Use the frozen acceptance tests in the package.", "Appliquer les essais d’acceptation figés dans le paquet.")),
+        text("Proposed price for review", "Prix proposé pour examen") + "  " + proposed,
+        "",
+        text("Suggested terms", "Conditions proposées"),
+        text("Deliver this revision and its verification package after the recipient and Vincent approve the scope, price, due date and permitted uses in writing.",
+             "Livrer cette révision et son dossier de vérification après accord écrit du destinataire et de Vincent sur le périmètre, le prix, l’échéance et les usages autorisés."),
+        text("The recipient can replay the included tests and compare its own workflow before accepting the outcome.",
+             "Le destinataire peut reproduire les essais inclus et comparer son processus avant d’accepter le résultat."),
+        "",
+        text("Payment route", "Modalités de paiement"),
+        text("Vincent issues the agreed invoice through a separately approved channel. Keep its reference with the signed acceptance, delivery acknowledgment and independent settlement evidence.",
+             "Vincent émet la facture convenue par un canal approuvé séparément. Conserver sa référence avec l’acceptation signée, l’accusé de réception et la preuve indépendante du règlement."),
+        "",
+        text("Internal review", "Examen interne"),
+        text("Check data and software rights, recipient identity, scope, terms and payment authority before sending anything. This download records no offer sent, beneficiary acceptance, delivery or payment.",
+             "Vérifier les droits sur les données et le logiciel, l’identité du destinataire, le périmètre, les conditions et l’autorisation de paiement avant tout envoi. Ce téléchargement ne consigne aucun envoi d’offre, accord du bénéficiaire, livraison ou paiement."),
+    ]
+    return "\n".join(lines) + "\n"
+
+
 def _allowed(stage, previous):
     return (stage in STAGES and (stage == NEXT.get(previous) or
             (stage == "withheld" and previous in (None, "identified", "validated"))))
