@@ -1,5 +1,21 @@
 # 🌌♾️ FRONTIER Ω — IGNITION
 
+## Run the sponsor research missions
+
+The private worker compares two real published opportunities, builds the registered candidates and advances after a failed economic premise. Its first output is a verified reversible circuit with a decision to withhold competition entry. Its second is a CPU patch for a real scroll ink reader. The operator can inspect the experiments, source rights, costs and the commercial decision for each. [Results and independent receiver](../../docs/frontier-omega-ignition/continuation/beneficiary-pursuit/REPORT.md) · [Download the offline scroll normalizer](../../docs/frontier-omega-ignition/continuation/beneficiary-pursuit/scroll-normalizer.zip)
+
+From this directory on Linux with Python 3.12, GNU C++20 and GNU patch:
+
+```sh
+python3 -B -m ignition --state ~/.frontier-ignition pursue examples/public-research.shortlist --request-id sponsor-research-001
+```
+
+The command includes research-only acquisition of 18 registered public CT positions. Use `start examples/scroll.json` for the offline operator. Each candidate runs as a standard private mission with its own controls and evidence. Repeat the pursuit command with the same ID to recover the same missions. It rejects changed inputs under an existing ID. The result identifies the local ZIP in the state's `recipients` directory. A commercial state of **identified** means that a dated research note identifies the counterparty and need. A verified export qualifies a local artifact. Only external evidence can establish buyer acceptance.
+
+Use `control ID pause --version N`, `control ID resume --version N`, or `control ID stop --version N` after the global state argument. Pause takes effect at a checkpoint. Stop is terminal for that mission. Add `--sequence S` to require the control state you inspected. The private browser exposes the same controls and commercial history. `serve --recover` also resumes active queued or interrupted revisions under their existing authority. An interrupted uncommitted field measurement is identified as such.
+
+Inspect a commercial record with `commercial ID --version N`. Supply `--template STAGE` to see the evidence required for a transition. Supply the completed local record through `--record FILE --evidence KIND=PATH` for each required source. Private documents stay with the operator. The journal stores their hashes and source descriptors. An offer or delivery must match the exact ZIP. Record only authorized actions actually taken and preserve an independent basis for the authenticity of outside records.
+
 ## From evidence to a decision · De la preuve à la décision
 
 Choose a candidate for MONTREAL.AI’s next engineering trial, withdraw a superseded astronomical alert, or recover the measurement that closes a scientific question. The bilingual exhibition lets you change the source, clock or evidence budget, see the resulting decision and take its executable recipient away. [Open the exhibition](../../docs/frontier-omega-ignition/continuation/FRONTIER_FIELD.html) · [Five-minute demonstration](showcase/field_exhibition/PRESENT.md) · [Results, limitations and costs](../../docs/frontier-omega-ignition/continuation/evidence-action/REPORT.md)

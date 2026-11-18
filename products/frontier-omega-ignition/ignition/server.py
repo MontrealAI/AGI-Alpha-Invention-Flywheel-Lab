@@ -15,10 +15,14 @@ from .store import Conflict, Missing, PRODUCT, StateError, canonical, strict_jso
 class Service(ThreadingHTTPServer):
     daemon_threads = True
 
-    def __init__(self, controller, port=8784):
+    def __init__(self, controller, port=8784, *, recover=False):
         self.controller = controller
         self.pool = ThreadPoolExecutor(max_workers=4, thread_name_prefix="ignition")
         super().__init__(("127.0.0.1", port), Handler)
+        if recover:
+            for item in controller.store.inventory():
+                if item["operation_state"] == "active" and item["observed_status"] in {"queued", "running"}:
+                    self.enqueue(item["id"], item["version"])
 
     def enqueue(self, run_id, version):
         def work():
@@ -141,12 +145,26 @@ class Handler(BaseHTTPRequestHandler):
             run_id, version = ctrl.create(body)
             self.server.enqueue(run_id,version)
             return self._json(ctrl.view(run_id),202)
-        match = re.fullmatch(r"/api/runs/([a-f0-9]{32})(?:/(history|bundle|try|resume|amend|respond|approve|choose))?",route)
+        match = re.fullmatch(r"/api/runs/([a-f0-9]{32})(?:/(history|bundle|try|resume|amend|respond|approve|choose|operation|commercial))?",route)
         if not match:
             raise Missing("Unknown route")
         run_id, action = match.groups()
         if not post and not action:
             return self._json(ctrl.view(run_id))
+        if not post and action == "commercial":
+            from .commercial_handoff import status
+            version = parse_qs(parts.query).get("version", [])
+            if len(version) != 1:
+                raise StateError("Select one mission revision")
+            return self._json(status(ctrl.store, run_id, int(version[0])))
+        if post and action == "operation":
+            if set(body) != {"version", "sequence", "operation"} or type(body["sequence"]) is not int:
+                raise StateError("Supply the current revision, control sequence and requested operation")
+            record = ctrl.set_operation(run_id, body["version"], body["operation"],
+                                        expected_sequence=body["sequence"])
+            if body["operation"] == "resume":
+                self.server.enqueue(run_id, body["version"])
+            return self._json(record)
         if not post and action == "history":
             return self._json({"versions":[{k:v for k,v in ctrl.public(s).items() if k!="handoff"}
                                            for s in ctrl.store.history(run_id)]})
@@ -165,6 +183,8 @@ class Handler(BaseHTTPRequestHandler):
                 ctrl.intervene(run_id,version,action,body)
             elif type(version) is not int or version != ctrl.store.get(run_id)["version"]:
                 raise Conflict("Resume requires the current version")
+            elif action == "resume":
+                ctrl.store.assert_operating(ctrl.store.get(run_id, version))
             self.server.enqueue(run_id,version)
             return self._json(ctrl.view(run_id),202)
         raise Missing("Unknown route or method")

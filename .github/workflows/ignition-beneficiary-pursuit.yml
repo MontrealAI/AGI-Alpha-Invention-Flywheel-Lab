@@ -1,0 +1,62 @@
+name: IGNITION beneficiary pursuit and transferred recipients
+on:
+  pull_request:
+    paths:
+      - 'products/frontier-omega-ignition/**'
+      - '.github/workflows/ignition-beneficiary-pursuit.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+env:
+  SOURCE: ${{ github.event.pull_request.head.sha || github.sha }}
+  PYTHONDONTWRITEBYTECODE: '1'
+jobs:
+  mission:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    outputs:
+      manifest: ${{ steps.mission.outputs.manifest }}
+    steps:
+      - run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ env.SOURCE }}
+          persist-credentials: false
+          sparse-checkout: |
+            products/frontier-omega-ignition
+            products/alpha-genesis-harness/bridge
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - id: mission
+        run: |
+          digest=$(python -IB products/frontier-omega-ignition/qa/qualify_pursuit.py produce "$RUNNER_TEMP/recipients" "$SOURCE")
+          echo "manifest=$digest" >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: ignition-beneficiary-recipients-${{ env.SOURCE }}
+          path: ${{ runner.temp }}/recipients
+          if-no-files-found: error
+  recipient:
+    needs: mission
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ env.SOURCE }}
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: /products/frontier-omega-ignition/qa/qualify_pursuit.py
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: ignition-beneficiary-recipients-${{ env.SOURCE }}
+          path: ${{ runner.temp }}/received
+      - name: Run both delivered recipients in clean directories
+        env:
+          MANIFEST: ${{ needs.mission.outputs.manifest }}
+        run: python -IB products/frontier-omega-ignition/qa/qualify_pursuit.py receive "$RUNNER_TEMP/received" "$MANIFEST"

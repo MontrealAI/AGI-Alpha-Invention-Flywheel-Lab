@@ -1,0 +1,7 @@
+{
+  "attempts": [
+    {"scope":"First final source-matched CLI start and export", "status":"failed", "stage":"Export qualification", "finding":"An isolated /bin/c++ C++20 shared-object compile returned exit 1. No source change was made as a recovery. The inner wrapper emitted the final compiler-command failure; the underlying compiler diagnosis was unavailable.", "cost":"Unmetered attempt; no new CT acquisition."},
+    {"scope":"Exact final source raw CLI cold compile and self-check", "status":"passed", "cases":32},
+    {"scope":"Archive rebuilt directly from the frozen package members, then self-check in a fresh extraction with scrubbed environment", "status":"passed", "cases":32}
+  ]
+}

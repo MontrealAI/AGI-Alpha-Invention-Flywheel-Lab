@@ -59,7 +59,7 @@ def runtime_source():
     # Hash the trusted computation, including the checker and portable recipient path.
     # Editing a stylesheet or command-line help does not change an accepted calculation.
     paths = [PRODUCT / "ignition" / f"{n}.py" for n in
-             ("construction","evaluation","delivery","portable","provider","research","controller","store","economics","model_schema","routing","development","pairing_specialist","endpoint_specialist","followup_specialist","change_specialist","fixed_delivery","change_recipient","evidence_specialist")]
+             ("construction","evaluation","delivery","portable","provider","research","controller","store","economics","model_schema","routing","development","pairing_specialist","endpoint_specialist","followup_specialist","change_specialist","fixed_delivery","change_recipient","evidence_specialist","scroll_specialist","quantum_specialist")]
     paths += [PRODUCT / "discovery_field" / name for name in ("protocol.py", "catalog.json")]
     paths += [PRODUCT / "discovery_field" / "decision_study" / name
               for name in ("private_sources.py", "evaluate.py", "missions.json", "sources.json", "publisher_observations.json")]
@@ -116,6 +116,15 @@ def event(state, stage, message, status=None):
     state["events"].append({"stage": stage, "at": timestamp(), "message": message})
 
 
+def initial_operation():
+    return {"state": "active", "sequence": 0, "history": []}
+
+
+def require_active(operation):
+    if operation["state"] != "active":
+        raise Conflict(f"Mission is {operation['state']} by operator control")
+
+
 class Store:
     def __init__(self, directory):
         self.root = Path(directory).expanduser()
@@ -141,7 +150,7 @@ class Store:
         finally:
             db.close()
 
-    def create(self, body, provider, runtime, *, run_id=None, base=None, inherited=None, specialist_source=None):
+    def create(self, body, provider, runtime, *, run_id=None, base=None, inherited=None, specialist_source=None, source_sequence=None):
         if not isinstance(body, dict) or set(body) - {"mission", "sources", "request_id", "version"}:
             raise StateError("Unexpected mission request")
         key = body.get("request_id")
@@ -156,6 +165,15 @@ class Store:
         fp = digest([run_id, base, mission, sources, inherited])
         with self.connection() as db:
             db.execute("BEGIN IMMEDIATE")
+            if run_id is not None:
+                require_active(self._get(db, run_id)["operation"])
+            if inherited:
+                source = self._get(db, inherited["source_id"])
+                require_active(source["operation"])
+                if source["version"] != inherited["source_version"]:
+                    raise Conflict("Source mission was amended")
+                if source_sequence is not None and source["operation"]["sequence"] != source_sequence:
+                    raise Conflict("Operator control changed during reuse")
             previous = db.execute("SELECT fingerprint,id,version FROM requests WHERE key=?", (key,)).fetchone()
             if previous:
                 if previous[0] != fp:
@@ -171,11 +189,11 @@ class Store:
                 version = base + 1
             state = dict(id=run_id, version=version, mission=mission, sources=sources, provider=provider,
                          runtime=runtime, input_sha256=digest([mission, sources]), status="queued", stage="intake",
-                         events=[], calls={}, exchanges={}, source_result=None, research=None, contract=None,
+                         operation=initial_operation(), events=[], calls={}, exchanges={}, source_result=None, research=None, contract=None,
                          routing=None, construction_attempts=[],
                          proposed_contract=None, contract_sha256=None, artifact=None, evaluation=None,
                          handoff=None, error=None, inherited=inherited, created_at=timestamp())
-            if {"pairing_lab", "endpoint_lab", "followup", "change_desk", "evidence_action"} & mission["resources"].keys():
+            if {"pairing_lab", "endpoint_lab", "followup", "change_desk", "evidence_action", "scroll_normalization", "quantum_multiplier"} & mission["resources"].keys():
                 state["specialist_source"] = specialist_source
             event(state, "intake", "Mission and permission snapshot saved")
             db.execute("INSERT INTO revisions VALUES(?,?,?)", (run_id,version,canonical(state)))
@@ -192,26 +210,81 @@ class Store:
             row = db.execute("SELECT data FROM revisions WHERE id=? AND version=?", (run_id,version)).fetchone()
         if row is None:
             raise Missing("Unknown mission")
-        return json.loads(row[0])
+        state = json.loads(row[0])
+        state.setdefault("operation", initial_operation())
+        return state
 
     def get(self, run_id, version=None):
         with self.connection() as db:
             return self._get(db, run_id, version)
 
-    def save(self, state):
+    def set_operation(self, run_id, version, action, reason="", *, expected_sequence=None):
+        target_states = {"pause": "paused", "resume": "active", "stop": "stopped"}
+        if not isinstance(action, str) or action not in target_states:
+            raise StateError("Choose pause, resume or stop")
+        if not isinstance(reason, str) or len(reason) > 2000:
+            raise StateError("Operator reason must be text of up to 2000 characters")
+        if expected_sequence is not None and (type(expected_sequence) is not int or expected_sequence < 0):
+            raise StateError("Expected control sequence must be a nonnegative integer")
         with self.connection() as db:
             db.execute("BEGIN IMMEDIATE")
-            head = db.execute("SELECT MAX(version) FROM revisions WHERE id=?", (state["id"],)).fetchone()[0]
-            if state["version"] != head:
+            state = self._get(db, run_id)
+            if type(version) is not int or state["version"] != version:
+                raise Conflict("Stale mission version")
+            control = state["operation"]
+            if expected_sequence is not None and expected_sequence != control["sequence"]:
+                raise Conflict("Operator control changed. Refresh before acting")
+            target = target_states[action]
+            if control["state"] == target:
+                return state
+            if control["state"] == "stopped":
+                raise Conflict("A stopped mission cannot be restarted")
+            control["sequence"] += 1
+            control["state"] = target
+            control["history"].append({"action": action, "state": target, "at": timestamp(),
+                                       "sequence": control["sequence"], "reason": reason.strip()})
+            db.execute("UPDATE revisions SET data=? WHERE id=? AND version=?", (canonical(state), run_id, version))
+            return state
+
+    def assert_operating(self, state):
+        current = self.get(state["id"])
+        if current["version"] != state["version"]:
+            raise Conflict("Mission was amended")
+        require_active(current["operation"])
+        if current["operation"]["sequence"] != state["operation"]["sequence"]:
+            raise Conflict("Operator control changed during this operation")
+
+    def save(self, state, *, completed_call=False):
+        with self.connection() as db:
+            db.execute("BEGIN IMMEDIATE")
+            head = self._get(db, state["id"])
+            if state["version"] != head["version"]:
                 raise Conflict("This work was superseded by a new mission revision")
+            control = head["operation"]
+            interrupted = (control["state"] != "active" or control["sequence"] != state["operation"]["sequence"])
+            if interrupted:
+                if not completed_call:
+                    raise Conflict("Operator control changed. Work halted at its checkpoint")
+                # The previously authorized call has already returned. Preserve its
+                # receipt in the same revision without restoring any worker state.
+                head["calls"].update(state["calls"])
+                head["unsuccessful_calls"] = state.get("unsuccessful_calls", [])
+                state = head
+            else:
+                state["operation"] = control
             db.execute("UPDATE revisions SET data=? WHERE id=? AND version=?",
                        (canonical(state),state["id"],state["version"]))
+        if interrupted:
+            raise Conflict("Operator control changed during the call. Its receipt was retained")
 
     def history(self, run_id):
         with self.connection() as db:
             self._get(db, run_id)
-            return [json.loads(row[0]) for row in db.execute(
+            states = [json.loads(row[0]) for row in db.execute(
                 "SELECT data FROM revisions WHERE id=? ORDER BY version", (run_id,))]
+            for state in states:
+                state.setdefault("operation", initial_operation())
+            return states
 
     def inventory(self):
         """Private operator summary; this read grants no reuse authority."""
@@ -223,7 +296,8 @@ class Store:
                 state = json.loads(raw)
                 report = state["research"] or {}
                 yield {"id": state["id"], "version": state["version"], "purpose": state["mission"]["purpose"],
-                       "observed_status": state["status"], "recorded_at": state["events"][-1]["at"],
+                       "observed_status": state["status"], "operation_state": state.get("operation", {}).get("state", "active"),
+                       "recorded_at": state["events"][-1]["at"],
                        "decision": report.get("decision"), "frontier": report.get("frontier"),
                        "obstruction": state["error"] or report.get("decision_reason"),
                        "candidates": [{"title":c["title"], "obstruction":c["obstruction"], "test":c["test"]}

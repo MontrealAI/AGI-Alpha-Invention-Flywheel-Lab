@@ -62,6 +62,11 @@ function commercialEvidence(e) {
 function results(run) {
   $("results").replaceChildren();
   const r=run.research || {};
+  if (run.field_decision) {
+    const field = section("Field decision");
+    entry(field, stageLabel(run.field_decision.disposition), run.field_decision.reason);
+    field.append(elem("p", run.field_decision.next_action));
+  }
   if (run.error) entry($("results"),"Run obstruction",lineText(run.error));
   if (Array.isArray(run.source_result?.failures) && run.source_result.failures.length) {
     detail($("results"),"Source retrieval failures",run.source_result.failures);
@@ -234,7 +239,11 @@ function readMission() {
   if (Object.hasOwn(mission.resources, "execution_strategy") || Object.hasOwn(mission.resources, "direct_method") || Object.hasOwn(mission.resources, "direct_after_research")) {
     throw Error("Use the route controls above. Remove their execution_strategy, direct_method or direct_after_research keys from Other resources.");
   }
-  mission.resources.execution_strategy = $("strategy").value;
+  const registered = mission.resources.quantum_multiplier || mission.resources.scroll_normalization;
+  if (registered && ($("strategy").value !== "adaptive" || $("direct-method").value || $("direct-after").checked)) {
+    throw Error("This experiment uses its registered source and method. Reset the route to automatic.");
+  }
+  if (!registered) mission.resources.execution_strategy = $("strategy").value;
   if ($("direct-method").value) mission.resources.direct_method = $("direct-method").value;
   if (!$("fallback-option").hidden && $("direct-after").checked) mission.resources.direct_after_research = true;
   return {mission,sources:parseField("sources",true)};
@@ -261,6 +270,14 @@ function buttons() {
   $("close-replay").hidden = !replay;
   $("recorded-bundle").hidden = true;
   $("history").hidden = replay;
+  const operation = current?.operation?.state;
+  const locked = operation === "paused" || operation === "stopped";
+  $("mission-operation").hidden = replay || !operation;
+  $("operation-state").textContent = operation ? "Mission " + operation : "";
+  $("pause-operation").hidden = locked;
+  $("resume-operation").hidden = operation !== "paused";
+  $("stop-operation").hidden = operation === "stopped";
+  for (const id of ["pause-operation", "resume-operation", "stop-operation"]) $(id).disabled = busy;
   $("mission").hidden = replay;
   if (replay) {
     $("bundle").removeAttribute("href");
@@ -269,15 +286,15 @@ function buttons() {
   }
   $("fresh").hidden = !current;
   $("start").textContent = current ? "Submit amended mission →" : "Start mission →";
-  $("start").disabled = !online || busy || Boolean(current && !dirty);
-  $("resume").hidden = !current || current.status !== "blocked" || dirty;
-  $("review").hidden = !current?.proposed_contract || current.status !== "awaiting_contract" || dirty;
-  $("mapping-choice").hidden = !current?.mapping_choice || current.status !== "awaiting_choice" || dirty;
+  $("start").disabled = !online || busy || locked || Boolean(current && !dirty);
+  $("resume").hidden = !current || current.status !== "blocked" || dirty || locked;
+  $("review").hidden = !current?.proposed_contract || current.status !== "awaiting_contract" || dirty || locked;
+  $("mapping-choice").hidden = !current?.mapping_choice || current.status !== "awaiting_choice" || dirty || locked;
   $("choice-options").disabled = busy || $("mapping-choice").hidden;
   $("apply-choice").disabled = busy || $("mapping-choice").hidden || !$("choice-options").querySelector("input:checked");
   $("abstain-choice").disabled = busy || $("mapping-choice").hidden;
-  $("handoff").hidden = !current?.handoff || current.status !== "awaiting_model" || dirty;
-  $("actions").hidden = current?.status !== "verified" || dirty;
+  $("handoff").hidden = !current?.handoff || current.status !== "awaiting_model" || dirty || locked;
+  $("actions").hidden = current?.status !== "verified" || dirty || locked;
   if ($("actions").hidden) $("bundle").removeAttribute("href");
   for (const id of ["resume","respond","approve","try"]) $(id).disabled = busy;
 }
@@ -347,7 +364,7 @@ function studyView(study) {
 }
 function pairingView(run) {
   const study = run.pairing_result;
-  const decision = study || run.endpoint_result || run.followup_result || run.change_result || run.evidence_result;
+  const decision = study || run.quantum_result || run.endpoint_result || run.followup_result || run.change_result || run.evidence_result;
   $("pairing-result").hidden = !study;
   $("pilot-next").hidden = study?.qualifies !== true;
   $("trial-label").hidden = Boolean(decision);
@@ -378,7 +395,9 @@ function pairingView(run) {
     $("evidence-attempts").replaceChildren(...receipt.attempts.map(a => elem("li", a.route + " · " + a.reason)));
     $("evidence-sha").textContent = receipt.sha256;
   }
-  $("recipient-command").textContent = run.evidence_result ? "python3 -IB action_study/desk.py verify decision.json --mission mission.json" :
+  $("recipient-command").textContent = run.quantum_result ? "python3 -IB replay.py" :
+    run.scroll_result ? "python3 -IB scroll_tool.py self-check" :
+    run.evidence_result ? "python3 -IB action_study/desk.py verify decision.json --mission mission.json" :
     run.change_result ? "python3 -IB review_change.py" :
     run.followup_result ? "python3 -IB review_followup.py" :
     run.endpoint_result ? "python3 -B endpoint_lab/replay_delivery.py" :
@@ -525,7 +544,7 @@ function mappingChoiceView(run) {
 }
 $("choice-options").addEventListener("change", buttons);
 function chooseRule(abstain) {
-  if (!current?.mapping_choice || current.status !== "awaiting_choice" || dirty || replay || busy) return;
+  if (!current?.mapping_choice || current.status !== "awaiting_choice" || dirty || locked || replay || busy) return;
   const request = current.mapping_choice;
   if (renderedChoice !== json([current.id, current.version, request.sha256])) return;
   const choice = abstain ? "abstain" : $("choice-options").querySelector("input:checked")?.value;
@@ -594,6 +613,11 @@ function executionView(run) {
 function show(run, open = false) {
   if (!run?.id) throw Error("The service returned an incomplete run record.");
   if (current && current.id !== run.id) {dirty=false;lastHandoff=null;lastTrial=null;}
+  if (current?.id !== run.id || current?.version !== run.version || replay) {
+    $("commercial-record").open = false;
+    $("commercial-state").textContent = "";
+    $("commercial-events").replaceChildren();
+  }
   current=run; if (!replay) remember(run.id); $("record").hidden=false; $("empty").hidden=true;
   $("record-title").textContent=run.mission?.purpose || "Execution & evidence";
   $("run-status").textContent=[run.status,run.stage].filter(Boolean).join(" · ").replaceAll("_"," ");
@@ -658,12 +682,12 @@ $("fresh").addEventListener("click",()=>{
   $("example").value="";loadBrief();$("record").hidden=true;$("empty").hidden=false;$("record-title").textContent="Execution & evidence";runNotice("");message("");buttons();$("purpose").focus();
 });
 async function action(name,data) {
-  if (replay || busy || dirty || !current) return;
+  if (replay || busy || (dirty && name !== "operation") || !current) return;
   const id=current.id, version=current.version, token=++generation;
   busy=true;clearTimeout(timer);buttons();runNotice("");
   try {
     const result=await api(apiPath(id,"/"+name),{...data,version});
-    if(token!==generation || dirty || replay)return;
+    if(token!==generation || (dirty && name !== "operation") || replay)return;
     if (name==="try") $("output").textContent=json(result);
     else {const run=result.mission ? result : await api(apiPath(id)); if(token===generation)show(run);}
   } catch(e){if(token===generation){
@@ -672,6 +696,29 @@ async function action(name,data) {
   }}
   finally {busy=false;buttons();}
 }
+for (const operation of ["pause", "resume", "stop"]) {
+  $(operation + "-operation").addEventListener("click", () => {
+    if (operation === "stop" && !window.confirm("Stop this mission permanently? Its history will remain available.")) return;
+    action("operation", {operation, sequence:current.operation.sequence});
+  });
+}
+$("commercial-record").addEventListener("toggle", async () => {
+  if (!$("commercial-record").open || replay || !current) return;
+  const {id, version} = current;
+  $("commercial-state").textContent = "Loading commercial record…";
+  try {
+    const record = await api(apiPath(id, "/commercial") + "?version=" + version);
+    if (current?.id !== id || current?.version !== version || replay) return;
+    $("commercial-state").textContent = stageLabel(record.commercial_state) + " · " + record.next_action;
+    $("commercial-events").replaceChildren(...record.history.map(item => {
+      const li = elem("li");
+      li.textContent = [item.recorded_at, item.event.stage, item.event.counterparty, item.event.reviewer].join(" · ");
+      return li;
+    }));
+  } catch (err) {
+    if (current?.id === id && current?.version === version && !replay) $("commercial-state").textContent = err.message;
+  }
+});
 $("resume").addEventListener("click",()=>action("resume",{}));
 $("approve").addEventListener("click",()=>{
   try {
@@ -688,7 +735,7 @@ $("copy-prompt").addEventListener("click",async()=>{
   catch { $("prompt").parentElement.open=true; const range=document.createRange();range.selectNodeContents($("prompt"));getSelection().removeAllRanges();getSelection().addRange(range);runNotice("Prompt selected. Use your browser’s copy command."); }
 });
 $("try").addEventListener("click",()=>{
-  try {const input=current?.pairing_result || current?.endpoint_result || current?.followup_result || current?.change_result || current?.evidence_result ? {} : JSON.parse($("trial").value); action("try",{input});}
+  try {const input=current?.quantum_result || current?.pairing_result || current?.endpoint_result || current?.followup_result || current?.change_result || current?.evidence_result ? {} : JSON.parse($("trial").value); action("try",{input});}
   catch { $("output").textContent="Enter a valid JSON input."; }
 });
 $("trial").addEventListener("input",()=>{$("output").textContent="";});

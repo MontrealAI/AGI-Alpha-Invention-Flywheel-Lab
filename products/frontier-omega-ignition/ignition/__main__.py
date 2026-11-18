@@ -5,6 +5,7 @@ import sys
 import uuid
 from pathlib import Path
 
+from . import commercial_handoff
 from .controller import Controller
 from .server import Service
 from .store import StateError, Store, strict_json
@@ -16,12 +17,24 @@ def main():
     parser.add_argument("--assisted", nargs=2, metavar=("PROVIDER","MODEL"),
                         help="enable an explicitly operator-assisted model exchange")
     sub = parser.add_subparsers(dest="command",required=True)
+    campaign = sub.add_parser("pursue", help="run a frozen shortlist through construction, checking and local commercial handoff")
+    campaign.add_argument("shortlist", type=Path)
+    campaign.add_argument("--request-id", required=True, help="stable private pursuit identity, also used on restart")
+    commercial_handoff.register_cli(sub)
+    control = sub.add_parser("control", help="pause, resume or permanently stop a mission")
+    control.add_argument("id")
+    control.add_argument("operation", choices=("pause", "resume", "stop"))
+    control.add_argument("--version", type=int, required=True)
+    control.add_argument("--sequence", type=int, help="last seen operation sequence")
+    control.add_argument("--reason", default="")
     sub.add_parser("inventory")
     edition = sub.add_parser("reading-edition", help="build a local page-linked reading edition")
     edition.add_argument("--pdf", type=Path, required=True)
     edition.add_argument("--source", type=Path, required=True)
     edition.add_argument("--output", type=Path, required=True, help="new local recipient directory")
-    sub.add_parser("serve").add_argument("--port",type=int,default=8784)
+    serve = sub.add_parser("serve")
+    serve.add_argument("--port", type=int, default=8784)
+    serve.add_argument("--recover", action="store_true", help="resume active queued or interrupted revisions within their existing grants")
     p = sub.add_parser("start")
     p.add_argument("file",type=Path)
     p.add_argument("--request-id",default=None)
@@ -49,14 +62,24 @@ def main():
         return
     ctrl = Controller(Store(args.state),assisted=args.assisted)
     if cmd == "serve":
-        with Service(ctrl,args.port) as server:
+        with Service(ctrl, args.port, recover=args.recover) as server:
             print(f"FRONTIER Ω IGNITION  http://127.0.0.1:{server.server_port}  |  {ctrl.identity()['mode']}",flush=True)
             try:
                 server.serve_forever()
             except KeyboardInterrupt:
                 pass
         return
-    if cmd == "inventory":
+    if cmd == "pursue":
+        from .pursuit import pursue
+        value = pursue(ctrl, args.shortlist, args.request_id)
+    elif cmd == "control":
+        value = ctrl.set_operation(args.id, args.version, args.operation, args.reason,
+                                   expected_sequence=args.sequence)
+        if args.operation == "resume":
+            value = ctrl.advance(args.id, args.version)
+    elif cmd == "commercial":
+        value = commercial_handoff.dispatch_cli(args, ctrl)
+    elif cmd == "inventory":
         value = list(ctrl.store.inventory())
     elif cmd in {"start","amend","successor"}:
         doc = strict_json(args.file.read_bytes())
