@@ -32,22 +32,32 @@ def confirm_arm(arm):
 
 
 def verify(record):
-    for name, key in [("REGISTRATION.md","registration_sha256"),("RECOVERY_REGISTRATION.md","recovery_registration_sha256")]:
+    for name, key in [("REGISTRATION.md","registration_sha256"),("RECOVERY_REGISTRATION.md","recovery_registration_sha256"),
+                      ("OUTPUT_REGISTRATION.md","output_registration_sha256"),("recovery.py","output_driver_sha256")]:
         require(hashlib.sha256((HERE/name).read_bytes()).hexdigest() == record[key], name + " differs from receipt")
     primary = record["model_experiment"]
     confirm_arm(primary)
+    receipts = primary["stage_receipts"]
+    require(receipts["workflow.discover"]["response_sha256"] == receipts["direct.discover"]["response_sha256"],
+            "Separate direct run did not reproduce the discovery")
+    require(receipts["workflow.challenge"]["status"] == "failed" and primary["challenge_terminal_log"], "Missing initial failure")
     followup = record.get("recovery_experiment")
     if followup:
         confirm_arm(followup)
+    extended = record.get("output_budget_experiment")
+    if extended:
+        confirm_arm(extended)
     ids = primary["arm_input_identity"]
     require(ids["workflow_discovery"] == ids["separate_direct_call"], "Input identity differs across arms")
     require(len(record["sources"]) == 4 and len({s["pinned_api_url"] for s in record["sources"]}) == 4, "Incomplete source inventory")
-    for r in [primary["restart"]] + ([followup["restart"]] if followup else []):
+    for r in [primary["restart"]] + [x["restart"] for x in (followup,extended) if x]:
         require(r["status"] == "observed_unchanged" and not r["missions"], "Duplicate mission on unchanged releases")
     return {"offline_record_check": "pass", "publisher_objects":len(record["sources"]),
             "first_workflow_status":primary["workflow"]["status"], "separate_direct_stages":1,
             "recovery_status":followup["status"] if followup else "registered",
-            "recovery_decision":followup["research_decision"] if followup else None}
+            "recovery_decision":followup["research_decision"] if followup else None,
+            "final_status":extended["status"] if extended else "registered",
+            "final_decision":extended["research_decision"] if extended else None}
 
 
 def capture(record, out):

@@ -11,7 +11,7 @@ Each discovery processed 3,439 input tokens and generated 1,951 output tokens. T
 
 The primary source revision was `bd0ddc3dddb643856edcb8aa81cfb978713cc73a`. The source-bound budget, exactly repeated prompt, negative result and source access conditions are recorded in `observation.json`. The GitHub connector acquired the publisher objects. The workspace's direct public-source transport separately recorded a DNS-policy refusal. The connector copies were imported into the ordinary observer interface. The receipt includes the direct transport failure and the two independently observed response identities.
 
-A separate recovery registered a fresh ordinary mission on `a44aa8535e7899aa197d6e17f567e86547792536` with a 12,288-token context. Its registration, driver and source identities accompany the observation.
+A fresh ordinary mission on `a44aa8535e7899aa197d6e17f567e86547792536` used a 12,288-token context. Its discovery reached the 2,048-token output ceiling and the controller declined the incomplete answer in 231.591 seconds. An unchanged observation again produced zero duplicate calls or children. A final registered experiment gives each model call the provider's usual 4,096-token output allowance. All four cited publisher excerpts also matched separate reads of their original public objects.
 
 ## Inspect or repeat
 
@@ -32,4 +32,4 @@ PYTHONPATH=. timeout 600 python -B evidence/source-observer-20261118/recovery.py
   --observations /tmp/observer-public-inputs --replay-at 2026-11-18T18:08:00+00:00
 ```
 
-Cache preparation can download the two public pinned assets. The model run requires a supported Linux x86-64 CPU environment. The registration documents, complete model-output digests, original source links, parser receipts and resource measurements are included. The local-model answers are hypotheses.
+Cache preparation can download the two public pinned assets. The model run requires a supported Linux x86-64 CPU environment. For the final experiment use a new work directory, `--output-tokens 4096` and a 900-second time limit. The registration documents, complete model-output digests, original source links, parser receipts and resource measurements are included. The local-model answers are hypotheses.

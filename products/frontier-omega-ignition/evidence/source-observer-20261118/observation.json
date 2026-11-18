@@ -101,6 +101,28 @@
     ]
   },
   "executed_source_revision": "bd0ddc3dddb643856edcb8aa81cfb978713cc73a",
+  "independent_publisher_checks": [
+    {
+      "matching_excerpt_sha256": "fa6eb9a819e90d79380d2ef8f4fa96c45d8ab3d05d4b60215c12d1d02a317d3a",
+      "transport": "separate GitHub connector read of original object by ID",
+      "url": "https://api.github.com/repos/ggml-org/llama.cpp/releases/450305209"
+    },
+    {
+      "matching_excerpt_sha256": "2e2810df251946be3b57bcf1c7741110019fc7a063f3c86dc6f3eefa3e596049",
+      "transport": "separate GitHub connector read of original object by ID",
+      "url": "https://api.github.com/repos/ggml-org/llama.cpp/releases/449701210"
+    },
+    {
+      "matching_excerpt_sha256": "7b911e1722121d9972f6a02559d80c97ee175f71e930c33a33357cbd06c03e58",
+      "transport": "separate GitHub connector read of original object by ID",
+      "url": "https://api.github.com/repos/ggml-org/llama.cpp/releases/449683399"
+    },
+    {
+      "matching_excerpt_sha256": "8b1289c2d376c28775298598e8d4883bc763a6a1e20e6593385ea26924c6283f",
+      "transport": "separate GitHub connector read of original object by ID",
+      "url": "https://api.github.com/repos/ggml-org/llama.cpp/commits/a0e6dc7384edb8f5d927155e1d26c10b4a310e6d"
+    }
+  ],
   "mission_brief_sha256": "abccb6b3d06d216a14a850ca19a98d3c6ae06fc82b8d5018c118f2da279c9350",
   "model_experiment": {
     "arm_input_identity": {
@@ -502,7 +524,172 @@
     }
   },
   "original_experiment_driver_sha256": "e1bf6471da7d868f9c2d90f6f176feb816d397e1f40a69fed22e216fd75051d1",
+  "output_driver_sha256": "2f7a97c7257f105acea793db31a6519563f1ee6e1178cda1784df10c9c692d8b",
+  "output_registration_sha256": "640e1fb7320f4b49ad2b2cf385c4dc509740924379d89d53697bb17f0eee87fd",
   "recovery_driver_sha256": "6b12136dcf8d928fff4199cd73327daf0a0aa05521fcd6f6fc534decabbdd644",
+  "recovery_experiment": {
+    "assets": {
+      "model_repository": "bartowski/Qwen_Qwen3-4B-Instruct-2507-GGUF",
+      "model_revision": "ae44f08e1392f39c0e474af10c3ff8355c8b6688",
+      "runtime_archive_bytes": 23158635,
+      "runtime_archive_sha256": "909eef25cd53e6601c8a07c866d8dbb2983e74177088d55182137a8fb8255d62",
+      "server_sha256": "fe211d00c4754aa67aaa492d2c755ab0f6ef60bf30eee3c0c74a3496189cde17",
+      "weights_bytes": 2497280736,
+      "weights_preparation_wall_seconds": 1.8368,
+      "weights_sha256": "2fde00ce69dd4899c70d020845e2638353015bba0fdf161b3eb965f2bca4464e"
+    },
+    "attempts": 1,
+    "brief_sha256": "abccb6b3d06d216a14a850ca19a98d3c6ae06fc82b8d5018c118f2da279c9350",
+    "candidates": [],
+    "cpu_seconds": 909.0959978660001,
+    "error": "Local model step failed (PROVIDER_STREAM). No automatic retry was sent.",
+    "executed_source_revision": "a44aa8535e7899aa197d6e17f567e86547792536",
+    "failed_model_calls": [
+      {
+        "at": "2026-11-18T18:21:09.817+00:00",
+        "elapsed_seconds": 226.582,
+        "receipts": [
+          {
+            "application_model_calls": 1,
+            "complete_cost_known": false,
+            "declared_model_sha256": "2fde00ce69dd4899c70d020845e2638353015bba0fdf161b3eb965f2bca4464e",
+            "endpoint": "http://127.0.0.1:50217",
+            "error_code": "PROVIDER_STREAM",
+            "harness_adapter_sha256": "040c74262976c1c77822171d9a55937038f2b7977e12216f7d2fbef8ccc27014",
+            "harness_streaming_sha256": "c94164c9b5539e08ff731b9d23063ac5357351264e86ad081f24a4ebed181986",
+            "mode": "local",
+            "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+            "output_tokens": 2048,
+            "provider": "llama-cpp",
+            "recorded_at": "2026-11-18T18:17:23.235346+00:00",
+            "request_sha256": "dc0aa78ce6a19deb04df404857cfd83e9cc59fa0b961ae36c38860959399fbdc",
+            "response_schema_sha256": "15bc5654c7e2a97113f7452e135e72109ab440dbb281d6ac4806175c3c8ab508",
+            "response_sha256": null,
+            "run_id": "ignition_089a13de971248fa883848d8e5ff0f74",
+            "schema_implementation": "9ad43ad6e9af37b222b01cf5e0ebd3e6cedbb50918bdff1d0ec07aeaa9c7bce4",
+            "schema_output": true,
+            "stage": "discover",
+            "status": "failed",
+            "stream_fragments": 2043,
+            "stream_output_bytes": 8935,
+            "timeout_seconds": 240,
+            "transport_mode": "streaming-sse/1",
+            "usage": null,
+            "wall_seconds": 226.581859,
+            "weights_identity": "operator-declared"
+          }
+        ],
+        "request_sha256": "1f2ac18c54a9e2bf8b30d721dbd380fc0d59847ef9651f2cdef0fc41c0e947ae",
+        "stage": "discover"
+      }
+    ],
+    "finished_at": "2026-11-18T18:21:09.945729+00:00",
+    "hardware": {
+      "architecture": "x86_64",
+      "gpu_layers": 0,
+      "platform": "Linux",
+      "processor": "AMD EPYC 9V45 96-Core Processor",
+      "threads": 4
+    },
+    "inputs": [
+      {
+        "imported_representation_sha256": "92675a93eb1d398fef7dbcf86f2d936040d6df8595b4ee808e1a338869aa88ad",
+        "url": "https://api.github.com/repos/ggml-org/llama.cpp/releases?per_page=3"
+      },
+      {
+        "imported_representation_sha256": "e135991910cf02ccf06d8864eef962274dbe07310b6f914e3cb32cfd5ad28a98",
+        "url": "https://api.github.com/repos/ggml-org/llama.cpp/commits?per_page=1&until=2026-10-14T23:59:59Z"
+      },
+      {
+        "imported_representation_sha256": "92675a93eb1d398fef7dbcf86f2d936040d6df8595b4ee808e1a338869aa88ad",
+        "url": "https://api.github.com/repos/ggml-org/llama.cpp/releases?per_page=3"
+      },
+      {
+        "imported_representation_sha256": "e135991910cf02ccf06d8864eef962274dbe07310b6f914e3cb32cfd5ad28a98",
+        "url": "https://api.github.com/repos/ggml-org/llama.cpp/commits?per_page=1&until=2026-10-14T23:59:59Z"
+      }
+    ],
+    "local_server_totals": [
+      "slot print_timing: id  0 | task 0 | prompt eval time =   34326.04 ms /  3437 tokens (    9.99 ms per token,   100.13 tokens per second)",
+      "slot print_timing: id  0 | task 0 |        eval time =  192247.25 ms /  2048 tokens (   93.92 ms per token,    10.65 tokens per second)",
+      "slot      release: id  0 | task 0 | stop processing: n_tokens = 5484, truncated = 0"
+    ],
+    "model_outputs_by_sha256": {},
+    "reason": null,
+    "repeat_children": 0,
+    "repeat_model_calls": 0,
+    "repeat_status": "observed_unchanged",
+    "research_decision": null,
+    "restart": {
+      "missions": [],
+      "reserved": 1,
+      "status": "observed_unchanged"
+    },
+    "serving_configuration": [
+      "--ctx-size",
+      "12288",
+      "--parallel",
+      "1",
+      "--threads",
+      "4",
+      "--threads-batch",
+      "4",
+      "--n-gpu-layers",
+      "0",
+      "--seed",
+      "6144",
+      "--temp",
+      "0",
+      "--no-repack",
+      "--batch-size",
+      "128",
+      "--ubatch-size",
+      "64",
+      "--no-webui"
+    ],
+    "source_checked_decision": {
+      "decision": null,
+      "decision_reason": null,
+      "selected": null,
+      "selection_recommendation": null
+    },
+    "source_time_mode": "current",
+    "stage_receipts": {
+      "workflow.discover": {
+        "application_model_calls": 1,
+        "complete_cost_known": false,
+        "declared_model_sha256": "2fde00ce69dd4899c70d020845e2638353015bba0fdf161b3eb965f2bca4464e",
+        "endpoint": "http://127.0.0.1:50217",
+        "error_code": "PROVIDER_STREAM",
+        "harness_adapter_sha256": "040c74262976c1c77822171d9a55937038f2b7977e12216f7d2fbef8ccc27014",
+        "harness_streaming_sha256": "c94164c9b5539e08ff731b9d23063ac5357351264e86ad081f24a4ebed181986",
+        "mode": "local",
+        "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+        "output_tokens": 2048,
+        "provider": "llama-cpp",
+        "recorded_at": "2026-11-18T18:17:23.235346+00:00",
+        "request_sha256": "dc0aa78ce6a19deb04df404857cfd83e9cc59fa0b961ae36c38860959399fbdc",
+        "response_schema_sha256": "15bc5654c7e2a97113f7452e135e72109ab440dbb281d6ac4806175c3c8ab508",
+        "response_sha256": null,
+        "run_id": "ignition_089a13de971248fa883848d8e5ff0f74",
+        "schema_implementation": "9ad43ad6e9af37b222b01cf5e0ebd3e6cedbb50918bdff1d0ec07aeaa9c7bce4",
+        "schema_output": true,
+        "stage": "discover",
+        "status": "failed",
+        "stream_fragments": 2043,
+        "stream_output_bytes": 8935,
+        "timeout_seconds": 240,
+        "transport_mode": "streaming-sse/1",
+        "usage": null,
+        "wall_seconds": 226.581859,
+        "weights_identity": "operator-declared"
+      }
+    },
+    "started_at": "2026-11-18T18:17:18.354642+00:00",
+    "status": "blocked",
+    "verified": false,
+    "wall_seconds": 231.59072686400032
+  },
   "recovery_registration_sha256": "5aca51aa403aa9cfaba0bde555ff7a89047b3cf323223473fe97bea6d8999ec5",
   "registered_at_scope": "Registered and hashed before model inference; system UTC receipts report later acquisition and execution.",
   "registration_sha256": "be0f00d57ca0e3dfa8f65f36c4bda9df125d28e1fd4ca1e4fbad94a641984559",

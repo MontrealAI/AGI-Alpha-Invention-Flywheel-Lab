@@ -47,6 +47,7 @@ def run(args):
         clock = lambda: historical
     brief = json.loads(Path("examples/scout.json").read_text())
     record = {"started_at": stamp(), "source_time_mode": "historical replay" if args.replay_at else "current",
+              "max_output_tokens_per_call": args.output_tokens,
               "hardware": observe.hardware(), "inputs": [], "brief_sha256": observe.PINS.sha(Path("examples/scout.json"))}
     record["hardware"]["threads"] = min(4, record["hardware"]["threads"])
     first_wall, first_cpu = time.monotonic(), cpu()
@@ -76,7 +77,7 @@ def run(args):
         try:
             observe.local.wait_ready(proc, port)
             provider = LocalProvider("llama-cpp", observe.local.MODEL_ALIAS, port, observe.PINS.MODEL_SHA,
-                                     output_tokens=2048, timeout=240, schema_output=True, streaming=True)
+                                     output_tokens=args.output_tokens, timeout=240, schema_output=True, streaming=True)
             controller = Controller(Store(work / "state"), provider_factory=lambda: provider)
             # On a later day an explicitly labelled historical replay may fix the source evaluation clock.
             from contextlib import nullcontext
@@ -117,4 +118,6 @@ if __name__ == "__main__":
     parser.add_argument("--assets", required=True, type=Path, help="cache for the two verified public model/runtime assets")
     parser.add_argument("--observations", required=True, type=Path, help="directory containing the two publisher JSON arrays")
     parser.add_argument("--replay-at", help="explicit source timestamp for historical replay after the release window")
+    parser.add_argument("--output-tokens", type=int, choices=(2048,4096), default=2048,
+                        help="registered per-call output allowance")
     run(parser.parse_args())
