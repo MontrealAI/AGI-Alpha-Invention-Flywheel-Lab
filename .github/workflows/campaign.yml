@@ -53,6 +53,16 @@ jobs:
           python-version: '3.12'
       - run: |
           python -m pip install -r requirements-cycle004.txt -r requirements-perturb006.txt
+      - name: Install original-source optional incumbent dependency before whole-root discovery
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/ignition-pinned-wheel"
+          python -m pip download --only-binary=:all: --no-deps --dest "$RUNNER_TEMP/ignition-pinned-wheel" 'nucleuswatch==1.2.0'
+          wheel="$RUNNER_TEMP/ignition-pinned-wheel/nucleuswatch-1.2.0-py3-none-any.whl"
+          test -f "$wheel"
+          echo "7c578e37ec958008424d02cef843d856f773c87ce4158186e19c836900403ed0  $wheel" | sha256sum --check --status
+          python -m pip install --no-deps "$wheel"
       - name: Source-matched tests and actual connected replay
         run: |
           python -m unittest discover -s benchmarks -p 'test_*.py' -v
