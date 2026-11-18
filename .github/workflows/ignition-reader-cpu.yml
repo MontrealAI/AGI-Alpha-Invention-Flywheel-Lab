@@ -1,0 +1,63 @@
+name: Reader V3 native CPU qualification
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/ignition-reader-confirmation-20261118]
+    paths:
+      - .github/workflows/ignition-reader-cpu.yml
+      - products/frontier-omega-ignition/invention/scroll_reader/**
+      - products/frontier-omega-ignition/invention/scroll_normalization/candidate.patch
+  pull_request:
+    paths:
+      - .github/workflows/ignition-reader-cpu.yml
+      - products/frontier-omega-ignition/invention/scroll_reader/**
+      - products/frontier-omega-ignition/invention/scroll_normalization/candidate.patch
+permissions:
+  contents: read
+jobs:
+  reader:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 100
+    env:
+      STUDY: products/frontier-omega-ignition/invention/scroll_reader
+      QUALIFICATION_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+    steps:
+      - name: Start clock
+        run: |
+          echo "QUALIFICATION_STARTED=$(date +%s)" >> "$GITHUB_ENV"
+          mkdir "$RUNNER_TEMP/reader-receipts"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ env.QUALIFICATION_SHA }}
+          persist-credentials: false
+          sparse-checkout: |
+            products/frontier-omega-ignition/invention/scroll_reader
+            products/frontier-omega-ignition/invention/scroll_normalization
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Install and record CPU dependencies
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install --no-install-recommends -y nlohmann-json3-dev libblosc-dev liblz4-dev libzstd-dev libsqlite3-dev libcurl4-openssl-dev zlib1g-dev libpng-dev libjpeg-dev libtiff-dev ninja-build pkg-config time
+          python -m pip install -r "$STUDY/requirements-cpu.txt"
+          python -m py_compile "$STUDY/reader_cpu.py"
+          python -m pip freeze > "$RUNNER_TEMP/reader-receipts/python-dependencies.txt"
+          dpkg-query -W > "$RUNNER_TEMP/reader-receipts/system-dependencies.txt"
+          lscpu > "$RUNNER_TEMP/reader-receipts/cpu.txt"
+          git rev-parse HEAD > "$RUNNER_TEMP/reader-receipts/receiver-commit.txt"
+          test "$(git rev-parse HEAD)" = "$QUALIFICATION_SHA"
+      - name: Build both native readers and run paired full-model inference
+        run: bash "$STUDY/replay.sh" "$RUNNER_TEMP/reader-builds" "$RUNNER_TEMP/reader-receipts"
+      - name: Record job elapsed time
+        if: always()
+        run: |
+          echo "elapsed_seconds=$(($(date +%s) - QUALIFICATION_STARTED))" > "$RUNNER_TEMP/reader-receipts/job-cost.txt"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: reader-v3-native-cpu-${{ env.QUALIFICATION_SHA }}
+          path: ${{ runner.temp }}/reader-receipts
+          if-no-files-found: error
+          retention-days: 14
