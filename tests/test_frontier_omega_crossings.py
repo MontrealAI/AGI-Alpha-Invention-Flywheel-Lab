@@ -5,7 +5,7 @@ frontier capability are asserted by a successful test or synthetic fixture.
 """
 from __future__ import annotations
 import copy
-from datetime import date
+from datetime import date,timedelta
 import json
 import os
 from pathlib import Path
@@ -242,7 +242,22 @@ class FrontierCrossingTests(unittest.TestCase):
             self.assertEqual(p.returncode,0,err)
             after=CrossingInventory(self.root)
             self.assertTrue(any(e['id']=='test-event-in-process' for e in after.inventory.reservoir.rows('frontiers')))
-            self.assertEqual(after.inventory.refresh('2026-11-17')['tasks_added'],0)
+            # The live worker has advanced the durable UTC clock. Replaying
+            # yesterday is a regression, not an idempotence test.
+            with after.inventory.reservoir.tx() as connection:
+                row=connection.execute('SELECT as_of FROM inventory_clock WHERE id=1').fetchone()
+                self.assertIsNotNone(row)
+                observed_clock=row[0]
+                before=[tuple(x) for x in connection.execute(
+                    'SELECT id,state,hash,note FROM research_queue ORDER BY id')]
+            self.assertGreaterEqual(date.fromisoformat(observed_clock),date.fromisoformat(extra['observed_on']))
+            self.assertEqual(after.inventory.refresh(observed_clock)['tasks_added'],0)
+            with after.inventory.reservoir.tx() as connection:
+                now=[tuple(x) for x in connection.execute(
+                    'SELECT id,state,hash,note FROM research_queue ORDER BY id')]
+            self.assertEqual(now,before)
+            with self.assertRaisesRegex(ValueError,'REFRESH_CLOCK_REGRESSION_USE_READ_ONLY_PLAN'):
+                after.inventory.refresh((date.fromisoformat(observed_clock)-timedelta(days=1)).isoformat())
         finally:
             if p.poll() is None:p.kill();p.communicate(timeout=3)
 
