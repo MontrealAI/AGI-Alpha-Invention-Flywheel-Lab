@@ -177,6 +177,7 @@ def calculate(as_of=None, *, folder=HERE/"sources"):
         # The broker stores an MJD derived from a binary-float JD. At submillisecond
         # boundaries use the original alert epoch for this exact candidate.
         aggregate_window = sorted((row for row in db.values() if row["fid"] == fid
+                                   and row["rfid"] == refid
                                    and 61339 <= row["mjd"] < 61342 and (jd if row["candid"] == str(c["candid"])
                                    else D(str(row["mjd"])) + D("2400000.5")) < until),
                                   key=lambda row: (row["mjd"], int(row["candid"])))
