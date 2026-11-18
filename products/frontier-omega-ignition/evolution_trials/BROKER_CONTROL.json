@@ -1,0 +1,452 @@
+{
+  "scope": "Retrospective archival control of two already-issued Fink notices. Enumerate all ALeRCE-indexed detections in the requested bands and time interval. Measure positive ZTF difference PSF magnitude on public program 1 within a shared field, readout channel, filter and reference processing ID.",
+  "result": {
+    "target": "ZTF26acbezdh",
+    "issue_utc": "2026-10-26T00:00:00Z",
+    "deadline_utc": "2026-10-29T00:00:00Z",
+    "bands": {
+      "g": {
+        "baseline": {
+          "candid": "3579392285815015017",
+          "jd": 2461333.8922801,
+          "utc": "2026-10-20T09:24:53.000+00:00",
+          "magpsf": 17.33022117614746,
+          "sigmapsf": 0.041944317519664764
+        },
+        "trigger": {
+          "candid": "3584356425815015004",
+          "jd": 2461338.8564236,
+          "utc": "2026-10-25T08:33:14.999+00:00",
+          "magpsf": 16.49347686767578,
+          "sigmapsf": 0.03727375715970993
+        },
+        "reference": {
+          "field": 505,
+          "rcid": 58,
+          "fid": 1,
+          "rfid": 505120158
+        },
+        "trigger_delta_mag": -0.8367443084716797,
+        "indexed_in_window": 1,
+        "eligible_in_window": 1,
+        "status": "persisted",
+        "witness": {
+          "candid": "3587249065815015015",
+          "jd": 2461341.7490625,
+          "utc": "2026-10-28T05:58:38.999+00:00",
+          "magpsf": 16.260494232177734,
+          "sigmapsf": 0.03731248900294304
+        },
+        "signed_delta_mag": -1.0697269439697266,
+        "quadrature_error_mag": 0.05613864629455543,
+        "signed_formal_units": -19.05508975683073,
+        "registered_threshold_mag": 0.2,
+        "reference_stack": {
+          "jdstartref": 2458322.965104,
+          "jdendref": 2458426.842616,
+          "nframesref": 15
+        },
+        "same_reference_stack": true,
+        "programid": 1,
+        "isdiffpos": "t",
+        "days_after_issue": 2.249062499962747,
+        "signed_delta_with_issued_baseline_mag": -1.0697267678222673
+      },
+      "r": {
+        "baseline": {
+          "candid": "3580268845815015008",
+          "jd": 2461334.7688426,
+          "utc": "2026-10-21T06:27:08.000+00:00",
+          "magpsf": 17.056013107299805,
+          "sigmapsf": 0.043045446276664734
+        },
+        "trigger": {
+          "candid": "3584382785815015006",
+          "jd": 2461338.8827894,
+          "utc": "2026-10-25T09:11:13.004+00:00",
+          "magpsf": 16.498058319091797,
+          "sigmapsf": 0.03055470809340477
+        },
+        "reference": {
+          "field": 505,
+          "rcid": 58,
+          "fid": 2,
+          "rfid": 505120258
+        },
+        "trigger_delta_mag": -0.5579547882080078,
+        "indexed_in_window": 1,
+        "eligible_in_window": 1,
+        "status": "persisted",
+        "witness": {
+          "candid": "3587389715815015003",
+          "jd": 2461341.8897106,
+          "utc": "2026-10-28T09:21:10.995+00:00",
+          "magpsf": 16.30483055114746,
+          "sigmapsf": 0.04858759418129921
+        },
+        "signed_delta_mag": -0.7511825561523438,
+        "quadrature_error_mag": 0.06491274723414385,
+        "signed_formal_units": -11.572188640280267,
+        "registered_threshold_mag": 0.2,
+        "reference_stack": {
+          "jdstartref": 2458316.965278,
+          "jdendref": 2458447.85191,
+          "nframesref": 34
+        },
+        "same_reference_stack": true,
+        "programid": 1,
+        "isdiffpos": "t",
+        "days_after_issue": 2.3897106000222266,
+        "signed_delta_with_issued_baseline_mag": -0.7511824488525392
+      }
+    }
+  },
+  "source_sha256": {
+    "index": "699356222cd1435b226eb47ba12f636d9516a167e02e917171c860152c7ec543",
+    "packets": {
+      "3579392285815015017": "012eaa1a962397158eedf40d7d2db7828d47a3b25966f3aa94f6a30515f49020",
+      "3580268845815015008": "81e19edd824398bf94c2c5171be456f10d06665836583ecc03101651f2756010",
+      "3584356425815015004": "a3b2a890a1eec098a9d2d43b132e6e63d4677f6f3b0a37483e8bbd8a583985a9",
+      "3584382785815015006": "938f2bde020ab8283fad247b6c428af301599f5f5c2eb6dcff103e666d52854a",
+      "3587249065815015015": "a4b072ffa754d4f7d941aa3e3798ca1665bcc4e89bd7f8298bb70355bf6ab77f",
+      "3587389715815015003": "08b9e75ac642bbe2c2bb199fd8edec3e133ccc0912ee45e43e5d31a7fc0b3408"
+    }
+  },
+  "archive": {
+    "bounded_votable": "broker_sources/alerce-window.vot",
+    "raw_anchors": "broker_sources/CANDID.avro.gz",
+    "shared_repeat_packets": [
+      "../invention/early_survey/exposures/sources/g.avro.gz",
+      "../invention/early_survey/exposures/sources/r.avro.gz"
+    ],
+    "index_query": "SELECT d.oid, d.candid, d.mjd, d.fid, d.rfid, d.pid FROM ztf.detection AS d WHERE d.oid='ZTF26acbezdh' AND d.fid IN (1,2) AND ((d.mjd>=61339 AND d.mjd<61342) OR d.candid IN (3579392285815015017,3584356425815015004,3580268845815015008,3584382785815015006)) ORDER BY d.mjd, d.candid",
+    "frozen_query": {
+      "utc": "2026-11-18T04:25:21.586959+00:00",
+      "url": "https://tap.alerce.online/tap/sync?REQUEST=doQuery&LANG=ADQL&FORMAT=votable&MAXREC=1000&QUERY=SELECT+d.oid%2C+d.candid%2C+d.mjd%2C+d.fid%2C+d.rfid%2C+d.pid+FROM+ztf.detection+AS+d+WHERE+d.oid%3D%27ZTF26acbezdh%27+AND+d.fid+IN+%281%2C2%29+AND+%28%28d.mjd%3E%3D61339+AND+d.mjd%3C61342%29+OR+d.candid+IN+%283579392285815015017%2C3584356425815015004%2C3580268845815015008%2C3584382785815015006%29%29+ORDER+BY+d.mjd%2C+d.candid",
+      "status": 200,
+      "wall_s": 5.692104998001014,
+      "cpu_s": 0.013090643999999999,
+      "size": 3908,
+      "sha256": "699356222cd1435b226eb47ba12f636d9516a167e02e917171c860152c7ec543"
+    },
+    "full_index_after_issue": "The public object lookup returned 44 detections. The exact bounded TAP response retains the four issued anchors and the two later indexed rows, six original packets with confirmed program ID 1. The original full-object response digest is recorded in discovery.",
+    "rights_sources": [
+      "https://science.alerce.online/services/ztf-database-api/",
+      "https://alerce.readthedocs.io/en/latest/apis.html",
+      "https://irsa.ipac.caltech.edu/data/ZTF/docs/ztf_pipelines_deliverables.pdf"
+    ],
+    "shared_physical_source": "Both brokers consume ZTF alerts. A common RFID plus matching stack dates and frame count documents reference metadata. Independent instrument photometry, contemporaneous broker availability, and physical calibration were outside this check."
+  },
+  "precision": "The all-Avro displacement uses the two original binary floating-point measurements. The issued-baseline displacement substitutes the rounded Fink baseline. The r calculations straddle a six-decimal rounding boundary. Formal units use only quoted quadrature uncertainty.",
+  "costs": {
+    "scope": "Client process and network elapsed time for this machine and endpoint. Six packet GETs run concurrently after one bounded TAP GET. Per-request thread CPU times overlap across threads. Mirrors, human work, deployment and opportunity cost are unpriced. Server-side compute, facility access and monetary savings were unmeasured.",
+    "repeatable_live_control": {
+      "requests_count": 7,
+      "response_bytes": 531584,
+      "wall_s": 11.147085468001023,
+      "process_cpu_s": 0.03468307899999999,
+      "requests": [
+        {
+          "url": "https://tap.alerce.online/tap/sync?REQUEST=doQuery&LANG=ADQL&FORMAT=votable&MAXREC=1000&QUERY=SELECT+d.oid%2C+d.candid%2C+d.mjd%2C+d.fid%2C+d.rfid%2C+d.pid+FROM+ztf.detection+AS+d+WHERE+d.oid%3D%27ZTF26acbezdh%27+AND+d.fid+IN+%281%2C2%29+AND+%28%28d.mjd%3E%3D61339+AND+d.mjd%3C61342%29+OR+d.candid+IN+%283579392285815015017%2C3584356425815015004%2C3580268845815015008%2C3584382785815015006%29%29+ORDER+BY+d.mjd%2C+d.candid",
+          "started_utc": "2026-11-18T04:30:26.761406+00:00",
+          "http": 200,
+          "http_date": "Wed, 18 Nov 2026 04:30:32 GMT",
+          "server_request_id": null,
+          "bytes": 3908,
+          "sha256": "f50f1fceb4d31b62d93ba7ec6cef688f838af3b96d1ea10d4ca43b4579ef4203",
+          "wall_s": 5.472724150997237,
+          "thread_cpu_s": 0.008769048000000002
+        },
+        {
+          "url": "https://avro.alerce.online/get_avro?oid=ZTF26acbezdh&candid=3579392285815015017",
+          "started_utc": "2026-11-18T04:30:32.235155+00:00",
+          "http": 200,
+          "http_date": "Wed, 18 Nov 2026 04:30:36 GMT",
+          "server_request_id": null,
+          "bytes": 90738,
+          "sha256": "012eaa1a962397158eedf40d7d2db7828d47a3b25966f3aa94f6a30515f49020",
+          "wall_s": 4.747864536999259,
+          "thread_cpu_s": 0.00436279
+        },
+        {
+          "url": "https://avro.alerce.online/get_avro?oid=ZTF26acbezdh&candid=3580268845815015008",
+          "started_utc": "2026-11-18T04:30:32.235634+00:00",
+          "http": 200,
+          "http_date": "Wed, 18 Nov 2026 04:30:36 GMT",
+          "server_request_id": null,
+          "bytes": 89368,
+          "sha256": "81e19edd824398bf94c2c5171be456f10d06665836583ecc03101651f2756010",
+          "wall_s": 4.695360183999583,
+          "thread_cpu_s": 0.002422613
+        },
+        {
+          "url": "https://avro.alerce.online/get_avro?oid=ZTF26acbezdh&candid=3584356425815015004",
+          "started_utc": "2026-11-18T04:30:32.236231+00:00",
+          "http": 200,
+          "http_date": "Wed, 18 Nov 2026 04:30:36 GMT",
+          "server_request_id": null,
+          "bytes": 87998,
+          "sha256": "a3b2a890a1eec098a9d2d43b132e6e63d4677f6f3b0a37483e8bbd8a583985a9",
+          "wall_s": 4.737378555997566,
+          "thread_cpu_s": 0.001994847
+        },
+        {
+          "url": "https://avro.alerce.online/get_avro?oid=ZTF26acbezdh&candid=3584382785815015006",
+          "started_utc": "2026-11-18T04:30:32.236642+00:00",
+          "http": 200,
+          "http_date": "Wed, 18 Nov 2026 04:30:37 GMT",
+          "server_request_id": null,
+          "bytes": 87222,
+          "sha256": "938f2bde020ab8283fad247b6c428af301599f5f5c2eb6dcff103e666d52854a",
+          "wall_s": 5.578493918997992,
+          "thread_cpu_s": 0.00208587
+        },
+        {
+          "url": "https://avro.alerce.online/get_avro?oid=ZTF26acbezdh&candid=3587249065815015015",
+          "started_utc": "2026-11-18T04:30:32.237234+00:00",
+          "http": 200,
+          "http_date": "Wed, 18 Nov 2026 04:30:36 GMT",
+          "server_request_id": null,
+          "bytes": 86192,
+          "sha256": "a4b072ffa754d4f7d941aa3e3798ca1665bcc4e89bd7f8298bb70355bf6ab77f",
+          "wall_s": 4.595198631002859,
+          "thread_cpu_s": 0.003202875
+        },
+        {
+          "url": "https://avro.alerce.online/get_avro?oid=ZTF26acbezdh&candid=3587389715815015003",
+          "started_utc": "2026-11-18T04:30:32.237750+00:00",
+          "http": 200,
+          "http_date": "Wed, 18 Nov 2026 04:30:37 GMT",
+          "server_request_id": null,
+          "bytes": 86158,
+          "sha256": "08b9e75ac642bbe2c2bb199fd8edec3e133ccc0912ee45e43e5d31a7fc0b3408",
+          "wall_s": 5.66557186999853,
+          "thread_cpu_s": 0.004484613
+        }
+      ]
+    },
+    "offline_stdlib_21_runs": {
+      "median_wall_s": 0.004338210004789289,
+      "median_process_cpu_s": 0.004312332000000002,
+      "p90_wall_s": 0.0046435440017376095,
+      "p90_process_cpu_s": 0.004644203999999999,
+      "scope": "File reads/decompression, typed decoding, hashing and adjudication after interpreter startup and reading the notice. Warm filesystem cache."
+    },
+    "initial_independent_discovery": {
+      "interval_start_utc": "2026-11-18T04:22:06.344937+00:00",
+      "elapsed_from_initial_GET_to_first_written_verdict_s": 131.310512,
+      "full_object_index": {
+        "utc": "2026-11-18T04:22:06.344937+00:00",
+        "url": "https://api.alerce.online/ztf/v1/objects/ZTF26acbezdh/detections",
+        "status": 200,
+        "wall_s": 5.574802380004257,
+        "cpu_s": 0.0067192999999999975,
+        "size": 22977,
+        "sha256": "2623954d1df12522d2079a8478772f58bf227879949eee16acfd0c5c255d37e5"
+      },
+      "first_packet": {
+        "utc": "2026-11-18T04:22:54.718306+00:00",
+        "url": "https://avro.alerce.online/get_avro?oid=ZTF26acbezdh&candid=3587249065815015015&format=json",
+        "status": 200,
+        "wall_s": 3.9128930660008336,
+        "thread_cpu_s": 0.007046345,
+        "size": 86192,
+        "sha256": "a4b072ffa754d4f7d941aa3e3798ca1665bcc4e89bd7f8298bb70355bf6ab77f"
+      },
+      "other_five_packet_batch_wall_s": 4.466013834993646,
+      "other_five_packet_batch_process_cpu_s": 0.033249720999999996,
+      "other_five_packets": [
+        {
+          "utc": "2026-11-18T04:23:16.891935+00:00",
+          "url": "https://avro.alerce.online/get_avro?oid=ZTF26acbezdh&candid=3579392285815015017&format=json",
+          "candid": "3579392285815015017",
+          "status": 200,
+          "wall_s": 3.639128234004602,
+          "thread_cpu_s": 0.006800693,
+          "size": 90738,
+          "sha256": "012eaa1a962397158eedf40d7d2db7828d47a3b25966f3aa94f6a30515f49020"
+        },
+        {
+          "utc": "2026-11-18T04:23:16.893141+00:00",
+          "url": "https://avro.alerce.online/get_avro?oid=ZTF26acbezdh&candid=3584356425815015004&format=json",
+          "candid": "3584356425815015004",
+          "status": 200,
+          "wall_s": 3.60181128399563,
+          "thread_cpu_s": 0.006377723,
+          "size": 87998,
+          "sha256": "a3b2a890a1eec098a9d2d43b132e6e63d4677f6f3b0a37483e8bbd8a583985a9"
+        },
+        {
+          "utc": "2026-11-18T04:23:16.893909+00:00",
+          "url": "https://avro.alerce.online/get_avro?oid=ZTF26acbezdh&candid=3580268845815015008&format=json",
+          "candid": "3580268845815015008",
+          "status": 200,
+          "wall_s": 4.462244267000642,
+          "thread_cpu_s": 0.004848858,
+          "size": 89368,
+          "sha256": "81e19edd824398bf94c2c5171be456f10d06665836583ecc03101651f2756010"
+        },
+        {
+          "utc": "2026-11-18T04:23:16.895066+00:00",
+          "url": "https://avro.alerce.online/get_avro?oid=ZTF26acbezdh&candid=3584382785815015006&format=json",
+          "candid": "3584382785815015006",
+          "status": 200,
+          "wall_s": 3.7141979430016363,
+          "thread_cpu_s": 0.004291566,
+          "size": 87222,
+          "sha256": "938f2bde020ab8283fad247b6c428af301599f5f5c2eb6dcff103e666d52854a"
+        },
+        {
+          "utc": "2026-11-18T04:23:16.895894+00:00",
+          "url": "https://avro.alerce.online/get_avro?oid=ZTF26acbezdh&candid=3587389715815015003&format=json",
+          "candid": "3587389715815015003",
+          "status": 200,
+          "wall_s": 3.487140366996755,
+          "thread_cpu_s": 0.005864376,
+          "size": 86158,
+          "sha256": "08b9e75ac642bbe2c2bb199fd8edec3e133ccc0912ee45e43e5d31a7fc0b3408"
+        }
+      ],
+      "ancillary_schema_probe": {
+        "url": "https://avro.alerce.online/openapi.json",
+        "status": 404,
+        "wall_s": 3.683587505001924,
+        "concurrent_with_first_packet": true
+      },
+      "independent_decoder": "fastavro 1.12.1, a full reader of all six original packets. The packaged standard-library reader reproduced both original signed displacements exactly.",
+      "initial_six_packet_fastavro_wall_s": 0.010347780997108202,
+      "initial_six_packet_fastavro_process_cpu_s": 0.010204946
+    },
+    "query_identity": "Every query records its URL, ZTF object or candidate IDs, timestamps, byte count and body hash. The endpoints returned no X-Request-ID header during the repeatable live run."
+  },
+  "other_target_software_check": {
+    "selection": "Engineering transfer on TNS 2024ijp (ZTF24aalougs); select an already-qualifying r anchor pair retrospectively. This check is outside the October cohort. The first later eligible indexed row adjudicates the supplied notice.",
+    "public_object_source": "https://www.wis-tns.org/object/2024ijp",
+    "notice": "broker_sources/alternate-notice.json",
+    "result": {
+      "target": "ZTF24aalougs",
+      "issue_utc": "2024-05-08T00:00:00Z",
+      "deadline_utc": "2024-05-11T00:00:00Z",
+      "bands": {
+        "r": {
+          "baseline": {
+            "candid": "2680256334115015001",
+            "jd": 2460434.756331,
+            "utc": "2024-05-04T06:09:06.998+00:00",
+            "magpsf": 18.609996795654297,
+            "sigmapsf": 0.12089851498603821
+          },
+          "trigger": {
+            "candid": "2683248874115015005",
+            "jd": 2460437.7488773,
+            "utc": "2024-05-07T05:58:22.998+00:00",
+            "magpsf": 18.069610595703125,
+            "sigmapsf": 0.08784026652574539
+          },
+          "reference": {
+            "field": 475,
+            "rcid": 41,
+            "fid": 2,
+            "rfid": 475120241
+          },
+          "trigger_delta_mag": -0.5403861999511719,
+          "indexed_in_window": 2,
+          "eligible_in_window": 2,
+          "status": "persisted",
+          "witness": {
+            "candid": "2684267954115015003",
+            "jd": 2460438.7679514,
+            "utc": "2024-05-08T06:25:51.000+00:00",
+            "magpsf": 17.9563045501709,
+            "sigmapsf": 0.07452250272035599
+          },
+          "signed_delta_mag": -0.6536922454833984,
+          "quadrature_error_mag": 0.1420213164899367,
+          "signed_formal_units": -4.602775566650359,
+          "registered_threshold_mag": 0.2840426329798734,
+          "reference_stack": {
+            "jdstartref": 2458165.915278,
+            "jdendref": 2458256.776146,
+            "nframesref": 15
+          },
+          "same_reference_stack": true,
+          "programid": 1,
+          "isdiffpos": "t",
+          "days_after_issue": 0.26795140001922846
+        }
+      }
+    },
+    "source_sha256": {
+      "index": "da410670051ad2b074d831056d2013eb849e7215e7d5d640b1712a2dbb6d9d79",
+      "packets": {
+        "2680256334115015001": "172fa34437a41644fcba66f085a8f6cd10a87b1f83021ba8b62ab4ff216d3400",
+        "2683248874115015005": "d0e670c3949542e123f721003a6ffe97dd7c05c06c9bdda3764ca8b0e8da4ecb",
+        "2684267954115015003": "e54c0c5eab251d774fc2ede8af8888f31c854fbd53d1fc8518525379c70a3db9",
+        "2686256384115015002": "0a563ac9c7db6f2af4fcc3a4bce6ac16afa8236abdced338dc60bc583db7ffda"
+      }
+    },
+    "cost": {
+      "requests_count": 5,
+      "response_bytes": 304619,
+      "wall_s": 9.442928807002318,
+      "process_cpu_s": 0.026135567,
+      "requests": [
+        {
+          "url": "https://tap.alerce.online/tap/sync?REQUEST=doQuery&LANG=ADQL&FORMAT=votable&MAXREC=1000&QUERY=SELECT+d.oid%2C+d.candid%2C+d.mjd%2C+d.fid%2C+d.rfid%2C+d.pid+FROM+ztf.detection+AS+d+WHERE+d.oid%3D%27ZTF24aalougs%27+AND+d.fid+IN+%282%29+AND+%28%28d.mjd%3E%3D60438+AND+d.mjd%3C60441%29+OR+d.candid+IN+%282680256334115015001%2C2683248874115015005%29%29+ORDER+BY+d.mjd%2C+d.candid",
+          "started_utc": "2026-11-18T04:32:13.383036+00:00",
+          "http": 200,
+          "http_date": "Wed, 18 Nov 2026 04:32:19 GMT",
+          "server_request_id": null,
+          "bytes": 3682,
+          "sha256": "da410670051ad2b074d831056d2013eb849e7215e7d5d640b1712a2dbb6d9d79",
+          "wall_s": 5.8671539509959985,
+          "thread_cpu_s": 0.007912167999999997
+        },
+        {
+          "url": "https://avro.alerce.online/get_avro?oid=ZTF24aalougs&candid=2680256334115015001",
+          "started_utc": "2026-11-18T04:32:19.251282+00:00",
+          "http": 200,
+          "http_date": "Wed, 18 Nov 2026 04:32:21 GMT",
+          "server_request_id": null,
+          "bytes": 73581,
+          "sha256": "172fa34437a41644fcba66f085a8f6cd10a87b1f83021ba8b62ab4ff216d3400",
+          "wall_s": 2.900493232998997,
+          "thread_cpu_s": 0.0030318449999999996
+        },
+        {
+          "url": "https://avro.alerce.online/get_avro?oid=ZTF24aalougs&candid=2683248874115015005",
+          "started_utc": "2026-11-18T04:32:19.252245+00:00",
+          "http": 200,
+          "http_date": "Wed, 18 Nov 2026 04:32:22 GMT",
+          "server_request_id": null,
+          "bytes": 75053,
+          "sha256": "d0e670c3949542e123f721003a6ffe97dd7c05c06c9bdda3764ca8b0e8da4ecb",
+          "wall_s": 3.007346286001848,
+          "thread_cpu_s": 0.004834156
+        },
+        {
+          "url": "https://avro.alerce.online/get_avro?oid=ZTF24aalougs&candid=2684267954115015003",
+          "started_utc": "2026-11-18T04:32:19.252915+00:00",
+          "http": 200,
+          "http_date": "Wed, 18 Nov 2026 04:32:22 GMT",
+          "server_request_id": null,
+          "bytes": 75383,
+          "sha256": "e54c0c5eab251d774fc2ede8af8888f31c854fbd53d1fc8518525379c70a3db9",
+          "wall_s": 3.570512411999516,
+          "thread_cpu_s": 0.0028587549999999997
+        },
+        {
+          "url": "https://avro.alerce.online/get_avro?oid=ZTF24aalougs&candid=2686256384115015002",
+          "started_utc": "2026-11-18T04:32:19.253175+00:00",
+          "http": 200,
+          "http_date": "Wed, 18 Nov 2026 04:32:22 GMT",
+          "server_request_id": null,
+          "bytes": 76920,
+          "sha256": "0a563ac9c7db6f2af4fcc3a4bce6ac16afa8236abdced338dc60bc583db7ffda",
+          "wall_s": 2.8997828460051096,
+          "thread_cpu_s": 0.0025835380000000002
+        }
+      ]
+    }
+  }
+}

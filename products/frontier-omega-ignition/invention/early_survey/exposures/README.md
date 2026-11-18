@@ -1,0 +1,43 @@
+# Two public detections recovered before the deadline
+
+The early-survey desk issued g and r notices for ZTF26acbezdh at 00:00 UTC on October 26, 2026. Its Fink object response had no qualifying repeat before October 29. An independent search found both repeats in another public broker, **ALeRCE**. Each original ZTF alert packet identifies a public-program observation, the exact science-image processing ID, the same detector and the same reference image as the original baseline and trigger. Both October 28 measurements sustain the predicted brightening of positive difference light. The original Fink-only receipt still records two gaps.
+
+| Band | Original baseline candid | October 25 trigger candid | October 28 first repeat candid | Repeat UTC | Reference image ID | Repeat − baseline, mag |
+| --- | --- | --- | --- | --- | --- | --- |
+| g | 3579392285815015017 | 3584356425815015004 | 3587249065815015015 | 05:58:39.000 | 505120158 | −1.06973 ± 0.05614 |
+| r | 3580268845815015008 | 3584382785815015006 | 3587389715815015003 | 09:21:10.995 | 505120258 | −0.75118 ± 0.06491 |
+
+**What changed the decision.** The research desk had treated a documented absence from one broker service as unresolved coverage. The second broker's dated light curve had two detections inside the original window, one in each band. We fetched both original survey packets by candid, then located both visits again in the history of the later public alert `3593289315815015006`. The pipeline supplied positive PSF magnitudes of 16.260494 and 16.304831 respectively. Both original packets report zero bad pixels and centroids within 0.05 arcsec of the matching trigger position. The read-only queries establish actual survey detections and their archive lineage. The reason the earlier Fink object response omitted the two records is unknown. [Scientific receipt](RESULT.json) · [Source queries, hashes, retrieval times and transfer costs](sources/index.json) · [Registration before acquisition](REGISTRATION.md)
+
+### Multiple measurements of the same exposures
+
+Aperture photometry gives a baseline-to-repeat change of −1.02130 ± 0.05719 mag in g and −0.63110 ± 0.06507 mag in r. Both pass the same persistence direction, magnitude and formal-error checks. An already-public forced PSF reduction separately gives −1.03900 ± 0.02193 and −0.76402 ± 0.02184 mag. The receiver recovers these values directly from the original fixed-position counts and the image zero point using `m = ZP − 2.5 log10(flux)`. It checks the separate ALeRCE forced-photometry product against each reconstruction. The errors in this comparison are first-order statistical flux errors. The image zero-point RMS values travel in the receipt. The confirmation uses status 0 for both fixed-position baseline and repeat. The original r trigger's forced measurement carried processing flag 56 and was excluded from this corroboration; the issued notice used its original detection PSF measurement.
+
+The g repeat's forced record first appears among our downloaded packets in the r alert later on October 28. Both forced repeats appear in the November 3 packet. A dated replay shows the subsequent calibration check only after that check's source packet time. PSF, aperture and forced estimates share exposures and reference images. These comparisons test extraction and photometric consistency; none is an independent third-instrument exposure. Two bands on one selected object do not measure population performance.
+
+### Why the public science-image search could not settle this
+
+The anonymous IRSA science-image index returned zero rows in the requested target footprint for either band in the October 26–29 interval. It also returned zero for the October 25 interval containing the already verified triggers. A broader same-position query returned **42** older rows in field 505, CCD 15, quadrant 3, readout 58. The latest returned g/r images in this search both date to September 18 and have November 17 public release dates. Queries through the audit date recovered no later rows in that footprint/filter/detector. ZTF describes a rolling 60-day public image-release window; individual images and updated light-curve releases have separate schedules. October image pixels could not be independently reduced from the anonymous full-frame archive at acquisition. The independent alert and forced records provide the measured result above. [Image-query controls and last public epochs](ARCHIVE_ACCESS.json) · [IRSA API](https://irsa.ipac.caltech.edu/docs/program_interface/ztf_api.html) · [ZTF-3 release schedule](https://www.ztf.caltech.edu/ztf-public-releases.html)
+
+### Reproduce
+
+Use Python 3.11+ with standard SQLite, from the product root. Each output path must be new.
+
+```sh
+python3 -B invention/early_survey/exposures/verify.py --check
+python3 -B invention/early_survey/exposures/verify.py --as-of 2026-10-28T07:00:00Z --out /tmp/ztf-early-one-witness.json
+python3 -B invention/early_survey/exposures/verify.py --as-of 2026-10-29T00:00:00Z --out /tmp/ztf-before-close.json
+python3 -B -m unittest discover -s invention/early_survey/exposures -p 'test_*.py'
+```
+
+At the first example cutoff only g has a visible repeat. At the second both direct repeats qualify. Timestamps govern retrospective data availability; actual broker ingestion latency at those times was not observed. The receiver compares the precise survey packet float to the original Fink baseline's published decimal. An independently decoded, all-Avro baseline can change the last displayed r digit at six decimals by less than a millionth of a magnitude. The comparison above uses five decimal places.
+
+To recheck the three original packets with the established Avro package, use `fastavro==1.12.1` in a separate environment, then run `python3 -B invention/early_survey/exposures/test_avro_external.py`. The offline recipient also supports these pinned records on a standard Python installation. To repeat the public HTTP acquisition, use `python3 -B invention/early_survey/exposures/refresh.py NEW_DIRECTORY`. The object histories and IRSA release index can grow after this observation. New captures and hashes describe a new retrieval.
+
+### Costs, rights and beneficiary scope
+
+The 14 retained successful metadata, history and packet requests returned 415,478 raw bytes in total. The sum of per-request wall times was 122.4537 seconds; several requests ran concurrently. Additional exploratory requests included two unsuccessful API-schema URLs and a Fink upper-limit query. Engineering time, dependency acquisition, any economic allocation of compute, human review, maintenance, archive operations and full service cost remain unpriced. A competent scientist can query the same brokers and calculate the same values directly. A decrease in booked exposures, a customer, prospective real-time service and revenue have yet to be measured.
+
+This study used anonymously served public scientific measurements. Every admitted source packet, including its embedded history, identifies survey program 1. Per the ZTF Science Data System, program 1 identifies public survey time; programs 2 and 3 have different rights. The ALeRCE aggregate projection retains only the six decision-bearing detections, each attributable to public survey packets or the program-checked original Fink baseline/trigger. All 76 records in the archived forced table declare program 1. The original observational credit belongs to ZTF at Palomar, the IPAC processing team and the Fink and ALeRCE brokers. The archive comparison creates no telescope allocation, observational authorship, commercial redistribution license or endorsement. [ZTF processing and public program definitions](https://irsa.ipac.caltech.edu/data/ZTF/docs/ztf_pipelines_deliverables.pdf) · [Survey alert distribution and recognized brokers](https://www.ztf.caltech.edu/ztf-alert-stream.html) · [Masci et al., Science Data System](https://doi.org/10.1088/1538-3873/aae8ac) · [Förster et al., ALeRCE](https://doi.org/10.3847/1538-3881/abe9bc) · [ALeRCE original-packet API](https://alerce.readthedocs.io/en/latest/tutorials/stamps_api.html) · [ZTF packet fields and units](https://zwickytransientfacility.github.io/ztf-avro-alert/schema.html)
+
+**Prochaine décision.** Les deux observations publiques du 28 octobre confirment, dans les bandes g et r, que la lumière différentielle mesurée reste plus brillante qu'à l'époque de référence choisie. Le service Fink initial n'avait livré aucune répétition admissible. L'archive ALeRCE a permis de retrouver les paquets ZTF originaux et une réduction indépendante des mêmes poses. Un essai prospectif peut maintenant comparer les deux voies de consultation pour une vraie file de priorités.

@@ -14,6 +14,7 @@ const product = path.resolve(__dirname, '..');
 const { qualifyMappingChoice } = require('./mapping_choice.cjs');
 const { qualifyEndpointDecision } = require('./endpoint_operator.cjs');
 const { qualifyFollowup } = require('./followup_operator.cjs');
+const { qualifyChangeDesk } = require('./change_operator.cjs');
 const { qualifyAdaptiveRepair, qualifyPairingDecision, qualifyPublicBoundary } = require('./adaptive_operator.cjs');
 
 async function assertLayout(page, width) {
@@ -147,6 +148,7 @@ async function main() {
     await qualifyPublicBoundary(page);
     await qualifyMappingChoice(page, work, assertLayout, receive, send);
     await qualifyFollowup(page, work, assertLayout, receive);
+    await qualifyChangeDesk(page, work, assertLayout, receive);
     await page.goto(pathToFileURL(path.join(product,'web','index.html')).href);
     await page.locator('.replay-picker summary').click();
     recording.mission.purpose='<img src=x onerror="document.body.dataset.injected=1">';

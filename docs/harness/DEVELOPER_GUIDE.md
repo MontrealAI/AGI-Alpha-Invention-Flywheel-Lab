@@ -8,6 +8,8 @@ The [local IGNITION application](../../products/frontier-omega-ignition/README.m
 
 The [field and invention continuation](../frontier-omega-ignition/continuation/field-invention/REPORT.md) adds a private, revisioned historical observing worklist, independent ephemeris and allocation checks, archival two-band photometry, and real loopback inference measurement with a separate service-quality decision. Rebuild the public recipient with `field_trials/qualify.py` from the IGNITION product. Its scope, matched alternatives, dated observations and outstanding adoption test are recorded with the instrument.
 
+The [dated transient decision](../frontier-omega-ignition/continuation/change-delivery/REPORT.md) follows two issued notices across public archives. Open the operator's `/change-desk` to create and amend its UTC cutoff, baseline and source scope. Numerical acceptance, external corroboration, the engineering CPU comparison and the beneficiary adoption question each have their own evidence.
+
 ### Customer HARNESS application
 
 The scoped [ALPHA GENESIS HARNESS](../../products/alpha-genesis-harness/README.md) continues the existing browser application with private model adapters, explicit ChatGPT-plan authorization, a separate Codex engineering path, and persistent bounded construction workflows. Its [operator guide](../../products/alpha-genesis-harness/docs/OPERATOR.md) and [workflow guide](../../products/alpha-genesis-harness/docs/AGENTIC-WORKFLOWS.md) document the actual call paths. It does not replace the native enterprise account or grant financial authority.

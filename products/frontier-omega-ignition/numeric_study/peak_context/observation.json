@@ -1,0 +1,118 @@
+{
+  "schema": "ignition.peak-context/1",
+  "source_baseline": "a16d3dd74cb231e04420fb320ed5386de6ef5c16",
+  "pdf_sha256": "b5ea8e5f3a3a4e94482e33de0ec47045d5f53b27cceaf5d384b62b94456a04d0",
+  "html_sha256": "9ec39a73734769df4b7a5483ff8ba54bc3449f25ef59f9d76a379743416dd633",
+  "pdf_bytes": 2206891,
+  "html_bytes": 363177,
+  "versions": {
+    "python": "3.12.14",
+    "pymupdf": "1.26.6",
+    "lxml": "6.1.1.0"
+  },
+  "scope": "six printed rows; numerical transcription and observation context",
+  "elapsed_seconds": {
+    "table_desk": 0.038304,
+    "pdf_geometry": 0.03978,
+    "semantic_dom": 0.010361,
+    "compare_and_encode": 0.001005
+  },
+  "results": {
+    "table_desk": {
+      "accepted": false,
+      "row_ids": 6,
+      "quantities": 24,
+      "conditions": [
+        "extinction_corrected_r_peak",
+        "host_extinction_method"
+      ],
+      "differences": [
+        {
+          "sn": "SN 2016coj",
+          "field": "peak_r_absolute_mag",
+          "observed": "-19.0±\\pm0.2"
+        },
+        {
+          "sn": "SN 2016coj",
+          "field": "host_E_BV_mag",
+          "observed": "≲\\lesssim 0.020"
+        },
+        {
+          "sn": "SN 2016coj",
+          "field": "distance_Mpc",
+          "observed": "24.90±\\pm1.75"
+        },
+        {
+          "sn": "SN 2016eiy",
+          "field": "peak_r_absolute_mag",
+          "observed": "-18.5±\\pm0.1"
+        },
+        {
+          "sn": "SN 2016eiy",
+          "field": "distance_Mpc",
+          "observed": "35.00±\\pm2.45"
+        },
+        {
+          "sn": "SN 2016gwl",
+          "field": "distance_Mpc",
+          "observed": "39.55±\\pm2.77"
+        },
+        {
+          "sn": "SN 2016hsc",
+          "field": "peak_r_absolute_mag",
+          "observed": "-17.2±\\pm0.1"
+        },
+        {
+          "sn": "SN 2016hsc",
+          "field": "distance_Mpc",
+          "observed": "28.70±\\pm2.00"
+        },
+        {
+          "sn": "SN 2017bzc",
+          "field": "peak_r_absolute_mag",
+          "observed": "-19.4±\\pm0.1"
+        },
+        {
+          "sn": "SN 2017bzc",
+          "field": "distance_Mpc",
+          "observed": "23.43±\\pm1.64"
+        },
+        {
+          "sn": "SN 2017cbv",
+          "field": "peak_r_absolute_mag",
+          "observed": "-19.1±\\pm0.1"
+        },
+        {
+          "sn": "SN 2017cbv",
+          "field": "distance_Mpc",
+          "observed": "15.02±\\pm1.05"
+        }
+      ],
+      "csv_sha256": "b72a2bbe20e9d0b99b575dc28a95e7a0b5dc3a4a2ecf6ae4a0db48cb3793b3c4"
+    },
+    "pdf_geometry": {
+      "accepted": true,
+      "row_ids": 6,
+      "quantities": 36,
+      "conditions": [
+        "six_entries_only",
+        "extinction_corrected_r_peak",
+        "host_extinction_method"
+      ],
+      "differences": [],
+      "csv_sha256": "befa4715cccf300e6f2fb436f0b733be6bbd9d89a1a3022bfd9fad53abba3c84"
+    },
+    "semantic_dom": {
+      "accepted": true,
+      "row_ids": 6,
+      "quantities": 36,
+      "conditions": [
+        "six_entries_only",
+        "extinction_corrected_r_peak",
+        "host_extinction_method"
+      ],
+      "differences": [],
+      "csv_sha256": "befa4715cccf300e6f2fb436f0b733be6bbd9d89a1a3022bfd9fad53abba3c84"
+    }
+  }
+}

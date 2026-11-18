@@ -11,13 +11,16 @@ PRODUCT = HERE if (HERE / "invention").is_dir() else HERE.parents[1]
 sys.path.insert(0, str(PRODUCT / "invention"))
 from qualify import qualification
 from verify import verify
+# The delivered entry point also runs with Python isolated mode.
+sys.path.insert(0, str(HERE))
+from change_desk import check_snapshot
 
 
 def read(path):
     return json.loads(path.read_bytes())
 
 
-def replay(case_path=None):
+def replay(case_path=None, snapshot_path=None):
     sky = qualification()
     if sky != read(PRODUCT / "invention/public.json"):
         raise ValueError("Frozen worklists or archive photometry differ from fresh qualification")
@@ -43,6 +46,44 @@ def replay(case_path=None):
               "second_week": {"targets": second["targets"], "pairs_120": len(second["pairs_120"]),
                               "pairs_10": len(second["pairs_10"]), "previously_withheld_now_measured": newly_measured},
               "fixture_captures": len(read(field / "PUBLIC.json")["receipts"]), "archive_dates": recorded["summary"]["dates"]}
+    again = field / "hosted_repeat"
+    operation = (again / "operation.json").read_bytes()
+    if hashlib.sha256(operation).hexdigest() != "920c40abf16dac96fb489424a135333bcaf06df47637363c3d41e66b37a12e6a":
+        raise ValueError("Hosted CPU observation identity changed")
+    receipt = json.loads(operation)
+    wire = again / "wire.json"
+    if hashlib.sha256(wire.read_bytes()).hexdigest() != receipt["receipt_sha256"]:
+        raise ValueError("Hosted CPU wire evidence differs from its operation")
+    repeated, = json.loads(subprocess.check_output([
+        sys.executable, "-B", str(field / "verify.py"), "--workload", str(field / "intake_workload.json"),
+        "--receipt", str(wire)]))
+    result["hosted_intake_repeat"] = repeated
+    evolution = PRODUCT / "invention/evolution"
+    subprocess.run([sys.executable, "-B", str(PRODUCT / "evolution_trials/verify.py"), "--check", str(evolution / "RESULT.json")],
+                   check=True, stdout=subprocess.DEVNULL)
+    early = PRODUCT / "invention/early_survey"
+    subprocess.run([sys.executable, "-B", str(early / "survey.py"), "--check"], check=True, stdout=subprocess.DEVNULL)
+    subprocess.run([sys.executable, "-B", str(PRODUCT / "evolution_trials/early.py"), "--check", str(early / "RESULT.json")],
+                   check=True, stdout=subprocess.DEVNULL)
+    result["november_change_queue"] = read(evolution / "RESULT.json")["summary"]
+    result["early_candidate_queues"] = read(early / "RESULT.json")["summary"]
+    subprocess.run([sys.executable, "-B", str(early / "exposures/verify.py"), "--check"],
+                   check=True, stdout=subprocess.DEVNULL)
+    subprocess.run([sys.executable, "-IB", str(PRODUCT / "evolution_trials/broker_control.py"), "--check"],
+                   check=True, stdout=subprocess.DEVNULL)
+    confirmed = read(early / "exposures/RESULT.json")["witnesses"]
+    result["additional_archive"] = {band: {"source": row["source"], "status": row["status"],
+                                            "candid": row["witness"]["candid"], "utc": row["witness"]["utc"],
+                                            "delta_from_baseline_mag": row["delta_from_baseline_mag"],
+                                            "formal_error_mag": row["formal_error_mag"]}
+                                      for band, row in confirmed.items() if row["witness"]}
+    decision_study = PRODUCT / "discovery_field/decision_study"
+    bounds = json.loads(subprocess.check_output([sys.executable, "-IB", str(decision_study / "calibration_bounds.py"), "--check"]))
+    result["equal_site_example"] = {label: witness["difference"] for label, witness in bounds["sharp_bounds"].items()}
+    subprocess.run([sys.executable, "-B", str(decision_study / "evaluate.py"), "replay", str(decision_study / "included.json")],
+                   check=True, stdout=subprocess.DEVNULL)
+    if snapshot_path:
+        result["selected_change_queue"] = check_snapshot(snapshot_path)
     if case_path:
         request = read(case_path)
         mission = request["mission"]
@@ -60,5 +101,6 @@ def replay(case_path=None):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--case", type=Path, help="JSON case downloaded in the public Forge")
+    parser.add_argument("--snapshot", type=Path, help="Dated change-queue JSON downloaded in the archive desk")
     args = parser.parse_args()
-    print(json.dumps(replay(args.case), ensure_ascii=False, indent=2))
+    print(json.dumps(replay(args.case, args.snapshot), ensure_ascii=False, indent=2))

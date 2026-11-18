@@ -17,18 +17,20 @@ from photometry import FIELDS, stamp
 from plan import build
 from verify import verify
 from showcase.build import csp_hash, sha
-from discovery_field.protocol import sources as checked_sources
+from discovery_field.decision_study.evaluate import sources as decision_sources
 from field_trials.replay_cpu import read_observation
 from replay import read, replay
+from change_desk import archive_series
 
 WORKLIST_FIELDS = ("target_id", "utc", "ra_deg", "dec_deg", "min_alt_deg", "max_sun_alt_deg")
 ORIGIN = "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/"
 PRIOR = "b10de326ae6dad744ba26aa76cd7e2ec613e09f4/docs/frontier-omega-ignition/continuation/"
 # Only these public research and implementation files may be published by the renderer.
 FILES = {
-    "invention": ["REGISTRATION.md", "README.md", "geometry.py", "plan.py", "verify.py", "reference.py", "qualify.py", "photometry.py",
+    "invention": ["REGISTRATION.md", "README.md", "INDEPENDENT_GEOMETRY_REVIEW.md", "geometry.py", "plan.py", "verify.py", "reference.py", "qualify.py", "photometry.py",
                   "mission.json", "catalog.json", "public.json", "sources/fink-alerts.json", "sources/alerts-source.json", "sources/fink-holdout.json", "sources/holdout-source.json"],
-    "field_lab": ["README.md", "REGISTRATION.md", "field.py", "protocol.py", "capture.py", "fixture_server.py", "verify.py", "workload.json", "PUBLIC.json",
+    "field_lab": ["README.md", "REGISTRATION.md", "field.py", "protocol.py", "capture.py", "fixture_server.py", "verify.py", "workload.json", "PUBLIC.json", "intake.py", "intake_workload.json", "INTAKE_REGISTRATION.md", "intake_recorded/result.json", "intake_recorded/independent_challenge.json",
+                  "hosted_repeat/operation.json", "hosted_repeat/wire.json",
                   *[f"evidence/{target}-{route}.json" for target in ("nominal", "adverse") for route in ("field", "conventional")]],
     "successor_field": ["REGISTRATION.md", "cohort.py", "audit.py", "triage.py", "SOURCES.json", "OBSERVATION.json", "archive-queue.csv",
                         *[f"facts/{series}.{ext}" for series in ("forecast", "reference") for ext in ("txt", "html", "csv")]],
@@ -36,32 +38,48 @@ FILES = {
     "invention/next_week": ["README.md", "RESULT.json", "replay.py", "photometry-120m.csv", "photometry-10m.csv",
                             "sources/alerts.json", "sources/objects.json", "sources/alerts-source.json", "sources/holdout-source.json"],
     "field_trials": ["recorded/summary.json"],
+    "invention/evolution": ["README.md", "REGISTRATION.md", "alert.py", "RESULT.json", "worklist.csv"],
+    "invention/early_survey": ["README.md", "REGISTRATION.md", "REFERENCE.md", "survey.py", "acquire.py", "RESULT.json", "worklist.csv",
+                               "sources/index.json", "sources/reference-index.json", "sources/class.json.gz",
+                               "sources/objects-1.json.gz", "sources/reference-1.json.gz"],
+    "invention/early_survey/exposures": ["REGISTRATION.md", "README.md", "avro_packet.py", "verify.py", "refresh.py", "test_exposures.py", "test_avro_external.py", "RESULT.json", "ARCHIVE_ACCESS.json",
+                                        "sources/index.json", "sources/detections.json", "sources/astrometry.json.gz",
+                                        "sources/coverage.csv.gz", "sources/empty-geometry.csv.gz", "sources/empty-stream.csv.gz",
+                                        "sources/forced.json.gz", "sources/g.avro.gz", "sources/r.avro.gz", "sources/history.avro.gz"],
+    "evolution_trials": ["REGISTRATION.md", "verify.py", "select.sql", "early.py",
+                         "broker_control.py", "BROKER_CONTROL.json", "BROKER_REPLAY.md",
+                         "broker_sources/alerce-window.vot", "broker_sources/alternate-notice.json",
+                         *[f"broker_sources/{candid}.avro.gz" for candid in
+                           ("3579392285815015017", "3580268845815015008", "3584356425815015004", "3584382785815015006")]],
+    "discovery_field/decision_study": ["sources.json", "missions.json", "possibilities.json", "REGISTRATION.md", "evaluate.py", "included.json",
+                                       "calibration_bounds.py", "calibration_observation.json"],
     "discovery_field": ["catalog.json", "REGISTRATION.md"],
 }
-# Each summary and its translation refer to the named, frozen source excerpt.
-BASIS = {
-    "sky": "4d429a84c8feded41b30af5c2bf44edb5152aa65c96375aca831479ed7f98504",
-    "weather": "8cba699b67ba7e2af3c0c4886a562a99373949c8a6f76b7134a9ac7fc342d1fb",
-    "proof": "7ff4d2e62584c233e2029028f8e1673c08a426b44b0ed392d33d3d59ab450830",
-    "cad": "6f4a06ad98d7cfeae1c91b365c8f5f337547a73b8f237475ef0bd2e788883488",
-    "kernel": "b2f8b209077f8bd3410eb0fc107fb1781e1ac8fca9080372cfcf65c3a49d0f66",
-}
-
-
 def opportunities():
-    catalog = read(PRODUCT / "discovery_field/catalog.json")
-    sources = checked_sources()
-    labels = read(HERE / "opportunities.json")
-    result = []
-    for row in catalog["opportunities"]:
-        key = row["id"]
-        source = sources[row["source"]]
-        if source["excerpt_sha256"] != BASIS[key] or urlparse(source["publication"]).scheme != "https":
-            raise ValueError(f"Review translated material claim for changed source: {key}")
-        result.append({"id": key, "publication": source["publication"], "translations": labels[key]})
-    if set(BASIS) != {r["id"] for r in result} or len(BASIS) != len(result):
-        raise ValueError("Opportunity population differs from translated cards")
-    return result
+    folder = PRODUCT / "discovery_field/decision_study"
+    raw = read(folder / "possibilities.json")
+    sources = decision_sources()
+    cards = raw["opportunities"]
+    if len({row["id"] for row in cards}) != len(cards) or len(cards) != 5:
+        raise ValueError("The public field needs five distinct opportunities")
+    for card in cards:
+        support = [sources[key] for key in card["source_ids"]]
+        if not support or card["url"] not in [source["url"] for source in support] or urlparse(card["url"]).scheme != "https":
+            raise ValueError("Opportunity is missing its attributed primary source")
+        card["sources"] = [{"title": source["title"], "url": source["url"]} for source in support]
+        for lang in ("en", "fr"):
+            if any(not card[lang].get(key) for key in ("title", "finding", "limit", "test")):
+                raise ValueError("Incomplete bilingual opportunity")
+    return cards
+
+
+def recorded_acquisition():
+    folder = PRODUCT / "invention/early_survey"
+    fink = read(folder / "sources/index.json")["requests"] + read(folder / "sources/reference-index.json")
+    extension = list(read(folder / "exposures/sources/index.json").values())
+    return {"requests": len(fink) + len(extension),
+            "bytes": sum(row["bytes"] for row in fink) + sum(row["size_bytes"] for row in extension),
+            "request_seconds": round(sum(row["wall_seconds"] for row in fink + extension), 4)}
 
 
 def worklist_csv(rows):
@@ -75,7 +93,7 @@ def worklist_csv(rows):
 def recipient():
     files = {f"{group}/{filename}": (PRODUCT / group / filename).read_bytes()
              for group, names in FILES.items() for filename in names}
-    for filename in ("PRESENT.md", "REPRODUCE.md", "replay.py"):
+    for filename in ("PRESENT.md", "REPRODUCE.md", "replay.py", "change_desk.py"):
         files[filename] = (HERE / filename).read_bytes()
     files["SHA256SUMS"] = "".join(f"{sha(files[name])}  {name}\n" for name in sorted(files)).encode()
     stream = io.BytesIO()
@@ -90,7 +108,7 @@ def recipient():
 
 
 def exhibition():
-    replay()
+    verified = replay()
     sky = read(PRODUCT / "invention/public.json")
     mission = sky["mission"]
     catalog = read(PRODUCT / "invention/catalog.json")
@@ -132,12 +150,13 @@ def exhibition():
             or len(pilot["arms"]) != 4 or any(r["requests"] != 6 for r in pilot["arms"])):
         raise ValueError("Update the bilingual pilot scope for the changed cohort")
     archive = recipient()
-    payload = {"secondWeekReport":(PRODUCT / "invention/next_week/RESULT.json").read_text(), "pilotReport":pilot_text, "sky": sky, "field":read(PRODUCT / "field_lab/PUBLIC.json"), "successor":successor["summary"],
+    payload = {"changeSeries":archive_series(), "acquisition":recorded_acquisition(), "intake":read(PRODUCT / "field_lab/intake_recorded/result.json"), "secondWeekReport":(PRODUCT / "invention/next_week/RESULT.json").read_text(), "pilotReport":pilot_text, "sky": sky, "field":read(PRODUCT / "field_lab/PUBLIC.json"), "successor":successor["summary"],
+               "hostedIntake":verified["hosted_intake_repeat"],
                "opportunities":opportunities(), "copy":copy, "archive":{"sha256":sha(archive), "bytes":base64.b64encode(archive).decode("ascii")},
                "command":"python3 -B replay.py", "related":[{"label": k,"url":ORIGIN + PRIOR + f} for k,f in
                          [("oldEndpoint","FRONTIER_LAB.html"),("oldReading","FRONTIER_IGNITION.html"),("oldPairing","PAIRING_LAB.html")]]}
     css = (HERE / "style.css").read_text()
-    js = (HERE / "app.js").read_text()
+    js = (HERE / "change_desk.js").read_text() + "\n" + (HERE / "app.js").read_text()
     policy = "default-src 'none'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; script-src " + csp_hash(js) + "; style-src " + csp_hash(css)
     data = json.dumps(payload, ensure_ascii=False, allow_nan=False, separators=(",", ":")).replace("<", "\\u003c")
     doc = (HERE / "index.html").read_text()

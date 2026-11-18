@@ -1,0 +1,20 @@
+# A published peak and an alert measure different things
+
+Freeze this contract before extraction of the data rows. The beneficiary is an archivist deciding whether a published supernova magnitude can serve as a reference for the single-band change-alert instrument.
+
+The new source is Xiaoran Ma et al., *Supernovae at Distances < 40 Mpc: I*, author edition arXiv:2504.04393v1, Appendix A, Table 6 (the six printed SNe Ia). The study appeared in 2025. This paper has no prior numerical qualification in the IGNITION product or exhibitions. The present study uses existing public acquisition-cache copies. Source selection inspected titles, headers, caption, row count, byte identities and article front matter. No Table 6 data values were read during selection. This is a fresh instrument task, not a blind first acquisition of the publication. The journal edition has a separate identity.
+
+| Registered input | SHA-256 |
+| --- | --- |
+| [PDF](https://arxiv.org/pdf/2504.04393v1) | `b5ea8e5f3a3a4e94482e33de0ec47045d5f53b27cceaf5d384b62b94456a04d0` |
+| [HTML](https://arxiv.org/html/2504.04393v1) | `9ec39a73734769df4b7a5483ff8ba54bc3449f25ef59f9d76a379743416dd633` |
+
+Deliver all six printed rows in order. Each row must retain the SN identifier and the printed cells for peak r-band magnitude, Galactic r-band extinction, host E(B−V), declination, redshift and distance. Require exact decimal digits, including trailing zeros, signs, missing values, uncertainties and any printed qualifiers in those columns. Accept the typographic equivalence of ASCII and Unicode minus when the glyph represents a minus sign. Map a stand-alone missing-value glyph to null. Formatting whitespace may be normalized while preserving meaningful boundaries. A blank/unsupported or ambiguous cell must be diagnosed. It cannot be silently repaired with the other arm's value.
+
+Test three semantic conditions separately from numerical transcription. The table contains only the first six entries. Its peak is corrected for extinction. For the stated host-extinction method, values may come from the referenced photometry sources or be estimated from sodium absorption when high-resolution spectra are available. An accepted result must also preserve the six unit meanings from the headers or explicit source context, including sexagesimal/degree declination as actually printed. A numerical tie without the conditions is a partial result.
+
+Compare (1) the same unmodified historical Table Desk rectangular reference reader, with only field projection, ordinary glyph/whitespace normalization and inspection of its returned headers for conditions, (2) semantic export from the versioned original author HTML using structure-aware field and note selection, and (3) independent conventional extraction from the original PDF using Poppler or PyMuPDF cell geometry and printed footnotes. Each gets its native source representation, the registered table/fields, and equal rights to read the public paper. Engineering may inspect the physical layout to implement a route. Code may not contain the expected data rows. Record the initial execution, disagreement, and subsequent correction separately. Check wrong signs, missing precision, lost conditions and changed source identity.
+
+Measure local extraction through independent comparison, with route execution windows, input sizes and dependencies. Label prior cached acquisition, implementation, scientific review, long-run upkeep and adoption costs when unmetered. No inference run, participant, paid service, physical observing action, or economic saving is presupposed. Reuse existing open inputs, retain a small data-only numerical record and attribution, and leave complete publications at their public sources.
+
+An archive alert magnitude describes flux relative to its reference image. A tabulated extinction-corrected peak magnitude cannot by itself corroborate a *rate of change* in another survey epoch or a different object. Check this scope conclusion alongside numerical accuracy. The strongest conventional method may win.

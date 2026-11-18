@@ -1,0 +1,6 @@
+[
+  {"id":"desk-en-phase","prompt":"For the editorial console, P90 complete response time must be within 450 ms. Deliver at least 31 tokens/s per user. We have not specified a first-output target.","expected":{"status":"defer"}},
+  {"id":"desk-fr-order","prompt":"Atelier. Il faut au moins 27 tokens/s par utilisateur. Le premier contenu visible au P90 doit arriver en 0,42 s au plus.","expected":{"status":"ready","p90_ms":420,"min_rate":27}},
+  {"id":"desk-en-extra","prompt":"The service reports 8000 tokens/s for the entire fleet. Our actual interactive requirement is P90 first visible output within 610 ms and at least 24 tokens/s per user.","expected":{"status":"ready","p90_ms":610,"min_rate":24}},
+  {"id":"desk-fr-aggregate","prompt":"Le premier contenu visible doit arriver au P90 sous 340 ms. Le débit total demandé est de 1200 tokens/s pour tous les utilisateurs réunis.","expected":{"status":"defer"}}
+]

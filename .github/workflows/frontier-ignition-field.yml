@@ -39,7 +39,7 @@ jobs:
       - name: Install reference ephemeris and locked browser driver
         run: |
           test "$(git rev-parse HEAD)" = "$EXPECTED_SOURCE"
-          python -m pip install 'numpy==2.2.6' 'scipy==1.17.0' 'astropy==7.2.0' 'pyerfa==2.0.1.5' 'astropy-iers-data==0.2026.11.16.0.37.44'
+          python -m pip install 'numpy==2.2.6' 'scipy==1.17.0' 'astropy==7.2.0' 'pyerfa==2.0.1.5' 'fastavro==1.12.1' 'astropy-iers-data==0.2026.11.16.0.37.44'
           mkdir -p "$RUNNER_TEMP/browser"
           cp products/alpha-genesis-harness/tests/visual/package*.json "$RUNNER_TEMP/browser/"
           npm ci --prefix "$RUNNER_TEMP/browser" --ignore-scripts --no-audit --no-fund
@@ -88,6 +88,17 @@ jobs:
           test "$(git rev-parse HEAD)" = "$EXPECTED_SOURCE"
           python -B products/frontier-omega-ignition/field_trials/observe.py --study "${{ matrix.study }}" \
             --assets "$RUNNER_TEMP/assets" --work "$RUNNER_TEMP/private-runtime" --output "$RUNNER_TEMP/observations"
+      - name: Measure twelve new bilingual service briefs on the verified model
+        if: matrix.study == 'field'
+        run: |
+          python -B products/frontier-omega-ignition/field_trials/intake_observe.py \
+            --assets "$RUNNER_TEMP/assets" --work "$RUNNER_TEMP/intake-runtime" --output "$RUNNER_TEMP/observations/intake"
+      - name: Compare direct and scoped research when the supporting source is removed
+        if: matrix.study == 'discovery'
+        working-directory: products/frontier-omega-ignition
+        run: |
+          python -B -m discovery_field.decision_study.observe --threads 4 --assets "$RUNNER_TEMP/assets" \
+            --output "$RUNNER_TEMP/observations/scope-decisions.json"
       - name: Preserve public-prompt observations and source identities
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02

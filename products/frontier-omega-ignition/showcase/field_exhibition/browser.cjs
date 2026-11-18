@@ -11,10 +11,12 @@ const {pathToFileURL} = require('node:url');
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
 const readJSON = async file => JSON.parse(await readFile(file,'utf8'));
 const py = (args, cwd) => execFileSync('python3',['-B',...args],{cwd,encoding:'utf8'});
+let checkedDownloads=0;
 async function download(page, selector, destination) {
   const waiting=page.waitForEvent('download');
   await page.locator(selector).click();
   await (await waiting).saveAs(destination);
+  checkedDownloads++;
 }
 
 async function qualifySerializedExports(filename) {
@@ -69,8 +71,7 @@ async function main() {
   const repeated=await readJSON(repeatFile);
   const pilotFile=path.join(product,'field_trials/recorded/summary.json');
   const pilot=await readJSON(pilotFile);
-  const catalog=await readJSON(path.join(product,'discovery_field/catalog.json'));
-  const translations=await readJSON(path.join(__dirname,'opportunities.json'));
+  const catalog=await readJSON(path.join(product,'discovery_field/decision_study/possibilities.json'));
   const widths=[320,390,768,1024,1440];
   const temp=await mkdtemp(path.join(tmpdir(),'observing-recipient-'));
   const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||'/usr/bin/chromium',
@@ -88,6 +89,9 @@ async function main() {
     await page.keyboard.press('Tab');
     assert.equal(await page.locator(':focus').getAttribute('class'),'skip');
     await page.locator('h1').click();
+    await page.locator('#supporting > summary').click();
+    const series=await page.locator('#public-evidence').evaluate(n=>JSON.parse(n.textContent).changeSeries);
+    assert.equal(series.length,4);
     for(const locale of ['en','fr']) {
       if(locale==='fr') await page.locator('#lang').click();
       assert.equal(await page.locator('html').getAttribute('lang'),locale);
@@ -97,9 +101,65 @@ async function main() {
       for(const [idx,item] of catalog.opportunities.entries()) {
         await cards.nth(idx).click();
         assert.equal(await cards.nth(idx).getAttribute('aria-pressed'),'true');
-        assert.equal(await page.locator('#opp-title').innerText(),translations[item.id][locale][1]);
-        assert.equal(await page.locator('#opp-source').getAttribute('href'),catalog.sources.find(s=>s.id===item.source).publication);
+        assert.equal(await page.locator('#opp-title').innerText(),item[locale].title);
+        assert.equal(await page.locator('#opp-source').getAttribute('href'),item.url);
       }
+      await page.selectOption('#signal-window','early_warm');
+      if(await page.locator('#compare-archive').getAttribute('aria-pressed')==='true') await page.locator('#compare-archive').click();
+      for(const window of series) {
+        await page.selectOption('#signal-window',window.id);
+        for(const sample of window.days) {
+          await page.selectOption('#signal-date',sample.as_of_utc);
+          const now=page.locator('#signal-coverage tr');
+          assert.equal(await now.count(),sample.coverage.length);
+          assert.deepEqual(await now.locator('td:first-child').allTextContents(),sample.coverage.map(r=>r.target_id));
+          assert.deepEqual(await now.locator('td:nth-child(3)').allTextContents(),sample.coverage.map(r=>String(r.eligible_detections)));
+          for(const item of [sample.coverage[0], ...sample.alerts]) {
+            await page.selectOption('#signal-choice',item.target_id+'/'+item.band);
+            const match=sample.alerts.find(a=>a.target_id===item.target_id&&a.band===item.band);
+            const coverage=sample.coverage.find(a=>a.target_id===item.target_id&&a.band===item.band);
+            const comparison=match||coverage.strongest_comparison;
+            const ids=comparison?[comparison.baseline,comparison.trigger,...(match?.followup?[match.followup]:[])].map(p=>'ID '+p.candid):[];
+            assert.deepEqual(await page.locator('#signal-points small').allTextContents(),ids);
+            assert.equal(await page.locator('#trace-drawing .trace-observation').count(),ids.length);
+            assert.equal(await page.locator('#trace-target').textContent(),item.target_id);
+          }
+        }
+        await page.locator('#signal-step').click();
+        assert.equal(await page.locator('#signal-date').inputValue(),window.days[0].as_of_utc);
+      }
+      const warm=series.find(s=>s.id==='early_warm');
+      await page.selectOption('#signal-window',warm.id);
+      const alert=warm.days.at(-1).alerts[0], focus=alert.target_id+'/'+alert.band;
+      await page.selectOption('#signal-choice',focus);
+      await page.selectOption('#signal-date',alert.issued_utc);
+      await page.locator('#compare-history').click();
+      assert.equal(await page.locator('#signal-window').inputValue(),'early_cold');
+      assert.equal(await page.locator('#signal-choice').inputValue(),focus);
+      assert.equal(await page.locator('#signal-date').inputValue(),alert.issued_utc);
+      assert.equal(await page.locator('#trace-drawing .trace-observation').count(),0);
+      await page.locator('#compare-history').click();
+      assert.equal(await page.locator('#trace-drawing .trace-observation').count(),2);
+      await page.locator('#compare-archive').click();
+      await download(page,'#signal-download',path.join(temp,'before-witness-'+locale+'.json'));
+      assert.deepEqual((await readJSON(path.join(temp,'before-witness-'+locale+'.json'))).second_archive.witnesses,[]);
+      const visible=warm.days.find(d=>warm.second_archive[d.as_of_utc].witnesses.some(x=>x.target_id+'/'+x.band===focus));
+      await page.selectOption('#signal-date',visible.as_of_utc);
+      assert.equal(await page.locator('#trace-drawing .trace-observation').count(),3);
+      assert.equal(await page.locator('#trace-source').textContent(),'FINK + ALeRCE / ZTF');
+      assert((await page.locator('#al-source').getAttribute('href')).startsWith('https://api.alerce.online/'));
+      await download(page,'#signal-download',path.join(temp,'later-witness-'+locale+'.json'));
+      await download(page,'#signal-csv',path.join(temp,'later-witness-'+locale+'.csv'));
+      assert.deepEqual(await readJSON(path.join(temp,'later-witness-'+locale+'.json')),{...visible, second_archive:warm.second_archive[visible.as_of_utc]});
+      await page.locator('#compare-archive').click();
+      assert.equal(await page.locator('#trace-drawing .trace-observation').count(),2);
+      await page.selectOption('#signal-window',series.find(s=>s.id==='nov10').id);
+      await page.selectOption('#signal-date','2026-11-13T00:00:00Z');
+      const expected=series.find(s=>s.id==='nov10').days.find(q=>q.as_of_utc==='2026-11-13T00:00:00Z');
+      const file=path.join(temp,'observations-'+locale+'.json');
+      await download(page,'#signal-download',file);
+      assert.deepEqual(await readJSON(file),expected);
+      await download(page,'#signal-csv',path.join(temp,'observations-'+locale+'.csv'));
       for(const sample of scientific.cases) {
         await page.selectOption('#budget',String(sample.budget));
         await page.selectOption('#coverage',String(sample.visits));
@@ -122,6 +182,17 @@ async function main() {
         for (const m of missing) assert((await page.locator('#withheld').textContent()).includes(m.id));
       }
       await page.locator('#field-proof summary').click();
+      const intake=await readJSON(path.join(product,'field_lab/intake_recorded/result.json'));
+      for(const [name,route] of Object.entries(intake.fresh.routes)) {
+        assert((await page.locator(`#intake-results [data-route="${name}"]`).innerText()).includes(route.correct+'/'+route.attempted));
+      }
+      const {metrics:[hosted]}=await readJSON(path.join(product,'field_lab/hosted_repeat/wire.json'));
+      assert.equal(hosted.meets_interactive_performance,true);
+      assert.equal(hosted.meets_task_quality,false);
+      const intakeText=await page.locator('#intake-cost').innerText();
+      for(const ms of [hosted.p90_first_visible_ms,hosted.p90_turn_ms]) {
+        assert(intakeText.includes(new Intl.NumberFormat(locale,{maximumFractionDigits:3}).format(ms/1000)));
+      }
       for(const load of [...new Set(field.arms.map(a=>a.concurrency))]) {
         await page.selectOption('#service-load',String(load));
         const matching=field.arms.filter(a=>a.concurrency===load);
@@ -149,6 +220,10 @@ async function main() {
       await page.locator('#field-proof summary').click();
       await page.selectOption('#budget','6'); await page.selectOption('#coverage','1');
       await cards.first().click();
+      const heroWindow=series.find(s=>s.days.at(-1).alerts.length)||series.find(s=>s.id==='nov10');
+      await page.selectOption('#signal-window',heroWindow.id);
+      await page.selectOption('#signal-date',visible.as_of_utc);
+      if(await page.locator('#compare-archive').getAttribute('aria-pressed')==='false') await page.locator('#compare-archive').click();
       for(const width of widths) {
         await page.setViewportSize({width,height:width<500?844:940});
         assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true,`${locale} overflow at ${width}px`);
@@ -156,6 +231,8 @@ async function main() {
         if(screens && (width===390||width===1440)) {
           await page.evaluate(()=>scrollTo(0,0));
           await page.screenshot({path:path.join(screens,`observing-night-${locale}-${width}.png`)});
+          await page.locator('#signals-title').scrollIntoViewIfNeeded();
+          await page.screenshot({path:path.join(screens,`archive-decision-${locale}-${width}.png`)});
         }
       }
     }
@@ -168,7 +245,20 @@ async function main() {
     await download(page,'#csv',path.join(temp,'selected.csv'));
     await download(page,'#colors',path.join(temp,'colors.csv'));
     py(['-m','zipfile','-e',archive,temp],temp);
-    const checked=JSON.parse(py(['replay.py','--case','selected.json'],temp));
+    const checked=JSON.parse(py(['replay.py','--case','selected.json','--snapshot','observations-en.json'],temp));
+    assert.equal(checked.selected_change_queue.cohort,'nov10');
+    assert.deepEqual(await readFile(path.join(temp,'observations-en.csv')),await readFile(path.join(temp,'observations-fr.csv')));
+    const earlyVerified=JSON.parse(py(['replay.py','--snapshot','later-witness-en.json'],temp));
+    assert.equal(earlyVerified.selected_change_queue.cohort,'early_warm');
+    assert.deepEqual(await readFile(path.join(temp,'later-witness-en.csv')),await readFile(path.join(temp,'later-witness-fr.csv')));
+    const forgedWitness=await readJSON(path.join(temp,'later-witness-en.json'));
+    forgedWitness.second_archive.witnesses[0].witness.candid+='7';
+    await writeFile(path.join(temp,'changed-witness.json'),JSON.stringify(forgedWitness));
+    assert.notEqual(spawnSync('python3',['-B','replay.py','--snapshot','changed-witness.json'],{cwd:temp}).status,0);
+    const changed=await readJSON(path.join(temp,'observations-en.json'));
+    changed.coverage[0].status='persisted';
+    await writeFile(path.join(temp,'altered-change.json'),JSON.stringify(changed));
+    assert.notEqual(spawnSync('python3',['-B','replay.py','--snapshot','altered-change.json'],{cwd:temp}).status,0);
     assert.equal(checked.registered_worklists,scientific.cases.length);
     assert.equal(checked.selected_case.id,'b6-v2');assert.equal(checked.selected_case.accepted,true);
     const selected=await readJSON(path.join(temp,'selected.json'));
@@ -190,7 +280,7 @@ async function main() {
     assert.match(await page.locator('#plan-number').innerText(),/^0 /);
     assert.deepEqual(errors,[]);assert.deepEqual(requests,[]);
     console.log(JSON.stringify({browser:browser.version(),languages:['en','fr'],widths,registered_contracts:scientific.cases.length,
-      photometry_intervals:scientific.exploratory_color_counts.length,checked_downloads:6,external_requests:requests.length,
+      photometry_intervals:scientific.exploratory_color_counts.length,change_windows:series.length, change_checkpoints:series.reduce((n,s)=>n+s.days.length,0), checked_downloads:checkedDownloads,external_requests:requests.length,
       page_errors:errors.length,recipient:checked}));
   } finally {await browser.close();await rm(temp,{recursive:true,force:true});}
 }

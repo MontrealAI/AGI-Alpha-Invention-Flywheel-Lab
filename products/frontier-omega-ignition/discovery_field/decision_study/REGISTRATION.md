@@ -1,0 +1,18 @@
+# When does primary evidence change a research brief?
+
+Registered before generating or scoring responses. The earlier Qwen discovery cohort used different questions, sources and output formats. Its zero supported open premises remain a historical result.
+
+Two beneficiaries have a choice to make before buying compute or allocating expert attention. For each we will ask the same question of a packet containing two real, topically relevant primary sources and a second packet with one source withdrawn. A fresh call sees just its own packet. The measured outcome is a supported research decision or an explicit deferral. All construction proposals and operating advantages remain hypotheses.
+
+| Mission | Property to establish from the supplied record | Inadequate substitute |
+| --- | --- | --- |
+| Offline AC power flow | Did a comparative study report a sufficiently parallel conventional solver matching or exceeding the tested learned surrogates' throughput on ordinary power flow? | Latency for one student model and scenario on an edge device. |
+| Microscopy tracking | Did the construction of a hard association subset select mistakes shared by different trackers? | A general tracking challenge evaluates real and simulated sequences. |
+
+Use source slots A/B for grid and C/D for microscopy. A is the edge study, B the solver comparison; C is the difficulty-selected study and D the challenge. Freeze the exact passages, scope notes, questions and machine-readable answer form before running. Apply four fresh contexts to each route in order grid full, tracking withdrawn, tracking full, grid withdrawn; record order. Present the same source words, choices and questions to both generation routes. The prepared route also gets analyst-authored scope annotations for *all available* sources. Do not leak withdrawn material into any prompt, make a synthetic withdrawal look like a publisher retraction, or selectively rerun a wrong answer. Keep the route order balanced across the four contexts.
+
+A supported response must affirm the registered narrow relation, identify the right available source and ground it in a substantive verbatim passage. When evidence is absent it must defer the factual judgment; possible designs should survive separately. Report exact decision, source identity and supporting relation separately from the scientific merits of the proposed action. A full answer proposes its own remaining uncertainty, action and decisive test against a credible alternative. A title, topic match, accurate quote about a different comparison, or a correct guess after withdrawal is insufficient. Quote overlap is mechanically checkable; interpretation of unconstrained prose requires independent scope review. Include adverse substitutions within the same domain, withdrawn or changed passages and unreviewed downstream prose.
+
+Compare an ordinary direct reading, a scope-annotated reading and a direct conventional lookup on the reviewed question/source relation. The local Qwen arms may use the already verified Qwen3-4B-Instruct-2507 Q4_K_M on loopback. An included assistant with no access to the registered answers may supply a separate direct arm, subject to availability. Never pool different model or mission denominators. The conventional lookup can win on these two bounded questions. Count calls, tokens and times where exposed; source curation, model preparation, review, human comparison, economic price and operational acceptance need their own observations. No external participants, payment, deployment, physical intervention or live grid operation.
+
+The five independently researched opportunities are editorial hypotheses. They are separate from these model outputs and the empirical outcome in the transient experiment.

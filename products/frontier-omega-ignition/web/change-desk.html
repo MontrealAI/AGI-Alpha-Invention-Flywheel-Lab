@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="dark"><title>Transient review desk · FRONTIER Ω</title>
+<link href="/style.css" rel="stylesheet"><link href="/operator.css" rel="stylesheet">
+<script src="/change-desk.js" defer></script>
+</head>
+<body class="operator night">
+<a href="#cutoff" class="skip" data-fr="Aller à la date de décision">Skip to decision time</a>
+<header><a href="/" class="brand" aria-label="FRONTIER Ω"><span class="mark" aria-hidden="true">Ω</span> FRONTIER</a>
+<nav aria-label="Language / Langue"><button id="language" type="button" lang="fr">Français</button></nav></header>
+<main>
+<section class="night-opening"><p class="eyebrow" data-fr="IGNITION · Atelier privé">IGNITION · Private workspace</p>
+<h1 data-fr="Suivre une variation du ciel">Follow a change in the sky</h1>
+<p class="intro" data-fr="Retrouvez les variations qui méritaient un deuxième examen à une date précise, puis vérifiez ce que montrait la prochaine détection admissible.">Recover the changes that warranted a second look at a specified time. See what the next eligible survey detection showed.</p></section>
+<div class="night-grid">
+<section class="workspace"><h2 data-fr="Décision d’archive">Archive decision</h2>
+<form id="mission">
+<label for="cutoff" data-fr="Date et heure de décision (UTC)">Decision time (UTC)</label>
+<input id="cutoff" name="as_of_utc" required autocomplete="off" spellcheck="false" maxlength="27" aria-describedby="window" value="2026-10-26T00:00:00Z">
+<p id="window" class="muted" data-fr="Le suivi Fink porte sur la semaine du 25 octobre au 1ᵉʳ novembre 2026. Avec ALeRCE, vous pouvez examiner les paquets jusqu’au 17 novembre à 00 h UTC.">The Fink study covers October 25 to November 1, 2026. With ALeRCE, you can examine packets through November 17 at 00:00 UTC.</p>
+<div class="action-row"><button type="button" data-instant="2026-10-26T00:00:00Z" data-fr="26 octobre · émission">Oct 26 · issue</button><button type="button" data-instant="2026-10-29T00:00:00Z" data-fr="29 octobre · échéance">Oct 29 · deadline</button><button id="late" hidden type="button" data-instant="2026-11-04T00:00:00Z" data-fr="4 novembre · flux forcé">Nov 4 · forced flux</button></div>
+<label for="arm" data-fr="Historique de référence">Baseline history</label>
+<select name="arm" id="arm"><option value="early_warm" selected data-fr="Inclure les sept jours précédant la semaine">Include the seven days before the week</option><option value="early_cold" data-fr="Limiter la référence à la semaine étudiée">Use the study week only</option></select>
+<label class="change-check"><input id="second-archive" type="checkbox"><span data-fr="Vérifier aussi les paquets ZTF archivés par ALeRCE">Also check ZTF packets archived by ALeRCE</span></label>
+<p class="muted" data-fr="Cette vérification locale ajoute les détections disponibles avant votre limite UTC et conserve la décision initiale de Fink.">This local check adds eligible detections before your cutoff and preserves the original Fink decision.</p>
+<label for="beneficiary" data-fr="Bénéficiaire privé">Private beneficiary</label>
+<input id="beneficiary" maxlength="200" autocomplete="off" value="MONTREAL.AI">
+<p class="muted" data-fr="Ce nom reste dans votre dossier local. Le fichier exporté contient les sources publiques et les paramètres choisis.">This name stays in your local record. The export contains the public sources and your selected parameters.</p>
+<div class="action-row"><button class="primary" type="submit" id="build" disabled data-fr="Construire la liste">Build review queue</button><button type="button" id="new" hidden data-fr="Nouvelle mission">New mission</button></div>
+</form></section>
+<section class="workspace night-result" aria-labelledby="verdict">
+<p class="eyebrow" data-fr="Archives Fink et ZTF">Fink and ZTF archive</p><h2 id="verdict" tabindex="-1" aria-live="polite"></h2>
+<p id="state" role="status"></p>
+<div id="receipt" hidden>
+<div class="night-table-wrap"><table>
+<caption data-fr="Décisions par cible et par filtre">Decisions by target and filter</caption>
+<thead><tr><th scope="col" data-fr="Cible · filtre">Target · filter</th><th scope="col" data-fr="Variation signalée (mag)">Issued change (mag)</th><th scope="col" data-fr="Suivi Fink">Fink follow-up</th><th id="archive-heading" hidden scope="col" data-fr="Suivi ALeRCE">ALeRCE follow-up</th></tr></thead>
+<tbody id="decisions"></tbody></table></div>
+<p id="second-verdict" class="muted" hidden></p>
+<p id="archive-scope" class="muted" hidden data-fr="Les deux archives distribuent les détections du même relevé ZTF. Les dates correspondent aux expositions. Le délai de publication à l’époque reste inconnu.">Both archives distribute ZTF survey detections. Dates refer to exposures. Historical broker delivery delays are unknown.</p>
+<p class="muted" data-fr="Les magnitudes concernent la lumière différentielle positive. Chaque ligne a été vérifiée par un calcul SQL indépendant.">Magnitudes describe positive difference light. An independent SQL calculation checked every row.</p>
+<div class="action-row"><a id="kit" class="button primary" download data-fr="Exporter la liste vérifiée">Download checked queue</a></div>
+<p class="muted"><span data-fr="Après extraction, vérifier avec">After extraction, verify with</span> <code id="verify-command">python3 -IB review_change.py</code>.</p>
+<details><summary data-fr="Mesures, identifiants et preuve">Measurements, identifiers and receipt</summary><pre id="proof"></pre></details>
+</div>
+<details id="history" hidden><summary data-fr="Historique des révisions">Revision history</summary><ol id="revisions"></ol></details>
+</section></div>
+</main>
+<footer><a href="/" data-fr="Atelier général (anglais)">General workbench (English)</a><a href="/field" target="_blank" rel="noopener noreferrer" data-fr="Exposition publique ↗">Public exhibition ↗</a></footer>
+</body></html>

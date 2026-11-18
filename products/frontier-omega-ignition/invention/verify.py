@@ -6,7 +6,7 @@ import math
 from collections import defaultdict
 from pathlib import Path
 
-from geometry import digest, geometry_scope, mission_digest, validate
+from geometry import admissible, digest, extrema, geometry_scope, mission_digest, validate
 
 
 def exact_direct(mission, catalog):
@@ -25,6 +25,22 @@ def exact_direct(mission, catalog):
             raise ValueError("invalid reference angles")
     except (KeyError, TypeError) as exc:
         raise ValueError("incomplete reference angles") from exc
+    # Source and worklist hashes bind documents to each other, not to an independent
+    # ephemeris. A caller may edit reference angles and recompute the catalog hash
+    # without changing the observer/pointing scope digest. Check all source-bound
+    # angles against the separate bounded geometric calculation before allowing
+    # those references to authorize any observing slot. The scientific qualification
+    # still checks the original Astropy source; this is a portable fail-closed guard.
+    objects = {obj["id"]: obj for obj in catalog["targets"]}
+    for i, start in enumerate(starts):
+        for name in names:
+            local_min, local_sun_max = extrema(mission, start, objects[name])
+            reference_min, reference_sun_max = stars[name][i], solar[i]
+            if (abs(local_min - reference_min) > 0.1 or
+                    abs(local_sun_max - reference_sun_max) > 0.1 or
+                    admissible(mission, local_min, local_sun_max) !=
+                    admissible(mission, reference_min, reference_sun_max)):
+                raise ValueError("independent geometry/reference verification failed")
     feasible = []
     for i, sun in enumerate(solar):
         allowed = []

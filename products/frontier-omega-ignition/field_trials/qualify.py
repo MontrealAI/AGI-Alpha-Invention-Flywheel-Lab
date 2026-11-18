@@ -52,9 +52,28 @@ def main():
     record.mkdir()
     with tempfile.TemporaryDirectory(prefix="ignition-recipient-") as tmp:
         temp = Path(tmp)
-        for folder in ("field_lab", "discovery_field", "invention", "successor_field", "field_trials"):
+        for folder in ("field_lab", "discovery_field", "invention", "invention/evolution", "invention/early_survey",
+                       "invention/early_survey/exposures", "evolution_trials", "numeric_study/peak_context", "successor_field", "field_trials"):
             python("-m", "unittest", "discover", "-s", folder, "-v")
         python("-m", "unittest", "discover", "-s", "tests", "-p", "test_followup_mission.py", "-v")
+        python("-m", "unittest", "discover", "-s", "tests", "-p", "test_change_mission.py", "-v")
+        python("-m", "unittest", "discover", "-s", "endpoint_lab", "-p", "test_rounding_audit.py", "-v")
+        python("invention/evolution/alert.py", "--check", capture=record / "november-change-decisions.json")
+        python("evolution_trials/verify.py", "--check", "invention/evolution/RESULT.json",
+               capture=record / "direct-november-change-decisions.json")
+        python("invention/early_survey/survey.py", "--check", capture=record / "october-change-decisions.json")
+        python("evolution_trials/early.py", "--check", "invention/early_survey/RESULT.json",
+               capture=record / "direct-october-change-decisions.json")
+        python("invention/early_survey/exposures/verify.py", "--check", capture=record / "cross-broker-check.json")
+        python("evolution_trials/broker_control.py", "--check", capture=record / "conventional-packet-replay.txt")
+        recovered = out / "recovered-observations.json"
+        python("invention/early_survey/exposures/verify.py", "--out", recovered)
+        sys.path.insert(0, str(PRODUCT))
+        from ignition.change_recipient import archive_csv
+        (out / "recovered-observations.csv").write_bytes(archive_csv(json.loads(recovered.read_bytes())["witnesses"]))
+        shutil.copyfile(PRODUCT / "invention/early_survey/worklist.csv", out / "early-candidate-queue.csv")
+        python("field_lab/intake_qualification.py", "--check", capture=record / "intake-decisions.json")
+        python("numeric_study/peak_context/study.py", capture=record / "peak-table.json")
         python("invention/qualify.py", "--check")
         python("invention/plan.py", "--out", out / "worklist")
         python("invention/photometry.py", "--out", out / "photometry.csv")
@@ -66,6 +85,9 @@ def main():
         shutil.copyfile(temp / "http/PUBLIC.json", record / "fresh-http.json")
         python("-m", "discovery_field.study", "replay", capture=record / "discovery.json")
         python("-m", "discovery_field.regrade", "--check", capture=record / "discovery-regrade.json")
+        python("-m", "discovery_field.decision_study.open_decisions", capture=record / "open-opportunity-review.json")
+        python("-m", "discovery_field.decision_study.report", capture=record / "source-withdrawal-review.json")
+        python("discovery_field/decision_study/calibration_bounds.py", "--check", capture=record / "equal-site-bounds.json")
         python("numeric_study/transient_table/study.py", capture=record / "transient-table.json")
         python("numeric_study/transient_table/nomai.py", capture=record / "historical-classifications.json")
         python("successor_field/observe.py", "--output", temp / "archive")

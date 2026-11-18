@@ -2,6 +2,8 @@
 
 MONTREAL.AI needs to know whether an endpoint completes a useful bilingual task under load. This instrument submits service briefs, times the visible response, checks the resulting machine-readable contract and withholds an operating recommendation when the evidence is incomplete. Both a field client and a conventional curl client can run it. A separate SQLite evaluator replays the observed wire events.
 
+The [subsequent bilingual intake trial](INTAKE.md) measured twelve new Qwen responses, tested a source-span check against a direct grammar, and preserved two missed valid contracts on an independently sealed challenge. Its CLI can compile a supported brief locally.
+
 ## What happened
 
 Six public English and French briefs ask for exact latency and delivery-rate requirements. Four have enough information to produce a typed contract. Two require abstention. The authored mix includes seconds, milliseconds, French decimals, per-user versus aggregate rates, and the wrong latency percentile. It represents a technical use case for internal intake. The distribution of incoming MONTREAL.AI briefs is unknown.

@@ -1,0 +1,118 @@
+{
+  "schema": 1,
+  "mission": "Bilingual typed intake under explicit service-level semantics",
+  "population": "Twelve new authored English/French engineering briefs, equally weighted. Six supported positive bounds and six deferrals. No private service traffic.",
+  "instruction": "Return one bare JSON object for the whole English or French brief. Only if it specifies a maximum for P90 first visible output and a minimum for output tokens per second per user, return {\"status\":\"ready\",\"p90_ms\":N,\"min_rate\":N}. Convert seconds to milliseconds and decimal commas to decimal points. Return {\"status\":\"defer\"} if the event, percentile, comparison direction or rate scope differs, a requirement is missing or an additional service constraint cannot be represented. No extra keys or explanation.",
+  "concurrency": [
+    1
+  ],
+  "max_attempts_per_request": 1,
+  "attempt_timeout_s": 90,
+  "max_output_tokens": 96,
+  "max_response_bytes": 131072,
+  "thresholds": {
+    "p90_first_visible_ms": 500,
+    "p90_turn_ms": 2500,
+    "p10_delivered_tokens_per_turn_second": 5,
+    "required_quality_fraction": 1,
+    "required_first_attempt_completion_fraction": 1
+  },
+  "cases": [
+    {
+      "id": "en-decimal",
+      "prompt": "P90 first visible output within 0.48 s and at least 76 tokens/s per user.",
+      "expected": {
+        "status": "ready",
+        "p90_ms": 480,
+        "min_rate": 76
+      }
+    },
+    {
+      "id": "fr-decimal",
+      "prompt": "Au P90, premier contenu visible en 0,64 s au plus et débit minimum de 27,5 tokens/s par utilisateur.",
+      "expected": {
+        "status": "ready",
+        "p90_ms": 640,
+        "min_rate": 27.5
+      }
+    },
+    {
+      "id": "en-reordered",
+      "prompt": "At least 58 tokens/s per user and P90 first visible output within 410 ms.",
+      "expected": {
+        "status": "ready",
+        "p90_ms": 410,
+        "min_rate": 58
+      }
+    },
+    {
+      "id": "fr-reordered",
+      "prompt": "Au moins 91 jetons/s par utilisateur et premier contenu visible au P90 en 375 ms au plus.",
+      "expected": {
+        "status": "ready",
+        "p90_ms": 375,
+        "min_rate": 91
+      }
+    },
+    {
+      "id": "en-mixed-events",
+      "prompt": "P95 first visible output within 330 ms and P90 complete turn within 2 s and at least 70 tokens/s per user.",
+      "expected": {
+        "status": "defer"
+      }
+    },
+    {
+      "id": "fr-global",
+      "prompt": "Premier contenu visible au P90 en 425 ms au plus et débit minimum de 7800 jetons/s pour tout le système.",
+      "expected": {
+        "status": "defer"
+      }
+    },
+    {
+      "id": "en-complete-turn",
+      "prompt": "P90 complete turn within 650 ms and at least 40 tokens/s per user.",
+      "expected": {
+        "status": "defer"
+      }
+    },
+    {
+      "id": "fr-upper-rate",
+      "prompt": "Premier contenu visible au P90 en 575 ms au plus et au maximum 64 tokens/s par utilisateur.",
+      "expected": {
+        "status": "defer"
+      }
+    },
+    {
+      "id": "en-upper-rate",
+      "prompt": "P90 first visible output within 440 ms and at most 130 tokens/s per user.",
+      "expected": {
+        "status": "defer"
+      }
+    },
+    {
+      "id": "fr-p95",
+      "prompt": "Premier contenu visible au P95 en 290 ms au plus et au moins 56 jetons/s par utilisateur.",
+      "expected": {
+        "status": "defer"
+      }
+    },
+    {
+      "id": "en-fronted-bound",
+      "prompt": "At most 0.39 s to first visible output at P90 and at least 31.25 output tokens/s per user.",
+      "expected": {
+        "status": "ready",
+        "p90_ms": 390,
+        "min_rate": 31.25
+      }
+    },
+    {
+      "id": "fr-milliseconds",
+      "prompt": "Premier contenu visible au P90 en 0,50 s au plus et au moins 95 tokens/s par utilisateur.",
+      "expected": {
+        "status": "ready",
+        "p90_ms": 500,
+        "min_rate": 95
+      }
+    }
+  ]
+}
