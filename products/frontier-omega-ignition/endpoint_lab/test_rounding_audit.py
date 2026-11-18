@@ -1,4 +1,5 @@
 import unittest
+from decimal import Decimal
 
 from rounding_audit import audit, conservative_reasons, rounding_envelope
 
@@ -22,9 +23,9 @@ def point(ttft="100.0", tps="100.0", tpot="10.00"):
 
 class PrecisionEnvelope(unittest.TestCase):
     def test_trailing_zeros_determine_the_declared_resolution(self):
-        self.assertEqual(rounding_envelope("100.0"), (99.95, 100.05))
-        self.assertEqual(rounding_envelope("10.00"), (9.995, 10.005))
-        self.assertEqual(rounding_envelope("100"), (99.5, 100.5))
+        self.assertEqual(rounding_envelope("100.0"), (Decimal('99.95'), Decimal('100.05')))
+        self.assertEqual(rounding_envelope("10.00"), (Decimal('9.995'), Decimal('10.005')))
+        self.assertEqual(rounding_envelope("100"), (Decimal('99.5'), Decimal('100.5')))
 
     def test_never_assume_exact_rounded_equality(self):
         reasons = conservative_reasons(point(), contract(), 100, 100)
