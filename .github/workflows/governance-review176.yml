@@ -24,6 +24,14 @@ jobs:
       - name: Start measured window
         run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - name: Enforce source checkout is the exact PR head
+        env:
+          EXPECTED_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          test "$(git rev-parse HEAD)" = "$EXPECTED_HEAD"
+          echo "Exact executing source: $EXPECTED_HEAD"
       - name: Source and runtime inventory (no key material)
         run: |
           git rev-parse HEAD
@@ -45,7 +53,7 @@ jobs:
           echo "Public source SHA256: $sum"
       - uses: actions/upload-artifact@v4
         with:
-          name: governance-review176-source-${{ github.sha }}
+          name: governance-review176-source-${{ github.event.pull_request.head.sha || github.sha }}
           path: ${{ runner.temp }}/governance-review176-source.tar
           if-no-files-found: error
           retention-days: 7
@@ -59,7 +67,7 @@ jobs:
         run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
       - uses: actions/download-artifact@v4
         with:
-          name: governance-review176-source-${{ github.sha }}
+          name: governance-review176-source-${{ github.event.pull_request.head.sha || github.sha }}
           path: ${{ runner.temp }}/verified-176
       - name: Verify exact producer digest, extract and execute independently
         run: |
