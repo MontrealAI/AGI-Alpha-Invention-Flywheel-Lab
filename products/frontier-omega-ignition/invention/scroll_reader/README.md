@@ -37,4 +37,8 @@ In the constrained local environment the native wheel build and a separate 384×
 | Ordinary, forward | 7c1c8936abd2c2 | 21 |
 | Ordinary, reverse | bd7124c4e9d6c4 | 31 |
 
-The local results came from one call per arm and pair, with observed inference times between 0.086 and 0.258 seconds. They do not establish a speed advantage. The registered native result depends on the completed hosted receipt for its exact tested commit.
+The original [local registration](REGISTRATION.md), [eighteen source chunk digests](inputs.json), and [eight measured local runs with full hashes and RSS](reduced_context_receipt.json) are retained. The local results came from one call per arm and pair, with observed inference times between 0.086 and 0.258 seconds. They do not establish a speed advantage. The registered native result depends on the completed hosted receipt for its exact tested commit.
+
+## Independent sparse-window confirmation
+
+The [prospective sparse registration](SPARSE_REGISTERED.md) adds one known zero-MAD native-size window to the hosted run. Its four additional native CLI calls reuse the existing weights and installed wheels. An independent receipt, `reader-v3-sparse.json`, stores its authenticated source identity, fill positions, output digests, pixel ranges, and costs. Constant predictions are recorded explicitly. The original two-panel requirement for nonconstant predictions and its independent receipt are retained.

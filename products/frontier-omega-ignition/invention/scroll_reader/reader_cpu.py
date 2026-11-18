@@ -54,11 +54,16 @@ def download(url, limit):
             time.sleep(2 ** attempt)
 
 
-def acquire(work, result):
-    data = download(WEIGHTS, 138379659)
+def checkpoint(work, cache):
+    data = cache.read_bytes() if cache.exists() else download(WEIGHTS, 138379659)
     verify(len(data) == 138379659 and digest(data) == CHECKPOINT, "Checkpoint identity mismatch")
-    (work / "reader-v3.pth").write_bytes(data)
-    del data
+    if not cache.exists():
+        cache.write_bytes(data)
+    (work / "reader-v3.pth").symlink_to(cache)
+
+
+def acquire(work, result, cache):
+    checkpoint(work, cache)
     metadata = json.loads(download(ZARR + "/.zarray", 65536))
     required = dict(zarr_format=2, shape=[28, 7660, 11140], chunks=[28, 128, 128],
                     dtype="|u1", compressor=None, filters=None, order="C", fill_value=0,
@@ -85,17 +90,17 @@ def acquire(work, result):
         result["panels"][panel] = {"sha256": expected, "source_chunk_sha256": chunks}
 
 
-def picture(path):
+def picture(path, allow_constant=False):
     with Image.open(path) as tif:
         verify(tif.format == "TIFF" and tif.mode == "L" and tif.size == (384, 384),
                "Wrong TIFF type or dimensions")
         pixels = tif.tobytes()
-    verify(min(pixels) < max(pixels), "Constant TIFF")
+    verify(allow_constant or min(pixels) < max(pixels), "Constant TIFF")
     return {"tiff_sha256": digest(path.read_bytes()), "pixels_sha256": digest(pixels),
             "min": min(pixels), "max": max(pixels), "distinct_uint8": len(set(pixels))}
 
 
-def run_one(work, src, builds, panel, block, arm):
+def run_one(work, src, builds, panel, block, arm, *, allow_constant=False):
     run = work / f"{panel}-{block}-{arm}"
     run.mkdir()
     env = dict(os.environ, PYTHONPATH=os.pathsep.join(
@@ -127,7 +132,8 @@ def run_one(work, src, builds, panel, block, arm):
     return {"arm": arm, "panel": panel, "block": block, "wall_s": float(wall),
             "user_cpu_s": float(user), "system_cpu_s": float(system), "peak_rss_kib": int(rss),
             "native_extension_sha256": digest(Path(native).read_bytes()),
-            "forward": picture(run / "out.tif"), "reverse": picture(run / "out_reverse.tif")}
+            "forward": picture(run / "out.tif", allow_constant),
+            "reverse": picture(run / "out_reverse.tif", allow_constant)}
 
 
 def main():
@@ -160,7 +166,7 @@ def main():
             result["wheels"][arm] = {"file": wheel.name, "sha256": digest(wheel.read_bytes())}
         with tempfile.TemporaryDirectory(dir=builds) as tmp:
             work = Path(tmp)
-            acquire(work, result)
+            acquire(work, result, builds / "reader-v3-cache.pth")
             save()
             for panel in PANELS:
                 expected = None

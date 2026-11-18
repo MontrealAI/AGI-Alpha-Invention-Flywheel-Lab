@@ -31,16 +31,18 @@ def normalize(raw):
     return np.asarray((clipped - center) / scale, dtype="<f4").tobytes()
 
 
-def check(run):
+def check(run, *, population_sample=False):
     start = time.monotonic()
     cpu_start = time.process_time()
-    names = ["window_selection.json", "window_inputs.json", "window_result.json"]
+    size = 24 if population_sample else 6
+    result_file = "sample_receipt.json" if population_sample else "window_result.json"
+    names = ["window_selection.json", "window_inputs.json", result_file]
     files = {name: (run / name).read_bytes() for name in names}
     selection, inputs, receipt = [json.loads(files[name]) for name in names]
     cases = selection["registered_windows"]
     results = receipt["tests"]
-    if [len(cases), len(inputs["tiles"]), len(results)] != [6, 6, 6]:
-        raise ValueError("The registered six-window cohort is incomplete")
+    if [len(cases), len(inputs["tiles"]), len(results)] != [size] * 3:
+        raise ValueError("The registered window cohort is incomplete")
     rows = []
     for case, source, observed in zip(cases, inputs["tiles"], results, strict=True):
         if any(source[k] != case[k] or observed[k] != case[k] for k in ("ordinal", "x", "y")):
@@ -58,11 +60,12 @@ def check(run):
             "python": sys.version.split()[0], "numpy": np.__version__, "elapsed_seconds": time.monotonic() - start,
             "cpu_seconds": time.process_time() - cpu_start,
             "peak_rss_platform_units": resource.getrusage(resource.RUSAGE_SELF).ru_maxrss,
-            "receipt_scope": "Mathematical output hashes for six recorded windows. Timings cover this check only."}
+            "receipt_scope": f"Mathematical output hashes for {size} recorded windows. Timings cover this check only."}
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("run", type=Path, help="directory with the selection, input, receiver manifests and research_data")
+    parser.add_argument("--population-sample", action="store_true", help="check the registered 24-window sample")
     args = parser.parse_args()
-    print(json.dumps(check(args.run), sort_keys=True, indent=2))
+    print(json.dumps(check(args.run, population_sample=args.population_sample), sort_keys=True, indent=2))

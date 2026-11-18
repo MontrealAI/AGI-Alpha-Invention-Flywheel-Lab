@@ -66,7 +66,11 @@ def _drain(controller, name):
         if current and controller.obsolete(state):
             state = controller.view(run_id)
         elif current and state["operation"]["state"] == "active" and state["status"] in {"queued", "running"}:
-            state = controller.advance(run_id, version)
+            try:
+                state = controller.advance(run_id, version, pending_only=True)
+            except Conflict:
+                # An operator or another worker has the mission. Leave the outbox entry for replay.
+                continue
         research_result = state.get("research") or {}
         result = {"mission_id": run_id, "version": version, "current_version": head["version"],
                   "status": state["status"], "decision": research_result.get("decision"),
@@ -76,9 +80,10 @@ def _drain(controller, name):
                   "verified_artifact": (state["status"] == "verified" and bool(state.get("artifact"))
                                         and (state.get("evaluation") or {}).get("status") == "pass")}
         with controller.store.connection() as db:
-            db.execute("UPDATE scout_work SET outcome=? WHERE name=? AND request=? AND outcome IS NULL",
-                       (canonical(result), name, request))
-        outcomes.append(result)
+            recorded = db.execute("UPDATE scout_work SET outcome=? WHERE name=? AND request=? AND outcome IS NULL",
+                                  (canonical(result), name, request)).rowcount
+        if recorded:
+            outcomes.append(result)
     return outcomes
 
 

@@ -244,12 +244,14 @@ class Controller:
             else:
                 raise StateError("Unknown intervention")
 
-    def advance(self, run_id, version):
+    def advance(self, run_id, version, *, pending_only=False):
         with self.store.work_lock(run_id,version):
             s = self.store.get(run_id)
             if type(version) is not int or version != s["version"]:
                 raise Conflict("Stale mission version")
             self._guard(s)
+            if pending_only and s["status"] not in {"queued", "running"}:
+                return self.public(s)
             if s["status"] in FINISHED | {"awaiting_model", "awaiting_contract", "awaiting_choice"}:
                 return self.public(s)
             s["error"] = None

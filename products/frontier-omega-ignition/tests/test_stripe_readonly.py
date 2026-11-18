@@ -13,6 +13,7 @@ from unittest.mock import patch
 from ignition import commercial_handoff as journal
 from ignition import stripe_readonly as stripe
 from ignition.controller import Controller
+from ignition.pursuit import _run_key, pursue
 from ignition.store import Conflict, StateError, Store
 
 
@@ -23,8 +24,18 @@ class ReadOnlyStripe(unittest.TestCase):
         root = Path(self.tmp.name)
         self.ctrl = Controller(Store(root / "synthetic-only"))
         src = Path(__file__).resolve().parents[1] / "examples/evidence_action.json"
-        self.rid, self.version = self.ctrl.create({"request_id": "synthetic-stripe-test",
-                                                  "mission": json.loads(src.read_bytes())["mission"]})
+        self.pursuit_id = "synthetic-stripe-test"
+        brief = src.read_bytes()
+        self.rid, self.version = self.ctrl.create({"request_id": _run_key(self.pursuit_id, "fixture"),
+                                                  "mission": json.loads(brief)["mission"]})
+        (root / "mission.json").write_bytes(brief)
+        candidate = {"id":"fixture", "mission_file":"mission.json", "counterparty":"Synthetic counterparty",
+                     "problem":"Fixture problem", "current_alternative":"Fixture alternative", "contact_route":"Fixture",
+                     "source":"https://example.invalid/fixture", "observed_on":"2026-11-18", "rights":"Self-authored fixture",
+                     "value_and_uncertainty":"Unknown outside this test", "proof_order":1}
+        self.plan = root / "test.shortlist"
+        self.plan.write_text(json.dumps({"purpose":"Synthetic pursuit", "selection_basis":"Fixture order",
+                                         "candidates":[candidate, dict(candidate, id="unreached", proof_order=2)]}))
         self.ctrl.advance(self.rid, self.version)
         self.parties = {"merchant": "acct_FixtureMerchant", "customer": "cus_FixtureBuyer",
                         "payment_intent": "pi_FixtureIntent"}
@@ -155,6 +166,25 @@ class ReadOnlyStripe(unittest.TestCase):
             with self.assertRaises(StateError):
                 stripe.observe(self.request, fd.fileno(), lambda: None)
             self.assertEqual(conn.request.call_count, 3)
+
+    def test_pursuit_projects_only_the_existing_missions_observation(self):
+        def run():
+            return pursue(self.ctrl, self.plan, self.pursuit_id)
+        before = run()
+        self.assertEqual(before["result"], "existing_commercial_engagement")
+        self.assertIsNone(before["collected_revenue"])
+        with patch.object(stripe, "observe", return_value=(self.charge, ["f"*64, "e"*64])) as provider:
+            paid = self.invoke()
+            after = run()
+            self.assertEqual(after["result"], "existing_commercial_engagement")
+            self.assertEqual(len(after["attempts"]), 1)
+            self.assertEqual(after["attempts"][0]["commercial_state"], "paid")
+            self.assertEqual(after["attempts"][0]["next_action"], paid["next_action"])
+            self.assertEqual(after["collected_revenue"], {**paid["collected_revenue"],
+                             "candidate":"fixture", "mission_id":self.rid, "version":self.version})
+            self.assertEqual(after, run())
+            self.assertEqual(len(journal.status(self.ctrl.store, self.rid, self.version)["history"]), 6)
+            provider.assert_called_once()
 
     def test_currency_precision(self):
         self.assertEqual(stripe.minor_amount("12.4", "CAD"), 1240)

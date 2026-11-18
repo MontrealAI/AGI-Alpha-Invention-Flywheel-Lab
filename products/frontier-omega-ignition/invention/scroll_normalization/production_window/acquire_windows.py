@@ -49,7 +49,7 @@ def write(path, value):
     path.write_text(json.dumps(value, sort_keys=True, indent=2) + '\n')
 
 
-def run(output):
+def run(output, *, select=None, byte_budget=BUDGET):
     output.mkdir(parents=True, exist_ok=True)
     raw = output / 'research_data'
     raw.mkdir(exist_ok=True)
@@ -66,7 +66,7 @@ def run(output):
         manifest.append({'path': path, 'sha256': sha256(meta).hexdigest()})
     low_keys, length = list_keys(STORE + '3/0/')
     wire += length
-    if wire + len(low_keys) * CHUNK > BUDGET:
+    if wire + len(low_keys) * CHUNK > byte_budget:
         raise ValueError('full occupancy exceeds registered byte budget')
     occupancy = np.zeros((958, 1393), dtype=bool)
 
@@ -88,6 +88,8 @@ def run(output):
     center = min(range(n), key=lambda i: ((layout[i][0]+192-7660/2)**2+
                                          (layout[i][1]+192-11140/2)**2, layout[i]))
     indexes = list(dict.fromkeys((0, n//4, n//2, 3*n//4, n-1, center)))
+    if select is not None:
+        indexes = select(layout, indexes)
     windows = [{'ordinal': i, 'y': layout[i][0], 'x': layout[i][1]} for i in indexes]
     write(output/'window_selection.json', {'count': n, 'registered_windows': windows,
           'occupancy_sha256': sha256(occupancy.tobytes()).hexdigest(), 'selection_observed_before_full_resolution': True})
@@ -101,7 +103,7 @@ def run(output):
     count = 17 * 128 * 128
     intervals = (6 * 128 * 128, 23 * 128 * 128 - 1)
     present = {(r,c) for r,c in needed if STORE+f'0/0/{r}/{c}' in available}
-    if wire + count * len(present) > BUDGET:
+    if wire + count * len(present) > byte_budget:
         raise ValueError('selected high-resolution windows exceed the registered byte budget')
 
     def fetch(pos):

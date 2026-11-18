@@ -65,6 +65,18 @@ async function qualifyMissionControls(page, work) {
   await page.locator('#commercial-events li').filter({hasText:'Synthetic UI beneficiary'}).waitFor();
   assert.match(await page.locator('#commercial-state').textContent(), /identified/i);
 
+  // A labeled transport fixture checks currency/fees/available-balance rendering. Provider
+  // reconciliation and durable journal readback are exercised separately by test_stripe_readonly.
+  await summary.click();
+  const endpoint = '**/api/runs/' + run.id + '/commercial?version=' + run.version;
+  await page.route(endpoint, route => route.fulfill({json: {...observed, commercial_state:'paid',
+    collected_revenue:{currency:'CAD', minor_unit_digits:2, gross_minor:1240, provider_fee_minor:66,
+      available_net_minor:1174, observed_at:'2026-11-18T13:00:00+00:00'}, next_action:'Synthetic observation'}}));
+  await summary.click();
+  await page.getByText(/Gross CAD 12.40.*Provider fee CAD 0.66.*Available in Stripe CAD 11.74/).waitFor();
+  assert.equal(await page.locator('#results dt').filter({hasText:'Collected revenue'}).count(), 0);
+  await page.unroute(endpoint);
+
   await assertLayout(page, 390);
   const draft = 'Unsaved new beneficiary';
   await page.locator('#beneficiary').fill(draft);

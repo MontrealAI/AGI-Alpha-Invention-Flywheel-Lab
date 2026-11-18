@@ -6,7 +6,7 @@ import tempfile
 from datetime import date
 from pathlib import Path
 
-from . import commercial_handoff
+from . import commercial_handoff, selection
 from .store import Conflict, StateError, canonical, clean_mission, digest, strict_json, timestamp
 
 
@@ -16,7 +16,11 @@ def _slug(value):
 
 def read_shortlist(path):
     plan = strict_json(path.read_bytes())
-    if not isinstance(plan, dict) or set(plan) != {"purpose", "selection_basis", "candidates"}:
+    if not isinstance(plan, dict):
+        raise StateError("Provide a shortlist object")
+    ranked = plan.get("selection_policy") == "economic_evidence_v1"
+    top_fields = {"purpose", "selection_basis", "candidates"}
+    if set(plan) != (top_fields | {"selection_policy"} if ranked else top_fields):
         raise StateError("Supply a purpose, selection_basis and candidates")
     if not all(isinstance(plan[k], str) and plan[k].strip() for k in ("purpose", "selection_basis")):
         raise StateError("Describe the beneficiary objective and the selection assumptions")
@@ -26,15 +30,21 @@ def read_shortlist(path):
     for candidate in plan["candidates"]:
         required = {"id", "mission_file", "counterparty", "problem", "current_alternative", "contact_route",
                     "source", "observed_on", "rights", "value_and_uncertainty", "proof_order"}
-        if not isinstance(candidate, dict) or set(candidate) != required:
+        if ranked:
+            required = (required - {"proof_order", "mission_file"}) | {"assessment"}
+        optional = {"mission_file"} if ranked else set()
+        if not isinstance(candidate, dict) or not required <= set(candidate) <= required | optional:
             raise StateError("Candidate fields differ from the registered shortlist format")
-        if not all(isinstance(candidate[k], str) and candidate[k].strip() for k in required - {"proof_order"}):
+        if not all(isinstance(candidate[k], str) and candidate[k].strip() for k in set(candidate) - {"proof_order", "assessment"}):
             raise StateError("Every candidate needs its dated source, rights, outside option and economic uncertainty")
-        if (not _slug(candidate["id"]) or candidate["id"] in seen or type(candidate["proof_order"]) is not int
-                or candidate["proof_order"] < 1 or not candidate["source"].startswith("https://")):
-            raise StateError("Use distinct candidate IDs, positive proof order and a primary HTTPS source")
+        if not _slug(candidate["id"]) or candidate["id"] in seen or not candidate["source"].startswith("https://"):
+            raise StateError("Use distinct candidate IDs and a primary HTTPS source")
+        if not ranked and (type(candidate["proof_order"]) is not int or candidate["proof_order"] < 1):
+            raise StateError("Use a positive proof order")
         seen.add(candidate["id"])
         date.fromisoformat(candidate["observed_on"])
+        if "mission_file" not in candidate:
+            continue
         name = candidate["mission_file"]
         if Path(name).name != name or not name.endswith(".json"):
             raise StateError("Reference a JSON mission in the shortlist directory")
@@ -224,6 +234,7 @@ def _keep_recipient(ctrl, state, directory):
 
 def pursue(ctrl, plan_file, request_id, *, reuse_from=None):
     plan = read_shortlist(Path(plan_file))
+    review = selection.select(plan) if "selection_policy" in plan else None
     receipt = {"id": request_id, "shortlist_sha256": _freeze(ctrl.store, request_id, plan, reuse_from),
                "purpose": plan["purpose"], "selection_basis": plan["selection_basis"],
                "attempts": [], "result": "shortlist_exhausted", "collected_revenue": None}
@@ -231,7 +242,13 @@ def pursue(ctrl, plan_file, request_id, *, reuse_from=None):
     directory.mkdir(mode=0o700, exist_ok=True)
     if directory.is_symlink():
         raise StateError("Use a private recipient directory inside the mission workspace")
-    for candidate in sorted(plan["candidates"], key=lambda c: (c["proof_order"], c["id"])):
+    if review is not None:
+        receipt["selection"] = review
+        by_id = {candidate["id"]: candidate for candidate in plan["candidates"]}
+        ordered = [by_id[key] for key in receipt["selection"]["ranked"]]
+    else:
+        ordered = sorted(plan["candidates"], key=lambda c: (c["proof_order"], c["id"]))
+    for candidate in ordered:
         reused = _select_reuse(ctrl, request_id, reuse_from, plan, candidate)
         if reused:
             receipt["attempts"].append({"candidate": candidate["id"], "technical_status": "reused_previous_negative",
@@ -269,6 +286,11 @@ def pursue(ctrl, plan_file, request_id, *, reuse_from=None):
             attempt["next_action"] = commercial["history"][-1]["event"]["details"]["reopen_condition"]
         if commercial["commercial_state"] not in ("identified", "withheld"):
             receipt["result"] = "existing_commercial_engagement"
+            attempt["next_action"] = commercial["next_action"]
+            if commercial["commercial_state"] == "paid" and commercial["collected_revenue"] is not None:
+                # Carry the single journal observation. Reruns report the same receipt and never book a new amount.
+                receipt["collected_revenue"] = {**commercial["collected_revenue"],
+                                                "candidate": candidate["id"], "mission_id": run_id, "version": rev}
             break
         if state["status"] == "verified" and decision and decision["disposition"] == "ready_for_beneficiary_review" and commercial["commercial_state"] != "withheld":
             receipt["result"] = "beneficiary_review_required"
