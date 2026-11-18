@@ -2,9 +2,9 @@
 
 ## The observing night · La nuit d’observation
 
-The [bilingual exhibition](../../docs/frontier-omega-ignition/continuation/FRONTIER_FIELD.html) turns six public transient candidates into an observing worklist and derives source-linked g−r measurements from the survey archive. Change the budget, cadence or time between bands, then export the checked result. The private operator workspace at `/follow-up` constructs a mission revision and reopens its delivered worklist independently. The public `/field` route also works as a standalone download.
+The [bilingual exhibition](../../docs/frontier-omega-ignition/continuation/FRONTIER_FIELD.html) follows ZTF26acbezdh from an early-supernova candidate to dated g- and r-band notices and a separately checked search for later observations. Set the UTC date and baseline to see exactly what the selected archive supports. The downloadable recipient recalculates the result from public evidence. Use `/change-desk` for a private, versioned mission and `/follow-up` for the historical observing planner.
 
-[Five-minute guide, EN/FR](showcase/field_exhibition/PRESENT.md) · [Outcomes, costs and reproduction](../../docs/frontier-omega-ignition/continuation/field-invention/REPORT.md) · [Endpoint service qualification](field_lab/README.md)
+[Five-minute guide, EN/FR](showcase/field_exhibition/PRESENT.md) · [Results and reproduction](../../docs/frontier-omega-ignition/continuation/change-delivery/REPORT.md) · [Endpoint service qualification](field_lab/INTAKE.md) · [Earlier field study](../../docs/frontier-omega-ignition/continuation/field-invention/REPORT.md)
 
 
 **Bring an ambition, investigate the evidence, and take home a program you can test.** MONTREAL.AI × QUEBEC.AI.
