@@ -1,10 +1,14 @@
 import copy
 import json
 import math
+import shutil
+import subprocess
+import sys
 import tempfile
 from pathlib import Path
 import unittest
 
+from geometry import digest, geometry_scope, mission_digest
 from photometry import compare_sql, evaluate, measure
 from plan import build
 from qualify import ROOT, qualification
@@ -90,6 +94,46 @@ class FollowupTests(unittest.TestCase):
             measure(cat,rows+[row],bounds)
         with self.assertRaisesRegex(ValueError,"outside"):
             measure(cat,[{**row,"i:jd":bounds[1]}],bounds)
+
+    def test_numeric_identity_preserves_history_and_rejects_changed_values(self):
+        identical = {**self.mission, "site": {"latitude_deg":32,"longitude_deg":-111},
+                     "guard_deg":1, "min_revisit_hours":18, "max_sun_alt_deg":-18, "min_target_alt_deg":30}
+        self.assertEqual(mission_digest(identical), digest(self.mission))
+        self.assertEqual(geometry_scope(identical,self.catalog), self.catalog["reference"]["scope_sha256"])
+        frozen = build(self.mission,self.catalog)
+        self.assertEqual(build(identical,self.catalog), frozen)
+        self.assertTrue(verify(identical,self.catalog,frozen)["accepted"])
+        for change in [{"site":{"latitude_deg":32.01,"longitude_deg":-111}}, {"guard_deg":1.001},
+                       {"guard_deg":True}, {"guard_deg":"1"}, {"max_slots":True}, {"max_slots":6.0},
+                       {"site":{"latitude_deg":True,"longitude_deg":-111}}, {"min_revisit_hours":None}]:
+            with self.subTest(change=change), self.assertRaises(ValueError):
+                verify({**identical,**change},self.catalog,frozen)
+        # A pre-repair custom recipient hashed its input spelling. Verify the same exact old input
+        # without opening a path for a different number or a boolean to satisfy it.
+        old_catalog = copy.deepcopy(self.catalog)
+        old_catalog["reference"]["scope_sha256"] = geometry_scope(identical,old_catalog,legacy=True)
+        old = build(identical,old_catalog)
+        old["mission_sha256"] = digest(identical)
+        self.assertTrue(verify(identical,old_catalog,old)["accepted"])
+
+    @unittest.skipUnless(shutil.which("node"), "Node runs the supplementary browser-number regression")
+    def test_javascript_round_trip_through_recipient_cli(self):
+        mission = {**self.mission, "visits_per_target":2}
+        original = build(mission,self.catalog)
+        receipt = {"mission":mission, "worklist":original}
+        js = "process.stdout.write(JSON.stringify(JSON.parse(require('fs').readFileSync(0,'utf8'))))"
+        exported = json.loads(subprocess.check_output(["node","-e",js],input=json.dumps(receipt).encode()))
+        self.assertIs(type(exported["mission"]["site"]["latitude_deg"]),int)
+        with tempfile.TemporaryDirectory() as temp:
+            folder = Path(temp)
+            m, work = folder/"mission.json", folder/"worklist.json"
+            m.write_text(json.dumps(exported["mission"]))
+            work.write_text(json.dumps(exported["worklist"]))
+            checked = subprocess.check_output([sys.executable,str(ROOT/"verify.py"),str(work),"--mission",str(m)])
+            self.assertEqual(json.loads(checked)["direct_objective"],3)
+            subprocess.run([sys.executable,str(ROOT/"plan.py"),"--mission",str(m),"--out",str(folder/"new")],
+                           check=True,capture_output=True)
+            self.assertEqual(json.loads((folder/"new/worklist.json").read_text()),original)
 
     def test_new_bytes_require_their_own_source_descriptor(self):
         descriptor = json.loads((ROOT/"sources/alerts-source.json").read_text())

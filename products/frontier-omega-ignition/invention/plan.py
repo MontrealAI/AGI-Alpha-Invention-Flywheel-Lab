@@ -6,7 +6,7 @@ import json
 from functools import lru_cache
 from pathlib import Path
 
-from geometry import admissible, digest, extrema, validate
+from geometry import admissible, digest, extrema, mission_digest, validate
 
 
 def build(mission, catalog):
@@ -53,7 +53,7 @@ def build(mission, catalog):
                          "ra_deg": obj["ra_deg"], "dec_deg": obj["dec_deg"],
                          "min_alt_deg": low, "max_sun_alt_deg": high})
     return {"scope": mission["scope"], "dispatch_authorized": False,
-            "mission_sha256": digest(mission), "catalog_sha256": digest(catalog),
+            "mission_sha256": mission_digest(mission), "catalog_sha256": digest(catalog),
             "objective": len(complete), "slots": sorted(rows, key=lambda r: r["utc"])}
 
 

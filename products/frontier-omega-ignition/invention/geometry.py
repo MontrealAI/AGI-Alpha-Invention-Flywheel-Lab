@@ -70,12 +70,32 @@ def validate(mission, catalog):
         raise ValueError("incomplete or invalid mission/catalog") from exc
 
 
-def geometry_scope(mission, catalog):
-    return digest({
-        "site": mission["site"], "starts": mission["slots_utc"],
-        "duration": mission["duration_minutes"],
-        "targets": [[o["id"], o["ra_deg"], o["dec_deg"]] for o in catalog["targets"]]
-    })
+def _measurement(value):
+    """Use one JSON spelling for a finite physical quantity. Counts and IDs stay typed."""
+    if type(value) not in (int, float) or not math.isfinite(value):
+        raise ValueError("a physical measurement requires a finite number")
+    return 0.0 if value == 0 else float(value)
+
+
+def _site_identity(site):
+    return {**site, "latitude_deg": _measurement(site["latitude_deg"]),
+            "longitude_deg": _measurement(site["longitude_deg"])}
+
+
+def mission_digest(mission):
+    numeric_fields = ("min_target_alt_deg", "max_sun_alt_deg", "guard_deg", "min_revisit_hours")
+    typed = {key: _measurement(mission[key]) for key in numeric_fields}
+    return digest({**mission, **typed, "site": _site_identity(mission["site"])})
+
+
+def geometry_scope(mission, catalog, *, legacy=False):
+    site = mission["site"]
+    points = [[o["id"], o["ra_deg"], o["dec_deg"]] for o in catalog["targets"]]
+    if not legacy:
+        site = _site_identity(site)
+        points = [[name, _measurement(ra), _measurement(dec)] for name, ra, dec in points]
+    return digest({"site": site, "starts": mission["slots_utc"],
+                   "duration": mission["duration_minutes"], "targets": points})
 
 
 def precess(ra_deg, dec_deg, t):

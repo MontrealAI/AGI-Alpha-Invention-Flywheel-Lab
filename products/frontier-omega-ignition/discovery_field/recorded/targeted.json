@@ -1,0 +1,102 @@
+{
+  "route": "local_qwen_targeted",
+  "packet_sha256": "c2fc0a6370b329c85e03077d4dcd7a1aada083ea3ee1a26064facf76fcfae41f",
+  "git_head": "d96ed9e3fe67f70ffdf1585b7b4bbe46b5243075",
+  "files": {
+    "missions.json": "c2fc0a6370b329c85e03077d4dcd7a1aada083ea3ee1a26064facf76fcfae41f",
+    "catalog.json": "e6eeb384c0d09352aed32867f5ff37a7e8f8f43a4bfa143327c28ca00a656f43",
+    "study.py": "083c7ff757fa3fe1e2c0f348bdc9e48ad4d110c80d2f6c0758c524ea0ca2a6b7",
+    "protocol.py": "366f023c86073b7ea4e50b1524b582515bee775938440e5bf11f39cff0ea3d60"
+  },
+  "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+  "declared_weights_sha256": "2fde00ce69dd4899c70d020845e2638353015bba0fdf161b3eb965f2bca4464e",
+  "started": "2026-11-18T01:32:59.798291+00:00",
+  "python": "3.12.16",
+  "complete_cost_known": false,
+  "cases": [
+    {
+      "task": "queue",
+      "sent_sources": [
+        "A"
+      ],
+      "receipt": {
+        "status": "completed",
+        "usage": {
+          "input_tokens": 388,
+          "output_tokens": 211
+        },
+        "application_model_calls": 1,
+        "wall_seconds": 18.550998,
+        "run_id": "ignition_abad23a7786646f8a79a90da621965c3",
+        "request_sha256": "dc45e0e84b1a07471f347ce19306f3e32e19a70be1e3c9d11af00899fc17a85d",
+        "raw_response_sha256": "ba928c6ba85701107645ac3845e51f1d41e78788ac83655cf2454dcec6bb603f",
+        "response_sha256": "85e7ff94a433788665bfd86b13c73cc099f0b7b02426f1ba35e3a2336c41e3f4",
+        "reported_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+        "transport_mode": "streaming-sse/1",
+        "harness_streaming_sha256": "c94164c9b5539e08ff731b9d23063ac5357351264e86ad081f24a4ebed181986",
+        "harness_adapter_sha256": "a05127970eb11bb08cc98ed7ef9e05f9a723f51c66f9a5bfaa9f2242bb6275a6",
+        "stream_output_bytes": 994,
+        "stream_fragments": 210
+      },
+      "failure": null,
+      "answer": {
+        "source": "A",
+        "metric": "recovered_fraction",
+        "value": "0.9167",
+        "scope": "active_labeled_upper_limit",
+        "decision": "offline_test",
+        "uncertainty": "The simulation may not fully capture real-time observational biases, detection thresholds, or data processing delays present in actual operations. Additionally, the completeness of the reported list itself may be incomplete or subject to reporting bias.",
+        "action": "Propose an offline test to evaluate the completeness of transient detection by simulating a known recovery rate from publicly reported SLSNe data.",
+        "test": "Simulate a synthetic transient feed using the 24 reported SLSNe from the Transient Name Server, assuming a known baseline recovery rate. Assign each event a label and track the fraction of events that are recovered in a controlled, offline analysis. Compare this recovered fraction to the reported 22/24 completeness to assess consistency and identify potential biases or gaps in detection coverage."
+      },
+      "assessment": {
+        "factual_status": "contradicted",
+        "decision_eligible": false,
+        "design_fields_present": true,
+        "design_scientifically_accepted": null
+      }
+    },
+    {
+      "task": "metrology",
+      "sent_sources": [
+        "B"
+      ],
+      "receipt": {
+        "status": "completed",
+        "usage": {
+          "input_tokens": 379,
+          "output_tokens": 216
+        },
+        "application_model_calls": 1,
+        "wall_seconds": 16.247878,
+        "run_id": "ignition_c1243f20854749bebd3764bdce9b6d84",
+        "request_sha256": "4dc8c3b441a246b1c38e3a1c93e9f2c4ddd56ad8a13cff683842b89114237324",
+        "raw_response_sha256": "4d178d7b317020713d086f32ecf3df2b360748cc80a2eec866bc1ae813d92e20",
+        "response_sha256": "d0659f78719c0cbab252cb8a8d066d68c8e4347f6aed450cdf5d4fe73f13a7bc",
+        "reported_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+        "transport_mode": "streaming-sse/1",
+        "harness_streaming_sha256": "c94164c9b5539e08ff731b9d23063ac5357351264e86ad081f24a4ebed181986",
+        "harness_adapter_sha256": "a05127970eb11bb08cc98ed7ef9e05f9a723f51c66f9a5bfaa9f2242bb6275a6",
+        "stream_output_bytes": 981,
+        "stream_fragments": 215
+      },
+      "failure": null,
+      "answer": {
+        "source": "B",
+        "metric": "mean_reward",
+        "value": "0.6103",
+        "scope": "benchmark_graded_score",
+        "decision": "offline_test",
+        "uncertainty": "The published mean reward may not reflect real-world conversion success due to unreported edge cases, tool-specific biases, or data aggregation methods. The manual test may introduce human error or variability in interpretation.",
+        "action": "Propose a reversible offline test to evaluate the reliability of CAD-to-FreeCAD conversion using published benchmark mean reward data from cadbench",
+        "test": "Manually convert a set of publicly available, simple CAD drawings to FreeCAD parts using standard, documented conversion workflows. Record the success rate of each conversion (e.g., geometry integrity, feature accuracy) and compare it to the published 61.03% mean reward from cadbench. Repeat with three distinct drawing types (e.g., basic extrusions, assemblies, complex fillets) to assess consistency across geometries."
+      },
+      "assessment": {
+        "factual_status": "contradicted",
+        "decision_eligible": false,
+        "design_fields_present": true,
+        "design_scientifically_accepted": null
+      }
+    }
+  ]
+}

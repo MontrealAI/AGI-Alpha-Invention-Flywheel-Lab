@@ -7,7 +7,6 @@ const {mkdtemp, mkdir, readFile, writeFile, rm} = require('node:fs/promises');
 const {tmpdir} = require('node:os');
 const path = require('node:path');
 const {pathToFileURL} = require('node:url');
-const {chromium} = require('playwright-core');
 
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
 const readJSON = async file => JSON.parse(await readFile(file,'utf8'));
@@ -18,12 +17,47 @@ async function download(page, selector, destination) {
   await (await waiting).saveAs(destination);
 }
 
+async function qualifySerializedExports(filename) {
+  const html = await readFile(filename, 'utf8');
+  const match = html.match(/<script type="application\/json" id="public-evidence">([\s\S]+?)<\/script>/);
+  assert(match, 'Standalone page has no source payload');
+  const payload = JSON.parse(match[1]);
+  const temp = await mkdtemp(path.join(tmpdir(), 'observing-export-'));
+  try {
+    const archive = Buffer.from(payload.archive.bytes, 'base64');
+    assert.equal(sha(archive), payload.archive.sha256);
+    await writeFile(path.join(temp, 'received.zip'), archive);
+    py(['-m', 'zipfile', '-e', 'received.zip', '.'], temp);
+    for (const item of payload.sky.cases) {
+      // The visitor receives exact bytes. Independent tools may equate 32.0 with 32 when
+      // they read and reserialize the mission. Both recipients must still verify.
+      const exact = JSON.parse(item.receipt_text);
+      const normalized = JSON.stringify(exact);
+      for (const receipt of [item.receipt_text, normalized]) {
+        await writeFile(path.join(temp, 'case.json'), receipt);
+        const checked = JSON.parse(py(['replay.py', '--case', 'case.json'], temp));
+        assert.deepEqual(checked.selected_case, {id:item.id, accepted:true, covered_targets:item.objective});
+      }
+      await writeFile(path.join(temp, 'mission.json'), JSON.stringify(exact.mission));
+      py(['invention/plan.py', '--mission', 'mission.json', '--out', item.id], temp);
+      assert.equal(await readFile(path.join(temp, item.id, 'worklist.csv'), 'utf8'), item.csv);
+    }
+    assert.equal(await readFile(path.join(temp, 'field_trials/recorded/summary.json'), 'utf8'), payload.pilotReport);
+    console.log(JSON.stringify({serialized_cases:payload.sky.cases.length, exact_and_normalized:true,
+      regenerated_csvs:payload.sky.cases.length, recorded_model_arms:JSON.parse(payload.pilotReport).arms.length}));
+  } finally { await rm(temp, {recursive:true,force:true}); }
+}
+
 async function main() {
+  if (process.argv[2] === '--recipient-only') return qualifySerializedExports(process.argv[3]);
+  const {chromium} = require('playwright-core');
   const [input,screens]=process.argv.slice(2);
   if (!input) throw Error('Provide the standalone exhibition path.');
   const product=path.resolve(__dirname,'../..');
   const scientific=await readJSON(path.join(product,'invention/public.json'));
   const field=await readJSON(path.join(product,'field_lab/PUBLIC.json'));
+  const pilotFile=path.join(product,'field_trials/recorded/summary.json');
+  const pilot=await readJSON(pilotFile);
   const catalog=await readJSON(path.join(product,'discovery_field/catalog.json'));
   const translations=await readJSON(path.join(__dirname,'opportunities.json'));
   const widths=[320,390,768,1024,1440];
@@ -79,6 +113,20 @@ async function main() {
         assert.equal(await page.locator('#field-results article').count(),matching.length);
         const text=await page.locator('#field-results article').allTextContents();
         for (const [i,arm] of matching.entries()) assert(text[i].includes(`${arm.quality_accepted}/${arm.requests}`));
+        const modelArms=pilot.arms.filter(a=>a.concurrency===load);
+        assert.equal(await page.locator('#model-results article').count(),modelArms.length);
+        for(const arm of modelArms){
+          const card=page.locator(`#model-results [data-route="${arm.route}"][data-concurrency="${load}"]`);
+          const content=await card.innerText();
+          assert(content.includes(`${arm.quality_accepted}/${arm.requests}`));
+          const latency=new Intl.NumberFormat(locale,{maximumFractionDigits:3}).format(arm.p90_turn_ms/1000);
+          assert(content.includes(`${latency} s (${arm.transport_complete}/${arm.requests})`));
+        }
+      }
+      if(locale==='en') {
+        const pilotDownload=path.join(temp,'qwen-cpu-pilot.json');
+        await download(page,'#pilot-summary',pilotDownload);
+        assert.deepEqual(await readFile(pilotDownload),await readFile(pilotFile));
       }
       await page.locator('#field-proof summary').click();
       await page.selectOption('#budget','6'); await page.selectOption('#coverage','1');
@@ -124,7 +172,7 @@ async function main() {
     assert.match(await page.locator('#plan-number').innerText(),/^0 /);
     assert.deepEqual(errors,[]);assert.deepEqual(requests,[]);
     console.log(JSON.stringify({browser:browser.version(),languages:['en','fr'],widths,registered_contracts:scientific.cases.length,
-      photometry_intervals:scientific.exploratory_color_counts.length,checked_downloads:4,external_requests:requests.length,
+      photometry_intervals:scientific.exploratory_color_counts.length,checked_downloads:5,external_requests:requests.length,
       page_errors:errors.length,recipient:checked}));
   } finally {await browser.close();await rm(temp,{recursive:true,force:true});}
 }

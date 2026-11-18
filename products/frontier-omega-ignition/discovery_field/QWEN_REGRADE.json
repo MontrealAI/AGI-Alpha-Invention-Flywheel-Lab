@@ -1,0 +1,74 @@
+{
+  "source": "d96ed9e3fe67f70ffdf1585b7b4bbe46b5243075",
+  "member_sha256": {
+    "direct": "1b18725e03adbdde527eee1bb8a336d34b16eb5e43c7531d0062aa84f407cf8f",
+    "targeted": "dc95416150ca212fa70cfafcfe26527180bf6bd7fe24fa2c5b76c2e14162dafe",
+    "open": "e59032324401a81c14440d8d5e37f8e009d356845d7189590977699dc260334b"
+  },
+  "observations": [
+    {
+      "arm": "direct",
+      "mission": "queue",
+      "source_cited": "B",
+      "reported": "0.6103",
+      "source_value": "61.03",
+      "quantity_against_cited_source": "exact",
+      "original_factual": "immaterial",
+      "revised_factual": "immaterial",
+      "exact_source_expression_in_test": null,
+      "offline_decision_exactly_grounded": false,
+      "action_accepted": false,
+      "scientific_reading": "Uses a CAD reward as an astronomical candidate-selection criterion."
+    },
+    {
+      "arm": "direct",
+      "mission": "metrology",
+      "source_cited": "A",
+      "reported": "0.917",
+      "source_value": "22/24",
+      "quantity_against_cited_source": "rounded",
+      "original_factual": "immaterial",
+      "revised_factual": "immaterial",
+      "exact_source_expression_in_test": null,
+      "offline_decision_exactly_grounded": false,
+      "action_accepted": false,
+      "scientific_reading": "Tests a supernova detection list instead of the drawing-to-part objective."
+    },
+    {
+      "arm": "targeted",
+      "mission": "queue",
+      "source_cited": "A",
+      "reported": "0.9167",
+      "source_value": "22/24",
+      "quantity_against_cited_source": "rounded",
+      "original_factual": "contradicted",
+      "revised_factual": "rounded_consistent",
+      "exact_source_expression_in_test": "22/24",
+      "offline_decision_exactly_grounded": false,
+      "action_accepted": false,
+      "scientific_reading": "Simulates the recovery rate assumed at input; neither later observations nor feasible queued visits independently test it."
+    },
+    {
+      "arm": "targeted",
+      "mission": "metrology",
+      "source_cited": "B",
+      "reported": "0.6103",
+      "source_value": "61.03",
+      "quantity_against_cited_source": "exact",
+      "original_factual": "contradicted",
+      "revised_factual": "supported",
+      "exact_source_expression_in_test": "61.03%",
+      "offline_decision_exactly_grounded": true,
+      "action_accepted": false,
+      "scientific_reading": "Compares a binary conversion success rate directly with a continuous mean reward. Their denominators and meanings differ."
+    },
+    {
+      "arm": "open",
+      "mission": "instrument-sharing",
+      "old_supported": 0,
+      "new_supported": 0,
+      "new_rounded": 0,
+      "returned": 5
+    }
+  ]
+}

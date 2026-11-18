@@ -64,12 +64,13 @@ def score(response, withdrawn=()):
         signal = lookup.get(key) if isinstance(key, str) and key not in withdrawn else None
         if signal:
             signal = dict(signal, id=key)
-        claim = {k: candidate.get(k) for k in ("source", "metric", "value", "scope")}
+        claim = {k: candidate[k] for k in ("source", "metric", "value", "scope", "unit") if k in candidate}
         # The original proposal's action, experiment and alternative are recorded separately.
         # The published-source contract asks what WAS observed, so polarity must be positive.
         claim["polarity"] = candidate.get("polarity", "asserted")
         observed = protocol.observe(signal) if signal else None
-        bound = bool(observed and all(claim[k] == observed[k] for k in claim))
+        fact_status = protocol.binding(claim, observed)
+        bound = fact_status == "supported"
         prose = " ".join(item for item in (candidate.get("action"), candidate.get("test")) if isinstance(item, str))
         domains = [domain for domain, patterns in USES.items()
                    if all(re.search(pattern, prose, re.I) for pattern in patterns)]
@@ -79,7 +80,8 @@ def score(response, withdrawn=()):
             material = None
         else:
             material = key == domains[0]
-        status = "supported" if bound else ("unsupported_value_or_scope" if signal else "no_eligible_source")
+        status = fact_status if fact_status in {"supported", "rounded_consistent"} else (
+            "unsupported_value_or_scope" if signal else "no_eligible_source")
         rows.append({"source": key, "eligible_id": bool(signal), "binding": status,
                      "action_domains": domains, "is_material": material})
     return {"format": "complete", "registered_slots": 5, "returned": len(candidates), "rows": rows}

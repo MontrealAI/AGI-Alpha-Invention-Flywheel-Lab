@@ -9,6 +9,7 @@ from __future__ import annotations
 import hashlib
 import json
 import re
+from fractions import Fraction
 from functools import lru_cache
 from pathlib import Path
 from urllib.parse import urlsplit
@@ -161,6 +162,76 @@ def qualified(signal):
             and signal.get("current_observation", True) and not signal.get("event_pending", False))
 
 
+# Public wire values are strings. Bounds precede conversion to exact rationals:
+# neither megadigit integers nor unbounded decimal exponents enter arithmetic.
+NUMBER = re.compile(r"(-?(?:[0-9]{1,24}/[0-9]{1,24}|[0-9]{1,24}(?:\.[0-9]{1,24})?|\.[0-9]{1,24}))"
+                    r"\s*(%|percent|fraction|ratio|dimensionless|proportion|tokens/s)?", re.I)
+UNITS = {"%": "percent", "percent": "percent", "fraction": "fraction", "ratio": "fraction",
+         "dimensionless": "fraction", "proportion": "fraction", "tokens/s": "tokens/s"}
+
+
+def quantity(premise, claim):
+    """Exact, rounded-to-displayed-decimal, or incompatible under the declared metric."""
+    metric = premise["metric"]
+    if metric not in {"mean_reward", "recovered_fraction", "proof_prefill_tokens_per_second"}:
+        return "exact" if claim.get("value") == premise["value"] and "unit" not in claim else "mismatch"
+    literal = claim.get("value")
+    if not isinstance(literal, str) or len(literal) > 96:
+        return "invalid"
+    match = NUMBER.fullmatch(literal.strip())
+    if not match:
+        return "invalid"
+    number, suffix = match.groups()
+    external = claim.get("unit")
+    if "unit" in claim and (not isinstance(external, str) or len(external) > 16 or external.casefold() not in UNITS):
+        return "invalid_unit"
+    suffix = UNITS.get(suffix.casefold()) if suffix else None
+    explicit = UNITS.get(external.casefold()) if isinstance(external, str) else None
+    if suffix and explicit and suffix != explicit:
+        return "invalid_unit"
+    unit = explicit or suffix
+    try:
+        reported = Fraction(number)
+    except (ZeroDivisionError, ValueError):
+        return "invalid"
+    expected = Fraction(premise["value"])
+    if metric == "proof_prefill_tokens_per_second":
+        if unit not in (None, "tokens/s"):
+            return "invalid_unit"
+        return "exact" if reported == expected else "mismatch"
+    if unit == "tokens/s":
+        return "invalid_unit"
+    if metric == "mean_reward":
+        expected /= 100
+    # The registered mean-reward shorthand uses percent points (61.03) or
+    # a normalized score (0.6103). An explicit suffix or unit always wins.
+    # Recovered fractions default to ratios. A percent there must say so.
+    if unit is None:
+        unit = "percent" if metric == "mean_reward" and "/" not in number and reported > 1 else "fraction"
+    scale = 100 if unit == "percent" else 1
+    if not 0 <= reported <= scale:
+        return "mismatch"
+    if reported == expected * scale:
+        return "exact"
+    if "." in number:
+        places = 10 ** len(number.partition(".")[2])
+        # Round positive values half up at the literal's displayed precision.
+        # Rounding never satisfies an exact-value acceptance requirement.
+        rounded = (expected * scale * places + Fraction(1, 2)) // 1
+        if reported * places == rounded:
+            return "rounded"
+    return "mismatch"
+
+
+def binding(claim, premise):
+    if not premise or claim.get("source") != premise["source"] or claim.get("metric") != premise["metric"]:
+        return "wrong_attribution"
+    if claim.get("scope") != premise["scope"] or claim.get("polarity") != premise["polarity"]:
+        return "contradicted"
+    relation = quantity(premise, claim)
+    return {"exact": "supported", "rounded": "rounded_consistent"}.get(relation, "contradicted")
+
+
 def adjudicate(claim, signal, purpose):
     if not isinstance(claim, dict) or not signal or not qualified(signal):
         return "ineligible"
@@ -171,10 +242,7 @@ def adjudicate(claim, signal, purpose):
         return "wrong_attribution"
     if not relevant(signal["url"], purpose):
         return "immaterial"
-    keys = ("value", "scope", "polarity")
-    if any(claim.get(key) != premise[key] for key in keys):
-        return "contradicted"
-    return "supported"
+    return binding(claim, premise)
 
 
 def denies_available_issues(value):
@@ -192,6 +260,7 @@ def review(candidate, signals, purpose, eligible_refs):
     if not isinstance(bindings, list) or len(bindings) > 32 or any(not isinstance(c, dict) for c in bindings):
         raise ValueError("Supply at most 32 factual premises")
     checks = []
+    seen = set()
     for claim in bindings:
         ref = claim.get("source")
         if not isinstance(ref, str):
@@ -203,6 +272,11 @@ def review(candidate, signals, purpose, eligible_refs):
             source_claim = statement(claim)
             if source_claim not in candidate.get("change", "").split("\n"):
                 status = "change_not_bound"
+        if status == "supported":
+            identity = (ref, claim["metric"], claim["scope"])
+            if identity in seen:
+                continue
+            seen.add(identity)
         checks.append({"claim": claim, "status": status})
     asserted = {statement(c["claim"]) for c in checks if c["status"] == "supported"}
     if asserted and set(candidate.get("change", "").splitlines()) != asserted:

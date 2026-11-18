@@ -60,10 +60,10 @@ def assess(packet, task, answer):
     if not isinstance(key, str) or key not in sources:
         result["factual_status"] = "wrong_attribution"
         return result
-    premise = {k: answer.get(k) for k in ("source", "metric", "value", "scope")}
+    premise = {k: answer[k] for k in ("source", "metric", "value", "scope", "unit") if k in answer}
     # The answer contract requests one positively reported quantity. The
     # unrestricted proposal protocol also supports explicit negative claims.
-    result["factual_status"] = protocol.adjudicate({**premise, "polarity": "asserted"}, sources[key], task["question"])
+    result["factual_status"] = protocol.adjudicate({**premise, "polarity": answer.get("polarity", "asserted")}, sources[key], task["question"])
     result["decision_eligible"] = result["factual_status"] == "supported" and answer.get("decision") == "offline_test"
     result["design_fields_present"] = all(isinstance(answer.get(k), str) and bool(answer[k].strip())
                                           for k in ("uncertainty", "action", "test"))
@@ -146,15 +146,16 @@ def live(args):
                 "harness_streaming_sha256", "harness_adapter_sha256", "stream_output_bytes", "stream_fragments")
         if open_arm:
             # Store only public answer fields. Never export inference traces.
-            fields = prompt["shape"]["candidates"][0]
+            fields = [*prompt["shape"]["candidates"][0], "unit", "polarity"]
             compact_answer = None
             if isinstance(answer, dict) and isinstance(answer.get("candidates"), list):
-                compact_answer = {"candidates": [{k: row[k] for k in fields if k in row}
+                compact_answer = {"candidates": [{k: row[k] if isinstance(row[k], str) else None for k in fields if k in row}
                                                   if isinstance(row, dict) else None for row in answer["candidates"]]}
             assessment = open_trial.compare(compact_answer)
             sent = [s["source"] for s in prompt["sources"]]
         else:
-            compact_answer = ({k: answer[k] for k in packet["shape"] if isinstance(answer.get(k), str)}
+            compact_answer = ({k: answer[k] if isinstance(answer[k], str) else None
+                               for k in (*packet["shape"], "unit", "polarity") if k in answer}
                               if isinstance(answer, dict) else None)
             assessment = assess(packet, task, answer)
             sent = list(prompt["source_fragments"])

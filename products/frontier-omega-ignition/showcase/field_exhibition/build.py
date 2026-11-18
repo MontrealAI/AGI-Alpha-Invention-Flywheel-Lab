@@ -18,6 +18,7 @@ from plan import build
 from verify import verify
 from showcase.build import csp_hash, sha
 from discovery_field.protocol import sources as checked_sources
+from field_trials.replay_cpu import read_observation
 from replay import read, replay
 
 WORKLIST_FIELDS = ("target_id", "utc", "ra_deg", "dec_deg", "min_alt_deg", "max_sun_alt_deg")
@@ -32,6 +33,7 @@ FILES = {
     "successor_field": ["REGISTRATION.md", "cohort.py", "audit.py", "triage.py", "SOURCES.json", "OBSERVATION.json", "archive-queue.csv",
                         *[f"facts/{series}.{ext}" for series in ("forecast", "reference") for ext in ("txt", "html", "csv")]],
     "table_desk": ["table_desk.py"],
+    "field_trials": ["recorded/summary.json"],
     "discovery_field": ["catalog.json", "REGISTRATION.md"],
 }
 # Each summary and its translation refer to the named, frozen source excerpt.
@@ -99,8 +101,10 @@ def exhibition():
         request = {**mission, "max_slots": case["budget"], "visits_per_target": case["visits"]}
         outcome = build(request, catalog)
         acceptance = verify(request, catalog, outcome)
-        case["receipt"] = {"schema": "frontier.observing-case.v1", "case_id": case["id"], "mission": request,
-                           "worklist": outcome, "acceptance": acceptance}
+        receipt = {"schema": "frontier.observing-case.v1", "case_id": case["id"], "mission": request,
+                   "worklist": outcome, "acceptance": acceptance}
+        # Carry the exact recipient bytes through the browser, including decimal spelling.
+        case["receipt_text"] = json.dumps(receipt, ensure_ascii=False, allow_nan=False, indent=2) + "\n"
         case["csv"] = worklist_csv(case["slots"])
     sky["primary"] = next(c["id"] for c in sky["cases"] if c["budget"] == mission["max_slots"] and c["visits"] == mission["visits_per_target"])
     photo = sky["photometry"]
@@ -115,8 +119,16 @@ def exhibition():
     copy = read(HERE / "copy.json")
     if copy["en"].keys() != copy["fr"].keys():
         raise ValueError("Missing translation")
+    pilot_text = (PRODUCT / "field_trials/recorded/summary.json").read_text()
+    pilot = json.loads(pilot_text)
+    if pilot != read_observation():
+        raise ValueError("Local model pilot projection differs from independent capture replay")
+    if (pilot["scope"] != "recorded public synthetic CPU pilot" or pilot["hardware"]["gpu_layers"] != 0
+            or {(r["route"], r["concurrency"]) for r in pilot["arms"]} != {(k,n) for k in ("field", "conventional") for n in (1,3)}
+            or len(pilot["arms"]) != 4 or any(r["requests"] != 6 for r in pilot["arms"])):
+        raise ValueError("Update the bilingual pilot scope for the changed cohort")
     archive = recipient()
-    payload = {"sky": sky, "field":read(PRODUCT / "field_lab/PUBLIC.json"), "successor":successor["summary"],
+    payload = {"pilotReport":pilot_text, "sky": sky, "field":read(PRODUCT / "field_lab/PUBLIC.json"), "successor":successor["summary"],
                "opportunities":opportunities(), "copy":copy, "archive":{"sha256":sha(archive), "bytes":base64.b64encode(archive).decode("ascii")},
                "command":"python3 -B replay.py", "related":[{"label": k,"url":ORIGIN + PRIOR + f} for k,f in
                          [("oldEndpoint","FRONTIER_LAB.html"),("oldReading","FRONTIER_IGNITION.html"),("oldPairing","PAIRING_LAB.html")]]}

@@ -1,0 +1,188 @@
+{
+  "route": "local_qwen_open",
+  "packet_sha256": "1f602ed003735be4377a66d44cdc75819c44fc967f14ba6f29625cb9d8ac553f",
+  "git_head": "d96ed9e3fe67f70ffdf1585b7b4bbe46b5243075",
+  "files": {
+    "missions.json": "c2fc0a6370b329c85e03077d4dcd7a1aada083ea3ee1a26064facf76fcfae41f",
+    "catalog.json": "e6eeb384c0d09352aed32867f5ff37a7e8f8f43a4bfa143327c28ca00a656f43",
+    "study.py": "083c7ff757fa3fe1e2c0f348bdc9e48ad4d110c80d2f6c0758c524ea0ca2a6b7",
+    "protocol.py": "366f023c86073b7ea4e50b1524b582515bee775938440e5bf11f39cff0ea3d60",
+    "open_mission.json": "1f602ed003735be4377a66d44cdc75819c44fc967f14ba6f29625cb9d8ac553f",
+    "open_trial.py": "8418d78f03b7a327980d959ea65cbd02b5c47d2baddb3c07e9b651c63bb54a82"
+  },
+  "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+  "declared_weights_sha256": "2fde00ce69dd4899c70d020845e2638353015bba0fdf161b3eb965f2bca4464e",
+  "started": "2026-11-18T01:31:47.976725+00:00",
+  "python": "3.12.16",
+  "complete_cost_known": false,
+  "cases": [
+    {
+      "task": "instrument-sharing",
+      "sent_sources": [
+        "nomai",
+        "ecmwf",
+        "flash",
+        "cadbench",
+        "evolve-source"
+      ],
+      "receipt": {
+        "status": "completed",
+        "usage": {
+          "input_tokens": 983,
+          "output_tokens": 966
+        },
+        "application_model_calls": 1,
+        "wall_seconds": 125.85875,
+        "run_id": "ignition_5db9b1c5bb4a42d68c921d01851590a5",
+        "request_sha256": "f1bfa73c71c65369c7ca8970bf7e13fb5b7e2ebf319ebb548e886fa94787b613",
+        "raw_response_sha256": "9ce8766cb5508a6861d4a5cbcaebea005af880421902f10a463874b4fb484709",
+        "response_sha256": "36ac018e50e0d13e1d2dfc84ca01337a59b9576748a6ed519019df4a81003126",
+        "reported_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+        "transport_mode": "streaming-sse/1",
+        "harness_streaming_sha256": "c94164c9b5539e08ff731b9d23063ac5357351264e86ad081f24a4ebed181986",
+        "harness_adapter_sha256": "a05127970eb11bb08cc98ed7ef9e05f9a723f51c66f9a5bfaa9f2242bb6275a6",
+        "stream_output_bytes": 4849,
+        "stream_fragments": 965
+      },
+      "failure": null,
+      "answer": {
+        "candidates": [
+          {
+            "title": "Self-Verifying Handoff with Provenance Hashing",
+            "source": "nomai",
+            "metric": "recovered_fraction",
+            "value": "0.87",
+            "scope": "active_labeled_upper_limit",
+            "uncertainty": "Whether the instrument’s hardware or software can support lightweight cryptographic hashing of configuration state in real time without performance penalty",
+            "action": "Introduce a standardized, self-verifying handoff protocol that embeds observational metadata, provenance tags, and cryptographic hashes of configuration states directly into the instrument’s shared state — enabling recipients to instantly verify authenticity, detect tampering, and decide whether to reuse or reconfigure without relying on memory or trust in prior setups.",
+            "test": "Simulate a handoff between two teams where one team modifies a configuration and the receiving team detects the change via mismatched hash — verify that the protocol flags the deviation and prevents unverified reuse.",
+            "alternative": "Existing manual handoff with verbal or written notes, which are prone to misinterpretation, loss, or omission"
+          },
+          {
+            "title": "Real-Time Configuration Optimization from Observations",
+            "source": "ecmwf",
+            "metric": "mean_reward",
+            "value": "0.61",
+            "scope": "experimental_realtime_case",
+            "uncertainty": "Whether the AI model can generalize from sparse, noisy observational data to produce reliable, actionable configuration changes",
+            "action": "Implement a real-time AI-driven configuration optimizer that uses incoming observational data (e.g., transient light curves) to dynamically suggest optimal instrument settings for the next task — without requiring full reconfiguration or prior setup knowledge.",
+            "test": "Feed a simulated transient event into the optimizer and compare the suggested configuration to a known optimal setup — verify that the AI recommendation achieves at least 60% of the benchmark reward.",
+            "alternative": "Manual configuration based on team experience or pre-defined templates"
+          },
+          {
+            "title": "Instrument State Ledger with Immutable Provenance",
+            "source": "evolve-source",
+            "metric": "parallel_evaluation",
+            "value": "0.72",
+            "scope": "benchmark_graded_score",
+            "uncertainty": "Whether the ledger can be maintained without introducing latency or requiring additional hardware",
+            "action": "Develop a shared instrument state ledger that logs every setup, modification, and handoff as a time-stamped, immutable record — accessible to all teams via a simple web interface — enabling transparent tracking and reducing coordination overhead.",
+            "test": "Simulate two teams attempting to reuse a setup from a previous session — verify that the ledger reveals the exact configuration and last user, and that both teams can independently validate consistency.",
+            "alternative": "No shared record; teams operate in isolation with no visibility into prior setups"
+          },
+          {
+            "title": "Prefill-Based Proof of Instrument State",
+            "source": "flash",
+            "metric": "proof_prefill_tokens_per_second",
+            "value": "0.92",
+            "scope": "reported_single_h100_prefill",
+            "uncertainty": "Whether the proof system can be implemented efficiently on low-end hardware or within the constraints of mobile instrument power budgets",
+            "action": "Adopt a prefill-based proof system that generates cryptographic proofs of instrument state validity during initialization — allowing teams to verify that the instrument is in a known, trusted state before beginning a new task.",
+            "test": "Run a prefill proof generation on a simulated instrument state and verify that the proof can be validated by a third party without requiring full re-execution of the setup.",
+            "alternative": "No verification; teams assume initial state is correct"
+          },
+          {
+            "title": "Modular Instrument Configuration Framework",
+            "source": "nomai",
+            "metric": "initialisation",
+            "value": "0.45",
+            "scope": "active_labeled_upper_limit",
+            "uncertainty": "Whether the physical interface design allows for reliable, quick module swapping without signal loss or calibration drift",
+            "action": "Introduce a lightweight, modular configuration framework that allows teams to plug in and swap instrument modules (e.g., sensors, calibration units) via standardized interfaces — enabling rapid reconfiguration for different tasks without full disassembly.",
+            "test": "Swap a sensor module in a simulated setup and verify that the new configuration is recognized and validated by the system within 30 seconds of connection.",
+            "alternative": "Fixed, monolithic instrument setup with no modular flexibility"
+          }
+        ]
+      },
+      "assessment": {
+        "original": {
+          "format": "complete",
+          "registered_slots": 5,
+          "returned": 5,
+          "rows": [
+            {
+              "source": "nomai",
+              "eligible_id": true,
+              "binding": "unsupported_value_or_scope",
+              "action_domains": [],
+              "is_material": false
+            },
+            {
+              "source": "ecmwf",
+              "eligible_id": true,
+              "binding": "unsupported_value_or_scope",
+              "action_domains": [
+                "evolve-source"
+              ],
+              "is_material": false
+            },
+            {
+              "source": "evolve-source",
+              "eligible_id": true,
+              "binding": "unsupported_value_or_scope",
+              "action_domains": [],
+              "is_material": false
+            },
+            {
+              "source": "flash",
+              "eligible_id": true,
+              "binding": "unsupported_value_or_scope",
+              "action_domains": [
+                "flash"
+              ],
+              "is_material": false
+            },
+            {
+              "source": "nomai",
+              "eligible_id": true,
+              "binding": "unsupported_value_or_scope",
+              "action_domains": [],
+              "is_material": false
+            }
+          ]
+        },
+        "withdrawal": {
+          "ecmwf": [
+            "unsupported_value_or_scope",
+            "no_eligible_source",
+            "unsupported_value_or_scope",
+            "unsupported_value_or_scope",
+            "unsupported_value_or_scope"
+          ],
+          "evolve-source": [
+            "unsupported_value_or_scope",
+            "unsupported_value_or_scope",
+            "no_eligible_source",
+            "unsupported_value_or_scope",
+            "unsupported_value_or_scope"
+          ],
+          "flash": [
+            "unsupported_value_or_scope",
+            "unsupported_value_or_scope",
+            "unsupported_value_or_scope",
+            "no_eligible_source",
+            "unsupported_value_or_scope"
+          ],
+          "nomai": [
+            "no_eligible_source",
+            "unsupported_value_or_scope",
+            "unsupported_value_or_scope",
+            "unsupported_value_or_scope",
+            "no_eligible_source"
+          ]
+        },
+        "true_but_unrelated_first_case": null
+      }
+    }
+  ]
+}

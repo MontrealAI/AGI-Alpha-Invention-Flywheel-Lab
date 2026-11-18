@@ -30,6 +30,10 @@ python3 -B field_lab/verify.py --public field_lab/PUBLIC.json
 python3 -B field_lab/field.py fixture --output my-service-fixture
 ```
 
+The local Qwen pilot's observed results are included in `field_trials/recorded/summary.json`. To recheck this separate model run from its compressed public service captures, run `python3 -B products/frontier-omega-ignition/field_trials/replay_cpu.py` from the matching repository revision. Both clients completed all six streams at each load and accepted five outputs per arm. Production access and all-in operating cost remain unresolved.
+
+Les mesures de l’essai Qwen local figurent dans `field_trials/recorded/summary.json`. La commande `python3 -B products/frontier-omega-ignition/field_trials/replay_cpu.py` régénère ces résultats à partir des flux publics compressés dans la révision correspondante du dépôt. Chaque client a reçu six flux complets à chaque charge. Cinq réponses sur six ont satisfait le critère de qualité. L’accès en production et le coût d’exploitation complet restent à établir.
+
 The catalog and holdout use public Fink/Zwicky Transient Facility data. URLs, acquisition periods and content identities appear in `invention/catalog.json` and `invention/sources/holdout-source.json`. `successor_field/SOURCES.json` identifies the IERS bulletins. `discovery_field/catalog.json` attributes the five research possibilities. Each study’s registered scope and control appear alongside its code. `SHA256SUMS` records the bytes included in this recipient.
 
 Le catalogue et les observations ultérieures proviennent des données publiques Fink/Zwicky Transient Facility. Les adresses, périodes d’acquisition et empreintes sont indiquées dans `invention/catalog.json` et `invention/sources/holdout-source.json`. `successor_field/SOURCES.json` identifie les bulletins de l’IERS. `discovery_field/catalog.json` attribue les cinq pistes de recherche. Le périmètre et le témoin de chaque essai figurent à côté de son code. `SHA256SUMS` recense les empreintes du dossier.

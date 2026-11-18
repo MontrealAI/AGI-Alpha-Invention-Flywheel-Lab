@@ -1,0 +1,104 @@
+{
+  "route": "local_qwen_direct",
+  "packet_sha256": "c2fc0a6370b329c85e03077d4dcd7a1aada083ea3ee1a26064facf76fcfae41f",
+  "git_head": "d96ed9e3fe67f70ffdf1585b7b4bbe46b5243075",
+  "files": {
+    "missions.json": "c2fc0a6370b329c85e03077d4dcd7a1aada083ea3ee1a26064facf76fcfae41f",
+    "catalog.json": "e6eeb384c0d09352aed32867f5ff37a7e8f8f43a4bfa143327c28ca00a656f43",
+    "study.py": "083c7ff757fa3fe1e2c0f348bdc9e48ad4d110c80d2f6c0758c524ea0ca2a6b7",
+    "protocol.py": "366f023c86073b7ea4e50b1524b582515bee775938440e5bf11f39cff0ea3d60"
+  },
+  "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+  "declared_weights_sha256": "2fde00ce69dd4899c70d020845e2638353015bba0fdf161b3eb965f2bca4464e",
+  "started": "2026-11-18T01:32:26.831744+00:00",
+  "python": "3.12.16",
+  "complete_cost_known": false,
+  "cases": [
+    {
+      "task": "queue",
+      "sent_sources": [
+        "A",
+        "B"
+      ],
+      "receipt": {
+        "status": "completed",
+        "usage": {
+          "input_tokens": 428,
+          "output_tokens": 207
+        },
+        "application_model_calls": 1,
+        "wall_seconds": 18.389392,
+        "run_id": "ignition_f099234dd3f04b4db8c9668f29fa54f9",
+        "request_sha256": "68465751d1bfdb070adf809fdd47ec42785bccf3682f897da14b4e18df704093",
+        "raw_response_sha256": "8f36a01e7b2c7e1e1607bee713ece11d9091876c30345917560b13f6f8d27db3",
+        "response_sha256": "1cf31affaa6305e5f4e3921fb33c426b256f33051be0a73516fc3bc41de79583",
+        "reported_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+        "transport_mode": "streaming-sse/1",
+        "harness_streaming_sha256": "c94164c9b5539e08ff731b9d23063ac5357351264e86ad081f24a4ebed181986",
+        "harness_adapter_sha256": "a05127970eb11bb08cc98ed7ef9e05f9a723f51c66f9a5bfaa9f2242bb6275a6",
+        "stream_output_bytes": 939,
+        "stream_fragments": 206
+      },
+      "failure": null,
+      "answer": {
+        "source": "B",
+        "metric": "mean_reward",
+        "value": "0.6103",
+        "scope": "benchmark_graded_score",
+        "decision": "offline_test",
+        "uncertainty": "The correlation between mean reward and recovery may be non-linear or influenced by unobserved biases in detection conditions or reporting delays; the simulation lacks real-time observational context.",
+        "action": "Propose an offline test to evaluate the predictive power of mean reward as a candidate selection metric using a simulated transient feed derived from public SLSN reports.",
+        "test": "Simulate a transient discovery feed using the 24 active SLSNe from the Transient Name Server, assign a mean reward score to each based on known detection characteristics, and apply a threshold (e.g., 60%) to select candidates. Then, compare the resulting selection to the actual recovery rate (from source A) to assess if higher mean reward correlates with higher recovery likelihood."
+      },
+      "assessment": {
+        "factual_status": "immaterial",
+        "decision_eligible": false,
+        "design_fields_present": true,
+        "design_scientifically_accepted": null
+      }
+    },
+    {
+      "task": "metrology",
+      "sent_sources": [
+        "A",
+        "B"
+      ],
+      "receipt": {
+        "status": "completed",
+        "usage": {
+          "input_tokens": 431,
+          "output_tokens": 183
+        },
+        "application_model_calls": 1,
+        "wall_seconds": 13.375092,
+        "run_id": "ignition_b46b38d7d64b4ce2b5ea359c5beb9763",
+        "request_sha256": "2f521c79f85d10843b14c737f97b8842a3d94ac89c97cffcbee7b589b27bb7af",
+        "raw_response_sha256": "d2a58fa3d5e10b28acf75ca33f96a09f576ad7e8887c07020c22b39e94d37fd7",
+        "response_sha256": "0eb92588d22eb1e2d9a988dc3c9fd0f6bd89f171666c39ec4acb9611c2ad32ec",
+        "reported_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+        "transport_mode": "streaming-sse/1",
+        "harness_streaming_sha256": "c94164c9b5539e08ff731b9d23063ac5357351264e86ad081f24a4ebed181986",
+        "harness_adapter_sha256": "a05127970eb11bb08cc98ed7ef9e05f9a723f51c66f9a5bfaa9f2242bb6275a6",
+        "stream_output_bytes": 838,
+        "stream_fragments": 182
+      },
+      "failure": null,
+      "answer": {
+        "source": "A",
+        "metric": "recovered_fraction",
+        "value": "0.917",
+        "scope": "active_labeled_upper_limit",
+        "decision": "offline_test",
+        "uncertainty": "The completeness of the Transient Name Server's reporting is not guaranteed; some entries may be duplicates, misattributions, or unverified. Manual verification introduces human error and potential bias in classification.",
+        "action": "Propose a reversible, offline experiment to evaluate the completeness of transient detection using publicly reported SLSN observations.",
+        "test": "Manually verify the status of 24 reported active SLSNe from the Transient Name Server, cross-referencing with publicly available metadata to determine how many are confirmed, unconfirmed, or missing. Record the recovered fraction as a function of reported status and time of observation."
+      },
+      "assessment": {
+        "factual_status": "immaterial",
+        "decision_eligible": false,
+        "design_fields_present": true,
+        "design_scientifically_accepted": null
+      }
+    }
+  ]
+}

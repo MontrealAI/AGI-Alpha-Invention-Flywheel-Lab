@@ -3,6 +3,7 @@
   const data = JSON.parse(document.getElementById('public-evidence').textContent);
   const el = id => document.getElementById(id);
   const query = new URLSearchParams(location.search);
+  const pilot = JSON.parse(data.pilotReport);
   let lang = query.get('lang') === 'fr' ? 'fr' : 'en';
   let candidate = 'sky';
   const cases = data.sky.cases;
@@ -143,7 +144,7 @@
     el('empty-plan').textContent=t('zero');el('empty-plan').hidden=current.slots.length!==0;
     skyChart(new Set(current.slots.map(s=>s.target_id)));
     setBlob('csv',current.csv,'text/csv;charset=utf-8',current.id+'.csv');
-    setBlob('receipt',JSON.stringify(current.receipt,null,2)+'\n','application/json',current.id+'.json');
+    setBlob('receipt',current.receipt_text,'application/json',current.id+'.json');
   }
   let gap = 120;
   function photometry() {
@@ -169,7 +170,23 @@
     const agreement=cases.filter(c=>c.accepted&&c.objective===c.direct_objective).length;
     term(list,t('solverLabel'),`${agreement}/${cases.length} ${t('casesAgree')}`,true);
     term(list,t('holdoutLabel'),data.sky.holdout?`${data.sky.holdout.detected}/${data.sky.holdout.total} ${t('archiveWith')} ${data.sky.holdout.note[lang]}`:t('archiveUnknown'),true);
-    term(list,t('actionLabel'),t('actionProof'),true);term(list,t('economicsLabel'),t('economicsProof'),true);
+    term(list,t('actionLabel'),t('actionProof'),true);
+    const passed=pilot.arms.filter(arm=>arm.meets_interactive_performance).length;
+    term(list,t('pilotLabel'),`${passed}/${pilot.arms.length} ${t('pilotSummary')}`,true);
+    term(list,t('economicsLabel'),t('economicsProof'),true);
+    el('pilot-identity').textContent=`${pilot.model} · ${pilot.hardware.processor} · ${num(pilot.hardware.threads)} ${t('pilotThreads')}`;
+    const liveRows=el('model-results');
+    liveRows.replaceChildren();
+    for(const arm of pilot.arms.filter(a=>a.concurrency===Number(el('service-load').value))) {
+      const card=element('article');
+      card.dataset.route=arm.route;
+      card.dataset.concurrency=String(arm.concurrency);
+      card.append(element('h4',`${t(arm.route==='field'?'fieldRoute':'directRoute')} · ${t(arm.decision==='withhold'?'pilotWithhold':'pilotPass')}`));
+      card.append(element('p',`${arm.transport_complete}/${arm.requests} ${t('pilotStreams')} · ${arm.quality_accepted}/${arm.requests} ${t('pilotQuality')}`));
+      card.append(element('p',`${t('fieldLatency')} · ${num(arm.p90_first_visible_ms===null?null:arm.p90_first_visible_ms/1000)} s (${arm.visible_count}/${arm.requests}) / ${num(arm.p90_turn_ms===null?null:arm.p90_turn_ms/1000)} s (${arm.transport_complete}/${arm.requests})`));
+      card.append(element('p',`${t('pilotSpeed')} · ${num(arm.p10_delivered_tokens_per_turn_second)} (${arm.rate_count}/${arm.requests})`));
+      liveRows.append(card);
+    }
     const fields=el('field-results');fields.replaceChildren();
     for(const arm of data.field.arms.filter(arm=>arm.concurrency===Number(el('service-load').value))) {
       const article=element('article');
@@ -213,6 +230,7 @@
   el('service-load').addEventListener('change',proof);
   el('gap').addEventListener('change',()=>{gap=Number(el('gap').value);photometry();});
   el('lang').addEventListener('click',()=>{lang=lang==='en'?'fr':'en';render();});
+  setBlob('pilot-summary',data.pilotReport,'application/json','qwen-cpu-pilot.json');
   setBlob('download',Uint8Array.from(atob(data.archive.bytes),v=>v.charCodeAt(0)),'application/zip','FRONTIER_OMEGA_Observing_Night.zip');
   render();
 })();

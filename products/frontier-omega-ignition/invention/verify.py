@@ -6,13 +6,14 @@ import math
 from collections import defaultdict
 from pathlib import Path
 
-from geometry import digest, geometry_scope, validate
+from geometry import digest, geometry_scope, mission_digest, validate
 
 
 def exact_direct(mission, catalog):
     starts = validate(mission, catalog)
     ref = catalog.get("reference", {})
-    if ref.get("scope_sha256") != geometry_scope(mission, catalog):
+    scope = ref.get("scope_sha256")
+    if scope != geometry_scope(mission, catalog) and scope != geometry_scope(mission, catalog, legacy=True):
         raise ValueError("changed observer, target coordinates or windows require fresh reference")
     try:
         solar = ref["max_sun_alt_deg"]
@@ -56,7 +57,10 @@ def exact_direct(mission, catalog):
 
 def verify(mission, catalog, plan):
     baseline, feasible = exact_direct(mission, catalog)
-    if (plan.get("mission_sha256") != digest(mission) or plan.get("catalog_sha256") != digest(catalog)
+    # Old private receipts may use the exact originally serialized input. Both comparisons
+    # run after schema validation, and neither changes the content-bound catalog identity.
+    if (plan.get("mission_sha256") not in (mission_digest(mission), digest(mission))
+            or plan.get("catalog_sha256") != digest(catalog)
             or plan.get("scope") != mission["scope"] or plan.get("dispatch_authorized") is not False):
         raise ValueError("worklist identity or authority differs")
     rows = plan.get("slots")
@@ -75,7 +79,8 @@ def verify(mission, catalog, plan):
             obj = targets[name]
             if name not in feasible[i] or i in seen:
                 raise ValueError("infeasible or repeated observing slot")
-            if (row["ra_deg"], row["dec_deg"]) != (obj["ra_deg"], obj["dec_deg"]):
+            if (any(type(row[key]) not in (int, float) for key in ("ra_deg", "dec_deg")) or
+                    (row["ra_deg"], row["dec_deg"]) != (obj["ra_deg"], obj["dec_deg"])):
                 raise ValueError("pointing differs from public source")
             for key, expected in [("min_alt_deg", ref["min_alt_deg"][name][i]),
                                   ("max_sun_alt_deg", ref["max_sun_alt_deg"][i])]:

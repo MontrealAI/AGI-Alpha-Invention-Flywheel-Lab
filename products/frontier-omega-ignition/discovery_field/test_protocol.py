@@ -110,6 +110,52 @@ class SourceDiscoveryTests(unittest.TestCase):
         self.assertEqual(open_trial.score({"candidates": []})["returned"], 0)
         self.assertEqual(open_trial.score({"candidates": [{"source": None}]})["rows"][0]["binding"], "no_eligible_source")
 
+    def test_scoped_exact_ratio_and_decimal_representations(self):
+        data = study.available(study.read_packet())
+        cad, sky = protocol.observe(data["B"]), protocol.observe(data["A"])
+        for literal in ("0.6103", "61.03", "61.0300%", "6103/10000", "0.6103 fraction"):
+            self.assertEqual(protocol.quantity(cad, {"value": literal}), "exact", literal)
+        for literal in ("22/24", "11/12"):
+            self.assertEqual(protocol.quantity(sky, {"value": literal}), "exact")
+        for literal in ("0.9167", "0.917", "91.67%"):
+            self.assertEqual(protocol.quantity(sky, {"value": literal}), "rounded", literal)
+        for literal in ("0.9166", "0.87", "91.67", "0.9167%", "22/25", "1"):
+            self.assertEqual(protocol.quantity(sky, {"value": literal}), "mismatch", literal)
+        for claim in ({"value":"0.6103%"}, {"value":"61.03", "unit":"fraction"},
+                      {"value":"0.6103","unit":"percent"}, {"value":"61.03%", "unit":"ratio"},
+                      {"value":"0.6103","unit":"tokens/s"}, {"value":"0.6103","unit":"widgets"}):
+            self.assertNotIn(protocol.quantity(cad, claim), ("exact", "rounded"), claim)
+        self.assertEqual(protocol.quantity(cad, {"value":"0.6103", "unit":"fraction"}), "exact")
+        self.assertEqual(protocol.quantity(cad, {"value":"61.03", "unit":"%"}), "exact")
+        self.assertEqual(protocol.quantity(cad, {"value":"0.6103", "unit":"dimensionless"}), "exact")
+        wrong_scope = dict(cad, value="0.6103", scope="field_acceptance")
+        self.assertEqual(protocol.binding(wrong_scope, cad), "contradicted")
+
+    def test_invalid_precision_bombs_and_repeated_evidence(self):
+        signal = dict(PUBLIC[0], id="S1")
+        fact = protocol.observe(signal)
+        for literal in ("1"*100000, "1e10000000", "0/0", "NaN", {"unit":"fraction"}, 0.9167):
+            self.assertEqual(protocol.quantity(fact, {"value":literal}), "invalid")
+        candidate = {"sources":["S1"],"evidence":[fact, dict(fact)], "change":protocol.statement(fact)}
+        reviewed = protocol.review(candidate, [signal], "transient queue", ["S1"])
+        self.assertEqual((len(reviewed["checks"]), reviewed["supported_sources"]), (1, ["S1"]))
+        candidate["evidence"].append(dict(fact, value="0.9166"))
+        checked = protocol.review(candidate, [signal], "transient queue", ["S1"])["checks"]
+        self.assertEqual([r["status"] for r in checked], ["supported","contradicted"])
+
+    def test_rounding_never_launders_the_exact_decision_or_action(self):
+        packet = study.read_packet()
+        sky = study.bounded(packet, packet["tasks"][0])
+        rounded = study.assess(packet, packet["tasks"][0], dict(sky, value="0.9167", test="22/24 twice: 22/24"))
+        self.assertEqual((rounded["factual_status"], rounded["decision_eligible"]), ("rounded_consistent", False))
+        cad = dict(study.bounded(packet, packet["tasks"][1]), value="0.6103")
+        verdict = study.assess(packet, packet["tasks"][1], cad)
+        self.assertTrue(verdict["decision_eligible"])
+        self.assertIsNone(verdict["design_scientifically_accepted"])
+        self.assertEqual(study.assess(packet, packet["tasks"][1], dict(cad, unit="percent"))["factual_status"], "contradicted")
+        open_answer = {"candidates":[dict(cad, source="cadbench", unit="percent")]}
+        self.assertEqual(open_trial.score(open_answer)["rows"][0]["binding"], "unsupported_value_or_scope")
+
     def test_retrieval_and_observational_claim_survive_but_do_not_approve_design(self):
         results = study.replay()["routes"]
         self.assertTrue(all(c["verdict"]["decision_eligible"] for c in results["included_direct"]["cases"]))
