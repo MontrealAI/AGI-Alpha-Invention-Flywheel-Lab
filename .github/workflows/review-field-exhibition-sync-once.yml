@@ -1,0 +1,55 @@
+name: IGNITION reviewer one-shot source-matched exhibition
+on:
+  push:
+    branches:
+      - review/ignition-geometry-proof-boundary-20261118
+    paths:
+      - .github/workflows/review-field-exhibition-sync-once.yml
+permissions:
+  contents: write
+jobs:
+  sync:
+    if: github.repository == 'MontrealAI/AGI-Alpha-Invention-Flywheel-Lab' && github.ref == 'refs/heads/review/ignition-geometry-proof-boundary-20261118'
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record runner window
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - name: Checkout this review commit only
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: true
+          sparse-checkout: |
+            .github/workflows
+            products/frontier-omega-ignition
+            docs/frontier-omega-ignition
+      - name: Use Python 3.12
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Regenerate from the reviewed source; require independent known digest
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          python -m pip install 'numpy==2.2.6' 'scipy==1.17.0' 'astropy==7.2.0' 'pyerfa==2.0.1.5' 'astropy-iers-data==0.2026.11.16.0.37.44'
+          python -B products/frontier-omega-ignition/showcase/field_exhibition/build.py --output "$RUNNER_TEMP/FRONTIER_FIELD.html" --recipient "$RUNNER_TEMP/FRONTIER_INSTRUMENT.zip"
+          echo '08e6834a911f7b59954eb025dc75257a93d4f515e837484aebb5dfebfdbf24b9  '"$RUNNER_TEMP/FRONTIER_FIELD.html" | sha256sum -c -
+          echo '570131b25a3e125ad86d2b87ee1233b4cef708fd2b6abbfc62ce30dce7ed4047  '"$RUNNER_TEMP/FRONTIER_INSTRUMENT.zip" | sha256sum -c -
+          cp "$RUNNER_TEMP/FRONTIER_FIELD.html" docs/frontier-omega-ignition/continuation/FRONTIER_FIELD.html
+          test "$(git diff --name-only)" = 'docs/frontier-omega-ignition/continuation/FRONTIER_FIELD.html'
+      - name: Commit exactly the exhibition and remove this one-shot writer
+        shell: bash
+        run: |
+          set -euo pipefail
+          BRANCH='review/ignition-geometry-proof-boundary-20261118'
+          REMOTE_SHA="$(git ls-remote --heads origin "$BRANCH" | cut -f1)"
+          test "$REMOTE_SHA" = "$GITHUB_SHA"
+          rm .github/workflows/review-field-exhibition-sync-once.yml
+          git add -- docs/frontier-omega-ignition/continuation/FRONTIER_FIELD.html .github/workflows/review-field-exhibition-sync-once.yml
+          test "$(git diff --cached --name-only | LC_ALL=C sort)" = "$(printf '%s\n' '.github/workflows/review-field-exhibition-sync-once.yml' 'docs/frontier-omega-ignition/continuation/FRONTIER_FIELD.html' | LC_ALL=C sort)"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m "Review: bind regenerated bilingual exhibition to verified geometry recipient"
+          git push origin "HEAD:refs/heads/$BRANCH"
