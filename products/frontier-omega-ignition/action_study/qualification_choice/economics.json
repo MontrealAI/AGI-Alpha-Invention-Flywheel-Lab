@@ -106,28 +106,28 @@
     "timing_scope": "Local read, original identity checks, computation and decision; first access may be warm.",
     "methods": {
       "ordinary_reuse_illustrative_example": {
-        "median_wall_seconds": 3.4997498005395755e-05,
-        "median_cpu_seconds": 3.516250000000498e-05,
-        "total_wall_seconds": 0.0009061469900188968,
-        "total_cpu_seconds": 0.0009084879999999851
+        "median_wall_seconds": 3.5763499909080565e-05,
+        "median_cpu_seconds": 3.6068500000013826e-05,
+        "total_wall_seconds": 0.0010475210001459345,
+        "total_cpu_seconds": 0.0010502260000001262
       },
       "retained_adaptive": {
-        "median_wall_seconds": 0.0028677210029854905,
-        "median_cpu_seconds": 0.002868812500000012,
-        "total_wall_seconds": 0.06809670900111087,
-        "total_cpu_seconds": 0.0680144939999999
+        "median_wall_seconds": 0.0031421974999830127,
+        "median_cpu_seconds": 0.0031433589999999567,
+        "total_wall_seconds": 0.08845457401184831,
+        "total_cpu_seconds": 0.08847433600000021
       },
       "direct_sql_full": {
-        "median_wall_seconds": 0.003913131498848088,
-        "median_cpu_seconds": 0.0039160250000000035,
-        "total_wall_seconds": 0.09395709200180136,
-        "total_cpu_seconds": 0.09395277700000004
+        "median_wall_seconds": 0.004345752502558753,
+        "median_cpu_seconds": 0.004347489499999968,
+        "total_wall_seconds": 0.1087622399936663,
+        "total_cpu_seconds": 0.10880058399999984
       },
       "direct_sql_adaptive": {
-        "median_wall_seconds": 0.010682386502594454,
-        "median_cpu_seconds": 0.010683386500000003,
-        "total_wall_seconds": 0.2604933899929165,
-        "total_cpu_seconds": 0.26030268200000006
+        "median_wall_seconds": 0.01164411550053046,
+        "median_cpu_seconds": 0.011646263499999976,
+        "total_wall_seconds": 0.30030226000235416,
+        "total_cpu_seconds": 0.3003492270000001
       }
     }
   },
@@ -178,13 +178,13 @@
     "authorization": "Public read-only metadata and local CPU. The delivered next-qualification input authorizes no model calls or spending."
   },
   "frozen_runner_sha256": {
-    "acquire.py": "33930e7a22ec8a69aca4df1c2632b2361a85b008aa60c41916fb426b18954ccb",
+    "acquire.py": "374565e62cf88b62ae4f7b15f2b2dabbd4b244c8a75191f9946d521b24998022",
     "adapter.py": "66d606f82b7ec98c3a489f64da9f891e05da6e25b1e2507e73a12dde46713286",
-    "roster.py": "42a27263d21f008db34add69dfd02091cef9bf13745b3a2e0091b89b32ab7e1f",
-    "direct.py": "019d28b7db316705683eea232e08c243a5a55ccc529530d235cde8a4b7f79bcd",
-    "prepare.py": "50ebd15522b63e4011740892c0215b7a28ed0c1f3d26d386f54b5fdbbd4d7144",
-    "verify.py": "ab5430a55636c39343f7620ab62042183a4cf8fe97a1b3b4c55dcd39f3c6dd09",
+    "roster.py": "60b347b0799bd542a11e8bc022f72d8d7949af167c28a234202ec7e000535bdb",
+    "direct.py": "986c86d57b62d8d0a4ab84c4721d5edaf18098e5a09967c86a2b1e83b1c4ee98",
+    "prepare.py": "f5c5e6228665c997b2cfa2f9da392696293b536138d4adc6b066f03ed55ce471",
+    "verify.py": "4729c6bc41e392685fb050a37194001f8a1d4553a19268699a6afaed25270e80",
     "../../discovery_field/decision_study/calibration_bounds.py": "3bb492ab232b26c4d27d0e35e341cc253b74c348a7b43b07a76c275038217c1d"
   },
-  "runner_scope": "Digests identify the shipped local replay and acquisition entry point. The first complete acquisition preceded the stopping-mode extension. The second live run used the current acquisition entry point. Subsequent local provenance validation and bounded decoding were requalified against all frozen source bytes."
+  "runner_scope": "Digests identify the shipped verified programs. The original full acquisition preceded the addition of stopping. The second live run used acquire.py at SHA-256 33930e7a22ec8a69aca4df1c2632b2361a85b008aa60c41916fb426b18954ccb. Both outputs were independently compared with the shipped source. Subsequent isolated-mode imports and local source-provenance guards were requalified on all frozen bytes."
 }

@@ -1,0 +1,376 @@
+{
+  "cost": {
+    "actual_downstream_scientific_value": null,
+    "complete_cost_by_arm": {
+      "A": null,
+      "B": null,
+      "C": null,
+      "D": null,
+      "E": null
+    },
+    "current_rehearsal": "Two offline passes per executed route on one host. Acquisition was historical. First pass includes route initialization; OS cache may already be warm. Repeated submissions are idempotent and do not increase the case count. Stage timings omit interpreter startup, prior development, cached source acquisition and off-host costs.",
+    "historical_broker_or_operator_availability": null,
+    "historical_conventional_acquisition": {
+      "process_cpu_s": 0.03468307899999999,
+      "requests_count": 7,
+      "response_bytes": 531584,
+      "wall_s": 11.147085468001023
+    },
+    "per_accepted_useful_decision_by_arm": {
+      "A": null,
+      "B": null,
+      "C": null,
+      "D": null,
+      "E": null
+    },
+    "unknown_terms": [
+      "acquisition",
+      "compute_and_tools",
+      "operator_delivery",
+      "failed_work_and_corrections",
+      "independent_verification",
+      "allocated_construction",
+      "maintenance_support",
+      "other_obligations",
+      "operator_seconds",
+      "correction_seconds",
+      "verification_seconds",
+      "interventions",
+      "search_requests",
+      "repeated_search_requests"
+    ]
+  },
+  "direct_worker": {
+    "answers_after_first_worker_clock_s": 176.081199,
+    "measured_failures": [],
+    "network_requests": 0,
+    "paid_external_calls": 0,
+    "programme_cost": null,
+    "qualification": "The worker had chronological original packets and conventional tools. No answer key or other arm submissions were issued in its packet. Published case familiarity cannot be excluded. Replaying the delivered program reuses the direct construction; it does not commission fresh model work.",
+    "route": "Fresh-context included Codex agent using local Python and the permitted conventional broker tools.",
+    "task_sha256": "ddf2e8dcb27ea41b093a647085dbea8339be58f8b099ee241aac1ab496576688",
+    "through_worker_verification_s": 211.07799,
+    "unique_discoveries": null,
+    "worker_files_sha256": {
+      "answers.json": "9ebdee364a6cc78ea984e5102839db899b0084b935bf69747ea71b1a29257add",
+      "review.py": "30ef4b8316e895818d594277ed05b6f0127dfe22ce6c5c37f4716dfdfb5ab015",
+      "worker.json": "734fc168174c06cb0dcb812e3968c8684d145cd2ab0ac3f121b1a50c0a1f53ec"
+    }
+  },
+  "execution": {
+    "database_bytes": 61440,
+    "finished_utc": "2026-11-18T07:04:13.030765+00:00",
+    "network_requests": 0,
+    "original_source_digests": {
+      "index": "699356222cd1435b226eb47ba12f636d9516a167e02e917171c860152c7ec543",
+      "packets": {
+        "3579392285815015017": "012eaa1a962397158eedf40d7d2db7828d47a3b25966f3aa94f6a30515f49020",
+        "3580268845815015008": "81e19edd824398bf94c2c5171be456f10d06665836583ecc03101651f2756010",
+        "3584356425815015004": "a3b2a890a1eec098a9d2d43b132e6e63d4677f6f3b0a37483e8bbd8a583985a9",
+        "3584382785815015006": "938f2bde020ab8283fad247b6c428af301599f5f5c2eb6dcff103e666d52854a",
+        "3587249065815015015": "a4b072ffa754d4f7d941aa3e3798ca1665bcc4e89bd7f8298bb70355bf6ab77f",
+        "3587389715815015003": "08b9e75ac642bbe2c2bb199fd8edec3e133ccc0912ee45e43e5d31a7fc0b3408"
+      }
+    },
+    "python": "CPython 3.12.14",
+    "recorded_clock": {
+      "blind_close": {
+        "elapsed_ns": 251123,
+        "process_cpu_ns": 251383
+      },
+      "independent_packet_sql": {
+        "elapsed_ns": 26902542,
+        "process_cpu_ns": 26905783
+      },
+      "key_seal": {
+        "elapsed_ns": 200287,
+        "process_cpu_ns": 200407
+      },
+      "protocol_preparation": {
+        "elapsed_ns": 1986823,
+        "process_cpu_ns": 1985723
+      },
+      "reopened_scoring": {
+        "elapsed_ns": 358543,
+        "process_cpu_ns": 358592
+      },
+      "retained_direct_answer_intake_only": {
+        "elapsed_ns": 154169,
+        "process_cpu_ns": 154298
+      },
+      "route_passes": [
+        {
+          "order": [
+            "B",
+            "C",
+            "E"
+          ],
+          "routes": {
+            "B": {
+              "elapsed_ns": 37263826,
+              "process_cpu_ns": 37267262
+            },
+            "C": {
+              "elapsed_ns": 216338977,
+              "process_cpu_ns": 215961892
+            },
+            "E": {
+              "elapsed_ns": 865406,
+              "process_cpu_ns": 866995
+            }
+          }
+        },
+        {
+          "order": [
+            "E",
+            "C",
+            "B"
+          ],
+          "routes": {
+            "B": {
+              "elapsed_ns": 18037681,
+              "process_cpu_ns": 18040181
+            },
+            "C": {
+              "elapsed_ns": 162511138,
+              "process_cpu_ns": 162513265
+            },
+            "E": {
+              "elapsed_ns": 307307,
+              "process_cpu_ns": 307956
+            }
+          }
+        }
+      ]
+    },
+    "source_files": {
+      "action_study/desk.py": "6fbcf726f0988e184a944677886d3975c1cdd9a320ad89ba7bf3ee88aa96e2f0",
+      "action_study/pack.py": "3d6bf6d422f1471b772dad2d14c331e723e100969f1426b0d4bf0cc7a6dafe18",
+      "action_study/shadow/REGISTRATION.md": "5b1fdda93508658298d5596551d37ce8a0cc3c4233695e6818043e2c786d5ffd",
+      "action_study/shadow/archive.py": "89330f418de04c663300d59890a7bab10fc3f2d6cf8a5cd37a3c7e4bbf1b74a0",
+      "action_study/shadow/direct_inputs.py": "9fe709bbf60149fd8e6eb762439b784879c0236806aaf2c0cb49a6b5a0ca15a6",
+      "action_study/shadow/fieldkit.py": "e60e9782acaa578a88a7220ecc5b0569bfb1f77a04b498c48885a08bf205021d",
+      "action_study/shadow/shadow.py": "bb316138d707bcd9eb2c065419e5c1d429a08ac0c9c56c356357b996a367a575",
+      "action_study/ztf.py": "1de5ac0818f860a55b92813775cc9b7142c5c6afd1648e5511dcee8849707e1f",
+      "evolution_trials/broker_control.py": "2b444541d172cf12486375af6263240294ae2856aa3d79870771e8d44e9b53e1",
+      "invention/early_survey/exposures/avro_packet.py": "e88c206fbf7cd708179caa525cefb20208e3b14ed9ec0bedccab56ba69bc6c7d",
+      "invention/early_survey/exposures/verify.py": "ca6a78352a1d8d938f6089e25ba70d315e13bef1406981fb1ab1eeba288eb98f"
+    },
+    "started_utc": "2026-11-18T07:04:12.530050+00:00"
+  },
+  "independence": "SQL selects and computes from the original packets, using a second Avro decoder. The TAP parser is shared with B and the full Avro decoder with C. All approaches share the same survey observations.",
+  "methods": {
+    "A": "No willing human incumbent or independently observed existing beneficiary workflow enrolled.",
+    "B": "Conventional bounded TAP plus an independent original-packet decoder, eligibility and photometry.",
+    "C": "Integrated Fink and ALeRCE question, scoped receiver and recommendation.",
+    "D": "Fresh-context included AI with permitted public archive routines; scored from its retained original submission.",
+    "E": "Recorded inaction: keep the unresolved notice open at every cutoff."
+  },
+  "mode": "historical_rehearsal",
+  "schema": "frontier.shadow-review/1",
+  "science": {
+    "arms": {
+      "A": {
+        "accepted": 0,
+        "accepted_cases_unresolved_by_actual_incumbent": null,
+        "accepted_with_observed_beneficiary_use": null,
+        "availability_to_accepted_decision_seconds": null,
+        "clusters": 1,
+        "correct_deliveries": 0,
+        "false_priorities": 0,
+        "invalid_decisions": 0,
+        "late_submissions": 0,
+        "missed_priorities": 0,
+        "missing_actions_on_deliverable": 3,
+        "missing_submissions": 6,
+        "scientifically_correct": 0,
+        "slots": 6,
+        "submitted": 0,
+        "unsettled_reference": 0
+      },
+      "B": {
+        "accepted": 6,
+        "accepted_cases_unresolved_by_actual_incumbent": null,
+        "accepted_with_observed_beneficiary_use": null,
+        "availability_to_accepted_decision_seconds": null,
+        "clusters": 1,
+        "correct_deliveries": 3,
+        "false_priorities": 0,
+        "invalid_decisions": 0,
+        "late_submissions": 0,
+        "missed_priorities": 0,
+        "missing_actions_on_deliverable": 0,
+        "missing_submissions": 0,
+        "scientifically_correct": 6,
+        "slots": 6,
+        "submitted": 6,
+        "unsettled_reference": 0
+      },
+      "C": {
+        "accepted": 6,
+        "accepted_cases_unresolved_by_actual_incumbent": null,
+        "accepted_with_observed_beneficiary_use": null,
+        "availability_to_accepted_decision_seconds": null,
+        "clusters": 1,
+        "correct_deliveries": 3,
+        "false_priorities": 0,
+        "invalid_decisions": 0,
+        "late_submissions": 0,
+        "missed_priorities": 0,
+        "missing_actions_on_deliverable": 0,
+        "missing_submissions": 0,
+        "scientifically_correct": 6,
+        "slots": 6,
+        "submitted": 6,
+        "unsettled_reference": 0
+      },
+      "D": {
+        "accepted": 6,
+        "accepted_cases_unresolved_by_actual_incumbent": null,
+        "accepted_with_observed_beneficiary_use": null,
+        "availability_to_accepted_decision_seconds": null,
+        "clusters": 1,
+        "correct_deliveries": 3,
+        "false_priorities": 0,
+        "invalid_decisions": 0,
+        "late_submissions": 0,
+        "missed_priorities": 0,
+        "missing_actions_on_deliverable": 0,
+        "missing_submissions": 0,
+        "scientifically_correct": 6,
+        "slots": 6,
+        "submitted": 6,
+        "unsettled_reference": 0
+      },
+      "E": {
+        "accepted": 3,
+        "accepted_cases_unresolved_by_actual_incumbent": null,
+        "accepted_with_observed_beneficiary_use": null,
+        "availability_to_accepted_decision_seconds": null,
+        "clusters": 1,
+        "correct_deliveries": 0,
+        "false_priorities": 0,
+        "invalid_decisions": 3,
+        "late_submissions": 0,
+        "missed_priorities": 3,
+        "missing_actions_on_deliverable": 0,
+        "missing_submissions": 0,
+        "scientifically_correct": 3,
+        "slots": 6,
+        "submitted": 6,
+        "unsettled_reference": 0
+      }
+    },
+    "cases": [
+      {
+        "case": "1027-g",
+        "expected": "keep_open",
+        "measurement": null,
+        "source_set_sha256": "9b6c2398ed63fc981b6f9807e6d6bc3678dfd3274a29df574099d52192ff778c",
+        "submitted_actions": {
+          "B": "keep_open",
+          "C": "keep_open",
+          "D": "keep_open",
+          "E": "keep_open"
+        }
+      },
+      {
+        "case": "1027-r",
+        "expected": "keep_open",
+        "measurement": null,
+        "source_set_sha256": "ce92504aac156940058859c4ca062fc2612424880bbc7b16823b19bb9d26852a",
+        "submitted_actions": {
+          "B": "keep_open",
+          "C": "keep_open",
+          "D": "keep_open",
+          "E": "keep_open"
+        }
+      },
+      {
+        "case": "1028-g",
+        "expected": "deliver",
+        "measurement": {
+          "baseline": "3579392285815015017",
+          "delta_mag": -1.0697269439697266,
+          "direction": "persisted",
+          "packet_sha256": "a4b072ffa754d4f7d941aa3e3798ca1665bcc4e89bd7f8298bb70355bf6ab77f",
+          "reference": "505120158",
+          "sigma_mag": 0.05613864629455543,
+          "trigger": "3584356425815015004",
+          "unit": "mag",
+          "witness": "3587249065815015015"
+        },
+        "source_set_sha256": "abfba9409b5c9d2625d1904f0851e90fe8ab2ae5645be6a83eb685a7fe8d4d68",
+        "submitted_actions": {
+          "B": "deliver",
+          "C": "deliver",
+          "D": "deliver",
+          "E": "keep_open"
+        }
+      },
+      {
+        "case": "1028-r",
+        "expected": "keep_open",
+        "measurement": null,
+        "source_set_sha256": "59d8aca56356b71e1a9ef036cec36b2c7d5a6b9c75f5ed22eac436d7e5965a87",
+        "submitted_actions": {
+          "B": "keep_open",
+          "C": "keep_open",
+          "D": "keep_open",
+          "E": "keep_open"
+        }
+      },
+      {
+        "case": "1029-g",
+        "expected": "deliver",
+        "measurement": {
+          "baseline": "3579392285815015017",
+          "delta_mag": -1.0697269439697266,
+          "direction": "persisted",
+          "packet_sha256": "a4b072ffa754d4f7d941aa3e3798ca1665bcc4e89bd7f8298bb70355bf6ab77f",
+          "reference": "505120158",
+          "sigma_mag": 0.05613864629455543,
+          "trigger": "3584356425815015004",
+          "unit": "mag",
+          "witness": "3587249065815015015"
+        },
+        "source_set_sha256": "1df1173125ece264fc260d9d12ae16749b91db8942ad580209be13478ff8c7d0",
+        "submitted_actions": {
+          "B": "deliver",
+          "C": "deliver",
+          "D": "deliver",
+          "E": "keep_open"
+        }
+      },
+      {
+        "case": "1029-r",
+        "expected": "deliver",
+        "measurement": {
+          "baseline": "3580268845815015008",
+          "delta_mag": -0.7511825561523438,
+          "direction": "persisted",
+          "packet_sha256": "08b9e75ac642bbe2c2bb199fd8edec3e133ccc0912ee45e43e5d31a7fc0b3408",
+          "reference": "505120258",
+          "sigma_mag": 0.06491274723414385,
+          "trigger": "3584382785815015006",
+          "unit": "mag",
+          "witness": "3587389715815015003"
+        },
+        "source_set_sha256": "6abcf91f1a0f16c614159b394f74b93e17d361d27650c004a72d27c7ad4ffa4a",
+        "submitted_actions": {
+          "B": "deliver",
+          "C": "deliver",
+          "D": "deliver",
+          "E": "keep_open"
+        }
+      }
+    ],
+    "independent_key_sha256": "7104f32889e6537b58b1428f6f297b1e3a1778e3c834a519a5219ce10abfd408",
+    "participants": 0,
+    "protocol_sha256": "21b537493088d7da86db0c5da009675351f03ec6edd7fd53b2ec1c35ac0d5d32",
+    "real_beneficiary_queue_decisions": 0,
+    "target": "ZTF26acbezdh",
+    "unique_positive_witnesses": 2
+  },
+  "scope": "Six correlated cutoffs from two known notices on one already known object. Times refer to exposure, not contemporaneous broker delivery."
+}

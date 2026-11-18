@@ -55,6 +55,14 @@ def main():
         for folder in ("field_lab", "discovery_field", "invention", "invention/evolution", "invention/early_survey",
                        "invention/early_survey/exposures", "evolution_trials", "numeric_study/peak_context", "successor_field", "field_trials"):
             python("-m", "unittest", "discover", "-s", folder, "-v")
+        for folder in ("action_study", "action_study/observing", "action_study/opportunities", "action_study/shadow"):
+            python("-m", "unittest", "discover", "-s", folder, "-v")
+        for pattern in ("test_evidence_projection.py", "test_evidence_action_mission.py"):
+            python("-m", "unittest", "discover", "-s", "tests", "-p", pattern, "-v")
+        python("action_study/construction/verify.py", capture=record / "fresh-clock-construction.json")
+        python("action_study/construction/cohort.py", capture=record / "release-cohort.json")
+        python("action_study/opportunities/verify.py", capture=record / "opportunity-records.json")
+        python("action_study/shadow/shadow.py", "check", capture=record / "shadow-rehearsal.json")
         python("-m", "unittest", "discover", "-s", "tests", "-p", "test_followup_mission.py", "-v")
         python("-m", "unittest", "discover", "-s", "tests", "-p", "test_change_mission.py", "-v")
         python("-m", "unittest", "discover", "-s", "endpoint_lab", "-p", "test_rounding_audit.py", "-v")
@@ -99,6 +107,21 @@ def main():
         with ZipFile(package) as archive:
             archive.extractall(temp / "recipient")
         python("-I", temp / "recipient/replay.py", cwd=temp / "recipient", capture=record / "recipient.json")
+        recipient = temp / "recipient"
+        python("-I", recipient / "action_study/observing/desk.py", "--check", cwd=recipient, capture=record / "public-alerts.json")
+        python("-I", recipient / "action_study/qualification_choice/verify.py", cwd=recipient, capture=record / "public-engineering.json")
+        for profile in ("ztf-persistence", "gw-status", "engineering-qualification"):
+            mission = temp / (profile + "-mission.json")
+            receipt = out / (profile + ".json")
+            tool = recipient / "action_study/desk.py"
+            python("-I", tool, "example", profile, cwd=recipient, capture=mission)
+            python("-I", tool, "decide", mission, cwd=recipient, capture=receipt)
+            python("-I", tool, "verify", receipt, "--mission", mission, cwd=recipient)
+        for src, dst in (("qualification_choice/qualification_input.json", "next-engineering-trial.json"),
+                         ("construction/git-clock-converter.zip", "git-clock-converter.zip"),
+                         ("shadow/PUBLIC_RESULT.json", "shadow-review.json"),
+                         ("qualification_choice/economics.json", "engineering-economics.json")):
+            shutil.copyfile(PRODUCT / "action_study" / src, out / dst)
         shutil.copyfile(SHOW / "PRESENT.md", out / "PRESENTER.md")
         if options.browser:
             rebuilt = temp / "recipient-catalog.json"
