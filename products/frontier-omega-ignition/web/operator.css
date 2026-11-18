@@ -91,3 +91,19 @@
 #fixed-list li {margin: 3px 0}
 .rule-option details {margin: 5px 0 0 28px; padding: 0; border: 0}
 .rule-option details summary {font-size: .85rem}
+
+.night .night-opening {padding:clamp(36px,6vw,74px) 0 30px;border-bottom:1px solid var(--line);margin-bottom:26px}
+.night-opening h1 {font:normal clamp(2.9rem,7vw,6.2rem)/1.03 'Instrument Serif',Georgia,serif;letter-spacing:-.06em;margin:.12em 0 .25em}
+.night-opening .intro {max-width:47rem}
+.night-grid {display:grid;grid-template-columns:minmax(0,.78fr) minmax(0,1.22fr);gap:18px;align-items:start}
+.night .night-grid .workspace {min-width:0;padding:clamp(17px,2.5vw,30px);margin:0}
+.night-result {border-top:2px solid var(--gold)}
+.night h2 {font:normal clamp(1.55rem,3vw,2.25rem)/1.15 'Instrument Serif',Georgia,serif;margin:.15em 0 .6em}
+.night .muted {font-size:.9rem}
+.night-table-wrap {overflow:auto;margin:18px 0}
+.night table {border-collapse:collapse;width:100%;text-align:left;font-size:.88rem}
+.night caption {text-align:left;color:var(--gold);padding-bottom:.5em}
+.night td,.night th {border-bottom:1px solid var(--line);padding:.55em .3em;overflow-wrap:anywhere;vertical-align:top}
+.night #history {margin-top:25px}
+.night footer {margin-top:44px;flex-wrap:wrap}
+@media(max-width:760px){.night-grid{grid-template-columns:1fr}.night #language{min-width:70px}}

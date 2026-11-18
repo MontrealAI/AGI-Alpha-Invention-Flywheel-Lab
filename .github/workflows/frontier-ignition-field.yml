@@ -1,0 +1,97 @@
+name: IGNITION · field trials and observing-night instrument
+on:
+  pull_request:
+    paths:
+      - 'products/frontier-omega-ignition/**'
+      - 'products/alpha-genesis-harness/bridge/**'
+      - 'products/alpha-genesis-harness/scripts/qualify_hosted_local.py'
+      - 'docs/frontier-omega-ignition/continuation/FRONTIER_FIELD.html'
+      - '.github/workflows/frontier-ignition-field.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+env:
+  EXPECTED_SOURCE: ${{ github.event.pull_request.head.sha || github.sha }}
+  PYTHONDONTWRITEBYTECODE: '1'
+
+jobs:
+  recipient:
+    name: Public instrument, independent alternatives and private operator
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record runner window
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ env.EXPECTED_SOURCE }}
+          persist-credentials: false
+          sparse-checkout: |
+            products/frontier-omega-ignition
+            products/alpha-genesis-harness/bridge
+            products/alpha-genesis-harness/scripts
+            products/alpha-genesis-harness/tests/visual
+            docs/frontier-omega-ignition
+            docs/research
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Install reference ephemeris and locked browser driver
+        run: |
+          test "$(git rev-parse HEAD)" = "$EXPECTED_SOURCE"
+          python -m pip install 'numpy==2.2.6' 'scipy==1.17.0' 'astropy==7.2.0' 'pyerfa==2.0.1.5' 'astropy-iers-data==0.2026.11.16.0.37.44'
+          mkdir -p "$RUNNER_TEMP/browser"
+          cp products/alpha-genesis-harness/tests/visual/package*.json "$RUNNER_TEMP/browser/"
+          npm ci --prefix "$RUNNER_TEMP/browser" --ignore-scripts --no-audit --no-fund
+      - name: Regenerate reference geometry and independently receive the exhibition
+        env:
+          NODE_PATH: ${{ runner.temp }}/browser/node_modules
+        run: |
+          export CHROMIUM_PATH="$(command -v google-chrome)"
+          cd products/frontier-omega-ignition
+          python -B invention/reference.py --out "$RUNNER_TEMP/fresh-catalog.json"
+          cmp invention/catalog.json "$RUNNER_TEMP/fresh-catalog.json"
+          python -B field_trials/independent_sky.py --check field_trials/independent_sky_receipt.json
+          python -B field_trials/qualify.py --browser --expected-head "$EXPECTED_SOURCE" --output "$RUNNER_TEMP/public"
+      - name: Deliver public instruments, receipts, views and presenter guide
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: frontier-field-exhibition-${{ env.EXPECTED_SOURCE }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/public/
+          if-no-files-found: error
+
+  cpu:
+    name: Actual pinned Qwen CPU · ${{ matrix.study }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    strategy:
+      fail-fast: false
+      matrix:
+        study: [field, discovery, open]
+    steps:
+      - name: Record runner window
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ env.EXPECTED_SOURCE }}
+          persist-credentials: false
+          sparse-checkout: |
+            products/frontier-omega-ignition
+            products/alpha-genesis-harness/bridge
+            products/alpha-genesis-harness/scripts
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Observe public missions using verified local weights
+        run: |
+          test "$(git rev-parse HEAD)" = "$EXPECTED_SOURCE"
+          python -B products/frontier-omega-ignition/field_trials/observe.py --study "${{ matrix.study }}" \
+            --assets "$RUNNER_TEMP/assets" --work "$RUNNER_TEMP/private-runtime" --output "$RUNNER_TEMP/observations"
+      - name: Preserve public-prompt observations and source identities
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: frontier-field-cpu-${{ matrix.study }}-${{ env.EXPECTED_SOURCE }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/observations/
+          if-no-files-found: error

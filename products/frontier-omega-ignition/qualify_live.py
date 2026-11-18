@@ -28,6 +28,7 @@ from ignition import construction, delivery, evaluation
 from ignition.controller import CONSTRUCT_INSTRUCTION, Controller
 from ignition.provider import LocalProvider
 from ignition.store import Store, digest, runtime_source
+from discovery_field import protocol as source_protocol
 
 MODEL_ALIAS = "Qwen3-4B-Instruct-2507-Q4_K_M"
 EXAMPLE = PRODUCT / "examples" / "migration.json"
@@ -246,21 +247,45 @@ def acquired_investigation(state, calls):
     research = state.get("research") or {}
     acquired = sources.get("sources", [])
     sources_by_id = {row["id"]: row for row in research.get("signals", [])}
-    retrieved = {row["source_response_sha256"] for row in acquired}
-    covered = {key for key, row in sources_by_id.items() if row.get("source_response_sha256") in retrieved}
-    attributed = [c["id"] for c in research.get("candidates", []) if set(c.get("usable_sources", [])) & covered]
+    def identity(row):
+        if not (row.get("url") and isinstance(row.get("text"), str) and row.get("source_response_sha256")):
+            return None
+        return (row["url"], row.get("version"), row.get("role"), row["source_response_sha256"],
+                source_protocol.digest(row["text"].encode()))
+
+    retrieved = {key for row in acquired if (key := identity(row)) is not None}
+    covered = {key for key, row in sources_by_id.items() if identity(row) in retrieved}
+    attributed = []
+    grounded = []
+    mission = state.get("mission") or {}
+    purpose = " ".join([mission.get("purpose", ""), *mission.get("requirements", [])])
+    for candidate in research.get("candidates", []):
+        refs = set(candidate.get("sources", [])) & covered
+        if refs:
+            attributed.append(candidate["id"])
+        checked = candidate.get("evidence_review", {}).get("checks", [])
+        bindings = [r.get("claim", {}) for r in checked]
+        # Re-run the actual claim, purpose and source-text checks. An ID or an
+        # externally supplied "supported" flag is insufficient.
+        eligible = {ref for ref in candidate.get("sources", [])
+                    if ref in sources_by_id and source_protocol.qualified(sources_by_id[ref])}
+        review = source_protocol.review(dict(candidate, evidence=bindings), list(sources_by_id.values()), purpose, eligible)
+        if (refs and review["checks"] and all(r["status"] == "supported" for r in review["checks"])
+                and set(review["supported_sources"]) & refs and not review["unbound_sources"]):
+            grounded.append(candidate["id"])
     stages = {c.get("stage") for c in calls if c.get("mode") == "local" and c.get("status") == "completed"
               and c.get("reported_model") == MODEL_ALIAS}
     required_roles = {"Published release", "Earlier snapshot; capability at this revision requires testing"}
     matched_feeds = [feed for feed in sources.get("feeds", []) if required_roles <=
                      {row["role"] for row in acquired if row["feed"] == feed}]
     matched = bool(matched_feeds)
-    status = "BLOCKED" if not acquired else ("PASS" if matched and attributed and {"discover", "challenge"} <= stages else "FAIL")
+    status = "BLOCKED" if not acquired else ("PASS" if matched and grounded and {"discover", "challenge"} <= stages else "FAIL")
     return {"status": status, "feeds": sources.get("feeds", []),
             "observations": [{k:row[k] for k in ("feed", "url", "role", "version", "retrieved_at",
                                                   "event_at", "source_response_sha256") if k in row} for row in acquired],
             "source_failures": [{k:row.get(k) for k in ("feed","role")} for row in sources.get("failures", [])],
             "matched_temporal_sources": matched, "feeds_with_both_dates": matched_feeds, "candidates_citing_live_sources": attributed,
+            "candidates_with_material_live_premise": grounded,
             "selected_cites_live_source": bool(set((research.get("selected") or {}).get("usable_sources", [])) & covered),
             "model_stages": sorted(stages), "frontier_crossing": "unproven"}
 

@@ -41,18 +41,28 @@ class HostedQualificationTests(unittest.TestCase):
         self.assertEqual(result_status({**state, "status": "deferred"}, calls, True), "FAIL")
 
     def test_live_source_use_needs_lineage_and_dated_feed_pair(self):
-        pair = [{"feed":"code", "source_response_sha256":"a", "role":"Published release"},
-                {"feed":"code", "source_response_sha256":"b", "role":"Earlier snapshot; capability at this revision requires testing"}]
-        state = {"source_result":{"feeds":["code"], "sources":pair}, "research":{
-            "signals":[{"id":"S2","source_response_sha256":"a"}],
-            "candidates":[{"id":"C1", "usable_sources":["S2"]}]}}
+        from discovery_field import protocol
+        release = {"url":"https://github.com/org/example/releases/tag/v1", "version":"v1",
+                   "origin":"https://api.github.com/repos/org/example/releases?per_page=3", "role":"Published release",
+                   "source_response_sha256":"a"*64, "feed":"code", "text":"Added strict unit normalization."}
+        baseline = dict(release, url="https://github.com/org/example/commit/123", version="123",
+                        role="Earlier snapshot; capability at this revision requires testing", source_response_sha256="b"*64)
+        signal = dict(release, id="S2")
+        claim = protocol.observe(signal)
+        candidate = {"id":"C1", "sources":["S2"], "usable_sources":["S2"], "change":protocol.statement(claim)}
+        state = {"source_result":{"feeds":["code"], "sources":[release, baseline]},
+                 "mission":{"purpose":"Test example release normalization"}, "research":{
+                 "signals":[signal], "candidates":[candidate]}}
         calls = [{"mode":"local","status":"completed","reported_model":MODEL_ALIAS,"stage": stage}
                  for stage in ("discover","challenge")]
-        self.assertEqual(acquired_investigation(state,calls)["status"], "PASS")
-        state["research"]["candidates"][0]["usable_sources"] = ["S1"]
         self.assertEqual(acquired_investigation(state,calls)["status"], "FAIL")
-        state["source_result"]["sources"] = []
-        self.assertEqual(acquired_investigation(state,calls)["status"], "BLOCKED")
+        candidate["evidence_review"] = {"checks":[{"claim":claim,"status":"supported"}]}
+        self.assertEqual(acquired_investigation(state,calls)["status"], "PASS")
+        signal["url"] = release["url"] + "-different"
+        self.assertEqual(acquired_investigation(state,calls)["status"], "FAIL")
+        signal["url"] = release["url"]
+        state["source_result"]["sources"] = [release]
+        self.assertEqual(acquired_investigation(state,calls)["status"], "FAIL")
 
     def test_direct_model_control_does_not_receive_withheld_cases(self):
         columns = [{"source":"id","target":"record_id","type":"text"},

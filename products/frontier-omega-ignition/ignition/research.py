@@ -7,6 +7,8 @@ import json
 import re
 import sys
 from datetime import date, datetime, time, timedelta, timezone
+
+from discovery_field import protocol as factual
 from pathlib import Path
 from urllib.parse import urlsplit
 
@@ -232,7 +234,7 @@ def discover_sources(mission, *, feeds=None, fetch=None, as_of=None):
     return result
 
 
-def _candidate(value, number, signals):
+def _candidate(value, number, signals, purpose):
     if not isinstance(value, dict):
         raise ValueError("Candidate must be an object")
     candidate = {key: _string(value.get(key), "candidate " + key) for key in CANDIDATE_FIELDS}
@@ -245,6 +247,20 @@ def _candidate(value, number, signals):
                                    and indexed[ref]["access"] == "available" and indexed[ref]["status"] == "active"
                                    and indexed[ref]["current_observation"] and not indexed[ref]["event_pending"]]
     candidate["ineligible_sources"] = [ref for ref in candidate["sources"] if ref not in candidate["usable_sources"]]
+    # Recheck typed, public premises independently of the proposing model. Unknown
+    # publications and unstated consequences remain actionable research hypotheses.
+    review = factual.review(value, signals, purpose, candidate["usable_sources"])
+    candidate["evidence_review"] = review
+    candidate["evidence_level"] = "reference identity only"
+    reviewed_refs = {s["id"] for s in signals if factual.record_key(s["url"]) or factual.observe(s)}
+    if reviewed_refs.intersection(refs) or value.get("evidence") or review["checks"]:
+        reviewed_ok = {item["claim"]["source"] for item in review["checks"] if item["status"] == "supported"}
+        unexplained = set(refs) - reviewed_ok
+        invalid = {item["claim"]["source"] for item in review["checks"] if item["status"] != "supported"}
+        candidate["usable_sources"] = [ref for ref in candidate["usable_sources"]
+                                       if ref in reviewed_ok and ref not in invalid]
+        candidate["ineligible_sources"] = sorted(set(candidate["ineligible_sources"]) | invalid | unexplained)
+        candidate["evidence_level"] = "checked material premise" if not candidate["ineligible_sources"] else "unresolved factual support"
     candidate["id"] = f"C{number}"
     candidate["standing"] = "source-linked hypothesis" if candidate["usable_sources"] and not candidate["ineligible_sources"] else "speculative"
     return candidate
@@ -299,7 +315,11 @@ give a concrete construction route, a decisive observable test and an economic h
 costs, rights and scaling limits. Cite only supplied source IDs. A release or source excerpt alone cannot establish historical
 impossibility, demand or profitability. Use kind record_migration for a row conversion, manifest_audit for checking actual
 bytes against a trusted digest manifest, existing for incumbent delivery, or a descriptive kind for other routes. Never change
-the ambition to fit a supported builder. Use fewer evidenced candidates if needed and leave speculative leads uncited."""
+the ambition to fit a supported builder. Use fewer evidenced candidates if needed and leave speculative leads uncited. If a source supplies an
+observed_premise, bind your specific factual assertion to it in evidence: source, metric, value, scope and polarity
+(asserted or denied). Cite a material premise only. Keep the proposed effect and economic value as testable
+hypotheses. Put exactly the corresponding verified_statement(s), one per line, in change. Explain what you propose
+for the beneficiary in outcome and route, keeping them open to disconfirmation. Other source IDs identify references only; you may still propose an original solution without one."""
 _CHALLENGE = """Challenge the leading answer, the candidate set and the proposed evidence instrument. Include a stronger
 additional candidate when justified. For consequential objections cite a verbatim witness, or explicitly leave it unresolved.
 For factual checks you may give a predicate of "source withdrawn" or "document unavailable".
@@ -334,12 +354,22 @@ def investigate(mission, sources, propose, *, as_of=None):
                                          "retrieved_at", "status", "access", "runtime_access", "current_observation", "event_pending", "version", "role") if k in s}
                      | {"excerpt": s["text"][:1200], "excerpt_truncated": len(s["text"]) > 1200 or bool(s.get("excerpt_truncated"))}
                      for s in signals]
+    purpose = " ".join([mission.get("purpose", ""), *mission.get("requirements", [])])
+    for source, public in zip(signals, model_signals):
+        premise = factual.observe(source)
+        if premise and factual.qualified(source):
+            public["observed_premise"] = {k: v for k, v in premise.items() if k != "excerpt_sha256"}
+            public["verified_statement"] = factual.statement(premise)
     payload = {"mission": context, "signals": model_signals, "baseline_date": str(when.date() - timedelta(days=35))}
+    candidate_shape = _CANDIDATE_SHAPE
+    if any("observed_premise" in s for s in model_signals):
+        candidate_shape = {**candidate_shape, "evidence": [{"source": "S ID", "metric": "observed metric",
+                           "value": "reported value", "scope": "population and interpretation", "polarity": "asserted or denied"}]}
     first = propose("discover", {**payload, "instructions": _DISCOVER, "response_shape": {
-        "candidates": [_CANDIDATE_SHAPE], "favourite": "C1"}})
+        "candidates": [candidate_shape], "favourite": "C1"}})
     if not isinstance(first, dict) or not isinstance(first.get("candidates"), list) or len(first["candidates"]) > 5:
         raise ValueError("Discovery must return up to five initial candidates")
-    candidates = [_candidate(row, i + 1, signals) for i, row in enumerate(first["candidates"])]
+    candidates = [_candidate(row, i + 1, signals, purpose) for i, row in enumerate(first["candidates"])]
     favourite = first.get("favourite")
     if favourite is not None and favourite not in [row["id"] for row in candidates]:
         raise ValueError("Initial favourite was not proposed")
@@ -355,7 +385,7 @@ def investigate(mission, sources, propose, *, as_of=None):
     if not isinstance(second, dict):
         raise ValueError("Challenge must return an object")
     if second.get("challenger") is not None:
-        candidates.append(_candidate(second["challenger"], len(candidates) + 1, signals))
+        candidates.append(_candidate(second["challenger"], len(candidates) + 1, signals, purpose))
     seen_routes = set()
     for candidate in candidates:
         route = tuple(sorted(_words(candidate["route"])))
@@ -381,7 +411,12 @@ def investigate(mission, sources, propose, *, as_of=None):
         and isinstance(row.get("check"), str) and 0 < len(row["check"].strip()) <= 2000
         for row, requirement in zip(fit, requirements)))
     gate = None
-    if decision in {"build", "incumbent"} and (not chosen or chosen["standing"] != "source-linked hypothesis"):
+    retrieved_ids = {s["id"] for s in signals if s.get("acquisition") in {
+        "operator-authorized public repository", "curated publisher feed"}}
+    if (decision in {"build", "incumbent"} and chosen and retrieved_ids.intersection(chosen["sources"])
+            and chosen["evidence_level"] != "checked material premise"):
+        gate = "Retrieved source identities alone do not establish the claimed change. Test or register a material premise."
+    elif decision in {"build", "incumbent"} and (not chosen or chosen["standing"] != "source-linked hypothesis"):
         gate = "The selected route lacks usable attributable support or repeats another route."
     elif decision == "build" and (kind not in KINDS or (has_spec and kind != public_spec.get("kind")) or not complete_fit):
         gate = "The selected construction or original requirement coverage exceeds the frozen bounded specification."

@@ -1,5 +1,12 @@
 # 🌌♾️ FRONTIER Ω — IGNITION
 
+## The observing night · La nuit d’observation
+
+The [bilingual exhibition](../../docs/frontier-omega-ignition/continuation/FRONTIER_FIELD.html) turns six public transient candidates into an observing worklist and derives source-linked g−r measurements from the survey archive. Change the budget, cadence or time between bands, then export the checked result. The private operator workspace at `/follow-up` constructs a mission revision and reopens its delivered worklist independently. The public `/field` route also works as a standalone download.
+
+[Five-minute guide, EN/FR](showcase/field_exhibition/PRESENT.md) · [Outcomes, costs and reproduction](../../docs/frontier-omega-ignition/continuation/field-invention/REPORT.md) · [Endpoint service qualification](field_lab/README.md)
+
+
 **Bring an ambition, investigate the evidence, and take home a program you can test.** MONTREAL.AI × QUEBEC.AI.
 
 IGNITION runs on the operator’s machine. It reads an authorized mission, investigates attributed sources, proposes opportunities, challenges them, and builds the selected construction when the installed interpreter can perform it. The first two executable families are typed record migrations and byte-level manifest audits. Research may select an existing solution, request a testable specification, or stop with a specific obstruction.

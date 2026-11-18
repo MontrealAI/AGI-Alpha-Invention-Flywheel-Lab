@@ -1,0 +1,26 @@
+{
+  "schema": 1,
+  "mission": "Bilingual service-brief intake for MONTREAL.AI",
+  "population": "Six authored public engineering briefs. Equal case weights, four specified contracts and two abstentions. This is a pilot proxy for internal intake; actual incoming traffic and its distribution have not been observed.",
+  "instruction": "Convert this service brief to one bare JSON object. Return {\"status\":\"ready\",\"p90_ms\":N,\"min_rate\":N} with the requested maximum P90 first-visible-output latency in milliseconds and minimum output token rate per user in tokens per second. Convert seconds and decimal commas. If either requirement is missing, refers to a different percentile or is only a total system rate, return {\"status\":\"defer\"}. Include no explanation or extra keys.",
+  "concurrency": [1, 3],
+  "max_attempts_per_request": 2,
+  "attempt_timeout_s": 90,
+  "max_output_tokens": 96,
+  "max_response_bytes": 131072,
+  "thresholds": {
+    "p90_first_visible_ms": 500,
+    "p90_turn_ms": 2500,
+    "p10_delivered_tokens_per_turn_second": 5,
+    "required_quality_fraction": 1,
+    "required_first_attempt_completion_fraction": 1
+  },
+  "cases": [
+    {"id":"en-interactive","prompt":"Support console. P90 first visible output within 500 ms and at least 100 tokens/s per user.","expected":{"status":"ready","p90_ms":500,"min_rate":100}},
+    {"id":"fr-interactive","prompt":"Soutien bilingue. Premier contenu visible au P90 sous 320 ms et au moins 80 tokens/s par utilisateur.","expected":{"status":"ready","p90_ms":320,"min_rate":80}},
+    {"id":"en-convert","prompt":"Research preview. P90 first visible output within 0.75 s and at least 44 tokens/s per user.","expected":{"status":"ready","p90_ms":750,"min_rate":44}},
+    {"id":"fr-convert","prompt":"Atelier interne. Au P90, premier contenu visible en 1,25 s au plus et débit minimum de 12,5 tokens/s par utilisateur.","expected":{"status":"ready","p90_ms":1250,"min_rate":12.5}},
+    {"id":"en-missing","prompt":"Editor preview. Require P90 first visible output within 400 ms. The minimum user delivery rate is undecided.","expected":{"status":"defer"}},
+    {"id":"fr-aggregate","prompt":"Portail public. Premier contenu visible au P95 sous 250 ms et débit global de 9000 tokens/s pour tout le système.","expected":{"status":"defer"}}
+  ]
+}

@@ -1,0 +1,51 @@
+"use strict";
+const assert = require("node:assert/strict");
+const path = require("node:path");
+const {execFileSync} = require("node:child_process");
+
+async function qualifyFollowup(page, work, assertLayout, receive) {
+  const origin = new URL(page.url()).origin;
+  await page.goto(origin + "/");
+  await page.locator('a[href="/follow-up"]').click();
+  await page.locator("#build:enabled").waitFor();
+  await assertLayout(page, 320);
+  await page.locator("#owner").fill("Private local observer");
+  await page.locator("#build").click();
+  await page.locator("#kit[href]").waitFor();
+  const verified = new URL(page.url());
+  const id = verified.hash.slice(1);
+  assert.match(id, /^[a-f0-9]{32}$/);
+  const rows = await page.locator("#slots tr").count();
+  assert.ok(rows <= 6);
+  const first = await page.locator("#kit").getAttribute("href");
+  const kit = path.join(work, "sky-recipient.zip");
+  await receive(page, "#kit", kit);
+  const directory = path.join(work, "sky-recipient");
+  execFileSync("python3", ["-m", "zipfile", "-e", kit, directory]);
+  const receipt = JSON.parse(execFileSync("python3", ["-IB", path.join(directory, "review_followup.py")]));
+  assert.equal(receipt.plan.slots.length, rows);
+  assert.equal(receipt.verification.accepted, true);
+  await page.locator("#language").click();
+  assert.equal(await page.locator("html").getAttribute("lang"), "fr");
+  assert.match(await page.locator("h1").textContent(), /programme de la nuit/);
+  await page.locator("#budget").fill("0");
+  assert.equal(await page.locator("#kit").getAttribute("href"), null);
+  assert.match(await page.locator("#verdict").textContent(), /Critères modifiés/);
+  await page.locator("#build").click();
+  await page.locator('#kit[href$="version=2"]').waitFor();
+  assert.equal(await page.locator("#slots tr").count(), 0);
+  assert.equal((await page.request.get(origin + first)).status(), 409);
+  await page.reload();
+  await page.locator('#kit[href$="version=2"]').waitFor();
+  assert.equal(await page.locator("#owner").inputValue(), "Private local observer");
+  await page.locator("#history summary").click();
+  assert.equal(await page.locator("#revisions li").count(), 2);
+  await assertLayout(page, 390);
+  await assertLayout(page, 1280);
+  await page.locator("#new").click();
+  assert.equal(await page.locator("#kit").getAttribute("href"), null);
+  assert.equal(await page.locator("#owner").inputValue(), "MONTREAL.AI");
+  assert.equal(new URL(page.url()).hash, "");
+}
+
+module.exports = {qualifyFollowup};

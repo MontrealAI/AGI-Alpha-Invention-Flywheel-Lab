@@ -1,0 +1,122 @@
+{
+  "acquisition": {
+    "runtime_bytes": 23158635,
+    "weights_bytes": 2497280736,
+    "download_and_verify_wall_seconds": 303.135
+  },
+  "attempts": [
+    {
+      "started_at": "2026-11-18T01:15:45.476644+00:00",
+      "finished_at": "2026-11-18T01:21:02.350432+00:00",
+      "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+      "hardware": {
+        "processor": "AMD EPYC 9V45 96-Core Processor",
+        "architecture": "x86_64",
+        "platform": "Linux",
+        "threads": 9,
+        "gpu_layers": 0
+      },
+      "source_files": {
+        "field_lab/capture.py": "1b4e369dde7b3818f83b2a1f469a91a83e1c8d426ceabc153be3b46f32fc57e3",
+        "field_lab/field.py": "bb0e5d174666c97985af8cebb2da2a278c05c68d81f02f637c5c72fa3f2b0302",
+        "field_lab/protocol.py": "7f1d1d032db59fee8a706e86e64a588ae1a32ca520785b75c7ef3b0b43900fd7",
+        "field_lab/verify.py": "161b750106ab1f02891b300cd883317be8333aaaecaa49ae035dcb2decab9886",
+        "field_lab/workload.json": "1c4cec4cfdaf847461600e0847ba48dad74ea9be988d6e56e7d6af652a1c5468",
+        "field_trials/observe.py": "591f61b42f06e71e3aa22ebb4a2ff4b8a4d1d8c0e80ec3df4a3aa974e4dc594d",
+        "qualify_live.py": "67ed12c2fa91b95543f190272ff3bd713a99f06eda52e2127cf4c60a9d96bd5f"
+      },
+      "wall_seconds": 316.8714,
+      "cpu_seconds_including_children": 1784.5653,
+      "arms": {
+        "field": {
+          "client_exit": 0,
+          "independent_replay_exit": 1,
+          "receipt_sha256": "5cd15731151eb1f5040e899933cdf08f18e027c22a1402265e1be4598cddb343",
+          "wall_seconds_with_startup": 217.5599,
+          "child_cpu_seconds_including_server": 1243.1924
+        },
+        "conventional": {
+          "client_exit": 0,
+          "independent_replay_exit": 1,
+          "receipt_sha256": "9a3d0bdc65689b33bb8abe27f67ddb0f0d13a0363f485b0f6301d679b171f384",
+          "wall_seconds_with_startup": 97.5593,
+          "child_cpu_seconds_including_server": 539.5819
+        }
+      },
+      "sha256_model": "2fde00ce69dd4899c70d020845e2638353015bba0fdf161b3eb965f2bca4464e",
+      "partial_qualification": "Both routes withheld. First producer ran while its source was edited; the checker rejected the changed capture source. The separate curl pilot lost the local model partway through replay; live token rechecking saw a refused connection. Exact cause of that stop was unobserved."
+    },
+    {
+      "started_at": "2026-11-18T01:24:41.101915+00:00",
+      "finished_at": "2026-11-18T01:24:50.244627+00:00",
+      "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+      "hardware": {
+        "processor": "AMD EPYC 9V45 96-Core Processor",
+        "architecture": "x86_64",
+        "platform": "Linux",
+        "threads": 9,
+        "gpu_layers": 0
+      },
+      "source_files": {
+        "field_lab/capture.py": "3cd31bf12e73c0325efd3601f03a7684a2d3c7ab43378ea8bbfc941f5a00d200",
+        "field_lab/field.py": "06df5aa0fdbf01d473aaab9ede917d112168582c443607be2e138fe2a7c178c4",
+        "field_lab/protocol.py": "ee810277eecb0bfa7265dd3ab076dbce26c29b5c1cca0b58467a6961106c9fb5",
+        "field_lab/verify.py": "c6e6c5988af6090886ccd85f53917b01d79d4aa096d11f0c94ae6aa53546eee8",
+        "field_lab/workload.json": "1c4cec4cfdaf847461600e0847ba48dad74ea9be988d6e56e7d6af652a1c5468",
+        "field_trials/observe.py": "8ad36866be1678b028f19a75d433decef41c6a7688d62af0901d236238053ce1",
+        "qualify_live.py": "67ed12c2fa91b95543f190272ff3bd713a99f06eda52e2127cf4c60a9d96bd5f"
+      },
+      "wall_seconds": 9.1397,
+      "cpu_seconds_including_children": 7.5178,
+      "arms": {
+        "field": {
+          "execution_obstruction": "Verified llama-server exited before it became ready.",
+          "serving_configuration": [
+            "--ctx-size",
+            "6144",
+            "--parallel",
+            "3",
+            "--threads",
+            "9",
+            "--threads-batch",
+            "9",
+            "--n-gpu-layers",
+            "0",
+            "--seed",
+            "6144",
+            "--temp",
+            "0"
+          ],
+          "server_exit_before_shutdown": -9,
+          "wall_seconds_with_startup": 4.0344,
+          "child_cpu_seconds_including_server": 3.3977
+        },
+        "conventional": {
+          "execution_obstruction": "Verified llama-server exited before it became ready.",
+          "serving_configuration": [
+            "--ctx-size",
+            "6144",
+            "--parallel",
+            "3",
+            "--threads",
+            "9",
+            "--threads-batch",
+            "9",
+            "--n-gpu-layers",
+            "0",
+            "--seed",
+            "6144",
+            "--temp",
+            "0"
+          ],
+          "server_exit_before_shutdown": -9,
+          "wall_seconds_with_startup": 3.0313,
+          "child_cpu_seconds_including_server": 2.0481
+        }
+      },
+      "sha256_model": "2fde00ce69dd4899c70d020845e2638353015bba0fdf161b3eb965f2bca4464e",
+      "partial_qualification": "In a clean checkout both server instances exited with signal 9 during loading, before any requests. The host did not supply a cause."
+    }
+  ],
+  "prospective_recovery": "Use one immutable checkout and the same public workload, model, 3 slots, 6144-token context and CPU permissions in both service arms. Disable weight repacking, use a logical batch of 128 and physical microbatch of 64, and disable the runtime web UI. Record this as a new serving configuration. Keep field adoption deferred and observe each server exit. The dedicated hosted CPU trial uses the same configuration."
+}

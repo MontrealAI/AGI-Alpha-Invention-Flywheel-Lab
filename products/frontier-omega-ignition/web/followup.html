@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="dark"><title>Night Worklist · FRONTIER Ω</title>
+<link href="/style.css" rel="stylesheet"><link href="/operator.css" rel="stylesheet">
+<script src="/followup.js" defer></script>
+</head>
+<body class="operator night">
+<a href="#budget" class="skip" data-fr="Aller aux critères">Skip to criteria</a>
+<header><a href="/" class="brand" aria-label="FRONTIER Ω"><span class="mark" aria-hidden="true">Ω</span> FRONTIER</a>
+<nav aria-label="Langue / Language"><button id="language" type="button" lang="fr">Français</button></nav></header>
+<main>
+<section class="night-opening"><p class="eyebrow" data-fr="IGNITION · Atelier privé">IGNITION · Private workspace</p>
+<h1 data-fr="Le programme de la nuit">The night worklist</h1>
+<p class="intro" data-fr="Transformez des alertes astronomiques archivées en un programme de suivi. Choisissez le temps disponible et le nombre de visites qu’exige chaque cible.">Turn archived astronomical alerts into a follow-up worklist. Choose the available time and the number of visits each target needs.</p>
+</section>
+<div class="night-grid">
+<section class="workspace"><h2 data-fr="Critères de la mission">Mission criteria</h2>
+<form id="plan-form">
+<label for="budget" data-fr="Nombre maximal de créneaux">Available visit slots</label>
+<input id="budget" name="max_slots" type="number" min="0" max="6" step="1" required value="6" aria-describedby="budget-hint">
+<p id="budget-hint" class="muted" data-fr="Six créneaux de 20 minutes répartis sur deux nuits modélisées.">Six 20-minute slots across two modeled nights.</p>
+<label for="cadence" data-fr="Visites par cible">Visits per target</label>
+<select name="visits_per_target" id="cadence"><option value="1" data-fr="Une visite">One visit</option><option value="2" selected data-fr="Deux visites sur des nuits distinctes">Two visits on separate nights</option></select>
+<label for="owner" data-fr="Bénéficiaire privé">Private beneficiary</label>
+<input id="owner" maxlength="200" autocomplete="off" value="MONTREAL.AI">
+<p class="muted" data-fr="Le nom reste dans ce dossier local. Le programme exporté contient les données astronomiques publiques et les paramètres de planification.">The name stays in this local record. The export contains the public sky data and planning parameters.</p>
+<div class="action-row"><button class="primary" id="build" type="submit" disabled>Construct worklist</button><button id="new" type="button" hidden data-fr="Nouvelle mission">New mission</button></div>
+</form></section>
+<section class="workspace night-result" aria-labelledby="verdict">
+<p class="eyebrow" data-fr="Programme vérifié">Verified worklist</p><h2 id="verdict" tabindex="-1" aria-live="polite"></h2>
+<p id="state-note" role="status"></p>
+<div id="receipt" hidden>
+<div class="night-table-wrap"><table><caption data-fr="Créneaux retenus · UTC">Selected slots · UTC</caption>
+<thead><tr><th scope="col" data-fr="Début">Start</th><th scope="col" data-fr="Cible">Target</th><th scope="col" data-fr="AD / Déc. (°)">RA / Dec (°)</th></tr></thead><tbody id="slots"></tbody></table></div>
+<p id="comparison"></p><p class="muted" data-fr="Le résultat porte sur la faisabilité géométrique des créneaux modélisés. Toute observation future exige du temps de télescope, la météo et une autorisation distincte.">This result covers geometric feasibility in the modeled windows. An actual observation requires telescope time, weather conditions and separate authority.</p>
+<div class="action-row"><a id="kit" class="button primary" download data-fr="Exporter le programme vérifié">Export verified worklist</a></div>
+<p class="muted"><span data-fr="Après extraction, vérifier avec">After extraction, verify with</span> <code>python3 -IB review_followup.py</code>.</p>
+<details><summary data-fr="Preuve et identité des sources">Evidence and source identities</summary><pre id="proof"></pre></details>
+</div>
+<details id="history" hidden><summary data-fr="Historique des révisions">Revision history</summary><ul id="revisions"></ul></details>
+</section>
+</div>
+</main>
+<footer><a href="/" data-fr="Atelier général (anglais)">General workbench (English)</a><a href="/field" target="_blank" rel="noopener noreferrer" data-fr="Exposition publique ↗">Public exhibition ↗</a></footer>
+</body></html>

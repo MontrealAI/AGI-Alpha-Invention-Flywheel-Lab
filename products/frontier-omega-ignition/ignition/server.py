@@ -37,6 +37,11 @@ class Service(ThreadingHTTPServer):
 
 PRIVATE_CSP = ("default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; "
                "connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'")
+PUBLIC_EXHIBITS = {
+    "/exhibition": "FRONTIER_IGNITION.html",
+    "/frontier": "FRONTIER_LAB.html",
+    "/field": "FRONTIER_FIELD.html",
+}
 
 
 class Handler(BaseHTTPRequestHandler):
@@ -69,7 +74,8 @@ class Handler(BaseHTTPRequestHandler):
         hosts = {f"127.0.0.1:{port}", f"localhost:{port}"}
         parts = urlsplit(self.path)
         # An opaque exhibit may navigate to another public page or download it.
-        public_document = (not post and parts.path in {"/frontier", "/exhibition", "/showcase"}
+        public_route = parts.path in PUBLIC_EXHIBITS or parts.path == "/showcase"
+        public_document = (not post and public_route
                            and self.headers.get("Sec-Fetch-Mode") == "navigate")
         if (len(self.headers.get_all("Host",[])) != 1 or self.headers.get("Host") not in hosts
                 or (not public_document and (self.headers.get("Origin") not in (None, "http://"+self.headers["Host"])
@@ -89,20 +95,23 @@ class Handler(BaseHTTPRequestHandler):
             body = strict_json(self.rfile.read(size))
             if not isinstance(body,dict):
                 raise StateError("Expected an object")
+        if not post and route in {"/follow-up", "/followup.js"}:
+            name = "followup.html" if route == "/follow-up" else "followup.js"
+            media = "text/html" if route == "/follow-up" else "text/javascript"
+            return self._send(200, media + "; charset=utf-8", (PRODUCT / "web" / name).read_bytes())
         if not post and route in {"/", "/index.html", "/app.js", "/style.css", "/operator.css"}:
             name = route.lstrip("/") or "index.html"
             media = {"index.html":"text/html","app.js":"text/javascript","style.css":"text/css","operator.css":"text/css"}[name]
             return self._send(200,media+"; charset=utf-8",(PRODUCT/"web"/name).read_bytes())
-        if not post and route in {"/showcase", "/exhibition", "/frontier"}:
+        if not post and public_route:
             # The exhibit reads only its repository's public inputs. Its opaque
             # origin and independent no-connect CSP isolate private workspace APIs.
             from showcase.build import render, policy
-            assets = {"/exhibition": "FRONTIER_IGNITION.html", "/frontier": "FRONTIER_LAB.html"}
             directory = PRODUCT.parents[1] / "docs/frontier-omega-ignition/continuation"
-            page = render() if route == "/showcase" else (directory / assets[route]).read_text(encoding="utf-8")
+            page = render() if route == "/showcase" else (directory / PUBLIC_EXHIBITS[route]).read_text(encoding="utf-8")
             csp = (policy(page) + "; frame-ancestors 'none'; "
                    "sandbox allow-scripts allow-downloads allow-popups allow-popups-to-escape-sandbox")
-            attachment = assets["/frontier"] if route == "/frontier" and parts.query == "download=1" else None
+            attachment = PUBLIC_EXHIBITS.get(route) if parse_qs(parts.query).get("download") == ["1"] else None
             return self._send(200, "text/html; charset=utf-8", page.encode("utf-8"), attachment, csp=csp)
         if not post and route == "/api/status":
             provider = ctrl.identity()
