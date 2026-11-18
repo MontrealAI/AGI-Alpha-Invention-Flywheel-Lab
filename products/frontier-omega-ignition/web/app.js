@@ -265,13 +265,17 @@ function loadBrief(mission = {}, sources = [], useSavedPermissions = true) {
   for (const k of authorityKeys) $(k).checked = useSavedPermissions && mission.authority?.[k] === true;
   $("sources").value = json(sources);
 }
+function missionLocked() {
+  const state = current?.operation?.state;
+  return state === "paused" || state === "stopped";
+}
 function buttons() {
   $("snapshot").hidden = replay || !current || ["queued","running","awaiting_model","awaiting_contract","awaiting_choice"].includes(current.status) || dirty;
   $("close-replay").hidden = !replay;
   $("recorded-bundle").hidden = true;
   $("history").hidden = replay;
   const operation = current?.operation?.state;
-  const locked = operation === "paused" || operation === "stopped";
+  const locked = missionLocked();
   $("mission-operation").hidden = replay || !operation;
   $("operation-state").textContent = operation ? "Mission " + operation : "";
   $("pause-operation").hidden = locked;
@@ -544,7 +548,7 @@ function mappingChoiceView(run) {
 }
 $("choice-options").addEventListener("change", buttons);
 function chooseRule(abstain) {
-  if (!current?.mapping_choice || current.status !== "awaiting_choice" || dirty || locked || replay || busy) return;
+  if (!current?.mapping_choice || current.status !== "awaiting_choice" || dirty || missionLocked() || replay || busy) return;
   const request = current.mapping_choice;
   if (renderedChoice !== json([current.id, current.version, request.sha256])) return;
   const choice = abstain ? "abstain" : $("choice-options").querySelector("input:checked")?.value;
