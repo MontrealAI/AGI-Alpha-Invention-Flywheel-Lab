@@ -76,13 +76,13 @@ def child_cpu():
 
 
 @contextlib.contextmanager
-def server(binary, weights, work, record, arm, *, context_tokens=6144):
+def server(binary, weights, work, record, arm):
     with socket.socket() as sock:
         sock.bind(("127.0.0.1", 0))
         port = sock.getsockname()[1]
     threads = str(record["hardware"]["threads"])
     slots = "3" if arm in {"field", "conventional"} else "1"
-    config = ["--ctx-size", str(context_tokens), "--parallel", slots, "--threads", threads, "--threads-batch",
+    config = ["--ctx-size", "6144", "--parallel", slots, "--threads", threads, "--threads-batch",
               threads, "--n-gpu-layers", "0", "--seed", "6144", "--temp", "0",
               "--no-repack", "--batch-size", "128", "--ubatch-size", "64", "--no-webui"]
     record["serving_configuration"] = config

@@ -19,6 +19,7 @@ PRODUCT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PRODUCT))
 
 from field_trials import observe
+from qa import research_server
 from ignition.construction import execute
 from ignition.controller import Controller
 from ignition.provider import LocalProvider
@@ -200,8 +201,11 @@ def main():
         record["source_revision"] = qualification.checked_source()
         record["runtime_source_sha256"] = qualification.runtime_source()
         binary, weights = observe.prepare(args.assets.resolve(), work, record)
-        with observe.server(binary, weights, work, record, "selection",
-                            context_tokens=12288 if (args.research or args.blank_studio) else 6144) as port:
+        if args.research or args.blank_studio:
+            serving = research_server.server(binary, weights, work, record)
+        else:
+            serving = observe.server(binary, weights, work, record, "selection")
+        with serving as port:
             model = LocalProvider("llama-cpp", qualification.MODEL_ALIAS, port, observe.PINS.MODEL_SHA,
                                   output_tokens=2048 if args.research else 128, timeout=600 if args.research else 120,
                                   streaming=True, schema_output=True)
