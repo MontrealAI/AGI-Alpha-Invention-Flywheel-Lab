@@ -269,6 +269,11 @@ def pursue(ctrl, plan_file, request_id, *, reuse_from=None):
             attempt["next_action"] = commercial["history"][-1]["event"]["details"]["reopen_condition"]
         if commercial["commercial_state"] not in ("identified", "withheld"):
             receipt["result"] = "existing_commercial_engagement"
+            attempt["next_action"] = commercial["next_action"]
+            if commercial["commercial_state"] == "paid" and commercial["collected_revenue"] is not None:
+                # Carry the single journal observation. Reruns report the same receipt and never book a new amount.
+                receipt["collected_revenue"] = {**commercial["collected_revenue"],
+                                                "candidate": candidate["id"], "mission_id": run_id, "version": rev}
             break
         if state["status"] == "verified" and decision and decision["disposition"] == "ready_for_beneficiary_review" and commercial["commercial_state"] != "withheld":
             receipt["result"] = "beneficiary_review_required"

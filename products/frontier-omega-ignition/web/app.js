@@ -26,10 +26,11 @@ function urlLink(url) {
     const a=elem("a","Inspect primary source →"); a.href=u.href; a.rel="noreferrer noopener"; a.target="_blank"; return a;
   } catch {return null;}
 }
-function commercialEvidence(e) {
+function commercialEvidence(e, liveJournal) {
   if(!e || typeof e!=="object") return;
   const s=section("Commercial evidence"), observed=elem("dl");
   for (const [key,label] of [["verified_demand","Verified demand"],["booked_revenue","Booked revenue"],["collected_revenue","Collected revenue"]]) {
+    if(key === "collected_revenue" && liveJournal) continue;
     if(Object.hasOwn(e,key)) observed.append(elem("dt",label),elem("dd",e[key]===null?"Unmeasured":lineText(e[key])));
   }
   if(observed.childElementCount) s.append(observed);
@@ -59,7 +60,7 @@ function commercialEvidence(e) {
   }
   if(e.error) s.append(elem("p",lineText(e.error),"notice"));
 }
-function results(run) {
+function results(run, liveJournal = false) {
   $("results").replaceChildren();
   const r=run.research || {};
   if (run.field_decision) {
@@ -120,7 +121,7 @@ function results(run) {
     if (ev.scope) s.append(elem("p",ev.scope,"muted"));
     detail(s,"Full evaluation receipt",ev);
   }
-  commercialEvidence(run.economics);
+  commercialEvidence(run.economics, liveJournal);
 }
 // END SHARED READ-ONLY EVIDENCE VIEW
 const authorityKeys = ["local_model", "assisted_model", "public_sources", "allow_program_reuse"];
@@ -639,7 +640,7 @@ function show(run, open = false) {
   $("events").replaceChildren(...(run.events||[]).map(ev=>{
     const li=elem("li");li.append(elem("strong",ev.stage),elem("p",ev.message),elem("small",ev.at));return li;
   }));
-  results(run);
+  results(run, !replay);
   $("proposal").textContent=json(run.proposed_contract || {});
   if(lastProposal!==run.contract_sha256) {lastProposal=run.contract_sha256; $("confirmations").value="";}
   if (lastHandoff !== run.handoff?.sha256) { $("response").value=""; lastHandoff=run.handoff?.sha256; }
@@ -713,10 +714,18 @@ $("commercial-record").addEventListener("toggle", async () => {
   try {
     const record = await api(apiPath(id, "/commercial") + "?version=" + version);
     if (current?.id !== id || current?.version !== version || replay) return;
-    $("commercial-state").textContent = stageLabel(record.commercial_state) + " · " + record.next_action;
+    const paid = record.commercial_state === "paid" && record.collected_revenue;
+    const parts = [stageLabel(record.commercial_state)];
+    if (paid) {
+      const format = minor => paid.currency + " " + (minor / 10 ** paid.minor_unit_digits).toFixed(paid.minor_unit_digits);
+      parts.push("Gross " + format(paid.gross_minor), "Provider fee " + format(paid.provider_fee_minor),
+                 "Available in Stripe " + format(paid.available_net_minor), "Observed " + paid.observed_at);
+    }
+    parts.push(record.next_action);
+    $("commercial-state").textContent = parts.join(" · ");
     $("commercial-events").replaceChildren(...record.history.map(item => {
       const li = elem("li");
-      li.textContent = [item.recorded_at, item.event.stage, item.event.counterparty, item.event.reviewer].join(" · ");
+      li.textContent = [item.recorded_at, item.event.stage, item.event.counterparty, item.event.reviewer].filter(Boolean).join(" · ");
       return li;
     }));
   } catch (err) {
