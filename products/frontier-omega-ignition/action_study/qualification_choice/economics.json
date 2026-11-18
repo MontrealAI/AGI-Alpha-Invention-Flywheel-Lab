@@ -1,0 +1,190 @@
+{
+  "registration_commit": "ab3b5d4969f358781dc7d63efb6b9987aa73b07f",
+  "as_of_utc": "2026-11-18",
+  "captures": {
+    "complete": {
+      "reports": 500,
+      "groups": 12,
+      "http_gets": 504,
+      "status_response_bytes": 57500,
+      "shared_body_bytes": 4154931,
+      "response_body_bytes": 4212431,
+      "report_retries": 0,
+      "wall_seconds": 201.35314135199587,
+      "client_cpu_seconds": 1.4365661349999999,
+      "first_metadata_retrieved_utc": "2026-11-18T06:33:09.665+00:00",
+      "first_report_retrieved_utc": "2026-11-18T06:33:25.068+00:00",
+      "last_report_retrieved_utc": "2026-11-18T06:36:27.493+00:00",
+      "stable_report_identity_sha256": "77aa55b166a1a9c2284d215caabbd9227be1d72212bece1e13a62cb5a2c33f19",
+      "matches_original": 500,
+      "role": "Full original acquisition, checked against independent roster and grouped SQL."
+    },
+    "stopped": {
+      "reports": 269,
+      "groups": 11,
+      "http_gets": 273,
+      "status_response_bytes": 30935,
+      "shared_body_bytes": 4154931,
+      "response_body_bytes": 4185866,
+      "report_retries": 0,
+      "wall_seconds": 117.99276645900682,
+      "client_cpu_seconds": 0.918667605,
+      "first_metadata_retrieved_utc": "2026-11-18T06:49:03.840+00:00",
+      "first_report_retrieved_utc": "2026-11-18T06:49:19.655+00:00",
+      "last_report_retrieved_utc": "2026-11-18T06:50:57.526+00:00",
+      "stable_report_identity_sha256": "3b79542178d3de51fc1ee08a409b227b103dcbf835aa9c561a49253152099b0f",
+      "matches_original": 269,
+      "role": "Second physical public acquisition, stopped at the first decision."
+    },
+    "shared_collection": "Four HTTP metadata bodies per run: two pinned YAMLs, one complete leaderboard JSON, one official B listing. The leaderboard body includes all A outcomes. B fetches only its original 115-byte evaluation prefixes. Billable transport, headers and TLS bytes are unmetered.",
+    "interpretation": "Two actual sequential runs with different time and cache conditions. The observed change in request count follows from the stopping rule. Direct SQL can use that same rule. Wall times do not isolate causal speedup."
+  },
+  "roster": {
+    "population": 500,
+    "groups": 12,
+    "source_file_bytes": 2096679,
+    "retained_original_prefix_bytes": 4490,
+    "successful_range_gets": 23,
+    "successful_range_body_bytes": 4500,
+    "source_schema_gets": 1,
+    "schema_body_bytes": 3336,
+    "first_schema_receipt_to_last_range_seconds": 181.789,
+    "first_receipt_utc": "2026-11-18T06:39:35.941+00:00",
+    "last_range_utc": "2026-11-18T06:42:37.730+00:00",
+    "note": "Separate acquisition shared by the comparisons. The elapsed interval begins after schema delivery. Overlapping range bytes count in network traffic."
+  },
+  "source_revision_clocks": {
+    "leaderboard_git_commit_utc": "2026-09-01T02:53:40Z",
+    "submission_catalogue_git_commit_utc": "2026-09-03T01:24:30Z",
+    "princeton_dataset_revision_last_modified_utc": "2025-02-18T23:48:55.000Z",
+    "individual_A_evaluation_times": null,
+    "individual_ingestion_utc": null,
+    "source_urls": [
+      "https://api.github.com/repos/SWE-bench/swe-bench.github.io/git/commits/193160a463a435d05cf44a1fa9dc5eac832113c3",
+      "https://api.github.com/repos/SWE-bench/experiments/git/commits/40f164d5b8f1d249bf95a6df8b74b577fd8e519d",
+      "https://huggingface.co/api/datasets/princeton-nlp/SWE-bench_Verified/revision/c104f840cc67f8b6eec6f759ebc8b2693d585d4a"
+    ]
+  },
+  "strong_alternative_search": [
+    {
+      "receipt": {
+        "url": "https://swe-bench-submissions.s3.amazonaws.com/?list-type=2&delimiter=%2F&prefix=bash-only%2F20260219_mini-v2.0.0_gpt-5-2-codex%2F&max-keys=1000",
+        "sha256": "1c22c05542884ffe54a5c43d2b4515ef01a0a36b3f9694723ee856addd52b5bd",
+        "bytes": 522,
+        "retrieved_utc": "2026-11-18T06:50:41.767+00:00",
+        "http": 200,
+        "content_range": null,
+        "last_modified": null,
+        "etag": null
+      },
+      "entries": [
+        "bash-only/20260219_mini-v2.0.0_gpt-5-2-codex/logs/",
+        "bash-only/20260219_mini-v2.0.0_gpt-5-2-codex/trajs/"
+      ]
+    },
+    {
+      "receipt": {
+        "url": "https://api.github.com/repos/SWE-bench/experiments/contents/evaluation/verified/20260219_mini-v2.0.0_gpt-5-2-codex?ref=40f164d5b8f1d249bf95a6df8b74b577fd8e519d",
+        "sha256": "db9cf6f1591946b77c2bd6c71e47a494eda5f43046016aeac4127e12a5fb2363",
+        "bytes": 2555,
+        "retrieved_utc": "2026-11-18T06:50:42.204+00:00",
+        "http": 200,
+        "content_range": null,
+        "last_modified": "Wed, 18 Nov 2026 04:25:15 GMT",
+        "etag": "\"438e4a70d671ae24017529ecc6631c7b505a4b4f\""
+      },
+      "entries": [
+        "logo.svg",
+        "metadata.yaml"
+      ]
+    }
+  ],
+  "local_replay": {
+    "python_version": "3.12.14",
+    "repetitions": 24,
+    "process_startup_included": false,
+    "timing_scope": "Local read, original identity checks, computation and decision; first access may be warm.",
+    "methods": {
+      "ordinary_reuse_illustrative_example": {
+        "median_wall_seconds": 3.5763499909080565e-05,
+        "median_cpu_seconds": 3.6068500000013826e-05,
+        "total_wall_seconds": 0.0010475210001459345,
+        "total_cpu_seconds": 0.0010502260000001262
+      },
+      "retained_adaptive": {
+        "median_wall_seconds": 0.0031421974999830127,
+        "median_cpu_seconds": 0.0031433589999999567,
+        "total_wall_seconds": 0.08845457401184831,
+        "total_cpu_seconds": 0.08847433600000021
+      },
+      "direct_sql_full": {
+        "median_wall_seconds": 0.004345752502558753,
+        "median_cpu_seconds": 0.004347489499999968,
+        "total_wall_seconds": 0.1087622399936663,
+        "total_cpu_seconds": 0.10880058399999984
+      },
+      "direct_sql_adaptive": {
+        "median_wall_seconds": 0.01164411550053046,
+        "median_cpu_seconds": 0.011646263499999976,
+        "total_wall_seconds": 0.30030226000235416,
+        "total_cpu_seconds": 0.3003492270000001
+      }
+    }
+  },
+  "historical_submission_costs": {
+    "publisher_reported_dollars": {
+      "A": 236.78350885,
+      "B": 224.71194935
+    },
+    "publisher_mean_calls_per_case": {
+      "A": 35.046,
+      "B": 28.072
+    },
+    "inference_reruns_here": 0,
+    "invoices_for_published_runs": null,
+    "display_units_source": "https://www.swebench.com/"
+  },
+  "prior_and_failed_work": [
+    {
+      "tried": "Initial A status-identifier validator",
+      "outcome": "Rejected hyphens in two legitimate organization names, before B report reads. Corrected and re-ran.",
+      "first_attempt_known_response_body_bytes": 4093027,
+      "additional_preliminary_leaderboard_body_bytes": 4091442
+    },
+    {
+      "tried": "Strict range acquisition and decoding of just two roster columns",
+      "outcome": "Two over-specific header assumptions stopped the early attempts. The final decoder handles the short data page and validates the intervening repo metadata. Preliminary range probes, partial failed ranges and permissive-reader investigation are excluded from successful-get clocks.",
+      "preparation_transfers_total_bytes": null,
+      "exploratory_optional_pyarrow_install_bytes": null,
+      "production_dependency": "Python standard library"
+    },
+    {
+      "tried": "Ordinary reuse of prior illustrative result",
+      "outcome": "Original two-facility example is executable but carries no evidence on these 500 cases or these model configurations."
+    }
+  ],
+  "economic_scope": {
+    "human_baseline": "No human workers ran this mission. A competent person can run the conventional grouped query. Time to discover, implement, interpret or adopt is unmeasured.",
+    "included_frontier_agent": "Implemented and qualified the decision in this session. Complete agent compute, discovery, review and labour prices are unavailable.",
+    "direct_AI_and_hybrid": "No separate model/human decision arm was enrolled for these author-bound submissions. Pooled-only and direct exact SQL are observed comparators.",
+    "inherited_calculator_historical_cost": null,
+    "initial_engineering_and_adaptation_cost": null,
+    "source_rights_and_maintenance_cost": null,
+    "delivery_support_cost": null,
+    "actual_bills": null,
+    "beneficiary_time_saved": null,
+    "cost_per_adopted_decision": null,
+    "revenue": null,
+    "authorization": "Public read-only metadata and local CPU. The delivered next-qualification input authorizes no model calls or spending."
+  },
+  "frozen_runner_sha256": {
+    "acquire.py": "374565e62cf88b62ae4f7b15f2b2dabbd4b244c8a75191f9946d521b24998022",
+    "adapter.py": "66d606f82b7ec98c3a489f64da9f891e05da6e25b1e2507e73a12dde46713286",
+    "roster.py": "60b347b0799bd542a11e8bc022f72d8d7949af167c28a234202ec7e000535bdb",
+    "direct.py": "986c86d57b62d8d0a4ab84c4721d5edaf18098e5a09967c86a2b1e83b1c4ee98",
+    "prepare.py": "f5c5e6228665c997b2cfa2f9da392696293b536138d4adc6b066f03ed55ce471",
+    "verify.py": "4729c6bc41e392685fb050a37194001f8a1d4553a19268699a6afaed25270e80",
+    "../../discovery_field/decision_study/calibration_bounds.py": "3bb492ab232b26c4d27d0e35e341cc253b74c348a7b43b07a76c275038217c1d"
+  },
+  "runner_scope": "Digests identify the shipped verified programs. The original full acquisition preceded the addition of stopping. The second live run used acquire.py at SHA-256 33930e7a22ec8a69aca4df1c2632b2361a85b008aa60c41916fb426b18954ccb. Both outputs were independently compared with the shipped source. Subsequent isolated-mode imports and local source-provenance guards were requalified on all frozen bytes."
+}

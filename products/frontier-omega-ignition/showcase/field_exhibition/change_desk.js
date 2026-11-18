@@ -214,5 +214,15 @@ function createChangeDesk(series, {el, t, num, fill, element, svg, options, setB
     display();
   });
   matchMedia('(max-width: 540px)').addEventListener('change',display);
-  return {render};
+  function openNotice(scope, sources) {
+    const window=series.find(s=>s.id==='early_warm'), focus='ZTF26acbezdh/'+scope.band;
+    const at=window.days.find(s=>s.as_of_utc===scope.as_of);
+    if(scope.clock!=='event'||!at?.coverage.some(row=>key(row)===focus)) return;
+    active=window;
+    checkpoint=at;
+    selected=focus;
+    useSecond=sources.includes('alerce');
+    render();
+  }
+  return {render, openNotice};
 }

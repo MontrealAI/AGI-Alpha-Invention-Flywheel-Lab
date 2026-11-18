@@ -56,8 +56,19 @@ class Controller:
         mission = body.get("mission") if isinstance(body, dict) else None
         resources = mission.get("resources") if isinstance(mission, dict) else None
         if isinstance(resources, dict):
-            if len({"pairing_lab", "endpoint_lab", "followup", "change_desk"} & resources.keys()) > 1:
+            if len({"pairing_lab", "endpoint_lab", "followup", "change_desk", "evidence_action", "scroll_normalization", "quantum_multiplier"} & resources.keys()) > 1:
                 raise StateError("Select one specialist for this mission.")
+            if "quantum_multiplier" in resources:
+                from .quantum_specialist import identity
+                return identity()
+            if "scroll_normalization" in resources:
+                if body.get("sources") or mission.get("construction_spec"):
+                    raise StateError("The scroll mission accepts its registered code and public-source selectors only.")
+                from .scroll_specialist import identity
+                return identity()
+            if "evidence_action" in resources:
+                from .evidence_specialist import identity
+                return identity(resources["evidence_action"])
             if "change_desk" in resources:
                 from .change_specialist import identity
                 return identity(resources["change_desk"])
@@ -83,16 +94,38 @@ class Controller:
                 raise StateError("Reuse the portable Pairing Lab instrument through a fresh specialist mission")
             if s["artifact"]["kind"] == "endpoint_evidence":
                 raise StateError("Open a fresh endpoint study to requalify a changed operating requirement.")
+            if s["artifact"]["kind"] == "quantum_multiplier":
+                raise StateError("Open a fresh quantum mission to freeze the threshold and requalify the recipient.")
+            if s["artifact"]["kind"] == "scroll_normalizer":
+                raise StateError("Use a fresh scroll mission and requalify the independent recipient on its source.")
+            if s["artifact"]["kind"] == "evidence_decision":
+                raise StateError("Open a fresh mission to qualify the new decision and permitted sources.")
             if s["artifact"]["kind"] == "dated_archive_queue":
                 raise StateError("Open a new archive mission to qualify its data cutoff and history.")
             if s["artifact"]["kind"] == "followup_worklist":
                 raise StateError("Open a fresh follow-up mission to check a new worklist.")
             inherited = {"source_id":run_id, "source_version":version, "artifact_sha256":s["artifact"]["sha256"],
                          "rights":rights, "kind":s["artifact"]["kind"], "program":s["artifact"]["program"]}
-            return self.store.create(body,self.identity(),self.source,inherited=inherited,specialist_source=self._specialist_identity(body))
+            return self.store.create(body,self.identity(),self.source,inherited=inherited,specialist_source=self._specialist_identity(body),
+                                     source_sequence=s["operation"]["sequence"])
 
     def obsolete(self, s):
         resources = s["mission"]["resources"]
+        if {"quantum_multiplier","scroll_normalization","evidence_action"} & resources.keys():
+            try:
+                if "quantum_multiplier" in resources:
+                    from .quantum_specialist import identity
+                    current = identity()
+                elif "scroll_normalization" in resources:
+                    from .scroll_specialist import identity
+                    current = identity()
+                else:
+                    from .evidence_specialist import identity
+                    current = identity(resources["evidence_action"])
+            except (OSError, ValueError, KeyError):
+                return True
+            if s.get("specialist_source") != current:
+                return True
         if {"followup", "endpoint_lab", "change_desk"} & resources.keys():
             if "change_desk" in resources:
                 from .change_specialist import identity
@@ -119,19 +152,27 @@ class Controller:
             s.pop("endpoint_result", None)
             s.pop("followup_result", None)
             s.pop("change_result", None)
+            s.pop("evidence_result", None)
+            s.pop("scroll_result", None)
+            s.pop("scroll_field", None)
+            s.pop("quantum_result", None)
+            s.pop("field_decision", None)
             s.update(status="stale", error="Provider or application source changed. Amend to open a fresh revision.",
                      handoff=None, artifact=None, evaluation=None)
         return self.public(s)
+
+    def set_operation(self, run_id, version, action, reason="", *, expected_sequence=None):
+        state = self.store.set_operation(run_id, version, action, reason, expected_sequence=expected_sequence)
+        return self.public(state)
 
     @staticmethod
     def public(s):
         return {k:v for k,v in s.items() if k not in PRIVATE_FIELDS}
 
     def _guard(self, s):
+        self.store.assert_operating(s)
         if self.obsolete(s):
             raise Conflict("Source or provider changed. Restart the service on current source and amend the mission")
-        if s["version"] != self.store.get(s["id"])["version"]:
-            raise Conflict("Mission was amended")
 
     def _step(self, s, stage, message, status="running"):
         if status in FINISHED | {"blocked"}:
@@ -203,12 +244,14 @@ class Controller:
             else:
                 raise StateError("Unknown intervention")
 
-    def advance(self, run_id, version):
+    def advance(self, run_id, version, *, pending_only=False):
         with self.store.work_lock(run_id,version):
             s = self.store.get(run_id)
             if type(version) is not int or version != s["version"]:
                 raise Conflict("Stale mission version")
             self._guard(s)
+            if pending_only and s["status"] not in {"queued", "running"}:
+                return self.public(s)
             if s["status"] in FINISHED | {"awaiting_model", "awaiting_contract", "awaiting_choice"}:
                 return self.public(s)
             s["error"] = None
@@ -234,6 +277,15 @@ class Controller:
         provider = self.provider(s["exchanges"])
         mode = provider.identity().get("mode")
         self._check_time(mission)
+        if "quantum_multiplier" in mission["resources"]:
+            from .quantum_specialist import run
+            return run(self, s)
+        if "scroll_normalization" in mission["resources"]:
+            from .scroll_specialist import run
+            return run(self, s)
+        if "evidence_action" in mission["resources"]:
+            from .evidence_specialist import run
+            return run(self, s)
         if "change_desk" in mission["resources"]:
             from .change_specialist import run
             return run(self, s)
@@ -298,20 +350,20 @@ class Controller:
                 s.setdefault("unsuccessful_calls", []).append({
                     "stage":stage, "request_sha256":key, "at":timestamp(),
                     "elapsed_seconds":round(time.monotonic()-start,3), "receipts":provider.receipts[-1:]})
-                self.store.save(s)
+                self.store.save(s, completed_call=True)
                 raise
             if not isinstance(response, dict):
                 raise StateError("Provider output must be a JSON object")
             s["calls"][key] = {"stage":stage, "response":response, "response_sha256":digest(response),
                                "receipt":provider.receipts[-1:] or None,
                                "elapsed_seconds":round(time.monotonic()-start,3)}
-            self.store.save(s)
+            self.store.save(s, completed_call=True)
             return response
 
         spec = mission.get("construction_spec", {})
         # The research and builder prompts never receive the predeclared confirmation inputs.
         model_mission = dict(mission, construction_spec={k:v for k,v in spec.items() if k != "cases"})
-        model_mission["resources"] = {k:v for k,v in mission["resources"].items() if k!="commercial_case"}
+        model_mission["resources"] = {k:v for k,v in mission["resources"].items() if k not in {"commercial_case", "mapping_evidence"}}
         if s["research"] is None:
             if choice["route"] == "direct":
                 s["research"] = routing.direct_selection(mission, choice)
@@ -419,6 +471,7 @@ class Controller:
         attempts = s.setdefault("construction_attempts", [])
         specialist = choice["method"] == "specialist"
         bounded = choice["method"] in ("operator_choice", "model_choice")
+        evidence_projection = choice["method"] == "evidence_projection"
         # Attempts and model calls are separately checkpointed. Resuming a handoff reuses its
         # exact request, and a terminal rejection cannot be converted into a fresh budget.
         while True:
@@ -427,12 +480,27 @@ class Controller:
                 last = attempts[-1]
                 if last["status"] == "accepted":
                     return self._step(s, "delivery", "Verified within the frozen contract", "verified")
-                if specialist or bounded or not last["repairable"] or len(attempts) > resources.get("max_repairs", 1):
+                if specialist or bounded or evidence_projection or not last["repairable"] or len(attempts) > resources.get("max_repairs", 1):
                     return self._step(s, "delivery", "Independent acceptance failed. The rejected construction is retained for inspection.", "failed")
             if bounded:
                 response = self._choose_mapping(s, payload, choice["method"], propose)
                 if response is None:
                     return
+            elif evidence_projection:
+                pool = resources["mapping_evidence"]
+                # The construction function receives no confirmation inputs or labels.
+                # Exclude any accidental reuse at this boundary before inspecting pool labels.
+                confirmation = {digest(row) for case in contract["spec"]["cases"]
+                                if isinstance(case["input"].get("rows"), list)
+                                for row in case["input"]["rows"] if isinstance(row, dict)}
+                program, resolution = development.resolve_projections(
+                    payload["definition"], pool, development.projection_scope(mission), confirmation)
+                s["mapping_resolution"] = resolution
+                if program is None:
+                    s["error"] = resolution["obstruction"]
+                    return self._step(s, "selection", s["error"], "deferred")
+                self._step(s, "construction", f"Resolved each projection using {len(resolution['labels_examined'])} approved source labels.")
+                response = {"kind": payload["kind"], "program": program}
             elif specialist:
                 program = payload["definition"]
                 self._step(s, "construction", "Running the installed local specialist on the builder-visible specification")
@@ -454,7 +522,7 @@ class Controller:
                 response = propose("construct", payload)
             started = time.monotonic()
             attempt = {"attempt": len(attempts) + 1, "contract_sha256": contract["sha256"],
-                       "proposal_sha256": digest(response), "method": choice["method"] if bounded or specialist else "model",
+                       "proposal_sha256": digest(response), "method": choice["method"] if bounded or specialist or evidence_projection else "model",
                        "artifact_sha256": None, "receipt_sha256": None, "feedback": None, "repairable": True}
             try:
                 artifact = construction.build(contract, response)
@@ -502,29 +570,43 @@ class Controller:
                 raise Conflict("Mission has been amended")
             if s["status"] != "verified":
                 raise Conflict("Current revision has no accepted artifact")
-            if s["artifact"]["kind"] == "dated_archive_queue":
-                from .change_specialist import deliver
-                return deliver(s, payload, trial)
-            if s["artifact"]["kind"] == "followup_worklist":
-                from .followup_specialist import deliver
-                return deliver(s, payload, trial)
-            if s["artifact"]["kind"] == "endpoint_evidence":
-                from .endpoint_specialist import deliver
-                return deliver(s, payload, trial)
-            if s["artifact"]["kind"] == "pairing_lab":
-                from .pairing_specialist import deliver
-                return deliver(self, s, payload, trial)
-            if trial:
-                return construction.execute(s["artifact"], payload)
-            ctx = {"mission_id":s["id"], "version":s["version"], "mission":s["mission"], "input_sha256":s["input_sha256"],
-                   "source_sha256":s["runtime"], "provider":s["provider"], "python":sys.version.split()[0],
-                   "research":s["research"], "routing":s.get("routing"), "construction_attempts":s.get("construction_attempts", []),
-                   "mapping_choice":s.get("mapping_choice"), "mapping_resolution":s.get("mapping_resolution"),
-                   "acceptance_origin":s.get("acceptance_origin"),
-                   "inherited_from":{k:v for k,v in (s.get("inherited") or {}).items() if k!="program"}, "sources":s["sources"] + s["source_result"]["sources"],
-                   "source_failures":s["source_result"]["failures"], "events":s["events"],
-                   "model_calls":[{k:v for k,v in c.items() if k!="response"} for c in s["calls"].values()],
-                   "unsuccessful_calls":s.get("unsuccessful_calls",[]),
-                   "economics":s.get("economics"),
-                   "inheritance":"Use only under separately established data and software rights. Requalify on each new mission."}
-            return delivery.export_bundle(s["contract"],s["artifact"],s["evaluation"],ctx)
+            result = self._deliver(s, payload, trial)
+            self.store.assert_operating(s)
+            return result
+
+    def _deliver(self, s, payload, trial):
+        if s["artifact"]["kind"] == "quantum_multiplier":
+            from .quantum_specialist import deliver
+            return deliver(s, payload, trial)
+        if s["artifact"]["kind"] == "scroll_normalizer":
+            from .scroll_specialist import deliver
+            return deliver(s, payload, trial)
+        if s["artifact"]["kind"] == "evidence_decision":
+            from .evidence_specialist import deliver
+            return deliver(s, payload, trial)
+        if s["artifact"]["kind"] == "dated_archive_queue":
+            from .change_specialist import deliver
+            return deliver(s, payload, trial)
+        if s["artifact"]["kind"] == "followup_worklist":
+            from .followup_specialist import deliver
+            return deliver(s, payload, trial)
+        if s["artifact"]["kind"] == "endpoint_evidence":
+            from .endpoint_specialist import deliver
+            return deliver(s, payload, trial)
+        if s["artifact"]["kind"] == "pairing_lab":
+            from .pairing_specialist import deliver
+            return deliver(self, s, payload, trial)
+        if trial:
+            return construction.execute(s["artifact"], payload)
+        ctx = {"mission_id":s["id"], "version":s["version"], "mission":s["mission"], "input_sha256":s["input_sha256"],
+               "source_sha256":s["runtime"], "provider":s["provider"], "python":sys.version.split()[0],
+               "research":s["research"], "routing":s.get("routing"), "construction_attempts":s.get("construction_attempts", []),
+               "mapping_choice":s.get("mapping_choice"), "mapping_resolution":s.get("mapping_resolution"),
+               "acceptance_origin":s.get("acceptance_origin"),
+               "inherited_from":{k:v for k,v in (s.get("inherited") or {}).items() if k!="program"}, "sources":s["sources"] + s["source_result"]["sources"],
+               "source_failures":s["source_result"]["failures"], "events":s["events"],
+               "model_calls":[{k:v for k,v in c.items() if k!="response"} for c in s["calls"].values()],
+               "unsuccessful_calls":s.get("unsuccessful_calls",[]),
+               "economics":s.get("economics"),
+               "inheritance":"Use only under separately established data and software rights. Requalify on each new mission."}
+        return delivery.export_bundle(s["contract"],s["artifact"],s["evaluation"],ctx)

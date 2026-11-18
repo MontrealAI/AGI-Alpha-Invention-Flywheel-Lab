@@ -1,0 +1,5 @@
+# Downstream release-hour cohort rehearsal
+
+The C1 constructor has produced a converter. Before computing any cohort counts, apply the delivered converter to an archive-review decision. Which of the fixed git/git v2.47.0 sample commits landed in the same UTC calendar hour as the tagged release commit? Mark each object ID for inclusion or exclusion from that hour's landed-changes review. The release commit is predetermined by the registered tag. Use all 100 sampled IDs. Also report author-hour membership to show how many decisions change if the wrong clock is used. The scope is the registered sample; the published list is a proposed archival review input.
+
+Input, output and cost comparisons use the same public release and native objects. Use the shipped converter plus a filter, compare directly with SQLite on native Git epochs, and measure both actual computing routes. Require exact membership agreement independently across all IDs. One route can legitimately be simpler. No observed downstream benefit, productivity, new release event or superiority follows from equal membership. Selecting a cohort from converted data is ordinary reuse of the instrument.

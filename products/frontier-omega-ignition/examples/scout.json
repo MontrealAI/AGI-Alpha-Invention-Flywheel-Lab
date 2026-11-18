@@ -1,0 +1,27 @@
+{
+  "mission": {
+    "purpose": "Investigate whether a published local-inference release enables an offline, independently verifiable improvement in research data handoff.",
+    "beneficiary": "MONTREAL.AI engineers deciding which local research capability to qualify",
+    "requirements": [
+      "Identify a specific, dated change, compare the incumbent and state one measurable acceptance criterion for a transferable result.",
+      "Defer a build if the evidence does not justify it."
+    ],
+    "resources": {
+      "execution_strategy": "research",
+      "max_model_calls": 4,
+      "max_repairs": 1,
+      "budget": "Local inference and CPU qualification only"
+    },
+    "authority": {
+      "public_sources": true,
+      "local_model": true,
+      "assisted_model": false
+    },
+    "time": {},
+    "construction_spec": {}
+  },
+  "feeds": [
+    "local-inference"
+  ],
+  "max_investigations": 3
+}

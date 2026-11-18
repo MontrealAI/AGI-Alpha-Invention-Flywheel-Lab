@@ -1,0 +1,89 @@
+{
+  "route": "Included Codex decision-maker (GPT-6 family) with local CPython. The worker wrote the per-cutoff selector, reused broker_control for notice and TAP validation, eligibility and local packet reads, and decoded originals with avro_packet. The TAP index supplied order and candidate identities. Original packets supplied photometry, qualifying metadata, and SHA-256. Each pair was decided in its own numbered folder before the next was opened.",
+  "resource": {
+    "worker": "Included Codex agent",
+    "exact_model_deployment": null,
+    "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+    "platform": "linux",
+    "network_requests": 0,
+    "paid_external_calls": 0,
+    "incremental_external_charge_usd": 0,
+    "script": "review.py",
+    "script_sha256": "30ef4b8316e895818d594277ed05b6f0127dfe22ce6c5c37f4716dfdfb5ab015",
+    "command": [
+      "python",
+      "-B",
+      "review.py",
+      "--step",
+      "--record",
+      "--review-start-utc",
+      "2026-11-18T06:58:02.191749+00:00"
+    ]
+  },
+  "started_utc": "2026-11-18T06:58:02.191749+00:00",
+  "finished_utc": "2026-11-18T07:00:58.272948+00:00",
+  "elapsed_wall_s": 176.081199,
+  "timing_scope": "The broader start marker was taken after reading TASK.md, alongside the first input inventory. The end marker follows writing answers.json. This elapsed time includes review, script construction and checkpoint inspection. The program clocks below include setup from the first lines of Python and checkpoint waits. Event clocks exclude waits and output serialization.",
+  "program_started_utc_after_imports": "2026-11-18T07:00:35.604251+00:00",
+  "program_wall_s": 22.733723288001784,
+  "program_process_cpu_s": 0.12933422700000002,
+  "events": [
+    {
+      "folder": 1,
+      "cutoff_utc": "2026-10-27T00:00:00Z",
+      "started_utc": "2026-11-18T07:00:35.604324+00:00",
+      "finished_utc": "2026-11-18T07:00:35.618744+00:00",
+      "wall_s": 0.0144251189994975,
+      "process_cpu_s": 0.014424040999999999,
+      "decisions": {
+        "1027-g": "No qualified repeat inside this exposure prefix",
+        "1027-r": "No qualified repeat inside this exposure prefix"
+      }
+    },
+    {
+      "folder": 2,
+      "cutoff_utc": "2026-10-28T07:00:00Z",
+      "started_utc": "2026-11-18T07:00:49.553290+00:00",
+      "finished_utc": "2026-11-18T07:00:49.569549+00:00",
+      "wall_s": 0.01609630299935816,
+      "process_cpu_s": 0.016088337999999994,
+      "decisions": {
+        "1028-g": "Earliest qualified original packet",
+        "1028-r": "No qualified repeat inside this exposure prefix"
+      }
+    },
+    {
+      "folder": 3,
+      "cutoff_utc": "2026-10-29T00:00:00Z",
+      "started_utc": "2026-11-18T07:00:58.240274+00:00",
+      "finished_utc": "2026-11-18T07:00:58.272466+00:00",
+      "wall_s": 0.032109879997733515,
+      "process_cpu_s": 0.03210784999999999,
+      "decisions": {
+        "1029-g": "Earliest qualified original packet",
+        "1029-r": "Earliest qualified original packet"
+      }
+    }
+  ],
+  "failures": [],
+  "unmeasured": [
+    "Exact agent inference tokens, server compute, internal cost or allocation",
+    "CPU for preparatory shell commands, interpreter startup and final worker receipt write",
+    "Time to dispatch this worker and read TASK.md before its first explicit UTC marker",
+    "Historical source ingestion times at the exposure cutoffs"
+  ],
+  "historical_interpretation": "Archival shadow recommendations grouped by exposure timestamp.",
+  "verification": {
+    "started_utc": "2026-11-18T07:01:33.129094+00:00",
+    "finished_utc": "2026-11-18T07:01:33.269739+00:00",
+    "wall_s": 0.14063593199534807,
+    "process_cpu_s": 0.005519151,
+    "child_cpu_s": 0.134361,
+    "bitwise_reproduced": true,
+    "conventional_crosscheck_cases": 6,
+    "answers_sha256": "9ebdee364a6cc78ea984e5102839db899b0084b935bf69747ea71b1a29257add",
+    "method": "Repeated review.py and compared exact output bytes; decoded all supplied packets again with broker_control.packet_candidate and compared each of six answers with broker_control.adjudicate using only that event prefix."
+  },
+  "finished_including_verification_utc": "2026-11-18T07:01:33.269739+00:00",
+  "elapsed_including_verification_s": 211.07799
+}

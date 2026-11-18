@@ -685,7 +685,7 @@ def retrieve_source(url, allowed_hosts, previous=None, resolver=socket.getaddrin
             "Accept-Encoding": "identity"})
         response = connection.getresponse()
         if response.status != 200:
-            raise BridgeError("SOURCE_HTTP", "Source did not return HTTP 200. Redirects are not followed.", 502)
+            raise BridgeError("SOURCE_HTTP", f"Source returned HTTP {response.status}. Redirects are not followed.", 502)
         content_type = response.getheader("Content-Type", "").split(";", 1)[0].lower()
         if content_type not in {"text/plain", "text/html", "application/json", "text/markdown"} or response.getheader("Content-Encoding", "identity") != "identity":
             raise BridgeError("SOURCE_TYPE", "Only uncompressed text, HTML, Markdown and JSON sources are accepted.")

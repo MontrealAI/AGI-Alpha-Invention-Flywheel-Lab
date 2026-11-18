@@ -1,0 +1,140 @@
+{
+  "results": {
+    "downstream_release_hour": {
+      "anchor": "777489f9e09c8d0dd6b12f9d90de6376330577a2",
+      "utc_hour": "2024-10-06T22:00:00Z",
+      "scope": 100,
+      "landed_review_ids": [
+        "777489f9e09c8d0dd6b12f9d90de6376330577a2"
+      ],
+      "authored_in_hour": 1,
+      "false_inclusions_using_author_clock": [],
+      "missed_inclusions_using_author_clock": []
+    },
+    "population": {
+      "commits": 100,
+      "development_ids": [
+        "5c97f7ba5c4ac7c4df7731bce0750a8b0c1e28fb",
+        "81e7bd61517f449e6ec27a67917eceda83bcfcbf"
+      ],
+      "sealed_records": 23,
+      "distinct_sealed_vectors": 14,
+      "pool_records": 32,
+      "pool_records_excluded_to_protect_sealed_inputs": 43
+    },
+    "corroborated_native_objects": 100,
+    "legacy_bounded_route": {
+      "status": "deferred",
+      "method": null,
+      "checks": 0,
+      "passes": 0,
+      "labels_examined": [],
+      "artifact_sha256": null,
+      "obstruction": "The public examples admit more than 16 complete mappings. Supply a discriminating development example."
+    },
+    "source_projection": {
+      "status": "verified",
+      "method": "evidence_projection",
+      "checks": 23,
+      "passes": 23,
+      "labels_examined": [
+        "365a7ed9bd50b4295311c3372a8a23b7701f8704"
+      ],
+      "artifact_sha256": "710c6525b3750c095352a49216830d73745beb2d05904c41c12a48fd6f2271fa",
+      "obstruction": null
+    },
+    "included_direct_replay": {
+      "status": "verified",
+      "method": "model",
+      "checks": 23,
+      "passes": 23,
+      "labels_examined": [],
+      "artifact_sha256": "710c6525b3750c095352a49216830d73745beb2d05904c41c12a48fd6f2271fa",
+      "obstruction": null
+    },
+    "ordinary_source_order": {
+      "status": "pass",
+      "labels_examined": [
+        "dde6096b16f2528a06f147640cd52f0d13e7b748",
+        "93d2fa651fc4655da25bacdeb31a01d4857b1476",
+        "fc49119c0344137afaf2a67498196cc207105335",
+        "3a19f2d4fc208066a3d93a6ca7bb03e25786ee14",
+        "f4110efbc3850ed76b7ad01d22109e190c3e0667",
+        "365a7ed9bd50b4295311c3372a8a23b7701f8704"
+      ],
+      "checks": 23,
+      "passes": 23
+    },
+    "sql_and_recipient": {
+      "sealed_records": 23,
+      "matched": 23,
+      "malformed_cases_refused_each": 3,
+      "portable_verifier_exit": 0
+    },
+    "adverse_acquisition": {
+      "unrelated_purpose": "These labels were approved for a different beneficiary purpose, requirement or field contract.",
+      "unchanged_digest_substitution": "Approved source metadata or record bytes changed. Requalify the source.",
+      "uninformative": "No approved input distinguishes the surviving projections.",
+      "incompatible_observation": "Acquired evidence contradicts every surviving projection for at least one target.",
+      "budget_exhausted": "Label budget exhausted while multiple projections remain."
+    },
+    "recorded_qwen": {
+      "status": "verified",
+      "deterministic_proposal_replays": [
+        {
+          "status": "pass",
+          "checks": 23,
+          "passes": 23
+        }
+      ],
+      "observed_total_calls_including_first_timeout": 2
+    }
+  },
+  "wall_times": {
+    "common_setup_and_source_audit_seconds": 0.013131,
+    "prior_controller_seconds": 0.011615,
+    "source_controller_and_delivery_seconds": 0.038817,
+    "included_handoff_replay_and_delivery_seconds": 0.037362,
+    "source_order_construction_and_checks_seconds": 0.00784,
+    "standalone_sql_four_processes_seconds": 0.081,
+    "portable_converter_four_processes_seconds": 0.135321,
+    "two_routes_and_portable_verification_seconds": 0.250123,
+    "recipient_process_unpack_and_projection_seconds": 0.041077,
+    "direct_native_sql_seconds": 0.000439,
+    "all_routes_and_comparisons_seconds": 0.663347
+  },
+  "qualification_runtime_sha256": "c05d08f3760870aa471dba92c7694d92b1c86a3c88c2e83964a5c69124db5320",
+  "recipient_sha256": "224ea152f20128838a5275fdc0b34270e7c22f591a78f335c00cc20f9808c74e",
+  "study_code_sha256": {
+    "acquire.py": "6c9fd98fc87ea8b1114eac3987c5c6cb1c7f643b9fd7240a754a5598415c5814",
+    "cohort.py": "239cf99e6da524c7820565a4a093017ab0601ea6711df677295aa705a754059f",
+    "conventional.py": "090b7035e4c084ffe1947271ef0252d60e27f0cf09ca35a8a43330dad776e63d",
+    "git_witness.py": "389d7971e2df788af2b35079df91a5f3613ac2d60326b418fe1c5754a03a6249",
+    "mission.py": "469701db809326bb1999bd59b1be4e3e9b7a4ded8a459566f1743236c41b873c",
+    "observe_model.py": "876a8bed80cde104df30c7fcc8e13d4002c8124ee411e4d4e817592ac8b8d072",
+    "verify.py": "728f4e113218916872057a9f22b11f2c924ba205d112aa1bd01fda79cb2f3188"
+  },
+  "shared_acquisition": {
+    "http_gets": 3,
+    "http_response_bytes": 369963,
+    "http_wall_seconds": 17.495168,
+    "original_git_bytes_with_batch_headers": 75596,
+    "native_validation_wall_seconds_excluding_checkout": 0.034119
+  },
+  "unmeasured_costs": [
+    "archive checkout wall time and transfer",
+    "operator, independent reviewer and implementation labour",
+    "included Codex inference, editing, and interaction cost",
+    "shared CPU allocation, power and supplier bill",
+    "historical construction, ongoing maintenance, delivery support and recipient adoption"
+  ],
+  "python": "3.12.14",
+  "sqlite": "3.53.1",
+  "sources_sha256": {
+    "REGISTRATION.md": "951fc27f1b60180eca88ff623b965ff5590b36a95fc313f766c42725a71b0ce5",
+    "COHORT_REGISTRATION.md": "6319fa887615951262adbd984c06b6781365e6052d07e85f3ebbffe71efd4e9d",
+    "source_clocks.json": "2c5158fdd216f38b1d7ca96a99b4863a65ec665d9c001e629cd5883bb9ed2dc2",
+    "native_clocks.json": "7545817530c0073c040df4a35092ff7dec6c2abc645e8a6387c7e2c17181fb6f",
+    "included_mapping.json": "452c158b53a0e4f258e7421f952bd525e07068e0f910d14c148b3fef12769255"
+  }
+}

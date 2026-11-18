@@ -1,0 +1,854 @@
+{
+  "registration_sha256": "aa2bdabf14242d0b11aad7098f62793dce5468950f82366df13a5b1c22d99ff2",
+  "as_of": "2026-11-18",
+  "source_zarray": {
+    "zarr_format": 2,
+    "shape": [
+      28,
+      7660,
+      11140
+    ],
+    "chunks": [
+      28,
+      128,
+      128
+    ],
+    "dtype": "|u1",
+    "compressor": null,
+    "fill_value": 0,
+    "order": "C",
+    "filters": null,
+    "dimension_separator": "/"
+  },
+  "platform": "Linux-6.18.57-x86_64-with-glibc2.41",
+  "compiler": "c++ (Debian 14.2.0-19) 14.2.0",
+  "variants": {
+    "base": "14d4e725df8b569e6fc8ceb3c04d130f705c1565",
+    "incumbent": "4c0a117f4ae983992bbe2ce134c0389d7280f120",
+    "candidate_patch": "336420772c845a10ece5edf316ab7494d79662390580112496299a0524727c57"
+  },
+  "summary": {
+    "registered": 18,
+    "retrieved": 15,
+    "absent": 3,
+    "all_equal": true,
+    "real_nonconstant_zero_mad": 2,
+    "real_nonconstant_other": 13,
+    "zero_mad_median_speedup": 9.82391915352973,
+    "other_median_speedup": 1.0111491340638128,
+    "component_gate_passed": true,
+    "benchmark_wall_seconds_including_compile": 5.161
+  },
+  "self_check": {
+    "passed": true,
+    "cases": 32,
+    "comparators": [
+      "base",
+      "incumbent",
+      "candidate"
+    ]
+  },
+  "cases": [
+    {
+      "row": 5,
+      "col": 5,
+      "url": "https://vesuvius-challenge-open-data.s3.amazonaws.com/PHerc0139/segments/20260206000002-w054_2026020617/surface-volumes/9.362um-1.2m-113keV-volume-20250728140407.zarr/0/0/5/5",
+      "available": false,
+      "status": 404
+    },
+    {
+      "row": 5,
+      "col": 40,
+      "url": "https://vesuvius-challenge-open-data.s3.amazonaws.com/PHerc0139/segments/20260206000002-w054_2026020617/surface-volumes/9.362um-1.2m-113keV-volume-20250728140407.zarr/0/0/5/40",
+      "available": true,
+      "size": 458752,
+      "sha256": "0fafa663f64386245c28edcfb34a8fe50362ee7fc577f5a4ecf6db6abe4b7da9",
+      "crop_sha256": "2008d965a610e74737aac1046f71d6eddde0aee6bf5512dc1cabbd083402e710",
+      "constant": false,
+      "zero_mad": false,
+      "byte_identical": true,
+      "output_sha256": {
+        "base": "85e91702ae2bcb2b39ce664c4fe42c1e4f6d898b6baf07b315f664be438dd662",
+        "incumbent": "85e91702ae2bcb2b39ce664c4fe42c1e4f6d898b6baf07b315f664be438dd662",
+        "candidate": "85e91702ae2bcb2b39ce664c4fe42c1e4f6d898b6baf07b315f664be438dd662"
+      },
+      "operator_ns": {
+        "base": [
+          10556804,
+          12118685,
+          10302815,
+          16572326,
+          9190042,
+          11373889,
+          9062272
+        ],
+        "incumbent": [
+          391602,
+          579031,
+          504009,
+          461747,
+          539942,
+          425443,
+          376109
+        ],
+        "candidate": [
+          471501,
+          437690,
+          580784,
+          432803,
+          405893,
+          380947,
+          429679
+        ]
+      },
+      "median_ns": {
+        "base": 10556804,
+        "incumbent": 461747,
+        "candidate": 432803
+      },
+      "incumbent_over_candidate": 1.0668756917119335
+    },
+    {
+      "row": 5,
+      "col": 80,
+      "url": "https://vesuvius-challenge-open-data.s3.amazonaws.com/PHerc0139/segments/20260206000002-w054_2026020617/surface-volumes/9.362um-1.2m-113keV-volume-20250728140407.zarr/0/0/5/80",
+      "available": false,
+      "status": 404
+    },
+    {
+      "row": 20,
+      "col": 5,
+      "url": "https://vesuvius-challenge-open-data.s3.amazonaws.com/PHerc0139/segments/20260206000002-w054_2026020617/surface-volumes/9.362um-1.2m-113keV-volume-20250728140407.zarr/0/0/20/5",
+      "available": true,
+      "size": 458752,
+      "sha256": "fc6ed54d58df6165302e21be645536621747b9e66613488c4eb465bb39ac4a76",
+      "crop_sha256": "996dc999ce3ba076ab9daae01bba54d362b1a30dbe010e22a469036d0648c6ed",
+      "constant": false,
+      "zero_mad": false,
+      "byte_identical": true,
+      "output_sha256": {
+        "base": "76d49bcaa593dda7028f47afe9fe182edb6966813f3d7af32ff04f1f5002d44a",
+        "incumbent": "76d49bcaa593dda7028f47afe9fe182edb6966813f3d7af32ff04f1f5002d44a",
+        "candidate": "76d49bcaa593dda7028f47afe9fe182edb6966813f3d7af32ff04f1f5002d44a"
+      },
+      "operator_ns": {
+        "base": [
+          8798660,
+          7752635,
+          7755969,
+          9040749,
+          7894726,
+          7594820,
+          7994284
+        ],
+        "incumbent": [
+          376950,
+          393715,
+          364261,
+          369489,
+          419133,
+          368738,
+          378252
+        ],
+        "candidate": [
+          405042,
+          394747,
+          362139,
+          431801,
+          396580,
+          690096,
+          373555
+        ]
+      },
+      "median_ns": {
+        "base": 7894726,
+        "incumbent": 376950,
+        "candidate": 396580
+      },
+      "incumbent_over_candidate": 0.9505017903071259
+    },
+    {
+      "row": 20,
+      "col": 40,
+      "url": "https://vesuvius-challenge-open-data.s3.amazonaws.com/PHerc0139/segments/20260206000002-w054_2026020617/surface-volumes/9.362um-1.2m-113keV-volume-20250728140407.zarr/0/0/20/40",
+      "available": true,
+      "size": 458752,
+      "sha256": "848311ac90afde30c1a63c370550bd96f86a6c24e498ed131680789362770850",
+      "crop_sha256": "8dfe9e0eece6ad37be5d78996114c25c3e0fad4e18157ef18bf4673e688a0e20",
+      "constant": false,
+      "zero_mad": false,
+      "byte_identical": true,
+      "output_sha256": {
+        "base": "fc49035404e8e1e40436b82bc259cfb6c3f6db074f384f516d74c720a97f76da",
+        "incumbent": "fc49035404e8e1e40436b82bc259cfb6c3f6db074f384f516d74c720a97f76da",
+        "candidate": "fc49035404e8e1e40436b82bc259cfb6c3f6db074f384f516d74c720a97f76da"
+      },
+      "operator_ns": {
+        "base": [
+          7988105,
+          7722720,
+          9639339,
+          14173640,
+          9716825,
+          8811979,
+          8563701
+        ],
+        "incumbent": [
+          359074,
+          2566126,
+          628113,
+          657328,
+          422257,
+          412744,
+          414867
+        ],
+        "candidate": [
+          421697,
+          355839,
+          405323,
+          722825,
+          402088,
+          383190,
+          404021
+        ]
+      },
+      "median_ns": {
+        "base": 8811979,
+        "incumbent": 422257,
+        "candidate": 404021
+      },
+      "incumbent_over_candidate": 1.0451362676692548
+    },
+    {
+      "row": 20,
+      "col": 80,
+      "url": "https://vesuvius-challenge-open-data.s3.amazonaws.com/PHerc0139/segments/20260206000002-w054_2026020617/surface-volumes/9.362um-1.2m-113keV-volume-20250728140407.zarr/0/0/20/80",
+      "available": false,
+      "status": 404
+    },
+    {
+      "row": 40,
+      "col": 5,
+      "url": "https://vesuvius-challenge-open-data.s3.amazonaws.com/PHerc0139/segments/20260206000002-w054_2026020617/surface-volumes/9.362um-1.2m-113keV-volume-20250728140407.zarr/0/0/40/5",
+      "available": true,
+      "size": 458752,
+      "sha256": "fe6c13d9d4f82641ee1fd7ef744262b817d0548807373ef590c5fb0589b30a14",
+      "crop_sha256": "7a40e3d43fbce0ca2d7b9405cf9c0b05ab63e9ff0bcf5cb73de654d7e1b48407",
+      "constant": false,
+      "zero_mad": false,
+      "byte_identical": true,
+      "output_sha256": {
+        "base": "e409c2836f7c2d8e9c1eaad265d9498646fd93ee69c4d6b8065444beff834f08",
+        "incumbent": "e409c2836f7c2d8e9c1eaad265d9498646fd93ee69c4d6b8065444beff834f08",
+        "candidate": "e409c2836f7c2d8e9c1eaad265d9498646fd93ee69c4d6b8065444beff834f08"
+      },
+      "operator_ns": {
+        "base": [
+          8500467,
+          9997107,
+          10391403,
+          8620205,
+          8309933,
+          8598913,
+          9011026
+        ],
+        "incumbent": [
+          462758,
+          437261,
+          476749,
+          387846,
+          408658,
+          380877,
+          608054
+        ],
+        "candidate": [
+          415828,
+          475207,
+          403480,
+          482928,
+          457390,
+          368648,
+          378763
+        ]
+      },
+      "median_ns": {
+        "base": 8620205,
+        "incumbent": 437261,
+        "candidate": 415828
+      },
+      "incumbent_over_candidate": 1.0515429456409862
+    },
+    {
+      "row": 40,
+      "col": 40,
+      "url": "https://vesuvius-challenge-open-data.s3.amazonaws.com/PHerc0139/segments/20260206000002-w054_2026020617/surface-volumes/9.362um-1.2m-113keV-volume-20250728140407.zarr/0/0/40/40",
+      "available": true,
+      "size": 458752,
+      "sha256": "bf14a4189a7d2fd58b0b3345389dd81f4739141869b98e74604e4d0e331989e3",
+      "crop_sha256": "d676bd8ecfac4d9a9bea0dec25412ca88c4b7de14855567ef9bc20676a6d9afc",
+      "constant": false,
+      "zero_mad": false,
+      "byte_identical": true,
+      "output_sha256": {
+        "base": "8ef439f19a9a51dd19bfcf48ceab8c376c554d823020ea7ef44ea3e7f2ad8e43",
+        "incumbent": "8ef439f19a9a51dd19bfcf48ceab8c376c554d823020ea7ef44ea3e7f2ad8e43",
+        "candidate": "8ef439f19a9a51dd19bfcf48ceab8c376c554d823020ea7ef44ea3e7f2ad8e43"
+      },
+      "operator_ns": {
+        "base": [
+          8421699,
+          7945752,
+          7748759,
+          7543755,
+          7753967,
+          7478067,
+          8011550
+        ],
+        "incumbent": [
+          398022,
+          365183,
+          366585,
+          356810,
+          357532,
+          356971,
+          366315
+        ],
+        "candidate": [
+          377551,
+          350350,
+          358553,
+          354257,
+          384952,
+          362489,
+          370320
+        ]
+      },
+      "median_ns": {
+        "base": 7753967,
+        "incumbent": 365183,
+        "candidate": 362489
+      },
+      "incumbent_over_candidate": 1.0074319496591622
+    },
+    {
+      "row": 40,
+      "col": 80,
+      "url": "https://vesuvius-challenge-open-data.s3.amazonaws.com/PHerc0139/segments/20260206000002-w054_2026020617/surface-volumes/9.362um-1.2m-113keV-volume-20250728140407.zarr/0/0/40/80",
+      "available": true,
+      "size": 458752,
+      "sha256": "444f2c33445d59300be1d50c7e52fff9667793d97f9e07d65bffc35d8891b15a",
+      "crop_sha256": "bee7d25977129cf95579721d1224b7e75feed2a7ca5236fe25c83968d35bba2f",
+      "constant": false,
+      "zero_mad": false,
+      "byte_identical": true,
+      "output_sha256": {
+        "base": "273db53578d3808275616ecb3fe7b5fae0ad084308237c36b237f7864b6b3cc9",
+        "incumbent": "273db53578d3808275616ecb3fe7b5fae0ad084308237c36b237f7864b6b3cc9",
+        "candidate": "273db53578d3808275616ecb3fe7b5fae0ad084308237c36b237f7864b6b3cc9"
+      },
+      "operator_ns": {
+        "base": [
+          7998150,
+          7828148,
+          8069306,
+          7684414,
+          8112681,
+          8124357,
+          8257455
+        ],
+        "incumbent": [
+          407807,
+          456699,
+          352784,
+          372363,
+          386735,
+          409799,
+          356821
+        ],
+        "candidate": [
+          376810,
+          351943,
+          558991,
+          370801,
+          375939,
+          368628,
+          357671
+        ]
+      },
+      "median_ns": {
+        "base": 8069306,
+        "incumbent": 386735,
+        "candidate": 370801
+      },
+      "incumbent_over_candidate": 1.0429718366455323
+    },
+    {
+      "row": 55,
+      "col": 5,
+      "url": "https://vesuvius-challenge-open-data.s3.amazonaws.com/PHerc0139/segments/20260206000002-w054_2026020617/surface-volumes/9.362um-1.2m-113keV-volume-20250728140407.zarr/0/0/55/5",
+      "available": true,
+      "size": 458752,
+      "sha256": "de5417ca019e791b91f00f46dfca1fcb7dad92ff618b48a3d88eaabac7eb8018",
+      "crop_sha256": "d805a2b92ba6c2a0e65f050785c765e5e9d446c89b60b0b2975a502986878577",
+      "constant": false,
+      "zero_mad": false,
+      "byte_identical": true,
+      "output_sha256": {
+        "base": "89402dfed4a5f07202fb6d5f8544d65dd26e0604cbe753fd42aea50b78fc1ff1",
+        "incumbent": "89402dfed4a5f07202fb6d5f8544d65dd26e0604cbe753fd42aea50b78fc1ff1",
+        "candidate": "89402dfed4a5f07202fb6d5f8544d65dd26e0604cbe753fd42aea50b78fc1ff1"
+      },
+      "operator_ns": {
+        "base": [
+          7215316,
+          7090700,
+          8501178,
+          7113214,
+          6884705,
+          6914458,
+          7456494
+        ],
+        "incumbent": [
+          357261,
+          408797,
+          352184,
+          430820,
+          356890,
+          357982,
+          352654
+        ],
+        "candidate": [
+          363510,
+          354687,
+          368748,
+          359785,
+          372164,
+          411722,
+          374927
+        ]
+      },
+      "median_ns": {
+        "base": 7113214,
+        "incumbent": 357261,
+        "candidate": 368748
+      },
+      "incumbent_over_candidate": 0.9688486446028182
+    },
+    {
+      "row": 55,
+      "col": 40,
+      "url": "https://vesuvius-challenge-open-data.s3.amazonaws.com/PHerc0139/segments/20260206000002-w054_2026020617/surface-volumes/9.362um-1.2m-113keV-volume-20250728140407.zarr/0/0/55/40",
+      "available": true,
+      "size": 458752,
+      "sha256": "aaeb59eb08214db5a8ee6058728021c3c99485c9d9d8710d3595dfc0fdaec0ec",
+      "crop_sha256": "650e8d15821cf201c27de812d536ac6e8bf68c62cf2c376be63a6c6b48c51808",
+      "constant": false,
+      "zero_mad": false,
+      "byte_identical": true,
+      "output_sha256": {
+        "base": "11c4f11392cd00e716b81a557082be1987c248c8aa3034b2d44ec28ed1326585",
+        "incumbent": "11c4f11392cd00e716b81a557082be1987c248c8aa3034b2d44ec28ed1326585",
+        "candidate": "11c4f11392cd00e716b81a557082be1987c248c8aa3034b2d44ec28ed1326585"
+      },
+      "operator_ns": {
+        "base": [
+          8718701,
+          9222800,
+          9434165,
+          9371972,
+          8931117,
+          9059868,
+          8974271
+        ],
+        "incumbent": [
+          358964,
+          368758,
+          355298,
+          374246,
+          375959,
+          367977,
+          371763
+        ],
+        "candidate": [
+          365233,
+          354347,
+          409068,
+          364692,
+          527013,
+          359104,
+          360616
+        ]
+      },
+      "median_ns": {
+        "base": 9059868,
+        "incumbent": 368758,
+        "candidate": 364692
+      },
+      "incumbent_over_candidate": 1.0111491340638128
+    },
+    {
+      "row": 55,
+      "col": 80,
+      "url": "https://vesuvius-challenge-open-data.s3.amazonaws.com/PHerc0139/segments/20260206000002-w054_2026020617/surface-volumes/9.362um-1.2m-113keV-volume-20250728140407.zarr/0/0/55/80",
+      "available": true,
+      "size": 458752,
+      "sha256": "f7ef892ed66800b4c1bcf42c56813e30b683c3aa6fed98488b50ef07665e6ea0",
+      "crop_sha256": "245875a145d63d44af6bb169b1b3ff43c9911df79b014638d03285511721303d",
+      "constant": false,
+      "zero_mad": false,
+      "byte_identical": true,
+      "output_sha256": {
+        "base": "162c997892fe717d319e275916dd8198d2a52363b917939369c2d00d2a450142",
+        "incumbent": "162c997892fe717d319e275916dd8198d2a52363b917939369c2d00d2a450142",
+        "candidate": "162c997892fe717d319e275916dd8198d2a52363b917939369c2d00d2a450142"
+      },
+      "operator_ns": {
+        "base": [
+          8144197,
+          8154092,
+          8224426,
+          8664912,
+          7928456,
+          8514748,
+          8430373
+        ],
+        "incumbent": [
+          365113,
+          530038,
+          370981,
+          362328,
+          373084,
+          432604,
+          360345
+        ],
+        "candidate": [
+          367296,
+          372354,
+          359013,
+          356741,
+          381457,
+          363290,
+          361377
+        ]
+      },
+      "median_ns": {
+        "base": 8224426,
+        "incumbent": 370981,
+        "candidate": 363290
+      },
+      "incumbent_over_candidate": 1.0211704148201162
+    },
+    {
+      "row": 10,
+      "col": 2,
+      "url": "https://vesuvius-challenge-open-data.s3.amazonaws.com/PHerc0139/segments/20260206000002-w054_2026020617/surface-volumes/9.362um-1.2m-113keV-volume-20250728140407.zarr/0/0/10/2",
+      "available": true,
+      "size": 458752,
+      "sha256": "4970ebca1d4460fa76b41ce4ed0192d8612db97e25cfb6d69b9062a08d3c3fa4",
+      "crop_sha256": "2c90b6e5692e89bf46ce10dcfd3e48ef14ced1b3e74eef8a64d3a06ab14ed766",
+      "constant": false,
+      "zero_mad": false,
+      "byte_identical": true,
+      "output_sha256": {
+        "base": "f8ea552e03a8db3f3399fc6c65700b4e908909ee2ba8615ec7db881fa6eabc64",
+        "incumbent": "f8ea552e03a8db3f3399fc6c65700b4e908909ee2ba8615ec7db881fa6eabc64",
+        "candidate": "f8ea552e03a8db3f3399fc6c65700b4e908909ee2ba8615ec7db881fa6eabc64"
+      },
+      "operator_ns": {
+        "base": [
+          7676532,
+          7137561,
+          8314460,
+          7226803,
+          7479859,
+          7455182,
+          7700047
+        ],
+        "incumbent": [
+          386154,
+          396048,
+          507274,
+          466453,
+          402498,
+          385673,
+          398863
+        ],
+        "candidate": [
+          395228,
+          385082,
+          426464,
+          393825,
+          386936,
+          480034,
+          398903
+        ]
+      },
+      "median_ns": {
+        "base": 7479859,
+        "incumbent": 398863,
+        "candidate": 395228
+      },
+      "incumbent_over_candidate": 1.009197222868825
+    },
+    {
+      "row": 10,
+      "col": 79,
+      "url": "https://vesuvius-challenge-open-data.s3.amazonaws.com/PHerc0139/segments/20260206000002-w054_2026020617/surface-volumes/9.362um-1.2m-113keV-volume-20250728140407.zarr/0/0/10/79",
+      "available": true,
+      "size": 458752,
+      "sha256": "26179ace2e8b01c49d6ab4480b6e0fc77aa8ff977a09efee1ea8cb1fb3768c25",
+      "crop_sha256": "44d561f56e97cccc2c307b6cb0f209682ab474bb0494bbf3b91fbbd7b58841d4",
+      "constant": false,
+      "zero_mad": false,
+      "byte_identical": true,
+      "output_sha256": {
+        "base": "fcb36edb408234554bf1d130a913d1a4589aa85aec697239efce0295fadd3538",
+        "incumbent": "fcb36edb408234554bf1d130a913d1a4589aa85aec697239efce0295fadd3538",
+        "candidate": "fcb36edb408234554bf1d130a913d1a4589aa85aec697239efce0295fadd3538"
+      },
+      "operator_ns": {
+        "base": [
+          7181216,
+          7509183,
+          7233693,
+          6889142,
+          7515432,
+          7493910,
+          11763608
+        ],
+        "incumbent": [
+          473173,
+          415547,
+          406635,
+          476408,
+          425212,
+          429889,
+          410921
+        ],
+        "candidate": [
+          419424,
+          410170,
+          412834,
+          451992,
+          546833,
+          467815,
+          526473
+        ]
+      },
+      "median_ns": {
+        "base": 7493910,
+        "incumbent": 425212,
+        "candidate": 451992
+      },
+      "incumbent_over_candidate": 0.9407511637374113
+    },
+    {
+      "row": 30,
+      "col": 2,
+      "url": "https://vesuvius-challenge-open-data.s3.amazonaws.com/PHerc0139/segments/20260206000002-w054_2026020617/surface-volumes/9.362um-1.2m-113keV-volume-20250728140407.zarr/0/0/30/2",
+      "available": true,
+      "size": 458752,
+      "sha256": "cf1e5bda56dcbbeda6fef9694002b5c97e4b681c5ba9386ec2d48e760ab6a54b",
+      "crop_sha256": "5ecb9b21f77d2fc86d7613ad80b3abbbd3581f3df28a1a3d4d118135a872684f",
+      "constant": false,
+      "zero_mad": false,
+      "byte_identical": true,
+      "output_sha256": {
+        "base": "b27e1edbfcbbb0def494d0d47477a8903a66c48651f1d4597edcc9b4bb3ee479",
+        "incumbent": "b27e1edbfcbbb0def494d0d47477a8903a66c48651f1d4597edcc9b4bb3ee479",
+        "candidate": "b27e1edbfcbbb0def494d0d47477a8903a66c48651f1d4597edcc9b4bb3ee479"
+      },
+      "operator_ns": {
+        "base": [
+          8057683,
+          7047076,
+          7023200,
+          6947528,
+          7005233,
+          7164920,
+          7006035
+        ],
+        "incumbent": [
+          381557,
+          432643,
+          390280,
+          381637,
+          430400,
+          380876,
+          402278
+        ],
+        "candidate": [
+          388047,
+          428237,
+          394266,
+          377882,
+          379704,
+          378052,
+          378804
+        ]
+      },
+      "median_ns": {
+        "base": 7023200,
+        "incumbent": 390280,
+        "candidate": 379704
+      },
+      "incumbent_over_candidate": 1.027853275182774
+    },
+    {
+      "row": 30,
+      "col": 86,
+      "url": "https://vesuvius-challenge-open-data.s3.amazonaws.com/PHerc0139/segments/20260206000002-w054_2026020617/surface-volumes/9.362um-1.2m-113keV-volume-20250728140407.zarr/0/0/30/86",
+      "available": true,
+      "size": 458752,
+      "sha256": "ed4aa9ff7bb1f65a53b642474e7c04224edef3d73743243858a052279076b92e",
+      "crop_sha256": "8fcf5700033a1a80ca6762cf81bf55c3cfad02b1124fc8515d08dce4c0a1a254",
+      "constant": false,
+      "zero_mad": true,
+      "byte_identical": true,
+      "output_sha256": {
+        "base": "11e1fee6f729ee7aa4f9be2353937689c4d6303f3554cc77481ff6c6a830a300",
+        "incumbent": "11e1fee6f729ee7aa4f9be2353937689c4d6303f3554cc77481ff6c6a830a300",
+        "candidate": "11e1fee6f729ee7aa4f9be2353937689c4d6303f3554cc77481ff6c6a830a300"
+      },
+      "operator_ns": {
+        "base": [
+          5863056,
+          5793572,
+          6028642,
+          5786953,
+          5749166,
+          6031567,
+          5809716
+        ],
+        "incumbent": [
+          6105446,
+          6087049,
+          6126618,
+          6060960,
+          6273005,
+          6227658,
+          6098426
+        ],
+        "candidate": [
+          637468,
+          633972,
+          605701,
+          660312,
+          605901,
+          630216,
+          618510
+        ]
+      },
+      "median_ns": {
+        "base": 5809716,
+        "incumbent": 6105446,
+        "candidate": 630216
+      },
+      "incumbent_over_candidate": 9.687862574101578
+    },
+    {
+      "row": 50,
+      "col": 2,
+      "url": "https://vesuvius-challenge-open-data.s3.amazonaws.com/PHerc0139/segments/20260206000002-w054_2026020617/surface-volumes/9.362um-1.2m-113keV-volume-20250728140407.zarr/0/0/50/2",
+      "available": true,
+      "size": 458752,
+      "sha256": "deb75e6f3e0b3f410d24a6a8187ce14c89df950567aeae12299dda6c56646998",
+      "crop_sha256": "a214c25a43919412a9be8aadd5c5bae2786e51864ebc0178513d44fcc48f990a",
+      "constant": false,
+      "zero_mad": false,
+      "byte_identical": true,
+      "output_sha256": {
+        "base": "f255f86baa7c0b485d2fa597127dfda6987b89b506171a10ac1cd1d04bc78a1a",
+        "incumbent": "f255f86baa7c0b485d2fa597127dfda6987b89b506171a10ac1cd1d04bc78a1a",
+        "candidate": "f255f86baa7c0b485d2fa597127dfda6987b89b506171a10ac1cd1d04bc78a1a"
+      },
+      "operator_ns": {
+        "base": [
+          6140258,
+          6650517,
+          6052107,
+          6464680,
+          6091676,
+          6030525,
+          6075331
+        ],
+        "incumbent": [
+          450480,
+          475287,
+          461085,
+          542166,
+          465272,
+          461917,
+          447856
+        ],
+        "candidate": [
+          451641,
+          579581,
+          499973,
+          470810,
+          463649,
+          448136,
+          447956
+        ]
+      },
+      "median_ns": {
+        "base": 6091676,
+        "incumbent": 461917,
+        "candidate": 463649
+      },
+      "incumbent_over_candidate": 0.9962644155384784
+    },
+    {
+      "row": 50,
+      "col": 86,
+      "url": "https://vesuvius-challenge-open-data.s3.amazonaws.com/PHerc0139/segments/20260206000002-w054_2026020617/surface-volumes/9.362um-1.2m-113keV-volume-20250728140407.zarr/0/0/50/86",
+      "available": true,
+      "size": 458752,
+      "sha256": "e57528e0a545bdbb7e14b1c0a32dd088742db6c820d4ee84affa48263e81a2a4",
+      "crop_sha256": "eb19dc6f1389ce77ea68643d71f40eb558f8aa454fe87ad8c970a714e39b08c2",
+      "constant": false,
+      "zero_mad": true,
+      "byte_identical": true,
+      "output_sha256": {
+        "base": "ffeeb7df880d81c82c2096078dcda1146a580aa3465c71e8d0216f67a501c3e5",
+        "incumbent": "ffeeb7df880d81c82c2096078dcda1146a580aa3465c71e8d0216f67a501c3e5",
+        "candidate": "ffeeb7df880d81c82c2096078dcda1146a580aa3465c71e8d0216f67a501c3e5"
+      },
+      "operator_ns": {
+        "base": [
+          6027921,
+          5736918,
+          5840612,
+          5864178,
+          6004156,
+          5777889,
+          6006880
+        ],
+        "incumbent": [
+          6065627,
+          6013861,
+          6053709,
+          6192165,
+          6244513,
+          6348217,
+          6090814
+        ],
+        "candidate": [
+          598750,
+          616506,
+          597057,
+          611138,
+          649456,
+          786980,
+          611529
+        ]
+      },
+      "median_ns": {
+        "base": 5864178,
+        "incumbent": 6090814,
+        "candidate": 611529
+      },
+      "incumbent_over_candidate": 9.959975732957881
+    }
+  ]
+}

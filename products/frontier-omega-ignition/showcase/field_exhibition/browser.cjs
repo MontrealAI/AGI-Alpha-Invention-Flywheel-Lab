@@ -30,6 +30,30 @@ async function qualifySerializedExports(filename) {
     assert.equal(sha(archive), payload.archive.sha256);
     await writeFile(path.join(temp, 'received.zip'), archive);
     py(['-m', 'zipfile', '-e', 'received.zip', '.'], temp);
+    const artifactRoot=path.resolve(__dirname,'../..');
+    const manifest=(await readFile(path.join(temp,'SHA256SUMS'),'utf8')).trimEnd().split('\n');
+    for(const line of manifest) {
+      const [expected,name]=line.split('  ');
+      assert.equal(sha(await readFile(path.join(temp,name))),expected,name);
+      if(name.startsWith('action_study/') || name.startsWith('invention/early_survey/exposures/')) {
+        assert.equal(sha(await readFile(path.join(artifactRoot,name))),expected,name);
+      }
+    }
+    for(const editions of Object.values(payload.actionDesk.cases)) {
+      for(const item of editions) {
+        await writeFile(path.join(temp,'decision.json'),item.receipt);
+        const checked=JSON.parse(py(['action_study/desk.py','verify','decision.json'],temp));
+        assert.equal(checked.verified,JSON.parse(item.receipt).sha256,item.id);
+      }
+    }
+    const original=JSON.parse(payload.actionDesk.cases['gw-status'].find(c=>c.id==='withdraw').receipt);
+    const before=JSON.parse(payload.actionDesk.cases['gw-status'].find(c=>c.id==='before').receipt);
+    assert.notEqual(original.decision.action,before.decision.action);
+    await writeFile(path.join(temp,'decision.json'),JSON.stringify(original));
+    await writeFile(path.join(temp,'another-mission.json'),JSON.stringify(before.mission));
+    assert.notEqual(spawnSync('python3',['-IB','action_study/desk.py','verify','decision.json','--mission','another-mission.json'],{cwd:temp}).status,0);
+    assert.deepEqual(JSON.parse(py(['action_cases.py'],temp)),payload.actionDesk.references);
+    assert.equal(await readFile(path.join(temp,'action_study/qualification_choice/qualification_input.json'),'utf8'),payload.actionDesk.trial);
     const provenance='invention/sources/alerts-source.json';
     assert.deepEqual(await readFile(path.join(temp,provenance)),await readFile(path.resolve(__dirname,'../..',provenance)));
     for (const item of payload.sky.cases) {
@@ -71,7 +95,7 @@ async function main() {
   const repeated=await readJSON(repeatFile);
   const pilotFile=path.join(product,'field_trials/recorded/summary.json');
   const pilot=await readJSON(pilotFile);
-  const catalog=await readJSON(path.join(product,'discovery_field/decision_study/possibilities.json'));
+  const catalog=await readJSON(path.join(product,'action_study/opportunities/choices.json'));
   const widths=[320,390,768,1024,1440];
   const temp=await mkdtemp(path.join(tmpdir(),'observing-recipient-'));
   const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||'/usr/bin/chromium',
@@ -90,12 +114,65 @@ async function main() {
     assert.equal(await page.locator(':focus').getAttribute('class'),'skip');
     await page.locator('h1').click();
     await page.locator('#supporting > summary').click();
+    const actions=await page.locator('#public-evidence').evaluate(n=>JSON.parse(n.textContent).actionDesk);
     const series=await page.locator('#public-evidence').evaluate(n=>JSON.parse(n.textContent).changeSeries);
     assert.equal(series.length,4);
     for(const locale of ['en','fr']) {
       if(locale==='fr') await page.locator('#lang').click();
       assert.equal(await page.locator('html').getAttribute('lang'),locale);
       assert.equal(await page.locator('h1').count(),1);
+      await page.locator('#action-purpose').focus();
+      await page.keyboard.press('End');
+      assert.equal(await page.locator('#action-purpose').inputValue(),'engineering-qualification');
+      await page.keyboard.press('Tab');
+      assert.equal(await page.locator(':focus').getAttribute('id'),'action-edition');
+      await page.keyboard.press('Home');
+      assert.equal(await page.locator('#action-edition').inputValue(),'pooled');
+      assert.equal(await page.locator('#action-verdict').getAttribute('data-action'),'request_missing_evidence');
+      for(const [profile,editions] of Object.entries(actions.cases)) {
+        await page.selectOption('#action-purpose',profile);
+        for(const edition of editions) {
+          await page.selectOption('#action-edition',edition.id);
+          const receipt=JSON.parse(edition.receipt);
+          assert.equal(await page.locator('#action-verdict').getAttribute('data-action'),receipt.decision.action);
+          assert.equal(await page.locator('#action-attempts li').count(),receipt.attempts.length);
+          assert(!(await page.locator('.action-board').innerText()).includes('undefined'));
+          const offered=await page.locator('#trial-download').isVisible();
+          assert.equal(offered,profile==='engineering-qualification' && receipt.decision.finding==='B');
+          if(profile==='gw-status' && ['before','withdraw'].includes(edition.id)) {
+            assert.equal(await page.locator('#chronogram-plot [data-record]').count(),receipt.attempts.at(-1).evidence.length);
+          }
+        }
+        const expected=editions.at(-1), file=path.join(temp,profile+'-'+locale+'.json');
+        await download(page,'#action-download',file);
+        assert.equal(await readFile(file,'utf8'),expected.receipt);
+      }
+      await download(page,'#trial-download',path.join(temp,'trial-'+locale+'.json'));
+      assert.equal(await readFile(path.join(temp,'trial-'+locale+'.json'),'utf8'),actions.trial);
+      await page.selectOption('#action-edition','10');
+      assert.equal(await page.locator('#trial-download').getAttribute('href'),null);
+      await page.selectOption('#action-purpose','ztf-persistence');
+      await page.selectOption('#action-edition','r-repeat');
+      await page.locator('#photometry-link').click();
+      assert.equal(await page.locator('#signal-choice').inputValue(),'ZTF26acbezdh/r');
+      assert.equal(await page.locator('#signal-date').inputValue(),'2026-10-29T00:00:00Z');
+      assert.equal(await page.locator('#compare-archive').getAttribute('aria-pressed'),'true');
+      await page.selectOption('#action-edition','r-received');
+      assert.equal(await page.locator('#photometry-link').isVisible(),false);
+      for(const [mode,control] of Object.entries(actions.references)) {
+        await page.selectOption('#reference-control',mode);
+        assert.equal(await page.locator('#reference-verdict').getAttribute('data-accepted'),String(Boolean(control.witness)));
+        const evidence=await page.locator('#reference-evidence').innerText();
+        assert(evidence.includes(String(control.required_reference)));
+        if(control.witness) assert(evidence.includes(control.witness));
+        else assert(!evidence.includes(actions.references.archive.witness));
+      }
+      await page.selectOption('#reference-control','archive');
+      await page.selectOption('#action-purpose','gw-status');
+      await page.selectOption('#action-edition','before');
+      await page.locator('#chronicle-flip').click();
+      assert.equal(await page.locator('#action-edition').inputValue(),'withdraw');
+      assert.equal(await page.locator('#action-verdict').getAttribute('data-action'),'withdraw_shadow_review');
       const cards=page.locator('#choices button');
       assert.equal(await cards.count(),catalog.opportunities.length);
       for(const [idx,item] of catalog.opportunities.entries()) {
@@ -228,15 +305,24 @@ async function main() {
         await page.setViewportSize({width,height:width<500?844:940});
         assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true,`${locale} overflow at ${width}px`);
         assert.equal(await page.evaluate(()=>getComputedStyle(document.documentElement).scrollBehavior),'auto');
+        for(const [profile,edition] of [['ztf-persistence','r-repeat'],['engineering-qualification','11'],['gw-status','withdraw']]) {
+          await page.selectOption('#action-purpose',profile);await page.selectOption('#action-edition',edition);
+          assert(await page.locator('#action-verdict').isVisible());
+          assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),`${profile} overflows at ${width}px (${locale})`);
+        }
         if(screens && (width===390||width===1440)) {
           await page.evaluate(()=>scrollTo(0,0));
           await page.screenshot({path:path.join(screens,`observing-night-${locale}-${width}.png`)});
+          await page.locator('#action-title').scrollIntoViewIfNeeded();
+          await page.screenshot({path:path.join(screens,`evidence-action-${locale}-${width}.png`)});
           await page.locator('#signals-title').scrollIntoViewIfNeeded();
           await page.screenshot({path:path.join(screens,`archive-decision-${locale}-${width}.png`)});
         }
       }
     }
     await page.selectOption('#coverage','2');await page.selectOption('#gap','10');
+    await download(page,'#presenter-download',path.join(temp,'presenter.md'));
+    assert.equal(await readFile(path.join(temp,'presenter.md'),'utf8'),await readFile(path.join(__dirname,'PRESENT.md'),'utf8'));
     const archive=path.join(temp,'received.zip');
     await download(page,'#download',archive);
     await page.locator('#instrument details summary').click();
@@ -245,6 +331,11 @@ async function main() {
     await download(page,'#csv',path.join(temp,'selected.csv'));
     await download(page,'#colors',path.join(temp,'colors.csv'));
     py(['-m','zipfile','-e',archive,temp],temp);
+    for(const profile of Object.keys(actions.cases)) {
+      const verified=JSON.parse(py(['action_study/desk.py','verify',profile+'-en.json'],temp));
+      assert.equal(verified.verified,(await readJSON(path.join(temp,profile+'-en.json'))).sha256);
+      assert.deepEqual(await readFile(path.join(temp,profile+'-en.json')),await readFile(path.join(temp,profile+'-fr.json')));
+    }
     const checked=JSON.parse(py(['replay.py','--case','selected.json','--snapshot','observations-en.json'],temp));
     assert.equal(checked.selected_change_queue.cohort,'nov10');
     assert.deepEqual(await readFile(path.join(temp,'observations-en.csv')),await readFile(path.join(temp,'observations-fr.csv')));

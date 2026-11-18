@@ -1,0 +1,7 @@
+# A decision under changing evidence
+
+This continuation freezes three different beneficiary questions. A retrospective ZTF persistence measurement can close an open archive question. The public LVK alert stream can change the disposition of a shadow review. Equal weight across repositories can change which software engineering configuration merits a fresh qualification. The scientific and engineering cohorts, temporal rules, controls and strong alternatives are registered separately in their own directories.
+
+For each question, start with the permitted inexpensive summary or existing notice. Read the more complete source only if necessary or if reconciliation is explicitly requested. A successful HTTP request, empty search, leaderboard total or historical issue date cannot establish an unmeasured outcome. A closed-population absence requires an explicit authority, interval, complete census and zero eligible matches. Qualified conflicts require human review. No recommendation enables an external act. Unmeasured time, labor, demand, bills and adoption remain unknown.
+
+Challenge a changed cutoff, withdrawn source, absent packet, foreign reference, incomplete census, contradictory qualified reports, altered receipt, source drift and amended private mission. Compare accepted decisions to original records and independently written domain checks. Content hashes permit replay and tamper detection. Independent interpretation and source identity remain necessary. Separate the six original ZTF shadow slots from new target and engineering decisions.

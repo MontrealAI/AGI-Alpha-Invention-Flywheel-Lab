@@ -17,7 +17,9 @@ from photometry import FIELDS, stamp
 from plan import build
 from verify import verify
 from showcase.build import csp_hash, sha
-from discovery_field.decision_study.evaluate import sources as decision_sources
+from action_cases import editions
+from action_study.pack import public_files
+from action_study.shadow.shadow import public_paths as shadow_public_paths
 from field_trials.replay_cpu import read_observation
 from replay import read, replay
 from change_desk import archive_series
@@ -42,7 +44,7 @@ FILES = {
     "invention/early_survey": ["README.md", "REGISTRATION.md", "REFERENCE.md", "survey.py", "acquire.py", "RESULT.json", "worklist.csv",
                                "sources/index.json", "sources/reference-index.json", "sources/class.json.gz",
                                "sources/objects-1.json.gz", "sources/reference-1.json.gz"],
-    "invention/early_survey/exposures": ["REGISTRATION.md", "README.md", "avro_packet.py", "verify.py", "refresh.py", "test_exposures.py", "test_avro_external.py", "RESULT.json", "ARCHIVE_ACCESS.json",
+    "invention/early_survey/exposures": ["REGISTRATION.md", "README.md", "avro_packet.py", "verify.py", "refresh.py", "test_exposures.py", "test_avro_external.py", "STREAM_FIRST_REVIEW.md", "RESULT.json", "ARCHIVE_ACCESS.json",
                                         "sources/index.json", "sources/detections.json", "sources/astrometry.json.gz",
                                         "sources/coverage.csv.gz", "sources/empty-geometry.csv.gz", "sources/empty-stream.csv.gz",
                                         "sources/forced.json.gz", "sources/g.avro.gz", "sources/r.avro.gz", "sources/history.avro.gz"],
@@ -56,9 +58,9 @@ FILES = {
     "discovery_field": ["catalog.json", "REGISTRATION.md"],
 }
 def opportunities():
-    folder = PRODUCT / "discovery_field/decision_study"
-    raw = read(folder / "possibilities.json")
-    sources = decision_sources()
+    folder = PRODUCT / "action_study/opportunities"
+    raw = read(folder / "choices.json")
+    sources = {s["id"]: s for s in read(folder / "sources.json")["sources"]}
     cards = raw["opportunities"]
     if len({row["id"] for row in cards}) != len(cards) or len(cards) != 5:
         raise ValueError("The public field needs five distinct opportunities")
@@ -70,7 +72,7 @@ def opportunities():
         for lang in ("en", "fr"):
             if any(not card[lang].get(key) for key in ("title", "finding", "limit", "test")):
                 raise ValueError("Incomplete bilingual opportunity")
-    return cards
+    return {"cards": cards, "selected": raw["next_build"], "selection": raw["selection"]}
 
 
 def recorded_acquisition():
@@ -93,7 +95,14 @@ def worklist_csv(rows):
 def recipient():
     files = {f"{group}/{filename}": (PRODUCT / group / filename).read_bytes()
              for group, names in FILES.items() for filename in names}
-    for filename in ("PRESENT.md", "REPRODUCE.md", "replay.py", "change_desk.py"):
+    allowed = public_files()
+    allowed.update({name: (PRODUCT / name).read_bytes()
+                    for name in (*shadow_public_paths(), "action_study/construction/results.json")})
+    for name, content in allowed.items():
+        if name in files and files[name] != content:
+            raise ValueError("Conflicting recipient bytes for " + name)
+        files[name] = content
+    for filename in ("PRESENT.md", "REPRODUCE.md", "replay.py", "change_desk.py", "action_cases.py"):
         files[filename] = (HERE / filename).read_bytes()
     files["SHA256SUMS"] = "".join(f"{sha(files[name])}  {name}\n" for name in sorted(files)).encode()
     stream = io.BytesIO()
@@ -149,14 +158,16 @@ def exhibition():
             or {(r["route"], r["concurrency"]) for r in pilot["arms"]} != {(k,n) for k in ("field", "conventional") for n in (1,3)}
             or len(pilot["arms"]) != 4 or any(r["requests"] != 6 for r in pilot["arms"])):
         raise ValueError("Update the bilingual pilot scope for the changed cohort")
+    opportunities_field = opportunities()
+    actions = editions()
     archive = recipient()
     payload = {"changeSeries":archive_series(), "acquisition":recorded_acquisition(), "intake":read(PRODUCT / "field_lab/intake_recorded/result.json"), "secondWeekReport":(PRODUCT / "invention/next_week/RESULT.json").read_text(), "pilotReport":pilot_text, "sky": sky, "field":read(PRODUCT / "field_lab/PUBLIC.json"), "successor":successor["summary"],
                "hostedIntake":verified["hosted_intake_repeat"],
-               "opportunities":opportunities(), "copy":copy, "archive":{"sha256":sha(archive), "bytes":base64.b64encode(archive).decode("ascii")},
-               "command":"python3 -B replay.py", "related":[{"label": k,"url":ORIGIN + PRIOR + f} for k,f in
+               "opportunities":opportunities_field["cards"], "nextBuild":opportunities_field["selected"], "selection":opportunities_field["selection"], "actionDesk":actions, "copy":copy, "archive":{"sha256":sha(archive), "bytes":base64.b64encode(archive).decode("ascii")},
+               "presenter":(HERE / "PRESENT.md").read_text(), "command":"python3 -IB action_study/desk.py verify decision.json", "related":[{"label": k,"url":ORIGIN + PRIOR + f} for k,f in
                          [("oldEndpoint","FRONTIER_LAB.html"),("oldReading","FRONTIER_IGNITION.html"),("oldPairing","PAIRING_LAB.html")]]}
     css = (HERE / "style.css").read_text()
-    js = (HERE / "change_desk.js").read_text() + "\n" + (HERE / "app.js").read_text()
+    js = "\n".join((HERE / name).read_text() for name in ("change_desk.js", "action_desk.js", "app.js"))
     policy = "default-src 'none'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; script-src " + csp_hash(js) + "; style-src " + csp_hash(css)
     data = json.dumps(payload, ensure_ascii=False, allow_nan=False, separators=(",", ":")).replace("<", "\\u003c")
     doc = (HERE / "index.html").read_text()

@@ -1,0 +1,56 @@
+diff --git a/vc_reader/src/cpp/transforms/cpu/normalization.hpp b/vc_reader/src/cpp/transforms/cpu/normalization.hpp
+index d051978..ba6aa93 100644
+--- a/vc_reader/src/cpp/transforms/cpu/normalization.hpp
++++ b/vc_reader/src/cpp/transforms/cpu/normalization.hpp
+@@ -188,7 +188,7 @@ bool uint8_histogram(const T* values, std::size_t n, const std::uint8_t* valid,
+ // selected, or the robust scale is degenerate (its std fallback is an ordered
+ // float64 sum over the voxels). Options holds Normalize's mode and percentiles.
+ template<class T, class Options>
+-bool uint8_order_table(const unsigned long long* count, const Options& t, T* table) {
++bool uint8_order_table(const unsigned long long* count, const Options& t, T* table, double fallback_deviation = -1.) {
+     std::array<std::size_t, 256> below{};  // number of selected values < bin + 1
+     std::size_t selected = 0;
+     for (std::size_t b = 0; b < 256; ++b) below[b] = selected += count[b];
+@@ -223,7 +223,10 @@ bool uint8_order_table(const unsigned long long* count, const Options& t, T* tab
+             return deviations[std::size_t(std::upper_bound(upto.begin(), upto.begin() + used, k) - upto.begin())].first;
+         }, selected, 50);
+         scale = 1.4826 * mad;
+-        if (!(std::isfinite(scale) && scale >= 1e-6)) return false;
++        if (!(std::isfinite(scale) && scale >= 1e-6)) {
++            if (fallback_deviation < 0.) return false;
++            scale = robust_scale(mad, fallback_deviation, high - low);
++        }
+     }
+     for (std::size_t b = 0; b < 256; ++b) table[b] = finite_or_zero<T>((clipped(b) - center) / scale);
+     return true;
+@@ -233,7 +236,29 @@ template<class T>
+ bool normalize_order_uint8(T* values, std::size_t n, const Normalize& t, const std::uint8_t* valid) {
+     std::array<unsigned long long, 256> count;
+     std::array<T, 256> table;
+-    if (!uint8_histogram(values, n, valid, count.data()) || !uint8_order_table(count.data(), t, table.data())) return false;
++    if (!uint8_histogram(values, n, valid, count.data())) return false;
++    if (!uint8_order_table(count.data(), t, table.data())) {
++        // The original CPU fallback sums squared residuals in voxel order.
++        // Integer first moments are exact while n*255 <= 2^53.
++        if (t.mode != Normalization::Robust || n > (UINT64_C(1) << 53) / 255) return false;
++        std::size_t selected = 0;
++        double sum = 0.;
++        for (std::size_t b = 0; b < count.size(); ++b) {
++            selected += count[b];
++            sum += double(b) * double(count[b]);
++        }
++        if (!selected) return false;
++        const double mean = sum / double(selected);
++        double ss = 0.;
++        for (std::size_t i = 0; i < n; ++i) {
++            if (!valid || valid[i]) {
++                const double delta = double(values[i]) - mean;
++                ss += delta * delta;
++            }
++        }
++        const double deviation = std::sqrt(ss / double(selected));
++        if (!uint8_order_table(count.data(), t, table.data(), deviation)) return false;
++    }
+     for (std::size_t i = 0; i < n; ++i) values[i] = table[static_cast<unsigned>(values[i])];
+     return true;
+ }

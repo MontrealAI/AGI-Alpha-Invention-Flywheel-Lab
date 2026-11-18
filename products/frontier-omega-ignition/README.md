@@ -1,5 +1,29 @@
 # 🌌♾️ FRONTIER Ω — IGNITION
 
+## Run the sponsor research missions
+
+The private worker ranks three real published opportunities, screens an already-served request, builds the registered candidates and advances after a failed economic premise. Its first output is a verified reversible circuit with a decision to withhold competition entry. Its second is a CPU patch for a real scroll ink reader. The operator can inspect the experiments, source rights, costs and the commercial decision for each. [Results and independent receiver](../../docs/frontier-omega-ignition/continuation/beneficiary-pursuit/REPORT.md) · [Download the offline scroll normalizer](../../docs/frontier-omega-ignition/continuation/beneficiary-pursuit/scroll-normalizer.zip)
+
+From this directory on Linux with Python 3.12, GNU C++20 and GNU patch:
+
+```sh
+python3 -B -m ignition --state ~/.frontier-ignition pursue examples/public-research-ranked.shortlist --request-id sponsor-ranked-001
+```
+
+The ranked portfolio freezes the evidence and estimates for all three candidates. It screens experiments outside the objective, contingent on missing proof access or new spending, or with a negative upper expected net return. Among eligible experiments it prioritizes a positive lower expected return, then strength of demand, fit, upper time to collection, proof access and duration, and reuse. The expected interval in USD cents combines conditional gross receipts, collection probability and expected complete costs. Every unknown remains visible. The published awards alone give neither experiment an estimated net return. The older `examples/public-research.shortlist` and its original request IDs retain their declared proof order. Use a fresh ID for a changed portfolio.
+
+The command includes research-only acquisition of 18 registered public CT positions. Use `start examples/scroll.json` for the offline operator. Each candidate runs as a standard private mission with its own controls and evidence. Repeat the pursuit command with the same ID to recover the same missions. It rejects changed inputs under an existing ID. A successor can use `--reuse-from PRIOR_PURSUIT_ID` to reference a verified negative public quantum result if its grants, source, sponsor, date, contract and recipient bytes still match. That attempt reports `new_measurement: false`. The scroll experiment collects its own measurements. The result identifies the local ZIP in the state's `recipients` directory. A commercial state of **identified** means that a dated research note identifies the counterparty and need. A verified export qualifies a local artifact. Only external evidence can establish buyer acceptance.
+
+For ongoing release observation, start `scout examples/scout.json --id lab-sensor` with the private state argument. It establishes a baseline. `--investigate-initial` also opens an investigation for that first snapshot. `--follow --interval 900` polls while the foreground command runs; the state directory retains the observation identity on restart. The existing investigation controller decides whether it can construct something under the brief's own grants. A changed release can trigger an investigation without proving a new economic capability.
+
+Use `control ID pause --version N`, `control ID resume --version N`, or `control ID stop --version N` after the global state argument. Pause takes effect at a checkpoint. Stop is terminal for that mission. Add `--sequence S` to require the control state you inspected. The private browser exposes the same controls and commercial history. `serve --recover` also resumes active queued or interrupted revisions under their existing authority. An interrupted uncommitted field measurement is identified as such.
+
+Inspect a commercial record with `commercial ID --version N`. Supply `--template STAGE` to see the evidence required for a transition. Supply the completed local record through `--record FILE --evidence KIND=PATH` for each required source. Private documents stay with the operator. The journal stores their hashes and source descriptors. An offer or delivery must match the exact ZIP. Record only authorized actions actually taken and preserve an independent basis for the authenticity of outside records.
+
+## From evidence to a decision · De la preuve à la décision
+
+Choose a candidate for MONTREAL.AI’s next engineering trial, withdraw a superseded astronomical alert, or recover the measurement that closes a scientific question. The bilingual exhibition lets you change the source, clock or evidence budget, see the resulting decision and take its executable recipient away. [Open the exhibition](../../docs/frontier-omega-ignition/continuation/FRONTIER_FIELD.html) · [Five-minute demonstration](showcase/field_exhibition/PRESENT.md) · [Results, limitations and costs](../../docs/frontier-omega-ignition/continuation/evidence-action/REPORT.md)
+
 ## The observing night · La nuit d’observation
 
 The [bilingual exhibition](../../docs/frontier-omega-ignition/continuation/FRONTIER_FIELD.html) follows ZTF26acbezdh from an early-supernova candidate to dated g- and r-band notices and a separately checked search for later observations. Set the UTC date and baseline to see exactly what the selected archive supports. The downloadable recipient recalculates the result from public evidence. Use `/change-desk` for a private, versioned mission and `/follow-up` for the historical observing planner.
@@ -126,3 +150,10 @@ GNU Coreutils and jq are needed for the standalone conventional comparisons. Arc
 | Rejected input | Correct the input to match its declared schema. The interpreter refuses unsupported operations and out-of-domain values. |
 | Stale or changed revision | Open the latest revision, inspect history, and amend under the current provider/source. Historical receipts identify their original scope. |
 | Interrupted stage | Resume using the same run, revision and provider. Completed calls are durably reused. An interrupted local generation can consume additional computation on a deliberate retry. |
+
+
+### Optional Stripe reconciliation
+
+For a direct, same-currency charge, an authorized local operator may use `commercial ID --version N --stripe-offer PARTIES.json` before making the offer. The private file identifies the existing merchant, customer and uncharged PaymentIntent. The offered terms retain a digest binding all three. `--stripe-metadata` displays the offer digest for a separately authorized checkout. The operator records actual counterparty acceptance and a delivery acknowledgment through the ordinary commercial journal.
+
+After a real payment, the authorized operator adds the specific charge ID to the private reference file and can invoke `commercial ID --version N --stripe-reconcile PRIVATE.json --stripe-key-fd FD --control-sequence S`. The command accepts an explicitly provided live restricted read credential on that file descriptor. It reads the authenticated merchant and the identified charge with its associated balance transaction. It checks the enrolled parties and PaymentIntent, offer, chronology, exact currency and amount, capture, refund, dispute and available balance. The local journal records gross receipts, provider fees, available net and when observed. Later reversals and bank payout require separate evidence. Other payment rails remain available for operator-reviewed settlement observations. Qualification used synthetic fixtures and made no authenticated financial requests. [Stripe charge fields](https://docs.stripe.com/api/charges/object) · [Balance transaction fields](https://docs.stripe.com/api/balance_transactions/object)

@@ -2,6 +2,7 @@
 // These authored responses qualify UI wiring through the real local service.
 // They do not qualify a live model. No model endpoints or source feeds are used.
 const assert = require('node:assert/strict');
+const { createHash } = require('node:crypto');
 const fs = require('node:fs/promises');
 const os = require('node:os');
 const path = require('node:path');
@@ -36,6 +37,66 @@ async function receive(page, selector, dest) {
   const wait=page.waitForEvent('download');
   await page.locator(selector).click();
   await (await wait).saveAs(dest);
+}
+async function qualifyMissionControls(page, work) {
+  const run = JSON.parse(await page.locator('#raw').textContent());
+  const bundle = new URL(await page.locator('#bundle').getAttribute('href'), page.url()).href;
+  const summary = page.locator('#commercial-record > summary');
+  await summary.click();
+  await page.waitForFunction(() => document.querySelector('#commercial-state').textContent.toLowerCase().startsWith('unassessed'));
+  await summary.click();
+
+  // The local operator imports a labeled fixture. Only its digest and attribution enter the record.
+  const cli = ['-B', '-m', 'ignition', '--state', work, '--assisted', 'UI qualification', 'authored test data',
+    'commercial', run.id, '--version', String(run.version)];
+  const imported = JSON.parse(execFileSync('python3', [...cli, '--template', 'identified'], {cwd:product}));
+  const evidence = Buffer.from('Synthetic beneficiary interview for the operator interface check.\n');
+  const source = path.join(work, 'operator-source.txt');
+  const record = path.join(work, 'operator-observation.json');
+  imported.counterparty = 'Synthetic UI beneficiary';
+  imported.reviewer = 'Synthetic operator';
+  imported.details = {problem:'Synthetic review workload', current_alternative:'Manual review', contact_route:'Fixture'};
+  imported.evidence.public_need = {source:'Synthetic interview fixture', sha256:createHash('sha256').update(evidence).digest('hex')};
+  await fs.writeFile(source, evidence);
+  await fs.writeFile(record, JSON.stringify(imported));
+  const observed = JSON.parse(execFileSync('python3', [...cli, '--record', record, '--evidence', 'public_need=' + source], {cwd:product}));
+  assert.equal(observed.collected_revenue, null);
+  await summary.click();
+  await page.locator('#commercial-events li').filter({hasText:'Synthetic UI beneficiary'}).waitFor();
+  assert.match(await page.locator('#commercial-state').textContent(), /identified/i);
+
+  // A labeled transport fixture checks currency/fees/available-balance rendering. Provider
+  // reconciliation and durable journal readback are exercised separately by test_stripe_readonly.
+  await summary.click();
+  const endpoint = '**/api/runs/' + run.id + '/commercial?version=' + run.version;
+  await page.route(endpoint, route => route.fulfill({json: {...observed, commercial_state:'paid',
+    collected_revenue:{currency:'CAD', minor_unit_digits:2, gross_minor:1240, provider_fee_minor:66,
+      available_net_minor:1174, observed_at:'2026-11-18T13:00:00+00:00'}, next_action:'Synthetic observation'}}));
+  await summary.click();
+  await page.getByText(/Gross CAD 12.40.*Provider fee CAD 0.66.*Available in Stripe CAD 11.74/).waitFor();
+  assert.equal(await page.locator('#results dt').filter({hasText:'Collected revenue'}).count(), 0);
+  await page.unroute(endpoint);
+
+  await assertLayout(page, 390);
+  const draft = 'Unsaved new beneficiary';
+  await page.locator('#beneficiary').fill(draft);
+  await page.locator('#pause-operation').click();
+  await page.waitForFunction(() => document.querySelector('#operation-state').textContent === 'Mission paused');
+  assert.equal(await page.locator('#beneficiary').inputValue(), draft);
+  assert.equal((await page.request.get(bundle)).status(), 409);
+  await page.reload();
+  await page.locator('#resume-operation:visible').click();
+  await page.waitForFunction(() => document.querySelector('#operation-state').textContent === 'Mission active');
+  assert.equal((await page.request.get(bundle)).status(), 200);
+  page.once('dialog', dialog => dialog.accept());
+  await page.locator('#stop-operation').click();
+  await page.waitForFunction(() => document.querySelector('#operation-state').textContent === 'Mission stopped');
+  await page.reload();
+  await page.waitForFunction(() => document.querySelector('#operation-state').textContent === 'Mission stopped');
+  assert.equal(await page.locator('#resume-operation').isVisible(), false);
+  assert.equal((await page.request.get(bundle)).status(), 409);
+  const stopped = JSON.parse(await page.locator('#raw').textContent());
+  assert.deepEqual(stopped.operation.history.map(event => event.action), ['pause', 'resume', 'stop']);
 }
 async function publicReplayCheck(browser,work) {
   const server=spawn('python3',['-B','-m','ignition','--state',path.join(work,'replays'),'serve','--port','0'],
@@ -102,6 +163,28 @@ async function main() {
     await assertLayout(page,360);await assertLayout(page,390);await assertLayout(page,1200);
     await page.keyboard.press('Tab');
     assert.equal(await page.evaluate(()=>document.activeElement.className),'skip');
+    const deskPage = await browser.newPage({reducedMotion:'reduce'});
+    deskPage.on('pageerror', e => errors.push(String(e)));
+    await deskPage.route(/^https?:/, route => {
+      if (new URL(route.request().url()).origin === origin) return route.continue();
+      external.push(route.request().url()); return route.abort();
+    });
+    await deskPage.goto(origin);
+    await deskPage.locator('#presets').waitFor();
+    await deskPage.locator('#example').selectOption('evidence_action');
+    await deskPage.locator('#start').click();
+    await deskPage.locator('#evidence-result').waitFor();
+    assert.equal(await deskPage.locator('#evidence-verdict').textContent(), 'Withdraw the shadow review');
+    assert.match(await deskPage.locator('#evidence-verdict-fr').textContent(), /Retirer/);
+    await deskPage.locator('#try').click();
+    await deskPage.waitForFunction(()=>document.getElementById('output').textContent.includes('withdraw_shadow_review'));
+    const evidenceZip = path.join(work, 'scientific-decision.zip');
+    await receive(deskPage, '#bundle', evidenceZip);
+    execFileSync('python3', ['-c',
+      'import pathlib,subprocess,sys,zipfile; d=pathlib.Path(sys.argv[2]); zipfile.ZipFile(sys.argv[1]).extractall(d); subprocess.run([sys.executable,"-IB","action_study/desk.py","verify","decision.json","--mission","mission.json"],cwd=d,check=True)',
+      evidenceZip, path.join(work, 'received-decision')]);
+    await qualifyMissionControls(deskPage, work);
+    await deskPage.close();
     await page.locator('#example').selectOption('integrity');
     await page.locator('#strategy').selectOption('research');
     await page.locator('#settings').evaluate(el => { el.open = true; });

@@ -26,10 +26,11 @@ function urlLink(url) {
     const a=elem("a","Inspect primary source →"); a.href=u.href; a.rel="noreferrer noopener"; a.target="_blank"; return a;
   } catch {return null;}
 }
-function commercialEvidence(e) {
+function commercialEvidence(e, liveJournal) {
   if(!e || typeof e!=="object") return;
   const s=section("Commercial evidence"), observed=elem("dl");
   for (const [key,label] of [["verified_demand","Verified demand"],["booked_revenue","Booked revenue"],["collected_revenue","Collected revenue"]]) {
+    if(key === "collected_revenue" && liveJournal) continue;
     if(Object.hasOwn(e,key)) observed.append(elem("dt",label),elem("dd",e[key]===null?"Unmeasured":lineText(e[key])));
   }
   if(observed.childElementCount) s.append(observed);
@@ -59,9 +60,14 @@ function commercialEvidence(e) {
   }
   if(e.error) s.append(elem("p",lineText(e.error),"notice"));
 }
-function results(run) {
+function results(run, liveJournal = false) {
   $("results").replaceChildren();
   const r=run.research || {};
+  if (run.field_decision) {
+    const field = section("Field decision");
+    entry(field, stageLabel(run.field_decision.disposition), run.field_decision.reason);
+    field.append(elem("p", run.field_decision.next_action));
+  }
   if (run.error) entry($("results"),"Run obstruction",lineText(run.error));
   if (Array.isArray(run.source_result?.failures) && run.source_result.failures.length) {
     detail($("results"),"Source retrieval failures",run.source_result.failures);
@@ -115,7 +121,7 @@ function results(run) {
     if (ev.scope) s.append(elem("p",ev.scope,"muted"));
     detail(s,"Full evaluation receipt",ev);
   }
-  commercialEvidence(run.economics);
+  commercialEvidence(run.economics, liveJournal);
 }
 // END SHARED READ-ONLY EVIDENCE VIEW
 const authorityKeys = ["local_model", "assisted_model", "public_sources", "allow_program_reuse"];
@@ -234,7 +240,11 @@ function readMission() {
   if (Object.hasOwn(mission.resources, "execution_strategy") || Object.hasOwn(mission.resources, "direct_method") || Object.hasOwn(mission.resources, "direct_after_research")) {
     throw Error("Use the route controls above. Remove their execution_strategy, direct_method or direct_after_research keys from Other resources.");
   }
-  mission.resources.execution_strategy = $("strategy").value;
+  const registered = mission.resources.quantum_multiplier || mission.resources.scroll_normalization;
+  if (registered && ($("strategy").value !== "adaptive" || $("direct-method").value || $("direct-after").checked)) {
+    throw Error("This experiment uses its registered source and method. Reset the route to automatic.");
+  }
+  if (!registered) mission.resources.execution_strategy = $("strategy").value;
   if ($("direct-method").value) mission.resources.direct_method = $("direct-method").value;
   if (!$("fallback-option").hidden && $("direct-after").checked) mission.resources.direct_after_research = true;
   return {mission,sources:parseField("sources",true)};
@@ -256,11 +266,23 @@ function loadBrief(mission = {}, sources = [], useSavedPermissions = true) {
   for (const k of authorityKeys) $(k).checked = useSavedPermissions && mission.authority?.[k] === true;
   $("sources").value = json(sources);
 }
+function missionLocked() {
+  const state = current?.operation?.state;
+  return state === "paused" || state === "stopped";
+}
 function buttons() {
   $("snapshot").hidden = replay || !current || ["queued","running","awaiting_model","awaiting_contract","awaiting_choice"].includes(current.status) || dirty;
   $("close-replay").hidden = !replay;
   $("recorded-bundle").hidden = true;
   $("history").hidden = replay;
+  const operation = current?.operation?.state;
+  const locked = missionLocked();
+  $("mission-operation").hidden = replay || !operation;
+  $("operation-state").textContent = operation ? "Mission " + operation : "";
+  $("pause-operation").hidden = locked;
+  $("resume-operation").hidden = operation !== "paused";
+  $("stop-operation").hidden = operation === "stopped";
+  for (const id of ["pause-operation", "resume-operation", "stop-operation"]) $(id).disabled = busy;
   $("mission").hidden = replay;
   if (replay) {
     $("bundle").removeAttribute("href");
@@ -269,15 +291,15 @@ function buttons() {
   }
   $("fresh").hidden = !current;
   $("start").textContent = current ? "Submit amended mission →" : "Start mission →";
-  $("start").disabled = !online || busy || Boolean(current && !dirty);
-  $("resume").hidden = !current || current.status !== "blocked" || dirty;
-  $("review").hidden = !current?.proposed_contract || current.status !== "awaiting_contract" || dirty;
-  $("mapping-choice").hidden = !current?.mapping_choice || current.status !== "awaiting_choice" || dirty;
+  $("start").disabled = !online || busy || locked || Boolean(current && !dirty);
+  $("resume").hidden = !current || current.status !== "blocked" || dirty || locked;
+  $("review").hidden = !current?.proposed_contract || current.status !== "awaiting_contract" || dirty || locked;
+  $("mapping-choice").hidden = !current?.mapping_choice || current.status !== "awaiting_choice" || dirty || locked;
   $("choice-options").disabled = busy || $("mapping-choice").hidden;
   $("apply-choice").disabled = busy || $("mapping-choice").hidden || !$("choice-options").querySelector("input:checked");
   $("abstain-choice").disabled = busy || $("mapping-choice").hidden;
-  $("handoff").hidden = !current?.handoff || current.status !== "awaiting_model" || dirty;
-  $("actions").hidden = current?.status !== "verified" || dirty;
+  $("handoff").hidden = !current?.handoff || current.status !== "awaiting_model" || dirty || locked;
+  $("actions").hidden = current?.status !== "verified" || dirty || locked;
   if ($("actions").hidden) $("bundle").removeAttribute("href");
   for (const id of ["resume","respond","approve","try"]) $(id).disabled = busy;
 }
@@ -347,14 +369,41 @@ function studyView(study) {
 }
 function pairingView(run) {
   const study = run.pairing_result;
-  const decision = study || run.endpoint_result || run.followup_result || run.change_result;
+  const decision = study || run.quantum_result || run.endpoint_result || run.followup_result || run.change_result || run.evidence_result;
   $("pairing-result").hidden = !study;
   $("pilot-next").hidden = study?.qualifies !== true;
   $("trial-label").hidden = Boolean(decision);
   $("trial").hidden = Boolean(decision);
   $("try").textContent = decision ? "Reproduce decision" : "Run input";
   $("actions-title").textContent = decision ? "Take the decision with you" : "Operate the artifact";
-  $("recipient-command").textContent = run.change_result ? "python3 -IB review_change.py" :
+  $("evidence-result").hidden = !run.evidence_result;
+  if (run.evidence_result) {
+    const receipt = run.evidence_result;
+    const labels = {
+      retain_shadow_review: ["Retain the shadow review", "Maintenir l’examen en parallèle"],
+      withdraw_shadow_review: ["Withdraw the shadow review", "Retirer le dossier de la file parallèle"],
+      qualify_A_next: ["Qualify configuration A next", "Évaluer ensuite la configuration A"],
+      qualify_B_next: ["Qualify configuration B next", "Évaluer ensuite la configuration B"],
+      defer_tied_qualification: ["Defer the tied choice", "Reporter le choix entre les configurations ex æquo"],
+      deliver_persistence_measurement: ["Deliver the persistence measurement", "Livrer la mesure de persistance"],
+      escalate_reversal: ["Review the reversal", "Examiner l’inversion"],
+      close_unconfirmed_change: ["Close the unconfirmed change", "Clore la variation non confirmée"],
+      request_missing_evidence: ["Obtain the missing evidence", "Obtenir les éléments manquants"],
+      continue_monitoring: ["Continue monitoring", "Poursuivre le suivi"],
+      defer_until_access: ["Defer until access is available", "Reporter jusqu’à l’obtention de l’accès"],
+      escalate_to_review: ["Refer conflicting records for review", "Soumettre les données contradictoires à un examen"],
+      close_covered_search: ["Close the covered search", "Clore la recherche dans le périmètre couvert"]
+    };
+    const pair = labels[receipt.decision.action];
+    $("evidence-verdict").textContent = pair[0];
+    $("evidence-verdict-fr").textContent = pair[1];
+    $("evidence-attempts").replaceChildren(...receipt.attempts.map(a => elem("li", a.route + " · " + a.reason)));
+    $("evidence-sha").textContent = receipt.sha256;
+  }
+  $("recipient-command").textContent = run.quantum_result ? "python3 -IB replay.py" :
+    run.scroll_result ? "python3 -IB scroll_tool.py self-check" :
+    run.evidence_result ? "python3 -IB action_study/desk.py verify decision.json --mission mission.json" :
+    run.change_result ? "python3 -IB review_change.py" :
     run.followup_result ? "python3 -IB review_followup.py" :
     run.endpoint_result ? "python3 -B endpoint_lab/replay_delivery.py" :
     study ? "python3 -B verify_decision.py" : "python3 -I run.py verify";
@@ -500,7 +549,7 @@ function mappingChoiceView(run) {
 }
 $("choice-options").addEventListener("change", buttons);
 function chooseRule(abstain) {
-  if (!current?.mapping_choice || current.status !== "awaiting_choice" || dirty || replay || busy) return;
+  if (!current?.mapping_choice || current.status !== "awaiting_choice" || dirty || missionLocked() || replay || busy) return;
   const request = current.mapping_choice;
   if (renderedChoice !== json([current.id, current.version, request.sha256])) return;
   const choice = abstain ? "abstain" : $("choice-options").querySelector("input:checked")?.value;
@@ -569,6 +618,11 @@ function executionView(run) {
 function show(run, open = false) {
   if (!run?.id) throw Error("The service returned an incomplete run record.");
   if (current && current.id !== run.id) {dirty=false;lastHandoff=null;lastTrial=null;}
+  if (current?.id !== run.id || current?.version !== run.version || replay) {
+    $("commercial-record").open = false;
+    $("commercial-state").textContent = "";
+    $("commercial-events").replaceChildren();
+  }
   current=run; if (!replay) remember(run.id); $("record").hidden=false; $("empty").hidden=true;
   $("record-title").textContent=run.mission?.purpose || "Execution & evidence";
   $("run-status").textContent=[run.status,run.stage].filter(Boolean).join(" · ").replaceAll("_"," ");
@@ -586,7 +640,7 @@ function show(run, open = false) {
   $("events").replaceChildren(...(run.events||[]).map(ev=>{
     const li=elem("li");li.append(elem("strong",ev.stage),elem("p",ev.message),elem("small",ev.at));return li;
   }));
-  results(run);
+  results(run, !replay);
   $("proposal").textContent=json(run.proposed_contract || {});
   if(lastProposal!==run.contract_sha256) {lastProposal=run.contract_sha256; $("confirmations").value="";}
   if (lastHandoff !== run.handoff?.sha256) { $("response").value=""; lastHandoff=run.handoff?.sha256; }
@@ -633,12 +687,12 @@ $("fresh").addEventListener("click",()=>{
   $("example").value="";loadBrief();$("record").hidden=true;$("empty").hidden=false;$("record-title").textContent="Execution & evidence";runNotice("");message("");buttons();$("purpose").focus();
 });
 async function action(name,data) {
-  if (replay || busy || dirty || !current) return;
+  if (replay || busy || (dirty && name !== "operation") || !current) return;
   const id=current.id, version=current.version, token=++generation;
   busy=true;clearTimeout(timer);buttons();runNotice("");
   try {
     const result=await api(apiPath(id,"/"+name),{...data,version});
-    if(token!==generation || dirty || replay)return;
+    if(token!==generation || (dirty && name !== "operation") || replay)return;
     if (name==="try") $("output").textContent=json(result);
     else {const run=result.mission ? result : await api(apiPath(id)); if(token===generation)show(run);}
   } catch(e){if(token===generation){
@@ -647,6 +701,37 @@ async function action(name,data) {
   }}
   finally {busy=false;buttons();}
 }
+for (const operation of ["pause", "resume", "stop"]) {
+  $(operation + "-operation").addEventListener("click", () => {
+    if (operation === "stop" && !window.confirm("Stop this mission permanently? Its history will remain available.")) return;
+    action("operation", {operation, sequence:current.operation.sequence});
+  });
+}
+$("commercial-record").addEventListener("toggle", async () => {
+  if (!$("commercial-record").open || replay || !current) return;
+  const {id, version} = current;
+  $("commercial-state").textContent = "Loading commercial record…";
+  try {
+    const record = await api(apiPath(id, "/commercial") + "?version=" + version);
+    if (current?.id !== id || current?.version !== version || replay) return;
+    const paid = record.commercial_state === "paid" && record.collected_revenue;
+    const parts = [stageLabel(record.commercial_state)];
+    if (paid) {
+      const format = minor => paid.currency + " " + (minor / 10 ** paid.minor_unit_digits).toFixed(paid.minor_unit_digits);
+      parts.push("Gross " + format(paid.gross_minor), "Provider fee " + format(paid.provider_fee_minor),
+                 "Available in Stripe " + format(paid.available_net_minor), "Observed " + paid.observed_at);
+    }
+    parts.push(record.next_action);
+    $("commercial-state").textContent = parts.join(" · ");
+    $("commercial-events").replaceChildren(...record.history.map(item => {
+      const li = elem("li");
+      li.textContent = [item.recorded_at, item.event.stage, item.event.counterparty, item.event.reviewer].filter(Boolean).join(" · ");
+      return li;
+    }));
+  } catch (err) {
+    if (current?.id === id && current?.version === version && !replay) $("commercial-state").textContent = err.message;
+  }
+});
 $("resume").addEventListener("click",()=>action("resume",{}));
 $("approve").addEventListener("click",()=>{
   try {
@@ -663,7 +748,7 @@ $("copy-prompt").addEventListener("click",async()=>{
   catch { $("prompt").parentElement.open=true; const range=document.createRange();range.selectNodeContents($("prompt"));getSelection().removeAllRanges();getSelection().addRange(range);runNotice("Prompt selected. Use your browser’s copy command."); }
 });
 $("try").addEventListener("click",()=>{
-  try {const input=current?.pairing_result || current?.endpoint_result || current?.followup_result || current?.change_result ? {} : JSON.parse($("trial").value); action("try",{input});}
+  try {const input=current?.quantum_result || current?.pairing_result || current?.endpoint_result || current?.followup_result || current?.change_result || current?.evidence_result ? {} : JSON.parse($("trial").value); action("try",{input});}
   catch { $("output").textContent="Enter a valid JSON input."; }
 });
 $("trial").addEventListener("input",()=>{$("output").textContent="";});

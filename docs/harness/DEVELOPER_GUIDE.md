@@ -10,6 +10,8 @@ The [field and invention continuation](../frontier-omega-ignition/continuation/f
 
 The [dated transient decision](../frontier-omega-ignition/continuation/change-delivery/REPORT.md) follows two issued notices across public archives. Open the operator's `/change-desk` to create and amend its UTC cutoff, baseline and source scope. Numerical acceptance, external corroboration, the engineering CPU comparison and the beneficiary adoption question each have their own evidence.
 
+The [beneficiary pursuit](../frontier-omega-ignition/continuation/beneficiary-pursuit/REPORT.md) runs an [evidence-ranked portfolio](../../products/frontier-omega-ignition/examples/public-research-ranked.shortlist) through the same private controller. Its selection receipt preserves rejected opportunities, missing economics and source references. Its quantum experiment withheld an uncompetitive entry and its scroll experiment produced an executable CPU normalizer for recipient evaluation. The private journal distinguishes local qualification, outside acknowledgments and reconciled funds. [Operator commands](../../products/frontier-omega-ignition/README.md)
+
 ### Customer HARNESS application
 
 The scoped [ALPHA GENESIS HARNESS](../../products/alpha-genesis-harness/README.md) continues the existing browser application with private model adapters, explicit ChatGPT-plan authorization, a separate Codex engineering path, and persistent bounded construction workflows. Its [operator guide](../../products/alpha-genesis-harness/docs/OPERATOR.md) and [workflow guide](../../products/alpha-genesis-harness/docs/AGENTIC-WORKFLOWS.md) document the actual call paths. It does not replace the native enterprise account or grant financial authority.

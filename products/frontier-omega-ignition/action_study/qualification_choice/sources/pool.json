@@ -1,0 +1,165 @@
+{
+  "publisher": "SWE-bench maintainers; Princeton NLP / SWE-bench roster",
+  "cases": 500,
+  "candidates": {
+    "A": {
+      "folder": "20260217_mini-v2.0.0_gpt-5-2-high",
+      "name": "GPT 5.2 (high)",
+      "date": "2026-02-17",
+      "resolved": 72.8,
+      "cost": 236.78350885,
+      "instance_calls": 35.046,
+      "reasoning_effort": "high"
+    },
+    "B": {
+      "folder": "20260219_mini-v2.0.0_gpt-5-2-codex",
+      "name": "GPT 5.2 Codex",
+      "date": "2026-02-19",
+      "resolved": 72.8,
+      "cost": 224.71194935,
+      "instance_calls": 28.072,
+      "reasoning_effort": null
+    }
+  },
+  "pooled": {
+    "A": 364,
+    "B": 364
+  },
+  "catalogue_receipts": [
+    {
+      "url": "https://raw.githubusercontent.com/SWE-bench/experiments/40f164d5b8f1d249bf95a6df8b74b577fd8e519d/evaluation/verified/20260217_mini-v2.0.0_gpt-5-2-high/metadata.yaml",
+      "sha256": "969a7c91b351fd0ac9ce47fddec706a9babbc15a84bc2022dd6f138461858d75",
+      "bytes": 754,
+      "retrieved_utc": "2026-11-18T06:33:09.665+00:00",
+      "http": 200,
+      "content_range": null,
+      "last_modified": null,
+      "etag": "\"0381659bfc084d5e3b234f020b8738f6fbfb4795f16de529b06af35c1035b680\""
+    },
+    {
+      "url": "https://raw.githubusercontent.com/SWE-bench/experiments/40f164d5b8f1d249bf95a6df8b74b577fd8e519d/evaluation/verified/20260219_mini-v2.0.0_gpt-5-2-codex/metadata.yaml",
+      "sha256": "2917707ed49e50c15af7e676aad60051dfa274c2882f2a43db645a01c11ace00",
+      "bytes": 831,
+      "retrieved_utc": "2026-11-18T06:33:13.399+00:00",
+      "http": 200,
+      "content_range": null,
+      "last_modified": null,
+      "etag": "\"1556e5c4398fbe5602f5a114bce275e021d5440533c2e8d0acfdf2ff8765c2a2\""
+    },
+    {
+      "url": "https://raw.githubusercontent.com/SWE-bench/swe-bench.github.io/193160a463a435d05cf44a1fa9dc5eac832113c3/data/leaderboards.json",
+      "sha256": "83cd949a9582f4dd68b0a07148cd86ff0eae6a05b0f2d2298a8f3717baf89d2d",
+      "bytes": 4091442,
+      "retrieved_utc": "2026-11-18T06:33:16.721+00:00",
+      "http": 200,
+      "content_range": null,
+      "last_modified": null,
+      "etag": "\"607d09836549b9edb156d9be549688c0866d237c092c1a37547bbd1f2e6279db\""
+    },
+    {
+      "url": "https://swe-bench-submissions.s3.amazonaws.com/?list-type=2&delimiter=%2F&prefix=bash-only%2F20260219_mini-v2.0.0_gpt-5-2-codex%2Flogs%2F&max-keys=1000",
+      "sha256": "bbf35e1f1593488da7929182765b88044c434b42e38d5bd0a84bd7c567c2ce7a",
+      "bytes": 61904,
+      "retrieved_utc": "2026-11-18T06:33:21.151+00:00",
+      "http": 200,
+      "content_range": null,
+      "last_modified": null,
+      "etag": null
+    }
+  ],
+  "roster_url": "https://huggingface.co/datasets/princeton-nlp/SWE-bench_Verified/resolve/c104f840cc67f8b6eec6f759ebc8b2693d585d4a/data/test-00000-of-00001.parquet",
+  "attachments": {
+    "roster.parquet-prefix": "f064f0991046c73421084dbc4750a7901cd928f65479c0ade9f56a4c0d3d46d1",
+    "roster-receipt.json": "82357e3d62852649a28473bcf28637969ec6e0531f5ddae00ee77422bec2a29f",
+    "20260217_mini-v2.0.0_gpt-5-2-high.yaml": "969a7c91b351fd0ac9ce47fddec706a9babbc15a84bc2022dd6f138461858d75",
+    "20260219_mini-v2.0.0_gpt-5-2-codex.yaml": "2917707ed49e50c15af7e676aad60051dfa274c2882f2a43db645a01c11ace00"
+  },
+  "groups": {
+    "pallets/flask": {
+      "file": "pallets__flask.json",
+      "sha256": "a6d847e6e046cddb35a6eb40ae08450c2c8dbdeec0d2be329aad0a2d705c2920",
+      "size": 1,
+      "first_retrieved_utc": "2026-11-18T06:33:25.068+00:00",
+      "retrieved_utc": "2026-11-18T06:33:25.068+00:00"
+    },
+    "mwaskom/seaborn": {
+      "file": "mwaskom__seaborn.json",
+      "sha256": "825cb57cf3ea905fc1efe81acd7c9e215cc7fdc477fca351c49192c87a63b95e",
+      "size": 2,
+      "first_retrieved_utc": "2026-11-18T06:33:28.524+00:00",
+      "retrieved_utc": "2026-11-18T06:33:29.138+00:00"
+    },
+    "psf/requests": {
+      "file": "psf__requests.json",
+      "sha256": "f4ff7babffdda9a9aa9123d942ac68bcc05cdc9123015d6885bedfedfd7efbdc",
+      "size": 8,
+      "first_retrieved_utc": "2026-11-18T06:33:33.239+00:00",
+      "retrieved_utc": "2026-11-18T06:33:33.883+00:00"
+    },
+    "pylint-dev/pylint": {
+      "file": "pylint-dev__pylint.json",
+      "sha256": "6d0a11f9c201a1c7e96bb230acb0498dca18d4242f892f8e330d7895b5042069",
+      "size": 10,
+      "first_retrieved_utc": "2026-11-18T06:33:36.949+00:00",
+      "retrieved_utc": "2026-11-18T06:33:37.331+00:00"
+    },
+    "pytest-dev/pytest": {
+      "file": "pytest-dev__pytest.json",
+      "sha256": "13ce613974b54fa64b658236a5c61449d73c17ec3f1066d8f6aeb99f08411cf5",
+      "size": 19,
+      "first_retrieved_utc": "2026-11-18T06:33:40.584+00:00",
+      "retrieved_utc": "2026-11-18T06:33:44.123+00:00"
+    },
+    "astropy/astropy": {
+      "file": "astropy__astropy.json",
+      "sha256": "2142140f5d162e3cc1cc108e446b8bc782ac3eef5ec15b11c039728e7d5494c1",
+      "size": 22,
+      "first_retrieved_utc": "2026-11-18T06:33:48.969+00:00",
+      "retrieved_utc": "2026-11-18T06:33:52.341+00:00"
+    },
+    "pydata/xarray": {
+      "file": "pydata__xarray.json",
+      "sha256": "aa724ed0ae813700b52dc7da78d15be38b7770b6cb9e861fcf3c587fa77e946b",
+      "size": 22,
+      "first_retrieved_utc": "2026-11-18T06:33:55.834+00:00",
+      "retrieved_utc": "2026-11-18T06:33:59.287+00:00"
+    },
+    "scikit-learn/scikit-learn": {
+      "file": "scikit-learn__scikit-learn.json",
+      "sha256": "ec4cae42c10631cf3050fbbda619256996a25f09241bccb20d862778cc3e2688",
+      "size": 32,
+      "first_retrieved_utc": "2026-11-18T06:34:02.855+00:00",
+      "retrieved_utc": "2026-11-18T06:34:09.891+00:00"
+    },
+    "matplotlib/matplotlib": {
+      "file": "matplotlib__matplotlib.json",
+      "sha256": "6f3d8ce8962904358a223bf71ddc14ad7448114837d1adcf1e8e574a80255e50",
+      "size": 34,
+      "first_retrieved_utc": "2026-11-18T06:34:13.577+00:00",
+      "retrieved_utc": "2026-11-18T06:34:21.727+00:00"
+    },
+    "sphinx-doc/sphinx": {
+      "file": "sphinx-doc__sphinx.json",
+      "sha256": "d16239cd2ff353cbdbd6b3a2ad2f4501a552da25fa1b3a0cdbd7be9f018054d5",
+      "size": 44,
+      "first_retrieved_utc": "2026-11-18T06:34:25.710+00:00",
+      "retrieved_utc": "2026-11-18T06:34:37.521+00:00"
+    },
+    "sympy/sympy": {
+      "file": "sympy__sympy.json",
+      "sha256": "a4c3518fe2ebfa1b2f6a1f83f9d000819fd5ea0ed695d7a591a2378b674a6f6a",
+      "size": 75,
+      "first_retrieved_utc": "2026-11-18T06:34:41.611+00:00",
+      "retrieved_utc": "2026-11-18T06:35:09.688+00:00"
+    },
+    "django/django": {
+      "file": "django__django.json",
+      "sha256": "dcce0aa62ccbcd70ef9530166e63342f07469d1d05e6e1fcc842d2f0d2cc26d4",
+      "size": 231,
+      "first_retrieved_utc": "2026-11-18T06:35:13.154+00:00",
+      "retrieved_utc": "2026-11-18T06:36:27.493+00:00"
+    }
+  },
+  "publication_utc": null,
+  "retrieved_utc": "2026-11-18T06:33:16.721+00:00"
+}

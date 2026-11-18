@@ -11,7 +11,7 @@ def validate_options(resources):
     strategy = resources.get("execution_strategy", "adaptive")
     if strategy not in ("adaptive", "direct", "research"):
         raise ValueError("execution_strategy must be adaptive, direct or research")
-    if "direct_method" in resources and resources["direct_method"] not in ("specialist", "model", "operator_choice", "model_choice"):
+    if "direct_method" in resources and resources["direct_method"] not in ("specialist", "model", "operator_choice", "model_choice", "evidence_projection"):
         raise ValueError("Unsupported direct construction method")
     if resources.get("choice_order", "ascending") not in ("ascending", "descending"):
         raise ValueError("choice_order must be ascending or descending")
@@ -95,6 +95,9 @@ def route(mission, *, model_permitted=False):
     elif strategy == "research":
         action = "research"
         reason = "The operator requested a frontier investigation and comparison of complete routes."
+    elif method == "evidence_projection" and not (kind == "record_migration" and not exact and "mapping_evidence" in resources):
+        action = "clarify"
+        reason = "Source-guided projection needs a migration with development examples and an operator-supplied labelled pool."
     elif method in ("operator_choice", "model_choice") and not (supported and kind == "record_migration" and not exact):
         action = "clarify"
         reason = "Bounded mapping choices require a record migration with public development examples."
@@ -102,7 +105,11 @@ def route(mission, *, model_permitted=False):
         action = "direct"
         reason = "The supplied software contract can be attempted and checked directly."
         if strategy == "adaptive" and not exact and not resources.get("direct_method"):
-            method, reason = adaptive_mapping(mission, model_permitted)
+            if "mapping_evidence" in resources:
+                method = "evidence_projection"
+                reason = "Use the supplied source labels to distinguish whole-field projections under the registered budget."
+            else:
+                method, reason = adaptive_mapping(mission, model_permitted)
             if method is None:
                 action = "clarify"
                 interpretation["obstruction"] = reason
