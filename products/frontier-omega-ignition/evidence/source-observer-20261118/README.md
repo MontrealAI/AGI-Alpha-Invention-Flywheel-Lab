@@ -1,6 +1,6 @@
 # Public-release investigation with a pinned local model
 
-On November 18, 2026, IGNITION opened a research mission from three published llama.cpp releases and one earlier revision. A separate direct call to the same local Qwen3-4B model returned the same five hypotheses and the same initial favourite. The first ordinary mission stopped when the challenge reached the server's 6,144-token context limit. Reobserving the same releases produced zero additional children. No technical effect on a beneficiary, accepted delivery or payment was measured.
+On November 18, 2026, release candidate `a44aa8535e7899aa197d6e17f567e86547792536` opened an ordinary research mission from three published llama.cpp releases and one earlier revision. The local Qwen3-4B model produced five hypotheses. A separate challenge turn using the same model concluded that the supplied publisher records did not establish a testable beneficiary improvement. All five candidates were classified as speculative. The controller recorded `defer`. Reobserving the same sources produced zero additional calls or children. No beneficiary performance, accepted delivery or payment was measured.
 
 | Registered primary arm | Completed calls | Outcome | Wall seconds | CPU seconds |
 | --- | ---: | --- | ---: | ---: |
@@ -11,7 +11,7 @@ Each discovery processed 3,439 input tokens and generated 1,951 output tokens. T
 
 The primary source revision was `bd0ddc3dddb643856edcb8aa81cfb978713cc73a`. The source-bound budget, exactly repeated prompt, negative result and source access conditions are recorded in `observation.json`. The GitHub connector acquired the publisher objects. The workspace's direct public-source transport separately recorded a DNS-policy refusal. The connector copies were imported into the ordinary observer interface. The receipt includes the direct transport failure and the two independently observed response identities.
 
-A fresh ordinary mission on `a44aa8535e7899aa197d6e17f567e86547792536` used a 12,288-token context. Its discovery reached the 2,048-token output ceiling and the controller declined the incomplete answer in 231.591 seconds. An unchanged observation again produced zero duplicate calls or children. A final registered experiment gives each model call the provider's usual 4,096-token output allowance. All four cited publisher excerpts also matched separate reads of their original public objects.
+The primary workflow's challenge stopped at 6,143 occupied tokens on a 6,144-token server. Each failure and its negative receipt were retained. A fresh mission on the final source used a 12,288-token context and reached the 2,048-token output ceiling during discovery in 231.591 seconds. The final registered experiment kept the larger context and supplied the provider's usual 4,096-token output allowance. Discovery used 3,439 input and 2,279 output tokens. The challenge used 6,279 input and 1,007 output tokens. Both turns completed in 508.743 seconds wall and 2,007.007 seconds CPU including server startup, shutdown and the repeat observation. New normal mission identities and retrieval times produced different inputs across the diagnostic runs. All four cited publisher excerpts also matched separate reads of their original public objects.
 
 ## Inspect or repeat
 

@@ -524,6 +524,495 @@
     }
   },
   "original_experiment_driver_sha256": "e1bf6471da7d868f9c2d90f6f176feb816d397e1f40a69fed22e216fd75051d1",
+  "output_budget_experiment": {
+    "assets": {
+      "model_repository": "bartowski/Qwen_Qwen3-4B-Instruct-2507-GGUF",
+      "model_revision": "ae44f08e1392f39c0e474af10c3ff8355c8b6688",
+      "runtime_archive_bytes": 23158635,
+      "runtime_archive_sha256": "909eef25cd53e6601c8a07c866d8dbb2983e74177088d55182137a8fb8255d62",
+      "server_sha256": "fe211d00c4754aa67aaa492d2c755ab0f6ef60bf30eee3c0c74a3496189cde17",
+      "weights_bytes": 2497280736,
+      "weights_preparation_wall_seconds": 1.8118,
+      "weights_sha256": "2fde00ce69dd4899c70d020845e2638353015bba0fdf161b3eb965f2bca4464e"
+    },
+    "attempts": 2,
+    "brief_sha256": "abccb6b3d06d216a14a850ca19a98d3c6ae06fc82b8d5018c118f2da279c9350",
+    "candidate_assessments": [
+      {
+        "evidence_level": "unresolved factual support",
+        "id": "C1",
+        "kind": "existing",
+        "sources": [
+          "S2"
+        ],
+        "standing": "speculative",
+        "title": "Offline Verification via Local Inference with ggml-openvino (SWA Layer Classification)"
+      },
+      {
+        "evidence_level": "unresolved factual support",
+        "id": "C2",
+        "kind": "existing",
+        "sources": [
+          "S1"
+        ],
+        "standing": "speculative",
+        "title": "Verification of FA Mask Broadcast via WebGPU Fix (Q Batch Support)"
+      },
+      {
+        "evidence_level": "unresolved factual support",
+        "id": "C3",
+        "kind": "existing",
+        "sources": [
+          "S4"
+        ],
+        "standing": "speculative",
+        "title": "Self-Service Verification of OpenCL Strided Clamp Behavior"
+      },
+      {
+        "evidence_level": "unresolved factual support",
+        "id": "C4",
+        "kind": "existing",
+        "sources": [
+          "S3"
+        ],
+        "standing": "speculative",
+        "title": "Customer Self-Service: Local Inference with CPU-Only Models (No NPU/GPU)"
+      },
+      {
+        "evidence_level": "unresolved factual support",
+        "id": "C5",
+        "kind": "research",
+        "sources": [
+          "S2"
+        ],
+        "standing": "speculative",
+        "title": "Non-Entry: Research into SWA Layer Classification via Model-Specific Mask Analysis"
+      }
+    ],
+    "candidates": [
+      "Offline Verification via Local Inference with ggml-openvino (SWA Layer Classification)",
+      "Verification of FA Mask Broadcast via WebGPU Fix (Q Batch Support)",
+      "Self-Service Verification of OpenCL Strided Clamp Behavior",
+      "Customer Self-Service: Local Inference with CPU-Only Models (No NPU/GPU)",
+      "Non-Entry: Research into SWA Layer Classification via Model-Specific Mask Analysis"
+    ],
+    "cpu_seconds": 2007.006708678,
+    "error": null,
+    "executed_source_revision": "a44aa8535e7899aa197d6e17f567e86547792536",
+    "failed_model_calls": [],
+    "finished_at": "2026-11-18T18:30:44.717844+00:00",
+    "hardware": {
+      "architecture": "x86_64",
+      "gpu_layers": 0,
+      "platform": "Linux",
+      "processor": "AMD EPYC 9V45 96-Core Processor",
+      "threads": 4
+    },
+    "inputs": [
+      {
+        "imported_representation_sha256": "92675a93eb1d398fef7dbcf86f2d936040d6df8595b4ee808e1a338869aa88ad",
+        "url": "https://api.github.com/repos/ggml-org/llama.cpp/releases?per_page=3"
+      },
+      {
+        "imported_representation_sha256": "e135991910cf02ccf06d8864eef962274dbe07310b6f914e3cb32cfd5ad28a98",
+        "url": "https://api.github.com/repos/ggml-org/llama.cpp/commits?per_page=1&until=2026-10-14T23:59:59Z"
+      },
+      {
+        "imported_representation_sha256": "92675a93eb1d398fef7dbcf86f2d936040d6df8595b4ee808e1a338869aa88ad",
+        "url": "https://api.github.com/repos/ggml-org/llama.cpp/releases?per_page=3"
+      },
+      {
+        "imported_representation_sha256": "e135991910cf02ccf06d8864eef962274dbe07310b6f914e3cb32cfd5ad28a98",
+        "url": "https://api.github.com/repos/ggml-org/llama.cpp/commits?per_page=1&until=2026-10-14T23:59:59Z"
+      }
+    ],
+    "local_server_totals": [
+      "slot print_timing: id  0 | task 0 | prompt eval time =   35646.14 ms /  3439 tokens (   10.37 ms per token,    96.48 tokens per second)",
+      "slot print_timing: id  0 | task 0 |        eval time =  233723.18 ms /  2279 tokens (  102.60 ms per token,     9.75 tokens per second)",
+      "slot      release: id  0 | task 0 | stop processing: n_tokens = 5717, truncated = 0",
+      "slot print_timing: id  0 | task 2306 | prompt eval time =   88654.52 ms /  6190 tokens (   14.32 ms per token,    69.82 tokens per second)",
+      "slot print_timing: id  0 | task 2306 |        eval time =  143151.32 ms /  1007 tokens (  142.30 ms per token,     7.03 tokens per second)",
+      "slot      release: id  0 | task 2306 | stop processing: n_tokens = 7285, truncated = 0"
+    ],
+    "max_output_tokens_per_call": 4096,
+    "model_outputs_by_sha256": {
+      "11ff4a234eebb4a29908dd6c0ac51aafcdbe197e8cc9e8978f5e0e955e49b2af": {
+        "challenger": null,
+        "decision": "defer",
+        "fit": [
+          {
+            "check": "The candidate C1 identifies a specific change in b12503 (SWA layer classification based on mask window), but the measurable acceptance criterion (correct identification of SWA layers in known models) is not independently verifiable due to lack of test data or observed outcomes. Thus, the requirement is unsupported.",
+            "requirement": "Identify a specific, dated change, compare the incumbent and state one measurable acceptance criterion for a transferable result.",
+            "status": "unsupported"
+          },
+          {
+            "check": "The evidence for all candidates is either unverified, conditional, or lacks observable test cases. No candidate meets the mission's requirement for a transferable, measurable result. Therefore, deferral is appropriate.",
+            "requirement": "Defer a build if the evidence does not justify it.",
+            "status": "supported"
+          }
+        ],
+        "objections": [
+          {
+            "candidate": "C1",
+            "claim": "The test requires observing SWA layer classification in at least two distinct models with known SWA configurations, but no such models or data are provided in the sources. The claim that the classification occurs only when the mask shows the window is conditional and unverified in practice; it is a logical assertion from the release note, not an observed outcome.",
+            "predicate": "source withdrawn",
+            "quote": "When cache extents match, classify the larger mask group as SWA only once its mask has fewer keys per row than the other mask. Keep the classification per KV cache buffer so new sequences reuse the same graph, and include swa_layers when checking graph reuse.",
+            "source": "S2",
+            "target": "test"
+          },
+          {
+            "candidate": "C2",
+            "claim": "The test requires observing FA mask broadcasting over Q batch dimensions in a test case with non-uniform Q batch sizes. However, the release note labels this a 'CI fix' and does not describe any measurable impact on inference behavior or data handoff. No evidence exists that this change improves consistency in attention masking during research data processing.",
+            "predicate": "document unavailable",
+            "quote": "webgpu: (fix CI) allow the FA mask to be broadcast over the Q batch (#32535)",
+            "source": "S1",
+            "target": "test"
+          },
+          {
+            "candidate": "C3",
+            "claim": "The obstruction correctly identifies that the commit is a repository snapshot, not a published release, and runtime access is untested. The test requires observing correct handling of non-contiguous views, but no test case or verified inference behavior is available. The claim that 'strided kernel_clamp_nc' exists is not independently verified.",
+            "predicate": "source withdrawn",
+            "quote": "The clamp kernel indexed source and destination as one flat contiguous array, so a strided view as input (the new CLAMP v=1 case) read the wrong elements. Add a strided kernel_clamp_nc, as the other unary ops have, and take it whenever the source is not contiguous.",
+            "source": "S4",
+            "target": "test"
+          },
+          {
+            "candidate": "C4",
+            "claim": "The test requires measuring data handoff fidelity in CPU-only inference and comparing it to a trusted baseline. However, no baseline is defined, and no evidence exists that CPU-only inference improves data handoff fidelity. The change described in S3 is unrelated to data handoff or transferability.",
+            "predicate": "document unavailable",
+            "quote": "CUDA: use MMQ for MoE on V100 (#32504)",
+            "source": "S3",
+            "target": "test"
+          }
+        ],
+        "reason": "The mission requires identifying a specific, dated change and establishing a measurable acceptance criterion for a transferable result. While C1 references a specific change in b12503 (SWA layer classification based on mask window), the evidence is limited to a publisher-reported change without observable, independently verifiable test results. The test requires observing SWA classification in known models, but no such models or data are available. The claim that classification occurs only when the mask shows the window is conditional and not empirically validated. No candidate provides a verifiable, observable, and measurable outcome under the mission's requirements. Therefore, the evidence does not justify a build. The mission's requirement for a transferable result is not met by any candidate due to lack of observable data or testable outcomes. The decision to defer is consistent with the requirement to defer a build if the evidence does not justify it.",
+        "selected": "C1"
+      },
+      "c8aedf1462a03ac03fa22b7bd927f4a7c00d0bf1295cf9b75d5229237ca86b15": {
+        "candidates": [
+          {
+            "alternative": "Use of SWA layer classification in local inference to improve data handoff fidelity.",
+            "beneficiary": "MONTREAL.AI engineers deciding which local research capability to qualify",
+            "change": "Evaluate whether the ggml-openvino release b12503 enables accurate classification of sparse attention (SWA) layers during local inference, using a defined metric of correct layer identification based on mask behavior.",
+            "evidence": [
+              {
+                "metric": "release_note",
+                "polarity": "asserted",
+                "scope": "publisher_reported_change",
+                "source": "S2",
+                "value": "ggml-openvino: expand model support, optimize NPU,GPU and memory usage (#32172)"
+              },
+              {
+                "metric": "release_note",
+                "polarity": "asserted",
+                "scope": "publisher_reported_change",
+                "source": "S2",
+                "value": "ggml-openvino: classify SWA layers only when the mask shows the window"
+              },
+              {
+                "metric": "release_note",
+                "polarity": "asserted",
+                "scope": "publisher_reported_change",
+                "source": "S2",
+                "value": "ggml-openvino: classify SWA layers from the first graph"
+              }
+            ],
+            "kind": "existing",
+            "obstruction": "The SWA classification logic in b12503 is conditional on mask window size and key-per-row thresholds, which may not be reliably observable without access to full attention mask data or model internals.",
+            "outcome": "A measurable improvement in research data handoff through offline, independently verifiable inference of sparse attention (SWA) layers using local inference with ggml-openvino.",
+            "route": "Download the b12503 release from https://github.com/ggml-org/llama.cpp/releases/tag/b12503. Run a local inference test on a model with known SWA layers using a sequence where mask window size and key-per-row variance are known. Compare the output layer classification against a trusted baseline (e.g., from a known SWA-annotated dataset).",
+            "scale": "Per model, per research task requiring sparse attention layer identification.",
+            "sources": [
+              "S2"
+            ],
+            "test": "The model correctly identifies SWA layers when the mask has fewer keys per row than the other mask, and classifies them only when the window appears in the mask. This must be observed in at least two distinct models with known SWA configurations.",
+            "title": "Offline Verification via Local Inference with ggml-openvino (SWA Layer Classification)",
+            "value": "A verified, independently verifiable classification of SWA layers in local inference improves data handoff accuracy and enables reproducible research."
+          },
+          {
+            "alternative": "Use of FA mask broadcasting to improve attention masking consistency in local inference.",
+            "beneficiary": "MONTREAL.AI engineers deciding which local research capability to qualify",
+            "change": "Assess whether the webgpu fix in b12521 allows FA mask broadcasting over Q batch dimensions, which could improve consistency in attention masking during research data processing.",
+            "evidence": [
+              {
+                "metric": "release_note",
+                "polarity": "asserted",
+                "scope": "publisher_reported_change",
+                "source": "S1",
+                "value": "webgpu: (fix CI) allow the FA mask to be broadcast over the Q batch (#32535)"
+              }
+            ],
+            "kind": "existing",
+            "obstruction": "The fix is labeled a CI fix and does not explicitly state its impact on data handoff or model behavior; its effect on actual inference behavior is unverified.",
+            "outcome": "An improvement in research data handoff through the ability to broadcast FA masks over Q batches in local inference, enabling consistent attention masking across sequences.",
+            "route": "Obtain the b12521 release from https://github.com/ggml-org/llama.cpp/releases/tag/b12521. Run a test where a FA mask is applied across multiple Q batches and verify that the mask is correctly broadcasted using a known input sequence with non-uniform Q batch sizes.",
+            "scale": "Per model, per sequence with variable Q batch sizes.",
+            "sources": [
+              "S1"
+            ],
+            "test": "The FA mask is correctly broadcast over the Q batch dimension in a test case with non-uniform Q batch sizes. This must be observed in at least one model with known attention masking requirements.",
+            "title": "Verification of FA Mask Broadcast via WebGPU Fix (Q Batch Support)",
+            "value": "Broadcasting FA masks over Q batches enables more consistent and predictable attention masking in local inference, improving data handoff reproducibility."
+          },
+          {
+            "alternative": "Use of strided clamp to improve robustness in non-contiguous data handling.",
+            "beneficiary": "MONTREAL.AI engineers deciding which local research capability to qualify",
+            "change": "Verify that the opencl: support CLAMP on non-contiguous views (a0e6dc7384ed) enables correct handling of strided input views in local inference.",
+            "evidence": [
+              {
+                "metric": "release_note",
+                "polarity": "asserted",
+                "scope": "publisher_reported_change",
+                "source": "S4",
+                "value": "opencl: support CLAMP on non-contiguous views (#30186)"
+              }
+            ],
+            "kind": "existing",
+            "obstruction": "This is a repository snapshot, not a published release; runtime access is untested and lacks a verified inference test case.",
+            "outcome": "A measurable improvement in data handoff through reliable handling of non-contiguous views in local inference via strided clamp operations.",
+            "route": "Obtain the a0e6dc7384ed commit from https://github.com/ggml-org/llama.cpp/commit/a0e6dc7384edb8f5d927155e1d26c10b4a310e6d. Compile and run a test with a strided input view to confirm that the strided kernel_clamp_nc correctly handles non-contiguous data.",
+            "scale": "Per model, per input configuration with strided views.",
+            "sources": [
+              "S4"
+            ],
+            "test": "The strided kernel_clamp_nc correctly processes a non-contiguous input view without data corruption or misalignment. This must be observed in at least one test case.",
+            "title": "Self-Service Verification of OpenCL Strided Clamp Behavior",
+            "value": "Correct handling of strided views improves data handoff robustness in edge cases."
+          },
+          {
+            "alternative": "Use of CPU-only local inference as a baseline for research data handoff.",
+            "beneficiary": "MONTREAL.AI engineers deciding which local research capability to qualify",
+            "change": "Establish a baseline performance and data handoff fidelity using CPU-only inference from the b12502 or b12503 releases, without relying on NPU or GPU acceleration.",
+            "evidence": [
+              {
+                "metric": "release_note",
+                "polarity": "asserted",
+                "scope": "publisher_reported_change",
+                "source": "S3",
+                "value": "CUDA: use MMQ for MoE on V100 (#32504)"
+              },
+              {
+                "metric": "platform_support",
+                "polarity": "asserted",
+                "scope": "available platform",
+                "source": "S3",
+                "value": "Ubuntu x64 (CPU)"
+              }
+            ],
+            "kind": "existing",
+            "obstruction": "No evidence of improved data handoff or transferability in CPU-only inference; the change is not tied to a measurable improvement in data handoff.",
+            "outcome": "A baseline improvement in research data handoff through offline, CPU-only local inference using publicly available llama.cpp binaries.",
+            "route": "Download and run the b12502 or b12503 CPU-only binaries (e.g., ubuntu-x64) on a local machine. Measure data handoff fidelity using a known input-output pair and compare to prior baseline.",
+            "scale": "Per model, per research task.",
+            "sources": [
+              "S3"
+            ],
+            "test": "The data handoff fidelity (e.g., output token accuracy) is consistent across multiple runs and matches a trusted baseline. This must be observed in at least one model.",
+            "title": "Customer Self-Service: Local Inference with CPU-Only Models (No NPU/GPU)",
+            "value": "Provides a reliable, offline, and independently verifiable research capability without hardware dependencies."
+          },
+          {
+            "alternative": "Research into SWA layer classification from mask patterns.",
+            "beneficiary": "MONTREAL.AI engineers deciding which local research capability to qualify",
+            "change": "Investigate whether SWA layer classification can be derived from attention mask patterns (e.g., key-per-row variance) in known models, independent of any published fix.",
+            "evidence": [
+              {
+                "metric": "release_note",
+                "polarity": "asserted",
+                "scope": "publisher_reported_change",
+                "source": "S2",
+                "value": "ggml-openvino: classify SWA layers only when the mask shows the window"
+              }
+            ],
+            "kind": "research",
+            "obstruction": "No published evidence of a working classification method or data to validate such a pattern; no observable test case exists.",
+            "outcome": "A research-based understanding of whether SWA layer classification can be reliably inferred from attention mask patterns without relying on a published fix.",
+            "route": "Analyze attention mask data from known models with documented SWA layers to determine if key-per-row variance or window size can predict SWA layer classification.",
+            "scale": "Research-only; not deployable as a capability.",
+            "sources": [
+              "S2"
+            ],
+            "test": "A pattern (e.g., key-per-row variance) correlates with known SWA layer classification in at least two models. This must be observed in a controlled analysis.",
+            "title": "Non-Entry: Research into SWA Layer Classification via Model-Specific Mask Analysis",
+            "value": "Provides a foundational understanding of SWA layer behavior, which may inform future capability development."
+          }
+        ],
+        "favourite": "C1"
+      }
+    },
+    "reason": "The mission requires identifying a specific, dated change and establishing a measurable acceptance criterion for a transferable result. While C1 references a specific change in b12503 (SWA layer classification based on mask window), the evidence is limited to a publisher-reported change without observable, independently verifiable test results. The test requires observing SWA classification in known models, but no such models or data are available. The claim that classification occurs only when the mask shows the window is conditional and not empirically validated. No candidate provides a verifiable, observable, and measurable outcome under the mission's requirements. Therefore, the evidence does not justify a build. The mission's requirement for a transferable result is not met by any candidate due to lack of observable data or testable outcomes. The decision to defer is consistent with the requirement to defer a build if the evidence does not justify it.",
+    "repeat_children": 0,
+    "repeat_model_calls": 0,
+    "repeat_status": "observed_unchanged",
+    "research_decision": "defer",
+    "restart": {
+      "missions": [],
+      "reserved": 1,
+      "status": "observed_unchanged"
+    },
+    "serving_configuration": [
+      "--ctx-size",
+      "12288",
+      "--parallel",
+      "1",
+      "--threads",
+      "4",
+      "--threads-batch",
+      "4",
+      "--n-gpu-layers",
+      "0",
+      "--seed",
+      "6144",
+      "--temp",
+      "0",
+      "--no-repack",
+      "--batch-size",
+      "128",
+      "--ubatch-size",
+      "64",
+      "--no-webui"
+    ],
+    "source_checked_decision": {
+      "decision": "defer",
+      "decision_reason": "The mission requires identifying a specific, dated change and establishing a measurable acceptance criterion for a transferable result. While C1 references a specific change in b12503 (SWA layer classification based on mask window), the evidence is limited to a publisher-reported change without observable, independently verifiable test results. The test requires observing SWA classification in known models, but no such models or data are available. The claim that classification occurs only when the mask shows the window is conditional and not empirically validated. No candidate provides a verifiable, observable, and measurable outcome under the mission's requirements. Therefore, the evidence does not justify a build. The mission's requirement for a transferable result is not met by any candidate due to lack of observable data or testable outcomes. The decision to defer is consistent with the requirement to defer a build if the evidence does not justify it.",
+      "selected": {
+        "alternative": "Use of SWA layer classification in local inference to improve data handoff fidelity.",
+        "beneficiary": "MONTREAL.AI engineers deciding which local research capability to qualify",
+        "change": "Evaluate whether the ggml-openvino release b12503 enables accurate classification of sparse attention (SWA) layers during local inference, using a defined metric of correct layer identification based on mask behavior.",
+        "evidence_level": "unresolved factual support",
+        "evidence_review": {
+          "checks": [
+            {
+              "claim": {
+                "metric": "release_note",
+                "polarity": "asserted",
+                "scope": "publisher_reported_change",
+                "source": "S2",
+                "value": "ggml-openvino: expand model support, optimize NPU,GPU and memory usage (#32172)"
+              },
+              "status": "immaterial"
+            },
+            {
+              "claim": {
+                "metric": "release_note",
+                "polarity": "asserted",
+                "scope": "publisher_reported_change",
+                "source": "S2",
+                "value": "ggml-openvino: classify SWA layers only when the mask shows the window"
+              },
+              "status": "immaterial"
+            },
+            {
+              "claim": {
+                "metric": "release_note",
+                "polarity": "asserted",
+                "scope": "publisher_reported_change",
+                "source": "S2",
+                "value": "ggml-openvino: classify SWA layers from the first graph"
+              },
+              "status": "immaterial"
+            }
+          ],
+          "open_proposal": "hypothesis pending independent action and decisive test",
+          "supported_sources": [],
+          "unbound_sources": [
+            "S2"
+          ]
+        },
+        "id": "C1",
+        "ineligible_sources": [
+          "S2"
+        ],
+        "kind": "existing",
+        "obstruction": "The SWA classification logic in b12503 is conditional on mask window size and key-per-row thresholds, which may not be reliably observable without access to full attention mask data or model internals.",
+        "outcome": "A measurable improvement in research data handoff through offline, independently verifiable inference of sparse attention (SWA) layers using local inference with ggml-openvino.",
+        "route": "Download the b12503 release from https://github.com/ggml-org/llama.cpp/releases/tag/b12503. Run a local inference test on a model with known SWA layers using a sequence where mask window size and key-per-row variance are known. Compare the output layer classification against a trusted baseline (e.g., from a known SWA-annotated dataset).",
+        "scale": "Per model, per research task requiring sparse attention layer identification.",
+        "sources": [
+          "S2"
+        ],
+        "standing": "speculative",
+        "test": "The model correctly identifies SWA layers when the mask has fewer keys per row than the other mask, and classifies them only when the window appears in the mask. This must be observed in at least two distinct models with known SWA configurations.",
+        "title": "Offline Verification via Local Inference with ggml-openvino (SWA Layer Classification)",
+        "usable_sources": [],
+        "value": "A verified, independently verifiable classification of SWA layers in local inference improves data handoff accuracy and enables reproducible research."
+      },
+      "selection_recommendation": "The mission requires identifying a specific, dated change and establishing a measurable acceptance criterion for a transferable result. While C1 references a specific change in b12503 (SWA layer classification based on mask window), the evidence is limited to a publisher-reported change without observable, independently verifiable test results. The test requires observing SWA classification in known models, but no such models or data are available. The claim that classification occurs only when the mask shows the window is conditional and not empirically validated. No candidate provides a verifiable, observable, and measurable outcome under the mission's requirements. Therefore, the evidence does not justify a build. The mission's requirement for a transferable result is not met by any candidate due to lack of observable data or testable outcomes. The decision to defer is consistent with the requirement to defer a build if the evidence does not justify it."
+    },
+    "source_time_mode": "current",
+    "stage_receipts": {
+      "workflow.challenge": {
+        "application_model_calls": 1,
+        "complete_cost_known": false,
+        "declared_model_sha256": "2fde00ce69dd4899c70d020845e2638353015bba0fdf161b3eb965f2bca4464e",
+        "endpoint": "http://127.0.0.1:51583",
+        "harness_adapter_sha256": "040c74262976c1c77822171d9a55937038f2b7977e12216f7d2fbef8ccc27014",
+        "harness_streaming_sha256": "c94164c9b5539e08ff731b9d23063ac5357351264e86ad081f24a4ebed181986",
+        "mode": "local",
+        "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+        "output_tokens": 4096,
+        "provider": "llama-cpp",
+        "raw_response_sha256": "23edacdd3e58daccfcba9b23f13d2b0064878ad763a1987c70f0d5f2434bc503",
+        "recorded_at": "2026-11-18T18:26:52.233440+00:00",
+        "reported_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+        "request_sha256": "e2467d438dc708de29f19ed9e896d9cdfef3419dbd6df4aec5abad16bd98c999",
+        "response_schema_sha256": "02afc398eb94272ddd10edd5f7aaeb2badcf4d592c846686b5ee52256686dc5a",
+        "response_sha256": "11ff4a234eebb4a29908dd6c0ac51aafcdbe197e8cc9e8978f5e0e955e49b2af",
+        "run_id": "ignition_3238e59a67d14a91b9aae07882b4f466",
+        "schema_implementation": "9ad43ad6e9af37b222b01cf5e0ebd3e6cedbb50918bdff1d0ec07aeaa9c7bce4",
+        "schema_output": true,
+        "stage": "challenge",
+        "status": "completed",
+        "stream_fragments": 1006,
+        "stream_output_bytes": 4633,
+        "timeout_seconds": 240,
+        "transport_mode": "streaming-sse/1",
+        "usage": {
+          "input_tokens": 6279,
+          "output_tokens": 1007
+        },
+        "wall_seconds": 232.349717,
+        "weights_identity": "operator-declared"
+      },
+      "workflow.discover": {
+        "application_model_calls": 1,
+        "complete_cost_known": false,
+        "declared_model_sha256": "2fde00ce69dd4899c70d020845e2638353015bba0fdf161b3eb965f2bca4464e",
+        "endpoint": "http://127.0.0.1:51583",
+        "harness_adapter_sha256": "040c74262976c1c77822171d9a55937038f2b7977e12216f7d2fbef8ccc27014",
+        "harness_streaming_sha256": "c94164c9b5539e08ff731b9d23063ac5357351264e86ad081f24a4ebed181986",
+        "mode": "local",
+        "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+        "output_tokens": 4096,
+        "provider": "llama-cpp",
+        "raw_response_sha256": "1d28cabf7c7b131d43ed2f907a5a3c8aba6f7f8d3b4fff51876c3fba5ea8ded8",
+        "recorded_at": "2026-11-18T18:22:22.845635+00:00",
+        "reported_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+        "request_sha256": "9b976c7968763b86f5b06dc1b8234b44d4adcaa08927e38b6bd950cd43aeab7b",
+        "response_schema_sha256": "15bc5654c7e2a97113f7452e135e72109ab440dbb281d6ac4806175c3c8ab508",
+        "response_sha256": "c8aedf1462a03ac03fa22b7bd927f4a7c00d0bf1295cf9b75d5229237ca86b15",
+        "run_id": "ignition_005b23ccc556468e878427d94e89b95c",
+        "schema_implementation": "9ad43ad6e9af37b222b01cf5e0ebd3e6cedbb50918bdff1d0ec07aeaa9c7bce4",
+        "schema_output": true,
+        "stage": "discover",
+        "status": "completed",
+        "stream_fragments": 2278,
+        "stream_output_bytes": 10082,
+        "timeout_seconds": 240,
+        "transport_mode": "streaming-sse/1",
+        "usage": {
+          "input_tokens": 3439,
+          "output_tokens": 2279
+        },
+        "wall_seconds": 269.3788,
+        "weights_identity": "operator-declared"
+      }
+    },
+    "started_at": "2026-11-18T18:22:15.974202+00:00",
+    "status": "deferred",
+    "verified": false,
+    "wall_seconds": 508.7434592600039
+  },
   "output_driver_sha256": "2f7a97c7257f105acea793db31a6519563f1ee6e1178cda1784df10c9c692d8b",
   "output_registration_sha256": "640e1fb7320f4b49ad2b2cf385c4dc509740924379d89d53697bb17f0eee87fd",
   "recovery_driver_sha256": "6b12136dcf8d928fff4199cd73327daf0a0aa05521fcd6f6fc534decabbdd644",
@@ -540,6 +1029,7 @@
     },
     "attempts": 1,
     "brief_sha256": "abccb6b3d06d216a14a850ca19a98d3c6ae06fc82b8d5018c118f2da279c9350",
+    "candidate_assessments": [],
     "candidates": [],
     "cpu_seconds": 909.0959978660001,
     "error": "Local model step failed (PROVIDER_STREAM). No automatic retry was sent.",
@@ -775,6 +1265,22 @@
       "title": "Repository snapshot a0e6dc7384ed",
       "url": "https://github.com/ggml-org/llama.cpp/commit/a0e6dc7384edb8f5d927155e1d26c10b4a310e6d",
       "version": "a0e6dc7384edb8f5d927155e1d26c10b4a310e6d"
+    }
+  ],
+  "upstream_license_documents": [
+    {
+      "bytes": 11343,
+      "first_line": "Apache License",
+      "scope": "Original Qwen weights",
+      "sha256": "832dd9e00a68dd83b3c3fb9f5588dad7dcf337a0db50f7d9483f310cd292e92e",
+      "url": "https://huggingface.co/Qwen/Qwen3-4B-Instruct-2507/resolve/cdbee75f17c01a7cc42f958dc650907174af0554/LICENSE"
+    },
+    {
+      "bytes": 1078,
+      "first_line": "MIT License",
+      "scope": "llama.cpp repository at the tested runtime tag",
+      "sha256": "94f29bbed6a22c35b992c5c6ebf0e7c92f13b836b90f36f461c9cf2f0f1d010d",
+      "url": "https://raw.githubusercontent.com/ggml-org/llama.cpp/b12242/LICENSE"
     }
   ]
 }

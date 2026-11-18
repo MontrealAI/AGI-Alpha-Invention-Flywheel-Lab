@@ -52,12 +52,17 @@ def verify(record):
     require(len(record["sources"]) == 4 and len({s["pinned_api_url"] for s in record["sources"]}) == 4, "Incomplete source inventory")
     for r in [primary["restart"]] + [x["restart"] for x in (followup,extended) if x]:
         require(r["status"] == "observed_unchanged" and not r["missions"], "Duplicate mission on unchanged releases")
+    criteria = bool(extended and extended["research_decision"] in {"build","incumbent","stop","defer"}
+                    and all(extended["stage_receipts"].get("workflow."+stage,{}).get("status") == "completed"
+                            for stage in ("discover","challenge"))
+                    and extended["repeat_children"] == 0 and extended["repeat_model_calls"] == 0)
     return {"offline_record_check": "pass", "publisher_objects":len(record["sources"]),
             "first_workflow_status":primary["workflow"]["status"], "separate_direct_stages":1,
             "recovery_status":followup["status"] if followup else "registered",
             "recovery_decision":followup["research_decision"] if followup else None,
             "final_status":extended["status"] if extended else "registered",
-            "final_decision":extended["research_decision"] if extended else None}
+            "final_decision":extended["research_decision"] if extended else None,
+            "final_registered_technical_criterion":criteria if extended else None}
 
 
 def capture(record, out):
