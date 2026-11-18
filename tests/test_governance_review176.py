@@ -300,5 +300,22 @@ class Reviewer176Tests(unittest.TestCase):
                 main(command)
 
 
+    def test_r177_a_claimed_issuance_before_reviewer_authority_is_rejected(self):
+        """An action claimed before the authorized role began cannot be accepted."""
+        b, t = self.setup_data()
+        statement = b["decisions"][0]["statement"]
+        statement["issued_at_utc"] = "2026-10-31T14:00:00Z"
+        b["decisions"][0]["signature_b64"] = self.sign(statement)
+        with self.assertRaisesRegex(ValueError, "AUTHORIZ"):
+            self.run_case(b, t)
+
+    def test_r177_b_two_attributed_identities_cannot_share_one_anchored_key(self):
+        """Anchored malformed identity registry must not ambiguously attribute a signer."""
+        b, t = self.setup_data()
+        t["reviewers"][1]["public_key_pem"] = t["reviewers"][0]["public_key_pem"]
+        with self.assertRaisesRegex(ValueError, "UNIQUE.*KEY"):
+            self.run_case(b, t)
+
+
 if __name__ == "__main__":
     unittest.main()
