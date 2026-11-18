@@ -169,6 +169,8 @@ def main():
     paths.add_argument("--studio", action="store_true", help="Use a real TLS staging login and a guided model construction")
     paths.add_argument("--blank-studio", action="store_true",
                        help="Use the signed-in blank research mission, with no supplied construction specification")
+    paths.add_argument("--blank-archive", action="store_true",
+                       help="Run the independent signed-in blank archive-receiver study")
     paths.add_argument("--research", action="store_true", help="Run open discovery, critique and construction on the published archive")
     args = parser.parse_args()
     work, output = args.work.resolve(), args.output.resolve()
@@ -191,8 +193,9 @@ def main():
         record.update(protocol="ignition.authenticated-model-construction.v1",
                       scope="Locally trusted staging TLS and hosted HTTP endpoints, authenticated invitation, "
                             "bounded local model, public source and independent package replay.")
-    if args.blank_studio:
-        record.update(protocol="ignition.blank-studio-research.v1",
+    blank = args.blank_studio or args.blank_archive
+    if blank:
+        record.update(protocol=("ignition.blank-archive-research.v1" if args.blank_archive else "ignition.blank-studio-research.v1"),
                       scope="Public synthetic beneficiary workflow over authenticated staging TLS. "
                             "No supplied contract, real pinned inference, prospectively limited automated "
                             "operator approval. No customer participation, deployment or payment.")
@@ -201,7 +204,7 @@ def main():
         record["source_revision"] = qualification.checked_source()
         record["runtime_source_sha256"] = qualification.runtime_source()
         binary, weights = observe.prepare(args.assets.resolve(), work, record)
-        if args.research or args.blank_studio:
+        if args.research or blank:
             serving = research_server.server(binary, weights, work, record)
         else:
             serving = observe.server(binary, weights, work, record, "selection")
@@ -209,13 +212,14 @@ def main():
             model = LocalProvider("llama-cpp", qualification.MODEL_ALIAS, port, observe.PINS.MODEL_SHA,
                                   output_tokens=2048 if args.research else 128, timeout=600 if args.research else 120,
                                   streaming=True, schema_output=True)
-            if args.studio or args.blank_studio:
+            if args.studio or blank:
                 from qa.qualify_studio_model import exercise as hosted
+                protocol = None
                 if args.blank_studio:
-                    from qa.qualify_blank_studio import run
-                    passed = hosted(work, port, record, protocol=run)
-                else:
-                    passed = hosted(work, port, record)
+                    from qa.qualify_blank_studio import run as protocol
+                if args.blank_archive:
+                    from qa.qualify_blank_archive import run as protocol
+                passed = hosted(work, port, record, protocol=protocol)
             elif args.research:
                 from qa.qualify_research_dispatch import exercise as investigate
                 passed = investigate(work, model, record)

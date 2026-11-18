@@ -112,12 +112,38 @@ class ResearchTests(unittest.TestCase):
 
     def test_new_mission_with_no_contract_can_request_approval(self):
         request = {"purpose": "Check an archive against my trusted digests.", "requirements": []}
-        first = {"candidates": [candidate(1, kind="manifest_audit")], "favourite": "C1"}
-        report, _ = trial(first=first, second={"fit": []}, mission=request)
+        mechanics = {"inputs": ["trusted_sha256_manifest", "named_file_bytes"], "operations": ["compare_sha256_by_path"],
+                     "outputs": ["path_discrepancy_report"]}
+        first = {"requested_output": "path_discrepancy_report", "favourite": "C1",
+                 "candidates": [dict(candidate(1, kind="manifest_audit"), mechanics=mechanics)]}
+        permitted = {**SOURCE, "text": hashlib.sha256(b"local file").hexdigest() + "  release.txt",
+                     "rights": "Supplied by the operator for local evaluation."}
+        report, _ = trial(first=first, second={"fit": []}, mission=request, sources=[permitted])
         self.assertEqual((report["decision"], report["kind"]), ("build", "manifest_audit"))
         self.assertTrue(report["specification_required"])
+        no_digest, _ = trial(first=first, second={"fit": []}, mission=request)
+        self.assertEqual((no_digest["decision"], no_digest["specification_required"]), ("defer", False))
         prior, _ = trial()
         self.assertFalse(prior["specification_required"])
+
+    def test_blank_route_checks_true_operation_and_allows_independent_challenger(self):
+        request = {"purpose": "Rename one column on each event row.", "requirements": []}
+        mechanics = {"inputs": ["flat_json_rows"], "operations": ["project_fields"], "outputs": ["mapped_json_rows"]}
+        first = {"requested_output": "mapped_json_rows", "favourite": "C1",
+                 "candidates": [dict(candidate(1, kind="manifest_audit"), mechanics=mechanics)]}
+        report, calls = trial(first=first, second={"fit": []}, mission=request)
+        self.assertEqual(report["decision"], "defer")
+        verdict = calls[1][1]["candidates"][0]["family_assessment"]
+        self.assertEqual(verdict["status"], "unsupported")
+        newcomer = dict(candidate(2), mechanics=mechanics)
+        second = {"fit": [], "challenger": newcomer, "selected": "C2"}
+        valid, _ = trial(first=first, second=second, mission=request)
+        self.assertEqual((valid["decision"], valid["selected"]["id"]), ("build", "C2"))
+        for missing in ("other", None, []):
+            report, _ = trial(first={**first, "requested_output": missing}, second=second, mission=request)
+            self.assertEqual(report["decision"], "defer")
+        declined, _ = trial(first=first, second={**second, "decision": "defer"}, mission=request)
+        self.assertEqual(declined["decision"], "defer")
 
     def test_retraction_supersedes_earlier_source_and_surplus_entries_reported(self):
         withdrawn = SOURCE | {"status": "withdrawn", "retrieved_at": "2026-11-17T11:00:00Z"}

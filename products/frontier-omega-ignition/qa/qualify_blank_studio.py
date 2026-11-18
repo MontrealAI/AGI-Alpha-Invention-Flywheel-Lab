@@ -149,13 +149,18 @@ def replay_recipient(work):
 
 def run(work, call, record):
     request = intake()
-    confirmations = held_out_cases()
-    record.update(public_source=SOURCE, intake=request, independent_confirmation_sha256=digest(confirmations),
-                  independent_recipient_inputs_sha256=digest(RECIPIENT_INPUTS), approval_submitted=False,
+    return run_blank(work, call, record, request=request, confirmations=held_out_cases(),
+                     recipient_inputs=RECIPIENT_INPUTS, review_draft=review, replay=replay_recipient,
+                     scope="Synthetic flat export to importer rows. No live billing account, measured demand "
+                           "or counterfactual claim that projection recently became possible.")
+
+
+def run_blank(work, call, record, *, request, confirmations, recipient_inputs, review_draft, replay, scope):
+    record.update(public_source=request["sources"][0], intake=request, independent_confirmation_sha256=digest(confirmations),
+                  independent_recipient_inputs_sha256=digest(recipient_inputs), approval_submitted=False,
                   approval_authority="Automated simulated operator, solely for this prospective public qualification. "
                                      "No customer participation, financial authority or external effects.",
-                  comparison_scope="Synthetic flat export to importer rows. No live billing account, measured demand "
-                                   "or counterfactual claim that projection recently became possible.",
+                  comparison_scope=scope,
                   limits={"per_call_seconds": CALL_SECONDS, "max_calls": CALL_CAP, "max_initial_candidates": 2})
     if (record.get("unauthenticated_status") != 401 or record["authentication"] != {
             "authenticated": True, "environment": "staging"} or record["readiness"] != {
@@ -174,7 +179,7 @@ def run(work, call, record):
         return False
     spec = state["proposed_contract"]["spec"]
     record.update(proposed_spec=spec, proposed_contract_sha256=state["contract_sha256"])
-    reason = review(spec)
+    reason = review_draft(spec)
     if reason:
         record["protocol_outcome"] = reason
         return False
@@ -193,7 +198,7 @@ def run(work, call, record):
     successful = context["model_calls"]
     receipts = q.compact_calls({"calls": dict(enumerate(successful)), "unsuccessful_calls": []})
     record["completed_model_receipts"] = sorted(receipts, key=lambda receipt: receipt["recorded_at"])
-    record["independent_recipient_replay"] = replay_recipient(work)
+    record["independent_recipient_replay"] = replay(work)
     calls = (record.get("usage") or {}).get("recorded_application_model_calls")
     passed = (record["route"] == "research" and record["research_decision"] == "build"
               and record["acceptance"] == "pass" and "construct" in record["events"]

@@ -80,6 +80,39 @@ class WireGrammarTests(unittest.TestCase):
                 with self.assertRaises(SchemaError):
                     validate_output({"kind": "manifest_audit", "program": program}, schema)
 
+    def test_blank_draft_grammar_preserves_variable_examples_and_abstention(self):
+        from ignition.family_contracts import catalog
+        for kind, family in catalog().items():
+            packet = {"kind": kind, "mission": {"purpose": "An operator-specified outcome."}, "family_contract": family}
+            if kind == "manifest_audit":
+                trusted = {"sample": "1" * 64}
+                packet["trusted_manifest"] = trusted
+                definition = {"manifest": trusted}
+                case = {"name": "No files present", "input": {"files": {}}, "expected":
+                        {"ok": False, "matched": [], "missing": ["sample"], "changed": [], "unexpected": []}}
+            else:
+                definition = {"columns": [{"source": "variable", "target": "field", "type": "integer"}],
+                              "extra_fields": "reject"}
+                case = {"name": "Convert an integer string", "input": {"rows": [{"variable": "8"}]},
+                        "expected": {"rows": [{"field": 8}]}}
+            schema = prepare_schema(model_schema.for_stage("specification", packet))
+            proposed = {"purpose": packet["mission"]["purpose"], "kind": kind, "definition": definition, "cases": [case]}
+            validate_output({"spec": proposed}, schema)
+            validate_output({"obstruction": "The input entitlement remains uncertain."}, schema)
+            for key, value in (("purpose", "Replaced goal"), ("kind", "new_worker")):
+                with self.assertRaises(SchemaError):
+                    validate_output({"spec": {**proposed, key: value}}, schema)
+            if kind == "manifest_audit":
+                with self.assertRaises(SchemaError):
+                    validate_output({"spec": {**proposed, "definition": {"manifest": {"invented": "2" * 64}}}}, schema)
+
+    def test_blank_wire_grammar_can_admit_unsupported_mechanics(self):
+        from ignition.family_contracts import catalog
+        schema = prepare_schema(model_schema.for_stage("discover", {"signals": [], "installed_contracts": catalog()}))
+        candidate = {k: "Uninstalled hypothesis" for k in model_schema.CANDIDATE_FIELDS} | {
+            "sources": [], "mechanics": {"inputs": ["other"], "operations": ["other"], "outputs": ["other"]}}
+        validate_output({"requested_output": "other", "candidates": [candidate], "favourite": None}, schema)
+
     def test_discovery_allows_unsupported_hypothesis_and_no_evidence(self):
         s = prepare_schema(model_schema.for_stage("discover",{"signals":[]}))
         validate_output({"candidates":[],"favourite":None},s)

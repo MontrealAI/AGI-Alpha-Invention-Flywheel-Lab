@@ -149,6 +149,22 @@ def sql_and_recipient(work, archive, source):
             "portable_verifier_exit": checked.returncode}, timing
 
 
+def verify_recipient_versions(archived, fresh, registered_digest):
+    # Authenticate the published executable as a whole before opening or running it.
+    require(hashlib.sha256(archived).hexdigest() == registered_digest,
+            "published recipient differs from its registered digest")
+    with zipfile.ZipFile(io.BytesIO(archived)) as retained, zipfile.ZipFile(io.BytesIO(fresh)) as current:
+        require(sorted(retained.namelist()) == sorted(current.namelist()), "published recipient member substitution")
+        for member in current.namelist():
+            if member == "ignition/construction.py":
+                # Current deliveries embed the installed interpreter. The old one is
+                # authenticated by the registered archive digest and exercised separately.
+                require(current.read(member) == (PRODUCT / member).read_bytes(),
+                        "fresh recipient constructor differs from the checkout")
+            elif member not in ("receipt.json", "SHA256SUMS.json"):
+                require(retained.read(member) == current.read(member), "published recipient mismatch in " + member)
+
+
 def controls(m):
     definition = m["construction_spec"]["definition"]
     pool = copy.deepcopy(m["resources"]["mapping_evidence"])
@@ -199,18 +215,15 @@ def verify(output=None, receipt_path=None, git_path=None):
                  "mission_source": "https://github.com/git/git", "release_commit": SOURCE_REVISION,
                  "source_projection": active["mapping_resolution"], "native_objects_corroborated": native,
                  "scope": "Public rehearsal with SQL and native Git cross-checks. Operator adoption and bill unknown."})
+        fresh_public = public_bundle()
+        archived = (HERE / "git-clock-converter.zip").read_bytes()
+        verify_recipient_versions(archived, fresh_public, read("results.json")["recipient_sha256"])
+        for label, bundle in (("current-public", fresh_public), ("archived", archived)):
+            replay_work = wd / label
+            replay_work.mkdir()
+            sql_and_recipient(replay_work, bundle, source)
         if output:
-            output.write_bytes(public_bundle())
-        archived = HERE / "git-clock-converter.zip"
-        if archived.exists():
-            with zipfile.ZipFile(archived) as retained, zipfile.ZipFile(io.BytesIO(public_bundle())) as current:
-                require(sorted(retained.namelist()) == sorted(current.namelist()), "published recipient member substitution")
-                for member in current.namelist():
-                    if member not in ("receipt.json", "SHA256SUMS.json"):
-                        require(retained.read(member) == current.read(member), "published recipient mismatch in " + member)
-            archived_work = wd / "archived"
-            archived_work.mkdir()
-            sql_and_recipient(archived_work, archived.read_bytes(), source)
+            output.write_bytes(fresh_public)
     evidence_controls = controls(m)
     from cohort import cohort
     downstream = cohort(source, witness, SOURCE_REVISION, HERE / "git-clock-converter.zip")
@@ -240,7 +253,8 @@ def verify(output=None, receipt_path=None, git_path=None):
     metrics["all_routes_and_comparisons_seconds"] = round(time.perf_counter()-started, 6)
     measured = {"results": semantic, "wall_times": metrics,
                 "qualification_runtime_sha256": runtime_source(),
-                "recipient_sha256": hashlib.sha256((HERE/"git-clock-converter.zip").read_bytes()).hexdigest(),
+                "recipient_sha256": hashlib.sha256(archived).hexdigest(),
+                "fresh_recipient_sha256": hashlib.sha256(fresh_public).hexdigest(),
                 "study_code_sha256": {p.name: hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(HERE.glob("*.py"))},
                 "shared_acquisition": {"http_gets": len(source["exchanges"]),
                     "http_response_bytes": sum(x["response_bytes"] for x in source["exchanges"]),

@@ -59,7 +59,7 @@ def runtime_source():
     # Hash the trusted computation, including the checker and portable recipient path.
     # Editing a stylesheet or command-line help does not change an accepted calculation.
     paths = [PRODUCT / "ignition" / f"{n}.py" for n in
-             ("construction","evaluation","delivery","portable","provider","research","controller","store","economics","model_schema","routing","development","pairing_specialist","endpoint_specialist","followup_specialist","change_specialist","fixed_delivery","change_recipient","evidence_specialist","scroll_specialist","quantum_specialist")]
+             ("construction","evaluation","delivery","portable","provider","research","family_contracts","controller","store","economics","model_schema","routing","development","pairing_specialist","endpoint_specialist","followup_specialist","change_specialist","fixed_delivery","change_recipient","evidence_specialist","scroll_specialist","quantum_specialist")]
     paths += [PRODUCT / "discovery_field" / name for name in ("protocol.py", "catalog.json")]
     paths += [PRODUCT / "discovery_field" / "decision_study" / name
               for name in ("private_sources.py", "evaluate.py", "missions.json", "sources.json", "publisher_observations.json")]
