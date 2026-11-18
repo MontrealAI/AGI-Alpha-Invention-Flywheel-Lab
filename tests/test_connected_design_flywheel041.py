@@ -319,5 +319,68 @@ class NativeDesignSearch041Tests(unittest.TestCase):
         self.assertIsNone(no_bid["heldout_recommendation"]["recommended_policy"])
 
 
+    def test_matched_available_liquidity_discloses_positive_profit_cash_tradeoff(self):
+        spec = example_spec()
+        def row(profit, available):
+            return {"audit_accepted": True, "observed": {
+                "profit_microUSD": profit, "available_microUSD": available,
+                "obligations_covered": True, "source_linked_successor": None}}
+        development = {"incumbent": row(10, 1000),
+                       "earned_distribution": row(20, 950)}
+        selection = {"selected": "earned_distribution"}
+        def report(control, contender):
+            return _public(spec, {"sha256": "frozen-source"}, development,
+                           selection, {"incumbent": control,
+                                       "earned_distribution": contender}, {})
+        better_profit_lower_liquidity = report(row(10, 1000), row(20, 950))
+        self.assertEqual(better_profit_lower_liquidity[
+            "matched_confirmation_profit_delta_microUSD"], 10)
+        self.assertEqual(better_profit_lower_liquidity[
+            "matched_confirmation_available_delta_microUSD"], -50)
+        self.assertTrue(better_profit_lower_liquidity[
+            "positive_profit_lower_available_liquidity"])
+        self.assertEqual(better_profit_lower_liquidity[
+            "heldout_recommendation"]["recommended_policy"], "earned_distribution")
+        self.assertEqual(better_profit_lower_liquidity[
+            "heldout_recommendation"]["native_financial_action_authority"], [])
+        more_profit_more_liquidity = report(row(10, 900), row(20, 950))
+        self.assertEqual(more_profit_more_liquidity[
+            "matched_confirmation_available_delta_microUSD"], 50)
+        self.assertFalse(more_profit_more_liquidity[
+            "positive_profit_lower_available_liquidity"])
+        lost = report(row(20, 900), row(10, 800))
+        self.assertEqual(lost["matched_confirmation_profit_delta_microUSD"], -10)
+        self.assertEqual(lost["matched_confirmation_available_delta_microUSD"], -100)
+        self.assertFalse(lost["positive_profit_lower_available_liquidity"])
+        tied = report(row(10, 950), row(20, 950))
+        self.assertEqual(tied["matched_confirmation_available_delta_microUSD"], 0)
+        self.assertFalse(tied["positive_profit_lower_available_liquidity"])
+
+    def test_liquidity_disclosure_fails_closed_on_incomplete_or_invalid_comparison(self):
+        spec = example_spec()
+        def row(available=None, include=True):
+            observed = {"profit_microUSD": 12, "obligations_covered": True,
+                        "source_linked_successor": None}
+            if include:
+                observed["available_microUSD"] = available
+            return {"observed": observed}
+        development = {"incumbent": row(), "earned_distribution": row()}
+        selection = {"selected": "earned_distribution"}
+        def report(a, b, selected=selection):
+            return _public(spec, {"sha256": "frozen-source"}, development, selected,
+                           {"incumbent": a, "earned_distribution": b}, {})
+        missing_both = report(row(include=False), row(include=False))
+        self.assertIsNone(missing_both["matched_confirmation_available_delta_microUSD"])
+        self.assertIsNone(missing_both["positive_profit_lower_available_liquidity"])
+        with self.assertRaisesRegex(ValueError, "MATCHED_NATIVE_AVAILABLE_LIQUIDITY_REQUIRED"):
+            report(row(available=100), row(include=False))
+        with self.assertRaisesRegex(ValueError, "MATCHED_NATIVE_AVAILABLE_LIQUIDITY_REQUIRED"):
+            report(row(available=True), row(available=200))
+        without_confirmation = _public(spec, {"sha256": "frozen-source"},
+                                       development, {"selected": None}, {}, {})
+        self.assertIsNone(without_confirmation["matched_confirmation_available_delta_microUSD"])
+        self.assertIsNone(without_confirmation["positive_profit_lower_available_liquidity"])
+
+
 if __name__ == "__main__":
     unittest.main()
