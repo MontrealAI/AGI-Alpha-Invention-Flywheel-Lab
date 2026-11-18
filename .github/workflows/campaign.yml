@@ -62,7 +62,7 @@ jobs:
           wheel="$RUNNER_TEMP/ignition-pinned-wheel/nucleuswatch-1.2.0-py3-none-any.whl"
           test -f "$wheel"
           echo "7c578e37ec958008424d02cef843d856f773c87ce4158186e19c836900403ed0  $wheel" | sha256sum --check --status
-          python -m pip install --no-deps "$wheel"
+          python -m pip install "$wheel"
       - name: Source-matched tests and actual connected replay
         run: |
           python -m unittest discover -s benchmarks -p 'test_*.py' -v
