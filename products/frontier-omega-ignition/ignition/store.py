@@ -59,9 +59,9 @@ def runtime_source():
     # Hash the trusted computation, including the checker and portable recipient path.
     # Editing a stylesheet or command-line help does not change an accepted calculation.
     paths = [PRODUCT / "ignition" / f"{n}.py" for n in
-             ("construction","evaluation","delivery","portable","provider","research","controller","store","economics","model_schema","routing","development","pairing_specialist")]
+             ("construction","evaluation","delivery","portable","provider","research","controller","store","economics","model_schema","routing","development","pairing_specialist","endpoint_specialist")]
     bridge = PRODUCT.parent / "alpha-genesis-harness" / "bridge"
-    paths += [bridge / name for name in ("__init__.py", "adapters.py", "output_schema.py")]
+    paths += [bridge / name for name in ("__init__.py", "adapters.py", "output_schema.py", "streaming.py")]
     return digest({"python": [sys.implementation.name, *sys.version_info[:3]],
                    "files": {str(p.relative_to(PRODUCT.parent)): hashlib.sha256(p.read_bytes()).hexdigest()
                              for p in sorted(paths)}})
@@ -172,7 +172,7 @@ class Store:
                          routing=None, construction_attempts=[],
                          proposed_contract=None, contract_sha256=None, artifact=None, evaluation=None,
                          handoff=None, error=None, inherited=inherited, created_at=timestamp())
-            if "pairing_lab" in mission["resources"]:
+            if "pairing_lab" in mission["resources"] or "endpoint_lab" in mission["resources"]:
                 state["specialist_source"] = specialist_source
             event(state, "intake", "Mission and permission snapshot saved")
             db.execute("INSERT INTO revisions VALUES(?,?,?)", (run_id,version,canonical(state)))

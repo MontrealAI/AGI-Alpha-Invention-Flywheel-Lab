@@ -33,3 +33,13 @@ python3 -B numeric_study/receive.py --model-observation /tmp/nd02-new-model \
 ```
 
 The original three model observations, raw LaTeX generations, exact model weights/driver identifiers, and per-crop timings are [preserved here](model_observation/observation.json). Hash checking, loading and three independent processes with four CPU threads took 68.2773 wall seconds. The accepted published-table model call took 14.5405 seconds, including process setup and model load. Direct semantic projection took 0.000261 seconds, native PDF 0.488043 seconds and segmented OCR 1.514294 seconds in their receiver windows. Those windows exclude source preparation and shared crop rendering. The model saw no reference or per-cell guide. Conventional PDF/OCR arms received registered geometry. Labor to register geometry, complete engineering and delivery costs, taxes, buyer uptake and comparative reader time remain unmeasured.
+
+## What the withheld model output contained
+
+Both calibration crops actually included their full groups, values and temperature footnote. The original converter encountered `\mbox{}` in the covered slot of an explicit LaTeX two-row span and declined the delivery. The separately registered receiver permits that exact empty box only at the declared continuation, with an explicit matching span anchor in the preceding row. It reused the two recorded model outputs and made zero additional model calls. All 25 logical cells and both notes then matched the independent semantic reference, with the same CSV digest as direct and native export. Negative controls continue to reject an empty box in a quantity cell, a missing span anchor, a nonempty box, a changed sign, or a wrong qualifying temperature. This is a repair on observations already inspected. New unseen papers are required to measure generalization. [Recovery registration](RECOVERY_PROTOCOL.md) · [Accepted result and provenance](RECOVERY.json).
+
+```sh
+python3 -B numeric_study/recover.py --output /tmp/nd02-span-replay
+```
+
+The recovered CSV is accompanied by `RECOVERY.json`, which retains the source PDF identity, qualifying notes and digest. Every arm's results above retain their original verdicts. On these authorized sources, direct native or semantic extraction is the complete, inexpensive alternative. A stronger beneficiary test would use an actual scan without a text layer or author CSV, consented independent double-entry by an editor, and the full time/cost of geometry, correction and abstention.

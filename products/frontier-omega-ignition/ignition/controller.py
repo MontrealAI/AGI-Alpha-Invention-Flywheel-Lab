@@ -45,11 +45,22 @@ class Controller:
         return self.provider().identity()
 
     def create(self, body, run_id=None):
+        specialist = self._specialist_identity(body)
         if run_id is not None:
             with self.store.work_lock(run_id):
                 return self.store.create(body, self.identity(), self.source, run_id=run_id, base=body.get("version"),
-                                         specialist_source=self.pairing_source)
-        return self.store.create(body, self.identity(), self.source, specialist_source=self.pairing_source)
+                                         specialist_source=specialist)
+        return self.store.create(body, self.identity(), self.source, specialist_source=specialist)
+
+    def _specialist_identity(self, body):
+        mission = body.get("mission") if isinstance(body, dict) else None
+        resources = mission.get("resources") if isinstance(mission, dict) else None
+        if isinstance(resources, dict) and "endpoint_lab" in resources:
+            if "pairing_lab" in resources:
+                raise StateError("Select one specialist for this mission.")
+            from .endpoint_specialist import identity
+            return identity()
+        return self.pairing_source
 
     def successor(self, run_id, version, body, rights):
         if not isinstance(rights,str) or not rights.strip() or len(rights)>2000:
@@ -63,11 +74,21 @@ class Controller:
                 raise StateError("Source mission did not grant local program reuse")
             if s["artifact"]["kind"] == "pairing_lab":
                 raise StateError("Reuse the portable Pairing Lab instrument through a fresh specialist mission")
+            if s["artifact"]["kind"] == "endpoint_evidence":
+                raise StateError("Open a fresh endpoint study to requalify a changed operating requirement.")
             inherited = {"source_id":run_id, "source_version":version, "artifact_sha256":s["artifact"]["sha256"],
                          "rights":rights, "kind":s["artifact"]["kind"], "program":s["artifact"]["program"]}
-            return self.store.create(body,self.identity(),self.source,inherited=inherited,specialist_source=self.pairing_source)
+            return self.store.create(body,self.identity(),self.source,inherited=inherited,specialist_source=self._specialist_identity(body))
 
     def obsolete(self, s):
+        if "endpoint_lab" in s["mission"]["resources"]:
+            from .endpoint_specialist import identity
+            try:
+                current = identity()
+            except OSError:
+                return True
+            if s.get("specialist_source") != current:
+                return True
         if "pairing_lab" in s["mission"]["resources"]:
             from .pairing_specialist import identity
             if s.get("specialist_source") != self.pairing_source or identity() != self.pairing_source or (s.get("contract") and s["contract"].get("specialist_sha256") != self.pairing_source):
@@ -193,6 +214,9 @@ class Controller:
         provider = self.provider(s["exchanges"])
         mode = provider.identity().get("mode")
         self._check_time(mission)
+        if "endpoint_lab" in mission["resources"]:
+            from .endpoint_specialist import run
+            return run(self, s)
         if "pairing_lab" in mission["resources"]:
             from .pairing_specialist import run
             return run(self, s)
@@ -452,6 +476,9 @@ class Controller:
                 raise Conflict("Mission has been amended")
             if s["status"] != "verified":
                 raise Conflict("Current revision has no accepted artifact")
+            if s["artifact"]["kind"] == "endpoint_evidence":
+                from .endpoint_specialist import deliver
+                return deliver(s, payload, trial)
             if s["artifact"]["kind"] == "pairing_lab":
                 from .pairing_specialist import deliver
                 return deliver(self, s, payload, trial)

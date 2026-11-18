@@ -1,0 +1,50 @@
+Field Name,Run 1,Run 2,Run 3,Run 4,Run 5,Run 6,Run 7,Run 8
+Run Date,10/16/2026,10/16/2026,10/16/2026,10/16/2026,10/16/2026,10/16/2026,10/16/2026,10/16/2026
+Concurrency,17,35,70,140,272,"1,024","3,840","22,528"
+System Tokens/Second,"6,700.9","12,762.3","23,201.7","41,220.6","71,891.3","192,483.8","445,733.1","948,368.9"
+Tokens/Second per User,394.2,364.6,331.5,294.4,264.3,188.0,116.1,42.1
+TTFT P90 (ms),89.7,87.7,102.2,147.6,610.9,705.9,849.8,509.0
+Utilization,0.7%,1.3%,2.4%,4.3%,7.6%,20.3%,47.0%,100.0%
+Configuration Summary,gpt-oss-120b-c17 · submission,gpt-oss-120b-c35 · submission,gpt-oss-120b-c70 · submission,gpt-oss-120b-c140 · submission,gpt-oss-120b-c272 · submission,gpt-oss-120b-c1024 · submission,gpt-oss-120b-c3840 · submission,gpt-oss-120b-c22528 · submission
+Config Type,submission,submission,submission,submission,submission,submission,submission,submission
+Config Region,—,—,—,—,—,—,—,—
+Target QPS,—,—,—,—,—,—,—,—
+Result State,complete,complete,complete,complete,complete,complete,complete,complete
+Measured Accuracy Score,—,—,—,—,—,—,—,—
+Benchmark Version,unknown,unknown,unknown,unknown,unknown,unknown,unknown,unknown
+Result Version,0.1.0,0.1.0,0.1.0,0.1.0,0.1.0,0.1.0,0.1.0,0.1.0
+Archive URI,gs://mlperf-endpoints-blob/runs/6882566f-7eb0-4cdc-b183-bd1487b7c0c3/archive.tar.gz,gs://mlperf-endpoints-blob/runs/3c9a8a07-5451-42da-adee-1876397c2e64/archive.tar.gz,gs://mlperf-endpoints-blob/runs/d130215f-124d-4e5d-8195-262c3d7d210b/archive.tar.gz,gs://mlperf-endpoints-blob/runs/3e6761dc-e335-4c5d-998f-515f64f59a7b/archive.tar.gz,gs://mlperf-endpoints-blob/runs/712660c4-9314-4633-83a6-f62650a5ffc8/archive.tar.gz,gs://mlperf-endpoints-blob/runs/30e2e482-54b0-4053-a93e-7c5740c6ed9f/archive.tar.gz,gs://mlperf-endpoints-blob/runs/0d350459-3835-49c9-9ba8-d4462719cdd9/archive.tar.gz,gs://mlperf-endpoints-blob/runs/caacd918-5f8a-4cec-8557-107cc85429f5/archive.tar.gz
+QPS,5.4595,10.3735,18.8526,33.4378,58.3776,156.4375,362.2483,770.8032
+Total Output Tokens,"7,850,341","47,213,215","39,357,303","39,423,526","94,519,024","251,832,572","566,642,892","1,888,658,721"
+Average Output Tokens,"1,227.38","1,230.28","1,230.68","1,232.76","1,231.49","1,230.42","1,230.46","1,230.36"
+Run Duration (s),"1,171.54","3,699.42","1,696.31",956.40,"1,314.75","1,308.33","1,271.26","1,991.48"
+Total Queries,"6,396","38,376","31,980","31,980","76,752","204,672","460,512","1,535,040"
+Total Queries Issued,"6,396","38,376","31,980","31,980","76,752","204,672","460,512","1,535,040"
+Total Queries Failed,0,0,0,0,0,0,0,0
+Time to First Token (TTFT) (ms),,,,,,,,
+Minimum,32.2,29.6,29.8,30.2,29.9,33.5,41.8,59.2
+Average,82.8,68.8,79.2,105.6,243.2,384.9,580.2,516.0
+P50,61.8,60.9,63.4,79.3,93.0,322.3,500.9,325.7
+P90,89.7,87.7,102.2,147.6,610.9,705.9,849.8,509.0
+P95,104.9,101.1,118.1,175.7,953.7,867.0,979.5,587.1
+P99,1033.9,130.5,155.5,248.2,1812.3,1196.9,1474.3,7663.4
+P999,3037.4,1277.9,3071.2,3658.9,3581.8,3935.9,8868.0,21163.8
+Maximum,3466.6,3575.2,3687.9,4006.4,4270.4,5340.3,10737.9,24821.0
+Time Per Output Token (TPOT) (ms),,,,,,,,
+Minimum,0.81,1.41,1.14,1.57,1.64,1.87,4.75,11.2
+Average,2.46,2.69,2.95,3.30,3.58,4.99,8.09,23.2
+P50,2.46,2.67,2.94,3.29,3.56,5.00,8.15,23.0
+P90,2.53,2.77,3.09,3.43,3.72,5.06,8.45,24.3
+P95,2.56,2.83,3.14,3.47,3.75,5.08,8.50,24.6
+P99,2.61,2.93,3.24,3.54,3.77,5.11,8.56,25.0
+P999,2.66,3.07,3.38,3.63,3.82,5.17,8.63,25.2
+Maximum,2.78,3.19,3.53,3.70,3.92,5.81,16.5,43.5
+Query Latency (ms),,,,,,,,
+Minimum,1427.7,1318.1,1461.1,1673.8,1663.6,2266.4,3609.0,1755.4
+Average,3108.8,3371.7,3706.9,4175.0,4646.9,6521.0,10529.9,28978.2
+P50,3059.4,3333.2,3641.7,4108.9,4563.4,6447.1,10387.2,28565.6
+P90,3913.4,4227.7,4708.7,5259.8,5882.8,8105.7,13127.9,36334.5
+P95,4194.0,4522.3,5061.0,5651.3,6328.9,8668.5,14059.3,38981.4
+P99,4877.6,5158.8,5814.3,6484.1,7321.3,9921.4,16253.3,45228.7
+P999,5906.9,6166.4,7067.6,8000.4,8660.9,11885.8,20242.5,54481.6
+Maximum,7108.9,7947.0,9114.7,12460.3,11947.9,16620.8,28441.7,83625.5

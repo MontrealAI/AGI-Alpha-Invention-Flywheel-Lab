@@ -1,0 +1,50 @@
+Field Name,Run 1,Run 2,Run 3,Run 4,Run 5,Run 6,Run 7,Run 8,Run 9,Run 10,Run 11
+Run Date,11/13/2026,11/13/2026,11/13/2026,11/13/2026,11/13/2026,11/13/2026,11/13/2026,11/13/2026,11/13/2026,11/13/2026,11/13/2026
+Concurrency,16,32,48,64,128,256,512,"1,024","3,072","6,144","12,288"
+System Tokens/Second,"7,559.5","12,157.4","15,810.2","18,940.3","31,412.1","57,091.0","80,035.1","93,697.0","131,352.7","153,553.6","164,188.7"
+Tokens/Second per User,472.5,379.9,329.4,295.9,245.4,223.0,156.3,91.5,42.8,25.0,13.4
+TTFT P90 (ms),143.8,89.1,95.1,212.8,259.3,389.7,2306.6,7852.8,981.3,1627.0,19504.9
+Utilization,4.6%,7.4%,9.6%,11.5%,19.1%,34.8%,48.7%,57.1%,80.0%,93.5%,100.0%
+Configuration Summary,gb300-x8-trtllm-dynamo-gptoss-c16 · submission,gb300-x8-trtllm-dynamo-gptoss-c32 · submission,gb300-x8-trtllm-dynamo-gptoss-c48 · submission,gb300-x8-trtllm-dynamo-gptoss-c64 · submission,gb300-x8-trtllm-dynamo-gptoss-c128 · submission,gb300-x8-trtllm-dynamo-gptoss-c256 · submission,gb300-x8-trtllm-dynamo-gptoss-c512 · submission,gb300-x8-trtllm-dynamo-gptoss-c1024 · submission,gb300-x8-trtllm-dynamo-gptoss-c3072 · submission,gb300-x8-trtllm-dynamo-gptoss-c6144 · submission,gb300-x8-trtllm-dynamo-gptoss-c12288 · submission
+Config Type,submission,submission,submission,submission,submission,submission,submission,submission,submission,submission,submission
+Config Region,—,—,—,—,—,—,—,—,—,—,—
+Target QPS,—,—,—,—,—,—,—,—,—,—,—
+Result State,complete,complete,complete,complete,complete,complete,complete,complete,complete,complete,complete
+Measured Accuracy Score,—,—,—,—,—,—,—,—,—,—,—
+Benchmark Version,unknown,unknown,unknown,unknown,unknown,unknown,unknown,unknown,unknown,unknown,unknown
+Result Version,0.1.0,0.1.0,0.1.0,0.1.0,0.1.0,0.1.0,0.1.0,0.1.0,0.1.0,0.1.0,0.1.0
+Archive URI,gs://mlperf-endpoints-blob/runs/6427ac25-8560-4962-9cfe-db6e75dd4875/archive.tar.gz,gs://mlperf-endpoints-blob/runs/39c97b6b-0f19-455f-b2f5-49e5e14de007/archive.tar.gz,gs://mlperf-endpoints-blob/runs/feba013e-0604-4b0f-a46c-da59a6d07572/archive.tar.gz,gs://mlperf-endpoints-blob/runs/bf1e7a19-b7a2-4808-85c7-f4f059def75a/archive.tar.gz,gs://mlperf-endpoints-blob/runs/e9a2a8ac-0a29-4d94-8434-24e52623b1b0/archive.tar.gz,gs://mlperf-endpoints-blob/runs/5a67533f-6748-4d4f-83b6-5281a3d27ae9/archive.tar.gz,gs://mlperf-endpoints-blob/runs/3eb23e77-cde8-43da-9b17-f619fcdf1a83/archive.tar.gz,gs://mlperf-endpoints-blob/runs/f81dc1a8-0016-4731-93ec-165b19d1ce99/archive.tar.gz,gs://mlperf-endpoints-blob/runs/5791fcfc-0ba5-48cd-9553-98a8dd8a1cf7/archive.tar.gz,gs://mlperf-endpoints-blob/runs/f7838493-d160-4a95-9e4d-69f09be2140e/archive.tar.gz,gs://mlperf-endpoints-blob/runs/120ab122-722e-4e09-84bd-700875217e8e/archive.tar.gz
+QPS,5.6565,9.0996,11.8156,14.1651,23.9451,43.5360,61.0351,71.8053,100.1644,117.0377,125.1890
+Total Output Tokens,"42,738,711","42,726,517","42,791,821","51,313,159","83,905,135","142,585,987","218,063,320","250,379,700","343,888,769","411,186,638","444,591,759"
+Average Output Tokens,"1,336.42","1,336.04","1,338.08","1,337.12","1,311.84","1,311.35","1,311.3","1,304.88","1,311.37","1,312","1,311.53"
+Run Duration (s),"5,653.67","3,514.45","2,706.59","2,709.20","2,671.11","2,497.52","2,724.60","2,672.23","2,618.06","2,677.80","2,707.81"
+Total Queries,"31,980","31,980","31,980","38,376","63,960","108,732","166,296","191,880","262,236","313,404","338,988"
+Total Queries Issued,"31,980","31,980","31,980","38,376","63,960","108,732","166,296","191,880","262,236","313,404","338,988"
+Total Queries Failed,0,0,0,0,0,0,0,0,0,0,0
+Time to First Token (TTFT) (ms),,,,,,,,,,,
+Minimum,101.7,50.1,51.3,127.5,194.0,198.6,659.2,635.7,488.9,729.5,7604.9
+Average,119.2,65.5,71.7,172.6,231.9,304.0,1973.2,7451.2,953.2,1738.0,18942.0
+P50,110.2,57.2,60.7,167.9,224.4,285.4,1922.2,7448.1,819.1,1386.2,18359.2
+P90,143.8,89.1,95.1,212.8,259.3,389.7,2306.6,7852.8,981.3,1627.0,19504.9
+P95,150.3,93.6,102.9,237.7,272.9,428.7,2360.7,7979.6,1040.8,1735.3,20107.2
+P99,180.4,122.9,135.6,276.6,303.7,524.2,2638.5,8207.9,10022.8,19862.7,40255.3
+P999,230.1,847.7,1274.4,1786.8,1233.1,2849.5,6275.4,12158.0,13160.2,25021.3,78451.6
+Maximum,1136.2,1331.0,1281.9,1834.7,1486.3,4862.1,9393.0,15139.8,13355.9,25964.2,82171.7
+Time Per Output Token (TPOT) (ms),,,,,,,,,,,
+Minimum,1.56,1.66,1.92,2.08,3.18,3.14,3.51,3.69,7.58,11.4,13.3
+Average,2.07,2.59,2.99,3.32,3.99,4.35,5.00,5.31,23.0,39.3,61.0
+P50,2.07,2.58,2.98,3.32,3.98,4.34,4.99,5.30,23.1,39.5,61.6
+P90,2.20,2.74,3.17,3.53,4.27,4.59,5.35,5.61,24.0,41.1,64.5
+P95,2.24,2.79,3.22,3.59,4.35,4.66,5.46,5.71,24.2,41.6,65.4
+P99,2.32,2.89,3.33,3.71,4.50,4.82,5.64,5.91,24.7,42.5,67.0
+P999,2.40,3.02,3.44,3.84,4.66,5.29,5.86,6.90,25.4,43.8,69.1
+Maximum,2.51,5.61,3.54,4.08,4.94,5.85,6.47,7.92,29.2,49.9,93.8
+Query Latency (ms),,,,,,,,,,,
+Minimum,956.1,1251.4,1349.0,1599.8,1698.4,1973.2,3532.5,4017.8,3683.4,14011.0,32781.3
+Average,2827.8,3514.7,4058.9,4515.2,5338.1,5870.8,8370.9,14219.7,30559.8,52258.4,97398.8
+P50,2790.0,3458.7,3996.9,4444.2,5253.9,5778.8,8260.1,14101.9,30105.3,51507.8,96231.8
+P90,3571.9,4437.0,5136.4,5715.0,6809.7,7436.8,10245.1,16217.8,38697.8,66449.6,119908.1
+P95,3833.2,4770.2,5509.2,6127.6,7340.5,8005.5,10914.4,16925.8,41594.9,71489.6,128134.1
+P99,4456.1,5530.4,6352.4,7088.6,8500.4,9266.6,12411.4,18577.9,47839.9,82406.7,148162.2
+P999,5443.3,6701.4,7639.5,8547.8,10376.8,11300.9,15024.0,21202.8,57792.4,98440.8,179564.6
+Maximum,6807.1,9279.0,10011.1,11613.8,14518.7,15989.2,21066.0,26505.8,85072.4,158436.3,256408.6
