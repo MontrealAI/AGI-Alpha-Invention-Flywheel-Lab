@@ -6,7 +6,7 @@
   const pilot = JSON.parse(data.pilotReport);
   const secondWeek = JSON.parse(data.secondWeekReport);
   let lang = query.get('lang') === 'fr' ? 'fr' : 'en';
-  let candidate = 'sky';
+  let candidate = data.opportunities[0].id;
   const cases = data.sky.cases;
   const chosen = cases.find(row => String(row.budget) === query.get('budget') && String(row.visits) === query.get('visits'));
   let current = chosen || cases.find(row => row.id === data.sky.primary);
@@ -116,13 +116,18 @@
   }
   function opportunity() {
     const c = data.opportunities.find(row => row.id===candidate);
-    const [short,title,claim,limit,test] = c.translations[lang];
+    const {title,finding,limit,test} = c[lang];
     document.querySelectorAll('#choices button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.id === candidate)));
-    el('opp-state').textContent=t(c.id==='sky'?'chosen':'hypothesis');
-    el('opp-title').textContent=title; el('opp-claim').textContent=claim;
+    el('opp-state').textContent=t(c.id==='transient'?'chosen':'hypothesis');
+    el('opp-title').textContent=title; el('opp-claim').textContent=finding;
     const details=el('opp-detail');details.replaceChildren();
     term(details,t('limitLabel'),limit);term(details,t('testLabel'),test);
-    el('opp-source').textContent=t('sourceLink');el('opp-source').href=c.publication;
+    el('opp-source').textContent=t('sourceLink');el('opp-source').href=c.url;
+    const more=el('opp-others');more.replaceChildren();
+    for(const source of c.sources.filter(s=>s.url!==c.url)) {
+      const li=element('li'), link=element('a',source.title+' ↗');
+      link.href=source.url;link.target='_blank';link.rel='noopener noreferrer';li.append(link);more.append(li);
+    }
   }
   function options(id, values, fn, selected) {
     const select=el(id);select.replaceChildren();
@@ -189,12 +194,24 @@
   }
   function proof() {
     const list=el('verdicts');list.replaceChildren();
+    for(const series of data.changeSeries){
+      const last=series.days.at(-1), pairs=last.coverage.reduce((n,r)=>n+r.comparisons,0);
+      const measured=last.alerts.filter(a=>a.followup).length;
+      term(list,t('series_'+series.id),fill(t('proofLine'),{alerts:num(last.alerts.length),pairs:num(pairs),measured:num(measured)}),true);
+    }
+    const extended=data.changeSeries.find(s=>s.second_archive);
+    if(extended) {
+      const asof=extended.days.at(-1).as_of_utc, rows=extended.second_archive[asof].witnesses;
+      term(list,t('crossProof'),fill(t('crossProofLine'),{found:rows.length,persist:rows.filter(r=>r.status==='persisted').length}),true);
+    }
     const agreement=cases.filter(c=>c.accepted&&c.objective===c.direct_objective).length;
     term(list,t('solverLabel'),`${agreement}/${cases.length} ${t('casesAgree')}`,true);
     term(list,t('holdoutLabel'),data.sky.holdout?`${data.sky.holdout.detected}/${data.sky.holdout.total} ${t('archiveWith')} ${data.sky.holdout.note[lang]}`:t('archiveUnknown'),true);
     term(list,t('actionLabel'),t('actionProof'),true);
     const passed=pilot.arms.filter(arm=>arm.meets_interactive_performance).length;
     term(list,t('pilotLabel'),`${passed}/${pilot.arms.length} ${t('pilotSummary')}`,true);
+    const acquisition=data.acquisition;
+    term(list,t('acquisitionLabel'),fill(t('acquisitionCost'),{requests:num(acquisition.requests),bytes:num(acquisition.bytes,0),seconds:num(acquisition.request_seconds,2)}),true);
     term(list,t('economicsLabel'),t('economicsProof'),true);
     el('pilot-identity').textContent=`${pilot.model} · ${pilot.hardware.processor} · ${num(pilot.hardware.threads)} ${t('pilotThreads')}`;
     const liveRows=el('model-results');
@@ -209,6 +226,15 @@
       card.append(element('p',`${t('pilotSpeed')} · ${num(arm.p10_delivered_tokens_per_turn_second)} (${arm.rate_count}/${arm.requests})`));
       liveRows.append(card);
     }
+    const intake=el('intake-results');intake.replaceChildren();
+    for(const [name,r] of Object.entries(data.intake.fresh.routes)) {
+      const card=element('article');card.dataset.route=name;
+      card.append(element('h4',t('intake_'+name)),element('p',fill(t('intakeScore'),{ok:num(r.correct),all:num(r.attempted),unsafe:num(r.unsafe_ready)})));
+      intake.append(card);
+    }
+    el('intake-cost').textContent=fill(t('intakeCost'),{wall:num(data.intake.fresh.wall_seconds,2),cpu:num(data.intake.fresh.cpu_seconds_including_children,2)});
+    const challenge=data.intake.independent_challenge.routes;
+    el('intake-challenge').textContent=fill(t('intakeChallenge'),{direct:challenge.direct.correct,incumbent:challenge.incumbent.correct,all:challenge.direct.attempted});
     const fields=el('field-results');fields.replaceChildren();
     for(const arm of data.field.arms.filter(arm=>arm.concurrency===Number(el('service-load').value))) {
       const article=element('article');
@@ -223,7 +249,7 @@
   }
   function render() {
     document.documentElement.lang=lang;
-    document.title='FRONTIER Ω IGNITION · '+(lang==='fr'?'Nuit d’observation':'Observing night');
+    document.title='FRONTIER Ω IGNITION · '+t('deskTitle');
     document.querySelectorAll('[data-i]').forEach(n=>{n.textContent=t(n.dataset.i);});
     el('navigation').setAttribute('aria-label',t('nav'));
     const toggle=el('lang');toggle.textContent=lang==='fr'?'EN':'FR';toggle.lang=lang==='fr'?'en':'fr';toggle.setAttribute('aria-label',lang==='fr'?'English':'Français');
@@ -231,10 +257,10 @@
     el('choices').replaceChildren();el('choices').setAttribute('aria-label',t('oppGroup'));
     for(const c of data.opportunities){
       const button=element('button'); button.type='button';button.dataset.id=c.id;button.setAttribute('aria-controls','opportunity');
-      const arrow=element('span','↗');arrow.setAttribute('aria-hidden','true');button.append(element('span',c.translations[lang][0]),arrow);
+      const arrow=element('span','↗');arrow.setAttribute('aria-hidden','true');button.append(element('span',c[lang].label || c[lang].title),arrow);
       button.addEventListener('click',()=>{candidate=c.id;opportunity();});el('choices').append(button);
     }
-    el('research-source').href=data.opportunities.find(o=>o.id==='sky').publication;
+    el('research-source').href=data.opportunities.find(o=>o.id==='transient').url;
     options('budget',[...new Set(cases.map(c=>c.budget))].sort((a,b)=>a-b),n=>`${num(n)} ${t('budgetOption')}`,current.budget);
     options('coverage',[...new Set(cases.map(c=>c.visits))].sort((a,b)=>a-b),n=>t(n===1?'coverageOne':'coverageTwo'),current.visits);
     el('csv').textContent=t('csv');el('receipt').textContent=t('receipt');
@@ -244,7 +270,7 @@
     options('gap',data.sky.exploratory_color_counts.map(x=>x.max_gap_minutes),n=>`${num(n)} min`,gap);
     const loads=[...new Set(data.field.arms.map(a=>a.concurrency))].sort((a,b)=>a-b);
     options('service-load',loads,num,Number(el('service-load').value)||loads[0]);
-    opportunity();worklist();photometry();secondWeekFinding();proof();
+    opportunity();worklist();photometry();secondWeekFinding();proof();changeDesk.render();
   }
   for(const id of ['budget','coverage']) el(id).addEventListener('change',()=>{
     current=cases.find(c=>c.budget===Number(el('budget').value)&&c.visits===Number(el('coverage').value));worklist();
@@ -252,8 +278,10 @@
   el('service-load').addEventListener('change',proof);
   el('gap').addEventListener('change',()=>{gap=Number(el('gap').value);photometry();});
   el('lang').addEventListener('click',()=>{lang=lang==='en'?'fr':'en';render();});
+  const changeDesk = createChangeDesk(data.changeSeries, {el, t, num, fill, element, svg, options, setBlob, locale:()=>lang});
+  if (location.hash === '#forge' || location.hash === '#measurements') el('supporting').open = true;
   setBlob('second-source',data.secondWeekReport,'application/json','fink-second-week.json');
   setBlob('pilot-summary',data.pilotReport,'application/json','qwen-cpu-pilot.json');
-  setBlob('download',Uint8Array.from(atob(data.archive.bytes),v=>v.charCodeAt(0)),'application/zip','FRONTIER_OMEGA_Observing_Night.zip');
+  setBlob('download',Uint8Array.from(atob(data.archive.bytes),v=>v.charCodeAt(0)),'application/zip','FRONTIER_INSTRUMENT.zip');
   render();
 })();
