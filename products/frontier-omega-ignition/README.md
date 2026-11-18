@@ -1,5 +1,9 @@
 # 🌌♾️ FRONTIER Ω — IGNITION
 
+## From evidence to a decision · De la preuve à la décision
+
+Choose a candidate for MONTREAL.AI’s next engineering trial, withdraw a superseded astronomical alert, or recover the measurement that closes a scientific question. The bilingual exhibition lets you change the source, clock or evidence budget, see the resulting decision and take its executable recipient away. [Open the exhibition](../../docs/frontier-omega-ignition/continuation/FRONTIER_FIELD.html) · [Five-minute demonstration](showcase/field_exhibition/PRESENT.md) · [Results, limitations and costs](../../docs/frontier-omega-ignition/continuation/evidence-action/REPORT.md)
+
 ## The observing night · La nuit d’observation
 
 The [bilingual exhibition](../../docs/frontier-omega-ignition/continuation/FRONTIER_FIELD.html) follows ZTF26acbezdh from an early-supernova candidate to dated g- and r-band notices and a separately checked search for later observations. Set the UTC date and baseline to see exactly what the selected archive supports. The downloadable recipient recalculates the result from public evidence. Use `/change-desk` for a private, versioned mission and `/follow-up` for the historical observing planner.

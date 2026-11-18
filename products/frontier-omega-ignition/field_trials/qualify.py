@@ -104,12 +104,19 @@ def main():
         python(SHOW / "build.py", "--output", page, "--recipient", package)
         if page.read_bytes() != (DOCS / "FRONTIER_FIELD.html").read_bytes():
             raise ValueError("Generated public exhibition differs from the checked-in one")
+        from action_study.pack import public_files
+        from action_study.shadow.shadow import public_paths
         with ZipFile(package) as archive:
+            for name in set(public_files()) | set(public_paths()):
+                if archive.read(name) != (PRODUCT / name).read_bytes():
+                    raise ValueError("Portable public source differs from checkout: " + name)
             archive.extractall(temp / "recipient")
         python("-I", temp / "recipient/replay.py", cwd=temp / "recipient", capture=record / "recipient.json")
         recipient = temp / "recipient"
         python("-I", recipient / "action_study/observing/desk.py", "--check", cwd=recipient, capture=record / "public-alerts.json")
         python("-I", recipient / "action_study/qualification_choice/verify.py", cwd=recipient, capture=record / "public-engineering.json")
+        python("-I", recipient / "action_study/shadow/shadow.py", "check", cwd=recipient, capture=record / "portable-shadow.txt")
+        python("action_study/shadow/shadow.py", "portable", "--out", out / "shadow-review-instrument.zip")
         for profile in ("ztf-persistence", "gw-status", "engineering-qualification"):
             mission = temp / (profile + "-mission.json")
             receipt = out / (profile + ".json")
