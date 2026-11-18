@@ -143,6 +143,19 @@ def main():
     opts.output.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(f"{report['status']}: {len(report['observations'])} validated observations, "
           f"{len(report['failed_requests'])} failed requests, {len(report['integrity_errors'])} integrity errors")
+    for failure in report["failed_requests"]:
+        feed, role = failure.get("feed"), failure.get("role")
+        if feed not in REGISTERED or role not in {"current", "baseline"}:
+            continue
+        code = failure.get("reason_code")
+        if not isinstance(code, str) or not re.fullmatch(r"SOURCE_[A-Z_]+", code):
+            code = "SOURCE_RECORD"
+        diagnostic = f"public source {REGISTERED[feed]} ({role}): {code}"
+        if code == "SOURCE_HTTP":
+            match = re.fullmatch(r"Source returned HTTP ([1-5][0-9]{2})\. Redirects are not followed\.", failure.get("reason", ""))
+            if match:
+                diagnostic += " " + match[1]
+        print(diagnostic)
     return {"PASS": 0, "FAIL": 1, "BLOCKED": 2}[report["status"]]
 
 

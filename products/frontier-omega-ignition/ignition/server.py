@@ -121,7 +121,8 @@ class Handler(BaseHTTPRequestHandler):
             provider = ctrl.identity()
             return self._json({"mode":provider["mode"],"provider":provider,"runtime":ctrl.source})
         if not post and route == "/api/examples":
-            return self._json({"examples":[json.loads(p.read_text()) for p in sorted((PRODUCT/"examples").glob("*.json"))]})
+            available = (json.loads(p.read_text()) for p in sorted((PRODUCT/"examples").glob("*.json")))
+            return self._json({"examples": [item for item in available if item.get("id") and item.get("mission")]})
         if not post and route == "/api/replays":
             items = [{"id":i, "title": json.loads((PRODUCT/"examples"/f"{i}.json").read_bytes())["title"]}
                      for i in ("integrity","migration","unsupported")]

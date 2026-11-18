@@ -2,7 +2,6 @@
 import argparse
 import hashlib
 import json
-import os
 from pathlib import Path
 import shutil
 import subprocess
@@ -41,11 +40,21 @@ def produce(target, source):
         second = output_json(cmd, PRODUCT)
         if first != second:
             raise ValueError("A process restart changed the accepted package, outcome or mission identity")
+        successor = output_json([*cli, "pursue", "examples/public-research.shortlist",
+                                 "--request-id", "qualify-successor", "--reuse-from", "qualify-public-research"], PRODUCT)
+        prior, fresh = successor["attempts"]
+        if (prior.get("technical_status") != "reused_previous_negative" or prior.get("new_measurement") is not False
+                or prior["reused_from"]["mission_id"] != first["attempts"][0]["mission_id"]
+                or fresh["candidate"] != "scroll" or fresh["mission_id"] == first["attempts"][1]["mission_id"]):
+            raise ValueError("The successor must reuse the exact negative and run its own scroll experiment")
+        new_state = output_json([*cli, "show", fresh["mission_id"]], PRODUCT)
+        if not new_state.get("scroll_field", {}).get("receipt"):
+            raise ValueError("The successor did not collect its own public field evidence")
         attempts = first["attempts"]
         if [a["candidate"] for a in attempts] != ["quantum", "scroll"] or attempts[0]["commercial_state"] != "withheld":
             raise ValueError("The measured scored-resource tie must advance to the second experiment")
-        receipt = {"source": source, "pursuit": first, "restart_identical": True,
-                   "elapsed_seconds_with_restart": round(time.monotonic() - started, 3), "packages": {}}
+        receipt = {"source": source, "pursuit": first, "restart_identical": True, "successor": successor,
+                   "elapsed_seconds_including_restart_and_successor": round(time.monotonic() - started, 3), "packages": {}}
         for a in attempts:
             name = a["candidate"]
             package = target / (name + ".zip")

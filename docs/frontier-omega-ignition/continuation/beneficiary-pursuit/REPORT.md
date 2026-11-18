@@ -15,6 +15,8 @@ The portfolio binds two dated sponsor opportunities and complete mission inputs 
 
 The independent receiver reconstructed the published 2,122-window schedule. It registered six positions before inspecting their high-resolution measurements. Each 17 × 384 × 384 output agreed byte for byte with both C++ alternatives and an independent NumPy calculation, across 60,162,048 output bytes. The exported candidate normalized the two sparse boundary windows 12.91× and 11.28× faster than the strong exact incumbent. The four other ratios ranged from 0.982× to 1.101×. The six deliberately selected positions cannot establish the frequency of sparse windows or a whole-reader speedup. The optimization applies to a recent ink pipeline. No historical matched trial established that its CPU arithmetic was impossible five weeks ago. [Protocol, full-window timings, failed compilation and independent oracle](../../../../products/frontier-omega-ignition/invention/scroll_normalization/production_window/README.md)
 
+A third opportunity was screened before construction. Expensify posted a $250 profile UI issue with a public statement of expected behavior. Several contributors had already offered source-level repairs, including before-and-after evidence. Reproducing an already proposed change offered little evidence of an unmet frontier capability or an advantaged path to collection. [Sponsor issue and competing proposals](https://github.com/Expensify/App/issues/102630)
+
 ## Integration baseline
 
 | Source | Verified status at inspection |
@@ -34,3 +36,12 @@ The initial component comparison took 5.161 seconds including compilation after 
 **Proposed acceptance trial.** Request permission to give the Scroll Prize technical team the ZIP and patch. The receiving team would run the same checkpoint, input, schedule, hardware and settings through its current Reader V3 implementation and the candidate, verify the complete output TIFF hash, and record wall time and GPU input wait for both, including repeated runs. Ask which minimum gain would justify maintaining the patch before comparing timings. A documented decision to keep their incumbent is a valid outcome. Submit for a discretionary award only with evidence of actual usefulness and authorization for submission and the required licensing terms.
 
 The capability remains a draft. Operating this finite shortlist, checking a recipient and preparing a real counterparty handoff do not establish open-ended autonomous discovery, a five-week economic crossing, beneficiary acceptance or realized income.
+
+
+### Recipient trial invitation prepared for owner review
+
+> We built a CPU normalization patch for the sparse-window fallback in your Reader V3 work on PHerc0139. On six production-sized windows, all output bytes matched both C++ controls and an independent NumPy implementation. Two sparse boundary windows improved substantially; results on the four interiors varied around parity. Your published histogram path already kept pace with the GPU on the reference machine.
+>
+> Is there a representative deployment where this fallback is still limiting turnaround? If so, what whole-run time improvement would justify adopting a patch? We can supply the source, an offline verifier and a matched trial that checks the complete TIFF and records total time and input wait. If the existing path already meets the need, that answer closes the trial.
+
+This is a prepared inquiry. Sending it to the external team, submitting to an award programme or granting a new licence requires the owner's authority.
