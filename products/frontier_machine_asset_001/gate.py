@@ -75,7 +75,7 @@ def checked_request(request):
         if b in targets:
             raise Refused("DUPLICATE_OR_RESERVED_TARGET")
         targets.add(b)
-        if op not in OPERATIONS:
+        if type(op) is not str or op not in OPERATIONS:
             raise Refused("UNSUPPORTED_OPERATION")
     seen = set()
     for row in rows:
