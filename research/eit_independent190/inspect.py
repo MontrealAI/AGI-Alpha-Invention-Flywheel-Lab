@@ -186,11 +186,19 @@ def inventory_archive(path: Path, sha256: str, size: int, md5: str):
             else:
                 if len(raw) > MAX_MATLAB_SCRIPT:
                     raise Refusal("EIT190_MATLAB_SCRIPT_OVERSIZE")
+                # MATLAB examples are historical source bytes and may use
+                # non-UTF8 encodings (e.g., a legacy local single-byte codepage).
+                # Do NOT parse, transcode, or execute them in the source inventory:
+                # pin the raw bytes, disclose unknown encoding, and require a
+                # separately registered semantic review before any Stage 2 use.
                 try:
-                    lines = raw.decode("utf-8").splitlines()
-                except UnicodeDecodeError as error:
-                    raise Refusal("EIT190_NONUTF8_MATLAB_SOURCE") from error
-                item.update({"format": "MATLAB-source-not-executed", "lines": len(lines)})
+                    raw.decode("utf-8")
+                    encoding_scope = "UTF8-decodes; semantics-not-checked"
+                except UnicodeDecodeError:
+                    encoding_scope = "nonUTF8-source; semantics-unverified"
+                item.update({"format": "MATLAB-source-bytes-not-executed",
+                             "encoding_scope": encoding_scope,
+                             "raw_newline_count": raw.count(b"\\n")})
             members.append(item)
         if z.testzip() is not None:
             raise Refusal("EIT190_ZIP_CRC_VALIDATION_FAILED")
