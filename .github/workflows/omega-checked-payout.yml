@@ -1,0 +1,65 @@
+name: PR486 exact-credit outbound remediation reference
+on:
+  push:
+    branches:
+      - review/omega-checked-outbound-reference-20261119
+    paths:
+      - "campaign/omega-checked-payout-20261119/**"
+      - "products/frontier_mechanism_foundry/reference/FrontierProofExchangeChecked.sol"
+      - "products/frontier_mechanism_foundry/test/CheckedPayoutQualification.t.sol"
+      - ".github/workflows/omega-checked-payout.yml"
+  pull_request:
+    paths:
+      - "campaign/omega-checked-payout-20261119/**"
+      - "products/frontier_mechanism_foundry/reference/FrontierProofExchangeChecked.sol"
+      - "products/frontier_mechanism_foundry/test/CheckedPayoutQualification.t.sol"
+      - ".github/workflows/omega-checked-payout.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  prospective-exact-credit-review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Record platform execution clock
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - name: Pin original broken contract, earlier negative witnesses and freeze
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git hash-object products/frontier_mechanism_foundry/contracts/FrontierProofExchange.sol)" = "ef6fc9f03a3fc284df7e63d3ad1b20de1bfd2f83"
+          test "$(git hash-object products/frontier_mechanism_foundry/test/OutboundSettlementWitness.t.sol)" = "dd1c9f1fbccaeddc40d6deb2487a4b3996630e2b"
+          test "$(git hash-object campaign/omega-checked-payout-20261119/PREREGISTRATION.md)" = "1c6cc593d1eaa85780f7abc2258384f2ed288b3a"
+          git rev-parse HEAD
+      - name: Install standard public-hosted Foundry toolchain
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: stable
+      - name: Run original negative witness and five fixed checked-reference outcomes
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd products/frontier_mechanism_foundry
+          forge --version
+          /usr/bin/time -v forge test --match-contract OutboundSettlementWitness -vv 2>&1 | tee "$RUNNER_TEMP/original-outbound-negative.log"
+          /usr/bin/time -v forge test --match-contract CheckedPayoutQualification -vv 2>&1 | tee "$RUNNER_TEMP/checked-outbound-qualification.log"
+          echo "Scope: reference-only; original negative findings remain, neither reference nor original is deployment-qualified"
+      - name: Save bounded public qualification receipts
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: omega-checked-payout-${{ github.sha }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/original-outbound-negative.log
+            ${{ runner.temp }}/checked-outbound-qualification.log
+          if-no-files-found: warn
+          retention-days: 7
