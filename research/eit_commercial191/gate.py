@@ -88,6 +88,10 @@ def validate_notices(notices: tuple[dict, ...]) -> None:
             raise GateError("EIT191_TENDER_IS_NOT_AN_AWARD")
         if n.get("eit_only_estimate_eur") is not None:
             raise GateError("EIT191_UNSUPPORTED_EIT_ONLY_VALUATION")
+    for n in notices:
+        reference = POLAND if n["notice"] == POLAND["notice"] else SPAIN
+        if n != reference:
+            raise GateError("EIT191_REGISTERED_NOTICE_FACTS_CHANGED")
     spanish = next(n for n in notices if n["notice"] == SPAIN["notice"])
     if (spanish.get("full_bundle_estimate_eur") != 228000 or
             spanish.get("subject") != SPAIN["subject"]):
