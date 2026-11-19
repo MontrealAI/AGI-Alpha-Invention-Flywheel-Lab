@@ -423,7 +423,9 @@ class Controller:
                 s["research"] = routing.direct_selection(mission, choice)
             else:
                 sources = s["sources"] + s["source_result"]["sources"]
-                s["research"] = research.investigate(model_mission, sources, propose, as_of=s["source_result"]["observed_at"])
+                s["research"] = research.investigate(model_mission, sources, propose,
+                                                      as_of=s["source_result"]["observed_at"],
+                                                      acquisition=s["source_result"])
                 prior = [record["research"] for record in self.store.history(s["id"])
                          if record["version"] < s["version"] and record["research"]]
                 s["research"]["retest_leads"] = research.reopen_inventory(prior, s["research"]["signals"])

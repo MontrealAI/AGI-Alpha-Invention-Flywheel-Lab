@@ -47,3 +47,20 @@ Keep all attempted stages and outcomes. A negative first run stays recorded.
    reuse run under equal constraints and disclose all intervention and costs.
    If the first arm has no usable asset, run the second brief as an independent
    discovery trial. Transfer remains unmeasured in that case.
+
+## Independent evaluator
+
+An evaluator uninvolved in product construction selected `MISSION-2.json` and
+retains both panels. Their private case-and-oracle manifest commits to
+`c8bef367d8f99707f2d7506ec26bcc34ceb1071b593db9b994ef23b8c10b0062`.
+It was frozen at 00:08:22 UTC on November 19, after mission 1 was dispatched and
+before any finalist was visible to the evaluator. Neither case inputs nor
+answers are submitted to either model. Mission 2's two public development
+notices are disjoint from its withheld cases. It uses the same inference
+limits and a 30-minute operator review budget. The conventional route uses
+the official CanadaBuys search, exact notice and amendment checks, and a
+specialist's relevance triage. Require zero false recommendations on stale,
+closed, unverified or materially unsuitable notices. Every recommended
+notice must have a verifiable deadline, source and next action. Track whole
+workflow time, effort and cost under matched inputs. Availability, adoption,
+and commercial results are distinct. No bid or communication is authorized.
