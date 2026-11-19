@@ -32,3 +32,14 @@ jobs:
           assert len(result["receipt"]["receipt_sha256"])==64
           print("BINDING_AND_ACCEPTANCE_PASS; NO PAYMENT ATTEMPTED")
           PY
+      - name: Verify independently supplied agent output
+        run: |
+          python3 products/frontier_machine_asset_001/gate.py --verify < products/frontier_machine_asset_001/audit-example.json > /tmp/machine-asset-001-audit.json
+          python3 - <<'PY'
+          import json
+          with open("/tmp/machine-asset-001-audit.json", encoding="utf-8") as f:
+              result=json.load(f)
+          assert result["receipt"]["accepted"]
+          assert result["receipt"]["verification"].startswith("independent candidate")
+          print("INDEPENDENT_CANDIDATE_REPLAY_PASS; NO EXTERNAL CERTIFICATION")
+          PY
