@@ -32,7 +32,8 @@ jobs:
         with:
           python-version: '3.12'
       - name: Install source-pinned format libraries
-        run: python -m pip install --only-binary=:all: numpy==2.3.5 h5py==3.15.1
+        run: |
+          python -m pip install --only-binary=:all: numpy==2.3.5 h5py==3.15.1
       - name: Verify exact head and nine unchanged offline checks
         run: |
           test "$(git rev-parse HEAD)" = "${{ github.event.pull_request.head.sha || github.sha }}"
