@@ -22,7 +22,7 @@ def mat_bytes(key="voltages_matrix"):
     return f.getvalue()
 
 
-def synthetic_archive(path, add_j=True):
+def synthetic_archive(path, add_j=True, matlab_bytes=None):
     with ZipFile(path, "w") as z:
         base = "AgarChestPhantom/"
         if add_j:
@@ -110,6 +110,20 @@ class Eit190OfflineTests(unittest.TestCase):
             self.assertEqual(receipt["original_mesh_count"], 1)
             self.assertFalse(receipt["independent_conductivity_reconstructed"])
             self.assertIsNone(receipt["complete_cost_or_frontier_model_bill_usd"])
+
+    def test_legacy_nonutf8_matlab_is_reported_as_bytes_never_executed(self):
+        with tempfile.TemporaryDirectory() as d:
+            p = Path(d)/"historical.zip"
+            original_bytes = b"% MATLAB historical " + bytes((0xe9, 10)) + b"x=1;"
+            synthetic_archive(p, matlab_bytes=original_bytes)
+            report = inventory_archive(p, "source-test", p.stat().st_size, "a"*32)
+            scripts = [m for m in report["mat_and_matlab_source_members"]
+                       if m["member"].endswith(".m")]
+            self.assertEqual(len(scripts), 1)
+            self.assertEqual(scripts[0]["encoding_scope"],
+                             "nonUTF8-source; semantics-unverified")
+            self.assertEqual(scripts[0]["raw_newline_count"], 1)
+            self.assertFalse(report["independent_conductivity_reconstructed"])
 
     def test_missing_original_jacobian_fails(self):
         with tempfile.TemporaryDirectory() as d:
