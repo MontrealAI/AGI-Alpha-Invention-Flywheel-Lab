@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import json
 import re
+import urllib.error
 import urllib.request
 from urllib.parse import urlsplit
 
@@ -69,23 +70,23 @@ def ethereum_evidence(quote, receipt, transaction, included_block, finalized_blo
     must(type(receipt) is dict and type(transaction) is dict, "MISSING_ETHEREUM_TRANSACTION")
     tx_hash = quote.get("tx_ref")
     must(type(tx_hash) is str and HASH_RE.fullmatch(tx_hash), "INVALID_ETHEREUM_HASH")
-    must(receipt.get("transactionHash", "").lower() == tx_hash.lower(), "ETHEREUM_RECEIPT_HASH")
-    must(transaction.get("hash", "").lower() == tx_hash.lower(), "ETHEREUM_TRANSACTION_HASH")
+    must(str(receipt.get("transactionHash", "")).lower() == tx_hash.lower(), "ETHEREUM_RECEIPT_HASH")
+    must(str(transaction.get("hash", "")).lower() == tx_hash.lower(), "ETHEREUM_TRANSACTION_HASH")
     must(receipt.get("status") == "0x1", "FAILED_ETHEREUM_TRANSACTION")
     must(type(quote.get("recipient")) is str and ADDRESS_RE.fullmatch(quote["recipient"]),
          "INVALID_ETHEREUM_RECIPIENT")
     must(type(quote.get("payer")) is str and ADDRESS_RE.fullmatch(quote["payer"]),
          "INVALID_ETHEREUM_PAYER")
-    must(transaction.get("from", "").lower() == quote["payer"].lower(), "WRONG_ETHEREUM_SENDER")
+    must(str(transaction.get("from", "")).lower() == quote["payer"].lower(), "WRONG_ETHEREUM_SENDER")
     must(quote.get("unique_amount_bound") is True, "UNBOUND_ETHEREUM_ORDER")
     must(type(included_block) is dict and type(finalized_block) is dict, "MISSING_FINALITY_PROOF")
     included = hex_quantity(receipt.get("blockNumber"))
     must(included == hex_quantity(included_block.get("number")), "MISMATCHED_INCLUDED_BLOCK")
     must(included <= hex_quantity(finalized_block.get("number")), "ETHEREUM_NOT_FINALIZED")
-    must(receipt.get("blockHash", "").lower() == included_block.get("hash", "").lower()
+    must(str(receipt.get("blockHash", "")).lower() == str(included_block.get("hash", "")).lower()
          and type(receipt.get("blockHash")) is str
          and HASH_RE.fullmatch(receipt["blockHash"]), "ETHEREUM_NONCANONICAL_BLOCK")
-    must(transaction.get("blockHash", "").lower() == receipt["blockHash"].lower(),
+    must(str(transaction.get("blockHash", "")).lower() == receipt["blockHash"].lower(),
          "ETHEREUM_TX_BLOCK_MISMATCH")
     time_window(quote, hex_quantity(included_block.get("timestamp")))
     want = positive_units(quote.get("amount_units"))
@@ -159,7 +160,7 @@ def solana_evidence(quote, tx, mint_account, treasury_account, genesis_hash):
     sig = quote.get("tx_ref")
     must(type(sig) is str and B58_RE.fullmatch(sig), "INVALID_SOLANA_SIGNATURE")
     transaction = tx.get("transaction")
-    must(type(transaction) is dict and transaction.get("signatures", [None])[0] == sig,
+    must(type(transaction) is dict and type(transaction.get("signatures")) is list and bool(transaction["signatures"]) and transaction["signatures"][0] == sig,
          "MISMATCHED_SOLANA_SIGNATURE")
     must(type(tx.get("slot")) is int and tx["slot"] > 0, "INVALID_SOLANA_SLOT")
     time_window(quote, tx.get("blockTime"))
@@ -186,6 +187,8 @@ def solana_evidence(quote, tx, mint_account, treasury_account, genesis_hash):
              for k in keys), "PAYER_DID_NOT_SIGN_SOLANA_TRANSACTION")
     instructions = message.get("instructions", [])
     must(type(instructions) is list, "UNPARSED_SOLANA_INSTRUCTIONS")
+    must(type(quote.get("order_id")) is str and type(quote.get("nonce")) is str,
+         "INVALID_SOLANA_ORDER_REFERENCE")
     expected_memo = "FRONTIER-OMEGA:" + quote["order_id"] + ":" + quote["nonce"]
     memos = [i.get("parsed") for i in instructions if type(i) is dict
              and i.get("program") == "spl-memo"]
@@ -255,10 +258,14 @@ class JsonRpc:
         req = urllib.request.Request(self.endpoint, data=payload,
                                      headers={"Content-Type": "application/json"},
                                      method="POST")
-        with urllib.request.urlopen(req, timeout=12) as response:
-            raw = response.read(4_000_001)
-            must(len(raw) <= 4_000_000, "RPC_RESPONSE_TOO_LARGE")
-        result = json.loads(raw)
+        try:
+            with urllib.request.urlopen(req, timeout=12) as response:
+                raw = response.read(4_000_001)
+                must(len(raw) <= 4_000_000, "RPC_RESPONSE_TOO_LARGE")
+            result = json.loads(raw)
+        except (urllib.error.URLError, TimeoutError, OSError,
+                json.JSONDecodeError) as exc:
+            raise PaymentRejected("RPC_UNAVAILABLE_OR_UNPARSEABLE") from exc
         must(type(result) is dict and result.get("id") == 1 and
              result.get("jsonrpc") == "2.0" and "error" not in result,
              "RPC_RESPONSE_ERROR")
@@ -290,6 +297,6 @@ def verify_over_rpc(quote, ethereum_rpc=None, solana_rpc=None):
             SOL_MINT, {"encoding": "jsonParsed", "commitment": "finalized"}])
         recipient = rpc.call("getAccountInfo", [
             quote["recipient"], {"encoding": "jsonParsed", "commitment": "finalized"}])
-        return solana_evidence(quote, tx, mint.get("value") if mint else None,
-                               recipient.get("value") if recipient else None, genesis)
+        return solana_evidence(quote, tx, mint.get("value") if type(mint) is dict else None,
+                               recipient.get("value") if type(recipient) is dict else None, genesis)
     raise PaymentRejected("UNSUPPORTED_PAYMENT_NETWORK")
