@@ -85,7 +85,7 @@ class Merchant:
         if chain == "solana":
             if not (B58_RE.fullmatch(self.sol_treasury_owner or "")
                     and B58_RE.fullmatch(self.sol_treasury_token_account or "")
-                    and self.sol_rpc and positive_units(self.sol_price_units) > 0):
+                    and self.sol_rpc and 0 < positive_units(self.sol_price_units) <= 2**64 - 1):
                 raise PaymentRejected("SOLANA_MERCHANT_NOT_QUALIFIED")
             JsonRpc(self.sol_rpc)
             return self.sol_treasury_token_account, self.sol_treasury_owner, int(self.sol_price_units)
