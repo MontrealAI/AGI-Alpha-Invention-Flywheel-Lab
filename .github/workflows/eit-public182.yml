@@ -1,0 +1,67 @@
+name: Blue Sky 182 real public EIT archive intake (source provenance only)
+on:
+  push:
+    branches: [experiment/blue-sky-eit-public-physical-data-20261119]
+    paths:
+      - 'campaign/eit-public-observatory182/**'
+      - 'research/eit_public182/**'
+      - 'tests/test_eit_public182.py'
+      - '.github/workflows/eit-public182.yml'
+  pull_request:
+    paths:
+      - 'campaign/eit-public-observatory182/**'
+      - 'research/eit_public182/**'
+      - 'tests/test_eit_public182.py'
+      - '.github/workflows/eit-public182.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+
+jobs:
+  offline-refusals:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record platform job execution start
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Check exact head and execute frozen offline controls
+        run: |
+          test "$(git rev-parse HEAD)" = "${{ github.event.pull_request.head.sha || github.sha }}"
+          python -B -m unittest -v tests.test_eit_public182
+  source-metadata-intake:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record platform job execution start
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Freeze source and fetch registered public metadata only
+        run: |
+          test "$(git rev-parse HEAD)" = "${{ github.sha }}"
+          python -B -m unittest -v tests.test_eit_public182
+          /usr/bin/time -f 'real_seconds=%e user_CPU_seconds=%U system_CPU_seconds=%S max_RSS_kB=%M' \
+            -o "$RUNNER_TEMP/eit182-resource.txt" \
+            python -B research/eit_public182/intake.py --out "$RUNNER_TEMP/EIT182_METADATA_RECEIPT.json"
+          cat "$RUNNER_TEMP/eit182-resource.txt"
+      - name: Publish only source-declared metadata and measured resource receipt
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: eit182-source-metadata-only-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/EIT182_METADATA_RECEIPT.json
+            ${{ runner.temp }}/eit182-resource.txt
+          retention-days: 14
