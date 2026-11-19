@@ -1,0 +1,88 @@
+{
+  "schema": "montreal.ai/mechanism-foundry/v1",
+  "evidence_cutoff": "2026-11-19",
+  "rights_confirmed": false,
+  "currency": "SYNTHETIC_UNITS_NOT_MONEY",
+  "comparison_options": [
+    "no_entry",
+    "direct",
+    "free_existing_escrow"
+  ],
+  "mission_id": "agent-artifact-settlement-001",
+  "outcome": "Reliable conditional payment for independently accepted machine-generated software deliverables.",
+  "enabler": {
+    "source": "https://eips.ethereum.org/EIPS/eip-8004",
+    "claimed_change": "Agent validation registry is available as a published draft, not a newly invented acceptance protocol.",
+    "verified": false
+  },
+  "fixed_construction_cost": 24,
+  "development": [
+    {
+      "id": "d1",
+      "price": 1000,
+      "value_if_accepted": 2100,
+      "seller_cost": 450,
+      "success_ppm": 900000,
+      "network_cost": 10,
+      "independent_check_cost": 18,
+      "operator_cost": 3,
+      "buyer_outside": 0,
+      "seller_outside": 0,
+      "time_limit_days": 7
+    },
+    {
+      "id": "d2",
+      "price": 1200,
+      "value_if_accepted": 2400,
+      "seller_cost": 510,
+      "success_ppm": 850000,
+      "network_cost": 12,
+      "independent_check_cost": 20,
+      "operator_cost": 4,
+      "buyer_outside": 0,
+      "seller_outside": 0,
+      "time_limit_days": 3
+    },
+    {
+      "id": "d3",
+      "price": 900,
+      "value_if_accepted": 1850,
+      "seller_cost": 420,
+      "success_ppm": 800000,
+      "network_cost": 9,
+      "independent_check_cost": 16,
+      "operator_cost": 3,
+      "buyer_outside": 0,
+      "seller_outside": 0,
+      "time_limit_days": 7
+    }
+  ],
+  "holdout": [
+    {
+      "id": "h1",
+      "price": 1100,
+      "value_if_accepted": 2120,
+      "seller_cost": 530,
+      "success_ppm": 700000,
+      "network_cost": 14,
+      "independent_check_cost": 22,
+      "operator_cost": 5,
+      "buyer_outside": 0,
+      "seller_outside": 0,
+      "time_limit_days": 3
+    },
+    {
+      "id": "h2",
+      "price": 1350,
+      "value_if_accepted": 2500,
+      "seller_cost": 630,
+      "success_ppm": 790000,
+      "network_cost": 17,
+      "independent_check_cost": 25,
+      "operator_cost": 5,
+      "buyer_outside": 0,
+      "seller_outside": 0,
+      "time_limit_days": 7
+    }
+  ]
+}
