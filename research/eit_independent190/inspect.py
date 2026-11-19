@@ -169,9 +169,10 @@ def mat_variables(raw: bytes):
     # header. SciPy whosmat supports v4, but it must fully parse a valid
     # variable table; arbitrary binary is never accepted as a MATLAB source.
     from scipy.io import whosmat
+    from scipy.io.matlab import MatReadError
     try:
         legacy = whosmat(io.BytesIO(raw))
-    except (OSError, ValueError, TypeError, IndexError) as error:
+    except (MatReadError, OSError, ValueError, TypeError, IndexError) as error:
         raise Refusal("EIT190_UNKNOWN_MAT_SOURCE_FORMAT") from error
     if not legacy or len(legacy) > MAX_MAT_VARIABLES:
         raise Refusal("EIT190_MAT4_EMPTY_OR_TOO_MANY_VARIABLES")
