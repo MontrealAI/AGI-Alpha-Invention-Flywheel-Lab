@@ -1,0 +1,72 @@
+name: Independent raw-unit microfee parity (no payment)
+on:
+  push:
+    paths:
+      - "products/frontier_mechanism_foundry/microfee_precision.py"
+      - "products/frontier_mechanism_foundry/test_microfee_precision.py"
+      - "products/frontier_mechanism_foundry/test/FrontierMicrofeeParity.t.sol"
+      - ".github/workflows/frontier-microfee-parity.yml"
+      - "campaign/omega-microfee-parity-20261119/**"
+  pull_request:
+    paths:
+      - "products/frontier_mechanism_foundry/microfee_precision.py"
+      - "products/frontier_mechanism_foundry/test_microfee_precision.py"
+      - "products/frontier_mechanism_foundry/test/FrontierMicrofeeParity.t.sol"
+      - ".github/workflows/frontier-microfee-parity.yml"
+      - "campaign/omega-microfee-parity-20261119/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  fixed-python-model-bridge:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record platform execution clock
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@v4
+      - name: Reject modified owner source and check registered arithmetic
+        run: |
+          test "$(git hash-object products/frontier_mechanism_foundry/contracts/FrontierProofExchange.sol)" = "ef6fc9f03a3fc284df7e63d3ad1b20de1bfd2f83"
+          test "$(git hash-object products/frontier_mechanism_foundry/invent.py)" = "9f86912d5bdbd724cef6783ae46540968a380064"
+          python3 -m unittest products.frontier_mechanism_foundry.test_microfee_precision -v
+          python3 - <<'PY'
+          import json
+          from products.frontier_mechanism_foundry.microfee_precision import microfee_receipt
+          x = microfee_receipt([99] * 20, 100)
+          assert x["conditional_per_order_fee_sum_raw"] == "0"
+          assert x["one_bundle_fee_raw_if_representable"] == "19"
+          assert x["actual_collected_raw_fees"] is None
+          with open("/tmp/microfee-parity-receipt.json", "w", encoding="utf-8") as f:
+              json.dump(x, f, sort_keys=True, indent=2)
+              f.write("\n")
+          print("SIMULATED_RAW_FEE_PRECHECK_ONLY; ZERO_COLLECTED_REVENUE")
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: omega-microfee-readonly-receipt
+          path: /tmp/microfee-parity-receipt.json
+          if-no-files-found: error
+
+  fixed-foundry-evm:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record platform execution clock
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@v4
+      - name: Reject modified owner EVM contract
+        run: |
+          test "$(git hash-object products/frontier_mechanism_foundry/contracts/FrontierProofExchange.sol)" = "ef6fc9f03a3fc284df7e63d3ad1b20de1bfd2f83"
+      - uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: stable
+      - name: Execute all four fixed local raw-token settlement cases and original contract tests
+        run: |
+          cd products/frontier_mechanism_foundry
+          forge --version
+          forge test -vv
