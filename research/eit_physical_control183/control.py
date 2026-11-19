@@ -53,9 +53,13 @@ def validate_zip(archive: ZipFile):
 def parse_member(raw: bytes):
     import numpy as np
     import h5py
-    if len(raw) > 250_000_000 or not raw.startswith(b"\x89HDF\r\n\x1a\n"):
+    if len(raw) > 250_000_000:
         raise Refusal("NOT_BOUNDED_HDF5")
-    with h5py.File(io.BytesIO(raw), "r") as h:
+    try:
+        h = h5py.File(io.BytesIO(raw), "r")
+    except (OSError, ValueError) as exc:
+        raise Refusal("NOT_BOUNDED_HDF5") from exc
+    with h:
         arrays = []
         for name in ("currents_matrix", "voltages_matrix"):
             if name not in h or not isinstance(h[name], h5py.Dataset):
