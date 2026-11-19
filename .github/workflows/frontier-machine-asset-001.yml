@@ -1,0 +1,34 @@
+name: FRONTIER OMEGA machine asset 001 (offline)
+on:
+  pull_request:
+    paths:
+      - "products/frontier_machine_asset_001/**"
+      - ".github/workflows/frontier-machine-asset-001.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  offline-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check Python and run complete offline tests
+        run: |
+          python3 --version
+          python3 -m unittest discover -s products/frontier_machine_asset_001 -p test_gate.py -v
+      - name: Smoke test agent-native stdin interface
+        run: |
+          python3 products/frontier_machine_asset_001/gate.py < products/frontier_machine_asset_001/example.json > /tmp/machine-asset-001-response.json
+          python3 - <<'PY'
+          import json
+          with open("/tmp/machine-asset-001-response.json", encoding="utf-8") as f:
+              result=json.load(f)
+          assert result["receipt"]["accepted"]
+          assert result["delivery"][0]["customer"]=="Ana"
+          assert result["delivery"][1]["region"]=="FR"
+          assert len(result["receipt"]["receipt_sha256"])==64
+          print("BINDING_AND_ACCEPTANCE_PASS; NO PAYMENT ATTEMPTED")
+          PY
