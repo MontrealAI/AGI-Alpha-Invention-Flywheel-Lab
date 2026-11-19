@@ -1,0 +1,53 @@
+name: Machine asset002 pinned independent safety and ordinary-control witness
+on:
+  pull_request:
+    paths:
+      - "campaign/machine-asset-002/**"
+      - ".github/workflows/machine-asset-002.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-bound-review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Record actual job start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Run one immutable external-source challenge
+        run: python -B campaign/machine-asset-002/witness.py "$RUNNER_TEMP/machine-asset002/RESULT.json"
+      - name: Separately check that a product failure cannot become a qualification pass
+        run: |
+          python -B - <<'PY'
+          import json, os
+          from pathlib import Path
+          result = json.loads((Path(os.environ["RUNNER_TEMP"]) / "machine-asset002/RESULT.json").read_text())
+          assert result["source_verified_before_import"]
+          assert result["source_git_blob_sha1"] == "115cf8531df65a66dcc679e2d35cb03394cea11a"
+          assert result["positive_same_output"] and result["positive_rows"] == 3
+          assert result["witness_execution_status"] == "ACHIEVED_INDEPENDENT_NEGATIVE_OR_POSITIVE_EVIDENCE"
+          assert result["commercial"]["decision"] == "NO_BID_NO_DEPLOY"
+          assert result["commercial"]["actual_collected_USD"] == 0
+          assert result["product_input_safety_verdict"] in {
+              "FAILED_UNCAUGHT_EXCEPTION", "FAILED_UNEXPECTED_ACCEPTANCE_OR_OTHER", "ACHIEVED_FAIL_CLOSED"
+          }
+          print("EVIDENCE_RECEIPT_VALIDATED; PRODUCT_VERDICT_SEPARATE=" + result["product_input_safety_verdict"])
+          PY
+      - name: Preserve compact read-only negative evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: source-bound-machine-asset002-witness
+          path: ${{ runner.temp }}/machine-asset002/RESULT.json
+          if-no-files-found: warn
+          retention-days: 30
