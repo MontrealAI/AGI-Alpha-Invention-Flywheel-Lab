@@ -12,7 +12,7 @@ import json
 from pathlib import Path
 import re
 from urllib.parse import urlsplit
-from urllib.request import Request, urlopen
+from urllib.request import Request, build_opener, HTTPRedirectHandler
 
 from invent import Refused, canonical, digest, require, strict_json
 
@@ -104,6 +104,11 @@ def validate_proposals(output):
     return output
 
 
+class DenyRedirect(HTTPRedirectHandler):
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        raise Refused("LOCAL_MODEL_REDIRECT_REFUSED")
+
+
 def local_model_response(signals, model, endpoint):
     require(type(model) is str and re.fullmatch(r"[a-zA-Z0-9_.:/-]{2,128}", model),
             "INVALID_LOCAL_MODEL_NAME")
@@ -120,7 +125,7 @@ def local_model_response(signals, model, endpoint):
     })
     req = Request(endpoint, data=body, method="POST",
                   headers={"Content-Type": "application/json"})
-    with urlopen(req, timeout=300) as response:
+    with build_opener(DenyRedirect).open(req, timeout=300) as response:
         raw = response.read(500_001)
     require(len(raw) <= 500_000, "LOCAL_MODEL_OUTPUT_TOO_LARGE")
     packet = strict_json(raw.decode("utf-8"))
