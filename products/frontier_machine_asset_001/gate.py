@@ -187,6 +187,40 @@ def run(request):
         }}
 
 
+def audit(request):
+    """Audit an independently supplied candidate delivery, without constructing it."""
+    if type(request) is not dict or set(request) != {"contract", "source_rows", "candidate_delivery"}:
+        return {"receipt": {
+            "schema": VERSION, "accepted": False,
+            "errors": ["EXACT_AUDIT_FIELDS_REQUIRED"],
+            "verification": "input refused; no external certification",
+        }}
+    try:
+        contract, rows = checked_request({
+            "contract": request["contract"], "source_rows": request["source_rows"]
+        })
+        candidate = request["candidate_delivery"]
+        candidate_sha = digest(candidate)
+        errors = verify(contract, rows, candidate)
+        receipt = {
+            "schema": VERSION,
+            "accepted": not errors,
+            "errors": errors,
+            "source_sha256": digest(rows),
+            "contract_sha256": digest(contract),
+            "delivery_sha256": candidate_sha,
+            "verification": "independent candidate; local deterministic checker, not external certification",
+        }
+        receipt["receipt_sha256"] = digest(receipt)
+        return {"receipt": receipt}
+    except (Refused, ValueError, TypeError, OverflowError) as exc:
+        return {"receipt": {
+            "schema": VERSION, "accepted": False,
+            "errors": ["AUDIT_REFUSED: " + str(exc)],
+            "verification": "input refused; no external certification",
+        }}
+
+
 class Handler(BaseHTTPRequestHandler):
     def log_message(self, _format, *_args):
         # Do not log request bodies or user-controlled identifiers.
@@ -198,7 +232,7 @@ class Handler(BaseHTTPRequestHandler):
         self.reply(200, {"ready": True, "version": VERSION, "payments": "disabled"})
 
     def do_POST(self):
-        if self.path != "/v0/transform":
+        if self.path not in ("/v0/transform", "/v0/verify"):
             return self.reply(404, {"error": "NOT_FOUND"})
         if self.headers.get_content_type() != "application/json":
             return self.reply(415, {"error": "JSON_REQUIRED"})
@@ -210,7 +244,8 @@ class Handler(BaseHTTPRequestHandler):
             return self.reply(413, {"error": "REQUEST_SIZE"})
         raw = self.rfile.read(length)
         try:
-            result = run(strict_json(raw.decode("utf-8")))
+            request = strict_json(raw.decode("utf-8"))
+            result = audit(request) if self.path == "/v0/verify" else run(request)
         except (Refused, UnicodeDecodeError) as exc:
             return self.reply(400, {"error": str(exc)})
         self.reply(200 if result["receipt"]["accepted"] else 422, result)
@@ -228,6 +263,7 @@ class Handler(BaseHTTPRequestHandler):
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("--serve", action="store_true", help="local loopback API only")
+    p.add_argument("--verify", action="store_true", help="audit independent delivery on stdin")
     p.add_argument("--port", type=int, default=8788)
     opts = p.parse_args()
     if opts.serve:
@@ -245,7 +281,8 @@ def main():
         if len(raw) > MAX_BODY:
             raise SystemExit("Input too large")
         try:
-            print(json.dumps(run(strict_json(raw.decode("utf-8"))),
+            request = strict_json(raw.decode("utf-8"))
+            print(json.dumps((audit(request) if opts.verify else run(request)),
                              ensure_ascii=False, sort_keys=True))
         except (Refused, UnicodeDecodeError) as exc:
             raise SystemExit(str(exc)) from exc
