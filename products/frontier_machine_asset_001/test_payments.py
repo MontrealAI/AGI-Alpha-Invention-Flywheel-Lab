@@ -225,6 +225,12 @@ class SolanaProofTests(unittest.TestCase):
         with self.assertRaises(PaymentRejected):
             solana_evidence(*sol_fixture(), "devnet-genesis")
 
+    def test_reject_sol_u64_overflow(self):
+        a = list(copy.deepcopy(sol_fixture()))
+        a[0]["amount_units"] = str(2**64)
+        with self.assertRaisesRegex(PaymentRejected, "SOLANA_TOKEN_AMOUNT_EXCEEDS_U64"):
+            self.verify(a)
+
     def test_reject_wrong_transfer_amount(self):
         a = list(copy.deepcopy(sol_fixture()))
         a[1]["transaction"]["message"]["instructions"][0]["parsed"]["info"]["tokenAmount"]["amount"] = "99999"
