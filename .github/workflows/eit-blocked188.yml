@@ -1,4 +1,4 @@
-name: EIT188 pinned sixteen-column held-out prediction versus nuisance
+name: EIT188 source-pinned 16-column predictive falsification
 on:
   push:
     branches: [experiment/eit188-blocked-predictive-generalization-20261119]
@@ -17,11 +17,12 @@ on:
 permissions:
   contents: read
 jobs:
-  fixed-offline-analytic-and-refusal-tests:
+  preregistered-offline-controls:
     runs-on: ubuntu-latest
     timeout-minutes: 360
     steps:
-      - name: Record actual job start
+      - name: Record actual job start marker
+        shell: bash
         run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
@@ -30,18 +31,21 @@ jobs:
       - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
         with:
           python-version: '3.12'
-      - name: Install fixed public wheels
-        run: python -m pip install --only-binary=:all: numpy==2.3.5 h5py==3.15.1 scipy==1.17.0
-      - name: Execute frozen eight offline tests
+      - name: Install public fixed numerical dependencies only
+        run: |
+          python -m pip install --only-binary=:all: numpy==2.3.5 h5py==3.15.1 scipy==1.17.0
+      - name: Execute preregistered offline leakage and refusal tests with exact-head confirmation
         run: |
           test "$(git rev-parse HEAD)" = "${{ github.event.pull_request.head.sha || github.sha }}"
-          OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 python -B -m unittest -v tests.test_eit_blocked_prediction188
-  pinned-original-source-sixteen-fold-execution:
+          PYTHONDONTWRITEBYTECODE=1 OPENBLAS_NUM_THREADS=1 python -B -m unittest -v tests.test_eit_blocked_prediction188
+
+  original-source-all-heldout-controls:
     if: github.event_name == 'push'
     runs-on: ubuntu-latest
     timeout-minutes: 360
     steps:
-      - name: Record actual job start
+      - name: Record actual job start marker
+        shell: bash
         run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
@@ -50,18 +54,19 @@ jobs:
       - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
         with:
           python-version: '3.12'
-      - name: Install fixed public wheels
-        run: python -m pip install --only-binary=:all: numpy==2.3.5 h5py==3.15.1 scipy==1.17.0
-      - name: Freeze actual head; evaluate all arms once on original data
+      - name: Install same fixed numerical dependencies
+        run: |
+          python -m pip install --only-binary=:all: numpy==2.3.5 h5py==3.15.1 scipy==1.17.0
+      - name: One original-source read and all 16 heldout columns, all controls
         run: |
           test "$(git rev-parse HEAD)" = "${{ github.sha }}"
-          OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 python -B -m unittest -v tests.test_eit_blocked_prediction188
+          PYTHONDONTWRITEBYTECODE=1 OPENBLAS_NUM_THREADS=1 python -B -m unittest -v tests.test_eit_blocked_prediction188
           /usr/bin/time -f 'wall_seconds=%e user_CPU_seconds=%U system_CPU_seconds=%S max_RSS_kB=%M' -o "$RUNNER_TEMP/EIT188_RESOURCES.txt" env OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 python -B -m research.eit_blocked_prediction188.compare --out "$RUNNER_TEMP/EIT188_ALL_FOLDS.json"
-      - name: Retain only compact result and resource receipt, no source archive
+      - name: Preserve exact result and resource receipt, never the source archive
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: eit188-registered-blocked-prediction-${{ github.sha }}-${{ github.run_attempt }}
+          name: eit188-sixteen-fold-controls-${{ github.sha }}-${{ github.run_attempt }}
           path: |
             ${{ runner.temp }}/EIT188_ALL_FOLDS.json
             ${{ runner.temp }}/EIT188_RESOURCES.txt
