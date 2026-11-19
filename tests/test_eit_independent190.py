@@ -32,7 +32,7 @@ def synthetic_archive(path, add_j=True, matlab_bytes=None):
         for k in range(4):
             z.writestr(base + "Data/2_" + str(k) + "_AgarChestPhantom.mat", mat_bytes())
         z.writestr(base + "ExampleCodes/Example_ChestPhantom_LinearDifferenceImaging.m",
-                   "dV = V2 - V1;\n")
+                   matlab_bytes if matlab_bytes is not None else b"dV = V2 - V1;\\n")
 
 
 class Eit190OfflineTests(unittest.TestCase):
