@@ -217,7 +217,9 @@ def solana_evidence(quote, tx, mint_account, treasury_account, genesis_hash):
                  "INVALID_SOLANA_TRANSFER_AMOUNT")
             transfers.append((int(amount), info.get("source")))
     must(len(transfers) == 1, "NO_UNAMBIGUOUS_SOLANA_TRANSFER")
-    must(transfers[0][0] == positive_units(quote.get("amount_units")),
+    required_units = positive_units(quote.get("amount_units"))
+    must(required_units <= 2**64 - 1, "SOLANA_TOKEN_AMOUNT_EXCEEDS_U64")
+    must(transfers[0][0] == required_units,
          "WRONG_SOLANA_PAYMENT_AMOUNT")
     source = transfers[0][1]
     must(source in resolved and source != token_account, "UNKNOWN_SOLANA_SOURCE_ACCOUNT")
