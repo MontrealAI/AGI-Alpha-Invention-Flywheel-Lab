@@ -63,6 +63,8 @@ def _mat5_inventory(raw):
                 raise Refusal("JACOBIAN_DATASET_TOO_LARGE")
         arrays = loadmat(io.BytesIO(raw), squeeze_me=False,
                          struct_as_record=True, verify_compressed_data_integrity=True)
+    except Refusal:
+        raise
     except (ValueError, OSError, TypeError, IndexError) as exc:
         raise Refusal("ORIGINAL_MAT5_CONTAINER_INVALID") from exc
     datasets = []
