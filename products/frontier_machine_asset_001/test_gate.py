@@ -2,7 +2,7 @@
 import copy
 import json
 import unittest
-from gate import Refused, checked_request, digest, produce, run, strict_json, verify
+from gate import Refused, audit, checked_request, digest, produce, run, strict_json, verify
 
 
 def sample():
@@ -125,6 +125,32 @@ class GateTests(unittest.TestCase):
         payload = sample()
         raw = json.dumps(payload, ensure_ascii=False)
         self.assertTrue(run(strict_json(raw))["receipt"]["accepted"])
+
+    def test_independent_agent_delivery_accepted(self):
+        payload = sample()
+        delivered = produce(*checked_request(payload))
+        receipt = audit({**payload, "candidate_delivery": delivered})["receipt"]
+        self.assertTrue(receipt["accepted"])
+        self.assertEqual(receipt["delivery_sha256"], digest(delivered))
+        self.assertEqual(len(receipt["receipt_sha256"]), 64)
+
+    def test_independent_agent_delivery_tamper_refused(self):
+        payload = sample()
+        delivered = produce(*checked_request(payload))
+        delivered[0]["region"] = "US"
+        receipt = audit({**payload, "candidate_delivery": delivered})["receipt"]
+        self.assertFalse(receipt["accepted"])
+        self.assertIn("VALUE_MISMATCH", receipt["errors"])
+
+    def test_independent_agent_delivery_bad_shape_refused(self):
+        payload = sample()
+        self.assertFalse(audit({**payload, "candidate_delivery": {"forged": "true"}})["receipt"]["accepted"])
+        self.assertFalse(audit({"candidate_delivery": []})["receipt"]["accepted"])
+
+    def test_nonstring_operation_refused(self):
+        payload = sample()
+        payload["contract"]["rules"][0]["op"] = {"run": "shell"}
+        self.assertEqual(run(payload)["receipt"]["errors"], ["UNSUPPORTED_OPERATION"])
 
     def test_empty_and_oversized_rows(self):
         payload = sample()
