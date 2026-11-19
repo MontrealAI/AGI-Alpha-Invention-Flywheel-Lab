@@ -165,7 +165,20 @@ def mat_variables(raw: bytes):
         except (OSError, ValueError, TypeError, KeyError) as error:
             raise Refusal("EIT190_HDF5_PARSE_FAILED") from error
         return {"format": "HDF5-v7.3", "variables": entries}
-    raise Refusal("EIT190_UNKNOWN_MAT_SOURCE_FORMAT")
+    # Legacy MATLAB v4 matrices have no printable 128-byte MATLAB 5.0
+    # header. SciPy whosmat supports v4, but it must fully parse a valid
+    # variable table; arbitrary binary is never accepted as a MATLAB source.
+    from scipy.io import whosmat
+    try:
+        legacy = whosmat(io.BytesIO(raw))
+    except (OSError, ValueError, TypeError, IndexError) as error:
+        raise Refusal("EIT190_UNKNOWN_MAT_SOURCE_FORMAT") from error
+    if not legacy or len(legacy) > MAX_MAT_VARIABLES:
+        raise Refusal("EIT190_MAT4_EMPTY_OR_TOO_MANY_VARIABLES")
+    return {"format": "MATLAB4-scipy-validated", "variables": [
+        {"name": str(name), "shape": [int(x) for x in shape], "type": str(tp)}
+        for name, shape, tp in legacy
+    ]}
 
 
 def inventory_archive(path: Path, sha256: str, size: int, md5: str):
@@ -182,7 +195,17 @@ def inventory_archive(path: Path, sha256: str, size: int, md5: str):
             item = {"member": name, "bytes": len(raw),
                     "sha256": hashlib.sha256(raw).hexdigest()}
             if name.lower().endswith(".mat"):
-                item.update(mat_variables(raw))
+                try:
+                    item.update(mat_variables(raw))
+                except Refusal as error:
+                    # Preserve exact offending public member for independent
+                    # diagnosis; never guess its format or replace this tank.
+                    raise Refusal(
+                        "EIT190_ORIGINAL_MEMBER_FORMAT_UNSUPPORTED:"
+                        + name + ":sha256=" + item["sha256"]
+                        + ":header16=" + raw[:16].hex()
+                        + ":cause=" + str(error)
+                    ) from error
             else:
                 if len(raw) > MAX_MATLAB_SCRIPT:
                     raise Refusal("EIT190_MATLAB_SCRIPT_OVERSIZE")
