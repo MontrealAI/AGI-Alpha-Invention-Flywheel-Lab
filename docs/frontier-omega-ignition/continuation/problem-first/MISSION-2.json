@@ -1,0 +1,60 @@
+{
+  "protocol": "ignition.problem-first.v1",
+  "engine_revision": "0da09f16c29b7ee0758f016e47d42808e3e8ab58",
+  "registered_at": "2026-11-19T00:16:47.895986+00:00",
+  "cash_budget_usd": 0,
+  "mission_minutes": 27,
+  "authorized_public_inputs": [
+    "https://canadabuys.canada.ca/en/tender-opportunities",
+    "https://open.canada.ca/data/en/dataset/6abd20d4-7a1c-4b38-baa2-9525d0bb2fd2",
+    "the approved publisher feeds already in Mission Studio"
+  ],
+  "independent_holdout_commitment": "c8bef367d8f99707f2d7506ec26bcc34ceb1071b593db9b994ef23b8c10b0062",
+  "development_source_sha256": "734283771bfcae5a360203a1927b31332e60c77518be1ec97ba17943039ab623",
+  "input": {
+    "request_id": "public-problem-first-20261119-canadabuys",
+    "sources": [
+      {
+        "url": "https://canadabuys.canada.ca/en/tender-opportunities/tender-notice/ab-2026-07111",
+        "publisher": "Alberta Education and Childcare",
+        "title": "Education and Childcare - Request for Proposal - Solution Architecture Services",
+        "text": "Solicitation AB-2026-07111.\nAlberta Education and Childcare expects one contract for one resource to provide solution architecture services.\nStatus displayed Open. Closing 2026/11/23 09:00 EST.\nLast amendment displayed 2026-11-04. Retrieval may show a cached primary notice.",
+        "rights": "Public CanadaBuys tender notices. Operator-authorized local review and citation of primary sources. No bid or outreach.",
+        "retrieved_at": "2026-11-19T00:09:34Z",
+        "published_at": "2026-10-27",
+        "event_at": "2026-11-04"
+      },
+      {
+        "url": "https://canadabuys.canada.ca/en/tender-opportunities/tender-notice/cb-495-53252386",
+        "publisher": "Standards Council of Canada",
+        "title": "Technical Specifications (TS) for Tree Well Design in Urban Hardscapes",
+        "text": "Solicitation RFP-2026-05.\nDevelop technical specifications covering design approaches and material selection for urban tree wells.\nStatus displayed Open. Closing 2026/12/04 14:00 EST.\nLast amendment displayed 2026-11-13. Retrieval may show a cached primary notice.",
+        "rights": "Public CanadaBuys tender notices. Operator-authorized local review and citation of primary sources. No bid or outreach.",
+        "retrieved_at": "2026-11-19T00:09:34Z",
+        "published_at": "2026-10-14",
+        "event_at": "2026-11-13"
+      }
+    ],
+    "mission": {
+      "purpose": "MONTREAL.AI’s business-development lead has one 30-minute review window for Canadian public-sector opportunities. Help them decide which currently open opportunities for an applied AI team merit that time and which to pass over. The result should stay usable when notices change and should identify the decision deadline and next action for each opportunity worth reviewing.",
+      "beneficiary": "MONTREAL.AI business-development lead",
+      "requirements": [
+        "Each opportunity recommended for review must be currently open, match the applied AI scope, and cite its closing deadline and official notice. Flag incomplete or stale evidence.",
+        "The decision process must apply to new public notices and amendments within a 30-minute operator review window."
+      ],
+      "authority": {
+        "local_model": true,
+        "public_sources": true,
+        "allow_program_reuse": true
+      },
+      "resources": {
+        "execution_strategy": "research",
+        "max_initial_candidates": 3,
+        "max_model_calls": 5,
+        "max_repairs": 1,
+        "assets": "Public CanadaBuys data and two unlabelled primary notices. No outreach, bid, outside data submission, purchase or account access."
+      }
+    }
+  },
+  "seal": "An independently selected workflow, with new withheld cases outside model context. No specified solution or AI release. First mission produced no transferable asset before this registration."
+}

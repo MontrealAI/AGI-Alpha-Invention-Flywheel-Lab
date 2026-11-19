@@ -1,0 +1,192 @@
+{
+  "protocol": "ignition.problem-first.v1",
+  "started_at": "2026-11-19T00:21:20.080056+00:00",
+  "finished_at": "2026-11-19T00:35:15.437090+00:00",
+  "source_revision": "0da09f16c29b7ee0758f016e47d42808e3e8ab58",
+  "runtime_source_sha256": "fcdc8f4a33f66da3e7d25e3bcd45e89a80fc501583488d388b21a201039830d8",
+  "brief_sha256": "edb18b5a51264a802a9ac16efebf19e15b0a34f79fa43ce2f033a1bd88a945b1",
+  "registration_sha": "4defe4e00da5379670183685428b35bc81856299",
+  "hardware": {
+    "processor": "AMD EPYC 9V45 96-Core Processor",
+    "architecture": "x86_64",
+    "platform": "Linux",
+    "threads": 4,
+    "gpu_layers": 0
+  },
+  "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+  "assets": {
+    "weights_sha256": "2fde00ce69dd4899c70d020845e2638353015bba0fdf161b3eb965f2bca4464e",
+    "weights_bytes": 2497280736,
+    "model_repository": "bartowski/Qwen_Qwen3-4B-Instruct-2507-GGUF",
+    "model_revision": "ae44f08e1392f39c0e474af10c3ff8355c8b6688",
+    "runtime_archive_sha256": "909eef25cd53e6601c8a07c866d8dbb2983e74177088d55182137a8fb8255d62",
+    "runtime_archive_bytes": 23158635,
+    "server_sha256": "fe211d00c4754aa67aaa492d2c755ab0f6ef60bf30eee3c0c74a3496189cde17",
+    "weights_preparation_wall_seconds": 12.9777
+  },
+  "wall_seconds": 835.354,
+  "cpu_seconds": 3213.183,
+  "status": "deferred",
+  "stage": "selection",
+  "attempts": 2,
+  "authentication": {
+    "authenticated": true,
+    "environment": "staging"
+  },
+  "readiness": {
+    "revision": "0da09f16c29b7ee0758f016e47d42808e3e8ab58",
+    "status": "ok"
+  },
+  "unauthenticated_status": 401,
+  "call_wall_limit_respected": false,
+  "catalogue_diagnostic": {
+    "category": "selection declined construction",
+    "decision": "defer",
+    "candidate_count": 3,
+    "executable_contract_frozen": false,
+    "artifact_built": false
+  },
+  "delivered": false,
+  "cash_collected_usd": 0,
+  "calls": [
+    {
+      "stage": "challenge",
+      "status": "completed",
+      "request_sha256": "0c2232ea611eeb21cf5a25f344085aef4c4186c9b3f44a1e517ccbb89bdabcc4",
+      "response_sha256": "daebb166f05deda8ccce14bf81c98d4c77b1da0676fa88769e194a410d614b04",
+      "reported_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+      "wall_seconds": 344.130184,
+      "usage": {
+        "input_tokens": 9484,
+        "output_tokens": 558
+      }
+    },
+    {
+      "stage": "discover",
+      "status": "completed",
+      "request_sha256": "be865eacc7dcbf289453f4ea3f1bccb2f9588d04aa1c38e410c13b938c67e8b1",
+      "response_sha256": "4e21c28b585e770c093963c190320038c0f40d75aba13448a0648f432250fbf1",
+      "reported_model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+      "wall_seconds": 471.703171,
+      "usage": {
+        "input_tokens": 6992,
+        "output_tokens": 1839
+      }
+    }
+  ],
+  "publisher_inputs": [
+    {
+      "url": "https://github.com/ggml-org/llama.cpp/releases/tag/b12529",
+      "published_at": "2026-11-19T00:11:40Z",
+      "response_sha256": "a27a9b04e6118ffbb6e2a3d5ebb4441e6a62a3d94407319a1bf8612085824339"
+    },
+    {
+      "url": "https://github.com/ggml-org/llama.cpp/releases/tag/b12528",
+      "published_at": "2026-11-18T23:38:54Z",
+      "response_sha256": "a27a9b04e6118ffbb6e2a3d5ebb4441e6a62a3d94407319a1bf8612085824339"
+    },
+    {
+      "url": "https://github.com/ggml-org/llama.cpp/releases/tag/b12527",
+      "published_at": "2026-11-18T22:56:20Z",
+      "response_sha256": "a27a9b04e6118ffbb6e2a3d5ebb4441e6a62a3d94407319a1bf8612085824339"
+    },
+    {
+      "url": "https://github.com/ggml-org/llama.cpp/commit/2851b3bcbf8d993a2243ae751c0a7dfa8e944a40",
+      "published_at": null,
+      "response_sha256": "d1d473d9790c71ca55ad6165bd09bec56acf7d4fefc81c47c5890c19b35885f6"
+    },
+    {
+      "url": "https://github.com/in-toto/attestation/releases/tag/v1.2.0",
+      "published_at": "2026-03-18T17:52:36Z",
+      "response_sha256": "88f6311a233c60ffa95de2e5558bcd00734eabed159285bf64f922e95e9d1719"
+    },
+    {
+      "url": "https://github.com/in-toto/attestation/releases/tag/v1.1.2",
+      "published_at": "2025-06-14T11:38:12Z",
+      "response_sha256": "88f6311a233c60ffa95de2e5558bcd00734eabed159285bf64f922e95e9d1719"
+    },
+    {
+      "url": "https://github.com/in-toto/attestation/releases/tag/v1.1.1",
+      "published_at": "2025-01-24T15:53:35Z",
+      "response_sha256": "88f6311a233c60ffa95de2e5558bcd00734eabed159285bf64f922e95e9d1719"
+    },
+    {
+      "url": "https://github.com/in-toto/attestation/commit/ae00f0b2aae7283fc2e1909be643b958c1f3d63a",
+      "published_at": null,
+      "response_sha256": "b168bf547085a2e156d0314405436adce822ff3c84791fc54e7cc0309d8474fa"
+    }
+  ],
+  "publisher_failures": [],
+  "research": {
+    "decision": "defer",
+    "requested_output": "other",
+    "candidates": [
+      {
+        "id": "C1",
+        "kind": "record_migration",
+        "standing": "speculative",
+        "mechanics": {
+          "inputs": [
+            "named_file_bytes",
+            "trusted_sha256_manifest"
+          ],
+          "operations": [
+            "project_fields",
+            "join_text_fields",
+            "split_text_field"
+          ],
+          "outputs": [
+            "mapped_json_rows"
+          ]
+        },
+        "family_assessment": {
+          "reason": "The installed family cannot emit the requested output.",
+          "status": "unsupported"
+        }
+      },
+      {
+        "id": "C2",
+        "kind": "record_migration",
+        "standing": "speculative",
+        "mechanics": {
+          "inputs": [
+            "flat_json_rows"
+          ],
+          "operations": [
+            "project_fields",
+            "join_text_fields",
+            "split_text_field"
+          ],
+          "outputs": [
+            "mapped_json_rows"
+          ]
+        },
+        "family_assessment": {
+          "reason": "The installed family cannot emit the requested output.",
+          "status": "unsupported"
+        }
+      },
+      {
+        "id": "C3",
+        "kind": "other",
+        "standing": "speculative",
+        "mechanics": {
+          "inputs": [
+            "flat_json_rows"
+          ],
+          "operations": [
+            "project_fields",
+            "split_text_field"
+          ],
+          "outputs": [
+            "mapped_json_rows"
+          ]
+        },
+        "family_assessment": {
+          "reason": "No installed data-only builder has this family.",
+          "status": "unsupported"
+        }
+      }
+    ]
+  }
+}

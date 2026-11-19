@@ -1,0 +1,75 @@
+{
+  "source": "d5b58a240cb919163867a430de1263792a0755ba",
+  "runtime": "b5696b2d16440f2ecd9928ec0759cb6e381d783fec35f150e967941030644914",
+  "hardware": {
+    "processor": "INTEL(R) XEON(R) PLATINUM 8573C",
+    "architecture": "x86_64",
+    "platform": "Linux",
+    "threads": 4,
+    "gpu_layers": 0
+  },
+  "scope": "Actual pinned CPU stream interrupted by the workbench wall limit. A short response checks continued use.",
+  "assets": {
+    "weights_sha256": "2fde00ce69dd4899c70d020845e2638353015bba0fdf161b3eb965f2bca4464e",
+    "weights_bytes": 2497280736,
+    "model_repository": "bartowski/Qwen_Qwen3-4B-Instruct-2507-GGUF",
+    "model_revision": "ae44f08e1392f39c0e474af10c3ff8355c8b6688",
+    "runtime_archive_sha256": "909eef25cd53e6601c8a07c866d8dbb2983e74177088d55182137a8fb8255d62",
+    "runtime_archive_bytes": 23158635,
+    "server_sha256": "fe211d00c4754aa67aaa492d2c755ab0f6ef60bf30eee3c0c74a3496189cde17",
+    "weights_preparation_wall_seconds": 3.4354
+  },
+  "serving_configuration": [
+    "--ctx-size",
+    "12288",
+    "--parallel",
+    "1",
+    "--threads",
+    "4",
+    "--threads-batch",
+    "4",
+    "--n-gpu-layers",
+    "0",
+    "--seed",
+    "6144",
+    "--temp",
+    "0",
+    "--no-repack",
+    "--batch-size",
+    "128",
+    "--ubatch-size",
+    "64",
+    "--no-webui"
+  ],
+  "short_allowance": {
+    "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+    "declared_model_sha256": "2fde00ce69dd4899c70d020845e2638353015bba0fdf161b3eb965f2bca4464e",
+    "wall_timeout_seconds": 1,
+    "timeout_seconds": 30,
+    "request_sha256": "0adfc90372ee50060a5f9c5c32a329fa4cc6a4976b1ddffe396dfcf30ac7fc53",
+    "response_sha256": null,
+    "status": "failed",
+    "error_code": "PROVIDER_WALL_LIMIT",
+    "usage": null,
+    "wall_seconds": 1.001229,
+    "application_model_calls": 1
+  },
+  "adequate_allowance": {
+    "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+    "declared_model_sha256": "2fde00ce69dd4899c70d020845e2638353015bba0fdf161b3eb965f2bca4464e",
+    "wall_timeout_seconds": 60,
+    "timeout_seconds": 30,
+    "request_sha256": "e226c9f1836c3949dc0107d4d6580e4f3bddc617b5863617ae32bfcc7536daa5",
+    "response_sha256": "0a5adb3ee8606db684c9c6431f8fc239c8819a50c38bca21bae9ebd7eb3ae6ab",
+    "status": "completed",
+    "usage": {
+      "input_tokens": 124,
+      "output_tokens": 12
+    },
+    "wall_seconds": 3.527384,
+    "application_model_calls": 1
+  },
+  "passed": true,
+  "server_exit_before_shutdown": null,
+  "wall_seconds": 15.144
+}

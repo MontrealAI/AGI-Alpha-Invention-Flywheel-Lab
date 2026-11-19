@@ -401,11 +401,35 @@
     if(ev?.cases) values.unshift([t("Verification cases passed","Cas de vérification réussis"),ev.cases.filter(c=>c.candidate_pass===true).length+" / "+ev.cases.length]);
     if(comp?.outcome) values.unshift([t("Comparison result","Résultat de la comparaison"),label(comp.outcome)]);
     $("outcome").replaceChildren(facts(values));
+    const acquisition=r.source_result;
+    if(acquisition?.failures?.length) {
+      const details=el("details");details.open=!acquisition.sources?.length;
+      details.append(el("summary",t("Some publisher records could not be retrieved","Certaines sources des éditeurs sont inaccessibles")),
+        el("p",t("The source check is incomplete. A failed retrieval provides no evidence about what the publisher released.",
+          "La consultation des sources est incomplète. Un échec d’accès ne permet aucune conclusion sur les publications de l’éditeur.")));
+      const failures=el("ul");
+      for(const failure of acquisition.failures) {
+        const period=failure.role==="baseline"?t("earlier records","publications antérieures"):t("recent releases","publications récentes");
+        failures.append(el("li",failure.repository_url+" · "+period+" · "+failure.reason_code));
+      }
+      details.append(failures);$("outcome").append(details);
+    }
     if(r.error || r.research?.decision_reason) {
       const details=el("details");details.open=!!r.error || ["deferred","failed","blocked"].includes(s);
       details.append(el("summary",t("Reason recorded by the engine · original text","Motif consigné par le moteur · texte d’origine")),
         el("p",r.error || r.research.decision_reason));
       $("outcome").append(details);
+    }
+    if(r.research?.candidates?.length) {
+      const details=el("details"), options=el("ul");
+      details.append(el("summary",t("Approaches considered","Approches examinées")));
+      for(const candidate of r.research.candidates) {
+        const item=el("li");
+        item.append(el("strong",candidate.title),el("p",candidate.route));
+        if(candidate.obstruction) item.append(el("p",candidate.obstruction));
+        options.append(item);
+      }
+      details.append(options);$("outcome").append(details);
     }
     $("events").replaceChildren(...(r.events||[]).map(e=>{const li=el("li");li.append(el("time",new Date(e.at).toLocaleString(language)),el("p",e.message));return li;}));
     $("record").textContent=json(r);

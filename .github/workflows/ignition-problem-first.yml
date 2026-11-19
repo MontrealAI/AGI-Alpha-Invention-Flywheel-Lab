@@ -1,0 +1,68 @@
+name: IGNITION problem-first qualification
+
+on:
+  push:
+    branches: [feature/ignition-problem-first-20261119]
+    paths:
+      - '.github/workflows/ignition-problem-first.yml'
+      - 'docs/frontier-omega-ignition/continuation/problem-first/run_registered.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  investigate:
+    name: Real blank mission ${{ matrix.mission }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    strategy:
+      fail-fast: false
+      matrix:
+        mission: [1, 2]
+    env:
+      QUALIFICATION_BASE: 0da09f16c29b7ee0758f016e47d42808e3e8ab58
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Record allocated runner window
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /docs/frontier-omega-ignition/continuation/problem-first/
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ env.QUALIFICATION_BASE }}
+          path: original-candidate
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /products/frontier-omega-ignition/
+            /products/alpha-genesis-harness/bridge/
+            /products/alpha-genesis-harness/scripts/
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Execute the frozen public workflow using pinned CPU inference
+        env:
+          MISSION_NUMBER: ${{ matrix.mission }}
+        run: |
+          directory=docs/frontier-omega-ignition/continuation/problem-first
+          brief="$directory/MISSION-$MISSION_NUMBER.json"
+          registration=$(git log -1 --format=%H -- "$brief")
+          test -n "$registration"
+          test "$(git -C original-candidate rev-parse HEAD)" = "$QUALIFICATION_BASE"
+          python -IB "$directory/run_registered.py" \
+            --repo "$GITHUB_WORKSPACE/original-candidate" \
+            --brief "$GITHUB_WORKSPACE/$brief" --registration-sha "$registration" \
+            --assets "$RUNNER_TEMP/model-assets" --work "$RUNNER_TEMP/blank-mission"
+      - name: Preserve public-only receipt even on abstention or failure
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: ignition-blank-${{ matrix.mission }}-${{ env.QUALIFICATION_BASE }}
+          path: ${{ runner.temp }}/blank-mission/public-receipt.json
+          if-no-files-found: error

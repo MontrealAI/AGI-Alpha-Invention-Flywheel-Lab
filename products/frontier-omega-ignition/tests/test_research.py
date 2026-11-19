@@ -24,7 +24,7 @@ def candidate(number, refs=None, kind="record_migration"):
             "kind": kind, "sources": ["S1"] if refs is None else refs}
 
 
-def trial(first=None, second=None, sources=None, mission=None):
+def trial(first=None, second=None, sources=None, mission=None, acquisition=None):
     if first is None:
         first = {"candidates": [candidate(i) for i in range(5)], "favourite": "C1"}
     if second is None:
@@ -39,11 +39,25 @@ def trial(first=None, second=None, sources=None, mission=None):
         calls.append((stage, payload))
         return first if stage == "discover" else revised
 
-    result = investigate(MISSION if mission is None else mission, [SOURCE] if sources is None else sources, propose, as_of=AS_OF)
+    result = investigate(MISSION if mission is None else mission, [SOURCE] if sources is None else sources,
+                         propose, as_of=AS_OF, acquisition=acquisition)
     return result, calls
 
 
 class ResearchTests(unittest.TestCase):
+    def test_unavailable_publisher_is_context_and_cannot_substitute_for_evidence(self):
+        acquisition = {"observed_at": AS_OF, "feeds": ["local-inference"], "sources": [],
+                       "failures": [{"feed": "local-inference", "role": "current", "reason_code": "SOURCE_URL",
+                                     "repository_url": "https://github.com/ggml-org/llama.cpp",
+                                     "reason": "internal diagnostic detail"}]}
+        result, calls = trial(first={"candidates": [candidate(1)], "favourite": "C1"}, sources=[], acquisition=acquisition)
+        self.assertEqual(result["decision"], "defer")
+        self.assertEqual(result["signals"], [])
+        for _, payload in calls:
+            self.assertEqual(payload["source_acquisition"]["retrieved"], 0)
+            self.assertEqual(payload["source_acquisition"]["failures"][0]["reason_code"], "SOURCE_URL")
+            self.assertNotIn("internal diagnostic detail", json.dumps(payload))
+
     def test_candidate_budget_applies_to_provider_and_semantic_validation(self):
         from ignition.model_schema import discovery
         from ignition.routing import validate_options

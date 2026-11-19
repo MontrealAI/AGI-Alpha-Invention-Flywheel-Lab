@@ -9,6 +9,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import parse_qs, urlsplit
 
 from .dispatcher import Dispatcher
+from .research import acquisition_summary
 from .store import Conflict, Missing, PRODUCT, StateError, canonical, strict_json
 
 
@@ -224,6 +225,7 @@ class Handler(BaseHTTPRequestHandler):
             result = {k: state.get(k) for k in fields}
             artifact = state.get("artifact") or {}
             result["artifact"] = {k: artifact[k] for k in ("kind", "sha256") if k in artifact}
+            result["source_acquisition"] = acquisition_summary(state.get("source_result"))
             result["schema"] = "ignition.mission-evidence.v1"
             return self._send(200, "application/json; charset=utf-8", canonical(result).encode(),
                               f"ignition-{run_id}-v{params[0]}-evidence.json")
