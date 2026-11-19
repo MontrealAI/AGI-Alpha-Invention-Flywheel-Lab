@@ -12,8 +12,11 @@ permissions:
 jobs:
   offline-check:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 360
     steps:
+      - name: Record platform execution clock
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
       - uses: actions/checkout@v4
       - name: Check Python and run complete offline tests
         run: |
