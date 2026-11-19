@@ -147,7 +147,8 @@ def mat_variables(raw: bytes):
             {"name": str(name), "shape": [int(x) for x in shape], "type": str(tp)}
             for name, shape, tp in objects
         ]}
-    if raw.startswith(bytes((0x89, 0x48, 0x44, 0x46, 0x0d, 0x0a, 0x1a, 0x0a))):
+    if (raw.startswith(b"MATLAB 7.3 MAT-file") or
+            raw.startswith(bytes((0x89, 0x48, 0x44, 0x46, 0x0d, 0x0a, 0x1a, 0x0a)))):
         import h5py
         entries = []
         try:
