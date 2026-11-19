@@ -34,7 +34,7 @@ class ResearchProposals(unittest.TestCase):
         prompt = make_prompt(signals)
         self.assertEqual(len(prompt), 2)
         self.assertIn("Uniswap", prompt[0]["content"])
-        self.assertIn("fals", prompt[0]["content"].lower())
+        self.assertIn("experiment", prompt[0]["content"].lower())
 
     def test_refuse_copycat_candidates(self):
         signals, ideas = fixtures()
