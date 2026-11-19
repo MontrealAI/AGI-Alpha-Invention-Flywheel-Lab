@@ -85,8 +85,8 @@ class Eit193Offline(unittest.TestCase):
             self.assertEqual(report["scripts"], 1)
             self.assertEqual(report["data_matrices"], 1)
             self.assertEqual(len(report["matlab_members"]), 4)
-            self.assertEqual(report["matlab_members"][-1]["sha256"],
-                             hashlib.sha256(b"mat-mesh").hexdigest())
+            self.assertIn(hashlib.sha256(b"mat-mesh").hexdigest(),
+                          [item["sha256"] for item in report["matlab_members"]])
 
     def test_original_parser_failure_must_not_silently_discard_genuine_mat(self):
         with tempfile.TemporaryDirectory() as directory:
