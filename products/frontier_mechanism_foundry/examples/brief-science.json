@@ -1,0 +1,75 @@
+{
+  "schema": "montreal.ai/mechanism-foundry/v1",
+  "evidence_cutoff": "2026-11-19",
+  "rights_confirmed": false,
+  "currency": "SYNTHETIC_UNITS_NOT_MONEY",
+  "comparison_options": [
+    "no_entry",
+    "direct",
+    "free_existing_escrow"
+  ],
+  "mission_id": "scientific-acceptance-escrow-002",
+  "outcome": "Produce trustworthy settlement arrangements for independently assessed laboratory measurement deliverables.",
+  "enabler": {
+    "source": "https://www.uniswap.org/",
+    "claimed_change": "Permissionless accounting examples motivate mechanism composability; no specific recent scientific enabling change verified.",
+    "verified": false
+  },
+  "fixed_construction_cost": 150,
+  "development": [
+    {
+      "id": "d1",
+      "price": 1000,
+      "value_if_accepted": 1300,
+      "seller_cost": 860,
+      "success_ppm": 450000,
+      "network_cost": 55,
+      "independent_check_cost": 90,
+      "operator_cost": 45,
+      "buyer_outside": 110,
+      "seller_outside": 120,
+      "time_limit_days": 7
+    },
+    {
+      "id": "d2",
+      "price": 1000,
+      "value_if_accepted": 1150,
+      "seller_cost": 900,
+      "success_ppm": 300000,
+      "network_cost": 45,
+      "independent_check_cost": 120,
+      "operator_cost": 40,
+      "buyer_outside": 110,
+      "seller_outside": 150,
+      "time_limit_days": 7
+    }
+  ],
+  "holdout": [
+    {
+      "id": "h1",
+      "price": 1000,
+      "value_if_accepted": 1200,
+      "seller_cost": 950,
+      "success_ppm": 350000,
+      "network_cost": 60,
+      "independent_check_cost": 105,
+      "operator_cost": 50,
+      "buyer_outside": 120,
+      "seller_outside": 200,
+      "time_limit_days": 7
+    },
+    {
+      "id": "h2",
+      "price": 1000,
+      "value_if_accepted": 1150,
+      "seller_cost": 880,
+      "success_ppm": 200000,
+      "network_cost": 60,
+      "independent_check_cost": 100,
+      "operator_cost": 50,
+      "buyer_outside": 100,
+      "seller_outside": 150,
+      "time_limit_days": 3
+    }
+  ]
+}
