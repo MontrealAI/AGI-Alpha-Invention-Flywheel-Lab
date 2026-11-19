@@ -20,6 +20,7 @@ From this directory:
 ~~~sh
 python3 -m unittest discover -s . -p 'test_gate.py' -v
 python3 gate.py < example.json
+python3 gate.py --verify < audit-example.json  # check an independent candidate
 python3 gate.py --serve --port 8788
 # POST JSON to http://127.0.0.1:8788/v0/transform
 # GET http://127.0.0.1:8788/healthz
@@ -44,6 +45,8 @@ Input object:
   ]
 }
 ~~~
+
+The optional independent-delivery route accepts the same contract and source rows plus a candidate_delivery list, and returns a local acceptance verdict without constructing a new answer. This supports machine-agent verification experiments, but is still no substitute for external certification or evidence provenance.
 
 Only source fields explicitly required by the rules are emitted. All source identifiers must be unique; fields, operations, rows and request bytes are capped. Unknown operations, duplicate JSON keys, nested values, malformed records and nonfinite numbers are refused. Output and receipt SHA-256 digests protect local replay comparisons but are **not** signatures or proofs of source authenticity.
 
