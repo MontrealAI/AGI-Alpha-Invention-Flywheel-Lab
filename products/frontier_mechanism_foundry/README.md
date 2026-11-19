@@ -9,7 +9,7 @@
 ## Implemented
 
 1. **Discover (bounded):** invent.py exhaustively compares 25 candidate arrangements across direct settlement, buyer-verifier escrow, and independent-verifier escrow, with fee and expiry policies. Includes no-entry and fee-free escrow alternatives.
-2. **Construct:** Escrow candidates produce parameters for the executable Solidity reference in contracts/FrontierProofExchange.sol. This real code uses immutable fees, seller artifact commitments, buyer-selected verifier and refund at expiry.
+2. **Construct and inventory:** Escrow candidates produce parameters for the executable Solidity reference in contracts/FrontierProofExchange.sol. The FrontierAssetFactory.sol contract lets the publisher create separately indexed fee-bearing instances linked to an evidence digest. It is an ordinary restricted factory, not scientific certification or proof of asset ownership beyond its own registry.
 3. **Verify:** Synthetic buyer/seller economic calculations use exact rational arithmetic. Selection is from development cases only; the holdout is evaluated after selection. EVM tests exercise transfers, refunds, unauthorized acceptance, replay and taxed-token deposits.
 4. **Retain:** registry.py stores result identities, failures and hash-linked experiment records across distinct missions. Successor comparisons avoid assuming inherited advantage.
 5. **Commercial gate:** No mainnet deployment, actual sales, real token transfers, customer billing, new merchant account, public endpoint or new paid service.
@@ -52,7 +52,7 @@ cd products/frontier_mechanism_foundry
 forge test -vv
 ~~~
 
-GitHub Actions runs the same isolated EVM tests. The contract is **not deployed** and has not received an independent security audit. Off-chain quality and verifier integrity are not proven by an artifact hash. Fees accrue only from transactions users voluntarily route through **that specific contract**. Other participants can fork the publicly available escrow, including at zero fee.
+GitHub Actions runs the same isolated EVM tests, including publisher-only factory deployment and fee routing to an immutable treasury. These contracts are **not deployed on a live network** and have not received an independent security audit. Off-chain quality and verifier integrity are not proven by an artifact hash. Fees accrue only from transactions users voluntarily route through **that specific contract**. Other participants can fork the publicly available escrow, including at zero fee.
 
 ### Both $AGIALPHA assets remain valid
 
