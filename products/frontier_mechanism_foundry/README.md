@@ -14,6 +14,23 @@
 4. **Retain:** registry.py stores result identities, failures and hash-linked experiment records across distinct missions. Successor comparisons avoid assuming inherited advantage.
 5. **Commercial gate:** No mainnet deployment, actual sales, real token transfers, customer billing, new merchant account, public endpoint or new paid service.
 
+### Explore frontier signals with a local AI model (optional)
+
+The discovery stage can take public, source-labelled frontier signals and ask a locally hosted Ollama model for **three materially different** productive mechanisms, each with a strong incumbent comparator and a falsifying experiment:
+
+~~~sh
+cd products/frontier_mechanism_foundry
+# Reproducible authored fixture, not real AI inference:
+python3 discovery_agent.py --signals examples/frontier-signals.json --offline-proposals examples/offline-proposals.json --out /tmp/frontier-ideas.json
+
+# Optional locally installed model and Ollama server — example only:
+python3 discovery_agent.py --signals examples/frontier-signals.json --local-model YOUR_INSTALLED_MODEL --out /tmp/frontier-ideas-live.json
+~~~
+
+The model endpoint is strictly local (localhost port 11434 by default); it cannot be redirected to a paid remote API by the input brief. No local model weights, API keys or funded inference are provided by this repository. The output is a **research hypothesis**, not automatically deployed code. It must first earn a prospectively registered experiment using authentic source data, a relevant test and strong comparators.
+
+The current mechanism constructor accepts only a disclosed finite on-chain grammar. Unknown free-text mechanisms from a local model do **not** bypass the compiler, verifier, or commercial qualification gates. Extending the constructor to a genuine new productive primitive remains a separately testable research task.
+
 ### Reproduce the discovery loop
 
 Python 3.10+ standard library only, no external services or credentials:
