@@ -60,6 +60,33 @@ class AppleDouble192Tests(unittest.TestCase):
         with self.assertRaisesRegex(Refusal, "DUPLICATE"):
             parse_appledouble(duplicate)
 
+    def test_macos_zip_exact_appledouble_filesystem_field(self):
+        # Original failed chest member begins with this documented macOS ZIP
+        # AppleDouble-v2 header. Whole member validation remains separate.
+        raw = bytearray(sidecar(b"resource", b"attributes"))
+        raw[8:24] = b"Mac OS X        "
+        self.assertEqual(raw[:16].hex(), "00051607000200004d6163204f532058")
+        entries = parse_appledouble(bytes(raw))
+        self.assertEqual(len(entries), 2)
+        self.assertEqual([entry["length"] for entry in entries], [8, 10])
+        temp, path = make_zip([
+            ("A/target.mat", b"real-MAT-parser-must-examine-this"),
+            ("__MACOSX/A/._target.mat", bytes(raw)),
+        ])
+        try:
+            receipt = classify_zip(path)
+            self.assertEqual(receipt["genuine_matlab_candidates"], ["A/target.mat"])
+            self.assertEqual(len(receipt["sidecars"]), 1)
+            self.assertTrue(receipt["sidecars"][0]["counterpart_present"])
+        finally:
+            temp.cleanup()
+        for replacement in (b"Mac OS X       x", b"mac OS X        ",
+                            b"Mac OS X\0\0\0\0\0\0\0\0", b"Mac OS X        "[:-1] + b"\0"):
+            bad = raw.copy()
+            bad[8:24] = replacement
+            with self.assertRaisesRegex(Refusal, "FILLER_UNKNOWN"):
+                parse_appledouble(bytes(bad))
+
     def test_descriptor_range_and_overlap(self):
         good = bytearray(sidecar(b"ab", b"cd"))
         bad = good.copy()
