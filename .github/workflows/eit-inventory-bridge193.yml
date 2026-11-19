@@ -1,0 +1,74 @@
+name: EIT193 pinned exact-source genuine MATLAB inventory bridge
+on:
+  push:
+    branches:
+      - research/eit193-pinned-matlab-source-bridge-20261119
+    paths:
+      - 'campaign/eit-inventory-193/**'
+      - 'tools/eit_inventory_bridge193.py'
+      - 'tests/test_eit_inventory_bridge193.py'
+      - '.github/workflows/eit-inventory-bridge193.yml'
+  pull_request:
+    paths:
+      - 'campaign/eit-inventory-193/**'
+      - 'tools/eit_inventory_bridge193.py'
+      - 'tests/test_eit_inventory_bridge193.py'
+      - '.github/workflows/eit-inventory-bridge193.yml'
+permissions:
+  contents: read
+jobs:
+  original-parser-offline-adversarial:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record platform job start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Execute exact-head offline source identity and refusal tests
+        run: |
+          test "$(git rev-parse HEAD)" = "${{ github.event.pull_request.head.sha || github.sha }}"
+          PYTHONDONTWRITEBYTECODE=1 python3 -B -m unittest -v tests.test_eit_inventory_bridge193
+
+  one-frozen-original-chest-semantic-inventory:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record platform job start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Install original inspector's pinned numerical dependencies
+        run: |
+          python3 -m pip install --only-binary=:all: numpy==2.3.5 scipy==1.17.0 h5py==3.15.1
+      - name: Fail-closed offline regressions at exact source
+        run: |
+          test "$(git rev-parse HEAD)" = "${{ github.sha }}"
+          PYTHONDONTWRITEBYTECODE=1 OPENBLAS_NUM_THREADS=1 python3 -B -m unittest -v tests.test_eit_inventory_bridge193
+      - name: Single exact chest source and unchanged EIT190 MATLAB parser execution
+        run: |
+          /usr/bin/time -f 'wall_seconds=%e user_CPU_seconds=%U system_CPU_seconds=%S max_RSS_kB=%M' -o "$RUNNER_TEMP/EIT193_RESOURCES.txt" env PYTHONDONTWRITEBYTECODE=1 OPENBLAS_NUM_THREADS=1 python3 -B -m tools.eit_inventory_bridge193 --out "$RUNNER_TEMP/EIT193_RESULT.json" --failure-out "$RUNNER_TEMP/EIT193_FAILURE.json"
+      - name: Preserve source-bound compact success, failure and resource receipts
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: eit193-original-mat-bridge-${{ github.sha }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/EIT193_RESULT.json
+            ${{ runner.temp }}/EIT193_FAILURE.json
+            ${{ runner.temp }}/EIT193_RESOURCES.txt
+          if-no-files-found: warn
+          retention-days: 14
