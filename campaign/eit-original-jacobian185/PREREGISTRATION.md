@@ -1,0 +1,17 @@
+# EIT185 — preregistered original Jacobian reconstruction baseline gate
+
+**Frozen before inspecting new Jacobian/schema bytes or writing EIT185 execution code.** Independent additive dependent branch from EIT184 source 61edf175bc9dd4ce7f766a6b18146cd442e399e8; EIT183 parent 61aa238f61a303a97d0f1f2509fcf9728d608f8c, main f0987aa48d5c9136b28540f54eabf5367e63bbe6. Original measured pair, its labels, raw difference and gain/offset outcomes were exposed beforehand, not new hidden holdouts. Other owners' files and historical failures remain immutable.
+
+## Consequential question and real alternatives
+
+Goal: independently accepted interior conductivity reconstruction with calibrated uncertainty, beneficiary and complete costs; not a nonzero voltage contrast. Compare (A) competent university-supplied Jacobian/Tikhonov reconstruction with original source maps, meshes and original scripts, (B) conventional gain/offset-corrected specialist acquisition/reconstruction, (C) a genuinely new observation or transfer mechanism if competent complete alternatives leave a measured unmet acceptance condition, and (D) no deployment. Current work executes a necessary original-source mapping check for A only; it does not reconstruct, infer physical truth, claim a buyer, or demonstrate new technology. Primary publication: arXiv:2611.17225v1 submitted 12 Nov 2026, DOI 10.5281/zenodo.24120439.
+
+## Frozen Stage A source and one-shot rule
+
+One public source: https://zenodo.org/api/records/24120439/files/AgarCylinderPhantom.zip/content . Require exactly 12482688 compressed bytes, MD5 658694f69f64075b6fefec2e2c597131 and SHA256 42fa038c0c1b4d5bb5769f4d8a8575eef300e8eef559137767e5ab0bb1bd9f70, as independently observed in EIT182/183. Recheck both registered EIT183 measured .mat member hashes and matching finite 79x16 currents. No new phantom/case/seed selection.
+
+Enumerate every archive member with a basename starting J_ (case-insensitive) and ending .mat, and every .m member inside an ExampleCodes path. Do not select favorable files. Verify bounded ZIP paths/duplicate names/links/expansion, hash every candidate member; for each Jacobian file identify HDF5 magic and all finite dense numeric datasets with bounded sizes, paths, shapes, dtypes. Count and hash original .m example scripts; never execute untrusted MATLAB. If no usable original Jacobian or source script, fail with a preserved explicit result. Do not infer correct electrode/matrix row order from shape or filename alone.
+
+Stage B is not authorized by Stage A success: after inspecting the actual sample source and independently confirming exact measurement-to-Jacobian mapping, preregister a separate strong reconstruction comparison on the original fixed pair (all folds/parameters, no favorable selection). Column predictive fit is not physical truth. Never weaken original experts to create a challenger victory.
+
+One initial public hosted source-acquisition attempt; tests synthetic and offline. Preserve adverse source, schema and execution outcomes. Publish compact receipt, hashes, total file inventory, source/test identities and measured command wall/CPU/RSS; no raw dataset or archive checked into git. Actual GitHub/model billing unknown. The current decision is HOLD / NO DEPLOY / NO BID, with no observed paying buyer, new funding, account access, physical actuation, clinical qualification, signed account migration or US$3B profit. No paid APIs, outreach, spending, keys or transaction.
