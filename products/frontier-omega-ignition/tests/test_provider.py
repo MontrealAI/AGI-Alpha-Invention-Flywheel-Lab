@@ -22,7 +22,7 @@ def frame(content=None, finish=None, model="unit-model", **extra_delta):
 
 
 @contextmanager
-def local_sse(events, *, delays=(), timeout=1):
+def local_sse(events, *, delays=(), timeout=1, wall_timeout=None):
     requests = []
     class Handler(BaseHTTPRequestHandler):
         def log_message(self, *args):
@@ -47,7 +47,7 @@ def local_sse(events, *, delays=(), timeout=1):
         thread.start()
         try:
             yield LocalProvider("llama-cpp", "unit-model", server.server_port, timeout=timeout,
-                                schema_output=True, streaming=True), requests
+                                schema_output=True, streaming=True, wall_timeout=wall_timeout), requests
         finally:
             server.shutdown()
             thread.join()
@@ -88,6 +88,24 @@ class ProviderTests(unittest.TestCase):
             self.assertEqual(receipt["stream_fragments"], 2)
             self.assertEqual(receipt["usage"], {"input_tokens": 20, "output_tokens": 10})
             self.assertGreater(receipt["wall_seconds"], route.timeout)
+
+    def test_total_wall_budget_interrupts_an_active_loopback_stream(self):
+        frames = [frame('{"choice":'), frame('"abstain"}'), frame(finish="stop"), "[DONE]"]
+        with local_sse(frames, delays=(0, .65, .65), timeout=3, wall_timeout=1) as (provider, calls):
+            with self.assertRaisesRegex(ProviderUnavailable, "PROVIDER_WALL_LIMIT"):
+                provider.propose("choose_hypothesis", {"candidates": []})
+            self.assertEqual(len(calls), 1)
+            self.assertEqual(provider.identity()["wall_timeout_seconds"], 1)
+            receipt = provider.receipts[-1]
+            self.assertIsNone(receipt["response_sha256"])
+            self.assertEqual(receipt["application_model_calls"], 1)
+            self.assertLess(receipt["wall_seconds"], 1.5)
+
+    def test_complete_loopback_stream_can_pass_under_the_wall_budget(self):
+        frames = [frame('{"choice":"abstain"}'), frame(finish="stop"), "[DONE]"]
+        with local_sse(frames, wall_timeout=1) as (provider, calls):
+            self.assertEqual(provider.propose("choose_hypothesis", {"candidates": []}), {"choice": "abstain"})
+            self.assertEqual(len(calls), 1)
 
     def test_stream_rejects_partial_wrong_identity_undeclared_tools_oversize_or_invalid_schema(self):
         answer, stop = frame('{"choice":"abstain"}'), frame(finish="stop")

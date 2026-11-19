@@ -125,6 +125,7 @@ class ModelProvider:
             port = int(env.get("IGNITION_MODEL_PORT", 11434 if kind == "ollama" else 8080))
             output = int(env.get("IGNITION_MODEL_OUTPUT_TOKENS", 4096))
             timeout = int(env.get("IGNITION_MODEL_TIMEOUT", 300))
+            wall = env.get("IGNITION_MODEL_WALL_TIMEOUT")
             schema = env.get("IGNITION_MODEL_SCHEMA", "0")
             if schema not in {"0", "1"}:
                 raise ValueError("IGNITION_MODEL_SCHEMA must be 0 or 1.")
@@ -133,7 +134,8 @@ class ModelProvider:
                 raise ValueError("IGNITION_MODEL_STREAM must be 0 or 1.")
             return LocalProvider(kind, env.get("IGNITION_MODEL_ID"), port,
                                  env.get("IGNITION_MODEL_SHA256") or None, output, timeout,
-                                 schema_output=schema == "1", streaming=streaming == "1")
+                                 schema_output=schema == "1", streaming=streaming == "1",
+                                 wall_timeout=int(wall) if wall is not None else None)
         except (ValueError, TypeError) as error:
             raise ProviderUnavailable(f"Invalid local model configuration: {error}") from None
 
@@ -193,7 +195,7 @@ class LocalProvider(ModelProvider):
     """The shared HARNESS sends one text/JSON request to an operator's installed loopback model."""
 
     def __init__(self, kind, model, port, declared_sha256=None, output_tokens=4096,
-                 timeout=300, *, sender=transport, schema_output=False, streaming=False):
+                 timeout=300, *, sender=transport, schema_output=False, streaming=False, wall_timeout=None):
         super().__init__()
         if kind not in {"ollama", "llama-cpp"}:
             raise ValueError("Unsupported local model provider.")
@@ -212,8 +214,11 @@ class LocalProvider(ModelProvider):
             raise ValueError("Local model schema support must be explicitly declared.")
         if type(streaming) is not bool or (streaming and kind != "llama-cpp"):
             raise ValueError("Only a locally configured llama.cpp server supports this streaming route.")
+        if wall_timeout is not None and (not streaming or type(wall_timeout) is not int or not 1 <= wall_timeout <= 600):
+            raise ValueError("Set a total time allowance from 1 to 600 seconds on the local streaming route.")
         self.schema_output = schema_output
         self.streaming = streaming
+        self.wall_timeout = wall_timeout
         self.base = f"http://127.0.0.1:{port}"
         self.sender = sender
         p = {"kind": "ollama" if kind == "ollama" else "openai",
@@ -237,7 +242,8 @@ class LocalProvider(ModelProvider):
             row["stream_fragments"] += 1
             on_text(fragment)
         return stream_transport(url, headers, body, kind=kind, timeout=timeout, cancel=cancel, on_text=progress,
-                                accumulator_factory=lambda k, emit: LocalTextStream(k, emit, self.model))
+                                accumulator_factory=lambda k, emit: LocalTextStream(k, emit, self.model),
+                                wall_timeout=self.wall_timeout)
 
     def _send(self, url, headers, body=None, timeout=60):
         response = self.sender(url, headers, body, timeout=timeout)
@@ -260,6 +266,7 @@ class LocalProvider(ModelProvider):
                 "endpoint": self.base, "declared_model_sha256": self.declared_sha256,
                 "weights_identity": "operator-declared" if self.declared_sha256 else "unmeasured",
                 "output_tokens": self.output_tokens, "timeout_seconds": self.timeout,
+                **({"wall_timeout_seconds": self.wall_timeout} if self.wall_timeout is not None else {}),
                 "schema_output": self.schema_output, "schema_implementation": model_schema.LOADED_SOURCE_SHA256,
                 "harness_adapter_sha256": LOADED_SOURCE_SHA256}
 

@@ -5,14 +5,63 @@ from __future__ import annotations
 import hashlib
 import http.client
 import json
+import socket
+import threading
+import time
+from contextlib import contextmanager
 from pathlib import Path
 from urllib.error import HTTPError, URLError
+from urllib.parse import urlsplit
 from urllib.request import Request, build_opener, ProxyHandler
 
 LOADED_SOURCE_SHA256 = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
 
 
-def stream_transport(url, headers, body, *, kind, timeout, cancel, on_text, accumulator_factory=None):
+@contextmanager
+def _loopback_response(url, headers, payload, idle_timeout, wall_timeout, bridge_error):
+    """Bound the request itself, including a read interrupted in the middle of a frame."""
+    target = urlsplit(url)
+    if (target.scheme != "http" or target.hostname != "127.0.0.1" or not target.port
+            or target.username or target.password or target.fragment):
+        raise bridge_error("CONFIG", "The wall-limited stream requires an exact loopback endpoint.")
+    deadline = time.monotonic() + wall_timeout
+    connection = http.client.HTTPConnection(target.hostname, target.port, timeout=min(idle_timeout, wall_timeout))
+    alarm = None
+    try:
+        connection.connect()
+        peer = connection.sock
+
+        def interrupt_read():
+            try:
+                peer.shutdown(socket.SHUT_RDWR)
+            except OSError:
+                pass
+
+        alarm = threading.Timer(max(0, deadline - time.monotonic()), interrupt_read)
+        alarm.daemon = True
+        alarm.start()
+        path = target.path or "/"
+        if target.query:
+            path += "?" + target.query
+        connection.request("POST", path, body=payload, headers=headers)
+        with connection.getresponse() as response:
+            if response.status != 200:
+                raise HTTPError(url, response.status, response.reason, response.headers, response)
+            yield response
+        if time.monotonic() >= deadline:
+            raise TimeoutError()
+    except (OSError, http.client.HTTPException, bridge_error):
+        if time.monotonic() >= deadline:
+            raise bridge_error("PROVIDER_WALL_LIMIT", "The local model reached its total time allowance.", 504) from None
+        raise
+    finally:
+        if alarm is not None:
+            alarm.cancel()
+        connection.close()
+
+
+def stream_transport(url, headers, body, *, kind, timeout, cancel, on_text, accumulator_factory=None,
+                     wall_timeout=None):
     try:
         from .adapters import BridgeError, NoRedirect, MAX_RESPONSE, strict_json
     except ImportError:
@@ -21,8 +70,12 @@ def stream_transport(url, headers, body, *, kind, timeout, cancel, on_text, accu
     headers = dict(headers, Accept="application/x-ndjson" if kind == "ollama" else "text/event-stream")
     accumulator = (accumulator_factory or StreamAccumulator)(kind, on_text)
     try:
-        opener = build_opener(ProxyHandler({}), NoRedirect())
-        with opener.open(Request(url, data=payload, headers=headers), timeout=timeout) as response:
+        if wall_timeout is None:
+            opener = build_opener(ProxyHandler({}), NoRedirect())
+            response_context = opener.open(Request(url, data=payload, headers=headers), timeout=timeout)
+        else:
+            response_context = _loopback_response(url, headers, payload, timeout, wall_timeout, BridgeError)
+        with response_context as response:
             size, pending = 0, []
             while True:
                 if cancel.is_set():

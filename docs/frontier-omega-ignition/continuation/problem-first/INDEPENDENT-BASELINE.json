@@ -1,0 +1,55 @@
+{
+  "schema": "ignition/independent-baseline-summary/v1",
+  "purpose": "Aggregate comparison reference for release-evidence and public procurement review.",
+  "commitments": {
+    "holdout_sha256": "c8bef367d8f99707f2d7506ec26bcc34ceb1071b593db9b994ef23b8c10b0062",
+    "holdout_frozen_utc": "2026-11-19T00:08:22.839126542Z",
+    "comparison_sha256": "309afb644234761508b625bdfcc6d543cceb097da94e4db8b0464c1cbf8bb78e",
+    "comparison_frozen_utc": "2026-11-19T00:22:18.312862272Z"
+  },
+  "methods": {
+    "release_evidence": "Use full revision and content identifiers to match pinned public receipts, then apply documented evidence gates. Check decisions, material fact attribution, and unsupported release decisions.",
+    "procurement_review": "Resolve canonical links from official notice listings, read authoritative notice status and amendments, then apply documented relevance and access checks. Check decisions, material fact attribution and supplier eligibility assertions.",
+    "verification": "The independent evaluator froze the expected outcomes before observing the qualification artifacts. Five complete local replays of the conventional workflows produced byte-identical decision outputs.",
+    "timing_scope": "Wall and process CPU measurements cover local execution from staged public evidence to decision files with evidence references. Reported counts cover tested observations."
+  },
+  "release_evidence": {
+    "decision_checks_passed": 5,
+    "decision_checks_total": 5,
+    "traceable_fact_checks_passed": 20,
+    "traceable_fact_checks_total": 20,
+    "process_launches_per_replay": 5,
+    "median_wall_seconds": 0.1936,
+    "wall_seconds_range": [
+      0.1628,
+      0.2137
+    ],
+    "median_cpu_seconds": 0.1926,
+    "unsupported_go_decisions": 0
+  },
+  "procurement_review": {
+    "decision_checks_passed": 7,
+    "decision_checks_total": 7,
+    "traceable_fact_checks_passed": 16,
+    "traceable_fact_checks_total": 16,
+    "process_launches_per_replay": 1,
+    "median_wall_seconds": 0.0412,
+    "wall_seconds_range": [
+      0.0388,
+      0.0623
+    ],
+    "median_cpu_seconds": 0.0409,
+    "public_listing_rows_indexed": 89,
+    "unsupported_supplier_eligibility_assertions": 0
+  },
+  "replays": 5,
+  "byte_identical_decision_outputs_across_replays": true,
+  "known_incremental_external_cash_usd": 0,
+  "external_requests_during_replay": 0,
+  "human_active_minutes": null,
+  "limitations": [
+    "Initial public retrieval, data preparation, implementation, reading, and human review are outside the reported timing scope.",
+    "The evaluator configured the conventional workflow against the available source format. The first procurement implementation required a correction for truncated listing titles before the reported repeated runs.",
+    "The bounded cases provide a comparison reference. Generalization and operational human savings require separate measurements."
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "load": {
+    "surface": "isolated staging backend on loopback; TLS and external routing excluded",
+    "tenants": 4,
+    "workers": 2,
+    "completed_real_local_compiler_jobs": 4,
+    "model_calls": 0,
+    "intake_samples": 4,
+    "status_read_samples": 72,
+    "p95_intake_seconds": 0.1685,
+    "p95_status_read_seconds": 0.0523,
+    "max_time_from_accepted_intake_through_last_read_seconds": 1.054,
+    "limits": {
+      "p95_intake_seconds": 2,
+      "p95_status_read_seconds": 1
+    },
+    "passed": true
+  },
+  "restore": {
+    "scope": "disposable local staging; storage restore through operator CLI",
+    "bundle_sha256": "3413418964ce56a845af3f0b6a02d825692a2f8c817829bff8c818e6bb4f78ac",
+    "same_request_after_restore": true,
+    "restore_process_ms": 177.77,
+    "partial_restore_published": false,
+    "model_calls": 0
+  },
+  "scope": "Exact application tree with the opt-in wall guard on isolated staging. Only guided compiler tasks were used to exercise load and restore. External TLS, alert delivery and deployment rollback on the production host are unverified."
+}

@@ -16,6 +16,7 @@ Use a trusted, locally provisioned inference server under your control. A loopba
 | `IGNITION_MODEL_SCHEMA` | Set to `1` only for a provisioned server/model supporting native JSON schema. Default is `0`. Stores the exact grammar digest per call. |
 | `IGNITION_MODEL_STREAM` | Set to `1` to request incremental SSE from a local llama.cpp server. The default `0` uses the existing buffered route. |
 | `IGNITION_MODEL_TIMEOUT` | Connection and socket-read timeout in seconds, from 1 through 600. Default 300. A streaming generation can run longer while its connection continues to deliver bytes. |
+| `IGNITION_MODEL_WALL_TIMEOUT` | Optional total HTTP time allowance in seconds, from 1 through 600, for llama.cpp streaming. The workbench closes its connection at the deadline and rejects partial output. Provider compute may already have incurred cost. |
 
 A mission changing providers requires a new revision. A stopped, incomplete, differently identified or invalid response fails the stage. Receipts preserve the declared and returned model IDs, request and response hashes, elapsed time and token counts if reported. An interrupted request can have used resources. CPU, electricity, maintenance and operator time have real costs even when no billable service is contacted.
 
