@@ -7,7 +7,7 @@ pragma solidity ^0.8.24;
 /// mechanism, not a unique invention, audited product or mainnet deployment.
 /// A buyer-chosen verifier may release money ONLY after a seller submits the
 /// committed artifact digest. Off-chain judgment is NOT cryptographic proof.
-interface IFronToken {
+interface IFronTokenChecked {
     function transferFrom(address from, address to, uint256 amount) external returns (bool);
     function transfer(address to, uint256 amount) external returns (bool);
     function balanceOf(address account) external view returns (uint256);
@@ -34,7 +34,7 @@ contract FrontierProofExchangeChecked {
         Status status;
     }
 
-    IFronToken public immutable token;
+    IFronTokenChecked public immutable token;
     address public immutable treasury;
     uint16 public immutable feeBps;
     uint16 public constant MAX_FEE_BPS = 250; // At most 2.5% of accepted principal
@@ -58,7 +58,7 @@ contract FrontierProofExchangeChecked {
         if (paymentToken == address(0) || paymentToken.code.length == 0
             || feeRecipient == address(0) || feeRecipient == address(this)
             || platformFeeBps > MAX_FEE_BPS) revert Invalid();
-        token = IFronToken(paymentToken);
+        token = IFronTokenChecked(paymentToken);
         treasury = feeRecipient;
         feeBps = platformFeeBps;
     }
@@ -127,7 +127,7 @@ contract FrontierProofExchangeChecked {
         uint256 recipientBefore = token.balanceOf(to);
         if (to == address(this) || escrowBefore < amount) revert UnexpectedTokenBalance();
         (bool ok, bytes memory response) = address(token).call(
-            abi.encodeWithSelector(IFronToken.transfer.selector, to, amount));
+            abi.encodeWithSelector(IFronTokenChecked.transfer.selector, to, amount));
         if (!ok || (response.length != 0 &&
             (response.length != 32 || !abi.decode(response, (bool)))))
             revert TransferFailed();
@@ -138,7 +138,7 @@ contract FrontierProofExchangeChecked {
 
     function _safeTransferFrom(address from, address to, uint256 amount) private {
         (bool ok, bytes memory response) = address(token).call(
-            abi.encodeWithSelector(IFronToken.transferFrom.selector, from, to, amount));
+            abi.encodeWithSelector(IFronTokenChecked.transferFrom.selector, from, to, amount));
         if (!ok || (response.length != 0 &&
             (response.length != 32 || !abi.decode(response, (bool)))))
             revert TransferFailed();
