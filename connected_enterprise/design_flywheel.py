@@ -365,8 +365,24 @@ def _public(spec, source, development, selection, confirmation, discovery):
     incumbent = confirmation.get(spec["incumbent"])
     if challenger is not None and incumbent is not None:
         delta = challenger["observed"]["profit_microUSD"] - incumbent["observed"]["profit_microUSD"]
+        # Spendable native liquidity is not recognized profit. Compare the
+        # separately owned, independently audited account snapshots without
+        # pooling balances or granting another investment authorization.
+        candidate_available = challenger["observed"].get("available_microUSD")
+        control_available = incumbent["observed"].get("available_microUSD")
+        if candidate_available is None and control_available is None:
+            available_delta = None
+        elif type(candidate_available) is not int or type(control_available) is not int:
+            raise ValueError("MATCHED_NATIVE_AVAILABLE_LIQUIDITY_REQUIRED")
+        else:
+            available_delta = candidate_available - control_available
     else:
         delta = None
+        available_delta = None
+    liquidity_conflict = (
+        delta > 0 and available_delta < 0
+        if delta is not None and available_delta is not None else None
+    )
     witness = challenger["observed"]["source_linked_successor"] if challenger else None
     holdout = _heldout_recommendation(spec, selected, challenger, incumbent, delta)
     funded_successor_exists = bool(witness and witness["positive_incremental_collected_contribution"] and
@@ -382,6 +398,8 @@ def _public(spec, source, development, selection, confirmation, discovery):
         "heldout_recommendation": holdout,
         "confirmation": {k: v["observed"] for k, v in sorted(confirmation.items())},
         "matched_confirmation_profit_delta_microUSD": delta,
+        "matched_confirmation_available_delta_microUSD": available_delta,
+        "positive_profit_lower_available_liquidity": liquidity_conflict,
         "connected_earned_successor_witness": witness,
         "confirmed_positive_funded_successor_opportunity": funded_successor_exists,
         "comparative_advantage_on_one_fresh_seed": holdout["challenger_accepted"],
