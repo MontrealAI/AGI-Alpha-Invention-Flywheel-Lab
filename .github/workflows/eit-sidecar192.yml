@@ -1,0 +1,67 @@
+name: EIT192 independent typed AppleDouble metadata preflight
+on:
+  pull_request:
+    paths:
+      - 'tools/eit_zip_metadata192.py'
+      - 'tools/eit_live_source192.py'
+      - 'tests/test_eit_*192.py'
+      - 'campaign/eit-sidecar-192/**'
+      - '.github/workflows/eit-sidecar192.yml'
+  push:
+    branches:
+      - research/eit192-appledouble-classifier-20261119
+permissions:
+  contents: read
+jobs:
+  typed-source-preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record platform job execution start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Test exact-head preregistered offline refusal cases
+        run: |
+          test "$(git rev-parse HEAD)" = "${{ github.event.pull_request.head.sha || github.sha }}"
+          PYTHONDONTWRITEBYTECODE=1 python3 -B -m unittest discover -s tests -p 'test_eit_*192.py' -v
+
+  original-chest-typed-metadata-qualification:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record platform job execution start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Verify exact source and offline refusal cases
+        run: |
+          test "$(git rev-parse HEAD)" = "${{ github.sha }}"
+          PYTHONDONTWRITEBYTECODE=1 python3 -B -m unittest discover -s tests -p 'test_eit_*192.py' -v
+      - name: Exactly one original public chest archive metadata and CRC scan
+        run: |
+          /usr/bin/time -f 'wall_seconds=%e user_CPU_seconds=%U system_CPU_seconds=%S max_RSS_kB=%M' -o "$RUNNER_TEMP/EIT192_LIVE_RESOURCES.txt" env PYTHONDONTWRITEBYTECODE=1 python3 -B -m tools.eit_live_source192 --out "$RUNNER_TEMP/EIT192_LIVE_SOURCE.json" --failure-out "$RUNNER_TEMP/EIT192_LIVE_FAILURE.json"
+      - name: Publish compact actual-source receipt, failure and command resources
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: eit192-chest-source-${{ github.sha }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/EIT192_LIVE_SOURCE.json
+            ${{ runner.temp }}/EIT192_LIVE_FAILURE.json
+            ${{ runner.temp }}/EIT192_LIVE_RESOURCES.txt
+          if-no-files-found: warn
+          retention-days: 14
