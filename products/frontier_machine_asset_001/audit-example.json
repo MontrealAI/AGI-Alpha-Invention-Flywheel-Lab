@@ -1,0 +1,50 @@
+{
+  "contract": {
+    "id_field": "id",
+    "rules": [
+      {
+        "from": "name",
+        "to": "customer",
+        "op": "strip"
+      },
+      {
+        "from": "country",
+        "to": "region",
+        "op": "upper"
+      },
+      {
+        "from": "quantity",
+        "to": "amount",
+        "op": "copy"
+      }
+    ]
+  },
+  "source_rows": [
+    {
+      "id": "alpha",
+      "name": "  Ana  ",
+      "country": "ca",
+      "quantity": 2
+    },
+    {
+      "id": "beta",
+      "name": "  Émilie ",
+      "country": "fr",
+      "quantity": 4
+    }
+  ],
+  "candidate_delivery": [
+    {
+      "id": "alpha",
+      "customer": "Ana",
+      "region": "CA",
+      "amount": 2
+    },
+    {
+      "id": "beta",
+      "customer": "Émilie",
+      "region": "FR",
+      "amount": 4
+    }
+  ]
+}

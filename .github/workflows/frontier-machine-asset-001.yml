@@ -1,0 +1,59 @@
+name: FRONTIER OMEGA machine asset 001 (offline)
+on:
+  pull_request:
+    paths:
+      - "products/frontier_machine_asset_001/**"
+      - ".github/workflows/frontier-machine-asset-001.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  offline-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check Python and run complete offline tests
+        run: |
+          python3 --version
+          python3 -m unittest discover -s products/frontier_machine_asset_001 -p 'test_*.py' -v
+      - name: Smoke test agent-native stdin interface
+        run: |
+          python3 products/frontier_machine_asset_001/gate.py < products/frontier_machine_asset_001/example.json > /tmp/machine-asset-001-response.json
+          python3 - <<'PY'
+          import json
+          with open("/tmp/machine-asset-001-response.json", encoding="utf-8") as f:
+              result=json.load(f)
+          assert result["receipt"]["accepted"]
+          assert result["delivery"][0]["customer"]=="Ana"
+          assert result["delivery"][1]["region"]=="FR"
+          assert len(result["receipt"]["receipt_sha256"])==64
+          print("BINDING_AND_ACCEPTANCE_PASS; NO PAYMENT ATTEMPTED")
+          PY
+      - name: Verify independently supplied agent output
+        run: |
+          python3 products/frontier_machine_asset_001/gate.py --verify < products/frontier_machine_asset_001/audit-example.json > /tmp/machine-asset-001-audit.json
+          python3 - <<'PY'
+          import json
+          with open("/tmp/machine-asset-001-audit.json", encoding="utf-8") as f:
+              result=json.load(f)
+          assert result["receipt"]["accepted"]
+          assert result["receipt"]["verification"].startswith("independent candidate")
+          print("INDEPENDENT_CANDIDATE_REPLAY_PASS; NO EXTERNAL CERTIFICATION")
+          PY
+      - name: Confirm production payment claims are disabled by default
+        run: |
+          python3 products/frontier_machine_asset_001/market.py --state /tmp/frontier_omega_market_test.sqlite3 > /tmp/frontier_omega_market_status.json
+          python3 - <<'PY'
+          import json
+          with open("/tmp/frontier_omega_market_status.json", encoding="utf-8") as f:
+              raw=f.read()
+          result=json.loads(raw[raw.find("{"):])
+          assert result["quotes_enabled"] is False
+          assert result["commercial_demand"] == "NOT_ESTABLISHED"
+          assert result["accepted_tokens"]["ethereum"]["chain_id"] == 1
+          assert result["accepted_tokens"]["solana"]["mint"] == "tWKHzXd5PRmxTF5cMfJkm2Ua3TcjwNNoSRUqx6Apump"
+          print("LIVE_COLLECTION_DISABLED_BY_DEFAULT")
+          PY
