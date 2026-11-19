@@ -78,7 +78,7 @@ class Merchant:
     def for_chain(self, chain):
         if chain == "ethereum":
             if not (ADDRESS_RE.fullmatch(self.eth_treasury or "")
-                    and self.eth_rpc and positive_units(self.eth_price_units) >= 10**15):
+                    and self.eth_rpc and positive_units(self.eth_price_units) > 0):
                 raise PaymentRejected("ETHEREUM_MERCHANT_NOT_QUALIFIED")
             JsonRpc(self.eth_rpc)
             return self.eth_treasury, "", int(self.eth_price_units)
@@ -180,7 +180,16 @@ class Market:
             raise PaymentRejected("INVALID_QUOTE_TIME")
         # Each EVM quote's exact raw token amount uniquely identifies the
         # intended order transfer. Quote collisions are refused by SQLite.
-        dust = secrets.randbits(48) if chain == "ethereum" else 0
+        dust = 0
+        if chain == "ethereum":
+            # Keep amount fingerprint at or below 1% of operator-set token
+            # price while requiring at least 32 bits of collision resistance.
+            # Cheaper machine payments should use the Solana memo route until
+            # a signed-order EVM contract can be qualified.
+            bound = min(1 << 48, price // 100)
+            if bound < (1 << 32) or price + bound >= 2**256:
+                raise PaymentRejected("ETHEREUM_ORDER_NONCE_ENTROPY_INSUFFICIENT")
+            dust = secrets.randbelow(bound)
         amount = str(price + dust)
         order_id = uuid.uuid4().hex
         nonce = secrets.token_hex(16)
