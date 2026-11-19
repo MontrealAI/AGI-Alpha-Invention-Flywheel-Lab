@@ -2,10 +2,18 @@
 from fractions import Fraction
 import unittest
 
-from products.frontier_mechanism_foundry.microfee_precision import (
-    PrecisionRefusal, UINT256_MAX, microfee_receipt,
-)
-from products.frontier_mechanism_foundry.invent import value
+try:
+    # Package-qualified invocation from repository root.
+    from products.frontier_mechanism_foundry.microfee_precision import (
+        PrecisionRefusal, UINT256_MAX, microfee_receipt,
+    )
+    from products.frontier_mechanism_foundry.invent import value
+except ModuleNotFoundError as exc:
+    if exc.name != "products":
+        raise
+    # The original owner's unittest discovery runs from inside this folder.
+    from microfee_precision import PrecisionRefusal, UINT256_MAX, microfee_receipt
+    from invent import value
 
 
 class MicrofeePrecisionTest(unittest.TestCase):
