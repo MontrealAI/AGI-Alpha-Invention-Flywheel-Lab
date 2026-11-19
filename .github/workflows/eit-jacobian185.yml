@@ -6,12 +6,14 @@ on:
       - 'campaign/eit-original-jacobian185/**'
       - 'research/eit_jacobian185/**'
       - 'tests/test_eit_jacobian185.py'
+      - 'tests/test_eit_jacobian185_mat5.py'
       - '.github/workflows/eit-jacobian185.yml'
   pull_request:
     paths:
       - 'campaign/eit-original-jacobian185/**'
       - 'research/eit_jacobian185/**'
       - 'tests/test_eit_jacobian185.py'
+      - 'tests/test_eit_jacobian185_mat5.py'
       - '.github/workflows/eit-jacobian185.yml'
   workflow_dispatch:
 permissions:
@@ -31,11 +33,11 @@ jobs:
           python-version: '3.12'
       - name: Install only exact original-source format dependencies
         run: |
-          python -m pip install --only-binary=:all: numpy==2.3.5 h5py==3.15.1
+          python -m pip install --only-binary=:all: numpy==2.3.5 h5py==3.15.1 scipy==1.17.0
       - name: Frozen adversarial original source-mapping tests
         run: |
           test "$(git rev-parse HEAD)" = "${{ github.event.pull_request.head.sha || github.sha }}"
-          PYTHONDONTWRITEBYTECODE=1 python -B -m unittest -v tests.test_eit_jacobian185
+          PYTHONDONTWRITEBYTECODE=1 python -B -m unittest -v tests.test_eit_jacobian185 tests.test_eit_jacobian185_mat5
 
   single-original-source-inventory:
     if: github.event_name == 'push'
@@ -51,11 +53,11 @@ jobs:
           python-version: '3.12'
       - name: Install pinned public scientific format dependencies
         run: |
-          python -m pip install --only-binary=:all: numpy==2.3.5 h5py==3.15.1
+          python -m pip install --only-binary=:all: numpy==2.3.5 h5py==3.15.1 scipy==1.17.0
       - name: Exactly one original-source hash and candidate-schema acquisition
         run: |
           test "$(git rev-parse HEAD)" = "${{ github.sha }}"
-          PYTHONDONTWRITEBYTECODE=1 python -B -m unittest -v tests.test_eit_jacobian185
+          PYTHONDONTWRITEBYTECODE=1 python -B -m unittest -v tests.test_eit_jacobian185 tests.test_eit_jacobian185_mat5
           /usr/bin/time -f 'wall_seconds=%e user_CPU_seconds=%U system_CPU_seconds=%S max_RSS_kB=%M' -o "$RUNNER_TEMP/EIT185_RESOURCES.txt" \
             python -B -m research.eit_jacobian185.original_source --out "$RUNNER_TEMP/EIT185_ORIGINAL_SOURCE.json"
           cat "$RUNNER_TEMP/EIT185_RESOURCES.txt"
