@@ -2,7 +2,7 @@
 ## A bounded, machine-consumable transformation with reproducible acceptance
 
 **Beneficiary and intended economic owner:** MONTREAL.AI.
-**Status:** offline prototype / commercial hypothesis. **Not** a production service, proven new invention, external security attestation, customer-validated product or money-earning deployment.
+**Status:** offline prototype with a disabled-by-default dual-chain checkout shell / commercial hypothesis. **Not** a production service, proven new invention, external security attestation, customer-validated product or money-earning deployment.
 **Priority:** retain a capability MONTREAL.AI can operate. Sell verified outcomes or usage if genuine demand exists; do not sell the discovery engine by default.
 
 ### The first executable kernel
@@ -18,15 +18,19 @@ Standard-library Python 3.10+; no external services, packages, accounts or keys.
 From this directory:
 
 ~~~sh
-python3 -m unittest discover -s . -p 'test_gate.py' -v
+python3 -m unittest discover -s . -p 'test_*.py' -v
 python3 gate.py < example.json
 python3 gate.py --verify < audit-example.json  # check an independent candidate
 python3 gate.py --serve --port 8788
 # POST JSON to http://127.0.0.1:8788/v0/transform
 # GET http://127.0.0.1:8788/healthz
+python3 market.py --state /tmp/frontier-local-market.sqlite3
+python3 market.py --state /tmp/frontier-local-market.sqlite3 --serve
+python3 portfolio_metrics.py --state /tmp/frontier-local-market.sqlite3
+# Machine commerce API is local-only and charges are disabled by default
 ~~~
 
-Never expose this unauthenticated prototype beyond loopback; it has neither production authentication, contractual safeguards, audit-service independence nor payment integration. It never calls a payment gateway and never reports a settled charge.
+Never expose the prototype beyond loopback. The transformer is unauthenticated, and the separate market shell is also research-only. Live token collection is **disabled** unless an operator deliberately provisions mainnet RPC, treasury addresses, token amounts and an explicit activation flag. No such activation is authorized by this PR; no external payment or settlement has been attempted.
 
 Input object:
 
@@ -62,11 +66,16 @@ The first **valuable FRONTIER Ω product** is not predetermined by this reposito
 
 **No positive conclusions on 1–5 have been established in this kernel.**
 
-### Machine-payment rail strategy
+### Machine-payment rail strategy — two valid $AGIALPHA mainnets
 
-Payments are a separate, explicitly authorized adapter, not part of this prototype. Stripe/Tempo MPP (HTTP 402) is an available open agent-payment mechanism; merchant approval and actual supported payout methods for a Canadian seller must be verified. Cloudflare Monetization Gateway is currently closed beta and requires U.S.-based buyers and sellers; do not assume MONTREAL.AI is eligible.
+The supporting payment shell now includes read-only token-transfer verification, private orders, atomic anti-replay checks, and paid-only delivery gates, with all live collection **disabled by default**.
 
-If future authority and eligibility are confirmed, use a well-maintained, provider-supported adapter with payment verification, idempotency, receipts, refunds and accounting. A caller-supplied "paid" flag must never unlock a paid result. Keep public publishing, signing credentials and actual collection disabled until separately qualified.
+- **Ethereum mainnet:** $AGIALPHA at 0xA61a3B3a130a9c20768EEBF97E21515A6046a1fA (chain ID 1, 18 decimals), verified by ERC-20 Transfer log, exact one-time quote amount and finalized block.
+- **Solana mainnet-beta:** $AGIALPHA at tWKHzXd5PRmxTF5cMfJkm2Ua3TcjwNNoSRUqx6Apump (confirmed valid by the owner), verified by finalized transferChecked, authentic mint/treasury token account, original payer, exact order memo and credited balance. Solana decimals are inspected on chain rather than assumed.
+
+Stripe/Tempo MPP can be evaluated as a future primary rail, and token settlement can serve as an independent fallback. The shell does not claim to implement MPP or accept live payments yet. Cloudflare Monetization Gateway is currently closed beta and may not support Canadian merchants.
+
+All merchant receiving wallets, Solana treasury token account, pricing, RPC endpoints and required compliance approvals remain to be supplied and validated. For exact procedures see [OPERATIONS.md](OPERATIONS.md); for economic admission see [ADMISSION.md](ADMISSION.md). [portfolio_metrics.py](portfolio_metrics.py) deliberately keeps chain transfer observations separate from recognized revenue, profitability and company valuation.
 
 ### Scientific admission
 
