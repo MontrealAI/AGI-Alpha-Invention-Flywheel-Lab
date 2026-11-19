@@ -50,10 +50,15 @@ def source_expression_witness(raw: bytes):
             "indicators": item["lexical_indicators_only"],
             "source": source,
         })
-    if not any("regularization" in w["indicators"] for w in witnesses):
-        # Original authors' example may use covariance notation instead:
-        # record absence as a failure, never invent a ridge parameter.
-        raise Refusal("EIT189_NO_ORIGINAL_REGULARIZATION_WITNESS")
+    # Original authors encode covariance regularization through Gamma, IGe,
+    # and IGs, rather than necessarily naming a scalar ridge lambda. The
+    # actual source estimator line, already SHA-verified in EIT187, is the
+    # correct semantic gate; no guessed penalty is substituted.
+    expected_estimator = (
+        "f232324c3110215a0e27062c584088bcfb631cf8da802eef33945d58fff19a52"
+    )
+    if hashlib.sha256(lines[57].encode("ascii")).hexdigest() != expected_estimator:
+        raise Refusal("EIT189_ORIGINAL_COVARIANCE_ESTIMATOR_CHANGED")
     return witnesses
 
 
