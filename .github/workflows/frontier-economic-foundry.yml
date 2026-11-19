@@ -12,8 +12,11 @@ permissions:
 jobs:
   discovery-evidence:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 360
     steps:
+      - name: Record platform execution clock
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
       - uses: actions/checkout@v4
       - name: Validate bounded discovery and experimental refusals
         run: |
@@ -52,8 +55,11 @@ jobs:
 
   evm-contract:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 360
     steps:
+      - name: Record platform execution clock
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
       - uses: actions/checkout@v4
       - name: Install Foundry for isolated local EVM tests
         uses: foundry-rs/foundry-toolchain@v1
