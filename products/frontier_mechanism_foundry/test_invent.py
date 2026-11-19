@@ -92,8 +92,7 @@ class MechanismFoundryTests(unittest.TestCase):
             case["seller_outside"] = 1
         result = run(a)
         self.assertEqual(result["decision"], "HOLD_NO_DEPLOY_NO_REVENUE")
-        self.assertTrue(all(c["candidate"]["fee_bps"] <= 200
-                            for c in candidates()))
+        self.assertTrue(all(c["fee_bps"] <= 200 for c in candidates()))
 
     def test_exact_balance_of_modeled_participant_utilities(self):
         case = brief()["development"][0]
