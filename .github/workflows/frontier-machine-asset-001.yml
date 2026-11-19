@@ -18,7 +18,7 @@ jobs:
       - name: Check Python and run complete offline tests
         run: |
           python3 --version
-          python3 -m unittest discover -s products/frontier_machine_asset_001 -p test_gate.py -v
+          python3 -m unittest discover -s products/frontier_machine_asset_001 -p 'test_*.py' -v
       - name: Smoke test agent-native stdin interface
         run: |
           python3 products/frontier_machine_asset_001/gate.py < products/frontier_machine_asset_001/example.json > /tmp/machine-asset-001-response.json
@@ -42,4 +42,18 @@ jobs:
           assert result["receipt"]["accepted"]
           assert result["receipt"]["verification"].startswith("independent candidate")
           print("INDEPENDENT_CANDIDATE_REPLAY_PASS; NO EXTERNAL CERTIFICATION")
+          PY
+      - name: Confirm production payment claims are disabled by default
+        run: |
+          python3 products/frontier_machine_asset_001/market.py --state /tmp/frontier_omega_market_test.sqlite3 > /tmp/frontier_omega_market_status.json
+          python3 - <<'PY'
+          import json
+          with open("/tmp/frontier_omega_market_status.json", encoding="utf-8") as f:
+              raw=f.read()
+          result=json.loads(raw[raw.find("{"):])
+          assert result["quotes_enabled"] is False
+          assert result["commercial_demand"] == "NOT_ESTABLISHED"
+          assert result["accepted_tokens"]["ethereum"]["chain_id"] == 1
+          assert result["accepted_tokens"]["solana"]["mint"] == "tWKHzXd5PRmxTF5cMfJkm2Ua3TcjwNNoSRUqx6Apump"
+          print("LIVE_COLLECTION_DISABLED_BY_DEFAULT")
           PY
