@@ -69,8 +69,10 @@ def parse_appledouble(raw):
     magic, version, filler, count = HEADER.unpack_from(raw)
     if magic != APPLEDOUBLE_MAGIC or version != APPLEDOUBLE_VERSION:
         raise Refusal("EIT192_NOT_APPLEDOUBLE_V2")
-    if filler != b"\x00" * 16:
-        raise Refusal("EIT192_APPLEDOUBLE_FILLER_NONZERO")
+    # Documented v2 sidecars occur with NUL filler or macOS ZIP filesystem text.
+    # Accept exactly the two known 16-byte fields, never arbitrary contents.
+    if filler not in (b"\x00" * 16, b"Mac OS X        "):
+        raise Refusal("EIT192_APPLEDOUBLE_FILLER_UNKNOWN")
     if count < 1 or count > MAX_DESCRIPTORS:
         raise Refusal("EIT192_DESCRIPTOR_COUNT_INVALID")
     table_end = HEADER.size + count * DESCRIPTOR.size
