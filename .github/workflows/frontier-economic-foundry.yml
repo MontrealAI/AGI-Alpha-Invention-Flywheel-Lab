@@ -34,6 +34,22 @@ jobs:
           print("REPRODUCIBLE_FINITE_DISCOVERY_ONLY; NO ACTUAL REVENUE")
           PY
 
+      - name: Verify local research proposals and persistent non-revenue register
+        run: |
+          cd products/frontier_mechanism_foundry
+          python3 discovery_agent.py --signals examples/frontier-signals.json --offline-proposals examples/offline-proposals.json --out /tmp/frontier-ideas.json
+          python3 registry.py --register /tmp/frontier-omega-research.jsonl --result /tmp/frontier-economic-foundry-result.json
+          python3 registry.py --register /tmp/frontier-omega-research.jsonl
+          python3 - <<'PY'
+          import json
+          x=json.load(open("/tmp/frontier-ideas.json", encoding="utf-8"))
+          assert x["claim_status"] == "UNVERIFIED_RESEARCH_HYPOTHESES"
+          assert x["actual_collected_revenue"] == "ZERO_OBSERVED"
+          assert x["onchain_deployment"] == "NONE"
+          assert len(x["proposals"]) == 3
+          print("THREE_HYPOTHESES_PRESERVED; NO FUNDS OR DEPLOYMENT")
+          PY
+
   evm-contract:
     runs-on: ubuntu-latest
     timeout-minutes: 20
