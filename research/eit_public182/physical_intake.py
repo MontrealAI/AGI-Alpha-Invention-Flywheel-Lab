@@ -143,6 +143,10 @@ def inventory(archive: ZipFile, working: Path) -> list:
                     output.write(chunk)
             if size != info.file_size:
                 raise PhysicalIntakeRefusal("MEASUREMENT_LENGTH_CHANGED")
+            if not h5py.is_hdf5(temporary):
+                with temporary.open("rb") as handle:
+                    prefix = handle.read(16).hex()
+                raise PhysicalIntakeRefusal("NON_HDF5_MATLAB_MEMBER:" + info.filename + ":prefix=" + prefix)
             with h5py.File(temporary, "r") as mat:
                 if "currents_matrix" not in mat or "voltages_matrix" not in mat:
                     raise PhysicalIntakeRefusal("MISSING_REQUIRED_MATLAB_MATRIX:" + info.filename)
