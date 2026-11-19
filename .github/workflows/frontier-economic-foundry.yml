@@ -1,0 +1,50 @@
+name: FRONTIER OMEGA economic mechanism foundry
+on:
+  pull_request:
+    paths:
+      - "products/frontier_mechanism_foundry/**"
+      - ".github/workflows/frontier-economic-foundry.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  discovery-evidence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate bounded discovery and experimental refusals
+        run: |
+          cd products/frontier_mechanism_foundry
+          python3 -m unittest discover -s . -p 'test_*.py' -v
+      - name: Reproduce two different synthetic missions and fresh successor comparison
+        run: |
+          cd products/frontier_mechanism_foundry
+          python3 invent.py --brief examples/brief-agent.json --successor examples/brief-science.json --out /tmp/frontier-economic-foundry-result.json
+          python3 - <<'PY'
+          import json
+          x=json.load(open("/tmp/frontier-economic-foundry-result.json", encoding="utf-8"))
+          assert x["decision"] == "HOLD_NO_DEPLOY_NO_REVENUE"
+          assert x["grammar"]["candidate_count"] == 25
+          assert x["evidence"]["real_collected_revenue"] == "NOT_OBSERVED"
+          assert x["successor_comparison"]["claimed_causal_compounding"] == "NOT_ESTABLISHED"
+          assert x["build"].get("deployment_status") != "DEPLOYED"
+          print("REPRODUCIBLE_FINITE_DISCOVERY_ONLY; NO ACTUAL REVENUE")
+          PY
+
+  evm-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Foundry for isolated local EVM tests
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: stable
+      - name: Compile and run adversarial Ethereum escrow tests
+        run: |
+          cd products/frontier_mechanism_foundry
+          forge --version
+          forge test -vv
