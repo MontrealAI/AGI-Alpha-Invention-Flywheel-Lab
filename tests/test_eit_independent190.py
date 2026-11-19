@@ -100,6 +100,15 @@ class Eit190OfflineTests(unittest.TestCase):
         with self.assertRaisesRegex(Refusal, "UNKNOWN_MAT"):
             mat_variables(b"not a matlab source")
 
+    def test_supported_legacy_matlab4_source_is_validated_not_guessed(self):
+        f = io.BytesIO()
+        savemat(f, {"measured": np.array([[1., 2.], [3., 4.]])}, format="4")
+        original = f.getvalue()
+        self.assertFalse(original.startswith(b"MATLAB 5.0 MAT-file"))
+        report = mat_variables(original)
+        self.assertEqual(report["format"], "MATLAB4-scipy-validated")
+        self.assertEqual(report["variables"][0]["shape"], [2, 2])
+
     def test_all_four_synthetic_chest_states_inventoried(self):
         with tempfile.TemporaryDirectory() as d:
             p = Path(d)/"mock.zip"
