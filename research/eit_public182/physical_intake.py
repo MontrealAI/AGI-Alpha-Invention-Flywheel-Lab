@@ -31,6 +31,11 @@ class PhysicalIntakeRefusal(ValueError):
     pass
 
 
+def is_appledouble_member(name: str) -> bool:
+    parts = PurePosixPath(name).parts
+    return bool(parts) and (parts[0] == "__MACOSX" or parts[-1].startswith("._"))
+
+
 def check_names(archive: ZipFile):
     infos = archive.infolist()
     if not infos or len(infos) > MAX_FILES:
@@ -55,7 +60,7 @@ def check_names(archive: ZipFile):
             raise PhysicalIntakeRefusal("UNBOUNDED_ZIP_EXPANSION")
         if not info.is_dir() and name.lower().endswith(".mat") and any(p.lower() == "data" for p in parts[:-1]):
             basename = parts[-1].lower()
-            if not basename.startswith(("mesh_", "j_")):
+            if not basename.startswith(("mesh_", "j_")) and not is_appledouble_member(name):
                 selected.append(info)
     if len(selected) < 2:
         raise PhysicalIntakeRefusal("INSUFFICIENT_REGISTERED_MEASUREMENTS")
@@ -175,6 +180,7 @@ def main(argv=None):
         archive_path = working / ARCHIVE_NAME
         archive_receipt = fetch_verified(archive_path)
         with ZipFile(archive_path) as z:
+            excluded_sidecars = sorted(i.filename for i in z.infolist() if is_appledouble_member(i.filename))
             measures = inventory(z, working)
         receipt = {
             "schema": "blue-sky182-physical-archive-byte-inventory-v1",
@@ -185,6 +191,7 @@ def main(argv=None):
             "measured_cases_count": len(measures),
             "all_eligible_measurement_members_included": True,
             "measurements": measures,
+            "excluded_nonmeasurement_appledouble_members": excluded_sidecars,
             "reconstruction_performed": False,
             "physical_new_observability_or_clinical_utility_proved": False,
             "commercial_revenue_or_profit": None,

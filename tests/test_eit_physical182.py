@@ -29,6 +29,14 @@ class PhysicalZipGateTests(unittest.TestCase):
         self.assertEqual([i.filename for i in module.check_names(z)],
                          ["AgarCylinderPhantom/Data/01_a.mat", "AgarCylinderPhantom/Data/03_b.mat"])
 
+    def test_real_measurement_cases_remain_while_appledouble_is_excluded(self):
+        z = makezip(["__MACOSX/AgarCylinderPhantom/Data/._1o0_NoInc.mat",
+                     "AgarCylinderPhantom/Data/1o0_NoInc.mat",
+                     "AgarCylinderPhantom/Data/2o0_WithInc.mat"])
+        self.assertTrue(module.is_appledouble_member("__MACOSX/AgarCylinderPhantom/Data/._1o0_NoInc.mat"))
+        self.assertEqual([i.filename for i in module.check_names(z)],
+                         ["AgarCylinderPhantom/Data/1o0_NoInc.mat", "AgarCylinderPhantom/Data/2o0_WithInc.mat"])
+
     def test_duplicate_casefold_zip_name_refused(self):
         z = makezip(["AgarCylinderPhantom/Data/A.mat", "agarcylinderphantom/Data/a.MAT"])
         with self.assertRaisesRegex(module.PhysicalIntakeRefusal, "DUPLICATE_ZIP_MEMBER"):
