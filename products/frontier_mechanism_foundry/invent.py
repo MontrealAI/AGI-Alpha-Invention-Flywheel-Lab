@@ -187,6 +187,15 @@ def value(case, mechanism, fixed_cost_per_case=Fraction(0)):
 
 
 def aggregate(cases, mechanism, construction_cost):
+    if mechanism["kind"] == "no_entry":
+        return {
+            "candidate": mechanism, "cases": len(cases), "transactions": 0,
+            "owner_profit_exact": "0", "buyer_utility_exact": "0",
+            "seller_utility_exact": "0", "all_cases_accept": False,
+            "per_case": [{"id": c["id"], "accepted": False,
+                          "reason": "NO_ENTRY"} for c in cases],
+            "source": "AUTHORED_SYNTHETIC_MODEL",
+        }
     fixed = Fraction(construction_cost, len(cases))
     results = [value(case, mechanism, fixed) for case in cases]
     return {
@@ -245,20 +254,26 @@ def compile_plan(candidate):
 def run(brief):
     validate_brief(brief)
     options = candidates()
+    no_entry = {"kind": "no_entry", "verifier": "none", "fee_bps": 0,
+                "expiry_days": 0, "deployable": False}
     training = [aggregate(brief["development"], c, brief["fixed_construction_cost"])
                 for c in options]
+    training.append(aggregate(brief["development"], no_entry, 0))
     # This is a constrained model optimization, not a universal economic optimum.
     best = max(training, key=ranking_key)
     baseline = [r for r in training if r["candidate"]["kind"] == "direct"
+                or r["candidate"]["kind"] == "no_entry"
                 or (r["candidate"]["kind"] == "buyer_escrow"
                     and r["candidate"]["fee_bps"] == 0)]
     # Frozen holdout evaluated AFTER selection, no opportunistic reranking.
     held = aggregate(brief["holdout"], best["candidate"],
-                     brief["fixed_construction_cost"])
+                     0 if best["candidate"]["kind"] == "no_entry"
+                     else brief["fixed_construction_cost"])
     best_control = max(baseline, key=ranking_key)
     controls_held = [
         aggregate(brief["holdout"], r["candidate"],
-                  brief["fixed_construction_cost"]) for r in baseline
+                  0 if r["candidate"]["kind"] == "no_entry"
+                  else brief["fixed_construction_cost"]) for r in baseline
     ]
     strongest_holdout_control = max(controls_held, key=ranking_key)
     has_superiority = (
@@ -277,7 +292,14 @@ def run(brief):
         "development_strongest_baseline": best_control,
         "holdout_selected": held,
         "holdout_strongest_baseline": strongest_holdout_control,
-        "holdout_superiority_within_authored_model": has_superiority,
+        "holdout_owner_return_above_named_controls_in_authored_model": has_superiority,
+        "free_equivalent_dominates_if_adoptable": (
+            best["candidate"]["fee_bps"] > 0
+            and best["candidate"]["kind"] in ("buyer_escrow", "independent_escrow")),
+        "free_equivalent_note": (
+            "An equivalent no-fee deployable instance can offer the same acceptance "
+            "and refund functions; no switching/network effect has been demonstrated."
+        ),
         "build": compile_plan(best["candidate"]),
         "evidence": {
             "enabler_source": brief["enabler"]["source"],
@@ -305,7 +327,9 @@ def compare_successor(first, second):
     # against an equally endowed fresh exhaustive search, not a crippled reset.
     validate_brief(second)
     full = run(second)
-    reuse = aggregate(second["holdout"], reused, second["fixed_construction_cost"])
+    reuse = aggregate(second["holdout"], reused,
+                      0 if reused["kind"] == "no_entry"
+                      else second["fixed_construction_cost"])
     return {
         "first_mission": first["mission_id"], "successor_mission": second["mission_id"],
         "retained_candidate": reused, "retained_on_fresh_cases": reuse,
