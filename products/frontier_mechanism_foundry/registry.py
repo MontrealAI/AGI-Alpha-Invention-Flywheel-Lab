@@ -7,6 +7,7 @@ No automatic promotion to commercial, production, scientific or IP status.
 from __future__ import annotations
 
 import argparse
+import fcntl
 import hashlib
 import json
 import os
@@ -65,37 +66,41 @@ def append_result(path, result):
     require(result.get("decision") == "HOLD_NO_DEPLOY_NO_REVENUE"
             and result.get("evidence", {}).get("real_collected_revenue") == "NOT_OBSERVED",
             "RESULT_MAY_NOT_CLAIM_REVENUE")
-    # Use create-only on an initially empty register, then explicit append.
-    # Single local writer; do not use network drives or simultaneous writers.
     target = Path(path)
     target.parent.mkdir(parents=True, exist_ok=True, mode=0o700)
     if target.is_symlink():
         raise Refused("REGISTRY_SYMLINK_NOT_PERMITTED")
-    history = verify_records(target)
-    require(result["mission_id"] not in {x["mission_id"] for x in history},
-            "MISSION_ALREADY_REGISTERED")
-    previous_hash = _record_hash(history[-1]) if history else "0" * 64
-    # Each record stores its own payload hash, not the preceding content hash.
-    # The latter is recovered from the raw envelope.
-    if history:
-        last_line = target.read_text(encoding="utf-8").splitlines()[-1]
-        previous_hash = strict_json(last_line)["hash"]
-    payload = {
-        "schema": REGISTRY_SCHEMA, "index": len(history) + 1,
-        "previous_hash": previous_hash, "mission_id": result["mission_id"],
-        "result_digest": digest(result), "decision": result["decision"],
-        "reported_revenue": "NOT_OBSERVED",
-        "fresh_successor": result.get("successor_comparison", {}).get("successor_mission"),
-        "scope": "RESEARCH_ONLY",
-    }
-    envelope = {"payload": payload, "hash": _record_hash(payload)}
-    # Simpler than a database, but not safe against two simultaneous writers.
-    # Single-writer host is a mandatory operational precondition.
-    with target.open("a", encoding="utf-8") as handle:
-        handle.write(json.dumps(envelope, sort_keys=True, separators=(",", ":")) + "\n")
-        handle.flush()
-        os.fsync(handle.fileno())
-    return envelope
+    # Exclusive advisory lock protects cooperating writers; the file must be
+    # local and under the operator's custody. It is not hostile-admin-proof.
+    with target.open("a+", encoding="utf-8") as handle:
+        fcntl.flock(handle.fileno(), fcntl.LOCK_EX)
+        try:
+            os.chmod(target, 0o600)
+            history = verify_records(target)
+            require(result["mission_id"] not in
+                    {x["mission_id"] for x in history}, "MISSION_ALREADY_REGISTERED")
+            previous_hash = "0" * 64
+            if history:
+                handle.seek(0)
+                previous_hash = strict_json(
+                    handle.read().splitlines()[-1]
+                )["hash"]
+            payload = {
+                "schema": REGISTRY_SCHEMA, "index": len(history) + 1,
+                "previous_hash": previous_hash, "mission_id": result["mission_id"],
+                "result_digest": digest(result), "decision": result["decision"],
+                "reported_revenue": "NOT_OBSERVED",
+                "fresh_successor": result.get("successor_comparison", {}).get("successor_mission"),
+                "scope": "RESEARCH_ONLY",
+            }
+            envelope = {"payload": payload, "hash": _record_hash(payload)}
+            handle.seek(0, os.SEEK_END)
+            handle.write(json.dumps(envelope, sort_keys=True, separators=(",", ":")) + "\n")
+            handle.flush()
+            os.fsync(handle.fileno())
+            return envelope
+        finally:
+            fcntl.flock(handle.fileno(), fcntl.LOCK_UN)
 
 
 def main():
