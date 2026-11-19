@@ -147,7 +147,7 @@ def mat_variables(raw: bytes):
             {"name": str(name), "shape": [int(x) for x in shape], "type": str(tp)}
             for name, shape, tp in objects
         ]}
-    if raw.startswith(b"\\x89HDF\\r\\n\\x1a\\n".encode("latin1")):
+    if raw.startswith(bytes((0x89, 0x48, 0x44, 0x46, 0x0d, 0x0a, 0x1a, 0x0a))):
         import h5py
         entries = []
         try:
