@@ -44,8 +44,66 @@ def candidate_names(archive):
     return sorted(jacobians), sorted(scripts)
 
 
+def _mat5_inventory(raw):
+    """Conservative dense/sparse MATLAB v5/7.2 numerical source inventory."""
+    import numpy as np
+    from scipy.io import loadmat, whosmat
+    from scipy.sparse import issparse
+    if not raw.startswith(b"MATLAB 5.0 MAT-file"):
+        raise Refusal("UNRECOGNIZED_JACOBIAN_CONTAINER")
+    try:
+        header = whosmat(io.BytesIO(raw))
+        if not header:
+            raise Refusal("ORIGINAL_JACOBIAN_HAS_NO_DATASETS")
+        n = 0
+        for name, shape, kind in header:
+            k = math.prod(shape)
+            n += k
+            if k > MAX_DATASET_CELLS or n > MAX_DATASET_CELLS:
+                raise Refusal("JACOBIAN_DATASET_TOO_LARGE")
+        arrays = loadmat(io.BytesIO(raw), squeeze_me=False,
+                         struct_as_record=True, verify_compressed_data_integrity=True)
+    except (ValueError, OSError, TypeError, IndexError) as exc:
+        raise Refusal("ORIGINAL_MAT5_CONTAINER_INVALID") from exc
+    datasets = []
+    for name in sorted(k for k in arrays if not k.startswith("__")):
+        obj = arrays[name]
+        if issparse(obj):
+            finite = np.isfinite(obj.data).all()
+            cells = math.prod(obj.shape)
+            dtype = str(obj.dtype)
+            shape = list(obj.shape)
+            kind = obj.dtype.kind
+            nnz = int(obj.nnz)
+        else:
+            a = np.asarray(obj)
+            cells = a.size
+            dtype = str(a.dtype)
+            shape = list(a.shape)
+            kind = a.dtype.kind
+            if kind not in "fiucb":
+                raise Refusal("UNSUPPORTED_NESTED_MAT5_JACOBIAN")
+            finite = np.isfinite(a).all()
+            nnz = None
+        if kind not in "fiucb" or not finite:
+            raise Refusal("UNSUPPORTED_OR_NONFINITE_MAT5_JACOBIAN")
+        if cells > MAX_DATASET_CELLS:
+            raise Refusal("JACOBIAN_DATASET_TOO_LARGE")
+        datasets.append({
+            "path": "/" + name, "shape": shape, "dtype": dtype,
+            "cells": int(cells), "container": "MATLAB5",
+            "sparse_nonzero_elements": nnz,
+            "has_1264_measurement_dimension": 1264 in shape,
+        })
+    if not datasets:
+        raise Refusal("ORIGINAL_JACOBIAN_HAS_NO_DATASETS")
+    return datasets
+
+
 def dataset_inventory(raw):
-    """Inventory all numeric HDF5 arrays without guessing the original row mapping."""
+    """Source-typed HDF5 or MATLAB v5 Jacobian; never invent row correspondence."""
+    if raw.startswith(b"MATLAB 5.0 MAT-file"):
+        return _mat5_inventory(raw)
     import h5py
     import numpy as np
     if len(raw) > MAX_FILE:
