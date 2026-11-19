@@ -53,3 +53,16 @@ def asset_economics(database):
         "valuation": "NOT_ESTABLISHED",
         "evidence": "READ_ONLY_LOCAL_LEDGER; no independent financial audit",
     }
+
+
+def main():
+    import argparse
+    import json
+    p = argparse.ArgumentParser(description="Private, read-only asset evidence summary")
+    p.add_argument("--state", required=True)
+    args = p.parse_args()
+    print(json.dumps(asset_economics(args.state), indent=2, sort_keys=True))
+
+
+if __name__ == "__main__":
+    main()
