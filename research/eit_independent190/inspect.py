@@ -198,7 +198,7 @@ def inventory_archive(path: Path, sha256: str, size: int, md5: str):
                     encoding_scope = "nonUTF8-source; semantics-unverified"
                 item.update({"format": "MATLAB-source-bytes-not-executed",
                              "encoding_scope": encoding_scope,
-                             "raw_newline_count": raw.count(b"\\n")})
+                             "raw_newline_count": raw.count(bytes((10,)))})
             members.append(item)
         if z.testzip() is not None:
             raise Refusal("EIT190_ZIP_CRC_VALIDATION_FAILED")
