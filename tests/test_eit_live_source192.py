@@ -100,7 +100,8 @@ class Source192LiveTests(unittest.TestCase):
                 qualify_archive(src, historical_member=MEMBER,
                                 historical_sha=hashlib.sha256(raw).hexdigest(),
                                 historical_header=raw[:16].hex())
-            self.assertIn("Bad CRC", str(error.exception))
+            self.assertIsInstance(error.exception, Refusal)
+            self.assertIn("EIT192_ZIP_CRC_FAILURE", str(error.exception))
 
     def test_bounded_uncompressed_member_with_signed_source_unchanged(self):
         with tempfile.TemporaryDirectory() as temp:
