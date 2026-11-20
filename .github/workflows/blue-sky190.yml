@@ -1,0 +1,44 @@
+name: Blue Sky 190 exact published calibration contradiction witness
+on:
+  pull_request:
+    paths:
+      - 'research/blue_sky190/**'
+      - 'tests/test_blue_sky190.py'
+      - 'campaign/blue-sky-190/**'
+      - '.github/workflows/blue-sky190.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: blue-sky190-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
+jobs:
+  source-bound-paired-calibration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record actual execution start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Frozen synthetic checks and all published fixture rows
+        run: python3 -m unittest -v tests.test_blue_sky190
+      - name: Publish one create-only source-bound read-only diagnostic
+        shell: bash
+        run: |
+          python3 -m research.blue_sky190.calibration_contract --output "$RUNNER_TEMP/BLUE_SKY190_RESULT.json"
+          cat "$RUNNER_TEMP/BLUE_SKY190_RESULT.json"
+      - name: Upload compact verification report, including negative verdict
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: blue-sky190-report-${{ github.run_id }}
+          path: ${{ runner.temp }}/BLUE_SKY190_RESULT.json
+          if-no-files-found: warn
+          retention-days: 7
