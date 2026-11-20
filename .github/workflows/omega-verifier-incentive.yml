@@ -1,0 +1,81 @@
+name: Omega verifier incentive counterexample (simulated, no commerce)
+on:
+  pull_request:
+    paths:
+      - "campaign/omega-verifier-incentives-20261119/**"
+      - "products/frontier_mechanism_foundry/verifier_incentive.py"
+      - "products/frontier_mechanism_foundry/test_verifier_incentive.py"
+      - "products/frontier_mechanism_foundry/test/FrontierVerifierIncentive.t.sol"
+      - ".github/workflows/omega-verifier-incentive.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+
+jobs:
+  finite-game-control:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record standard platform clock
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Refuse changed owner model, contract or original EVM control
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git hash-object products/frontier_mechanism_foundry/invent.py)" = "9f86912d5bdbd724cef6783ae46540968a380064"
+          test "$(git hash-object products/frontier_mechanism_foundry/contracts/FrontierProofExchange.sol)" = "ef6fc9f03a3fc284df7e63d3ad1b20de1bfd2f83"
+          test "$(git hash-object products/frontier_mechanism_foundry/test/FrontierProofExchange.t.sol)" = "56ce95b564f72fde5f80df881c8339a13b3f2730"
+          echo "ORIGINAL_OWNER_SOURCE_PINNED"
+      - name: Frozen adversarial and strong-control economic tests
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s products/frontier_mechanism_foundry -p 'test_verifier_incentive.py' -v
+          python3 products/frontier_mechanism_foundry/verifier_incentive.py > "$RUNNER_TEMP/verifier-incentive-result.json"
+          python3 -c 'import json,sys; a=json.load(open(sys.argv[1])); assert a["actual_revenue"]=="NONE_OBSERVED"; assert a["seller_best_response_before_entry"]=="NO_ENTRY"; print("FINITE_GAME_REFUSAL_AND_CONTROLS_PRESERVED")' "$RUNNER_TEMP/verifier-incentive-result.json"
+          sha256sum "$RUNNER_TEMP/verifier-incentive-result.json"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: omega-verifier-game-${{ github.sha }}-attempt-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/verifier-incentive-result.json
+          if-no-files-found: warn
+
+  local-evm-proof:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record standard platform clock
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Refuse original contract or harness drift
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git hash-object products/frontier_mechanism_foundry/contracts/FrontierProofExchange.sol)" = "ef6fc9f03a3fc284df7e63d3ad1b20de1bfd2f83"
+          test "$(git hash-object products/frontier_mechanism_foundry/test/FrontierProofExchange.t.sol)" = "56ce95b564f72fde5f80df881c8339a13b3f2730"
+      - uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: stable
+      - name: Execute all owner and independent local Ethereum cases
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd products/frontier_mechanism_foundry
+          forge --version
+          forge test -vv | tee "$RUNNER_TEMP/omega-verifier-forge.log"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: omega-verifier-evm-${{ github.sha }}-attempt-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/omega-verifier-forge.log
+          if-no-files-found: warn
