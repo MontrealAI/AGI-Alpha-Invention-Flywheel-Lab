@@ -1,0 +1,71 @@
+name: P199 original-source A2A version-negotiation negative witness
+on:
+  push:
+    branches: [review/a2a-version-negotiation199-20261120]
+    paths:
+      - 'campaign/a2a-version199/**'
+      - '.github/workflows/a2a-version199.yml'
+  pull_request:
+    paths:
+      - 'campaign/a2a-version199/**'
+      - '.github/workflows/a2a-version199.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-http-source-only-witness:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Record actual platform start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - name: Checkout independent preregistered witness
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Checkout exact unchanged A2A198 original
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+          ref: dec5cb10ce2ac3eb1ccb0de383a21ab8d063a360
+          path: source-pr498
+      - name: Checkout exact unchanged original asset gate
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+          ref: b333a5f4ac9495b9c8259170597239a1792bf1ac
+          path: source-pr484
+      - name: Verify immutable source and run four frozen HTTP observations
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/a2a199"
+          test "$(git -C source-pr498 rev-parse HEAD)" = dec5cb10ce2ac3eb1ccb0de383a21ab8d063a360
+          test "$(git -C source-pr498 hash-object campaign/a2a-interop198/a2a_adapter.py)" = 9cd62b61fb84732511350a5aaa5820594b19f7d1
+          test "$(git -C source-pr484 rev-parse HEAD)" = b333a5f4ac9495b9c8259170597239a1792bf1ac
+          test "$(git -C source-pr484 hash-object products/frontier_machine_asset_001/gate.py)" = 115cf8531df65a66dcc679e2d35cb03394cea11a
+          test "$(git hash-object campaign/a2a-version199/PREREGISTRATION.md)" = f6d45b1c5727a0d0a149dfc8af7fe6de1c5dfae0
+          export P199_ADAPTER="$GITHUB_WORKSPACE/source-pr498/campaign/a2a-interop198/a2a_adapter.py"
+          export P199_GATE="$GITHUB_WORKSPACE/source-pr484/products/frontier_machine_asset_001/gate.py"
+          python3 --version | tee "$RUNNER_TEMP/a2a199/PYTHON.txt"
+          sha256sum "$P199_ADAPTER" "$P199_GATE" campaign/a2a-version199/{PREREGISTRATION.md,test_version_witness.py} > "$RUNNER_TEMP/a2a199/SOURCES.sha256"
+          /usr/bin/time -v -o "$RUNNER_TEMP/a2a199/RESOURCE.txt" \
+            python3 -m unittest discover -v -s campaign/a2a-version199 -p test_version_witness.py \
+            2>&1 | tee "$RUNNER_TEMP/a2a199/TESTS.txt"
+          grep -q 'Ran 4 tests' "$RUNNER_TEMP/a2a199/TESTS.txt"
+          grep -q '^OK$' "$RUNNER_TEMP/a2a199/TESTS.txt"
+          for v in V1 V2_NEGATIVE V3_NEGATIVE V4_NEGATIVE; do
+            grep -q "P199_${v}: ORIGINAL_ACCEPTED_V1_SEMANTICS" "$RUNNER_TEMP/a2a199/TESTS.txt"
+          done
+          sha256sum "$RUNNER_TEMP/a2a199/"{TESTS.txt,RESOURCE.txt,PYTHON.txt} > "$RUNNER_TEMP/a2a199/PROOFS.sha256"
+      - name: Preserve immutable negative results including failed attempts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: a2a199-source-pinned-version-negotiation
+          path: ${{ runner.temp }}/a2a199/
+          if-no-files-found: warn
+          retention-days: 30
