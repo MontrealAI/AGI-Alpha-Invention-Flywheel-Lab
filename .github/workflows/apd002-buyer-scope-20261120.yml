@@ -1,0 +1,50 @@
+name: APD002 buyer-scoped job identity independent research
+on:
+  push:
+    branches:
+      - review/apd002-buyer-scope-20261120
+  pull_request:
+    paths:
+      - "campaign/atomic-proof-delivery-20261119/**"
+      - "campaign/apd002-buyer-scope-20261120/**"
+      - ".github/workflows/apd002-buyer-scope-20261120.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  original-and-reference:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Mark actual execution window
+        run: |
+          echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+          date -u
+      - uses: actions/checkout@v4
+      - name: Verify exact unmodified original APD001 source
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git hash-object campaign/atomic-proof-delivery-20261119/contracts/AtomicThreeColorExchange.sol)" = "d9b4b0a736b2d276e16220954203667db63c24cf"
+          test -f campaign/apd002-buyer-scope-20261120/PREREGISTRATION.md
+      - name: Install Foundry local EVM tooling
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: stable
+      - name: Original denial and independent scoped reference tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          forge --version
+          cd campaign/atomic-proof-delivery-20261119
+          /usr/bin/time -v forge test -vv --gas-report 2>&1 | tee "$RUNNER_TEMP/apd002-foundry.log"
+          cp "$RUNNER_TEMP/apd002-foundry.log" "$GITHUB_WORKSPACE/apd002-foundry.log"
+      - name: Preserve execution and failure logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: apd002-source-pinned-logs
+          path: apd002-foundry.log
+          if-no-files-found: warn
