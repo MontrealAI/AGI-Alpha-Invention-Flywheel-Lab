@@ -1,0 +1,20 @@
+# A2A198 preregistration — one real third-party agent call, not a new product claim
+
+**Frozen before implementation/test:** 2026-11-20; base current qualified main `f0987aa48d5c9136b28540f54eabf5367e63bbe6`; independently owned reference asset [PR484 at `b333a5f4ac9495b9c8259170597239a1792bf1ac`](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/pull/484). The original asset's `products/frontier_machine_asset_001/gate.py` is read at **exact immutable Git SHA** by hosted CI; never merge or modify its owner branch. Original Python `gate.run` is the strong, free direct-call incumbent.
+
+## Decision being tested
+The 12 November [Open Agentic Web Challenge announcement](https://www.cognizant.com/us/en/ai-lab/blog/open-agentic-web-challenge) and [official rules](https://cognizant-agenticweb.devpost.com/rules) are public *developer interest*, not paying demand. The [A2A v1 protocol](https://a2a-protocol.org/v1.0.0/specification/) specifies a `/.well-known/agent-card.json` discovery document, `SendMessage`, `ROLE_USER`/`ROLE_AGENT`, and data parts without the older `kind` discriminator. An opt-in **loopback-only**, research-only, no-payment adapter might make the existing asset callable by an independent A2A client. This tests an engineering missing interface, not an economic missing means or competition win.
+
+### Four complete alternatives, no outcome assumed
+1. **Current direct Python/HTTP:** strong incumbent, requires no A2A bridge, lower complexity for preconfigured clients; preserve full output and acceptance parity.
+2. **A2A v1 opt-in adapter:** portable discovery and one synchronous, bounded structured-data `SendMessage` on loopback, using exactly the original source/checker; no claim of signatures, certified provenance or live settlement.
+3. **External managed agent interoperability/distribution:** standards/registries and commercial platforms exist; cannot assume operator access, buyer consent, contracts, pricing or service advantage. No external connection under this mandate.
+4. **No adapter/no entry/no deploy:** retain cash and the original candidate's `NOT ADMITTED` status.
+
+### Frozen executable checks and stop rule
+A1 required v1 card with honest `research_only`, no live payment, no falsely advertised streaming/certification; A2 real loopback GET discovery; A3 A2A direct `SendMessage` acceptance with actual independent existing `gate.run`; A4 exact output/receipt parity with direct incumbent; A5 duplicate JSON keys/nonfinite data refused; A6 old `kind` or v0.3 role refused, not silently accepted; A7 wrong method / malformed RPC rejected; A8 multiple parts, task continuation or unsupported media refused; A9 oversize bodies rejected without fetching; A10 absent/malformed/unsupported contract refused without payload leakage; A11 repeated identical message is deterministic engineering reproduction, not distinct payment/commerce; A12 operator listening remains loopback-only and credentials/live payment are never invoked. Tests use original pinned gate source, not copied or weakened evaluator. **Any failed registered check remains FAILED**; repair with a new explicit source revision and preserve first trace.
+
+Success requires all checks plus source-matched Actions receipts; no real A2A deployment, external buyer, actual sale, earned cash, commercial edge or discovered innovation is claimed. A direct HTTP tie is the expected competent control. If no corroborating advantage emerges, retain as an optional technical interoperability tool and **do not admit as flagship, charge, bid or deploy**.
+
+## Ownership/security/cost boundaries
+Additive `campaign/a2a-interop198/` and scoped workflow only; no edits to PR484, PR486, finance-owner PR40, any ledgers, keys, queues, historical evidence, existing main/release or other owners. Public workflow uses standard ubuntu-latest, six-hour native boundary, no paid APIs, credentials, networked client service, transactions or production deployment. Actual host/model/engineering dollars unknown. Historical failures immutable. US$3B trailing-365 complete-cost profit remains unachieved.

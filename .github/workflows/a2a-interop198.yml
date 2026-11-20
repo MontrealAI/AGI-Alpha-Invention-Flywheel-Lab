@@ -1,0 +1,58 @@
+name: A2A198 source-bound v1 loopback interoperability
+on:
+  push:
+    branches: [research/a2a-interop198-20261120]
+    paths:
+      - 'campaign/a2a-interop198/**'
+      - '.github/workflows/a2a-interop198.yml'
+  pull_request:
+    paths:
+      - 'campaign/a2a-interop198/**'
+      - '.github/workflows/a2a-interop198.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  pinned-v1-transport-and-original-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Record actual platform start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - name: Checkout current experiment
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Checkout exact owner asset source without touching owner branch
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+          ref: b333a5f4ac9495b9c8259170597239a1792bf1ac
+          path: source-pr484
+      - name: Verify immutably pinned producer and run frozen twelve checks
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/a2a198"
+          test "$(git -C source-pr484 rev-parse HEAD)" = b333a5f4ac9495b9c8259170597239a1792bf1ac
+          test "$(git -C source-pr484 hash-object products/frontier_machine_asset_001/gate.py)" = 115cf8531df65a66dcc679e2d35cb03394cea11a
+          export A2A198_GATE="$GITHUB_WORKSPACE/source-pr484/products/frontier_machine_asset_001/gate.py"
+          sha256sum "$A2A198_GATE" campaign/a2a-interop198/a2a_adapter.py campaign/a2a-interop198/test_a2a.py campaign/a2a-interop198/PREREGISTRATION.md > "$RUNNER_TEMP/a2a198/SOURCES.sha256"
+          python3 -V
+          /usr/bin/time -v -o "$RUNNER_TEMP/a2a198/RESOURCE.txt" \
+            python3 -m unittest discover -v -s campaign/a2a-interop198 -p test_a2a.py \
+            2>&1 | tee "$RUNNER_TEMP/a2a198/TESTS.txt"
+          grep -q 'Ran 12 tests' "$RUNNER_TEMP/a2a198/TESTS.txt"
+          grep -q '^OK$' "$RUNNER_TEMP/a2a198/TESTS.txt"
+          sha256sum "$RUNNER_TEMP/a2a198/TESTS.txt" "$RUNNER_TEMP/a2a198/RESOURCE.txt" > "$RUNNER_TEMP/a2a198/PROOFS.sha256"
+      - name: Preserve compact passing or failing original-source receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: a2a198-pinned-original-gate-proof
+          path: ${{ runner.temp }}/a2a198/
+          if-no-files-found: warn
+          retention-days: 30
