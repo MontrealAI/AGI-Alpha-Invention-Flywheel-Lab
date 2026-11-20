@@ -1,0 +1,13 @@
+# P200 — A2A protocol-version repair reference (research only)
+
+This is a **source-pinned positive corrective implementation**, not another defect-only witness. Freeze: [PREREGISTRATION.md](PREREGISTRATION.md) first committed at `407490160ba7b28e4ab16fae25ffa718481d5fb2` before reference or tests were created. The original [PR498](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/pull/498) owner adapter at `dec5cb10` and original [PR484](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/pull/484) gate at `b333a5f4` are checked out unchanged and authenticated by full commit and Git blob identities. The reference wraps the exact original HTTP handler rather than duplicating the checker or changing accounts.
+
+## Executable change and acceptance
+The wrapper reads all `A2A-Version` HTTP header fields **before reading the body or executing original source**; only one unambiguous 1.0 major.minor (optional numeric patch) may dispatch to the original implementation. All absent, empty, legacy, future, repeated, mixed and malformed versions fail with JSON-RPC `VersionNotSupportedError` code **-32009**. Thirteen independently frozen real-loopback HTTP checks cover unchanged original gate parity, patch matching, all refusal groups, unchanged GET card/wrong-path behavior, and the correction's impact on existing tests.
+
+**Important integration note:** PR498's existing `test_A3_actual_loopback_sendmessage_original_gate` uses its shared HTTP helper, which sends only `Content-Type`, not `A2A-Version`. Following a conformant repair that test's expectation must be updated to include `A2A-Version: 1.0`. Do not silently weaken the version gate or retroactively reclassify prior 12 passing owner tests.
+
+## Qualified scope and economics
+This reference proves at most one HTTP protocol negotiation behavior under exact local source. It does **not** prove an A2A fully conformant server, authenticated provenance, third-party SDK interoperability, full buyer delivery, payments, profit, commercial reach, or recursive invention. The original commodity transformation still ties capable direct conventional software with less protocol complexity. No-deploy is the retained decision. **No merge or production activation** is requested. Original owner may selectively adopt this small correction with current-source review and new tests.
+
+Run in a clean checkout with exact pinned original sources available, then provide their explicit paths through `PYTHONPATH` and `A2A200_GATE`; the dedicated workflow fixes them automatically and refuses drift. The workflow uses the standard public-hosted runner, retains failures, collects resource telemetry and publishes a compact proof artifact. Actual total host/model billing remains unknown.
