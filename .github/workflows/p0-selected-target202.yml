@@ -1,0 +1,49 @@
+name: P0-202 selected-source target reference (owner-safe)
+on:
+  pull_request:
+    paths:
+      - "campaign/p0-manifest-target-reference-20261120/**"
+      - ".github/workflows/p0-selected-target202.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: p0-selected-target202-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  exact-source-reference:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Record public platform execution start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ced6c1cb004887dcdafaea59a2976020be649f8e
+          path: owner-pr40
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Install exact canonical local simulation dependencies
+        run: python -m pip install --only-binary=:all: -r requirements-commercial010.txt
+      - name: Check exact original owner blobs and selected target closures (no authority)
+        env:
+          P0202_OWNER_ROOT: ${{ github.workspace }}/owner-pr40
+          P0202_REPORT: ${{ runner.temp }}/p0202-result.json
+        run: python -B campaign/p0-manifest-target-reference-20261120/test_reference.py
+      - name: Preserve compact immutable source-only verdict or failure
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: p0202-reference-${{ github.event.pull_request.head.sha || github.sha }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/p0202-result.json
+          if-no-files-found: warn
+          retention-days: 14
