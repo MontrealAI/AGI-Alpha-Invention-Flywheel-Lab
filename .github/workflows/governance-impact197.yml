@@ -1,0 +1,57 @@
+name: P197 source-matched governance impact and no-bid qualification
+on:
+  push:
+    branches: [research/governance-impact197-20261120]
+    paths:
+      - 'campaign/governance-impact197/**'
+      - '.github/workflows/governance-impact197.yml'
+  pull_request:
+    paths:
+      - 'campaign/governance-impact197/**'
+      - '.github/workflows/governance-impact197.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  frozen-technical-acceptance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Capture actual platform start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Fixed eight-group ordinary/parity/safety test
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/governance-impact197"
+          python3 -V
+          sha256sum campaign/governance-impact197/impact.py campaign/governance-impact197/test_impact.py campaign/governance-impact197/PREREGISTRATION.md > "$RUNNER_TEMP/governance-impact197/SOURCE_SHA256SUMS.txt"
+          /usr/bin/time -v -o "$RUNNER_TEMP/governance-impact197/RESOURCE.txt" python3 -m unittest discover -v -s campaign/governance-impact197 -p 'test_impact.py' 2>&1 | tee "$RUNNER_TEMP/governance-impact197/TESTS.txt"
+          python3 campaign/governance-impact197/impact.py > "$RUNNER_TEMP/governance-impact197/RESULT.json"
+          python3 - "$RUNNER_TEMP/governance-impact197/RESULT.json" <<'PY'
+          import json, sys
+          r=json.load(open(sys.argv[1]))
+          f=r['result']['findings']
+          assert [v['system_id'] for v in f] == ['case-a','case-b']
+          assert [v['evidence_state'] for v in f] == ['UNABLE_TO_DETERMINE','PARTIAL']
+          assert r['commercial_decision']=='NO_BID_NO_DEPLOY'
+          assert r['result']['ordinary_tie'] is True
+          assert r['actual_collections_usd'] is None
+          assert r['complete_actual_costs_usd'] is None
+          print('P197_SYNTHETIC_ORDINARY_TIE_NO_BID_ACCEPTED')
+          PY
+          sha256sum "$RUNNER_TEMP/governance-impact197/RESULT.json" "$RUNNER_TEMP/governance-impact197/TESTS.txt" > "$RUNNER_TEMP/governance-impact197/RESULT_SHA256SUMS.txt"
+      - name: Retain compact negative and positive receipts, including failed executions
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: governance-impact197-source-matched-proof
+          path: ${{ runner.temp }}/governance-impact197/
+          if-no-files-found: warn
+          retention-days: 30
