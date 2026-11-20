@@ -128,7 +128,7 @@ class SelectedTargetReferenceTest(unittest.TestCase):
                  isinstance(n.func, ast.Name) and n.func.id == "source_identity"]
         self.assertEqual(len(calls), 2)
         self.assertTrue(all(len(n.args) == 1 and not n.keywords for n in calls))
-        self.assertIn("manifest", [a.arg for a in fn.args.args if isinstance(a, ast.arg)])
+        self.assertIn("manifest", [a.arg for a in fn.args.kwonlyargs if isinstance(a, ast.arg)])
 
 
 if __name__ == "__main__":
