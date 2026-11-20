@@ -1,0 +1,70 @@
+name: Magnetic rotor format-only root-cause diagnostic 003
+on:
+  pull_request:
+    paths:
+      - 'research/magnetic_rotor001/mat_format.py'
+      - 'research/magnetic_rotor001/MAT_FORMAT_DIAGNOSTIC.md'
+      - 'tests/test_magnetic_mat_format003.py'
+      - '.github/workflows/magnetic-mat-format003.yml'
+permissions:
+  contents: read
+jobs:
+  format-diagnosis:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Record platform job start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - name: Checkout exact source
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+          fetch-depth: 0
+      - name: Verify both preregistered failures and diagnostic freeze
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "${{ github.event.pull_request.head.sha || github.sha }}"
+          git merge-base --is-ancestor 9c68ab9d5a14857c1084a4573b74fe98ab48ef34 HEAD
+          git merge-base --is-ancestor 9e0bd304192c477f7b215d78e17796342673313f HEAD
+          git merge-base --is-ancestor a24c5048788f9cc5b06e266cb71ef965771f19b9 HEAD
+          test "$(git show a24c5048788f9cc5b06e266cb71ef965771f19b9:research/magnetic_rotor001/MAT_FORMAT_DIAGNOSTIC.md | sha256sum | cut -d ' ' -f1)" = "$(sha256sum research/magnetic_rotor001/MAT_FORMAT_DIAGNOSTIC.md | cut -d ' ' -f1)"
+          sha256sum research/magnetic_rotor001/{gate.py,schema.py,mat_format.py,MAT_FORMAT_DIAGNOSTIC.md} tests/test_magnetic_mat_format003.py
+      - name: Python 3.12
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Install public standard pinned binary reader
+        run: |
+          python -m pip install --only-binary=:all: numpy==2.3.5 scipy==1.17.0
+      - name: Check diagnostic source without network
+        run: |
+          python -m unittest tests.test_magnetic_mat_format003 -v
+          python -O -m unittest tests.test_magnetic_mat_format003 -v
+      - name: One read-only original public archive header diagnosis
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m research.magnetic_rotor001.mat_format --output "$RUNNER_TEMP/mat-format003"
+          python - "$RUNNER_TEMP/mat-format003/MAT_FORMAT_DIAGNOSTIC.json" <<'PY'
+          import json,pathlib,sys
+          r=json.loads(pathlib.Path(sys.argv[1]).read_text())
+          if r.get('status')!='MAT_FORMAT_DIAGNOSTIC_COMPLETE_SCHEMA002_STILL_FAILED':
+              raise SystemExit('DIAGNOSTIC_NOT_COMPLETED')
+          if r.get('member_count')!=10 or not r.get('original_schema002_failure_preserved'):
+              raise SystemExit('MEMBER_DENOMINATOR_OR_FAILURE_REWRITTEN')
+          if r.get('numeric_arrays_materialized') or r.get('physical_force_interpreted') or r.get('deployment')!='NO_DEPLOY':
+              raise SystemExit('INVALID_SCIENTIFIC_SCOPE')
+          print(json.dumps({'status':r['status'],'members':r['member_count'],'reader_errors':r['reader_error_count'],'original_schema_failed':True},sort_keys=True))
+          PY
+      - name: Preserve only public classified headers and failures
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: magnetic-mat-format003-${{ github.event.pull_request.head.sha || github.sha }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/mat-format003/MAT_FORMAT_DIAGNOSTIC.json
+          if-no-files-found: warn
