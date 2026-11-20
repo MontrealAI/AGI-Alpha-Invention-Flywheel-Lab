@@ -19,7 +19,7 @@ contract AtomicThreeColorExchangeTest {
     AtomicThreeColorExchange internal market;
     address internal constant buyer = address(0xB01);
     address payable internal constant seller = payable(address(0x5E11));
-    address payable internal constant treasury = payable(address(0x7E4);
+    address payable internal constant treasury = payable(address(0x7E4));
     bytes32 internal constant ID = keccak256("registered-graph-001");
 
     function setUp() public {
