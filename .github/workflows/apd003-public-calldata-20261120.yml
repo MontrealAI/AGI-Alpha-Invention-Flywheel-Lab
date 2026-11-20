@@ -1,0 +1,49 @@
+name: APD003 public calldata and failed payout (research only)
+on:
+  pull_request:
+    paths:
+      - "campaign/atomic-proof-delivery-20261119/test/APD003PublicCalldata.t.sol"
+      - "campaign/apd003-public-calldata-20261120/**"
+      - ".github/workflows/apd003-public-calldata-20261120.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  public-calldata-witness:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Mark actual execution window
+        run: |
+          echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+          date -u
+      - uses: actions/checkout@v4
+      - name: Pin original source identity and preregistration
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f campaign/apd003-public-calldata-20261120/PREREGISTRATION.md
+          git hash-object campaign/atomic-proof-delivery-20261119/contracts/BuyerScopedThreeColorExchange.sol | grep -Fx 350d936c51dd342cc686e413310f8273ad0df67e
+          git hash-object campaign/atomic-proof-delivery-20261119/contracts/AtomicThreeColorExchange.sol | grep -Fx d9b4b0a736b2d276e16220954203667db63c24cf
+      - uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: stable
+      - name: Run preregistered adversarial witness and unchanged original controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd campaign/atomic-proof-delivery-20261119
+          forge --version
+          forge test -vv --gas-report | tee "$RUNNER_TEMP/apd003-foundry.txt"
+          sha256sum "$RUNNER_TEMP/apd003-foundry.txt" > "$RUNNER_TEMP/apd003-sha256.txt"
+      - name: Publish compact result witness
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: apd003-public-calldata-evidence
+          if-no-files-found: warn
+          path: |
+            ${{ runner.temp }}/apd003-foundry.txt
+            ${{ runner.temp }}/apd003-sha256.txt
