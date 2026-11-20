@@ -1,0 +1,1281 @@
+{
+  "cutoff": "2026-11-20",
+  "baseline": [
+    {
+      "id": "metr-horizon",
+      "title": "METR long-task horizon method",
+      "domain": "agents",
+      "announced_at": "2025-03-19",
+      "available_at": null,
+      "sources": [
+        {
+          "url": "https://metr.org/blog/2025-03-19-measuring-ai-ability-to-complete-long-tasks/",
+          "title": "METR long-task horizon method",
+          "date": "2025-03-19"
+        }
+      ],
+      "prior": "Single-step benchmark accuracy did not measure extended autonomous work.",
+      "change": "Tracked success against task duration for professional human baselines.",
+      "evidence": "Independent primary measurement; historical ≈7-month doubling in tested tasks, not runtime prediction or universal reliability.",
+      "access": "Published method and results; no product release.",
+      "unlocks": "Design task-length and reliability controls.",
+      "importance": 5,
+      "relevance": 5,
+      "depends_on": []
+    },
+    {
+      "id": "kernelevolve",
+      "title": "Meta KernelEvolve",
+      "domain": "efficiency",
+      "announced_at": "2025-12-29",
+      "available_at": null,
+      "sources": [
+        {
+          "url": "https://arxiv.org/abs/2512.23236",
+          "title": "Meta KernelEvolve",
+          "date": "2025-12-29"
+        },
+        {
+          "url": "https://engineering.fb.com/2026/04/02/developer-tools/kernelevolve-how-metas-ranking-engineer-agent-optimizes-ai-infrastructure/",
+          "title": "Meta production engineering account",
+          "date": "2026-04-02"
+        }
+      ],
+      "prior": "Vendor libraries and expert tuning; agentic kernel generation already emerging.",
+      "change": "Graph search using executable correctness and performance, including production workloads.",
+      "evidence": "Author paper; Meta reports >60% throughput on one ads-inference workload, not a portable guarantee.",
+      "access": "Paper; Meta’s production deployment is not a public tool.",
+      "unlocks": "Treat agent kernel search and trajectory retention as prior art.",
+      "importance": 5,
+      "relevance": 5,
+      "depends_on": []
+    },
+    {
+      "id": "machine-payments",
+      "title": "Machine Payments Protocol",
+      "domain": "economics",
+      "announced_at": "2026-03-18",
+      "available_at": "2026-03-18",
+      "sources": [
+        {
+          "url": "https://stripe.com/blog/machine-payments-protocol",
+          "title": "Machine Payments Protocol",
+          "date": "2026-03-18"
+        }
+      ],
+      "prior": "Human checkout and prior HTTP payment work such as x402.",
+      "change": "Stripe and Tempo published a protocol for software to request and settle permitted service payments.",
+      "evidence": "First-party protocol launch, not evidence that any proposed MONTREAL.AI product has customers.",
+      "access": "Open specification; live rails need merchant approval, geography and integration checks.",
+      "unlocks": "Compare machine-native checkout after actual demand is proved.",
+      "importance": 4,
+      "relevance": 4,
+      "depends_on": []
+    },
+    {
+      "id": "fastkernels",
+      "title": "FastKernels production-path benchmark",
+      "domain": "efficiency",
+      "announced_at": "2026-05-22",
+      "available_at": null,
+      "sources": [
+        {
+          "url": "https://arxiv.org/abs/2605.23215",
+          "title": "FastKernels production-path benchmark",
+          "date": "2026-05-22"
+        }
+      ],
+      "prior": "Stand-alone kernels could score well while failing when deployed.",
+      "change": "Composed inference-path qualification with production peers.",
+      "evidence": "Author benchmark; October v2 reports microbench gains up to 6.6× but at most 1.25× end-to-end, and 20% of unchanged winner sets worked.",
+      "access": "Public method and code; production-class GPU resources needed.",
+      "unlocks": "Use end-to-end quality, throughput and integration as gates.",
+      "importance": 5,
+      "relevance": 5,
+      "depends_on": []
+    },
+    {
+      "id": "fable5",
+      "title": "First Claude Fable 5 and Mythos 5 release",
+      "domain": "models",
+      "announced_at": "2026-06-09",
+      "available_at": "2026-06-09",
+      "sources": [
+        {
+          "url": "https://www.anthropic.com/news/claude-fable-5-mythos-5",
+          "title": "First Claude Fable 5 and Mythos 5 release",
+          "date": "2026-06-09"
+        }
+      ],
+      "prior": "Earlier Claude tiers and Mythos Preview.",
+      "change": "Mythos-class capability offered with distinct access and safeguards.",
+      "evidence": "Publisher benchmarks and deployment history; June 12 suspension interrupts original availability.",
+      "access": "Initial Fable access limited by later suspension; Mythos restricted.",
+      "unlocks": "Establish high-end June incumbent; controls can alter access separately from capability.",
+      "importance": 5,
+      "relevance": 4,
+      "depends_on": []
+    },
+    {
+      "id": "unlimited-ocr",
+      "title": "Baidu Unlimited OCR first generation",
+      "domain": "multimodal",
+      "announced_at": "2026-06-22",
+      "available_at": "2026-06-22",
+      "sources": [
+        {
+          "url": "https://github.com/baidu/Unlimited-OCR",
+          "title": "Baidu Unlimited OCR first generation",
+          "date": "2026-06-22"
+        }
+      ],
+      "prior": "Page-wise OCR or multiple context passes.",
+      "change": "Released long-document one-shot parser; predecessor limited to 40 pages on the later evaluation.",
+      "evidence": "Publisher release and paper; already established multi-page parsing.",
+      "access": "Public repository and model; deployment hardware and licence review separate.",
+      "unlocks": "Pre-July control for scan and table workflows.",
+      "importance": 4,
+      "relevance": 5,
+      "depends_on": []
+    }
+  ],
+  "milestones": [
+    {
+      "id": "fable5-return",
+      "title": "Claude Fable 5 access restored",
+      "domain": "models",
+      "announced_at": "2026-07-01",
+      "available_at": "2026-07-01",
+      "sources": [
+        {
+          "url": "https://www.anthropic.com/news/claude-fable-5-mythos-5",
+          "title": "Claude Fable 5 access restored",
+          "date": "2026-07-01"
+        }
+      ],
+      "prior": "June release, then June 12 access suspension.",
+      "change": "Anthropic redeployed Fable 5 and Mythos 5; this is an access event, not a model-family invention.",
+      "evidence": "Publisher chronology explicitly dates June announcement and July redeployment.",
+      "access": "Fable generally available; Mythos eligible access only.",
+      "unlocks": "Retest previously blocked authorized workflows.",
+      "importance": 4,
+      "relevance": 3,
+      "depends_on": [
+        "fable5"
+      ]
+    },
+    {
+      "id": "gpt56",
+      "title": "GPT-5.6 family general availability",
+      "domain": "models",
+      "announced_at": "2026-07-09",
+      "available_at": "2026-07-09",
+      "sources": [
+        {
+          "url": "https://openai.com/index/gpt-5-6/",
+          "title": "GPT-5.6 family general availability",
+          "date": "2026-07-09"
+        },
+        {
+          "url": "https://developers.openai.com/api/docs/changelog",
+          "title": "OpenAI API changelog, July 9 entry",
+          "date": "2026-07-09"
+        }
+      ],
+      "prior": "GPT-5.5 and limited GPT-5.6 previews.",
+      "change": "Sol/Terra/Luna availability, with programmatic tools, persisted reasoning and orchestration beta.",
+      "evidence": "Publisher reports Agents’ Last Exam 53.6 for Sol in its configured evaluation; not reliability on our workflows.",
+      "access": "API and eligible product rollout; beta features distinct.",
+      "unlocks": "Try long professional workflows at different cost and effort tiers.",
+      "importance": 5,
+      "relevance": 5,
+      "depends_on": [
+        "fable5"
+      ]
+    },
+    {
+      "id": "alphaevolve-ga",
+      "title": "Google Cloud AlphaEvolve general availability",
+      "domain": "agents",
+      "announced_at": "2026-07-09",
+      "available_at": "2026-07-09",
+      "sources": [
+        {
+          "url": "https://cloud.google.com/blog/products/ai-machine-learning/alphaevolve-is-available-for-everyone",
+          "title": "Google Cloud AlphaEvolve GA announcement",
+          "date": "2026-07-09"
+        },
+        {
+          "url": "https://cloud.google.com/blog/products/ai-machine-learning/alphaevolve-on-google-cloud",
+          "title": "Google Cloud AlphaEvolve private-preview announcement",
+          "date": "2025-12-09"
+        }
+      ],
+      "prior": "AlphaEvolve was already disclosed and operated in Google Cloud private preview from December 2025; evaluation-driven search was not invented in July.",
+      "change": "General availability on Gemini Enterprise Agent Platform. Given a seed program and a deterministic client-side quantitative evaluator, the service proposes code variants and uses returned scores for evolutionary search.",
+      "evidence": "Official availability evidence. Customer results quoted by Google apply to their stated workloads and are not independent reproduction or general guarantees.",
+      "access": "Managed Google Cloud service, not public model weights. Needs authorized cloud access, execution and an evaluator under the operator’s control.",
+      "unlocks": "Benchmark candidate search on a frozen evaluator, holding out transfer cases and accounting for full search cost and rejected variants.",
+      "importance": 5,
+      "relevance": 5,
+      "depends_on": []
+    },
+    {
+      "id": "inkling",
+      "title": "Thinking Machines Inkling",
+      "domain": "multimodal",
+      "announced_at": "2026-07-15",
+      "available_at": "2026-07-15",
+      "sources": [
+        {
+          "url": "https://thinkingmachines.ai/news/introducing-inkling/",
+          "title": "Thinking Machines Inkling",
+          "date": "2026-07-15"
+        },
+        {
+          "url": "https://thinkingmachines.ai/news/inkling-small/",
+          "title": "Inkling-Small release",
+          "date": "2026-07-30"
+        }
+      ],
+      "prior": "Multiple modality-specific tools or model stacks.",
+      "change": "Released general multimodal open-weight model; Inkling-Small followed July 30.",
+      "evidence": "Publisher model card and evaluations; open weights are not small-device feasibility.",
+      "access": "Open weights subject to applicable terms; access and hardware vary.",
+      "unlocks": "Benchmark private multimodal workflows without assuming API-only routing.",
+      "importance": 4,
+      "relevance": 4,
+      "depends_on": []
+    },
+    {
+      "id": "ovisocr2",
+      "title": "OvisOCR2 compact document parser",
+      "domain": "multimodal",
+      "announced_at": "2026-07-15",
+      "available_at": null,
+      "sources": [
+        {
+          "url": "https://arxiv.org/abs/2607.13639",
+          "title": "OvisOCR2 compact document parser",
+          "date": "2026-07-15"
+        }
+      ],
+      "prior": "Raw OCR and larger document VLMs.",
+      "change": "0.8B model parses reading order, tables, formulas and text from page imagery.",
+      "evidence": "Author benchmark; no proof of exact edits, field provenance or commercial advantage.",
+      "access": "Public paper; model packaging and first downloadable date not separately checked in this record.",
+      "unlocks": "Older strong comparator for small local page parsing.",
+      "importance": 4,
+      "relevance": 5,
+      "depends_on": [
+        "unlimited-ocr"
+      ]
+    },
+    {
+      "id": "mistral-ocr41-release",
+      "title": "Mistral OCR 4.1 release and OCR alias change",
+      "domain": "multimodal",
+      "announced_at": "2026-07-16",
+      "available_at": "2026-07-16",
+      "sources": [
+        {
+          "url": "https://docs.mistral.ai/resources/changelogs#july-16",
+          "title": "Mistral changelog: OCR 4.1 release and block score API",
+          "date": "2026-07-16"
+        },
+        {
+          "url": "https://mistral.ai/news/ocr-4/",
+          "title": "Mistral OCR 4 launch and technical documentation",
+          "date": "2026-06-23"
+        }
+      ],
+      "prior": "OCR 4.0 already provided paragraph-level bounding boxes and structural labels, alongside page and word confidence, on June 23.",
+      "change": "OCR 4.1 was released and mistral-ocr-latest and mistral-ocr-4 switched to it; the OCR API gained block-level confidence granularity.",
+      "evidence": "Vendor release and API contract; no independent exact-cell/numerical workflow comparison or measured review-time effect.",
+      "access": "Named hosted API release, not evidence of general availability on this date or public weights. Pin mistral-ocr-4-1 rather than a rolling alias.",
+      "unlocks": "Compare structured document extraction and reviewer triage on a fixed specification pair while preserving row/page evidence.",
+      "importance": 4,
+      "relevance": 5,
+      "depends_on": []
+    },
+    {
+      "id": "gemini36",
+      "title": "Gemini 3.6 Flash",
+      "domain": "efficiency",
+      "announced_at": "2026-07-21",
+      "available_at": "2026-07-21",
+      "sources": [
+        {
+          "url": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-3-6-flash-3-5-flash-lite-3-5-flash-cyber/",
+          "title": "Gemini 3.6 Flash",
+          "date": "2026-07-21"
+        }
+      ],
+      "prior": "Gemini 3.5 Flash.",
+      "change": "New Flash tier improved coding, multimodal tasks and token efficiency.",
+      "evidence": "Publisher cites 17% fewer output tokens on Artificial Analysis Index; workload-dependent.",
+      "access": "Google developer surfaces according to release; check quotas and pricing at execution.",
+      "unlocks": "A cheaper baseline for bounded high-volume agents.",
+      "importance": 4,
+      "relevance": 4,
+      "depends_on": []
+    },
+    {
+      "id": "opus5",
+      "title": "Claude Opus 5",
+      "domain": "models",
+      "announced_at": "2026-07-24",
+      "available_at": "2026-07-24",
+      "sources": [
+        {
+          "url": "https://www.anthropic.com/news/claude-opus-5",
+          "title": "Claude Opus 5",
+          "date": "2026-07-24"
+        }
+      ],
+      "prior": "Fable 5 was high-capability but higher priced.",
+      "change": "Opus generation advances coding/knowledge work at half Fable 5 token list price.",
+      "evidence": "Publisher comparison under selected benchmark settings; cost per accepted job not established.",
+      "access": "Claude product/API according to release.",
+      "unlocks": "Test where a middle tier meets acceptance without premium routing.",
+      "importance": 4,
+      "relevance": 4,
+      "depends_on": [
+        "fable5-return"
+      ]
+    },
+    {
+      "id": "nemotron-lightning",
+      "title": "Nemotron 3.5 Lightning",
+      "domain": "efficiency",
+      "announced_at": "2026-08-11",
+      "available_at": "2026-08-11",
+      "sources": [
+        {
+          "url": "https://huggingface.co/nvidia/NVIDIA-Nemotron-3.5-Lightning-30B-A3B-BF16",
+          "title": "Nemotron 3.5 Lightning",
+          "date": "2026-08-11"
+        }
+      ],
+      "prior": "Prior open-weight agent models and dense inference.",
+      "change": "NVIDIA 30B-class MoE with ~3B active parameters; publishable self-hosted option.",
+      "evidence": "First-party model card benchmarks; active size is not parameter storage or RAM required.",
+      "access": "Public BF16 weights; check governing NVIDIA licence and hardware.",
+      "unlocks": "Measure self-hosted throughput and acceptance as alternative to per-token APIs.",
+      "importance": 4,
+      "relevance": 4,
+      "depends_on": []
+    },
+    {
+      "id": "gemini37",
+      "title": "Gemini 3.7 Flash",
+      "domain": "efficiency",
+      "announced_at": "2026-08-13",
+      "available_at": "2026-08-13",
+      "sources": [
+        {
+          "url": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-3-7-flash/",
+          "title": "Gemini 3.7 Flash",
+          "date": "2026-08-13"
+        }
+      ],
+      "prior": "Gemini 3.6 Flash.",
+      "change": "Revised Flash for longer software work at introductory cost below prior launch rates.",
+      "evidence": "Publisher reports WebDev Arena 1588 vs 1538; promotional pricing not permanent economics.",
+      "access": "Developer-facing model; availability by provider terms.",
+      "unlocks": "Retest workload on equal price window, reasoning efforts and accepted output.",
+      "importance": 4,
+      "relevance": 4,
+      "depends_on": [
+        "gemini36"
+      ]
+    },
+    {
+      "id": "vortexchat",
+      "title": "VortexChat integrated photonic inverse design",
+      "domain": "science",
+      "announced_at": "2026-08-21",
+      "available_at": null,
+      "sources": [
+        {
+          "url": "https://arxiv.org/abs/2608.20688",
+          "title": "VortexChat integrated photonic inverse design",
+          "date": "2026-08-21"
+        }
+      ],
+      "prior": "Manual template and inverse-design workflows; prior research agents.",
+      "change": "Natural-language specification to automated multi-objective simulation and photonics optimization.",
+      "evidence": "Author preprint; simulation evidence is not fabricated-device qualification.",
+      "access": "Research publication; no verified public production service or rights.",
+      "unlocks": "A falsifier for claims that autonomous photonics design first appeared in November.",
+      "importance": 3,
+      "relevance": 4,
+      "depends_on": []
+    },
+    {
+      "id": "mistral-ocr41-ga",
+      "title": "Mistral OCR 4.1 formal general availability",
+      "domain": "multimodal",
+      "announced_at": "2026-08-31",
+      "available_at": "2026-08-31",
+      "sources": [
+        {
+          "url": "https://docs.mistral.ai/resources/changelogs#august-31",
+          "title": "Mistral changelog: OCR 4.1 general availability",
+          "date": "2026-08-31"
+        }
+      ],
+      "prior": "The July 16 OCR 4.1 release and API alias switch preceded this entry.",
+      "change": "Formal GA for the existing mistral-ocr-4-1 model ID; not a second OCR accuracy advance.",
+      "evidence": "Provider GA status only; no new performance claim.",
+      "access": "Hosted Mistral OCR API; production suitability and data rights still require review.",
+      "unlocks": "Use the named version as a paid hosted incumbent in a matched comparison; separate external API cost from reviewer time.",
+      "importance": 3,
+      "relevance": 5,
+      "depends_on": [
+        "mistral-ocr41-release"
+      ]
+    },
+    {
+      "id": "fable51",
+      "title": "Claude Fable 5.1 and Mythos 5.1",
+      "domain": "models",
+      "announced_at": "2026-09-01",
+      "available_at": "2026-09-01",
+      "sources": [
+        {
+          "url": "https://www.anthropic.com/claude-fable-and-mythos-5-1",
+          "title": "Claude Fable 5.1 and Mythos 5.1",
+          "date": "2026-09-01"
+        }
+      ],
+      "prior": "Fable 5 and Mythos 5.",
+      "change": "New capability and lower cache read rates; continued distinct safety/access classes.",
+      "evidence": "First-party developer evidence; projected savings depend on cache-heavy workload.",
+      "access": "Fable public paid surfaces; Mythos trusted access, not presumed.",
+      "unlocks": "Retest high-context tools and recurrent project work.",
+      "importance": 5,
+      "relevance": 4,
+      "depends_on": [
+        "fable5-return"
+      ]
+    },
+    {
+      "id": "gpt6-astra",
+      "title": "GPT-6 Astra limited rollout",
+      "domain": "models",
+      "announced_at": "2026-09-03",
+      "available_at": null,
+      "sources": [
+        {
+          "url": "https://openai.com/index/gpt-6-astra/",
+          "title": "GPT-6 Astra limited rollout",
+          "date": "2026-09-03"
+        },
+        {
+          "url": "https://help.openai.com/en/articles/6825453-chatgpt-release-notes",
+          "title": "September 3 ChatGPT release entry",
+          "date": "2026-09-03"
+        }
+      ],
+      "prior": "GPT-5.6 Sol.",
+      "change": "New generation of high-effort model on research, coding and computer use; limited initial access.",
+      "evidence": "Publisher evaluation, plus official access boundary on announcement day; not general autonomous reliability.",
+      "access": "Initially selected organisations; broad rollout followed; separate from date of global ChatGPT availability.",
+      "unlocks": "Reassess the strongest direct comparator for difficult authorized workflows.",
+      "importance": 5,
+      "relevance": 5,
+      "depends_on": [
+        "gpt56"
+      ]
+    },
+    {
+      "id": "deepseek-v41",
+      "title": "DeepSeek V4.1 Flash",
+      "domain": "efficiency",
+      "announced_at": "2026-09-10",
+      "available_at": "2026-09-10",
+      "sources": [
+        {
+          "url": "https://api-docs.deepseek.com/news/news260910/",
+          "title": "DeepSeek V4.1 Flash",
+          "date": "2026-09-10"
+        },
+        {
+          "url": "https://api-docs.deepseek.com/updates/",
+          "title": "DeepSeek changelog, September 10",
+          "date": "2026-09-10"
+        }
+      ],
+      "prior": "DeepSeek V4 Flash/Vision variants and existing low-cost open models.",
+      "change": "New multimodal architecture and lower public API rates.",
+      "evidence": "Publisher capability/speed claims; provider changed later V4-Pro transition, so consult changelog.",
+      "access": "Public API and model weights; self-hosting footprint differs from API price.",
+      "unlocks": "Use as direct price-quality alternative; do not infer workstation feasibility.",
+      "importance": 5,
+      "relevance": 4,
+      "depends_on": []
+    },
+    {
+      "id": "gpt61-sol",
+      "title": "GPT-6.1 Sol and Agents API computer use",
+      "domain": "agents",
+      "announced_at": "2026-09-29",
+      "available_at": "2026-09-29",
+      "sources": [
+        {
+          "url": "https://developers.openai.com/api/docs/changelog",
+          "title": "GPT-6.1 Sol and Agents API computer use",
+          "date": "2026-09-29"
+        }
+      ],
+      "prior": "Astra high-end service and GPT-5.6 agent tooling.",
+      "change": "Lower-priced Sol for professional work and API access to hosted browser execution with approvals.",
+      "evidence": "Official changelog; model and browser permission are separate controls.",
+      "access": "Responses API; beta multi-agent and approvals are conditional.",
+      "unlocks": "Benchmark authorized browser work against deterministic connectors or simpler APIs.",
+      "importance": 5,
+      "relevance": 5,
+      "depends_on": [
+        "gpt6-astra"
+      ]
+    },
+    {
+      "id": "mistral-ocr40-retirement",
+      "title": "Mistral OCR 4.0 retirement notice",
+      "domain": "multimodal",
+      "announced_at": "2026-09-29",
+      "available_at": null,
+      "sources": [
+        {
+          "url": "https://docs.mistral.ai/resources/changelogs#september-29",
+          "title": "Mistral changelog: September 30 retirement date for OCR 4.0",
+          "date": "2026-09-29"
+        }
+      ],
+      "prior": "Named OCR 4.0 and OCR 4.1 could be treated as distinct comparator versions before the stated transition.",
+      "change": "Mistral deprecated mistral-ocr-4-0 and announced its retirement for September 30, 2026, recommending OCR 4.1 at the same price.",
+      "evidence": "Official lifecycle notice; not independently observed endpoint shutdown or a performance/cost jump.",
+      "access": "Do not assume the retired named API is runnable now; preserve historical raw outputs and model IDs.",
+      "unlocks": "Catch alias drift and keep historical comparisons auditable.",
+      "importance": 2,
+      "relevance": 4,
+      "depends_on": [
+        "mistral-ocr41-ga"
+      ]
+    },
+    {
+      "id": "gemini4-argon",
+      "title": "Gemini 4 Argon staged availability",
+      "domain": "models",
+      "announced_at": "2026-09-30",
+      "available_at": "2026-10-13",
+      "sources": [
+        {
+          "url": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-4-argon/",
+          "title": "Gemini 4 Argon staged availability",
+          "date": "2026-09-30"
+        },
+        {
+          "url": "https://blog.google/innovation-and-ai/technology/developers-tools/build-with-gemini-4-argon/",
+          "title": "Developer availability",
+          "date": "2026-10-13"
+        }
+      ],
+      "prior": "Gemini Flash tier and limited frontier previews.",
+      "change": "New high-end long-horizon model announced September 30; developer access October 13.",
+      "evidence": "Publisher evaluation/availability; not a universal task threshold.",
+      "access": "Paid Gemini API and eligible applications from developer launch.",
+      "unlocks": "Test prior no-go code migration or structured evidence workflows.",
+      "importance": 5,
+      "relevance": 5,
+      "depends_on": [
+        "gemini37"
+      ]
+    },
+    {
+      "id": "lightonocr-3",
+      "title": "LightOnOCR-3 grounded document parsing",
+      "domain": "multimodal",
+      "announced_at": "2026-10-08",
+      "available_at": "2026-10-08",
+      "sources": [
+        {
+          "url": "https://huggingface.co/blog/lightonai/lightonocr-3",
+          "title": "LightOnOCR-3: High-Performance OCR and Layout Extraction in One Model",
+          "date": "2026-10-08"
+        },
+        {
+          "url": "https://huggingface.co/lightonai/LightOnOCR-3-1B",
+          "title": "LightOnOCR-3-1B model and license card",
+          "date": "2026-10-08"
+        }
+      ],
+      "prior": "LightOnOCR-2-1B transcription and independent document layout/table pipelines already existed.",
+      "change": "The 1B successor preserves the old architecture and adds a grounding mode with labeled document-region bounding boxes, alongside OCR, image descriptions and chart extraction.",
+      "evidence": "Publisher model card and evaluations. Region boxes are not proven cell-level provenance. Exact numerical change detection and commercial advantage remain untested.",
+      "access": "Public model announced under Apache 2.0; customer inputs and dependencies require separate rights and deployment review.",
+      "unlocks": "Test table-revision-proof: independent before/after cell evidence, compared with established layout and keyed table diff.",
+      "importance": 4,
+      "relevance": 5,
+      "depends_on": [
+        "ovisocr2"
+      ]
+    },
+    {
+      "id": "duodiscover",
+      "title": "DuoDiscover autonomous evaluation search",
+      "domain": "agents",
+      "announced_at": "2026-10-12",
+      "available_at": null,
+      "sources": [
+        {
+          "url": "https://arxiv.org/abs/2610.17184",
+          "title": "DuoDiscover autonomous evaluation search",
+          "date": "2026-10-12"
+        }
+      ],
+      "prior": "AlphaEvolve-style search depends on repeated expensive evaluations.",
+      "change": "Two-tier evaluation design reduces bottleneck; TPU/JAX search cases.",
+      "evidence": "Author preprint; technical witness, not guaranteed throughput, hardware transfer or commercial product.",
+      "access": "Public paper; production route not established here.",
+      "unlocks": "Test cheap screening only where full independent evaluation can reject proxy winners.",
+      "importance": 5,
+      "relevance": 5,
+      "depends_on": [
+        "kernelevolve",
+        "fastkernels",
+        "alphaevolve-ga"
+      ]
+    },
+    {
+      "id": "gpt61-terra",
+      "title": "GPT-6.1 Terra",
+      "domain": "multimodal",
+      "announced_at": "2026-10-26",
+      "available_at": "2026-10-26",
+      "sources": [
+        {
+          "url": "https://openai.com/index/introducing-gpt-6-1-terra/",
+          "title": "GPT-6.1 Terra",
+          "date": "2026-10-26"
+        },
+        {
+          "url": "https://deploymentsafety.openai.com/gpt-6-1-terra",
+          "title": "Terra system-card addendum",
+          "date": "2026-10-26"
+        }
+      ],
+      "prior": "Higher-cost GPT-6.1 Sol and earlier Terra.",
+      "change": "Specialized visual reasoning, computer-use and writing at $1/$5 per million standard input/output tokens at launch.",
+      "evidence": "Official release and safety card; tested surface differs from real permissioned production.",
+      "access": "API and eligible Work/Codex. Access varies by deployment surface.",
+      "unlocks": "Try inexpensive visual computer use only against best native and conventional routes.",
+      "importance": 5,
+      "relevance": 5,
+      "depends_on": [
+        "gpt61-sol"
+      ]
+    },
+    {
+      "id": "lfm3",
+      "title": "Liquid AI LFM3 open-weight compact specialists",
+      "domain": "efficiency",
+      "announced_at": "2026-10-27",
+      "available_at": "2026-10-27",
+      "sources": [
+        {
+          "url": "https://www.liquid.ai/blog/lfm3",
+          "title": "Liquid AI LFM3 open-weight compact specialists",
+          "date": "2026-10-27"
+        }
+      ],
+      "prior": "Prior compact specialist and generic instruction models.",
+      "change": "Compact text and modality-specific variants including base checkpoints, released together.",
+      "evidence": "Publisher hardware benchmarks and quality claims; user-deployed offsets unproven.",
+      "access": "Open weights and provider endpoints; assess each model’s terms and quantized hardware.",
+      "unlocks": "Potential locally operated specialist benchmark, not learned succession proof.",
+      "importance": 4,
+      "relevance": 5,
+      "depends_on": []
+    },
+    {
+      "id": "unlimited-ocr2",
+      "title": "Baidu Unlimited OCR 2",
+      "domain": "multimodal",
+      "announced_at": "2026-10-27",
+      "available_at": "2026-10-27",
+      "sources": [
+        {
+          "url": "https://github.com/baidu/Unlimited-OCR",
+          "title": "Baidu Unlimited OCR 2",
+          "date": "2026-10-27"
+        },
+        {
+          "url": "https://arxiv.org/abs/2610.39308",
+          "title": "Unlimited OCR Works 2",
+          "date": "2026-10-29"
+        }
+      ],
+      "prior": "First Unlimited OCR already handled multipage input; evaluation limit 40 pages.",
+      "change": "Sparse reference sliding window bounds active context per decode step; improved hundred-page parsing.",
+      "evidence": "Author MPDocBench cross-page table structure 89.54 vs 60.76 predecessor; not exact numeric accuracy. Single-page table metric worsened slightly.",
+      "access": "Public model card tags MIT. Vendor tested A800-80GB native path; CPU feasibility and complete costs unverified.",
+      "unlocks": "Try licensed fragmented supplier tables; compare pagewise parsing plus rules before any product claim.",
+      "importance": 5,
+      "relevance": 5,
+      "depends_on": [
+        "unlimited-ocr",
+        "ovisocr2"
+      ]
+    },
+    {
+      "id": "gemini4-carbon",
+      "title": "Gemini 4 Carbon staged rollout",
+      "domain": "models",
+      "announced_at": "2026-10-28",
+      "available_at": "2026-11-10",
+      "sources": [
+        {
+          "url": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-carbon/",
+          "title": "Gemini 4 Carbon staged rollout",
+          "date": "2026-10-28"
+        },
+        {
+          "url": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-4-carbon-now-available/",
+          "title": "Broad Carbon launch",
+          "date": "2026-11-10"
+        }
+      ],
+      "prior": "Gemini 4 Argon.",
+      "change": "Restricted Oct28 release followed by broad November 10 release for complex coding and scientific reasoning.",
+      "evidence": "Publisher evaluations; separate restricted early access from public availability; larger reasoning usage can offset per-token price.",
+      "access": "Broad developer access at second date; terms and promotional pricing not treated as durable.",
+      "unlocks": "Reopen expensive research tasks if end-to-end quality actually changes decision.",
+      "importance": 5,
+      "relevance": 5,
+      "depends_on": [
+        "gemini4-argon"
+      ]
+    },
+    {
+      "id": "surya25",
+      "title": "Datalab Surya 2.5 release",
+      "domain": "multimodal",
+      "announced_at": "2026-10-29",
+      "available_at": "2026-10-29",
+      "sources": [
+        {
+          "url": "https://github.com/datalab-to/surya/releases/tag/v0.23.0",
+          "title": "Datalab Surya 2.5 release",
+          "date": "2026-10-29"
+        },
+        {
+          "url": "https://huggingface.co/datalab-to/surya-ocr-2.5",
+          "title": "Surya 2.5 model card and commercial terms",
+          "date": "2026-10-29"
+        }
+      ],
+      "prior": "Surya 2 and smaller page parsers already exist.",
+      "change": "Changes table default to structured HTML and adds experimental MLX backend; drops original row/column geometry.",
+      "evidence": "Publisher model/feature notes; neither improved exact cell accuracy nor universal speed is established.",
+      "access": "Apache-2.0 code; weights have modified OpenRAIL-M terms and startup eligibility conditions.",
+      "unlocks": "Run local numerical table comparisons; keep independent source-image evidence when geometry needed.",
+      "importance": 4,
+      "relevance": 5,
+      "depends_on": [
+        "ovisocr2"
+      ]
+    },
+    {
+      "id": "flashprove",
+      "title": "FlashProve provable-inference prototype",
+      "domain": "verification",
+      "announced_at": "2026-11-02",
+      "available_at": null,
+      "sources": [
+        {
+          "url": "https://www.anthropic.com/research/provable-inference",
+          "title": "FlashProve provable-inference prototype",
+          "date": "2026-11-02"
+        }
+      ],
+      "prior": "Earlier costly cryptographic verifiable inference and ordinary attestations.",
+      "change": "Provider prototypes proof generation for model computation.",
+      "evidence": "Anthropic reports 110 proved tokens/s and 19 MB proof, with ~70–95× GPU time overhead; not truthfulness, quality or commercial savings.",
+      "access": "Research, not independently verified production access.",
+      "unlocks": "Test narrow proof-of-execution needs only where premium and overhead justify deployment.",
+      "importance": 5,
+      "relevance": 5,
+      "depends_on": []
+    },
+    {
+      "id": "inkling2-small",
+      "title": "Thinking Machines Inkling 2 Small",
+      "domain": "models",
+      "announced_at": "2026-11-05",
+      "available_at": "2026-11-12",
+      "sources": [
+        {
+          "url": "https://thinkingmachines.ai/news/inkling-2-small/",
+          "title": "Thinking Machines Inkling 2 Small",
+          "date": "2026-11-05"
+        }
+      ],
+      "prior": "Inkling-Small July release.",
+      "change": "New generation first announced November 5, weights downloadable November 12 per same page update.",
+      "evidence": "Publisher card and release; verify full cost and hardware.",
+      "access": "Weights downloadable; use exact model card terms and hardware gating.",
+      "unlocks": "Separate model announcement from when own deployment becomes possible.",
+      "importance": 4,
+      "relevance": 4,
+      "depends_on": [
+        "inkling"
+      ]
+    },
+    {
+      "id": "metr-rd",
+      "title": "METR independent Anthropic R&D acceleration study",
+      "domain": "agents",
+      "announced_at": "2026-11-05",
+      "available_at": null,
+      "sources": [
+        {
+          "url": "https://metr.org/blog/2026-11-05-anthropic-ai-rd-acceleration-assessment/",
+          "title": "METR independent Anthropic R&D acceleration study",
+          "date": "2026-11-05"
+        }
+      ],
+      "prior": "Agent task-horizon benchmarks only partly capture real internal R&D.",
+      "change": "11-week access supports independent assessment of one laboratory’s internal AI-assisted work.",
+      "evidence": "Independent evaluator estimate around 1.9× (interval 1.5–2.8) on reported engineering measure; significant redactions, not fully autonomous primary training.",
+      "access": "Public assessment; no replication access to internal workflows presumed.",
+      "unlocks": "Separate agent-assisted R&D acceleration from autonomous self-improvement.",
+      "importance": 5,
+      "relevance": 5,
+      "depends_on": [
+        "metr-horizon"
+      ]
+    },
+    {
+      "id": "harness-adapters-v1",
+      "title": "Hugging Face harness-specific adapters, first release",
+      "domain": "agents",
+      "announced_at": "2026-11-06",
+      "available_at": "2026-11-06",
+      "sources": [
+        {
+          "url": "https://huggingface.co/blog/harness-hub/harness-adapters",
+          "title": "Hugging Face harness-specific adapters, first release",
+          "date": "2026-11-06"
+        }
+      ],
+      "prior": "General models with unmodified agent harnesses.",
+      "change": "Released separate small LoRA adapters trained on verifiable tasks in pi, OpenCode and Hermes.",
+      "evidence": "First-party smoke/heldout tests; not sustained improvement or proof comparisons against all stronger alternatives.",
+      "access": "Public description and artifacts; check each base model and adapter licence.",
+      "unlocks": "Controls for later claims about harness-conditioned training.",
+      "importance": 4,
+      "relevance": 5,
+      "depends_on": []
+    },
+    {
+      "id": "fable52",
+      "title": "Claude Fable 5.2 and Mythos 5.2",
+      "domain": "models",
+      "announced_at": "2026-11-09",
+      "available_at": "2026-11-09",
+      "sources": [
+        {
+          "url": "https://www.anthropic.com/claude-fable-and-mythos-5-2",
+          "title": "Claude Fable 5.2 and Mythos 5.2",
+          "date": "2026-11-09"
+        }
+      ],
+      "prior": "Fable/Mythos 5.1 plus ordinary specialized tools.",
+      "change": "New long-horizon research and engineering capability with distinct safety classes.",
+      "evidence": "Provider Frontier Code 49.1 vs 32.4 Fable 5.1; selective results do not prove generalization.",
+      "access": "Fable paid public access; Mythos trusted access only.",
+      "unlocks": "Retest hard authorized research/engineering against matched older model and specialist.",
+      "importance": 5,
+      "relevance": 5,
+      "depends_on": [
+        "fable51"
+      ]
+    },
+    {
+      "id": "gemini4-hydrogen",
+      "title": "Gemini 4 Hydrogen",
+      "domain": "efficiency",
+      "announced_at": "2026-11-12",
+      "available_at": "2026-11-12",
+      "sources": [
+        {
+          "url": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-hydrogen/",
+          "title": "Gemini 4 Hydrogen",
+          "date": "2026-11-12"
+        }
+      ],
+      "prior": "Previously deployed Flash and Gemini 4 high-end tiers.",
+      "change": "Lower-price model optimized for agentic workflows; quoted launch rates $1.50/$7.50 per million.",
+      "evidence": "Publisher Terminal-Bench comparisons; not cost per independently verified output.",
+      "access": "Google API/app routes subject to eligibility and quotas.",
+      "unlocks": "Evaluate bounded high-volume internal workboxes before using higher-cost agents.",
+      "importance": 4,
+      "relevance": 5,
+      "depends_on": [
+        "gemini4-argon"
+      ]
+    },
+    {
+      "id": "singularitybench",
+      "title": "Singularity-Bench agent-built systems",
+      "domain": "agents",
+      "announced_at": "2026-11-12",
+      "available_at": null,
+      "sources": [
+        {
+          "url": "https://arxiv.org/abs/2611.16591",
+          "title": "Singularity-Bench agent-built systems",
+          "date": "2026-11-12"
+        }
+      ],
+      "prior": "Code benchmarks and single artifact tests.",
+      "change": "Measures agents constructing other agents or runtime systems under resource limits.",
+      "evidence": "Author benchmark, six tasks; best aggregate is bounded, inference economics are simulated, and multiple systems fail.",
+      "access": "Public paper; verify exact test assets and hardware independently.",
+      "unlocks": "Build full task and held-out acceptance into successor qualification.",
+      "importance": 5,
+      "relevance": 5,
+      "depends_on": [
+        "metr-horizon",
+        "fastkernels"
+      ]
+    },
+    {
+      "id": "antigravity-teamwork",
+      "title": "Google Antigravity /teamwork research examples",
+      "domain": "agents",
+      "announced_at": "2026-11-13",
+      "available_at": null,
+      "sources": [
+        {
+          "url": "https://research.google/blog/advancing-science-engineering-with-antigravitys-teamwork-feature/",
+          "title": "Google Antigravity /teamwork research examples",
+          "date": "2026-11-13"
+        }
+      ],
+      "prior": "Prior DuoDiscover and multi-agent workflows.",
+      "change": "Google reports coordinated agent experiments for engineering and science.",
+      "evidence": "Publisher demonstrations; TPU speedups specific to selected workload and measurement; not universal market superiority.",
+      "access": "Published research examples; equivalent customer quota, permissions and setting unverified.",
+      "unlocks": "Test controlled multi-agent search on measurable opportunities against single-agent budgets.",
+      "importance": 4,
+      "relevance": 5,
+      "depends_on": [
+        "duodiscover"
+      ]
+    },
+    {
+      "id": "pardig",
+      "title": "Google PARDIG public dataset launch",
+      "domain": "science",
+      "announced_at": "2026-11-13",
+      "available_at": "2026-11-13",
+      "sources": [
+        {
+          "url": "https://deepmind.google/blog/opening-the-datasets-behind-our-ai-weather-models/",
+          "title": "Google DeepMind’s dated public dataset launch",
+          "date": "2026-11-13"
+        },
+        {
+          "url": "https://developers.google.com/weathernext/release-notes",
+          "title": "Google WeatherNext release notes: November PARDIG launch",
+          "date": "2026-11-13"
+        },
+        {
+          "url": "https://developers.google.com/weathernext/guides/pardig",
+          "title": "PARDIG dataset guide",
+          "date": "2026-11-13"
+        },
+        {
+          "url": "https://arxiv.org/abs/2611.13941",
+          "title": "PARDIG preprint submission (preceding launch)",
+          "date": "2026-11-10"
+        }
+      ],
+      "prior": "NASA IMERG V07 half-hour estimates and locally available radar plus gauges.",
+      "change": "Open global AI-derived precipitation estimates on a 0.1-degree grid at 15-minute intervals. The public announcement followed the November 10 paper submission; the date is not the start of data collection.",
+      "evidence": "Publisher evaluation against independent radar and station observations; grid estimates are not site observations or accumulated rain, and finer cadence does not establish site-level accuracy. NRT refreshes each 6 hours and has around 2–8 hours effective latency.",
+      "access": "CC BY 4.0 per provider documentation; authenticated Cloud Storage/Earth Engine access, with live Zarr and static Earth Engine as distinct routes. Egress and application costs unverified.",
+      "unlocks": "Test weather-replay-instrument: retrospective coincidence review with independent gauges and the strongest available incumbent, not warnings or causal inference.",
+      "importance": 4,
+      "relevance": 4,
+      "depends_on": []
+    },
+    {
+      "id": "poppy",
+      "title": "Personal Agent Protocol 1.0",
+      "domain": "economics",
+      "announced_at": "2026-11-13",
+      "available_at": "2026-11-13",
+      "sources": [
+        {
+          "url": "https://sierra.ai/uk/blog/releasing-poppy",
+          "title": "Personal Agent Protocol 1.0",
+          "date": "2026-11-13"
+        }
+      ],
+      "prior": "Existing machine payments and pilot personal-agent protocols.",
+      "change": "Poppy protocol 1.0 release; Sierra reports Shopify enablement and initial partner launches.",
+      "evidence": "Provider-reported interoperability and rollout; neither transaction volumes nor willingness to pay for MONTREAL.AI proven.",
+      "access": "Public protocol; merchants and customers need permissions and integration.",
+      "unlocks": "Machine-readable path to browse supported offerings; no autonomous outreach or settlement assumed.",
+      "importance": 4,
+      "relevance": 5,
+      "depends_on": [
+        "machine-payments"
+      ]
+    },
+    {
+      "id": "gpt62",
+      "title": "GPT-6.2 Astra and Sol",
+      "domain": "models",
+      "announced_at": "2026-11-17",
+      "available_at": "2026-11-17",
+      "sources": [
+        {
+          "url": "https://openai.com/index/introducing-gpt-6-2-astra-sol/",
+          "title": "GPT-6.2 Astra and Sol",
+          "date": "2026-11-17"
+        },
+        {
+          "url": "https://artificialanalysis.ai/articles/openai-has-the-2-model-in-the-intelligence-index-with-the-release-of-gpt-6-2-astra-and-gpt-6-2-sol",
+          "title": "Artificial Analysis independent evaluation",
+          "date": "2026-11-17"
+        }
+      ],
+      "prior": "GPT-6 Astra and GPT-6.1 Sol.",
+      "change": "Updated professional, tool-use and coding models at lower standard Astra rates than prior generation.",
+      "evidence": "Publisher workbench evidence; independent aggregate diagnostics show runtime/harness dependence, not blanket superiority.",
+      "access": "API and eligible Work/Codex, subject to rights, region and quota.",
+      "unlocks": "Compare per-accepted-job quality and cost with pinned October model.",
+      "importance": 5,
+      "relevance": 5,
+      "depends_on": [
+        "gpt6-astra",
+        "gpt61-sol"
+      ]
+    },
+    {
+      "id": "mai-code2",
+      "title": "Microsoft MAI Code 2 and Code 2 Flash",
+      "domain": "efficiency",
+      "announced_at": "2026-11-17",
+      "available_at": "2026-11-17",
+      "sources": [
+        {
+          "url": "https://microsoft.ai/news/introducing-mai-code-2-and-mai-code-2-flash/",
+          "title": "Microsoft MAI Code 2 and Code 2 Flash",
+          "date": "2026-11-17"
+        }
+      ],
+      "prior": "Premium code agents, vendor-hosted tested baselines.",
+      "change": "Microsoft deploys lower-priced coding tiers and showcases selected cost-performance ratios.",
+      "evidence": "Publisher 96%-performance/5%-cost claim uses selected tests and promotional price; not full agent runs or FLOPs avoided.",
+      "access": "First-party availability announced; verify surfaces and plan before retail use.",
+      "unlocks": "Use as price comparator only with task-level accepted output and full pricing.",
+      "importance": 4,
+      "relevance": 4,
+      "depends_on": []
+    },
+    {
+      "id": "rsi-prime",
+      "title": "RSI-Prime decision-selected researcher training",
+      "domain": "agents",
+      "announced_at": "2026-11-17",
+      "available_at": null,
+      "sources": [
+        {
+          "url": "https://arxiv.org/abs/2611.23138",
+          "title": "RSI-Prime decision-selected researcher training",
+          "date": "2026-11-17"
+        }
+      ],
+      "prior": "An unchanged GLM-5.3 researcher and full trajectory fine-tuning.",
+      "change": "Curates decisions inside 350 complete experimental trajectories before fine-tuning researcher.",
+      "evidence": "Author results 36.56 unchanged, 45.61 full-SFT, 48.24 decision-SFT; disclosed HumanEval overlap and only original averaged three trials.",
+      "access": "Public preprint. Target model training uses one H100 with 10-hour budget per experiment; not cost of training the researcher itself.",
+      "unlocks": "First compare verified notes with raw receipts and budget-matched fresh researcher before training.",
+      "importance": 5,
+      "relevance": 5,
+      "depends_on": [
+        "singularitybench"
+      ]
+    },
+    {
+      "id": "gemini4-neon",
+      "title": "Gemini 4 Neon",
+      "domain": "models",
+      "announced_at": "2026-11-18",
+      "available_at": "2026-11-18",
+      "sources": [
+        {
+          "url": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-neon/",
+          "title": "Gemini 4 Neon",
+          "date": "2026-11-18"
+        },
+        {
+          "url": "https://deepmind.google/models/model-cards/gemini-4-neon/",
+          "title": "Gemini 4 Neon model card",
+          "date": "2026-11-18"
+        },
+        {
+          "url": "https://artificialanalysis.ai/articles/gemini-4-neon-intelligence-gain",
+          "title": "Artificial Analysis independent evaluation",
+          "date": "2026-11-18"
+        }
+      ],
+      "prior": "Gemini 4 Carbon and earlier Flash tiers.",
+      "change": "Carbon-derived model targets faster high-volume multimodal reasoning.",
+      "evidence": "Independent Artificial Analysis reports index 61 at xhigh; lower benchmark time and cost than standard-price Carbon but more output tokens. No compute-avoidance inference.",
+      "access": "Google API/eligible products per publisher; cost depends on tier and promotion window.",
+      "unlocks": "Strong competing direct route for document and tool-use trials, not a unique moated workflow.",
+      "importance": 5,
+      "relevance": 5,
+      "depends_on": [
+        "gemini4-carbon"
+      ]
+    },
+    {
+      "id": "harness-adapters-scale",
+      "title": "Hugging Face harness adapters at 27B scale",
+      "domain": "agents",
+      "announced_at": "2026-11-20",
+      "available_at": "2026-11-20",
+      "sources": [
+        {
+          "url": "https://huggingface.co/blog/harness-adapters-at-scale",
+          "title": "Hugging Face harness adapters at 27B scale",
+          "date": "2026-11-20"
+        }
+      ],
+      "prior": "Earlier harness-specific smoke trials and untuned Qwen3.8-27B with the same harness.",
+      "change": "Released matched within-harness RL-trained LoRA comparisons for three agent harnesses and a merged adapter.",
+      "evidence": "Authors report pi SWE-bench Pro hard51 39.2→64.7%; thinking baseline is stronger. Efficiency comparisons on mutually solved tasks are not full-workload savings. Terminal-Bench participated in some selection.",
+      "access": "Public reproducibility pipeline and artifacts; training resources and model rights separate.",
+      "unlocks": "Compare specialist against same-budget thinking base and strongest direct solver on new owned workflow before training.",
+      "importance": 5,
+      "relevance": 5,
+      "depends_on": [
+        "harness-adapters-v1",
+        "rsi-prime"
+      ]
+    },
+    {
+      "id": "inkling2-mini",
+      "title": "Thinking Machines Inkling 2 Mini",
+      "domain": "models",
+      "announced_at": "2026-11-20",
+      "available_at": "2026-11-20",
+      "sources": [
+        {
+          "url": "https://thinkingmachines.ai/news/inkling-2-mini/",
+          "title": "Thinking Machines Inkling 2 Mini",
+          "date": "2026-11-20"
+        },
+        {
+          "url": "https://thinkingmachines.ai/model-card/inkling-2-mini/",
+          "title": "Inkling 2 Mini Model Card",
+          "date": "2026-11-20"
+        }
+      ],
+      "prior": "Older Inkling-Small and laptop-class open models with different memory/capability tradeoffs.",
+      "change": "26.4B total, 3.4B active MoE loops middle layers three times per token; provider reports approximately 20GB memory footprint.",
+      "evidence": "Publisher DeepSWE v1.1 48.2% and Vals Index v2.2 46.5%; speed chart theoretical and settings vary. No independent local acceptance measured.",
+      "access": "Open Apache-2.0 weights; memory is deployment-dependent, not a CPU latency guarantee.",
+      "unlocks": "Evaluate ownable local text/image agent tasks with matched whole-job costs against Nemotron and API incumbents.",
+      "importance": 5,
+      "relevance": 5,
+      "depends_on": [
+        "inkling2-small",
+        "nemotron-lightning"
+      ]
+    }
+  ],
+  "coverage": [
+    {
+      "month": "2026-07",
+      "reviewed_domains": [
+        "models",
+        "multimodal",
+        "efficiency"
+      ],
+      "gaps": [
+        "Not exhaustive across regional developers, hardware or enterprise deployment.",
+        "No independent matched cost for local OCR recorded."
+      ]
+    },
+    {
+      "month": "2026-08",
+      "reviewed_domains": [
+        "efficiency",
+        "science",
+        "models"
+      ],
+      "gaps": [
+        "Sparse verified institutional coverage outside chosen developer releases and photonics prior art.",
+        "No independently reproduced cross-device cost curves."
+      ]
+    },
+    {
+      "month": "2026-09",
+      "reviewed_domains": [
+        "models",
+        "efficiency",
+        "agents"
+      ],
+      "gaps": [
+        "Public versus restricted access tracked where dated; no full Asia model and finance infrastructure inventory.",
+        "No measured MONTREAL.AI workflow transfer."
+      ]
+    },
+    {
+      "month": "2026-10",
+      "reviewed_domains": [
+        "models",
+        "agents",
+        "multimodal",
+        "efficiency",
+        "science"
+      ],
+      "gaps": [
+        "Dates reflect cited first public observation, not private availability.",
+        "Missing robust new-versus-old experimental outcomes on rights-cleared buyer workloads."
+      ]
+    },
+    {
+      "month": "2026-11",
+      "reviewed_domains": [
+        "models",
+        "agents",
+        "multimodal",
+        "efficiency",
+        "verification",
+        "science",
+        "economics"
+      ],
+      "gaps": [
+        "Partial month, through November 20 UTC only; no real-time exhaustive crawl.",
+        "Independent validation strongest for selected benchmark setups; live product, buyer, ROI and regional access not independently qualified."
+      ]
+    }
+  ],
+  "exclusions": [
+    "No maturity claims based on fundraising, demos or leaderboard rank alone.",
+    "Research availability is not public commercial deployment; null denotes unverified broad access or no deployable release.",
+    "No rumor, assumed uniform API regional availability, realized customer return or unsupported pre-July impossibility included.",
+    "Safety-sensitive operational details and unauthorized data are outside scope.",
+    "Cutoff marks actual run date, not blanket coverage of every same-day publication."
+  ]
+}

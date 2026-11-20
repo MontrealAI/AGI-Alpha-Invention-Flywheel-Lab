@@ -1,0 +1,66 @@
+[
+  {
+    "id":"table-revision-proof",
+    "title":"Turn scanned revisions into cell-level change evidence",
+    "as_of":"2026-11-20",
+    "move":"Sell a fixed-scope comparison of two authorized catalog revisions that shows which specification cells changed, with reviewable page anchors. Start with non-safety-critical industrial catalogs.",
+    "change":"LightOn's October 8 LightOnOCR-3 announcement and model card document a 1B model that adds region coordinates and labels to OCR, enabling a new candidate pipeline for linking parsed values back to visible evidence. They do not establish accuracy or historical impossibility for this workflow.",
+    "alternative":"Compare pinned pre-July Docling layout and TableFormer extraction plus deterministic keyed table diff and analyst review, on identical originals. For born-digital catalogs also permit native text extraction and the supplier's revision notes.",
+    "ownership":"Own the matching, provenance, abstention and verification workflow; not customer catalogs or model weights. The referenced model card names Apache 2.0 for the model. Client-document rights and a shipping dependency/license review remain necessary.",
+    "buyer":"Catalog-operations owner at a specialist industrial distributor who already reviews periodic supplier revisions.",
+    "economics":"Fixed fee per compared revision or per enabled vendor. Measure actual specialist minutes, false-alert and missed-change rework, hosting and the attainable fee. No observed net savings or willingness to pay.",
+    "experiment":"Freeze complete independently adjudicated vendor releases before tuning, stratified by language and native versus scanned format. Compare both methods' true changed cells, wrong supplier/part mappings, source links, unexplained misses and total review minutes. Obtain an authorized pilot separately before counting demand.",
+    "pass_threshold":"At least 30% lower total analyst minutes than the strongest permitted baseline, no incremental material numeric/units errors, every emitted change links to both legible source cells, and at least 85% of eligible tables resolved.",
+    "stop_threshold":"Stop if source rights cannot be cleared or adjudication shows any unsupported material numeric change; pass on the market thesis if time savings do not clear the threshold or a paid pilot does not cover direct review costs.",
+    "sources":[
+      {"url":"https://huggingface.co/blog/lightonai/lightonocr-3","title":"LightOnOCR-3: High-Performance OCR and Layout Extraction in One Model","date":"2026-10-08"},
+      {"url":"https://huggingface.co/lightonai/LightOnOCR-3-1B","title":"LightOnOCR-3-1B model and license card","date":"2026-10-08"},
+      {"url":"https://arxiv.org/abs/2408.09869","title":"Docling Technical Report","date":"2024-08-19"}
+    ],
+    "capability_verified":false,"ownership_supported":false,"demand_observed":false,"delivery_verified":false,
+    "urgency":null,"recommendation":"TEST","priority":5
+  },
+  {
+    "id":"weather-replay-instrument",
+    "title":"Separate likely wet windows from unknowns in historical operations logs",
+    "as_of":"2026-11-20",
+    "move":"Join authorized timestamped public work interruptions to public precipitation estimates and independent gauges for retrospective coincidence review only; ship an auditable ledger, not site observations, warnings, or causal explanations.",
+    "change":"Google's November 13 release made PARDIG experimental precipitation estimates openly available, including a 15-minute, 0.1-degree archive. Finer time bins than half-hour IMERG are real; greater accuracy on an individual site has not been established.",
+    "alternative":"NASA IMERG V07 half-hour archive plus the same gauge matching workflow. In areas with suitable coverage also measure against the strongest locally available radar-and-gauge workflow rather than assuming a global-only comparator.",
+    "ownership":"Own the joining and abstention code, not published grids or gauge observations. Google documents CC BY 4.0 for PARDIG; separately establish terms for each gauge feed, operations record and deployment.",
+    "buyer":"Solar O&M analyst reviewing whether brief recorded interruptions coincided with wet intervals in a region with incomplete weather logs.",
+    "economics":"Possible portfolio audit fee only if reduced review or fewer unresolved episodes are independently measured. Include acquisition, egress, exception review, validation and maintenance. No buyer commitment or evidence of value capture.",
+    "experiment":"Do not start without public work intervals, overlapping candidate and alternative archives, and an independent gauge reference with frozen distance and time tolerances. Hold out site and storm groups, compare wet/dry mistakes and abstentions at matched coverage, time the entire case review. Never attribute exact site rain from a grid alone.",
+    "pass_threshold":"At least 20% lower median review time and 10% fewer unresolved eligible intervals than strongest baseline, with no increase in independently observed wet/dry error at comparable coverage.",
+    "stop_threshold":"Withhold when eligible public intervals or matched independent gauges are absent. Stop if the finer time bins do not outperform the strongest comparator or their errors fail to transfer across sites.",
+    "sources":[
+      {"url":"https://developers.google.com/weathernext/release-notes","title":"Google WeatherNext release notes: PARDIG launch","date":"2026-11-13"},
+      {"url":"https://developers.google.com/weathernext/guides/pardig","title":"Google PARDIG dataset guide","date":"2026-11-13"},
+      {"url":"https://gpm.nasa.gov/sites/default/files/2024-12/IMERG_V07_ReleaseNotes_241126.pdf","title":"NASA IMERG V07 Release Notes","date":"2024-11-26"}
+    ],
+    "capability_verified":false,"ownership_supported":false,"demand_observed":false,"delivery_verified":false,
+    "urgency":null,"recommendation":"TEST","priority":3
+  },
+  {
+    "id":"offline-audio-fault-report",
+    "title":"Local bilingual voice-to-rework tickets for disconnected workshops",
+    "as_of":"2026-11-20",
+    "move":"Turn a consenting technician's voice note into a draft inventory or cosmetic rework ticket with verbatim time-linked evidence. Never control equipment or make safety, compliance, fault causation, or personnel decisions; human review stays in the loop.",
+    "change":"Liquid AI's October 27 LFM3 release includes a compact audio model with multilingual speech processing, and the November 12 LiquidCodec technical post explains the new audio tokenizer. Lower end-to-end costs on shop-floor hardware remain a hypothesis, not a consequence of the announcement.",
+    "alternative":"Pre-existing local Whisper multilingual transcription followed by fixed-schema extraction and conventional review; use the same glossary, hardware and source-review UI with both arms.",
+    "ownership":"Own the schema, review UI and evidence-validation logic. The LFM model's license is commercially restricted at a USD 10 million annual revenue threshold; verify exact entity eligibility and a model-substitution or separate-license plan. Do not train on technician recordings without distinct authorization.",
+    "buyer":"Workshop supervisor at a small refurbisher or assembly operation with bilingual staff and disconnected workstations.",
+    "economics":"Potential per-workstation software fee. Include local hardware, operations, onboarding and all correction time. The first fee must be tied to ordinary work orders, not benchmark performance; there is no payment evidence.",
+    "experiment":"Collect consented, non-sensitive ticket notes and adjudicated field labels, hold out speakers and locations, and run both offline arms on the same target hardware. Compare exact item IDs and quantities, abstention and review minutes including ambient-noise corrections.",
+    "pass_threshold":"At least 25% lower median capture-to-approved-ticket time, no decrease in exact item ID or quantity match at a comparable completion rate, and no transfer of raw audio off the device.",
+    "stop_threshold":"Stop if commercial use cannot be cleared, rate of materially erroneous fields exceeds the baseline, end-to-end gains do not survive unseen speakers, or direct support costs exceed the credible fee.",
+    "sources":[
+      {"url":"https://www.liquid.ai/blog/lfm3","title":"Introducing LFM3: Every Modality for Specialized Intelligence","date":"2026-10-27"},
+      {"url":"https://www.liquid.ai/blog/liquidcodec","title":"LiquidCodec: High-Fidelity Audio Tokenization Optimized for Speed","date":"2026-11-12"},
+      {"url":"https://huggingface.co/LiquidAI/LFM3-Audio-2B/blob/main/LICENSE","title":"LFM3-Audio-2B LFM Open License v1.0","date":"2026-10-27"},
+      {"url":"https://openai.com/index/whisper/","title":"Introducing Whisper","date":"2022-09-21"}
+    ],
+    "capability_verified":false,"ownership_supported":false,"demand_observed":false,"delivery_verified":false,
+    "urgency":null,"recommendation":"TEST","priority":2
+  }
+]
