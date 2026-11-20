@@ -1,0 +1,40 @@
+name: ALPHA economic engine ignition
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'connected_enterprise/alpha_runtime.py'
+      - 'connected_enterprise/alpha_verify.py'
+      - 'connected_enterprise/alpha_demo.py'
+      - 'tests/test_alpha_runtime_ignition.py'
+      - '.github/workflows/alpha-economic-engine-ignition.yml'
+permissions:
+  contents: read
+jobs:
+  ignition:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record platform window
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            connected_enterprise
+            tests
+      - name: Regression suite
+        run: python3 -m unittest discover -s tests -p 'test_alpha_runtime_ignition.py' -v
+      - name: Operate one daemon and audit delivered artifacts
+        run: |
+          python3 -m connected_enterprise.alpha_demo --output "$RUNNER_TEMP/alpha-ignition"
+          python3 -m connected_enterprise.alpha_runtime --root "$RUNNER_TEMP/alpha-ignition/machine" audit
+      - name: Publish bounded evidence to job summary
+        if: always()
+        run: |
+          python3 - <<'PY'
+          import os, pathlib
+          p = pathlib.Path(os.environ['RUNNER_TEMP']) / 'alpha-ignition/RESULTS.json'
+          with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as f:
+              f.write('# ALPHA production ignition\n\nSynthetic inputs; real local computation. No customers, settlement or reinvestment.\n\n')
+              f.write('```json\n' + (p.read_text() if p.exists() else '{"result":"INCOMPLETE"}') + '\n```\n')
+          PY

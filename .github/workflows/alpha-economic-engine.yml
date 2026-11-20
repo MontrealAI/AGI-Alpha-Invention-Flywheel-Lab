@@ -1,0 +1,74 @@
+name: ALPHA Economic Engine integration
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/alpha-economic-engine.yml'
+      - 'connected_enterprise/alpha_economic/**'
+      - 'commercial/ledger.py'
+      - 'connected_enterprise/finance.py'
+      - 'tests/test_alpha_economic*'
+      - 'scripts/alpha_economic*'
+  workflow_dispatch:
+    inputs:
+      local_model:
+        description: 'Run pinned local CPU model qualification (no paid API)'
+        required: false
+        type: boolean
+        default: false
+permissions:
+  contents: read
+jobs:
+  engine:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record platform window
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+          sparse-checkout: |
+            connected_enterprise
+            adaptive_enterprise
+            commercial
+            enterprise
+            vendor
+            experiments
+            portfolio25
+            verification
+            production060
+            inventory061
+            flexibility063
+            mechanisms
+            flywheel
+            products/alpha-genesis-harness
+            tests
+            scripts
+            docs/alpha-economic-engine
+      - name: Qualify exact integrated source and extracted package
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/alpha-public"
+          git rev-parse HEAD > "$RUNNER_TEMP/alpha-public/SOURCE-REVISION.txt"
+          python3 -m unittest discover -s tests -p 'test_alpha_economic*.py' -v 2>&1 | tee "$RUNNER_TEMP/alpha-public/ENGINE-TESTS.txt"
+          python3 -m unittest discover -s tests -p 'test_connected_finance.py' -v 2>&1 | tee "$RUNNER_TEMP/alpha-public/NATIVE-REGRESSION.txt"
+          python3 -m unittest discover -s tests -p 'test_alpha_runtime_ignition.py' -v 2>&1 | tee "$RUNNER_TEMP/alpha-public/IGNITION-REGRESSION.txt"
+          python3 -m connected_enterprise.alpha_economic demo --output "$RUNNER_TEMP/alpha-demo" > "$RUNNER_TEMP/alpha-public/DEMO-LOG.txt"
+          cp "$RUNNER_TEMP/alpha-demo/RESULTS.json" "$RUNNER_TEMP/alpha-public/RESULTS.json"
+          python3 scripts/alpha_economic_package.py --output "$RUNNER_TEMP/alpha-public/ALPHA_ECONOMIC_ENGINE_0.2.0.zip" > "$RUNNER_TEMP/alpha-public/PACKAGE.json"
+          mkdir -p "$RUNNER_TEMP/alpha-extracted"
+          python3 -m zipfile -e "$RUNNER_TEMP/alpha-public/ALPHA_ECONOMIC_ENGINE_0.2.0.zip" "$RUNNER_TEMP/alpha-extracted"
+          cd "$RUNNER_TEMP/alpha-extracted"
+          python3 -m unittest discover -s tests -p 'test_alpha_economic*.py' -v 2>&1 | tee "$RUNNER_TEMP/alpha-public/EXTRACTED-TESTS.txt"
+          python3 -m connected_enterprise.alpha_economic demo --output "$RUNNER_TEMP/alpha-extracted-demo" > "$RUNNER_TEMP/alpha-public/EXTRACTED-DEMO.txt"
+      - name: Actual pinned local CPU model in the connected operating loop
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.local_model }}
+        run: python3 scripts/alpha_economic_local_model.py --work "$RUNNER_TEMP/alpha-local-model-work" --public "$RUNNER_TEMP/alpha-public/local-model"
+      - name: Preserve only public code and bounded evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: alpha-economic-engine-${{ github.run_id }}
+          path: ${{ runner.temp }}/alpha-public
+          if-no-files-found: warn
+          retention-days: 7
