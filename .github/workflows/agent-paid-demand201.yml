@@ -1,0 +1,47 @@
+name: ME201 paid-agent evidence gate (independent read-only)
+on:
+  pull_request:
+    paths:
+      - 'campaign/agent-paid-demand201/**'
+      - '.github/workflows/agent-paid-demand201.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-bound-research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Check out exact event source without persistent credentials
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - name: Record exact code and provenance
+        run: |
+          git rev-parse HEAD
+          sha256sum campaign/agent-paid-demand201/{PREREGISTRATION.md,admission.py,test_admission.py}
+      - name: Run all 14 frozen tests without installing dependencies
+        run: python3 -B -m unittest discover -s campaign/agent-paid-demand201 -p 'test_admission.py' -v
+      - name: Generate standalone read-only verdict; no network calls or payment
+        run: |
+          python3 -B campaign/agent-paid-demand201/admission.py --output "$RUNNER_TEMP/me201-result.json"
+          python3 - "$RUNNER_TEMP/me201-result.json" <<'PY'
+          import json,sys
+          d=json.load(open(sys.argv[1]))
+          assert d['selected_action']=='NO_DEPLOY_RETAIN_QUALIFIED_INCUMBENT'
+          assert d['actual_trailing_365_profit_usd'] is None
+          assert [x['arithmetic']['gross_only_necessary_annual_units'] for x in d['alternatives'][:3]]==[600000000000,150000000000,300000]
+          assert not any(x['admit_to_native_commerce'] for x in d['alternatives'])
+          assert not d['sampled_market_is_global_ceiling']
+          print('ME201 conditional arithmetic and nonentry acceptance verified; zero commerce')
+          PY
+      - name: Upload bounded evidence only
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: me201-source-bound-readonly-report
+          path: ${{ runner.temp }}/me201-result.json
+          if-no-files-found: error
+          retention-days: 14
