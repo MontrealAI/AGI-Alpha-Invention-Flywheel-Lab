@@ -69,11 +69,6 @@ def names_from_target(source):
         raise ValueError("TARGET_SOURCE_IDENTITY_SELECTOR_CHANGED")
     # Only evaluate the pinned, isolated selector AST with literal data. Do not
     # execute the full module or import JournalAccount/native finance/account.
-    ns = {"isinstance": isinstance, "dict": dict, "tuple": tuple, **constants}
-    exec(compile(ast.Module(body=[selector], type_ignores=[]),
-                 "pinned-source-selector", "exec"), {"__builtins__": {
-                     "isinstance": isinstance, "dict": dict, "tuple": tuple}, **ns}, ns)
-    # AST function global namespace is not ns when globals != locals; recompile.
     scope = {"__builtins__": {"isinstance": isinstance, "dict": dict, "tuple": tuple},
              **constants}
     exec(compile(ast.Module(body=[selector], type_ignores=[]),
