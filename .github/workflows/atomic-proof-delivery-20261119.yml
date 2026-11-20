@@ -1,0 +1,36 @@
+name: APD001 atomic verified delivery (research only)
+on:
+  pull_request:
+    paths:
+      - "campaign/atomic-proof-delivery-20261119/**"
+      - ".github/workflows/atomic-proof-delivery-20261119.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  executable-proof:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Mark actual execution window
+        run: |
+          echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+          date -u
+      - uses: actions/checkout@v4
+      - name: Independently execute strong conventional software control
+        run: |
+          cd campaign/atomic-proof-delivery-20261119
+          python3 -m unittest discover -s . -p 'test_ordinary_control.py' -v
+          python3 ordinary_control.py --output "$RUNNER_TEMP/apd001-ordinary-control.json"
+          python3 -m json.tool "$RUNNER_TEMP/apd001-ordinary-control.json" > /dev/null
+      - name: Install Foundry for local-only EVM
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: stable
+      - name: Execute exact graph proof settlement and negative-path tests
+        run: |
+          cd campaign/atomic-proof-delivery-20261119
+          forge --version
+          forge test -vv --gas-report
