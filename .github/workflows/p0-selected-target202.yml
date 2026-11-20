@@ -33,7 +33,8 @@ jobs:
         with:
           python-version: '3.12'
       - name: Install exact canonical local simulation dependencies
-        run: python -m pip install --only-binary=:all: -r requirements-commercial010.txt
+        run: |
+          python -m pip install --only-binary=:all: -r requirements-commercial010.txt
       - name: Check exact original owner blobs and selected target closures (no authority)
         env:
           P0202_OWNER_ROOT: ${{ github.workspace }}/owner-pr40
