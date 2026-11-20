@@ -1,0 +1,15 @@
+# APD002 — immutable order-ID capture and buyer-scope counterexample
+
+**Prospective preregistration before any APD002 implementation or execution.** Based on publicly visible APD001 research branch commit `d87ca815e8c762852855c893d3b2a512675c753d`; original `campaign/atomic-proof-delivery-20261119/contracts/AtomicThreeColorExchange.sol` Git blob `d9b4b0a736b2d276e16220954203667db63c24cf`. The source and previous APD001 experiments must remain unchanged. This is independent review, not owner-source modification, protected merge, financial account migration or release.
+
+## Threat and acceptance
+
+A malicious different-account observer sees a legitimate buyer's public `open(id, seller, graphHash, vertices, expiry)` transaction before inclusion and submits a cheaper own `open` with **the same global job id** and a different sender/payload first. On the original contract, `jobs[id].status != None` permanently excludes the legitimate buyer even if the attacker pays one wei; the legitimate buyer's transaction reverts and may incur gas. It is *order admission denial*, not theft of deposited funds. First confirmed state is explicitly modeled using local EVM call ordering, **not** proof of public-network MEV profitability.
+
+Predeclared executable cases: (1) original exact source permits attacker-first ID occupation and refuses victim's attempt; (2) separate buyer-scoped reference computes `keccak256(abi.encode(buyer, clientId))` and accepts same clientId from different buyer accounts into different storage keys; (3) same buyer still cannot duplicate a clientId; (4) attacker cannot claim seller's valid certificate; (5) a legitimate seller's C4 witness atomically settles and refunds stay forbidden afterward; (6) expired unaccepted work returns correct principal; (7) malicious invalid certificate never transfers funds. Retain original tests unchanged, using standalone new tests. Do not silently loosen the original graph verification, fee cap or cancellation ordering.
+
+Success is **only** demonstrating a buyer-namespace isolation property under local EVM assumptions, plus equality of the original happy-path settlement. Strong alternatives are randomly unique high-entropy IDs (reduces guessing but not public-mempool copying), private order flow (not assumed available), conventional off-chain fulfillment with competent operator and no deploy. No new market, verifiable economic buyer, ETH transfer, real revenue, a new frontier discovery or US$3B T365 profit may be claimed. Preserve all failures, costs, caveats and independent-owner boundaries.
+
+## Execution
+
+Use a separate additive reference contract and tests; no edit to original APD001. Test with standard free public GitHub-hosted Actions and Foundry, job `timeout-minutes: 360`, first step records `AGI_JOB_START_EPOCH`. Pin/verify original Git blob before tests. Run `forge test -vv` from APD001 project folder so both original and independent tests run. Keep simulated ephemeral EVM balances only; no chain deployment or persistent credentials. If deployment gas/hosting billing is unavailable, leave it unknown. The decision remains **HOLD / NO DEPLOY / NO BID**.
