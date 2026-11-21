@@ -9,7 +9,9 @@ from decimal import Decimal
 import hashlib
 import json
 from pathlib import Path
+import subprocess
 import sys
+import tempfile
 from time import perf_counter
 from urllib.request import urlopen
 
@@ -18,7 +20,7 @@ from bridge.adapters import Runtime, strict_json
 from bridge.economic_mission import ARTIFACT, SOURCE_LIMIT, checks, selected
 from bridge.instruments import evaluate
 from bridge.services import AccessRuntime
-from bridge.workflows import WorkflowService, digest, equivalent
+from bridge.workflows import WorkflowService, digest, equivalent, portable_digest
 
 SOURCES = {
     "electricity": (
@@ -159,6 +161,21 @@ def catalogue_inputs(records):
                "floor": (6000, 6250, 6500)[index % 3], "reviewed": properties["status"] == "reviewed"}
 
 
+def boundary_inputs(contract, sample):
+    if contract == "window":
+        return [
+            {**sample, **{f"c{i}": 100 for i in range(6)}, "ready": 1, "until": 5},
+            {**sample, **{f"c{i}": -1 if i % 2 else 100 for i in range(6)}, "ready": 0, "until": 6},
+            {**sample, "ready": 4, "until": 5},
+        ]
+    if contract == "quote":
+        return [
+            {**sample, "cad": 100, "usd": 100, "usd_rate": 10000, "eur": -1, "gbp": -1},
+            {**sample, "cad": -1, "usd": -1, "eur": -1, "gbp": -1},
+        ]
+    return []
+
+
 def cases(sources):
     data = {key: strict_json(row["snapshot"]["body"]) for key, row in sources.items()}
     groups = {"window": list(window_inputs(data["electricity"]["data"])),
@@ -174,8 +191,14 @@ def cases(sources):
         if len(rows) < 7:
             raise ValueError(f"Insufficient distinct observations for the registered {key} workload.")
         labelled = [{"input": row, "expected": REFERENCES[key](row)} for row in rows]
+        if len({digest(row["expected"]) for row in labelled}) < 2:
+            # The USGS summary feed can omit magnitude uncertainty. All-abstention
+            # cases cannot qualify inclusion and exclusion, so keep it as evidence only.
+            continue
         source, goal = GOALS[key]
-        contracts[key] = {"source": source, "goal": goal, "development": labelled[:3], "qualification": labelled[3:-2]}
+        boundary = [{"input": row, "expected": REFERENCES[key](row)} for row in boundary_inputs(key, rows[0])]
+        contracts[key] = {"source": source, "goal": goal, "development": labelled[:3],
+                          "qualification": labelled[3:-2] + boundary}
         successor[key] = labelled[-2:]
     return contracts, successor
 
@@ -225,12 +248,13 @@ def run(args):
         "local_only": True, "tool_permissions": ["construct_instrument"],
         "max_iterations": 3, "max_actions": 3, "max_output_tokens": 2304,
         "economic_mission": {"beneficiary": "MONTREAL.AI", "language": args.language,
-                             "sources": sources, "contracts": contracts},
+                             "sources": sources, "contracts": contracts, "confirm_citations": True},
     }
     _json(args.work / "MISSION.json", spec)
     registration = {"spec_sha256": digest(spec), "successor_sha256": digest(successor),
                     "conventional": sorted(REFERENCES), "model": args.model,
-                    "max_construction_attempts": spec["max_iterations"]}
+                    "max_construction_attempts": spec["max_iterations"],
+                    "insufficient_observation_coverage": sorted(set(REFERENCES) - set(contracts))}
     _json(args.work / "REGISTRATION.json", registration)
     config = strict_json(args.config.read_bytes())
     runtime = AccessRuntime(Runtime(config), config)
@@ -272,16 +296,59 @@ def run(args):
         service.close()
 
 
+def replay(path):
+    """Re-evaluate a qualified export using the pinned portable evaluator."""
+    archive = strict_json(path.read_bytes())
+    if (archive.get("schema") != "alpha-genesis-workflow-export/v1"
+            or archive.get("sha256") != portable_digest({k: v for k, v in archive.items() if k != "sha256"})):
+        raise ValueError("Invalid HARNESS export identity.")
+    state, files = archive["state"], archive["files"]
+    economic = state["economic_mission"]
+    sealed = economic["frozen"]
+    acceptance = checks(state, final=True)
+    evaluator = Path(__file__).resolve().parents[1] / "bridge/instruments.py"
+    evaluator_sha256 = hashlib.sha256(evaluator.read_bytes()).hexdigest()
+    if (state["status"] != "complete" or state["spec_hash"] != digest(state["spec"]) or not acceptance
+            or sealed["qualification_sha256"] != digest(acceptance)
+            or sealed["sha256"] != hashlib.sha256(files[ARTIFACT].encode()).hexdigest()
+            or economic["source_identity"]["instruments.py"] != evaluator_sha256
+            or hashlib.sha256(files["RUN_INSTRUMENT.py"].encode()).hexdigest() != evaluator_sha256):
+        raise ValueError("Archived instrument, evaluator or qualification inputs changed.")
+    passed = 0
+    started = perf_counter()
+    with tempfile.TemporaryDirectory(prefix="omega-replay-") as temporary:
+        root = Path(temporary)
+        asset, inputs = root / ARTIFACT, root / "input.json"
+        asset.write_text(files[ARTIFACT], encoding="utf-8")
+        for check in acceptance:
+            _json(inputs, check["input"])
+            raw = subprocess.check_output([sys.executable, "-B", str(evaluator), str(asset), str(inputs),
+                                           "--max-operations", str(state["spec"]["max_operations"])])
+            passed += equivalent(strict_json(raw)["output"], check["expected"])
+    return {"qualification": "passed" if passed == len(acceptance) else "rejected",
+            "passed": passed, "total": len(acceptance), "candidate_sha256": sealed["sha256"],
+            "evaluator_sha256": evaluator_sha256, "wall_seconds": perf_counter() - started}
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--config", required=True, type=Path)
-    parser.add_argument("--provider", required=True)
-    parser.add_argument("--model", required=True)
-    parser.add_argument("--work", required=True, type=Path)
+    parser.add_argument("--config", type=Path)
+    parser.add_argument("--provider")
+    parser.add_argument("--model")
+    parser.add_argument("--work", type=Path)
     parser.add_argument("--sources", type=Path, help="Replay a previous exact public-source capture.")
     parser.add_argument("--language", choices=("en", "fr"), default="en")
-    run(parser.parse_args())
+    parser.add_argument("--replay", type=Path, help="Re-execute the frozen qualification from a completed archive.")
+    args = parser.parse_args()
+    if args.replay:
+        result = replay(args.replay)
+        print(json.dumps(result, ensure_ascii=False))
+        return 0 if result["qualification"] == "passed" else 1
+    if not all((args.config, args.provider, args.model, args.work)):
+        parser.error("Live experiment needs --config, --provider, --model and --work.")
+    run(args)
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

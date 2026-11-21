@@ -1,0 +1,358 @@
+{
+  "schema": "alpha-genesis-economic-mission-trials/v1",
+  "date": "2026-11-21",
+  "beneficiary": "MONTREAL.AI",
+  "scope": "Prospectively registered local construction trials. Source snapshots were supplied to HARNESS by the public pilot's acquisition step. Each row is a separate run.",
+  "sources": {
+    "electricity": {
+      "url": "https://api.carbonintensity.org.uk/intensity/2026-11-14T00:00Z/2026-11-16T00:00Z",
+      "sha256": "66dace003b6febd6cfe1d21413746e41ed0cd4ec4ce4fd31c2bf52c663c7fc89",
+      "mode": "operator-snapshot"
+    },
+    "exchange-rates": {
+      "url": "https://www.bankofcanada.ca/valet/observations/FXUSDCAD,FXEURCAD,FXGBPCAD/json?start_date=2026-10-01&end_date=2026-10-19",
+      "sha256": "9705a836b6c1bd4905323e1aeef573990193c0eebbd27e71af5bba9727668a88",
+      "mode": "operator-snapshot"
+    },
+    "seismic-archive": {
+      "url": "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=2026-10-01&endtime=2026-10-19&minmagnitude=6&orderby=time-asc",
+      "sha256": "8fa8b8a23a77e82ae02651ef07b07a149ac64ca2b0dafe4d4376e164a2327f05",
+      "mode": "operator-snapshot"
+    }
+  },
+  "attempts": [
+    {
+      "run_id": "wf_25292ce8985a27ba2a4912ee",
+      "status": "paused",
+      "model": "qwen3-4b-instruct-2507-q4",
+      "spec_sha256": "67a1300a39d3a3735d4b77993011d913841b496afaeef4068199a216d094a8bb",
+      "successor_sha256": "9194952580853b1d6f7b8aa084abae4f2a9ecdf6e321d3b195fe11707df29c4a",
+      "verdicts": {
+        "AUTONOMOUS_DISCOVERY": "not_established",
+        "EXECUTABLE_INVENTION": "not_established",
+        "INDEPENDENT_ACCEPTANCE": "not_established",
+        "CAPABILITY_ADVANTAGE": "not_established",
+        "FRONTIER_PARITY": "not_established",
+        "ECONOMIC_FEASIBILITY": "not_established",
+        "PRODUCTIVE_ASSET": "not_established",
+        "REAL_VALUE_CAPTURE": "not_established",
+        "FRESH_SUCCESSOR_BENEFIT": "not_established",
+        "INVENTOR_IMPROVEMENT": "not_established",
+        "AFTER_COST_COMPOUNDING": "not_established"
+      },
+      "configuration": "Qwen3 4B, first exact PR source, schema output, 16K context",
+      "mission_wall_seconds": 334.859,
+      "source_sha256": {
+        "adapters.py": "a05127970eb11bb08cc98ed7ef9e05f9a723f51c66f9a5bfaa9f2242bb6275a6",
+        "economic_mission.py": "8f6a49a5fca4ce7e96783e1946695dc5e3f18d0f547f581cf96f176990949a71",
+        "instruments.py": "46d43d4a017f1d32fcd9e05b32316a6fffac27e1a9572ab9ffbbf87338f00322",
+        "output_schema.py": "9877d088cad20b89b6b8d7322c4472840f21098e6b5bcb3eb008d84bfccc28cf",
+        "proof_to_market.py": "757e7579f17efed8d378f47ede6fbe2971e311272b4b4ca84269cb2efb3c19cd",
+        "services.py": "41b71b3f946f0912898558995f2c83f1f09b0cb2d5f9203bfecbef301de4a081",
+        "workflow_schemas.py": "74951ad4dedc2519a64ae8a8853da2fbe83c642e73ad12c36542a01f8b4ba58b",
+        "workflow_strategies.py": "bb639bfe6467c1da816149fc5918f785f9df8053b3e5fc841f9e0cdef3115124",
+        "workflows.py": "5124bd58f695701f00f6a2cd8bb622e4c639b46cb29de55d696d4687b2f91468"
+      },
+      "phase": "researcher",
+      "model_calls": 1,
+      "qualified_instrument": false,
+      "evidence": [
+        {
+          "kind": "model_error",
+          "role": "researcher",
+          "code": "PROVIDER_CONNECTION"
+        }
+      ],
+      "interruption": "The backend process was killed during generation. Cause unverified."
+    },
+    {
+      "run_id": "wf_b40c7dc93ef05050e4894f73",
+      "status": "paused",
+      "model": "qwen3-4b-instruct-2507-q4",
+      "spec_sha256": "67a1300a39d3a3735d4b77993011d913841b496afaeef4068199a216d094a8bb",
+      "successor_sha256": "9194952580853b1d6f7b8aa084abae4f2a9ecdf6e321d3b195fe11707df29c4a",
+      "verdicts": {
+        "AUTONOMOUS_DISCOVERY": "not_established",
+        "EXECUTABLE_INVENTION": "not_established",
+        "INDEPENDENT_ACCEPTANCE": "not_established",
+        "CAPABILITY_ADVANTAGE": "not_established",
+        "FRONTIER_PARITY": "not_established",
+        "ECONOMIC_FEASIBILITY": "not_established",
+        "PRODUCTIVE_ASSET": "not_established",
+        "REAL_VALUE_CAPTURE": "not_established",
+        "FRESH_SUCCESSOR_BENEFIT": "not_established",
+        "INVENTOR_IMPROVEMENT": "not_established",
+        "AFTER_COST_COMPOUNDING": "not_established"
+      },
+      "configuration": "Qwen3 4B, first extracted PR package, generic JSON mode, 16K context",
+      "mission_wall_seconds": 409.39,
+      "source_sha256": {
+        "adapters.py": "a05127970eb11bb08cc98ed7ef9e05f9a723f51c66f9a5bfaa9f2242bb6275a6",
+        "economic_mission.py": "8f6a49a5fca4ce7e96783e1946695dc5e3f18d0f547f581cf96f176990949a71",
+        "instruments.py": "46d43d4a017f1d32fcd9e05b32316a6fffac27e1a9572ab9ffbbf87338f00322",
+        "output_schema.py": "9877d088cad20b89b6b8d7322c4472840f21098e6b5bcb3eb008d84bfccc28cf",
+        "proof_to_market.py": "757e7579f17efed8d378f47ede6fbe2971e311272b4b4ca84269cb2efb3c19cd",
+        "services.py": "41b71b3f946f0912898558995f2c83f1f09b0cb2d5f9203bfecbef301de4a081",
+        "workflow_schemas.py": "74951ad4dedc2519a64ae8a8853da2fbe83c642e73ad12c36542a01f8b4ba58b",
+        "workflow_strategies.py": "bb639bfe6467c1da816149fc5918f785f9df8053b3e5fc841f9e0cdef3115124",
+        "workflows.py": "5124bd58f695701f00f6a2cd8bb622e4c639b46cb29de55d696d4687b2f91468"
+      },
+      "phase": "researcher",
+      "model_calls": 1,
+      "qualified_instrument": false,
+      "evidence": [
+        {
+          "kind": "model_error",
+          "role": "researcher",
+          "code": "PROVIDER_CONNECTION"
+        }
+      ],
+      "interruption": "The backend process was killed during generation. Cause unverified."
+    },
+    {
+      "run_id": "wf_1ca4e5416a0378cf67a67396",
+      "status": "paused",
+      "model": "qwen3-4b-instruct-2507-q4",
+      "spec_sha256": "b8dfcfa05fffe772a8ab31d3b4217d2902a52b400694876f3b08e6382def076e",
+      "successor_sha256": "06e5d1954c713f40700b8468cd577b9ef64519dd9df4d3c37cee59b499cee525",
+      "verdicts": {
+        "AUTONOMOUS_DISCOVERY": "not_established",
+        "EXECUTABLE_INVENTION": "not_established",
+        "INDEPENDENT_ACCEPTANCE": "not_established",
+        "CAPABILITY_ADVANTAGE": "not_established",
+        "FRONTIER_PARITY": "not_established",
+        "ECONOMIC_FEASIBILITY": "not_established",
+        "PRODUCTIVE_ASSET": "not_established",
+        "REAL_VALUE_CAPTURE": "not_established",
+        "FRESH_SUCCESSOR_BENEFIT": "not_established",
+        "INVENTOR_IMPROVEMENT": "not_established",
+        "AFTER_COST_COMPOUNDING": "not_established"
+      },
+      "configuration": "Qwen3 4B, revised sources and boundary cases, plain output, 16K context",
+      "mission_wall_seconds": 41.885,
+      "source_sha256": {
+        "adapters.py": "a05127970eb11bb08cc98ed7ef9e05f9a723f51c66f9a5bfaa9f2242bb6275a6",
+        "economic_mission.py": "901608529fa34cdb47abc045c7be9c1f49b217b7810d9f57b92f7335504ccebd",
+        "instruments.py": "46d43d4a017f1d32fcd9e05b32316a6fffac27e1a9572ab9ffbbf87338f00322",
+        "output_schema.py": "9877d088cad20b89b6b8d7322c4472840f21098e6b5bcb3eb008d84bfccc28cf",
+        "proof_to_market.py": "757e7579f17efed8d378f47ede6fbe2971e311272b4b4ca84269cb2efb3c19cd",
+        "services.py": "41b71b3f946f0912898558995f2c83f1f09b0cb2d5f9203bfecbef301de4a081",
+        "workflow_schemas.py": "74951ad4dedc2519a64ae8a8853da2fbe83c642e73ad12c36542a01f8b4ba58b",
+        "workflow_strategies.py": "bb639bfe6467c1da816149fc5918f785f9df8053b3e5fc841f9e0cdef3115124",
+        "workflows.py": "8ac5424609ba634ea1f6896320c2791c7c5c69ef88e2a71b647aebd9e948acda"
+      },
+      "phase": "researcher",
+      "model_calls": 1,
+      "qualified_instrument": false,
+      "evidence": [
+        {
+          "kind": "model_error",
+          "role": "researcher",
+          "code": "PROVIDER_CONNECTION"
+        }
+      ],
+      "interruption": "The backend process was killed during generation. Cause unverified."
+    },
+    {
+      "run_id": "wf_e0f5f7ac1d5524d696197613",
+      "status": "needs_review",
+      "model": "qwen2.5-coder-1.5b-q4",
+      "spec_sha256": "c8ef03889d907a60428853dbba34d6f147a185c7ec92bbb270c72bd889417734",
+      "successor_sha256": "06e5d1954c713f40700b8468cd577b9ef64519dd9df4d3c37cee59b499cee525",
+      "verdicts": {
+        "AUTONOMOUS_DISCOVERY": "not_established",
+        "EXECUTABLE_INVENTION": "not_established",
+        "INDEPENDENT_ACCEPTANCE": "not_established",
+        "CAPABILITY_ADVANTAGE": "not_established",
+        "FRONTIER_PARITY": "not_established",
+        "ECONOMIC_FEASIBILITY": "not_established",
+        "PRODUCTIVE_ASSET": "not_established",
+        "REAL_VALUE_CAPTURE": "not_established",
+        "FRESH_SUCCESSOR_BENEFIT": "not_established",
+        "INVENTOR_IMPROVEMENT": "not_established",
+        "AFTER_COST_COMPOUNDING": "not_established"
+      },
+      "configuration": "Qwen2.5 Coder 1.5B, plain output, 8K context",
+      "mission_wall_seconds": 92.248,
+      "source_sha256": {
+        "adapters.py": "a05127970eb11bb08cc98ed7ef9e05f9a723f51c66f9a5bfaa9f2242bb6275a6",
+        "economic_mission.py": "901608529fa34cdb47abc045c7be9c1f49b217b7810d9f57b92f7335504ccebd",
+        "instruments.py": "46d43d4a017f1d32fcd9e05b32316a6fffac27e1a9572ab9ffbbf87338f00322",
+        "output_schema.py": "9877d088cad20b89b6b8d7322c4472840f21098e6b5bcb3eb008d84bfccc28cf",
+        "proof_to_market.py": "757e7579f17efed8d378f47ede6fbe2971e311272b4b4ca84269cb2efb3c19cd",
+        "services.py": "41b71b3f946f0912898558995f2c83f1f09b0cb2d5f9203bfecbef301de4a081",
+        "workflow_schemas.py": "74951ad4dedc2519a64ae8a8853da2fbe83c642e73ad12c36542a01f8b4ba58b",
+        "workflow_strategies.py": "bb639bfe6467c1da816149fc5918f785f9df8053b3e5fc841f9e0cdef3115124",
+        "workflows.py": "8ac5424609ba634ea1f6896320c2791c7c5c69ef88e2a71b647aebd9e948acda"
+      },
+      "phase": "researcher",
+      "model_calls": 1,
+      "qualified_instrument": false,
+      "evidence": [
+        {
+          "kind": "model_completed",
+          "role": "researcher",
+          "usage": {
+            "input_tokens": 1322,
+            "output_tokens": 2012
+          },
+          "response_sha256": "7ab177d6eee466e0dfe8e6b7b3959ce24a3cd6e3600e9caa43dad31a63aa34a6"
+        },
+        {
+          "kind": "response_refused",
+          "reason": "Malformed or unsupported response: Return three to five opportunities, a selection and its rationale."
+        }
+      ]
+    },
+    {
+      "run_id": "wf_44c9a6015b3e5c51716ad81f",
+      "status": "needs_review",
+      "model": "qwen2.5-coder-1.5b-q4",
+      "spec_sha256": "c8ef03889d907a60428853dbba34d6f147a185c7ec92bbb270c72bd889417734",
+      "successor_sha256": "06e5d1954c713f40700b8468cd577b9ef64519dd9df4d3c37cee59b499cee525",
+      "verdicts": {
+        "AUTONOMOUS_DISCOVERY": "not_established",
+        "EXECUTABLE_INVENTION": "not_established",
+        "INDEPENDENT_ACCEPTANCE": "not_established",
+        "CAPABILITY_ADVANTAGE": "not_established",
+        "FRONTIER_PARITY": "not_established",
+        "ECONOMIC_FEASIBILITY": "not_established",
+        "PRODUCTIVE_ASSET": "not_established",
+        "REAL_VALUE_CAPTURE": "not_established",
+        "FRESH_SUCCESSOR_BENEFIT": "not_established",
+        "INVENTOR_IMPROVEMENT": "not_established",
+        "AFTER_COST_COMPOUNDING": "not_established"
+      },
+      "configuration": "Qwen2.5 Coder 1.5B, separated input/output, schema output, 8K context",
+      "mission_wall_seconds": 32.706,
+      "source_sha256": {
+        "adapters.py": "a05127970eb11bb08cc98ed7ef9e05f9a723f51c66f9a5bfaa9f2242bb6275a6",
+        "economic_mission.py": "3085e4947a3cc7256a0adbefad8b0c76f8139747b9293a2b732da917879327c0",
+        "instruments.py": "46d43d4a017f1d32fcd9e05b32316a6fffac27e1a9572ab9ffbbf87338f00322",
+        "output_schema.py": "9877d088cad20b89b6b8d7322c4472840f21098e6b5bcb3eb008d84bfccc28cf",
+        "proof_to_market.py": "757e7579f17efed8d378f47ede6fbe2971e311272b4b4ca84269cb2efb3c19cd",
+        "services.py": "41b71b3f946f0912898558995f2c83f1f09b0cb2d5f9203bfecbef301de4a081",
+        "workflow_schemas.py": "74951ad4dedc2519a64ae8a8853da2fbe83c642e73ad12c36542a01f8b4ba58b",
+        "workflow_strategies.py": "bb639bfe6467c1da816149fc5918f785f9df8053b3e5fc841f9e0cdef3115124",
+        "workflows.py": "fd879e6460de8bf58de61db88ab1d2fc8adb461c08c69914ee0f661e4f4f00b3"
+      },
+      "phase": "researcher",
+      "model_calls": 1,
+      "qualified_instrument": false,
+      "evidence": [
+        {
+          "kind": "model_completed",
+          "role": "researcher",
+          "usage": {
+            "input_tokens": 1332,
+            "output_tokens": 934
+          },
+          "response_sha256": "c973b8f7b6c7ef6956e145ab468090fd029bf308d12d4788f34c8152178db1b1"
+        },
+        {
+          "kind": "response_refused",
+          "reason": "Malformed or unsupported response: Opportunity does not match the discovery response contract."
+        }
+      ]
+    },
+    {
+      "run_id": "wf_c21006b84a360c6d7bbda5d9",
+      "status": "needs_review",
+      "model": "qwen3-4b-instruct-2507-q4",
+      "spec_sha256": "b8dfcfa05fffe772a8ab31d3b4217d2902a52b400694876f3b08e6382def076e",
+      "successor_sha256": "06e5d1954c713f40700b8468cd577b9ef64519dd9df4d3c37cee59b499cee525",
+      "verdicts": {
+        "AUTONOMOUS_DISCOVERY": "not_established",
+        "EXECUTABLE_INVENTION": "not_established",
+        "INDEPENDENT_ACCEPTANCE": "not_established",
+        "CAPABILITY_ADVANTAGE": "not_established",
+        "FRONTIER_PARITY": "not_established",
+        "ECONOMIC_FEASIBILITY": "not_established",
+        "PRODUCTIVE_ASSET": "not_established",
+        "REAL_VALUE_CAPTURE": "not_established",
+        "FRESH_SUCCESSOR_BENEFIT": "not_established",
+        "INVENTOR_IMPROVEMENT": "not_established",
+        "AFTER_COST_COMPOUNDING": "not_established"
+      },
+      "configuration": "Qwen3 4B, separated input/output, plain output, 4K context",
+      "mission_wall_seconds": 51.023,
+      "source_sha256": {
+        "adapters.py": "a05127970eb11bb08cc98ed7ef9e05f9a723f51c66f9a5bfaa9f2242bb6275a6",
+        "economic_mission.py": "3085e4947a3cc7256a0adbefad8b0c76f8139747b9293a2b732da917879327c0",
+        "instruments.py": "46d43d4a017f1d32fcd9e05b32316a6fffac27e1a9572ab9ffbbf87338f00322",
+        "output_schema.py": "9877d088cad20b89b6b8d7322c4472840f21098e6b5bcb3eb008d84bfccc28cf",
+        "proof_to_market.py": "757e7579f17efed8d378f47ede6fbe2971e311272b4b4ca84269cb2efb3c19cd",
+        "services.py": "41b71b3f946f0912898558995f2c83f1f09b0cb2d5f9203bfecbef301de4a081",
+        "workflow_schemas.py": "74951ad4dedc2519a64ae8a8853da2fbe83c642e73ad12c36542a01f8b4ba58b",
+        "workflow_strategies.py": "bb639bfe6467c1da816149fc5918f785f9df8053b3e5fc841f9e0cdef3115124",
+        "workflows.py": "fd879e6460de8bf58de61db88ab1d2fc8adb461c08c69914ee0f661e4f4f00b3"
+      },
+      "phase": "researcher",
+      "model_calls": 1,
+      "qualified_instrument": false,
+      "evidence": [
+        {
+          "kind": "model_completed",
+          "role": "researcher",
+          "usage": {
+            "input_tokens": 1311,
+            "output_tokens": 314
+          },
+          "response_sha256": "ff2b60cf666ed7534c38a08dfdbe0bca8bfafa7028b7f555e4286b88f60d0c06"
+        }
+      ],
+      "selection": {
+        "proposed_selection": 1,
+        "selected": null,
+        "disposition": "insufficient_distinct_evidence"
+      },
+      "hypotheses": [
+        {
+          "title": "Optimize electricity usage via historical intensity windows",
+          "source": "[electricity]",
+          "contract": null,
+          "quote_verified": false
+        },
+        {
+          "title": "Automate currency conversion for software quotes",
+          "source": "[exchange-rates]",
+          "contract": null,
+          "quote_verified": false
+        },
+        {
+          "title": "Analyze seismic events for regional risk patterns",
+          "source": "[seismic-archive]",
+          "contract": null,
+          "quote_verified": false
+        }
+      ]
+    }
+  ],
+  "unknowns": [
+    "Complete monetary cost",
+    "Observed adoption",
+    "Restricted-frontier parity",
+    "Causal inventor improvement"
+  ],
+  "runtime": {
+    "release": "llama.cpp b12242 / 3b4d6ab3f",
+    "archive_sha256": "909eef25cd53e6601c8a07c866d8dbb2983e74177088d55182137a8fb8255d62",
+    "models": {
+      "qwen3-4b-instruct-2507-q4": {
+        "revision": "ae44f08e1392f39c0e474af10c3ff8355c8b6688",
+        "sha256": "2fde00ce69dd4899c70d020845e2638353015bba0fdf161b3eb965f2bca4464e"
+      },
+      "qwen2.5-coder-1.5b-q4": {
+        "revision": "f86cb2c1fa58255f8052cc32aeede1b7482d4361",
+        "sha256": "cc324af070c2ecbfd324a30884d2f951a7ff756aba85cb811a6ec436933bb046"
+      }
+    }
+  },
+  "earlier_package": {
+    "source_revision": "8e0410501c8be0e13210fd8236ff3d59fb5b21c5",
+    "actions_run": 44919216908,
+    "actions_artifact": 14712893368,
+    "received_zip_sha256": "3e629e1e8d83ea15ecbe5d679fcf589eb58acd0de4234a705a61824c9029be61",
+    "receiving_host_regressions_passed": 6
+  }
+}

@@ -11,6 +11,7 @@ from bridge.adapters import BridgeError, Runtime
 from bridge.economic_mission import ARTIFACT
 from bridge.services import AccessRuntime
 from bridge.workflows import WorkflowService, digest
+from scripts.qualify_economic_mission import replay
 
 
 def sources():
@@ -24,7 +25,10 @@ def sources():
 
 def specification(*, bad_holdout=False):
     route = {"provider": "local", "model": "fixture"}
-    case = lambda x, y: {"input": {"x": x}, "expected": {"result": y}}
+
+    def case(x, y):
+        return {"input": {"x": x}, "expected": {"result": y}}
+
     return {
         "objective": "Find a useful way to use our authorized evidence.", "roles": {"researcher": route, "builder": route},
         "tool_permissions": ["construct_instrument"], "max_iterations": 2, "max_actions": 2,
@@ -107,6 +111,9 @@ class EconomicMissionTests(unittest.TestCase):
         self.assertEqual(len(final["request_costs"]), 2)
         with self.assertRaisesRegex(BridgeError, "audit records"):
             self.service.import_archive(archive)
+        path = self.root.parent / "archive.json"
+        path.write_text(json.dumps(archive), encoding="utf-8")
+        self.assertEqual(replay(path)["passed"], 2)
 
     def test_no_build_on_abstention_wrong_source_or_bad_model_response(self):
         abstention = {**proposal(), "selection": None}
@@ -132,6 +139,28 @@ class EconomicMissionTests(unittest.TestCase):
         self.assertEqual(result["verdicts"]["INDEPENDENT_ACCEPTANCE"], "rejected")
         self.assertEqual(len(self.requests), 2)
         self.assertEqual(self.service.capabilities()["capabilities"], [])
+
+    def test_model_can_confirm_evidence_once_for_the_same_hypotheses(self):
+        spec = specification()
+        spec["economic_mission"]["confirm_citations"] = True
+        ident = self.collect(spec)
+        decision = proposal(wrong_source=True)
+        confirmation = {"selection": 0, "rationale": "The first hypothesis uses the verified measurement.",
+                        "citations": [
+                            {"source": label, "excerpt_index": 0, "contract": "measurement" if index == 0 else None}
+                            for index, label in enumerate(sources())
+                        ]}
+        self.replies.extend([decision, confirmation, candidate()])
+        first = self.service.step(ident)
+        self.assertEqual(first["status"], "ready")
+        self.assertEqual(first["phase"], "researcher")
+        self.assertIsNone(first["economic_mission"]["decision"]["selected"])
+        fixed = self.service.step(ident)
+        self.assertEqual(fixed["phase"], "builder")
+        resolved = fixed["economic_mission"]["decision"]["opportunities"][0]
+        self.assertEqual(resolved["outcome"], decision["opportunities"][0]["outcome"])
+        self.assertTrue(resolved["quote_verified"])
+        self.assertEqual(self.service.step(ident)["status"], "complete")
 
     def test_resume_after_freezing_does_not_call_model_again(self):
         ident = self.collect(specification())
@@ -183,6 +212,13 @@ class EconomicMissionTests(unittest.TestCase):
         with self.assertRaisesRegex(BridgeError, "refuses nonlocal"):
             self.service.create(spec)
         self.assertEqual(self.requests, [])
+
+    def test_numeric_round_trip_does_not_create_a_fresh_input(self):
+        spec = specification()
+        original = spec["economic_mission"]["contracts"]["measurement"]
+        original["qualification"][0]["input"]["x"] = 3.0
+        with self.assertRaisesRegex(BridgeError, "input repeats"):
+            self.service.create(spec)
 
 
 if __name__ == "__main__":
