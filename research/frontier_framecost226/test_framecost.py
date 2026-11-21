@@ -72,6 +72,17 @@ class FrozenMath(unittest.TestCase):
         with self.assertRaises(AssertionError):
             pair_stats([1.,0.],[0.,1.],0.49,0.0)
 
+
+    def test_sufficient_bound_refuses_near_integer_optimism(self):
+        # BC just above sqrt(0.1) means two shots DO NOT satisfy the
+        # sufficient 5% error certificate: ceil(log(0.1)/log(BC)) = 3.
+        target_bc=math.sqrt(0.1)*(1+1e-12)
+        x=(1+math.sqrt(1-target_bc**2))/2
+        r=pair_stats([x,1-x],[1-x,x],0.0,0.0)
+        self.assertEqual(r["status"],"finite")
+        self.assertGreaterEqual(r["sufficient_shots"],3)
+        self.assertLessEqual(r["bc"]**r["sufficient_shots"],0.1+1e-14)
+
     def test_no_optimistic_count_for_numerically_unresolved_pair(self):
         r=pair_stats([.5+1e-11,.5-1e-11],[.5-1e-11,.5+1e-11],.499999,0)
         self.assertIn("indistinguishable",r["status"])
