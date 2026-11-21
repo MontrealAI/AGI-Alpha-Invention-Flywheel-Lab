@@ -1,0 +1,33 @@
+name: Omega first asset independent review
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/omega-first-asset-review.yml"
+      - "products/alpha-genesis-harness/scripts/first_asset_reviewer.py"
+      - "products/alpha-genesis-harness/scripts/test_first_asset_reviewer.py"
+      - "products/alpha-genesis-harness/docs/FIRST-ECONOMIC-ASSET-REVIEW.md"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  independent-oracles-and-refusal:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record platform execution start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - name: Checkout exact change
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: "3.12"
+      - name: Independent arithmetic, source-cohort, tampering and incomplete-asset controls
+        working-directory: products/alpha-genesis-harness
+        run: python3 -B -m unittest discover -s scripts -p 'test_first_asset_reviewer.py' -v
