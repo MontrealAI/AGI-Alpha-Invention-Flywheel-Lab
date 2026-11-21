@@ -292,7 +292,7 @@ class WorkflowService:
                 records.extend(self._request_costs(self._load(branch["run_id"])))
         return records
 
-    def create(self, spec, _reservation=None, *, _workshop=None, _identity=None):
+    def create(self, spec, _reservation=None, *, _workshop=None, _identity=None, _forge=None):
         require(not self._closed, "Workflow service is closed.", "WORKFLOW_STATE")
         require(isinstance(spec, dict), "Workflow specification must be an object.")
         spec = strict_json(encoded(spec))  # Detach caller-owned containers and reject nonfinite values.
@@ -368,6 +368,8 @@ class WorkflowService:
             state["parent_run"], state["branch_index"] = _reservation["parent_run"], _reservation["index"]
         if _workshop is not None:
             state["workshop"] = copy.deepcopy(_workshop)
+        if _forge is not None:
+            state["forge"] = copy.deepcopy(_forge)
         self._event(state, "created", {"spec_hash": state["spec_hash"], "acceptance_source": "Operator-frozen conditions; independence is not inferred."})
         if spec.get("inherited_capability"):
             self._inherit(state, spec["inherited_capability"])
@@ -749,7 +751,7 @@ class WorkflowService:
             state = current
             state["inflight"] = None
             completion = {"role": role, "provider": result.get("provider", route["provider"]), "model": result.get("model", route["model"]), "requested_model": result.get("requested_model", route["model"]), "reported_model": result.get("reported_model"), "run_id": request_id, "usage": result.get("usage"), "cost": result.get("cost"), "qualification": result.get("qualification"), "response_sha256": hashlib.sha256(result.get("text", "").encode()).hexdigest()}
-            if state.get("workshop"):
+            if state.get("workshop") or state.get("forge"):
                 response_bytes = result["text"].encode()
                 completion["response"] = self.runtime.redact(response_bytes[:65536].decode(errors="replace"))
                 completion["response_truncated"] = len(response_bytes) > 65536
@@ -776,7 +778,7 @@ class WorkflowService:
                     require(isinstance(response, dict), "Model must return a JSON object.")
                     if role == "builder":
                         require(not set(response) - {"summary", "actions", "done"} and isinstance(response.get("actions"), list) and len(response["actions"]) <= 8, "Builder response must contain at most eight actions.")
-                        if state.get("workshop") and isinstance(response.get("summary"), str):
+                        if (state.get("workshop") or state.get("forge")) and isinstance(response.get("summary"), str):
                             self._event(state, "route_proposed", {"summary": self.runtime.redact(response["summary"][:3000])})
                         for action_index, action in enumerate(response["actions"]):
                             if state["actions"] >= state["spec"]["max_actions"]:
