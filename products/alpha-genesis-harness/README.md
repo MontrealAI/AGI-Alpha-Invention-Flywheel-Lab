@@ -40,6 +40,7 @@ The synthetic example demonstrates software behavior. It does not establish a ne
 - [Provider protocols and local-only configuration](docs/PROVIDER-PROTOCOLS.md)
 - [Official ChatGPT-plan and Codex setup](docs/CHATGPT-PLAN.md)
 - [Agentic workflow specifications](docs/AGENTIC-WORKFLOWS.md)
+- [Ω ALPHA economic missions / Missions économiques](docs/ECONOMIC-MISSION.md)
 - [Ω GENESIS NEXT: improve and challenge the HARNESS](docs/OMEGA-GENESIS-NEXT.md)
 - [Model-driven Upgrade Foundry](docs/UPGRADE-FOUNDRY.md)
 - [Authorized frontier monitoring and replay](docs/FRONTIER-MONITOR.md)
