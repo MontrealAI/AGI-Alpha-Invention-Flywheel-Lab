@@ -18,21 +18,37 @@ def main():
     parser.add_argument("--assets", type=Path, required=True)
     parser.add_argument("--checkpoint", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--resume", action="store_true", help="Continue the same cohort without retrying sent items.")
     args = parser.parse_args()
     root = args.output.resolve()
-    root.mkdir(mode=0o700)
+    root.mkdir(mode=0o700, exist_ok=args.resume)
     frozen = strict_json(args.checkpoint.read_bytes())
     cases = frozen["cohorts"]["qualification"]
     commitment = telemetry.fingerprint(cases)
     if commitment != frozen["commitments"]["qualification"]:
         raise ValueError("Qualification inputs do not match the prospective commitment.")
-    binary = hosted_runtime(args.assets.resolve(), root)
-    receipt = {"commitment": commitment, "budget_output_tokens": 512, "planned": len(cases),
-               "model": None, "rows": []}
     checkpoint = root / "compact-control.json"
+    if args.resume:
+        receipt = strict_json(checkpoint.read_bytes())
+        if receipt["commitment"] != commitment or receipt["budget_output_tokens"] != 512:
+            raise ValueError("Cannot resume a changed comparison.")
+        if receipt["rows"] and receipt["rows"][-1].get("pending"):
+            row = receipt["rows"][-1]
+            row.pop("pending")
+            row.update({"error": "INTERRUPTED", "cost_unknown": True})
+            save(checkpoint, receipt)
+    else:
+        receipt = {"commitment": commitment, "budget_output_tokens": 512, "planned": len(cases),
+                   "model": None, "rows": []}
+    binary = hosted_runtime(args.assets.resolve(), root)
     with model_server(args.assets.resolve(), binary, "primary", root) as (runtime, route, pid, manifest):
+        if receipt["model"]:
+            for key in ("weights_sha256", "threads", "context_tokens", "llama_server_sha256"):
+                if receipt["model"][key] != manifest[key]:
+                    raise ValueError("Cannot resume with a different model or inference configuration.")
+            receipt.setdefault("earlier_server_sessions", []).append(receipt["model"])
         receipt["model"] = manifest
-        for case in cases:
+        for case in cases[len(receipt["rows"]):]:
             row = {"id": case["id"], "pending": True, "passed": False}
             receipt["rows"].append(row)
             save(checkpoint, receipt)

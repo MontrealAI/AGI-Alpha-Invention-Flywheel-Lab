@@ -1,0 +1,255 @@
+[
+  {
+    "checkpoint_sha256": "0c04928d0979ae58d2aa2e7cb870b84e9368b5791939ddadcf7ac796e4d4ea19",
+    "complete_cost_known": false,
+    "completed_artifacts": {},
+    "measured_segments": [
+      {
+        "model_cpu_seconds": 955.3499999999995,
+        "status": "paused",
+        "wall_seconds": 122.78137346400013
+      }
+    ],
+    "overall_status": "paused",
+    "registered_commitments": {
+      "qualification": "ed48b2d168ee36727a0db19540e7cbbdab507d842ff23a33c826bd7f9bd1824b",
+      "transfer": "52f8a76efa153e4e5da42371a31ea49447623cd7a6baae7671b2bec6429cc8dc"
+    },
+    "request_events": [
+      {
+        "at": "2026-11-21T15:14:25.572924+00:00",
+        "kind": "model_started",
+        "model": "forge-qwen3-4b",
+        "provider": "primary",
+        "role": "researcher",
+        "run_id": "wf_2da61821f2e4c1c96b4acd1e_762a674e08e57cdb",
+        "sha256": "0cab5f1be19f53422d0a7239f2eef431bc54894bb1cbd0d75aa049de56dd95a1"
+      },
+      {
+        "at": "2026-11-21T15:16:28.263335+00:00",
+        "code": "PROVIDER_CONNECTION",
+        "kind": "model_error",
+        "model": "forge-qwen3-4b",
+        "provider": "primary",
+        "role": "researcher",
+        "run_id": "wf_2da61821f2e4c1c96b4acd1e_762a674e08e57cdb",
+        "sha256": "917a7ff93c14ce6c3ba32748469873572abde2b1dceb08232223d9597b27dc9a"
+      }
+    ],
+    "run_id": "wf_2da61821f2e4c1c96b4acd1e",
+    "scope": "Local connection dropped during diagnosis; no completed diagnosis in this run.",
+    "source": {
+      "adapters.py": "a05127970eb11bb08cc98ed7ef9e05f9a723f51c66f9a5bfaa9f2242bb6275a6",
+      "forge.py": "d7006f05be4670425ed8ba4fe8aa8b8f04fec1bb96a91ff61b7fea319aa59ee6",
+      "forge_sandbox.py": "ccd92bec90d3d1517c487e79baac966186efbedb3cd6365b5ac98e1fe9063966",
+      "forge_telemetry.py": "5f0b9dfc22002b59d5394a736ec8aca52e96aae57a70b354d394d365b95490e1",
+      "protocol": "42e7a0828b61e3b4554356013613c851e88707461b97323d1abf96f81fa8de9f",
+      "services.py": "41b71b3f946f0912898558995f2c83f1f09b0cb2d5f9203bfecbef301de4a081",
+      "study": "51a1cb00815f85f6ecabd141cc07baa687454eafc3bc9b8b36ab064b83787fb0",
+      "workflows.py": "6f8e4f44ffdcea3627003bc7b533676f22b68c5ac09b7146ade648c34691e2ba"
+    }
+  },
+  {
+    "checkpoint_sha256": "14b08543c7cad33d56cff5e828344c0a261cefc741a11cac5d3c9ee7e7c16ec9",
+    "complete_cost_known": false,
+    "completed_artifacts": {},
+    "measured_segments": [],
+    "overall_status": "running",
+    "registered_commitments": {
+      "qualification": "ed48b2d168ee36727a0db19540e7cbbdab507d842ff23a33c826bd7f9bd1824b",
+      "transfer": "52f8a76efa153e4e5da42371a31ea49447623cd7a6baae7671b2bec6429cc8dc"
+    },
+    "request_events": [
+      {
+        "at": "2026-11-21T15:18:17.811939+00:00",
+        "kind": "model_started",
+        "model": "forge-qwen3-4b",
+        "provider": "primary",
+        "role": "researcher",
+        "run_id": "wf_f50f9f8c8c54cfe04fce9d88_59e1d5f51f2ccf91",
+        "sha256": "1c7aeefee59d4d942d401f4ad2c4bef5bbd343310810e808d0ab1f3325af86d1"
+      },
+      {
+        "at": "2026-11-21T15:20:37.202590+00:00",
+        "kind": "model_completed",
+        "model": "forge-qwen3-4b",
+        "provider": "primary",
+        "response_sha256": "1a710358b7206d181235bef069cc6a2304304bf4943fc96ea2778c8eb7de8f40",
+        "role": "researcher",
+        "run_id": "wf_f50f9f8c8c54cfe04fce9d88_59e1d5f51f2ccf91",
+        "sha256": "75f083059ce9465da361ee0d1f2fa4a13b9b4aa6105a5710e78d457e982988f2",
+        "usage": {
+          "input_tokens": 1152,
+          "output_tokens": 118
+        }
+      },
+      {
+        "at": "2026-11-21T15:20:37.216805+00:00",
+        "kind": "model_started",
+        "model": "forge-qwen3-4b",
+        "provider": "primary",
+        "role": "builder",
+        "run_id": "wf_f50f9f8c8c54cfe04fce9d88_e4c3f097f5f4948b",
+        "sha256": "bba905c16da2f42db370d2fad7ac5bd7dc8061d879650302567bd8514d91c34b"
+      }
+    ],
+    "run_id": "wf_f50f9f8c8c54cfe04fce9d88",
+    "scope": "Real diagnosis completed. The structured construction stream slowed and was interrupted before a candidate response completed.",
+    "source": {
+      "adapters.py": "a05127970eb11bb08cc98ed7ef9e05f9a723f51c66f9a5bfaa9f2242bb6275a6",
+      "forge.py": "660b7c57515886bbeee5a444990261edb9eb329676a2d13220c339611ca29783",
+      "forge_sandbox.py": "ccd92bec90d3d1517c487e79baac966186efbedb3cd6365b5ac98e1fe9063966",
+      "forge_telemetry.py": "5f0b9dfc22002b59d5394a736ec8aca52e96aae57a70b354d394d365b95490e1",
+      "protocol": "42e7a0828b61e3b4554356013613c851e88707461b97323d1abf96f81fa8de9f",
+      "services.py": "41b71b3f946f0912898558995f2c83f1f09b0cb2d5f9203bfecbef301de4a081",
+      "study": "1fabd0782104b9b93f112dba8d03fc31e86aaa5fe1849422fd384b5e50194642",
+      "workflows.py": "516c95bf3b6cfcae90843aba53368ed46a27968301e1b4876333063755fcbab1"
+    }
+  },
+  {
+    "checkpoint_sha256": "11a02274bbd3da000ae17d9bcded8c98109f22d30e79313d058b16a375a8e08b",
+    "complete_cost_known": false,
+    "completed_artifacts": {},
+    "measured_segments": [],
+    "overall_status": "running",
+    "registered_commitments": {
+      "qualification": "ed48b2d168ee36727a0db19540e7cbbdab507d842ff23a33c826bd7f9bd1824b",
+      "transfer": "52f8a76efa153e4e5da42371a31ea49447623cd7a6baae7671b2bec6429cc8dc"
+    },
+    "request_events": [
+      {
+        "at": "2026-11-21T15:25:43.982287+00:00",
+        "kind": "model_started",
+        "model": "forge-qwen3-4b",
+        "provider": "primary",
+        "role": "researcher",
+        "run_id": "wf_80fd15093baa2135f55a7e20_2ea46b5aa7a1d990",
+        "sha256": "0a4a1d2c179f0fd093aa21be3a5d7484e36e5edf82e224edbea4a02dfd18fc0c"
+      }
+    ],
+    "run_id": "wf_80fd15093baa2135f55a7e20",
+    "scope": "Host stalled during another diagnosis, before the source-only construction could begin.",
+    "source": {
+      "adapters.py": "a05127970eb11bb08cc98ed7ef9e05f9a723f51c66f9a5bfaa9f2242bb6275a6",
+      "forge.py": "33305030f365dfee5b90bfe26a0a0a7c003b119ee2a6f1940502e25190dc895e",
+      "forge_sandbox.py": "ccd92bec90d3d1517c487e79baac966186efbedb3cd6365b5ac98e1fe9063966",
+      "forge_telemetry.py": "5f0b9dfc22002b59d5394a736ec8aca52e96aae57a70b354d394d365b95490e1",
+      "protocol": "42e7a0828b61e3b4554356013613c851e88707461b97323d1abf96f81fa8de9f",
+      "services.py": "41b71b3f946f0912898558995f2c83f1f09b0cb2d5f9203bfecbef301de4a081",
+      "study": "fa5d2c84d277e5953000177dcc6628e102bebdc4530d99cd748591d5c52e51c6",
+      "workflows.py": "69a292abba3eb24601b79783965a8b5ffff4fe3a9dcef245aa755e3e9d8a4059"
+    }
+  },
+  {
+    "checkpoint_sha256": "c7e0de8a7fcd3f34085a3de4d5d444d9958790601d95988f1c29dad4247d9d38",
+    "complete_cost_known": false,
+    "completed_artifacts": {
+      "candidate-001.txt": {
+        "bytes": 6170,
+        "kind": "document",
+        "sha256": "1f91d35561a87b1251ac9a72fae521cc984023241b714817fbd06ecf6a9e6862"
+      }
+    },
+    "measured_segments": [],
+    "overall_status": "running",
+    "registered_commitments": {
+      "qualification": "ed48b2d168ee36727a0db19540e7cbbdab507d842ff23a33c826bd7f9bd1824b",
+      "transfer": "52f8a76efa153e4e5da42371a31ea49447623cd7a6baae7671b2bec6429cc8dc"
+    },
+    "request_events": [
+      {
+        "at": "2026-11-21T15:31:15.905263+00:00",
+        "kind": "model_started",
+        "model": "forge-qwen3-4b",
+        "provider": "primary",
+        "role": "builder",
+        "run_id": "wf_1278984a3cc7ef4635ba8bc5_bb11e8264afd021b",
+        "sha256": "01c20c3001a0fd9c700fd9d27b3f169a2468fcd11edd3eea14138d3edc94cee7"
+      },
+      {
+        "at": "2026-11-21T15:38:58.633983+00:00",
+        "kind": "model_completed",
+        "model": "forge-qwen3-4b",
+        "provider": "primary",
+        "response_sha256": "e6167da8505379c466045524a1bb3554d3470faa30cc60ea4a015b842838cc7b",
+        "role": "builder",
+        "run_id": "wf_1278984a3cc7ef4635ba8bc5_bb11e8264afd021b",
+        "sha256": "9732ed351b9b8ab4b21b77eeded886001e97b2d096b33d50cfef078f6358d6a7",
+        "usage": {
+          "input_tokens": 712,
+          "output_tokens": 1411
+        }
+      },
+      {
+        "at": "2026-11-21T15:38:59.277828+00:00",
+        "checks": [
+          {
+            "error": "SYSCALL_REFUSED",
+            "id": "development-01",
+            "passed": false
+          },
+          {
+            "error": "SYSCALL_REFUSED",
+            "id": "development-02",
+            "passed": false
+          },
+          {
+            "error": "SYSCALL_REFUSED",
+            "id": "development-03",
+            "passed": false
+          },
+          {
+            "error": "SYSCALL_REFUSED",
+            "id": "development-04",
+            "passed": false
+          },
+          {
+            "error": "SYSCALL_REFUSED",
+            "id": "development-05",
+            "passed": false
+          },
+          {
+            "error": "SYSCALL_REFUSED",
+            "id": "development-06",
+            "passed": false
+          },
+          {
+            "error": "SYSCALL_REFUSED",
+            "id": "development-07",
+            "passed": false
+          },
+          {
+            "error": "SYSCALL_REFUSED",
+            "id": "development-08",
+            "passed": false
+          }
+        ],
+        "kind": "verification",
+        "passed": false,
+        "phase": "development",
+        "sha256": "286d7ab8164d39ce0f1a181af7dd8cb42f2d3a785ee2481f4d63390f5d69a935"
+      },
+      {
+        "at": "2026-11-21T15:38:59.296129+00:00",
+        "kind": "model_started",
+        "model": "forge-qwen3-4b",
+        "provider": "primary",
+        "role": "builder",
+        "run_id": "wf_1278984a3cc7ef4635ba8bc5_7bc05b008a909339",
+        "sha256": "70804370bc32dce30260d70a80020d1722defd688bdc394b10f1fa4c39e46f6e"
+      }
+    ],
+    "run_id": "wf_1278984a3cc7ef4635ba8bc5",
+    "scope": "One source-only candidate was produced and refused on all eight development cases. A second in-flight construction call was interrupted before switching to composition.",
+    "source": {
+      "adapters.py": "a05127970eb11bb08cc98ed7ef9e05f9a723f51c66f9a5bfaa9f2242bb6275a6",
+      "forge.py": "86e2b8c18bace29581d13c8208abe42d8e125f47005a01580cf57150bcfdaad6",
+      "forge_sandbox.py": "ccd92bec90d3d1517c487e79baac966186efbedb3cd6365b5ac98e1fe9063966",
+      "forge_telemetry.py": "5f0b9dfc22002b59d5394a736ec8aca52e96aae57a70b354d394d365b95490e1",
+      "protocol": "42e7a0828b61e3b4554356013613c851e88707461b97323d1abf96f81fa8de9f",
+      "services.py": "41b71b3f946f0912898558995f2c83f1f09b0cb2d5f9203bfecbef301de4a081",
+      "study": "ab5a5263d5026568bded46bc3f904bdb145b88eb7fd85e43e1e47a5462425f66",
+      "workflows.py": "69a292abba3eb24601b79783965a8b5ffff4fe3a9dcef245aa755e3e9d8a4059"
+    }
+  }
+]

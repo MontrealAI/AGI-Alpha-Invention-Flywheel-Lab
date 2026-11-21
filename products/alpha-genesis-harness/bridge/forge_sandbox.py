@@ -41,6 +41,39 @@ class Comparison(ctypes.Structure):
                 ("mask", ctypes.c_uint64), ("value", ctypes.c_uint64)]
 
 
+def rational_affine(matrix, readings, width):
+    """Particular solution and a null-space basis of an exact linear system."""
+    rows = [[fractions.Fraction(item) for item in list(row) + [reading]]
+            for row, reading in zip(matrix, readings, strict=True)]
+    pivots = []
+    for col in range(width):
+        pos = len(pivots)
+        pivot = next((index for index in range(pos, len(rows)) if rows[index][col]), None)
+        if pivot is None:
+            continue
+        rows[pos], rows[pivot] = rows[pivot], rows[pos]
+        scale = rows[pos][col]
+        rows[pos] = [item / scale for item in rows[pos]]
+        for other, row in enumerate(rows):
+            factor = row[col]
+            if other != pos and factor:
+                rows[other] = [a - factor * b for a, b in zip(row, rows[pos])]
+        pivots.append(col)
+    if any(row[-1] for row in rows[len(pivots):]):
+        return None
+    point = [fractions.Fraction(0)] * width
+    for row, column in zip(rows, pivots):
+        point[column] = row[-1]
+    kernel = []
+    for free in sorted(set(range(width)) - set(pivots)):
+        direction = [fractions.Fraction(0)] * width
+        direction[free] = fractions.Fraction(1)
+        for row, column in zip(rows, pivots):
+            direction[column] = -row[free]
+        kernel.append(direction)
+    return point, kernel
+
+
 def _restrict():
     import resource
     from platform import machine
@@ -103,7 +136,8 @@ def _worker():
     except (SandboxError, OSError, ValueError):
         os._exit(78)
     safe_builtins = dict(vars(builtins), __import__=_import_module)
-    namespace = {"__builtins__": safe_builtins, "__name__": "candidate"}
+    namespace = {"__builtins__": safe_builtins, "__name__": "candidate",
+                 "rational_affine": rational_affine}
     try:
         exec(compile(data["source"], "<candidate>", "exec", dont_inherit=True), namespace)
         answer = namespace["solve"](data["input"])

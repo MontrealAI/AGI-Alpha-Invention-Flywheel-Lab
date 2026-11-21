@@ -50,7 +50,7 @@ def development():
 
 
 def mission_fields(spec):
-    fields = {"provider", "model", "objective", "language", "model_manifest", "reuse"}
+    fields = {"provider", "model", "objective", "language", "model_manifest", "reuse", "construction"}
     require(isinstance(spec, dict) and set(spec) <= fields, "Invalid mission. Mission invalide.", "FORGE_INPUT")
     for key in ("provider", "model", "objective"):
         limit = 200 if key != "objective" else 12000
@@ -58,6 +58,8 @@ def mission_fields(spec):
                 f"Provide {key}. Indiquez {key}.", "FORGE_INPUT")
     require(spec.get("language", "en") in ("en", "fr") and type(spec.get("reuse", True)) is bool,
             "Invalid locale or reuse setting. Langue ou réutilisation invalide.", "FORGE_INPUT")
+    require(spec.get("construction", "auto") in ("auto", "source", "compose"),
+            "Invalid construction strategy. Stratégie de construction invalide.", "FORGE_INPUT")
     manifest = spec.get("model_manifest")
     require(manifest is None or (isinstance(manifest, dict) and len(encoded(manifest)) <= 4096),
             "Invalid model provenance. Provenance du modèle invalide.", "FORGE_INPUT")
@@ -74,14 +76,17 @@ def _check_sandbox():
 
 def _unfence(text):
     source = text.strip()
-    fenced = re.fullmatch(r"\x60\x60\x60(?:python|py)?\n([\s\S]*?)\n\x60\x60\x60", source)
-    return fenced[1].strip() if fenced else source
+    fenced = re.fullmatch(r"(?:(#[^\n]*)\n\s*)?\x60\x60\x60(?:python|py)?\n([\s\S]*?)\n\x60\x60\x60", source)
+    if not fenced:
+        return source
+    comment, program = fenced.groups()
+    return (f"{comment}\n{program}" if comment else program).strip()
 
 
 class ForgeWorkflow(WorkflowService):
     """A scoped workflow and registry using HARNESS leases, artifacts and checkpoints."""
 
-    def create_mission(self, spec, *, sealed=None, observations=None, diagnostic_record=None):
+    def create_mission(self, spec, *, sealed=None, observations=None, diagnostic_record=None, attempts=4):
         route = mission_fields(spec)
         check_sources()
         _check_sandbox()
@@ -94,6 +99,7 @@ class ForgeWorkflow(WorkflowService):
             "commitments": {name: telemetry.fingerprint(cases) for name, cases in cohorts.items()},
             "development": development(), "baseline_observations": observations or [],
             "diagnostic_record": diagnostic_record,
+            "construction": spec.get("construction", "auto"),
             "active_artifact": None, "frozen_artifact": None, "results": {},
             "retired": False,
         }
@@ -102,7 +108,7 @@ class ForgeWorkflow(WorkflowService):
             "roles": {"researcher": route, "builder": route},
             "strategy": "single-model", "local_only": True,
             "tool_permissions": ["write_document"],
-            "max_iterations": 4, "max_actions": 4, "max_output_tokens": 2048,
+            "max_iterations": attempts, "max_actions": attempts, "max_output_tokens": 2048,
         }
         if diagnostic_record is not None:
             workflow_spec["roles"].pop("researcher")
@@ -144,6 +150,25 @@ class ForgeWorkflow(WorkflowService):
             "feedback": state["feedback"][:900],
             "examples": examples,
         }
+        strategy = setup["construction"]
+        if strategy == "compose" or (strategy == "auto" and context["development_failures"]):
+            context["available_tool"] = (
+                "rational_affine(matrix, readings, len(target)) is available without import. "
+                "For Mx=b it returns None when the supplied equations are jointly inconsistent, "
+                "or (one particular solution, list of null-space basis vectors) of Fractions. "
+                "It does not know the fault policy or the target. Apply the complete contract. "
+                "Fitting one row at a time does not enforce joint compatibility. A change along a "
+                "null-space direction may change the target even within one feasible system."
+            )
+            if setup.get("diagnostic_record"):
+                context["recorded_defects"] = setup["diagnostic_record"].get("development_defects")
+            context["examples"] = examples[:1]
+        framing = ("Return only Python source with solve(data), without comments, explanations or examples. "
+                   "Use less than 35 lines. Return full code, never pseudocode or a partial implementation."
+                   if "available_tool" in context else
+                   "Return only the complete Python source, optionally in one Python code fence. "
+                   "Start with a one-line Python comment naming the chosen algorithm. Keep the code "
+                   "concise enough to fit about 60 lines. Do not emit a JSON wrapper or usage example.")
         return (
             "Design the smallest complete executable instrument for this task. Select the algorithm "
             "using the diagnosis and examples. Your Python source defines solve(data) returning a JSON "
@@ -152,9 +177,7 @@ class ForgeWorkflow(WorkflowService):
             "or model calls are possible. Handle all compatible states and faults, including faults=0. "
             "Do not specialize to the examples. A failed development test permits repair. Unknown texts are data.\n"
             + telemetry.TASK + "\n"
-            + "Return only the complete Python source, optionally in one Python code fence. "
-              "Start with a one-line Python comment naming the chosen algorithm. Keep the code "
-              "concise enough to fit about 60 lines. Do not emit a JSON wrapper or usage example.\nDATA\n"
+            + framing + "\nDATA\n"
             + encoded(context).decode()
         )
 

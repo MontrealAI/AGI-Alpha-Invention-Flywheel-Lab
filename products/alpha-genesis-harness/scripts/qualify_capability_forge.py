@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import ast
 from contextlib import contextmanager
 import hashlib
 import json
@@ -202,9 +203,9 @@ def run_model_arm(state, checkpoint, name, cases, runtime, route, pid, budget, w
         print(f"{name} {len(rows)}/{len(cases)}: {sum(row['passed'] for row in rows)} correct", flush=True)
 
 
-def prior_diagnosis(checkpoint, runtime, commitments, model):
+def prior_diagnosis(checkpoint, runtime, commitments, model, *, new_cohorts=False):
     previous = strict_json(checkpoint.read_bytes())
-    if previous["commitments"] != commitments:
+    if not new_cohorts and previous["commitments"] != commitments:
         raise ValueError("Diagnosis and current trial use different sealed commitments.")
     experimental = ForgeWorkflow(runtime, checkpoint.parent / "workspaces" / "forge")
     try:
@@ -223,15 +224,46 @@ def prior_diagnosis(checkpoint, runtime, commitments, model):
             "model_weights_sha256": prior["weights_sha256"], "usage": events[0]["detail"]["usage"]}
 
 
-def forge_arm(state, checkpoint, root, runtime, route, pid, model, diagnosis_from=None):
+def exposed_defects(checkpoint):
+    old = strict_json(checkpoint.read_bytes())
+    workflow = strict_json((checkpoint.parent / "forge-workflow.json").read_bytes())
+    run = workflow["state"]
+    if run["id"] != old["forge_run"] or run["forge"]["frozen_artifact"]:
+        raise ValueError("Follow-up feedback requires a pre-qualification development rejection.")
+    name = run["forge"]["active_artifact"]
+    source = workflow["files"][name]
+    ident = hashlib.sha256(source.encode()).hexdigest()
+    if ident != run["artifacts"][name]["sha256"]:
+        raise ValueError("Earlier development candidate does not match its recorded digest.")
+    tree = ast.parse(source)
+    loaded = {node.id for node in ast.walk(tree) if isinstance(node, ast.Name) and isinstance(node.ctx, ast.Load)}
+    calls = [node for node in ast.walk(tree) if isinstance(node, ast.Call) and isinstance(node.func, ast.Name)
+             and node.func.id == "rational_affine"]
+    notes = []
+    if "faults" not in loaded:
+        notes.append("The previous candidate assigned the fault allowance but never used that binding.")
+    if any(len(node.args) >= 3 and isinstance(node.args[2], ast.Constant) and node.args[2].value == 1
+           for node in calls):
+        notes.append("Its tool calls fixed the dimension to one even for multi-dimensional states.")
+    notes += [{"actual": row.get("actual"), "expected": row["expected"]}
+              for row in run["verification"]["checks"] if not row["passed"]]
+    return {"candidate_sha256": ident, "run_id": run["id"], "diagnostics": notes}
+
+
+def forge_arm(state, checkpoint, root, runtime, route, pid, model, diagnosis_from=None,
+              construction="auto", attempts=4, follow_up=None):
     service = ForgeWorkflow(runtime, root / "workspaces" / "forge")
     started, start_cpu = time.perf_counter(), cpu(pid)
     try:
         if "forge_run" not in state:
-            diagnostic = prior_diagnosis(diagnosis_from, runtime, state["commitments"], model) if diagnosis_from else None
-            run = service.create_mission({**route, "objective": OBJECTIVE, "model_manifest": model, "reuse": False},
+            diagnostic = prior_diagnosis(diagnosis_from, runtime, state["commitments"], model,
+                                         new_cohorts=follow_up is not None) if diagnosis_from else None
+            if follow_up and diagnostic is not None:
+                diagnostic["development_defects"] = exposed_defects(follow_up)
+            run = service.create_mission({**route, "objective": OBJECTIVE, "model_manifest": model,
+                                          "reuse": False, "construction": construction},
                                          sealed=(state["seeds"], state["cohorts"]),
-                                         diagnostic_record=diagnostic,
+                                         diagnostic_record=diagnostic, attempts=attempts,
                                          observations=[{"id": r["id"], "actual": r.get("actual"), "passed": r["passed"]}
                                                        for r in state["arms"]["A_development"]])
             state["diagnostic_record"] = diagnostic
@@ -301,13 +333,17 @@ def main():
     parser.add_argument("--resume", action="store_true")
     parser.add_argument("--continue-from", type=Path,
                         help="Continue a pre-construction interruption in a new source-bound workspace.")
+    parser.add_argument("--follow-up-from", type=Path,
+                        help="Start new sealed cohorts after a recorded development rejection.")
     parser.add_argument("--diagnosis-from", type=Path,
                         help="Reuse an authenticated prior diagnosis by the same model on the same study.")
+    parser.add_argument("--construction", choices=("auto", "source", "compose"), default="auto")
+    parser.add_argument("--candidate-attempts", type=int, choices=range(1, 5), default=4)
     parser.add_argument("--first", action="store_true", help="Run development controls and Forge before the other arms.")
     parser.add_argument("--skip-d", action="store_true", help="Leave the open challenger explicitly unmeasured.")
     args = parser.parse_args()
-    if args.resume and args.continue_from:
-        parser.error("--resume and --continue-from are mutually exclusive")
+    if sum(bool(item) for item in (args.resume, args.continue_from, args.follow_up_from)) > 1:
+        parser.error("--resume, --continue-from and --follow-up-from are mutually exclusive")
     root, assets = args.output.resolve(), args.assets.resolve()
     root.mkdir(mode=0o700, parents=True, exist_ok=args.resume)
     checkpoint = root / "study.json"
@@ -344,6 +380,12 @@ def main():
                                                 "models": previous["models"], "cost": previous.get("forge_segments", []),
                                                 "sources": previous["sources"],
                                                 "previous": previous.get("interrupted_predecessor")}
+        if args.follow_up_from:
+            parent = strict_json(args.follow_up_from.read_bytes())
+            if parent.get("forge_status") != "exhausted" or parent.get("candidate"):
+                raise ValueError("Earlier study must have exhausted development before qualification.")
+            state["arms"]["A_development"] = parent["arms"]["A_development"]
+            state["follow_up_parent_sha256"] = sha(args.follow_up_from)
         save(checkpoint, state)
     from flint import __version__ as flint_version
     state["specialist"] = {"method": "FLINT exact rational RREF", "python_flint": flint_version}
@@ -363,7 +405,8 @@ def main():
                 state["forge_status"] = "NOT_RUN_NO_DEVELOPMENT_GAP"
                 state["arms"].update({"C_qualification": [], "C_transfer": []})
             if "forge_status" not in state:
-                forge_arm(state, checkpoint, root, runtime, route, pid, model, args.diagnosis_from)
+                forge_arm(state, checkpoint, root, runtime, route, pid, model, args.diagnosis_from,
+                          args.construction, args.candidate_attempts, args.follow_up_from)
             if not args.first:
                 qual = state["cohorts"]["qualification"]
                 for suffix, budget in (("", 2048), ("_512", 512)):

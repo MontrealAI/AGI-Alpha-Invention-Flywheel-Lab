@@ -1,0 +1,765 @@
+{
+  "candidate_source": "# Use rational_affine to solve each consistent system and check target·x across feasible states\n\nimport itertools\nfrom fractions import Fraction\nimport math\n\ndef solve(data):\n    A = data['A']\n    y = data['y']\n    target = data['target']\n    faults = data['faults']\n    \n    n, m = len(A), len(A[0])\n    valid_rows = []\n    \n    # For each row, check if it can be consistent with some x\n    # We'll use rational_affine to solve each row independently\n    for i in range(n):\n        # Skip rows that are all zero in A, unless y[i] is zero\n        if all(a == 0 for a in A[i]):\n            if y[i] != 0:\n                return {\"status\": \"inconsistent\"}\n            continue\n        \n        # Try to solve A[i] · x = y[i]\n        try:\n            sol, null_basis = rational_affine([A[i]], [y[i]], 1)\n            if sol is None:\n                return {\"status\": \"inconsistent\"}\n            x_sol = sol\n            # Check if this row is consistent with some x\n            valid_rows.append((i, x_sol))\n        except:\n            return {\"status\": \"inconsistent\"}\n    \n    # If no valid rows, inconsistent\n    if not valid_rows:\n        return {\"status\": \"inconsistent\"}\n    \n    # Build feasible x from consistent rows\n    # We need to find all x such that at most faults rows have A[i]·x ≠ y[i]\n    # Instead, we use the fact that if multiple x satisfy constraints, target·x may vary\n    \n    # Try to find a feasible x with at most faults errors\n    # Use rational_affine to solve each row and collect solutions\n    all_x = []\n    for i in range(n):\n        if all(a == 0 for a in A[i]):\n            if y[i] != 0:\n                return {\"status\": \"inconsistent\"}\n            continue\n        try:\n            sol, null_basis = rational_affine([A[i]], [y[i]], 1)\n            if sol is None:\n                return {\"status\": \"inconsistent\"}\n            x_sol = sol\n            all_x.append((i, x_sol))\n        except:\n            return {\"status\": \"inconsistent\"}\n    \n    # If we have no consistent rows, inconsistent\n    if not all_x:\n        return {\"status\": \"inconsistent\"}\n    \n    # Check if all feasible x give same target·x\n    # We only need to check a few representative x\n    # Use the fact that null space vectors can generate other solutions\n    \n    # For each row, we have a solution x_i\n    # The general solution is x_i + null_space_vector\n    # We'll generate a few candidate x values and compute target·x\n    \n    # If we have only one row, just use that\n    if len(all_x) == 1:\n        x = all_x[0][1]\n        val = sum(target[j] * x[j] for j in range(len(x)))\n        return {\"status\": \"determined\", \"value\": str(val)}\n    \n    # For multiple rows, check if target·x is same across feasible solutions\n    # We'll take one solution from each row and check if target·x is same\n    # If not, return ambiguous\n    \n    # Use only one solution per row\n    x_list = [x for _, x in all_x]\n    \n    # Compute target·x for each\n    values = []\n    for x in x_list:\n        val = sum(target[j] * x[j] for j in range(len(x)))\n        values.append(val)\n    \n    # If all values are equal, determined\n    if all(abs(v - values[0]) == 0 for v in values):\n        return {\"status\": \"determined\", \"value\": str(values[0])}\n    \n    # Otherwise, ambiguous\n    return {\"status\": \"ambiguous\"}\n",
+  "commitments": {
+    "qualification": "ed48b2d168ee36727a0db19540e7cbbdab507d842ff23a33c826bd7f9bd1824b",
+    "transfer": "52f8a76efa153e4e5da42371a31ea49447623cd7a6baae7671b2bec6429cc8dc"
+  },
+  "cost_scope": {
+    "energy_joules": null,
+    "host_billing_usd": null,
+    "human_setup_seconds": null,
+    "paid_api_calls": 0
+  },
+  "development_checks": [
+    {
+      "actual": {
+        "status": "determined",
+        "value": "3/5"
+      },
+      "application_wall_seconds": 0.06555194000020492,
+      "expected": {
+        "status": "determined",
+        "value": "3/5"
+      },
+      "id": "development-01",
+      "input": {
+        "A": [
+          [
+            5,
+            0
+          ],
+          [
+            15,
+            0
+          ],
+          [
+            15,
+            0
+          ],
+          [
+            10,
+            0
+          ],
+          [
+            -5,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            15,
+            0
+          ]
+        ],
+        "faults": 1,
+        "target": [
+          3,
+          0
+        ],
+        "y": [
+          1,
+          3,
+          3,
+          2,
+          -1,
+          0,
+          3
+        ]
+      },
+      "passed": true,
+      "verifier_wall_seconds": 0.00015173300016613211
+    },
+    {
+      "actual": {
+        "status": "inconsistent"
+      },
+      "application_wall_seconds": 0.06455469399998037,
+      "expected": {
+        "status": "inconsistent"
+      },
+      "id": "development-02",
+      "input": {
+        "A": [
+          [
+            24,
+            0
+          ],
+          [
+            -18,
+            -12
+          ],
+          [
+            6,
+            0
+          ],
+          [
+            6,
+            0
+          ],
+          [
+            0,
+            6
+          ],
+          [
+            6,
+            12
+          ],
+          [
+            24,
+            24
+          ]
+        ],
+        "faults": 0,
+        "target": [
+          3,
+          1
+        ],
+        "y": [
+          40,
+          -4,
+          11,
+          10,
+          -13,
+          -16,
+          -12
+        ]
+      },
+      "passed": true,
+      "verifier_wall_seconds": 4.471600004762877e-05
+    },
+    {
+      "actual": {
+        "status": "inconsistent"
+      },
+      "application_wall_seconds": 0.03234585799964407,
+      "expected": {
+        "status": "ambiguous"
+      },
+      "id": "development-03",
+      "input": {
+        "A": [
+          [
+            4,
+            0
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            -8,
+            0
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            8,
+            0
+          ],
+          [
+            6,
+            0
+          ],
+          [
+            0,
+            -2
+          ],
+          [
+            -8,
+            0
+          ],
+          [
+            -8,
+            0
+          ]
+        ],
+        "faults": 1,
+        "target": [
+          -1,
+          1
+        ],
+        "y": [
+          -8,
+          -5,
+          16,
+          -4,
+          -16,
+          -12,
+          10,
+          16,
+          16
+        ]
+      },
+      "passed": false,
+      "verifier_wall_seconds": 0.00017260399999941
+    },
+    {
+      "actual": {
+        "status": "inconsistent"
+      },
+      "application_wall_seconds": 0.032389807000072324,
+      "expected": {
+        "status": "inconsistent"
+      },
+      "id": "development-04",
+      "input": {
+        "A": [
+          [
+            4,
+            0,
+            0
+          ],
+          [
+            16,
+            -8,
+            8
+          ],
+          [
+            0,
+            -16,
+            -12
+          ],
+          [
+            -16,
+            -16,
+            -8
+          ],
+          [
+            16,
+            0,
+            4
+          ],
+          [
+            -12,
+            -12,
+            0
+          ],
+          [
+            4,
+            0,
+            0
+          ],
+          [
+            12,
+            -4,
+            12
+          ],
+          [
+            12,
+            4,
+            -16
+          ],
+          [
+            4,
+            0,
+            0
+          ],
+          [
+            -16,
+            -16,
+            -8
+          ]
+        ],
+        "faults": 1,
+        "target": [
+          0,
+          -3,
+          1
+        ],
+        "y": [
+          12,
+          0,
+          11,
+          -42,
+          27,
+          -51,
+          10,
+          -16,
+          89,
+          11,
+          -42
+        ]
+      },
+      "passed": true,
+      "verifier_wall_seconds": 0.00013198399983593845
+    },
+    {
+      "actual": {
+        "status": "inconsistent"
+      },
+      "application_wall_seconds": 0.06446874199991726,
+      "expected": {
+        "status": "determined",
+        "value": "8/5"
+      },
+      "id": "development-05",
+      "input": {
+        "A": [
+          [
+            -5,
+            -5,
+            -15
+          ],
+          [
+            20,
+            0,
+            -5
+          ],
+          [
+            0,
+            20,
+            20
+          ],
+          [
+            0,
+            15,
+            -10
+          ],
+          [
+            0,
+            -20,
+            0
+          ],
+          [
+            5,
+            0,
+            0
+          ]
+        ],
+        "faults": 0,
+        "target": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          -13,
+          28,
+          -12,
+          -29,
+          28,
+          8
+        ]
+      },
+      "passed": false,
+      "verifier_wall_seconds": 0.00012914999979329878
+    },
+    {
+      "actual": {
+        "status": "inconsistent"
+      },
+      "application_wall_seconds": 0.06804146700005731,
+      "expected": {
+        "status": "ambiguous"
+      },
+      "id": "development-06",
+      "input": {
+        "A": [
+          [
+            0,
+            -12,
+            0
+          ],
+          [
+            0,
+            9,
+            0
+          ],
+          [
+            -9,
+            -6,
+            0
+          ],
+          [
+            9,
+            9,
+            0
+          ],
+          [
+            0,
+            0,
+            -3
+          ],
+          [
+            9,
+            -12,
+            0
+          ],
+          [
+            3,
+            9,
+            0
+          ],
+          [
+            0,
+            9,
+            0
+          ],
+          [
+            0,
+            0,
+            3
+          ],
+          [
+            0,
+            9,
+            0
+          ]
+        ],
+        "faults": 1,
+        "target": [
+          1,
+          1,
+          1
+        ],
+        "y": [
+          -44,
+          33,
+          -43,
+          54,
+          0,
+          -23,
+          40,
+          33,
+          -5,
+          33
+        ]
+      },
+      "passed": false,
+      "verifier_wall_seconds": 0.00025391400004082243
+    },
+    {
+      "actual": {
+        "status": "determined",
+        "value": "5"
+      },
+      "application_wall_seconds": 0.06557808500019746,
+      "expected": {
+        "status": "ambiguous"
+      },
+      "id": "development-07",
+      "input": {
+        "A": [
+          [
+            6,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            6,
+            0
+          ],
+          [
+            6,
+            0
+          ]
+        ],
+        "faults": 0,
+        "target": [
+          3,
+          1
+        ],
+        "y": [
+          10,
+          0,
+          0,
+          10,
+          10
+        ]
+      },
+      "passed": false,
+      "verifier_wall_seconds": 7.551099997726851e-05
+    },
+    {
+      "actual": {
+        "status": "ambiguous"
+      },
+      "application_wall_seconds": 0.06541522899988195,
+      "expected": {
+        "status": "ambiguous"
+      },
+      "id": "development-08",
+      "input": {
+        "A": [
+          [
+            15,
+            0,
+            0
+          ],
+          [
+            -20,
+            20,
+            0
+          ],
+          [
+            10,
+            -5,
+            0
+          ],
+          [
+            -15,
+            -5,
+            0
+          ],
+          [
+            -15,
+            -10,
+            0
+          ],
+          [
+            -15,
+            -15,
+            0
+          ],
+          [
+            -5,
+            -5,
+            0
+          ],
+          [
+            -15,
+            -15,
+            0
+          ]
+        ],
+        "faults": 1,
+        "target": [
+          2,
+          2,
+          1
+        ],
+        "y": [
+          21,
+          -80,
+          27,
+          3,
+          5,
+          18,
+          6,
+          18
+        ]
+      },
+      "passed": true,
+      "verifier_wall_seconds": 0.00010855000027731876
+    }
+  ],
+  "diagnostic_record": {
+    "event_sha256": "75f083059ce9465da361ee0d1f2fa4a13b9b4aa6105a5710e78d457e982988f2",
+    "model_weights_sha256": "2fde00ce69dd4899c70d020845e2638353015bba0fdf161b3eb965f2bca4464e",
+    "run_id": "wf_f50f9f8c8c54cfe04fce9d88",
+    "text": "A key assumption in naive inference is that all compatible states yield the same linear combination of target and x, ignoring structural dependencies in A. Evidence shows ambiguous cases (e.g., case 3) where multiple x satisfy constraints despite identical target·x, indicating non-uniqueness in feasible states. A discriminant test: for each compatible state, compute target·x; if values diverge, return \"ambiguous\". If no states exist, \"inconsistent\"; if all yield same value, \"determined\". This exposes the flaw: assuming linear consistency without verifying across all feasible x.",
+    "usage": {
+      "input_tokens": 1152,
+      "output_tokens": 118
+    }
+  },
+  "forge_requests": [
+    {
+      "cost": {
+        "accounted": 0.0,
+        "amount": 0.0,
+        "attempts": 1,
+        "basis": "reported_usage_at_user_rates",
+        "complete_cost_known": false,
+        "currency": "USD"
+      },
+      "cost_uncertain": true,
+      "event_index": 2,
+      "event_kind": "model_completed",
+      "model": "forge-qwen3-4b",
+      "provider": "primary",
+      "role": "builder",
+      "run_id": "wf_43a1359d8560492fec4add0d_539ab3d4178f1ac0",
+      "usage": {
+        "input_tokens": 799,
+        "output_tokens": 833
+      },
+      "workflow": "wf_43a1359d8560492fec4add0d"
+    }
+  ],
+  "forge_segments": [
+    {
+      "model_cpu_seconds": 299.75,
+      "status": "exhausted",
+      "wall_seconds": 151.0478414610002
+    }
+  ],
+  "forge_status": "exhausted",
+  "model_alone_development": [
+    {
+      "actual": null,
+      "budget_output_tokens": 2048,
+      "cost": {
+        "accounted": 0.0,
+        "amount": 0.0,
+        "attempts": 1,
+        "basis": "reported_usage_at_user_rates",
+        "complete_cost_known": false,
+        "currency": "USD"
+      },
+      "error": "INVALID_RESULT",
+      "id": "development-01",
+      "model_cpu_seconds": 554.22,
+      "passed": false,
+      "reported_model": "forge-qwen3-4b",
+      "response": "{\"work\":\"We are given a matrix A, a vector y of observations, a target vector, and a fault limit. We are to determine the value of target ⋅ x over all rational vectors x such that at most 'faults' rows have A[i] ⋅ x ≠ y[i].\\n\\nGiven:\\n- A = [[5,0],[15,0],[15,0],[10,0],[-5,0],[0,0],[15,0]]\\n- y = [1,3,3,2,-1,0,3]\\n- target = [3,0]\\n- faults = 1\\n\\nWe are to compute target ⋅ x = 3x₁ + 0x₂ = 3x₁ over all rational vectors x such that at most one row has A[i] ⋅ x ≠ y[i].\\n\\nNote: All rows in A have second column zero. So A[i] ⋅ x = 5x₁, 15x₁, etc. So each equation reduces to:\\n- Row 0: 5x₁ = 1 → x₁ = 1/5\\n- Row 1: 15x₁ = 3 → x₁ = 1/5\\n- Row 2: 15x₁ = 3 → x₁ = 1/5\\n- Row 3: 10x₁ = 2 → x₁ = 1/5\\n- Row 4: -5x₁ = -1 → x₁ = 1/5\\n- Row 5: 0x₁ = 0 → always true (no constraint)\\n- Row 6: 15x₁ = 3 → x₁ = 1/5\\n\\nSo every row (except row 5) gives x₁ = 1/5. Row 5 is always satisfied regardless of x₁.\\n\\nNow, the condition is that at most 1 row can be faulty (i.e., can have A[i] ⋅ x ≠ y[i]).\\n\\nBut every row except row 5 gives a constraint that forces x₁ = 1/5. If we violate any of these, we would have a row where A[i] ⋅ x ≠ y[i].\\n\\nSuppose we allow one fault. Then one row can be inconsistent.\\n\\nBut if we pick any row from 0 to 6 except row 5, and violate it, then x₁ must not be 1/5.\\n\\nBut if x₁ ≠ 1/5, then for other rows, A[i] ⋅ x ≠ y[i] will also hold — because all other rows require x₁ = 1/5.\\n\\nFor example, suppose we violate row 0: 5x₁ ≠ 1 → x₁ ≠ 1/5.\\nThen row 1: 15x₁ = 15*(x₁) ≠ 3 → unless x₁ = 1/5.\\nSo if x₁ ≠ 1/5, then row 1 also fails.\\nSimilarly, row 2, 3, 4, 6 all fail.\\n\\nSo if we violate one row (say row 0), then all other rows (except row 5) will also fail — because they all require x₁ = 1/5.\\n\\nThus, the only way to have at most one faulty row is to have all rows satisfy A[i] ⋅ x = y[i] — because any violation forces multiple violations.\\n\\nBut row 5 is always satisfied regardless.\\n\\nSo the only compatible state is when x₁ = 1/5, and all other rows are satisfied.\\n\\nThus, the value of target ⋅ x = 3x₁ = 3*(1/5) = 3/5.\\n\\nBut wait: is there any way to have exactly one faulty row?\\nSuppose we set x₁ such that only one row fails.\\nBut as shown, if x₁ ≠ 1/5, then every row with a non-zero coefficient fails.\\n\\nHow many such rows are there?\\nRows 0,1,2,3,4,6: 6 rows with non-zero coefficients.\\nRow 5: always satisfied.\\n\\nSo if x₁ ≠ 1/5, then all of rows 0,1,2,3,4,6 fail → 6 faults → exceeds faults=1.\\n\\nTherefore, the only compatible states are those where x₁ = 1/5, and all rows satisfy the equations.\\n\\nThus, for all compatible states, target ⋅ x = 3*(1/5) = 3/5.\\n\\nSo the value is determined.\\n\\nFinal answer: {\\\"status\\\":\\\"determined\\\",\\\"value\\\":\\\"3/5\\\"}\", \"answer\":\"{\\\\\\\"status\\\\\\\":\\\\\\\"determined\\\\\\\",\\\\\\\"value\\\\\\\":\\\\\\\"3/5\\\\\\\"}\"}",
+      "usage": {
+        "input_tokens": 263,
+        "output_tokens": 1073
+      },
+      "wall_seconds": 69.62396207500001
+    },
+    {
+      "actual": null,
+      "budget_output_tokens": 2048,
+      "cost": {
+        "accounted": 0.0,
+        "amount": 0.0,
+        "attempts": 1,
+        "basis": "reported_usage_at_user_rates",
+        "complete_cost_known": false,
+        "currency": "USD"
+      },
+      "error": "INVALID_RESULT",
+      "id": "development-02",
+      "model_cpu_seconds": 259.63,
+      "passed": false,
+      "reported_model": "forge-qwen3-4b",
+      "response": "{\"work\":\"We are given a matrix A, a vector y of observations, a target vector, and a number of faults (0 in this case). We are to determine the value of target ⋅ x over all rational vectors x such that at most faults rows satisfy A[i] ⋅ x ≠ y[i]. Since faults = 0, every row must satisfy A[i] ⋅ x = y[i]. So we have a system of linear equations:\\n\\nA[i] ⋅ x = y[i] for all i.\\n\\nWe are to compute target ⋅ x over all rational solutions x to this system. If no solution exists → inconsistent. If multiple solutions exist and target ⋅ x differs → ambiguous. If target ⋅ x is the same for all solutions → determined.\\n\\nGiven:\\nA = [[24, 0], [-18, -12], [6, 0], [6, 0], [0, 6], [6, 12], [24, 24]]\\ny = [40, -4, 11, 10, -13, -16, -12]\\ntarget = [3, 1]\\n\\nWe have 7 equations in 2 variables (x₀, x₁). Since faults = 0, all equations must hold.\\n\\nLet’s write the equations:\\n\\n1. 24x₀ = 40 → x₀ = 40/24 = 5/6\\n2. -18x₀ -12x₁ = -4\\n3. 6x₀ = 11\\n4. 6x₀ = 10\\n5. 6x₁ = -13\\n6. 6x₀ + 12x₁ = -16\\n7. 24x₀ + 24x₁ = -12\\n\\nNow check for consistency.\\n\\nFrom (1): x₀ = 5/6\\n\\nCheck (3): 6x₀ = 6*(5/6) = 5 ≠ 11 → contradiction.\\n\\nSo equation (3) says 6x₀ = 11 → x₀ = 11/6\\nBut from (1): x₀ = 5/6\\n\\nConflict: 5/6 ≠ 11/6\\n\\nThus, no solution exists that satisfies all equations.\\n\\nTherefore, there are no compatible states.\\n\\nAnswer: inconsistent\",\"answer\":\"{\\\"status\\\":\\\"inconsistent\\\"}\"}",
+      "usage": {
+        "input_tokens": 271,
+        "output_tokens": 551
+      },
+      "wall_seconds": 32.93422473800001
+    },
+    {
+      "actual": null,
+      "budget_output_tokens": 2048,
+      "error": "PROVIDER_RESPONSE",
+      "id": "development-03",
+      "model_cpu_seconds": 1067.54,
+      "passed": false,
+      "wall_seconds": 134.0619233860001
+    },
+    {
+      "actual": null,
+      "budget_output_tokens": 2048,
+      "error": "PROVIDER_RESPONSE",
+      "id": "development-04",
+      "model_cpu_seconds": 1106.8700000000001,
+      "passed": false,
+      "wall_seconds": 141.7309482799999
+    },
+    {
+      "actual": null,
+      "budget_output_tokens": 2048,
+      "cost": {
+        "accounted": 0.0,
+        "amount": 0.0,
+        "attempts": 1,
+        "basis": "reported_usage_at_user_rates",
+        "complete_cost_known": false,
+        "currency": "USD"
+      },
+      "error": "INVALID_RESULT",
+      "id": "development-05",
+      "model_cpu_seconds": 671.9899999999998,
+      "passed": false,
+      "reported_model": "forge-qwen3-4b",
+      "response": "{\"work\":\"We are given a matrix A, a vector y of observations, a target vector, and a number of faults (0 in this case). We are to determine the value of target ⋅ x over all rational vectors x such that at most faults rows satisfy A[i] ⋅ x ≠ y[i]. Since faults = 0, every row must satisfy A[i] ⋅ x = y[i]. So we have a system of linear equations:\\n\\nA[i] ⋅ x = y[i] for all i.\\n\\nWe are to compute target ⋅ x over all rational solutions x to this system. If no solution exists → inconsistent. If multiple solutions exist and target ⋅ x differs → ambiguous. If target ⋅ x is the same for all solutions → determined.\\n\\nGiven:\\nA = [[-5,-5,-15],\\n     [20,0,-5],\\n     [0,20,20],\\n     [0,15,-10],\\n     [0,-20,0],\\n     [5,0,0]]\\ny = [-13, 28, -12, -29, 28, 8]\\ntarget = [1, 0, 0]\\n\\nWe are to solve:\\n-5x₁ -5x₂ -15x₃ = -13  (eq1)\\n20x₁ -5x₃ = 28          (eq2)\\n20x₂ + 20x₃ = -12       (eq3)\\n15x₂ -10x₃ = -29        (eq4)\\n-20x₂ = 28              (eq5)\\n5x₁ = 8                 (eq6)\\n\\nLet’s solve step by step.\\n\\nFrom eq5: -20x₂ = 28 → x₂ = -28/20 = -7/5\\n\\nFrom eq6: 5x₁ = 8 → x₁ = 8/5\\n\\nNow plug into eq3: 20x₂ + 20x₃ = -12\\n20*(-7/5) + 20x₃ = -12\\n-28 + 20x₃ = -12\\n20x₃ = 16 → x₃ = 16/20 = 4/5\\n\\nNow verify with eq4: 15x₂ -10x₃ = -29\\n15*(-7/5) -10*(4/5) = -21 - 8 = -29 → correct\\n\\nNow verify eq1: -5x₁ -5x₂ -15x₃ = -5*(8/5) -5*(-7/5) -15*(4/5)\\n= -8 + 7 - 12 = -13 → correct\\n\\nNow verify eq2: 20x₁ -5x₃ = 20*(8/5) -5*(4/5) = 32 - 4 = 28 → correct\\n\\nAll equations are satisfied with x₁ = 8/5, x₂ = -7/5, x₃ = 4/5.\\n\\nNow compute target ⋅ x = [1,0,0] ⋅ [x₁,x₂,x₃] = x₁ = 8/5.\\n\\nSince there is exactly one solution (due to full rank or consistent system), and target ⋅ x is uniquely determined, the value is 8/5.\\n\\nBut wait — the problem says: 'state x ranges over all rational vectors'. We found one rational solution. Is it unique?\\n\\nWe have 6 equations in 3 variables. The system is overdetermined, but consistent. We found a unique solution. So only one rational vector x satisfies all equations.\\n\\nTherefore, target ⋅ x is uniquely determined.\\n\\nBut the expected output format says: if determined, return value as reduced fraction.\\n\\nSo answer is 8/5.\\n\\nWait — the example in the prompt says: return {'status':'determined','value':'-5/7'}\\nSo we return value as string in reduced form.\\n\\nBut is the solution unique? Let's check if the system has a unique solution.\\n\\nWe can form the augmented matrix and row reduce.\\n\\nBut since we have solved all equations and they are consistent and we have a unique solution (all equations give same values), and no free variables, then yes — unique solution.\\n\\nThus, target ⋅ x = x₁ = 8/5.\\n\\nBut wait — the problem says 'faults = 0', so all equations must hold. We found one solution. So it's determined.\\n\\nFinal answer: 8/5\\n\\nBut let me double-check eq3:\\n20x₂ + 20x₃ = -12\\nx₂ = -7/5 → 20*(-7/5) = -28\\n-28 + 20x₃ = -12 → 20x₃ = 16 → x₃ = 4/5 → correct\\n\\neq4: 15*(-7/5) = -21, -10*(4/5) = -8 → -29 → correct\\n\\neq1: -5*(8/5) = -8, -5*(-7/5)=7, -15*(4/5)=-12 → -8+7-12 = -13 → correct\\n\\nAll good.\\n\\nSo the value of target ⋅ x is 8/5.\\n\\nThus, the answer is determined.\", \"answer\":\"{\\\\\\\"status\\\\\\\":\\\\\\\"determined\\\\\\\",\\\\\\\"value\\\\\\\":\\\\\\\"8/5\\\\\\\"}\"}",
+      "usage": {
+        "input_tokens": 279,
+        "output_tokens": 1304
+      },
+      "wall_seconds": 86.53686969499995
+    },
+    {
+      "actual": null,
+      "budget_output_tokens": 2048,
+      "error": "PROVIDER_RESPONSE",
+      "id": "development-06",
+      "model_cpu_seconds": 1118.04,
+      "passed": false,
+      "wall_seconds": 142.42287704199998
+    },
+    {
+      "actual": {
+        "status": "ambiguous"
+      },
+      "budget_output_tokens": 2048,
+      "cost": {
+        "accounted": 0.0,
+        "amount": 0.0,
+        "attempts": 1,
+        "basis": "reported_usage_at_user_rates",
+        "complete_cost_known": false,
+        "currency": "USD"
+      },
+      "id": "development-07",
+      "model_cpu_seconds": 187.52999999999975,
+      "passed": true,
+      "reported_model": "forge-qwen3-4b",
+      "response": "{\"work\":\"We are given a matrix A, a vector y, a target vector, and a number of faults (0 in this case). We are to determine the value of target ⋅ x over all rational vectors x such that at most faults rows satisfy A[i] ⋅ x ≠ y[i]. Since faults = 0, every row must satisfy A[i] ⋅ x = y[i].\\n\\nMatrix A:\\n- Row 0: [6, 0] → 6x₀ = 10\\n- Row 1: [0, 0] → 0x₀ + 0x₁ = 0\\n- Row 2: [0, 0] → 0x₀ + 0x₁ = 0\\n- Row 3: [6, 0] → 6x₀ = 10\\n- Row 4: [6, 0] → 6x₀ = 10\\n\\nAll rows 1 and 2 are [0,0], so they give 0 = 0, which is always true — no constraint on x₀ or x₁.\\n\\nRows 0, 3, 4 all give 6x₀ = 10 → x₀ = 10/6 = 5/3.\\n\\nSo x₀ = 5/3, and x₁ is unconstrained (since no row involves x₁).\\n\\nTarget vector is [3, 1], so target ⋅ x = 3x₀ + 1x₁ = 3*(5/3) + x₁ = 5 + x₁.\\n\\nSince x₁ can be any rational number (no constraints), target ⋅ x = 5 + x₁ can take infinitely many values depending on x₁.\\n\\nTherefore, the value of target ⋅ x is not unique across compatible states.\\n\\nHence, the answer is ambiguous.\", \"answer\": {\"status\":\"ambiguous\"}}",
+      "usage": {
+        "input_tokens": 250,
+        "output_tokens": 421
+      },
+      "wall_seconds": 23.996015263000118
+    },
+    {
+      "actual": null,
+      "budget_output_tokens": 2048,
+      "error": "PROVIDER_RESPONSE",
+      "id": "development-08",
+      "model_cpu_seconds": 1165.5699999999997,
+      "passed": false,
+      "wall_seconds": 149.45350712999993
+    }
+  ],
+  "models": {
+    "primary": {
+      "alias": "forge-qwen3-4b",
+      "context_tokens": 4096,
+      "hardware_backend": "CPU",
+      "llama_archive_sha256": "909eef25cd53e6601c8a07c866d8dbb2983e74177088d55182137a8fb8255d62",
+      "llama_release": "https://github.com/ggml-org/llama.cpp/releases/download/b12242/llama-b12242-bin-ubuntu-x64.tar.gz",
+      "llama_server_sha256": "fe211d00c4754aa67aaa492d2c755ab0f6ef60bf30eee3c0c74a3496189cde17",
+      "model_license": "Apache-2.0",
+      "peak_server_rss_bytes": 5003579392,
+      "quantization": "Q4_K_M",
+      "seed": 721638,
+      "startup_cpu_seconds": 4.96,
+      "startup_wall_seconds": 5.282107030000134,
+      "temperature": 0.2,
+      "threads": 2,
+      "weights_bytes": 2497280736,
+      "weights_sha256": "2fde00ce69dd4899c70d020845e2638353015bba0fdf161b3eb965f2bca4464e",
+      "weights_url": "https://huggingface.co/bartowski/Qwen_Qwen3-4B-Instruct-2507-GGUF/resolve/ae44f08e1392f39c0e474af10c3ff8355c8b6688/Qwen_Qwen3-4B-Instruct-2507-Q4_K_M.gguf"
+    }
+  },
+  "original_qualification_attempted": false,
+  "original_transfer_attempted": false,
+  "rejected_artifact_sha256": "a55d995db6e95a71d24c449e2112070fd9e4815195bdf2907f3cd664f4c40951",
+  "run_id": "wf_43a1359d8560492fec4add0d",
+  "sources": {
+    "adapters.py": "a05127970eb11bb08cc98ed7ef9e05f9a723f51c66f9a5bfaa9f2242bb6275a6",
+    "forge.py": "090a75a3b98e28e7e146ddb006b1ab0c9689eaee33cdd6fb9e7454b2716e6cbf",
+    "forge_sandbox.py": "860c444c497c6ba68f6967cdfd5e93e544c792860c6985a537f580ff257b80ed",
+    "forge_telemetry.py": "5f0b9dfc22002b59d5394a736ec8aca52e96aae57a70b354d394d365b95490e1",
+    "protocol": "42e7a0828b61e3b4554356013613c851e88707461b97323d1abf96f81fa8de9f",
+    "services.py": "41b71b3f946f0912898558995f2c83f1f09b0cb2d5f9203bfecbef301de4a081",
+    "study": "4e9d2c5761b24ffbbee1ca3b620f72cbc5528b13e281a13685fce4774dfd7c93",
+    "workflows.py": "69a292abba3eb24601b79783965a8b5ffff4fe3a9dcef245aa755e3e9d8a4059"
+  }
+}

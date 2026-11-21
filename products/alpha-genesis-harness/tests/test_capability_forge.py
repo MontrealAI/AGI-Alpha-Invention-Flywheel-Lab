@@ -12,7 +12,7 @@ from unittest.mock import patch
 import zipfile
 
 from bridge.adapters import BridgeError, Runtime
-from bridge.forge import ForgeWorkflow, development
+from bridge.forge import ForgeWorkflow, _unfence, development
 from bridge import forge_sandbox as sandbox, forge_telemetry as telemetry
 from bridge.server import HarnessServer
 from bridge.services import AccessRuntime
@@ -33,6 +33,11 @@ FIXTURE = (
 
 
 class OracleTests(unittest.TestCase):
+    def test_comment_before_a_single_code_fence_is_safe_source_framing(self):
+        fence = chr(96) * 3
+        text = "# hypothesis\n\n" + fence + "python\ndef solve(data): return 7\n" + fence
+        self.assertEqual(_unfence(text), "# hypothesis\ndef solve(data): return 7")
+
     def test_state_can_be_underdetermined_while_target_is_exact(self):
         self.assertEqual(telemetry.verify(CASE), {"status": "determined", "value": "3/2"})
         self.assertEqual(telemetry.verify({**CASE, "target": [1, 1]}), {"status": "ambiguous"})
@@ -98,6 +103,14 @@ class IsolatedForgeTests(unittest.TestCase):
         self.assertEqual(raised.exception.code, "CANDIDATE_ERROR")
         self.assertEqual(sandbox.execute(
             "from fractions import Fraction\ndef solve(data): return str(Fraction(4, 6))", {})["answer"], "2/3")
+
+    def test_generic_affine_primitive_exposes_no_fault_policy(self):
+        source = (
+            "def solve(data):\n"
+            "    point, space = rational_affine([[2,0],[4,0]], [3,6], 2)\n"
+            "    return [list(map(str, point)), [list(map(str, v)) for v in space]]\n"
+        )
+        self.assertEqual(sandbox.execute(source, {})["answer"], [["3/2", "0"], [["0", "1"]]])
 
     def test_development_overfit_stops_at_sealed_checks_without_retry(self):
         def key(data):
