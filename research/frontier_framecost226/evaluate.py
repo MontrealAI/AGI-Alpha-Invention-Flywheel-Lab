@@ -8,6 +8,7 @@ from __future__ import annotations
 import hashlib
 import json
 import math
+from decimal import Decimal, ROUND_CEILING, localcontext
 import resource
 import sys
 import time
@@ -77,15 +78,25 @@ def response_noise(p: np.ndarray, epsilon: float):
     return (1-epsilon)*p + epsilon/len(p)
 
 
-def bounded_n(bc: float, numerator: float):
-    """Return a conservative abstention if required count exceeds reporting precision."""
-    logbc = math.log1p(-(1-bc))
-    if not math.isfinite(logbc) or logbc >= 0:
-        raise ValueError("not a distinguishable fidelity")
-    threshold = math.log(numerator) / logbc
-    if not math.isfinite(threshold) or threshold > MAX_RELIABLE_REPORTED_SHOTS:
-        return {"count": None, "reason": "exceeds_reliable_reportable_1e12_shots"}
-    return {"count": max(1, int(math.ceil(threshold - 1e-10))), "reason": None}
+def bounded_n(bc: float, numerator: float, *, necessary: bool):
+    """Directed high-precision ceil: never round a sufficient guarantee downward.
+
+    The bound is conditional on the observed floating-point overlap and ideal
+    i.i.d. model. One-ULP directed adjustments avoid falsely tight thresholds;
+    they do not calibrate the real-world distribution or numerical shot costs.
+    """
+    if not (0 < bc < 1 and 0 < numerator < 1):
+        raise ValueError("invalid distinguishable fidelity or bound")
+    adjusted = math.nextafter(bc, 0.0 if necessary else 1.0)
+    if not (0 < adjusted < 1):
+        return {"count": None, "reason": "insufficient_numerical_precision"}
+    with localcontext() as ctx:
+        ctx.prec = 70
+        threshold = Decimal(str(numerator)).ln() / Decimal.from_float(adjusted).ln()
+        if not threshold.is_finite() or threshold > MAX_RELIABLE_REPORTED_SHOTS:
+            return {"count": None, "reason": "exceeds_reliable_reportable_1e12_shots"}
+        value = int(threshold.to_integral_value(rounding=ROUND_CEILING))
+    return {"count": max(1, value), "reason": None}
 
 
 def pair_stats(p, q, helstrom_error: float, epsilon: float):
@@ -114,8 +125,8 @@ def pair_stats(p, q, helstrom_error: float, epsilon: float):
     elif bc <= 0:
         result.update(status="finite", necessary_shots=1, sufficient_shots=1)
     else:
-        necessary = bounded_n(bc, 4*TARGET*(1-TARGET))
-        sufficient = bounded_n(bc, 2*TARGET)
+        necessary = bounded_n(bc, 4*TARGET*(1-TARGET), necessary=True)
+        sufficient = bounded_n(bc, 2*TARGET, necessary=False)
         if necessary["count"] is not None and sufficient["count"] is not None:
             if not (1 <= necessary["count"] <= sufficient["count"]):
                 raise AssertionError("invalid necessary/sufficient ordering")
