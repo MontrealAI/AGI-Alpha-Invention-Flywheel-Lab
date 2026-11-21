@@ -244,17 +244,34 @@ def citation_prompt(state):
     )
 
 
-def discovery_schema(confirm=False):
-    text = {"type": "string"}
-    properties = ({"source": text, "excerpt_index": {"type": "integer", "minimum": 0, "maximum": 5}}
-                  if confirm else {key: text for key in (*FIELDS, "source", "quote")})
-    properties["contract"] = {"anyOf": [text, {"type": "null"}]}
+def discovery_schema(confirm=False, *, state=None):
+    """Constrain response syntax; source support and admission still use decide.
+
+    State contributes only registered identifiers and the prior hypothesis count,
+    never qualification inputs, answers or an inferred choice for the model.
+    """
+    def text(maximum):
+        return {"type": "string", "minLength": 1, "maxLength": maximum}
+
+    source, contract = text(40), {"anyOf": [text(40), {"type": "null"}]}
+    minimum, maximum = 3, 5
+    if state is not None:
+        mission = state["spec"]["economic_mission"]
+        source = {"type": "string", "enum": sorted(mission["sources"])}
+        contracts = sorted(mission["contracts"])
+        contract = ({"anyOf": [{"type": "string", "enum": contracts}, {"type": "null"}]}
+                    if contracts else {"type": "null"})
+        if confirm:
+            minimum = maximum = len(state["economic_mission"]["decision"]["opportunities"])
+    properties = ({"source": source, "excerpt_index": {"type": "integer", "minimum": 0, "maximum": 5}}
+                  if confirm else {**{key: text(1000) for key in FIELDS}, "source": source, "quote": text(180)})
+    properties["contract"] = contract
     name = "citations" if confirm else "opportunities"
     return {"type": "object", "properties": {
-        name: {"type": "array", "minItems": 3, "maxItems": 5, "items": {
+        name: {"type": "array", "minItems": minimum, "maxItems": maximum, "items": {
             "type": "object", "properties": properties, "required": list(properties), "additionalProperties": False}},
-        "selection": {"anyOf": [{"type": "integer", "minimum": 0, "maximum": 4}, {"type": "null"}]},
-        "rationale": text},
+        "selection": {"anyOf": [{"type": "integer", "minimum": 0, "maximum": maximum - 1}, {"type": "null"}]},
+        "rationale": text(1200)},
         "required": [name, "selection", "rationale"], "additionalProperties": False}
 
 

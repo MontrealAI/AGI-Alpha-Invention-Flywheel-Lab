@@ -1,5 +1,6 @@
 # SPDX-License-Identifier: Apache-2.0
 """State, permission and sequestered-acceptance regressions for economic missions."""
+import copy
 import hashlib
 import json
 from pathlib import Path
@@ -8,7 +9,8 @@ import unittest
 from unittest.mock import patch
 
 from bridge.adapters import BridgeError, Runtime
-from bridge.economic_mission import ARTIFACT
+from bridge.economic_mission import ARTIFACT, decide, discovery_schema
+from bridge.output_schema import SchemaError, prepare_schema, validate_output
 from bridge.services import AccessRuntime
 from bridge.workflows import WorkflowService, digest
 from scripts.qualify_economic_mission import replay
@@ -68,10 +70,10 @@ class EconomicMissionTests(unittest.TestCase):
         self.service = self.open_service()
         self.addCleanup(lambda: self.service.close())
 
-    def open_service(self, *, remote=False):
+    def open_service(self, *, remote=False, schema=False):
         host = "https://example.com" if remote else "http://127.0.0.1:8123"
         config = {"providers": {"local": {"kind": "openai", "base_url": host + "/v1",
-                  "models": {"fixture": {"input_per_million": 0, "output_per_million": 0}}}}}
+                  "models": {"fixture": {"input_per_million": 0, "output_per_million": 0, "json_schema": schema}}}}}
 
         def call(url, headers, body, timeout):
             self.requests.append(body)
@@ -162,6 +164,34 @@ class EconomicMissionTests(unittest.TestCase):
         self.assertTrue(resolved["quote_verified"])
         self.assertEqual(self.service.step(ident)["status"], "complete")
 
+    def test_schema_dispatch_binds_ids_and_confirmation_count_without_answers(self):
+        self.service.close()
+        self.service = self.open_service(schema=True)
+        spec = specification()
+        spec["economic_mission"]["confirm_citations"] = True
+        ident = self.collect(spec)
+        confirmation = {"selection": 0, "rationale": "Bind each existing hypothesis to its source.",
+                        "citations": [
+                            {"source": label, "excerpt_index": 0, "contract": "measurement" if index == 0 else None}
+                            for index, label in enumerate(sources())
+                        ]}
+        self.replies.extend([proposal(wrong_source=True), confirmation, candidate()])
+        self.assertEqual(self.service.step(ident)["phase"], "researcher")
+        self.assertEqual(self.service.step(ident)["phase"], "builder")
+        for request in self.requests:
+            schema = request["response_format"]["json_schema"]["schema"]
+            prepare_schema(schema)
+            name = "citations" if "citations" in schema["properties"] else "opportunities"
+            rows = schema["properties"][name]
+            self.assertEqual(rows["items"]["properties"]["source"]["enum"], sorted(sources()))
+            if name == "citations":
+                self.assertEqual((rows["minItems"], rows["maxItems"]), (3, 3))
+                with self.assertRaises(SchemaError):
+                    validate_output({**confirmation, "citations": confirmation["citations"][:1]}, schema)
+            self.assertNotIn("717123", json.dumps(request))
+            self.assertNotIn("1434246", json.dumps(request))
+        self.assertEqual(self.service.step(ident)["status"], "complete")
+
     def test_resume_after_freezing_does_not_call_model_again(self):
         ident = self.collect(specification())
         self.replies.extend([proposal(), candidate()])
@@ -219,6 +249,55 @@ class EconomicMissionTests(unittest.TestCase):
         original["qualification"][0]["input"]["x"] = 3.0
         with self.assertRaisesRegex(BridgeError, "input repeats"):
             self.service.create(spec)
+
+
+class EconomicMissionSchemaTests(unittest.TestCase):
+    def test_generation_bounds_reject_observed_overlong_quotes_without_repair(self):
+        schema = prepare_schema(discovery_schema())
+        value = proposal()
+        validate_output(value, schema)
+        for field, limit in (("title", 1000), ("quote", 180), ("source", 40), ("contract", 40)):
+            with self.subTest(field=field):
+                boundary = copy.deepcopy(value)
+                boundary["opportunities"][0][field] = "a" * limit
+                validate_output(boundary, schema)
+                boundary["opportunities"][0][field] += "a"
+                before = copy.deepcopy(boundary)
+                with self.assertRaises(SchemaError):
+                    validate_output(boundary, schema)
+                self.assertEqual(boundary, before)
+        value["opportunities"][0]["quote"] = "a" * 582
+        with self.assertRaises(SchemaError):
+            validate_output(value, schema)
+        value = proposal()
+        value["rationale"] = "a" * 1201
+        with self.assertRaises(SchemaError):
+            validate_output(value, schema)
+
+    def test_registered_ids_keep_abstention_and_do_not_certify_source_support(self):
+        spec = specification()
+        state = {"spec": spec, "economic_mission": {"decision": None, "observations": {
+            key: {"status": "observed", "excerpt": row["snapshot"]["body"], "sha256": row["snapshot"]["sha256"]}
+            for key, row in spec["economic_mission"]["sources"].items()}}}
+        schema = prepare_schema(discovery_schema(state=state))
+        value = proposal()
+        validate_output(value, schema)
+        for field, unsupported in (("source", "[measurement]"), ("contract", "unregistered")):
+            invalid = copy.deepcopy(value)
+            invalid["opportunities"][0][field] = unsupported
+            with self.subTest(field=field), self.assertRaises(SchemaError):
+                validate_output(invalid, schema)
+        for row in value["opportunities"]:
+            row["quote"] = "This quotation is absent from every source."
+        validate_output(value, schema)
+        self.assertIsNone(decide(state, value)["selected"])
+        spec["economic_mission"]["contracts"] = {}
+        schema = prepare_schema(discovery_schema(state=state))
+        value["selection"] = None
+        for row in value["opportunities"]:
+            row["contract"] = None
+        validate_output(value, schema)
+        self.assertEqual(decide(state, value)["disposition"], "model_abstained")
 
 
 if __name__ == "__main__":

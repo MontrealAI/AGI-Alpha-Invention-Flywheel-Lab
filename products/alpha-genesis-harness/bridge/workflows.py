@@ -738,7 +738,7 @@ class WorkflowService:
                         and not instrument_mission):
                     if discovery:
                         from .economic_mission import discovery_schema
-                        request["json_schema"] = discovery_schema(confirm=discovery["decision"] is not None)
+                        request["json_schema"] = discovery_schema(confirm=discovery["decision"] is not None, state=state)
                     elif state.get("workshop") and role == "builder":
                         from .workshop import BUILDER_SCHEMA
                         request["json_schema"] = BUILDER_SCHEMA
