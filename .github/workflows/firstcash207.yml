@@ -1,0 +1,77 @@
+name: FIRSTCASH207 source-bound bilingual sample (no transaction)
+on:
+  pull_request:
+    paths:
+      - 'docs/frontier-unseen-advantage-sample.html'
+      - 'tests/test_unseen_firstcash207.py'
+      - 'campaign/unseen-first-cash-207/**'
+      - '.github/workflows/firstcash207.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-and-print-qualification:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Source-only bilingual and no-external-action checks
+        run: python -B -m unittest -v tests.test_unseen_firstcash207
+      - name: Generate and audit true A4 ten-page PDF from exact source
+        shell: bash
+        run: |
+          set -euo pipefail
+          command -v google-chrome
+          command -v pdfinfo
+          command -v pdftotext
+          mkdir -p "$RUNNER_TEMP/firstcash207"
+          google-chrome --headless --no-sandbox --disable-gpu --disable-dev-shm-usage \
+            --disable-background-networking --no-pdf-header-footer \
+            --print-to-pdf="$RUNNER_TEMP/firstcash207/FIRSTCASH207-SPECIMEN.pdf" \
+            "file://$GITHUB_WORKSPACE/docs/frontier-unseen-advantage-sample.html" \
+            > "$RUNNER_TEMP/firstcash207/chrome.stdout" 2> "$RUNNER_TEMP/firstcash207/chrome.stderr"
+          test -s "$RUNNER_TEMP/firstcash207/FIRSTCASH207-SPECIMEN.pdf"
+          pdfinfo "$RUNNER_TEMP/firstcash207/FIRSTCASH207-SPECIMEN.pdf" > "$RUNNER_TEMP/firstcash207/pdfinfo.txt"
+          pages="$(awk '/^Pages:/ {print $2}' "$RUNNER_TEMP/firstcash207/pdfinfo.txt")"
+          if [ "$pages" != 10 ]; then echo "PRINTED_PAGE_COUNT_MISMATCH: $pages" >&2; exit 1; fi
+          pdftotext -layout "$RUNNER_TEMP/firstcash207/FIRSTCASH207-SPECIMEN.pdf" "$RUNNER_TEMP/firstcash207/printed.txt"
+          python -B - "$RUNNER_TEMP/firstcash207/printed.txt" <<'PY_VERIFY'
+          from pathlib import Path
+          import sys
+          pages = Path(sys.argv[1]).read_text().split("\f")
+          if pages[-1].strip() == "":
+              pages.pop()
+          expected = (
+              "The Unseen Advantage", "What the beneficiary really needs",
+              "One real component improvement", "The competitor is not a weak AI demo",
+              "The missing means may be acceptance", "No automatic winner",
+              "How one real sale would be accepted", "Profit cannot be guessed from price",
+              "What would change the decision", "Keep the ambition"
+          )
+          if len(pages) != 10:
+              raise SystemExit(f"EXTRACTED_PAGE_COUNT_MISMATCH: {len(pages)}")
+          for index, (page, title) in enumerate(zip(pages, expected), 1):
+              if title not in page:
+                  raise SystemExit(f"PAGE_{index}_MISSING_HEADING: {title}")
+              if not page.strip():
+                  raise SystemExit(f"EMPTY_PAGE_{index}")
+          print("SOURCE_BOUND_A4_PRINT_10_PAGES_VERIFIED")
+          PY_VERIFY
+          sha256sum docs/frontier-unseen-advantage-sample.html "$RUNNER_TEMP/firstcash207/FIRSTCASH207-SPECIMEN.pdf" > "$RUNNER_TEMP/firstcash207/SHA256SUMS.txt"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: firstcash207-source-bound-print-proof
+          if-no-files-found: error
+          path: |
+            ${{ runner.temp }}/firstcash207/FIRSTCASH207-SPECIMEN.pdf
+            ${{ runner.temp }}/firstcash207/pdfinfo.txt
+            ${{ runner.temp }}/firstcash207/SHA256SUMS.txt
+          retention-days: 30
