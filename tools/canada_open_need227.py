@@ -33,7 +33,7 @@ PHRASES = (
     "digital transformation", "document processing",
     "intelligence artificielle", "analyse de données",
 )
-PATTERN = re.compile(r"(?<!\\w)(?:" + "|".join(re.escape(x) for x in PHRASES) + r")(?!\\w)", re.I)
+PATTERN = re.compile(r"(?<!\w)(?:" + "|".join(re.escape(x) for x in PHRASES) + r")(?!\w)", re.I)
 COSTS = (
     "research_and_failed_attempts", "acquisition", "eligibility_and_bid",
     "production_and_tool_inference", "independent_acceptance", "corrections",
@@ -89,7 +89,7 @@ def clean(value, limit=240):
 
 def observed_date(value):
     if not isinstance(value, str) or not re.fullmatch(
-        r"\\d{4}-\\d\\d-\\d\\dT\\d\\d:\\d\\d:\\d\\d(?:\\.\\d+)?(?:Z|[+-]\\d\\d:\\d\\d)", value
+        r"\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d(?:\.\d+)?(?:Z|[+-]\d\d:\d\d)", value
     ):
         refuse("INVALID_OBSERVED_AT")
     try:
@@ -104,7 +104,7 @@ def closing_day(value):
     if not isinstance(value, str):
         return None
     value = value.strip()
-    if not re.fullmatch(r"\\d{4}-\\d\\d-\\d\\d(?:[ T]\\d\\d:\\d\\d(?::\\d\\d)?(?:Z|[+-]\\d\\d:\\d\\d)?)?", value):
+    if not re.fullmatch(r"\d{4}-\d\d-\d\d(?:[ T]\d\d:\d\d(?::\d\d)?(?:Z|[+-]\d\d:\d\d)?)?", value):
         return None
     try:
         return date.fromisoformat(value[:10])
