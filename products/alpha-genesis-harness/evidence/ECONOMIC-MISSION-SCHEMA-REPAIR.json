@@ -1,0 +1,298 @@
+{
+  "schema": "omega-alpha/economic-schema-repair/v1",
+  "observed_date": "2026-11-21",
+  "base_public_commit": "6142186b1b0e591bb1fc1b06ffd31a5db4553d6c",
+  "scope": "Response schema reliability repair and local compatibility observations; no economic invention proof.",
+  "source_sha256": {
+    "bridge/economic_mission.py": "977847c5ee1ee4b67a14e9273eebc15816a806323c8c79ba23a90f268029a4ea",
+    "bridge/workflows.py": "d0046344d6e804709ab8b37b895ffdb258c8400335b46198c18d560d7c898ead",
+    "tests/test_economic_mission.py": "2f81f407aa3e7c0544d7b85a5a1dbf7a3154163d100af53ca3e1f9254f10512e"
+  },
+  "prior_trials": [
+    {
+      "run_id": "wf_25292ce8985a27ba2a4912ee",
+      "status": "paused",
+      "result_sha256": "0551bd3817fbfd04e539f34b9b9caaa77338e2e5f0e83132ae023d8568ccc307",
+      "qualified_instrument": false,
+      "reported_mission_wall_seconds": 334.85927378999986
+    },
+    {
+      "run_id": "wf_b40c7dc93ef05050e4894f73",
+      "status": "paused",
+      "result_sha256": "defdc599480428b46b3952346e4494bd8da39bc6b3866992d41a6c0edaf3f109",
+      "qualified_instrument": false,
+      "reported_mission_wall_seconds": 409.389615866
+    },
+    {
+      "run_id": "wf_1ca4e5416a0378cf67a67396",
+      "status": "paused",
+      "result_sha256": "98a27b7ddc173c24c0d19647d6b83a2162ef6b52fa637cb38adb9b0fc3d7fbf9",
+      "qualified_instrument": false,
+      "reported_mission_wall_seconds": 41.885275801999796
+    },
+    {
+      "run_id": "wf_e0f5f7ac1d5524d696197613",
+      "status": "needs_review",
+      "result_sha256": "c144af85e6cb1b80eda1d2cb37c598cdf455c3dfbe907fd79f666c04d2886313",
+      "qualified_instrument": false,
+      "reported_mission_wall_seconds": 92.2481457480003
+    },
+    {
+      "run_id": "wf_44c9a6015b3e5c51716ad81f",
+      "status": "needs_review",
+      "result_sha256": "2cda83902041b728dcbd3aa7149c4250bc1d52a996d29750e4043f0c4d6e0a7e",
+      "qualified_instrument": false,
+      "reported_mission_wall_seconds": 32.70638388399993
+    },
+    {
+      "run_id": "wf_c21006b84a360c6d7bbda5d9",
+      "status": "needs_review",
+      "result_sha256": "c3721da635ddf1690eb45d3c6a8020917454b9fbad271511c08ec1746fa882c1",
+      "qualified_instrument": false,
+      "reported_mission_wall_seconds": 51.023297834000005
+    },
+    {
+      "run_id": "wf_0065bba9db0827a4275fec01",
+      "status": "needs_review",
+      "result_sha256": "f65f198d6898e679213947cb00aba5144186b8f21ee5b533990cfefa1d19c8f1",
+      "qualified_instrument": false,
+      "reported_mission_wall_seconds": 93.39065410500007
+    }
+  ],
+  "observed_defect": {
+    "trial_05_quote_lengths": [
+      582,
+      584,
+      582
+    ],
+    "parser_quote_limit": 180,
+    "old_decoder_schema_accepted_response": true,
+    "trial_07_confirmation_rows": 1,
+    "required_confirmation_rows": 3
+  },
+  "tests": {
+    "focused": {
+      "tests_run": 32,
+      "failures": 0,
+      "errors": 0,
+      "reported_seconds": 0.431,
+      "command": "python -B -m unittest tests.test_economic_mission tests.test_output_schema tests.test_workflow_schemas -v"
+    },
+    "full_suite": {
+      "command": "python -m unittest discover -s tests -q",
+      "tests_run": 559,
+      "skipped": 1,
+      "failures": 0,
+      "errors": 0,
+      "reported_seconds": 29.002
+    }
+  },
+  "independent_code_review": {
+    "status": "no_material_issues_found",
+    "scope": [
+      "schema subset compatibility",
+      "unchanged evidence and source admission",
+      "no hidden-case leakage",
+      "preserved abstention",
+      "regression quality"
+    ],
+    "limitations": "Read-only code review by a separate assistant agent; no commercial or invention certification."
+  },
+  "larger_model_trial": {
+    "run_id": "wf_375de0b641546c675f8aee43",
+    "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+    "model_sha256": "2fde00ce69dd4899c70d020845e2638353015bba0fdf161b3eb965f2bca4464e",
+    "registrations": [
+      {
+        "filename": "REGISTRATION.json",
+        "sha256": "fa1a2147b8ac54943a609211060694800bb4fb96ed7b888539a3a00342ebe50b"
+      },
+      {
+        "filename": "RESUME-REGISTRATION.json",
+        "sha256": "bc6c40cbcf1527ce6d800752c01c2673221433593c70024b69b7ea8579f40df1"
+      },
+      {
+        "filename": "RECOVERY-REGISTRATION.json",
+        "sha256": "e0b2819fea176a3d173bb0ea4187b85821b7c7010d163fa3c979368eb3769da8"
+      },
+      {
+        "filename": "CONFIGURATION-REGISTRATION.json",
+        "sha256": "086fc427d812e26e929246e07cf2a4f81210f7b600b225b11c9891b3c1572e9c"
+      }
+    ],
+    "stages": [
+      {
+        "stage": "initial_8192_context",
+        "status": "paused",
+        "error": null,
+        "wall_seconds": 12.851054187000045,
+        "child_cpu_seconds": 17.838537,
+        "source_unchanged": true
+      },
+      {
+        "stage": "16384_server_start",
+        "status": "server_start_failed",
+        "error": "RuntimeError: Server exited: -9",
+        "wall_seconds": 6.572446827000022,
+        "child_cpu_seconds": 5.963758,
+        "source_unchanged": true
+      },
+      {
+        "stage": "9216_context_resume",
+        "status": "paused",
+        "error": null,
+        "wall_seconds": 11.524145410999154,
+        "child_cpu_seconds": 11.694177000000002,
+        "source_unchanged": true
+      },
+      {
+        "stage": "12288_context_resume",
+        "status": "paused",
+        "error": null,
+        "wall_seconds": 42.475307529999554,
+        "child_cpu_seconds": 112.258975,
+        "source_unchanged": true
+      }
+    ],
+    "final_status": "paused",
+    "model_attempt_events": [
+      {
+        "kind": "model_error",
+        "code": "CONTEXT"
+      },
+      {
+        "kind": "model_error",
+        "code": "CONTEXT"
+      },
+      {
+        "kind": "model_error",
+        "code": "PROVIDER_CONNECTION"
+      }
+    ],
+    "completed_model_responses": 0,
+    "builder_calls": 0,
+    "qualified_instrument": false,
+    "backend_interruption_cause": "Unverified. The 16384-context start reported signal 9; the final run lost the backend connection during prompt processing."
+  },
+  "smaller_model_trial": {
+    "run_id": "wf_e9183726130936cc01db8cba",
+    "model": "Qwen2.5-Coder-1.5B-Instruct-Q4_K_M",
+    "model_sha256": "cc324af070c2ecbfd324a30884d2f951a7ff756aba85cb811a6ec436933bb046",
+    "registration_sha256": "5463a2232b5e187a88ca28f2482c4f178c800bef03c3b377f37f63f49ee994a3",
+    "registration_timing": "Recorded locally before generation; publication follows observation.",
+    "settings": {
+      "threads": 4,
+      "context": 12288,
+      "seed": 214,
+      "temperature": 0,
+      "batch_size": 128
+    },
+    "source_snapshot_sha256": "74895743fecacfcc6e6824164758244391e24e689172fada373dcadb49489303",
+    "source_observations": {
+      "electricity": {
+        "excerpt": "{\"data\":[{\"from\":\"2026-11-13T23:30Z\",\"to\":\"2026-11-14T00:00Z\",\"intensity\":{\"forecast\":144,\"actual\":148,\"index\":\"moderate\"}},{\"from\":\"2026-11-14T00:00Z\",\"to\":\"2026-11-14T00:30Z\",\"intensity\":{\"forecast\":147,\"actual\":151,\"index\":\"moderate\"}},{\"from\":\"2026-11-14T00:30Z\",\"to\":\"2026-11-14T01:00Z\",\"intensity\":{\"forecast\":135,\"actual\":145,\"index\":\"moderate\"}},{\"from\":\"2026-11-14T01:00Z\",\"to\":\"2026-11-14T01:30Z\",\"intensity\":{\"forecast\":151,\"actual\":134,\"index\":\"moderate\"}},{\"from\":\"2026-11-14T01:30Z\",\"to\":\"2026-11-14T02:00Z\",\"intensity\":{\"forecast\":141,\"actual\":132,\"index\":\"moderate\"}},{\"from\":\"2026-11-14T02:00Z\",\"to\":\"20",
+        "label": "NESO national carbon intensity, Great Britain, 14–16 November 2026 UTC",
+        "mode": "operator-snapshot",
+        "sha256": "66dace003b6febd6cfe1d21413746e41ed0cd4ec4ce4fd31c2bf52c663c7fc89",
+        "status": "observed",
+        "url": "https://api.carbonintensity.org.uk/intensity/2026-11-14T00:00Z/2026-11-16T00:00Z"
+      },
+      "exchange-rates": {
+        "excerpt": "{ \"terms\": { \"url\": \"https://www.bankofcanada.ca/terms/\" }, \"seriesDetail\": { \"FXEURCAD\": { \"label\": \"EUR/CAD\", \"description\": \"Daily average exchange rate of the euro in Canadian dollars.\", \"dimension\": { \"key\": \"d\", \"name\": \"Date\" }, \"dateFormat\": \"daily\", \"metadata\": { \"unit\": \"Canadian dollars per euro\", \"frequency\": \"Business daily\" } }, \"FXGBPCAD\": { \"label\": \"GBP/CAD\", \"description\": \"Daily average exchange rate of the UK pound sterling in Canadian dollars.\", \"dimension\": { \"key\": \"d\", \"name\": \"Date\" }, \"dateFormat\": \"daily\", \"metadata\": { \"unit\": \"Canadian dollars per UK pound sterling\", \"frequency\": \"Bus",
+        "label": "Bank of Canada daily reference exchange rates, 1–19 October 2026",
+        "mode": "operator-snapshot",
+        "sha256": "9705a836b6c1bd4905323e1aeef573990193c0eebbd27e71af5bba9727668a88",
+        "status": "observed",
+        "url": "https://www.bankofcanada.ca/valet/observations/FXUSDCAD,FXEURCAD,FXGBPCAD/json?start_date=2026-10-01&end_date=2026-10-19"
+      },
+      "seismic-archive": {
+        "excerpt": "{\"type\":\"FeatureCollection\",\"metadata\":{\"generated\":1795274548000,\"url\":\"https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=2026-10-01&endtime=2026-10-19&minmagnitude=6&orderby=time-asc\",\"title\":\"USGS Earthquakes\",\"status\":200,\"api\":\"2.8.4\",\"count\":10},\"features\":[{\"type\":\"Feature\",\"properties\":{\"mag\":6.3,\"place\":\"117 km NE of Norsup, Vanuatu\",\"time\":1791450008818,\"updated\":1793726407918,\"tz\":null,\"url\":\"https://earthquake.usgs.gov/earthquakes/eventpage/us6000u0xi\",\"detail\":\"https://earthquake.usgs.gov/fdsnws/event/1/query?eventid=us6000u0xi&format=geojson\",\"felt\":5,\"cdi\":6.9,\"mmi\":6.84,\"al",
+        "label": "USGS reviewed and provisional earthquake catalogue records, 1–19 October 2026",
+        "mode": "operator-snapshot",
+        "sha256": "8fa8b8a23a77e82ae02651ef07b07a149ac64ca2b0dafe4d4376e164a2327f05",
+        "status": "observed",
+        "url": "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=2026-10-01&endtime=2026-10-19&minmagnitude=6&orderby=time-asc"
+      }
+    },
+    "response": {
+      "opportunities": [
+        {
+          "title": "Discover and construct one unexpectedly valuable productive capability",
+          "outcome": "MONTREAL.AI can own or operate a real decision we could deliver reliably at scale",
+          "constraint": "Deployment, outreach and financial authority are absent",
+          "alternative": "Discover and construct one unexpectedly valuable productive capability",
+          "experiment": "Retrospectively compare historical reference-rate conversions for equivalent hypothetical software quotes",
+          "capture": "The least converted amount with ties resolved in the order CAD, USD, EUR, GBP",
+          "source": "exchange-rates",
+          "quote": "tests Retrospectively compare historical reference-rate conversions for equivalent hypothetical software quotes. Fields cad, usd, eur, gbp are whole local currency units. A neagtiv",
+          "contract": "quote"
+        },
+        {
+          "title": "Discover and construct one unexpectedly valuable productive capability",
+          "outcome": "MONTREAL.AI can own or operate a real decision we could deliver reliably at scale",
+          "constraint": "Deployment, outreach and financial authority are absent",
+          "alternative": "Discover and construct one unexpectedly valuable productive capability",
+          "experiment": "Retrospectively choose a continuous one-hour window for a constant-power flexible workload",
+          "capture": "The start (zero-based slot index) and total (the sum of the two published intensity values) for the feasible window with least integrated intensity",
+          "source": "electricity",
+          "quote": "tests Retrospectively choose a continuous one-hour window for a constant-power flexible workload. Fields c0 to c5 are the published actual carbon intensities of six successive equa",
+          "contract": "window"
+        },
+        {
+          "title": "Discover and construct one unexpectedly valuable productive capability",
+          "outcome": "MONTREAL.AI can own or operate a real decision we could deliver reliably at scale",
+          "constraint": "Deployment, outreach and financial authority are absent",
+          "alternative": "Discover and construct one unexpectedly valuable productive capability",
+          "experiment": "Retrospectively compare historical reference-rate conversions for equivalent hypothetical software quotes",
+          "capture": "The least converted amount with ties resolved in the order CAD, USD, EUR, GBP",
+          "source": "exchange-rates",
+          "quote": "tests Retrospectively compare historical reference-rate conversions for equivalent hypothetical software quotes. Fields cad, usd, eur, gbp are whole local currency units. A neagtiv",
+          "contract": "quote"
+        }
+      ],
+      "selection": null,
+      "rationale": "The opportunities are all about discovering and constructing a real decision we could deliver reliably at scale, which is the ambition of the project. The experiments are about comparing historical reference-rate conversions and choosing a continuous one-hour window for a constant-power flexible workload, which are relevant to the project's ambition. The capture is about the least converted amount with ties resolved in the order CAD, USD, EUR, GBP, which is a relevant metric to the project's ambition. The contract is about the quote, which is relevant to the project's ambition. The selection is null to abstain from selecting a promising matched idea by its zero-based index."
+    },
+    "response_sha256": "90f23afda970432502a9f55215eef63f6c58e174843f2e1653a03cac8afd8b61",
+    "reported_usage": {
+      "input_tokens": 1332,
+      "output_tokens": 677
+    },
+    "model_wall_seconds": 65.40211545799957,
+    "status": "needs_review",
+    "disposition": "model_abstained",
+    "schema_and_parser_acceptance": true,
+    "verified_quotes": 0,
+    "distinct_outcome_count": 1,
+    "selected": null,
+    "builder_calls": 0,
+    "qualification_checks": 0,
+    "qualified_instrument": false,
+    "source_unchanged": true,
+    "measured_wall_seconds": 77.43245571399984,
+    "measured_child_cpu_seconds": 230.21509700000001
+  },
+  "verdicts": {
+    "AUTONOMOUS_DISCOVERY": "not_established",
+    "EXECUTABLE_INVENTION": "not_established",
+    "INDEPENDENT_ACCEPTANCE": "not_established",
+    "CAPABILITY_ADVANTAGE": "not_established",
+    "FRONTIER_PARITY": "not_established",
+    "ECONOMIC_FEASIBILITY": "not_established",
+    "PRODUCTIVE_ASSET": "not_established",
+    "REAL_VALUE_CAPTURE": "not_established",
+    "FRESH_SUCCESSOR_BENEFIT": "not_established",
+    "INVENTOR_IMPROVEMENT": "not_established",
+    "AFTER_COST_COMPOUNDING": "not_established"
+  },
+  "paid_api_requests": 0,
+  "complete_monetary_cost_known": false,
+  "cost_scope": "Wall/child CPU covers the named local commands, including model startup. Setup, assistant work, prior failed work and monetary rates are not asserted as zero. Configured zero request prices are access-policy settings.",
+  "lessons": [
+    "Align structured generation constraints with the parser before live selection; preserve independent evidence checks.",
+    "Schema-valid source IDs and quotations do not establish source support or useful discovery.",
+    "A matching source does not establish that a calculation verifies the proposed economic outcome.",
+    "The existing final-two-input cohort is same-task reuse, not construction of a second different invention.",
+    "Continue substantive discovery/construction work; do not treat this supporting repair as the flagship proof."
+  ]
+}
