@@ -29,6 +29,16 @@ jobs:
           echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
           echo "GITHUB_SHA=$GITHUB_SHA"
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - name: Verify exact executing head
+        shell: bash
+        run: |
+          expected="${{ github.event.pull_request.head.sha || github.sha }}"
+          actual="$(git rev-parse HEAD)"
+          echo "Expected=$expected actual=$actual"
+          test "$actual" = "$expected"
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
