@@ -32,11 +32,31 @@ def next_friday(as_of):
     return target if target > local else target + timedelta(days=7)
 
 
+def _known_at(day, stamp, cutoff):
+    """Conservatively treat date-only claims as known after their UTC day.
+
+    An optional observed timestamp can establish earlier eligibility; never
+    invent an intraday publication hour from a calendar date.
+    """
+    if cutoff.tzinfo is None or cutoff.utcoffset() is None:
+        raise ValueError("timezone-aware cutoff required")
+    declared = date.fromisoformat(day)
+    if stamp is not None:
+        try:
+            observed = instant(stamp).astimezone(timezone.utc)
+        except (ValueError, TypeError, OverflowError, AttributeError):
+            return False
+        return observed.date() == declared and observed <= cutoff.astimezone(timezone.utc)
+    return cutoff.astimezone(timezone.utc) >= datetime.combine(
+        declared + timedelta(days=1), datetime.min.time(), tzinfo=timezone.utc
+    )
+
+
 def evidence_available(record, as_of):
-    """Use the latest evidence date: do not leak later sources into a replay."""
-    end = as_of.astimezone(timezone.utc).date()
+    """Require every source to be known at this exact UTC instant."""
     sources = record.get("sources", [])
-    return bool(sources) and all(s.get("date") and date.fromisoformat(s["date"]) <= end for s in sources)
+    return bool(sources) and all(s.get("date") and _known_at(s["date"], s.get("available_at"), as_of)
+                                 for s in sources)
 
 
 def assess(record, as_of, *, history=False):
@@ -44,7 +64,7 @@ def assess(record, as_of, *, history=False):
         return {"id": record["id"], "decision": label, "reason": reason, "alert": alert}
 
     end = as_of.astimezone(timezone.utc).date()
-    if date.fromisoformat(record["as_of"]) > end or not evidence_available(record, as_of):
+    if not _known_at(record["as_of"], record.get("as_of_instant"), as_of) or not evidence_available(record, as_of):
         return result("UNAVAILABLE", "Record or evidence did not exist at the cutoff.")
     if record["recommendation"] == "PASS":
         return result("PASS", "Recorded rejection.")
@@ -74,8 +94,8 @@ def assess(record, as_of, *, history=False):
 
 
 def atlas_at(atlas, as_of):
-    end = as_of.astimezone(timezone.utc).date()
-    return [r for r in atlas["milestones"] if date.fromisoformat(r["announced_at"]) <= end
+    return [r for r in atlas["milestones"]
+            if _known_at(r["announced_at"], r.get("announced_at_instant"), as_of)
             and evidence_available(r, as_of)]
 
 
@@ -85,7 +105,7 @@ def briefing(atlas, records, as_of, health=None):
     if health and any(x.get("status") not in ("ok", "not_modified") for x in health):
         lines.append("**Coverage degraded.** See source health; silence is not confirmation.")
     milestones = atlas_at(atlas, as_of)
-    recent = [x for x in milestones if date.fromisoformat(x["announced_at"]) >= as_of.date() - timedelta(days=7)]
+    recent = [x for x in milestones if date.fromisoformat(x["announced_at"]) >= as_of.astimezone(timezone.utc).date() - timedelta(days=7)]
     ranked = sorted(recent, key=lambda x: (x["importance"], x["relevance"], x["announced_at"]), reverse=True)
     lines += ["", "## Read first"]
     if not ranked:
