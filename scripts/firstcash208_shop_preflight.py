@@ -106,7 +106,7 @@ def probe(opener=None, timestamp=None) -> dict:
     when = timestamp or datetime.now(timezone.utc).isoformat()
     result = {
         "schema": "firstcash208-public-readonly/v1",
-        "source_commit": os.environ.get("GITHUB_SHA") or None,
+        "source_commit": os.environ.get("FIRSTCASH208_SOURCE_SHA") or os.environ.get("GITHUB_SHA") or None,
         "observed_utc": when,
         "requested_url": URL,
         "final_url_matches_registered_host": None,
