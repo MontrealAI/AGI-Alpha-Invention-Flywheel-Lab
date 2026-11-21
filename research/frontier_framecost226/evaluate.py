@@ -92,7 +92,7 @@ def bounded_n(bc: float, numerator: float, *, necessary: bool):
         return {"count": None, "reason": "insufficient_numerical_precision"}
     with localcontext() as ctx:
         ctx.prec = 70
-        threshold = Decimal(str(numerator)).ln() / Decimal.from_float(adjusted).ln()
+        threshold = Decimal(str(numerator)).ln() / (Decimal(2 if necessary else 1) * Decimal.from_float(adjusted).ln())
         if not threshold.is_finite() or threshold > MAX_RELIABLE_REPORTED_SHOTS:
             return {"count": None, "reason": "exceeds_reliable_reportable_1e12_shots"}
         value = int(threshold.to_integral_value(rounding=ROUND_CEILING))
