@@ -1,0 +1,111 @@
+name: FRAMECOST226 ideal finite-shot feasibility qualification
+on:
+  push:
+    branches: ['experiment/frontier-framecost226-20261121']
+    paths:
+      - 'research/frontier_framecost226/**'
+      - '.github/workflows/frontier-framecost226.yml'
+  pull_request:
+    paths:
+      - 'research/frontier_framecost226/**'
+      - '.github/workflows/frontier-framecost226.yml'
+permissions:
+  contents: read
+concurrency:
+  group: framecost226-${{ github.event.pull_request.number || github.ref }}-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  exact-source-finite-shot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    env:
+      OPENBLAS_NUM_THREADS: '1'
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+      PYTHONHASHSEED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+          fetch-depth: 0
+      - name: Verify exact executing head and immutable protocol freeze
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/framecost226
+          expected="${{ github.event.pull_request.head.sha || github.sha }}"
+          test "$(git rev-parse HEAD)" = "$expected"
+          git cat-file -e a5e4bcb055fd51fcb9fdee99f8b06948dbd84dfb^{commit}
+          git merge-base --is-ancestor a5e4bcb055fd51fcb9fdee99f8b06948dbd84dfb HEAD
+          git show a5e4bcb055fd51fcb9fdee99f8b06948dbd84dfb:research/frontier_framecost226/PROTOCOL.json > /tmp/framecost226/ORIGINAL_PROTOCOL.json
+          cmp research/frontier_framecost226/PROTOCOL.json /tmp/framecost226/ORIGINAL_PROTOCOL.json
+          git rev-parse HEAD > /tmp/framecost226/SOURCE_HEAD.txt
+          sha256sum research/frontier_framecost226/{PROTOCOL.json,evaluate.py,test_framecost.py,README.md} > /tmp/framecost226/SOURCE_SHA256.txt
+          date -u +%Y-%m-%dT%H:%M:%SZ > /tmp/framecost226/START_UTC.txt
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install unchanged scientific dependencies and record actual versions
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install -r research/frontier_qec_transfer/requirements.txt
+          python -m pip freeze > /tmp/framecost226/DEPENDENCIES.txt
+      - name: Adversarial mathematical controls and source pins
+        shell: bash
+        run: |
+          set -o pipefail
+          python -m unittest discover -s research/frontier_framecost226 -p 'test_*.py' -v 2>&1 | tee /tmp/framecost226/TESTS.log
+      - name: Two independent full-process, all-pair ideal-shot evaluations
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/frontier_framecost226/evaluate.py --output /tmp/framecost226/RESULT1.json
+          python research/frontier_framecost226/evaluate.py --output /tmp/framecost226/RESULT2.json
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          p=Path('/tmp/framecost226')
+          x=json.loads((p/'RESULT1.json').read_text())
+          y=json.loads((p/'RESULT2.json').read_text())
+          assert x["registered_pairs"] == y["registered_pairs"] == 609
+          assert x["registered_pair_scenarios"] == y["registered_pair_scenarios"] == 1827
+          assert x["pinned_source_git_blob_sha1"] == y["pinned_source_git_blob_sha1"]
+          maxdrift=0.0
+          for a,b in zip(x["cases"],y["cases"]):
+              assert (a["fixture"],a["pairs"]) == (b["fixture"],b["pairs"])
+              assert len(a["all_pair_scenarios"]) == len(b["all_pair_scenarios"]) == a["pairs"]
+              for pa,pb in zip(a["all_pair_scenarios"],b["all_pair_scenarios"]):
+                  assert (pa["i"],pa["j"]) == (pb["i"],pb["j"])
+                  assert len(pa["noise_cases"]) == len(pb["noise_cases"]) == 3
+                  for r,s in zip(pa["noise_cases"],pb["noise_cases"]):
+                      assert r["status"] == s["status"]
+                      assert r["necessary_shots"] == s["necessary_shots"]
+                      assert r["sufficient_shots"] == s["sufficient_shots"]
+                      for key in ("tv","bc","single_shot_error_fixed_receiver","ideal_known_pair_helstrom_error"):
+                          maxdrift=max(maxdrift,abs(r[key]-s[key]))
+              for ca,cb in zip(a["scenarios"],b["scenarios"]):
+                  assert ca == cb
+          assert maxdrift <= 2e-8, f"source-matched cross-process drift {maxdrift}"
+          receipt={
+              "schema":"frontier/framecost226/independent-cross-process/v1",
+              "executing_sha":(p/"SOURCE_HEAD.txt").read_text().strip(),
+              "frozen_protocol_commit":"a5e4bcb055fd51fcb9fdee99f8b06948dbd84dfb",
+              "registered_pairs":609,"registered_pair_scenarios":1827,
+              "max_cross_process_numeric_difference":maxdrift,
+              "pass":True,
+              "decision":"HOLD_NO_DEPLOY",
+              "claim":"ideal-iid binary-shot bounds only, no actual physical or economic result"
+          }
+          (p/"REVIEW.json").write_text(json.dumps(receipt,sort_keys=True,indent=2)+"\n")
+          print(receipt)
+          PY
+          sha256sum /tmp/framecost226/{RESULT1.json,RESULT2.json,REVIEW.json} > /tmp/framecost226/OUTPUT_SHA256.txt
+      - name: Preserve complete registered results and failed-run traces
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontier-framecost226-source-and-results
+          path: /tmp/framecost226
+          if-no-files-found: warn

@@ -1,0 +1,54 @@
+{
+  "schema": "frontier/framecost226/preimplementation/v1",
+  "date_utc": "2026-11-21",
+  "purpose": "Evaluate whether the new physical gauge-invariant receiver is finite-shot useful: derive rigorous binary-error necessary and sufficient shot bounds under ideal i.i.d. samples and fixed disclosed classical uniform-response noise, retaining all pairs and the strongest known-pair quantum comparator.",
+  "owner_boundary": {
+    "original_owner_pr": 524,
+    "original_owner_head": "7501e83ea37b0d933e2318be2099b37308de0574",
+    "shotgate_pr": 525,
+    "shotgate_head": "e18e40c3952a74228e7b6071d35d2c668c9e2041",
+    "source_receiver_pr": 526,
+    "source_receiver_head": "04767e2b7628e9e4b470c910fd7a3c3c03202135",
+    "write_scope": "research/frontier_framecost226 and dedicated workflow only; no existing owner or native financial source changes"
+  },
+  "pinned_file_blob_sha1": {
+    "research/frontier_framefix225/framefix.py": "d4024d07ece3fa10179addb0f6fc89723c89bca9",
+    "research/frontier_qec_transfer/recovery.py": "6c8092bf132f9f218ca4c1b074a6c9b93d9b2b69",
+    "research/frontier_qec_transfer/noise_experiment.py": "434278fa64d4d7e90cb6a3117f5afdfe8e5bc40b",
+    "research/frontier_qec_transfer/fixtures/public_fixtures.py": "75be45ee4581eba1991ac4e8b2e5690084796f45",
+    "research/frontier_qec_transfer/fixtures/second_public_fixtures.py": "866b170844f751731d66cc4f76bbdb427f8d53cc"
+  },
+  "fixed_cases": [
+    {
+      "fixture": "pollatsek_ruskai_7",
+      "hypotheses": 22,
+      "pairs": 231
+    },
+    {
+      "fixture": "shor_9",
+      "hypotheses": 28,
+      "pairs": 378
+    }
+  ],
+  "scenario_noise_fractions": [
+    0,
+    0.01,
+    0.05
+  ],
+  "error_target": 0.05,
+  "math": "For classical distributions p,q, BC=sum sqrt(p*q). Equal-prior independent N-shot minimum Bayes error is at least (1-sqrt(1-BC^(2N)))/2 and at most BC^N/2. Thus for target a=.05 the necessary N is ceil(log(4*a*(1-a))/(2*log(BC))) and sufficient N is ceil(log(2*a)/log(BC)), subject to justified numerical precision. Single-shot actual optimal error for this fixed receiver is (1-TV(p,q))/2. For source syndrome states rho_i,rho_j, the strong known-binary comparator has optimal single-copy Helstrom error (1-||rho_i-rho_j||_1/2)/2; it is not a general unknown-mixture solution. Noise fractions mix the observed p with uniform over all fixed outcomes; they are authored sensitivities, not physical calibration.",
+  "criteria": {
+    "source_binding": "fail on any of five pinned Git blob changes",
+    "denominators": "both named fixtures and all 609 pairs in all 3 scenarios = 1827 pair-scenarios; retain zero-distance and numerically unresolved pairs",
+    "valid_probabilities": "finite nonnegative, normalized probabilities and 0<=BC<=1 within tolerance",
+    "bounds": "where numerically distinguishable: 1<=necessary<=sufficient and exact one-shot receiver error >= Helstrom minus 2e-8",
+    "data_processing": "all pair TVs must not increase as uniform-response fraction increases; BC must not decrease except 2e-8 numerical tolerance",
+    "numerical_abstention": "pairs with BC within 1e-12 of 1 or TV <=1e-9 are marked unresolved or indistinguishable, never assigned favorable finite shot counts",
+    "resource_claims": "reported sample counts are mathematically bounded ideal i.i.d. shots, not measured hardware costs or dollars; CPU/wall telemetry separated",
+    "cross_process": "two independently invoked same-source processes agree all pairing identities and numeric results; any failure preserved",
+    "no_deploy": "no physical shot/buyer/revenue/profit/inventor gain or US$3B claim"
+  },
+  "stopping_rule": "One frozen source, exactly two fixtures, three stated classical noise fractions, all 1827 pair-scenarios; no new seeds/fixtures/tolerances or samples chosen after seeing outcomes.",
+  "economics": "Do not infer full cost, buyer utility, hardware realizability, cash or native profit from shot bounds. The instrument exposes a necessary hardware-feasibility dependency for the existing candidate and a NO DEPLOY decision pending measured beneficiary acceptance, device costs, capacity and strong complete alternatives.",
+  "authorization": "Existing simulation-only research, standard public GitHub Actions; no spending/outreach/APIs requiring keys/production/ledger writers, PR remains draft."
+}
