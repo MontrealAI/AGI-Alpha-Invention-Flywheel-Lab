@@ -11,7 +11,9 @@ class GateTests(unittest.TestCase):
     def fixture(self):
         return {
             "id": "control", "as_of": "2026-11-20",
-            "sources": [{"date": "2026-11-20", "url": "https://example.org/fixture"}],
+            "as_of_instant": "2026-11-20T15:00:00Z",
+            "sources": [{"date": "2026-11-20", "available_at": "2026-11-20T15:00:00Z",
+                         "url": "https://example.org/fixture"}],
             "recommendation": "BUILD",
             "capability_verified": True, "ownership_supported": True,
             "demand_observed": False, "delivery_verified": False,
