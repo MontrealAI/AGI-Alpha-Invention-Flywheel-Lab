@@ -1,0 +1,28 @@
+# AWARD-DEMAND213 — preregistered public procurement purchase-evidence instrument
+
+Registered 2026-11-21 before implementation on independent branch research/award-demand213-20261121, based on exact main f0987aa48d5c9136b28540f54eabf5367e63bbe6. No active native-account/signing/queue/merchant owner or P0 financial source will be modified. This is one finite independent new commercial-discovery experiment.
+
+## Consequential objective and missing means
+Existing FRONTIER Ω C$2,995 public-only dossier has not established outsider purchases. Unawarded tenders indicate interest, not a historical award. Construct a reproducible, agent-readable **purchase-history opportunity search** from an official federal award dataset so an established B2B firm can investigate a new repeatable service that a public buyer has actually contracted for. It cannot infer fulfilled delivery, collected cash, willingness to buy from MONTREAL.AI, technological novelty or attainable profit from a government award.
+
+## Fixed choices and strongest alternatives
+A. Existing individualized B2B new-business decision dossier (C$2,995 hypothetical sale; unknown acquisition/delivery costs; competent AI-assisted analyst or internal strategy team comparator).
+B. Recurring **federal award-evidence opportunity feed** for AI-related service/product categories, using exact CanadaBuys public award notices. Strong baseline: official CanadaBuys free search, competent procurement analyst, established commercial monitoring platforms; differentiated added value not proven.
+C. A contingent proof-carrying bid/delivery service built for a specific accepted requirement. Strong baseline: incumbent specialist/hybrid provider; eligibility, authority, cash, capacity, costs all unknown, so not executable or deployed here.
+D. NO DEPLOY/NO BID, the default without authentic customer payment and complete costs.
+This experiment observes **B** only; it does not adopt a paid B or C.
+
+## Frozen source and one-pass protocol
+- One public no-key GET: `https://canadabuys.canada.ca/opendata/pub/2026-2027-awardNotice-avisAttribution.csv`, federal FY2026–27 (not all governments). Official CanadaBuys dataset and supporting documentation: `https://open.canada.ca/data/dataset/6abd20d4-7a1c-4b38-baa2-9525d0bb2fd2` and `https://donnees-data.tpsgc-pwgsc.gc.ca/ba2/ac-cb/soutien-support-eng.html`. Government's licensing and attribution apply.
+- One UTF-8/UTF-8-BOM CSV ingest, bounded ≤32 MiB, ≤100,000 records; no redirect or other host, 30-second timeout, no retry, no API key/cookie. A network refusal stays a refusal; no fallback feed or hand-chosen favorable sample. Record exact retrieved source SHA256/bytes, timestamp, field names, total records and truncated output marker.
+- Only official `title-titre-eng` and/or `title-titre-fra` containing whole-phrase `artificial intelligence`, `machine learning`, `generative AI`, `agentic AI`, `intelligence artificielle` or `apprentissage automatique` are candidates. Do not search arbitrary substrings such as 'AI' in 'Canada' and do not retrospectively broaden keywords after seeing results.
+- Require `solicitationNumber-numeroSollicitation` and a bounded nonempty title; missing `awardStatus-attributionStatut-eng` or non-Active/awarded status means NOT VERIFIED AS CURRENT AWARD. Duplicate solicitation references are not distinct customers or sales. A government **award notice** supports *publicly disclosed awarded procurement*, not cash paid or work performed; a value field is not permitted to fund the business. No amount will be counted as MONTREAL.AI cash.
+- Deterministic sorting: normalized solicitation number, then English/French title; publish at most first 25 qualified matched reference/title pairs, plus **whole-file** denominators and exact truncation flags. If any mandatory header is absent, refuse schema rather than silently infer field meanings. Missing buyer identity means multi-buyer recurrence UNKNOWN, not false or true.
+- Test offline malformed/duplicate headers, invalid status, false positive tokens, formula-like fields, date-independent input, zero matches, nonmatching input, B/French text, oversize and unsafe redirects. No synthetic fixture can count as an actual award.
+- Output a content-bound source/receipt pair via public GitHub Actions with one official network request, exact source and independent replay check. Retain failure logs and source archive only as transient workflow artifact, no source data committed. The PR documents exact-head results, no rerun until a favorable sample.
+
+## Fixed verdicts and full cost
+GO means engineering observation and a shortlist for *manual business eligibility/research*, not bidder qualification, commercial adoption or an actual payment. Refuse unknown columns/status. Full acquisition, tool, inference, outreach, bid, production, verification, warranty, maintenance, refunds, taxes, liquidity and human costs remain UNKNOWN unless measured; free included workflow has unknown whole-account bill. US$3B T365 = NOT QUALIFIED. Stop after one one-pass hosted observation and deterministic offline test run, preserve even zero/negative result. Next step only a materially new requirement/asset construction, no redeploy claim.
+
+## Owner and publication limits
+No customer outreach, commercial order, bid, contract, purchase, key, account, private data, financial action, automatic merge, release or production deployment. Preserve native finance PR40/source checkpoint and immutable old evidence, PR510 UK notices and PR508 dossier producer as independent owners. This preregistration is not permission to alter them.
