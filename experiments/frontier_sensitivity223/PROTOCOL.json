@@ -1,0 +1,45 @@
+{
+  "schema": "frontier-sensitivity223-protocol/v1",
+  "registered_date_utc": "2026-11-21",
+  "purpose": "Independently test source-record sensitivity of two already-qualified retrospective chemistry decisions; no new physical or economic claim.",
+  "pin": {
+    "owner_pr": 522,
+    "owner_head": "b211c461874051f29827345fc96f82d0d196fc12",
+    "owner_branch": "work/frontier-first-proof-20261121",
+    "main_at_start": "f0987aa48d5c9136b28540f54eabf5367e63bbe6",
+    "cover_file": "experiments/frontier_first_proof_20261121/cover.py",
+    "source_commit": "ae3e910dcea27cfd1631a28b793b6c63607baedd",
+    "amidation_sha256": "e77f6a498387888eec63423265d6feb9d8b1ff9299b8afbc3bcc1218a7e5857a",
+    "ethanol_sha256": "d5216a673eefbaacc4ae961f4ff6acb73dbc1c83e37d0548fa7eaf84bbe5607c"
+  },
+  "cases": {
+    "error_radii_percentage_points": [
+      "0",
+      "0.25",
+      "0.5",
+      "1",
+      "2",
+      "5"
+    ],
+    "amidation_relative_fraction_percent": 90,
+    "ethanol_ligand_gap_percentage_points": 20,
+    "universe": "fixed 10-source-substrate amidation and 253 ethanol ligand pairs; no changing denominators"
+  },
+  "semantics": {
+    "interval": "Each recorded yield independently has hypothetical additive symmetric absolute error ≤ epsilon percentage points; this is an adversarial sensitivity parameter, not a scientifically calibrated uncertainty bound.",
+    "amidation": "For each substrate and assigned reaction condition c, guarantee observed(c)-epsilon >= 0.90*max(observed(c)-epsilon, max_{d!=c}(observed(d)+epsilon)); one fixed assignment for each source substrate.",
+    "ethanol": "For each ligand pair, a selected substrate guarantees separation when abs(recorded_difference) >= 20+2*epsilon.",
+    "infeasibility": "If any required row lacks a robust covering option, report infeasible for full declared universe with counterexample row. Never delete failures or redefine to covered-subset success.",
+    "comparison": "Compare original fixed five-condition, six-substrate choices against full robust-cover optimum (when feasible). Verify solver certificates with separately authored existing independent checker; no claim of algorithmic novelty."
+  },
+  "acceptance": {
+    "source_identity": "All pinned bytes and retained solver source must be verified.",
+    "all_cases": "Exactly six error radii, each with fixed original and reoptimized statuses; disclose if resource-bound, infeasible or checker-rejected.",
+    "adversarial": "Synthetic 2x2 and 2-ligand boundary counterexamples independently enumerated; one-case margins and fake input identities rejected.",
+    "economics": "Keep adopted utility, assay error, physical yield, true lab savings, actual model costs, buyer demand, revenue, and profit unknown."
+  },
+  "ownership": {
+    "boundary": "Additive review-only experiment; no original source edits, no journal/Account, no production or release, no owner branch writes.",
+    "status": "DRAFT_NO_DEPLOY"
+  }
+}
