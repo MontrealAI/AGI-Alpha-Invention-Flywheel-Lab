@@ -1,0 +1,89 @@
+name: FRONTIER223 independent retrospective measurement sensitivity
+on:
+  pull_request:
+    paths:
+      - 'experiments/frontier_sensitivity223/**'
+      - '.github/workflows/frontier-sensitivity223.yml'
+permissions:
+  contents: read
+concurrency:
+  group: frontier-sensitivity223-${{ github.event.pull_request.number }}-${{ github.event.pull_request.head.sha }}
+  cancel-in-progress: false
+jobs:
+  fixed-six-case-sensitivity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record true job start
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          fetch-depth: 30
+          persist-credentials: false
+          sparse-checkout: |
+            experiments/frontier_first_proof_20261121
+            experiments/frontier_sensitivity223
+            .github/workflows/frontier-sensitivity223.yml
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Check exact scientific owner source and preregistration
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/sensitivity223"
+          owner=b211c461874051f29827345fc96f82d0d196fc12
+          git cat-file -e "$owner^{commit}"
+          git merge-base --is-ancestor "$owner" HEAD
+          git diff --quiet "$owner" HEAD -- experiments/frontier_first_proof_20261121
+          echo "$owner" > "$RUNNER_TEMP/sensitivity223/OWNER_PIN.txt"
+          cp experiments/frontier_sensitivity223/PROTOCOL.json "$RUNNER_TEMP/sensitivity223/PROTOCOL.json"
+          sha256sum experiments/frontier_sensitivity223/PROTOCOL.json > "$RUNNER_TEMP/sensitivity223/PROTOCOL_SHA256.txt"
+          sha256sum experiments/frontier_first_proof_20261121/cover.py > "$RUNNER_TEMP/sensitivity223/RETAINED_ASSET_SHA256.txt"
+          python -B -c "import sys; sys.path.insert(0,'experiments/frontier_sensitivity223'); import sensitivity; sensitivity.validated_parent()"
+      - name: Run frozen synthetic boundary challenges
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B -m unittest discover -s experiments/frontier_sensitivity223/tests -v 2>&1 | tee "$RUNNER_TEMP/sensitivity223/TESTS.txt"
+      - name: Download pinned published historical chemistry inputs
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B experiments/frontier_first_proof_20261121/fetch_sources.py --data-dir "$RUNNER_TEMP/sensitivity223-input" 2>&1 | tee "$RUNNER_TEMP/sensitivity223/FETCH.txt"
+      - name: Execute all preregistered radii and independent optimality checks
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B experiments/frontier_sensitivity223/sensitivity.py --data-dir "$RUNNER_TEMP/sensitivity223-input" --output "$RUNNER_TEMP/sensitivity223/RESULT.json" 2>&1 | tee "$RUNNER_TEMP/sensitivity223/RESULT_LOG.txt"
+          sha256sum "$RUNNER_TEMP/sensitivity223/RESULT.json" > "$RUNNER_TEMP/sensitivity223/RESULT_SHA256.txt"
+      - name: Preserve outcome, including failed-run scope
+        if: always()
+        shell: bash
+        env:
+          JOB_STATE: ${{ job.status }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/sensitivity223"
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          p=Path(os.environ["RUNNER_TEMP"])/"sensitivity223"
+          summary={"schema":"frontier-sensitivity223/hosted-status/v1",
+            "job_state_at_receipt":os.environ["JOB_STATE"],
+            "frozen_owner_head":"b211c461874051f29827345fc96f82d0d196fc12",
+            "registered_error_radii":["0","0.25","0.5","1","2","5"],
+            "results_file_present":(p/"RESULT.json").exists(),
+            "tests_log_present":(p/"TESTS.txt").exists(),
+            "scope":"Retrospective exact arithmetic sensitivity to assumed per-cell yield error, not measured uncertainty",
+            "claims_not_established":["prospective laboratory accuracy","new chemistry","material commercial value","actual payment","economic invention","recursive improvement","US$3B complete-cost trailing profit"],
+            "financial_account":"untouched",
+            "paid_services_or_customer_actions":"none"}
+          (p/"HOSTED_STATUS.json").write_text(json.dumps(summary,indent=2)+"\n")
+          PY
+      - name: Preserve pass or failure artifact
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: frontier-sensitivity223-${{ github.event.pull_request.head.sha }}-attempt-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/sensitivity223/
+          if-no-files-found: error
