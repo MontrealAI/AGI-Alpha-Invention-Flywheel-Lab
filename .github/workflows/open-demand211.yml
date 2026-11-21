@@ -1,0 +1,56 @@
+name: OPEN-DEMAND211 independent public demand qualification
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/open-demand211.yml"
+      - "campaign/open-demand211/**"
+      - "tests/test_open_demand211.py"
+      - "tools/open_demand211.py"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test-and-observe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record actual job start
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - name: Checkout exact PR head
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - name: Offline preregistered adversarial tests
+        run: python3 -B -m unittest -v tests.test_open_demand211
+      - name: Exactly one live public government read; preserve any refusal
+        id: live
+        shell: bash
+        run: |
+          set +e
+          python3 -B tools/open_demand211.py fetch --out "$RUNNER_TEMP/open-demand211" > "$RUNNER_TEMP/RESULT_STDOUT.json" 2> "$RUNNER_TEMP/ERROR.txt"
+          rc=$?
+          echo "EXIT_CODE=$rc" >> "$GITHUB_ENV"
+          echo "exit=$rc" >> "$GITHUB_OUTPUT"
+          echo "Observed command exit $rc (no retry)"
+          if [ "$rc" -eq 0 ]; then
+            python3 -B tools/open_demand211.py verify --out "$RUNNER_TEMP/open-demand211"
+          else
+            cat "$RUNNER_TEMP/ERROR.txt"
+            exit "$rc"
+          fi
+      - name: Upload bounded source-and-receipt evidence including failures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: open-demand211-exact-head-evidence
+          path: |
+            ${{ runner.temp }}/open-demand211/SOURCE.json
+            ${{ runner.temp }}/open-demand211/RECEIPT.json
+            ${{ runner.temp }}/RESULT_STDOUT.json
+            ${{ runner.temp }}/ERROR.txt
+          if-no-files-found: warn
+          retention-days: 7
