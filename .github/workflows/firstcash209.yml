@@ -23,6 +23,7 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
           persist-credentials: false
+          fetch-depth: 16
       - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
         with:
           python-version: '3.12'
@@ -79,3 +80,22 @@ jobs:
             ${{ runner.temp }}/firstcash209/bundle/DECISION.html
             ${{ runner.temp }}/firstcash209/bundle/MANIFEST.json
           retention-days: 30
+      - name: FIRSTCASH212 independent original-source actual-PDF completeness gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B scripts/firstcash212_print_gate.py "$RUNNER_TEMP/firstcash212"
+      - name: Preserve FIRSTCASH212 success or initial content-loss failure
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: firstcash212-independent-pdf-visibility
+          path: |
+            ${{ runner.temp }}/firstcash212/RESULT.json
+            ${{ runner.temp }}/firstcash212/SYNTHETIC_INPUT.json
+            ${{ runner.temp }}/firstcash212/original_self_case/audit.json
+            ${{ runner.temp }}/firstcash212/original_self_case/document.pdf
+            ${{ runner.temp }}/firstcash212/synthetic_stress/audit.json
+            ${{ runner.temp }}/firstcash212/synthetic_stress/document.pdf
+          if-no-files-found: warn
+          retention-days: 15
