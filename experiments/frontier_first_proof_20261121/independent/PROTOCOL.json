@@ -1,0 +1,69 @@
+{
+  "schema": "frontier-independent-chemistry-protocol/v1",
+  "scope": "Retrospective, exact computational experimental-design decisions on published measurements; no prospective laboratory, economic, novelty, general-invention or RSI claim.",
+  "independence": "Reviewer has not inspected the producer's solver. This protocol is frozen before the reviewer reads nickel-borylation data. The first capability must be frozen before successor results are released to the producer. The broad successor objective is planned, not an unforeseen discovery.",
+  "first": {
+    "source_file": "amidation.csv",
+    "source_sha256": "e77f6a498387888eec63423265d6feb9d8b1ff9299b8afbc3bcc1218a7e5857a",
+    "outcome": "Smallest portfolio of distinct base-solvent-activator combinations that covers every recorded nucleophile at the specified fraction of that nucleophile's maximum recorded yield.",
+    "primary_fraction_percent": 90,
+    "all_fraction_percent": [50, 70, 80, 90, 95],
+    "comparison": "Exact arithmetic: 100 * recorded_yield >= fraction_percent * maximum_recorded_yield.",
+    "invariants": [
+      "No clipping of negative or above-range measured yields.",
+      "Every nucleophile-condition cell appears exactly once; missing and duplicate cells are rejected.",
+      "Numerical measurements must be finite; identifiers and chemical metadata must remain consistent.",
+      "Condition identity is the complete recorded base-solvent-activator tuple, with chemical identifiers retained.",
+      "Report absolute maxima and minimum covered yield; relative coverage does not establish a commercially useful absolute yield.",
+      "Optimality is conditional on this finite recorded candidate set and declared acceptance criterion."
+    ],
+    "independent_exact_method": "Dynamic programming over all nucleophile coverage masks. This is independent of the production solver and HiGHS."
+  },
+  "successor": {
+    "primary_source_file": "nib-etoh.csv",
+    "replication_source_file": "nib-meoh.csv",
+    "outcome": "Smallest diagnostic panel of recorded substrates whose measured response differences distinguish every pair of recorded condition protocols distinguishable by the full dataset at the declared gap.",
+    "primary_gap_percentage_points": 20,
+    "all_gap_percentage_points": [10, 15, 20, 25, 30],
+    "comparison": "A substrate witnesses condition pair (a,b) exactly when abs(yield[a] - yield[b]) >= declared_gap. Equality qualifies. All condition pairs with at least one witness are required; pairs with no witness are explicitly reported as indistinguishable under this criterion.",
+    "invariants": [
+      "Do not aggregate ethanol and methanol into one convenient cohort.",
+      "No clipping of negative or above-range measured yields.",
+      "One finite recorded yield per substrate-condition cell; reject duplicates and incomplete matrices.",
+      "No claim that the declared gaps are calibrated measurement uncertainty or experimental significance.",
+      "The panel discriminates recorded responses; it does not establish future chemical discrimination, generalization or prospective assay savings.",
+      "Empty distinguishable-pair universe has exact optimum zero; do not manufacture requirements.",
+      "Report the full condition-pair denominator, distinguishable pairs and indistinguishable pairs.",
+      "Candidate panel must include only actual recorded substrate identifiers."
+    ],
+    "independent_exact_method": "Increasing-cardinality enumeration when tractable, otherwise memoized exact branching over uncovered requirements with independent preprocessing and complete branch coverage."
+  },
+  "comparators": {
+    "fresh_conventional": "Independent input-to-output SciPy/HiGHS binary covering formulation, with setup and verification included, zero MIP relative gap requested and optimal status required. Exact independent acceptance and cardinality checks still apply.",
+    "greedy": "Choose the option covering the most still-uncovered requirements, break ties by canonical identifier, then remove redundant options. This is a heuristic comparison, not the sole strong baseline.",
+    "ordinary_reuse": "If the producer's frozen first capability solves the successor after a normal reduction, this is ordinary artifact reuse. No enhanced invention claim is inferred merely from that success.",
+    "objective": "Same accepted finite problem and candidate set for every method; minimum cardinality, not artificial solver/library restrictions. Different equally optimal solutions all qualify."
+  },
+  "certificate_acceptance": {
+    "feasible_witness": "Every required row is hit by the selected unique in-range option indices.",
+    "optimality": "A separately verified infeasibility tree for cardinality k-1, plus feasible cardinality k. An empty universe needs k=0 and no negative-budget tree.",
+    "allowed_leaf_packing": "List of still-uncovered row indices whose available option sets are pairwise disjoint, with list length greater than remaining budget. Every set and intersection is recomputed independently.",
+    "allowed_leaf_budget": "Remaining budget is zero and at least one requirement remains uncovered.",
+    "allowed_branch": "One still-uncovered row, with a child for every available option satisfying that row; each child removes every row hit by that option and reduces budget by one. Omission or duplication rejects.",
+    "strictness": "Reject invalid indices, duplicate selected options, non-integer budgets, missing branches, wrong transitions, unsupported leaf types, malformed trees and certificates bound to a different problem."
+  },
+  "metrics": {
+    "primary": "Independently accepted cardinality and complete declared input-to-output wall/CPU resource cost for the same problem.",
+    "timing": "Keep dataset preparation, solve, verification and complete pipeline components. Report warm repeated measurements separately from process/import overhead. No pretense that wall timing measures developer labor.",
+    "construction": "Record independent construction start/end and exact code identities; model token cost, cash billing and developer labor valuation remain unknown unless separately measured.",
+    "cost_boundary": "Report first construction and transfer separately; do not infer zero cost from included execution or count unperformed laboratory work as savings."
+  },
+  "claims": {
+    "possible_positive": "Accepted retrospective planning instruments, exact finite optimality and correct source-bound artifact transfer.",
+    "stronger_unestablished_without_more_evidence": [
+      "A commercially valuable outcome previously unreachable through capable conventional methods.",
+      "Novel chemical discovery, prospective laboratory validation, autonomous local-model invention or improved invention methodology.",
+      "Real demand, collected revenue, realized laboratory savings, economic compounding or causal benefit beyond ordinary reuse."
+    ]
+  }
+}

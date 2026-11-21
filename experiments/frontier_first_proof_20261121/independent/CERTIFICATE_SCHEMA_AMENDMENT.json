@@ -1,0 +1,10 @@
+{
+  "schema": "frontier-independent-certificate-amendment/v1",
+  "original_protocol_sha256": "279843f71eb2950a113c334cafa4846aa1a8858a45cf9d68e5f301af08e2567d",
+  "purpose": "Accept the producer's explicitly communicated proof encoding and two sound proof-size reductions. No outcome, threshold, source, comparator or success criterion changes.",
+  "encoding": "Problem {schema:'frontier-cover-instance/v1',option_ids:[unique strings],requirements:[[option indices],...]}; certificate {schema:'frontier-min-cover-proof/v1',problem_sha256,optimum,selected,root,nodes}. All hashes use UTF-8 canonical JSON with sorted keys, compact separators and ensure_ascii=false. Child node indices must be lower than parent indices.",
+  "capacity_leaf": "Independently recompute m uncovered requirements and maximum number c covered by any available option. If c=0 then infeasible; otherwise ceil(m/c)>remaining_budget proves infeasibility. No producer-supplied bound is trusted.",
+  "dominated_branch": "Every option in the selected uncovered row occurs exactly once either as an explicit child or as an omitted option paired with an explicitly branched representative. The omitted option's coverage of all current uncovered rows must be a subset of the representative's coverage. The representative must itself satisfy the branch row. This establishes replacement without weakening branch completeness.",
+  "empty_leaf": "A specified currently uncovered requirement has zero candidate options, independently recomputed.",
+  "scope": "This encoding amendment is recorded after the first source freeze and before successor baseline execution. It cannot establish invention novelty or independence from the communicated proof specification. The implementation remains independently authored without reading the production solver."
+}
