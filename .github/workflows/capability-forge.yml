@@ -47,6 +47,20 @@ jobs:
           assert execute("def solve(data): return 7", {})["answer"] == 7
           PY
           python -B -m unittest discover -s tests -p 'test_capability_forge.py' -v
+          if [[ -f evidence/capability-forge/qualified-repair.json ]]; then
+            python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          receipt = json.loads(Path("evidence/capability-forge/qualified-repair.json").read_bytes())
+          target = Path(os.environ["RUNNER_TEMP"]) / "forge-replay"
+          target.mkdir()
+          (target / "candidate.txt").write_text(receipt["candidate_source"], encoding="utf-8")
+          (target / "evidence.json").write_text(json.dumps(receipt["evidence"], ensure_ascii=False), encoding="utf-8")
+          PY
+            python -B bridge/forge_telemetry.py "$RUNNER_TEMP/forge-replay/candidate.txt" \
+              "$RUNNER_TEMP/forge-replay/evidence.json" > "$package_dir/qualified-replay.json"
+          fi
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: capability-forge-harness-candidate

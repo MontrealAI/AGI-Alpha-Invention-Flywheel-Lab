@@ -86,10 +86,11 @@ def summarize(state):
     return {"sources": state["sources"], "commitments": state["commitments"],
             "models": state["models"], "status": state.get("forge_status"),
             "candidate": state.get("candidate"), "forge_cost": state.get("forge_segments", []),
-            "forge_requests": state.get("forge_requests", []), "accuracy_and_usage": results,
+            "forge_requests": state.get("forge_requests", state.get("provenance", {}).get("model_requests", [])),
+            "program_search_wall_seconds": state.get("repair_wall_seconds"), "accuracy_and_usage": results,
             "explicit_answer_rescore": adjusted, "comparisons": comparisons,
             "retained_successor": state.get("retained_successor"), "restricted_E": state["restricted_E"],
-            "cost_scope": state["cost_scope"], "hardware": state["hardware"], "specialist": state.get("specialist")}
+            "cost_scope": state["cost_scope"], "hardware": state.get("hardware"), "specialist": state.get("specialist")}
 
 
 def main():

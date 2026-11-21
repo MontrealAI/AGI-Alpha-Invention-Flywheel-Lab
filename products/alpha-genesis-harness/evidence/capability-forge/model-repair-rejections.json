@@ -1,0 +1,1165 @@
+{
+  "commitments": {
+    "qualification": "2a4ce35d3156a19efb3be7f3a5322c26613ea31df1d985c9e331d11fc1b0c4e5",
+    "transfer": "99af20e6725bdec34e29d8e8299addbe7b44cfea5c47caaff4186be83dceef51"
+  },
+  "construction_requests": [
+    {
+      "cost": {
+        "accounted": 0.0,
+        "amount": 0.0,
+        "attempts": 1,
+        "basis": "reported_usage_at_user_rates",
+        "complete_cost_known": false,
+        "currency": "USD"
+      },
+      "cost_uncertain": true,
+      "event_index": 2,
+      "event_kind": "model_completed",
+      "model": "forge-qwen3-4b",
+      "provider": "primary",
+      "role": "builder",
+      "run_id": "wf_e3ae5444607d3d3119ddbcb1_86f7aed8d4a475c7",
+      "usage": {
+        "input_tokens": 825,
+        "output_tokens": 454
+      },
+      "workflow": "wf_e3ae5444607d3d3119ddbcb1"
+    },
+    {
+      "cost": {
+        "accounted": 0.0,
+        "amount": 0.0,
+        "attempts": 1,
+        "basis": "reported_usage_at_user_rates",
+        "complete_cost_known": false,
+        "currency": "USD"
+      },
+      "cost_uncertain": true,
+      "event_index": 8,
+      "event_kind": "model_completed",
+      "model": "forge-qwen3-4b",
+      "provider": "primary",
+      "role": "builder",
+      "run_id": "wf_e3ae5444607d3d3119ddbcb1_14f8adeea430c4fa",
+      "usage": {
+        "input_tokens": 1855,
+        "output_tokens": 362
+      },
+      "workflow": "wf_e3ae5444607d3d3119ddbcb1"
+    }
+  ],
+  "development": [
+    {
+      "artifact": "candidate-001.txt",
+      "checks": [
+        {
+          "actual": {
+            "status": "ambiguous"
+          },
+          "application_wall_seconds": 0.06519369399984498,
+          "expected": {
+            "status": "determined",
+            "value": "3/5"
+          },
+          "id": "development-01",
+          "input": {
+            "A": [
+              [
+                5,
+                0
+              ],
+              [
+                15,
+                0
+              ],
+              [
+                15,
+                0
+              ],
+              [
+                10,
+                0
+              ],
+              [
+                -5,
+                0
+              ],
+              [
+                0,
+                0
+              ],
+              [
+                15,
+                0
+              ]
+            ],
+            "faults": 1,
+            "target": [
+              3,
+              0
+            ],
+            "y": [
+              1,
+              3,
+              3,
+              2,
+              -1,
+              0,
+              3
+            ]
+          },
+          "passed": false,
+          "verifier_wall_seconds": 0.00016406099985033507
+        },
+        {
+          "actual": {
+            "status": "inconsistent"
+          },
+          "application_wall_seconds": 0.032232725999620016,
+          "expected": {
+            "status": "inconsistent"
+          },
+          "id": "development-02",
+          "input": {
+            "A": [
+              [
+                24,
+                0
+              ],
+              [
+                -18,
+                -12
+              ],
+              [
+                6,
+                0
+              ],
+              [
+                6,
+                0
+              ],
+              [
+                0,
+                6
+              ],
+              [
+                6,
+                12
+              ],
+              [
+                24,
+                24
+              ]
+            ],
+            "faults": 0,
+            "target": [
+              3,
+              1
+            ],
+            "y": [
+              40,
+              -4,
+              11,
+              10,
+              -13,
+              -16,
+              -12
+            ]
+          },
+          "passed": true,
+          "verifier_wall_seconds": 6.54559999020421e-05
+        },
+        {
+          "actual": {
+            "status": "ambiguous"
+          },
+          "application_wall_seconds": 0.03218330400022751,
+          "expected": {
+            "status": "ambiguous"
+          },
+          "id": "development-03",
+          "input": {
+            "A": [
+              [
+                4,
+                0
+              ],
+              [
+                0,
+                2
+              ],
+              [
+                -8,
+                0
+              ],
+              [
+                2,
+                0
+              ],
+              [
+                8,
+                0
+              ],
+              [
+                6,
+                0
+              ],
+              [
+                0,
+                -2
+              ],
+              [
+                -8,
+                0
+              ],
+              [
+                -8,
+                0
+              ]
+            ],
+            "faults": 1,
+            "target": [
+              -1,
+              1
+            ],
+            "y": [
+              -8,
+              -5,
+              16,
+              -4,
+              -16,
+              -12,
+              10,
+              16,
+              16
+            ]
+          },
+          "passed": true,
+          "verifier_wall_seconds": 0.000244999999722495
+        },
+        {
+          "actual": {
+            "status": "ambiguous"
+          },
+          "application_wall_seconds": 0.0322125809998397,
+          "expected": {
+            "status": "inconsistent"
+          },
+          "id": "development-04",
+          "input": {
+            "A": [
+              [
+                4,
+                0,
+                0
+              ],
+              [
+                16,
+                -8,
+                8
+              ],
+              [
+                0,
+                -16,
+                -12
+              ],
+              [
+                -16,
+                -16,
+                -8
+              ],
+              [
+                16,
+                0,
+                4
+              ],
+              [
+                -12,
+                -12,
+                0
+              ],
+              [
+                4,
+                0,
+                0
+              ],
+              [
+                12,
+                -4,
+                12
+              ],
+              [
+                12,
+                4,
+                -16
+              ],
+              [
+                4,
+                0,
+                0
+              ],
+              [
+                -16,
+                -16,
+                -8
+              ]
+            ],
+            "faults": 1,
+            "target": [
+              0,
+              -3,
+              1
+            ],
+            "y": [
+              12,
+              0,
+              11,
+              -42,
+              27,
+              -51,
+              10,
+              -16,
+              89,
+              11,
+              -42
+            ]
+          },
+          "passed": false,
+          "verifier_wall_seconds": 0.00014854800019747927
+        },
+        {
+          "actual": {
+            "status": "inconsistent"
+          },
+          "application_wall_seconds": 0.0644120090000797,
+          "expected": {
+            "status": "determined",
+            "value": "8/5"
+          },
+          "id": "development-05",
+          "input": {
+            "A": [
+              [
+                -5,
+                -5,
+                -15
+              ],
+              [
+                20,
+                0,
+                -5
+              ],
+              [
+                0,
+                20,
+                20
+              ],
+              [
+                0,
+                15,
+                -10
+              ],
+              [
+                0,
+                -20,
+                0
+              ],
+              [
+                5,
+                0,
+                0
+              ]
+            ],
+            "faults": 0,
+            "target": [
+              1,
+              0,
+              0
+            ],
+            "y": [
+              -13,
+              28,
+              -12,
+              -29,
+              28,
+              8
+            ]
+          },
+          "passed": false,
+          "verifier_wall_seconds": 0.00010868000026675873
+        },
+        {
+          "actual": {
+            "status": "ambiguous"
+          },
+          "application_wall_seconds": 0.032243302000097174,
+          "expected": {
+            "status": "ambiguous"
+          },
+          "id": "development-06",
+          "input": {
+            "A": [
+              [
+                0,
+                -12,
+                0
+              ],
+              [
+                0,
+                9,
+                0
+              ],
+              [
+                -9,
+                -6,
+                0
+              ],
+              [
+                9,
+                9,
+                0
+              ],
+              [
+                0,
+                0,
+                -3
+              ],
+              [
+                9,
+                -12,
+                0
+              ],
+              [
+                3,
+                9,
+                0
+              ],
+              [
+                0,
+                9,
+                0
+              ],
+              [
+                0,
+                0,
+                3
+              ],
+              [
+                0,
+                9,
+                0
+              ]
+            ],
+            "faults": 1,
+            "target": [
+              1,
+              1,
+              1
+            ],
+            "y": [
+              -44,
+              33,
+              -43,
+              54,
+              0,
+              -23,
+              40,
+              33,
+              -5,
+              33
+            ]
+          },
+          "passed": true,
+          "verifier_wall_seconds": 0.00023078999993231264
+        },
+        {
+          "actual": {
+            "status": "inconsistent"
+          },
+          "application_wall_seconds": 0.03216210299979139,
+          "expected": {
+            "status": "ambiguous"
+          },
+          "id": "development-07",
+          "input": {
+            "A": [
+              [
+                6,
+                0
+              ],
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ],
+              [
+                6,
+                0
+              ],
+              [
+                6,
+                0
+              ]
+            ],
+            "faults": 0,
+            "target": [
+              3,
+              1
+            ],
+            "y": [
+              10,
+              0,
+              0,
+              10,
+              10
+            ]
+          },
+          "passed": false,
+          "verifier_wall_seconds": 6.979199997658725e-05
+        },
+        {
+          "actual": {
+            "status": "ambiguous"
+          },
+          "application_wall_seconds": 0.06471593600008418,
+          "expected": {
+            "status": "ambiguous"
+          },
+          "id": "development-08",
+          "input": {
+            "A": [
+              [
+                15,
+                0,
+                0
+              ],
+              [
+                -20,
+                20,
+                0
+              ],
+              [
+                10,
+                -5,
+                0
+              ],
+              [
+                -15,
+                -5,
+                0
+              ],
+              [
+                -15,
+                -10,
+                0
+              ],
+              [
+                -15,
+                -15,
+                0
+              ],
+              [
+                -5,
+                -5,
+                0
+              ],
+              [
+                -15,
+                -15,
+                0
+              ]
+            ],
+            "faults": 1,
+            "target": [
+              2,
+              2,
+              1
+            ],
+            "y": [
+              21,
+              -80,
+              27,
+              3,
+              5,
+              18,
+              6,
+              18
+            ]
+          },
+          "passed": true,
+          "verifier_wall_seconds": 0.00011207499983356684
+        }
+      ],
+      "passed": false,
+      "phase": "development",
+      "scope": "Exposed development checks / Contrôles de développement exposés"
+    },
+    {
+      "artifact": "candidate-002.txt",
+      "checks": [
+        {
+          "actual": {
+            "status": "determined",
+            "value": "3/5"
+          },
+          "application_wall_seconds": 0.06490870500010715,
+          "expected": {
+            "status": "determined",
+            "value": "3/5"
+          },
+          "id": "development-01",
+          "input": {
+            "A": [
+              [
+                5,
+                0
+              ],
+              [
+                15,
+                0
+              ],
+              [
+                15,
+                0
+              ],
+              [
+                10,
+                0
+              ],
+              [
+                -5,
+                0
+              ],
+              [
+                0,
+                0
+              ],
+              [
+                15,
+                0
+              ]
+            ],
+            "faults": 1,
+            "target": [
+              3,
+              0
+            ],
+            "y": [
+              1,
+              3,
+              3,
+              2,
+              -1,
+              0,
+              3
+            ]
+          },
+          "passed": true,
+          "verifier_wall_seconds": 0.0001829500001804263
+        },
+        {
+          "actual": {
+            "status": "inconsistent"
+          },
+          "application_wall_seconds": 0.03309200400008194,
+          "expected": {
+            "status": "inconsistent"
+          },
+          "id": "development-02",
+          "input": {
+            "A": [
+              [
+                24,
+                0
+              ],
+              [
+                -18,
+                -12
+              ],
+              [
+                6,
+                0
+              ],
+              [
+                6,
+                0
+              ],
+              [
+                0,
+                6
+              ],
+              [
+                6,
+                12
+              ],
+              [
+                24,
+                24
+              ]
+            ],
+            "faults": 0,
+            "target": [
+              3,
+              1
+            ],
+            "y": [
+              40,
+              -4,
+              11,
+              10,
+              -13,
+              -16,
+              -12
+            ]
+          },
+          "passed": true,
+          "verifier_wall_seconds": 9.722300001158146e-05
+        },
+        {
+          "actual": {
+            "status": "inconsistent"
+          },
+          "application_wall_seconds": 0.06563982499983467,
+          "expected": {
+            "status": "ambiguous"
+          },
+          "id": "development-03",
+          "input": {
+            "A": [
+              [
+                4,
+                0
+              ],
+              [
+                0,
+                2
+              ],
+              [
+                -8,
+                0
+              ],
+              [
+                2,
+                0
+              ],
+              [
+                8,
+                0
+              ],
+              [
+                6,
+                0
+              ],
+              [
+                0,
+                -2
+              ],
+              [
+                -8,
+                0
+              ],
+              [
+                -8,
+                0
+              ]
+            ],
+            "faults": 1,
+            "target": [
+              -1,
+              1
+            ],
+            "y": [
+              -8,
+              -5,
+              16,
+              -4,
+              -16,
+              -12,
+              10,
+              16,
+              16
+            ]
+          },
+          "passed": false,
+          "verifier_wall_seconds": 0.0001672770004006452
+        },
+        {
+          "actual": {
+            "status": "inconsistent"
+          },
+          "application_wall_seconds": 0.06569033999994645,
+          "expected": {
+            "status": "inconsistent"
+          },
+          "id": "development-04",
+          "input": {
+            "A": [
+              [
+                4,
+                0,
+                0
+              ],
+              [
+                16,
+                -8,
+                8
+              ],
+              [
+                0,
+                -16,
+                -12
+              ],
+              [
+                -16,
+                -16,
+                -8
+              ],
+              [
+                16,
+                0,
+                4
+              ],
+              [
+                -12,
+                -12,
+                0
+              ],
+              [
+                4,
+                0,
+                0
+              ],
+              [
+                12,
+                -4,
+                12
+              ],
+              [
+                12,
+                4,
+                -16
+              ],
+              [
+                4,
+                0,
+                0
+              ],
+              [
+                -16,
+                -16,
+                -8
+              ]
+            ],
+            "faults": 1,
+            "target": [
+              0,
+              -3,
+              1
+            ],
+            "y": [
+              12,
+              0,
+              11,
+              -42,
+              27,
+              -51,
+              10,
+              -16,
+              89,
+              11,
+              -42
+            ]
+          },
+          "passed": true,
+          "verifier_wall_seconds": 0.002922749999925145
+        },
+        {
+          "actual": {
+            "status": "inconsistent"
+          },
+          "application_wall_seconds": 0.03238862699981837,
+          "expected": {
+            "status": "determined",
+            "value": "8/5"
+          },
+          "id": "development-05",
+          "input": {
+            "A": [
+              [
+                -5,
+                -5,
+                -15
+              ],
+              [
+                20,
+                0,
+                -5
+              ],
+              [
+                0,
+                20,
+                20
+              ],
+              [
+                0,
+                15,
+                -10
+              ],
+              [
+                0,
+                -20,
+                0
+              ],
+              [
+                5,
+                0,
+                0
+              ]
+            ],
+            "faults": 0,
+            "target": [
+              1,
+              0,
+              0
+            ],
+            "y": [
+              -13,
+              28,
+              -12,
+              -29,
+              28,
+              8
+            ]
+          },
+          "passed": false,
+          "verifier_wall_seconds": 0.00012004700010948
+        },
+        {
+          "actual": {
+            "status": "inconsistent"
+          },
+          "application_wall_seconds": 0.0322037660002934,
+          "expected": {
+            "status": "ambiguous"
+          },
+          "id": "development-06",
+          "input": {
+            "A": [
+              [
+                0,
+                -12,
+                0
+              ],
+              [
+                0,
+                9,
+                0
+              ],
+              [
+                -9,
+                -6,
+                0
+              ],
+              [
+                9,
+                9,
+                0
+              ],
+              [
+                0,
+                0,
+                -3
+              ],
+              [
+                9,
+                -12,
+                0
+              ],
+              [
+                3,
+                9,
+                0
+              ],
+              [
+                0,
+                9,
+                0
+              ],
+              [
+                0,
+                0,
+                3
+              ],
+              [
+                0,
+                9,
+                0
+              ]
+            ],
+            "faults": 1,
+            "target": [
+              1,
+              1,
+              1
+            ],
+            "y": [
+              -44,
+              33,
+              -43,
+              54,
+              0,
+              -23,
+              40,
+              33,
+              -5,
+              33
+            ]
+          },
+          "passed": false,
+          "verifier_wall_seconds": 0.00023291299976335722
+        },
+        {
+          "actual": {
+            "status": "inconsistent"
+          },
+          "application_wall_seconds": 0.032172382999760885,
+          "expected": {
+            "status": "ambiguous"
+          },
+          "id": "development-07",
+          "input": {
+            "A": [
+              [
+                6,
+                0
+              ],
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ],
+              [
+                6,
+                0
+              ],
+              [
+                6,
+                0
+              ]
+            ],
+            "faults": 0,
+            "target": [
+              3,
+              1
+            ],
+            "y": [
+              10,
+              0,
+              0,
+              10,
+              10
+            ]
+          },
+          "passed": false,
+          "verifier_wall_seconds": 7.424899968100362e-05
+        },
+        {
+          "actual": {
+            "status": "inconsistent"
+          },
+          "application_wall_seconds": 0.032284167999932833,
+          "expected": {
+            "status": "ambiguous"
+          },
+          "id": "development-08",
+          "input": {
+            "A": [
+              [
+                15,
+                0,
+                0
+              ],
+              [
+                -20,
+                20,
+                0
+              ],
+              [
+                10,
+                -5,
+                0
+              ],
+              [
+                -15,
+                -5,
+                0
+              ],
+              [
+                -15,
+                -10,
+                0
+              ],
+              [
+                -15,
+                -15,
+                0
+              ],
+              [
+                -5,
+                -5,
+                0
+              ],
+              [
+                -15,
+                -15,
+                0
+              ]
+            ],
+            "faults": 1,
+            "target": [
+              2,
+              2,
+              1
+            ],
+            "y": [
+              21,
+              -80,
+              27,
+              3,
+              5,
+              18,
+              6,
+              18
+            ]
+          },
+          "passed": false,
+          "verifier_wall_seconds": 0.00012083799992979039
+        }
+      ],
+      "passed": false,
+      "phase": "development",
+      "scope": "Exposed development checks / Contrôles de développement exposés"
+    }
+  ],
+  "model_sources": {
+    "candidate-001.txt": "import itertools\nfrom fractions import Fraction\nfrom math import gcd\nfrom collections import defaultdict\n\ndef solve(data):\n    A = data['A']\n    y = data['y']\n    target = data['target']\n    faults = data['faults']\n    \n    n = len(A)\n    m = len(target)\n    \n    # Generate all possible subsets of rows with at most 'faults' faults\n    from itertools import combinations\n    valid_subsets = []\n    for r in range(faults + 1):\n        for subset in combinations(range(n), r):\n            valid_subsets.append(subset)\n    \n    results = []\n    for subset in valid_subsets:\n        # Build system with only non-faulty rows\n        A_sub = [A[i] for i in subset]\n        y_sub = [y[i] for i in subset]\n        if len(A_sub) == 0:\n            continue\n        # Solve A_sub @ x = y_sub\n        try:\n            sol = rational_affine(A_sub, y_sub, m)\n            if sol is None:\n                continue\n            x_sol = sol[0]\n            null_space = sol[1]\n            # Compute target @ x\n            val = sum(target[i] * x_sol[i] for i in range(m))\n            # Check if null space introduces variation\n            if null_space:\n                # Try perturbations in null space\n                for null_vec in null_space:\n                    if any(abs(null_vec[i]) > 1e-9 for i in range(m)):\n                        # Check if perturbation changes target·x\n                        new_val = val + sum(target[i] * null_vec[i] for i in range(m))\n                        if abs(new_val - val) > 1e-9:\n                            return {\"status\": \"ambiguous\"}\n            results.append(val)\n        except:\n            continue\n    \n    if not results:\n        return {\"status\": \"inconsistent\"}\n    if len(set(results)) > 1:\n        return {\"status\": \"ambiguous\"}\n    return {\"status\": \"determined\", \"value\": str(results[0]).replace('1/', '1/').replace('0/', '0/')}\n",
+    "candidate-002.txt": "from itertools import combinations\nfrom fractions import Fraction\nfrom math import gcd\nfrom functools import reduce\n\ndef solve(data):\n    A = data['A']\n    y = data['y']\n    target = data['target']\n    faults = data['faults']\n    \n    n = len(A)\n    m = len(target)\n    \n    def solve_system(subset):\n        if not subset:\n            return None\n        A_sub = [A[i] for i in subset]\n        y_sub = [y[i] for i in subset]\n        if not A_sub:\n            return None\n        # Use rational_affine to solve\n        sol = rational_affine(A_sub, y_sub, m)\n        if sol is None:\n            return None\n        x_sol = sol[0]\n        null_space = sol[1]\n        val = sum(target[i] * x_sol[i] for i in range(m))\n        if null_space:\n            for vec in null_space:\n                if any(abs(vec[i]) > 1e-9 for i in range(m)):\n                    new_val = val + sum(target[i] * vec[i] for i in range(m))\n                    if abs(new_val - val) > 1e-9:\n                        return None\n        return val\n    \n    results = []\n    for r in range(faults + 1):\n        for subset in combinations(range(n), r):\n            res = solve_system(subset)\n            if res is not None:\n                results.append(res)\n    \n    if not results:\n        return {\"status\": \"inconsistent\"}\n    if len(set(results)) > 1:\n        return {\"status\": \"ambiguous\"}\n    return {\"status\": \"determined\", \"value\": str(results[0])}\n"
+  },
+  "run_id": "wf_e3ae5444607d3d3119ddbcb1",
+  "sources": {
+    "adapters.py": "a05127970eb11bb08cc98ed7ef9e05f9a723f51c66f9a5bfaa9f2242bb6275a6",
+    "forge.py": "90cb543cd8456f9248ceb5b02ef5ffa683ce02597d1fb27566de771b4ad3dd26",
+    "forge_sandbox.py": "860c444c497c6ba68f6967cdfd5e93e544c792860c6985a537f580ff257b80ed",
+    "forge_telemetry.py": "5f0b9dfc22002b59d5394a736ec8aca52e96aae57a70b354d394d365b95490e1",
+    "services.py": "41b71b3f946f0912898558995f2c83f1f09b0cb2d5f9203bfecbef301de4a081",
+    "workflows.py": "69a292abba3eb24601b79783965a8b5ffff4fe3a9dcef245aa755e3e9d8a4059"
+  },
+  "status": "exhausted"
+}

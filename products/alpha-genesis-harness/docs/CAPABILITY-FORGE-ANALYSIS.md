@@ -39,3 +39,17 @@ The first complete source-only attempt failed its exposed development checks. It
 ## Fresh repair experiment
 
 The first composition candidate passed four of eight development checks and exhausted the original study's construction allocation. It is rejected. The program read the fault allowance without using it and gave its numerical primitive a fixed dimension of one. A distinct follow-up freezes newly sampled qualification and transfer cohorts with the same 24/16 gate. It carries forward the exposed development observations and independently derived defects, allows up to two new builder attempts, and keeps the same verifier and practical open model. Strong conventional and frontier comparisons remain separate for any result.
+
+## Independently judged source search
+
+The fresh model-only repair produced one wrong-row-subset program and then a program that also discarded variable affine projections as inconsistent. Both failed development. Register a distinct source-search arm before executing it. Take the most accurate exposed candidate from that authenticated local-model workflow. Evaluate all eight subsets of three source mutations, counting the unchanged candidate. The operations change combination cardinality to its complement, remove an empty-subset skip, or replace small floating thresholds with exact zero. Compare candidates on eight exposed cases and three exposed boundary cases. Freeze the first fully accepted variant by increasing mutation count, then check separate fresh 24-case qualification and 16-case transfer cohorts.
+
+The operations were chosen after reading the disclosed failures. The search selects and applies them mechanically. This can demonstrate model-originated source plus engineered program search and independent qualification. It cannot establish autonomous discovery of the repair space or new mathematics. All original failures remain failures. The holdout acceptance criterion, exact verifier and conventional control remain unchanged.
+
+## Out-of-cohort boundary and new qualification
+
+The first source-search winner passed both registered cohorts but failed two additional probes when all observations could be faulty. A sole informative row incorrectly forced a value, and a sole contradictory row incorrectly made even the zero contrast infeasible. In both cases the empty retained set had been skipped. This pre-release finding changes applicability and is retained.
+
+A separate qualification adds the two observed counterexamples and an explicit combinatorial-resource probe to development. The repair search also considers one cardinality endpoint mutation, with 16 variants including the unchanged program. Exactly the maximum permitted omissions suffice for this contract. Every state satisfying more readings still belongs to a subset of the exact minimum size, and any state fitting such a subset is compatible. Use new sealed cohorts to judge the selected candidate. Earlier cohort passes and the additional failures remain historical evidence.
+
+The compact model-alone arm scored zero on the first source-search cohort and often copied the numeric example embedded in the task wording. Retain that adverse interface outcome and avoid interpreting it as general mathematical inability. A separate 512-token control on the final qualification cohort removes the numeric example and requires a concise explanation before the exact verdict. The strongest tool-equipped controls remain the decision-making comparisons.

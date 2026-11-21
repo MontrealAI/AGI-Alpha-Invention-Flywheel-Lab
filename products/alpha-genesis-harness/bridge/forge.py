@@ -20,7 +20,7 @@ from .services import AccessRuntime
 from .workflows import WorkflowService, TERMINAL, encoded, require
 
 PRODUCT = Path(__file__).resolve().parents[1]
-CORE_FILES = ("forge.py", "forge_sandbox.py", "forge_telemetry.py", "workflows.py",
+CORE_FILES = ("forge.py", "forge_repair.py", "forge_sandbox.py", "forge_telemetry.py", "workflows.py",
               "adapters.py", "services.py")
 
 
@@ -245,6 +245,38 @@ class ForgeWorkflow(WorkflowService):
             state["phase"] = "builder"
             if not state["forge"]["active_artifact"] and not state["feedback"]:
                 state["feedback"] = "No executable candidate was provided. Aucun candidat exécutable soumis."
+
+    def repair_development(self, ident, source, provenance):
+        """Search predeclared edits to a source-bound rejected model proposal."""
+        from .forge_repair import trial_candidates
+
+        with self._lock(ident):
+            state = self._load(ident)
+            setup = state["forge"]
+            check_sources(setup["sources"])
+            require(state["status"] == "ready" and setup["frozen_artifact"] is None,
+                    "Repair requires a new unfrozen mission. La correction exige une nouvelle mission non scellée.",
+                    "FORGE_STATE")
+            require(hashlib.sha256(source.encode()).hexdigest() == provenance["candidate_sha256"],
+                    "Rejected source changed. La source rejetée a changé.", "FORGE_INTEGRITY")
+            self._event(state, "repair_input", provenance)
+            selected = None
+            for index, (candidate, result) in enumerate(trial_candidates(source, setup["development"])):
+                name = f"repair-{index:02}.txt"
+                artifact = self._write(state, name, candidate, "document")
+                self._event(state, "repair_tested", {"artifact": artifact, **result})
+                if result["passed"] and selected is None:
+                    selected = name
+                self._save(state)
+            if selected is None:
+                state["status"] = "exhausted"
+                self._event(state, "stopped", {"reason": "Finite repair search exhausted on development."})
+                self._save(state)
+            else:
+                setup["active_artifact"] = selected
+                self._verify(state)
+                self._finish(state)
+            return self._view(state)
 
     def _finish(self, state):
         setup = state["forge"]

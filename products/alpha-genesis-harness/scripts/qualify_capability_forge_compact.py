@@ -19,6 +19,8 @@ def main():
     parser.add_argument("--checkpoint", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--resume", action="store_true", help="Continue the same cohort without retrying sent items.")
+    parser.add_argument("--reasoning", action="store_true",
+                        help="Require brief reasoning and omit numeric answer examples.")
     args = parser.parse_args()
     root = args.output.resolve()
     root.mkdir(mode=0o700, exist_ok=args.resume)
@@ -28,9 +30,11 @@ def main():
     if commitment != frozen["commitments"]["qualification"]:
         raise ValueError("Qualification inputs do not match the prospective commitment.")
     checkpoint = root / "compact-control.json"
+    style = "reasoning-no-numeric-example" if args.reasoning else "compact"
     if args.resume:
         receipt = strict_json(checkpoint.read_bytes())
-        if receipt["commitment"] != commitment or receipt["budget_output_tokens"] != 512:
+        if (receipt["commitment"] != commitment or receipt["budget_output_tokens"] != 512
+                or receipt.get("style", "compact") != style):
             raise ValueError("Cannot resume a changed comparison.")
         if receipt["rows"] and receipt["rows"][-1].get("pending"):
             row = receipt["rows"][-1]
@@ -38,7 +42,7 @@ def main():
             row.update({"error": "INTERRUPTED", "cost_unknown": True})
             save(checkpoint, receipt)
     else:
-        receipt = {"commitment": commitment, "budget_output_tokens": 512, "planned": len(cases),
+        receipt = {"commitment": commitment, "budget_output_tokens": 512, "planned": len(cases), "style": style,
                    "model": None, "rows": []}
     binary = hosted_runtime(args.assets.resolve(), root)
     with model_server(args.assets.resolve(), binary, "primary", root) as (runtime, route, pid, manifest):
@@ -52,12 +56,21 @@ def main():
             row = {"id": case["id"], "pending": True, "passed": False}
             receipt["rows"].append(row)
             save(checkpoint, receipt)
-            prompt = (
+            compact = (
                 "Solve the following exact numerical problem without executable tools.\n" + telemetry.TASK +
                 '\nReturn a single JSON object with "status" and, only for "determined", "value". '
                 'You may include "work" with up to 40 words of concise reasoning. '
-                'Keep status and value at the top level as fields.\nInput\n' + encoded(case["input"]).decode()
+                'Keep status and value at the top level as fields.'
             )
+            reasoning = (
+                "Solve the following problem yourself using exact reasoning. "
+                + telemetry.TASK.split(" Return ")[0]
+                + '\nThink about which readings must hold together and what can vary. '
+                  'Return a JSON object starting with "work" (one or two short sentences of reasoning), '
+                  'then "status" as determined, ambiguous or inconsistent. For determined also return '
+                  '"value", the exact rational number as a string. Use these top-level JSON fields.'
+            )
+            prompt = (reasoning if args.reasoning else compact) + "\nInput\n" + encoded(case["input"]).decode()
             start, start_cpu = time.perf_counter(), cpu(pid)
             try:
                 response = runtime.generate({**route, "run_id": "forge_compact_" + secrets.token_hex(12),

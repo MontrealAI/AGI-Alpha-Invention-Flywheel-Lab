@@ -2,7 +2,7 @@
 
 CAPABILITY FORGE extends the private HARNESS workflow with a new experimental capability. A local model diagnoses a scientific task, proposes an executable instrument and repairs it against exposed checks. A separate exact verifier then judges the frozen source on sealed qualification and transfer cases. A successful tool can be run again without a model.
 
-This candidate implements one task family, **exact rational telemetry with sparse faulty readings**. It reports an exact value, ambiguity, or inconsistency. The measurements in the registered trial are synthetic. The instrument does not model measurement noise or qualify physical equipment. The experiment and its A–F comparisons are specified in [the preregistration](CAPABILITY-FORGE-PROTOCOL.md).
+This candidate implements one task family, **exact rational telemetry with sparse faulty readings**. It reports an exact value, ambiguity, or inconsistency. The measurements in the registered trial are synthetic. The instrument does not model measurement noise or qualify physical equipment. See the [registered experiment](CAPABILITY-FORGE-PROTOCOL.md) and the [observed results and limits](../evidence/capability-forge/RESULTS.md).
 
 ## Start in the HARNESS
 
