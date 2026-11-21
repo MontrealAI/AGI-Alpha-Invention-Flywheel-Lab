@@ -1,0 +1,135 @@
+name: OMEGA COMPOSE219 independent owner-branch compatibility
+on:
+  push:
+    branches:
+      - audit/omega-compose219-20261121
+    paths:
+      - '.github/workflows/omega-compose219.yml'
+      - 'research/omega-compose219/**'
+permissions:
+  contents: read
+jobs:
+  exact-source-compose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record job start
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - name: Read preregistration from independent branch
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+          fetch-depth: 1
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Pin preregistration and attempt exact owner-head composition without publishing
+        id: compose
+        env:
+          PR517_BASE: '109bdcb4ec3d2309f23ba2c9ab3c96df530aada1'
+          PR519_HEAD: 'e67c7bd8d9bdc198d82a4153bf4c702de8d01982'
+          PR520_HEAD: 'fe346668e717d9b38977d43b4123224d2feada64'
+        shell: bash
+        run: |
+          set -euo pipefail
+          evidence="$RUNNER_TEMP/omega-compose219"
+          mkdir -p "$evidence"
+          cp research/omega-compose219/PREREGISTRATION.md "$evidence/PREREGISTRATION.md"
+          sha256sum "$evidence/PREREGISTRATION.md" > "$evidence/PREREGISTRATION.SHA256"
+          printf '%s\n' "$PR517_BASE" "$PR519_HEAD" "$PR520_HEAD" > "$evidence/REGISTERED-REFS.txt"
+          git fetch --no-tags origin refs/pull/519/head:refs/remotes/origin/compose219-pr519
+          git fetch --no-tags origin refs/pull/520/head:refs/remotes/origin/compose219-pr520
+          test "$(git rev-parse refs/remotes/origin/compose219-pr519)" = "$PR519_HEAD"
+          test "$(git rev-parse refs/remotes/origin/compose219-pr520)" = "$PR520_HEAD"
+          test "$(git merge-base "$PR519_HEAD" "$PR520_HEAD")" = "$PR517_BASE"
+          printf 'exact_heads_verified=TRUE\n' > "$evidence/COMPOSITION.txt"
+          git checkout --detach "$PR520_HEAD"
+          test "$(git rev-parse HEAD)" = "$PR520_HEAD"
+          set +e
+          git -c user.name='OMEGA independent review' -c user.email='no-reply@users.noreply.github.com' merge --no-commit --no-ff "$PR519_HEAD" > "$evidence/MERGE-OUTPUT.txt" 2>&1
+          code=$?
+          set -e
+          echo "merge_exit_code=$code" >> "$evidence/COMPOSITION.txt"
+          git status --porcelain=v1 > "$evidence/STATUS.txt"
+          git diff --name-only --diff-filter=U > "$evidence/CONFLICTS.txt"
+          if [ "$code" -ne 0 ]; then
+            cat "$evidence/MERGE-OUTPUT.txt"
+            echo "COMPOSE_FAILED; preserved original failure. No retry." >&2
+            exit "$code"
+          fi
+          test ! -s "$evidence/CONFLICTS.txt"
+          git diff --check
+          git diff --cached --name-status > "$evidence/COMPOSED-CHANGES.txt"
+          git write-tree > "$evidence/COMPOSED-TREE.txt"
+          echo "composed_uncommitted_worktree_only=TRUE" >> "$evidence/COMPOSITION.txt"
+          echo "Merged tree (local, unpublished): $(cat "$evidence/COMPOSED-TREE.txt")"
+      - name: Install already-declared product test requirements
+        if: steps.compose.outcome == 'success'
+        working-directory: products/alpha-genesis-harness
+        run: |
+          set -euo pipefail
+          python -m pip install -r requirements-chatgpt.txt
+      - name: Independently execute combined Python suite
+        if: steps.compose.outcome == 'success'
+        working-directory: products/alpha-genesis-harness
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B -m unittest discover -s tests -p 'test_*.py' -v 2>&1 | tee "$RUNNER_TEMP/omega-compose219/PYTHON-TESTS.txt"
+      - name: Independently execute combined Node suite
+        if: steps.compose.outcome == 'success'
+        working-directory: products/alpha-genesis-harness
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --test tests/*.test.cjs 2>&1 | tee "$RUNNER_TEMP/omega-compose219/NODE-TESTS.txt"
+      - name: Exercise bilingual and economic-outcome UI replay on combined source
+        if: steps.compose.outcome == 'success'
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/omega-compose219/dom"
+          cp products/alpha-genesis-harness/tests/dom/package*.json "$RUNNER_TEMP/omega-compose219/dom/"
+          npm ci --prefix "$RUNNER_TEMP/omega-compose219/dom" --ignore-scripts --no-audit --no-fund
+          NODE_PATH="$RUNNER_TEMP/omega-compose219/dom/node_modules" node products/alpha-genesis-harness/evidence/UI_AGENTIC_REPLAY.cjs 2>&1 | tee "$RUNNER_TEMP/omega-compose219/UI-TESTS.txt"
+      - name: Save immutable scope and outcome receipt
+        if: always()
+        env:
+          COMPOSE_OUTCOME: ${{ steps.compose.outcome }}
+          JOB_STATUS: ${{ job.status }}
+        run: |
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          root = Path(os.environ['RUNNER_TEMP'])/'omega-compose219'
+          root.mkdir(parents=True, exist_ok=True)
+          tests = {}
+          for kind in ('PYTHON', 'NODE', 'UI'):
+              file = root/(kind+'-TESTS.txt')
+              tests[kind] = {'executed': file.exists(), 'last_lines': file.read_text(errors='replace').splitlines()[-15:] if file.exists() else []}
+          receipt = {
+            'schema': 'omega-compose219/bounded-independent-review/v1',
+            'source_heads': {'pr517_base': '109bdcb4ec3d2309f23ba2c9ab3c96df530aada1',
+              'pr519': 'e67c7bd8d9bdc198d82a4153bf4c702de8d01982',
+              'pr520': 'fe346668e717d9b38977d43b4123224d2feada64'},
+            'composition': os.environ['COMPOSE_OUTCOME'], 'job_status_at_receipt': os.environ['JOB_STATUS'],
+            'tree': (root/'COMPOSED-TREE.txt').read_text().strip() if (root/'COMPOSED-TREE.txt').exists() else None,
+            'tests': tests,
+            'scope': 'uncommitted temporary worktree only; no branch write or normal release',
+            'not_established': ['independent economic benefit', 'first productive invention', 'retained distinct successor advantage',
+               'customer payment', 'complete-cost profit', 'production deployment', 'USD3B trailing-365 profit',
+               'authoritative native account migration', 'qualified protected integration'],
+            'financial_authority': 'untouched; simulation-only permission',
+            'unknown_costs': ['real inference', 'complete campaign host cost', 'human intervention']
+          }
+          (root/'REVIEW.json').write_text(json.dumps(receipt, indent=2)+'\n')
+          print(json.dumps({'composition':receipt['composition'], 'tree':receipt['tree'], 'test_suites_executed':{k:v['executed'] for k,v in tests.items()}}))
+          PY
+      - name: Preserve pass or failure evidence, including exact original test outputs
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: omega-compose219-${{ github.sha }}-attempt-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/omega-compose219
+          if-no-files-found: error
