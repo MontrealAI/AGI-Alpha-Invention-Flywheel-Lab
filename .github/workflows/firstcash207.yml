@@ -25,13 +25,13 @@ jobs:
           python-version: '3.12'
       - name: Source-only bilingual and no-external-action checks
         run: python -B -m unittest -v tests.test_unseen_firstcash207
+      - name: Install pinned free PDF verification library
+        run: python -m pip install --disable-pip-version-check --only-binary=:all: pypdf==5.9.0
       - name: Generate and audit true A4 ten-page PDF from exact source
         shell: bash
         run: |
           set -euo pipefail
           command -v google-chrome
-          command -v pdfinfo
-          command -v pdftotext
           mkdir -p "$RUNNER_TEMP/firstcash207"
           google-chrome --headless --no-sandbox --disable-gpu --disable-dev-shm-usage \
             --disable-background-networking --no-pdf-header-footer \
@@ -39,16 +39,11 @@ jobs:
             "file://$GITHUB_WORKSPACE/docs/frontier-unseen-advantage-sample.html" \
             > "$RUNNER_TEMP/firstcash207/chrome.stdout" 2> "$RUNNER_TEMP/firstcash207/chrome.stderr"
           test -s "$RUNNER_TEMP/firstcash207/FIRSTCASH207-SPECIMEN.pdf"
-          pdfinfo "$RUNNER_TEMP/firstcash207/FIRSTCASH207-SPECIMEN.pdf" > "$RUNNER_TEMP/firstcash207/pdfinfo.txt"
-          pages="$(awk '/^Pages:/ {print $2}' "$RUNNER_TEMP/firstcash207/pdfinfo.txt")"
-          if [ "$pages" != 10 ]; then echo "PRINTED_PAGE_COUNT_MISMATCH: $pages" >&2; exit 1; fi
-          pdftotext -layout "$RUNNER_TEMP/firstcash207/FIRSTCASH207-SPECIMEN.pdf" "$RUNNER_TEMP/firstcash207/printed.txt"
-          python -B - "$RUNNER_TEMP/firstcash207/printed.txt" <<'PY_VERIFY'
+          python -B - "$RUNNER_TEMP/firstcash207/FIRSTCASH207-SPECIMEN.pdf" <<'PY_VERIFY'
           from pathlib import Path
+          from pypdf import PdfReader
           import sys
-          pages = Path(sys.argv[1]).read_text().split("\f")
-          if pages[-1].strip() == "":
-              pages.pop()
+          pdf = PdfReader(sys.argv[1])
           expected = (
               "The Unseen Advantage", "What the beneficiary really needs",
               "One real component improvement", "The competitor is not a weak AI demo",
@@ -56,13 +51,22 @@ jobs:
               "How one real sale would be accepted", "Profit cannot be guessed from price",
               "What would change the decision", "Keep the ambition"
           )
-          if len(pages) != 10:
-              raise SystemExit(f"EXTRACTED_PAGE_COUNT_MISMATCH: {len(pages)}")
-          for index, (page, title) in enumerate(zip(pages, expected), 1):
-              if title not in page:
+          if len(pdf.pages) != 10:
+              raise SystemExit(f"PRINTED_PAGE_COUNT_MISMATCH: {len(pdf.pages)}")
+          report = []
+          for index, (page, title) in enumerate(zip(pdf.pages, expected), 1):
+              text = page.extract_text() or ""
+              if title not in text:
                   raise SystemExit(f"PAGE_{index}_MISSING_HEADING: {title}")
-              if not page.strip():
+              if not text.strip():
                   raise SystemExit(f"EMPTY_PAGE_{index}")
+              box = page.mediabox
+              w, h = float(box.width), float(box.height)
+              if not (590 <= w <= 600 and 836 <= h <= 845):
+                  raise SystemExit(f"PAGE_{index}_NOT_A4: {w}x{h}")
+              report.append(f"page={index},heading={title},characters={len(text)},size={w:.1f}x{h:.1f}")
+          Path(sys.argv[1]).with_suffix(".audit.txt").write_text(
+              "\\n".join(report)+"\\nSOURCE_BOUND_A4_PRINT_10_PAGES_VERIFIED\\n")
           print("SOURCE_BOUND_A4_PRINT_10_PAGES_VERIFIED")
           PY_VERIFY
           sha256sum docs/frontier-unseen-advantage-sample.html "$RUNNER_TEMP/firstcash207/FIRSTCASH207-SPECIMEN.pdf" > "$RUNNER_TEMP/firstcash207/SHA256SUMS.txt"
@@ -72,6 +76,6 @@ jobs:
           if-no-files-found: error
           path: |
             ${{ runner.temp }}/firstcash207/FIRSTCASH207-SPECIMEN.pdf
-            ${{ runner.temp }}/firstcash207/pdfinfo.txt
+            ${{ runner.temp }}/firstcash207/FIRSTCASH207-SPECIMEN.audit.txt
             ${{ runner.temp }}/firstcash207/SHA256SUMS.txt
           retention-days: 30
