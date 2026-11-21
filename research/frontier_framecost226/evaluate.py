@@ -130,6 +130,13 @@ def pair_stats(p, q, helstrom_error: float, epsilon: float):
         if necessary["count"] is not None and sufficient["count"] is not None:
             if not (1 <= necessary["count"] <= sufficient["count"]):
                 raise AssertionError("invalid necessary/sufficient ordering")
+            if necessary["count"] > 1:
+                prev = necessary["count"] - 1
+                lower_previous = (1-math.sqrt(max(0.0, 1-bc**(2*prev))))/2
+                if lower_previous < TARGET-1e-10:
+                    raise AssertionError("false necessary-shot lower bound")
+            if 0.5*bc**sufficient["count"] > TARGET+1e-12:
+                raise AssertionError("false sufficient-shot upper bound")
             result.update(status="finite", necessary_shots=necessary["count"],
                           sufficient_shots=sufficient["count"])
         else:
