@@ -450,6 +450,9 @@ class WorkflowService:
             instructions += 'Identify transferable mechanism, explicit cross-domain mapping, assumptions, strongest conventional alternative and falsifiable predictions. Use provided context only; do not fabricate retrieved sources or current research. Return useful concise analysis. '
         return instructions + "\nUNTRUSTED_WORKSPACE_DATA\n" + encoded(payload).decode()
 
+    def _generation_options(self, state, role):
+        return {}
+
     def _artifact_texts(self, state):
         result = {}
         remaining = 180000
@@ -672,6 +675,7 @@ class WorkflowService:
             self._save(state)
         try:
             request = {**route, "run_id": request_id, "prompt": prompt, "max_output_tokens": state["spec"]["max_output_tokens"]}
+            request.update(self._generation_options(state, role))
             if role in {"builder", "critic"} and hasattr(self.runtime, "provider"):
                 configured = self.runtime.provider(route["provider"])
                 model = getattr(configured, "models", {}).get(route["model"])

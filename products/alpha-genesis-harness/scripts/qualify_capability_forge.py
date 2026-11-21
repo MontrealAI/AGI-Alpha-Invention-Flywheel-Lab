@@ -123,7 +123,7 @@ def model_server(assets, binary, which, root):
                 "kind": "openai", "base_url": base + "/v1", "output_limit_field": "max_tokens",
                 "models": {alias: {"input_per_million": 0, "output_per_million": 0,
                                    "json_mode": True, "max_output_tokens": 2048,
-                                   "streaming": False}},
+                                   "streaming": True}},
             }}}
             runtime = AccessRuntime(Runtime(config), config, private_root=root)
             yield runtime, {"provider": which, "model": alias}, server.pid, model
@@ -273,9 +273,13 @@ def main():
     parser.add_argument("--assets", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--resume", action="store_true")
+    parser.add_argument("--continue-from", type=Path,
+                        help="Continue a pre-construction interruption in a new source-bound workspace.")
     parser.add_argument("--first", action="store_true", help="Run development controls and Forge before the other arms.")
     parser.add_argument("--skip-d", action="store_true", help="Leave the open challenger explicitly unmeasured.")
     args = parser.parse_args()
+    if args.resume and args.continue_from:
+        parser.error("--resume and --continue-from are mutually exclusive")
     root, assets = args.output.resolve(), args.assets.resolve()
     root.mkdir(mode=0o700, parents=True, exist_ok=args.resume)
     checkpoint = root / "study.json"
@@ -285,7 +289,16 @@ def main():
         if state["sources"] != sources:
             raise ValueError("Study source changed. Continue the registered snapshot.")
     else:
-        seeds, cohorts = seal()
+        previous = strict_json(args.continue_from.read_bytes()) if args.continue_from else None
+        if previous:
+            if (previous.get("forge_status") or "forge_run" not in previous or previous.get("candidate")
+                    or {name for name in previous["arms"] if not name.startswith("F_")} != {"A_development"}
+                    or any(row.get("pending") for row in previous["arms"]["A_development"])
+                    or len(previous["arms"]["A_development"]) != len(development())):
+                raise ValueError("Continuation requires a completed development arm and no frozen candidate or sealed model results.")
+            seeds, cohorts = previous["seeds"], previous["cohorts"]
+        else:
+            seeds, cohorts = seal()
         state = {"sources": sources, "seeds": seeds, "cohorts": cohorts, "models": {}, "arms": {},
                  "commitments": {name: telemetry.fingerprint(cases) for name, cases in cohorts.items()},
                  "hardware": {"platform": platform.platform(), "machine": platform.machine(),
@@ -295,6 +308,13 @@ def main():
                  "cost_scope": {"energy_joules": None, "host_billing_usd": None, "human_setup_seconds": None,
                                 "paid_api_calls": 0},
                  "restricted_E": {"status": "UNMEASURED", "reason": "No authorized isolated reference run on comparable withheld inputs."}}
+        if previous:
+            if state["commitments"] != previous["commitments"]:
+                raise ValueError("Continuation cohort commitment mismatch.")
+            state["arms"] = previous["arms"]
+            state["interrupted_predecessor"] = {"study_sha256": sha(args.continue_from), "run_id": previous["forge_run"],
+                                                "models": previous["models"], "cost": previous.get("forge_segments", []),
+                                                "sources": previous["sources"]}
         save(checkpoint, state)
     from flint import __version__ as flint_version
     state["specialist"] = {"method": "FLINT exact rational RREF", "python_flint": flint_version}
