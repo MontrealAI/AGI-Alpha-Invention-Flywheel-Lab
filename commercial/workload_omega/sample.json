@@ -1,0 +1,216 @@
+{
+  "schema": "workload-omega/v1",
+  "workload_id": "synthetic-comparable-task",
+  "evidence_type": "synthetic",
+  "reference_arm": "reference",
+  "candidate_arms": [
+    "cheap_bad",
+    "efficient"
+  ],
+  "max_latency_ms": 500,
+  "min_acceptance_bps": 10000,
+  "min_train_pairs": 4,
+  "min_holdout_pairs": 4,
+  "observations": [
+    {
+      "split": "train",
+      "case_id": "T0",
+      "arm": "reference",
+      "accepted": true,
+      "latency_ms": 300,
+      "cost_microusd": 60000
+    },
+    {
+      "split": "train",
+      "case_id": "T0",
+      "arm": "efficient",
+      "accepted": true,
+      "latency_ms": 150,
+      "cost_microusd": 20000
+    },
+    {
+      "split": "train",
+      "case_id": "T0",
+      "arm": "cheap_bad",
+      "accepted": true,
+      "latency_ms": 100,
+      "cost_microusd": 1000
+    },
+    {
+      "split": "train",
+      "case_id": "T1",
+      "arm": "reference",
+      "accepted": true,
+      "latency_ms": 300,
+      "cost_microusd": 60000
+    },
+    {
+      "split": "train",
+      "case_id": "T1",
+      "arm": "efficient",
+      "accepted": true,
+      "latency_ms": 150,
+      "cost_microusd": 20000
+    },
+    {
+      "split": "train",
+      "case_id": "T1",
+      "arm": "cheap_bad",
+      "accepted": false,
+      "latency_ms": 100,
+      "cost_microusd": 1000
+    },
+    {
+      "split": "train",
+      "case_id": "T2",
+      "arm": "reference",
+      "accepted": true,
+      "latency_ms": 300,
+      "cost_microusd": 60000
+    },
+    {
+      "split": "train",
+      "case_id": "T2",
+      "arm": "efficient",
+      "accepted": true,
+      "latency_ms": 150,
+      "cost_microusd": 20000
+    },
+    {
+      "split": "train",
+      "case_id": "T2",
+      "arm": "cheap_bad",
+      "accepted": true,
+      "latency_ms": 100,
+      "cost_microusd": 1000
+    },
+    {
+      "split": "train",
+      "case_id": "T3",
+      "arm": "reference",
+      "accepted": true,
+      "latency_ms": 300,
+      "cost_microusd": 60000
+    },
+    {
+      "split": "train",
+      "case_id": "T3",
+      "arm": "efficient",
+      "accepted": true,
+      "latency_ms": 150,
+      "cost_microusd": 20000
+    },
+    {
+      "split": "train",
+      "case_id": "T3",
+      "arm": "cheap_bad",
+      "accepted": true,
+      "latency_ms": 100,
+      "cost_microusd": 1000
+    },
+    {
+      "split": "holdout",
+      "case_id": "H0",
+      "arm": "reference",
+      "accepted": true,
+      "latency_ms": 300,
+      "cost_microusd": 60000
+    },
+    {
+      "split": "holdout",
+      "case_id": "H0",
+      "arm": "efficient",
+      "accepted": true,
+      "latency_ms": 150,
+      "cost_microusd": 20000
+    },
+    {
+      "split": "holdout",
+      "case_id": "H0",
+      "arm": "cheap_bad",
+      "accepted": true,
+      "latency_ms": 100,
+      "cost_microusd": 1000
+    },
+    {
+      "split": "holdout",
+      "case_id": "H1",
+      "arm": "reference",
+      "accepted": true,
+      "latency_ms": 300,
+      "cost_microusd": 60000
+    },
+    {
+      "split": "holdout",
+      "case_id": "H1",
+      "arm": "efficient",
+      "accepted": true,
+      "latency_ms": 150,
+      "cost_microusd": 20000
+    },
+    {
+      "split": "holdout",
+      "case_id": "H1",
+      "arm": "cheap_bad",
+      "accepted": false,
+      "latency_ms": 100,
+      "cost_microusd": 1000
+    },
+    {
+      "split": "holdout",
+      "case_id": "H2",
+      "arm": "reference",
+      "accepted": true,
+      "latency_ms": 300,
+      "cost_microusd": 60000
+    },
+    {
+      "split": "holdout",
+      "case_id": "H2",
+      "arm": "efficient",
+      "accepted": true,
+      "latency_ms": 150,
+      "cost_microusd": 20000
+    },
+    {
+      "split": "holdout",
+      "case_id": "H2",
+      "arm": "cheap_bad",
+      "accepted": true,
+      "latency_ms": 100,
+      "cost_microusd": 1000
+    },
+    {
+      "split": "holdout",
+      "case_id": "H3",
+      "arm": "reference",
+      "accepted": true,
+      "latency_ms": 300,
+      "cost_microusd": 60000
+    },
+    {
+      "split": "holdout",
+      "case_id": "H3",
+      "arm": "efficient",
+      "accepted": true,
+      "latency_ms": 150,
+      "cost_microusd": 20000
+    },
+    {
+      "split": "holdout",
+      "case_id": "H3",
+      "arm": "cheap_bad",
+      "accepted": true,
+      "latency_ms": 100,
+      "cost_microusd": 1000
+    }
+  ],
+  "economics": {
+    "expected_monthly_requests": 10000,
+    "savings_share_bps": 2000,
+    "monthly_operating_cost_microusd": 25000000,
+    "monthly_onboarding_amortization_microusd": 5000000,
+    "monitoring_cost_per_request_microusd": 500,
+    "other_monthly_cost_microusd": 0
+  }
+}
