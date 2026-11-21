@@ -1,0 +1,49 @@
+name: OMEGA LINKAGE218 independent evidence-first falsification
+on:
+  pull_request:
+    paths:
+      - "research/omega-linkage218/**"
+      - "products/alpha-genesis-harness/scripts/test_economic_linkage218.py"
+      - ".github/workflows/omega-economic-linkage218.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  fixed-four-cases:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Exact review-branch checkout (no persistent GitHub credentials)
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - name: Source and frozen protocol identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git hash-object products/alpha-genesis-harness/bridge/economic_mission.py)" = "b9f1e647d8d3c4bf898888c0cd3b2a6ef9dee861"
+          test -f research/omega-linkage218/PREREGISTRATION.md
+      - name: Execute exactly the four preregistered independent cases
+        working-directory: products/alpha-genesis-harness
+        run: python3 -B -m unittest -v scripts.test_economic_linkage218
+      - name: Emit independent synthetic-only counterexample witness
+        working-directory: products/alpha-genesis-harness
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -B scripts/test_economic_linkage218.py --witness "$RUNNER_TEMP/LINKAGE218_WITNESS.json"
+          cp "$RUNNER_TEMP/LINKAGE218_WITNESS.json" "$GITHUB_WORKSPACE/LINKAGE218_WITNESS.json"
+          sha256sum "$GITHUB_WORKSPACE/LINKAGE218_WITNESS.json" > "$GITHUB_WORKSPACE/LINKAGE218_SHA256SUMS.txt"
+      - name: Preserve compact bounded witness
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: omega-linkage218-exact-head
+          path: |
+            LINKAGE218_WITNESS.json
+            LINKAGE218_SHA256SUMS.txt
+          if-no-files-found: ignore
+          retention-days: 7
