@@ -1,0 +1,41 @@
+name: firstcash208-public-order-path
+
+on:
+  pull_request:
+    paths:
+      - 'campaign/unseen-first-cash-208/**'
+      - 'scripts/firstcash208_shop_preflight.py'
+      - 'tests/test_firstcash208_shop_preflight.py'
+      - '.github/workflows/firstcash208.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  readonly-shop-preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record platform job start
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - name: Checkout exact source, not PR merge
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - name: Offline adversarial qualification before public request
+        run: python3 -m unittest discover -s tests -p 'test_firstcash208_shop_preflight.py' -v
+      - name: Exactly one read-only GET of official public product page
+        run: |
+          export FIRSTCASH208_SOURCE_SHA="$(git rev-parse HEAD)"
+          python3 scripts/firstcash208_shop_preflight.py --receipt firstcash208-receipt.json
+          sha256sum firstcash208-receipt.json > SHA256SUMS.txt
+      - name: Upload source-bound receipt (not a sale)
+        uses: actions/upload-artifact@v4
+        with:
+          name: firstcash208-public-readonly-result
+          path: |
+            firstcash208-receipt.json
+            SHA256SUMS.txt
+          retention-days: 30
