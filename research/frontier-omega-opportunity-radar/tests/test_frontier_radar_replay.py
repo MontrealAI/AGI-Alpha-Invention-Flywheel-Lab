@@ -38,8 +38,12 @@ class TestReplay(unittest.TestCase):
     def test_date_tz_and_silence(self):
         a = {"cutoff": "2026-07-02", "milestones": [milestone("risk")]}
         r = record()
+        r["as_of_instant"] = "2026-07-02T12:00:00Z"
+        r["sources"][0]["available_at"] = "2026-07-02T12:00:00Z"
+        a["milestones"][0]["announced_at_instant"] = "2026-07-02T12:00:00Z"
+        a["milestones"][0]["sources"][0]["available_at"] = "2026-07-02T12:00:00Z"
         cutoff = stamp("2026-07-02T23:59:59.999999Z")
-        self.assertTrue(core.assess(r, cutoff)["alert"])  # live gate could alert
+        self.assertTrue(core.assess(r, cutoff)["alert"])  # evidence is explicitly timestamped  # live gate could alert
         q = replay.run(a, [r], cutoff)
         case = q["cases"][0]
         self.assertEqual("TEST", case["radar_decision"])
