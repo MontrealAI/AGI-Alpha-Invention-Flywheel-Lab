@@ -33,7 +33,7 @@ jobs:
           set -euo pipefail
           python3 -B -m scripts.test_economic_linkage218 --witness "$RUNNER_TEMP/LINKAGE218_WITNESS.json"
           cp "$RUNNER_TEMP/LINKAGE218_WITNESS.json" "$GITHUB_WORKSPACE/LINKAGE218_WITNESS.json"
-          sha256sum "$GITHUB_WORKSPACE/LINKAGE218_WITNESS.json" > "$GITHUB_WORKSPACE/LINKAGE218_SHA256SUMS.txt"
+          (cd "$GITHUB_WORKSPACE" && sha256sum LINKAGE218_WITNESS.json > LINKAGE218_SHA256SUMS.txt)
       - name: Preserve compact bounded witness
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
