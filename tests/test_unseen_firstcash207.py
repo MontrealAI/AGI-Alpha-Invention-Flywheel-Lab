@@ -51,8 +51,8 @@ class SampleContract(unittest.TestCase):
         self.assertIn("@page{size:A4;margin:0}", self.content)
 
     def test_meaningful_parallel_bilingual_structure(self):
-        self.assertEqual(10, self.parser.langs.count("en"))
-        self.assertEqual(10, self.parser.langs.count("fr"))
+        self.assertEqual(10, sum(lang == "en" for _, lang in self.parser.sections))
+        self.assertEqual(10, sum(lang == "fr" for _, lang in self.parser.sections))
         self.assertEqual(10, len(re.findall(r'<h[12]\b', self.content)))
         self.assertIn("ÉCHANTILLON", self.content)
         self.assertIn("NOT A CUSTOMER", self.content)
