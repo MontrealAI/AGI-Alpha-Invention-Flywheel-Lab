@@ -1,0 +1,194 @@
+{
+  "schema": "frontier-independent-verifier-mutations/v1",
+  "valid_first_cases": 5,
+  "valid_successor_cases": 10,
+  "valid_shared_dag_example": 1,
+  "mutants_tested": 36,
+  "mutants_rejected": 36,
+  "cases": [
+    {
+      "mutation": "displayed_recipe_wrong_base",
+      "rejected": true,
+      "reason": "DISPLAYED_RECIPE_MISMATCH"
+    },
+    {
+      "mutation": "assignment_wrong_yield",
+      "rejected": true,
+      "reason": "ASSIGNMENT_YIELD"
+    },
+    {
+      "mutation": "assignment_wrong_maximum",
+      "rejected": true,
+      "reason": "ASSIGNMENT_MAXIMUM"
+    },
+    {
+      "mutation": "assignment_wrong_threshold",
+      "rejected": true,
+      "reason": "ASSIGNMENT_THRESHOLD"
+    },
+    {
+      "mutation": "assignment_wrong_source_line",
+      "rejected": true,
+      "reason": "ASSIGNMENT_SOURCE_LINE"
+    },
+    {
+      "mutation": "assignment_wrong_substrate_name",
+      "rejected": true,
+      "reason": "ASSIGNED_SUBSTRATE_NAME"
+    },
+    {
+      "mutation": "assignment_missing_substrate",
+      "rejected": true,
+      "reason": "ASSIGNMENT_COUNT"
+    },
+    {
+      "mutation": "assignment_unselected_condition",
+      "rejected": true,
+      "reason": "ASSIGNED_CONDITION_NOT_SELECTED"
+    },
+    {
+      "mutation": "covered_substrates_false",
+      "rejected": true,
+      "reason": "COVERED_SUBSTRATE_COUNT"
+    },
+    {
+      "mutation": "best_single_coverage_false",
+      "rejected": true,
+      "reason": "BEST_SINGLE_COVERAGE"
+    },
+    {
+      "mutation": "source_url_wrong",
+      "rejected": true,
+      "reason": "SOURCE_URL"
+    },
+    {
+      "mutation": "source_negative_yield_clipped",
+      "rejected": true,
+      "reason": "YIELD_RANGE_CHANGED"
+    },
+    {
+      "mutation": "first_case_omission",
+      "rejected": true,
+      "reason": "CASE_DENOMINATOR"
+    },
+    {
+      "mutation": "successor_displayed_selection_wrong",
+      "rejected": true,
+      "reason": "SUCCESSOR_DISPLAYED_SELECTION"
+    },
+    {
+      "mutation": "successor_witness_substrate_unselected",
+      "rejected": true,
+      "reason": "SUCCESSOR_WITNESS_SUBSTRATE"
+    },
+    {
+      "mutation": "successor_witness_gap_wrong",
+      "rejected": true,
+      "reason": "SUCCESSOR_WITNESS_GAP"
+    },
+    {
+      "mutation": "successor_witness_source_line_wrong",
+      "rejected": true,
+      "reason": "SUCCESSOR_WITNESS_SOURCE_ROWS"
+    },
+    {
+      "mutation": "successor_witness_source_yield_wrong",
+      "rejected": true,
+      "reason": "SUCCESSOR_WITNESS_SOURCE_ROWS"
+    },
+    {
+      "mutation": "successor_witness_pair_missing",
+      "rejected": true,
+      "reason": "SUCCESSOR_WITNESS_COUNT"
+    },
+    {
+      "mutation": "successor_omitted_pair_missing",
+      "rejected": true,
+      "reason": "SUCCESSOR_OMITTED_PAIRS"
+    },
+    {
+      "mutation": "successor_omitted_maximum_wrong",
+      "rejected": true,
+      "reason": "SUCCESSOR_OMITTED_GAP"
+    },
+    {
+      "mutation": "successor_omitted_source_wrong",
+      "rejected": true,
+      "reason": "SUCCESSOR_OMITTED_SOURCE_ROWS"
+    },
+    {
+      "mutation": "successor_pair_denominator_wrong",
+      "rejected": true,
+      "reason": "SUCCESSOR_PAIR_DENOMINATOR"
+    },
+    {
+      "mutation": "successor_cohort_mislabeled",
+      "rejected": true,
+      "reason": "SUCCESSOR_SOLVENT"
+    },
+    {
+      "mutation": "successor_case_omission",
+      "rejected": true,
+      "reason": "SUCCESSOR_CASE_ORDER"
+    },
+    {
+      "mutation": "proof_wrong_problem_hash",
+      "rejected": true,
+      "reason": "PROBLEM_BINDING"
+    },
+    {
+      "mutation": "proof_duplicate_selection",
+      "rejected": true,
+      "reason": "SELECTED_DUPLICATE"
+    },
+    {
+      "mutation": "proof_boolean_index",
+      "rejected": true,
+      "reason": "SELECTED_INDEX"
+    },
+    {
+      "mutation": "proof_missing_branch",
+      "rejected": true,
+      "reason": "INCOMPLETE_BRANCH"
+    },
+    {
+      "mutation": "proof_duplicate_branch",
+      "rejected": true,
+      "reason": "CHILD_OPTION"
+    },
+    {
+      "mutation": "proof_forward_cycle",
+      "rejected": true,
+      "reason": "CHILD_ORDER"
+    },
+    {
+      "mutation": "proof_false_dominance",
+      "rejected": true,
+      "reason": "FALSE_DOMINANCE"
+    },
+    {
+      "mutation": "proof_context_invalid_shared_leaf",
+      "rejected": true,
+      "reason": "PACKING_ROWS"
+    },
+    {
+      "mutation": "proof_false_empty_requirement",
+      "rejected": true,
+      "reason": "EMPTY_ROW_NOT_EMPTY"
+    },
+    {
+      "mutation": "proof_false_capacity_lower_bound",
+      "rejected": true,
+      "reason": "CAPACITY_NOT_PROVEN"
+    },
+    {
+      "mutation": "proof_overlapping_packing",
+      "rejected": true,
+      "reason": "PACKING_OVERLAP"
+    }
+  ],
+  "wall_seconds": 1.169557467001141,
+  "test_source_sha256": "d877bf59851836860762f72ca0f510dc6923729a5d7e007f030abe1ec0795651",
+  "verifier_sha256": "9d614809680cc481e9ce17aff9f2a5f96c352aca6dbb69cfbab5a4a6fe609b0f",
+  "scope": "Concrete source-output and proof integrity regressions; no claim of exhaustive adversarial security."
+}

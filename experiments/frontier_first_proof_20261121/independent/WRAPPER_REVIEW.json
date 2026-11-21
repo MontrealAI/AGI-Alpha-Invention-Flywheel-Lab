@@ -1,0 +1,84 @@
+{
+  "schema": "frontier-final-wrapper-review/v1",
+  "recorded_at_utc": "2026-11-21T18:52:33.726196+00:00",
+  "source_changes": {
+    "audit.py": "5f3aa18c8c217b2f0dfde7f2767d22e5966860c273871cb554d3bc60dfd8f323",
+    "transfer_check.py": "90d2a824b8f328671349fd4326e27bbf3a6df137bede8cf4115ceebf3bf7eb41",
+    "tests/test_wrapper_integrity.py": "1191dbcf29184a90a6c975746fd4f202af32a6f8f7ee44b6908aec277ec5dd7b"
+  },
+  "workflow_sha256": "411dd3a83b3d4897d2ecd205b064553a1d79f0540c207119a3cd92b884aa0ea3",
+  "reviewed_without_change": [
+    "fetch_sources.py",
+    "tests/test_exact_capability.py",
+    "OUTCOME_AND_LESSONS.json",
+    "docs/harness/DEVELOPER_GUIDE.md section 6"
+  ],
+  "corrections": [
+    {
+      "defect": "An empty successor cohort produced an all-positive transfer summary.",
+      "repair": "Require all ten ordered case identities and complete cohort counts before executing the comparison."
+    },
+    {
+      "defect": "Fresh comparison accepted cardinality summaries without complete bound run receipts.",
+      "repair": "Bind code, protocol, source and incidence hashes; require complete method/run denominators and independently recheck every baseline selection and exact cardinality."
+    },
+    {
+      "defect": "Complete audit accepted forged successor asset or adapter provenance if the finite outputs remained correct.",
+      "repair": "Check all frozen first-source identities and top-level/per-case successor asset, adapter and protocol hashes before data acceptance."
+    },
+    {
+      "defect": "Existence check followed by write_text could overwrite an output created in between.",
+      "repair": "Write audit and transfer outputs using exclusive creation."
+    },
+    {
+      "defect": "CI omitted semantic mutation regression and transfer-control execution.",
+      "repair": "Run both after their required source and conventional-baseline dependencies."
+    },
+    {
+      "defect": "First wrapper repair demanded exact binary-float equality for HiGHS dual-bound telemetry.",
+      "repair": "Accept finite metadata within 1e-7 of the integer value; exact objective validity remains independently checked by finite proof. The rejected attempt produced no qualified receipt."
+    },
+    {
+      "defect": "Current adapter/protocol identity was checked without comparing their preexecution freeze receipts.",
+      "repair": "Bind successor hash, byte length and first-asset identity to successor_source_freeze; bind independent protocol hash to PROTOCOL_FREEZE; copied-fixture CLI regressions reject changed expectations."
+    }
+  ],
+  "qualification": {
+    "targeted_cli_tests": 16,
+    "passed": 16,
+    "python_site_packages_disabled": true,
+    "rejected_cli_creates_output": false,
+    "positive_complete_audit_cases": 15,
+    "positive_transfer_cases": 10,
+    "transfer_repetitions_per_arm": 5,
+    "positive_runs_python_site_packages_disabled": true
+  },
+  "new_receipts": {
+    "independent/WRAPPER_AUDIT_QUALIFIED.json": "0a9ed367b5d72d1b44f5879ebf37683820590211c393c2b706b2fa1d3e5806e3",
+    "independent/WRAPPER_TRANSFER_QUALIFIED.json": "e96d9212b86a141ff6d151bc516cc9f9ffeec40010764a872d309d27433eadb7"
+  },
+  "superseded_receipts": {
+    "evidence/COMPLETE_AUDIT.json": {
+      "sha256": "dea0e6b70c1b94c5a30e5d10fa2538694a0cb67d99c599b2146ebbcb03beae88",
+      "scope": "Historical earlier wrapper acceptance; superseded for current provenance/cohort qualification by new independent/WRAPPER_*_QUALIFIED.json receipt."
+    },
+    "evidence/TRANSFER_CONTROL.json": {
+      "sha256": "8a1812a0d1b4ab428f8231d74578e3833e510f05d99dfbfabcfd02bc94985505",
+      "scope": "Historical earlier wrapper acceptance; superseded for current provenance/cohort qualification by new independent/WRAPPER_*_QUALIFIED.json receipt."
+    }
+  },
+  "claim_boundary": "Audit rejects checked source, semantic, finite-proof and provenance violations with nonzero exit and does not write an accepted result. Sixteen targeted CLI regressions plus thirty-six independent mutation regressions are not a proof against every possible defect. Timing, physical efficacy, autonomous discovery, commercial value and publication are outside audit scope.",
+  "frozen_scientific_sources_modified": false,
+  "original_scientific_evidence_modified": false,
+  "cli_changes": "No arguments changed; existing inputs now receive stricter validation.",
+  "superseded_intermediate_wrapper_receipts": {
+    "WRAPPER_AUDIT_QUALIFIED.json": {
+      "sha256": "ded9ace92e507feede2681b1cfe50db2d6b5afd622711faed143488534f1c573",
+      "scope": "Earlier wrapper qualification before explicit successor/protocol freeze binding. Replaced after matching-hash check; compact identity retained and original scientific evidence remains unchanged."
+    },
+    "WRAPPER_TRANSFER_QUALIFIED.json": {
+      "sha256": "906519a4175835388b92307413a8446052f48447b889b157a11261a15a84b769",
+      "scope": "Earlier wrapper qualification before explicit successor/protocol freeze binding. Replaced after matching-hash check; compact identity retained and original scientific evidence remains unchanged."
+    }
+  }
+}

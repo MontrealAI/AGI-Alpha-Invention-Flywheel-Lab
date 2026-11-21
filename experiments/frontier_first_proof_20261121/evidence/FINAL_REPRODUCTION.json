@@ -1,0 +1,81 @@
+{
+  "schema": "frontier-final-local-reproduction/v1",
+  "recorded_at_utc": "2026-11-21T18:53:56.762989+00:00",
+  "accepted": true,
+  "environment": {
+    "python": "3.12.14",
+    "numpy": "2.3.5",
+    "scipy": "1.17.0"
+  },
+  "source_sha256": {
+    "audit.py": "5f3aa18c8c217b2f0dfde7f2767d22e5966860c273871cb554d3bc60dfd8f323",
+    "cover.py": "786867bdffc2502ecd816b043b4a974f86faf7dba8a3a3bdcd7de89a965c95d7",
+    "fetch_sources.py": "638df4d9ce6f9d3d0b7200b0e7bd364dfee64ff3aa4c06465781803b9273b1a6",
+    "independent/baselines.py": "954aca3a89078edebb4245bb5a8fc758bfafd84b6660849c7cd3dac4458a3378",
+    "independent/check_mutations.py": "d877bf59851836860762f72ca0f510dc6923729a5d7e007f030abe1ec0795651",
+    "independent/verify_certificate.py": "9d614809680cc481e9ce17aff9f2a5f96c352aca6dbb69cfbab5a4a6fe609b0f",
+    "portfolio.py": "e30382c85bd4f01434e87a4d0f83ef782863de5eed3c769c93e6e9cb8cb4d035",
+    "successor.py": "a1c6967a5d34646f12d54e42f92994355d063867997600cd5bcb065d9426cf65",
+    "tests/test_exact_capability.py": "90ad66331e7957e6d8fd29658a3200ea13f1c42d778855c30c84b10abafbd579",
+    "tests/test_wrapper_integrity.py": "1191dbcf29184a90a6c975746fd4f202af32a6f8f7ee44b6908aec277ec5dd7b",
+    "transfer_check.py": "90d2a824b8f328671349fd4326e27bbf3a6df137bede8cf4115ceebf3bf7eb41"
+  },
+  "input_sha256": {
+    "SOURCE-DATASETS-README.md": "18db5845ff11b41df232a205534fd5b817f811588db6c09974020dd6b88f5a6b",
+    "SOURCE-LICENSE.md": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+    "amidation.csv": "e77f6a498387888eec63423265d6feb9d8b1ff9299b8afbc3bcc1218a7e5857a",
+    "nib-etoh.csv": "d5216a673eefbaacc4ae961f4ff6acb73dbc1c83e37d0548fa7eaf84bbe5607c",
+    "nib-meoh.csv": "be9fccf4c4bee7fa2b868cbbf5e813d2a29765e4ffc1f92c84b450c8381d5f99"
+  },
+  "checks": {
+    "unittest": {
+      "passed": 21,
+      "exhaustively_enumerated_small_problem_instances": 250,
+      "site_packages_disabled": true
+    },
+    "source_audit": {
+      "accepted_cases": 15,
+      "site_packages_disabled": true,
+      "resources": {
+        "wall_seconds": 0.17738016600014817,
+        "cpu_seconds": 0.17733115
+      }
+    },
+    "semantic_and_proof_mutations": {
+      "tested": 36,
+      "rejected": 36,
+      "site_packages_disabled": true
+    },
+    "strong_conventional_methods": {
+      "cases": 15,
+      "repetitions_per_method_per_case": 1,
+      "all_optima_match": true
+    },
+    "equal_content_transfer": {
+      "cases": 10,
+      "repetitions_per_arm": 5,
+      "site_packages_disabled": true,
+      "findings": {
+        "unchanged_capability_reused": true,
+        "different_objective_executed": true,
+        "ordinary_reuse_ties": true,
+        "fresh_exact_alternatives_match": true,
+        "superior_invention_method": "NOT_ESTABLISHED",
+        "complete_cost_advantage": "NOT_ESTABLISHED",
+        "physical_or_commercial_value": "NOT_ESTABLISHED"
+      }
+    },
+    "documentation": "All local links in English and French guides resolve; JSON parses; reviewed wrapper and workflow hashes match."
+  },
+  "reproduced_output_sha256": {
+    "audit.json": "0e618efc3e52b9fd4736fda79ce6eea61dcf61140d7df0e7079aa2e208cef0b8",
+    "conventional-first.json": "544789802216517c7ded3a4eef7cd27dfbc4fa8bbb11d6177f116235659557b4",
+    "conventional-successor.json": "9668e1eae88e46882a52f96866cdedb19edf2f3860234393ad7bf9acd451183b",
+    "first.json": "6e796ed6062a25bb1e80fc044153875598f00c02b8b6354774ccddb14b6964fb",
+    "mutations.json": "c4e0e18fb103d9da807d127a0abdcaad7457373bb28c93149214f90b59c5a539",
+    "successor.json": "6f201ac3006c889c77f4bb6ec3ba837f88ed2a41bfef307628e33650fb4f06d5",
+    "transfer.json": "f78320baee2f62631c7b9cbe33f4c0e789115c20638fe7555cb3fcac82a4ec0d"
+  },
+  "output_retention": "Repetition outputs remain transient; the original frozen scientific evidence, final independent qualification and compact reproduction record are retained.",
+  "interpretation": "Final-source local engineering reproduction. No fresh hidden scientific cohort, physical experiment, commercial outcome, merge or released-system qualification is implied."
+}
