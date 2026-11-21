@@ -1,0 +1,49 @@
+{
+  "scope": "Public fixture and independently authored development checks; not private qualification",
+  "status": "passed",
+  "source_sha256": "c2b3ba3fde39b247ea4d81983e5a4bb6de1d5ed62053b205f8aa65138f99e261",
+  "contract_sha256": "e7a5e817d5609596e071edb4cd69f74985e81fcf1a1d461381e492bfa4a129b5",
+  "public_development_example": true,
+  "fixtures": [
+    {
+      "fixture": "pollatsek_ruskai_7",
+      "n": 7,
+      "K": 2,
+      "syndrome_rank": 22,
+      "error_count": 22,
+      "kl_residual": 4.440892098500626e-16,
+      "orthogonality_residual": 3.552713678800501e-15,
+      "coherent_density_max_error": 5.557814441934373e-17,
+      "exported_channel_max_error": 1.387784251206398e-17,
+      "outside_support_erasure_checked": false,
+      "constructor_wall_seconds": 0.002503674000763567
+    },
+    {
+      "fixture": "shor_9",
+      "n": 9,
+      "K": 2,
+      "syndrome_rank": 22,
+      "error_count": 28,
+      "kl_residual": 2.7755575615628914e-17,
+      "orthogonality_residual": 8.881784197001252e-16,
+      "coherent_density_max_error": 5.562071851822574e-17,
+      "exported_channel_max_error": 5.5511843043803e-17,
+      "outside_support_erasure_checked": true,
+      "constructor_wall_seconds": 0.0010376559985161293
+    },
+    {
+      "fixture": "archived_controlled_s_15",
+      "n": 15,
+      "K": 4,
+      "syndrome_rank": 46,
+      "error_count": 46,
+      "kl_residual": 2.220446049250313e-16,
+      "orthogonality_residual": 4.6629367034256575e-15,
+      "coherent_density_max_error": 1.3904866443919908e-16,
+      "exported_channel_max_error": 8.326676127659882e-17,
+      "outside_support_erasure_checked": true,
+      "constructor_wall_seconds": 0.013627017999169766
+    }
+  ],
+  "invalid_development_witnesses_rejected": 2
+}

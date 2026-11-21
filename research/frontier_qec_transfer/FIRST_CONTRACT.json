@@ -1,0 +1,56 @@
+{
+  "schema": "frontier.general_recovery.first_contract.v1",
+  "objective": "Make the archived quantum-code research instrument operational for valid general one-qubit-correcting codes with complex amplitudes, including nonorthogonal error sectors and genuine degeneracy, while preserving trace and explicitly reporting erasure outside the correctable subspace.",
+  "beneficiary": "MONTREAL.AI internal computational quantum-code research; no physical device, quantum advantage, sale, or globally novel recovery algorithm is claimed.",
+  "deliverable": "A self-contained Python module recovery.py exporting class Recovery; standard library, NumPy and SciPy only. No network, installed-code mutation, paid services, or additional packages.",
+  "inputs": {
+    "constructor": "Recovery(n: int, codewords: list[dict[int, complex]])",
+    "codewords": "Ordered orthonormal logical basis; dictionary integer keys 0..2**n-1 and finite complex amplitudes. Arbitrary complex sparse amplitudes, not restricted to nonnegative square roots. Qubit 0 is the most-significant bit.",
+    "qualified_domain": "n <= 20, K in {2,4}, <=4096 initial nonzero code amplitudes; mathematically valid codes correcting arbitrary errors on any one physical qubit. The finite tested cohort is well conditioned at double precision. No claim of universal floating-point decisions at a singular threshold.",
+    "invalid_codes": "Reject nonorthonormal codes or codes that fail single-qubit Knill-Laflamme conditions by a clearly resolvable amount, rather than silently normalize or report successful correction."
+  },
+  "interface": {
+    "encode": "encode(logical) -> dict[int,complex]. Accept any finite K-component vector, preserve its norm, and return the ordered linear combination of supplied codewords. Do not normalize.",
+    "recover": "recover(branches: list[dict[int,complex]]) -> dict with logical_density (complex KxK array-like), input_probability (float), correctable_probability (float), erasure_probability (float). Each branch is an unnormalized pure-state Kraus component. Sum density contributions, never coherently add distinct branches. Zero and subnormalized inputs are valid; no hidden renormalization.",
+    "kraus": "kraus() -> list of recovery operators; each operator is a list of K sparse rows (dict[int,complex]). Row coefficients act as sum(row[word]*state[word]); coefficients are not implicitly conjugated. This exports a finite inspectable certificate of the logical recovery channel, without specifying how to construct it."
+  },
+  "acceptance": {
+    "scientific": "For every tested logical state and any tested one-qubit CPTP channel, recover returns the original logical density and zero erasure within tolerance. This includes coherent rotations, genuinely complex Kraus operators, nonorthogonal full-rank error sectors and rank-deficient error sectors.",
+    "complete_channel": "Let S be the span of applying I and every single-qubit X,Y,Z to every codeword. The exported logical Kraus operators satisfy sum R_j^dagger R_j = projector onto S. The logical output is sum_j,b R_j|branch_b><branch_b|R_j^dagger. The orthogonal complement is mapped to one classical erasure flag, so output is blockdiag(logical_density, erasure_probability). This is a trace-preserving completely positive channel including erasure; no postselection or normalization.",
+    "mass": "input_probability=sum of raw branch squared norms; correctable_probability=real trace(logical_density); erasure_probability=input_probability-correctable_probability. Nonnegative up to tolerance and input/output mass conserved.",
+    "certificate": "Independent verification checks the exported operators, correctability, completeness on S, contraction on the full physical space and agreement with recover on fresh inputs. A successful visible example alone is insufficient.",
+    "tolerance": "Absolute error <=2e-8 * max(1,input_probability); independent certificate checks use the corresponding scale-aware spectral or entrywise tolerance.",
+    "resources": "CPU only; a candidate process may use up to 10 GiB RAM. Use sparse/active-coordinate representations: dense 2**n by 2**n physical operators are not an acceptable route. Run in an ordinary isolated scientific-Python subprocess, explicitly not the existing Forge stdlib/seccomp sandbox."
+  },
+  "development": {
+    "module": "public_fixtures.py",
+    "cases": [
+      {
+        "id": "published_pr7",
+        "factory": "pollatsek_ruskai_7",
+        "purpose": "Published nontrivial seven-qubit permutation-invariant code with nonzero common KL cross terms, full-rank error Gram matrix; it is nonorthogonal but not degenerate.",
+        "source": "https://faculty.sites.iastate.edu/ytpoon/files/inline-files/Characterizing%20Quantum%20Codes.pdf",
+        "source_location": "Equation 23"
+      },
+      {
+        "id": "shor9",
+        "factory": "shor_9",
+        "purpose": "Nine-qubit Shor code with genuinely degenerate single-qubit error spaces."
+      },
+      {
+        "id": "archived_s15",
+        "factory": "archived_controlled_s_15",
+        "purpose": "The actual archived 15-qubit, four-dimensional controlled-S code; its existing zero-moment recovery domain must keep working.",
+        "source_sha256": "df75e8119f67a54fa8cc6ffe0f2a51a7b80caf0ca71bb8480d875a1c69351556"
+      }
+    ],
+    "example": "public_fixtures.development_example(Recovery) supplies a small visible correction check."
+  },
+  "procedure": {
+    "construction": "One initial construction and at most two development repairs, retaining every submitted source and visible result. Freeze final source before private qualification; private results may not drive repairs within this registered experiment.",
+    "withheld": "Fresh valid variants, logical states, coherent and incoherent channels, erasure inputs, scale/branch invariances and invalid witnesses remain separate from builder context. Independent verifier will freeze all hidden material before first submission and will not inspect candidate implementation.",
+    "baselines": "Compare the existing archived instrument on its proper domain and an independently implemented competent sparse canonical recovery route. Established mathematics and ordinary scientific libraries are allowed for all routes.",
+    "accounting": "Record actual elapsed time, execution CPU/RSS where available, file hashes, failed attempts, integration and verification. Included-platform model usage and monetary costs are unknown unless exposed. Do not invent human labor or a price.",
+    "claims": "Passing establishes useful installed computational recovery functionality. A distinct successor construction comparison and full accounting are still required for transfer or compounding claims."
+  }
+}
