@@ -13,6 +13,12 @@ This candidate implements one task family, **exact rational telemetry with spars
 
 The engine tries a compatible retained artifact first when requested. Verification never transfers automatically. A failed retained development check can trigger fresh construction. A failed sealed qualification stops that candidate. Pause and resume preserve committed artifacts, evidence and consumed allowances. An interrupted model request may have consumed resources before its response was saved.
 
+For the pinned primary model, start the downloaded runtime on loopback and connect the compatible chat endpoint from the HARNESS Intelligence Center.
+
+    llama-server -m /path/to/qwen3-4b.gguf --alias forge-qwen3-4b --host 127.0.0.1 --port 8080 --ctx-size 4096 --threads 2
+
+Use http://127.0.0.1:8080/v1 and select forge-qwen3-4b. For a separate private CLI configuration, begin with [the existing local-only example](../bridge/config.local-only.example.json) and enter the same provider and model IDs in the mission file.
+
 ## CLI and authenticated API
 
 Run from the HARNESS directory. A CLI process and the connector cannot simultaneously own the same workspace.
@@ -35,6 +41,8 @@ In an extracted tool bundle:
 
 The sandbox runs each tool invocation in a clean child process with a Linux seccomp allowlist, bounded input and output, memory and CPU limits, no shell, no network and no filesystem access from generated code. macOS and Windows can browse HARNESS; this generated-Python route needs a compatible Linux environment, such as a Linux VM. Host support is checked before construction.
 
+The measured tool handles the published qualification and transfer envelope. One dense synthetic 32-by-16 case with two possible faults exceeded the worker's two CPU seconds and returned an execution failure. [Measured limits](../evidence/capability-forge/RESULTS.md)
+
 ## Reproduce the pinned CPU experiment
 
 Use Python 3.12 and install python-flint 0.8.0 in a separate environment for the independent conventional arm. Keep the weights outside the repository and have enough storage for about 7.2 GB of weights plus the runtime. The trial runs the models sequentially. The verified receipts report measured host usage.
@@ -51,6 +59,12 @@ Use the public upstream files at their pinned content identities. The trial driv
 
 The '--first' option runs the conventional and development controls and Forge construction before the remaining model arms. Append '--resume' with the same source and output to continue. The run records any unfinished arm. A restricted reference requires an independently authorized comparable session.
 
+The mission's optional construction setting supports auto, source and compose. Auto offers a general exact algebra primitive after an exposed development failure. For the separately registered program-search study, the following command starts from a preserved rejected run and seals a fresh cohort before trying the bounded repair space.
+
+    python3 scripts/qualify_capability_forge_repair.py --previous /path/to/rejected-study/study.json --output /path/to/new-repair-study
+
+Keep the rejected study and its private workspace together. The runner authenticates the prior model source through its HARNESS checkpoint before creating the new trial. The produced tool and accepted test set are portable without that private workspace.
+
 ## Français
 
 CAPABILITY FORGE prolonge le connecteur privé HARNESS. Un modèle local diagnostique une difficulté scientifique, construit un outil exécutable et peut le corriger d’après des essais de développement. Un vérificateur rationnel indépendant contrôle ensuite l’artefact scellé. L’outil qualifié peut être réutilisé sans refaire l’inférence.
@@ -63,5 +77,9 @@ Ce candidat couvre la télémétrie rationnelle à lectures erronées peu nombre
 4. Téléchargez l’outil qualifié. Dans **Outils qualifiés**, choisissez un artefact et collez de nouvelles mesures pour en vérifier le résultat.
 
 Le fichier [forge-mission.json](../examples/forge-mission.json) sert d’entrée à la commande 'create'. Adaptez les champs 'provider', 'model', 'objective' et 'language', puis exécutez 'run'. Les autres commandes ci-dessus permettent d’inspecter, de reprendre, d’exporter et de réutiliser l’outil. L’archive contient le programme isolé, un exemple, les preuves et les deux commandes de reproduction.
+
+Pour utiliser le modèle de l’expérience, démarrez llama-server avec la commande ci-dessus, connectez http://127.0.0.1:8080/v1 et choisissez forge-qwen3-4b. Le mode auto peut proposer la primitive algébrique après un échec de développement. La commande de recherche de corrections reprend le code rejeté dans son espace privé et scelle un nouveau jeu de cas.
+
+Les ressources du processus sont limitées. Dans un cas dense de 32 lignes et 16 variables avec deux pannes possibles, l’outil a dépassé deux secondes CPU et n’a rendu aucun verdict. [Résultats et limites mesurées](../evidence/capability-forge/RESULTS.md)
 
 Le modèle est local et son nom déclaré ne certifie pas ses poids. Le pilote de l’expérience vérifie les octets des poids et de llama.cpp, consigne les routes réellement utilisées et mesure le temps de calcul. Installez Python 3.12 et python-flint 0.8.0 pour ce pilote. Les liens du tableau désignent les poids publics verrouillés. Aucun gain économique ou niveau d’équivalence avec un modèle de pointe ne découle d’une qualification sur les cas synthétiques.
