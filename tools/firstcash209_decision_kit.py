@@ -175,7 +175,7 @@ def para(s):
 
 def page(number, title_en, title_fr, body, note):
     return (f'<article class="sheet" data-page="{number}">'
-            f'<header><span>🌌 ♾ FRONTIER Ω · MONTREAL.AI</span><span>{number:02} / 10</span></header>'
+            f'<header><span>FRONTIER Ω · MONTREAL.AI</span><span>{number:02} / 10</span></header>'
             f'<h2>{esc(title_en)} <small>{esc(title_fr)}</small></h2>'
             f'{body}<footer>{esc(note)} · FIRSTCASH209 · NO CLIENT OR PAYMENT CLAIM</footer></article>')
 
