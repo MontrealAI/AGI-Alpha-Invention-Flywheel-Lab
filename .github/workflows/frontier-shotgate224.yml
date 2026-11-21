@@ -1,0 +1,66 @@
+name: FRONTIER224 independent finite-shot QEC feasibility
+on:
+  push:
+    branches: ['experiment/frontier-shotgate224-20261121']
+    paths:
+      - 'research/frontier_shotgate224/**'
+      - '.github/workflows/frontier-shotgate224.yml'
+  pull_request:
+    paths:
+      - 'research/frontier_shotgate224/**'
+      - '.github/workflows/frontier-shotgate224.yml'
+permissions:
+  contents: read
+concurrency:
+  group: frontier-shotgate224-${{ github.event.pull_request.number || github.ref }}-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  fixed-two-fixture-shot-bounds:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    env:
+      OPENBLAS_NUM_THREADS: '1'
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+    steps:
+      - name: Record job source and start
+        shell: bash
+        run: |
+          echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+          echo "GITHUB_SHA=$GITHUB_SHA"
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install exact scientific owner requirements
+        run: python -m pip install -r research/frontier_qec_transfer/requirements.txt
+      - name: Independent mathematical and source-identity tests
+        shell: bash
+        run: |
+          set -o pipefail
+          mkdir -p /tmp/frontier-shotgate224
+          git rev-parse HEAD | tee /tmp/frontier-shotgate224/SOURCE_HEAD.txt
+          python -m unittest discover -s research/frontier_shotgate224 -p 'test_*.py' -v 2>&1 | tee /tmp/frontier-shotgate224/TESTS.log
+      - name: Run complete predeclared pair inventory
+        run: python research/frontier_shotgate224/shotgate.py --output /tmp/frontier-shotgate224/RESULT.json
+      - name: Validate artifact structure
+        shell: bash
+        run: |
+          python -m json.tool /tmp/frontier-shotgate224/RESULT.json >/dev/null
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path('/tmp/frontier-shotgate224/RESULT.json').read_text())
+          assert [c['hypotheses'] for c in x['cases']]==[22,28]
+          assert [c['pair_count'] for c in x['cases']]==[231,378]
+          assert len(x['cases'])==2
+          assert all(c['measurement_outcomes']>0 for c in x['cases'])
+          print('All 609 fixed pairs retained; two fixture inventories complete.')
+          PY
+      - name: Retain successful or failed receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontier-shotgate224-evidence
+          path: /tmp/frontier-shotgate224
+          if-no-files-found: warn
