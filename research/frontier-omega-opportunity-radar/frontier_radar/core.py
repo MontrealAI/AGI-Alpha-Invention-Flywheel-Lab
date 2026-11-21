@@ -65,7 +65,7 @@ def assess(record, as_of, *, history=False):
 
     end = as_of.astimezone(timezone.utc).date()
     if not _known_at(record["as_of"], record.get("as_of_instant"), as_of) or not evidence_available(record, as_of):
-        return result("UNAVAILABLE", "Record or evidence did not exist at the cutoff.")
+        return result("UNAVAILABLE", "Record or source availability not proven by the cutoff.")
     if record["recommendation"] == "PASS":
         return result("PASS", "Recorded rejection.")
     if record["capability_verified"] is not True:
