@@ -142,6 +142,7 @@ def citations(*, primary_source="one", selected=0):
 
 
 class Linkage218(unittest.TestCase):
+    counterexample_admitted = None
     def test_01_blind_no_contract_leak(self):
         state = make_state()
         prompt = discovery_prompt(state)
@@ -163,6 +164,7 @@ class Linkage218(unittest.TestCase):
         # This is a recorded COUNTEREXAMPLE to semantic match, NOT a passing
         # qualification of the economic outcome.
         self.assertEqual(decided["selected"], 0)
+        type(self).counterexample_admitted = decided["selected"] == 0
         self.assertEqual(decided["disposition"], "admitted_to_test")
         self.assertTrue(decided["opportunities"][0]["registered_test"])
         self.assertTrue(decided["opportunities"][0]["quote_verified"])
@@ -195,9 +197,9 @@ def witness():
     suite.run(result)
     if not result.wasSuccessful() or result.testsRun != 4:
         raise AssertionError(f"Registered case failure: {result.errors!r}, {result.failures!r}")
-    state, _ = initial_state()
-    false_admission = confirm_citations(state, citations())
-    same_source_admitted = false_admission["selected"] == 0
+    same_source_admitted = Linkage218.counterexample_admitted
+    if type(same_source_admitted) is not bool:
+        raise AssertionError("Missing result for preregistered semantic mismatch")
     return {
         "schema": "agi-alpha/omega-linkage218/v1",
         "owner_head": OWNER_HEAD,
