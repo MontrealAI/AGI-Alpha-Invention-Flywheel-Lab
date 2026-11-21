@@ -17,7 +17,7 @@ from urllib.request import urlopen
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from bridge.adapters import Runtime, strict_json
-from bridge.economic_mission import ARTIFACT, SOURCE_LIMIT, checks, selected
+from bridge.economic_mission import ARTIFACT, SOURCE_LIMIT, checks, qualification_scope, selected
 from bridge.instruments import evaluate
 from bridge.services import AccessRuntime
 from bridge.workflows import WorkflowService, digest, equivalent, portable_digest
@@ -249,6 +249,8 @@ def run(args):
         "max_iterations": 3, "max_actions": 3, "max_output_tokens": 2304,
         "economic_mission": {"beneficiary": "MONTREAL.AI", "language": args.language,
                              "sources": sources, "contracts": contracts, "confirm_citations": True,
+                             **({"qualification_scope": "registered_instrument"}
+                                if getattr(args, "instrument_only", False) else {}),
                              **({"blind_discovery": True} if getattr(args, "blind_discovery", False) else {})},
     }
     _json(args.work / "MISSION.json", spec)
@@ -257,6 +259,7 @@ def run(args):
                     "max_construction_attempts": spec["max_iterations"],
                     "discovery_protocol": "evidence-first" if getattr(args, "blind_discovery", False)
                                           else "registered-experiment-visible",
+                    "requested_qualification_scope": spec["economic_mission"].get("qualification_scope"),
                     "insufficient_observation_coverage": sorted(set(REFERENCES) - set(contracts))}
     _json(args.work / "REGISTRATION.json", registration)
     config = strict_json(args.config.read_bytes())
@@ -274,13 +277,16 @@ def run(args):
         choice = selected(state)
         receipt = {"status": state["status"], "run_id": ident, **registration,
                    "wall_seconds": elapsed, "verdicts": state["verdicts"],
+                   "qualification_scope": state["qualification_scope"],
                    "observations": state["economic_mission"]["observations"],
                    "decision": state["economic_mission"]["decision"], "choice": choice,
                    "verification": state["verification"], "model_requests": state["request_costs"],
                    "frozen": state["economic_mission"]["frozen"],
                    "complete_cost_known": False, "realized_value_observed": False,
-                   "unsatisfied_controls": ["Independent beneficiary adoption and value/cost evidence",
+                   "unsatisfied_controls": ["Independent outcome-to-test linkage and beneficiary result",
+                                            "Independent beneficiary adoption and value/cost evidence",
                                             "Strong tool-augmented frontier reference",
+                                            "Distinct second-capability construction with matched retention controls",
                                             "Improved inventor-method comparison"]}
         if state["status"] == "complete":
             for name in (ARTIFACT, "RUN_INSTRUMENT.py"):
@@ -290,10 +296,11 @@ def run(args):
             max_operations = state["spec"]["max_operations"]
             receipt["qualification_comparison"] = compare(
                 service, ident, contract, artifact, checks(archive["state"], final=True), max_operations)
-            receipt["fresh_transfer"] = compare(service, ident, contract, artifact, successor[contract], max_operations)
+            receipt["fresh_instance_reuse"] = compare(service, ident, contract, artifact, successor[contract], max_operations)
             receipt["unsatisfied_controls"].append("Fresh construction without retained artifact")
         _json(args.work / "RESULT.json", receipt)
-        print(json.dumps({"status": receipt["status"], "choice": choice, "result": str(args.work / "RESULT.json")},
+        print(json.dumps({"status": receipt["status"], "qualification_scope": receipt["qualification_scope"],
+                          "unverified_hypothesis": choice, "result": str(args.work / "RESULT.json")},
                          ensure_ascii=False), flush=True)
     finally:
         service.close()
@@ -329,6 +336,7 @@ def replay(path):
                                            "--max-operations", str(state["spec"]["max_operations"])])
             passed += equivalent(strict_json(raw)["output"], check["expected"])
     return {"qualification": "passed" if passed == len(acceptance) else "rejected",
+            "qualification_scope": qualification_scope(state),
             "passed": passed, "total": len(acceptance), "candidate_sha256": sealed["sha256"],
             "evaluator_sha256": evaluator_sha256, "wall_seconds": perf_counter() - started}
 
@@ -343,7 +351,10 @@ def main():
     parser.add_argument("--language", choices=("en", "fr"), default="en")
     parser.add_argument("--blind-discovery", action="store_true",
                         help="Generate source-led opportunities before revealing the registered experiments; "
-                             "a separate pass must match a discovered outcome to an eligible experiment.")
+                             "a separate model pass may nominate a test without qualifying the outcome.")
+    parser.add_argument("--instrument-only", action="store_true",
+                        help="Explicitly qualify only the registered instrument cases. "
+                             "This does not admit or verify the proposed beneficiary outcome.")
     parser.add_argument("--replay", type=Path, help="Re-execute the frozen qualification from a completed archive.")
     args = parser.parse_args()
     if args.replay:

@@ -35,6 +35,7 @@ def specification(*, bad_holdout=False):
         "objective": "Find a useful way to use our authorized evidence.", "roles": {"researcher": route, "builder": route},
         "tool_permissions": ["construct_instrument"], "max_iterations": 2, "max_actions": 2,
         "economic_mission": {"beneficiary": "Test", "sources": sources(),
+                             "qualification_scope": "registered_instrument",
                              "contracts": {"measurement": {"source": "measurement", "goal": "Double x for this test.",
                                 "development": [case(3, 6)],
                                 "qualification": [case(717123, 1434246), case(-11, 19 if bad_holdout else -22)]}}},
@@ -99,7 +100,8 @@ class EconomicMissionTests(unittest.TestCase):
         self.assertEqual(self.service.step(ident)["phase"], "builder")
         final = self.service.step(ident)
         self.assertEqual(final["status"], "complete")
-        self.assertEqual(final["verdicts"]["INDEPENDENT_ACCEPTANCE"], "demonstrated")
+        self.assertEqual(final["verdicts"]["REGISTERED_INSTRUMENT_ACCEPTANCE"], "demonstrated")
+        self.assertEqual(final["verdicts"]["INDEPENDENT_ACCEPTANCE"], "not_established")
         self.assertEqual(final["verdicts"]["REAL_VALUE_CAPTURE"], "not_established")
         self.assertNotIn("717123", json.dumps(self.requests))
         self.assertEqual(final["economic_mission"]["operating_assessment"]["commercial_validation"], "NOT_ESTABLISHED")
@@ -138,7 +140,8 @@ class EconomicMissionTests(unittest.TestCase):
         self.service.step(ident)
         result = self.service.step(ident)
         self.assertEqual(result["status"], "needs_review")
-        self.assertEqual(result["verdicts"]["INDEPENDENT_ACCEPTANCE"], "rejected")
+        self.assertEqual(result["verdicts"]["REGISTERED_INSTRUMENT_ACCEPTANCE"], "rejected")
+        self.assertEqual(result["verdicts"]["INDEPENDENT_ACCEPTANCE"], "not_established")
         self.assertEqual(len(self.requests), 2)
         self.assertEqual(self.service.capabilities()["capabilities"], [])
 
