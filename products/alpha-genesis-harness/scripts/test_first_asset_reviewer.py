@@ -118,7 +118,7 @@ class OracleTests(unittest.TestCase):
                     'spec_sha256':register['spec_sha256'],
                     'successor_sha256':register['successor_sha256'],
                     'frozen':{'sha256':hashlib.sha256(asset.encode()).hexdigest()}}
-            for k, v in [('qualification_comparison',cases[3:-2]),('fresh_transfer',cases[-2:])]:
+            for k, v in [('qualification_comparison',cases[3:-2] + review.boundary_inputs('window', cases[0])),('fresh_transfer',cases[-2:])]:
                 result[k]={'cases':[{'input':x,'expected':review.oracle_window(x)} for x in v]}
             objects={'SOURCES.json':sources,'MISSION.json':spec,
                      'REGISTRATION.json':register,'RESULT.json':result,
