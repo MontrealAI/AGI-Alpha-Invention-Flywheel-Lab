@@ -259,8 +259,12 @@ class WorkflowService:
         result["objective"] = state["spec"]["objective"]
         result["roles"] = state["spec"]["roles"]
         if state.get("economic_mission"):
-            from .economic_mission import verdicts
+            from .economic_mission import instrument_objective, qualification_scope, verdicts
             result["verdicts"] = verdicts(state)
+            result["qualification_scope"] = qualification_scope(state)
+            if result["qualification_scope"]["kind"] == "registered_instrument_cases":
+                result["mission_objective"] = result["objective"]
+                result["objective"] = instrument_objective(state)
             result["request_costs"] = self._request_costs(state)
             for contract in result["spec"]["economic_mission"]["contracts"].values():
                 contract["qualification_count"] = len(contract.pop("qualification"))
@@ -424,7 +428,11 @@ class WorkflowService:
                     s = self.get(path.name)
                     if s.get("parent_run"):
                         continue
-                    rows.append({k: s[k] for k in ["id", "objective", "status", "phase", "iteration", "updated_at", "verification", "worker_active"]})
+                    row = {k: s[k] for k in ["id", "objective", "status", "phase", "iteration", "updated_at", "verification", "worker_active"]}
+                    for key in ("qualification_scope", "mission_objective", "verdicts"):
+                        if key in s:
+                            row[key] = s[key]
+                    rows.append(row)
                 except BridgeError:
                     rows.append({"id": path.name, "status": "integrity_error"})
         return {"runs": rows}
@@ -614,7 +622,10 @@ class WorkflowService:
             state["verification"]["dependencies_current"] = current
             state["verification"]["stage"] = "final" if final else "development"
         if state.get("economic_mission"):
+            from .economic_mission import INSTRUMENT_SCOPE, qualification_scope
             state["verification"]["stage"] = "qualification" if final else "development"
+            state["verification"]["scope"] = INSTRUMENT_SCOPE
+            state["verification"]["qualification_scope"] = qualification_scope(state)
         self._event(state, "verification", state["verification"])
 
     def step(self, ident, _parent=None):
@@ -976,6 +987,9 @@ class WorkflowService:
             from .economic_mission import ARTIFACT, assess, check_source, checks
             economic = state["economic_mission"]
             check_source(economic["source_identity"])
+            require(state["spec"]["economic_mission"].get("qualification_scope") == "registered_instrument",
+                    "Outcome-to-test linkage remains unverified. Only an explicitly registered "
+                    "instrument trial can qualify this calculation.", "ECONOMIC_MISSION_SCOPE")
             frozen = {"artifact": ARTIFACT, "sha256": state["artifacts"][ARTIFACT]["sha256"],
                       "qualification_sha256": digest(checks(state, final=True))}
             if economic["frozen"] is None:
@@ -1071,11 +1085,13 @@ class WorkflowService:
             value = {"schema": "alpha-genesis-workflow-export/v1", "state": state, "files": files,
                      "notice": "Contains your objective, context and artifacts. Inspect before sharing. No connector credentials or workspace integrity key included. Recorded verification is historical; recheck imported work."}
             if state.get("economic_mission"):
-                from .economic_mission import verdicts
+                from .economic_mission import qualification_scope, verdicts
                 require(state["status"] in TERMINAL, "Economic mission archives open only once execution ends.",
                         "ECONOMIC_MISSION_STATE")
-                value["notice"] += " This archive contains the registered qualification inputs and answers."
-                value["state"] = {**state, "verdicts": verdicts(state)}
+                value["notice"] += (" This archive contains the registered qualification inputs and answers. "
+                                    "Instrument cases do not establish the proposed beneficiary outcome.")
+                value["state"] = {**state, "verdicts": verdicts(state),
+                                  "qualification_scope": qualification_scope(state)}
             if state.get("branch_runs"):
                 value["branch_exports"] = [self.export(ref["run_id"]) for ref in state["branch_runs"]]
             value["sha256"] = portable_digest(value)
@@ -1152,9 +1168,14 @@ class WorkflowService:
                         check_source(state["economic_mission"]["source_identity"])
                     except BridgeError:
                         continue
-                records.append({"id": state["id"], "objective": state["spec"]["objective"], "version": state["spec_hash"], "artifacts": state["artifacts"], "validation": state["verification"],
+                record = {"id": state["id"], "objective": state["spec"]["objective"], "version": state["spec_hash"], "artifacts": state["artifacts"], "validation": state["verification"],
                     "conditions": "Only the recorded operator cases are qualified; every successor rechecks its own acceptance.", "provenance": {"run": state["id"], "events_sha256": digest(state["events"]), "roles": state["spec"]["roles"]},
-                    "costs": [record["cost"] for record in self._request_costs(state)], "request_costs": self._request_costs(state), "maintenance_cost": None})
+                    "costs": [request["cost"] for request in self._request_costs(state)], "request_costs": self._request_costs(state), "maintenance_cost": None}
+                if state.get("economic_mission"):
+                    from .economic_mission import instrument_objective, qualification_scope, verdicts
+                    record.update(mission_objective=record["objective"], objective=instrument_objective(state),
+                                  qualification_scope=qualification_scope(state), verdicts=verdicts(state))
+                records.append(record)
         return {"capabilities": records}
 
     def _inherit(self, state, capability_id):
@@ -1171,7 +1192,11 @@ class WorkflowService:
                 check_source(prior["economic_mission"]["source_identity"])
             for name, meta in prior["artifacts"].items():
                 self._write(state, name, self._read_artifact(prior, name).decode(), meta["kind"])
-        self._event(state, "inherited", {"capability_id": capability_id, "source_spec_hash": prior["spec_hash"], "prior_verification_inherited": False})
+        inheritance = {"capability_id": capability_id, "source_spec_hash": prior["spec_hash"], "prior_verification_inherited": False}
+        if prior.get("economic_mission"):
+            from .economic_mission import qualification_scope
+            inheritance["source_qualification_scope"] = qualification_scope(prior)
+        self._event(state, "inherited", inheritance)
         self._verify(state)
 
     def reuse(self, capability_id, inputs):
@@ -1189,7 +1214,11 @@ class WorkflowService:
             for name, meta in state["artifacts"].items():
                 if meta["kind"] == "instrument":
                     outputs[name] = evaluate(strict_json(self._read_artifact(state, name)), inputs, state["spec"]["max_operations"])
-            return {"capability_id": capability_id, "outputs": outputs, "verification": "EXECUTED_NOT_SUCCESSOR_ACCEPTED", "scope": "Original acceptance does not verify this new input's real-world meaning or applicability."}
+            result = {"capability_id": capability_id, "outputs": outputs, "verification": "EXECUTED_NOT_SUCCESSOR_ACCEPTED", "scope": "Original acceptance does not verify this new input's real-world meaning or applicability."}
+            if state.get("economic_mission"):
+                from .economic_mission import qualification_scope
+                result["qualification_scope"] = qualification_scope(state)
+            return result
 
 
 def main():

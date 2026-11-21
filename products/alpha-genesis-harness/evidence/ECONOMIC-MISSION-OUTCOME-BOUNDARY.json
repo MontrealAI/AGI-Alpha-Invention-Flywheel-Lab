@@ -1,0 +1,132 @@
+{
+  "schema": "agi-alpha/economic-outcome-boundary/v1",
+  "base_commit": "109bdcb4ec3d2309f23ba2c9ab3c96df530aada1",
+  "scope": "Synthetic software regression and current source verification; no semantic evaluator or live invention claim.",
+  "runtime_source_sha256": {
+    "adapters.py": "a05127970eb11bb08cc98ed7ef9e05f9a723f51c66f9a5bfaa9f2242bb6275a6",
+    "economic_mission.py": "961c8f89cc26540582c13365c71e1b78b7a1d31b51a4e82b215b0d74b8d7e345",
+    "instruments.py": "46d43d4a017f1d32fcd9e05b32316a6fffac27e1a9572ab9ffbbf87338f00322",
+    "output_schema.py": "9877d088cad20b89b6b8d7322c4472840f21098e6b5bcb3eb008d84bfccc28cf",
+    "proof_to_market.py": "757e7579f17efed8d378f47ede6fbe2971e311272b4b4ca84269cb2efb3c19cd",
+    "services.py": "41b71b3f946f0912898558995f2c83f1f09b0cb2d5f9203bfecbef301de4a081",
+    "workflow_schemas.py": "74951ad4dedc2519a64ae8a8853da2fbe83c642e73ad12c36542a01f8b4ba58b",
+    "workflow_strategies.py": "bb639bfe6467c1da816149fc5918f785f9df8053b3e5fc841f9e0cdef3115124",
+    "workflows.py": "e5bab41325e7704174cb40e5b5d3bf83cab8ee64f7351fc93ffc933fa17f6e23"
+  },
+  "original_counterexample": {
+    "review_commit": "02fe1cf9870604ce2a513f406917917eed168943",
+    "reviewer_script_blob": "0debb039f05ededbb9c606ef6ece792170dce997",
+    "owner_module_blob": "b9f1e647d8d3c4bf898888c0cd3b2a6ef9dee861",
+    "preregistration_commit": "15c95ea0440c0e6005c9d4b8bb339846f37461da",
+    "witness_sha256": "8be5b7a88c5de52fcd219b78b69bf348016983d31b41d3154250bc86cc06ff4e",
+    "matches_published_witness": true,
+    "registered_cases_run": 4,
+    "counterexample_admitted": true,
+    "semantic_outcome_to_test_linkage": "FAILED",
+    "original_expectations_changed": false
+  },
+  "same_fixture_repaired_public_api": {
+    "status": "needs_review",
+    "disposition": "outcome_contract_linkage_unverified",
+    "selected": null,
+    "model_calls": 2,
+    "actions": 0,
+    "artifacts": {},
+    "qualified_capabilities": 0,
+    "qualification_scope": {
+      "contract": null,
+      "description": "Outcome-to-test linkage is unverified. A source quotation and a model's proposed contract mapping do not qualify the beneficiary outcome.",
+      "kind": "unqualified_hypothesis",
+      "outcome_linkage": "not_established"
+    },
+    "public_api_envelope_adjustments": [
+      "Empty low-level acceptance object converted to public API empty array.",
+      "Uncalled builder route added as required by WorkflowService.create."
+    ],
+    "unchanged_semantic_payloads": [
+      "source snapshots",
+      "arithmetic contract and all cases",
+      "blind-discovery flags",
+      "first_proposals()",
+      "citations()"
+    ],
+    "verdicts": {
+      "AFTER_COST_COMPOUNDING": "not_established",
+      "AUTONOMOUS_DISCOVERY": "not_established",
+      "CAPABILITY_ADVANTAGE": "not_established",
+      "ECONOMIC_FEASIBILITY": "not_established",
+      "EXECUTABLE_INVENTION": "not_established",
+      "FRESH_SUCCESSOR_BENEFIT": "not_established",
+      "FRONTIER_PARITY": "not_established",
+      "INDEPENDENT_ACCEPTANCE": "not_established",
+      "INSTRUMENT_CONSTRUCTION": "not_established",
+      "INVENTOR_IMPROVEMENT": "not_established",
+      "PRODUCTIVE_ASSET": "not_established",
+      "REAL_VALUE_CAPTURE": "not_established",
+      "REGISTERED_INSTRUMENT_ACCEPTANCE": "not_established"
+    }
+  },
+  "verification": [
+    {
+      "command": "python3 -B -m unittest discover -s tests -v",
+      "exit_code": 0,
+      "tests_run": 575,
+      "passed": 574,
+      "skipped": 1,
+      "skip_reason": "Canonical research source is intentionally absent from standalone distribution",
+      "wall_seconds": 26.035
+    },
+    {
+      "command": "node --test tests/engine.test.cjs tests/acceptance.test.cjs",
+      "exit_code": 0,
+      "tests_run": 60,
+      "passed": 60,
+      "skipped": 0
+    },
+    {
+      "command": "python3 -B -m unittest tests.test_economic_outcome_boundary tests.test_economic_mission -v",
+      "exit_code": 0,
+      "tests_run": 27,
+      "passed": 27,
+      "skipped": 0,
+      "subset_of_full_suite": true
+    },
+    {
+      "command": "NODE_PATH=tests/dom/node_modules node evidence/UI_AGENTIC_REPLAY.cjs",
+      "exit_code": 0,
+      "scenarios": 31,
+      "new_outcome_scope_scenarios": 4,
+      "scope": "English/French DOM and mock protocol; saved-project scope retention; no graphical rendering or live inference"
+    }
+  ],
+  "resource_scope": {
+    "model_service_requests": 0,
+    "authored_fixture_replies": true,
+    "customer_actions": 0,
+    "payments": 0,
+    "actual_host_cost": null,
+    "complete_engineering_cost": null
+  },
+  "not_established": [
+    "Independent outcome-specific evaluation",
+    "Autonomous economically useful invention",
+    "Beneficiary adoption or realized value",
+    "Distinct second-capability construction benefit",
+    "Complete-cost compounding"
+  ],
+  "learning": {
+    "tried": "Literal source agreement plus a model-proposed contract mapping.",
+    "observed": "An unrelated outcome was admitted to a same-source arithmetic test.",
+    "changed": "Withhold outcome admission; preserve explicit instrument-only qualification.",
+    "next": "Connect an independently adequate executable evaluator to a consequential beneficiary outcome."
+  },
+  "changed_executable_and_test_sha256": {
+    "app/app.js": "189a08e8650e784dec7fd261feca5c1cf91e2f96bad0c05f41abf6248c38be80",
+    "bridge/economic_mission.py": "961c8f89cc26540582c13365c71e1b78b7a1d31b51a4e82b215b0d74b8d7e345",
+    "bridge/workflows.py": "e5bab41325e7704174cb40e5b5d3bf83cab8ee64f7351fc93ffc933fa17f6e23",
+    "scripts/qualify_economic_mission.py": "2d730cefcf81fb6405e232c5a200b12823bef9e1ef2f226489efaf38fd94ced4",
+    "evidence/UI_AGENTIC_REPLAY.cjs": "437c60d2859b0bdb8eb466134aecf64957fc36f0b97a9ea789f4e21458870502",
+    "tests/test_economic_mission.py": "c3b9f274a9cb67dedc1b0d0b71aaded916116f28c9cd66dbfb99bf54639786cc",
+    "tests/test_economic_outcome_boundary.py": "608f9b16da16420977f9260a58e161f0a3ffb2de3cece08f4ff73b065daa6279"
+  }
+}
