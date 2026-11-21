@@ -81,6 +81,7 @@ class HarnessServer(ThreadingHTTPServer):
         self._local_connections = None
         self._upgrade_foundry = None
         self._frontier_monitor = None
+        self._frontier_missions = None
         self._workflow_lock = threading.RLock()
         self.token = secrets.token_urlsafe(32)
         self.app_path = Path(app_path).resolve()
@@ -144,8 +145,17 @@ class HarnessServer(ThreadingHTTPServer):
         with self._workflow_lock:
             if self._frontier_monitor is None:
                 from bridge.frontier_monitor import FrontierMonitorService
-                self._frontier_monitor = FrontierMonitorService(self.workflows, self.genesis_next)
+                self._frontier_monitor = FrontierMonitorService(self.workflows, self.genesis_next,
+                                                               frontier_missions=self.frontier_missions)
             return self._frontier_monitor
+
+    @property
+    def frontier_missions(self):
+        with self._workflow_lock:
+            if self._frontier_missions is None:
+                from bridge.frontier_mission import FrontierMissionService
+                self._frontier_missions = FrontierMissionService(self.workflows)
+            return self._frontier_missions
 
 
 class Handler(BaseHTTPRequestHandler):
@@ -238,6 +248,9 @@ class Handler(BaseHTTPRequestHandler):
             if self.path == "/api/frontier-monitor/status":
                 self.boundary(authenticated=True)
                 return self.json(200, self.server.frontier_monitor.status())
+            if self.path == "/api/frontier-missions/status":
+                self.boundary(authenticated=True)
+                return self.json(200, self.server.frontier_missions.status())
             if self.path in {"/api/chatgpt/status", "/api/codex/status"}:
                 self.boundary(authenticated=True)
                 return self.json(200, self.connection_status(self.path.split("/")[2]))
@@ -301,6 +314,8 @@ class Handler(BaseHTTPRequestHandler):
                 result = self.upgrade_foundry_action(self.path.rsplit("/", 1)[1], data)
             elif self.path.startswith("/api/frontier-monitor/"):
                 result = self.frontier_monitor_action(self.path.rsplit("/", 1)[1], data)
+            elif self.path.startswith("/api/frontier-missions/"):
+                result = self.frontier_mission_action(self.path.rsplit("/", 1)[1], data)
             elif self.path.startswith("/api/chatgpt/") or self.path.startswith("/api/codex/"):
                 result = self.connection_action(self.path.split("/")[2], self.path.rsplit("/", 1)[1], data)
             else:
@@ -453,6 +468,12 @@ class Handler(BaseHTTPRequestHandler):
         if action == "status":
             return service.status()
         return getattr(service, action)(data)
+
+    def frontier_mission_action(self, action, data):
+        if action not in {"status", "extract", "register", "get", "observe", "discover", "contract", "build", "compare", "export"}:
+            raise BridgeError("NOT_FOUND", "Unknown FRONTIER mission action.", 404)
+        service = self.server.frontier_missions
+        return service.status() if action == "status" else getattr(service, action)(data)
 
     def do_OPTIONS(self):
         self.json(403, {"error": {"code": "CORS", "message": "Cross-origin access is disabled."}})

@@ -26,6 +26,7 @@ For model connections and persistent agentic construction, use the source launch
 - Explicit economic assumptions, participant outside options and complete-cost fields, without moving money or creating a second enterprise ledger.
 - Versioned project export/import, a capability record and scope-limited comparison procedures.
 - Ω GENESIS NEXT: a bounded internal evidence-reuse upgrade, independent comparison, deferred-opportunity replay and a separate successor experiment. The built-in recipe is authored; ordinary reuse may tie or win.
+- FRONTIER Ω: source-bound foresight extraction, expiring prerequisite evidence, open opportunity discovery, isolated Python construction and a distinct second-objective comparison. See the [research operator guide / guide de recherche](docs/FRONTIER-FORESIGHT-INVENTION.md); economic usefulness and compounding require separate evidence.
 - A model-driven Upgrade Foundry for isolated interpreter-module edits, independent host checks, explicit hash-bound research selection and rollback. Live model construction remains separately gated.
 - Consent-bound monitoring of configured public sources, with pause/restart controls and reported-only frontier replay. A source change never proves an improved capability.
 - A local connector for configured provider APIs/local inference, bounded persistent agentic construction and official eligible ChatGPT/Codex pathways. See [model connections](docs/MODEL-CONNECTIONS.md); real authenticated integrations remain unqualified unless the release evidence specifically says otherwise.
@@ -41,6 +42,7 @@ The synthetic example demonstrates software behavior. It does not establish a ne
 - [Official ChatGPT-plan and Codex setup](docs/CHATGPT-PLAN.md)
 - [Agentic workflow specifications](docs/AGENTIC-WORKFLOWS.md)
 - [Ω ALPHA economic missions / Missions économiques](docs/ECONOMIC-MISSION.md)
+- [FRONTIER Ω: foresight, invention and successor proof / Prospective, invention et preuve de transfert](docs/FRONTIER-FORESIGHT-INVENTION.md)
 - [Ω GENESIS NEXT: improve and challenge the HARNESS](docs/OMEGA-GENESIS-NEXT.md)
 - [Model-driven Upgrade Foundry](docs/UPGRADE-FOUNDRY.md)
 - [Authorized frontier monitoring and replay](docs/FRONTIER-MONITOR.md)
@@ -51,6 +53,8 @@ The synthetic example demonstrates software behavior. It does not establish a ne
 - [Owner's manual commercial handoff](commercial/storefront-checklist.md)
 
 ## Actual local-model evidence
+
+The [FRONTIER Ω implementation and live-trial report](docs/FRONTIER-FORESIGHT-RESULTS.md) records source-bound foresight, isolated construction and a different-objective comparison, with 632 Python and 60 JavaScript tests passing. The actual 7B discovery trials produced attributable but generic proposals; no construction contract or economic invention was admitted. The machine-readable record preserves that distinction and the exact implementation identities.
 
 The [historical equality-corrected `0398ea31` source receipt](evidence/live-local-workflows-v0.3-equality-fixed.json) records actual HTTP onboarding and Qwen3-1.7B inference through llama.cpp on Linux CPU. Its aggregate result is **FAIL**: the single builder exhausted three calls producing invalid input-field artifacts. The builder–critic path passed in three calls after rejecting malformed JSON, repairing the construction and obtaining a separate critique; its checked export returned 34 for x=17 and reuse returned 82 for x=41. This demonstrates bounded automatic repair in that run, not reliable construction across policies or validation of the merged runtime. Its recorded source hashes identify the executed revision; a final-source claim requires evidence matching the packaged code. [Earlier attempts](evidence/LIVE-LOCAL-REPLAY-NOTES.md) retain their original source identities and outcomes. Ordinary reuse ties, complete costs remain unknown, and cloud APIs/ChatGPT-plan access retain separate live gates.
 

@@ -35,8 +35,9 @@ def stamp(seconds=None):
 
 class FrontierMonitorService:
     """One process owner per private workspace; stored restart consent is explicit."""
-    def __init__(self, workflows, genesis_next, *, fetcher=None, clock=time.time):
+    def __init__(self, workflows, genesis_next, *, fetcher=None, clock=time.time, frontier_missions=None):
         self.workflows, self.genesis = workflows, genesis_next
+        self.frontier_missions = frontier_missions
         self.runtime = workflows.runtime
         self.fetcher = retrieve_source if fetcher is None else fetcher
         self.clock = clock
@@ -221,6 +222,18 @@ class FrontierMonitorService:
                 classification = "INITIAL_OBSERVATION" if old_sha is None else "UNCHANGED" if old_sha == sha else "CHANGED"
                 if classification == "CHANGED":
                     job["change_count"] += 1
+                if classification in {"CHANGED", "INITIAL_OBSERVATION"}:
+                    job["pending_foresight"] = {"url": observed["url"], "sha256": sha,
+                                                "retrieved_at": observed["retrieved_at"]}
+                if job.get("pending_foresight") and self.frontier_missions is not None:
+                    try:
+                        reopened = self.frontier_missions.source_changed(job["pending_foresight"])
+                        self._history(job, "FORESIGHT_REOPENED", "Affected foresight conditions require new evidence.", mission_ids=reopened)
+                        job.pop("pending_foresight", None)
+                    except Exception:
+                        # Keep the pending invalidation through unchanged polls.
+                        job["failure_count"] += 1
+                        self._history(job, "FORESIGHT_REOPEN_FAILED", "Changed source observed; mission revalidation remains pending.")
                 job["last_sha256"], job["last_observed_at"] = sha, observed["retrieved_at"]
                 replayed = False
                 if sha != job["last_replayed_sha256"]:
