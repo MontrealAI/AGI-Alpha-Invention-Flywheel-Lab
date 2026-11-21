@@ -251,6 +251,70 @@ class EconomicMissionTests(unittest.TestCase):
             self.service.create(spec)
 
 
+    def test_evidence_first_discovery_hides_solution_and_is_two_stage(self):
+        spec = specification()
+        spec["economic_mission"].update(blind_discovery=True, confirm_citations=True)
+        ident = self.collect(spec)
+        state = self.service._load(ident)
+        prompt = self.service._prompt(state, "researcher")
+        self.assertIn("evidence-first phase", prompt)
+        self.assertNotIn("Double x for this test", prompt)
+        self.assertNotIn("Registered experiments", prompt)
+        schema = discovery_schema(state=state)
+        self.assertEqual(schema["properties"]["opportunities"]["items"]["properties"]["contract"],
+                         {"type": "null"})
+        first = proposal()
+        first["opportunities"][0]["contract"] = None
+        confirmation = {"selection": 0, "rationale": "Measurement source supports trying the specified test.",
+                        "citations": [
+                            {"source": label, "excerpt_index": 0,
+                             "contract": "measurement" if index == 0 else None}
+                            for index, label in enumerate(sources())
+                        ]}
+        self.replies.extend([first, confirmation, candidate()])
+        initial = self.service.step(ident)
+        self.assertEqual(initial["phase"], "researcher")
+        self.assertIsNone(initial["economic_mission"]["decision"]["selected"])
+        self.assertEqual(initial["economic_mission"]["decision"]["proposed_selection"], 0)
+        self.assertEqual(len(self.requests), 1)
+        self.assertNotIn("Double x for this test", json.dumps(self.requests[0]))
+        self.assertNotIn("717123", json.dumps(self.requests))
+        second = self.service.step(ident)
+        self.assertEqual(second["phase"], "builder")
+        self.assertIn("Double x for this test", json.dumps(self.requests[1]))
+        self.assertEqual(self.service.step(ident)["status"], "complete")
+        self.assertEqual(len(self.requests), 3)
+
+    def test_evidence_first_refuses_premature_contract_and_preserves_abstention(self):
+        spec = specification()
+        spec["economic_mission"].update(blind_discovery=True, confirm_citations=True)
+        ident = self.collect(spec)
+        self.replies.append(proposal())  # attempts to preassign the operator's test
+        rejected = self.service.step(ident)
+        self.assertEqual(rejected["status"], "needs_review")
+        self.assertEqual(len(self.requests), 1)
+        self.assertEqual(rejected["artifacts"], {})
+        ident = self.collect(spec)
+        proposal_abstain = proposal()
+        for item in proposal_abstain["opportunities"]:
+            item["contract"] = None
+        proposal_abstain["selection"] = None
+        self.replies.append(proposal_abstain)
+        abstained = self.service.step(ident)
+        self.assertEqual(abstained["status"], "needs_review")
+        self.assertEqual(len(self.requests), 2)
+        self.assertEqual(abstained["artifacts"], {})
+
+    def test_evidence_first_cannot_run_without_confirmation_or_with_bad_type(self):
+        spec = specification()
+        spec["economic_mission"]["blind_discovery"] = True
+        with self.assertRaisesRegex(BridgeError, "requires a separate citation"):
+            self.service.create(spec)
+        spec["economic_mission"].update(confirm_citations=True, blind_discovery=1)
+        with self.assertRaisesRegex(BridgeError, "explicit booleans"):
+            self.service.create(spec)
+
+
 class EconomicMissionSchemaTests(unittest.TestCase):
     def test_generation_bounds_reject_observed_overlong_quotes_without_repair(self):
         schema = prepare_schema(discovery_schema())
