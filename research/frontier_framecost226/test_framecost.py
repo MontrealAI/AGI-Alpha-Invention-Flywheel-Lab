@@ -73,6 +73,20 @@ class FrozenMath(unittest.TestCase):
             pair_stats([1.,0.],[0.,1.],0.49,0.0)
 
 
+
+    def test_necessary_bound_has_required_factor_of_two(self):
+        # At BC=.40118861, log(.19)/(2*log(BC)) is below one.
+        # Without the factor of two an invalid "at least 2 shots" is reported.
+        self.assertEqual(bounded_n(.40118861033648706,0.19,necessary=True)["count"],1)
+        self.assertEqual(bounded_n(.40118861033648706,0.1,necessary=False)["count"],3)
+        p=[.95,.05]
+        q=[.05,.95]
+        r=pair_stats(p,q,.05,0.0)
+        if r["necessary_shots"]>1:
+            n=r["necessary_shots"]-1
+            lower=(1-math.sqrt(1-r["bc"]**(2*n)))/2
+            self.assertGreater(lower, TARGET-1e-10)
+
     def test_sufficient_bound_refuses_near_integer_optimism(self):
         # BC just above sqrt(0.1) means two shots DO NOT satisfy the
         # sufficient 5% error certificate: ceil(log(0.1)/log(BC)) = 3.
