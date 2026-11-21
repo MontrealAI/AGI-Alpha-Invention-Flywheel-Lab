@@ -248,12 +248,15 @@ def run(args):
         "local_only": True, "tool_permissions": ["construct_instrument"],
         "max_iterations": 3, "max_actions": 3, "max_output_tokens": 2304,
         "economic_mission": {"beneficiary": "MONTREAL.AI", "language": args.language,
-                             "sources": sources, "contracts": contracts, "confirm_citations": True},
+                             "sources": sources, "contracts": contracts, "confirm_citations": True,
+                             **({"blind_discovery": True} if getattr(args, "blind_discovery", False) else {})},
     }
     _json(args.work / "MISSION.json", spec)
     registration = {"spec_sha256": digest(spec), "successor_sha256": digest(successor),
                     "conventional": sorted(REFERENCES), "model": args.model,
                     "max_construction_attempts": spec["max_iterations"],
+                    "discovery_protocol": "evidence-first" if getattr(args, "blind_discovery", False)
+                                          else "registered-experiment-visible",
                     "insufficient_observation_coverage": sorted(set(REFERENCES) - set(contracts))}
     _json(args.work / "REGISTRATION.json", registration)
     config = strict_json(args.config.read_bytes())
@@ -338,6 +341,9 @@ def main():
     parser.add_argument("--work", type=Path)
     parser.add_argument("--sources", type=Path, help="Replay a previous exact public-source capture.")
     parser.add_argument("--language", choices=("en", "fr"), default="en")
+    parser.add_argument("--blind-discovery", action="store_true",
+                        help="Generate source-led opportunities before revealing the registered experiments; "
+                             "a separate pass must match a discovered outcome to an eligible experiment.")
     parser.add_argument("--replay", type=Path, help="Re-execute the frozen qualification from a completed archive.")
     args = parser.parse_args()
     if args.replay:
