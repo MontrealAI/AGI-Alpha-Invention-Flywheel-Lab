@@ -1,0 +1,394 @@
+{
+  "schema": "frontier-foresight-invention-evidence/v1",
+  "base_commit": "109bdcb4ec3d2309f23ba2c9ab3c96df530aada1",
+  "implementation_source_identity": {
+    "frontier_mission.py": "3874bc5d767427c7a0b80dc3c84a989772b6aace431cc491503f76c4a89de5a5",
+    "foresight.py": "77669b9035ee89451df1d342ef594600018db72c4cabd23ae7f74adcc3a5933a",
+    "frontier_builder.py": "3403b784008e2d6d281a2a012ac664116291abe3d306ae274e8c87340c249fd5",
+    "frontier_transfer.py": "e1c27bb6dd557aaf44cd43bd9f34fa5421554e572338280aa9c1b9ec99b8c667",
+    "forge_sandbox.py": "860c444c497c6ba68f6967cdfd5e93e544c792860c6985a537f580ff257b80ed",
+    "workflows.py": "d0046344d6e804709ab8b37b895ffdb258c8400335b46198c18d560d7c898ead",
+    "adapters.py": "a05127970eb11bb08cc98ed7ef9e05f9a723f51c66f9a5bfaa9f2242bb6275a6",
+    "services.py": "41b71b3f946f0912898558995f2c83f1f09b0cb2d5f9203bfecbef301de4a081",
+    "output_schema.py": "9877d088cad20b89b6b8d7322c4472840f21098e6b5bcb3eb008d84bfccc28cf",
+    "frontier_monitor.py": "a595b18a0de12868885afcbc90c6d4ff7d0f11efcaa01df8e191983471d2abd6",
+    "server.py": "aa73128e82efe90bbd7a5e45185dbe3917d7b712d3175caf8d740d0c416b27a7",
+    "../scripts/frontier_mission.py": "c23e99acb58f36d6eee98795b0b3ad2bafb6a2ad8467f1af85cb87ea69367c1b",
+    "../scripts/run_frontier_local.py": "a664393d46e66bdf31ab0bebcf6752a9047c190844c1e921b466bf1073a8058a"
+  },
+  "additional_extractor_sha256": "12aaa733ffc4a29cb09e577573fe29af807f93bc6db47677020cc2dcc96dd02e",
+  "verification": {
+    "python": {
+      "command": "python -B -m unittest discover -s tests -p 'test_*.py' -q",
+      "tests": 632,
+      "passed": 632,
+      "failed": 0,
+      "skipped": 0,
+      "seconds": 30.477,
+      "log_sha256": "74ba234b2daf6283b5a2fa1594938ddcdf01b2f9787f22f27a7b0efae59aeb7f"
+    },
+    "javascript": {
+      "command": "node --test tests/*.test.cjs",
+      "tests": 60,
+      "passed": 60,
+      "failed": 0,
+      "skipped": 0,
+      "log_sha256": "0b009b7770d2dd2994ef7707508ec4cc19e3260863970f997d6b51069324bfaf"
+    },
+    "git_diff_check": "passed",
+    "fixture_scope": "Authored response fixtures qualify orchestration and sandbox behavior; they are not live invention evidence."
+  },
+  "live_trials": [
+    {
+      "started_at": "2026-11-21T17:56:33.430112+00:00",
+      "finished_at": "2026-11-21T17:57:56.401540+00:00",
+      "status": "completed",
+      "mission_status": "needs_first_contract",
+      "mission_id": "frontier_e51bba12697b4eb2",
+      "runtime_identity": {
+        "context_tokens": 16384,
+        "hardware_backend": "CPU",
+        "launcher_sha256": "a664393d46e66bdf31ab0bebcf6752a9047c190844c1e921b466bf1073a8058a",
+        "machine": "x86_64",
+        "model_alias": "frontier-qwen-coder-7b",
+        "model_weights_sha256": "1664fccab734674a50763490a8c6931b70e3f2f8ec10031b54806d30e5f956b6",
+        "origin": "live_local_model",
+        "python": "3.12.14",
+        "seed": 721638,
+        "server_sha256": "fe211d00c4754aa67aaa492d2c755ab0f6ef60bf30eee3c0c74a3496189cde17",
+        "system": "Linux",
+        "temperature": 0.2,
+        "threads": 8
+      },
+      "startup_wall_seconds": 5.06982094399973,
+      "model_cpu_seconds": 611.06,
+      "model_peak_rss_bytes": 8341712896,
+      "model_resource_scope": "Observed process CPU and peak RSS before shutdown; shutdown CPU is not measured.",
+      "wall_seconds": 82.97143728300034,
+      "actual_complete_cost": null,
+      "cost_scope": "Measured execution resources only; acquisition, human work, energy and host billing unknown.",
+      "record_sha256": "eb48903f2b72f61700681bff7bde05287ada298796ee743480993fcabd3587cd",
+      "source_identity": {
+        "../scripts/frontier_mission.py": "c23e99acb58f36d6eee98795b0b3ad2bafb6a2ad8467f1af85cb87ea69367c1b",
+        "../scripts/run_frontier_local.py": "a664393d46e66bdf31ab0bebcf6752a9047c190844c1e921b466bf1073a8058a",
+        "adapters.py": "a05127970eb11bb08cc98ed7ef9e05f9a723f51c66f9a5bfaa9f2242bb6275a6",
+        "foresight.py": "77669b9035ee89451df1d342ef594600018db72c4cabd23ae7f74adcc3a5933a",
+        "forge_sandbox.py": "860c444c497c6ba68f6967cdfd5e93e544c792860c6985a537f580ff257b80ed",
+        "frontier_builder.py": "3403b784008e2d6d281a2a012ac664116291abe3d306ae274e8c87340c249fd5",
+        "frontier_mission.py": "6f0bf5082a1514bd1ae41b0427661fb994df4a70272472287e50daa65ab7023d",
+        "frontier_monitor.py": "a595b18a0de12868885afcbc90c6d4ff7d0f11efcaa01df8e191983471d2abd6",
+        "frontier_transfer.py": "e1c27bb6dd557aaf44cd43bd9f34fa5421554e572338280aa9c1b9ec99b8c667",
+        "output_schema.py": "9877d088cad20b89b6b8d7322c4472840f21098e6b5bcb3eb008d84bfccc28cf",
+        "server.py": "aa73128e82efe90bbd7a5e45185dbe3917d7b712d3175caf8d740d0c416b27a7",
+        "services.py": "41b71b3f946f0912898558995f2c83f1f09b0cb2d5f9203bfecbef301de4a081",
+        "workflows.py": "d0046344d6e804709ab8b37b895ffdb258c8400335b46198c18d560d7c898ead"
+      },
+      "matches_current_implementation": false,
+      "frozen_input": {
+        "catalog_id": "humanity-foresight-seed",
+        "catalog_version": "2026-11-21.1",
+        "catalog_sha256": "19a44c998e5a750533b0195e589cdf6a55acea89a8ad0119a30da0860da5c0d3",
+        "recorded_at": "2026-11-21T17:52:06.739504+00:00",
+        "as_of": "2026-11-21T17:56:38.509428+00:00",
+        "operational_observations": 0,
+        "source_identities": {
+          "bush": {
+            "url": "https://www.theatlantic.com/magazine/archive/1945/07/as-we-may-think/303881/",
+            "published_at": "1945-07",
+            "scope": "excerpt",
+            "sha256": "21f14724e90a065089c4933bc74435c0adc45665a987b5487920cb7a86a6e80a"
+          },
+          "engelbart": {
+            "url": "https://dougengelbart.org/pubs/augment-3906.html",
+            "published_at": "1962-10",
+            "scope": "excerpt",
+            "sha256": "bd6fe24a6dc6e13ae7f31755a75f5c4459a2619055c4e20257657d723330e26e"
+          },
+          "licklider": {
+            "url": "https://groups.csail.mit.edu/medg/people/psz/Licklider.html",
+            "published_at": "1960-03",
+            "scope": "excerpt",
+            "sha256": "dce5058e1c40b96001cab7357f8dfac2ee1b14d49d7bac4b9404018034ec37e1"
+          },
+          "situational-awareness": {
+            "url": "https://situational-awareness.ai/from-gpt-4-to-agi/",
+            "published_at": "2024-06",
+            "scope": "excerpt",
+            "sha256": "6e4016bdaeaa6fd8795775c8cee3a5d9d7853ff7bb578c49077b3e088cad22f1"
+          }
+        },
+        "reconstruct_from_distributed_seed": {
+          "path": "examples/frontier-foresight.json",
+          "set_catalog_version": "2026-11-21.1",
+          "set_each_claim_quote_to": "the corresponding source snapshot body; v2 stores shorter quotation anchors"
+        }
+      },
+      "discovery": {
+        "evidence_sha256": "e8ac9fea152abf5a7d6e3899ead0889bcaed50462c840f4e6e83e34863a322a4",
+        "opportunities": [
+          {
+            "alternative": "Manual code review and testing",
+            "claim": "bush",
+            "falsification": "Reduction in code defects and faster development cycles",
+            "family": "Software development",
+            "missing_means": "AI-driven code analysis tools",
+            "outcome": "Automated code review and testing",
+            "quotation_verified": true,
+            "rival_future": "Human-only code review and testing becomes obsolete",
+            "value_hypothesis": "Significantly improves software quality and development efficiency",
+            "quote_sha256": "21f14724e90a065089c4933bc74435c0adc45665a987b5487920cb7a86a6e80a"
+          },
+          {
+            "alternative": "Traditional classroom learning",
+            "claim": "engelbart",
+            "falsification": "Increased student engagement and better academic performance",
+            "family": "Education",
+            "missing_means": "AI-driven adaptive learning platforms",
+            "outcome": "Personalized learning and education",
+            "quotation_verified": true,
+            "rival_future": "Customized learning becomes the norm in education",
+            "value_hypothesis": "Tailors education to individual needs, enhancing learning outcomes",
+            "quote_sha256": "bd6fe24a6dc6e13ae7f31755a75f5c4459a2619055c4e20257657d723330e26e"
+          },
+          {
+            "alternative": "Scheduled maintenance based on fixed intervals",
+            "claim": "licklider",
+            "falsification": "Reduced downtime and increased equipment lifespan",
+            "family": "Manufacturing",
+            "missing_means": "AI-driven predictive analytics",
+            "outcome": "Predictive maintenance for industrial equipment",
+            "quotation_verified": true,
+            "rival_future": "Predictive maintenance becomes standard in industrial operations",
+            "value_hypothesis": "Prevents unexpected equipment failures, saving costs and improving productivity",
+            "quote_sha256": "dce5058e1c40b96001cab7357f8dfac2ee1b14d49d7bac4b9404018034ec37e1"
+          }
+        ],
+        "provenance": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+        "rationale": "Automated code review and testing is a critical need in software development, and accessible AI can significantly improve its efficiency and accuracy.",
+        "selection": 0
+      },
+      "discovery_events": [
+        {
+          "at": "2026-11-21T17:56:38.509943+00:00",
+          "cost_basis": "host and acquisition costs unknown",
+          "cpu_seconds": 0.12275817499999953,
+          "input_sha256": "e947a2c65162f34080a21b39a3038ffed024bfe46ac5a415534e6de887958cc1",
+          "kind": "discovery",
+          "model_usage": {
+            "input_tokens": 2018,
+            "output_tokens": 445
+          },
+          "monetary_cost": null,
+          "response_sha256": "030759e00aa824930344605cc5789dba8ec8e7ad67e09ac3e40e2b14ecbe94c0",
+          "stage": "first",
+          "status": "completed",
+          "wall_seconds": 77.72146335499929
+        }
+      ],
+      "contracts": 0,
+      "builder_calls": 0,
+      "qualification_checks": 0,
+      "qualified_capabilities": 0,
+      "claims_scope": "Quotation attribution and actual proposal generation only; no useful economic invention established."
+    },
+    {
+      "started_at": "2026-11-21T18:02:51.983066+00:00",
+      "finished_at": "2026-11-21T18:04:08.249866+00:00",
+      "status": "completed",
+      "mission_status": "needs_first_contract",
+      "mission_id": "frontier_5e1e1afd44520124",
+      "runtime_identity": {
+        "context_tokens": 16384,
+        "hardware_backend": "CPU",
+        "launcher_sha256": "a664393d46e66bdf31ab0bebcf6752a9047c190844c1e921b466bf1073a8058a",
+        "machine": "x86_64",
+        "model_alias": "frontier-qwen-coder-7b",
+        "model_weights_sha256": "1664fccab734674a50763490a8c6931b70e3f2f8ec10031b54806d30e5f956b6",
+        "origin": "live_local_model",
+        "python": "3.12.14",
+        "seed": 721638,
+        "server_sha256": "fe211d00c4754aa67aaa492d2c755ab0f6ef60bf30eee3c0c74a3496189cde17",
+        "system": "Linux",
+        "temperature": 0.2,
+        "threads": 8
+      },
+      "startup_wall_seconds": 4.865708090001135,
+      "model_cpu_seconds": 553.45,
+      "model_peak_rss_bytes": 8303386624,
+      "model_resource_scope": "Observed process CPU and peak RSS before shutdown; shutdown CPU is not measured.",
+      "wall_seconds": 76.26680601600128,
+      "actual_complete_cost": null,
+      "cost_scope": "Measured execution resources only; acquisition, human work, energy and host billing unknown.",
+      "record_sha256": "c21afea0632bb0c91535d744ba21fac01e52c7d762e369268b8557c434c3d727",
+      "source_identity": {
+        "../scripts/frontier_mission.py": "c23e99acb58f36d6eee98795b0b3ad2bafb6a2ad8467f1af85cb87ea69367c1b",
+        "../scripts/run_frontier_local.py": "a664393d46e66bdf31ab0bebcf6752a9047c190844c1e921b466bf1073a8058a",
+        "adapters.py": "a05127970eb11bb08cc98ed7ef9e05f9a723f51c66f9a5bfaa9f2242bb6275a6",
+        "foresight.py": "77669b9035ee89451df1d342ef594600018db72c4cabd23ae7f74adcc3a5933a",
+        "forge_sandbox.py": "860c444c497c6ba68f6967cdfd5e93e544c792860c6985a537f580ff257b80ed",
+        "frontier_builder.py": "3403b784008e2d6d281a2a012ac664116291abe3d306ae274e8c87340c249fd5",
+        "frontier_mission.py": "3874bc5d767427c7a0b80dc3c84a989772b6aace431cc491503f76c4a89de5a5",
+        "frontier_monitor.py": "a595b18a0de12868885afcbc90c6d4ff7d0f11efcaa01df8e191983471d2abd6",
+        "frontier_transfer.py": "e1c27bb6dd557aaf44cd43bd9f34fa5421554e572338280aa9c1b9ec99b8c667",
+        "output_schema.py": "9877d088cad20b89b6b8d7322c4472840f21098e6b5bcb3eb008d84bfccc28cf",
+        "server.py": "aa73128e82efe90bbd7a5e45185dbe3917d7b712d3175caf8d740d0c416b27a7",
+        "services.py": "41b71b3f946f0912898558995f2c83f1f09b0cb2d5f9203bfecbef301de4a081",
+        "workflows.py": "d0046344d6e804709ab8b37b895ffdb258c8400335b46198c18d560d7c898ead"
+      },
+      "matches_current_implementation": true,
+      "frozen_input": {
+        "catalog_id": "humanity-foresight-seed",
+        "catalog_version": "2026-11-21.1",
+        "catalog_sha256": "19a44c998e5a750533b0195e589cdf6a55acea89a8ad0119a30da0860da5c0d3",
+        "recorded_at": "2026-11-21T17:52:06.739504+00:00",
+        "as_of": "2026-11-21T18:02:56.855324+00:00",
+        "operational_observations": 0,
+        "source_identities": {
+          "bush": {
+            "url": "https://www.theatlantic.com/magazine/archive/1945/07/as-we-may-think/303881/",
+            "published_at": "1945-07",
+            "scope": "excerpt",
+            "sha256": "21f14724e90a065089c4933bc74435c0adc45665a987b5487920cb7a86a6e80a"
+          },
+          "engelbart": {
+            "url": "https://dougengelbart.org/pubs/augment-3906.html",
+            "published_at": "1962-10",
+            "scope": "excerpt",
+            "sha256": "bd6fe24a6dc6e13ae7f31755a75f5c4459a2619055c4e20257657d723330e26e"
+          },
+          "licklider": {
+            "url": "https://groups.csail.mit.edu/medg/people/psz/Licklider.html",
+            "published_at": "1960-03",
+            "scope": "excerpt",
+            "sha256": "dce5058e1c40b96001cab7357f8dfac2ee1b14d49d7bac4b9404018034ec37e1"
+          },
+          "situational-awareness": {
+            "url": "https://situational-awareness.ai/from-gpt-4-to-agi/",
+            "published_at": "2024-06",
+            "scope": "excerpt",
+            "sha256": "6e4016bdaeaa6fd8795775c8cee3a5d9d7853ff7bb578c49077b3e088cad22f1"
+          }
+        },
+        "reconstruct_from_distributed_seed": {
+          "path": "examples/frontier-foresight.json",
+          "set_catalog_version": "2026-11-21.1",
+          "set_each_claim_quote_to": "the corresponding source snapshot body; v2 stores shorter quotation anchors"
+        }
+      },
+      "discovery": {
+        "evidence_sha256": "4d3b320a33b5fe578b3f11c015621b0d9feb9edfbe1d96168e9af70d2f756a13",
+        "opportunities": [
+          {
+            "alternative": "Manual code review and debugging",
+            "claim": "bush",
+            "falsification": "Decrease in code defects identified by AI tools",
+            "family": "Software development",
+            "missing_means": "AI-driven code analysis tools",
+            "outcome": "Automated code review and debugging",
+            "quotation_verified": true,
+            "rival_future": "Human-only code review becomes obsolete",
+            "value_hypothesis": "Significantly reduce time and cost of software development",
+            "quote_sha256": "21f14724e90a065089c4933bc74435c0adc45665a987b5487920cb7a86a6e80a"
+          },
+          {
+            "alternative": "Traditional classroom education",
+            "claim": "engelbart",
+            "falsification": "Improved student performance metrics",
+            "family": "Education",
+            "missing_means": "AI-driven adaptive learning platforms",
+            "outcome": "Personalized learning and education",
+            "quotation_verified": true,
+            "rival_future": "AI-driven education replaces traditional teaching methods",
+            "value_hypothesis": "Enhance educational outcomes for students",
+            "quote_sha256": "bd6fe24a6dc6e13ae7f31755a75f5c4459a2619055c4e20257657d723330e26e"
+          },
+          {
+            "alternative": "Manual inspection and maintenance",
+            "claim": "licklider",
+            "falsification": "Decrease in equipment downtime",
+            "family": "Manufacturing",
+            "missing_means": "AI-driven anomaly detection systems",
+            "outcome": "Predictive maintenance for industrial equipment",
+            "quotation_verified": true,
+            "rival_future": "AI-driven maintenance becomes standard practice",
+            "value_hypothesis": "Reduce maintenance costs and increase operational efficiency",
+            "quote_sha256": "dce5058e1c40b96001cab7357f8dfac2ee1b14d49d7bac4b9404018034ec37e1"
+          }
+        ],
+        "provenance": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+        "rationale": "Automated code review and debugging can significantly reduce the time and cost of software development, making it economically attainable with accessible intelligence and an invented missing mechanism.",
+        "selection": 0
+      },
+      "discovery_events": [
+        {
+          "at": "2026-11-21T18:02:56.855891+00:00",
+          "cost_basis": "host and acquisition costs unknown",
+          "cpu_seconds": 0.12818046800000005,
+          "input_sha256": "37d28dca46ec98b66dacd8af009dba82ff2804409540729713aa60fc9f0ed321",
+          "kind": "discovery",
+          "model_usage": {
+            "input_tokens": 2023,
+            "output_tokens": 434
+          },
+          "monetary_cost": null,
+          "response_sha256": "f0d0c644a721a7bd33d0d75fd43a8f8777c2a714d0991357727c14233ff09652",
+          "stage": "first",
+          "status": "completed",
+          "wall_seconds": 71.22172693200082
+        }
+      ],
+      "contracts": 0,
+      "builder_calls": 0,
+      "qualification_checks": 0,
+      "qualified_capabilities": 0,
+      "claims_scope": "Quotation attribution and actual proposal generation only; no useful economic invention established."
+    }
+  ],
+  "independent_review": {
+    "implementation": {
+      "reviewer": "separate assistant agents",
+      "scope": "Code, evidence boundaries, HTTP authentication, holdout isolation, lifecycle and source changes; not commercial or scientific certification.",
+      "resolved_findings": [
+        "Retracted evidence could advance second discovery.",
+        "Interrupted work could restart without its previous attempt denominator.",
+        "Transfer-registration views exposed qualification cases.",
+        "Owner shutdown released the workspace while a FRONTIER request could still commit.",
+        "Pending monitor invalidation was not retried after callback failure.",
+        "Evidence expiry was not refreshed at action time.",
+        "Local connection changes could bypass discovery local-only scope."
+      ],
+      "result": "No remaining material blocker found in reviewed implementation; four final regressions passed."
+    },
+    "live_opportunity": {
+      "reviewer": "separate foresight-review assistant",
+      "record_sha256": "c21afea0632bb0c91535d744ba21fac01e52c7d762e369268b8557c434c3d727",
+      "decision": "HOLD",
+      "reasons": [
+        "No specific recurring MONTREAL.AI activity, measured residual or unmet acceptance condition.",
+        "The proposed missing means is a general tool category, not a construction hypothesis.",
+        "The alternative omits conventional automated analysis and existing AI review.",
+        "Fewer identified defects is an ambiguous falsifier without an independent defect denominator.",
+        "The stated rival future reinforces adoption instead of testing adverse alternatives.",
+        "Historical quotation attribution does not establish workflow need, mechanism feasibility or economics."
+      ],
+      "primary_alternative_sources": [
+        "https://docs.astral.sh/ruff/",
+        "https://codeql.github.com/docs/codeql-overview/about-codeql/",
+        "https://docs.github.com/en/copilot/concepts/agent-capabilities/agent-powered-workflows-and-operations/code-review"
+      ],
+      "scope": "Assistant research review, not certification; no competitor purchase or access assumed."
+    }
+  },
+  "scientific_verdict": {
+    "source_led_proposal_generation": "OBSERVED",
+    "quotation_attribution": "THREE_VERIFIED_PER_TRIAL",
+    "substantive_discovery": "NOT_ESTABLISHED",
+    "future_outcome_useful_today": "NOT_ESTABLISHED",
+    "distinct_second_capability_advantage": "NOT_ESTABLISHED",
+    "economic_value": "NOT_ESTABLISHED",
+    "revenue": "NOT_ESTABLISHED",
+    "inventor_improvement": "NOT_ESTABLISHED",
+    "after_cost_compounding": "NOT_ESTABLISHED"
+  },
+  "release_status": "implementation candidate; public branch, PR and hosted checks tracked separately; no merged production release asserted"
+}

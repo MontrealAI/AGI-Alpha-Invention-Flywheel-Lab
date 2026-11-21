@@ -154,6 +154,52 @@ class FrontierMonitorTests(unittest.TestCase):
         self.assertTrue(second["observation"]["replayed"])
         self.assertEqual(len(self.genesis.status()["frontier_events"]), 1)
 
+    def test_foresight_failure_persists_and_retries_on_unchanged_source(self):
+        class ForesightFixture:
+            def __init__(self):
+                self.calls = []
+
+            def source_changed(self, observation):
+                self.calls.append(copy.deepcopy(observation))
+                if len(self.calls) == 2:
+                    raise BridgeError("FIXTURE_FAILURE", "Reopening temporarily unavailable")
+                return ["fixture-mission"]
+
+        missions = ForesightFixture()
+        self.monitor.frontier_missions = missions
+        job = self.add()
+        initial = self.poll(job)
+        self.assertEqual(initial["observation"]["status"], "INITIAL_OBSERVATION")
+        self.assertNotIn("pending_foresight", initial["state"]["jobs"][0])
+        self.assertEqual(len(missions.calls), 1)
+
+        self.fetch.text = "Source B: observed change awaiting mission revalidation"
+        failed = self.poll(job)
+        self.assertEqual(failed["observation"]["status"], "CHANGED")
+        changed_sha = failed["observation"]["sha256"]
+        pending = failed["state"]["jobs"][0]["pending_foresight"]
+        self.assertEqual(pending["sha256"], changed_sha)
+        self.assertEqual(failed["state"]["jobs"][0]["failure_count"], 1)
+        self.assertEqual(len(missions.calls), 2)
+        self.assertEqual(sum(row["status"] == "FORESIGHT_REOPENED"
+                             for row in failed["state"]["jobs"][0]["history"]), 1)
+
+        # The retry obligation survives a process-owner restart, rather than
+        # depending on an in-memory flag or another byte change.
+        self.monitor.close()
+        self.monitor = FrontierMonitorService(self.workflows, self.genesis,
+                fetcher=self.fetch, frontier_missions=missions)
+        self.assertEqual(self.monitor.status()["jobs"][0]["pending_foresight"], pending)
+        recovered = self.poll(job)
+        self.assertEqual(recovered["observation"]["status"], "UNCHANGED")
+        self.assertFalse(recovered["observation"]["replayed"])
+        self.assertEqual(missions.calls[2], pending)
+        self.assertNotIn("pending_foresight", recovered["state"]["jobs"][0])
+        self.assertEqual(recovered["state"]["jobs"][0]["change_count"], 1)
+        self.assertEqual(recovered["state"]["jobs"][0]["failure_count"], 1)
+        self.poll(job)
+        self.assertEqual(len(missions.calls), 3)
+
     def test_tampered_persistent_consent_is_rejected(self):
         self.add()
         value = json.loads(self.monitor.path.read_text())

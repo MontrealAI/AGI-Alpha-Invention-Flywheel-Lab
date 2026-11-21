@@ -181,6 +181,10 @@ Scale tests must exercise meaningful demand/fulfillment/settlement workloads, co
 
 
 
+## FRONTIER Ω foresight and constructive research
+
+The [executable FRONTIER research path](../../products/alpha-genesis-harness/docs/FRONTIER-FORESIGHT-INVENTION.md) connects source-snapshot extraction, expiring condition evidence, source-led opportunity discovery, isolated Python construction and separate construction of a different successor capability. It uses existing HARNESS ownership/model access and the pinned Capability Forge sandbox; it creates no financial ledger or deployment authority. Use the [observed results](../../products/alpha-genesis-harness/docs/FRONTIER-FORESIGHT-RESULTS.md) and source identities rather than inferring scientific success from passing fixtures. The local 7B trial generated attributable but generic ideas; the first economically useful invention-and-transfer proof remains unachieved. Strong conventional alternatives, independent acceptance, complete costs and meaningful successor distinctness still govern admission.
+
 ## Selective paid refusal recourse (opt-in)
 
 The optional `connected-selective-refusal-recourse/v2` policy prepays public evaluation daily and buys retry allowance only when a feasible first-refusal-branch alternative justifies its fee. It preserves the existing account, accepted commitments, exact cost charges and fixed v1 default. See [policy, conservative scope and frozen comparison](SELECTIVE_RECOURSE048.md). The current small authored comparison is engineering evidence, not new discovery or actual commerce; source-matched qualification and release adoption remain separate.
