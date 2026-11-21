@@ -26,7 +26,8 @@ jobs:
       - name: Source-only bilingual and no-external-action checks
         run: python -B -m unittest -v tests.test_unseen_firstcash207
       - name: Install pinned free PDF verification library
-        run: python -m pip install --disable-pip-version-check --only-binary=:all: pypdf==5.9.0
+        run: |
+          python -m pip install --disable-pip-version-check --only-binary=:all: pypdf==5.9.0
       - name: Generate and audit true A4 ten-page PDF from exact source
         shell: bash
         run: |
