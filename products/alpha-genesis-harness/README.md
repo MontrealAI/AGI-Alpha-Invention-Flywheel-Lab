@@ -2,6 +2,8 @@
 
 [Instrument workshop quick-start · Atelier des instruments](docs/WORKSHOP.md)
 
+[Capability Forge Ω · Local investigation and qualified tool reuse](docs/CAPABILITY-FORGE.md)
+
 **Turn an ambition into alternatives, a testable instrument and inspectable evidence.**
 
 Version **0.3.0 — release candidate**. The intended Official Edition price is **CAD $299, one-time, bring your own AI models**. This candidate is not a claim of a completed commercial deployment. Read the current [qualification matrix](evidence/QUALIFICATION-MATRIX.md) before relying on a release claim.
