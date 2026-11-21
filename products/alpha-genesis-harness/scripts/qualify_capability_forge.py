@@ -38,7 +38,8 @@ ROUTES = {
 }
 OBJECTIVE = "Recover the exact estimable contrast across all explanations of faulty scientific telemetry."
 STD_CONFIG = {"local_only": True, "timeout_seconds": 240, "max_attempts": 1, "max_concurrent_requests": 1}
-THREADS = min(8, os.cpu_count() or 1)
+THREADS = int(os.environ.get("FORGE_MODEL_THREADS", min(8, os.cpu_count() or 1)))
+CONTEXT = int(os.environ.get("FORGE_MODEL_CONTEXT", 8192))
 
 
 def save(path, value):
@@ -91,7 +92,7 @@ def model_server(assets, binary, which, root):
     model = {"alias": alias, "weights_sha256": digest, "weights_bytes": weights.stat().st_size,
              "weights_url": url, "model_license": "Apache-2.0", "quantization": "Q4_K_M",
              "llama_release": BINARY_URL, "llama_archive_sha256": BINARY_ARCHIVE_SHA,
-             "llama_server_sha256": sha(binary), "threads": THREADS, "context_tokens": 8192,
+             "llama_server_sha256": sha(binary), "threads": THREADS, "context_tokens": CONTEXT,
              "seed": 721638, "temperature": 0.2, "hardware_backend": "CPU"}
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as available:
         available.bind(("127.0.0.1", 0))
@@ -101,7 +102,8 @@ def model_server(assets, binary, which, root):
     log_path = root / f"{which}-{time.time_ns()}.log"
     with log_path.open("w") as log, subprocess.Popen(
         [binary, "-m", weights, "--alias", alias, "--host", "127.0.0.1", "--port", str(port),
-         "--threads", str(THREADS), "--ctx-size", "8192", "--parallel", "1", "--temp", "0.2",
+         "--threads", str(THREADS), "--threads-batch", str(THREADS), "--ctx-size", str(CONTEXT),
+         "--parallel", "1", "--temp", "0.2",
          "--seed", "721638", "--no-ui", "--device", "none"],
         stdout=log, stderr=subprocess.STDOUT, cwd=assets, env={"LC_ALL": "C.UTF-8"}, close_fds=True,
     ) as server:
@@ -200,15 +202,39 @@ def run_model_arm(state, checkpoint, name, cases, runtime, route, pid, budget, w
         print(f"{name} {len(rows)}/{len(cases)}: {sum(row['passed'] for row in rows)} correct", flush=True)
 
 
-def forge_arm(state, checkpoint, root, runtime, route, pid, model):
+def prior_diagnosis(checkpoint, runtime, commitments, model):
+    previous = strict_json(checkpoint.read_bytes())
+    if previous["commitments"] != commitments:
+        raise ValueError("Diagnosis and current trial use different sealed commitments.")
+    experimental = ForgeWorkflow(runtime, checkpoint.parent / "workspaces" / "forge")
+    try:
+        run = experimental.get(previous["forge_run"])
+    finally:
+        experimental.close()
+    prior = run["forge"]["model_manifest"]
+    if prior["weights_sha256"] != model["weights_sha256"] or run["forge"]["frozen_artifact"]:
+        raise ValueError("Diagnosis must come from the same model before any candidate was frozen.")
+    events = [event for event in run["events"] if event["kind"] == "model_completed"
+              and event["detail"]["role"] == "researcher"]
+    text = run["research"]
+    if len(events) != 1 or not text or events[0]["detail"]["response_sha256"] != hashlib.sha256(text.encode()).hexdigest():
+        raise ValueError("No authenticated completed diagnosis found.")
+    return {"text": text, "run_id": run["id"], "event_sha256": events[0]["sha256"],
+            "model_weights_sha256": prior["weights_sha256"], "usage": events[0]["detail"]["usage"]}
+
+
+def forge_arm(state, checkpoint, root, runtime, route, pid, model, diagnosis_from=None):
     service = ForgeWorkflow(runtime, root / "workspaces" / "forge")
     started, start_cpu = time.perf_counter(), cpu(pid)
     try:
         if "forge_run" not in state:
+            diagnostic = prior_diagnosis(diagnosis_from, runtime, state["commitments"], model) if diagnosis_from else None
             run = service.create_mission({**route, "objective": OBJECTIVE, "model_manifest": model, "reuse": False},
                                          sealed=(state["seeds"], state["cohorts"]),
+                                         diagnostic_record=diagnostic,
                                          observations=[{"id": r["id"], "actual": r.get("actual"), "passed": r["passed"]}
                                                        for r in state["arms"]["A_development"]])
+            state["diagnostic_record"] = diagnostic
             state["forge_run"] = run["id"]
             save(checkpoint, state)
         run = service.get(state["forge_run"])
@@ -275,6 +301,8 @@ def main():
     parser.add_argument("--resume", action="store_true")
     parser.add_argument("--continue-from", type=Path,
                         help="Continue a pre-construction interruption in a new source-bound workspace.")
+    parser.add_argument("--diagnosis-from", type=Path,
+                        help="Reuse an authenticated prior diagnosis by the same model on the same study.")
     parser.add_argument("--first", action="store_true", help="Run development controls and Forge before the other arms.")
     parser.add_argument("--skip-d", action="store_true", help="Leave the open challenger explicitly unmeasured.")
     args = parser.parse_args()
@@ -314,7 +342,8 @@ def main():
             state["arms"] = previous["arms"]
             state["interrupted_predecessor"] = {"study_sha256": sha(args.continue_from), "run_id": previous["forge_run"],
                                                 "models": previous["models"], "cost": previous.get("forge_segments", []),
-                                                "sources": previous["sources"]}
+                                                "sources": previous["sources"],
+                                                "previous": previous.get("interrupted_predecessor")}
         save(checkpoint, state)
     from flint import __version__ as flint_version
     state["specialist"] = {"method": "FLINT exact rational RREF", "python_flint": flint_version}
@@ -334,7 +363,7 @@ def main():
                 state["forge_status"] = "NOT_RUN_NO_DEVELOPMENT_GAP"
                 state["arms"].update({"C_qualification": [], "C_transfer": []})
             if "forge_status" not in state:
-                forge_arm(state, checkpoint, root, runtime, route, pid, model)
+                forge_arm(state, checkpoint, root, runtime, route, pid, model, args.diagnosis_from)
             if not args.first:
                 qual = state["cohorts"]["qualification"]
                 for suffix, budget in (("", 2048), ("_512", 512)):

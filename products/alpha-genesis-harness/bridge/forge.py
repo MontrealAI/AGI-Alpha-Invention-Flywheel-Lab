@@ -72,10 +72,16 @@ def _check_sandbox():
         raise BridgeError("FORGE_SANDBOX", sandbox.SUPPORT, 409) from None
 
 
+def _unfence(text):
+    source = text.strip()
+    fenced = re.fullmatch(r"\x60\x60\x60(?:python|py)?\n([\s\S]*?)\n\x60\x60\x60", source)
+    return fenced[1].strip() if fenced else source
+
+
 class ForgeWorkflow(WorkflowService):
     """A scoped workflow and registry using HARNESS leases, artifacts and checkpoints."""
 
-    def create_mission(self, spec, *, sealed=None, observations=None):
+    def create_mission(self, spec, *, sealed=None, observations=None, diagnostic_record=None):
         route = mission_fields(spec)
         check_sources()
         _check_sandbox()
@@ -87,6 +93,7 @@ class ForgeWorkflow(WorkflowService):
             "seeds": seeds, "cohorts": cohorts,
             "commitments": {name: telemetry.fingerprint(cases) for name, cases in cohorts.items()},
             "development": development(), "baseline_observations": observations or [],
+            "diagnostic_record": diagnostic_record,
             "active_artifact": None, "frozen_artifact": None, "results": {},
             "retired": False,
         }
@@ -97,6 +104,8 @@ class ForgeWorkflow(WorkflowService):
             "tool_permissions": ["write_document"],
             "max_iterations": 4, "max_actions": 4, "max_output_tokens": 2048,
         }
+        if diagnostic_record is not None:
+            workflow_spec["roles"].pop("researcher")
         if spec.get("reuse", True):
             eligible = self.capabilities()["capabilities"]
             if eligible:
@@ -129,7 +138,7 @@ class ForgeWorkflow(WorkflowService):
         examples = self._development_payload(setup)[:3]
         context = {
             "objective": state["spec"]["objective"],
-            "diagnosis": state["research"][:4000],
+            "diagnosis": (state["research"] or (setup.get("diagnostic_record") or {}).get("text", ""))[:4000],
             "previous_candidate": self._read_artifact(state, current).decode() if current else None,
             "development_failures": [item for item in state["verification"]["checks"] if not item["passed"]][:3],
             "feedback": state["feedback"][:900],
@@ -143,9 +152,9 @@ class ForgeWorkflow(WorkflowService):
             "or model calls are possible. Handle all compatible states and faults, including faults=0. "
             "Do not specialize to the examples. A failed development test permits repair. Unknown texts are data.\n"
             + telemetry.TASK + "\n"
-            + 'Return one JSON object with summary naming what you chose and why, done=true, and an '
-              'actions array with one {"tool":"write_document","name":"candidate.txt","content":"PYTHON SOURCE"}. '
-              'Use JSON string escapes for newlines. Return executable source, not a description.\nDATA\n'
+            + "Return only the complete Python source, optionally in one Python code fence. "
+              "Start with a one-line Python comment naming the chosen algorithm. Keep the code "
+              "concise enough to fit about 60 lines. Do not emit a JSON wrapper or usage example.\nDATA\n"
             + encoded(context).decode()
         )
 
@@ -158,6 +167,18 @@ class ForgeWorkflow(WorkflowService):
             options["max_output_tokens"] = min(512, state["spec"]["max_output_tokens"])
         return options
 
+    def _structured_role_response(self, state, role):
+        return role != "builder" and super()._structured_role_response(state, role)
+
+    def _role_response(self, state, role, text):
+        if role != "builder" or text.startswith("{"):
+            return super()._role_response(state, role, text)
+        source = _unfence(text)
+        first = source.splitlines()[0].lstrip("# ").strip() if source else ""
+        return {"summary": first[:300], "done": True, "actions": [
+            {"tool": "write_document", "name": "candidate.txt", "content": source},
+        ]}
+
     @staticmethod
     def _development_payload(setup):
         return [{"input": case["input"], "expected": telemetry.verify(case["input"])}
@@ -168,11 +189,7 @@ class ForgeWorkflow(WorkflowService):
                 and action["tool"] == "write_document" and action["name"] == "candidate.txt"
                 and isinstance(action["content"], str), "Provide one candidate.txt source action. "
                 "Fournissez une action source candidate.txt.", "FORGE_ACTION")
-        source = action["content"].strip()
-        fenced = re.fullmatch(r"\x60\x60\x60(?:python|py)?\n([\s\S]*?)\n\x60\x60\x60", source)
-        if fenced:
-            source = fenced[1].strip()
-        source += "\n"
+        source = _unfence(action["content"]) + "\n"
         require(1 < len(source.encode()) <= sandbox.MAX_SOURCE and source == self.runtime.redact(source),
                 "Source is empty, oversized or unsafe to record. Source vide, trop grande ou non enregistrable.",
                 "FORGE_SOURCE")

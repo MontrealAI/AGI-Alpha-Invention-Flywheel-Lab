@@ -453,6 +453,16 @@ class WorkflowService:
     def _generation_options(self, state, role):
         return {}
 
+    def _structured_role_response(self, state, role):
+        return role in {"builder", "critic"}
+
+    def _role_response(self, state, role, text):
+        if state.get("workshop") and role == "builder":
+            from .workshop import construction_response
+            require(self.runtime.redact(text) == text, "The proposal contained a configured credential.", "WORKSHOP_SECRET")
+            return construction_response(text, "instrument.json" in state["artifacts"])
+        return strict_json(text)
+
     def _artifact_texts(self, state):
         result = {}
         remaining = 180000
@@ -676,7 +686,7 @@ class WorkflowService:
         try:
             request = {**route, "run_id": request_id, "prompt": prompt, "max_output_tokens": state["spec"]["max_output_tokens"]}
             request.update(self._generation_options(state, role))
-            if role in {"builder", "critic"} and hasattr(self.runtime, "provider"):
+            if self._structured_role_response(state, role) and hasattr(self.runtime, "provider"):
                 configured = self.runtime.provider(route["provider"])
                 model = getattr(configured, "models", {}).get(route["model"])
                 if (getattr(configured, "kind", None) in {"openai", "ollama"}
@@ -773,12 +783,7 @@ class WorkflowService:
                     text = result["text"].strip()
                     if text.startswith("```json") and text.endswith("```"):
                         text = text[7:-3].strip()
-                    if state.get("workshop") and role == "builder":
-                        from .workshop import construction_response
-                        require(self.runtime.redact(text) == text, "The proposal contained a configured credential.", "WORKSHOP_SECRET")
-                        response = construction_response(text, "instrument.json" in state["artifacts"])
-                    else:
-                        response = strict_json(text)
+                    response = self._role_response(state, role, text)
                     require(isinstance(response, dict), "Model must return a JSON object.")
                     if role == "builder":
                         require(not set(response) - {"summary", "actions", "done"} and isinstance(response.get("actions"), list) and len(response["actions"]) <= 8, "Builder response must contain at most eight actions.")

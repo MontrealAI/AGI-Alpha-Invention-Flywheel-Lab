@@ -79,11 +79,14 @@ class IsolatedForgeTests(unittest.TestCase):
         return {"choices": [{"message": {"content": self.responses.pop(0)}}],
                 "usage": {"prompt_tokens": 50, "completion_tokens": 25}, "model": "fixture-model"}
 
-    def respond_with(self, source):
+    def respond_with(self, source, *, plain=False):
+        response = ("# Exact test fixture\n" + source if plain else json.dumps({
+            "summary": "Use an exact instrument", "actions": [
+                {"tool": "write_document", "name": "candidate.txt", "content": source}], "done": True,
+        }))
         self.responses.extend([
             "The target may live in the row space even when the state has free coordinates.",
-            json.dumps({"summary": "Use an exact instrument", "actions": [
-                {"tool": "write_document", "name": "candidate.txt", "content": source}], "done": True}),
+            response,
         ])
 
     def test_kernel_filesystem_refusal_and_allowed_modules(self):
@@ -121,7 +124,7 @@ class IsolatedForgeTests(unittest.TestCase):
             self.service.bundle(ident)
 
     def test_model_candidate_qualifies_exports_and_changes_successor_execution(self):
-        self.respond_with(FIXTURE)
+        self.respond_with(FIXTURE, plain=True)
         run = self.service.create_mission(MISSION)
         self.service.step(run["id"])
         run = self.service.step(run["id"])
