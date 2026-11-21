@@ -1,0 +1,30 @@
+{
+  "schema": "frontier/shotgate224/protocol/v1",
+  "frozen_utc": "2026-11-21",
+  "owner_source": "7501e83ea37b0d933e2318be2099b37308de0574",
+  "owner_pr": 524,
+  "purpose": "Independent finite-shot feasibility/identifiability stress test of frozen QEC noise readout, not a sale or a hardware claim",
+  "untouched": [
+    "research/frontier_qec_transfer/",
+    "native Account/JournalAccount",
+    "main and releases"
+  ],
+  "input_cases": [
+    "pollatsek_ruskai_7 + pauli_hypotheses(7)",
+    "shor_9 + pauli_hypotheses(9)"
+  ],
+  "target_error": 0.05,
+  "fixed_shot_budgets": [
+    100,
+    1000,
+    10000,
+    1000000
+  ],
+  "pair_inventory": "Evaluate all pairs of distinct pure registered noise hypotheses; disclose pairs with total variation <=1e-9 as numerically indistinguishable; choose the hardest distinguishable pair per fixture by maximum Bhattacharyya coefficient, lexicographic index tiebreak",
+  "primary_bound": "With equal priors and N independent identical outcomes: error_opt(N)>=0.5*(1-sqrt(1-BC^(2N))) with BC=sum_i sqrt(p_i*q_i). Necessary N>=ceil(log(4alpha(1-alpha))/(2log(BC))) when 0<BC<1. This is NECESSARY, not sufficient; BC=1 is indistinguishable and BC=0 requires at least one shot.",
+  "conventional": "Independently construct syndrome-space pair-specific one-shot Helstrom discrimination e=(1-0.5||rho-sigma||_1)/2; this is a strong conventional binary task comparator but not the same as multi-hypothesis estimation or an actual hardware implementation",
+  "numerics": "Clamp only tiny negative response values in [-2e-8,0], require normalized columns within 2e-8; check the Helstrom one-shot optimum is no worse than fixed readout within 2e-8; preserve exact names, tested source ref and failures.",
+  "tests": "Mathematically closed synthetic boundary controls including equal, disjoint and overlapping distributions; both real fixtures and all pair inventories must run; no seed selection or outcome-adjusted stopping.",
+  "claims": "Mathematical finite-case lower-bound audit only. No actual physical shots, real buying intent, monetary cost, measured inference billing, inventor improvement or asset payback.",
+  "deployment": "NO DEPLOY; all original owner files, legacy ledgers, liability and history unchanged"
+}
