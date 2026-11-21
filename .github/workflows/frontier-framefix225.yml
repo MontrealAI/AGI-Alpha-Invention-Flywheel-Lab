@@ -1,0 +1,93 @@
+name: FRAMEFIX225 fixed physical measurement qualification
+on:
+  push:
+    branches: ['experiment/frontier-canonical-frame225-20261121']
+    paths:
+      - 'research/frontier_framefix225/**'
+      - '.github/workflows/frontier-framefix225.yml'
+  pull_request:
+    paths:
+      - 'research/frontier_framefix225/**'
+      - '.github/workflows/frontier-framefix225.yml'
+permissions:
+  contents: read
+concurrency:
+  group: framefix225-${{ github.event.pull_request.number || github.ref }}-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  anchored-physical-frame:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    env:
+      OPENBLAS_NUM_THREADS: '1'
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+      PYTHONHASHSEED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - name: Verify exact executing source head
+        shell: bash
+        run: |
+          set -euo pipefail
+          expected="${{ github.event.pull_request.head.sha || github.sha }}"
+          actual="$(git rev-parse HEAD)"
+          echo "Source=$actual Expected=$expected"
+          test "$actual" = "$expected"
+          mkdir -p /tmp/framefix225
+          printf '%s\n' "$actual" > /tmp/framefix225/SOURCE_HEAD.txt
+          date -u +%Y-%m-%dT%H:%M:%SZ > /tmp/framefix225/START_UTC.txt
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install unchanged owner requirements
+        run: python -m pip install -r research/frontier_qec_transfer/requirements.txt
+      - name: Source-bound frozen independent acceptance tests
+        shell: bash
+        run: |
+          set -o pipefail
+          python -m unittest discover -s research/frontier_framefix225 -p 'test_*.py' -v 2>&1 | tee /tmp/framefix225/TESTS.log
+      - name: Two independent processes over all 609 pairs and three frozen gauges
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/frontier_framefix225/run.py --output /tmp/framefix225/RESULT1.json
+          python research/frontier_framefix225/run.py --output /tmp/framefix225/RESULT2.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root=Path('/tmp/framefix225')
+          a=json.loads((root/'RESULT1.json').read_text())
+          b=json.loads((root/'RESULT2.json').read_text())
+          assert a["fixed_pairs"] == b["fixed_pairs"] == 609
+          assert a["exact_owner_source_git_blob_sha1"] == b["exact_owner_source_git_blob_sha1"]
+          max_gap=0.0
+          for c1,c2 in zip(a["cases"],b["cases"]):
+              assert c1["fixture"]==c2["fixture"]
+              assert c1["registered_pairs"]==c2["registered_pairs"]
+              assert c1["numerically_indistinguishable_pairs"]==c2["numerically_indistinguishable_pairs"]
+              assert len(c1["pair_total_variation"])==len(c2["pair_total_variation"])
+              for x,y in zip(c1["pair_total_variation"],c2["pair_total_variation"]):
+                  assert (x["i"],x["j"]) == (y["i"],y["j"])
+                  max_gap=max(max_gap,abs(x["total_variation"]-y["total_variation"]))
+          assert max_gap <= 2e-8, f"cross-process response drift {max_gap}"
+          review={
+              "schema":"frontier/framefix225/cross-process-review/v1",
+              "pinned_source_head":(root/'SOURCE_HEAD.txt').read_text().strip(),
+              "registered_pairs":609,
+              "cross_process_max_total_variation_delta":max_gap,
+              "pass":True,
+              "scope":"same-executing-head numerical repeatability only, not hardware deployment or economic value"
+          }
+          (root/'COMPARISON.json').write_text(json.dumps(review,indent=2,sort_keys=True)+"\n")
+          print(review)
+          PY
+      - name: Retain successes and original failures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontier-framefix225-fixed-evidence
+          path: /tmp/framefix225
+          if-no-files-found: warn

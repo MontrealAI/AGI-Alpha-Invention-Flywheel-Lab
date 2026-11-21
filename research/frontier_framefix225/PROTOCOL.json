@@ -1,0 +1,36 @@
+{
+  "schema": "frontier/framefix225/preimplementation-protocol/v1",
+  "date_utc": "2026-11-21",
+  "purpose": "Construct a fixed physical noise-measurement frame invariant to arbitrary syndrome eigenvector gauge, without changing source research owner or native financial authority.",
+  "research_source": {
+    "owner_pr": 524,
+    "exact_owner_head": "7501e83ea37b0d933e2318be2099b37308de0574",
+    "dependent_pr": 525,
+    "exact_dependent_head": "e18e40c3952a74228e7b6071d35d2c668c9e2041"
+  },
+  "pinned_blob_sha1": {
+    "research/frontier_qec_transfer/recovery.py": "6c8092bf132f9f218ca4c1b074a6c9b93d9b2b69",
+    "research/frontier_qec_transfer/noise_experiment.py": "434278fa64d4d7e90cb6a3117f5afdfe8e5bc40b",
+    "research/frontier_qec_transfer/fixtures/public_fixtures.py": "75be45ee4581eba1991ac4e8b2e5690084796f45",
+    "research/frontier_qec_transfer/fixtures/second_public_fixtures.py": "866b170844f751731d66cc4f76bbdb427f8d53cc"
+  },
+  "frozen_cases": [
+    "pollatsek_ruskai_7 / 22 hypotheses / 231 pairs",
+    "shor_9 / 28 hypotheses / 378 pairs"
+  ],
+  "gauge_variants": "identity and three deterministic seeded complex unitaries, seeds 1, 7, 257; no seed search",
+  "constructive_method": "Deterministic, twice-reorthogonalized Gram-Schmidt on recovery syndrome coordinate columns indexed by physical computational basis, first logical output; fixed numerical threshold; rotate syndrome states and recovery; construct square-root-free normalized informationally complete frame by Cholesky; verify physical Kraus completeness.",
+  "criteria": {
+    "gauge_response_max_abs": "<= 2e-8 across all fixed rotations and both fixtures",
+    "gauge_physical_operator_max_abs": "<= 2e-8, anchored physical outcome order",
+    "frame_and_recovery_completeness_max_abs": "<= 2e-8",
+    "hypothesis_probability_normalization": "<= 2e-8",
+    "identifiability": "same available rank and disclosed indistinguishable pairs as independent owner; no removed hypotheses",
+    "negative_control": "source uncorrected generic frame must demonstrably vary under at least one registered nontrivial gauge rotation",
+    "fresh_process": "two independently invoked processes using same pinned owner requirements plus SOURCE_HEAD, sha1/sha256, numerical receipts and full failure retention",
+    "fail_closed": "invalid dimensions, incomplete gauge rank, nonphysical probabilities and source-identity drift refuse"
+  },
+  "permitted_scope": "Read-only alternative research module, tests and workflow, separate PR; no changes to existing QEC owner code, source/ledger/account/keys/queues, no transactions or release.",
+  "limitations": "Gauge-invariant numerical design is NOT physical quantum hardware qualification, instrument economy, new algorithm, confirmed causally faster invention, viable customer demand, native profit or the US$3B T365 target.",
+  "stopping_rule": "Run two fixed real fixtures and all 609 pairs with three frozen rotations. Preserve all failures; do not retune seeds, thresholds or cases to win."
+}
