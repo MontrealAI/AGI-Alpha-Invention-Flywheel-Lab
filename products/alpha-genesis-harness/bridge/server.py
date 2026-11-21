@@ -29,7 +29,8 @@ from bridge.services import AccessRuntime
 PRODUCT = Path(__file__).resolve().parent.parent
 APP = PRODUCT / "app"
 STATIC_FILES = {"/": "index.html", "/index.html": "index.html", "/app.js": "app.js",
-                "/engine.js": "engine.js", "/styles.css": "styles.css", "/workshop.js": "workshop.js"}
+                "/engine.js": "engine.js", "/styles.css": "styles.css", "/workshop.js": "workshop.js",
+                "/forge.js": "forge.js"}
 
 
 class NativeMechanism:
@@ -81,6 +82,7 @@ class HarnessServer(ThreadingHTTPServer):
         self._local_connections = None
         self._upgrade_foundry = None
         self._frontier_monitor = None
+        self._forge = None
         self._workflow_lock = threading.RLock()
         self.token = secrets.token_urlsafe(32)
         self.app_path = Path(app_path).resolve()
@@ -106,6 +108,8 @@ class HarnessServer(ThreadingHTTPServer):
             return self._workflows
 
     def server_close(self):
+        if self._forge is not None:
+            self._forge.close()
         if self._frontier_monitor is not None:
             self._frontier_monitor.close()
         if self._upgrade_foundry is not None:
@@ -146,6 +150,15 @@ class HarnessServer(ThreadingHTTPServer):
                 from bridge.frontier_monitor import FrontierMonitorService
                 self._frontier_monitor = FrontierMonitorService(self.workflows, self.genesis_next)
             return self._frontier_monitor
+
+    @property
+    def forge(self):
+        with self._workflow_lock:
+            if self._forge is None:
+                from bridge.forge import ForgeWorkflow
+                self._forge = ForgeWorkflow(self.runtime, self.workspace / "forge",
+                                            server_source_sha256=LOADED_SOURCE_SHA256)
+            return self._forge
 
 
 class Handler(BaseHTTPRequestHandler):
@@ -238,6 +251,16 @@ class Handler(BaseHTTPRequestHandler):
             if self.path == "/api/frontier-monitor/status":
                 self.boundary(authenticated=True)
                 return self.json(200, self.server.frontier_monitor.status())
+            if self.path == "/api/forge/status":
+                self.boundary(authenticated=True)
+                from bridge.forge import _check_sandbox
+                from bridge.forge_telemetry import CONTRACT
+                try:
+                    _check_sandbox()
+                    issue = None
+                except BridgeError as error:
+                    issue = {"code": error.code, "message": error.message}
+                return self.json(200, {"available": issue is None, "issue": issue, "contract": CONTRACT})
             if self.path in {"/api/chatgpt/status", "/api/codex/status"}:
                 self.boundary(authenticated=True)
                 return self.json(200, self.connection_status(self.path.split("/")[2]))
@@ -270,6 +293,8 @@ class Handler(BaseHTTPRequestHandler):
             if self.path == "/api/workshop/bundle":
                 from bridge.workshop import bundle
                 return self.send_bytes(200, bundle(self.server.workflows, data), "application/zip")
+            if self.path == "/api/forge/bundle":
+                return self.send_bytes(200, self.server.forge.bundle(data.get("run_id")), "application/zip")
             if self.path == "/api/generate":
                 result = self.server.runtime.generate(data)
                 result["budget"] = self.server.runtime.budget.view()
@@ -301,6 +326,8 @@ class Handler(BaseHTTPRequestHandler):
                 result = self.upgrade_foundry_action(self.path.rsplit("/", 1)[1], data)
             elif self.path.startswith("/api/frontier-monitor/"):
                 result = self.frontier_monitor_action(self.path.rsplit("/", 1)[1], data)
+            elif self.path.startswith("/api/forge/"):
+                result = self.forge_action(self.path.rsplit("/", 1)[1], data)
             elif self.path.startswith("/api/chatgpt/") or self.path.startswith("/api/codex/"):
                 result = self.connection_action(self.path.split("/")[2], self.path.rsplit("/", 1)[1], data)
             else:
@@ -453,6 +480,23 @@ class Handler(BaseHTTPRequestHandler):
         if action == "status":
             return service.status()
         return getattr(service, action)(data)
+
+    def forge_action(self, action, data):
+        allowed = {"create", "start", "get", "list", "registry", "resume", "pause",
+                   "cancel", "export", "reuse", "retire"}
+        if action not in allowed:
+            raise BridgeError("NOT_FOUND", "Unknown Forge action. Action de la Forge inconnue.", 404)
+        service = self.server.forge
+        ident = data.get("run_id")
+        if action == "create":
+            return service.create_mission(data)
+        if action == "registry":
+            return service.capabilities()
+        if action == "list":
+            return service.list()
+        if action == "reuse":
+            return service.reuse(ident, data.get("input"))
+        return getattr(service, action)(ident)
 
     def do_OPTIONS(self):
         self.json(403, {"error": {"code": "CORS", "message": "Cross-origin access is disabled."}})

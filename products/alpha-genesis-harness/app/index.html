@@ -11,6 +11,7 @@
 <script src="engine.js" defer></script>
 <script src="app.js" defer></script>
 <script src="workshop.js" defer></script>
+<script src="forge.js" defer></script>
 </head>
 <body>
 <a class="skip-link" href="#main" data-i18n="skip">Skip to workspace</a>
@@ -30,6 +31,7 @@
     <button class="nav-item" data-view="verification"><span class="nav-number">07</span><span data-i18n="navVerification">Verification Lab</span></button>
     <button class="nav-item" data-view="economy"><span class="nav-number">08</span><span data-i18n="navEconomy">Economy Studio</span></button>
     <button class="nav-item omega-nav" data-view="genesis-next"><span aria-hidden="true">Ω</span><span data-i18n="navGenesisNext">GENESIS NEXT</span></button>
+    <button class="nav-item" data-view="forge"><span aria-hidden="true">◇</span><span>CAPABILITY FORGE Ω</span></button>
     <button class="nav-item" data-view="history"><span class="nav-number">09</span><span data-i18n="navHistory">Run History</span></button>
   </nav>
   <div class="sidebar-bottom"><span class="private-dot" aria-hidden="true"></span><span data-i18n="localPrivate">Your work stays on this device</span><p data-i18n="localNote">You choose what to export or send to a model.</p><span id="version" class="version">Release candidate · 0.3.0</span></div>
@@ -337,6 +339,58 @@
  </div>
  <div class="panel omega-lineage-panel"><div class="section-heading"><div><div class="eyebrow" data-i18n="omegaLineageEyebrow">FLYWHEEL OBSERVATORY</div><h2 data-i18n="omegaLineageTitle">Which capability contributed to which successor?</h2></div></div><p class="subtle" data-i18n="omegaLineageCopy">Follow the recorded inheritance and measured contribution. Sequence alone does not establish compounding.</p><div id="omega-lineage"></div></div>
 </section>
+<section class="view hidden" id="view-forge" aria-labelledby="forge-title">
+  <div class="page-heading">
+    <h1 id="forge-title">Capability Forge Ω</h1>
+    <p data-forge="intro">Build a tool that recovers an exact result from readings that may contain errors. Qualify it on fresh cases before reuse.</p>
+  </div>
+  <p id="forge-notice" class="connection-note" role="status" aria-live="polite"></p>
+  <div class="panel">
+    <div class="section-heading">
+      <h2 data-forge="mission">Investigation</h2>
+      <button class="button secondary small" type="button" id="forge-refresh" data-forge="refresh">Refresh</button>
+    </div>
+    <form id="forge-form">
+      <label for="forge-objective" data-forge="objective">What measurement do you need to establish?</label>
+      <textarea id="forge-objective" rows="3" maxlength="12000" required></textarea>
+      <label for="forge-model" data-forge="model">Local model</label>
+      <select id="forge-model" required disabled></select>
+      <button class="button text-button small" type="button" id="forge-connect" data-forge="connect">Connect a model</button>
+      <label class="check-label"><input type="checkbox" id="forge-inherit" checked><span data-forge="inherit">Try a compatible qualified tool first.</span></label>
+      <button class="button primary" type="submit" id="forge-launch" disabled data-forge="launch">Start investigation</button>
+    </form>
+  </div>
+  <div class="panel">
+    <label for="forge-history" data-forge="history">Reopen an investigation</label>
+    <select id="forge-history" disabled></select>
+    <div id="forge-run" class="hidden">
+      <div class="section-heading"><h2 id="forge-run-title"></h2><span class="connection-note" id="forge-status"></span></div>
+      <p id="forge-progress" class="bounded-details" aria-live="polite"></p>
+      <div class="button-row">
+        <button class="button secondary small" id="forge-pause" type="button" data-forge="pause">Pause</button>
+        <button class="button secondary small" id="forge-resume" type="button" data-forge="resume">Resume</button>
+        <button class="button secondary small" id="forge-cancel" type="button" data-forge="cancel">Cancel</button>
+        <button class="button primary small" id="forge-bundle" type="button" data-forge="bundle">Download executable tool</button>
+        <button class="button secondary small" id="forge-export" type="button" data-forge="export">Export run evidence</button>
+      </div>
+      <ul class="bounded-details" id="forge-activity"></ul>
+      <details><summary data-forge="details">Checks, model route and usage</summary><pre class="receipt" id="forge-details"></pre></details>
+    </div>
+  </div>
+  <div class="panel">
+    <h2 data-forge="registry">Qualified tools</h2>
+    <form id="forge-reuse-form">
+      <label for="forge-tool" data-forge="tool">Retained tool</label>
+      <select id="forge-tool" disabled required></select>
+      <label for="forge-input" data-forge="input">New readings (JSON)</label>
+      <textarea id="forge-input" spellcheck="false" rows="5" required>{"A":[[2],[4],[6]],"y":[3,6,10],"target":[1],"faults":1}</textarea>
+      <button class="button secondary" type="submit" id="forge-reuse" disabled data-forge="reuse">Run and verify</button>
+    </form>
+    <pre id="forge-output" class="receipt hidden" aria-live="polite"></pre>
+  </div>
+  <p class="bounded-details" data-forge="scope">Qualification covers the registered synthetic telemetry tasks. Frontier-model parity and economic benefit require separate evidence.</p>
+</section>
+
 <section class="view hidden" id="view-history" aria-labelledby="history-title">
  <div class="page-heading"><div class="eyebrow" data-i18n="historyEyebrow">RUN HISTORY</div><h1 id="history-title" data-i18n="historyTitle">Continue from what actually happened.</h1><p data-i18n="historyCopy">Browser experiments belong to this project. Connected runs are stored by your local bridge and can be reopened after a restart.</p></div>
  <div class="panel"><div class="section-heading"><h2 data-i18n="historyConnected">Saved connected runs</h2><div class="button-row"><button class="button secondary" id="history-import" data-i18n="importRun">Import run JSON</button><button class="button secondary" id="history-refresh" data-i18n="refreshHistory">Refresh history</button></div></div><div id="history-connected" class="item-list"></div></div>

@@ -1,0 +1,672 @@
+{
+  "budget_output_tokens": 512,
+  "commitment": "53a92fa6cbb93f60d2ceb227ec6a5947b0d322ab7576968c18491efccb700194",
+  "model": {
+    "alias": "forge-qwen3-4b",
+    "context_tokens": 4096,
+    "hardware_backend": "CPU",
+    "llama_archive_sha256": "909eef25cd53e6601c8a07c866d8dbb2983e74177088d55182137a8fb8255d62",
+    "llama_release": "https://github.com/ggml-org/llama.cpp/releases/download/b12242/llama-b12242-bin-ubuntu-x64.tar.gz",
+    "llama_server_sha256": "fe211d00c4754aa67aaa492d2c755ab0f6ef60bf30eee3c0c74a3496189cde17",
+    "model_license": "Apache-2.0",
+    "peak_server_rss_bytes": 4920352768,
+    "quantization": "Q4_K_M",
+    "seed": 721638,
+    "startup_cpu_seconds": 5.02,
+    "startup_wall_seconds": 5.0987651249997725,
+    "temperature": 0.2,
+    "threads": 2,
+    "weights_bytes": 2497280736,
+    "weights_sha256": "2fde00ce69dd4899c70d020845e2638353015bba0fdf161b3eb965f2bca4464e",
+    "weights_url": "https://huggingface.co/bartowski/Qwen_Qwen3-4B-Instruct-2507-GGUF/resolve/ae44f08e1392f39c0e474af10c3ff8355c8b6688/Qwen_Qwen3-4B-Instruct-2507-Q4_K_M.gguf"
+  },
+  "paired_model_alone_vs_forge": {
+    "forge_only_correct": 24,
+    "model_only_correct": 0,
+    "two_sided_p": 1.1920928955078125e-07
+  },
+  "planned": 24,
+  "rows": [
+    {
+      "actual": {
+        "status": "determined",
+        "value": "10"
+      },
+      "cost": {
+        "accounted": 0.0,
+        "amount": 0.0,
+        "attempts": 1,
+        "basis": "reported_usage_at_user_rates",
+        "complete_cost_known": false,
+        "currency": "USD"
+      },
+      "exact_reference": {
+        "status": "ambiguous"
+      },
+      "id": "qualification-01",
+      "model_cpu_seconds": 136.31,
+      "passed": false,
+      "reported_model": "forge-qwen3-4b",
+      "response": "{\n  \"work\": \"We are given a system where each row of A defines a linear constraint: A[i] ⋅ x = y[i] in a perfect case, but at most 'faults' (here 1) rows can be erroneous. The goal is to determine the exact value of target ⋅ x over all compatible states (i.e., states where at most one row is faulty). Since x ranges over rational vectors, and we are to compute target ⋅ x over all compatible states, we must find whether the value of target ⋅ x is uniquely determined regardless of which row is faulty or what the correct x is. We analyze the system by checking linear dependencies among the rows. If the rows are linearly dependent, or if the system of equations is consistent under any single fault, then target ⋅ x may be forced to a single value. We compute the linear combinations of the rows to see if target is a linear combination of the rows. If so, then target ⋅ x equals the sum of (y[i] * coefficient) over i, even if one row is faulty — but only if the target is in the span of the row vectors. We check whether target is in the row space of A. If yes, then target ⋅ x is determined by the linear combination of y[i] values. We find that the target vector is a linear combination of the rows of A. Specifically, we can solve for a linear combination of the rows that equals the target row. Then, for any compatible state (with at most one fault), target ⋅ x = sum over i of (coefficient_i * y[i]). Since the target is in the row space, and the system is consistent under any single fault, the value of target ⋅ x is invariant across all compatible states. Thus, it is determined.\",\n  \"status\": \"determined\",\n  \"value\": \"10\"\n}",
+      "usage": {
+        "input_tokens": 339,
+        "output_tokens": 402
+      },
+      "wall_seconds": 76.46666122199986
+    },
+    {
+      "actual": {
+        "status": "determined",
+        "value": "10"
+      },
+      "cost": {
+        "accounted": 0.0,
+        "amount": 0.0,
+        "attempts": 1,
+        "basis": "reported_usage_at_user_rates",
+        "complete_cost_known": false,
+        "currency": "USD"
+      },
+      "exact_reference": {
+        "status": "ambiguous"
+      },
+      "id": "qualification-02",
+      "model_cpu_seconds": 100.94,
+      "passed": false,
+      "reported_model": "forge-qwen3-4b",
+      "response": "{\n  \"work\": \"We are given a system where each row of A defines a linear constraint: A[i] · x = y[i] for correct rows, and at most 'faults' rows can be faulty (i.e., A[i] · x ≠ y[i]). We are to compute the exact value of target · x over all compatible states (i.e., states where at most one row is faulty). Since x ranges over rational vectors, and we are to determine target · x over all compatible states, we analyze whether the value of target · x is forced to be the same regardless of which row is faulty (or if no row is faulty). We check whether the system of equations is consistent and whether the dot product target · x is invariant across all possible compatible states. We do this by considering the differences between the equations: for each row, we compute the difference between the left-hand side A[i] · x and the right-hand side y[i]. If we assume that only one row is faulty, then for all other rows, A[i] · x = y[i]. We then express target · x as a linear combination of the known equations and see if it is uniquely determined. The key insight is that if the target vector lies in the span of the rows of A, and the system is consistent under the fault model, then target · x is determined. We compute the linear dependencies among the rows and check whether target · x can be expressed as a linear combination of the known equations. We find that the target vector is orthogonal to the null space of A, or that the dot product target · x is constant across all consistent assignments. After checking all possible single-fault scenarios, we find that target · x evaluates to the same rational value in all cases. This value is computed by solving the system under the assumption that all but one row are correct, and then verifying that the result is consistent across all such cases.\",\n  \"status\": \"determined\",\n  \"value\": \"10\"\n}",
+      "usage": {
+        "input_tokens": 316,
+        "output_tokens": 411
+      },
+      "wall_seconds": 50.694246198000656
+    },
+    {
+      "actual": {
+        "status": "determined",
+        "value": "-7"
+      },
+      "cost": {
+        "accounted": 0.0,
+        "amount": 0.0,
+        "attempts": 1,
+        "basis": "reported_usage_at_user_rates",
+        "complete_cost_known": false,
+        "currency": "USD"
+      },
+      "exact_reference": {
+        "status": "inconsistent"
+      },
+      "id": "qualification-03",
+      "model_cpu_seconds": 48.52000000000001,
+      "passed": false,
+      "reported_model": "forge-qwen3-4b",
+      "response": "{\n  \"work\": \"The problem asks for the exact value of target dot x over all compatible states, where compatibility means at most 'faults' rows have A[i] dot x != y[i]. With faults = 0, every row must satisfy A[i] dot x = y[i]. This gives a system of linear equations. We solve the system A x = y for x, and then compute target dot x. Since A is a matrix of integers and y is integer, and we are to find target dot x over all compatible states (which here are exactly the solutions to A x = y), we solve the system. The system is consistent and has a unique solution because the matrix A has full row rank (verified by checking linear independence of rows). Solving the system yields x = [1, 1, 1]. Then target dot x = -3*1 + (-1)*1 + (-3)*1 = -7. Thus, the value is determined.\",\n  \"status\": \"determined\",\n  \"value\": \"-7\"\n}",
+      "usage": {
+        "input_tokens": 246,
+        "output_tokens": 218
+      },
+      "wall_seconds": 24.418372193000323
+    },
+    {
+      "actual": {
+        "status": "determined",
+        "value": "1"
+      },
+      "cost": {
+        "accounted": 0.0,
+        "amount": 0.0,
+        "attempts": 1,
+        "basis": "reported_usage_at_user_rates",
+        "complete_cost_known": false,
+        "currency": "USD"
+      },
+      "exact_reference": {
+        "status": "ambiguous"
+      },
+      "id": "qualification-04",
+      "model_cpu_seconds": 58.45999999999998,
+      "passed": false,
+      "reported_model": "forge-qwen3-4b",
+      "response": "{\n  \"work\": \"We are given a matrix A, a vector y of observations, a target vector, and a fault limit of 1. A state x is compatible if at most one row has A[i] · x ≠ y[i]. We are to compute the exact value of target · x over all compatible states. Since only one row can be faulty, we consider all possible rows being faulty (one at a time), and for each, solve for x such that A[i] · x = y[i] for all i ≠ faulty, and A[faulty] · x may differ. Then, we evaluate target · x in each case and see if the value is consistent across all valid cases. If it is, then the value is determined; otherwise, it is ambiguous or inconsistent. We proceed by checking each possible faulty row, solving the linear system for the other rows, and computing target · x. If all valid cases give the same value, then the result is determined. Otherwise, it's ambiguous or inconsistent.\",\n  \"status\": \"determined\",\n  \"value\": \"1\"\n}",
+      "usage": {
+        "input_tokens": 282,
+        "output_tokens": 227
+      },
+      "wall_seconds": 29.430687949000458
+    },
+    {
+      "actual": {
+        "status": "determined",
+        "value": "10"
+      },
+      "cost": {
+        "accounted": 0.0,
+        "amount": 0.0,
+        "attempts": 1,
+        "basis": "reported_usage_at_user_rates",
+        "complete_cost_known": false,
+        "currency": "USD"
+      },
+      "exact_reference": {
+        "status": "ambiguous"
+      },
+      "id": "qualification-05",
+      "model_cpu_seconds": 57.660000000000025,
+      "passed": false,
+      "reported_model": "forge-qwen3-4b",
+      "response": "{\n  \"work\": \"The problem asks for the exact value of target dot x over all compatible states, where compatibility means at most 'faults' rows have A[i] dot x != y[i]. Here, faults = 0, so every row must satisfy A[i] dot x = y[i]. This gives a system of linear equations: A[i] · x = y[i] for all i. Since the system is consistent (no faults), we solve for x using the given A and y. The target dot x is then the dot product of the target vector with the solution x. We solve the system using exact rational arithmetic. The system is linear and overdetermined, but since faults = 0, all equations must hold. We check if the system has a unique solution or if it's underdetermined. After solving, we find that the solution x is unique and rational. Then compute target · x exactly.\",\n  \"status\": \"determined\",\n  \"value\": \"10\"\n}",
+      "usage": {
+        "input_tokens": 274,
+        "output_tokens": 207
+      },
+      "wall_seconds": 28.959216433999245
+    },
+    {
+      "actual": {
+        "status": "determined",
+        "value": "4"
+      },
+      "cost": {
+        "accounted": 0.0,
+        "amount": 0.0,
+        "attempts": 1,
+        "basis": "reported_usage_at_user_rates",
+        "complete_cost_known": false,
+        "currency": "USD"
+      },
+      "exact_reference": {
+        "status": "inconsistent"
+      },
+      "id": "qualification-06",
+      "model_cpu_seconds": 59.48000000000002,
+      "passed": false,
+      "reported_model": "forge-qwen3-4b",
+      "response": "{\n  \"work\": \"The problem requires finding the value of target dot x over all compatible states, where compatibility means at most 'faults' rows have A[i] dot x != y[i]. With faults = 0, every row must satisfy A[i] dot x = y[i]. This gives a system of linear equations. Since the system is consistent and we are to compute target dot x over all compatible states (which are the solutions to the system), we solve the system exactly. The system is underdetermined in terms of variables (x), but the constraints are linear and consistent. We solve the system using exact arithmetic. After solving, we find that the value of target dot x is uniquely determined across all solutions. The system has a unique solution for x due to the structure of A and the constraints, and target dot x evaluates to a rational number.\",\n  \"status\": \"determined\",\n  \"value\": \"4\"\n}",
+      "usage": {
+        "input_tokens": 244,
+        "output_tokens": 193
+      },
+      "wall_seconds": 31.772892992999914
+    },
+    {
+      "actual": {
+        "status": "determined",
+        "value": "0"
+      },
+      "cost": {
+        "accounted": 0.0,
+        "amount": 0.0,
+        "attempts": 1,
+        "basis": "reported_usage_at_user_rates",
+        "complete_cost_known": false,
+        "currency": "USD"
+      },
+      "exact_reference": {
+        "status": "determined",
+        "value": "-4"
+      },
+      "id": "qualification-07",
+      "model_cpu_seconds": 79.71999999999997,
+      "passed": false,
+      "reported_model": "forge-qwen3-4b",
+      "response": "{\n  \"work\": \"Each row of A defines a linear constraint: A[i] · x = y[i] in a correct state. With at most 1 fault, at most one row can be inconsistent. The target dot x is the sum of target[i] * x[i] over all i. Since only one row can be faulty, all other rows must satisfy A[i] · x = y[i]. We can solve the system of equations from the correct rows and then check whether the value of target · x is consistent across all such solutions. Because the system is linear and the constraints are consistent in all but one row, we can compute the value of target · x by solving the system of equations from the majority of rows (all except one), and verify that the value is the same regardless of which row is faulty. The key insight is that the value of target · x must be the same across all compatible states, so we can compute it by solving the system under the assumption that each row (except one) is correct, and check if the resulting value of target · x is the same. If it is, then the value is determined; otherwise, it's ambiguous or inconsistent.\",\n  \"status\": \"determined\",\n  \"value\": \"0\"\n}",
+      "usage": {
+        "input_tokens": 305,
+        "output_tokens": 260
+      },
+      "wall_seconds": 40.067237840000416
+    },
+    {
+      "actual": {
+        "status": "determined",
+        "value": "10"
+      },
+      "cost": {
+        "accounted": 0.0,
+        "amount": 0.0,
+        "attempts": 1,
+        "basis": "reported_usage_at_user_rates",
+        "complete_cost_known": false,
+        "currency": "USD"
+      },
+      "exact_reference": {
+        "status": "determined",
+        "value": "-19/3"
+      },
+      "id": "qualification-08",
+      "model_cpu_seconds": 60.25,
+      "passed": false,
+      "reported_model": "forge-qwen3-4b",
+      "response": "{\n  \"work\": \"The problem asks for the exact value of target dot x over all compatible states, where compatibility means at most 'faults' rows have A[i] dot x != y[i]. Here, faults = 0, so every row must satisfy A[i] dot x = y[i]. This gives a system of linear equations: A[i] dot x = y[i] for each row. Since the system is consistent (no faults), and we are to compute target dot x over all such x, we solve the system exactly. The system is linear and overdetermined, so we check if it has a unique solution. If so, target dot x is fixed. If not, the value may vary — but since faults = 0, all equations must hold, so the solution space is constrained. We solve the system using exact rational arithmetic. The system is solvable and has a unique solution because the matrix A and target are given and the equations are consistent. We compute x via solving the linear system A x = y, then compute target dot x.\",\n  \"status\": \"determined\",\n  \"value\": \"10\"\n}",
+      "usage": {
+        "input_tokens": 250,
+        "output_tokens": 236
+      },
+      "wall_seconds": 30.299359134000042
+    },
+    {
+      "actual": {
+        "status": "determined",
+        "value": "1"
+      },
+      "cost": {
+        "accounted": 0.0,
+        "amount": 0.0,
+        "attempts": 1,
+        "basis": "reported_usage_at_user_rates",
+        "complete_cost_known": false,
+        "currency": "USD"
+      },
+      "exact_reference": {
+        "status": "ambiguous"
+      },
+      "id": "qualification-09",
+      "model_cpu_seconds": 43.42000000000007,
+      "passed": false,
+      "reported_model": "forge-qwen3-4b",
+      "response": "{\n  \"work\": \"The problem asks for the exact value of target dot x over all compatible states, where compatibility means at most 'faults' rows have A[i] dot x != y[i]. Here, faults = 0, so every row must satisfy A[i] dot x = y[i]. Thus, we have a system of linear equations: A[i] dot x = y[i] for all i. Since A is a matrix of integers and x ranges over rational vectors, we solve this system exactly. We check whether the system is consistent and has a unique solution or if it's underdetermined. The system is linear and overdetermined, so we solve it using linear algebra. We find that the system has a unique solution for x, and compute target dot x directly from that solution.\",\n  \"status\": \"determined\",\n  \"value\": \"1\"\n}",
+      "usage": {
+        "input_tokens": 274,
+        "output_tokens": 181
+      },
+      "wall_seconds": 21.81378275299994
+    },
+    {
+      "actual": {
+        "status": "determined",
+        "value": "3"
+      },
+      "cost": {
+        "accounted": 0.0,
+        "amount": 0.0,
+        "attempts": 1,
+        "basis": "reported_usage_at_user_rates",
+        "complete_cost_known": false,
+        "currency": "USD"
+      },
+      "exact_reference": {
+        "status": "determined",
+        "value": "-3"
+      },
+      "id": "qualification-10",
+      "model_cpu_seconds": 54.379999999999995,
+      "passed": false,
+      "reported_model": "forge-qwen3-4b",
+      "response": "{\n  \"work\": \"The problem asks for the exact value of target dot x over all compatible states, where compatibility means at most 'faults' rows have A[i] dot x != y[i]. Here, faults = 0, so every row must satisfy A[i] dot x = y[i]. This gives a system of linear equations: A[i] dot x = y[i] for each row. Since the system is consistent (no faults), we solve for x over rationals. The value of target dot x is then the dot product of the target vector with the solution x. We solve the system using linear algebra. The matrix A is 8x5, and we have 8 equations in 5 variables. We check if the system has a unique solution or if it's underdetermined. After solving the system, we find that the solution x is unique and rational. Then we compute target dot x exactly.\",\n  \"status\": \"determined\",\n  \"value\": \"3\"\n}",
+      "usage": {
+        "input_tokens": 300,
+        "output_tokens": 207
+      },
+      "wall_seconds": 27.74730562500008
+    },
+    {
+      "error": "PROVIDER_STREAM",
+      "exact_reference": {
+        "status": "ambiguous"
+      },
+      "id": "qualification-11",
+      "model_cpu_seconds": 155.52999999999997,
+      "passed": false,
+      "wall_seconds": 78.39960675900056
+    },
+    {
+      "actual": {
+        "status": "determined",
+        "value": "12"
+      },
+      "cost": {
+        "accounted": 0.0,
+        "amount": 0.0,
+        "attempts": 1,
+        "basis": "reported_usage_at_user_rates",
+        "complete_cost_known": false,
+        "currency": "USD"
+      },
+      "exact_reference": {
+        "status": "inconsistent"
+      },
+      "id": "qualification-12",
+      "model_cpu_seconds": 72.37,
+      "passed": false,
+      "reported_model": "forge-qwen3-4b",
+      "response": "{\n  \"work\": \"Each row of A represents a linear constraint: A[i] ⋅ x = y[i] in a correct state. With at most 1 fault, at most one row can be inconsistent. The target dot x is the sum of target[i] * x[i] over all i. Since only one row can be faulty, all other rows must satisfy A[i] ⋅ x = y[i]. We can solve the system of equations from the correct rows and then verify that the target dot x is consistent regardless of which row is faulty (or if none is). We compute the value of target ⋅ x under the assumption that all but one row are correct. Since the system is linear and the target dot x is a linear combination, we can compute the value by solving the system from the consistent rows. We find that the value of target ⋅ x is uniquely determined across all compatible states, because even with one fault, the correct value is forced by the structure of the equations and the target vector. The value is the same in all compatible states, so it is determined.\",\n  \"status\": \"determined\",\n  \"value\": \"12\"\n}",
+      "usage": {
+        "input_tokens": 369,
+        "output_tokens": 246
+      },
+      "wall_seconds": 36.65648979400066
+    },
+    {
+      "actual": {
+        "status": "determined",
+        "value": "0"
+      },
+      "cost": {
+        "accounted": 0.0,
+        "amount": 0.0,
+        "attempts": 1,
+        "basis": "reported_usage_at_user_rates",
+        "complete_cost_known": false,
+        "currency": "USD"
+      },
+      "exact_reference": {
+        "status": "determined",
+        "value": "1/3"
+      },
+      "id": "qualification-13",
+      "model_cpu_seconds": 55.210000000000036,
+      "passed": false,
+      "reported_model": "forge-qwen3-4b",
+      "response": "{\n  \"work\": \"We are given a matrix A, a vector y of observations, a target vector, and a fault limit of 1. A state x is compatible if at most one row has A[i] · x ≠ y[i]. We are to compute the exact value of target · x over all compatible states. Since only one row can be faulty, we consider all possible rows that could be faulty (i.e., where A[i] · x ≠ y[i]), and for each such case, we solve for x such that the rest of the equations hold exactly. We then compute target · x in each case and see if the value is consistent across all valid cases. If it is, then the value is determined; otherwise, it is ambiguous or inconsistent. The key insight is that the equations from the correct rows (non-faulty) must be satisfied, and the faulty row can be ignored or treated as inconsistent. We solve the system of equations from the non-faulty rows and check consistency with the target dot product. After checking all possible fault scenarios (only one fault allowed), we find that in every compatible state, target · x evaluates to the same rational value.\",\n  \"status\": \"determined\",\n  \"value\": \"0\"\n}",
+      "usage": {
+        "input_tokens": 244,
+        "output_tokens": 259
+      },
+      "wall_seconds": 27.761827455000457
+    },
+    {
+      "actual": {
+        "status": "determined",
+        "value": "10"
+      },
+      "cost": {
+        "accounted": 0.0,
+        "amount": 0.0,
+        "attempts": 1,
+        "basis": "reported_usage_at_user_rates",
+        "complete_cost_known": false,
+        "currency": "USD"
+      },
+      "exact_reference": {
+        "status": "ambiguous"
+      },
+      "id": "qualification-14",
+      "model_cpu_seconds": 58.639999999999986,
+      "passed": false,
+      "reported_model": "forge-qwen3-4b",
+      "response": "{\n  \"work\": \"Each row of A defines a linear constraint: A[i] · x = y[i] in a correct state. With at most 1 fault, at most one row can be inconsistent. The target dot x is the sum of target[i] * x[i] over all i. Since only one row can be faulty, all other rows must satisfy A[i] · x = y[i]. We can solve the system of equations from the correct rows and then verify consistency with the target dot x. The key insight is that the target dot x must be the same across all compatible states, so we can compute it by solving the system from the majority of consistent equations. We identify which rows are consistent and solve the linear system. The value of target · x is determined uniquely because the system is underdetermined but the target dot x is invariant under the constraint of at most one fault. We compute the value using the consistent equations and verify that the target dot x is the same regardless of which row is faulty (or if none is).\",\n  \"status\": \"determined\",\n  \"value\": \"10\"\n}",
+      "usage": {
+        "input_tokens": 322,
+        "output_tokens": 233
+      },
+      "wall_seconds": 29.44446541599973
+    },
+    {
+      "actual": {
+        "status": "determined",
+        "value": "10"
+      },
+      "cost": {
+        "accounted": 0.0,
+        "amount": 0.0,
+        "attempts": 1,
+        "basis": "reported_usage_at_user_rates",
+        "complete_cost_known": false,
+        "currency": "USD"
+      },
+      "exact_reference": {
+        "status": "ambiguous"
+      },
+      "id": "qualification-15",
+      "model_cpu_seconds": 84.34999999999991,
+      "passed": false,
+      "reported_model": "forge-qwen3-4b",
+      "response": "{\n  \"work\": \"We are given a system where each row of A defines a linear constraint: A[i] ⋅ x = y[i] for correct rows, and at most 'faults' rows can be erroneous. The goal is to determine the exact value of target ⋅ x over all compatible states (i.e., states where at most one row is faulty). Since x ranges over rational vectors, and we are to compute target ⋅ x over all compatible states, we must find whether the value of target ⋅ x is uniquely determined regardless of which row is faulty (or if it's consistent across all possibilities). We analyze the system by checking whether the equations are linearly dependent or whether combinations of rows can be used to express target ⋅ x as a linear combination of the y-values. We compute the linear combination of the rows of A that matches the target vector, and check if such a combination exists with integer coefficients. If so, then target ⋅ x = sum over i of (coeff_i * y[i]) for any compatible state, and this value is fixed. We find that the target vector is a linear combination of the rows of A with rational coefficients, and that the value of target ⋅ x is invariant across all compatible states (due to the structure of the constraints and the fact that only one row can be faulty). This invariance implies that the value of target ⋅  x is uniquely determined.\",\n  \"status\": \"determined\",\n  \"value\": \"10\"\n}",
+      "usage": {
+        "input_tokens": 348,
+        "output_tokens": 319
+      },
+      "wall_seconds": 42.26260901200021
+    },
+    {
+      "actual": {
+        "status": "determined",
+        "value": "1"
+      },
+      "cost": {
+        "accounted": 0.0,
+        "amount": 0.0,
+        "attempts": 1,
+        "basis": "reported_usage_at_user_rates",
+        "complete_cost_known": false,
+        "currency": "USD"
+      },
+      "exact_reference": {
+        "status": "inconsistent"
+      },
+      "id": "qualification-16",
+      "model_cpu_seconds": 61.15000000000009,
+      "passed": false,
+      "reported_model": "forge-qwen3-4b",
+      "response": "{\n  \"work\": \"We are given a system where each row of A defines a linear constraint: A[i] · x = y[i] for correct rows, and at most 'faults' rows (here, 1) can be erroneous. The target vector is [-1, -2, 0], and we are to compute the exact value of target · x over all compatible states. Since x ranges over rational vectors, and only one row can be faulty, we consider all possible rows that could be faulty and check whether the remaining constraints are consistent. For each such case, we solve the system of equations from the correct rows and compute target · x. If the value is the same across all valid cases, then the value is determined. Otherwise, it is ambiguous or inconsistent. We find that in all cases where one row is faulty, the remaining equations yield a consistent solution for x, and target · x evaluates to the same rational value. This value is uniquely determined regardless of which row is faulty, due to the structure of the constraints and the target vector.\",\n  \"status\": \"determined\",\n  \"value\": \"1\"\n}",
+      "usage": {
+        "input_tokens": 269,
+        "output_tokens": 235
+      },
+      "wall_seconds": 30.766130349999912
+    },
+    {
+      "actual": {
+        "status": "determined",
+        "value": "1"
+      },
+      "cost": {
+        "accounted": 0.0,
+        "amount": 0.0,
+        "attempts": 1,
+        "basis": "reported_usage_at_user_rates",
+        "complete_cost_known": false,
+        "currency": "USD"
+      },
+      "exact_reference": {
+        "status": "ambiguous"
+      },
+      "id": "qualification-17",
+      "model_cpu_seconds": 46.50999999999999,
+      "passed": false,
+      "reported_model": "forge-qwen3-4b",
+      "response": "{\n  \"work\": \"The problem asks for the exact value of target dot x over all compatible states, where compatibility means at most 'faults' rows have A[i] dot x != y[i]. Here, faults = 0, so every row must satisfy A[i] dot x = y[i]. We are given A, y, and target, and x ranges over rational vectors. Since all rows must hold exactly, we have a system of linear equations: A[i] dot x = y[i] for each row i. We solve this system to find x, then compute target dot x. The system is consistent and has a unique solution because the matrix A has full row rank (verified by checking linear independence of rows). Solving the system yields a unique rational solution for x. Then target dot x is computed exactly.\",\n  \"status\": \"determined\",\n  \"value\": \"1\"\n}",
+      "usage": {
+        "input_tokens": 249,
+        "output_tokens": 186
+      },
+      "wall_seconds": 23.40701874899969
+    },
+    {
+      "actual": {
+        "status": "determined",
+        "value": "10"
+      },
+      "cost": {
+        "accounted": 0.0,
+        "amount": 0.0,
+        "attempts": 1,
+        "basis": "reported_usage_at_user_rates",
+        "complete_cost_known": false,
+        "currency": "USD"
+      },
+      "exact_reference": {
+        "status": "inconsistent"
+      },
+      "id": "qualification-18",
+      "model_cpu_seconds": 145.75,
+      "passed": false,
+      "reported_model": "forge-qwen3-4b",
+      "response": "{\n  \"work\": \"The problem asks for the exact value of target dot x over all compatible states, where at most 'faults' rows can have A[i] dot x != y[i]. We are given A, y, target, and faults=1. Since x ranges over rational vectors, we are to find a value that is consistent across all compatible states (i.e., at most one row can be erroneous). The key insight is that if multiple rows of A dot x are consistent with the same x, then target dot x must be the same across all such consistent x. We can check whether the system of equations A[i] dot x = y[i] has a solution, and if not, whether the one fault allows a consistent value of target dot x. We analyze the linear dependencies among the rows of A. Observing that several rows are linear combinations of others, we can reduce the system. For instance, rows 0 and 3 are identical (both [3,0,0,0]), and row 9 is also [3,0,0,0]. Row 1: [-6,-9,9,3], row 8: [12,6,3,-6], row 10: [-3,3,6,12], etc. We check if the equations are consistent under the assumption that at most one row is faulty. We compute the value of target dot x under the assumption that each row is correct, and see if the resulting value of target dot x is the same across all such cases — if so, then it is determined. We find that multiple rows are linearly dependent, and when we solve the system under the assumption that each row is correct (except one), the value of target dot x remains constant. This suggests that the value is uniquely determined even with one fault. We compute target dot x for the consistent solution when all equations are satisfied (assuming no fault), and verify that even with one fault, the value of target dot x is preserved due to linear dependencies. After checking all combinations (though only one fault is allowed), we find that the value of target dot in all consistent cases is 10. This is confirmed by solving the system with the constraints and verifying that the value of target dot x is invariant under the allowed faults.\",\n  \"status\": \"determined\",\n  \"value\": \"10\"\n}",
+      "usage": {
+        "input_tokens": 307,
+        "output_tokens": 491
+      },
+      "wall_seconds": 73.33437049799977
+    },
+    {
+      "actual": {
+        "status": "determined",
+        "value": "0"
+      },
+      "cost": {
+        "accounted": 0.0,
+        "amount": 0.0,
+        "attempts": 1,
+        "basis": "reported_usage_at_user_rates",
+        "complete_cost_known": false,
+        "currency": "USD"
+      },
+      "exact_reference": {
+        "status": "determined",
+        "value": "29/6"
+      },
+      "id": "qualification-19",
+      "model_cpu_seconds": 98.95000000000005,
+      "passed": false,
+      "reported_model": "forge-qwen3-4b",
+      "response": "{\n  \"work\": \"Each row of A defines a linear constraint: A[i] · x = y[i] in a correct state. With at most 1 fault, at most one row can be inconsistent. The target dot x is the value we want to compute over all compatible states. Since x ranges over rational vectors, and the system is linear, we can consider the sum of target · x over all possible consistent assignments. However, the key insight is that in the absence of faults, all equations A[i] · x = y[i] must hold. If only one row is faulty, then the rest must satisfy their equations. We can solve the system of equations formed by the correct rows and then check whether the target dot x is uniquely determined. Since the target is fixed and the system is linear, if the correct rows (all but one) determine a unique x, then target · x is fixed. We check whether the system of equations from the non-faulty rows has a unique solution or if multiple solutions exist. If so, we compute target · x for that solution. We find that the rows are linearly dependent — in fact, they are combinations of each other. After reducing the system, we find that all rows are linear combinations of a smaller set. We can verify that the equations are consistent and that the target dot x is invariant across all possible consistent assignments. The value is determined uniquely.\",\n  \"status\": \"determined\",\n  \"value\": \"0\"\n}",
+      "usage": {
+        "input_tokens": 287,
+        "output_tokens": 305
+      },
+      "wall_seconds": 49.68281858099999
+    },
+    {
+      "actual": {
+        "status": "determined",
+        "value": "12"
+      },
+      "cost": {
+        "accounted": 0.0,
+        "amount": 0.0,
+        "attempts": 1,
+        "basis": "reported_usage_at_user_rates",
+        "complete_cost_known": false,
+        "currency": "USD"
+      },
+      "exact_reference": {
+        "status": "ambiguous"
+      },
+      "id": "qualification-20",
+      "model_cpu_seconds": 86.03999999999996,
+      "passed": false,
+      "reported_model": "forge-qwen3-4b",
+      "response": "{\n  \"work\": \"Each row of A defines a linear constraint: A[i] · x = y[i] in a correct state. With at most 1 fault, at most one row can be inconsistent. The target dot x is the sum of target[i] * x[i] over all i. Since only one row can be faulty, all other rows must satisfy A[i] · x = y[i]. We can solve the system of equations from the correct rows and then check consistency with the target dot x. The key insight is that the target dot x must be the same across all compatible states, so we compute it by solving the system of equations from the non-faulty rows. Since the system is linear and the target dot x is a linear combination of the variables, and the constraints are consistent across all but one row, we can compute the value of target · x by solving the system of equations from the majority of rows (all except one, which may vary). We test whether the value of target · x is uniquely determined regardless of which row is faulty. By checking the consistency of the system and observing that the target dot x is invariant under the choice of faulty row (due to linear dependencies), we find that the value is uniquely determined.\",\n  \"status\": \"determined\",\n  \"value\": \"12\"\n}",
+      "usage": {
+        "input_tokens": 323,
+        "output_tokens": 274
+      },
+      "wall_seconds": 43.28071671099951
+    },
+    {
+      "actual": {
+        "status": "determined",
+        "value": "1"
+      },
+      "cost": {
+        "accounted": 0.0,
+        "amount": 0.0,
+        "attempts": 1,
+        "basis": "reported_usage_at_user_rates",
+        "complete_cost_known": false,
+        "currency": "USD"
+      },
+      "exact_reference": {
+        "status": "ambiguous"
+      },
+      "id": "qualification-21",
+      "model_cpu_seconds": 73.12000000000012,
+      "passed": false,
+      "reported_model": "forge-qwen3-4b",
+      "response": "{\n  \"work\": \"Each row of A defines a linear constraint: A[i] · x = y[i] in a correct state. With at most 1 fault, at most one row can be inconsistent. The target dot x is the sum of target[i] * x[i] over all i. Since only one row can be faulty, all other rows must satisfy A[i] · x = y[i]. We can solve the system of equations from the correct rows and then verify consistency with the target dot x. The key insight is that the target dot x must be the same across all compatible states, so we can compute it by solving the system from the majority of consistent equations. We find that the system of equations from the 11 correct rows (excluding one) is consistent and determines x uniquely up to the faulty row. By checking all possible faulty rows, we find that only one choice of faulty row leads to a consistent rational solution for x that satisfies all other equations. Then, target · x is computed exactly and is the same across all compatible states. Thus, the value is uniquely determined.\",\n  \"status\": \"determined\",\n  \"value\": \"1\"\n}",
+      "usage": {
+        "input_tokens": 321,
+        "output_tokens": 242
+      },
+      "wall_seconds": 36.625604306999776
+    },
+    {
+      "actual": {
+        "status": "determined",
+        "value": "0"
+      },
+      "cost": {
+        "accounted": 0.0,
+        "amount": 0.0,
+        "attempts": 1,
+        "basis": "reported_usage_at_user_rates",
+        "complete_cost_known": false,
+        "currency": "USD"
+      },
+      "exact_reference": {
+        "status": "ambiguous"
+      },
+      "id": "qualification-22",
+      "model_cpu_seconds": 53.88999999999987,
+      "passed": false,
+      "reported_model": "forge-qwen3-4b",
+      "response": "{\n  \"work\": \"Each row of A defines a linear constraint: A[i] · x = y[i] in the correct state. With at most 1 fault, at most one row can be inconsistent. The target dot x is the value we want to compute over all compatible states. Since x ranges over rational vectors, and the constraints are linear, we can evaluate the target dot x by considering the consistent equations and the effect of a single fault. We compute the value of target · x under the assumption that all but one row are satisfied. We check whether the value of target · x is the same across all possible consistent configurations (i.e., when one row is faulty). If it is, then the value is determined; otherwise, it is ambiguous. We find that for every possible row that could be faulty, the value of target · x remains the same — indicating consistency across all compatible states. This implies the value is uniquely determined.\",\n  \"status\": \"determined\",\n  \"value\": \"0\"\n}",
+      "usage": {
+        "input_tokens": 261,
+        "output_tokens": 209
+      },
+      "wall_seconds": 27.140315053999984
+    },
+    {
+      "actual": {
+        "status": "determined",
+        "value": "1"
+      },
+      "cost": {
+        "accounted": 0.0,
+        "amount": 0.0,
+        "attempts": 1,
+        "basis": "reported_usage_at_user_rates",
+        "complete_cost_known": false,
+        "currency": "USD"
+      },
+      "exact_reference": {
+        "status": "inconsistent"
+      },
+      "id": "qualification-23",
+      "model_cpu_seconds": 58.680000000000064,
+      "passed": false,
+      "reported_model": "forge-qwen3-4b",
+      "response": "{\n  \"work\": \"Each row of A represents a linear constraint: A[i] · x = y[i]. A state is compatible if at most 'faults' (here, 1) rows have a mismatch. We are to compute target · x over all compatible states. Since only one row can be faulty, all other rows must satisfy A[i] · x = y[i]. The value of target · x must be the same across all such consistent x (within rational vectors). We solve the system of equations from the correct rows and check consistency. The system is overdetermined, but due to the structure of A and the target, we can find a unique value of target · x that is preserved even when one row is allowed to be faulty. By considering linear combinations of the rows and the target, we find that target · x is invariant under the constraints of the correct rows. We compute the value by solving the system from the majority of rows (all except one), and verify that the value of target · x is the same regardless of which row is faulty. This invariance implies the value is determined uniquely.\",\n  \"status\": \"determined\",\n  \"value\": \"1\"\n}",
+      "usage": {
+        "input_tokens": 324,
+        "output_tokens": 246
+      },
+      "wall_seconds": 29.584857068999554
+    },
+    {
+      "actual": {
+        "status": "determined",
+        "value": "10"
+      },
+      "cost": {
+        "accounted": 0.0,
+        "amount": 0.0,
+        "attempts": 1,
+        "basis": "reported_usage_at_user_rates",
+        "complete_cost_known": false,
+        "currency": "USD"
+      },
+      "exact_reference": {
+        "status": "determined",
+        "value": "3"
+      },
+      "id": "qualification-24",
+      "model_cpu_seconds": 54.13999999999987,
+      "passed": false,
+      "reported_model": "forge-qwen3-4b",
+      "response": "{\n  \"work\": \"The problem requires finding the value of target dot x over all compatible states, where compatibility means at most 'faults' rows have A[i] dot x != y[i]. Given faults = 0, all rows must satisfy A[i] dot x = y[i]. This forms a system of linear equations: A[i] · x = y[i] for each row. Since x ranges over rational vectors, and the system is consistent (due to faults = 0), we solve the system exactly. The system is underdetermined (6 equations, 4 variables), but the equations are linearly dependent. We compute the solution space and evaluate target · x over all solutions. However, since the system is consistent and we are to find the value of target · x over all compatible states, and the system has a unique solution (as we will verify), we solve the system directly. After solving the linear system using exact arithmetic, we find a unique rational solution for x. Then we compute target · x. The result is consistent across all compatible states, so the value is determined.\",\n  \"status\": \"determined\",\n  \"value\": \"10\"\n}",
+      "usage": {
+        "input_tokens": 259,
+        "output_tokens": 243
+      },
+      "wall_seconds": 27.27371537399995
+    }
+  ],
+  "scope": "Single prompt and pinned accessible model on final synthetic qualification cohort.",
+  "style": "reasoning-no-numeric-example",
+  "total_passed": 0,
+  "wall_seconds": 917.2903074700007
+}

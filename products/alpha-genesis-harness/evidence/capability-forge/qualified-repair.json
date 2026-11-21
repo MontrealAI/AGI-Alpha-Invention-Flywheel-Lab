@@ -1,0 +1,7519 @@
+{
+  "candidate_source": "import itertools\nfrom fractions import Fraction\nfrom math import gcd\nfrom collections import defaultdict\n\ndef solve(data):\n    A = data['A']\n    y = data['y']\n    target = data['target']\n    faults = data['faults']\n    n = len(A)\n    m = len(target)\n    from itertools import combinations\n    valid_subsets = []\n    for r in (faults,):\n        for subset in combinations(range(n), n - r):\n            valid_subsets.append(subset)\n    results = []\n    for subset in valid_subsets:\n        A_sub = [A[i] for i in subset]\n        y_sub = [y[i] for i in subset]\n        try:\n            sol = rational_affine(A_sub, y_sub, m)\n            if sol is None:\n                continue\n            x_sol = sol[0]\n            null_space = sol[1]\n            val = sum((target[i] * x_sol[i] for i in range(m)))\n            if null_space:\n                for null_vec in null_space:\n                    if any((abs(null_vec[i]) > 0 for i in range(m))):\n                        new_val = val + sum((target[i] * null_vec[i] for i in range(m)))\n                        if abs(new_val - val) > 0:\n                            return {'status': 'ambiguous'}\n            results.append(val)\n        except:\n            continue\n    if not results:\n        return {'status': 'inconsistent'}\n    if len(set(results)) > 1:\n        return {'status': 'ambiguous'}\n    return {'status': 'determined', 'value': str(results[0]).replace('1/', '1/').replace('0/', '0/')}\n",
+  "conventional": {
+    "F_qualification": [
+      {
+        "actual": {
+          "status": "ambiguous"
+        },
+        "expected": {
+          "status": "ambiguous"
+        },
+        "id": "qualification-01",
+        "passed": true,
+        "verifier_wall_seconds": 0.0005938330000390124,
+        "wall_seconds": 0.00028782399976989836
+      },
+      {
+        "actual": {
+          "status": "ambiguous"
+        },
+        "expected": {
+          "status": "ambiguous"
+        },
+        "id": "qualification-02",
+        "passed": true,
+        "verifier_wall_seconds": 0.0002002050000555755,
+        "wall_seconds": 7.745399989289581e-05
+      },
+      {
+        "actual": {
+          "status": "inconsistent"
+        },
+        "expected": {
+          "status": "inconsistent"
+        },
+        "id": "qualification-03",
+        "passed": true,
+        "verifier_wall_seconds": 3.827599994110642e-05,
+        "wall_seconds": 3.126599995084689e-05
+      },
+      {
+        "actual": {
+          "status": "ambiguous"
+        },
+        "expected": {
+          "status": "ambiguous"
+        },
+        "id": "qualification-04",
+        "passed": true,
+        "verifier_wall_seconds": 0.0001239919997715333,
+        "wall_seconds": 4.664900006901007e-05
+      },
+      {
+        "actual": {
+          "status": "ambiguous"
+        },
+        "expected": {
+          "status": "ambiguous"
+        },
+        "id": "qualification-05",
+        "passed": true,
+        "verifier_wall_seconds": 0.00011045299970646738,
+        "wall_seconds": 4.9342999773216434e-05
+      },
+      {
+        "actual": {
+          "status": "inconsistent"
+        },
+        "expected": {
+          "status": "inconsistent"
+        },
+        "id": "qualification-06",
+        "passed": true,
+        "verifier_wall_seconds": 3.20270000884193e-05,
+        "wall_seconds": 2.8290999580349308e-05
+      },
+      {
+        "actual": {
+          "status": "determined",
+          "value": "-4"
+        },
+        "expected": {
+          "status": "determined",
+          "value": "-4"
+        },
+        "id": "qualification-07",
+        "passed": true,
+        "verifier_wall_seconds": 0.0003896339999300835,
+        "wall_seconds": 0.0003257890002714703
+      },
+      {
+        "actual": {
+          "status": "determined",
+          "value": "-19/3"
+        },
+        "expected": {
+          "status": "determined",
+          "value": "-19/3"
+        },
+        "id": "qualification-08",
+        "passed": true,
+        "verifier_wall_seconds": 0.00010687700023481739,
+        "wall_seconds": 4.570700002659578e-05
+      },
+      {
+        "actual": {
+          "status": "ambiguous"
+        },
+        "expected": {
+          "status": "ambiguous"
+        },
+        "id": "qualification-09",
+        "passed": true,
+        "verifier_wall_seconds": 0.0001075479999599338,
+        "wall_seconds": 4.0159000036510406e-05
+      },
+      {
+        "actual": {
+          "status": "determined",
+          "value": "-3"
+        },
+        "expected": {
+          "status": "determined",
+          "value": "-3"
+        },
+        "id": "qualification-10",
+        "passed": true,
+        "verifier_wall_seconds": 0.0001286600004277716,
+        "wall_seconds": 5.139600034453906e-05
+      },
+      {
+        "actual": {
+          "status": "ambiguous"
+        },
+        "expected": {
+          "status": "ambiguous"
+        },
+        "id": "qualification-11",
+        "passed": true,
+        "verifier_wall_seconds": 0.0003971649998675275,
+        "wall_seconds": 0.00032557900021856767
+      },
+      {
+        "actual": {
+          "status": "inconsistent"
+        },
+        "expected": {
+          "status": "inconsistent"
+        },
+        "id": "qualification-12",
+        "passed": true,
+        "verifier_wall_seconds": 0.00013341600015337463,
+        "wall_seconds": 0.0004572519997054769
+      },
+      {
+        "actual": {
+          "status": "determined",
+          "value": "1/3"
+        },
+        "expected": {
+          "status": "determined",
+          "value": "1/3"
+        },
+        "id": "qualification-13",
+        "passed": true,
+        "verifier_wall_seconds": 0.0003575659998205083,
+        "wall_seconds": 0.0001466159997107752
+      },
+      {
+        "actual": {
+          "status": "ambiguous"
+        },
+        "expected": {
+          "status": "ambiguous"
+        },
+        "id": "qualification-14",
+        "passed": true,
+        "verifier_wall_seconds": 0.0006639469997935521,
+        "wall_seconds": 0.00022619299988946295
+      },
+      {
+        "actual": {
+          "status": "ambiguous"
+        },
+        "expected": {
+          "status": "ambiguous"
+        },
+        "id": "qualification-15",
+        "passed": true,
+        "verifier_wall_seconds": 0.00043352800003049197,
+        "wall_seconds": 0.00021236200018392992
+      },
+      {
+        "actual": {
+          "status": "inconsistent"
+        },
+        "expected": {
+          "status": "inconsistent"
+        },
+        "id": "qualification-16",
+        "passed": true,
+        "verifier_wall_seconds": 0.00011865399983435054,
+        "wall_seconds": 0.00020576199995048228
+      },
+      {
+        "actual": {
+          "status": "ambiguous"
+        },
+        "expected": {
+          "status": "ambiguous"
+        },
+        "id": "qualification-17",
+        "passed": true,
+        "verifier_wall_seconds": 6.984299989198917e-05,
+        "wall_seconds": 3.3769999845389975e-05
+      },
+      {
+        "actual": {
+          "status": "inconsistent"
+        },
+        "expected": {
+          "status": "inconsistent"
+        },
+        "id": "qualification-18",
+        "passed": true,
+        "verifier_wall_seconds": 0.0001399660000060976,
+        "wall_seconds": 0.0003044879999833938
+      },
+      {
+        "actual": {
+          "status": "determined",
+          "value": "29/6"
+        },
+        "expected": {
+          "status": "determined",
+          "value": "29/6"
+        },
+        "id": "qualification-19",
+        "passed": true,
+        "verifier_wall_seconds": 0.0002669230002538825,
+        "wall_seconds": 0.00024198600021918537
+      },
+      {
+        "actual": {
+          "status": "ambiguous"
+        },
+        "expected": {
+          "status": "ambiguous"
+        },
+        "id": "qualification-20",
+        "passed": true,
+        "verifier_wall_seconds": 0.00042887100016741897,
+        "wall_seconds": 5.552199991143425e-05
+      },
+      {
+        "actual": {
+          "status": "ambiguous"
+        },
+        "expected": {
+          "status": "ambiguous"
+        },
+        "id": "qualification-21",
+        "passed": true,
+        "verifier_wall_seconds": 0.00048460300013175583,
+        "wall_seconds": 0.0002980379999826255
+      },
+      {
+        "actual": {
+          "status": "ambiguous"
+        },
+        "expected": {
+          "status": "ambiguous"
+        },
+        "id": "qualification-22",
+        "passed": true,
+        "verifier_wall_seconds": 0.0002645289996507927,
+        "wall_seconds": 0.00013898499992137658
+      },
+      {
+        "actual": {
+          "status": "inconsistent"
+        },
+        "expected": {
+          "status": "inconsistent"
+        },
+        "id": "qualification-23",
+        "passed": true,
+        "verifier_wall_seconds": 0.0001153790003627364,
+        "wall_seconds": 0.00030221499991966994
+      },
+      {
+        "actual": {
+          "status": "determined",
+          "value": "3"
+        },
+        "expected": {
+          "status": "determined",
+          "value": "3"
+        },
+        "id": "qualification-24",
+        "passed": true,
+        "verifier_wall_seconds": 9.854500012806966e-05,
+        "wall_seconds": 3.980900009992183e-05
+      }
+    ],
+    "F_transfer": [
+      {
+        "actual": {
+          "status": "determined",
+          "value": "-44/7"
+        },
+        "expected": {
+          "status": "determined",
+          "value": "-44/7"
+        },
+        "id": "transfer-01",
+        "passed": true,
+        "verifier_wall_seconds": 0.012529911000001448,
+        "wall_seconds": 0.0037303369999790448
+      },
+      {
+        "actual": {
+          "status": "determined",
+          "value": "-11"
+        },
+        "expected": {
+          "status": "determined",
+          "value": "-11"
+        },
+        "id": "transfer-02",
+        "passed": true,
+        "verifier_wall_seconds": 0.00226943800043955,
+        "wall_seconds": 0.0006312989999059937
+      },
+      {
+        "actual": {
+          "status": "inconsistent"
+        },
+        "expected": {
+          "status": "inconsistent"
+        },
+        "id": "transfer-03",
+        "passed": true,
+        "verifier_wall_seconds": 0.0005367890003071807,
+        "wall_seconds": 0.0006684830000267539
+      },
+      {
+        "actual": {
+          "status": "ambiguous"
+        },
+        "expected": {
+          "status": "ambiguous"
+        },
+        "id": "transfer-04",
+        "passed": true,
+        "verifier_wall_seconds": 0.0031757719998495304,
+        "wall_seconds": 0.0041074720002143295
+      },
+      {
+        "actual": {
+          "status": "ambiguous"
+        },
+        "expected": {
+          "status": "ambiguous"
+        },
+        "id": "transfer-05",
+        "passed": true,
+        "verifier_wall_seconds": 0.0010210619998360926,
+        "wall_seconds": 0.0028156010002931
+      },
+      {
+        "actual": {
+          "status": "determined",
+          "value": "33/2"
+        },
+        "expected": {
+          "status": "determined",
+          "value": "33/2"
+        },
+        "id": "transfer-06",
+        "passed": true,
+        "verifier_wall_seconds": 0.0023327620001509786,
+        "wall_seconds": 0.003305882999939058
+      },
+      {
+        "actual": {
+          "status": "ambiguous"
+        },
+        "expected": {
+          "status": "ambiguous"
+        },
+        "id": "transfer-07",
+        "passed": true,
+        "verifier_wall_seconds": 0.0007835419996808923,
+        "wall_seconds": 0.0013843259998793656
+      },
+      {
+        "actual": {
+          "status": "ambiguous"
+        },
+        "expected": {
+          "status": "ambiguous"
+        },
+        "id": "transfer-08",
+        "passed": true,
+        "verifier_wall_seconds": 0.001771176000147534,
+        "wall_seconds": 0.003824084999905608
+      },
+      {
+        "actual": {
+          "status": "inconsistent"
+        },
+        "expected": {
+          "status": "inconsistent"
+        },
+        "id": "transfer-09",
+        "passed": true,
+        "verifier_wall_seconds": 0.0002753250000750995,
+        "wall_seconds": 0.0005838789998051652
+      },
+      {
+        "actual": {
+          "status": "ambiguous"
+        },
+        "expected": {
+          "status": "ambiguous"
+        },
+        "id": "transfer-10",
+        "passed": true,
+        "verifier_wall_seconds": 0.003801913000188506,
+        "wall_seconds": 0.0029728730000897485
+      },
+      {
+        "actual": {
+          "status": "inconsistent"
+        },
+        "expected": {
+          "status": "inconsistent"
+        },
+        "id": "transfer-11",
+        "passed": true,
+        "verifier_wall_seconds": 0.0018058559999190038,
+        "wall_seconds": 0.0027379969997127773
+      },
+      {
+        "actual": {
+          "status": "ambiguous"
+        },
+        "expected": {
+          "status": "ambiguous"
+        },
+        "id": "transfer-12",
+        "passed": true,
+        "verifier_wall_seconds": 0.00021072999970783712,
+        "wall_seconds": 5.761500005974085e-05
+      },
+      {
+        "actual": {
+          "status": "determined",
+          "value": "-8"
+        },
+        "expected": {
+          "status": "determined",
+          "value": "-8"
+        },
+        "id": "transfer-13",
+        "passed": true,
+        "verifier_wall_seconds": 0.00043244699963906896,
+        "wall_seconds": 0.00029783799982396886
+      },
+      {
+        "actual": {
+          "status": "ambiguous"
+        },
+        "expected": {
+          "status": "ambiguous"
+        },
+        "id": "transfer-14",
+        "passed": true,
+        "verifier_wall_seconds": 0.00027827900021293317,
+        "wall_seconds": 0.000134988999889174
+      },
+      {
+        "actual": {
+          "status": "ambiguous"
+        },
+        "expected": {
+          "status": "ambiguous"
+        },
+        "id": "transfer-15",
+        "passed": true,
+        "verifier_wall_seconds": 0.00014601400016545085,
+        "wall_seconds": 4.243199964548694e-05
+      },
+      {
+        "actual": {
+          "status": "inconsistent"
+        },
+        "expected": {
+          "status": "inconsistent"
+        },
+        "id": "transfer-16",
+        "passed": true,
+        "verifier_wall_seconds": 0.004920789000152581,
+        "wall_seconds": 0.005358783000247058
+      }
+    ]
+  },
+  "cost_scope": {
+    "energy_joules": null,
+    "host_billing_usd": null,
+    "matched_wall_timing": false,
+    "new_model_requests_in_repair": 0
+  },
+  "earlier_scoped_result": {
+    "additional_boundary_failures": {
+      "inputs": [
+        {
+          "A": [
+            [
+              2
+            ]
+          ],
+          "faults": 1,
+          "target": [
+            1
+          ],
+          "y": [
+            3
+          ]
+        },
+        {
+          "A": [
+            [
+              0
+            ]
+          ],
+          "faults": 1,
+          "target": [
+            0
+          ],
+          "y": [
+            1
+          ]
+        }
+      ],
+      "results": [
+        {
+          "actual": {
+            "status": "determined",
+            "value": "3/2"
+          },
+          "application_wall_seconds": 0.0653377769999679,
+          "expected": {
+            "status": "ambiguous"
+          },
+          "passed": false,
+          "verifier_wall_seconds": 0.00010575499982223846
+        },
+        {
+          "actual": {
+            "status": "inconsistent"
+          },
+          "application_wall_seconds": 0.06463772699999026,
+          "expected": {
+            "status": "determined",
+            "value": "0"
+          },
+          "passed": false,
+          "verifier_wall_seconds": 8.395400027438882e-05
+        }
+      ]
+    },
+    "candidate": {
+      "name": "repair-05.txt",
+      "sha256": "7c15490a842b8a4d86909424aa6c1fd09695b30a6a88a49ccd18f8e31015f97b"
+    },
+    "commitments": {
+      "qualification": "0ae839cafc47c0d7a50249750f7e902bfe6be8eb3f84006536c47ffa3e6ff264",
+      "transfer": "1eeaf477612bb21e294ecdee3700bea4f8d53814921c8d8df893b7ef6defb0d6"
+    },
+    "registered_results": {
+      "C_qualification": [
+        {
+          "actual": {
+            "status": "ambiguous"
+          },
+          "application_wall_seconds": 0.06452894800031572,
+          "expected": {
+            "status": "ambiguous"
+          },
+          "id": "qualification-01",
+          "passed": true,
+          "verifier_wall_seconds": 0.00021330399977159686
+        },
+        {
+          "actual": {
+            "status": "ambiguous"
+          },
+          "application_wall_seconds": 0.06463256000006368,
+          "expected": {
+            "status": "ambiguous"
+          },
+          "id": "qualification-02",
+          "passed": true,
+          "verifier_wall_seconds": 0.00018398099973637727
+        },
+        {
+          "actual": {
+            "status": "determined",
+            "value": "29/7"
+          },
+          "application_wall_seconds": 0.06457665800007817,
+          "expected": {
+            "status": "determined",
+            "value": "29/7"
+          },
+          "id": "qualification-03",
+          "passed": true,
+          "verifier_wall_seconds": 0.0002231879998362274
+        },
+        {
+          "actual": {
+            "status": "ambiguous"
+          },
+          "application_wall_seconds": 0.06457011900010912,
+          "expected": {
+            "status": "ambiguous"
+          },
+          "id": "qualification-04",
+          "passed": true,
+          "verifier_wall_seconds": 0.00014298999985840055
+        },
+        {
+          "actual": {
+            "status": "inconsistent"
+          },
+          "application_wall_seconds": 0.06458203600004708,
+          "expected": {
+            "status": "inconsistent"
+          },
+          "id": "qualification-05",
+          "passed": true,
+          "verifier_wall_seconds": 0.0003023649996976019
+        },
+        {
+          "actual": {
+            "status": "determined",
+            "value": "-5"
+          },
+          "application_wall_seconds": 0.06452748200035785,
+          "expected": {
+            "status": "determined",
+            "value": "-5"
+          },
+          "id": "qualification-06",
+          "passed": true,
+          "verifier_wall_seconds": 0.0007137900001907838
+        },
+        {
+          "actual": {
+            "status": "determined",
+            "value": "-6"
+          },
+          "application_wall_seconds": 0.0645917400001963,
+          "expected": {
+            "status": "determined",
+            "value": "-6"
+          },
+          "id": "qualification-07",
+          "passed": true,
+          "verifier_wall_seconds": 0.00019373499981156783
+        },
+        {
+          "actual": {
+            "status": "ambiguous"
+          },
+          "application_wall_seconds": 0.032389352999871335,
+          "expected": {
+            "status": "ambiguous"
+          },
+          "id": "qualification-08",
+          "passed": true,
+          "verifier_wall_seconds": 0.0004059069997310871
+        },
+        {
+          "actual": {
+            "status": "inconsistent"
+          },
+          "application_wall_seconds": 0.03232782299983228,
+          "expected": {
+            "status": "inconsistent"
+          },
+          "id": "qualification-09",
+          "passed": true,
+          "verifier_wall_seconds": 7.488999972338206e-05
+        },
+        {
+          "actual": {
+            "status": "ambiguous"
+          },
+          "application_wall_seconds": 0.032397014000252966,
+          "expected": {
+            "status": "ambiguous"
+          },
+          "id": "qualification-10",
+          "passed": true,
+          "verifier_wall_seconds": 0.0002683450002223253
+        },
+        {
+          "actual": {
+            "status": "determined",
+            "value": "-14/3"
+          },
+          "application_wall_seconds": 0.03233661600006599,
+          "expected": {
+            "status": "determined",
+            "value": "-14/3"
+          },
+          "id": "qualification-11",
+          "passed": true,
+          "verifier_wall_seconds": 0.00015970499998729792
+        },
+        {
+          "actual": {
+            "status": "ambiguous"
+          },
+          "application_wall_seconds": 0.032443241999772,
+          "expected": {
+            "status": "ambiguous"
+          },
+          "id": "qualification-12",
+          "passed": true,
+          "verifier_wall_seconds": 0.00036450599964155117
+        },
+        {
+          "actual": {
+            "status": "inconsistent"
+          },
+          "application_wall_seconds": 0.06436323400021138,
+          "expected": {
+            "status": "inconsistent"
+          },
+          "id": "qualification-13",
+          "passed": true,
+          "verifier_wall_seconds": 0.00010954099980153842
+        },
+        {
+          "actual": {
+            "status": "inconsistent"
+          },
+          "application_wall_seconds": 0.06450911899992207,
+          "expected": {
+            "status": "inconsistent"
+          },
+          "id": "qualification-14",
+          "passed": true,
+          "verifier_wall_seconds": 7.295700015674811e-05
+        },
+        {
+          "actual": {
+            "status": "determined",
+            "value": "-16/3"
+          },
+          "application_wall_seconds": 0.06459554100001696,
+          "expected": {
+            "status": "determined",
+            "value": "-16/3"
+          },
+          "id": "qualification-15",
+          "passed": true,
+          "verifier_wall_seconds": 0.00034138199998778873
+        },
+        {
+          "actual": {
+            "status": "determined",
+            "value": "-5/4"
+          },
+          "application_wall_seconds": 0.06463518500004284,
+          "expected": {
+            "status": "determined",
+            "value": "-5/4"
+          },
+          "id": "qualification-16",
+          "passed": true,
+          "verifier_wall_seconds": 0.0004742969999824709
+        },
+        {
+          "actual": {
+            "status": "inconsistent"
+          },
+          "application_wall_seconds": 0.06443720300012501,
+          "expected": {
+            "status": "inconsistent"
+          },
+          "id": "qualification-17",
+          "passed": true,
+          "verifier_wall_seconds": 7.870599984016735e-05
+        },
+        {
+          "actual": {
+            "status": "ambiguous"
+          },
+          "application_wall_seconds": 0.06449632900012148,
+          "expected": {
+            "status": "ambiguous"
+          },
+          "id": "qualification-18",
+          "passed": true,
+          "verifier_wall_seconds": 0.00013815300007991027
+        },
+        {
+          "actual": {
+            "status": "ambiguous"
+          },
+          "application_wall_seconds": 0.06443086900026174,
+          "expected": {
+            "status": "ambiguous"
+          },
+          "id": "qualification-19",
+          "passed": true,
+          "verifier_wall_seconds": 0.0002264130002913589
+        },
+        {
+          "actual": {
+            "status": "ambiguous"
+          },
+          "application_wall_seconds": 0.06444281099993532,
+          "expected": {
+            "status": "ambiguous"
+          },
+          "id": "qualification-20",
+          "passed": true,
+          "verifier_wall_seconds": 0.00013506799996321206
+        },
+        {
+          "actual": {
+            "status": "ambiguous"
+          },
+          "application_wall_seconds": 0.06465722199982338,
+          "expected": {
+            "status": "ambiguous"
+          },
+          "id": "qualification-21",
+          "passed": true,
+          "verifier_wall_seconds": 0.0003778059999604011
+        },
+        {
+          "actual": {
+            "status": "ambiguous"
+          },
+          "application_wall_seconds": 0.06469794099984938,
+          "expected": {
+            "status": "ambiguous"
+          },
+          "id": "qualification-22",
+          "passed": true,
+          "verifier_wall_seconds": 0.00020748500037370832
+        },
+        {
+          "actual": {
+            "status": "inconsistent"
+          },
+          "application_wall_seconds": 0.06454782099990553,
+          "expected": {
+            "status": "inconsistent"
+          },
+          "id": "qualification-23",
+          "passed": true,
+          "verifier_wall_seconds": 0.00022679399990011007
+        },
+        {
+          "actual": {
+            "status": "ambiguous"
+          },
+          "application_wall_seconds": 0.11517347799963318,
+          "expected": {
+            "status": "ambiguous"
+          },
+          "id": "qualification-24",
+          "passed": true,
+          "verifier_wall_seconds": 0.0002627569997457613
+        }
+      ],
+      "C_transfer": [
+        {
+          "actual": {
+            "status": "inconsistent"
+          },
+          "application_wall_seconds": 0.16496323399996982,
+          "expected": {
+            "status": "inconsistent"
+          },
+          "id": "transfer-01",
+          "passed": true,
+          "verifier_wall_seconds": 0.002255637999951432
+        },
+        {
+          "actual": {
+            "status": "ambiguous"
+          },
+          "application_wall_seconds": 0.0646134780004104,
+          "expected": {
+            "status": "ambiguous"
+          },
+          "id": "transfer-02",
+          "passed": true,
+          "verifier_wall_seconds": 0.0005323530003806809
+        },
+        {
+          "actual": {
+            "status": "inconsistent"
+          },
+          "application_wall_seconds": 0.1650006489999214,
+          "expected": {
+            "status": "inconsistent"
+          },
+          "id": "transfer-03",
+          "passed": true,
+          "verifier_wall_seconds": 0.003640024000105768
+        },
+        {
+          "actual": {
+            "status": "ambiguous"
+          },
+          "application_wall_seconds": 0.06444862499984083,
+          "expected": {
+            "status": "ambiguous"
+          },
+          "id": "transfer-04",
+          "passed": true,
+          "verifier_wall_seconds": 0.0009275539996451698
+        },
+        {
+          "actual": {
+            "status": "ambiguous"
+          },
+          "application_wall_seconds": 0.06549209500008146,
+          "expected": {
+            "status": "ambiguous"
+          },
+          "id": "transfer-05",
+          "passed": true,
+          "verifier_wall_seconds": 0.00022348799984683865
+        },
+        {
+          "actual": {
+            "status": "inconsistent"
+          },
+          "application_wall_seconds": 0.06458063399986713,
+          "expected": {
+            "status": "inconsistent"
+          },
+          "id": "transfer-06",
+          "passed": true,
+          "verifier_wall_seconds": 0.00045981599987499067
+        },
+        {
+          "actual": {
+            "status": "inconsistent"
+          },
+          "application_wall_seconds": 0.26527263500020126,
+          "expected": {
+            "status": "inconsistent"
+          },
+          "id": "transfer-07",
+          "passed": true,
+          "verifier_wall_seconds": 0.002302828000210866
+        },
+        {
+          "actual": {
+            "status": "ambiguous"
+          },
+          "application_wall_seconds": 0.06479722299991408,
+          "expected": {
+            "status": "ambiguous"
+          },
+          "id": "transfer-08",
+          "passed": true,
+          "verifier_wall_seconds": 0.00015449700003955513
+        },
+        {
+          "actual": {
+            "status": "determined",
+            "value": "-13/2"
+          },
+          "application_wall_seconds": 0.0646689539998988,
+          "expected": {
+            "status": "determined",
+            "value": "-13/2"
+          },
+          "id": "transfer-09",
+          "passed": true,
+          "verifier_wall_seconds": 0.00016169699983947794
+        },
+        {
+          "actual": {
+            "status": "ambiguous"
+          },
+          "application_wall_seconds": 0.16517645700014327,
+          "expected": {
+            "status": "ambiguous"
+          },
+          "id": "transfer-10",
+          "passed": true,
+          "verifier_wall_seconds": 0.0023926389999360254
+        },
+        {
+          "actual": {
+            "status": "determined",
+            "value": "-61/3"
+          },
+          "application_wall_seconds": 0.11483539699975154,
+          "expected": {
+            "status": "determined",
+            "value": "-61/3"
+          },
+          "id": "transfer-11",
+          "passed": true,
+          "verifier_wall_seconds": 0.009968382999886671
+        },
+        {
+          "actual": {
+            "status": "ambiguous"
+          },
+          "application_wall_seconds": 0.06452201699994475,
+          "expected": {
+            "status": "ambiguous"
+          },
+          "id": "transfer-12",
+          "passed": true,
+          "verifier_wall_seconds": 0.0007706530000177736
+        },
+        {
+          "actual": {
+            "status": "determined",
+            "value": "-3"
+          },
+          "application_wall_seconds": 0.06486462000020765,
+          "expected": {
+            "status": "determined",
+            "value": "-3"
+          },
+          "id": "transfer-13",
+          "passed": true,
+          "verifier_wall_seconds": 0.0008139870001286909
+        },
+        {
+          "actual": {
+            "status": "ambiguous"
+          },
+          "application_wall_seconds": 0.06497417599985056,
+          "expected": {
+            "status": "ambiguous"
+          },
+          "id": "transfer-14",
+          "passed": true,
+          "verifier_wall_seconds": 0.00016746599976613652
+        },
+        {
+          "actual": {
+            "status": "ambiguous"
+          },
+          "application_wall_seconds": 0.11471802999994907,
+          "expected": {
+            "status": "ambiguous"
+          },
+          "id": "transfer-15",
+          "passed": true,
+          "verifier_wall_seconds": 0.0011824490002254606
+        },
+        {
+          "actual": {
+            "status": "determined",
+            "value": "-3/2"
+          },
+          "application_wall_seconds": 0.06457340199995087,
+          "expected": {
+            "status": "determined",
+            "value": "-3/2"
+          },
+          "id": "transfer-16",
+          "passed": true,
+          "verifier_wall_seconds": 0.0017844349999904807
+        }
+      ]
+    },
+    "repair_wall_seconds": 8.798021446999883,
+    "retained_successor": {
+      "artifact": {
+        "name": "inherited-candidate.txt",
+        "sha256": "7c15490a842b8a4d86909424aa6c1fd09695b30a6a88a49ccd18f8e31015f97b"
+      },
+      "calls": 0,
+      "checks": {
+        "qualification": {
+          "passed": 24,
+          "total": 24
+        },
+        "transfer": {
+          "passed": 16,
+          "total": 16
+        }
+      },
+      "commitments": {
+        "qualification": "57395c371ee4df7593a5e2457799a596c27db89cb989af40fdd43c253c85e5f3",
+        "transfer": "23959e90737148fa596167426422566e7bc8f6a547cb891154af7a06c7c51312"
+      },
+      "id": "wf_7fbca74cea96c315713eb86f",
+      "status": "complete"
+    },
+    "sources": {
+      "adapters.py": "a05127970eb11bb08cc98ed7ef9e05f9a723f51c66f9a5bfaa9f2242bb6275a6",
+      "forge.py": "b3e3dd8b56f7f9290889bcc786826c33070c7d53ce374b318c1bd8056ef6f489",
+      "forge_repair.py": "33dc4bdd60c7309b42f440057c9aaab90cb11d03d52d75efcf213136c52c88cb",
+      "forge_sandbox.py": "860c444c497c6ba68f6967cdfd5e93e544c792860c6985a537f580ff257b80ed",
+      "forge_telemetry.py": "5f0b9dfc22002b59d5394a736ec8aca52e96aae57a70b354d394d365b95490e1",
+      "services.py": "41b71b3f946f0912898558995f2c83f1f09b0cb2d5f9203bfecbef301de4a081",
+      "study": "3b3ea443d8ca36ec49dd2a3d7f817e11afce44d2a6d7aa43856caf3f2cc2b2ec",
+      "workflows.py": "69a292abba3eb24601b79783965a8b5ffff4fe3a9dcef245aa755e3e9d8a4059"
+    }
+  },
+  "engine_source_sha256": {
+    "adapters.py": "a05127970eb11bb08cc98ed7ef9e05f9a723f51c66f9a5bfaa9f2242bb6275a6",
+    "forge.py": "b3e3dd8b56f7f9290889bcc786826c33070c7d53ce374b318c1bd8056ef6f489",
+    "forge_repair.py": "c8317d7fe1682063001a491399a87b4dd5bb0f32e1f2bb7730a73db27cbb4b8e",
+    "forge_sandbox.py": "860c444c497c6ba68f6967cdfd5e93e544c792860c6985a537f580ff257b80ed",
+    "forge_telemetry.py": "5f0b9dfc22002b59d5394a736ec8aca52e96aae57a70b354d394d365b95490e1",
+    "services.py": "41b71b3f946f0912898558995f2c83f1f09b0cb2d5f9203bfecbef301de4a081",
+    "study": "3b3ea443d8ca36ec49dd2a3d7f817e11afce44d2a6d7aa43856caf3f2cc2b2ec",
+    "workflows.py": "69a292abba3eb24601b79783965a8b5ffff4fe3a9dcef245aa755e3e9d8a4059"
+  },
+  "evidence": {
+    "candidate_sha256": "07e797ad9a388271d6fb3e2d7241c80425e3669e444d095561fd4da05daddcc0",
+    "cohorts": {
+      "qualification": [
+        {
+          "family": "competing",
+          "id": "qualification-01",
+          "input": {
+            "A": [
+              [
+                -12,
+                0,
+                0,
+                4,
+                0
+              ],
+              [
+                -12,
+                8,
+                8,
+                -8,
+                0
+              ],
+              [
+                -12,
+                8,
+                4,
+                -8,
+                0
+              ],
+              [
+                -12,
+                -12,
+                4,
+                -8,
+                0
+              ],
+              [
+                4,
+                -8,
+                0,
+                -16,
+                0
+              ],
+              [
+                12,
+                -16,
+                -8,
+                -8,
+                0
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                4
+              ],
+              [
+                12,
+                -4,
+                12,
+                12,
+                0
+              ],
+              [
+                -4,
+                8,
+                16,
+                -12,
+                0
+              ],
+              [
+                8,
+                8,
+                4,
+                -12,
+                0
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                4
+              ],
+              [
+                8,
+                16,
+                -4,
+                0,
+                0
+              ]
+            ],
+            "faults": 1,
+            "target": [
+              -3,
+              2,
+              -1,
+              0,
+              1
+            ],
+            "y": [
+              2,
+              27,
+              28,
+              -32,
+              -21,
+              -47,
+              7,
+              -21,
+              24,
+              24,
+              12,
+              47
+            ]
+          }
+        },
+        {
+          "family": "free-direction",
+          "id": "qualification-02",
+          "input": {
+            "A": [
+              [
+                0,
+                -4,
+                16,
+                4,
+                0
+              ],
+              [
+                16,
+                -4,
+                -4,
+                8,
+                0
+              ],
+              [
+                -8,
+                -8,
+                8,
+                8,
+                0
+              ],
+              [
+                -12,
+                -12,
+                0,
+                -12,
+                0
+              ],
+              [
+                -4,
+                -12,
+                4,
+                -12,
+                0
+              ],
+              [
+                12,
+                12,
+                0,
+                4,
+                0
+              ],
+              [
+                -12,
+                -12,
+                -16,
+                16,
+                0
+              ],
+              [
+                16,
+                0,
+                8,
+                4,
+                0
+              ],
+              [
+                4,
+                -16,
+                8,
+                16,
+                0
+              ],
+              [
+                8,
+                -8,
+                -12,
+                -8,
+                0
+              ]
+            ],
+            "faults": 1,
+            "target": [
+              -2,
+              -3,
+              2,
+              -1,
+              1
+            ],
+            "y": [
+              -10,
+              32,
+              -10,
+              33,
+              43,
+              -21,
+              7,
+              14,
+              23,
+              62
+            ]
+          }
+        },
+        {
+          "family": "incompatible",
+          "id": "qualification-03",
+          "input": {
+            "A": [
+              [
+                5,
+                -5,
+                0
+              ],
+              [
+                5,
+                0,
+                0
+              ],
+              [
+                10,
+                10,
+                20
+              ],
+              [
+                -10,
+                10,
+                -15
+              ],
+              [
+                0,
+                20,
+                15
+              ],
+              [
+                5,
+                0,
+                0
+              ],
+              [
+                15,
+                -20,
+                5
+              ],
+              [
+                20,
+                0,
+                20
+              ]
+            ],
+            "faults": 0,
+            "target": [
+              -3,
+              -1,
+              -3
+            ],
+            "y": [
+              -5,
+              0,
+              34,
+              -8,
+              38,
+              1,
+              -14,
+              24
+            ]
+          }
+        },
+        {
+          "family": "free-direction",
+          "id": "qualification-04",
+          "input": {
+            "A": [
+              [
+                7,
+                28,
+                21,
+                0
+              ],
+              [
+                -7,
+                7,
+                -14,
+                0
+              ],
+              [
+                21,
+                -28,
+                0,
+                0
+              ],
+              [
+                7,
+                21,
+                14,
+                0
+              ],
+              [
+                7,
+                7,
+                0,
+                0
+              ],
+              [
+                0,
+                21,
+                -7,
+                0
+              ],
+              [
+                -14,
+                28,
+                14,
+                0
+              ],
+              [
+                -14,
+                -28,
+                28,
+                0
+              ],
+              [
+                -21,
+                21,
+                21,
+                0
+              ]
+            ],
+            "faults": 1,
+            "target": [
+              -3,
+              -3,
+              -3,
+              1
+            ],
+            "y": [
+              -52,
+              6,
+              55,
+              -34,
+              2,
+              -10,
+              -68,
+              -34,
+              -81
+            ]
+          }
+        },
+        {
+          "family": "free-direction",
+          "id": "qualification-05",
+          "input": {
+            "A": [
+              [
+                6,
+                -12,
+                -3,
+                -9,
+                0
+              ],
+              [
+                0,
+                -6,
+                -3,
+                6,
+                0
+              ],
+              [
+                9,
+                9,
+                -3,
+                -6,
+                0
+              ],
+              [
+                9,
+                12,
+                -3,
+                9,
+                0
+              ],
+              [
+                9,
+                -6,
+                9,
+                -6,
+                0
+              ],
+              [
+                -3,
+                -6,
+                12,
+                6,
+                0
+              ],
+              [
+                6,
+                -3,
+                -9,
+                -6,
+                0
+              ],
+              [
+                0,
+                6,
+                0,
+                -9,
+                0
+              ]
+            ],
+            "faults": 0,
+            "target": [
+              -1,
+              -1,
+              1,
+              1,
+              1
+            ],
+            "y": [
+              -25,
+              1,
+              38,
+              84,
+              20,
+              3,
+              -5,
+              -12
+            ]
+          }
+        },
+        {
+          "family": "incompatible",
+          "id": "qualification-06",
+          "input": {
+            "A": [
+              [
+                6,
+                0,
+                0
+              ],
+              [
+                -12,
+                0,
+                6
+              ],
+              [
+                18,
+                6,
+                24
+              ],
+              [
+                -12,
+                -24,
+                -6
+              ],
+              [
+                6,
+                0,
+                0
+              ],
+              [
+                6,
+                24,
+                0
+              ],
+              [
+                -18,
+                -24,
+                -6
+              ],
+              [
+                -6,
+                18,
+                -6
+              ]
+            ],
+            "faults": 0,
+            "target": [
+              -2,
+              2,
+              2
+            ],
+            "y": [
+              -7,
+              12,
+              -46,
+              44,
+              -8,
+              -32,
+              52,
+              -6
+            ]
+          }
+        },
+        {
+          "family": "redundancy",
+          "id": "qualification-07",
+          "input": {
+            "A": [
+              [
+                -6,
+                3,
+                9,
+                9,
+                0
+              ],
+              [
+                9,
+                -12,
+                12,
+                3,
+                0
+              ],
+              [
+                -12,
+                6,
+                -6,
+                -6,
+                0
+              ],
+              [
+                3,
+                -6,
+                -6,
+                -3,
+                0
+              ],
+              [
+                3,
+                -9,
+                6,
+                12,
+                0
+              ],
+              [
+                -6,
+                0,
+                6,
+                3,
+                0
+              ],
+              [
+                0,
+                -6,
+                12,
+                0,
+                0
+              ],
+              [
+                9,
+                0,
+                -3,
+                3,
+                0
+              ],
+              [
+                -3,
+                -9,
+                -3,
+                -6,
+                0
+              ],
+              [
+                6,
+                12,
+                -12,
+                -12,
+                0
+              ]
+            ],
+            "faults": 1,
+            "target": [
+              3,
+              0,
+              -1,
+              -3,
+              0
+            ],
+            "y": [
+              27,
+              8,
+              -42,
+              -18,
+              35,
+              -4,
+              -14,
+              36,
+              -42,
+              -4
+            ]
+          }
+        },
+        {
+          "family": "redundancy",
+          "id": "qualification-08",
+          "input": {
+            "A": [
+              [
+                -3,
+                3,
+                12,
+                -12
+              ],
+              [
+                9,
+                -6,
+                0,
+                -9
+              ],
+              [
+                -6,
+                -9,
+                3,
+                -12
+              ],
+              [
+                6,
+                -6,
+                -6,
+                -6
+              ],
+              [
+                12,
+                6,
+                3,
+                -9
+              ],
+              [
+                6,
+                12,
+                0,
+                0
+              ],
+              [
+                -6,
+                -12,
+                6,
+                3
+              ]
+            ],
+            "faults": 0,
+            "target": [
+              1,
+              -3,
+              1,
+              2
+            ],
+            "y": [
+              -78,
+              -37,
+              -94,
+              -10,
+              1,
+              54,
+              -66
+            ]
+          }
+        },
+        {
+          "family": "free-direction",
+          "id": "qualification-09",
+          "input": {
+            "A": [
+              [
+                -6,
+                2,
+                -6,
+                0,
+                0
+              ],
+              [
+                -8,
+                2,
+                0,
+                6,
+                0
+              ],
+              [
+                4,
+                -4,
+                8,
+                2,
+                0
+              ],
+              [
+                2,
+                -4,
+                0,
+                6,
+                0
+              ],
+              [
+                2,
+                -6,
+                -6,
+                -6,
+                0
+              ],
+              [
+                -6,
+                2,
+                -8,
+                -2,
+                0
+              ],
+              [
+                -2,
+                0,
+                6,
+                4,
+                0
+              ],
+              [
+                0,
+                0,
+                -2,
+                0,
+                0
+              ]
+            ],
+            "faults": 0,
+            "target": [
+              1,
+              -2,
+              0,
+              -1,
+              1
+            ],
+            "y": [
+              4,
+              -70,
+              -21,
+              -12,
+              107,
+              27,
+              -61,
+              10
+            ]
+          }
+        },
+        {
+          "family": "redundancy",
+          "id": "qualification-10",
+          "input": {
+            "A": [
+              [
+                5,
+                15,
+                20,
+                -10,
+                0
+              ],
+              [
+                15,
+                20,
+                10,
+                -10,
+                0
+              ],
+              [
+                20,
+                15,
+                -15,
+                5,
+                -20
+              ],
+              [
+                -15,
+                -10,
+                5,
+                5,
+                -10
+              ],
+              [
+                -20,
+                -5,
+                -20,
+                0,
+                -10
+              ],
+              [
+                -10,
+                0,
+                -20,
+                -15,
+                -10
+              ],
+              [
+                0,
+                0,
+                15,
+                0,
+                -20
+              ],
+              [
+                -5,
+                -5,
+                -10,
+                10,
+                -20
+              ]
+            ],
+            "faults": 0,
+            "target": [
+              0,
+              3,
+              0,
+              0,
+              3
+            ],
+            "y": [
+              -49,
+              -39,
+              -36,
+              -15,
+              18,
+              36,
+              -52,
+              -19
+            ]
+          }
+        },
+        {
+          "family": "competing",
+          "id": "qualification-11",
+          "input": {
+            "A": [
+              [
+                12,
+                8,
+                12,
+                -4,
+                0
+              ],
+              [
+                -12,
+                -8,
+                -12,
+                4,
+                0
+              ],
+              [
+                -16,
+                0,
+                -12,
+                12,
+                0
+              ],
+              [
+                0,
+                -8,
+                0,
+                4,
+                0
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                -4
+              ],
+              [
+                0,
+                4,
+                4,
+                -16,
+                0
+              ],
+              [
+                0,
+                4,
+                -8,
+                -12,
+                0
+              ],
+              [
+                -8,
+                8,
+                4,
+                16,
+                0
+              ],
+              [
+                0,
+                0,
+                -16,
+                -16,
+                0
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                4
+              ],
+              [
+                16,
+                16,
+                4,
+                -16,
+                0
+              ],
+              [
+                0,
+                -8,
+                16,
+                8,
+                0
+              ]
+            ],
+            "faults": 1,
+            "target": [
+              -1,
+              -3,
+              -1,
+              -1,
+              1
+            ],
+            "y": [
+              -1,
+              1,
+              -10,
+              25,
+              7,
+              -10,
+              -46,
+              13,
+              -64,
+              -12,
+              -63,
+              80
+            ]
+          }
+        },
+        {
+          "family": "incompatible",
+          "id": "qualification-12",
+          "input": {
+            "A": [
+              [
+                6,
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                6,
+                -6,
+                24,
+                0
+              ],
+              [
+                6,
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                -6,
+                -12,
+                12,
+                18,
+                6
+              ],
+              [
+                -18,
+                24,
+                -18,
+                12,
+                18
+              ],
+              [
+                0,
+                18,
+                -18,
+                18,
+                -6
+              ],
+              [
+                -12,
+                0,
+                12,
+                0,
+                -12
+              ],
+              [
+                -12,
+                -18,
+                -6,
+                24,
+                0
+              ],
+              [
+                6,
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                -6,
+                0,
+                -18,
+                0,
+                12
+              ],
+              [
+                -6,
+                24,
+                -12,
+                -18,
+                -12
+              ],
+              [
+                -18,
+                18,
+                -18,
+                0,
+                18
+              ],
+              [
+                -18,
+                -18,
+                6,
+                24,
+                18
+              ]
+            ],
+            "faults": 1,
+            "target": [
+              0,
+              -3,
+              -2,
+              -3,
+              3
+            ],
+            "y": [
+              11,
+              -21,
+              13,
+              30,
+              -68,
+              -64,
+              -32,
+              5,
+              12,
+              -6,
+              -86,
+              -54,
+              34
+            ]
+          }
+        },
+        {
+          "family": "redundancy",
+          "id": "qualification-13",
+          "input": {
+            "A": [
+              [
+                -12,
+                24,
+                0
+              ],
+              [
+                -18,
+                18,
+                0
+              ],
+              [
+                -18,
+                12,
+                0
+              ],
+              [
+                -24,
+                -12,
+                0
+              ],
+              [
+                12,
+                24,
+                0
+              ],
+              [
+                0,
+                -24,
+                0
+              ],
+              [
+                -12,
+                18,
+                0
+              ],
+              [
+                6,
+                12,
+                0
+              ]
+            ],
+            "faults": 1,
+            "target": [
+              0,
+              -2,
+              0
+            ],
+            "y": [
+              -2,
+              0,
+              1,
+              6,
+              -6,
+              4,
+              -1,
+              -3
+            ]
+          }
+        },
+        {
+          "family": "competing",
+          "id": "qualification-14",
+          "input": {
+            "A": [
+              [
+                0,
+                2,
+                -2,
+                2,
+                0
+              ],
+              [
+                8,
+                4,
+                8,
+                -8,
+                0
+              ],
+              [
+                -2,
+                -8,
+                -8,
+                4,
+                0
+              ],
+              [
+                0,
+                2,
+                8,
+                -2,
+                0
+              ],
+              [
+                -4,
+                -6,
+                4,
+                -6,
+                0
+              ],
+              [
+                4,
+                0,
+                0,
+                -2,
+                0
+              ],
+              [
+                -4,
+                4,
+                4,
+                -2,
+                0
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                2
+              ],
+              [
+                -6,
+                -4,
+                -8,
+                6,
+                0
+              ],
+              [
+                4,
+                0,
+                -4,
+                6,
+                0
+              ],
+              [
+                4,
+                -2,
+                -4,
+                -6,
+                0
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                2
+              ]
+            ],
+            "faults": 1,
+            "target": [
+              1,
+              -2,
+              1,
+              -2,
+              1
+            ],
+            "y": [
+              13,
+              18,
+              -23,
+              -18,
+              -32,
+              9,
+              9,
+              13,
+              -10,
+              -1,
+              30,
+              8
+            ]
+          }
+        },
+        {
+          "family": "competing",
+          "id": "qualification-15",
+          "input": {
+            "A": [
+              [
+                -7,
+                -28,
+                28,
+                0,
+                0
+              ],
+              [
+                -14,
+                -28,
+                7,
+                14,
+                0
+              ],
+              [
+                -21,
+                0,
+                -28,
+                21,
+                0
+              ],
+              [
+                -28,
+                -28,
+                14,
+                28,
+                0
+              ],
+              [
+                -28,
+                28,
+                21,
+                21,
+                0
+              ],
+              [
+                7,
+                21,
+                7,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                7
+              ],
+              [
+                28,
+                0,
+                7,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                -7
+              ],
+              [
+                0,
+                -7,
+                14,
+                0,
+                0
+              ],
+              [
+                -7,
+                0,
+                -7,
+                -28,
+                0
+              ],
+              [
+                14,
+                0,
+                14,
+                0,
+                0
+              ]
+            ],
+            "faults": 1,
+            "target": [
+              3,
+              3,
+              2,
+              0,
+              1
+            ],
+            "y": [
+              -89,
+              -69,
+              11,
+              -102,
+              -39,
+              25,
+              16,
+              25,
+              -11,
+              -31,
+              10,
+              -4
+            ]
+          }
+        },
+        {
+          "family": "incompatible",
+          "id": "qualification-16",
+          "input": {
+            "A": [
+              [
+                3,
+                0,
+                6
+              ],
+              [
+                0,
+                9,
+                9
+              ],
+              [
+                3,
+                0,
+                0
+              ],
+              [
+                3,
+                0,
+                0
+              ],
+              [
+                -12,
+                -9,
+                -3
+              ],
+              [
+                -9,
+                -3,
+                12
+              ],
+              [
+                9,
+                9,
+                -6
+              ],
+              [
+                9,
+                12,
+                -9
+              ],
+              [
+                3,
+                0,
+                0
+              ],
+              [
+                -3,
+                -6,
+                3
+              ],
+              [
+                9,
+                12,
+                -9
+              ]
+            ],
+            "faults": 1,
+            "target": [
+              -1,
+              -2,
+              0
+            ],
+            "y": [
+              31,
+              54,
+              14,
+              15,
+              -88,
+              -12,
+              48,
+              48,
+              13,
+              -22,
+              48
+            ]
+          }
+        },
+        {
+          "family": "free-direction",
+          "id": "qualification-17",
+          "input": {
+            "A": [
+              [
+                -5,
+                10,
+                20,
+                0
+              ],
+              [
+                -5,
+                0,
+                0,
+                0
+              ],
+              [
+                -15,
+                0,
+                20,
+                0
+              ],
+              [
+                -15,
+                10,
+                10,
+                0
+              ],
+              [
+                -10,
+                5,
+                -5,
+                0
+              ],
+              [
+                -5,
+                15,
+                -5,
+                0
+              ],
+              [
+                -5,
+                15,
+                0,
+                0
+              ]
+            ],
+            "faults": 0,
+            "target": [
+              2,
+              -2,
+              2,
+              1
+            ],
+            "y": [
+              16,
+              -2,
+              6,
+              6,
+              -4,
+              4,
+              7
+            ]
+          }
+        },
+        {
+          "family": "incompatible",
+          "id": "qualification-18",
+          "input": {
+            "A": [
+              [
+                3,
+                0,
+                0,
+                0
+              ],
+              [
+                -6,
+                -9,
+                9,
+                3
+              ],
+              [
+                12,
+                0,
+                9,
+                -3
+              ],
+              [
+                3,
+                0,
+                0,
+                0
+              ],
+              [
+                -12,
+                -9,
+                -12,
+                0
+              ],
+              [
+                -12,
+                -6,
+                -9,
+                -6
+              ],
+              [
+                -12,
+                0,
+                -3,
+                -12
+              ],
+              [
+                -6,
+                -9,
+                12,
+                12
+              ],
+              [
+                12,
+                6,
+                3,
+                -6
+              ],
+              [
+                3,
+                0,
+                0,
+                0
+              ],
+              [
+                -3,
+                3,
+                6,
+                12
+              ],
+              [
+                -6,
+                0,
+                -12,
+                -12
+              ]
+            ],
+            "faults": 1,
+            "target": [
+              -1,
+              -2,
+              -3,
+              2
+            ],
+            "y": [
+              2,
+              -55,
+              5,
+              3,
+              -22,
+              2,
+              32,
+              -86,
+              42,
+              4,
+              -36,
+              48
+            ]
+          }
+        },
+        {
+          "family": "redundancy",
+          "id": "qualification-19",
+          "input": {
+            "A": [
+              [
+                6,
+                -18,
+                24,
+                0
+              ],
+              [
+                -6,
+                -12,
+                18,
+                0
+              ],
+              [
+                18,
+                6,
+                6,
+                0
+              ],
+              [
+                24,
+                -18,
+                -24,
+                0
+              ],
+              [
+                -12,
+                24,
+                -6,
+                0
+              ],
+              [
+                24,
+                24,
+                6,
+                0
+              ],
+              [
+                -24,
+                -24,
+                -18,
+                0
+              ],
+              [
+                18,
+                -12,
+                -24,
+                0
+              ],
+              [
+                12,
+                -24,
+                18,
+                0
+              ]
+            ],
+            "faults": 1,
+            "target": [
+              -3,
+              1,
+              0,
+              0
+            ],
+            "y": [
+              29,
+              40,
+              -30,
+              -60,
+              -1,
+              -60,
+              39,
+              -53,
+              15
+            ]
+          }
+        },
+        {
+          "family": "free-direction",
+          "id": "qualification-20",
+          "input": {
+            "A": [
+              [
+                -6,
+                -6,
+                18,
+                -18,
+                0
+              ],
+              [
+                -18,
+                -18,
+                6,
+                24,
+                0
+              ],
+              [
+                0,
+                6,
+                -6,
+                12,
+                0
+              ],
+              [
+                12,
+                12,
+                6,
+                -6,
+                0
+              ],
+              [
+                24,
+                -18,
+                12,
+                -6,
+                0
+              ],
+              [
+                12,
+                0,
+                -12,
+                -18,
+                0
+              ],
+              [
+                0,
+                -6,
+                12,
+                12,
+                0
+              ],
+              [
+                -18,
+                -18,
+                18,
+                6,
+                0
+              ],
+              [
+                -24,
+                -6,
+                12,
+                -12,
+                0
+              ],
+              [
+                -12,
+                12,
+                -24,
+                6,
+                0
+              ]
+            ],
+            "faults": 1,
+            "target": [
+              3,
+              -3,
+              3,
+              3,
+              1
+            ],
+            "y": [
+              19,
+              3,
+              -12,
+              18,
+              80,
+              -4,
+              30,
+              17,
+              -22,
+              -67
+            ]
+          }
+        },
+        {
+          "family": "competing",
+          "id": "qualification-21",
+          "input": {
+            "A": [
+              [
+                -8,
+                6,
+                -2,
+                -2,
+                0
+              ],
+              [
+                -8,
+                0,
+                -6,
+                2,
+                0
+              ],
+              [
+                4,
+                -2,
+                -8,
+                4,
+                0
+              ],
+              [
+                8,
+                6,
+                -6,
+                -8,
+                0
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                2
+              ],
+              [
+                -4,
+                -8,
+                6,
+                -8,
+                0
+              ],
+              [
+                2,
+                0,
+                -4,
+                6,
+                0
+              ],
+              [
+                0,
+                -2,
+                -2,
+                -2,
+                0
+              ],
+              [
+                2,
+                -2,
+                -2,
+                -2,
+                0
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                -2
+              ],
+              [
+                0,
+                6,
+                -8,
+                -2,
+                0
+              ],
+              [
+                -2,
+                2,
+                -8,
+                2,
+                0
+              ]
+            ],
+            "faults": 1,
+            "target": [
+              3,
+              0,
+              -3,
+              -3,
+              1
+            ],
+            "y": [
+              -43,
+              -5,
+              52,
+              32,
+              7,
+              -2,
+              20,
+              17,
+              24,
+              -2,
+              9,
+              16
+            ]
+          }
+        },
+        {
+          "family": "competing",
+          "id": "qualification-22",
+          "input": {
+            "A": [
+              [
+                0,
+                14,
+                0
+              ],
+              [
+                21,
+                -28,
+                0
+              ],
+              [
+                0,
+                -7,
+                0
+              ],
+              [
+                -28,
+                -14,
+                0
+              ],
+              [
+                -7,
+                7,
+                0
+              ],
+              [
+                0,
+                0,
+                7
+              ],
+              [
+                -7,
+                7,
+                0
+              ],
+              [
+                28,
+                28,
+                0
+              ],
+              [
+                0,
+                0,
+                -7
+              ],
+              [
+                21,
+                -21,
+                0
+              ]
+            ],
+            "faults": 1,
+            "target": [
+              -3,
+              -2,
+              1
+            ],
+            "y": [
+              18,
+              -48,
+              -9,
+              -2,
+              13,
+              -2,
+              13,
+              20,
+              -3,
+              -39
+            ]
+          }
+        },
+        {
+          "family": "incompatible",
+          "id": "qualification-23",
+          "input": {
+            "A": [
+              [
+                6,
+                0,
+                0,
+                0
+              ],
+              [
+                6,
+                0,
+                0,
+                0
+              ],
+              [
+                -18,
+                -12,
+                0,
+                -18
+              ],
+              [
+                6,
+                12,
+                -24,
+                -18
+              ],
+              [
+                -18,
+                -24,
+                -24,
+                18
+              ],
+              [
+                18,
+                -6,
+                -12,
+                -24
+              ],
+              [
+                6,
+                0,
+                0,
+                0
+              ],
+              [
+                6,
+                -18,
+                0,
+                24
+              ],
+              [
+                -12,
+                18,
+                12,
+                -18
+              ],
+              [
+                18,
+                -12,
+                12,
+                12
+              ],
+              [
+                -24,
+                18,
+                -18,
+                -12
+              ],
+              [
+                6,
+                -12,
+                -12,
+                0
+              ]
+            ],
+            "faults": 1,
+            "target": [
+              -3,
+              -1,
+              1,
+              2
+            ],
+            "y": [
+              1,
+              0,
+              -36,
+              -32,
+              -50,
+              -49,
+              2,
+              -3,
+              25,
+              10,
+              -9,
+              -34
+            ]
+          }
+        },
+        {
+          "family": "redundancy",
+          "id": "qualification-24",
+          "input": {
+            "A": [
+              [
+                -24,
+                -24,
+                0,
+                -6
+              ],
+              [
+                0,
+                -18,
+                -24,
+                -12
+              ],
+              [
+                0,
+                6,
+                24,
+                -18
+              ],
+              [
+                -6,
+                12,
+                -24,
+                0
+              ],
+              [
+                12,
+                -18,
+                0,
+                24
+              ],
+              [
+                0,
+                -6,
+                6,
+                -18
+              ],
+              [
+                -24,
+                -24,
+                -18,
+                -6
+              ]
+            ],
+            "faults": 0,
+            "target": [
+              3,
+              2,
+              2,
+              2
+            ],
+            "y": [
+              8,
+              5,
+              37,
+              -68,
+              37,
+              32,
+              -19
+            ]
+          }
+        }
+      ],
+      "transfer": [
+        {
+          "family": "redundancy",
+          "id": "transfer-01",
+          "input": {
+            "A": [
+              [
+                0,
+                28,
+                0,
+                -14,
+                21,
+                0
+              ],
+              [
+                -21,
+                28,
+                7,
+                21,
+                28,
+                7
+              ],
+              [
+                28,
+                7,
+                -7,
+                14,
+                -21,
+                -7
+              ],
+              [
+                -21,
+                -14,
+                0,
+                -28,
+                -21,
+                -14
+              ],
+              [
+                14,
+                -21,
+                7,
+                -21,
+                28,
+                21
+              ],
+              [
+                -28,
+                7,
+                21,
+                -28,
+                -21,
+                -28
+              ],
+              [
+                21,
+                0,
+                28,
+                7,
+                -28,
+                0
+              ],
+              [
+                -21,
+                -14,
+                -21,
+                0,
+                14,
+                21
+              ],
+              [
+                -28,
+                7,
+                28,
+                28,
+                21,
+                -28
+              ],
+              [
+                -7,
+                0,
+                7,
+                -28,
+                28,
+                -28
+              ],
+              [
+                -14,
+                7,
+                -28,
+                -7,
+                -7,
+                28
+              ],
+              [
+                -14,
+                7,
+                0,
+                28,
+                28,
+                7
+              ],
+              [
+                -14,
+                -21,
+                0,
+                -7,
+                -21,
+                21
+              ]
+            ],
+            "faults": 2,
+            "target": [
+              1,
+              2,
+              -1,
+              -1,
+              2,
+              -3
+            ],
+            "y": [
+              -14,
+              20,
+              -67,
+              -24,
+              109,
+              -56,
+              -18,
+              60,
+              11,
+              5,
+              -1,
+              44,
+              40
+            ]
+          }
+        },
+        {
+          "family": "redundancy",
+          "id": "transfer-02",
+          "input": {
+            "A": [
+              [
+                -2,
+                8,
+                -2,
+                -6,
+                4,
+                2,
+                0
+              ],
+              [
+                -4,
+                6,
+                8,
+                -6,
+                0,
+                -4,
+                0
+              ],
+              [
+                -6,
+                4,
+                8,
+                4,
+                -6,
+                0,
+                0
+              ],
+              [
+                0,
+                8,
+                8,
+                -2,
+                4,
+                4,
+                0
+              ],
+              [
+                0,
+                -4,
+                -4,
+                -8,
+                0,
+                -6,
+                0
+              ],
+              [
+                0,
+                -8,
+                4,
+                -2,
+                4,
+                -2,
+                0
+              ],
+              [
+                -2,
+                0,
+                -4,
+                2,
+                -2,
+                2,
+                0
+              ],
+              [
+                4,
+                -6,
+                8,
+                -6,
+                -4,
+                8,
+                0
+              ],
+              [
+                -6,
+                4,
+                2,
+                -2,
+                6,
+                -4,
+                0
+              ],
+              [
+                -6,
+                -4,
+                -2,
+                -6,
+                8,
+                4,
+                0
+              ],
+              [
+                -8,
+                6,
+                -2,
+                2,
+                2,
+                -8,
+                0
+              ],
+              [
+                -2,
+                6,
+                -4,
+                6,
+                0,
+                -2,
+                0
+              ]
+            ],
+            "faults": 1,
+            "target": [
+              1,
+              0,
+              1,
+              2,
+              -3,
+              -1,
+              0
+            ],
+            "y": [
+              75,
+              36,
+              -54,
+              31,
+              38,
+              -37,
+              -17,
+              -70,
+              37,
+              -15,
+              44,
+              30
+            ]
+          }
+        },
+        {
+          "family": "incompatible",
+          "id": "transfer-03",
+          "input": {
+            "A": [
+              [
+                0,
+                4,
+                6,
+                -2,
+                6,
+                -6
+              ],
+              [
+                2,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                8,
+                -6,
+                -8,
+                -6,
+                0,
+                -8
+              ],
+              [
+                -6,
+                6,
+                -4,
+                4,
+                -4,
+                0
+              ],
+              [
+                0,
+                2,
+                0,
+                -8,
+                8,
+                4
+              ],
+              [
+                -2,
+                -8,
+                -8,
+                2,
+                4,
+                4
+              ],
+              [
+                -6,
+                4,
+                -8,
+                0,
+                6,
+                8
+              ],
+              [
+                2,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                -2,
+                -4,
+                2,
+                -2,
+                -4,
+                -8
+              ],
+              [
+                2,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                -4,
+                0,
+                -8,
+                0,
+                0
+              ],
+              [
+                -2,
+                0,
+                -6,
+                -8,
+                -8,
+                4
+              ],
+              [
+                -4,
+                -8,
+                2,
+                4,
+                4,
+                0
+              ],
+              [
+                8,
+                -2,
+                -4,
+                -2,
+                0,
+                6
+              ]
+            ],
+            "faults": 1,
+            "target": [
+              3,
+              2,
+              -1,
+              3,
+              3,
+              2
+            ],
+            "y": [
+              63,
+              3,
+              -34,
+              -61,
+              78,
+              -41,
+              -10,
+              5,
+              -21,
+              4,
+              28,
+              -35,
+              0,
+              6
+            ]
+          }
+        },
+        {
+          "family": "competing",
+          "id": "transfer-04",
+          "input": {
+            "A": [
+              [
+                0,
+                0,
+                0,
+                0,
+                -4
+              ],
+              [
+                -12,
+                12,
+                -8,
+                -8,
+                0
+              ],
+              [
+                8,
+                4,
+                12,
+                8,
+                0
+              ],
+              [
+                4,
+                4,
+                16,
+                16,
+                0
+              ],
+              [
+                -4,
+                8,
+                0,
+                -8,
+                0
+              ],
+              [
+                16,
+                -16,
+                0,
+                8,
+                0
+              ],
+              [
+                -16,
+                16,
+                -4,
+                12,
+                0
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                -4
+              ],
+              [
+                12,
+                16,
+                -8,
+                -12,
+                0
+              ],
+              [
+                0,
+                -12,
+                -4,
+                -12,
+                0
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                4
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                4
+              ],
+              [
+                -4,
+                0,
+                -12,
+                4,
+                0
+              ],
+              [
+                0,
+                -4,
+                16,
+                12,
+                0
+              ],
+              [
+                -12,
+                0,
+                -16,
+                -16,
+                0
+              ],
+              [
+                12,
+                4,
+                16,
+                -4,
+                0
+              ]
+            ],
+            "faults": 2,
+            "target": [
+              2,
+              1,
+              -3,
+              2,
+              1
+            ],
+            "y": [
+              -10,
+              -20,
+              -8,
+              -32,
+              -15,
+              56,
+              -45,
+              -10,
+              57,
+              14,
+              15,
+              15,
+              20,
+              -43,
+              5,
+              -6
+            ]
+          }
+        },
+        {
+          "family": "competing",
+          "id": "transfer-05",
+          "input": {
+            "A": [
+              [
+                -8,
+                -12,
+                -16,
+                4,
+                0
+              ],
+              [
+                12,
+                -4,
+                -12,
+                -4,
+                0
+              ],
+              [
+                8,
+                -8,
+                8,
+                4,
+                0
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                -4
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                4
+              ],
+              [
+                -4,
+                16,
+                16,
+                -16,
+                0
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                4
+              ],
+              [
+                -16,
+                12,
+                8,
+                0,
+                0
+              ],
+              [
+                -8,
+                -16,
+                -16,
+                12,
+                0
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                4
+              ],
+              [
+                -8,
+                -4,
+                8,
+                -4,
+                0
+              ],
+              [
+                8,
+                -12,
+                8,
+                -8,
+                0
+              ],
+              [
+                0,
+                -12,
+                8,
+                -16,
+                0
+              ],
+              [
+                -4,
+                0,
+                -16,
+                12,
+                0
+              ],
+              [
+                -8,
+                -8,
+                -12,
+                0,
+                0
+              ],
+              [
+                -8,
+                12,
+                -8,
+                16,
+                0
+              ]
+            ],
+            "faults": 2,
+            "target": [
+              -3,
+              -1,
+              -2,
+              2,
+              1
+            ],
+            "y": [
+              70,
+              5,
+              -21,
+              -6,
+              1,
+              -8,
+              6,
+              -1,
+              57,
+              1,
+              40,
+              31,
+              81,
+              -7,
+              65,
+              -57
+            ]
+          }
+        },
+        {
+          "family": "redundancy",
+          "id": "transfer-06",
+          "input": {
+            "A": [
+              [
+                2,
+                4,
+                2,
+                2,
+                -2,
+                0
+              ],
+              [
+                -2,
+                0,
+                8,
+                2,
+                0,
+                0
+              ],
+              [
+                -2,
+                0,
+                -4,
+                2,
+                0,
+                0
+              ],
+              [
+                8,
+                -6,
+                -8,
+                6,
+                2,
+                0
+              ],
+              [
+                -2,
+                -2,
+                -6,
+                2,
+                4,
+                0
+              ],
+              [
+                4,
+                -6,
+                -2,
+                6,
+                8,
+                0
+              ],
+              [
+                -4,
+                -4,
+                2,
+                -8,
+                6,
+                0
+              ],
+              [
+                8,
+                2,
+                -6,
+                4,
+                -6,
+                0
+              ],
+              [
+                6,
+                -2,
+                -6,
+                -4,
+                -8,
+                0
+              ],
+              [
+                4,
+                0,
+                8,
+                -6,
+                6,
+                0
+              ],
+              [
+                4,
+                2,
+                -2,
+                6,
+                -2,
+                0
+              ],
+              [
+                8,
+                -6,
+                -4,
+                -2,
+                8,
+                0
+              ],
+              [
+                0,
+                -6,
+                6,
+                -2,
+                -8,
+                0
+              ]
+            ],
+            "faults": 2,
+            "target": [
+              3,
+              -2,
+              0,
+              1,
+              -2,
+              0
+            ],
+            "y": [
+              9,
+              63,
+              -12,
+              -30,
+              -36,
+              -18,
+              -30,
+              -15,
+              -15,
+              -27,
+              6,
+              -81,
+              102
+            ]
+          }
+        },
+        {
+          "family": "free-direction",
+          "id": "transfer-07",
+          "input": {
+            "A": [
+              [
+                -12,
+                -9,
+                3,
+                12,
+                0
+              ],
+              [
+                9,
+                -12,
+                3,
+                -6,
+                0
+              ],
+              [
+                6,
+                -3,
+                6,
+                9,
+                0
+              ],
+              [
+                12,
+                3,
+                -3,
+                -6,
+                0
+              ],
+              [
+                6,
+                -6,
+                -3,
+                12,
+                0
+              ],
+              [
+                9,
+                3,
+                -3,
+                -3,
+                0
+              ],
+              [
+                12,
+                -12,
+                -12,
+                0,
+                0
+              ],
+              [
+                9,
+                12,
+                12,
+                6,
+                0
+              ],
+              [
+                9,
+                -3,
+                -9,
+                12,
+                0
+              ],
+              [
+                0,
+                -3,
+                9,
+                -12,
+                0
+              ],
+              [
+                -3,
+                9,
+                0,
+                -12,
+                0
+              ],
+              [
+                12,
+                -3,
+                -12,
+                3,
+                0
+              ]
+            ],
+            "faults": 2,
+            "target": [
+              2,
+              2,
+              2,
+              1,
+              1
+            ],
+            "y": [
+              -22,
+              23,
+              23,
+              42,
+              69,
+              37,
+              104,
+              -6,
+              97,
+              -58,
+              -49,
+              102
+            ]
+          }
+        },
+        {
+          "family": "competing",
+          "id": "transfer-08",
+          "input": {
+            "A": [
+              [
+                0,
+                0,
+                0,
+                0,
+                -6
+              ],
+              [
+                0,
+                -18,
+                -12,
+                18,
+                0
+              ],
+              [
+                -12,
+                0,
+                18,
+                24,
+                0
+              ],
+              [
+                12,
+                -12,
+                0,
+                18,
+                0
+              ],
+              [
+                0,
+                -12,
+                24,
+                12,
+                0
+              ],
+              [
+                24,
+                -18,
+                -18,
+                -24,
+                0
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                -6
+              ],
+              [
+                18,
+                6,
+                18,
+                -18,
+                0
+              ],
+              [
+                -6,
+                0,
+                24,
+                -24,
+                0
+              ],
+              [
+                -18,
+                18,
+                24,
+                -24,
+                0
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                6
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                6
+              ],
+              [
+                6,
+                0,
+                6,
+                -24,
+                0
+              ],
+              [
+                -18,
+                -6,
+                24,
+                -24,
+                0
+              ],
+              [
+                6,
+                -12,
+                24,
+                -12,
+                0
+              ],
+              [
+                -18,
+                24,
+                24,
+                -18,
+                0
+              ]
+            ],
+            "faults": 2,
+            "target": [
+              -2,
+              0,
+              3,
+              -1,
+              1
+            ],
+            "y": [
+              -2,
+              -55,
+              -8,
+              -65,
+              -26,
+              -38,
+              3,
+              8,
+              55,
+              101,
+              2,
+              -3,
+              27,
+              69,
+              -1,
+              100
+            ]
+          }
+        },
+        {
+          "family": "incompatible",
+          "id": "transfer-09",
+          "input": {
+            "A": [
+              [
+                12,
+                -12,
+                -3,
+                12,
+                3,
+                12
+              ],
+              [
+                6,
+                -12,
+                0,
+                -12,
+                -3,
+                0
+              ],
+              [
+                3,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                3,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                9,
+                -9,
+                -3,
+                6,
+                -12,
+                12
+              ],
+              [
+                -6,
+                3,
+                0,
+                12,
+                12,
+                9
+              ],
+              [
+                -9,
+                -6,
+                -3,
+                9,
+                -12,
+                -12
+              ],
+              [
+                3,
+                0,
+                12,
+                -6,
+                0,
+                3
+              ],
+              [
+                6,
+                0,
+                -3,
+                -12,
+                -9,
+                12
+              ],
+              [
+                -9,
+                9,
+                0,
+                -3,
+                12,
+                3
+              ],
+              [
+                3,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                3,
+                -9,
+                9,
+                3,
+                -6,
+                12
+              ],
+              [
+                -3,
+                -6,
+                -3,
+                -6,
+                6,
+                -3
+              ],
+              [
+                12,
+                -3,
+                -3,
+                -9,
+                -6,
+                9
+              ]
+            ],
+            "faults": 1,
+            "target": [
+              -1,
+              -1,
+              0,
+              1,
+              1,
+              -2
+            ],
+            "y": [
+              -10,
+              97,
+              7,
+              6,
+              7,
+              -76,
+              -50,
+              84,
+              54,
+              -33,
+              8,
+              58,
+              21,
+              60
+            ]
+          }
+        },
+        {
+          "family": "competing",
+          "id": "transfer-10",
+          "input": {
+            "A": [
+              [
+                12,
+                0,
+                12,
+                18,
+                12,
+                -18,
+                0
+              ],
+              [
+                -24,
+                -18,
+                6,
+                0,
+                -24,
+                12,
+                0
+              ],
+              [
+                -18,
+                18,
+                0,
+                -18,
+                0,
+                -18,
+                0
+              ],
+              [
+                24,
+                18,
+                18,
+                12,
+                -6,
+                -18,
+                0
+              ],
+              [
+                0,
+                -6,
+                12,
+                -6,
+                -24,
+                6,
+                0
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                -6
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                6
+              ],
+              [
+                12,
+                18,
+                -6,
+                -18,
+                -24,
+                -24,
+                0
+              ],
+              [
+                -12,
+                -6,
+                -12,
+                -18,
+                -12,
+                0,
+                0
+              ],
+              [
+                24,
+                18,
+                18,
+                0,
+                0,
+                -12,
+                0
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                6
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                -6
+              ],
+              [
+                24,
+                -6,
+                18,
+                18,
+                -6,
+                -6,
+                0
+              ],
+              [
+                -18,
+                12,
+                6,
+                -18,
+                0,
+                0,
+                0
+              ],
+              [
+                -18,
+                24,
+                18,
+                24,
+                12,
+                24,
+                0
+              ],
+              [
+                -12,
+                24,
+                18,
+                -24,
+                12,
+                -18,
+                0
+              ],
+              [
+                0,
+                6,
+                -12,
+                12,
+                12,
+                -6,
+                0
+              ],
+              [
+                0,
+                6,
+                0,
+                6,
+                -24,
+                0,
+                0
+              ]
+            ],
+            "faults": 2,
+            "target": [
+              -2,
+              -2,
+              0,
+              -1,
+              1,
+              3,
+              1
+            ],
+            "y": [
+              59,
+              49,
+              18,
+              64,
+              39,
+              5,
+              -5,
+              20,
+              -19,
+              31,
+              0,
+              0,
+              63,
+              -1,
+              4,
+              27,
+              -18,
+              31
+            ]
+          }
+        },
+        {
+          "family": "incompatible",
+          "id": "transfer-11",
+          "input": {
+            "A": [
+              [
+                12,
+                -4,
+                16,
+                16,
+                -12
+              ],
+              [
+                4,
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                -12,
+                12,
+                16,
+                16
+              ],
+              [
+                -8,
+                16,
+                -4,
+                -16,
+                -16
+              ],
+              [
+                -12,
+                -8,
+                -16,
+                8,
+                -4
+              ],
+              [
+                -8,
+                -4,
+                -12,
+                12,
+                -8
+              ],
+              [
+                0,
+                -4,
+                16,
+                12,
+                -8
+              ],
+              [
+                4,
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                4,
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                -16,
+                0,
+                4,
+                4,
+                -4
+              ],
+              [
+                4,
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                12,
+                8,
+                -12,
+                -4,
+                0
+              ],
+              [
+                -12,
+                12,
+                -16,
+                -8,
+                16
+              ],
+              [
+                4,
+                8,
+                0,
+                4,
+                12
+              ],
+              [
+                0,
+                16,
+                4,
+                16,
+                -4
+              ],
+              [
+                -12,
+                12,
+                -16,
+                16,
+                16
+              ]
+            ],
+            "faults": 2,
+            "target": [
+              -1,
+              -3,
+              -2,
+              -3,
+              3
+            ],
+            "y": [
+              -72,
+              9,
+              -37,
+              19,
+              -42,
+              -53,
+              -74,
+              10,
+              7,
+              -52,
+              8,
+              58,
+              73,
+              36,
+              -30,
+              13
+            ]
+          }
+        },
+        {
+          "family": "free-direction",
+          "id": "transfer-12",
+          "input": {
+            "A": [
+              [
+                4,
+                8,
+                -6,
+                -4,
+                -6,
+                -6,
+                0
+              ],
+              [
+                0,
+                -8,
+                4,
+                6,
+                -8,
+                8,
+                0
+              ],
+              [
+                -6,
+                -8,
+                -8,
+                4,
+                -8,
+                -4,
+                0
+              ],
+              [
+                6,
+                6,
+                2,
+                4,
+                6,
+                8,
+                0
+              ],
+              [
+                -4,
+                -2,
+                4,
+                8,
+                2,
+                -2,
+                0
+              ],
+              [
+                4,
+                4,
+                -6,
+                6,
+                8,
+                0,
+                0
+              ],
+              [
+                8,
+                2,
+                6,
+                8,
+                -8,
+                6,
+                0
+              ],
+              [
+                8,
+                -6,
+                -6,
+                0,
+                -8,
+                -4,
+                0
+              ],
+              [
+                -8,
+                0,
+                -8,
+                -6,
+                0,
+                -6,
+                0
+              ],
+              [
+                -6,
+                -6,
+                -4,
+                8,
+                -8,
+                6,
+                0
+              ]
+            ],
+            "faults": 0,
+            "target": [
+              -2,
+              -2,
+              -1,
+              -2,
+              1,
+              0,
+              1
+            ],
+            "y": [
+              85,
+              -64,
+              -53,
+              -37,
+              -23,
+              -52,
+              11,
+              16,
+              3,
+              -106
+            ]
+          }
+        },
+        {
+          "family": "redundancy",
+          "id": "transfer-13",
+          "input": {
+            "A": [
+              [
+                -6,
+                6,
+                12,
+                0,
+                0,
+                3
+              ],
+              [
+                9,
+                -9,
+                12,
+                9,
+                9,
+                9
+              ],
+              [
+                9,
+                3,
+                -12,
+                12,
+                0,
+                9
+              ],
+              [
+                -6,
+                0,
+                3,
+                -6,
+                12,
+                0
+              ],
+              [
+                0,
+                12,
+                3,
+                0,
+                9,
+                6
+              ],
+              [
+                -3,
+                -12,
+                12,
+                -3,
+                -3,
+                -9
+              ],
+              [
+                6,
+                -12,
+                9,
+                -12,
+                9,
+                -12
+              ],
+              [
+                -6,
+                -9,
+                -3,
+                3,
+                6,
+                9
+              ],
+              [
+                3,
+                0,
+                9,
+                6,
+                -9,
+                -12
+              ],
+              [
+                12,
+                3,
+                6,
+                12,
+                6,
+                0
+              ],
+              [
+                0,
+                -12,
+                -3,
+                -6,
+                -6,
+                -3
+              ]
+            ],
+            "faults": 1,
+            "target": [
+              1,
+              3,
+              3,
+              -3,
+              1,
+              1
+            ],
+            "y": [
+              2,
+              60,
+              -4,
+              40,
+              -13,
+              21,
+              11,
+              99,
+              -75,
+              -43,
+              34
+            ]
+          }
+        },
+        {
+          "family": "free-direction",
+          "id": "transfer-14",
+          "input": {
+            "A": [
+              [
+                0,
+                7,
+                -21,
+                14,
+                -7,
+                0
+              ],
+              [
+                -14,
+                7,
+                -7,
+                -21,
+                -21,
+                0
+              ],
+              [
+                0,
+                -28,
+                0,
+                0,
+                -7,
+                0
+              ],
+              [
+                14,
+                -21,
+                -28,
+                -28,
+                -21,
+                0
+              ],
+              [
+                -14,
+                -14,
+                -28,
+                0,
+                21,
+                0
+              ],
+              [
+                -21,
+                21,
+                -28,
+                7,
+                -14,
+                0
+              ],
+              [
+                -28,
+                -28,
+                -21,
+                28,
+                -14,
+                0
+              ],
+              [
+                -21,
+                28,
+                -7,
+                -7,
+                -14,
+                0
+              ],
+              [
+                28,
+                21,
+                -7,
+                -21,
+                7,
+                0
+              ],
+              [
+                -7,
+                -21,
+                14,
+                0,
+                28,
+                0
+              ],
+              [
+                -14,
+                -14,
+                -14,
+                7,
+                -7,
+                0
+              ]
+            ],
+            "faults": 1,
+            "target": [
+              3,
+              1,
+              -2,
+              -2,
+              2,
+              1
+            ],
+            "y": [
+              -15,
+              20,
+              31,
+              11,
+              41,
+              4,
+              62,
+              -5,
+              -58,
+              39,
+              34
+            ]
+          }
+        },
+        {
+          "family": "free-direction",
+          "id": "transfer-15",
+          "input": {
+            "A": [
+              [
+                -12,
+                6,
+                0,
+                6,
+                -18,
+                0
+              ],
+              [
+                -18,
+                -24,
+                24,
+                6,
+                -18,
+                0
+              ],
+              [
+                -12,
+                -18,
+                18,
+                -6,
+                24,
+                0
+              ],
+              [
+                -24,
+                12,
+                18,
+                24,
+                18,
+                0
+              ],
+              [
+                6,
+                -6,
+                24,
+                -18,
+                -6,
+                0
+              ],
+              [
+                -24,
+                -12,
+                -18,
+                -6,
+                24,
+                0
+              ],
+              [
+                24,
+                -12,
+                6,
+                -6,
+                -12,
+                0
+              ],
+              [
+                -12,
+                0,
+                12,
+                18,
+                -6,
+                0
+              ],
+              [
+                -6,
+                18,
+                6,
+                12,
+                6,
+                0
+              ],
+              [
+                -6,
+                12,
+                -18,
+                -12,
+                24,
+                0
+              ],
+              [
+                0,
+                0,
+                -12,
+                24,
+                18,
+                0
+              ],
+              [
+                -24,
+                -12,
+                0,
+                12,
+                -12,
+                0
+              ],
+              [
+                -24,
+                18,
+                12,
+                6,
+                -24,
+                0
+              ]
+            ],
+            "faults": 2,
+            "target": [
+              -2,
+              -1,
+              -1,
+              0,
+              -1,
+              1
+            ],
+            "y": [
+              -2,
+              -5,
+              42,
+              26,
+              -43,
+              118,
+              -64,
+              -8,
+              -7,
+              66,
+              27,
+              40,
+              -9
+            ]
+          }
+        },
+        {
+          "family": "incompatible",
+          "id": "transfer-16",
+          "input": {
+            "A": [
+              [
+                -8,
+                -4,
+                0,
+                4,
+                -2,
+                2,
+                -6
+              ],
+              [
+                4,
+                0,
+                -6,
+                2,
+                -8,
+                -6,
+                8
+              ],
+              [
+                8,
+                -8,
+                6,
+                -6,
+                0,
+                8,
+                2
+              ],
+              [
+                2,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                6,
+                0,
+                -6,
+                -4,
+                -4,
+                4,
+                0
+              ],
+              [
+                6,
+                4,
+                -8,
+                0,
+                2,
+                4,
+                6
+              ],
+              [
+                0,
+                6,
+                0,
+                -8,
+                6,
+                8,
+                6
+              ],
+              [
+                -8,
+                -8,
+                -2,
+                6,
+                4,
+                0,
+                -4
+              ],
+              [
+                -4,
+                4,
+                -6,
+                2,
+                2,
+                -4,
+                6
+              ],
+              [
+                0,
+                4,
+                -2,
+                4,
+                -4,
+                6,
+                -4
+              ],
+              [
+                0,
+                2,
+                -8,
+                8,
+                0,
+                -2,
+                8
+              ],
+              [
+                2,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                2,
+                8,
+                -6,
+                -6,
+                -8,
+                -4,
+                4
+              ],
+              [
+                2,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                2,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                -8,
+                -4,
+                0,
+                -4,
+                0,
+                -8
+              ],
+              [
+                4,
+                -2,
+                0,
+                -4,
+                -2,
+                -2,
+                -8
+              ],
+              [
+                -6,
+                6,
+                6,
+                4,
+                -4,
+                8,
+                -6
+              ]
+            ],
+            "faults": 2,
+            "target": [
+              -2,
+              -3,
+              3,
+              -1,
+              2,
+              2,
+              2
+            ],
+            "y": [
+              27,
+              -30,
+              -101,
+              -8,
+              -39,
+              -45,
+              -14,
+              30,
+              37,
+              -21,
+              -21,
+              -7,
+              24,
+              -10,
+              -9,
+              6,
+              19,
+              -1
+            ]
+          }
+        }
+      ]
+    },
+    "commitments": {
+      "qualification": "53a92fa6cbb93f60d2ceb227ec6a5947b0d322ab7576968c18491efccb700194",
+      "transfer": "e2851628d904cbbd5895836587592c2093059b100b3b65c5f66c8c74f5d95e64"
+    },
+    "contract": "rational-telemetry/v1",
+    "model_manifest": {
+      "alias": "forge-qwen3-4b",
+      "context_tokens": 4096,
+      "hardware_backend": "CPU",
+      "llama_archive_sha256": "909eef25cd53e6601c8a07c866d8dbb2983e74177088d55182137a8fb8255d62",
+      "llama_release": "https://github.com/ggml-org/llama.cpp/releases/download/b12242/llama-b12242-bin-ubuntu-x64.tar.gz",
+      "llama_server_sha256": "fe211d00c4754aa67aaa492d2c755ab0f6ef60bf30eee3c0c74a3496189cde17",
+      "model_license": "Apache-2.0",
+      "peak_server_rss_bytes": 5001261056,
+      "quantization": "Q4_K_M",
+      "seed": 721638,
+      "startup_cpu_seconds": 8.31,
+      "startup_wall_seconds": 8.083023060999949,
+      "temperature": 0.2,
+      "threads": 2,
+      "weights_bytes": 2497280736,
+      "weights_sha256": "2fde00ce69dd4899c70d020845e2638353015bba0fdf161b3eb965f2bca4464e",
+      "weights_url": "https://huggingface.co/bartowski/Qwen_Qwen3-4B-Instruct-2507-GGUF/resolve/ae44f08e1392f39c0e474af10c3ff8355c8b6688/Qwen_Qwen3-4B-Instruct-2507-Q4_K_M.gguf"
+    },
+    "requests": [],
+    "results": {
+      "qualification": [
+        {
+          "actual": {
+            "status": "ambiguous"
+          },
+          "application_wall_seconds": 0.07333950400015965,
+          "expected": {
+            "status": "ambiguous"
+          },
+          "id": "qualification-01",
+          "passed": true,
+          "verifier_wall_seconds": 0.0008977010002126917
+        },
+        {
+          "actual": {
+            "status": "ambiguous"
+          },
+          "application_wall_seconds": 0.06752410500030237,
+          "expected": {
+            "status": "ambiguous"
+          },
+          "id": "qualification-02",
+          "passed": true,
+          "verifier_wall_seconds": 0.0002150160003111523
+        },
+        {
+          "actual": {
+            "status": "inconsistent"
+          },
+          "application_wall_seconds": 0.03613387399991552,
+          "expected": {
+            "status": "inconsistent"
+          },
+          "id": "qualification-03",
+          "passed": true,
+          "verifier_wall_seconds": 5.1405000249360455e-05
+        },
+        {
+          "actual": {
+            "status": "ambiguous"
+          },
+          "application_wall_seconds": 0.03220233100000769,
+          "expected": {
+            "status": "ambiguous"
+          },
+          "id": "qualification-04",
+          "passed": true,
+          "verifier_wall_seconds": 0.00011567000001377892
+        },
+        {
+          "actual": {
+            "status": "ambiguous"
+          },
+          "application_wall_seconds": 0.07116825000002791,
+          "expected": {
+            "status": "ambiguous"
+          },
+          "id": "qualification-05",
+          "passed": true,
+          "verifier_wall_seconds": 0.0001288089997615316
+        },
+        {
+          "actual": {
+            "status": "inconsistent"
+          },
+          "application_wall_seconds": 0.07212394599991967,
+          "expected": {
+            "status": "inconsistent"
+          },
+          "id": "qualification-06",
+          "passed": true,
+          "verifier_wall_seconds": 4.670899988923338e-05
+        },
+        {
+          "actual": {
+            "status": "determined",
+            "value": "-4"
+          },
+          "application_wall_seconds": 0.06428225199988447,
+          "expected": {
+            "status": "determined",
+            "value": "-4"
+          },
+          "id": "qualification-07",
+          "passed": true,
+          "verifier_wall_seconds": 0.00035678500034919125
+        },
+        {
+          "actual": {
+            "status": "determined",
+            "value": "-19/3"
+          },
+          "application_wall_seconds": 0.032072199000140245,
+          "expected": {
+            "status": "determined",
+            "value": "-19/3"
+          },
+          "id": "qualification-08",
+          "passed": true,
+          "verifier_wall_seconds": 0.00012440299997251714
+        },
+        {
+          "actual": {
+            "status": "ambiguous"
+          },
+          "application_wall_seconds": 0.0649995960002343,
+          "expected": {
+            "status": "ambiguous"
+          },
+          "id": "qualification-09",
+          "passed": true,
+          "verifier_wall_seconds": 0.00012580500015246798
+        },
+        {
+          "actual": {
+            "status": "determined",
+            "value": "-3"
+          },
+          "application_wall_seconds": 0.064497909000238,
+          "expected": {
+            "status": "determined",
+            "value": "-3"
+          },
+          "id": "qualification-10",
+          "passed": true,
+          "verifier_wall_seconds": 0.0002398429996901541
+        },
+        {
+          "actual": {
+            "status": "ambiguous"
+          },
+          "application_wall_seconds": 0.0713199629999508,
+          "expected": {
+            "status": "ambiguous"
+          },
+          "id": "qualification-11",
+          "passed": true,
+          "verifier_wall_seconds": 0.000693299999966257
+        },
+        {
+          "actual": {
+            "status": "inconsistent"
+          },
+          "application_wall_seconds": 0.06776244899992889,
+          "expected": {
+            "status": "inconsistent"
+          },
+          "id": "qualification-12",
+          "passed": true,
+          "verifier_wall_seconds": 0.00012490400013120961
+        },
+        {
+          "actual": {
+            "status": "determined",
+            "value": "1/3"
+          },
+          "application_wall_seconds": 0.064686924000398,
+          "expected": {
+            "status": "determined",
+            "value": "1/3"
+          },
+          "id": "qualification-13",
+          "passed": true,
+          "verifier_wall_seconds": 0.0005043620003561955
+        },
+        {
+          "actual": {
+            "status": "ambiguous"
+          },
+          "application_wall_seconds": 0.06475060799994026,
+          "expected": {
+            "status": "ambiguous"
+          },
+          "id": "qualification-14",
+          "passed": true,
+          "verifier_wall_seconds": 0.0009787500002857996
+        },
+        {
+          "actual": {
+            "status": "ambiguous"
+          },
+          "application_wall_seconds": 0.06479532299999846,
+          "expected": {
+            "status": "ambiguous"
+          },
+          "id": "qualification-15",
+          "passed": true,
+          "verifier_wall_seconds": 0.0007171749998633459
+        },
+        {
+          "actual": {
+            "status": "inconsistent"
+          },
+          "application_wall_seconds": 0.06755123799985085,
+          "expected": {
+            "status": "inconsistent"
+          },
+          "id": "qualification-16",
+          "passed": true,
+          "verifier_wall_seconds": 0.0001890579997052555
+        },
+        {
+          "actual": {
+            "status": "ambiguous"
+          },
+          "application_wall_seconds": 0.06485614399980477,
+          "expected": {
+            "status": "ambiguous"
+          },
+          "id": "qualification-17",
+          "passed": true,
+          "verifier_wall_seconds": 0.00018248800006404053
+        },
+        {
+          "actual": {
+            "status": "inconsistent"
+          },
+          "application_wall_seconds": 0.07096130400032052,
+          "expected": {
+            "status": "inconsistent"
+          },
+          "id": "qualification-18",
+          "passed": true,
+          "verifier_wall_seconds": 0.00024326800030394224
+        },
+        {
+          "actual": {
+            "status": "determined",
+            "value": "29/6"
+          },
+          "application_wall_seconds": 0.06826569899976676,
+          "expected": {
+            "status": "determined",
+            "value": "29/6"
+          },
+          "id": "qualification-19",
+          "passed": true,
+          "verifier_wall_seconds": 0.00028859499980171677
+        },
+        {
+          "actual": {
+            "status": "ambiguous"
+          },
+          "application_wall_seconds": 0.06752088400025968,
+          "expected": {
+            "status": "ambiguous"
+          },
+          "id": "qualification-20",
+          "passed": true,
+          "verifier_wall_seconds": 0.0006622040000365814
+        },
+        {
+          "actual": {
+            "status": "ambiguous"
+          },
+          "application_wall_seconds": 0.06491904700033047,
+          "expected": {
+            "status": "ambiguous"
+          },
+          "id": "qualification-21",
+          "passed": true,
+          "verifier_wall_seconds": 0.0007864770000196586
+        },
+        {
+          "actual": {
+            "status": "ambiguous"
+          },
+          "application_wall_seconds": 0.07232687299983809,
+          "expected": {
+            "status": "ambiguous"
+          },
+          "id": "qualification-22",
+          "passed": true,
+          "verifier_wall_seconds": 0.00038583800005653757
+        },
+        {
+          "actual": {
+            "status": "inconsistent"
+          },
+          "application_wall_seconds": 0.0699621250000746,
+          "expected": {
+            "status": "inconsistent"
+          },
+          "id": "qualification-23",
+          "passed": true,
+          "verifier_wall_seconds": 0.0001660339999034477
+        },
+        {
+          "actual": {
+            "status": "determined",
+            "value": "3"
+          },
+          "application_wall_seconds": 0.06797644500011302,
+          "expected": {
+            "status": "determined",
+            "value": "3"
+          },
+          "id": "qualification-24",
+          "passed": true,
+          "verifier_wall_seconds": 0.00019631899976957357
+        }
+      ],
+      "transfer": [
+        {
+          "actual": {
+            "status": "determined",
+            "value": "-44/7"
+          },
+          "application_wall_seconds": 0.17402971999990768,
+          "expected": {
+            "status": "determined",
+            "value": "-44/7"
+          },
+          "id": "transfer-01",
+          "passed": true,
+          "verifier_wall_seconds": 0.01739735199998904
+        },
+        {
+          "actual": {
+            "status": "determined",
+            "value": "-11"
+          },
+          "application_wall_seconds": 0.24694239099972037,
+          "expected": {
+            "status": "determined",
+            "value": "-11"
+          },
+          "id": "transfer-02",
+          "passed": true,
+          "verifier_wall_seconds": 0.0017550319998917985
+        },
+        {
+          "actual": {
+            "status": "inconsistent"
+          },
+          "application_wall_seconds": 0.11833549300035884,
+          "expected": {
+            "status": "inconsistent"
+          },
+          "id": "transfer-03",
+          "passed": true,
+          "verifier_wall_seconds": 0.00075438000021677
+        },
+        {
+          "actual": {
+            "status": "ambiguous"
+          },
+          "application_wall_seconds": 0.17713495699990744,
+          "expected": {
+            "status": "ambiguous"
+          },
+          "id": "transfer-04",
+          "passed": true,
+          "verifier_wall_seconds": 0.0029501899998649606
+        },
+        {
+          "actual": {
+            "status": "ambiguous"
+          },
+          "application_wall_seconds": 0.12165433599966491,
+          "expected": {
+            "status": "ambiguous"
+          },
+          "id": "transfer-05",
+          "passed": true,
+          "verifier_wall_seconds": 0.001338207999651786
+        },
+        {
+          "actual": {
+            "status": "determined",
+            "value": "33/2"
+          },
+          "application_wall_seconds": 0.06450965500016537,
+          "expected": {
+            "status": "determined",
+            "value": "33/2"
+          },
+          "id": "transfer-06",
+          "passed": true,
+          "verifier_wall_seconds": 0.0017471010000917886
+        },
+        {
+          "actual": {
+            "status": "ambiguous"
+          },
+          "application_wall_seconds": 0.07472340200001781,
+          "expected": {
+            "status": "ambiguous"
+          },
+          "id": "transfer-07",
+          "passed": true,
+          "verifier_wall_seconds": 0.0009737020000102348
+        },
+        {
+          "actual": {
+            "status": "ambiguous"
+          },
+          "application_wall_seconds": 0.11775102299998252,
+          "expected": {
+            "status": "ambiguous"
+          },
+          "id": "transfer-08",
+          "passed": true,
+          "verifier_wall_seconds": 0.0013064119998489332
+        },
+        {
+          "actual": {
+            "status": "inconsistent"
+          },
+          "application_wall_seconds": 0.07323565200022131,
+          "expected": {
+            "status": "inconsistent"
+          },
+          "id": "transfer-09",
+          "passed": true,
+          "verifier_wall_seconds": 0.00032941500012384495
+        },
+        {
+          "actual": {
+            "status": "ambiguous"
+          },
+          "application_wall_seconds": 0.19118535799998426,
+          "expected": {
+            "status": "ambiguous"
+          },
+          "id": "transfer-10",
+          "passed": true,
+          "verifier_wall_seconds": 0.004891444999884698
+        },
+        {
+          "actual": {
+            "status": "inconsistent"
+          },
+          "application_wall_seconds": 0.12291871600018567,
+          "expected": {
+            "status": "inconsistent"
+          },
+          "id": "transfer-11",
+          "passed": true,
+          "verifier_wall_seconds": 0.003358581000156846
+        },
+        {
+          "actual": {
+            "status": "ambiguous"
+          },
+          "application_wall_seconds": 0.06742340099981448,
+          "expected": {
+            "status": "ambiguous"
+          },
+          "id": "transfer-12",
+          "passed": true,
+          "verifier_wall_seconds": 0.0003930180000679684
+        },
+        {
+          "actual": {
+            "status": "determined",
+            "value": "-8"
+          },
+          "application_wall_seconds": 0.07344077900006596,
+          "expected": {
+            "status": "determined",
+            "value": "-8"
+          },
+          "id": "transfer-13",
+          "passed": true,
+          "verifier_wall_seconds": 0.0008248139997704129
+        },
+        {
+          "actual": {
+            "status": "ambiguous"
+          },
+          "application_wall_seconds": 0.03552568400027667,
+          "expected": {
+            "status": "ambiguous"
+          },
+          "id": "transfer-14",
+          "passed": true,
+          "verifier_wall_seconds": 0.00036562799959938275
+        },
+        {
+          "actual": {
+            "status": "ambiguous"
+          },
+          "application_wall_seconds": 0.0320822489998136,
+          "expected": {
+            "status": "ambiguous"
+          },
+          "id": "transfer-15",
+          "passed": true,
+          "verifier_wall_seconds": 0.00018785599968396127
+        },
+        {
+          "actual": {
+            "status": "inconsistent"
+          },
+          "application_wall_seconds": 0.2182456129999082,
+          "expected": {
+            "status": "inconsistent"
+          },
+          "id": "transfer-16",
+          "passed": true,
+          "verifier_wall_seconds": 0.006407265999769152
+        }
+      ]
+    },
+    "run_id": "wf_821b4e6617442f92d7879f47",
+    "seeds": {
+      "qualification": "59f14f17304ae0812ba32712523acd31",
+      "transfer": "73d46c77e0ab307e9eeb51fb86339daa"
+    },
+    "sources": {
+      "adapters.py": "a05127970eb11bb08cc98ed7ef9e05f9a723f51c66f9a5bfaa9f2242bb6275a6",
+      "forge.py": "b3e3dd8b56f7f9290889bcc786826c33070c7d53ce374b318c1bd8056ef6f489",
+      "forge_repair.py": "c8317d7fe1682063001a491399a87b4dd5bb0f32e1f2bb7730a73db27cbb4b8e",
+      "forge_sandbox.py": "860c444c497c6ba68f6967cdfd5e93e544c792860c6985a537f580ff257b80ed",
+      "forge_telemetry.py": "5f0b9dfc22002b59d5394a736ec8aca52e96aae57a70b354d394d365b95490e1",
+      "services.py": "41b71b3f946f0912898558995f2c83f1f09b0cb2d5f9203bfecbef301de4a081",
+      "workflows.py": "69a292abba3eb24601b79783965a8b5ffff4fe3a9dcef245aa755e3e9d8a4059"
+    }
+  },
+  "exposed_variants": [
+    {
+      "failed": [
+        "development-01",
+        "development-04",
+        "development-05",
+        "development-07",
+        "small-exact-direction",
+        "only-reading-may-fail",
+        "empty-constraint-only-feasible-subset",
+        "avoid-redundant-fault-counts"
+      ],
+      "methods": [],
+      "passed": 6,
+      "sha256": "925206f5f38c0dfb094e1443dcb3aca9949376bd1383692ff3916dd6a8db0998",
+      "total": 14
+    },
+    {
+      "failed": [
+        "small-exact-direction",
+        "only-reading-may-fail",
+        "empty-constraint-only-feasible-subset",
+        "avoid-redundant-fault-counts"
+      ],
+      "methods": [
+        "complement"
+      ],
+      "passed": 10,
+      "sha256": "c7359b036c690a0b3e67bbd3e5733302aaee6d195811ba2ab8162ab1590a3b0d",
+      "total": 14
+    },
+    {
+      "failed": [
+        "development-01",
+        "development-02",
+        "development-04",
+        "development-05",
+        "avoid-redundant-fault-counts"
+      ],
+      "methods": [
+        "empty"
+      ],
+      "passed": 9,
+      "sha256": "dda5106c1c28f00036aa8615ca2d54a9e5e39f288ba84e035344c7774b8f08c1",
+      "total": 14
+    },
+    {
+      "failed": [
+        "development-01",
+        "development-04",
+        "development-05",
+        "development-07",
+        "small-exact-direction",
+        "only-reading-may-fail",
+        "empty-constraint-only-feasible-subset",
+        "avoid-redundant-fault-counts"
+      ],
+      "methods": [
+        "exact"
+      ],
+      "passed": 6,
+      "sha256": "b1f6d6342c60956aafeac71b4a94aef47b294263ef258bb6ec8ef4285f506dd5",
+      "total": 14
+    },
+    {
+      "failed": [
+        "development-01",
+        "development-04",
+        "development-05",
+        "development-07",
+        "small-exact-direction",
+        "only-reading-may-fail",
+        "empty-constraint-only-feasible-subset"
+      ],
+      "methods": [
+        "endpoint"
+      ],
+      "passed": 7,
+      "sha256": "f385b473c144760dcf19b900ddd322476f5e4f7c10645c6ff82f67c4da89bae4",
+      "total": 14
+    },
+    {
+      "failed": [
+        "small-exact-direction",
+        "avoid-redundant-fault-counts"
+      ],
+      "methods": [
+        "complement",
+        "empty"
+      ],
+      "passed": 12,
+      "sha256": "19a02ae5c0d601297b52590df60210ea450e4eec985631b4fe60ca18fff52886",
+      "total": 14
+    },
+    {
+      "failed": [
+        "only-reading-may-fail",
+        "empty-constraint-only-feasible-subset",
+        "avoid-redundant-fault-counts"
+      ],
+      "methods": [
+        "complement",
+        "exact"
+      ],
+      "passed": 11,
+      "sha256": "7c15490a842b8a4d86909424aa6c1fd09695b30a6a88a49ccd18f8e31015f97b",
+      "total": 14
+    },
+    {
+      "failed": [
+        "small-exact-direction",
+        "empty-constraint-nonzero-target",
+        "empty-constraint-zero-target",
+        "only-reading-may-fail",
+        "empty-constraint-only-feasible-subset",
+        "avoid-redundant-fault-counts"
+      ],
+      "methods": [
+        "complement",
+        "endpoint"
+      ],
+      "passed": 8,
+      "sha256": "95c00230611af0e6c31a06f62987116d3e5b74c0f50fd9f9488ce38d86ebb7aa",
+      "total": 14
+    },
+    {
+      "failed": [
+        "development-01",
+        "development-02",
+        "development-04",
+        "development-05",
+        "avoid-redundant-fault-counts"
+      ],
+      "methods": [
+        "empty",
+        "exact"
+      ],
+      "passed": 9,
+      "sha256": "29a4aa77cdccd2fd31d66abeb1c8e7eeb44b5801cd890c251e8d608208953b3d",
+      "total": 14
+    },
+    {
+      "failed": [
+        "development-01",
+        "development-02",
+        "development-04",
+        "development-05",
+        "only-reading-may-fail",
+        "empty-constraint-only-feasible-subset"
+      ],
+      "methods": [
+        "empty",
+        "endpoint"
+      ],
+      "passed": 8,
+      "sha256": "deec8620a46b1bcd0c728ae9b281a2533ed9e259be203b30d645c0f7d4e7ea68",
+      "total": 14
+    },
+    {
+      "failed": [
+        "development-01",
+        "development-04",
+        "development-05",
+        "development-07",
+        "small-exact-direction",
+        "only-reading-may-fail",
+        "empty-constraint-only-feasible-subset"
+      ],
+      "methods": [
+        "endpoint",
+        "exact"
+      ],
+      "passed": 7,
+      "sha256": "fb93d01be468c9f019b8028cf665acbda2915b8bf230cff27b7ddae4ed1b72e6",
+      "total": 14
+    },
+    {
+      "failed": [
+        "avoid-redundant-fault-counts"
+      ],
+      "methods": [
+        "complement",
+        "empty",
+        "exact"
+      ],
+      "passed": 13,
+      "sha256": "0e05072f166d42479539a09962afcbd2043dec7c68c6dfe91e85c81b1922641a",
+      "total": 14
+    },
+    {
+      "failed": [
+        "small-exact-direction"
+      ],
+      "methods": [
+        "complement",
+        "empty",
+        "endpoint"
+      ],
+      "passed": 13,
+      "sha256": "88f8006e8a4f8ede1805f3204a08147d08277ad5d85156be4c0d4210bb42537b",
+      "total": 14
+    },
+    {
+      "failed": [
+        "empty-constraint-nonzero-target",
+        "empty-constraint-zero-target",
+        "only-reading-may-fail",
+        "empty-constraint-only-feasible-subset",
+        "avoid-redundant-fault-counts"
+      ],
+      "methods": [
+        "complement",
+        "endpoint",
+        "exact"
+      ],
+      "passed": 9,
+      "sha256": "d26fbad9094950d064718c59139720f324d4c89991a29052fdfc862cea576392",
+      "total": 14
+    },
+    {
+      "failed": [
+        "development-01",
+        "development-02",
+        "development-04",
+        "development-05",
+        "only-reading-may-fail",
+        "empty-constraint-only-feasible-subset"
+      ],
+      "methods": [
+        "empty",
+        "endpoint",
+        "exact"
+      ],
+      "passed": 8,
+      "sha256": "cecddf672e2949e545b8e2a810f59efb986fba806e4cbcb06cfabbe28bf35923",
+      "total": 14
+    },
+    {
+      "failed": [],
+      "methods": [
+        "complement",
+        "empty",
+        "endpoint",
+        "exact"
+      ],
+      "passed": 14,
+      "sha256": "07e797ad9a388271d6fb3e2d7241c80425e3669e444d095561fd4da05daddcc0",
+      "total": 14
+    }
+  ],
+  "ordinary_reuse_and_export": {
+    "archive_sha256": "63c4187e38ddd8a9e8871f2906b0cf7d1d4a3b9762f200f231a14e5f8cde5e07",
+    "boundary_cases": [
+      {
+        "id": "every-row-may-fail",
+        "input": {
+          "A": [
+            [
+              2,
+              3
+            ]
+          ],
+          "faults": 1,
+          "target": [
+            0,
+            1
+          ],
+          "y": [
+            11
+          ]
+        }
+      },
+      {
+        "id": "zero-target-without-required-readings",
+        "input": {
+          "A": [
+            [
+              2,
+              3
+            ]
+          ],
+          "faults": 1,
+          "target": [
+            0,
+            0
+          ],
+          "y": [
+            11
+          ]
+        }
+      },
+      {
+        "id": "contradictory-zero-channel",
+        "input": {
+          "A": [
+            [
+              0,
+              0
+            ],
+            [
+              0,
+              0
+            ],
+            [
+              2,
+              3
+            ]
+          ],
+          "faults": 1,
+          "target": [
+            0,
+            0
+          ],
+          "y": [
+            1,
+            1,
+            0
+          ]
+        }
+      },
+      {
+        "id": "irregular-rescaled-coefficients",
+        "input": {
+          "A": [
+            [
+              1,
+              1
+            ],
+            [
+              1,
+              -1
+            ],
+            [
+              3,
+              1
+            ],
+            [
+              4,
+              2
+            ],
+            [
+              -2,
+              8
+            ],
+            [
+              11,
+              3
+            ]
+          ],
+          "faults": 1,
+          "target": [
+            2,
+            1
+          ],
+          "y": [
+            0,
+            1,
+            1,
+            4,
+            -5,
+            4
+          ]
+        }
+      },
+      {
+        "id": "nonzero-common-projection-across-fault-explanations",
+        "input": {
+          "A": [
+            [
+              4,
+              0
+            ],
+            [
+              8,
+              0
+            ],
+            [
+              12,
+              0
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              1
+            ]
+          ],
+          "faults": 1,
+          "target": [
+            3,
+            0
+          ],
+          "y": [
+            2,
+            4,
+            6,
+            0,
+            1
+          ]
+        }
+      },
+      {
+        "id": "integer-width",
+        "input": {
+          "A": [
+            [
+              2147483647,
+              1
+            ],
+            [
+              2147483646,
+              -1
+            ],
+            [
+              0,
+              1
+            ]
+          ],
+          "faults": 0,
+          "target": [
+            2147483647,
+            2147483646
+          ],
+          "y": [
+            2147483647,
+            2147483646,
+            0
+          ]
+        }
+      },
+      {
+        "A": [
+          [
+            2
+          ]
+        ],
+        "faults": 1,
+        "target": [
+          1
+        ],
+        "y": [
+          3
+        ]
+      },
+      {
+        "A": [
+          [
+            0
+          ]
+        ],
+        "faults": 1,
+        "target": [
+          0
+        ],
+        "y": [
+          1
+        ]
+      }
+    ],
+    "boundary_results": [
+      {
+        "actual": {
+          "status": "ambiguous"
+        },
+        "application_wall_seconds": 0.06500665700059471,
+        "expected": {
+          "status": "ambiguous"
+        },
+        "id": "every-row-may-fail",
+        "passed": true,
+        "verifier_wall_seconds": 3.0745000003662426e-05
+      },
+      {
+        "actual": {
+          "status": "determined",
+          "value": "0"
+        },
+        "application_wall_seconds": 0.06493078100083949,
+        "expected": {
+          "status": "determined",
+          "value": "0"
+        },
+        "id": "zero-target-without-required-readings",
+        "passed": true,
+        "verifier_wall_seconds": 0.00011001199982274557
+      },
+      {
+        "actual": {
+          "status": "inconsistent"
+        },
+        "application_wall_seconds": 0.06510794600035297,
+        "expected": {
+          "status": "inconsistent"
+        },
+        "id": "contradictory-zero-channel",
+        "passed": true,
+        "verifier_wall_seconds": 4.8802000492287334e-05
+      },
+      {
+        "actual": {
+          "status": "determined",
+          "value": "1/2"
+        },
+        "application_wall_seconds": 0.06500310799947329,
+        "expected": {
+          "status": "determined",
+          "value": "1/2"
+        },
+        "id": "irregular-rescaled-coefficients",
+        "passed": true,
+        "verifier_wall_seconds": 0.00018113699934474425
+      },
+      {
+        "actual": {
+          "status": "determined",
+          "value": "3/2"
+        },
+        "application_wall_seconds": 0.03258711900070921,
+        "expected": {
+          "status": "determined",
+          "value": "3/2"
+        },
+        "id": "nonzero-common-projection-across-fault-explanations",
+        "passed": true,
+        "verifier_wall_seconds": 0.0001785629992809845
+      },
+      {
+        "actual": {
+          "status": "determined",
+          "value": "2147483647"
+        },
+        "application_wall_seconds": 0.03249868000057177,
+        "expected": {
+          "status": "determined",
+          "value": "2147483647"
+        },
+        "id": "integer-width",
+        "passed": true,
+        "verifier_wall_seconds": 0.000109642000097665
+      },
+      {
+        "actual": {
+          "status": "ambiguous"
+        },
+        "application_wall_seconds": 0.06448584600002505,
+        "expected": {
+          "status": "ambiguous"
+        },
+        "id": "finding-6",
+        "passed": true,
+        "verifier_wall_seconds": 3.175699930579867e-05
+      },
+      {
+        "actual": {
+          "status": "determined",
+          "value": "0"
+        },
+        "application_wall_seconds": 0.06476823199955106,
+        "expected": {
+          "status": "determined",
+          "value": "0"
+        },
+        "id": "finding-7",
+        "passed": true,
+        "verifier_wall_seconds": 5.5983000493142754e-05
+      }
+    ],
+    "candidate_sha256": "07e797ad9a388271d6fb3e2d7241c80425e3669e444d095561fd4da05daddcc0",
+    "ordinary_reuse": [
+      {
+        "application_wall_seconds": 0.06446264200076257,
+        "cohort": "qualification",
+        "id": "qualification-01",
+        "passed": true
+      },
+      {
+        "application_wall_seconds": 0.06455952499982232,
+        "cohort": "qualification",
+        "id": "qualification-02",
+        "passed": true
+      },
+      {
+        "application_wall_seconds": 0.06447786500029906,
+        "cohort": "qualification",
+        "id": "qualification-03",
+        "passed": true
+      },
+      {
+        "application_wall_seconds": 0.03224677799971687,
+        "cohort": "qualification",
+        "id": "qualification-04",
+        "passed": true
+      },
+      {
+        "application_wall_seconds": 0.03216709099979198,
+        "cohort": "qualification",
+        "id": "qualification-05",
+        "passed": true
+      },
+      {
+        "application_wall_seconds": 0.03206356499958929,
+        "cohort": "qualification",
+        "id": "qualification-06",
+        "passed": true
+      },
+      {
+        "application_wall_seconds": 0.06432121799934976,
+        "cohort": "qualification",
+        "id": "qualification-07",
+        "passed": true
+      },
+      {
+        "application_wall_seconds": 0.06442437199984852,
+        "cohort": "qualification",
+        "id": "qualification-08",
+        "passed": true
+      },
+      {
+        "application_wall_seconds": 0.06446872500055179,
+        "cohort": "qualification",
+        "id": "qualification-09",
+        "passed": true
+      },
+      {
+        "application_wall_seconds": 0.0647997280002528,
+        "cohort": "qualification",
+        "id": "qualification-10",
+        "passed": true
+      },
+      {
+        "application_wall_seconds": 0.06485546000021714,
+        "cohort": "qualification",
+        "id": "qualification-11",
+        "passed": true
+      },
+      {
+        "application_wall_seconds": 0.06443357899934199,
+        "cohort": "qualification",
+        "id": "qualification-12",
+        "passed": true
+      },
+      {
+        "application_wall_seconds": 0.06459500700020726,
+        "cohort": "qualification",
+        "id": "qualification-13",
+        "passed": true
+      },
+      {
+        "application_wall_seconds": 0.06418314999973518,
+        "cohort": "qualification",
+        "id": "qualification-14",
+        "passed": true
+      },
+      {
+        "application_wall_seconds": 0.03221389100053784,
+        "cohort": "qualification",
+        "id": "qualification-15",
+        "passed": true
+      },
+      {
+        "application_wall_seconds": 0.06436743099948217,
+        "cohort": "qualification",
+        "id": "qualification-16",
+        "passed": true
+      },
+      {
+        "application_wall_seconds": 0.06578371100022196,
+        "cohort": "qualification",
+        "id": "qualification-17",
+        "passed": true
+      },
+      {
+        "application_wall_seconds": 0.2476867459999994,
+        "cohort": "qualification",
+        "id": "qualification-18",
+        "passed": true
+      },
+      {
+        "application_wall_seconds": 0.12423459799992997,
+        "cohort": "qualification",
+        "id": "qualification-19",
+        "passed": true
+      },
+      {
+        "application_wall_seconds": 0.13205739200020616,
+        "cohort": "qualification",
+        "id": "qualification-20",
+        "passed": true
+      },
+      {
+        "application_wall_seconds": 0.06492543300009856,
+        "cohort": "qualification",
+        "id": "qualification-21",
+        "passed": true
+      },
+      {
+        "application_wall_seconds": 0.067325523999898,
+        "cohort": "qualification",
+        "id": "qualification-22",
+        "passed": true
+      },
+      {
+        "application_wall_seconds": 0.06477682000058849,
+        "cohort": "qualification",
+        "id": "qualification-23",
+        "passed": true
+      },
+      {
+        "application_wall_seconds": 0.06517803400038247,
+        "cohort": "qualification",
+        "id": "qualification-24",
+        "passed": true
+      },
+      {
+        "application_wall_seconds": 0.11693739900056244,
+        "cohort": "transfer",
+        "id": "transfer-01",
+        "passed": true
+      },
+      {
+        "application_wall_seconds": 0.06489723199956643,
+        "cohort": "transfer",
+        "id": "transfer-02",
+        "passed": true
+      },
+      {
+        "application_wall_seconds": 0.06494382899927587,
+        "cohort": "transfer",
+        "id": "transfer-03",
+        "passed": true
+      },
+      {
+        "application_wall_seconds": 0.06464430899995932,
+        "cohort": "transfer",
+        "id": "transfer-04",
+        "passed": true
+      },
+      {
+        "application_wall_seconds": 0.11466785999982676,
+        "cohort": "transfer",
+        "id": "transfer-05",
+        "passed": true
+      },
+      {
+        "application_wall_seconds": 0.11458692999985942,
+        "cohort": "transfer",
+        "id": "transfer-06",
+        "passed": true
+      },
+      {
+        "application_wall_seconds": 0.06430969799930608,
+        "cohort": "transfer",
+        "id": "transfer-07",
+        "passed": true
+      },
+      {
+        "application_wall_seconds": 0.11466006800037576,
+        "cohort": "transfer",
+        "id": "transfer-08",
+        "passed": true
+      },
+      {
+        "application_wall_seconds": 0.16474228500010213,
+        "cohort": "transfer",
+        "id": "transfer-09",
+        "passed": true
+      },
+      {
+        "application_wall_seconds": 0.0642588219998288,
+        "cohort": "transfer",
+        "id": "transfer-10",
+        "passed": true
+      },
+      {
+        "application_wall_seconds": 0.11474747099964588,
+        "cohort": "transfer",
+        "id": "transfer-11",
+        "passed": true
+      },
+      {
+        "application_wall_seconds": 0.11478646399973513,
+        "cohort": "transfer",
+        "id": "transfer-12",
+        "passed": true
+      },
+      {
+        "application_wall_seconds": 0.11449200300012308,
+        "cohort": "transfer",
+        "id": "transfer-13",
+        "passed": true
+      },
+      {
+        "application_wall_seconds": 0.06442491500001779,
+        "cohort": "transfer",
+        "id": "transfer-14",
+        "passed": true
+      },
+      {
+        "application_wall_seconds": 0.06441213600010087,
+        "cohort": "transfer",
+        "id": "transfer-15",
+        "passed": true
+      },
+      {
+        "application_wall_seconds": 0.03206004300045606,
+        "cohort": "transfer",
+        "id": "transfer-16",
+        "passed": true
+      }
+    ],
+    "replayed": [
+      {
+        "actual": {
+          "status": "ambiguous"
+        },
+        "application_wall_seconds": 0.1151635489995897,
+        "expected": {
+          "status": "ambiguous"
+        },
+        "id": "qualification-01",
+        "passed": true,
+        "verifier_wall_seconds": 0.000577009000153339
+      },
+      {
+        "actual": {
+          "status": "ambiguous"
+        },
+        "application_wall_seconds": 0.1843220310001925,
+        "expected": {
+          "status": "ambiguous"
+        },
+        "id": "qualification-02",
+        "passed": true,
+        "verifier_wall_seconds": 0.00016854799923748942
+      },
+      {
+        "actual": {
+          "status": "inconsistent"
+        },
+        "application_wall_seconds": 0.18356391699944652,
+        "expected": {
+          "status": "inconsistent"
+        },
+        "id": "qualification-03",
+        "passed": true,
+        "verifier_wall_seconds": 0.0012194130003990722
+      },
+      {
+        "actual": {
+          "status": "ambiguous"
+        },
+        "application_wall_seconds": 0.06838664200040512,
+        "expected": {
+          "status": "ambiguous"
+        },
+        "id": "qualification-04",
+        "passed": true,
+        "verifier_wall_seconds": 0.0016072139997049817
+      },
+      {
+        "actual": {
+          "status": "ambiguous"
+        },
+        "application_wall_seconds": 0.0646700850002162,
+        "expected": {
+          "status": "ambiguous"
+        },
+        "id": "qualification-05",
+        "passed": true,
+        "verifier_wall_seconds": 0.00022012400040694047
+      },
+      {
+        "actual": {
+          "status": "inconsistent"
+        },
+        "application_wall_seconds": 0.06467561299996305,
+        "expected": {
+          "status": "inconsistent"
+        },
+        "id": "qualification-06",
+        "passed": true,
+        "verifier_wall_seconds": 5.560200042964425e-05
+      },
+      {
+        "actual": {
+          "status": "determined",
+          "value": "-4"
+        },
+        "application_wall_seconds": 0.06463736700061418,
+        "expected": {
+          "status": "determined",
+          "value": "-4"
+        },
+        "id": "qualification-07",
+        "passed": true,
+        "verifier_wall_seconds": 0.00037879800038354006
+      },
+      {
+        "actual": {
+          "status": "determined",
+          "value": "-19/3"
+        },
+        "application_wall_seconds": 0.03237047899983736,
+        "expected": {
+          "status": "determined",
+          "value": "-19/3"
+        },
+        "id": "qualification-08",
+        "passed": true,
+        "verifier_wall_seconds": 0.0001313030006713234
+      },
+      {
+        "actual": {
+          "status": "ambiguous"
+        },
+        "application_wall_seconds": 0.06430332899981295,
+        "expected": {
+          "status": "ambiguous"
+        },
+        "id": "qualification-09",
+        "passed": true,
+        "verifier_wall_seconds": 0.0001188750002256711
+      },
+      {
+        "actual": {
+          "status": "determined",
+          "value": "-3"
+        },
+        "application_wall_seconds": 0.0645137399997111,
+        "expected": {
+          "status": "determined",
+          "value": "-3"
+        },
+        "id": "qualification-10",
+        "passed": true,
+        "verifier_wall_seconds": 0.00017014100012602285
+      },
+      {
+        "actual": {
+          "status": "ambiguous"
+        },
+        "application_wall_seconds": 0.06450947799930873,
+        "expected": {
+          "status": "ambiguous"
+        },
+        "id": "qualification-11",
+        "passed": true,
+        "verifier_wall_seconds": 0.0004219700003886828
+      },
+      {
+        "actual": {
+          "status": "inconsistent"
+        },
+        "application_wall_seconds": 0.06448308899962285,
+        "expected": {
+          "status": "inconsistent"
+        },
+        "id": "qualification-12",
+        "passed": true,
+        "verifier_wall_seconds": 0.00013265500001580222
+      },
+      {
+        "actual": {
+          "status": "determined",
+          "value": "1/3"
+        },
+        "application_wall_seconds": 0.0322035639992464,
+        "expected": {
+          "status": "determined",
+          "value": "1/3"
+        },
+        "id": "qualification-13",
+        "passed": true,
+        "verifier_wall_seconds": 0.0003278419999332982
+      },
+      {
+        "actual": {
+          "status": "ambiguous"
+        },
+        "application_wall_seconds": 0.06434850599998754,
+        "expected": {
+          "status": "ambiguous"
+        },
+        "id": "qualification-14",
+        "passed": true,
+        "verifier_wall_seconds": 0.0005029899994042353
+      },
+      {
+        "actual": {
+          "status": "ambiguous"
+        },
+        "application_wall_seconds": 0.06436478099931264,
+        "expected": {
+          "status": "ambiguous"
+        },
+        "id": "qualification-15",
+        "passed": true,
+        "verifier_wall_seconds": 0.0004015710001112893
+      },
+      {
+        "actual": {
+          "status": "inconsistent"
+        },
+        "application_wall_seconds": 0.06437184599963075,
+        "expected": {
+          "status": "inconsistent"
+        },
+        "id": "qualification-16",
+        "passed": true,
+        "verifier_wall_seconds": 9.891500030789757e-05
+      },
+      {
+        "actual": {
+          "status": "ambiguous"
+        },
+        "application_wall_seconds": 0.06437887199990655,
+        "expected": {
+          "status": "ambiguous"
+        },
+        "id": "qualification-17",
+        "passed": true,
+        "verifier_wall_seconds": 0.00017167300029541366
+      },
+      {
+        "actual": {
+          "status": "inconsistent"
+        },
+        "application_wall_seconds": 0.06468033200053469,
+        "expected": {
+          "status": "inconsistent"
+        },
+        "id": "qualification-18",
+        "passed": true,
+        "verifier_wall_seconds": 0.00017917399964062497
+      },
+      {
+        "actual": {
+          "status": "determined",
+          "value": "29/6"
+        },
+        "application_wall_seconds": 0.03227157600031205,
+        "expected": {
+          "status": "determined",
+          "value": "29/6"
+        },
+        "id": "qualification-19",
+        "passed": true,
+        "verifier_wall_seconds": 0.0003811610004049726
+      },
+      {
+        "actual": {
+          "status": "ambiguous"
+        },
+        "application_wall_seconds": 0.03236782699968899,
+        "expected": {
+          "status": "ambiguous"
+        },
+        "id": "qualification-20",
+        "passed": true,
+        "verifier_wall_seconds": 0.0003666790007628151
+      },
+      {
+        "actual": {
+          "status": "ambiguous"
+        },
+        "application_wall_seconds": 0.06437626499973703,
+        "expected": {
+          "status": "ambiguous"
+        },
+        "id": "qualification-21",
+        "passed": true,
+        "verifier_wall_seconds": 0.00042507499983912567
+      },
+      {
+        "actual": {
+          "status": "ambiguous"
+        },
+        "application_wall_seconds": 0.03226328300024761,
+        "expected": {
+          "status": "ambiguous"
+        },
+        "id": "qualification-22",
+        "passed": true,
+        "verifier_wall_seconds": 0.0003977550004492514
+      },
+      {
+        "actual": {
+          "status": "inconsistent"
+        },
+        "application_wall_seconds": 0.06451461899996502,
+        "expected": {
+          "status": "inconsistent"
+        },
+        "id": "qualification-23",
+        "passed": true,
+        "verifier_wall_seconds": 9.993699950427981e-05
+      },
+      {
+        "actual": {
+          "status": "determined",
+          "value": "3"
+        },
+        "application_wall_seconds": 0.06446164099997986,
+        "expected": {
+          "status": "determined",
+          "value": "3"
+        },
+        "id": "qualification-24",
+        "passed": true,
+        "verifier_wall_seconds": 0.0001301120000789524
+      },
+      {
+        "actual": {
+          "status": "determined",
+          "value": "-44/7"
+        },
+        "application_wall_seconds": 0.06485180399977253,
+        "expected": {
+          "status": "determined",
+          "value": "-44/7"
+        },
+        "id": "transfer-01",
+        "passed": true,
+        "verifier_wall_seconds": 0.01633979799953522
+      },
+      {
+        "actual": {
+          "status": "determined",
+          "value": "-11"
+        },
+        "application_wall_seconds": 0.06465183999989677,
+        "expected": {
+          "status": "determined",
+          "value": "-11"
+        },
+        "id": "transfer-02",
+        "passed": true,
+        "verifier_wall_seconds": 0.0016234179993261932
+      },
+      {
+        "actual": {
+          "status": "inconsistent"
+        },
+        "application_wall_seconds": 0.06487665199983894,
+        "expected": {
+          "status": "inconsistent"
+        },
+        "id": "transfer-03",
+        "passed": true,
+        "verifier_wall_seconds": 0.0005675649999830057
+      },
+      {
+        "actual": {
+          "status": "ambiguous"
+        },
+        "application_wall_seconds": 0.06491170299977966,
+        "expected": {
+          "status": "ambiguous"
+        },
+        "id": "transfer-04",
+        "passed": true,
+        "verifier_wall_seconds": 0.0043719220002458314
+      },
+      {
+        "actual": {
+          "status": "ambiguous"
+        },
+        "application_wall_seconds": 0.11510840799928701,
+        "expected": {
+          "status": "ambiguous"
+        },
+        "id": "transfer-05",
+        "passed": true,
+        "verifier_wall_seconds": 0.001333160999820393
+      },
+      {
+        "actual": {
+          "status": "determined",
+          "value": "33/2"
+        },
+        "application_wall_seconds": 0.0650129220002782,
+        "expected": {
+          "status": "determined",
+          "value": "33/2"
+        },
+        "id": "transfer-06",
+        "passed": true,
+        "verifier_wall_seconds": 0.003220278000299004
+      },
+      {
+        "actual": {
+          "status": "ambiguous"
+        },
+        "application_wall_seconds": 0.06517488000008598,
+        "expected": {
+          "status": "ambiguous"
+        },
+        "id": "transfer-07",
+        "passed": true,
+        "verifier_wall_seconds": 0.0008842010001899325
+      },
+      {
+        "actual": {
+          "status": "ambiguous"
+        },
+        "application_wall_seconds": 0.06475576299999375,
+        "expected": {
+          "status": "ambiguous"
+        },
+        "id": "transfer-08",
+        "passed": true,
+        "verifier_wall_seconds": 0.0019359379994057235
+      },
+      {
+        "actual": {
+          "status": "inconsistent"
+        },
+        "application_wall_seconds": 0.06488637599977665,
+        "expected": {
+          "status": "inconsistent"
+        },
+        "id": "transfer-09",
+        "passed": true,
+        "verifier_wall_seconds": 0.0004177649998382549
+      },
+      {
+        "actual": {
+          "status": "ambiguous"
+        },
+        "application_wall_seconds": 0.1762119579998398,
+        "expected": {
+          "status": "ambiguous"
+        },
+        "id": "transfer-10",
+        "passed": true,
+        "verifier_wall_seconds": 0.00679326299996319
+      },
+      {
+        "actual": {
+          "status": "inconsistent"
+        },
+        "application_wall_seconds": 0.23195740199935244,
+        "expected": {
+          "status": "inconsistent"
+        },
+        "id": "transfer-11",
+        "passed": true,
+        "verifier_wall_seconds": 0.005422176999672956
+      },
+      {
+        "actual": {
+          "status": "ambiguous"
+        },
+        "application_wall_seconds": 0.06977476100018976,
+        "expected": {
+          "status": "ambiguous"
+        },
+        "id": "transfer-12",
+        "passed": true,
+        "verifier_wall_seconds": 0.0017572450005900464
+      },
+      {
+        "actual": {
+          "status": "determined",
+          "value": "-8"
+        },
+        "application_wall_seconds": 0.06456736699965404,
+        "expected": {
+          "status": "determined",
+          "value": "-8"
+        },
+        "id": "transfer-13",
+        "passed": true,
+        "verifier_wall_seconds": 0.0006897140001456137
+      },
+      {
+        "actual": {
+          "status": "ambiguous"
+        },
+        "application_wall_seconds": 0.06516572199961956,
+        "expected": {
+          "status": "ambiguous"
+        },
+        "id": "transfer-14",
+        "passed": true,
+        "verifier_wall_seconds": 0.0005576200001087273
+      },
+      {
+        "actual": {
+          "status": "ambiguous"
+        },
+        "application_wall_seconds": 0.032387846000347054,
+        "expected": {
+          "status": "ambiguous"
+        },
+        "id": "transfer-15",
+        "passed": true,
+        "verifier_wall_seconds": 0.00020045400015078485
+      },
+      {
+        "actual": {
+          "status": "inconsistent"
+        },
+        "application_wall_seconds": 0.2151372230000561,
+        "expected": {
+          "status": "inconsistent"
+        },
+        "id": "transfer-16",
+        "passed": true,
+        "verifier_wall_seconds": 0.005382887999985542
+      }
+    ]
+  },
+  "provenance": {
+    "candidate_sha256": "925206f5f38c0dfb094e1443dcb3aca9949376bd1383692ff3916dd6a8db0998",
+    "development_event_sha256": "1be8f217888c279751a566bf9ec0abcc24a95714f303aea00dfe064bd421caf5",
+    "model_requests": [
+      {
+        "cost": {
+          "accounted": 0.0,
+          "amount": 0.0,
+          "attempts": 1,
+          "basis": "reported_usage_at_user_rates",
+          "complete_cost_known": false,
+          "currency": "USD"
+        },
+        "cost_uncertain": true,
+        "event_index": 2,
+        "event_kind": "model_completed",
+        "model": "forge-qwen3-4b",
+        "provider": "primary",
+        "role": "builder",
+        "run_id": "wf_e3ae5444607d3d3119ddbcb1_86f7aed8d4a475c7",
+        "usage": {
+          "input_tokens": 825,
+          "output_tokens": 454
+        },
+        "workflow": "wf_e3ae5444607d3d3119ddbcb1"
+      },
+      {
+        "cost": {
+          "accounted": 0.0,
+          "amount": 0.0,
+          "attempts": 1,
+          "basis": "reported_usage_at_user_rates",
+          "complete_cost_known": false,
+          "currency": "USD"
+        },
+        "cost_uncertain": true,
+        "event_index": 8,
+        "event_kind": "model_completed",
+        "model": "forge-qwen3-4b",
+        "provider": "primary",
+        "role": "builder",
+        "run_id": "wf_e3ae5444607d3d3119ddbcb1_14f8adeea430c4fa",
+        "usage": {
+          "input_tokens": 1855,
+          "output_tokens": 362
+        },
+        "workflow": "wf_e3ae5444607d3d3119ddbcb1"
+      }
+    ],
+    "run_id": "wf_e3ae5444607d3d3119ddbcb1",
+    "source_sha256": {
+      "adapters.py": "a05127970eb11bb08cc98ed7ef9e05f9a723f51c66f9a5bfaa9f2242bb6275a6",
+      "forge.py": "90cb543cd8456f9248ceb5b02ef5ffa683ce02597d1fb27566de771b4ad3dd26",
+      "forge_sandbox.py": "860c444c497c6ba68f6967cdfd5e93e544c792860c6985a537f580ff257b80ed",
+      "forge_telemetry.py": "5f0b9dfc22002b59d5394a736ec8aca52e96aae57a70b354d394d365b95490e1",
+      "services.py": "41b71b3f946f0912898558995f2c83f1f09b0cb2d5f9203bfecbef301de4a081",
+      "workflows.py": "69a292abba3eb24601b79783965a8b5ffff4fe3a9dcef245aa755e3e9d8a4059"
+    }
+  },
+  "repair_wall_seconds": 21.73520958800009,
+  "retained_successor": {
+    "artifact": {
+      "name": "inherited-candidate.txt",
+      "sha256": "07e797ad9a388271d6fb3e2d7241c80425e3669e444d095561fd4da05daddcc0"
+    },
+    "calls": 0,
+    "checks": {
+      "qualification": {
+        "passed": 24,
+        "total": 24
+      },
+      "transfer": {
+        "passed": 16,
+        "total": 16
+      }
+    },
+    "commitments": {
+      "qualification": "b36314de59df1a94e46e33977c1d97e2728281db46c8b5ee84ebc97ad46edfc2",
+      "transfer": "cb4a64c4293b808bb31a1614be3c980a10c30b37a785823ec9e29bbf3e7e4483"
+    },
+    "id": "wf_c84ffdbbdab3aed2b23da1cf",
+    "status": "complete"
+  }
+}
