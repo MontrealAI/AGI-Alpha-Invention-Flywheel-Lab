@@ -53,7 +53,7 @@ class SampleContract(unittest.TestCase):
     def test_meaningful_parallel_bilingual_structure(self):
         self.assertEqual(10, self.parser.langs.count("en"))
         self.assertEqual(10, self.parser.langs.count("fr"))
-        self.assertEqual(10, len(re.findall(r'<h[12]\\b', self.content)))
+        self.assertEqual(10, len(re.findall(r'<h[12]\b', self.content)))
         self.assertIn("ÉCHANTILLON", self.content)
         self.assertIn("NOT A CUSTOMER", self.content)
 
@@ -76,7 +76,7 @@ class SampleContract(unittest.TestCase):
                                                   "input", "object", "embed",
                                                   "video", "audio", "img"})
         self.assertFalse(self.parser.unsafe_attributes)
-        self.assertFalse(re.search(r'url\\s*\\(|@import|fetch\\s*\\(', self.content, re.I))
+        self.assertFalse(re.search(r'url\s*\(|@import|fetch\s*\(', self.content, re.I))
         for link in self.parser.links:
             self.assertTrue(link.startswith(GITHUB_PREFIX) or link == SHOP, link)
             parts = urlsplit(link)
