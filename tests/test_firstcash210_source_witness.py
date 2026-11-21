@@ -104,7 +104,7 @@ class SourceWitnessTests(unittest.TestCase):
         with self.assertRaisesRegex(kit.Refusal, "OVERSIZE_SOURCE"):
             kit.fetch_public_source(opener=FakeOpener(FakeResponse(reported_length=kit.MAX_BYTES + 1)))
         with self.assertRaisesRegex(kit.Refusal, "EMPTY_OR_OVERSIZE_SOURCE"):
-            kit.fetch_public_source(opener=FakeOpener(FakeResponse(body=b"x" * (kit.MAX_BYTES + 1))))
+            kit.fetch_public_source(opener=FakeOpener(FakeResponse(body=b"x" * (kit.MAX_BYTES + 1), reported_length=0)))
 
     def test_refuse_network_failure_not_retry(self):
         opener = FakeOpener(TimeoutError("network unavailable"))
