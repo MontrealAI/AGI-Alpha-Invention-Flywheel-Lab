@@ -22,7 +22,7 @@ class BinaryHelstrom:
         # Row-coefficients = spectral syndrome bra * previous recovery Kraus rows.
         # The physical branch acts linearly on amplitudes, without a second conjugation.
         self._operators = np.einsum(
-            "js,jid->sid", eigenvectors.conj().T, experiment._recovery,
+            "bs,sid->bid", eigenvectors.conj().T, experiment._recovery,
             optimize=True
         )
         self.syndrome_dimension = experiment.syndrome_rank
@@ -61,10 +61,7 @@ class BinaryHelstrom:
         }
 
     def _eigenrow(self, index):
-        # The eigenvectors are implicit in the transformed Kraus rows,
-        # but the original syndrome-coordinate row is needed for exact prediction.
-        # Reconstruct via Kraus row inner products only when the source is orthonormal.
-        # Instead retain the original diagonalizer below.
+        # Eigenvector in original syndrome coordinates for direct prediction.
         return self._eigenvectors[:, index]
 
     def operators(self):
