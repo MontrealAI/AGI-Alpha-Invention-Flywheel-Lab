@@ -139,6 +139,22 @@ def source_cohort(sources, contract):
     return list(unique.values())
 
 
+def boundary_inputs(contract, sample):
+    """Independently reconstruct registered adversarial boundary commitments."""
+    if contract == 'window':
+        return [
+            {**sample, **{'c'+str(i): 100 for i in range(6)}, 'ready':1, 'until':5},
+            {**sample, **{'c'+str(i): (-1 if i%2 else 100) for i in range(6)}, 'ready':0, 'until':6},
+            {**sample, 'ready':4, 'until':5},
+        ]
+    if contract == 'quote':
+        return [
+            {**sample, 'cad':100, 'usd':100, 'usd_rate':10000, 'eur':-1, 'gbp':-1},
+            {**sample, 'cad':-1, 'usd':-1, 'eur':-1, 'gbp':-1},
+        ]
+    return []
+
+
 def audit_sources(sources):
     if not isinstance(sources, dict) or not sources:
         raise ValueError('PRIMARY_SOURCE_MAP_REQUIRED')
@@ -232,7 +248,7 @@ def audit(work:Path):
     fields=('qualification_comparison','fresh_transfer')
     full_source=source_cohort(sources,contract)
     expected_inputs={
-        'qualification_comparison':full_source[3:-2],
+        'qualification_comparison':full_source[3:-2] + boundary_inputs(contract, full_source[0]),
         'fresh_transfer':full_source[-2:]}
     details={}
     all_cases=[]
