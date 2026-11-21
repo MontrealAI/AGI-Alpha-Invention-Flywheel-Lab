@@ -125,6 +125,16 @@ def fixture_report(factory):
         "hypotheses": len(named),
         "measurement_outcomes": len(experiment.measurement_operators()),
         "rank": experiment.identifiability()["rank"],
+        "realized_povm_shape": list(experiment._operators.shape),
+        "realized_povm_sha256": hashlib.sha256(
+            np.ascontiguousarray(experiment._operators, dtype=np.complex128).tobytes()
+        ).hexdigest(),
+        "realized_response_sha256": hashlib.sha256(
+            np.ascontiguousarray(a, dtype=np.float64).tobytes()
+        ).hexdigest(),
+        "realization_warning": ("A source hash does not freeze a degenerate syndrome "
+                                "eigenbasis or the physical POVM constructed from it; "
+                                "shot estimates apply only to this realized POVM."),
         "unique_mixture": experiment.identifiability()["unique"],
         "pair_count": len(pairs),
         "numerically_indistinguishable_pairs": len(pairs)-len(eligible),
@@ -149,8 +159,9 @@ def run():
         "target_equal_prior_average_error": ALPHA,
         "shot_budgets": list(BUDGETS),
         "cases": [fixture_report(f) for f in (pollatsek_ruskai_7, shor_9)],
-        "scope": ("Exact-probability mathematical necessary-shot lower bounds; "
-                  "not a sufficient sample size, physical receiver or economic finding."),
+        "scope": ("Exact-probability mathematical necessary-shot lower bounds for "
+                  "the evidenced POVM byte identity, NOT source-invariant shot claims, "
+                  "sufficient sample sizes, physical receivers or economic findings."),
         "decision": "RESEARCH_ONLY_NO_DEPLOY",
         "actual_hardware_shots": 0,
         "real_customers": 0,
