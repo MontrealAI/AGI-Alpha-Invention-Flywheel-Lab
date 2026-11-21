@@ -24,12 +24,8 @@ def _windows(start, cutoff):
 
 
 def _known_instant(day, stamp, cutoff):
-    """An undated-in-time announcement is known only at UTC day close."""
-    day = date.fromisoformat(day)
-    if stamp:
-        published = core.instant(stamp)
-        return published.astimezone(timezone.utc).date() == day and published <= cutoff
-    return _end_of_day(day) <= cutoff
+    """Share exact intraday eligibility with the live briefing/alert gate."""
+    return core._known_at(day, stamp, cutoff)
 
 
 def _dated_available(row, key, cutoff):
