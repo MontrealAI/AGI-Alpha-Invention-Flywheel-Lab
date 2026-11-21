@@ -83,8 +83,9 @@ class FrozenAdversarialTests(unittest.TestCase):
         self.assertEqual(r["counts"]["ambiguous_reference_groups"], 1)
 
     def test_09_missing_mandatory_header_rejected(self):
+        raw = (n.REFERENCE + "," + n.TITLE + "\nCB-1,Software development\n").encode()
         with self.assertRaisesRegex(n.Refusal, "UNSUPPORTED_TENDER_SCHEMA"):
-            self.summary(item(), fields=(n.REFERENCE, n.TITLE, n.BUYER, n.CATEGORY))
+            n.assess(raw, AT)
 
     def test_10_duplicate_header_rejected(self):
         raw = (n.REFERENCE + "," + n.TITLE + "," + n.TITLE + "," + n.CLOSING + "\n").encode()
