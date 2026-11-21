@@ -147,10 +147,12 @@ class EconomicMissionTests(unittest.TestCase):
         decision = proposal(wrong_source=True)
         confirmation = {"selection": 0, "rationale": "The first hypothesis uses the verified measurement.",
                         "citations": [
-                            {"source": label, "excerpt_index": 0, "contract": "measurement" if index == 0 else None}
-                            for index, label in enumerate(sources())
+                            {"source": label, "excerpt_index": 0, "contract": None}
+                            for label in sources()
                         ]}
-        self.replies.extend([decision, confirmation, candidate()])
+        formula = {"summary": "Double x", "inputs": ["x"], "bindings": {"twice": "2*x"},
+                   "outputs": {"result": "twice"}}
+        self.replies.extend([decision, confirmation, formula])
         first = self.service.step(ident)
         self.assertEqual(first["status"], "ready")
         self.assertEqual(first["phase"], "researcher")
@@ -160,6 +162,9 @@ class EconomicMissionTests(unittest.TestCase):
         resolved = fixed["economic_mission"]["decision"]["opportunities"][0]
         self.assertEqual(resolved["outcome"], decision["opportunities"][0]["outcome"])
         self.assertTrue(resolved["quote_verified"])
+        self.assertEqual(resolved["contract"], "measurement")
+        self.assertEqual(fixed["economic_mission"]["decision"]["experiment_routed_by"],
+                         "unique_registered_contract_for_confirmed_source")
         self.assertEqual(self.service.step(ident)["status"], "complete")
 
     def test_resume_after_freezing_does_not_call_model_again(self):

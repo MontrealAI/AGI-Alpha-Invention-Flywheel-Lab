@@ -112,7 +112,7 @@ def development_feedback(state):
     return summary + ("\nSynthetic development counterexamples: " + encoded(examples[:2]).decode() if examples else "")
 
 
-def construction_response(text, existing):
+def construction_response(text, existing, artifact=protocol.ARTIFACT):
     """Validate the model proposal, then attach the sole operator-approved tool."""
     raw = strict_portable_json(text)
     require(isinstance(raw, dict) and set(raw) == set(BUILDER_SCHEMA["properties"]),
@@ -134,7 +134,7 @@ def construction_response(text, existing):
         require(existing and not inputs and not spec["bindings"], "Provide at least one output formula.")
         actions = []
     else:
-        actions = [{"tool": "construct_instrument", "name": protocol.ARTIFACT, "spec": spec}]
+        actions = [{"tool": "construct_instrument", "name": artifact, "spec": spec}]
     return {"summary": raw["summary"], "actions": actions}
 
 

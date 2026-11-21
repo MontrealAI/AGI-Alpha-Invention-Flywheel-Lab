@@ -448,11 +448,12 @@ class WorkflowService:
                    "remaining_actions": spec["max_actions"] - state["actions"], "iteration": state["iteration"]}
         if economic:
             from .economic_mission import ARTIFACT, builder_data, checks, construction_prompt
+            if role == "builder":
+                prior = self._read_artifact(state, ARTIFACT).decode() if ARTIFACT in state["artifacts"] else None
+                return construction_prompt(state, prior)
             payload.update(builder_data(state), acceptance=checks(state))
             if ARTIFACT in state["artifacts"]:
                 payload["artifacts"][ARTIFACT] = self._read_artifact(state, ARTIFACT).decode()
-            if role == "builder":
-                return construction_prompt(payload)
         else:
             payload["artifacts"] = self._artifact_texts(state)
         if role in {"builder", "critic"}:
@@ -734,11 +735,13 @@ class WorkflowService:
                 configured = self.runtime.provider(route["provider"])
                 model = getattr(configured, "models", {}).get(route["model"])
                 if (getattr(configured, "kind", None) in {"openai", "ollama"}
-                        and not getattr(configured, "remote", True) and getattr(model, "json_schema", False) is True
-                        and not instrument_mission):
+                        and not getattr(configured, "remote", True) and getattr(model, "json_schema", False) is True):
                     if discovery:
                         from .economic_mission import discovery_schema
                         request["json_schema"] = discovery_schema(confirm=discovery["decision"] is not None)
+                    elif instrument_mission:
+                        from .economic_mission import construction_schema
+                        request["json_schema"] = construction_schema(state)
                     elif state.get("workshop") and role == "builder":
                         from .workshop import BUILDER_SCHEMA
                         request["json_schema"] = BUILDER_SCHEMA
@@ -858,6 +861,11 @@ class WorkflowService:
                         response = construction_response(text, "instrument.json" in state["artifacts"])
                     else:
                         response = strict_json(text)
+                        if (state.get("economic_mission") and role == "builder" and isinstance(response, dict)
+                                and set(response) == {"summary", "inputs", "bindings", "outputs"}):
+                            from .economic_mission import ARTIFACT
+                            from .workshop import construction_response
+                            response = construction_response(text, existing=False, artifact=ARTIFACT)
                     require(isinstance(response, dict), "Model must return a JSON object.")
                     if role == "builder":
                         require(not set(response) - {"summary", "actions", "done"} and isinstance(response.get("actions"), list) and len(response["actions"]) <= 8, "Builder response must contain at most eight actions.")
@@ -968,7 +976,7 @@ class WorkflowService:
             if state.get("workshop"):
                 from .workshop import development_feedback
                 state["feedback"] += "\n" + development_feedback(state)
-            else:
+            elif not state.get("economic_mission"):
                 state["feedback"] += "\nDeterministic acceptance: " + encoded(state["verification"]).decode()
 
     def _finish(self, state):

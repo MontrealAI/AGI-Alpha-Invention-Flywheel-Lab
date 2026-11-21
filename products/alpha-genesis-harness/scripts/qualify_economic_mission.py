@@ -237,6 +237,7 @@ def run(args):
     else:
         with ThreadPoolExecutor(max_workers=len(SOURCES)) as pool:
             sources = dict(zip(SOURCES, pool.map(_snapshot, SOURCES.values())))
+    sources["exchange-rates"]["anchor"] = '"observations":'
     _json(args.work / "SOURCES.json", sources)
     contracts, successor = cases(sources)
     route = {"provider": args.provider, "model": args.model}
