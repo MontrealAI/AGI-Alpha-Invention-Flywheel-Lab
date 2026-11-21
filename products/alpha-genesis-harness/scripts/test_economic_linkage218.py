@@ -224,7 +224,8 @@ def witness():
 if __name__ == "__main__":
     import sys
     if len(sys.argv) == 3 and sys.argv[1] == "--witness":
-        Path(sys.argv[2]).write_text(json.dumps(witness(), sort_keys=True, indent=2) + "\n")
-        print(json.dumps(witness(), sort_keys=True))
+        result = witness()
+        Path(sys.argv[2]).write_text(json.dumps(result, sort_keys=True, indent=2) + "\n")
+        print(json.dumps(result, sort_keys=True))
     else:
         unittest.main()
