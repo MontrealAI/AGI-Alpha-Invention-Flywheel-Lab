@@ -18,6 +18,8 @@ def src(day="2026-11-20", when=None):
 def record():
     return {
         "id": "radar205", "title": "Date-only alert", "as_of": "2026-11-20",
+        "priority": 5, "move": "Research only", "experiment": "Review measured evidence",
+        "stop_threshold": "No admissible source",
         "sources": [src()], "recommendation": "BUILD", "capability_verified": True,
         "ownership_supported": True, "demand_observed": False, "delivery_verified": False,
         "urgency": {"reason": "Fixed cutoff", "certainty": "fixed_deadline",
