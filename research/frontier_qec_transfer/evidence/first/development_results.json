@@ -1,0 +1,219 @@
+{
+  "test": "public and self-designed development suite",
+  "seed": 41702413,
+  "source_sha256": "f8638af7b2532f8c2161fefe2169bb91788c9fc3a5e3321cf7a05ec717f7c134",
+  "started_utc": "2026-11-21T19:13:03.294278+00:00",
+  "threads": {
+    "OPENBLAS_NUM_THREADS": "1",
+    "OMP_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1"
+  },
+  "fixtures": [
+    {
+      "id": "published_pr7",
+      "n": 7,
+      "K": 2,
+      "initial_nonzero": 128,
+      "syndrome_rank": 22,
+      "constructor_wall_seconds": 0.002044929000476259,
+      "constructor_cpu_seconds": 0.0020457260000000255,
+      "validation_residuals": {
+        "code_orthonormality": 1.1102230246251565e-16,
+        "knill_laflamme": 4.440892098500626e-16,
+        "syndrome_isometry": 1.9984014913826673e-15,
+        "rank_tolerance": 9.379164112033324e-13
+      },
+      "channel_state_qubit_cases": 140,
+      "max_logical_density_abs_error": 1.1547409630671503e-14,
+      "max_mass_abs_error": 1.5987211554602254e-14,
+      "max_encode_squared_norm_error": 0.0,
+      "certificate": {
+        "exported_kraus_count": 22,
+        "active_coordinates": 128,
+        "kraus_nonzeros": 5504,
+        "row_isometry_spectral_error": 3.6452323870632095e-15,
+        "completeness_on_error_span_spectral_error": 3.2050714639659216e-15,
+        "largest_squared_singular_value": 1.000000000000003,
+        "fresh_input_certificate_density_error": 1.4539632184201917e-17,
+        "erasure_and_branch_invariance_checks": "passed"
+      }
+    },
+    {
+      "id": "shor9",
+      "n": 9,
+      "K": 2,
+      "initial_nonzero": 16,
+      "syndrome_rank": 22,
+      "constructor_wall_seconds": 0.001232583999808412,
+      "constructor_cpu_seconds": 0.001231668000000019,
+      "validation_residuals": {
+        "code_orthonormality": 2.220446049250313e-16,
+        "knill_laflamme": 2.7755575615628914e-17,
+        "syndrome_isometry": 8.899114524108741e-16,
+        "rank_tolerance": 1.1937117960769683e-12
+      },
+      "channel_state_qubit_cases": 180,
+      "max_logical_density_abs_error": 3.614624287906422e-15,
+      "max_mass_abs_error": 3.552713678800501e-15,
+      "max_encode_squared_norm_error": 1.7763568394002505e-15,
+      "certificate": {
+        "exported_kraus_count": 22,
+        "active_coordinates": 80,
+        "kraus_nonzeros": 768,
+        "row_isometry_spectral_error": 9.07290285691296e-16,
+        "completeness_on_error_span_spectral_error": 7.280426438213548e-16,
+        "largest_squared_singular_value": 1.0000000000000018,
+        "fresh_input_certificate_density_error": 5.222209201006511e-18,
+        "erasure_and_branch_invariance_checks": "passed"
+      }
+    },
+    {
+      "id": "archived_s15",
+      "n": 15,
+      "K": 4,
+      "initial_nonzero": 122,
+      "syndrome_rank": 46,
+      "constructor_wall_seconds": 0.013842270000168355,
+      "constructor_cpu_seconds": 0.013841554000000034,
+      "validation_residuals": {
+        "code_orthonormality": 0.0,
+        "knill_laflamme": 2.220446049250313e-16,
+        "syndrome_isometry": 2.2204568912455683e-15,
+        "rank_tolerance": 6.536993168992931e-13
+      },
+      "channel_state_qubit_cases": 300,
+      "max_logical_density_abs_error": 3.204296758965566e-15,
+      "max_mass_abs_error": 8.881784197001252e-15,
+      "max_encode_squared_norm_error": 2.220446049250313e-16,
+      "certificate": {
+        "exported_kraus_count": 46,
+        "active_coordinates": 1952,
+        "kraus_nonzeros": 50752,
+        "row_isometry_spectral_error": 2.830816319192187e-15,
+        "completeness_on_error_span_spectral_error": 2.3837415941618172e-15,
+        "largest_squared_singular_value": 1.0000000000000033,
+        "fresh_input_certificate_density_error": 0.0,
+        "erasure_and_branch_invariance_checks": "passed"
+      }
+    },
+    {
+      "id": "complex_rotated_pr7",
+      "n": 7,
+      "K": 2,
+      "initial_nonzero": 256,
+      "syndrome_rank": 22,
+      "constructor_wall_seconds": 0.0019935529999202117,
+      "constructor_cpu_seconds": 0.001991666000000003,
+      "validation_residuals": {
+        "code_orthonormality": 4.440892098500626e-16,
+        "knill_laflamme": 2.821556530045685e-16,
+        "syndrome_isometry": 2.8865882040300704e-15,
+        "rank_tolerance": 9.379164112033324e-13
+      },
+      "channel_state_qubit_cases": 140,
+      "max_logical_density_abs_error": 7.996451694855013e-15,
+      "max_mass_abs_error": 8.881784197001252e-15,
+      "max_encode_squared_norm_error": 3.552713678800501e-15,
+      "certificate": {
+        "exported_kraus_count": 22,
+        "active_coordinates": 128,
+        "kraus_nonzeros": 5632,
+        "row_isometry_spectral_error": 3.4885411928782457e-15,
+        "completeness_on_error_span_spectral_error": 3.4759157628250697e-15,
+        "largest_squared_singular_value": 1.0000000000000033,
+        "fresh_input_certificate_density_error": 5.553504986672457e-17,
+        "erasure_and_branch_invariance_checks": "passed"
+      }
+    },
+    {
+      "id": "complex_rotated_shor9",
+      "n": 9,
+      "K": 2,
+      "initial_nonzero": 1024,
+      "syndrome_rank": 22,
+      "constructor_wall_seconds": 0.006328882998786867,
+      "constructor_cpu_seconds": 0.006328092999999924,
+      "validation_residuals": {
+        "code_orthonormality": 8.881784197001252e-16,
+        "knill_laflamme": 6.661338147750939e-16,
+        "syndrome_isometry": 2.4424906541753444e-15,
+        "rank_tolerance": 1.1937117960769701e-12
+      },
+      "channel_state_qubit_cases": 180,
+      "max_logical_density_abs_error": 8.885994482167781e-15,
+      "max_mass_abs_error": 7.105427357601002e-15,
+      "max_encode_squared_norm_error": 8.881784197001252e-15,
+      "certificate": {
+        "exported_kraus_count": 22,
+        "active_coordinates": 512,
+        "kraus_nonzeros": 22528,
+        "row_isometry_spectral_error": 2.88331168416783e-15,
+        "completeness_on_error_span_spectral_error": 3.143109539507803e-15,
+        "largest_squared_singular_value": 1.000000000000003,
+        "fresh_input_certificate_density_error": 1.3890627051105854e-17,
+        "erasure_and_branch_invariance_checks": "passed"
+      }
+    },
+    {
+      "id": "n20_4096_amplitudes",
+      "n": 20,
+      "K": 2,
+      "initial_nonzero": 4096,
+      "syndrome_rank": 33,
+      "constructor_wall_seconds": 0.09287898799993854,
+      "constructor_cpu_seconds": 0.09288160700000003,
+      "validation_residuals": {
+        "code_orthonormality": 2.220446049250313e-16,
+        "knill_laflamme": 5.5185890579512176e-17,
+        "syndrome_isometry": 4.466216033042513e-15,
+        "rank_tolerance": 1.0402345651527868e-11
+      },
+      "channel_state_qubit_cases": 160,
+      "max_logical_density_abs_error": 2.220551360183821e-14,
+      "max_mass_abs_error": 2.3092638912203256e-14,
+      "max_encode_squared_norm_error": 1.7763568394002505e-15
+    }
+  ],
+  "invalid_inputs": [
+    {
+      "case": "nonnormalized",
+      "rejected": true,
+      "reason": "codewords are not orthonormal (maximum Gram residual 0.0201)"
+    },
+    {
+      "case": "duplicate",
+      "rejected": true,
+      "reason": "codewords are not orthonormal (maximum Gram residual 1)"
+    },
+    {
+      "case": "orthonormal_uncorrectable",
+      "rejected": true,
+      "reason": "code fails the single-qubit Knill--Laflamme conditions (maximum residual 1)"
+    },
+    {
+      "case": "nan_amplitude",
+      "rejected": true,
+      "reason": "physical amplitudes must be finite complex numbers"
+    },
+    {
+      "case": "infinite_amplitude",
+      "rejected": true,
+      "reason": "physical amplitudes must be finite complex numbers"
+    },
+    {
+      "case": "out_of_range_word",
+      "rejected": true,
+      "reason": "physical basis index is out of range"
+    },
+    {
+      "case": "noninteger_word",
+      "rejected": true,
+      "reason": "physical words must be integer basis indices"
+    }
+  ],
+  "passed": true,
+  "completed_utc": "2026-11-21T19:13:07.669096+00:00",
+  "wall_seconds": 4.37499636999928,
+  "process_cpu_seconds": 4.369480941,
+  "max_rss_kib": 121212
+}

@@ -1,0 +1,140 @@
+{
+  "start_utc": "2026-11-21T19:34:07.522104+00:00",
+  "completion_utc": "2026-11-21T19:39:56.695939+00:00",
+  "elapsed_wall_seconds": 349.17383479699856,
+  "source_sha256": "800d8cc7f56f866dec690ebac7b2ab5280da0c58127453024c5a5fc1eafcd389",
+  "prior_dependency_sha256": {
+    "recovery.py": "f8638af7b2532f8c2161fefe2169bb91788c9fc3a5e3321cf7a05ec717f7c134"
+  },
+  "frozen_source_path": "/workspace/scratch/e2ed86e4c5fa/frontier-second-pair3_retained/frozen/800d8cc7f56f866dec690ebac7b2ab5280da0c58127453024c5a5fc1eafcd389/noise_experiment.py",
+  "frozen_dependency_path": "/workspace/scratch/e2ed86e4c5fa/frontier-second-pair3_retained/frozen/800d8cc7f56f866dec690ebac7b2ab5280da0c58127453024c5a5fc1eafcd389/recovery.py",
+  "frozen_directory": "/workspace/scratch/e2ed86e4c5fa/frontier-second-pair3_retained/frozen/800d8cc7f56f866dec690ebac7b2ab5280da0c58127453024c5a5fc1eafcd389",
+  "development_outcome": "passed supplied example, six full instrument cases, and supplemental affine-dependence/boundary fits",
+  "repair_count": 0,
+  "meaningful_failed_attempts": [],
+  "versions": [
+    {
+      "label": "initial",
+      "path": "/workspace/scratch/e2ed86e4c5fa/frontier-second-pair3_retained/submissions/initial.py",
+      "sha256": "800d8cc7f56f866dec690ebac7b2ab5280da0c58127453024c5a5fc1eafcd389",
+      "status": "passed; unchanged final"
+    }
+  ],
+  "measured_numerical_subprocesses": [
+    {
+      "source": "/workspace/scratch/e2ed86e4c5fa/frontier-second-pair3_retained/submissions/initial.py",
+      "source_sha256": "800d8cc7f56f866dec690ebac7b2ab5280da0c58127453024c5a5fc1eafcd389",
+      "started_utc": "2026-11-21T19:37:48.369094+00:00",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "development_checks.py"
+      ],
+      "environment": {
+        "OPENBLAS_NUM_THREADS": "1",
+        "OMP_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1"
+      },
+      "completed_utc": "2026-11-21T19:37:50.692036+00:00",
+      "wall_seconds": 2.3228451690010843,
+      "exit_code": 0,
+      "cpu_user_seconds": 1.980829,
+      "cpu_system_seconds": 0.372366,
+      "max_rss_kib": 201192
+    },
+    {
+      "command": [
+        "CODEX_PRIMARY_RUNTIME_PYTHON",
+        "supplemental_checks.py"
+      ],
+      "observed_exec_wall_seconds": 0.446881862,
+      "exit_code": 0,
+      "source_sha256": "800d8cc7f56f866dec690ebac7b2ab5280da0c58127453024c5a5fc1eafcd389",
+      "measurements": {
+        "wall_seconds": 0.03161605899731512,
+        "cpu_user_seconds": 0.343603,
+        "cpu_system_seconds": 0.171402,
+        "max_rss_kib": 66616
+      },
+      "environment": {
+        "OPENBLAS_NUM_THREADS": "1",
+        "OMP_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1"
+      }
+    }
+  ],
+  "implementation_lines": 325,
+  "implementation_bytes": 15914,
+  "prior_dependency_lines": 260,
+  "prior_dependency_bytes": 11778,
+  "maximum_development_errors": {
+    "completeness_spectral_error": 3.8032086570793916e-15,
+    "erasure_completion_spectral_error": 1.5462552095425803e-15,
+    "nondisturbance_max_error": 2.1157531201690872e-16,
+    "response_max_error": 8.326672684688674e-17,
+    "response_normalization_max_error": 4.884981308350689e-15,
+    "certificate_max_error": 2.1094237467877974e-15,
+    "subnormalized_logical_error": 6.106255510247457e-16,
+    "ideal_identifiable_coordinate_max_error": 6.763028776138238e-15,
+    "ideal_prediction_max_error": 3.7470027081099033e-16
+  },
+  "public_case_ranks": [
+    {
+      "case": "public_pollatsek_ruskai_pauli",
+      "hypotheses": 22,
+      "rank": 22,
+      "unique": true
+    },
+    {
+      "case": "public_shor_pauli",
+      "hypotheses": 28,
+      "rank": 22,
+      "unique": false
+    },
+    {
+      "case": "complex_rotated_pollatsek_random_cptp",
+      "hypotheses": 32,
+      "rank": 32,
+      "unique": true
+    },
+    {
+      "case": "complex_rotated_shor_random_cptp_duplicates",
+      "hypotheses": 32,
+      "rank": 30,
+      "unique": false
+    },
+    {
+      "case": "single_channel",
+      "hypotheses": 1,
+      "rank": 1,
+      "unique": true
+    },
+    {
+      "case": "all_hypotheses_identical",
+      "hypotheses": 8,
+      "rank": 1,
+      "unique": false
+    }
+  ],
+  "blinding_attestation": {
+    "only_assigned_workspace_and_permitted_system_runtime_paths": true,
+    "outside_research": false,
+    "parent_or_sibling_workspaces_read": false,
+    "evaluator_or_private_data_read": false,
+    "other_agent_results_read": false,
+    "delegation_or_sibling_contact": false,
+    "tool_or_conversation_histories_inspected": false,
+    "isolation_kind": "procedural on shared filesystem, not OS security isolation"
+  },
+  "accounting": {
+    "model_inference_calls": "unknown",
+    "model_inference_tokens": "unknown",
+    "model_inference_compute": "unknown",
+    "host_cost": "unknown",
+    "model_cost": "unknown",
+    "total_monetary_cost": "unknown",
+    "prior_acquisition_and_qualification_cost": "unknown in this constructor; must be retained in cumulative parent comparison",
+    "included_agent_execution_is_zero_cost": false,
+    "process_wall_is_model_compute": false
+  },
+  "independent_qualification": "not performed or claimed"
+}

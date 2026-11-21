@@ -1,0 +1,82 @@
+{
+  "schema": "frontier.noise_experiment.construction_end.v1",
+  "start_utc": "2026-11-21T19:34:11.068426+00:00",
+  "completion_utc": "2026-11-21T19:39:58.372607+00:00",
+  "elapsed_wall_seconds": 347.3041832529998,
+  "source_sha256": "54d70a7c0f5a48400b4944224c22fa0fbda2ad56a95068e70b8ed64416c4bd1c",
+  "frozen_source_path": "/workspace/scratch/e2ed86e4c5fa/frontier-second-pair3_without/frozen/54d70a7c0f5a48400b4944224c22fa0fbda2ad56a95068e70b8ed64416c4bd1c/noise_experiment.py",
+  "source_path": "/workspace/scratch/e2ed86e4c5fa/frontier-second-pair3_without/noise_experiment.py",
+  "prior_dependency_sha256": {},
+  "prior_capability_present": false,
+  "development_outcome": "passed public development; independent qualification not performed",
+  "repair_count": 0,
+  "source_versions": [
+    {
+      "name": "initial",
+      "sha256": "54d70a7c0f5a48400b4944224c22fa0fbda2ad56a95068e70b8ed64416c4bd1c"
+    }
+  ],
+  "meaningful_failed_attempts": [
+    {
+      "stage": "numerical measurement wrapper launch",
+      "exit_code": 127,
+      "reason": "/usr/bin/time unavailable",
+      "scientific_python_executed": false,
+      "source_modified": false,
+      "evidence": "launch_failure_stderr.txt",
+      "correction": "standard-library subprocess and resource measurement wrapper"
+    }
+  ],
+  "numerical_development_failures": 0,
+  "numerical_subprocess": {
+    "start_utc": "2026-11-21T19:38:36.324907+00:00",
+    "completion_utc": "2026-11-21T19:38:38.897896+00:00",
+    "wall_seconds": 2.5730198830024165,
+    "user_cpu_seconds": 2.108821,
+    "system_cpu_seconds": 0.499612,
+    "maximum_rss_kib": 230724,
+    "exit_code": 0,
+    "python": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+    "thread_limits": {
+      "OPENBLAS_NUM_THREADS": "1",
+      "OMP_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1"
+    },
+    "prior_launch_failure": "/usr/bin/time unavailable; no scientific Python executed in that launch"
+  },
+  "implementation_lines": 279,
+  "implementation_bytes": 13924,
+  "development_cases": 6,
+  "ideal_mixtures_tested": 171,
+  "max_ideal_error": 3.219646771412954e-14,
+  "model_inference_calls": "unknown",
+  "model_inference_tokens": "unknown",
+  "model_host_cost": "unknown",
+  "total_monetary_cost": "unknown",
+  "included_agent_execution_is_zero_economic_cost": false,
+  "tool_process_time_is_model_inference_compute": false,
+  "blinding_attestation": {
+    "only_assigned_public_materials_and_system_runtime_accessed": true,
+    "other_workspaces_inspected": false,
+    "other_agents_results_accessed": false,
+    "private_qualification_accessed": false,
+    "delegation_used": false,
+    "external_research_used": false,
+    "source_frozen_before_independent_qualification": true
+  },
+  "input_sha256": {
+    "TASK.txt": "196bcc81d4434580bb808d5042cb3dfee07ef72ad930949389188372035cd876",
+    "SECOND_CONTRACT.json": "6d2d908da376834de60a67bad3a3c59db8632dcdd0840e7bf579dae8876d295c",
+    "second_public_fixtures.py": "754594f84004f6b657f0e843e459a0c70e78105d93aa9710a33b3eec9c499b58",
+    "public_fixtures.py": "e0e532750f1df183fc12eaf3c913e0aeaaf520a753d3e9791bbfc43d454fea9d"
+  },
+  "evidence_sha256": {
+    "development_checks.py": "b62a9181634a1d9dad9d7ff0f5e1a650aaa67538a4caa110d165584994af2b5b",
+    "development_results.json": "a6899f733e4a6cfa25983704f4dfa5d21d61f94dc074bdd3cac62c5f6325e4b1",
+    "DEVELOPMENT.md": "085f2ce87b38cf39cc97c091c67208fec4960479f617101df994fe8b90648d76",
+    "numerical_process_receipt.json": "5daad7d32b9946b81b549002ca5a3239d12ee386fd4c69d9008c34bc682936a2",
+    "development_stdout.txt": "c881a72623bc327fd5d5e5a7ec5968b88f622346947abb5b04ce2696fe8442cd",
+    "development_stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "launch_failure_stderr.txt": "3e737f6a9117cec194b02103b357f8668fae9adb86a8a8cd0bf25efab8948548"
+  }
+}

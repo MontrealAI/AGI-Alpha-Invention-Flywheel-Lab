@@ -1,0 +1,55 @@
+{
+  "schema": "frontier.construction_end.v1",
+  "construction_start_utc": "2026-11-21T19:08:39.319699+00:00",
+  "construction_completion_utc": "2026-11-21T19:13:59.553534+00:00",
+  "construction_elapsed_wall_seconds": 320.233835,
+  "source_path": "/workspace/scratch/e2ed86e4c5fa/frontier-proof-builder-first/recovery.py",
+  "source_sha256": "f8638af7b2532f8c2161fefe2169bb91788c9fc3a5e3321cf7a05ec717f7c134",
+  "frozen_archive": "recovery_final_f8638af7b2532f8c2161fefe2169bb91788c9fc3a5e3321cf7a05ec717f7c134.py",
+  "source_frozen": true,
+  "source_matches_initial_submission": true,
+  "public_development_repairs": 0,
+  "meaningful_failed_attempts": [],
+  "test_summary": {
+    "public_development_example_passed": true,
+    "development_suite_passed": true,
+    "channel_state_qubit_cases": 1100,
+    "fixtures": 6,
+    "certificate_fixtures": 5,
+    "invalid_witnesses_rejected": 7,
+    "max_logical_density_abs_error": 2.220551360183821e-14,
+    "max_mass_abs_error": 2.3092638912203256e-14,
+    "largest_case": {
+      "n": 20,
+      "K": 2,
+      "initial_nonzero_amplitudes": 4096
+    },
+    "private_qualification": "not run or observed by constructor"
+  },
+  "measured_local_numerical_execution": {
+    "logged_wall_seconds": 4.396633078000377,
+    "logged_process_cpu_seconds": 4.391117725,
+    "peak_process_rss_kib": 121212,
+    "scope": "Timed public example and development suite. Excludes imports and additional untimed fixture-construction inspection.",
+    "thread_environment": {
+      "OPENBLAS_NUM_THREADS": "1",
+      "OMP_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1"
+    }
+  },
+  "inference_usage": {
+    "model_call_count": "unknown",
+    "token_count": "unknown",
+    "inference_wall_or_cpu": "unknown",
+    "configuration": "inherited included model; no paid model calls made"
+  },
+  "monetary_cost": "unknown; no price inferred from included execution",
+  "human_labor_cost": "unknown; not estimated",
+  "blinding": "Procedural on shared host; only this task workspace was read. No evaluator, other builders, other task workspaces, or qualification material were consulted.",
+  "limitations": [
+    "Double-precision rank and validation decisions assume the contract's numerically well-conditioned cohort.",
+    "Constructor rejects n outside 1..20 and invalid orthonormality or Knill-Laflamme witnesses.",
+    "Roundoff-sized negative erasure differences are returned without hidden normalization.",
+    "These are public-input development checks, not independent qualification or a universality claim."
+  ]
+}

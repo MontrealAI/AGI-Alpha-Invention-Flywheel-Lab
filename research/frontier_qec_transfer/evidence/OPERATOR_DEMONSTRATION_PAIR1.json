@@ -1,0 +1,59 @@
+{
+  "scope": "Executable classical quantum-code research demonstration",
+  "recovery": [
+    {
+      "code": "pollatsek_ruskai_7",
+      "physical_qubits": 7,
+      "logical_dimension": 2,
+      "recovery_operators": 22,
+      "logical_density_max_error": 8.882601706564269e-16,
+      "input_probability": 0.9999999999999999,
+      "correctable_probability": 0.9999999999999987,
+      "erasure_probability": 1.2212453270876722e-15
+    },
+    {
+      "code": "shor_9",
+      "physical_qubits": 9,
+      "logical_dimension": 2,
+      "recovery_operators": 22,
+      "logical_density_max_error": 1.1167442499359912e-16,
+      "input_probability": 0.9999999999999996,
+      "correctable_probability": 0.9999999999999996,
+      "erasure_probability": 0.0
+    },
+    {
+      "code": "archived_controlled_s_15",
+      "physical_qubits": 15,
+      "logical_dimension": 4,
+      "recovery_operators": 46,
+      "logical_density_max_error": 5.682377955034956e-17,
+      "input_probability": 1.0,
+      "correctable_probability": 1.0000000000000002,
+      "erasure_probability": -2.220446049250313e-16
+    }
+  ],
+  "noise_experiment": [
+    {
+      "code": "pollatsek_ruskai_7",
+      "hypotheses": 22,
+      "measurement_outcomes": 946,
+      "identifiable_rank": 22,
+      "unique_mixture": true,
+      "identifiable_coordinate_max_error": 2.0122792321330962e-16,
+      "response_prediction_max_error": 5.637851296924623e-18,
+      "logical_preservation_max_error": 2.9976021675507664e-15,
+      "observation_model": "Exact probabilities from classical simulation; no laboratory data."
+    },
+    {
+      "code": "shor_9",
+      "hypotheses": 28,
+      "measurement_outcomes": 946,
+      "identifiable_rank": 22,
+      "unique_mixture": false,
+      "identifiable_coordinate_max_error": 9.627715291671279e-17,
+      "response_prediction_max_error": 8.673617379884035e-19,
+      "logical_preservation_max_error": 8.826273045796912e-15,
+      "observation_model": "Exact probabilities from classical simulation; no laboratory data."
+    }
+  ]
+}

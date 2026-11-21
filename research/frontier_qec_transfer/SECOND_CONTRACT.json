@@ -1,0 +1,53 @@
+{
+  "schema": "frontier.noise_experiment.second_contract.v1",
+  "objective": "Construct an executable nondestructive noise-identification experiment for valid quantum codes: extract every statistically identifiable combination of specified noise-mixture weights while returning the arbitrary unknown logical state unchanged. Output the measurement instrument, predicted observation model, identifiability certificate and estimator. This is a different productive objective from recovering a corrupted logical state.",
+  "beneficiary": "MONTREAL.AI internal computational quantum-code/noise research. CPU simulation and mathematical protocol construction only; no physical hardware, fault-tolerance, world novelty or revenue claim.",
+  "deliverable": "Self-contained Python module noise_experiment.py exporting class NoiseExperiment. Standard library, NumPy and SciPy permitted. Independently supplied prior assets may be used only when present in the assigned workspace. The same read-only primary-source and web-documentation research is permitted in every arm. No cross-arm or private verification files, downloads, additional packages, paid services or execution-time network dependence.",
+  "inputs": {
+    "constructor": "NoiseExperiment(n: int, codewords: list[dict[int, complex]], hypotheses: list[dict])",
+    "codewords": "Ordered orthonormal K=2 logical basis in integer-coordinate sparse complex form, qubit0 most-significant bit. Codes satisfy correction of arbitrary errors on any one qubit. Qualified finite domain n<=9, <=2048 total code amplitudes, well-conditioned exact-code families.",
+    "hypotheses": "Each dictionary has name (unique string), qubit (integer physical position), and kraus (nonempty list of complex 2x2 matrices). Each is a known local CPTP channel. Unknown nonnegative mixture weights sum to one. Up to32 hypotheses. Duplicate or intrinsically indistinguishable hypotheses are valid and must not be falsely called identifiable."
+  },
+  "interface": {
+    "measurement_operators": "measurement_operators() -> list of outcome operators. Each outcome operator consists of K sparse dictionaries giving direct row coefficients: output[row]=sum(coefficient[word]*input[word]). Each registered outcome has one Kraus operator, maps physical input to the recovered logical space, and is an executable measurement branch. Export finite operators, not only an abstract information score.",
+    "response_matrix": "response_matrix() -> real LxH matrix A. A[o,h] is the probability of registered outcome o under hypothesis h, independent of the unknown logical input. Rows match measurement_operators() exactly; columns match hypothesis order. The erasure flag has zero probability for these supported noise hypotheses and is excluded from A.",
+    "identifiability": "identifiability() -> dict {rank: int, unique: bool, identifiable_projector: real HxH array}. Projector is the orthogonal Euclidean projector onto row(A). unique is true exactly when rank==H. Its nullspace describes genuinely unidentifiable changes in mixture weights; normalization is included in the row space.",
+    "estimate": "estimate(observed: real length-L vector of nonnegative counts or probabilities with positive sum) -> dict {mixture_weights: real length-H probability vector, identifiable_coordinates: real length-H vector, predicted_frequencies: real length-L vector, unique: bool}. Normalize this classical count vector explicitly. For nonidentifiable models, mixture_weights is a feasible representative, not a claim of a unique underlying mixture; identifiable_coordinates equals identifiable_projector@mixture_weights and predicted_frequencies equals A@mixture_weights. Reject zero total observations."
+  },
+  "acceptance": {
+    "nondisturbance": "For each supported hypothesis and every logical input, each measurement branch is proportional to that same logical state. The unconditional sum returns the original logical density with no postselection; observed probabilities cannot depend on the logical state. Verify on the full Pauli-correctable span, not only one logical probe.",
+    "complete_instrument": "Let S be the span of all single-qubit I,X,Y,Z images of the code. The measurement operators satisfy sum M_o^dagger M_o=projector(S). Outside S, an additional classical erasure outcome completes the channel and preserves total raw mass. The logical output and erasure form a CPTP instrument, including subnormalized inputs.",
+    "maximal_identifiability": "A must attain the linear rank available in the physical output density operators of the specified noise hypotheses acting on a fixed encoded pure logical state. Correctability makes that available noise information independent of which logical state is used. Do not assert distinguishability that the code/channel physics removes. No optimal-shot-complexity or globally optimal experimental-design claim is required.",
+    "ideal_probabilities_primary": "On fresh mixtures, noiseless model probabilities must yield the correct identifiable coordinates and predicted observations, with a feasible normalized mixture representative. In full-rank cases recover the actual weights. In deficient-rank cases report unique=false and reproduce the identifiable quotient; never invent distinguishability.",
+    "finite_counts_secondary": "Run fresh seeded multinomial observations and record estimator errors, fitted probabilities and statistical limitations. These secondary observations are descriptive finite-sample results, not a universal accuracy guarantee and not grounds to alter the primary pass decision.",
+    "tolerances": "Physical/operator/response/certificate error <=2e-8 in scale-appropriate entrywise or spectral norms. Ideal-probability estimator error <=2e-6. Rank decisions are evaluated on finite cases with a separated nonzero singular spectrum.",
+    "resources": "CPU only, at most10GiB process memory; ordinary isolated scientific-Python subprocess, not Forge seccomp. Efficient sparse, active-coordinate or modest dense conventional calculations are allowed within that same budget."
+  },
+  "development": {
+    "module": "second_public_fixtures.py",
+    "cases": [
+      {
+        "factory": "pollatsek_ruskai_7",
+        "hypotheses": "pauli_hypotheses(7)",
+        "available_rank": 22,
+        "hypotheses_count": 22,
+        "purpose": "Nonorthogonal full-rank noise model; all mixture weights are physically identifiable."
+      },
+      {
+        "factory": "shor_9",
+        "hypotheses": "pauli_hypotheses(9)",
+        "available_rank": 22,
+        "hypotheses_count": 28,
+        "purpose": "Degenerate model; identify the available quotient and honestly report nonuniqueness."
+      }
+    ],
+    "example": "second_public_fixtures.development_example(NoiseExperiment)"
+  },
+  "procedure": {
+    "construction": "Fresh isolated-in-context constructor, one initial source plus at most two development repairs. Freeze source before private qualification; preserve every submission and failure. No private results may drive same-experiment repair.",
+    "withheld": "Fresh code variants, noise libraries, logical probes, mixture weights and observations are independently frozen before first submission. Separate verifier agent does not inspect constructed source.",
+    "comparison": "Matched fresh included-agent constructions with and without the retained first capability, plus competent ordinary reconstruction/reuse. Same public objective, information, tools, resource envelope and acceptance. Do not weaken the conventional comparator.",
+    "accounting": "Record actual construction interval, source hashes, tool/process receipts, failed attempts, acquisition, integration, qualification and execution. First-capability cost is retained in cumulative comparisons; unknown model inference or monetary costs remain unknown.",
+    "claims": "A qualified distinct experiment is required before any transfer conclusion. Repeated measured construction savings may support a bounded transfer observation, not an improved-inventor, general causal, monetization or full economic-compounding claim."
+  }
+}

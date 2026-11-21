@@ -1,0 +1,376 @@
+{
+  "schema": "frontier.qec.independent_code_evidence_review.v1",
+  "recorded_utc": "2026-11-21T19:53:30.283856+00:00",
+  "status": "PASS_FOR_BOUNDED_RESEARCH_SCOPE",
+  "scope": "Separate-agent source/evidence review and local finite verification; not external scientific certification, adversarial security audit, or economic validation.",
+  "no_constructor_contact": true,
+  "no_delegation": true,
+  "frozen_candidate_checker_case_or_original_receipt_edits": false,
+  "reviewed_files_sha256": {
+    "recovery.py": "f8638af7b2532f8c2161fefe2169bb91788c9fc3a5e3321cf7a05ec717f7c134",
+    "noise_experiment.py": "6afa2b999e810e8873ee1ed9de4ca09ddb06b80cfe2c37d269ab798e7c09679b",
+    "constructions/pair1_retained/noise_experiment.py": "0a1a563879a76bc192936caba3a8ae27987024123d03287dacf5dea80da716db",
+    "constructions/pair2_retained/noise_experiment.py": "6afa2b999e810e8873ee1ed9de4ca09ddb06b80cfe2c37d269ab798e7c09679b",
+    "alternatives/recovery_conventional.py": "c2b3ba3fde39b247ea4d81983e5a4bb6de1d5ed62053b205f8aa65138f99e261",
+    "verification/first/qualify.py": "3099493828db0dbfee9a8624d28c64655a36fc8eaa1c140ba361aee391461bdb",
+    "verification/first/cases.json": "121a1b5ee0dac75597d1618cfe68c188d22a708e98e90169e00d2632d4c88de1",
+    "verification/second/qualify.py": "7f483d904aacd4ebd2b88da9081030e0de03848a164481952426bf0ebec82a75",
+    "verification/second/first_physics.py": "3099493828db0dbfee9a8624d28c64655a36fc8eaa1c140ba361aee391461bdb",
+    "verification/second/cases.json": "8b8b27d851a14a49f8629e5f30fd0b5960c5dccc1861c8b2b20578ecaea3af9d",
+    "FIRST_CONTRACT.json": "e7a5e817d5609596e071edb4cd69f74985e81fcf1a1d461381e492bfa4a129b5",
+    "SECOND_CONTRACT.json": "6d2d908da376834de60a67bad3a3c59db8632dcdd0840e7bf579dae8876d295c",
+    "protocol/TRANSFER_PROTOCOL.json": "d50e2861e58c704c788f9be25150051dbda9ee76e9945076afd0e58b3dcbf089",
+    "protocol/WORDING_CLARIFICATION.json": "e80fea4ef5603f2604240411b952b9388db2b96afc354f93119e54f6870e084e",
+    "reproduce.py": "617161e489da96989fa775da6d6e694655949e24ea4234b41e680499ae6090ac",
+    "demo.py": "54e9352ce24b527c8b6bd5523a8b49c702b359bcc1171da921e4604589cb099d",
+    "requirements.txt": "1668a3152e33680d94637b13421c15e68bd97cd8701f7f555c691f5bc5c0b9f3",
+    "SOURCE_MANIFEST.json": "74280c1fc74bc830c5a8c3ce08c0581197f0d82757f64bfbecc399217d1bda3c",
+    "README.md": "6382a94cb6b67816a23ec8cd7cc7473bc1f75199b6eaf0f00efd982f33024a3b",
+    "REPORT.md": "7788e7ab2da9fe780b00ec15450c7f6f3ec821631b8f71b3e47e80e119b52870",
+    "evidence/OPERATOR_SELECTION.json": "000d8207f2f4d1fa1d45a6a702a22fde1cfc41b0ec2e1ac93c03b535715dc23c",
+    "evidence/OPERATOR_DEMONSTRATION.json": "d2d789d705cdfe2bf775bc1de3bbd8381a056309b264ce9ec64a726332d9cb1c",
+    "evidence/second/SECOND_VERDICT.json": "af0dcc62d49a4bfd676427b9a4f0f7e7a340ff7e181cc1a457f8ed8e6fb59353",
+    "evidence/second/pair1_retained_functional_use_trace.json": "75869d6645f7c37b3e4a52f8d8115d8a84bd8fba76fe0c1eb4399e40cd41bea7",
+    "evidence/second/pair2_retained_functional_use_trace.json": "df09dbc4ead07edab844496714cb4f111162ab0a48f19f62fab744ac8b66f2dc",
+    "evidence/second/pair1_qualified_successor_ambiguity_resolution.json": "8f017342a669e9b613c6d0cc98804ebb94d15de35147f08b8366b5d7ab088a8c",
+    "evidence/second/pair2_qualified_successor_ambiguity_resolution.json": "7de997279ff81a7de5fe1ea2e9c0c7121c3f80227d048d7c1cdbcc47fc515c4b",
+    "evidence/integration/PACKAGING_RECORD.json": "a0021f785a8111bb3f25b8ce02baa281cb75d8774ac934cbe80efdc2ce148907",
+    "constructions/ordinary_reuse/construction_end.json": "d1ca444f0b09483307749f56344dd1217870d91691d1f54d446e4986d16abed1",
+    "constructions/ordinary_reuse/execution.json": "60f30433ad1d9258b73ca5a95e7fb4285ef8bf07b2e1d0a0cdac643e2a3ec943",
+    "constructions/ordinary_reuse/manifest.json": "2214cbab10e774d87c7c6ed013ac6e237fe631322081e719b02be89b7a49ea2b",
+    "constructions/ordinary_reuse/qualification.json": "81e3cddf9ef8797de6b7d72493f1ac6cfdcdd1e00850ad00edb0f306921cb6d9",
+    "constructions/pair1_retained/construction_end.json": "e641a848704ad87d6ac1e20adc354b46b10eb87ca83306174782105d93d24330",
+    "constructions/pair1_retained/execution.json": "6661624a4d396176ea1297cfa73ed6efad859903e513447c5e18da06f39f2378",
+    "constructions/pair1_retained/manifest.json": "9ae3c334a4512c8d9eee059eaa4e0663d164a23304e75bd988fb686b62760f26",
+    "constructions/pair1_retained/qualification.json": "6b0848bea3b049a91ced65820e9c1a28c35897bf551497d8657ec84fc83deec7",
+    "constructions/pair1_without/construction_end.json": "d5bdd37b25440da4756e5de510302bf9744cc5b242a0b99ccff35330f8861d37",
+    "constructions/pair1_without/execution.json": "6e7430624cc511711f651379d62bc93152ea87dd36480dbd5c10ef3dc78ef55c",
+    "constructions/pair1_without/manifest.json": "d253b6bfc062598a72661db2aaead9aa99fc66548d593fe873b1c8b2e12e574d",
+    "constructions/pair1_without/qualification.json": "5b52512715858ebb9e18aa673ed55ce3c0acdab97ae4c99ae84d9f5a16ee64e3",
+    "constructions/pair2_retained/construction_end.json": "d29c49d200dae8cc36d72bb8a397cb9155ba9f418eec96a39faeee73addc73fc",
+    "constructions/pair2_retained/execution.json": "69170804ee530829a3ac2dc1b1bd93e6b5ebfb9e1253e0136cabb1cb0ccefe77",
+    "constructions/pair2_retained/manifest.json": "681135b38d15f1108c55bfcd50f0c63c03f1af314c9a91aa07fc47f226317474",
+    "constructions/pair2_retained/qualification.json": "19189fcf4d4c3fd7e8934e1e340f04c376d634ec067ad800b1d2d1d5f5e94781",
+    "constructions/pair2_without/construction_end.json": "131766ebfa393353136f725f4da1930a4045fff892f64296936b3fe263629b73",
+    "constructions/pair2_without/execution.json": "94ba72ace10cd1129d4819811fb35a74f60e53e36cd98ca113825669d19797bb",
+    "constructions/pair2_without/manifest.json": "c61c9026c62eac0cda02b707bbcea84adbf80d1512fd1d33bba3561744b6c271",
+    "constructions/pair2_without/qualification.json": "99bf0d06568516febaf516bf8e7519ed140fe6b715113e1f6da2edf41ca190f6",
+    "constructions/pair3_retained/construction_end.json": "3c5418bbbd164ea21a98f0334a805c598b935f6cc1bc695bf9ea680310f79a65",
+    "constructions/pair3_retained/execution.json": "b2b16e51e5aa86999c510bce8ea6123d9dd2657b0fd720d80b7ccfa3e406776b",
+    "constructions/pair3_retained/manifest.json": "a173cc12a07f420bc6bcb5428a9ec5537260ccc100d23827ef1e6cd06b13d67e",
+    "constructions/pair3_retained/qualification.json": "5f7788c28063fb43c13e30618b245f06e43fb8d3759930c45b4bcad12ea096c6",
+    "constructions/pair3_without/construction_end.json": "9ea0df02948bf8eff991bd0840f56aef0c3ff7b90dc5b6d3c125e8c230977eee",
+    "constructions/pair3_without/execution.json": "2705c0e850dd596b34ed3355dd4a81e1645b9ee23d0696c8654cbb805a902bf7",
+    "constructions/pair3_without/manifest.json": "380bd069cb44264a8d5cd800b85735d2659b7ecca8b74e5de4e6564ea05bde03",
+    "constructions/pair3_without/qualification.json": "f26c6fdddc3275b65c57405fccad4cd323fb66dc049c8fe6684409da02251244",
+    "evidence/second/PUBLISHED_EVIDENCE_MAP.json": "fc600351c0c5705433979181edf2a10cbc057cb89828c056299c24dc82541b8e",
+    "evidence/integration/FINAL_REPLAY.json": "f8c9e2ef1f3678dbe520b646f04bdc6a9839ed66d64801b13d746ee9eef1cb4c",
+    "verification/second/execute_package.py": "0d340a85e25dcca014951a85f233c580485d46fa56881f3a7a8d9bb8ab27afdb",
+    "evidence/second/original_scripts/README.md": "b894574a2a06cd030cd521ba1f1a3110bb8dd448f2a5df3dbc1d6bef13f8512c"
+  },
+  "workflow_sha256": "137f564fe5427264819c8e6fc38464481ba63429d2a22f9c1b36eef901198cfc",
+  "findings": [
+    {
+      "id": "R1",
+      "severity": "medium",
+      "status": "fixed_by_packaging_owner",
+      "file": "reproduce.py",
+      "finding": "Relative --output was interpreted by the parent and checker under different working directories.",
+      "fix": "args.output.expanduser().resolve() before creation and subprocess execution.",
+      "verification": "Resolved by independent manifest-only relocation: caller cwd outside source, source path containing a space, relative output path, all nine replay verdicts and selected demo passed."
+    },
+    {
+      "id": "R2",
+      "severity": "information",
+      "status": "resolved_selection_adopted_without_frozen_source_change",
+      "finding": "Pair2 retained is a qualified alternative with 484 rather than 946 outcomes, lower recorded qualification RSS, and larger nonzero response singular values on all six frozen cases.",
+      "resolution": "Owner selected the unchanged pair2 source as canonical; this is a bounded engineering choice, not a globally optimal measurement or shot-efficiency claim."
+    },
+    {
+      "id": "R3",
+      "severity": "information",
+      "status": "resolved_separate_source_bound_receipts_verified",
+      "finding": "Pair1 dependency-use and ambiguity-resolution receipts explicitly bind the pair1 hash and cannot be relabeled as selected pair2 observations.",
+      "resolution": "Distinct pair1 and pair2 receipts and their source hashes were inspected. Both trace the exact retained recovery calls; the selected pair2 witness is separately bound and the report states basis/environment specificity."
+    },
+    {
+      "id": "R4",
+      "severity": "information",
+      "status": "scope_limit",
+      "finding": "resource, RLIMIT_AS, and preexec_fn make replay POSIX-oriented; the provided workflow targets Ubuntu.",
+      "resolution": "No Windows portability claim is supported; no change needed for the declared Linux execution path."
+    },
+    {
+      "id": "R5",
+      "severity": "information",
+      "status": "resolved_report_wording",
+      "finding": "Original CLI failure receipts alone do not prove zero backend inference.",
+      "resolution": "REPORT.md now says failed without a completed result, with backend work and cost unknown."
+    }
+  ],
+  "verification": {
+    "recovery_frozen_replay": {
+      "pass": true,
+      "passed_checks": 824,
+      "total_checks": 824
+    },
+    "pair1_successor_frozen_replay": {
+      "pass": true,
+      "passed_checks": 163,
+      "total_checks": 163
+    },
+    "six_original_paired_provenance_chains": "All source, dependency, manifest, construction, checker, physics, cases and qualification receipt hashes matched; all six package identity receipts passed with no unbound loaded sources.",
+    "supplemental_pair1_and_pair2": "Passed public-fixture exported-operator agreement, arbitrary physical input/erasure completion and convexly dependent ideal-inference boundary checks.",
+    "supplemental_recovery_n20_K4": "Passed 20 local amplitude-damping checks on a public Shor-product code with 256 initial amplitudes; maximum logical density error 1.943e-16. Not an original frozen qualification result.",
+    "receipt_hashes": {
+      "recovery_qualification.json": "ce3d9c47babb5e1191fabe73541fb9a324a3e5baa85147550ed971b6ad240412",
+      "noise_qualification.json": "cbda11ce6555346196cb06333a05d8b4e1c4ee093864c0b7e9b6f59973589d4f",
+      "supplemental_checks.json": "b13a53b31e6d9288d8de30158a192719bcaa872a76789d621ed28c372fb23322",
+      "supplemental_checks_pair2.json": "3150b3d0400cf57789d36fb9ec6d7f1febe4b07e293774dbc0dcaa9b8a563c07",
+      "independent_checks.py": "21c405545512527fad9fcb4e6232c6e345c9ea3045389903069fc2d539b76d17",
+      "independent_checks_pair2.py": "40c3b4ef0646e64a10ffc76baa310c901b3a01711712c44a458b3a7b7ef16cc2",
+      "relocated_replay_receipt.json": "cc89d3eb3917c46f47916088aa9df9d06dcfeccb32ed778c8386dd9ab744312a",
+      "relocated_replay/SUMMARY.json": "fe1be1844721ef9848b9e2dadfc241a1a67635aa9caac0249f6ea7f2a3cd924f",
+      "relocated_replay/operator_example.json": "d2d789d705cdfe2bf775bc1de3bbd8381a056309b264ce9ec64a726332d9cb1c"
+    },
+    "all_seven_successor_provenance_chains": "All source, dependency, manifest, construction, checker, physics, cases, execution and qualification receipt bindings matched. Every identity wrapper passed and no unbound or foreign workspace sources were loaded.",
+    "ordinary_reuse": {
+      "source_sha256": "0e2e559d8fdd552afeadd723d654a24fc49591847411a597cf389e2ebdd63503",
+      "recovery_dependency_sha256": "c2b3ba3fde39b247ea4d81983e5a4bb6de1d5ed62053b205f8aa65138f99e261",
+      "pass": true,
+      "passed_checks": 163,
+      "total_checks": 163,
+      "construction_seconds": 373.63837417800096,
+      "repairs": 0
+    },
+    "relocated_manifest_only_replay": {
+      "schema": "frontier.qec.relocated_independent_review.v1",
+      "pass": true,
+      "scope": "Linux manifest-only relocated scientific replay and selected demo; no hosted CI or reconstruction-latency claim.",
+      "manifest_sha256": "74280c1fc74bc830c5a8c3ce08c0581197f0d82757f64bfbecc399217d1bda3c",
+      "manifest_file_count": 29,
+      "replay_count": 9,
+      "copied_only_manifest_files_and_manifest": true,
+      "source_path_contains_space": true,
+      "cwd_outside_source_tree": true,
+      "relative_output_in_callers_directory": true,
+      "inherited_pythonpath_removed": true,
+      "source_files_unchanged": true,
+      "all_recorded_verdicts_reproduced": true,
+      "selected_source_sha256": {
+        "recovery.py": "f8638af7b2532f8c2161fefe2169bb91788c9fc3a5e3321cf7a05ec717f7c134",
+        "noise_experiment.py": "6afa2b999e810e8873ee1ed9de4ca09ddb06b80cfe2c37d269ab798e7c09679b"
+      },
+      "replay_summary_sha256": "fe1be1844721ef9848b9e2dadfc241a1a67635aa9caac0249f6ea7f2a3cd924f",
+      "operator_receipt_sha256": "d2d789d705cdfe2bf775bc1de3bbd8381a056309b264ce9ec64a726332d9cb1c",
+      "wall_seconds": 32.728787741001724,
+      "child_cpu_seconds": 32.68446000000001,
+      "maximum_child_rss_kib": 250124,
+      "runtime": {
+        "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+        "python_executable": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "platform": "Linux-6.18.57-x86_64-with-glibc2.41",
+        "numpy": "2.3.5",
+        "scipy": "1.17.0",
+        "linear_algebra_threads": 1,
+        "third_party_binary_scope": "Versions recorded and pinned by requirements; external binaries and BLAS builds are not asserted byte-identical across hosts."
+      },
+      "case_inputs_retained_in_review_output": false
+    },
+    "replayed_verdicts": [
+      {
+        "name": "first_retained",
+        "candidate_sha256": "f8638af7b2532f8c2161fefe2169bb91788c9fc3a5e3321cf7a05ec717f7c134",
+        "matched_recorded_verdict": true,
+        "scientific_pass": true,
+        "passed_checks": 824,
+        "total_checks": 824
+      },
+      {
+        "name": "first_conventional",
+        "candidate_sha256": "c2b3ba3fde39b247ea4d81983e5a4bb6de1d5ed62053b205f8aa65138f99e261",
+        "matched_recorded_verdict": true,
+        "scientific_pass": true,
+        "passed_checks": 824,
+        "total_checks": 824
+      },
+      {
+        "name": "ordinary_reuse",
+        "candidate_sha256": "0e2e559d8fdd552afeadd723d654a24fc49591847411a597cf389e2ebdd63503",
+        "matched_recorded_verdict": true,
+        "scientific_pass": true,
+        "passed_checks": 163,
+        "total_checks": 163
+      },
+      {
+        "name": "pair1_retained",
+        "candidate_sha256": "0a1a563879a76bc192936caba3a8ae27987024123d03287dacf5dea80da716db",
+        "matched_recorded_verdict": true,
+        "scientific_pass": true,
+        "passed_checks": 163,
+        "total_checks": 163
+      },
+      {
+        "name": "pair1_without",
+        "candidate_sha256": "05e989ca4e8c5512c375bb7eeb19e9b1b98c16cc763a5048a772a2da05ac6ae9",
+        "matched_recorded_verdict": true,
+        "scientific_pass": true,
+        "passed_checks": 163,
+        "total_checks": 163
+      },
+      {
+        "name": "pair2_retained",
+        "candidate_sha256": "6afa2b999e810e8873ee1ed9de4ca09ddb06b80cfe2c37d269ab798e7c09679b",
+        "matched_recorded_verdict": true,
+        "scientific_pass": true,
+        "passed_checks": 163,
+        "total_checks": 163
+      },
+      {
+        "name": "pair2_without",
+        "candidate_sha256": "7adbfc0ea64d7ea48990a7f922752b0ad86d4cc1a8b3aae0be7cdf14cdeec9e7",
+        "matched_recorded_verdict": true,
+        "scientific_pass": true,
+        "passed_checks": 163,
+        "total_checks": 163
+      },
+      {
+        "name": "pair3_retained",
+        "candidate_sha256": "800d8cc7f56f866dec690ebac7b2ab5280da0c58127453024c5a5fc1eafcd389",
+        "matched_recorded_verdict": true,
+        "scientific_pass": true,
+        "passed_checks": 163,
+        "total_checks": 163
+      },
+      {
+        "name": "pair3_without",
+        "candidate_sha256": "54d70a7c0f5a48400b4944224c22fa0fbda2ad56a95068e70b8ed64416c4bd1c",
+        "matched_recorded_verdict": true,
+        "scientific_pass": true,
+        "passed_checks": 163,
+        "total_checks": 163
+      }
+    ],
+    "selected_successor_frozen_replay": {
+      "pass": true,
+      "passed_checks": 163,
+      "total_checks": 163,
+      "source_sha256": "6afa2b999e810e8873ee1ed9de4ca09ddb06b80cfe2c37d269ab798e7c09679b",
+      "receipt": "relocated_replay/pair2_retained.json"
+    },
+    "published_evidence_map": {
+      "records": 30,
+      "all_identity_bindings_match": true,
+      "map_sha256": "fc600351c0c5705433979181edf2a10cbc057cb89828c056299c24dc82541b8e",
+      "original_wrapper_sha256": "0d340a85e25dcca014951a85f233c580485d46fa56881f3a7a8d9bb8ab27afdb"
+    },
+    "owner_final_replay": {
+      "receipt_sha256": "f8c9e2ef1f3678dbe520b646f04bdc6a9839ed66d64801b13d746ee9eef1cb4c",
+      "source_files_unchanged": true,
+      "all_nine_recorded_verdicts_reproduced": true,
+      "scope": "Receipt inspected separately from reviewer-performed relocated replay."
+    }
+  },
+  "paired_construction_elapsed": [
+    {
+      "pair": 1,
+      "retained_seconds": 368.42074680899896,
+      "without_seconds": 479.3985642100015,
+      "without_minus_retained_seconds": 110.97781740100254,
+      "fraction_shorter_relative_to_without": 0.23149384601074544
+    },
+    {
+      "pair": 2,
+      "retained_seconds": 343.99167828600184,
+      "without_seconds": 386.7152290619997,
+      "without_minus_retained_seconds": 42.723550775997865,
+      "fraction_shorter_relative_to_without": 0.11047806645635944
+    },
+    {
+      "pair": 3,
+      "retained_seconds": 349.17383479699856,
+      "without_seconds": 347.3041832529998,
+      "without_minus_retained_seconds": -1.8696515439987706,
+      "fraction_shorter_relative_to_without": -0.005383325724691287
+    }
+  ],
+  "scientific_assessment": {
+    "recovery": "Common Knill-Laflamme Gram diagonalization correctly constructs orthogonal syndrome/logical sectors and erasure completion; sparse active-coordinate construction matches the finite numerical contract.",
+    "selected_successor": "The r^2 raw frame spans Hermitian syndrome operators. Invertible frame whitening preserves that span and normalizes the instrument. Composition with certified recovery preserves arbitrary logical states and attains the available linear density rank.",
+    "estimator": "SVD quotient inversion and simplex/linear-feasibility fitting are appropriate for the ideal separated-spectrum finite contract. Finite-count fitting is descriptive, may be biased, and does not provide a likelihood optimum or uncertainty interval.",
+    "checker": "Independent physical Pauli action, QR span, direct exported matrix certificates, density-Gram rank and matrix-unit nondisturbance tests are adequate for the narrow finite acceptance claims. Test counts are checks over six cohorts, not independent scientific replications.",
+    "distinct_useful_objective": "The successor exports a noise-identification measurement, observation model, identifiability certificate and estimator. This is distinct from returning a corrected logical density. It is mathematical/classical research utility; physical and economic utility remain unmeasured."
+  },
+  "claim_boundaries": [
+    "Two new installed computational capabilities and functional code reuse can be established.",
+    "Every paired arm succeeds; no demonstrated necessity of the retained asset for reaching the second outcome.",
+    "Two retained construction intervals are shorter and one is slightly longer; three procedurally paired trials do not establish a general causal latency effect.",
+    "The ordinary control is functionally equivalent independent code, not byte-identical equal content, as clarified prospectively before its dispatch.",
+    "Original recovery-readout rank depends on the frozen source, syndrome basis and numerical realization; no impossibility claim for all conventional recovery measurements follows.",
+    "Elapsed intervals include model, tooling and scheduling; logged numerical CPU is not inference compute. Complete cost categories must remain explicit and unknown costs must not become zero.",
+    "No global algorithmic novelty, quantum hardware benefit, improved inventor, human-productivity superiority, revenue, funded continuation or complete economic advantage is established."
+  ],
+  "required_code_fixes_remaining": [],
+  "pending_before_final_review": [],
+  "verdict": "No unresolved material scientific-code, evidence-provenance, or Linux replay defect found in the reviewed package. Functional reuse and finite capability correctness are supported; general causal, physical, inventor-improvement and economic claims are not established.",
+  "formal_pr_approval_merge_release_or_deployment_authorized": false,
+  "hosted_workflow_execution": "Workflow source reviewed; no hosted GitHub Actions completion was independently observed by this reviewer.",
+  "source_manifest": {
+    "sha256": "74280c1fc74bc830c5a8c3ce08c0581197f0d82757f64bfbecc399217d1bda3c",
+    "provisional": false,
+    "bound_file_count": 29,
+    "replay_count": 9,
+    "every_bound_identity_matches": true
+  },
+  "identity_checked_manifest_files_sha256": {
+    "FIRST_CONTRACT.json": "e7a5e817d5609596e071edb4cd69f74985e81fcf1a1d461381e492bfa4a129b5",
+    "SECOND_CONTRACT.json": "6d2d908da376834de60a67bad3a3c59db8632dcdd0840e7bf579dae8876d295c",
+    "alternatives/recovery_conventional.py": "c2b3ba3fde39b247ea4d81983e5a4bb6de1d5ed62053b205f8aa65138f99e261",
+    "constructions/ordinary_reuse/noise_experiment.py": "0e2e559d8fdd552afeadd723d654a24fc49591847411a597cf389e2ebdd63503",
+    "constructions/ordinary_reuse/recovery.py": "c2b3ba3fde39b247ea4d81983e5a4bb6de1d5ed62053b205f8aa65138f99e261",
+    "constructions/pair1_retained/noise_experiment.py": "0a1a563879a76bc192936caba3a8ae27987024123d03287dacf5dea80da716db",
+    "constructions/pair1_retained/recovery.py": "f8638af7b2532f8c2161fefe2169bb91788c9fc3a5e3321cf7a05ec717f7c134",
+    "constructions/pair1_without/noise_experiment.py": "05e989ca4e8c5512c375bb7eeb19e9b1b98c16cc763a5048a772a2da05ac6ae9",
+    "constructions/pair2_retained/noise_experiment.py": "6afa2b999e810e8873ee1ed9de4ca09ddb06b80cfe2c37d269ab798e7c09679b",
+    "constructions/pair2_retained/recovery.py": "f8638af7b2532f8c2161fefe2169bb91788c9fc3a5e3321cf7a05ec717f7c134",
+    "constructions/pair2_without/noise_experiment.py": "7adbfc0ea64d7ea48990a7f922752b0ad86d4cc1a8b3aae0be7cdf14cdeec9e7",
+    "constructions/pair3_retained/noise_experiment.py": "800d8cc7f56f866dec690ebac7b2ab5280da0c58127453024c5a5fc1eafcd389",
+    "constructions/pair3_retained/recovery.py": "f8638af7b2532f8c2161fefe2169bb91788c9fc3a5e3321cf7a05ec717f7c134",
+    "constructions/pair3_without/noise_experiment.py": "54d70a7c0f5a48400b4944224c22fa0fbda2ad56a95068e70b8ed64416c4bd1c",
+    "demo.py": "54e9352ce24b527c8b6bd5523a8b49c702b359bcc1171da921e4604589cb099d",
+    "fixtures/controlled_s15.json": "df75e8119f67a54fa8cc6ffe0f2a51a7b80caf0ca71bb8480d875a1c69351556",
+    "fixtures/public_fixtures.py": "e0e532750f1df183fc12eaf3c913e0aeaaf520a753d3e9791bbfc43d454fea9d",
+    "fixtures/second_public_fixtures.py": "754594f84004f6b657f0e843e459a0c70e78105d93aa9710a33b3eec9c499b58",
+    "noise_experiment.py": "6afa2b999e810e8873ee1ed9de4ca09ddb06b80cfe2c37d269ab798e7c09679b",
+    "protocol/COMMON_CONSTRUCTOR_TASK.txt": "196bcc81d4434580bb808d5042cb3dfee07ef72ad930949389188372035cd876",
+    "protocol/TRANSFER_PROTOCOL.json": "d50e2861e58c704c788f9be25150051dbda9ee76e9945076afd0e58b3dcbf089",
+    "recovery.py": "f8638af7b2532f8c2161fefe2169bb91788c9fc3a5e3321cf7a05ec717f7c134",
+    "reproduce.py": "617161e489da96989fa775da6d6e694655949e24ea4234b41e680499ae6090ac",
+    "requirements.txt": "1668a3152e33680d94637b13421c15e68bd97cd8701f7f555c691f5bc5c0b9f3",
+    "verification/first/cases.json": "121a1b5ee0dac75597d1618cfe68c188d22a708e98e90169e00d2632d4c88de1",
+    "verification/first/qualify.py": "3099493828db0dbfee9a8624d28c64655a36fc8eaa1c140ba361aee391461bdb",
+    "verification/second/cases.json": "8b8b27d851a14a49f8629e5f30fd0b5960c5dccc1861c8b2b20578ecaea3af9d",
+    "verification/second/first_physics.py": "3099493828db0dbfee9a8624d28c64655a36fc8eaa1c140ba361aee391461bdb",
+    "verification/second/qualify.py": "7f483d904aacd4ebd2b88da9081030e0de03848a164481952426bf0ebec82a75"
+  },
+  "complete_cost_assessment": {
+    "status": "Categories disclosed; measurements partial; monetary economic advantage not established.",
+    "first_constructor_seconds": 320.233835,
+    "first_dispatch_to_freeze_seconds": 348.773488,
+    "conventional_first_elapsed_since_recon_seconds": 213.21139550209045,
+    "first_interval_scope": "Includes different recorded activity boundaries; not a controlled first-stage latency comparison.",
+    "mean_paired_marginal_seconds_saved": 50.610572211000544,
+    "acquisition_paid_back_by_any_measured_single_successor_interval": false,
+    "additional_costs": "Research, acquisition, protocol, evaluator development, unsuccessful diagnostics/launches, all repeated constructors, integration, review, reproduction, operation and maintenance remain additional.",
+    "unknown_costs": "Model calls/tokens, backend inference compute, actual money, future maintenance and priced productive benefit remain unknown.",
+    "concurrency_boundary": "Overlapping construction intervals are not additive end-to-end wall time; numerical subprocess CPU is not inference compute."
+  },
+  "report_assessment": "Final README and REPORT accurately report the mixed same-task three-pair timing evidence, successful ordinary comparator, finite numerical domains, selected-source tradeoffs, unknown complete costs, and absence of hardware/revenue/inventor improvement evidence.",
+  "limits_remaining": [
+    "Finite numerical contracts and separated spectra only.",
+    "No independent observation of hosted workflow success, formal merge, release or deployment.",
+    "No exact third-party binary or BLAS-build identity across hosts.",
+    "No external scientific certification, hostile-code security guarantee, or economic validation."
+  ],
+  "archival_script_scope": "Original descriptive evaluator scripts are expressly archival and outside the portable scientific replay; their historical layouts are not claimed as current CLI entry points."
+}

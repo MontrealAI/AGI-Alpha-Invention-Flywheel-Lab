@@ -1,0 +1,94 @@
+{
+  "schema": "noise_experiment.construction_end.v1",
+  "start_utc": "2026-11-21T19:18:32.588905+00:00",
+  "completion_utc": "2026-11-21T19:24:41.009650+00:00",
+  "start_monotonic": 16275.563807854,
+  "completion_monotonic": 16643.984554663,
+  "elapsed_wall_seconds": 368.42074680899896,
+  "source_sha256": "0a1a563879a76bc192936caba3a8ae27987024123d03287dacf5dea80da716db",
+  "frozen_source_path": "/workspace/scratch/e2ed86e4c5fa/frontier-second-pair1_retained/frozen/0a1a563879a76bc192936caba3a8ae27987024123d03287dacf5dea80da716db/noise_experiment.py",
+  "frozen_archive_path": "/workspace/scratch/e2ed86e4c5fa/frontier-second-pair1_retained/frozen/0a1a563879a76bc192936caba3a8ae27987024123d03287dacf5dea80da716db",
+  "prior_dependency_sha256": {
+    "recovery.py": "f8638af7b2532f8c2161fefe2169bb91788c9fc3a5e3321cf7a05ec717f7c134"
+  },
+  "prior_dependency_changed": false,
+  "source_versions": [
+    {
+      "version": "initial",
+      "path": "submissions/initial.py",
+      "sha256": "0a1a563879a76bc192936caba3a8ae27987024123d03287dacf5dea80da716db"
+    }
+  ],
+  "repair_count": 0,
+  "meaningful_failed_attempts": [],
+  "workflow_failures": [
+    {
+      "kind": "measurement_wrapper_launch_failure",
+      "exit_code": 127,
+      "command": "OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 /usr/bin/time -v -o development_process_time.txt $CODEX_PRIMARY_RUNTIME_PYTHON run_development.py",
+      "cause": "/usr/bin/time is not installed",
+      "scientific_source_executed": false,
+      "correction": "Use a standard-library subprocess/resource measurement wrapper; no artifact source change."
+    }
+  ],
+  "development_outcome": {
+    "status": "passed",
+    "supplied_public_example": true,
+    "full_contract_development_families": 4,
+    "fresh_ideal_mixture_trials": 40,
+    "fresh_finite_count_trials": 12,
+    "max_physical_operator_response_certificate_residual": 4.107825191113079e-15,
+    "max_ideal_identifiable_coordinate_error": 3.3306690738754696e-15,
+    "independent_second_stage_qualification": "not performed by constructor"
+  },
+  "measured_numerical_subprocess": {
+    "start_utc": "2026-11-21T19:22:52.972018+00:00",
+    "completion_utc": "2026-11-21T19:22:56.309475+00:00",
+    "command": [
+      "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+      "run_development.py"
+    ],
+    "returncode": 0,
+    "wall_seconds": 3.3374689770025725,
+    "user_cpu_seconds": 2.88477,
+    "system_cpu_seconds": 0.48872,
+    "cpu_seconds": 3.37349,
+    "peak_rss_kib": 180032,
+    "thread_environment": {
+      "OPENBLAS_NUM_THREADS": "1",
+      "OMP_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1"
+    }
+  },
+  "implementation": {
+    "lines": 357,
+    "bytes": 17702,
+    "retained_dependency_lines": 260,
+    "retained_dependency_bytes": 11778
+  },
+  "environment": {
+    "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+    "numpy": "2.3.5",
+    "scipy": "1.17.0"
+  },
+  "cost_accounting": {
+    "model_inference_calls": "unknown",
+    "model_inference_tokens": "unknown",
+    "model_inference_host_compute": "unknown",
+    "model_inference_monetary_cost": "unknown",
+    "total_monetary_cost": "unknown",
+    "retained_first_capability_acquisition_and_qualification_cost": "not separately available here; must be retained by parent cumulative accounting",
+    "included_agent_execution_is_zero_economic_cost": false,
+    "process_elapsed_time_is_model_inference_compute": false
+  },
+  "blinding_attestation": {
+    "only_assigned_public_materials_and_system_runtime_read": true,
+    "no_parent_or_sibling_workspace_inspection": true,
+    "no_private_qualification_material_or_other_agent_results": true,
+    "no_agent_contact_or_delegation_during_construction": true,
+    "no_tool_or_conversation_history_inspection": true,
+    "no_paid_services_extra_packages_downloads_credentials_or_runtime_network": true,
+    "repairs_based_on_private_feedback": false,
+    "independent_qualification_claimed": false
+  }
+}

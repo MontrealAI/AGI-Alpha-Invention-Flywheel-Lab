@@ -1,0 +1,63 @@
+{
+  "schema": "frontier.noise_experiment.qualification.v1",
+  "started_utc": "2026-11-21T19:19:28.261651+00:00",
+  "checker_sha256": "7f483d904aacd4ebd2b88da9081030e0de03848a164481952426bf0ebec82a75",
+  "physics_dependency_sha256": "3099493828db0dbfee9a8624d28c64655a36fc8eaa1c140ba361aee391461bdb",
+  "frozen_inputs_sha256": "8b8b27d851a14a49f8629e5f30fd0b5960c5dccc1861c8b2b20578ecaea3af9d",
+  "scope": "Independent non-adversarial procedural black-box qualification; ordinary shared host.",
+  "input_audit": [
+    {
+      "id": "pr7_pauli",
+      "hypotheses": 22,
+      "syndrome_vector_rank": 22,
+      "density_rank": 22,
+      "smallest_nonzero_density_gram_eigenvalue": 0.8888888888888881,
+      "kl_residual": 4.440892098500626e-16
+    },
+    {
+      "id": "shor9_pauli",
+      "hypotheses": 28,
+      "syndrome_vector_rank": 22,
+      "density_rank": 22,
+      "smallest_nonzero_density_gram_eigenvalue": 0.9999999999999991,
+      "kl_residual": 2.2162789822939568e-17
+    },
+    {
+      "id": "pr7_rotated_pauli",
+      "hypotheses": 22,
+      "syndrome_vector_rank": 22,
+      "density_rank": 22,
+      "smallest_nonzero_density_gram_eigenvalue": 0.8888888888888865,
+      "kl_residual": 2.2215299868541707e-16
+    },
+    {
+      "id": "pr7_complex_channels",
+      "hypotheses": 12,
+      "syndrome_vector_rank": 22,
+      "density_rank": 10,
+      "smallest_nonzero_density_gram_eigenvalue": 0.044846854884384495,
+      "kl_residual": 4.443059973708341e-16
+    },
+    {
+      "id": "shor9_rotated_pauli_duplicates",
+      "hypotheses": 30,
+      "syndrome_vector_rank": 22,
+      "density_rank": 28,
+      "smallest_nonzero_density_gram_eigenvalue": 0.15588167973010103,
+      "kl_residual": 6.421383037113635e-16
+    },
+    {
+      "id": "shor9_complex_channels",
+      "hypotheses": 12,
+      "syndrome_vector_rank": 22,
+      "density_rank": 10,
+      "smallest_nonzero_density_gram_eigenvalue": 0.10252316482470639,
+      "kl_residual": 3.3335025165361687e-16
+    }
+  ],
+  "pass": true,
+  "wall_seconds": 0.08851704699918628,
+  "cpu_seconds": 0.08851891300000003,
+  "maximum_rss_kib": 52364,
+  "finished_utc": "2026-11-21T19:19:28.348675+00:00"
+}

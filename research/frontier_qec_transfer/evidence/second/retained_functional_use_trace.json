@@ -1,0 +1,29 @@
+{
+  "schema": "frontier.retained_dependency.executed_use.v1",
+  "created_utc": "2026-11-21T19:37:28.384679+00:00",
+  "role": "Descriptive public-fixture trace after qualification; no changed source, acceptance or constructor feedback.",
+  "source_hashes": {
+    "noise_experiment.py": "0a1a563879a76bc192936caba3a8ae27987024123d03287dacf5dea80da716db",
+    "recovery.py": "f8638af7b2532f8c2161fefe2169bb91788c9fc3a5e3321cf7a05ec717f7c134"
+  },
+  "phase": "NoiseExperiment constructor only",
+  "fixture": "public Pollatsek-Ruskai7 with all22 Pauli hypotheses",
+  "public_api_calls_into_exact_recovery_source": {
+    "Recovery.__init__": 1,
+    "Recovery.kraus": 1,
+    "Recovery.encode": 0,
+    "Recovery.recover": 0
+  },
+  "produced_response_shape": [
+    946,
+    22
+  ],
+  "produced_identifiability_rank": 22,
+  "source_files_unchanged": {
+    "noise_experiment.py": true,
+    "recovery.py": true
+  },
+  "profiled_wall_seconds": 0.03268743799708318,
+  "profiled_cpu_seconds": 0.03268804699999994,
+  "inference": "Observed calls establish actual use of the retained constructor and exported recovery operators in constructing this successor instance. They do not by themselves establish a causal timing benefit or full economic advantage."
+}

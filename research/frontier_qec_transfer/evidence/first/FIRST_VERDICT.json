@@ -1,0 +1,54 @@
+{
+  "schema": "frontier.first_capability.independent_verdict.v1",
+  "created_utc": "2026-11-21T19:23:37.877697+00:00",
+  "qualified_first_capability": true,
+  "competent_conventional_route_also_qualifies": true,
+  "candidate": {
+    "candidate_sha256": "f8638af7b2532f8c2161fefe2169bb91788c9fc3a5e3321cf7a05ec717f7c134",
+    "passed_checks": 824,
+    "total_checks": 824,
+    "wall_seconds": 2.2122026900015044,
+    "cpu_seconds": 2.2079874090000002,
+    "maximum_rss_kib": 217400
+  },
+  "conventional": {
+    "candidate_sha256": "c2b3ba3fde39b247ea4d81983e5a4bb6de1d5ed62053b205f8aa65138f99e261",
+    "passed_checks": 824,
+    "total_checks": 824,
+    "wall_seconds": 2.127089784000418,
+    "cpu_seconds": 2.122808598,
+    "maximum_rss_kib": 216904
+  },
+  "common_checker_sha256": "3099493828db0dbfee9a8624d28c64655a36fc8eaa1c140ba361aee391461bdb",
+  "common_frozen_inputs_sha256": "121a1b5ee0dac75597d1618cfe68c188d22a708e98e90169e00d2632d4c88de1",
+  "receipt_sha256": {
+    "candidate": "c8ea1fa1a3b1eb2dafde89c05da8c5a445e7ba028d38aade677cf73c00b6fa0a",
+    "conventional": "7c15a7c423bb23f8db537f8eb489b76add1687048f45874d70a78ae822a4bbcb"
+  },
+  "independent_scope": {
+    "cohorts": 6,
+    "maximum_qualified_n": 15,
+    "logical_dimensions": [
+      2,
+      4
+    ],
+    "coverage": [
+      "Archived controlled-S15 code and operation under fresh local noise",
+      "Published nonorthogonal full-rank Pollatsek-Ruskai7 code",
+      "Genuinely degenerate Shor9 code",
+      "Fresh complex unitary/permutation variants",
+      "All one-qubit Pauli errors and fresh complex CPTP channels",
+      "Logical tomography, subnormalization, outside-span erasure, branch invariance",
+      "Independent full-space Kraus certificate within numerical tolerance",
+      "Two clearly invalid code witnesses rejected"
+    ],
+    "method": "Separate verifier agent; frozen inputs and checker; no submitted source prose inspected; black-box import/execution with source hashing; no private-outcome-driven source repair."
+  },
+  "claim_boundary": [
+    "Installed useful computational recovery functionality is established on the qualified finite domain.",
+    "Established sparse conventional recovery also succeeds; no world-first algorithm or advantage over competent conventional recovery is established.",
+    "Numerical scientific validation is not hardware performance, physical fault tolerance, exact formal proof, commercial certification or revenue.",
+    "This first capability alone establishes neither successor construction benefit nor inventor improvement nor economic compounding.",
+    "Reported process timings include qualification/oracle work; they are not pure operating benchmarks or inference-cost estimates."
+  ]
+}
