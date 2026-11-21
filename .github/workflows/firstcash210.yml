@@ -1,0 +1,54 @@
+name: FIRSTCASH210 pinned public-source witness (read-only, no commerce)
+on:
+  pull_request:
+    paths:
+      - 'tools/firstcash210_source_witness.py'
+      - 'tests/test_firstcash210_source_witness.py'
+      - 'campaign/unseen-first-cash-210/**'
+      - '.github/workflows/firstcash210.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-byte-witness:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Record platform job execution start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Run preregistered offline adversarial tests
+        run: python -B -m unittest -v tests.test_firstcash210_source_witness
+      - name: One pinned public read, actual-byte receipt and offline replay
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tools/firstcash210_source_witness.py fetch --output "$RUNNER_TEMP/firstcash210"
+          python -B tools/firstcash210_source_witness.py verify --output "$RUNNER_TEMP/firstcash210"
+          sha256sum "$RUNNER_TEMP/firstcash210/WITNESS.json" "$RUNNER_TEMP/firstcash210/SOURCE.md" > "$RUNNER_TEMP/FIRSTCASH210_SHA256SUMS.txt"
+          python -B - "$RUNNER_TEMP/firstcash210/WITNESS.json" <<'PY_CHECK'
+          import json, sys
+          from pathlib import Path
+          record = json.loads(Path(sys.argv[1]).read_text(encoding="utf-8"))
+          assert record["expected_git_blob"] == "184291fa360326fe3cb44b213b74053ba486817a"
+          assert record["observed_git_blob"] == record["expected_git_blob"]
+          assert record["scope"] == "PUBLIC_PINNED_SOURCE_BYTES_ONLY_NOT_INDEPENDENT_FACT_OR_COMMERCE"
+          print("FIRSTCASH210_PINNED_PUBLIC_BYTES_VERIFIED_ONLY")
+          PY_CHECK
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: firstcash210-pinned-public-source-no-customer
+          if-no-files-found: error
+          path: |
+            ${{ runner.temp }}/firstcash210/WITNESS.json
+            ${{ runner.temp }}/FIRSTCASH210_SHA256SUMS.txt
+          retention-days: 30
