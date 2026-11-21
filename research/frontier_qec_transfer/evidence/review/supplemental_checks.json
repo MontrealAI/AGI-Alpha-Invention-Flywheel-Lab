@@ -1,0 +1,56 @@
+{
+  "schema": "frontier.qec.independent_review_probes.v1",
+  "scope": "Public-fixture supplemental review; no source repairs, private-case copying, or primary-gate changes.",
+  "pass": true,
+  "source_sha256": {
+    "recovery.py": "f8638af7b2532f8c2161fefe2169bb91788c9fc3a5e3321cf7a05ec717f7c134",
+    "noise_experiment.py": "0a1a563879a76bc192936caba3a8ae27987024123d03287dacf5dea80da716db"
+  },
+  "source_files_unchanged": true,
+  "probes": [
+    {
+      "name": "public_product_code_n20_K4",
+      "pass": true,
+      "local_channels_checked": 20,
+      "max_logical_density_error": 1.9429177484669556e-16,
+      "initial_code_amplitudes": 256,
+      "scope": "Supplemental boundary probe, not original frozen qualification."
+    },
+    {
+      "name": "pollatsek_ruskai_7/convenience_execution",
+      "pass": true,
+      "residuals": {
+        "density": 5.551192792179508e-17,
+        "outcome_probabilities": 3.686287386450715e-18,
+        "erasure": 8.881784197001252e-16,
+        "raw_input_mass": 0.0,
+        "mass_balance": 1.7763568394002505e-15
+      }
+    },
+    {
+      "name": "shor_9/convenience_execution",
+      "pass": true,
+      "residuals": {
+        "density": 1.262897753262583e-17,
+        "outcome_probabilities": 4.336808689942018e-19,
+        "erasure": 0.0,
+        "raw_input_mass": 4.440892098500626e-16,
+        "mass_balance": 4.440892098500626e-16
+      }
+    },
+    {
+      "name": "convex_dependence_and_boundary_inference",
+      "pass": true,
+      "rank": 2,
+      "hypotheses": 3,
+      "max_identifiable_coordinate_error": 5.551115123125783e-16,
+      "fit_methods_exercised": [
+        "feasible_identifiable_inverse",
+        "identifiable_inverse"
+      ]
+    }
+  ],
+  "wall_seconds": 0.5753862269993988,
+  "cpu_seconds": 0.5819074500000001,
+  "maximum_rss_kib": 130236
+}

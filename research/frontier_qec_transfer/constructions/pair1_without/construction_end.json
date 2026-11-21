@@ -1,0 +1,98 @@
+{
+  "schema": "noise_experiment.construction_end.v1",
+  "start_utc": "2026-11-21T19:18:37.336979+00:00",
+  "completion_utc": "2026-11-21T19:26:36.735543+00:00",
+  "elapsed_wall_seconds": 479.3985642100015,
+  "source_sha256": "05e989ca4e8c5512c375bb7eeb19e9b1b98c16cc763a5048a772a2da05ac6ae9",
+  "initial_source_sha256": "05e989ca4e8c5512c375bb7eeb19e9b1b98c16cc763a5048a772a2da05ac6ae9",
+  "frozen_source_path": "/workspace/scratch/e2ed86e4c5fa/frontier-second-pair1_without/frozen/05e989ca4e8c5512c375bb7eeb19e9b1b98c16cc763a5048a772a2da05ac6ae9/noise_experiment.py",
+  "source_read_only": true,
+  "prior_dependencies": [],
+  "implementation_lines": 362,
+  "implementation_bytes": 18468,
+  "development_outcome": "passed public development; independent qualification not performed",
+  "development_case_count": 7,
+  "ideal_mixture_trials": 70,
+  "finite_count_trials": 14,
+  "repair_count": 0,
+  "meaningful_failed_attempts": [
+    {
+      "attempt": "initial development subprocess with external time wrapper",
+      "exit_code": 127,
+      "stderr": "/bin/bash: line 1: /usr/bin/time: No such file or directory",
+      "scientific_process_started": false,
+      "source_changed": false,
+      "correction": "Use standard-library subprocess, time and resource accounting instead of the unavailable external timing executable."
+    }
+  ],
+  "scientific_test_failures": [],
+  "maximum_development_errors": {
+    "response_normalization_error": 7.549516567451064e-15,
+    "completeness_spectral_error": 4.1424559259835855e-15,
+    "full_span_nondisturbance_max_error": 1.3877787807814457e-16,
+    "response_max_error": 3.8163916471489756e-17,
+    "logical_output_max_error": 1.6653767753813737e-15,
+    "projector_error": 3.6475859218729874e-15,
+    "erasure_error": 3.2741489866637352e-15,
+    "ideal_coordinate_max_error": 4.440892098500626e-15,
+    "ideal_frequency_max_error": 4.85722573273506e-17
+  },
+  "numerical_subprocess_receipts": [
+    {
+      "start_utc": "2026-11-21T19:24:15.705205+00:00",
+      "completion_utc": "2026-11-21T19:24:18.931819+00:00",
+      "elapsed_wall_seconds": 3.2266347050026525,
+      "user_cpu_seconds": 2.7224259999999996,
+      "system_cpu_seconds": 0.49905599999999994,
+      "maximum_resident_set_kib": 184396,
+      "exit_code": 0,
+      "source_sha256": "05e989ca4e8c5512c375bb7eeb19e9b1b98c16cc763a5048a772a2da05ac6ae9",
+      "thread_environment": {
+        "OPENBLAS_NUM_THREADS": "1",
+        "OMP_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1"
+      },
+      "model_inference_compute": "unknown; subprocess resources are not model inference compute"
+    },
+    {
+      "start_utc": "2026-11-21T19:25:08.880652+00:00",
+      "completion_utc": "2026-11-21T19:25:09.502225+00:00",
+      "elapsed_wall_seconds": 0.6215954590006731,
+      "user_cpu_seconds": 0.40862299999999996,
+      "system_cpu_seconds": 0.24738799999999997,
+      "maximum_resident_set_kib": 93064,
+      "exit_code": 0,
+      "source_sha256": "05e989ca4e8c5512c375bb7eeb19e9b1b98c16cc763a5048a772a2da05ac6ae9",
+      "scope": "Additional public-only test of a convex-dependent channel library; no source repair"
+    }
+  ],
+  "acquisition": {
+    "prior_capability_available": false,
+    "external_research_used": false,
+    "downloads_or_new_packages": false,
+    "numpy_version": "2.3.5",
+    "scipy_version": "1.17.0"
+  },
+  "integration": "self-contained new module using only standard library, NumPy and SciPy",
+  "qualification": "not performed; no private feedback requested",
+  "model_inference_calls": "unknown",
+  "model_inference_tokens": "unknown",
+  "model_host_cost": "unknown",
+  "total_monetary_cost": "unknown",
+  "economic_cost_note": "Included agent execution is not zero economic cost. Tool/process elapsed time is not model inference compute.",
+  "blinding_attestation": {
+    "workspace_only": true,
+    "authorized_materials": [
+      "TASK.txt",
+      "SECOND_CONTRACT.json",
+      "second_public_fixtures.py",
+      "public_fixtures.py"
+    ],
+    "private_qualification_material_read": false,
+    "other_implementations_or_workspaces_read": false,
+    "agent_history_inspected": false,
+    "sibling_agents_contacted": false,
+    "additional_agents_delegated": false,
+    "no_source_edits_after_freeze": true
+  }
+}

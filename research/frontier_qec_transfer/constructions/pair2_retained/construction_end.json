@@ -1,0 +1,67 @@
+{
+  "start_utc": "2026-11-21T19:27:16.005483+00:00",
+  "completion_utc": "2026-11-21T19:32:59.997159+00:00",
+  "start_monotonic": 16798.980383878,
+  "completion_monotonic": 17142.972062164,
+  "elapsed_wall_seconds": 343.99167828600184,
+  "source_sha256": "6afa2b999e810e8873ee1ed9de4ca09ddb06b80cfe2c37d269ab798e7c09679b",
+  "prior_dependency_sha256": {
+    "recovery.py": "f8638af7b2532f8c2161fefe2169bb91788c9fc3a5e3321cf7a05ec717f7c134"
+  },
+  "prior_dependency_changed": false,
+  "frozen_source_path": "/workspace/scratch/e2ed86e4c5fa/frontier-second-pair2_retained/frozen/6afa2b999e810e8873ee1ed9de4ca09ddb06b80cfe2c37d269ab798e7c09679b/noise_experiment.py",
+  "frozen_dependency_paths": [
+    "/workspace/scratch/e2ed86e4c5fa/frontier-second-pair2_retained/frozen/6afa2b999e810e8873ee1ed9de4ca09ddb06b80cfe2c37d269ab798e7c09679b/recovery.py"
+  ],
+  "development_outcome": "Initial source passed supplied examples and all seven public-contract development cases.",
+  "repair_count": 0,
+  "meaningful_failed_attempts": [],
+  "infrastructure_launch_failures": [
+    {
+      "exit_code": 127,
+      "reason": "/usr/bin/time missing; Python did not run",
+      "evidence": "development_launch_failure.log",
+      "correction": "Use Bash built-in time; no source changes"
+    }
+  ],
+  "numerical_subprocess": {
+    "wall_seconds": 1.472499836996576,
+    "cpu_seconds": 1.5086333939999998,
+    "max_rss_kib": 152656,
+    "full_subprocess_shell_wall_seconds": 2.042,
+    "full_subprocess_shell_user_seconds": 1.716,
+    "full_subprocess_shell_system_seconds": 0.36,
+    "environment": {
+      "OPENBLAS_NUM_THREADS": "1",
+      "OMP_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1"
+    },
+    "python_executable": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3"
+  },
+  "implementation_lines": 309,
+  "implementation_bytes": 15154,
+  "prior_dependency_lines": 260,
+  "prior_dependency_bytes": 11778,
+  "ideal_mixture_cases": 235,
+  "finite_count_trials": 42,
+  "max_ideal_coordinate_error": 8.770761894538737e-15,
+  "max_ideal_prediction_error": 3.677613769070831e-16,
+  "model_inference_calls": "unknown",
+  "model_inference_tokens": "unknown",
+  "model_host_cost": "unknown",
+  "total_monetary_cost": "unknown",
+  "prior_acquisition_and_qualification_cost": "unknown to this arm; retained in cumulative parent comparison",
+  "economic_cost_note": "Included agent execution is not zero economic cost; process elapsed time is not model inference compute.",
+  "blinding_attestation": "Only TASK and authorized public materials in the assigned workspace and system runtime libraries were read. No parent/sibling workspace contents, private tests, evaluators, other construction material, conversation history, or other agent results were inspected. No delegation or sibling contact occurred. Final source frozen before reporting; no independent qualification claimed.",
+  "evidence_files": [
+    "construction_start.json",
+    "construction_end.json",
+    "development_checks.py",
+    "development_results.json",
+    "development_run.log",
+    "development_time.txt",
+    "development_launch_failure.log",
+    "DEVELOPMENT.md",
+    "submissions/initial.py"
+  ]
+}

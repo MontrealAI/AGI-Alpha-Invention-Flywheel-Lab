@@ -1,0 +1,34 @@
+{
+  "schema": "frontier.qec.relocated_independent_review.v1",
+  "pass": true,
+  "scope": "Linux manifest-only relocated scientific replay and selected demo; no hosted CI or reconstruction-latency claim.",
+  "manifest_sha256": "74280c1fc74bc830c5a8c3ce08c0581197f0d82757f64bfbecc399217d1bda3c",
+  "manifest_file_count": 29,
+  "replay_count": 9,
+  "copied_only_manifest_files_and_manifest": true,
+  "source_path_contains_space": true,
+  "cwd_outside_source_tree": true,
+  "relative_output_in_callers_directory": true,
+  "inherited_pythonpath_removed": true,
+  "source_files_unchanged": true,
+  "all_recorded_verdicts_reproduced": true,
+  "selected_source_sha256": {
+    "recovery.py": "f8638af7b2532f8c2161fefe2169bb91788c9fc3a5e3321cf7a05ec717f7c134",
+    "noise_experiment.py": "6afa2b999e810e8873ee1ed9de4ca09ddb06b80cfe2c37d269ab798e7c09679b"
+  },
+  "replay_summary_sha256": "fe1be1844721ef9848b9e2dadfc241a1a67635aa9caac0249f6ea7f2a3cd924f",
+  "operator_receipt_sha256": "d2d789d705cdfe2bf775bc1de3bbd8381a056309b264ce9ec64a726332d9cb1c",
+  "wall_seconds": 32.728787741001724,
+  "child_cpu_seconds": 32.68446000000001,
+  "maximum_child_rss_kib": 250124,
+  "runtime": {
+    "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+    "python_executable": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+    "platform": "Linux-6.18.57-x86_64-with-glibc2.41",
+    "numpy": "2.3.5",
+    "scipy": "1.17.0",
+    "linear_algebra_threads": 1,
+    "third_party_binary_scope": "Versions recorded and pinned by requirements; external binaries and BLAS builds are not asserted byte-identical across hosts."
+  },
+  "case_inputs_retained_in_review_output": false
+}

@@ -6,6 +6,7 @@ It performs classical computations; it does not operate quantum hardware.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 from pathlib import Path
 import sys
@@ -112,6 +113,12 @@ def main():
     args = parser.parse_args()
     result = {
         "scope": "Executable classical quantum-code research demonstration",
+        "source_sha256": {
+            "recovery.py": hashlib.sha256((HERE / "recovery.py").read_bytes()).hexdigest(),
+            **({"noise_experiment.py": hashlib.sha256(
+                (HERE / "noise_experiment.py").read_bytes()).hexdigest()}
+               if args.stage == "both" else {}),
+        },
         "recovery": first_outcome(),
     }
     if args.stage == "both":

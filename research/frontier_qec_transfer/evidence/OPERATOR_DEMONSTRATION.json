@@ -1,0 +1,63 @@
+{
+  "scope": "Executable classical quantum-code research demonstration",
+  "source_sha256": {
+    "recovery.py": "f8638af7b2532f8c2161fefe2169bb91788c9fc3a5e3321cf7a05ec717f7c134",
+    "noise_experiment.py": "6afa2b999e810e8873ee1ed9de4ca09ddb06b80cfe2c37d269ab798e7c09679b"
+  },
+  "recovery": [
+    {
+      "code": "pollatsek_ruskai_7",
+      "physical_qubits": 7,
+      "logical_dimension": 2,
+      "recovery_operators": 22,
+      "logical_density_max_error": 8.882601706564269e-16,
+      "input_probability": 0.9999999999999999,
+      "correctable_probability": 0.9999999999999987,
+      "erasure_probability": 1.2212453270876722e-15
+    },
+    {
+      "code": "shor_9",
+      "physical_qubits": 9,
+      "logical_dimension": 2,
+      "recovery_operators": 22,
+      "logical_density_max_error": 1.1167442499359912e-16,
+      "input_probability": 0.9999999999999996,
+      "correctable_probability": 0.9999999999999996,
+      "erasure_probability": 0.0
+    },
+    {
+      "code": "archived_controlled_s_15",
+      "physical_qubits": 15,
+      "logical_dimension": 4,
+      "recovery_operators": 46,
+      "logical_density_max_error": 5.682377955034956e-17,
+      "input_probability": 1.0,
+      "correctable_probability": 1.0000000000000002,
+      "erasure_probability": -2.220446049250313e-16
+    }
+  ],
+  "noise_experiment": [
+    {
+      "code": "pollatsek_ruskai_7",
+      "hypotheses": 22,
+      "measurement_outcomes": 484,
+      "identifiable_rank": 22,
+      "unique_mixture": true,
+      "identifiable_coordinate_max_error": 1.2836953722228372e-16,
+      "response_prediction_max_error": 4.336808689942018e-18,
+      "logical_preservation_max_error": 1.6653345381003566e-15,
+      "observation_model": "Exact probabilities from classical simulation; no laboratory data."
+    },
+    {
+      "code": "shor_9",
+      "hypotheses": 28,
+      "measurement_outcomes": 484,
+      "identifiable_rank": 22,
+      "unique_mixture": false,
+      "identifiable_coordinate_max_error": 1.6393136847980827e-16,
+      "response_prediction_max_error": 3.469446951953614e-18,
+      "logical_preservation_max_error": 9.992007256990534e-16,
+      "observation_model": "Exact probabilities from classical simulation; no laboratory data."
+    }
+  ]
+}

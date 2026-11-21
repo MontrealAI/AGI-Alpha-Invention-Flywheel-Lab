@@ -1,0 +1,116 @@
+{
+  "schema": "frontier.qec.scientific_source_manifest.v1",
+  "scope": "Exact scientific source/input bytes and recorded finite outcomes. Rerunning these checks does not rerun or independently reproduce AI construction intervals.",
+  "files": {
+    "FIRST_CONTRACT.json": "e7a5e817d5609596e071edb4cd69f74985e81fcf1a1d461381e492bfa4a129b5",
+    "SECOND_CONTRACT.json": "6d2d908da376834de60a67bad3a3c59db8632dcdd0840e7bf579dae8876d295c",
+    "alternatives/recovery_conventional.py": "c2b3ba3fde39b247ea4d81983e5a4bb6de1d5ed62053b205f8aa65138f99e261",
+    "constructions/pair1_retained/noise_experiment.py": "0a1a563879a76bc192936caba3a8ae27987024123d03287dacf5dea80da716db",
+    "constructions/pair1_retained/recovery.py": "f8638af7b2532f8c2161fefe2169bb91788c9fc3a5e3321cf7a05ec717f7c134",
+    "constructions/pair1_without/noise_experiment.py": "05e989ca4e8c5512c375bb7eeb19e9b1b98c16cc763a5048a772a2da05ac6ae9",
+    "constructions/pair2_retained/noise_experiment.py": "6afa2b999e810e8873ee1ed9de4ca09ddb06b80cfe2c37d269ab798e7c09679b",
+    "constructions/pair2_retained/recovery.py": "f8638af7b2532f8c2161fefe2169bb91788c9fc3a5e3321cf7a05ec717f7c134",
+    "constructions/pair2_without/noise_experiment.py": "7adbfc0ea64d7ea48990a7f922752b0ad86d4cc1a8b3aae0be7cdf14cdeec9e7",
+    "constructions/pair3_retained/noise_experiment.py": "800d8cc7f56f866dec690ebac7b2ab5280da0c58127453024c5a5fc1eafcd389",
+    "constructions/pair3_retained/recovery.py": "f8638af7b2532f8c2161fefe2169bb91788c9fc3a5e3321cf7a05ec717f7c134",
+    "constructions/pair3_without/noise_experiment.py": "54d70a7c0f5a48400b4944224c22fa0fbda2ad56a95068e70b8ed64416c4bd1c",
+    "demo.py": "c413df719e6bbe2a2589db095d682e163b93f625bb7348fbb1deab0b476dc515",
+    "fixtures/controlled_s15.json": "df75e8119f67a54fa8cc6ffe0f2a51a7b80caf0ca71bb8480d875a1c69351556",
+    "fixtures/public_fixtures.py": "e0e532750f1df183fc12eaf3c913e0aeaaf520a753d3e9791bbfc43d454fea9d",
+    "fixtures/second_public_fixtures.py": "754594f84004f6b657f0e843e459a0c70e78105d93aa9710a33b3eec9c499b58",
+    "noise_experiment.py": "0a1a563879a76bc192936caba3a8ae27987024123d03287dacf5dea80da716db",
+    "protocol/COMMON_CONSTRUCTOR_TASK.txt": "196bcc81d4434580bb808d5042cb3dfee07ef72ad930949389188372035cd876",
+    "protocol/TRANSFER_PROTOCOL.json": "d50e2861e58c704c788f9be25150051dbda9ee76e9945076afd0e58b3dcbf089",
+    "recovery.py": "f8638af7b2532f8c2161fefe2169bb91788c9fc3a5e3321cf7a05ec717f7c134",
+    "reproduce.py": "b8be0a955caa48632d0664965e8983c451148a5faef58851bbdb01095bfece3c",
+    "requirements.txt": "1668a3152e33680d94637b13421c15e68bd97cd8701f7f555c691f5bc5c0b9f3",
+    "verification/first/cases.json": "121a1b5ee0dac75597d1618cfe68c188d22a708e98e90169e00d2632d4c88de1",
+    "verification/first/qualify.py": "3099493828db0dbfee9a8624d28c64655a36fc8eaa1c140ba361aee391461bdb",
+    "verification/second/cases.json": "8b8b27d851a14a49f8629e5f30fd0b5960c5dccc1861c8b2b20578ecaea3af9d",
+    "verification/second/first_physics.py": "3099493828db0dbfee9a8624d28c64655a36fc8eaa1c140ba361aee391461bdb",
+    "verification/second/qualify.py": "7f483d904aacd4ebd2b88da9081030e0de03848a164481952426bf0ebec82a75"
+  },
+  "replays": [
+    {
+      "name": "first_retained",
+      "checker": "verification/first/qualify.py",
+      "candidate": "recovery.py",
+      "expected_pass": true,
+      "expected_passed_checks": 824,
+      "expected_total_checks": 824,
+      "default": true
+    },
+    {
+      "name": "first_conventional",
+      "checker": "verification/first/qualify.py",
+      "candidate": "alternatives/recovery_conventional.py",
+      "expected_pass": true,
+      "expected_passed_checks": 824,
+      "expected_total_checks": 824,
+      "default": true
+    },
+    {
+      "name": "pair1_retained",
+      "checker": "verification/second/qualify.py",
+      "candidate": "noise_experiment.py",
+      "expected_pass": true,
+      "expected_passed_checks": 163,
+      "expected_total_checks": 163,
+      "default": true,
+      "archived_candidate": "constructions/pair1_retained/noise_experiment.py"
+    },
+    {
+      "name": "pair1_without",
+      "checker": "verification/second/qualify.py",
+      "candidate": "constructions/pair1_without/noise_experiment.py",
+      "expected_pass": true,
+      "expected_passed_checks": 163,
+      "expected_total_checks": 163,
+      "default": false,
+      "archived_candidate": "constructions/pair1_without/noise_experiment.py"
+    },
+    {
+      "name": "pair2_retained",
+      "checker": "verification/second/qualify.py",
+      "candidate": "constructions/pair2_retained/noise_experiment.py",
+      "expected_pass": true,
+      "expected_passed_checks": 163,
+      "expected_total_checks": 163,
+      "default": false,
+      "archived_candidate": "constructions/pair2_retained/noise_experiment.py"
+    },
+    {
+      "name": "pair2_without",
+      "checker": "verification/second/qualify.py",
+      "candidate": "constructions/pair2_without/noise_experiment.py",
+      "expected_pass": true,
+      "expected_passed_checks": 163,
+      "expected_total_checks": 163,
+      "default": false,
+      "archived_candidate": "constructions/pair2_without/noise_experiment.py"
+    },
+    {
+      "name": "pair3_retained",
+      "checker": "verification/second/qualify.py",
+      "candidate": "constructions/pair3_retained/noise_experiment.py",
+      "expected_pass": true,
+      "expected_passed_checks": 163,
+      "expected_total_checks": 163,
+      "default": false,
+      "archived_candidate": "constructions/pair3_retained/noise_experiment.py"
+    },
+    {
+      "name": "pair3_without",
+      "checker": "verification/second/qualify.py",
+      "candidate": "constructions/pair3_without/noise_experiment.py",
+      "expected_pass": true,
+      "expected_passed_checks": 163,
+      "expected_total_checks": 163,
+      "default": false,
+      "archived_candidate": "constructions/pair3_without/noise_experiment.py"
+    }
+  ],
+  "selected_successor_source_sha256": "0a1a563879a76bc192936caba3a8ae27987024123d03287dacf5dea80da716db",
+  "selection": "First fully qualified retained implementation retained as the stable operator entry. Other qualified constructions remain available; none is relabeled globally optimal.",
+  "provisional": true
+}

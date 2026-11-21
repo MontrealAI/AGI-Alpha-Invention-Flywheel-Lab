@@ -1,69 +1,104 @@
-# FRONTIER Ω: recovery, then nondestructive noise identification
+# FRONTIER Ω — Recovery, then nondestructive noise identification
 
-This experiment constructs two different research capabilities for MONTREAL.AI:
+**Two useful computational research capabilities are implemented and independently qualified.** The second uses the retained first capability to construct a different measurement-and-inference tool. Three matched construction pairs show a mixed, descriptive latency benefit: two favorable pairs and one practical tie. **Acquisition-inclusive economic payback remains unestablished.**
 
-1. Execute recovery for valid quantum codes whose error spaces can overlap or be degenerate.
-2. Construct measurements that learn every identifiable combination of specified noise-mixture weights while preserving the arbitrary encoded logical state.
+Read the [complete result and limitations](REPORT.md), the [first independent verdict](evidence/first/FIRST_VERDICT.json), and the [second independent comparison](evidence/second/SECOND_VERDICT.json). This package is classical scientific software; it does not operate quantum hardware or establish commercial revenue.
 
-The first source and an independently implemented conventional alternative each passed **824/824 frozen independent checks**. The second construction comparison is in progress. No transfer, monetary benefit, hardware operation, or broader economic breakthrough is claimed by this initial checkpoint.
+## What you can use now
 
-## Why this is useful
+| Capability | Useful operation | Original independent qualification |
+|---|---|---|
+| [General sparse recovery](recovery.py) | Recover logical information from correctable noise, including overlapping and degenerate error spaces; preserve raw mass and report erasure. | 824/824 checks, six cohorts including the archived controlled-S15 artifact. |
+| [Nondestructive noise experiment](noise_experiment.py) | Construct executable measurements, identify the physically available noise-mixture subspace, and infer a feasible mixture without disturbing logical information. | 163/163 checks for the selected source; all seven constructed routes qualified. |
 
-The existing `inventions/phase_codes/runtime_v2.py` deliberately supports a narrower orthogonal-error-sector domain. Removing its refusal would be incorrect. `recovery.py` constructs a proper channel for the wider, well-conditioned finite domain in `FIRST_CONTRACT.json`, including the published seven-qubit Pollatsek–Ruskai code, the degenerate nine-qubit Shor code, and the repository's archived fifteen-qubit controlled-S artifact. The original instrument and its pinned reproduction remain unchanged.
+The first tool expands the callable research domain beyond the existing phase-code instrument's intentional zero-moment restriction. The second goes beyond another recovery calculation: it constructs an information-gathering instrument and an estimator. Indistinguishable hypotheses are reported honestly as nonunique.
 
-This is classical research software and mathematical protocol construction. It does not implement quantum hardware or establish a physical speedup. Known quantum-error-correction mathematics is a component; worldwide algorithmic novelty is not asserted.
+The original `inventions/phase_codes/` files and their pinned artifact are unchanged. Both tools apply established mathematics; no world-first algorithm or advantage over all conventional methods is claimed.
 
-## Current executable example
+## Run the working example
 
-From the repository root, with NumPy and SciPy installed:
+From the repository root, use a scientific Python environment with the versions in [requirements.txt](requirements.txt):
+
+```sh
+python -m pip install -r research/frontier_qec_transfer/requirements.txt
+OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 \
+  python research/frontier_qec_transfer/demo.py
+```
+
+The example encodes complex logical states, applies noise, executes recovery, then executes the second tool's exported measurement operators and estimates the available parameters. It reports the actual source hashes and numerical errors. The selected seven-qubit example recovers all 22 specified mixture probabilities subject to normalization; the nine-qubit example reports a rank-22 identifiable quotient among 28 hypotheses.
+
+The [recorded operator demonstration](evidence/OPERATOR_DEMONSTRATION.json) is source-matched to the current entry points. The selected successor uses **484 measurement outcomes** on those fixtures. This is a mathematical instrument and classical simulation, with no compiled hardware circuit or optimal shot-cost claim.
+
+## Reproduce every scientific construction
 
 ```sh
 OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 \
-  python research/frontier_qec_transfer/demo.py --stage first
+  python research/frontier_qec_transfer/reproduce.py --all-arms
 ```
 
-The example encodes complex logical states, applies amplitude-damping noise, and executes recovery for the three named codes. The output reports the full mass accounting and logical-density error. It is separate from the frozen independent qualification.
+The command creates a fresh temporary output directory, prints each receipt path and writes `SUMMARY.json`. Add `--output /absolute/new/directory` to choose a destination; relative paths are resolved from the calling directory. An existing receipt is refused so a stale result cannot be mistaken for a new run.
 
-To reproduce first-stage qualification:
+The [source manifest](SOURCE_MANIFEST.json) binds the exact project sources, retained dependencies, scientific checkers, inputs and expected recorded verdicts. Each qualification runs in a fresh process with one BLAS thread and a 10 GiB address-space ceiling. This is ordinary Linux scientific Python, not the Capability Forge seccomp sandbox. Every replay records its actual Python, NumPy, SciPy and platform versions. Third-party binaries and BLAS builds are not asserted byte-identical across hosts.
 
-```sh
-OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 \
-  python research/frontier_qec_transfer/verification/first/qualify.py \
-  research/frontier_qec_transfer/recovery.py --output /tmp/frontier-first-qualification.json
+This command replays the frozen **scientific artifacts**. It does not rerun the AI constructions or reproduce their original elapsed times. Those construction observations are preserved in their original receipts.
+
+## APIs and applicability
+
+From this directory:
+
+```python
+from recovery import Recovery
+from noise_experiment import NoiseExperiment
+
+recovery = Recovery(n, codewords)
+state = recovery.encode(logical_amplitudes)
+result = recovery.recover(noisy_kraus_branches)
+recovery_operators = recovery.kraus()
+
+experiment = NoiseExperiment(n, codewords, hypotheses)
+measurement_operators = experiment.measurement_operators()
+response = experiment.response_matrix()
+identifiability = experiment.identifiability()
+estimate = experiment.estimate(observed_counts_or_probabilities)
 ```
 
-The recorded environment is Python 3.12.14, NumPy 2.3.5 and SciPy 1.17.0, with one BLAS thread. See `ENVIRONMENT.json` for the exact observed runtime and limitations.
+Sparse states are dictionaries mapping integer physical basis indices to complex amplitudes. Physical qubit zero is the most significant bit. Exported operator rows contain **direct coefficients**: multiply them by the input amplitudes without an extra conjugation. Separate input branches are summed incoherently.
 
-## Prospective successor comparison
+The [first contract](FIRST_CONTRACT.json) specifies the sparse, well-conditioned domain up to twenty physical qubits. The original independent frozen cohort covers seven-, nine- and fifteen-qubit codes, with logical dimensions two and four. The twenty-qubit development case and later supplemental review have separate evidence scopes.
 
-`protocol/TRANSFER_PROTOCOL.json` and `protocol/COMMON_CONSTRUCTOR_TASK.txt` were frozen before second-stage construction. Three pairs of fresh-context constructors receive the same second objective, public fixtures, ordinary tools, research access and acceptance. One arm additionally receives the exact qualified first source. A separate ordinary-reuse arm receives the independently constructed conventional recovery source.
+The [second contract](SECOND_CONTRACT.json) specifies up to nine physical qubits, a two-dimensional logical code and up to 32 named local CPTP hypotheses. Each hypothesis contains `name`, `qubit`, and a list of complex 2×2 `kraus` matrices. Unknown mixture weights are nonnegative and sum to one. No arbitrary out-of-model noise guarantee is made.
 
-The distinct second outcome is specified in `SECOND_CONTRACT.json`. It must export an executable measurement instrument, a correct observation model, the maximal physically identifiable parameter subspace, and an estimator. Repeating recovery on fresh inputs is insufficient. Private inputs and the checker are frozen independently; no qualification feedback may repair a source within the registered experiment.
+`estimate` normalizes classical observations, rejects zero total observations, and reports identifiable coordinates. When the model is deficient, its returned weights are a feasible representative, not a uniquely identified underlying mixture. Finite-count results are descriptive; they do not promise universal accuracy.
 
-Every result will be retained. Construction latency is not inference compute, labor cost or monetary savings. First-capability acquisition, verification and failures remain part of the cumulative comparison. Unknown costs remain unknown. The same configured included model and procedural blinding are used; exact model weights and OS-enforced isolation are not available.
+## What the transfer comparison found
 
-## Evidence and identities
+| Pair | With retained source | Without it | Difference |
+|---|---:|---:|---:|
+| 1 | 368.4 s | 479.4 s | 111.0 s lower |
+| 2 | 344.0 s | 386.7 s | 42.7 s lower |
+| 3 | 349.2 s | 347.3 s | 1.9 s higher |
 
-- `SELECTION.json`: three materially different opportunities, the concrete installed gap and source identities.
-- `FIRST_CONTRACT.json`, `FIRST_PUBLIC_FREEZE.json`: first public acceptance and freeze.
-- `verification/first/`: exact frozen independent checker and six input cohorts, now released after first-source freezing.
-- `evidence/first/`: first candidate, conventional comparison, construction and failure receipts.
-- `alternatives/recovery_conventional.py`: independently constructed strong established-method alternative.
-- `protocol/`: the frozen three-pair successor procedure and dispatch receipts.
+All six sources passed the same **163 primary checks**. The mean reduction was **50.6 seconds**, or **12.51% of the control mean**. A separate ordinary-reuse construction using the independently qualified conventional first asset also passed 163/163, with a recorded interval of **373.6 seconds**. It provides a capable conventional reusable route.
 
-The first source identity is `f8638af7b2532f8c2161fefe2169bb91788c9fc3a5e3321cf7a05ec717f7c134`. The conventional source identity is `c2b3ba3fde39b247ea4d81983e5a4bb6de1d5ed62053b205f8aa65138f99e261`. Both were qualified without private-feedback repair. Separate-agent verification is not external scientific or commercial certification.
+These are constructor-recorded intervals, not exclusive model inference, monetary savings or a reliable general speedup. The three pairs repeat the same second objective; they are not three different productive inventions. The first asset's recorded dispatch-to-freeze interval was **348.8 seconds**, and each observed one-successor saving is smaller. Complete research, verification, integration, inference and maintenance costs remain additional or unknown.
 
-## Primary mathematical references
+The selected operator is the unchanged `pair2_retained` source. It uses fewer outcomes and had a lower qualification memory footprint than the initial `pair1_retained` operator. The [selection record](evidence/OPERATOR_SELECTION.json) preserves the tradeoff and the limits of conditioning and finite-sample comparisons. All alternative sources and original observations remain under [constructions](constructions/).
 
-- Knill and Laflamme, [Theory of Quantum Error-Correcting Codes](https://doi.org/10.1103/PhysRevA.55.900), 1997.
-- Du, Zhang, Poon and Zeng, [Characterizing Quantum Codes via the Coefficients in Knill–Laflamme Conditions](https://faculty.sites.iastate.edu/ytpoon/files/inline-files/Characterizing%20Quantum%20Codes.pdf), equation 23 for the seven-qubit fixture.
-- Wagner et al., [Optimal noise estimation from syndrome statistics of quantum codes](https://doi.org/10.1103/PhysRevResearch.3.013292), 2021.
-- Wagner et al., [Pauli channels can be estimated from syndrome measurements in quantum error correction](https://quantum-journal.org/papers/q-2022-09-19-809/), 2022.
+## Inspect the evidence
 
-These establish relevant existing methods, not a prior complete implementation comparison or a claim that this finite experiment exceeds the literature.
+- [Opportunity selection](SELECTION.json): three different candidate directions, the installed gap and historical source identities.
+- [Prospective comparison protocol](protocol/TRANSFER_PROTOCOL.json), [common constructor task](protocol/COMMON_CONSTRUCTOR_TASK.txt) and [dispatch records](protocol/DISPATCH.jsonl).
+- [First frozen checker and inputs](verification/first/) and [second frozen checker and inputs](verification/second/), released after construction freezing.
+- [First-stage evidence](evidence/first/) and [second-stage evidence](evidence/second/).
+- [Selected successor's actual functional reuse](evidence/second/pair2_retained_functional_use_trace.json).
+- [Selected successor's ambiguity-resolution witness](evidence/second/pair2_qualified_successor_ambiguity_resolution.json). This witness is specific to the recorded first readout basis and numerical environment, not an impossibility claim about other recovery measurements.
+- [Independent conventional recovery](alternatives/recovery_conventional.py).
+- [Complete interpretation, costs and primary references](REPORT.md).
+
+Scientific qualification was performed by a separate assistant verifier; a different assistant reviewed code and evidence. These are not external scientific or commercial certifications. Construction used the available included-agent route; the HARNESS local-model frontend and a production release are separate, unclaimed statuses.
 
 ## Français
 
-Le premier outil de recherche et une solution conventionnelle indépendante ont chacun réussi les **824 vérifications indépendantes**. Ils corrigent les erreurs dans le domaine numérique déclaré, y compris des espaces d'erreur non orthogonaux et dégénérés. La comparaison prospective porte ensuite sur une autre fonction : construire une expérience qui identifie le bruit sans détruire l'information logique protégée.
+Deux outils de recherche fonctionnent : la correction quantique dans un domaine numérique plus général, puis la construction d'une expérience d'identification du bruit qui préserve l'information logique. Les sept constructions du second outil ont chacune réussi les **163 vérifications primaires**, y compris une solution conventionnelle réutilisable.
 
-Ce point de contrôle ne revendique pas encore un avantage de transfert. Les calculs sont classiques; aucun matériel quantique, revenu, profit ou avantage économique complet n'est démontré. Les coûts inconnus ne deviennent pas nuls. Les sources historiques restent intactes.
+La conservation du premier outil réduit le temps de construction observé dans deux des trois paires; la troisième est pratiquement à égalité. Le gain moyen de **50,6 secondes** ne rembourse pas les **348,8 secondes** mesurées pour l'acquisition du premier outil, sans compter les autres coûts. Le transfert fonctionnel est établi; l'avantage économique complet, les revenus, l'amélioration de l'inventeur et l'exploitation d'un matériel quantique ne le sont pas.

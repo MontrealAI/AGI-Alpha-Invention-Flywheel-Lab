@@ -1,0 +1,47 @@
+name: FRONTIER quantum capability transfer
+
+on:
+  pull_request:
+    paths:
+      - 'research/frontier_qec_transfer/**'
+      - '.github/workflows/frontier-qec-transfer.yml'
+  push:
+    branches:
+      - 'feature/frontier-first-transfer-20261121'
+    paths:
+      - 'research/frontier_qec_transfer/**'
+      - '.github/workflows/frontier-qec-transfer.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  scientific-replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    env:
+      OPENBLAS_NUM_THREADS: '1'
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+    steps:
+      - name: Record platform job start
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: research/frontier_qec_transfer/requirements.txt
+      - name: Install scientific dependencies
+        run: python -m pip install -r research/frontier_qec_transfer/requirements.txt
+      - name: Replay all frozen scientific constructions
+        run: python research/frontier_qec_transfer/reproduce.py --all-arms --output /tmp/frontier-qec-replay
+      - name: Execute the operator example
+        run: python research/frontier_qec_transfer/demo.py --output /tmp/frontier-qec-replay/operator-example.json
+      - name: Retain scientific receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontier-qec-scientific-replay
+          path: /tmp/frontier-qec-replay
+          if-no-files-found: warn

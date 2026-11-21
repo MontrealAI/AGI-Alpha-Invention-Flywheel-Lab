@@ -1,0 +1,91 @@
+{
+  "schema": "frontier.noise-experiment.construction.v1",
+  "start_utc": "2026-11-21T19:27:11.802300+00:00",
+  "completion_utc": "2026-11-21T19:33:38.517528+00:00",
+  "start_monotonic": 16794.777203136,
+  "completion_monotonic": 17181.492432018,
+  "elapsed_wall_seconds": 386.7152290619997,
+  "source_path": "/workspace/scratch/e2ed86e4c5fa/frontier-second-pair2_without/noise_experiment.py",
+  "source_sha256": "7adbfc0ea64d7ea48990a7f922752b0ad86d4cc1a8b3aae0be7cdf14cdeec9e7",
+  "frozen_path": "/workspace/scratch/e2ed86e4c5fa/frontier-second-pair2_without/frozen/7adbfc0ea64d7ea48990a7f922752b0ad86d4cc1a8b3aae0be7cdf14cdeec9e7/noise_experiment.py",
+  "prior_dependency_sha256": {},
+  "prior_asset_present": false,
+  "repair_count": 0,
+  "implementation_lines": 284,
+  "implementation_bytes": 15593,
+  "development_outcome": {
+    "success": true,
+    "public_development_example": true,
+    "extended_cases": 6,
+    "ideal_mixtures": 42,
+    "max_physical_operator_response_certificate_error": 8.185874960054468e-15,
+    "max_ideal_coordinate_error": 7.708278459972462e-13,
+    "qualification_status": "public development only; independently unqualified"
+  },
+  "meaningful_failed_attempts": [],
+  "infrastructure_failed_attempts": [
+    {
+      "exit_code": 127,
+      "cause": "/usr/bin/time executable absent",
+      "source_executed": false,
+      "evidence": "infrastructure_failure_time.txt",
+      "correction": "standard-library subprocess/resource measurement"
+    }
+  ],
+  "numerical_subprocess": {
+    "command": [
+      "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+      "development_check.py"
+    ],
+    "started_utc": "2026-11-21T19:31:57.644951+00:00",
+    "completed_utc": "2026-11-21T19:32:01.868809+00:00",
+    "elapsed_wall_seconds": 4.224026099000184,
+    "user_cpu_seconds": 3.85751,
+    "system_cpu_seconds": 0.394416,
+    "max_rss_kib": 173632,
+    "exit_code": 0,
+    "thread_environment": {
+      "OPENBLAS_NUM_THREADS": "1",
+      "OMP_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1"
+    }
+  },
+  "measured_numerical_subprocess_wall_seconds": 4.224026099000184,
+  "measured_numerical_subprocess_cpu_seconds": 4.251926,
+  "measured_numerical_subprocess_max_rss_kib": 173632,
+  "runtime": {
+    "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+    "numpy": "2.3.5",
+    "scipy": "1.17.0"
+  },
+  "model_inference_calls": "unknown",
+  "model_inference_tokens": "unknown",
+  "model_inference_compute": "unknown",
+  "host_cost": "unknown",
+  "agent_economic_cost": "unknown",
+  "total_monetary_cost": "unknown",
+  "economic_note": "Included agent execution is not zero economic cost. Process time is not model inference compute.",
+  "evidence_sha256": {
+    "TASK.txt": "196bcc81d4434580bb808d5042cb3dfee07ef72ad930949389188372035cd876",
+    "SECOND_CONTRACT.json": "6d2d908da376834de60a67bad3a3c59db8632dcdd0840e7bf579dae8876d295c",
+    "public_fixtures.py": "e0e532750f1df183fc12eaf3c913e0aeaaf520a753d3e9791bbfc43d454fea9d",
+    "second_public_fixtures.py": "754594f84004f6b657f0e843e459a0c70e78105d93aa9710a33b3eec9c499b58",
+    "development_check.py": "c9f0344b7da50290b3feaa180da7c73b241786db9aeed82d0f5b594cb69ad2a7",
+    "numerical_runner.py": "56110cfc6540149fbc6dae998023249e39f5b1799a3f2335dfe36d28c9f66910",
+    "DEVELOPMENT.md": "097aafbbb2323ac660a9e1328264faf4c6adc5b4c055a2225c41040b8d2c16d0",
+    "development_results.json": "8539ddefc85a24bcb4c9f4a69bed787e6bac80d7da487744987ce2a1fa5c1d54"
+  },
+  "blinding_attestation": {
+    "assigned_workspace_only": true,
+    "supplied_public_materials_only": true,
+    "no_prior_capability_available": true,
+    "no_parent_or_sibling_inspection": true,
+    "no_evaluator_or_private_material": true,
+    "no_history_inspection": true,
+    "no_other_agent_contact_or_delegation": true,
+    "no_external_research": true,
+    "no_downloads_extra_packages_paid_services_credentials": true,
+    "no_runtime_network_dependency": true,
+    "no_private_feedback": true
+  }
+}

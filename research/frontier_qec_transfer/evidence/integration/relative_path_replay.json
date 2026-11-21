@@ -1,0 +1,60 @@
+{
+  "schema": "frontier.qec.replay.v1",
+  "manifest_sha256": "fb36ed9cd09100ad4df77fc8aa51d2312a236945b75ff2c524320dfc0c3b8146",
+  "scope": "Scientific-source replay; not reconstruction latency, external certification, or economic proof.",
+  "source_files_unchanged": true,
+  "all_recorded_verdicts_reproduced": true,
+  "arms": [
+    {
+      "name": "first_retained",
+      "candidate_sha256": "f8638af7b2532f8c2161fefe2169bb91788c9fc3a5e3321cf7a05ec717f7c134",
+      "returncode": 0,
+      "matched_recorded_verdict": true,
+      "scientific_pass": true,
+      "passed_checks": 824,
+      "total_checks": 824,
+      "wrapper_wall_seconds": 3.3410426699992968,
+      "child_cpu_seconds": 3.336205,
+      "scientific_wall_seconds": 2.395657222998125,
+      "scientific_cpu_seconds": 2.391663695,
+      "peak_rss_kib": 221168,
+      "result_file": "/workspace/scratch/e2ed86e4c5fa/frontier-qec-relative-replay/first_retained.json",
+      "stdout": "{\"pass\": true, \"wall_seconds\": 2.395657222998125, \"cpu_seconds\": 2.391663695, \"maximum_rss_kib\": 221168, \"passed_checks\": 824, \"total_checks\": 824}",
+      "stderr": ""
+    },
+    {
+      "name": "first_conventional",
+      "candidate_sha256": "c2b3ba3fde39b247ea4d81983e5a4bb6de1d5ed62053b205f8aa65138f99e261",
+      "returncode": 0,
+      "matched_recorded_verdict": true,
+      "scientific_pass": true,
+      "passed_checks": 824,
+      "total_checks": 824,
+      "wrapper_wall_seconds": 2.360128980002628,
+      "child_cpu_seconds": 2.352458,
+      "scientific_wall_seconds": 2.156510848002654,
+      "scientific_cpu_seconds": 2.149570501,
+      "peak_rss_kib": 217656,
+      "result_file": "/workspace/scratch/e2ed86e4c5fa/frontier-qec-relative-replay/first_conventional.json",
+      "stdout": "{\"pass\": true, \"wall_seconds\": 2.156510848002654, \"cpu_seconds\": 2.149570501, \"maximum_rss_kib\": 217656, \"passed_checks\": 824, \"total_checks\": 824}",
+      "stderr": ""
+    },
+    {
+      "name": "pair1_retained",
+      "candidate_sha256": "0a1a563879a76bc192936caba3a8ae27987024123d03287dacf5dea80da716db",
+      "returncode": 0,
+      "matched_recorded_verdict": true,
+      "scientific_pass": true,
+      "passed_checks": 163,
+      "total_checks": 163,
+      "wrapper_wall_seconds": 3.5137867019984697,
+      "child_cpu_seconds": 3.5101180000000003,
+      "scientific_wall_seconds": 3.270380646998092,
+      "scientific_cpu_seconds": 3.2676620649999997,
+      "peak_rss_kib": 247248,
+      "result_file": "/workspace/scratch/e2ed86e4c5fa/frontier-qec-relative-replay/pair1_retained.json",
+      "stdout": "{\"pass\": true, \"wall_seconds\": 3.270380646998092, \"cpu_seconds\": 3.2676620649999997, \"maximum_rss_kib\": 247248, \"passed_checks\": 163, \"total_checks\": 163}",
+      "stderr": ""
+    }
+  ]
+}

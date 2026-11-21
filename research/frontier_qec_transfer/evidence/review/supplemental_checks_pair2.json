@@ -1,0 +1,55 @@
+{
+  "schema": "frontier.qec.independent_review_probes.v1",
+  "scope": "Public-fixture supplemental review; no source repairs, private-case copying, or primary-gate changes.",
+  "pass": true,
+  "source_sha256": {
+    "recovery.py": "f8638af7b2532f8c2161fefe2169bb91788c9fc3a5e3321cf7a05ec717f7c134",
+    "noise_experiment.py": "6afa2b999e810e8873ee1ed9de4ca09ddb06b80cfe2c37d269ab798e7c09679b"
+  },
+  "source_files_unchanged": true,
+  "probes": [
+    {
+      "name": "public_product_code_n20_K4",
+      "pass": true,
+      "local_channels_checked": 20,
+      "max_logical_density_error": 1.9429177484669556e-16,
+      "initial_code_amplitudes": 256,
+      "scope": "Supplemental boundary probe, not original frozen qualification."
+    },
+    {
+      "name": "pollatsek_ruskai_7/convenience_execution",
+      "pass": true,
+      "residuals": {
+        "density": 2.220446910192069e-16,
+        "outcome_probabilities": 1.734723475976807e-18,
+        "erasure": 4.440892098500626e-16,
+        "raw_input_mass": 0.0,
+        "mass_balance": 0.0
+      }
+    },
+    {
+      "name": "shor_9/convenience_execution",
+      "pass": true,
+      "residuals": {
+        "density": 5.551126802896174e-17,
+        "outcome_probabilities": 6.505213034913027e-19,
+        "erasure": 4.440892098500626e-16,
+        "raw_input_mass": 4.440892098500626e-16,
+        "mass_balance": 0.0
+      }
+    },
+    {
+      "name": "convex_dependence_and_boundary_inference",
+      "pass": true,
+      "rank": 2,
+      "hypotheses": 3,
+      "max_identifiable_coordinate_error": 3.3306690738754696e-16,
+      "fit_methods_exercised": [
+        "not_exposed_by_this_api"
+      ]
+    }
+  ],
+  "wall_seconds": 0.39166892700086464,
+  "cpu_seconds": 0.4099787730000001,
+  "maximum_rss_kib": 103420
+}

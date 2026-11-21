@@ -1,0 +1,17 @@
+{
+  "scope": "Packaging and operator-runner work, separate from frozen AI construction experiments.",
+  "preserved_failures": [
+    {
+      "action": "Repeat collection of completed trial sources",
+      "failure": "An overwrite attempt on an unchanged read-only archived copy raised PermissionError.",
+      "resolution": "Collection now verifies and skips byte-identical existing files. Original frozen sources were never altered."
+    },
+    {
+      "action": "Independent review of relative output paths",
+      "failure": "Reviewer identified that child cwd could redirect an unresolved relative output path.",
+      "resolution": "Resolve and expand output path before changing child cwd. Targeted replay from repository root using a relative sibling output path passed824/824,824/824 and163/163 checks."
+    }
+  ],
+  "scope_of_fix": "Reproduction/packaging only; no frozen candidate, checker, cases or original comparison outcome changed.",
+  "cost": "Packaging/review/inference costs are additional and not fully instrumented; not assigned zero."
+}
