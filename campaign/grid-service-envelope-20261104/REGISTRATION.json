@@ -1,0 +1,137 @@
+{
+  "version": "grid-service-envelope-1",
+  "registered_utc": "2026-11-04T13:55:26.217697+00:00",
+  "role": "prospective finite authored comparison; not random holdout or reliability estimate",
+  "base_commit": "4abbb85893c9c073ca092db4ad858f7bb156dc35",
+  "dataset_commit": "3ece0d3725c844056132393ee252b3083dd4eab4",
+  "development_days": [
+    "2020-01-01"
+  ],
+  "confirmation_days": [
+    "2020-07-01",
+    "2020-12-01"
+  ],
+  "buses": [
+    101,
+    313
+  ],
+  "it_capacity_mw": [
+    10,
+    100
+  ],
+  "hours": 24,
+  "pue": 1.2,
+  "work": {
+    "units": "modeled MWh-equivalent useful IT work; no measured FLOP conversion",
+    "release_hours": [
+      0,
+      12
+    ],
+    "deadline_hours": [
+      12,
+      24
+    ],
+    "each_batch_capacity_hours": 6,
+    "divisible_preemptible": true
+  },
+  "fault_reveal_hour": 8,
+  "scenarios": [
+    "normal",
+    "connection_trip_8_14",
+    "backup_failure_8_24",
+    "battery_failure_8_24",
+    "line_A1_out_load_110pct_8_24",
+    "largest_thermal_out_8_24",
+    "connection_trip_8_20_and_backup_failure"
+  ],
+  "decision_information": "All jobs and baseline public day-ahead profiles known at t=0. No fault identity known before t=8. All scenario decisions identical for t<8; one schedule per observed named fault after t=8. No observation errors modeled. Work schedule is common across all scenarios, a conservative causal policy subset.",
+  "network": {
+    "model": "lossless DC, base100MVA, source transformer taps, source continuous branch ratings, no existing-load shedding",
+    "thermal": "all nonzero thermal units committed throughout; source PMin/PMax and hourly ramp; fault unit drops only at reveal",
+    "wind_pv": "curtailable source DAY_AHEAD profiles",
+    "rtpv": "fixed source profile",
+    "hydro": "fixed source hourly output",
+    "csp_and_existing_storage": "disabled rather than inventing intertemporal energy",
+    "not_qualified": [
+      "AC voltage",
+      "stability",
+      "frequency",
+      "protection",
+      "fault level",
+      "startups/minimum up/down",
+      "reserves",
+      "subhourly switching",
+      "real connection rights"
+    ]
+  },
+  "equipment": {
+    "battery_mwh_per_it_mw_max": 8,
+    "battery_mw_per_it_mw_max": 1.2,
+    "backup_mw_per_it_mw_max": 1.2,
+    "charge_efficiency": 0.95,
+    "discharge_efficiency": 0.95,
+    "initial_soc_fraction": 0.5,
+    "terminal_soc_fraction": 0.5,
+    "backup_fuel_mwh_per_it_mw_max": 24,
+    "backup_start": "instantaneous hourly approximation; no physical UPS qualification"
+  },
+  "routes": [
+    "constructed_envelope",
+    "ordinary_flexible_storage_backup_shifting",
+    "no_equipment_control",
+    "fixed_work_control",
+    "firm_connection_or_reinforcement_quote_threshold",
+    "relocation_best_tested_bus",
+    "non_entry"
+  ],
+  "ordinary_route": "Same complete information, equipment, construction, solver and cost permissions. If it delivers same accepted outcome at same complete budget, residual is rejected, even if construct works.",
+  "firm_reinforcement": "Do not invent accepted rights, commissioned capacity, lead times or quotes. Report as unresolved outside options with maximum affordable additional quote relative to constructed route; never label missing quote infeasible. A real complete route could dominate.",
+  "objective": "Minimize first-year equivalent equipment cost plus worst-case modeled daily operating cost times365, under every registered scenario; annual repetition is a conditional tariff envelope, NOT annual simulation or profit.",
+  "modeled_usd": {
+    "it_capex_per_mw": 15000000,
+    "site_capex_per_mw": 2000000,
+    "battery_capex_per_mwh": 300000,
+    "battery_power_capex_per_mw": 100000,
+    "backup_capex_per_mw": 1000000,
+    "connection_setup": 500000,
+    "construction_verification": 250000,
+    "fixed_opex_per_it_mw_year": 100000,
+    "electricity_per_mwh": 80,
+    "backup_per_mwh": 300,
+    "battery_throughput_per_mwh": 5,
+    "capital_life_years": 5,
+    "capital_opportunity_rate": 0.1,
+    "construction_contingency_fraction": 0.2,
+    "performance_reserve_fraction_of_capex": 0.1,
+    "working_capital_days": 30
+  },
+  "cost_evidence": "All monetary coefficients are explicit uncalibrated scenario assumptions, NOT vendor quotes, local tariffs or verified complete installed costs. Missing tax, permitting, interconnection, backup-emission permissions, curtailment compensation and jurisdiction-specific residuals remain additive unknown U. Report known modeled subtotal + U, never real complete cost.",
+  "finance": {
+    "cash": "capital plus contingent reserve plus working capital needed before service; no receipt or native account created",
+    "hypothetical_debt_fraction": 0.6,
+    "hypothetical_debt_rate": 0.08,
+    "hypothetical_debt_term_years": 5,
+    "hypothetical_fee_fraction": 0.02,
+    "availability": "unknown; conditional coverage only, no secured funds or loan execution",
+    "reference_funding_usd": [
+      100000,
+      1000000,
+      1000000000
+    ]
+  },
+  "acceptance": {
+    "residual_tolerance_mw": 1e-05,
+    "deadline_shortfall": 0,
+    "all_registered_scenarios": true,
+    "nonanticipativity": true,
+    "independent_checker": "different code reconstructs source bounds, nodal balances, flows, ramps, equipment state, deadline and causal constraints from witness; negative mutations must be rejected",
+    "optimality": "HiGHS primal/dual residual and gap in declared continuous policy class only, no global enterprise or equilibrium claim"
+  },
+  "falsification": [
+    "Any admissible registered stress breaks work, network or equipment contract",
+    "Strong existing complete flexible route supplies same modeled accepted outcome within same full modeled budget",
+    "Unknown physical or commercial qualification prevents promotion even with numerical pass"
+  ],
+  "stopping": "Run all8 location/day/scale primary models and registered controls once on frozen source; retain infeasible/failed outcomes. Fix implementation bugs openly and rerun as amended-source reproduction, not untouched confirmation. No new scenarios selected after favorable outcomes to claim preregistered success.",
+  "authority": "Public code and compact evidence only; no outreach, paid APIs, spending, real connection, deployment, transactions or existing native account changes."
+}

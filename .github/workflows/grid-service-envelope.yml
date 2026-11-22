@@ -1,0 +1,42 @@
+name: Grid service envelope qualification
+on:
+  push:
+    branches: ['experiment/grid-service-envelope-20261104']
+    paths: ['grid_service_envelope/**', 'campaign/grid-service-envelope-20261104/**', 'tests/test_grid_service_envelope.py', 'requirements-grid-envelope.txt', '.github/workflows/grid-service-envelope.yml']
+  pull_request:
+    paths: ['grid_service_envelope/**', 'campaign/grid-service-envelope-20261104/**', 'tests/test_grid_service_envelope.py', 'requirements-grid-envelope.txt', '.github/workflows/grid-service-envelope.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  qualify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+      GRID_ENVELOPE_REQUIRE_WITNESS: '1'
+      OPENBLAS_NUM_THREADS: '1'
+      OMP_NUM_THREADS: '1'
+    steps:
+      - name: Start platform clock
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -r requirements-grid-envelope.txt
+      - name: Reconstruct development witness
+        run: |
+          mkdir -p .tmp
+          python -m grid_service_envelope.construct --data campaign/grid-service-envelope-20261104/data --day 2020-01-01 --output .tmp/development-amended.json
+      - name: Independent feasibility and mutation tests
+        env:
+          RTS_DATA: campaign/grid-service-envelope-20261104/data
+        run: python -m unittest discover -s tests -p test_grid_service_envelope.py -v
+      - name: Reproduce all registered rows
+        run: python -m grid_service_envelope.run --role reproduction --output .tmp/reproduction
+      - name: Compact outcome
+        if: always()
+        run: |
+          if [ -f .tmp/reproduction/SUMMARY.json ]; then cat .tmp/reproduction/SUMMARY.json; fi
+          echo "elapsed_seconds=$(( $(date +%s) - AGI_JOB_START_EPOCH ))"
