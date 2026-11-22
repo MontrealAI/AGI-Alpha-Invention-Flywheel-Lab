@@ -1,0 +1,61 @@
+{
+  "after": [
+    {
+      "applies_to": [
+        "decision",
+        "genai"
+      ],
+      "controls": [
+        "impact-review",
+        "logging",
+        "output-monitoring"
+      ],
+      "id": "public-governance",
+      "source_sha256": "c0052737b9a6197a80519ec3107699fed74433dfaf96ffb9eaed1cc50b7fee7b",
+      "version": "v2"
+    }
+  ],
+  "before": [
+    {
+      "applies_to": [
+        "decision"
+      ],
+      "controls": [
+        "impact-review",
+        "logging"
+      ],
+      "id": "public-governance",
+      "source_sha256": "4bbbe9c336f4f2762410bbf69031953696fe16d8d0f461a678b3baea88318e84",
+      "version": "v1"
+    }
+  ],
+  "schema": "impact-continuation229/v1",
+  "systems": [
+    {
+      "evidence_refs": [
+        {
+          "control": "impact-review",
+          "source_sha256": "fe2d43ce7751de3c6484e312a3f845cf1d5c7baf71df61246ad1e0a524a6aa91"
+        }
+      ],
+      "id": "public-service-ai",
+      "tags": [
+        "decision"
+      ]
+    },
+    {
+      "evidence_refs": [],
+      "id": "internal-genai",
+      "tags": [
+        "genai"
+      ]
+    },
+    {
+      "evidence_refs": [],
+      "id": "inventory-planner",
+      "tags": [
+        "logistics"
+      ]
+    }
+  ]
+}
