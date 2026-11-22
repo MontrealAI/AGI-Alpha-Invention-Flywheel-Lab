@@ -1,0 +1,26 @@
+{
+  "schema": "agi-alpha/prospective-resources006/v1",
+  "capacity_cpu_seconds": 5400,
+  "capacity_storage_bytes": 6442450944,
+  "state": "active",
+  "runs": {
+    "nasa-coordinate-repair-r2": {
+      "state": "settled",
+      "limits": {
+        "wall_seconds": 180,
+        "cpu_seconds": 160,
+        "memory_bytes": 2147483648,
+        "output_bytes": 67108864,
+        "storage_bytes": 134217728
+      },
+      "budget_cpu_seconds": 160,
+      "budget_storage_bytes": 35680610,
+      "receipt_sha256": "03563476df147205ec77f36d3a5c2fcddcfe6ed3b1d38baba4a2a752a8f3843f",
+      "outcome": "complete",
+      "observed_waited_cpu_seconds": 30.990706,
+      "observed_output_bytes": 35680610,
+      "cpu_refund_seconds": 0,
+      "cpu_refund_reason": "No exact full process-group CPU attribution; preserve conservative reservation as budget charge, not measured cost."
+    }
+  }
+}

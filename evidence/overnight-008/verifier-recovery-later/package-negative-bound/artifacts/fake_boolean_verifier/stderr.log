@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/workspace/scratch/557a27c9cfaf/lab/research/xct008/recovery/replay.py", line 91, in <module>
+    if __name__=='__main__':main()
+                            ^^^^^^
+  File "/workspace/scratch/557a27c9cfaf/lab/research/xct008/recovery/replay.py", line 57, in main
+    if sha(verifier)!=manifest['verifier']['sha256']:raise ValueError('separate verifier source changed')
+                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: separate verifier source changed

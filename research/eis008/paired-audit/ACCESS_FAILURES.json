@@ -1,0 +1,11 @@
+{
+  "all_failures_preserved_without_changing_scientific_test":true,
+  "items":[
+    {"operation":"Figshare28879097 public metadata","result":"Proxy CONNECT timeout; no dataset body downloaded","alternative":"Open Zenodo15123604 metadata and ranged raw archive"},
+    {"operation":"Initial raw.githubusercontent.com processed MAT fetch","result":"Proxy CONNECT timeout; no dataset bytes obtained","alternative":"Ordinary public github.com raw URL succeeded and exact Git blob identity verified"},
+    {"operation":"GitHub connector binary blob fetch","result":"UnicodeDecodeError: tool attempts UTF8 text on binary MAT","alternative":"Public binary download through existing network; no privilege expansion"},
+    {"operation":"Initial range-audit helper import","result":"requests is not installed; script terminated before network work","alternative":"Python standard-library urllib, no package installation"},
+    {"operation":"Nature article/PDF and EuropePMC public fullTextXML","result":"Nature cookie redirects/tool access errors or proxy CONNECT timeout; EuropePMC publicAPI proxy timeout","consequence":"No claim of having read full SI or reconstructed extraction-clock protocol. No CAPTCHA, account or security bypass used."}
+  ],
+  "candidate_execution":"Frozen exact-r1 completed without runtime failure; data/cohort/protocol unchanged"
+}

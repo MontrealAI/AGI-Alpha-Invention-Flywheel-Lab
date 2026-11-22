@@ -1,0 +1,54 @@
+{
+  "schema": "agi-alpha/trusted-experiment-run006/v3",
+  "run_id": "recovery-sandbox-current-host",
+  "command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+    "/workspace/scratch/557a27c9cfaf/verification_recovery/run_sandbox_requalification.py",
+    "--repo",
+    "/workspace/scratch/557a27c9cfaf/lab",
+    "--output",
+    "/workspace/scratch/557a27c9cfaf/verification_recovery/sandbox-current-host-bound/artifacts"
+  ],
+  "requested_command": [
+    "python3",
+    "/workspace/scratch/557a27c9cfaf/verification_recovery/run_sandbox_requalification.py",
+    "--repo",
+    "/workspace/scratch/557a27c9cfaf/lab",
+    "--output",
+    "/workspace/scratch/557a27c9cfaf/verification_recovery/sandbox-current-host-bound/artifacts"
+  ],
+  "normalized_command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+    "/workspace/scratch/557a27c9cfaf/verification_recovery/run_sandbox_requalification.py",
+    "--repo",
+    "/workspace/scratch/557a27c9cfaf/lab",
+    "--output",
+    "/workspace/scratch/557a27c9cfaf/verification_recovery/sandbox-current-host-bound/artifacts"
+  ],
+  "reservation_created": true,
+  "cwd": "/workspace/scratch/557a27c9cfaf",
+  "limits": {
+    "wall_seconds": 70,
+    "cpu_seconds": 100,
+    "memory_bytes": 2147483648,
+    "output_bytes": 20971520,
+    "storage_bytes": 33554432
+  },
+  "wrapper_sha256": "8a10193e2cc29ca277560c7b2153d616e8cb46e64fbc7f54c102518dc2b71cbd",
+  "state": "complete",
+  "exit_code": 0,
+  "reason": null,
+  "error": null,
+  "wall_seconds": 3.98976205200006,
+  "supervisor_cpu_seconds": 0.07339105,
+  "waited_cpu_seconds": 3.9909149999999998,
+  "descendant_survivors": false,
+  "output_bytes": 64775,
+  "logs": {
+    "stdout.log": "c4ebfbcfe0e3ed4fd4c2209362dcaa123db64e5537c6048525ae6b615deca449",
+    "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "scope": "Trusted commands only. Per-process CPU/AS/file limits plus process-group wall termination, main-thread SIGTERM cleanup, and terminal aggregate-output/receipt checks. Waited-child rusage may omit escaped/unwaited descendants; this is not a sandbox or exact full-group CPU meter.",
+  "aggregate_cpu_complete": false,
+  "complete_monetary_cost": null
+}

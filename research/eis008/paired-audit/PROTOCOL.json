@@ -1,0 +1,25 @@
+{
+  "campaign":"overnight008; original campaign-wide history and error budget persist",
+  "lane":"DEVELOPMENT; alpha0; no protected confirmation or population claim",
+  "root_agreement":"Root agreed to exact recorded-alias test after protocol freeze and timing/channel/repeatability audit. No rounding/nearest grouping, predictor training or physical-noise inference.",
+  "purpose":"Challenge whether the released passive-profile records themselves contain an exact-input/different-label witness that could justify investigating an actively identifiable measurement means. This is not predictor optimization and no candidate is automatically admitted.",
+  "frozen_cohort":"All828 released dataset4 records, X shape[828,10,180], Y1 shape[828,38,2]; no selection by outputs, input distances or favorable examples",
+  "data_identity":{"repository":"yuanhao911/ISDiffM","revision":"320ac4649a618c2d20b1009aa9dcc0a27d7664be","path":"dataset/dataset4_final_split82_index.mat","git_blob_sha1":"5b14a996232797c8c0ec9ce7294ae3ef516755fa","sha256":"8f02b75054e3cf8e337a3c196f8b330ea740b698902bd38639e9536583af855b","size":12433584},
+  "input_views":[
+    {"id":"published9x100","definition":"Apply source test_transfer_learning.py permutation to X, retain first9 channels, interval1, slice samples80:180 as utils.tools.simple(); all raw floating values retained"},
+    {"id":"all10x180","definition":"All10 released channels and all180 released history samples per record; no withheld older observations"}
+  ],
+  "channel_audit_before_freeze":"All input channels finite;10th channel is exactly1 for all828x180 entries. Other channel physical names/timestamps remain subject to raw/SI source audit; no physical-name guessing.",
+  "pairing_and_timing_gate":{
+    "record_pairing":"Author release asserts X and Y1 row correspondence and source code indexes them identically. This establishes released-record alignment, not independent clock synchronization.",
+    "physical_timing":"Public raw recording/reference snippets and authors' readmes will be checked for absolute clocks, measurement start/end and mapping to the extracted window. If unresolved, physical timing remains UNKNOWN.",
+    "repeatability":"Dataset4 suffix a00 is whole stack; a01-a11 are specified different cell locations, not twelve repeated measurements of one cell. Source dataset2 explicitly has replicated inputs for some missing recordings and is excluded from this frozen dataset4 cohort. No fitted residual, across-cell variation or nominal-condition group supplies a physical noise bound.",
+    "claim_gate":"Exact released-record alias diagnostic may describe array aliasing when row pairing is source-bound; physical/material underidentification and instrument admission remain blocked unless independent timing/repeatability/calibration support is actually found. Unknowns cannot become convenient zeros."
+  },
+  "primary_test":"Group records by exact complete float-value equality within each frozen view. Canonicalize signed zero only. No rounding, thresholds, learned embeddings, normalization, nearest-neighbor equivalence, SNR assumptions or output-dependent input selection.",
+  "primary_recorded_endpoints":["Number of unique input groups and duplicate groups/pairs in each view","Within each exact group, equality or difference of the FULL38-complex-value measured label vector","If conflicting exact inputs exist, retain every record ID and full label vector and report observed label-vector diameters in released units; no materiality/noise threshold is invented"],
+  "strongest_alternatives":"Published AI/ordinary models retain all legitimate recorded input, history, identity/timestamp and context access. This test is a property of a stated array view, not a performance comparison or a denial of source identity/context. Existing operando/LTV and active techniques remain complete alternatives. No pretrained pickle checkpoint or downloaded source program will be executed.",
+  "stopping_rules":["No exact conflicting groups means this test does not establish even a recorded-input alias witness; do not promote near pairs into an equivalence class","A conflicting recorded group does not imply physical impossibility: first adjudicate noise, finite precision, different cell identity, acquisition delay, input replication and missing context","Absence of independent repeatability/timing bounds blocks physical/material/instrument claims; archive the useful data-audit result and identify missing measurement without building an unsupported winner"],
+  "resources":{"new_cpu_seconds":300,"wall_deadline_utc":"2026-10-30T08:35:00Z","memory_gib":2,"downloads_mib":128,"paid_spend":0,"outreach":false,"real_commerce":false},
+  "preservation":"Old science_recovery26-file evidence unchanged; all new acquisition failures, source metadata, range receipts, protocol versions and exposed data remain under science_recovery_next. Root agreement precedes candidate relation execution."
+}

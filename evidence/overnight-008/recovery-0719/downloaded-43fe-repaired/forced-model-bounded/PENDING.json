@@ -1,0 +1,39 @@
+{
+  "schema": "agi-alpha/trusted-experiment-run006/v2",
+  "run_id": "forced-model",
+  "command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+    "research/observability008/compile_petab_forcing.py",
+    "--source",
+    "research/observability008/boehm/source",
+    "--output",
+    "/workspace/scratch/557a27c9cfaf/downloaded-43fe-repaired/boehm"
+  ],
+  "requested_command": [
+    "python3",
+    "research/observability008/compile_petab_forcing.py",
+    "--source",
+    "research/observability008/boehm/source",
+    "--output",
+    "/workspace/scratch/557a27c9cfaf/downloaded-43fe-repaired/boehm"
+  ],
+  "normalized_command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+    "research/observability008/compile_petab_forcing.py",
+    "--source",
+    "research/observability008/boehm/source",
+    "--output",
+    "/workspace/scratch/557a27c9cfaf/downloaded-43fe-repaired/boehm"
+  ],
+  "reservation_created": true,
+  "cwd": "/workspace/scratch/557a27c9cfaf/downloaded-43fe-repaired/source",
+  "limits": {
+    "wall_seconds": 120,
+    "cpu_seconds": 60,
+    "memory_bytes": 2147483648,
+    "output_bytes": 33554432,
+    "storage_bytes": 67108864
+  },
+  "wrapper_sha256": "8a59559fd1d02af280719dabf6499295afd82f23a36a812d0d7c757dee82f6d5",
+  "state": "pending"
+}

@@ -1,0 +1,544 @@
+{
+  "schema": "agi-alpha-independent-NASA-coordinate-repair008/v1",
+  "source_sha256": "48cd04ae4bf6447d952c89e16c45d7ac2353bb3c105e3e6af9100f1fe5887ac1",
+  "protocol_sha256": "26e92db9b0f5b2195c3844db384b15921b7eaac9031dd8ebee6035771490c61c",
+  "result_sha256": "d621a760a606c22e65e256c51ea896e809a32db19370e4ccd7ee825cf711194a",
+  "verifier_source_sha256": "dd2dc7438bd5740ea082b011da40762cd342666b35d7ccab4fb83bfa89fd1693",
+  "checks": {
+    "old_manifest": true,
+    "protocol": true,
+    "source": true,
+    "result_identities": true,
+    "old_files_all_unchanged": true,
+    "explicit_coordinate_reference": true,
+    "target_centers": true,
+    "ramp0": true,
+    "ramp1": true,
+    "min_frozen_full_affine_preserved": true,
+    "min_old_field_transport": true,
+    "min_recorded_refit_rebuilds": true,
+    "min_common_mask": true,
+    "min_old_transported_metrics": true,
+    "min_old_transported_common_metrics": true,
+    "min_fixed_old_transform_metrics": true,
+    "min_fixed_old_transform_common_metrics": true,
+    "min_refit_metrics": true,
+    "min_refit_common_metrics": true,
+    "max_frozen_full_affine_preserved": true,
+    "max_old_field_transport": true,
+    "max_recorded_refit_rebuilds": true,
+    "max_common_mask": true,
+    "max_old_transported_metrics": true,
+    "max_old_transported_common_metrics": true,
+    "max_fixed_old_transform_metrics": true,
+    "max_fixed_old_transform_common_metrics": true,
+    "max_refit_metrics": true,
+    "max_refit_common_metrics": true,
+    "zero_plane_all_points": true
+  },
+  "all_checks_passed": true,
+  "ramps": [
+    {
+      "axis": 0,
+      "max_explicit_coordinate_ramp_error_mm": 3.552713678800501e-15,
+      "trailing_crop_mm": 0.019050400000001133
+    },
+    {
+      "axis": 1,
+      "max_explicit_coordinate_ramp_error_mm": 3.552713678800501e-15,
+      "trailing_crop_mm": 0.010710799999998244
+    }
+  ],
+  "rows": [
+    {
+      "side": "min",
+      "scores": {
+        "old_transported": {
+          "full_overlap": {
+            "reference_n": 548444,
+            "overlap_n": 512659,
+            "coverage": 0.9347517704633472,
+            "mae_mm": 0.015760507729030045,
+            "bias_mm": -0.009812281069943812,
+            "zero_plane_mae_mm_same_overlap": 0.0013829174340369717,
+            "strata": [
+              {
+                "reference_n": 2464,
+                "overlap_n": 673,
+                "coverage": 0.27313311688311687,
+                "mae_mm": 0.16860700483226762,
+                "zero_plane_mae_mm": 0.15506208203802674
+              },
+              {
+                "reference_n": 5383,
+                "overlap_n": 3185,
+                "coverage": 0.5916775032509753,
+                "mae_mm": 0.08672050468748327,
+                "zero_plane_mae_mm": 0.05686523720412858
+              },
+              {
+                "reference_n": 11425,
+                "overlap_n": 7058,
+                "coverage": 0.6177680525164114,
+                "mae_mm": 0.05401658757803987,
+                "zero_plane_mae_mm": 0.015355288655093233
+              },
+              {
+                "reference_n": 529172,
+                "overlap_n": 501743,
+                "coverage": 0.9481661917108237,
+                "mae_mm": 0.014566899259280662,
+                "zero_plane_mae_mm": 0.0006280404106914702
+              }
+            ]
+          },
+          "common_overlap": {
+            "reference_n": 548444,
+            "overlap_n": 512653,
+            "coverage": 0.9347408304220668,
+            "mae_mm": 0.01575479894646851,
+            "bias_mm": -0.009806502670389976,
+            "zero_plane_mae_mm_same_overlap": 0.0013826995429968415,
+            "strata": [
+              {
+                "reference_n": 2464,
+                "overlap_n": 673,
+                "coverage": 0.27313311688311687,
+                "mae_mm": 0.16860700483226762,
+                "zero_plane_mae_mm": 0.15506208203802674
+              },
+              {
+                "reference_n": 5383,
+                "overlap_n": 3185,
+                "coverage": 0.5916775032509753,
+                "mae_mm": 0.08672050468748327,
+                "zero_plane_mae_mm": 0.05686523720412858
+              },
+              {
+                "reference_n": 11425,
+                "overlap_n": 7052,
+                "coverage": 0.6172428884026259,
+                "mae_mm": 0.05363413039888167,
+                "zero_plane_mae_mm": 0.015351336830352813
+              },
+              {
+                "reference_n": 529172,
+                "overlap_n": 501743,
+                "coverage": 0.9481661917108237,
+                "mae_mm": 0.014566899259280662,
+                "zero_plane_mae_mm": 0.0006280404106914702
+              }
+            ]
+          }
+        },
+        "fixed_old_transform": {
+          "full_overlap": {
+            "reference_n": 548444,
+            "overlap_n": 515241,
+            "coverage": 0.9394596348943557,
+            "mae_mm": 0.017695108073645462,
+            "bias_mm": -0.011359653367772551,
+            "zero_plane_mae_mm_same_overlap": 0.0016613994163841663,
+            "strata": [
+              {
+                "reference_n": 2464,
+                "overlap_n": 1096,
+                "coverage": 0.4448051948051948,
+                "mae_mm": 0.21969826255853775,
+                "zero_plane_mae_mm": 0.19651661341916646
+              },
+              {
+                "reference_n": 5383,
+                "overlap_n": 3569,
+                "coverage": 0.663013189671187,
+                "mae_mm": 0.09932583073305275,
+                "zero_plane_mae_mm": 0.056924113707696275
+              },
+              {
+                "reference_n": 11425,
+                "overlap_n": 7477,
+                "coverage": 0.6544420131291029,
+                "mae_mm": 0.0622450093775723,
+                "zero_plane_mae_mm": 0.015616350233626139
+              },
+              {
+                "reference_n": 529172,
+                "overlap_n": 503099,
+                "coverage": 0.9507286855691534,
+                "mae_mm": 0.016013858223146202,
+                "zero_plane_mae_mm": 0.0006374754787232674
+              }
+            ]
+          },
+          "common_overlap": {
+            "reference_n": 548444,
+            "overlap_n": 512653,
+            "coverage": 0.9347408304220668,
+            "mae_mm": 0.015791336556669137,
+            "bias_mm": -0.009777746166139238,
+            "zero_plane_mae_mm_same_overlap": 0.0013826995429968415,
+            "strata": [
+              {
+                "reference_n": 2464,
+                "overlap_n": 673,
+                "coverage": 0.27313311688311687,
+                "mae_mm": 0.16873497188234818,
+                "zero_plane_mae_mm": 0.15506208203802674
+              },
+              {
+                "reference_n": 5383,
+                "overlap_n": 3185,
+                "coverage": 0.5916775032509753,
+                "mae_mm": 0.08728294435062513,
+                "zero_plane_mae_mm": 0.05686523720412858
+              },
+              {
+                "reference_n": 11425,
+                "overlap_n": 7052,
+                "coverage": 0.6172428884026259,
+                "mae_mm": 0.05379111099899734,
+                "zero_plane_mae_mm": 0.015351336830352813
+              },
+              {
+                "reference_n": 529172,
+                "overlap_n": 501743,
+                "coverage": 0.9481661917108237,
+                "mae_mm": 0.014598283047671044,
+                "zero_plane_mae_mm": 0.0006280404106914702
+              }
+            ]
+          }
+        },
+        "refit": {
+          "full_overlap": {
+            "reference_n": 548444,
+            "overlap_n": 515820,
+            "coverage": 0.9405153488779164,
+            "mae_mm": 0.017840806295699764,
+            "bias_mm": -0.011528609262264275,
+            "zero_plane_mae_mm_same_overlap": 0.0016643942078691826,
+            "strata": [
+              {
+                "reference_n": 2464,
+                "overlap_n": 1095,
+                "coverage": 0.44439935064935066,
+                "mae_mm": 0.22071756648539256,
+                "zero_plane_mae_mm": 0.19656600242975703
+              },
+              {
+                "reference_n": 5383,
+                "overlap_n": 3591,
+                "coverage": 0.6671001300390117,
+                "mae_mm": 0.10227857125726754,
+                "zero_plane_mae_mm": 0.056950601778840294
+              },
+              {
+                "reference_n": 11425,
+                "overlap_n": 7487,
+                "coverage": 0.6553172866520788,
+                "mae_mm": 0.06515200576534189,
+                "zero_plane_mae_mm": 0.015612203105153408
+              },
+              {
+                "reference_n": 529172,
+                "overlap_n": 503647,
+                "coverage": 0.9517642656829916,
+                "mae_mm": 0.01609437473388382,
+                "zero_plane_mae_mm": 0.0006391180171953744
+              }
+            ]
+          },
+          "common_overlap": {
+            "reference_n": 548444,
+            "overlap_n": 512653,
+            "coverage": 0.9347408304220668,
+            "mae_mm": 0.015357577508891792,
+            "bias_mm": -0.009353759834712917,
+            "zero_plane_mae_mm_same_overlap": 0.0013826995429968415,
+            "strata": [
+              {
+                "reference_n": 2464,
+                "overlap_n": 673,
+                "coverage": 0.27313311688311687,
+                "mae_mm": 0.16546489938883469,
+                "zero_plane_mae_mm": 0.15506208203802674
+              },
+              {
+                "reference_n": 5383,
+                "overlap_n": 3185,
+                "coverage": 0.5916775032509753,
+                "mae_mm": 0.08624855694846227,
+                "zero_plane_mae_mm": 0.05686523720412858
+              },
+              {
+                "reference_n": 11425,
+                "overlap_n": 7052,
+                "coverage": 0.6172428884026259,
+                "mae_mm": 0.055985303986311595,
+                "zero_plane_mae_mm": 0.015351336830352813
+              },
+              {
+                "reference_n": 529172,
+                "overlap_n": 501743,
+                "coverage": 0.9481661917108237,
+                "mae_mm": 0.014135205250068056,
+                "zero_plane_mae_mm": 0.0006280404106914702
+              }
+            ]
+          }
+        }
+      },
+      "raw_old_transport_points_without_new_reference": 0,
+      "note": "Main comparison intentionally conditions transported old overlap on repaired reference validity; this additional count exposes its uns cored old-only locations."
+    },
+    {
+      "side": "max",
+      "scores": {
+        "old_transported": {
+          "full_overlap": {
+            "reference_n": 548444,
+            "overlap_n": 531760,
+            "coverage": 0.969579391879572,
+            "mae_mm": 0.0065722481418982424,
+            "bias_mm": -0.0007120548033872909,
+            "zero_plane_mae_mm_same_overlap": 0.0014687247858988567,
+            "strata": [
+              {
+                "reference_n": 2464,
+                "overlap_n": 1015,
+                "coverage": 0.4119318181818182,
+                "mae_mm": 0.031829514884429845,
+                "zero_plane_mae_mm": 0.16051936759351132
+              },
+              {
+                "reference_n": 5383,
+                "overlap_n": 2784,
+                "coverage": 0.5171837265465354,
+                "mae_mm": 0.03650634939015229,
+                "zero_plane_mae_mm": 0.05853721554895228
+              },
+              {
+                "reference_n": 11425,
+                "overlap_n": 5738,
+                "coverage": 0.5022319474835886,
+                "mae_mm": 0.024977340055457594,
+                "zero_plane_mae_mm": 0.013522591184427606
+              },
+              {
+                "reference_n": 529172,
+                "overlap_n": 522223,
+                "coverage": 0.9868681638484273,
+                "mae_mm": 0.006161348811499519,
+                "zero_plane_mae_mm": 0.0007229128126061725
+              }
+            ]
+          },
+          "common_overlap": {
+            "reference_n": 548444,
+            "overlap_n": 531758,
+            "coverage": 0.9695757451991452,
+            "mae_mm": 0.00657176576419981,
+            "bias_mm": -0.0007115503848607423,
+            "zero_plane_mae_mm_same_overlap": 0.0014687291384347756,
+            "strata": [
+              {
+                "reference_n": 2464,
+                "overlap_n": 1015,
+                "coverage": 0.4119318181818182,
+                "mae_mm": 0.031829514884429845,
+                "zero_plane_mae_mm": 0.16051936759351132
+              },
+              {
+                "reference_n": 5383,
+                "overlap_n": 2784,
+                "coverage": 0.5171837265465354,
+                "mae_mm": 0.03650634939015229,
+                "zero_plane_mae_mm": 0.05853721554895228
+              },
+              {
+                "reference_n": 11425,
+                "overlap_n": 5738,
+                "coverage": 0.5022319474835886,
+                "mae_mm": 0.024977340055457594,
+                "zero_plane_mae_mm": 0.013522591184427606
+              },
+              {
+                "reference_n": 529172,
+                "overlap_n": 522221,
+                "coverage": 0.9868643843589608,
+                "mae_mm": 0.0061608560507740336,
+                "zero_plane_mae_mm": 0.000722914388321911
+              }
+            ]
+          }
+        },
+        "fixed_old_transform": {
+          "full_overlap": {
+            "reference_n": 548444,
+            "overlap_n": 534495,
+            "coverage": 0.9745662273632313,
+            "mae_mm": 0.007037267442137395,
+            "bias_mm": -0.001164704216515038,
+            "zero_plane_mae_mm_same_overlap": 0.0016053352245656994,
+            "strata": [
+              {
+                "reference_n": 2464,
+                "overlap_n": 1253,
+                "coverage": 0.5085227272727273,
+                "mae_mm": 0.04372780985520656,
+                "zero_plane_mae_mm": 0.1668831204949347
+              },
+              {
+                "reference_n": 5383,
+                "overlap_n": 2940,
+                "coverage": 0.5461638491547465,
+                "mae_mm": 0.04556160676085129,
+                "zero_plane_mae_mm": 0.05862957216324285
+              },
+              {
+                "reference_n": 11425,
+                "overlap_n": 6252,
+                "coverage": 0.5472210065645514,
+                "mae_mm": 0.033067729066366985,
+                "zero_plane_mae_mm": 0.013648885624403286
+              },
+              {
+                "reference_n": 529172,
+                "overlap_n": 524050,
+                "coverage": 0.9903207274761325,
+                "mae_mm": 0.0064228656611713085,
+                "zero_plane_mae_mm": 0.0007465610643839081
+              }
+            ]
+          },
+          "common_overlap": {
+            "reference_n": 548444,
+            "overlap_n": 531758,
+            "coverage": 0.9695757451991452,
+            "mae_mm": 0.006587219934887198,
+            "bias_mm": -0.0006888879965417434,
+            "zero_plane_mae_mm_same_overlap": 0.0014687291384347756,
+            "strata": [
+              {
+                "reference_n": 2464,
+                "overlap_n": 1015,
+                "coverage": 0.4119318181818182,
+                "mae_mm": 0.031571102717892055,
+                "zero_plane_mae_mm": 0.16051936759351132
+              },
+              {
+                "reference_n": 5383,
+                "overlap_n": 2784,
+                "coverage": 0.5171837265465354,
+                "mae_mm": 0.038440908137597374,
+                "zero_plane_mae_mm": 0.05853721554895228
+              },
+              {
+                "reference_n": 11425,
+                "overlap_n": 5738,
+                "coverage": 0.5022319474835886,
+                "mae_mm": 0.02530426944862713,
+                "zero_plane_mae_mm": 0.013522591184427606
+              },
+              {
+                "reference_n": 529172,
+                "overlap_n": 522221,
+                "coverage": 0.9868643843589608,
+                "mae_mm": 0.006163189229322056,
+                "zero_plane_mae_mm": 0.000722914388321911
+              }
+            ]
+          }
+        },
+        "refit": {
+          "full_overlap": {
+            "reference_n": 548444,
+            "overlap_n": 533846,
+            "coverage": 0.9733828795647322,
+            "mae_mm": 0.007101926928458283,
+            "bias_mm": -0.0012232941112286719,
+            "zero_plane_mae_mm_same_overlap": 0.0015914544339417213,
+            "strata": [
+              {
+                "reference_n": 2464,
+                "overlap_n": 1243,
+                "coverage": 0.5044642857142857,
+                "mae_mm": 0.04653418729216625,
+                "zero_plane_mae_mm": 0.16661064010603702
+              },
+              {
+                "reference_n": 5383,
+                "overlap_n": 2931,
+                "coverage": 0.5444919190042727,
+                "mae_mm": 0.047434396869321875,
+                "zero_plane_mae_mm": 0.05864861126471036
+              },
+              {
+                "reference_n": 11425,
+                "overlap_n": 6113,
+                "coverage": 0.535054704595186,
+                "mae_mm": 0.03380872714316897,
+                "zero_plane_mae_mm": 0.013619929397167828
+              },
+              {
+                "reference_n": 529172,
+                "overlap_n": 523559,
+                "coverage": 0.9893928628120914,
+                "mae_mm": 0.006470694462315429,
+                "zero_plane_mae_mm": 0.0007398150926036897
+              }
+            ]
+          },
+          "common_overlap": {
+            "reference_n": 548444,
+            "overlap_n": 531758,
+            "coverage": 0.9695757451991452,
+            "mae_mm": 0.006703764951123691,
+            "bias_mm": -0.0008069085706926427,
+            "zero_plane_mae_mm_same_overlap": 0.0014687291384347756,
+            "strata": [
+              {
+                "reference_n": 2464,
+                "overlap_n": 1015,
+                "coverage": 0.4119318181818182,
+                "mae_mm": 0.034203401145064836,
+                "zero_plane_mae_mm": 0.16051936759351132
+              },
+              {
+                "reference_n": 5383,
+                "overlap_n": 2784,
+                "coverage": 0.5171837265465354,
+                "mae_mm": 0.03975171946642684,
+                "zero_plane_mae_mm": 0.05853721554895228
+              },
+              {
+                "reference_n": 11425,
+                "overlap_n": 5738,
+                "coverage": 0.5022319474835886,
+                "mae_mm": 0.02668799786371874,
+                "zero_plane_mae_mm": 0.013522591184427606
+              },
+              {
+                "reference_n": 529172,
+                "overlap_n": 522221,
+                "coverage": 0.9868643843589608,
+                "mae_mm": 0.006254554435729012,
+                "zero_plane_mae_mm": 0.000722914388321911
+              }
+            ]
+          }
+        }
+      },
+      "raw_old_transport_points_without_new_reference": 0,
+      "note": "Main comparison intentionally conditions transported old overlap on repaired reference validity; this additional count exposes its uns cored old-only locations."
+    }
+  ],
+  "scope": "Fixed-saved-field coordinate/affine/arithmetic review only; no registration optimization or candidate imports",
+  "limits": [
+    "All data/results development exposed,alpha0; shared numerical libraries/host/model family, no external certification.",
+    "Relative origin and grid-consistency repair only, not physically calibrated alignment or height accuracy.",
+    "Old/new reference locations/cohorts differ; interpolation order and refit effects are separately disclosed.",
+    "No new feature cohort, baseline superiority, invention, customer tolerance, profit or earned-funding claim."
+  ],
+  "cpu_seconds": 3.591679828
+}

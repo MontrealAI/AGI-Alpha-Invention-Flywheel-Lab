@@ -1,0 +1,66 @@
+{
+  "schema": "agi-alpha/trusted-experiment-run006/v2",
+  "run_id": "nasa-data-9121",
+  "command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+    "verification/check_nasa_data_archive008.py",
+    "--archive",
+    "/workspace/scratch/557a27c9cfaf/nasa-data-9121.tar.gz",
+    "--commit",
+    "9121dd1f3bff267e84c3cd7002ecd2061ed73dbd",
+    "--expected-tree",
+    "/workspace/scratch/557a27c9cfaf/archive-expected.json",
+    "--output",
+    "/workspace/scratch/557a27c9cfaf/nasa-data-check-bound/artifacts"
+  ],
+  "requested_command": [
+    "python3",
+    "verification/check_nasa_data_archive008.py",
+    "--archive",
+    "/workspace/scratch/557a27c9cfaf/nasa-data-9121.tar.gz",
+    "--commit",
+    "9121dd1f3bff267e84c3cd7002ecd2061ed73dbd",
+    "--expected-tree",
+    "/workspace/scratch/557a27c9cfaf/archive-expected.json",
+    "--output",
+    "/workspace/scratch/557a27c9cfaf/nasa-data-check-bound/artifacts"
+  ],
+  "normalized_command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+    "verification/check_nasa_data_archive008.py",
+    "--archive",
+    "/workspace/scratch/557a27c9cfaf/nasa-data-9121.tar.gz",
+    "--commit",
+    "9121dd1f3bff267e84c3cd7002ecd2061ed73dbd",
+    "--expected-tree",
+    "/workspace/scratch/557a27c9cfaf/archive-expected.json",
+    "--output",
+    "/workspace/scratch/557a27c9cfaf/nasa-data-check-bound/artifacts"
+  ],
+  "reservation_created": true,
+  "cwd": "/workspace/scratch/557a27c9cfaf/lab",
+  "limits": {
+    "wall_seconds": 120,
+    "cpu_seconds": 30,
+    "memory_bytes": 268435456,
+    "output_bytes": 33554432,
+    "storage_bytes": 167772160
+  },
+  "wrapper_sha256": "8a59559fd1d02af280719dabf6499295afd82f23a36a812d0d7c757dee82f6d5",
+  "state": "complete",
+  "exit_code": 0,
+  "reason": null,
+  "error": null,
+  "wall_seconds": 0.6423549630007983,
+  "supervisor_cpu_seconds": 0.017863695000000006,
+  "waited_cpu_seconds": 0.584023,
+  "descendant_survivors": false,
+  "output_bytes": 132622783,
+  "logs": {
+    "stdout.log": "91197f0010acb5cf83fb117c84a4940f5c03e48277d45e801caf141c1a7e272f",
+    "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "scope": "Trusted commands only. Per-process CPU/AS/file limits plus process-group wall termination. Waited-child rusage may omit escaped/unwaited descendants; this is not a sandbox or exact full-group CPU meter.",
+  "aggregate_cpu_complete": false,
+  "complete_monetary_cost": null
+}

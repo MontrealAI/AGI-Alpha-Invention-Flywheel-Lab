@@ -1,0 +1,89 @@
+{
+  "scope": "DOCUMENTARY_DERIVATION_FROM_FROZEN_CONSTANTS",
+  "rows": [
+    {
+      "side": "min",
+      "original_reference_valid_center_indices": [
+        462.19319615371273,
+        457.71978041037045
+      ],
+      "original_CT_support_center_indices": [
+        463.03607348999344,
+        443.155108752467
+      ],
+      "old_actual_reference_spacing_mm": [
+        0.02586824034334764,
+        0.025859518599562363
+      ],
+      "old_frozen_parameters": {
+        "flip": -1,
+        "parameters": [
+          -153.2738336235987,
+          -2.7266153511441438,
+          -31.260675394988105
+        ],
+        "loss": 0.8734287618383584,
+        "success": true,
+        "nfev": 415
+      },
+      "A_CT_indices_per_mm": [
+        [
+          -34.52751652541387,
+          -17.391156887804687
+        ],
+        [
+          -17.38529328005667,
+          34.539161759702246
+        ]
+      ],
+      "b_CT_indices": [
+        1078.9736692304427,
+        210.93537816434159
+      ],
+      "formula": "CT_index=A@[target_y_mm,target_x_mm]+b; no repaired-validity recentering"
+    },
+    {
+      "side": "max",
+      "original_reference_valid_center_indices": [
+        462.19319615371273,
+        457.71978041037045
+      ],
+      "original_CT_support_center_indices": [
+        463.03607348999344,
+        443.155108752467
+      ],
+      "old_actual_reference_spacing_mm": [
+        0.02586824034334764,
+        0.025859518599562363
+      ],
+      "old_frozen_parameters": {
+        "flip": 1,
+        "parameters": [
+          26.942929602908674,
+          -3.553822887459675,
+          -0.38642622711025204
+        ],
+        "loss": 0.32149511635868255,
+        "success": true,
+        "nfev": 233
+      },
+      "A_CT_indices_per_mm": [
+        [
+          34.461496991259125,
+          -17.521701779798914
+        ],
+        [
+          17.51579415749539,
+          34.47311995887383
+        ]
+      ],
+      "b_CT_indices": [
+        254.85039759979816,
+        -174.69042760775062
+      ],
+      "formula": "CT_index=A@[target_y_mm,target_x_mm]+b; no repaired-validity recentering"
+    }
+  ],
+  "cpu_seconds": 0.033461765000000004,
+  "source_sha256": "ce060f769c7e91ee619eda546dfbbb46102d2afa52683bb007856e104ff91aad"
+}

@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "/workspace/scratch/557a27c9cfaf/manufacturing_recovery/replay.py", line 84, in <module>
+    if __name__=='__main__':main()
+                            ^^^^^^
+  File "/workspace/scratch/557a27c9cfaf/manufacturing_recovery/replay.py", line 59, in main
+    if local is not None:checked_copy(local,stage/'data'/name,size,digest)
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/557a27c9cfaf/manufacturing_recovery/replay.py", line 14, in checked_copy
+    if size is not None and source.stat().st_size!=size:raise ValueError('size changed: '+str(source))
+                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: size changed: /workspace/scratch/557a27c9cfaf/manufacturing_recovery/DATA_LICENSE.md

@@ -1,0 +1,45 @@
+{
+  "id": "recovery-reservation/NASA-physical-coordinate-repair-r1",
+  "pool": "experiment",
+  "conservative_budget_charge_CPU_seconds": 160,
+  "charge_is_measured_cost": false,
+  "origin": {
+    "authority": "Integration owner direct prospective task2026-10-30, within original overnight allocation; separate from the closed600CPU cycle"
+  },
+  "purpose": "Repair the independently verified physical-coordinate defect before publishing the metrology baseline",
+  "known_defect": {
+    "default_zoom_center_grid_spacing_mm": [
+      0.02586824,
+      0.02585952
+    ],
+    "nominal_grid_spacing_mm": 0.0258478,
+    "near_edge_discrepancy_micrometers": [
+      19.05,
+      10.71
+    ]
+  },
+  "limits": {
+    "CPU_seconds": 160,
+    "additional_download_bytes": 0,
+    "wall_minutes": 20,
+    "latest_end_utc": "2026-10-30T08:28:00Z",
+    "worker_memory_bytes": 2147483648
+  },
+  "execution_gate": "Builder freezes repair protocol before execution; preserve all47 old outputs and the prior closed-cycle charges",
+  "required_controls": [
+    "Explicit physical sampling",
+    "Identical plane",
+    "Common overlap",
+    "All mask changes reported"
+  ],
+  "claim_limits": [
+    "No retroactive acceptance",
+    "No new flagship or superiority claim",
+    "No routine-fix-as-mission-success claim",
+    "Original time/resource/error budgets unchanged"
+  ],
+  "observed_CPU_seconds": null,
+  "refund_CPU_seconds": 0,
+  "new_spending_USD": 0,
+  "qualified_simulated_commercial_earnings_microUSD": 0
+}

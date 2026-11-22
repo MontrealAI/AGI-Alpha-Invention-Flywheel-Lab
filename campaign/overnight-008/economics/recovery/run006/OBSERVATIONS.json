@@ -1,0 +1,61 @@
+{
+  "schema": "agi-alpha/event21-failure-event22-observations008/v1",
+  "observations": [
+    {
+      "path": "downloaded-56dc-xct-bound/RECEIPT.json",
+      "file_sha256": "7b3f20f6146abcb359fe681e456b5bc8c99773d34dc0a5eb4410d133ecdd8b69",
+      "canonical_semantic_sha256": "5802035bc60777aaf7c73232666f3c1067748d8af1dfc5d64c6bbfc9eba0a759",
+      "state": "failed",
+      "limits": {
+        "wall_seconds": 1200,
+        "cpu_seconds": 900,
+        "memory_bytes": 2147483648,
+        "output_bytes": 134217728,
+        "storage_bytes": 536870912
+      },
+      "reported_waited_CPU_seconds": 2.525127,
+      "full_group_CPU_attribution_complete": false,
+      "reservation_covered_by_event": 21,
+      "additional_charge_for_observation": 0
+    },
+    {
+      "path": "downloaded-56dc-xct-direct-bound/RECEIPT.json",
+      "file_sha256": "9597e54312bb4f3f7996783042873107d5273472fe43f8076f76244aa416bc94",
+      "canonical_semantic_sha256": "fbc344fbe490f7a856ef1fc0f6fb0ae278660aeb6d847416681d20c175bd2106",
+      "state": "complete",
+      "limits": {
+        "wall_seconds": 1200,
+        "cpu_seconds": 900,
+        "memory_bytes": 2147483648,
+        "output_bytes": 67108864,
+        "storage_bytes": 134217728
+      },
+      "reported_waited_CPU_seconds": 25.298156000000002,
+      "full_group_CPU_attribution_complete": false,
+      "reservation_covered_by_event": 22,
+      "additional_charge_for_observation": 0
+    }
+  ],
+  "latest_actual_replay": {
+    "path": "downloaded-56dc-xct-direct/REPLAY_RECEIPT.json",
+    "file_sha256": "cdf64b95af7ec5eeb3b62f293fc34ed1441e69abbcc1e90c3344e7268c5c2606",
+    "status": "COMPLETED",
+    "separate_report_status": "FULL120_MODEL_OBSTRUCTION_VERIFIED",
+    "child_CPU_seconds": 25.175004,
+    "scope": "EXPOSED_DEVELOPMENT_NEW_RECOVERY_EDITION",
+    "candidate_source_sha256": "b7a7bbe93cf7a43876a8c2168384cd78573a9f3bbc19be71114edb5e93466fc5",
+    "separate_verifier_sha256": "fa2cd11e61a70ec9ab03f70817d51d01fd02377a82b8ac9be03b41ea87ba172e"
+  },
+  "archive_download": {
+    "source_file": "source-56dc-download.json",
+    "source_file_sha256": "69990c238574b065beb3c50795bb2e59ddb79c52c9be50a572217b8b801f4aae",
+    "url": "https://codeload.github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/tar.gz/56dc5a4490ecdd0f5a317908c33b5acfc6dc0f54",
+    "bytes": 109073331,
+    "sha256": "c94264b619dce9769e8ec8fd3b0ac72356596702c98a2ff2ed69a657a6553b6d",
+    "wall_seconds": 9.289504547999968
+  },
+  "all_network_total_bytes": null,
+  "duplicate_archive_paths_not_assumed_distinct_transfers": true,
+  "actual_full_view_obstruction_replay_is_not_commercial_success": true,
+  "no_nested_CPU_double_charge_or_refund": true
+}

@@ -1,0 +1,435 @@
+{
+  "schema": "agi-alpha-independent-NASA-metric-review008/v1",
+  "scope": "Exposed frozen saved-array arithmetic/coordinate audit, no candidate import or segmentation/registration reoptimization",
+  "manifest_sha256": "60a275fcf18a4a01e44fed5ac12c6260052125bdc214eaa64f4818ee549b9033",
+  "verifier_source_sha256": "e5ec54df820eb515b6591d81bf67cc02eec68a0acd171da9c7129e1281a18674",
+  "checks": {
+    "pinned_manifest": true,
+    "file_ACQUIRE.json": true,
+    "file_ARRAY_CHECK.json": true,
+    "file_CHRONOLOGY.json": true,
+    "file_INTAKE.json": true,
+    "file_ORDINARY_RESULT.json": true,
+    "file_PLANE_COMPARATOR.json": true,
+    "file_PR12_REVIEW_RECOVERY.json": true,
+    "file_PROTOCOL.json": true,
+    "file_REFINED_RESULT.json": true,
+    "file_REPORT.md": true,
+    "file_REPORT_DRAFT_CORRECTION.json": true,
+    "file_REPRODUCE.md": true,
+    "file_RESOURCE_LEDGER.json": true,
+    "file_SENSITIVITY_RESULT.json": true,
+    "file_SOURCES.json": true,
+    "file_STRATIFIED_COVERAGE.json": true,
+    "file_TTT_AM_315400_low_res.tif": true,
+    "file_TTT_AM_315400_profilometry.zip": true,
+    "file_acquire.py": true,
+    "file_check_arrays.py": true,
+    "file_ct.npy": true,
+    "file_ct_max_axis0.png": true,
+    "file_ct_max_axis1.png": true,
+    "file_ct_max_axis2.png": true,
+    "file_disk_profilometry_top_height_metadata.csv": true,
+    "file_disk_profilometry_top_optical_metadata.csv": true,
+    "file_intake.py": true,
+    "file_intake_v1_executed.py": true,
+    "file_ordinary_baseline.py": true,
+    "file_ordinary_comparison.png": true,
+    "file_ordinary_depth_max.npz": true,
+    "file_ordinary_depth_min.npz": true,
+    "file_ordinary_refined.py": true,
+    "file_ordinary_registered_max.npz": true,
+    "file_ordinary_registered_min.npz": true,
+    "file_ordinary_run.log": true,
+    "file_plane_comparator.py": true,
+    "file_profile.npy": true,
+    "file_profile_at_ct_spacing.npz": true,
+    "file_profile_texture.png": true,
+    "file_refined_comparison.png": true,
+    "file_refined_max.npz": true,
+    "file_refined_min.npz": true,
+    "file_refined_run.log": true,
+    "file_sensitivity.py": true,
+    "file_sensitivity_run.log": true,
+    "file_sensitivity_syntax_failure.log": true,
+    "native_array_contracts": true,
+    "source_TIFF_contract": true,
+    "native_profile_bits_match_source_TIFF": true,
+    "finite_count_matches_intake": true,
+    "all_values_at_decimal_10um_centroids": true,
+    "CT_header_spacing": true,
+    "CT_header_stack": true,
+    "resampled_reference_shape": true,
+    "saved_reference_matches_documented_resampling": true,
+    "valid_reference_is_finite": true,
+    "histogram_count": true,
+    "ordinary_threshold_is_full_volume_Otsu": true,
+    "zero_plane_receipt_reproduces": true
+  },
+  "all_reported_math_and_reconstruction_checks_pass": true,
+  "quantization": {
+    "finite_native_values": 6698824,
+    "zero_native_values": 5943986,
+    "zero_fraction": 0.8873178336973774,
+    "stored_decimal_centroid_equal_count": 6698824,
+    "grid_mm": 0.01,
+    "max_scaled_centroid_rounding_residual": 7.105427357601002e-15,
+    "scope": "Consistency with10um decimal-level exported quantization only; rounding rule and total physical error remain unknown."
+  },
+  "coordinate_ramp_witnesses": [
+    {
+      "axis": 0,
+      "native_count": 3259,
+      "output_count": 933,
+      "nominal_output_spacing_mm": 0.0258478,
+      "effective_zoom_center_spacing_mm": 0.02586824034334764,
+      "far_endpoint_discrepancy_mm": 0.019050400000001133,
+      "direct_ramp_end_matches_native_span": true
+    },
+    {
+      "axis": 1,
+      "native_count": 3195,
+      "output_count": 915,
+      "nominal_output_spacing_mm": 0.0258478,
+      "effective_zoom_center_spacing_mm": 0.025859518599562363,
+      "far_endpoint_discrepancy_mm": 0.010710799999998244,
+      "direct_ramp_end_matches_native_span": true
+    }
+  ],
+  "nominal_target_spacing_inconsistent_with_zoom_center_grid": true,
+  "rows": [
+    {
+      "version": "v1",
+      "side": "min",
+      "record_sha256": "28f56fda49520b422a26473632ca5dee3ce04dd00f0399948b6595d736ac10e5",
+      "overlap": 528369,
+      "coverage": 0.9646188308878701,
+      "MAE_mm": 0.019159971695580376,
+      "zero_plane_MAE_same_overlap_mm": 0.001877843874392108,
+      "zero_plane_wins_primary": true,
+      "strata": [
+        {
+          "reference_interval_mm": [
+            "-inf",
+            "-0.1"
+          ],
+          "all_reference_pixels": 2446,
+          "overlap_pixels": 1114,
+          "coverage": 0.455437448896157,
+          "MAE_mm": 0.13537442901087424,
+          "zero_plane_MAE_mm": 0.18441577890943783
+        },
+        {
+          "reference_interval_mm": [
+            "-0.1",
+            "-0.03"
+          ],
+          "all_reference_pixels": 5402,
+          "overlap_pixels": 4099,
+          "coverage": 0.7587930396149575,
+          "MAE_mm": 0.09917492455156432,
+          "zero_plane_MAE_mm": 0.05652748667194626
+        },
+        {
+          "reference_interval_mm": [
+            "-0.03",
+            "-0.01"
+          ],
+          "all_reference_pixels": 11103,
+          "overlap_pixels": 9825,
+          "coverage": 0.8848959740610646,
+          "MAE_mm": 0.08090990210768317,
+          "zero_plane_MAE_mm": 0.015936978375503945
+        },
+        {
+          "reference_interval_mm": [
+            "-0.01",
+            "inf"
+          ],
+          "all_reference_pixels": 528798,
+          "overlap_pixels": 513331,
+          "coverage": 0.970750645804258,
+          "MAE_mm": 0.01708696760366926,
+          "zero_plane_MAE_mm": 0.0007762405386698561
+        }
+      ],
+      "checks": {
+        "mask_subset_of_reference": true,
+        "finite_predictions_on_overlap": true,
+        "overlap_count_matches": true,
+        "coverage_matches": true,
+        "MAE_matches": true,
+        "bias_matches": true,
+        "RMS_matches": true,
+        "reported_rigid_transform_rebuilds_predictions": true,
+        "overlap_rebuilds_from_source_support_only": true,
+        "stratum0_counts_and_MAE": true,
+        "stratum0_coverage": true,
+        "stratum1_counts_and_MAE": true,
+        "stratum1_coverage": true,
+        "stratum2_counts_and_MAE": true,
+        "stratum2_coverage": true,
+        "stratum3_counts_and_MAE": true,
+        "stratum3_coverage": true
+      }
+    },
+    {
+      "version": "v1",
+      "side": "max",
+      "record_sha256": "2e718a42c9a7bbce8ed35cb7f71cc9b02030490d2286cc6a38a83eb59cab93d3",
+      "overlap": 533184,
+      "coverage": 0.9734093535542739,
+      "MAE_mm": 0.009655803257374584,
+      "zero_plane_MAE_same_overlap_mm": 0.0017240007790560294,
+      "zero_plane_wins_primary": true,
+      "strata": [
+        {
+          "reference_interval_mm": [
+            "-inf",
+            "-0.1"
+          ],
+          "all_reference_pixels": 2446,
+          "overlap_pixels": 1242,
+          "coverage": 0.5077677841373671,
+          "MAE_mm": 0.12453713016387356,
+          "zero_plane_MAE_mm": 0.1564319961537522
+        },
+        {
+          "reference_interval_mm": [
+            "-0.1",
+            "-0.03"
+          ],
+          "all_reference_pixels": 5402,
+          "overlap_pixels": 3758,
+          "coverage": 0.6956682710107368,
+          "MAE_mm": 0.05916152569497835,
+          "zero_plane_MAE_mm": 0.057896737546078395
+        },
+        {
+          "reference_interval_mm": [
+            "-0.03",
+            "-0.01"
+          ],
+          "all_reference_pixels": 11103,
+          "overlap_pixels": 7863,
+          "coverage": 0.7081869764928398,
+          "MAE_mm": 0.022199567418181784,
+          "zero_plane_MAE_mm": 0.015340945320305135
+        },
+        {
+          "reference_interval_mm": [
+            "-0.01",
+            "inf"
+          ],
+          "all_reference_pixels": 528798,
+          "overlap_pixels": 520321,
+          "coverage": 0.9839693039686231,
+          "MAE_mm": 0.00883447040604855,
+          "zero_plane_MAE_mm": 0.000743232157467271
+        }
+      ],
+      "checks": {
+        "mask_subset_of_reference": true,
+        "finite_predictions_on_overlap": true,
+        "overlap_count_matches": true,
+        "coverage_matches": true,
+        "MAE_matches": true,
+        "bias_matches": true,
+        "RMS_matches": true,
+        "reported_rigid_transform_rebuilds_predictions": true,
+        "overlap_rebuilds_from_source_support_only": true,
+        "stratum0_counts_and_MAE": true,
+        "stratum0_coverage": true,
+        "stratum1_counts_and_MAE": true,
+        "stratum1_coverage": true,
+        "stratum2_counts_and_MAE": true,
+        "stratum2_coverage": true,
+        "stratum3_counts_and_MAE": true,
+        "stratum3_coverage": true
+      }
+    },
+    {
+      "version": "refined",
+      "side": "min",
+      "record_sha256": "7de3a0b34128a9e3a7ce69d7ba319d90128d3dc45eb1d3d342d54b52c04b5622",
+      "overlap": 514574,
+      "coverage": 0.9394339378072804,
+      "MAE_mm": 0.01767962306874066,
+      "zero_plane_MAE_same_overlap_mm": 0.0016544856039855842,
+      "zero_plane_wins_primary": true,
+      "strata": [
+        {
+          "reference_interval_mm": [
+            "-inf",
+            "-0.1"
+          ],
+          "all_reference_pixels": 2446,
+          "overlap_pixels": 1068,
+          "coverage": 0.4366312346688471,
+          "MAE_mm": 0.22408952810400187,
+          "zero_plane_MAE_mm": 0.19768330999933842
+        },
+        {
+          "reference_interval_mm": [
+            "-0.1",
+            "-0.03"
+          ],
+          "all_reference_pixels": 5402,
+          "overlap_pixels": 3573,
+          "coverage": 0.661421695668271,
+          "MAE_mm": 0.09903749590251015,
+          "zero_plane_MAE_mm": 0.05696374717972194
+        },
+        {
+          "reference_interval_mm": [
+            "-0.03",
+            "-0.01"
+          ],
+          "all_reference_pixels": 11103,
+          "overlap_pixels": 7209,
+          "coverage": 0.6492839773034315,
+          "MAE_mm": 0.06298056114393855,
+          "zero_plane_MAE_mm": 0.015825561420646422
+        },
+        {
+          "reference_interval_mm": [
+            "-0.01",
+            "inf"
+          ],
+          "all_reference_pixels": 528798,
+          "overlap_pixels": 502724,
+          "coverage": 0.9506919466412506,
+          "MAE_mm": 0.01601327747792578,
+          "zero_plane_MAE_mm": 0.0006417269896631116
+        }
+      ],
+      "checks": {
+        "mask_subset_of_reference": true,
+        "finite_predictions_on_overlap": true,
+        "overlap_count_matches": true,
+        "coverage_matches": true,
+        "MAE_matches": true,
+        "bias_matches": true,
+        "RMS_matches": true,
+        "reported_rigid_transform_rebuilds_predictions": true,
+        "overlap_rebuilds_from_source_support_only": true,
+        "stratum0_counts_and_MAE": true,
+        "stratum0_coverage": true,
+        "stratum1_counts_and_MAE": true,
+        "stratum1_coverage": true,
+        "stratum2_counts_and_MAE": true,
+        "stratum2_coverage": true,
+        "stratum3_counts_and_MAE": true,
+        "stratum3_coverage": true
+      }
+    },
+    {
+      "version": "refined",
+      "side": "max",
+      "record_sha256": "9406cfac0e094d57488500b7606dbced795c5b7f0702b772936431125a314384",
+      "overlap": 533826,
+      "coverage": 0.9745814232431278,
+      "MAE_mm": 0.007055421433801198,
+      "zero_plane_MAE_same_overlap_mm": 0.0016072370245225648,
+      "zero_plane_wins_primary": true,
+      "strata": [
+        {
+          "reference_interval_mm": [
+            "-inf",
+            "-0.1"
+          ],
+          "all_reference_pixels": 2446,
+          "overlap_pixels": 1260,
+          "coverage": 0.5151267375306623,
+          "MAE_mm": 0.044043293201269144,
+          "zero_plane_MAE_mm": 0.16725598146804077
+        },
+        {
+          "reference_interval_mm": [
+            "-0.1",
+            "-0.03"
+          ],
+          "all_reference_pixels": 5402,
+          "overlap_pixels": 2925,
+          "coverage": 0.5414661236579045,
+          "MAE_mm": 0.04759048723904989,
+          "zero_plane_MAE_mm": 0.05841928997083639
+        },
+        {
+          "reference_interval_mm": [
+            "-0.03",
+            "-0.01"
+          ],
+          "all_reference_pixels": 11103,
+          "overlap_pixels": 5975,
+          "coverage": 0.5381428442763218,
+          "MAE_mm": 0.0357621773233243,
+          "zero_plane_MAE_mm": 0.013885008685810763
+        },
+        {
+          "reference_interval_mm": [
+            "-0.01",
+            "inf"
+          ],
+          "all_reference_pixels": 528798,
+          "overlap_pixels": 523666,
+          "coverage": 0.9902949708584374,
+          "MAE_mm": 0.00641246838291139,
+          "zero_plane_MAE_mm": 0.0007512479808516032
+        }
+      ],
+      "checks": {
+        "mask_subset_of_reference": true,
+        "finite_predictions_on_overlap": true,
+        "overlap_count_matches": true,
+        "coverage_matches": true,
+        "MAE_matches": true,
+        "bias_matches": true,
+        "RMS_matches": true,
+        "reported_rigid_transform_rebuilds_predictions": true,
+        "overlap_rebuilds_from_source_support_only": true,
+        "stratum0_counts_and_MAE": true,
+        "stratum0_coverage": true,
+        "stratum1_counts_and_MAE": true,
+        "stratum1_coverage": true,
+        "stratum2_counts_and_MAE": true,
+        "stratum2_coverage": true,
+        "stratum3_counts_and_MAE": true,
+        "stratum3_coverage": true
+      }
+    }
+  ],
+  "common_overlap_diagnostic": {
+    "min": {
+      "common_pixels": 507902,
+      "v1_MAE_mm": 0.01726432094733911,
+      "refined_MAE_mm": 0.01638603838184585,
+      "zero_plane_MAE_mm": 0.0015344850612766317
+    },
+    "max": {
+      "common_pixels": 528803,
+      "v1_MAE_mm": 0.009389545414340323,
+      "refined_MAE_mm": 0.006536458570538949,
+      "zero_plane_MAE_mm": 0.0014762201276817158
+    }
+  },
+  "findings": [
+    "Featureless zero plane beats all-field MAE on identical overlaps; this primary endpoint cannot establish pore identification.",
+    "Deep diagnostic stratum loses nearly half of original reference points despite high aggregate coverage.",
+    "Default endpoint-aligned zoom does not produce exactly the declared CT-spacing grid after output-count rounding; ramp witness measures only processing XY discrepancy, not height impact or physical uncertainty.",
+    "Both reference-assisted registration and version/face selection are exposed; no protected/reference-independent accuracy is established.",
+    "Exported10um level quantization and nominal voxel spacing are not calibrated error envelopes or hard accuracy bounds."
+  ],
+  "limits": [
+    "No true pore labels, internal geometry, unseen specimens or independent calibration/registration uncertainty.",
+    "Diagnostic depth strata and common-overlap analysis do not replace the frozen primary endpoint or create a new customer cohort.",
+    "The grid mismatch does not establish how much of observed height error it caused; candidate remains unchanged.",
+    "No method novelty, strongest-complete-baseline superiority, demand, profit, earned funds or mission success.",
+    "Procedural separate reviewer sharing numerical libraries/host/model family; alpha0 and no external certification."
+  ],
+  "resources": {
+    "cpu_seconds": 3.1108314829999997,
+    "wall_seconds": 3.111926354999923,
+    "peak_rss_kib": 266872
+  }
+}

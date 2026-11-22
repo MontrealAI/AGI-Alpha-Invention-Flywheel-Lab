@@ -1,0 +1,129 @@
+{
+  "scope": "EXPOSED_DEVELOPMENT_STRONG_SIMPLE_COMPARATOR",
+  "method": "Predict height0 everywhere relative to the supplied fitted plane; no pore identification",
+  "source_sha256": "ce921b4bd8a90c753cfe3987df7bf7ae19243515613810bb94df5412024949c4",
+  "results": [
+    {
+      "scope": "all_reference_valid",
+      "n": 547749,
+      "coverage": 1.0,
+      "mae_mm": 0.002527168319804337,
+      "depth_strata": [
+        {
+          "reference_interval_mm": [
+            "-inf",
+            "-0.1"
+          ],
+          "n": 2446,
+          "mae_mm": 0.19097435002883514
+        },
+        {
+          "reference_interval_mm": [
+            "-0.1",
+            "-0.03"
+          ],
+          "n": 5402,
+          "mae_mm": 0.05730246927607568
+        },
+        {
+          "reference_interval_mm": [
+            "-0.03",
+            "-0.01"
+          ],
+          "n": 11103,
+          "mae_mm": 0.016163376561869405
+        },
+        {
+          "reference_interval_mm": [
+            "-0.01",
+            "inf"
+          ],
+          "n": 528798,
+          "mae_mm": 0.0008096111385409516
+        }
+      ]
+    },
+    {
+      "scope": "v1_max_overlap",
+      "n": 533184,
+      "coverage": 0.9734093535542739,
+      "mae_mm": 0.0017240007790560294,
+      "depth_strata": [
+        {
+          "reference_interval_mm": [
+            "-inf",
+            "-0.1"
+          ],
+          "n": 1242,
+          "mae_mm": 0.15643199615375222
+        },
+        {
+          "reference_interval_mm": [
+            "-0.1",
+            "-0.03"
+          ],
+          "n": 3758,
+          "mae_mm": 0.057896737546078395
+        },
+        {
+          "reference_interval_mm": [
+            "-0.03",
+            "-0.01"
+          ],
+          "n": 7863,
+          "mae_mm": 0.015340945320305135
+        },
+        {
+          "reference_interval_mm": [
+            "-0.01",
+            "inf"
+          ],
+          "n": 520321,
+          "mae_mm": 0.0007432321574672709
+        }
+      ]
+    },
+    {
+      "scope": "refined_max_overlap",
+      "n": 533826,
+      "coverage": 0.9745814232431278,
+      "mae_mm": 0.001607237024522565,
+      "depth_strata": [
+        {
+          "reference_interval_mm": [
+            "-inf",
+            "-0.1"
+          ],
+          "n": 1260,
+          "mae_mm": 0.16725598146804077
+        },
+        {
+          "reference_interval_mm": [
+            "-0.1",
+            "-0.03"
+          ],
+          "n": 2925,
+          "mae_mm": 0.0584192899708364
+        },
+        {
+          "reference_interval_mm": [
+            "-0.03",
+            "-0.01"
+          ],
+          "n": 5975,
+          "mae_mm": 0.013885008685810763
+        },
+        {
+          "reference_interval_mm": [
+            "-0.01",
+            "inf"
+          ],
+          "n": 523666,
+          "mae_mm": 0.0007512479808516031
+        }
+      ]
+    }
+  ],
+  "cpu_seconds": 0.04551989000000001,
+  "decision": "Whole-field MAE alone cannot qualify consequential pore support if a featureless plane wins; keep the original endpoint and report the limitation, no retroactive success threshold."
+}

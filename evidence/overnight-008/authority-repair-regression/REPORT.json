@@ -1,0 +1,75 @@
+{
+  "schema": "agi-alpha-authority-repair-development-regression/v1",
+  "lane": "EXPOSED DEVELOPMENT ONLY; negative cases are deliberate isolated copies, not legitimate retained verification",
+  "driver_sha256": "32e34d5d9ab5195968513a561d599ad1f42be5897d2a281707aadca1601cbaa6",
+  "verifier_source_sha256": "962e767a0a64bc6e4100c5c19eda80cc6edc0fc408209fba1d511ac66ded2b9c",
+  "authority_sha256": "8c2593ed507d605e696e97b7ff72047cf17fbf8ec2e94a22557c2bd3d67ccee7",
+  "accepted_receipt_sha256": "84e93b689b5903384ef457593d490c4239ee69816c48b745f612367d300b69ea",
+  "records": [
+    {
+      "name": "forged_receipt",
+      "expected_error": "RECEIPT_NOT_AUTHORIZED_FOR_ARTIFACT",
+      "observed_error": "ValueError: RECEIPT_NOT_AUTHORIZED_FOR_ARTIFACT",
+      "memory_records": 0,
+      "passed": true,
+      "wall_seconds": 0.0003252790047554299,
+      "receipt_sha256": "7716ab79d1fc3a863f4fceec7a333a1df1d383c5d7485251d2f4a79e39147a35"
+    },
+    {
+      "name": "changed_receipt_bytes",
+      "expected_error": "RECEIPT_NOT_AUTHORIZED_FOR_ARTIFACT",
+      "observed_error": "ValueError: RECEIPT_NOT_AUTHORIZED_FOR_ARTIFACT",
+      "memory_records": 0,
+      "passed": true,
+      "wall_seconds": 0.0002705079969018698,
+      "receipt_sha256": "0dcbee47cdcdf1b9a6fa2ceedb01b28f2d01b5dc210b087391755512d937421f"
+    },
+    {
+      "name": "changed_authority_bytes",
+      "expected_error": "PINNED_VERIFIER_AUTHORITY_REQUIRED",
+      "observed_error": "ValueError: PINNED_VERIFIER_AUTHORITY_REQUIRED",
+      "memory_records": 0,
+      "passed": true,
+      "wall_seconds": 0.004635578996385448,
+      "receipt_sha256": "84e93b689b5903384ef457593d490c4239ee69816c48b745f612367d300b69ea"
+    },
+    {
+      "name": "changed_verifier_source",
+      "expected_error": "VERIFIER_SOURCE_IDENTITY",
+      "observed_error": "ValueError: VERIFIER_SOURCE_IDENTITY",
+      "memory_records": 0,
+      "passed": true,
+      "wall_seconds": 0.0004307530034566298,
+      "receipt_sha256": "84e93b689b5903384ef457593d490c4239ee69816c48b745f612367d300b69ea"
+    },
+    {
+      "name": "changed_interpreter_source",
+      "expected_error": "AUTHORITY_SOURCE_OR_TASK_MISMATCH",
+      "observed_error": "ValueError: AUTHORITY_SOURCE_OR_TASK_MISMATCH",
+      "memory_records": 0,
+      "passed": true,
+      "wall_seconds": 0.0002339469938306138,
+      "receipt_sha256": "84e93b689b5903384ef457593d490c4239ee69816c48b745f612367d300b69ea"
+    },
+    {
+      "name": "old_artifact_new_receipt",
+      "expected_error": "RECEIPT_NOT_AUTHORIZED_FOR_ARTIFACT",
+      "observed_error": "ValueError: RECEIPT_NOT_AUTHORIZED_FOR_ARTIFACT",
+      "memory_records": 0,
+      "passed": true,
+      "wall_seconds": 0.001480898994486779,
+      "receipt_sha256": "84e93b689b5903384ef457593d490c4239ee69816c48b745f612367d300b69ea"
+    },
+    {
+      "name": "valid_frozen_receipt",
+      "expected_error": null,
+      "observed_error": null,
+      "memory_records": 1,
+      "passed": true,
+      "wall_seconds": 0.3247798980009975,
+      "receipt_sha256": "84e93b689b5903384ef457593d490c4239ee69816c48b745f612367d300b69ea"
+    }
+  ],
+  "passed": true,
+  "protection_scope": "Runtime rejects unlisted/mutated receipt/source/authority under the frozen driver. Shared writable host and builder control of future source remain procedural trust boundaries; no external certification."
+}

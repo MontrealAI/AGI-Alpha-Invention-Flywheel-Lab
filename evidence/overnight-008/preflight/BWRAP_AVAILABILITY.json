@@ -1,0 +1,31 @@
+{
+  "command": [
+    "bwrap",
+    "--unshare-all",
+    "--die-with-parent",
+    "--new-session",
+    "--ro-bind",
+    "/usr",
+    "/usr",
+    "--ro-bind",
+    "/bin",
+    "/bin",
+    "--ro-bind",
+    "/lib",
+    "/lib",
+    "--proc",
+    "/proc",
+    "--dev",
+    "/dev",
+    "--tmpfs",
+    "/tmp",
+    "--",
+    "/bin/true"
+  ],
+  "returncode": 1,
+  "stdout": "",
+  "stderr": "bwrap: loopback: Failed to create NETLINK_ROUTE socket: Operation not permitted\n",
+  "wall_seconds": 0.004828355988138355,
+  "qualified": false,
+  "scope": "Availability probe only; a true return is not yet full effect/resource qualification; never fallback to unrestricted generated Python."
+}
