@@ -35,6 +35,7 @@ jobs:
           set -euo pipefail
           mkdir -p bidirectional230-receipts
           git rev-parse HEAD | tee bidirectional230-receipts/HEAD.txt
+          test "$(git hash-object tools/impact_continuation229.py)" = "87a4bf4d412158770bbd09b98a6524368c4e225e" || { echo 'UPSTREAM_BLOB_CHANGED'; exit 1; }
           python3 --version | tee bidirectional230-receipts/PYTHON.txt
           /usr/bin/time -p python3 -m unittest discover -s tests -p 'test_bidirectional_impact230.py' -v 2>&1 | tee bidirectional230-receipts/TESTS.txt
           python3 tools/bidirectional_impact230.py research/bidirectional-impact230/AI_GOVERNANCE_SYNTHETIC.json --output bidirectional230-receipts/AI.json
