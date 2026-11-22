@@ -71,7 +71,9 @@ class CompleteArrangements242Tests(unittest.TestCase):
         result = compare()
         self.assertEqual(result["robust_development_policy"], "NO_BID")
         self.assertEqual(result["robust_development_worst_case"], 0)
-        self.assertEqual(result["conditional_base_best"], "STANDALONE_B@0.95")
+        self.assertEqual(result["conditional_base_best"], "RECURRING_B@0.95")
+        self.assertEqual(result["equivalent_conditional_base_policies"],
+                         ["RECURRING_B@0.95", "STANDALONE_B@0.95"])
         self.assertTrue(result["price_selected_before_adverse_case"])
         self.assertEqual(result["actual_paid_orders"], 0)
         self.assertEqual(result["actual_collected_revenue_usd"], 0)
