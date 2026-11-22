@@ -1,0 +1,32 @@
+name: C1d strongest disclosed prior acquisition
+on:
+  push:
+    branches:
+      - research/omega-c1d-leading-prior-20261116
+    paths:
+      - 'research/omega_c1d_prior/**'
+      - '.github/workflows/omega-c1d-prior.yml'
+  pull_request:
+    paths:
+      - 'research/omega_c1d_prior/**'
+      - '.github/workflows/omega-c1d-prior.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Acquire exact public best disclosed source with SHA256
+        run: python3 research/omega_c1d_prior/fetch_prior.py
+      - name: Retain provenance-checked incumbent
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: omega-c1d-prior-${{ github.sha }}
+          path: upstream-c1d-incumbent.json
+          retention-days: 30
+          if-no-files-found: error
