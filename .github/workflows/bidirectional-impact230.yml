@@ -1,0 +1,66 @@
+name: BIDIRECTIONAL230 independent registered-change impact qualification
+on:
+  push:
+    branches: [research/bidirectional-impact230-20261121]
+    paths:
+      - '.github/workflows/bidirectional-impact230.yml'
+      - 'tools/bidirectional_impact230.py'
+      - 'tests/test_bidirectional_impact230.py'
+      - 'research/bidirectional-impact230/**'
+  pull_request:
+    paths:
+      - '.github/workflows/bidirectional-impact230.yml'
+      - 'tools/bidirectional_impact230.py'
+      - 'tests/test_bidirectional_impact230.py'
+      - 'research/bidirectional-impact230/**'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  frozen-adversarial-and-ordinary-control:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Record native start time
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - name: Execute frozen protocol and ordinary negative control
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p bidirectional230-receipts
+          git rev-parse HEAD | tee bidirectional230-receipts/HEAD.txt
+          python3 --version | tee bidirectional230-receipts/PYTHON.txt
+          /usr/bin/time -p python3 -m unittest discover -s tests -p 'test_bidirectional_impact230.py' -v 2>&1 | tee bidirectional230-receipts/TESTS.txt
+          python3 tools/bidirectional_impact230.py research/bidirectional-impact230/AI_GOVERNANCE_SYNTHETIC.json --output bidirectional230-receipts/AI.json
+          python3 tools/bidirectional_impact230.py research/bidirectional-impact230/SUPPLIER_QUALITY_SYNTHETIC.json --output bidirectional230-receipts/SUPPLIER.json
+          python3 - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+          from tools import impact_continuation229 as old
+          d = Path('bidirectional230-receipts')
+          for item, file in (('AI','AI_GOVERNANCE_SYNTHETIC.json'),('SUPPLIER','SUPPLIER_QUALITY_SYNTHETIC.json')):
+              receipt = json.loads((d/(item+'.json')).read_text())
+              claim = receipt.pop('result_sha256')
+              actual = hashlib.sha256(json.dumps(receipt,sort_keys=True,ensure_ascii=False,separators=(',',':')).encode()).hexdigest()
+              if claim != actual: raise SystemExit('RESULT_HASH_MISMATCH:'+item)
+              if receipt['compliance_claim'] != 'NONE' or receipt['review_count'] != 2:
+                  raise SystemExit('UNQUALIFIED_CLAIM_OR_MISSING_REVIEW:'+item)
+              print(item, 'reviews', receipt['review_count'],'sha256',claim)
+              source = json.loads((Path('research/bidirectional-impact230')/file).read_text())
+              original = old.assess({'schema':old.SCHEMA,'before':source['before']['requirements'],'after':source['after']['requirements'],'systems':source['after']['systems']})
+              if original['reassessment_count'] != 0: raise SystemExit('ORIGINAL_POLICY_ONLY_NEGATIVE_CONTROL_CHANGED')
+          PY
+          sha256sum tools/impact_continuation229.py tools/bidirectional_impact230.py tests/test_bidirectional_impact230.py research/bidirectional-impact230/* bidirectional230-receipts/{AI,SUPPLIER,HEAD,PYTHON,TESTS}* > bidirectional230-receipts/SHA256SUMS.txt
+      - name: Publish exact-source witness including failed tests
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bidirectional230-frozen-test-witness
+          path: bidirectional230-receipts/
+          if-no-files-found: warn
