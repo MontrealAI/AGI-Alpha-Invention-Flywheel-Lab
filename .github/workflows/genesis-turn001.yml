@@ -1,0 +1,66 @@
+name: GENESIS 001 synthetic cross-domain turn
+on:
+  pull_request:
+    paths:
+      - 'campaign/genesis_turn001/**'
+      - '.github/workflows/genesis-turn001.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  independent-turn:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Install pinned public project dependencies
+        run: |
+          python -m pip install -r requirements-omega-mechanisms-v3.txt
+      - name: Separate verification and adversarial controls
+        run: python -B -m unittest campaign.genesis_turn001.test_turn -v
+      - name: Execute and independently audit three fresh native accounts
+        run: |
+          python -B -m campaign.genesis_turn001.native_turn run --output "$RUNNER_TEMP/genesis-central"
+          python -B -m campaign.genesis_turn001.native_turn audit --output "$RUNNER_TEMP/genesis-central"
+          python -B -m campaign.genesis_turn001.native_turn run --stress no_demand --output "$RUNNER_TEMP/genesis-no-demand"
+          python -B -m campaign.genesis_turn001.native_turn audit --output "$RUNNER_TEMP/genesis-no-demand"
+          python -B -m campaign.genesis_turn001.native_turn run --stress failed_acceptance --output "$RUNNER_TEMP/genesis-failed-acceptance"
+          python -B -m campaign.genesis_turn001.native_turn audit --output "$RUNNER_TEMP/genesis-failed-acceptance"
+      - name: Adversarial audit rejects changed financial report without changing native authority
+        run: |
+          cp "$RUNNER_TEMP/genesis-central/REPORT.json" "$RUNNER_TEMP/genesis-central/REPORT.backup.json"
+          python - "$RUNNER_TEMP/genesis-central/REPORT.json" <<'PY'
+          import json, pathlib, sys
+          p=pathlib.Path(sys.argv[1])
+          record=json.loads(p.read_text())
+          record['simulated_profit_after_r_and_d_cents'] += 100
+          p.write_text(json.dumps(record))
+          PY
+          if python -B -m campaign.genesis_turn001.native_turn audit --output "$RUNNER_TEMP/genesis-central"; then
+            echo "FAIL: tampered report was accepted" >&2
+            exit 1
+          fi
+          mv "$RUNNER_TEMP/genesis-central/REPORT.backup.json" "$RUNNER_TEMP/genesis-central/REPORT.json"
+          python -B -m campaign.genesis_turn001.native_turn audit --output "$RUNNER_TEMP/genesis-central"
+      - name: Recheck independent tests with Python assertions disabled
+        run: python -O -B -m unittest campaign.genesis_turn001.test_turn -v
+      - name: Retain only public-safe reports, never account recovery authority
+        if: always()
+        run: |
+          mkdir -p public-safe-turn-evidence
+          for kind in central no-demand failed-acceptance; do
+            if test -f "$RUNNER_TEMP/genesis-$kind/REPORT.json"; then
+              cp "$RUNNER_TEMP/genesis-$kind/REPORT.json" "public-safe-turn-evidence/$kind.json"
+            fi
+          done
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: genesis001-public-safe-reports
+          path: public-safe-turn-evidence/
+          if-no-files-found: warn
