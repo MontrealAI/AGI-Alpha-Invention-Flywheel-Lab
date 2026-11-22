@@ -37,7 +37,7 @@ class Adverse236Tests(unittest.TestCase):
         }), 10)
         self.assertTrue(contract["no_deploy_option"])
         self.assertIn("do not retune inputs", contract["stopper"])
-        self.assertIn("actual", contract["outcomes_and_costs"])
+        self.assertIn("unknown", contract["outcomes_and_costs"])
 
     def test_each_native_spec_keeps_same_market_across_design_arms(self):
         c = load_protocol(REGISTRY)
