@@ -1,0 +1,27 @@
+name: Governance090 public-demand impact witness (research only)
+on:
+  pull_request:
+    paths:
+      - 'campaign/governance090/**'
+      - 'research/governance090/**'
+      - 'tests/test_governance090.py'
+      - '.github/workflows/governance090.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  preregistered-impact-evidence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record standard job start before checkout
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Execute all frozen D1-D4 H1-H2 A1-A2 cases without network or paid APIs
+        run: python -m unittest discover -s tests -p 'test_governance090.py' -v

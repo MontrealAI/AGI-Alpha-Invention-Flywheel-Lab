@@ -1,0 +1,30 @@
+name: Governance091 revision-epoch rollback adversarial qualification
+on:
+  pull_request:
+    paths:
+      - 'campaign/governance091/**'
+      - 'research/governance090/impact.py'
+      - 'tests/test_governance091.py'
+      - '.github/workflows/governance091.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  revision-epoch-adversarial:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record platform job start before checkout
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Execute separate preregistered R1-R6 adversarial cases
+        run: python -m unittest discover -s tests -p 'test_governance091.py' -v
+      - name: Preserve original Governance090 eight checks
+        run: python -m unittest discover -s tests -p 'test_governance090.py' -v
