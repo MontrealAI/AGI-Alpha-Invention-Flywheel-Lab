@@ -106,7 +106,7 @@ class Bidirectional230Tests(unittest.TestCase):
     def test_policy_unchanged_new_tag(self):
         p = rule("directive")
         x = system("x", ("prototype",))
-        y = system("x", ("decision",))
+        y = system("x", ("decision",), ())
         data = case([p], [copy.deepcopy(p)], [x], [y])
         original = old.assess({"schema": old.SCHEMA, "before": [p], "after": [p], "systems": [y]})
         self.assertEqual(original["reassessment_count"], 0)
