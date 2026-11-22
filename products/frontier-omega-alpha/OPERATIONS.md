@@ -1,5 +1,7 @@
 # Operation and deployment / Exploitation et déploiement
 
+**Current GitHub-only release path.** See [GitHub Pages and MetaMask](GITHUB-NATIVE.md) for native provisioning, isolated hosting, bilingual instructions and the current threat model. The original SIWE access service remains the local reference.
+
 ## English
 
 ### Reproduce and prepare the member packet

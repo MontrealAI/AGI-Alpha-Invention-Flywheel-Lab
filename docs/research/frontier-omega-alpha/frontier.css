@@ -148,3 +148,19 @@ button:disabled { cursor: wait; opacity: .76; }
   .top-nav a[href="#access"] { display: none; }
   .methods { grid-template-columns: 1fr; }
 }
+
+.native-controls {
+  display: grid;
+  gap: .75rem;
+  margin-top: 1rem;
+  padding: 1rem 1.25rem;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: #141020;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+.native-controls h3 { color: var(--gold); font-family: var(--serif); font-weight: 400; font-size: 1.42rem; }
+.native-controls a { color: var(--gold); text-underline-offset: .2em; }
+.native-controls button { justify-self: start; }
+.native-controls code { color: var(--ink); overflow-wrap: anywhere; }

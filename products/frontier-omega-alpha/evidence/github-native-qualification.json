@@ -1,0 +1,147 @@
+{
+  "schema": "frontier-omega-alpha/github-native-qualification-v1",
+  "reviewed_parent": "3c8dbeaa17363704164ddbf5dbf5db6f49f55ec1",
+  "default_branch_baseline": "f0987aa48d5c9136b28540f54eabf5367e63bbe6",
+  "read_only_ethereum_rpc": "https://ethereum-rpc.publicnode.com",
+  "mainnet_block_scan": {
+    "beginning": 26472650,
+    "ending": 26472655,
+    "anchorHash": "0x57c213dd60f7f068bc60c702f80cee62c864b23e86ed7d289f94676464cf4984",
+    "endingHash": "0xead5cf42ad93526e113d2c246aa4a10758bbd6a3401a4fa602ae0943b3317a25",
+    "recognizedEnrollments": 0,
+    "scanWallSeconds": 6.835,
+    "token": {
+      "token": "0xA61a3B3a130a9c20768EEBF97E21515A6046a1fA",
+      "decimals": 18,
+      "symbol": "AGIALPHA",
+      "block": "26472729",
+      "hash": "0xb4f6d24f1994f790b16b4ca9de390ddc0d8303f4dfc83fcccb6b1047fd2632ec"
+    },
+    "identityEcho": true
+  },
+  "sample_mainnet_gas_estimate": {
+    "payload_bytes": 115,
+    "gas_units": 25941,
+    "transactions_submitted": 0
+  },
+  "publisher_key_rotation": {
+    "status": "local operator with live read-only mainnet RPC",
+    "records": 1,
+    "publicRecipients": 0,
+    "anchor": {
+      "anchorHeight": 26472687,
+      "anchorHash": "0x349fe307b2f1bfc7251e3358b3abad2b9ee648d2d4c92cb9d5723efb5a8b0d14",
+      "identityPrecompile": "0x0000000000000000000000000000000000000004",
+      "token": {
+        "token": "0xA61a3B3a130a9c20768EEBF97E21515A6046a1fA",
+        "decimals": 18,
+        "symbol": "AGIALPHA",
+        "block": "26472759",
+        "hash": "0xcb89fc5a8cfcb62dab0968b6bd3f1f9adcec0494bf80fe7c0bf96ea69cd3c42f"
+      }
+    },
+    "mainnetEnrollmentTransactionsSubmitted": 0,
+    "rekeyPreservedPublicLibrary": true,
+    "finished_at": "2026-11-22T19:30:15.510681+00:00"
+  },
+  "public_pages_preservation": {
+    "base_files_byte_identical": 109,
+    "site_additions": [
+      "frontier-omega-alpha/carina.webp",
+      "frontier-omega-alpha/decrypt.js",
+      "frontier-omega-alpha/fr.html",
+      "frontier-omega-alpha/frontier.css",
+      "frontier-omega-alpha/frontier.js",
+      "frontier-omega-alpha/index.html",
+      "frontier-omega-alpha/library.json",
+      "frontier-omega-alpha/native-config.json"
+    ]
+  },
+  "scheduled_radar_rehearsal": {
+    "checked_sources": 6,
+    "statuses": {
+      "formal_verification": "published_version_changed",
+      "local_models_and_quantization": "metadata_changed",
+      "serving_cost": "metadata_changed",
+      "hardware_runtime": "first_observation",
+      "model_distribution": "metadata_changed",
+      "scientific_computing": "unchanged"
+    },
+    "version_delta": {
+      "state": "published_version_changed",
+      "observed": {
+        "tag": "v4.36.0",
+        "id": 447243369,
+        "published_at": "2026-11-16T15:45:27+00:00",
+        "url": "https://api.github.com/repos/leanprover/lean4/releases/latest",
+        "retrieved_at": "2026-11-22T19:30:53.809388+00:00",
+        "sha256": "5ffaaa2f760509d2c86807f210ed1df4b05e257e01f1a9fadf4248568c9f2386"
+      },
+      "pinned": {
+        "tag": "v4.36.0",
+        "id": 447243369,
+        "published_at": "2026-11-16T15:45:27+00:00",
+        "url": "https://api.github.com/repos/leanprover/lean4/releases/tags/v4.36.0",
+        "retrieved_at": "2026-11-22T19:30:56.921202+00:00",
+        "sha256": "5ffaaa2f760509d2c86807f210ed1df4b05e257e01f1a9fadf4248568c9f2386"
+      },
+      "preceding": {
+        "tag": "v4.35.0",
+        "id": 410881210,
+        "published_at": "2026-10-12T18:13:12+00:00",
+        "url": "https://api.github.com/repos/leanprover/lean4/releases/tags/v4.35.0",
+        "retrieved_at": "2026-11-22T19:28:42.336903+00:00",
+        "sha256": "b0e2c93718a4c5b06124fe80463f9a09b085efdd1a3dd969766211bdedaafc5a"
+      },
+      "uncertainty": "This evidence verifies a publisher record. Capability and economic effects require experiments.",
+      "opportunity": {
+        "kind": "reported_release_hypothesis",
+        "newly_worth_attempting": "Replay a matched verification experiment with the newly published leanprover/lean4 release v4.36.0.",
+        "why_earlier_was_harder": "The recorded predecessor was v4.35.0. The new version and its exact feature delta require qualification.",
+        "action": "Choose one acceptance metric from the release’s primary documentation and preregister a before/after comparison.",
+        "beneficiary": "MONTREAL.AI operators with a reproducible workload in this category.",
+        "existing_alternative": "The exact preceding published release v4.35.0 on the same workload.",
+        "requirements": "An approved release checksum, compatible runtime and bounded local or standard GitHub compute.",
+        "falsification": "A separately implemented reference test fails to reproduce an improvement beyond the registered tolerance.",
+        "retained_asset": "A version-pinned reproducer, the matched baseline and a reusable acceptance rule.",
+        "technical_verification": "pending",
+        "beneficiary_acceptance": "unproven",
+        "payment": "unproven",
+        "net_economic_benefit": "unproven"
+      }
+    },
+    "hardware_source": {
+      "tag": "therock-10.2",
+      "id": 449807176,
+      "published_at": "2026-11-18T10:12:40+00:00",
+      "url": "https://api.github.com/repos/ROCm/rocm-systems/releases/latest",
+      "retrieved_at": "2026-11-22T19:30:59.653324+00:00",
+      "sha256": "90798e76965d733bae5be8ac5dfb3c3786d4adf281d3fc660bbb151ef8d48d96"
+    },
+    "executed_at": "2026-11-22T19:31:02.941189+00:00"
+  },
+  "preserved_registered_replay": {
+    "status": "receipt-agreement",
+    "executed_at": "2026-11-22T19:31:11.350918+00:00",
+    "cases": 14,
+    "retained_profile_sha256": "bcdcb23b2a8b12752f7978992e80db510106a5fcaf20d03ea3da8589892ccc94",
+    "economic": {
+      "complete_cost_profit": null,
+      "external_billing": null,
+      "labor": null,
+      "payment": null,
+      "replay_wall_seconds": 0.003896237000844849,
+      "status": "unproven"
+    }
+  },
+  "limits": {
+    "mandatory_paid_hosting": false,
+    "tested_rpc_required_paid_plan": false,
+    "actual_rpc_service_level": "unmeasured",
+    "browser_test_signers": "synthetic",
+    "real_eligible_wallet_decryption": "pending",
+    "protected_GitHub_environment_and_isolated_reader": "pending",
+    "external_security_sign_off": "pending",
+    "production_deployment": "pending"
+  }
+}

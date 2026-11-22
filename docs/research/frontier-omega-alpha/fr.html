@@ -45,7 +45,7 @@
     <section id="access" class="frame gate" aria-labelledby="gate-title">
       <div class="gate-head">
         <h2 id="gate-title">Accéder à la recherche</h2>
-        <p>Connectez un portefeuille admissible sur le réseau principal Ethereum. Votre signature authentifie votre session. Aucune transaction ni approbation de jetons n’est requise.</p>
+        <p>Connectez MetaMask au réseau principal Ethereum. Le premier enregistrement transfère zéro ETH et entraîne des frais de réseau. Les visites suivantes utilisent la clé créée sur cet appareil.</p>
       </div>
       <div class="paths">
         <form class="path" id="club-form">
@@ -60,6 +60,7 @@
         </div>
       </div>
       <p class="status" id="status" role="status" aria-live="polite">L’accès protégé est hors ligne sur ce site.</p>
+      <div id="native-controls" class="native-controls" hidden></div>
       <noscript><p>Activez JavaScript pour vous connecter avec un portefeuille.</p></noscript>
     </section>
     <section id="member" class="frame workspace" hidden aria-labelledby="workspace-title">
@@ -92,7 +93,7 @@
     </section>
     <section class="frame privacy" id="privacy" aria-labelledby="privacy-title">
       <h2 id="privacy-title">Accès par portefeuille et confidentialité</h2>
-      <div><p>Lorsque l’accès est en service, le système utilise votre adresse publique, votre identifiant Club le cas échéant et votre signature pour ouvrir une session de courte durée. Il vérifie votre admissibilité auprès de son fournisseur Ethereum. Les sessions expirent après cinq minutes. Le navigateur conserve les données en mémoire durant la session et efface l’affichage à la fermeture. Les lecteurs autorisés peuvent copier les contenus reçus.</p><p>L’admissibilité du portefeuille donne un accès en lecture. Les opérations de recherche exigent une autorisation distincte.</p></div>
+      <div><p>L’enregistrement est une transaction publique sur Ethereum. L’adresse signataire, le libellé Club facultatif et la clé publique de l’appareil peuvent être associés à votre participation. Le navigateur conserve une clé privée non extractible sur l’origine isolée de lecture. La perte de ces données impose un nouvel enregistrement. Les destinataires peuvent conserver les enveloppes publiées et les dossiers déjà déchiffrés.</p><p>L’admissibilité du portefeuille donne un accès en lecture. Les opérations de recherche exigent une autorisation distincte.</p></div>
     </section>
   </main>
   <footer class="footer">

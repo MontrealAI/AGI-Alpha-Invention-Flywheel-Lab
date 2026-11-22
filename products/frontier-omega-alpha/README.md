@@ -1,5 +1,9 @@
 # FRONTIER Ω ALPHA
 
+**Current GitHub-only release path.** See [GitHub Pages and MetaMask](GITHUB-NATIVE.md) for native provisioning, isolated hosting, bilingual instructions and the current threat model. The original SIWE access service remains the local reference.
+
+**Déploiement GitHub.** Le [guide GitHub Pages et MetaMask](GITHUB-NATIVE.md) présente l’enregistrement, la remise des clés, la lecture sur une origine isolée et l’exploitation.
+
 **MONTREAL.AI × QUÉBEC.AI**
 
 ## English

@@ -57,6 +57,77 @@ const messages = {
   }
 }[language];
 
+const nativeMessages = {
+  en: {
+    secure_reader: 'The protected reader opens on its isolated GitHub Pages origin.',
+    continue: 'Open the secure reader',
+    reader_origin: 'Open the reader directly on its approved address.',
+    metamask_missing: 'Open this page in MetaMask Mobile’s browser or use the MetaMask extension.',
+    mobile: 'Open in MetaMask Mobile',
+    publisher_offline: 'The GitHub publisher has not posted a recent release. Enrollment is paused.',
+    review: 'Review Ethereum enrollment',
+    review_text: 'The public transaction registers this device key and any Club label you entered. It sends zero ETH. Network fees apply. Review the final amount in MetaMask.',
+    gas: 'Gas units',
+    transaction_data: 'Transaction data',
+    signing_wallet: 'Signing wallet',
+    estimated: 'Estimated network fee',
+    maximum: 'Proposed fee cap',
+    send: 'Review and confirm in MetaMask',
+    checking: 'Checking enrollment status…',
+    pending: 'Transaction submitted. Waiting for Ethereum confirmation.',
+    awaiting_receipt: 'The wallet did not return a transaction hash. The reader will recover from the published receipt. Avoid submitting again while this request can still be mined.',
+    expired_receipt: 'This unconfirmed enrollment expired. You can review a replacement.',
+    confirmed: 'Ethereum transaction confirmed. Waiting for finality and GitHub provisioning.',
+    eligible: 'Eligibility verified. Waiting for release keys.',
+    denied: 'The publisher found no qualifying ownership for this enrollment.',
+    revoked: 'This enrollment is no longer eligible. A different qualifying path can be registered.',
+    superseded: 'This wallet enrolled another device. You can review a new enrollment for this device.',
+    failed: 'The Ethereum transaction failed. You can review a new enrollment.',
+    capacity: 'The publisher’s current enrollment capacity was reached. A new review may be attempted later.',
+    retry: 'Review a new enrollment',
+    refresh: 'Check status now',
+    transaction: 'View Ethereum transaction',
+    storage: 'Device key storage is unavailable. Enable browser storage before enrolling.',
+    storage_busy: 'Enrollment changed in another tab. Reconnect here to check its status.',
+    fee_unavailable: 'A live Ethereum fee quote could not be obtained. No transaction was requested.',
+    unavailable: 'The registration could not be verified. Please reconnect to check its status.'
+  },
+  fr: {
+    secure_reader: 'La lecture protégée se fait sur son origine GitHub Pages isolée.',
+    continue: 'Ouvrir la lecture sécurisée',
+    reader_origin: 'Ouvrez directement la lecture protégée à l’adresse approuvée.',
+    metamask_missing: 'Ouvrez cette page dans le navigateur de MetaMask Mobile ou utilisez l’extension MetaMask.',
+    mobile: 'Ouvrir dans MetaMask Mobile',
+    publisher_offline: 'Le processus de publication GitHub n’a pas diffusé de version récente. L’enregistrement est en pause.',
+    review: 'Examiner l’enregistrement Ethereum',
+    review_text: 'La transaction publique enregistre la clé de cet appareil et le libellé Club saisi, le cas échéant. Elle transfère zéro ETH et entraîne des frais de réseau. Vérifiez le montant final dans MetaMask.',
+    gas: 'Unités de gaz',
+    transaction_data: 'Données de la transaction',
+    signing_wallet: 'Portefeuille signataire',
+    estimated: 'Frais de réseau estimés',
+    maximum: 'Plafond de frais proposé',
+    send: 'Examiner et confirmer dans MetaMask',
+    checking: 'Vérification de l’enregistrement…',
+    pending: 'Transaction soumise. En attente de la confirmation Ethereum.',
+    awaiting_receipt: 'Le portefeuille n’a pas retourné d’identifiant de transaction. Le lecteur reprendra à partir du reçu publié. Évitez une nouvelle soumission tant que cette demande peut être confirmée.',
+    expired_receipt: 'Cet enregistrement non confirmé a expiré. Vous pouvez examiner un remplacement.',
+    confirmed: 'Transaction Ethereum confirmée. En attente de la finalité et de la mise à disposition par GitHub.',
+    eligible: 'Admissibilité vérifiée. En attente des clés de lecture.',
+    denied: 'GitHub n’a relevé aucune détention admissible pour cet enregistrement.',
+    revoked: 'Cet enregistrement n’est plus admissible. Un autre mode admissible peut être enregistré.',
+    superseded: 'Ce portefeuille a enregistré un autre appareil. Vous pouvez examiner un nouvel enregistrement pour celui-ci.',
+    failed: 'La transaction Ethereum a échoué. Vous pouvez examiner un nouvel enregistrement.',
+    capacity: 'La capacité actuelle d’enregistrement est atteinte. Réessayez plus tard.',
+    retry: 'Examiner un nouvel enregistrement',
+    refresh: 'Vérifier maintenant',
+    transaction: 'Voir la transaction Ethereum',
+    storage: 'Le stockage de la clé d’appareil est indisponible. Activez le stockage du navigateur avant de vous enregistrer.',
+    storage_busy: 'L’enregistrement a changé dans un autre onglet. Reconnectez-vous ici pour vérifier son état.',
+    fee_unavailable: 'L’estimation en direct des frais Ethereum est indisponible. Aucune transaction n’a été demandée.',
+    unavailable: 'L’enregistrement n’a pas pu être vérifié. Reconnectez-vous pour consulter son état.'
+  }
+}[language];
+
 const byId = id => document.getElementById(id);
 const status = byId('status');
 const workspaceStatus = byId('workspace-status');
@@ -84,6 +155,8 @@ let selectedSection;
 let expiryTimer;
 let checkTimer;
 let checking = false;
+let polling;
+let nativeConfig;
 
 async function request(route, body, token) {
   const headers = { 'Content-Type': 'application/json' };
@@ -114,6 +187,9 @@ function lock(reason, focus = false) {
   openRequest++;
   clearTimeout(expiryTimer);
   clearInterval(checkTimer);
+  clearTimeout(polling);
+  const controls = byId('native-controls');
+  if (controls) { controls.replaceChildren(); controls.hidden = true; }
   if (activeWallet) boundEvents(activeWallet, 'removeListener');
   activeWallet = null;
   revoke(session?.token);
@@ -122,7 +198,7 @@ function lock(reason, focus = false) {
   byId('member').hidden = true;
   for (const id of ['record', 'entries', 'collections', 'workspace-status']) byId(id).replaceChildren();
   connectButtons.forEach(button => { button.disabled = false; });
-  say(status, reason);
+  tell(reason);
   if (focus) byId('gate-title').scrollIntoView({ block: 'nearest' });
   if (focus) connectButtons[0].focus({ preventScroll: true });
 }
@@ -132,7 +208,8 @@ async function recheck(ownGeneration) {
   if (Date.now() >= session.expiresAt) return lock('session_required');
   checking = true;
   try {
-    await request('session', {}, session.token);
+    if (session.check) await session.check();
+    else await request('session', {}, session.token);
   } catch (error) {
     if (ownGeneration === generation) lock(error.message);
   } finally {
@@ -185,7 +262,8 @@ async function openRelease(entry) {
   byId('record').replaceChildren();
   say(workspaceStatus, 'loading');
   try {
-    const { ciphertext, key, record } = await request('open', { id: entry.id, version: entry.version }, session.token);
+    const { ciphertext, key, record } = session.open ? await session.open(entry)
+      : await request('open', { id: entry.id, version: entry.version }, session.token);
     const content = record ?? await decryptRelease(ciphertext, key, entry);
     const localized = content?.[language];
     if (content?.section !== entry.section || typeof localized?.title !== 'string' ||
@@ -221,8 +299,150 @@ function compatibleEntry(entry) {
     Number.isSafeInteger(entry.version) && entry.version >= 1 && labels.includes(entry.section);
 }
 
+function tell(key) {
+  if (Object.hasOwn(nativeMessages, key)) status.textContent = nativeMessages[key];
+  else say(status, key);
+}
+
+function openWorkspace(grant, catalog, ownGeneration) {
+  session = grant;
+  entries = catalog;
+  renderSections();
+  selectSection(entries[0]?.section ?? labels[0]);
+  byId('member').hidden = false;
+  byId('workspace-title').focus();
+  const controls = byId('native-controls');
+  if (controls) { controls.replaceChildren(); controls.hidden = true; }
+  status.textContent = '';
+  expiryTimer = setTimeout(() => lock('session_required'), grant.expiresAt - Date.now());
+  checkTimer = setInterval(() => void recheck(ownGeneration), 45_000);
+}
+
+async function readNativeConfig() {
+  try {
+    const response = await fetch('./native-config.json', { redirect: 'error', credentials: 'omit', cache: 'no-store' });
+    if (!response.ok) return null;
+    const config = await response.json();
+    const reader = new URL(config.reader);
+    if (reader.protocol !== 'https:' && !(reader.origin === location.origin && reader.hostname === '127.0.0.1')) return null;
+    if (!reader.pathname.endsWith('/') || reader.search || reader.hash || reader.username || reader.password) return null;
+    return config;
+  } catch {
+    return null;
+  }
+}
+
+function nativeButton(controls, title, handler) {
+  const button = recordNode('button', nativeMessages[title]);
+  button.type = 'button';
+  button.className = 'quiet';
+  button.addEventListener('click', handler);
+  controls.append(button);
+  return button;
+}
+
+function nativeLink(controls, title, url) {
+  const link = recordNode('a', nativeMessages[title]);
+  link.href = url;
+  link.rel = 'noopener noreferrer';
+  controls.append(link);
+}
+
+async function openNative(path) {
+  const config = await (nativeConfig ??= readNativeConfig());
+  const controls = byId('native-controls');
+  if (!config || !controls || !globalThis.isSecureContext) return say(status, 'offline');
+  const site = new URL(config.reader);
+  if (site.origin !== location.origin) {
+    tell('secure_reader');
+    controls.replaceChildren();
+    controls.hidden = false;
+    const target = new URL(language === 'fr' ? 'fr.html#access' : '#access', site);
+    nativeLink(controls, 'continue', target.href);
+    controls.querySelector('a').focus();
+    return;
+  }
+
+  let label = path === 'club' ? byId('club-label').value.trim().toLowerCase() : null;
+  if (path === 'club' && !/^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$/.test(label)) return say(status, 'identity');
+  if (session || activeWallet) lock('locked');
+  const active = ++generation;
+  connectButtons.forEach(button => { button.disabled = true; });
+  let client;
+
+  function failure(error) {
+    if (generation !== active) return;
+    const errorKey = error.code === 4001 ? 'refused' : error.message;
+    lock(errorKey);
+    if (errorKey === 'metamask_missing') {
+      controls.hidden = false;
+      nativeLink(controls, 'mobile', 'https://link.metamask.io/dapp/' + site.host + site.pathname);
+    }
+  }
+
+  async function show(result) {
+    if (generation !== active) return;
+    clearTimeout(polling);
+    controls.hidden = false;
+    controls.replaceChildren();
+    if (result.state === 'provisioned') {
+      if (!Array.isArray(result.entries) || !result.entries.every(compatibleEntry)) throw Error('unavailable');
+      openWorkspace({ ...result, expiresAt: Date.now() + 5 * 60_000 }, result.entries, active);
+      return;
+    }
+    tell(result.state);
+    if (result.state === 'review') {
+      const { quote } = result;
+      const details = document.createElement('details');
+      details.append(recordNode('summary', nativeMessages.transaction_data),
+        recordNode('p', nativeMessages.signing_wallet + ' · ' + quote.payload.from),
+        recordNode('code', quote.payload.data));
+      controls.append(recordNode('h3', nativeMessages.review), recordNode('p', nativeMessages.review_text),
+        recordNode('code', quote.payload.to),
+        recordNode('p', nativeMessages.gas + ' · ' + quote.gas),
+        recordNode('p', nativeMessages.estimated + ' · ' + quote.estimate + ' ETH'),
+        recordNode('p', nativeMessages.maximum + ' · ' + quote.maximum + ' ETH'), details);
+      nativeButton(controls, 'send', event => {
+        event.target.disabled = true;
+        run(async () => show(await client.submit(quote)));
+      }).focus();
+    } else {
+      if (result.tx) nativeLink(controls, 'transaction', 'https://etherscan.io/tx/' + result.tx);
+      if (['pending', 'confirmed', 'eligible', 'awaiting_receipt'].includes(result.state)) {
+        const refresh = () => run(async () => show(await client.status()));
+        nativeButton(controls, 'refresh', refresh);
+        polling = setTimeout(refresh, 45_000);
+      }
+      if (['denied', 'revoked', 'superseded', 'failed', 'capacity', 'expired_receipt'].includes(result.state)) {
+        nativeButton(controls, 'retry', () => run(async () => show(await client.prepare(true))));
+      }
+    }
+  }
+
+  function run(operation) {
+    tell('checking');
+    void operation().catch(failure);
+  }
+
+  try {
+    tell('connecting');
+    const { connectReader } = await import('./native-runtime.js');
+    client = await connectReader(config, label, { loopbackTest: config.loopbackTest === true });
+    if (generation !== active) return;
+    activeWallet = client.wallet;
+    boundEvents(client.wallet, 'on');
+    const state = await client.status();
+    await show(state.state === 'new' ? await client.prepare() : state);
+  } catch (error) {
+    failure(error);
+  } finally {
+    if (generation === active) connectButtons.forEach(button => { button.disabled = false; });
+  }
+}
+
 async function connect(path) {
-  if (!api || !globalThis.isSecureContext || !globalThis.crypto?.subtle) return say(status, 'offline');
+  if (!api) return openNative(path);
+  if (!globalThis.isSecureContext || !globalThis.crypto?.subtle) return say(status, 'offline');
   const wallet = globalThis.ethereum;
   if (!wallet?.request) return say(status, 'wallet_missing');
   const label = path === 'club' ? byId('club-label').value.trim().toLowerCase() : null;
@@ -257,16 +477,7 @@ async function connect(path) {
     if (ownGeneration !== generation) return;
     if (!Array.isArray(catalog.entries) || !catalog.entries.every(compatibleEntry)) throw Error('verification_unavailable');
     if (provisioned.expiresAt <= Date.now()) throw Error('session_required');
-    session = provisioned;
-    entries = catalog.entries;
-    const first = entries[0]?.section ?? labels[0];
-    renderSections();
-    selectSection(first);
-    byId('member').hidden = false;
-    byId('workspace-title').focus();
-    status.textContent = '';
-    expiryTimer = setTimeout(() => lock('session_required'), session.expiresAt - Date.now());
-    checkTimer = setInterval(() => void recheck(ownGeneration), 45_000);
+    openWorkspace(provisioned, catalog.entries, ownGeneration);
   } catch (error) {
     if (ownGeneration === generation) lock(error.code === 4001 ? 'refused' : error.message);
   } finally {
@@ -282,3 +493,11 @@ window.addEventListener('pagehide', () => { if (session || activeWallet) lock('l
 window.addEventListener('focus', () => void recheck(generation));
 document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') void recheck(generation); });
 say(status, api ? 'ready' : 'offline');
+if (!api) {
+  nativeConfig = readNativeConfig();
+  void nativeConfig.then(config => {
+    if (!config || generation !== 0) return;
+    if (new URL(config.reader).origin !== location.origin) byId('club-form').noValidate = true;
+    tell('ready');
+  });
+}

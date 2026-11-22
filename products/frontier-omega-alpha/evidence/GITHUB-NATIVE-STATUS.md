@@ -1,0 +1,21 @@
+# GitHub-native qualification / Qualification GitHub native
+
+**Review starting point.** PR #541 at `3c8dbeaa17363704164ddbf5dbf5db6f49f55ec1`, compared with default branch `f0987aa48d5c9136b28540f54eabf5367e63bbe6`. The prior qualification had 17 successful workflows. The native implementation continues the same PR and leaves the prior evidence available.
+
+| Requirement | Source-linked result |
+| --- | --- |
+| GitHub-native separation | The original read-only Pages build and a main-only native publisher implement the production design. The only online browser application inputs are approved Pages files and MetaMask's Ethereum interface. The native site asks members for no GitHub credentials. A separate trusted Pages origin protects persistent reader keys. |
+| Protocol and browser | Local Chromium exercised both language and eligibility paths using test signers, actual signed fixture transactions, canonical receipt intake, HPKE envelopes and Web Crypto. After reload, the member opened the same approved release without a second transaction. A below-threshold browser account saw no estimate or wallet transaction request. Desktop and mobile viewport accessibility checks passed. |
+| Cryptography and access | The implementation passed the CFRG test vector for RFC 9180 P-256/HKDF-SHA256/AES-256-GCM and tested envelope/asset integrity, wrong keys and context, failed and forged eligibility, replay, resumed scanning, checkpoint mismatch, outage, membership loss, explicit revocation, and encrypted key rotation. One test initially exposed address capitalization in the issuer's registry comparison. It was corrected by normalizing the address before eligibility checks. |
+| Real network reads | Ethereum mainnet identified the fixed identity precompile by its response. The scanner traversed five finalized blocks and the read-only token check reconfirmed AGIALPHA and 18 decimals. A 115-byte sample returned an estimate of 25,941 gas units. The operator created a sealed test record, published a no-member staged checkpoint and restored it after publisher-key rotation. No Ethereum transaction was broadcast. |
+| Frontier research | A live rehearsal verified six upstream release feeds. It distinguished Lean 4.35.0 → 4.36.0 from metadata-only changes. The separately registered Lean receipt experiment was independently rerun on exact inputs. Both implementations agreed on 14 cases, and the retained parser profile had the prior digest. A performance advantage, beneficiary acceptance, payment and profit remain unproven. |
+| Compatibility | Exactly 109 pre-existing files were byte-identical in the staged Pages comparison, including during the controlled append of the two native files. The prior local SIWE reader and original research instruments remain available. Repository platform policy and the Pages, HARNESS and ALPHA GENESIS regressions passed locally. |
+| Production approval | The reviewed merge, approved static reader origin, protected GitHub environment, approved encrypted catalog, real qualifying MetaMask wallets for both paths, actual mobile hardware and an independent security reviewer are still needed. Native production defaults to disabled. |
+
+[Machine-readable receipts and primary source hashes](github-native-qualification.json) · [EN/FR operation, threat model and recovery](../GITHUB-NATIVE.md)
+
+## Français
+
+L’implémentation poursuit la demande de fusion nº 541 à partir de sa version déjà qualifiée. Les essais Chromium ont reproduit les deux parcours avec des portefeuilles de test et des transactions signées par des clés de test. Les dossiers ont été déchiffrés après publication des enveloppes puis rouverts après rechargement sans nouvelle transaction. Les lectures Ethereum réelles ont vérifié le précompilé d’identité, le jeton et cinq blocs finalisés. L’estimation de gaz ne constitue pas une transaction envoyée.
+
+La collecte a vérifié six sources et détecté un changement de version de Lean distinct des modifications de métadonnées. L’expérience enregistrée a reproduit l’accord sur 14 cas et conservé le profil de la première version. La comparaison du site a retrouvé 109 fichiers antérieurs identiques, octet par octet. Une revue indépendante, l’origine de lecture approuvée et les essais avec de vrais portefeuilles restent à réaliser avant l’ouverture.

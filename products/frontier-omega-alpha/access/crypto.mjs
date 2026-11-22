@@ -56,3 +56,12 @@ export function rotateAsset(envelope, oldKey, newKey, epoch) {
 export function decryptAsset(envelope, contentKey) {
   return open(contentKey, envelope.payload, payloadAAD(envelope));
 }
+
+export function rewrapAsset(envelope, oldKey, newKey) {
+  const contentKey = releaseKey(envelope, oldKey);
+  try {
+    return { ...envelope, wrapped: seal(newKey, contentKey, keyAAD(envelope)) };
+  } finally {
+    contentKey.fill(0);
+  }
+}

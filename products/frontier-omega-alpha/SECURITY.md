@@ -1,5 +1,7 @@
 # Security design and review / Conception et revue de sécurité
 
+**Current GitHub-only release path.** See [GitHub Pages and MetaMask](GITHUB-NATIVE.md) for native provisioning, isolated hosting, bilingual instructions and the current threat model. The original SIWE access service remains the local reference.
+
 ## English
 
 The Pages artifact is public. Its allowlist contains only the authored landing assets, a blank API configuration and client decryption code. The access service stores releases in private SQLite. It authenticates a wallet, checks current membership or holdings, and returns either one AES-256-GCM content key with its ciphertext or server-decrypted bytes for one release. The AES-GCM associated data includes scheme, asset identifier, version, key epoch and format. Key wrapping uses a separate KEK and authenticated domain with fresh 96-bit nonces. The KEK never crosses the reader API.

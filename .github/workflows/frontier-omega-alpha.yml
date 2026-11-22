@@ -5,6 +5,9 @@ on:
       - 'docs/research/frontier-omega-alpha/**'
       - 'products/frontier-omega-alpha/**'
       - 'products/alpha-genesis-harness/bridge/**'
+      - '.github/workflows/research-pages.yml'
+      - '.github/workflows/frontier-omega-alpha-native.yml'
+      - '.github/workflows/frontier-omega-alpha-research.yml'
       - 'scripts/build_research_site.py'
       - 'tests/test_research_site.py'
       - '.github/workflows/frontier-omega-alpha.yml'
@@ -14,6 +17,9 @@ on:
       - 'docs/research/frontier-omega-alpha/**'
       - 'products/frontier-omega-alpha/**'
       - 'products/alpha-genesis-harness/bridge/**'
+      - '.github/workflows/research-pages.yml'
+      - '.github/workflows/frontier-omega-alpha-native.yml'
+      - '.github/workflows/frontier-omega-alpha-research.yml'
       - 'scripts/build_research_site.py'
       - 'tests/test_research_site.py'
       - '.github/workflows/frontier-omega-alpha.yml'
@@ -52,7 +58,7 @@ jobs:
         working-directory: products/frontier-omega-alpha
       - run: npm run test:browser
         working-directory: products/frontier-omega-alpha
-      - run: python3 -m unittest discover -s tests -p test_research.py -v
+      - run: python3 -m unittest discover -s tests -p 'test_research*.py' -v
         working-directory: products/frontier-omega-alpha
       - run: python3 -m unittest discover -s tests -p test_research_site.py -v
       - run: node --test tests/test_alpha_site.cjs tests/test_surf_reader.cjs

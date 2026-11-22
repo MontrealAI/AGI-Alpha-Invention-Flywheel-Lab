@@ -45,7 +45,7 @@
     <section id="access" class="frame gate" aria-labelledby="gate-title">
       <div class="gate-head">
         <h2 id="gate-title">Access the research</h2>
-        <p>Sign in with an eligible wallet on Ethereum mainnet. Your signature authenticates your session. No transaction or token approval is required.</p>
+        <p>Connect MetaMask on Ethereum mainnet. First-time enrollment sends zero ETH and requires a network fee. Returning to read uses the device key created at enrollment.</p>
       </div>
       <div class="paths">
         <form class="path" id="club-form">
@@ -60,6 +60,7 @@
         </div>
       </div>
       <p class="status" id="status" role="status" aria-live="polite">Protected access is offline on this deployment.</p>
+      <div id="native-controls" class="native-controls" hidden></div>
       <noscript><p>Enable JavaScript to use wallet sign-in.</p></noscript>
     </section>
     <section id="member" class="frame workspace" hidden aria-labelledby="workspace-title">
@@ -92,7 +93,7 @@
     </section>
     <section class="frame privacy" id="privacy" aria-labelledby="privacy-title">
       <h2 id="privacy-title">Wallet access and privacy</h2>
-      <div><p>When access is operational, the service uses your public wallet address, optional Club label and signature to establish a short session. It checks eligibility using its Ethereum provider. Sessions expire after five minutes. The session token stays in page memory and the view clears when the session closes. Authorized readers can still copy content they receive.</p><p>Wallet eligibility grants reader access. Research operations require separate authority.</p></div>
+      <div><p>Enrollment is a public Ethereum transaction. The signing address, optional Club label and device public key can be linked to participation. The browser keeps a nonextractable private key on the isolated reader origin. Losing that browser data requires re-enrollment. Published envelopes and previously decrypted records can be saved by recipients.</p><p>Wallet eligibility grants reader access. Research operations require separate authority.</p></div>
     </section>
   </main>
   <footer class="footer">
