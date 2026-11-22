@@ -11,9 +11,11 @@ on:
       - '.github/workflows/research-pages.yml'
       - 'products/alpha-genesis-harness/**'
       - 'events/alpha-genesis-live/**'
+      - 'research/goal_genesis_omega/**'
+      - 'tests/test_goal_genesis_omega.py'
       - '.github/workflows/alpha-genesis-harness.yml'
   push:
-    branches: [main]
+    branches: [main, research/goal-genesis-omega-open-constant-001]
     paths:
       - 'docs/research/**'
       - 'experiments/frontier-conclave/**'
@@ -24,6 +26,8 @@ on:
       - '.github/workflows/research-pages.yml'
       - 'products/alpha-genesis-harness/**'
       - 'events/alpha-genesis-live/**'
+      - 'research/goal_genesis_omega/**'
+      - 'tests/test_goal_genesis_omega.py'
       - '.github/workflows/alpha-genesis-harness.yml'
   workflow_dispatch:
 permissions:
@@ -47,6 +51,8 @@ jobs:
             experiments/frontier-conclave
             scripts/build_research_site.py
             tests/test_research_site.py
+            research/goal_genesis_omega
+            tests/test_goal_genesis_omega.py
             tests/test_alpha_site.cjs
             tests/test_surf_reader.cjs
             events/alpha-genesis-live
@@ -66,6 +72,46 @@ jobs:
           node --test events/alpha-genesis-live/engine/tests/*.test.mjs events/alpha-genesis-live/lab/test/*.test.mjs events/alpha-genesis-live/06_QA/stage_engine.test.mjs
           node events/alpha-genesis-live/00_STAGE/run_show.mjs --mode preview --focus confidence --out "$RUNNER_TEMP/alpha-genesis-live-preview"
           node events/alpha-genesis-live/engine/verify_receipt.mjs "$RUNNER_TEMP/alpha-genesis-live-preview/agent-receipt.json"
+      - name: GOAL GENESIS - qualify mathematical certification controls
+        run: |
+          python3 -m pip install --only-binary=:all: numpy==2.3.5 scipy==1.17.0
+          python3 -m unittest discover -s tests -p 'test_goal_genesis_omega.py' -v
+      - name: GOAL GENESIS - attempt actual 2026 open mathematical frontier
+        timeout-minutes: 30
+        env:
+          OPENBLAS_NUM_THREADS: '1'
+          OMP_NUM_THREADS: '1'
+          MKL_NUM_THREADS: '1'
+        run: |
+          python3 -m research.goal_genesis_omega.c1d_search \
+            --max-cells 2400 --iterations 750 \
+            --output "$RUNNER_TEMP/goal-genesis-candidate.json"
+          python3 -m research.goal_genesis_omega.c1d_verify \
+            --candidate "$RUNNER_TEMP/goal-genesis-candidate.json" \
+            --output "$RUNNER_TEMP/goal-genesis-verdict.json"
+          python3 - "$RUNNER_TEMP/goal-genesis-verdict.json" <<'PY'
+          import json,sys
+          result=json.load(open(sys.argv[1]))
+          print("FRONTIER_CLAIM",result["status"])
+          print("EXACT_CANDIDATE",result["candidate_decimal_16"])
+          print("REPORTED_INCUMBENT",result["incumbent_decimal_16"])
+          print("Only a strictly improved exact certificate can justify a candidate frontier claim.")
+          PY
+      - name: Independently replay the strongest Nov 15 external mathematical claim
+        timeout-minutes: 20
+        run: |
+          python3 -m research.goal_genesis_omega.external_ntt_verify \
+            --output "$RUNNER_TEMP/goal-genesis-independent-external-replay.json"
+      - name: Retain exact open-problem result for adversarial review
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: goal-genesis-open-math-${{ github.event.pull_request.head.sha || github.sha }}
+          path: |
+            ${{ runner.temp }}/goal-genesis-candidate.json
+            ${{ runner.temp }}/goal-genesis-verdict.json
+            ${{ runner.temp }}/goal-genesis-independent-external-replay.json
+          retention-days: 30
+          if-no-files-found: error
       - name: Validate original PDFs, links and publication boundary
         run: python3 -m unittest discover -s tests -p 'test_research_site.py' -v
       - name: Check interactive research calculations and decisions
