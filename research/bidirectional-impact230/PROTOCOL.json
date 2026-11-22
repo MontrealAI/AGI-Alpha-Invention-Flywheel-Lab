@@ -1,0 +1,46 @@
+{
+  "schema": "bidirectional-impact230/preregistration-v1",
+  "branch": "research/bidirectional-impact230-20261121",
+  "upstream_pr": 530,
+  "frozen_upstream_commit": "a4dc8c8429cf92c3550cf9ea9d45cdf0e1f13fc7",
+  "frozen_upstream_tool_blob": "87a4bf4d412158770bbd09b98a6524368c4e225e",
+  "date": "2026-11-21",
+  "objective": "Close a concrete false-negative in policy-only reassessment: a registered system changes tags or evidence while requirements remain unchanged. Retain original requirement validation and financial/owner custody. Construct a source-bound bidirectional impact reviewer, not a compliance verdict.",
+  "preregistered_adverse_counterexample": "Unchanged requirement applies to tag 'decision'. System 'x' initially tagged 'prototype', after revision tagged 'decision'; unchanged evidence refs. v1 returns no reassessments. v2 must include (x, requirement), disclose missing controls, and withhold compliance verdict.",
+  "protocol": [
+    "Accept exact before/after requirement and before/after system snapshots; reject malformed, duplicate identifiers, same-version changed requirement, unsafe JSON duplicates.",
+    "Inspect old and new applicability. Queue a pair if applicable in either snapshot AND its requirement OR its system differs across snapshots, including additions and retirements.",
+    "Preserve both sides' linked evidence and unlinked controls, with no source authentication implied, no automated compliance outcome and deterministic receipt SHA-256.",
+    "Compare against independent unoptimized exhaustive O(R*S) script with same rights/data. Report any control tie, not manufactured economic superiority.",
+    "Use synthetic AI-governance A and different synthetic supplier-quality B with disclosed fixture assumptions; no real beneficiary, paid contract, legal interpretation or revenue claims.",
+    "Predeclared fixed randomized cross-check seeds 230041 and 230042; no resampling, no seed changes after outcomes.",
+    "Test the original upstream negative control independently on the same adverse case without editing it. It is a bounded missing-feature demonstration, not a retroactive failure of its original declared protocol.",
+    "All 12 named adverse tests and both examples must succeed. A failing attempt remains failed with cause; only separately labeled repaired run can qualify."
+  ],
+  "test_names": [
+    "test_policy_unchanged_new_tag",
+    "test_policy_unchanged_removed_evidence",
+    "test_system_added_and_retired",
+    "test_requirement_changed_bidirectional_applicability",
+    "test_deduplicate_joint_changes",
+    "test_unchanged_empty_and_no_compliance_verdict",
+    "test_version_collision_and_malformed",
+    "test_cli_duplicate_json_and_create_only",
+    "test_independent_ordinary_exhaustive_ai",
+    "test_distinct_supplier_quality",
+    "test_frozen_seed_230041",
+    "test_frozen_seed_230042"
+  ],
+  "required_receipts": [
+    "exact_commit",
+    "upstream_blob_sha",
+    "all_12_test_names",
+    "two_example_outputs",
+    "negative_control_result",
+    "first_run_failures_if_any",
+    "sha256_inventory",
+    "resource_telemetry"
+  ],
+  "scope": "Independent additive research; no native account or financial actions, no paid API, government access, private records, buyer communications, spending, bid, production release or merging into main.",
+  "exit": "If missing-feature corrected, retain engineering result only. Separate rights-cleared representative data, competent current commercial suites, beneficiary acceptance, measured complete costs, released-byte proof and causal transfer are still necessary."
+}
