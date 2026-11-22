@@ -1,0 +1,62 @@
+name: COMPLETE-ARRANGEMENTS242 matched conditional policy qualifier
+on:
+  push:
+    branches:
+      - research/complete-arrangements242-20261122
+    paths:
+      - "enterprise/complete_arrangements242.py"
+      - "tests/test_complete_arrangements242.py"
+      - "research/complete-arrangements242/**"
+      - ".github/workflows/complete-arrangements242.yml"
+  pull_request:
+    paths:
+      - "enterprise/complete_arrangements242.py"
+      - "tests/test_complete_arrangements242.py"
+      - "research/complete-arrangements242/**"
+      - ".github/workflows/complete-arrangements242.yml"
+permissions:
+  contents: read
+concurrency:
+  group: complete-arrangements242-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
+jobs:
+  frozen-adverse-policies:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record platform start before checkout
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - name: Capture exact source identities and registered protocol
+        shell: bash
+        run: |
+          git rev-parse HEAD
+          sha256sum research/complete-arrangements242/PROTOCOL.md enterprise/pricing.py enterprise/mixed_bundle240.py enterprise/complete_arrangements242.py tests/test_complete_arrangements242.py
+      - name: Run independent fixed-case cost/adverse/renewal oracle
+        run: python3 -B -m unittest -v tests.test_complete_arrangements242
+      - name: Run finite preregistered policy comparison
+        shell: bash
+        run: |
+          python3 -B -m enterprise.complete_arrangements242 --out "$RUNNER_TEMP/ARRANGEMENTS242_RESULT.json"
+          python3 -B - "$RUNNER_TEMP/ARRANGEMENTS242_RESULT.json" <<'PY'
+          import json,sys
+          r=json.load(open(sys.argv[1]))
+          assert r['conditional_base_best']=='STANDALONE_B@0.95'
+          assert r['robust_development_policy']=='NO_BID'
+          assert r['native_financial_authority']==[]
+          assert r['actual_collected_revenue_usd']==0
+          assert r['native_trailing_365_profit_usd'] is None
+          print('VERDICT',r['decision'],'BASE',r['conditional_base_best'],'ROBUST',r['robust_development_policy'])
+          PY
+      - name: Preserve compact source-bound research-only receipt
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: complete-arrangements242-${{ github.event.pull_request.head.sha || github.sha }}
+          path: ${{ runner.temp }}/ARRANGEMENTS242_RESULT.json
+          if-no-files-found: warn
+          retention-days: 7
