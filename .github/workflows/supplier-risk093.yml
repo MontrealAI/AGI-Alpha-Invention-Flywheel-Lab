@@ -1,0 +1,39 @@
+name: Supplier-risk093 five-case contract impossibility certificate
+on:
+  pull_request:
+    paths:
+      - 'research/supplier_risk093.py'
+      - 'tests/test_supplier_risk093.py'
+      - 'campaign/omega-supplier-risk-093/**'
+      - '.github/workflows/supplier-risk093.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  retrospective-contract-bound:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record platform job execution start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Execute all nine frozen read-only tests
+        run: python -m unittest discover -s tests -p 'test_supplier_risk093.py' -v
+      - name: Produce and check deterministic public certificate
+        run: |
+          python -m research.supplier_risk093 --out "$RUNNER_TEMP/SUPPLIER_RISK093.json"
+          python -c 'import json,sys; p=json.load(open(sys.argv[1])); assert len(p["cases"])==5 and p["new_native_accounts"]==0 and not p["seller_supplier_robust_pareto_via_fee_only"]' "$RUNNER_TEMP/SUPPLIER_RISK093.json"
+      - name: Keep immutable analysis artifact
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: supplier-risk093-${{ github.event.pull_request.head.sha || github.sha }}
+          path: ${{ runner.temp }}/SUPPLIER_RISK093.json
+          if-no-files-found: warn
