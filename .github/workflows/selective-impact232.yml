@@ -1,0 +1,109 @@
+name: SELECTIVE-IMPACT232 frozen precision-and-ordinary comparison
+on:
+  push:
+    branches: [research/selective-impact232-20261122]
+    paths:
+      - '.github/workflows/selective-impact232.yml'
+      - 'tools/selective_impact232.py'
+      - 'tests/test_selective_impact232.py'
+      - 'research/selective-impact232/**'
+  pull_request:
+    paths:
+      - '.github/workflows/selective-impact232.yml'
+      - 'tools/selective_impact232.py'
+      - 'tests/test_selective_impact232.py'
+      - 'research/selective-impact232/**'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  exact-head-ordinary-oracle:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Mark platform start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - name: Exact upstream and frozen protocol and test
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p selective232-receipts
+          git rev-parse HEAD | tee selective232-receipts/HEAD.txt
+          python3 --version | tee selective232-receipts/PYTHON.txt
+          test "$(git hash-object tools/impact_continuation229.py)" = "87a4bf4d412158770bbd09b98a6524368c4e225e" || { echo 'UPSTREAM229_CHANGED'; exit 1; }
+          test "$(git hash-object tools/bidirectional_impact230.py)" = "7fbf89f1a73c8bc0b977755829752c4994255554" || { echo 'UPSTREAM230_CHANGED'; exit 1; }
+          test "$(git hash-object research/selective-impact232/PROTOCOL.md)" = "33518ab702cb74928d10e23b91fdb2e8b52343d9" || { echo 'FROZEN_PROTOCOL_BLOB_CHANGED'; exit 1; }
+          /usr/bin/time -p python3 -B -m unittest discover -s tests -p 'test_selective_impact232.py' -v 2>&1 | tee selective232-receipts/TESTS.txt
+      - name: Two-domain exact output and independent complete denominator
+        shell: bash
+        run: |
+          set -euo pipefail
+          /usr/bin/time -p python3 -B - <<'PY' 2>&1 | tee selective232-receipts/DOMAIN.txt
+          import copy, json
+          from pathlib import Path
+          from tools import selective_impact232 as new
+          from tools import bidirectional_impact230 as control
+          from tests.test_selective_impact232 import independent_ordinary_oracle
+          root = Path('research/bidirectional-impact230')
+          dest = Path('selective232-receipts')
+          for domain, filename in (('AI_GOVERNANCE','AI_GOVERNANCE_SYNTHETIC.json'),
+                                   ('SUPPLIER_QUALITY','SUPPLIER_QUALITY_SYNTHETIC.json')):
+              raw = json.loads((root / filename).read_text())
+              raw['schema'] = new.SCHEMA
+              result = new.assess(raw)
+              oracle = independent_ordinary_oracle(raw)
+              got = {(x['requirement_id'],x['system_id']) for x in result['reviews']}
+              if got != oracle: raise SystemExit('ORACLE_MISMATCH:' + domain)
+              if result['review_count'] + result['suppressed_count'] != result['conservative_review_count']:
+                  raise SystemExit('DENOMINATOR_MISMATCH:' + domain)
+              if result['compliance_claim'] != 'NONE' or result['economic_savings_USD'] is not None:
+                  raise SystemExit('UNQUALIFIED_COMMERCIAL_CLAIM:' + domain)
+              (dest / (domain + '.json')).write_text(json.dumps(result,sort_keys=True,indent=2)+'\n')
+              print(domain,'conservative',result['conservative_review_count'],
+                    'selective',result['review_count'],'suppressed',result['suppressed_count'],
+                    'exact_ordinary_oracle',len(oracle),'sha256',result['result_sha256'])
+          PY
+          sha256sum research/selective-impact232/PROTOCOL.md tools/selective_impact232.py tests/test_selective_impact232.py tools/impact_continuation229.py tools/bidirectional_impact230.py selective232-receipts/{AI_GOVERNANCE,SUPPLIER_QUALITY}.json > selective232-receipts/SHA256SUMS.txt
+      - name: Report both frozen seeded review denominators without selection
+        shell: bash
+        run: |
+          set -euo pipefail
+          /usr/bin/time -p python3 -B - <<'PY' 2>&1 | tee selective232-receipts/SEEDS.txt
+          import json
+          from pathlib import Path
+          from tools import selective_impact232 as engine
+          from tests.test_selective_impact232 import generated, independent_ordinary_oracle
+          receipts=[]
+          for seed in (232041,232042):
+              data=generated(seed)
+              result=engine.assess(data)
+              actual={(item['requirement_id'],item['system_id']) for item in result['reviews']}
+              oracle=independent_ordinary_oracle(data)
+              if actual != oracle:raise SystemExit('FROZEN_SEED_ORACLE_MISMATCH:'+str(seed))
+              if result['review_count']+result['suppressed_count']!=result['conservative_review_count']:
+                  raise SystemExit('FROZEN_SEED_DENOMINATOR_MISMATCH:'+str(seed))
+              r={'seed':seed,'review_count':result['review_count'],
+                 'conservative_review_count':result['conservative_review_count'],
+                 'suppressed_count':result['suppressed_count'],
+                 'ordinary_oracle_count':len(oracle),'result_sha256':result['result_sha256'],
+                 'economically_qualified':False}
+              receipts.append(r)
+              print(json.dumps(r,sort_keys=True))
+          Path('selective232-receipts/FROZEN_SEEDS.json').write_text(
+              json.dumps(receipts,sort_keys=True,indent=2))
+          PY
+          sha256sum selective232-receipts/FROZEN_SEEDS.json >> selective232-receipts/SHA256SUMS.txt
+      - name: Preserve success or failed-test receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: selective232-frozen-evidence
+          path: selective232-receipts/
+          if-no-files-found: warn
