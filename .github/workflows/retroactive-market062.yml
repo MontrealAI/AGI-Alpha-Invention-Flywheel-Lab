@@ -1,0 +1,42 @@
+name: Retrospective market062 native economic experiment
+on:
+  pull_request:
+    paths:
+      - 'experiments/retroactive_market062.py'
+      - 'experiments/retroactive_market062_verify.py'
+      - 'tests/test_retroactive_market062.py'
+      - '.github/workflows/retroactive-market062.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  native-economic-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - name: Check out exact candidate source
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # pinned v4
+        with:
+          persist-credentials: false
+      - name: Exercise known failure and voluntary participation cases
+        run: python3 -m unittest discover -s tests -p 'test_retroactive_market062.py' -v
+      - name: Execute three source-bound native business accounts
+        shell: bash
+        run: |
+          set -euo pipefail
+          OUT="$PWD/.market062-native-$GITHUB_RUN_ID"
+          python3 -m experiments.retroactive_market062 run --output "$OUT"
+          echo "EXPERIMENT_OUTPUT=$OUT" >> "$GITHUB_ENV"
+      - name: Recompute historical claims and independently audit native accounts
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m experiments.retroactive_market062 verify --output "$EXPERIMENT_OUTPUT"
+          python3 - "$EXPERIMENT_OUTPUT/RESULT.json" <<'PY'
+          import json,sys
+          record=json.load(open(sys.argv[1]))
+          for name,arm in record['arms'].items():
+              s=arm['summary']
+              print(name,'SIMULATED collected USD',s['collections']/1e6,'expenses USD',s['expenses']/1e6,'profit USD',s['profit']/1e6)
+          print('Conditions are synthetic; no real customer or physical sensor validation.')
+          PY
