@@ -97,7 +97,7 @@ jobs:
               receipts.append(r)
               print(json.dumps(r,sort_keys=True))
           Path('selective232-receipts/FROZEN_SEEDS.json').write_text(
-              json.dumps(receipts,sort_keys=True,indent=2)+'\\n')
+              json.dumps(receipts,sort_keys=True,indent=2))
           PY
           sha256sum selective232-receipts/FROZEN_SEEDS.json >> selective232-receipts/SHA256SUMS.txt
       - name: Preserve success or failed-test receipts
