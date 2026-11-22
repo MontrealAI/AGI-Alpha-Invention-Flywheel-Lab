@@ -24,6 +24,9 @@ jobs:
       MKL_NUM_THREADS: '1'
       PYTHONHASHSEED: '1'
     steps:
+      - name: Record platform job execution start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
