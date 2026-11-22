@@ -1,0 +1,182 @@
+{
+  "s1": [
+    {
+      "id": "fresh-oem-alias",
+      "input": {
+        "model": "  prusa   core one l+ ",
+        "nozzle_requirement_c": 400,
+        "use": "non_safety_critical"
+      },
+      "expected": "retrofit-candidate"
+    },
+    {
+      "id": "fresh-upper-limit",
+      "input": {
+        "model": "Prusa CORE ONE L+",
+        "nozzle_requirement_c": 402,
+        "use": "non_safety_critical"
+      },
+      "expected": "no-documented-path"
+    },
+    {
+      "id": "fresh-original-stock",
+      "input": {
+        "model": "CORE ONE L",
+        "nozzle_requirement_c": 288,
+        "use": "non_safety_critical"
+      },
+      "expected": "existing-envelope"
+    },
+    {
+      "id": "fresh-maker-exclusion",
+      "input": {
+        "model": "Prusa XL+",
+        "nozzle_requirement_c": 355,
+        "use": "non_safety_critical"
+      },
+      "expected": "unsupported-configuration"
+    },
+    {
+      "id": "fresh-missing-label",
+      "input": {
+        "model": "CORE One L+ v9",
+        "nozzle_requirement_c": 395,
+        "use": "non_safety_critical"
+      },
+      "expected": "need-model-evidence"
+    },
+    {
+      "id": "fresh-regulated",
+      "input": {
+        "model": "CORE One L",
+        "nozzle_requirement_c": 400,
+        "use": "regulated"
+      },
+      "expected": "external-review-required"
+    },
+    {
+      "id": "fresh-gen2-lower-bound",
+      "input": {
+        "model": "PRUSA CORE ONE+ (GEN 2)",
+        "nozzle_requirement_c": 291,
+        "use": "non_safety_critical"
+      },
+      "expected": "retrofit-candidate"
+    },
+    {
+      "id": "fresh-unknown-printer",
+      "input": {
+        "model": "Vendor prototype",
+        "nozzle_requirement_c": 388,
+        "use": "non_safety_critical"
+      },
+      "expected": "need-model-evidence"
+    }
+  ],
+  "s2": [
+    {
+      "id": "fresh-gen2-at-55",
+      "input": {
+        "model": "Core One+ (Gen 2)",
+        "nozzle_requirement_c": 400,
+        "use": "non_safety_critical",
+        "claimed_installed": "retrofit",
+        "required_chamber_c": 55,
+        "sheet": "oem-hightemp-matching-model",
+        "site_review": "approved-evidence"
+      },
+      "expected": "documented-process-envelope"
+    },
+    {
+      "id": "fresh-gen2-at-56",
+      "input": {
+        "model": "Core One+ (Gen 2)",
+        "nozzle_requirement_c": 400,
+        "use": "non_safety_critical",
+        "claimed_installed": "retrofit",
+        "required_chamber_c": 56,
+        "sheet": "oem-hightemp-matching-model",
+        "site_review": "approved-evidence"
+      },
+      "expected": "outside-chamber-envelope"
+    },
+    {
+      "id": "fresh-large-kit",
+      "input": {
+        "model": "Prusa CORE ONE L+",
+        "nozzle_requirement_c": 400,
+        "use": "non_safety_critical",
+        "claimed_installed": "retrofit",
+        "required_chamber_c": 59,
+        "sheet": "oem-hightemp-matching-model",
+        "site_review": "approved-evidence"
+      },
+      "expected": "documented-process-envelope"
+    },
+    {
+      "id": "fresh-wrong-accessory",
+      "input": {
+        "model": "Prusa CORE One L",
+        "nozzle_requirement_c": 300,
+        "use": "non_safety_critical",
+        "claimed_installed": "retrofit",
+        "required_chamber_c": 60,
+        "sheet": "standard-sheet",
+        "site_review": "approved-evidence"
+      },
+      "expected": "accessory-evidence-required"
+    },
+    {
+      "id": "fresh-no-device-inspection",
+      "input": {
+        "model": "Core One L+",
+        "nozzle_requirement_c": 320,
+        "use": "non_safety_critical",
+        "claimed_installed": "unknown",
+        "required_chamber_c": 55,
+        "sheet": "oem-hightemp-matching-model",
+        "site_review": "approved-evidence"
+      },
+      "expected": "installed-configuration-unverified"
+    },
+    {
+      "id": "fresh-physical-witness-missing",
+      "input": {
+        "model": "Core One L+",
+        "nozzle_requirement_c": 291,
+        "use": "non_safety_critical",
+        "claimed_installed": "retrofit",
+        "required_chamber_c": 60,
+        "sheet": "oem-hightemp-matching-model",
+        "site_review": "missing"
+      },
+      "expected": "site-evidence-required"
+    },
+    {
+      "id": "fresh-safety-branch",
+      "input": {
+        "model": "Core One L+",
+        "nozzle_requirement_c": 390,
+        "use": "safety_critical",
+        "claimed_installed": "retrofit",
+        "required_chamber_c": 59,
+        "sheet": "oem-hightemp-matching-model",
+        "site_review": "approved-evidence"
+      },
+      "expected": "external-review-required"
+    },
+    {
+      "id": "fresh-unsupported-nozzle",
+      "input": {
+        "model": "Core One L+",
+        "nozzle_requirement_c": 401,
+        "use": "non_safety_critical",
+        "claimed_installed": "retrofit",
+        "required_chamber_c": 60,
+        "sheet": "oem-hightemp-matching-model",
+        "site_review": "approved-evidence"
+      },
+      "expected": "no-documented-path"
+    }
+  ]
+}

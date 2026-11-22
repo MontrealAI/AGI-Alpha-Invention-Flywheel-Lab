@@ -1,0 +1,47 @@
+{
+  "issued_on": "2026-11-22",
+  "selection": "parts-retrofit",
+  "decision": "registered technical pilot, with commercial authorization pending",
+  "opportunities": [
+    {
+      "id": "parts-retrofit",
+      "purpose": "Enable a shop with an installed compatible platform to qualify a documented retrofit for work previously outside its nozzle envelope.",
+      "observed_change": "Prusa released the HT Hotend on 2026-10-21, enabling up to 400 C on supported configurations. Published stock configurations are rated 290 C.",
+      "incumbent": "Direct manufacturer compatibility and spec lookup. Market alternatives include human distributor quoting, Partium, another industrial machine, and qualified outsourcing.",
+      "binding_constraint": "A higher nozzle requirement on an otherwise relevant installed device. Maker compatibility, chamber limits, physical approval and supplier obligations still bind.",
+      "counterfactual": "Hold the device, use, required limits and catalog scope fixed. Open the newly dated upgrade option only in the after replay. Decline when a different configuration or chamber requirement still blocks the purpose.",
+      "commercial_gate": "An authorized distributor or installed-base shop with genuine inquiries, alternative quotes and disposition/fulfillment evidence.",
+      "sources": [
+        "release",
+        "upgrade",
+        "stock",
+        "parts-specialist",
+        "market-signal"
+      ]
+    },
+    {
+      "id": "document-evidence",
+      "purpose": "Independently trace supplier answers back to authentic document pages under version changes.",
+      "observed_change": "Docling upstream recorded a November fix for VLM page-range provenance and complete assembly.",
+      "incumbent": "Direct page-exact PDF extraction and competent human citation checking. A page-range fix alone has no demonstrated delivery or economic advantage.",
+      "binding_constraint": "The work needs authorized real RFQ PDFs and an independently audited before/after provenance failure.",
+      "counterfactual": "Run equal documented cases on pinned releases, direct layout extraction, and the best existing manual checking.",
+      "commercial_gate": "No lawful pilot document set or contracted outcome was provided.",
+      "sources": [
+        "docling"
+      ]
+    },
+    {
+      "id": "bitvector-proof",
+      "purpose": "Shorten the formal acceptance path for transformations that call abstract fixed-width functions.",
+      "observed_change": "Lean 4.36 added bv_decide +uf. The #541 pilot verified two registered proofs and one false mutation.",
+      "incumbent": "The explicit Lean 4.35 congruence proof already passed both valid cases.",
+      "binding_constraint": "A shorter proof route has not demonstrated a new accepted commercial workload or full-cost advantage.",
+      "counterfactual": "Compare exact same statement and qualified result on both toolchains, with explicit congruence as the matched incumbent.",
+      "commercial_gate": "No authorized verification beneficiary, accepted workload or measured expense reduction.",
+      "sources": [
+        "lean"
+      ]
+    }
+  ]
+}
