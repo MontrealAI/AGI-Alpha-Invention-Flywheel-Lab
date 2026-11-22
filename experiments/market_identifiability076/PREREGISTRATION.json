@@ -1,0 +1,76 @@
+{
+  "schema": "agi-alpha/market-identifiability076/prereg-v1",
+  "registered_utc": "2026-11-03T02:00:00Z",
+  "base_commit": "4130ebfcab25a28b37c34032c63b25d7a2688e0f",
+  "objective": "Falsify or retain whether public aggregate Medicare provider+service data can replace rights-cleared claim-level auditing for duplicate claim identifier detection. No customer data, no outreach, no contract execution.",
+  "source_signals": [
+    {
+      "arrangement": "claim-level health billing audit",
+      "source": "https://sam.gov/opp/650978c0876c4ea994b6976213322974/view",
+      "notice_id": "36C10B27Q0073",
+      "notice_type": "SOURCES_SOUGHT_RFI_NOT_A_SOLICITATION",
+      "published": "2026-10-23",
+      "response": "2026-11-06",
+      "buyer_signal": "nonbinding market research; no right to private claims"
+    },
+    {
+      "arrangement": "secure multiparty SaaS data platform",
+      "source": "https://sam.gov/opp/981dee6f523e4776ac546381be6b2ec9/view",
+      "notice_id": "RFI_CIC_SaaS_CBP_FY2027",
+      "notice_type": "SOURCES_SOUGHT_RFI_NOT_A_SOLICITATION",
+      "published": "2026-10-20",
+      "response": "2026-11-10",
+      "buyer_signal": "FedRAMP/comparable security authorization and managed operations requirements are not evidenced"
+    },
+    {
+      "arrangement": "public federal award change attestation",
+      "source": "https://www.usaspending.gov/award/CONT_AWD_20341522F00039_2036_GS00Q14OADS204_4732",
+      "notice_type": "HISTORICAL_AWARD_NOT_CURRENT_ORDER",
+      "buyer_signal": "historical independent validation purchase, later termination/deobligation; public USAspending UI strong incumbent"
+    }
+  ],
+  "source_model": {
+    "data": "https://data.cms.gov/data-api/v1/dataset/335e5f35-eca6-482d-87b3-f99883e213e3/data",
+    "dictionary": "https://data.cms.gov/data-api/v1/dataset/335e5f35-eca6-482d-87b3-f99883e213e3/dictionary",
+    "metadata": "https://catalog.data.gov/dataset/medicare-physician-other-practitioners-by-provider-and-service-2024-12-01",
+    "version": "2024",
+    "updated": "2026-05-21",
+    "observable_fields": [
+      "Rndrng_NPI",
+      "HCPCS_Cd",
+      "Place_Of_Srvc",
+      "Tot_Benes",
+      "Tot_Srvcs",
+      "Tot_Bene_Day_Srvcs",
+      "Avg_Sbmtd_Chrg",
+      "Avg_Mdcr_Alowd_Amt",
+      "Avg_Mdcr_Pymt_Amt",
+      "Avg_Mdcr_Stdzd_Amt"
+    ],
+    "nonobservable_field": "claim_id"
+  },
+  "frozen_test": "Two authored micro-claim worlds have two services for one beneficiary on separate dates, with identical provider, service, amounts and every named aggregate; one world has unique claim IDs, the other repeats an ID. Only their claim ID differs. Private exact-ID check distinguishes; no public-aggregate-only procedure can distinguish.",
+  "comparators": [
+    "ordinary claim-level exact ID database check when authorized and supplied",
+    "public CMS browsing and basic grouping with no claim IDs",
+    "no-deploy when information/permission/acceptance is absent"
+  ],
+  "acceptance": {
+    "total_worlds": 2,
+    "sample_budget_worlds": 2,
+    "require_public_aggregate_equal": true,
+    "require_private_truth_different": true,
+    "require_test_tamper_rejection": true,
+    "stopping_rule": "execute one frozen pair and adversarial tests once; no post-hoc changes to worlds/projection/requirements on a failure",
+    "economic_admission": "no-deploy absent current rights-cleared input, specific buyer acceptance/contract, complete costs, native-account cash authority and independently observed demand"
+  },
+  "claims": {
+    "real_customers": 0,
+    "real_collections_usd": 0,
+    "native_profit": null,
+    "market_size": null,
+    "annual_3000000000_achieved": false,
+    "method_advantage": null
+  },
+  "safety": "Synthetic identifiers only, no CPT descriptors, no patient/provider data, no paid API, no outreach; source metadata is public and is not private claims or buyer agreement."
+}
