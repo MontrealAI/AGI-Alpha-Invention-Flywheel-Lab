@@ -1,0 +1,55 @@
+name: FRONTIER Ω ALPHA qualification
+on:
+  pull_request:
+    paths:
+      - 'docs/research/frontier-omega-alpha/**'
+      - 'products/frontier-omega-alpha/**'
+      - 'products/alpha-genesis-harness/bridge/**'
+      - 'scripts/build_research_site.py'
+      - 'tests/test_research_site.py'
+      - '.github/workflows/frontier-omega-alpha.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'docs/research/frontier-omega-alpha/**'
+      - 'products/frontier-omega-alpha/**'
+      - 'products/alpha-genesis-harness/bridge/**'
+      - 'scripts/build_research_site.py'
+      - 'tests/test_research_site.py'
+      - '.github/workflows/frontier-omega-alpha.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  qualify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+          sparse-checkout: |
+            docs/research
+            experiments/frontier-conclave
+            products/frontier-omega-alpha
+            products/alpha-genesis-harness/bridge
+            scripts/build_research_site.py
+            tests/test_research_site.py
+            tests/test_alpha_site.cjs
+            tests/test_surf_reader.cjs
+          sparse-checkout-cone-mode: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '24'
+      - run: npm ci --ignore-scripts
+        working-directory: products/frontier-omega-alpha
+      - run: npm test
+        working-directory: products/frontier-omega-alpha
+      - run: npx playwright install --with-deps chromium
+        working-directory: products/frontier-omega-alpha
+      - run: npm run test:browser
+        working-directory: products/frontier-omega-alpha
+      - run: python3 -m unittest discover -s tests -p test_research.py -v
+        working-directory: products/frontier-omega-alpha
+      - run: python3 -m unittest discover -s tests -p test_research_site.py -v
+      - run: node --test tests/test_alpha_site.cjs tests/test_surf_reader.cjs

@@ -58,6 +58,13 @@ ASSETS += ('frontier-conclave-hero.png', 'frontier-conclave-salon.png', 'FRONTIE
 PAGES += ('alpha-genesis-live.html', 'alpha-genesis-live-studio.html')
 PAGES += ('ignition/index.html', 'ignition/demo.html')
 ASSETS += ('ignition/studio.css', 'ignition/public.js')
+PAGES += ('frontier-omega-alpha/index.html', 'frontier-omega-alpha/fr.html')
+ASSETS += (
+    'frontier-omega-alpha/frontier.css',
+    'frontier-omega-alpha/frontier.js',
+    'frontier-omega-alpha/decrypt.js',
+    'frontier-omega-alpha/carina.webp',
+)
 FILES = PAPERS + PAGES + ASSETS + ('publication-manifest.json',)
 PUBLIC_SITE = 'https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/'
 EXTERNAL_RESEARCH_REFERENCES = frozenset({
