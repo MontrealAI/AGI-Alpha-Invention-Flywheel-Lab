@@ -1,0 +1,36 @@
+{
+  "kind": "prospective_protocol_freeze",
+  "created_utc": "2026-11-04T23:11:39Z",
+  "development_only_cell": "A0067",
+  "remaining_raw_payloads_opened": 0,
+  "test_labels_opened": 0,
+  "independent_pre_freeze_tests": 18,
+  "development_run": 41931083111,
+  "development_job": 126927835214,
+  "development_source_commit": "134f616e9a1b8c1b5846fc34298ccb1cc9d0615a",
+  "earlier_failure": {
+    "commit": "348aa3acc529296d16e9df1d3ce6da25cf9973fb",
+    "run": 41930871435,
+    "stage": "workflow YAML parse before execution",
+    "cause": "Unquoted pip --only-binary=:all: scalar",
+    "resolution": "Block-scalar run command; parsed locally then actual dev run passed"
+  },
+  "file_sha256": {
+    "PROTOCOL.md": "e5c5b783fb2118563e2535b30d258146fbd4423c816cb395f6171fade77c22f9",
+    "README.md": "35af2fb11710c3943fb4ded09dcc2904195e1b711344ce44f064efa1b24fd1c0",
+    "cli.py": "a93ddb279ee6721e14d56f8b02cd6385b61a8ed421a0aad2acd32a456559b544",
+    "development-receipt.json": "ae4a7001417f26eb7a82d809b47d2bf2b38ae2ce144cf01d1a9960c06b6a6437",
+    "development.py": "e25963e4f0a01617443b2d6fda5f2011c6f07b98e273db7978f17f6ec82750be",
+    "evaluate.py": "dc85f80f1532a1ade59d78c520776de770569a1b083ee3e747ba272334b476eb",
+    "manifest.json": "6d306c3c0e6d6de505cf78b2984f3b565f31fe760d1736a8867cfa798dbab9bc",
+    "measurement.py": "76b54024690dfee1c5e92f077c64653970d29439f99eff9addbda9d838a91cb4",
+    "probe.py": "b891e9eb8383b14c26c3c1b55de252da3ceecfb95c4c0611872f0e6822f6a2d7",
+    "prognosis.py": "056b25c62ececa867a486762ab3f93d44dbfd899db3ed47779a72c017b11b120",
+    "pyprobe_reference.py": "760e2439c01c50080b5ea4764e391e2b801ef9e8f4db960e037305e853751d0e",
+    "requirements.txt": "50f2cf9ef3a25a2607717be729564b9eccfdb8f9ee6e1f320492db758a76d276",
+    "test_evaluate.py": "c97df7a00f99e9525a124a1ee23a5947a31eae2c5d2a5c6b47204b8f13b7c98b",
+    "test_measurement.py": "f60481ba09113d7e2f07ca65c917d885b9a634a53a85a2034a156e1b54031adc",
+    "test_probe.py": "a1153704adb95e21745b0ecc4690fd039d789d241daa10198019de0e23c5bf8f",
+    "test_prognosis.py": "5fd33f1ca4237b11c0a44bedc0bf4f8aa4aaf2d863f4d6b79e4a39a9cccc51c1"
+  }
+}
