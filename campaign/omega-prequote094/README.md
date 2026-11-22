@@ -1,0 +1,17 @@
+# Prequote094 — when would a pre-spend observation change the economic game?
+
+Read [frozen pre-implementation protocol](PROTOCOL.md). The input is the **unchanged, already-exposed** five-scenario, ten-native-account paid-reach comparison in main `4abbb858`. This research instrument constructs a *finite source-bound decision frontier*, not a new buyer, realized demand, prospective signal, partner contract or native operator.
+
+## New executable capability
+
+`python -m research.prequote094 --out /absolute/new/PREQUOTE094.json` reads and SHA256-verifies the actual prior comparison. It reconciles reported signed-audit receipts, cash, profit, incurred costs, reserves and original paired deltas; it does **not** reopen or resign the private accounts. It solves all 108 registered hypothetical combinations with rational arithmetic. In every finite game, an unrestricted competent comparator can keep organic/nonpurchase, buy the historical prepaid pilot without buying information, buy on an informative positive observation, or invert an anti-informative observation. Screening costs are paid even when screening says not to buy.
+
+The original modeled after-tax incremental results (pilot minus organic) are central **+$205.112**; weak, copycat and no demand **−$7.16** each; failed activation **−$5**. The worst-case adverse loss bound is $7.16. The unconditional paid pilot's minimum is −$7.16 versus $0 incremental for organic, so the distribution-free conservative decision with **no independently calibrated prequote signal** is still **NO NEW CHANNEL COMMITMENT**. A perfect, costless hindsight classifier is only an optimistic mathematical bound, not evidence that a supplier or buyer can generate it in advance.
+
+The 108 scenarios are **not empirical probabilities**. In particular, apparent positive conditional Bayesian value does not establish profitable future orders or an actionable signal; in an adverse world an ideal classifier still loses any strictly positive screening fee. Real buyer responses to a new contract, actual comprehensive host/model costs, market reach, supplier incentives, human/conventional alternatives, true signal acquisition cost and signal quality are all unknown.
+
+## What this changes for the next experiment
+
+Instead of another uncalibrated priced scenario, the missing enabling means is now operationally specified: legally usable, independently timestamped, source-linked information genuinely available **before** purchasing reach; measured predictive quality over a separately frozen prospective cohort; and a complete native financial mechanism that can verify accepted deliverables, collect actual earnings and atomically reserve only audited unrestricted funds. Any such study must include selective nonpurchase, organic direct acquisition, strong conventional/AI/self-service comparators, unsuccessful quote expenses, production/repair/support, taxes and pending claims. Those means and validation have **not yet been constructed** by this research certificate.
+
+All outputs are **simulated retrospective financial arithmetic and conditional game theory**, not genuine commerce, observed equilibrium, a new discovery-process improvement, annual profit or progress toward the $3 billion target. No code alters `Account`, `JournalAccount`, prior accounts, financial authority, release workflows or historical failures. The research branch remains draft; full exact-head CI and any merge/release require distinct qualifications. Decision: **RESEARCH ONLY / NO NEW PAID CHANNEL / NO DEPLOY**.
