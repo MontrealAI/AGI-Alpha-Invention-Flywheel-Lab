@@ -1,0 +1,88 @@
+name: CANADA-OPEN-REVIEW228 offline immutable-artifact qualification
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/canada-open-review228.yml"
+      - "campaign/canada-open-review228/**"
+      - "tools/canada_open_review228.py"
+      - "tests/test_canada_open_review228.py"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  historical-artifact-review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Declare standard platform window
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - name: Checkout exact candidate without persistent credentials
+        uses: actions/checkout@v4
+        with:
+          ref: \${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - name: Capture source identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          git rev-parse HEAD | tee "$RUNNER_TEMP/HEAD.txt"
+          sha256sum tools/canada_open_review228.py tests/test_canada_open_review228.py campaign/canada-open-review228/PROTOCOL.md | tee "$RUNNER_TEMP/SOURCE_SHA256.txt"
+      - name: Offline synthetic/adversarial cases without government request
+        shell: bash
+        run: |
+          set -euo pipefail
+          /usr/bin/time -v python3 -B -m unittest -v tests.test_canada_open_review228 2>&1 | tee "$RUNNER_TEMP/TESTS.txt"
+      - name: Download only the EXISTING historical source witness from GitHub Actions
+        shell: bash
+        env:
+          GH_TOKEN: \${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh run download 44961099150 \
+            --repo MontrealAI/AGI-Alpha-Invention-Flywheel-Lab \
+            --name canada-open-need227-registered-observation \
+            --dir "$RUNNER_TEMP/need228"
+          printf '%s\n' "Existing artifact 14728724874; no CanadaBuys request" > "$RUNNER_TEMP/ARTIFACT_ORIGIN.txt"
+          echo "2f58308f5e312472599d80cb6d1ea835c7004b446c30371c79d1b7cbd6a899a9  $RUNNER_TEMP/need228/canada-open-need227/SOURCE.csv" | sha256sum -c -
+          echo "a7bf21169189636eea6dc7dca50d93f80e81118994e188a0be5805e969769349  $RUNNER_TEMP/need228/canada-open-need227/RECEIPT.json" | sha256sum -c -
+      - name: Replay all 937 published rows and six registered matches
+        shell: bash
+        env:
+          NEED228_SOURCE_DIR: \${{ runner.temp }}/need228/canada-open-need227
+        run: |
+          set -euo pipefail
+          /usr/bin/time -v python3 -B -m unittest -v tests.test_canada_open_review228 2>&1 | tee "$RUNNER_TEMP/TESTS_WITH_ACTUAL_ARTIFACT.txt"
+          python3 -B tools/canada_open_review228.py review \
+            --input "$NEED228_SOURCE_DIR" --report "$RUNNER_TEMP/REVIEW.json" > "$RUNNER_TEMP/REVIEW_COMMAND.txt"
+          python3 -B tools/canada_open_review228.py audit \
+            --input "$NEED228_SOURCE_DIR" --report "$RUNNER_TEMP/REVIEW.json" > /dev/null
+          echo "1e302a64a8836220609e19ff8548dbc6ccd8d0184fd7f3a91649c869e3850572  $RUNNER_TEMP/REVIEW.json" | sha256sum -c -
+          python3 - "$RUNNER_TEMP/REVIEW.json" <<'PY'
+          import json, sys
+          result=json.load(open(sys.argv[1],encoding="utf-8"))
+          assert result["source_rows"] == 937 and result["registered_matches"] == 6
+          assert len(result["reviewed_rows"]) == 6
+          assert all(r["buyer_as_published_en"] for r in result["reviewed_rows"])
+          assert result["decision"] == "RESEARCH_ONLY_NO_BID_NO_DEPLOY"
+          assert result["financial_ledger_touched"] is False
+          assert not result["usd_3b_trailing365_complete_cost_profit_proven"]
+          print("REGISTERED_OFFLINE_REVIEW_ACCEPTED")
+          PY
+      - name: Preserve compact pass or failure evidence, not repeated source
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: canada-open-review228-offline-evidence
+          retention-days: 7
+          if-no-files-found: warn
+          path: |
+            \${{ runner.temp }}/HEAD.txt
+            \${{ runner.temp }}/SOURCE_SHA256.txt
+            \${{ runner.temp }}/TESTS.txt
+            \${{ runner.temp }}/TESTS_WITH_ACTUAL_ARTIFACT.txt
+            \${{ runner.temp }}/ARTIFACT_ORIGIN.txt
+            \${{ runner.temp }}/REVIEW.json
