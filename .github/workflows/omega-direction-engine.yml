@@ -1,0 +1,32 @@
+name: Omega Direction Engine | Bounded Epistemic Test
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'omega_direction/**'
+      - '.github/workflows/omega-direction-engine.yml'
+permissions:
+  contents: read
+jobs:
+  omega-direction-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Exact decisions and Monte Carlo evidence
+        run: |
+          python -m unittest discover -s omega_direction -p 'test_*.py' -v
+          python omega_direction/engine.py --output /tmp/omega-direction-result.json
+      - name: Check published receipt reproducibility
+        run: |
+          python - <<'PY'
+          import json
+          a=json.load(open('/tmp/omega-direction-result.json'))
+          b=json.load(open('omega_direction/RESULT.json'))
+          assert a==b, 'Receipt mismatches source or frozen parameters'
+          assert b['scope'].startswith('exactly solved authored')
+          print('Published bounded conditional receipt independently reproduced.')
+          PY
