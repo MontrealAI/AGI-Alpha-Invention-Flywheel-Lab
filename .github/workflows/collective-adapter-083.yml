@@ -1,0 +1,42 @@
+name: Collective adapter 083 conditional construction and independent audit
+on:
+  pull_request:
+    paths:
+      - 'campaign/collective-adapter-083/**'
+      - '.github/workflows/collective-adapter-083.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  preregistered-coalition-and-adapter:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record actual platform job start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Reproduce all registered and adversarial checks
+        working-directory: campaign/collective-adapter-083
+        run: python -m unittest -v test_engine.py
+      - name: Construct original sample deliverables and independently audit bytes
+        working-directory: campaign/collective-adapter-083
+        env:
+          PROOF_ROOT: ${{ runner.temp }}/collective-adapter-083-proof
+        run: |
+          python -c 'import os; from engine import run; run(os.environ["PROOF_ROOT"])'
+          python -c 'import os; from independent import audit; print(audit(os.environ["PROOF_ROOT"]))'
+          test "$(git rev-parse HEAD)" = '${{ github.event.pull_request.head.sha || github.sha }}'
+      - name: Preserve small source-bound evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: collective-adapter-083-${{ github.event.pull_request.head.sha || github.sha }}
+          path: ${{ runner.temp }}/collective-adapter-083-proof
+          if-no-files-found: warn
