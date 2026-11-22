@@ -1,0 +1,111 @@
+{
+  "schema": "agi-alpha/p0-same-source-restart126/summary-v1",
+  "source_commit": "1d64b69dcadb494d60f666c635fbecf74ebeeefc",
+  "source_sha256": "1fffc99faef369607ec05e0cdd30ee4cc6f3ec42d1fda3797c3e731ce0a87613",
+  "preregistered_protocol_sha256": "a207aa257fb073e48fcf45436b686423126c27922df72b6fee37a33e9deaf1a5",
+  "registered_input_sha256": "cf9c115d9bbfeb795d3257c69211c6abee6e7d5b5ad833a63fb0aa24ab7b733f",
+  "adversarial_protocol_sha256": "58f4a72f3e050c7d53c96766bf56baf4d154e9b36fb6a11055b08a7ad350cfcb",
+  "role": "development_only_fresh_ephemeral_simulation",
+  "worlds": 2,
+  "days": 5,
+  "seed": 126001,
+  "service_seed": 126002,
+  "opening_microUSD_per_arm": 5000000000,
+  "commands": [
+    {
+      "name": "register",
+      "exit": 0
+    },
+    {
+      "name": "operate --max-events 4",
+      "exit": 0,
+      "events_per_arm": 4,
+      "queued_clear_hour": 51
+    },
+    {
+      "name": "operate --max-events 2",
+      "exit": 0,
+      "events_per_arm": 6
+    },
+    {
+      "name": "resume",
+      "exit": 0,
+      "events_per_arm": 9,
+      "queue_drained": true
+    },
+    {
+      "name": "audit",
+      "exit": 0,
+      "accepted": true,
+      "service_jobs_rederived": 104
+    },
+    {
+      "name": "completed resume",
+      "exit": 0,
+      "financial_file_digests_unchanged": true,
+      "files_verified": 6
+    },
+    {
+      "name": "tampered-source resume",
+      "exit": 1,
+      "expected_rejection": "FROZEN_SOURCE_OR_CONFIGURATION_CHANGED",
+      "financial_file_digests_unchanged": true
+    },
+    {
+      "name": "restored-source audit",
+      "exit": 0,
+      "accepted": true
+    }
+  ],
+  "arms": {
+    "baseline": {
+      "accepted_jobs": 1,
+      "paid_jobs": 1,
+      "synthetic_customers": 1,
+      "processed_events": 9,
+      "pending_events": 0,
+      "collection_event_observed": true,
+      "collections_microUSD": 42780000,
+      "expenses_microUSD": 80040620,
+      "profit_microUSD": -37260620,
+      "tail_reserve_microUSD": 42980000,
+      "equity_protection_backing_microUSD": 142980000,
+      "unrestricted_earned_microUSD": 0,
+      "productive_expansions": 0,
+      "conditional_simulated_commercial_success": false
+    },
+    "growth": {
+      "accepted_jobs": 1,
+      "paid_jobs": 1,
+      "synthetic_customers": 1,
+      "processed_events": 9,
+      "pending_events": 0,
+      "collection_event_observed": true,
+      "collections_microUSD": 42780000,
+      "expenses_microUSD": 80040620,
+      "profit_microUSD": -37260620,
+      "tail_reserve_microUSD": 42980000,
+      "equity_protection_backing_microUSD": 142980000,
+      "unrestricted_earned_microUSD": 0,
+      "productive_expansions": 0,
+      "conditional_simulated_commercial_success": false
+    }
+  },
+  "paired_profit_difference_microUSD": 0,
+  "acceptance": {
+    "source_bound_queue_restart": "ACHIEVED",
+    "due_collection_processed": "ACHIEVED",
+    "same_source_completed_resume_idempotence": "ACHIEVED",
+    "tampered_source_rejected": "ACHIEVED",
+    "cross_source_legacy_migration": "BLOCKED",
+    "preregistered_conditional_commercial_minimum": "FAILED",
+    "real_collected_commerce": "NOT_OBSERVED",
+    "annual_3b_target": "NOT_ACHIEVED"
+  },
+  "unknown_costs": [
+    "actual_model_host_billing",
+    "whole_campaign_incurred_engineering_cost"
+  ],
+  "safety": "No owner ledger or signer, original keys, private state, account paths, action tapes or customer data published. No real payments or spending.",
+  "caveat": "Fresh authored same-source engineering reproduction with negative economics, not account upgrade, external commerce, annual profit or causal recursive advantage."
+}
