@@ -4,6 +4,8 @@
 
 **Déploiement GitHub.** Le [guide GitHub Pages et MetaMask](GITHUB-NATIVE.md) présente l’enregistrement, la remise des clés, la lecture sur une origine isolée et l’exploitation.
 
+[ALPHA-1 · EN/FR](ALPHA-1.md) records the verified retrofit pilot, successor comparison and private economic evidence procedure.
+
 **MONTREAL.AI × QUÉBEC.AI**
 
 ## English
