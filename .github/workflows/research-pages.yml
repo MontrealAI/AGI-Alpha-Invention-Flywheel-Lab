@@ -37,6 +37,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     timeout-minutes: 360
+    permissions:
+      actions: read
+      contents: read
     steps:
       - name: Record platform job execution start
         shell: bash

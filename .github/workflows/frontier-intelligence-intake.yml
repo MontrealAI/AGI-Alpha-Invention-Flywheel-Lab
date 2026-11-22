@@ -27,7 +27,7 @@ jobs:
     timeout-minutes: 360
     permissions:
       contents: read
-      deployments: read
+      actions: read
     steps:
       - name: Record platform job execution start
         run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
@@ -46,6 +46,10 @@ jobs:
     environment: frontier-intelligence-intake
     runs-on: ubuntu-latest
     timeout-minutes: 360
+    permissions:
+      actions: read
+      contents: read
+      pull-requests: read
     steps:
       - name: Record platform job execution start
         shell: bash
@@ -57,6 +61,10 @@ jobs:
           sparse-checkout: |
             products/frontier-omega-alpha
             products/alpha-genesis-harness/bridge
+      - name: Recheck GitHub protection after intake approval
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 products/frontier-omega-alpha/native/production_gate.py --environment frontier-intelligence-intake --commit "$GITHUB_SHA"
       - name: Validate a reviewed public submission using protected source
         shell: bash
         working-directory: products/frontier-omega-alpha
