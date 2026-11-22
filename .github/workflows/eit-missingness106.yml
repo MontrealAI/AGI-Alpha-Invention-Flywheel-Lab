@@ -1,0 +1,62 @@
+name: EIT106 independent physical source-token inventory
+on:
+  pull_request:
+    paths:
+      - 'research/eit_missingness106/**'
+      - 'tests/test_eit_missingness106.py'
+      - '.github/workflows/eit-missingness106.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-locked-diagnostic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Record actual platform start
+        run: echo "AGI_JOB_START_EPOCH=$(date -u +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - name: Verify exact executing source
+        run: test "$(git rev-parse HEAD)" = "${{ github.event.pull_request.head.sha || github.sha }}"
+      - name: Test refusal and disjoint source representations
+        run: |
+          python3 -m unittest tests.test_eit_missingness106 -v
+          python3 -O -m unittest tests.test_eit_missingness106 -v
+      - name: Inventory one independently acquired physical source without imputation
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m research.eit_missingness106.diagnose > "$RUNNER_TEMP/EIT106_DIAGNOSTIC.json"
+          python3 - "$RUNNER_TEMP/EIT106_DIAGNOSTIC.json" "$(git rev-parse HEAD)" <<'PY'
+          import json,sys
+          path,head=sys.argv[1:]
+          with open(path,encoding="utf-8") as stream: obj=json.load(stream)
+          assert obj["schema"]=="eit106/source-token-inventory/v1"
+          assert obj["source"]["official_md5"]=="262a968766cd034914155ac2bfcd121e"
+          assert obj["inventory"]["measurement_rows"]>0
+          assert obj["inventory"]["voltage_cells_observed"]==16*obj["inventory"]["measurement_rows"]
+          assert obj["inventory"]["original_EIT105_strict_contract"]=="FAILED_HISTORICAL"
+          assert obj["inventory"]["original_EIT105_masked_contract"]=="FAILED_HISTORICAL"
+          assert obj["inventory"]["unknown_tokens_accepted_as_voltage"] is False
+          assert obj["inventory"]["all_missing_values_left_unimputed"] is True
+          assert obj["research_verdict"]=="DIAGNOSTIC_ONLY_NO_BID_NO_DEPLOY"
+          assert obj["actual_collections_usd"]==0
+          obj["executing_source_commit"]=head
+          obj["protocol_freeze_commit"]="658ad434c4c3c76335ca59e29b92f6628bccde8e"
+          with open(path,"w",encoding="utf-8") as out: json.dump(obj,out,sort_keys=True,indent=2)
+          print("INDEPENDENT_SOURCE_DIAGNOSTIC_ONLY_OLD_FAILURES_PRESERVED")
+          PY
+          sha256sum "$RUNNER_TEMP/EIT106_DIAGNOSTIC.json"
+          cat "$RUNNER_TEMP/EIT106_DIAGNOSTIC.json"
+      - name: Publish compact provenance and diagnostic counts
+        if: success()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: eit106-independent-source-diagnostic
+          path: ${{ runner.temp }}/EIT106_DIAGNOSTIC.json
+          if-no-files-found: error
