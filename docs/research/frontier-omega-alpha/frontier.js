@@ -8,7 +8,7 @@ const messages = {
     offline: 'Protected access is offline on this deployment.',
     wallet_missing: 'Open this page in an Ethereum wallet browser or install a compatible wallet extension.',
     network: 'Switch your wallet to Ethereum mainnet and try again.',
-    identity: 'Enter only the first label, using letters, digits or internal hyphens.',
+    identity: 'Enter only the first label of your AGI Club name.',
     connecting: 'Connecting to your wallet…',
     signing: 'Review and sign the sign-in message in your wallet.',
     verifying: 'Verifying your wallet and eligibility on Ethereum…',
@@ -34,7 +34,7 @@ const messages = {
     offline: 'L’accès protégé est hors ligne sur ce site.',
     wallet_missing: 'Ouvrez cette page dans le navigateur d’un portefeuille Ethereum ou installez une extension compatible.',
     network: 'Passez au réseau principal Ethereum dans votre portefeuille, puis réessayez.',
-    identity: 'Saisissez uniquement le premier libellé, avec des lettres, des chiffres ou des traits d’union internes.',
+    identity: 'Saisissez uniquement le premier libellé de votre nom AGI Club.',
     connecting: 'Connexion à votre portefeuille…',
     signing: 'Vérifiez et signez le message de connexion dans votre portefeuille.',
     verifying: 'Vérification de votre portefeuille et de votre admissibilité sur Ethereum…',
@@ -65,31 +65,24 @@ const nativeMessages = {
     metamask_missing: 'Open this page in MetaMask Mobile’s browser or use the MetaMask extension.',
     mobile: 'Open in MetaMask Mobile',
     publisher_offline: 'The GitHub publisher has not posted a recent release. Enrollment is paused.',
-    review: 'Review Ethereum enrollment',
-    review_text: 'The public transaction registers this device key and any Club label you entered. It sends zero ETH. Network fees apply. Review the final amount in MetaMask.',
-    gas: 'Gas units',
-    transaction_data: 'Transaction data',
-    signing_wallet: 'Signing wallet',
-    estimated: 'Estimated network fee',
-    maximum: 'Proposed fee cap',
-    send: 'Review and confirm in MetaMask',
+    review: 'Review the device request',
+    review_text: 'Sign a message in MetaMask to bind your wallet to this browser. Signing uses no gas.',
+    signature_data: 'Message to sign',
+    send: 'Sign in MetaMask',
+    download: 'Download signed request',
     checking: 'Checking enrollment status…',
-    pending: 'Transaction submitted. Waiting for Ethereum confirmation.',
-    awaiting_receipt: 'The wallet did not return a transaction hash. The reader will recover from the published receipt. Avoid submitting again while this request can still be mined.',
-    expired_receipt: 'This unconfirmed enrollment expired. You can review a replacement.',
-    confirmed: 'Ethereum transaction confirmed. Waiting for finality and GitHub provisioning.',
+    pending: 'Signed request ready. Share it privately with the authorized operator to receive access on this device.',
+    expired_receipt: 'This signed request expired. You can review a replacement.',
     eligible: 'Eligibility verified. Waiting for release keys.',
+    paused: 'Access is paused. The publisher rechecks eligibility after an ENSv1 extension or qualifying balance change. This browser keeps its existing registration.',
     denied: 'The publisher found no qualifying ownership for this enrollment.',
-    revoked: 'This enrollment is no longer eligible. A different qualifying path can be registered.',
+    revoked: 'The operator withdrew access for this device.',
     superseded: 'This wallet enrolled another device. You can review a new enrollment for this device.',
-    failed: 'The Ethereum transaction failed. You can review a new enrollment.',
     capacity: 'The publisher’s current enrollment capacity was reached. A new review may be attempted later.',
     retry: 'Review a new enrollment',
     refresh: 'Check status now',
-    transaction: 'View Ethereum transaction',
     storage: 'Device key storage is unavailable. Enable browser storage before enrolling.',
     storage_busy: 'Enrollment changed in another tab. Reconnect here to check its status.',
-    fee_unavailable: 'A live Ethereum fee quote could not be obtained. No transaction was requested.',
     unavailable: 'The registration could not be verified. Please reconnect to check its status.'
   },
   fr: {
@@ -99,31 +92,24 @@ const nativeMessages = {
     metamask_missing: 'Ouvrez cette page dans le navigateur de MetaMask Mobile ou utilisez l’extension MetaMask.',
     mobile: 'Ouvrir dans MetaMask Mobile',
     publisher_offline: 'Le processus de publication GitHub n’a pas diffusé de version récente. L’enregistrement est en pause.',
-    review: 'Examiner l’enregistrement Ethereum',
-    review_text: 'La transaction publique enregistre la clé de cet appareil et le libellé Club saisi, le cas échéant. Elle transfère zéro ETH et entraîne des frais de réseau. Vérifiez le montant final dans MetaMask.',
-    gas: 'Unités de gaz',
-    transaction_data: 'Données de la transaction',
-    signing_wallet: 'Portefeuille signataire',
-    estimated: 'Frais de réseau estimés',
-    maximum: 'Plafond de frais proposé',
-    send: 'Examiner et confirmer dans MetaMask',
+    review: 'Examiner la demande d’accès',
+    review_text: 'Signez un message dans MetaMask pour lier votre portefeuille à ce navigateur. La signature est sans frais de gaz.',
+    signature_data: 'Message à signer',
+    send: 'Signer dans MetaMask',
+    download: 'Télécharger la demande signée',
     checking: 'Vérification de l’enregistrement…',
-    pending: 'Transaction soumise. En attente de la confirmation Ethereum.',
-    awaiting_receipt: 'Le portefeuille n’a pas retourné d’identifiant de transaction. Le lecteur reprendra à partir du reçu publié. Évitez une nouvelle soumission tant que cette demande peut être confirmée.',
-    expired_receipt: 'Cet enregistrement non confirmé a expiré. Vous pouvez examiner un remplacement.',
-    confirmed: 'Transaction Ethereum confirmée. En attente de la finalité et de la mise à disposition par GitHub.',
+    pending: 'La demande signée est prête. Transmettez-la en privé à l’opérateur autorisé pour obtenir l’accès sur cet appareil.',
+    expired_receipt: 'Cette demande signée a expiré. Vous pouvez en examiner une nouvelle.',
     eligible: 'Admissibilité vérifiée. En attente des clés de lecture.',
+    paused: 'L’accès est en pause. L’admissibilité est vérifiée de nouveau après un renouvellement ENSv1 ou une variation du solde. Ce navigateur conserve son enregistrement.',
     denied: 'GitHub n’a relevé aucune détention admissible pour cet enregistrement.',
-    revoked: 'Cet enregistrement n’est plus admissible. Un autre mode admissible peut être enregistré.',
+    revoked: 'L’opérateur a révoqué l’accès de cet appareil.',
     superseded: 'Ce portefeuille a enregistré un autre appareil. Vous pouvez examiner un nouvel enregistrement pour celui-ci.',
-    failed: 'La transaction Ethereum a échoué. Vous pouvez examiner un nouvel enregistrement.',
     capacity: 'La capacité actuelle d’enregistrement est atteinte. Réessayez plus tard.',
     retry: 'Examiner un nouvel enregistrement',
     refresh: 'Vérifier maintenant',
-    transaction: 'Voir la transaction Ethereum',
     storage: 'Le stockage de la clé d’appareil est indisponible. Activez le stockage du navigateur avant de vous enregistrer.',
     storage_busy: 'L’enregistrement a changé dans un autre onglet. Reconnectez-vous ici pour vérifier son état.',
-    fee_unavailable: 'L’estimation en direct des frais Ethereum est indisponible. Aucune transaction n’a été demandée.',
     unavailable: 'L’enregistrement n’a pas pu être vérifié. Reconnectez-vous pour consulter son état.'
   }
 }[language];
@@ -363,8 +349,8 @@ async function openNative(path) {
     return;
   }
 
-  let label = path === 'club' ? byId('club-label').value.trim().toLowerCase() : null;
-  if (path === 'club' && !/^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$/.test(label)) return say(status, 'identity');
+  const label = path === 'club' ? byId('club-label').value.trim() : null;
+  if (path === 'club' && (!label || label.includes('.'))) return say(status, 'identity');
   if (session || activeWallet) lock('locked');
   const active = ++generation;
   connectButtons.forEach(button => { button.disabled = true; });
@@ -392,28 +378,30 @@ async function openNative(path) {
     }
     tell(result.state);
     if (result.state === 'review') {
-      const { quote } = result;
       const details = document.createElement('details');
-      details.append(recordNode('summary', nativeMessages.transaction_data),
-        recordNode('p', nativeMessages.signing_wallet + ' · ' + quote.payload.from),
-        recordNode('code', quote.payload.data));
-      controls.append(recordNode('h3', nativeMessages.review), recordNode('p', nativeMessages.review_text),
-        recordNode('code', quote.payload.to),
-        recordNode('p', nativeMessages.gas + ' · ' + quote.gas),
-        recordNode('p', nativeMessages.estimated + ' · ' + quote.estimate + ' ETH'),
-        recordNode('p', nativeMessages.maximum + ' · ' + quote.maximum + ' ETH'), details);
+      details.append(recordNode('summary', nativeMessages.signature_data), recordNode('code', result.message));
+      controls.append(recordNode('h3', nativeMessages.review), recordNode('p', nativeMessages.review_text), details);
       nativeButton(controls, 'send', event => {
         event.target.disabled = true;
-        run(async () => show(await client.submit(quote)));
+        run(async () => show(await client.submit()));
       }).focus();
     } else {
-      if (result.tx) nativeLink(controls, 'transaction', 'https://etherscan.io/tx/' + result.tx);
-      if (['pending', 'confirmed', 'eligible', 'awaiting_receipt'].includes(result.state)) {
+      if (result.request) {
+        nativeButton(controls, 'download', () => {
+          const file = new Blob([JSON.stringify(result.request) + '\n'], { type: 'application/json' });
+          const link = document.createElement('a');
+          link.href = URL.createObjectURL(file);
+          link.download = 'frontier-device-request.json';
+          link.click();
+          setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+        });
+      }
+      if (['pending', 'eligible', 'paused'].includes(result.state)) {
         const refresh = () => run(async () => show(await client.status()));
         nativeButton(controls, 'refresh', refresh);
         polling = setTimeout(refresh, 45_000);
       }
-      if (['denied', 'revoked', 'superseded', 'failed', 'capacity', 'expired_receipt'].includes(result.state)) {
+      if (['denied', 'revoked', 'superseded', 'capacity', 'expired_receipt'].includes(result.state)) {
         nativeButton(controls, 'retry', () => run(async () => show(await client.prepare(true))));
       }
     }
@@ -445,8 +433,8 @@ async function connect(path) {
   if (!globalThis.isSecureContext || !globalThis.crypto?.subtle) return say(status, 'offline');
   const wallet = globalThis.ethereum;
   if (!wallet?.request) return say(status, 'wallet_missing');
-  const label = path === 'club' ? byId('club-label').value.trim().toLowerCase() : null;
-  if (path === 'club' && !/^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$/.test(label)) return say(status, 'identity');
+  const label = path === 'club' ? byId('club-label').value.trim() : null;
+  if (path === 'club' && (!label || label.includes('.'))) return say(status, 'identity');
   if (session) lock('locked');
   const ownGeneration = ++generation;
   connectButtons.forEach(button => { button.disabled = true; });

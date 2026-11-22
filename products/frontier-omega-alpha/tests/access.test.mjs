@@ -7,7 +7,7 @@ import { SiweMessage } from 'siwe';
 import { createAccessServer } from '../access/server.mjs';
 import { releaseKey, rotateAsset } from '../access/crypto.mjs';
 import { decryptRelease } from '../../../docs/research/frontier-omega-alpha/decrypt.js';
-import { fakeMainnet, testStore, createWallet, memberRecord, clubNode, MINIMUM, WRAPPER } from './fixtures.mjs';
+import { fakeMainnet, testStore, createWallet, memberRecord, clubNode, CLUB_PARENT, CLUB_ROOT, MINIMUM, WRAPPER } from './fixtures.mjs';
 
 process.umask(0o077);
 const origin = 'https://research.example.test';
@@ -41,7 +41,7 @@ async function setup(t) {
   return { post, challenge, login, store, wrappingKey, asset, rpcState, clock, advance: milliseconds => { time += milliseconds; } };
 }
 
-test('GoalOS label namehash and mainnet direct Club ownership at zero token balance', async t => {
+test('ENSv1 Registry verifies an unwrapped Club name and revokes the former owner after transfer', async t => {
   const s = await setup(t);
   const wallet = createWallet();
   assert.equal(clubNode(' MEMBER-2 '), namehash('member-2.club.agi.eth'));
@@ -53,28 +53,87 @@ test('GoalOS label namehash and mainnet direct Club ownership at zero token bala
   assert.equal((await s.login(wallet, 'member-3')).status, 403);
   const forged = await s.post('challenge', { address: wallet.address, label: 'member-2.club.agi.eth', language: 'en' });
   assert.equal(forged.status, 400);
-  s.rpcState.owners.set(clubNode('member-2'), createWallet().address);
+  const transferee = createWallet();
+  s.rpcState.owners.set(clubNode('member-2'), transferee.address);
   assert.equal((await s.post('catalog', {}, body.token)).status, 403);
   assert.equal((await s.post('catalog', {}, body.token)).status, 401);
+  assert.equal((await s.login(transferee, 'member-2')).body.path, 'club');
 });
 
-test('Uses canonical wrapper, direct owner agreement and expiry, including the exact boundary', async t => {
+test('ENSv1 Name Wrapper verifies the owner, follows a transfer and expires an emancipated subname', async t => {
   const s = await setup(t);
   s.rpcState.balance = 0n;
   const wallet = createWallet();
   const label = 'wrapped';
   const node = clubNode(label);
   s.rpcState.owners.set(node, WRAPPER);
-  s.rpcState.wrapped.set(node, { owner: wallet.address, expiry: BigInt(Math.floor(s.clock() / 1000) + 60) });
+  s.rpcState.wrapped.set(node, { owner: wallet.address, fuses: 1 << 16, expiry: BigInt(Math.floor(s.clock() / 1000) + 60) });
   const access = await s.login(wallet, label);
   assert.equal(access.status, 200);
   s.rpcState.wrapped.get(node).recordedOwner = createWallet().address;
   assert.equal((await s.login(wallet, label)).status, 403);
   delete s.rpcState.wrapped.get(node).recordedOwner;
-  s.advance(60_000);
+  const transferee = createWallet();
+  s.rpcState.wrapped.get(node).owner = transferee.address;
   assert.equal((await s.post('session', {}, access.body.token)).status, 403);
-  s.rpcState.owners.set(node, createWallet().address);
+  const transferred = await s.login(transferee, label);
+  assert.equal(transferred.body.path, 'club');
+  s.advance(60_000);
+  assert.equal((await s.post('session', {}, transferred.body.token)).status, 403);
+  s.rpcState.owners.set(node, transferee.address);
   assert.equal((await s.login(wallet, label)).status, 403);
+  assert.equal((await s.login(transferee, label)).body.path, 'club');
+});
+
+test('ENSv1 wrapped subname subject to parental control keeps its owner when temporary fuses expire', async t => {
+  const s = await setup(t);
+  s.rpcState.balance = 0n;
+  const wallet = createWallet();
+  const node = clubNode('legacy');
+  s.rpcState.owners.set(node, WRAPPER);
+  const now = BigInt(Math.floor(s.clock() / 1000));
+  s.rpcState.wrapped.set(node, { owner: wallet.address, expiry: now - 1n });
+  assert.equal((await s.login(wallet, 'legacy')).body.path, 'club');
+  s.rpcState.wrapped.get(node).expiry = 0n;
+  assert.equal((await s.login(wallet, 'legacy')).body.path, 'club');
+  s.rpcState.owners.delete(node);
+  assert.equal((await s.login(wallet, 'legacy')).status, 403);
+});
+
+test('Uses the specific ENSv1 member extension and bounds it by a valid parent and registrar lease', async () => {
+  let now = 1_795_385_000n;
+  const { chain, rpcState } = fakeMainnet(() => Number(now * 1000n));
+  const wallet = createWallet().address;
+  const label = '🦊';
+  const node = clubNode(label);
+  const initial = now;
+  assert.equal(node, namehash(label + '.club.agi.eth'));
+  rpcState.balance = MINIMUM - 1n;
+  rpcState.owners.set(node, WRAPPER);
+  rpcState.owners.set(CLUB_PARENT, WRAPPER);
+  rpcState.owners.set(CLUB_ROOT, WRAPPER);
+  const holder = expiry => ({ owner: wallet, fuses: 1 << 16, expiry });
+  rpcState.wrapped.set(node, holder(now + 30n));
+  rpcState.wrapped.set(CLUB_PARENT, holder(now + 55n));
+  rpcState.wrapped.set(CLUB_ROOT, holder(now + 300n));
+  const qualifies = async () => chain.entitlement(wallet, label, await chain.snapshot());
+  assert.equal(await qualifies(), 'club');
+  now = initial + 31n;
+  rpcState.wrapped.get(CLUB_PARENT).expiry = initial + 60n;
+  assert.equal(await qualifies(), null, 'Parent extension cannot move the member deadline');
+  rpcState.wrapped.get(node).expiry = initial + 90n;
+  assert.equal(await qualifies(), 'club', 'A changed member deadline is read at the next snapshot');
+  now = initial + 60n;
+  assert.equal(await qualifies(), null, 'Expired namespace authority denies even a still-live leaf');
+  rpcState.owners.set(CLUB_PARENT, wallet);
+  rpcState.owners.set(node, wallet);
+  assert.equal(await qualifies(), 'club', 'Direct Registry ownership has no member Wrapper deadline');
+  rpcState.rootExpiry = now - rpcState.rootGrace + 1n;
+  assert.equal(await qualifies(), 'club', 'The root remains owned in the .eth registrar grace period');
+  now++;
+  assert.equal(await qualifies(), null, 'A stale subname cannot outlive the ENSv1 root lease');
+  rpcState.balance = MINIMUM;
+  assert.equal(await qualifies(), 'token');
 });
 
 test('Token eligibility accepts integer equality and surplus, independently of Club', async t => {
