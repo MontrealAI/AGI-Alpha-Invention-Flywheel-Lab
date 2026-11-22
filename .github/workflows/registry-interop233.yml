@@ -1,0 +1,102 @@
+name: REGISTER-INTEROP233 exact official CSV bridge
+on:
+  push:
+    branches: [research/registry-interop233-20261122]
+    paths:
+      - 'research/registry-interop233/**'
+      - 'tools/registry_interop233.py'
+      - 'tests/test_registry_interop233.py'
+      - '.github/workflows/registry-interop233.yml'
+  pull_request:
+    paths:
+      - 'research/registry-interop233/**'
+      - 'tools/registry_interop233.py'
+      - 'tests/test_registry_interop233.py'
+      - '.github/workflows/registry-interop233.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-bound-real-interop:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+      SOURCE_URL: https://open.canada.ca/data/dataset/fcbc0200-79ba-4fa4-94a6-00e32facea6b/resource/369f6f34-148a-42ed-b581-8c164e941a89/download/gc-ai-register-mvp-registre-de-lia-du-gc-pmv-04-26.csv
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - name: Validate immutable preregistration and unchanged upstream owner source
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p registry233-receipts
+          git rev-parse HEAD | tee registry233-receipts/HEAD.txt
+          echo "Protocol frozen at 202546bc3635fe03ff6ae6c52310a9e9d21346e8" | tee registry233-receipts/FREEZE.txt
+          test "$(git hash-object research/registry-interop233/PROTOCOL.md)" = "3086b9e34a51532493a06f018154ef715a5e95fe"
+          test "$(git hash-object tools/gc_ai_register231.py)" = "3d19ff1f6d0e943acca10424775c0fd1f7a96a1d"
+          python3 --version | tee registry233-receipts/PYTHON.txt
+          sha256sum research/registry-interop233/PROTOCOL.md tools/gc_ai_register231.py tools/registry_interop233.py tests/test_registry_interop233.py > registry233-receipts/SOURCE_FILES_SHA256.txt
+      - name: Run all twenty-one preregistered adversarial tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          /usr/bin/time -p python3 -m unittest discover -s tests -p 'test_registry_interop233.py' -v 2>&1 | tee registry233-receipts/TESTS.txt
+      - name: One official source retrieval and exact full-denominator interop
+        shell: bash
+        run: |
+          set -euo pipefail
+          /usr/bin/time -p curl --fail --show-error --silent --location --retry 0 --connect-timeout 25 --max-time 110 "$SOURCE_URL" --output /tmp/register233-official.csv 2>&1 | tee registry233-receipts/FETCH.txt
+          sha256sum /tmp/register233-official.csv | tee registry233-receipts/SOURCE_SHA256.txt
+          /usr/bin/time -p python3 -m tools.registry_interop233 /tmp/register233-official.csv --source-url "$SOURCE_URL" --output registry233-receipts/SNAPSHOT.json 2>&1 | tee registry233-receipts/INTEROP.txt
+          /usr/bin/time -p python3 -m tools.registry_interop233 /tmp/register233-official.csv --old-csv /tmp/register233-official.csv --source-url "$SOURCE_URL" --output registry233-receipts/SELF_COMPARISON.json 2>&1 | tee registry233-receipts/SELF_TEST.txt
+          python3 - <<'PY'
+          import csv, hashlib, io, json
+          from pathlib import Path
+          raw = Path('/tmp/register233-official.csv').read_bytes()
+          source = io.StringIO(raw.decode('utf-8-sig'), newline='')
+          normal = csv.DictReader(source, strict=True)
+          ids = set()
+          hashes = {}
+          for row in normal:
+              if None in row or any(v is None for v in row.values()):
+                  raise SystemExit('ORDINARY_CONTROL_BAD_WIDTH')
+              key = row['ai_register_id']
+              if not key or key in ids:
+                  raise SystemExit('ORDINARY_CONTROL_DUPLICATE_ID')
+              ids.add(key)
+              hashes[key] = hashlib.sha256(json.dumps(row, ensure_ascii=False, sort_keys=True, separators=(',', ':')).encode('utf-8')).hexdigest()
+          snap = json.loads(Path('registry233-receipts/SNAPSHOT.json').read_text())
+          target = {x['ai_register_id']: x['record_sha256'] for x in snap['records']}
+          if target != hashes or snap['row_count'] != len(ids):
+              raise SystemExit('ORDINARY_CONTROL_NOT_EQUAL')
+          if snap['source_sha256'] != hashlib.sha256(raw).hexdigest():
+              raise SystemExit('SOURCE_DIGEST_MISMATCH')
+          empty = json.loads(Path('registry233-receipts/SELF_COMPARISON.json').read_text())
+          if any(empty[key] for key in ('added_count','removed_count','changed_count')):
+              raise SystemExit('SELF_COMPARISON_NOT_ZERO')
+          receipt = {
+              'reference_historical_pr532_sha256': 'de0a5d2961fac0fb81c0c552104c21bea2c87a0b9c18ad58e2380199b4bfb313',
+              'actual_current_sha256': snap['source_sha256'],
+              'historical_same_bytes': snap['source_sha256'] == 'de0a5d2961fac0fb81c0c552104c21bea2c87a0b9c18ad58e2380199b4bfb313',
+              'full_denominator': snap['row_count'],
+              'column_count': snap['column_count'],
+              'independent_ordinary_row_parity': True,
+              'real_official_old_to_new_record_delta': None,
+              'real_beneficiary_acceptance': None,
+              'complete_cost_profit': None,
+              'qualifications': 'DATA_INTEROP_ONLY_NO_GOVERNANCE_OR_COMMERCIAL_VERDICT',
+          }
+          Path('registry233-receipts/INDEPENDENT.json').write_text(json.dumps(receipt,sort_keys=True,indent=2)+'\n')
+          print('INDEPENDENT_FULL_PARITY',len(ids),snap['source_sha256'])
+          PY
+          sha256sum registry233-receipts/*.json > registry233-receipts/RESULT_FILES_SHA256.txt
+      - name: Publish limited evidence even after failures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: register-interop233-source-bound-evidence
+          path: registry233-receipts/
+          if-no-files-found: warn

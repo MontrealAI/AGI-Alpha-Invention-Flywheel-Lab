@@ -1,0 +1,28 @@
+# REGISTER-INTEROP233 — pre-code frozen real-data bridge
+
+**Date:** 2026-11-22 UTC. **Base:** independent PR #532 exact head `01b97dbc2d97d7ef426df3ec4637ce74bd889a73`. No changes to its source or historical receipts. No access to the private financial source, account, HMAC, original task, or other research owner's files.
+
+## Consequential dependency / falsifiable question
+
+Shared Services Canada's [AI decision traceability and governance challenge](https://www.ised-isde.canada.ca/site/innovative-solutions-canada/en/artificial-intelligence-ai-decision-making-process-visibility-traceability-and-compliance-governance) explicitly calls for enterprise and governance-system interoperability, including detecting potentially affected registered systems after governance changes. PR #530/#531/#533 test synthetic registered records only. PR #532 observes **real official CSV structure**, but provides totals rather than a trustworthy per-system transfer interface. Can a small *source-bound versioned adapter* turn the published real AI Register into a deterministic, auditable identity/change inventory without inventing tags, controls, permissions or compliance findings?
+
+**Only limited first gate**: all real published rows accepted without fabricated semantics; digest and stable ID reconciliation with a separately implemented competent ordinary CSV parser. A second, genuinely independent beneficiary outcome, material advantage over a competent governance suite or ordinary code, and any paid contract remain open.
+
+## Exact public dataset and no favorable selection
+
+- Source: https://open.canada.ca/data/dataset/fcbc0200-79ba-4fa4-94a6-00e32facea6b/resource/369f6f34-148a-42ed-b581-8c164e941a89/download/gc-ai-register-mvp-registre-de-lia-du-gc-pmv-04-26.csv
+- Previously observed PR #532 source (historical immutable check, not a promised current value): **412 rows, 24 fields**, SHA256 `de0a5d2961fac0fb81c0c552104c21bea2c87a0b9c18ad58e2380199b4bfb313`. Do not replace or relabel a changed dataset.
+- One attempted retrieval at the exact official URL, zero HTTP retries/substitution and a full-denominator pass; HTTP refusal is a failure for real-source qualification. No raw official CSV in Git tree or uploaded artifact.
+- Exact 24-column ordered schema from PR #532's independently verified artifact. Reject unknown schema, duplicate/blank IDs, malformed bytes, digest mismatch and schema collision. Published unique identifiers are keys; row order is not identity. No fuzzy matching.
+
+## Fixed execution contract / controls
+
+Build a read-only `tools/registry_interop233.py` API/CLI that imports but **does not modify** PR #532's exact `scan()` for source-byte structural checks. Create a privacy-minimal, source-hashed per-system snapshot (ID and row digest, no descriptions), and a two-snapshot field-level change witness: additions, removals, changed fields with digest-only old/new values. Independent standard-library `csv.DictReader` rederives every row digest/ID count with no imported target classifier. A changed byte order alone must not appear as a changed system. Every actual comparison requires **two actual source files**; do not relabel a synthetic edit as an official historical amendment. Historical old bytes are unavailable in the public summary, so an actual official old-to-new content delta is NOT established by old and new SHA alone.
+
+Freeze these named tests: (1) 2 systems ordinary parity, (2) reversed ordering no changes, (3) exact new system, (4) exact removal, (5) relevant changed system description, (6) status date edit, (7) unrelated arbitrary field still reported as source change not risk, (8) bilingual Unicode/multiline, (9) blank ID rejection, (10) duplicate ID rejection, (11) whitespace ID rejection, (12) duplicated header, (13) header rearrangement, (14) bad width, (15) bad UTF-8, (16) SHA mismatch, (17) no raw content or compliance assertion, (18) deterministic output, (19) legacy 231 parser parity, (20) create-only CLI, and (21) simulated change expressly labeled fixture. No seed choice or cherry-picked row, no relaxation after observation. Fixed stop: one official retrieval plus full-data bridge, local/hosted 21 cases and independent full-denominator check; failures retained unchanged.
+
+## Four alternatives, no predicted winner
+
+(1) Competent ordinary Python/CSV or pandas import/diff; **allowed to tie or win**. (2) Existing governance suites with connectors, access control and history; no access, prices and actual comparison remain unknown. (3) This source-versioned interoperable adapter, with an explicit scope contract. (4) No use: keep monitoring the future improved official register. Any source-level parity is an engineering gate, **not** an economic edge. No buyer, acceptable procurement bid, contract, dollars, paid frontier inference, complete cost, claimed B benefit, human-time savings, commercial funding or government deployment.
+
+Source-version identities are SHA-256 *content identity only*, **not source authentication**. Real semantic policies, control dictionaries, completeness, risk, permission, government acceptance and legal consequences are NOT deducible from CSV blanks. Stop/HOLD if unavailable rather than fabricate them. Costs: record CPU/wall for finite commands; whole assistant/host/model bills remain UNKNOWN. No spending, outreach, bid, API keys, transactions or production deployment. Source-finance P0 remains separately owned, original account and liabilities untouched. Never merge this draft without independent owner review and protected normal release/downloaded qualification. Objective US$3B trailing-365 complete-cost profit remains UNQUALIFIED.
