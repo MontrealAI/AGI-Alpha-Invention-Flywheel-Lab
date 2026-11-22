@@ -124,8 +124,8 @@ class Sparse237Tests(unittest.TestCase):
         self.assertIn("all eight", content.lower())
         self.assertIn("NO BID / NO DEPLOY", content)
         self.assertIn("Random(237)", content)
-        self.assertIn("30cb329b", content.replace(" ", "") if False else
-                      "30cb329b" + " ".join([])) if False else None
+        self.assertIn(SOURCE_SHA, content)
+        self.assertIn("four", content.lower())
 
 
 if __name__ == "__main__":
