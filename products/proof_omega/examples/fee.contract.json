@@ -1,0 +1,7 @@
+{
+  "schema": 1,
+  "function": "fee",
+  "inputs": {"amount_cents": [0, 1000000000000], "rate_bps": [0, 10000]},
+  "expected": "amount_cents * rate_bps // 10000",
+  "output_range": [0, 1000000000000]
+}
