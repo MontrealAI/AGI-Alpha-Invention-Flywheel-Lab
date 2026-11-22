@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "FRONTIER Ω ALPHA reviewed public finding capsule v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "source_task_id", "classification", "profile", "source", "version", "baseline", "created_at", "observed_at", "method"],
+  "properties": {
+    "schema": {"const": "frontier-omega-alpha/public-finding-capsule-v1"},
+    "source_task_id": {"const": "6b034cc5c6f48191ba3a73193f5d0f6c"},
+    "classification": {"const": "public-evidence"},
+    "profile": {"enum": ["prusa-retrofit", "lean-bitvector", "upstream-release"]},
+    "source": {"enum": ["prusa", "formal_verification", "local_models_and_quantization", "serving_cost", "hardware_runtime", "model_distribution", "scientific_computing"]},
+    "version": {"type": "string", "maxLength": 40},
+    "baseline": {"type": "string", "maxLength": 40},
+    "created_at": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"},
+    "observed_at": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"},
+    "method": {"enum": ["interactive-connector", "manual-export"]}
+  }
+}

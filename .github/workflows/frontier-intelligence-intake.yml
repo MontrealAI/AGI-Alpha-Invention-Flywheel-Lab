@@ -1,0 +1,57 @@
+name: FRONTIER Ω ALPHA reviewed finding intake
+on:
+  workflow_dispatch:
+    inputs:
+      submission_pr:
+        description: PR number for the reviewed public capsule
+        type: string
+        required: true
+      run_registered:
+        description: Allow the registered bounded technical verifier
+        type: boolean
+        default: false
+permissions:
+  contents: read
+  pull-requests: read
+concurrency:
+  group: frontier-intelligence-intake
+  cancel-in-progress: false
+jobs:
+  receive:
+    if: github.repository == 'MontrealAI/AGI-Alpha-Invention-Flywheel-Lab' && github.ref == 'refs/heads/main' && vars.FRONTIER_BRIDGE_ENABLED == 'true'
+    environment: frontier-intelligence-intake
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record platform job execution start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+          sparse-checkout: |
+            products/frontier-omega-alpha
+            products/alpha-genesis-harness/bridge
+      - name: Validate a reviewed public submission using protected source
+        shell: bash
+        working-directory: products/frontier-omega-alpha
+        env:
+          GH_TOKEN: ${{ github.token }}
+          FRONTIER_BRIDGE_SUBMITTERS: ${{ vars.FRONTIER_BRIDGE_SUBMITTERS }}
+          FINDING_SUBMISSION_PR: ${{ inputs.submission_pr }}
+          FRONTIER_RUN_REGISTERED: ${{ inputs.run_registered }}
+        run: |
+          flags=()
+          if [[ "$FRONTIER_RUN_REGISTERED" == true ]]; then flags+=(--allow-registered-experiment); fi
+          python3 -m research.intelligence_bridge github --pr "$FINDING_SUBMISSION_PR" \
+            --output "$RUNNER_TEMP/frontier-intake" "${flags[@]}"
+      - name: Return only normalized research and the proposed ledger revision
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: frontier-approved-intake-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/frontier-intake/receipt.json
+            ${{ runner.temp }}/frontier-intake/ledger-next.json
+          if-no-files-found: error
+          retention-days: 7

@@ -1,0 +1,134 @@
+{
+  "schema": "frontier-omega-alpha/intelligence-bridge-qualification-v1",
+  "checked_task": {
+    "authorized_task_id": "6b034cc5c6f48191ba3a73193f5d0f6c",
+    "enabled": true,
+    "timezone": "America/Toronto",
+    "interval_hours": 3,
+    "inspected_utc": "2026-11-22T20:26:50Z",
+    "last_run_recorded": false,
+    "eligible_output_available": false,
+    "automatic_upload_prohibited_by_saved_prompt": true,
+    "configuration_changed": false
+  },
+  "manual_work_github_capability": "An interactive GitHub branch and draft PR write was verified during the separate ALPHA-1 engineering change. A genuine task finding was not transferred.",
+  "registered_public_source_probe": {
+    "scope": "Engineering source and experiment probe. No ChatGPT result, GitHub intake write or publication is represented.",
+    "executed_at": "2026-11-22T20:24:07.585260+00:00",
+    "profiles": [
+      {
+        "profile": "lean-bitvector",
+        "source_evidence": [
+          {
+            "id": "baseline",
+            "url": "https://api.github.com/repos/leanprover/lean4/releases/tags/v4.35.0",
+            "sha256": "d754eb181ad04267b683cf2b468ffb36c61529c86e6ac53cee8d328f5ac399b7",
+            "publisher": "leanprover/lean4",
+            "version": "v4.35.0",
+            "published_on": "2026-10-12",
+            "effective_on": "2026-10-12",
+            "evidence_location": "Release tag, release ID, and publication timestamp"
+          },
+          {
+            "id": "current",
+            "url": "https://api.github.com/repos/leanprover/lean4/releases/tags/v4.36.0",
+            "sha256": "b0cb397a25ec6808e1680ce9a12fd0d929c91e8a77c5974dcb08abdfbaaf824d",
+            "publisher": "leanprover/lean4",
+            "version": "v4.36.0",
+            "published_on": "2026-11-16",
+            "effective_on": "2026-11-16",
+            "evidence_location": "Release tag, release ID, and publication timestamp"
+          },
+          {
+            "id": "feature",
+            "url": "https://lean-lang.org/doc/reference/latest/releases/v4.36.0/",
+            "sha256": "7aeed47f3f88ab65bb598bc9bc4c8ee90fe368b76c7ad9d58beddbd1583bc033",
+            "publisher": "leanprover/lean4",
+            "version": "v4.36.0",
+            "published_on": "2026-11-16",
+            "effective_on": "2026-11-16",
+            "evidence_location": "Uninterpreted Functions in bv_decide"
+          }
+        ],
+        "effective_on": "2026-11-16",
+        "registered_constraint": true,
+        "technical_replay": null
+      },
+      {
+        "profile": "prusa-retrofit",
+        "source_evidence": [
+          {
+            "id": "release",
+            "url": "https://blog.prusa3d.com/ht-hotend-is-out-plus-we-offer-new-materials-and-hightemp-sheets-for-core-one-l_138625/",
+            "sha256": "ff699a42eac7c8dc4ffc46554c976550ce816a966f72cb9467bbc77a7ea51525",
+            "publisher": "prusa",
+            "version": "ht-400-2026-10-21",
+            "published_on": "2026-10-21",
+            "effective_on": "2026-10-21",
+            "evidence_location": "2026-10-21 manufacturer release"
+          },
+          {
+            "id": "upgrade",
+            "url": "https://www.prusa3d.com/product/ht-hotend-upgrade-for-core-one-and-core-one-l/",
+            "sha256": "2a81dd3851d5365476b4e8c3ac884134d4ea5b75816be4957584700ea81ca06e",
+            "publisher": "prusa",
+            "version": "ht-400-2026-10-21",
+            "published_on": null,
+            "effective_on": "2026-10-21",
+            "evidence_location": "OEM retrofit product and compatibility table"
+          },
+          {
+            "id": "stock",
+            "url": "https://www.prusa3d.com/en/product/prusa-core-one/",
+            "sha256": "350cc5d8126ef6d1eda8559393461f94a248b027b554657d3760bb4b2714f66c",
+            "publisher": "prusa",
+            "version": "ht-400-2026-10-21",
+            "published_on": null,
+            "effective_on": "2026-10-21",
+            "evidence_location": "OEM comparative specifications"
+          },
+          {
+            "id": "large",
+            "url": "https://www.prusa3d.com/en/product/prusa-core-one-l-3/",
+            "sha256": "13e212a8edb51ff7b507fbd360f1929c7347c5ccf234438f096d972d25c443cb",
+            "publisher": "prusa",
+            "version": "ht-400-2026-10-21",
+            "published_on": null,
+            "effective_on": "2026-10-21",
+            "evidence_location": "OEM CORE One L+ specifications"
+          }
+        ],
+        "effective_on": "2026-10-21",
+        "registered_constraint": true,
+        "technical_replay": {
+          "s1_reproduced": 24,
+          "s2_reproduced": 18,
+          "new_catalog_routes": 7,
+          "technical_equivalence": true,
+          "technical_level": 1,
+          "economic_promotion_authorized": false
+        }
+      }
+    ],
+    "task_output_used": false,
+    "scheduled_github_write_observed": false
+  },
+  "local_receiver_and_encrypted_member_probe": {
+    "scope": "Engineering probe and fixture PR provenance. No real task output was submitted.",
+    "authenticated_intake_success_uses_fixtures": true,
+    "real_github_wrong_scope_rejected": true,
+    "verified_schema_count": 2,
+    "bilingual_records_sealed_and_reopened": 6,
+    "task_write_observed": false,
+    "private_task_content_used": false,
+    "zero_new_publications_in_no_finding_cycle": true
+  },
+  "scope": {
+    "real_task_origin_submission": "pending approved first result",
+    "unattended_scheduled_connector_write": "unverified",
+    "protected_default_branch_receiver": "candidate, approval required",
+    "unrelated_automation_outputs_used": false,
+    "mandatory_openai_api": false,
+    "other_application_host_required": false
+  }
+}

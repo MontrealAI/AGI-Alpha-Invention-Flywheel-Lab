@@ -1,0 +1,63 @@
+# FRONTIER Ω ALPHA · ChatGPT Pro × GitHub
+
+## Integration status
+
+The authorized source is **FRONTIER Ω ALPHA — Possible Now**, task `6b034cc5c6f48191ba3a73193f5d0f6c`. Its saved schedule is every three hours in America/Toronto. Its action policy keeps results inside ChatGPT and explicitly prohibits automatic GitHub uploads. The existing hourly and Friday automations have separate scopes. The exact task was enabled and had no recorded result during the initial inspection.
+
+The documented GitHub app provides repository retrieval and scheduled GitHub event triggers. Those capabilities do not demonstrate a scheduled research run writing a PR. Interactive Work can create a branch and PR with its authorized GitHub actions, as demonstrated by the separate ALPHA-1 engineering submission. A runtime permission exposed to interactive Work is distinct from permission granted to the scheduled task. This release implements an explicitly reviewed manual transfer. A scheduled GitHub write remains unverified and the saved task is untouched. [Scheduled tasks](https://help.openai.com/en/articles/10291617-scheduled-tasks-in-chatgpt) · [GitHub connection in ChatGPT](https://help.openai.com/en/articles/11145903-connecting-github-to-chatgpt)
+
+## Submit one reviewed public finding
+
+1. Open the named task, select a result that warrants action, and review the proposed **public capsule** in ChatGPT. The projection contains the allowlisted task ID, public source profile and version transition, two UTC timestamps and a declared transfer method. Exclude all conversation text, confidential analysis, private materials, credentials, alternative-task output and customer records. Keep private findings in their original workspace.
+2. After reviewing the specific capsule, ask in Work **“Submit this reviewed public capsule to FRONTIER Ω ALPHA. Use the interactive GitHub connector and include only the validated capsule.”** The operator runs `prepare`, presents the exact public bytes and destination, and follows the applicable GitHub approval boundary. The inspection command fetches the named public references and derives a stable ID, filename and branch. The connector creates a one-file draft PR with those exact bytes and a neutral title. The reviewer confirms the change before publication. The account connection is handled through ChatGPT or GitHub. No credentials belong in capsule fields, files or prompts.
+3. If the interactive write is unavailable, use the validated JSON from `prepare`. An authorized GitHub operator can create the named branch and upload only that JSON through **Add file**. Use `main` as the target branch. Follow the same GitHub review path and enter the resulting PR number at intake. Keep the PR body free of task text and private material. Public GitHub retains bytes as soon as they are submitted. A later CI rejection cannot undo a mistaken disclosure.
+4. A silent task cycle submits nothing. A repeated finding returns a duplicate disposition without re-reading sources. A missing source pauses the candidate and a subsequent useful observation can reopen review. Work proceeds only after the required operator or GitHub approval. [Input capsule schema](research/intelligence_bridge/capsule-v1.schema.json)
+
+From `products/frontier-omega-alpha`, given a specifically approved local capsule outside the checkout:
+
+```sh
+python3 -m research.intelligence_bridge prepare --capsule /private/reviewed-capsule.json \
+  --disclosure-reviewed --output /private/frontier-prepared
+```
+
+Choose `lean-bitvector` for the registered v4.35.0 to v4.36.0 Lean comparison, `prusa-retrofit` for the dated ALPHA-1 catalog condition, or `upstream-release` for a named release in the existing Radar registry. The latter establishes a publisher observation and leaves a specific hypothesis and experiment to review. Unknown profiles remain in ChatGPT until a source adapter and policy receive normal review. No URL or free-form text can be supplied in place of these fields.
+
+## GitHub operator procedure
+
+1. After normal protected review, configure the `frontier-intelligence-intake` GitHub environment restricted to `main`, with the owner-approved reviewer controls. Set `FRONTIER_BRIDGE_SUBMITTERS` to the exact comma-separated approved GitHub logins and enable `FRONTIER_BRIDGE_ENABLED`. No additional service or API credentials are needed. The workflow uses a GitHub token restricted to reading contents and pull requests. The scheduled task has no role in that environment.
+2. Open **FRONTIER Ω ALPHA reviewed finding intake** and dispatch it on `main` with the capsule PR number. Confirm that its author and one added file match the agreed submission. The workflow independently reads the Git object and recomputes its hash. It checks the head again before processing. Source endpoints are constructed from a fixed registry, use HTTPS and bounded bodies, and supply data only. The record labels the GitHub actor and distinguishes declared ChatGPT origin from authenticated GitHub submission. The bounded experiment is opt-in. The registered ALPHA-1 comparator can execute with standard included compute. The Lean run still requires the two separately approved pinned toolchains. [GitHub workflow dispatch and source restrictions](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#workflow_dispatch)
+3. Review `receipt.json` and `ledger-next.json` in the workflow artifact. Record a genuine failure or withdrawn claim as an appended review decision. For a new accepted record, use `confirm-ledger` to check the current base digest and the exact proposed append. Submit the generated `ledger.json` and `record-<digest>.json` to the same module in a reviewed PR. This saves normalized evidence after the artifact expires. If the base digest moved, rerun validation on the current ledger. The submitted inbox file grants no publication or execution authority.
+4. Stage member records with `member` using the exact approved record and ledger. Review the six EN/FR inputs for Radar, Opportunity Explorer, Experiment Lab, Verification Room, Compounding Ledger and Research Archive. Seal approved records with the existing native publisher and normal reviewed catalog. The member experience remains read-only. No intake output is automatically published to Pages. Public GitHub receives only the already reviewed projection and normalized public proof. [GitHub Pages and MetaMask encrypted publication](GITHUB-NATIVE.md)
+
+```sh
+python3 -m research.intelligence_bridge confirm-ledger --owner-reviewed \
+  --receipt /private/intake/receipt.json --proposal /private/intake/ledger-next.json \
+  --ledger research/intelligence_bridge/ledger.json --output /private/reviewed-ledger
+
+python3 -m research.intelligence_bridge member --owner-reviewed \
+  --receipt /private/intake/receipt.json --ledger /private/reviewed-ledger/ledger.json \
+  --output /private/member-finding-inputs
+```
+
+The canonical version `frontier-omega-alpha/research-finding-v1` records stable identity, source and publication times, declaration and GitHub attribution, prior and current capability, proposed application, accepted comparator, explicit uncertainty, reuse contract and evidence gates. The cost scope names development and failed attempts, data, integration, inference, operations, maintenance, independent verification, human work and obligations. Intake leaves actual benefit, funds, complete-cost net improvement and compounding unknown. The separate [ALPHA-1 economic procedure](ALPHA-1.md) handles independently reviewed genuine commercial documents. Neither multiple pages from one publisher nor identical-output checkers establish independent upstream truth. [Normalized record schema](research/intelligence_bridge/record-v1.schema.json)
+
+## Proposed task amendment for owner review
+
+No amendment is required for manual transfer. If the owner wants the existing task to prepare an optional human-review capsule, append the following without changing its saved schedule or no-upload instruction:
+
+> For one eligible finding, optionally show a public FRONTIER Ω ALPHA capsule in the private task result. Use only the approved versioned fields, public source profile and timestamps. Leave the existing finding and no-update criteria in effect. Keep private reasoning, task history, documents and personal information inside ChatGPT. The capsule is for owner review. Take no external write action.
+
+A future scheduled-write amendment would replace only the explicit no-upload sentence, after separately establishing and approving an unattended scoped connector action. Proposed replacement for that future review:
+
+> For the single eligible finding from this run, use only the separately approved repository-scoped action to submit the owner-approved validated public capsule to the allowlisted FRONTIER Ω ALPHA inbox. Keep the full result and all nonpublic fields in ChatGPT. Create no submission on a no-finding or duplicate cycle. Stop and retain the capsule for manual review if approval, the exact designated action, or the permitted repository is unavailable. Do not deploy or publish records, change task settings, or use credentials supplied in a prompt.
+
+## Français
+
+La source autorisée est la tâche **FRONTIER Ω ALPHA — Possible Now**, réglée aux trois heures dans le fuseau de Toronto. Elle garde ses résultats dans ChatGPT et interdit la transmission automatique vers GitHub. Le flux disponible passe par la sélection et l’autorisation explicites d’une capsule publique. Une action interactive de Work n’établit pas qu’une tâche planifiée peut écrire dans GitHub sans intervention.
+
+1. Relisez le résultat dans la tâche. Sélectionnez un changement précis. Vérifiez dans ChatGPT la capsule publique proposée, qui contient uniquement le profil de la source, la version précédente, la nouvelle version, les deux dates et le mode de remise. Conservez toute analyse interne et tout dossier privé dans son espace d’origine.
+2. Demandez **« Soumets cette capsule publique vérifiée à FRONTIER Ω ALPHA avec le connecteur GitHub. Publie uniquement la capsule validée. »** Le flux prépare le fichier et la branche. Un opérateur peut aussi téléverser ce même fichier JSON par l’interface GitHub. N’ajoutez aucun extrait de conversation à la demande de fusion. Un cycle sans résultat ne crée aucune publication.
+3. Lancez le processus GitHub de réception après contrôle de la demande. Fournissez son numéro et, si l’autorité a été accordée, activez l’essai enregistré. Le résultat distingue la soumission authentifiée par GitHub de l’origine déclarée dans la tâche. Les empreintes, les versions et les dates sont vérifiées dans les limites des sources disponibles. Une version nouvelle sans preuve d’un changement pertinent reste une observation.
+4. Validez le registre et la version exacte du rapport sous les protections habituelles. La commande `member` prépare les six dossiers bilingues. Seul le processus de publication chiffrée existant peut distribuer un dossier approuvé. La validation économique, les fonds encaissés et le gain causal restent à établir avec leurs propres preuves.
+
+Pour la remise manuelle, aucune modification de la tâche n’est nécessaire. Toute éventuelle écriture planifiée exige une action officiellement autorisée, une approbation distincte et une démonstration réelle. Une absence de connecteur, un refus, une approbation requise ou une preuve insuffisante laisse la capsule en attente de revue.
