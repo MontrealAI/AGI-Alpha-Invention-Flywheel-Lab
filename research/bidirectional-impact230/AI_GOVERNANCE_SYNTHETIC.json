@@ -1,0 +1,84 @@
+{
+  "schema": "bidirectional-impact230/v1",
+  "before": {
+    "requirements": [
+      {
+        "id": "decision-directive",
+        "version": "v1",
+        "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "applies_to": [
+          "decision"
+        ],
+        "controls": [
+          "audit"
+        ]
+      }
+    ],
+    "systems": [
+      {
+        "id": "ai-system-a",
+        "tags": [
+          "prototype"
+        ],
+        "evidence_refs": []
+      },
+      {
+        "id": "ai-system-b",
+        "tags": [
+          "decision"
+        ],
+        "evidence_refs": [
+          {
+            "control": "audit",
+            "source_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+          }
+        ]
+      },
+      {
+        "id": "ai-system-c",
+        "tags": [
+          "unrelated"
+        ],
+        "evidence_refs": []
+      }
+    ]
+  },
+  "after": {
+    "requirements": [
+      {
+        "id": "decision-directive",
+        "version": "v1",
+        "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "applies_to": [
+          "decision"
+        ],
+        "controls": [
+          "audit"
+        ]
+      }
+    ],
+    "systems": [
+      {
+        "id": "ai-system-a",
+        "tags": [
+          "decision"
+        ],
+        "evidence_refs": []
+      },
+      {
+        "id": "ai-system-b",
+        "tags": [
+          "decision"
+        ],
+        "evidence_refs": []
+      },
+      {
+        "id": "ai-system-c",
+        "tags": [
+          "unrelated"
+        ],
+        "evidence_refs": []
+      }
+    ]
+  }
+}
