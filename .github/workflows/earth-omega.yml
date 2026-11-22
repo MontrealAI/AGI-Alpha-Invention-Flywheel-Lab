@@ -1,0 +1,24 @@
+name: EARTH Omega qualification
+on:
+  pull_request:
+    paths: ['products/earth_omega/**', '.github/workflows/earth-omega.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  qualify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Start platform clock
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Tests and explicit fixture rehearsal
+        run: |
+          python -m unittest discover -s products/earth_omega/tests -v
+          python -m products.earth_omega.earth screen products/earth_omega/examples/mission.json --out "$RUNNER_TEMP/earth"
+          python -m products.earth_omega.earth verify products/earth_omega/examples/mission.json "$RUNNER_TEMP/earth/report.json"
+          python -m products.earth_omega.earth investigate products/earth_omega/examples/mission.json --out "$RUNNER_TEMP/earth-agent.json"
