@@ -1,0 +1,61 @@
+name: MIXED-OUTSIDE240 independent finite buyer-choice qualification
+on:
+  push:
+    branches:
+      - research/heterogeneous-outside240-20261122
+    paths:
+      - "enterprise/mixed_bundle240.py"
+      - "tests/test_mixed_outside240.py"
+      - "research/mixed-outside240/**"
+      - ".github/workflows/mixed-outside240.yml"
+  pull_request:
+    paths:
+      - "enterprise/mixed_bundle240.py"
+      - "tests/test_mixed_outside240.py"
+      - "research/mixed-outside240/**"
+      - ".github/workflows/mixed-outside240.yml"
+permissions:
+  contents: read
+concurrency:
+  group: mixed-outside240-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
+jobs:
+  conditional-market:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record standard platform start before checkout
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - name: Frozen protocol and exact-source receipt
+        shell: bash
+        run: |
+          git rev-parse HEAD
+          sha256sum research/mixed-outside240/PROTOCOL.md enterprise/mixed_bundle240.py enterprise/pricing.py tests/test_mixed_outside240.py
+      - name: Independent finite mixed-outside Cartesian oracle and adversarial tests
+        run: python3 -B -m unittest -v tests.test_mixed_outside240
+      - name: Run preregistered legacy versus mixed-outside no-bid comparison
+        shell: bash
+        run: |
+          python3 -B -m enterprise.mixed_bundle240 --out "$RUNNER_TEMP/MIXED_OUTSIDE240_RESULT.json"
+          python3 -B - "$RUNNER_TEMP/MIXED_OUTSIDE240_RESULT.json" <<'PY'
+          import json,sys
+          data=json.load(open(sys.argv[1]))
+          assert data["buyer_choice_set_falsification"] is True
+          assert data["mixed_decision"]=="NO_BID_NONPOSITIVE_COMPLETE_CONTRIBUTION"
+          assert data["observed_paid_revenue_usd"]==0
+          assert data["native_profit_usd"] is None
+          print("BOUNDARY",data["verdict"],"REGRESSION",data["buyer_choice_set_falsification"])
+          PY
+      - name: Preserve compact public-only source-bound evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: mixed-outside240-${{ github.event.pull_request.head.sha || github.sha }}
+          path: ${{ runner.temp }}/MIXED_OUTSIDE240_RESULT.json
+          if-no-files-found: warn
+          retention-days: 7
