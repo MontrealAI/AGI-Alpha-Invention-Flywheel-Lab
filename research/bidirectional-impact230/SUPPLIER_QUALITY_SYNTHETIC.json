@@ -1,0 +1,84 @@
+{
+  "schema": "bidirectional-impact230/v1",
+  "before": {
+    "requirements": [
+      {
+        "id": "inspection-rule",
+        "version": "v1",
+        "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "applies_to": [
+          "materials"
+        ],
+        "controls": [
+          "inspection"
+        ]
+      }
+    ],
+    "systems": [
+      {
+        "id": "supplier-a",
+        "tags": [
+          "candidate"
+        ],
+        "evidence_refs": []
+      },
+      {
+        "id": "supplier-b",
+        "tags": [
+          "materials"
+        ],
+        "evidence_refs": [
+          {
+            "control": "inspection",
+            "source_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+          }
+        ]
+      },
+      {
+        "id": "supplier-c",
+        "tags": [
+          "food"
+        ],
+        "evidence_refs": []
+      }
+    ]
+  },
+  "after": {
+    "requirements": [
+      {
+        "id": "inspection-rule",
+        "version": "v1",
+        "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "applies_to": [
+          "materials"
+        ],
+        "controls": [
+          "inspection"
+        ]
+      }
+    ],
+    "systems": [
+      {
+        "id": "supplier-a",
+        "tags": [
+          "materials"
+        ],
+        "evidence_refs": []
+      },
+      {
+        "id": "supplier-b",
+        "tags": [
+          "materials"
+        ],
+        "evidence_refs": []
+      },
+      {
+        "id": "supplier-c",
+        "tags": [
+          "food"
+        ],
+        "evidence_refs": []
+      }
+    ]
+  }
+}
