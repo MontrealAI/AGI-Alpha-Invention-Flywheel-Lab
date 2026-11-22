@@ -45,7 +45,8 @@ jobs:
           python3 -B - "$RUNNER_TEMP/ARRANGEMENTS242_RESULT.json" <<'PY'
           import json,sys
           r=json.load(open(sys.argv[1]))
-          assert r['conditional_base_best']=='STANDALONE_B@0.95'
+          assert r['conditional_base_best']=='RECURRING_B@0.95'
+          assert r['equivalent_conditional_base_policies']==['RECURRING_B@0.95','STANDALONE_B@0.95']
           assert r['robust_development_policy']=='NO_BID'
           assert r['native_financial_authority']==[]
           assert r['actual_collected_revenue_usd']==0
