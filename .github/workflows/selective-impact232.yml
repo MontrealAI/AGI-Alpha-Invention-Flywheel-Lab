@@ -71,6 +71,35 @@ jobs:
                     'exact_ordinary_oracle',len(oracle),'sha256',result['result_sha256'])
           PY
           sha256sum research/selective-impact232/PROTOCOL.md tools/selective_impact232.py tests/test_selective_impact232.py tools/impact_continuation229.py tools/bidirectional_impact230.py selective232-receipts/{AI_GOVERNANCE,SUPPLIER_QUALITY}.json > selective232-receipts/SHA256SUMS.txt
+      - name: Report both frozen seeded review denominators without selection
+        shell: bash
+        run: |
+          set -euo pipefail
+          /usr/bin/time -p python3 -B - <<'PY' 2>&1 | tee selective232-receipts/SEEDS.txt
+          import json
+          from pathlib import Path
+          from tools import selective_impact232 as engine
+          from tests.test_selective_impact232 import generated, independent_ordinary_oracle
+          receipts=[]
+          for seed in (232041,232042):
+              data=generated(seed)
+              result=engine.assess(data)
+              actual={(item['requirement_id'],item['system_id']) for item in result['reviews']}
+              oracle=independent_ordinary_oracle(data)
+              if actual != oracle:raise SystemExit('FROZEN_SEED_ORACLE_MISMATCH:'+str(seed))
+              if result['review_count']+result['suppressed_count']!=result['conservative_review_count']:
+                  raise SystemExit('FROZEN_SEED_DENOMINATOR_MISMATCH:'+str(seed))
+              r={'seed':seed,'review_count':result['review_count'],
+                 'conservative_review_count':result['conservative_review_count'],
+                 'suppressed_count':result['suppressed_count'],
+                 'ordinary_oracle_count':len(oracle),'result_sha256':result['result_sha256'],
+                 'economically_qualified':False}
+              receipts.append(r)
+              print(json.dumps(r,sort_keys=True))
+          Path('selective232-receipts/FROZEN_SEEDS.json').write_text(
+              json.dumps(receipts,sort_keys=True,indent=2)+'\\n')
+          PY
+          sha256sum selective232-receipts/FROZEN_SEEDS.json >> selective232-receipts/SHA256SUMS.txt
       - name: Preserve success or failed-test receipts
         if: always()
         uses: actions/upload-artifact@v4
