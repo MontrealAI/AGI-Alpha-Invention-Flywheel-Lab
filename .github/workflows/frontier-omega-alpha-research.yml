@@ -1,0 +1,62 @@
+name: FRONTIER Ω ALPHA scheduled research
+on:
+  schedule:
+    - cron: '33 */4 * * *'
+    - cron: '19 13 * * 1'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: frontier-omega-alpha-research
+  cancel-in-progress: false
+jobs:
+  radar:
+    if: github.repository == 'MontrealAI/AGI-Alpha-Invention-Flywheel-Lab' && github.ref == 'refs/heads/main' && vars.FRONTIER_ALPHA_RESEARCH_ENABLED == 'true' && github.event.schedule != '19 13 * * 1'
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record platform job execution start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+          sparse-checkout: |
+            products/frontier-omega-alpha
+            products/alpha-genesis-harness/bridge
+      - run: bash products/frontier-omega-alpha/native/github-radar.sh
+        env:
+          GH_TOKEN: ${{ github.token }}
+  registered-replay:
+    if: github.repository == 'MontrealAI/AGI-Alpha-Invention-Flywheel-Lab' && github.ref == 'refs/heads/main' && vars.FRONTIER_ALPHA_RESEARCH_ENABLED == 'true' && (github.event_name == 'workflow_dispatch' || github.event.schedule == '19 13 * * 1')
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record platform job execution start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+          sparse-checkout: |
+            products/frontier-omega-alpha
+            products/alpha-genesis-harness/bridge
+      - name: Acquire and qualify registered public evidence
+        shell: bash
+        working-directory: products/frontier-omega-alpha
+        run: |
+          python3 -m research fetch --output "$RUNNER_TEMP/frontier-alpha-registered-inputs" --allow-network --environment-egress
+          python3 -m research run --inputs "$RUNNER_TEMP/frontier-alpha-registered-inputs" --output "$RUNNER_TEMP/frontier-alpha-registered-replay"
+          python3 -m research verify --inputs "$RUNNER_TEMP/frontier-alpha-registered-inputs" --report "$RUNNER_TEMP/frontier-alpha-registered-replay/research-receipt.json"
+      - name: Preserve only the public registered-run receipts
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: frontier-alpha-registered-public-replay-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/frontier-alpha-registered-replay/research-receipt.json
+            ${{ runner.temp }}/frontier-alpha-registered-replay/retained-profile.json
+          if-no-files-found: error

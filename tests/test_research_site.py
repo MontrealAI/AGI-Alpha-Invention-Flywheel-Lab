@@ -40,6 +40,19 @@ class ResearchSiteTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'regular'):
             site.validate(self.source)
 
+    def test_frontier_alpha_publishes_only_offline_bilingual_shell(self):
+        vault = self.source / 'frontier-omega-alpha'
+        for filename in ('private.json', 'frontier.sqlite', 'kek.json', 'frontier.js.map'):
+            (vault / filename).write_text('private fixture')
+        out = site.build(self.source, self.root / 'published')
+        self.assertEqual({item.name for item in (out / vault.name).iterdir()},
+                         {'index.html', 'fr.html', 'frontier.js', 'frontier.css', 'decrypt.js', 'carina.webp'})
+        for page, language in (('index.html', 'en'), ('fr.html', 'fr')):
+            content = (out / vault.name / page).read_text()
+            self.assertIn(f'<html lang="{language}">', content)
+            self.assertIn('name="frontier-api" content=""', content)
+            self.assertIn('id="member" class="frame workspace" hidden', content)
+
     def test_genesis_stable_reader_features_v2_and_preserves_prior_access(self):
         import json
         reader = (self.source / 'alpha-genesis-flywheel-omega.html').read_text()
@@ -122,7 +135,7 @@ class ResearchSiteTests(unittest.TestCase):
         collection = (self.source / 'out-series.html').read_text()
         homepage = (self.source / 'index.html').read_text()
         self.assertEqual(len(site.PAPERS), 29)
-        self.assertEqual(len(site.PAGES), 38)
+        self.assertEqual(len(site.PAGES), 40)
         self.assertTrue({'alpha-genesis-live.html', 'alpha-genesis-live-studio.html'}.issubset(site.PAGES))
         self.assertIn('out-series.html', homepage)
         for slug in slugs:
@@ -439,7 +452,7 @@ class ResearchSiteTests(unittest.TestCase):
         for name in site.PAGES:
             text = (self.source / name).read_text()
             self.assertIn('name="viewport"', text)
-            french = name in ('continuity-omega-fr.html', 'continuity-omega-media-fr.html')
+            french = name in ('continuity-omega-fr.html', 'continuity-omega-media-fr.html', 'frontier-omega-alpha/fr.html')
             self.assertIn('Aller au contenu' if french else 'Skip to content', text)
             styles = text
             if name == 'studio.html':
@@ -447,10 +460,13 @@ class ResearchSiteTests(unittest.TestCase):
             elif name in ('ignition/index.html', 'ignition/demo.html'):
                 self.assertIn('href="studio.css"', text)
                 styles = (self.source / 'ignition/studio.css').read_text()
+            elif name.startswith('frontier-omega-alpha/'):
+                self.assertIn('href="frontier.css"', text)
+                styles = (self.source / 'frontier-omega-alpha/frontier.css').read_text()
             self.assertIn('prefers-reduced-motion', styles)
-            self.assertIn('@media(max-width:', styles)
+            self.assertRegex(styles, r'@media\s*\(max-width:')
             self.assertNotIn('↗', text)
-            if name not in ('ignition/index.html', 'ignition/demo.html', 'frontier-conclave.html', 'index.html', 'out-series.html', 'studio.html', 'continuity-omega-media.html', 'continuity-omega-media-fr.html', 'alpha-genesis-live.html', 'alpha-genesis-live-studio.html'):
+            if name not in ('ignition/index.html', 'ignition/demo.html', 'frontier-conclave.html', 'index.html', 'out-series.html', 'studio.html', 'continuity-omega-media.html', 'continuity-omega-media-fr.html', 'alpha-genesis-live.html', 'alpha-genesis-live-studio.html', 'frontier-omega-alpha/index.html', 'frontier-omega-alpha/fr.html'):
                 self.assertIn('type="application/pdf"', text)
                 self.assertIn('download>', text)
                 self.assertIn('Votre navigateur n’affiche pas les PDF intégrés' if french else 'Your browser does not display embedded PDFs', text)

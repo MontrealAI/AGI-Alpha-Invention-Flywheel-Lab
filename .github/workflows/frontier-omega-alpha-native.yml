@@ -1,0 +1,83 @@
+name: FRONTIER Ω ALPHA GitHub publisher
+on:
+  schedule:
+    - cron: '7,22,37,52 * * * *'
+  workflow_dispatch:
+    inputs:
+      build_reader:
+        description: Build the isolated static reader artifact
+        type: boolean
+        default: false
+permissions:
+  contents: read
+concurrency:
+  group: frontier-omega-alpha-native-publisher
+  cancel-in-progress: false
+jobs:
+  provision:
+    if: github.repository == 'MontrealAI/AGI-Alpha-Invention-Flywheel-Lab' && github.ref == 'refs/heads/main' && vars.FRONTIER_ALPHA_NATIVE_ENABLED == 'true' && inputs.build_reader != true
+    environment: frontier-omega-alpha-provision
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    permissions:
+      contents: write
+      actions: write
+    steps:
+      - name: Record platform job execution start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+          sparse-checkout: products/frontier-omega-alpha
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '24'
+      - run: npm ci --ignore-scripts --omit=dev
+        working-directory: products/frontier-omega-alpha
+      - name: Check the reviewed reader origin configuration
+        run: node --input-type=module -e "import { readerAddress } from './products/frontier-omega-alpha/native/stage.mjs'; readerAddress(process.env.FRONTIER_ALPHA_READER)"
+        env:
+          FRONTIER_ALPHA_READER: ${{ vars.FRONTIER_ALPHA_READER }}
+      - name: Verify approved wallet signatures and checkpoint encrypted publication
+        run: bash products/frontier-omega-alpha/native/github-provision.sh
+        env:
+          FRONTIER_ALPHA_PUBLISH_KEY: ${{ secrets.FRONTIER_ALPHA_PUBLISH_KEY }}
+          FRONTIER_ALPHA_RPC: ${{ secrets.FRONTIER_ALPHA_RPC }}
+          FRONTIER_ALPHA_READER: ${{ vars.FRONTIER_ALPHA_READER }}
+          FRONTIER_ALPHA_ANCHOR_HEIGHT: ${{ vars.FRONTIER_ALPHA_ANCHOR_HEIGHT }}
+          FRONTIER_ALPHA_ANCHOR_HASH: ${{ vars.FRONTIER_ALPHA_ANCHOR_HASH }}
+          GH_TOKEN: ${{ github.token }}
+  reader:
+    if: github.repository == 'MontrealAI/AGI-Alpha-Invention-Flywheel-Lab' && github.ref == 'refs/heads/main' && github.event_name == 'workflow_dispatch' && inputs.build_reader == true
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record platform job execution start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+          sparse-checkout: |
+            products/frontier-omega-alpha
+            docs/research/frontier-omega-alpha
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '24'
+      - run: npm ci --ignore-scripts
+        working-directory: products/frontier-omega-alpha
+      - name: Prepare the approved reader pages
+        shell: bash
+        run: node products/frontier-omega-alpha/native/stage.mjs reader "$RUNNER_TEMP/frontier-native-reader" "$FRONTIER_ALPHA_READER"
+        env:
+          FRONTIER_ALPHA_READER: ${{ vars.FRONTIER_ALPHA_READER }}
+      - name: Preserve the deployable reader assets
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: frontier-alpha-isolated-reader-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/frontier-native-reader/
+          include-hidden-files: true
+          if-no-files-found: error

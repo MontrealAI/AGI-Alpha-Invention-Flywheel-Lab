@@ -10,6 +10,7 @@ on:
       - 'tests/test_surf_reader.cjs'
       - '.github/workflows/research-pages.yml'
       - 'products/alpha-genesis-harness/**'
+      - 'products/frontier-omega-alpha/**'
       - 'events/alpha-genesis-live/**'
       - '.github/workflows/alpha-genesis-harness.yml'
   push:
@@ -23,6 +24,7 @@ on:
       - 'tests/test_surf_reader.cjs'
       - '.github/workflows/research-pages.yml'
       - 'products/alpha-genesis-harness/**'
+      - 'products/frontier-omega-alpha/**'
       - 'events/alpha-genesis-live/**'
       - '.github/workflows/alpha-genesis-harness.yml'
   workflow_dispatch:
@@ -50,6 +52,7 @@ jobs:
             tests/test_alpha_site.cjs
             tests/test_surf_reader.cjs
             events/alpha-genesis-live
+            products/frontier-omega-alpha
             products/alpha-genesis-harness/app
             products/alpha-genesis-harness/scripts/publish_preview.py
             products/alpha-genesis-harness/tests/engine.test.cjs
@@ -81,6 +84,21 @@ jobs:
         run: |
           node --test products/alpha-genesis-harness/tests/*.test.cjs
           python3 products/alpha-genesis-harness/scripts/publish_preview.py --output "$RUNNER_TEMP/research-site/harness" --source-revision "$(git rev-parse HEAD)"
+      - name: Append the approved encrypted FRONTIER Ω ALPHA library
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main' && github.repository == 'MontrealAI/AGI-Alpha-Invention-Flywheel-Lab' && vars.FRONTIER_ALPHA_NATIVE_ENABLED == 'true'
+        env:
+          FRONTIER_ALPHA_READER: ${{ vars.FRONTIER_ALPHA_READER }}
+        shell: bash
+        run: |
+          if git ls-remote --exit-code origin refs/heads/frontier-omega-alpha-state >/dev/null; then
+            git fetch -q --depth=1 origin refs/heads/frontier-omega-alpha-state
+            git show FETCH_HEAD:library.json > "$RUNNER_TEMP/frontier-alpha-encrypted-library.json"
+            node products/frontier-omega-alpha/native/stage.mjs public "$RUNNER_TEMP/research-site/frontier-omega-alpha" "$RUNNER_TEMP/frontier-alpha-encrypted-library.json" "$FRONTIER_ALPHA_READER"
+          else
+            code=$?
+            if [[ "$code" != 2 ]]; then exit "$code"; fi
+            echo 'Frontier encrypted publication has no initial checkpoint. Publishing the offline shell.'
+          fi
       - name: Upload the allowlisted Pages artifact
         if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
         uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b # v4
