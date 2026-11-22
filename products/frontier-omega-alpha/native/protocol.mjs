@@ -5,6 +5,7 @@ export const WINDOW_SECONDS = 24 * 60 * 60;
 export const MAX_FINALIZED_AGE_SECONDS = 45 * 60;
 export const CIPHERTEXT_FORMAT = 'research-json.browser.v1';
 export const LIBRARY_SCHEMA = 'frontier-omega-alpha/library-v1';
+export const SIGNED_LIBRARY_SCHEMA = 'frontier-omega-alpha/signed-library-v1';
 export const MAX_RELEASES = 12;
 export const MAX_MEMBERS = 96;
 export const MAX_LIBRARY_BYTES = 6 * 1024 * 1024;
@@ -85,8 +86,8 @@ export function assetContext(record) {
   return [record.id, record.version, record.epoch, record.format, record.section];
 }
 
-export function envelopeContext(tx, tag) {
-  return text.encode(JSON.stringify([LIBRARY_SCHEMA, MAINNET, tx, tag]));
+export function envelopeContext(proof, tag, schema = LIBRARY_SCHEMA) {
+  return text.encode(JSON.stringify([schema, MAINNET, proof, tag]));
 }
 
 export async function releaseTag(record) {
@@ -109,7 +110,8 @@ export function assertRecord(record, wrapped = false) {
 
 export function assertLibrary(library) {
   if (!keysAre(library, ['schema', 'updatedAt', 'openEnrollment', 'records', 'recipients']) ||
-      library.schema !== LIBRARY_SCHEMA || typeof library.openEnrollment !== 'boolean' || !Number.isSafeInteger(library.updatedAt) || library.updatedAt <= 0 ||
+      ![LIBRARY_SCHEMA, SIGNED_LIBRARY_SCHEMA].includes(library.schema) ||
+      typeof library.openEnrollment !== 'boolean' || !Number.isSafeInteger(library.updatedAt) || library.updatedAt <= 0 ||
       !Array.isArray(library.records) || library.records.length > MAX_RELEASES ||
       !library.recipients || typeof library.recipients !== 'object' || Array.isArray(library.recipients) ||
       Object.keys(library.recipients).length > 2 * MAX_MEMBERS) throw Error('Invalid encrypted library');
@@ -122,8 +124,9 @@ export function assertLibrary(library) {
     tags.add(record.tag);
     versions.add(release);
   }
-  for (const [tx, entry] of Object.entries(library.recipients)) {
-    if (!hash(tx) || !keysAre(entry, ['tx', 'state', 'keys']) || !hash(entry.tx) ||
+  const proof = library.schema === SIGNED_LIBRARY_SCHEMA ? 'proof' : 'tx';
+  for (const [id, entry] of Object.entries(library.recipients)) {
+    if (!hash(id) || !keysAre(entry, [proof, 'state', 'keys']) || !hash(entry[proof]) ||
         !['eligible', 'provisioned', 'denied', 'revoked', 'superseded', 'capacity'].includes(entry.state) ||
         !entry.keys || typeof entry.keys !== 'object' || Array.isArray(entry.keys)) throw Error('Invalid registration receipt');
     const envelopes = Object.entries(entry.keys);
