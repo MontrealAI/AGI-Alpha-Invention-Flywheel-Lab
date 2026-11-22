@@ -1,0 +1,56 @@
+name: OSCAL172 conservative scope continuity and official NIST confirmation
+on:
+  pull_request:
+    paths:
+      - 'research/governance_scope172.py'
+      - 'research/governance_scope172_official_t9.py'
+      - 'tests/test_governance_scope172.py'
+      - 'campaign/governance-scope172/**'
+      - '.github/workflows/governance-scope172.yml'
+      - 'research/governance_oscal171.py'
+      - 'products/governance_impact140/engine.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: governance-scope172-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  conservative-scope:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record platform job execution start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Frozen tests and original engine parity
+        run: |
+          set -euo pipefail
+          python3 -B -m unittest tests.test_governance_scope172 tests.test_governance_oscal171 tests.test_governance_impact140 -v
+      - name: Retrieve only public exact-pinned original NIST catalog
+        run: |
+          set -euo pipefail
+          curl --fail --location --silent --show-error --retry 2 --connect-timeout 15 --max-time 120 \
+            'https://raw.githubusercontent.com/usnistgov/oscal-content/v1.6.0/nist.gov/AI100-1/ver1/json/NIST_AI-RMF_v1_catalog-min.json' \
+            --output "$RUNNER_TEMP/nist-ai-rmf-v1.6.0.json"
+          test "$(git hash-object "$RUNNER_TEMP/nist-ai-rmf-v1.6.0.json")" = '1f625a618448cec41f8f7fa8ea50bbaf7751bb82'
+      - name: Execute T9 actual public bytes and synthetic strict differences
+        run: |
+          set -euo pipefail
+          python3 -B -m research.governance_scope172_official_t9 \
+            --fixture "$RUNNER_TEMP/nist-ai-rmf-v1.6.0.json" \
+            --output "$RUNNER_TEMP/governance-scope172-result.json"
+      - name: Upload original result or failure-safe evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: governance-scope172-${{ github.event.pull_request.head.sha || github.sha }}-attempt-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/governance-scope172-result.json
+          if-no-files-found: warn
