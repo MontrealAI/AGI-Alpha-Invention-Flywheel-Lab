@@ -1,0 +1,92 @@
+name: Blue Sky EIT237 physical chest sparse observation qualification
+on:
+  push:
+    branches:
+      - research/eit-chest-sparse237-20261122
+    paths:
+      - "research/eit_chest_sparse237/**"
+      - "tests/test_eit_chest_sparse237.py"
+      - ".github/workflows/eit-chest-sparse237.yml"
+  pull_request:
+    paths:
+      - "research/eit_chest_sparse237/**"
+      - "tests/test_eit_chest_sparse237.py"
+      - ".github/workflows/eit-chest-sparse237.yml"
+permissions:
+  contents: read
+concurrency:
+  group: eit-chest-sparse237-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
+jobs:
+  offline-regressions:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record platform job start before checkout
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: "3.12"
+      - name: Install preregistered ordinary numerical dependencies
+        run: python -m pip install numpy==2.3.5 scipy==1.17.0 h5py==3.15.1
+      - name: Run synthetic adversarial regressions only, not a physical qualification
+        run: python -B -m unittest -v tests.test_eit_chest_sparse237
+  original-source-once:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record platform job start before checkout
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: "3.12"
+      - name: Install same pinned numerical dependencies
+        run: python -m pip install numpy==2.3.5 scipy==1.17.0 h5py==3.15.1
+      - name: Check precommitted protocol and frozen source-only tests
+        run: python -B -m unittest -v tests.test_eit_chest_sparse237
+      - name: Download one exact original public chest archive and evaluate two frozen folds
+        shell: bash
+        run: |
+          /usr/bin/time -v -o "$RUNNER_TEMP/EIT237_MEASURE.txt" \
+            python -B -m research.eit_chest_sparse237.probe \
+              --public "$RUNNER_TEMP/EIT237_PUBLIC.json" \
+              --failure "$RUNNER_TEMP/EIT237_FAILURE.json"
+      - name: Independently validate the report envelope, without assuming success
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json,os,pathlib
+          p=pathlib.Path(os.environ["RUNNER_TEMP"])/"EIT237_PUBLIC.json"
+          r=json.loads(p.read_text())
+          assert r["schema"]=="agi-alpha/eit-chest-sparse237/physical-reanalysis-v1"
+          assert r["parent_main"]=="f0987aa48d5c9136b28540f54eabf5367e63bbe6"
+          assert len(r["source_member_receipts"])==8
+          assert len(r["class_labels_from_original_public_filenames"])==4
+          for arm in ("greedy8","full79","fixed8","random8"):
+            assert r["arms"][arm]["denominator"]==8
+            assert len(r["arms"][arm]["all_predictions"])==8
+          assert r["external_paid_collections_usd"]==0
+          assert r["decision"]=="HOLD_NO_BID_NO_DEPLOY"
+          print("source envelope accepted, outcome", r["registered_sparse_criterion_met"])
+          print("counts", {a:r["arms"][a]["correct"] for a in r["arms"]})
+          PY
+      - name: Upload only public compact receipts (no raw measurement matrices)
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: eit-chest-sparse237-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/EIT237_PUBLIC.json
+            ${{ runner.temp }}/EIT237_FAILURE.json
+            ${{ runner.temp }}/EIT237_MEASURE.txt
+          if-no-files-found: warn
+          retention-days: 7
