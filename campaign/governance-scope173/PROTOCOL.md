@@ -1,0 +1,13 @@
+# T173: independently pinned successor inventory — frozen adversarial specification
+
+Date: 2026-11-15 UTC. Base research source `f15bcb91a9eaf7255c8a1329c5b44e84a1b3aed0`, current qualified main `75f8f722c923e448d8f1fb44aa762b6ba0cd5a46`. This is a separate, nonfinancial, synthetic negative control against draft PR372. No original code, financial owner, account, key, ledger, queue, release or prior failure may be overwritten.
+
+## Hypothesis and expected test
+
+The source-continuity proposal accepts exactly four caller-supplied anchors: before/after catalogs, prior scope and **prior** registered systems. It derives target-inventory equality entirely from `after_systems`, which has no separately pinned successor-inventory hash. An input writer could substitute the exact prior system list for a changed target list while leaving all four original anchors unchanged. The generator may then emit apparently eligible provisional scope for the old inventory, even though the intended authoritative successor inventory has changed.
+
+Freeze a two-control valid fixture. (1) With a genuine changed successor system inventory, the mechanism must require review for both controls. (2) Record an independent SHA-256 digest of that intended successor inventory before introducing an attacker-controlled substitution. (3) Substitute a copy of `before_systems` for `after_systems` without changing the original four anchors; the existing implementation is expected to produce two misleading provisional continuities rather than reject the mismatch. **This would constitute a FAILED control-plane trust-boundary test, not proof of real policy approvals.**
+
+A narrow corrective successor may add a required independently supplied `systems_after_sha256` source anchor and verify it against `after_systems` before proposing any mapping. With the pinned digest intact, the substituted stale inventory must fail closed; with the valid changed successor inventory, both controls must require new review. An untrusted user who controls both the input and its digest remains able to lie: hashes are not signatures or independent authorization. No commercial superiority, legal compliance, real system inventory or buyer acceptance can be inferred.
+
+Keep original T1–T11 results, code hashes, failing logs and corrected CI history intact. Do not loosen tests, expand operating authority or merge for the purpose of obtaining green CI. This is a one-case adversarial check against a known candidate, not a Blue Sky flagship or financial P0 transition. If the risk is observed and repaired, park this conventional helper unless it earns a separate decisive commercial/delivery advantage against strong incumbent methods.
