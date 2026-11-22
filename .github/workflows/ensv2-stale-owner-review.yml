@@ -1,0 +1,38 @@
+name: ENSv2-stale-owner-independent-review
+on:
+  pull_request:
+    paths:
+      - 'review/ensv2-stale-owner/**'
+      - '.github/workflows/ensv2-stale-owner-review.yml'
+  workflow_dispatch:
+
+jobs:
+  negative-legacy-ownership-witness:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    permissions:
+      contents: read
+    steps:
+      - name: Record mandatory platform job start
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@v4
+        with:
+          path: review
+          persist-credentials: false
+      - name: Check out exact product-owner candidate for read-only examination
+        uses: actions/checkout@v4
+        with:
+          ref: dcaa91fe2a78561aafd3de2cefd77a8256cd4be3
+          path: product
+          persist-credentials: false
+      - name: Bind exact candidate and source blob
+        run: |
+          test "$(git -C product rev-parse HEAD)" = 'dcaa91fe2a78561aafd3de2cefd77a8256cd4be3'
+          test "$(git -C product hash-object products/frontier-omega-alpha/access/chain.mjs)" = '073625f95501b24c7beff5141f7a5c30f6f01c07'
+          cp review/review/ensv2-stale-owner/negative.mjs product/products/frontier-omega-alpha/tests/ensv2-stale-owner-negative.mjs
+      - name: Install exact existing public dependency closure
+        working-directory: product/products/frontier-omega-alpha
+        run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Execute frozen two-case negative/control witness
+        working-directory: product/products/frontier-omega-alpha
+        run: node --test tests/ensv2-stale-owner-negative.mjs
