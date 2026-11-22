@@ -1,0 +1,21 @@
+# C1 — staged industrial heat and power infrastructure
+
+Decision before construction: retain as third materially distinct opportunity; do not build a generic storage-sizing optimizer as a new enabling invention. This is a screened opportunity, not an executed third technical arm.
+
+## Consequential outcome and complementary means
+Continuous industrial steam from variable renewable electricity, then a different electricity-delivery function using retained thermal infrastructure. Beneficiaries include alumina refiners and industrial steam users. The proposed complement bundle is storage medium, electrical connection, heat exchanger/steam generator, controls, qualification and a later heat engine. Removing any indispensable element defeats delivery; investment staging must preserve existing steam obligations.
+
+## Primary evidence and strongest complete alternatives
+- ARENA's Yarwun project page (21 October 2026) identifies brownfield integration, electrical/site infrastructure and continuous steam as real constraints. It specifies feasibility and investment stage gates before construction, followed by testing and 36 months of trial operation. It is evidence of a consequential funded development problem, not a realized return or a ready customer for this portfolio. https://arena.gov.au/projects/rio-tinto-yarwun-thermal-energy-storage-industrial-demonstration-project/
+- Rondo reports commercial daily operation of a 100 MWh solar-charged heat battery delivering continuous industrial steam, after ten weeks of operation in October 2025. These are manufacturer's statements, not independently replayed performance data. The complete incumbent alternative already includes installation and operation, not merely an inferior scheduling algorithm. https://www.rondo.com/news-press/rondo-powers-up-worlds-largest-industrial-heat-battery
+- California Energy Commission report CEC-500-2024-011 describes Antora's thermophotovoltaic manufacturing programme and reported manufacturing-readiness achievement. A heat-to-electricity extension is therefore not itself a newly discovered productive means. Manufacturing qualification does not establish this portfolio's hardware, plant economics or market access. https://www.energy.ca.gov/publications/2024/manufacturing-scale-record-breaking-solid-state-heat-engine-deep-decarbonization
+
+## Residual and decision
+Cheap autonomous engineering might reduce site-specific integration/qualification work, but no source-backed allocation of those costs or paired autonomous-versus-human complete delivery has been established. We cannot attribute all plant capital, construction delay or a public award to removable engineering labor. Strong conventional providers may design, buy, finance and install the same components. No existing source establishes a full-budget boundary that our construction crosses.
+
+Consequently there is no justified new C1 construction in this finite stage. This is not rejection for lack of algorithmic novelty, lack of $100,000 seed or lack of a tiny public dataset. It is the specific absence of an identified missing complementary interface beyond an already available complete route. First two routes execute different actual instruments; C1 remains visible rather than being cosmetically promoted.
+
+## If reopened
+A concrete site interface or qualification bottleneck needs public engineering inputs and an independently specified delivered steam/power contract. Test conserved energy AND exergy, finite heat-transfer rates, temperature, standby losses, initial stored energy and protected steam inventory; electricity cannot exceed available exergy and cannot consume the same reserved energy twice. Include grid connection, fabrication, commissioning, downtime, maintenance, backup and financing delay/terms. Compare incumbent heat batteries/CHP, electric boilers with firm supply, gas where admissible, staged investment and non-entry. A model could test conditional engineering reachability, but not manufacture physical acceptance or revenue.
+
+Paper mechanism used: Beyond the Production Frontier's complementary means and investment order; Transformational Intelligence's unchanged purpose and unrestricted conventional route. The operational consequence here is to decline an unsupported construction claim, not to import a synthetic paper's profit into industry.

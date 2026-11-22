@@ -1,0 +1,9 @@
+# Post-W1 source-specific mapping assessment
+
+No W1 result or acceptance was changed. This bounded inspection used the already retrieved published article PDF/text and Figshare24991158 metadata; no new sensor outcomes, channel-correlation inference or broad literature search.
+
+The article's Controller integration section identifies a SensorexTCS3020 conductivity meter directly after the stack on the diluate stream. It does not map that instrument to a publicCSV channel number. Figshare descriptions label conductivity1_DS through conductivity4_DS only as sensors1–4, allmicroS/cm. The archive contains dailyCSV files, noPLC source or channel dictionary. The paper refers detailed process/interface information to SupplementaryFig2/Table1. The attempted supplement retrieval returnedHTTP503 and no supplement bytes were available for inspection; this is an access result, not proof that the supplement is unavailable elsewhere.
+
+Therefore the inspected sources do NOT establish which numbered channel measures releasable product, whether switching/reversal changes its interpretation, or which timepoints coincide with completed-batch acceptance. Selecting the minimum conductivity, the most favorable channel or the best correlation would create an outcome-driven acceptance rule. W1 remains qualityHOLD7/7.
+
+Highest-value next public input is the process/instrument diagram plusPLC tag/state dictionary connecting all four conductivity probes to tank/stream identity and batch-release state, with calibration/temperature-compensation details. That would permit a separately preregistered chemical-proxy follow-up on fresh dates; it still would not establish microbiological/other-contaminant potability or observed customer acceptance. The independently specified water product needs full quality criteria, not only low salinity.
