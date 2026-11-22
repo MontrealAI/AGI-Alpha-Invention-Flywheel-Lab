@@ -39,7 +39,7 @@ jobs:
           python3 --version | tee selective232-receipts/PYTHON.txt
           test "$(git hash-object tools/impact_continuation229.py)" = "87a4bf4d412158770bbd09b98a6524368c4e225e" || { echo 'UPSTREAM229_CHANGED'; exit 1; }
           test "$(git hash-object tools/bidirectional_impact230.py)" = "7fbf89f1a73c8bc0b977755829752c4994255554" || { echo 'UPSTREAM230_CHANGED'; exit 1; }
-          git merge-base --is-ancestor 993ce4b8202dfd86efe11a8a93e04068d1afc9a9 HEAD || { echo 'FROZEN_PROTOCOL_NOT_ANCESTOR'; exit 1; }
+          test "$(git hash-object research/selective-impact232/PROTOCOL.md)" = "33518ab702cb74928d10e23b91fdb2e8b52343d9" || { echo 'FROZEN_PROTOCOL_BLOB_CHANGED'; exit 1; }
           /usr/bin/time -p python3 -B -m unittest discover -s tests -p 'test_selective_impact232.py' -v 2>&1 | tee selective232-receipts/TESTS.txt
       - name: Two-domain exact output and independent complete denominator
         shell: bash
