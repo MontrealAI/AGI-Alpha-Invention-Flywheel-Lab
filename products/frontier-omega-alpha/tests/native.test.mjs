@@ -140,7 +140,9 @@ test('Pages staging publishes only ciphertext and isolated reader assets', async
   t.after(() => rm(root, { recursive: true, force: true }));
   const f = fixtureChain();
   const masterKey = randomBytes(32);
-  const result = await advance({ rpc: f.rpc, state: initialState(f.cursor), catalog: [assetFor(masterKey)], masterKey });
+  const result = await advance({
+    rpc: f.rpc, state: initialState(f.cursor), catalog: [assetFor(masterKey)], masterKey, signedRequests: []
+  });
   const file = join(root, 'snapshot.json');
   await writeFile(file, JSON.stringify(result.library));
   const publicPage = join(root, 'frontier-omega-alpha');

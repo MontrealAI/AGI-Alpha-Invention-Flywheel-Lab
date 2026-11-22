@@ -7,7 +7,7 @@ import { SiweMessage } from 'siwe';
 import { createAccessServer } from '../access/server.mjs';
 import { releaseKey, rotateAsset } from '../access/crypto.mjs';
 import { decryptRelease } from '../../../docs/research/frontier-omega-alpha/decrypt.js';
-import { fakeMainnet, testStore, createWallet, memberRecord, clubNode, MINIMUM, WRAPPER } from './fixtures.mjs';
+import { fakeMainnet, testStore, createWallet, memberRecord, clubNode, CLUB_PARENT, CLUB_ROOT, MINIMUM, WRAPPER } from './fixtures.mjs';
 
 process.umask(0o077);
 const origin = 'https://research.example.test';
@@ -98,6 +98,42 @@ test('ENSv1 wrapped subname subject to parental control keeps its owner when tem
   assert.equal((await s.login(wallet, 'legacy')).body.path, 'club');
   s.rpcState.owners.delete(node);
   assert.equal((await s.login(wallet, 'legacy')).status, 403);
+});
+
+test('Uses the specific ENSv1 member extension and bounds it by a valid parent and registrar lease', async () => {
+  let now = 1_795_385_000n;
+  const { chain, rpcState } = fakeMainnet(() => Number(now * 1000n));
+  const wallet = createWallet().address;
+  const label = '🦊';
+  const node = clubNode(label);
+  const initial = now;
+  assert.equal(node, namehash(label + '.club.agi.eth'));
+  rpcState.balance = MINIMUM - 1n;
+  rpcState.owners.set(node, WRAPPER);
+  rpcState.owners.set(CLUB_PARENT, WRAPPER);
+  rpcState.owners.set(CLUB_ROOT, WRAPPER);
+  const holder = expiry => ({ owner: wallet, fuses: 1 << 16, expiry });
+  rpcState.wrapped.set(node, holder(now + 30n));
+  rpcState.wrapped.set(CLUB_PARENT, holder(now + 55n));
+  rpcState.wrapped.set(CLUB_ROOT, holder(now + 300n));
+  const qualifies = async () => chain.entitlement(wallet, label, await chain.snapshot());
+  assert.equal(await qualifies(), 'club');
+  now = initial + 31n;
+  rpcState.wrapped.get(CLUB_PARENT).expiry = initial + 60n;
+  assert.equal(await qualifies(), null, 'Parent extension cannot move the member deadline');
+  rpcState.wrapped.get(node).expiry = initial + 90n;
+  assert.equal(await qualifies(), 'club', 'A changed member deadline is read at the next snapshot');
+  now = initial + 60n;
+  assert.equal(await qualifies(), null, 'Expired namespace authority denies even a still-live leaf');
+  rpcState.owners.set(CLUB_PARENT, wallet);
+  rpcState.owners.set(node, wallet);
+  assert.equal(await qualifies(), 'club', 'Direct Registry ownership has no member Wrapper deadline');
+  rpcState.rootExpiry = now - rpcState.rootGrace + 1n;
+  assert.equal(await qualifies(), 'club', 'The root remains owned in the .eth registrar grace period');
+  now++;
+  assert.equal(await qualifies(), null, 'A stale subname cannot outlive the ENSv1 root lease');
+  rpcState.balance = MINIMUM;
+  assert.equal(await qualifies(), 'token');
 });
 
 test('Token eligibility accepts integer equality and surplus, independently of Club', async t => {

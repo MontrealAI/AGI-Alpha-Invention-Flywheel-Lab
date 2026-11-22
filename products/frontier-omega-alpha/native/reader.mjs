@@ -1,11 +1,11 @@
-import { formatEther, getAddress } from 'ethers';
+import { getAddress } from 'ethers';
 import { Mainnet, clubLabel } from '../access/chain.mjs';
 import {
-  address, assertLibrary, DESTINATION, encodeEnrollment, enrollmentId, hash, hex, MAX_FINALIZED_AGE_SECONDS, MAX_LIBRARY_BYTES,
-  releaseTag, toBase64, WINDOW_SECONDS
+  address, assertLibrary, enrollmentId, hex, MAX_LIBRARY_BYTES, releaseTag, SIGNED_LIBRARY_SCHEMA, toBase64, WINDOW_SECONDS
 } from './protocol.mjs';
 import { compareDevice, loadDevice } from './device.mjs';
 import { decapsulate, makeDeviceKey } from './hpke.mjs';
+import { authenticateSignedEnrollment, makeSignedEnrollment, signedEnrollmentMessage } from './signed-enrollment.mjs';
 
 const sharedOrigin = 'https://montrealai.github.io';
 const enc = new TextDecoder('utf-8', { fatal: true });
@@ -56,34 +56,9 @@ async function fetchLibrary(url) {
     }
     text += enc.decode(value, { stream: true });
   }
-  return assertLibrary(JSON.parse(text + enc.decode()));
-}
-
-function unsignedQuantity(value) {
-  if (typeof value !== 'string' || !/^0x(?:0|[1-9a-f][0-9a-f]*)$/.test(value)) {
-    throw Error('fee_unavailable');
-  }
-  return BigInt(value);
-}
-
-const quantity = value => '0x' + value.toString(16);
-
-async function estimate(request, current, data) {
-  const input = { from: current, to: DESTINATION, value: '0x0', data };
-  const [gas, block, tip] = await Promise.all([
-    request('eth_estimateGas', [input]), request('eth_getBlockByNumber', ['latest', false]),
-    request('eth_maxPriorityFeePerGas', [])
-  ]);
-  const fee = unsignedQuantity(block?.baseFeePerGas);
-  const priority = unsignedQuantity(tip);
-  const limit = unsignedQuantity(gas);
-  if (limit < 21_000n || limit > 50_000n || fee * 2n + priority <= 0n) throw Error('fee_unavailable');
-  const max = fee * 2n + priority;
-  return {
-    payload: { ...input, gas: quantity(limit), maxFeePerGas: quantity(max), maxPriorityFeePerGas: quantity(priority) },
-    gas: limit.toString(), maximum: formatEther(limit * max), estimate: formatEther(limit * (fee + priority)),
-    quotedAt: Date.now()
-  };
+  const library = assertLibrary(JSON.parse(text + enc.decode()));
+  if (library.schema !== SIGNED_LIBRARY_SCHEMA) throw Error('publisher_offline');
+  return library;
 }
 
 export async function connectReader(config, prefix, { loopbackTest = false } = {}) {
@@ -95,9 +70,15 @@ export async function connectReader(config, prefix, { loopbackTest = false } = {
   if (!address(owner?.toLowerCase())) throw Error('metamask_missing');
   const current = owner.toLowerCase();
   const chain = new Mainnet(request);
-  const selectedLabel = prefix === null ? null : clubLabel(prefix);
+  let selectedLabel;
+  try {
+    selectedLabel = prefix === null ? null : clubLabel(prefix);
+  } catch {
+    throw Error('identity');
+  }
   let saved = await loadDevice(current);
   let persisted = saved;
+  let draft;
   if (saved && (!(saved.privateKey instanceof CryptoKey) || saved.privateKey.extractable ||
       saved.privateKey.type !== 'private' || saved.privateKey.algorithm.name !== 'ECDH')) throw Error('storage');
 
@@ -107,51 +88,57 @@ export async function connectReader(config, prefix, { loopbackTest = false } = {
     if (first?.toLowerCase() !== current) throw Error('wallet_changed');
   }
 
-  async function check() {
+  async function check(label = saved ? saved.label : selectedLabel) {
     await account();
     const block = await chain.snapshot();
-    const path = await chain.entitlement(getAddress(current), saved ? saved.label : selectedLabel, block);
+    const path = await chain.entitlement(getAddress(current), label, block);
     if (!path) throw Error('ineligible');
     return block;
+  }
+
+  async function publishedReceipt(library) {
+    const id = await enrollmentId(current, saved.nonce);
+    const receipt = Object.hasOwn(library.recipients, id) ? library.recipients[id] : null;
+    if (receipt && receipt.proof !== saved.proof) throw Error('unavailable');
+    return receipt;
+  }
+
+  async function checkProvisioned() {
+    await check();
+    const library = await fetchLibrary(url);
+    const receipt = await publishedReceipt(library);
+    if (receipt?.state !== 'provisioned') throw Error(receipt?.state ?? 'unavailable');
+    return { library, receipt };
   }
 
   async function status({ checked = false } = {}) {
     if (!checked) await account();
     if (!saved) return { state: 'new' };
     const library = await fetchLibrary(url);
-    const id = await enrollmentId(current, saved.nonce);
-    const receipt = Object.hasOwn(library.recipients, id) ? library.recipients[id] : null;
+    const receipt = await publishedReceipt(library);
     if (receipt?.state === 'provisioned') {
       await check();
       const entries = library.records.filter(record => Object.hasOwn(receipt.keys, record.tag));
       return {
-        state: 'provisioned', wallet, entries, check,
+        state: 'provisioned', wallet, entries, check: checkProvisioned,
         async open(entry) {
-          await check();
-          if (await releaseTag(entry) !== entry.tag) throw Error('release_unavailable');
-          const key = await decapsulate(saved, receipt.keys[entry.tag], receipt.tx, entry.tag);
+          const { library, receipt: latest } = await checkProvisioned();
+          const record = library.records.find(record => record.tag === entry.tag);
+          if (!record || !Object.hasOwn(latest.keys, record.tag) || await releaseTag(record) !== entry.tag) {
+            throw Error('release_unavailable');
+          }
+          const key = await decapsulate(saved, latest.keys[record.tag], latest.proof, record.tag, library.schema);
           try {
-            return { ciphertext: entry, key: toBase64(key) };
+            return { ciphertext: record, key: toBase64(key) };
           } finally {
             key.fill(0);
           }
         }
       };
     }
-    if (receipt) return { state: receipt.state, tx: receipt.tx };
-    // A later, caught-up publication can confirm that a missing receipt has aged out.
-    if (saved.phase !== 'draft' && library.openEnrollment && library.updatedAt > saved.expiresAt + MAX_FINALIZED_AGE_SECONDS) {
-      return { state: 'expired_receipt' };
-    }
-    if (!saved.tx && saved.phase === 'broadcasting') {
-      return { state: saved.expiresAt > Date.now() / 1_000 ? 'awaiting_receipt' : 'expired_receipt' };
-    }
-    if (!saved.tx) return { state: 'new' };
-    const mined = await request('eth_getTransactionReceipt', [saved.tx]);
-    if (mined?.status === '0x0') return { state: 'failed', tx: saved.tx };
-    if (mined?.status === '0x1' && mined.transactionHash === saved.tx && mined.from?.toLowerCase() === current &&
-        mined.to?.toLowerCase() === DESTINATION) return { state: 'confirmed', tx: saved.tx };
-    return { state: 'pending', tx: saved.tx };
+    if (receipt) return { state: receipt.state };
+    if (saved.expiresAt <= Date.now() / 1000) return { state: 'expired_receipt' };
+    return { state: 'pending', request: saved.request };
   }
 
   async function requirePublisher() {
@@ -165,49 +152,35 @@ export async function connectReader(config, prefix, { loopbackTest = false } = {
     await requirePublisher();
     const existing = await status({ checked: true });
     if (!renew && existing.state !== 'new') return existing;
-    if (renew && !['superseded', 'failed', 'denied', 'capacity', 'expired_receipt', 'revoked'].includes(existing.state)) throw Error('unavailable');
-    if (renew || !saved || saved.expiresAt < Date.now() / 1000 + 20 * 60) {
-      const device = await makeDeviceKey();
-      saved = { ...device, label: selectedLabel, nonce: hex(crypto.getRandomValues(new Uint8Array(16))),
-        expiresAt: 0, phase: 'draft', tx: null };
-    }
-    const block = await check();
-    if (!saved.expiresAt) saved.expiresAt = block.timestamp + WINDOW_SECONDS - 60;
-    const data = encodeEnrollment({ ...saved, wallet: current });
-    return { state: 'review', quote: await estimate(request, current, data) };
+    if (renew && !['superseded', 'denied', 'capacity', 'expired_receipt', 'revoked'].includes(existing.state)) throw Error('unavailable');
+    const block = await check(selectedLabel);
+    const device = await makeDeviceKey();
+    const payload = makeSignedEnrollment({
+      origin: location.origin, issuedAt: block.timestamp, expiresAt: block.timestamp + WINDOW_SECONDS,
+      wallet: current, label: selectedLabel, nonce: hex(crypto.getRandomValues(new Uint8Array(16))), publicKey: device.publicKey
+    });
+    draft = { device, payload, renew };
+    return { state: 'review', message: signedEnrollmentMessage(payload, location.origin) };
   }
 
-  async function submit(quote) {
-    await account();
-    if (Date.now() - quote.quotedAt > 90_000) {
-      await requirePublisher();
-      await check();
-      return { state: 'review', quote: await estimate(request, current, encodeEnrollment({ ...saved, wallet: current })) };
-    }
+  async function submit() {
+    if (!draft) throw Error('unavailable');
     await requirePublisher();
-    await check();
-    if (quote.payload.data !== encodeEnrollment({ ...saved, wallet: current }) ||
-        quote.payload.from !== current || quote.payload.to !== DESTINATION || quote.payload.value !== '0x0') throw Error('unavailable');
-    const broadcasting = { ...saved, phase: 'broadcasting' };
-    if (!await compareDevice(current, persisted, broadcasting)) throw Error('storage_busy');
-    persisted = broadcasting;
-    saved = broadcasting;
-    let tx;
-    try {
-      tx = await request('eth_sendTransaction', [quote.payload]);
-    } catch (error) {
-      if (error.code === 4001) {
-        const recoverable = { ...broadcasting, phase: 'draft' };
-        if (await compareDevice(current, broadcasting, recoverable)) persisted = saved = recoverable;
-        throw error;
-      }
-      return { state: 'awaiting_receipt' };
-    }
-    if (!hash(tx)) return { state: 'awaiting_receipt' };
-    const submitted = { ...broadcasting, tx, phase: 'sent' };
-    if (!await compareDevice(current, broadcasting, submitted)) return { state: 'awaiting_receipt' };
-    persisted = saved = submitted;
-    return { state: 'pending', tx };
+    const { device, payload, renew } = draft;
+    if (Date.now() / 1000 - payload.issuedAt > 180) return prepare(renew);
+    await check(selectedLabel);
+    const message = signedEnrollmentMessage(payload, location.origin);
+    const signature = await request('personal_sign', [hex(new TextEncoder().encode(message)), current]);
+    const packet = { ...payload, signature };
+    const snapshot = await check(selectedLabel);
+    const verified = await authenticateSignedEnrollment(packet, location.origin, chain, snapshot);
+    if (!verified) throw Error('unavailable');
+    const { label, nonce, expiresAt, proof } = verified;
+    const enrolled = { ...device, label, nonce, expiresAt, proof, request: packet };
+    if (!await compareDevice(current, persisted, enrolled)) throw Error('storage_busy');
+    persisted = saved = enrolled;
+    draft = null;
+    return { state: 'pending', request: packet };
   }
 
   await account();

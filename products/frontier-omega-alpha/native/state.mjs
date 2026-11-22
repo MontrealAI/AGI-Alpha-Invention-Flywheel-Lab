@@ -1,9 +1,38 @@
 import { createCipheriv, createDecipheriv, createHash, hkdfSync, randomBytes } from 'node:crypto';
-import { assertLibrary, fromBase64, keysAre, MAX_LIBRARY_BYTES, toBase64 } from './protocol.mjs';
+import { decryptAsset, encryptAsset, releaseKey } from '../access/crypto.mjs';
+import { assertLibrary, fromBase64, keysAre, MAX_LIBRARY_BYTES, SIGNED_LIBRARY_SCHEMA, toBase64 } from './protocol.mjs';
 
 const legacyLimit = MAX_LIBRARY_BYTES + 1024 * 1024;
 const compactLimit = 512 * 1024;
 export const checkpointEnvelopeBytes = Math.ceil((legacyLimit + 16) * 4 / 3) + 1024;
+export const enrollmentEnvelopeBytes = 256 * 1024;
+const enrollmentType = { id: 'approved-enrollments', version: 1, format: 'frontier-omega-alpha/approved-enrollments-v1' };
+
+export function sealEnrollments(requests, masterKey) {
+  if (!Array.isArray(requests) || requests.length > 48) throw Error('Invalid approved enrollment batch');
+  const payload = Buffer.from(JSON.stringify(requests));
+  try {
+    return encryptAsset({ ...enrollmentType, epoch: randomBytes(16).toString('hex') }, payload, masterKey);
+  } finally {
+    payload.fill(0);
+  }
+}
+
+export function openEnrollments(sealed, masterKey) {
+  if (sealed === null) return [];
+  if (!sealed || !Object.entries(enrollmentType).every(([field, expected]) => sealed[field] === expected)) {
+    throw Error('Invalid encrypted enrollment batch');
+  }
+  const wrapped = releaseKey(sealed, masterKey);
+  let plaintext;
+  try {
+    plaintext = decryptAsset(sealed, wrapped);
+    return JSON.parse(plaintext);
+  } finally {
+    wrapped.fill(0);
+    plaintext?.fill(0);
+  }
+}
 
 function context(version) {
   return Buffer.from(`FRONTIER Ω ALPHA GitHub publisher checkpoint v${version}`, 'utf8');
@@ -63,9 +92,12 @@ export function openState(sealed, masterKey, library) {
       if (!keysAre(state, [...fields, 'digest'])) throw Error('Invalid publisher checkpoint state');
       if (state.digest !== digest) throw Error('Publisher checkpoint and public library disagree');
       const { digest: _, ...checkpoint } = state;
+      const proof = library.schema === SIGNED_LIBRARY_SCHEMA ? 'proof' : 'tx';
       for (const member of Object.values(checkpoint.active)) {
         const receipt = library.recipients[member.id];
-        if (!receipt || receipt.tx !== member.tx || receipt.state !== member.state) throw Error('Publisher checkpoint and public library disagree');
+        if (!receipt || receipt[proof] !== member[proof] || receipt.state !== member.state) {
+          throw Error('Publisher checkpoint and public library disagree');
+        }
         member.keys = structuredClone(receipt.keys);
       }
       return { ...checkpoint, publication: library };

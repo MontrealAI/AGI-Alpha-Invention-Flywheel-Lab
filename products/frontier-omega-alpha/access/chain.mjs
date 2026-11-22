@@ -1,15 +1,22 @@
-import { concat, getAddress, hashMessage, id, Interface, keccak256, verifyMessage, ZeroAddress, ZeroHash } from 'ethers';
+import { ensNormalize, getAddress, hashMessage, id, Interface, namehash, verifyMessage, ZeroAddress } from 'ethers';
 
 // AGI Club names use the Ethereum mainnet ENSv1 Registry and (when wrapped) ENSv1 Name Wrapper.
 export const TOKEN = '0xA61a3B3a130a9c20768EEBF97E21515A6046a1fA';
 export const MINIMUM = 1_000_000n * 10n ** 18n;
 export const REGISTRY = '0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e';
 export const WRAPPER = '0xD4416b13d2b3a9aBae7AcD5D6C2BbDBE25686401';
+export const REGISTRAR = '0x57f1887a8BF19b14fC0dF6Fd9B2acc9Af147eA85';
+export const MAX_CLUB_LABEL_BYTES = 255;
+const CLUB_SUFFIX = 'club.agi.eth';
+const CLUB_PARENT = namehash(CLUB_SUFFIX);
+const CLUB_ROOT = namehash('agi.eth');
 const PARENT_CANNOT_CONTROL = 1n << 16n;
 const abi = new Interface([
   'function owner(bytes32) view returns (address)',
   'function ownerOf(uint256) view returns (address)',
   'function getData(uint256) view returns (address,uint32,uint64)',
+  'function nameExpires(uint256) view returns (uint256)',
+  'function GRACE_PERIOD() view returns (uint256)',
   'function decimals() view returns (uint8)',
   'function symbol() view returns (string)',
   'function balanceOf(address) view returns (uint256)',
@@ -20,16 +27,21 @@ const word = /^0x[0-9a-f]{64}$/i;
 const quantity = /^0x(?:0|[1-9a-f][0-9a-f]*)$/i;
 
 export function clubLabel(value) {
-  if (typeof value !== 'string' || value.length > 128) throw Error('Invalid Club label');
-  const label = value.trim().toLowerCase();
-  if (!/^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$/.test(label)) throw Error('Invalid Club label');
+  if (typeof value !== 'string' || value.length > MAX_CLUB_LABEL_BYTES) throw Error('Invalid Club label');
+  let label;
+  try {
+    label = ensNormalize(value.trim());
+  } catch {
+    throw Error('Invalid Club label');
+  }
+  if (!label || label.includes('.') || new TextEncoder().encode(label).length > MAX_CLUB_LABEL_BYTES) {
+    throw Error('Invalid Club label');
+  }
   return label;
 }
 
 export function clubNode(label) {
-  let node = ZeroHash;
-  for (const part of ['eth', 'agi', 'club', clubLabel(label)]) node = keccak256(concat([node, id(part)]));
-  return node;
+  return namehash(clubLabel(label) + '.' + CLUB_SUFFIX);
 }
 
 export function httpRpc(endpoint) {
@@ -59,6 +71,8 @@ export function httpRpc(endpoint) {
 class ContractReverted extends Error {}
 
 export class Mainnet {
+  #namespaces = new WeakMap();
+
   constructor(rpc, now = Date.now) {
     this.rpc = rpc;
     this.now = now;
@@ -97,18 +111,36 @@ export class Mainnet {
     return decoded;
   }
 
-  async ownsClub(address, label, snapshot) {
-    const node = clubNode(label);
+  async #ensOwner(node, snapshot) {
     const [registryOwner] = await this.call(REGISTRY, 'owner', [node], snapshot);
-    if (registryOwner !== WRAPPER) return registryOwner !== ZeroAddress && registryOwner === address;
+    if (registryOwner !== WRAPPER) return { owner: registryOwner, expires: null };
     const [[owner], [recordedOwner, fuses, expiry]] = await Promise.all([
       this.call(WRAPPER, 'ownerOf', [node], snapshot),
       this.call(WRAPPER, 'getData', [node], snapshot)
     ]);
+    if (owner !== recordedOwner) return { owner: ZeroAddress, expires: null };
+    // Only an emancipated ENSv1 name loses ownership when its wrapper fuses expire.
+    return { owner, expires: (fuses & PARENT_CANNOT_CONTROL) ? expiry : null };
+  }
+
+  async #clubNamespace(snapshot) {
+    if (!this.#namespaces.has(snapshot)) {
+      this.#namespaces.set(snapshot, Promise.all([
+        this.#ensOwner(CLUB_PARENT, snapshot), this.#ensOwner(CLUB_ROOT, snapshot),
+        this.call(REGISTRAR, 'nameExpires', [id('agi')], snapshot),
+        this.call(REGISTRAR, 'GRACE_PERIOD', [], snapshot)
+      ]));
+    }
+    return this.#namespaces.get(snapshot);
+  }
+
+  async ownsClub(address, label, snapshot) {
+    const member = await this.#ensOwner(clubNode(label), snapshot);
+    if (member.owner === ZeroAddress || member.owner !== address) return false;
+    const [parent, root, [registrationExpiry], [grace]] = await this.#clubNamespace(snapshot);
     const current = BigInt(Math.max(snapshot.timestamp, Math.floor(this.now() / 1000)));
-    // A subname loses its owner at expiry only when emancipated from its parent.
-    const nameExpired = (fuses & PARENT_CANNOT_CONTROL) !== 0n && expiry <= current;
-    return owner !== ZeroAddress && owner === address && recordedOwner === address && !nameExpired;
+    if (registrationExpiry === 0n || registrationExpiry + grace <= current) return false;
+    return [member, parent, root].every(name => name.owner !== ZeroAddress && (name.expires === null || name.expires > current));
   }
 
   async tokenIdentity(snapshot) {

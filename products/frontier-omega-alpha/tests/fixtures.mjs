@@ -1,9 +1,9 @@
-import { Interface, Wallet, ZeroAddress } from 'ethers';
+import { Interface, namehash, Wallet, ZeroAddress } from 'ethers';
 import { randomBytes } from 'node:crypto';
 import { mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { Mainnet, TOKEN, MINIMUM, REGISTRY, WRAPPER, clubNode } from '../access/chain.mjs';
+import { Mainnet, TOKEN, MINIMUM, REGISTRAR, REGISTRY, WRAPPER, clubNode } from '../access/chain.mjs';
 import { Store } from '../access/store.mjs';
 import { encryptAsset } from '../access/crypto.mjs';
 
@@ -11,18 +11,24 @@ const functions = new Interface([
   'function owner(bytes32) view returns (address)',
   'function ownerOf(uint256) view returns (address)',
   'function getData(uint256) view returns (address,uint32,uint64)',
+  'function nameExpires(uint256) view returns (uint256)',
+  'function GRACE_PERIOD() view returns (uint256)',
   'function decimals() view returns (uint8)',
   'function symbol() view returns (string)',
   'function balanceOf(address) view returns (uint256)',
   'function isValidSignature(bytes32,bytes) view returns (bytes4)'
 ]);
 const hash = '0x' + 'ab'.repeat(32);
+const namespaceOwner = '0x0000000000000000000000000000000000000001';
+export const CLUB_PARENT = namehash('club.agi.eth');
+export const CLUB_ROOT = namehash('agi.eth');
 
 export function fakeMainnet(clock = Date.now) {
   const rpcState = {
     chainId: '0x1', age: 0, canonical: true, balance: MINIMUM, decimals: 18n, symbol: 'AGIALPHA',
     tokenCode: '0x6080', contract: null, signatureValid: null, outage: false,
-    owners: new Map(), wrapped: new Map()
+    owners: new Map([[CLUB_PARENT, namespaceOwner], [CLUB_ROOT, namespaceOwner]]), wrapped: new Map(),
+    rootExpiry: BigInt(Math.floor(clock() / 1000) + 365 * 24 * 60 * 60), rootGrace: 90n * 24n * 60n * 60n
   };
   const rpc = async (method, args) => {
     if (rpcState.outage) throw Error('Synthetic RPC outage');
@@ -48,6 +54,8 @@ export function fakeMainnet(clock = Date.now) {
       if (call.name === 'balanceOf') return result([rpcState.balance]);
     }
     if (to === REGISTRY && call.name === 'owner') return result([rpcState.owners.get(node) ?? ZeroAddress]);
+    if (to === REGISTRAR && call.name === 'nameExpires') return result([rpcState.rootExpiry]);
+    if (to === REGISTRAR && call.name === 'GRACE_PERIOD') return result([rpcState.rootGrace]);
     if (to === WRAPPER) {
       const row = rpcState.wrapped.get('0x' + node.toString(16).padStart(64, '0'));
       if (call.name === 'ownerOf') return result([row.owner]);

@@ -1,5 +1,7 @@
 # GitHub-native qualification / Qualification GitHub native
 
+This report retains the historical #541 transaction-based prototype. The current [transaction-free candidate](../GITHUB-NATIVE.md) uses signed device requests and encrypted provisioning.
+
 **Review starting point.** PR #541 at `3c8dbeaa17363704164ddbf5dbf5db6f49f55ec1`, compared with default branch `f0987aa48d5c9136b28540f54eabf5367e63bbe6`. The prior qualification had 17 successful workflows. The native implementation continues the same PR and leaves the prior evidence available.
 
 | Requirement | Source-linked result |
