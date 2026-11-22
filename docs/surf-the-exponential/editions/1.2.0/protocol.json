@@ -1,0 +1,174 @@
+{
+  "schema": "missing-move-arithmetic-audit/v1",
+  "title": "The Missing Move: exact arithmetic audit of adjudicated challenge",
+  "specified_on": "2026-11-05",
+  "evidence_status": "Prospectively specified authored arithmetic audit, not an empirical preregistration, a frontier-model benchmark, or an observation of business performance.",
+  "design_disclosure": "The scenario parameters and illustrative arithmetic were examined during design. This file specifies the complete grid and controls before running the publication generator. No scenario is an untouched empirical confirmation set.",
+  "scope_revision": "Methodological review narrowed the events to one prespecified material-defect proposition per episode. An unrelated false accusation against an otherwise flawed artifact cannot count as a true challenge. The fixed-target arithmetic is unchanged; mixed true/false batches and open-ended target selection are outside this model.",
+  "units": "authored utility units; no conversion to money or measured model accuracy",
+  "events": {
+    "F": "One prespecified, decision-material defect proposition about the incumbent is true.",
+    "D": "A critic alleges that exact prespecified defect proposition, not an unrelated flaw.",
+    "A": "That same allegation is accepted for a revision targeting the proposition; A implies D."
+  },
+  "parameters": {
+    "pi": "P(F)",
+    "d": "P(D | F)",
+    "a": "P(A | D,F)",
+    "f": "P(D | not F)",
+    "b": "P(A | D,not F)",
+    "G": "Conditional expected improvement after an accepted true challenge, net of revision and retesting costs; may be negative in the general identity.",
+    "H": "Conditional expected harm after an accepted false challenge, including revision costs; nonnegative.",
+    "K": "Expected incremental criticism and adjudication cost across all branches, including discarded proposals, retrieval, delay and opportunity cost; nonnegative."
+  },
+  "assumptions": [
+    "Each episode has one target proposition fixed before criticism. The truth event F concerns that exact target. Multiple allegations, mixed true/false batches and adaptive target selection are outside this finite audit.",
+    "Incumbent-relative utility is zero when no revision is accepted, before charging K.",
+    "Conditional rates are supplied jointly through the probability tree; no independence of critic and adjudicator is assumed.",
+    "G and H include conditional downstream revision and retesting costs. Those costs are not charged again in K.",
+    "For the accept-every-criticism versus adjudicated comparison, G and H are held constant across accepted and rejected proposals in each truth class. This authored homogeneous-payoff comparison does not model selective acceptance of revisions with different severity or repair quality.",
+    "The unaddressed-flaw quantity is P(F and not A): a true target proposition without an accepted allegation. It is neither whole-artifact error coverage nor the probability of a flaw remaining after an attempted repair.",
+    "A positive value compares the named route only with keeping the incumbent. It is not a global optimum or a win over every comparator.",
+    "All probabilities and payoffs are authored. The audit cannot estimate detection accuracy, real task prevalence, demand, revenue or discovery superiority.",
+    "No money, native account, API key, external data or model call is used."
+  ],
+  "identity": "delta = pi*d*a*G - (1-pi)*f*b*H - K",
+  "decision_rule": "Compare each route with retaining the incumbent at utility zero; positive selects review, negative retains the incumbent, zero is a tie. The perfect-information row is only an unavailable upper bound.",
+  "scenarios": [
+    {
+      "id": "grounded_challenge",
+      "label": "Grounded challenge",
+      "kind": "scenario",
+      "parameters": {"pi":"1/4","d":"4/5","a":"9/10","f":"1/10","b":"1/20","G":"100","H":"30","K":"8"},
+      "expected_delta": "791/80"
+    },
+    {
+      "id": "shared_blind_spot",
+      "label": "Shared discovery blind spot",
+      "kind": "scenario",
+      "parameters": {"pi":"1/4","d":"1/10","a":"9/10","f":"1/10","b":"1/20","G":"100","H":"30","K":"8"},
+      "expected_delta": "-469/80"
+    },
+    {
+      "id": "weak_adjudication",
+      "label": "Weak adjudication",
+      "kind": "scenario",
+      "parameters": {"pi":"1/20","d":"4/5","a":"4/5","f":"2/5","b":"3/4","G":"100","H":"60","K":"8"},
+      "expected_delta": "-219/10"
+    },
+    {
+      "id": "expensive_review",
+      "label": "Review too expensive",
+      "kind": "scenario",
+      "parameters": {"pi":"1/4","d":"4/5","a":"9/10","f":"1/10","b":"1/20","G":"100","H":"30","K":"20"},
+      "expected_delta": "-169/80"
+    },
+    {
+      "id": "small_stakes",
+      "label": "Low consequence of the omission",
+      "kind": "scenario",
+      "parameters": {"pi":"1/4","d":"4/5","a":"9/10","f":"1/10","b":"1/20","G":"10","H":"30","K":"8"},
+      "expected_delta": "-101/16"
+    },
+    {
+      "id": "perfect_checker_poor_discovery",
+      "label": "Perfect checker, poor discovery",
+      "kind": "scenario",
+      "parameters": {"pi":"1/4","d":"1/10","a":"1","f":"1/10","b":"0","G":"100","H":"30","K":"8"},
+      "expected_delta": "-11/2"
+    }
+  ],
+  "controls": [
+    {
+      "id": "no_review",
+      "label": "No additional review",
+      "kind": "control",
+      "parameters": {"pi":"1/4","d":"0","a":"0","f":"0","b":"0","G":"100","H":"30","K":"0"},
+      "expected_delta": "0"
+    },
+    {
+      "id": "accept_all_criticisms",
+      "label": "Accept every criticism",
+      "kind": "control",
+      "parameters": {"pi":"1/4","d":"4/5","a":"1","f":"1/10","b":"1","G":"100","H":"30","K":"8"},
+      "expected_delta": "39/4"
+    },
+    {
+      "id": "matched_conventional",
+      "label": "Equally equipped conventional review",
+      "kind": "control",
+      "parameters": {"pi":"1/4","d":"4/5","a":"9/10","f":"1/10","b":"1/20","G":"100","H":"30","K":"8"},
+      "expected_delta": "791/80"
+    },
+    {
+      "id": "cheaper_conventional",
+      "label": "Conventional review, one unit cheaper",
+      "kind": "control",
+      "parameters": {"pi":"1/4","d":"4/5","a":"9/10","f":"1/10","b":"1/20","G":"100","H":"30","K":"7"},
+      "expected_delta": "871/80"
+    },
+    {
+      "id": "perfect_information_bound",
+      "label": "Perfect-information upper bound",
+      "kind": "unavailable_bound",
+      "parameters": {"pi":"1/4","d":"1","a":"1","f":"0","b":"0","G":"100","H":"30","K":"0"},
+      "expected_delta": "25"
+    }
+  ],
+  "grid": {
+    "axis_order": ["pi","d","f","a","b","K"],
+    "axes": {
+      "pi": ["0","1/20","1/4","1/2"],
+      "d": ["0","1/10","4/5","1"],
+      "f": ["0","1/10","2/5","1"],
+      "a": ["0","4/5","1"],
+      "b": ["0","1/20","3/4","1"],
+      "K": ["0","8","20"]
+    },
+    "fixed": {"G":"100","H":"30"},
+    "expected_count": 2304,
+    "retention": "Retain inputs, a digest of all canonical exact result rows, complete sign counts and range. Reproduce all rows by enumerating the disclosed Cartesian product.",
+    "interpretation": "The distribution of grid signs is a property of this authored Cartesian product, not a frequency estimate for real tasks."
+  },
+  "critic_pair": {
+    "marginal_detection_given_flaw": "7/10",
+    "correlations": [
+      {"id":"conditional_independence","rho":"0"},
+      {"id":"strong_shared_error","rho":"4/5"},
+      {"id":"identical_detection","rho":"1"}
+    ],
+    "interpretation": "Authored feasible joint Bernoulli detection models conditional on the truth of the same target proposition. Each marginal detection rate is 0.7 and miss rate is 0.3; rho is not measured. A shared model family does not itself determine rho."
+  },
+  "cash_illustrations": {
+    "scope": "Deterministic successful-delivery cash-path illustration in authored units. The deposit is assumed authorized and usable for the stated production costs, with acceptance and final payment as specified. This is not a native account, executed contract, consent check, revenue observation, failure-path reserve calculation or insolvency-risk estimate. Advance cash remains an obligation until earned.",
+    "cases": [
+      {
+        "id": "successful_delivery_without_deposit",
+        "label": "Successful delivery without a deposit",
+        "flows": ["-60", "-30", "120"],
+        "expected_minimum_starting_cash": "90",
+        "expected_net_contribution": "30"
+      },
+      {
+        "id": "successful_delivery_with_deposit",
+        "label": "Successful delivery with an authorized deposit",
+        "flows": ["40", "-60", "-30", "80"],
+        "expected_minimum_starting_cash": "50",
+        "expected_net_contribution": "30"
+      }
+    ]
+  },
+  "acceptance": [
+    "All eleven named profiles reproduce their declared exact deltas.",
+    "A separately implemented checker enumerates all eight logical (F,D,A) branches, including zero-mass impossible branches, and verifies probability mass, exact utility and unaddressed-flaw probability.",
+    "The complete 2304-point grid agrees with that independent branch enumeration and its canonical digest.",
+    "Conventional review ties when given identical conditional rates and costs and wins by exactly one utility unit when it costs one unit less.",
+    "The five adverse named scenarios select the incumbent; an unproductive perfect checker does not earn a positive verdict.",
+    "All three critic-pair joint distributions are nonnegative, conserve mass and satisfy the union bounds.",
+    "The two authored successful-delivery paths retain contribution 30 and have minimum additional starting cash 90 and 50; a separate prefix-sum calculation checks both. Failure liabilities and participant consent remain outside these arithmetic claims.",
+    "Invalid probabilities and negative H or K are rejected; negative G remains permissible in the general accounting identity.",
+    "Published JSON, CSV and LaTeX numeric fields agree, and source hashes identify the protocol and calculation/checker/test code."
+  ],
+  "stopping_rule": "Enumerate every declared profile, grid point, critic-pair case and successful cash path once; run the focused correctness checks. Do not tune parameters or discard adverse rows after generation.",
+  "outputs": ["evidence/results.json","evidence/results.csv","evidence/results_table.tex"]
+}

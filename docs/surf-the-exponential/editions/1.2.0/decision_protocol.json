@@ -1,0 +1,49 @@
+{
+  "criterion": "Minimize maximum complete modeled cost; tie break by fewer predicates, then lexical names and policy. Enter only for strictly positive modeled surplus and sufficient opening cash.",
+  "dispatch": "Prepay four units per reserved source, including a source that proves unavailable. Surplus output is permitted and counted as cost.",
+  "economic_grid": {
+    "demand": [
+      1,
+      2
+    ],
+    "fallback_unit_cost": [
+      4,
+      5,
+      7,
+      9,
+      12
+    ],
+    "opening_cash": [
+      0,
+      5,
+      12
+    ],
+    "query_cost": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "quote": [
+      6,
+      10,
+      14,
+      18
+    ]
+  },
+  "fallback": "A supplied independent route can deliver the whole declared demand, at fallback_unit_cost per delivered unit, in every modeled state.",
+  "funding": "The maximum branch cost must be prefunded; the stated quote arrives only after accepted delivery. No advance, debt, tax, unmodeled support or real trade is simulated.",
+  "matrix_grid": "All 512 binary 3-state/3-action admissibility relations, including empty state action sets; all five state partitions.",
+  "observations": "A chosen subset of truthful source-status predicates is paid and observed before dispatch. This is stipulated access, not a new measured sensor.",
+  "schema": "surf/decision-bridge/v1",
+  "state_semantics": "Exactly one of three sources is unavailable; each other source supplies one unit.",
+  "states": [
+    "A_down",
+    "B_down",
+    "C_down"
+  ],
+  "status": "Authored exact-model analysis examined during design, not fresh empirical confirmation or autonomous discovery."
+}
