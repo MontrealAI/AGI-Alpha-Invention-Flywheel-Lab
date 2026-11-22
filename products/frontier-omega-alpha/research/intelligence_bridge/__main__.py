@@ -47,6 +47,7 @@ def main():
     preview.add_argument('--disclosure-reviewed', required=True, action='store_true')
     receive = subs.add_parser('github', help='Receive one immutable PR blob using trusted GitHub metadata')
     receive.add_argument('--pr', required=True, type=int)
+    receive.add_argument('--head', required=True, help='Full commit SHA explicitly approved for this intake')
     receive.add_argument('--allow-registered-experiment', action='store_true')
     for command in (preview, receive):
         command.add_argument('--ledger', default=str(ROOT / 'ledger.json'))
@@ -86,7 +87,8 @@ def main():
             report = receipt_at(args.receipt)
             proposed = ledger_at(private_path(args.proposal))
             record = report['record']
-            if (not record or record['reception']['authenticated_by'] != 'github-rest'
+            if (not record or record.get('schema') != intake.RECORD or 'source_task_id' in record
+                    or record['reception']['authenticated_by'] != 'github-rest'
                     or report['expected_prior_ledger_sha256'] != intake.digest(old)
                     or report['proposed_ledger_sha256'] != intake.digest(proposed)
                     or proposed != intake.append_record(old, record)):
@@ -113,7 +115,7 @@ def main():
                               'path': intake.INBOX + identifier + '.json'}))
             return 0
         trusted = {name for name in os.environ.get('FRONTIER_BRIDGE_SUBMITTERS', '').split(',') if name}
-        raw, reception = github_intake.intake_pr(args.pr, trusted)
+        raw, reception = github_intake.intake_pr(args.pr, trusted, args.head)
         result = intake.receive(raw, old, reception, now, run_registered=args.allow_registered_experiment)
         render_run(result, old, output)
         return 0

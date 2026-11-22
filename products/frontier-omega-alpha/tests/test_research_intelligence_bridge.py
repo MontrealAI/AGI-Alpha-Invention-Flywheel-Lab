@@ -1,9 +1,10 @@
 from base64 import b64encode
 from copy import deepcopy
 from datetime import datetime, timezone
-from hashlib import sha1
+from hashlib import sha1, sha256
 import json
 import unittest
+from unittest.mock import patch
 
 from research.economic_alpha import study
 from research.intelligence_bridge import adapter, github_intake, intake, member
@@ -21,7 +22,7 @@ def finding(profile='prusa-retrofit', **changes):
         source, version, baseline = 'prusa', 'ht-400-2026-10-21', 'stock-290'
     else:
         source, version, baseline = 'formal_verification', 'v4.36.0', 'v4.35.0'
-    return {'schema': intake.CAPSULE, 'source_task_id': intake.TASK, 'classification': 'public-evidence',
+    return {'schema': intake.CAPSULE, 'classification': 'public-evidence',
             'profile': profile, 'source': source, 'version': version, 'baseline': baseline,
             'created_at': '2026-11-22T20:00:00Z', 'observed_at': '2026-11-22T19:00:00Z',
             'method': 'manual-export', **changes}
@@ -55,6 +56,9 @@ class FindingsTests(unittest.TestCase):
         raw = intake.canonical(finding())
         first = intake.receive(raw, EMPTY, REST, NOW, evidence=oem_evidence)
         self.assertEqual(first['disposition'], 'experiment-prepared')
+        self.assertNotIn('source_task_id', first['record'])
+        self.assertEqual(first['record']['reception']['authenticated_by'], 'github-rest')
+        self.assertEqual(first['record']['reception']['declared_method'], 'manual-export')
         self.assertFalse(first['record']['reopened'])
         self.assertEqual(first['record']['evaluation']['independence']['distinct_groups'], 1)
         verified = intake.receive(raw, first['ledger'], REST, NOW, evidence=oem_evidence, run_registered=True)
@@ -137,29 +141,63 @@ class GitHubReceiptTests(unittest.TestCase):
         raw = intake.exported_capsule(value)
         sha = sha1(b'blob ' + str(len(raw)).encode() + b'\0' + raw).hexdigest()
         identifier = intake.event_id(value)
+        path = intake.INBOX + identifier + '.json'
+        blob_route = '/contents/' + path + '?ref=' + REST['commit_sha']
         repo = {'full_name': github_intake.REPO}
         meta = {'number': 3, 'state': 'open', 'user': {'login': 'ApprovedOwner'}, 'created_at': WALL,
                 'base': {'ref': 'main', 'repo': repo}, 'changed_files': 1,
                 'head': {'ref': 'bridge-intake/' + identifier, 'sha': 'a' * 40, 'repo': repo}}
         routes = {
             '/pulls/3': meta,
-            '/pulls/3/files?per_page=2': [{'filename': intake.INBOX + identifier + '.json', 'status': 'added', 'sha': sha}],
-            '/git/blobs/' + sha: {'sha': sha, 'encoding': 'base64', 'size': len(raw), 'content': b64encode(raw).decode()},
+            '/pulls/3/files?per_page=2': [{'filename': path, 'status': 'added', 'sha': sha}],
+            blob_route: {'path': path, 'type': 'file', 'sha': sha, 'encoding': 'base64', 'size': len(raw),
+                         'content': b64encode(raw).decode()},
         }
 
         def get(path):
             return deepcopy(routes[path.removeprefix('repos/' + github_intake.REPO)])
 
-        self.assertEqual(github_intake.intake_pr(3, {'ApprovedOwner'}, get), (raw, REST))
+        self.assertEqual(github_intake.intake_pr(3, {'ApprovedOwner'}, REST['commit_sha'], get), (raw, REST))
         with self.assertRaises(ValueError):
-            github_intake.intake_pr(3, {'Other'}, get)
+            github_intake.intake_pr(3, {'Other'}, REST['commit_sha'], get)
+        with self.assertRaises(ValueError):
+            github_intake.intake_pr(3, {'ApprovedOwner'}, 'b' * 40, get)
         meta['changed_files'] = 2
         with self.assertRaises(ValueError):
-            github_intake.intake_pr(3, {'ApprovedOwner'}, get)
+            github_intake.intake_pr(3, {'ApprovedOwner'}, REST['commit_sha'], get)
         meta['changed_files'] = 1
-        routes['/git/blobs/' + sha]['content'] = b64encode(raw[:-1] + b' ').decode()
+
+        def moved(path):
+            result = get(path)
+            if path.endswith(blob_route):
+                meta['head']['sha'] = 'b' * 40
+            return result
+
+        with self.assertRaisesRegex(ValueError, 'changed during validation'):
+            github_intake.intake_pr(3, {'ApprovedOwner'}, REST['commit_sha'], moved)
+        meta['head']['sha'] = REST['commit_sha']
+        routes[blob_route]['content'] = b64encode(raw[:-1] + b' ').decode()
         with self.assertRaises(ValueError):
-            github_intake.intake_pr(3, {'ApprovedOwner'}, get)
+            github_intake.intake_pr(3, {'ApprovedOwner'}, REST['commit_sha'], get)
+
+    def test_only_the_exact_reviewed_legacy_capsule_projects_to_v2_and_deduplicates(self):
+        old = {**finding(), 'schema': 'frontier-omega-alpha/public-finding-capsule-v1',
+               'source_task_id': 'private-fixture-id'}
+        raw = intake.exported_capsule(old)
+        head = github_intake.LEGACY_HEAD
+        historical_id = intake.digest({key: old[key] for key in ('source_task_id', 'source', 'version')})
+        with patch.object(github_intake, 'LEGACY_CAPSULE_DIGEST', sha256(raw).hexdigest()):
+            future_raw, old_id = github_intake.normalize_pr_capsule(github_intake.LEGACY_PR, head, raw)
+            for number, commit, content in [(555, head, raw), (github_intake.LEGACY_PR, 'f' * 40, raw),
+                                            (github_intake.LEGACY_PR, head, raw + b' ')]:
+                with self.assertRaises(ValueError):
+                    github_intake.normalize_pr_capsule(number, commit, content)
+        self.assertEqual(old_id, historical_id)
+        self.assertEqual(future_raw, intake.exported_capsule(finding()))
+        old_row = {'id': old_id, 'scope': 'prusa', 'version': old['version'], 'phase': 'experiment-prepared',
+                   'effective_on': '2026-10-21', 'at': WALL, 'digest': '2' * 64}
+        reviewed = {'schema': intake.LEDGER, 'entries': [old_row]}
+        self.assertEqual(intake.receive(future_raw, reviewed, REST, NOW)['disposition'], 'duplicate')
 
 
 if __name__ == '__main__':

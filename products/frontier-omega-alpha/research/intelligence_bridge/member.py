@@ -1,6 +1,6 @@
 """Stage bilingual records consumable by the existing approved encrypted publisher."""
 
-from .intake import RECORD, digest
+from .intake import LEGACY_RECORD, RECORD, digest
 
 STATUS = {
     'source-insufficient': ('Investigating', 'En cours d’examen'),
@@ -12,9 +12,10 @@ STATUS = {
 
 
 def packet(record, ledger):
-    active = next((row for row in reversed(ledger['entries']) if row['id'] == record['finding_id']), None)
-    if (record['schema'] != RECORD or record['classification'] != 'public-evidence' or not active
-            or active['digest'] != digest(record) or active['phase'] != record['status']
+    active = next((row for row in reversed(ledger['entries'])
+                   if row['scope'] == record['scope'] and row['version'] == record['change']['current']), None)
+    if (record['schema'] not in (RECORD, LEGACY_RECORD) or record['classification'] != 'public-evidence' or not active
+            or active['id'] != record['finding_id'] or active['digest'] != digest(record) or active['phase'] != record['status']
             or record['reception']['authenticated_by'] != 'github-rest'
             or record['status'] not in STATUS or record['production_authority'] is not False):
         raise ValueError('Use a reviewed GitHub-origin receipt and its exact approved ledger entry')
@@ -50,8 +51,8 @@ def packet(record, ledger):
          [f'Actif conservé et qualifié, SHA-256 {asset}.' if asset else 'Une capacité réutilisable reste à qualifier.',
           'Le gain causal sur un successeur distinct reste à établir.']),
         ('archive', 'Intake and review identity', 'Identité de la réception et de la revue',
-         [f"Finding {record['finding_id']}.", 'GitHub authenticated the recorded submission. Task authorship is operator-declared.'],
-         [f"Observation {record['finding_id']}.", 'GitHub a authentifié la soumission. Son origine dans la tâche est déclarée par l’opérateur.']),
+         [f"Finding {record['finding_id']}.", 'GitHub verified the PR author and reviewed commit. Task authorship is operator-declared.'],
+         [f"Observation {record['finding_id']}.", 'GitHub a vérifié l’auteur de la demande et le commit approuvé. L’origine de la tâche est déclarée par l’opérateur.']),
     )
     return {section: {'section': section, 'en': {'title': en, 'paragraphs': en_body},
                       'fr': {'title': fr, 'paragraphs': fr_body}, 'sources': source_links}

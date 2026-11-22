@@ -51,7 +51,7 @@ export function fakeMainnet(clock = Date.now) {
     if (to === WRAPPER) {
       const row = rpcState.wrapped.get('0x' + node.toString(16).padStart(64, '0'));
       if (call.name === 'ownerOf') return result([row.owner]);
-      if (call.name === 'getData') return result([row.recordedOwner ?? row.owner, 0, row.expiry]);
+      if (call.name === 'getData') return result([row.recordedOwner ?? row.owner, row.fuses ?? 0, row.expiry]);
     }
     if (to === rpcState.contract && call.name === 'isValidSignature') {
       return result([await rpcState.signatureValid(call.args) ? '0x1626ba7e' : '0xffffffff']);

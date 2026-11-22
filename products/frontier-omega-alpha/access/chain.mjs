@@ -1,10 +1,11 @@
 import { concat, getAddress, hashMessage, id, Interface, keccak256, verifyMessage, ZeroAddress, ZeroHash } from 'ethers';
 
-// Mainnet addresses only. GoalOS v2.0.0-SO2 uses these ENS contracts and an ASCII single label.
+// AGI Club names use the Ethereum mainnet ENSv1 Registry and (when wrapped) ENSv1 Name Wrapper.
 export const TOKEN = '0xA61a3B3a130a9c20768EEBF97E21515A6046a1fA';
 export const MINIMUM = 1_000_000n * 10n ** 18n;
 export const REGISTRY = '0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e';
 export const WRAPPER = '0xD4416b13d2b3a9aBae7AcD5D6C2BbDBE25686401';
+const PARENT_CANNOT_CONTROL = 1n << 16n;
 const abi = new Interface([
   'function owner(bytes32) view returns (address)',
   'function ownerOf(uint256) view returns (address)',
@@ -100,12 +101,14 @@ export class Mainnet {
     const node = clubNode(label);
     const [registryOwner] = await this.call(REGISTRY, 'owner', [node], snapshot);
     if (registryOwner !== WRAPPER) return registryOwner !== ZeroAddress && registryOwner === address;
-    const [[owner], [recordedOwner, , expiry]] = await Promise.all([
+    const [[owner], [recordedOwner, fuses, expiry]] = await Promise.all([
       this.call(WRAPPER, 'ownerOf', [node], snapshot),
       this.call(WRAPPER, 'getData', [node], snapshot)
     ]);
     const current = BigInt(Math.max(snapshot.timestamp, Math.floor(this.now() / 1000)));
-    return owner === address && recordedOwner === address && (expiry === 0n || expiry > current);
+    // A subname loses its owner at expiry only when emancipated from its parent.
+    const nameExpired = (fuses & PARENT_CANNOT_CONTROL) !== 0n && expiry <= current;
+    return owner !== ZeroAddress && owner === address && recordedOwner === address && !nameExpired;
   }
 
   async tokenIdentity(snapshot) {

@@ -1,13 +1,12 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "FRONTIER Ω ALPHA normalized public research record v1",
+  "title": "FRONTIER Ω ALPHA normalized public research record v2",
   "type": "object",
   "required": [
     "schema",
     "finding_id",
     "scope",
     "profile",
-    "source_task_id",
     "classification",
     "created_at",
     "observed_at",
@@ -26,7 +25,7 @@
   "additionalProperties": false,
   "properties": {
     "schema": {
-      "const": "frontier-omega-alpha/research-finding-v1"
+      "const": "frontier-omega-alpha/research-finding-v2"
     },
     "finding_id": {
       "type": "string",
@@ -42,9 +41,6 @@
         "lean-bitvector",
         "hf-harness-adapter"
       ]
-    },
-    "source_task_id": {
-      "const": "6b034cc5c6f48191ba3a73193f5d0f6c"
     },
     "classification": {
       "const": "public-evidence"

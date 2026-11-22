@@ -8,10 +8,9 @@ import { assertRecord, CIPHERTEXT_FORMAT, DESTINATION, fromBase64, hash, MAX_LIB
 import { advance, initialState } from './issue.mjs';
 import { Mainnet } from '../access/chain.mjs';
 import { boundedRpc, readFinalized } from './intake.mjs';
-import { openState, sealState } from './state.mjs';
+import { checkpointEnvelopeBytes, openState, sealState } from './state.mjs';
 
 const [command, ...args] = process.argv.slice(2);
-const envelopeLimit = Math.ceil((MAX_LIBRARY_BYTES + 1024 * 1024) * 4 / 3) + 1024;
 process.umask(0o077);
 
 function readJson(path, maximum) {
@@ -40,16 +39,12 @@ async function run(key, catalogPath, previousPath, publicPath, output) {
     if (!Number.isSafeInteger(height) || height < 1 || !hash(blockHash)) throw Error('Missing approved chain anchor');
     state = initialState({ height, hash: blockHash, offset: null });
   } else {
-    state = openState(readJson(previousPath, envelopeLimit), key);
-    // A public snapshot is committed in the same revision as its sealed rights state.
-    if (JSON.stringify(readJson(publicPath, MAX_LIBRARY_BYTES)) !== JSON.stringify(state.publication)) {
-      throw Error('Publisher checkpoint and public library disagree');
-    }
+    state = openState(readJson(previousPath, checkpointEnvelopeBytes), key, readJson(publicPath, MAX_LIBRARY_BYTES));
   }
   const revoked = readJson(new URL('./revoked-enrollments.json', import.meta.url), 96 * 1024);
   const next = await advance({ rpc: boundedRpc(process.env.FRONTIER_ALPHA_RPC), state, catalog, revoked, masterKey: key });
   mkdirSync(privatePath(output), { mode: 0o700 });
-  writeJson(join(output, 'state.json'), sealState(next.state, key), envelopeLimit);
+  writeJson(join(output, 'state.json'), sealState(next.state, key), checkpointEnvelopeBytes);
   writeJson(join(output, 'library.json'), next.library, MAX_LIBRARY_BYTES);
   writeJson(join(output, 'result.json'), { changed: next.changed, height: next.state.cursor.height }, 512);
 }
@@ -86,17 +81,17 @@ try {
         source.fill(0);
       }
       console.log('Created a sealed release record.');
-    } else if (command === 'rekey' && args.length === 3) {
-      const [previous, catalogPath, output] = args;
+    } else if (command === 'rekey' && args.length === 4) {
+      const [previous, publicPath, catalogPath, output] = args;
       nextKey = master('FRONTIER_ALPHA_NEXT_PUBLISH_KEY');
       if (key.equals(nextKey)) throw Error('Expected two distinct publisher keys');
-      const state = openState(readJson(previous, envelopeLimit), key);
+      const state = openState(readJson(previous, checkpointEnvelopeBytes), key, readJson(publicPath, MAX_LIBRARY_BYTES));
       const catalog = readJson(catalogPath, MAX_LIBRARY_BYTES).map(item => {
         assertRecord(item, true);
         return rewrapAsset(item, key, nextKey);
       });
       mkdirSync(privatePath(output), { mode: 0o700 });
-      writeJson(join(output, 'state.json'), sealState(state, nextKey), envelopeLimit);
+      writeJson(join(output, 'state.json'), sealState(state, nextKey), checkpointEnvelopeBytes);
       writeJson(join(output, 'catalog.json'), catalog, MAX_LIBRARY_BYTES);
       console.log('Prepared a new encrypted publisher checkpoint and wrapped release catalog.');
     } else if (command === 'run' && args.length === 4) {

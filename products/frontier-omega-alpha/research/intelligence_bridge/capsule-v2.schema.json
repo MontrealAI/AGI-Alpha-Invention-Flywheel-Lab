@@ -1,12 +1,11 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "FRONTIER Ω ALPHA reviewed public finding capsule v1",
+  "title": "FRONTIER Ω ALPHA reviewed public finding capsule v2",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schema", "source_task_id", "classification", "profile", "source", "version", "baseline", "created_at", "observed_at", "method"],
+  "required": ["schema", "classification", "profile", "source", "version", "baseline", "created_at", "observed_at", "method"],
   "properties": {
-    "schema": {"const": "frontier-omega-alpha/public-finding-capsule-v1"},
-    "source_task_id": {"const": "6b034cc5c6f48191ba3a73193f5d0f6c"},
+    "schema": {"const": "frontier-omega-alpha/public-finding-capsule-v2"},
     "classification": {"const": "public-evidence"},
     "profile": {"enum": ["prusa-retrofit", "lean-bitvector", "upstream-release", "hf-harness-adapter"]},
     "source": {"enum": ["prusa", "formal_verification", "local_models_and_quantization", "serving_cost", "hardware_runtime", "model_distribution", "scientific_computing", "qwen_harness_adapter"]},

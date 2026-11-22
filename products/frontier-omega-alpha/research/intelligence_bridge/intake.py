@@ -15,9 +15,9 @@ from ..economic_alpha import observations as alpha_sources, study as alpha_study
 from ..reflective_gate import assess_source_groups
 from . import adapter
 
-TASK = '6b034cc5c6f48191ba3a73193f5d0f6c'
-CAPSULE = 'frontier-omega-alpha/public-finding-capsule-v1'
-RECORD = 'frontier-omega-alpha/research-finding-v1'
+CAPSULE = 'frontier-omega-alpha/public-finding-capsule-v2'
+RECORD = 'frontier-omega-alpha/research-finding-v2'
+LEGACY_RECORD = 'frontier-omega-alpha/research-finding-v1'
 LEDGER = 'frontier-omega-alpha/finding-ledger-v1'
 METHODS = ('interactive-connector', 'manual-export')
 VERSION = re.compile(r'(?:v?|therock-)\d{1,6}(?:\.\d{1,6}){1,3}(?:-(?:rc|beta|alpha)\d{0,2})?\Z')
@@ -74,9 +74,9 @@ def capsule(raw, now=None):
     value = load_json(raw)
     if value is None:
         return None
-    if (not isinstance(value, dict) or set(value) != {'schema', 'source_task_id', 'classification', 'profile',
+    if (not isinstance(value, dict) or set(value) != {'schema', 'classification', 'profile',
             'source', 'version', 'baseline', 'created_at', 'observed_at', 'method'}
-            or value['schema'] != CAPSULE or value['source_task_id'] != TASK or value['classification'] != 'public-evidence'
+            or value['schema'] != CAPSULE or value['classification'] != 'public-evidence'
             or value['method'] not in METHODS):
         raise ValueError('Invalid or prohibited finding scope')
     created, observed = time_value(value['created_at']), time_value(value['observed_at'])
@@ -111,7 +111,7 @@ def opportunity_id(value):
 
 def event_id(value):
     # A dated release has one identity across declared methods, timestamps and profile upgrades.
-    return digest({key: value[key] for key in ('source_task_id', 'source', 'version')})
+    return digest({key: value[key] for key in ('schema', 'source', 'version')})
 
 
 def fetch_evidence(value, transport=through_egress_proxy, oem=alpha_sources.observe_source):
@@ -245,7 +245,10 @@ def receive(raw, ledger, reception, now=None, evidence=fetch_evidence, run_regis
         return {'disposition': 'no-finding', 'record': None, 'ledger': ledger}
     check_reception(reception)
     finding = event_id(value)
-    previous = next((item for item in reversed(ledger['entries']) if item['id'] == finding), None)
+    scope = opportunity_id(value)
+    # Previously approved records used a different ID. Deduplicate on the public release across schemas.
+    previous = next((item for item in reversed(ledger['entries'])
+                     if item['scope'] == scope and item['version'] == value['version']), None)
     advance = previous and ((previous['phase'] == 'experiment-prepared' and run_registered and value['profile'] == 'prusa-retrofit')
                             or (previous['phase'] == 'detected' and value['profile'] == 'lean-bitvector'))
     if previous and previous['phase'] != 'source-insufficient' and not advance:
@@ -260,7 +263,6 @@ def receive(raw, ledger, reception, now=None, evidence=fetch_evidence, run_regis
             raise ValueError('Finding predates the verified public change')
     except (BridgeError, KeyError, OSError, ValueError, SubprocessError):
         sources, inputs, effective, material = [], None, None, False
-    scope = opportunity_id(value)
     status = 'source-insufficient' if not sources else 'experiment-prepared' if material else 'detected'
     if previous and not sources:
         return {'disposition': 'source-insufficient-repeat', 'record': None, 'ledger': ledger}
@@ -278,7 +280,7 @@ def receive(raw, ledger, reception, now=None, evidence=fetch_evidence, run_regis
             experiment = {'verdict': 'registered comparison falsified or source freeze mismatched'}
             status = 'falsified'
     record = {
-        'schema': RECORD, 'finding_id': finding, 'scope': scope, 'profile': value['profile'], 'source_task_id': TASK,
+        'schema': RECORD, 'finding_id': finding, 'scope': scope, 'profile': value['profile'],
         'classification': 'public-evidence', 'created_at': value['created_at'], 'observed_at': value['observed_at'],
         'effective_on': effective, 'status': status, 'reopened': reopened, 'source_evidence': sources,
         'reception': {**reception, 'declared_method': value['method'], 'received_at': utcstamp(now),

@@ -6,6 +6,10 @@ on:
         description: PR number for the reviewed public capsule
         type: string
         required: true
+      submission_head:
+        description: Full commit SHA approved for this intake
+        type: string
+        required: true
       run_registered:
         description: Allow the registered bounded technical verifier
         type: boolean
@@ -40,11 +44,13 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           FRONTIER_BRIDGE_SUBMITTERS: ${{ vars.FRONTIER_BRIDGE_SUBMITTERS }}
           FINDING_SUBMISSION_PR: ${{ inputs.submission_pr }}
+          FINDING_SUBMISSION_HEAD: ${{ inputs.submission_head }}
           FRONTIER_RUN_REGISTERED: ${{ inputs.run_registered }}
         run: |
           flags=()
           if [[ "$FRONTIER_RUN_REGISTERED" == true ]]; then flags+=(--allow-registered-experiment); fi
           python3 -m research.intelligence_bridge github --pr "$FINDING_SUBMISSION_PR" \
+            --head "$FINDING_SUBMISSION_HEAD" \
             --output "$RUNNER_TEMP/frontier-intake" "${flags[@]}"
       - name: Return only normalized research and the proposed ledger revision
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02

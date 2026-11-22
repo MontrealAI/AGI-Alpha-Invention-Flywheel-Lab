@@ -11,7 +11,7 @@ import AxeBuilder from '@axe-core/playwright';
 import { advance, initialState } from '../native/issue.mjs';
 import { DESTINATION, decodeEnrollment } from '../native/protocol.mjs';
 import { bundleReader } from '../native/stage.mjs';
-import { clubNode, createWallet, MINIMUM } from './fixtures.mjs';
+import { clubNode, createWallet, MINIMUM, WRAPPER } from './fixtures.mjs';
 import { assetFor, fixtureChain, signEnrollment } from './native-fixtures.mjs';
 
 const pages = new URL('../../../docs/research/frontier-omega-alpha/', import.meta.url);
@@ -114,7 +114,13 @@ for (const language of ['en', 'fr']) {
       stage.rpc.balances.set(wallet.address.toLowerCase(), MINIMUM);
     } else {
       stage.rpc.balances.set(wallet.address.toLowerCase(), 0n);
-      stage.rpc.rpcState.owners.set(clubNode('membre-1'), wallet.address);
+      const node = clubNode('membre-1');
+      stage.rpc.rpcState.owners.set(node, WRAPPER);
+      stage.rpc.rpcState.wrapped.set(node, {
+        owner: wallet.address,
+        fuses: 1 << 16,
+        expiry: BigInt(Math.floor(Date.now() / 1000) + 3600)
+      });
     }
     await page.goto(stage.origin + (english ? '/' : '/fr.html'));
     async function enter() {
