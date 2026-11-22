@@ -137,6 +137,8 @@ def compare():
     base_best = max(arms, key=lambda arm: (
         arm["case_scores"]["BASE"], arm["policy"] == "NO_BID",
         -len(arm["policy"]), arm["policy"]))
+    base_tied = sorted(arm["policy"] for arm in arms if abs(
+        arm["case_scores"]["BASE"] - base_best["case_scores"]["BASE"]) < 1e-12)
     original = frozen_case()
     src = Path(__file__)
     parent = src.with_name("mixed_bundle240.py")
@@ -151,6 +153,7 @@ def compare():
         "price_selected_before_adverse_case": True,
         "policy_comparisons": arms,
         "conditional_base_best": base_best["policy"],
+        "equivalent_conditional_base_policies": base_tied,
         "robust_development_policy": selected["policy"],
         "robust_development_worst_case": selected["worst_case_contribution"],
         "native_financial_authority": [],
