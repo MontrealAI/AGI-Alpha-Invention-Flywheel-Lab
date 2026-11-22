@@ -388,7 +388,12 @@ def _audit_decision(record, day, terms, rows, first, cursor, book, grants):
     prior = inputs['first_exclusive_collections_microUSD'] - inputs['first_paid_variable_costs_microUSD'] - inputs['first_invoice_microUSD']
     projection = (2 * inputs['warm_contribution_microUSD'] // n if n else 0) - invoice - 42 * 10 * CENT
     expected = projection if day == 90 else prior
-    should_buy = (terms['arm'] == 'pilot' and n > 0 and expected > 0 and earned >= invoice
+    # Independent of the producer's decision, a one-tranche treatment may
+    # buy the exact incumbent first plan but never the second. Other arms' gates
+    # and all financial/acceptance requirements remain unchanged.
+    should_buy = (terms['arm'] in ('pilot', 'trial_once') and
+                  (terms['arm'] == 'pilot' or day == 90) and
+                  n > 0 and expected > 0 and earned >= invoice
                   and available >= invoice + 1200 * CENT
                   and (day == 90 or (inputs['first_invoice_microUSD'] == invoice
                                      and inputs['first_exclusive_settled'] > 0)))
