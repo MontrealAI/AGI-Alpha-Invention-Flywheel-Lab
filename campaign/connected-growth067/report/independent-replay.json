@@ -1,0 +1,164 @@
+{
+  "source_files_matched": 68,
+  "result_digest_matched": true,
+  "configuration": {
+    "funding_mode": "capital_available",
+    "grow": true,
+    "mode": "ECONOMIC",
+    "opening": 100000000000,
+    "policy_name": "distribution_first",
+    "seed": 670001,
+    "unit_cost": 10,
+    "world": "central"
+  },
+  "audit": {
+    "accepted": true,
+    "scope": "AUDITED_SIM_BULK_MODEL_AND_ACTUAL_TEMPLATES_NOT_OBSERVED_INDIVIDUAL_DEMAND",
+    "complete_cost_checks": {
+      "accepted": true,
+      "setup_microUSD": 10000000000,
+      "processing_microUSD": 1560555320000,
+      "tax_paid_microUSD": 6315450777032,
+      "cohorts": 120,
+      "settlement_events": 420,
+      "cost_arithmetic": "EXACT_INTEGER_RATIONAL_MICROUSD"
+    },
+    "months": 61,
+    "modeled_collected_units": 765114,
+    "actual_template_productions": 60,
+    "annual": {
+      "schema": "agi-alpha/native-trailing-profit/v1",
+      "scope": "ONE_ACCOUNT_EXACT_MODELED_ACCRUAL_PROFIT_NOT_FORWARD_PROJECTION",
+      "native_actions_sha256": "837c47932100454ddbe45d7277efd91d9b8f36f950e642b485e575fa7a923e90",
+      "interval": {
+        "start_hour_inclusive": 35040,
+        "end_hour_exclusive": 43800,
+        "clock": "native integer hours from opening",
+        "boundary": "[start,end); all same-hour actions included or excluded together"
+      },
+      "operating_complete": true,
+      "complete_365_day_operating_history": true,
+      "qualification": "FULL_OPERATING_YEAR",
+      "trailing_365_day_profit_microUSD": 16641713166780,
+      "observed_window_profit_microUSD": 16641713166780,
+      "observed_window_flows_microUSD": {
+        "revenue": 30980820000000,
+        "recoveryIncome": 0,
+        "expenses": 14339106833220
+      },
+      "prefix_difference_microUSD": {
+        "revenue": 30980820000000,
+        "recoveryIncome": 0,
+        "expenses": 14339106833220
+      },
+      "prefix_before_start_microUSD": {
+        "revenue": 14916460000000,
+        "recoveryIncome": 0,
+        "expenses": 6296370058648
+      },
+      "prefix_before_end_microUSD": {
+        "revenue": 45897280000000,
+        "recoveryIncome": 0,
+        "expenses": 20635476891868
+      },
+      "native_endpoint_summary": {
+        "assuranceScope": "Local provider assumption only; full late-debit reserve retained for conservative investment",
+        "available": 17589246308132,
+        "cash": 25361803108132,
+        "collections": 45897280000000,
+        "conditionalEarned": 25261803108132,
+        "custodyReserve": 0,
+        "custodyRestricted": 0,
+        "earnedProtectionBacking": 7672556800000,
+        "equityProtectionBacking": 100000000000,
+        "expensePaid": 20635476891868,
+        "expenses": 20635476891868,
+        "fundingScope": "Bounded principal-plus-fee exposure; arbitrary additional debits are not guaranteed",
+        "investmentStopped": false,
+        "netEarnedAfterIncurredObligations": 25261803108132,
+        "payables": 0,
+        "profit": 25261803108132,
+        "recoveryIncome": 0,
+        "reservedInvestment": 0,
+        "revenue": 45897280000000,
+        "strictEarnedControl": 17489246308132,
+        "tailReserve": 7772556800000,
+        "unrestrictedEarned": 17589246308132,
+        "workingCapital": 0
+      },
+      "obligation_scope": "Endpoint native summary preserved, not a new reserve-coverage or complete-cost qualification.",
+      "event_prefix_max_deviation_microUSD": 0,
+      "included_native_actions": 314,
+      "settlement_drain_actions_excluded": 2,
+      "accounting_basis": "Recognized revenue plus recovery income minus incurred expenses; signed revisions retained. Seed and principal reserve releases are not profit. Payables remain incurred expenses even when unpaid. Taxes enter only when recorded as native expense; no added hypothetical tax/depreciation.",
+      "limits": [
+        "Requires independent native and operating audits of the source result.",
+        "Existing modeled cost coverage and unknown host/model billing are unchanged.",
+        "No annualization, pooled enterprises, forward inference, or spending authority.",
+        "Post-operating settlement drain remains on the account but is excluded from this operating-window measure."
+      ]
+    },
+    "native_actions_sha256": "837c47932100454ddbe45d7277efd91d9b8f36f950e642b485e575fa7a923e90"
+  },
+  "summary": {
+    "assuranceScope": "Local provider assumption only; full late-debit reserve retained for conservative investment",
+    "available": 25285291708132,
+    "cash": 25361803108132,
+    "collections": 45897280000000,
+    "conditionalEarned": 25261803108132,
+    "custodyReserve": 0,
+    "custodyRestricted": 0,
+    "earnedProtectionBacking": 0,
+    "equityProtectionBacking": 76511400000,
+    "expensePaid": 20635476891868,
+    "expenses": 20635476891868,
+    "fundingScope": "Bounded principal-plus-fee exposure; arbitrary additional debits are not guaranteed",
+    "investmentStopped": false,
+    "netEarnedAfterIncurredObligations": 25261803108132,
+    "payables": 0,
+    "profit": 25261803108132,
+    "recoveryIncome": 0,
+    "reservedInvestment": 0,
+    "revenue": 45897280000000,
+    "strictEarnedControl": 25185291708132,
+    "tailReserve": 76511400000,
+    "unrestrictedEarned": 25261803108132,
+    "workingCapital": 0
+  },
+  "actual_packets": 60,
+  "modeled_collected_units": 765114,
+  "annual_profit_microUSD": 16641713166780,
+  "attainment": {
+    "first_daily_attainment": null,
+    "observation": "fixed daily boundaries; not annualized exit rate",
+    "target_microUSD": 3000000000000000
+  },
+  "stage_spends_microUSD": {
+    "acquisition": 4138406794836,
+    "capacity": 157964000000,
+    "maintenance": 30500000000,
+    "onboarding": 456690000000,
+    "resource": 7965910000000
+  },
+  "spend_funding": {
+    "SEED": {
+      "count": 13,
+      "microUSD": 29904751623
+    },
+    "EARNED": {
+      "count": 283,
+      "microUSD": 12729566043213
+    }
+  },
+  "growth_funding": {
+    "SEED": {
+      "count": 5,
+      "microUSD": 7324751623
+    },
+    "EARNED": {
+      "count": 110,
+      "microUSD": 4289046043213
+    }
+  },
+  "elapsed_seconds": 92.72994903707877
+}

@@ -1,0 +1,43 @@
+{
+  "schema": "agi-alpha/growth067-independent-chart-validation/v1",
+  "accepted": true,
+  "case": "dev-100000-distribution_first",
+  "scope": "Exact chart-data extraction from independently accepted public SIM control; not campaign selection, real demand, or independently rendered bulk fulfillment",
+  "source_artifact_sha256": "f7415b3200eb0984961b6c17e7a90bf8ce1559559ebf3ec425bb025a43480c95",
+  "executed_commit": "8d615b1e850f81838b7ff77f87fee8964bf1f280",
+  "method": "Independent direct event-prefix scans and signed interval-delta sums, not reuse of extraction bisect implementation",
+  "checks": {
+    "native_snapshots": 243,
+    "rolling365_snapshots": 388,
+    "all_event_and_expiry_sample_times_present": true,
+    "same_hour_actions_atomic": true,
+    "money_unit": "integer microUSD",
+    "time_unit": "native integer hours; display days=hours/24",
+    "final_window_half_open_hours": [
+      35040,
+      43800
+    ],
+    "total_expenses_microUSD": 20635476891868,
+    "lifetime_profit_microUSD": 25261803108132,
+    "trailing365_profit_microUSD": 16641713166780,
+    "modeled_chosen_orders": 796591,
+    "modeled_quality_failed": 15826,
+    "modeled_uncollected": 15651,
+    "modeled_collected_units": 765114,
+    "actual_template_executions": 60,
+    "distinct_input_hashes": 6,
+    "distinct_output_hashes": 6
+  },
+  "limitations": [
+    "Volume rows attribute eventually collected units to proposal/order cohort month, not settlement month.",
+    "Operating endpoint and post-maturity drain are distinct; releasing restrictions creates no profit.",
+    "Six repeated synthetic fixtures do not establish population error rates or real commercial demand.",
+    "Native/full-cost replay accepted separately; no economic rerun or private signing access was performed."
+  ],
+  "validated_files_sha256": {
+    "data.json": "601fe24d6b2afc0282318922a63e2ef1454b0b3c7ff9434718f19c9b2f69a472",
+    "native-series.csv": "6c7d6f524660713bc6b8b9a907f215c0833754b7f7ae7e6d8c844c43b957b74a",
+    "rolling365.csv": "e68aa21d6bba55532a7b4af2c32ebe953cb489dc0e3eeba86f5a321a3ad65620",
+    "volume.csv": "5d50f028f6a504ccd58e6a649625bfd3c8d057802d1d982376104b6fe4b8d658"
+  }
+}
