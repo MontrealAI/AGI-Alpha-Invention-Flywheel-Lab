@@ -1,0 +1,81 @@
+name: GC-AI-REGISTER231 single-source structural qualification
+on:
+  push:
+    branches: [research/gc-ai-register231-20261121]
+    paths:
+      - '.github/workflows/gc-ai-register231.yml'
+      - 'tools/gc_ai_register231.py'
+      - 'tests/test_gc_ai_register231.py'
+      - 'research/gc-ai-register231/**'
+  pull_request:
+    paths:
+      - '.github/workflows/gc-ai-register231.yml'
+      - 'tools/gc_ai_register231.py'
+      - 'tests/test_gc_ai_register231.py'
+      - 'research/gc-ai-register231/**'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  frozen-source-and-strong-ordinary-control:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+      SOURCE_URL: https://open.canada.ca/data/dataset/fcbc0200-79ba-4fa4-94a6-00e32facea6b/resource/369f6f34-148a-42ed-b581-8c164e941a89/download/gc-ai-register-mvp-registre-de-lia-du-gc-pmv-04-26.csv
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - name: Source-bound frozen sixteen-case qualification
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p register231-receipts
+          git rev-parse HEAD | tee register231-receipts/HEAD.txt
+          python3 --version | tee register231-receipts/PYTHON.txt
+          /usr/bin/time -p python3 -m unittest discover -s tests -p 'test_gc_ai_register231.py' -v 2>&1 | tee register231-receipts/TESTS.txt
+      - name: Single official source request and complete-denominator processing
+        shell: bash
+        run: |
+          set -euo pipefail
+          /usr/bin/time -p curl --fail --show-error --silent --location --retry 0 --connect-timeout 25 --max-time 110 "$SOURCE_URL" --output /tmp/register231-official.csv 2>&1 | tee register231-receipts/FETCH.txt
+          sha256sum /tmp/register231-official.csv | tee register231-receipts/SOURCE_SHA256.txt
+          /usr/bin/time -p python3 tools/gc_ai_register231.py /tmp/register231-official.csv --source-url "$SOURCE_URL" --output register231-receipts/REPORT.json 2>&1 | tee register231-receipts/PROCESS.txt
+          python3 - <<'PY'
+          import csv, hashlib, io, json
+          from pathlib import Path
+          raw=Path('/tmp/register231-official.csv').read_bytes()
+          rows=csv.reader(io.StringIO(raw.decode('utf-8-sig'), newline=''), strict=True)
+          headers=next(rows)
+          independent=[dict(nonblank=0,empty=0,whitespace_only=0,literal_unknown=0,literal_na=0) for _ in headers]
+          count=0
+          for cells in rows:
+              if len(cells)!=len(headers): raise SystemExit('INDEPENDENT_WIDTH_MISMATCH')
+              count+=1
+              for i,v in enumerate(cells):
+                  d=independent[i]
+                  if v=='': d['empty']+=1
+                  elif not v.strip(): d['whitespace_only']+=1
+                  else:
+                      d['nonblank']+=1
+                      if v.strip().casefold()=='unknown':d['literal_unknown']+=1
+                      if v.strip().casefold()=='n/a':d['literal_na']+=1
+          report=json.loads(Path('register231-receipts/REPORT.json').read_text())
+          if count!=report['row_count'] or headers!=[c['name'] for c in report['columns']]:raise SystemExit('BASELINE_DENOMINATOR_MISMATCH')
+          for i,col in enumerate(report['columns']):
+              for k,v in independent[i].items():
+                  if col[k]!=v:raise SystemExit('BASELINE_COLUMN_MISMATCH')
+          assert report['source_sha256']==hashlib.sha256(raw).hexdigest()
+          assert report['system_risk_impact_compliance_claim']=='NONE'
+          print('INDEPENDENT_PARITY_PASS',count,len(headers),report['source_sha256'])
+          PY
+          sha256sum research/gc-ai-register231/PROTOCOL.md tools/gc_ai_register231.py tests/test_gc_ai_register231.py register231-receipts/REPORT.json > register231-receipts/FILES_SHA256.txt
+      - name: Publish successful or failed source-bound receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gc-ai-register231-frozen-evidence
+          path: register231-receipts/
+          if-no-files-found: warn
