@@ -1,0 +1,96 @@
+{
+  "freeze_hashes_match": {
+    "retained_symmetry.py": true,
+    "k1_card.json": true,
+    "K1_OBSERVATIONS.json": true,
+    "K1_CONSTRUCTION.json": true
+  },
+  "self_test": {
+    "passed": true,
+    "scope": "algebra and cost/anchor mechanics, no physics qualification"
+  },
+  "k1_result": {
+    "version": "grid074.k1-retained-symmetry.v1",
+    "symmetry_basis": [
+      {
+        "theta": "-1",
+        "C": "1",
+        "loss": "1",
+        "gain": "1"
+      }
+    ],
+    "target_affecting_symmetries": [
+      {
+        "theta": "-1",
+        "C": "1",
+        "loss": "1",
+        "gain": "1"
+      }
+    ],
+    "has_witnessed_scale_ambiguity": true,
+    "identifiable": null,
+    "scope": "multiplicative symmetry of validated supplied representation only",
+    "decision": "construct_reference_then_requalify",
+    "instruments": [
+      "calibrated_temperature_reference"
+    ],
+    "cost": 8.0,
+    "executable_measurements": [
+      {
+        "theta": 1
+      }
+    ]
+  },
+  "k2_result": {
+    "version": "grid074.k1-retained-symmetry.v1",
+    "symmetry_basis": [],
+    "target_affecting_symmetries": [],
+    "has_witnessed_scale_ambiguity": false,
+    "identifiable": null,
+    "scope": "multiplicative symmetry of validated supplied representation only",
+    "decision": "no_scale_breaking_instrument_justified_by_this_test",
+    "instruments": [],
+    "cost": 0
+  },
+  "unanchored_unit_test_result": {
+    "version": "grid074.k1-retained-symmetry.v1",
+    "symmetry_basis": [
+      {
+        "v": "-2",
+        "u": "-2",
+        "ell": "2",
+        "r": "-2",
+        "x": "-2",
+        "gain": "1"
+      }
+    ],
+    "target_affecting_symmetries": [
+      {
+        "v": "-2",
+        "u": "-2",
+        "ell": "2",
+        "r": "-2",
+        "x": "-2",
+        "gain": "1"
+      }
+    ],
+    "has_witnessed_scale_ambiguity": true,
+    "identifiable": null,
+    "scope": "multiplicative symmetry of validated supplied representation only",
+    "decision": "construct_reference_then_requalify",
+    "instruments": [
+      "calibrated_voltage_reference"
+    ],
+    "cost": 12.0,
+    "executable_measurements": [
+      {
+        "v": "1/2"
+      }
+    ]
+  },
+  "independent_hand_derived_k1_symmetry_verified": true,
+  "independent_hand_derived_unanchored_k2_symmetry_verified": true,
+  "fixed_k2_all_coordinates_no_scaling": true,
+  "scope": "multiplicative symmetries of provided constant-regime monomial equations only; no K2 observations or outcomes read/run",
+  "evaluation": "independent structural reproduction; not a validation of full identifiability, safe qualification, economic value, or learned improvement"
+}

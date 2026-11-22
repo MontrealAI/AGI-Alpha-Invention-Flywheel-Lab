@@ -1,0 +1,17 @@
+{
+  "variables": ["v", "u", "ell", "r", "x", "P", "Q", "p", "q", "gain", "offset", "reading"],
+  "equations": [
+    [{"P":1}, {"p":1}, {"r":1,"ell":1}],
+    [{"Q":1}, {"q":1}, {"x":1,"ell":1}],
+    [{"v":1}, {"u":1}, {"r":1,"P":1}, {"x":1,"Q":1}, {"r":2,"ell":1}, {"x":2,"ell":1}],
+    [{"u":1,"ell":1}, {"P":2}, {"Q":2}],
+    [{"reading":1}, {"gain":1,"v":"1/2"}, {"offset":1}]
+  ],
+  "fixed": ["p", "q", "reading", "u"],
+  "target": {"v":"1/2"},
+  "allowed_references": [
+    {"name":"calibrated_voltage_reference", "monomial":{"v":"1/2"}, "cost":12}
+  ],
+  "construction_budget":36,
+  "adapter_limits":"nonzero generic sector of exact series branch-flow equations, fixed source magnitude; no proof of practical identifiability, all model families, safe export or global uniqueness. Input/output signs do not affect exponent constraints."
+}

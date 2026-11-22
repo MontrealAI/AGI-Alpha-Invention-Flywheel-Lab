@@ -1,0 +1,91 @@
+{
+  "role": "development falsification; no fresh confirmation experiment",
+  "retained_artifact_unchanged": true,
+  "cases": {
+    "K1_thermal": {
+      "version": "grid074.k1-retained-symmetry.v1",
+      "symmetry_basis": [
+        {
+          "theta": "-1",
+          "C": "1",
+          "loss": "1",
+          "gain": "1"
+        }
+      ],
+      "target_affecting_symmetries": [
+        {
+          "theta": "-1",
+          "C": "1",
+          "loss": "1",
+          "gain": "1"
+        }
+      ],
+      "has_witnessed_scale_ambiguity": true,
+      "identifiable": null,
+      "scope": "multiplicative symmetry of validated supplied representation only",
+      "decision": "construct_reference_then_requalify",
+      "instruments": [
+        "calibrated_temperature_reference"
+      ],
+      "cost": 8.0,
+      "executable_measurements": [
+        {
+          "theta": 1
+        }
+      ]
+    },
+    "K2_fixed_source": {
+      "version": "grid074.k1-retained-symmetry.v1",
+      "symmetry_basis": [],
+      "target_affecting_symmetries": [],
+      "has_witnessed_scale_ambiguity": false,
+      "identifiable": null,
+      "scope": "multiplicative symmetry of validated supplied representation only",
+      "decision": "no_scale_breaking_instrument_justified_by_this_test",
+      "instruments": [],
+      "cost": 0
+    },
+    "counterfactual_unanchored_source_algebra_only": {
+      "version": "grid074.k1-retained-symmetry.v1",
+      "symmetry_basis": [
+        {
+          "v": "-2",
+          "u": "-2",
+          "ell": "2",
+          "r": "-2",
+          "x": "-2",
+          "gain": "1"
+        }
+      ],
+      "target_affecting_symmetries": [
+        {
+          "v": "-2",
+          "u": "-2",
+          "ell": "2",
+          "r": "-2",
+          "x": "-2",
+          "gain": "1"
+        }
+      ],
+      "has_witnessed_scale_ambiguity": true,
+      "identifiable": null,
+      "scope": "multiplicative symmetry of validated supplied representation only",
+      "decision": "construct_reference_then_requalify",
+      "instruments": [
+        "calibrated_voltage_reference"
+      ],
+      "cost": 12.0,
+      "executable_measurements": [
+        {
+          "v": "1/2"
+        }
+      ]
+    }
+  },
+  "cpu_seconds": 0.003962345000000006,
+  "decision": "Reject the transferred premise that K2 necessarily needs a scale-breaking reference. Fixed source anchors the tested scaling degree of freedom. Do not claim K2 is identifiable from noisy data, or that no reference can ever be useful.",
+  "learned_advantage": false,
+  "newly_enabled_business": false,
+  "commercial_test": "not started; no accepted customer output/native account or profit claimed",
+  "next": "Compare any remaining practical cost/robustness hypothesis to ordinary adaptive identification before funding a more realistic commissioning study. No confirmation sweep of the failed structural premise."
+}
