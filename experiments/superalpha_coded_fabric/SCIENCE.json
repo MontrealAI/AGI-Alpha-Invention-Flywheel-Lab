@@ -1,0 +1,247 @@
+{
+  "actual_commercial_orders": 0,
+  "exhaustive": {
+    "gram": {
+      "correct": 29,
+      "refused": 99,
+      "subsets": 128
+    },
+    "linear": {
+      "correct": 99,
+      "refused": 29,
+      "subsets": 128
+    }
+  },
+  "milestone_achieved": false,
+  "native_trailing365_profit_usd": null,
+  "outcomes": {
+    "gram": {
+      "conventional_coded": {
+        "feasible_placements": 9,
+        "worker_units": 8
+      },
+      "corruption_rejected_by_full_recomputation": true,
+      "decode_scalar_multiplications": 3840,
+      "independent_verification_scalar_multiplications": 12288,
+      "output_sha256": "57ca9e3f15874d11a5a3502e40b621d5fda080747841fef59677b282f462e31b",
+      "plan": {
+        "counts": [
+          2,
+          3,
+          3
+        ],
+        "domain_losses": 1,
+        "field": 65537,
+        "kind": "gram",
+        "threshold": 5,
+        "worker_units": 8,
+        "workers": [
+          {
+            "domain": 0,
+            "x": 4
+          },
+          {
+            "domain": 0,
+            "x": 5
+          },
+          {
+            "domain": 1,
+            "x": 7
+          },
+          {
+            "domain": 1,
+            "x": 8
+          },
+          {
+            "domain": 1,
+            "x": 9
+          },
+          {
+            "domain": 2,
+            "x": 10
+          },
+          {
+            "domain": 2,
+            "x": 11
+          },
+          {
+            "domain": 2,
+            "x": 12
+          }
+        ]
+      },
+      "reliable_local_production_scalar_multiplications": 12288,
+      "replication": {
+        "worker_units": 6,
+        "workers": [
+          {
+            "block": 0,
+            "domain": 0,
+            "slot": 0
+          },
+          {
+            "block": 1,
+            "domain": 0,
+            "slot": 1
+          },
+          {
+            "block": 2,
+            "domain": 0,
+            "slot": 2
+          },
+          {
+            "block": 0,
+            "domain": 1,
+            "slot": 0
+          },
+          {
+            "block": 1,
+            "domain": 1,
+            "slot": 1
+          },
+          {
+            "block": 2,
+            "domain": 1,
+            "slot": 2
+          }
+        ]
+      },
+      "replication_single_domain_outages_accepted": 3,
+      "replication_worker_scalar_multiplications": 24576,
+      "return_field_elements_all_workers": 2048,
+      "single_domain_outages_accepted": 3,
+      "worker_scalar_multiplications": 32768
+    },
+    "linear": {
+      "conventional_coded": {
+        "feasible_placements": 81,
+        "worker_units": 5
+      },
+      "corruption_rejected_by_full_recomputation": true,
+      "decode_scalar_multiplications": 2304,
+      "independent_verification_scalar_multiplications": 12288,
+      "output_sha256": "528b6c82b81831a18d026184128b1331d28ff70e3b164ad650984656c7fe2e2d",
+      "plan": {
+        "counts": [
+          1,
+          2,
+          2
+        ],
+        "domain_losses": 1,
+        "field": 65537,
+        "kind": "linear",
+        "threshold": 3,
+        "worker_units": 5,
+        "workers": [
+          {
+            "domain": 0,
+            "x": 4
+          },
+          {
+            "domain": 1,
+            "x": 7
+          },
+          {
+            "domain": 1,
+            "x": 8
+          },
+          {
+            "domain": 2,
+            "x": 10
+          },
+          {
+            "domain": 2,
+            "x": 11
+          }
+        ]
+      },
+      "reliable_local_production_scalar_multiplications": 12288,
+      "replication": {
+        "worker_units": 6,
+        "workers": [
+          {
+            "block": 0,
+            "domain": 0,
+            "slot": 0
+          },
+          {
+            "block": 1,
+            "domain": 0,
+            "slot": 1
+          },
+          {
+            "block": 2,
+            "domain": 0,
+            "slot": 2
+          },
+          {
+            "block": 0,
+            "domain": 1,
+            "slot": 0
+          },
+          {
+            "block": 1,
+            "domain": 1,
+            "slot": 1
+          },
+          {
+            "block": 2,
+            "domain": 1,
+            "slot": 2
+          }
+        ]
+      },
+      "replication_single_domain_outages_accepted": 3,
+      "replication_worker_scalar_multiplications": 24576,
+      "return_field_elements_all_workers": 1280,
+      "single_domain_outages_accepted": 3,
+      "worker_scalar_multiplications": 20480
+    }
+  },
+  "scope": "AUTHORED_EXACT_FIELD_COMPUTATION_AND_DECLARED_ERASURE_MODEL",
+  "sources": {
+    "PROTOCOL.md": "4ec02e833f727f75d15bb5d818bc1806cc6794fa9f32033fed1e11126192e921",
+    "__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "fabric.py": "2554be021dd86e18089a92facfda471d865a6e96bd464222bc937da51fb07ff3",
+    "finance_probe.py": "0443b2098df89e62b506f5d992f52f87f80d422b818548d11724c9d33d1c9c34",
+    "reference.py": "a427e945b770247280be275fffe44a7cc90c23b54862b355eec32f32ccbdb7e5",
+    "run.py": "f30c9070d9de61bb21c2beeae7c139664dfedc92cf8e185789c957094d665699",
+    "test_fabric.py": "d5dd8c0ffe60cdfbb9d56a9dd3af1886867ba93f9f7fd5b1e706f6014769db08"
+  },
+  "successor": {
+    "all_outputs_equal": true,
+    "degree_aware_contract_rejects": true,
+    "equal_content_ordinary": {
+      "encoding_scalar_multiplications": 2304,
+      "new_outbound_field_elements": 768,
+      "new_shards": 3,
+      "reused_shards": 5
+    },
+    "improved_discovery_advantage": false,
+    "inherited_linear_threshold_wrong_output": true,
+    "no_retention": {
+      "encoding_scalar_multiplications": 6144,
+      "new_outbound_field_elements": 2048,
+      "new_shards": 8,
+      "reused_shards": 0
+    },
+    "predecessor_encoding": {
+      "encoding_scalar_multiplications": 3840,
+      "new_outbound_field_elements": 1280,
+      "new_shards": 5,
+      "reused_shards": 0
+    },
+    "retained": {
+      "encoding_scalar_multiplications": 2304,
+      "new_outbound_field_elements": 768,
+      "new_shards": 3,
+      "reused_shards": 5
+    }
+  },
+  "telemetry": {
+    "billing_usd": null,
+    "wall_seconds": 0.1470375140052056
+  },
+  "two_domain_loss_coded_gram_feasible": false,
+  "verdict": "NO_SUPER_ALPHA_ESTABLISHED_STRONG_ORDINARY_ALTERNATIVE_RETAINED"
+}
