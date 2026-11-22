@@ -1,0 +1,21 @@
+name: UNLOCK OMEGA isolated product qualification
+on:
+  pull_request:
+    paths:
+      - 'products/unlock-omega/**'
+      - '.github/workflows/unlock-omega.yml'
+  workflow_dispatch:
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    timeout-minutes: 360
+    steps:
+      - name: Record platform start
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@v4
+      - name: Run adversarial tests of audited fixtures
+        run: python3 -m unittest discover -s products/unlock-omega/tests -v
+      - name: Run default Docker-isolated acceptance gate
+        run: python3 products/unlock-omega/unlock.py demo

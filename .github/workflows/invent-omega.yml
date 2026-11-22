@@ -1,0 +1,41 @@
+name: INVENT OMEGA scoped qualification
+on:
+  pull_request:
+    paths:
+      - 'products/invent_omega/**'
+      - 'products/unlock-omega/make_demo.py'
+      - '.github/workflows/invent-omega.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  qualification:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record platform start
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@v4
+      - name: Adversarial gate tests
+        run: python3 -m unittest discover -s products/invent_omega/tests -v
+      - name: Obtain fixed public runtime
+        run: docker pull python@sha256:a61cbd76a882645de7f91423329fe43a67eed60d7da24f9e5331414bb3618b20
+      - name: Real isolated equality and wrong-answer controls
+        run: |
+          python3 products/invent_omega/make_demo.py /tmp/invent-demo
+          python3 products/invent_omega/invent.py verify /tmp/invent-demo /tmp/invent-demo/candidate.py --output /tmp/invent-control.json || test "$?" = 2
+          python3 products/invent_omega/invent.py verify /tmp/invent-demo /tmp/invent-demo/wrong.py --output /tmp/invent-wrong.json || test "$?" = 2
+          python3 - <<'PY'
+          import json
+          good=json.load(open('/tmp/invent-control.json'))
+          bad=json.load(open('/tmp/invent-wrong.json'))
+          assert good['correctness_pass'] is True, good
+          assert bad['correctness_pass'] is False and bad['status']=='HOLD', bad
+          assert good['actual_revenue_usd'] is None
+          print('Real isolated functional controls accepted; no invention or profit claim.')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: invent-scoped-controls
+          path: /tmp/invent-*.json
