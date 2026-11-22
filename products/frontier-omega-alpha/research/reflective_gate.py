@@ -54,6 +54,20 @@ def _report_counts(report: dict) -> tuple[int, int]:
     return len(cohorts), count
 
 
+def assess_source_groups(groups, max_faulty_source_groups: int = 1) -> dict:
+    """Apply the necessary group-count check without certifying independence."""
+    if not isinstance(max_faulty_source_groups, int) or not 0 <= max_faulty_source_groups <= 8:
+        raise ValueError("Invalid source fault budget")
+    necessary_groups = 2 * max_faulty_source_groups + 1
+    count = len(set(groups))
+    return {
+        "distinct_groups": count,
+        "necessary_groups_for_t_fault_correction": necessary_groups,
+        "correction_claim": ("necessary_group_count_failed" if count < necessary_groups
+                             else "necessary_group_count_only_not_certified"),
+    }
+
+
 def analyze(
     plan: dict,
     report: dict,
@@ -70,8 +84,6 @@ def analyze(
     """
     if plan.get("schema") != PROTOCOL_SCHEMA:
         raise ValueError("Unsupported protocol; do not generalize this study silently")
-    if not isinstance(max_faulty_source_groups, int) or not 0 <= max_faulty_source_groups <= 8:
-        raise ValueError("Invalid source fault budget")
     if not isinstance(protocol_sha256, str) or len(protocol_sha256) != 64 or any(
         c not in "0123456789abcdef" for c in protocol_sha256
     ):
@@ -89,12 +101,7 @@ def analyze(
     # If a source-group distance is > 2t, at least 2t+1 distinct groups must
     # exist. The converse does not hold: *counting* different hosts proves no
     # distance, source independence, admissible target class, or fault budget.
-    necessary_groups = 2 * max_faulty_source_groups + 1
-    host_count = len(host_groups)
-    source_fault_status = (
-        "necessary_group_count_failed" if host_count < necessary_groups
-        else "necessary_group_count_only_not_certified"
-    )
+    count_assessment = assess_source_groups(host_groups, max_faulty_source_groups)
     returned_profile = report.get("retained_profile_sha256")
     profile_recorded = bool(is_receipt_agreement and returned_profile)
     findings = [
@@ -104,9 +111,9 @@ def analyze(
             "scope": "Published statement-match and axiom logs, not Lean kernel reexecution",
             "evidence": {
                 "publisher_hosts": host_groups,
-                "publisher_host_count": host_count,
-                "necessary_groups_for_t_fault_correction": necessary_groups,
-                "correction_claim": source_fault_status,
+                "publisher_host_count": count_assessment["distinct_groups"],
+                "necessary_groups_for_t_fault_correction": count_assessment["necessary_groups_for_t_fault_correction"],
+                "correction_claim": count_assessment["correction_claim"],
             },
             "materiality": "A common upstream error can be accepted by both local implementations.",
             "discriminating_test": (
