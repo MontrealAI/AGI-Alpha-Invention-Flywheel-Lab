@@ -10,6 +10,7 @@ import copy
 import hashlib
 import json
 import resource
+import shutil
 import time
 from pathlib import Path
 
@@ -130,6 +131,30 @@ def public_case(case: dict, proof: dict, wall: float, cpu: float) -> dict:
     }
 
 
+def independent_frozen_runtime(source: Path, destination: Path) -> Path:
+    """Copy exact release-closure source into a new isolated simulated world root.
+
+    The canonical prepare_services generator insists on a create-only
+    service-inputs/ directory. Each preregistered scenario must own an immutable
+    working-source root; sharing one repo working tree would violate both the
+    generator's no-overwrite rule and independently audited source identity.
+    """
+    from connected_enterprise.runner import identity
+
+    before = identity(source)
+    if destination.exists() or destination.is_symlink():
+        raise FileExistsError("CREATE_ONLY_NATIVE_SOURCE_ROOT_REQUIRED")
+    destination.mkdir(parents=True)
+    for name in before["files"]:
+        original = source / name
+        copy = destination / name
+        copy.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(original, copy)
+    if identity(destination) != before:
+        raise ValueError("ISOLATED_CANONICAL_RUNTIME_SOURCE_CHANGED")
+    return destination
+
+
 def run(contract_path: Path, output: Path) -> dict:
     contract = load_protocol(contract_path)
     output = output.absolute()
@@ -164,8 +189,9 @@ def run(contract_path: Path, output: Path) -> dict:
         try:
             spec = registered_spec(contract, case)
             case_output = output / ("native-" + case["id"])
-            constructed = execute(spec, src, case_output)
-            independently_recomputed = verify(src, case_output)
+            frozen_root = independent_frozen_runtime(src, output / ("source-" + case["id"]))
+            constructed = execute(spec, frozen_root, case_output)
+            independently_recomputed = verify(frozen_root, case_output)
             if constructed != independently_recomputed:
                 raise ValueError("INDEPENDENT_REDERIVATION_MISMATCH")
             after = resource.getrusage(resource.RUSAGE_SELF)
