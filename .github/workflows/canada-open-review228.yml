@@ -23,7 +23,7 @@ jobs:
       - name: Checkout exact candidate without persistent credentials
         uses: actions/checkout@v4
         with:
-          ref: \${{ github.event.pull_request.head.sha || github.sha }}
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
           persist-credentials: false
       - name: Capture source identity
         shell: bash
@@ -39,7 +39,7 @@ jobs:
       - name: Download only the EXISTING historical source witness from GitHub Actions
         shell: bash
         env:
-          GH_TOKEN: \${{ github.token }}
+          GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
           gh run download 44961099150 \
@@ -52,7 +52,7 @@ jobs:
       - name: Replay all 937 published rows and six registered matches
         shell: bash
         env:
-          NEED228_SOURCE_DIR: \${{ runner.temp }}/need228/canada-open-need227
+          NEED228_SOURCE_DIR: ${{ runner.temp }}/need228/canada-open-need227
         run: |
           set -euo pipefail
           /usr/bin/time -v python3 -B -m unittest -v tests.test_canada_open_review228 2>&1 | tee "$RUNNER_TEMP/TESTS_WITH_ACTUAL_ARTIFACT.txt"
@@ -80,9 +80,9 @@ jobs:
           retention-days: 7
           if-no-files-found: warn
           path: |
-            \${{ runner.temp }}/HEAD.txt
-            \${{ runner.temp }}/SOURCE_SHA256.txt
-            \${{ runner.temp }}/TESTS.txt
-            \${{ runner.temp }}/TESTS_WITH_ACTUAL_ARTIFACT.txt
-            \${{ runner.temp }}/ARTIFACT_ORIGIN.txt
-            \${{ runner.temp }}/REVIEW.json
+            ${{ runner.temp }}/HEAD.txt
+            ${{ runner.temp }}/SOURCE_SHA256.txt
+            ${{ runner.temp }}/TESTS.txt
+            ${{ runner.temp }}/TESTS_WITH_ACTUAL_ARTIFACT.txt
+            ${{ runner.temp }}/ARTIFACT_ORIGIN.txt
+            ${{ runner.temp }}/REVIEW.json
