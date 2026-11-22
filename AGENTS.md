@@ -49,6 +49,14 @@ The primary productivity comparison is **competent frontier AI/agents versus com
 
 Use [the commercial comparison](COMMERCIAL_COMPARISON.md#primary-comparison-and-correction) for economic reporting and [the developer guide](docs/harness/DEVELOPER_GUIDE.md#run-the-right-comparison) for execution. Realistic simulation requires no purchase, API key or paid model call; existing spending and access prohibitions remain unchanged.
 
+### Reduce cost without weakening the accepted outcome
+
+Actively test reuse, caching, quality-preserving model/tool routing, batching and shared-setup amortization. A current modeled cost is not a permanent floor, and a proposed reduction is not a guaranteed result. Compare complete cost per independently accepted and supported unit, including misses, cache writes/invalidation, setup, storage, retrieval, verification, retries, fallback, latency and maintenance—not just the cheapest successful prompt. Route difficult or uncertain work to stronger suitable models/tools when that improves accepted outcomes or total cost; efficient routing must not silently weaken quality, rights, security or customer isolation.
+
+Reuse only within verified input, source/version, permission and acceptance conditions; do not reuse stale evidence or transfer private customer information between customers. Batch only where deadlines, capacity, failure handling and isolation permit. Declare a defensible reuse volume/horizon and show sensitivity to low utilization. Amortization allocates costs; it does not erase historical development or make setup free. Current available cash must fund upfront construction/setup and cover obligations before anticipated reuse or future receipts.
+
+Separate underlying paid needs and task volume from the share this offering can win, buyer willingness to pay and competitors' responses. Cheaper AI production does not by itself imply that demand disappears; nor does an existing need guarantee purchases, constant volume or a fixed market share. Model substitution, self-service, expansion and rival adoption using evidence and explicit uncertainty. Re-estimate demand, attainable price and share as evidence changes; no fixed share or universal optimal pricing claim follows from a cost reduction.
+
 ## Invent the complete productive arrangement
 
 **Transformational intelligence changes the game.** The defining shift is **from optimizing an enterprise to constructing the conditions under which better enterprises become possible**. Discover the valuable outcome, the means of producing and verifying it, and the arrangement that makes each participant's involvement worthwhile—together. The object of invention is the complete productive arrangement, not a transaction counter, a catalogue of mechanisms or dependence on this machine.

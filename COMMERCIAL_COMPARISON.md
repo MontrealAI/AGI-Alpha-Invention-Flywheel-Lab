@@ -83,6 +83,14 @@ The calculation prices each agent phase at an explicit model tariff and token bu
 
 **A $0 assumption is permitted only for a genuinely absent cost in the defined scenario.** Unknown actual costs must remain unknown in measured reporting. Expense categories should be tightened or expanded from real instrumented runs, not inflated with fictitious employees or omitted to make the numbers attractive. Higher model capability may be worth its additional inference cost if it improves acceptance, time-to-result, or reduces retries.
 
+### Reuse, caching, routing and demand
+
+Follow [the canonical cost-reduction discipline](AGENTS.md#reduce-cost-without-weakening-the-accepted-outcome). Test compatible reuse/caching, quality-preserving model/tool routing, batching and shared setup rather than treating today's modeled unit cost as a permanent floor. Count setup/development, cache misses and writes, invalidation, storage/retrieval, checking, retries, fallback, latency, maintenance and supported failures per independently accepted and supported unit. Preserve unchanged acceptance, rights, security and customer isolation; qualify reuse and routing before assigning savings.
+
+Report marginal and fully allocated lifecycle costs separately, with declared utilization/reuse horizons and sensitivity. Shared setup may be amortized once across justified uses, not omitted or counted repeatedly. Historical development remains part of the declared full-cost account. Upfront setup still requires current available funding with obligations covered; future reuse, forecasts and accounting allocations are not spendable cash.
+
+Lower AI cost alone does not make underlying paid needs or task volume vanish. Distinguish those needs from reachable demand, willingness to pay, the seller's attainable share, self-service/substitution and competitor responses. Existing jobs are not proof of unchanged future volume or guaranteed sales. Let evidence change these quantities, including possible demand expansion or contraction; neither automatic demand collapse nor fixed demand/share is a default fact. Cost reductions do not establish a universal optimal price, fixed share or guaranteed profit.
+
 ## Evidence and commercial experiment
 
 First run a representative, rights-cleared job cohort **end-to-end** using the strongest suitable frontier models and qualified tools. Instrument every operation: model/version/token usage, tool calls and fees, CPU/storage, retries, QA tests, source checks, delivery, agent-run acquisition and support, refunds, failure rates, and any actual human escalation. If independent QA or customers cannot accept the autonomous result, mark the job unaccepted rather than assuming equivalent human quality. Test accepted tasks on held-out specifications and give H the same input rights and obligations.
