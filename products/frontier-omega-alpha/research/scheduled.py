@@ -9,6 +9,7 @@ import re
 from urllib.parse import quote
 
 from .__main__ import BridgeError, dump, retrieve_source, through_egress_proxy
+from .lean_delta import EXPERIMENT as LEAN_EXPERIMENT, FEATURE as LEAN_FEATURE, VERSIONS as LEAN_VERSIONS
 
 HOSTS = frozenset({'api.github.com'})
 SCHEMA = 'frontier-omega-alpha/release-observations-v1'
@@ -42,7 +43,7 @@ def fetch_release(url, transport):
 
 
 def proposal(repo, facet, before, after):
-    return {
+    candidate = {
         'kind': 'reported_release_hypothesis',
         'newly_worth_attempting': f'Replay a matched {facet} experiment with the newly published {repo} release {after["tag"]}.',
         'why_earlier_was_harder': f'The recorded predecessor was {before["tag"]}. The new version and its exact feature delta require qualification.',
@@ -57,6 +58,19 @@ def proposal(repo, facet, before, after):
         'payment': 'unproven',
         'net_economic_benefit': 'unproven',
     }
+    if repo == 'leanprover/lean4' and (before['tag'], after['tag']) == tuple('v' + version for version in LEAN_VERSIONS):
+        candidate.update(
+            newly_worth_attempting='Verify that the new bv_decide +uf mode checks whether two calculations make equivalent calls to an abstract function.',
+            why_earlier_was_harder='Lean 4.35 had no +uf mode. Compare against its existing grind and explicit congruence proofs.',
+            action='Run the registered Lean release comparison on approved local toolchains.',
+            beneficiary='MONTREAL.AI operators verifying fixed-width compiler or hardware transformations behind abstract interfaces.',
+            existing_alternative='Lean 4.35 grind and explicit congruence proved with the established bv_decide tactic.',
+            falsification='Lean 4.36 fails either true workload or accepts a false workload with an independently enumerated witness.',
+            retained_asset='A parameterized proof pattern on both function arities and a finite independent reference.',
+            registered_experiment=LEAN_EXPERIMENT,
+            release_notes=LEAN_FEATURE,
+        )
+    return candidate
 
 
 def observe_releases(previous, transport=retrieve_source):

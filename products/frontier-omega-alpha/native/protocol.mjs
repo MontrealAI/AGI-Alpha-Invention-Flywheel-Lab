@@ -1,9 +1,13 @@
+import { clubLabel, MAX_CLUB_LABEL_BYTES } from '../access/chain.mjs';
+
 export const DESTINATION = '0x0000000000000000000000000000000000000004';
 export const MAINNET = 1;
 export const TAG = '0x46524f4e544945520101';
 export const WINDOW_SECONDS = 24 * 60 * 60;
+export const MAX_FINALIZED_AGE_SECONDS = 45 * 60;
 export const CIPHERTEXT_FORMAT = 'research-json.browser.v1';
 export const LIBRARY_SCHEMA = 'frontier-omega-alpha/library-v1';
+export const SIGNED_LIBRARY_SCHEMA = 'frontier-omega-alpha/signed-library-v1';
 export const MAX_RELEASES = 12;
 export const MAX_MEMBERS = 96;
 export const MAX_LIBRARY_BYTES = 6 * 1024 * 1024;
@@ -12,7 +16,6 @@ export const SECTIONS = ['radar', 'opportunity', 'experiment', 'verification', '
 const text = new TextEncoder();
 const readText = new TextDecoder('utf-8', { fatal: true });
 const heading = 115;
-const labelPattern = /^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$/;
 export const hash = value => typeof value === 'string' && /^0x[a-f0-9]{64}$/.test(value);
 export const address = value => typeof value === 'string' && /^0x[a-f0-9]{40}$/.test(value);
 export const hex = bytes => '0x' + Array.from(bytes, byte => byte.toString(16).padStart(2, '0')).join('');
@@ -49,7 +52,7 @@ export function publicKeyBytes(value) {
 export function encodeEnrollment({ wallet, nonce, publicKey, expiresAt, label = null }) {
   if (!address(wallet) || !/^0x[a-f0-9]{32}$/.test(nonce) || nonce === '0x' + '0'.repeat(32) ||
       !Number.isInteger(expiresAt) || expiresAt <= 0 || expiresAt > 0xffffffff ||
-      (label !== null && (typeof label !== 'string' || !labelPattern.test(label)))) throw Error('Invalid enrollment');
+      (label !== null && clubLabel(label) !== label)) throw Error('Invalid enrollment');
   const labelBytes = text.encode(label ?? '');
   const out = new Uint8Array(heading + labelBytes.length);
   out.set(bytes(TAG));
@@ -63,7 +66,7 @@ export function encodeEnrollment({ wallet, nonce, publicKey, expiresAt, label = 
 
 export function decodeEnrollment(value) {
   if (typeof value !== 'string' || !value.startsWith(TAG) || value.length < 2 + heading * 2 ||
-      value.length > 2 + (heading + 63) * 2) throw Error('Not a registered enrollment format');
+      value.length > 2 + (heading + MAX_CLUB_LABEL_BYTES) * 2) throw Error('Not a registered enrollment format');
   const data = bytes(value);
   const result = {
     wallet: hex(data.slice(10, 30)),
@@ -84,8 +87,8 @@ export function assetContext(record) {
   return [record.id, record.version, record.epoch, record.format, record.section];
 }
 
-export function envelopeContext(tx, tag) {
-  return text.encode(JSON.stringify([LIBRARY_SCHEMA, MAINNET, tx, tag]));
+export function envelopeContext(proof, tag, schema = LIBRARY_SCHEMA) {
+  return text.encode(JSON.stringify([schema, MAINNET, proof, tag]));
 }
 
 export async function releaseTag(record) {
@@ -108,7 +111,8 @@ export function assertRecord(record, wrapped = false) {
 
 export function assertLibrary(library) {
   if (!keysAre(library, ['schema', 'updatedAt', 'openEnrollment', 'records', 'recipients']) ||
-      library.schema !== LIBRARY_SCHEMA || typeof library.openEnrollment !== 'boolean' || !Number.isSafeInteger(library.updatedAt) || library.updatedAt <= 0 ||
+      ![LIBRARY_SCHEMA, SIGNED_LIBRARY_SCHEMA].includes(library.schema) ||
+      typeof library.openEnrollment !== 'boolean' || !Number.isSafeInteger(library.updatedAt) || library.updatedAt <= 0 ||
       !Array.isArray(library.records) || library.records.length > MAX_RELEASES ||
       !library.recipients || typeof library.recipients !== 'object' || Array.isArray(library.recipients) ||
       Object.keys(library.recipients).length > 2 * MAX_MEMBERS) throw Error('Invalid encrypted library');
@@ -121,9 +125,12 @@ export function assertLibrary(library) {
     tags.add(record.tag);
     versions.add(release);
   }
-  for (const [tx, entry] of Object.entries(library.recipients)) {
-    if (!hash(tx) || !keysAre(entry, ['tx', 'state', 'keys']) || !hash(entry.tx) ||
-        !['eligible', 'provisioned', 'denied', 'revoked', 'superseded', 'capacity'].includes(entry.state) ||
+  const proof = library.schema === SIGNED_LIBRARY_SCHEMA ? 'proof' : 'tx';
+  const acceptedStates = ['eligible', 'provisioned', 'denied', 'revoked', 'superseded', 'capacity'];
+  if (proof === 'proof') acceptedStates.push('paused');
+  for (const [id, entry] of Object.entries(library.recipients)) {
+    if (!hash(id) || !keysAre(entry, [proof, 'state', 'keys']) || !hash(entry[proof]) ||
+        !acceptedStates.includes(entry.state) ||
         !entry.keys || typeof entry.keys !== 'object' || Array.isArray(entry.keys)) throw Error('Invalid registration receipt');
     const envelopes = Object.entries(entry.keys);
     if ((entry.state === 'provisioned') !== (envelopes.length > 0)) throw Error('Invalid enrollment status');

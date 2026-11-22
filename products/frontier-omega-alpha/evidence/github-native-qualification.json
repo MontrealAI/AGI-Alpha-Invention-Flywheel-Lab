@@ -74,16 +74,16 @@
         "id": 447243369,
         "published_at": "2026-11-16T15:45:27+00:00",
         "url": "https://api.github.com/repos/leanprover/lean4/releases/latest",
-        "retrieved_at": "2026-11-22T19:30:53.809388+00:00",
-        "sha256": "5ffaaa2f760509d2c86807f210ed1df4b05e257e01f1a9fadf4248568c9f2386"
+        "retrieved_at": "2026-11-22T19:42:26.005785+00:00",
+        "sha256": "57a9c386d6fd2f6afca2d2eac494933bfa96d2d09334b06c7c136ea0bc3d6e95"
       },
       "pinned": {
         "tag": "v4.36.0",
         "id": 447243369,
         "published_at": "2026-11-16T15:45:27+00:00",
         "url": "https://api.github.com/repos/leanprover/lean4/releases/tags/v4.36.0",
-        "retrieved_at": "2026-11-22T19:30:56.921202+00:00",
-        "sha256": "5ffaaa2f760509d2c86807f210ed1df4b05e257e01f1a9fadf4248568c9f2386"
+        "retrieved_at": "2026-11-22T19:42:29.264747+00:00",
+        "sha256": "57a9c386d6fd2f6afca2d2eac494933bfa96d2d09334b06c7c136ea0bc3d6e95"
       },
       "preceding": {
         "tag": "v4.35.0",
@@ -96,18 +96,20 @@
       "uncertainty": "This evidence verifies a publisher record. Capability and economic effects require experiments.",
       "opportunity": {
         "kind": "reported_release_hypothesis",
-        "newly_worth_attempting": "Replay a matched verification experiment with the newly published leanprover/lean4 release v4.36.0.",
-        "why_earlier_was_harder": "The recorded predecessor was v4.35.0. The new version and its exact feature delta require qualification.",
-        "action": "Choose one acceptance metric from the release’s primary documentation and preregister a before/after comparison.",
-        "beneficiary": "MONTREAL.AI operators with a reproducible workload in this category.",
-        "existing_alternative": "The exact preceding published release v4.35.0 on the same workload.",
+        "newly_worth_attempting": "Verify that the new bv_decide +uf mode checks whether two calculations make equivalent calls to an abstract function.",
+        "why_earlier_was_harder": "Lean 4.35 had no +uf mode. Compare against its existing grind and explicit congruence proofs.",
+        "action": "Run the registered Lean release comparison on approved local toolchains.",
+        "beneficiary": "MONTREAL.AI operators verifying fixed-width compiler or hardware transformations behind abstract interfaces.",
+        "existing_alternative": "Lean 4.35 grind and explicit congruence proved with the established bv_decide tactic.",
         "requirements": "An approved release checksum, compatible runtime and bounded local or standard GitHub compute.",
-        "falsification": "A separately implemented reference test fails to reproduce an improvement beyond the registered tolerance.",
-        "retained_asset": "A version-pinned reproducer, the matched baseline and a reusable acceptance rule.",
+        "falsification": "Lean 4.36 fails either true workload or accepts a false workload with an independently enumerated witness.",
+        "retained_asset": "A parameterized proof pattern on both function arities and a finite independent reference.",
         "technical_verification": "pending",
         "beneficiary_acceptance": "unproven",
         "payment": "unproven",
-        "net_economic_benefit": "unproven"
+        "net_economic_benefit": "unproven",
+        "registered_experiment": "lean-4.36-black-box-bit-vector-congruence",
+        "release_notes": "https://lean-lang.org/doc/reference/latest/releases/v4.36.0/"
       }
     },
     "hardware_source": {
@@ -115,10 +117,10 @@
       "id": 449807176,
       "published_at": "2026-11-18T10:12:40+00:00",
       "url": "https://api.github.com/repos/ROCm/rocm-systems/releases/latest",
-      "retrieved_at": "2026-11-22T19:30:59.653324+00:00",
-      "sha256": "90798e76965d733bae5be8ac5dfb3c3786d4adf281d3fc660bbb151ef8d48d96"
+      "retrieved_at": "2026-11-22T19:42:32.629471+00:00",
+      "sha256": "a79bef65e7bec5bd34ad24cef6d2f2213e8ef92992345091b6641902e3870ae9"
     },
-    "executed_at": "2026-11-22T19:31:02.941189+00:00"
+    "executed_at": "2026-11-22T19:42:35.632710+00:00"
   },
   "preserved_registered_replay": {
     "status": "receipt-agreement",
@@ -143,5 +145,228 @@
     "protected_GitHub_environment_and_isolated_reader": "pending",
     "external_security_sign_off": "pending",
     "production_deployment": "pending"
+  },
+  "publisher_checkpoint_migration": {
+    "old_checkpoint_format": 1,
+    "new_checkpoint_format": 2,
+    "kept_ciphertext_exact": true,
+    "refused_mismatched_library": true,
+    "next_checkpoint_height": 26472719,
+    "production_signers": 0,
+    "checked_at": "2026-11-22T19:38:10.234887+00:00"
+  },
+  "lean_release_comparison": {
+    "experiment": "lean-4.36-black-box-bit-vector-congruence",
+    "source": "https://lean-lang.org/doc/reference/latest/releases/v4.36.0/",
+    "registered_outcome": "matched",
+    "independent_reference": {
+      "one_argument_inputs": 81,
+      "two_argument_inputs": 1296,
+      "invalid_case_witness": {
+        "x": 0,
+        "mask": 0,
+        "value": 0
+      },
+      "witness_oracle": "second argument"
+    },
+    "runtimes": [
+      {
+        "version": "Lean (version 4.35.0, x86_64-unknown-linux-gnu, commit eb6cafb7290e8bd5f2937522d8d804f58f02bafc, Release)",
+        "proofs": [
+          {
+            "case": "one_argument",
+            "method": "explicit_congruence",
+            "accepted": true,
+            "source_sha256": "6fe21b008a720b72a5cd11bc5a5b88feb4ed24c9c2a82601d4c35285a2c69a96",
+            "axioms": "'frontier_check' depends on axioms: [propext, Classical.choice, Quot.sound, frontier_check._native.bv_decide.ax_1_5]",
+            "diagnostic": null,
+            "reports_counterexample": false,
+            "wall_seconds": 0.526489
+          },
+          {
+            "case": "one_argument",
+            "method": "grind",
+            "accepted": true,
+            "source_sha256": "7c8d9461cefdcf950c8fd68eef8b17e64143fb0169e4ba9c369e3f523bc0c8ba",
+            "axioms": "'frontier_check' depends on axioms: [propext, Classical.choice, Quot.sound]",
+            "diagnostic": null,
+            "reports_counterexample": false,
+            "wall_seconds": 0.429724
+          },
+          {
+            "case": "one_argument",
+            "method": "default_bv",
+            "accepted": false,
+            "source_sha256": "c95911c292466753ecc92e350623a20a05059119d47456454d8f37b9b7d1e341",
+            "axioms": "'frontier_check' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]",
+            "diagnostic": "Proof.lean:6:2: error: The prover found a potentially spurious counterexample:",
+            "reports_counterexample": true,
+            "wall_seconds": 0.329894
+          },
+          {
+            "case": "one_argument",
+            "method": "uf_bv",
+            "accepted": false,
+            "source_sha256": "6135e8f24915d100b896cbd72d68747f0f344cedd5fe3b8dbbd1d6d82ce8a832",
+            "axioms": "'frontier_check' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]",
+            "diagnostic": "Proof.lean:6:13: error: Invalid configuration option `uf` for `Lean.Elab.Tactic.BVDecide.BVDecideConfig`",
+            "reports_counterexample": true,
+            "wall_seconds": 0.301236
+          },
+          {
+            "case": "two_arguments",
+            "method": "explicit_congruence",
+            "accepted": true,
+            "source_sha256": "bdf54105eb4ca0ab9276fc5ddd7f32ff257c7d8e004c235a98a28be8c1b57ffc",
+            "axioms": "'frontier_check' depends on axioms: [propext, Classical.choice, Quot.sound, frontier_check._native.bv_decide.ax_1_10, frontier_check._native.bv_decide.ax_1_5]",
+            "diagnostic": null,
+            "reports_counterexample": false,
+            "wall_seconds": 0.353957
+          },
+          {
+            "case": "two_arguments",
+            "method": "grind",
+            "accepted": false,
+            "source_sha256": "86737da802840d2b63957e1415d36a61d280d49a24ba235c517c7811376419c2",
+            "axioms": "'frontier_check' depends on axioms: [propext, sorryAx, Quot.sound]",
+            "diagnostic": "Proof.lean:6:2: error: `grind` failed",
+            "reports_counterexample": false,
+            "wall_seconds": 0.379564
+          },
+          {
+            "case": "two_arguments",
+            "method": "default_bv",
+            "accepted": false,
+            "source_sha256": "58f83fbe649d2762f79f75e43e24ea16f1d67fbe9a0459fe219f03acb5997201",
+            "axioms": "'frontier_check' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]",
+            "diagnostic": "Proof.lean:6:2: error: The prover found a potentially spurious counterexample:",
+            "reports_counterexample": true,
+            "wall_seconds": 0.285848
+          },
+          {
+            "case": "two_arguments",
+            "method": "uf_bv",
+            "accepted": false,
+            "source_sha256": "42a1812ec974aac9a93e5164eaa934e15ea0497ade7981f63e6ba23e09b7977d",
+            "axioms": "'frontier_check' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]",
+            "diagnostic": "Proof.lean:6:13: error: Invalid configuration option `uf` for `Lean.Elab.Tactic.BVDecide.BVDecideConfig`",
+            "reports_counterexample": true,
+            "wall_seconds": 0.290922
+          }
+        ]
+      },
+      {
+        "version": "Lean (version 4.36.0, x86_64-unknown-linux-gnu, commit 611c117bfaf7b7ae1cfcf246ce6fba31e8f509e9, Release)",
+        "proofs": [
+          {
+            "case": "one_argument",
+            "method": "explicit_congruence",
+            "accepted": true,
+            "source_sha256": "6fe21b008a720b72a5cd11bc5a5b88feb4ed24c9c2a82601d4c35285a2c69a96",
+            "axioms": "'frontier_check' depends on axioms: [propext, Classical.choice, Quot.sound, frontier_check._native.bv_decide.ax_1_5]",
+            "diagnostic": null,
+            "reports_counterexample": false,
+            "wall_seconds": 0.262213
+          },
+          {
+            "case": "one_argument",
+            "method": "grind",
+            "accepted": true,
+            "source_sha256": "7c8d9461cefdcf950c8fd68eef8b17e64143fb0169e4ba9c369e3f523bc0c8ba",
+            "axioms": "'frontier_check' depends on axioms: [propext, Classical.choice, Quot.sound]",
+            "diagnostic": null,
+            "reports_counterexample": false,
+            "wall_seconds": 0.302231
+          },
+          {
+            "case": "one_argument",
+            "method": "default_bv",
+            "accepted": false,
+            "source_sha256": "c95911c292466753ecc92e350623a20a05059119d47456454d8f37b9b7d1e341",
+            "axioms": "'frontier_check' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]",
+            "diagnostic": "Proof.lean:6:2: error: The prover found a potentially spurious counterexample:",
+            "reports_counterexample": true,
+            "wall_seconds": 0.291545
+          },
+          {
+            "case": "one_argument",
+            "method": "uf_bv",
+            "accepted": true,
+            "source_sha256": "6135e8f24915d100b896cbd72d68747f0f344cedd5fe3b8dbbd1d6d82ce8a832",
+            "axioms": "'frontier_check' depends on axioms: [propext, Classical.choice, Quot.sound, frontier_check._native.bv_decide.ax_1_5]",
+            "diagnostic": null,
+            "reports_counterexample": false,
+            "wall_seconds": 0.323651
+          },
+          {
+            "case": "two_arguments",
+            "method": "explicit_congruence",
+            "accepted": true,
+            "source_sha256": "bdf54105eb4ca0ab9276fc5ddd7f32ff257c7d8e004c235a98a28be8c1b57ffc",
+            "axioms": "'frontier_check' depends on axioms: [propext, Classical.choice, Quot.sound, frontier_check._native.bv_decide.ax_1_10, frontier_check._native.bv_decide.ax_1_5]",
+            "diagnostic": null,
+            "reports_counterexample": false,
+            "wall_seconds": 0.323666
+          },
+          {
+            "case": "two_arguments",
+            "method": "grind",
+            "accepted": false,
+            "source_sha256": "86737da802840d2b63957e1415d36a61d280d49a24ba235c517c7811376419c2",
+            "axioms": "'frontier_check' depends on axioms: [propext, sorryAx, Quot.sound]",
+            "diagnostic": "Proof.lean:6:2: error: `grind` failed",
+            "reports_counterexample": false,
+            "wall_seconds": 0.38816
+          },
+          {
+            "case": "two_arguments",
+            "method": "default_bv",
+            "accepted": false,
+            "source_sha256": "58f83fbe649d2762f79f75e43e24ea16f1d67fbe9a0459fe219f03acb5997201",
+            "axioms": "'frontier_check' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]",
+            "diagnostic": "Proof.lean:6:2: error: The prover found a potentially spurious counterexample:",
+            "reports_counterexample": true,
+            "wall_seconds": 0.25575
+          },
+          {
+            "case": "two_arguments",
+            "method": "uf_bv",
+            "accepted": true,
+            "source_sha256": "42a1812ec974aac9a93e5164eaa934e15ea0497ade7981f63e6ba23e09b7977d",
+            "axioms": "'frontier_check' depends on axioms: [propext, Classical.choice, Quot.sound, frontier_check._native.bv_decide.ax_1_5]",
+            "diagnostic": null,
+            "reports_counterexample": false,
+            "wall_seconds": 0.258258
+          },
+          {
+            "case": "invalid_two_arguments",
+            "method": "uf_bv",
+            "accepted": false,
+            "source_sha256": "d2935715b575d036385951f94cf119c7c25cefc6b0eab576fbeaf351aa050d2e",
+            "axioms": "'frontier_check' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]",
+            "diagnostic": "Proof.lean:6:2: error: - The prover used the following expressions as uninterpreted functions:",
+            "reports_counterexample": true,
+            "wall_seconds": 0.273907
+          }
+        ]
+      }
+    ],
+    "retained_asset": "Reusable +uf proof pattern on both arities",
+    "causal_invention_improvement": "unproven",
+    "economic_effect": "unproven",
+    "observed_at": "2026-11-22T19:43:54.210019+00:00",
+    "toolchain_archives": {
+      "4.35.0": {
+        "bytes": 594481375,
+        "sha256": "7289597a44543246c9227b8cae501767e095ce17f6d448b95fc4a8dc97268f6d",
+        "url": "https://github.com/leanprover/lean4/releases/download/v4.35.0/lean-4.35.0-linux.tar.zst"
+      },
+      "4.36.0": {
+        "bytes": 607649028,
+        "sha256": "2b7ab1ed8b92d2e6abfaf41344823b510064dbc9c0260cac73eb496ab2dea6eb",
+        "url": "https://github.com/leanprover/lean4/releases/download/v4.36.0/lean-4.36.0-linux.tar.zst"
+      }
+    },
+    "toolchain_rehearsal": "The first partial toolchain extraction lacked bundled C++ and unwind libraries. Both releases were rerun after the full solver runtime was restored."
   }
 }
