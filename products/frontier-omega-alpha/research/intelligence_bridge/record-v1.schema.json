@@ -39,7 +39,8 @@
       "enum": [
         "upstream-release",
         "prusa-retrofit",
-        "lean-bitvector"
+        "lean-bitvector",
+        "hf-harness-adapter"
       ]
     },
     "source_task_id": {
@@ -123,6 +124,39 @@
           },
           "evidence_location": {
             "type": "string"
+          },
+          "artifact": {
+            "type": "object",
+            "properties": {
+              "repository": {
+                "type": "string"
+              },
+              "file": {
+                "type": "string"
+              },
+              "revision": {
+                "type": "string"
+              },
+              "sha256": {
+                "type": "string"
+              },
+              "license": {
+                "type": "string"
+              },
+              "bytes": {
+                "type": "integer",
+                "minimum": 1
+              }
+            },
+            "required": [
+              "repository",
+              "file",
+              "revision",
+              "sha256",
+              "license",
+              "bytes"
+            ],
+            "additionalProperties": false
           }
         }
       }
@@ -298,7 +332,8 @@
         "independence",
         "complete_cost_categories",
         "resources",
-        "experiment_receipt"
+        "experiment_receipt",
+        "input_lock"
       ],
       "additionalProperties": false,
       "properties": {
@@ -367,6 +402,43 @@
             "object",
             "null"
           ]
+        },
+        "input_lock": {
+          "type": "array",
+          "maxItems": 2,
+          "items": {
+            "type": "object",
+            "properties": {
+              "repository": {
+                "type": "string"
+              },
+              "file": {
+                "type": "string"
+              },
+              "revision": {
+                "type": "string"
+              },
+              "sha256": {
+                "type": "string"
+              },
+              "license": {
+                "type": "string"
+              },
+              "bytes": {
+                "type": "integer",
+                "minimum": 1
+              }
+            },
+            "required": [
+              "repository",
+              "file",
+              "revision",
+              "sha256",
+              "license",
+              "bytes"
+            ],
+            "additionalProperties": false
+          }
         }
       }
     },

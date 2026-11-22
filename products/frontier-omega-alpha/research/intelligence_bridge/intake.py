@@ -13,6 +13,7 @@ from .. import scheduled
 from ..__main__ import BridgeError, through_egress_proxy
 from ..economic_alpha import observations as alpha_sources, study as alpha_study
 from ..reflective_gate import assess_source_groups
+from . import adapter
 
 TASK = '6b034cc5c6f48191ba3a73193f5d0f6c'
 CAPSULE = 'frontier-omega-alpha/public-finding-capsule-v1'
@@ -85,6 +86,11 @@ def capsule(raw, now=None):
     if value['profile'] == 'prusa-retrofit':
         if tuple(value[key] for key in ('source', 'baseline', 'version')) != ('prusa', 'stock-290', 'ht-400-2026-10-21'):
             raise ValueError('Unregistered OEM event and comparator')
+    elif value['profile'] == 'hf-harness-adapter':
+        if (value['source'] != 'qwen_harness_adapter' or value['baseline'] == value['version']
+                or any(not isinstance(value[key], str) or not GITHUB_SHA.fullmatch(value[key])
+                       for key in ('baseline', 'version'))):
+            raise ValueError('Use the registered adapter and immutable GGUF revisions')
     elif value['profile'] in ('upstream-release', 'lean-bitvector'):
         if (not isinstance(value['source'], str) or value['source'] not in scheduled.SOURCES
                 or any(not isinstance(value[key], str) or len(value[key]) > 40 or not VERSION.fullmatch(value[key])
@@ -109,6 +115,8 @@ def event_id(value):
 
 
 def fetch_evidence(value, transport=through_egress_proxy, oem=alpha_sources.observe_source):
+    if value['profile'] == 'hf-harness-adapter':
+        return adapter.observe(value['baseline'], value['version'], transport), None, adapter.RELEASE_DAY, True
     if value['profile'] == 'prusa-retrofit':
         protocol = alpha_study.named('protocol.json')
         with ThreadPoolExecutor(max_workers=4) as pool:
@@ -152,8 +160,9 @@ def history(raw):
         if (not isinstance(row, dict) or set(row) != {'id', 'scope', 'version', 'phase', 'effective_on', 'at', 'digest'}
                 or not isinstance(row['id'], str) or not HASH.fullmatch(row['id'])
                 or not isinstance(row['digest'], str) or not HASH.fullmatch(row['digest'])
-                or row['scope'] not in {*scheduled.SOURCES, 'prusa'}
-                or not isinstance(row['version'], str) or (not VERSION.fullmatch(row['version']) and row['version'] != 'ht-400-2026-10-21')
+                or row['scope'] not in {*scheduled.SOURCES, 'prusa', 'qwen_harness_adapter'}
+                or not isinstance(row['version'], str) or (not VERSION.fullmatch(row['version'])
+                    and not GITHUB_SHA.fullmatch(row['version']) and row['version'] != 'ht-400-2026-10-21')
                 or (row['effective_on'] is not None and not DAY.fullmatch(row['effective_on']))
                 or row['phase'] not in HOLDS | {'detected', 'experiment-prepared', 'technically-verified'}):
             raise ValueError('Invalid history entry')
@@ -184,6 +193,16 @@ def observe_again(ledger, finding, phase, now):
 
 
 def experiment_plan(value):
+    if value['profile'] == 'hf-harness-adapter':
+        return {'id': 'local-gguf-harness-adapter-matched-trial',
+                'command': None,
+                'comparison': 'Same pinned base, harness, settings and resources with and without the adapter, plus the best authorized incumbent',
+                'acceptance': 'An independent task checker verifies 12–20 fresh maintenance tasks. Compare all costs, retries and human work.',
+                'falsifier': 'Local load, acceptance, resource economy or strongest alternative defeats the proposed benefit',
+                'purpose': 'Test whether an already trained adapter makes a local coding workflow more productive on authorized work',
+                'asset_contract': 'Pinned weights, harness configuration and independent acceptance evidence',
+                'successor': 'Transfer the matched process to a different authorized software task family',
+                'bounded_runner': False}
     if value['profile'] == 'prusa-retrofit':
         return {'id': 'alpha-1-retrofit-replay', 'command': 'python3 -m research.economic_alpha qualify',
                 'comparison': 'Same supported device, requirement and authorized data before and after the documented retrofit',
@@ -267,13 +286,15 @@ def receive(raw, ledger, reception, now=None, evidence=fetch_evidence, run_regis
         'change': {'publisher_profile': value['source'], 'prior': value['baseline'], 'current': value['version'],
                    'material_constraint_link': material, 'reported_improvement': None,
                    'independently_measured': experiment['verification'] if status == 'technically-verified' else None,
-                   'access_and_license': 'Verify on approved source and actual permitted deployment',
+                   'access_and_license': ('Pinned public Apache-2.0 GGUF records. Local capacity and task authority remain to be qualified.'
+                                          if value['profile'] == 'hf-harness-adapter' else 'Verify on approved source and actual permitted deployment'),
                    'uncertainty': 'A publisher record alone cannot establish capability or independent commercial evidence'},
         'opportunity': {'purpose': plan['purpose'], 'binding_condition': plan['comparison'], 'missing_means': plan['id'],
                         'structural_transfer': None, 'beneficiary': None, 'payer': None,
                         'permissions': 'Owner approval for deployment, private data, payments and publication',
                         'existing_alternative': plan['comparison']},
-        'evaluation': {**plan, 'identical_inputs_and_authority': True, 'independence': assess_source_groups(
+        'evaluation': {**plan, 'input_lock': [item['artifact'] for item in sources if 'artifact' in item],
+            'identical_inputs_and_authority': True, 'independence': assess_source_groups(
             item['publisher'] for item in sources), 'complete_cost_categories': alpha_study.named('protocol.json')['cost_categories'],
             'resources': 'Only reviewed local or standard GitHub compute', 'experiment_receipt': experiment},
         'asset': {'verified_identity': experiment['s1_asset_sha256'] if status == 'technically-verified' else None,

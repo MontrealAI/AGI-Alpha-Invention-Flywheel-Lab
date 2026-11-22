@@ -6,6 +6,8 @@ The authorized source is **FRONTIER Ω ALPHA — Possible Now**, task `6b034cc5c
 
 The documented GitHub app provides repository retrieval and scheduled GitHub event triggers. Those capabilities do not demonstrate a scheduled research run writing a PR. Interactive Work can create a branch and PR with its authorized GitHub actions, as demonstrated by the separate ALPHA-1 engineering submission. A runtime permission exposed to interactive Work is distinct from permission granted to the scheduled task. This release implements an explicitly reviewed manual transfer. A scheduled GitHub write remains unverified and the saved task is untouched. [Scheduled tasks](https://help.openai.com/en/articles/10291617-scheduled-tasks-in-chatgpt) · [GitHub connection in ChatGPT](https://help.openai.com/en/articles/11145903-connecting-github-to-chatgpt)
 
+The first genuine result was reviewed with the owner's explicit approval for one public draft. The validator read its single immutable file from GitHub, verified three primary records and prepared the matched experiment with two pinned public artifacts. Replaying the same draft returned `duplicate`. The local validator used the live draft. The protected hosted intake and model benchmark still require their own approvals and evidence. [Approved one-file submission](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/pull/546) · [Qualification evidence](evidence/INTELLIGENCE-BRIDGE.json)
+
 ## Submit one reviewed public finding
 
 1. Open the named task, select a result that warrants action, and review the proposed **public capsule** in ChatGPT. The projection contains the allowlisted task ID, public source profile and version transition, two UTC timestamps and a declared transfer method. Exclude all conversation text, confidential analysis, private materials, credentials, alternative-task output and customer records. Keep private findings in their original workspace.
@@ -20,7 +22,7 @@ python3 -m research.intelligence_bridge prepare --capsule /private/reviewed-caps
   --disclosure-reviewed --output /private/frontier-prepared
 ```
 
-Choose `lean-bitvector` for the registered v4.35.0 to v4.36.0 Lean comparison, `prusa-retrofit` for the dated ALPHA-1 catalog condition, or `upstream-release` for a named release in the existing Radar registry. The latter establishes a publisher observation and leaves a specific hypothesis and experiment to review. Unknown profiles remain in ChatGPT until a source adapter and policy receive normal review. No URL or free-form text can be supplied in place of these fields.
+Choose `lean-bitvector` for the registered v4.35.0 to v4.36.0 Lean comparison, `prusa-retrofit` for the dated ALPHA-1 catalog condition, `hf-harness-adapter` for the registered Qwen GGUF artifact and baseline revisions, or `upstream-release` for a named release in the existing Radar registry. The general release profile verifies a publisher observation and leaves a specific experiment to review. The model profile verifies public metadata and prepares a matched local trial. It fetches no model weights. Unknown profiles remain in ChatGPT until a source adapter and policy receive normal review. No URL or free-form text can be supplied in place of these fields.
 
 ## GitHub operator procedure
 
@@ -54,6 +56,8 @@ A future scheduled-write amendment would replace only the explicit no-upload sen
 ## Français
 
 La source autorisée est la tâche **FRONTIER Ω ALPHA — Possible Now**, réglée aux trois heures dans le fuseau de Toronto. Elle garde ses résultats dans ChatGPT et interdit la transmission automatique vers GitHub. Le flux disponible passe par la sélection et l’autorisation explicites d’une capsule publique. Une action interactive de Work n’établit pas qu’une tâche planifiée peut écrire dans GitHub sans intervention.
+
+La première soumission approuvée contient un seul fichier. Le validateur l’a relu sur GitHub, a vérifié trois pièces publiques et a préparé l’essai comparatif avec deux artefacts identifiés par révision. Une seconde lecture a détecté le doublon. L’essai sur le modèle et la réception hébergée sous protections restent à qualifier. [Soumission approuvée](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/pull/546)
 
 1. Relisez le résultat dans la tâche. Sélectionnez un changement précis. Vérifiez dans ChatGPT la capsule publique proposée, qui contient uniquement le profil de la source, la version précédente, la nouvelle version, les deux dates et le mode de remise. Conservez toute analyse interne et tout dossier privé dans son espace d’origine.
 2. Demandez **« Soumets cette capsule publique vérifiée à FRONTIER Ω ALPHA avec le connecteur GitHub. Publie uniquement la capsule validée. »** Le flux prépare le fichier et la branche. Un opérateur peut aussi téléverser ce même fichier JSON par l’interface GitHub. N’ajoutez aucun extrait de conversation à la demande de fusion. Un cycle sans résultat ne crée aucune publication.

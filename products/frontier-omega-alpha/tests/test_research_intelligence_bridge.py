@@ -6,7 +6,7 @@ import json
 import unittest
 
 from research.economic_alpha import study
-from research.intelligence_bridge import github_intake, intake, member
+from research.intelligence_bridge import adapter, github_intake, intake, member
 
 NOW = datetime(2026, 11, 22, 21, tzinfo=timezone.utc)
 WALL = '2026-11-22T20:01:00Z'
@@ -99,6 +99,36 @@ class FindingsTests(unittest.TestCase):
         material = intake.receive(intake.canonical(finding('lean-bitvector')), generic['ledger'], LOCAL, NOW, release_evidence)
         self.assertTrue(material['record']['reopened'])
         self.assertFalse(material['record']['evaluation']['bounded_runner'])
+
+    def test_registered_gguf_requires_public_pinned_files_and_prepares_without_downloading(self):
+        value = finding('hf-harness-adapter', source='qwen_harness_adapter', baseline='b' * 40, version='a' * 40)
+        paths = {
+            'https://huggingface.co/api/models/' + adapter.BASE + '/revision/' + 'b' * 40 + '?blobs=true':
+                (adapter.BASE, adapter.BASE_FILE, 'b' * 40),
+            'https://huggingface.co/api/models/' + adapter.ADAPTER + '/revision/' + 'a' * 40 + '?blobs=true':
+                (adapter.ADAPTER, adapter.ADAPTER_FILE, 'a' * 40),
+        }
+
+        def read(url, hosts):
+            self.assertEqual(hosts, frozenset({'huggingface.co'}))
+            if url == adapter.RECIPE:
+                return {'sha256': 'c' * 64, 'text': 'November 20, 2026. Harness adapter for Qwen3.8-27B.'}
+            name, filename, revision = paths[url]
+            return {'sha256': 'c' * 64, 'text': json.dumps({'id': name, 'private': False, 'gated': False,
+                      'sha': revision, 'cardData': {'license': 'apache-2.0'},
+                      'siblings': [{'rfilename': filename, 'lfs': {'sha256': 'd' * 64, 'size': 99}}]})}
+
+        def check(candidate):
+            return intake.fetch_evidence(candidate, transport=read)
+
+        received = intake.receive(intake.canonical(value), EMPTY, REST, NOW, evidence=check, run_registered=True)
+        self.assertEqual(received['disposition'], 'experiment-prepared')
+        self.assertEqual(len(received['record']['source_evidence']), 3)
+        self.assertEqual({row['revision'] for row in received['record']['evaluation']['input_lock']}, {'a' * 40, 'b' * 40})
+        self.assertIsNone(received['record']['evaluation']['experiment_receipt'])
+        self.assertFalse(received['record']['evaluation']['bounded_runner'])
+        with self.assertRaises(ValueError):
+            intake.capsule(intake.canonical({**value, 'version': 'latest'}), NOW)
 
 
 class GitHubReceiptTests(unittest.TestCase):
