@@ -1,0 +1,103 @@
+{
+  "source_sha256": "506b0866fa1a410e8ddda8380a3472b5f7fb5eb0812073b0e99d82211d290f66",
+  "zone_scenarios": 797,
+  "independent_zone_distance_checks": 9564,
+  "maximum_difference": 0.0,
+  "all_retained_zone_reachability_equal": true,
+  "feeder_cut_certificates": [
+    {
+      "target": 2,
+      "failed_edge_index": 102,
+      "failed_edge": [
+        63,
+        62,
+        1.090458488
+      ],
+      "all_other_sites_disconnected": true
+    },
+    {
+      "target": 5,
+      "failed_edge_index": 184,
+      "failed_edge": [
+        119,
+        118,
+        1.090458488
+      ],
+      "all_other_sites_disconnected": true
+    },
+    {
+      "target": 7,
+      "failed_edge_index": 321,
+      "failed_edge": [
+        215,
+        214,
+        1.090458488
+      ],
+      "all_other_sites_disconnected": true
+    }
+  ],
+  "onsite_independent_optimum_and_assignments": [
+    {
+      "deadline": 5,
+      "case": "parent",
+      "lower_bound": 9000,
+      "onsite_empty_path_assignment_verified_scenarios": 797
+    },
+    {
+      "deadline": 5,
+      "case": "successor",
+      "lower_bound": 12000,
+      "onsite_empty_path_assignment_verified_scenarios": 797
+    },
+    {
+      "deadline": 5,
+      "case": "ordinary_equal_content_successor",
+      "lower_bound": 12000,
+      "onsite_empty_path_assignment_verified_scenarios": 797
+    },
+    {
+      "deadline": 10,
+      "case": "parent",
+      "lower_bound": 9000,
+      "onsite_empty_path_assignment_verified_scenarios": 797
+    },
+    {
+      "deadline": 10,
+      "case": "successor",
+      "lower_bound": 12000,
+      "onsite_empty_path_assignment_verified_scenarios": 797
+    },
+    {
+      "deadline": 10,
+      "case": "ordinary_equal_content_successor",
+      "lower_bound": 12000,
+      "onsite_empty_path_assignment_verified_scenarios": 797
+    },
+    {
+      "deadline": 15,
+      "case": "parent",
+      "lower_bound": 9000,
+      "onsite_empty_path_assignment_verified_scenarios": 797
+    },
+    {
+      "deadline": 15,
+      "case": "successor",
+      "lower_bound": 12000,
+      "onsite_empty_path_assignment_verified_scenarios": 797
+    },
+    {
+      "deadline": 15,
+      "case": "ordinary_equal_content_successor",
+      "lower_bound": 12000,
+      "onsite_empty_path_assignment_verified_scenarios": 797
+    }
+  ],
+  "original_and_zone_failures_preserved": true,
+  "claim": "Onsite provision is optimal in the authored model; conventional identical provision ties. No commercial superiority or successor enabling advantage.",
+  "audited_files_sha256": {
+    "run.py": "7f0d53f231fdb84b990d6ffdbd3b955e5f0e1f23c85dabb813a7ba0d776aa9e8",
+    "run_zone.py": "cfbffe126943e9ece2636882d1c4603fec4b8881c9224da65fe6258d407a877d",
+    "run_onsite.py": "fe941415e4243994447b457cc5e7ff665bc9bdf082a3c9bfffdf48887d2699ea",
+    "ONSITE_RESULT.json": "989a31a9f28c0e9e9ee3295e018827cd7e5b87dd86a550ae6989ee672fbe4d70"
+  }
+}
