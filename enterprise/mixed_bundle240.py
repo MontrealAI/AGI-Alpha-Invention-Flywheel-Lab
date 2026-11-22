@@ -112,11 +112,20 @@ def optimize_mixed_bundle(publics, quotes, regime, model, *,
         total = sum(component_prices)
         conditional_purchase_probability = 0.
         for value_factor in VALUE_FACTORS:
-            rows = [utilities(p["anchor_usd"] * value_factor, price,
+            # Mixed outsiders buying from us separately receive only the
+            # DECLARED standalone public quote, never the full-bundle discount.
+            rows = [utilities(p["anchor_usd"] * value_factor, q["price"],
                               q["rival"]["price"], p, rr)
-                    for p, q, price in zip(pp, qq, component_prices)]
-            # One approval: conservatively keep the largest component friction.
-            bundle_utility = sum(row[0] for row in rows) + sum(p["friction_usd"] for p in pp) - max(p["friction_usd"] for p in pp)
+                    for p, q in zip(pp, qq)]
+            # The all-ours complete bundle alone gets the searched discount.
+            # One shared approval is costed conservatively at max friction.
+            discounted_bundle_own = [
+                utilities(p["anchor_usd"] * value_factor, price,
+                          q["rival"]["price"], p, rr)[0]
+                for p, q, price in zip(pp, qq, component_prices)]
+            bundle_utility = (sum(discounted_bundle_own) +
+                              sum(p["friction_usd"] for p in pp) -
+                              max(p["friction_usd"] for p in pp))
             temperature = sum(p["anchor_usd"] for p in pp) * rr["temperature_ratio"]
             conditional_purchase_probability += mixed_choice_probability(
                 rows, bundle_utility, model, temperature) / len(VALUE_FACTORS)
