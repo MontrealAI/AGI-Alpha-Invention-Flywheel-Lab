@@ -65,6 +65,18 @@ export async function advance({ rpc, state, catalog, masterKey, revoked = [], no
     return observed.get(id);
   }
 
+  const previousMembers = Object.values(updated.active);
+  for (let start = 0; start < previousMembers.length; start += 6) {
+    const group = previousMembers.slice(start, start + 6);
+    const entitled = await Promise.all(group.map(current));
+    for (let i = 0; i < group.length; i++) {
+      const member = group[i];
+      if (entitled[i] && !revokedIds.has(member.id)) continue;
+      recordOutcome(updated, member.id, member.tx, 'revoked');
+      delete updated.active[member.wallet];
+    }
+  }
+
   // Prepare at most six wallet checks at a time; process verified events in chain order.
   for (let start = 0; start < batch.events.length; start += 6) {
     const group = batch.events.slice(start, start + 6);
@@ -93,30 +105,20 @@ export async function advance({ rpc, state, catalog, masterKey, revoked = [], no
   }
 
   const members = Object.values(updated.active);
-  for (let start = 0; start < members.length; start += 6) {
-    const group = members.slice(start, start + 6);
-    const entitled = await Promise.all(group.map(current));
-    for (let i = 0; i < group.length; i++) {
-      const member = group[i];
-      if (!entitled[i] || revokedIds.has(member.id)) {
-        member.state = 'revoked';
-        member.keys = {};
-        continue;
+  for (const member of members) {
+    member.keys = Object.fromEntries(Object.entries(member.keys).filter(([tag]) => tags.has(tag)));
+    const recipient = await validatePublicKey(member.publicKey);
+    for (let index = 0; index < records.length; index++) {
+      const { tag } = records[index];
+      if (Object.hasOwn(member.keys, tag)) continue;
+      const key = releaseKey(catalog[index], masterKey);
+      try {
+        member.keys[tag] = await encapsulate(recipient, key, member.tx, tag);
+      } finally {
+        key.fill(0);
       }
-      member.keys = Object.fromEntries(Object.entries(member.keys).filter(([tag]) => tags.has(tag)));
-      const recipient = await validatePublicKey(member.publicKey);
-      for (let index = 0; index < records.length; index++) {
-        const { tag } = records[index];
-        if (Object.hasOwn(member.keys, tag)) continue;
-        const key = releaseKey(catalog[index], masterKey);
-        try {
-          member.keys[tag] = await encapsulate(recipient, key, member.tx, tag);
-        } finally {
-          key.fill(0);
-        }
-      }
-      member.state = Object.keys(member.keys).length ? 'provisioned' : 'eligible';
     }
+    member.state = Object.keys(member.keys).length ? 'provisioned' : 'eligible';
   }
 
   const canonical = await rpc('eth_getBlockByNumber', [quantity(BigInt(snapshot.number)), false]);

@@ -2,7 +2,8 @@ import hashlib
 import json
 import unittest
 
-from research.scheduled import SOURCES, observe_releases
+from research.lean_delta import EXPERIMENT, independent_reference
+from research.scheduled import SOURCES, observe_releases, proposal
 
 
 class ScheduledResearchTests(unittest.TestCase):
@@ -33,6 +34,15 @@ class ScheduledResearchTests(unittest.TestCase):
         suffix_id[0] = 3
         stale = observe_releases(updated, retrieve)
         self.assertTrue(all(item['state'] == 'unavailable' and 'opportunity' not in item for item in stale.values()))
+
+    def test_observed_lean_delta_has_a_registered_workload_and_independent_witness(self):
+        candidate = proposal('leanprover/lean4', 'verification', {'tag': 'v4.35.0'}, {'tag': 'v4.36.0'})
+        self.assertEqual(candidate['registered_experiment'], EXPERIMENT)
+        self.assertEqual(candidate['technical_verification'], 'pending')
+        reference = independent_reference()
+        self.assertEqual(reference['one_argument_inputs'], 81)
+        self.assertEqual(reference['two_argument_inputs'], 1296)
+        self.assertEqual(reference['invalid_case_witness'], {'x': 0, 'mask': 0, 'value': 0})
 
 
 if __name__ == '__main__':

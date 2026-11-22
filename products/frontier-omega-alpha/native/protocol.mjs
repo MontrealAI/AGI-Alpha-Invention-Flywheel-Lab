@@ -2,6 +2,7 @@ export const DESTINATION = '0x0000000000000000000000000000000000000004';
 export const MAINNET = 1;
 export const TAG = '0x46524f4e544945520101';
 export const WINDOW_SECONDS = 24 * 60 * 60;
+export const MAX_FINALIZED_AGE_SECONDS = 45 * 60;
 export const CIPHERTEXT_FORMAT = 'research-json.browser.v1';
 export const LIBRARY_SCHEMA = 'frontier-omega-alpha/library-v1';
 export const MAX_RELEASES = 12;

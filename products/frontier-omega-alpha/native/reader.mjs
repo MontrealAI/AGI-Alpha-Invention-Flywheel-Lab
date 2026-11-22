@@ -1,7 +1,7 @@
 import { formatEther, getAddress } from 'ethers';
 import { Mainnet, clubLabel } from '../access/chain.mjs';
 import {
-  address, assertLibrary, DESTINATION, encodeEnrollment, enrollmentId, hash, hex, MAX_LIBRARY_BYTES,
+  address, assertLibrary, DESTINATION, encodeEnrollment, enrollmentId, hash, hex, MAX_FINALIZED_AGE_SECONDS, MAX_LIBRARY_BYTES,
   releaseTag, toBase64, WINDOW_SECONDS
 } from './protocol.mjs';
 import { compareDevice, loadDevice } from './device.mjs';
@@ -139,6 +139,10 @@ export async function connectReader(config, prefix, { loopbackTest = false } = {
       };
     }
     if (receipt) return { state: receipt.state, tx: receipt.tx };
+    // A later, caught-up publication can confirm that a missing receipt has aged out.
+    if (saved.phase !== 'draft' && library.openEnrollment && library.updatedAt > saved.expiresAt + MAX_FINALIZED_AGE_SECONDS) {
+      return { state: 'expired_receipt' };
+    }
     if (!saved.tx && saved.phase === 'broadcasting') {
       return { state: saved.expiresAt > Date.now() / 1_000 ? 'awaiting_receipt' : 'expired_receipt' };
     }
