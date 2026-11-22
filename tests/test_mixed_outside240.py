@@ -86,6 +86,23 @@ class MixedOutsideIndependentTests(unittest.TestCase):
                             for c in result["candidate_curve"]))
         self.assertEqual(result["native_financial_authority"], [])
 
+    def test_bundle_discount_not_smuggled_into_unbundled_outside_price(self):
+        # Independent test-only perturbation, NOT a reroll of the frozen
+        # observational experiment. A public standalone price remains $50,
+        # even if the complete-bundle search considers a 30% discount.
+        case = frozen_case()
+        case["quotes"][0]["rival"]["price"] = 25
+        priced = optimize_mixed_bundle(case["publics"], case["quotes"],
+                                      case["regime"], "utility")
+        searched = priced["candidate_curve"][0]
+        self.assertEqual(searched["factor"], .70)
+        # At this rival price, properly priced standalone alternatives do not
+        # crowd out the discounted bundle; incorrectly discounting standalone
+        # items would change this result. No buyer actually purchased it.
+        self.assertAlmostEqual(searched["conditional_choice_probability_on_exposure"], 1.)
+        self.assertGreater(searched["expected_immediate_contribution_per_opportunity"], 0)
+        self.assertEqual(priced["native_financial_authority"], [])
+
     def test_default_source_regression_is_unmodified(self):
         case = frozen_case()
         before = optimize_bundle(case["publics"], case["quotes"], case["regime"], "utility")
