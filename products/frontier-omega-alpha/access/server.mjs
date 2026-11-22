@@ -134,7 +134,7 @@ export function createAccessServer({ siteUrl, localHttp = false, chain, store, w
         nonce,
         issuedAt: new Date(now).toISOString(),
         expirationTime: new Date(expires).toISOString(),
-        resources: [club ? 'urn:frontier-omega-alpha:club:' + club + '.club.agi.eth' : 'urn:frontier-omega-alpha:token']
+        resources: [club ? 'urn:frontier-omega-alpha:club:' + encodeURIComponent(club) + '.club.agi.eth' : 'urn:frontier-omega-alpha:token']
       }).prepareMessage();
       store.challenge(nonce, wallet, club, message, expires);
       return { nonce, message };

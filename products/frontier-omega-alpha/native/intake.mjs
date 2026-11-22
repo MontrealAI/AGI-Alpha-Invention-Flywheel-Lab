@@ -1,5 +1,5 @@
 import { Transaction } from 'ethers';
-import { DESTINATION, TAG, WINDOW_SECONDS, decodeEnrollment, hash } from './protocol.mjs';
+import { DESTINATION, TAG, MAX_FINALIZED_AGE_SECONDS, WINDOW_SECONDS, decodeEnrollment, hash } from './protocol.mjs';
 import { validatePublicKey } from './hpke.mjs';
 
 const MAX_BLOCKS = 120;
@@ -55,7 +55,7 @@ async function blockAt(rpc, blockTag, full = false) {
 
 export async function readFinalized(rpc, now = Date.now) {
   const [chain, head] = await Promise.all([rpc('eth_chainId', []), blockAt(rpc, 'finalized')]);
-  if (chain !== '0x1' || now() / 1_000 - head.time > 45 * 60 || head.time > now() / 1_000 + 12) {
+  if (chain !== '0x1' || now() / 1_000 - head.time > MAX_FINALIZED_AGE_SECONDS || head.time > now() / 1_000 + 12) {
     throw Error('Mainnet finalized head is missing or stale');
   }
   return head;

@@ -14,15 +14,15 @@ export async function makeDeviceKey() {
   return { privateKey: pair.privateKey, publicKey: toBase64(await crypto.subtle.exportKey('raw', pair.publicKey)) };
 }
 
-export async function encapsulate(recipientPublicKey, key, tx, tag) {
+export async function encapsulate(recipientPublicKey, key, proof, tag, schema) {
   const sender = await suite.createSenderContext({ recipientPublicKey, info });
-  return { enc: toBase64(sender.enc), body: toBase64(await sender.seal(key, envelopeContext(tx, tag))) };
+  return { enc: toBase64(sender.enc), body: toBase64(await sender.seal(key, envelopeContext(proof, tag, schema))) };
 }
 
-export async function decapsulate(device, box, tx, tag) {
+export async function decapsulate(device, box, proof, tag, schema) {
   const recipientKey = { privateKey: device.privateKey, publicKey: await validatePublicKey(device.publicKey) };
   const recipient = await suite.createRecipientContext({ recipientKey, enc: publicKeyBytes(box.enc), info });
-  const key = new Uint8Array(await recipient.open(fromBase64(box.body, 48), envelopeContext(tx, tag)));
+  const key = new Uint8Array(await recipient.open(fromBase64(box.body, 48), envelopeContext(proof, tag, schema)));
   if (key.length !== 32) throw Error('Invalid provisioned content key');
   return key;
 }

@@ -1,27 +1,35 @@
 import { getAddress } from 'ethers';
 import { Mainnet } from '../access/chain.mjs';
 import { decryptAsset, releaseKey } from '../access/crypto.mjs';
-import { assertLibrary, assertRecord, enrollmentId, hash, LIBRARY_SCHEMA, MAX_MEMBERS, MAX_RELEASES, releaseTag } from './protocol.mjs';
+import { assertLibrary, assertRecord, enrollmentId, hash, LIBRARY_SCHEMA, MAX_MEMBERS, MAX_RELEASES, releaseTag, SIGNED_LIBRARY_SCHEMA } from './protocol.mjs';
 import { validateRecord } from '../access/records.mjs';
 import { encapsulate, validatePublicKey } from './hpke.mjs';
 import { quantity, scanEnrollments } from './intake.mjs';
+import { authenticateSignedEnrollment } from './signed-enrollment.mjs';
 
 export function initialState(cursor) {
   return { cursor, active: {}, outcomes: {}, publication: null, releases: {} };
 }
 
-function recordOutcome(state, id, tx, result) {
-  if (Object.hasOwn(state.outcomes, id)) delete state.outcomes[id];
-  state.outcomes[id] = { tx, state: result, keys: {} };
-  const oldest = Object.keys(state.outcomes);
-  if (oldest.length > MAX_MEMBERS) delete state.outcomes[oldest[0]];
-}
-
-export async function advance({ rpc, state, catalog, masterKey, revoked = [], now = Date.now, scanner = scanEnrollments }) {
+export async function advance({
+  rpc, state, catalog, masterKey, revoked = [], now = Date.now, scanner = scanEnrollments,
+  signedRequests = null, readerOrigin
+}) {
   if (!Array.isArray(catalog) || !catalog.length || catalog.length > MAX_RELEASES) throw Error('Expected approved encrypted releases');
   if (!Array.isArray(revoked) || revoked.length > 1024 || !revoked.every(hash)) throw Error('Invalid enrollment revocation list');
   const revokedIds = new Set(revoked);
   const updated = structuredClone(state);
+  const signed = signedRequests !== null;
+  const schema = signed ? SIGNED_LIBRARY_SCHEMA : LIBRARY_SCHEMA;
+  const proofField = signed ? 'proof' : 'tx';
+  if (state.publication && state.publication.schema !== schema) throw Error('Publisher enrollment format changed');
+  if (signed && (!Array.isArray(signedRequests) || signedRequests.length > 48)) throw Error('Invalid approved enrollment batch');
+  function recordOutcome(id, candidate, result) {
+    if (Object.hasOwn(updated.outcomes, id)) delete updated.outcomes[id];
+    updated.outcomes[id] = { [proofField]: candidate[proofField], state: result, keys: {} };
+    const oldest = Object.keys(updated.outcomes);
+    if (oldest.length > MAX_MEMBERS) delete updated.outcomes[oldest[0]];
+  }
   const records = [];
   const tags = new Set();
   const identifiers = new Set();
@@ -53,16 +61,51 @@ export async function advance({ rpc, state, catalog, masterKey, revoked = [], no
     throw Error('The release version registry requires an authorized archival checkpoint');
   }
 
-  const batch = await scanner(rpc, updated.cursor, { now });
-  updated.cursor = batch.cursor;
+  const batch = signed ? { cursor: updated.cursor, events: [], caughtUp: true } : await scanner(rpc, updated.cursor, { now });
   const chain = new Mainnet(rpc, now);
   const snapshot = await chain.snapshot();
   const observed = new Map();
+
+  if (signed) {
+    for (let start = 0; start < signedRequests.length; start += 6) {
+      const verified = await Promise.all(signedRequests.slice(start, start + 6).map(request =>
+        authenticateSignedEnrollment(request, readerOrigin, chain, snapshot)));
+      for (const event of verified) {
+        if (!event) continue;
+        observed.set(event.wallet + ':' + (event.label ?? ''), Promise.resolve(true));
+        batch.events.push(event);
+      }
+    }
+    batch.events.sort((a, b) => a.registeredAt - b.registeredAt || a.proof.localeCompare(b.proof));
+  }
+  updated.cursor = batch.cursor;
 
   function current(event) {
     const id = event.wallet + ':' + (event.label ?? '');
     if (!observed.has(id)) observed.set(id, chain.entitlement(getAddress(event.wallet), event.label, snapshot));
     return observed.get(id);
+  }
+
+  const previousMembers = Object.values(updated.active);
+  for (let start = 0; start < previousMembers.length; start += 6) {
+    const group = previousMembers.slice(start, start + 6);
+    const entitled = await Promise.all(group.map(current));
+    for (let i = 0; i < group.length; i++) {
+      const member = group[i];
+      if (!revokedIds.has(member.id)) {
+        if (entitled[i]) {
+          if (member.state === 'paused') member.state = 'eligible';
+          continue;
+        }
+        if (signed) {
+          member.keys = {};
+          member.state = 'paused';
+          continue;
+        }
+      }
+      recordOutcome(member.id, member, 'revoked');
+      delete updated.active[member.wallet];
+    }
   }
 
   // Prepare at most six wallet checks at a time; process verified events in chain order.
@@ -73,50 +116,43 @@ export async function advance({ rpc, state, catalog, masterKey, revoked = [], no
       const event = group[i];
       const id = await enrollmentId(event.wallet, event.nonce);
       if (revokedIds.has(id)) {
-        recordOutcome(updated, id, event.tx, 'revoked');
+        recordOutcome(id, event, 'revoked');
         continue;
       }
       const previous = updated.active[event.wallet];
+      if (signed && previous && (event.registeredAt < previous.registeredAt ||
+          (event.registeredAt === previous.registeredAt && event.proof <= previous.proof))) continue;
       const recentNonces = (previous?.usedNonces ?? []).filter(nonce => nonce.expiresAt >= event.registeredAt);
       if (recentNonces.some(nonce => nonce.value === event.nonce) || Object.hasOwn(updated.outcomes, id)) continue;
       if (!entitled[i]) {
-        recordOutcome(updated, id, event.tx, 'denied');
+        recordOutcome(id, event, 'denied');
         continue;
       }
       if ((!previous && Object.keys(updated.active).length >= MAX_MEMBERS) || recentNonces.length >= 32) {
-        recordOutcome(updated, id, event.tx, 'capacity');
+        recordOutcome(id, event, 'capacity');
         continue;
       }
-      if (previous) recordOutcome(updated, previous.id, previous.tx, 'superseded');
+      if (previous) recordOutcome(previous.id, previous, 'superseded');
       updated.active[event.wallet] = { ...event, id, state: 'eligible', keys: {}, usedNonces: [...recentNonces, { value: event.nonce, expiresAt: event.expiresAt }] };
     }
   }
 
   const members = Object.values(updated.active);
-  for (let start = 0; start < members.length; start += 6) {
-    const group = members.slice(start, start + 6);
-    const entitled = await Promise.all(group.map(current));
-    for (let i = 0; i < group.length; i++) {
-      const member = group[i];
-      if (!entitled[i] || revokedIds.has(member.id)) {
-        member.state = 'revoked';
-        member.keys = {};
-        continue;
+  for (const member of members) {
+    if (member.state === 'paused') continue;
+    member.keys = Object.fromEntries(Object.entries(member.keys).filter(([tag]) => tags.has(tag)));
+    const recipient = await validatePublicKey(member.publicKey);
+    for (let index = 0; index < records.length; index++) {
+      const { tag } = records[index];
+      if (Object.hasOwn(member.keys, tag)) continue;
+      const key = releaseKey(catalog[index], masterKey);
+      try {
+        member.keys[tag] = await encapsulate(recipient, key, member[proofField], tag, schema);
+      } finally {
+        key.fill(0);
       }
-      member.keys = Object.fromEntries(Object.entries(member.keys).filter(([tag]) => tags.has(tag)));
-      const recipient = await validatePublicKey(member.publicKey);
-      for (let index = 0; index < records.length; index++) {
-        const { tag } = records[index];
-        if (Object.hasOwn(member.keys, tag)) continue;
-        const key = releaseKey(catalog[index], masterKey);
-        try {
-          member.keys[tag] = await encapsulate(recipient, key, member.tx, tag);
-        } finally {
-          key.fill(0);
-        }
-      }
-      member.state = Object.keys(member.keys).length ? 'provisioned' : 'eligible';
     }
+    member.state = Object.keys(member.keys).length ? 'provisioned' : 'eligible';
   }
 
   const canonical = await rpc('eth_getBlockByNumber', [quantity(BigInt(snapshot.number)), false]);
@@ -128,8 +164,8 @@ export async function advance({ rpc, state, catalog, masterKey, revoked = [], no
 
   for (const record of records) updated.releases[record.id + ':' + record.version] = record.tag;
   const recipients = { ...updated.outcomes };
-  for (const member of members) recipients[member.id] = { tx: member.tx, state: member.state, keys: member.keys };
-  const publication = { schema: LIBRARY_SCHEMA, updatedAt: Math.floor(now() / 1_000), openEnrollment: batch.caughtUp === true && members.length < MAX_MEMBERS, records, recipients };
+  for (const member of members) recipients[member.id] = { [proofField]: member[proofField], state: member.state, keys: member.keys };
+  const publication = { schema, updatedAt: Math.floor(now() / 1_000), openEnrollment: batch.caughtUp === true && members.length < MAX_MEMBERS, records, recipients };
   assertLibrary(publication);
   // Refresh the public heartbeat hourly and on meaningful library changes.
   const old = state.publication;

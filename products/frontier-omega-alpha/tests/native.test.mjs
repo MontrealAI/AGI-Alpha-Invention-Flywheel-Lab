@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { randomBytes } from 'node:crypto';
+import { createCipheriv, hkdfSync, randomBytes } from 'node:crypto';
 import { mkdir, mkdtemp, readFile, readdir, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -84,9 +84,23 @@ test('Issuer enforces independent eligibility, envelopes, nonce idempotency, los
   assert.ok(!published.includes(catalog[0].wrapped.body));
   assert.throws(() => assertLibrary({ ...first.library, records: [{ ...record, wrapped: catalog[0].wrapped }] }));
   const stateBlob = sealState(first.state, key);
-  assert.deepEqual(openState(stateBlob, key), first.state);
-  assert.throws(() => openState(stateBlob, randomBytes(32)));
+  assert.equal(stateBlob.v, 2);
+  assert.deepEqual(openState(stateBlob, key, first.library), first.state);
+  assert.throws(() => openState(stateBlob, randomBytes(32), first.library));
+  assert.throws(() => openState(stateBlob, key, { ...first.library, openEnrollment: false }), /library disagree/);
+  const larger = structuredClone(first.state);
+  larger.publication.records[0].payload.body = Buffer.alloc(128 * 1024, 91).toString('base64url');
+  assert.equal(sealState(larger, key).body.length, stateBlob.body.length, 'the compact checkpoint never repeats encrypted library data');
   assert.ok(!JSON.stringify(stateBlob).includes(tokenWallet.address.toLowerCase()));
+
+  const v1Context = Buffer.from('FRONTIER Ω ALPHA GitHub publisher checkpoint v1');
+  const legacyIv = randomBytes(12);
+  const legacyKey = hkdfSync('sha256', key, Buffer.alloc(32), v1Context, 32);
+  const oldCipher = createCipheriv('aes-256-gcm', legacyKey, legacyIv);
+  oldCipher.setAAD(v1Context);
+  const oldData = Buffer.concat([oldCipher.update(JSON.stringify(first.state)), oldCipher.final(), oldCipher.getAuthTag()]);
+  const legacy = { v: 1, iv: legacyIv.toString('base64url'), body: oldData.toString('base64url') };
+  assert.deepEqual(openState(legacy, key, first.library), first.state);
 
   const repeated = await signEnrollment(tokenWallet, { data: encodeEnrollment(enrollments[0].info), nonce: 5 });
   await f.mine([repeated]);
@@ -97,6 +111,7 @@ test('Issuer enforces independent eligibility, envelopes, nonce idempotency, los
   const secondVersion = [assetFor(key, 2)];
   const rotated = await issue(replay.state, secondVersion);
   assert.deepEqual(rotated.library.recipients[ids[0]], { tx: token.tx, state: 'revoked', keys: {} });
+  assert.equal(Object.hasOwn(rotated.state.active, tokenWallet.address.toLowerCase()), false);
   assert.equal(rotated.library.recipients[ids[1]].state, 'provisioned');
   assert.equal(rotated.library.records[0].version, 2);
   assert.notEqual(rotated.library.records[0].tag, record.tag);
@@ -105,6 +120,16 @@ test('Issuer enforces independent eligibility, envelopes, nonce idempotency, los
   const revoked = await issue(rotated.state, secondVersion, [ids[1]]);
   assert.equal(revoked.library.recipients[ids[1]].state, 'revoked');
   assert.deepEqual(revoked.library.recipients[ids[1]].keys, {});
+  assert.deepEqual(revoked.state.active, {});
+  f.balances.set(tokenWallet.address.toLowerCase(), MINIMUM);
+  const restoredBalance = await issue(revoked.state, secondVersion, [ids[1]]);
+  assert.equal(restoredBalance.library.recipients[ids[0]].state, 'revoked');
+  const renewed = await createEnrollment(tokenWallet, { txNonce: 6 });
+  await f.mine([renewed.raw]);
+  const enrolledAgain = await issue(restoredBalance.state, secondVersion, [ids[1]]);
+  const newId = await enrollmentId(renewed.info.wallet, renewed.info.nonce);
+  assert.equal(enrolledAgain.library.recipients[newId].state, 'provisioned');
+  assert.equal(enrolledAgain.library.recipients[ids[0]].state, 'revoked');
   f.rpcState.outage = true;
   await assert.rejects(issue(rotated.state, secondVersion), /Synthetic RPC outage|cannot be replaced/);
   assert.equal(rotated.library.recipients[ids[0]].state, 'revoked');
@@ -115,7 +140,9 @@ test('Pages staging publishes only ciphertext and isolated reader assets', async
   t.after(() => rm(root, { recursive: true, force: true }));
   const f = fixtureChain();
   const masterKey = randomBytes(32);
-  const result = await advance({ rpc: f.rpc, state: initialState(f.cursor), catalog: [assetFor(masterKey)], masterKey });
+  const result = await advance({
+    rpc: f.rpc, state: initialState(f.cursor), catalog: [assetFor(masterKey)], masterKey, signedRequests: []
+  });
   const file = join(root, 'snapshot.json');
   await writeFile(file, JSON.stringify(result.library));
   const publicPage = join(root, 'frontier-omega-alpha');
