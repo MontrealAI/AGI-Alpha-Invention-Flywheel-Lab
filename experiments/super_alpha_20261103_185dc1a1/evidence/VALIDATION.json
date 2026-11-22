@@ -1,0 +1,64 @@
+{
+  "final_tests": {
+    "elapsed_seconds": 18.499,
+    "errors": 0,
+    "failures": 0,
+    "run": 25
+  },
+  "hosted_exact_source_status": "First dedicated hosted run failed at a9b50b1910c7bd8f229c9d7f2d8ea7003ce13d06. Dependency-only workflow correction requires a new exact-source hosted result; no pass inferred from local tests.",
+  "liquidity_regression": {
+    "positive_profit_preserved_microUSD": 90000000,
+    "requested_spend": "native available cash plus one microUSD",
+    "result": "DEFERRED_WITH_ENTIRE_EXPORT_UNCHANGED_AND_NATIVE_AUDIT_ACCEPTED",
+    "scope": "Separate ephemeral canonical baseline control, never pooled with primary.",
+    "test": "test_positive_profit_without_available_cash_defers_without_erasure"
+  },
+  "native_primary_audit": "ACCEPTED",
+  "pre_campaign_review_corrections": [
+    "Ordinary reference cached public feasible routes and reference output so ordinary reuse has a fair chance.",
+    "Adaptive attacker prediction projected quote/route/cost fields and uses an explicitly dummy buyer, preventing evaluator-owned private buyer preferences entering the attack. Full transcript privacy enumeration still includes every output."
+  ],
+  "retained_initial_failure": {
+    "cause": "Sparse source retrieval lacked unchanged vendor/__init__.py, required by legacy pinned-source engine. All errors occurred before any cost commitment.",
+    "correction": "Retrieved exact original pinned blob and included all unchanged legacy PINS paths in adapter source-copy closure. No acceptance, cost, protocol or old account altered.",
+    "elapsed_seconds": 1.851,
+    "errors": 6,
+    "passed": 1,
+    "stage": "financial adapter tests before primary account creation",
+    "tests": 7
+  },
+  "retained_hosted_failure": {
+    "run_id": 41642657528,
+    "run_url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41642657528",
+    "source_commit": "a9b50b1910c7bd8f229c9d7f2d8ea7003ce13d06",
+    "python_version": "3.12.15",
+    "stage": "Test independent outcomes, disclosure and native continuity",
+    "tests": 25,
+    "passed": 18,
+    "errors": 7,
+    "failures": 0,
+    "error": "ModuleNotFoundError: No module named 'cryptography'",
+    "cause": "The dedicated workflow omitted installation of the existing pinned native-account dependencies required by vendor.alpha_claim.protected_exchange.",
+    "skipped_stages": [
+      "Reproduce every registered case on the exact PR source",
+      "Independently replay the original key-free native research history"
+    ],
+    "verdict": "FAILED_RETAINED_NOT_RETROACTIVELY_RECLASSIFIED"
+  },
+  "hosted_packaging_correction": {
+    "scope": "Workflow prerequisite installation and reproduction documentation only; all nine frozen protocol/core files and original native account preserved.",
+    "install_command": "python -m pip install --only-binary=:all: -r requirements-commercial010.txt",
+    "existing_dependency_specification_git_blob": "a69183f86436c1e7585a7a3c36a1017cfbfe7883",
+    "pinned_dependencies": {
+      "cryptography": "50.0.2",
+      "cffi": "2.1.1",
+      "pycparser": "3.11"
+    },
+    "local_passing_runtime_versions_match": true,
+    "hosted_status": "AWAITING_NEW_EXACT_SOURCE_EXECUTION"
+  },
+  "schema": "super-alpha-185dc1a1/local-validation/v1",
+  "source_commit": "f7ff17a4d24cad1426e0e7d3c1fde690abc2c02e",
+  "technical_cases_independently_checked": 172032,
+  "test_command": "python -m unittest -v experiments.super_alpha_20261103_185dc1a1.test_mechanism experiments.super_alpha_20261103_185dc1a1.test_finance"
+}

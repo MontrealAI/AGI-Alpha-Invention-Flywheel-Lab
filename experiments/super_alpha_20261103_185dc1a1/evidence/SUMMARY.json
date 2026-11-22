@@ -1,0 +1,405 @@
+{
+  "complete_cases_independently_checked": 172032,
+  "decisive_four_quote_witness": {
+    "complete_quotes": [
+      {
+        "excluded": [
+          "p0"
+        ],
+        "public_full_quote_cents": 2140,
+        "public_production_cents": 1600
+      },
+      {
+        "excluded": [
+          "p1"
+        ],
+        "public_full_quote_cents": 2040,
+        "public_production_cents": 1500
+      },
+      {
+        "excluded": [
+          "p2"
+        ],
+        "public_full_quote_cents": 1740,
+        "public_production_cents": 1200
+      },
+      {
+        "excluded": [
+          "p3"
+        ],
+        "public_full_quote_cents": 1640,
+        "public_production_cents": 1100
+      }
+    ],
+    "exact_vectors_reconstructed": 256,
+    "reconstructed_asks_cents": {
+      "p0": 200,
+      "p1": 300,
+      "p2": 600,
+      "p3": 700
+    },
+    "submitted_asks_cents": {
+      "p0": 200,
+      "p1": 300,
+      "p2": 600,
+      "p3": 700
+    },
+    "worlds": 256
+  },
+  "dimensions": {
+    "ask_worlds": 256,
+    "block_rows": 4,
+    "broker_fee_cents": 200,
+    "exclusion_masks": 16,
+    "fixed_full_offer_cost_cents": 340,
+    "modes": [
+      "exact",
+      "coarse"
+    ],
+    "primary_rows": 12,
+    "providers": 4,
+    "queries_per_request": 96,
+    "source_of_numbers": "authored finite test, not commercial measurements",
+    "successor_rows": 16
+  },
+  "evidence_policy": "Compact aggregate evidence plus hash of every deterministic scientific result; regenerate full per-world rows with run.py. No bulk result archive published.",
+  "phase_results": {
+    "primary:coarse": {
+      "accepted_quote_cents_histogram": {
+        "1440": 832,
+        "1840": 1440,
+        "2240": 896,
+        "2640": 144
+      },
+      "complete_cases": 24576,
+      "independent_mismatches": 0,
+      "interpretation": "Counterfactual offer evaluations; repeated quotes are not distinct customers, native orders, collections or profit.",
+      "no_exclusion_max_cap_accepted_worlds": 256,
+      "queries_per_world": 96,
+      "status_counts": {
+        "buyer_declined": 4368,
+        "offer_accepted": 3312,
+        "unavailable": 16896
+      },
+      "worlds": 256
+    },
+    "primary:exact": {
+      "accepted_quote_cents_histogram": {
+        "1140": 145,
+        "1240": 312,
+        "1340": 304,
+        "1440": 100,
+        "1540": 264,
+        "1640": 558,
+        "1740": 522,
+        "1840": 162,
+        "1940": 192,
+        "2040": 344,
+        "2140": 320,
+        "2240": 104,
+        "2340": 42,
+        "2440": 54,
+        "2540": 52,
+        "2640": 17
+      },
+      "complete_cases": 24576,
+      "independent_mismatches": 0,
+      "interpretation": "Counterfactual offer evaluations; repeated quotes are not distinct customers, native orders, collections or profit.",
+      "no_exclusion_max_cap_accepted_worlds": 256,
+      "queries_per_world": 96,
+      "status_counts": {
+        "buyer_declined": 4188,
+        "offer_accepted": 3492,
+        "unavailable": 16896
+      },
+      "worlds": 256
+    },
+    "resource_conflict:coarse": {
+      "accepted_quote_cents_histogram": {
+        "1440": 448,
+        "1840": 912,
+        "2240": 544,
+        "2640": 80
+      },
+      "complete_cases": 24576,
+      "independent_mismatches": 0,
+      "interpretation": "Counterfactual offer evaluations; repeated quotes are not distinct customers, native orders, collections or profit.",
+      "no_exclusion_max_cap_accepted_worlds": 256,
+      "queries_per_world": 96,
+      "status_counts": {
+        "buyer_declined": 2624,
+        "offer_accepted": 1984,
+        "unavailable": 19968
+      },
+      "worlds": 256
+    },
+    "resource_conflict:exact": {
+      "accepted_quote_cents_histogram": {
+        "1140": 75,
+        "1240": 172,
+        "1340": 164,
+        "1440": 52,
+        "1540": 164,
+        "1640": 351,
+        "1740": 333,
+        "1840": 105,
+        "1940": 111,
+        "2040": 210,
+        "2140": 198,
+        "2240": 62,
+        "2340": 22,
+        "2440": 31,
+        "2540": 29,
+        "2640": 9
+      },
+      "complete_cases": 24576,
+      "independent_mismatches": 0,
+      "interpretation": "Counterfactual offer evaluations; repeated quotes are not distinct customers, native orders, collections or profit.",
+      "no_exclusion_max_cap_accepted_worlds": 256,
+      "queries_per_world": 96,
+      "status_counts": {
+        "buyer_declined": 2520,
+        "offer_accepted": 2088,
+        "unavailable": 19968
+      },
+      "worlds": 256
+    },
+    "successor:coarse": {
+      "accepted_quote_cents_histogram": {
+        "1740": 48,
+        "2140": 128,
+        "2540": 96,
+        "2940": 64
+      },
+      "complete_cases": 24576,
+      "independent_mismatches": 0,
+      "interpretation": "Counterfactual offer evaluations; repeated quotes are not distinct customers, native orders, collections or profit.",
+      "no_exclusion_max_cap_accepted_worlds": 240,
+      "queries_per_world": 96,
+      "status_counts": {
+        "buyer_declined": 1200,
+        "offer_accepted": 336,
+        "unavailable": 23040
+      },
+      "worlds": 256
+    },
+    "successor:exact": {
+      "accepted_quote_cents_histogram": {
+        "1340": 4,
+        "1440": 16,
+        "1540": 24,
+        "1640": 12,
+        "1740": 15,
+        "1840": 48,
+        "1940": 72,
+        "2040": 32,
+        "2140": 20,
+        "2240": 48,
+        "2340": 72,
+        "2440": 24,
+        "2540": 10,
+        "2640": 16,
+        "2740": 24,
+        "2840": 16,
+        "2940": 5
+      },
+      "complete_cases": 24576,
+      "independent_mismatches": 0,
+      "interpretation": "Counterfactual offer evaluations; repeated quotes are not distinct customers, native orders, collections or profit.",
+      "no_exclusion_max_cap_accepted_worlds": 241,
+      "queries_per_world": 96,
+      "status_counts": {
+        "buyer_declined": 1078,
+        "offer_accepted": 458,
+        "unavailable": 23040
+      },
+      "worlds": 256
+    },
+    "successor_repartition:coarse": {
+      "accepted_quote_cents_histogram": {
+        "2940": 16
+      },
+      "complete_cases": 24576,
+      "independent_mismatches": 0,
+      "interpretation": "Counterfactual offer evaluations; repeated quotes are not distinct customers, native orders, collections or profit.",
+      "no_exclusion_max_cap_accepted_worlds": 16,
+      "queries_per_world": 96,
+      "status_counts": {
+        "buyer_declined": 1520,
+        "offer_accepted": 16,
+        "unavailable": 23040
+      },
+      "worlds": 256
+    }
+  },
+  "privacy": {
+    "primary:coarse": {
+      "any_provider_exactly_identified_worlds": 0,
+      "equivalence_classes": 16,
+      "exact_vector_reconstruction_worlds": 0,
+      "maximum_remaining_worlds": 16,
+      "minimum_possible_values_per_provider": {
+        "p0": 2,
+        "p1": 2,
+        "p2": 2,
+        "p3": 2
+      },
+      "minimum_remaining_worlds": 16,
+      "world_count_by_ambiguity": {
+        "16": 256
+      },
+      "worlds": 256
+    },
+    "primary:exact": {
+      "any_provider_exactly_identified_worlds": 256,
+      "equivalence_classes": 256,
+      "exact_vector_reconstruction_worlds": 256,
+      "maximum_remaining_worlds": 1,
+      "minimum_possible_values_per_provider": {
+        "p0": 1,
+        "p1": 1,
+        "p2": 1,
+        "p3": 1
+      },
+      "minimum_remaining_worlds": 1,
+      "world_count_by_ambiguity": {
+        "1": 256
+      },
+      "worlds": 256
+    },
+    "stable_predecessor_plus_repartitioned_successor": {
+      "any_provider_exactly_identified_worlds": 32,
+      "equivalence_classes": 80,
+      "exact_vector_reconstruction_worlds": 32,
+      "maximum_remaining_worlds": 6,
+      "minimum_possible_values_per_provider": {
+        "p0": 1,
+        "p1": 1,
+        "p2": 1,
+        "p3": 1
+      },
+      "minimum_remaining_worlds": 1,
+      "world_count_by_ambiguity": {
+        "1": 32,
+        "4": 128,
+        "6": 96
+      },
+      "worlds": 256
+    },
+    "stable_predecessor_plus_stable_successor": {
+      "any_provider_exactly_identified_worlds": 0,
+      "equivalence_classes": 16,
+      "exact_vector_reconstruction_worlds": 0,
+      "maximum_remaining_worlds": 16,
+      "minimum_possible_values_per_provider": {
+        "p0": 2,
+        "p1": 2,
+        "p2": 2,
+        "p3": 2
+      },
+      "minimum_remaining_worlds": 16,
+      "world_count_by_ambiguity": {
+        "16": 256
+      },
+      "worlds": 256
+    },
+    "successor:coarse": {
+      "any_provider_exactly_identified_worlds": 0,
+      "equivalence_classes": 5,
+      "exact_vector_reconstruction_worlds": 0,
+      "maximum_remaining_worlds": 96,
+      "minimum_possible_values_per_provider": {
+        "p0": 2,
+        "p1": 2,
+        "p2": 2,
+        "p3": 2
+      },
+      "minimum_remaining_worlds": 16,
+      "world_count_by_ambiguity": {
+        "16": 32,
+        "64": 128,
+        "96": 96
+      },
+      "worlds": 256
+    },
+    "successor_repartition:coarse": {
+      "any_provider_exactly_identified_worlds": 0,
+      "equivalence_classes": 5,
+      "exact_vector_reconstruction_worlds": 0,
+      "maximum_remaining_worlds": 96,
+      "minimum_possible_values_per_provider": {
+        "p0": 2,
+        "p1": 2,
+        "p2": 2,
+        "p3": 2
+      },
+      "minimum_remaining_worlds": 16,
+      "world_count_by_ambiguity": {
+        "16": 32,
+        "64": 128,
+        "96": 96
+      },
+      "worlds": 256
+    }
+  },
+  "privacy_offer_tradeoff": {
+    "primary": {
+      "coarse_accepted_exact_declined": 0,
+      "denominator": 24576,
+      "exact_accepted_coarse_declined": 180,
+      "no_exclusion_max_cap_lost_worlds": [],
+      "no_exclusion_max_cap_world_count": 256
+    },
+    "resource_conflict": {
+      "coarse_accepted_exact_declined": 0,
+      "denominator": 24576,
+      "exact_accepted_coarse_declined": 104,
+      "no_exclusion_max_cap_lost_worlds": [],
+      "no_exclusion_max_cap_world_count": 256
+    },
+    "successor": {
+      "coarse_accepted_exact_declined": 0,
+      "denominator": 24576,
+      "exact_accepted_coarse_declined": 122,
+      "no_exclusion_max_cap_lost_worlds": [
+        "600-600-600-600"
+      ],
+      "no_exclusion_max_cap_world_count": 256
+    }
+  },
+  "schema": "super-alpha-185dc1a1/decisive-results/v1",
+  "scope": "EXHAUSTIVE_AUTHORED_FINITE_MODEL_WITH_IDEAL_SECURE_INTERNALS",
+  "semantic_results_sha256": "a2084fd3f03f7d8fe3a167fde6e6350962373a98d2a19f2a15737f7c31d8c676",
+  "source_hashes": {
+    "experiments/super_alpha_20261103_185dc1a1/PROTOCOL.json": "33640da369170a7706e3cb30b80c9ad51bdc65a10d75d039ee597420ec7276eb",
+    "experiments/super_alpha_20261103_185dc1a1/__init__.py": "57a4208920d9ff315ace6f415cd4a61f83b3b5f95d6d0fdabdae8998db83e038",
+    "experiments/super_alpha_20261103_185dc1a1/finance.py": "5a0a09190d4ac76d504f8875e21e55d47e20d83430e3d35abd424703a16af45b",
+    "experiments/super_alpha_20261103_185dc1a1/fixtures.py": "0c01045b8bd9093be01cd944bac6c606ffe707d388220df23f40c5933f2d46dd",
+    "experiments/super_alpha_20261103_185dc1a1/independent.py": "48703b2a7f9a6830f6c97e536f04c1544d1e50ebd291b96f4eabd7d9eb163ef8",
+    "experiments/super_alpha_20261103_185dc1a1/mechanism.py": "b15eae2193d5d1e6643a37666efee97419484e3b067fabe51a726f6e6b620cf6",
+    "experiments/super_alpha_20261103_185dc1a1/run.py": "2d38d09ae172ac5eba51e8ad610422f719bed7d91d8dc0387093098603ae630d",
+    "experiments/super_alpha_20261103_185dc1a1/test_finance.py": "d2446215487847b74b7cb1172ae47e53146f4c6fb6864821a5c77c9c1c025fc8",
+    "experiments/super_alpha_20261103_185dc1a1/test_mechanism.py": "56007cda825a62cba53afdf420cfcee4c7710f28dc37b197783e6f8746ce7e87"
+  },
+  "strong_ordinary_mismatches": 0,
+  "successor_causal_controls": {
+    "causal_interpretation": "The globally stable release partition prevents compositional ask reconstruction. An unsafe fresh partition is a failure ablation, not a strongest no-inheritance baseline. Fresh ordinary reconstruction with equal useful content ties; no discovery-method gain is established.",
+    "continued_and_fresh_same_content_output_equal": true,
+    "discarded_policy_repartition_exact_reconstructions": 32,
+    "earned_capital_effect": "NONE: native account is research-only with zero earnings; no financed successor claim.",
+    "ordinary_equal_content_control": "The independently implemented ordinary solver matches every whole offer, including the fresh successor; ordinary reuse of the same global partition preserves the same privacy.",
+    "repartition_rejected_by_continuing_exchange": true,
+    "retained_content_vs_method": "Retained public tariff policy is useful content and a correctness condition; the experiment does not establish an improved inventor or unavoidable dependence on predecessor.",
+    "stable_privacy_minimum_worlds": 16
+  },
+  "verdict": {
+    "commercial_scale": "NOT_QUALIFIED",
+    "exact_quote_confidentiality": "FALSIFIED",
+    "fresh_successor_release_reset": "FALSIFIED_BY_COMPOSITION",
+    "next_action_executed": "Constructed stable disclosure-partition retention and refusal of incompatible successor reset; tested the adverse offer and equal-content controls.",
+    "stable_finite_domain_ask_ambiguity": "PRESERVED",
+    "super_alpha_method_advantage": "NOT_ESTABLISHED_ORDINARY_COMPLETE_CONTROL_TIES",
+    "technical_construction": "EXECUTED_AND_INDEPENDENTLY_CHECKED",
+    "three_billion_objective": "UNMET"
+  }
+}
