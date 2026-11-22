@@ -1,0 +1,29 @@
+{
+  "preregistered_at": "90f25c850dd52481dcc553371ce8839fb20af684",
+  "source_files_sha256": {
+    "enterprise078/transactional_admission/__init__.py": "89017e56a9f230f3bfd036fc2189c6a8af6af9226857b5b8fa3d334aede2cf7c",
+    "enterprise078/transactional_admission/authority.py": "1c3fb422a03ae1e7d69db6d968e3a1f5cb98caa048004ac0546e03eb4beb6cbf",
+    "enterprise078/transactional_admission/contract.py": "22f6957fbcd33397b34dc7ee2cd6a88c7d51a6381e1a0add1b86d65cc66fc59d",
+    "enterprise078/transactional_admission/native_controls.py": "4e6a0783283f2c1d25936b7c934c4e0ad520074fd7a703e4795f391cce97012e",
+    "enterprise078/transactional_admission/offer.py": "4cf9b7e1f25fbb90ef81e178f35325311597f3340c2e7d9c6103db18dffbb42a",
+    "enterprise078/transactional_admission/test_admission.py": "9c031387a0fbb2388bc9b0637c85e6fa3bb0f6491ee0f87140ad41bbf876c7e4"
+  },
+  "native_control_checks": 6,
+  "test_suite_tests": 15,
+  "test_suite_accepted": true,
+  "existing_runtime_platform_tests": 11,
+  "existing_runtime_platform_accepted": true,
+  "initial_failure": {
+    "test": "test_database_corruption",
+    "reason": "fixture kept SQLite connection open; standalone-delivery WAL guard refused",
+    "repair": "close fixture connection before row-corruption inspection; guard unchanged"
+  },
+  "evidence_role": "exposed development checks; not fresh economic confirmation",
+  "original_authority_audit": true,
+  "original_export_sha256": "66da91b5c4849a08d1e6b443202aaf81f8bf86a30bd2e392ec5feda5c6a9fc9f",
+  "original_financial_actions_added": 0,
+  "catalog_transition_qualified": false,
+  "updated_complete_cost_profit": null,
+  "whole_construction_host_model_cost": "UNKNOWN_NOT_ZERO",
+  "native_fixture_loss_microUSD": 100000000
+}

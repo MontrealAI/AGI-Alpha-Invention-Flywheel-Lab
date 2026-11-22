@@ -1,0 +1,253 @@
+{
+  "accepted": true,
+  "actual_customers": 0,
+  "actual_generated_database_count": 8,
+  "cases": [
+    {
+      "accepted": true,
+      "case": "normal",
+      "csv_bytes": 501,
+      "csv_sha256": "fdff1f7bca2ae4b2e248eda1dbf88de5168d81a5b3b8bd2a85af0eb1c3d84d6e",
+      "database_bytes": 36864,
+      "database_sha256": "7bb611b4c34e195cc9ddd0ede5b53bab6dea800598605d96f7beb73a5cd307c4",
+      "faults": {
+        "mutated_projection_rejected": true
+      },
+      "k1": {
+        "accepted": true,
+        "errors": [],
+        "groups": 31,
+        "scope": "actual local SQLite and CSV; synthetic nonfinancial records",
+        "total_units": 122,
+        "unique_events": 257
+      },
+      "k2": {
+        "accepted": true,
+        "errors": [],
+        "groups": 31,
+        "scope": "actual local SQLite and CSV; synthetic nonfinancial records",
+        "total_units": 122,
+        "unique_events": 257
+      },
+      "wall_seconds": 0.014595438000014838
+    },
+    {
+      "accepted": true,
+      "case": "lost_reply",
+      "csv_bytes": 501,
+      "csv_sha256": "fdff1f7bca2ae4b2e248eda1dbf88de5168d81a5b3b8bd2a85af0eb1c3d84d6e",
+      "database_bytes": 36864,
+      "database_sha256": "7bb611b4c34e195cc9ddd0ede5b53bab6dea800598605d96f7beb73a5cd307c4",
+      "faults": {
+        "accepted_before_retry": true,
+        "exit_code": 72,
+        "mutated_projection_rejected": true
+      },
+      "k1": {
+        "accepted": true,
+        "errors": [],
+        "groups": 31,
+        "scope": "actual local SQLite and CSV; synthetic nonfinancial records",
+        "total_units": 122,
+        "unique_events": 257
+      },
+      "k2": {
+        "accepted": true,
+        "errors": [],
+        "groups": 31,
+        "scope": "actual local SQLite and CSV; synthetic nonfinancial records",
+        "total_units": 122,
+        "unique_events": 257
+      },
+      "wall_seconds": 0.05024423600002592
+    },
+    {
+      "accepted": true,
+      "case": "mid_batch_crash",
+      "csv_bytes": 501,
+      "csv_sha256": "fdff1f7bca2ae4b2e248eda1dbf88de5168d81a5b3b8bd2a85af0eb1c3d84d6e",
+      "database_bytes": 36864,
+      "database_sha256": "5ecc95729b5063a3b2e54856e367f274b000c0f371583c552727149328f25e79",
+      "faults": {
+        "exit_code": 71,
+        "mutated_projection_rejected": true,
+        "rollback_preserved": true
+      },
+      "k1": {
+        "accepted": true,
+        "errors": [],
+        "groups": 31,
+        "scope": "actual local SQLite and CSV; synthetic nonfinancial records",
+        "total_units": 122,
+        "unique_events": 257
+      },
+      "k2": {
+        "accepted": true,
+        "errors": [],
+        "groups": 31,
+        "scope": "actual local SQLite and CSV; synthetic nonfinancial records",
+        "total_units": 122,
+        "unique_events": 257
+      },
+      "wall_seconds": 0.048691112999961206
+    },
+    {
+      "accepted": true,
+      "case": "reordered_duplicate",
+      "csv_bytes": 501,
+      "csv_sha256": "fdff1f7bca2ae4b2e248eda1dbf88de5168d81a5b3b8bd2a85af0eb1c3d84d6e",
+      "database_bytes": 36864,
+      "database_sha256": "06c75305befafc5a7ec50cacecf3371625b30ab7a6238da15c49df553a1e3388",
+      "faults": {
+        "mutated_projection_rejected": true
+      },
+      "k1": {
+        "accepted": true,
+        "errors": [],
+        "groups": 31,
+        "scope": "actual local SQLite and CSV; synthetic nonfinancial records",
+        "total_units": 122,
+        "unique_events": 257
+      },
+      "k2": {
+        "accepted": true,
+        "errors": [],
+        "groups": 31,
+        "scope": "actual local SQLite and CSV; synthetic nonfinancial records",
+        "total_units": 122,
+        "unique_events": 257
+      },
+      "wall_seconds": 0.016918349999968996
+    },
+    {
+      "accepted": true,
+      "case": "conflicting_duplicate",
+      "csv_bytes": 501,
+      "csv_sha256": "fdff1f7bca2ae4b2e248eda1dbf88de5168d81a5b3b8bd2a85af0eb1c3d84d6e",
+      "database_bytes": 36864,
+      "database_sha256": "7bb611b4c34e195cc9ddd0ede5b53bab6dea800598605d96f7beb73a5cd307c4",
+      "faults": {
+        "mutated_projection_rejected": true,
+        "prior_state_preserved": true,
+        "refused": "CONFLICTING_PERSISTED_EVENT"
+      },
+      "k1": {
+        "accepted": true,
+        "errors": [],
+        "groups": 31,
+        "scope": "actual local SQLite and CSV; synthetic nonfinancial records",
+        "total_units": 122,
+        "unique_events": 257
+      },
+      "k2": {
+        "accepted": true,
+        "errors": [],
+        "groups": 31,
+        "scope": "actual local SQLite and CSV; synthetic nonfinancial records",
+        "total_units": 122,
+        "unique_events": 257
+      },
+      "wall_seconds": 0.013207242000021324
+    },
+    {
+      "accepted": true,
+      "case": "invalid_event",
+      "csv_bytes": 501,
+      "csv_sha256": "fdff1f7bca2ae4b2e248eda1dbf88de5168d81a5b3b8bd2a85af0eb1c3d84d6e",
+      "database_bytes": 36864,
+      "database_sha256": "7bb611b4c34e195cc9ddd0ede5b53bab6dea800598605d96f7beb73a5cd307c4",
+      "faults": {
+        "mutated_projection_rejected": true,
+        "prior_state_preserved": true,
+        "refused": "EXACT_EVENT_REQUIRED"
+      },
+      "k1": {
+        "accepted": true,
+        "errors": [],
+        "groups": 31,
+        "scope": "actual local SQLite and CSV; synthetic nonfinancial records",
+        "total_units": 122,
+        "unique_events": 257
+      },
+      "k2": {
+        "accepted": true,
+        "errors": [],
+        "groups": 31,
+        "scope": "actual local SQLite and CSV; synthetic nonfinancial records",
+        "total_units": 122,
+        "unique_events": 257
+      },
+      "wall_seconds": 0.014650580000022728
+    },
+    {
+      "accepted": true,
+      "case": "derived_restart",
+      "csv_bytes": 501,
+      "csv_sha256": "fdff1f7bca2ae4b2e248eda1dbf88de5168d81a5b3b8bd2a85af0eb1c3d84d6e",
+      "database_bytes": 36864,
+      "database_sha256": "5ecc95729b5063a3b2e54856e367f274b000c0f371583c552727149328f25e79",
+      "faults": {
+        "exit_code": 73,
+        "mutated_projection_rejected": true,
+        "prior_projection_preserved": true,
+        "stale_projection_refused": true
+      },
+      "k1": {
+        "accepted": true,
+        "errors": [],
+        "groups": 31,
+        "scope": "actual local SQLite and CSV; synthetic nonfinancial records",
+        "total_units": 122,
+        "unique_events": 257
+      },
+      "k2": {
+        "accepted": true,
+        "errors": [],
+        "groups": 31,
+        "scope": "actual local SQLite and CSV; synthetic nonfinancial records",
+        "total_units": 122,
+        "unique_events": 257
+      },
+      "wall_seconds": 0.054016434000004665
+    },
+    {
+      "accepted": true,
+      "case": "largest_gateway",
+      "csv_bytes": 596,
+      "csv_sha256": "767c382cff92e76bf353652cac0d51f092e2f4b5698b48c7715ec566f0578945",
+      "database_bytes": 5947392,
+      "database_sha256": "fa6e6eb7d1d159049f09b5789fa2df3446bda0d839b98633c1bdbbdd920724e8",
+      "faults": {
+        "accepted_before_retry": true,
+        "exit_code": 72,
+        "mutated_projection_rejected": true
+      },
+      "k1": {
+        "accepted": true,
+        "errors": [],
+        "groups": 31,
+        "scope": "actual local SQLite and CSV; synthetic nonfinancial records",
+        "total_units": 47,
+        "unique_events": 100000
+      },
+      "k2": {
+        "accepted": true,
+        "errors": [],
+        "groups": 31,
+        "scope": "actual local SQLite and CSV; synthetic nonfinancial records",
+        "total_units": 47,
+        "unique_events": 100000
+      },
+      "wall_seconds": 2.402883255000006
+    }
+  ],
+  "commercial_status": "UNEXECUTED_NO_ORIGINAL_AUTHORITY",
+  "cpu_seconds": 2.6760005500000004,
+  "discovery_advantage": "NOT_CLAIMED_ORDINARY_SQLITE_REUSED",
+  "largest_actual_event_count": 100000,
+  "native_profit": null,
+  "original_account_mutated": false,
+  "scope": "actual local crash/restart and file outputs; synthetic data and developer-authored contracts",
+  "wall_seconds": 2.730226918000028,
+  "whole_construction_and_inference_cost": "UNKNOWN_NOT_ZERO"
+}

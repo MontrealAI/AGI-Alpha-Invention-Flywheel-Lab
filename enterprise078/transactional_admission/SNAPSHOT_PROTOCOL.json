@@ -1,0 +1,23 @@
+{
+  "schema": "enterprise078/live-snapshot-protocol/v1",
+  "parent": "ece7d2024e0ac42923c5cb123390a272db0b874f",
+  "evidence_role": "development",
+  "constraint": "Accepted offline database is not a safe portable snapshot of a live WAL database. Build a coherent standalone SQL/CSV delivery using ordinary SQLite backup, no source write or financial action.",
+  "alternatives": [
+    "stop source and checkpoint with downtime",
+    "ordinary SQLite online backup and independently checked projection (selected)",
+    "copy main database alone (negative control; may omit WAL)"
+  ],
+  "cases": [
+    "live committed WAL accepted",
+    "100000 actual records accepted",
+    "input mismatch publishes nothing",
+    "post-snapshot source append leaves delivered snapshot unchanged",
+    "acceptance exception publishes nothing",
+    "existing destination never overwritten",
+    "concurrent publisher lock refusal"
+  ],
+  "stop": "Run finite cases; retain failures. No demand or profit inference. Original catalog/history transition remains unqualified.",
+  "costs": "Measure command CPU/wall; full construction/model/host and commercial offer costs unknown, not zero.",
+  "basis": "https://www.sqlite.org/backup.html"
+}
