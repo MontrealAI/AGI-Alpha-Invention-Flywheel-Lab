@@ -15,6 +15,8 @@ Read-only checks on 22 November 2026 used the same `Mainnet.ownsClub` verifier a
 
 The primary reads came from `ethereum-rpc.publicnode.com`. Blockscout indexed Registry logs. The historical reads used `eth.drpc.org` and `eth-mainnet.g.alchemy.com/public` against the same Ethereum history. The operational record omits member names and wallets. The live work was read-only. Browser and publisher qualification used fixture signers. A consenting live MetaMask pilot and independent security release review remain required before production activation.
 
+For the transaction-free candidate, a fresh mainnet test at block 26473588 confirmed three wrapped Club holders and rejected the unrelated wallet for all three names. It also confirmed a holder through the token-only route and rejected the comparison wallet. The domain-bound signature through ciphertext reading was exercised separately with fixture signers in both languages. [Transaction-free access and trade-offs](../GITHUB-NATIVE.md)
+
 ### Recheck a consenting case
 
 From `products/frontier-omega-alpha` with the locked Node dependencies installed, supply the existing name's first label and current wallet in `FRONTIER_TEST_LABEL` and `FRONTIER_TEST_WALLET` outside Git. This check sends Ethereum read requests and returns a decision and its block.

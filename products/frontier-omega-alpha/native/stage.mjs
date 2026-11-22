@@ -1,7 +1,7 @@
 import { copyFile, lstat, mkdir, readFile, writeFile } from 'node:fs/promises';
 import { basename, join, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { assertLibrary, MAX_LIBRARY_BYTES, releaseTag } from './protocol.mjs';
+import { assertLibrary, MAX_LIBRARY_BYTES, releaseTag, SIGNED_LIBRARY_SCHEMA } from './protocol.mjs';
 
 const source = fileURLToPath(new URL('../../../docs/research/frontier-omega-alpha/', import.meta.url));
 const entry = fileURLToPath(new URL('./reader.mjs', import.meta.url));
@@ -28,6 +28,7 @@ async function checkedLibrary(path) {
   const file = await lstat(path);
   if (!file.isFile() || file.size > MAX_LIBRARY_BYTES) throw Error('Invalid public encrypted snapshot');
   const value = assertLibrary(JSON.parse(await readFile(path, 'utf8')));
+  if (value.schema !== SIGNED_LIBRARY_SCHEMA) throw Error('Expected transaction-free signed enrollment library');
   for (const record of value.records) {
     if (record.tag !== await releaseTag(record)) throw Error('Invalid ciphertext release digest');
   }

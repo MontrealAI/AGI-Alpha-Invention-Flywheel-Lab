@@ -40,11 +40,12 @@ jobs:
         run: node --input-type=module -e "import { readerAddress } from './products/frontier-omega-alpha/native/stage.mjs'; readerAddress(process.env.FRONTIER_ALPHA_READER)"
         env:
           FRONTIER_ALPHA_READER: ${{ vars.FRONTIER_ALPHA_READER }}
-      - name: Verify finalized enrollments and checkpoint encrypted publication
+      - name: Verify approved wallet signatures and checkpoint encrypted publication
         run: bash products/frontier-omega-alpha/native/github-provision.sh
         env:
           FRONTIER_ALPHA_PUBLISH_KEY: ${{ secrets.FRONTIER_ALPHA_PUBLISH_KEY }}
           FRONTIER_ALPHA_RPC: ${{ secrets.FRONTIER_ALPHA_RPC }}
+          FRONTIER_ALPHA_READER: ${{ vars.FRONTIER_ALPHA_READER }}
           FRONTIER_ALPHA_ANCHOR_HEIGHT: ${{ vars.FRONTIER_ALPHA_ANCHOR_HEIGHT }}
           FRONTIER_ALPHA_ANCHOR_HASH: ${{ vars.FRONTIER_ALPHA_ANCHOR_HASH }}
           GH_TOKEN: ${{ github.token }}

@@ -1,4 +1,4 @@
-const namespace = 'frontier-omega-alpha-native-v1';
+const namespace = 'frontier-omega-alpha-signed-device-v1';
 
 export function openDevices() {
   return new Promise((resolve, reject) => {
@@ -32,7 +32,7 @@ export function compareDevice(wallet, expected, value) {
     const read = store.get(wallet);
     read.onsuccess = () => {
       const prior = read.result;
-      if (prior?.nonce === expected?.nonce && prior?.phase === expected?.phase && prior?.tx === expected?.tx) {
+      if (prior?.nonce === expected?.nonce && prior?.proof === expected?.proof) {
         store.put(value, wallet);
         written = true;
       }

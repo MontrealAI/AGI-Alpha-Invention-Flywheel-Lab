@@ -4,11 +4,13 @@ import { join } from 'node:path';
 import { privateFile, privatePath } from '../access/store.mjs';
 import { encryptAsset, rewrapAsset } from '../access/crypto.mjs';
 import { maximumAssetBytes, validateRecord, validId, validVersion } from '../access/records.mjs';
-import { assertRecord, CIPHERTEXT_FORMAT, DESTINATION, fromBase64, hash, MAX_LIBRARY_BYTES } from './protocol.mjs';
+import { assertRecord, CIPHERTEXT_FORMAT, fromBase64, hash, MAX_LIBRARY_BYTES } from './protocol.mjs';
 import { advance, initialState } from './issue.mjs';
 import { Mainnet } from '../access/chain.mjs';
 import { boundedRpc, readFinalized } from './intake.mjs';
-import { checkpointEnvelopeBytes, openState, sealState } from './state.mjs';
+import { checkpointEnvelopeBytes, enrollmentEnvelopeBytes, openEnrollments, openState, sealEnrollments, sealState } from './state.mjs';
+import { authenticateSignedEnrollment } from './signed-enrollment.mjs';
+import { readerAddress } from './stage.mjs';
 
 const [command, ...args] = process.argv.slice(2);
 process.umask(0o077);
@@ -30,6 +32,12 @@ function master(name = 'FRONTIER_ALPHA_PUBLISH_KEY') {
   return Buffer.from(key);
 }
 
+const approvedEnrollments = new URL('./approved-enrollments.json', import.meta.url);
+
+function readerOrigin() {
+  return new URL(readerAddress(process.env.FRONTIER_ALPHA_READER)).origin;
+}
+
 async function run(key, catalogPath, previousPath, publicPath, output) {
   const catalog = readJson(catalogPath, MAX_LIBRARY_BYTES);
   let state;
@@ -42,7 +50,10 @@ async function run(key, catalogPath, previousPath, publicPath, output) {
     state = openState(readJson(previousPath, checkpointEnvelopeBytes), key, readJson(publicPath, MAX_LIBRARY_BYTES));
   }
   const revoked = readJson(new URL('./revoked-enrollments.json', import.meta.url), 96 * 1024);
-  const next = await advance({ rpc: boundedRpc(process.env.FRONTIER_ALPHA_RPC), state, catalog, revoked, masterKey: key });
+  const next = await advance({
+    rpc: boundedRpc(process.env.FRONTIER_ALPHA_RPC), state, catalog, revoked, masterKey: key,
+    signedRequests: openEnrollments(readJson(approvedEnrollments, enrollmentEnvelopeBytes), key), readerOrigin: readerOrigin()
+  });
   mkdirSync(privatePath(output), { mode: 0o700 });
   writeJson(join(output, 'state.json'), sealState(next.state, key), checkpointEnvelopeBytes);
   writeJson(join(output, 'library.json'), next.library, MAX_LIBRARY_BYTES);
@@ -59,14 +70,20 @@ try {
     const rpc = boundedRpc(process.env.FRONTIER_ALPHA_RPC);
     const chain = new Mainnet(rpc);
     const finalized = await readFinalized(rpc);
-    const sample = '0x46524f4e54494552';
-    const echoed = await rpc('eth_call', [{ to: DESTINATION, value: '0x0', data: sample }, 'finalized']);
-    if (echoed !== sample) throw Error('Ethereum RPC identity precompile verification failed');
     const token = await chain.tokenIdentity(await chain.snapshot());
-    console.log(JSON.stringify({ anchorHeight: finalized.height, anchorHash: finalized.hash, identityPrecompile: DESTINATION, token }));
+    console.log(JSON.stringify({ anchorHeight: finalized.height, anchorHash: finalized.hash, token }));
   } else {
     key = master();
-    if (command === 'seal' && args.length === 4) {
+    if (command === 'approve-enrollment' && args.length === 2) {
+      const [input, output] = args;
+      const request = readJson(privateFile(privatePath(input)), 4096);
+      const chain = new Mainnet(boundedRpc(process.env.FRONTIER_ALPHA_RPC));
+      if (!await authenticateSignedEnrollment(request, readerOrigin(), chain, await chain.snapshot())) {
+        throw Error('Device request did not verify');
+      }
+      writeJson(privatePath(output), sealEnrollments([request], key), enrollmentEnvelopeBytes);
+      console.log('Prepared a private enrollment batch for protected repository review.');
+    } else if (command === 'seal' && args.length === 4) {
       const [id, version, privateRecord, output] = args;
       if (!validId(id) || !validVersion(Number(version))) throw Error('Invalid release version');
       const path = privateFile(privatePath(privateRecord));
@@ -90,15 +107,17 @@ try {
         assertRecord(item, true);
         return rewrapAsset(item, key, nextKey);
       });
+      const enrollments = openEnrollments(readJson(approvedEnrollments, enrollmentEnvelopeBytes), key);
       mkdirSync(privatePath(output), { mode: 0o700 });
       writeJson(join(output, 'state.json'), sealState(state, nextKey), checkpointEnvelopeBytes);
       writeJson(join(output, 'catalog.json'), catalog, MAX_LIBRARY_BYTES);
+      writeJson(join(output, 'enrollments.json'), enrollments.length ? sealEnrollments(enrollments, nextKey) : null, enrollmentEnvelopeBytes);
       console.log('Prepared a new encrypted publisher checkpoint and wrapped release catalog.');
     } else if (command === 'run' && args.length === 4) {
       await run(key, ...args);
       console.log('Finished a bounded enrollment checkpoint.');
     } else {
-      throw Error('Use keygen, preflight, seal, rekey or run');
+      throw Error('Use keygen, preflight, approve-enrollment, seal, rekey or run');
     }
   }
 } catch (error) {

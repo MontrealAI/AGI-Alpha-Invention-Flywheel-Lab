@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { randomBytes } from 'node:crypto';
 import { once } from 'node:events';
+import { getBytes } from 'ethers';
 import { mkdtemp, readFile, rm } from 'node:fs/promises';
 import { createServer } from 'node:http';
 import { tmpdir } from 'node:os';
@@ -9,10 +10,10 @@ import test from 'node:test';
 import { chromium } from 'playwright';
 import AxeBuilder from '@axe-core/playwright';
 import { advance, initialState } from '../native/issue.mjs';
-import { DESTINATION, decodeEnrollment } from '../native/protocol.mjs';
+import { SIGNED_LIBRARY_SCHEMA } from '../native/protocol.mjs';
 import { bundleReader } from '../native/stage.mjs';
 import { clubNode, createWallet, MINIMUM, WRAPPER } from './fixtures.mjs';
-import { assetFor, fixtureChain, signEnrollment } from './native-fixtures.mjs';
+import { assetFor, fixtureChain } from './native-fixtures.mjs';
 
 const pages = new URL('../../../docs/research/frontier-omega-alpha/', import.meta.url);
 const mime = {
@@ -29,8 +30,9 @@ async function staged(t) {
   const masterKey = randomBytes(32);
   const catalog = [assetFor(masterKey)];
   let state = initialState(rpc.cursor);
-  async function publish() {
-    const result = await advance({ rpc: rpc.rpc, state, catalog, masterKey });
+  let origin;
+  async function publish(signedRequests = []) {
+    const result = await advance({ rpc: rpc.rpc, state, catalog, masterKey, signedRequests, readerOrigin: origin });
     state = result.state;
     return result.library;
   }
@@ -68,10 +70,11 @@ async function staged(t) {
   });
   web.listen(0, '127.0.0.1');
   await once(web, 'listening');
+  origin = 'http://127.0.0.1:' + web.address().port;
   t.after(() => Promise.all([web, publicHost].map(server => new Promise(resolve => server.close(resolve)))));
   const browser = await chromium.launch({ executablePath: process.env.FRONTIER_CHROMIUM || undefined });
   t.after(() => browser.close());
-  return { rpc, publish, browser, origin: 'http://127.0.0.1:' + web.address().port };
+  return { rpc, publish, browser, origin };
 }
 
 async function inject(page, signer, rpc) {
@@ -80,13 +83,9 @@ async function inject(page, signer, rpc) {
     const { method, params = [] } = request;
     calls.push(method);
     if (method === 'eth_requestAccounts' || method === 'eth_accounts') return [signer.address];
-    if (method === 'eth_sendTransaction') {
-      const [tx] = params;
-      assert.equal(tx.to, DESTINATION);
-      assert.equal(tx.value, '0x0');
-      assert.equal(decodeEnrollment(tx.data).wallet, signer.address.toLowerCase());
-      const raw = await signEnrollment(signer, { data: tx.data });
-      return (await rpc.mine([raw]))[0];
+    if (method === 'personal_sign') {
+      assert.equal(params[1], signer.address.toLowerCase());
+      return signer.signMessage(getBytes(params[0]));
     }
     return rpc.rpc(method, params);
   });
@@ -101,7 +100,7 @@ async function inject(page, signer, rpc) {
 }
 
 for (const language of ['en', 'fr']) {
-  test('Isolated ' + language + ' reader previews gas and decrypts only after finalized Ethereum provisioning', async t => {
+  test('Isolated ' + language + ' reader decrypts after signed device provisioning with zero wallet writes', async t => {
     const stage = await staged(t);
     const wallet = createWallet();
     const english = language === 'en';
@@ -128,20 +127,22 @@ for (const language of ['en', 'fr']) {
       await page.getByRole('button', { name: english ? 'Enter with $AGIALPHA' : 'Entrer avec AGI Club' }).click();
     }
     await enter();
-    const confirm = page.getByRole('button', { name: english ? 'Review and confirm in MetaMask' : 'Examiner et confirmer dans MetaMask' });
+    const confirm = page.getByRole('button', { name: english ? 'Sign in MetaMask' : 'Signer dans MetaMask' });
     await confirm.waitFor();
     assert.equal(calls.includes('eth_sendTransaction'), false);
-    assert.match(await page.locator('#native-controls').innerText(), /0x0{39}4/);
-    assert.match(await page.locator('#native-controls').innerText(), /ETH/);
+    assert.match(await page.locator('#native-controls').innerText(), english ? /uses no gas/ : /sans frais de gaz/);
     assert.equal(await page.locator('#member').isVisible(), false);
     const axe = await new AxeBuilder({ page }).withTags(['wcag2a','wcag2aa','wcag21a','wcag21aa','wcag22aa']).analyze();
     assert.deepEqual(axe.violations.map(({ id, nodes }) => [id, nodes.map(x => x.target)]), []);
     await confirm.click();
-    await page.getByText(english ? /Transaction submitted/ : /Transaction soumise/).waitFor();
+    const downloadButton = page.getByRole('button', { name: english ? 'Download signed request' : 'Télécharger la demande signée' });
+    const [download] = await Promise.all([page.waitForEvent('download'), downloadButton.click()]);
+    const request = JSON.parse(await readFile(await download.path(), 'utf8'));
     const refresh = page.getByRole('button', { name: english ? 'Check status now' : 'Vérifier maintenant' });
     await refresh.click();
-    await page.getByText(english ? /Waiting for finality and GitHub/ : /En attente de la finalité/).waitFor();
-    const encrypted = await stage.publish();
+    await page.getByText(english ? /Signed request ready/ : /La demande signée est prête/).waitFor();
+    const encrypted = await stage.publish([request]);
+    assert.equal(encrypted.schema, SIGNED_LIBRARY_SCHEMA);
     assert.equal(JSON.stringify(encrypted).includes('Synthetic member record'), false);
     assert.deepEqual(Object.values(encrypted.recipients).map(record => record.state), ['provisioned']);
     await refresh.click();
@@ -154,14 +155,15 @@ for (const language of ['en', 'fr']) {
     await page.reload();
     await enter();
     await title.waitFor();
-    assert.equal(calls.filter(method => method === 'eth_sendTransaction').length, 1);
+    assert.equal(calls.filter(method => method === 'personal_sign').length, 1);
+    assert.equal(calls.some(method => /sendTransaction|estimateGas|maxPriorityFeePerGas/.test(method)), false);
     await page.evaluate(() => window.testWalletEvent('accountsChanged'));
     assert.equal(await page.locator('#member').isVisible(), false);
     assert.deepEqual(errors, []);
   });
 }
 
-test('An ineligible MetaMask account receives no wallet transaction request', async t => {
+test('An ineligible MetaMask account receives no signature or wallet transaction request', async t => {
   const stage = await staged(t);
   const wallet = createWallet();
   stage.rpc.balances.set(wallet.address.toLowerCase(), MINIMUM - 1n);
@@ -172,6 +174,7 @@ test('An ineligible MetaMask account receives no wallet transaction request', as
   await page.getByRole('button', { name: 'Enter with $AGIALPHA' }).click();
   await page.getByText(/does not meet the verified AGI Club/).waitFor();
   assert.equal(calls.includes('eth_sendTransaction'), false);
+  assert.equal(calls.includes('personal_sign'), false);
   assert.equal(calls.includes('eth_estimateGas'), false);
   assert.equal(await page.locator('#member').isVisible(), false);
 });
