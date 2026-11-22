@@ -1,0 +1,48 @@
+name: Historical event contract 001 (exposed, offline)
+on:
+  push:
+    branches: [experiment/historical-event-contract-20261103-001]
+    paths:
+      - 'experiments/historical_event_contract001/**'
+      - '.github/workflows/historical-event001.yml'
+  pull_request:
+    paths:
+      - 'experiments/historical_event_contract001/**'
+      - '.github/workflows/historical-event001.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  offline-event-certificate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Record platform job start before checkout
+        run: date -u +'%Y-%m-%dT%H:%M:%SZ'
+      - name: Checkout exact triggering source
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - name: Run independent source and refusal regressions
+        run: python3 -m unittest discover -v -s experiments/historical_event_contract001 -p 'test_*.py'
+      - name: Recreate original exposed archive labels (not fresh inference)
+        run: python3 research/historical_measurement/replay.py
+      - name: Execute registered methods once with source binding
+        run: |
+          test "$(git hash-object research/historical_measurement/manifest.json)" = fdd3c3b842bfc58ec71c64212598d50d6eadcb3b
+          python3 experiments/historical_event_contract001/event_contract.py --budget 32 --output "$RUNNER_TEMP/event001.json"
+          python3 - <<'PY'
+          import hashlib,json,os
+          from pathlib import Path
+          r=json.loads((Path(os.environ['RUNNER_TEMP'])/'event001.json').read_text())
+          assert r['source_csv_sha256']=='f03f7c6fb0f6368618140727e04eada07c555375707874b203eef5f6e81b2eaa'
+          assert r['frames']==338 and r['budget_images']==32
+          lines=['# Historical event contract 001 — exposed archival replay',
+                 'Not physical validation, a fresh holdout, paid commerce or annual profit.',
+                 '| Policy | Images | Target assessments | Road conditional | Sidewalk conditional |',
+                 '|---|---:|---:|---|---|']
+          for name,x in r['methods'].items():
+              q=x['queries']
+              lines.append(f"| {name} | {x['image_reads']} | {x['target_assessments']} | {q['road'].get('eligible_for_conditional_interval',False)} | {q['sidewalk'].get('eligible_for_conditional_interval',False)} |")
+          lines.append(f"Source CSV SHA-256: {r['source_csv_sha256']}; manifest SHA-256: {r['source_manifest_sha256']}.")
+          print('\n'.join(lines))
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as f:f.write('\n'.join(lines)+'\n')
+          PY
