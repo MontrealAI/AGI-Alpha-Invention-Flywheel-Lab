@@ -1,0 +1,48 @@
+name: TRUST Omega evidence acceptance (research)
+on:
+  pull_request:
+    paths:
+      - 'products/trust-omega/**'
+      - 'tests/test_trust_omega.py'
+      - '.github/workflows/trust-omega.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  strict-parser:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 -m unittest discover -s tests -p test_trust_omega.py -v
+  upstream-accept-reject:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Get pinned FlashProve research prototype
+        run: |
+          git clone -q https://github.com/anthropics/FlashProve.git fp
+          cd fp
+          git checkout -q 9e2bdd8ff5bf9c62f18263d7dac189b0400b260c
+      - name: Build verifier (as ordinary runner user)
+        run: cd fp && verifier/build.sh
+      - name: Accept authentic stored synthetic proof
+        run: |
+          cd fp
+          python3 integrations/check_proof.py examples/accepted-proof/example.proof examples/accepted-proof/example.req \
+            --public-key-dir examples/accepted-proof/ivk \
+            --parameter-file examples/accepted-proof/config/policy.txt \
+            --scales-file examples/accepted-proof/config/KL.bin \
+            --commitment-id 79a5a2bc7a469b40df73dedf40abeb740671e8ae8077738bd3743897aeb22183 \
+            --range 60:64 --next-token 199 --end-token none --policy exact
+      - name: Reject wrong commitment ID
+        run: |
+          cd fp
+          if python3 integrations/check_proof.py examples/accepted-proof/example.proof examples/accepted-proof/example.req \
+            --public-key-dir examples/accepted-proof/ivk \
+            --parameter-file examples/accepted-proof/config/policy.txt \
+            --scales-file examples/accepted-proof/config/KL.bin \
+            --commitment-id aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa \
+            --range 60:64 --next-token 199 --end-token none --policy exact; then
+            echo 'FAIL: wrong commitment accepted'; exit 1
+          fi
+          echo 'Expected rejection observed. The stored model is synthetic.'
