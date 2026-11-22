@@ -3,6 +3,7 @@ from copy import deepcopy
 from datetime import datetime, timezone
 from hashlib import sha1, sha256
 import json
+from pathlib import Path
 import unittest
 from unittest.mock import patch
 
@@ -133,6 +134,28 @@ class FindingsTests(unittest.TestCase):
         self.assertFalse(received['record']['evaluation']['bounded_runner'])
         with self.assertRaises(ValueError):
             intake.capsule(intake.canonical({**value, 'version': 'latest'}), NOW)
+
+
+    def test_actual_qwen_trial_advances_only_the_matching_artifact_receipt(self):
+        trial_path = Path(__file__).resolve().parents[1] / 'evidence' / intake.QWEN_RECEIPT
+        artifacts = json.loads(trial_path.read_bytes())['source']
+        value = finding('hf-harness-adapter', source='qwen_harness_adapter',
+                        baseline=artifacts['base']['revision'], version=artifacts['adapter']['revision'])
+        raw = intake.exported_capsule(value)
+        rows = [{'id': source, 'artifact': {**artifacts[key], 'license': 'Apache-2.0'}, 'publisher': 'fixture',
+                 'url': 'https://huggingface.co/' + artifacts[key]['repository']}
+                for source, key in [('baseline', 'base'), ('adapter', 'adapter')]]
+        reception = {**REST, 'github_pr': github_intake.LEGACY_PR, 'commit_sha': github_intake.LEGACY_HEAD}
+        wrong = deepcopy(rows)
+        wrong[1]['artifact']['sha256'] = '0' * 64
+        prepared = intake.receive(raw, EMPTY, reception, NOW, lambda _: (wrong, None, adapter.RELEASE_DAY, True))
+        self.assertEqual(prepared['disposition'], 'experiment-prepared')
+        tested = intake.receive(raw, prepared['ledger'], reception, NOW, lambda _: (rows, None, adapter.RELEASE_DAY, True))
+        self.assertEqual(tested['disposition'], 'falsified')
+        self.assertEqual(tested['record']['evaluation']['experiment_receipt']['direct_validator']['accepted'], 12)
+        self.assertTrue(all(value is None for value in tested['record']['economics'].values()))
+        self.assertIn('1,15 ms', member.packet(tested['record'], tested['ledger'])['experiment']['fr']['paragraphs'][1])
+        self.assertEqual(intake.receive(raw, tested['ledger'], reception, NOW)['disposition'], 'duplicate')
 
 
 class GitHubReceiptTests(unittest.TestCase):

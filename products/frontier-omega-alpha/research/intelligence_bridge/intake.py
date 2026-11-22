@@ -31,6 +31,9 @@ PRUSA = ('release', 'upgrade', 'stock', 'large')
 LEAN_NOTES = 'https://lean-lang.org/doc/reference/latest/releases/v4.36.0/'
 HOLDS = {'source-insufficient', 'contradicted', 'invalidated', 'falsified', 'waiting'}
 MAX_ENTRIES = 512
+QWEN_TRIAL_PR = 546
+QWEN_RECEIPT = 'qwen-gguf-maintenance.json'
+QWEN_RECEIPT_SHA256 = '888dc8625220024b6cc67ae0db6311a509298d4d69cdcf292fe13aced0da1586'
 
 
 def canonical(value):
@@ -238,6 +241,31 @@ def check_reception(reception):
         raise ValueError('Local preview cannot claim GitHub authentication')
 
 
+def matched_qwen_trial(sources, reception):
+    if reception['authenticated_by'] != 'github-rest' or reception['github_pr'] != QWEN_TRIAL_PR:
+        return None
+    raw = (Path(__file__).resolve().parents[2] / 'evidence' / QWEN_RECEIPT).read_bytes()
+    if sha256(raw).hexdigest() != QWEN_RECEIPT_SHA256:
+        raise ValueError('The retained Qwen trial receipt changed')
+    trial = load_json(raw, 64 * 1024)
+    observed = {source['id']: source['artifact'] for source in sources if 'artifact' in source}
+    for source, arm in [('baseline', 'base'), ('adapter', 'adapter')]:
+        if any(observed.get(source, {}).get(key) != expected
+               for key, expected in trial['source'][arm].items()):
+            return None
+    paired = trial['paired_trial']
+    return {
+        'verdict': 'Falsified on the registered local CPU budget',
+        'scope': trial['scope'],
+        'receipt': QWEN_RECEIPT,
+        'sha256': QWEN_RECEIPT_SHA256,
+        'protocol_sha256': paired['protocol_sha256'],
+        'model_arms': [{key: row[key] for key in ('arm', 'wall_seconds', 'accepted', 'deadline_exceeded')}
+                       for row in paired['execution']],
+        'direct_validator': paired['incumbent'],
+    }
+
+
 def receive(raw, ledger, reception, now=None, evidence=fetch_evidence, run_registered=False):
     now = now or datetime.now(timezone.utc)
     value = capsule(raw, now)
@@ -249,7 +277,9 @@ def receive(raw, ledger, reception, now=None, evidence=fetch_evidence, run_regis
     # Previously approved records used a different ID. Deduplicate on the public release across schemas.
     previous = next((item for item in reversed(ledger['entries'])
                      if item['scope'] == scope and item['version'] == value['version']), None)
-    advance = previous and ((previous['phase'] == 'experiment-prepared' and run_registered and value['profile'] == 'prusa-retrofit')
+    qwen = value['profile'] == 'hf-harness-adapter' and reception['github_pr'] == QWEN_TRIAL_PR
+    advance = previous and ((previous['phase'] == 'experiment-prepared'
+                             and (qwen or run_registered and value['profile'] == 'prusa-retrofit'))
                             or (previous['phase'] == 'detected' and value['profile'] == 'lean-bitvector'))
     if previous and previous['phase'] != 'source-insufficient' and not advance:
         return {'disposition': 'duplicate', 'record': None, 'ledger': ledger}
@@ -271,7 +301,13 @@ def receive(raw, ledger, reception, now=None, evidence=fetch_evidence, run_regis
     reopened = bool(old and old['phase'] in HOLDS and effective and effective > old['effective_on'] and material)
     plan = experiment_plan(value)
     experiment = None
-    if run_registered and status == 'experiment-prepared' and plan['bounded_runner']:
+    if qwen and status == 'experiment-prepared':
+        experiment = matched_qwen_trial(sources, reception)
+        if experiment:
+            status = 'falsified'
+        elif previous and previous['phase'] == status:
+            return {'disposition': 'duplicate', 'record': None, 'ledger': ledger}
+    elif run_registered and status == 'experiment-prepared' and plan['bounded_runner']:
         try:
             tested = alpha_study.qualify(inputs)
             experiment = {key: tested[key] for key in ('verification', 'cost_observations', 's1_asset_sha256')}

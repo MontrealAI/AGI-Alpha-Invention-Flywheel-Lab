@@ -7,7 +7,7 @@ STATUS = {
     'detected': ('Detected', 'Détecté'),
     'experiment-prepared': ('Experiment prepared', 'Expérience préparée'),
     'technically-verified': ('Technically verified', 'Vérifié techniquement'),
-    'falsified': ('Registered comparison failed', 'Comparaison enregistrée non concluante'),
+    'falsified': ('Registered hypothesis falsified', 'Hypothèse de l’essai réfutée'),
 }
 
 
@@ -28,6 +28,15 @@ def packet(record, ledger):
     plan = record['evaluation']['id']
     observed = record['observed_at']
     asset = record['asset']['verified_identity']
+    trial = record['evaluation']['experiment_receipt']
+    en_result, fr_result = [], []
+    if record['profile'] == 'hf-harness-adapter' and trial and 'direct_validator' in trial:
+        incumbent = trial['direct_validator']
+        en_result.append(f"Both model arms hit the local CPU deadline. The direct validator solved "
+                         f"{incumbent['accepted']} cases in {incumbent['validator_ms']:.2f} ms.")
+        elapsed_fr = f"{incumbent['validator_ms']:.2f}".replace('.', ',')
+        fr_result.append(f"Les deux configurations ont atteint la limite de calcul local. Le validateur direct "
+                         f"a résolu {incumbent['accepted']} cas en {elapsed_fr} ms.")
     records = (
         ('radar', 'Frontier observation', 'Observation à la frontière',
          [f'{en_status}. {version}. Observed {observed}.'],
@@ -38,8 +47,8 @@ def packet(record, ledger):
          ['La comparaison garde le résultat recherché, les données et les autorisations constants.',
           'Les droits, la preuve du bénéficiaire ou les faits manquants restent à établir.']),
         ('experiment', 'Registered experiment', 'Expérience enregistrée',
-         [f'Registered test {plan}.' if plan else 'An independently reproducible test still needs review.'],
-         [f'Essai enregistré {plan}.' if plan else 'Un essai reproductible reste à faire approuver.']),
+         [f'Registered test {plan}.' if plan else 'An independently reproducible test still needs review.', *en_result],
+         [f'Essai enregistré {plan}.' if plan else 'Un essai reproductible reste à faire approuver.', *fr_result]),
         ('verification', 'What is supported', 'Ce que les pièces établissent',
          [f'{en_status}. The upstream group count is {count}. It does not certify scientific independence.',
           'Economic validation and collected payment remain unproven.'],

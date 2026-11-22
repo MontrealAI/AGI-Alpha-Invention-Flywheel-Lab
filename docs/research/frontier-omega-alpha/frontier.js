@@ -6,7 +6,7 @@ const messages = {
   en: {
     ready: 'Choose an access path.',
     offline: 'Protected access is offline on this deployment.',
-    wallet_missing: 'Open this page in an Ethereum wallet browser or install a compatible wallet extension.',
+    wallet_missing: 'Open this page in MetaMask Mobile or install the MetaMask browser extension.',
     network: 'Switch your wallet to Ethereum mainnet and try again.',
     identity: 'Enter only the first label of your AGI Club name.',
     connecting: 'Connecting to your wallet…',
@@ -32,7 +32,7 @@ const messages = {
   fr: {
     ready: 'Choisissez un mode d’accès.',
     offline: 'L’accès protégé est hors ligne sur ce site.',
-    wallet_missing: 'Ouvrez cette page dans le navigateur d’un portefeuille Ethereum ou installez une extension compatible.',
+    wallet_missing: 'Ouvrez cette page dans MetaMask Mobile ou installez l’extension MetaMask.',
     network: 'Passez au réseau principal Ethereum dans votre portefeuille, puis réessayez.',
     identity: 'Saisissez uniquement le premier libellé de votre nom AGI Club.',
     connecting: 'Connexion à votre portefeuille…',
@@ -119,6 +119,7 @@ const status = byId('status');
 const workspaceStatus = byId('workspace-status');
 const connectButtons = Array.from(document.querySelectorAll('[data-connect]'));
 const say = (node, key) => { node.textContent = Object.hasOwn(messages, key) ? messages[key] : messages.verification_unavailable; };
+const issuerMode = document.querySelector('meta[name="frontier-device-issuer"]')?.content === 'v1';
 let api;
 try {
   const config = document.querySelector('meta[name="frontier-api"]').content.trim();
@@ -429,10 +430,9 @@ async function openNative(path) {
 }
 
 async function connect(path) {
+  if (issuerMode && !api) return say(status, 'offline');
   if (!api) return openNative(path);
   if (!globalThis.isSecureContext || !globalThis.crypto?.subtle) return say(status, 'offline');
-  const wallet = globalThis.ethereum;
-  if (!wallet?.request) return say(status, 'wallet_missing');
   const label = path === 'club' ? byId('club-label').value.trim() : null;
   if (path === 'club' && (!label || label.includes('.'))) return say(status, 'identity');
   if (session) lock('locked');
@@ -441,14 +441,20 @@ async function connect(path) {
   let provisioned;
   try {
     say(status, 'connecting');
+    const device = issuerMode ? await (await import('./native-runtime.js')).connectIssuerDevice() : null;
+    const wallet = device?.wallet ?? globalThis.ethereum;
+    if (!wallet?.request) throw Error('wallet_missing');
     const [address] = await wallet.request({ method: 'eth_requestAccounts' });
     if (!address) throw Error('wallet_missing');
     if (await wallet.request({ method: 'eth_chainId' }) !== '0x1') throw Error('network');
     if (ownGeneration !== generation) return;
     activeWallet = wallet;
     boundEvents(wallet, 'on');
-    const { nonce, message } = await request('challenge', { address, label, language });
+    const requestBody = { address, label, language };
+    if (device) requestBody.deviceKey = device.publicKey;
+    const { nonce, message } = await request('challenge', requestBody);
     if (ownGeneration !== generation) return;
+    device?.validateChallenge({ nonce, message }, address, label, language);
     const encoded = Array.from(new TextEncoder().encode(message), byte => byte.toString(16).padStart(2, '0')).join('');
     say(status, 'signing');
     const signature = await wallet.request({ method: 'personal_sign', params: ['0x' + encoded, address] });
@@ -465,6 +471,8 @@ async function connect(path) {
     if (ownGeneration !== generation) return;
     if (!Array.isArray(catalog.entries) || !catalog.entries.every(compatibleEntry)) throw Error('verification_unavailable');
     if (provisioned.expiresAt <= Date.now()) throw Error('session_required');
+    if (device) provisioned.open = async entry => device.unwrap(
+      await request('open', { id: entry.id, version: entry.version }, provisioned.token), message);
     openWorkspace(provisioned, catalog.entries, ownGeneration);
   } catch (error) {
     if (ownGeneration === generation) lock(error.code === 4001 ? 'refused' : error.message);

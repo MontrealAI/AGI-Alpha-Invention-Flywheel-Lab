@@ -14,8 +14,28 @@ concurrency:
   group: frontier-omega-alpha-native-publisher
   cancel-in-progress: false
 jobs:
-  provision:
+  governance:
     if: github.repository == 'MontrealAI/AGI-Alpha-Invention-Flywheel-Lab' && github.ref == 'refs/heads/main' && vars.FRONTIER_ALPHA_NATIVE_ENABLED == 'true' && inputs.build_reader != true
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    permissions:
+      contents: read
+      deployments: read
+    steps:
+      - name: Record platform job execution start
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+          sparse-checkout: products/frontier-omega-alpha/native
+      - name: Verify GitHub rules before requesting publisher secrets
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 products/frontier-omega-alpha/native/production_gate.py --environment frontier-omega-alpha-provision --commit "$GITHUB_SHA"
+  provision:
+    needs: governance
+    if: needs.governance.result == 'success' && github.repository == 'MontrealAI/AGI-Alpha-Invention-Flywheel-Lab' && github.ref == 'refs/heads/main'
     environment: frontier-omega-alpha-provision
     runs-on: ubuntu-latest
     timeout-minutes: 360

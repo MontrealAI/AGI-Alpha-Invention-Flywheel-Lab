@@ -3,6 +3,7 @@ import { envelopeContext, fromBase64, publicKeyBytes, toBase64 } from './protoco
 
 export const suite = new CipherSuite({ kem: new DhkemP256HkdfSha256(), kdf: new HkdfSha256(), aead: new Aes256Gcm() });
 const info = new TextEncoder().encode('FRONTIER Ω ALPHA | Ethereum mainnet | member content key v1');
+export const ISSUER_ENVELOPE_SCHEMA = 'frontier-omega-alpha/issuer-envelope-v1';
 
 export async function validatePublicKey(publicKey) {
   // Web Crypto rejects malformed or off-curve P-256 points.

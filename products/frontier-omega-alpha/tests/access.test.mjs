@@ -6,6 +6,8 @@ import { getAddress, hashMessage, namehash } from 'ethers';
 import { SiweMessage } from 'siwe';
 import { createAccessServer } from '../access/server.mjs';
 import { releaseKey, rotateAsset } from '../access/crypto.mjs';
+import { decapsulate, ISSUER_ENVELOPE_SCHEMA, makeDeviceKey } from '../native/hpke.mjs';
+import { releaseTag } from '../native/protocol.mjs';
 import { decryptRelease } from '../../../docs/research/frontier-omega-alpha/decrypt.js';
 import { fakeMainnet, testStore, createWallet, memberRecord, clubNode, CLUB_PARENT, CLUB_ROOT, MINIMUM, WRAPPER } from './fixtures.mjs';
 
@@ -13,12 +15,12 @@ process.umask(0o077);
 const origin = 'https://research.example.test';
 const siteUrl = origin + '/frontier-omega-alpha/';
 
-async function setup(t) {
+async function setup(t, deviceIssuer = false) {
   let time = Date.now();
   const clock = () => time;
   const { chain, rpcState } = fakeMainnet(clock);
   const { store, wrappingKey, asset } = testStore(t);
-  const server = createAccessServer({ siteUrl, chain, store, wrappingKey, clock });
+  const server = createAccessServer({ siteUrl, chain, store, wrappingKey, clock, deviceIssuer });
   server.listen(0, '127.0.0.1');
   await once(server, 'listening');
   const target = 'http://127.0.0.1:' + server.address().port;
@@ -40,6 +42,43 @@ async function setup(t) {
   };
   return { post, challenge, login, store, wrappingKey, asset, rpcState, clock, advance: milliseconds => { time += milliseconds; } };
 }
+
+test('The optional issuer binds the key envelope to a fresh signed device and retains wallet revocation', async t => {
+  const s = await setup(t, true);
+  s.asset();
+  s.asset('server-only-record', 1, 'server');
+  const browser = await makeDeviceKey();
+  const other = await makeDeviceKey();
+  const wallet = createWallet();
+  const identity = { address: wallet.address, language: 'en', label: null, deviceKey: browser.publicKey };
+  assert.equal((await s.post('challenge', { ...identity, deviceKey: 'invalid' })).status, 400);
+  const { body: { nonce, message } } = await s.post('challenge', identity);
+  assert.ok(new SiweMessage(message).resources.includes('urn:frontier-omega-alpha:issuer-device:' + browser.publicKey));
+  const signed = { nonce, signature: await wallet.signMessage(message) };
+  const { body: session, status } = await s.post('verify', signed);
+  assert.equal(status, 200);
+  assert.equal(session.path, 'token');
+  assert.deepEqual((await s.post('catalog', {}, session.token)).body.entries.map(row => row.id), ['synthetic-record']);
+  assert.equal((await s.post('open', { id: 'server-only-record', version: 1 }, session.token)).status, 404);
+  assert.equal((await s.post('verify', signed)).status, 401);
+  const { body: release } = await s.post('open', { id: 'synthetic-record', version: 1 }, session.token);
+  assert.ok(release.keyEnvelope && !release.key && !release.record);
+  const transcript = hashMessage(message);
+  const tag = await releaseTag(release.ciphertext);
+  await assert.rejects(decapsulate(other, release.keyEnvelope, transcript, tag, ISSUER_ENVELOPE_SCHEMA));
+  await assert.rejects(decapsulate(browser, release.keyEnvelope, hashMessage(message + 'x'), tag, ISSUER_ENVELOPE_SCHEMA));
+  const key = await decapsulate(browser, release.keyEnvelope, transcript, tag, ISSUER_ENVELOPE_SCHEMA);
+  assert.deepEqual(await decryptRelease(release.ciphertext, Buffer.from(key).toString('base64url'),
+    { id: 'synthetic-record', version: 1 }), memberRecord);
+  key.fill(0);
+  s.store.revokeWallet(wallet.address);
+  assert.equal((await s.post('open', { id: 'synthetic-record', version: 1 }, session.token)).status, 401);
+  assert.equal((await s.post('challenge', identity)).status, 403);
+  s.store.revokeAll();
+  assert.equal((await s.post('challenge', identity)).status, 403);
+  s.store.restoreWallet(wallet.address);
+  assert.equal((await s.post('challenge', identity)).status, 200);
+});
 
 test('ENSv1 Registry verifies an unwrapped Club name and revokes the former owner after transfer', async t => {
   const s = await setup(t);

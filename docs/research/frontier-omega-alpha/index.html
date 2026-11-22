@@ -45,7 +45,7 @@
     <section id="access" class="frame gate" aria-labelledby="gate-title">
       <div class="gate-head">
         <h2 id="gate-title">Access the research</h2>
-        <p>Connect MetaMask on Ethereum mainnet. First-time enrollment sends zero ETH and requires a network fee. Returning to read uses the device key created at enrollment.</p>
+        <p>Connect MetaMask on Ethereum mainnet. Sign-in may ask you to sign a message. Access requires no transaction or gas.</p>
       </div>
       <div class="paths">
         <form class="path" id="club-form">
@@ -91,9 +91,16 @@
         </ul>
       </div>
     </section>
+    <section class="frame privacy" aria-labelledby="public-results-title">
+      <h2 id="public-results-title">Public research results</h2>
+      <div>
+        <p><strong>Verified in a matched test.</strong> Lean 4.36 checked two bit-vector proofs about equivalent inputs to a rule without inspecting the rule itself. Explicit proofs also passed in Lean 4.35. The new tactic simplifies this proof step for the tested cases. <a href="https://github.com/leanprover/lean4/releases/tag/v4.36.0">Lean 4.36 release notes</a></p>
+        <p><strong>Falsified within the registered CPU budget.</strong> Both Qwen GGUF configurations reached the 300-second limit. The direct validator solved all 12 release-record maintenance cases in 1.15 ms. <a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/pull/545">Comparison and reproduction instructions</a></p>
+      </div>
+    </section>
     <section class="frame privacy" id="privacy" aria-labelledby="privacy-title">
       <h2 id="privacy-title">Wallet access and privacy</h2>
-      <div><p>Enrollment is a public Ethereum transaction. The signing address, optional Club label and device public key can be linked to participation. The browser keeps a nonextractable private key on the isolated reader origin. Losing that browser data requires re-enrollment. Published envelopes and previously decrypted records can be saved by recipients.</p><p>Wallet eligibility grants reader access. Research operations require separate authority.</p></div>
+      <div><p>A MetaMask message can bind your wallet to this browser without an Ethereum transaction. In the GitHub-only reader, a new browser needs a one-time private handoff to receive its encrypted keys. A provisioned browser keeps its private key on the reader’s isolated origin. Clearing its storage may require a new handoff. Recipients can keep records they have already decrypted.</p><p>Wallet eligibility grants reader access. Research operations require separate authority.</p></div>
     </section>
   </main>
   <footer class="footer">

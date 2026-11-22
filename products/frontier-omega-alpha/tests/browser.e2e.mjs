@@ -1,13 +1,17 @@
 import assert from 'node:assert/strict';
+import { execFileSync } from 'node:child_process';
 import { once } from 'node:events';
-import { readFileSync } from 'node:fs';
+import { mkdtempSync, readFileSync, rmSync } from 'node:fs';
 import { createServer } from 'node:http';
-import { resolve } from 'node:path';
+import { createServer as httpsServer } from 'node:https';
+import { tmpdir } from 'node:os';
+import { join, resolve } from 'node:path';
 import test from 'node:test';
 import AxeBuilder from '@axe-core/playwright';
 import { chromium } from 'playwright';
 import { getBytes } from 'ethers';
 import { createAccessServer } from '../access/server.mjs';
+import { stageReader } from '../native/stage.mjs';
 import { fakeMainnet, createWallet, testStore, clubNode, MINIMUM } from './fixtures.mjs';
 
 process.umask(0o077);
@@ -65,6 +69,7 @@ async function installWallet(page, wallet, chain = '0x1') {
   await page.addInitScript(() => {
     const listeners = new Map();
     window.ethereum = {
+      isMetaMask: true,
       request: request => window.frontierWallet(request),
       on: (name, callback) => { listeners.set(name, callback); },
       removeListener: name => { listeners.delete(name); }
@@ -86,6 +91,7 @@ test('Bilingual landing is responsive, keyboard-accessible and offline without a
   const calls = await installWallet(page, createWallet());
   await page.goto(base + '/offline/');
   await page.getByRole('heading', { name: 'FRONTIER Ω ALPHA' }).waitFor();
+  await page.getByRole('heading', { name: 'Public research results' }).waitFor();
   await page.getByRole('button', { name: 'Enter with $AGIALPHA' }).click();
   assert.deepEqual(calls, []);
   assert.match(await page.locator('#status').innerText(), /offline/);
@@ -96,6 +102,7 @@ test('Bilingual landing is responsive, keyboard-accessible and offline without a
   }
   await page.getByRole('link', { name: 'Français' }).click();
   assert.equal(await page.locator('html').getAttribute('lang'), 'fr');
+  await page.getByRole('heading', { name: 'Résultats publics de recherche' }).waitFor();
   await page.setViewportSize({ width: 360, height: 780 });
   assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
   await page.getByRole('link', { name: 'Aller au contenu' }).focus();
@@ -109,6 +116,102 @@ test('Bilingual landing is responsive, keyboard-accessible and offline without a
   await wrongNetwork.getByText('Passez au réseau principal Ethereum dans votre portefeuille, puis réessayez.').waitFor();
   assert.equal(wrongCalls.includes('personal_sign'), false);
   assert.equal(await wrongNetwork.locator('#member').isVisible(), false);
+});
+
+test('Separate HTTPS origins provision the first and second browser without a device handoff', async t => {
+  const directory = mkdtempSync(join(tmpdir(), 'frontier-issuer-tls-'));
+  t.after(() => rmSync(directory, { recursive: true, force: true }));
+  const key = join(directory, 'key.pem');
+  const cert = join(directory, 'cert.pem');
+  execFileSync('openssl', ['req', '-x509', '-newkey', 'rsa:2048', '-nodes', '-keyout', key, '-out', cert,
+    '-days', '1', '-subj', '/CN=127.0.0.1', '-addext', 'subjectAltName=IP:127.0.0.1'], { stdio: 'ignore' });
+  const tls = { key: readFileSync(key), cert: readFileSync(cert) };
+  const staged = join(directory, 'reader');
+  await stageReader(staged, 'https://reader.example.test/', 'https://issuer.example.test/');
+
+  const { chain, rpcState } = fakeMainnet();
+  const { store, wrappingKey, asset } = testStore(t);
+  asset();
+  const catalog = { ...files, 'native-runtime.js': 'text/javascript' };
+  let issuerOrigin;
+  const web = httpsServer(tls, (request, response) => {
+    const filename = request.url === '/' ? 'index.html' : request.url.slice(1);
+    if (!Object.hasOwn(catalog, filename)) return response.writeHead(404).end();
+    let body = readFileSync(join(staged, filename));
+    if (filename.endsWith('.html')) body = body.toString('utf8').replaceAll('https://issuer.example.test', issuerOrigin);
+    return response.writeHead(200, { 'Content-Type': catalog[filename] }).end(body);
+  });
+  async function listen(server) {
+    t.after(() => new Promise(close => { server.close(close); server.closeAllConnections(); }));
+    server.listen(0, '127.0.0.1');
+    await once(server, 'listening');
+    return 'https://127.0.0.1:' + server.address().port;
+  }
+  const readerOrigin = await listen(web);
+  issuerOrigin = await listen(createAccessServer({
+    siteUrl: readerOrigin + '/', chain, store, wrappingKey, deviceIssuer: true,
+    serverFactory: (options, listener) => httpsServer({ ...options, ...tls }, listener)
+  }));
+  const browser = await chromium.launch({ executablePath: process.env.FRONTIER_CHROMIUM || undefined });
+  t.after(() => browser.close());
+  const member = createWallet();
+  rpcState.balance = 0n;
+  rpcState.owners.set(clubNode('founder-2'), member.address);
+  const expected = new Set(['eth_requestAccounts', 'eth_accounts', 'eth_chainId', 'personal_sign']);
+  for (const path of ['/', '/fr.html']) {
+    const french = path === '/fr.html';
+    if (french) {
+      rpcState.owners.delete(clubNode('founder-2'));
+      rpcState.balance = MINIMUM;
+    }
+    const context = await browser.newContext({ ignoreHTTPSErrors: true,
+      viewport: french ? { width: 390, height: 844 } : { width: 1440, height: 980 } });
+    const page = await context.newPage();
+    const calls = await installWallet(page, member);
+    await page.goto(readerOrigin + path);
+    const login = page.getByRole('button', { name: french ? 'Entrer avec $AGIALPHA' : 'Enter with AGI Club' });
+    if (!french) await page.getByLabel('Your AGI Club label').fill('founder-2');
+    await login.click();
+    const record = page.getByRole('button', { name: /synthetic-record/ });
+    const title = page.getByRole('heading', { name: french ? 'Dossier membre synthétique' : 'Synthetic member record' });
+    const delivery = page.waitForResponse(answer => answer.url() === issuerOrigin + '/v1/open' && answer.request().method() === 'POST');
+    await record.click();
+    await title.waitFor();
+    const response = await delivery;
+    assert.match(response.headers()['cache-control'], /no-store/);
+    assert.equal(response.headers()['access-control-allow-origin'], readerOrigin);
+    const envelope = await response.json();
+    assert.ok(envelope.keyEnvelope && envelope.ciphertext && !envelope.key && !envelope.record);
+    assert.deepEqual(new Set(calls), expected);
+    assert.equal(calls.filter(method => method === 'personal_sign').length, 1);
+    assert.equal(await page.locator('#native-controls').isVisible(), false);
+    assert.equal(await page.evaluate(() => globalThis.isSecureContext && localStorage.length === 0 &&
+      sessionStorage.length === 0 && document.documentElement.scrollWidth <= innerWidth), true);
+    if (french) {
+      rpcState.outage = true;
+      await record.click();
+      await page.getByText('La vérification est temporairement indisponible. Le contenu reste verrouillé.').waitFor();
+      assert.equal(await title.isVisible(), false);
+      rpcState.outage = false;
+      await login.click();
+      await record.click();
+      await title.waitFor();
+      await page.evaluate(() => window.frontierWalletEvent('accountsChanged'));
+      assert.equal(await page.locator('#member').isVisible(), false);
+      assert.equal(await page.locator('#record').innerText(), '');
+      await page.route(issuerOrigin + '/v1/challenge', async route => {
+        if (route.request().method() !== 'POST') return route.continue();
+        const response = await route.fetch();
+        const challenge = await response.json();
+        challenge.message = challenge.message.replace('issuer-device:', 'other-device:');
+        await route.fulfill({ response, json: challenge });
+      });
+      const signed = calls.filter(method => method === 'personal_sign').length;
+      await login.click();
+      await page.getByText('La signature n’a pas pu être vérifiée. Relancez la connexion.').waitFor();
+      assert.equal(calls.filter(method => method === 'personal_sign').length, signed);
+    }
+  }
 });
 
 test('AGI Club login opens and decrypts the English research area, then clears it on a wallet change', async t => {

@@ -1,10 +1,10 @@
-import { getAddress } from 'ethers';
+import { getAddress, hashMessage } from 'ethers';
 import { Mainnet, clubLabel } from '../access/chain.mjs';
 import {
   address, assertLibrary, enrollmentId, hex, MAX_LIBRARY_BYTES, releaseTag, SIGNED_LIBRARY_SCHEMA, toBase64, WINDOW_SECONDS
 } from './protocol.mjs';
 import { compareDevice, loadDevice } from './device.mjs';
-import { decapsulate, makeDeviceKey } from './hpke.mjs';
+import { decapsulate, ISSUER_ENVELOPE_SCHEMA, makeDeviceKey } from './hpke.mjs';
 import { authenticateSignedEnrollment, makeSignedEnrollment, signedEnrollmentMessage } from './signed-enrollment.mjs';
 
 const sharedOrigin = 'https://montrealai.github.io';
@@ -21,6 +21,52 @@ function metaMask() {
   window.dispatchEvent(new Event('eip6963:requestProvider'));
   return detected.values().next().value ?? [...(window.ethereum?.providers ?? []), window.ethereum]
     .find(provider => provider?.isMetaMask === true && typeof provider.request === 'function');
+}
+
+export async function connectIssuerDevice() {
+  if (location.origin === sharedOrigin || window.top !== window.self) throw Error('reader_origin');
+  const wallet = metaMask();
+  if (!wallet) throw Error('wallet_missing');
+  const device = await makeDeviceKey();
+  return {
+    wallet,
+    publicKey: device.publicKey,
+    validateChallenge({ nonce, message }, owner, label, language) {
+      try {
+        const lines = message.split('\n');
+        const issuedAt = Date.parse(lines[9]?.slice('Issued At: '.length));
+        const expiry = Date.parse(lines[10]?.slice('Expiration Time: '.length));
+        const now = Date.now();
+        const statement = language === 'fr'
+          ? 'Connectez-vous a FRONTIER OMEGA ALPHA. Cette signature ne permet aucune transaction.'
+          : 'Sign in to FRONTIER OMEGA ALPHA. This signature does not authorize a transaction.';
+        const eligibility = label === null ? 'urn:frontier-omega-alpha:token' :
+          'urn:frontier-omega-alpha:club:' + encodeURIComponent(clubLabel(label)) + '.club.agi.eth';
+        const expected = [
+          location.origin + ' wants you to sign in with your Ethereum account:',
+          getAddress(owner), '', statement, '', 'URI: ' + location.origin + '/',
+          'Version: 1', 'Chain ID: 1', 'Nonce: ' + nonce,
+          'Issued At: ' + new Date(issuedAt).toISOString(), 'Expiration Time: ' + new Date(expiry).toISOString(),
+          'Resources:', '- ' + eligibility, '- urn:frontier-omega-alpha:issuer-device:' + device.publicKey
+        ].join('\n');
+        if (message !== expected || !/^[a-f0-9]{32}$/.test(nonce) ||
+            expiry <= now || expiry - issuedAt !== 120000 || issuedAt > now + 15000) throw Error();
+      } catch {
+        throw Error('invalid_signature');
+      }
+    },
+    async unwrap(result, message) {
+      if (Object.hasOwn(result, 'key') || Object.hasOwn(result, 'record')) throw Error('release_unavailable');
+      const { ciphertext, keyEnvelope } = result;
+      const key = await decapsulate(device, keyEnvelope, hashMessage(message),
+        await releaseTag(ciphertext), ISSUER_ENVELOPE_SCHEMA);
+      try {
+        return { ciphertext, key: toBase64(key) };
+      } finally {
+        key.fill(0);
+      }
+    }
+  };
 }
 
 export function validateReader(config, actual = location, loopbackTest = false) {

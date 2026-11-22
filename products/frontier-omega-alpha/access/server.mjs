@@ -1,17 +1,21 @@
 import { createServer } from 'node:http';
 import { pathToFileURL } from 'node:url';
-import { getAddress, ZeroAddress } from 'ethers';
+import { getAddress, hashMessage, ZeroAddress } from 'ethers';
 import { SiweMessage } from 'siwe';
 import { Mainnet, clubLabel, httpRpc } from './chain.mjs';
 import { Store, opaqueToken, readKey } from './store.mjs';
 import { releaseKey, decryptAsset } from './crypto.mjs';
 import { validId, validVersion, validateRecord } from './records.mjs';
+import { encapsulate, ISSUER_ENVELOPE_SCHEMA, validatePublicKey } from '../native/hpke.mjs';
+import { releaseTag } from '../native/protocol.mjs';
 
 const noncePattern = /^[a-f0-9]{32}$/;
 const signaturePattern = /^0x(?:[a-f0-9]{2}){1,4096}$/i;
 const routes = new Set(['challenge', 'verify', 'session', 'catalog', 'open', 'logout']);
 const challengeLifetime = 2 * 60_000;
 const sessionLifetime = 5 * 60_000;
+const deviceResource = 'urn:frontier-omega-alpha:issuer-device:';
+const browserFormat = 'research-json.browser.v1';
 
 class RequestError extends Error {
   constructor(status, code) {
@@ -80,8 +84,11 @@ function send(response, status, value) {
   response.end(JSON.stringify(value));
 }
 
-export function createAccessServer({ siteUrl, localHttp = false, chain, store, wrappingKey, clock = Date.now }) {
+export function createAccessServer({
+  siteUrl, localHttp = false, deviceIssuer = false, chain, store, wrappingKey, clock = Date.now, serverFactory = createServer
+}) {
   const site = configuredSite(siteUrl, localHttp);
+  if (deviceIssuer && site.hostname === 'montrealai.github.io') throw Error('Use the isolated reader origin');
   const limit = rateLimit(clock);
   async function authorize(token) {
     const session = store.session(token, clock());
@@ -99,14 +106,16 @@ export function createAccessServer({ siteUrl, localHttp = false, chain, store, w
     }
     // Check once more after async reads in case the session expired or was revoked meanwhile.
     if (!store.session(token, clock())) throw new RequestError(401, 'session_required');
-    return { path, expiresAt: session.expires, block: snapshot.number };
+    return { session, access: { path, expiresAt: session.expires, block: snapshot.number } };
   }
 
   async function dispatch(route, request) {
     const ip = request.socket.remoteAddress;
     if (route === 'challenge') {
       limit('challenge', ip, 100, 40);
-      const { address, label, language } = await parseBody(request, ['address', 'label', 'language']);
+      const fields = ['address', 'label', 'language'];
+      if (deviceIssuer) fields.push('deviceKey');
+      const { address, label, language, deviceKey } = await parseBody(request, fields);
       if (!['en', 'fr'].includes(language)) throw new RequestError(400, 'invalid_request');
       let wallet;
       let club;
@@ -115,12 +124,16 @@ export function createAccessServer({ siteUrl, localHttp = false, chain, store, w
         wallet = getAddress(address);
         if (wallet === ZeroAddress) throw Error();
         club = label === null ? null : clubLabel(label);
+        if (deviceIssuer) await validatePublicKey(deviceKey);
       } catch {
         throw new RequestError(400, 'invalid_identity');
       }
+      if (store.revokedWallet(wallet)) throw new RequestError(403, 'ineligible');
       const now = clock();
       const expires = now + challengeLifetime;
       const nonce = opaqueToken(16);
+      const resources = [club ? 'urn:frontier-omega-alpha:club:' + encodeURIComponent(club) + '.club.agi.eth' : 'urn:frontier-omega-alpha:token'];
+      if (deviceIssuer) resources.push(deviceResource + deviceKey);
       const message = new SiweMessage({
         scheme: site.protocol.slice(0, -1),
         domain: site.host,
@@ -134,7 +147,7 @@ export function createAccessServer({ siteUrl, localHttp = false, chain, store, w
         nonce,
         issuedAt: new Date(now).toISOString(),
         expirationTime: new Date(expires).toISOString(),
-        resources: [club ? 'urn:frontier-omega-alpha:club:' + encodeURIComponent(club) + '.club.agi.eth' : 'urn:frontier-omega-alpha:token']
+        resources
       }).prepareMessage();
       store.challenge(nonce, wallet, club, message, expires);
       return { nonce, message };
@@ -156,7 +169,7 @@ export function createAccessServer({ siteUrl, localHttp = false, chain, store, w
       if (!store.compatibleKey(wrappingKey.epoch)) throw Error('Key epoch unavailable');
       const now = clock();
       const expiresAt = now + sessionLifetime;
-      const token = store.issue(challenge, type === 'contract' ? signature : null, now, expiresAt);
+      const token = store.issue(challenge, type === 'contract' ? signature : null, now, expiresAt, deviceIssuer);
       if (!token) throw new RequestError(401, 'challenge_expired');
       return { token, path, expiresAt, block: snapshot.number };
     }
@@ -172,15 +185,27 @@ export function createAccessServer({ siteUrl, localHttp = false, chain, store, w
       throw new RequestError(400, 'invalid_request');
     }
     limit('protected', ip, 480, 240);
-    const access = await authorize(token);
+    const { session, access } = await authorize(token);
     if (!store.compatibleKey(wrappingKey.epoch)) throw Error('Key epoch unavailable');
     if (route === 'session') return access;
-    if (route === 'catalog') return { ...access, entries: store.catalog(wrappingKey.epoch) };
+    if (route === 'catalog') return { ...access, entries: store.catalog(wrappingKey.epoch, deviceIssuer ? browserFormat : null) };
     const envelope = store.asset(data.id, data.version, wrappingKey.epoch);
     if (!envelope) throw new RequestError(404, 'release_unavailable');
+    if (deviceIssuer && envelope.format !== browserFormat) throw new RequestError(404, 'release_unavailable');
     const key = releaseKey(envelope, wrappingKey.key);
     try {
       const { wrapped, ...ciphertext } = envelope;
+      if (deviceIssuer) {
+        const resource = new SiweMessage(session.message).resources.find(value => value.startsWith(deviceResource));
+        if (!resource) throw new RequestError(401, 'session_required');
+        const recipient = await validatePublicKey(resource.slice(deviceResource.length));
+        const keyEnvelope = await encapsulate(recipient, key, hashMessage(session.message),
+          await releaseTag(ciphertext), ISSUER_ENVELOPE_SCHEMA);
+        if (!store.session(token, clock()) || !store.asset(data.id, data.version, wrappingKey.epoch)) {
+          throw new RequestError(401, 'session_required');
+        }
+        return { ...access, ciphertext, keyEnvelope };
+      }
       if (ciphertext.format === 'research-json.server.v1') {
         const bytes = decryptAsset(envelope, key);
         try {
@@ -196,7 +221,7 @@ export function createAccessServer({ siteUrl, localHttp = false, chain, store, w
   }
 
   let pending = 0;
-  const server = createServer({ requestTimeout: 15000, headersTimeout: 10000, maxHeaderSize: 8192 }, async (request, response) => {
+  const server = serverFactory({ requestTimeout: 15000, headersTimeout: 10000, maxHeaderSize: 8192 }, async (request, response) => {
     response.setHeader('Cache-Control', 'no-store, private, max-age=0');
     response.setHeader('Pragma', 'no-cache');
     response.setHeader('X-Content-Type-Options', 'nosniff');
@@ -248,7 +273,8 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
     if (!Number.isInteger(port) || port < 1024 || port > 65535) throw Error('Invalid port');
     const server = createAccessServer({
       siteUrl: process.env.FRONTIER_SITE_URL, chain, store, wrappingKey,
-      localHttp: process.env.FRONTIER_LOCAL_HTTP === '1'
+      localHttp: process.env.FRONTIER_LOCAL_HTTP === '1',
+      deviceIssuer: process.env.FRONTIER_DEVICE_ISSUER === '1'
     });
     server.on('error', () => {
       console.error('Access service could not listen.');
