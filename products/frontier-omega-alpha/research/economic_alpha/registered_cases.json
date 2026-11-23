@@ -1,0 +1,280 @@
+{
+  "s1": [
+    {
+      "id": "standard-at-limit",
+      "input": {
+        "model": "core one",
+        "nozzle_requirement_c": 290,
+        "use": "non_safety_critical"
+      },
+      "expected": "existing-envelope"
+    },
+    {
+      "id": "one-over-stock",
+      "input": {
+        "model": "Prusa CORE ONE",
+        "nozzle_requirement_c": 291,
+        "use": "non_safety_critical"
+      },
+      "expected": "retrofit-candidate"
+    },
+    {
+      "id": "maximum-upgrade",
+      "input": {
+        "model": "core one+",
+        "nozzle_requirement_c": 400,
+        "use": "non_safety_critical"
+      },
+      "expected": "retrofit-candidate"
+    },
+    {
+      "id": "one-over-upgrade",
+      "input": {
+        "model": "core one+",
+        "nozzle_requirement_c": 401,
+        "use": "non_safety_critical"
+      },
+      "expected": "no-documented-path"
+    },
+    {
+      "id": "large-variant",
+      "input": {
+        "model": "CORE One L+",
+        "nozzle_requirement_c": 360,
+        "use": "non_safety_critical"
+      },
+      "expected": "retrofit-candidate"
+    },
+    {
+      "id": "large-original",
+      "input": {
+        "model": "CORE One L",
+        "nozzle_requirement_c": 330,
+        "use": "non_safety_critical"
+      },
+      "expected": "retrofit-candidate"
+    },
+    {
+      "id": "plus-gen2",
+      "input": {
+        "model": "CORE One+ (Gen 2)",
+        "nozzle_requirement_c": 390,
+        "use": "non_safety_critical"
+      },
+      "expected": "retrofit-candidate"
+    },
+    {
+      "id": "unlisted-model",
+      "input": {
+        "model": "CORE Two",
+        "nozzle_requirement_c": 350,
+        "use": "non_safety_critical"
+      },
+      "expected": "need-model-evidence"
+    },
+    {
+      "id": "named-exclusion",
+      "input": {
+        "model": "INDX (C1)",
+        "nozzle_requirement_c": 350,
+        "use": "non_safety_critical"
+      },
+      "expected": "unsupported-configuration"
+    },
+    {
+      "id": "exclude-indx-l",
+      "input": {
+        "model": "CORE One L+ INDX",
+        "nozzle_requirement_c": 350,
+        "use": "non_safety_critical"
+      },
+      "expected": "unsupported-configuration"
+    },
+    {
+      "id": "exclude-mk4s",
+      "input": {
+        "model": "MK4S",
+        "nozzle_requirement_c": 340,
+        "use": "non_safety_critical"
+      },
+      "expected": "unsupported-configuration"
+    },
+    {
+      "id": "exclude-xl",
+      "input": {
+        "model": "XL",
+        "nozzle_requirement_c": 380,
+        "use": "non_safety_critical"
+      },
+      "expected": "unsupported-configuration"
+    },
+    {
+      "id": "empty-identifier",
+      "input": {
+        "model": "",
+        "nozzle_requirement_c": 330,
+        "use": "non_safety_critical"
+      },
+      "expected": "need-model-evidence"
+    },
+    {
+      "id": "ambiguous-alias",
+      "input": {
+        "model": "core1 plus",
+        "nozzle_requirement_c": 315,
+        "use": "non_safety_critical"
+      },
+      "expected": "need-model-evidence"
+    },
+    {
+      "id": "safety-approval",
+      "input": {
+        "model": "core one l+",
+        "nozzle_requirement_c": 330,
+        "use": "safety_critical"
+      },
+      "expected": "external-review-required"
+    },
+    {
+      "id": "unknown-use",
+      "input": {
+        "model": "core one l+",
+        "nozzle_requirement_c": 330,
+        "use": "unknown"
+      },
+      "expected": "external-review-required"
+    }
+  ],
+  "s2": [
+    {
+      "id": "large-documented-envelope",
+      "input": {
+        "model": "core one l+",
+        "nozzle_requirement_c": 350,
+        "use": "non_safety_critical",
+        "claimed_installed": "retrofit",
+        "required_chamber_c": 60,
+        "sheet": "oem-hightemp-matching-model",
+        "site_review": "approved-evidence"
+      },
+      "expected": "documented-process-envelope"
+    },
+    {
+      "id": "gen2-boundary",
+      "input": {
+        "model": "core one+ (gen 2)",
+        "nozzle_requirement_c": 350,
+        "use": "non_safety_critical",
+        "claimed_installed": "retrofit",
+        "required_chamber_c": 55,
+        "sheet": "oem-hightemp-matching-model",
+        "site_review": "approved-evidence"
+      },
+      "expected": "documented-process-envelope"
+    },
+    {
+      "id": "large-above-chamber-cap",
+      "input": {
+        "model": "core one l",
+        "nozzle_requirement_c": 350,
+        "use": "non_safety_critical",
+        "claimed_installed": "retrofit",
+        "required_chamber_c": 61,
+        "sheet": "oem-hightemp-matching-model",
+        "site_review": "approved-evidence"
+      },
+      "expected": "outside-chamber-envelope"
+    },
+    {
+      "id": "smaller-above-chamber-cap",
+      "input": {
+        "model": "core one+ (gen 2)",
+        "nozzle_requirement_c": 350,
+        "use": "non_safety_critical",
+        "claimed_installed": "retrofit",
+        "required_chamber_c": 56,
+        "sheet": "oem-hightemp-matching-model",
+        "site_review": "approved-evidence"
+      },
+      "expected": "outside-chamber-envelope"
+    },
+    {
+      "id": "hardware-route-insufficient",
+      "input": {
+        "model": "core one l+",
+        "nozzle_requirement_c": 350,
+        "use": "non_safety_critical",
+        "claimed_installed": "standard",
+        "required_chamber_c": 60,
+        "sheet": "oem-hightemp-matching-model",
+        "site_review": "approved-evidence"
+      },
+      "expected": "installed-configuration-unverified"
+    },
+    {
+      "id": "incomplete-process-material",
+      "input": {
+        "model": "core one l+",
+        "nozzle_requirement_c": 350,
+        "use": "non_safety_critical",
+        "claimed_installed": "retrofit",
+        "required_chamber_c": 60,
+        "sheet": "oem-hightemp-matching-model",
+        "site_review": "missing"
+      },
+      "expected": "site-evidence-required"
+    },
+    {
+      "id": "surface-incomplete",
+      "input": {
+        "model": "core one l+",
+        "nozzle_requirement_c": 350,
+        "use": "non_safety_critical",
+        "claimed_installed": "retrofit",
+        "required_chamber_c": 60,
+        "sheet": "unknown",
+        "site_review": "approved-evidence"
+      },
+      "expected": "accessory-evidence-required"
+    },
+    {
+      "id": "unproven-chamber-limit",
+      "input": {
+        "model": "core one+",
+        "nozzle_requirement_c": 350,
+        "use": "non_safety_critical",
+        "claimed_installed": "retrofit",
+        "required_chamber_c": 50,
+        "sheet": "oem-hightemp-matching-model",
+        "site_review": "approved-evidence"
+      },
+      "expected": "need-chamber-evidence"
+    },
+    {
+      "id": "unsupported-successor",
+      "input": {
+        "model": "INDX (C1L)",
+        "nozzle_requirement_c": 350,
+        "use": "non_safety_critical",
+        "claimed_installed": "retrofit",
+        "required_chamber_c": 60,
+        "sheet": "oem-hightemp-matching-model",
+        "site_review": "approved-evidence"
+      },
+      "expected": "unsupported-configuration"
+    },
+    {
+      "id": "missing-revision",
+      "input": {
+        "model": "core1 plus",
+        "nozzle_requirement_c": 350,
+        "use": "non_safety_critical",
+        "claimed_installed": "retrofit",
+        "required_chamber_c": 55,
+        "sheet": "oem-hightemp-matching-model",
+        "site_review": "approved-evidence"
+      },
+      "expected": "need-model-evidence"
+    }
+  ]
+}

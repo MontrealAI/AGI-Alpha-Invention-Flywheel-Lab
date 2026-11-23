@@ -1,0 +1,131 @@
+{
+  "schema": "frontier-omega-alpha/alpha-1-v1",
+  "frozen_on": "2026-11-22",
+  "technical_beneficiary_scope": "Independent fabrication shop with a named installed compatible machine. Real beneficiary identity pending separate authorization.",
+  "use": "Non-safety-critical desktop fabrication inquiry and conditional qualification. Public cases use authored inquiries and curated facts from OEM records.",
+  "required_outcome": "Return a manufacturer-documented compatibility route or a scoped hold, with exact source facts and no procurement or physical approval.",
+  "commercial_authority": "No private partner, wallet, machine, order or payment authority has been granted.",
+  "unsupported_use": "A regulated, safety-critical or unknown application requires separate qualified review.",
+  "before": "2026-10-20",
+  "after": "2026-10-21",
+  "sku": "prusa-ht-hotend-upgrade",
+  "catalog": {
+    "standard_nozzle_c": 290,
+    "retrofit_nozzle_c": 400,
+    "eligible": {
+      "core-one": {
+        "labels": [
+          "core one",
+          "prusa core one"
+        ],
+        "chamber_limit_c": null
+      },
+      "core-one-plus": {
+        "labels": [
+          "core one+",
+          "prusa core one+"
+        ],
+        "chamber_limit_c": null
+      },
+      "core-one-plus-gen2": {
+        "labels": [
+          "core one+ (gen 2)",
+          "prusa core one+ (gen 2)"
+        ],
+        "chamber_limit_c": 55
+      },
+      "core-one-l": {
+        "labels": [
+          "core one l",
+          "prusa core one l"
+        ],
+        "chamber_limit_c": 60
+      },
+      "core-one-l-plus": {
+        "labels": [
+          "core one l+",
+          "prusa core one l+"
+        ],
+        "chamber_limit_c": 60
+      }
+    },
+    "explicit_exclusions": [
+      "mk4s",
+      "xl",
+      "xl+",
+      "indx (c1)",
+      "indx (c1l)",
+      "core one+ indx",
+      "core one l+ indx"
+    ],
+    "successor_sheet": "oem-hightemp-matching-model"
+  },
+  "acceptance": {
+    "technical": "All registered route decisions match separately implemented verifier and stated requirements. Any negative case offered as a fulfillment or use approval fails.",
+    "primary_compare": "Strong same-information conventional route implemented as SQLite conditional lookup. OEM sources form the specialist comparison. Human, marketplace, alternative machine and outsourcing routes retain unmeasured complete costs.",
+    "replay": "Use exactly the same S1 cases, constraints and known stock configuration before and after folding in the OEM launch fact. The replay tests the hardware envelope only.",
+    "s1_retention": "Freeze the executable compatibility selector and its catalog inputs before executing S2. Retain exact SHA-256 source identity.",
+    "s2": "Readiness screen for a distinct installed production process: chamber limit, modeled accessory, current installed configuration and process witness. Separate direct and no-artifact controls use the same facts.",
+    "reject_claims": "Part compatibility does not establish current stock, signed terms, acceptance, independent supplier evidence, safe printing, customer payment or positive economic value."
+  },
+  "alternatives": [
+    "incumbent-workflow",
+    "direct-specialist",
+    "conventional",
+    "no-deployment"
+  ],
+  "cost_categories": [
+    "development",
+    "failed_attempts",
+    "data",
+    "integration",
+    "inference",
+    "operations",
+    "maintenance",
+    "verification",
+    "labor",
+    "obligations"
+  ],
+  "sources": {
+    "release": {
+      "url": "https://blog.prusa3d.com/ht-hotend-is-out-plus-we-offer-new-materials-and-hightemp-sheets-for-core-one-l_138625/",
+      "upstream": "prusa",
+      "identity": "2026-10-21 manufacturer release"
+    },
+    "upgrade": {
+      "url": "https://www.prusa3d.com/product/ht-hotend-upgrade-for-core-one-and-core-one-l/",
+      "upstream": "prusa",
+      "identity": "OEM retrofit product and compatibility table"
+    },
+    "stock": {
+      "url": "https://www.prusa3d.com/en/product/prusa-core-one/",
+      "upstream": "prusa",
+      "identity": "OEM comparative specifications"
+    },
+    "large": {
+      "url": "https://www.prusa3d.com/en/product/prusa-core-one-l-3/",
+      "upstream": "prusa",
+      "identity": "OEM CORE One L+ specifications"
+    },
+    "parts-specialist": {
+      "url": "https://www.partium.io/parts-intelligence/spare-parts-identification",
+      "upstream": "partium",
+      "identity": "installed incumbent product description"
+    },
+    "market-signal": {
+      "url": "https://openrepair.org/open-data/downloads/",
+      "upstream": "open-repair-alliance",
+      "identity": "October 2026 Open Repair publication; general repair records, not RFQs"
+    },
+    "docling": {
+      "url": "https://github.com/docling-project/docling/commit/557df04",
+      "upstream": "docling-project",
+      "identity": "upstream Docling provenance fix"
+    },
+    "lean": {
+      "url": "https://lean-lang.org/doc/reference/latest/releases/v4.36.0/",
+      "upstream": "lean-project",
+      "identity": "Lean 4.36.0 release notes, 2026-11-16"
+    }
+  }
+}

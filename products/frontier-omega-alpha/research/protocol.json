@@ -1,0 +1,198 @@
+{
+  "schema": "frontier-omega-alpha/research-protocol-v1",
+  "settings": {
+    "impact": 3,
+    "evidence": 3,
+    "test_readiness": 2
+  },
+  "as_of": "2026-11-22",
+  "week_earlier": "2026-11-15",
+  "scope": "Adjudicate the cited, third-party statement-match and axiom receipts for a dependent project. No theorem proving, mathematical acceptance on behalf of a customer, or claims of new proof checking.",
+  "acceptance": "Both comparator logs must report zero process exit, a matching verified aggregate and each requested theorem once. The Lean axiom audit must list each requested theorem exactly once with the registered allowed axioms. The source snapshot must match pinned bytes. Independent direct inspection and candidate indexing must agree on all real and negative cases.",
+  "sources": {
+    "mit-rh": {
+      "url": "https://math.mit.edu/~drew/grh/",
+      "published": "2026-11-21",
+      "title": "MIT published RH and arithmetic verification receipts"
+    },
+    "lean-rh": {
+      "url": "https://leanprover-community.github.io/blog/posts/riemann-hypothesis/",
+      "published": "2026-11-21",
+      "title": "Lean and Mathlib community verification"
+    },
+    "inkling": {
+      "url": "https://huggingface.co/thinkingmachines/Inkling-2-Mini/raw/main/README.md",
+      "published": "2026-11-20",
+      "title": "Thinking Machines Lab public Inkling 2 Mini model card"
+    },
+    "faltings": {
+      "url": "https://axiommath.ai/research/faltings-theorem-formalized/",
+      "published": "2026-11-12",
+      "title": "Axiom formalization of Faltings’ theorem"
+    }
+  },
+  "opportunities": [
+    {
+      "id": "proof-dependency-qualification",
+      "changed": "Independent verification teams published statement-matching logs and axiom audits for the new Lean proof and subsequent arithmetic corollaries.",
+      "counterfactual": "On 15 November the checked RH proof and these precise dependency receipts were unavailable. An integration decision relying on those verified declarations could not cite them.",
+      "outcome": "A machine-readable decision about whether an exact mathematical dependency has documented third-party statement and axiom evidence for feasibility work.",
+      "beneficiary": "MONTREAL.AI research and Lean maintainers assessing large newly released formal artifacts.",
+      "alternatives": [
+        "Read and compare the original reports directly",
+        "Run the official Comparator or replay the export with an independent kernel"
+      ],
+      "resources_authority": "Published logs and local Python only. No account, spend, cloud or remote execution.",
+      "cost_estimate": "Small local replay. Full engineering labor, infrastructure cost and partner integration cost unmeasured.",
+      "uncertainties": "Shared upstream artifacts and publisher custody limit independent trust. No dependency build, buyer acceptance or paid demand has been tested.",
+      "experiment": "Compare a reusable indexed receipt parser with independent direct evidence inspection on RH then arithmetic claim sets.",
+      "falsifier": "Missing pinned bytes, disagreement on expected claims or acceptance of an unregistered statement, failed checker or unapproved axiom.",
+      "capture": "Retain the evidence adapter and evaluate demand for source-bound dependency acceptance with volunteer counterparties under separate authority.",
+      "decision": "experiment",
+      "sources": [
+        "mit-rh",
+        "lean-rh"
+      ],
+      "scores": {
+        "impact": 5,
+        "evidence": 5,
+        "test_readiness": 5
+      }
+    },
+    {
+      "id": "local-multimodal-evidence",
+      "changed": "Inkling 2 Mini released downloadable multimodal weights.",
+      "counterfactual": "These weights were unavailable on 15 November. Existing local vision models could already address some private evidence workflows.",
+      "outcome": "Locally extract disputed image evidence for review under a fixed compute budget.",
+      "beneficiary": "MONTREAL.AI researchers moving private inspection tasks off external APIs.",
+      "alternatives": [
+        "Existing local open-weight vision-language models",
+        "Conventional OCR and human inspection"
+      ],
+      "resources_authority": "Authorized local hardware and a licensed, consented evaluation set.",
+      "cost_estimate": "Unknown until a matched local comparison measures run time and setup.",
+      "uncertainties": "Hardware practicality, accuracy, license fit and residual versus existing alternatives.",
+      "experiment": "Prepare a matched local comparison on an authorized image set.",
+      "falsifier": "Existing models meet the same accepted outputs inside the same full cost and resource budget.",
+      "capture": "A portable local evidence workflow if incremental value survives.",
+      "decision": "prepare",
+      "sources": [
+        "inkling"
+      ],
+      "scores": {
+        "impact": 4,
+        "evidence": 3,
+        "test_readiness": 2
+      }
+    },
+    {
+      "id": "rational-point-dependency",
+      "changed": "Axiom published a Lean formalization of Faltings’ theorem on 12 November.",
+      "counterfactual": "The change precedes the registered week-over-week boundary. No additional qualifying change was demonstrated.",
+      "outcome": "Identify where an importable finiteness theorem actually removes a downstream proof obligation.",
+      "beneficiary": "Formal mathematicians building a verified algebraic-geometry dependency.",
+      "alternatives": [
+        "Existing published proof and libraries",
+        "Direct use of the Axiom project"
+      ],
+      "resources_authority": "Authorized formal source and an isolated Lean build with pinned dependencies.",
+      "cost_estimate": "Unknown pending compatible Lean builds and expert statement review.",
+      "uncertainties": "Executable applicability and any downstream acceptance benefit remain untested.",
+      "experiment": "Define a downstream proof obligation and source-pinned acceptance rule before construction.",
+      "falsifier": "No changed current constraint or existing direct import already satisfies the full outcome.",
+      "capture": "A retained method for downstream theorem-reuse qualification if demonstrated.",
+      "decision": "defer",
+      "sources": [
+        "faltings"
+      ],
+      "scores": {
+        "impact": 4,
+        "evidence": 3,
+        "test_readiness": 1
+      }
+    }
+  ],
+  "allowed_axioms": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "stages": [
+    {
+      "id": "riemann-dirichlet",
+      "theorems": [
+        "riemannHypothesis",
+        "riemannZeta_eq_zero_re",
+        "LFunction_ne_zero_of_half_lt_re",
+        "LFunction_eq_zero_re",
+        "LFunction_eq_zero_re_of_isPrimitive"
+      ],
+      "challenge_declarations": 51692,
+      "solution_declarations": 1468418,
+      "files": {
+        "audit": {
+          "file": "audit.log",
+          "url": "https://math.mit.edu/~drew/grh/audit.log",
+          "bytes": 2062,
+          "sha256": "0a1473fce6eed840011f4a76b1c51558fc6f03edd1e6bd1ee542e6c738d87a62"
+        },
+        "con-leche": {
+          "file": "con-leche-compare.log",
+          "url": "https://math.mit.edu/~drew/grh/con-leche-compare.log",
+          "bytes": 5875,
+          "sha256": "5a068bf55f24904eea9f05eda947c63d43bdee3c6ab0490e43943a3bd9af1f6e"
+        },
+        "con-ron": {
+          "file": "con-ron-compare.log",
+          "url": "https://math.mit.edu/~drew/grh/con-ron-compare.log",
+          "bytes": 2969,
+          "sha256": "dcf2fbbde0e27ef8828b7d788ea7b9f9f65ba7a8246798ffd47298f89a3ee2ff"
+        }
+      }
+    },
+    {
+      "id": "robin-lagarias",
+      "theorems": [
+        "robin_inequality",
+        "lagarias_inequality"
+      ],
+      "challenge_declarations": 15156,
+      "solution_declarations": 1472825,
+      "files": {
+        "audit": {
+          "file": "arith-audit.log",
+          "url": "https://math.mit.edu/~drew/grh/arith-audit.log",
+          "bytes": 713,
+          "sha256": "6cd5dbc8da46e6dd88b6eac4f6a94ff1bd51cc63f61279bf438d149db1979ff4"
+        },
+        "con-leche": {
+          "file": "arith-con-leche-compare.log",
+          "url": "https://math.mit.edu/~drew/grh/arith-con-leche-compare.log",
+          "bytes": 2596,
+          "sha256": "bf9adf0a48fa4ee2d06de00ce7737fd9e32de539f3c852b8240ee65cdef55a76"
+        },
+        "con-ron": {
+          "file": "arith-con-ron-compare.log",
+          "url": "https://math.mit.edu/~drew/grh/arith-con-ron-compare.log",
+          "bytes": 1157,
+          "sha256": "6358eeac1787a88641458734c6d7867675e2aa8592cf50f1034af6ea99d7e60e"
+        },
+        "statement": {
+          "file": "ArithChallenge.lean",
+          "url": "https://math.mit.edu/~drew/grh/ArithChallenge.lean",
+          "bytes": 1099,
+          "sha256": "7a168036b5d9d4c0addfad28eec6a47ae1d860498aea39899f97e965eb0a2698"
+        }
+      }
+    }
+  ],
+  "negative_cases": [
+    "missing_statement_match",
+    "failed_checker",
+    "disallowed_axiom",
+    "unregistered_theorem",
+    "duplicate_witness",
+    "wrong_declaration_count"
+  ],
+  "comparison_scope": "Use identical inputs and acceptance for both methods. The logs were inspected before this registration for format and case selection. The arithmetic stage is a scope transfer, not a blinded holdout. Record construction and inference costs as unknown where unmeasured. Actual payment and profit require external evidence."
+}
