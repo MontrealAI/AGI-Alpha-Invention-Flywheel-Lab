@@ -39,7 +39,8 @@ jobs:
       github.repository == 'MontrealAI/AGI-Alpha-Invention-Flywheel-Lab' &&
       github.ref == 'refs/heads/main' &&
       github.event_name != 'pull_request' &&
-      vars.FRONTIER_ALPHA_OBSERVATORY_ENABLED == 'true'
+      vars.FRONTIER_ALPHA_OBSERVATORY_ENABLED == 'true' &&
+      vars.FRONTIER_ALPHA_RESEARCH_ENABLED == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 35
     permissions:
@@ -81,6 +82,9 @@ jobs:
             cp "$RUNNER_TEMP/atlas-new.json" "$RUNNER_TEMP/atlas-current.json"
           elif test -s "$RUNNER_TEMP/atlas-prior.json"; then
             cp "$RUNNER_TEMP/atlas-prior.json" "$RUNNER_TEMP/atlas-current.json"
+            # The source poll found NO new material change. Do not replay a stale
+            # historical version-change status as a fresh research opportunity.
+            python3 -c 'import json,sys; from pathlib import Path; p=Path(sys.argv[1]); d=json.loads(p.read_text()); [(v.update(state="unchanged"), v.pop("opportunity", None)) for v in d["sources"].values() if v["state"] != "unavailable"]; p.write_text(json.dumps(d, sort_keys=True))' "$RUNNER_TEMP/atlas-current.json"
           else
             echo "No source observation available" >&2
             exit 1
