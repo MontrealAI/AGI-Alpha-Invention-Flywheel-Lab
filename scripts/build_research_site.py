@@ -146,10 +146,11 @@ def read_possibilities(source):
         order.append((-date.fromisoformat(day).toordinal(), key))
         ids.add(key)
         watch, evidence = record['watch'], record['evidence']
-        if watch not in ('living-watch', 'possible-now', 'verified-invention-watch'):
+        if watch not in ('living-watch', 'possible-now', 'verified-invention-watch', 'research-lab'):
             raise ValueError('Invalid possibility source stream')
-        if evidence not in (('verified-result', 'falsified') if watch == 'verified-invention-watch'
-                            else ('author-reported', 'proposed-test')):
+        allowed_evidence = {'verified-invention-watch': ('verified-result', 'falsified'),
+                            'research-lab': ('research-tested',)}.get(watch, ('author-reported', 'proposed-test'))
+        if evidence not in allowed_evidence:
             raise ValueError('Evidence type does not belong to this possibility source stream')
         for lang in ('en', 'fr'):
             localized = record[lang]
@@ -167,11 +168,11 @@ def read_possibilities(source):
             urls.add(citation['url'])
             _possibility_text(citation['en'], 80)
             _possibility_text(citation['fr'], 80)
-        if watch == 'verified-invention-watch' and not any(
+        if watch in ('verified-invention-watch', 'research-lab') and not any(
             re.fullmatch(r'https://github\.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/commit/[a-f0-9]{40}', url)
             for url in urls
         ):
-            raise ValueError('Verified Invention Watch requires an immutable MONTREAL.AI evidence commit')
+            raise ValueError('Replayed research requires an immutable MONTREAL.AI evidence commit')
     if order != sorted(order):
         raise ValueError('Possibility records must be sorted by descending date then ascending ID')
     return records
@@ -183,14 +184,16 @@ def render_possibility_page(page, name, records):
     lang = 'fr' if name.endswith('/fr.html') else 'en'
     watched = {
         'living-watch': {'en':'Unseen Advantage Watch', 'fr':'Veille de l’avantage insoupçonné'},
-        'possible-now': {'en':'Possible Now · every three hours', 'fr':'Possible Now · toutes les trois heures'},
+        'possible-now': {'en':'Possible Now · hourly', 'fr':'Possible Now · chaque heure'},
         'verified-invention-watch': {'en':'Verified Invention Watch', 'fr':'Veille des inventions vérifiées'},
+        'research-lab': {'en':'FRONTIER research experiments', 'fr':'Expériences de recherche FRONTIER'},
     }
     evidence = {
         'author-reported': {'en':'Author-reported', 'fr':'Rapporté par les auteurs'},
         'proposed-test': {'en':'Proposed test', 'fr':'Essai proposé'},
         'verified-result': {'en':'Verified bounded result', 'fr':'Résultat circonscrit vérifié'},
         'falsified': {'en':'Hypothesis falsified in tested scope', 'fr':'Hypothèse réfutée dans le périmètre testé'},
+        'research-tested': {'en':'Replayed bounded experiment · draft research', 'fr':'Expérience circonscrite rejouée · recherche en cours'},
     }
     entries = []
     for item in records:
