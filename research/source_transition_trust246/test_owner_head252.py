@@ -202,8 +202,9 @@ class OwnerHead252Tests(unittest.TestCase):
                 read_committed_head(root, key)
             head.unlink()
             head.write_bytes(raw)
+            head.chmod(0o600)  # Exercise bundle verification, not an accidental head-mode failure.
             (Path(root) / ("bundle-" + first["bundle_sha256"]) / "ticket.json").write_bytes(b"x")
-            with self.assertRaises(ValueError):
+            with self.assertRaisesRegex(ValueError, "PUBLISHED_TICKET_DIGEST_MISMATCH"):
                 read_committed_head(root, key, original=old)
 
     def test_09_locked_liabilities_and_queue_stay_immutable(self):
