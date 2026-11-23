@@ -1,0 +1,47 @@
+{
+  "schema": "frontier-omega-alpha/photometry-resilience-registration-v1",
+  "beneficiary": "MONTREAL.AI public archive research desk",
+  "purpose": "Decide which preselected ZTF targets have a source-verifiable positive g/r difference-photometry pair within two hours and a fixed UTC observation window, including when a broker is unavailable. Preserve both detections as the witness. Absence of an accepted witness is an abstention. The #449 closest-pair contract remains separate.",
+  "opportunity_selection": [
+    {"mission":"Endpoint Field Lab", "decision":"ABSTAIN; approved representative traffic, real service limits and confidential evaluator unavailable"},
+    {"mission":"ALPHA-1 historical availability", "decision":"Prior correction retained; no fresh authority-cleared order or fulfillment series found"},
+    {"mission":"Public ZTF archive triage", "decision":"RUN; authorized historical rows, a dated selection policy, independent physical witness values, a public alternate broker and a measured acquisition dependency"}
+  ],
+  "prior": {
+    "commit":"230409b54f4adf8f69bd8d029020bfde7acbcff0",
+    "path":"products/frontier-omega-ignition/invention/next_week",
+    "report":"https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/tree/230409b54f4adf8f69bd8d029020bfde7acbcff0/products/frontier-omega-ignition/invention/next_week",
+    "development_query_wall_seconds":5.9898,
+    "development_calculation_and_verify_cpu_seconds":0.0042
+  },
+  "rights":"Existing #449 public read-only archive analysis. Unauthenticated, rate-bounded public ZTF broker calls. No allocation, proprietary data, billable requests, protected production change or external contact.",
+  "providers": {
+    "roster":"https://api.ztf.fink-portal.org/api/v1/latests",
+    "primary":"https://api.ztf.fink-portal.org/api/v1/objects",
+    "alternate":"https://api.alerce.online/ztf/v1/objects/{object}/detections",
+    "schema":"https://zwickytransientfacility.github.io/ztf-avro-alert/schema.html",
+    "alternate_schema":"https://alerce.readthedocs.io/en/latest/models/ztf_detection.html"
+  },
+  "development": {
+    "membership":"The six later #449 targets from its published alerts, before the November 10 cutoff",
+    "start":"2026-11-10", "stop":"2026-11-17",
+    "primary_blob_sha256":"f212212ae9541e20723134551f3fdec59f977bda716c9e2f6f30edc4c2b40060"
+  },
+  "confirmation": [
+    {"name":"following-week", "select_start":"2026-11-10", "select_stop":"2026-11-17", "start":"2026-11-17", "stop":"2026-11-23"},
+    {"name":"earlier-week-transfer", "select_start":"2026-10-25", "select_stop":"2026-11-01", "start":"2026-11-01", "stop":"2026-11-08"}
+  ],
+  "selection":"Latest SLSN-candidate alert per object in half-open UTC selection interval, then descending exact Julian date and ascending object ID. Six targets. Reject all development IDs and all earlier confirmation IDs to keep target groups distinct. Do not substitute targets outside the registered query. Retain shortfalls.",
+  "budget":{"max_targets":6,"max_roster_alerts":100,"max_reply_bytes":2000000,"request_timeout_seconds":15,"alternate_parallelism":3,"max_attempts_per_provider_request":1,"research_spend_authorized":false},
+  "contract": {
+    "max_gap_minutes":120,
+    "max_observed_provider_time_disagreement_seconds":0.1,
+    "decision":"The source identity and cutoff, same target, distinct ZTF candidate IDs, g and r, positive subtraction, finite PSF magnitudes with positive formal sigma, and exact in-window gap are mandatory. Match alternate rows by original ZTF IDs and require identical band and binary32 magnitude/sigma and observed clock disagreement at most 0.1 seconds against independent held Fink records. Count all uncorroborated, malformed, ambiguous or discrepant outcomes as abstentions. Do not claim Fink-independent acceptance for an uncalibrated row.",
+    "constructor":"Use development only to choose whether a calibrated alternate witness representation is supportable. Freeze plan before confirmation target selection. Fixed code and source access, no chance to see case answers before freeze.",
+    "baseline":"Batched Fink query with the seven required columns and an exact indexed SQLite join. Also run ordinary single-broker fallback and competent indexed SQL on the same admitted evidence from both sources. Give each method the same source rights, complete costs, and abstention contract.",
+    "controls":"Primary healthy and unavailable, source gaps, incomplete/malformed/contradictory data, timestamps outside the UTC cutoff, accepted and false boundary pairs. The evaluator also holds both raw sources and attests actual witness identity and values. Injected faults use real measurements with access restricted. Never infer an actual broker outage from injected faults.",
+    "falsifier":"A source or comparison fails, a competing SQL route ties at lower or unresolved full cost, or there is no independently accepted incremental outcome. Preserve the result and keep a competent conventional route.",
+    "costs":"Capture request attempts/status, source wall/CPU, bytes, verification, computation and selected cases. Fee, engineering, energy, sustained availability and labor cost are unknown unless observed. Do not promote S1 on evidence recovery alone. S2, constructor improvement and update-rule improvement require separate comparative evidence."
+  },
+  "protected_production":"https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/issues/550"
+}
