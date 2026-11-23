@@ -61,7 +61,7 @@ jobs:
           names = ['FORK252_PROTOCOL.md','owner_head252.py','test_owner_head252.py',
                    'owner_durable251.py','owner_signed_boundary250.py','owner_wire248.py']
           old = (Path(os.environ['RUNNER_TEMP'])/'p0252-old-owner.py').read_bytes()
-          sha = hashlib.sha1(b'blob '+str(len(old)).encode()+b'\\0'+old).hexdigest()
+          sha = hashlib.sha1(b'blob '+str(len(old)).encode()+bytes([0])+old).hexdigest()
           assert sha == '2397091ef8e1960ad13950693d5b3cd04e2ff7c5'
           receipt = {
               'schema': 'agi-alpha/p0-252-synthetic-owner-head/v1',
@@ -80,7 +80,7 @@ jobs:
               'actual_host_model_billing_usd': None,
           }
           (Path(os.environ['RUNNER_TEMP'])/'p0252-receipt'/'RESULT.json').write_text(
-              json.dumps(receipt, sort_keys=True, indent=2)+'\\n')
+              json.dumps(receipt, sort_keys=True, indent=2)+chr(10))
           PY
       - name: Upload receipt without test keys or state
         if: success()
