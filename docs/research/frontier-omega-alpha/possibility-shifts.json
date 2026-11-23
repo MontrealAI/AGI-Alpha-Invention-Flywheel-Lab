@@ -1,0 +1,79 @@
+{
+  "schema": "frontier-possibility-shifts/1",
+  "records": [
+    {
+      "id": "anys1",
+      "date": "2026-11-23",
+      "watch": "possible-now",
+      "evidence": "author-reported",
+      "en": {
+        "title": "Earlier lead, 23 November: AnyS1",
+        "signal": "Author-reported result. Across three benchmarks, the 4B decision model reduced episode cost by 75–91% relative to an uncompiled System-2 agent, not relative to the strongest alternatives.",
+        "next": "Proposed test. Compare review routing and public-source triage on 20 frozen holdout cases per workflow. Use deterministic routing and a compiled all-System-2 workflow. Target at least 25% lower full recurring cost against the strongest comparator, with no materially wrong outputs. No experiment or economic value is established."
+      },
+      "fr": {
+        "title": "Piste relevée plus tôt le 23 novembre : AnyS1",
+        "signal": "Résultat rapporté par les auteurs. Sur trois bancs d’essai, le modèle de décision à 4 milliards de paramètres aurait réduit de 75 à 91 % le coût par épisode par rapport à un agent de système 2 non compilé, et non par rapport aux meilleures solutions de rechange.",
+        "next": "Essai proposé. Comparer l’orientation des dossiers à examiner et le tri de sources publiques sur 20 cas d’évaluation gelés, tenus à l’écart pour chaque processus. Comparer à un routage déterministe et à un processus compilé utilisant uniquement le système 2. Viser un coût complet récurrent inférieur d’au moins 25 % à celui du meilleur comparateur, sans résultat substantiellement erroné. Aucun essai ni avantage économique n’est établi."
+      },
+      "sources": [
+        {
+          "url": "https://arxiv.org/abs/2611.23751",
+          "en": "AnyS1 preprint",
+          "fr": "Prépublication AnyS1"
+        }
+      ]
+    },
+    {
+      "id": "repofactory",
+      "date": "2026-11-23",
+      "watch": "living-watch",
+      "evidence": "author-reported",
+      "en": {
+        "title": "RepoFactory: training environments can evolve before model training",
+        "signal": "Author-reported result. The preprint reports 10,159 environments across 17 software domains and a 5.1-percentage-point incremental gain on NL2Repo-Bench with its environment-evolution loop (22.6 vs 17.5 points of improvement over the underlying model).",
+        "next": "Proposed test. Compare ordinary Harbor environment construction with Ω-assisted construction using the same authorized tasks, scope and quality checks. Measure accepted outputs and complete cost. We have not run this comparison."
+      },
+      "fr": {
+        "title": "RepoFactory : faire évoluer les environnements avant d’entraîner un modèle",
+        "signal": "Résultat rapporté par les auteurs. La prépublication fait état de 10 159 environnements dans 17 domaines logiciels et d’un gain supplémentaire de 5,1 points de pourcentage sur NL2Repo-Bench grâce à l’évolution des environnements (22,6 contre 17,5 points de gain par rapport au modèle de départ).",
+        "next": "Essai proposé. Comparer la construction classique d’environnements Harbor à une méthode assistée par Ω, avec les mêmes tâches autorisées, le même périmètre et les mêmes contrôles de qualité. Mesurer les résultats acceptés et le coût complet. Cette comparaison n’a pas été réalisée."
+      },
+      "sources": [
+        {
+          "url": "https://arxiv.org/abs/2611.21152",
+          "en": "RepoFactory preprint",
+          "fr": "Prépublication RepoFactory"
+        }
+      ]
+    },
+    {
+      "id": "qwen-harness-adapter",
+      "date": "2026-11-22",
+      "watch": "possible-now",
+      "evidence": "author-reported",
+      "en": {
+        "title": "Qwen harness adapter: a promising lead stopped by a matched test",
+        "signal": "The downloadable Qwen3.8-27B harness-RL adapter suggested a hypothesis: could a local model replace repeated manual choices in research-record maintenance?",
+        "next": "Bounded follow-up: both base and adapter arms returned no completed answer in 300 seconds (0/12); a direct validator passed 12/12. Keep the deterministic approach for this workload. This single CPU run per configuration does not rule out other hardware or tasks."
+      },
+      "fr": {
+        "title": "Adaptateur Qwen : un essai comparatif a écarté la piste",
+        "signal": "L’adaptateur téléchargeable de Qwen3.8-27B, entraîné par renforcement avec un environnement d’agent, ouvrait une piste : un modèle local pouvait-il remplacer des choix manuels répétés lors de la mise à jour de fiches de recherche?",
+        "next": "Essai encadré : le modèle de base et celui avec l’adaptateur n’ont terminé aucune réponse en 300 secondes (0/12). Un validateur direct a réussi les 12 cas. Conserver la méthode déterministe pour cette tâche. Un seul essai sur processeur par configuration ne permet pas de conclure pour d’autres matériels ou tâches."
+      },
+      "sources": [
+        {
+          "url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/pull/546",
+          "en": "Reviewed public research handoff",
+          "fr": "Transmission de recherche publique examinée"
+        },
+        {
+          "url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/pull/557",
+          "en": "Published matched trial and scope",
+          "fr": "Essai comparatif et portée publiés"
+        }
+      ]
+    }
+  ]
+}

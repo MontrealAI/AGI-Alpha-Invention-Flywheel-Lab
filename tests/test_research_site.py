@@ -18,7 +18,7 @@ class ResearchSiteTests(unittest.TestCase):
         self.root = Path(self.tmp.name)
         self.source = self.root / 'source'
         self.source.mkdir()
-        for name in site.FILES:
+        for name in (*site.FILES, site.POSSIBILITY_INPUT):
             (self.source / name).parent.mkdir(exist_ok=True, parents=True)
             shutil.copyfile(ROOT / 'docs/research' / name, self.source / name)
 
@@ -27,7 +27,48 @@ class ResearchSiteTests(unittest.TestCase):
         out = site.build(self.source, self.root / 'site')
         self.assertEqual({p.relative_to(out).as_posix() for p in out.rglob('*') if p.is_file()}, set(site.FILES) | {'.nojekyll'})
         for name in site.FILES:
-            self.assertEqual((self.source / name).read_bytes(), (out / name).read_bytes())
+            if name in site.POSSIBILITY_PAGES:
+                self.assertEqual(site.render_possibility_page((self.source / name).read_text(), name,
+                                                            site.read_possibilities(self.source)), (out / name).read_text())
+            else:
+                self.assertEqual((self.source / name).read_bytes(), (out / name).read_bytes())
+
+    def test_possibility_feed_rejects_invalid_content_without_staging(self):
+        import json
+        path = self.source / site.POSSIBILITY_INPUT
+        original = path.read_text()
+        for reason in ('unknown field', 'text injection', 'link injection', 'private URL', 'duplicate ID', 'future label'):
+            with self.subTest(reason=reason):
+                data = json.loads(original)
+                record = data['records'][0]
+                if reason == 'unknown field':
+                    record['automation_id'] = 'not public'
+                elif reason == 'text injection':
+                    record['en']['title'] = '<script>nothing</script>'
+                elif reason == 'link injection':
+                    record['sources'][0]['url'] = 'https://arxiv.org@localhost/abs/2611.23751'
+                elif reason == 'private URL':
+                    record['fr']['next'] = 'https://chatgpt.com/c/private'
+                elif reason == 'duplicate ID':
+                    data['records'].append(record)
+                else:
+                    record['evidence'] = 'verified'
+                path.write_text(json.dumps(data))
+                destination = self.root / 'rejected'
+                with self.assertRaises(ValueError):
+                    site.build(self.source, destination)
+                self.assertFalse(destination.exists())
+
+    def test_possibility_sections_and_private_source_boundary(self):
+        out = site.build(self.source, self.root / 'rendered')
+        self.assertFalse((out / site.POSSIBILITY_INPUT).exists())
+        for name in site.POSSIBILITY_PAGES:
+            page = (out / name).read_text()
+            self.assertNotIn(site.POSSIBILITY_MARKER, page)
+            for record in site.read_possibilities(self.source):
+                self.assertIn(f'id="shift-{record["id"]}"', page)
+            self.assertLess(page.index('id="possibility-shifts"'), page.index('id="research"'))
+            self.assertEqual(page.count('src="wallet-check.js"'), 1)
 
     def test_ignition_pages_exclude_private_files_and_reject_symlinked_subdirectory(self):
         (self.source / 'ignition/private.json').write_text('private')
