@@ -87,3 +87,21 @@ L'audit indépendant exige des références étiquetées par un évaluateur. En 
 Les conversations ChatGPT, fichiers privés, secrets et dossiers personnels ne sont jamais transférés automatiquement. La tâche de trois heures et son transfert manuel sous approbation ne sont pas modifiés. Aucun accès membre, publication chiffrée ou transaction n'est activé par ce module.
 
 **FRONTIER Ω ALPHA is technological and scientific possibility discovery, not securities analysis or investment advice.**
+
+## Registered invention cycle / Cycle d’invention enregistré
+
+The [bilingual execution report](EXECUTION.md) records the 23 November endpoint and hardware-history studies, the comparators and scope. The command below includes the checked results in both Atlas editions.
+
+Le [rapport d’exécution bilingue](EXECUTION.md) présente les études du 23 novembre, leurs comparateurs et la portée des résultats. La commande ci-dessous vérifie les deux reçus avant de les inclure dans l’Atlas.
+
+    python3 -B -m research.possibility_observatory \
+      --observations /path/to/radar.json \
+      --as-of 2026-11-23 \
+      --registered-studies \
+      --output /new/path/atlas
+
+Both replays process local data. Each new case, dataset or objective requires a new registered comparison. Les deux essais utilisent des données locales. Un nouveau cas, jeu de données ou objectif exige un nouvel essai enregistré.
+
+The [23 November checkpoint](evidence/radar.json) captured six public sources. The [reproduced Atlas](evidence/atlas.json) and its [English](evidence/atlas.en.md) and [French](evidence/atlas.fr.md) editions preserve the opportunity states and both checked experiment receipts. CI rebuilds these exact outputs from the pinned checkpoint.
+
+Le [relevé du 23 novembre](evidence/radar.json) couvre six sources publiques. L’[Atlas](evidence/atlas.json), en [anglais](evidence/atlas.en.md) et en [français](evidence/atlas.fr.md), conserve les possibilités et les deux résultats. Les tests reconstruisent ces sorties à partir du relevé figé.

@@ -3,8 +3,9 @@ name: FRONTIER Ω ALPHA Possibility Observatory
 on:
   pull_request:
     paths:
-      - "products/frontier-omega-alpha/research/possibility_observatory/**"
-      - "products/frontier-omega-alpha/tests/test_possibility_observatory.py"
+      - "products/frontier-omega-alpha/research/**"
+      - "products/frontier-omega-alpha/tests/test_*.py"
+      - "products/alpha-genesis-harness/bridge/**"
       - ".github/workflows/frontier-possibility-observatory.yml"
   workflow_dispatch:
   schedule:
@@ -34,7 +35,17 @@ jobs:
             products/alpha-genesis-harness/bridge
       - name: Run independent offline Observatory contract tests
         working-directory: products/frontier-omega-alpha
-        run: timeout 15m python3 -B -m unittest discover -s tests -p test_possibility_observatory.py -v
+        run: python3 -B -m unittest discover -s tests -p 'test_*.py' -v
+      - name: Rebuild the retained bilingual Atlas from its frozen checkpoint
+        working-directory: products/frontier-omega-alpha
+        run: |
+          set -euo pipefail
+          evidence=research/possibility_observatory/evidence
+          python3 -B -m research.possibility_observatory --observations "$evidence/radar.json" \
+            --as-of 2026-11-23 --registered-studies --output "$RUNNER_TEMP/frontier-atlas-replay"
+          for record in atlas.json atlas.en.md atlas.fr.md; do
+            cmp "$evidence/$record" "$RUNNER_TEMP/frontier-atlas-replay/$record"
+          done
 
   daily-public-atlas:
     needs: qualification
@@ -104,6 +115,7 @@ jobs:
           timeout 2m python3 -m research.possibility_observatory \
             --observations "$RUNNER_TEMP/atlas-current.json" \
             --as-of "$(date -u +%Y-%m-%d)" \
+            --registered-studies \
             --output "$RUNNER_TEMP/frontier-possibility-atlas"
       - name: Retain only bounded public research artifacts
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02

@@ -15,6 +15,8 @@ from urllib.parse import urlsplit
 
 from ..__main__ import private_path
 from ..scheduled import SCHEMA as RELEASE_SCHEMA, SOURCES
+from .endpoint_study.__main__ import AS_OF as STUDIES_AS_OF, checked_receipt as check_endpoints
+from .hardware_history.__main__ import checked_receipt as check_history
 
 SCHEMA = "frontier-omega-alpha/possibility-atlas-v1"
 GOALS_SCHEMA = "frontier-omega-alpha/blocked-purposes-v1"
@@ -296,12 +298,51 @@ def render(report, language="en"):
                    else "No experiment reopened by a confirmed source-version change.")
     for q in report["experiment_queue"]:
         out.append("- **" + q["goal_id"] + "** — " + q["experiment"])
+    if studies := report.get("registered_studies"):
+        endpoint = studies["endpoint_pilot"]
+        history = studies["hardware_history"]
+        out += ["", "## " + ("Essais exécutés" if fr else "Completed studies"), ""]
+        if fr:
+            out.append(f"- Pilote d’inférence : {endpoint['screened_points']} points examinés. "
+                       f"La charge retenue passe de {endpoint['primary_load']} à {endpoint['capped_load']} "
+                       "requêtes simultanées avec la limite de 500 ms au P90 du premier jeton.")
+            out.append(f"- Historique du matériel : accord sur {history['matched_cells']} décisions. "
+                       "La commande, la réception rapportée et la validation d’un procédé ont des preuves distinctes.")
+        else:
+            out.append(f"- Inference pilot: {endpoint['screened_points']} points screened. "
+                       f"The selected load changes from {endpoint['primary_load']} to {endpoint['capped_load']} "
+                       "concurrent requests under the 500 ms P90 first-token ceiling.")
+            out.append(f"- Hardware history: agreement on {history['matched_cells']} decisions. "
+                       "Orderability, reported receipt and validated operation require distinct evidence.")
     coverage = report["independent_coverage"]
     out += ["", "## " + ("Audit indépendant" if fr else "Independent discovery audit"), "",
             coverage["note"], "",
             "**" + ("Aucun avantage économique ou causal n'est prouvé par cet atlas." if fr
                     else "This atlas does not establish economic or causal invention advantage.") + "**", ""]
     return "\n".join(out)
+
+def verified_studies(as_of):
+    # Registration is code-owned. A release feed or reviewed finding never selects executable code.
+    if as_of < STUDIES_AS_OF:
+        raise ValueError("The registered studies postdate this Atlas")
+    endpoint = check_endpoints()
+    history = check_history()
+    return {
+        "endpoint_pilot": {
+            "goal_id": "serving-capability-threshold",
+            "screened_points": endpoint["rows"],
+            "primary_load": endpoint["registered_cases"]["40"]["witnesses"][0]["load"],
+            "capped_load": endpoint["exploratory_first_token_screen"]["witnesses"][0]["load"],
+            "receipt_sha256": digest(canonical(endpoint)),
+            "scope": "Published benchmark shortlist. Validate workload, quality, latency and cost before adoption.",
+        },
+        "hardware_history": {
+            "matched_cells": history["matched_cells"],
+            "earliest_in_observed_record": history["established_firsts_in_observed_record"],
+            "receipt_sha256": digest(canonical(history)),
+            "scope": "Conventional alternatives agree. Independent application and net value are unresolved.",
+        },
+    }
 
 def main():
     os.umask(0o077)
@@ -311,6 +352,8 @@ def main():
     parser.add_argument("--approved-record", action="append", default=[])
     parser.add_argument("--audit")
     parser.add_argument("--as-of")
+    parser.add_argument("--registered-studies", action="store_true",
+                        help="Include the independently replayed, source-controlled studies")
     parser.add_argument("--output", required=True)
     args = parser.parse_args()
     try:
@@ -322,6 +365,8 @@ def main():
         findings, finding_hashes = findings_at(args.approved_record)
         audit = args.audit
         report = build(observations, goals, findings, audit, args.as_of)
+        if args.registered_studies:
+            report["registered_studies"] = verified_studies(report["as_of"])
         report["input_provenance"] = {
             "release_checkpoint_sha256": observed_hash, "registry_sha256": goal_hash,
             "approved_findings": finding_hashes}

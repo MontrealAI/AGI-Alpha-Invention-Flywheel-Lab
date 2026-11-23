@@ -1,0 +1,69 @@
+{
+  "schema": "frontier-omega-alpha/alpha-1-milestone-observations-v1",
+  "sources": [
+    {
+      "id": "prusa-archived-us-offer",
+      "published": "2026-09-29",
+      "roles": ["orderable", "documented-specification"],
+      "url": "https://web.archive.org/web/20260929192630id_/https://www.prusa3d.com/product/ht-hotend-upgrade-for-core-one-and-core-one-l/",
+      "source_sha256": "ae0d4313f129c38c1eed62fa4d92af732fed4bc8cfdf8db2436bf755c7d8633b",
+      "basis": "Reproduced archived manufacturer capture at 19:26:30 UTC. US offer, 400 °C, five named configurations, INDX exclusions, cart and two-week preparation estimate.",
+      "limit": "No actual shipment, stock throughout the interval, installed process, or price comparison."
+    },
+    {
+      "id": "customer-tracking-update",
+      "published": "2026-10-05",
+      "roles": ["tracking-reported"],
+      "url": "https://forum.prusa3d.com/forum/english-forum-general-discussion-announcements-and-releases/ht-hotend-for-the-prusa-core-one-l/paged/5/?language=en",
+      "source_sha256": "787b408da553066ad096b625cda45e2d31efc28186fc7475793b2c28e1544e17",
+      "basis": "A customer reported a carrier tracking number and stated that the carrier did not yet have the parcel.",
+      "limit": "A label or tracking number cannot establish handoff or delivery."
+    },
+    {
+      "id": "customer-hotend-calibration",
+      "published": "2026-10-11",
+      "roles": ["receipt-reported"],
+      "url": "https://forum.prusa3d.com/forum/english-forum-general-discussion-announcements-and-releases/ht-hotend-for-the-prusa-core-one-l/paged/5/?language=en",
+      "source_sha256": "787b408da553066ad096b625cda45e2d31efc28186fc7475793b2c28e1544e17",
+      "basis": "A customer described the nozzle supplied with their unit and reported high-temperature material calibration.",
+      "limit": "Self-report without an independent measurement or a qualified production outcome. Date is the post date, not the receipt date."
+    },
+    {
+      "id": "customer-uninstalled-unit",
+      "published": "2026-10-20",
+      "roles": ["receipt-reported"],
+      "url": "https://forum.prusa3d.com/forum/prusa-core-one-general-discussion-announcements-and-releases/fw-ver-7-0-how-stable-is-it-and-why-no-announcement/",
+      "source_sha256": "83125db385780ef0d89fead9f33fac2b6ea404ba20395dace07fcc5d586ee238",
+      "basis": "A different customer explicitly reported physical receipt of a unit and planned a later install.",
+      "limit": "No installation evidence for this unit."
+    },
+    {
+      "id": "prusa-product-announcement",
+      "published": "2026-10-21",
+      "roles": ["announcement"],
+      "url": "https://blog.prusa3d.com/ht-hotend-is-out-plus-we-offer-new-materials-and-hightemp-sheets-for-core-one-l_138625/",
+      "source_sha256": "2fad02892cb4badd1096728f7d5ecfe3af039431025fa87e16e37db60f816563",
+      "basis": "The manufacturer's 21 October announcement of the upgrade and accompanying products.",
+      "limit": "This is the date of this announcement. It cannot replace the archive or user evidence."
+    },
+    {
+      "id": "prusa-dated-firmware-release-record",
+      "published": "2026-11-03",
+      "roles": ["firmware-support-declared"],
+      "url": "https://api.github.com/repos/prusa3d/Prusa-Firmware-Buddy/releases/tags/v7.0.0",
+      "source_sha256": "4c309f8850cd064cde79e17871c38b6cd775453b7a3039bf8594bd1e5347182b",
+      "basis": "The GitHub release API's published_at for the release that documents automatic HT hotend detection and support.",
+      "limit": "A GitHub publication timestamp is not the first download or install date. Firmware creation and distribution are distinct."
+    }
+  ],
+  "context": [
+    {
+      "id": "prusa-firmware-changelog",
+      "publication_date_verified": false,
+      "declared_event_date": "2026-10-05",
+      "url": "https://help.prusa3d.com/changelog/core-one-l-plus",
+      "source_sha256": "c5e6d323a5a2043beba0359ee9359971f9cfa818b3ad8390fd2a25f59033a1d2",
+      "limit": "The current vendor changelog dates firmware 7.0.0 to October 5. Its historical publication date was not independently pinned. October forum reports support earlier firmware use. The November GitHub date is not a contrary first-availability claim."
+    }
+  ]
+}

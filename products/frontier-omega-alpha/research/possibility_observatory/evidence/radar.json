@@ -1,0 +1,169 @@
+{
+  "schema": "frontier-omega-alpha/release-observations-v1",
+  "sources": {
+    "formal_verification": {
+      "observed": {
+        "id": 447243369,
+        "material_sha256": "5fcb49d22df6f7dd357778c38c6d7a70d58e8c21a74122ee11f392cebd3eb3e2",
+        "published_at": "2026-11-16T15:45:27+00:00",
+        "retrieved_at": "2026-11-23T16:45:00.637435+00:00",
+        "sha256": "98599426c45c4b017e8114f9fa7c4ef9e9210c1e671fa15d40de0c28d9dd2659",
+        "tag": "v4.36.0",
+        "url": "https://api.github.com/repos/leanprover/lean4/releases/latest"
+      },
+      "opportunity": {
+        "action": "Run the registered Lean release comparison on approved local toolchains.",
+        "beneficiary": "MONTREAL.AI operators verifying fixed-width compiler or hardware transformations behind abstract interfaces.",
+        "beneficiary_acceptance": "unproven",
+        "existing_alternative": "Lean 4.35 grind and explicit congruence proved with the established bv_decide tactic.",
+        "falsification": "Lean 4.36 fails either true workload or accepts a false workload with an independently enumerated witness.",
+        "follow_up_experiment": "lean-4.36-enrollment-expiry-decoder-equivalence",
+        "kind": "reported_release_hypothesis",
+        "net_economic_benefit": "unproven",
+        "newly_worth_attempting": "Verify that the new bv_decide +uf mode checks whether two calculations make equivalent calls to an abstract function.",
+        "payment": "unproven",
+        "registered_experiment": "lean-4.36-black-box-bit-vector-congruence",
+        "release_notes": "https://lean-lang.org/doc/reference/latest/releases/v4.36.0/",
+        "requirements": "An approved release checksum, compatible runtime and bounded local or standard GitHub compute.",
+        "retained_asset": "A parameterized proof pattern on both function arities and a finite independent reference.",
+        "technical_verification": "pending",
+        "why_earlier_was_harder": "Lean 4.35 had no +uf mode. Compare against its existing grind and explicit congruence proofs."
+      },
+      "pinned": {
+        "id": 447243369,
+        "material_sha256": "5fcb49d22df6f7dd357778c38c6d7a70d58e8c21a74122ee11f392cebd3eb3e2",
+        "published_at": "2026-11-16T15:45:27+00:00",
+        "retrieved_at": "2026-11-23T16:45:09.598135+00:00",
+        "sha256": "98599426c45c4b017e8114f9fa7c4ef9e9210c1e671fa15d40de0c28d9dd2659",
+        "tag": "v4.36.0",
+        "url": "https://api.github.com/repos/leanprover/lean4/releases/tags/v4.36.0"
+      },
+      "preceding": {
+        "id": 410881210,
+        "material_sha256": "85ee7dc5094ce918c0585730fd3c4f9348f3940928f684ca0943e6ec413ea94c",
+        "published_at": "2026-10-12T18:13:12+00:00",
+        "retrieved_at": "2026-11-23T16:45:13.413005+00:00",
+        "sha256": "805f142e3369bd54061c180011205f4129986fa9575b65b98886a767877bd45f",
+        "tag": "v4.35.0",
+        "url": "https://api.github.com/repos/leanprover/lean4/releases/tags/v4.35.0"
+      },
+      "state": "published_version_changed",
+      "uncertainty": "This evidence verifies a publisher record. Capability and economic effects require experiments."
+    },
+    "hardware_runtime": {
+      "observed": {
+        "id": 449807176,
+        "material_sha256": "1b14d95aab15ba2939312e8c21c7aef3e0b03a09f8fc86ca04a03f57237d9f6a",
+        "published_at": "2026-11-18T10:12:40+00:00",
+        "retrieved_at": "2026-11-23T16:45:13.302761+00:00",
+        "sha256": "079322c618323d960c66f9e270e7332e2372422b33856ae114477467a119b313",
+        "tag": "therock-10.2",
+        "url": "https://api.github.com/repos/ROCm/rocm-systems/releases/latest"
+      },
+      "pinned": {
+        "id": 449807176,
+        "material_sha256": "1b14d95aab15ba2939312e8c21c7aef3e0b03a09f8fc86ca04a03f57237d9f6a",
+        "published_at": "2026-11-18T10:12:40+00:00",
+        "retrieved_at": "2026-11-23T16:45:16.382768+00:00",
+        "sha256": "079322c618323d960c66f9e270e7332e2372422b33856ae114477467a119b313",
+        "tag": "therock-10.2",
+        "url": "https://api.github.com/repos/ROCm/rocm-systems/releases/tags/therock-10.2"
+      },
+      "preceding": null,
+      "state": "first_observation",
+      "uncertainty": "This evidence verifies a publisher record. Capability and economic effects require experiments."
+    },
+    "local_models_and_quantization": {
+      "observed": {
+        "id": 444087024,
+        "material_sha256": "ce836ff82b8275b63c52ed5c621f580aa32ad713e3cb4efd73568ac36164e19b",
+        "published_at": "2026-11-13T10:20:19+00:00",
+        "retrieved_at": "2026-11-23T16:45:00.702677+00:00",
+        "sha256": "f72fa105eb1f9a846f5ddedff0b56999cef009dbd8507a976212ffd9dfc550e0",
+        "tag": "v1.0.0",
+        "url": "https://api.github.com/repos/ggml-org/llama.cpp/releases/latest"
+      },
+      "pinned": {
+        "id": 444087024,
+        "material_sha256": "ce836ff82b8275b63c52ed5c621f580aa32ad713e3cb4efd73568ac36164e19b",
+        "published_at": "2026-11-13T10:20:19+00:00",
+        "retrieved_at": "2026-11-23T16:45:09.493919+00:00",
+        "sha256": "f72fa105eb1f9a846f5ddedff0b56999cef009dbd8507a976212ffd9dfc550e0",
+        "tag": "v1.0.0",
+        "url": "https://api.github.com/repos/ggml-org/llama.cpp/releases/tags/v1.0.0"
+      },
+      "preceding": null,
+      "state": "first_observation",
+      "uncertainty": "This evidence verifies a publisher record. Capability and economic effects require experiments."
+    },
+    "model_distribution": {
+      "observed": {
+        "id": 440983764,
+        "material_sha256": "85d375151f3ba628a2da3174dc221bee33580218154675318bfb58cb70a2dc17",
+        "published_at": "2026-11-10T22:25:00+00:00",
+        "retrieved_at": "2026-11-23T16:45:13.373668+00:00",
+        "sha256": "970e513d51155ce9f2f48963c32c2f695009ef4c85e723f4b486fad601e0015b",
+        "tag": "v0.40.17",
+        "url": "https://api.github.com/repos/ollama/ollama/releases/latest"
+      },
+      "pinned": {
+        "id": 440983764,
+        "material_sha256": "85d375151f3ba628a2da3174dc221bee33580218154675318bfb58cb70a2dc17",
+        "published_at": "2026-11-10T22:25:00+00:00",
+        "retrieved_at": "2026-11-23T16:45:16.469404+00:00",
+        "sha256": "970e513d51155ce9f2f48963c32c2f695009ef4c85e723f4b486fad601e0015b",
+        "tag": "v0.40.17",
+        "url": "https://api.github.com/repos/ollama/ollama/releases/tags/v0.40.17"
+      },
+      "preceding": null,
+      "state": "first_observation",
+      "uncertainty": "This evidence verifies a publisher record. Capability and economic effects require experiments."
+    },
+    "scientific_computing": {
+      "observed": {
+        "id": 374742789,
+        "material_sha256": "e37d47c4be142bd9f58c387ee511a5a720a04d7b853ac4c73cfd77c7e6edb259",
+        "published_at": "2026-08-21T23:52:53+00:00",
+        "retrieved_at": "2026-11-23T16:45:16.373062+00:00",
+        "sha256": "1a6f368135d5c013255039c96e8027a79ac77fc28f1a6a5e76521cb6af29e044",
+        "tag": "v1.18.1",
+        "url": "https://api.github.com/repos/scipy/scipy/releases/latest"
+      },
+      "pinned": {
+        "id": 374742789,
+        "material_sha256": "e37d47c4be142bd9f58c387ee511a5a720a04d7b853ac4c73cfd77c7e6edb259",
+        "published_at": "2026-08-21T23:52:53+00:00",
+        "retrieved_at": "2026-11-23T16:45:21.379902+00:00",
+        "sha256": "1a6f368135d5c013255039c96e8027a79ac77fc28f1a6a5e76521cb6af29e044",
+        "tag": "v1.18.1",
+        "url": "https://api.github.com/repos/scipy/scipy/releases/tags/v1.18.1"
+      },
+      "preceding": null,
+      "state": "first_observation",
+      "uncertainty": "This evidence verifies a publisher record. Capability and economic effects require experiments."
+    },
+    "serving_cost": {
+      "observed": {
+        "id": 447739190,
+        "material_sha256": "a7190ab0498352a7a7677cd43282e3897b729bf1afde7d14e4de39b9d48dcff7",
+        "published_at": "2026-11-16T23:22:00+00:00",
+        "retrieved_at": "2026-11-23T16:45:00.594272+00:00",
+        "sha256": "dc45fd3c19dfe2b860cdd5caceddcf4c531c9f61454a615f90a82cdb2dff12d6",
+        "tag": "v0.34.0",
+        "url": "https://api.github.com/repos/vllm-project/vllm/releases/latest"
+      },
+      "pinned": {
+        "id": 447739190,
+        "material_sha256": "a7190ab0498352a7a7677cd43282e3897b729bf1afde7d14e4de39b9d48dcff7",
+        "published_at": "2026-11-16T23:22:00+00:00",
+        "retrieved_at": "2026-11-23T16:45:09.514296+00:00",
+        "sha256": "dc45fd3c19dfe2b860cdd5caceddcf4c531c9f61454a615f90a82cdb2dff12d6",
+        "tag": "v0.34.0",
+        "url": "https://api.github.com/repos/vllm-project/vllm/releases/tags/v0.34.0"
+      },
+      "preceding": null,
+      "state": "first_observation",
+      "uncertainty": "This evidence verifies a publisher record. Capability and economic effects require experiments."
+    }
+  }
+}
