@@ -69,6 +69,9 @@ ASSETS += (
     'frontier-omega-alpha/member-brief-001.js',
     'frontier-omega-alpha/carina.webp',
     'frontier-omega-alpha/atlas.js',
+    'frontier-omega-alpha/endpoint-screen.mjs',
+    'frontier-omega-alpha/outcome-receipt.mjs',
+    'frontier-omega-alpha/member-workbench.mjs',
 )
 FILES = PAPERS + PAGES + ASSETS + ('publication-manifest.json',)
 PUBLIC_SITE = 'https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/'
@@ -85,7 +88,11 @@ POSSIBILITY_INPUT = 'frontier-omega-alpha/possibility-shifts.json'
 POSSIBILITY_PAGES = frozenset({'frontier-omega-alpha/index.html', 'frontier-omega-alpha/fr.html'})
 POSSIBILITY_MARKER = '<!-- FRONTIER_POSSIBILITY_RECORDS -->'
 POSSIBILITY_MAX_BYTES = 256_000
-ATLAS_OUTPUTS = frozenset({'frontier-omega-alpha/atlas-ledger.json', 'frontier-omega-alpha/atlas-release.json'})
+ATLAS_OUTPUTS = frozenset({
+    'frontier-omega-alpha/atlas-ledger.json', 'frontier-omega-alpha/atlas-release.json',
+    'frontier-omega-alpha/member-value.json', 'frontier-omega-alpha/endpoint-evidence-screen-1.0.0.zip',
+    'frontier-omega-alpha/noaa-archive-point-1.0.0.zip',
+})
 STATES = ('discovered', 'qualified', 'testing', 'verified', 'falsified', 'abstain', 'retained', 'deployed', 'value-verified')
 POSSIBILITY_SOURCE_PATTERNS = (
     r'https://arxiv\.org/abs/[0-9]{4}\.[0-9]{4,5}(?:v[1-9][0-9]*)?',

@@ -1,0 +1,69 @@
+"""Qualification of the source-driven member projector and public scope."""
+
+import json
+from pathlib import Path
+import sys
+from tempfile import TemporaryDirectory
+import unittest
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / 'scripts'))
+import build_research_site as site
+import frontier_member_value as member
+
+REVISION = 'a' * 40
+OBSERVED = '2026-11-23T20:20:00Z'
+
+
+def sample_ledger():
+    reviewed = site.read_possibilities(ROOT / 'docs/research')
+    entries = [{
+        'id': 'shift-' + row['id'], 'state': site.record_state(row),
+        'editorial': [{'reviewed_commit': REVISION, 'observed_at': OBSERVED, 'record': row}], 'sources': {},
+    } for row in reviewed]
+    primary = {'source':'arxiv', 'source_version':'2611.09822v3', 'observed_at':OBSERVED,
+               'decision':'test', 'url':'https://arxiv.org/abs/2611.09822v3', 'publisher_commit':REVISION,
+               'title':'Discovering Formally Verified Quantum Programs with AI', 'primary_sha256':'b'*64}
+    return {'updated_at': OBSERVED, 'records': entries + [{
+        'id': 'watch-arxiv-2611.09822', 'state': 'discovered',
+        'editorial': [], 'sources': {'arxiv:2611.09822': [primary]},
+    }]}
+
+
+class MemberValueTests(unittest.TestCase):
+    def test_compiles_qualified_falsified_insufficient_and_incumbent_cases(self):
+        rows = {r['id']: member.context_for(r) for r in member.decision_briefs(sample_ledger())}
+        self.assertEqual(rows['shift-autonomous-endpoint']['verdict'], 'ABSTAIN')
+        self.assertEqual(rows['shift-alpha-1-availability']['verdict'], 'DISCARD')
+        self.assertEqual(rows['shift-archive-point']['verdict'], 'USE NOW')
+        self.assertEqual(rows['shift-measurement-gap']['atlas_state'], 'falsified')
+        self.assertIn('Gaussian process', rows['shift-measurement-gap']['en']['missing_move'])
+        self.assertIn('processus gaussien', rows['shift-measurement-gap']['fr']['missing_move'])
+        new = rows['watch-arxiv-2611.09822']
+        self.assertEqual(new['evidence'], 'source-identity-only')
+        self.assertEqual(new['verdict'], 'PREPARE')
+        self.assertEqual(new['source_version'], '2611.09822v3')
+        for brief in rows.values():
+            self.assertIsNone(brief['member_lead_seconds'])
+            self.assertIsNone(brief['protected_release'])
+            self.assertIsNone(brief['complete_cost'])
+            for language in ('en', 'fr'):
+                self.assertTrue(all(brief[language][field] for field in member.FIELDS))
+
+    def test_member_output_is_staged_public_only_and_is_stable(self):
+        with TemporaryDirectory() as x, TemporaryDirectory() as y:
+            left, right = Path(x), Path(y)
+            produced, html, seal = member.prepare(left, sample_ledger(), 'f' * 64)
+            second, _, other = member.prepare(right, sample_ledger(), 'f' * 64)
+            self.assertEqual(produced, second)
+            self.assertEqual(seal, other)
+            self.assertEqual({p.name for p in left.iterdir()}, {member.ENDPOINT_ZIP, member.ARCHIVE_ZIP, member.MEMBER_JSON})
+            self.assertEqual(produced['publication'], 'public-file')
+            self.assertIsNone(produced['protected_member_first'])
+            self.assertIsNone(produced['real_member_trials'])
+            self.assertEqual(produced['atlas_sha256'], 'f' * 64)
+            for language in ('en', 'fr'):
+                self.assertIn('id="mv-endpoint-run"', html[language])
+                self.assertEqual(html[language].count('data-mv-record'), len(sample_ledger()['records']))
+                self.assertNotIn('<!-- MV_', html[language])
+                self.assertIn(produced['capabilities']['archive']['sha256'], html[language])

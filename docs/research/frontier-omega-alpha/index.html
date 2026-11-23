@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="frontier.css">
   <script type="module" src="atlas.js"></script>
   <script type="module" src="wallet-check.js"></script>
+  <script type="module" src="member-workbench.mjs"></script>
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
@@ -83,7 +84,7 @@
     </section>
     <section id="member" class="frame workspace" hidden aria-labelledby="workspace-title">
       <div class="workspace-head">
-        <h2 id="workspace-title" tabindex="-1">Public research workspace</h2>
+        <h2 id="workspace-title" tabindex="-1">Member workbench</h2>
         <button id="lock" class="quiet" type="button">Lock session</button>
       </div>
       <div class="brief-entry" data-nosnippet>
@@ -96,6 +97,7 @@
         <p>A selection of current results and open questions from the public Atlas.</p>
         <!-- FRONTIER_MEMBER_UPDATES -->
       </section>
+      <!-- FRONTIER_MEMBER_VALUE -->
       <ul class="packet-shortcuts">
         <li><a href="#monitoring">Frontier watch results</a></li>
         <li><a href="#packet-lean">Lean 4.36</a></li>
