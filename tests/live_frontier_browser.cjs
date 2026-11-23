@@ -157,7 +157,8 @@ async function walletPaths(browser, language) {
     await page.locator('#open-brief').click();
     await brief.waitFor({ state: 'visible' });
     assert.match(await brief.innerText(), /1\.2/);
-    assert.ok(await page.locator('.member-updates a').count() > 0);
+    assert.ok(await page.locator('.member-updates a[href^="#shift-"]').count() > 0);
+    assert.ok(await page.locator('.member-updates a[href^="#watch-"]').count() > 0);
     await page.locator('#lock').click();
     await member.waitFor({ state: 'hidden' });
     await club.click();

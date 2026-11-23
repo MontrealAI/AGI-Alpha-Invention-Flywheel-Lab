@@ -118,10 +118,17 @@ def cached_metadata(ledger, identity, item, commit, observed):
 
 def read_inbox_history(revisions, holds, request, cache=None):
     records, rejected, selected = {}, [], {}
+    observed_commits = set()
+    published_commits = {
+        entry['publisher_commit'] for versions in (cache or {}).values() for entry in versions
+        if isinstance(entry, dict) and isinstance(entry.get('publisher_commit'), str)
+        and SHA.fullmatch(entry['publisher_commit'])
+    }
     # Repeated canonical source versions, including cross-stream duplicates,
     # never create an additional entry. A new arXiv version is a revision.
     seen = set()
     for commit, observed, raw in revisions:
+        observed_commits.add(commit)
         try:
             inbox = watch.parse_inbox(raw)
         except (ValueError, TypeError, RecursionError):
@@ -150,6 +157,8 @@ def read_inbox_history(revisions, holds, request, cache=None):
                     'publisher_commit': commit, 'observed_at': observed,
                     'stream': stream, 'decision': item['decision'],
                 })
+    if published_commits - observed_commits:
+        raise ValueError('Previously published inbox history was removed')
     return records, selected, rejected
 
 
@@ -249,11 +258,17 @@ def reference_card(entry, lang, active):
     read, receipt = ('Source primaire', 'Reçu du registre') if fr else ('Primary source', 'Ledger receipt')
     if fr:
         status = 'Référence externe dont la version est confirmée. Les résultats demeurent à vérifier.'
-        alternative = 'Alternative comparative à établir.'
+        alternative = 'Meilleure solution de rechange à établir.'
+        next_test = ('Reproduire un résultat annoncé sur des données autorisées, puis le comparer à la méthode de référence.'
+                     if last['source'] == 'arxiv' else
+                     'Comparer cette version à la précédente sur la même charge, avec des critères d’acceptation communs.')
         inactive = 'Cette référence est conservée dans l’historique de la veille.'
     else:
         status = 'External reference with a confirmed version. Its results await independent verification.'
-        alternative = 'The strongest comparable alternative is still to be established.'
+        alternative = 'Strongest comparable alternative still to be established.'
+        next_test = ('Reproduce one reported result on rights-cleared inputs and compare it with the strongest incumbent.'
+                     if last['source'] == 'arxiv' else
+                     'Compare this release and its predecessor on the same workload under shared acceptance criteria.')
         inactive = 'This reference is retained from an earlier watch selection.'
     label = watch.LABELS[lang][last['decision']]
     decision = label if (last['source'], last['source_version']) in active else inactive
@@ -262,7 +277,9 @@ def reference_card(entry, lang, active):
         f'<div class="atlas-card-meta"><strong>{site.STATE_LABELS[lang]["discovered"]}</strong>'
         f'<time datetime="{first}">{first[:10]}</time></div>'
         f'<h3 id="{key}-title">{escape(last["title"])}</h3><p class="atlas-evidence">{status}</p>'
-        f'<p>{decision} · {escape(last["source_version"])}</p><p>{alternative}</p>'
+        f'<p>{decision} · {escape(last["source_version"])}</p>'
+        f'<dl><div><dt>{"Comparaison" if fr else "Comparator"}</dt><dd>{alternative}</dd></div>'
+        f'<div><dt>{"Prochaine étape" if fr else "Next step"}</dt><dd>{next_test}</dd></div></dl>'
         f'<ul class="atlas-links"><li><a href="{escape(last["url"])}">{read}</a></li>'
         f'<li><a href="{COMMIT_URL}{last["publisher_commit"]}">{receipt}</a></li></ul>'
         f'{archive_links(entry, lang)}</article>'
@@ -285,15 +302,20 @@ def render(page, lang, ledger, selected, references, sealed_digest):
     for rows in current.values():
         rows.sort(key=lambda row: (row[2], row[1]), reverse=True)
 
-    entries, updates = [], []
+    entries, updates, watch_updates = [], [], []
     for entry in ledger['records']:
         if entry['editorial']:
             latest = entry['editorial'][-1]['record']
             entries.append(site.possibility_card(latest, lang, archive_links(entry, lang)))
-            if len(updates) < 3:
+            if len(updates) < 2:
                 updates.append(f'<li><a href="#{entry["id"]}">{escape(latest[lang]["title"])}</a></li>')
         else:
             entries.append(reference_card(entry, lang, active))
+            for versions in entry['sources'].values():
+                newest = versions[-1]
+                watch_updates.append((newest['observed_at'], entry['id'], newest['title']))
+    for _, key, title in sorted(watch_updates, reverse=True)[:2]:
+        updates.append(f'<li><a href="#{escape(key)}">{escape(title)}</a></li>')
     records = f'<div class="atlas-grid" id="atlas-records" data-atlas-digest="{sealed_digest}">{"".join(entries)}</div>'
     fr = lang == 'fr'
     count = len(entries)

@@ -61,13 +61,13 @@ FRENCH_STREAMS = {
 LABELS = {
     'en': {
         'empty': 'No qualifying public reference available.',
-        'verified-invention-watch': 'Read reviewed experimental outcomes in Possibility shifts.',
+        'verified-invention-watch': 'Read reviewed experimental outcomes in the Atlas.',
         'test': 'Matched test proposed',
         'watch': 'Awaiting further evidence',
     },
     'fr': {
         'empty': 'Aucune référence publique admissible pour le moment.',
-        'verified-invention-watch': 'Les résultats expérimentaux examinés figurent dans « Ce qui devient possible ».',
+        'verified-invention-watch': 'Les résultats expérimentaux examinés figurent dans l’Atlas.',
         'test': 'Essai comparatif proposé',
         'watch': 'En attente de preuves supplémentaires',
     },
