@@ -1,0 +1,31 @@
+{
+  "schema":"frontier-omega-alpha/archive-point-research-v1",
+  "beneficiary":"MONTREAL.AI internal archive research desk",
+  "outcome":"Retrieve the exact archived 24-hour NOAA GFS 2 m temperature at a specified 0.25-degree grid coordinate, with a witnessed origin and a declared bounded transfer. Produces historical model values in kelvin. No weather advice, actual exposure measurement, financial claim, or new operating authority.",
+  "atlas":"November 23 living Frontier Atlas scientific-instrument-reuse and portable-instrument entries, plus the reviewed early weather access lead. See the selection in REPORT.md.",
+  "selection":[
+    {"class":"Scientific instrument","intervention":"New physical survey measurement","decision":"Requires data collection and scope unavailable for this run."},
+    {"class":"Computational capability","intervention":"Sparse direct-origin exact GRIB point extraction","decision":"Ready. Public permission, exact archived outputs, full indexed conventional decoder and a public point server to compare."},
+    {"class":"Representation","intervention":"AnyS1 style model-call removal","decision":"Unresolved. No two rights-cleared representative operational traces or complete measured model incumbents available."},
+    {"class":"Experimental method","intervention":"RepoFactory style compoundable environments","decision":"Public study is a lead. A real independently accepted business outcome and suitable comparison remain missing."},
+    {"class":"Production arrangement","intervention":"Empowered source-side procurement intake","decision":"No independently accepted or cleared supplier source. Public preparation only."},
+    {"class":"Economic mechanism","intervention":"Advance demand to fund productive capacity","decision":"Unproven counterparties, incentives and complete financial commitments. No transaction authorized."}
+  ],
+  "origin":"https://noaa-gfs-bdp-pds.s3.amazonaws.com",
+  "independent_point_service":"https://tds.gdex.ucar.edu/thredds/ncss/grid/files/d084001",
+  "data_rights":"Public NOAA Open Data, anonymous read-only HTTP requests. No credentials, paid services, protected hardware or production changes.",
+  "development":"20240115 00Z f024, TMP at 2 m only. A 1024-byte HTTP 206 probe saw GRIB2 template 5.3, and an 871,538-byte total message in a 540,110,427-byte object. Python proxy rejected that same public origin. curl read the published index and byte range.",
+  "confirmation":[
+    {"name":"winter-toronto-grid","day":"20240116","cycle":"00","latitude":43.75,"longitude":-79.5},
+    {"name":"winter-montreal-grid","day":"20240117","cycle":"00","latitude":45.5,"longitude":-73.5},
+    {"name":"winter-quebec-grid","day":"20240118","cycle":"00","latitude":46.75,"longitude":-71.25},
+    {"name":"summer-toronto-grid","day":"20250606","cycle":"12","latitude":43.75,"longitude":-79.5},
+    {"name":"summer-montreal-grid","day":"20250607","cycle":"12","latitude":45.5,"longitude":-73.5},
+    {"name":"summer-quebec-grid","day":"20250608","cycle":"12","latitude":46.75,"longitude":-71.25}
+  ],
+  "test_contract":{"forecast_hour":24,"field":"TMP:2 m above ground","grid":"native 0.25 degree latitude/longitude, no interpolation","agreement_tolerance_k":0.00005,"decoded_case_payload_budget_bytes":393216,"candidate_max_prefix_bytes":327680,"maximum_full_field_bytes":2500000},
+  "arms":["Direct-origin candidate: index plus a single bounded field prefix, validate byte/identity boundaries, reconstruct only the necessary complex-packed group differences and point.","Strong ordinary direct-origin arm: same index and entire selected message, using ECMWF ecCodes to extract the exact point. Whole forecast downloads are excluded.","Strong ordinary alternative origin: NCAR THREDDS historical coordinate subset, verify right archive cycle, forecast, 2 m height, and coordinate before accepting. Missing or mismatched provenance abstains."],
+  "acceptance":"Separate held-day decodes use ecCodes independently. Match decoded grid point and numerical tolerance on all six cases. Report a technical budget advantage over the complete direct-origin arm if each passing candidate uses at most the experimental payload budget. Also compare the public point service; do not claim overall superiority if a complete alternative matches at lower cost or any complete costs are unavailable. No relabeling of experimental byte budget as an operational requirement.",
+  "accounting":"Retain source ETags, ranges and hashes, values, HTTP failures, body bytes, cold index and field acquisition times, CPU, request count and observed runtime dependencies. Service-side compute, actual operator demand, controlled network billing, energy, maintenance and monetary costs are unmeasured. No S1, S2, constructor or learning claims from a single screen.",
+  "preserve":{"endpoint":"ABSTAIN","endpoint_incumbent":"indexed-sqlite","production":"NO-GO under issue #550","prior":"Keep exact #567 signed receipts and conventional Gaussian process result."}
+}

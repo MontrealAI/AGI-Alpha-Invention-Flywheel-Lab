@@ -60,6 +60,12 @@ jobs:
           lab=products/frontier-omega-alpha/research/measurement_gap
           python3 -B "$lab/replay.py" audit "$lab/evidence/confirmation.json" \
             --key-sha256 2eaa691e4974a20aca3fb590c3b1750285970f8664ff9d4e67b2dfca3647d6f2
+      - name: Recompute the signed archive point acceptance results offline
+        run: |
+          set -euo pipefail
+          lab=products/frontier-omega-alpha/research/archive_point
+          python3 -B "$lab/replay.py" audit "$lab/evidence/confirmation.json" \
+            --key-sha256 d16ea889e128693e68fe91802e3228849ee4a92f6984f51a12ba4da86ae34a9e
       - name: Run the unattended public Endpoint Field Lab cycle
         id: endpoint
         if: >-
