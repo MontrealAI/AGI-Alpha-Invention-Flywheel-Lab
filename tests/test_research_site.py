@@ -105,6 +105,41 @@ class ResearchSiteTests(unittest.TestCase):
                 self.assertNotIn('aucun résultat admissible publié' if name.endswith('/fr.html') else
                                  'no qualifying result published yet', ready)
 
+    def test_public_research_cycle_requires_pinned_evidence_and_draft_label(self):
+        import json
+        path = self.source / site.POSSIBILITY_INPUT
+        data = json.loads(path.read_text())
+        row = next(item for item in data['records'] if item['watch'] == 'research-lab')
+        data['records'] = [row]
+        path.write_text(json.dumps(data))
+        self.assertEqual(site.read_possibilities(self.source)[0]['id'], row['id'])
+        for name in site.POSSIBILITY_PAGES:
+            page = (self.source / name).read_text()
+            rendered = site.render_possibility_page(page, name, site.read_possibilities(self.source))
+            self.assertIn('Expérience circonscrite rejouée' if name.endswith('/fr.html')
+                          else 'Replayed bounded experiment', rendered)
+            self.assertIn('recherche en cours' if name.endswith('/fr.html') else 'draft research', rendered)
+        original_sources = row['sources']
+        row['sources'] = [{'url': 'https://arxiv.org/abs/2611.21152',
+                           'en': 'Paper', 'fr': 'Article'}]
+        path.write_text(json.dumps(data))
+        with self.assertRaises(ValueError):
+            site.read_possibilities(self.source)
+        row['sources'] = original_sources
+        row['evidence'] = 'verified-result'
+        path.write_text(json.dumps(data))
+        with self.assertRaises(ValueError):
+            site.read_possibilities(self.source)
+
+    def test_public_home_links_bilingual_frontier_atlas(self):
+        home = (self.source / 'index.html').read_text()
+        self.assertIn('href="frontier-omega-alpha/index.html"', home)
+        self.assertIn('href="frontier-omega-alpha/fr.html"', home)
+        self.assertIn('The living Possibility Atlas', home)
+        self.assertIn('public files; confidential delivery is not enabled', home)
+        out = site.build(self.source, self.root / 'frontier-nav')
+        self.assertIn('href="frontier-omega-alpha/index.html"', (out / 'index.html').read_text())
+
     def test_possibility_sections_and_private_source_boundary(self):
         out = site.build(self.source, self.root / 'rendered')
         self.assertFalse((out / site.POSSIBILITY_INPUT).exists())
