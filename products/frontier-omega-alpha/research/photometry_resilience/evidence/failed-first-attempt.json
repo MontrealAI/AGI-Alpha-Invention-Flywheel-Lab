@@ -1,0 +1,115 @@
+{
+  "status": "FAILED_BEFORE_SCIENTIFIC_VERDICT",
+  "cause": "The no-alternate uncertainty margin was an integer zero whose division yielded a float. Decimal addition failed before any verdict.",
+  "registered_code_revision_local": "347a25e",
+  "freeze_sha256": "197608b61109527738c7d407f2f73dd81a2883bf69ab2f58fa369f5415024db4",
+  "plan": {
+    "development_conflicts": 0,
+    "development_matched_exposures": 25,
+    "route": "combine-calibrated-brokers"
+  },
+  "roster": {
+    "bytes": 1053,
+    "sha256": "08696c8f3de6af41e160b6a004acac0476f329c27f16797ca93bcb9bf66c6a07",
+    "started_utc": "2026-11-23T18:01:21.639631+00:00",
+    "status": 200,
+    "thread_cpu_ns": 3262689,
+    "url": "https://api.ztf.fink-portal.org/api/v1/latests?class=SLSN+candidate&n=100&startdate=2026-11-10&stopdate=2026-11-17&columns=i%3AobjectId%2Ci%3Ajd&output-format=json",
+    "wall_ns": 4674908332
+  },
+  "source_requests": {
+    "acquisition_wall_ns": 13062667416,
+    "alternate": [
+      {
+        "bytes": 27309,
+        "conflicts": 0,
+        "invalid": 0,
+        "retained": 4,
+        "sha256": "e90cf7b9661dce015fab05e454ad6eff7f4d1477bc77a31fc73f55e3d6153d3c",
+        "started_utc": "2026-11-23T18:01:31.054146+00:00",
+        "status": 200,
+        "thread_cpu_ns": 3014192,
+        "url": "https://api.alerce.online/ztf/v1/objects/ZTF26abrhnfb/detections",
+        "wall_ns": 4222348727
+      },
+      {
+        "bytes": 56381,
+        "conflicts": 0,
+        "invalid": 0,
+        "retained": 2,
+        "sha256": "50ad94173d09678039de2d23e7a1f53d26ce2f7cc5c6771fb672c6ac17bc929e",
+        "started_utc": "2026-11-23T18:01:31.054784+00:00",
+        "status": 200,
+        "thread_cpu_ns": 3278649,
+        "url": "https://api.alerce.online/ztf/v1/objects/ZTF26abyuvfs/detections",
+        "wall_ns": 4302512970
+      },
+      {
+        "bytes": 32147,
+        "conflicts": 0,
+        "invalid": 0,
+        "retained": 1,
+        "sha256": "8cba05958d97bdf83c0695b0c017cb2f2369a5d8894739e0fc00fe5472e32e31",
+        "started_utc": "2026-11-23T18:01:31.055467+00:00",
+        "status": 200,
+        "thread_cpu_ns": 4315802,
+        "url": "https://api.alerce.online/ztf/v1/objects/ZTF26abzlqjb/detections",
+        "wall_ns": 4201711039
+      },
+      {
+        "bytes": 25783,
+        "conflicts": 0,
+        "invalid": 0,
+        "retained": 0,
+        "sha256": "7887e711e2c9de9d8b5475e87b0fa1ad2d524dcaeb84a4b802855e5b3b58a61f",
+        "started_utc": "2026-11-23T18:01:35.257404+00:00",
+        "status": 200,
+        "thread_cpu_ns": 3606090,
+        "url": "https://api.alerce.online/ztf/v1/objects/ZTF26acdfcma/detections",
+        "wall_ns": 3975688165
+      },
+      {
+        "bytes": 38590,
+        "conflicts": 0,
+        "invalid": 0,
+        "retained": 2,
+        "sha256": "840ec52f00ebb11f1186bb5b97001bafab4a014295d7f0b2b9ea696fe1df844a",
+        "started_utc": "2026-11-23T18:01:35.276527+00:00",
+        "status": 200,
+        "thread_cpu_ns": 2627244,
+        "url": "https://api.alerce.online/ztf/v1/objects/ZTF26abenjab/detections",
+        "wall_ns": 4100133825
+      },
+      {
+        "bytes": 35850,
+        "conflicts": 0,
+        "invalid": 0,
+        "retained": 1,
+        "sha256": "7f71c5295703b357ef3c32501e5579c34ff42adb2575e325476b2faa0f8361d6",
+        "started_utc": "2026-11-23T18:01:35.357333+00:00",
+        "status": 200,
+        "thread_cpu_ns": 4023244,
+        "url": "https://api.alerce.online/ztf/v1/objects/ZTF26abzayqe/detections",
+        "wall_ns": 4011344187
+      }
+    ],
+    "alternate_batch_wall_ns": 8323689244,
+    "primary": [
+      {
+        "bytes": 34560,
+        "conflicts": 0,
+        "invalid": 0,
+        "retained": 9,
+        "sha256": "022a3b254e4b82a534ef41fb92bc77a9fc46c9f060e7ad4f5571fa3d68d18330",
+        "started_utc": "2026-11-23T18:01:26.314689+00:00",
+        "status": 200,
+        "thread_cpu_ns": 4740685,
+        "url": "https://api.ztf.fink-portal.org/api/v1/objects?objectId=ZTF26abrhnfb%2CZTF26abyuvfs%2CZTF26abzlqjb%2CZTF26acdfcma%2CZTF26abenjab%2CZTF26abzayqe&columns=i%3AobjectId%2Ci%3Acandid%2Ci%3Ajd%2Ci%3Afid%2Ci%3Amagpsf%2Ci%3Asigmapsf%2Ci%3Aisdiffpos&output-format=json",
+        "wall_ns": 4738329804
+      }
+    ]
+  },
+  "admitted_primary": 9,
+  "admitted_alternate": 10,
+  "later_run": "Separate state after exact arithmetic correction. No outcome from this attempt was counted."
+}
