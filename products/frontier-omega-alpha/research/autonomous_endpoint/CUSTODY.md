@@ -2,6 +2,8 @@
 
 **Prepared. Activation awaits the one standing authorization in [#565](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/issues/565).** The proposed device is the existing owner-controlled Mac Studio. The connected public GitHub credential and the local research sandbox establish no administrative privilege on it. Routine use of GitHub Actions in #564 remains public. The incumbent remains indexed SQLite and the operational Endpoint verdict remains **ABSTAIN**. [Production gates #550](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/issues/550)
 
+Use the [on-device activation and canary](MAC-ACTIVATION.md) for the exact signed Mac runtime, real role separation and approved launcher. Operational scoring on macOS requires the administrator-owned canary for the active signed authorization.
+
 ## Activate on approved hardware once
 
 1. The repository owner uses a separate local macOS administrator credential to create a non-login, non-admin `frontier-evaluator` account and exclusive read group. Keep that credential and the offline Ed25519 authority key outside both the constructor and this service account. Stage the bootstrap and its imports, Python runtime and OpenSSL in an administrator-owned protected location. Bind the exact host with administrator-owned `host-binding.json` and its digest. Its `hostname` must agree with the local machine. Set private paths below only after this host is approved.

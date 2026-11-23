@@ -113,6 +113,9 @@ def verify_authority(root, trust_sha256, state):
     authority, manifest = signed_host_binding(root, trust_sha256, state)
     now = datetime.now(timezone.utc)
     active_approval(authority, now)
+    if sys.platform == "darwin":
+        from mac_activation import require_canary
+        require_canary(root, authority, sha(manifest.read_bytes()))
     uid = os.geteuid()
     private_key = protected(state / "evaluator.key", owner=uid, private=True)
     public = checked(["openssl", "pkey", "-in", str(private_key), "-pubout"])

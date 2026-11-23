@@ -54,6 +54,12 @@ jobs:
           lab=products/frontier-omega-alpha/research/photometry_resilience
           python3 -B "$lab/replay.py" audit "$lab/evidence/confirmation.json" \
             --key-sha256 066b78c0fd3f102c6dd07170ad5d912d4ae3e3ea349170e767f6b58215b7bf24
+      - name: Replay the signed missing-measurement comparison offline
+        run: |
+          set -euo pipefail
+          lab=products/frontier-omega-alpha/research/measurement_gap
+          python3 -B "$lab/replay.py" audit "$lab/evidence/confirmation.json" \
+            --key-sha256 2eaa691e4974a20aca3fb590c3b1750285970f8664ff9d4e67b2dfca3647d6f2
       - name: Run the unattended public Endpoint Field Lab cycle
         id: endpoint
         if: >-
