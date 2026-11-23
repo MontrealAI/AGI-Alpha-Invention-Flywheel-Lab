@@ -1,14 +1,14 @@
-name: P0-254 isolated native signer path trial
+name: P0-255 isolated pinned legacy codec bootstrap
 on:
   pull_request:
     paths:
-      - 'research/source_transition_trust246/*254*'
+      - 'research/source_transition_trust246/*255*'
       - '.github/workflows/source-transition-owner-native254.yml'
   workflow_dispatch:
 permissions:
   contents: read
 concurrency:
-  group: p0254-${{ github.event.pull_request.number || github.ref }}
+  group: p0255-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: false
 jobs:
   native-path:
@@ -37,16 +37,16 @@ jobs:
           mv owner254 "$RUNNER_TEMP/owner254"
           cd "$RUNNER_TEMP/owner254"
           python -m pip install --only-binary=:all: -r requirements-commercial010.txt -r requirements-cycle004.txt numpy==2.3.5 scipy==1.17.0
-      - name: Execute all three registered cases once
+      - name: Check bootstrap selection and execute frozen native cases once
         shell: bash
         run: |
           set -euo pipefail
-          python -B research/source_transition_trust246/run_native254.py "$RUNNER_TEMP/owner254" "$RUNNER_TEMP/p0254-receipt" "${{ github.event.pull_request.head.sha || github.sha }}"
+          python -B research/source_transition_trust246/run_native255.py "$RUNNER_TEMP/owner254" "$RUNNER_TEMP/p0255-receipt" "${{ github.event.pull_request.head.sha || github.sha }}"
       - name: Upload nonsecret result only, including on test failure
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: p0254-${{ github.event.pull_request.head.sha || github.sha }}-${{ github.run_attempt }}
-          path: ${{ runner.temp }}/p0254-receipt/RESULT.json
+          name: p0255-${{ github.event.pull_request.head.sha || github.sha }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/p0255-receipt/RESULT.json
           if-no-files-found: error
           retention-days: 7
