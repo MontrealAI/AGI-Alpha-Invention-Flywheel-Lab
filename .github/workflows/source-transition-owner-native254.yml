@@ -1,0 +1,52 @@
+name: P0-254 isolated native signer path trial
+on:
+  pull_request:
+    paths:
+      - 'research/source_transition_trust246/*254*'
+      - '.github/workflows/source-transition-owner-native254.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: p0254-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
+jobs:
+  native-path:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record job start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ced6c1cb004887dcdafaea59a2976020be649f8e
+          path: owner254
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Isolate owner source and install existing dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          mv owner254 "$RUNNER_TEMP/owner254"
+          cd "$RUNNER_TEMP/owner254"
+          python -m pip install --only-binary=:all: -r requirements-commercial010.txt -r requirements-cycle004.txt numpy==2.3.5 scipy==1.17.0
+      - name: Execute all three registered cases once
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B research/source_transition_trust246/run_native254.py "$RUNNER_TEMP/owner254" "$RUNNER_TEMP/p0254-receipt" "${{ github.event.pull_request.head.sha || github.sha }}"
+      - name: Upload nonsecret result only, including on test failure
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: p0254-${{ github.event.pull_request.head.sha || github.sha }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/p0254-receipt/RESULT.json
+          if-no-files-found: error
+          retention-days: 7
