@@ -625,11 +625,15 @@ async function mounted(path){
  globalThis.document={documentElement:{lang:path==='club'?'fr':'en'},getElementById:id=>el[id],
   querySelectorAll:()=>[button],querySelector:()=>button,createElement:node};
  const chain=rpc(path);
- const calls=[];
+ const calls=[],events={};
  globalThis.window={location:{origin:'https://montrealai.github.io'},addEventListener(){},ethereum:{
-  isMetaMask:true, on(){}, request:async msg=>{
+  isMetaMask:true, on(name,run){events[name]=run}, request:async msg=>{
    calls.push(msg.method);
-   if(msg.method==='eth_requestAccounts'||msg.method==='eth_accounts')return [acct];
+   if(msg.method==='eth_requestAccounts'){
+    events.accountsChanged([acct]);
+    return [acct];
+   }
+   if(msg.method==='eth_accounts')return [acct];
    if(msg.method==='personal_sign')return '0x'+'ab'.repeat(65);
    return await chain.request(msg);
   }
@@ -652,7 +656,9 @@ async function mounted(path){
   assert(brief.children.length>2);
   assert.equal(calls.filter(m=>m==='personal_sign').length,1);
   assert(calls.every(m=>['eth_requestAccounts','eth_accounts','eth_chainId','eth_getBlockByNumber','eth_getCode','eth_call','personal_sign'].includes(m)));
-  listeners.lock();
+  events.accountsChanged([acct,other]);
+  assert.equal(brief.hidden,false);
+  events.accountsChanged([other]);
   assert.equal(member.hidden,true);
   assert.equal(brief.hidden,true);
   assert.equal(brief.children.length,0);

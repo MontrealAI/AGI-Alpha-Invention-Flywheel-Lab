@@ -143,7 +143,7 @@ function mount(){
   const status=el('status'),member=el('member'),buttons=[...document.querySelectorAll('[data-connect]')];
   const briefButton=el('open-brief'),briefStatus=el('brief-status'),brief=el('brief-content');
   const say=k=>{status.textContent=s[k]??s.unavailable;};
-  let epoch=0,timer,provider,session;
+  let epoch=0,timer,provider,session,pending;
   function resetBrief() {
     session = null;
     brief.hidden = true;
@@ -156,9 +156,16 @@ function mount(){
     epoch++;
     clearTimeout(timer);
     member.hidden=true;
+    pending=null;
     resetBrief();
     buttons.forEach(b=>b.disabled=false);
     say('changed');
+  };
+  const accountsChanged = accounts => {
+    const active = pending ?? session;
+    const selected = accounts?.[0];
+    if (active && isAddr(selected) && (!active.account || same(active.account, selected))) return;
+    lock();
   };
   async function openBrief() {
     if (!session) return;
@@ -191,15 +198,17 @@ function mount(){
     const id=++epoch;
     clearTimeout(timer);member.hidden=true;buttons.forEach(b=>b.disabled=true);
     resetBrief();
+    const attempt={account:null};
+    pending=attempt;
     try{
       const label=path==='club'?normalized(el('club-label').value):'';
       const injected=window.ethereum;
       const w=injected?.providers?.find(p=>p.isMetaMask)??injected;
       if(!w?.isMetaMask||typeof w.request!=='function')throw Error('wallet');
       if(w!==provider){
-        for (const event of ['accountsChanged','chainChanged','disconnect']) {
-          provider?.removeListener?.(event,lock);
-          w.on?.(event,lock);
+        for (const [event, listener] of Object.entries({accountsChanged,chainChanged:lock,disconnect:lock})) {
+          provider?.removeListener?.(event,listener);
+          w.on?.(event,listener);
         }
         provider=w;
       }
@@ -207,8 +216,12 @@ function mount(){
       const [account]=await w.request({method:'eth_requestAccounts'});
       if(id!==epoch)return;
       if(!isAddr(account))throw Error('wallet');
+      attempt.account=account;
       if(!await eligible(w,account,path,label))throw Error('no');
       if(id!==epoch)return;
+      const [selected]=await w.request({method:'eth_accounts'});
+      if(id!==epoch)return;
+      if(!same(selected,account))throw Error('no');
       say('sign');
       const message=signInMessage(window.location.origin,account,path,Date.now(),hx(crypto.getRandomValues(new Uint8Array(16))));
       const signature=await w.request({method:'personal_sign',params:['0x'+hx(enc.encode(message)),account]});
@@ -221,7 +234,10 @@ function mount(){
       say('ok');member.hidden=false;el('workspace-title').focus();
       timer=setTimeout(lock,5*60*1000);
     }catch(e){if(id===epoch)say(e?.code===4001?'cancelled':e?.message);}
-    finally{if(id===epoch)buttons.forEach(b=>b.disabled=false);}
+    finally{
+      if(pending===attempt)pending=null;
+      if(id===epoch)buttons.forEach(b=>b.disabled=false);
+    }
   }
   buttons.forEach(b=>b.disabled=false);
   say('idle');
