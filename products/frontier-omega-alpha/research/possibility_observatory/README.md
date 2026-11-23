@@ -2,6 +2,8 @@
 
 ## Mission
 
+[Transformational Invention](TRANSFORMATIONAL-INVENTION.md) governs the four scientific advancement claims in the 10/10 mandate. [The registered constructor comparison](evidence_constructor/RESULTS.md) tests those claims with historical evidence and distinct source families.
+
 **Characterize the accelerating frontier. Discover the newly possible. Challenge inherited constraints. Experiment. Verify. Learn.**
 
 This additive, research-only component turns the existing public release checkpoint into a **Possibility Atlas** and a **human-review experiment queue**. It does not automatically invent valuable technology, access ChatGPT conversations, authorize experiments, or establish commercial return.
