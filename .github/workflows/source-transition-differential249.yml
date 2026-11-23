@@ -58,7 +58,7 @@ jobs:
           paths=['DIFFERENTIAL249_PROTOCOL.md','owner_wire248.py','test_owner_differential249.py']
           hist=Path(os.environ['RUNNER_TEMP'])/'p0249-pinned-owner.py'
           raw=hist.read_bytes()
-          blob=hashlib.sha1(('blob %d\\0'%len(raw)).encode()+raw).hexdigest()
+          blob=hashlib.sha1(b'blob '+str(len(raw)).encode()+bytes([0])+raw).hexdigest()
           assert blob=='2397091ef8e1960ad13950693d5b3cd04e2ff7c5'
           receipt={
             'schema':'agi-alpha/p0-249-pinned-owner-differential/v1',
@@ -77,7 +77,7 @@ jobs:
             'actual_host_model_bill_usd':None
           }
           dest=Path(os.environ['RUNNER_TEMP'])/'p0249-receipt'/'RESULT.json'
-          dest.write_text(json.dumps(receipt,sort_keys=True,indent=2)+'\\n')
+          dest.write_text(json.dumps(receipt,sort_keys=True,indent=2)+chr(10))
           PY
       - name: Upload compact exact-head evidence
         if: success()
