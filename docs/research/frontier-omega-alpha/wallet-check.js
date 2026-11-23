@@ -83,6 +83,37 @@ export function signInMessage(origin,account,path,now,nonce){
     'Issued: '+new Date(now).toISOString(),'Nonce: '+nonce
   ].join('\n');
 }
+
+function showBrief(target, edition, sourceLabel) {
+  const element = (tag, text) => {
+    const node = document.createElement(tag);
+    node.textContent = text;
+    return node;
+  };
+  const meta = element('p', edition.edition);
+  meta.className = 'packet-meta';
+  const title = element('h3', edition.title);
+  title.id = 'brief-title';
+  title.tabIndex = -1;
+  target.setAttribute('aria-labelledby', title.id);
+  target.replaceChildren(meta, title);
+  for (const section of edition.sections) {
+    target.append(element('h4', section.heading));
+    for (const paragraph of section.paragraphs) target.append(element('p', paragraph));
+  }
+  const list = document.createElement('ul');
+  for (const source of edition.sources) {
+    const item = document.createElement('li');
+    const link = element('a', source.label);
+    link.href = source.href;
+    item.append(link);
+    list.append(item);
+  }
+  target.append(element('h4', sourceLabel), list);
+  target.hidden = false;
+  title.focus();
+}
+
 function mount(){
   const fr=document.documentElement.lang==='fr';
   const s=fr?{
@@ -93,7 +124,9 @@ function mount(){
     no:'Ce portefeuille ne satisfait pas au critère choisi.', sign:'Vérifiez le message de connexion dans MetaMask.',
     ok:'Admissibilité vérifiée. Vous êtes connecté à l’espace de recherche public.',
     cancelled:'Connexion annulée.', unavailable:'Vérification impossible pour le moment. Réessayez.',
-    changed:'Session verrouillée. Reconnectez-vous pour vérifier le portefeuille.'
+    changed:'Session verrouillée. Reconnectez-vous pour vérifier le portefeuille.',
+    opening:'Nouvelle vérification de l’admissibilité…', sources:'Sources et données d’essai',
+    briefError:'Le dossier ne peut pas être ouvert pour le moment. Réessayez.'
   }:{
     idle:'Choose a MetaMask sign-in option.', checking:'Checking on Ethereum…',
     wallet:'Open the page in MetaMask Mobile or use the MetaMask browser extension.',
@@ -102,24 +135,73 @@ function mount(){
     no:'This wallet does not meet the selected requirement.', sign:'Review the sign-in message in MetaMask.',
     ok:'Eligibility verified. You’re signed in to the public research workspace.',
     cancelled:'Sign-in canceled.', unavailable:'Could not verify right now. Please try again.',
-    changed:'Session locked. Sign in again to verify your wallet.'
+    changed:'Session locked. Sign in again to verify your wallet.',
+    opening:'Checking eligibility again…', sources:'Sources and test inputs',
+    briefError:'The brief could not be opened. Try again.'
   };
   const el=id=>document.getElementById(id);
   const status=el('status'),member=el('member'),buttons=[...document.querySelectorAll('[data-connect]')];
+  const briefButton=el('open-brief'),briefStatus=el('brief-status'),brief=el('brief-content');
   const say=k=>{status.textContent=s[k]??s.unavailable;};
-  let epoch=0,timer,provider;
-  const lock=()=>{epoch++;clearTimeout(timer);member.hidden=true;buttons.forEach(b=>b.disabled=false);say('changed');};
+  let epoch=0,timer,provider,session;
+  function resetBrief() {
+    session = null;
+    brief.hidden = true;
+    brief.replaceChildren();
+    briefStatus.textContent = '';
+    briefButton.disabled = false;
+    briefButton.setAttribute('aria-expanded', 'false');
+  }
+  const lock=()=>{
+    epoch++;
+    clearTimeout(timer);
+    member.hidden=true;
+    resetBrief();
+    buttons.forEach(b=>b.disabled=false);
+    say('changed');
+  };
+  async function openBrief() {
+    if (!session) return;
+    if (!brief.hidden) {
+      el('brief-title').focus();
+      return;
+    }
+    const {id, w, account, path, label} = session;
+    briefButton.disabled = true;
+    briefStatus.textContent = s.opening;
+    try {
+      const [current] = await w.request({method:'eth_accounts'});
+      if (!same(current, account) || !await eligible(w, account, path, label)) {
+        if (id === epoch) { lock(); say('no'); }
+        return;
+      }
+      if (id !== epoch) return;
+      const {brief001} = await import('./member-brief-001.js');
+      if (id !== epoch) return;
+      showBrief(brief, brief001[fr ? 'fr' : 'en'], s.sources);
+      briefButton.setAttribute('aria-expanded', 'true');
+      briefStatus.textContent = '';
+    } catch {
+      if (id === epoch) briefStatus.textContent = s.briefError;
+    } finally {
+      if (id === epoch) briefButton.disabled = false;
+    }
+  }
   async function enter(path){
     const id=++epoch;
     clearTimeout(timer);member.hidden=true;buttons.forEach(b=>b.disabled=true);
+    resetBrief();
     try{
       const label=path==='club'?normalized(el('club-label').value):'';
       const injected=window.ethereum;
       const w=injected?.providers?.find(p=>p.isMetaMask)??injected;
       if(!w?.isMetaMask||typeof w.request!=='function')throw Error('wallet');
       if(w!==provider){
-        if(provider?.removeListener){provider.removeListener('accountsChanged',lock);provider.removeListener('chainChanged',lock);}
-        provider=w;w.on?.('accountsChanged',lock);w.on?.('chainChanged',lock);
+        for (const event of ['accountsChanged','chainChanged','disconnect']) {
+          provider?.removeListener?.(event,lock);
+          w.on?.(event,lock);
+        }
+        provider=w;
       }
       say('checking');
       const [account]=await w.request({method:'eth_requestAccounts'});
@@ -135,6 +217,7 @@ function mount(){
       const [confirmed]=await w.request({method:'eth_accounts'});
       if(!same(confirmed,account)||!await eligible(w,account,path,label))throw Error('no');
       if(id!==epoch)return;
+      session={id,w,account,path,label};
       say('ok');member.hidden=false;el('workspace-title').focus();
       timer=setTimeout(lock,5*60*1000);
     }catch(e){if(id===epoch)say(e?.code===4001?'cancelled':e?.message);}
@@ -144,6 +227,7 @@ function mount(){
   say('idle');
   el('club-form').addEventListener('submit',e=>{e.preventDefault();void enter('club');});
   document.querySelector('[data-connect="token"]').addEventListener('click',()=>void enter('token'));
+  briefButton.addEventListener('click',()=>void openBrief());
   el('lock').addEventListener('click',lock);
   window.addEventListener('pagehide',lock);
 }

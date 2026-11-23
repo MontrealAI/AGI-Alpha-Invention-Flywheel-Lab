@@ -107,6 +107,27 @@ button:disabled { cursor: wait; opacity: .76; }
 }
 .packet-shortcuts a, .packet-evidence a { color: var(--gold); text-underline-offset: .22em; }
 .packet-shortcuts a { display: inline-flex; align-items: center; min-height: 44px; }
+.member-brief { border-left: 2px solid #927652; margin-top: 1.35rem; padding: .24rem 1rem; }
+.member-brief h3, .watch-streams h3 { color: var(--gold); font-size: 1rem; }
+.member-brief p, .watch-results p { color: var(--muted); }
+.watch-results { grid-column: 1 / -1; }
+.watch-results h3 { margin-bottom: .4rem; }
+.watch-streams { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; margin-top: 1.25rem; }
+.watch-streams article { border: 1px solid var(--line); border-top-color: #927652; border-radius: 9px; padding: 1rem; background: #181122; overflow-wrap: anywhere; }
+.watch-streams h3 + p, .watch-streams li p { font-size: .85rem; margin-top: .4rem; }
+.watch-streams ul { list-style: none; padding: 0; }
+.watch-streams li { border-top: 1px solid var(--line); padding-top: .8rem; margin-top: .8rem; }
+.watch-streams li a { text-underline-offset: .2em; }
+.brief-entry { padding: 1rem 1.4rem 0; }
+.brief-entry > button { border-color: #f1d7a6; background: var(--gold); color: #21152b; }
+.brief-entry > button:hover { color: #21152b; background: #ffdfab; }
+.brief-content { max-width: 75ch; padding-block: 1.4rem .75rem; color: var(--muted); }
+.brief-content h3 { color: var(--ink); font: 400 clamp(1.5rem, 3.2vw, 2.3rem)/1.15 var(--serif); }
+.brief-content h4 { color: var(--gold); margin: 1.2rem 0 .35rem; }
+.brief-content p + p { margin-top: .6rem; }
+.brief-content ul { padding-left: 1.3rem; }
+.brief-content a { color: var(--gold); text-underline-offset: .2em; }
+.brief-content .packet-meta { margin-bottom: .45rem; }
 .research { background: #130e1d; border-block: 1px solid var(--line); padding-block: clamp(2.8rem, 7vw, 5rem); }
 .method-intro { margin-block: .85rem 2.2rem; }
 .packets { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.15rem; }
@@ -143,6 +164,7 @@ button:disabled { cursor: wait; opacity: .76; }
   .observation { right: .1rem; }
   .methods { grid-template-columns: repeat(2, 1fr); }
   .packets { grid-template-columns: 1fr; }
+  .watch-streams { grid-template-columns: 1fr; }
 }
 @media (max-width: 630px) {
   .header-inner { min-height: 62px; }

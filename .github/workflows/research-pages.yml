@@ -5,6 +5,9 @@ on:
       - 'docs/research/**'
       - 'experiments/frontier-conclave/**'
       - 'scripts/build_research_site.py'
+      - 'scripts/frontier_public_watch.py'
+      - 'publication/frontier-public-holds.json'
+      - 'tests/test_frontier_public_watch.py'
       - 'tests/test_research_site.py'
       - 'tests/test_alpha_site.cjs'
       - 'tests/test_surf_reader.cjs'
@@ -18,6 +21,9 @@ on:
       - 'docs/research/**'
       - 'experiments/frontier-conclave/**'
       - 'scripts/build_research_site.py'
+      - 'scripts/frontier_public_watch.py'
+      - 'publication/frontier-public-holds.json'
+      - 'tests/test_frontier_public_watch.py'
       - 'tests/test_research_site.py'
       - 'tests/test_alpha_site.cjs'
       - 'tests/test_surf_reader.cjs'
@@ -26,6 +32,8 @@ on:
       - 'events/alpha-genesis-live/**'
       - '.github/workflows/alpha-genesis-harness.yml'
   workflow_dispatch:
+  schedule:
+    - cron: '17 */3 * * *'
 permissions:
   contents: read
 concurrency:
@@ -35,6 +43,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     timeout-minutes: 360
+    outputs:
+      publish: ${{ steps.frontier_watch.outputs.changed }}
     steps:
       - name: Record platform job execution start
         shell: bash
@@ -46,6 +56,9 @@ jobs:
             docs/research
             experiments/frontier-conclave
             scripts/build_research_site.py
+            scripts/frontier_public_watch.py
+            publication/frontier-public-holds.json
+            tests/test_frontier_public_watch.py
             tests/test_research_site.py
             tests/test_alpha_site.cjs
             tests/test_surf_reader.cjs
@@ -56,38 +69,53 @@ jobs:
             products/alpha-genesis-harness/tests/acceptance.test.cjs
             products/alpha-genesis-harness/examples/customer-mission.json
           sparse-checkout-cone-mode: false
+      - name: Build only the public website allowlist
+        run: python3 scripts/build_research_site.py --output "$RUNNER_TEMP/research-site"
+      - name: Test watch publication and topic holds
+        run: python3 -m unittest discover -s tests -p 'test_frontier_public_watch.py' -v
+      - name: Verify and stage public watch references
+        id: frontier_watch
+        if: github.event_name == 'pull_request' || github.ref == 'refs/heads/main'
+        shell: bash
+        run: |
+          changed="$(python3 scripts/frontier_public_watch.py "$RUNNER_TEMP/research-site/frontier-omega-alpha" "$GITHUB_EVENT_NAME")"
+          printf 'changed=%s\n' "$changed" >> "$GITHUB_OUTPUT"
       - name: Qualify prepared Conclave experiment
+        if: github.event_name != 'schedule' || steps.frontier_watch.outputs.changed == 'true'
         working-directory: experiments/frontier-conclave
         run: |
           python3 RUN_WORKSHOP.py check
           python3 -m unittest test_experiment -v
       - name: Verify ALPHA GENESIS LIVE agent, construction and evidence
+        if: github.event_name != 'schedule' || steps.frontier_watch.outputs.changed == 'true'
         run: |
           node --test events/alpha-genesis-live/engine/tests/*.test.mjs events/alpha-genesis-live/lab/test/*.test.mjs events/alpha-genesis-live/06_QA/stage_engine.test.mjs
           node events/alpha-genesis-live/00_STAGE/run_show.mjs --mode preview --focus confidence --out "$RUNNER_TEMP/alpha-genesis-live-preview"
           node events/alpha-genesis-live/engine/verify_receipt.mjs "$RUNNER_TEMP/alpha-genesis-live-preview/agent-receipt.json"
       - name: Validate original PDFs, links and publication boundary
+        if: github.event_name != 'schedule' || steps.frontier_watch.outputs.changed == 'true'
         run: python3 -m unittest discover -s tests -p 'test_research_site.py' -v
       - name: Check interactive research calculations and decisions
+        if: github.event_name != 'schedule' || steps.frontier_watch.outputs.changed == 'true'
         run: node --test tests/test_alpha_site.cjs tests/test_surf_reader.cjs
       - name: Reproduce OUT-ACCELERATE exact worked example
+        if: github.event_name != 'schedule' || steps.frontier_watch.outputs.changed == 'true'
         run: |
           python3 docs/research/out-accelerate/acceleration_witness.py --output-dir "$RUNNER_TEMP/out-accelerate-replay"
           cmp docs/research/out-accelerate/results/results.json "$RUNNER_TEMP/out-accelerate-replay/results.json"
           cmp docs/research/out-accelerate/results/summary.csv "$RUNNER_TEMP/out-accelerate-replay/summary.csv"
-      - name: Build only the public website allowlist
-        run: python3 scripts/build_research_site.py --output "$RUNNER_TEMP/research-site"
       - name: Qualify and add the standalone HARNESS preview
+        if: github.event_name != 'schedule' || steps.frontier_watch.outputs.changed == 'true'
         run: |
           node --test products/alpha-genesis-harness/tests/*.test.cjs
           python3 products/alpha-genesis-harness/scripts/publish_preview.py --output "$RUNNER_TEMP/research-site/harness" --source-revision "$(git rev-parse HEAD)"
       - name: Upload the allowlisted Pages artifact
-        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main' && steps.frontier_watch.outputs.changed == 'true'
         uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b # v4
         with:
           path: ${{ runner.temp }}/research-site
   deploy:
-    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main' && needs.build.outputs.publish == 'true'
     needs: build
     runs-on: ubuntu-latest
     timeout-minutes: 360
