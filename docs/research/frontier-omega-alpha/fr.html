@@ -6,11 +6,12 @@
   <meta name="color-scheme" content="dark">
   <meta name="description" content="MONTREAL.AI et QUÉBEC.AI explorent ce qui vient de devenir possible et le mettent à l’épreuve.">
   <meta name="referrer" content="no-referrer">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'none'; style-src 'self'; img-src 'self'; connect-src 'none'; base-uri 'none'; form-action 'none'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'none'; base-uri 'none'; form-action 'none'">
   <title>FRONTIER Ω ALPHA · MONTREAL.AI × QUÉBEC.AI</title>
   <link rel="canonical" href="https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/frontier-omega-alpha/fr.html">
   <link rel="alternate" hreflang="en" href="https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/frontier-omega-alpha/index.html">
   <link rel="stylesheet" href="frontier.css">
+  <script type="module" src="wallet-check.js"></script>
 </head>
 <body>
   <a class="skip" href="#main">Aller au contenu</a>
@@ -43,12 +44,12 @@
     <section id="access" class="frame gate" aria-labelledby="gate-title">
       <div class="gate-head">
         <h2 id="gate-title">Accéder à la recherche</h2>
-        <p>Connectez MetaMask au réseau principal Ethereum. La connexion peut demander une signature de message. L’accès ne nécessite ni transaction ni frais de gaz.</p>
+        <p>Vérification du portefeuille sur Ethereum et signature d’un message, sans transaction ni frais. Cet espace de recherche est public et ne contient aucun dossier privé chiffré.</p>
       </div>
       <div class="paths">
         <form class="path" id="club-form">
           <label for="club-label">Votre identifiant AGI Club</label>
-          <div class="field"><input id="club-label" disabled name="label" maxlength="255" inputmode="text" autocapitalize="none" autocomplete="off" spellcheck="false" required placeholder="founder"><span aria-hidden="true">.club.agi.eth</span></div>
+          <div class="field"><input id="club-label" name="label" maxlength="63" inputmode="text" autocapitalize="none" autocomplete="off" spellcheck="false" required placeholder="founder"><span aria-hidden="true">.club.agi.eth</span></div>
           <p>Détenir directement un nom ENSv1 sous <code>.club.agi.eth</code>, avec ou sans Name Wrapper.</p>
           <button type="submit" data-connect="club" disabled>Entrer avec AGI Club <span aria-hidden="true">→</span></button>
         </form>
@@ -57,22 +58,14 @@
           <button type="button" data-connect="token" disabled>Entrer avec $AGIALPHA <span aria-hidden="true">→</span></button>
         </div>
       </div>
-      <p class="status" id="status" role="status" aria-live="polite">Page publique. La connexion au portefeuille et le déchiffrement ne sont pas activés.</p>
-      <div id="native-controls" class="native-controls" hidden></div>
+      <p class="status" id="status" role="status" aria-live="polite">Pour vous connecter, ouvrez cette page dans MetaMask.</p>
     </section>
     <section id="member" class="frame workspace" hidden aria-labelledby="workspace-title">
       <div class="workspace-head">
-        <h2 id="workspace-title" tabindex="-1">Recherche réservée aux membres</h2>
+        <h2 id="workspace-title" tabindex="-1">Espace de recherche public</h2>
         <button id="lock" class="quiet" type="button">Verrouiller la session</button>
       </div>
-      <div class="workspace-body">
-        <nav id="collections" aria-label="Sections de recherche"></nav>
-        <div class="workspace-content">
-          <p id="workspace-status" role="status"></p>
-          <ul id="entries"></ul>
-          <article id="record" aria-live="polite"></article>
-        </div>
-      </div>
+      <p><a href="#research">Voir les résultats de recherche →</a></p>
     </section>
     <section class="research" id="research" aria-labelledby="method-title">
       <div class="frame">
@@ -97,7 +90,7 @@
     </section>
     <section class="frame privacy" id="privacy" aria-labelledby="privacy-title">
       <h2 id="privacy-title">Accès par portefeuille et confidentialité</h2>
-      <div><p>Une signature de message dans MetaMask peut lier votre portefeuille à ce navigateur sans transaction Ethereum. Dans le lecteur hébergé uniquement sur GitHub, un nouveau navigateur reçoit ses clés chiffrées par une remise privée effectuée une seule fois. Le navigateur conserve sa clé privée sur l’origine isolée du lecteur. L’effacement de ses données peut nécessiter une nouvelle remise. Les destinataires peuvent conserver les dossiers déjà déchiffrés.</p><p>L’admissibilité du portefeuille donne un accès en lecture. Les opérations de recherche exigent une autorisation distincte.</p></div>
+      <div><p>L’adresse est vérifiée auprès du fournisseur Ethereum de votre portefeuille. Ce site n’enregistre ni ne transmet votre signature. Le contrôle de connexion n’est pas un coffre chiffré.</p></div>
     </section>
   </main>
   <footer class="footer">

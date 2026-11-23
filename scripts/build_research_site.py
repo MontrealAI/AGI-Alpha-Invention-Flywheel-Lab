@@ -61,6 +61,7 @@ ASSETS += ('ignition/studio.css', 'ignition/public.js')
 PAGES += ('frontier-omega-alpha/index.html', 'frontier-omega-alpha/fr.html')
 ASSETS += (
     'frontier-omega-alpha/frontier.css',
+    'frontier-omega-alpha/wallet-check.js',
     'frontier-omega-alpha/carina.webp',
 )
 FILES = PAPERS + PAGES + ASSETS + ('publication-manifest.json',)
