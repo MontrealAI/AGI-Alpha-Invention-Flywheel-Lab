@@ -498,7 +498,7 @@ class ResearchSiteTests(unittest.TestCase):
                 self.assertIn('download>', text)
                 self.assertIn('Votre navigateur n’affiche pas les PDF intégrés' if french else 'Your browser does not display embedded PDFs', text)
 
-    def test_frontier_alpha_public_wallet_check_is_not_private_content_access(self):
+    def test_frontier_alpha_member_reading_uses_transaction_free_public_assets(self):
         import os
         import subprocess
         for name in ('index.html', 'fr.html'):
@@ -507,13 +507,16 @@ class ResearchSiteTests(unittest.TestCase):
             self.assertIn("connect-src 'none'", page)
             self.assertIn('data-connect="club" disabled', page)
             self.assertIn('data-connect="token" disabled', page)
+            self.assertIn('id="brief-content" hidden', page)
+            self.assertNotIn('member-brief-001.js', page)
         self.assertEqual(
             {name for name in site.FILES if name.startswith('frontier-omega-alpha/')},
             {'frontier-omega-alpha/index.html', 'frontier-omega-alpha/fr.html',
              'frontier-omega-alpha/frontier.css', 'frontier-omega-alpha/carina.webp',
-             'frontier-omega-alpha/wallet-check.js'},
+             'frontier-omega-alpha/wallet-check.js', 'frontier-omega-alpha/member-brief-001.js'},
         )
         source = (self.source / 'frontier-omega-alpha' / 'wallet-check.js').read_text()
+        self.assertIn("await import('./member-brief-001.js')", source)
         for forbidden in ('eth_sendTransaction', 'wallet_sendCalls', 'localStorage', 'sessionStorage', 'fetch('):
             self.assertNotIn(forbidden, source)
         subprocess.run(['node', '--input-type=module', '-e', r"""import assert from 'node:assert/strict';

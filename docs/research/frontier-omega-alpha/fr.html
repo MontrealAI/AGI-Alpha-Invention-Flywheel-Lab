@@ -45,7 +45,7 @@
     <section id="access" class="frame gate" aria-labelledby="gate-title">
       <div class="gate-head">
         <h2 id="gate-title">Accéder à la recherche</h2>
-        <p>Vérification du portefeuille sur Ethereum et signature d’un message, sans transaction ni frais. Cet espace de recherche est public et ne contient aucun dossier privé chiffré.</p>
+        <p>Vérification du portefeuille sur Ethereum et signature d’un message, sans transaction ni frais. Le dossier membre utilise des fichiers publics sur GitHub Pages.</p>
       </div>
       <div class="paths">
         <form class="path" id="club-form">
@@ -60,13 +60,23 @@
         </div>
       </div>
       <p class="status" id="status" role="status" aria-live="polite">Pour vous connecter, ouvrez cette page dans MetaMask.</p>
+      <div class="member-brief" id="member-brief">
+        <h3>Dossier membre</h3>
+        <p>Connectez votre portefeuille AGI Club ou $AGIALPHA pour ouvrir le dossier. Le site affiche le dossier après vérification.</p>
+      </div>
     </section>
     <section id="member" class="frame workspace" hidden aria-labelledby="workspace-title">
       <div class="workspace-head">
         <h2 id="workspace-title" tabindex="-1">Espace de recherche public</h2>
         <button id="lock" class="quiet" type="button">Verrouiller la session</button>
       </div>
+      <div class="brief-entry">
+        <button class="quiet" id="open-brief" type="button" aria-controls="brief-content" aria-expanded="false">Ouvrir le dossier membre</button>
+        <p class="status" id="brief-status" role="status"></p>
+        <article class="brief-content" id="brief-content" hidden></article>
+      </div>
       <ul class="packet-shortcuts">
+        <li><a href="#monitoring">Résultats des veilles</a></li>
         <li><a href="#packet-lean">Lean 4.36</a></li>
         <li><a href="#packet-qwen">Qwen GGUF</a></li>
         <li><a href="#research-packet">Rapports de preuve</a></li>
@@ -83,6 +93,11 @@
         <p>23 novembre 2026 : le dernier passage examiné de Possible Now n’a relevé aucune nouvelle occasion justifiant une action. Il s’agit d’un état de veille, pas d’une alerte.</p>
         <!-- FRONTIER_POSSIBILITY_RECORDS -->
       </div>
+      <section class="watch-results" id="monitoring" aria-labelledby="monitoring-title">
+        <h3 id="monitoring-title">Références récentes des veilles</h3>
+        <p>Les sources primaires ont été contrôlées. Les essais affichés restent à réaliser.</p>
+        <!-- FRONTIER_PUBLIC_WATCH -->
+      </section>
     </section>
     <section class="research" id="research" aria-labelledby="public-results-title">
       <div class="frame">

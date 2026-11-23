@@ -45,7 +45,7 @@
     <section id="access" class="frame gate" aria-labelledby="gate-title">
       <div class="gate-head">
         <h2 id="gate-title">Access the research</h2>
-        <p>Check your wallet on Ethereum and sign a message. No transaction or gas. This research workspace is public and contains no private encrypted records.</p>
+        <p>Check your wallet on Ethereum and sign a message. No transaction or gas. The member reading view is hosted as public GitHub Pages files.</p>
       </div>
       <div class="paths">
         <form class="path" id="club-form">
@@ -60,13 +60,23 @@
         </div>
       </div>
       <p class="status" id="status" role="status" aria-live="polite">To sign in, open this page with MetaMask.</p>
+      <div class="member-brief" id="member-brief">
+        <h3>Member brief</h3>
+        <p>Sign in with AGI Club or $AGIALPHA to open the brief. The site shows the brief after checking eligibility.</p>
+      </div>
     </section>
     <section id="member" class="frame workspace" hidden aria-labelledby="workspace-title">
       <div class="workspace-head">
         <h2 id="workspace-title" tabindex="-1">Public research workspace</h2>
         <button id="lock" class="quiet" type="button">Lock session</button>
       </div>
+      <div class="brief-entry">
+        <button class="quiet" id="open-brief" type="button" aria-controls="brief-content" aria-expanded="false">Open the member brief</button>
+        <p class="status" id="brief-status" role="status"></p>
+        <article class="brief-content" id="brief-content" hidden></article>
+      </div>
       <ul class="packet-shortcuts">
+        <li><a href="#monitoring">Frontier watch results</a></li>
         <li><a href="#packet-lean">Lean 4.36</a></li>
         <li><a href="#packet-qwen">Qwen GGUF</a></li>
         <li><a href="#research-packet">Formal proof receipts</a></li>
@@ -83,6 +93,11 @@
         <p>23 November 2026: the latest reviewed Possible Now check identified no new actionable opportunity. This is a status note, not an alert.</p>
         <!-- FRONTIER_POSSIBILITY_RECORDS -->
       </div>
+      <section class="watch-results" id="monitoring" aria-labelledby="monitoring-title">
+        <h3 id="monitoring-title">Latest watch references</h3>
+        <p>References are checked against primary sources. Test decisions describe proposed work.</p>
+        <!-- FRONTIER_PUBLIC_WATCH -->
+      </section>
     </section>
     <section class="research" id="research" aria-labelledby="public-results-title">
       <div class="frame">
