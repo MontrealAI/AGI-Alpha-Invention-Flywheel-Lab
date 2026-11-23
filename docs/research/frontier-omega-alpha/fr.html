@@ -69,7 +69,7 @@
         <h2 id="workspace-title" tabindex="-1">Espace de recherche public</h2>
         <button id="lock" class="quiet" type="button">Verrouiller la session</button>
       </div>
-      <div class="brief-entry">
+      <div class="brief-entry" data-nosnippet>
         <button class="quiet" id="open-brief" type="button" aria-controls="brief-content" aria-expanded="false">Ouvrir le dossier membre</button>
         <p class="status" id="brief-status" role="status"></p>
         <article class="brief-content" id="brief-content" hidden></article>
@@ -81,36 +81,24 @@
         <li><a href="#research-packet">Rapports de preuve</a></li>
         <li><a href="#packet-retrofit">Mise à niveau ALPHA-1</a></li>
       </ul>
-      <div class="packet" data-nosnippet>
-        <p class="packet-meta">Aperçu membre · non chiffré</p>
-        <details id="member-brief-001">
-          <summary>Note 001 · AnyS1 : aiguiller les cas courants et transmettre les cas incertains</summary>
-          <p>Aperçu : la vérification du portefeuille contrôle l’affichage. Ce contenu statique n’est pas chiffré et reste publiquement accessible, notamment dans le code source de la page. Il ne contient aucun document confidentiel.</p>
-          <p>Décision : tester sans effet sur les opérations. MONTREAL.AI n’a pas exécuté cet essai. AnyS1 utilise un modèle de 4 milliards de paramètres pour évaluer les choix admissibles et confie les cas incertains à un modèle plus puissant. La baisse annoncée de 75 à 91 % vise un agent non compilé. Dans la même étude, la compilation seule économisait déjà 71 à 81 % en moyenne.</p>
-          <p>Figer 20 cas pour le tri de sources publiques et 20 pour l’aiguillage selon des règles fictives. Mêmes données, options, outils, limites et champs de sortie : décision, motif, preuve et recours. A : règles déterministes et meilleur outil autorisé au besoin. B : même flux et même recours, avec AnyS1 pour évaluer les options admissibles. Transmettre les cas mal étayés ou contradictoires. Aucune action externe.</p>
-          <p>Réussite : coût complet récurrent par résultat accepté indépendamment inférieur d’au moins 25 %, après amortissement de la mise en place et de la maintenance, sans dégradation importante. Évaluer à l’aveugle les preuves, les acceptations erronées et les recours inutiles ou manqués. Compter calcul, énergie, révision, recours, tentatives et reprises. Sinon, garder le flux compilé classique.</p>
-          <p>Pour commencer : figer les 40 cas et la grille, consigner versions et empreintes, puis comparer les deux méthodes sur les cas scellés.</p>
-          <p><a href="https://arxiv.org/abs/2611.23751">Prépublication AnyS1</a></p>
-        </details>
-      </div>
-    <section class="workspace-content privacy" id="possibility-shifts" data-nosnippet aria-labelledby="possibility-shifts-title">
-      <div>
-        <p class="eyebrow">Veille sur la frontière</p>
-        <h2 id="possibility-shifts-title">Ce qui devient possible</h2>
-        <p>La vérification du portefeuille contrôle l’affichage. Ces notes statiques ne sont pas chiffrées et demeurent accessibles dans le code source.</p>
-        <p>Un aperçu révisé de ce qui pourrait devenir réalisable, des preuves qui manquent et des essais qui permettraient de trancher. Ces notes ne constituent pas un fil en direct.</p>
-      </div>
-      <div>
-        <p>23 novembre 2026 : le dernier passage examiné de Possible Now n’a relevé aucune nouvelle occasion justifiant une action. Il s’agit d’un état de veille, pas d’une alerte.</p>
-        <p>Trois sources alimentent cette veille : Veille de l’avantage insoupçonné, Possible Now et Ω ALPHA — Veille des inventions vérifiées. Cette dernière publie uniquement des résultats circonscrits après examen d’une preuve reproductible et publique.</p>
-        <!-- FRONTIER_POSSIBILITY_RECORDS -->
-      </div>
-      <section class="watch-results" id="monitoring" aria-labelledby="monitoring-title">
-        <h3 id="monitoring-title">Références récentes des veilles</h3>
-        <p>Les sources primaires ont été contrôlées. Les essais affichés restent à réaliser.</p>
-        <!-- FRONTIER_PUBLIC_WATCH -->
+      <section class="workspace-content privacy" id="possibility-shifts" data-nosnippet aria-labelledby="possibility-shifts-title">
+        <div>
+          <p class="eyebrow">Veille sur la frontière</p>
+          <h2 id="possibility-shifts-title">Ce qui devient possible</h2>
+          <p>La vérification du portefeuille contrôle l’affichage. Ces notes statiques ne sont pas chiffrées et demeurent accessibles dans le code source.</p>
+          <p>Un aperçu révisé de ce qui pourrait devenir réalisable, des preuves qui manquent et des essais qui permettraient de trancher. Ces notes ne constituent pas un fil en direct.</p>
+        </div>
+        <div>
+          <p>23 novembre 2026 : le dernier passage examiné de Possible Now n’a relevé aucune nouvelle occasion justifiant une action. Il s’agit d’un état de veille, pas d’une alerte.</p>
+          <p>Trois sources alimentent cette veille : Veille de l’avantage insoupçonné, Possible Now et Ω ALPHA — Veille des inventions vérifiées. Cette dernière publie uniquement des résultats circonscrits après examen d’une preuve reproductible et publique.</p>
+          <!-- FRONTIER_POSSIBILITY_RECORDS -->
+        </div>
+        <section class="watch-results" id="monitoring" aria-labelledby="monitoring-title">
+          <h3 id="monitoring-title">Références récentes des veilles</h3>
+          <p>Les sources primaires ont été contrôlées. Les essais affichés restent à réaliser.</p>
+          <!-- FRONTIER_PUBLIC_WATCH -->
+        </section>
       </section>
-    </section>
     </section>
     <section class="research" id="research" aria-labelledby="public-results-title">
       <div class="frame">
@@ -159,7 +147,9 @@
             <p>La nouvelle tête HT Hotend de Prusa porte la limite documentée de la buse de 290 °C à 400 °C sur les configurations CORE One compatibles. Le catalogue exclut explicitement les configurations INDX.</p>
             <p>L’ajout de la mise à niveau datée au catalogue a fourni une option documentée dans 7 des 24 demandes d’essai. La comparaison directe en SQL a reproduit les 24 décisions. Trois implémentations ont aussi donné les mêmes résultats sur les 18 cas d’un essai distinct consacré aux procédés.</p>
             <p>L’expérience porte sur des décisions de catalogue pour des demandes construites. La performance physique, les commandes réelles, les paiements et un gain causal de réutilisation du premier outil restent à mesurer.</p>
+            <p>Les calculs d’origine restent reproductibles. Des comptes rendus du 29 septembre remettent en cause la date du 21 octobre. Dans le scénario où le même catalogue était déjà accessible, aucun des 24 cas ne change entre les 20 et 21 octobre.</p>
             <ul class="packet-evidence">
+              <li><a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/commit/abc79ae1c30bb8cac7b10422159d0325196f1d23">Correction de la date et résultats reproductibles</a></li>
               <li><a href="https://blog.prusa3d.com/ht-hotend-is-out-plus-we-offer-new-materials-and-hightemp-sheets-for-core-one-l_138625/">Annonce du fabricant Prusa</a></li>
               <li><a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/5cced81256c965797988cd682fb5f910fe72c981/products/frontier-omega-alpha/research/economic_alpha/qualification.json">Résultats figés et comparaisons</a></li>
               <li><a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/5cced81256c965797988cd682fb5f910fe72c981/products/frontier-omega-alpha/ALPHA-1.md#exécution-et-essai-commercial">Reproduire la comparaison de catalogue</a></li>

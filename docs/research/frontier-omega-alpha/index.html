@@ -69,7 +69,7 @@
         <h2 id="workspace-title" tabindex="-1">Public research workspace</h2>
         <button id="lock" class="quiet" type="button">Lock session</button>
       </div>
-      <div class="brief-entry">
+      <div class="brief-entry" data-nosnippet>
         <button class="quiet" id="open-brief" type="button" aria-controls="brief-content" aria-expanded="false">Open the member brief</button>
         <p class="status" id="brief-status" role="status"></p>
         <article class="brief-content" id="brief-content" hidden></article>
@@ -81,36 +81,24 @@
         <li><a href="#research-packet">Formal proof receipts</a></li>
         <li><a href="#packet-retrofit">ALPHA-1 retrofit</a></li>
       </ul>
-      <div class="packet" data-nosnippet>
-        <p class="packet-meta">Member preview · unencrypted</p>
-        <details id="member-brief-001">
-          <summary>Brief 001 · AnyS1: Route the routine, escalate the uncertain</summary>
-          <p>Preview: The wallet check controls display. This static content is unencrypted and publicly retrievable, including through page source. No confidential material is included.</p>
-          <p>Decision: Test in shadow mode. No MONTREAL.AI benchmark has run. AnyS1 uses a compact 4B model to score known options, with stronger-model fallback. Its reported 75–91% cost reduction is versus an uncompiled agent. Ordinary compilation already saved 71–81% on average in the same paper.</p>
-          <p>Run 20 frozen cases each for public-source triage and synthetic policy routing. Use identical inputs, options, tools, limits and output fields: decision, reason, evidence and escalation. A: deterministic rules and the strongest allowed resolver when needed. B: same workflow and fallback, with AnyS1 scoring eligible choices. Escalate weak or conflicting evidence. No external actions.</p>
-          <p>Pass only with at least 25% lower complete recurring cost per independently accepted outcome after amortizing setup and maintenance, and no material quality regression. Blind-score evidence, wrong accepts and needless or missed escalations. Include compute, energy, human review, fallback, retries and rework. Otherwise keep the ordinary compiled workflow.</p>
-          <p>Start: Freeze the 40 cases and scoring rubric, pin runtime and model versions and artifact hashes, and run both arms on the sealed cases.</p>
-          <p><a href="https://arxiv.org/abs/2611.23751">AnyS1 preprint</a></p>
-        </details>
-      </div>
-    <section class="workspace-content privacy" id="possibility-shifts" data-nosnippet aria-labelledby="possibility-shifts-title">
-      <div>
-        <p class="eyebrow">Frontier watch</p>
-        <h2 id="possibility-shifts-title">Possibility shifts</h2>
-        <p>The wallet check controls display. These static notes are unencrypted and remain accessible through page source.</p>
-        <p>A reviewed snapshot of what may be newly practical, what remains unproven and what would justify a test. These notes are not a live feed.</p>
-      </div>
-      <div>
-        <p>23 November 2026: the latest reviewed Possible Now check identified no new actionable opportunity. This is a status note, not an alert.</p>
-        <p>The sources monitored here are Unseen Advantage Watch, Possible Now, and Ω ALPHA — Verified Invention Watch. The last stream reports bounded outcomes only after reviewing a reproducible public receipt.</p>
-        <!-- FRONTIER_POSSIBILITY_RECORDS -->
-      </div>
-      <section class="watch-results" id="monitoring" aria-labelledby="monitoring-title">
-        <h3 id="monitoring-title">Latest watch references</h3>
-        <p>References are checked against primary sources. Test decisions describe proposed work.</p>
-        <!-- FRONTIER_PUBLIC_WATCH -->
+      <section class="workspace-content privacy" id="possibility-shifts" data-nosnippet aria-labelledby="possibility-shifts-title">
+        <div>
+          <p class="eyebrow">Frontier watch</p>
+          <h2 id="possibility-shifts-title">Possibility shifts</h2>
+          <p>The wallet check controls display. These static notes are unencrypted and remain accessible through page source.</p>
+          <p>A reviewed snapshot of what may be newly practical, what remains unproven and what would justify a test. These notes are not a live feed.</p>
+        </div>
+        <div>
+          <p>23 November 2026: the latest reviewed Possible Now check identified no new actionable opportunity. This is a status note, not an alert.</p>
+          <p>The sources monitored here are Unseen Advantage Watch, Possible Now, and Ω ALPHA — Verified Invention Watch. The last stream reports bounded outcomes only after reviewing a reproducible public receipt.</p>
+          <!-- FRONTIER_POSSIBILITY_RECORDS -->
+        </div>
+        <section class="watch-results" id="monitoring" aria-labelledby="monitoring-title">
+          <h3 id="monitoring-title">Latest watch references</h3>
+          <p>References are checked against primary sources. Test decisions describe proposed work.</p>
+          <!-- FRONTIER_PUBLIC_WATCH -->
+        </section>
       </section>
-    </section>
     </section>
     <section class="research" id="research" aria-labelledby="public-results-title">
       <div class="frame">
@@ -159,7 +147,9 @@
             <p>Prusa’s HT Hotend added a documented upgrade path from a 290 °C stock nozzle limit to up to 400 °C on eligible CORE One configurations. The catalog explicitly excludes INDX.</p>
             <p>Adding the dated retrofit to the catalog changed 7 of 24 test inquiries from no documented route to a retrofit candidate. The direct SQL comparison reproduced all 24 decisions. Three implementations also matched on all 18 cases in a separate process-screening test.</p>
             <p>The evidence concerns catalog decisions for constructed inquiries. Physical performance, actual orders, payments and a causal benefit from reusing the first tool remain unmeasured.</p>
+            <p>The original calculation still reproduces. September 29 reports challenge the October 21 cutoff. If the same catalog was already available, none of the 24 cases changes between October 20 and 21.</p>
             <ul class="packet-evidence">
+              <li><a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/commit/abc79ae1c30bb8cac7b10422159d0325196f1d23">Availability correction and reproducible results</a></li>
               <li><a href="https://blog.prusa3d.com/ht-hotend-is-out-plus-we-offer-new-materials-and-hightemp-sheets-for-core-one-l_138625/">Prusa product announcement</a></li>
               <li><a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/5cced81256c965797988cd682fb5f910fe72c981/products/frontier-omega-alpha/research/economic_alpha/qualification.json">Frozen results and control outcomes</a></li>
               <li><a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/5cced81256c965797988cd682fb5f910fe72c981/products/frontier-omega-alpha/ALPHA-1.md#run-the-pilot">Reproduce the catalog comparison</a></li>

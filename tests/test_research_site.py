@@ -625,11 +625,15 @@ async function mounted(path){
  globalThis.document={documentElement:{lang:path==='club'?'fr':'en'},getElementById:id=>el[id],
   querySelectorAll:()=>[button],querySelector:()=>button,createElement:node};
  const chain=rpc(path);
- const calls=[];
+ const calls=[],events={};
  globalThis.window={location:{origin:'https://montrealai.github.io'},addEventListener(){},ethereum:{
-  isMetaMask:true, on(){}, request:async msg=>{
+  isMetaMask:true, on(name,run){events[name]=run}, request:async msg=>{
    calls.push(msg.method);
-   if(msg.method==='eth_requestAccounts'||msg.method==='eth_accounts')return [acct];
+   if(msg.method==='eth_requestAccounts'){
+    events.accountsChanged([acct]);
+    return [acct];
+   }
+   if(msg.method==='eth_accounts')return [acct];
    if(msg.method==='personal_sign')return '0x'+'ab'.repeat(65);
    return await chain.request(msg);
   }
@@ -652,7 +656,9 @@ async function mounted(path){
   assert(brief.children.length>2);
   assert.equal(calls.filter(m=>m==='personal_sign').length,1);
   assert(calls.every(m=>['eth_requestAccounts','eth_accounts','eth_chainId','eth_getBlockByNumber','eth_getCode','eth_call','personal_sign'].includes(m)));
-  listeners.lock();
+  events.accountsChanged([acct,other]);
+  assert.equal(brief.hidden,false);
+  events.accountsChanged([other]);
   assert.equal(member.hidden,true);
   assert.equal(brief.hidden,true);
   assert.equal(brief.children.length,0);
@@ -663,19 +669,19 @@ await mounted('club');await mounted('token');
 console.log('11 wallet qualification checks and both workspace open/lock fixtures passed');"""],
                        check=True, env={**os.environ, 'WALLET_PATH': str(modules / 'wallet-check.js')}, timeout=30)
 
-    def test_member_brief_is_unencrypted_and_only_inside_hidden_workspace(self):
-        for name, public_note in (('index.html', 'static content is unencrypted and publicly retrievable'),
-                                  ('fr.html', 'Ce contenu statique n’est pas chiffré et reste publiquement accessible')):
+    def test_member_brief_loads_once_from_the_hidden_workspace(self):
+        for name, public_note in (('index.html', 'hosted as public GitHub Pages files'),
+                                  ('fr.html', 'fichiers publics sur GitHub Pages')):
             with self.subTest(page=name):
                 page = (self.source / 'frontier-omega-alpha' / name).read_text()
                 before, workspace = page.split('<section id="member" class="frame workspace" hidden', 1)
-                workspace, after = workspace.split('</section>', 1)
-                self.assertNotIn('member-brief-001', before + after)
-                self.assertNotIn('href="#member-brief-001"', page)
-                self.assertIn('<div class="packet" data-nosnippet>', workspace)
-                self.assertIn('<details id="member-brief-001">', workspace)
-                self.assertIn(public_note, workspace)
-                self.assertIn('https://arxiv.org/abs/2611.23751', workspace)
+                workspace, after = workspace.split('<section class="research" id="research"', 1)
+                self.assertIn(public_note, before)
+                self.assertEqual(page.count('id="open-brief"'), 1)
+                self.assertNotIn('id="open-brief"', before + after)
+                self.assertIn('<div class="brief-entry" data-nosnippet>', workspace)
+                self.assertIn('id="brief-content" hidden></article>', workspace)
+                self.assertNotIn('id="member-brief-001"', page)
                 self.assertIn('id="possibility-shifts" data-nosnippet', workspace)
                 self.assertNotIn('id="possibility-shifts"', before + after)
                 self.assertNotIn('href="#possibility-shifts"', page)

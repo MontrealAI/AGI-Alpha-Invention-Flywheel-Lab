@@ -6,6 +6,8 @@ on:
       - 'experiments/frontier-conclave/**'
       - 'scripts/build_research_site.py'
       - 'scripts/frontier_public_watch.py'
+      - 'scripts/replay_frontier_alpha1_availability.py'
+      - 'publication/frontier-alpha-1-availability.json'
       - 'publication/frontier-public-holds.json'
       - 'tests/test_frontier_public_watch.py'
       - 'tests/test_research_site.py'
@@ -22,6 +24,8 @@ on:
       - 'experiments/frontier-conclave/**'
       - 'scripts/build_research_site.py'
       - 'scripts/frontier_public_watch.py'
+      - 'scripts/replay_frontier_alpha1_availability.py'
+      - 'publication/frontier-alpha-1-availability.json'
       - 'publication/frontier-public-holds.json'
       - 'tests/test_frontier_public_watch.py'
       - 'tests/test_research_site.py'
@@ -57,6 +61,8 @@ jobs:
             experiments/frontier-conclave
             scripts/build_research_site.py
             scripts/frontier_public_watch.py
+            scripts/replay_frontier_alpha1_availability.py
+            publication/frontier-alpha-1-availability.json
             publication/frontier-public-holds.json
             tests/test_frontier_public_watch.py
             tests/test_research_site.py
@@ -73,6 +79,11 @@ jobs:
         run: python3 scripts/build_research_site.py --output "$RUNNER_TEMP/research-site"
       - name: Test watch publication and topic holds
         run: python3 -m unittest discover -s tests -p 'test_frontier_public_watch.py' -v
+      - name: Replay the ALPHA-1 availability correction
+        if: github.event_name != 'schedule'
+        run: |
+          git fetch --no-tags --depth=1 origin 5cced81256c965797988cd682fb5f910fe72c981
+          python3 scripts/replay_frontier_alpha1_availability.py --check
       - name: Verify and stage public watch references
         id: frontier_watch
         if: github.event_name == 'pull_request' || github.ref == 'refs/heads/main'
