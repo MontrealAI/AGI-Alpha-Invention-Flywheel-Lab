@@ -6,6 +6,8 @@
 
 [ALPHA-1 · EN/FR](ALPHA-1.md) records the verified retrofit pilot, successor comparison and private economic evidence procedure.
 
+[ChatGPT Pro × GitHub · EN/FR](INTELLIGENCE-BRIDGE.md) describes reviewed research intake and preparation for the existing encrypted publication process.
+
 **MONTREAL.AI × QUÉBEC.AI**
 
 ## English

@@ -54,8 +54,10 @@ export async function bundleReader(target) {
   });
 }
 
-export async function stageReader(output, reader) {
+export async function stageReader(output, reader, issuer) {
   const config = { reader: readerAddress(reader), data: publicData };
+  const service = issuer ? new URL(readerAddress(issuer)).origin : null;
+  const connectSources = service ?? new URL(publicData).origin;
   await mkdir(output, { mode: 0o755 });
   for (const name of staticFiles) {
     if (!pageFiles.includes(name)) {
@@ -68,14 +70,17 @@ export async function stageReader(output, reader) {
     }
     const locale = name === 'fr.html' ? 'index.html' : 'fr.html';
     const hosted = page
-      .replace("connect-src 'self'", "connect-src 'self' " + new URL(publicData).origin)
+      .replace("connect-src 'self'", "connect-src 'self' " + connectSources)
+      .replace('<meta name="frontier-api" content="">', service
+        ? '<meta name="frontier-api" content="' + service + '">\n  <meta name="frontier-device-issuer" content="v1">'
+        : '<meta name="frontier-api" content="">')
       .replace('<link rel="canonical" href="https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/frontier-omega-alpha/' + name + '">',
         '<link rel="canonical" href="' + config.reader + name + '">')
       .replace('href="https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/frontier-omega-alpha/' + locale + '"',
         'href="' + config.reader + locale + '"');
     await write(join(output, name), hosted);
   }
-  await write(join(output, 'native-config.json'), JSON.stringify(config) + '\n');
+  if (!service) await write(join(output, 'native-config.json'), JSON.stringify(config) + '\n');
   await write(join(output, '.nojekyll'), '');
   await bundleReader(join(output, 'native-runtime.js'));
 }
@@ -84,9 +89,9 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
   const [kind, ...arguments_] = process.argv.slice(2);
   if (kind === 'public' && arguments_.length === 3) {
     await stagePublic(...arguments_);
-  } else if (kind === 'reader' && arguments_.length === 2) {
+  } else if (kind === 'reader' && [2, 3].includes(arguments_.length)) {
     await stageReader(...arguments_);
   } else {
-    throw Error('Use public <existing Pages subdirectory> <encrypted snapshot> <reader URL> or reader <new directory> <reader URL>');
+    throw Error('Use public <Pages directory> <encrypted snapshot> <reader URL> or reader <new directory> <reader URL> [approved issuer URL]');
   }
 }

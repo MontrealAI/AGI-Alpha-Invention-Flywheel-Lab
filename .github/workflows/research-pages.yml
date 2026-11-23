@@ -37,6 +37,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     timeout-minutes: 360
+    permissions:
+      actions: read
+      contents: read
     steps:
       - name: Record platform job execution start
         shell: bash
@@ -88,8 +91,13 @@ jobs:
         if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main' && github.repository == 'MontrealAI/AGI-Alpha-Invention-Flywheel-Lab' && vars.FRONTIER_ALPHA_NATIVE_ENABLED == 'true'
         env:
           FRONTIER_ALPHA_READER: ${{ vars.FRONTIER_ALPHA_READER }}
+          GH_TOKEN: ${{ github.token }}
         shell: bash
         run: |
+          if ! python3 products/frontier-omega-alpha/native/production_gate.py --environment frontier-omega-alpha-provision --commit "$GITHUB_SHA"; then
+            echo 'Frontier governance not verified. Publishing the existing public site with protected access offline.'
+            exit 0
+          fi
           if git ls-remote --exit-code origin refs/heads/frontier-omega-alpha-state >/dev/null; then
             git fetch -q --depth=1 origin refs/heads/frontier-omega-alpha-state
             git show FETCH_HEAD:library.json > "$RUNNER_TEMP/frontier-alpha-encrypted-library.json"

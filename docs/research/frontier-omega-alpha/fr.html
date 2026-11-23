@@ -45,7 +45,7 @@
     <section id="access" class="frame gate" aria-labelledby="gate-title">
       <div class="gate-head">
         <h2 id="gate-title">Accéder à la recherche</h2>
-        <p>Connectez MetaMask au réseau principal Ethereum. Le premier enregistrement transfère zéro ETH et entraîne des frais de réseau. Les visites suivantes utilisent la clé créée sur cet appareil.</p>
+        <p>Connectez MetaMask au réseau principal Ethereum. La connexion peut demander une signature de message. L’accès ne nécessite ni transaction ni frais de gaz.</p>
       </div>
       <div class="paths">
         <form class="path" id="club-form">
@@ -91,9 +91,16 @@
         </ul>
       </div>
     </section>
+    <section class="frame privacy" aria-labelledby="public-results-title">
+      <h2 id="public-results-title">Résultats publics de recherche</h2>
+      <div>
+        <p><strong>Vérifié par un essai comparatif.</strong> Lean 4.36 a vérifié deux preuves sur des vecteurs de bits qui établissent l’équivalence des entrées d’une règle sans examiner son fonctionnement. Les preuves explicites ont aussi réussi avec Lean 4.35. La nouvelle tactique simplifie cette étape pour les cas testés. <a href="https://github.com/leanprover/lean4/releases/tag/v4.36.0">Notes de version de Lean 4.36</a></p>
+        <p><strong>Hypothèse réfutée dans le temps de calcul fixé.</strong> Les deux configurations Qwen GGUF ont atteint la limite de 300 secondes. Le validateur direct a résolu les 12 cas de maintenance de fiches de publication en 1,15 ms. <a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/pull/545">Comparaison et procédure de reproduction</a></p>
+      </div>
+    </section>
     <section class="frame privacy" id="privacy" aria-labelledby="privacy-title">
       <h2 id="privacy-title">Accès par portefeuille et confidentialité</h2>
-      <div><p>L’enregistrement est une transaction publique sur Ethereum. L’adresse signataire, le libellé Club facultatif et la clé publique de l’appareil peuvent être associés à votre participation. Le navigateur conserve une clé privée non extractible sur l’origine isolée de lecture. La perte de ces données impose un nouvel enregistrement. Les destinataires peuvent conserver les enveloppes publiées et les dossiers déjà déchiffrés.</p><p>L’admissibilité du portefeuille donne un accès en lecture. Les opérations de recherche exigent une autorisation distincte.</p></div>
+      <div><p>Une signature de message dans MetaMask peut lier votre portefeuille à ce navigateur sans transaction Ethereum. Dans le lecteur hébergé uniquement sur GitHub, un nouveau navigateur reçoit ses clés chiffrées par une remise privée effectuée une seule fois. Le navigateur conserve sa clé privée sur l’origine isolée du lecteur. L’effacement de ses données peut nécessiter une nouvelle remise. Les destinataires peuvent conserver les dossiers déjà déchiffrés.</p><p>L’admissibilité du portefeuille donne un accès en lecture. Les opérations de recherche exigent une autorisation distincte.</p></div>
     </section>
   </main>
   <footer class="footer">

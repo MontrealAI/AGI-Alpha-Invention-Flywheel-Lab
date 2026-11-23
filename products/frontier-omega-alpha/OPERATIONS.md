@@ -1,6 +1,6 @@
 # Operation and deployment / Exploitation et déploiement
 
-**Current GitHub-only release path.** See [GitHub Pages and MetaMask](GITHUB-NATIVE.md) for native provisioning, isolated hosting, bilingual instructions and the current threat model. The original SIWE access service remains the local reference.
+**Current GitHub-only release path.** See [GitHub Pages and MetaMask](GITHUB-NATIVE.md) for native provisioning, isolated hosting, bilingual instructions and the current threat model. The existing SIWE access service also supports an optional device-bound first-use route for separate authority and qualification.
 
 ## English
 
@@ -62,7 +62,7 @@ npm start
 
 Repeat `publish` for each approved version or use `publish-server` for server-side decryption with no key transfer. Avoid exposing unpublished or tenant-private projects through the member catalog. Member wallets receive the reader role. The researcher role owns its private collection and runs the research commands. A designated release operator with access to the separate service state and wrapping key can publish, withdraw and rotate. Hosting and commercial authority remain separate from these file permissions.
 
-The GitHub Pages build uses the repository's existing protected-main deployment pipeline. The qualification workflow cannot publish. Production qualification needs a trusted TLS host and RPC, the signed-in Club and token paths with authorized real wallets, expiry and loss-of-entitlement checks, isolated-origin/privacy review and an independent release sign-off. The selected Club wallet should own the exact name. The token wallet should meet the threshold without Club access. Use normal review to qualify publication of the public shell.
+The GitHub Pages build retains the existing main-only deployment workflow. The qualification workflow cannot publish. The production preflight requires actual GitHub branch protections and an independently reviewed environment before protected access can be enabled. Production qualification needs an approved TLS origin, trusted RPC, the signed-in Club and token paths with authorized real wallets, expiry and loss-of-entitlement checks, isolated-origin privacy review and independent release sign-off. The selected Club wallet should own the exact name. The token wallet should meet the threshold without Club access. Use normal review to qualify publication of the public shell. [Current release decision](evidence/PRODUCTION-QUALIFICATION.md)
 
 ### Rotation and recovery
 

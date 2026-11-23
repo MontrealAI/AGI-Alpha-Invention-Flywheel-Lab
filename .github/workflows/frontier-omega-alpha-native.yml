@@ -14,13 +14,33 @@ concurrency:
   group: frontier-omega-alpha-native-publisher
   cancel-in-progress: false
 jobs:
-  provision:
+  governance:
     if: github.repository == 'MontrealAI/AGI-Alpha-Invention-Flywheel-Lab' && github.ref == 'refs/heads/main' && vars.FRONTIER_ALPHA_NATIVE_ENABLED == 'true' && inputs.build_reader != true
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - name: Record platform job execution start
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+          sparse-checkout: products/frontier-omega-alpha/native
+      - name: Verify GitHub rules before requesting publisher secrets
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 products/frontier-omega-alpha/native/production_gate.py --environment frontier-omega-alpha-provision --commit "$GITHUB_SHA"
+  provision:
+    needs: governance
+    if: needs.governance.result == 'success' && github.repository == 'MontrealAI/AGI-Alpha-Invention-Flywheel-Lab' && github.ref == 'refs/heads/main'
     environment: frontier-omega-alpha-provision
     runs-on: ubuntu-latest
     timeout-minutes: 360
     permissions:
-      contents: write
+      contents: read
       actions: write
     steps:
       - name: Record platform job execution start
@@ -31,6 +51,10 @@ jobs:
           ref: ${{ github.sha }}
           persist-credentials: false
           sparse-checkout: products/frontier-omega-alpha
+      - name: Recheck GitHub protection after release approval
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 products/frontier-omega-alpha/native/production_gate.py --environment frontier-omega-alpha-provision --commit "$GITHUB_SHA"
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
           node-version: '24'
@@ -40,6 +64,15 @@ jobs:
         run: node --input-type=module -e "import { readerAddress } from './products/frontier-omega-alpha/native/stage.mjs'; readerAddress(process.env.FRONTIER_ALPHA_READER)"
         env:
           FRONTIER_ALPHA_READER: ${{ vars.FRONTIER_ALPHA_READER }}
+      - name: Issue the approved checkpoint writer's repository token
+        id: checkpoint-token
+        uses: actions/create-github-app-token@f418cff399f7aef4c2f0ad47e25ca7a6abbdd6fc # v3.4.0
+        with:
+          client-id: ${{ vars.FRONTIER_ALPHA_CHECKPOINT_APP_CLIENT_ID }}
+          private-key: ${{ secrets.FRONTIER_ALPHA_CHECKPOINT_APP_PRIVATE_KEY }}
+          owner: MontrealAI
+          repositories: AGI-Alpha-Invention-Flywheel-Lab
+          permission-contents: write
       - name: Verify approved wallet signatures and checkpoint encrypted publication
         run: bash products/frontier-omega-alpha/native/github-provision.sh
         env:
@@ -48,6 +81,7 @@ jobs:
           FRONTIER_ALPHA_READER: ${{ vars.FRONTIER_ALPHA_READER }}
           FRONTIER_ALPHA_ANCHOR_HEIGHT: ${{ vars.FRONTIER_ALPHA_ANCHOR_HEIGHT }}
           FRONTIER_ALPHA_ANCHOR_HASH: ${{ vars.FRONTIER_ALPHA_ANCHOR_HASH }}
+          FRONTIER_ALPHA_CHECKPOINT_TOKEN: ${{ steps.checkpoint-token.outputs.token }}
           GH_TOKEN: ${{ github.token }}
   reader:
     if: github.repository == 'MontrealAI/AGI-Alpha-Invention-Flywheel-Lab' && github.ref == 'refs/heads/main' && github.event_name == 'workflow_dispatch' && inputs.build_reader == true

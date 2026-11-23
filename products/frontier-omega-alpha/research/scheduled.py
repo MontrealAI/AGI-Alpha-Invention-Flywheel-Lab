@@ -3,13 +3,14 @@
 import argparse
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
+import hashlib
 import json
 from pathlib import Path
 import re
 from urllib.parse import quote
 
 from .__main__ import BridgeError, dump, retrieve_source, through_egress_proxy
-from .lean_delta import EXPERIMENT as LEAN_EXPERIMENT, FEATURE as LEAN_FEATURE, VERSIONS as LEAN_VERSIONS
+from .lean_delta import EXPERIMENT as LEAN_EXPERIMENT, EXPIRY_EXPERIMENT, FEATURE as LEAN_FEATURE, VERSIONS as LEAN_VERSIONS
 
 HOSTS = frozenset({'api.github.com'})
 SCHEMA = 'frontier-omega-alpha/release-observations-v1'
@@ -38,8 +39,13 @@ def fetch_release(url, transport):
         raise ValueError('Invalid publication time')
     if not SHA.fullmatch(result['sha256']):
         raise ValueError('Invalid document digest')
-    return {'tag': tag, 'id': release['id'], 'published_at': published.isoformat(),
-            'url': url, 'retrieved_at': result['retrieved_at'], 'sha256': result['sha256']}
+    identity = {'tag': tag, 'id': release['id'], 'published_at': published.isoformat()}
+    assets = sorted(release.get('assets', []), key=lambda asset: asset['id'])
+    stable = {**identity, 'target': release.get('target_commitish'), 'notes': release.get('body'),
+              'assets': [{field: asset.get(field) for field in ('id', 'name', 'size', 'digest')} for asset in assets]}
+    material = hashlib.sha256(json.dumps(stable, ensure_ascii=True, sort_keys=True).encode()).hexdigest()
+    return {**identity, 'url': url, 'retrieved_at': result['retrieved_at'],
+            'sha256': result['sha256'], 'material_sha256': material}
 
 
 def proposal(repo, facet, before, after):
@@ -68,6 +74,7 @@ def proposal(repo, facet, before, after):
             falsification='Lean 4.36 fails either true workload or accepts a false workload with an independently enumerated witness.',
             retained_asset='A parameterized proof pattern on both function arities and a finite independent reference.',
             registered_experiment=LEAN_EXPERIMENT,
+            follow_up_experiment=EXPIRY_EXPERIMENT,
             release_notes=LEAN_FEATURE,
         )
     return candidate
@@ -81,24 +88,35 @@ def observe_releases(previous, transport=retrieve_source):
         try:
             latest = fetch_release(base + '/latest', transport)
             pointed = fetch_release(base + '/tags/' + quote(latest['tag'], safe=''), transport)
-            fields = ('tag', 'id', 'published_at')
+            fields = ('tag', 'id', 'published_at', 'material_sha256')
             if tuple(latest[key] for key in fields) != tuple(pointed[key] for key in fields):
                 raise ValueError('Latest and version-pinned records disagree')
         except (BridgeError, ValueError, KeyError, AttributeError, TypeError):
             return ident, {'state': 'unavailable', 'observed': prior,
                            'uncertainty': 'The source was unavailable or its named release could not be verified.'}
-        if not prior:
+        predecessor = prior
+        if not prior and repository == 'leanprover/lean4' and latest['tag'] == 'v' + LEAN_VERSIONS[1]:
+            try:
+                old_tag = 'v' + LEAN_VERSIONS[0]
+                old = fetch_release(base + '/tags/' + old_tag, transport)
+                if old['tag'] == old_tag and old['id'] != latest['id'] and old['published_at'] < latest['published_at']:
+                    predecessor = old
+            except (BridgeError, ValueError, KeyError, AttributeError, TypeError):
+                pass  # The current pinned release is still evidence of a first observation.
+        if not predecessor:
             state = 'first_observation'
-        elif any(latest[field] != prior[field] for field in ('id', 'tag')):
+        elif any(latest[field] != predecessor[field] for field in ('id', 'tag')):
             state = 'published_version_changed'
-        elif latest['sha256'] != prior['sha256']:
+        elif 'material_sha256' not in predecessor:  # Preserve raw document digests across checkpoint upgrades.
+            state = 'checkpoint_upgraded'
+        elif latest['material_sha256'] != predecessor['material_sha256']:
             state = 'metadata_changed'
         else:
             state = 'unchanged'
-        evidence = {'state': state, 'observed': latest, 'pinned': pointed, 'preceding': prior,
+        evidence = {'state': state, 'observed': latest, 'pinned': pointed, 'preceding': predecessor,
                     'uncertainty': 'This evidence verifies a publisher record. Capability and economic effects require experiments.'}
         if state == 'published_version_changed':
-            evidence['opportunity'] = proposal(repository, facet, prior, latest)
+            evidence['opportunity'] = proposal(repository, facet, predecessor, latest)
         return ident, evidence
 
     with ThreadPoolExecutor(max_workers=3) as pool:
@@ -122,7 +140,9 @@ def main():
     records = observe_releases(previous, through_egress_proxy if args.environment_egress else retrieve_source)
     if all(record['state'] == 'unavailable' for record in records.values()):
         raise SystemExit('Primary release sources unavailable. Prior checkpoint retained.')
-    if previous and all(record['state'] == 'unchanged' for record in records.values()):
+    if previous and all(record['state'] == 'unchanged' or
+                        record['state'] == previous[key]['state'] == 'unavailable'
+                        for key, record in records.items()):
         return
     dump({'schema': SCHEMA, 'sources': records}, args.output)
 

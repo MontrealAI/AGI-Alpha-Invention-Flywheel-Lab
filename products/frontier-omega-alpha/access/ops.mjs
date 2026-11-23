@@ -1,4 +1,5 @@
 import { openSync, closeSync, readFileSync, writeFileSync, statSync } from 'node:fs';
+import { getAddress } from 'ethers';
 import { Store, readKey, opaqueToken, privatePath, privateFile } from './store.mjs';
 import { encryptAsset, rotateAsset } from './crypto.mjs';
 import { validateRecord, validId, validVersion, maximumAssetBytes } from './records.mjs';
@@ -28,6 +29,12 @@ try {
     if (command === 'revoke-all' && !first) {
       store.revokeAll();
       console.log('Revoked all sessions and challenges.');
+    } else if (['revoke-wallet', 'restore-wallet'].includes(command) && !second) {
+      // Keep the wallet address out of command arguments and release telemetry.
+      const wallet = getAddress(readFileSync(privateFile(privatePath(first)), 'utf8').trim());
+      if (command === 'revoke-wallet') store.revokeWallet(wallet);
+      else store.restoreWallet(wallet);
+      console.log('Updated the private wallet access policy.');
     } else if (command === 'withdraw' && validId(first) && validVersion(Number(second)) && !third) {
       console.log(JSON.stringify({ withdrawn: store.withdraw(first, Number(second)) }));
     } else if (command === 'rotate' && first && !second) {
@@ -51,7 +58,7 @@ try {
       }
       console.log('Stored encrypted research release.');
     } else {
-      throw Error('Use keygen, chain-check, publish, publish-server, withdraw, rotate or revoke-all');
+      throw Error('Use keygen, chain-check, publish, publish-server, withdraw, rotate, revoke-wallet, restore-wallet or revoke-all');
     }
   }
 } catch {

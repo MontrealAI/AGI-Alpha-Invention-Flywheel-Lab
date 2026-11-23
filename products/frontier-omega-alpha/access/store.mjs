@@ -72,6 +72,7 @@ export class Store {
         token_hash TEXT PRIMARY KEY, address TEXT NOT NULL, label TEXT, expires INTEGER NOT NULL,
         access_epoch INTEGER NOT NULL, message TEXT, contract_signature TEXT
       );
+      CREATE TABLE IF NOT EXISTS revoked_wallets (address TEXT PRIMARY KEY);
       CREATE TABLE IF NOT EXISTS releases (
         id TEXT NOT NULL, version INTEGER NOT NULL, section TEXT NOT NULL, active INTEGER NOT NULL,
         kek_epoch TEXT NOT NULL, wrap_nonce TEXT NOT NULL, envelope TEXT NOT NULL,
@@ -114,13 +115,15 @@ export class Store {
     `).get(digest(nonce), now);
   }
 
-  issue(challenge, signature, now, expires) {
+  issue(challenge, signature, now, expires, keepMessage = false) {
     const token = opaqueToken();
     const result = this.db.prepare(`
       INSERT INTO sessions SELECT ?, ?, ?, ?, access_epoch, ?, ? FROM state
-        WHERE access_epoch = ? AND ? > ?
+        WHERE access_epoch = ? AND ? > ? AND NOT EXISTS
+          (SELECT 1 FROM revoked_wallets WHERE address = ?)
     `).run(digest(token), challenge.address, challenge.label, expires,
-      signature ? challenge.message : null, signature, challenge.access_epoch, challenge.expires, now);
+      signature || keepMessage ? challenge.message : null, signature, challenge.access_epoch, challenge.expires, now,
+      challenge.address);
     return result.changes ? token : null;
   }
 
@@ -133,6 +136,22 @@ export class Store {
 
   revoke(token) {
     this.db.prepare('DELETE FROM sessions WHERE token_hash = ?').run(digest(token));
+  }
+
+  revokedWallet(address) {
+    return Boolean(this.db.prepare('SELECT 1 FROM revoked_wallets WHERE address=?').get(address));
+  }
+
+  revokeWallet(address) {
+    this.transaction(() => {
+      this.db.prepare('INSERT OR IGNORE INTO revoked_wallets VALUES (?)').run(address);
+      this.db.prepare('DELETE FROM sessions WHERE address=?').run(address);
+      this.db.prepare('DELETE FROM challenges WHERE address=?').run(address);
+    });
+  }
+
+  restoreWallet(address) {
+    this.db.prepare('DELETE FROM revoked_wallets WHERE address=?').run(address);
   }
 
   revokeAll() {
@@ -158,11 +177,12 @@ export class Store {
     });
   }
 
-  catalog(epoch) {
+  catalog(epoch, format = null) {
     return this.db.prepare(`
       SELECT id, version, section FROM releases WHERE active=1 AND kek_epoch=?
+        AND (? IS NULL OR json_extract(envelope, '$.format') = ?)
         ORDER BY section, id, version DESC
-    `).all(epoch);
+    `).all(epoch, format, format);
   }
 
   asset(id, version, epoch) {
