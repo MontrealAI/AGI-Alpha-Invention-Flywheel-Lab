@@ -1,0 +1,32 @@
+# Mac Studio evaluator activation · issue #565
+
+**Prepared. The owner grant and an approved route to the actual Mac Studio are pending.** The existing owner-controlled Mac Studio is the target. The program binds the actual model and machine identifier on-device, privately. Linux can only validate package contracts and must refuse the on-device canary. Endpoint adoption remains **ABSTAIN**, indexed SQLite remains the incumbent, and #550 controls protected production. [Standing request #565](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/issues/565) · [Production gates #550](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/issues/550)
+
+## One-time preparation and owner grant
+
+Use `mac_activation.py describe` to enumerate the exact five Python files and digests. Stage them, as regular administrator-owned files, in `/Library/FrontierEvaluator/runtime/autonomous_endpoint/`. The owner-admin stages an existing approved Ed25519-capable `openssl` as `/Library/FrontierEvaluator/bin/openssl`, including its trusted dependencies. Do not introduce spending. Run `mac_activation.py inventory --authority-root /Library/FrontierEvaluator` privately on the exact Mac with the chosen Python runtime. Its model, private device binding, Python and OpenSSL hashes and Python file closure must match the signed authorization. Keep the inventory, local names, raw fingerprints, and credentials in local administration.
+
+Use the standing grant in [CUSTODY.md](CUSTODY.md) to bind the root-owned hostname record and a dedicated evaluator and case store. For the on-device constructor path, bind the UID of the actual construction execution identity and the distinct Mac administrator. Verify that case store permissions, group membership and effective login, administrator and credential policies exclude the constructor. The code accepts this Mac canary for an actual local constructor identity. An off-host constructor requires a separately witnessed denial from its actual execution identity. A substitute local identity gives no off-host proof.
+
+In addition to the core grant fields, the owner signs `mac_activation` with `model`, `machine_binding_sha256`, `administrator_uid`, `runtime_files`, `openssl_sha256` and `interval_seconds`. The timeframe, scheduler interval and input, storage and runtime bounds come from the owner. The evaluator key stays on the device in a private 0600 file. The owner key stays offline. Store the expected owner fingerprint outside the evaluator’s authority envelope and protect the system launch configuration. The key, case store, read-only input source and approved code use the protected paths in [CUSTODY.md](CUSTODY.md). These steps create no new scope beyond issue #565.
+
+## Real canary and routine use
+
+After issue #565 grants the standing scope, the named admin runs the following once on the approved Mac. The chosen Python interpreter and root path must be the signed versions. Use empty `cleared-records` during the canary. No private evidence is needed.
+
+```sh
+root=/Library/FrontierEvaluator
+state=/private/var/db/frontier-evaluator
+sudo "$approved_python" -B "$root/runtime/autonomous_endpoint/mac_activation.py" canary \
+  --authority-root "$root" --private-state "$state" --owner-pin "$owner_pin"
+```
+
+The program creates two nonconfidential canary files, switches to the signed actual role accounts using local macOS credentials, and exercises real file opens. It checks that the constructor cannot read the case, signing key or staged record or obtain write access to those data, the approval or the scorer. The evaluator can read its case, key and staged record while the record, approval and scorer remain read-only. It verifies a public canary signature made as the evaluator and the lack of sudo grants for both unprivileged roles. Only the independent administrator can place the resulting canary record. The canary files are removed after testing. Share only its redacted checksum and verdict. The on-host controls have not yet been exercised.
+
+After a valid canary, `mac_activation.py plist` with the same paths and pinned owner key renders the approved `launchd` configuration. The administrator installs that single system job under the evaluator identity. Each wake cleans expired service-created case storage and checks for a scoped new input version. For routine published records the owner authorizes `record_queue: true` and a scoped publisher. The publisher retains one immutable directory under `cleared-records` per signed `input-version.json`, named by the SHA-256 of that exact envelope. Stage each complete directory atomically. All eligible retained versions are evaluated after each wake. A verified result for the existing approval and input suppresses duplicate scoring. An invalid version does not suppress another eligible version. This keeps versions that arrive between wakes without new case selection, intake form or approval. An invalid or expired approval, changed case authority, absent canary, changed runtime or changed access causes abstention. The offline package tests check the permission matrix, exact launcher settings, Linux refusal and traversal of all retained record versions. They supply no Mac permission or device proof.
+
+Revocation disables the job, removes the read-only grant and evaluator key trust, and distributes current owner-signed status through the independent channel. Source owners apply their own retention to the staged read-only inputs. Raw cases, operator identities and keys remain in their controlled locations.
+
+## Français
+
+**Préparé. L’accord du propriétaire et l’accès autorisé au Mac Studio restent à obtenir.** Le programme compare sur l’appareil l’identité de la machine, les identités de service et d’administration, les empreintes du code et des exécutables, et le bail signé. Après l’accord #565, un administrateur distinct lance le canari avec des données publiques, avant tout dépôt confidentiel. Le contrôle ouvre réellement les fichiers avec les identités autorisées et vérifie une signature produite par l’évaluateur. Le constructeur doit se voir refuser l’accès. Les tests sous Linux établissent uniquement la cohérence du programme et son refus d’agir hors du Mac. Après qualification, le service traite automatiquement les versions signées dans le périmètre établi, applique la rétention et produit des agrégats signés. L’adoption Endpoint demeure en abstention. SQLite indexé est la référence et #550 gouverne la production protégée.

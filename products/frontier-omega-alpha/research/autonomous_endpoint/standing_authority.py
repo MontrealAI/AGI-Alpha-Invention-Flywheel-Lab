@@ -71,6 +71,8 @@ def active_approval(envelope, now):
                 required != "input-version.json", "INVALID_RECORD_PUBLISHER_GRANT")
     else:
         require(required in envelope["records_sha256"], "MISSING_APPROVED_ENTRY_OR_REQUIREMENTS")
+    require(type(envelope.get("record_queue", False)) is bool and
+            (not envelope.get("record_queue") or "record_publisher" in envelope), "UNAPPROVED_RECORD_QUEUE")
     require(type(envelope["run_wall_seconds"]) is int and envelope["run_wall_seconds"] > 0, "MISSING_APPROVED_WALL_LIMIT")
     require(type(envelope["max_input_bytes"]) is int and envelope["max_input_bytes"] > 0, "MISSING_APPROVED_BYTE_BUDGET")
     require(type(envelope["retention_days"]) is int and envelope["retention_days"] > 0, "MISSING_APPROVED_RETENTION")
@@ -109,10 +111,27 @@ def signed_host_binding(root, trust_sha256, state):
     return authority, manifest
 
 
-def verify_authority(root, trust_sha256, state):
+def digest_name(name):
+    return isinstance(name, str) and len(name) == 64 and all(c in "0123456789abcdef" for c in name)
+
+
+def record_directory(root, authority, slot):
+    records = root / "cleared-records"
+    if authority.get("record_queue"):
+        require(digest_name(slot), "INPUT_VERSION_DIRECTORY_REQUIRED")
+        protected(records, directory=True)
+        return records / slot
+    require(slot is None, "INPUT_VERSION_DIRECTORY_UNAPPROVED")
+    return records
+
+
+def verify_authority(root, trust_sha256, state, slot=None):
     authority, manifest = signed_host_binding(root, trust_sha256, state)
     now = datetime.now(timezone.utc)
     active_approval(authority, now)
+    if sys.platform == "darwin":
+        from mac_activation import require_canary
+        require_canary(root, authority, sha(manifest.read_bytes()))
     uid = os.geteuid()
     private_key = protected(state / "evaluator.key", owner=uid, private=True)
     public = checked(["openssl", "pkey", "-in", str(private_key), "-pubout"])
@@ -121,19 +140,24 @@ def verify_authority(root, trust_sha256, state):
     file_set(root / "approved-code", authority["code_sha256"])
     gid = authority["evaluator_gid"]
     require(gid in {os.getegid(), *os.getgroups()}, "EVALUATOR_GROUP_UNAVAILABLE")
-    directory = root / "cleared-records"
+    directory = record_directory(root, authority, slot)
     approval_sha = sha(manifest.read_bytes())
     inputs, version, expiry = authority.get("records_sha256"), approval_sha, timestamp(authority["valid_until"])
     if "record_publisher" in authority:
         protected(directory, directory=True)
         published = protected(directory / "input-version.json")
         stamp = sha(published.read_bytes())
+        require(slot is None or slot == stamp, "SOURCE_VERSION_DIRECTORY_CONTENT_CHANGED")
         batch = verify(published, authority["record_publisher"]["key_sha256"])["receipt"]
         files, batch_expiry = admit_batch(batch, authority, now)
         inputs = files | {"input-version.json": stamp}
         version = sha(encode([approval_sha, stamp]))
         expiry = min(expiry, batch_expiry)
     file_set(directory, inputs, private_group=gid, max_bytes=authority["max_input_bytes"])
+    if sys.platform == "darwin":
+        from mac_activation import require_posix_only
+        for path in (directory, *(directory / name for name in inputs)):
+            require_posix_only(path)
     return authority, approval_sha, version, expiry, inputs
 
 
@@ -152,7 +176,7 @@ def verify_aggregate(path, approval_path, owner_key, expected_version=None):
             result["scope"] == "non-production-only" and result["authority_envelope_sha256"] ==
             sha(approval_path.read_bytes()), "RECEIPT_NOT_BOUND_TO_ACTIVE_APPROVAL")
     source = result["input_version_binding_sha256"]
-    require(len(source) == 64 and all(c in "0123456789abcdef" for c in source) and
+    require(digest_name(source) and
             (expected_version is None or source == expected_version), "RECEIPT_INPUT_VERSION_MISMATCH")
     return validate_metrics(result["metrics"])
 
@@ -170,18 +194,18 @@ def cleanup_managed_runs(state):
                 shutil.rmtree(run_state)
 
 
-def run(root, trust, state, output):
+def run(root, trust, state, output, slot=None):
     # Only the signed, administrator-pinned scorer executes on held cases.
     protected(state, directory=True, owner=os.geteuid(), private=True)
     with exclusive_state(state):
         cleanup_managed_runs(state)
-        authority, manifest, version, expires, inputs = verify_authority(root, trust, state)
+        authority, manifest, version, expires, inputs = verify_authority(root, trust, state, slot)
         require(output == Path(authority["aggregate_directory"]) and output.resolve() == output and output.is_dir() and
                 not output.is_relative_to(state), "UNAPPROVED_EXPORT")
         destination = output / (version + ".json")
         if destination.exists():
             verify_aggregate(destination, root / "authority.json", trust, version)
-            return
+            return "already_scored"
         managed = state / "managed-runs"
         managed.mkdir(mode=0o700, exist_ok=True)
         protected(managed, directory=True, owner=os.geteuid(), private=True)
@@ -191,7 +215,7 @@ def run(root, trust, state, output):
         snapshot = case_state / "input-snapshot"
         snapshot.mkdir(mode=0o700)
         for name, identity in inputs.items():
-            raw = (root / "cleared-records" / name).read_bytes()
+            raw = (record_directory(root, authority, slot) / name).read_bytes()
             require(sha(raw) == identity, "APPROVED_INPUT_CHANGED_DURING_FREEZE")
             path = snapshot / name
             path.write_bytes(raw)
@@ -209,13 +233,36 @@ def run(root, trust, state, output):
         except (subprocess.SubprocessError, OSError):
             raise ValueError("APPROVED_SCORER_FAILED_PRIVATE_EVIDENCE_RETAINED") from None
         metrics = validate_metrics(json.loads(observation.stdout))
-        current, current_manifest, current_version, _, _ = verify_authority(root, trust, state)
+        current, current_manifest, current_version, _, _ = verify_authority(root, trust, state, slot)
         require(manifest == current_manifest and authority == current and version == current_version,
                 "AUTHORITY_CHANGED_DURING_SCORING")
         receipt = {"schema": "frontier-omega-alpha/independent-evaluator-aggregate-v1", "completed_utc": clock(),
                    "authority_envelope_sha256": manifest, "input_version_binding_sha256": version,
                    "metrics": metrics, "scope": "non-production-only"}
         atomic(destination, signature(state, receipt))
+        return "scored"
+
+
+def run_available(root, trust, state):
+    authority, manifest = signed_host_binding(root, trust, state)
+    with exclusive_state(state):
+        cleanup_managed_runs(state)
+    active_approval(authority, datetime.now(timezone.utc))
+    if sys.platform == "darwin":
+        from mac_activation import require_canary
+        require_canary(root, authority, sha(manifest.read_bytes()))
+    output = Path(authority["aggregate_directory"])
+    if not authority.get("record_queue"):
+        return {run(root, trust, state, output): 1}
+    records = protected(root / "cleared-records", directory=True)
+    stats = {"scored": 0, "already_scored": 0, "ineligible_or_unavailable": 0}
+    for slot in sorted(p.name for p in records.iterdir() if digest_name(p.name)):
+        try:
+            stats[run(root, trust, state, output, slot)] += 1
+        except (OSError, ValueError, TypeError, KeyError, subprocess.SubprocessError):
+            # Score independent, valid versions even when a neighboring version is expired or corrupt.
+            stats["ineligible_or_unavailable"] += 1
+    return stats
 
 
 def main():

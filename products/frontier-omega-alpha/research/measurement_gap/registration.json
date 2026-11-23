@@ -1,0 +1,40 @@
+{
+  "schema": "frontier-omega-alpha/missing-measurement-registration-v1",
+  "question": "Can borrowing short-term structure from a second filter recover a missing positive ZTF difference magnitude at a measured held-out epoch more accurately than strong interpolation baselines using the same data?",
+  "beneficiary": "MONTREAL.AI public archive research desk",
+  "selection": [
+    {"option": "Broker recovery or verifier expansion", "decision": "Reject. PR #566 demonstrated a conventional tie in injected faults and no accepted fresh witness."},
+    {"option": "Model-assisted Endpoint contract extraction", "decision": "Defer. Real workload rights, operating thresholds and representative cases are unavailable."},
+    {"option": "Recover a missing light-curve measurement", "decision": "Run. Distinct unavailable measurement, public dated data, observed held truth and full conventional competitors."}
+  ],
+  "rights": "Public read-only Fink ZTF research already authorized under #449 and #566. No telescope allocation, paid requests, confidential records, production action or financial claim.",
+  "reference": {
+    "commit": "03693ee8b9d22f6cb423fe559c313e52e223819d",
+    "receipt_sha256": "d2a9197a630d8e220e8fe2d035d190c3ce7ac407bfb2fd4f50ed41f407fef8ac",
+    "objects": "https://api.ztf.fink-portal.org/api/v1/objects",
+    "roster": "https://api.ztf.fink-portal.org/api/v1/latests",
+    "measurement_schema": "https://zwickytransientfacility.github.io/ztf-avro-alert/schema.html",
+    "multiband_precedent": "https://arxiv.org/abs/1907.04690"
+  },
+  "cohorts": {
+    "development": "Six distinct development objects from pinned #566 receipt, positive g/r object-history detections available before cutoff.",
+    "confirmation": "Two disjoint target strata from the pinned #566 confirmation target lists, acquired anew only after signing the frozen fit. Predict newly drawn measurement gaps, not the prior witness task. Older target IDs and their former observations were public before registration. No assertion of a never-seen population.",
+    "fresh_roster": "Distinct public SLSN candidate IDs selected after freeze with alerts in [November 17, November 23) 2026 UTC, ranked by latest in-window exact JD then ID. Exclude all nine historical confirmation and six development IDs. Keep six or fewer. Record missing population without backfill."
+  },
+  "cutoff_utc_day": "2026-11-23",
+  "per_confirmation_object_max": 6,
+  "within_side_days": 5,
+  "confirmation_cases": "Remove the chosen observed detection ID from every arm. Require two distinct same-band anchors bracketing that epoch with each at most five days away. Sample up to six eligible IDs per object using the evaluator-owned fresh seed after fitting. Publish every scored miss and eligibility shortfall. Retrospective interpolation may use data from both sides before the cutoff. Extrapolation is outside scope.",
+  "tolerance_mag": 0.15,
+  "comparison": {
+    "incumbents": ["nearest same-band", "piecewise-linear same-band", "shape-preserving local cubic", "locally fitted multiband Matérn-3/2 Gaussian process"],
+    "candidate": "Keep the same-band linear envelope. Add the auxiliary-band deviation at the query epoch from the auxiliary band chord through the primary anchors. Choose residual transfer strength from [0, 0.25, 0.5, 1] on development only. Abstain where same-band anchors are unqualified. Zero is an allowed decision to keep linear interpolation.",
+    "gp_grid": "Length scales 1.5, 4 and 8 days and cross-filter correlations 0, 0.6 and 0.9. Choose a single setting on the same dev cases. Use measured formal sigma and fixed 0.03-mag diagonal floor. Each prediction receives the nearest six neighbors per band within five days, plus the two legal same-band anchors. Fit band offsets locally. Standard grid-search competitor may win.",
+    "acceptance": "Independent evaluator computes truth and held-ID exclusion, empirical count within 0.15 mag, object-balanced mean absolute error and complete coverage. The numerical threshold is an experimental error tolerance and grants no operational authority. Candidate must improve on the best conventional error and accepted-case rate without reduced coverage in both historical cohorts and the fresh cohort to justify follow-up. Empty or disconnected cohorts cannot support promotion.",
+    "limits": "Report descriptive per-cohort and per-object errors. Do not treat correlated alerts as independent, infer telescope savings, extrapolate beyond the registered scope, or treat a prediction as a physical observation. Study has no known complete monetary costs, operator acceptance or observational allocation."
+  },
+  "maximum_request_bytes": 2000000,
+  "source_timeout_seconds": 20,
+  "source_attempts_per_query": 1,
+  "preserve": {"endpoint":"ABSTAIN", "endpoint_incumbent":"indexed-sqlite", "production":"NO-GO under issue #550", "previous_evidence":"keep exact PR #566 qualification and failed and corrected packets"}
+}
