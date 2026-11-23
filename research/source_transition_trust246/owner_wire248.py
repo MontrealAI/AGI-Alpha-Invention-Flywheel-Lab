@@ -116,6 +116,12 @@ def strict_blob(raw):
 def _validate_v1(original):
     if type(original) is not dict or original.get('schema') != V1:
         raise ValueError('EXACT_V1_BODY_REQUIRED')
+    # Match the historical owner's signed v2 resolver/validation boundary.
+    # The reference must not appear to pre-authorize an out-of-range transition.
+    if type(original.get('counter')) is not int or not 1 <= original['counter'] <= 4:
+        raise ValueError('SOURCE_TRANSITION_COUNTER_AND_CLOCK_REQUIRED')
+    if type(original.get('day')) is not int or original['day'] < 0:
+        raise ValueError('SOURCE_TRANSITION_COUNTER_AND_CLOCK_REQUIRED')
     names = set(original)
     if names not in (BASE_FIELDS | REQUIRED_EVIDENCE,
                      BASE_FIELDS | REQUIRED_EVIDENCE | {'operating'}):
