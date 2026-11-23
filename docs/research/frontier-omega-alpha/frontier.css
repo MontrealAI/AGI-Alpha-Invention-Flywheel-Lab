@@ -416,6 +416,12 @@ button:disabled { cursor: wait; opacity: .76; }
 #mv-screen-result h5 { color: var(--gold); margin-block: 0 .4rem; font-size: 1.12rem; }
 @media (max-width: 680px) {
   .preview-grid, .mv-grid, .mv-measures, .mf-feature dl { grid-template-columns: 1fr; }
-  .mv .mv-nav { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .workspace-head { gap: .5rem .6rem; }
+  .workspace-head #lock { font-size: .83rem; padding-inline: .54rem; }
+  .mf-verified { font-size: .76rem; }
+  .mv-heading { padding-top: .95rem; }
+  .member-first-action { margin-block: .75rem .5rem; }
+  .member-first-action p:not(.packet-meta) { font-size: .87rem; }
+  .mv .mv-nav { grid-template-columns: repeat(2, minmax(0, 1fr)); padding-top: .35rem; }
 }
 @media (max-width: 420px) { .mv-facets { grid-template-columns: 1fr; } }
