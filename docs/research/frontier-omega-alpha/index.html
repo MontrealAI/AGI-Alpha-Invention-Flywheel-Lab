@@ -65,20 +65,67 @@
         <h2 id="workspace-title" tabindex="-1">Public research workspace</h2>
         <button id="lock" class="quiet" type="button">Lock session</button>
       </div>
-      <p><a href="#research">See the research results →</a></p>
+      <ul class="packet-shortcuts">
+        <li><a href="#packet-lean">Lean 4.36</a></li>
+        <li><a href="#packet-qwen">Qwen GGUF</a></li>
+        <li><a href="#research-packet">Formal proof receipts</a></li>
+        <li><a href="#packet-retrofit">ALPHA-1 retrofit</a></li>
+      </ul>
     </section>
-    <section class="research" id="research" aria-labelledby="method-title">
+    <section class="research" id="research" aria-labelledby="public-results-title">
       <div class="frame">
-        <h2 id="method-title">A shorter path from possibility to proof.</h2>
-        <p class="method-intro">We track changes in what can be done, turn them into testable opportunities, and retain the methods and tools that earn their place in the next experiment.</p>
-        <ul class="methods">
-        <li><h3>Frontier Radar</h3><p>Trace a material capability change to its primary sources.</p></li>
-        <li><h3>Opportunity Explorer</h3><p>Compare the newly practical outcome with credible alternatives.</p></li>
-        <li><h3>Experiment Lab</h3><p>Run bounded comparisons with explicit acceptance criteria.</p></li>
-        <li><h3>Verification Room</h3><p>Read independent checks, unresolved questions and negative results.</p></li>
-        <li><h3>Compounding Ledger</h3><p>See what was retained and what it enabled on a subsequent task.</p></li>
-        <li><h3>Research Archive</h3><p>Consult versioned methods, receipts and reproducible artifacts.</p></li>
-        </ul>
+        <h2 id="public-results-title">Public research packets</h2>
+        <p class="method-intro">Read the question, the result and what the evidence supports. Each packet links to the underlying records.</p>
+        <div class="packets">
+          <article class="packet" id="packet-lean" aria-labelledby="packet-lean-title">
+            <p class="packet-meta">Release tested <span aria-hidden="true">·</span> <time datetime="2026-11-16">16 November 2026</time></p>
+            <h3 id="packet-lean-title">Proving equivalence through an opaque rule</h3>
+            <p>Lean 4.36 adds <code>bv_decide +uf</code>. The tactic can reason about two calls to a function whose implementation is unspecified when their Boolean or bit-vector arguments can be shown to agree.</p>
+            <p>We compared Lean 4.35 and 4.36 on two proofs involving a 32-bit expiry value. The new tactic discharged both on 4.36. Explicit congruence already proved both on 4.35. The independent decoder checked 69,640 words and gave a concrete witness for the deliberately false variant, which the new tactic rejected.</p>
+            <p>The result supports a reusable proof pattern for transformations behind an abstract interface. The experiment establishes neither a runtime speedup nor the correctness of the full reader.</p>
+            <ul class="packet-evidence">
+              <li><a href="https://lean-lang.org/doc/reference/latest/releases/v4.36.0/">Lean 4.36 release notes</a></li>
+              <li><a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/5cced81256c965797988cd682fb5f910fe72c981/products/frontier-omega-alpha/evidence/frontier-cycle.json">Recorded comparison</a></li>
+              <li><a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/5cced81256c965797988cd682fb5f910fe72c981/products/frontier-omega-alpha/GITHUB-NATIVE.md#reproduce-the-lean-release-experiment">Reproduce the proof comparison</a></li>
+            </ul>
+          </article>
+          <article class="packet" id="packet-qwen" aria-labelledby="packet-qwen-title">
+            <p class="packet-meta">CPU trial <span aria-hidden="true">·</span> <time datetime="2026-11-22">22 November 2026</time></p>
+            <h3 id="packet-qwen-title">A direct validator beats the local model trial</h3>
+            <p>Can a local Qwen 27B model, with or without the GGUF adapter, select the valid edit for each of 12 constructed research-record cases? Both configurations used the same prompt, six CPU threads, and a 300-second deadline on one test host.</p>
+            <p>Neither model configuration completed its answer. A direct comparator tried the same candidate edits with the existing schema validator and solved all 12 cases in 1.15 ms.</p>
+            <p>Keep deterministic validation for this particular task. The result is from one run per configuration and leaves model quality on other hardware and other workloads open.</p>
+            <ul class="packet-evidence">
+              <li><a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/5cced81256c965797988cd682fb5f910fe72c981/products/frontier-omega-alpha/evidence/qwen-gguf-maintenance.json">Trial data, prompts and artifact hashes</a></li>
+              <li><a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/5cced81256c965797988cd682fb5f910fe72c981/products/frontier-omega-alpha/INTELLIGENCE-BRIDGE.md#qwen-gguf-matched-trial">Reproduce the matched trial</a></li>
+            </ul>
+          </article>
+          <article class="packet" id="packet-receipts" aria-labelledby="packet-receipts-title">
+            <p class="packet-meta">Receipt replay <span aria-hidden="true">·</span> <time datetime="2026-11-22">22 November 2026</time></p>
+            <h3 id="packet-receipts-title">Screening formal dependencies from published logs</h3>
+            <p>Large Lean projects publish verification logs that can be screened before a team commits to a full build. We pinned seven public evidence files for seven declarations covering the Riemann and Dirichlet results and the Robin and Lagarias criteria.</p>
+            <p>The reusable parser and a separately implemented direct checker agreed with all 14 expected outcomes, including 12 altered or unregistered cases. The second cohort loaded the parser profile retained from the first.</p>
+            <p>This qualifies the checks on statement matching and allowed axioms in the selected receipts. The replay did not execute a proof kernel. The direct checker matched the retained method, so the comparison leaves a reuse advantage open.</p>
+            <ul class="packet-evidence">
+              <li><a href="#research-packet">Read all six verification records</a></li>
+              <li><a href="https://math.mit.edu/~drew/grh/">MIT verification files</a></li>
+              <li><a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/5cced81256c965797988cd682fb5f910fe72c981/products/frontier-omega-alpha/evidence/engineering-receipt.json">Replay evidence and input hashes</a></li>
+              <li><a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/5cced81256c965797988cd682fb5f910fe72c981/products/frontier-omega-alpha/research/protocol.json">Frozen acceptance checks</a></li>
+            </ul>
+          </article>
+          <article class="packet" id="packet-retrofit" aria-labelledby="packet-retrofit-title">
+            <p class="packet-meta">Technical replay <span aria-hidden="true">·</span> <time datetime="2026-11-22">22 November 2026</time></p>
+            <h3 id="packet-retrofit-title">Finding a documented 400 °C retrofit</h3>
+            <p>Prusa’s HT Hotend added a documented upgrade path from a 290 °C stock nozzle limit to up to 400 °C on eligible CORE One configurations. The catalog explicitly excludes INDX.</p>
+            <p>Adding the dated retrofit to the catalog changed 7 of 24 test inquiries from no documented route to a retrofit candidate. The direct SQL comparison reproduced all 24 decisions. Three implementations also matched on all 18 cases in a separate process-screening test.</p>
+            <p>The evidence concerns catalog decisions for constructed inquiries. Physical performance, actual orders, payments and a causal benefit from reusing the first tool remain unmeasured.</p>
+            <ul class="packet-evidence">
+              <li><a href="https://blog.prusa3d.com/ht-hotend-is-out-plus-we-offer-new-materials-and-hightemp-sheets-for-core-one-l_138625/">Prusa product announcement</a></li>
+              <li><a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/5cced81256c965797988cd682fb5f910fe72c981/products/frontier-omega-alpha/research/economic_alpha/qualification.json">Frozen results and control outcomes</a></li>
+              <li><a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/5cced81256c965797988cd682fb5f910fe72c981/products/frontier-omega-alpha/ALPHA-1.md#run-the-pilot">Reproduce the catalog comparison</a></li>
+            </ul>
+          </article>
+        </div>
       </div>
     </section>
     <section class="frame privacy" id="research-packet" aria-labelledby="research-packet-title">
@@ -118,11 +165,18 @@
         </details>
       </div>
     </section>
-    <section class="frame privacy" aria-labelledby="public-results-title">
-      <h2 id="public-results-title">Public research results</h2>
-      <div>
-        <p><strong>Verified in a matched test.</strong> Lean 4.36 checked two bit-vector proofs about equivalent inputs to a rule without inspecting the rule itself. Explicit proofs also passed in Lean 4.35. The new tactic simplifies this proof step for the tested cases. <a href="https://github.com/leanprover/lean4/releases/tag/v4.36.0">Lean 4.36 release notes</a></p>
-        <p><strong>Falsified within the registered CPU budget.</strong> Both Qwen GGUF configurations reached the 300-second limit. The direct validator solved all 12 release-record maintenance cases in 1.15 ms. <a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/pull/545">Comparison and reproduction instructions</a></p>
+    <section class="research" id="method" aria-labelledby="method-title">
+      <div class="frame">
+        <h2 id="method-title">A shorter path from possibility to proof.</h2>
+        <p class="method-intro">We track changes in what can be done, turn them into testable opportunities, and retain the methods and tools that earn their place in the next experiment.</p>
+        <ul class="methods">
+        <li><h3>Frontier Radar</h3><p>Trace a material capability change to its primary sources.</p></li>
+        <li><h3>Opportunity Explorer</h3><p>Compare the newly practical outcome with credible alternatives.</p></li>
+        <li><h3>Experiment Lab</h3><p>Run bounded comparisons with explicit acceptance criteria.</p></li>
+        <li><h3>Verification Room</h3><p>Read independent checks, unresolved questions and negative results.</p></li>
+        <li><h3>Compounding Ledger</h3><p>See what was retained and what it enabled on a subsequent task.</p></li>
+        <li><h3>Research Archive</h3><p>Consult versioned methods, receipts and reproducible artifacts.</p></li>
+        </ul>
       </div>
     </section>
     <section class="frame privacy" id="privacy" aria-labelledby="privacy-title">

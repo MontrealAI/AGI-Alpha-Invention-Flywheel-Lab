@@ -516,6 +516,25 @@ assert.match(signInMessage('https://montrealai.github.io',acct,'token',now,'nonc
 console.log('11 wallet qualification checks passed');"""],
                        check=True, env={**os.environ, 'WALLET_SOURCE': source}, timeout=30)
 
+    def test_frontier_alpha_workspace_links_to_bilingual_public_packets(self):
+        for name in ('index.html', 'fr.html'):
+            with self.subTest(page=name):
+                page = (self.source / 'frontier-omega-alpha' / name).read_text()
+                before, packets = page.split('id="research" aria-labelledby="public-results-title"', 1)
+                workspace = before.split('id="member"', 1)[1]
+                packets = packets.split('</section>', 1)[0]
+                self.assertNotRegex(packets, r'<[^>]*\shidden\b')
+                for slug in ('lean', 'qwen', 'retrofit'):
+                    self.assertIn(f'href="#packet-{slug}"', workspace)
+                    self.assertIn(f'<article class="packet" id="packet-{slug}"', packets)
+                self.assertIn('href="#research-packet"', workspace)
+                self.assertIn('href="#research-packet"', packets)
+                six_records = page.split('id="research-packet"', 1)[1].split('</section>', 1)[0]
+                self.assertEqual(six_records.count('<details id="packet-'), 6)
+                for evidence in ('frontier-cycle.json', 'qwen-gguf-maintenance.json',
+                                 'engineering-receipt.json', 'economic_alpha/qualification.json'):
+                    self.assertIn(evidence, packets)
+
     def test_preferred_home_design_keeps_studio_and_published_anchors(self):
         home = (self.source / 'index.html').read_text()
         studio = (self.source / 'studio.html').read_text()

@@ -69,6 +69,8 @@ PUBLIC_SITE = 'https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/'
 EXTERNAL_RESEARCH_REFERENCES = frozenset({
     'https://bbbc.broadinstitute.org/BBBC007',
     'https://math.mit.edu/~drew/grh/',
+    'https://blog.prusa3d.com/ht-hotend-is-out-plus-we-offer-new-materials-and-hightemp-sheets-for-core-one-l_138625/',
+    'https://lean-lang.org/doc/reference/latest/releases/v4.36.0/',
     'https://leanprover-community.github.io/blog/posts/riemann-hypothesis/',
 })
 
