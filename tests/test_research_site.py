@@ -68,12 +68,13 @@ class ResearchSiteTests(unittest.TestCase):
         ordinary = [{'url':'https://arxiv.org/abs/2611.21152',
                      'en':'External preprint', 'fr':'Prépublication externe'}]
         row.update(watch='living-watch', evidence='author-reported', sources=ordinary)
+        row['assessment']['state'] = 'discovered'
         path.write_text(json.dumps(data))
         for name in site.POSSIBILITY_PAGES:
             page = (self.source / name).read_text()
             rendered = site.render_possibility_page(page, name, site.read_possibilities(self.source))
-            self.assertIn('aucun résultat admissible publié' if name.endswith('/fr.html') else
-                          'no qualifying result published yet', rendered)
+            self.assertIn('Rapporté par les auteurs' if name.endswith('/fr.html') else 'Author-reported', rendered)
+            self.assertIn('data-state="discovered"', rendered)
         for watch, evidence, sources in (
             ('living-watch', 'verified-result', ordinary),
             ('verified-invention-watch', 'author-reported', ordinary),
@@ -102,8 +103,7 @@ class ResearchSiteTests(unittest.TestCase):
                 page = (self.source / name).read_text()
                 ready = site.render_possibility_page(page, name, site.read_possibilities(self.source))
                 self.assertIn(fr if name.endswith('/fr.html') else en, ready)
-                self.assertNotIn('aucun résultat admissible publié' if name.endswith('/fr.html') else
-                                 'no qualifying result published yet', ready)
+                self.assertNotIn('Author-reported' if not name.endswith('/fr.html') else 'Rapporté par les auteurs', ready)
 
     def test_public_research_cycle_requires_pinned_evidence_and_draft_label(self):
         import json
@@ -149,7 +149,8 @@ class ResearchSiteTests(unittest.TestCase):
             for record in site.read_possibilities(self.source):
                 self.assertIn(f'id="shift-{record["id"]}"', page)
             self.assertLess(page.index('id="possibility-shifts"'), page.index('id="research"'))
-            self.assertLess(page.index('</section>\n    <section class="frame workspace-content privacy"'), page.index('id="possibility-shifts"'))
+            self.assertLess(page.index('id="possibility-shifts"'), page.index('id="access"'))
+            self.assertIn('id="atlas-controls"', page)
             self.assertIn('id="member" class="frame workspace" hidden', page)
             self.assertNotIn('id="possibility-shifts" data-nosnippet', page)
             self.assertEqual(page.count('src="wallet-check.js"'), 1)
@@ -597,7 +598,8 @@ class ResearchSiteTests(unittest.TestCase):
             {name for name in site.FILES if name.startswith('frontier-omega-alpha/')},
             {'frontier-omega-alpha/index.html', 'frontier-omega-alpha/fr.html',
              'frontier-omega-alpha/frontier.css', 'frontier-omega-alpha/carina.webp',
-             'frontier-omega-alpha/wallet-check.js', 'frontier-omega-alpha/member-brief-001.js'},
+             'frontier-omega-alpha/wallet-check.js', 'frontier-omega-alpha/member-brief-001.js',
+             'frontier-omega-alpha/atlas.js'},
         )
         source = (self.source / 'frontier-omega-alpha' / 'wallet-check.js').read_text()
         self.assertIn("await import('./member-brief-001.js')", source)
@@ -661,7 +663,7 @@ async function mounted(path){
  lock.addEventListener=(name,run)=>{listeners['lock']=run};
  button.addEventListener=(name,run)=>{listeners['token']=run};
  globalThis.document={documentElement:{lang:path==='club'?'fr':'en'},getElementById:id=>el[id],
-  querySelectorAll:()=>[button],querySelector:()=>button,createElement:node};
+  querySelectorAll:()=>[button],querySelector:()=>button,createElement:node,addEventListener(){}};
  const chain=rpc(path);
  const calls=[],events={};
  globalThis.window={location:{origin:'https://montrealai.github.io'},addEventListener(){},ethereum:{
@@ -720,14 +722,11 @@ console.log('11 wallet qualification checks and both workspace open/lock fixture
                 self.assertIn('<div class="brief-entry" data-nosnippet>', workspace)
                 self.assertIn('id="brief-content" hidden></article>', workspace)
                 self.assertNotIn('id="member-brief-001"', page)
-                public_boundary = '    </section>\n    <section class="frame workspace-content privacy"'
-                self.assertIn(public_boundary, workspace)
-                member_only, public_atlas = workspace.split(public_boundary, 1)
-                self.assertNotIn('id="possibility-shifts"', member_only)
-                self.assertIn('id="possibility-shifts" aria-labelledby="possibility-shifts-title"', public_atlas)
-                self.assertIn('<!-- FRONTIER_POSSIBILITY_RECORDS -->', public_atlas)
-                self.assertIn('<!-- FRONTIER_PUBLIC_WATCH -->', public_atlas)
-                self.assertNotIn('data-nosnippet aria-labelledby="possibility-shifts-title"', public_atlas)
+                self.assertNotIn('id="possibility-shifts"', workspace)
+                self.assertIn('id="possibility-shifts" aria-labelledby="possibility-shifts-title"', before)
+                self.assertIn('<!-- FRONTIER_POSSIBILITY_RECORDS -->', before)
+                self.assertIn('<!-- FRONTIER_PUBLIC_WATCH -->', before)
+                self.assertNotIn('data-nosnippet aria-labelledby="possibility-shifts-title"', before)
                 self.assertIn('href="#possibility-shifts"', before)
                 self.assertNotIn('id="possibility-shifts"', after)
 

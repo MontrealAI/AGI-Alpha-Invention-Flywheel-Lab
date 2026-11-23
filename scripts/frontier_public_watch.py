@@ -29,6 +29,9 @@ STREAMS = {
     'living-possibility-watch': 'Unseen Advantage Watch',
     'possible-now': 'Possible Now',
     'verified-invention-watch': 'Ω ALPHA — Verified Invention Watch',
+    'action-alerts': 'AI Frontier Action Alerts',
+    'living-atlas': 'Living Possibility Atlas',
+    'opportunity-radar': 'AI Frontier Opportunity Radar',
 }
 REQUIRED = {'living-possibility-watch', 'possible-now'}
 SOURCES = {
@@ -47,6 +50,14 @@ TAG = re.compile(
     re.ASCII,
 )
 SHA256 = re.compile(r'[0-9a-f]{64}', re.ASCII)
+FRENCH_STREAMS = {
+    'living-possibility-watch': 'Veille de l’avantage insoupçonné',
+    'possible-now': 'Possible Now',
+    'verified-invention-watch': 'Veille des inventions vérifiées Ω ALPHA',
+    'action-alerts': 'Alertes FRONTIER',
+    'living-atlas': 'Atlas vivant des possibles',
+    'opportunity-radar': 'Radar des possibilités FRONTIER',
+}
 LABELS = {
     'en': {
         'empty': 'No qualifying public reference available.',
@@ -226,6 +237,10 @@ def render(snapshot, language):
     labels = LABELS[language]
     cards = []
     for stream, name in STREAMS.items():
+        if not snapshot[stream] and stream not in REQUIRED | {'verified-invention-watch'}:
+            continue
+        if language == 'fr':
+            name = FRENCH_STREAMS[stream]
         entries = [
             '<li><a href="' + escape(url, quote=True) + '">' + escape(title) + '</a>'
             f'<p><time datetime="{published}">{published}</time> · {labels[decision]}</p></li>'

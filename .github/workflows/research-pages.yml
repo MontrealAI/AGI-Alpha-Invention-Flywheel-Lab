@@ -6,10 +6,13 @@ on:
       - 'experiments/frontier-conclave/**'
       - 'scripts/build_research_site.py'
       - 'scripts/frontier_public_watch.py'
+      - 'scripts/frontier_atlas.py'
       - 'scripts/replay_frontier_alpha1_availability.py'
       - 'publication/frontier-alpha-1-availability.json'
       - 'publication/frontier-public-holds.json'
       - 'tests/test_frontier_public_watch.py'
+      - 'tests/test_frontier_atlas.py'
+      - 'tests/live_frontier_browser.cjs'
       - 'tests/test_research_site.py'
       - 'tests/test_alpha_site.cjs'
       - 'tests/test_surf_reader.cjs'
@@ -24,10 +27,13 @@ on:
       - 'experiments/frontier-conclave/**'
       - 'scripts/build_research_site.py'
       - 'scripts/frontier_public_watch.py'
+      - 'scripts/frontier_atlas.py'
       - 'scripts/replay_frontier_alpha1_availability.py'
       - 'publication/frontier-alpha-1-availability.json'
       - 'publication/frontier-public-holds.json'
       - 'tests/test_frontier_public_watch.py'
+      - 'tests/test_frontier_atlas.py'
+      - 'tests/live_frontier_browser.cjs'
       - 'tests/test_research_site.py'
       - 'tests/test_alpha_site.cjs'
       - 'tests/test_surf_reader.cjs'
@@ -49,6 +55,7 @@ jobs:
     timeout-minutes: 360
     outputs:
       publish: ${{ steps.frontier_watch.outputs.changed }}
+      ledger: ${{ steps.frontier_watch.outputs.ledger }}
     steps:
       - name: Record platform job execution start
         shell: bash
@@ -61,10 +68,12 @@ jobs:
             experiments/frontier-conclave
             scripts/build_research_site.py
             scripts/frontier_public_watch.py
+            scripts/frontier_atlas.py
             scripts/replay_frontier_alpha1_availability.py
             publication/frontier-alpha-1-availability.json
             publication/frontier-public-holds.json
             tests/test_frontier_public_watch.py
+            tests/test_frontier_atlas.py
             tests/test_research_site.py
             tests/test_alpha_site.cjs
             tests/test_surf_reader.cjs
@@ -77,20 +86,30 @@ jobs:
           sparse-checkout-cone-mode: false
       - name: Build only the public website allowlist
         run: python3 scripts/build_research_site.py --output "$RUNNER_TEMP/research-site"
-      - name: Test watch publication and topic holds
-        run: python3 -m unittest discover -s tests -p 'test_frontier_public_watch.py' -v
+      - name: Test watch publication, replay, rejection and recovery
+        run: |
+          python3 -m unittest discover -s tests -p 'test_frontier_public_watch.py' -v
+          python3 -m unittest discover -s tests -p 'test_frontier_atlas.py' -v
       - name: Replay the ALPHA-1 availability correction
         if: github.event_name != 'schedule'
         run: |
           git fetch --no-tags --depth=1 origin 5cced81256c965797988cd682fb5f910fe72c981
           python3 scripts/replay_frontier_alpha1_availability.py --check
-      - name: Verify and stage public watch references
+      - name: Replay approved public Git history and stage the bilingual Atlas
         id: frontier_watch
         if: github.event_name == 'pull_request' || github.ref == 'refs/heads/main'
         shell: bash
         run: |
-          changed="$(python3 scripts/frontier_public_watch.py "$RUNNER_TEMP/research-site/frontier-omega-alpha" "$GITHUB_EVENT_NAME")"
-          printf 'changed=%s\n' "$changed" >> "$GITHUB_OUTPUT"
+          for attempt in 1 2 3; do
+            if git fetch --no-tags --filter=blob:none --shallow-since=2026-11-22T00:00:00Z origin \
+                "$GITHUB_SHA" refs/heads/frontier-watch-public:refs/remotes/origin/frontier-watch-public; then
+              break
+            fi
+            test "$attempt" -lt 3 || exit 1
+            sleep "$((2 * attempt))"
+          done
+          python3 scripts/frontier_atlas.py stage "$RUNNER_TEMP/research-site" \
+            "$GITHUB_EVENT_NAME" "$GITHUB_SHA" "$GITHUB_RUN_ID" >> "$GITHUB_OUTPUT"
       - name: Qualify prepared Conclave experiment
         if: github.event_name != 'schedule' || steps.frontier_watch.outputs.changed == 'true'
         working-directory: experiments/frontier-conclave
@@ -147,3 +166,41 @@ jobs:
       - name: Deploy the public website
         id: deployment
         uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4
+  verify-live:
+    if: always() && github.event_name != 'pull_request' && github.ref == 'refs/heads/main' && needs.build.result == 'success' && (needs.deploy.result == 'success' || needs.deploy.result == 'skipped')
+    needs: [build, deploy]
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    permissions:
+      contents: read
+    steps:
+      - name: Record platform job execution start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+          sparse-checkout: |
+            scripts/frontier_atlas.py
+            scripts/frontier_public_watch.py
+            scripts/build_research_site.py
+            tests/live_frontier_browser.cjs
+          sparse-checkout-cone-mode: false
+      - name: Verify the actual public English and French pages and ledger bytes
+        env:
+          EXPECTED_LEDGER: ${{ needs.build.outputs.ledger }}
+          PUBLISHED: ${{ needs.deploy.result }}
+        run: |
+          args=()
+          if test "$PUBLISHED" = 'success'; then
+            args+=(--source-commit "$GITHUB_SHA" --workflow-run "$GITHUB_RUN_ID")
+          fi
+          python3 scripts/frontier_atlas.py verify "$EXPECTED_LEDGER" "${args[@]}" > "$RUNNER_TEMP/frontier-live.json"
+          cat "$RUNNER_TEMP/frontier-live.json" >> "$GITHUB_STEP_SUMMARY"
+      - name: Exercise live desktop, mobile and transaction-free member paths
+        if: needs.deploy.result == 'success'
+        shell: bash
+        run: |
+          npm install --prefix "$RUNNER_TEMP/frontier-browser" --ignore-scripts --no-audit --no-fund --save-exact playwright-core@1.62.1
+          NODE_PATH="$RUNNER_TEMP/frontier-browser/node_modules" node tests/live_frontier_browser.cjs | tee "$RUNNER_TEMP/frontier-browser.json"
+          cat "$RUNNER_TEMP/frontier-browser.json" >> "$GITHUB_STEP_SUMMARY"

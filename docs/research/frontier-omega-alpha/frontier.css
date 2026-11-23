@@ -203,3 +203,52 @@ button:disabled { cursor: wait; opacity: .76; }
 .native-controls a { color: var(--gold); text-underline-offset: .2em; }
 .native-controls button { justify-self: start; }
 .native-controls code { color: var(--ink); overflow-wrap: anywhere; }
+
+.hero-inner { min-height: clamp(415px, 43vw, 530px); padding-block: 3rem 4.1rem; }
+.hero .question { max-width: 37ch; font-size: clamp(1.15rem, 2.3vw, 1.65rem); }
+.hero .promise { max-width: 58ch; color: #f1e7f9; }
+.hero-action { display: inline-flex; align-items: center; gap: .7rem; justify-self: start; min-height: 44px; margin-top: 1.25rem; padding: .6rem 1rem; color: #21152b; background: #f1cd91; font-weight: 700; text-decoration: none; border-radius: 4px; }
+.hero-action:hover { background: #ffe6b9; }
+.atlas { padding-block: clamp(2.6rem, 5vw, 4.4rem); }
+.atlas h2 { font-size: clamp(2.25rem, 5.5vw, 4.15rem); line-height: 1.05; letter-spacing: -.045em; }
+.atlas-heading, .atlas-controls { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); align-items: end; gap: .8rem 2rem; }
+.atlas-heading p, .atlas-health, .atlas-card { color: var(--muted); }
+.atlas-heading p { max-width: 62ch; }
+.atlas-health { display: flex; align-items: baseline; flex-wrap: wrap; gap: .35rem 1.2rem; margin: 1.4rem 0 1.6rem; padding: .8rem 0; border-block: 1px solid var(--line); font-size: .83rem; }
+.atlas-health strong, .atlas-health a { color: var(--gold); }
+.atlas-health a, .atlas-links a, .member-updates a { text-underline-offset: .22em; }
+.atlas-controls { grid-template-columns: minmax(0, 1.3fr) minmax(0, .7fr) minmax(0, 1fr); margin-bottom: 1.5rem; }
+.atlas-controls label { display: grid; gap: .35rem; color: #f4d49c; font-size: .86rem; font-weight: 650; }
+.atlas-controls input, .atlas-controls select { width: 100%; min-height: 44px; padding: .55rem .75rem; border: 1px solid #806d92; border-radius: 4px; background: #171121; color: var(--ink); font: inherit; }
+.atlas-controls p { color: var(--muted); align-self: end; min-height: 44px; display: grid; align-items: center; font-size: .82rem; }
+.atlas-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+.atlas-card { display: flex; flex-direction: column; gap: .68rem; padding: clamp(1.05rem, 2.6vw, 1.65rem); background: linear-gradient(140deg, #1b1328, #14101f); border: 1px solid var(--line); border-top: 2px solid #8a6e57; border-radius: 6px; overflow-wrap: anywhere; scroll-margin-block-start: 1rem; }
+.atlas-card:target { border-color: var(--gold); }
+.atlas-card h3 { color: var(--ink); font: 400 clamp(1.45rem, 2.25vw, 1.95rem)/1.13 var(--serif); }
+.atlas-card-meta { display: flex; justify-content: space-between; flex-wrap: wrap; align-items: baseline; gap: .24rem .6rem; font: .76rem/1.4 var(--mono); }
+.atlas-card-meta strong { color: var(--gold); text-transform: uppercase; letter-spacing: .055em; }
+.atlas-evidence { color: #e7d2f5; font-size: .81rem; }
+.atlas-card dl { display: grid; gap: .6rem; margin: .1rem 0 .25rem; }
+.atlas-card dt { color: var(--ink); font-size: .84rem; font-weight: 650; }
+.atlas-card dd { margin: 0; font-size: .9rem; }
+.atlas-links { padding: .62rem 0 0; margin: auto 0 0; border-top: 1px solid var(--line); list-style: none; display: flex; flex-wrap: wrap; gap: .4rem 1.05rem; color: var(--gold); font-size: .86rem; }
+.atlas-history { font-size: .84rem; }
+.atlas-history summary { min-height: 36px; padding-block: .4rem; cursor: pointer; color: #e7d2f5; }
+.atlas-history li + li { margin-top: .55rem; }
+.atlas .watch-results { margin-top: 2.15rem; }
+.atlas .watch-results > h3 { font: 400 clamp(1.55rem, 3.4vw, 2.45rem) var(--serif); }
+.member-updates { margin: 1rem 1.4rem; border-top: 1px solid var(--line); padding-top: .8rem; }
+.member-updates h3 { color: var(--gold); font-weight: 630; }
+.member-updates p { color: var(--muted); }
+.member-updates ul { margin-block: .5rem; padding-inline-start: 1.15rem; }
+.member-updates a { display: inline-block; padding-block: .3rem; }
+@media (max-width: 700px) {
+  .atlas-heading, .atlas-grid { grid-template-columns: 1fr; }
+  .atlas-controls { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: .65rem; }
+  .atlas-controls p { grid-column: 1 / -1; min-height: 22px; }
+}
+@media (max-width: 420px) {
+  .hero-inner { padding-block: 2.7rem 4rem; }
+  .hero .promise { font-size: .9rem; }
+  .atlas-controls { grid-template-columns: 1fr; }
+}

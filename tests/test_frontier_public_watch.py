@@ -144,7 +144,8 @@ class PublicWatchTests(unittest.TestCase):
             self.assertTrue(watch.stage(directory, holds=frozenset(), request=request))
             for page, decision in (('index.html', 'Matched test proposed'), ('fr.html', 'Essai comparatif proposé')):
                 html = (directory / page).read_text(encoding='utf-8')
-                self.assertIn('Ω ALPHA — Verified Invention Watch', html)
+                self.assertIn('Ω ALPHA — Verified Invention Watch' if page == 'index.html' else
+                              'Veille des inventions vérifiées Ω ALPHA', html)
                 self.assertIn('Source &amp; &lt;test&gt;', html)
                 self.assertIn(decision, html)
                 self.assertIn('Preserve this packet.', html)

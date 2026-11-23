@@ -11,6 +11,7 @@
   <link rel="canonical" href="https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/frontier-omega-alpha/index.html">
   <link rel="alternate" hreflang="fr" href="https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/frontier-omega-alpha/fr.html">
   <link rel="stylesheet" href="frontier.css">
+  <script type="module" src="atlas.js"></script>
   <script type="module" src="wallet-check.js"></script>
 </head>
 <body>
@@ -31,17 +32,32 @@
       <div class="hero-image" aria-hidden="true"></div>
       <div class="instrument" aria-hidden="true"><span></span></div>
       <div class="frame hero-inner">
-        <p class="eyebrow">SURF THE EXPONENTIAL.</p>
+        <p class="eyebrow">CAPTURING THE EXPONENTIAL</p>
         <h1 id="title">FRONTIER <span>Ω ALPHA</span></h1>
-        <p class="question">What can we do this week that wasn’t worth attempting last week?</p>
-        <p class="promise">Own the advantage. Compound the future.</p>
+        <p class="question">The research lab of MONTREAL.AI and QUÉBEC.AI tracks new capabilities and tests them against the strongest available alternatives.</p>
+        <p class="promise">Understand what may become possible. Discover what can become possible sooner. Invent the missing means. Prove the value. Capture it. Compound it.</p>
+        <a class="hero-action" href="#possibility-shifts">Explore the Atlas <span aria-hidden="true">↓</span></a>
         <p class="observation" aria-hidden="true">NGC 3324 · Carina Nebula</p>
       </div>
     </section>
-    <div class="frame flow">
-      <p>Exploratory research</p>
-      <ol><li>Explore</li><li>Experiment</li><li>Verify</li><li>Learn</li></ol>
-    </div>
+    <section class="frame atlas" id="possibility-shifts" aria-labelledby="possibility-shifts-title">
+      <div class="atlas-heading">
+        <h2 id="possibility-shifts-title">Living Possibility Atlas</h2>
+        <p>Find what changed, what still blocks a valuable outcome, and the experiments that could settle it. External leads and our own results carry distinct evidence labels.</p>
+      </div>
+      <!-- FRONTIER_ATLAS_HEALTH -->
+      <div id="atlas-controls" class="atlas-controls" hidden>
+        <label for="atlas-query">Search the Atlas<input id="atlas-query" type="search" maxlength="120" autocomplete="off" aria-controls="atlas-records"></label>
+        <label for="atlas-state">Evidence state<select id="atlas-state" aria-controls="atlas-records"><option value="">All states</option></select></label>
+        <p id="atlas-count" role="status" data-label="Records shown" data-empty="No records match these filters."></p>
+      </div>
+      <!-- FRONTIER_POSSIBILITY_RECORDS -->
+      <section class="watch-results" id="monitoring" aria-labelledby="monitoring-title">
+        <h3 id="monitoring-title">Latest watch references</h3>
+        <p>Source identity and version are checked. The Atlas retains references after they leave this selection.</p>
+        <!-- FRONTIER_PUBLIC_WATCH -->
+      </section>
+    </section>
     <section id="access" class="frame gate" aria-labelledby="gate-title">
       <div class="gate-head">
         <h2 id="gate-title">Access the research</h2>
@@ -75,6 +91,11 @@
         <p class="status" id="brief-status" role="status"></p>
         <article class="brief-content" id="brief-content" hidden></article>
       </div>
+      <section class="member-updates" aria-labelledby="member-updates-title">
+        <h3 id="member-updates-title">Since the brief</h3>
+        <p>A selection of current results and open questions from the public Atlas.</p>
+        <!-- FRONTIER_MEMBER_UPDATES -->
+      </section>
       <ul class="packet-shortcuts">
         <li><a href="#monitoring">Frontier watch results</a></li>
         <li><a href="#packet-lean">Lean 4.36</a></li>
@@ -83,24 +104,6 @@
         <li><a href="#packet-retrofit">ALPHA-1 retrofit</a></li>
       </ul>
     </section>
-    <section class="frame workspace-content privacy" id="possibility-shifts" aria-labelledby="possibility-shifts-title">
-        <div>
-          <p class="eyebrow">Frontier watch</p>
-          <h2 id="possibility-shifts-title">Living Possibility Atlas</h2>
-          <p>The Living Atlas is public and does not require a wallet. The member brief remains behind an eligibility check; it is still a public-file research edition, not confidential delivery.</p>
-          <p>Eight reviewed research findings and source-verified watch references. The public watch is checked hourly and refreshes only when approved source evidence changes.</p>
-        </div>
-        <div>
-          <p>23 November 2026: the latest reviewed Possible Now check identified no new actionable opportunity. This is a status note, not an alert.</p>
-          <p>The sources monitored here are Unseen Advantage Watch, Possible Now, and Ω ALPHA — Verified Invention Watch. The last stream reports bounded outcomes only after reviewing a reproducible public receipt.</p>
-          <!-- FRONTIER_POSSIBILITY_RECORDS -->
-        </div>
-        <section class="watch-results" id="monitoring" aria-labelledby="monitoring-title">
-          <h3 id="monitoring-title">Latest watch references</h3>
-          <p>References are checked against primary sources. Test decisions describe proposed work.</p>
-          <!-- FRONTIER_PUBLIC_WATCH -->
-        </section>
-      </section>
     <section class="research" id="research" aria-labelledby="public-results-title">
       <div class="frame">
         <h2 id="public-results-title">Public research packets</h2>
