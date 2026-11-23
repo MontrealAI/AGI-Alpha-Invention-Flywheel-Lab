@@ -32,7 +32,7 @@ def pinned_owner_source():
         data = response.read(MAX_BYTES + 1)
     if not data or len(data) > MAX_BYTES:
         raise ValueError("BOUNDED_PUBLIC_OWNER_SOURCE_REQUIRED")
-    blob = hashlib.sha1(f"blob {len(data)}\\0".encode() + data).hexdigest()
+    blob = hashlib.sha1(f"blob {len(data)}\0".encode() + data).hexdigest()
     if blob != OWNER_BLOB:
         raise ValueError("EXACT_OWNER_GIT_BLOB_MISMATCH")
     return data
@@ -122,8 +122,8 @@ class _SyntheticAccount:
 def synthetic_caller_visibility():
     """Show Python interpreter semantics with a harmless synthetic marker ONLY."""
     payload = (
-        "import sys\\n"
-        "result=sys._getframe(1).f_locals['a'].marker\\n"
+        "import sys\n"
+        "result=sys._getframe(1).f_locals['a'].marker\n"
     )
 
     def historical_like_signer():
@@ -166,7 +166,7 @@ def main():
     args = parser.parse_args()
     result = report()
     args.report.parent.mkdir(parents=True, exist_ok=True)
-    args.report.write_text(json.dumps(result, indent=2, sort_keys=True) + "\\n")
+    args.report.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n")
     print(json.dumps({"negative_witness": True, "report": str(args.report)}, sort_keys=True))
 
 
