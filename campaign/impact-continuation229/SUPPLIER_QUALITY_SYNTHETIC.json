@@ -1,0 +1,59 @@
+{
+  "after": [
+    {
+      "applies_to": [
+        "metal",
+        "electronics"
+      ],
+      "controls": [
+        "lot-inspection",
+        "origin-record"
+      ],
+      "id": "supplier-acceptance",
+      "source_sha256": "ff78c1164e18539822ea4e548c70f1f4948b9317f9560e0c97a47e78077220eb",
+      "version": "v2"
+    }
+  ],
+  "before": [
+    {
+      "applies_to": [
+        "metal"
+      ],
+      "controls": [
+        "lot-inspection"
+      ],
+      "id": "supplier-acceptance",
+      "source_sha256": "f5d5e4872ead3e1ac9a67a5cb5d45259dec8080204730cc3807330d432bb0b79",
+      "version": "v1"
+    }
+  ],
+  "schema": "impact-continuation229/v1",
+  "systems": [
+    {
+      "evidence_refs": [
+        {
+          "control": "lot-inspection",
+          "source_sha256": "0f35b0a65037cf494d74500e542ef52f1b486ca706370feb97e487726930cef7"
+        }
+      ],
+      "id": "supplier-metals",
+      "tags": [
+        "metal"
+      ]
+    },
+    {
+      "evidence_refs": [],
+      "id": "supplier-electronics",
+      "tags": [
+        "electronics"
+      ]
+    },
+    {
+      "evidence_refs": [],
+      "id": "supplier-food",
+      "tags": [
+        "food"
+      ]
+    }
+  ]
+}

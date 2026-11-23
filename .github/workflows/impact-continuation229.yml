@@ -1,0 +1,59 @@
+name: IMPACT-CONTINUATION229 synthetic independent scope qualification
+on:
+  push:
+    branches:
+      - experiment/impact-continuation229-20261121
+    paths:
+      - '.github/workflows/impact-continuation229.yml'
+      - 'tools/impact_continuation229.py'
+      - 'tests/test_impact_continuation229.py'
+      - 'campaign/impact-continuation229/**'
+  pull_request:
+    paths:
+      - '.github/workflows/impact-continuation229.yml'
+      - 'tools/impact_continuation229.py'
+      - 'tests/test_impact_continuation229.py'
+      - 'campaign/impact-continuation229/**'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  synthetic-independent-qualification:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Start job platform telemetry
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - name: Run exactly checked-out source and adversarial tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p impact229-receipts
+          git rev-parse HEAD | tee impact229-receipts/HEAD.txt
+          python3 --version | tee impact229-receipts/PYTHON.txt
+          /usr/bin/time -p python3 -m unittest discover -s tests -p 'test_impact_continuation229.py' -v 2>&1 | tee impact229-receipts/TESTS.txt
+          python3 tools/impact_continuation229.py campaign/impact-continuation229/AI_GOVERNANCE_SYNTHETIC.json --output impact229-receipts/AI.json
+          python3 tools/impact_continuation229.py campaign/impact-continuation229/SUPPLIER_QUALITY_SYNTHETIC.json --output impact229-receipts/SUPPLIER.json
+          python3 - <<'PY'
+          import hashlib,json,pathlib
+          d=pathlib.Path('impact229-receipts')
+          for name in ('AI', 'SUPPLIER'):
+              value=json.loads((d/(name+'.json')).read_text())
+              claim=value.pop('result_sha256')
+              actual=hashlib.sha256(json.dumps(value,sort_keys=True,ensure_ascii=False,separators=(',',':')).encode()).hexdigest()
+              if claim != actual: raise SystemExit('RECEIPT_HASH_MISMATCH:'+name)
+              if value['compliance_claim'] != 'NONE': raise SystemExit('FALSE_COMPLIANCE_CLAIM:'+name)
+              print(name,'reassessments',value['reassessment_count'],'sha256',claim)
+          PY
+          sha256sum tools/impact_continuation229.py tests/test_impact_continuation229.py campaign/impact-continuation229/* impact229-receipts/* > impact229-receipts/SHA256SUMS.txt
+      - name: Publish compact witness
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: impact-continuation229-witness
+          path: impact229-receipts/
+          if-no-files-found: warn
