@@ -66,6 +66,8 @@ def approved_mac(authority):
             details["openssl_sha256"] == local["openssl_sha256"],
             "MAC_RUNTIME_NOT_EXACTLY_APPROVED")
     require(type(details["interval_seconds"]) is int and details["interval_seconds"] > 0, "MAC_INTERVAL_UNAPPROVED")
+    require("record_publisher" not in authority or authority.get("record_queue") is True,
+            "MAC_ROUTINE_PUBLISHER_REQUIRES_RETAINED_VERSIONS")
     admin, evaluator, constructor = details["administrator_uid"], authority["evaluator_uid"], authority["constructor_uid"]
     require(all(type(n) is int and n > 0 for n in (admin, evaluator, constructor)) and
             len({admin, evaluator, constructor}) == 3, "THREE_ACTUAL_SEPARATE_HOST_IDENTITIES_REQUIRED")
@@ -218,12 +220,8 @@ def plist_document(root, state, owner_pin, authority, interval):
 
 def runtime(root, state, owner_pin):
     require_mac()
-    from cycle import exclusive_state
-    from standing_authority import cleanup_managed_runs, run, signed_host_binding
-    authority, _ = signed_host_binding(root, owner_pin, state)
-    with exclusive_state(state):
-        cleanup_managed_runs(state)
-    run(root, owner_pin, state, Path(authority["aggregate_directory"]))
+    from standing_authority import run_available
+    return run_available(root, owner_pin, state)
 
 
 def main():
@@ -257,8 +255,7 @@ def main():
                     authority["mac_activation"]["interval_seconds"])))
                 return 0
             else:
-                runtime(root, state, pin)
-                return 0
+                result = runtime(root, state, pin)
         print(encode(result).decode(), end="")
     except (OSError, ValueError, TypeError, KeyError, subprocess.SubprocessError) as error:
         term = str(error)
