@@ -149,6 +149,9 @@ class ResearchSiteTests(unittest.TestCase):
             for record in site.read_possibilities(self.source):
                 self.assertIn(f'id="shift-{record["id"]}"', page)
             self.assertLess(page.index('id="possibility-shifts"'), page.index('id="research"'))
+            self.assertLess(page.index('</section>\n    <section class="frame workspace-content privacy"'), page.index('id="possibility-shifts"'))
+            self.assertIn('id="member" class="frame workspace" hidden', page)
+            self.assertNotIn('id="possibility-shifts" data-nosnippet', page)
             self.assertEqual(page.count('src="wallet-check.js"'), 1)
 
     def test_ignition_pages_exclude_private_files_and_reject_symlinked_subdirectory(self):
@@ -717,9 +720,16 @@ console.log('11 wallet qualification checks and both workspace open/lock fixture
                 self.assertIn('<div class="brief-entry" data-nosnippet>', workspace)
                 self.assertIn('id="brief-content" hidden></article>', workspace)
                 self.assertNotIn('id="member-brief-001"', page)
-                self.assertIn('id="possibility-shifts" data-nosnippet', workspace)
-                self.assertNotIn('id="possibility-shifts"', before + after)
-                self.assertNotIn('href="#possibility-shifts"', page)
+                public_boundary = '    </section>\n    <section class="frame workspace-content privacy"'
+                self.assertIn(public_boundary, workspace)
+                member_only, public_atlas = workspace.split(public_boundary, 1)
+                self.assertNotIn('id="possibility-shifts"', member_only)
+                self.assertIn('id="possibility-shifts" aria-labelledby="possibility-shifts-title"', public_atlas)
+                self.assertIn('<!-- FRONTIER_POSSIBILITY_RECORDS -->', public_atlas)
+                self.assertIn('<!-- FRONTIER_PUBLIC_WATCH -->', public_atlas)
+                self.assertNotIn('data-nosnippet aria-labelledby="possibility-shifts-title"', public_atlas)
+                self.assertIn('href="#possibility-shifts"', before)
+                self.assertNotIn('id="possibility-shifts"', after)
 
     def test_frontier_alpha_workspace_links_to_bilingual_public_packets(self):
         for name in ('index.html', 'fr.html'):
