@@ -9,16 +9,16 @@ import hashlib
 OWNER_UPGRADES_BLOB = "9866d004c412fc05c9f6292cf898307f177359df"
 REPLACEMENTS = (
     (
-        "                'operating': operating, 'evidence_dir': str(Path(evidence_dir).absolute()) if evidence_dir else None,\n                'codec_source': (target_root/'connected_enterprise/transition_evidence.py').read_text() if evidence_dir else None}",
-        "                'operating': operating, 'evidence_dir': str(Path(evidence_dir).absolute()) if evidence_dir else None}",
+        "               'operating': operating, 'evidence_dir': str(Path(evidence_dir).absolute()) if evidence_dir else None,\n               'codec_source': (target_root/'connected_enterprise/transition_evidence.py').read_text() if evidence_dir else None}",
+        "               'operating': operating, 'evidence_dir': str(Path(evidence_dir).absolute()) if evidence_dir else None}",
     ),
     (
-        "   codec={};exec(p['codec_source'],codec);blobs={}",
-        "   from connected_enterprise.transition_evidence import externalize, preflight_storage, persist_evidence\n   blobs={}",
+        "  codec={};exec(p['codec_source'],codec);blobs={}",
+        "  from connected_enterprise.transition_evidence import externalize, preflight_storage, persist_evidence\n  blobs={}",
     ),
-    ("   body=codec['externalize'](body,blobs)", "   body=externalize(body,blobs)"),
-    ("   codec['preflight_storage'](unsigned,r,old)", "   preflight_storage(unsigned,r,old)"),
-    ("   codec['persist_evidence'](p['evidence_dir'],blobs)", "   persist_evidence(p['evidence_dir'],blobs)"),
+    ("  body=codec['externalize'](body,blobs)", "  body=externalize(body,blobs)"),
+    ("  codec['preflight_storage'](unsigned,r,old)", "  preflight_storage(unsigned,r,old)"),
+    ("  codec['persist_evidence'](p['evidence_dir'],blobs)", "  persist_evidence(p['evidence_dir'],blobs)"),
 )
 
 def git_blob_id(raw):
