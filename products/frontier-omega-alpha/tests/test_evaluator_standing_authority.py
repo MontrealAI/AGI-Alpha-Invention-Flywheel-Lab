@@ -7,8 +7,8 @@ import unittest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "research" / "autonomous_endpoint"))
 from common import atomic, sha
-from cycle import signature
-from standing_authority import SCHEMA, active_approval, cleanup_managed_runs, validate_metrics, verify_aggregate
+from cycle import signature, verify
+from standing_authority import BATCH_SCHEMA, SCHEMA, active_approval, admit_batch, cleanup_managed_runs, validate_metrics, verify_aggregate
 
 
 class StandingAuthorityTests(unittest.TestCase):
@@ -17,7 +17,7 @@ class StandingAuthorityTests(unittest.TestCase):
         return {"schema": SCHEMA, "purpose": "non-production-only", "state": "ACTIVE",
                 "valid_from": (now - timedelta(hours=1)).isoformat(), "valid_until": (now + timedelta(hours=1)).isoformat(),
                 "code_sha256": {"score.py": "example"}, "records_sha256": {"contract.json": "example"},
-                "score_entry": "score.py", "operating_requirements_file": "contract.json", "run_wall_seconds": 1,
+                "score_entry": "score.py", "operating_requirements_file": "contract.json", "run_wall_seconds": 1, "max_input_bytes": 1000,
                 "retention_days": 1, "evaluator_key_sha256": key, "revoked_key_sha256": [],
                 "new_spend_authorized": False, "publish": "signed-aggregate-only"}
 
@@ -47,7 +47,8 @@ class StandingAuthorityTests(unittest.TestCase):
             public = root / "aggregate.json"
             metrics = {"accepted": 1, "abstained": 1, "cases": 2, "rejected": 0}
             body = {"schema": "frontier-omega-alpha/independent-evaluator-aggregate-v1", "scope": "non-production-only",
-                    "authority_envelope_sha256": sha(approval.read_bytes()), "metrics": metrics}
+                    "authority_envelope_sha256": sha(approval.read_bytes()),
+                    "input_version_binding_sha256": sha(b"example-version"), "metrics": metrics}
             atomic(public, signature(evaluator, body))
             self.assertEqual(verify_aggregate(public, approval, signer), metrics)
             with self.assertRaisesRegex(ValueError, "UNTRUSTED_EVALUATOR_KEY"):
@@ -55,6 +56,27 @@ class StandingAuthorityTests(unittest.TestCase):
             atomic(approval, signature(owner, self.fixture(key) | {"revoked_key_sha256": [key]}))
             with self.assertRaisesRegex(ValueError, "EVALUATOR_REVOKED"):
                 verify_aggregate(public, approval, signer)
+
+    def test_two_signed_input_versions_use_one_approval(self):
+        with tempfile.TemporaryDirectory() as folder:
+            directory = Path(folder)
+            envelope = self.fixture()
+            publisher = signature(directory, {"fixture": True})["evaluator_public_key_sha256"]
+            authority = envelope | {"record_publisher": {"key_sha256": publisher, "scope_id": "registered-source",
+                                 "requirements_sha256": "fixed-contract"}}
+            now = datetime.now(timezone.utc)
+            fields = {"schema": BATCH_SCHEMA, "scope_id": "registered-source", "valid_from": envelope["valid_from"],
+                      "valid_until": envelope["valid_until"]}
+            version = directory / "intake.json"
+            for seen in ("sample-one", "sample-two"):
+                files = {"contract.json": "fixed-contract", "cases.json": seen}
+                atomic(version, signature(directory, fields | {"records_sha256": files}))
+                data = verify(version, publisher)["receipt"]
+                self.assertEqual(admit_batch(data, active_approval(authority, now), now)[0], files)
+            with self.assertRaisesRegex(ValueError, "INPUT_VERSION_OUTSIDE_APPROVED_SCOPE"):
+                admit_batch(data | {"scope_id": "other-source"}, authority, now)
+            with self.assertRaisesRegex(ValueError, "INPUT_VERSION_CHANGED_APPROVED_REQUIREMENTS"):
+                admit_batch(data | {"records_sha256": {"contract.json": "different-contract", "cases.json": "data"}}, authority, now)
 
     def test_aggregate_field_gate_and_managed_retention(self):
         sample = {"accepted": 0, "abstained": 1, "cases": 1, "rejected": 0}
