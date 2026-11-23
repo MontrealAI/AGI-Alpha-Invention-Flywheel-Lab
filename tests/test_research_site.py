@@ -118,7 +118,7 @@ class ResearchSiteTests(unittest.TestCase):
             rendered = site.render_possibility_page(page, name, site.read_possibilities(self.source))
             self.assertIn('Expérience circonscrite rejouée' if name.endswith('/fr.html')
                           else 'Replayed bounded experiment', rendered)
-            self.assertIn('research' if name.endswith('/fr.html') else 'draft research', rendered)
+            self.assertIn('recherche en cours' if name.endswith('/fr.html') else 'draft research', rendered)
         original_sources = row['sources']
         row['sources'] = [{'url': 'https://arxiv.org/abs/2611.21152',
                            'en': 'Paper', 'fr': 'Article'}]
