@@ -1,0 +1,78 @@
+{
+  "schema": "frontier-omega-alpha/autonomous-endpoint-registration-v1",
+  "registered_on": "2026-11-23",
+  "purpose": "Select the highest actually observed load satisfying an explicitly supplied pair of archive-screening limits in one exact configuration, return every tied witness, or abstain with a reason. Independently replay the authorized FA01 loopback pilot. Record operational adoption separately.",
+  "beneficiary": "MONTREAL.AI internal endpoint research",
+  "source": {
+    "commit": "86a2c9f007cb66e92aa36179ac755d9f5b3595dc",
+    "path": "products/frontier-omega-alpha/research/possibility_observatory/endpoint_study/observations.json",
+    "normalized_sha256": "31962c792366e0508d43565f03b28d239488ed7353175f7607718cddf7a151b0",
+    "url": "https://results.mlcommons.org/endpoints/__data.json",
+    "upstream_sha256": "ce3226048090ba13e5d2369b582126f8440ba3485926f91ed81396fe15acada0",
+    "retrieved_at": "2026-11-23T16:33:40.355Z",
+    "cutoff": "2026-11-23",
+    "rights": "Public, read-only archive research; no service access, purchase, production replay or field transfer"
+  },
+  "endpoint_pilot": {
+    "ref": "230409b54f4adf8f69bd8d029020bfde7acbcff0",
+    "versioned_at": "2026-11-17T20:59:33-05:00",
+    "path": "products/frontier-omega-ignition/field_lab",
+    "sha256": {
+      "REGISTRATION.md": "3057376aaf4ba23fdee689632f305f04fa428db42cd95c22e3143df0569b405a",
+      "workload.json": "1c4cec4cfdaf847461600e0847ba48dad74ea9be988d6e56e7d6af652a1c5468",
+      "capture.py": "3cd31bf12e73c0325efd3601f03a7684a2d3c7ab43378ea8bbfc941f5a00d200",
+      "field.py": "06df5aa0fdbf01d473aaab9ede917d112168582c443607be2e138fe2a7c178c4",
+      "fixture_server.py": "7bce9993518743479ea1272831a0ccb038f2ae4a36f6ab3607ac79bb31aab729",
+      "protocol.py": "ee810277eecb0bfa7265dd3ab076dbce26c29b5c1cca0b58467a6961106c9fb5",
+      "verify.py": "c6e6c5988af6090886ccd85f53917b01d79d4aa096d11f0c94ae6aa53546eee8"
+    },
+    "workload": "Six public English/French authored service-intake proxies; deterministic nominal and adverse loopback fixture, transparent UTF-8 byte tokenizer",
+    "workers": [1, 3],
+    "p90_first_visible_ms_max": 500,
+    "p90_turn_ms_max": 2500,
+    "p10_delivered_fixture_tokens_per_turn_second_min": 5,
+    "first_attempt_completion_fraction": 1,
+    "exact_task_acceptance_fraction": 1,
+    "retry": "At most once on 429 or 503 before any visible output, no answer repair",
+    "rights": "Bounded public non-production CPU replay on loopback; independent wire replay in SQLite. Limits apply only to FA01."
+  },
+  "operational": {
+    "authority": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/issues/550",
+    "authority_snapshot": "2026-11-23",
+    "production_status": "NO-GO",
+    "missing": [
+      "A rights-cleared representative request distribution and actual incumbent with a current dated source and allowed retention",
+      "Current beneficiary-approved latency, sustained throughput and concurrency limits and measurement windows for that workload",
+      "Current task acceptance, reliability, availability and error tolerance for that workload",
+      "Authorized matched model, tokenizer, runtime, hardware and resource entitlement for the real replay",
+      "Actual source fees, loaded human review, compute, support, failure, verification and maintenance costs",
+      "A separately administered confirmation store, evaluator identity and trusted receipt key for confidential workload operation"
+    ],
+    "reconsideration": "Recheck this ledger and the registered public source on each run; an updated, reviewed, source-bound contract requires a new registration before a real trial."
+  },
+  "comparison": {
+    "scope_keys": ["version", "division", "model", "dataset", "availability", "submission", "run", "submission_id", "system"],
+    "required_facts": {"version": "1.0", "division": "Standardized", "availability": "Available", "submission": "official", "run": "valid-online"},
+    "development_models": ["deepseek-v4_1-flash"],
+    "confirmation_models": ["kimi-k3", "Qwen3.6 35B-A3B"],
+    "acceptance": "Complete dated rows with valid measured load, exact throughput and P90 at or before query cutoff. Exact scope, inclusive limits, all max-load IDs in lexical order. Stop on malformed, missing, stale, contradictory or unauthenticated source when it invalidates coverage; abstain when no row qualifies.",
+    "baseline": "Persistent indexed SQLite with exact decimal keys, indexed max-load query and retrieval of all tied witnesses. Pre-acquire the same authorized source and cache the index between cases.",
+    "existing": "Frozen #554 endpoint_study.decision.evaluate and its fixed classification order. Maximize measured load through the existing objective input. Cache source and pass identical eligible semantics.",
+    "candidate": "Fit an executable evidence materialization using only the development projection, then freeze. Test whether a scope-local retained certificate can answer the same decisions with no original source at query time. Charge construction, refresh and independent verification. Give both incumbents permission to pre-acquire and persist inputs.",
+    "oracle": "Direct independent exhaustive score and independent certificate verification against the full admitted source. Exact all-case agreement and all adverse gates are required. Never interpolate load or generalize across configurations.",
+    "case_design": {
+      "fresh_selection": "After artifact freeze, use evaluator-only random nonce to select confirmation scopes and motivating rows. Sample each case type equally. No selected case, answer or seed is exported.",
+      "queries_per_type": 16,
+      "types": ["at-observed-limits", "faster-throughput-floor", "earlier-cutoff", "unattainable-ceiling"],
+      "controls": ["missing-source", "stale-source", "malformed-source", "contradictory-source", "digest-mismatch", "retryable-source-loss", "interrupted-evaluation", "invalid-certificate", "equal-load-witnesses"]
+    },
+    "costs": "Measure source acquisition attempts, time and bytes, wall and CPU by phase and matched method, persisted data size, acceptance and decision counts, sandbox resources, loopback response times, throughput, failures and retries. Record source fees, actual full engineering, electricity, independent human review and maintenance as unknown when unobserved. Scope uncertainty to this admitted snapshot, one host, one confirmation campaign and instrumented fixtures; no economic inference from CPU alone.",
+    "retain_if": "No operational S1 until independently accepted useful output at lower complete cost or a separately established benefit. Reuse, equal-content construction and update-rule campaigns remain separate claims."
+  },
+  "custody": {
+    "sandbox_sha256": "103e2a8828a7aaf31faac475fb48ccbba1a685b4f64191dae4f6fbe8a9b6c7c8",
+    "limits": {"wall_seconds": 5, "cpu_seconds": 2, "memory_bytes": 268435456, "output_bytes": 1048576, "input_bytes": 4194304},
+    "boundary": "Separate trusted evaluator process and assessor-controlled state. Kernel-enforced file, network and process denial around constructor execution. Constructor receives development rows only and returns declarative executable plan only. Hidden query tasks are freshly selected from public raw records. Trust the runner administrator and launcher. Confidential operations require independent administration.",
+    "signing": "Ed25519 receipt bound to registration, source and evaluator/constructor/plan identities, with a blinded case commitment. Local evaluator signs; trust in evaluator identity requires a pinned public key. No private data in public artifacts."
+  }
+}
