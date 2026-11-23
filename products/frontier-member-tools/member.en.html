@@ -1,10 +1,55 @@
 <div class="mv" id="member-value">
   <header class="mv-heading">
-    <h3>Your frontier starts here.</h3>
-    <div class="member-first-action">
-      <div><p class="packet-meta">Recommended first action</p><h4>Find the highest tested load.</h4><p>Screen seven public measurements against SQLite evidence and export a receipt on your device.</p></div>
-      <a class="entry-button" id="mf-quick-run" href="#mv-endpoint-run">Load the Endpoint example <span aria-hidden="true">→</span></a>
-    </div>
+    <section class="goal-studio" id="my-frontier" aria-labelledby="my-frontier-title">
+      <p class="packet-meta">MY FRONTIER Ω</p>
+      <h3 id="my-frontier-title">Your next frontier begins here.</h3>
+      <form id="goal-form" aria-describedby="goal-local">
+        <label for="goal-text">What would you like intelligence to make possible for you?</label>
+        <div class="goal-input">
+          <input id="goal-text" type="search" maxlength="200" autocomplete="off" spellcheck="false"
+            placeholder="e.g. Find a historical NOAA forecast">
+          <button id="goal-submit" type="submit" class="entry-button" disabled>Find my next move <span aria-hidden="true">→</span></button>
+        </div>
+        <p id="goal-local">Your goal is matched to the current research in this browser.</p>
+        <div class="goal-presets" role="group" aria-label="Suggested goals">
+          <button type="button" data-goal="endpoint" aria-pressed="false">Check an AI endpoint</button>
+          <button type="button" data-goal="archive" aria-pressed="false">Retrieve a forecast</button>
+          <button type="button" data-goal="workflow" aria-pressed="false">Improve a workflow</button>
+          <button type="button" data-goal="verify" aria-pressed="false">Check a claim</button>
+          <button type="button" data-goal="discover" aria-pressed="false">Find an opportunity</button>
+          <button type="button" data-goal="build" aria-pressed="false">Build an AI capability</button>
+        </div>
+      </form>
+      <p id="goal-status" class="status" role="status"></p>
+      <article class="goal-result" id="goal-result" hidden aria-labelledby="goal-result-title">
+        <p class="packet-meta">THE UNSEEN ADVANTAGE Ω</p>
+        <h4 id="goal-result-title" tabindex="-1"></h4>
+        <p id="goal-evidence-state" class="goal-evidence-state"></p>
+        <dl class="goal-evidence">
+          <div><dt>The possibility</dt><dd data-goal-fact="possibility"></dd></div>
+          <div><dt>Why this might work</dt><dd data-goal-fact="why"></dd></div>
+          <div><dt>The strongest alternative</dt><dd data-goal-fact="alternative"></dd></div>
+          <div><dt>The evidence and its limits</dt><dd data-goal-fact="uncertainty"></dd></div>
+        </dl>
+        <div class="goal-next">
+          <div><h5>The next move</h5><p data-goal-fact="next"></p><p id="goal-available"></p></div>
+          <a id="goal-action" class="entry-button" href="#mv-better"></a>
+        </div>
+        <p class="mv-links"><a id="goal-proof" href="#mv-better" data-mv-open>Open evidence and history</a>
+          <a id="goal-source" href="#mv-better">Open primary source</a></p>
+      </article>
+      <div class="goal-quick">
+        <a id="mf-quick-run" href="#mv-endpoint-run">Try the public Endpoint demo <span aria-hidden="true">→</span></a>
+        <details id="goal-keeper">
+          <summary>Keep or reopen a goal</summary>
+          <p>Your goal lives here until you leave or lock the session. A downloaded goal file includes what you entered. Keep it somewhere you control.</p>
+          <div class="mv-actions">
+            <button type="button" class="quiet" id="goal-export" disabled>Download current goal</button>
+            <label for="goal-import">Reopen a goal file<input id="goal-import" type="file" accept=".json,application/json"></label>
+          </div>
+        </details>
+      </div>
+    </section>
     <nav class="mv-nav" aria-label="Member First destinations">
       <a href="#mv-earlier"><strong>Latest intelligence</strong><span>Open the featured briefing</span></a>
       <a href="#mv-better"><strong>Your next opportunity</strong><span>Explore evidence and decisions</span></a>
@@ -36,29 +81,34 @@
   </section>
   <section class="mv-section" id="mv-tools" aria-labelledby="mv-tools-title">
     <h3 id="mv-tools-title">Gain capabilities</h3>
-    <p class="mf-section-intro">Member Capability Library</p>
+    <p class="mf-section-intro">Frontier Ω Capability Library</p>
     <p>Run the published tools or download an exact version with its input format, verifier, operating limits and rights.</p>
     <div class="mv-grid"><!-- MV_TOOLS --></div>
     <section class="mv-runner" id="mv-endpoint-run" aria-labelledby="mv-run-title">
       <h4 id="mv-run-title">Run Endpoint Evidence Screen</h4>
-      <p>Use the seven official reference rows or load an authorized batch that follows the ZIP’s sample format. Processing takes place in this browser.</p>
-      <p>Load the example, freeze its inputs and comparator, then run it. The result explains which tested load qualifies and why operational adoption remains in abstention.</p>
+      <p>Find the highest qualifying measured load from seven public reference rows. The public demonstration runs here and checks the result against the frozen SQLite comparison.</p>
       <template id="mv-endpoint-sample"><!-- MV_SAMPLE --></template>
       <template id="mv-endpoint-reference"><!-- MV_REFERENCE --></template>
       <template id="mv-endpoint-manifest"><!-- MV_TOOL_MANIFEST --></template>
-      <div class="mv-actions">
-        <button type="button" class="quiet" id="mv-sample">Load public test data</button>
-        <label for="mv-input">Open a local JSON batch<input id="mv-input" type="file" accept=".json,application/json"></label>
-      </div>
-      <label class="mv-check" id="mv-rights-row" hidden><input type="checkbox" id="mv-rights">I am authorized to process this batch locally.</label>
-      <p id="mv-plan" class="mv-plan"></p>
-      <div class="mv-actions">
-        <button type="button" class="quiet" id="mv-freeze" disabled>Freeze task and comparator</button>
-        <button type="button" class="quiet" id="mv-run" disabled>Run screening</button>
-        <button type="button" class="quiet" id="mv-clear">Clear this task</button>
-      </div>
+      <button type="button" class="entry-button" id="mv-demo">Run public demonstration</button>
       <p id="mv-run-status" role="status" class="status"></p>
       <div id="mv-screen-result" hidden tabindex="-1"></div>
+      <a id="mv-keep-result" class="quiet" href="#mv-consent" hidden>Keep the result</a>
+      <details>
+        <summary>Use an authorized batch or inspect the plan</summary>
+        <p>Use the ZIP’s sample format for local data. Freeze the inputs and comparator before running. Processing stays in this browser.</p>
+        <div class="mv-actions">
+          <button type="button" class="quiet" id="mv-sample">Load public test data</button>
+          <label for="mv-input">Open a local JSON batch<input id="mv-input" type="file" accept=".json,application/json"></label>
+        </div>
+        <label class="mv-check" id="mv-rights-row" hidden><input type="checkbox" id="mv-rights">I am authorized to process this batch locally.</label>
+        <p id="mv-plan" class="mv-plan"></p>
+        <div class="mv-actions">
+          <button type="button" class="quiet" id="mv-freeze" disabled>Freeze task and comparator</button>
+          <button type="button" class="quiet" id="mv-run" disabled>Run screening</button>
+          <button type="button" class="quiet" id="mv-clear">Clear this task</button>
+        </div>
+      </details>
     </section>
   </section>
   <section class="mv-section" id="mv-results" aria-labelledby="mv-results-title">
