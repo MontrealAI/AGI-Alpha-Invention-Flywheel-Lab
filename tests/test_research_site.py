@@ -122,7 +122,7 @@ class ResearchSiteTests(unittest.TestCase):
         collection = (self.source / 'out-series.html').read_text()
         homepage = (self.source / 'index.html').read_text()
         self.assertEqual(len(site.PAPERS), 29)
-        self.assertEqual(len(site.PAGES), 38)
+        self.assertEqual(len(site.PAGES), 40)
         self.assertTrue({'alpha-genesis-live.html', 'alpha-genesis-live-studio.html'}.issubset(site.PAGES))
         self.assertIn('out-series.html', homepage)
         for slug in slugs:
@@ -439,7 +439,7 @@ class ResearchSiteTests(unittest.TestCase):
         for name in site.PAGES:
             text = (self.source / name).read_text()
             self.assertIn('name="viewport"', text)
-            french = name in ('continuity-omega-fr.html', 'continuity-omega-media-fr.html')
+            french = name in ('continuity-omega-fr.html', 'continuity-omega-media-fr.html', 'frontier-omega-alpha/fr.html')
             self.assertIn('Aller au contenu' if french else 'Skip to content', text)
             styles = text
             if name == 'studio.html':
@@ -447,13 +447,74 @@ class ResearchSiteTests(unittest.TestCase):
             elif name in ('ignition/index.html', 'ignition/demo.html'):
                 self.assertIn('href="studio.css"', text)
                 styles = (self.source / 'ignition/studio.css').read_text()
+            elif name.startswith('frontier-omega-alpha/'):
+                styles = (self.source / 'frontier-omega-alpha/frontier.css').read_text()
             self.assertIn('prefers-reduced-motion', styles)
-            self.assertIn('@media(max-width:', styles)
+            self.assertIn('@media(max-width:', styles.replace('@media (', '@media('))
             self.assertNotIn('↗', text)
-            if name not in ('ignition/index.html', 'ignition/demo.html', 'frontier-conclave.html', 'index.html', 'out-series.html', 'studio.html', 'continuity-omega-media.html', 'continuity-omega-media-fr.html', 'alpha-genesis-live.html', 'alpha-genesis-live-studio.html'):
+            if not name.startswith('frontier-omega-alpha/') and name not in ('ignition/index.html', 'ignition/demo.html', 'frontier-conclave.html', 'index.html', 'out-series.html', 'studio.html', 'continuity-omega-media.html', 'continuity-omega-media-fr.html', 'alpha-genesis-live.html', 'alpha-genesis-live-studio.html'):
                 self.assertIn('type="application/pdf"', text)
                 self.assertIn('download>', text)
                 self.assertIn('Votre navigateur n’affiche pas les PDF intégrés' if french else 'Your browser does not display embedded PDFs', text)
+
+    def test_frontier_alpha_public_wallet_check_is_not_private_content_access(self):
+        import os
+        import subprocess
+        for name in ('index.html', 'fr.html'):
+            page = (self.source / 'frontier-omega-alpha' / name).read_text()
+            self.assertIn('src="wallet-check.js"', page)
+            self.assertIn("connect-src 'none'", page)
+            self.assertIn('data-connect="club" disabled', page)
+            self.assertIn('data-connect="token" disabled', page)
+        self.assertEqual(
+            {name for name in site.FILES if name.startswith('frontier-omega-alpha/')},
+            {'frontier-omega-alpha/index.html', 'frontier-omega-alpha/fr.html',
+             'frontier-omega-alpha/frontier.css', 'frontier-omega-alpha/carina.webp',
+             'frontier-omega-alpha/wallet-check.js'},
+        )
+        source = (self.source / 'frontier-omega-alpha' / 'wallet-check.js').read_text()
+        for forbidden in ('eth_sendTransaction', 'wallet_sendCalls', 'localStorage', 'sessionStorage', 'fetch('):
+            self.assertNotIn(forbidden, source)
+        subprocess.run(['node', '--input-type=module', '-e', r"""import assert from 'node:assert/strict';
+const {eligible,signInMessage}=await import('data:text/javascript;base64,'+Buffer.from(process.env.WALLET_SOURCE).toString('base64'));
+const acct='0x'+'12'.repeat(20), other='0x'+'34'.repeat(20), wrap='d4416b13d2b3a9abae7acd5d6c2bbdbe25686401';
+const word=n=>BigInt(n).toString(16).padStart(64,'0');
+const aw=a=>a.replace(/^0x/,'').padStart(64,'0');
+const now=1700000000000, stamp=1700000000;
+const block={hash:'0x'+'11'.repeat(32),number:'0x16',timestamp:'0x'+stamp.toString(16)};
+const qty=n=>'0x'+word(n);
+const rpc=(mode,balance=1000000n*10n**18n)=>({request:async({method,params})=>{
+ if(method==='eth_chainId')return mode==='wrong-chain'?'0x2':'0x1';
+ if(method==='eth_getBlockByNumber')return mode==='reorg'&&params[0]!=='latest'?{...block,hash:'0x'+'22'.repeat(32)}:block;
+ if(method==='eth_getCode')return '0x1234';
+ assert.equal(method,'eth_call');
+ assert.equal(params[1],block.number);
+ const {data,to}=params[0]; const sel=data.slice(0,10);
+ if(sel==='0x313ce567')return qty(18);
+ if(sel==='0x95d89b41')return '0x'+word(32)+word(8)+Buffer.from('AGIALPHA').toString('hex').padEnd(64,'0');
+ if(sel==='0x70a08231'){assert.equal(data.slice(10),aw(acct));return qty(balance);}
+ if(sel==='0x02571be3')return '0x'+aw(mode==='wrapped'||mode==='expired'?wrap:mode==='club-other'?other:acct);
+ if(sel==='0x6352211e')return '0x'+aw(acct);
+ if(sel==='0x0178fe3f')return '0x'+aw(acct)+word(65536)+word(mode==='expired'?stamp:stamp+3600);
+ if(to.toLowerCase()==='0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85'){
+   if(data.length===74)return qty(stamp+3600);
+   if(data.length===10)return qty(7776000);
+ }
+ throw Error('unexpected method '+data);
+}});
+assert.equal(await eligible(rpc('token'),acct,'token','',now),true);
+assert.equal(await eligible(rpc('token',999999n*10n**18n),acct,'token','',now),false);
+assert.equal(await eligible(rpc('club'),acct,'club','founder',now),true);
+assert.equal(await eligible(rpc('wrapped'),acct,'club','founder',now),true);
+assert.equal(await eligible(rpc('expired'),acct,'club','founder',now),false);
+assert.equal(await eligible(rpc('club-other'),acct,'club','founder',now),false);
+await assert.rejects(eligible(rpc('club'),acct,'club','x.y',now),/label/);
+await assert.rejects(eligible(rpc('wrong-chain'),acct,'token','',now),/network/);
+await assert.rejects(eligible(rpc('reorg'),acct,'token','',now),/unavailable/);
+await assert.rejects(eligible(rpc('token'),acct,'token','',now+91000),/unavailable/);
+assert.match(signInMessage('https://montrealai.github.io',acct,'token',now,'nonce'),/does not approve a transaction/);
+console.log('11 wallet qualification checks passed');"""],
+                       check=True, env={**os.environ, 'WALLET_SOURCE': source}, timeout=30)
 
     def test_preferred_home_design_keeps_studio_and_published_anchors(self):
         home = (self.source / 'index.html').read_text()
