@@ -65,8 +65,8 @@ class ResearchSiteTests(unittest.TestCase):
         for name in site.POSSIBILITY_PAGES:
             page = (out / name).read_text()
             self.assertNotIn(site.POSSIBILITY_MARKER, page)
-            self.assertIn('id="shift-anys1"', page)
-            self.assertIn('id="shift-repofactory"', page)
+            for record in site.read_possibilities(self.source):
+                self.assertIn(f'id="shift-{record["id"]}"', page)
             self.assertLess(page.index('id="possibility-shifts"'), page.index('id="research"'))
             self.assertEqual(page.count('src="wallet-check.js"'), 1)
 
