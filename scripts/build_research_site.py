@@ -2,11 +2,15 @@
 """Validate and copy only the public research website; no repository export."""
 import argparse
 import hashlib
+from datetime import date
+from html import escape
 from html.parser import HTMLParser
 import json
 import posixpath
+import re
 from pathlib import Path
 import shutil
+import unicodedata
 from urllib.parse import unquote, urlsplit
 
 PAPERS = (
@@ -75,6 +79,124 @@ EXTERNAL_RESEARCH_REFERENCES = frozenset({
 })
 
 
+POSSIBILITY_INPUT = 'frontier-omega-alpha/possibility-shifts.json'
+POSSIBILITY_PAGES = frozenset({'frontier-omega-alpha/index.html', 'frontier-omega-alpha/fr.html'})
+POSSIBILITY_MARKER = '<!-- FRONTIER_POSSIBILITY_RECORDS -->'
+POSSIBILITY_MAX_BYTES = 24576
+POSSIBILITY_SOURCE_PATTERNS = (
+    r'https://arxiv\.org/abs/[0-9]{4}\.[0-9]{4,5}(?:v[1-9][0-9]*)?',
+    r'https://github\.com/[A-Za-z0-9][A-Za-z0-9-]{0,38}/[A-Za-z0-9_][A-Za-z0-9_.-]{0,99}(?:/releases/tag/[A-Za-z0-9][A-Za-z0-9_.-]{0,99}|/commit/[a-f0-9]{40}|/pull/[1-9][0-9]{0,8})?',
+    r'https://console\.upstage\.ai/docs/models/[a-z0-9][a-z0-9-]{0,79}',
+)
+
+
+def possibility_source(url):
+    return (isinstance(url, str) and len(url) <= 250 and
+            any(re.fullmatch(pattern, url) for pattern in POSSIBILITY_SOURCE_PATTERNS))
+
+
+def _possibility_text(value, limit):
+    if (not isinstance(value, str) or not 1 <= len(value) <= limit or value != value.strip() or
+            any(unicodedata.category(ch) in ('Cc', 'Cf', 'Cs') for ch in value) or
+            any(ch in value for ch in '<>') or
+            re.search(r'https?://|sentinel_|(?:room|task|automation|thread)_id\s*[:=]|\b[\w.+-]+@[\w.-]+\.[A-Za-z]{2,}', value, re.I)):
+        raise ValueError('Invalid possibility public text')
+
+
+def _possibility_keys(value, keys):
+    if not isinstance(value, dict) or set(value) != set(keys):
+        raise ValueError('Unexpected possibility record fields')
+
+
+def read_possibilities(source):
+    source = Path(source)
+    path = source / POSSIBILITY_INPUT
+    if path.is_symlink() or not path.is_file() or path.resolve() != source.resolve() / POSSIBILITY_INPUT:
+        raise ValueError('Not a regular possibility input file')
+    with path.open('rb') as stream:
+        raw = stream.read(POSSIBILITY_MAX_BYTES + 1)
+    if len(raw) > POSSIBILITY_MAX_BYTES:
+        raise ValueError('Possibility data exceeds byte limit')
+
+    def pairs(items):
+        result = {}
+        for key, value in items:
+            if key in result:
+                raise ValueError('Duplicate possibility field')
+            result[key] = value
+        return result
+
+    data = json.loads(raw.decode('utf-8'), object_pairs_hook=pairs)
+    _possibility_keys(data, ('schema', 'records'))
+    if data['schema'] != 'frontier-possibility-shifts/1':
+        raise ValueError('Unsupported possibility schema')
+    records = data['records']
+    if not isinstance(records, list) or not 1 <= len(records) <= 12:
+        raise ValueError('Invalid possibility record count')
+    ids = set()
+    order = []
+    for record in records:
+        _possibility_keys(record, ('id', 'date', 'watch', 'evidence', 'en', 'fr', 'sources'))
+        key, day = record['id'], record['date']
+        if not isinstance(key, str) or not re.fullmatch(r'[a-z0-9][a-z0-9-]{0,63}', key) or key in ids:
+            raise ValueError('Duplicate or invalid possibility ID')
+        if not isinstance(day, str) or not re.fullmatch(r'\d{4}-\d{2}-\d{2}', day):
+            raise ValueError('Invalid possibility date')
+        order.append((-date.fromisoformat(day).toordinal(), key))
+        ids.add(key)
+        if record['watch'] not in ('living-watch', 'possible-now') or record['evidence'] not in ('author-reported', 'proposed-test'):
+            raise ValueError('Invalid possibility evidence type')
+        for lang in ('en', 'fr'):
+            localized = record[lang]
+            _possibility_keys(localized, ('title', 'signal', 'next'))
+            for field, max_chars in (('title', 120), ('signal', 600), ('next', 650)):
+                _possibility_text(localized[field], max_chars)
+        sources = record['sources']
+        if not isinstance(sources, list) or not 1 <= len(sources) <= 3:
+            raise ValueError('Invalid possibility source count')
+        urls = set()
+        for citation in sources:
+            _possibility_keys(citation, ('url', 'en', 'fr'))
+            if not possibility_source(citation['url']) or citation['url'] in urls:
+                raise ValueError('Unapproved or duplicate possibility source')
+            urls.add(citation['url'])
+            _possibility_text(citation['en'], 80)
+            _possibility_text(citation['fr'], 80)
+    if order != sorted(order):
+        raise ValueError('Possibility records must be sorted by descending date then ascending ID')
+    return records
+
+
+def render_possibility_page(page, name, records):
+    if page.count(POSSIBILITY_MARKER) != 1:
+        raise ValueError('The possibility page must contain exactly one render marker')
+    lang = 'fr' if name.endswith('/fr.html') else 'en'
+    watched = {
+        'living-watch': {'en':'Living Possibility Watch', 'fr':'Veille des possibilités'},
+        'possible-now': {'en':'Possible Now · every three hours', 'fr':'Possible Now · toutes les trois heures'},
+    }
+    evidence = {
+        'author-reported': {'en':'Author-reported', 'fr':'Rapporté par les auteurs'},
+        'proposed-test': {'en':'Proposed test', 'fr':'Essai proposé'},
+    }
+    entries = []
+    for item in records:
+        local = item[lang]
+        stage = escape(watched[item['watch']][lang] + ' · ' + item['date'] + ' · ' + evidence[item['evidence']][lang])
+        key = 'shift-' + escape(item['id'])
+        links = ' · '.join(f'<a href="{escape(s["url"])}">{escape(s[lang])}</a>' for s in item['sources'])
+        entries.append(
+            f'<article id="{key}" aria-labelledby="{key}-title">\n'
+            f'          <p><strong>{stage}</strong></p>\n'
+            f'          <h3 id="{key}-title">{escape(local["title"])}</h3>\n'
+            f'          <p>{escape(local["signal"])}</p>\n'
+            f'          <p>{escape(local["next"])}</p>\n'
+            f'          <p>{links}</p>\n'
+            '        </article>'
+        )
+    return page.replace(POSSIBILITY_MARKER, '\n        <hr>\n        '.join(entries))
+
+
 class Links(HTMLParser):
     def __init__(self):
         super().__init__()
@@ -97,7 +219,7 @@ class Links(HTMLParser):
                     self.links.append(attrs[key])
 
 
-def validate(source):
+def validate(source, *, staged=False):
     """Fail closed on changed PDFs, nonlocal files, or broken relative links."""
     source = Path(source)
     for name in FILES:
@@ -112,10 +234,16 @@ def validate(source):
         data = (source / item['file']).read_bytes()
         if not data.startswith(b'%PDF-') or len(data) != item['bytes'] or hashlib.sha256(data).hexdigest() != item['sha256']:
             raise ValueError(f'PDF integrity mismatch: {item["file"]}')
+    records = None if staged else read_possibilities(source)
     parsed = {}
     for name in PAGES:
         parser = Links()
         page = (source / name).read_text()
+        if name in POSSIBILITY_PAGES:
+            if staged and POSSIBILITY_MARKER in page:
+                raise ValueError('Unrendered possibility publication')
+            if not staged:
+                page = render_possibility_page(page, name, records)
         if any(token in page for token in ('PAPER_SHA256_PLACEHOLDER', 'PAPER_PAGECOUNT_PLACEHOLDER', 'TODO_RESULT_', 'SUPER_ALPHA_PAGE_COUNT', 'SUPER_ALPHA_PDF_SHA', 'FLYWHEEL_OMEGA_PAGE_COUNT', 'FLYWHEEL_OMEGA_PDF_SHA', 'SURF_PAGE_COUNT', 'SURF_SHA256', 'SURF_PDF_BYTES', 'CONTINUITY_PAGE_COUNT', 'CONTINUITY_SHA256', 'CONTINUITY_PDF_BYTES', 'CONTINUITY_EN_PAGE_COUNT', 'CONTINUITY_EN_SHA256', 'CONTINUITY_EN_PDF_BYTES', 'CONTINUITY_FR_PAGE_COUNT', 'CONTINUITY_FR_SHA256', 'CONTINUITY_FR_PDF_BYTES')):
             raise ValueError(f'Unresolved publication metadata: {name}')
         parser.feed(page)
@@ -129,7 +257,8 @@ def validate(source):
         for link in parser.links:
             url = urlsplit(link)
             if url.scheme:
-                if link not in EXTERNAL_RESEARCH_REFERENCES and (url.scheme != 'https' or url.netloc != 'github.com'):
+                frontier_source = name in POSSIBILITY_PAGES and possibility_source(link)
+                if not frontier_source and link not in EXTERNAL_RESEARCH_REFERENCES and (url.scheme != 'https' or url.netloc != 'github.com'):
                     raise ValueError(f'Unexpected external link: {link}')
                 continue
             if url.netloc or url.query:
@@ -145,15 +274,19 @@ def validate(source):
 def build(source, output):
     source, output = Path(source), Path(output)
     validate(source)
+    records = read_possibilities(source)
     # Never clean an existing directory: callers must choose an empty staging path.
     if output.is_symlink() or output.exists():
         raise ValueError('Output must be a new directory')
     output.mkdir(parents=True)
     for name in FILES:
         (output / name).parent.mkdir(parents=True, exist_ok=True)
-        shutil.copyfile(source / name, output / name)
+        if name in POSSIBILITY_PAGES:
+            (output / name).write_text(render_possibility_page((source / name).read_text(), name, records))
+        else:
+            shutil.copyfile(source / name, output / name)
     (output / '.nojekyll').write_text('')
-    validate(output)
+    validate(output, staged=True)
     published = {p.relative_to(output).as_posix() for p in output.rglob('*') if p.is_file()}
     if published != set(FILES) | {'.nojekyll'}:
         raise ValueError('Unexpected published file')
