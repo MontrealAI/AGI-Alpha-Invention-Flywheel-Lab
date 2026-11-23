@@ -5,11 +5,13 @@ from pathlib import Path
 import sys
 from tempfile import TemporaryDirectory
 import unittest
+from unittest.mock import Mock
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'scripts'))
 import build_research_site as site
 import frontier_member_value as member
+import frontier_member_first as editions
 
 REVISION = 'a' * 40
 OBSERVED = '2026-11-23T20:20:00Z'
@@ -67,3 +69,37 @@ class MemberValueTests(unittest.TestCase):
                 self.assertEqual(html[language].count('data-mv-record'), len(sample_ledger()['records']))
                 self.assertNotIn('<!-- MV_', html[language])
                 self.assertIn(produced['capabilities']['archive']['sha256'], html[language])
+                self.assertIn('data-edition-run="1"', html[language])
+                self.assertEqual(html[language].count('data-mv-open'), 5)
+                self.assertEqual(member.public_feature(produced, language), '')
+
+    def test_public_recaps_follow_verified_member_editions_and_quiet_runs(self):
+        briefs = member.decision_briefs(sample_ledger())
+        pending = editions.feed(briefs, {}, '100', Mock())
+        self.assertEqual(pending['edition']['source_version'], '2611.09822v3')
+        self.assertIsNone(pending['public_feature'])
+        witness = Mock(return_value=None)
+        self.assertEqual(editions.feed(briefs, pending, '101', witness), pending)
+        witness.assert_called_once_with('100')
+        witness.return_value = OBSERVED
+        featured = editions.feed(briefs, pending, '102', witness)
+        self.assertEqual(featured['public_feature'], {**pending['edition'], 'public_run': '102',
+                                                     'member_checked_at': OBSERVED})
+        quiet = Mock()
+        self.assertEqual(editions.feed(briefs, featured, '103', quiet), featured)
+        quiet.assert_not_called()
+        revised = {**briefs[-1], 'source_version': '2611.09822v4', 'updated_at': '2026-11-23T21:00:00Z'}
+        following = editions.feed([*briefs[:-1], revised], featured, '104', Mock())
+        self.assertIsNone(following['public_feature'])
+        self.assertEqual(following['edition']['source_version'], revised['source_version'])
+
+    def test_confirmation_rejects_wrong_runs_and_unverified_steps(self):
+        finished = {'name': editions.CHECK_STEP, 'conclusion': 'success', 'completed_at': OBSERVED}
+        jobs = [{'name': 'verify-live', 'run_id': 100, 'steps': [{**finished, 'conclusion': 'failure'}]},
+                {'name': 'build', 'run_id': 100, 'steps': [finished]},
+                {'name': 'verify-live', 'run_id': 101, 'steps': [finished]}]
+        request = Mock(side_effect=lambda *_: json.dumps({'jobs': jobs}).encode())
+        self.assertIsNone(editions.witnessed_run('100', request))
+        jobs.append({'name': 'verify-live', 'run_id': 100, 'steps': [finished]})
+        self.assertEqual(editions.witnessed_run('100', request), OBSERVED)
+        self.assertIsNone(editions.witnessed_run('100?elsewhere', request))

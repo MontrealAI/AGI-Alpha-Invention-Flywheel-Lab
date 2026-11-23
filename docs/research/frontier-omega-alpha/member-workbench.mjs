@@ -14,6 +14,7 @@ const words = fr ? {
   abstain:'Adoption opérationnelle en abstention.', checked:'Empreinte cohérente. Vérifiez séparément l’origine et le comparateur.',
   badReceipt:'Reçu invalide ou modifié.', exported:'Reçu exporté localement.',
   consentCleared:'Consentement retiré. Aucun nouveau reçu ne sera préparé.',
+  demonstration:'Démonstration publique terminée.', task:'Analyse locale terminée. L’acceptation indépendante reste à établir.',
   missingCrypto:'Le calcul local reste offert. La préparation de reçus nécessite un navigateur en contexte HTTPS sécurisé.',
 } : {
   tracked:'briefs shown', empty:'No briefs match.',
@@ -25,11 +26,14 @@ const words = fr ? {
   abstain:'Operational adoption remains ABSTAIN.', checked:'Digest matches. Verify origin and the comparator separately.',
   badReceipt:'Invalid or altered receipt.', exported:'Receipt exported locally.',
   consentCleared:'Consent withdrawn. No further receipt will be prepared.',
+  demonstration:'Public demonstration completed.', task:'Local screen completed. Independent acceptance is outstanding.',
   missingCrypto:'Local calculation is available. Receipt tools require a browser in a secure HTTPS context.',
 };
 
 function setupExplorer() {
   const query = id('mv-query');
+  const order = id('mv-order');
+  const grid = id('mv-records');
   const filters = [...document.querySelectorAll('[data-mv-filter]')];
   const normalize = value => value.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase();
   const cards = [...document.querySelectorAll('[data-mv-record]')].map(card => [card, normalize(card.textContent)]);
@@ -45,6 +49,24 @@ function setupExplorer() {
   }
   query.addEventListener('input', update);
   for (const select of filters) select.addEventListener('change', update);
+  order.addEventListener('change', () => {
+    const sorted = order.value === 'newest'
+      ? [...cards].sort(([a], [b]) => b.dataset.observed.localeCompare(a.dataset.observed)) : cards;
+    grid.append(...sorted.map(([card]) => card));
+  });
+  for (const link of member.querySelectorAll('[data-mv-open]')) {
+    link.addEventListener('click', event => {
+      if (member.hidden || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+      const card = id(link.hash.slice(1));
+      const details = card?.querySelector('details');
+      if (!details) return;
+      query.value = '';
+      for (const select of filters) select.value = '';
+      update();
+      details.open = true;
+      details.querySelector('summary').focus({preventScroll: true});
+    });
+  }
   id('mv-filters').hidden = false;
   update();
 }
@@ -171,7 +193,8 @@ ${current.rows.length} ${words.rows} · ${words.floor} ${current.minimum_tokens_
     };
     const list = document.createElement('ul');
     for (const [reason, count] of totals) list.append(text('li', `${labels[reason]} · ${count}`));
-    resultArea.replaceChildren(text('h5', title), text('p', words.abstain), list);
+    const level = frozen.plan?.classification === 'controlled-public-replay' ? words.demonstration : words.task;
+    resultArea.replaceChildren(text('h5', title), text('p', level), text('p', words.abstain), list);
     resultArea.hidden = false;
     resultArea.focus();
     status.textContent = words.sync;

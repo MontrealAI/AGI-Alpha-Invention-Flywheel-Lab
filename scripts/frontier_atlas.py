@@ -18,6 +18,7 @@ from urllib.parse import quote, unquote
 import build_research_site as site
 import frontier_public_watch as watch
 import frontier_member_value as member
+import frontier_member_first as editions
 
 
 INBOX_ANCHOR = '5db5637d42c0f675cc7689674d5db7ceb91930da'
@@ -303,20 +304,13 @@ def render(page, lang, ledger, selected, references, sealed_digest):
     for rows in current.values():
         rows.sort(key=lambda row: (row[2], row[1]), reverse=True)
 
-    entries, updates, watch_updates = [], [], []
+    entries = []
     for entry in ledger['records']:
         if entry['editorial']:
             latest = entry['editorial'][-1]['record']
             entries.append(site.possibility_card(latest, lang, archive_links(entry, lang)))
-            if len(updates) < 2:
-                updates.append(f'<li><a href="#{entry["id"]}">{escape(latest[lang]["title"])}</a></li>')
         else:
             entries.append(reference_card(entry, lang, active))
-            for versions in entry['sources'].values():
-                newest = versions[-1]
-                watch_updates.append((newest['observed_at'], entry['id'], newest['title']))
-    for _, key, title in sorted(watch_updates, reverse=True)[:2]:
-        updates.append(f'<li><a href="#{escape(key)}">{escape(title)}</a></li>')
     records = f'<div class="atlas-grid" id="atlas-records" data-atlas-digest="{sealed_digest}">{"".join(entries)}</div>'
     fr = lang == 'fr'
     count = len(entries)
@@ -330,7 +324,6 @@ def render(page, lang, ledger, selected, references, sealed_digest):
               f'<a href="{LEDGER}">{data}</a><a href="{RELEASE}">{report}</a>'
               f'<a href="{RUNS_URL}">{"Historique des mises à jour" if fr else "Update history"}</a></div>')
     for marker, contents in ((site.POSSIBILITY_MARKER, records), (watch.MARKER, watch.render(current, lang)[0]),
-                             ('<!-- FRONTIER_MEMBER_UPDATES -->', f'<ul>{"".join(updates)}</ul>'),
                              ('<!-- FRONTIER_ATLAS_HEALTH -->', health)):
         if page.count(marker) != 1:
             raise ValueError('Unexpected release template')
@@ -367,13 +360,15 @@ def prepare(output, revision, event, run, request=source_with_retry):
         raise ValueError('Public ledger exceeds the supported single-file transfer limit')
     directory = output / 'frontier-omega-alpha'
     sealed = digest(raw)
-    member_view, member_pages, member_digest = member.prepare(directory, ledger, sealed)
+    member_view, member_pages, member_digest = member.prepare(directory, ledger, sealed, run,
+        previous.get('member_first'), lambda prior: editions.witnessed_run(prior, request))
     for page, lang in watch.PAGES.items():
         source = Path(EDITORIAL_PATH).parent / page
         html = render(source.read_text(), lang, ledger, selected, references, sealed)
-        if html.count(member.MARKER) != 1:
+        if html.count(member.MARKER) != 1 or html.count(member.PUBLIC_FEATURE_MARKER) != 1:
             raise ValueError('Unexpected public member template')
-        (directory / page).write_text(html.replace(member.MARKER, member_pages[lang]))
+        html = html.replace(member.MARKER, member_pages[lang])
+        (directory / page).write_text(html.replace(member.PUBLIC_FEATURE_MARKER, member.public_feature(member_view, lang)))
     (directory / LEDGER).write_bytes(raw)
     files = [(file.relative_to(output).as_posix(), digest(file.read_bytes()))
              for file in sorted(output.rglob('*')) if file.is_file()]
@@ -383,6 +378,7 @@ def prepare(output, revision, event, run, request=source_with_retry):
     release = {'schema': 'frontier-omega-alpha/atlas-release-v1', 'source_commit': revision,
                'content_updated_at': ledger['updated_at'], 'ledger_sha256': sealed,
                'member_value_sha256': member_digest,
+               'member_first': member_view['member_first'],
                'public_capability_sha256': {v['download']: v['sha256'] for v in member_view['capabilities'].values()},
                'records': len(ledger['records']), 'states': dict(Counter(row['state'] for row in ledger['records'])),
                'projection_sha256': digest(canonical_json([files, preview])),
@@ -414,6 +410,9 @@ def verify_live(expected, revision, run, request=source_with_retry):
     member_evidence = json.loads(member_raw)
     if member_evidence['atlas_sha256'] != expected or member_evidence['publication'] != 'public-file':
         raise ValueError('Live member evidence does not bind the current public Atlas')
+    sequenced = member_evidence['member_first']
+    if sequenced != release['member_first']:
+        raise ValueError('Member First sequencing receipt differs from the publication')
     for filename in (member.ENDPOINT_ZIP, member.ARCHIVE_ZIP):
         if digest(request(watch.SITE + filename, 500_000)) != release['public_capability_sha256'][filename]:
             raise ValueError('Live tool bytes do not match')
@@ -431,6 +430,13 @@ def verify_live(expected, revision, run, request=source_with_retry):
         if ('id="member-value"' not in workspace or 'id="mv-endpoint-run"' not in workspace
                 or any(marker in html for marker in (member.MARKER, '<!-- MV_SAMPLE -->'))):
             raise ValueError('Unpublished member-workbench rendering')
+        edition = sequenced['edition']
+        public = sequenced['public_feature']
+        if (f'id="mf-edition" data-edition-run="{edition["member_run"]}"' not in workspace
+                or 'id="mf-edition"' in atlas or bool(public) != ('id="atlas-editorial"' in atlas)
+                or (public and f'id="atlas-editorial" data-public-run="{public["public_run"]}"' not in atlas)):
+            raise ValueError('Member edition or public editorial placement does not match its release')
+    release['live_checked_at_utc'] = datetime.now(timezone.utc).isoformat(timespec='seconds')
     return release
 
 

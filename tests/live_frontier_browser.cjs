@@ -3,6 +3,7 @@
 /* Run against the public Pages URLs. Wallet permissions are never requested
    from a real wallet. The provider fixture is isolated to its own browser page. */
 const assert = require('node:assert/strict');
+const {createHash} = require('node:crypto');
 const {readFile} = require('node:fs/promises');
 const { chromium } = require('playwright-core');
 
@@ -23,6 +24,8 @@ async function publicAtlas(browser, language, width) {
     const count = await inventory.count();
     assert.ok(count >= 8);
     assert.equal(await page.locator('#member').isVisible(), false);
+    assert.equal(await page.locator('#mf-edition').isVisible(), false);
+    assert.match(await page.locator('.gate-head').innerText(), /fichiers publics|public GitHub Pages files/i);
     const viewport = await page.evaluate(() => ({
       width: document.documentElement.clientWidth,
       scroll: document.documentElement.scrollWidth,
@@ -72,7 +75,7 @@ function fakeWallet() {
   const addressWord = value => value.slice(2).padStart(64, '0');
   const abi = value => '0x' + word(value);
   const listeners = new Map();
-  window.walletScenario = { balance: 1_000_000n, expiration: false, chain: '0x1', methods: [], signed: [] };
+  window.walletScenario = { account, balance: 1_000_000n, expiration: false, chain: '0x1', methods: [], signed: [] };
   const state = window.walletScenario;
   const block = () => ({ hash: '0x' + '11'.repeat(32), number: '0x16',
     timestamp: '0x' + Math.floor(Date.now() / 1000).toString(16) });
@@ -85,7 +88,7 @@ function fakeWallet() {
       if (method === 'eth_chainId') return state.chain;
       if (method === 'eth_getBlockByNumber') return block();
       if (method === 'eth_getCode') return '0x1234';
-      if (method === 'eth_requestAccounts' || method === 'eth_accounts') return [account];
+      if (method === 'eth_requestAccounts' || method === 'eth_accounts') return [state.account];
       if (method === 'personal_sign') {
         if (state.cancel) throw {code: 4001};
         state.signed.push(params[0]);
@@ -97,8 +100,8 @@ function fakeWallet() {
       if (selector === '0x313ce567') return abi(18);
       if (selector === '0x95d89b41') return '0x' + word(32) + word(8) + '414749414c504841'.padEnd(64, '0');
       if (selector === '0x70a08231') {
-        if (data.slice(10) !== addressWord(account)) throw Error('Wrong balance account');
-        return abi(state.balance * 10n ** 18n);
+        if (data.slice(10) !== addressWord(state.account)) throw Error('Wrong balance account');
+        return abi(state.account === account ? state.balance * 10n ** 18n : 0n);
       }
       if (selector === '0x02571be3') return '0x' + addressWord(account);
       if (to.toLowerCase() === '0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85') {
@@ -113,6 +116,15 @@ function fakeWallet() {
 async function memberWorkbench(page, language) {
   const workbench = page.locator('#member-value');
   assert.equal(await workbench.isVisible(), true);
+  assert.match(await page.locator('#workspace-title').innerText(), /MEMBER FIRST Ω/);
+  assert.equal(await page.locator('.mf-verified').isVisible(), true);
+  assert.match(await page.locator('.mf-disclosure').innerText(), /public/);
+  assert.equal(await page.locator('.mv-nav a').count(), 4);
+  const featured = page.locator('#mf-edition');
+  await featured.waitFor({state:'visible'});
+  assert.equal(await featured.locator('dl dt').count(), 5);
+  const openDecision = featured.locator('[data-mv-open]');
+  const target = page.locator(await openDecision.getAttribute('href'));
   const filter = page.locator('#mv-query');
   const count = await page.locator('[data-mv-record]').count();
   assert.ok(count >= 8);
@@ -123,9 +135,24 @@ async function memberWorkbench(page, language) {
   await page.locator('#mv-filters summary').click();
   await page.locator('#mv-action').selectOption('ABSTAIN');
   assert.equal(await page.locator('[data-mv-record]:visible').count(), 1);
-  await page.locator('#mv-action').selectOption('');
-  assert.equal(await page.locator('#tool-endpoint a[download]').count(), 1);
-  assert.equal(await page.locator('#tool-archive a[download]').count(), 1);
+  await openDecision.click();
+  assert.equal(await target.locator('details').evaluate(node => node.open), true);
+  assert.equal(await page.locator('#mv-action').inputValue(), '');
+  await page.locator('#mv-order').selectOption('newest');
+  const timestamps = await page.locator('[data-mv-record]').evaluateAll(nodes => nodes.map(n => n.dataset.observed));
+  assert.deepEqual(timestamps, [...timestamps].sort().reverse());
+  const memberData = await (await page.request.get(base + 'member-value.json')).json();
+  assert.equal(await featured.getAttribute('data-edition-run'), memberData.member_first.edition.member_run);
+  for (const key of ['endpoint', 'archive']) {
+    const tool = page.locator('#tool-' + key);
+    await tool.locator('.mf-instructions summary').click();
+    assert.ok(await tool.locator('.mf-instructions pre').isVisible());
+    const download = page.waitForEvent('download');
+    await tool.locator('a[download]').click();
+    const artifact = await readFile(await (await download).path());
+    assert.equal(createHash('sha256').update(artifact).digest('hex'), memberData.capabilities[key].sha256);
+    await tool.locator('.mf-instructions summary').click();
+  }
   assert.equal(await page.locator('#mv-export').isEnabled(), false);
 
   const context = page.context();
@@ -138,6 +165,7 @@ async function memberWorkbench(page, language) {
     await output.waitFor({state:'visible'});
     assert.match(await output.innerText(), /140/);
     assert.match(await output.innerText(), /ABSTAIN|abstention/i);
+    assert.match(await output.innerText(), /demonstration|démonstration/i);
     assert.equal(await page.locator('#mv-export').isEnabled(), false);
     await page.locator('#mv-consent').check();
     await page.locator('#mv-consent').uncheck();
@@ -195,6 +223,7 @@ async function walletPaths(browser, language) {
     await page.evaluate(() => { window.walletScenario.cancel = false; });
     await token.click();
     await member.waitFor({ state: 'visible' });
+    assert.equal(await page.locator(':focus').getAttribute('id'), 'workspace-title');
     await page.locator('#open-brief').click();
     await brief.waitFor({ state: 'visible' });
     assert.match(await brief.innerText(), /1\.2/);
@@ -219,15 +248,21 @@ async function walletPaths(browser, language) {
     await page.locator('#open-brief').click();
     await brief.waitFor({ state: 'visible' });
     assert.match(await brief.innerText(), /1\.2/);
-    assert.ok(await page.locator('.member-updates a[href^="#shift-"]').count() > 0);
-    assert.ok(await page.locator('.member-updates a[href^="#watch-"]').count() > 0);
+    assert.equal(await page.locator('#mf-edition').isVisible(), true);
+    assert.ok(await page.locator('.mv-timeline a[href^="#decision-watch-"]').count() > 0);
     await page.locator('#lock').click();
     await member.waitFor({ state: 'hidden' });
     await club.click();
     await member.waitFor({ state: 'visible' });
 
-    await page.evaluate(() => window.walletScenario.emit('accountsChanged', []));
+    await page.evaluate(() => {
+      window.walletScenario.account = '0x' + '34'.repeat(20);
+      window.walletScenario.emit('accountsChanged', [window.walletScenario.account]);
+    });
     await member.waitFor({ state: 'hidden' });
+    assert.equal(await page.locator('#mf-edition').isVisible(), false);
+    await club.click();
+    await page.waitForFunction(regex => new RegExp(regex).test(document.getElementById('status').textContent), denied.source);
     assert.equal(await brief.textContent(), '');
     const state = await page.evaluate(() => ({
       methods: window.walletScenario.methods, signed: window.walletScenario.signed
@@ -239,7 +274,8 @@ async function walletPaths(browser, language) {
     assert.equal(new Set(messages).size, 3);
     checks.push({ kind: 'member-ui', language, provider: 'isolated declared test wallet',
       eligibleRoutes: ['AGI CLUB', 'AGIALPHA'], rejects: ['under balance', 'expired name', 'canceled signature'],
-      brief: '001 v1.2', publicBenchmarkedScreen: 140, offlineRunAndReceipt: true, receiptTamperDenial: true, lock: true, expiry: true, reconnect: true, accountRevocation: true });
+      brief: '001 v1.2', memberFirstEntry: true, featuredBrief: true, downloadHashes: true, publicBenchmarkedScreen: 140,
+      offlineRunAndReceipt: true, receiptTamperDenial: true, lock: true, expiry: true, reconnect: true, accountSwitchDenial: true });
   } finally {
     await page.close();
   }
