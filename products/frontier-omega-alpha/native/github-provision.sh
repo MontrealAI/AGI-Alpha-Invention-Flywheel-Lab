@@ -2,6 +2,13 @@
 set -euo pipefail
 umask 077
 
+: "${FRONTIER_ALPHA_CHECKPOINT_TOKEN:?Missing approved checkpoint writer token}"
+: "${GH_TOKEN:?Missing Pages dispatch token}"
+if [[ "$FRONTIER_ALPHA_CHECKPOINT_TOKEN" == "$GH_TOKEN" ]]; then
+  echo 'Checkpoint writes and Pages dispatch require separate credentials' >&2
+  exit 1
+fi
+
 state_ref='refs/heads/frontier-omega-alpha-state'
 origin='https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab.git'
 published='https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/frontier-omega-alpha/library.json'
@@ -26,15 +33,18 @@ else
   [[ "$absence" == 2 ]]
 fi
 
-node "$product/native/operator.mjs" run "$product/native/approved-releases.json" "$previous" "$public" "$work/next"
+env -u FRONTIER_ALPHA_CHECKPOINT_TOKEN -u GH_TOKEN \
+  node "$product/native/operator.mjs" run "$product/native/approved-releases.json" "$previous" "$public" "$work/next"
 unset FRONTIER_ALPHA_PUBLISH_KEY FRONTIER_ALPHA_RPC
 cp "$work/next/state.json" "$state_git/state.json"
 cp "$work/next/library.json" "$state_git/library.json"
 git -C "$state_git" add -- state.json library.json
 git -C "$state_git" -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' \
   -c core.hooksPath=/dev/null commit -qm 'Checkpoint encrypted FRONTIER Ω ALPHA publication'
-GIT_TERMINAL_PROMPT=0 git -C "$state_git" -c credential.helper= -c 'credential.helper=!gh auth git-credential' \
+GH_TOKEN="$FRONTIER_ALPHA_CHECKPOINT_TOKEN" GIT_TERMINAL_PROMPT=0 \
+  git -C "$state_git" -c credential.helper= -c 'credential.helper=!gh auth git-credential' \
   push -q origin "HEAD:$state_ref"
+unset FRONTIER_ALPHA_CHECKPOINT_TOKEN
 
 # A successful state write may outlive a failed dispatch. Repairs use the published bytes as their receipt.
 if curl -q --silent --fail --max-time 20 --max-filesize 6291456 --proto '=https' "$published" -o "$work/published.json" &&

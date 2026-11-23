@@ -8,7 +8,10 @@ import sys
 from urllib.request import HTTPRedirectHandler, Request, build_opener
 
 REPOSITORY = 'MontrealAI/AGI-Alpha-Invention-Flywheel-Lab'
-ENVIRONMENTS = {'frontier-omega-alpha-provision', 'frontier-intelligence-intake'}
+PROVISION = 'frontier-omega-alpha-provision'
+ENVIRONMENTS = {PROVISION, 'frontier-intelligence-intake'}
+CHECKPOINT = '/rules/branches/frontier-omega-alpha-state'
+REQUIRED_CHECKS = {('active-worker-bounds054', 15368), ('phase-code-qualification', 15368)}
 API = 'https://api.github.com/repos/' + REPOSITORY
 LIMIT = 1024 * 1024
 
@@ -40,12 +43,17 @@ def qualify(environment, commit, read=fetch):
     rules = read('/rules/branches/main')
     if not any(row['type'] == 'pull_request'
                and row['parameters'].get('required_approving_review_count', 0) >= 1
+               and row['parameters'].get('dismiss_stale_reviews_on_push') is True
                and row['parameters'].get('require_last_push_approval') is True for row in rules):
-        raise ValueError('A main ruleset must enforce independent review of the latest push')
+        raise ValueError('A main ruleset must enforce independent review of the latest push and dismiss stale approvals')
     if not any(row['type'] == 'required_status_checks'
                and row['parameters'].get('strict_required_status_checks_policy') is True
-               and row['parameters'].get('required_status_checks') for row in rules):
-        raise ValueError('A main ruleset must enforce status checks on up-to-date code')
+               and REQUIRED_CHECKS <= {(check['context'], check.get('integration_id'))
+                                       for check in row['parameters'].get('required_status_checks', [])}
+               for row in rules):
+        raise ValueError('A main ruleset must enforce both approved GitHub Actions status checks on up-to-date code')
+    if not {'deletion', 'non_fast_forward'} <= {rule['type'] for rule in rules}:
+        raise ValueError('A main ruleset must prohibit deletion and non-fast-forward updates')
 
     path = '/environments/' + environment
     settings = read(path)
@@ -60,6 +68,18 @@ def qualify(environment, commit, read=fetch):
     if (branches['total_count'] != 1
             or [(row['name'], row.get('type')) for row in branches['branch_policies']] != [('main', 'branch')]):
         raise ValueError('Use exactly one deployment policy of type branch for main')
+    if environment == PROVISION:
+        checkpoint = read(CHECKPOINT)
+        writer = [rule for rule in checkpoint if rule['type'] in {'creation', 'update'}]
+        if {rule['type'] for rule in writer} != {'creation', 'update'} or any(not rule.get('ruleset_id') for rule in writer):
+            raise ValueError('The production checkpoint must restrict both creation and forward updates')
+        if any(rule.get('parameters', {}).get('update_allows_fetch_and_merge') is True for rule in writer):
+            raise ValueError('The production checkpoint must restrict every update to the approved writer')
+        writer_ids = {rule['ruleset_id'] for rule in writer}
+        independent_types = {rule['type'] for rule in checkpoint
+                             if rule.get('ruleset_id') and rule['ruleset_id'] not in writer_ids}
+        if not {'deletion', 'non_fast_forward'} <= independent_types:
+            raise ValueError('The production checkpoint must separate writer exceptions from immutability rules')
 
 
 def main():
