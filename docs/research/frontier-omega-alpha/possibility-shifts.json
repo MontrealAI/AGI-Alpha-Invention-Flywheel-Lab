@@ -46,6 +46,34 @@
           "fr": "Prépublication RepoFactory"
         }
       ]
+    },
+    {
+      "id": "qwen-harness-adapter",
+      "date": "2026-11-22",
+      "watch": "possible-now",
+      "evidence": "author-reported",
+      "en": {
+        "title": "Qwen harness adapter: a promising lead stopped by a matched test",
+        "signal": "The downloadable Qwen3.8-27B harness-RL adapter suggested a hypothesis: could a local model replace repeated manual choices in research-record maintenance?",
+        "next": "Bounded follow-up: both base and adapter arms returned no completed answer in 300 seconds (0/12); a direct validator passed 12/12. Keep the deterministic approach for this workload. This single CPU run per configuration does not rule out other hardware or tasks."
+      },
+      "fr": {
+        "title": "Adaptateur Qwen : un essai comparatif a écarté la piste",
+        "signal": "L’adaptateur téléchargeable de Qwen3.8-27B, entraîné par renforcement avec un environnement d’agent, ouvrait une piste : un modèle local pouvait-il remplacer des choix manuels répétés lors de la mise à jour de fiches de recherche?",
+        "next": "Essai encadré : le modèle de base et celui avec l’adaptateur n’ont terminé aucune réponse en 300 secondes (0/12). Un validateur direct a réussi les 12 cas. Conserver la méthode déterministe pour cette tâche. Un seul essai sur processeur par configuration ne permet pas de conclure pour d’autres matériels ou tâches."
+      },
+      "sources": [
+        {
+          "url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/pull/546",
+          "en": "Reviewed public research handoff",
+          "fr": "Transmission de recherche publique examinée"
+        },
+        {
+          "url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/pull/557",
+          "en": "Published matched trial and scope",
+          "fr": "Essai comparatif et portée publiés"
+        }
+      ]
     }
   ]
 }
