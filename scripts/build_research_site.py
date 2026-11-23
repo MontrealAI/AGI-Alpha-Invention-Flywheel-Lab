@@ -68,6 +68,8 @@ FILES = PAPERS + PAGES + ASSETS + ('publication-manifest.json',)
 PUBLIC_SITE = 'https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/'
 EXTERNAL_RESEARCH_REFERENCES = frozenset({
     'https://bbbc.broadinstitute.org/BBBC007',
+    'https://math.mit.edu/~drew/grh/',
+    'https://leanprover-community.github.io/blog/posts/riemann-hypothesis/',
 })
 
 
