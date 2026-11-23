@@ -1,0 +1,69 @@
+name: Tender244 independent primary-source contradiction witness
+on:
+  pull_request:
+    paths:
+      - 'research/tender-sourceguard244/**'
+      - 'tools/tender_sourceguard244.py'
+      - 'tests/test_tender_sourceguard244.py'
+      - '.github/workflows/tender-sourceguard244.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: tender244-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
+jobs:
+  source-witness:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record actual hosted start before resource-consuming steps
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - name: Exact source checkout without persistent credentials
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - name: Assert exact executing source
+        env:
+          EXPECTED_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          test "$(git rev-parse HEAD)" = "$EXPECTED_SHA"
+          test -f research/tender-sourceguard244/PROTOCOL.md
+          test -f research/tender-sourceguard244/CASE_30008508.json
+          test -f tools/tender_sourceguard244.py
+          test -f tests/test_tender_sourceguard244.py
+      - name: Run independent frozen controls with standard Python
+        run: python3 -B -m unittest discover -s tests -p test_tender_sourceguard244.py -v
+      - name: Reconcile actual public-source witness without network or bid
+        run: |
+          mkdir -p "$RUNNER_TEMP/tender244"
+          python3 -B tools/tender_sourceguard244.py --input research/tender-sourceguard244/CASE_30008508.json > "$RUNNER_TEMP/tender244/RESULT.json"
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib, json, os, subprocess
+          p=Path(os.environ["RUNNER_TEMP"])/"tender244"
+          r=json.loads((p/"RESULT.json").read_text())
+          assert r["observed_official_instant_utc"]=="2026-11-23T19:00:00+00:00"
+          assert r["schedule_status"]=="INDETERMINATE"
+          assert r["final_current_deadline_verified"] is False
+          assert r["commercial_decision"]=="HOLD_NO_BID"
+          assert r["external_discrepancies"][0]["conflicts_with_known_official"] is True
+          sha=subprocess.check_output(["git","rev-parse","HEAD"],text=True).strip()
+          receipt={"schema":"tender-sourceguard244/receipt/v1","executing_sha":sha,"result":r,
+                   "protocol_sha256":hashlib.sha256(Path("research/tender-sourceguard244/PROTOCOL.md").read_bytes()).hexdigest(),
+                   "test_sha256":hashlib.sha256(Path("tests/test_tender_sourceguard244.py").read_bytes()).hexdigest(),
+                   "implementation_sha256":hashlib.sha256(Path("tools/tender_sourceguard244.py").read_bytes()).hexdigest(),
+                   "source_pdf_byte_hashes":None,"current_official_amendment_inventory":None,
+                   "actual_host_billing_usd":None,"buyer_payments_usd":None,"qualified_native_profit_usd":None}
+          (p/"PUBLIC.json").write_text(json.dumps(receipt,sort_keys=True,indent=2)+"\n")
+          PY
+      - name: Preserve compact nonprivate source receipt
+        if: success()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: tender244-${{ github.event.pull_request.head.sha || github.sha }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/tender244/PUBLIC.json
+          if-no-files-found: error
+          retention-days: 7
