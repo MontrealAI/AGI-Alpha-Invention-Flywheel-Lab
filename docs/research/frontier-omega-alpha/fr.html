@@ -65,9 +65,69 @@
         <h2 id="workspace-title" tabindex="-1">Espace de recherche public</h2>
         <button id="lock" class="quiet" type="button">Verrouiller la session</button>
       </div>
-      <p><a href="#research">Voir les résultats de recherche →</a></p>
+      <ul class="packet-shortcuts">
+        <li><a href="#packet-lean">Lean 4.36</a></li>
+        <li><a href="#packet-qwen">Qwen GGUF</a></li>
+        <li><a href="#packet-receipts">Rapports de preuve</a></li>
+        <li><a href="#packet-retrofit">Mise à niveau ALPHA-1</a></li>
+      </ul>
     </section>
-    <section class="research" id="research" aria-labelledby="method-title">
+    <section class="research" id="research" aria-labelledby="public-results-title">
+      <div class="frame">
+        <h2 id="public-results-title">Dossiers publics de recherche</h2>
+        <p class="method-intro">Consultez la question étudiée, le résultat et la portée des preuves. Chaque dossier donne accès aux pièces justificatives.</p>
+        <div class="packets">
+          <article class="packet" id="packet-lean" aria-labelledby="packet-lean-title">
+            <p class="packet-meta">Version mise à l’essai <span aria-hidden="true">·</span> <time datetime="2026-11-16">16 novembre 2026</time></p>
+            <h3 id="packet-lean-title">Prouver l’équivalence sans ouvrir la boîte noire</h3>
+            <p>Lean 4.36 introduit <code>bv_decide +uf</code>. La tactique peut raisonner sur deux appels à une fonction dont l’implémentation est inconnue si l’on démontre que leurs arguments booléens ou leurs vecteurs de bits coïncident.</p>
+            <p>Nous avons comparé Lean 4.35 et 4.36 sur deux preuves portant sur une échéance codée sur 32 bits. La nouvelle tactique a établi les deux preuves avec la version 4.36. La congruence explicite y parvenait déjà avec la version 4.35. Un décodeur indépendant a vérifié 69 640 mots et fourni un contre-exemple pour la variante volontairement erronée, que la nouvelle tactique a rejetée.</p>
+            <p>L’essai fournit un schéma de preuve réutilisable pour des transformations derrière une interface abstraite. Le temps d’exécution et la correction du lecteur complet restent à établir.</p>
+            <ul class="packet-evidence">
+              <li><a href="https://lean-lang.org/doc/reference/latest/releases/v4.36.0/">Notes de version de Lean 4.36</a></li>
+              <li><a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/5cced81256c965797988cd682fb5f910fe72c981/products/frontier-omega-alpha/evidence/frontier-cycle.json">Comparaison enregistrée</a></li>
+              <li><a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/5cced81256c965797988cd682fb5f910fe72c981/products/frontier-omega-alpha/GITHUB-NATIVE.md#reproduire-lexpérience-sur-les-versions-de-lean">Reproduire la comparaison de preuves</a></li>
+            </ul>
+          </article>
+          <article class="packet" id="packet-qwen" aria-labelledby="packet-qwen-title">
+            <p class="packet-meta">Essai sur processeur <span aria-hidden="true">·</span> <time datetime="2026-11-22">22 novembre 2026</time></p>
+            <h3 id="packet-qwen-title">Le validateur direct l’emporte sur l’essai local du modèle</h3>
+            <p>Un modèle local Qwen 27B, avec ou sans adaptateur GGUF, peut-il choisir une correction valide dans chacun de 12 cas construits de maintenance de dossiers de recherche? Les deux configurations ont reçu la même consigne et disposaient de six fils d’exécution et de 300 secondes sur la même machine.</p>
+            <p>Aucune des deux configurations n’a terminé sa réponse. Le comparateur direct a essayé les mêmes corrections avec le validateur de schéma existant et résolu les 12 cas en 1,15 ms.</p>
+            <p>La validation déterministe reste le meilleur choix pour cette tâche. L’essai compte un passage par configuration et ne permet pas de conclure sur d’autres machines ou d’autres tâches.</p>
+            <ul class="packet-evidence">
+              <li><a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/5cced81256c965797988cd682fb5f910fe72c981/products/frontier-omega-alpha/evidence/qwen-gguf-maintenance.json">Données d’essai, consigne et empreintes des fichiers</a></li>
+              <li><a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/5cced81256c965797988cd682fb5f910fe72c981/products/frontier-omega-alpha/INTELLIGENCE-BRIDGE.md#qwen-gguf-matched-trial">Reproduire l’essai comparatif</a></li>
+            </ul>
+          </article>
+          <article class="packet" id="packet-receipts" aria-labelledby="packet-receipts-title">
+            <p class="packet-meta">Rejeu des rapports <span aria-hidden="true">·</span> <time datetime="2026-11-22">22 novembre 2026</time></p>
+            <h3 id="packet-receipts-title">Examiner des dépendances formelles à partir des journaux publiés</h3>
+            <p>Les journaux publics d’un grand projet Lean permettent un premier examen avant d’entreprendre une compilation intégrale. Nous avons figé sept pièces publiques portant sur sept déclarations liées aux résultats de Riemann et de Dirichlet ainsi qu’aux critères de Robin et de Lagarias.</p>
+            <p>L’analyseur réutilisable et un vérificateur direct programmé séparément ont donné les résultats attendus dans les 14 cas, dont 12 cas modifiés ou non enregistrés. La seconde série a rechargé le profil conservé après la première.</p>
+            <p>L’essai valide le contrôle des énoncés et des axiomes permis dans les rapports retenus. Le rejeu n’a pas exécuté de noyau de preuve. La vérification directe a donné les mêmes résultats que l’analyseur conservé, et le bénéfice propre à sa réutilisation reste à établir.</p>
+            <ul class="packet-evidence">
+              <li><a href="https://math.mit.edu/~drew/grh/">Dossier de vérification du MIT</a></li>
+              <li><a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/5cced81256c965797988cd682fb5f910fe72c981/products/frontier-omega-alpha/evidence/engineering-receipt.json">Résultats du rejeu et empreintes des sources</a></li>
+              <li><a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/5cced81256c965797988cd682fb5f910fe72c981/products/frontier-omega-alpha/research/protocol.json">Critères d’acceptation figés</a></li>
+            </ul>
+          </article>
+          <article class="packet" id="packet-retrofit" aria-labelledby="packet-retrofit-title">
+            <p class="packet-meta">Rejeu technique <span aria-hidden="true">·</span> <time datetime="2026-11-22">22 novembre 2026</time></p>
+            <h3 id="packet-retrofit-title">Repérer une mise à niveau documentée à 400 °C</h3>
+            <p>La nouvelle tête HT Hotend de Prusa porte la limite documentée de la buse de 290 °C à 400 °C sur les configurations CORE One compatibles. Le catalogue exclut explicitement les configurations INDX.</p>
+            <p>L’ajout de la mise à niveau datée au catalogue a fourni une option documentée dans 7 des 24 demandes d’essai. La comparaison directe en SQL a reproduit les 24 décisions. Trois implémentations ont aussi donné les mêmes résultats sur les 18 cas d’un essai distinct consacré aux procédés.</p>
+            <p>L’expérience porte sur des décisions de catalogue pour des demandes construites. La performance physique, les commandes réelles, les paiements et un gain causal de réutilisation du premier outil restent à mesurer.</p>
+            <ul class="packet-evidence">
+              <li><a href="https://blog.prusa3d.com/ht-hotend-is-out-plus-we-offer-new-materials-and-hightemp-sheets-for-core-one-l_138625/">Annonce du fabricant Prusa</a></li>
+              <li><a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/5cced81256c965797988cd682fb5f910fe72c981/products/frontier-omega-alpha/research/economic_alpha/qualification.json">Résultats figés et comparaisons</a></li>
+              <li><a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/5cced81256c965797988cd682fb5f910fe72c981/products/frontier-omega-alpha/ALPHA-1.md#exécution-et-essai-commercial">Reproduire la comparaison de catalogue</a></li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+    <section class="research" id="method" aria-labelledby="method-title">
       <div class="frame">
         <h2 id="method-title">De la possibilité à la preuve, plus rapidement.</h2>
         <p class="method-intro">Nous repérons ce qui change dans le champ du possible, en tirons des hypothèses testables et conservons les méthodes et les outils qui servent aux expériences suivantes.</p>
@@ -79,13 +139,6 @@
         <li><h3>Registre des acquis</h3><p>Voir les acquis conservés et ce qu’ils ont rendu possible dans un travail ultérieur.</p></li>
         <li><h3>Archives de recherche</h3><p>Consulter les versions des méthodes, des pièces justificatives et des résultats reproductibles.</p></li>
         </ul>
-      </div>
-    </section>
-    <section class="frame privacy" aria-labelledby="public-results-title">
-      <h2 id="public-results-title">Résultats publics de recherche</h2>
-      <div>
-        <p><strong>Vérifié par un essai comparatif.</strong> Lean 4.36 a vérifié deux preuves sur des vecteurs de bits qui établissent l’équivalence des entrées d’une règle sans examiner son fonctionnement. Les preuves explicites ont aussi réussi avec Lean 4.35. La nouvelle tactique simplifie cette étape pour les cas testés. <a href="https://github.com/leanprover/lean4/releases/tag/v4.36.0">Notes de version de Lean 4.36</a></p>
-        <p><strong>Hypothèse réfutée dans le temps de calcul fixé.</strong> Les deux configurations Qwen GGUF ont atteint la limite de 300 secondes. Le validateur direct a résolu les 12 cas de maintenance de fiches de publication en 1,15 ms. <a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/pull/545">Comparaison et procédure de reproduction</a></p>
       </div>
     </section>
     <section class="frame privacy" id="privacy" aria-labelledby="privacy-title">

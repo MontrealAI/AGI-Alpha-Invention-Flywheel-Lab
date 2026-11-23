@@ -102,8 +102,24 @@ button:disabled { cursor: wait; opacity: .76; }
 .workspace-content article { margin-top: 1rem; }
 .workspace-content article p + p { margin-top: .6rem; }
 .workspace-content article h3 { color: var(--gold); margin-bottom: .65rem; }
+.packet-shortcuts {
+  display: flex; flex-wrap: wrap; gap: .35rem 1.35rem; padding: .65rem 1.4rem; list-style: none;
+}
+.packet-shortcuts a, .packet-evidence a { color: var(--gold); text-underline-offset: .22em; }
+.packet-shortcuts a { display: inline-flex; align-items: center; min-height: 44px; }
 .research { background: #130e1d; border-block: 1px solid var(--line); padding-block: clamp(2.8rem, 7vw, 5rem); }
 .method-intro { margin-block: .85rem 2.2rem; }
+.packets { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.15rem; }
+.packet {
+  display: flex; flex-direction: column; gap: .85rem; padding: clamp(1.15rem, 3.25vw, 1.9rem);
+  border: 1px solid var(--line); border-top-color: #927652; border-radius: 9px;
+  background: #181122; color: var(--muted); scroll-margin-block-start: 1rem;
+}
+.packet:target { border-color: var(--gold); }
+.packet h3 { color: var(--ink); font: 400 clamp(1.45rem, 2.6vw, 2.1rem)/1.16 var(--serif); }
+.packet-meta { color: var(--gold); font: .77rem/1.5 var(--mono); }
+.packet code { font-size: .9em; color: #e0d0f2; }
+.packet-evidence { display: grid; gap: .45rem; margin-top: auto; padding: .75rem 0 0; border-top: 1px solid var(--line); list-style: none; }
 .methods { display: grid; grid-template-columns: repeat(3, 1fr); column-gap: 1.5rem; list-style: none; padding: 0; }
 .methods li { border-top: 1px solid #52405f; padding-block: 1.05rem 1.4rem; }
 .methods h3 { color: var(--gold); font-size: 1rem; margin-bottom: .21rem; }
@@ -126,6 +142,7 @@ button:disabled { cursor: wait; opacity: .76; }
   .hero-inner { min-height: 484px; }
   .observation { right: .1rem; }
   .methods { grid-template-columns: repeat(2, 1fr); }
+  .packets { grid-template-columns: 1fr; }
 }
 @media (max-width: 630px) {
   .header-inner { min-height: 62px; }
