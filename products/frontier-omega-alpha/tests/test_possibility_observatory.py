@@ -137,7 +137,8 @@ class ObservatoryTests(unittest.TestCase):
             self.write("meta.json", observations("formal_verification", "metadata_changed")))
         result = atlas.build(observed, self.goals)
         self.assertEqual(result["experiment_queue"], [])
-        self.assertEqual(result["entries"][0]["status"], "source-change-review")
+        entry = next(e for e in result["entries"] if e["id"] == "fixed-width-proof-maintenance")
+        self.assertEqual(entry["status"], "source-change-review")
 
     def test_first_observation_is_baseline_only(self):
         observed, _ = atlas.observations_at(
