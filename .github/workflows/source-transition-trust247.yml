@@ -1,0 +1,66 @@
+name: P0-247 owner-trusted transition data-boundary positive reference
+on:
+  pull_request:
+    paths:
+      - 'research/source_transition_trust246/**'
+      - '.github/workflows/source-transition-trust247.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: p0247-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
+jobs:
+  owner-trusted-data-reference:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record actual hosted platform start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - name: Read-only exact-head checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - name: Python 3.12 standard-library runtime
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Fixed preregistered conservation and adversarial tests
+        run: |
+          test "$(git rev-parse HEAD)" = "${{ github.event.pull_request.head.sha || github.sha }}"
+          python3 -B research/source_transition_trust246/test_owner_trusted_codec.py -v
+      - name: Emit source-bound no-accounts research-only receipt
+        run: |
+          mkdir -p "$RUNNER_TEMP/p0247"
+          python3 -B - <<'PY'
+          import hashlib, json, os, subprocess
+          from pathlib import Path
+          folder=Path("research/source_transition_trust246")
+          files=["REMEDIATION_PROTOCOL.md","owner_trusted_codec.py","test_owner_trusted_codec.py"]
+          report={
+            "schema":"agi-alpha/p0-247-safe-codec-reference/v1",
+            "source_commit":subprocess.check_output(["git","rev-parse","HEAD"],text=True).strip(),
+            "source_hashes_sha256":{f:hashlib.sha256((folder/f).read_bytes()).hexdigest() for f in files},
+            "adversarial_tests_exit_zero":True,
+            "artifact_class":"synthetic_pre-sign_data_conservation_only",
+            "historical_owner_source_modified":False,
+            "real_financial_authority_or_hmac":False,
+            "private_accounts_or_keys_touched":False,
+            "native_legacy_queue_migration_qualified":False,
+            "production_security_repair_qualified":False,
+            "economic_claim_or_deployment":False,
+            "actual_model_and_host_billing_usd":None
+          }
+          target=Path(os.environ["RUNNER_TEMP"])/"p0247"/"RECEIPT.json"
+          target.write_text(json.dumps(report,sort_keys=True,indent=2)+"\n")
+          PY
+      - name: Preserve exact-head read-only reference receipt
+        if: success()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: p0247-${{ github.event.pull_request.head.sha || github.sha }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/p0247/RECEIPT.json
+          if-no-files-found: error
+          retention-days: 7
