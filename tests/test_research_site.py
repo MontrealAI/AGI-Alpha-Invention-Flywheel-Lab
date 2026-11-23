@@ -601,7 +601,8 @@ class ResearchSiteTests(unittest.TestCase):
              'frontier-omega-alpha/frontier.css', 'frontier-omega-alpha/carina.webp',
              'frontier-omega-alpha/wallet-check.js', 'frontier-omega-alpha/member-brief-001.js',
              'frontier-omega-alpha/atlas.js', 'frontier-omega-alpha/endpoint-screen.mjs',
-             'frontier-omega-alpha/outcome-receipt.mjs', 'frontier-omega-alpha/member-workbench.mjs'},
+             'frontier-omega-alpha/outcome-receipt.mjs', 'frontier-omega-alpha/member-workbench.mjs',
+             'frontier-omega-alpha/frontier-goals.mjs'},
         )
         source = (self.source / 'frontier-omega-alpha' / 'wallet-check.js').read_text()
         self.assertIn("await import('./member-brief-001.js')", source)

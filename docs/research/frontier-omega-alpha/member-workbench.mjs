@@ -1,5 +1,6 @@
 import {screen, validate} from './endpoint-screen.mjs';
-import {freezeScreen, outcome, verifyOutcome} from './outcome-receipt.mjs';
+import {fingerprint, freezeScreen, outcome, verifyOutcome} from './outcome-receipt.mjs';
+import {downloadJSON, setupGoals} from './frontier-goals.mjs';
 
 const id = key => document.getElementById(key);
 const member = id('member');
@@ -12,6 +13,8 @@ const words = fr ? {
   floor:'débit minimal (jetons/s/utilisateur)', ceiling:'latence P90 maximale (ms)', cutoff:'date limite',
   highest:'Charge maximale documentée', noPoint:'Aucun point documenté admissible',
   abstain:'Adoption opérationnelle en abstention.', checked:'Empreinte cohérente. Vérifiez séparément l’origine et le comparateur.',
+  compared:'Concorde avec le résultat indépendant de SQLite pour cet exemple public.',
+  referenceError:'Écart avec la référence SQLite figée. Le reçu pour l’exemple public est indisponible.',
   badReceipt:'Reçu invalide ou modifié.', exported:'Reçu exporté localement.',
   consentCleared:'Consentement retiré. Aucun nouveau reçu ne sera préparé.',
   demonstration:'Démonstration publique terminée.', task:'Analyse locale terminée. L’acceptation indépendante reste à établir.',
@@ -24,6 +27,8 @@ const words = fr ? {
   floor:'minimum tokens/s/user', ceiling:'maximum P90 TTFT (ms)', cutoff:'cutoff',
   highest:'Highest documented load', noPoint:'No documented qualifying point',
   abstain:'Operational adoption remains ABSTAIN.', checked:'Digest matches. Verify origin and the comparator separately.',
+  compared:'Matches the independently computed SQLite result for this public example.',
+  referenceError:'The result differs from the frozen SQLite reference. A public example receipt is unavailable.',
   badReceipt:'Invalid or altered receipt.', exported:'Receipt exported locally.',
   consentCleared:'Consent withdrawn. No further receipt will be prepared.',
   demonstration:'Public demonstration completed.', task:'Local screen completed. Independent acceptance is outstanding.',
@@ -97,26 +102,29 @@ function setupRunner() {
   const freeze = id('mv-freeze');
   const run = id('mv-run');
   const save = id('mv-export');
+  const keep = id('mv-keep-result');
   const input = id('mv-input');
   const receiptInput = id('mv-import');
   const tool = template('mv-endpoint-manifest');
   const reference = template('mv-endpoint-reference');
   const hasCrypto = Boolean(window.crypto?.subtle);
-  let current, frozen, result, duration, exportStamp;
+  const sample = validate(template('mv-endpoint-sample'));
+  let current, frozen, result, duration, exportStamp, running = false;
   let generation = 0;
   const active = () => !member.hidden;
   function enable() {
     freeze.disabled = !current || !(rightsRow.hidden || rights.checked) || Boolean(frozen);
-    run.disabled = !frozen || Boolean(result) || !(rightsRow.hidden || rights.checked);
+    run.disabled = !frozen || running || Boolean(result) || !(rightsRow.hidden || rights.checked);
     save.disabled = !hasCrypto || !consent.checked || !result || !(rightsRow.hidden || rights.checked);
   }
   function clear() {
     generation++;
     exportStamp = undefined;
     current = frozen = result = duration = undefined;
+    running = false;
     input.value = receiptInput.value = '';
     consent.checked = rights.checked = false;
-    rightsRow.hidden = resultArea.hidden = true;
+    rightsRow.hidden = resultArea.hidden = keep.hidden = true;
     resultArea.replaceChildren();
     status.textContent = feedback.textContent = scope.textContent = '';
     enable();
@@ -131,18 +139,12 @@ ${current.rows.length} ${words.rows} · ${words.floor} ${current.minimum_tokens_
   }
 
   function loadPublic() {
-    if (!active()) return;
+    if (!active()) return false;
     clear();
-    load(template('mv-endpoint-sample'), true);
+    load(sample, true);
+    return true;
   }
   id('mv-sample').addEventListener('click',loadPublic);
-  id('mf-quick-run').addEventListener('click',event=>{
-    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-    event.preventDefault();
-    loadPublic();
-    id('mv-endpoint-run').scrollIntoView({block:'start'});
-    freeze.focus({preventScroll:true});
-  });
   input.addEventListener('change', async () => {
     if (!active()) return;
     const file = input.files[0];
@@ -160,7 +162,8 @@ ${current.rows.length} ${words.rows} · ${words.floor} ${current.minimum_tokens_
       generation++;
       exportStamp = undefined;
       frozen = result = duration = undefined;
-      resultArea.hidden = true;
+      running = false;
+      resultArea.hidden = keep.hidden = true;
       resultArea.replaceChildren();
       consent.checked = false;
       status.textContent = words.input;
@@ -168,27 +171,48 @@ ${current.rows.length} ${words.rows} · ${words.floor} ${current.minimum_tokens_
     }
     enable();
   });
-  freeze.addEventListener('click', async () => {
-    if (!active() || !current || !(rightsRow.hidden || rights.checked)) return;
+  async function freezeTask() {
+    if (!active() || !current || !(rightsRow.hidden || rights.checked)) return false;
     const token = ++generation;
     const approvedInput = current;
     freeze.disabled = true;
     try {
       const plan = hasCrypto ? await freezeScreen(approvedInput, tool, reference) : null;
-      if (token !== generation || !active() || !(rightsRow.hidden || rights.checked)) return;
+      if (token !== generation || !active() || !(rightsRow.hidden || rights.checked)) return false;
       frozen = {input: approvedInput, plan};
       status.textContent = words.frozen;
       enable();
+      return true;
     } catch {
       if (token === generation && active()) { status.textContent = words.missingCrypto; enable(); }
+      return false;
     }
-  });
+  }
+  freeze.addEventListener('click', freezeTask);
 
-  run.addEventListener('click', () => {
-    if (!active() || !frozen) return;
+  async function runTask() {
+    if (!active() || !frozen || running || result) return;
+    const token = generation;
+    running = true;
+    enable();
     const start = performance.now();
-    result = screen(frozen.input);
-    duration = Math.round((performance.now() - start) * 1000) / 1000;
+    const output = screen(frozen.input);
+    const elapsed = Math.round((performance.now() - start) * 1000) / 1000;
+    const isExample = frozen.plan?.classification === 'controlled-public-replay';
+    try {
+      if (isExample && await fingerprint(output) !== reference.result_sha256) throw Error('REFERENCE_MISMATCH');
+    } catch {
+      if (token === generation && active()) {
+        running = false;
+        status.textContent = words.referenceError;
+        enable();
+      }
+      return;
+    }
+    if (token !== generation || !active()) return;
+    running = false;
+    result = output;
+    duration = elapsed;
     const title = result.highest_tested_load === null ? words.noPoint : `${words.highest} · ${result.highest_tested_load}`;
     const totals = new Map();
     for (const row of result.rows) totals.set(row.disposition, (totals.get(row.disposition) ?? 0) + 1);
@@ -201,12 +225,30 @@ ${current.rows.length} ${words.rows} · ${words.floor} ${current.minimum_tokens_
     };
     const list = document.createElement('ul');
     for (const [reason, count] of totals) list.append(text('li', `${labels[reason]} · ${count}`));
-    const level = frozen.plan?.classification === 'controlled-public-replay' ? words.demonstration : words.task;
-    resultArea.replaceChildren(text('h5', title), text('p', level), text('p', words.abstain), list);
+    resultArea.replaceChildren(text('h5', title), text('p', isExample ? words.demonstration : words.task),
+      text('p', words.abstain), list);
+    if (isExample) resultArea.querySelector('h5').after(text('p', words.compared));
     resultArea.hidden = false;
-    resultArea.focus();
+    keep.hidden = !hasCrypto;
+    resultArea.scrollIntoView({block: 'start', behavior: 'instant'});
+    resultArea.focus({preventScroll: true});
     status.textContent = words.sync;
     enable();
+  }
+  run.addEventListener('click', runTask);
+  async function launchDemo() {
+    if (loadPublic() && await freezeTask()) await runTask();
+  }
+  id('mv-demo').addEventListener('click', launchDemo);
+  id('mf-quick-run').addEventListener('click', event => {
+    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    event.preventDefault();
+    void launchDemo();
+  });
+  keep.addEventListener('click', event => {
+    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    event.preventDefault();
+    consent.focus();
   });
 
   consent.addEventListener('change', () => {
@@ -230,29 +272,39 @@ ${current.rows.length} ${words.rows} · ${words.floor} ${current.minimum_tokens_
       return;
     }
     if (exportStamp !== stamp || !active() || !consent.checked) return;
-    const url = URL.createObjectURL(new Blob([JSON.stringify(sealed, null, 2)], {type:'application/json'}));
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = 'frontier-outcome-receipt.json';
-    link.click();
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    downloadJSON(sealed, 'frontier-outcome-receipt.json');
     feedback.textContent = words.exported;
     enable();
   });
   receiptInput.addEventListener('change', async () => {
     if (!active()) return;
     const token = generation;
-    let correct = false;
-    try { correct = await verifyOutcome(await readFile(receiptInput.files[0])); } catch { /* untrusted input */ }
-    if (token === generation && active()) feedback.textContent = correct ? words.checked : words.badReceipt;
+    const file = receiptInput.files[0];
+    feedback.textContent = '';
+    let message = words.badReceipt;
+    try {
+      const saved = await readFile(file);
+      if (await verifyOutcome(saved)) {
+        const {receipt} = saved;
+        if (receipt.plan.classification === 'controlled-public-replay') {
+          const plan = await freezeScreen(sample, tool, reference);
+          const sameScope = ['artifact_sha256', 'input_sha256', 'scope_sha256', 'limits_sha256']
+            .every(key => plan[key] === receipt.plan[key]);
+          if (sameScope && receipt.result_sha256 === reference.result_sha256
+              && receipt.recorded_highest_load === reference.highest_tested_load) message = words.compared;
+        } else message = words.checked;
+      }
+    } catch { /* untrusted input */ }
+    if (file === receiptInput.files[0] && token === generation && active()) feedback.textContent = message;
   });
   if (!hasCrypto) { receiptInput.disabled = consent.disabled = true; status.textContent = words.missingCrypto; }
   id('mv-clear').addEventListener('click', clear);
   window.addEventListener('frontier:member-lock', clear);
   enable();
+  return launchDemo;
 }
 
 if (id('member-value')) {
   setupExplorer();
-  setupRunner();
+  setupGoals(member, setupRunner());
 }

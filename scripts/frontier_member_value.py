@@ -116,7 +116,8 @@ def build_tools(destination):
                   'disposition': 'qualified' if r['load'] <= 140 else 'above-ceiling'} for r in sample['rows']],
     }
     reference = {'input_sha256': digest(stable(sample)), 'result_sha256': digest(stable(comparative)),
-                 'upstream_sha256': SUBMISSION_HASH, 'source_revision': ENDPOINT_PIN, 'rows': len(sample['rows'])}
+                 'upstream_sha256': SUBMISSION_HASH, 'source_revision': ENDPOINT_PIN, 'rows': len(sample['rows']),
+                 'highest_tested_load': comparative['highest_tested_load']}
     tools = {
         'endpoint': package(destination / ENDPOINT_ZIP, endpoint, 'endpoint-evidence-screen', ENDPOINT_PIN,
                            'Linux Node 24 and Python 3.12 with SQLite, live Chromium workbench'),
@@ -428,6 +429,19 @@ FIELDS = {
     'rights': ('Rights', 'Droits'),
 }
 
+REVIEW_FIELDS = ('possibility', 'why', 'missing_move', 'alternative', 'next', 'uncertainty',
+                 'protocol', 'rights', 'economics')
+
+
+def review_digest(brief, tools):
+    tool = tools.get(brief['tool'])
+    scope = {key: brief[key] for key in ('source_version', 'atlas_state', 'evidence', 'verdict', 'tool')}
+    scope['tool_release'] = [tool['version'], tool['sha256']] if tool else None
+    scope['sources'] = sorted(ref['url'] for ref in brief['evidence_links'])
+    scope.update({lang: {key: brief[lang][key] for key in REVIEW_FIELDS} for lang in CAPTIONS})
+    return digest(stable(scope))
+
+
 def label(value, fr):
     if value in VERDICTS:
         return FR_VERDICTS[VERDICTS.index(value)] if fr else value
@@ -450,8 +464,9 @@ def cards(briefs, lang):
     for brief in briefs:
         local = brief[lang]
         attributes = ' '.join(f'data-{k}="{escape(v)}"' for k, v in brief['profile'].items())
-        facts = ''.join(f'<div><dt>{names[fr]}</dt><dd>{escape(local[key])}</dd></div>' for key, names in FIELDS.items())
-        links = ''.join(f'<a href="{escape(ref["url"])}">{escape(ref[lang])}</a>'
+        facts = ''.join(f'<div><dt>{names[fr]}</dt><dd data-field="{key}">{escape(local[key])}</dd></div>'
+                        for key, names in FIELDS.items())
+        links = ''.join(f'<a data-decision-source href="{escape(ref["url"])}">{escape(ref[lang])}</a>'
                         for ref in brief['evidence_links'])
         source = 'Source et version' if fr else 'Source and version'
         receipt = 'Reçu Git' if fr else 'Git receipt'
@@ -465,8 +480,8 @@ def cards(briefs, lang):
             f'<p class="packet-meta">{escape(label(brief["verdict"], fr))} · {escape(label(brief["atlas_state"], fr))}</p>'
             f'<h4>{escape(local["title"])}</h4><p>{escape(local["possibility"])}</p>'
             f'<details><summary>{detail}</summary>'
-            f'<p class="mv-source-date">{source} · <time datetime="{timestamp}">{timestamp[:10]}</time> '
-            f'· <code>{escape(brief["source_version"])}</code></p>'
+            f'<p class="mv-source-date" data-review="{brief["review_sha256"]}" data-tool="{brief["tool"] or ""}">'
+            f'{source} · <time datetime="{timestamp}">{timestamp[:10]}</time> · <code>{escape(brief["source_version"])}</code></p>'
             f'<dl>{facts}</dl><p class="mv-links">{links}'
             f'<a href="{brief["receipt"]}">{receipt}</a><a href="#{escape(brief["id"])}">{history}</a></p>'
             f'{recommendation}</details></article>'
@@ -497,10 +512,22 @@ def tool_card(key, manifest, fr):
     if key == 'endpoint':
         open_tool = f'<a href="#mv-endpoint-run">{"Exécuter" if fr else "Run in browser"}</a>'
     if key == 'endpoint':
+        action = ('Compare a single benchmark scope and keep a reference-checked receipt.',
+                  'Comparez une seule configuration de banc d’essai et conservez un reçu vérifié par comparaison.')[fr]
+        checks = ('Seven public measurements and four exact comparisons against indexed SQLite, which remains the operating incumbent.',
+                  'Sept mesures publiques et quatre comparaisons exactes avec SQLite indexé, qui demeure la référence opérationnelle.')[fr]
+        reuse = ('Open an authorized batch with the same schema. Validate any new operating limits and evidence separately.',
+                 'Ouvrez un lot autorisé de même format. Validez séparément toute nouvelle limite opérationnelle et ses preuves.')[fr]
         instructions = 'Extraire le ZIP, puis lancer ces deux comparaisons dans le dossier extrait.' if fr else 'Extract the ZIP and run both comparisons from the extracted folder.'
         command = 'node endpoint-cli.mjs sample.json\npython3 endpoint-sqlite.py sample.json'
         accepted = 'Même résultat pour les deux sorties. Charge maximale mesurée admissible de 140 sur l’exemple. Adoption opérationnelle en abstention.' if fr else 'Expect matching output for the sample, a highest qualifying measured load of 140 and operational ABSTAIN.'
     else:
+        action = ('Recover a native GFS grid value for a historical weather study.',
+                  'Retrouvez une valeur sur la grille native GFS pour une étude météorologique historique.')[fr]
+        checks = ('Six held forecasts match independent ecCodes decoding. Use NCAR when the point service covers the required grid and product.',
+                  'Six prévisions réservées concordent avec le décodage indépendant ecCodes. Préférez NCAR si le service ponctuel couvre le produit et la grille recherchés.')[fr]
+        reuse = ('Keep the validated coordinates, forecast time and output for a reproducible analysis.',
+                 'Conservez les coordonnées validées, l’heure de prévision et la valeur pour reproduire l’analyse.')[fr]
         instructions = 'Extraire le ZIP. Vérifier les six cas signés hors ligne, puis interroger et vérifier le point historique près de Québec.' if fr else 'Extract the ZIP. Audit the six signed cases offline, then retrieve and check the historical point near Québec.'
         command = ('python3 archive-verify.py\npython3 archive-query.py --day 2024-01-18 --cycle 00 --latitude 46.75 '
                    '--longitude -71.25 > point.json\npython3 archive-verify.py point.json')
@@ -508,12 +535,14 @@ def tool_card(key, manifest, fr):
     how = 'Instructions et résultat attendu' if fr else 'Instructions and expected result'
     return (
         f'<article class="mv-tool" id="tool-{key}"><p class="packet-meta">v{manifest["version"]}</p>'
-        f'<h4>{title}</h4><p>{detail}</p><p>{environment}</p>'
+        f'<h4>{title}</h4><p class="mf-tool-purpose">{action}</p><p>{detail}</p><p>{environment}</p>'
         f'<p class="mv-links">{open_tool}<a href="{manifest["download"]}" download>{download}</a>'
         f'<a href="{manifest["source"]}">{source}</a></p>'
         f'<details class="mf-instructions"><summary>{how}</summary><p>{instructions}</p>'
         f'<pre><code>{escape(command)}</code></pre><p>{accepted}</p></details>'
-        f'<details><summary>{"Empreinte de l’archive" if fr else "Archive checksum"}</summary>'
+        f'<details><summary>{"Validation, réutilisation et coûts" if fr else "Verification, reuse and costs"}</summary>'
+        f'<p>{checks}</p><p>{reuse}</p>'
+        f'<p>{"Coût complet non mesuré. Les droits sur les sources amont restent applicables." if fr else "Complete cost unmeasured. Upstream source rights still apply."}</p>'
         f'<p><code>SHA-256 {manifest["sha256"]}</code></p></details></article>'
     )
 
@@ -636,6 +665,8 @@ def render(lang, compiled, sample):
 def prepare(directory, ledger, atlas_sha256, run='1', previous=None, witness=lambda run: None, promote=True):
     tools, sample, reference = build_tools(directory)
     briefs = [context_for(brief) for brief in decision_briefs(ledger)]
+    for brief in briefs:
+        brief['review_sha256'] = review_digest(brief, tools)
     value = {'schema': 'frontier/public-member-value-v1', 'publication': 'public-file',
              'atlas_sha256': atlas_sha256, 'updated_at': ledger['updated_at'],
              'protected_member_first': None, 'member_lead_seconds': None, 'real_member_trials': None,

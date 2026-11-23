@@ -72,6 +72,7 @@ ASSETS += (
     'frontier-omega-alpha/endpoint-screen.mjs',
     'frontier-omega-alpha/outcome-receipt.mjs',
     'frontier-omega-alpha/member-workbench.mjs',
+    'frontier-omega-alpha/frontier-goals.mjs',
 )
 FILES = PAPERS + PAGES + ASSETS + ('publication-manifest.json',)
 PUBLIC_SITE = 'https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/'

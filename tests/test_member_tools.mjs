@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import {screen} from '../docs/research/frontier-omega-alpha/endpoint-screen.mjs';
 import {fingerprint, freezeScreen, outcome, verifyOutcome} from '../docs/research/frontier-omega-alpha/outcome-receipt.mjs';
+import {rankOpportunities, readSavedGoal, reviewSaved} from '../docs/research/frontier-omega-alpha/frontier-goals.mjs';
 
 const input = {
   schema:'frontier/endpoint-screen-v1', source:'example local authorized data',
@@ -61,4 +62,37 @@ test('a controlled receipt binds a frozen independent reference and forbids prom
   contaminated.receipt.plan_sha256 = await fingerprint(contaminated.receipt.plan);
   contaminated.sha256 = await fingerprint(contaminated.receipt);
   assert.equal(await verifyOutcome(contaminated), false);
+});
+
+const records = [
+  {id:'forecast', title:'Historical NOAA forecasts', subject:'Recover a native grid point', outcome:'archive',
+    tool:'archive', observed:'2026-11-20', state:'verified', version:'a'.repeat(40), review:'e'.repeat(64)},
+  {id:'endpoint', title:'Choose a tested operational Endpoint load', subject:'Scope-limited latency checks',
+    outcome:'screening', tool:'endpoint', observed:'2026-11-20', state:'abstain', version:'b'.repeat(40), review:'f'.repeat(64)},
+  {id:'new', title:'Unproven method for forecasts', subject:'An author-reported test', outcome:'evidence',
+    observed:'2026-11-23', state:'discovered', version:'2611.20000v2', review:'d'.repeat(64)},
+];
+
+test('goal matches prefer applicable evidence, pass through operating scope and abstain on unrelated goals', () => {
+  const match = goal => rankOpportunities(records, goal)[0];
+  assert.equal(match({text:'retrouver une prévision historique NOAA'}).record.id, 'forecast');
+  assert.equal(match({text:'retrouver une prévision historique NOAA sans installation'}).action, 'review');
+  assert.equal(match({text:'check endpoint latency on real traffic'}).action, 'review');
+  assert.equal(match({preset:'endpoint'}).action, 'demo');
+  assert.equal(match({text:'research 2611.20000v2'}).record.id, 'new');
+  assert.equal(match({text:'research 2611.20000v1'}), undefined);
+  assert.equal(match({text:'tune a harmonica reed with beeswax'}), undefined);
+});
+
+test('a saved goal reports a corrected same-version decision and rejects unsupported file fields', () => {
+  const {id, version, review} = records[0];
+  const envelope = {schema:'frontier/saved-goal-v1', goal:{preset:'archive'}, pin:{id, version, review}};
+  const saved = readSavedGoal(envelope);
+  assert.equal(reviewSaved(saved.pin, records[0]), 'current');
+  assert.equal(reviewSaved(saved.pin, {...records[0], review:'a'.repeat(64)}), 'revised');
+  assert.equal(reviewSaved(saved.pin, records[1]), 'missing');
+  assert.equal(reviewSaved(saved.pin, undefined), 'missing');
+  assert.throws(() => readSavedGoal({...envelope, goal:{preset:'bogus'}}), /INVALID_GOAL/);
+  assert.throws(() => readSavedGoal({...envelope, goal:{text:'a'.repeat(201)}}), /INVALID_GOAL/);
+  assert.throws(() => readSavedGoal({...envelope, wallet:'internal'}), /INVALID_GOAL/);
 });

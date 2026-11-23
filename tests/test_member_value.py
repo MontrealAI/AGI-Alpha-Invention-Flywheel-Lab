@@ -1,5 +1,6 @@
 """Qualification of the source-driven member projector and public scope."""
 
+from copy import deepcopy
 import json
 from pathlib import Path
 import sys
@@ -70,13 +71,26 @@ class MemberValueTests(unittest.TestCase):
                 self.assertNotIn('<!-- MV_', html[language])
                 self.assertIn(produced['capabilities']['archive']['sha256'], html[language])
                 self.assertIn('data-edition-run="1"', html[language])
-                self.assertEqual(html[language].count('data-mv-open'), 5)
+                self.assertEqual(html[language].count('data-mv-open'), 6)
+                self.assertIn('id="goal-form"', html[language])
+                for brief in produced['briefs']:
+                    self.assertIn(f'data-review="{brief["review_sha256"]}"', html[language])
                 self.assertEqual(member.public_feature(produced, language), '')
                 preview = member.home_preview(produced, language)
                 self.assertIn(f'data-preview-count="{len(produced["briefs"])}"', preview)
                 self.assertIn('data-preview-version="2611.09822v3"', preview)
                 self.assertIn('Endpoint Evidence Screen', preview)
                 self.assertIn('NOAA Archive Point', preview)
+
+    def test_recheck_carries_unchanged_evidence_and_flags_a_corrected_next_move(self):
+        with TemporaryDirectory() as work:
+            value, _, _ = member.prepare(Path(work), sample_ledger(), 'f' * 64)
+        brief = next(row for row in value['briefs'] if row['id'] == 'shift-autonomous-endpoint')
+        updated = deepcopy(brief)
+        updated['updated_at'] = '2026-11-24T20:20:00Z'
+        self.assertEqual(member.review_digest(updated, value['capabilities']), brief['review_sha256'])
+        updated['fr']['next'] = 'Une correction à examiner.'
+        self.assertNotEqual(member.review_digest(updated, value['capabilities']), brief['review_sha256'])
 
     def test_public_recaps_follow_verified_member_editions_and_quiet_runs(self):
         briefs = member.decision_briefs(sample_ledger())

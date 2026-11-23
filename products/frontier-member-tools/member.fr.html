@@ -1,10 +1,57 @@
 <div class="mv" id="member-value">
   <header class="mv-heading">
-    <h3>Votre exploration commence ici.</h3>
-    <div class="member-first-action">
-      <div><p class="packet-meta">Pour commencer</p><h4>Trouvez la charge testée admissible.</h4><p>Sept mesures publiques, une référence SQLite et un reçu sur votre appareil.</p></div>
-      <a class="entry-button" id="mf-quick-run" href="#mv-endpoint-run">Charger l’exemple Endpoint <span aria-hidden="true">→</span></a>
-    </div>
+    <section class="goal-studio" id="my-frontier" aria-labelledby="my-frontier-title">
+      <p class="packet-meta">MA FRONTIÈRE Ω</p>
+      <h3 id="my-frontier-title">Votre prochaine frontière commence ici.</h3>
+      <form id="goal-form" aria-describedby="goal-local">
+        <label for="goal-text">Que souhaitez-vous rendre possible grâce à l’intelligence artificielle?</label>
+        <div class="goal-input">
+          <input id="goal-text" type="search" maxlength="200" autocomplete="off" spellcheck="false"
+            placeholder="p. ex. Retrouver une prévision NOAA">
+          <button id="goal-submit" type="submit" class="entry-button" disabled>Trouver ma prochaine action <span aria-hidden="true">→</span></button>
+        </div>
+        <div class="goal-quick">
+          <p id="goal-local">Votre objectif est comparé aux recherches actuelles dans ce navigateur.</p>
+          <a id="mf-quick-run" href="#mv-endpoint-run">Essayer l’exemple Endpoint <span aria-hidden="true">→</span></a>
+        </div>
+        <div class="goal-presets" role="group" aria-label="Objectifs suggérés">
+          <button type="button" data-goal="endpoint" aria-pressed="false">Évaluer un service d’IA</button>
+          <button type="button" data-goal="archive" aria-pressed="false">Retrouver une prévision</button>
+          <button type="button" data-goal="workflow" aria-pressed="false">Améliorer un processus</button>
+          <button type="button" data-goal="verify" aria-pressed="false">Vérifier une affirmation</button>
+          <button type="button" data-goal="discover" aria-pressed="false">Trouver une occasion</button>
+          <button type="button" data-goal="build" aria-pressed="false">Créer un outil d’IA</button>
+        </div>
+      </form>
+      <p id="goal-status" class="status" role="status"></p>
+      <article class="goal-result" id="goal-result" hidden aria-labelledby="goal-result-title">
+        <p class="packet-meta">L’AVANTAGE INAPERÇU Ω</p>
+        <h4 id="goal-result-title" tabindex="-1"></h4>
+        <p id="goal-evidence-state" class="goal-evidence-state"></p>
+        <div class="goal-next">
+          <div><h5>La prochaine action</h5><p data-goal-fact="next"></p><p id="goal-available"></p></div>
+          <a id="goal-action" class="entry-button" href="#mv-better"></a>
+        </div>
+        <dl class="goal-evidence">
+          <div><dt>La possibilité</dt><dd data-goal-fact="possibility"></dd></div>
+          <div><dt>Pourquoi cette piste mérite un examen</dt><dd data-goal-fact="why"></dd></div>
+          <div><dt>La meilleure solution de rechange</dt><dd data-goal-fact="alternative"></dd></div>
+          <div><dt>Les preuves et leurs limites</dt><dd data-goal-fact="uncertainty"></dd></div>
+        </dl>
+        <p class="mv-links"><a id="goal-proof" href="#mv-better" data-mv-open>Consulter les preuves et l’historique</a>
+          <a id="goal-source" href="#mv-better">Consulter la source primaire</a></p>
+      </article>
+      <div class="goal-quick">
+        <details id="goal-keeper">
+          <summary>Conserver ou rouvrir un objectif</summary>
+          <p>L’objectif reste ici jusqu’à votre départ ou au verrouillage. Le fichier téléchargé contient votre saisie. Conservez-le dans un emplacement sous votre contrôle.</p>
+          <div class="mv-actions">
+            <button type="button" class="quiet" id="goal-export" disabled>Télécharger l’objectif</button>
+            <label for="goal-import">Rouvrir un fichier d’objectif<input id="goal-import" type="file" accept=".json,application/json"></label>
+          </div>
+        </details>
+      </div>
+    </section>
     <nav class="mv-nav" aria-label="Sections de l’espace Member First">
       <a href="#mv-earlier"><strong>Dernières découvertes</strong><span>Ouvrir le bulletin à la une</span></a>
       <a href="#mv-better"><strong>Votre prochaine occasion</strong><span>Explorer les preuves et les décisions</span></a>
@@ -36,29 +83,34 @@
   </section>
   <section class="mv-section" id="mv-tools" aria-labelledby="mv-tools-title">
     <h3 id="mv-tools-title">Acquérir des capacités</h3>
-    <p class="mf-section-intro">Bibliothèque d’outils des membres</p>
+    <p class="mf-section-intro">Bibliothèque d’outils Frontier Ω</p>
     <p>Exécutez les outils publiés ou téléchargez une version précise avec son format d’entrée, son vérificateur, ses limites et ses droits d’utilisation.</p>
     <div class="mv-grid"><!-- MV_TOOLS --></div>
     <section class="mv-runner" id="mv-endpoint-run" aria-labelledby="mv-run-title">
       <h4 id="mv-run-title">Analyser les mesures Endpoint</h4>
-      <p>Utilisez les sept mesures officielles ou ouvrez un lot autorisé au format de l’exemple du ZIP. Le traitement se fait dans ce navigateur.</p>
-      <p>Chargez l’exemple, figez les données d’entrée et le comparateur, puis lancez l’analyse. Le résultat indique la charge admissible et explique l’abstention opérationnelle.</p>
+      <p>Trouvez la plus haute charge mesurée admissible parmi sept mesures publiques. La démonstration s’exécute ici et compare le résultat à la référence SQLite figée.</p>
       <template id="mv-endpoint-sample"><!-- MV_SAMPLE --></template>
       <template id="mv-endpoint-reference"><!-- MV_REFERENCE --></template>
       <template id="mv-endpoint-manifest"><!-- MV_TOOL_MANIFEST --></template>
-      <div class="mv-actions">
-        <button type="button" class="quiet" id="mv-sample">Charger les données d’essai publiques</button>
-        <label for="mv-input">Ouvrir un lot JSON local<input id="mv-input" type="file" accept=".json,application/json"></label>
-      </div>
-      <label class="mv-check" id="mv-rights-row" hidden><input type="checkbox" id="mv-rights">J’ai l’autorisation de traiter ce lot localement.</label>
-      <p id="mv-plan" class="mv-plan"></p>
-      <div class="mv-actions">
-        <button type="button" class="quiet" id="mv-freeze" disabled>Figer la tâche et le comparateur</button>
-        <button type="button" class="quiet" id="mv-run" disabled>Exécuter l’évaluation</button>
-        <button type="button" class="quiet" id="mv-clear">Effacer cette tâche</button>
-      </div>
+      <button type="button" class="entry-button" id="mv-demo">Lancer la démonstration publique</button>
       <p id="mv-run-status" role="status" class="status"></p>
       <div id="mv-screen-result" hidden tabindex="-1"></div>
+      <a id="mv-keep-result" class="quiet" href="#mv-consent" hidden>Conserver le résultat</a>
+      <details>
+        <summary>Utiliser un lot autorisé ou examiner le plan</summary>
+        <p>Respectez le format de l’exemple fourni dans le ZIP. Figez les entrées et le comparateur avant le calcul local dans ce navigateur.</p>
+        <div class="mv-actions">
+          <button type="button" class="quiet" id="mv-sample">Charger les données d’essai publiques</button>
+          <label for="mv-input">Ouvrir un lot JSON local<input id="mv-input" type="file" accept=".json,application/json"></label>
+        </div>
+        <label class="mv-check" id="mv-rights-row" hidden><input type="checkbox" id="mv-rights">J’ai l’autorisation de traiter ce lot localement.</label>
+        <p id="mv-plan" class="mv-plan"></p>
+        <div class="mv-actions">
+          <button type="button" class="quiet" id="mv-freeze" disabled>Figer la tâche et le comparateur</button>
+          <button type="button" class="quiet" id="mv-run" disabled>Exécuter l’évaluation</button>
+          <button type="button" class="quiet" id="mv-clear">Effacer cette tâche</button>
+        </div>
+      </details>
     </section>
   </section>
   <section class="mv-section" id="mv-results" aria-labelledby="mv-results-title">
