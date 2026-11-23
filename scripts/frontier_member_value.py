@@ -7,6 +7,8 @@ from pathlib import Path
 import subprocess
 from zipfile import ZipFile, ZipInfo, ZIP_STORED
 
+import frontier_member_first as editions
+
 MAIN = Path(__file__).resolve().parents[1]
 SITE = 'frontier-omega-alpha/'
 ASSETS = MAIN / 'docs/research' / SITE
@@ -24,6 +26,7 @@ ARCHIVE_ZIP = 'noaa-archive-point-1.0.0.zip'
 MEMBER_JSON = 'member-value.json'
 OUTPUTS = frozenset(SITE + name for name in (ENDPOINT_ZIP, ARCHIVE_ZIP, MEMBER_JSON))
 MARKER = '<!-- FRONTIER_MEMBER_VALUE -->'
+PUBLIC_FEATURE_MARKER = '<!-- FRONTIER_PUBLIC_FEATURE -->'
 RIGHTS = 'Authorized public distribution of this pinned package. Upstream material retains its own rights.'
 VERDICTS = ('USE NOW', 'TEST NOW', 'PREPARE', 'WATCH', 'ABSTAIN', 'DISCARD')
 FR_VERDICTS = ('UTILISER', 'TESTER', 'PRÉPARER', 'SURVEILLER', 'ABSTENTION', 'ÉCARTER')
@@ -173,7 +176,15 @@ def reviewed_brief(entry):
     verdict, domain, task, hardware, skill, effort, tool = PROFILES.get(entry['id'], default)
     profile = {'beneficiary': 'research-teams', 'industry': domain, 'outcome': task, 'hardware': hardware,
                'expertise': skill, 'effort': effort, 'evidence': entry['state'], 'action': verdict}
-    brief = {'id': entry['id'], 'observed_at': entry['editorial'][0]['observed_at'],
+    if entry['state'] == 'falsified':
+        kind = 'correction'
+    elif tool and entry['state'] == 'verified':
+        kind = 'capability'
+    elif entry['state'] == 'verified':
+        kind = 'verified-result'
+    else:
+        kind = 'revision' if len(entry['editorial']) > 1 else 'review'
+    brief = {'id': entry['id'], 'edition_kind': kind, 'observed_at': entry['editorial'][0]['observed_at'],
              'updated_at': latest['observed_at'], 'source_version': latest['reviewed_commit'],
              'atlas_state': entry['state'], 'evidence': item['evidence'], 'verdict': verdict, 'tool': tool,
              'profile': profile, 'evidence_links': item['sources'], 'receipt': commit_url(latest['reviewed_commit']),
@@ -199,7 +210,8 @@ def source_brief(entry):
     item = max(versions, key=lambda row: (int(row['source_version'].rsplit('v', 1)[1])
                                          if row['source'] == 'arxiv' else 0, row['observed_at']))
     verdict = 'PREPARE' if item['decision'] == 'test' else 'WATCH'
-    brief = {'id': entry['id'], 'observed_at': versions[0]['observed_at'], 'updated_at': item['observed_at'],
+    brief = {'id': entry['id'], 'edition_kind': 'revision' if len(versions) > 1 else 'discovery',
+             'observed_at': versions[0]['observed_at'], 'updated_at': item['observed_at'],
              'source_version': item['source_version'], 'atlas_state': entry['state'], 'evidence': 'source-identity-only',
              'verdict': verdict, 'tool': None,
              'profile': {'beneficiary': 'research-teams', 'industry': 'research', 'outcome': 'evidence',
@@ -301,7 +313,76 @@ def context_for(brief):
             if brief['evidence'] != 'source-identity-only':
                 local['why'] = words['not_proven']
                 local['missing_move'] = words['reviewed']
+        sourced = SOURCE_CONTEXT.get(brief['source_version'], {}).get(lang)
+        if not context and sourced:
+            local.update(zip(('change', 'why', 'possibility', 'alternative', 'next', 'uncertainty'), sourced))
     return brief
+
+
+# Exact-version editorial notes. New versions use the ordinary source-only
+# brief until the new evidence supports carrying these descriptions forward.
+SOURCE_CONTEXT = {
+    '2611.09822v3': {
+        'en': (
+            'The authors report an agent workflow that generates quantum programs and checks their correctness and resource cost with a Lean library.',
+            'A formal specification can support comparison beyond the small circuit instances amenable to classical simulation.',
+            'Screen a candidate arithmetic circuit before allocating laboratory or fault-tolerant hardware time.',
+            'A hand-designed reversible circuit checked against the same formal specification and resource model.',
+            'Choose one publicly specified arithmetic circuit. Freeze the correctness specification, ancilla budget and gate model. Replay the proof and compare the counted resources with the best published circuit under those constraints.',
+            'This is a version-checked author report. Independent replication, hardware benefit and full costs remain open.',
+        ),
+        'fr': (
+            'Les auteurs décrivent un processus à agents qui produit des programmes quantiques et vérifie leur exactitude et leur coût en ressources avec une bibliothèque Lean.',
+            'Une spécification formelle permet d’envisager des comparaisons au-delà des petits circuits simulables classiquement.',
+            'Évaluer un circuit arithmétique candidat avant de réserver du temps de laboratoire ou du matériel tolérant aux fautes.',
+            'Un circuit réversible conçu par un spécialiste et évalué avec la même spécification formelle et le même modèle de ressources.',
+            'Choisir un circuit arithmétique spécifié publiquement. Figer la spécification, le budget de qubits auxiliaires et le modèle de portes. Rejouer la preuve et comparer les ressources avec celles du meilleur circuit publié soumis aux mêmes contraintes.',
+            'La version du rapport des auteurs est confirmée. La réplication indépendante, le gain sur matériel et les coûts complets restent à établir.',
+        ),
+    },
+    '2611.21541v1': {
+        'en': ('SciResearch-Eval tests how agents infer thermal properties when their model of the experiment can be wrong.',
+               'A narrow reported interval can hide a biased physical model.',
+               'Test whether a laboratory assistant can choose measurements that stay reliable under simulator errors.',
+               'A scientist or scripted design that checks residuals and uses a measurement regime with known model error.',
+               'On held licensed cases, compare interval coverage, interval score and time under the same experiment budget.',
+               'The authors report results on one thermal inference task. Check calibration on the intended apparatus before relying on it.'),
+        'fr': ('SciResearch-Eval évalue comment les agents estiment des propriétés thermiques lorsqu’un simulateur peut être erroné.',
+               'Un intervalle étroit peut masquer un modèle physique biaisé.',
+               'Vérifier si un assistant de laboratoire sait choisir des mesures robustes aux erreurs du simulateur.',
+               'Un spécialiste ou un protocole déterministe qui examine les résidus et choisit un régime dont l’erreur de modèle est connue.',
+               'Sur des cas réservés dont l’usage est autorisé, comparer la couverture, le score des intervalles et le temps à budget expérimental identique.',
+               'Les auteurs rapportent une seule tâche d’inférence thermique. Vérifier l’étalonnage sur l’appareil visé avant de s’y fier.'),
+    },
+    '2611.23509v1': {
+        'en': ('GRAFT uses selected traces of previous agent successes and failures when recombining candidate designs.',
+               'Aggregate scores alone do not reveal which component helped on a particular case.',
+               'Reuse diagnostic evidence already collected during optimization to choose the next design.',
+               'Score-only search with the same initial designs, held tasks and execution budget.',
+               'Pre-register a held comparison that changes only access to prior traces. Count evaluator calls, failures and total cost.',
+               'The reported gains are the authors’ results. Transfer to our workflows and cost advantage remain unverified.'),
+        'fr': ('GRAFT exploite des traces sélectionnées de réussites et d’échecs pour recombiner des architectures d’agents.',
+               'Un score agrégé ne révèle pas quel composant a aidé dans un cas donné.',
+               'Réutiliser les preuves diagnostiques déjà recueillies pour choisir la prochaine architecture.',
+               'Une recherche guidée uniquement par le score, avec mêmes architectures initiales, tâches réservées et budget.',
+               'Préenregistrer une comparaison qui ne fait varier que l’accès aux traces. Compter les appels d’évaluation, les échecs et le coût complet.',
+               'Les gains sont rapportés par les auteurs. Le transfert à nos processus et l’avantage de coût restent à vérifier.'),
+    },
+    '2611.26722v1': {
+        'en': ('TOUMAII describes paired correct and plausible incorrect tool calls for preference training.',
+               'Valid syntax alone does not guarantee that an agent chose the correct function or argument.',
+               'Compare training on contrastive calls with enforcing a validator at runtime for one authorized tool.',
+               'The same model with strict schema checks and deterministic validation of business rules.',
+               'On a rights-cleared held task, compare accepted calls and failure recovery under a matched budget before training more broadly.',
+               'Dataset size and performance are author-reported. Review upstream terms and test for task overlap and transfer.'),
+        'fr': ('TOUMAII décrit des paires d’appels corrects et d’appels erronés plausibles pour l’apprentissage par préférences.',
+               'Une syntaxe valide ne garantit pas le bon choix de fonction ou d’argument.',
+               'Comparer un apprentissage contrastif à un contrôle pendant l’exécution pour un outil autorisé.',
+               'Le même modèle, avec contrôle strict du schéma et validation déterministe des règles métier.',
+               'Sur une tâche réservée dont l’usage est autorisé, comparer les appels acceptés et la reprise après échec à budget égal.',
+               'La taille du jeu et les résultats proviennent des auteurs. Vérifier les droits, le chevauchement des tâches et le transfert.'),
+    },
+}
 
 
 FACETS = {
@@ -375,9 +456,9 @@ def cards(briefs, lang):
         detail = 'Ouvrir le dossier décisionnel' if fr else 'Open decision brief'
         recommendation = '' if not brief['tool'] else (
             f'<p><a href="#tool-{brief["tool"]}">{"Ouvrir l’outil" if fr else "Open the capability"}</a></p>')
-        timestamp = brief['observed_at']
+        timestamp = brief['updated_at']
         yield (
-            f'<article class="mv-decision" data-mv-record {attributes}>'
+            f'<article class="mv-decision" id="decision-{escape(brief["id"])}" data-mv-record data-observed="{timestamp}" {attributes}>'
             f'<p class="packet-meta">{escape(label(brief["verdict"], fr))} · {escape(label(brief["atlas_state"], fr))}</p>'
             f'<h4>{escape(local["title"])}</h4><p>{escape(local["possibility"])}</p>'
             f'<details><summary>{detail}</summary>'
@@ -412,13 +493,76 @@ def tool_card(key, manifest, fr):
     open_tool = ''
     if key == 'endpoint':
         open_tool = f'<a href="#mv-endpoint-run">{"Exécuter" if fr else "Run in browser"}</a>'
+    if key == 'endpoint':
+        instructions = 'Extraire le ZIP, puis lancer ces deux comparaisons dans le dossier extrait.' if fr else 'Extract the ZIP and run both comparisons from the extracted folder.'
+        command = 'node endpoint-cli.mjs sample.json\npython3 endpoint-sqlite.py sample.json'
+        accepted = 'Même résultat pour les deux sorties. Charge maximale mesurée admissible de 140 sur l’exemple. Adoption opérationnelle en abstention.' if fr else 'Expect matching output for the sample, a highest qualifying measured load of 140 and operational ABSTAIN.'
+    else:
+        instructions = 'Extraire le ZIP. Vérifier les six cas signés hors ligne, puis interroger et vérifier le point historique près de Québec.' if fr else 'Extract the ZIP. Audit the six signed cases offline, then retrieve and check the historical point near Québec.'
+        command = ('python3 archive-verify.py\npython3 archive-query.py --day 2024-01-18 --cycle 00 --latitude 46.75 '
+                   '--longitude -71.25 > point.json\npython3 archive-verify.py point.json')
+        accepted = 'Le vérificateur doit retrouver environ 257,85171875 K. Il s’agit d’une prévision historique. Préférer le service ponctuel NCAR si son produit et sa grille conviennent.' if fr else 'The verifier should match about 257.85171875 K for this historical forecast. Prefer NCAR when its product and grid fit your use.'
+    how = 'Instructions et résultat attendu' if fr else 'Instructions and expected result'
     return (
         f'<article class="mv-tool" id="tool-{key}"><p class="packet-meta">v{manifest["version"]}</p>'
         f'<h4>{title}</h4><p>{detail}</p><p>{environment}</p>'
         f'<p class="mv-links">{open_tool}<a href="{manifest["download"]}" download>{download}</a>'
         f'<a href="{manifest["source"]}">{source}</a></p>'
+        f'<details class="mf-instructions"><summary>{how}</summary><p>{instructions}</p>'
+        f'<pre><code>{escape(command)}</code></pre><p>{accepted}</p></details>'
         f'<details><summary>{"Empreinte de l’archive" if fr else "Archive checksum"}</summary>'
         f'<p><code>SHA-256 {manifest["sha256"]}</code></p></details></article>'
+    )
+
+
+EDITION_LABELS = {
+    'discovery': ('Source checked', 'Source confirmée'), 'revision': ('Evidence revised', 'Preuves révisées'),
+    'review': ('Evidence reviewed', 'Preuves examinées'), 'verified-result': ('Result verified', 'Résultat vérifié'),
+    'correction': ('Finding corrected', 'Conclusion révisée'), 'capability': ('Tool available', 'Outil disponible'),
+}
+
+
+def timestamp_html(when):
+    return f'<time datetime="{escape(when)}">{escape(when[:16].replace("T", " "))} UTC</time>'
+
+
+def feature_html(slot, compiled, lang):
+    fr = lang == 'fr'
+    row = next(entry for entry in compiled['briefs'] if editions.key(entry) == editions.key(slot))
+    local = row[lang]
+    title = escape(local['title'])
+    reference = row['evidence_links'][0]
+    kind = EDITION_LABELS[row['edition_kind']][fr]
+    inputs = ('why', 'possibility', 'alternative', 'next', 'uncertainty')
+    facts = ''.join(f'<div><dt>{FIELDS[name][fr]}</dt><dd>{escape(local[name])}</dd></div>' for name in inputs)
+    label = 'Dossier à la une' if fr else 'Featured intelligence briefing'
+    brief = 'Ouvrir le dossier décisionnel' if fr else 'Open the decision brief'
+    runs = 'Vérification de publication' if fr else 'Publication verification'
+    return (
+        f'<article class="mf-feature" id="mf-edition" data-edition-run="{slot["member_run"]}">'
+        f'<p class="packet-meta">{label} · {kind}</p><h4>{title}</h4><p>{escape(local["change"])}</p>'
+        f'<p class="mf-meta">{timestamp_html(row["updated_at"])} · {escape(row["source_version"])}</p>'
+        f'<dl>{facts}</dl><p class="mv-links"><a class="mf-action" data-mv-open href="#decision-{row["id"]}">{brief}</a>'
+        f'<a href="{escape(reference["url"])}">{escape(reference[lang])}</a>'
+        f'<a href="{editions.RUNS}{slot["member_run"]}">{runs}</a></p></article>'
+    )
+
+
+def public_feature(compiled, lang):
+    slot = compiled['member_first']['public_feature']
+    if not slot:
+        return ''
+    fr = lang == 'fr'
+    row = next(entry for entry in compiled['briefs'] if editions.key(entry) == editions.key(slot))
+    caption = 'Du bulletin Member First' if fr else 'From the Member First briefing'
+    observe = 'Première vérification de l’édition membre' if fr else 'First verified member-edition visibility'
+    evidence = 'Vérification du résumé public' if fr else 'Public summary verification'
+    return (
+        f'<aside class="atlas-editorial" id="atlas-editorial" data-public-run="{slot["public_run"]}">'
+        f'<p class="packet-meta">{caption}</p><h3>{escape(row[lang]["title"])}</h3>'
+        f'<p>{escape(row[lang]["change"])}</p><p>{observe} {timestamp_html(slot["member_checked_at"])}</p>'
+        f'<p><a href="#{row["id"]}">{"Dossier public" if fr else "Public record"}</a> · '
+        f'<a href="{editions.RUNS}{slot["public_run"]}">{evidence}</a></p></aside>'
     )
 
 
@@ -428,11 +572,13 @@ def render(lang, compiled, sample):
     briefs = compiled['briefs']
     template = (TOOLS / f'member.{lang}.html').read_text()
     highlights = []
-    for row in sorted(briefs, key=lambda entry: entry['observed_at'], reverse=True)[:4]:
-        when = row['observed_at']
-        highlights.append(f'<li><time datetime="{when}">{when[:10]}</time> '
-                          f'<a href="#{escape(row["id"])}">{escape(row[lang]["title"])}</a></li>')
+    for row in sorted(briefs, key=lambda entry: (entry['updated_at'], entry['id']), reverse=True)[:4]:
+        highlights.append(f'<li>{timestamp_html(row["updated_at"])} '
+                          f'<a data-mv-open href="#decision-{escape(row["id"])}">{escape(row[lang]["title"])}</a> '
+                          f'<span>{EDITION_LABELS[row["edition_kind"]][fr]}</span></li>')
     replacements = {
+        '<!-- MF_FEATURE -->': feature_html(compiled['member_first']['edition'], compiled, lang),
+        '<!-- MF_UPDATED -->': timestamp_html(compiled['updated_at']),
         '<!-- MV_TIMELINE -->': ''.join(highlights),
         '<!-- MV_FILTERS -->': controls(briefs, fr),
         '<!-- MV_BRIEFS -->': ''.join(cards(briefs, lang)),
@@ -448,7 +594,7 @@ def render(lang, compiled, sample):
     return template
 
 
-def prepare(directory, ledger, atlas_sha256):
+def prepare(directory, ledger, atlas_sha256, run='1', previous=None, witness=lambda run: None):
     tools, sample, reference = build_tools(directory)
     briefs = [context_for(brief) for brief in decision_briefs(ledger)]
     value = {'schema': 'frontier/public-member-value-v1', 'publication': 'public-file',
@@ -456,7 +602,8 @@ def prepare(directory, ledger, atlas_sha256):
              'protected_member_first': None, 'member_lead_seconds': None, 'real_member_trials': None,
              'independently_accepted_member_trials': None, 'measured_productivity_advantage': None,
              'member_redeployments': None, 'source_policy': 'existing-approved-atlas-inputs-only',
-             'capabilities': tools, 'endpoint_reference': reference, 'briefs': briefs}
+             'capabilities': tools, 'endpoint_reference': reference, 'briefs': briefs,
+             'member_first': editions.feed(briefs, previous or {}, run, witness)}
     raw = stable(value) + b'\n'
     (directory / MEMBER_JSON).write_bytes(raw)
     return value, {lang: render(lang, value, sample) for lang in CAPTIONS}, digest(raw)

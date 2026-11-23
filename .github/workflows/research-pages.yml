@@ -8,6 +8,7 @@ on:
       - 'scripts/frontier_public_watch.py'
       - 'scripts/frontier_atlas.py'
       - 'scripts/frontier_member_value.py'
+      - 'scripts/frontier_member_first.py'
       - 'scripts/qualify_frontier_member.py'
       - 'products/frontier-member-tools/**'
       - 'tests/test_member_value.py'
@@ -34,6 +35,7 @@ on:
       - 'scripts/frontier_public_watch.py'
       - 'scripts/frontier_atlas.py'
       - 'scripts/frontier_member_value.py'
+      - 'scripts/frontier_member_first.py'
       - 'scripts/qualify_frontier_member.py'
       - 'products/frontier-member-tools/**'
       - 'tests/test_member_value.py'
@@ -81,6 +83,7 @@ jobs:
             scripts/frontier_public_watch.py
             scripts/frontier_atlas.py
             scripts/frontier_member_value.py
+            scripts/frontier_member_first.py
             scripts/qualify_frontier_member.py
             products/frontier-member-tools
             tests/test_member_value.py
@@ -210,6 +213,7 @@ jobs:
           sparse-checkout: |
             scripts/frontier_atlas.py
             scripts/frontier_member_value.py
+            scripts/frontier_member_first.py
             scripts/qualify_frontier_member.py
             scripts/frontier_public_watch.py
             scripts/build_research_site.py

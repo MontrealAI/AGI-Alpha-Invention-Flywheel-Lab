@@ -47,6 +47,7 @@
         <p>Repérez ce qui change, ce qui bloque et les essais qui pourraient trancher. Les pistes externes et les résultats de notre laboratoire portent des niveaux de preuve distincts.</p>
       </div>
       <!-- FRONTIER_ATLAS_HEALTH -->
+      <!-- FRONTIER_PUBLIC_FEATURE -->
       <div id="atlas-controls" class="atlas-controls" hidden>
         <label for="atlas-query">Rechercher dans l’Atlas<input id="atlas-query" type="search" maxlength="120" autocomplete="off" aria-controls="atlas-records"></label>
         <label for="atlas-state">État de la preuve<select id="atlas-state" aria-controls="atlas-records"><option value="">Tous les états</option></select></label>
@@ -61,8 +62,8 @@
     </section>
     <section id="access" class="frame gate" aria-labelledby="gate-title">
       <div class="gate-head">
-        <h2 id="gate-title">Accéder à la recherche</h2>
-        <p>Vérification du portefeuille sur Ethereum et signature d’un message, sans transaction ni frais. Le dossier membre utilise des fichiers publics sur GitHub Pages.</p>
+        <h2 id="gate-title">Accéder à Member First</h2>
+        <p>Vérifiez votre portefeuille sur Ethereum pour ouvrir le bulletin, le bureau d’aide à la décision, les outils et l’atelier. La signature d’un message est sans frais. Member First utilise des fichiers publics sur GitHub Pages.</p>
       </div>
       <div class="paths">
         <form class="path" id="club-form">
@@ -78,33 +79,26 @@
       </div>
       <p class="status" id="status" role="status" aria-live="polite">Pour vous connecter, ouvrez cette page dans MetaMask.</p>
       <div class="member-brief" id="member-brief">
-        <h3>Dossier membre</h3>
-        <p>Connectez votre portefeuille AGI Club ou $AGIALPHA pour ouvrir le dossier. Le site affiche le dossier après vérification.</p>
+        <h3>Commencer par l’Atlas public</h3>
+        <p><a href="#possibility-shifts">Consultez les dernières preuves</a> pendant que l’espace membre est verrouillé.</p>
       </div>
     </section>
     <section id="member" class="frame workspace" hidden aria-labelledby="workspace-title">
       <div class="workspace-head">
-        <h2 id="workspace-title" tabindex="-1">Atelier membre</h2>
+        <div><p class="packet-meta">FRONTIER Ω ALPHA</p><h2 id="workspace-title" tabindex="-1">MEMBER FIRST Ω</h2></div>
+        <span class="mf-verified">Portefeuille vérifié</span>
         <button id="lock" class="quiet" type="button">Verrouiller la session</button>
       </div>
+      <!-- FRONTIER_MEMBER_VALUE -->
       <div class="brief-entry" data-nosnippet>
         <button class="quiet" id="open-brief" type="button" aria-controls="brief-content" aria-expanded="false">Ouvrir le dossier membre</button>
         <p class="status" id="brief-status" role="status"></p>
         <article class="brief-content" id="brief-content" hidden></article>
       </div>
-      <section class="member-updates" aria-labelledby="member-updates-title">
-        <h3 id="member-updates-title">À suivre depuis le dossier</h3>
-        <p>Une sélection des résultats et pistes en cours, alimentée par l’Atlas public.</p>
-        <!-- FRONTIER_MEMBER_UPDATES -->
-      </section>
-      <!-- FRONTIER_MEMBER_VALUE -->
-      <ul class="packet-shortcuts">
-        <li><a href="#monitoring">Résultats des veilles</a></li>
-        <li><a href="#packet-lean">Lean 4.36</a></li>
-        <li><a href="#packet-qwen">Qwen GGUF</a></li>
-        <li><a href="#research-packet">Rapports de preuve</a></li>
-        <li><a href="#packet-retrofit">Mise à niveau ALPHA-1</a></li>
-      </ul>
+      <details class="mf-related"><summary>Recherche publique connexe</summary><ul>
+        <li><a href="#packet-lean">Lean 4.36</a></li><li><a href="#packet-qwen">Qwen GGUF</a></li>
+        <li><a href="#research-packet">Rapports de preuve</a></li><li><a href="#packet-retrofit">Mise à niveau ALPHA-1</a></li>
+      </ul></details>
     </section>
     <section class="research" id="research" aria-labelledby="public-results-title">
       <div class="frame">
