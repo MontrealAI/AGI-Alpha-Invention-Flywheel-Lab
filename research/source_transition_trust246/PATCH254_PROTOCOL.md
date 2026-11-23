@@ -1,0 +1,19 @@
+# P0-254 — native-path trial of the owner-pinned signer repair
+
+Frozen protocol, 23 November 2026. This is a *fresh ephemeral-account qualification* of the [P0-253 source-pinned proposal](PATCH253_PROTOCOL.md), not a change to historical financial-owner PR #40 or its account, a transfer of signing custody, a protected release, or proof of new commerce.
+
+## Source and ownership freeze
+
+- Research baseline: draft PR #553 exact source commit `b3a286363f0b377797f744c9624be3c025b617f6`; historical finance owner: PR #40 immutable commit `ced6c1cb004887dcdafaea59a2976020be649f8e`.
+- Historical `connected_enterprise/upgrades.py` Git blob `9866d004c412fc05c9f6292cf898307f177359df`; historical codec blob `2397091ef8e1960ad13950693d5b3cd04e2ff7c5`.
+- The owner source must be checked out at that exact commit into a separate **temporary CI workspace**. Only a copied `upgrades.py` is patched via `patch_historical_owner`. No repository owner branch, current main, original task/account, private keys, credentials, actual financial operating state or persistent signer is modified. All test keys are existing harness-created ephemeral local simulated keys, never exported or printed.
+- The original task `01a18fa7-ffc6-7384-8bb4-ea6012cfb0f7` has no independently verified live checkpoint or exclusive writer boundary. Do not assume inactivity and do not integrate.
+
+## Finite executable qualification and predetermined verdict
+
+1. Checkout research and owner trees at exact source, fail closed if either SHA or historical Git blob differs, and apply the **same P0-253 patch bytes** in the isolated owner copy. Record candidate patch digest, not key material.
+2. Run the **preexisting owner tests unchanged**: `OperatingUpgradeTests.test_forward_engine_only_upgrade_preserves_prior_transition_and_same_business` and `OperatingUpgradeTests.test_second_transition_native_commit_crash_recovers_without_downgrade`. Both cross a *second transition whose historical signer is the patched PR40 owner source*; verify original business history, queue, same native identity, actual HMAC/JournalAccount acceptance, forward source commitment, failure recovery, anti-downgrade, no duplicate financial action and resume. Do not weaken assertions or substitute a facade.
+3. Run one **new fixed negative side-effect witness**: construct a normal first native transition on a private harness-created simulation account; construct a new future source whose otherwise unchanged target `transition_evidence.py` contains a harmless top-level sentinel-file write. Execute the **preparation/signing** of the second source transition, without committing it. The sentinel must not exist: the old key-bearing signer may import only its own trusted historical codec and must not run target-root Python. Verify a source-bound upgrade request exists and the old simulated key inode is unchanged.
+4. Inspect each test exit independently. Any failure is a failed result; do not alter the frozen tests, seed or target after inspection to obtain a favorable verdict. A separately versioned engineering repair may follow with failed attempt retained. Job start marker, standard public runner, six-hour platform limit, no paid API/services, nonsecret compact artifact and resource/cost unknowns apply.
+
+**Acceptance:** All three specified test methods return zero on exact trial source, including the explicit nonempty signed second-transition owner tests, and the CI artifact binds exact research/owner SHA and patched source digest. This qualifies *only ephemeral authentic-native-path interoperability*. It does **not** establish the active owner's current checkpoint, writer lease, original-account migration, noncooperative fork exclusion, financial merge/release, full complete-cost economics, actual buyer commerce, or the USD3B target. Those gates remain separate, with historical failures immutable.
