@@ -122,7 +122,7 @@ class ResearchSiteTests(unittest.TestCase):
         collection = (self.source / 'out-series.html').read_text()
         homepage = (self.source / 'index.html').read_text()
         self.assertEqual(len(site.PAPERS), 29)
-        self.assertEqual(len(site.PAGES), 38)
+        self.assertEqual(len(site.PAGES), 40)
         self.assertTrue({'alpha-genesis-live.html', 'alpha-genesis-live-studio.html'}.issubset(site.PAGES))
         self.assertIn('out-series.html', homepage)
         for slug in slugs:
@@ -439,7 +439,7 @@ class ResearchSiteTests(unittest.TestCase):
         for name in site.PAGES:
             text = (self.source / name).read_text()
             self.assertIn('name="viewport"', text)
-            french = name in ('continuity-omega-fr.html', 'continuity-omega-media-fr.html')
+            french = name in ('continuity-omega-fr.html', 'continuity-omega-media-fr.html', 'frontier-omega-alpha/fr.html')
             self.assertIn('Aller au contenu' if french else 'Skip to content', text)
             styles = text
             if name == 'studio.html':
@@ -447,13 +447,33 @@ class ResearchSiteTests(unittest.TestCase):
             elif name in ('ignition/index.html', 'ignition/demo.html'):
                 self.assertIn('href="studio.css"', text)
                 styles = (self.source / 'ignition/studio.css').read_text()
+            elif name.startswith('frontier-omega-alpha/'):
+                styles = (self.source / 'frontier-omega-alpha/frontier.css').read_text()
             self.assertIn('prefers-reduced-motion', styles)
-            self.assertIn('@media(max-width:', styles)
+            self.assertIn('@media(max-width:', styles.replace('@media (', '@media('))
             self.assertNotIn('↗', text)
-            if name not in ('ignition/index.html', 'ignition/demo.html', 'frontier-conclave.html', 'index.html', 'out-series.html', 'studio.html', 'continuity-omega-media.html', 'continuity-omega-media-fr.html', 'alpha-genesis-live.html', 'alpha-genesis-live-studio.html'):
+            if not name.startswith('frontier-omega-alpha/') and name not in ('ignition/index.html', 'ignition/demo.html', 'frontier-conclave.html', 'index.html', 'out-series.html', 'studio.html', 'continuity-omega-media.html', 'continuity-omega-media-fr.html', 'alpha-genesis-live.html', 'alpha-genesis-live-studio.html'):
                 self.assertIn('type="application/pdf"', text)
                 self.assertIn('download>', text)
                 self.assertIn('Votre navigateur n’affiche pas les PDF intégrés' if french else 'Your browser does not display embedded PDFs', text)
+
+    def test_frontier_alpha_public_page_does_not_enable_wallet_access(self):
+        for name, status in (
+            ('index.html', 'Wallet sign-in and decryption are not enabled.'),
+            ('fr.html', 'La connexion au portefeuille et le déchiffrement ne sont pas activés.'),
+        ):
+            page = (self.source / 'frontier-omega-alpha' / name).read_text()
+            self.assertIn(status, page)
+            self.assertIn("script-src 'none'", page)
+            self.assertIn("connect-src 'none'", page)
+            self.assertNotIn('<script', page)
+            for path in ('club', 'token'):
+                self.assertIn(f'data-connect="{path}" disabled', page)
+        self.assertEqual(
+            {name for name in site.FILES if name.startswith('frontier-omega-alpha/')},
+            {'frontier-omega-alpha/index.html', 'frontier-omega-alpha/fr.html',
+             'frontier-omega-alpha/frontier.css', 'frontier-omega-alpha/carina.webp'},
+        )
 
     def test_preferred_home_design_keeps_studio_and_published_anchors(self):
         home = (self.source / 'index.html').read_text()
