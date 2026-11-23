@@ -25,3 +25,7 @@ Retain the portable rank-and-witness instrument, exact normalized evidence, sour
 - [MLCommons v1.0 workloads](https://mlcommons.org/2026/11/mlperf-endpoints-how-to-submit/)
 - [Official Results Explorer](https://results.mlcommons.org/endpoints)
 - [Published metric definitions](https://github.com/mlcommons/endpoints-submission-docs/blob/main/docs/understand/what-is-mlperf-endpoints.md)
+
+## Exploratory follow-up after the primary replay
+
+The primary winner's published first-token delay prompted a separate sensitivity run with the same 40-token floor and a 500 ms P90 first-token ceiling. This ceiling is a comparison scenario. It is not an approved production objective. Read the first-token field separately from agentic end-to-end interactivity. The publisher's report table uses the distinct per-user token-rate field in one display. Never substitute that rounded field for end-to-end interactivity.
