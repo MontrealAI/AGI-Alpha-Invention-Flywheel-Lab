@@ -59,6 +59,52 @@ class ResearchSiteTests(unittest.TestCase):
                     site.build(self.source, destination)
                 self.assertFalse(destination.exists())
 
+    def test_verified_invention_watch_requires_distinct_evidence_and_pinned_commit(self):
+        import json
+        path = self.source / site.POSSIBILITY_INPUT
+        data = json.loads(path.read_text())
+        row = data['records'][0]
+        data['records'] = [row]
+        ordinary = [{'url':'https://arxiv.org/abs/2611.21152',
+                     'en':'External preprint', 'fr':'Prépublication externe'}]
+        row.update(watch='living-watch', evidence='author-reported', sources=ordinary)
+        path.write_text(json.dumps(data))
+        for name in site.POSSIBILITY_PAGES:
+            page = (self.source / name).read_text()
+            rendered = site.render_possibility_page(page, name, site.read_possibilities(self.source))
+            self.assertIn('aucun résultat admissible publié' if name.endswith('/fr.html') else
+                          'no qualifying result published yet', rendered)
+        for watch, evidence, sources in (
+            ('living-watch', 'verified-result', ordinary),
+            ('verified-invention-watch', 'author-reported', ordinary),
+            ('verified-invention-watch', 'falsified', ordinary),
+            ('verified-invention-watch', 'verified-result', [
+                {'url':'https://github.com/ThirdParty/Project/commit/' + 'a' * 40,
+                 'en':'Public commit', 'fr':'Révision publique'}
+            ]),
+        ):
+            with self.subTest(watch=watch, evidence=evidence):
+                row.update(watch=watch, evidence=evidence, sources=sources)
+                path.write_text(json.dumps(data))
+                with self.assertRaises(ValueError):
+                    site.read_possibilities(self.source)
+        row['sources'] = [
+            {'url':'https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/commit/' + 'a' * 40,
+             'en':'Pinned evidence', 'fr':'Preuve figée'}
+        ]
+        for ev, en, fr in (
+            ('verified-result', 'Verified bounded result', 'Résultat circonscrit vérifié'),
+            ('falsified', 'Hypothesis falsified in tested scope', 'Hypothèse réfutée dans le périmètre testé'),
+        ):
+            row['evidence'] = ev
+            path.write_text(json.dumps(data))
+            for name in site.POSSIBILITY_PAGES:
+                page = (self.source / name).read_text()
+                ready = site.render_possibility_page(page, name, site.read_possibilities(self.source))
+                self.assertIn(fr if name.endswith('/fr.html') else en, ready)
+                self.assertNotIn('aucun résultat admissible publié' if name.endswith('/fr.html') else
+                                 'no qualifying result published yet', ready)
+
     def test_possibility_sections_and_private_source_boundary(self):
         out = site.build(self.source, self.root / 'rendered')
         self.assertFalse((out / site.POSSIBILITY_INPUT).exists())

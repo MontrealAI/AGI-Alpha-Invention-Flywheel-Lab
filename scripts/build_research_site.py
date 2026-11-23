@@ -144,8 +144,12 @@ def read_possibilities(source):
             raise ValueError('Invalid possibility date')
         order.append((-date.fromisoformat(day).toordinal(), key))
         ids.add(key)
-        if record['watch'] not in ('living-watch', 'possible-now') or record['evidence'] not in ('author-reported', 'proposed-test'):
-            raise ValueError('Invalid possibility evidence type')
+        watch, evidence = record['watch'], record['evidence']
+        if watch not in ('living-watch', 'possible-now', 'verified-invention-watch'):
+            raise ValueError('Invalid possibility source stream')
+        if evidence not in (('verified-result', 'falsified') if watch == 'verified-invention-watch'
+                            else ('author-reported', 'proposed-test')):
+            raise ValueError('Evidence type does not belong to this possibility source stream')
         for lang in ('en', 'fr'):
             localized = record[lang]
             _possibility_keys(localized, ('title', 'signal', 'next'))
@@ -162,6 +166,11 @@ def read_possibilities(source):
             urls.add(citation['url'])
             _possibility_text(citation['en'], 80)
             _possibility_text(citation['fr'], 80)
+        if watch == 'verified-invention-watch' and not any(
+            re.fullmatch(r'https://github\.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/commit/[a-f0-9]{40}', url)
+            for url in urls
+        ):
+            raise ValueError('Verified Invention Watch requires an immutable MONTREAL.AI evidence commit')
     if order != sorted(order):
         raise ValueError('Possibility records must be sorted by descending date then ascending ID')
     return records
@@ -174,10 +183,13 @@ def render_possibility_page(page, name, records):
     watched = {
         'living-watch': {'en':'Unseen Advantage Watch', 'fr':'Veille de l’avantage insoupçonné'},
         'possible-now': {'en':'Possible Now · every three hours', 'fr':'Possible Now · toutes les trois heures'},
+        'verified-invention-watch': {'en':'Verified Invention Watch', 'fr':'Veille des inventions vérifiées'},
     }
     evidence = {
         'author-reported': {'en':'Author-reported', 'fr':'Rapporté par les auteurs'},
         'proposed-test': {'en':'Proposed test', 'fr':'Essai proposé'},
+        'verified-result': {'en':'Verified bounded result', 'fr':'Résultat circonscrit vérifié'},
+        'falsified': {'en':'Hypothesis falsified in tested scope', 'fr':'Hypothèse réfutée dans le périmètre testé'},
     }
     entries = []
     for item in records:
@@ -194,6 +206,12 @@ def render_possibility_page(page, name, records):
             f'          <p>{links}</p>\n'
             '        </article>'
         )
+    if not any(item['watch'] == 'verified-invention-watch' for item in records):
+        no_result = {
+            'en': 'Verified Invention Watch: no qualifying result published yet.',
+            'fr': 'Veille des inventions vérifiées : aucun résultat admissible publié à ce jour.',
+        }
+        entries.append(f'<p>{escape(no_result[lang])}</p>')
     return page.replace(POSSIBILITY_MARKER, '\n        <hr>\n        '.join(entries))
 
 
