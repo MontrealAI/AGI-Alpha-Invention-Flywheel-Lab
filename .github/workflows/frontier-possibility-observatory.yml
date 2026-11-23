@@ -1,0 +1,108 @@
+name: FRONTIER Ω ALPHA Possibility Observatory
+
+on:
+  pull_request:
+    paths:
+      - "products/frontier-omega-alpha/research/possibility_observatory/**"
+      - "products/frontier-omega-alpha/tests/test_possibility_observatory.py"
+      - ".github/workflows/frontier-possibility-observatory.yml"
+  workflow_dispatch:
+  schedule:
+    - cron: "17 13 * * *"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: frontier-possibility-observatory-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  qualification:
+    if: github.repository == 'MontrealAI/AGI-Alpha-Invention-Flywheel-Lab'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+          sparse-checkout: |
+            products/frontier-omega-alpha
+            products/alpha-genesis-harness/bridge
+      - name: Run independent offline Observatory contract tests
+        working-directory: products/frontier-omega-alpha
+        run: python3 -B -m unittest discover -s tests -p test_possibility_observatory.py -v
+
+  daily-public-atlas:
+    needs: qualification
+    if: >
+      github.repository == 'MontrealAI/AGI-Alpha-Invention-Flywheel-Lab' &&
+      github.ref == 'refs/heads/main' &&
+      github.event_name != 'pull_request' &&
+      vars.FRONTIER_ALPHA_OBSERVATORY_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+          sparse-checkout: |
+            products/frontier-omega-alpha
+            products/alpha-genesis-harness/bridge
+      - name: Load previous public release checkpoint, if present
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          umask 077
+          prior="$RUNNER_TEMP/atlas-prior.json"
+          if gh api "repos/$GITHUB_REPOSITORY/contents/radar.json?ref=frontier-omega-alpha-radar" \
+              -H "Accept: application/vnd.github.raw+json" > "$prior"; then
+            python3 -c 'import json,sys; x=json.load(open(sys.argv[1])); assert x["schema"] == "frontier-omega-alpha/release-observations-v1"' "$prior"
+          else
+            rm -f "$prior"
+            echo "No approved public radar checkpoint available; first observations cannot establish novelty."
+          fi
+      - name: Obtain a fresh public source observation
+        shell: bash
+        working-directory: products/frontier-omega-alpha
+        run: |
+          set -euo pipefail
+          umask 077
+          args=(--output "$RUNNER_TEMP/atlas-new.json" --environment-egress)
+          if test -s "$RUNNER_TEMP/atlas-prior.json"; then
+            args+=(--previous "$RUNNER_TEMP/atlas-prior.json")
+          fi
+          python3 -m research.scheduled "${args[@]}"
+          if test -s "$RUNNER_TEMP/atlas-new.json"; then
+            cp "$RUNNER_TEMP/atlas-new.json" "$RUNNER_TEMP/atlas-current.json"
+          elif test -s "$RUNNER_TEMP/atlas-prior.json"; then
+            cp "$RUNNER_TEMP/atlas-prior.json" "$RUNNER_TEMP/atlas-current.json"
+          else
+            echo "No source observation available" >&2
+            exit 1
+          fi
+      - name: Produce review-only bilingual atlas, queue and unknown-recall audit
+        shell: bash
+        working-directory: products/frontier-omega-alpha
+        run: |
+          set -euo pipefail
+          umask 077
+          python3 -m research.possibility_observatory \
+            --observations "$RUNNER_TEMP/atlas-current.json" \
+            --as-of "$(date -u +%Y-%m-%d)" \
+            --output "$RUNNER_TEMP/frontier-possibility-atlas"
+      - name: Retain only bounded public research artifacts
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: frontier-possibility-atlas-public-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/frontier-possibility-atlas/atlas.json
+            ${{ runner.temp }}/frontier-possibility-atlas/experiment-queue.json
+            ${{ runner.temp }}/frontier-possibility-atlas/atlas.en.md
+            ${{ runner.temp }}/frontier-possibility-atlas/atlas.fr.md
+          if-no-files-found: error
+          retention-days: 7
