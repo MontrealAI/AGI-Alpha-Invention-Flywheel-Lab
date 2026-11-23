@@ -172,7 +172,7 @@ def render_possibility_page(page, name, records):
         raise ValueError('The possibility page must contain exactly one render marker')
     lang = 'fr' if name.endswith('/fr.html') else 'en'
     watched = {
-        'living-watch': {'en':'Living Possibility Watch', 'fr':'Veille des possibilités'},
+        'living-watch': {'en':'Unseen Advantage Watch', 'fr':'Veille de l’avantage insoupçonné'},
         'possible-now': {'en':'Possible Now · every three hours', 'fr':'Possible Now · toutes les trois heures'},
     }
     evidence = {
