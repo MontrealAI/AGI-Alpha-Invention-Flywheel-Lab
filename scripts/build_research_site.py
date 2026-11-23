@@ -68,6 +68,7 @@ ASSETS += (
     'frontier-omega-alpha/wallet-check.js',
     'frontier-omega-alpha/member-brief-001.js',
     'frontier-omega-alpha/carina.webp',
+    'frontier-omega-alpha/atlas.js',
 )
 FILES = PAPERS + PAGES + ASSETS + ('publication-manifest.json',)
 PUBLIC_SITE = 'https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/'
@@ -83,10 +84,12 @@ EXTERNAL_RESEARCH_REFERENCES = frozenset({
 POSSIBILITY_INPUT = 'frontier-omega-alpha/possibility-shifts.json'
 POSSIBILITY_PAGES = frozenset({'frontier-omega-alpha/index.html', 'frontier-omega-alpha/fr.html'})
 POSSIBILITY_MARKER = '<!-- FRONTIER_POSSIBILITY_RECORDS -->'
-POSSIBILITY_MAX_BYTES = 24576
+POSSIBILITY_MAX_BYTES = 256_000
+ATLAS_OUTPUTS = frozenset({'frontier-omega-alpha/atlas-ledger.json', 'frontier-omega-alpha/atlas-release.json'})
+STATES = ('discovered', 'qualified', 'testing', 'verified', 'falsified', 'abstain', 'retained', 'deployed', 'value-verified')
 POSSIBILITY_SOURCE_PATTERNS = (
     r'https://arxiv\.org/abs/[0-9]{4}\.[0-9]{4,5}(?:v[1-9][0-9]*)?',
-    r'https://github\.com/[A-Za-z0-9][A-Za-z0-9-]{0,38}/[A-Za-z0-9_][A-Za-z0-9_.-]{0,99}(?:/releases/tag/[A-Za-z0-9][A-Za-z0-9_.-]{0,99}|/commit/[a-f0-9]{40}|/pull/[1-9][0-9]{0,8})?',
+    r'https://github\.com/[A-Za-z0-9][A-Za-z0-9-]{0,38}/[A-Za-z0-9_][A-Za-z0-9_.-]{0,99}(?:/releases/tag/[A-Za-z0-9][A-Za-z0-9_.-]{0,99}|/commit/[a-f0-9]{40}|/pull/[1-9][0-9]{0,8}|/blob/[a-f0-9]{40}/[A-Za-z0-9_./-]{1,150})?',
     r'https://console\.upstage\.ai/docs/models/[a-z0-9][a-z0-9-]{0,79}',
 )
 
@@ -119,6 +122,13 @@ def read_possibilities(source):
     if len(raw) > POSSIBILITY_MAX_BYTES:
         raise ValueError('Possibility data exceeds byte limit')
 
+    return parse_possibilities(raw)
+
+
+def parse_possibilities(raw):
+    if len(raw) > POSSIBILITY_MAX_BYTES:
+        raise ValueError('Possibility data exceeds byte limit')
+
     def pairs(items):
         result = {}
         for key, value in items:
@@ -129,15 +139,18 @@ def read_possibilities(source):
 
     data = json.loads(raw.decode('utf-8'), object_pairs_hook=pairs)
     _possibility_keys(data, ('schema', 'records'))
-    if data['schema'] != 'frontier-possibility-shifts/1':
+    if data['schema'] not in ('frontier-possibility-shifts/1', 'frontier-possibility-shifts/2'):
         raise ValueError('Unsupported possibility schema')
     records = data['records']
-    if not isinstance(records, list) or not 1 <= len(records) <= 12:
+    if not isinstance(records, list) or not records:
         raise ValueError('Invalid possibility record count')
     ids = set()
     order = []
     for record in records:
-        _possibility_keys(record, ('id', 'date', 'watch', 'evidence', 'en', 'fr', 'sources'))
+        fields = ('id', 'date', 'watch', 'evidence', 'en', 'fr', 'sources')
+        if data['schema'].endswith('/2'):
+            fields += ('assessment',)
+        _possibility_keys(record, fields)
         key, day = record['id'], record['date']
         if not isinstance(key, str) or not re.fullmatch(r'[a-z0-9][a-z0-9-]{0,63}', key) or key in ids:
             raise ValueError('Duplicate or invalid possibility ID')
@@ -157,6 +170,17 @@ def read_possibilities(source):
             _possibility_keys(localized, ('title', 'signal', 'next'))
             for field, max_chars in (('title', 120), ('signal', 600), ('next', 650)):
                 _possibility_text(localized[field], max_chars)
+        if 'assessment' in record:
+            assessment = record['assessment']
+            _possibility_keys(assessment, ('state', 'priority', 'en', 'fr'))
+            if assessment['state'] not in STATES or type(assessment['priority']) is not int or not 1 <= assessment['priority'] <= 3:
+                raise ValueError('Invalid Atlas assessment')
+            if evidence in ('author-reported', 'proposed-test') and assessment['state'] not in STATES[:3]:
+                raise ValueError('A reference cannot attest an experimental outcome')
+            for language in ('en', 'fr'):
+                _possibility_keys(assessment[language], ('decision', 'alternative'))
+                _possibility_text(assessment[language]['decision'], 350)
+                _possibility_text(assessment[language]['alternative'], 350)
         sources = record['sources']
         if not isinstance(sources, list) or not 1 <= len(sources) <= 3:
             raise ValueError('Invalid possibility source count')
@@ -178,45 +202,58 @@ def read_possibilities(source):
     return records
 
 
+STATE_LABELS = {
+    'en': dict(zip(STATES, ('Discovered', 'Qualified', 'Testing', 'Verified', 'Falsified',
+                           'Abstain', 'Retained', 'Deployed', 'Value verified'))),
+    'fr': dict(zip(STATES, ('Repéré', 'Qualifié', 'À l’essai', 'Vérifié', 'Réfuté',
+                           'Abstention', 'Conservé', 'Déployé', 'Valeur vérifiée'))),
+}
+EVIDENCE_LABELS = {
+    'author-reported': ('Author-reported', 'Rapporté par les auteurs'),
+    'proposed-test': ('Proposed test', 'Essai proposé'),
+    'verified-result': ('Verified bounded result', 'Résultat circonscrit vérifié'),
+    'falsified': ('Hypothesis falsified in tested scope', 'Hypothèse réfutée dans le périmètre testé'),
+    'research-tested': ('Replayed bounded experiment · draft research',
+                        'Expérience circonscrite rejouée · recherche en cours'),
+}
+
+
+def record_state(item):
+    return item.get('assessment', {}).get('state', {
+        'verified-result': 'verified', 'falsified': 'falsified',
+    }.get(item['evidence'], 'discovered'))
+
+
+def possibility_card(item, lang, revisions=''):
+    local = item[lang]
+    state = record_state(item)
+    evidence = EVIDENCE_LABELS[item['evidence']][lang == 'fr']
+    key = 'shift-' + item['id']
+    labels = ('Source evidence', 'Decision', 'Strongest alternative', 'Next step') if lang == 'en' else (
+        'Sources et preuves', 'Décision', 'Meilleure solution de rechange', 'Prochaine étape')
+    links = ''.join(f'<li><a href="{escape(s["url"])}">{escape(s[lang])}</a></li>' for s in item['sources'])
+    assessment = item.get('assessment', {}).get(lang)
+    notes = ''
+    if assessment:
+        notes = ''.join(f'<div><dt>{label}</dt><dd>{escape(assessment[field])}</dd></div>'
+                        for label, field in zip(labels[1:3], ('decision', 'alternative')))
+    return (
+        f'<article class="atlas-card" id="{key}" data-atlas-record data-state="{state}" aria-labelledby="{key}-title">'
+        f'<div class="atlas-card-meta"><strong>{STATE_LABELS[lang][state]}</strong>'
+        f'<time datetime="{item["date"]}">{item["date"]}</time></div>'
+        f'<h3 id="{key}-title">{escape(local["title"])}</h3><p class="atlas-evidence">{escape(evidence)}</p>'
+        f'<p>{escape(local["signal"])}</p><dl>{notes}'
+        f'<div><dt>{labels[3]}</dt><dd>{escape(local["next"])}</dd></div></dl>'
+        f'<ul aria-label="{labels[0]}" class="atlas-links">{links}</ul>{revisions}</article>'
+    )
+
+
 def render_possibility_page(page, name, records):
     if page.count(POSSIBILITY_MARKER) != 1:
         raise ValueError('The possibility page must contain exactly one render marker')
     lang = 'fr' if name.endswith('/fr.html') else 'en'
-    watched = {
-        'living-watch': {'en':'Unseen Advantage Watch', 'fr':'Veille de l’avantage insoupçonné'},
-        'possible-now': {'en':'Possible Now · hourly', 'fr':'Possible Now · chaque heure'},
-        'verified-invention-watch': {'en':'Verified Invention Watch', 'fr':'Veille des inventions vérifiées'},
-        'research-lab': {'en':'FRONTIER research experiments', 'fr':'Expériences de recherche FRONTIER'},
-    }
-    evidence = {
-        'author-reported': {'en':'Author-reported', 'fr':'Rapporté par les auteurs'},
-        'proposed-test': {'en':'Proposed test', 'fr':'Essai proposé'},
-        'verified-result': {'en':'Verified bounded result', 'fr':'Résultat circonscrit vérifié'},
-        'falsified': {'en':'Hypothesis falsified in tested scope', 'fr':'Hypothèse réfutée dans le périmètre testé'},
-        'research-tested': {'en':'Replayed bounded experiment · draft research', 'fr':'Expérience circonscrite rejouée · recherche en cours'},
-    }
-    entries = []
-    for item in records:
-        local = item[lang]
-        stage = escape(watched[item['watch']][lang] + ' · ' + item['date'] + ' · ' + evidence[item['evidence']][lang])
-        key = 'shift-' + escape(item['id'])
-        links = ' · '.join(f'<a href="{escape(s["url"])}">{escape(s[lang])}</a>' for s in item['sources'])
-        entries.append(
-            f'<article id="{key}" aria-labelledby="{key}-title">\n'
-            f'          <p><strong>{stage}</strong></p>\n'
-            f'          <h3 id="{key}-title">{escape(local["title"])}</h3>\n'
-            f'          <p>{escape(local["signal"])}</p>\n'
-            f'          <p>{escape(local["next"])}</p>\n'
-            f'          <p>{links}</p>\n'
-            '        </article>'
-        )
-    if not any(item['watch'] == 'verified-invention-watch' for item in records):
-        no_result = {
-            'en': 'Verified Invention Watch: no qualifying result published yet.',
-            'fr': 'Veille des inventions vérifiées : aucun résultat admissible publié à ce jour.',
-        }
-        entries.append(f'<p>{escape(no_result[lang])}</p>')
-    return page.replace(POSSIBILITY_MARKER, '\n        <hr>\n        '.join(entries))
+    entries = ''.join(possibility_card(item, lang) for item in records)
+    return page.replace(POSSIBILITY_MARKER, f'<div class="atlas-grid" id="atlas-records">{entries}</div>')
 
 
 class Links(HTMLParser):
@@ -286,7 +323,7 @@ def validate(source, *, staged=False):
             if url.netloc or url.query:
                 raise ValueError(f'Unexpected relative link: {link}')
             target = posixpath.normpath(posixpath.join(posixpath.dirname(name), unquote(url.path))) if url.path else name
-            if target not in FILES:
+            if target not in FILES and not (name in POSSIBILITY_PAGES and target in ATLAS_OUTPUTS):
                 raise ValueError(f'Link outside publication: {link}')
             if url.fragment and target in parsed and unquote(url.fragment) not in parsed[target].ids:
                 raise ValueError(f'Unknown HTML anchor: {link}')

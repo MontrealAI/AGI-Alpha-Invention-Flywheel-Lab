@@ -11,6 +11,7 @@
   <link rel="canonical" href="https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/frontier-omega-alpha/fr.html">
   <link rel="alternate" hreflang="en" href="https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/frontier-omega-alpha/index.html">
   <link rel="stylesheet" href="frontier.css">
+  <script type="module" src="atlas.js"></script>
   <script type="module" src="wallet-check.js"></script>
 </head>
 <body>
@@ -31,17 +32,32 @@
       <div class="hero-image" aria-hidden="true"></div>
       <div class="instrument" aria-hidden="true"><span></span></div>
       <div class="frame hero-inner">
-        <p class="eyebrow">SURFEZ SUR L’EXPONENTIELLE.</p>
+        <p class="eyebrow">CAPTER L’EXPONENTIELLE</p>
         <h1 id="title">FRONTIER <span>Ω ALPHA</span></h1>
-        <p class="question">Que pouvons-nous faire cette semaine qui ne valait pas la peine d’être tenté la semaine dernière?</p>
-        <p class="promise">Maîtrisez l’avantage. Faites-le fructifier.</p>
+        <p class="question">Le laboratoire de recherche de MONTREAL.AI et QUÉBEC.AI suit les nouvelles capacités et les confronte aux meilleures solutions existantes.</p>
+        <p class="promise">Comprendre ce qui pourrait devenir possible. Découvrir ce qui peut devenir possible plus tôt. Inventer les moyens manquants. Prouver leur valeur. La capter. La faire fructifier.</p>
+        <a class="hero-action" href="#possibility-shifts">Explorer l’Atlas <span aria-hidden="true">↓</span></a>
         <p class="observation" aria-hidden="true">NGC 3324 · Nébuleuse de la Carène</p>
       </div>
     </section>
-    <div class="frame flow">
-      <p>Recherche exploratoire</p>
-      <ol><li>Explorer</li><li>Expérimenter</li><li>Vérifier</li><li>Apprendre</li></ol>
-    </div>
+    <section class="frame atlas" id="possibility-shifts" aria-labelledby="possibility-shifts-title">
+      <div class="atlas-heading">
+        <h2 id="possibility-shifts-title">Atlas vivant des possibles</h2>
+        <p>Repérez ce qui change, ce qui bloque et les essais qui pourraient trancher. Les pistes externes et les résultats de notre laboratoire portent des niveaux de preuve distincts.</p>
+      </div>
+      <!-- FRONTIER_ATLAS_HEALTH -->
+      <div id="atlas-controls" class="atlas-controls" hidden>
+        <label for="atlas-query">Rechercher dans l’Atlas<input id="atlas-query" type="search" maxlength="120" autocomplete="off" aria-controls="atlas-records"></label>
+        <label for="atlas-state">État de la preuve<select id="atlas-state" aria-controls="atlas-records"><option value="">Tous les états</option></select></label>
+        <p id="atlas-count" role="status" data-label="Fiches affichées" data-empty="Aucune fiche ne correspond à ces filtres."></p>
+      </div>
+      <!-- FRONTIER_POSSIBILITY_RECORDS -->
+      <section class="watch-results" id="monitoring" aria-labelledby="monitoring-title">
+        <h3 id="monitoring-title">Références récentes de la veille</h3>
+        <p>La source et la version sont contrôlées. L’Atlas conserve les références après leur retrait de cette sélection.</p>
+        <!-- FRONTIER_PUBLIC_WATCH -->
+      </section>
+    </section>
     <section id="access" class="frame gate" aria-labelledby="gate-title">
       <div class="gate-head">
         <h2 id="gate-title">Accéder à la recherche</h2>
@@ -75,6 +91,11 @@
         <p class="status" id="brief-status" role="status"></p>
         <article class="brief-content" id="brief-content" hidden></article>
       </div>
+      <section class="member-updates" aria-labelledby="member-updates-title">
+        <h3 id="member-updates-title">À suivre depuis le dossier</h3>
+        <p>Une sélection des résultats et pistes en cours, alimentée par l’Atlas public.</p>
+        <!-- FRONTIER_MEMBER_UPDATES -->
+      </section>
       <ul class="packet-shortcuts">
         <li><a href="#monitoring">Résultats des veilles</a></li>
         <li><a href="#packet-lean">Lean 4.36</a></li>
@@ -83,24 +104,6 @@
         <li><a href="#packet-retrofit">Mise à niveau ALPHA-1</a></li>
       </ul>
     </section>
-    <section class="frame workspace-content privacy" id="possibility-shifts" aria-labelledby="possibility-shifts-title">
-        <div>
-          <p class="eyebrow">Veille sur la frontière</p>
-          <h2 id="possibility-shifts-title">Atlas vivant des possibles</h2>
-          <p>L’Atlas vivant est public et ne nécessite aucun portefeuille. Le dossier membre reste soumis à une vérification d’admissibilité; il s’agit toujours de fichiers publics, non d’une livraison confidentielle.</p>
-          <p>Huit dossiers de recherche examinés et des références de veille vérifiées à la source. La veille publique est vérifiée chaque heure et ne change que lorsque de nouvelles sources admissibles sont disponibles.</p>
-        </div>
-        <div>
-          <p>23 novembre 2026 : le dernier passage examiné de Possible Now n’a relevé aucune nouvelle occasion justifiant une action. Il s’agit d’un état de veille, pas d’une alerte.</p>
-          <p>Trois sources alimentent cette veille : Veille de l’avantage insoupçonné, Possible Now et Ω ALPHA — Veille des inventions vérifiées. Cette dernière publie uniquement des résultats circonscrits après examen d’une preuve reproductible et publique.</p>
-          <!-- FRONTIER_POSSIBILITY_RECORDS -->
-        </div>
-        <section class="watch-results" id="monitoring" aria-labelledby="monitoring-title">
-          <h3 id="monitoring-title">Références récentes des veilles</h3>
-          <p>Les sources primaires ont été contrôlées. Les essais affichés restent à réaliser.</p>
-          <!-- FRONTIER_PUBLIC_WATCH -->
-        </section>
-      </section>
     <section class="research" id="research" aria-labelledby="public-results-title">
       <div class="frame">
         <h2 id="public-results-title">Dossiers publics de recherche</h2>

@@ -11,6 +11,7 @@ const registrar='0x57f1887a8BF19b14fC0dF6Fd9B2acc9Af147eA85';
 const token='0xA61a3B3a130a9c20768EEBF97E21515A6046a1fA';
 const zero='0x'+'0'.repeat(40);
 const min=1000000n*10n**18n;
+const sessionLifetime = 5 * 60 * 1000;
 const isAddr=x=>typeof x==='string'&&/^0x[0-9a-f]{40}$/i.test(x);
 const quantity=x=>typeof x==='string'&&/^0x(?:0|[1-9a-f][0-9a-f]{0,63})$/i.test(x);
 const hash32=x=>typeof x==='string'&&/^0x[0-9a-f]{64}$/i.test(x);
@@ -169,6 +170,7 @@ function mount(){
   };
   async function openBrief() {
     if (!session) return;
+    if (Date.now() >= session.expires) { lock(); return; }
     if (!brief.hidden) {
       el('brief-title').focus();
       return;
@@ -185,6 +187,7 @@ function mount(){
       if (id !== epoch) return;
       const {brief001} = await import('./member-brief-001.js');
       if (id !== epoch) return;
+      if (Date.now() >= session.expires) { lock(); return; }
       showBrief(brief, brief001[fr ? 'fr' : 'en'], s.sources);
       briefButton.setAttribute('aria-expanded', 'true');
       briefStatus.textContent = '';
@@ -230,9 +233,9 @@ function mount(){
       const [confirmed]=await w.request({method:'eth_accounts'});
       if(!same(confirmed,account)||!await eligible(w,account,path,label))throw Error('no');
       if(id!==epoch)return;
-      session={id,w,account,path,label};
+      session={id,w,account,path,label,expires:Date.now()+sessionLifetime};
       say('ok');member.hidden=false;el('workspace-title').focus();
-      timer=setTimeout(lock,5*60*1000);
+      timer=setTimeout(lock,sessionLifetime);
     }catch(e){if(id===epoch)say(e?.code===4001?'cancelled':e?.message);}
     finally{
       if(pending===attempt)pending=null;
@@ -246,5 +249,17 @@ function mount(){
   briefButton.addEventListener('click',()=>void openBrief());
   el('lock').addEventListener('click',lock);
   window.addEventListener('pagehide',lock);
+  document.addEventListener('visibilitychange', async () => {
+    if (document.hidden || !session) return;
+    const active = session;
+    if (Date.now() >= active.expires) { lock(); return; }
+    try {
+      const [account] = await active.w.request({method:'eth_accounts'});
+      const owns = same(account, active.account) && await eligible(active.w, active.account, active.path, active.label);
+      if (session === active && (!owns || Date.now() >= active.expires)) lock();
+    } catch {
+      if (session === active) lock();
+    }
+  });
 }
 if(typeof document!=='undefined')mount();
