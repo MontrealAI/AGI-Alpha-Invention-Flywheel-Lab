@@ -565,8 +565,13 @@ class ResearchSiteTests(unittest.TestCase):
         self.assertIn("await import('./member-brief-001.js')", source)
         for forbidden in ('eth_sendTransaction', 'wallet_sendCalls', 'localStorage', 'sessionStorage', 'fetch('):
             self.assertNotIn(forbidden, source)
+        # Real relative dynamic imports must resolve against the same files as the page.
+        modules = self.source / 'frontier-omega-alpha'
+        (modules / 'package.json').write_text('{"type":"module"}')
         subprocess.run(['node', '--input-type=module', '-e', r"""import assert from 'node:assert/strict';
-const {eligible,signInMessage}=await import('data:text/javascript;base64,'+Buffer.from(process.env.WALLET_SOURCE).toString('base64'));
+import {pathToFileURL} from 'node:url';
+const walletURL=pathToFileURL(process.env.WALLET_PATH);
+const {eligible,signInMessage}=await import(walletURL);
 const acct='0x'+'12'.repeat(20), other='0x'+'34'.repeat(20), wrap='d4416b13d2b3a9abae7acd5d6c2bbdbe25686401';
 const word=n=>BigInt(n).toString(16).padStart(64,'0');
 const aw=a=>a.replace(/^0x/,'').padStart(64,'0');
@@ -604,13 +609,21 @@ await assert.rejects(eligible(rpc('reorg'),acct,'token','',now),/unavailable/);
 await assert.rejects(eligible(rpc('token'),acct,'token','',now+91000),/unavailable/);
 assert.match(signInMessage('https://montrealai.github.io',acct,'token',now,'nonce'),/does not approve a transaction/);
 async function mounted(path){
+ const node=()=>({children:[],attributes:{},focus(){},
+  setAttribute(name,value){this.attributes[name]=value},
+  replaceChildren(...children){this.children=children},
+  append(...children){this.children.push(...children)}});
  const listeners={},button={},form={},lock={},member={hidden:true},status={};
- const el={'status':status,'member':member,'club-label':{value:'founder'},'club-form':form,'lock':lock,'workspace-title':{focus(){}}};
+ const brief=node(), open=node(), briefStatus=node();
+ brief.hidden=true;
+ open.addEventListener=(name,run)=>{listeners.open=run};
+ const el={'status':status,'member':member,'club-label':{value:'founder'},'club-form':form,'lock':lock,
+  'workspace-title':{focus(){}},'open-brief':open,'brief-status':briefStatus,'brief-content':brief};
  form.addEventListener=(name,run)=>{listeners[name]=run};
  lock.addEventListener=(name,run)=>{listeners['lock']=run};
  button.addEventListener=(name,run)=>{listeners['token']=run};
  globalThis.document={documentElement:{lang:path==='club'?'fr':'en'},getElementById:id=>el[id],
-  querySelectorAll:()=>[button],querySelector:()=>button};
+  querySelectorAll:()=>[button],querySelector:()=>button,createElement:node};
  const chain=rpc(path);
  const calls=[];
  globalThis.window={location:{origin:'https://montrealai.github.io'},addEventListener(){},ethereum:{
@@ -623,20 +636,32 @@ async function mounted(path){
  }};
  const realNow=Date.now;Date.now=()=>now;
  try{
-  await import('data:text/javascript;base64,'+Buffer.from(process.env.WALLET_SOURCE).toString('base64')+'#'+path);
+  await import(new URL('#'+path,walletURL));
   assert.equal(member.hidden,true);
   listeners[path==='club'?'submit':'token']({preventDefault(){}});
   for(let i=0;i<50&&member.hidden;i++)await new Promise(setImmediate);
   assert.equal(member.hidden,false);
+  assert.equal(brief.hidden,true);
+  const beforeOpen=calls.length;
+  listeners.open();
+  for(let i=0;i<100&&brief.hidden;i++)await new Promise(resolve=>setTimeout(resolve,5));
+  assert.equal(brief.hidden,false);
+  assert(calls.slice(beforeOpen).includes('eth_accounts'));
+  assert(calls.slice(beforeOpen).includes('eth_call'));
+  assert.equal(open.attributes['aria-expanded'],'true');
+  assert(brief.children.length>2);
   assert.equal(calls.filter(m=>m==='personal_sign').length,1);
   assert(calls.every(m=>['eth_requestAccounts','eth_accounts','eth_chainId','eth_getBlockByNumber','eth_getCode','eth_call','personal_sign'].includes(m)));
   listeners.lock();
   assert.equal(member.hidden,true);
+  assert.equal(brief.hidden,true);
+  assert.equal(brief.children.length,0);
+  assert.equal(open.attributes['aria-expanded'],'false');
  }finally{Date.now=realNow;delete globalThis.document;delete globalThis.window;}
 }
 await mounted('club');await mounted('token');
 console.log('11 wallet qualification checks and both workspace open/lock fixtures passed');"""],
-                       check=True, env={**os.environ, 'WALLET_SOURCE': source}, timeout=30)
+                       check=True, env={**os.environ, 'WALLET_PATH': str(modules / 'wallet-check.js')}, timeout=30)
 
     def test_member_brief_is_unencrypted_and_only_inside_hidden_workspace(self):
         for name, public_note in (('index.html', 'static content is unencrypted and publicly retrievable'),
