@@ -124,7 +124,8 @@ async function memberWorkbench(page, language) {
   await featured.waitFor({state:'visible'});
   assert.equal(await featured.locator('dl dt').count(), 5);
   const openDecision = featured.locator('[data-mv-open]');
-  const target = page.locator(await openDecision.getAttribute('href'));
+  const id = (await openDecision.getAttribute('href')).slice(1);
+  const target = page.locator(`[id=${JSON.stringify(id)}]`);
   const filter = page.locator('#mv-query');
   const count = await page.locator('[data-mv-record]').count();
   assert.ok(count >= 8);

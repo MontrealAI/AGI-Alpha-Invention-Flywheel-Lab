@@ -303,6 +303,8 @@ CONTEXT = {
 
 def context_for(brief):
     context = CONTEXT.get(brief['id'], {})
+    version = brief['source_version']
+    source_context = SOURCE_CONTEXT.get(version, {}) if brief['id'] == 'watch-arxiv-' + version.partition('v')[0] else {}
     for lang, words in CAPTIONS.items():
         local = brief[lang]
         value = context.get(lang)
@@ -313,7 +315,7 @@ def context_for(brief):
             if brief['evidence'] != 'source-identity-only':
                 local['why'] = words['not_proven']
                 local['missing_move'] = words['reviewed']
-        sourced = SOURCE_CONTEXT.get(brief['source_version'], {}).get(lang)
+        sourced = source_context.get(lang)
         if not context and sourced:
             local.update(zip(('change', 'why', 'possibility', 'alternative', 'next', 'uncertainty'), sourced))
     return brief
@@ -594,7 +596,7 @@ def render(lang, compiled, sample):
     return template
 
 
-def prepare(directory, ledger, atlas_sha256, run='1', previous=None, witness=lambda run: None):
+def prepare(directory, ledger, atlas_sha256, run='1', previous=None, witness=lambda run: None, promote=True):
     tools, sample, reference = build_tools(directory)
     briefs = [context_for(brief) for brief in decision_briefs(ledger)]
     value = {'schema': 'frontier/public-member-value-v1', 'publication': 'public-file',
@@ -603,7 +605,7 @@ def prepare(directory, ledger, atlas_sha256, run='1', previous=None, witness=lam
              'independently_accepted_member_trials': None, 'measured_productivity_advantage': None,
              'member_redeployments': None, 'source_policy': 'existing-approved-atlas-inputs-only',
              'capabilities': tools, 'endpoint_reference': reference, 'briefs': briefs,
-             'member_first': editions.feed(briefs, previous or {}, run, witness)}
+             'member_first': editions.feed(briefs, previous or {}, run, witness, promote)}
     raw = stable(value) + b'\n'
     (directory / MEMBER_JSON).write_bytes(raw)
     return value, {lang: render(lang, value, sample) for lang in CAPTIONS}, digest(raw)

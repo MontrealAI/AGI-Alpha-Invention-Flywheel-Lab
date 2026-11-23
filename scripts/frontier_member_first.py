@@ -38,7 +38,7 @@ def key(entry):
     return (entry['id'], entry['source_version'])
 
 
-def feed(briefs, previous, run, witness):
+def feed(briefs, previous, run, witness, promote=True):
     """Feature one qualified lead, then a shorter public recap in a later build."""
     by_version = {key(brief): brief for brief in briefs}
 
@@ -62,7 +62,7 @@ def feed(briefs, previous, run, witness):
     actionable = [b for b in briefs if b['verdict'] != 'WATCH']
     lead = max(actionable or briefs, key=lambda b: (b['updated_at'],
                b['verdict'] in ('PREPARE', 'TEST NOW'), b['edition_kind'] == 'capability', b['id']))
-    if edition and (public is None or key(public) != key(edition)) and edition['member_run'] != run:
+    if promote and edition and (public is None or key(public) != key(edition)) and edition['member_run'] != run:
         checked = witness(edition['member_run'])
         if checked:
             public = {**edition, 'member_checked_at': checked, 'public_run': run}

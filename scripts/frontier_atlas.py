@@ -361,7 +361,8 @@ def prepare(output, revision, event, run, request=source_with_retry):
     directory = output / 'frontier-omega-alpha'
     sealed = digest(raw)
     member_view, member_pages, member_digest = member.prepare(directory, ledger, sealed, run,
-        previous.get('member_first'), lambda prior: editions.witnessed_run(prior, request))
+        previous.get('member_first'), lambda prior: editions.witnessed_run(prior, request),
+        promote=event == 'schedule')
     for page, lang in watch.PAGES.items():
         source = Path(EDITORIAL_PATH).parent / page
         html = render(source.read_text(), lang, ledger, selected, references, sealed)
