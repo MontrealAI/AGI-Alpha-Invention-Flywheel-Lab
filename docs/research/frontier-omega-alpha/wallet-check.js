@@ -118,32 +118,50 @@ function showBrief(target, edition, sourceLabel) {
 function mount(){
   const fr=document.documentElement.lang==='fr';
   const s=fr?{
-    idle:'Choisissez un mode de connexion MetaMask.', checking:'Vérification sur Ethereum…',
-    wallet:'Ouvrez la page dans MetaMask Mobile ou utilisez l’extension MetaMask.',
-    network:'Choisissez Ethereum Mainnet dans MetaMask, puis réessayez.',
-    label:'Entrez uniquement le premier mot du nom, avec des lettres ASCII, chiffres ou traits d’union.',
-    no:'Ce portefeuille ne satisfait pas au critère choisi.', sign:'Vérifiez le message de connexion dans MetaMask.',
-    ok:'Admissibilité vérifiée. Vous êtes connecté à l’espace de recherche public.',
-    cancelled:'Connexion annulée.', unavailable:'Vérification impossible pour le moment. Réessayez.',
+    checking:'Vérification sur Ethereum…',
+    wallet:'Ouvrez ce site dans MetaMask Mobile ou installez l’extension MetaMask sur votre navigateur.',
+    network:'Sélectionnez le réseau principal Ethereum dans MetaMask, puis réessayez.',
+    label:'Saisissez seulement l’identifiant avant .club.agi.eth. Utilisez des lettres ASCII, des chiffres ou des traits d’union.',
+    clubNo:'Ce portefeuille ne détient pas le nom admissible. Vérifiez l’identifiant, le propriétaire et l’expiration.',
+    tokenNo:'Ce portefeuille ne satisfait pas au seuil de 1 000 000 de $AGIALPHA. Vérifiez le compte sélectionné.',
+    sign:'Vérifiez le message de connexion dans MetaMask.',
+    clubVerified:'Adhésion AGI CLUB vérifiée', tokenVerified:'Admissibilité $AGIALPHA vérifiée',
+    cancelled:'Signature annulée. Vous pouvez réessayer.', unavailable:'Vérification impossible pour le moment. Réessayez.',
     changed:'Session verrouillée. Reconnectez-vous pour vérifier le portefeuille.',
     opening:'Nouvelle vérification de l’admissibilité…', sources:'Sources et données d’essai',
     briefError:'Le dossier ne peut pas être ouvert pour le moment. Réessayez.'
   }:{
-    idle:'Choose a MetaMask sign-in option.', checking:'Checking on Ethereum…',
-    wallet:'Open the page in MetaMask Mobile or use the MetaMask browser extension.',
+    checking:'Checking on Ethereum…',
+    wallet:'Open this site in MetaMask Mobile or install the MetaMask browser extension.',
     network:'Select Ethereum Mainnet in MetaMask, then try again.',
-    label:'Enter only the first label, using ASCII letters, numbers or hyphens.',
-    no:'This wallet does not meet the selected requirement.', sign:'Review the sign-in message in MetaMask.',
-    ok:'Eligibility verified. You’re signed in to the public research workspace.',
-    cancelled:'Sign-in canceled.', unavailable:'Could not verify right now. Please try again.',
+    label:'Enter only the label before .club.agi.eth, using ASCII letters, numbers or hyphens.',
+    clubNo:'This wallet does not meet the ownership requirement. Check the name, owner and expiry.',
+    tokenNo:'This wallet does not meet the 1,000,000 $AGIALPHA threshold. Check the selected account.',
+    sign:'Review the sign-in message in MetaMask.',
+    clubVerified:'AGI CLUB membership verified', tokenVerified:'$AGIALPHA eligibility verified',
+    cancelled:'Signature canceled. You can try again.', unavailable:'Could not verify right now. Please try again.',
     changed:'Session locked. Sign in again to verify your wallet.',
     opening:'Checking eligibility again…', sources:'Sources and test inputs',
     briefError:'The brief could not be opened. Try again.'
   };
   const el=id=>document.getElementById(id);
-  const status=el('status'),member=el('member'),buttons=[...document.querySelectorAll('[data-connect]')];
+  const status=el('status'),member=el('member'),entry=el('access'),preview=el('member-preview');
+  const club=el('enter-club'),clubForm=el('club-form'),clubLabel=el('club-label'),help=el('entry-help');
+  const tokenEntry=document.querySelector('[data-connect="token"]');
+  const buttons=[club,...document.querySelectorAll('[data-connect]')];
+  const memberNav=el('member-nav'),route=el('member-route');
   const briefButton=el('open-brief'),briefStatus=el('brief-status'),brief=el('brief-content');
   const say=k=>{status.textContent=s[k]??s.unavailable;};
+  const selectedWallet=()=>{
+    const injected=window.ethereum;
+    return injected?.providers?.find(p=>p.isMetaMask)??injected;
+  };
+  const canSign=w=>w?.isMetaMask&&typeof w.request==='function';
+  const deny=path=>say(path==='club'?'clubNo':'tokenNo');
+  function showWalletHelp(){
+    help.open=true;
+    say('wallet');
+  }
   let epoch=0,timer,provider,session,pending;
   function resetBrief() {
     session = null;
@@ -154,14 +172,20 @@ function mount(){
     briefButton.setAttribute('aria-expanded', 'false');
   }
   const lock=()=>{
+    const returnToEntry=!member.hidden && member.contains(document.activeElement);
+    const previousPath=session?.path;
     epoch++;
     clearTimeout(timer);
     member.hidden=true;
+    entry.hidden=preview.hidden=false;
+    memberNav.href='#access';
+    route.textContent='';
     pending=null;
     resetBrief();
     window.dispatchEvent(new Event('frontier:member-lock'));
     buttons.forEach(b=>b.disabled=false);
     say('changed');
+    if(returnToEntry)(previousPath==='club'?club:tokenEntry).focus();
   };
   const accountsChanged = accounts => {
     const active = pending ?? session;
@@ -182,7 +206,7 @@ function mount(){
     try {
       const [current] = await w.request({method:'eth_accounts'});
       if (!same(current, account) || !await eligible(w, account, path, label)) {
-        if (id === epoch) { lock(); say('no'); }
+        if (id === epoch) { lock(); deny(path); }
         return;
       }
       if (id !== epoch) return;
@@ -205,10 +229,9 @@ function mount(){
     const attempt={account:null};
     pending=attempt;
     try{
-      const label=path==='club'?normalized(el('club-label').value):'';
-      const injected=window.ethereum;
-      const w=injected?.providers?.find(p=>p.isMetaMask)??injected;
-      if(!w?.isMetaMask||typeof w.request!=='function')throw Error('wallet');
+      const label=path==='club'?normalized(clubLabel.value):'';
+      const w=selectedWallet();
+      if(!canSign(w))throw Error('wallet');
       if(w!==provider){
         for (const [event, listener] of Object.entries({accountsChanged,chainChanged:lock,disconnect:lock})) {
           provider?.removeListener?.(event,listener);
@@ -235,18 +258,37 @@ function mount(){
       if(!same(confirmed,account)||!await eligible(w,account,path,label))throw Error('no');
       if(id!==epoch)return;
       session={id,w,account,path,label,expires:Date.now()+sessionLifetime};
-      say('ok');member.hidden=false;el('workspace-title').focus();
+      status.textContent='';
+      entry.hidden=preview.hidden=true;
+      memberNav.href='#member';
+      route.textContent=s[path==='club'?'clubVerified':'tokenVerified'];
+      member.hidden=false;
+      window.scrollTo({top:0,behavior:'instant'});
+      el('workspace-title').focus({preventScroll:true});
       timer=setTimeout(lock,sessionLifetime);
-    }catch(e){if(id===epoch)say(e?.code===4001?'cancelled':e?.message);}
+    }catch(e){
+      if(id!==epoch)return;
+      if(e?.message==='wallet')showWalletHelp();
+      else if(e?.message==='no')deny(path);
+      else say(e?.code===4001?'cancelled':e?.message);
+    }
     finally{
       if(pending===attempt)pending=null;
       if(id===epoch)buttons.forEach(b=>b.disabled=false);
     }
   }
   buttons.forEach(b=>b.disabled=false);
-  say('idle');
-  el('club-form').addEventListener('submit',e=>{e.preventDefault();void enter('club');});
-  document.querySelector('[data-connect="token"]').addEventListener('click',()=>void enter('token'));
+  club.addEventListener('click',()=>{
+    if(!canSign(selectedWallet())){showWalletHelp();return;}
+    clubForm.hidden=!clubForm.hidden;
+    club.setAttribute('aria-expanded',String(!clubForm.hidden));
+    if(!clubForm.hidden)clubLabel.focus();
+  });
+  for(const link of document.querySelectorAll('[data-entry-help]')){
+    link.addEventListener('click',()=>{help.open=true;});
+  }
+  clubForm.addEventListener('submit',e=>{e.preventDefault();void enter('club');});
+  tokenEntry.addEventListener('click',()=>void enter('token'));
   briefButton.addEventListener('click',()=>void openBrief());
   el('lock').addEventListener('click',lock);
   window.addEventListener('pagehide',lock);

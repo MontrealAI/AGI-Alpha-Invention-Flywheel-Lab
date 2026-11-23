@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="dark">
-  <meta name="description" content="MONTREAL.AI and QUÉBEC.AI explore what has just become possible and test it against evidence.">
+  <meta name="description" content="Member First Ω by MONTREAL.AI and QUÉBEC.AI brings frontier briefings, decisions, qualified tools and verifiable results to eligible members.">
   <meta name="referrer" content="no-referrer">
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'none'; base-uri 'none'; form-action 'none'">
   <title>FRONTIER Ω ALPHA · MONTREAL.AI × QUÉBEC.AI</title>
@@ -21,25 +21,94 @@
     <div class="frame header-inner">
       <a class="wordmark" href="index.html"><span class="seal" aria-hidden="true">Ω</span><span>FRONTIER <b>Ω ALPHA</b></span></a>
       <nav class="top-nav" aria-label="Main navigation">
-        <a class="nav-atlas" href="#possibility-shifts">Living Atlas</a>
-        <a class="nav-research" href="#research">Research</a>
-        <a href="#access">Member access</a>
-        <a class="locale" href="fr.html" lang="fr">Français</a>
+        <a class="nav-member" id="member-nav" href="#access">Member First</a>
+        <a class="nav-atlas" href="#possibility-shifts">Public Atlas <span aria-hidden="true">→</span></a>
+        <a class="locale" href="fr.html" lang="fr" hreflang="fr" aria-label="Français">FR</a>
       </nav>
     </div>
   </header>
   <main id="main" tabindex="-1">
-    <section class="hero" aria-labelledby="title">
-      <div class="hero-image" aria-hidden="true"></div>
-      <div class="instrument" aria-hidden="true"><span></span></div>
-      <div class="frame hero-inner">
-        <p class="eyebrow">CAPTURING THE EXPONENTIAL</p>
-        <h1 id="title">FRONTIER <span>Ω ALPHA</span></h1>
-        <p class="question">The research lab of MONTREAL.AI and QUÉBEC.AI tracks new capabilities and tests them against the strongest available alternatives.</p>
-        <p class="promise">Understand what may become possible. Discover what can become possible sooner. Invent the missing means. Prove the value. Capture it. Compound it.</p>
-        <a class="hero-action" href="#possibility-shifts">Explore the Atlas <span aria-hidden="true">↓</span></a>
-        <p class="observation" aria-hidden="true">NGC 3324 · Carina Nebula</p>
+    <section id="access" class="entry" aria-labelledby="title">
+      <div class="entry-sky" aria-hidden="true"></div>
+      <div class="entry-orbit" aria-hidden="true"></div>
+      <div class="frame entry-inner">
+        <div class="entry-mast">
+          <p class="eyebrow">MONTREAL.AI × QUÉBEC.AI</p>
+          <h1 id="title">Member First <span>Ω</span></h1>
+          <p class="entry-promise">Your advantage at the frontier of intelligence.</p>
+          <p class="entry-hook">Discover what you can do next, with evidence and tools to act on it.</p>
+        </div>
+        <ul class="entry-pillars">
+          <li><span class="entry-point" aria-hidden="true"></span><div><strong>Discover earlier</strong><p>The latest research briefings.</p></div></li>
+          <li><span class="entry-point" aria-hidden="true"></span><div><strong>Understand better</strong><p>Evidence and a clear next move.</p></div></li>
+          <li><span class="entry-point" aria-hidden="true"></span><div><strong>Gain capabilities</strong><p>Qualified tools you can run.</p></div></li>
+          <li><span class="entry-point" aria-hidden="true"></span><div><strong>Achieve results</strong><p>Local results with receipts.</p></div></li>
+        </ul>
+        <div class="entry-portals" role="group" aria-label="Member access">
+          <article class="entry-portal" aria-labelledby="club-portal-title">
+            <div class="portal-head"><span class="portal-seal" aria-hidden="true">Ω</span><div>
+              <p class="packet-meta">Membership access</p><h2 id="club-portal-title">AGI CLUB</h2>
+            </div></div>
+            <p class="portal-eligibility">Own a qualifying <span>.club.agi.eth</span> membership.</p>
+            <button class="entry-button" type="button" id="enter-club" aria-controls="club-form" aria-expanded="false" disabled>Enter with AGI CLUB<span aria-hidden="true">→</span></button>
+            <a class="portal-rules" href="#club-requirements" data-entry-help>AGI CLUB eligibility</a>
+          </article>
+          <article class="entry-portal" aria-labelledby="token-portal-title">
+            <div class="portal-head"><span class="portal-seal" aria-hidden="true">α</span><div>
+              <p class="packet-meta">Holder access</p><h2 id="token-portal-title">$AGIALPHA</h2>
+            </div></div>
+            <p class="portal-eligibility">Hold <strong>1,000,000</strong> or more $AGIALPHA in your signing wallet.</p>
+            <button class="entry-button" type="button" data-connect="token" disabled>Enter with $AGIALPHA<span aria-hidden="true">→</span></button>
+            <a class="portal-rules" href="#token-requirements" data-entry-help>$AGIALPHA eligibility</a>
+          </article>
+        </div>
+        <form class="entry-form" id="club-form" hidden>
+          <label for="club-label">AGI CLUB membership label</label>
+          <div class="entry-form-row">
+            <div class="field"><input id="club-label" name="label" maxlength="63" inputmode="text" autocapitalize="none" autocomplete="off" spellcheck="false" aria-describedby="club-label-help" required placeholder="alex"><span aria-hidden="true">.club.agi.eth</span></div>
+            <button class="entry-button" type="submit" data-connect="club" disabled>Verify membership<span aria-hidden="true">→</span></button>
+          </div>
+          <p id="club-label-help">If your name is <code>alex.club.agi.eth</code>, enter <code>alex</code>.</p>
+        </form>
+        <p class="status entry-status" id="status" role="status" aria-live="polite"></p>
+        <div class="entry-foot">
+          <p>Sign a message on Ethereum. No transaction or gas.</p>
+          <details class="entry-help" id="entry-help">
+            <summary>Wallet help and eligibility</summary>
+            <div class="entry-help-body">
+              <p id="wallet-guidance">On desktop, use the MetaMask browser extension. On your phone, open this site in the browser inside MetaMask Mobile. Select Ethereum Mainnet before signing. <a href="https://metamask.io/download">Official MetaMask download</a>.</p>
+              <p id="club-requirements"><strong>AGI CLUB</strong> · Sign with the wallet that directly owns a qualifying ENSv1 name under <code>.club.agi.eth</code>. The existing check supports both wrapped and unwrapped names.</p>
+              <p id="token-requirements"><strong>$AGIALPHA</strong> · Sign with the wallet that holds at least 1,000,000 qualifying $AGIALPHA on Ethereum Mainnet. The approved token contract and balance rules apply.</p>
+              <p>Member First is hosted as public GitHub Pages files.</p>
+            </div>
+          </details>
+        </div>
+        <noscript><p class="entry-status">Enable JavaScript to verify your wallet. The public Atlas is available below.</p></noscript>
       </div>
+    </section>
+    <section id="member" class="frame workspace" hidden aria-labelledby="workspace-title">
+      <div class="workspace-head">
+        <div><p class="packet-meta">FRONTIER Ω ALPHA</p><h2 id="workspace-title" tabindex="-1">Welcome to Member First Ω</h2></div>
+        <span class="mf-verified" id="member-route">Wallet verified</span>
+        <button id="lock" class="quiet" type="button">Lock session</button>
+      </div>
+      <!-- FRONTIER_MEMBER_VALUE -->
+      <div class="brief-entry" data-nosnippet>
+        <button class="quiet" id="open-brief" type="button" aria-controls="brief-content" aria-expanded="false">Open the member brief</button>
+        <p class="status" id="brief-status" role="status"></p>
+        <article class="brief-content" id="brief-content" hidden></article>
+      </div>
+      <details class="mf-related"><summary>Related public research</summary><ul>
+        <li><a href="#packet-lean">Lean 4.36</a></li><li><a href="#packet-qwen">Qwen GGUF</a></li>
+        <li><a href="#research-packet">Formal proof receipts</a></li><li><a href="#packet-retrofit">ALPHA-1 retrofit</a></li>
+      </ul></details>
+    </section>
+    <section id="member-preview" class="frame member-preview" aria-labelledby="preview-title">
+      <div class="preview-heading">
+        <div><h2 id="preview-title">Member First preview</h2><p>See the research, decisions and tools waiting in your workspace.</p></div>
+        <a href="#access">Back to member access <span aria-hidden="true">↑</span></a>
+      </div>
+      <!-- FRONTIER_MEMBER_PREVIEW -->
     </section>
     <section class="frame atlas" id="possibility-shifts" aria-labelledby="possibility-shifts-title">
       <div class="atlas-heading">
@@ -59,46 +128,6 @@
         <p>Source identity and version are checked. The Atlas retains references after they leave this selection.</p>
         <!-- FRONTIER_PUBLIC_WATCH -->
       </section>
-    </section>
-    <section id="access" class="frame gate" aria-labelledby="gate-title">
-      <div class="gate-head">
-        <h2 id="gate-title">Enter Member First</h2>
-        <p>Verify your eligible wallet on Ethereum to open the briefing, decision desk, tools and outcome workbench. Sign a message with zero gas. Member First is hosted as public GitHub Pages files.</p>
-      </div>
-      <div class="paths">
-        <form class="path" id="club-form">
-          <label for="club-label">Your AGI Club label</label>
-          <div class="field"><input id="club-label" name="label" maxlength="63" inputmode="text" autocapitalize="none" autocomplete="off" spellcheck="false" required placeholder="founder"><span aria-hidden="true">.club.agi.eth</span></div>
-          <p>Direct owner of an ENSv1 name under <code>.club.agi.eth</code>. Wrapped and unwrapped names are supported.</p>
-          <button type="submit" data-connect="club" disabled>Enter with AGI Club <span aria-hidden="true">→</span></button>
-        </form>
-        <div class="path token-path">
-          <span class="token-mark" aria-hidden="true">α</span><p>Hold at least <strong>1,000,000 $AGIALPHA</strong> in the signing wallet.</p>
-          <button type="button" data-connect="token" disabled>Enter with $AGIALPHA <span aria-hidden="true">→</span></button>
-        </div>
-      </div>
-      <p class="status" id="status" role="status" aria-live="polite">To sign in, open this page with MetaMask.</p>
-      <div class="member-brief" id="member-brief">
-        <h3>Start with the public Atlas</h3>
-        <p><a href="#possibility-shifts">Browse the latest evidence</a> while the member workbench is locked.</p>
-      </div>
-    </section>
-    <section id="member" class="frame workspace" hidden aria-labelledby="workspace-title">
-      <div class="workspace-head">
-        <div><p class="packet-meta">FRONTIER Ω ALPHA</p><h2 id="workspace-title" tabindex="-1">MEMBER FIRST Ω</h2></div>
-        <span class="mf-verified">Wallet verified</span>
-        <button id="lock" class="quiet" type="button">Lock session</button>
-      </div>
-      <!-- FRONTIER_MEMBER_VALUE -->
-      <div class="brief-entry" data-nosnippet>
-        <button class="quiet" id="open-brief" type="button" aria-controls="brief-content" aria-expanded="false">Open the member brief</button>
-        <p class="status" id="brief-status" role="status"></p>
-        <article class="brief-content" id="brief-content" hidden></article>
-      </div>
-      <details class="mf-related"><summary>Related public research</summary><ul>
-        <li><a href="#packet-lean">Lean 4.36</a></li><li><a href="#packet-qwen">Qwen GGUF</a></li>
-        <li><a href="#research-packet">Formal proof receipts</a></li><li><a href="#packet-retrofit">ALPHA-1 retrofit</a></li>
-      </ul></details>
     </section>
     <section class="research" id="research" aria-labelledby="public-results-title">
       <div class="frame">

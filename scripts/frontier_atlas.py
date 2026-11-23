@@ -366,10 +366,13 @@ def prepare(output, revision, event, run, request=source_with_retry):
     for page, lang in watch.PAGES.items():
         source = Path(EDITORIAL_PATH).parent / page
         html = render(source.read_text(), lang, ledger, selected, references, sealed)
-        if html.count(member.MARKER) != 1 or html.count(member.PUBLIC_FEATURE_MARKER) != 1:
-            raise ValueError('Unexpected public member template')
-        html = html.replace(member.MARKER, member_pages[lang])
-        (directory / page).write_text(html.replace(member.PUBLIC_FEATURE_MARKER, member.public_feature(member_view, lang)))
+        for marker, contents in ((member.MARKER, member_pages[lang]),
+                                 (member.PREVIEW_MARKER, member.home_preview(member_view, lang)),
+                                 (member.PUBLIC_FEATURE_MARKER, member.public_feature(member_view, lang))):
+            if html.count(marker) != 1:
+                raise ValueError('Unexpected public member template')
+            html = html.replace(marker, contents)
+        (directory / page).write_text(html)
     (directory / LEDGER).write_bytes(raw)
     files = [(file.relative_to(output).as_posix(), digest(file.read_bytes()))
              for file in sorted(output.rglob('*')) if file.is_file()]
@@ -424,12 +427,17 @@ def verify_live(expected, revision, run, request=source_with_retry):
         ids = {item['id'] for item in ledger['records']}
         if not ids.issubset(parser.ids) or ids & {'member', 'brief-content'}:
             raise ValueError('Live Atlas is missing one or more records')
-        atlas = html.partition('id="possibility-shifts"')[2].partition('id="access"')[0]
+        atlas = html.partition('id="possibility-shifts"')[2].partition('id="research"')[0]
         if f'data-atlas-digest="{expected}"' not in atlas or atlas.count('data-atlas-record') != len(ids):
             raise ValueError('Expected public records outside the wallet gate')
-        workspace = html.partition('id="member"')[2].partition('id="research"')[0]
-        if ('id="member-value"' not in workspace or 'id="mv-endpoint-run"' not in workspace
-                or any(marker in html for marker in (member.MARKER, '<!-- MV_SAMPLE -->'))):
+        entrance, _, reader = html.partition('<section id="member" class="frame workspace" hidden')
+        workspace, _, preview = reader.partition('id="member-preview"')
+        preview = preview.partition('id="possibility-shifts"')[0]
+        if (not {'enter-club', 'member-preview', 'mf-quick-run'}.issubset(parser.ids)
+                or 'id="access"' not in entrance or 'data-connect="token"' not in entrance
+                or 'id="member-value"' not in workspace or 'id="mv-endpoint-run"' not in workspace
+                or f'data-preview-count="{len(ids)}"' not in preview
+                or any(marker in html for marker in (member.MARKER, member.PREVIEW_MARKER, '<!-- MV_SAMPLE -->'))):
             raise ValueError('Unpublished member-workbench rendering')
         edition = sequenced['edition']
         public = sequenced['public_feature']

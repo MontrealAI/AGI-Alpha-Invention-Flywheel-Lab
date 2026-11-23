@@ -26,6 +26,7 @@ ARCHIVE_ZIP = 'noaa-archive-point-1.0.0.zip'
 MEMBER_JSON = 'member-value.json'
 OUTPUTS = frozenset(SITE + name for name in (ENDPOINT_ZIP, ARCHIVE_ZIP, MEMBER_JSON))
 MARKER = '<!-- FRONTIER_MEMBER_VALUE -->'
+PREVIEW_MARKER = '<!-- FRONTIER_MEMBER_PREVIEW -->'
 PUBLIC_FEATURE_MARKER = '<!-- FRONTIER_PUBLIC_FEATURE -->'
 RIGHTS = 'Authorized public distribution of this pinned package. Upstream material retains its own rights.'
 VERDICTS = ('USE NOW', 'TEST NOW', 'PREPARE', 'WATCH', 'ABSTAIN', 'DISCARD')
@@ -526,6 +527,42 @@ EDITION_LABELS = {
 
 def timestamp_html(when):
     return f'<time datetime="{escape(when)}">{escape(when[:16].replace("T", " "))} UTC</time>'
+
+
+def home_preview(compiled, lang):
+    fr = lang == 'fr'
+    featured = next(row for row in compiled['briefs'] if editions.key(row) == editions.key(compiled['member_first']['edition']))
+    local = featured[lang]
+    source = featured['evidence_links'][0]
+    archive = next(row for row in compiled['briefs'] if row['tool'] == 'archive')
+    decision = archive[lang]
+    evidence = ('Piste externe · source confirmée' if fr else 'External lead · source checked') if featured['evidence'] == 'source-identity-only' else EDITION_LABELS[featured['edition_kind']][fr]
+    steps = ('Choisir une tâche', 'Exécuter l’outil', 'Examiner le résultat', 'Exporter le reçu') if fr else (
+        'Choose a task', 'Run the tool', 'Inspect the result', 'Export a receipt')
+    outcome = ('Essayez l’exemple Endpoint avec sept mesures publiques. L’analyse et le reçu restent sur votre appareil.' if fr else
+               'Try the Endpoint example with seven public measurements. The analysis and receipt stay on your device.')
+    tool_list = (
+        ('Endpoint Evidence Screen', 'Charge maximale testée admissible. SQLite comme référence. Adoption opérationnelle en abstention.' if fr else
+         'Highest qualifying tested load. SQLite reference. Operational adoption remains ABSTAIN.'),
+        ('NOAA Archive Point', 'Prévision GFS historique à un point précis. Six cas vérifiés avec ecCodes. NCAR peut utiliser moins de données.' if fr else
+         'Historical GFS forecast at an exact point. Six cases checked against ecCodes. NCAR can use less data.'),
+    )
+    tools = ''.join(f'<li><strong>{title}</strong> · {detail}</li>' for title, detail in tool_list)
+    findings = ''.join(f'<dt>{FIELDS[name][fr]}</dt><dd>{escape(decision[name])}</dd>' for name in ('alternative', 'next'))
+    return (
+        f'<div class="preview-grid" data-preview-version="{escape(featured["source_version"])}" data-preview-count="{len(compiled["briefs"])}">'
+        f'<article class="preview-card" id="preview-intelligence"><p class="packet-meta">{"Bulletin Member First" if fr else "Member First intelligence"}</p>'
+        f'<h3>{escape(local["title"])}</h3><p>{escape(local["possibility"])}</p>'
+        f'<p class="preview-meta">{evidence} · {timestamp_html(featured["updated_at"])} · <a href="{escape(source["url"])}">{escape(source[lang])}</a></p></article>'
+        f'<article class="preview-card" id="preview-decisions"><p class="packet-meta">{"Bureau d’aide à la décision" if fr else "Frontier Decision Desk"}</p>'
+        f'<h3>{len(compiled["briefs"])} {"dossiers consultables" if fr else "searchable decision briefs"}</h3>'
+        f'<p>{escape(decision["possibility"])}</p><p><strong>{escape(label(archive["verdict"], fr))}</strong> · {"Dans le périmètre testé" if fr else "Within the tested scope"}</p><dl>{findings}</dl></article>'
+        f'<article class="preview-card" id="preview-capabilities"><p class="packet-meta">{"Bibliothèque d’outils" if fr else "Frontier Capability Library"}</p>'
+        f'<h3>{len(compiled["capabilities"])} {"outils qualifiés" if fr else "qualified tools you can run"}</h3><ul>{tools}</ul></article>'
+        f'<article class="preview-card" id="preview-outcomes"><p class="packet-meta">{"Atelier de vérification" if fr else "Outcome Workbench"}</p>'
+        f'<h3>{"Du résultat à la preuve" if fr else "From result to evidence"}</h3><p>{outcome}</p>'
+        f'<ol>{"".join(f"<li>{step}</li>" for step in steps)}</ol></article></div>'
+    )
 
 
 def feature_html(slot, compiled, lang):
