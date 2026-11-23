@@ -172,7 +172,7 @@ def certificate(rows, target, start, stop, limit, tolerance):
     choices = []
     for left, right in product((r for r in relevant if r["band"] == 1), (r for r in relevant if r["band"] == 2)):
         dates = [Decimal(left["jd"]), Decimal(right["jd"])]
-        margin = sum(tolerance for point in (left, right) if point["provider"] == "alerce")
+        margin = sum((tolerance for point in (left, right) if point["provider"] == "alerce"), Decimal(0))
         if left["id"] != right["id"] and min(dates) >= start + margin/DAY and max(dates) < stop - margin/DAY:
             gap = abs(dates[0] - dates[1]) * DAY
             if gap + margin <= limit:
