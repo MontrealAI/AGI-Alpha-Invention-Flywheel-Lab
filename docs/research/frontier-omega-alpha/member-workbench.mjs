@@ -130,10 +130,18 @@ ${current.rows.length} ${words.rows} · ${words.floor} ${current.minimum_tokens_
     enable();
   }
 
-  id('mv-sample').addEventListener('click', () => {
+  function loadPublic() {
     if (!active()) return;
     clear();
     load(template('mv-endpoint-sample'), true);
+  }
+  id('mv-sample').addEventListener('click',loadPublic);
+  id('mf-quick-run').addEventListener('click',event=>{
+    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    event.preventDefault();
+    loadPublic();
+    id('mv-endpoint-run').scrollIntoView({block:'start'});
+    freeze.focus({preventScroll:true});
   });
   input.addEventListener('change', async () => {
     if (!active()) return;

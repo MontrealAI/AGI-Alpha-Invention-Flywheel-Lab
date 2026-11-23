@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="dark">
-  <meta name="description" content="MONTREAL.AI et QUÉBEC.AI explorent ce qui vient de devenir possible et le mettent à l’épreuve.">
+  <meta name="description" content="Member First Ω de MONTREAL.AI et QUÉBEC.AI réunit des bulletins, des dossiers décisionnels, des outils qualifiés et des résultats vérifiables.">
   <meta name="referrer" content="no-referrer">
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'none'; base-uri 'none'; form-action 'none'">
   <title>FRONTIER Ω ALPHA · MONTREAL.AI × QUÉBEC.AI</title>
@@ -21,25 +21,94 @@
     <div class="frame header-inner">
       <a class="wordmark" href="fr.html"><span class="seal" aria-hidden="true">Ω</span><span>FRONTIER <b>Ω ALPHA</b></span></a>
       <nav class="top-nav" aria-label="Navigation principale">
-        <a class="nav-atlas" href="#possibility-shifts">Atlas vivant</a>
-        <a class="nav-research" href="#research">Recherche</a>
-        <a href="#access">Accès membre</a>
-        <a class="locale" href="index.html" lang="en">English</a>
+        <a class="nav-member" id="member-nav" href="#access">Member First</a>
+        <a class="nav-atlas" href="#possibility-shifts">Atlas public <span aria-hidden="true">→</span></a>
+        <a class="locale" href="index.html" lang="en" hreflang="en" aria-label="English">EN</a>
       </nav>
     </div>
   </header>
   <main id="main" tabindex="-1">
-    <section class="hero" aria-labelledby="title">
-      <div class="hero-image" aria-hidden="true"></div>
-      <div class="instrument" aria-hidden="true"><span></span></div>
-      <div class="frame hero-inner">
-        <p class="eyebrow">CAPTER L’EXPONENTIELLE</p>
-        <h1 id="title">FRONTIER <span>Ω ALPHA</span></h1>
-        <p class="question">Le laboratoire de recherche de MONTREAL.AI et QUÉBEC.AI suit les nouvelles capacités et les confronte aux meilleures solutions existantes.</p>
-        <p class="promise">Comprendre ce qui pourrait devenir possible. Découvrir ce qui peut devenir possible plus tôt. Inventer les moyens manquants. Prouver leur valeur. La capter. La faire fructifier.</p>
-        <a class="hero-action" href="#possibility-shifts">Explorer l’Atlas <span aria-hidden="true">↓</span></a>
-        <p class="observation" aria-hidden="true">NGC 3324 · Nébuleuse de la Carène</p>
+    <section id="access" class="entry" aria-labelledby="title">
+      <div class="entry-sky" aria-hidden="true"></div>
+      <div class="entry-orbit" aria-hidden="true"></div>
+      <div class="frame entry-inner">
+        <div class="entry-mast">
+          <p class="eyebrow">MONTREAL.AI × QUÉBEC.AI</p>
+          <h1 id="title">Member First <span>Ω</span></h1>
+          <p class="entry-promise">Votre avantage à la frontière de l’intelligence.</p>
+          <p class="entry-hook">Découvrez ce que vous pouvez faire dès maintenant, preuves et outils à l’appui.</p>
+        </div>
+        <ul class="entry-pillars">
+          <li><span class="entry-point" aria-hidden="true"></span><div><strong>Découvrir plus tôt</strong><p>Les derniers bulletins de recherche.</p></div></li>
+          <li><span class="entry-point" aria-hidden="true"></span><div><strong>Mieux comprendre</strong><p>Des preuves et une action claire.</p></div></li>
+          <li><span class="entry-point" aria-hidden="true"></span><div><strong>Acquérir des capacités</strong><p>Des outils qualifiés à exécuter.</p></div></li>
+          <li><span class="entry-point" aria-hidden="true"></span><div><strong>Obtenir des résultats</strong><p>Des résultats locaux avec reçus.</p></div></li>
+        </ul>
+        <div class="entry-portals" role="group" aria-label="Accès membre">
+          <article class="entry-portal" aria-labelledby="club-portal-title">
+            <div class="portal-head"><span class="portal-seal" aria-hidden="true">Ω</span><div>
+              <p class="packet-meta">Accès par adhésion</p><h2 id="club-portal-title">AGI CLUB</h2>
+            </div></div>
+            <p class="portal-eligibility">Détenez un nom <span>.club.agi.eth</span> admissible.</p>
+            <button class="entry-button" type="button" id="enter-club" aria-controls="club-form" aria-expanded="false" disabled>Entrer avec AGI CLUB<span aria-hidden="true">→</span></button>
+            <a class="portal-rules" href="#club-requirements" data-entry-help>Admissibilité AGI CLUB</a>
+          </article>
+          <article class="entry-portal" aria-labelledby="token-portal-title">
+            <div class="portal-head"><span class="portal-seal" aria-hidden="true">α</span><div>
+              <p class="packet-meta">Accès par détention</p><h2 id="token-portal-title">$AGIALPHA</h2>
+            </div></div>
+            <p class="portal-eligibility">Détenez au moins <strong>1&nbsp;000&nbsp;000</strong> de $AGIALPHA.</p>
+            <button class="entry-button" type="button" data-connect="token" disabled>Entrer avec $AGIALPHA<span aria-hidden="true">→</span></button>
+            <a class="portal-rules" href="#token-requirements" data-entry-help>Admissibilité $AGIALPHA</a>
+          </article>
+        </div>
+        <form class="entry-form" id="club-form" hidden>
+          <label for="club-label">Identifiant AGI CLUB</label>
+          <div class="entry-form-row">
+            <div class="field"><input id="club-label" name="label" maxlength="63" inputmode="text" autocapitalize="none" autocomplete="off" spellcheck="false" aria-describedby="club-label-help" required placeholder="alex"><span aria-hidden="true">.club.agi.eth</span></div>
+            <button class="entry-button" type="submit" data-connect="club" disabled>Vérifier l’adhésion<span aria-hidden="true">→</span></button>
+          </div>
+          <p id="club-label-help">Pour <code>alex.club.agi.eth</code>, saisissez <code>alex</code>.</p>
+        </form>
+        <p class="status entry-status" id="status" role="status" aria-live="polite"></p>
+        <div class="entry-foot">
+          <p>Signez un message sur Ethereum, sans transaction ni frais de réseau.</p>
+          <details class="entry-help" id="entry-help">
+            <summary>Aide et conditions d’accès</summary>
+            <div class="entry-help-body">
+              <p id="wallet-guidance">Sur ordinateur, utilisez l’extension MetaMask. Sur téléphone, ouvrez ce site dans le navigateur intégré à MetaMask Mobile. Sélectionnez le réseau principal Ethereum avant de signer. <a href="https://metamask.io/download">Télécharger MetaMask sur son site officiel</a>.</p>
+              <p id="club-requirements"><strong>AGI CLUB</strong> · Signez avec le portefeuille qui détient directement un nom ENSv1 admissible sous <code>.club.agi.eth</code>. Les noms avec ou sans Name Wrapper sont pris en charge.</p>
+              <p id="token-requirements"><strong>$AGIALPHA</strong> · Signez avec le portefeuille qui détient au moins 1&nbsp;000&nbsp;000 de $AGIALPHA admissibles sur le réseau principal Ethereum. Le contrat approuvé et les règles de solde en vigueur s’appliquent.</p>
+              <p>Member First utilise des fichiers publics sur GitHub Pages.</p>
+            </div>
+          </details>
+        </div>
+        <noscript><p class="entry-status">Activez JavaScript pour vérifier votre portefeuille. L’Atlas public est accessible ci-dessous.</p></noscript>
       </div>
+    </section>
+    <section id="member" class="frame workspace" hidden aria-labelledby="workspace-title">
+      <div class="workspace-head">
+        <div><p class="packet-meta">FRONTIER Ω ALPHA</p><h2 id="workspace-title" tabindex="-1">Bienvenue dans Member First Ω</h2></div>
+        <span class="mf-verified" id="member-route">Portefeuille vérifié</span>
+        <button id="lock" class="quiet" type="button">Verrouiller la session</button>
+      </div>
+      <!-- FRONTIER_MEMBER_VALUE -->
+      <div class="brief-entry" data-nosnippet>
+        <button class="quiet" id="open-brief" type="button" aria-controls="brief-content" aria-expanded="false">Ouvrir le dossier membre</button>
+        <p class="status" id="brief-status" role="status"></p>
+        <article class="brief-content" id="brief-content" hidden></article>
+      </div>
+      <details class="mf-related"><summary>Recherche publique connexe</summary><ul>
+        <li><a href="#packet-lean">Lean 4.36</a></li><li><a href="#packet-qwen">Qwen GGUF</a></li>
+        <li><a href="#research-packet">Rapports de preuve</a></li><li><a href="#packet-retrofit">Mise à niveau ALPHA-1</a></li>
+      </ul></details>
+    </section>
+    <section id="member-preview" class="frame member-preview" aria-labelledby="preview-title">
+      <div class="preview-heading">
+        <div><h2 id="preview-title">Aperçu de Member First</h2><p>Découvrez les dossiers, les décisions et les outils qui vous attendent dans votre espace.</p></div>
+        <a href="#access">Revenir à l’accès membre <span aria-hidden="true">↑</span></a>
+      </div>
+      <!-- FRONTIER_MEMBER_PREVIEW -->
     </section>
     <section class="frame atlas" id="possibility-shifts" aria-labelledby="possibility-shifts-title">
       <div class="atlas-heading">
@@ -59,46 +128,6 @@
         <p>La source et la version sont contrôlées. L’Atlas conserve les références après leur retrait de cette sélection.</p>
         <!-- FRONTIER_PUBLIC_WATCH -->
       </section>
-    </section>
-    <section id="access" class="frame gate" aria-labelledby="gate-title">
-      <div class="gate-head">
-        <h2 id="gate-title">Accéder à Member First</h2>
-        <p>Vérifiez votre portefeuille sur Ethereum pour ouvrir le bulletin, le bureau d’aide à la décision, les outils et l’atelier. La signature d’un message est sans frais. Member First utilise des fichiers publics sur GitHub Pages.</p>
-      </div>
-      <div class="paths">
-        <form class="path" id="club-form">
-          <label for="club-label">Votre identifiant AGI Club</label>
-          <div class="field"><input id="club-label" name="label" maxlength="63" inputmode="text" autocapitalize="none" autocomplete="off" spellcheck="false" required placeholder="founder"><span aria-hidden="true">.club.agi.eth</span></div>
-          <p>Détenir directement un nom ENSv1 sous <code>.club.agi.eth</code>, avec ou sans Name Wrapper.</p>
-          <button type="submit" data-connect="club" disabled>Entrer avec AGI Club <span aria-hidden="true">→</span></button>
-        </form>
-        <div class="path token-path">
-          <span class="token-mark" aria-hidden="true">α</span><p>Détenir au moins <strong>1 000 000 de $AGIALPHA</strong> dans le portefeuille signataire.</p>
-          <button type="button" data-connect="token" disabled>Entrer avec $AGIALPHA <span aria-hidden="true">→</span></button>
-        </div>
-      </div>
-      <p class="status" id="status" role="status" aria-live="polite">Pour vous connecter, ouvrez cette page dans MetaMask.</p>
-      <div class="member-brief" id="member-brief">
-        <h3>Commencer par l’Atlas public</h3>
-        <p><a href="#possibility-shifts">Consultez les dernières preuves</a> pendant que l’espace membre est verrouillé.</p>
-      </div>
-    </section>
-    <section id="member" class="frame workspace" hidden aria-labelledby="workspace-title">
-      <div class="workspace-head">
-        <div><p class="packet-meta">FRONTIER Ω ALPHA</p><h2 id="workspace-title" tabindex="-1">MEMBER FIRST Ω</h2></div>
-        <span class="mf-verified">Portefeuille vérifié</span>
-        <button id="lock" class="quiet" type="button">Verrouiller la session</button>
-      </div>
-      <!-- FRONTIER_MEMBER_VALUE -->
-      <div class="brief-entry" data-nosnippet>
-        <button class="quiet" id="open-brief" type="button" aria-controls="brief-content" aria-expanded="false">Ouvrir le dossier membre</button>
-        <p class="status" id="brief-status" role="status"></p>
-        <article class="brief-content" id="brief-content" hidden></article>
-      </div>
-      <details class="mf-related"><summary>Recherche publique connexe</summary><ul>
-        <li><a href="#packet-lean">Lean 4.36</a></li><li><a href="#packet-qwen">Qwen GGUF</a></li>
-        <li><a href="#research-packet">Rapports de preuve</a></li><li><a href="#packet-retrofit">Mise à niveau ALPHA-1</a></li>
-      </ul></details>
     </section>
     <section class="research" id="research" aria-labelledby="public-results-title">
       <div class="frame">

@@ -88,6 +88,7 @@ jobs:
             products/frontier-member-tools
             tests/test_member_value.py
             tests/test_member_tools.mjs
+            tests/live_frontier_browser.cjs
             scripts/replay_frontier_alpha1_availability.py
             publication/frontier-alpha-1-availability.json
             publication/frontier-public-holds.json
@@ -137,6 +138,16 @@ jobs:
           python3 -m unittest discover -s tests -p 'test_member_value.py' -v
           node --test tests/test_member_tools.mjs
           python3 scripts/qualify_frontier_member.py "$RUNNER_TEMP/research-site/frontier-omega-alpha"
+      - name: Qualify both member entrances on the candidate artifact
+        if: github.event_name == 'pull_request'
+        shell: bash
+        run: |
+          npm install --prefix "$RUNNER_TEMP/frontier-browser" --ignore-scripts --no-audit --no-fund --save-exact playwright-core@1.62.1
+          python3 -m http.server 8765 --bind 127.0.0.1 --directory "$RUNNER_TEMP/research-site" > "$RUNNER_TEMP/frontier-preview.log" 2>&1 &
+          preview_pid=$!
+          trap 'kill "$preview_pid"' EXIT
+          curl --silent --fail --retry 4 --retry-connrefused http://127.0.0.1:8765/frontier-omega-alpha/ --output /dev/null
+          FRONTIER_BROWSER_URL=http://127.0.0.1:8765/frontier-omega-alpha/ NODE_PATH="$RUNNER_TEMP/frontier-browser/node_modules" node tests/live_frontier_browser.cjs
       - name: Qualify prepared Conclave experiment
         if: github.event_name != 'schedule' || steps.frontier_watch.outputs.changed == 'true'
         working-directory: experiments/frontier-conclave
@@ -235,8 +246,19 @@ jobs:
         shell: bash
         run: |
           npm install --prefix "$RUNNER_TEMP/frontier-browser" --ignore-scripts --no-audit --no-fund --save-exact playwright-core@1.62.1
+          if test "$GITHUB_EVENT_NAME" = 'push'; then
+            export FRONTIER_SCREENSHOTS="$RUNNER_TEMP/frontier-screenshots"
+          fi
           NODE_PATH="$RUNNER_TEMP/frontier-browser/node_modules" node tests/live_frontier_browser.cjs | tee "$RUNNER_TEMP/frontier-browser.json"
           cat "$RUNNER_TEMP/frontier-browser.json" >> "$GITHUB_STEP_SUMMARY"
+      - name: Save verified production screenshots
+        if: github.event_name == 'push' && needs.deploy.result == 'success'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: frontier-production-browser-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/frontier-screenshots/*.png
+          if-no-files-found: error
+          retention-days: 30
       - name: Download and independently execute the actual production packages
         if: needs.deploy.result == 'success'
         shell: bash

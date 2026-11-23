@@ -323,7 +323,7 @@ def validate(source, *, staged=False):
         for link in parser.links:
             url = urlsplit(link)
             if url.scheme:
-                frontier_source = name in POSSIBILITY_PAGES and possibility_source(link)
+                frontier_source = name in POSSIBILITY_PAGES and (possibility_source(link) or link == 'https://metamask.io/download')
                 if not frontier_source and link not in EXTERNAL_RESEARCH_REFERENCES and (url.scheme != 'https' or url.netloc != 'github.com'):
                     raise ValueError(f'Unexpected external link: {link}')
                 continue

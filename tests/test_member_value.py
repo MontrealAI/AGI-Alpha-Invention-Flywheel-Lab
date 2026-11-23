@@ -72,6 +72,11 @@ class MemberValueTests(unittest.TestCase):
                 self.assertIn('data-edition-run="1"', html[language])
                 self.assertEqual(html[language].count('data-mv-open'), 5)
                 self.assertEqual(member.public_feature(produced, language), '')
+                preview = member.home_preview(produced, language)
+                self.assertIn(f'data-preview-count="{len(produced["briefs"])}"', preview)
+                self.assertIn('data-preview-version="2611.09822v3"', preview)
+                self.assertIn('Endpoint Evidence Screen', preview)
+                self.assertIn('NOAA Archive Point', preview)
 
     def test_public_recaps_follow_verified_member_editions_and_quiet_runs(self):
         briefs = member.decision_briefs(sample_ledger())

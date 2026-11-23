@@ -4,16 +4,25 @@
    from a real wallet. The provider fixture is isolated to its own browser page. */
 const assert = require('node:assert/strict');
 const {createHash} = require('node:crypto');
-const {readFile} = require('node:fs/promises');
+const {mkdir, readFile} = require('node:fs/promises');
+const {join} = require('node:path');
 const { chromium } = require('playwright-core');
 
 const base = process.env.FRONTIER_BROWSER_URL ??
   'https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/frontier-omega-alpha/';
 const checks = [];
+const screenshots = process.env.FRONTIER_SCREENSHOTS;
+const dimensions = width => ({width, height:width === 390 ? 844 : 900});
+
+async function capture(page, language, width, subject) {
+  if (!screenshots) return;
+  await mkdir(screenshots, {recursive:true});
+  await page.screenshot({path:join(screenshots, `${subject}-${language}-${width}.png`), animations:'disabled'});
+}
 
 async function publicAtlas(browser, language, width) {
   const path = language === 'fr' ? 'fr.html' : '';
-  const page = await browser.newPage({ viewport: { width, height: 900 }, reducedMotion: 'reduce' });
+  const page = await browser.newPage({ viewport:dimensions(width), reducedMotion:'reduce' });
   const errors = [];
   page.on('pageerror', error => errors.push(error.message));
   try {
@@ -25,25 +34,58 @@ async function publicAtlas(browser, language, width) {
     assert.ok(count >= 8);
     assert.equal(await page.locator('#member').isVisible(), false);
     assert.equal(await page.locator('#mf-edition').isVisible(), false);
-    assert.match(await page.locator('.gate-head').innerText(), /fichiers publics|public GitHub Pages files/i);
-    const viewport = await page.evaluate(() => ({
-      width: document.documentElement.clientWidth,
-      scroll: document.documentElement.scrollWidth,
-      hasWallet: Boolean(window.ethereum),
-      atlasBeforeGate: Boolean(document.getElementById('possibility-shifts').compareDocumentPosition(document.getElementById('access')) & Node.DOCUMENT_POSITION_FOLLOWING),
-      anchorIDs: [...document.querySelectorAll('#possibility-shifts [data-atlas-record]')].map(card => card.id)
-    }));
+    assert.equal(await page.locator('#club-form').isVisible(), false);
+    assert.match(await page.locator('h1').innerText(), /Member First Ω/i);
+    assert.equal(await page.locator('.entry-pillars li').count(), 4);
+    const viewport = await page.evaluate(() => {
+      const entrance = document.getElementById('access');
+      const atlas = document.getElementById('possibility-shifts');
+      const actions = [...entrance.querySelectorAll('.entry-portal button')].map(button => {
+        const {top,bottom,height,width} = button.getBoundingClientRect();
+        return {top:Math.round(top), bottom:Math.round(bottom), height:Math.round(height), width:Math.round(width),
+          disabled:button.disabled, background:getComputedStyle(button).backgroundImage};
+      });
+      return {width:document.documentElement.clientWidth, height:innerHeight,
+        scroll:document.documentElement.scrollWidth, hasWallet:Boolean(window.ethereum),
+        gateBeforeAtlas:Boolean(entrance.compareDocumentPosition(atlas) & Node.DOCUMENT_POSITION_FOLLOWING),
+        actions, atlasTop:Math.round(atlas.getBoundingClientRect().top),
+        anchorIDs:[...atlas.querySelectorAll('[data-atlas-record]')].map(card => card.id)};
+    });
     assert.ok(viewport.scroll <= viewport.width);
     assert.equal(viewport.hasWallet, false);
-    assert.equal(viewport.atlasBeforeGate, true);
+    assert.equal(viewport.gateBeforeAtlas, true);
+    assert.equal(viewport.actions.length, 2);
+    assert.ok(viewport.actions.every(action => !action.disabled && action.top >= 0 && action.bottom < viewport.height && action.height >= 44));
+    assert.equal(viewport.actions[0].top, viewport.actions[1].top);
+    assert.equal(viewport.actions[0].width, viewport.actions[1].width);
+    assert.equal(viewport.actions[0].background, viewport.actions[1].background);
+    assert.ok(viewport.atlasTop >= viewport.height);
     assert.equal(new Set(viewport.anchorIDs).size, count);
+    const memberData = await (await page.request.get(base + 'member-value.json')).json();
+    const preview = page.locator('#member-preview .preview-grid');
+    assert.equal(await preview.getAttribute('data-preview-count'), String(count));
+    assert.equal(await preview.getAttribute('data-preview-version'), memberData.member_first.edition.source_version);
+    assert.match(await page.locator('#preview-capabilities').innerText(), /Endpoint Evidence Screen[\s\S]*NOAA Archive Point/);
+    assert.equal(await page.locator('#preview-outcomes li').count(), 4);
+    await capture(page, language, width, 'home');
 
     await page.keyboard.press('Tab');
     assert.match(await page.locator(':focus').getAttribute('href'), /#main$/);
     await page.keyboard.press('Enter');
     assert.equal(await page.locator(':focus').getAttribute('id'), 'main');
 
-    await page.locator('.hero-action').click();
+    const clubPortal = page.locator('#enter-club');
+    await clubPortal.click();
+    assert.equal(await page.locator('#entry-help').evaluate(el => el.open), true);
+    assert.match(await page.locator('#status').innerText(), /MetaMask Mobile/);
+    assert.equal(await page.locator('#wallet-guidance a').getAttribute('href'), 'https://metamask.io/download');
+    assert.equal(await page.locator('#club-form').isVisible(), false);
+    assert.equal(await page.locator('#member').isVisible(), false);
+    await page.locator('[data-connect="token"]').click();
+    assert.match(await page.locator('#status').innerText(), /MetaMask Mobile/);
+    await page.locator('a[href="#token-requirements"]').click();
+    assert.equal(await page.locator('#token-requirements').isVisible(), true);
+    await page.locator('.nav-atlas').click();
     await page.waitForURL(/#possibility-shifts$/);
     assert.equal(await page.locator('#atlas-query').isVisible(), true);
     await page.locator('#atlas-query').fill('SQLite');
@@ -63,7 +105,8 @@ async function publicAtlas(browser, language, width) {
     for (const file of files) assert.equal((await page.request.get(base + file)).status(), 200);
     assert.deepEqual(errors, []);
     checks.push({ kind: 'public', language, viewport: width, redirect: response.url(), records: count,
-      keyboard: true, filters: true, evidenceLinks: true });
+      actionsAboveFold:viewport.actions.map(({top,bottom,height})=>({top,bottom,height})), atlasTop:viewport.atlasTop,
+      keyboard:true, filters:true, evidenceLinks:true, noWalletHelp:true, previewSourceBound:true });
   } finally {
     await page.close();
   }
@@ -116,7 +159,7 @@ function fakeWallet() {
 async function memberWorkbench(page, language) {
   const workbench = page.locator('#member-value');
   assert.equal(await workbench.isVisible(), true);
-  assert.match(await page.locator('#workspace-title').innerText(), /MEMBER FIRST Ω/);
+  assert.match(await page.locator('#workspace-title').innerText(), /Member First Ω/i);
   assert.equal(await page.locator('.mf-verified').isVisible(), true);
   assert.match(await page.locator('.mf-disclosure').innerText(), /public/);
   assert.equal(await page.locator('.mv-nav a').count(), 4);
@@ -159,7 +202,8 @@ async function memberWorkbench(page, language) {
   const context = page.context();
   await context.setOffline(true);
   try {
-    await page.locator('#mv-sample').click();
+    await page.locator('#mf-quick-run').click();
+    assert.equal(await page.locator(':focus').getAttribute('id'), 'mv-freeze');
     await page.locator('#mv-freeze').click();
     await page.locator('#mv-run').click();
     const output = page.locator('#mv-screen-result');
@@ -197,8 +241,8 @@ async function memberWorkbench(page, language) {
   assert.ok(width[1] <= width[0]);
 }
 
-async function walletPaths(browser, language) {
-  const page = await browser.newPage({ viewport: { width: language === 'fr' ? 390 : 1100, height: 850 }, reducedMotion: 'reduce' });
+async function walletPaths(browser, language, width) {
+  const page = await browser.newPage({ viewport:dimensions(width), reducedMotion:'reduce' });
   try {
     await page.clock.install();
     await page.addInitScript(fakeWallet);
@@ -206,14 +250,23 @@ async function walletPaths(browser, language) {
     assert.equal(response.status(), 200);
     const token = page.locator('[data-connect="token"]');
     const club = page.locator('[data-connect="club"]');
+    const clubPortal = page.locator('#enter-club');
     const member = page.locator('#member');
     const brief = page.locator('#brief-content');
-    const denied = language === 'fr' ? /ne satisfait/ : /does not meet/;
+    const tokenDenied = language === 'fr' ? /ne satisfait/ : /does not meet/;
+    const clubDenied = language === 'fr' ? /ne détient pas/ : /does not meet/;
     const canceled = language === 'fr' ? /annulée/ : /canceled/;
 
+    await page.evaluate(() => { window.walletScenario.chain = '0x2'; });
+    await token.click();
+    await page.waitForFunction(regex => new RegExp(regex).test(document.getElementById('status').textContent),
+      language === 'fr' ? 'réseau principal Ethereum' : 'Select Ethereum Mainnet');
+    assert.equal(await member.isVisible(), false);
+    assert.equal(await page.evaluate(() => window.walletScenario.signed.length), 0);
+    await page.evaluate(() => { window.walletScenario.chain = '0x1'; });
     await page.evaluate(() => { window.walletScenario.balance = 999_999n; });
     await token.click();
-    await page.waitForFunction(regex => new RegExp(regex).test(document.getElementById('status').textContent), denied.source);
+    await page.waitForFunction(regex => new RegExp(regex).test(document.getElementById('status').textContent), tokenDenied.source);
     assert.equal(await member.isVisible(), false);
 
     await page.evaluate(() => { window.walletScenario.balance = 1_000_000n; window.walletScenario.cancel = true; });
@@ -225,6 +278,15 @@ async function walletPaths(browser, language) {
     await token.click();
     await member.waitFor({ state: 'visible' });
     assert.equal(await page.locator(':focus').getAttribute('id'), 'workspace-title');
+    assert.equal(await page.locator('#access').isVisible(), false);
+    assert.equal(await page.locator('#member-preview').isVisible(), false);
+    assert.equal(await page.locator('#member-nav').getAttribute('href'), '#member');
+    assert.match(await page.locator('#member-route').innerText(), /\$AGIALPHA/);
+    const arrival = await page.locator('#mf-quick-run').boundingBox();
+    const scroll = await page.evaluate(() => scrollY);
+    assert.ok(arrival.y >= 0 && arrival.y + arrival.height <= dimensions(width).height,
+      `Recommended action beyond the ${language} ${width}px first screen. Scroll ${scroll}, box ${JSON.stringify(arrival)}`);
+    if (language === 'en') await capture(page, language, width, 'arrival-token');
     await page.locator('#open-brief').click();
     await brief.waitFor({ state: 'visible' });
     assert.match(await brief.innerText(), /1\.2/);
@@ -236,16 +298,24 @@ async function walletPaths(browser, language) {
     assert.equal(await brief.textContent(), '');
     assert.equal(await page.locator('#mv-screen-result').textContent(), '');
     assert.equal(await page.locator('#mv-consent').isChecked(), false);
+    assert.equal(await page.locator('#access').isVisible(), true);
+    assert.equal(await page.locator('#member-nav').getAttribute('href'), '#access');
 
+    assert.equal(await page.locator('#club-form').isVisible(), false);
+    await clubPortal.click();
+    assert.equal(await clubPortal.getAttribute('aria-expanded'), 'true');
+    assert.equal(await page.locator(':focus').getAttribute('id'), 'club-label');
     await page.locator('#club-label').fill('frontier-check');
     await page.evaluate(() => { window.walletScenario.expiration = true; });
     await club.click();
-    await page.waitForFunction(regex => new RegExp(regex).test(document.getElementById('status').textContent), denied.source);
+    await page.waitForFunction(regex => new RegExp(regex).test(document.getElementById('status').textContent), clubDenied.source);
     assert.equal(await member.isVisible(), false);
 
     await page.evaluate(() => { window.walletScenario.expiration = false; });
     await club.click();
     await member.waitFor({ state: 'visible' });
+    assert.match(await page.locator('#member-route').innerText(), /AGI CLUB/);
+    if (language === 'fr') await capture(page, language, width, 'arrival-club');
     await page.locator('#open-brief').click();
     await brief.waitFor({ state: 'visible' });
     assert.match(await brief.innerText(), /1\.2/);
@@ -262,8 +332,9 @@ async function walletPaths(browser, language) {
     });
     await member.waitFor({ state: 'hidden' });
     assert.equal(await page.locator('#mf-edition').isVisible(), false);
+    assert.equal(await page.locator('#access').isVisible(), true);
     await club.click();
-    await page.waitForFunction(regex => new RegExp(regex).test(document.getElementById('status').textContent), denied.source);
+    await page.waitForFunction(regex => new RegExp(regex).test(document.getElementById('status').textContent), clubDenied.source);
     assert.equal(await brief.textContent(), '');
     const state = await page.evaluate(() => ({
       methods: window.walletScenario.methods, signed: window.walletScenario.signed
@@ -273,9 +344,9 @@ async function walletPaths(browser, language) {
     const messages = state.signed.map(hex => Buffer.from(hex.slice(2), 'hex').toString());
     assert.ok(messages.every(message => message.includes('does not approve a transaction') && message.includes(new URL(base).origin)));
     assert.equal(new Set(messages).size, 3);
-    checks.push({ kind: 'member-ui', language, provider: 'isolated declared test wallet',
-      eligibleRoutes: ['AGI CLUB', 'AGIALPHA'], rejects: ['under balance', 'expired name', 'canceled signature'],
-      brief: '001 v1.2', memberFirstEntry: true, featuredBrief: true, downloadHashes: true, publicBenchmarkedScreen: 140,
+    checks.push({kind:'member-ui', language, width, provider:'isolated declared test wallet',
+      eligibleRoutes:['AGI CLUB','AGIALPHA'], rejects:['wrong network','under balance','expired name','canceled signature'],
+      brief:'001 v1.2', arrivalAboveFold:true, featuredBrief:true, downloadHashes:true, publicBenchmarkedScreen:140,
       offlineRunAndReceipt: true, receiptTamperDenial: true, lock: true, expiry: true, reconnect: true, accountSwitchDenial: true });
   } finally {
     await page.close();
@@ -286,8 +357,10 @@ async function walletPaths(browser, language) {
   const browser = await chromium.launch({ executablePath: process.env.FRONTIER_CHROME ?? '/usr/bin/google-chrome' });
   try {
     for (const language of ['en', 'fr']) {
-      for (const width of [1280, 390]) await publicAtlas(browser, language, width);
-      await walletPaths(browser, language);
+      for (const width of [1440,390]) {
+        await publicAtlas(browser, language, width);
+        await walletPaths(browser, language, width);
+      }
     }
     process.stdout.write(JSON.stringify(checks, null, 2) + '\n');
   } finally {

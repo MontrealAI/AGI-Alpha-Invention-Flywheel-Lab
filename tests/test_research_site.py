@@ -149,7 +149,8 @@ class ResearchSiteTests(unittest.TestCase):
             for record in site.read_possibilities(self.source):
                 self.assertIn(f'id="shift-{record["id"]}"', page)
             self.assertLess(page.index('id="possibility-shifts"'), page.index('id="research"'))
-            self.assertLess(page.index('id="possibility-shifts"'), page.index('id="access"'))
+            self.assertLess(page.index('id="access"'), page.index('id="possibility-shifts"'))
+            self.assertLess(page.index('id="member-preview"'), page.index('id="possibility-shifts"'))
             self.assertIn('id="atlas-controls"', page)
             self.assertIn('id="member" class="frame workspace" hidden', page)
             self.assertNotIn('id="possibility-shifts" data-nosnippet', page)
@@ -654,20 +655,24 @@ async function mounted(path){
   setAttribute(name,value){this.attributes[name]=value},
   replaceChildren(...children){this.children=children},
   append(...children){this.children.push(...children)}});
- const listeners={},button={},form={},lock={},member={hidden:true},status={};
+ const listeners={},button=node(),form={hidden:true},lock={},status={},entry={},preview={},route={},nav={},help={};
+ const member={hidden:true,contains(){return false}};
+ const portal=node(),label={value:'founder',focus(){}};
+ portal.addEventListener=(name,run)=>{listeners.reveal=run};
  const brief=node(), open=node(), briefStatus=node();
  brief.hidden=true;
  open.addEventListener=(name,run)=>{listeners.open=run};
- const el={'status':status,'member':member,'club-label':{value:'founder'},'club-form':form,'lock':lock,
+ const el={'status':status,'member':member,'club-label':label,'club-form':form,'lock':lock,'enter-club':portal,
+  'access':entry,'member-preview':preview,'entry-help':help,'member-route':route,'member-nav':nav,
   'workspace-title':{focus(){}},'open-brief':open,'brief-status':briefStatus,'brief-content':brief};
  form.addEventListener=(name,run)=>{listeners[name]=run};
  lock.addEventListener=(name,run)=>{listeners['lock']=run};
  button.addEventListener=(name,run)=>{listeners['token']=run};
  globalThis.document={documentElement:{lang:path==='club'?'fr':'en'},getElementById:id=>el[id],
-  querySelectorAll:()=>[button],querySelector:()=>button,createElement:node,addEventListener(){}};
+  querySelectorAll:selector=>selector==='[data-connect]'?[button]:[],querySelector:()=>button,createElement:node,addEventListener(){}};
  const chain=rpc(path);
  const calls=[],events={};
- globalThis.window={location:{origin:'https://montrealai.github.io'},addEventListener(){},dispatchEvent(){},ethereum:{
+ globalThis.window={location:{origin:'https://montrealai.github.io'},addEventListener(){},dispatchEvent(){},scrollTo(){},ethereum:{
   isMetaMask:true, on(name,run){events[name]=run}, request:async msg=>{
    calls.push(msg.method);
    if(msg.method==='eth_requestAccounts'){
@@ -683,9 +688,17 @@ async function mounted(path){
  try{
   await import(new URL('#'+path,walletURL));
   assert.equal(member.hidden,true);
+  if(path==='club'){
+   listeners.reveal();
+   assert.equal(form.hidden,false);
+   assert.equal(portal.attributes['aria-expanded'],'true');
+  }
   listeners[path==='club'?'submit':'token']({preventDefault(){}});
   for(let i=0;i<50&&member.hidden;i++)await new Promise(setImmediate);
   assert.equal(member.hidden,false);
+  assert.equal(entry.hidden,true);
+  assert.equal(preview.hidden,true);
+  assert.equal(nav.href,'#member');
   assert.equal(brief.hidden,true);
   const beforeOpen=calls.length;
   listeners.open();
@@ -701,6 +714,9 @@ async function mounted(path){
   assert.equal(brief.hidden,false);
   events.accountsChanged([other]);
   assert.equal(member.hidden,true);
+  assert.equal(entry.hidden,false);
+  assert.equal(preview.hidden,false);
+  assert.equal(route.textContent,'');
   assert.equal(brief.hidden,true);
   assert.equal(brief.children.length,0);
   assert.equal(open.attributes['aria-expanded'],'false');
@@ -716,7 +732,7 @@ console.log('11 wallet qualification checks and both workspace open/lock fixture
             with self.subTest(page=name):
                 page = (self.source / 'frontier-omega-alpha' / name).read_text()
                 before, workspace = page.split('<section id="member" class="frame workspace" hidden', 1)
-                workspace, after = workspace.split('<section class="research" id="research"', 1)
+                workspace, after = workspace.split('<section id="member-preview"', 1)
                 self.assertIn(public_note, before)
                 self.assertEqual(page.count('id="open-brief"'), 1)
                 self.assertNotIn('id="open-brief"', before + after)
@@ -724,12 +740,12 @@ console.log('11 wallet qualification checks and both workspace open/lock fixture
                 self.assertIn('id="brief-content" hidden></article>', workspace)
                 self.assertNotIn('id="member-brief-001"', page)
                 self.assertNotIn('id="possibility-shifts"', workspace)
-                self.assertIn('id="possibility-shifts" aria-labelledby="possibility-shifts-title"', before)
-                self.assertIn('<!-- FRONTIER_POSSIBILITY_RECORDS -->', before)
-                self.assertIn('<!-- FRONTIER_PUBLIC_WATCH -->', before)
-                self.assertNotIn('data-nosnippet aria-labelledby="possibility-shifts-title"', before)
+                self.assertIn('id="possibility-shifts" aria-labelledby="possibility-shifts-title"', after)
+                self.assertIn('<!-- FRONTIER_POSSIBILITY_RECORDS -->', after)
+                self.assertIn('<!-- FRONTIER_PUBLIC_WATCH -->', after)
+                self.assertNotIn('data-nosnippet aria-labelledby="possibility-shifts-title"', after)
                 self.assertIn('href="#possibility-shifts"', before)
-                self.assertNotIn('id="possibility-shifts"', after)
+                self.assertNotIn('id="possibility-shifts"', before)
 
     def test_frontier_alpha_workspace_links_to_bilingual_public_packets(self):
         for name in ('index.html', 'fr.html'):
