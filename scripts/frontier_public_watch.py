@@ -50,11 +50,13 @@ SHA256 = re.compile(r'[0-9a-f]{64}', re.ASCII)
 LABELS = {
     'en': {
         'empty': 'No qualifying public reference available.',
+        'verified-invention-watch': 'Read reviewed experimental outcomes in Possibility shifts.',
         'test': 'Matched test proposed',
         'watch': 'Awaiting further evidence',
     },
     'fr': {
         'empty': 'Aucune référence publique admissible pour le moment.',
+        'verified-invention-watch': 'Les résultats expérimentaux examinés figurent dans « Ce qui devient possible ».',
         'test': 'Essai comparatif proposé',
         'watch': 'En attente de preuves supplémentaires',
     },
@@ -229,7 +231,7 @@ def render(snapshot, language):
             f'<p><time datetime="{published}">{published}</time> · {labels[decision]}</p></li>'
             for title, url, published, decision in snapshot[stream]
         ]
-        results = f'<ul>{"".join(entries)}</ul>' if entries else f'<p>{labels["empty"]}</p>'
+        results = f'<ul>{"".join(entries)}</ul>' if entries else f'<p>{labels.get(stream, labels["empty"])}</p>'
         cards.append(f'<article><h3>{name}</h3>{results}</article>')
     content = '\n'.join(cards)
     fingerprint = sha256(content.encode()).hexdigest()
