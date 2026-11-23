@@ -61,11 +61,12 @@
     "candidate": "Fit an executable evidence materialization using only the development projection, then freeze. Test whether a scope-local retained certificate can answer the same decisions with no original source at query time. Charge construction, refresh and independent verification. Give both incumbents permission to pre-acquire and persist inputs.",
     "oracle": "Direct independent exhaustive score and independent certificate verification against the full admitted source. Exact all-case agreement and all adverse gates are required. Never interpolate load or generalize across configurations.",
     "case_design": {
-      "fresh_selection": "After artifact freeze, use evaluator-only random nonce to select confirmation scopes and motivating rows. Sample each case type equally. No selected case, answer or seed is exported.",
+      "fresh_selection": "After artifact freeze, use evaluator-only random nonce to select confirmation scopes and motivating rows. Sample distinct queries within each case type without replacement. No selected case, answer or seed is exported.",
       "queries_per_type": 16,
       "types": ["at-observed-limits", "faster-throughput-floor", "earlier-cutoff", "unattainable-ceiling"],
-      "controls": ["missing-source", "stale-source", "malformed-source", "contradictory-source", "digest-mismatch", "retryable-source-loss", "interrupted-evaluation", "invalid-certificate", "equal-load-witnesses"]
+      "controls": ["missing-source", "stale-source", "malformed-source", "contradictory-source", "digest-mismatch", "retryable-source-loss", "interrupted-evaluation", "invalid-certificate", "equal-load-witnesses", "bounded-overload-recovery"]
     },
+    "synthetic_overload": "In a separate loopback machinery control, hold a single admitted slot, observe 503 with no payload for both matched HTTP clients, release the slot and observe one successful retry per client. This tests recovery behavior only.",
     "costs": "Measure source acquisition attempts, time and bytes, wall and CPU by phase and matched method, persisted data size, acceptance and decision counts, sandbox resources, loopback response times, throughput, failures and retries. Record source fees, actual full engineering, electricity, independent human review and maintenance as unknown when unobserved. Scope uncertainty to this admitted snapshot, one host, one confirmation campaign and instrumented fixtures; no economic inference from CPU alone.",
     "retain_if": "No operational S1 until independently accepted useful output at lower complete cost or a separately established benefit. Reuse, equal-content construction and update-rule campaigns remain separate claims."
   },
