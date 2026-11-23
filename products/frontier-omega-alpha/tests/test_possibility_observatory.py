@@ -184,6 +184,18 @@ class ObservatoryTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             atlas.findings_at([self.write("bad.json", f)])
 
+    def test_finding_rejects_malformed_reception(self):
+        f = finding()
+        f["reception"] = ["not", "an", "object"]
+        with self.assertRaises(ValueError):
+            atlas.findings_at([self.write("bad.json", f)])
+
+    def test_finding_rejects_malformed_opportunity(self):
+        f = finding()
+        f["opportunity"] = "private conversation"
+        with self.assertRaises(ValueError):
+            atlas.findings_at([self.write("bad.json", f)])
+
     def test_finding_rejects_duplicate_id(self):
         p1 = self.write("f1.json", finding())
         p2 = self.write("f2.json", finding())
