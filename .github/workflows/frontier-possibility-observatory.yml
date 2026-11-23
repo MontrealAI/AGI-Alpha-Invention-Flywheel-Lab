@@ -21,6 +21,7 @@ jobs:
   qualification:
     if: github.repository == 'MontrealAI/AGI-Alpha-Invention-Flywheel-Lab'
     runs-on: ubuntu-latest
+    timeout-minutes: 360
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
@@ -30,7 +31,7 @@ jobs:
             products/alpha-genesis-harness/bridge
       - name: Run independent offline Observatory contract tests
         working-directory: products/frontier-omega-alpha
-        run: python3 -B -m unittest discover -s tests -p test_possibility_observatory.py -v
+        run: timeout 15m python3 -B -m unittest discover -s tests -p test_possibility_observatory.py -v
 
   daily-public-atlas:
     needs: qualification
@@ -41,6 +42,7 @@ jobs:
       vars.FRONTIER_ALPHA_OBSERVATORY_ENABLED == 'true' &&
       vars.FRONTIER_ALPHA_RESEARCH_ENABLED == 'true'
     runs-on: ubuntu-latest
+    timeout-minutes: 360
     permissions:
       contents: read
     steps:
@@ -58,7 +60,7 @@ jobs:
           set -euo pipefail
           umask 077
           prior="$RUNNER_TEMP/atlas-prior.json"
-          if gh api "repos/$GITHUB_REPOSITORY/contents/radar.json?ref=frontier-omega-alpha-radar" \
+          if timeout 2m gh api "repos/$GITHUB_REPOSITORY/contents/radar.json?ref=frontier-omega-alpha-radar" \
               -H "Accept: application/vnd.github.raw+json" > "$prior"; then
             python3 -c 'import json,sys; x=json.load(open(sys.argv[1])); assert x["schema"] == "frontier-omega-alpha/release-observations-v1"' "$prior"
           else
@@ -75,7 +77,7 @@ jobs:
           if test -s "$RUNNER_TEMP/atlas-prior.json"; then
             args+=(--previous "$RUNNER_TEMP/atlas-prior.json")
           fi
-          python3 -m research.scheduled "${args[@]}"
+          timeout 20m python3 -m research.scheduled "${args[@]}"
           if test -s "$RUNNER_TEMP/atlas-new.json"; then
             cp "$RUNNER_TEMP/atlas-new.json" "$RUNNER_TEMP/atlas-current.json"
           elif test -s "$RUNNER_TEMP/atlas-prior.json"; then
@@ -93,7 +95,7 @@ jobs:
         run: |
           set -euo pipefail
           umask 077
-          python3 -m research.possibility_observatory \
+          timeout 2m python3 -m research.possibility_observatory \
             --observations "$RUNNER_TEMP/atlas-current.json" \
             --as-of "$(date -u +%Y-%m-%d)" \
             --output "$RUNNER_TEMP/frontier-possibility-atlas"
