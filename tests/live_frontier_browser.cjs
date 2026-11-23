@@ -283,7 +283,9 @@ async function walletPaths(browser, language, width) {
     assert.equal(await page.locator('#member-nav').getAttribute('href'), '#member');
     assert.match(await page.locator('#member-route').innerText(), /\$AGIALPHA/);
     const arrival = await page.locator('#mf-quick-run').boundingBox();
-    assert.ok(arrival.y >= 0 && arrival.y + arrival.height <= dimensions(width).height);
+    const scroll = await page.evaluate(() => scrollY);
+    assert.ok(arrival.y >= 0 && arrival.y + arrival.height <= dimensions(width).height,
+      `Recommended action beyond the ${language} ${width}px first screen. Scroll ${scroll}, box ${JSON.stringify(arrival)}`);
     if (language === 'en') await capture(page, language, width, 'arrival-token');
     await page.locator('#open-brief').click();
     await brief.waitFor({ state: 'visible' });

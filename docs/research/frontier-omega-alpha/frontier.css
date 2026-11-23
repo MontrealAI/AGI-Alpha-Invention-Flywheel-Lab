@@ -11,6 +11,7 @@
 }
 *, *::before, *::after { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
+html:has(#member:not([hidden])) { overflow-anchor: none; }
 body { margin: 0; background: var(--ground); color: var(--ink); font: 1rem/1.57 var(--sans); }
 [hidden] { display: none !important; }
 h1, h2, h3, p, ul, ol { margin-block: 0; }

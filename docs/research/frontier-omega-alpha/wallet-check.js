@@ -263,8 +263,8 @@ function mount(){
       memberNav.href='#member';
       route.textContent=s[path==='club'?'clubVerified':'tokenVerified'];
       member.hidden=false;
-      window.scrollTo({top:0,behavior:'instant'});
       el('workspace-title').focus({preventScroll:true});
+      window.scrollTo({top:0,behavior:'instant'});
       timer=setTimeout(lock,sessionLifetime);
     }catch(e){
       if(id!==epoch)return;
