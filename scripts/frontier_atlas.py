@@ -17,6 +17,7 @@ from urllib.parse import quote, unquote
 
 import build_research_site as site
 import frontier_public_watch as watch
+import frontier_member_value as member
 
 
 INBOX_ANCHOR = '5db5637d42c0f675cc7689674d5db7ceb91930da'
@@ -366,9 +367,13 @@ def prepare(output, revision, event, run, request=source_with_retry):
         raise ValueError('Public ledger exceeds the supported single-file transfer limit')
     directory = output / 'frontier-omega-alpha'
     sealed = digest(raw)
+    member_view, member_pages, member_digest = member.prepare(directory, ledger, sealed)
     for page, lang in watch.PAGES.items():
         source = Path(EDITORIAL_PATH).parent / page
-        (directory / page).write_text(render(source.read_text(), lang, ledger, selected, references, sealed))
+        html = render(source.read_text(), lang, ledger, selected, references, sealed)
+        if html.count(member.MARKER) != 1:
+            raise ValueError('Unexpected public member template')
+        (directory / page).write_text(html.replace(member.MARKER, member_pages[lang]))
     (directory / LEDGER).write_bytes(raw)
     files = [(file.relative_to(output).as_posix(), digest(file.read_bytes()))
              for file in sorted(output.rglob('*')) if file.is_file()]
@@ -377,6 +382,8 @@ def prepare(output, revision, event, run, request=source_with_retry):
                   'products/alpha-genesis-harness/examples/customer-mission.json').decode()
     release = {'schema': 'frontier-omega-alpha/atlas-release-v1', 'source_commit': revision,
                'content_updated_at': ledger['updated_at'], 'ledger_sha256': sealed,
+               'member_value_sha256': member_digest,
+               'public_capability_sha256': {v['download']: v['sha256'] for v in member_view['capabilities'].values()},
                'records': len(ledger['records']), 'states': dict(Counter(row['state'] for row in ledger['records'])),
                'projection_sha256': digest(canonical_json([files, preview])),
                'workflow_run': run, 'checked_at': datetime.now(timezone.utc).isoformat(timespec='seconds')}
@@ -401,6 +408,15 @@ def verify_live(expected, revision, run, request=source_with_retry):
     if digest(raw) != expected:
         raise ValueError('Live ledger bytes do not match')
     ledger = json.loads(raw)
+    member_raw = request(watch.SITE + member.MEMBER_JSON, LEDGER_LIMIT)
+    if digest(member_raw) != release['member_value_sha256']:
+        raise ValueError('Live member evidence bytes do not match')
+    member_evidence = json.loads(member_raw)
+    if member_evidence['atlas_sha256'] != expected or member_evidence['publication'] != 'public-file':
+        raise ValueError('Live member evidence does not bind the current public Atlas')
+    for filename in (member.ENDPOINT_ZIP, member.ARCHIVE_ZIP):
+        if digest(request(watch.SITE + filename, 500_000)) != release['public_capability_sha256'][filename]:
+            raise ValueError('Live tool bytes do not match')
     for path in ('', 'fr.html'):
         html = request(watch.SITE + path, LEDGER_LIMIT).decode()
         parser = site.Links()
@@ -411,6 +427,10 @@ def verify_live(expected, revision, run, request=source_with_retry):
         atlas = html.partition('id="possibility-shifts"')[2].partition('id="access"')[0]
         if f'data-atlas-digest="{expected}"' not in atlas or atlas.count('data-atlas-record') != len(ids):
             raise ValueError('Expected public records outside the wallet gate')
+        workspace = html.partition('id="member"')[2].partition('id="research"')[0]
+        if ('id="member-value"' not in workspace or 'id="mv-endpoint-run"' not in workspace
+                or any(marker in html for marker in (member.MARKER, '<!-- MV_SAMPLE -->'))):
+            raise ValueError('Unpublished member-workbench rendering')
     return release
 
 

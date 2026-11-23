@@ -1,0 +1,71 @@
+<div class="mv" id="member-value">
+  <header class="mv-heading">
+    <p class="packet-meta">FRONTIER Ω ALPHA</p>
+    <h3>Mettre la recherche de pointe à l’œuvre</h3>
+    <p>Suivez les nouvelles preuves, choisissez une action justifiée et exécutez des outils dont vous pouvez vérifier les résultats.</p>
+    <nav class="mv-nav" aria-label="Atelier membre">
+      <a href="#mv-earlier">Découvrir plus tôt</a><a href="#mv-better">Mieux comprendre</a>
+      <a href="#mv-tools">Acquérir des capacités</a><a href="#mv-results">Obtenir des résultats</a>
+    </nav>
+  </header>
+  <section class="mv-section" id="mv-earlier" aria-labelledby="mv-earlier-title">
+    <h3 id="mv-earlier-title">Découvrir plus tôt</h3>
+    <p>Dernières preuves publiques inscrites au registre. Une diffusion protégée indépendante et une avance mesurée pour les membres restent à établir.</p>
+    <ul class="mv-timeline"><!-- MV_TIMELINE --></ul>
+    <p class="mv-links"><a href="member-value.json">Preuves décisionnelles versionnées</a>
+      <a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/issues/550">État de la diffusion protégée</a></p>
+  </section>
+  <section class="mv-section" id="mv-better" aria-labelledby="mv-better-title">
+    <h3 id="mv-better-title">Mieux comprendre</h3>
+    <p>Explorez le périmètre testé, la meilleure solution de rechange, les coûts et la prochaine étape. Une piste dont la source est confirmée attend un essai indépendant.</p>
+    <div class="mv-filters" id="mv-filters" hidden>
+      <label for="mv-query">Rechercher dans les dossiers<input id="mv-query" type="search" maxlength="120" autocomplete="off" aria-controls="mv-records"></label>
+      <details><summary>Filtrer selon votre situation</summary><div class="mv-facets"><!-- MV_FILTERS --></div></details>
+      <p role="status" id="mv-filter-status"></p>
+    </div>
+    <div class="mv-grid" id="mv-records"><!-- MV_BRIEFS --></div>
+  </section>
+  <section class="mv-section" id="mv-tools" aria-labelledby="mv-tools-title">
+    <h3 id="mv-tools-title">Acquérir des capacités</h3>
+    <p>Exécutez les outils publiés ou téléchargez une version précise avec son format d’entrée, son vérificateur, ses limites et ses droits d’utilisation.</p>
+    <div class="mv-grid"><!-- MV_TOOLS --></div>
+    <section class="mv-runner" id="mv-endpoint-run" aria-labelledby="mv-run-title">
+      <h4 id="mv-run-title">Analyser les mesures Endpoint</h4>
+      <p>Utilisez les sept mesures officielles ou ouvrez un lot autorisé au format de l’exemple du ZIP. Le traitement se fait dans ce navigateur.</p>
+      <template id="mv-endpoint-sample"><!-- MV_SAMPLE --></template>
+      <template id="mv-endpoint-reference"><!-- MV_REFERENCE --></template>
+      <template id="mv-endpoint-manifest"><!-- MV_TOOL_MANIFEST --></template>
+      <div class="mv-actions">
+        <button type="button" class="quiet" id="mv-sample">Charger les données d’essai publiques</button>
+        <label for="mv-input">Ouvrir un lot JSON local<input id="mv-input" type="file" accept=".json,application/json"></label>
+      </div>
+      <label class="mv-check" id="mv-rights-row" hidden><input type="checkbox" id="mv-rights">J’ai l’autorisation de traiter ce lot localement.</label>
+      <p id="mv-plan" class="mv-plan"></p>
+      <div class="mv-actions">
+        <button type="button" class="quiet" id="mv-freeze" disabled>Figer la tâche et le comparateur</button>
+        <button type="button" class="quiet" id="mv-run" disabled>Exécuter l’évaluation</button>
+        <button type="button" class="quiet" id="mv-clear">Effacer cette tâche</button>
+      </div>
+      <p id="mv-run-status" role="status" class="status"></p>
+      <div id="mv-screen-result" hidden tabindex="-1"></div>
+    </section>
+  </section>
+  <section class="mv-section" id="mv-results" aria-labelledby="mv-results-title">
+    <h3 id="mv-results-title">Obtenir des résultats</h3>
+    <dl class="mv-measures">
+      <div><dt>Outils qualifiés</dt><dd>2</dd></div>
+      <div><dt>Rejeu Endpoint public contrôlé</dt><dd>7 mesures vérifiées par SQLite</dd></div>
+      <div><dt>Référence d’archive signée</dt><dd>6 prévisions réservées vérifiées avec ecCodes</dd></div>
+      <div><dt>Essais membres réels, acceptations indépendantes et réutilisations</dt><dd>Pas encore mesurés</dd></div>
+      <div><dt>Avance vérifiée et gains de productivité des membres</dt><dd>Pas encore mesurés</dd></div>
+    </dl>
+    <p>Vous pouvez exporter un reçu local après une évaluation Endpoint. Il contient les empreintes des preuves, la portée de l’essai et l’état de la vérification. Le reçu reste en votre possession. Pour vos propres données, il omet les valeurs de charge, le texte source, les entrées et les renseignements sur le portefeuille.</p>
+    <label class="mv-check"><input type="checkbox" id="mv-consent">Préparer un reçu local pour cette tâche. Décochez la case pour retirer votre consentement avant l’exportation.</label>
+    <div class="mv-actions">
+      <button type="button" class="quiet" id="mv-export" disabled>Exporter le reçu</button>
+      <label for="mv-import">Vérifier l’intégrité d’un reçu<input id="mv-import" type="file" accept=".json,application/json"></label>
+    </div>
+    <p id="mv-receipt-status" role="status" class="status"></p>
+    <p>Le contrôle d’intégrité compare les empreintes. L’acceptation indépendante exige le comparateur nommé et des preuves fiables. Cette édition ne recueille ni ne transmet de données membres.</p>
+  </section>
+</div>

@@ -159,6 +159,7 @@ function mount(){
     member.hidden=true;
     pending=null;
     resetBrief();
+    window.dispatchEvent(new Event('frontier:member-lock'));
     buttons.forEach(b=>b.disabled=false);
     say('changed');
   };

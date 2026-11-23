@@ -599,7 +599,8 @@ class ResearchSiteTests(unittest.TestCase):
             {'frontier-omega-alpha/index.html', 'frontier-omega-alpha/fr.html',
              'frontier-omega-alpha/frontier.css', 'frontier-omega-alpha/carina.webp',
              'frontier-omega-alpha/wallet-check.js', 'frontier-omega-alpha/member-brief-001.js',
-             'frontier-omega-alpha/atlas.js'},
+             'frontier-omega-alpha/atlas.js', 'frontier-omega-alpha/endpoint-screen.mjs',
+             'frontier-omega-alpha/outcome-receipt.mjs', 'frontier-omega-alpha/member-workbench.mjs'},
         )
         source = (self.source / 'frontier-omega-alpha' / 'wallet-check.js').read_text()
         self.assertIn("await import('./member-brief-001.js')", source)
@@ -666,7 +667,7 @@ async function mounted(path){
   querySelectorAll:()=>[button],querySelector:()=>button,createElement:node,addEventListener(){}};
  const chain=rpc(path);
  const calls=[],events={};
- globalThis.window={location:{origin:'https://montrealai.github.io'},addEventListener(){},ethereum:{
+ globalThis.window={location:{origin:'https://montrealai.github.io'},addEventListener(){},dispatchEvent(){},ethereum:{
   isMetaMask:true, on(name,run){events[name]=run}, request:async msg=>{
    calls.push(msg.method);
    if(msg.method==='eth_requestAccounts'){

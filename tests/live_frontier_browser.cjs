@@ -3,6 +3,7 @@
 /* Run against the public Pages URLs. Wallet permissions are never requested
    from a real wallet. The provider fixture is isolated to its own browser page. */
 const assert = require('node:assert/strict');
+const {readFile} = require('node:fs/promises');
 const { chromium } = require('playwright-core');
 
 const base = process.env.FRONTIER_BROWSER_URL ??
@@ -55,7 +56,7 @@ async function publicAtlas(browser, language, width) {
     assert.equal(await page.locator('#monitoring a[href*="2611.23751"]').count(), 0);
     const source = page.locator('#shift-archive-point a').first();
     assert.match(await source.getAttribute('href'), /6a635b77012fb45b4d96c404a33fa04327c19674/);
-    const files = ['atlas-ledger.json', 'atlas-release.json', 'member-brief-001.js'];
+    const files = ['atlas-ledger.json', 'atlas-release.json', 'member-brief-001.js', 'member-value.json'];
     for (const file of files) assert.equal((await page.request.get(base + file)).status(), 200);
     assert.deepEqual(errors, []);
     checks.push({ kind: 'public', language, viewport: width, redirect: response.url(), records: count,
@@ -109,8 +110,66 @@ function fakeWallet() {
   state.emit = (event, payload) => listeners.get(event)?.(payload);
 }
 
+async function memberWorkbench(page, language) {
+  const workbench = page.locator('#member-value');
+  assert.equal(await workbench.isVisible(), true);
+  const filter = page.locator('#mv-query');
+  const count = await page.locator('[data-mv-record]').count();
+  assert.ok(count >= 8);
+  await filter.fill('SQLite');
+  assert.ok((await page.locator('[data-mv-record]:visible').count()) > 0);
+  assert.ok((await page.locator('[data-mv-record]:visible').count()) < count);
+  await filter.fill('');
+  await page.locator('#mv-filters summary').click();
+  await page.locator('#mv-action').selectOption('ABSTAIN');
+  assert.equal(await page.locator('[data-mv-record]:visible').count(), 1);
+  await page.locator('#mv-action').selectOption('');
+  assert.equal(await page.locator('#tool-endpoint a[download]').count(), 1);
+  assert.equal(await page.locator('#tool-archive a[download]').count(), 1);
+  assert.equal(await page.locator('#mv-export').isEnabled(), false);
+
+  const context = page.context();
+  await context.setOffline(true);
+  try {
+    await page.locator('#mv-sample').click();
+    await page.locator('#mv-freeze').click();
+    await page.locator('#mv-run').click();
+    const output = page.locator('#mv-screen-result');
+    await output.waitFor({state:'visible'});
+    assert.match(await output.innerText(), /140/);
+    assert.match(await output.innerText(), /ABSTAIN|abstention/i);
+    assert.equal(await page.locator('#mv-export').isEnabled(), false);
+    await page.locator('#mv-consent').check();
+    await page.locator('#mv-consent').uncheck();
+    assert.equal(await page.locator('#mv-export').isEnabled(), false);
+    await page.locator('#mv-consent').check();
+    const download = page.waitForEvent('download');
+    await page.locator('#mv-export').click();
+    const receipt = await readFile(await (await download).path());
+    const proof = JSON.parse(receipt);
+    assert.equal(proof.receipt.verification, 'matched-frozen-independent-sqlite-reference');
+    assert.equal(proof.receipt.recorded_highest_load, 140);
+    assert.equal(proof.receipt.complete_cost, null);
+    assert.equal(proof.receipt.realized_member_value, null);
+    assert.ok(!receipt.includes(Buffer.from('GB300')));
+    assert.ok(!receipt.includes(Buffer.from('0x' + '12'.repeat(20))));
+    await page.locator('#mv-import').setInputFiles({name:'proof.json',mimeType:'application/json',buffer:receipt});
+    await page.waitForFunction(lang => document.getElementById('mv-receipt-status').textContent.includes(
+      lang === 'fr' ? 'Empreinte cohérente' : 'Digest matches'), language);
+    proof.receipt.recorded_highest_load = 141;
+    await page.locator('#mv-import').setInputFiles({name:'changed.json',mimeType:'application/json',
+      buffer:Buffer.from(JSON.stringify(proof))});
+    await page.waitForFunction(lang => document.getElementById('mv-receipt-status').textContent.includes(
+      lang === 'fr' ? 'invalide' : 'altered'), language);
+  } finally {
+    await context.setOffline(false);
+  }
+  const width = await page.evaluate(() => [document.documentElement.clientWidth, document.documentElement.scrollWidth]);
+  assert.ok(width[1] <= width[0]);
+}
+
 async function walletPaths(browser, language) {
-  const page = await browser.newPage({ viewport: { width: 1100, height: 850 }, reducedMotion: 'reduce' });
+  const page = await browser.newPage({ viewport: { width: language === 'fr' ? 390 : 1100, height: 850 }, reducedMotion: 'reduce' });
   try {
     await page.clock.install();
     await page.addInitScript(fakeWallet);
@@ -140,10 +199,13 @@ async function walletPaths(browser, language) {
     await brief.waitFor({ state: 'visible' });
     assert.match(await brief.innerText(), /1\.2/);
     assert.ok(await brief.locator('a').count() > 0);
+    await memberWorkbench(page, language);
 
     await page.clock.fastForward(301_000);
     await member.waitFor({ state: 'hidden' });
     assert.equal(await brief.textContent(), '');
+    assert.equal(await page.locator('#mv-screen-result').textContent(), '');
+    assert.equal(await page.locator('#mv-consent').isChecked(), false);
 
     await page.locator('#club-label').fill('frontier-check');
     await page.evaluate(() => { window.walletScenario.expiration = true; });
@@ -177,7 +239,7 @@ async function walletPaths(browser, language) {
     assert.equal(new Set(messages).size, 3);
     checks.push({ kind: 'member-ui', language, provider: 'isolated declared test wallet',
       eligibleRoutes: ['AGI CLUB', 'AGIALPHA'], rejects: ['under balance', 'expired name', 'canceled signature'],
-      brief: '001 v1.2', lock: true, expiry: true, reconnect: true, accountRevocation: true });
+      brief: '001 v1.2', publicBenchmarkedScreen: 140, offlineRunAndReceipt: true, receiptTamperDenial: true, lock: true, expiry: true, reconnect: true, accountRevocation: true });
   } finally {
     await page.close();
   }

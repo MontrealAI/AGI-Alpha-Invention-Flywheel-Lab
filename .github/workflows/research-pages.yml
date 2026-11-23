@@ -7,6 +7,11 @@ on:
       - 'scripts/build_research_site.py'
       - 'scripts/frontier_public_watch.py'
       - 'scripts/frontier_atlas.py'
+      - 'scripts/frontier_member_value.py'
+      - 'scripts/qualify_frontier_member.py'
+      - 'products/frontier-member-tools/**'
+      - 'tests/test_member_value.py'
+      - 'tests/test_member_tools.mjs'
       - 'scripts/replay_frontier_alpha1_availability.py'
       - 'publication/frontier-alpha-1-availability.json'
       - 'publication/frontier-public-holds.json'
@@ -28,6 +33,11 @@ on:
       - 'scripts/build_research_site.py'
       - 'scripts/frontier_public_watch.py'
       - 'scripts/frontier_atlas.py'
+      - 'scripts/frontier_member_value.py'
+      - 'scripts/qualify_frontier_member.py'
+      - 'products/frontier-member-tools/**'
+      - 'tests/test_member_value.py'
+      - 'tests/test_member_tools.mjs'
       - 'scripts/replay_frontier_alpha1_availability.py'
       - 'publication/frontier-alpha-1-availability.json'
       - 'publication/frontier-public-holds.json'
@@ -70,6 +80,11 @@ jobs:
             scripts/build_research_site.py
             scripts/frontier_public_watch.py
             scripts/frontier_atlas.py
+            scripts/frontier_member_value.py
+            scripts/qualify_frontier_member.py
+            products/frontier-member-tools
+            tests/test_member_value.py
+            tests/test_member_tools.mjs
             scripts/replay_frontier_alpha1_availability.py
             publication/frontier-alpha-1-availability.json
             publication/frontier-public-holds.json
@@ -109,8 +124,16 @@ jobs:
             test "$attempt" -lt 3 || exit 1
             sleep "$((2 * attempt))"
           done
+          git fetch --no-tags --depth=1 --filter=blob:none origin \
+            522542e525e96556285560e65e4443c85cc7b709 6a635b77012fb45b4d96c404a33fa04327c19674
           python3 scripts/frontier_atlas.py stage "$RUNNER_TEMP/research-site" \
             "$GITHUB_EVENT_NAME" "$GITHUB_SHA" "$GITHUB_RUN_ID" >> "$GITHUB_OUTPUT"
+      - name: Qualify public member briefs, receipts and exact portable packages
+        if: github.event_name != 'schedule' || steps.frontier_watch.outputs.changed == 'true'
+        run: |
+          python3 -m unittest discover -s tests -p 'test_member_value.py' -v
+          node --test tests/test_member_tools.mjs
+          python3 scripts/qualify_frontier_member.py "$RUNNER_TEMP/research-site/frontier-omega-alpha"
       - name: Qualify prepared Conclave experiment
         if: github.event_name != 'schedule' || steps.frontier_watch.outputs.changed == 'true'
         working-directory: experiments/frontier-conclave
@@ -186,6 +209,8 @@ jobs:
           persist-credentials: false
           sparse-checkout: |
             scripts/frontier_atlas.py
+            scripts/frontier_member_value.py
+            scripts/qualify_frontier_member.py
             scripts/frontier_public_watch.py
             scripts/build_research_site.py
             tests/live_frontier_browser.cjs
@@ -208,3 +233,15 @@ jobs:
           npm install --prefix "$RUNNER_TEMP/frontier-browser" --ignore-scripts --no-audit --no-fund --save-exact playwright-core@1.62.1
           NODE_PATH="$RUNNER_TEMP/frontier-browser/node_modules" node tests/live_frontier_browser.cjs | tee "$RUNNER_TEMP/frontier-browser.json"
           cat "$RUNNER_TEMP/frontier-browser.json" >> "$GITHUB_STEP_SUMMARY"
+      - name: Download and independently execute the actual production packages
+        if: needs.deploy.result == 'success'
+        shell: bash
+        run: |
+          packages="$RUNNER_TEMP/frontier-distributed"
+          mkdir -p "$packages"
+          origin="https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/frontier-omega-alpha"
+          for artifact in member-value.json endpoint-evidence-screen-1.0.0.zip noaa-archive-point-1.0.0.zip; do
+            curl --fail --silent --show-error --retry 2 --max-time 20 --max-filesize 20000000 "$origin/$artifact" --output "$packages/$artifact"
+          done
+          python3 scripts/qualify_frontier_member.py "$packages" | tee "$RUNNER_TEMP/frontier-distributed.json"
+          cat "$RUNNER_TEMP/frontier-distributed.json" >> "$GITHUB_STEP_SUMMARY"
