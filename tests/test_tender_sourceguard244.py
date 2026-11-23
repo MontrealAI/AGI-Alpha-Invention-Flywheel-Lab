@@ -55,6 +55,34 @@ class TestSourceGuard(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "TIMEZONE_LABEL_CONFLICTS"):
             mod.reconcile(x)
 
+    def test_nonexistent_spring_forward_instant_rejected_both_labels(self):
+        # Toronto clocks jump from 01:59:59 EST to 03:00:00 EDT.
+        for zone in ("EST", "EDT"):
+            with self.subTest(zone=zone), self.assertRaisesRegex(
+                    ValueError, "TIMEZONE_LABEL_CONFLICTS_OR_LOCAL_TIME_NONEXISTENT"):
+                mod._datetime("2026-03-08T02:30:00", zone)
+
+    def test_repeated_fall_back_hour_respects_explicit_fold(self):
+        first = mod._datetime("2026-11-01T01:30:00", "EDT")
+        second = mod._datetime("2026-11-01T01:30:00", "EST")
+        self.assertEqual(first.isoformat(), "2026-11-01T01:30:00-04:00")
+        self.assertEqual(second.isoformat(), "2026-11-01T01:30:00-05:00")
+        self.assertEqual(first.astimezone(mod.timezone.utc).isoformat(),
+                         "2026-11-01T05:30:00+00:00")
+        self.assertEqual(second.astimezone(mod.timezone.utc).isoformat(),
+                         "2026-11-01T06:30:00+00:00")
+        self.assertEqual(first.fold, 0)
+        self.assertEqual(second.fold, 1)
+
+    def test_registered_real_tender_timestamp_unchanged_after_dst_repair(self):
+        result = mod.reconcile(copy.deepcopy(CASE))
+        self.assertEqual(result["observed_official_instant_utc"],
+                         "2026-11-23T19:00:00+00:00")
+        self.assertEqual(result["schedule_status"], "INDETERMINATE")
+        self.assertFalse(result["final_current_deadline_verified"])
+        self.assertEqual(result["commercial_decision"], "HOLD_NO_BID")
+        self.assertTrue(result["external_discrepancies"][0]["conflicts_with_known_official"])
+
     def test_winter_est_summer_edt(self):
         self.assertEqual(mod._datetime("2026-07-01T14:00:00", "EDT").isoformat(),
                          "2026-07-01T14:00:00-04:00")

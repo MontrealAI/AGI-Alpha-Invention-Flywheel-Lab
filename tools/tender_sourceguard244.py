@@ -35,11 +35,23 @@ def _datetime(reading: str, zone: str) -> datetime:
         raise ValueError("INVALID_CANONICAL_LOCAL_DATETIME") from exc
     if zone == "UTC":
         return local.replace(tzinfo=timezone.utc)
-    toronto = local.replace(tzinfo=ZoneInfo("America/Toronto"))
-    actual = toronto.utcoffset()
+    # A bare tzinfo replacement can invent nonexistent DST-gap timestamps or
+    # reject the valid second occurrence of a fall-back wall clock instant.
+    region = ZoneInfo("America/Toronto")
     expected = timedelta(hours=-5 if zone == "EST" else -4)
-    _require(actual == expected, "TIMEZONE_LABEL_CONFLICTS_WITH_TORONTO_DATE")
-    return toronto
+    valid = []
+    for fold in (0, 1):
+        candidate = local.replace(tzinfo=region, fold=fold)
+        if candidate.utcoffset() != expected:
+            continue
+        # Only the correct fold of an existing wall time survives an exact
+        # UTC -> local round trip. Ordinary unambiguous instants use fold=0.
+        roundtrip = candidate.astimezone(timezone.utc).astimezone(region)
+        if (roundtrip.replace(tzinfo=None) == local and
+                roundtrip.fold == fold):
+            valid.append(candidate)
+    _require(len(valid) == 1, "TIMEZONE_LABEL_CONFLICTS_OR_LOCAL_TIME_NONEXISTENT")
+    return valid[0]
 
 
 def _normalize_doc(d: dict, solicitation: str) -> dict:
