@@ -21,7 +21,7 @@ from standing_authority import active_approval, protected
 LABEL = "ai.montreal.frontier-evaluator"
 SCOPE = "frontier-omega-alpha/mac-studio-canary-v1"
 DIAGNOSTIC = b"Public nonconfidential custody permission canary for issue #565.\n"
-RUNTIME_FILES = ("mac_activation.py", "standing_authority.py", "common.py", "cycle.py", "evaluation.py")
+RUNTIME_FILES = ("mac_activation.py", "standing_authority.py", "common.py", "cycle.py", "evaluation.py", "record_intake.py")
 PROBE = """import json, os, sys
 operations = json.loads(sys.argv[1])
 result = {}
@@ -85,6 +85,11 @@ def validate_roles(receipt, authority, approved):
             receipt["constructor"]["gid"] != authority["evaluator_gid"] and
             receipt["constructor"]["operations"] == CONSTRUCTOR_RIGHTS,
             "ACTUAL_MAC_PERMISSION_MATRIX_NOT_SATISFIED")
+    if "source_intake" in authority:
+        publisher = receipt["publisher"]
+        require(publisher["uid"] == authority["source_intake"]["publisher_uid"] and
+                publisher["gid"] != authority["evaluator_gid"] and publisher["operations"] == CONSTRUCTOR_RIGHTS,
+                "MAC_PUBLISHER_CUSTODY_DENIAL_UNPROVEN")
 
 
 def require_canary(root, authority, manifest_sha):
@@ -94,10 +99,14 @@ def require_canary(root, authority, manifest_sha):
     require(receipt["approval_sha256"] == manifest_sha, "MAC_CANARY_BELONGS_TO_DIFFERENT_APPROVAL")
     validate_roles(receipt, authority, approved)
     evaluator, constructor = (pwd.getpwuid(authority[role + "_uid"]).pw_name for role in ("evaluator", "constructor"))
-    require(all(not (name_groups(name) & {"admin", "wheel", "sudo"}) for name in (evaluator, constructor)),
+    untrusted_records = [constructor]
+    if "source_intake" in authority:
+        untrusted_records.append(pwd.getpwuid(authority["source_intake"]["publisher_uid"]).pw_name)
+    require(all(not (name_groups(name) & {"admin", "wheel", "sudo"}) for name in [evaluator, *untrusted_records]),
             "MAC_GROUP_AUTHORITY_CHANGED")
-    constructor_groups = set(checked(["/usr/bin/id", "-G", constructor]).decode().split())
-    require(str(authority["evaluator_gid"]) not in constructor_groups, "MAC_CONSTRUCTOR_JOINED_EVALUATOR_GROUP")
+    for account in untrusted_records:
+        require(str(authority["evaluator_gid"]) not in checked(["/usr/bin/id", "-G", account]).decode().split(),
+                "MAC_NON_EVALUATOR_JOINED_CUSTODY_GROUP")
     state = Path(authority["private_state"])
     records = root / "cleared-records"
     for path in (root, root / "authority.json", root / "approved-code", records, state, state / "evaluator.key",
@@ -165,6 +174,14 @@ def canary(root, state, owner_pin):
             for p in (evaluator, constructor)) and evaluator.pw_name == policy["evaluator_user"] and
             evaluator.pw_gid == policy["evaluator_gid"], "MAC_GROUP_SEPARATION_UNPROVEN")
     require(all(no_sudo_policy(account.pw_name) for account in (evaluator, constructor)), "MAC_PRIVILEGE_SEPARATION_UNPROVEN")
+    roles = [("evaluator", evaluator), ("constructor", constructor)]
+    if "source_intake" in policy:
+        from record_intake import validate_scope
+        scope, _, _ = validate_scope(policy, root)
+        publisher = pwd.getpwuid(scope["publisher_uid"])
+        require(not (name_groups(publisher.pw_name) & {"admin", "wheel", "sudo"}) and no_sudo_policy(publisher.pw_name),
+                "MAC_PUBLISHER_ADMINISTRATIVE_SEPARATION_UNPROVEN")
+        roles.append(("publisher", publisher))
     require(state == Path(policy["private_state"]) and state.resolve() == state, "MAC_CASE_STORE_UNAPPROVED")
     protected(state, directory=True, owner=evaluator.pw_uid, private=True)
     private_key = protected(state / "evaluator.key", owner=evaluator.pw_uid, private=True)
@@ -192,7 +209,7 @@ def canary(root, state, owner_pin):
             ("record_read", record_probe, False), ("record_write", record_probe, True),
             ("approval_write", manifest, True), ("code_write", score, True))]
         measures = {}
-        for role, person in (("evaluator", evaluator), ("constructor", constructor)):
+        for role, person in roles:
             data = checked(["/usr/bin/sudo", "-n", "-u", person.pw_name, "--", sys.executable, "-I", "-B", "-c",
                             PROBE, json.dumps(probes)])
             measures[role] = json.loads(data)
