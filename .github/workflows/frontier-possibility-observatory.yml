@@ -6,6 +6,7 @@ on:
       - "products/frontier-omega-alpha/research/**"
       - "products/frontier-omega-alpha/tests/test_*.py"
       - "products/alpha-genesis-harness/bridge/**"
+      - "flywheel/sandbox.py"
       - ".github/workflows/frontier-possibility-observatory.yml"
   workflow_dispatch:
   schedule:
@@ -33,6 +34,7 @@ jobs:
           sparse-checkout: |
             products/frontier-omega-alpha
             products/alpha-genesis-harness/bridge
+            flywheel
       - name: Run independent offline Observatory contract tests
         working-directory: products/frontier-omega-alpha
         run: python3 -B -m unittest discover -s tests -p 'test_*.py' -v
@@ -46,6 +48,28 @@ jobs:
           for record in atlas.json atlas.en.md atlas.fr.md; do
             cmp "$evidence/$record" "$RUNNER_TEMP/frontier-atlas-replay/$record"
           done
+      - name: Run the unattended public Endpoint Field Lab cycle
+        id: endpoint
+        if: >-
+          github.event_name != 'schedule' ||
+          (vars.FRONTIER_ALPHA_OBSERVATORY_ENABLED == 'true' && vars.FRONTIER_ALPHA_RESEARCH_ENABLED == 'true')
+        run: |
+          set -euo pipefail
+          lab=products/frontier-omega-alpha/research/autonomous_endpoint
+          state="$RUNNER_TEMP/frontier-endpoint-evaluator"
+          out="$RUNNER_TEMP/frontier-endpoint-public"
+          python3 -B "$lab/cycle.py" run --state "$state" --output "$out" --exercise-recovery
+          key_sha256=$(python3 -c 'import json, sys; print(json.load(open(sys.argv[1]))["evaluator_public_key_sha256"])' "$out/receipt.json")
+          python3 -B "$lab/cycle.py" audit --state "$state" --key-sha256 "$key_sha256"
+      - name: Retain the signed public Endpoint Field Lab evidence
+        if: ${{ always() && steps.endpoint.outcome != 'skipped' }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: frontier-endpoint-public-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/frontier-endpoint-public/receipt.json
+            ${{ runner.temp }}/frontier-endpoint-public/capsule.json
+          if-no-files-found: warn
 
   daily-public-atlas:
     needs: qualification

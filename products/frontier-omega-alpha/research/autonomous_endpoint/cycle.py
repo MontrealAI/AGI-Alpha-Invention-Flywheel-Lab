@@ -2,10 +2,12 @@
 """Run, resume or verify the registered non-production Endpoint Field Lab cycle."""
 from argparse import ArgumentParser
 import base64
+from collections import Counter
 from contextlib import contextmanager
 from copy import deepcopy
 from datetime import date
 import fcntl
+import gzip
 import http.client
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 import os
@@ -25,6 +27,7 @@ from evaluation import DECIMAL, admitted, authenticated, capsule_groups, certify
 
 PUBLIC_RECEIPT = "receipt.json"
 PROBES = ("read", "write", "network", "exec", "fork", "environment")
+PUBLIC_REPOSITORY = "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab.git"
 
 
 def checkpoint(path, content):
@@ -125,18 +128,34 @@ def invalid_checks(raw, rows, capsule, registration, state):
     return checks
 
 
-def pilot_source(state, registration):
-    spec = registration["endpoint_pilot"]
-    checkout = state / "pilot-source"
+def pinned_pilot_files(checkout, git_ref, prefix, checksums):
     checkout.mkdir(mode=0o700, exist_ok=True)
-    for name, expected in spec["sha256"].items():
+    for name, expected in checksums.items():
         path = checkout / name
         if not path.exists():
-            source = checked(["git", "-C", str(ROOT), "show", f"{spec['ref']}:{spec['path']}/{name}"])
+            source = checked(["git", "-C", str(ROOT), "show", f"{git_ref}:{prefix}/{name}"])
             require(sha(source) == expected, "FA01_SOURCE_IDENTITY_MISMATCH")
-            path.write_bytes(source)
+            with tempfile.NamedTemporaryFile(dir=checkout) as out:
+                out.write(source)
+                out.flush()
+                os.fsync(out.fileno())
+                os.link(out.name, path)
         require(sha(path.read_bytes()) == expected, "FA01_SOURCE_IDENTITY_MISMATCH")
-    return checkout
+
+
+def pilot_source(state, registration):
+    spec = registration["endpoint_pilot"]
+    ref = spec["ref"]
+    probe = subprocess.run(["git", "-C", str(ROOT), "cat-file", "-e", f"{ref}^{{commit}}"], capture_output=True)
+    if probe.returncode:
+        checked(["git", "-C", str(ROOT), "-c", "credential.helper=", "fetch", "--quiet", "--no-tags", "--depth=1",
+                 PUBLIC_REPOSITORY, ref], env=os.environ | {"GIT_TERMINAL_PROMPT": "0"})
+    checkout = state / "pilot-source"
+    pinned_pilot_files(checkout, ref, spec["path"], spec["sha256"])
+    archived = state / "recorded-pilot"
+    recorded = spec["recorded_local_model"]
+    pinned_pilot_files(archived, ref, recorded["path"], recorded["sha256"])
+    return checkout, archived
 
 
 def overload_replay():
@@ -193,7 +212,7 @@ def overload_replay():
 def pilot_replay(state, registration):
     costs = {}
     with measure(costs, "pinned_pilot_source_acquisition"):
-        checkout = pilot_source(state, registration)
+        checkout, archived = pilot_source(state, registration)
     # A fresh capture directory after interruption preserves partial prior runs.
     output = Path(tempfile.mkdtemp(prefix="fa01-", dir=state)) / "capture"
     with measure(costs, "matched_live_loopback_replay"):
@@ -219,7 +238,31 @@ def pilot_replay(state, registration):
                           "sha256": capture["sha256"], "costs": read(path)["cost"],
                           "verification_wall_us": capture["verification_wall_us"],
                           "verification_process_cpu_us": capture["verification_process_cpu_us"]})
-    return {"source_ref": registration["endpoint_pilot"]["ref"], "arms": arms,
+    with measure(costs, "separate_historical_model_wire_replay"):
+        archival = read(archived / "operation.json")
+        summary = read(archived / "summary.json")
+        reference = []
+        for route in ("field", "conventional"):
+            wire = gzip.decompress((archived / f"{route}.json.gz").read_bytes())
+            require(sha(wire) == archival["arms"][route]["receipt_sha256"], "HISTORICAL_CAPTURE_IDENTITY_MISMATCH")
+            with tempfile.NamedTemporaryFile(dir=state) as capture:
+                capture.write(wire)
+                capture.flush()
+                replayed = decode(checked([sys.executable, "-B", str(checkout / "verify.py"),
+                                           "--receipt", capture.name]))
+            reference.extend({"route": route, **row} for row in replayed)
+        require(reference == summary["arms"], "HISTORICAL_MODEL_REPLAY_DISAGREES")
+    recorded_model = {"model": archival["model"], "hardware": archival["hardware"], "arms": reference,
+                      "observed_wall_seconds": archival["wall_seconds"],
+                      "observed_cpu_seconds": archival["cpu_seconds_including_children"],
+                      "recorded_acquisition_wall_seconds": summary["acquisition_wall_seconds"],
+                      "model_sha256": archival["assets"]["weights_sha256"],
+                      "runtime_sha256": archival["assets"]["server_sha256"],
+                      "highest_observed_qualifying_load": {route: max((a["concurrency"] for a in reference
+                          if a["route"] == route and a["decision"] == "accept-registered-replay"), default="ABSTAIN")
+                          for route in ("field", "conventional")},
+                      "evidence": "independent offline wire replay with recorded tokenization; fresh inference was not run"}
+    return {"source_ref": registration["endpoint_pilot"]["ref"], "arms": arms, "recorded_model": recorded_model,
             "highest_observed_qualifying_load": results, "public_projection_sha256": sha((output / "PUBLIC.json").read_bytes()),
             "independent_verifier_output_sha256": sha(verified), "capture_costs": execution,
             "raw_capture_bytes": sum(capture["bytes"] for capture in execution), "costs": costs}
@@ -273,6 +316,33 @@ def verified_decision(capsule_path, receipt_path, query_path, trusted_key_sha256
     if tuple(query["scope"]) not in groups or query["as_of"] > receipt["source"]["cutoff"]:
         return {"decision": "ABSTAIN", "reason": "OUTSIDE_CERTIFIED_SCOPE_OR_CUTOFF"}
     return from_capsule(groups, query)
+
+
+def audit(state, trusted_key_sha256):
+    """Reconstruct the exact hidden-case commitment inside evaluator custody."""
+    receipt = verify(state / PUBLIC_RECEIPT, trusted_key_sha256)["receipt"]
+    registration = read(REGISTRATION)
+    require(identities(registration) == receipt["implementation_sha256"], "AUDIT_SOURCE_MISMATCH")
+    manifest = registration["comparison"]
+    rows = authenticated((ROOT / registration["source"]["path"]).read_bytes(), registration)
+    position = manifest["scope_keys"].index("model")
+    rows = [row for row in rows if row["scope"][position] in manifest["confirmation_models"]]
+    held = read(state / "confirmation-private.json")
+    seed = bytes.fromhex(held["nonce"])
+    cases = choose_cases(rows, registration, seed)
+    require(cases == held["cases"] and sha(seed + encode(cases)) == receipt["confirmation_commitment_sha256"] and
+            sha((state / "frozen-construction.json").read_bytes()) == receipt["frozen_artifact_sha256"] and
+            held["frozen_construction_sha256"] == receipt["frozen_artifact_sha256"], "AUDIT_CONFIRMATION_MISMATCH")
+    capsule = (state / "capsule.json").read_bytes()
+    require(sha(capsule) == receipt["capsule_sha256"] and certify(rows, decode(capsule)) == receipt["coverage"],
+            "AUDIT_CAPSULE_MISMATCH")
+    scores = read(state / "confirmation-scoring-private.json")
+    answers = [oracle(rows, case) for case in cases]
+    require(scores["answers"] == answers and dict(Counter(a["decision"] for a in answers)) ==
+            receipt["comparison"]["expected_decisions"] and len(scores["failure_witnesses"]) ==
+            receipt["comparison"]["failure_count"], "AUDIT_SCORING_MISMATCH")
+    return {"signature_valid": True, "cases_reconstructed": len(cases), "coverage_verified": True,
+            "failures": len(scores["failure_witnesses"])}
 
 
 def evaluate(state, exercise, simulate_interrupt):
@@ -404,7 +474,8 @@ def evaluate(state, exercise, simulate_interrupt):
 def exclusive_state(state):
     require(not state.is_symlink(), "STATE_SYMLINK_FORBIDDEN")
     state.mkdir(mode=0o700, exist_ok=True)
-    require(state.stat().st_mode & 0o077 == 0, "EVALUATOR_STATE_MUST_BE_PRIVATE")
+    status = state.stat()
+    require(status.st_uid == os.geteuid() and status.st_mode & 0o077 == 0, "EVALUATOR_STATE_MUST_BE_PRIVATE")
     fd = os.open(state / "run.lock", os.O_CREAT | os.O_RDWR | os.O_NOFOLLOW, 0o600)
     with os.fdopen(fd, "r+") as lock:
         fcntl.flock(lock.fileno(), fcntl.LOCK_EX)
@@ -412,6 +483,7 @@ def exclusive_state(state):
 
 
 def run(state, output, exercise):
+    require(not output.resolve().is_relative_to(state.resolve()), "EXPORT_MUST_BE_OUTSIDE_EVALUATOR_STATE")
     with exclusive_state(state):
         target = state / PUBLIC_RECEIPT
         attempts, costs = [], {}
@@ -453,6 +525,9 @@ def main():
     check = commands.add_parser("verify")
     check.add_argument("receipt", type=Path)
     check.add_argument("--key-sha256")
+    audit_command = commands.add_parser("audit")
+    audit_command.add_argument("--state", type=Path, required=True)
+    audit_command.add_argument("--key-sha256", required=True)
     decide = commands.add_parser("decide")
     decide.add_argument("--capsule", type=Path, required=True)
     decide.add_argument("--receipt", type=Path, required=True)
@@ -470,6 +545,10 @@ def main():
         result = verify(args.receipt, args.key_sha256)
         print(encode({"signature_valid": True, "evaluator_key_pinned_by_caller": args.key_sha256 is not None,
                       "operational_adoption": result["receipt"]["operational_adoption"]}).decode(), end="")
+        return
+    if args.command == "audit":
+        with exclusive_state(args.state):
+            print(encode(audit(args.state, args.key_sha256)).decode(), end="")
         return
     if args.command == "decide":
         print(encode(verified_decision(args.capsule, args.receipt, args.query, args.key_sha256)).decode(), end="")
