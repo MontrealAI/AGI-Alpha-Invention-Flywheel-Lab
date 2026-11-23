@@ -1,10 +1,18 @@
 // Static member reading edition. Drawn from public sources and new proposed work.
 export const brief001 = {
-  "version": "1.1",
+  "version": "1.2",
   "en": {
     "title": "Compile the decisions before calling the model",
-    "edition": "Brief 001 · Version 1.1 · 23 November 2026",
+    "edition": "Brief 001 · Version 1.2 · 23 November 2026",
     "sections": [
+      {
+        "heading": "Latest research: useful results, strong conventional winners",
+        "paragraphs": [
+          "The 23 November NOAA archive experiment reproduced six registered forecast values under a 384 KiB response cap and reduced transferred bytes against a full-field download. The existing NCAR point service transferred much less and recovered all six after one retry. This is bounded technical evidence, not measured productive or economic superiority.",
+          "The ZTF measurement study found a conventional multiband Gaussian process within the specified tolerance on 85 of 85 held-out observations, versus 82 of 85 for the proposed correction. In the Endpoint Lab, 64 hidden confirmation decisions and 13 controls passed, but indexed SQLite remained substantially cheaper for the tested complete workflow. Operational adoption remains ABSTAIN.",
+          "These are publicly inspectable research drafts, not confidential findings or permission to deploy. What remains open is a valuable, independently accepted S₁ capability, a causal S₂ successor gain and an actual economic return."
+        ]
+      },
       {
         "heading": "What changed",
         "paragraphs": [
@@ -41,6 +49,8 @@ export const brief001 = {
       }
     ],
     "sources": [
+      { "label": "NOAA archive point-extraction experiment", "href": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/commit/6a635b77012fb45b4d96c404a33fa04327c19674" },
+      { "label": "ZTF GP and candidate comparison", "href": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/commit/7729ef8aae95330d5f73e52bed18de58e438791f" },
       {
         "label": "AnyS1 preprint v1",
         "href": "https://arxiv.org/abs/2611.23751v1"
@@ -57,8 +67,16 @@ export const brief001 = {
   },
   "fr": {
     "title": "Compiler les décisions avant d’appeler le modèle",
-    "edition": "Dossier 001 · Version 1.1 · 23 novembre 2026",
+    "edition": "Dossier 001 · Version 1.2 · 23 novembre 2026",
     "sections": [
+      {
+        "heading": "Recherche récente : résultats utiles et méthodes classiques gagnantes",
+        "paragraphs": [
+          "Le 23 novembre, un extracteur NOAA a reproduit six valeurs de prévision sous un plafond de 384 Kio et réduit le transfert face à un téléchargement de champ entier. Le service de points NCAR a consommé beaucoup moins de données et retrouvé les six valeurs après une reprise. Ce résultat technique ne prouve aucun gain productif ou économique.",
+          "Dans l'étude ZTF, un processus gaussien multibande classique a atteint la tolérance sur 85 mesures masquées sur 85, contre 82 sur 85 pour la correction proposée. Le laboratoire Endpoint a réussi 64 cas de confirmation masqués et 13 contrôles, mais SQLite indexé reste plus économique dans le processus complet étudié. L'adoption reste en ABSTENTION.",
+          "Ces résultats sont des ébauches de recherche publiques, non des données confidentielles ni une autorisation de déploiement. La valeur productive de S₁, le transfert causal à S₂ et les retombées économiques restent à démontrer."
+        ]
+      },
       {
         "heading": "Ce qui a changé",
         "paragraphs": [
@@ -95,6 +113,8 @@ export const brief001 = {
       }
     ],
     "sources": [
+      { "label": "Essai d'extraction de points NOAA", "href": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/commit/6a635b77012fb45b4d96c404a33fa04327c19674" },
+      { "label": "Comparaison ZTF entre GP et méthode proposée", "href": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/commit/7729ef8aae95330d5f73e52bed18de58e438791f" },
       {
         "label": "Prépublication AnyS1 v1",
         "href": "https://arxiv.org/abs/2611.23751v1"
