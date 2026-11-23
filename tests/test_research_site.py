@@ -131,6 +131,15 @@ class ResearchSiteTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             site.read_possibilities(self.source)
 
+    def test_public_home_links_bilingual_frontier_atlas(self):
+        home = (self.source / 'index.html').read_text()
+        self.assertIn('href="frontier-omega-alpha/index.html"', home)
+        self.assertIn('href="frontier-omega-alpha/fr.html"', home)
+        self.assertIn('The living Possibility Atlas', home)
+        self.assertIn('public files; confidential delivery is not enabled', home)
+        out = site.build(self.source, self.root / 'frontier-nav')
+        self.assertIn('href="frontier-omega-alpha/index.html"', (out / 'index.html').read_text())
+
     def test_possibility_sections_and_private_source_boundary(self):
         out = site.build(self.source, self.root / 'rendered')
         self.assertFalse((out / site.POSSIBILITY_INPUT).exists())
