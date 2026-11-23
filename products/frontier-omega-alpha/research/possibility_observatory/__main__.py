@@ -154,7 +154,9 @@ def findings_at(paths):
         if not isinstance(ident, str) or not SHA.fullmatch(ident) or ident in seen:
             raise ValueError("Invalid or repeated finding")
         seen.add(ident)
-        reception = obj.get("reception") or {}
+        reception = obj.get("reception")
+        if type(reception) is not dict:
+            raise ValueError("Finding reception must be an object")
         if (reception.get("authenticated_by") != "github-rest"
                 or reception.get("task_origin") != "operator-declared, task authorship unverified"
                 or "source_task_id" in obj):
@@ -165,8 +167,9 @@ def findings_at(paths):
                             "sha256": source["sha256"], "version": text(source["version"], 120)})
             if not isinstance(source["sha256"], str) or not SHA.fullmatch(source["sha256"]):
                 raise ValueError("Invalid referenced source hash")
-        change = obj.get("change") or {}
-        opportunity = obj.get("opportunity") or {}
+        opportunity = obj.get("opportunity")
+        if type(opportunity) is not dict:
+            raise ValueError("Finding opportunity must be an object")
         comparison = text(opportunity.get("existing_alternative"), 420)
         purpose = text(opportunity.get("purpose"), 420)
         selected.append({
