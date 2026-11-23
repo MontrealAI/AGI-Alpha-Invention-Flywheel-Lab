@@ -83,6 +83,13 @@ class AtlasPublicationTests(TestCase):
         self.assertEqual(recovered['arxiv:' + PAPER][0], prior['arxiv:' + PAPER][0])
         self.assertEqual(len(rejects), 1)
 
+    def test_rewritten_prefix_cannot_remove_already_published_records(self):
+        raw = [(A, DAY, inbox([item(PAPER + 'v1')]))]
+        request = Mock(return_value=paper_page(PAPER + 'v1'))
+        prior, _, _ = atlas.read_inbox_history(raw, set(), request)
+        with self.assertRaisesRegex(ValueError, 'published inbox history was removed'):
+            atlas.read_inbox_history([(B, DAY, inbox())], set(), request, prior)
+
     def test_held_version_is_not_read_or_rehydrated(self):
         request = Mock()
         refs, _, rejects = atlas.read_inbox_history(
