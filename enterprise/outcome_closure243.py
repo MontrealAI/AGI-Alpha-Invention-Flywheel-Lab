@@ -93,7 +93,7 @@ def evaluate_complete(case, permission, policy):
         return {
             "policy": policy, "parent_partial_contribution_usd": 0.,
             "modeled_complete_contribution_usd": 0.,
-            "selected_if_known_case": True, "completion_probability": None,
+            "selected_if_known_case": None, "completion_probability": None,
             "model_evidence_tier": tier, "operational_authority": [],
             "qualified_paid_outcome": None,
         }
@@ -136,6 +136,10 @@ def report():
     for key, (case, permission) in witnesses.items():
         candidate = evaluate_complete(case, permission, POLICIES[0])
         control = evaluate_complete(case, permission, POLICIES[1])
+        # NO_BID is safe, not necessarily model-preferred. Compare both arms.
+        candidate_amount = candidate["modeled_complete_contribution_usd"]
+        control["selected_if_known_case"] = (
+            None if candidate_amount is None else candidate_amount <= 0.)
         rows[key] = {
             "scenario_sha256": sha256(json.dumps(
                 {"case": case, "permission": permission},
