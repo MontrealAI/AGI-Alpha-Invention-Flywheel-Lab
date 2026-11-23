@@ -600,8 +600,57 @@ await assert.rejects(eligible(rpc('wrong-chain'),acct,'token','',now),/network/)
 await assert.rejects(eligible(rpc('reorg'),acct,'token','',now),/unavailable/);
 await assert.rejects(eligible(rpc('token'),acct,'token','',now+91000),/unavailable/);
 assert.match(signInMessage('https://montrealai.github.io',acct,'token',now,'nonce'),/does not approve a transaction/);
-console.log('11 wallet qualification checks passed');"""],
+async function mounted(path){
+ const listeners={},button={},form={},lock={},member={hidden:true},status={};
+ const el={'status':status,'member':member,'club-label':{value:'founder'},'club-form':form,'lock':lock,'workspace-title':{focus(){}}};
+ form.addEventListener=(name,run)=>{listeners[name]=run};
+ lock.addEventListener=(name,run)=>{listeners['lock']=run};
+ button.addEventListener=(name,run)=>{listeners['token']=run};
+ globalThis.document={documentElement:{lang:path==='club'?'fr':'en'},getElementById:id=>el[id],
+  querySelectorAll:()=>[button],querySelector:()=>button};
+ const chain=rpc(path);
+ const calls=[];
+ globalThis.window={location:{origin:'https://montrealai.github.io'},addEventListener(){},ethereum:{
+  isMetaMask:true, on(){}, request:async msg=>{
+   calls.push(msg.method);
+   if(msg.method==='eth_requestAccounts'||msg.method==='eth_accounts')return [acct];
+   if(msg.method==='personal_sign')return '0x'+'ab'.repeat(65);
+   return await chain.request(msg);
+  }
+ }};
+ const realNow=Date.now;Date.now=()=>now;
+ try{
+  await import('data:text/javascript;base64,'+Buffer.from(process.env.WALLET_SOURCE).toString('base64')+'#'+path);
+  assert.equal(member.hidden,true);
+  listeners[path==='club'?'submit':'token']({preventDefault(){}});
+  for(let i=0;i<50&&member.hidden;i++)await new Promise(setImmediate);
+  assert.equal(member.hidden,false);
+  assert.equal(calls.filter(m=>m==='personal_sign').length,1);
+  assert(calls.every(m=>['eth_requestAccounts','eth_accounts','eth_chainId','eth_getBlockByNumber','eth_getCode','eth_call','personal_sign'].includes(m)));
+  listeners.lock();
+  assert.equal(member.hidden,true);
+ }finally{Date.now=realNow;delete globalThis.document;delete globalThis.window;}
+}
+await mounted('club');await mounted('token');
+console.log('11 wallet qualification checks and both workspace open/lock fixtures passed');"""],
                        check=True, env={**os.environ, 'WALLET_SOURCE': source}, timeout=30)
+
+    def test_member_brief_is_unencrypted_and_only_inside_hidden_workspace(self):
+        for name, public_note in (('index.html', 'static content is unencrypted and publicly retrievable'),
+                                  ('fr.html', 'Ce contenu statique n’est pas chiffré et reste publiquement accessible')):
+            with self.subTest(page=name):
+                page = (self.source / 'frontier-omega-alpha' / name).read_text()
+                before, workspace = page.split('<section id="member" class="frame workspace" hidden', 1)
+                workspace, after = workspace.split('</section>', 1)
+                self.assertNotIn('member-brief-001', before + after)
+                self.assertNotIn('href="#member-brief-001"', page)
+                self.assertIn('<div class="packet" data-nosnippet>', workspace)
+                self.assertIn('<details id="member-brief-001">', workspace)
+                self.assertIn(public_note, workspace)
+                self.assertIn('https://arxiv.org/abs/2611.23751', workspace)
+                self.assertIn('id="possibility-shifts" data-nosnippet', workspace)
+                self.assertNotIn('id="possibility-shifts"', before + after)
+                self.assertNotIn('href="#possibility-shifts"', page)
 
     def test_frontier_alpha_workspace_links_to_bilingual_public_packets(self):
         for name in ('index.html', 'fr.html'):
