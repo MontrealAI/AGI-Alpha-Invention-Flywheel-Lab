@@ -524,9 +524,13 @@ console.log('11 wallet qualification checks passed');"""],
                 workspace = before.split('id="member"', 1)[1]
                 packets = packets.split('</section>', 1)[0]
                 self.assertNotRegex(packets, r'<[^>]*\shidden\b')
-                for slug in ('lean', 'qwen', 'receipts', 'retrofit'):
+                for slug in ('lean', 'qwen', 'retrofit'):
                     self.assertIn(f'href="#packet-{slug}"', workspace)
                     self.assertIn(f'<article class="packet" id="packet-{slug}"', packets)
+                self.assertIn('href="#research-packet"', workspace)
+                self.assertIn('href="#research-packet"', packets)
+                six_records = page.split('id="research-packet"', 1)[1].split('</section>', 1)[0]
+                self.assertEqual(six_records.count('<details id="packet-'), 6)
                 for evidence in ('frontier-cycle.json', 'qwen-gguf-maintenance.json',
                                  'engineering-receipt.json', 'economic_alpha/qualification.json'):
                     self.assertIn(evidence, packets)

@@ -68,7 +68,7 @@
       <ul class="packet-shortcuts">
         <li><a href="#packet-lean">Lean 4.36</a></li>
         <li><a href="#packet-qwen">Qwen GGUF</a></li>
-        <li><a href="#packet-receipts">Rapports de preuve</a></li>
+        <li><a href="#research-packet">Rapports de preuve</a></li>
         <li><a href="#packet-retrofit">Mise à niveau ALPHA-1</a></li>
       </ul>
     </section>
@@ -107,6 +107,7 @@
             <p>L’analyseur réutilisable et un vérificateur direct programmé séparément ont donné les résultats attendus dans les 14 cas, dont 12 cas modifiés ou non enregistrés. La seconde série a rechargé le profil conservé après la première.</p>
             <p>L’essai valide le contrôle des énoncés et des axiomes permis dans les rapports retenus. Le rejeu n’a pas exécuté de noyau de preuve. La vérification directe a donné les mêmes résultats que l’analyseur conservé, et le bénéfice propre à sa réutilisation reste à établir.</p>
             <ul class="packet-evidence">
+              <li><a href="#research-packet">Lire les six rapports de vérification</a></li>
               <li><a href="https://math.mit.edu/~drew/grh/">Dossier de vérification du MIT</a></li>
               <li><a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/5cced81256c965797988cd682fb5f910fe72c981/products/frontier-omega-alpha/evidence/engineering-receipt.json">Résultats du rejeu et empreintes des sources</a></li>
               <li><a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/5cced81256c965797988cd682fb5f910fe72c981/products/frontier-omega-alpha/research/protocol.json">Critères d’acceptation figés</a></li>
@@ -125,6 +126,43 @@
             </ul>
           </article>
         </div>
+      </div>
+    </section>
+    <section class="frame privacy" id="research-packet" aria-labelledby="research-packet-title">
+      <h2 id="research-packet-title">Lire le dossier public de recherche</h2>
+      <div>
+        <h3>Édition 01 · Vérifier les justificatifs de dépendances formelles</h3>
+        <p>Six fiches suivent le passage d’un signal de la frontière à un essai de transfert reproductible. Aucun portefeuille n’est requis pour lire cette édition publique.</p>
+        <details id="packet-radar">
+          <summary>01 · Radar de la frontière : nouveaux rapports de vérification</summary>
+          <p>En novembre 2026, des équipes externes ont publié des comparaisons d’énoncés, des audits d’axiomes et des résultats de vérification par noyau concernant des travaux formels liés à l’hypothèse de Riemann et à des critères arithmétiques connexes. Notre étude examine les pièces publiées, pas la validité de la conjecture.</p>
+          <p><a href="https://math.mit.edu/~drew/grh/">Dossier de vérification du MIT</a> · <a href="https://leanprover-community.github.io/blog/posts/riemann-hypothesis/">Compte rendu des communautés Lean et Mathlib</a></p>
+        </details>
+        <details id="packet-opportunity">
+          <summary>02 · Explorateur d’occasions : examiner une dépendance avant de compiler</summary>
+          <p>Avant d’investir dans une compilation intégrale, une équipe peut vérifier si les énoncés et les axiomes d’une déclaration précise sont documentés. La comparaison de référence consistait à lire les mêmes rapports directement. Aucune des deux méthodes ne remplace une nouvelle vérification par le noyau.</p>
+          <p><a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/5cced81256c965797988cd682fb5f910fe72c981/products/frontier-omega-alpha/research/protocol.json">Protocole figé de l’essai</a></p>
+        </details>
+        <details id="packet-experiment">
+          <summary>03 · Laboratoire d’expérimentation : deux ensembles, une référence</summary>
+          <p>L’analyseur réutilisable et le contrôle mis en œuvre séparément ont concordé sur les 14 résultats attendus : deux ensembles publiés et 12 cas négatifs modifiés ou hors protocole. Les sept fichiers identifiés par empreinte (16 471 octets) couvraient cinq déclarations liées à Riemann et Dirichlet et deux liées à Robin et Lagarias.</p>
+          <p><a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/5cced81256c965797988cd682fb5f910fe72c981/products/frontier-omega-alpha/evidence/STATUS.md">Décompte des cas et portée des preuves</a></p>
+        </details>
+        <details id="packet-verification">
+          <summary>04 · Salle de vérification : ce qui a été contrôlé</summary>
+          <p>Le contrôle de référence a comparé les codes de sortie rapportés, la concordance des énoncés et les listes d’axiomes aux critères du protocole. Il a aussi vérifié les empreintes des fichiers. Nous n’avons ni relancé les noyaux, ni revérifié indépendamment les preuves mathématiques, ni démontré l’hypothèse de Riemann.</p>
+          <p><a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/5cced81256c965797988cd682fb5f910fe72c981/products/frontier-omega-alpha/research/protocol.json">Critères d’acceptation et références des sources</a></p>
+        </details>
+        <details id="packet-compounding">
+          <summary>05 · Registre des acquis : réutilisation et essai de transfert distinct</summary>
+          <p>Pour le deuxième ensemble, le profil conservé a été relu et a donné le même résultat que l’inspection directe. Dans un autre essai, un procédé de preuve de Lean 4.36 a été transposé à deux obligations portant sur un modèle de valeur d’échéance de 32 bits et a rejeté une mutation d’un bit. Un décodeur distinct a contrôlé 69 640 entrées. Les preuves explicites de Lean 4.35 ont aussi satisfait les deux obligations valides. Aucun gain causal de vitesse ou de coût ni aucune garantie de sécurité du code de portefeuille n’est établi.</p>
+          <p><a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/5cced81256c965797988cd682fb5f910fe72c981/products/frontier-omega-alpha/evidence/frontier-cycle.json">Résultats de transfert et contrôles</a> · <a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/5cced81256c965797988cd682fb5f910fe72c981/products/frontier-omega-alpha/research/lean_delta.py">Comparaison exécutable</a></p>
+        </details>
+        <details id="packet-archive">
+          <summary>06 · Archives de recherche : reproduire la version publiée</summary>
+          <p>Le protocole figé identifie les sources et leurs empreintes attendues. Le dossier technique et le profil conservé précisent ce qui a été testé et ce qui peut être reproduit. Le coût complet, l’adoption opérationnelle et la valeur commerciale n’ont pas été mesurés.</p>
+          <p><a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/5cced81256c965797988cd682fb5f910fe72c981/products/frontier-omega-alpha/research/protocol.json">Protocole</a> · <a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/5cced81256c965797988cd682fb5f910fe72c981/products/frontier-omega-alpha/evidence/engineering-receipt.json">Dossier technique</a> · <a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/5cced81256c965797988cd682fb5f910fe72c981/products/frontier-omega-alpha/evidence/retained-profile.json">Profil conservé</a></p>
+        </details>
       </div>
     </section>
     <section class="research" id="method" aria-labelledby="method-title">
