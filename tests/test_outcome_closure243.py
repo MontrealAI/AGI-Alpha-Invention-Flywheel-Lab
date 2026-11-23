@@ -93,8 +93,24 @@ class OutcomeClosure243Tests(unittest.TestCase):
         for name, (case, record) in registered_witnesses().items():
             row = evaluate_complete(case, record, "NO_BID")
             self.assertEqual(row["modeled_complete_contribution_usd"], 0)
+            self.assertIsNone(row["selected_if_known_case"])
             self.assertEqual(row["operational_authority"], [])
             self.assertIsNone(row["qualified_paid_outcome"])
+
+    def test_report_choice_is_relative_not_simultaneously_preferred(self):
+        # A standalone no-bid evaluation has not inspected the competitor.
+        rows = report()["all_cases"]
+        self.assertIsNone(rows["NO_RIGHTS"]["no_bid"]["selected_if_known_case"])
+        self.assertFalse(rows["MODEL_AUTHORIZED"]["no_bid"]["selected_if_known_case"])
+        self.assertTrue(rows["MODEL_AUTHORIZED"]["partial_offer"]["selected_if_known_case"])
+        for name in ("MODEL_FAILURE", "WAR", "ABSENT"):
+            self.assertTrue(rows[name]["no_bid"]["selected_if_known_case"])
+            self.assertFalse(rows[name]["partial_offer"]["selected_if_known_case"])
+        for name in ("MODEL_AUTHORIZED", "MODEL_FAILURE", "WAR", "ABSENT"):
+            pair = rows[name]
+            self.assertNotEqual(
+                pair["no_bid"]["selected_if_known_case"],
+                pair["partial_offer"]["selected_if_known_case"])
 
     def test_adversarial_missing_boolean_invalid_probability_and_cost(self):
         case, record = registered_witnesses()["MODEL_AUTHORIZED"]
