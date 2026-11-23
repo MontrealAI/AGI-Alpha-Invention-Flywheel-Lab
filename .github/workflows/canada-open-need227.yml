@@ -1,0 +1,67 @@
+name: CANADA-OPEN-NEED227 single-source federal buyer-need observation
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/canada-open-need227.yml"
+      - "campaign/canada-open-need227/**"
+      - "tools/canada_open_need227.py"
+      - "tests/test_canada_open_need227.py"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  registered-observation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Declare standard platform window
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - name: Checkout exact PR head, without retained credentials
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - name: Freeze exact running source identity
+        shell: bash
+        run: |
+          git rev-parse HEAD | tee "$RUNNER_TEMP/HEAD.txt"
+          sha256sum tools/canada_open_need227.py tests/test_canada_open_need227.py campaign/canada-open-need227/PREREGISTRATION.md | tee "$RUNNER_TEMP/SOURCE_SHA256.txt"
+          python3 --version | tee "$RUNNER_TEMP/PYTHON.txt"
+      - name: Registered offline adversarial cases before any public network GET
+        shell: bash
+        run: |
+          set -o pipefail
+          /usr/bin/time -v python3 -B -m unittest -v tests.test_canada_open_need227 2>&1 | tee "$RUNNER_TEMP/TESTS.txt"
+      - name: Exactly one direct official CanadaBuys open-tenders GET (no fallback)
+        shell: bash
+        run: |
+          set +e
+          /usr/bin/time -v python3 -B tools/canada_open_need227.py observe --out "$RUNNER_TEMP/canada-open-need227" > "$RUNNER_TEMP/OBSERVATION.txt" 2> "$RUNNER_TEMP/ERROR_AND_RESOURCES.txt"
+          rc=$?
+          printf '%s\n' "$rc" > "$RUNNER_TEMP/OBSERVATION_EXIT.txt"
+          if [ "$rc" -ne 0 ]; then
+            cat "$RUNNER_TEMP/ERROR_AND_RESOURCES.txt"
+            exit "$rc"
+          fi
+          python3 -B tools/canada_open_need227.py verify --out "$RUNNER_TEMP/canada-open-need227" > "$RUNNER_TEMP/INDEPENDENT_REPLAY.txt"
+      - name: Preserve compact negative or positive source-bound witness
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: canada-open-need227-registered-observation
+          retention-days: 7
+          if-no-files-found: warn
+          path: |
+            ${{ runner.temp }}/HEAD.txt
+            ${{ runner.temp }}/SOURCE_SHA256.txt
+            ${{ runner.temp }}/PYTHON.txt
+            ${{ runner.temp }}/TESTS.txt
+            ${{ runner.temp }}/OBSERVATION_EXIT.txt
+            ${{ runner.temp }}/OBSERVATION.txt
+            ${{ runner.temp }}/ERROR_AND_RESOURCES.txt
+            ${{ runner.temp }}/INDEPENDENT_REPLAY.txt
+            ${{ runner.temp }}/canada-open-need227/SOURCE.csv
+            ${{ runner.temp }}/canada-open-need227/RECEIPT.json
