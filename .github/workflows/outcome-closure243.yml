@@ -1,0 +1,68 @@
+name: OUTCOME-CLOSURE243 independent complement acceptance gate
+on:
+  push:
+    branches:
+      - research/outcome-closure243-20261122
+    paths:
+      - "enterprise/outcome_closure243.py"
+      - "tests/test_outcome_closure243.py"
+      - "research/outcome-closure243/**"
+      - ".github/workflows/outcome-closure243.yml"
+  pull_request:
+    paths:
+      - "enterprise/outcome_closure243.py"
+      - "tests/test_outcome_closure243.py"
+      - "research/outcome-closure243/**"
+      - ".github/workflows/outcome-closure243.yml"
+permissions:
+  contents: read
+concurrency:
+  group: outcome-closure243-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
+jobs:
+  frozen-complement-closure:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record platform start before checkout
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - name: Bind source and protocol before result
+        shell: bash
+        run: |
+          git rev-parse HEAD
+          sha256sum research/outcome-closure243/PROTOCOL.md enterprise/pricing.py enterprise/mixed_bundle240.py enterprise/complete_arrangements242.py enterprise/outcome_closure243.py tests/test_outcome_closure243.py
+      - name: Original frozen parent negative and correction controls
+        run: python3 -B -m unittest -v tests.test_mixed_outside240 tests.test_complete_arrangements242
+      - name: Independent fixed witness and Bernoulli oracle
+        run: python3 -B -m unittest -v tests.test_outcome_closure243
+      - name: Produce compact source-linked unqualified research verdict
+        shell: bash
+        run: |
+          python3 -B -m enterprise.outcome_closure243 --out "$RUNNER_TEMP/OUTCOME_CLOSURE243_RESULT.json"
+          python3 -B - "$RUNNER_TEMP/OUTCOME_CLOSURE243_RESULT.json" <<'PY'
+          import json, sys
+          r=json.load(open(sys.argv[1]))
+          assert r['scenario_count']==5
+          assert r['native_financial_authority']==[]
+          assert r['real_customer_collections_usd'] is None
+          assert r['native_trailing365_complete_cost_profit_usd'] is None
+          assert r['commercial_verdict']=='UNQUALIFIED_HOLD_NO_NATIVE_ACTION'
+          expected={'NO_RIGHTS':None,'MODEL_AUTHORIZED':20.5,'MODEL_FAILURE':-5.25,'WAR':-21.,'ABSENT':-21.}
+          for name, amount in expected.items():
+              actual=r['all_cases'][name]['partial_offer']['modeled_complete_contribution_usd']
+              assert actual is None if amount is None else abs(actual-amount)<1e-9, (name,actual,amount)
+          print('Outcome closure scenarios 5/5; commercial qualification withheld')
+          PY
+      - name: Retain exact-head model-only result or failed trace
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: outcome-closure243-${{ github.event.pull_request.head.sha || github.sha }}
+          path: ${{ runner.temp }}/OUTCOME_CLOSURE243_RESULT.json
+          if-no-files-found: warn
+          retention-days: 7
