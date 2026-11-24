@@ -519,8 +519,8 @@ function setup() {
       return;
     }
     const items = chosen.map(row => row.evidence).join(', ');
-    put(output, fr ? `Charge commune étayée · ${chosen.at(-1).load}. Preuves ${items}. Adoption opérationnelle en abstention.` :
-      `Shared tested load · ${chosen.at(-1).load}. Evidence ${items}. Operational adoption remains ABSTAIN.`);
+    put(output, fr ? `Plancher des charges mesurées · ${chosen.at(-1).load}. Preuves ${items}. Adoption opérationnelle en abstention.` :
+      `Measured capacity floor · ${chosen.at(-1).load}. Evidence ${items}. Operational adoption remains ABSTAIN.`);
   });
   get('amplification-open')?.addEventListener('change', launch(async alive => {
     clearAmplification();
