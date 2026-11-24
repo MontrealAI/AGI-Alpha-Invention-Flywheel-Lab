@@ -608,6 +608,9 @@ body:has(#member:not([hidden]):not([data-public-view])) #main > :not(#member) { 
 .foundry-stage .foundry-binding { color: #e6cdaa; font-size: .88rem; }
 .foundry-panel .mv-actions { align-items: start; }
 .foundry-panel .mv-actions label { margin: 0; }
+.foundry-library-items { padding: 0; list-style: none; }
+.foundry-library-items li { padding: .85rem 0; border-top: 1px solid #594566; overflow-wrap: anywhere; }
+.foundry-library-items p { margin: .35rem 0; color: #e6cdaa; font-size: .9rem; }
 @media (max-width: 640px) {
   .mf-bar-inner .mf-intelligence-link { grid-row: 3; grid-column: 1 / -1; width: fit-content; min-height: 44px; }
   .foundry-example, .foundry-stage .foundry-fields { grid-template-columns: 1fr; }

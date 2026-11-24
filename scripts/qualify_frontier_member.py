@@ -179,6 +179,73 @@ def qualify_foundry(directory, root, release):
             'package_sha256':expected,'negative_controls':8,'real_member_trial':None}
 
 
+def qualify_successors(directory, root, release):
+    expected = release['foundry_sha256'][member.STUDY_ZIP]
+    manifest = install(directory / member.STUDY_ZIP, root, {'sha256':expected})
+    require(manifest['version'] == '1.1.0', 'Wrong study companion version')
+    outcomes = {}
+    for trial in ('successor-study','successor-followup'):
+        report_path, cases_path = f'{trial}/report.json', f'{trial}/cases.json'
+        envelope = json.loads((root / report_path).read_bytes())
+        result, elapsed = call(root, 'node', 'study-cli.mjs', 'replay', report_path, cases_path)
+        require(result == envelope['report'], 'Study replay did not reproduce the recorded comparison')
+        comparison = result['comparison']
+        require(comparison['reference']['matched'] == comparison['reference']['total'] == 49 and
+                comparison['decision'] == 'KEEP_INCUMBENT', 'Incumbent outcome changed')
+        outcomes[trial] = {'sha256':envelope['sha256'], 'replay_wall_ns':elapsed,
+                           'matched':{name:arm['comparison']['matched'] if arm['comparison'] else None
+                                      for name, arm in comparison['outcomes'].items()}}
+    require(set(outcomes['successor-study']['matched'].values()) == {43}, 'Failed boundary cases were lost')
+    require(set(outcomes['successor-followup']['matched'].values()) == {49}, 'Clarified cohort did not reproduce')
+
+    clarified = json.loads((root / 'successor-followup/report.json').read_bytes())['report']
+    (root / 'mission.json').write_bytes(member.stable(clarified['plan']['study']['task']))
+    (root / 'candidate.json').write_bytes(member.stable(clarified['attempts']['direct']['candidate']))
+    asset, _ = call(root, 'node', 'foundry-cli.mjs', 'retain', 'mission.json', 'candidate.json',
+                    'successor-followup/cases.json')
+    (root / 'capability.json').write_bytes(member.stable(asset))
+    valid = {'previous_end':7,'start':8,'end':9,'object_bytes':10,'body_bytes':2,'same_version':True}
+    for item, expected_result in ((valid, True), ({**valid,'end':10,'body_bytes':3}, False)):
+        (root / 'fresh.json').write_bytes(member.stable(item))
+        reuse, _ = call(root, 'node', 'foundry-cli.mjs', 'run', 'capability.json', 'successor-followup/cases.json', 'fresh.json')
+        require(reuse == {'appendable':expected_result}, 'Retained candidate failed a fresh boundary case')
+
+    report = json.loads((root / 'successor-study/report.json').read_bytes())
+    tampered = deepcopy(report)
+    tampered['report']['comparison']['retained_vs_ordinary'] = 'HIGHER'
+    tampered['sha256'] = member.digest(member.stable(tampered['report']))
+    (root / 'tampered.json').write_bytes(member.stable(tampered))
+    call(root, 'node', 'study-cli.mjs', 'replay', 'tampered.json', 'successor-study/cases.json', expected=2)
+    cases = json.loads((root / 'successor-study/cases.json').read_bytes())
+    cases['cases'][0]['expected']['appendable'] ^= True
+    (root / 'different-cases.json').write_bytes(member.stable(cases))
+    call(root, 'node', 'study-cli.mjs', 'replay', 'successor-study/report.json', 'different-cases.json', expected=2)
+
+    plan = report['report']['plan']
+    (root / 'plan.json').write_bytes(member.stable(plan))
+    config = json.loads((root / 'local.example.json').read_bytes())
+    provider = config['providers']['localhost-inference']
+    options = provider['models'].pop('replace-with-your-model-id')
+    provider['models'][plan['study']['model']] = options
+    cfg = root / 'study-local.json'
+    invocation = (sys.executable, 'study.py', '--config', cfg.name, '--provider', 'localhost-inference',
+                  '--plan', 'plan.json', '--workspace', 'interrupted')
+    cfg.write_bytes(member.stable({**config,'local_only':False}))
+    call(root, *invocation, expected=2)
+    workspace = root / 'interrupted'
+    require(not workspace.exists(), 'Non-local configuration reached construction')
+    cfg.write_bytes(member.stable(config))
+    workspace.mkdir()
+    (workspace / 'plan.json').write_bytes(member.stable({'study_sha256':plan['sha256'],
+        'provider':'localhost-inference','config_sha256':member.digest(cfg.read_bytes())}))
+    for arm in ('direct','ordinary','retained'):
+        (workspace / f'{arm}.started').touch()
+    resumed, _ = call(root, *invocation)
+    require(set(attempt['status'] for attempt in resumed.values()) == {'INTERRUPTED'},
+            'An interrupted arm was dispatched again')
+    return {'package_sha256':expected, 'replayed':outcomes, 'retained_fresh_cases':2, 'denied_controls':4}
+
+
 def qualify(directory, live=False):
     manifest = json.loads((directory / member.MEMBER_JSON).read_bytes())
     tools = manifest['capabilities']
@@ -195,6 +262,8 @@ def qualify(directory, live=False):
             release = json.loads((directory / 'atlas-release.json').read_bytes())
             if 'foundry_sha256' in release:
                 results['foundry'] = qualify_foundry(directory, root / 'foundry', release)
+                if member.STUDY_ZIP in release['foundry_sha256']:
+                    results['successors'] = qualify_successors(directory, root / 'successors', release)
         return results
 
 

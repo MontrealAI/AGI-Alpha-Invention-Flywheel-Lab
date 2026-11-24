@@ -605,7 +605,8 @@ class ResearchSiteTests(unittest.TestCase):
              'frontier-omega-alpha/atlas.js', 'frontier-omega-alpha/endpoint-screen.mjs',
              'frontier-omega-alpha/outcome-receipt.mjs', 'frontier-omega-alpha/member-workbench.mjs',
              'frontier-omega-alpha/frontier-goals.mjs', 'frontier-omega-alpha/foundry-core.mjs',
-             'frontier-omega-alpha/foundry-ui.mjs', *site.DECISION_EDITION_ASSETS},
+             'frontier-omega-alpha/foundry-ui.mjs', 'frontier-omega-alpha/foundry-study.mjs',
+             *site.DECISION_EDITION_ASSETS},
         )
         source = (self.source / 'frontier-omega-alpha' / 'wallet-check.js').read_text()
         self.assertIn("await import('./member-brief-001.js')", source)

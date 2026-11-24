@@ -170,6 +170,9 @@ async function foundryJourney(page, language, width) {
   const release = await (await online.get(base + 'atlas-release.json')).json();
   const zip = await (await online.get(base + 'frontier-foundry-1.0.0.zip')).body();
   assert.equal(createHash('sha256').update(zip).digest('hex'), release.foundry_sha256['frontier-foundry-1.0.0.zip']);
+  assert.equal(release.foundry_sha256['frontier-foundry-1.0.0.zip'], '6306d7adf5841cedfff40cf0b8fd3aa5d77b42d8b3108717a48c81f3946e08cb');
+  const studyZip = await (await online.get(base + 'frontier-foundry-1.1.0.zip')).body();
+  assert.equal(createHash('sha256').update(studyZip).digest('hex'), release.foundry_sha256['frontier-foundry-1.1.0.zip']);
   const example = await page.locator('#foundry-public-data').evaluate(node => JSON.parse(node.content.textContent));
   const context = page.context();
   await context.setOffline(true);
@@ -201,6 +204,25 @@ async function foundryJourney(page, language, width) {
     await page.locator('#foundry-clear').click();
     assert.equal(await page.locator('#foundry-output').textContent(), '');
 
+    await destination(page, 'mv-tools');
+    const items = page.locator('#foundry-library-items li');
+    assert.equal(await items.count(), 1);
+    const picker = page.locator('#foundry-library-files');
+    await picker.setInputFiles([content('original.json', original), content('invalid.json', altered)]);
+    await page.waitForFunction(lang => document.getElementById('foundry-library-status').textContent.includes(
+      lang === 'fr' ? 'changé' : 'changed'), language);
+    assert.equal(await items.count(), 1);
+    const libraryDownload = page.waitForEvent('download');
+    await items.first().locator('button').nth(1).click();
+    assert.deepEqual(JSON.parse(await readFile(await (await libraryDownload).path(), 'utf8')), original);
+    await items.first().locator('button').nth(2).click();
+    assert.equal(await items.count(), 0);
+    await picker.setInputFiles(content('original.json', original));
+    await items.first().locator('button').first().click();
+    await page.locator('#foundry-verification').waitFor({state:'visible'});
+    assert.equal(await page.locator('#foundry-run').isEnabled(), false);
+    await page.locator('#foundry-clear').click();
+
     await page.locator('#foundry-mission summary').click();
     for (const [id,value] of Object.entries({objective:french ? 'Compter les minutes' : 'Count elapsed minutes',
       rule:'Return elapsed = finish - start.', fields:'start:integer, finish:integer', outputs:'elapsed:integer',
@@ -225,14 +247,53 @@ async function foundryJourney(page, language, width) {
     const result = await page.evaluate(raw => globalThis.HarnessEngine.importProject(raw), file);
     assert.equal(result.artifactProvenance.verification, 'UNKNOWN');
     assert.deepEqual(result.instrumentSpec.inputs, ['start','finish']);
+    await page.locator('#foundry-response').fill('');
     await page.locator('#foundry-candidate-file').setInputFiles(content('native-project.json', result));
-    await page.waitForFunction(() => JSON.parse(document.getElementById('foundry-response').value).name === 'Elapsed');
+    await page.waitForFunction(() => {
+      const reply = document.getElementById('foundry-response').value;
+      return reply && JSON.parse(reply).name === 'Elapsed' && !document.getElementById('foundry-cases').disabled;
+    });
     const hash = await page.locator('#foundry-mission-hash').textContent();
     await page.locator('#foundry-cases').setInputFiles(content('cases.json', {schema:'frontier/foundry-cases-v1',
       mission_sha256:hash,reference:'Browser qualification fixture, direct integer arithmetic',
       cases:[{input:{start:10,finish:13},expected:{elapsed:3}}]}));
     await page.waitForFunction(() => document.getElementById('foundry-comparison').textContent.includes('1/1'));
     await capture(page, language, width, 'foundry-verified');
+
+    const fixture = await page.evaluate(async ({example, original}) => {
+      const here = path => new URL(path, document.baseURI).href;
+      const {registerStudy, evaluateStudy} = await import(here('foundry-study.mjs'));
+      const {fingerprint} = await import(here('outcome-receipt.mjs'));
+      const task = {...example.task, objective:'Reject ranges that are not singletons', outputs:{single:'boolean'}};
+      const candidate = {name:'Single byte', inputs:['start','end'],
+        outputs:{single:{op:'eq',args:[{field:'start'},{field:'end'}]}}};
+      const cases = {...example.suite, mission_sha256:await fingerprint(task), reference:'Independent browser test fixture',
+        cases:[{input:{start:3,end:4},expected:{single:false}},{input:{start:7,end:7},expected:{single:true}}]};
+      const plan = await registerStudy({task,hypothesis:'Fixture study',model:'local-fixture',output_tokens:128},
+        original, example.suite, candidate, cases);
+      const good = {status:'SEALED',candidate,elapsed_ns:100,usage:null,reason:null,bindings_used:[]};
+      const fail = {...good,status:'NO_CANDIDATE',reason:'FORMULA_REJECTED',candidate:null};
+      return {cases, bundle:await evaluateStudy(plan,cases,{direct:fail,ordinary:good,retained:good})};
+    }, {example, original});
+    await destination(page, 'mv-results');
+    await page.locator('#foundry-study-reopen summary').click();
+    await page.locator('#foundry-study-report').setInputFiles(content('report.json', fixture.bundle));
+    const studyCases = page.locator('#foundry-study-cases');
+    await studyCases.setInputFiles(content('changed-cases.json', {...fixture.cases, reference:'Changed reference'}));
+    await page.locator('#foundry-study-check').click();
+    await page.waitForFunction(lang => document.getElementById('foundry-study-status').textContent.includes(
+      lang === 'fr' ? 'diffère' : 'differ'), language);
+    assert.equal(await page.locator('#foundry-study-outcomes').isVisible(), false);
+    await studyCases.setInputFiles(content('cases.json', fixture.cases));
+    await page.locator('#foundry-study-check').click();
+    const comparison = page.locator('#foundry-study-outcomes');
+    await comparison.waitFor({state:'visible'});
+    assert.equal(await comparison.locator('dd').count(), 4);
+    assert.match(await comparison.locator('dd').last().textContent(), /2\/2/);
+    await capture(page, language, width, 'successor-study');
+    await comparison.locator('button').last().click();
+    await page.locator('#foundry-verification').waitFor({state:'visible'});
+    assert.match(await page.locator('#foundry-comparison').textContent(), /2\/2/);
   } finally { await context.setOffline(false); }
 }
 
@@ -554,6 +615,8 @@ async function walletPaths(browser, language, width) {
     assert.equal(await page.locator('#goal-text').inputValue(), '');
     assert.equal(await page.locator('#foundry-objective').inputValue(), '');
     assert.equal(await page.locator('#foundry-comparison').textContent(), '');
+    assert.equal(await page.locator('#foundry-library-items li').count(), 0);
+    assert.equal(await page.locator('#foundry-study-outcomes dd').count(), 0);
     assert.equal(await page.locator('#goal-result').isVisible(), false);
     assert.equal(await page.locator('#goal-export').isEnabled(), false);
     assert.equal(await page.locator('#access').isVisible(), true);
@@ -616,7 +679,7 @@ async function walletPaths(browser, language, width) {
       goalAwareRanking:true, savedGoalRecheck:true, missingEvidenceCheck:true, liveEvidenceFingerprints:true, restoredAfterSignIn:true,
       appShell:true, keyboardNavigation:true, publicAtlasReturn:true,
       executionFailureAndRetry:true, foundryOfflineReplay:true, foundryManualHandoffFixture:true,
-      foundryNativeProject:true, foundryAssetReopen:true,
+      foundryNativeProject:true, foundryAssetReopen:true, foundryPortfolio:true, foundrySuccessorStudyReplay:true,
       offlineRunAndReceipt: true, receiptTamperDenial: true, rehashedReceiptDenial:true, archivedEditionDownloads:true,
       lock: true, expiry: true, reconnect: true, accountSwitchDenial: true });
   } finally {
