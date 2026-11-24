@@ -35,6 +35,8 @@ async function publicAtlas(browser, language, width) {
     assert.equal(await page.locator('#member').isVisible(), false);
     assert.equal(await page.locator('#my-frontier').isVisible(), false);
     assert.equal(await page.locator('#mf-edition').isVisible(), false);
+    assert.equal(await page.locator('#foundry-cascade-results').isVisible(), false);
+    assert.equal(await page.locator('#possibility-shifts #foundry-cascade-results').count(), 0);
     assert.equal(await page.locator('#club-form').isVisible(), false);
     assert.match(await page.locator('h1').innerText(), /Member First Ω/i);
     assert.equal(await page.locator('.entry-pillars li').count(), 4);
@@ -189,6 +191,16 @@ async function foundryJourney(page, language, width) {
     'f4bc4141d5c86c251b04a9a2d129b65ab610242e5422755161e4882bb35cda06');
   const liberationZip = await (await online.get(base + 'frontier-activation-1.3.0.zip')).body();
   assert.equal(createHash('sha256').update(liberationZip).digest('hex'), release.foundry_sha256['frontier-activation-1.3.0.zip']);
+  assert.equal(release.foundry_sha256['frontier-activation-1.3.0.zip'],
+    'c73a4f0f261a2be986bf6315bd7ce6102167ccad929d9c44bc31701a1386ff1f');
+  const cascadeStudies = {};
+  for (const name of ['cascade-results.json', 'cascade-fresh-domain.json']) {
+    const response = await online.get(base + name);
+    assert.ok(response.ok());
+    const raw = await response.body();
+    assert.equal(createHash('sha256').update(raw).digest('hex'), release.foundry_sha256[name]);
+    cascadeStudies[name] = JSON.parse(raw);
+  }
   const example = await page.locator('#foundry-public-data').evaluate(node => JSON.parse(node.content.textContent));
   const context = page.context();
   await context.setOffline(true);
@@ -338,6 +350,26 @@ async function foundryJourney(page, language, width) {
     assert.deepEqual(await page.locator('#foundry-liberation-results tr td:nth-child(2)').allTextContents(),
       ['96 / 106', '93 / 106', '93 / 106', '94 / 106']);
     assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
+    await destination(page, 'mv-tools');
+    await page.locator('a[href="#foundry-cascade-results"]').press('Enter');
+    assert.equal(await page.locator(':focus').getAttribute('id'), 'foundry-cascade-title');
+    const headingIsClear = await page.locator('#foundry-cascade-title').evaluate(heading =>
+      heading.getBoundingClientRect().top >= document.querySelector('.mf-bar').getBoundingClientRect().bottom);
+    assert.ok(headingIsClear, 'Cascade heading must clear the sticky member navigation');
+    const cascade = page.getByRole('region', {name:'Activation 1.4 · Cascade'});
+    assert.match(await cascade.innerText(), /11.*16|16.*11/);
+    const {observed} = cascadeStudies['cascade-fresh-domain.json'];
+    assert.ok((await cascade.innerText()).includes(`${observed.matches_published}/${observed.seasons_compared}`));
+    for (const filename of Object.keys(cascadeStudies)) {
+      assert.equal(await cascade.locator(`a[href="${filename}"][download]`).isVisible(), true);
+    }
+    await cascade.locator('summary').press('Enter');
+    const {composition} = cascadeStudies['cascade-results.json'].summary;
+    const cells = await cascade.getByRole('cell').allTextContents();
+    assert.deepEqual(cells, ['direct','ordinary','typed','conventional','withdrawn'].map(arm =>
+      `${composition[arm]} / ${composition.jobs}`));
+    assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
+    await capture(page, language, width, 'cascade');
     const contextFile = {schema:'frontier/amplification-v1', objective:'Local measurement fixture',
       binding:{model:'Local model fixture', arm:'amplified'}, state:'DEVELOPMENT_PASS',
       attempts:[{number:1,scores:{accepted:2,cases:2}}]};
@@ -367,6 +399,15 @@ async function foundryJourney(page, language, width) {
     await page.locator('#foundry-verification').waitFor({state:'visible'});
     assert.match(await page.locator('#foundry-comparison').textContent(), /2\/2/);
   } finally { await context.setOffline(false); }
+  await destination(page, 'mv-tools');
+  await page.locator('a[href="#foundry-cascade-results"]').press('Enter');
+  const [cascadeDownload] = await Promise.all([
+    page.waitForEvent('download'),
+    page.locator('#foundry-cascade-results a[href="frontier-activation-1.4.0.zip"][download]').press('Enter')
+  ]);
+  assert.equal(cascadeDownload.suggestedFilename(), 'frontier-activation-1.4.0.zip');
+  assert.equal(createHash('sha256').update(await readFile(await cascadeDownload.path())).digest('hex'),
+    release.foundry_sha256['frontier-activation-1.4.0.zip']);
 }
 
 async function destination(page, name) {
@@ -698,6 +739,7 @@ async function walletPaths(browser, language, width) {
     assert.equal(await page.locator('#foundry-amplification-attempts li').count(), 0);
     assert.equal(await page.locator('#foundry-amplification-replay-status').textContent(), '');
     assert.equal(await page.locator('#foundry-substrate-replay-status').textContent(), '');
+    assert.equal(await page.locator('#foundry-cascade-results').isVisible(), false);
     assert.equal(await page.locator('#goal-result').isVisible(), false);
     assert.equal(await page.locator('#goal-export').isEnabled(), false);
     assert.equal(await page.locator('#access').isVisible(), true);
@@ -730,6 +772,9 @@ async function walletPaths(browser, language, width) {
     assert.match(await brief.innerText(), /1\.2/);
     assert.equal(await page.locator('#mf-edition').isVisible(), true);
     assert.ok(await page.locator('.mv-timeline a[href^="#decision-watch-"]').count() > 0);
+    await destination(page, 'mv-tools');
+    await page.locator('a[href="#foundry-cascade-results"]').press('Enter');
+    assert.equal(await page.locator('#foundry-cascade-results').isVisible(), true);
     await page.locator('#lock').click();
     await member.waitFor({ state: 'hidden' });
     await club.click();
@@ -762,6 +807,7 @@ async function walletPaths(browser, language, width) {
       executionFailureAndRetry:true, foundryOfflineReplay:true, foundryManualHandoffFixture:true,
       foundryNativeProject:true, foundryAssetReopen:true, foundryPortfolio:true, foundrySuccessorStudyReplay:true,
       foundryInventorPilot:true,
+      cascadeEvidenceAndDownload:true,
       offlineRunAndReceipt: true, receiptTamperDenial: true, rehashedReceiptDenial:true, archivedEditionDownloads:true,
       lock: true, expiry: true, reconnect: true, accountSwitchDenial: true });
   } finally {

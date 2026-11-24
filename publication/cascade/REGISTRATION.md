@@ -1,0 +1,21 @@
+# FRONTIER Ω · Activation 1.4 research registration
+
+This study starts from Activation 1.3 at `96bf376e90acb2ae291a6317e72284a266389d27`. The internal beneficiary is the MONTREAL.AI research operation. Its measurable task is to turn actual public light curves into source-bound transit-time evidence and identify which timings can support another forecast analysis. The release may make the instrument reusable offline. Observing and spending authority are outside the research contract.
+
+## Photometry and confirmation
+
+Use the individual measurements in ExoClock IV solely as an external numerical reference. The five high-error events from 1.3 are development material. The input contract exposes the target, publicly documented nominal duration, calendar date of an archived observation identifier, the original TESS SPOC product and its SHA-256. The UTC-date band is BJD numerically from 0.15 days before the date's UTC midnight to 1.40 days after it. The broad band accommodates archive identifiers that describe an observation night. It supplies no numeric catalogue midpoint. Verify the source product time basis, coverage and target provenance.
+
+Select untouched TESS timings whose dated identifiers map to the registered host and sectors. Omit any identifier already represented in Activation 1.3 and require the date to be strictly later than that planet's development date. Select up to the first two such dates per planet and per sector, using the date and then the identifier as tie breakers. An event belongs to one product. First fit the date bands and freeze outputs, then reveal and compare the decimal catalogue times. Constructor processes receive only the input document. This is a historical held comparison under one administrator. The archive truth and instrument measurements can share underlying observations.
+
+Compare a qualified implementation from the included Codex path and a separately constructed ordinary scientific control on identical inputs. The visible task requires midpoint, uncertainty, source witness and justified abstention. A catalogue agreement requires `MEASURED`, a finite positive reported uncertainty of at most 600 seconds, and absolute error within the greater of 90 seconds and three catalogue standard errors, capped at 720 seconds. Show all misses and abstentions. Separately measure two-method concordance and whether the 90% interval covers the catalogue midpoint, including the catalogue measurement uncertainty where appropriate. No midpoints are dropped based on the observed error. This small host-grouped cohort cannot establish calibrated observing coverage or justify replacing the earlier published forecasts.
+
+## Cascade experiment
+
+Keep sophisticated discovery and construction on the included, operator-reviewed Codex path. Use the already evaluated exact transit contract from Activation 1.3 and the new scientific timing evidence as retained capabilities. The smaller Qwen3-4B operates a read-only tool registry and never receives catalogue truth. Use matched inputs and envelopes for direct reasoning, ordinary tool descriptions and the typed registry. The ordinary tool arm receives both competent callable operations and the same semantic facts. A conventional deterministic integration is the strong control. Retain the short outcome and execution trace for each case and operation.
+
+Score task routing, actual tool calls, correct composed result and justified abstention independently from the model's wording. Require at least two additional accepted jobs compared with both the ordinary-use control and deterministic integration before claiming a cascade advantage. Replay with the retained capability removed on the same routes to test contribution to execution. The withdrawal is a capability-use comparison. Inventive transfer additionally needs a fresh independently accepted invention.
+
+## Adoption and economics
+
+Verify repeatability using more than one actual public event. Report measured request and processing time, accepted outcomes, source bytes and observable acquisition costs. A financial advantage requires measured full competing workflows and attention, which are separate from technical qualification. Preserve a qualified conventional alternative if it ties or wins.

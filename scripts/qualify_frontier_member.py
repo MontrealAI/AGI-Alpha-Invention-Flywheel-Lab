@@ -371,11 +371,26 @@ def qualify_liberation(directory, root, release):
     expected=release['foundry_sha256'][member.LIBERATION_ZIP]
     manifest=install(directory/member.LIBERATION_ZIP,root,{'sha256':expected})
     require(manifest['id']=='frontier-activation' and manifest['version']=='1.3.0' and
-            manifest['source']==member.commit_url(release['source_commit']),'Wrong research workbench source')
+            manifest['source']==member.commit_url(member.LIBERATION_PIN),'Wrong research workbench source')
     evidence,elapsed=call(root,sys.executable,'verify_liberation.py')
     require(evidence['construction_held_accepted']['manual']==42 and evidence['covariance_confirmed']==106
             and evidence['hydrology']['days']==28,'Invention and scientific workbench replay failed')
     return {'package_sha256':expected,'replayed_ns':elapsed,**evidence}
+
+
+def qualify_cascade(directory, root, release):
+    expected = release['foundry_sha256'][member.CASCADE_ZIP]
+    manifest = install(directory/member.CASCADE_ZIP,root,{'sha256':expected})
+    require(manifest['id']=='frontier-activation' and manifest['version']=='1.4.0'
+            and manifest['source']==member.commit_url(release['source_commit']),'Wrong cascade workbench source')
+    for name, filename in member.CASCADE_STUDIES.items():
+        require((directory/name).read_bytes()==(root/'study/cascade'/filename).read_bytes(),
+                'Cascade public data and portable evidence differ')
+    evidence, elapsed = call(root, sys.executable, 'verify_cascade.py')
+    require(evidence['tess']['held']==11 and evidence['historical_oni_seasons']==900
+            and evidence['composition']['jobs']==13 and evidence['observing_decision']=='ABSTAIN',
+            'Cascade evidence is incomplete')
+    return {'package_sha256':expected, 'replayed_ns':elapsed, **evidence}
 
 
 def qualify(directory, live=False):
@@ -408,6 +423,8 @@ def qualify(directory, live=False):
                     results['substrate'] = qualify_substrate(directory, root/'substrate', release)
                 if member.LIBERATION_ZIP in release['foundry_sha256']:
                     results['liberation'] = qualify_liberation(directory, root/'liberation', release)
+                if member.CASCADE_ZIP in release['foundry_sha256']:
+                    results['cascade'] = qualify_cascade(directory, root/'cascade', release)
         return results
 
 

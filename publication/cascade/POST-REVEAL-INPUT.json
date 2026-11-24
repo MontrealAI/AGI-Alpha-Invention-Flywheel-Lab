@@ -1,0 +1,32 @@
+{
+  "purpose": "Post-reveal Sector 64 source diagnostic, excluded from frozen evaluation",
+  "product_uri": "https://mast.stsci.edu/api/v0.1/Download/file/?uri=mast:TESS/product/tess2023096110322-s0064-0000000055652896-0257-s_lc.fits",
+  "product_sha256": "508b969a606dfb3b7bb5fed8cfbfb5b614b2d1a1afe6362f0474737716016d10",
+  "product_bytes": 1969920,
+  "tic_id": 55652896,
+  "sector": 64,
+  "reducer_sha256": "f38c811e9df2443c8e8536c7342cbe607e0d864b7fb74bfbeb91dffb96f85f6e",
+  "catalogue_uri": "https://osf.io/download/8xzsr/",
+  "catalogue_sha256": "0c17105ad6a7b4f50281c15f1ed61170163f008f00451c30bb25e39e83ef80e8",
+  "primary_output_sha256": "9cca1e67764946ecb8d589fe9cb088fbc054e52d8f9b102f7b6bb44d3d5c6d71",
+  "outer": {
+    "id": "TOI-216.01_246_2023-04-22_TESS",
+    "witness": "by_planet/TOI-216.01.txt:L28",
+    "catalogue_mid_bjd_tdb": 2460056.75945,
+    "catalogue_uncertainty_days": 0.00066,
+    "nominal_duration_hour": 5.4736
+  },
+  "inner": {
+    "id": "TOI-216.02_495_2023-04-27_TESS",
+    "witness": "by_planet/TOI-216.02.txt:L36",
+    "catalogue_mid_bjd_tdb": 2460056.8146,
+    "catalogue_uncertainty_days": 0.0021,
+    "nominal_duration_hour": 2.2021,
+    "isolated_dips": [
+      {"id": "TOI-216.02_494_2023-04-10_TESS", "frozen_mid_bjd_tdb": 2460045.6199894357},
+      {"id": "TOI-216.02_495_2023-04-27_TESS", "frozen_mid_bjd_tdb": 2460062.687402377}
+    ],
+    "depth_controls_ppt": [4.75, 7.478],
+    "literature_depth_source": "https://exoplanetarchive.ipac.caltech.edu/overview/TOI-216"
+  }
+}
