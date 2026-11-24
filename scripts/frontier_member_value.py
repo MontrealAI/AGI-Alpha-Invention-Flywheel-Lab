@@ -2,6 +2,7 @@
 
 from hashlib import sha256
 from html import escape
+from decimal import Decimal
 import json
 import re
 from pathlib import Path
@@ -31,17 +32,20 @@ INVENTOR_ZIP = 'frontier-inventor-1.0.0.zip'
 LEARNING_ZIP = 'frontier-learning-1.0.0.zip'
 ACTIVATION_ZIP = 'frontier-activation-1.0.0.zip'
 AMPLIFICATION_ZIP = 'frontier-activation-1.1.0.zip'
+AMPLIFICATION_PIN = '3e229271a5408961a8ad686fa32d0b0f2fd08663'
+SUBSTRATE_ZIP = 'frontier-activation-1.2.0.zip'
 FOUNDRY_ENGINE = 'harness-engine.js'
 FOUNDRY_INPUT = 'FOUNDRY_PUBLIC_DATA'
 HARNESS_PIN = '39e76570c851b3527d78a526053a9ea2a611a993'
 HARNESS = 'products/alpha-genesis-harness/'
 FOUNDRY_ASSETS = ('foundry-core.mjs', 'foundry-ui.mjs', 'foundry-study.mjs', 'outcome-receipt.mjs',
                   FOUNDRY_ENGINE, FOUNDRY_ZIP, STUDY_ZIP, INVENTOR_ZIP, LEARNING_ZIP, ACTIVATION_ZIP,
-                  AMPLIFICATION_ZIP)
+                  AMPLIFICATION_ZIP, SUBSTRATE_ZIP)
 INVENTOR_EVIDENCE = MAIN / 'publication/inventor'
 LEARNING_EVIDENCE = MAIN / 'publication/adaptive'
 ACTIVATION_EVIDENCE = MAIN / 'publication/activation'
 AMPLIFICATION_EVIDENCE = MAIN / 'publication/amplification'
+SUBSTRATE_EVIDENCE = MAIN / 'publication/substrate'
 
 OUTPUTS = frozenset(SITE + name for name in (ENDPOINT_ZIP, ARCHIVE_ZIP, MEMBER_JSON))
 MARKER = '<!-- FRONTIER_MEMBER_VALUE -->'
@@ -278,7 +282,7 @@ def build_activation(destination):
                    'Public evidence recovery, bounded Wasm table construction, and prospective Pages shadow forecasts.')
 
 
-def build_amplification(destination, revision):
+def amplification_files():
     files=activation_files()
     for name in ('AMPLIFICATION.md','amplify.py','native_experiment.py','route_environment.py','reproduce_amplification.py',
                  'calibration_environment.py','refine_amplification.py','discover_amplification.py'):
@@ -290,9 +294,51 @@ def build_amplification(destination, revision):
                  'next-investigation.json','phase-additional.json','diagnostic-audit.json',
                  'initial-research-input.txt','next-research-input.txt'):
         files[f'study/amplification/{name}']=(AMPLIFICATION_EVIDENCE/name).read_bytes()
-    return package(destination/AMPLIFICATION_ZIP,files,'frontier-activation',revision,
+    return files
+
+
+def build_amplification(destination):
+    return package(destination/AMPLIFICATION_ZIP,amplification_files(),'frontier-activation',AMPLIFICATION_PIN,
                    'Activation 1.1 with a separate native research sandbox, matched comparisons, and exact workload replay.',
                    version='1.1.0')
+
+
+def build_substrate(destination, revision):
+    files = amplification_files()
+    for filename in ('SUBSTRATE.md', 'science_substrate.py', 'science_reference.py', 'science_workbench.py',
+                     'substrate_study.py', 'verify_substrate.py'):
+        files[filename] = (TOOLS/'activation'/filename).read_bytes()
+    for filename in ('REGISTRATION.json', 'BINDINGS.json', 'CASE.json', 'DEVELOPMENT.json', 'CONFIRMATION.json',
+                     'SURVEYS.json', 'MANUAL-PACKET.json', 'MANUAL-RESPONSE.json', 'manual-candidate.json',
+                     'REPORT.md', 'assemble.py', 'RESULTS.json', 'NEXT.json', 'LOCAL-CONFIG.json',
+                     'model-evidence.json', 'record.py', 'covariance_pilot.py', 'PILOT-REGISTRATION.json', 'PILOT-RESULT.json'):
+        files[f'study/substrate/{filename}'] = (SUBSTRATE_EVIDENCE/filename).read_bytes()
+    return package(destination/SUBSTRATE_ZIP,files,'frontier-activation',revision,
+                   'Exact scientific environments and bounded research on source-grounded executable knowledge.',
+                   version='1.2.0')
+
+
+def substrate_example():
+    case = json.loads((SUBSTRATE_EVIDENCE/'CASE.json').read_bytes())
+    q = case['ephemeris']
+    scale = 10**12
+    scaled = [Decimal(x) * scale for x in (case['anchor'], q['t0_day'], q['period_day'], q['t0_sigma_day'],
+                                           q['period_sigma_day'], q['duration_hour'])]
+    if any(value != int(value) for value in scaled):
+        raise ValueError('Browser example precision')
+    return {'scale': str(scale), 'values': [str(int(value)) for value in scaled], 'witness': case['witness']}
+
+
+def render_substrate(fr):
+    results = json.loads((SUBSTRATE_EVIDENCE/'RESULTS.json').read_bytes())
+    total = results['scoped_reference']['all_source_row_horizons_agree']
+    manual = results['operator_assisted']['confirmation']['accepted']
+    if fr:
+        grouped = f'{total:,}'.replace(',', '\u202f')
+        return (f'<p>Deux calculs indépendants concordent sur {grouped} vérifications des sources. '
+                f'L’artefact construit avec transfert manuel et la référence exacte réussissent chacun {manual}/28 cas de confirmation.</p>')
+    return (f'<p>Two independent calculations agree on {total:,} source checks. '
+            f'The manually transferred artifact and the exact reference each pass {manual}/28 held cases.</p>')
 
 
 def render_amplification(fr):
@@ -945,6 +991,8 @@ def render(lang, compiled, sample):
         '<!-- ACTIVATION_MAP -->': render_activation(fr),
         '<!-- AMPLIFICATION_RESULTS -->': render_amplification(fr),
         '<!-- AMPLIFICATION_EXAMPLE -->': escape(stable(json.loads((AMPLIFICATION_EVIDENCE/'trial.json').read_bytes())).decode()),
+        '<!-- SUBSTRATE_EXAMPLE -->': escape(stable(substrate_example()).decode()),
+        '<!-- SUBSTRATE_RESULTS -->': render_substrate(fr),
         '<!-- MF_UPDATED -->': timestamp_html(compiled['updated_at']),
         '<!-- MV_TIMELINE -->': ''.join(highlights),
         '<!-- MV_FILTERS -->': controls(briefs, fr),
