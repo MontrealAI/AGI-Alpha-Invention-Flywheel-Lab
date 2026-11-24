@@ -1,0 +1,906 @@
+{
+  "schema": "frontier/ktc-observation-admissibility/v1",
+  "registration": "7529e43338381b50d4ef5e852071756461d251c1",
+  "executable_revision": "5eb5cac2cc4a96becf89f0eb775d8fc893e5016c",
+  "source_doi": "10.5281/zenodo.10986692",
+  "archive_sha256": {
+    "EvaluationData.zip": "e1003c2b652280fa052a8655ec80893e480d8a377ab7e516fced125b3ebc45c0",
+    "EvaluationData_full.zip": "85c47f91c0cd15889a96108b389550edafd8bba46b40fd84447e63a62534ce42"
+  },
+  "cases": [
+    {
+      "level": 1,
+      "phantom": 1,
+      "reported_full_measurements": 2356,
+      "same_visible_readings": 2356,
+      "withheld_measured_readings": 0,
+      "visible_rank": 360,
+      "conventional_identified": 0,
+      "exact_certificates_verified": 0,
+      "minimum_withheld_design_residual": null,
+      "source_unit_recovery_errors": [],
+      "one_counterexample": null,
+      "stage_costs": {
+        "shared_design": {
+          "wall_ms": 21.301145,
+          "cpu_ms": 21.305468
+        },
+        "conventional": {
+          "wall_ms": 182.497403,
+          "cpu_ms": 182.559796
+        },
+        "constructor": {
+          "wall_ms": 4.996698,
+          "cpu_ms": 4.999343
+        },
+        "independent_check": {
+          "wall_ms": 0.986823,
+          "cpu_ms": 0.988006
+        }
+      },
+      "certificate_indices_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "compute": {
+        "wall_ms": 212.408179,
+        "cpu_ms": 211.510914
+      }
+    },
+    {
+      "level": 1,
+      "phantom": 2,
+      "reported_full_measurements": 2356,
+      "same_visible_readings": 2356,
+      "withheld_measured_readings": 0,
+      "visible_rank": 360,
+      "conventional_identified": 0,
+      "exact_certificates_verified": 0,
+      "minimum_withheld_design_residual": null,
+      "source_unit_recovery_errors": [],
+      "one_counterexample": null,
+      "stage_costs": {
+        "shared_design": {
+          "wall_ms": 4.356455,
+          "cpu_ms": 4.360333
+        },
+        "conventional": {
+          "wall_ms": 148.209245,
+          "cpu_ms": 148.219247
+        },
+        "constructor": {
+          "wall_ms": 1.11661,
+          "cpu_ms": 1.119779
+        },
+        "independent_check": {
+          "wall_ms": 0.058194,
+          "cpu_ms": 0.058462
+        }
+      },
+      "certificate_indices_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "compute": {
+        "wall_ms": 153.809421,
+        "cpu_ms": 153.814699
+      }
+    },
+    {
+      "level": 1,
+      "phantom": 3,
+      "reported_full_measurements": 2356,
+      "same_visible_readings": 2356,
+      "withheld_measured_readings": 0,
+      "visible_rank": 360,
+      "conventional_identified": 0,
+      "exact_certificates_verified": 0,
+      "minimum_withheld_design_residual": null,
+      "source_unit_recovery_errors": [],
+      "one_counterexample": null,
+      "stage_costs": {
+        "shared_design": {
+          "wall_ms": 3.287746,
+          "cpu_ms": 3.29105
+        },
+        "conventional": {
+          "wall_ms": 121.491637,
+          "cpu_ms": 121.486642
+        },
+        "constructor": {
+          "wall_ms": 0.739257,
+          "cpu_ms": 0.740453
+        },
+        "independent_check": {
+          "wall_ms": 0.055191,
+          "cpu_ms": 0.055395
+        }
+      },
+      "certificate_indices_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "compute": {
+        "wall_ms": 125.660556,
+        "cpu_ms": 125.652173
+      }
+    },
+    {
+      "level": 2,
+      "phantom": 1,
+      "reported_full_measurements": 2356,
+      "same_visible_readings": 1624,
+      "withheld_measured_readings": 732,
+      "visible_rank": 315,
+      "conventional_identified": 0,
+      "exact_certificates_verified": 732,
+      "minimum_withheld_design_residual": 1.4361406616345065,
+      "source_unit_recovery_errors": [],
+      "one_counterexample": {
+        "drive_index_zero_based": 0,
+        "sense_index_zero_based": 0,
+        "one_symmetric_entry_zero_based": [
+          0,
+          0
+        ]
+      },
+      "stage_costs": {
+        "shared_design": {
+          "wall_ms": 2.639425,
+          "cpu_ms": 2.642599
+        },
+        "conventional": {
+          "wall_ms": 108.627526,
+          "cpu_ms": 108.63543
+        },
+        "constructor": {
+          "wall_ms": 0.892378,
+          "cpu_ms": 0.894754
+        },
+        "independent_check": {
+          "wall_ms": 17.059819,
+          "cpu_ms": 17.062687
+        }
+      },
+      "certificate_indices_sha256": "8d29e782e4dbcafc78b9d25c2f1109d1a69533945c8811c475f307e6c59b2f73",
+      "compute": {
+        "wall_ms": 129.356688,
+        "cpu_ms": 129.362621
+      }
+    },
+    {
+      "level": 2,
+      "phantom": 2,
+      "reported_full_measurements": 2356,
+      "same_visible_readings": 1624,
+      "withheld_measured_readings": 732,
+      "visible_rank": 315,
+      "conventional_identified": 0,
+      "exact_certificates_verified": 732,
+      "minimum_withheld_design_residual": 1.4361406616345065,
+      "source_unit_recovery_errors": [],
+      "one_counterexample": {
+        "drive_index_zero_based": 0,
+        "sense_index_zero_based": 0,
+        "one_symmetric_entry_zero_based": [
+          0,
+          0
+        ]
+      },
+      "stage_costs": {
+        "shared_design": {
+          "wall_ms": 2.255716,
+          "cpu_ms": 2.25969
+        },
+        "conventional": {
+          "wall_ms": 104.939085,
+          "cpu_ms": 104.946687
+        },
+        "constructor": {
+          "wall_ms": 0.971408,
+          "cpu_ms": 0.974527
+        },
+        "independent_check": {
+          "wall_ms": 17.126803,
+          "cpu_ms": 16.545507
+        }
+      },
+      "certificate_indices_sha256": "8d29e782e4dbcafc78b9d25c2f1109d1a69533945c8811c475f307e6c59b2f73",
+      "compute": {
+        "wall_ms": 125.382876,
+        "cpu_ms": 124.803708
+      }
+    },
+    {
+      "level": 2,
+      "phantom": 3,
+      "reported_full_measurements": 2356,
+      "same_visible_readings": 1624,
+      "withheld_measured_readings": 732,
+      "visible_rank": 315,
+      "conventional_identified": 0,
+      "exact_certificates_verified": 732,
+      "minimum_withheld_design_residual": 1.4361406616345065,
+      "source_unit_recovery_errors": [],
+      "one_counterexample": {
+        "drive_index_zero_based": 0,
+        "sense_index_zero_based": 0,
+        "one_symmetric_entry_zero_based": [
+          0,
+          0
+        ]
+      },
+      "stage_costs": {
+        "shared_design": {
+          "wall_ms": 2.321568,
+          "cpu_ms": 2.32577
+        },
+        "conventional": {
+          "wall_ms": 104.814572,
+          "cpu_ms": 104.822754
+        },
+        "constructor": {
+          "wall_ms": 0.763376,
+          "cpu_ms": 0.76542
+        },
+        "independent_check": {
+          "wall_ms": 17.088886,
+          "cpu_ms": 17.091531
+        }
+      },
+      "certificate_indices_sha256": "8d29e782e4dbcafc78b9d25c2f1109d1a69533945c8811c475f307e6c59b2f73",
+      "compute": {
+        "wall_ms": 125.070235,
+        "cpu_ms": 125.075687
+      }
+    },
+    {
+      "level": 3,
+      "phantom": 1,
+      "reported_full_measurements": 2356,
+      "same_visible_readings": 1404,
+      "withheld_measured_readings": 952,
+      "visible_rank": 273,
+      "conventional_identified": 0,
+      "exact_certificates_verified": 952,
+      "minimum_withheld_design_residual": 1.4375905768565214,
+      "source_unit_recovery_errors": [],
+      "one_counterexample": {
+        "drive_index_zero_based": 0,
+        "sense_index_zero_based": 0,
+        "one_symmetric_entry_zero_based": [
+          0,
+          0
+        ]
+      },
+      "stage_costs": {
+        "shared_design": {
+          "wall_ms": 2.361751,
+          "cpu_ms": 2.365586
+        },
+        "conventional": {
+          "wall_ms": 99.623408,
+          "cpu_ms": 99.631097
+        },
+        "constructor": {
+          "wall_ms": 0.887884,
+          "cpu_ms": 0.88978
+        },
+        "independent_check": {
+          "wall_ms": 19.276733,
+          "cpu_ms": 19.279979
+        }
+      },
+      "certificate_indices_sha256": "412159a79c7d4bf060a95dd51bad8557a2c0668b5fad954d024b1a48de58e770",
+      "compute": {
+        "wall_ms": 122.233188,
+        "cpu_ms": 122.237756
+      }
+    },
+    {
+      "level": 3,
+      "phantom": 2,
+      "reported_full_measurements": 2356,
+      "same_visible_readings": 1404,
+      "withheld_measured_readings": 952,
+      "visible_rank": 273,
+      "conventional_identified": 0,
+      "exact_certificates_verified": 952,
+      "minimum_withheld_design_residual": 1.4375905768565214,
+      "source_unit_recovery_errors": [],
+      "one_counterexample": {
+        "drive_index_zero_based": 0,
+        "sense_index_zero_based": 0,
+        "one_symmetric_entry_zero_based": [
+          0,
+          0
+        ]
+      },
+      "stage_costs": {
+        "shared_design": {
+          "wall_ms": 2.136593,
+          "cpu_ms": 2.140496
+        },
+        "conventional": {
+          "wall_ms": 95.168396,
+          "cpu_ms": 95.175532
+        },
+        "constructor": {
+          "wall_ms": 0.791858,
+          "cpu_ms": 0.793737
+        },
+        "independent_check": {
+          "wall_ms": 20.091604,
+          "cpu_ms": 20.094952
+        }
+      },
+      "certificate_indices_sha256": "412159a79c7d4bf060a95dd51bad8557a2c0668b5fad954d024b1a48de58e770",
+      "compute": {
+        "wall_ms": 118.274479,
+        "cpu_ms": 118.278922
+      }
+    },
+    {
+      "level": 3,
+      "phantom": 3,
+      "reported_full_measurements": 2356,
+      "same_visible_readings": 1404,
+      "withheld_measured_readings": 952,
+      "visible_rank": 273,
+      "conventional_identified": 0,
+      "exact_certificates_verified": 952,
+      "minimum_withheld_design_residual": 1.4375905768565214,
+      "source_unit_recovery_errors": [],
+      "one_counterexample": {
+        "drive_index_zero_based": 0,
+        "sense_index_zero_based": 0,
+        "one_symmetric_entry_zero_based": [
+          0,
+          0
+        ]
+      },
+      "stage_costs": {
+        "shared_design": {
+          "wall_ms": 2.244605,
+          "cpu_ms": 2.248383
+        },
+        "conventional": {
+          "wall_ms": 95.805969,
+          "cpu_ms": 95.813276
+        },
+        "constructor": {
+          "wall_ms": 0.9011,
+          "cpu_ms": 0.904114
+        },
+        "independent_check": {
+          "wall_ms": 18.638646,
+          "cpu_ms": 18.641254
+        }
+      },
+      "certificate_indices_sha256": "412159a79c7d4bf060a95dd51bad8557a2c0668b5fad954d024b1a48de58e770",
+      "compute": {
+        "wall_ms": 117.668602,
+        "cpu_ms": 117.673499
+      }
+    },
+    {
+      "level": 4,
+      "phantom": 1,
+      "reported_full_measurements": 2356,
+      "same_visible_readings": 1200,
+      "withheld_measured_readings": 1156,
+      "visible_rank": 234,
+      "conventional_identified": 0,
+      "exact_certificates_verified": 1156,
+      "minimum_withheld_design_residual": 1.4392458342578487,
+      "source_unit_recovery_errors": [],
+      "one_counterexample": {
+        "drive_index_zero_based": 0,
+        "sense_index_zero_based": 0,
+        "one_symmetric_entry_zero_based": [
+          0,
+          0
+        ]
+      },
+      "stage_costs": {
+        "shared_design": {
+          "wall_ms": 2.295156,
+          "cpu_ms": 2.298621
+        },
+        "conventional": {
+          "wall_ms": 91.509739,
+          "cpu_ms": 88.85534
+        },
+        "constructor": {
+          "wall_ms": 0.86128,
+          "cpu_ms": 0.863943
+        },
+        "independent_check": {
+          "wall_ms": 22.850875,
+          "cpu_ms": 22.854643
+        }
+      },
+      "certificate_indices_sha256": "c9028d039cda4e34ced7bbd96935f56184e2079a8b7bf627f3bd24735349c006",
+      "compute": {
+        "wall_ms": 117.602451,
+        "cpu_ms": 114.945819
+      }
+    },
+    {
+      "level": 4,
+      "phantom": 2,
+      "reported_full_measurements": 2356,
+      "same_visible_readings": 1200,
+      "withheld_measured_readings": 1156,
+      "visible_rank": 234,
+      "conventional_identified": 0,
+      "exact_certificates_verified": 1156,
+      "minimum_withheld_design_residual": 1.4392458342578487,
+      "source_unit_recovery_errors": [],
+      "one_counterexample": {
+        "drive_index_zero_based": 0,
+        "sense_index_zero_based": 0,
+        "one_symmetric_entry_zero_based": [
+          0,
+          0
+        ]
+      },
+      "stage_costs": {
+        "shared_design": {
+          "wall_ms": 2.678793,
+          "cpu_ms": 2.682819
+        },
+        "conventional": {
+          "wall_ms": 86.483462,
+          "cpu_ms": 86.475421
+        },
+        "constructor": {
+          "wall_ms": 0.745215,
+          "cpu_ms": 0.746225
+        },
+        "independent_check": {
+          "wall_ms": 22.152009,
+          "cpu_ms": 22.155351
+        }
+      },
+      "certificate_indices_sha256": "c9028d039cda4e34ced7bbd96935f56184e2079a8b7bf627f3bd24735349c006",
+      "compute": {
+        "wall_ms": 112.140719,
+        "cpu_ms": 112.12937
+      }
+    },
+    {
+      "level": 4,
+      "phantom": 3,
+      "reported_full_measurements": 2356,
+      "same_visible_readings": 1200,
+      "withheld_measured_readings": 1156,
+      "visible_rank": 234,
+      "conventional_identified": 0,
+      "exact_certificates_verified": 1156,
+      "minimum_withheld_design_residual": 1.4392458342578487,
+      "source_unit_recovery_errors": [],
+      "one_counterexample": {
+        "drive_index_zero_based": 0,
+        "sense_index_zero_based": 0,
+        "one_symmetric_entry_zero_based": [
+          0,
+          0
+        ]
+      },
+      "stage_costs": {
+        "shared_design": {
+          "wall_ms": 2.325251,
+          "cpu_ms": 2.328424
+        },
+        "conventional": {
+          "wall_ms": 84.299985,
+          "cpu_ms": 84.306599
+        },
+        "constructor": {
+          "wall_ms": 0.811764,
+          "cpu_ms": 0.813701
+        },
+        "independent_check": {
+          "wall_ms": 21.425267,
+          "cpu_ms": 21.428321
+        }
+      },
+      "certificate_indices_sha256": "c9028d039cda4e34ced7bbd96935f56184e2079a8b7bf627f3bd24735349c006",
+      "compute": {
+        "wall_ms": 108.941938,
+        "cpu_ms": 108.94674
+      }
+    },
+    {
+      "level": 5,
+      "phantom": 1,
+      "reported_full_measurements": 2356,
+      "same_visible_readings": 1012,
+      "withheld_measured_readings": 1344,
+      "visible_rank": 198,
+      "conventional_identified": 0,
+      "exact_certificates_verified": 1344,
+      "minimum_withheld_design_residual": 1.4411533842457842,
+      "source_unit_recovery_errors": [],
+      "one_counterexample": {
+        "drive_index_zero_based": 0,
+        "sense_index_zero_based": 0,
+        "one_symmetric_entry_zero_based": [
+          0,
+          0
+        ]
+      },
+      "stage_costs": {
+        "shared_design": {
+          "wall_ms": 2.314727,
+          "cpu_ms": 2.319232
+        },
+        "conventional": {
+          "wall_ms": 93.065531,
+          "cpu_ms": 93.072662
+        },
+        "constructor": {
+          "wall_ms": 0.835326,
+          "cpu_ms": 0.837797
+        },
+        "independent_check": {
+          "wall_ms": 22.131313,
+          "cpu_ms": 22.13425
+        }
+      },
+      "certificate_indices_sha256": "bd87caa537604099c3e8ecfba9965013ab8c48a122b1bbd1c09983111e0b7cea",
+      "compute": {
+        "wall_ms": 118.431812,
+        "cpu_ms": 118.436953
+      }
+    },
+    {
+      "level": 5,
+      "phantom": 2,
+      "reported_full_measurements": 2356,
+      "same_visible_readings": 1012,
+      "withheld_measured_readings": 1344,
+      "visible_rank": 198,
+      "conventional_identified": 0,
+      "exact_certificates_verified": 1344,
+      "minimum_withheld_design_residual": 1.4411533842457842,
+      "source_unit_recovery_errors": [],
+      "one_counterexample": {
+        "drive_index_zero_based": 0,
+        "sense_index_zero_based": 0,
+        "one_symmetric_entry_zero_based": [
+          0,
+          0
+        ]
+      },
+      "stage_costs": {
+        "shared_design": {
+          "wall_ms": 2.182895,
+          "cpu_ms": 2.186291
+        },
+        "conventional": {
+          "wall_ms": 90.283287,
+          "cpu_ms": 90.290323
+        },
+        "constructor": {
+          "wall_ms": 0.938564,
+          "cpu_ms": 0.940737
+        },
+        "independent_check": {
+          "wall_ms": 23.209008,
+          "cpu_ms": 23.212464
+        }
+      },
+      "certificate_indices_sha256": "bd87caa537604099c3e8ecfba9965013ab8c48a122b1bbd1c09983111e0b7cea",
+      "compute": {
+        "wall_ms": 116.699096,
+        "cpu_ms": 116.704353
+      }
+    },
+    {
+      "level": 5,
+      "phantom": 3,
+      "reported_full_measurements": 2356,
+      "same_visible_readings": 1012,
+      "withheld_measured_readings": 1344,
+      "visible_rank": 198,
+      "conventional_identified": 0,
+      "exact_certificates_verified": 1344,
+      "minimum_withheld_design_residual": 1.4411533842457842,
+      "source_unit_recovery_errors": [],
+      "one_counterexample": {
+        "drive_index_zero_based": 0,
+        "sense_index_zero_based": 0,
+        "one_symmetric_entry_zero_based": [
+          0,
+          0
+        ]
+      },
+      "stage_costs": {
+        "shared_design": {
+          "wall_ms": 2.186294,
+          "cpu_ms": 2.190583
+        },
+        "conventional": {
+          "wall_ms": 88.006299,
+          "cpu_ms": 88.013539
+        },
+        "constructor": {
+          "wall_ms": 1.340939,
+          "cpu_ms": 1.344375
+        },
+        "independent_check": {
+          "wall_ms": 23.512803,
+          "cpu_ms": 23.516038
+        }
+      },
+      "certificate_indices_sha256": "bd87caa537604099c3e8ecfba9965013ab8c48a122b1bbd1c09983111e0b7cea",
+      "compute": {
+        "wall_ms": 115.13523,
+        "cpu_ms": 115.140155
+      }
+    },
+    {
+      "level": 6,
+      "phantom": 1,
+      "reported_full_measurements": 2356,
+      "same_visible_readings": 630,
+      "withheld_measured_readings": 1726,
+      "visible_rank": 165,
+      "conventional_identified": 0,
+      "exact_certificates_verified": 1726,
+      "minimum_withheld_design_residual": 1.4433756729740643,
+      "source_unit_recovery_errors": [],
+      "one_counterexample": {
+        "drive_index_zero_based": 0,
+        "sense_index_zero_based": 0,
+        "one_symmetric_entry_zero_based": [
+          0,
+          0
+        ]
+      },
+      "stage_costs": {
+        "shared_design": {
+          "wall_ms": 2.793783,
+          "cpu_ms": 2.797988
+        },
+        "conventional": {
+          "wall_ms": 69.15154,
+          "cpu_ms": 69.157662
+        },
+        "constructor": {
+          "wall_ms": 1.092562,
+          "cpu_ms": 1.095968
+        },
+        "independent_check": {
+          "wall_ms": 22.194479,
+          "cpu_ms": 22.188427
+        }
+      },
+      "certificate_indices_sha256": "cb75b06856afe6775ea35a157732b6562d2e87930a442db9e98d80ed4f7a661c",
+      "compute": {
+        "wall_ms": 95.323335,
+        "cpu_ms": 95.31714
+      }
+    },
+    {
+      "level": 6,
+      "phantom": 2,
+      "reported_full_measurements": 2356,
+      "same_visible_readings": 630,
+      "withheld_measured_readings": 1726,
+      "visible_rank": 165,
+      "conventional_identified": 0,
+      "exact_certificates_verified": 1726,
+      "minimum_withheld_design_residual": 1.4433756729740643,
+      "source_unit_recovery_errors": [],
+      "one_counterexample": {
+        "drive_index_zero_based": 0,
+        "sense_index_zero_based": 0,
+        "one_symmetric_entry_zero_based": [
+          0,
+          0
+        ]
+      },
+      "stage_costs": {
+        "shared_design": {
+          "wall_ms": 2.56961,
+          "cpu_ms": 2.57309
+        },
+        "conventional": {
+          "wall_ms": 65.392959,
+          "cpu_ms": 65.398525
+        },
+        "constructor": {
+          "wall_ms": 0.88663,
+          "cpu_ms": 0.888593
+        },
+        "independent_check": {
+          "wall_ms": 23.939004,
+          "cpu_ms": 23.942362
+        }
+      },
+      "certificate_indices_sha256": "cb75b06856afe6775ea35a157732b6562d2e87930a442db9e98d80ed4f7a661c",
+      "compute": {
+        "wall_ms": 92.872145,
+        "cpu_ms": 92.875767
+      }
+    },
+    {
+      "level": 6,
+      "phantom": 3,
+      "reported_full_measurements": 2356,
+      "same_visible_readings": 630,
+      "withheld_measured_readings": 1726,
+      "visible_rank": 165,
+      "conventional_identified": 0,
+      "exact_certificates_verified": 1726,
+      "minimum_withheld_design_residual": 1.4433756729740643,
+      "source_unit_recovery_errors": [],
+      "one_counterexample": {
+        "drive_index_zero_based": 0,
+        "sense_index_zero_based": 0,
+        "one_symmetric_entry_zero_based": [
+          0,
+          0
+        ]
+      },
+      "stage_costs": {
+        "shared_design": {
+          "wall_ms": 3.055703,
+          "cpu_ms": 3.05946
+        },
+        "conventional": {
+          "wall_ms": 69.204722,
+          "cpu_ms": 69.211018
+        },
+        "constructor": {
+          "wall_ms": 0.982153,
+          "cpu_ms": 0.986411
+        },
+        "independent_check": {
+          "wall_ms": 23.052302,
+          "cpu_ms": 23.055816
+        }
+      },
+      "certificate_indices_sha256": "cb75b06856afe6775ea35a157732b6562d2e87930a442db9e98d80ed4f7a661c",
+      "compute": {
+        "wall_ms": 96.384081,
+        "cpu_ms": 96.387992
+      }
+    },
+    {
+      "level": 7,
+      "phantom": 1,
+      "reported_full_measurements": 2356,
+      "same_visible_readings": 513,
+      "withheld_measured_readings": 1843,
+      "visible_rank": 135,
+      "conventional_identified": 0,
+      "exact_certificates_verified": 1843,
+      "minimum_withheld_design_residual": 1.4459976109624422,
+      "source_unit_recovery_errors": [],
+      "one_counterexample": {
+        "drive_index_zero_based": 0,
+        "sense_index_zero_based": 0,
+        "one_symmetric_entry_zero_based": [
+          0,
+          0
+        ]
+      },
+      "stage_costs": {
+        "shared_design": {
+          "wall_ms": 2.625117,
+          "cpu_ms": 2.628762
+        },
+        "conventional": {
+          "wall_ms": 53.396601,
+          "cpu_ms": 53.40221
+        },
+        "constructor": {
+          "wall_ms": 0.986765,
+          "cpu_ms": 0.989099
+        },
+        "independent_check": {
+          "wall_ms": 22.849991,
+          "cpu_ms": 22.853442
+        }
+      },
+      "certificate_indices_sha256": "ce6d19771f0a4997f4e265bc64d62f854e1f4eb620a4f17fa36c786685d92d06",
+      "compute": {
+        "wall_ms": 79.948192,
+        "cpu_ms": 79.950897
+      }
+    },
+    {
+      "level": 7,
+      "phantom": 2,
+      "reported_full_measurements": 2356,
+      "same_visible_readings": 513,
+      "withheld_measured_readings": 1843,
+      "visible_rank": 135,
+      "conventional_identified": 0,
+      "exact_certificates_verified": 1843,
+      "minimum_withheld_design_residual": 1.4459976109624422,
+      "source_unit_recovery_errors": [],
+      "one_counterexample": {
+        "drive_index_zero_based": 0,
+        "sense_index_zero_based": 0,
+        "one_symmetric_entry_zero_based": [
+          0,
+          0
+        ]
+      },
+      "stage_costs": {
+        "shared_design": {
+          "wall_ms": 2.655763,
+          "cpu_ms": 2.659136
+        },
+        "conventional": {
+          "wall_ms": 54.453385,
+          "cpu_ms": 54.458507
+        },
+        "constructor": {
+          "wall_ms": 1.127763,
+          "cpu_ms": 1.130922
+        },
+        "independent_check": {
+          "wall_ms": 22.076783,
+          "cpu_ms": 21.961415
+        }
+      },
+      "certificate_indices_sha256": "ce6d19771f0a4997f4e265bc64d62f854e1f4eb620a4f17fa36c786685d92d06",
+      "compute": {
+        "wall_ms": 80.399068,
+        "cpu_ms": 80.283716
+      }
+    },
+    {
+      "level": 7,
+      "phantom": 3,
+      "reported_full_measurements": 2356,
+      "same_visible_readings": 513,
+      "withheld_measured_readings": 1843,
+      "visible_rank": 135,
+      "conventional_identified": 0,
+      "exact_certificates_verified": 1843,
+      "minimum_withheld_design_residual": 1.4459976109624422,
+      "source_unit_recovery_errors": [],
+      "one_counterexample": {
+        "drive_index_zero_based": 0,
+        "sense_index_zero_based": 0,
+        "one_symmetric_entry_zero_based": [
+          0,
+          0
+        ]
+      },
+      "stage_costs": {
+        "shared_design": {
+          "wall_ms": 2.851849,
+          "cpu_ms": 2.856068
+        },
+        "conventional": {
+          "wall_ms": 55.538826,
+          "cpu_ms": 55.516774
+        },
+        "constructor": {
+          "wall_ms": 0.926395,
+          "cpu_ms": 0.891846
+        },
+        "independent_check": {
+          "wall_ms": 21.113064,
+          "cpu_ms": 21.116024
+        }
+      },
+      "certificate_indices_sha256": "ce6d19771f0a4997f4e265bc64d62f854e1f4eb620a4f17fa36c786685d92d06",
+      "compute": {
+        "wall_ms": 80.513904,
+        "cpu_ms": 80.452425
+      }
+    }
+  ],
+  "failures": [],
+  "controls": [
+    "wrong_archive_digest",
+    "known_reciprocal_omitted_reading_identifiable",
+    "modified_null_witness",
+    "modified_retained_reading",
+    "inconsistent_read_coordinates",
+    "all_active_level"
+  ],
+  "adoption": "ABSTAIN",
+  "physical_site_costed_acceptance": false,
+  "interpretation": "Exact structural witnesses under a symmetric linear electrical response. The full direct archive is available. No physical field quality or price measured."
+}
