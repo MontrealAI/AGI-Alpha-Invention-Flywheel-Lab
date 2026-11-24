@@ -373,6 +373,7 @@ def prepare(output, revision, event, run, request=source_with_retry):
                 raise ValueError('Unexpected public member template')
             html = html.replace(marker, contents)
         (directory / page).write_text(html)
+    member.build_foundry(directory)
     (directory / LEDGER).write_bytes(raw)
     files = [(file.relative_to(output).as_posix(), digest(file.read_bytes()))
              for file in sorted(output.rglob('*')) if file.is_file()]
@@ -387,6 +388,9 @@ def prepare(output, revision, event, run, request=source_with_retry):
                'records': len(ledger['records']), 'states': dict(Counter(row['state'] for row in ledger['records'])),
                'projection_sha256': digest(canonical_json([files, preview])),
                'workflow_run': run, 'checked_at': datetime.now(timezone.utc).isoformat(timespec='seconds')}
+    release['foundry_sha256'] = {name.removeprefix(member.SITE): fingerprint
+                                for name, fingerprint in files
+                                if name.removeprefix(member.SITE) in member.FOUNDRY_ASSETS and name.startswith(member.SITE)}
     release['decision_edition_sha256'] = {
         name.removeprefix('frontier-omega-alpha/'): fingerprint
         for name, fingerprint in files if name in site.DECISION_EDITION_ASSETS
@@ -424,6 +428,12 @@ def verify_live(expected, revision, run, request=source_with_retry):
     for filename in (member.ENDPOINT_ZIP, member.ARCHIVE_ZIP):
         if digest(request(watch.SITE + filename, 500_000)) != release['public_capability_sha256'][filename]:
             raise ValueError('Live tool bytes do not match')
+    foundry = release.get('foundry_sha256', {})
+    if (revision or foundry) and set(foundry) != set(member.FOUNDRY_ASSETS):
+        raise ValueError('Unexpected Foundry asset set')
+    for name, expected_hash in foundry.items():
+        if digest(request(watch.SITE + name, 500_000)) != expected_hash:
+            raise ValueError('Live Foundry bytes do not match')
     editions = release['decision_edition_sha256']
     if set(editions) != {name.removeprefix('frontier-omega-alpha/') for name in site.DECISION_EDITION_ASSETS}:
         raise ValueError('Unexpected historical edition asset set')
@@ -446,6 +456,7 @@ def verify_live(expected, revision, run, request=source_with_retry):
         if (not {'enter-club', 'member-preview', 'mf-quick-run'}.issubset(parser.ids)
                 or 'id="access"' not in entrance or 'data-connect="token"' not in entrance
                 or 'id="member-value"' not in workspace or 'id="mv-endpoint-run"' not in workspace
+                or (foundry and 'id="my-intelligence"' not in workspace)
                 or f'data-preview-count="{len(ids)}"' not in preview
                 or any(marker in html for marker in (member.MARKER, member.PREVIEW_MARKER, '<!-- MV_SAMPLE -->'))):
             raise ValueError('Unpublished member-workbench rendering')

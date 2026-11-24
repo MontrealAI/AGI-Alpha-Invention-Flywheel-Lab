@@ -8,6 +8,7 @@
         <a class="mf-language" lang="en" hreflang="en" href="index.html" aria-label="English">EN</a>
         <button id="lock" class="quiet" type="button">Verrouiller</button>
       </div>
+      <a class="mf-intelligence-link" href="#my-intelligence">Mon intelligence</a>
     </div>
     <nav class="mv-nav mf-destinations" aria-label="Sections de l’espace Member First">
       <a href="#my-frontier" aria-current="page">Ma frontière</a>
@@ -45,6 +46,7 @@
           </div>
         </details>
       </form>
+        <p class="mv-links"><a href="#my-intelligence" data-foundry-start>Créer un outil pour mon objectif <span aria-hidden="true">→</span></a></p>
         <div id="goal-status" class="status" role="status"></div>
       </section>
       <aside class="mf-sample" aria-labelledby="mf-sample-title">
@@ -136,6 +138,11 @@
     <p class="mf-section-intro">Bibliothèque d’outils Frontier Ω</p>
     <p>Exécutez les outils publiés ou téléchargez une version précise avec son format d’entrée, son vérificateur, ses limites et ses droits d’utilisation.</p>
     <div class="mv-grid"><!-- MV_TOOLS --></div>
+    <article class="foundry-entry">
+      <h4>Alpha Genesis HARNESS</h4>
+      <p>Transformez votre règle en un outil HARNESS à portée limitée, vérifiez-le sur des cas séparés et conservez un fichier réutilisable.</p>
+      <a class="mf-action" href="#my-intelligence" data-foundry-start>Ouvrir l’atelier de capacités <span aria-hidden="true">→</span></a>
+    </article>
     <section class="mv-runner" id="mv-endpoint-run" aria-labelledby="mv-run-title">
       <h4 id="mv-run-title">Analyser les mesures Endpoint</h4>
       <p>Trouvez la plus haute charge mesurée admissible parmi sept mesures publiques. La démonstration s’exécute ici et compare le résultat à la référence SQLite figée.</p>
@@ -173,10 +180,107 @@
         <a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/main/publication/first-verified-advantage/REPORT.md#français">Guide de démarrage et comparaison</a></p>
     </details>
   </section>
+  <section class="mv-section foundry-panel" id="my-intelligence" aria-labelledby="my-intelligence-title" data-member-view hidden>
+    <h3 id="my-intelligence-title" tabindex="-1">Mon intelligence <span>Ω</span></h3>
+    <p class="mf-section-intro">Transformez une règle vérifiable en un outil que vous pouvez conserver.</p>
+    <p>Les fichiers sont traités sur cet appareil. Les fichiers diffusés par Pages sont publics. Les missions, entrées et résultats que vous ajoutez restent dans la session en cours. Le verrouillage les efface. Un fichier exporté peut contenir votre objectif, vos règles et votre instrument.</p>
+    <template id="foundry-public-data"><!-- FOUNDRY_PUBLIC_DATA --></template>
+    <div class="foundry-example">
+      <div><p class="packet-meta">Alpha Genesis HARNESS</p><p>Comparez la taille d’une plage réelle de l’archive NOAA au nombre d’octets observé. Il s’agit d’un rejeu technique.</p></div>
+      <button id="foundry-sample" type="button" class="entry-button">Rejouer un contrôle du nombre d’octets</button>
+    </div>
+    <p class="foundry-reference">Un instrument créé avec Qwen3-4B en local a réussi les 14 contrôles enregistrés et vérifié une nouvelle réponse de 32 octets. Python reste la référence. Les deux démarches de succession ont produit un instrument invalide.</p>
+    <p class="mv-links"><a href="frontier-foundry-1.0.0.zip" download>Télécharger l’instrument et les outils hors ligne</a> <a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/main/publication/frontier-foundry/REPORT.md">Preuves et comparaisons</a></p>
+    <p class="status" id="foundry-status" role="status"></p>
+    <details class="foundry-stage" id="foundry-mission">
+      <summary>Commencer une mission</summary>
+      <form id="foundry-form" autocomplete="off">
+        <label for="foundry-objective">Que voulez-vous rendre possible?</label>
+        <input type="text" id="foundry-objective" required maxlength="360">
+        <label for="foundry-rule">Que doit calculer ou vérifier l’outil?</label>
+        <textarea id="foundry-rule" required rows="3" maxlength="2400" placeholder="Par exemple, calculer le nombre d’octets entre deux positions incluses."></textarea>
+        <p id="foundry-field-help">Écrivez nom:integer, nom:boolean ou nom:text. Séparez les champs par des virgules. L’évaluateur traite les entiers exacts, les comparaisons et la logique.</p>
+        <div class="foundry-fields">
+          <div><label for="foundry-fields">Champs d’entrée</label>
+          <input id="foundry-fields" required maxlength="450" aria-describedby="foundry-field-help" placeholder="start:integer, end:integer"></div>
+          <div><label for="foundry-outputs">Champs de sortie</label>
+          <input id="foundry-outputs" required maxlength="450" aria-describedby="foundry-field-help" placeholder="bytes:integer"></div>
+        </div>
+        <div class="foundry-fields">
+          <div><label for="foundry-alternative">Méthode de référence</label><input id="foundry-alternative" required maxlength="640"></div>
+          <div><label for="foundry-acceptance">Comment reconnaître un résultat correct?</label><input id="foundry-acceptance" required maxlength="640"></div>
+        </div>
+        <button id="foundry-freeze" type="submit" class="entry-button">Figer la mission</button>
+      </form>
+      <label for="foundry-mission-file">Ouvrir un fichier de mission<input id="foundry-mission-file" type="file" accept=".json,application/json"></label>
+    </details>
+    <section class="foundry-stage" id="foundry-handoff" aria-labelledby="foundry-build-title" hidden>
+      <h4 id="foundry-build-title">Obtenir un instrument</h4>
+      <p>Choisissez une méthode. Les trois parcours produisent le même format HARNESS à portée limitée.</p>
+      <p class="foundry-binding">Empreinte de la mission <code id="foundry-mission-hash"></code></p>
+      <div class="foundry-modes">
+        <details><summary>Mon ChatGPT ou un autre assistant</summary><p>Relisez la consigne. Copiez-la dans votre propre conversation, puis rapportez la réponse JSON. L’utilisation dépend de votre compte et de ses conditions.</p>
+          <p><a href="https://chatgpt.com/" rel="noreferrer">Ouvrir ChatGPT <span aria-hidden="true">↗</span></a></p></details>
+        <details><summary>Modèle local ou votre propre API</summary><p>L’utilitaire hors ligne permet de lister les modèles, d’afficher la consigne exacte et de lancer la connexion HARNESS choisie. Les adaptateurs prennent en charge Ollama et les interfaces locales compatibles avec OpenAI. Consultez le guide pour les configurations testées.</p>
+          <p class="mv-links"><a href="frontier-foundry-1.0.0.zip" download>Télécharger l’utilitaire hors ligne</a>
+            <a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/main/products/frontier-member-tools/foundry/README.md">Installation, connexions et vérification</a></p></details>
+        <details><summary>Créer votre instrument à la main</summary><p>Utilisez le format JSON décrit dans la consigne ci-dessous. Il contient aussi un exemple de structure.</p></details>
+      </div>
+      <details id="foundry-data-permission" hidden>
+        <summary>Consigne de mission à relire</summary>
+        <textarea id="foundry-prompt" rows="7" readonly aria-label="Consigne de mission à relire"></textarea>
+        <label class="mv-check"><input id="foundry-share" type="checkbox"> Je suis autorisé à utiliser cette mission et j’ai relu les renseignements que je pourrais communiquer.</label>
+        <div class="mv-actions">
+          <button id="foundry-copy" type="button" class="quiet">Copier la consigne</button>
+          <button id="foundry-kit" type="button" class="quiet">Télécharger la consigne</button>
+        </div>
+      </details>
+      <p><button id="foundry-mission-download" type="button" class="quiet">Télécharger la mission</button></p>
+      <p>Ouvrez ce projet dans le HARNESS local pour accéder à l’atelier et aux expériences de succession. Il contient la mission et, le cas échéant, un instrument non vérifié.</p>
+      <button id="foundry-project" type="button" class="quiet">Exporter un projet natif HARNESS</button>
+      <label for="foundry-response">Coller l’instrument JSON</label>
+      <textarea id="foundry-response" rows="4" maxlength="128000" autocomplete="off" spellcheck="false"></textarea>
+      <div class="mv-actions">
+        <button id="foundry-candidate" type="button" class="entry-button">Sceller l’instrument</button>
+        <label for="foundry-candidate-file">Ou ouvrir un instrument ou un projet natif HARNESS<input id="foundry-candidate-file" type="file" accept=".json,application/json"></label>
+      </div>
+    </section>
+    <section class="foundry-stage" id="foundry-verification" aria-labelledby="foundry-check-title" hidden>
+      <h4 id="foundry-check-title">Vérifier et exécuter</h4>
+      <p class="foundry-binding">Empreinte de l’instrument <code id="foundry-seal"></code></p>
+      <p>Confiez les résultats attendus à une personne distincte de celle qui construit l’instrument. Fournissez-lui le modèle de vérification après le scellement. La concordance vaut pour les cas fournis. Utilisez la grille d’origine pour requalifier un instrument importé.</p>
+      <div class="mv-actions">
+        <button id="foundry-case-template" type="button" class="quiet">Télécharger le modèle</button>
+        <label for="foundry-cases">Ouvrir les cas de vérification<input id="foundry-cases" type="file" accept=".json,application/json"></label>
+      </div>
+      <details><summary>Coller une grille de vérification</summary>
+        <textarea id="foundry-sheet" rows="4" maxlength="128000" autocomplete="off" spellcheck="false" aria-label="Coller une grille de vérification"></textarea>
+        <button id="foundry-verify" type="button" class="quiet">Vérifier la grille</button>
+      </details>
+      <p class="status foundry-comparison" id="foundry-comparison" aria-live="polite"></p>
+      <details><summary>Examiner les résultats par cas</summary><pre id="foundry-receipt"></pre></details>
+      <label for="foundry-inputs">Entrées pour une exécution</label>
+      <textarea id="foundry-inputs" rows="3" maxlength="128000" autocomplete="off" spellcheck="false"></textarea>
+      <button id="foundry-run" type="button" class="entry-button" disabled>Exécuter sur cet appareil</button>
+      <pre id="foundry-output" aria-live="polite"></pre>
+    </section>
+    <section class="foundry-stage" id="foundry-portfolio" aria-labelledby="foundry-portfolio-title">
+      <h4 id="foundry-portfolio-title">Conserver la capacité</h4>
+      <p>Conservez l’instrument et la grille de vérification d’origine sur un appareil que vous contrôlez. Le fichier exporté contient la mission, l’instrument, l’empreinte de la grille et les totaux de la comparaison.</p>
+      <label class="mv-check"><input id="foundry-export-consent" type="checkbox"> Préparer un fichier local contenant cette mission et son instrument.</label>
+      <div class="mv-actions">
+        <button id="foundry-retain" type="button" class="entry-button" disabled>Exporter la capacité</button>
+        <label for="foundry-open">Rouvrir un fichier de capacité<input id="foundry-open" type="file" accept=".json,application/json"></label>
+      </div>
+      <p class="mv-links"><button id="foundry-clear" type="button" class="quiet">Vider l’atelier</button>
+        <a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/main/publication/frontier-foundry/REGISTRATION.md">Expérience enregistrée et limites</a></p>
+    </section>
+  </section>
   <section class="mv-section" id="mv-results" aria-labelledby="mv-results-title" data-member-view hidden>
     <h3 id="mv-results-title" tabindex="-1">Mes résultats</h3>
     <p class="mf-section-intro">Atelier de vérification des résultats</p>
     <p>Les résultats restent dans cette session. Téléchargez un objectif ou un reçu pour le rouvrir sur un appareil que vous contrôlez.</p>
+    <p><a href="#foundry-portfolio">Rouvrir une capacité conservée</a></p>
     <p id="mf-result-empty">Aucun résultat dans cette session. Commencez par l’exemple public Endpoint dans Ma frontière.</p>
     <p><a id="mf-current-result" href="#mv-screen-result" hidden>Revenir au résultat de cette session</a></p>
         <details id="goal-keeper">

@@ -45,7 +45,7 @@ const words = fr ? {
 
 function setupShell() {
   const views = [...member.querySelectorAll('[data-member-view]')];
-  const destinations = [...member.querySelectorAll('.mf-destinations a')];
+  const destinations = [...member.querySelectorAll('.mf-destinations a, .mf-intelligence-link')];
   const home = id('my-frontier');
   function show(target = home, {focus = true, remember = false} = {}) {
     if (member.hidden) return;

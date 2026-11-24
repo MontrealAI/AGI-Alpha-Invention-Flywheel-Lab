@@ -73,7 +73,7 @@ class MemberValueTests(unittest.TestCase):
                 self.assertIn('data-edition-run="1"', html[language])
                 self.assertEqual(html[language].count('data-mv-open'), 7)
                 self.assertIn('id="goal-form"', html[language])
-                self.assertEqual(html[language].count('data-member-view'), 4)
+                self.assertEqual(html[language].count('data-member-view'), 5)
                 self.assertEqual(html[language].count('id="mv-consent"'), 1)
                 self.assertIn('id="mf-outcome" class="mf-outcome" hidden', html[language])
                 for brief in produced['briefs']:

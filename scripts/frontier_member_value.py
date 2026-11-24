@@ -3,6 +3,7 @@
 from hashlib import sha256
 from html import escape
 import json
+import re
 from pathlib import Path
 import subprocess
 from zipfile import ZipFile, ZipInfo, ZIP_STORED
@@ -24,6 +25,13 @@ SUBMISSION_HASH = 'ce3226048090ba13e5d2369b582126f8440ba3485926f91ed81396fe15aca
 ENDPOINT_ZIP = 'endpoint-evidence-screen-1.0.0.zip'
 ARCHIVE_ZIP = 'noaa-archive-point-1.0.0.zip'
 MEMBER_JSON = 'member-value.json'
+FOUNDRY_ZIP = 'frontier-foundry-1.0.0.zip'
+FOUNDRY_ENGINE = 'harness-engine.js'
+FOUNDRY_INPUT = 'FOUNDRY_PUBLIC_DATA'
+HARNESS_PIN = '39e76570c851b3527d78a526053a9ea2a611a993'
+HARNESS = 'products/alpha-genesis-harness/'
+FOUNDRY_ASSETS = ('foundry-core.mjs', 'foundry-ui.mjs', 'outcome-receipt.mjs', FOUNDRY_ENGINE, FOUNDRY_ZIP)
+
 OUTPUTS = frozenset(SITE + name for name in (ENDPOINT_ZIP, ARCHIVE_ZIP, MEMBER_JSON))
 MARKER = '<!-- FRONTIER_MEMBER_VALUE -->'
 PREVIEW_MARKER = '<!-- FRONTIER_MEMBER_PREVIEW -->'
@@ -94,6 +102,80 @@ def package(path, files, name, pin, scope):
             entry.external_attr = 0o644 << 16
             release.writestr(entry, raw)
     return {**manifest, 'download': path.name, 'sha256': digest(path.read_bytes()), 'bytes': path.stat().st_size}
+
+
+def foundry_example(fr=False):
+    raw = pinned(ARCHIVE_PIN, ARCHIVE_PATH + 'evidence/confirmation.json')
+    if digest(raw) != '5f2e47bb0f08b7efcfdf934683c1b9215d45c5b4e5c9f7795ea324ac250d5add':
+        raise ValueError('Public NOAA byte-window source mismatch')
+    domain = {'min': 0, 'max': 2_000_000_000}
+    task = {
+        'schema': 'frontier/foundry-mission-v1', 'language': 'fr' if fr else 'en',
+        'objective': ('Vérifier le nombre d’octets d’une plage NOAA historique.'
+                      if fr else 'Check the byte count of an archived NOAA response window.'),
+        'rule': ('Retourner bytes = end - start + 1 et ordered = start <= end. Si ordered est faux, s’abstenir.'
+                 if fr else 'Return bytes = end - start + 1 and ordered = start <= end. Abstain if ordered is false.'),
+        'inputs': {'start': domain, 'end': domain}, 'outputs': {'bytes': 'integer', 'ordered': 'boolean'},
+        'alternative': 'Arithmétique entière Python, RFC 9110 §14.1.2.' if fr else 'Python integer arithmetic, RFC 9110 §14.1.2.',
+        'acceptance': ('Chaque résultat doit correspondre au nombre d’octets du reçu historique.'
+                       if fr else 'Every result must match the observed byte count in the historical receipt.'),
+    }
+    start, end = {'field': 'start'}, {'field': 'end'}
+    instrument = {'name': 'NOAA byte window', 'inputs': ['start', 'end'],
+                  'outputs': {'bytes': {'op': 'add', 'args': [{'op': 'sub', 'args': [end, start]}, 1]},
+                              'ordered': {'op': 'lte', 'args': [start, end]}}}
+    cases = []
+    for row in json.loads(raw)['receipt']['cases']:
+        source = row['candidate']['source']
+        first, last, _ = re.fullmatch(r'bytes (\d+)-(\d+)/(\d+)', source['content_range']).groups()
+        cases.append({'input': {'start': int(first), 'end': int(last)},
+                      'expected': {'bytes': source['body_bytes'], 'ordered': True}})
+    suite = {'schema': 'frontier/foundry-cases-v1', 'mission_sha256': digest(stable(task)),
+             'reference': ('Réponse NOAA historique, reçu Ed25519 ' if fr else 'Historical NOAA response, Ed25519 receipt ') + ARCHIVE_PIN,
+             'cases': cases}
+    return {'task': task, 'candidate': instrument, 'suite': suite, 'sample': cases[0]['input']}
+
+
+def build_foundry(destination):
+    source = TOOLS / 'foundry'
+    files = {name: (source / name).read_bytes() for name in
+             ('README.md', 'foundry-cli.mjs', 'provider.py', 'formulas.py', 'local.example.json')}
+    files.update({name: (ASSETS / name).read_bytes() for name in ('foundry-core.mjs', 'outcome-receipt.mjs')})
+    files.update({name: pinned(HARNESS_PIN, HARNESS + name) for name in
+                  ('LICENSE', 'NOTICE', 'bridge/adapters.py', 'bridge/instruments.py', 'bridge/output_schema.py', 'bridge/streaming.py')})
+    files['example.json'] = stable(foundry_example()) + b'\n'
+    publication = MAIN / 'publication/frontier-foundry'
+    result = (publication / 'reference-model-trial.json').read_bytes()
+    evidence = json.loads(result)
+    sealed = evidence['asset']['output']
+    comparison = evidence['s1_grade']['output']
+    if comparison['summary']['matched'] != 14 or not evidence['fresh_run_matches_observation']:
+        raise ValueError('Unqualified foundry asset in public package')
+    suite = {'schema': 'frontier/foundry-cases-v1',
+             'mission_sha256': sealed['asset']['mission_sha256'],
+             'reference': comparison['summary']['reference'],
+             'cases': []}
+    historical = json.loads(pinned(ARCHIVE_PIN, ARCHIVE_PATH+'evidence/confirmation.json'))['receipt']['cases']
+    sources = [item[route]['source'] for item in historical for route in ('candidate', 'reference')]
+    for source in sources:
+        first, last, _ = map(int, re.fullmatch(r'bytes (\d+)-(\d+)/(\d+)', source['content_range']).groups())
+        suite['cases'].append({'input':{'start':first,'end':last},
+                               'expected':{'bytes':source['body_bytes'],'ordered':True}})
+    suite['cases'] += [{'input':{'start':7,'end':7},'expected':{'bytes':1,'ordered':True}},
+                       {'input':{'start':8,'end':4},'expected':{'bytes':-3,'ordered':False}}]
+    if digest(stable(suite)) != sealed['asset']['comparison']['suite_sha256']:
+        raise ValueError('Retained confirmation cases changed')
+    files.update({
+        'retained/noaa-window.json': stable(sealed) + b'\n',
+        'retained/noaa-cases.json': stable(suite) + b'\n',
+        'retained/noaa-reuse-input.json': b'{"start":0,"end":31}\n',
+        'retained/qualification.json': result,
+    })
+    files[FOUNDRY_ENGINE] = pinned(HARNESS_PIN, HARNESS + 'app/engine.js')
+    (destination / FOUNDRY_ENGINE).write_bytes(files[FOUNDRY_ENGINE])
+    return package(destination / FOUNDRY_ZIP, files, 'frontier-foundry', HARNESS_PIN,
+                   'Bounded HARNESS exchange and offline replay. Source identifies the upstream HARNESS pin. '
+                   'The deployment receipt identifies integration source and distributed file hashes.')
 
 
 def build_tools(destination):
@@ -649,6 +731,7 @@ def render(lang, compiled, sample):
                           f'<span>{EDITION_LABELS[row["edition_kind"]][fr]}</span></li>')
     replacements = {
         '<!-- MF_FEATURE -->': feature_html(compiled['member_first']['edition'], compiled, lang),
+        '<!-- ' + FOUNDRY_INPUT + ' -->': escape(stable(foundry_example(fr)).decode()),
         '<!-- MF_UPDATED -->': timestamp_html(compiled['updated_at']),
         '<!-- MV_TIMELINE -->': ''.join(highlights),
         '<!-- MV_FILTERS -->': controls(briefs, fr),

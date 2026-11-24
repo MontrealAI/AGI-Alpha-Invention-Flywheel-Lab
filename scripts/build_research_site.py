@@ -77,6 +77,8 @@ ASSETS += (
     'frontier-omega-alpha/outcome-receipt.mjs',
     'frontier-omega-alpha/member-workbench.mjs',
     'frontier-omega-alpha/frontier-goals.mjs',
+    'frontier-omega-alpha/foundry-core.mjs',
+    'frontier-omega-alpha/foundry-ui.mjs',
 ) + DECISION_EDITION_ASSETS
 FILES = PAPERS + PAGES + ASSETS + ('publication-manifest.json',)
 PUBLIC_SITE = 'https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/'
@@ -97,6 +99,7 @@ ATLAS_OUTPUTS = frozenset({
     'frontier-omega-alpha/atlas-ledger.json', 'frontier-omega-alpha/atlas-release.json',
     'frontier-omega-alpha/member-value.json', 'frontier-omega-alpha/endpoint-evidence-screen-1.0.0.zip',
     'frontier-omega-alpha/noaa-archive-point-1.0.0.zip',
+    'frontier-omega-alpha/frontier-foundry-1.0.0.zip',
 })
 STATES = ('discovered', 'qualified', 'testing', 'verified', 'falsified', 'abstain', 'retained', 'deployed', 'value-verified')
 POSSIBILITY_SOURCE_PATTERNS = (
@@ -328,7 +331,7 @@ def validate(source, *, staged=False):
         for link in parser.links:
             url = urlsplit(link)
             if url.scheme:
-                frontier_source = name in POSSIBILITY_PAGES and (possibility_source(link) or link == 'https://metamask.io/download')
+                frontier_source = name in POSSIBILITY_PAGES and (possibility_source(link) or link in ('https://metamask.io/download', 'https://chatgpt.com/'))
                 if not frontier_source and link not in EXTERNAL_RESEARCH_REFERENCES and (url.scheme != 'https' or url.netloc != 'github.com'):
                     raise ValueError(f'Unexpected external link: {link}')
                 continue

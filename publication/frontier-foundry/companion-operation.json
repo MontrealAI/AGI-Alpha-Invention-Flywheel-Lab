@@ -1,0 +1,101 @@
+{
+  "authorization": "Public archive inputs and local CPU only",
+  "complete_cost": null,
+  "corrected": {
+    "candidate": {
+      "inputs": [
+        "end",
+        "start"
+      ],
+      "name": "Compiled HARNESS formula",
+      "outputs": {
+        "bytes": {
+          "args": [
+            {
+              "args": [
+                {
+                  "field": "end"
+                },
+                {
+                  "field": "start"
+                }
+              ],
+              "op": "sub"
+            },
+            1
+          ],
+          "op": "add"
+        },
+        "ordered": {
+          "args": [
+            {
+              "field": "start"
+            },
+            {
+              "field": "end"
+            }
+          ],
+          "op": "lte"
+        }
+      }
+    },
+    "cost": {
+      "accounted": 0.0,
+      "amount": 0.0,
+      "attempts": 1,
+      "basis": "reported_usage_at_user_rates",
+      "complete_cost_known": false,
+      "currency": "USD"
+    },
+    "elapsed_ns": 5219562206,
+    "plan_sha256": "6fd48cecf7649a82cb08c860e2792166e52e5e2b62dc6b9c2518847a6834087e",
+    "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+    "reported_model": "qwen3-4b-instruct-2507-q4_k_m",
+    "requested_model": "qwen3-4b-instruct-2507-q4_k_m",
+    "retained_asset_sha256": "d15531b3ce3dad5c79525c92b61264c718405ea8f391345b806730e0c7235e77",
+    "technical_check": {
+      "matched": 6,
+      "reference": "Historical NOAA response, Ed25519 receipt 6a635b77012fb45b4d96c404a33fa04327c19674",
+      "suite_sha256": "6bfe3a5dc973eef80b295a9da531813eba380f5f68c45c37778480aa145fc7eb",
+      "total": 6,
+      "verdict": "MATCHED"
+    },
+    "usage": {
+      "input_tokens": 146,
+      "output_tokens": 15
+    },
+    "usage_class": "local_compute"
+  },
+  "corrections": [
+    "named assignments accept inline or line separators without execution",
+    "expanded expression traversal is capped before serialization"
+  ],
+  "initial": {
+    "cost": {
+      "accounted": 0.0,
+      "amount": 0.0,
+      "attempts": 1,
+      "basis": "reported_usage_at_user_rates",
+      "complete_cost_known": false,
+      "currency": "USD"
+    },
+    "elapsed_ns": 5314385865,
+    "first_attempt_status": "CANDIDATE_FILE refusal on semicolon-separated assignments",
+    "matching_diagnostic_response": "bytes = end - start + 1; ordered = start <= end",
+    "plan_sha256": "c9d149d7012648d21e7c405d8a9b9f696af9cd7bae8aa0ac0e92d38432550455",
+    "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+    "reported_model": "qwen3-4b-instruct-2507-q4_k_m",
+    "requested_model": "qwen3-4b-instruct-2507-q4_k_m",
+    "usage": {
+      "input_tokens": 142,
+      "output_tokens": 15
+    },
+    "usage_class": "local_compute"
+  },
+  "package_sha256": "6306d7adf5841cedfff40cf0b8fd3aa5d77b42d8b3108717a48c81f3946e08cb",
+  "production_or_member_result": null,
+  "reported_charge_usd": null,
+  "schema": "frontier/foundry-companion-operation-v1",
+  "scope": "Linux CPU, exact distributed companion, locally streamed llama.cpp b12242 Qwen3-4B, no external provider",
+  "weight_sha256": "2fde00ce69dd4899c70d020845e2638353015bba0fdf161b3eb965f2bca4464e"
+}

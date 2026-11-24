@@ -1,0 +1,20 @@
+{
+  "local_only": true,
+  "session_budget_usd": 0,
+  "timeout_seconds": 60,
+  "providers": {
+    "localhost-inference": {
+      "kind": "openai",
+      "base_url": "http://127.0.0.1:8080/v1",
+      "output_limit_field": "max_tokens",
+      "models": {
+        "replace-with-your-model-id": {
+          "input_per_million": 0,
+          "output_per_million": 0,
+          "max_output_tokens": 512,
+          "input_token_overhead": 128
+        }
+      }
+    }
+  }
+}

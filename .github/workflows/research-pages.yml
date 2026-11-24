@@ -16,6 +16,7 @@ on:
       - 'scripts/replay_frontier_alpha1_availability.py'
       - 'publication/frontier-alpha-1-availability.json'
       - 'publication/frontier-public-holds.json'
+      - 'publication/frontier-foundry/**'
       - 'tests/test_frontier_public_watch.py'
       - 'tests/test_frontier_atlas.py'
       - 'tests/live_frontier_browser.cjs'
@@ -43,6 +44,7 @@ on:
       - 'scripts/replay_frontier_alpha1_availability.py'
       - 'publication/frontier-alpha-1-availability.json'
       - 'publication/frontier-public-holds.json'
+      - 'publication/frontier-foundry/**'
       - 'tests/test_frontier_public_watch.py'
       - 'tests/test_frontier_atlas.py'
       - 'tests/live_frontier_browser.cjs'
@@ -92,6 +94,7 @@ jobs:
             scripts/replay_frontier_alpha1_availability.py
             publication/frontier-alpha-1-availability.json
             publication/frontier-public-holds.json
+            publication/frontier-foundry/reference-model-trial.json
             tests/test_frontier_public_watch.py
             tests/test_frontier_atlas.py
             tests/test_research_site.py
@@ -284,7 +287,7 @@ jobs:
           packages="$RUNNER_TEMP/frontier-distributed"
           mkdir -p "$packages"
           origin="https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/frontier-omega-alpha"
-          for artifact in member-value.json endpoint-evidence-screen-1.0.0.zip noaa-archive-point-1.0.0.zip; do
+          for artifact in atlas-release.json member-value.json endpoint-evidence-screen-1.0.0.zip noaa-archive-point-1.0.0.zip frontier-foundry-1.0.0.zip; do
             curl --fail --silent --show-error --retry 2 --max-time 20 --max-filesize 20000000 "$origin/$artifact" --output "$packages/$artifact"
           done
           python3 scripts/qualify_frontier_member.py "$packages" | tee "$RUNNER_TEMP/frontier-distributed.json"
