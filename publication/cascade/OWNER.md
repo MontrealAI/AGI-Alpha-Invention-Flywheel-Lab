@@ -15,3 +15,10 @@ Activation 1.4 can continue on the included reviewed Codex handoff and public re
 Identify the chosen access route under A and the precise scopes approved under B–E. An approval may cover any subset. Reply through the existing owner channel and keep provider credentials, wallet proof and signing keys under owner control.
 
 The public portable toolkit contains the exact loopback command and receipt contract. For an owner-run GPU test, start an already approved local inference runtime on loopback, record the visible hardware and version, bind the model digest, and run the packaged comparison against that endpoint. The current release proves included Codex construction and the observed CPU model trials. GPU throughput and official frontier provider entitlement require a real receipt.
+
+## Décisions du propriétaire
+
+- **Calcul.** Indiquer une intégration déjà autorisée ou exécuter la procédure dans `REPLAY.md` sur le poste Ubuntu à deux TITAN RTX. Transmettre le relevé de matériel, de placement GPU, de débit et de résultats, sans clé ni identifiant secret.
+- **Exploitation continue.** Désigner le service, les tâches publiques permises, les ressources, la fréquence, l’expiration et le responsable de la révocation.
+- **Évaluation et diffusion confidentielles.** Désigner séparément l’administrateur et le dépôt d’évaluation de l’issue #565, puis le service HTTPS privé et le responsable de la révocation de l’issue #550.
+- **Usage réel.** Faire participer, avec son consentement, une personne admissible pour un premier travail et sa répétition. Mesurer les résultats, les corrections, le temps et les coûts face à la meilleure solution habituelle.

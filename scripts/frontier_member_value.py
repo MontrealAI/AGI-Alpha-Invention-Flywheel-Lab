@@ -36,19 +36,24 @@ AMPLIFICATION_PIN = '3e229271a5408961a8ad686fa32d0b0f2fd08663'
 SUBSTRATE_ZIP = 'frontier-activation-1.2.0.zip'
 SUBSTRATE_PIN = '97dffcd9c40d3a7504466b6ed74140bcb53b2a8c'
 LIBERATION_ZIP = 'frontier-activation-1.3.0.zip'
+LIBERATION_PIN = '96bf376e90acb2ae291a6317e72284a266389d27'
+LIBERATION_SHA256 = 'c73a4f0f261a2be986bf6315bd7ce6102167ccad929d9c44bc31701a1386ff1f'
+CASCADE_ZIP = 'frontier-activation-1.4.0.zip'
+CASCADE_STUDIES = {'cascade-results.json': 'RESULTS.json', 'cascade-fresh-domain.json': 'FRESH-DOMAIN.json'}
 FOUNDRY_ENGINE = 'harness-engine.js'
 FOUNDRY_INPUT = 'FOUNDRY_PUBLIC_DATA'
 HARNESS_PIN = '39e76570c851b3527d78a526053a9ea2a611a993'
 HARNESS = 'products/alpha-genesis-harness/'
 FOUNDRY_ASSETS = ('foundry-core.mjs', 'foundry-ui.mjs', 'foundry-study.mjs', 'outcome-receipt.mjs',
                   FOUNDRY_ENGINE, FOUNDRY_ZIP, STUDY_ZIP, INVENTOR_ZIP, LEARNING_ZIP, ACTIVATION_ZIP,
-                  AMPLIFICATION_ZIP, SUBSTRATE_ZIP, LIBERATION_ZIP)
+                  AMPLIFICATION_ZIP, SUBSTRATE_ZIP, LIBERATION_ZIP, CASCADE_ZIP, *CASCADE_STUDIES)
 INVENTOR_EVIDENCE = MAIN / 'publication/inventor'
 LEARNING_EVIDENCE = MAIN / 'publication/adaptive'
 ACTIVATION_EVIDENCE = MAIN / 'publication/activation'
 AMPLIFICATION_EVIDENCE = MAIN / 'publication/amplification'
 SUBSTRATE_EVIDENCE = MAIN / 'publication/substrate'
 LIBERATION_EVIDENCE = MAIN / 'publication/liberation'
+CASCADE_EVIDENCE = MAIN / 'publication/cascade'
 
 OUTPUTS = frozenset(SITE + name for name in (ENDPOINT_ZIP, ARCHIVE_ZIP, MEMBER_JSON))
 MARKER = '<!-- FRONTIER_MEMBER_VALUE -->'
@@ -325,7 +330,7 @@ def build_substrate(destination):
                    version='1.2.0')
 
 
-def build_liberation(destination, revision):
+def liberation_files():
     files=substrate_files()
     for filename in ('LIBERATION.md','liberation.py','covariance_study.py','hydrology.py','independent_timing.py',
                      'discovery_workbench.py','verify_liberation.py'):
@@ -335,9 +340,81 @@ def build_liberation(destination, revision):
                      'FOLLOWON-REGISTRATION.json','INDEPENDENT-TIMING.json',
                      'REPORT.md','GATES.md','assemble.py'):
         files[f'study/liberation/{filename}']=(LIBERATION_EVIDENCE/filename).read_bytes()
-    return package(destination/LIBERATION_ZIP,files,'frontier-activation',revision,
-                   'Historical scientific discovery, compact construction and source-bound hydrology.',
-                   version='1.3.0')
+    return files
+
+
+def build_liberation(destination):
+    release = package(destination / LIBERATION_ZIP, liberation_files(), 'frontier-activation', LIBERATION_PIN,
+                      'Historical scientific discovery, compact construction and source-bound hydrology.',
+                      version='1.3.0')
+    if release['sha256'] != LIBERATION_SHA256:
+        raise ValueError('Activation 1.3 release bytes changed')
+    return release
+
+
+def build_cascade(destination, revision):
+    files = liberation_files()
+    for filename in ('cascade.py', 'cascade_fresh_domain.py', 'post_reveal_overlap.py', 'transit_cascade.py',
+                     'transit_ordinary.py', 'ttv_diagnostic.py', 'verify_cascade.py'):
+        files[filename] = (TOOLS / 'activation' / filename).read_bytes()
+    for filename in ('REGISTRATION.md', 'OWNER.md', 'GATES.md', 'REPLAY.md', 'PRIMARY.json', 'ORDINARY.json',
+                     'TTV.json', 'TTV-INPUT.json', 'POST-REVEAL-INPUT.json', 'POST-REVEAL.json',
+                     'LOCAL-CONFIG.json', *CASCADE_STUDIES.values()):
+        files[f'study/cascade/{filename}'] = (CASCADE_EVIDENCE / filename).read_bytes()
+    for output, filename in CASCADE_STUDIES.items():
+        (destination / output).write_bytes(files[f'study/cascade/{filename}'])
+    return package(destination / CASCADE_ZIP, files, 'frontier-activation', revision,
+                   'Historical transit timing from source photometry, matched use of tools and a climate evidence replay.',
+                   version='1.4.0')
+
+
+def render_cascade(fr):
+    summary = json.loads((CASCADE_EVIDENCE / 'RESULTS.json').read_bytes())['summary']
+    tess = summary['tess']
+    held = int(tess['held'])
+    total = held + int(tess['development'])
+    products = int(tess['products'])
+    primary = int(tess['primary_agrees'])
+    ordinary = int(tess['ordinary_agrees'])
+    confirmed = int(tess['held_confirmed'])
+    fresh = json.loads((CASCADE_EVIDENCE / 'FRESH-DOMAIN.json').read_bytes())['observed']
+    noaa = f'{int(fresh["matches_published"])}/{int(fresh["seasons_compared"])}'
+    composition = summary['composition']
+    jobs = int(composition['jobs'])
+    completed_ordinary = f'{int(composition["completed-ordinary"])}/{jobs}'
+    completed_typed = f'{int(composition["completed-typed"])}/{jobs}'
+    advantage = int(composition['typed']) >= max(int(composition['ordinary']), int(composition['conventional'])) + 2
+    if fr:
+        timing = (f'Parmi les {total} événements historiques issus de {products} fichiers TESS, {held} ont servi à la confirmation. '
+                  f'La méthode construite avec Codex a respecté le seuil d’écart au catalogue dans {primary}/{held} cas, '
+                  f'et la méthode indépendante dans {ordinary}/{held} cas. '
+                  f'Le contrôle conjoint des mesures et de leur provenance a retenu {confirmed}/{held} cas.')
+        fresh_result = f'Le rejeu historique NOAA a reproduit {noaa} classifications saisonnières publiées.'
+        comparison = 'Les outils à contrats typés sont restés sous le seuil d’avantage fixé par le protocole.'
+        completion = ('Après l’achèvement déterministe des plans choisis par le modèle, les approches ordinaire et '
+                      f'typée ont réussi {completed_ordinary} et {completed_typed} tâches, respectivement.')
+        label, method, accepted = 'Comparer les cinq approches', 'Approche', 'Tâches acceptées'
+        methods = ('Réponse directe', 'Outils et descriptions', 'Outils et contrats typés',
+                   'Intégration déterministe', 'Contrats typés avec capacités retirées')
+    else:
+        timing = (f'The confirmation set contains {held} of {total} historical events across {products} TESS files. '
+                  f'The Codex-built and independent methods met the catalogue timing criterion in '
+                  f'{primary}/{held} and {ordinary}/{held} held cases, respectively. '
+                  f'The joint timing and source check accepted {confirmed}/{held} cases.')
+        fresh_result = f'The historical NOAA replay reproduced {noaa} published seasonal labels.'
+        comparison = 'The typed tools fell short of the registered advantage threshold.'
+        completion = ('After deterministic completion of the model-selected plans, the ordinary and typed approaches '
+                      f'passed {completed_ordinary} and {completed_typed} jobs, respectively.')
+        label, method, accepted = 'Compare the five approaches', 'Approach', 'Accepted jobs'
+        methods = ('Direct answer', 'Tools with descriptions', 'Tools with typed contracts',
+                   'Deterministic integration', 'Typed contracts with capabilities withdrawn')
+    rows = ''.join(f'<tr><th scope="row">{title}</th><td>{int(composition[key])} / {jobs}</td></tr>'
+                   for key, title in zip(('direct', 'ordinary', 'typed', 'conventional', 'withdrawn'), methods))
+    comparison_html = '' if advantage else f'<p>{comparison}</p>'
+    return (f'<p>{timing}</p><p>{fresh_result}</p>{comparison_html}<p>{completion}</p><details><summary>{label}</summary>'
+            f'<div class="foundry-pilot-table" role="region" tabindex="0" aria-label="{accepted}">'
+            f'<table><thead><tr><th scope="col">{method}</th><th scope="col">{accepted}</th></tr></thead>'
+            f'<tbody>{rows}</tbody></table></div></details>')
 
 
 def render_liberation(fr):
@@ -1036,6 +1113,7 @@ def render(lang, compiled, sample):
         '<!-- SUBSTRATE_EXAMPLE -->': escape(stable(substrate_example()).decode()),
         '<!-- SUBSTRATE_RESULTS -->': render_substrate(fr),
         '<!-- LIBERATION_RESULTS -->': render_liberation(fr),
+        '<!-- CASCADE_RESULTS -->': render_cascade(fr),
         '<!-- MF_UPDATED -->': timestamp_html(compiled['updated_at']),
         '<!-- MV_TIMELINE -->': ''.join(highlights),
         '<!-- MV_FILTERS -->': controls(briefs, fr),

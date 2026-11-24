@@ -1,0 +1,489 @@
+{
+  "protocol": {
+    "timing_cutoff_bjd_tdb": "2460035.5",
+    "epoch_association_max_abs_phase": 0.2,
+    "reference_uncertainty": "DR C published independent epoch and period marginals, plus historical median timing error",
+    "historical_calibration": "One latest timing per non-test system; predict from a preselected older prefix using an independent-marginals pseudo-ephemeris pivoted at its median epoch",
+    "calibration_ratio_bands": [
+      [
+        0.0,
+        1.0,
+        0.75
+      ],
+      [
+        1.0,
+        2.0,
+        1.5
+      ],
+      [
+        2.0,
+        4.0,
+        3.0
+      ]
+    ],
+    "minimum_calibration_systems": 30,
+    "nominal_coverage": 0.9,
+    "model": "Generalized least-squares linear ephemeris plus a Mat\u00e9rn-3/2 process on the O\u2212C residuals",
+    "coherence_timescale_history_fraction": 0.5,
+    "minimum_unique_training_epochs": 12,
+    "minimum_rolling_training_epochs": 8,
+    "minimum_residual_amplitude_to_reported_error": 2.5,
+    "minimum_process_variance_reduction": 0.1,
+    "maximum_lead_to_history_span": 1.0,
+    "rolling_lead_ratio": [
+      0.6,
+      1.4
+    ],
+    "minimum_rolling_forecasts": 6,
+    "minimum_rolling_blocks": 3,
+    "validation_block_width_lead_ratio": 0.2,
+    "max_ttv_to_linear_median_block_error": 0.8,
+    "minimum_fraction_blocks_improved": 0.6666666666666666,
+    "conditional_uncertainty_multiplier": "Maximum standardized historical rolling residual, floored at 1.645"
+  },
+  "sha256": {
+    "elements": "2f1e4a3ad9dd3cc9f78e38f25c3a1d1e0ead1604ea0a86f66cc752ff1a666033",
+    "observations": "68231e16f2de416b2070570ec71085db6ee91622cc231ef942bb91cc747c8f09",
+    "manifest": "eb2d9ba5f9f0b329a83eb3c39c98ecd7e74a25d1d99d3f41fe43dc72686379d5",
+    "script": "b9494cd83b671b2d3ae068e2fa7de1f974c3b053cd72f3d35c3aa746aff040df"
+  },
+  "calibration": {
+    "0": {
+      "systems": 398,
+      "rank_1_indexed": 360,
+      "weighted_multiplier": 3.4935865790054064,
+      "released_marginals_multiplier": 3.791021524704965
+    },
+    "1": {
+      "systems": 119,
+      "rank_1_indexed": 108,
+      "weighted_multiplier": 5.207509896637831,
+      "released_marginals_multiplier": 5.392251162944139
+    },
+    "2": {
+      "systems": 115,
+      "rank_1_indexed": 105,
+      "weighted_multiplier": 6.403153892982375,
+      "released_marginals_multiplier": 6.363086936761591
+    }
+  },
+  "verdict_counts": {
+    "ABSTAIN_TTV_FEW_PRE_CUTOFF_EPOCHS": 5,
+    "ABSTAIN_TTV_LEAD_OUTSIDE_HISTORICAL_SPAN": 4,
+    "ABSTAIN_TTV_NO_VALIDATED_GAIN_OVER_LINEAR": 1,
+    "ABSTAIN_TTV_WEAK_HISTORICAL_LEVERAGE": 1
+  },
+  "events": [
+    {
+      "id": "TOI-1130b_2105_2023-07-05_TESS",
+      "target": "TOI-1130b",
+      "older_epochs": 4,
+      "epoch": 310,
+      "candidate_epochs": 1,
+      "max_assumed_absolute_oc_days": 0.8154078,
+      "lead_days": 1072.261257,
+      "historical_span_days": 399.549822,
+      "calibration_band": 2,
+      "calibration_systems": 115,
+      "released_marginals": {
+        "mid_bjd_tdb": 2460130.55729,
+        "sigma_s": 712.3474345121207,
+        "calibration_multiplier": 6.363086936761591,
+        "nominal_90_halfwidth_s": 4532.728654979708
+      },
+      "weighted_linear": {
+        "mid_bjd_tdb": 2460130.5571035817,
+        "sigma_s": 295.60278858525925,
+        "calibration_multiplier": 6.403153892982375,
+        "nominal_90_halfwidth_s": 1892.7901465061486
+      },
+      "ttv": null,
+      "verdict": "ABSTAIN_TTV_FEW_PRE_CUTOFF_EPOCHS"
+    },
+    {
+      "id": "TOI-1130b_2106_2023-07-09_TESS",
+      "target": "TOI-1130b",
+      "older_epochs": 4,
+      "epoch": 311,
+      "candidate_epochs": 1,
+      "max_assumed_absolute_oc_days": 0.8154078,
+      "lead_days": 1076.338296,
+      "historical_span_days": 399.549822,
+      "calibration_band": 2,
+      "calibration_systems": 115,
+      "released_marginals": {
+        "mid_bjd_tdb": 2460134.634329,
+        "sigma_s": 714.5436500341739,
+        "calibration_multiplier": 6.363086936761591,
+        "nominal_90_halfwidth_s": 4546.703365278398
+      },
+      "weighted_linear": {
+        "mid_bjd_tdb": 2460134.6341418186,
+        "sigma_s": 296.4279115521234,
+        "calibration_multiplier": 6.403153892982375,
+        "nominal_90_halfwidth_s": 1898.073535843614
+      },
+      "ttv": null,
+      "verdict": "ABSTAIN_TTV_FEW_PRE_CUTOFF_EPOCHS"
+    },
+    {
+      "id": "TOI-125b_1852_2023-08-03_TESS",
+      "target": "TOI-125b",
+      "older_epochs": 15,
+      "epoch": 340,
+      "candidate_epochs": 1,
+      "max_assumed_absolute_oc_days": 0.9303706,
+      "lead_days": 1079.229896,
+      "historical_span_days": 753.600186,
+      "calibration_band": 1,
+      "calibration_systems": 119,
+      "released_marginals": {
+        "mid_bjd_tdb": 2460160.26942,
+        "sigma_s": 664.7277084160099,
+        "calibration_multiplier": 5.392251162944139,
+        "nominal_90_halfwidth_s": 3584.3787587474226
+      },
+      "weighted_linear": {
+        "mid_bjd_tdb": 2460160.269714189,
+        "sigma_s": 501.6965176821405,
+        "calibration_multiplier": 5.207509896637831,
+        "nominal_90_halfwidth_s": 2612.589580938483
+      },
+      "ttv": null,
+      "verdict": "ABSTAIN_TTV_LEAD_OUTSIDE_HISTORICAL_SPAN"
+    },
+    {
+      "id": "TOI-125b_1855_2023-08-17_TESS",
+      "target": "TOI-125b",
+      "older_epochs": 15,
+      "epoch": 343,
+      "candidate_epochs": 1,
+      "max_assumed_absolute_oc_days": 0.9303706,
+      "lead_days": 1093.185455,
+      "historical_span_days": 753.600186,
+      "calibration_band": 1,
+      "calibration_systems": 119,
+      "released_marginals": {
+        "mid_bjd_tdb": 2460174.224979,
+        "sigma_s": 668.8682046064381,
+        "calibration_multiplier": 5.392251162944139,
+        "nominal_90_halfwidth_s": 3606.7053541454243
+      },
+      "weighted_linear": {
+        "mid_bjd_tdb": 2460174.2252752236,
+        "sigma_s": 504.0230511929121,
+        "calibration_multiplier": 5.207509896637831,
+        "nominal_90_halfwidth_s": 2624.7050272206857
+      },
+      "ttv": null,
+      "verdict": "ABSTAIN_TTV_LEAD_OUTSIDE_HISTORICAL_SPAN"
+    },
+    {
+      "id": "TOI-125b_1860_2023-09-09_TESS",
+      "target": "TOI-125b",
+      "older_epochs": 15,
+      "epoch": 348,
+      "candidate_epochs": 1,
+      "max_assumed_absolute_oc_days": 0.9303706,
+      "lead_days": 1116.44472,
+      "historical_span_days": 753.600186,
+      "calibration_band": 1,
+      "calibration_systems": 119,
+      "released_marginals": {
+        "mid_bjd_tdb": 2460197.484244,
+        "sigma_s": 675.7924117791202,
+        "calibration_multiplier": 5.392251162944139,
+        "nominal_90_halfwidth_s": 3644.042418324785
+      },
+      "weighted_linear": {
+        "mid_bjd_tdb": 2460197.484543614,
+        "sigma_s": 507.92188337318373,
+        "calibration_multiplier": 5.207509896637831,
+        "nominal_90_halfwidth_s": 2645.0082343847803
+      },
+      "ttv": null,
+      "verdict": "ABSTAIN_TTV_LEAD_OUTSIDE_HISTORICAL_SPAN"
+    },
+    {
+      "id": "TOI-125b_1861_2023-09-14_TESS",
+      "target": "TOI-125b",
+      "older_epochs": 15,
+      "epoch": 349,
+      "candidate_epochs": 1,
+      "max_assumed_absolute_oc_days": 0.9303706,
+      "lead_days": 1121.096573,
+      "historical_span_days": 753.600186,
+      "calibration_band": 1,
+      "calibration_systems": 119,
+      "released_marginals": {
+        "mid_bjd_tdb": 2460202.136097,
+        "sigma_s": 677.1806957220207,
+        "calibration_multiplier": 5.392251162944139,
+        "nominal_90_halfwidth_s": 3651.5283940303875
+      },
+      "weighted_linear": {
+        "mid_bjd_tdb": 2460202.136397292,
+        "sigma_s": 508.7047972605995,
+        "calibration_multiplier": 5.207509896637831,
+        "nominal_90_halfwidth_s": 2649.0852662017132
+      },
+      "ttv": null,
+      "verdict": "ABSTAIN_TTV_LEAD_OUTSIDE_HISTORICAL_SPAN"
+    },
+    {
+      "id": "TOI-125c_942_2023-08-18_TESS",
+      "target": "TOI-125c",
+      "older_epochs": 8,
+      "epoch": 164,
+      "candidate_epochs": 1,
+      "max_assumed_absolute_oc_days": 1.830909,
+      "lead_days": 1089.390855,
+      "historical_span_days": 750.67269,
+      "calibration_band": 1,
+      "calibration_systems": 119,
+      "released_marginals": {
+        "mid_bjd_tdb": 2460174.51028,
+        "sigma_s": 837.7381782093019,
+        "calibration_multiplier": 5.392251162944139,
+        "nominal_90_halfwidth_s": 4517.294665691812
+      },
+      "weighted_linear": {
+        "mid_bjd_tdb": 2460174.5106232255,
+        "sigma_s": 633.2369547706603,
+        "calibration_multiplier": 5.207509896637831,
+        "nominal_90_halfwidth_s": 3297.587708885016
+      },
+      "ttv": null,
+      "verdict": "ABSTAIN_TTV_FEW_PRE_CUTOFF_EPOCHS"
+    },
+    {
+      "id": "TOI-125c_943_2023-08-27_TESS",
+      "target": "TOI-125c",
+      "older_epochs": 8,
+      "epoch": 165,
+      "candidate_epochs": 1,
+      "max_assumed_absolute_oc_days": 1.830909,
+      "lead_days": 1098.5454,
+      "historical_span_days": 750.67269,
+      "calibration_band": 1,
+      "calibration_systems": 119,
+      "released_marginals": {
+        "mid_bjd_tdb": 2460183.664825,
+        "sigma_s": 840.9699739134567,
+        "calibration_multiplier": 5.392251162944139,
+        "nominal_90_halfwidth_s": 4534.7213198359395
+      },
+      "weighted_linear": {
+        "mid_bjd_tdb": 2460183.6651710784,
+        "sigma_s": 634.7598219985894,
+        "calibration_multiplier": 5.207509896637831,
+        "nominal_90_halfwidth_s": 3305.518055045721
+      },
+      "ttv": null,
+      "verdict": "ABSTAIN_TTV_FEW_PRE_CUTOFF_EPOCHS"
+    },
+    {
+      "id": "TOI-125c_945_2023-09-14_TESS",
+      "target": "TOI-125c",
+      "older_epochs": 8,
+      "epoch": 167,
+      "candidate_epochs": 1,
+      "max_assumed_absolute_oc_days": 1.830909,
+      "lead_days": 1116.85449,
+      "historical_span_days": 750.67269,
+      "calibration_band": 1,
+      "calibration_systems": 119,
+      "released_marginals": {
+        "mid_bjd_tdb": 2460201.973915,
+        "sigma_s": 847.4549670589937,
+        "calibration_multiplier": 5.392251162944139,
+        "nominal_90_halfwidth_s": 4569.690031666646
+      },
+      "weighted_linear": {
+        "mid_bjd_tdb": 2460201.9742667847,
+        "sigma_s": 637.8221778360968,
+        "calibration_multiplier": 5.207509896637831,
+        "nominal_90_halfwidth_s": 3321.465303376568
+      },
+      "ttv": null,
+      "verdict": "ABSTAIN_TTV_FEW_PRE_CUTOFF_EPOCHS"
+    },
+    {
+      "id": "TOI-216.02_495_2023-04-27_TESS",
+      "target": "TOI-216.02",
+      "older_epochs": 26,
+      "epoch": 68,
+      "candidate_epochs": 1,
+      "max_assumed_absolute_oc_days": 3.4406,
+      "lead_days": 705.323,
+      "historical_span_days": 1014.977,
+      "calibration_band": 0,
+      "calibration_systems": 398,
+      "released_marginals": {
+        "mid_bjd_tdb": 2460062.789,
+        "sigma_s": 76577.76274845329,
+        "calibration_multiplier": 3.791021524704965,
+        "nominal_90_halfwidth_s": 290307.9468931365
+      },
+      "weighted_linear": {
+        "mid_bjd_tdb": 2460061.7358768038,
+        "sigma_s": 237.31270379146173,
+        "calibration_multiplier": 3.4935865790054064,
+        "nominal_90_halfwidth_s": 829.0724769933362
+      },
+      "ttv": null,
+      "diagnostics": {
+        "history_noise_s": 198.72,
+        "residual_process_amplitude_s": 97744.81110557159,
+        "coherence_timescale_epochs": 29.5,
+        "process_variance_reduction": 0.1351416484558851,
+        "rolling_forecasts": 12,
+        "rolling_blocks": 3,
+        "rolling_origin_target_epochs": [
+          [
+            -24,
+            9
+          ],
+          [
+            -24,
+            10
+          ],
+          [
+            -24,
+            11
+          ],
+          [
+            -24,
+            12
+          ],
+          [
+            -24,
+            14
+          ],
+          [
+            -24,
+            15
+          ],
+          [
+            -24,
+            16
+          ],
+          [
+            -24,
+            17
+          ],
+          [
+            -22,
+            19
+          ],
+          [
+            -20,
+            23
+          ],
+          [
+            -15,
+            25
+          ],
+          [
+            -14,
+            27
+          ]
+        ],
+        "ttv_median_block_absolute_error_s": 392812.646465796,
+        "linear_median_block_absolute_error_s": 395036.7160922605,
+        "fraction_blocks_improved": 1.0,
+        "rolling_uncertainty_multiplier": 63.53588555519729
+      },
+      "verdict": "ABSTAIN_TTV_NO_VALIDATED_GAIN_OVER_LINEAR"
+    },
+    {
+      "id": "TOI-216.02_503_2023-09-11_TESS",
+      "target": "TOI-216.02",
+      "older_epochs": 26,
+      "epoch": 76,
+      "candidate_epochs": 1,
+      "max_assumed_absolute_oc_days": 3.4406,
+      "lead_days": 842.947,
+      "historical_span_days": 1014.977,
+      "calibration_band": 0,
+      "calibration_systems": 398,
+      "released_marginals": {
+        "mid_bjd_tdb": 2460200.413,
+        "sigma_s": 85542.33969233248,
+        "calibration_multiplier": 3.791021524704965,
+        "nominal_90_halfwidth_s": 324292.8510472563
+      },
+      "weighted_linear": {
+        "mid_bjd_tdb": 2460199.3583765756,
+        "sigma_s": 245.22998729680225,
+        "calibration_multiplier": 3.4935865790054064,
+        "nominal_90_halfwidth_s": 856.7321923897747
+      },
+      "ttv": null,
+      "diagnostics": {
+        "history_noise_s": 198.72,
+        "residual_process_amplitude_s": 97744.81110557159,
+        "coherence_timescale_epochs": 29.5,
+        "process_variance_reduction": 0.07052777768318672,
+        "rolling_forecasts": 12,
+        "rolling_blocks": 2,
+        "rolling_origin_target_epochs": [
+          [
+            -24,
+            9
+          ],
+          [
+            -24,
+            10
+          ],
+          [
+            -24,
+            11
+          ],
+          [
+            -24,
+            12
+          ],
+          [
+            -24,
+            14
+          ],
+          [
+            -24,
+            15
+          ],
+          [
+            -24,
+            16
+          ],
+          [
+            -24,
+            17
+          ],
+          [
+            -24,
+            19
+          ],
+          [
+            -24,
+            23
+          ],
+          [
+            -24,
+            25
+          ],
+          [
+            -22,
+            27
+          ]
+        ],
+        "ttv_median_block_absolute_error_s": 461291.5623436933,
+        "linear_median_block_absolute_error_s": 463716.56001452234,
+        "fraction_blocks_improved": 1.0,
+        "rolling_uncertainty_multiplier": 78.31717232527384
+      },
+      "verdict": "ABSTAIN_TTV_WEAK_HISTORICAL_LEVERAGE"
+    }
+  ],
+  "wall_time_s": 0.183025035992614
+}
