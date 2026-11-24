@@ -1,0 +1,513 @@
+{
+  "source_commit": "ced6c1cb004887dcdafaea59a2976020be649f8e",
+  "base_main": "97dffcd9c40d3a7504466b6ed74140bcb53b2a8c",
+  "frozen_inspector_commit": "bba3d2b211e513c64ddb69b15d4f694ef2daf896",
+  "execution": "Exact inspector function executed against seven GitHub connector source responses with matched blob metadata; standalone Node wrapper not executed; no native audit run",
+  "elapsed_ms_including_retrieval": 2187,
+  "actual_billing": null,
+  "observed": {
+    "connected_enterprise/upgrades.py": "9866d004c412fc05c9f6292cf898307f177359df",
+    "connected_enterprise/finance.py": "c01e5cd97fb32b3e5fcd5cea190424d8f4f5d5ec",
+    "connected_enterprise/transition_evidence.py": "2397091ef8e1960ad13950693d5b3cd04e2ff7c5",
+    "connected_enterprise/migration.py": "7d0ddf8b1226571d2fa0eb6c49252840a930b67e",
+    "adaptive_enterprise/account.py": "d8b3c159af21519c1bcc3c2cde0dc8c572ca1122",
+    "adaptive_enterprise/instruments.py": "d2a8474573c80800b7baa768dd5dc3128cd3691c",
+    "commercial/ledger.py": "6cacd0a6ecc16216c498969c30f40b9c75244732"
+  },
+  "kind": "source_anchor_inventory_not_runtime_trace",
+  "checks": [
+    {
+      "label": "journal invokes adaptive audit",
+      "path": "connected_enterprise/finance.py",
+      "blob": "c01e5cd97fb32b3e5fcd5cea190424d8f4f5d5ec",
+      "expected": 1,
+      "observed": 1,
+      "pass": true,
+      "lines": [
+        {
+          "line": 859,
+          "text": "checked = audit_account(record, root=root, manifest=manifest, pending_source_transition=pending_transition)"
+        }
+      ]
+    },
+    {
+      "label": "journal history validation before entry checks",
+      "path": "connected_enterprise/finance.py",
+      "blob": "c01e5cd97fb32b3e5fcd5cea190424d8f4f5d5ec",
+      "expected": 1,
+      "observed": 1,
+      "pass": true,
+      "lines": [
+        {
+          "line": 860,
+          "text": "validated_history = _validate_source_history(journal, record, manifest, root)"
+        }
+      ]
+    },
+    {
+      "label": "journal history validation after entry checks",
+      "path": "connected_enterprise/finance.py",
+      "blob": "c01e5cd97fb32b3e5fcd5cea190424d8f4f5d5ec",
+      "expected": 1,
+      "observed": 1,
+      "pass": true,
+      "lines": [
+        {
+          "line": 939,
+          "text": "if _validate_source_history(journal, record, manifest, root) != validated_history:"
+        }
+      ]
+    },
+    {
+      "label": "journal history calls historical verifier",
+      "path": "connected_enterprise/finance.py",
+      "blob": "c01e5cd97fb32b3e5fcd5cea190424d8f4f5d5ec",
+      "expected": 1,
+      "observed": 1,
+      "pass": true,
+      "lines": [
+        {
+          "line": 137,
+          "text": "verify_historical(ticket, manifest, root=root)"
+        }
+      ]
+    },
+    {
+      "label": "adaptive audit committed history calls historical verifier",
+      "path": "adaptive_enterprise/account.py",
+      "blob": "d8b3c159af21519c1bcc3c2cde0dc8c572ca1122",
+      "expected": 1,
+      "observed": 1,
+      "pass": true,
+      "lines": [
+        {
+          "line": 282,
+          "text": "verify_historical(ticket, manifest, root=root)"
+        }
+      ]
+    },
+    {
+      "label": "adaptive audit pending transition calls historical verifier",
+      "path": "adaptive_enterprise/account.py",
+      "blob": "d8b3c159af21519c1bcc3c2cde0dc8c572ca1122",
+      "expected": 1,
+      "observed": 1,
+      "pass": true,
+      "lines": [
+        {
+          "line": 291,
+          "text": "verify_historical(pending_source_transition, manifest, root=root)"
+        }
+      ]
+    },
+    {
+      "label": "historical cache key prefix",
+      "path": "connected_enterprise/upgrades.py",
+      "blob": "9866d004c412fc05c9f6292cf898307f177359df",
+      "expected": 1,
+      "observed": 1,
+      "pass": true,
+      "lines": [
+        {
+          "line": 73,
+          "text": "cache_key = digest({'ticket': ticket, 'manifest': manifest, 'root': str(root),"
+        }
+      ]
+    },
+    {
+      "label": "historical cache key suffix",
+      "path": "connected_enterprise/upgrades.py",
+      "blob": "9866d004c412fc05c9f6292cf898307f177359df",
+      "expected": 1,
+      "observed": 1,
+      "pass": true,
+      "lines": [
+        {
+          "line": 74,
+          "text": "'verifier_files': body['verifier_files']})"
+        }
+      ]
+    },
+    {
+      "label": "hit returns before child launch",
+      "path": "connected_enterprise/upgrades.py",
+      "blob": "9866d004c412fc05c9f6292cf898307f177359df",
+      "expected": 1,
+      "observed": 1,
+      "pass": true,
+      "lines": [
+        {
+          "line": 76,
+          "text": "return copy.deepcopy(_HISTORICAL_AUDITS[cache_key])"
+        }
+      ]
+    },
+    {
+      "label": "child payload carries store route",
+      "path": "connected_enterprise/upgrades.py",
+      "blob": "9866d004c412fc05c9f6292cf898307f177359df",
+      "expected": 1,
+      "observed": 1,
+      "pass": true,
+      "lines": [
+        {
+          "line": 77,
+          "text": "payload = {'record': body['prior_record'], 'manifest': manifest, 'root': str(root), 'evidence_dir': current_store_directory()}"
+        }
+      ]
+    },
+    {
+      "label": "child enters directory scope",
+      "path": "connected_enterprise/upgrades.py",
+      "blob": "9866d004c412fc05c9f6292cf898307f177359df",
+      "expected": 1,
+      "observed": 2,
+      "pass": false,
+      "lines": [
+        {
+          "line": 83,
+          "text": "scope=evidence_directory(p['evidence_dir'])"
+        },
+        {
+          "line": 134,
+          "text": "scope=evidence_directory(p['evidence_dir'])"
+        }
+      ]
+    },
+    {
+      "label": "child recurses through journal audit",
+      "path": "connected_enterprise/upgrades.py",
+      "blob": "9866d004c412fc05c9f6292cf898307f177359df",
+      "expected": 1,
+      "observed": 1,
+      "pass": true,
+      "lines": [
+        {
+          "line": 85,
+          "text": "r=audit_journal(p['record'],root=p['root'],manifest=p['manifest'])"
+        }
+      ]
+    },
+    {
+      "label": "historical replay and authorization launch separately",
+      "path": "connected_enterprise/upgrades.py",
+      "blob": "9866d004c412fc05c9f6292cf898307f177359df",
+      "expected": 2,
+      "observed": 2,
+      "pass": true,
+      "lines": [
+        {
+          "line": 89,
+          "text": "done = subprocess.run([sys.executable, '-c', code], input=json.dumps(payload),"
+        },
+        {
+          "line": 164,
+          "text": "done = subprocess.run([sys.executable, '-c', code], input=json.dumps(payload),"
+        }
+      ]
+    },
+    {
+      "label": "inventory excludes historical descendants",
+      "path": "connected_enterprise/upgrades.py",
+      "blob": "9866d004c412fc05c9f6292cf898307f177359df",
+      "expected": 1,
+      "observed": 1,
+      "pass": true,
+      "lines": [
+        {
+          "line": 45,
+          "text": "if any(part in {'__pycache__', '.git', '.venv', 'historical-source-versions'} for part in relative.parts):"
+        }
+      ]
+    },
+    {
+      "label": "directory scope invokes recovery",
+      "path": "connected_enterprise/transition_evidence.py",
+      "blob": "2397091ef8e1960ad13950693d5b3cd04e2ff7c5",
+      "expected": 1,
+      "observed": 1,
+      "pass": true,
+      "lines": [
+        {
+          "line": 265,
+          "text": "_recover_published_aliases(fd)"
+        }
+      ]
+    },
+    {
+      "label": "verified staging-alias cleanup has durable effects",
+      "path": "connected_enterprise/transition_evidence.py",
+      "blob": "2397091ef8e1960ad13950693d5b3cd04e2ff7c5",
+      "expected": 1,
+      "observed": 2,
+      "pass": false,
+      "lines": [
+        {
+          "line": 256,
+          "text": "os.unlink(pending,dir_fd=fd);os.fsync(fd)"
+        },
+        {
+          "line": 304,
+          "text": "os.unlink(pending,dir_fd=fd);os.fsync(fd)"
+        }
+      ]
+    },
+    {
+      "label": "directory scope and persistence lock",
+      "path": "connected_enterprise/transition_evidence.py",
+      "blob": "2397091ef8e1960ad13950693d5b3cd04e2ff7c5",
+      "expected": 2,
+      "observed": 2,
+      "pass": true,
+      "lines": [
+        {
+          "line": 264,
+          "text": "fcntl.flock(fd,fcntl.LOCK_EX)"
+        },
+        {
+          "line": 279,
+          "text": "fcntl.flock(fd,fcntl.LOCK_EX)"
+        }
+      ]
+    },
+    {
+      "label": "directory routing uses store path",
+      "path": "connected_enterprise/transition_evidence.py",
+      "blob": "2397091ef8e1960ad13950693d5b3cd04e2ff7c5",
+      "expected": 1,
+      "observed": 1,
+      "pass": true,
+      "lines": [
+        {
+          "line": 310,
+          "text": "return getattr(store,'path',None)"
+        }
+      ]
+    },
+    {
+      "label": "in-memory scope installs immutable byte map",
+      "path": "connected_enterprise/transition_evidence.py",
+      "blob": "2397091ef8e1960ad13950693d5b3cd04e2ff7c5",
+      "expected": 1,
+      "observed": 1,
+      "pass": true,
+      "lines": [
+        {
+          "line": 84,
+          "text": "token=_store.set(MappingProxyType(verified));cache_token=_validated.set(_ValidationCache())"
+        }
+      ]
+    },
+    {
+      "label": "ticket reads referenced blob",
+      "path": "connected_enterprise/transition_evidence.py",
+      "blob": "2397091ef8e1960ad13950693d5b3cd04e2ff7c5",
+      "expected": 1,
+      "observed": 1,
+      "pass": true,
+      "lines": [
+        {
+          "line": 164,
+          "text": "raw=store.get(ref['sha256'])"
+        }
+      ]
+    },
+    {
+      "label": "ticket rebinds size and bytes",
+      "path": "connected_enterprise/transition_evidence.py",
+      "blob": "2397091ef8e1960ad13950693d5b3cd04e2ff7c5",
+      "expected": 1,
+      "observed": 1,
+      "pass": true,
+      "lines": [
+        {
+          "line": 165,
+          "text": "if raw is None or len(raw)!=ref['bytes'] or _sha(raw)!=ref['sha256']:"
+        }
+      ]
+    },
+    {
+      "label": "keyed ticket authentication remains separate",
+      "path": "connected_enterprise/transition_evidence.py",
+      "blob": "2397091ef8e1960ad13950693d5b3cd04e2ff7c5",
+      "expected": 1,
+      "observed": 1,
+      "pass": true,
+      "lines": [
+        {
+          "line": 146,
+          "text": "if not hmac.compare_digest(expected,str(ticket['signature'])):"
+        }
+      ]
+    },
+    {
+      "label": "upgrade validates keyed ticket",
+      "path": "connected_enterprise/upgrades.py",
+      "blob": "9866d004c412fc05c9f6292cf898307f177359df",
+      "expected": 1,
+      "observed": 1,
+      "pass": true,
+      "lines": [
+        {
+          "line": 208,
+          "text": "if not hmac.compare_digest(expected, str(ticket['signature'])):"
+        }
+      ]
+    },
+    {
+      "label": "operating checkpoint authentication remains separate",
+      "path": "connected_enterprise/migration.py",
+      "blob": "7d0ddf8b1226571d2fa0eb6c49252840a930b67e",
+      "expected": 1,
+      "observed": 1,
+      "pass": true,
+      "lines": [
+        {
+          "line": 128,
+          "text": "if not hmac.compare_digest(str(envelope['signature']), signature):"
+        }
+      ]
+    },
+    {
+      "label": "owned journal authentication",
+      "path": "connected_enterprise/finance.py",
+      "blob": "c01e5cd97fb32b3e5fcd5cea190424d8f4f5d5ec",
+      "expected": 1,
+      "observed": 1,
+      "pass": true,
+      "lines": [
+        {
+          "line": 198,
+          "text": "if not hmac.compare_digest(str(envelope['signature']), self._signature(body)):"
+        }
+      ]
+    },
+    {
+      "label": "owned journal validates target/path with key",
+      "path": "connected_enterprise/finance.py",
+      "blob": "c01e5cd97fb32b3e5fcd5cea190424d8f4f5d5ec",
+      "expected": 1,
+      "observed": 1,
+      "pass": true,
+      "lines": [
+        {
+          "line": 208,
+          "text": "authority = validate_ticket(ticket, key=self._account._key, root=self.root, path=self.path)"
+        }
+      ]
+    },
+    {
+      "label": "owned adaptive ticket validation",
+      "path": "adaptive_enterprise/account.py",
+      "blob": "d8b3c159af21519c1bcc3c2cde0dc8c572ca1122",
+      "expected": 3,
+      "observed": 2,
+      "pass": false,
+      "lines": [
+        {
+          "line": 399,
+          "text": "body = validate_ticket(ticket, key=self._key, root=self.root, path=self.path)"
+        },
+        {
+          "line": 647,
+          "text": "body = validate_ticket(ticket, key=self._key, root=self.root, path=self.path)"
+        }
+      ]
+    },
+    {
+      "label": "owned transition writes authority state",
+      "path": "adaptive_enterprise/account.py",
+      "blob": "d8b3c159af21519c1bcc3c2cde0dc8c572ca1122",
+      "expected": 1,
+      "observed": 1,
+      "pass": true,
+      "lines": [
+        {
+          "line": 675,
+          "text": "atomic_bytes(self._transitions_path,raw+b'\\n')"
+        }
+      ]
+    },
+    {
+      "label": "owned transition commits native action",
+      "path": "adaptive_enterprise/account.py",
+      "blob": "d8b3c159af21519c1bcc3c2cde0dc8c572ca1122",
+      "expected": 1,
+      "observed": 1,
+      "pass": true,
+      "lines": [
+        {
+          "line": 677,
+          "text": "self._owner.execute('source_transition', args, body['day'])"
+        }
+      ]
+    },
+    {
+      "label": "rejection verifier uses isolated temporary state",
+      "path": "connected_enterprise/finance.py",
+      "blob": "c01e5cd97fb32b3e5fcd5cea190424d8f4f5d5ec",
+      "expected": 1,
+      "observed": 1,
+      "pass": true,
+      "lines": [
+        {
+          "line": 819,
+          "text": "with tempfile.TemporaryDirectory(prefix='connected014-rejection-audit-') as temporary:"
+        }
+      ]
+    },
+    {
+      "label": "native replay uses isolated temporary state",
+      "path": "commercial/ledger.py",
+      "blob": "6cacd0a6ecc16216c498969c30f40b9c75244732",
+      "expected": 1,
+      "observed": 1,
+      "pass": true,
+      "lines": [
+        {
+          "line": 389,
+          "text": "with tempfile.TemporaryDirectory(prefix='commercial010-audit-') as tmp:"
+        }
+      ]
+    },
+    {
+      "label": "adaptive service manifest delegates to instrument verifier",
+      "path": "commercial/ledger.py",
+      "blob": "6cacd0a6ecc16216c498969c30f40b9c75244732",
+      "expected": 1,
+      "observed": 1,
+      "pass": true,
+      "lines": [
+        {
+          "line": 77,
+          "text": "return adaptive_jobs(root, manifest)"
+        }
+      ]
+    },
+    {
+      "label": "adaptive service verifier binds source bytes",
+      "path": "adaptive_enterprise/instruments.py",
+      "blob": "d2a8474573c80800b7baa768dd5dc3128cd3691c",
+      "expected": 1,
+      "observed": 1,
+      "pass": true,
+      "lines": [
+        {
+          "line": 378,
+          "text": "if source.is_symlink() or any(p.is_symlink() for p in source.parents) or hashlib.sha256(source.read_bytes()).hexdigest()!=expected or hashlib.sha256((Path(__file__).resolve().parents[1]/name).read_bytes()).hexdigest()!=expected:"
+        }
+      ]
+    }
+  ],
+  "passed": 30,
+  "total": 33,
+  "all_pass": false,
+  "conclusions": {
+    "journal_replay_fanout": "The inspected implementation requests historical verification from adaptive committed history, journal history before entry checks, and journal history again after entry checks. Pending and owned calls are separate. Different versions need independent inspection.",
+    "cache_key_boundary": "The exact key contains ticket, manifest, selected root and verifier_files. The separately resolved child evidence directory is not a key field. This does not prove a context collision in a native execution.",
+    "effect_boundary": "A directory-backed historical launch can perform verified staging-alias recovery on entry, including unlink and fsync. A cache hit bypasses this child invocation. Treat recovery and pure semantic replay as different obligations; do not bypass recovery to obtain speed.",
+    "pure_cache_eligible": false,
+    "owned_authorization_cache_eligible": false,
+    "native_equivalence_established": false
+  }
+}
