@@ -1,0 +1,56 @@
+name: P0-263 leaf memoized native historical execution
+on:
+  push:
+    branches: ['research/p0-native-cache263-20261124']
+    paths: ['.github/workflows/p0-native-cache263.yml']
+permissions:
+  contents: read
+jobs:
+  native-closure:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record platform job execution start
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ced6c1cb004887dcdafaea59a2976020be649f8e
+          path: owner262
+          persist-credentials: false
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: 1851100612b8c80a1852f413057bdb635de62d3a
+          path: prior262
+          persist-credentials: false
+          sparse-checkout: |
+            research/source_transition_trust246
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12.16'
+      - name: Stage pinned public wheels and disposable test source
+        shell: bash
+        run: |
+          set -euo pipefail
+          mv owner262 "$RUNNER_TEMP/owner262"
+          mv prior262 "$RUNNER_TEMP/prior262"
+          cat > "$RUNNER_TEMP/p0262-pins.txt" <<'EOF'
+          cryptography==50.0.2 --hash=sha256:9dab55f57c74c3cad24c323bacbbd04be4705ba6eb0d92e920b1fc4837ed5079
+          cffi==2.1.1 --hash=sha256:c1453022f490d2459a11819d83ad1d586e9ff65a12ac3e705ffebd46d3685dcf
+          pycparser==3.11 --hash=sha256:51d5a8ba2be0bbe440b99d2112604c95bbbc3c2748a64260186c541e1729cd80
+          EOF
+          python -m pip download --only-binary=:all: --require-hashes --no-deps -r "$RUNNER_TEMP/p0262-pins.txt" -d "$RUNNER_TEMP/p0262-wheels"
+          python -m pip install --no-index --no-deps --no-compile --require-hashes --find-links "$RUNNER_TEMP/p0262-wheels" -r "$RUNNER_TEMP/p0262-pins.txt" --target "$RUNNER_TEMP/p0262-deps"
+          python -m pip install --no-index --no-deps --no-compile --require-hashes --find-links "$RUNNER_TEMP/p0262-wheels" -r "$RUNNER_TEMP/p0262-pins.txt"
+      - name: Execute three unchanged registered native cases once
+        run: python -B research/p0_native_cache263/probe.py "$RUNNER_TEMP/owner262" "$RUNNER_TEMP/prior262" "$RUNNER_TEMP/p0262-deps" "$RUNNER_TEMP/P0_263.json"
+      - name: Retain only compact public receipt
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: p0-263-native-cache
+          path: ${{ runner.temp }}/P0_263.json
+          if-no-files-found: warn
+          retention-days: 7
