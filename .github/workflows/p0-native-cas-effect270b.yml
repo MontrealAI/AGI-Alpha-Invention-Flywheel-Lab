@@ -1,0 +1,46 @@
+name: P0-270B exact native CAS effects
+on:
+  push:
+    branches: ['research/p0-native-audit-edges270']
+    paths: ['.github/workflows/p0-native-cas-effect270b.yml']
+permissions:
+  contents: read
+jobs:
+  native-cas-effect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record platform job execution start
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+          sparse-checkout: |
+            research/p0_native_audit_edges270
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ced6c1cb004887dcdafaea59a2976020be649f8e
+          path: owner270b
+          persist-credentials: false
+          sparse-checkout: |
+            connected_enterprise/transition_evidence.py
+          sparse-checkout-cone-mode: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12.16'
+      - name: Execute frozen native storage boundary test once
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git hash-object research/p0_native_audit_edges270/native_effect_probe.py)" = 34ddd1e25ab84f98ffe11840d20e86f861b55f36
+          test "$(git hash-object owner270b/connected_enterprise/transition_evidence.py)" = 2397091ef8e1960ad13950693d5b3cd04e2ff7c5
+          test -z "$(find owner270b -name '*.pyc' -print -quit)"
+          python -I -B research/p0_native_audit_edges270/native_effect_probe.py owner270b/connected_enterprise/transition_evidence.py "$RUNNER_TEMP/P0_270B.json"
+      - name: Retain only compact public receipt
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: p0-270b-native-cas-effect
+          path: ${{ runner.temp }}/P0_270B.json
+          if-no-files-found: warn
+          retention-days: 7
