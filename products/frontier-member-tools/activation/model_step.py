@@ -4,6 +4,7 @@ from types import SimpleNamespace
 from time import time
 from uuid import uuid4
 
+from bridge.output_schema import prepare_schema, validate_output
 from inventor import Model
 from provider import request_plan
 from research import ResearchRun
@@ -30,6 +31,7 @@ class Constructor(Model):
 def step(workspace,config,model,schema,prompt,kind,request_tokens,attempts=2,*,validate=lambda value:value,
          deadline=None,expected_config=None):
     workspace.mkdir(mode=0o700,parents=True,exist_ok=True)
+    schema=prepare_schema(schema)
     constructor=Constructor(config,model,schema)
     if expected_config is not None and constructor.config_sha256!=expected_config:
         raise ValueError('CONFIG_DRIFT')
@@ -38,9 +40,12 @@ def step(workspace,config,model,schema,prompt,kind,request_tokens,attempts=2,*,v
             'kind':kind,'request_tokens':request_tokens,'prompt_sha256':digest(prompt),
             'schema_sha256':digest(schema),'attempts':attempts})
         if run.state['status']!='RUNNING':
+            if run.state['status']=='SEALED':
+                validate_output(run.state['result'],schema)
             return run.state
         for settled in run.state['events']:
             if settled['status']=='SEALED':
+                validate_output(settled['candidate'],schema)
                 return run.finish('SEALED',settled['candidate'])
         while run.remaining>=min(96,request_tokens) and len(run.state['events'])<attempts:
             if deadline is not None and int(time())>=deadline:
@@ -49,6 +54,7 @@ def step(workspace,config,model,schema,prompt,kind,request_tokens,attempts=2,*,v
             if answer is not None:
                 event['draft']=answer
             try:
+                validate_output(answer,schema)
                 candidate=validate(answer)
                 event.update(status='SEALED',candidate=candidate)
                 run.settle(event)

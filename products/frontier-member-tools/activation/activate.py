@@ -7,6 +7,7 @@ import signal
 import sys
 from time import time
 
+from bridge.output_schema import prepare_schema, validate_output
 from model_step import Constructor, object_schema, brief, step
 from packets import compare, project
 from pages import canonical, digest
@@ -191,7 +192,10 @@ def run(args):
 
         def dispatch(label,prompt,schema=PROGRAM):
             if label in state['completed']:
-                return state['completed'][label]
+                previous=state['completed'][label]
+                if previous['status']=='SEALED':
+                    validate_output(previous['result'],prepare_schema(schema))
+                return previous
             if int(time())>=args.until:
                 raise ValueError('LEASE_EXPIRED')
             state['current']=label
@@ -231,7 +235,7 @@ def run(args):
                 primary=repair['result']
         state['first']=primary
         write(root,state)
-        if intention!='stop' and primary:
+        if intention in ('repair','transfer') and primary:
             rule_prompt=('Create a transferable development-case selector for the inventor. Return JSON with hypothesis and program. '
                          'Use bounded def choose(n, r): with integer locals, for i in range(n), if, return, and v(i,j). '
                          'Choose an index for each remaining slot. Columns are required count, required bytes, request cap, '

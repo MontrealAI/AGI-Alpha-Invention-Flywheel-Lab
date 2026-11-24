@@ -1,8 +1,11 @@
 """Exercise distributed isolation and independently replay both research generations."""
 
 from pathlib import Path
+from tempfile import TemporaryDirectory
+from unittest.mock import patch
 
 from activate import read
+from model_step import object_schema, step
 from packets import allowed
 from pages import canonical
 from phase import close, predict
@@ -45,7 +48,24 @@ def controls():
         raise ValueError('FUEL_DENIAL')
     if allowed({'kind':'direct','url':'https://example.org/unknown'}):
         raise ValueError('ORIGIN_DENIAL')
-    return {'row_loop':True,'denied':len(invalid)+2}
+
+    class Unstructured:
+        name='fallback-fixture'
+        config_sha256='fixture'
+
+        def __init__(self,*_):
+            self.responses=iter(({'action':None},{'action':'stop'}))
+
+        def call(self,_prompt,_limit):
+            return ({'usage':{'input_tokens':8,'output_tokens':8},'reported_model':self.name,
+                     'text':canonical(next(self.responses)).decode()}, {'approval_sha256':'fixture'})
+
+    schema=object_schema({'action':{'enum':['repair','transfer','stop']}})
+    with TemporaryDirectory() as directory, patch('model_step.Constructor',Unstructured):
+        check=step(Path(directory),None,'fallback-fixture',schema,'fixture','decision-test',128)
+    if check['result']!={'action':'stop'} or [e['status'] for e in check['events']]!=['REFUSED','SEALED']:
+        raise ValueError('UNSTRUCTURED_AUTHORITY_VALIDATION_FAILED')
+    return {'row_loop':True,'denied':len(invalid)+2,'unstructured_action_rejected':True}
 
 
 def phase_controls(root):

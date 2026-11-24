@@ -333,6 +333,7 @@ def qualify_activation(directory,root,release):
     require(manifest['id']=='frontier-activation','Wrong activation companion')
     evidence,elapsed=call(root,sys.executable,'reproduce_activation.py')
     require(evidence['controls']['row_loop'] and evidence['controls']['denied']==6 and
+            evidence['controls']['unstructured_action_rejected'] and
             evidence['historical_phases']['future_excluded'],'Research isolation or phase qualification failed')
     return {'package_sha256':expected,'replayed_ns':elapsed,**evidence}
 
