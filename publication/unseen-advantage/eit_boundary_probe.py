@@ -88,8 +88,10 @@ def observations(limited, full, level):
     if complete.size != visible.size or not np.isfinite(complete).all():
         raise ValueError("full archive lacks finite source readings")
     if reduced.size == complete.size:
-        if np.any(reduced[~visible] != 0):
-            raise ValueError("full-size reduced data have nonzero values at omitted positions")
+        # The release README defines the omission marker as NaN. Verify the
+        # exact publisher mask instead of treating either NaN or zero as data.
+        if not np.array_equal(np.isnan(reduced), ~visible):
+            raise ValueError("source NaN positions disagree with the registered electrode mask")
         reduced = reduced[visible]
     if not np.array_equal(reduced, complete[visible]):
         raise ValueError("source overlap disagrees at matched measured coordinates")

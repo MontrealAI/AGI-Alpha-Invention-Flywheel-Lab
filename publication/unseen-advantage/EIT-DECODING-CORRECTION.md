@@ -1,0 +1,5 @@
+# Omission encoding correction / Correction du marqueur d'omission
+
+The frozen first run rejected 18 of 21 files, while all three level 1 controls passed. It expected zero at omitted coordinates. The README distributed inside `EvaluationData.zip` specifies NaN at omitted measurements. The corrected reader requires exactly that NaN mask, together with identical finite source readings on retained coordinates. The registered masks, all 21 cases, the SVD comparator, the exact certificate logic and acceptance stay fixed. The original run remains available. The corrected experiment reuses the registered public cases. [Initial run](evidence/eit-original-decoding.json) · [Source release](https://doi.org/10.5281/zenodo.10986692)
+
+Le premier code gelé attendait des zéros aux positions omises et a rejeté 18 des 21 dossiers. Le fichier README de l'éditeur spécifie des NaN. Le correctif vérifie le masque NaN exact et impose l'identité des mesures finies conservées. Le protocole, les comparateurs et les cas sont ceux de l'enregistrement initial.
