@@ -342,7 +342,7 @@ def qualify_amplification(directory,root,release):
     expected=release['foundry_sha256'][member.AMPLIFICATION_ZIP]
     manifest=install(directory/member.AMPLIFICATION_ZIP,root,{'sha256':expected})
     require(manifest['id']=='frontier-activation' and manifest['version']=='1.1.0' and
-            manifest['source']==member.commit_url(release['source_commit']),'Wrong amplification companion')
+            manifest['source']==member.commit_url(member.AMPLIFICATION_PIN),'Wrong amplification companion')
     evidence,elapsed=call(root,sys.executable,'reproduce_amplification.py')
     require(evidence['exact_controls']==evidence['cases']==12 and evidence['calibration']['exact_controls']==6,
             'Amplification control failed')
@@ -354,6 +354,17 @@ def qualify_amplification(directory,root,release):
             'Exact calibration witness failed')
     return {'package_sha256':expected,'replayed_ns':elapsed,'worked_contract':result,
             'calibration_witness':calibration,**evidence}
+
+
+def qualify_substrate(directory, root, release):
+    expected = release['foundry_sha256'][member.SUBSTRATE_ZIP]
+    manifest = install(directory/member.SUBSTRATE_ZIP, root, {'sha256': expected})
+    require(manifest['id']=='frontier-activation' and manifest['version']=='1.2.0' and
+            manifest['source']==member.commit_url(release['source_commit']), 'Wrong substrate companion')
+    evidence, elapsed = call(root, sys.executable, 'verify_substrate.py')
+    require(evidence['checked_cases']==32 and evidence['sample']['decision']=='COVARIANCE_SENSITIVE'
+            and evidence['endpoint']['load']==256, 'Scientific workbench replay failed')
+    return {'package_sha256': expected, 'replayed_ns': elapsed, **evidence}
 
 
 def qualify(directory, live=False):
@@ -382,6 +393,8 @@ def qualify(directory, live=False):
                     results['activation'] = qualify_activation(directory,root/'activation',release)
                 if member.AMPLIFICATION_ZIP in release['foundry_sha256']:
                     results['amplification'] = qualify_amplification(directory,root/'amplification',release)
+                if member.SUBSTRATE_ZIP in release['foundry_sha256']:
+                    results['substrate'] = qualify_substrate(directory, root/'substrate', release)
         return results
 
 

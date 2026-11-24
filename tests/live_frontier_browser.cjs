@@ -181,6 +181,10 @@ async function foundryJourney(page, language, width) {
   assert.equal(createHash('sha256').update(activationZip).digest('hex'), release.foundry_sha256['frontier-activation-1.0.0.zip']);
   const amplificationZip = await (await online.get(base + 'frontier-activation-1.1.0.zip')).body();
   assert.equal(createHash('sha256').update(amplificationZip).digest('hex'), release.foundry_sha256['frontier-activation-1.1.0.zip']);
+  assert.equal(release.foundry_sha256['frontier-activation-1.1.0.zip'],
+    '158aa880e2a282915f011ff8c4786ec0641b6d5da82178a9e131d0c64a17499c');
+  const substrateZip = await (await online.get(base + 'frontier-activation-1.2.0.zip')).body();
+  assert.equal(createHash('sha256').update(substrateZip).digest('hex'), release.foundry_sha256['frontier-activation-1.2.0.zip']);
   const example = await page.locator('#foundry-public-data').evaluate(node => JSON.parse(node.content.textContent));
   const context = page.context();
   await context.setOffline(true);
@@ -315,6 +319,10 @@ async function foundryJourney(page, language, width) {
     await page.locator('#foundry-amplification-replay').press('Enter');
     const displayed = await page.locator('#foundry-amplification-replay-status').textContent();
     assert.match(displayed, /256.*e045, e072/);
+    await page.locator('#foundry-substrate-results summary').press('Enter');
+    await page.locator('#foundry-substrate-replay').press('Enter');
+    assert.match(await page.locator('#foundry-substrate-replay-status').textContent(),
+      /(?:Covariance-sensitive|Dépend de la covariance).*5817.*175–267 s.*paper:T8:L98/);
     const contextFile = {schema:'frontier/amplification-v1', objective:'Local measurement fixture',
       binding:{model:'Local model fixture', arm:'amplified'}, state:'DEVELOPMENT_PASS',
       attempts:[{number:1,scores:{accepted:2,cases:2}}]};
@@ -674,6 +682,7 @@ async function walletPaths(browser, language, width) {
     assert.equal(await page.locator('#foundry-amplification-status').textContent(), '');
     assert.equal(await page.locator('#foundry-amplification-attempts li').count(), 0);
     assert.equal(await page.locator('#foundry-amplification-replay-status').textContent(), '');
+    assert.equal(await page.locator('#foundry-substrate-replay-status').textContent(), '');
     assert.equal(await page.locator('#goal-result').isVisible(), false);
     assert.equal(await page.locator('#goal-export').isEnabled(), false);
     assert.equal(await page.locator('#access').isVisible(), true);

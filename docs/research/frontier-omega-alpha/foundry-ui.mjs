@@ -560,6 +560,26 @@ function setup() {
         'Open amplification-status.json from the local companion.');
     }
   }));
+  get('substrate-replay')?.addEventListener('click', () => {
+    if (!active()) return;
+    const example = readJSON(get('substrate-example').content.textContent);
+    const [anchor, midpoint, period, midpointSigma, periodSigma, duration] = example.values.map(BigInt);
+    const scale = BigInt(example.scale);
+    const difference = anchor - midpoint;
+    const epoch = difference / period + (difference % period > 0n ? 1n : 0n);
+    const absolute = value => value < 0n ? -value : value;
+    const cycleSigma = absolute(epoch) * periodSigma;
+    const lower = 86400n * absolute(midpointSigma - cycleSigma);
+    const upper = 86400n * (midpointSigma + cycleSigma);
+    const target = 300n * duration;
+    const verdict = upper <= target ? 0 : lower > target ? 2 : 1;
+    const label = (fr ? ['Dans le seuil', 'Dépend de la covariance', 'Au-delà du seuil'] :
+      ['Within target', 'Covariance-sensitive', 'Exceeds target'])[verdict];
+    const interval = `${lower / scale}–${(upper + scale - 1n) / scale} s`;
+    put(get('substrate-replay-status'), fr ?
+      `${label}. Cycle ${epoch} · Écart-type ${interval} · Source ${example.witness}.` :
+      `${label}. Epoch ${epoch} · Standard deviation ${interval} · Source ${example.witness}.`);
+  });
   get('study-check').addEventListener('click', launch(async alive => {
     clearStudy();
     try {
@@ -634,6 +654,7 @@ function setup() {
     clearActivation();
     clearAmplification();
     if (get('amplification-replay-status')) put(get('amplification-replay-status'), '');
+    if (get('substrate-replay-status')) put(get('substrate-replay-status'), '');
     clearStudy();
     clear(true);
   });
