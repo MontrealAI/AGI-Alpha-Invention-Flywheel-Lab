@@ -6,8 +6,10 @@ from hashlib import sha256
 from pathlib import Path
 import signal
 from time import time
+from types import SimpleNamespace
 
 from bridge.instruments import strict_portable_json
+from bridge.output_schema import validate_output
 from model_step import brief, object_schema, step
 from native_experiment import NativeRefused, run as native
 from pages import digest
@@ -15,6 +17,7 @@ from study import atomic, lock
 
 
 SCHEMA = 'frontier/amplification-v1'
+TRANSFER = 'frontier/amplification-transfer-v1'
 ARMS = ('direct', 'harness', 'amplified')
 CODE = object_schema({'hypothesis': brief(320), 'source': brief(11_000)})
 STYLES = {
@@ -110,6 +113,54 @@ def design(args):
     return record
 
 
+def bound_instrument(path, registration):
+    artifact, file_id = read(path)
+    if type(artifact) is not dict:
+        raise ValueError('INSTRUMENT_BINDING')
+    if artifact.get('schema') != TRANSFER:
+        if artifact.get('registration_sha256') != registration:
+            raise ValueError('INSTRUMENT_BINDING')
+        validate_output(artifact.get('result'), CODE)
+        return artifact, file_id, None
+    if artifact.get('target_registration_sha256') != registration or type(artifact.get('instrument_utf8')) is not str:
+        raise ValueError('TRANSFER_BINDING')
+    raw = artifact['instrument_utf8'].encode('utf-8')
+    original = strict_portable_json(artifact['instrument_utf8'])
+    if type(original) is not dict:
+        raise ValueError('TRANSFER_PROVENANCE')
+    validate_output(original.get('result'), CODE)
+    old_scope = original.get('registration_sha256')
+    if (type(old_scope) is not str or old_scope == registration or old_scope != artifact.get('source_registration_sha256')
+            or sha256(raw).hexdigest() != artifact.get('instrument_sha256')
+            or digest(original['result']['source']) != artifact.get('source_sha256')):
+        raise ValueError('TRANSFER_PROVENANCE')
+    return original, file_id, {'original_instrument_sha256':artifact['instrument_sha256'],
+                               'original_registration_sha256':old_scope,'source_sha256':artifact['source_sha256']}
+
+
+def prepare_transfer(args):
+    policy, target = read(args.registration)
+    with args.instrument.open('rb') as stream:
+        raw = stream.read(200_001)
+    if not 0 < len(raw) <= 200_000:
+        raise ValueError('INSTRUMENT_SIZE')
+    source_text = raw.decode('utf-8')
+    original = strict_portable_json(source_text)
+    origin = original.get('registration_sha256') if type(original) is dict else None
+    if type(origin) is not str or origin == target or len(origin) != 64 or any(char not in '0123456789abcdef' for char in origin):
+        raise ValueError('TRANSFER_ORIGIN')
+    validate_output(original.get('result'), CODE)
+    cases = development(args.development, policy['development_sha256'])
+    record = {'schema':TRANSFER, 'source_registration_sha256':origin, 'target_registration_sha256':target,
+              'instrument_sha256':sha256(raw).hexdigest(), 'source_sha256':digest(original['result']['source']),
+              'instrument_utf8':source_text,
+              'development_diagnostics':proposed_instrument(original['result'], policy['contract'], cases, [])}
+    with args.output.open('x', encoding='utf-8') as stream:
+        stream.write(canonical(record)+'\n')
+    return {'schema':TRANSFER, 'source_registration_sha256':origin, 'target_registration_sha256':target,
+            'instrument_sha256':record['instrument_sha256'], 'development_diagnostics':record['development_diagnostics']}
+
+
 def construct(args):
     policy, freeze = read(args.registration)
     cases = development(args.development, policy['development_sha256'])
@@ -119,17 +170,17 @@ def construct(args):
     if args.arm == 'amplified':
         if args.instrument is None:
             raise ValueError('INSTRUMENT_REQUIRED')
-        instrument, instrument_id = read(args.instrument)
-        if instrument['registration_sha256'] != freeze:
-            raise ValueError('INSTRUMENT_BINDING')
+        instrument, instrument_id, transfer = bound_instrument(args.instrument,freeze)
     else:
         if args.instrument is not None:
             raise ValueError('CONTROL_INSTRUMENT')
-        instrument, instrument_id = None, None
+        instrument, instrument_id, transfer = None, None, None
     args.workspace.mkdir(mode=0o700, parents=True, exist_ok=True)
     config_id = sha256(args.config.read_bytes()).hexdigest()
     binding = {'registration': freeze, 'model': args.model, 'model_config': config_id,
                'arm': args.arm, 'instrument': instrument_id, 'lease_until': args.until}
+    if transfer is not None:
+        binding['transfer'] = transfer
     path = args.workspace/'amplification-status.json'
     with lock(args.workspace):
         record = read(path)[0] if path.exists() else {'schema': SCHEMA, 'objective': policy['objective'],
@@ -181,6 +232,45 @@ def selected(record):
     return max(candidates, key=lambda item: (item['scores']['accepted'], -item['number']), default=None)
 
 
+def compare(args):
+    """Drain the registered constructor arms and leave confirmation to an evaluator."""
+    policy, freeze = read(args.registration)
+    allowed = policy['comparisons'][args.model]['arms']
+    order = [arm for arm in policy.get('execution_order', {}).get(args.model, allowed) if arm != 'design']
+    if set(order) != set(allowed) or not set(order) <= set(ARMS) or len(order) != len(allowed) or len(order) != len(set(order)):
+        raise ValueError('COMPARISON_ORDER')
+    if not args.prefix.isascii() or not args.prefix.replace('-', '').isalnum() or len(args.prefix) > 30:
+        raise ValueError('COMPARISON_PREFIX')
+    args.workspace.mkdir(mode=0o700, parents=True, exist_ok=True)
+    binding = {'registration': freeze, 'model': args.model, 'lease': args.until,
+               'config_sha256': sha256(args.config.read_bytes()).hexdigest()}
+    seal = args.workspace / (args.prefix+'-comparison.json')
+    with lock(args.workspace):
+        result = read(seal)[0] if seal.exists() else {'schema': 'frontier/amplification-queue-v1', 'binding': binding,
+                                                     'arms': {arm: 'QUEUED' for arm in order}}
+        if result['binding'] != binding or list(result['arms']) != order:
+            raise ValueError('COMPARISON_BINDING')
+        result['state'] = 'RUNNING'
+        atomic(seal, result)
+        for arm in order:
+            target = args.workspace/(args.prefix+'-'+arm)
+            chosen = args.instrument if arm == 'amplified' else None
+            if arm == 'amplified' and chosen is None:
+                result['arms'][arm] = 'AWAITING_INSTRUMENT'
+                atomic(seal, result)
+                continue
+            result['arms'][arm] = 'RUNNING'
+            atomic(seal, result)
+            finished = construct(SimpleNamespace(registration=args.registration, development=args.development,
+                workspace=target, config=args.config, model=args.model, until=args.until, arm=arm, instrument=chosen))
+            result['arms'][arm] = finished['state']
+            atomic(seal, result)
+        if 'AWAITING_INSTRUMENT' not in result['arms'].values():
+            result['state'] = 'EVALUATION_READY'
+        atomic(seal, result)
+    return result
+
+
 def evaluate(args):
     policy, freeze = read(args.registration)
     cases = development(args.confirmation, policy['confirmation_sha256'])
@@ -204,7 +294,7 @@ def evaluate(args):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     sub = parser.add_subparsers(dest='mode', required=True)
-    for name, action in (('design', design), ('construct', construct)):
+    for name, action in (('design', design), ('construct', construct), ('compare', compare)):
         cli = sub.add_parser(name)
         cli.set_defaults(action=action)
         for flag in ('registration', 'development', 'workspace', 'config'):
@@ -213,12 +303,19 @@ def main():
         cli.add_argument('--until', type=int, required=True)
         if name == 'construct':
             cli.add_argument('--arm', choices=ARMS, required=True)
+        if name != 'design':
             cli.add_argument('--instrument', type=Path)
+        if name == 'compare':
+            cli.add_argument('--prefix', default='trial')
     cli = sub.add_parser('evaluate')
     cli.set_defaults(action=evaluate)
     cli.add_argument('--registration', type=Path, required=True)
     cli.add_argument('--confirmation', type=Path, required=True)
     cli.add_argument('checkpoints', type=Path, nargs='+')
+    cli = sub.add_parser('transfer')
+    cli.set_defaults(action=prepare_transfer)
+    for flag in ('registration','development','instrument','output'):
+        cli.add_argument('--'+flag,type=Path,required=True)
     args = parser.parse_args()
     signal.signal(signal.SIGTERM, interrupt)
     try:
