@@ -316,6 +316,17 @@ assert Run(path,model,256,{'kind':'construction'}).state == resumed.state
             'reopened':first,'fresh_impact':fresh_result['result'],'denied_controls':5,'interruption_recovery':True}
 
 
+def qualify_learning(directory, root, release):
+    expected = release['foundry_sha256'][member.LEARNING_ZIP]
+    manifest = install(directory/member.LEARNING_ZIP,root,{'sha256':expected})
+    require(manifest['id']=='frontier-learning','Wrong learning companion')
+    model, wall = call(root,sys.executable,'reproduce.py','--full')
+    require(model['case_count']>=16 and model['parameters_changed']>0,'Missing fitted parameters or confirmation')
+    boundaries,_ = call(root,sys.executable,'self_test.py')
+    require(boundaries['wasm_denials']==4 and all(boundaries['workspace'].values()),'Learning boundary failed')
+    return {'package_sha256':expected,'replay_wall_ns':wall,'trained_model':model,'boundaries':boundaries}
+
+
 def qualify(directory, live=False):
     manifest = json.loads((directory / member.MEMBER_JSON).read_bytes())
     tools = manifest['capabilities']
@@ -336,6 +347,8 @@ def qualify(directory, live=False):
                     results['successors'] = qualify_successors(directory, root / 'successors', release)
                 if member.INVENTOR_ZIP in release['foundry_sha256']:
                     results['inventor'] = qualify_inventor(directory, root / 'inventor', release)
+                if member.LEARNING_ZIP in release['foundry_sha256']:
+                    results['learning'] = qualify_learning(directory,root/'learning',release)
         return results
 
 

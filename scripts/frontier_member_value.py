@@ -28,13 +28,15 @@ MEMBER_JSON = 'member-value.json'
 FOUNDRY_ZIP = 'frontier-foundry-1.0.0.zip'
 STUDY_ZIP = 'frontier-foundry-1.1.0.zip'
 INVENTOR_ZIP = 'frontier-inventor-1.0.0.zip'
+LEARNING_ZIP = 'frontier-learning-1.0.0.zip'
 FOUNDRY_ENGINE = 'harness-engine.js'
 FOUNDRY_INPUT = 'FOUNDRY_PUBLIC_DATA'
 HARNESS_PIN = '39e76570c851b3527d78a526053a9ea2a611a993'
 HARNESS = 'products/alpha-genesis-harness/'
 FOUNDRY_ASSETS = ('foundry-core.mjs', 'foundry-ui.mjs', 'foundry-study.mjs', 'outcome-receipt.mjs',
-                  FOUNDRY_ENGINE, FOUNDRY_ZIP, STUDY_ZIP, INVENTOR_ZIP)
+                  FOUNDRY_ENGINE, FOUNDRY_ZIP, STUDY_ZIP, INVENTOR_ZIP, LEARNING_ZIP)
 INVENTOR_EVIDENCE = MAIN / 'publication/inventor'
+LEARNING_EVIDENCE = MAIN / 'publication/adaptive'
 
 OUTPUTS = frozenset(SITE + name for name in (ENDPOINT_ZIP, ARCHIVE_ZIP, MEMBER_JSON))
 MARKER = '<!-- FRONTIER_MEMBER_VALUE -->'
@@ -206,6 +208,42 @@ def build_inventor(destination):
         files['study/'+name] = (INVENTOR_EVIDENCE/name).read_bytes()
     return package(destination / INVENTOR_ZIP, files, 'frontier-inventor', HARNESS_PIN,
                    'Local read-only SQL construction, public-data replay and registered discovery-policy comparisons.')
+
+
+def build_learning(destination):
+    files = {name:(TOOLS/'adaptive'/name).read_bytes() for name in
+             ('README.md','check.py','learning.py','operate.py','pages.py','research.py','reproduce.py',
+              'self_test.py','wasm_policy.py','requirements-linux.txt')}
+    files.update({name:(TOOLS/'inventor'/name).read_bytes() for name in ('inventor.py','relational.py')})
+    files.update({name:(TOOLS/'foundry'/name).read_bytes() for name in
+                  ('provider.py','study.py','formulas.py','local.example.json')})
+    files.update({name:pinned(HARNESS_PIN,HARNESS+name) for name in
+                  ('LICENSE','NOTICE','bridge/adapters.py','bridge/instruments.py','bridge/output_schema.py','bridge/streaming.py')})
+    for name in ('REGISTRATION.md','REPORT.md','REPRESENTATION-FOLLOWUP.md','prepare.py','run_study.py','training.json','verification.json',
+                 'runs.json','operation.json','cohort/inputs.json','cohort/fit.json','cohort/development.json',
+                 'cohort/confirmation.json'):
+        files[f'study/{name}']=(LEARNING_EVIDENCE/name).read_bytes()
+    return package(destination/LEARNING_ZIP,files,'frontier-learning',HARNESS_PIN,
+                   'Local read-only release observation, portable training and isolated experimental policy comparison.')
+
+
+def render_learning(fr):
+    result=json.loads((LEARNING_EVIDENCE/'verification.json').read_bytes())['forecast']
+    reference=result['comparisons'][result['reference']]
+    trained=result['comparisons']['trained']
+    headers=('Prévision','Cas','Erreur absolue moyenne (s)','90e centile (s)') if fr else (
+        'Forecast','Cases','Mean absolute error (s)','90th percentile (s)')
+    alternatives=((('Référence conventionnelle' if fr else 'Conventional reference'),reference),
+                  (('Modèle entraîné' if fr else 'Trained model'),trained))
+    if result['verdict']=='QUALIFIED':
+        outcome='Seuil de confirmation atteint. Adoption distincte.' if fr else 'Met the confirmation threshold. Adoption requires a separate decision.'
+    else:
+        outcome='Le seuil de confirmation n’a pas été atteint.' if fr else 'The model missed the confirmation threshold.'
+    rows=''.join(f'<tr><th scope="row">{label}</th><td>{row["cases"]}</td><td>{row["mae_seconds"]:.1f}</td>'
+                 f'<td>{row["p90_seconds"]}</td></tr>' for label,row in alternatives)
+    return (f'<p>{outcome}</p><div class="foundry-pilot-table" tabindex="0" role="region" aria-label="{headers[0]}">'
+            '<table><thead><tr>'+''.join(f'<th scope="col">{h}</th>' for h in headers)+
+            '</tr></thead><tbody>'+rows+'</tbody></table></div>')
 
 
 def render_inventor(fr):
@@ -800,6 +838,7 @@ def render(lang, compiled, sample):
         '<!-- MF_FEATURE -->': feature_html(compiled['member_first']['edition'], compiled, lang),
         '<!-- ' + FOUNDRY_INPUT + ' -->': escape(stable(foundry_example(fr)).decode()),
         '<!-- INVENTOR_PILOT_RESULTS -->': render_inventor(fr),
+        '<!-- LEARNING_RESULTS -->': render_learning(fr),
         '<!-- MF_UPDATED -->': timestamp_html(compiled['updated_at']),
         '<!-- MV_TIMELINE -->': ''.join(highlights),
         '<!-- MV_FILTERS -->': controls(briefs, fr),

@@ -16,6 +16,25 @@ const inventorStatus = fr ? {
   RUNNING:'Running or paused', SELECTED:'Opportunity selected', SEALED:'Candidate sealed',
   DEVELOPMENT_INCOMPLETE:'Development checks incomplete', ABSTAIN:'Abstained',
 };
+const learningStages = fr ? {
+  audit:'Vérifier la publication', learn:'Entraîner le modèle', invent:'Construire un outil',
+} : {
+  audit:'Verify release', learn:'Train model', invent:'Construct tool',
+};
+const stageStates = fr ? {
+  QUEUED:'En attente', RUNNING:'En cours à l’export', COMPLETE:'Terminé', FAILED:'Échec',
+} : {
+  QUEUED:'Queued', RUNNING:'Running at export', COMPLETE:'Complete', FAILED:'Failed',
+};
+const learningOutcomes = fr ? {
+  MATCHED_PUBLIC_RELEASE:'Publication publique vérifiée', CANDIDATE:'Candidat à évaluer',
+  SEALED:'Outil à évaluer', ABSTAIN:'Abstention', REJECTED:'Refusé',
+  DEVELOPMENT_INCOMPLETE:'Développement incomplet',
+} : {
+  MATCHED_PUBLIC_RELEASE:'Public release verified', CANDIDATE:'Candidate awaiting evaluation',
+  SEALED:'Tool awaiting evaluation', ABSTAIN:'Abstained', REJECTED:'Rejected',
+  DEVELOPMENT_INCOMPLETE:'Development incomplete',
+};
 const words = fr ? {
   frozen:'Mission figée. Choisissez comment obtenir un instrument.',
   sealed:'Instrument scellé. Ouvrez maintenant vos cas de vérification.',
@@ -118,8 +137,9 @@ function setup() {
     get('study-check').disabled = busy || !globalThis.crypto?.subtle ||
       !get('study-report').files.length || !get('study-cases').files.length;
     for (const name of ['sample','freeze','candidate','verify','case-template','mission-download','project',
-      'open','candidate-file','cases','mission-file','library-files','study-report','study-cases','inventor-open']) {
-      get(name).disabled = busy || !globalThis.crypto?.subtle;
+      'open','candidate-file','cases','mission-file','library-files','study-report','study-cases','inventor-open','learning-open']) {
+      const control = get(name);
+      if (control) control.disabled = busy || !globalThis.crypto?.subtle;
     }
   }
 
@@ -375,6 +395,50 @@ function setup() {
       if (alive()) put(local, fr ? 'Ouvrez le fichier run.json produit par l’utilitaire.' : 'Open the run.json file produced by the companion.');
     }
   }));
+  function clearLearning() {
+    if (!get('learning-status')) return;
+    put(get('learning-status'), '');
+    get('learning-steps').replaceChildren();
+    get('learning-steps').hidden = true;
+  }
+  get('learning-open')?.addEventListener('change', launch(async alive => {
+    clearLearning();
+    try {
+      const snapshot = await fileValue(get('learning-open'));
+      if (!alive()) return;
+      const hash = value => value === null || (typeof value === 'string' && /^[a-f0-9]{64}$/.test(value));
+      if (snapshot?.schema !== 'frontier/learning-status-v1' || snapshot.scope !== 'public-actions-pages' ||
+          !['ACTIVE','IDLE'].includes(snapshot.state) || !Number.isSafeInteger(snapshot.observed) || snapshot.observed < 0 ||
+          !Number.isSafeInteger(snapshot.observed_at) || snapshot.observed_at < 0 || snapshot.observed_at >= 2 ** 32 ||
+          !hash(snapshot.candidate_sha256) || !hash(snapshot.admitted_sha256) ||
+          !Array.isArray(snapshot.stages) || snapshot.stages.length > 12 ||
+          snapshot.stages.some(row => !row || !Object.hasOwn(learningStages, row.stage) ||
+            !Object.hasOwn(stageStates, row.state) || (row.result && !Object.hasOwn(learningOutcomes, row.result.state)))) {
+        throw new Error('LEARNING_STATUS');
+      }
+      const date = new Intl.DateTimeFormat(fr ? 'fr-CA' : 'en-CA', {dateStyle:'medium',timeStyle:'short'});
+      const count = snapshot.observed;
+      const state = snapshot.state === 'ACTIVE' ? (fr ? 'actif à l’export' : 'active at export') : (fr ? 'au repos' : 'idle');
+      const candidate = snapshot.candidate_sha256 ? (fr ? 'Candidat ' : 'Candidate ') + snapshot.candidate_sha256.slice(0, 12) : '';
+      const admitted = snapshot.admitted_sha256 ? (fr ? 'Modèle autorisé ' : 'Admitted model ') + snapshot.admitted_sha256.slice(0, 12) : '';
+      put(get('learning-status'), [date.format(snapshot.observed_at*1000), state,
+        `${count} observations`, candidate, admitted].filter(Boolean).join(' · '));
+      const list = get('learning-steps');
+      for (const row of snapshot.stages) {
+        const item = document.createElement('li');
+        const title = document.createElement('strong');
+        put(title, learningStages[row.stage]);
+        const state = document.createElement('span');
+        put(state, row.result ? learningOutcomes[row.result.state] : stageStates[row.state]);
+        item.append(title, state);
+        list.append(item);
+      }
+      list.hidden = !snapshot.stages.length;
+    } catch {
+      if (alive()) put(get('learning-status'), fr ? 'Ouvrez le fichier learning-status.json de l’utilitaire.' :
+        'Open the learning-status.json file from the companion.');
+    }
+  }));
   get('study-check').addEventListener('click', launch(async alive => {
     clearStudy();
     try {
@@ -439,9 +503,13 @@ function setup() {
   window.addEventListener('frontier:member-lock', () => {
     library.clear();
     updateLibrary();
-    for (const key of ['library-files','study-report','study-cases','inventor-open']) get(key).value = '';
+    for (const key of ['library-files','study-report','study-cases','inventor-open','learning-open']) {
+      const control = get(key);
+      if (control) control.value = '';
+    }
     put(get('library-status'), '');
     put(get('inventor-local'), '');
+    clearLearning();
     clearStudy();
     clear(true);
   });

@@ -175,6 +175,8 @@ async function foundryJourney(page, language, width) {
   assert.equal(createHash('sha256').update(studyZip).digest('hex'), release.foundry_sha256['frontier-foundry-1.1.0.zip']);
   const inventorZip = await (await online.get(base + 'frontier-inventor-1.0.0.zip')).body();
   assert.equal(createHash('sha256').update(inventorZip).digest('hex'), release.foundry_sha256['frontier-inventor-1.0.0.zip']);
+  const learningZip = await (await online.get(base + 'frontier-learning-1.0.0.zip')).body();
+  assert.equal(createHash('sha256').update(learningZip).digest('hex'), release.foundry_sha256['frontier-learning-1.0.0.zip']);
   const example = await page.locator('#foundry-public-data').evaluate(node => JSON.parse(node.content.textContent));
   const context = page.context();
   await context.setOffline(true);
@@ -287,6 +289,16 @@ async function foundryJourney(page, language, width) {
       schema:'frontier/inventor-run-v1', model:'Local inventor fixture', status:'SEALED', events:[{}],
     }));
     await page.waitForFunction(() => document.getElementById('foundry-inventor-local').textContent.includes('Local inventor fixture'));
+    const learning = page.locator('#foundry-gains');
+    await learning.locator('summary').press('Enter');
+    assert.equal(await learning.locator('tbody tr').count(), 2);
+    await page.locator('#foundry-learning-open').setInputFiles(content('learning-status.json', {
+      schema:'frontier/learning-status-v1', scope:'public-actions-pages', state:'IDLE', observed_at:1795514400,
+      observed:71, candidate_sha256:'a'.repeat(64), admitted_sha256:null,
+      stages:[{stage:'learn',state:'COMPLETE',result:{state:'CANDIDATE'}}],
+    }));
+    await page.waitForFunction(() => document.getElementById('foundry-learning-status').textContent.includes('aaaaaaaaaaaa'));
+    assert.equal(await page.locator('#foundry-learning-steps li').count(), 1);
     await page.locator('#foundry-study-reopen summary').click();
     await page.locator('#foundry-study-report').setInputFiles(content('report.json', fixture.bundle));
     const studyCases = page.locator('#foundry-study-cases');
@@ -629,6 +641,8 @@ async function walletPaths(browser, language, width) {
     assert.equal(await page.locator('#foundry-library-items li').count(), 0);
     assert.equal(await page.locator('#foundry-study-outcomes dd').count(), 0);
     assert.equal(await page.locator('#foundry-inventor-local').textContent(), '');
+    assert.equal(await page.locator('#foundry-learning-status').textContent(), '');
+    assert.equal(await page.locator('#foundry-learning-steps li').count(), 0);
     assert.equal(await page.locator('#goal-result').isVisible(), false);
     assert.equal(await page.locator('#goal-export').isEnabled(), false);
     assert.equal(await page.locator('#access').isVisible(), true);

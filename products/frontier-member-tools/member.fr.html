@@ -47,6 +47,7 @@
         </details>
       </form>
         <p class="mv-links"><a href="#my-intelligence" data-foundry-start>Créer un outil pour mon objectif <span aria-hidden="true">→</span></a></p>
+        <p><a href="#foundry-learning">Améliorer un processus ou entraîner un modèle spécialisé <span aria-hidden="true">→</span></a></p>
         <div id="goal-status" class="status" role="status"></div>
       </section>
       <aside class="mf-sample" aria-labelledby="mf-sample-title">
@@ -148,6 +149,12 @@
       <p>Confiez à un modèle local un problème portant sur des tables de données. Il propose une requête, la teste et peut la corriger à l’aide de cas de développement. L’évaluateur conserve les cas de confirmation.</p>
       <p class="mv-links"><a href="frontier-inventor-1.0.0.zip" download>Télécharger l’utilitaire d’invention</a>
         <a href="#foundry-inventor-results">Voir les résultats de recherche</a></p>
+    </article>
+    <article class="foundry-entry" id="foundry-learning">
+      <h4>Apprendre du travail réel</h4>
+      <p>Utilisez l’outil local pour observer les publications, chercher à améliorer leur surveillance et entraîner un petit modèle de prévision. Une évaluation distincte est nécessaire avant d’utiliser un candidat.</p>
+      <p class="mv-links"><a href="frontier-learning-1.0.0.zip" download>Télécharger l’utilitaire d’apprentissage</a>
+        <a href="#foundry-gains">Voir les gains et l’historique des modèles</a></p>
     </article>
     <section class="foundry-stage" id="foundry-library" aria-labelledby="foundry-library-title">
       <h4 id="foundry-library-title">Votre bibliothèque de capacités</h4>
@@ -297,6 +304,19 @@
     <p class="mf-section-intro">Atelier de vérification des résultats</p>
     <p>Les résultats restent dans cette session. Téléchargez un objectif ou un reçu pour le rouvrir sur un appareil que vous contrôlez.</p>
     <p><a href="#foundry-library">Ouvrir votre bibliothèque de capacités</a></p>
+    <section class="foundry-stage foundry-learning" id="foundry-gains" aria-labelledby="foundry-gains-title">
+      <h4 id="foundry-gains-title">Mes gains et l’évolution de mes capacités</h4>
+      <p>Ouvrez le fichier d’état de l’utilitaire pour voir les dernières observations, constructions, évaluations et étapes d’entraînement.</p>
+      <div class="mv-actions"><label for="foundry-learning-open">Ouvrir un fichier d’état d’apprentissage
+        <input id="foundry-learning-open" type="file" accept=".json,application/json"></label></div>
+      <p id="foundry-learning-status" class="status" role="status"></p>
+      <ol id="foundry-learning-steps" class="foundry-learning-steps" aria-label="Étapes d’apprentissage consignées" hidden></ol>
+      <details>
+        <summary>Examiner l’entraînement et la comparaison publics</summary>
+        <!-- LEARNING_RESULTS -->
+        <p><a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/main/publication/adaptive/REPORT.md">Lire l’étude sur l’apprentissage en production</a></p>
+      </details>
+    </section>
     <section class="foundry-stage" id="foundry-inventor-results" aria-labelledby="foundry-inventor-title">
       <h4 id="foundry-inventor-title">Améliorer l’inventeur</h4>
       <p>Consultez l’expérience publique sur le choix des cas de développement. Reproduisez la comparaison dans l’utilitaire avant d’utiliser un instrument.</p>

@@ -47,6 +47,7 @@
         </details>
       </form>
         <p class="mv-links"><a href="#my-intelligence" data-foundry-start>Use my goal to start a tool <span aria-hidden="true">→</span></a></p>
+        <p><a href="#foundry-learning">Improve a workflow or train a specialist <span aria-hidden="true">→</span></a></p>
         <div id="goal-status" class="status" role="status"></div>
       </section>
       <aside class="mf-sample" aria-labelledby="mf-sample-title">
@@ -148,6 +149,12 @@
       <p>Give a local model a problem involving data tables. It proposes a query, tests it, and can revise it using development cases. Keep the confirmation cases with your evaluator.</p>
       <p class="mv-links"><a href="frontier-inventor-1.0.0.zip" download>Download the invention companion</a>
         <a href="#foundry-inventor-results">See the research results</a></p>
+    </article>
+    <article class="foundry-entry" id="foundry-learning">
+      <h4>Learn from real work</h4>
+      <p>Use the local companion to observe public release work, investigate better monitoring, and train a small timing model. Candidates need a separate evaluation before they can be used.</p>
+      <p class="mv-links"><a href="frontier-learning-1.0.0.zip" download>Download the learning companion</a>
+        <a href="#foundry-gains">Open gains and model history</a></p>
     </article>
     <section class="foundry-stage" id="foundry-library" aria-labelledby="foundry-library-title">
       <h4 id="foundry-library-title">Your capability library</h4>
@@ -297,6 +304,19 @@
     <p class="mf-section-intro">Outcome Workbench</p>
     <p>Results stay in this session. Download a goal or receipt to reopen it later on a device you control.</p>
     <p><a href="#foundry-library">Open your capability library</a></p>
+    <section class="foundry-stage foundry-learning" id="foundry-gains" aria-labelledby="foundry-gains-title">
+      <h4 id="foundry-gains-title">My gains and evolving intelligence</h4>
+      <p>Open the companion’s status file to see the last recorded observation, construction, training and verification.</p>
+      <div class="mv-actions"><label for="foundry-learning-open">Open a learning status file
+        <input id="foundry-learning-open" type="file" accept=".json,application/json"></label></div>
+      <p id="foundry-learning-status" class="status" role="status"></p>
+      <ol id="foundry-learning-steps" class="foundry-learning-steps" aria-label="Recorded learning stages" hidden></ol>
+      <details>
+        <summary>Inspect the public training and comparison</summary>
+        <!-- LEARNING_RESULTS -->
+        <p><a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/main/publication/adaptive/REPORT.md">Read the production learning study</a></p>
+      </details>
+    </section>
     <section class="foundry-stage" id="foundry-inventor-results" aria-labelledby="foundry-inventor-title">
       <h4 id="foundry-inventor-title">Improve the inventor</h4>
       <p>Explore the public experiment on retaining a method for choosing useful development cases. Reproduce the comparison in the companion before using an instrument.</p>
