@@ -10,8 +10,8 @@ from time import time
 from bridge.instruments import strict_portable_json
 from model_step import brief, object_schema, step
 from native_experiment import NativeRefused, run as native
-from pages import atomic, digest
-from study import lock
+from pages import digest
+from study import atomic, lock
 
 
 SCHEMA = 'frontier/amplification-v1'
