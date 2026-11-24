@@ -1,0 +1,5 @@
+# My Frontier Ω · Reference model compatibility
+
+Registered November 24, 2026. Neither 0.5B construction route qualified. To determine the supported local integration envelope, repeat the compact-formula protocol with the HARNESS's already-pinned Qwen3-4B-Instruct-2507 Q4_K_M reference model. This is a portability and compatibility check, with Python still the operational reference. It does not rescue either earlier trial.
+
+Use revision `ae44f08e1392f39c0e474af10c3ff8355c8b6688` and SHA-256 `2fde00ce69dd4899c70d020845e2638353015bba0fdf161b3eb965f2bca4464e` from the existing HARNESS hosted local qualification. Keep the prompts, scenario distribution, model-call limit and acceptance conditions in [FORMULA-REGISTRATION.md](FORMULA-REGISTRATION.md). Use one model instance, four CPU threads, 4096 context, one slot, temperature zero and seed 283. Do not change evaluation thresholds, swap models, or retry after discovering results. Compare the successor arms within this configuration. Do not infer higher financial value or causal recursive improvement from cross-model compatibility.
