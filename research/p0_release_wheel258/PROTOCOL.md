@@ -1,0 +1,18 @@
+# P0-258: release-matched wheel provenance, independent research only
+
+Base 3cc6bc95a13f991b5158e5bd5064b766b21632a4; owner PR40 unchanged ced6c1cb004887dcdafaea59a2976020be649f8e. No account or private key, native transition, financial integration, deployment or paid resource. Prior 257 used different local distributions. Current release run 45296234913 succeeded, both release-qualification job 138128223533 and downloaded-operation job 138139097709 installed identical versions and wheel filenames. The latter used CPython 3.12.16, Ubuntu 26.04 x64. Requirements-commercial010.txt Git blob a69183f86436c1e7585a7a3c36a1017cfbfe7883 is identical on both sources. Observed exact names:
+
+- cryptography 50.0.2: cryptography-50.0.2-cp311-abi3-manylinux_2_34_x86_64.whl
+- cffi 2.1.1: cffi-2.1.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl
+- pycparser 3.11: pycparser-3.11-py3-none-any.whl
+
+Historical job logs show names and versions, not bytes' independent digests. Local public PyPI lookup failed DNS; web JSON retrieval failed. Do not infer historical wheel identity from current metadata or installed RECORD. Single prospective public standard ubuntu-latest run with exact CPython patch if available; no retries on missing artifacts or interpreter. No new external credentials, spending, alternate account, private artifacts. Record failed stages as failed.
+
+Frozen acceptance:
+1. Exact interpreter and x86_64 Linux; query version-specific public PyPI JSON, select exactly the logged filename per distribution; reject missing, duplicate, yanked or non-PyPI-host download records; require valid SHA256 and size, download only these three public wheels and verify bytes against those records before staging. Record index response digests, filenames, sizes, hashes, runtime executable hash.
+2. Offline install only those wheel files into fresh private temporary staging with pip --no-index --no-deps --require-hashes --no-compile. Record exact staged regular-file inventory and aggregate digest; reject symlinks and unexpected files on recheck. No ambient site-packages in child.
+3. Child uses explicit isolated no-site no-bytecode startup with only verified staged root added; cryptography SHA256 abc known answer, verify cffi/pycparser/cryptography and native extension import paths inside stage, no site-packages from ambient interpreter. Capture loaded file-backed native library identities where available (/proc/self/maps), no secret data. Child after install uses no network; no financial/source code executed.
+4. Change a single staged member after freezing inventory; reject before child launch. Restore original bytes; extra synthetic module rejected before launch. No test repairs or favorable resampling within this run.
+5. Receipt binds source commit, package/index digests, staged inventory digest, runtime and observed loaded native libraries, per-case exit/outcome, wall and reaped-child CPU. Publish compact key-free receipt even on failure; no wheels or runtime archive retained. Actual account-wide billing unknown.
+
+Success means a prospectively verified wheel staging fixture for the same names/version/ABI as the released jobs, NOT proof of historical installed bytes, complete interpreter/stdlib/native loader trust, a secure sandbox or canonical native account operation. Owner-private immutable roots, independent execution closure, cache invalidation, actual signer/audit qualification and original account custody remain mandatory. No adoption into owner PR or release. No new commerce or profit. Decision only whether to retain candidate wheel manifest as an input to later owner-native qualification.
