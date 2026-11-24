@@ -22,8 +22,6 @@ STYLES = {
               'examples and any previous execution diagnostics to implement and improve the result.',
     'harness': 'Use the existing research harness process. Test a hypothesis, review development errors, '
                'and implement or repair an executable result.',
-    'amplified': 'Use the same research harness process and read the attached diagnostics from a proposed '
-                 'instrument. Treat them as fallible and verify them against the full examples.',
 }
 
 
@@ -155,7 +153,8 @@ def construct(args):
                                                    for event in previous['request']['events']]
             if enriched and enriched['used']:
                 context['proposed_instrument_diagnostics'] = enriched['notes']
-            prompt = (f'{STYLES[args.arm]} Return a JSON object with hypothesis and source. The source defines '
+            instructions = STYLES['direct' if args.arm == 'direct' else 'harness']
+            prompt = (f'{instructions} Return a JSON object with hypothesis and source. The source defines '
                       'solve(input) returning exactly the specified JSON output. A fresh isolated Python worker '
                       'can run normal standard-library code on each case. It has no files beyond the runtime, '
                       'external connection or process creation. A development check will run before a repair. '

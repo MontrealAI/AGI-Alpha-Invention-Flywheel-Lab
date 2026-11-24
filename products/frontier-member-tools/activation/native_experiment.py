@@ -5,13 +5,14 @@ backend is an opt-in Linux experiment, not a dependency of the Wasm runtime.
 """
 
 import json
-import os
 from pathlib import Path
 import platform
 import shutil
 import subprocess
 import tempfile
 from time import perf_counter_ns
+
+from bridge.instruments import strict_portable_json
 
 
 class NativeRefused(ValueError):
@@ -100,15 +101,17 @@ def command(memory, cpu, cap):
 
 
 def run(source, inputs, *, cpu=3, memory=160 * 1024 * 1024, cap=48_000):
-    if type(source) is not str or not 1 <= len(source.encode('utf-8')) <= 20_000:
-        raise NativeRefused('SOURCE_SIZE')
     if (type(cpu) is not int or not 1 <= cpu <= 30 or type(memory) is not int
             or not 48 * 1024 * 1024 <= memory <= 512 * 1024 * 1024
             or type(cap) is not int or not 1024 <= cap <= 128_000):
         raise NativeRefused('NATIVE_LIMIT')
     try:
-        body = json.dumps({'source': source, 'inputs': inputs}, allow_nan=False).encode()
-    except (TypeError, ValueError) as error:
+        if type(source) is not str or not 1 <= len(source.encode('utf-8')) <= 20_000:
+            raise NativeRefused('SOURCE_SIZE')
+        body = json.dumps({'source': source, 'inputs': inputs}, ensure_ascii=False, allow_nan=False).encode()
+    except NativeRefused:
+        raise
+    except (TypeError, ValueError, RecursionError) as error:
         raise NativeRefused('NATIVE_INPUT') from error
     if len(body) > 512_000:
         raise NativeRefused('NATIVE_INPUT_SIZE')
@@ -130,9 +133,24 @@ def run(source, inputs, *, cpu=3, memory=160 * 1024 * 1024, cap=48_000):
         stdout.seek(0)
         result = stdout.read(cap + 1)
     try:
-        parsed = json.loads(result)
-    except (ValueError, UnicodeError) as error:
+        parsed = strict_portable_json(result.decode('utf-8'))
+    except (ValueError, UnicodeError, RecursionError) as error:
         raise NativeRefused('NATIVE_OUTPUT') from error
     if type(parsed) is not dict or set(parsed) not in ({'result'}, {'error'}):
         raise NativeRefused('NATIVE_OUTPUT')
+    if 'error' in parsed and (type(parsed['error']) is not str or len(parsed['error']) > 360):
+        raise NativeRefused('NATIVE_OUTPUT')
+    pending = [(parsed, 0)]
+    while pending:
+        value, depth = pending.pop()
+        if depth > 48:
+            raise NativeRefused('NATIVE_OUTPUT')
+        if isinstance(value, list):
+            pending.extend((item, depth+1) for item in value)
+        elif isinstance(value, dict):
+            pending.extend((item, depth+1) for item in value.values())
+    try:
+        json.dumps(parsed, ensure_ascii=False).encode('utf-8')
+    except (ValueError, RecursionError) as error:
+        raise NativeRefused('NATIVE_OUTPUT') from error
     return {**parsed, 'wall_ns': perf_counter_ns() - start}
