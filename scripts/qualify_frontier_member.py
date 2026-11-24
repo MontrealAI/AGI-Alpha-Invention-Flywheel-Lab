@@ -360,11 +360,22 @@ def qualify_substrate(directory, root, release):
     expected = release['foundry_sha256'][member.SUBSTRATE_ZIP]
     manifest = install(directory/member.SUBSTRATE_ZIP, root, {'sha256': expected})
     require(manifest['id']=='frontier-activation' and manifest['version']=='1.2.0' and
-            manifest['source']==member.commit_url(release['source_commit']), 'Wrong substrate companion')
+            manifest['source']==member.commit_url(member.SUBSTRATE_PIN), 'Wrong substrate companion')
     evidence, elapsed = call(root, sys.executable, 'verify_substrate.py')
     require(evidence['checked_cases']==32 and evidence['sample']['decision']=='COVARIANCE_SENSITIVE'
             and evidence['endpoint']['load']==256, 'Scientific workbench replay failed')
     return {'package_sha256': expected, 'replayed_ns': elapsed, **evidence}
+
+
+def qualify_liberation(directory, root, release):
+    expected=release['foundry_sha256'][member.LIBERATION_ZIP]
+    manifest=install(directory/member.LIBERATION_ZIP,root,{'sha256':expected})
+    require(manifest['id']=='frontier-activation' and manifest['version']=='1.3.0' and
+            manifest['source']==member.commit_url(release['source_commit']),'Wrong research workbench source')
+    evidence,elapsed=call(root,sys.executable,'verify_liberation.py')
+    require(evidence['construction_held_accepted']['manual']==42 and evidence['covariance_confirmed']==106
+            and evidence['hydrology']['days']==28,'Invention and scientific workbench replay failed')
+    return {'package_sha256':expected,'replayed_ns':elapsed,**evidence}
 
 
 def qualify(directory, live=False):
@@ -395,6 +406,8 @@ def qualify(directory, live=False):
                     results['amplification'] = qualify_amplification(directory,root/'amplification',release)
                 if member.SUBSTRATE_ZIP in release['foundry_sha256']:
                     results['substrate'] = qualify_substrate(directory, root/'substrate', release)
+                if member.LIBERATION_ZIP in release['foundry_sha256']:
+                    results['liberation'] = qualify_liberation(directory, root/'liberation', release)
         return results
 
 

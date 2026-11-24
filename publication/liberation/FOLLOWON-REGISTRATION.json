@@ -1,0 +1,10 @@
+{
+  "question": "Can a separate photometric reduction cross-check early TESS epochs for the five largest weighted-fit forecast errors?",
+  "scope": "Exploratory audit of an already revealed tail. A match uses the same physical observation through another reduction and supplies no fresh forecasting acceptance.",
+  "selection": "Five largest absolute weighted forecast errors in the original 106 held targets, with target name as tie break. No substitutes. Also report overlap across all 106 to establish coverage.",
+  "source": "Ivshina and Winn, TESS Transit Timing of Hundreds of Hot Jupiters, Table 4, pinned to transit-timing/tt a04e1360d351d211b868dd5690117406b8f3af83",
+  "matching": "Normalize letters and digits in exact target names, refusing collisions. Admit explicitly TESS-derived readings from the authors and TESS-labelled ExoClock III readings with a common BJD TDB time standard. Assign epochs through the original ExoClock III ephemeris within one eighth of a period. If several readings exist per source and epoch, choose the smallest stated uncertainty before looking at their difference.",
+  "measures": "Count matching planets and epochs, and mark disagreements exceeding both one minute and three times the quadrature sum of published measurement errors. Use that threshold descriptively because the reductions can share detector noise. Separate absence of overlap from agreement.",
+  "decision": "Withhold attribution of the large errors until a suitable source can cross-check the relevant target or later observation. No observing authority.",
+  "source_identity_followup": "The primary exact-label scan found zero matches. The published series generally drops the planet-letter suffix. Run one exploratory extension allowing a single known DR C planet per host, one timing-series name and one published external period, with the periods agreeing within one part in 10,000. Require the same epoch conditions. Report exact-label matches separately. No fuzzy matches or inferred identity for multi-planet hosts."
+}

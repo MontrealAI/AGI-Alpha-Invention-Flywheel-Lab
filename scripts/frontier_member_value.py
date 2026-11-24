@@ -34,18 +34,21 @@ ACTIVATION_ZIP = 'frontier-activation-1.0.0.zip'
 AMPLIFICATION_ZIP = 'frontier-activation-1.1.0.zip'
 AMPLIFICATION_PIN = '3e229271a5408961a8ad686fa32d0b0f2fd08663'
 SUBSTRATE_ZIP = 'frontier-activation-1.2.0.zip'
+SUBSTRATE_PIN = '97dffcd9c40d3a7504466b6ed74140bcb53b2a8c'
+LIBERATION_ZIP = 'frontier-activation-1.3.0.zip'
 FOUNDRY_ENGINE = 'harness-engine.js'
 FOUNDRY_INPUT = 'FOUNDRY_PUBLIC_DATA'
 HARNESS_PIN = '39e76570c851b3527d78a526053a9ea2a611a993'
 HARNESS = 'products/alpha-genesis-harness/'
 FOUNDRY_ASSETS = ('foundry-core.mjs', 'foundry-ui.mjs', 'foundry-study.mjs', 'outcome-receipt.mjs',
                   FOUNDRY_ENGINE, FOUNDRY_ZIP, STUDY_ZIP, INVENTOR_ZIP, LEARNING_ZIP, ACTIVATION_ZIP,
-                  AMPLIFICATION_ZIP, SUBSTRATE_ZIP)
+                  AMPLIFICATION_ZIP, SUBSTRATE_ZIP, LIBERATION_ZIP)
 INVENTOR_EVIDENCE = MAIN / 'publication/inventor'
 LEARNING_EVIDENCE = MAIN / 'publication/adaptive'
 ACTIVATION_EVIDENCE = MAIN / 'publication/activation'
 AMPLIFICATION_EVIDENCE = MAIN / 'publication/amplification'
 SUBSTRATE_EVIDENCE = MAIN / 'publication/substrate'
+LIBERATION_EVIDENCE = MAIN / 'publication/liberation'
 
 OUTPUTS = frozenset(SITE + name for name in (ENDPOINT_ZIP, ARCHIVE_ZIP, MEMBER_JSON))
 MARKER = '<!-- FRONTIER_MEMBER_VALUE -->'
@@ -303,7 +306,7 @@ def build_amplification(destination):
                    version='1.1.0')
 
 
-def build_substrate(destination, revision):
+def substrate_files():
     files = amplification_files()
     for filename in ('SUBSTRATE.md', 'science_substrate.py', 'science_reference.py', 'science_workbench.py',
                      'substrate_study.py', 'verify_substrate.py'):
@@ -313,9 +316,48 @@ def build_substrate(destination, revision):
                      'REPORT.md', 'assemble.py', 'RESULTS.json', 'NEXT.json', 'LOCAL-CONFIG.json',
                      'model-evidence.json', 'record.py', 'covariance_pilot.py', 'PILOT-REGISTRATION.json', 'PILOT-RESULT.json'):
         files[f'study/substrate/{filename}'] = (SUBSTRATE_EVIDENCE/filename).read_bytes()
-    return package(destination/SUBSTRATE_ZIP,files,'frontier-activation',revision,
+    return files
+
+
+def build_substrate(destination):
+    return package(destination/SUBSTRATE_ZIP,substrate_files(),'frontier-activation',SUBSTRATE_PIN,
                    'Exact scientific environments and bounded research on source-grounded executable knowledge.',
                    version='1.2.0')
+
+
+def build_liberation(destination, revision):
+    files=substrate_files()
+    for filename in ('LIBERATION.md','liberation.py','covariance_study.py','hydrology.py','independent_timing.py',
+                     'discovery_workbench.py','verify_liberation.py'):
+        files[filename]=(TOOLS/'activation'/filename).read_bytes()
+    for filename in ('REGISTRATION.json','FOLLOWUP.json','CONFIRMATION.json','CONSTRUCTION.json','SOURCES.json',
+                     'COVARIANCE.json','HYDROLOGY.json','PACKET.json','RESPONSE.json','NEXT.json','config.json',
+                     'FOLLOWON-REGISTRATION.json','INDEPENDENT-TIMING.json',
+                     'REPORT.md','GATES.md','assemble.py'):
+        files[f'study/liberation/{filename}']=(LIBERATION_EVIDENCE/filename).read_bytes()
+    return package(destination/LIBERATION_ZIP,files,'frontier-activation',revision,
+                   'Historical scientific discovery, compact construction and source-bound hydrology.',
+                   version='1.3.0')
+
+
+def render_liberation(fr):
+    result=json.loads((LIBERATION_EVIDENCE/'COVARIANCE.json').read_bytes())['study']
+    label='Vérification des prévisions' if fr else 'Forecast verification'
+    headers=('Méthode','Transits couverts','Largeur médiane (s)') if fr else ('Method','Transits covered','Median width (s)')
+    titles={
+        'released_marginals':'Éphéméride publiée' if fr else 'Released ephemeris',
+        'weighted':'Moindres carrés pondérés' if fr else 'Weighted least squares',
+        'huber':'Ajustement robuste' if fr else 'Robust fit',
+        'adaptive_horizon':'Étalonnage par horizon' if fr else 'Horizon-specific calibration',
+    }
+    rows=[]
+    for key,title in titles.items():
+        measured=result['methods'][key]
+        rows.append(f'<tr><th scope="row">{title}</th><td>{int(measured["hits"])} / {int(measured["targets"])}</td>'
+                    f'<td>{round(measured["median_full_width_s"])}</td></tr>')
+    return (f'<div class="foundry-pilot-table" role="region" tabindex="0" aria-label="{label}"><table><thead><tr>'+
+            ''.join(f'<th scope="col">{name}</th>' for name in headers)+'</tr></thead><tbody>'+
+            ''.join(rows)+'</tbody></table></div>')
 
 
 def substrate_example():
@@ -993,6 +1035,7 @@ def render(lang, compiled, sample):
         '<!-- AMPLIFICATION_EXAMPLE -->': escape(stable(json.loads((AMPLIFICATION_EVIDENCE/'trial.json').read_bytes())).decode()),
         '<!-- SUBSTRATE_EXAMPLE -->': escape(stable(substrate_example()).decode()),
         '<!-- SUBSTRATE_RESULTS -->': render_substrate(fr),
+        '<!-- LIBERATION_RESULTS -->': render_liberation(fr),
         '<!-- MF_UPDATED -->': timestamp_html(compiled['updated_at']),
         '<!-- MV_TIMELINE -->': ''.join(highlights),
         '<!-- MV_FILTERS -->': controls(briefs, fr),
