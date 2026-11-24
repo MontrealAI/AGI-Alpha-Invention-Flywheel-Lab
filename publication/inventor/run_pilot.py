@@ -6,7 +6,7 @@ from pathlib import Path
 import subprocess
 import sys
 
-from protocol import MISSIONS, MODEL, canonical, digest
+from protocol import MISSIONS, canonical, digest
 
 
 def load(path):
@@ -27,7 +27,8 @@ def main(study, companion, config):
 
     def construct(kind, label, meeting, budget, *arguments):
         return execute('inventor.py',kind,'--workspace',blocks/label,'--input',meeting,
-                       '--config',config,'--provider','localhost-inference','--model',MODEL,'--budget',budget,*arguments)
+                       '--config',config,'--provider','localhost-inference','--model',registration['model'],
+                       '--budget',budget,*arguments)
 
     def assess(name, label, candidate, arm):
         result = execute('inventor_verify.py',study/'registration.json',constructor/f'{name}.json',
@@ -41,7 +42,13 @@ def main(study, companion, config):
                 'assessments':assessments,'complete_cost':None,'realized_member_value':None,'paid_inference_usd':0}
     runs = observed['runs']
     budgets = registration['output_budgets']
-    runs['opportunity'] = construct('choose','opportunity',constructor/'opportunities.json',budgets['opportunity'])
+    if 'opportunity_run_sha256' in registration:
+        choice = load(constructor/'fixed-opportunity.json')
+        if digest(choice) != registration['opportunity_run_sha256']:
+            raise ValueError('Registered opportunity choice changed.')
+        runs['opportunity'] = choice
+    else:
+        runs['opportunity'] = construct('choose','opportunity',constructor/'opportunities.json',budgets['opportunity'])
     if runs['opportunity']['status'] != 'SELECTED':
         (output/'receipt.json').write_bytes(canonical(observed)+b'\n')
         return

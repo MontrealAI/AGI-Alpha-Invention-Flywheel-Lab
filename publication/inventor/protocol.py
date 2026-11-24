@@ -13,6 +13,8 @@ ORIGIN = 'https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/frontier
 BASE = '162ac807c6a7302fa8b4fd6fa1a03ff786fd1f41'
 MODEL = 'qwen3-8b-q4-k-m'
 WEIGHTS = 'd98cdcbd03e17ce47681435b5150e34c1417f50b5c0019dd560e4882c5745785'
+SMALL_MODEL = 'qwen3-4b-instruct-2507-q4_k_m'
+SMALL_WEIGHTS = '2fde00ce69dd4899c70d020845e2638353015bba0fdf161b3eb965f2bca4464e'
 RUNTIME = '909eef25cd53e6601c8a07c866d8dbb2983e74177088d55182137a8fb8255d62'
 
 MISSIONS = {
@@ -201,7 +203,7 @@ def source_inputs(public):
                        ('atlas-release.json','member-value.json','endpoint-evidence-screen-1.0.0.zip')}})
 
 
-def main(root, public, seed):
+def main(root, public, seed, selection=None):
     development = root/'constructor'
     confirmation = root/'evaluator'
     development.mkdir(mode=0o700, parents=True)
@@ -232,10 +234,18 @@ def main(root, public, seed):
          'incumbent':'Dependency inspection and a conventional graph traversal.'},
     ]
     save(development/'opportunities.json',cards)
-    save(root/'registration.json',{'schema':'frontier/inventor-registration-v1','commitments':commitments,
-        'opportunities':digest(cards),'source':provenance,'model':MODEL,'model_weights_sha256':WEIGHTS,
+    registration = {'schema':'frontier/inventor-registration-v1','commitments':commitments,
+        'opportunities':digest(cards),'source':provenance,'model':SMALL_MODEL if selection else MODEL,
+        'model_weights_sha256':SMALL_WEIGHTS if selection else WEIGHTS,
         'runtime_archive_sha256':RUNTIME,'output_budgets':{'opportunity':256,'construction':640,'method':512},
-        'arms':['original','ordinary','augmented','withdrawn','conventional'],'public_replay_cases_per_mission':1})
+        'arms':['original','ordinary','augmented','withdrawn','conventional'],'public_replay_cases_per_mission':1}
+    if selection:
+        if (selection['status'] != 'SELECTED' or selection['binding'].get('input_sha256') != digest(cards) or
+                selection['model'] != MODEL or selection['result']['choice'] not in MISSIONS):
+            raise ValueError('A sealed opportunity selection from the larger model is required.')
+        registration['opportunity_run_sha256'] = digest(selection)
+        save(development/'fixed-opportunity.json', selection)
+    save(root/'registration.json', registration)
     save(confirmation/'generation.json',{'seed':str(seed),'scope':'Public controlled examples and one release replay per mission.'})
 
 
@@ -244,5 +254,7 @@ if __name__ == '__main__':
     parser.add_argument('root',type=Path)
     parser.add_argument('public',type=Path)
     parser.add_argument('--seed',type=int)
+    parser.add_argument('--reuse-selection',type=Path)
     args = parser.parse_args()
-    main(args.root,args.public,secrets.randbits(63) if args.seed is None else args.seed)
+    selected = json.loads(args.reuse_selection.read_bytes()) if args.reuse_selection else None
+    main(args.root,args.public,secrets.randbits(63) if args.seed is None else args.seed,selected)
