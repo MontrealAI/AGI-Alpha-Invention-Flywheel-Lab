@@ -21,6 +21,22 @@ const learningStages = fr ? {
 } : {
   audit:'Verify release', learn:'Train model', invent:'Construct tool',
 };
+const activationStages = fr ? {
+  construct:'Construire', decide:'Choisir la suite', repair:'Corriger', 'retain-rule':'Retenir une méthode',
+  'choose-next':'Choisir un nouvel objectif', original:'Référence initiale', ordinary:'Réemploi ordinaire',
+  augmented:'Méthode active', withdrawn:'Méthode retirée',
+} : {
+  construct:'Construct', decide:'Choose the next action', repair:'Repair', 'retain-rule':'Retain a method',
+  'choose-next':'Choose a fresh objective', original:'Original constructor', ordinary:'Ordinary reuse',
+  augmented:'Method active', withdrawn:'Method withdrawn',
+};
+const activationObjectives = fr ? {
+  'learning-replay':'Reproduire l’évaluation du modèle', 'local-runner':'Rétablir l’environnement local',
+  'inventor-audit':'Reconstituer les preuves d’invention',
+} : {
+  'learning-replay':'Replay the model evaluation', 'local-runner':'Restore the local runtime',
+  'inventor-audit':'Reconstruct the invention evidence',
+};
 const stageStates = fr ? {
   QUEUED:'En attente', RUNNING:'En cours à l’export', COMPLETE:'Terminé', FAILED:'Échec',
 } : {
@@ -137,7 +153,7 @@ function setup() {
     get('study-check').disabled = busy || !globalThis.crypto?.subtle ||
       !get('study-report').files.length || !get('study-cases').files.length;
     for (const name of ['sample','freeze','candidate','verify','case-template','mission-download','project',
-      'open','candidate-file','cases','mission-file','library-files','study-report','study-cases','inventor-open','learning-open']) {
+      'open','candidate-file','cases','mission-file','library-files','study-report','study-cases','inventor-open','learning-open','activation-open']) {
       const control = get(name);
       if (control) control.disabled = busy || !globalThis.crypto?.subtle;
     }
@@ -439,6 +455,43 @@ function setup() {
         'Open the learning-status.json file from the companion.');
     }
   }));
+  function clearActivation() {
+    if (!get('activation-status')) return;
+    put(get('activation-status'), '');
+    get('activation-steps').replaceChildren();
+    get('activation-steps').hidden = true;
+  }
+  get('activation-open')?.addEventListener('change', launch(async alive => {
+    clearActivation();
+    try {
+      const snapshot = await fileValue(get('activation-open'));
+      if (!alive()) return;
+      if (snapshot?.schema !== 'frontier/activation-run-v1' ||
+          snapshot.authority?.scope !== 'public-readonly-research' || !Object.hasOwn(activationObjectives,snapshot.objective) ||
+          !['ACTIVE','COMPLETE'].includes(snapshot.state) || !Array.isArray(snapshot.journal) || snapshot.journal.length > 9 ||
+          snapshot.journal.some(row => !row || !Object.hasOwn(activationStages,row.stage) || !['SEALED','ABSTAIN'].includes(row.state))) {
+        throw new Error('ACTIVATION_STATUS');
+      }
+      const state = snapshot.state === 'COMPLETE' ? (fr ? 'Cycle terminé' : 'Cycle complete') :
+        (fr ? 'Cycle actif à l’export' : 'Cycle active at export');
+      put(get('activation-status'), `${activationObjectives[snapshot.objective]} · ${state}`);
+      const list = get('activation-steps');
+      for (const row of snapshot.journal) {
+        const step = document.createElement('li');
+        const title = document.createElement('strong');
+        const note = document.createElement('span');
+        put(title,activationStages[row.stage]);
+        put(note,row.state === 'SEALED' ? (fr ? 'Proposition consignée' : 'Proposal recorded') :
+          (fr ? 'Abstention' : 'Abstained'));
+        step.append(title,note);
+        list.append(step);
+      }
+      list.hidden = snapshot.journal.length === 0;
+    } catch {
+      if (alive()) put(get('activation-status'),fr ? 'Ouvrez le fichier activation-status.json de l’utilitaire.' :
+        'Open activation-status.json from the local companion.');
+    }
+  }));
   get('study-check').addEventListener('click', launch(async alive => {
     clearStudy();
     try {
@@ -503,13 +556,14 @@ function setup() {
   window.addEventListener('frontier:member-lock', () => {
     library.clear();
     updateLibrary();
-    for (const key of ['library-files','study-report','study-cases','inventor-open','learning-open']) {
+    for (const key of ['library-files','study-report','study-cases','inventor-open','learning-open','activation-open']) {
       const control = get(key);
       if (control) control.value = '';
     }
     put(get('library-status'), '');
     put(get('inventor-local'), '');
     clearLearning();
+    clearActivation();
     clearStudy();
     clear(true);
   });

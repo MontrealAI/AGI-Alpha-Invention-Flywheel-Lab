@@ -10,6 +10,8 @@ Run the product's Python, Node and HTTP/DOM tests, then qualify the exact extrac
 
 The [FRONTIER Ω learning companion](../../products/frontier-member-tools/adaptive/README.md) operates a durable local queue over public release telemetry, trains versioned forecasts, and challenges read-only Wasm policies. The [registered report](../../publication/adaptive/REPORT.md) records actual predictive and monitoring controls. Keep deployed-source acceptance with the Pages verifier and model admission with the independently pinned evaluator.
 
+The [activation companion](../../products/frontier-member-tools/activation/README.md) starts from a public bottleneck map, resumes bounded model investigations and restores exact evidence in a scoped public replay. Its [registered report](../../publication/activation/REPORT.md) binds the two compiler revisions, independent byte-cover comparison and prospective phase observer. Candidate code and live retrieval authority run in separate paths.
+
 For economic-game construction, start with the [cart operator and recovery guide](../../campaign/omega-economy-v4/README.md). It connects executable menus, an exhaustive buyer-choice check, independently accepted work, native collections and a funded successor. The [paid-reach study](../../campaign/omega-paid-reach-20261104/README.md) tests the next operating decision: whether earned cash can buy access to additional voluntary buyers at a profit after costs. Each comparison account has its own identity and liabilities. The [economic and physical-data verdicts](../../campaign/omega-economy-v4/OPERATING_RESULT.md) explain where conventional methods tie or win.
 
 ### Read the current evidence before adopting

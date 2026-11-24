@@ -156,6 +156,12 @@
       <p class="mv-links"><a href="frontier-learning-1.0.0.zip" download>Download the learning companion</a>
         <a href="#foundry-gains">Open gains and model history</a></p>
     </article>
+    <article class="foundry-entry" id="foundry-activate">
+      <h4>Activate the inventor</h4>
+      <p>Build from the limits revealed by actual FRONTIER Ω experiments. The local companion chooses a research objective, tests an executable policy, and keeps a record of which ideas survived.</p>
+      <p class="mv-links"><a href="frontier-activation-1.0.0.zip" download>Download the investigation companion</a>
+        <a href="#foundry-bottlenecks">Open the bottleneck map and evidence</a></p>
+    </article>
     <section class="foundry-stage" id="foundry-library" aria-labelledby="foundry-library-title">
       <h4 id="foundry-library-title">Your capability library</h4>
       <p>Open capabilities from files you control. Use their original case sheets to requalify them. The list clears when you lock or leave.</p>
@@ -304,6 +310,16 @@
     <p class="mf-section-intro">Outcome Workbench</p>
     <p>Results stay in this session. Download a goal or receipt to reopen it later on a device you control.</p>
     <p><a href="#foundry-library">Open your capability library</a></p>
+    <section class="foundry-stage foundry-learning" id="foundry-bottlenecks" aria-labelledby="foundry-bottlenecks-title">
+      <h4 id="foundry-bottlenecks-title">Living bottleneck map</h4>
+      <p>Inspect the published causes and comparisons. Open your own checkpoint to see the stages the local investigator recorded.</p>
+      <!-- ACTIVATION_MAP -->
+      <p><a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/main/publication/activation/REPORT.md">Read the research and release evidence</a></p>
+      <div class="mv-actions"><label for="foundry-activation-open">Open an activation checkpoint
+        <input id="foundry-activation-open" type="file" accept=".json,application/json"></label></div>
+      <p id="foundry-activation-status" class="status" role="status"></p>
+      <ol id="foundry-activation-steps" class="foundry-learning-steps" hidden></ol>
+    </section>
     <section class="foundry-stage foundry-learning" id="foundry-gains" aria-labelledby="foundry-gains-title">
       <h4 id="foundry-gains-title">My gains and evolving intelligence</h4>
       <p>Open the companion’s status file to see the last recorded observation, construction, training and verification.</p>

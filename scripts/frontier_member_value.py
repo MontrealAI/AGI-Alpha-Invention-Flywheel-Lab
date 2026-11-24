@@ -29,14 +29,16 @@ FOUNDRY_ZIP = 'frontier-foundry-1.0.0.zip'
 STUDY_ZIP = 'frontier-foundry-1.1.0.zip'
 INVENTOR_ZIP = 'frontier-inventor-1.0.0.zip'
 LEARNING_ZIP = 'frontier-learning-1.0.0.zip'
+ACTIVATION_ZIP = 'frontier-activation-1.0.0.zip'
 FOUNDRY_ENGINE = 'harness-engine.js'
 FOUNDRY_INPUT = 'FOUNDRY_PUBLIC_DATA'
 HARNESS_PIN = '39e76570c851b3527d78a526053a9ea2a611a993'
 HARNESS = 'products/alpha-genesis-harness/'
 FOUNDRY_ASSETS = ('foundry-core.mjs', 'foundry-ui.mjs', 'foundry-study.mjs', 'outcome-receipt.mjs',
-                  FOUNDRY_ENGINE, FOUNDRY_ZIP, STUDY_ZIP, INVENTOR_ZIP, LEARNING_ZIP)
+                  FOUNDRY_ENGINE, FOUNDRY_ZIP, STUDY_ZIP, INVENTOR_ZIP, LEARNING_ZIP, ACTIVATION_ZIP)
 INVENTOR_EVIDENCE = MAIN / 'publication/inventor'
 LEARNING_EVIDENCE = MAIN / 'publication/adaptive'
+ACTIVATION_EVIDENCE = MAIN / 'publication/activation'
 
 OUTPUTS = frozenset(SITE + name for name in (ENDPOINT_ZIP, ARCHIVE_ZIP, MEMBER_JSON))
 MARKER = '<!-- FRONTIER_MEMBER_VALUE -->'
@@ -244,6 +246,53 @@ def render_learning(fr):
     return (f'<p>{outcome}</p><div class="foundry-pilot-table" tabindex="0" role="region" aria-label="{headers[0]}">'
             '<table><thead><tr>'+''.join(f'<th scope="col">{h}</th>' for h in headers)+
             '</tr></thead><tbody>'+rows+'</tbody></table></div>')
+
+
+def build_activation(destination):
+    files={name:(TOOLS/'activation'/name).read_bytes() for name in (
+        'README.md','activate.py','model_step.py','packets.py','phase.py','table_program.py',
+        'verify_activation.py','reproduce_activation.py','research_next.py')}
+    for directory,names in (
+            ('adaptive',('pages.py','research.py','learning.py','wasm_policy.py','requirements-linux.txt')),
+            ('inventor',('inventor.py','relational.py')),('foundry',('provider.py','study.py','formulas.py','local.example.json'))):
+        files.update({name:(TOOLS/directory/name).read_bytes() for name in names})
+    files.update({name:pinned(HARNESS_PIN,HARNESS+name) for name in (
+        'LICENSE','NOTICE','bridge/adapters.py','bridge/instruments.py','bridge/output_schema.py','bridge/streaming.py')})
+    names=['REGISTRATION.md','FOLLOWUP.md','REPORT.md','inventory.json','selection.json','live-case.json',
+           'live-replay.json','phase-history.json','phase-events.json','initial-run.json','followup-run.json','verification.json',
+           'next-research.json']
+    if (ACTIVATION_EVIDENCE/'phase-pr.json').is_file():
+        names.append('phase-pr.json')
+    names.extend('corpus/'+name+'.json' for name in (
+        'catalogue','commitments','learning-replay-development','learning-replay-confirmation',
+        'local-runner-development','local-runner-confirmation','inventor-audit-development','inventor-audit-confirmation'))
+    files.update({f'study/{name}':(ACTIVATION_EVIDENCE/name).read_bytes() for name in names})
+    return package(destination/ACTIVATION_ZIP,files,'frontier-activation',HARNESS_PIN,
+                   'Public evidence recovery, bounded Wasm table construction, and prospective Pages shadow forecasts.')
+
+
+def render_activation(fr):
+    recorded=json.loads((ACTIVATION_EVIDENCE/'verification.json').read_bytes())['followup']
+    results=recorded['primary']
+    labels={
+        'learning-replay':('Replay the fitted model','Reproduire l’évaluation du modèle'),
+        'local-runner':('Restore an independent runtime','Rétablir un environnement indépendant'),
+        'inventor-audit':('Challenge earlier invention evidence','Examiner les preuves d’invention'),
+    }
+    title='Objectif choisi et résultat sur les cas de confirmation' if fr else 'Selected objective and held-out result'
+    binding=escape(labels[recorded['objective']][fr])
+    match=f'{int(results["exact"])}/{int(results["cases"])}'
+    message=(f'{binding} · {match} décisions au coût optimal.' if fr else
+             f'{binding} · {match} decisions matched the exact minimum.')
+    if fr:
+        lessons=('Dépendances mal reconstituées lors d’un essai antérieur.',
+                 'Des réponses ont dépassé les limites du modèle ou du langage.',
+                 'La méthode de sélection a changé les exemples sans produire de gain qualifié.')
+    else:
+        lessons=('An earlier instrument failed to recover downstream dependencies.',
+                 'Responses hit model and language limits.',
+                 'Case selection changed the evidence without a qualified productive gain.')
+    return f'<p><strong>{title}</strong><br>{message}</p><ul>'+''.join(f'<li>{x}</li>' for x in lessons)+'</ul>'
 
 
 def render_inventor(fr):
@@ -839,6 +888,7 @@ def render(lang, compiled, sample):
         '<!-- ' + FOUNDRY_INPUT + ' -->': escape(stable(foundry_example(fr)).decode()),
         '<!-- INVENTOR_PILOT_RESULTS -->': render_inventor(fr),
         '<!-- LEARNING_RESULTS -->': render_learning(fr),
+        '<!-- ACTIVATION_MAP -->': render_activation(fr),
         '<!-- MF_UPDATED -->': timestamp_html(compiled['updated_at']),
         '<!-- MV_TIMELINE -->': ''.join(highlights),
         '<!-- MV_FILTERS -->': controls(briefs, fr),
