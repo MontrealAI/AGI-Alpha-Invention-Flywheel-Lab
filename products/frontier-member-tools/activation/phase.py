@@ -140,6 +140,13 @@ def watch(args):
                     raise ValueError('PHASE_RUN_SCOPE')
                 run=records[0]
                 if run['completed'] is not None:
+                    if time()<args.until:
+                        try:
+                            final=get(f'{API}/runs/{args.run}/jobs?filter=latest&per_page=30',450000)
+                            state['terminal_jobs']=jobs(final,args.run)
+                            state['terminal_jobs_sha256']=sha256(final).hexdigest()
+                        except (OSError,ValueError,KeyError,TypeError) as error:
+                            state['terminal_jobs_error']=type(error).__name__
                     close(state,run)
                     atomic(path,state)
                     return state

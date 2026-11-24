@@ -28,11 +28,15 @@ The learned selector reused a column as if it identified an archive. In the new 
 
 Qwen3-8B Q4_K_M ran on CPU with eight threads, a 4,096-token llama.cpp context, a local-only HARNESS connector and build 12242. Selection and construction recorded 12 attempts including one interruption, 6,278 reported input tokens, 1,660 reported output tokens and 564.341 seconds of observed request time. The interruption retained its 512-output-token reservation. Paid inference usage was zero. Human effort, setup and operating economics were not measured as a complete cost. The tested endpoint was local to this executor. The separately identified dual-TITAN machine and independent evaluator host were outside the accessible environment for this run.
 
+The loaded weight file matched SHA-256 `d98cdcbd03e17ce47681435b5150e34c1417f50b5c0019dd560e4882c5745785`.
+
 The investigator proposed testing adaptive evidence coverage against static prioritization in a separate [research review](next-research.json). The review consumed 896 input tokens, 119 output tokens and 52.292 seconds. Its rationale is clipped and does not distinguish the original arm's zero exact cases from the other arms' five. Treat the direction as a hypothesis. A stronger follow-up would validate the intended meaning of each input column before testing whether adaptive choices improve held utility under the same exact solver and cost boundaries.
 
 ## Operational phase study
 
 The phase observer uses 16 public historical workflow witnesses and a prospective trailing-60 control. It stores actual read times, stage clocks and available inputs. The verifier excludes predictions made after terminal completion and checks that future rows do not enter the reference set. This route supports shadow qualification without changing Pages acceptance. The materiality threshold requires at least eight fresh runs in the same scope.
+
+The [prospective PR observation](phase-pr.json) began on real Pages run [45454305211](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/45454305211). At the first visible build-phase opportunity, 76 seconds remained. The phase estimate was 50 seconds, trailing-60 gave 49 and the elapsed-time survival control gave 58. The phase had eight historical references. The remote run succeeded. Later job clocks are stored separately and cannot influence that forecast. The result is a single prospective demonstration with no qualified advantage.
 
 ## Résumé en français
 
