@@ -177,6 +177,8 @@ async function foundryJourney(page, language, width) {
   assert.equal(createHash('sha256').update(inventorZip).digest('hex'), release.foundry_sha256['frontier-inventor-1.0.0.zip']);
   const learningZip = await (await online.get(base + 'frontier-learning-1.0.0.zip')).body();
   assert.equal(createHash('sha256').update(learningZip).digest('hex'), release.foundry_sha256['frontier-learning-1.0.0.zip']);
+  const activationZip = await (await online.get(base + 'frontier-activation-1.0.0.zip')).body();
+  assert.equal(createHash('sha256').update(activationZip).digest('hex'), release.foundry_sha256['frontier-activation-1.0.0.zip']);
   const example = await page.locator('#foundry-public-data').evaluate(node => JSON.parse(node.content.textContent));
   const context = page.context();
   await context.setOffline(true);
@@ -299,6 +301,12 @@ async function foundryJourney(page, language, width) {
     }));
     await page.waitForFunction(() => document.getElementById('foundry-learning-status').textContent.includes('aaaaaaaaaaaa'));
     assert.equal(await page.locator('#foundry-learning-steps li').count(), 1);
+    await page.locator('#foundry-activation-open').setInputFiles(content('activation-status.json', {
+      schema:'frontier/activation-run-v1', authority:{scope:'public-readonly-research'}, objective:'learning-replay',
+      state:'COMPLETE', journal:[{stage:'construct',state:'SEALED'}],
+    }));
+    await page.locator('#foundry-activation-steps li').waitFor();
+    assert.equal(await page.locator('#foundry-activation-steps li').count(), 1);
     await page.locator('#foundry-study-reopen summary').click();
     await page.locator('#foundry-study-report').setInputFiles(content('report.json', fixture.bundle));
     const studyCases = page.locator('#foundry-study-cases');
@@ -643,6 +651,8 @@ async function walletPaths(browser, language, width) {
     assert.equal(await page.locator('#foundry-inventor-local').textContent(), '');
     assert.equal(await page.locator('#foundry-learning-status').textContent(), '');
     assert.equal(await page.locator('#foundry-learning-steps li').count(), 0);
+    assert.equal(await page.locator('#foundry-activation-status').textContent(), '');
+    assert.equal(await page.locator('#foundry-activation-steps li').count(), 0);
     assert.equal(await page.locator('#goal-result').isVisible(), false);
     assert.equal(await page.locator('#goal-export').isEnabled(), false);
     assert.equal(await page.locator('#access').isVisible(), true);

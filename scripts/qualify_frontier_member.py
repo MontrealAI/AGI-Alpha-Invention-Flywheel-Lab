@@ -327,6 +327,16 @@ def qualify_learning(directory, root, release):
     return {'package_sha256':expected,'replay_wall_ns':wall,'trained_model':model,'boundaries':boundaries}
 
 
+def qualify_activation(directory,root,release):
+    expected=release['foundry_sha256'][member.ACTIVATION_ZIP]
+    manifest=install(directory/member.ACTIVATION_ZIP,root,{'sha256':expected})
+    require(manifest['id']=='frontier-activation','Wrong activation companion')
+    evidence,elapsed=call(root,sys.executable,'reproduce_activation.py')
+    require(evidence['controls']['row_loop'] and evidence['controls']['denied']==6 and
+            evidence['historical_phases']['future_excluded'],'Research isolation or phase qualification failed')
+    return {'package_sha256':expected,'replayed_ns':elapsed,**evidence}
+
+
 def qualify(directory, live=False):
     manifest = json.loads((directory / member.MEMBER_JSON).read_bytes())
     tools = manifest['capabilities']
@@ -349,6 +359,8 @@ def qualify(directory, live=False):
                     results['inventor'] = qualify_inventor(directory, root / 'inventor', release)
                 if member.LEARNING_ZIP in release['foundry_sha256']:
                     results['learning'] = qualify_learning(directory,root/'learning',release)
+                if member.ACTIVATION_ZIP in release['foundry_sha256']:
+                    results['activation'] = qualify_activation(directory,root/'activation',release)
         return results
 
 

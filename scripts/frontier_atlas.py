@@ -376,6 +376,7 @@ def prepare(output, revision, event, run, request=source_with_retry):
     member.build_foundry(directory)
     member.build_inventor(directory)
     member.build_learning(directory)
+    member.build_activation(directory)
     (directory / LEDGER).write_bytes(raw)
     files = [(file.relative_to(output).as_posix(), digest(file.read_bytes()))
              for file in sorted(output.rglob('*')) if file.is_file()]
