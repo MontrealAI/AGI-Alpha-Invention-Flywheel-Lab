@@ -19,6 +19,10 @@ const words = fr ? {
   consentCleared:'Consentement retiré. Aucun nouveau reçu ne sera préparé.',
   demonstration:'Démonstration publique terminée.', task:'Analyse locale terminée. L’acceptation indépendante reste à établir.',
   missingCrypto:'Le calcul local reste offert. La préparation de reçus nécessite un navigateur en contexte HTTPS sécurisé.',
+  working:'Évaluation locale en cours…', interrupted:'L’évaluation a été interrompue. Relancez-la ou ouvrez un lot autorisé.',
+  scopeLabel:'Conditions et mesures du banc d’essai', comparison:'Référence SQLite et données figées',
+  measures:'utilisateurs simultanés', scopedResult:'Charge testée admissible', verdict:'Décision opérationnelle',
+  original:'Publication officielle MLPerf', next:'Préparez un lot autorisé pour évaluer votre propre configuration.',
 } : {
   tracked:'briefs shown', empty:'No briefs match.',
   input:'Batch ready to freeze.', bad:'The file does not match the input format. Check dates, measurements and identifiers.',
@@ -33,7 +37,71 @@ const words = fr ? {
   consentCleared:'Consent withdrawn. No further receipt will be prepared.',
   demonstration:'Public demonstration completed.', task:'Local screen completed. Independent acceptance is outstanding.',
   missingCrypto:'Local calculation is available. Receipt tools require a browser in a secure HTTPS context.',
+  working:'Running the local screen…', interrupted:'The screen was interrupted. Run it again or open an authorized batch.',
+  scopeLabel:'Benchmark conditions and measurements', comparison:'SQLite reference and frozen inputs',
+  measures:'concurrent users', scopedResult:'Qualifying tested load', verdict:'Operating decision',
+  original:'Official MLPerf submission', next:'Prepare an authorized batch to screen your own configuration.',
 };
+
+function setupShell() {
+  const views = [...member.querySelectorAll('[data-member-view]')];
+  const destinations = [...member.querySelectorAll('.mf-destinations a')];
+  const home = id('my-frontier');
+  function show(target = home, {focus = true, remember = false} = {}) {
+    if (member.hidden) return;
+    const within = member.contains(target);
+    const view = within ? target.closest('[data-member-view]') || home : null;
+    member.toggleAttribute('data-public-view', !view);
+    for (const section of views) section.hidden = section !== view;
+    for (const link of destinations) {
+      if (view && link.hash === `#${view.id}`) link.setAttribute('aria-current', 'page');
+      else link.removeAttribute('aria-current');
+    }
+    if (remember && location.hash !== `#${target.id}`) history.pushState(null, '', `#${target.id}`);
+    if (!focus) return;
+    const label = view && id(view.getAttribute('aria-labelledby'));
+    const node = target === view || target === member ? label : target.querySelector('h2, h3, h4') || target;
+    if (!node.hasAttribute('tabindex')) node.tabIndex = -1;
+    node.focus({preventScroll: true});
+    if (target === view || target === member) window.scrollTo({top: 0, behavior:'instant'});
+    else target.scrollIntoView({block:'start', behavior:'instant'});
+  }
+  function fragmentTarget() {
+    return id(location.hash.slice(1));
+  }
+  document.addEventListener('click', event => {
+    if (member.hidden || event.defaultPrevented || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    const link = event.target.closest('a[href^="#"]');
+    if (!link || !(member.contains(link) || link.id === 'member-nav')) return;
+    const target = id(link.hash.slice(1));
+    if (!target) return;
+    event.preventDefault();
+    // A decision or tool link can open an already focused disclosure.
+    const control = target.querySelector('details[open] summary');
+    const preserveFocus = control === document.activeElement;
+    show(target, {remember: true, focus: !preserveFocus});
+    if (preserveFocus) target.scrollIntoView({block:'start', behavior:'instant'});
+  });
+  window.addEventListener('hashchange', () => show(fragmentTarget() || home));
+  window.addEventListener('frontier:member-enter', () => {
+    history.replaceState(null, '', '#my-frontier');
+    show(home, {focus:false});
+  });
+  window.addEventListener('frontier:member-lock', () => {
+    member.removeAttribute('data-public-view');
+    if (fragmentTarget() && member.contains(fragmentTarget())) history.replaceState(null, '', '#access');
+    for (const section of views) section.hidden = section !== home;
+    for (const link of destinations) link.removeAttribute('aria-current');
+  });
+  function step(index) {
+    member.querySelectorAll('.mf-steps li').forEach((item, position) => {
+      item.toggleAttribute('data-complete', position < index);
+      if (position === index) item.setAttribute('aria-current', 'step');
+      else item.removeAttribute('aria-current');
+    });
+  }
+  return {show, step};
+}
 
 function setupExplorer() {
   const query = id('mv-query');
@@ -91,10 +159,15 @@ async function readFile(file) {
   return JSON.parse(await file.text());
 }
 
-function setupRunner() {
+function setupRunner(shell) {
   const status = id('mv-run-status');
+  const toolStatus = id('mv-tool-status');
   const resultArea = id('mv-screen-result');
-  const feedback = id('mv-receipt-status');
+  const resultPanel = id('mf-outcome');
+  const resultLink = id('mf-current-result');
+  const noResult = id('mf-result-empty');
+  const feedback = id('mv-export-status');
+  const receiptFeedback = id('mv-receipt-status');
   const scope = id('mv-plan');
   const consent = id('mv-consent');
   const rights = id('mv-rights');
@@ -103,30 +176,49 @@ function setupRunner() {
   const run = id('mv-run');
   const save = id('mv-export');
   const keep = id('mv-keep-result');
+  const keepControls = id('mf-keep-controls');
+  const demo = id('mv-demo');
   const input = id('mv-input');
   const receiptInput = id('mv-import');
   const tool = template('mv-endpoint-manifest');
   const reference = template('mv-endpoint-reference');
   const hasCrypto = Boolean(window.crypto?.subtle);
   const sample = validate(template('mv-endpoint-sample'));
-  let current, frozen, result, duration, exportStamp, running = false;
+  let current, frozen, result, duration, exportStamp, running = false, preparing = false;
   let generation = 0;
   const active = () => !member.hidden;
+  function tell(message) {
+    status.textContent = toolStatus.textContent = message;
+  }
   function enable() {
-    freeze.disabled = !current || !(rightsRow.hidden || rights.checked) || Boolean(frozen);
-    run.disabled = !frozen || running || Boolean(result) || !(rightsRow.hidden || rights.checked);
+    const busy = running || preparing;
+    freeze.disabled = !current || busy || !(rightsRow.hidden || rights.checked) || Boolean(frozen);
+    run.disabled = !frozen || busy || Boolean(result) || !(rightsRow.hidden || rights.checked);
+    demo.disabled = busy;
+    const goalAction = id('goal-action');
+    if (busy) goalAction.setAttribute('aria-busy', 'true');
+    else goalAction.removeAttribute('aria-busy');
     save.disabled = !hasCrypto || !consent.checked || !result || !(rightsRow.hidden || rights.checked);
+  }
+  function clearResult() {
+    exportStamp = undefined;
+    frozen = result = duration = undefined;
+    preparing = running = false;
+    consent.checked = false;
+    resultPanel.hidden = resultArea.hidden = keep.hidden = keepControls.hidden = resultLink.hidden = true;
+    noResult.hidden = false;
+    resultArea.replaceChildren();
+    feedback.textContent = '';
   }
   function clear() {
     generation++;
-    exportStamp = undefined;
-    current = frozen = result = duration = undefined;
-    running = false;
+    clearResult();
+    current = undefined;
     input.value = receiptInput.value = '';
-    consent.checked = rights.checked = false;
-    rightsRow.hidden = resultArea.hidden = keep.hidden = true;
-    resultArea.replaceChildren();
-    status.textContent = feedback.textContent = scope.textContent = '';
+    rights.checked = false;
+    rightsRow.hidden = true;
+    receiptFeedback.textContent = scope.textContent = '';
+    tell('');
     enable();
   }
   function load(document, isPublic) {
@@ -134,7 +226,7 @@ function setupRunner() {
     rightsRow.hidden = isPublic;
     scope.textContent = `${words.scoped} · ${current.scope.model} · ${current.scope.workload} · ${current.scope.system}
 ${current.rows.length} ${words.rows} · ${words.floor} ${current.minimum_tokens_per_s} · ${words.ceiling} ${current.maximum_p90_ttft_ms} · ${words.cutoff} ${current.cutoff}`;
-    status.textContent = words.input;
+    tell(words.input);
     enable();
   }
 
@@ -154,66 +246,65 @@ ${current.rows.length} ${words.rows} · ${words.floor} ${current.minimum_tokens_
       const incoming = await readFile(file);
       if (token === generation && active()) load(incoming, false);
     } catch {
-      if (token === generation && active()) status.textContent = words.bad;
+      if (token === generation && active()) tell(words.bad);
     }
   });
   rights.addEventListener('change', () => {
     if (!rights.checked) {
       generation++;
-      exportStamp = undefined;
-      frozen = result = duration = undefined;
-      running = false;
-      resultArea.hidden = keep.hidden = true;
-      resultArea.replaceChildren();
-      consent.checked = false;
-      status.textContent = words.input;
+      clearResult();
+      tell(words.input);
       feedback.textContent = words.consentCleared;
     }
     enable();
   });
   async function freezeTask() {
-    if (!active() || !current || !(rightsRow.hidden || rights.checked)) return false;
+    if (!active() || !current || preparing || running || !(rightsRow.hidden || rights.checked)) return false;
     const token = ++generation;
     const approvedInput = current;
-    freeze.disabled = true;
+    preparing = true;
+    enable();
     try {
       const plan = hasCrypto ? await freezeScreen(approvedInput, tool, reference) : null;
       if (token !== generation || !active() || !(rightsRow.hidden || rights.checked)) return false;
       frozen = {input: approvedInput, plan};
-      status.textContent = words.frozen;
-      enable();
+      tell(words.frozen);
       return true;
     } catch {
-      if (token === generation && active()) { status.textContent = words.missingCrypto; enable(); }
+      if (token === generation && active()) tell(words.interrupted);
       return false;
+    } finally {
+      if (token === generation && active()) { preparing = false; enable(); }
     }
   }
   freeze.addEventListener('click', freezeTask);
 
   async function runTask() {
-    if (!active() || !frozen || running || result) return;
+    if (!active() || !frozen || running || result) return false;
     const token = generation;
     running = true;
     enable();
-    const start = performance.now();
-    const output = screen(frozen.input);
-    const elapsed = Math.round((performance.now() - start) * 1000) / 1000;
+    tell(words.working);
     const isExample = frozen.plan?.classification === 'controlled-public-replay';
+    let output, elapsed;
     try {
+      const start = performance.now();
+      output = screen(frozen.input);
+      elapsed = Math.round((performance.now() - start) * 1000) / 1000;
       if (isExample && await fingerprint(output) !== reference.result_sha256) throw Error('REFERENCE_MISMATCH');
-    } catch {
+    } catch (error) {
       if (token === generation && active()) {
         running = false;
-        status.textContent = words.referenceError;
+        tell(error.message === 'REFERENCE_MISMATCH' ? words.referenceError : words.interrupted);
+        if (!status.closest('[data-member-view]').hidden) shell.show(status);
         enable();
       }
-      return;
+      return false;
     }
-    if (token !== generation || !active()) return;
+    if (token !== generation || !active()) return false;
     running = false;
     result = output;
     duration = elapsed;
-    const title = result.highest_tested_load === null ? words.noPoint : `${words.highest} · ${result.highest_tested_load}`;
     const totals = new Map();
     for (const row of result.rows) totals.set(row.disposition, (totals.get(row.disposition) ?? 0) + 1);
     const labels = fr ? {
@@ -225,29 +316,60 @@ ${current.rows.length} ${words.rows} · ${words.floor} ${current.minimum_tokens_
     };
     const list = document.createElement('ul');
     for (const [reason, count] of totals) list.append(text('li', `${labels[reason]} · ${count}`));
-    resultArea.replaceChildren(text('h5', title), text('p', isExample ? words.demonstration : words.task),
-      text('p', words.abstain), list);
-    if (isExample) resultArea.querySelector('h5').after(text('p', words.compared));
-    resultArea.hidden = false;
+    const metric = document.createElement('div');
+    metric.className = 'mf-result-metric';
+    metric.append(text('span', words.scopedResult));
+    if (result.highest_tested_load !== null) {
+      metric.append(text('strong', result.highest_tested_load), text('span', words.measures));
+    } else metric.append(text('p', words.noPoint));
+    const finding = document.createElement('div');
+    finding.className = 'mf-result-finding';
+    const decision = text('p', `${words.verdict} · ABSTAIN`);
+    decision.className = 'mf-result-verdict';
+    finding.append(text('h4', isExample ? words.demonstration : words.task), decision,
+      text('p', isExample ? words.compared : words.abstain), text('p', words.next));
+    const inspect = document.createElement('details');
+    const scopeText = text('p', scope.textContent);
+    scopeText.className = 'mv-plan';
+    inspect.append(text('summary', words.scopeLabel), scopeText);
+    const measured = frozen.input.rows.find(row => row.id === result.evidence_id);
+    if (measured) inspect.append(text('p', fr
+      ? `Mesure admissible · ${measured.tokens_per_s} jetons/s/utilisateur · latence P90 ${measured.p90_ttft_ms} ms`
+      : `Qualifying measurement · ${measured.tokens_per_s} tokens/s/user · P90 TTFT ${measured.p90_ttft_ms} ms`));
+    inspect.append(list);
+    if (isExample) {
+      const source = text('a', words.comparison);
+      source.href = tool.source;
+      const original = text('a', words.original);
+      original.href = sample.source;
+      const links = document.createElement('p');
+      links.className = 'mv-links';
+      links.append(source, original);
+      inspect.append(links);
+    }
+    resultArea.replaceChildren(metric, finding, inspect);
+    resultArea.hidden = resultPanel.hidden = resultLink.hidden = false;
+    noResult.hidden = true;
     keep.hidden = !hasCrypto;
-    resultArea.scrollIntoView({block: 'start', behavior: 'instant'});
-    resultArea.focus({preventScroll: true});
-    status.textContent = words.sync;
+    shell.step(4);
+    if (!member.hasAttribute('data-public-view')) shell.show(resultArea, {remember:true});
+    tell(words.sync);
     enable();
+    return true;
   }
   run.addEventListener('click', runTask);
   async function launchDemo() {
-    if (loadPublic() && await freezeTask()) await runTask();
+    if (preparing || running || !active()) return false;
+    shell.show(id('my-frontier'), {focus:false, remember:true});
+    shell.step(3);
+    if (loadPublic() && await freezeTask()) return runTask();
+    return false;
   }
-  id('mv-demo').addEventListener('click', launchDemo);
-  id('mf-quick-run').addEventListener('click', event => {
-    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-    event.preventDefault();
-    void launchDemo();
-  });
+  demo.addEventListener('click', launchDemo);
   keep.addEventListener('click', event => {
     if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
     event.preventDefault();
+    keepControls.hidden = false;
     consent.focus();
   });
 
@@ -280,7 +402,7 @@ ${current.rows.length} ${words.rows} · ${words.floor} ${current.minimum_tokens_
     if (!active()) return;
     const token = generation;
     const file = receiptInput.files[0];
-    feedback.textContent = '';
+    receiptFeedback.textContent = '';
     let message = words.badReceipt;
     try {
       const saved = await readFile(file);
@@ -295,16 +417,17 @@ ${current.rows.length} ${words.rows} · ${words.floor} ${current.minimum_tokens_
         } else message = words.checked;
       }
     } catch { /* untrusted input */ }
-    if (file === receiptInput.files[0] && token === generation && active()) feedback.textContent = message;
+    if (file === receiptInput.files[0] && token === generation && active()) receiptFeedback.textContent = message;
   });
-  if (!hasCrypto) { receiptInput.disabled = consent.disabled = true; status.textContent = words.missingCrypto; }
+  if (!hasCrypto) { receiptInput.disabled = consent.disabled = true; tell(words.missingCrypto); }
   id('mv-clear').addEventListener('click', clear);
   window.addEventListener('frontier:member-lock', clear);
   enable();
-  return launchDemo;
+  return {launchDemo, clear};
 }
 
 if (id('member-value')) {
+  const shell = setupShell();
   setupExplorer();
-  setupGoals(member, setupRunner());
+  setupGoals(member, setupRunner(shell), shell);
 }

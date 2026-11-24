@@ -149,7 +149,19 @@ jobs:
           preview_pid=$!
           trap 'kill "$preview_pid"' EXIT
           curl --silent --fail --retry 4 --retry-connrefused http://127.0.0.1:8765/frontier-omega-alpha/ --output /dev/null
-          FRONTIER_BROWSER_URL=http://127.0.0.1:8765/frontier-omega-alpha/ NODE_PATH="$RUNNER_TEMP/frontier-browser/node_modules" node tests/live_frontier_browser.cjs
+          FRONTIER_BROWSER_URL=http://127.0.0.1:8765/frontier-omega-alpha/ \
+            FRONTIER_SCREENSHOTS="$RUNNER_TEMP/frontier-staged-screenshots" \
+            NODE_PATH="$RUNNER_TEMP/frontier-browser/node_modules" node tests/live_frontier_browser.cjs | tee "$RUNNER_TEMP/frontier-staged-browser.json"
+      - name: Retain staged member qualification evidence
+        if: github.event_name == 'pull_request' && always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: frontier-staged-browser-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/frontier-staged-browser.json
+            ${{ runner.temp }}/frontier-staged-screenshots/*.png
+          if-no-files-found: ignore
+          retention-days: 7
       - name: Qualify prepared Conclave experiment
         if: github.event_name != 'schedule' || steps.frontier_watch.outputs.changed == 'true'
         working-directory: experiments/frontier-conclave
@@ -260,7 +272,9 @@ jobs:
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: frontier-production-browser-${{ github.run_attempt }}
-          path: ${{ runner.temp }}/frontier-screenshots/*.png
+          path: |
+            ${{ runner.temp }}/frontier-browser.json
+            ${{ runner.temp }}/frontier-screenshots/*.png
           if-no-files-found: error
           retention-days: 30
       - name: Download and independently execute the actual production packages

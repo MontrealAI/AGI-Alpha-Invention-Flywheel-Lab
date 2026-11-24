@@ -71,8 +71,11 @@ class MemberValueTests(unittest.TestCase):
                 self.assertNotIn('<!-- MV_', html[language])
                 self.assertIn(produced['capabilities']['archive']['sha256'], html[language])
                 self.assertIn('data-edition-run="1"', html[language])
-                self.assertEqual(html[language].count('data-mv-open'), 6)
+                self.assertEqual(html[language].count('data-mv-open'), 7)
                 self.assertIn('id="goal-form"', html[language])
+                self.assertEqual(html[language].count('data-member-view'), 4)
+                self.assertEqual(html[language].count('id="mv-consent"'), 1)
+                self.assertIn('id="mf-outcome" class="mf-outcome" hidden', html[language])
                 for brief in produced['briefs']:
                     self.assertIn(f'data-review="{brief["review_sha256"]}"', html[language])
                 self.assertEqual(member.public_feature(produced, language), '')

@@ -1,89 +1,117 @@
 <div class="mv" id="member-value">
-  <header class="mv-heading">
-    <section class="goal-studio" id="my-frontier" aria-labelledby="my-frontier-title">
-      <p class="packet-meta">MA FRONTIÈRE Ω</p>
-      <h3 id="my-frontier-title">Votre prochaine frontière commence ici.</h3>
+  <header class="mf-bar">
+    <div class="mf-bar-inner">
+      <div class="mf-brand"><span class="seal" aria-hidden="true">Ω</span><strong>Member First Ω</strong></div>
+      <div class="mf-session">
+        <span class="mf-verified" id="member-route"></span>
+        <a class="mf-public-link" href="#possibility-shifts">Atlas public <span aria-hidden="true">↗</span></a>
+        <a class="mf-language" lang="en" hreflang="en" href="index.html" aria-label="English">EN</a>
+        <button id="lock" class="quiet" type="button">Verrouiller</button>
+      </div>
+    </div>
+    <nav class="mv-nav mf-destinations" aria-label="Sections de l’espace Member First">
+      <a href="#my-frontier" aria-current="page">Ma frontière</a>
+      <a href="#mv-earlier">Veille</a>
+      <a href="#mv-tools">Capacités</a>
+      <a href="#mv-results">Mes résultats</a>
+    </nav>
+  </header>
+  <section id="my-frontier" class="mf-view" aria-labelledby="workspace-title" data-member-view>
+    <div class="mf-arrival">
+      <h2 id="workspace-title" tabindex="-1">Ma frontière <span>Ω</span></h2>
+      <p>Découvrez ce que les preuves rendent possible et passez à l’action.</p>
+    </div>
+    <div class="mf-canvas">
+      <section class="goal-studio" aria-labelledby="my-frontier-title">
+        <h3 id="my-frontier-title">Que voulez-vous rendre possible?</h3>
       <form id="goal-form" aria-describedby="goal-local">
-        <label for="goal-text">Que souhaitez-vous rendre possible grâce à l’intelligence artificielle?</label>
+        <label for="goal-text">Décrivez votre ambition, votre problème ou le résultat recherché.</label>
         <div class="goal-input">
-          <input id="goal-text" type="search" maxlength="200" autocomplete="off" spellcheck="false"
-            placeholder="p. ex. Retrouver une prévision NOAA">
+          <textarea id="goal-text" rows="2" maxlength="200" autocomplete="off" spellcheck="false"
+            placeholder="p. ex. Retrouver une prévision NOAA"></textarea>
           <button id="goal-submit" type="submit" class="entry-button" disabled>Trouver ma prochaine action <span aria-hidden="true">→</span></button>
         </div>
-        <div class="goal-quick">
-          <p id="goal-local">Votre objectif est comparé aux recherches actuelles dans ce navigateur.</p>
-          <a id="mf-quick-run" href="#mv-endpoint-run">Essayer l’exemple Endpoint <span aria-hidden="true">→</span></a>
-        </div>
+        <p id="goal-local">Votre objectif est comparé aux recherches actuelles sur cet appareil.</p>
         <div class="goal-presets" role="group" aria-label="Objectifs suggérés">
           <button type="button" data-goal="endpoint" aria-pressed="false">Évaluer un service d’IA</button>
           <button type="button" data-goal="archive" aria-pressed="false">Retrouver une prévision</button>
+        </div>
+        <details class="goal-more"><summary>Autres points de départ</summary>
+          <div class="goal-presets">
           <button type="button" data-goal="workflow" aria-pressed="false">Améliorer un processus</button>
           <button type="button" data-goal="verify" aria-pressed="false">Vérifier une affirmation</button>
           <button type="button" data-goal="discover" aria-pressed="false">Trouver une occasion</button>
           <button type="button" data-goal="build" aria-pressed="false">Créer un outil d’IA</button>
-        </div>
+          </div>
+        </details>
       </form>
-      <p id="goal-status" class="status" role="status"></p>
+        <div id="goal-status" class="status" role="status"></div>
+      </section>
+      <aside class="mf-sample" aria-labelledby="mf-sample-title">
+        <p class="packet-meta">Démonstration publique</p>
+        <h3 id="mf-sample-title">Essayez votre première capacité vérifiée</h3>
+        <p>Trouvez la charge simultanée documentée qui respecte les deux limites du banc d’essai. Comparez-la à SQLite et conservez un reçu.</p>
+        <a id="mf-quick-run" href="#goal-result">Essayer l’exemple Endpoint <span aria-hidden="true">→</span></a>
+      </aside>
+    </div>
+    <div class="mf-journey" id="mf-journey" hidden>
+      <ol class="mf-steps" aria-label="Progression">
+        <li aria-current="step"><span aria-hidden="true">01</span><b>Ambition</b></li>
+        <li><span aria-hidden="true">02</span><b>Occasion</b></li>
+        <li><span aria-hidden="true">03</span><b>Avantage</b></li>
+        <li><span aria-hidden="true">04</span><b>Action</b></li>
+        <li><span aria-hidden="true">05</span><b>Résultat</b></li>
+      </ol>
       <article class="goal-result" id="goal-result" hidden aria-labelledby="goal-result-title">
         <p class="packet-meta">L’AVANTAGE INAPERÇU Ω</p>
         <h4 id="goal-result-title" tabindex="-1"></h4>
-        <p id="goal-evidence-state" class="goal-evidence-state"></p>
+        <p id="goal-ambition"></p><p id="goal-evidence-state" class="goal-evidence-state"></p>
+        <p class="goal-match" id="goal-match"></p>
         <div class="goal-next">
           <div><h5>La prochaine action</h5><p data-goal-fact="next"></p><p id="goal-available"></p></div>
           <a id="goal-action" class="entry-button" href="#mv-better"></a>
         </div>
         <dl class="goal-evidence">
           <div><dt>La possibilité</dt><dd data-goal-fact="possibility"></dd></div>
-          <div><dt>Pourquoi cette piste mérite un examen</dt><dd data-goal-fact="why"></dd></div>
+          <div><dt>Ce qui a changé</dt><dd data-goal-fact="change"></dd></div>
+          <div><dt>Pourquoi cette piste compte</dt><dd data-goal-fact="why"></dd></div>
           <div><dt>La meilleure solution de rechange</dt><dd data-goal-fact="alternative"></dd></div>
           <div><dt>Les preuves et leurs limites</dt><dd data-goal-fact="uncertainty"></dd></div>
         </dl>
         <p class="mv-links"><a id="goal-proof" href="#mv-better" data-mv-open>Consulter les preuves et l’historique</a>
           <a id="goal-source" href="#mv-better">Consulter la source primaire</a></p>
+        <button type="button" id="goal-edit" class="quiet">Modifier l’ambition</button>
       </article>
-      <div class="goal-quick">
-        <details id="goal-keeper">
-          <summary>Conserver ou rouvrir un objectif</summary>
-          <p>L’objectif reste ici jusqu’à votre départ ou au verrouillage. Le fichier téléchargé contient votre saisie. Conservez-le dans un emplacement sous votre contrôle.</p>
-          <div class="mv-actions">
-            <button type="button" class="quiet" id="goal-export" disabled>Télécharger l’objectif</button>
-            <label for="goal-import">Rouvrir un fichier d’objectif<input id="goal-import" type="file" accept=".json,application/json"></label>
-          </div>
-          <p><a href="#edition-history">Retrouver les preuves publiques d’une édition antérieure</a></p>
-        </details>
+    </div>
+    <p id="mv-run-status" class="status" role="status"></p>
+    <section id="mf-outcome" class="mf-outcome" hidden aria-labelledby="mf-outcome-title">
+      <h3 id="mf-outcome-title">Ce que vous avez accompli</h3>
+      <div id="mv-screen-result" hidden tabindex="-1" role="group" aria-labelledby="mf-outcome-title"></div>
+      <div class="mf-result-followup">
+        <a id="mv-keep-result" class="quiet" href="#mv-consent" hidden>Conserver le résultat</a>
+        <a href="#mv-results">Rouvrir ou vérifier un reçu</a>
+        <a href="#mv-endpoint-run">Analyser un lot autorisé</a>
+      </div>
+      <div id="mf-keep-controls" hidden>
+        <label class="mv-check"><input type="checkbox" id="mv-consent">Préparer un reçu local pour cette tâche. Vous pouvez retirer votre consentement avant l’exportation.</label>
+        <button type="button" class="quiet" id="mv-export" disabled>Exporter le reçu</button>
+        <p id="mv-export-status" class="status" role="status"></p>
       </div>
     </section>
-    <nav class="mv-nav" aria-label="Sections de l’espace Member First">
-      <a href="#mv-earlier"><strong>Dernières découvertes</strong><span>Ouvrir le bulletin à la une</span></a>
-      <a href="#mv-better"><strong>Votre prochaine occasion</strong><span>Explorer les preuves et les décisions</span></a>
-      <a href="#mv-tools"><strong>Outils de pointe</strong><span>Utiliser un outil qualifié</span></a>
-      <a href="#mv-results"><strong>Atelier de vérification</strong><span>Examiner et vérifier les résultats</span></a>
-    </nav>
-    <p class="mf-disclosure">La vérification du portefeuille ouvre cet espace membre. Les fichiers de recherche et les outils sont publics.</p>
-  </header>
-  <section class="mv-section" id="mv-earlier" aria-labelledby="mv-earlier-title">
-    <h3 id="mv-earlier-title">Découvrir plus tôt</h3>
+  </section>
+  <section class="mv-section" id="mv-earlier" aria-labelledby="mv-earlier-title" data-member-view hidden>
+    <h3 id="mv-earlier-title" tabindex="-1">Renseignements de pointe</h3>
     <p class="mf-section-intro">Bulletin Member First · Dernière mise à jour des preuves <!-- MF_UPDATED --></p>
+    <aside class="mf-goal-link" id="goal-linked-evidence" hidden>
+      <p>En lien avec votre objectif</p><a data-mv-open href="#mv-better"></a>
+    </aside>
     <!-- MF_FEATURE -->
     <h4 class="mf-subhead">Dernières évolutions de la recherche</h4>
     <ul class="mv-timeline"><!-- MV_TIMELINE --></ul>
     <p class="mv-links"><a href="member-value.json">Preuves décisionnelles versionnées</a>
       <a href="atlas-release.json">Reçu de la publication en ligne</a></p>
-    <details id="edition-history">
-      <summary>Récupérer une édition décisionnelle antérieure</summary>
-      <p>Retrouvez le registre de l’Atlas, les décisions bilingues et le reçu d’origine. Vérifiez ce qu’indiquait une édition après la mise à jour du catalogue. Ces fichiers de preuve sont publics. Chaque archive est autonome.</p>
-      <ul class="mv-timeline">
-        <li><a href="decision-editions/45278828750.tar.zst" download>23 novembre à 17 h 21, heure de Toronto · 16 décisions</a></li>
-        <li><a href="decision-editions/45287921702.tar.zst" download>23 novembre à 18 h 20, heure de Toronto · 19 décisions</a></li>
-      </ul>
-      <p class="mv-links"><a href="decision-editions/index.json">Empreintes et exécutions d’origine</a>
-        <a href="decision-editions/verify.py" download>Télécharger le vérificateur Linux</a>
-        <a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/main/publication/first-verified-advantage/REPORT.md#français">Guide de démarrage et comparaison</a></p>
-    </details>
-  </section>
   <section class="mv-section" id="mv-better" aria-labelledby="mv-better-title">
-    <h3 id="mv-better-title">Mieux comprendre</h3>
-    <p class="mf-section-intro">Bureau d’aide à la décision</p>
+    <h3 id="mv-better-title">Bureau d’aide à la décision</h3>
     <p>Examinez l’occasion, les preuves, la meilleure solution de rechange et la prochaine action. Une source confirmée peut encore présenter une piste à vérifier.</p>
     <div class="mv-filters" id="mv-filters" hidden>
       <label for="mv-query">Rechercher dans les dossiers<input id="mv-query" type="search" maxlength="120" autocomplete="off" aria-controls="mv-records"></label>
@@ -93,8 +121,18 @@
     </div>
     <div class="mv-grid" id="mv-records"><!-- MV_BRIEFS --></div>
   </section>
-  <section class="mv-section" id="mv-tools" aria-labelledby="mv-tools-title">
-    <h3 id="mv-tools-title">Acquérir des capacités</h3>
+      <div class="brief-entry" data-nosnippet>
+        <button class="quiet" id="open-brief" type="button" aria-controls="brief-content" aria-expanded="false">Ouvrir le dossier membre</button>
+        <p class="status" id="brief-status" role="status"></p>
+        <article class="brief-content" id="brief-content" hidden></article>
+      </div>
+      <details class="mf-related"><summary>Recherche publique connexe</summary><ul>
+        <li><a href="#packet-lean">Lean 4.36</a></li><li><a href="#packet-qwen">Qwen GGUF</a></li>
+        <li><a href="#research-packet">Rapports de preuve</a></li><li><a href="#packet-retrofit">Mise à niveau ALPHA-1</a></li>
+      </ul></details>
+  </section>
+  <section class="mv-section" id="mv-tools" aria-labelledby="mv-tools-title" data-member-view hidden>
+    <h3 id="mv-tools-title" tabindex="-1">Capacités</h3>
     <p class="mf-section-intro">Bibliothèque d’outils Frontier Ω</p>
     <p>Exécutez les outils publiés ou téléchargez une version précise avec son format d’entrée, son vérificateur, ses limites et ses droits d’utilisation.</p>
     <div class="mv-grid"><!-- MV_TOOLS --></div>
@@ -105,9 +143,7 @@
       <template id="mv-endpoint-reference"><!-- MV_REFERENCE --></template>
       <template id="mv-endpoint-manifest"><!-- MV_TOOL_MANIFEST --></template>
       <button type="button" class="entry-button" id="mv-demo">Lancer la démonstration publique</button>
-      <p id="mv-run-status" role="status" class="status"></p>
-      <div id="mv-screen-result" hidden tabindex="-1"></div>
-      <a id="mv-keep-result" class="quiet" href="#mv-consent" hidden>Conserver le résultat</a>
+      <p id="mv-tool-status" role="status" class="status"></p>
       <details>
         <summary>Utiliser un lot autorisé ou examiner le plan</summary>
         <p>Respectez le format de l’exemple fourni dans le ZIP. Figez les entrées et le comparateur avant le calcul local dans ce navigateur.</p>
@@ -124,10 +160,35 @@
         </div>
       </details>
     </section>
+    <details id="edition-history">
+      <summary>Récupération des éditions décisionnelles</summary>
+      <p>Retrouvez le registre de l’Atlas, les décisions bilingues et le reçu d’origine. Vérifiez ce qu’indiquait une édition après la mise à jour du catalogue. Ces fichiers de preuve sont publics. Chaque archive est autonome.</p>
+      <ul class="mv-timeline">
+        <li><a href="decision-editions/45278828750.tar.zst" download>23 novembre à 17 h 21, heure de Toronto · 16 décisions</a></li>
+        <li><a href="decision-editions/45287921702.tar.zst" download>23 novembre à 18 h 20, heure de Toronto · 19 décisions</a></li>
+      </ul>
+      <p>Zstandard a remporté la comparaison. Le vérificateur Linux et les empreintes exactes sont disponibles.</p>
+      <p class="mv-links"><a href="decision-editions/index.json">Empreintes et exécutions d’origine</a>
+        <a href="decision-editions/verify.py" download>Télécharger le vérificateur Linux</a>
+        <a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/main/publication/first-verified-advantage/REPORT.md#français">Guide de démarrage et comparaison</a></p>
+    </details>
   </section>
-  <section class="mv-section" id="mv-results" aria-labelledby="mv-results-title">
-    <h3 id="mv-results-title">Obtenir des résultats</h3>
+  <section class="mv-section" id="mv-results" aria-labelledby="mv-results-title" data-member-view hidden>
+    <h3 id="mv-results-title" tabindex="-1">Mes résultats</h3>
     <p class="mf-section-intro">Atelier de vérification des résultats</p>
+    <p>Les résultats restent dans cette session. Téléchargez un objectif ou un reçu pour le rouvrir sur un appareil que vous contrôlez.</p>
+    <p id="mf-result-empty">Aucun résultat dans cette session. Commencez par l’exemple public Endpoint dans Ma frontière.</p>
+    <p><a id="mf-current-result" href="#mv-screen-result" hidden>Revenir au résultat de cette session</a></p>
+        <details id="goal-keeper">
+          <p id="goal-file-status" class="status" role="status"></p>
+          <summary>Conserver ou rouvrir un objectif</summary>
+          <p>L’objectif reste ici jusqu’à votre départ ou au verrouillage. Le fichier téléchargé contient votre saisie. Conservez-le dans un emplacement sous votre contrôle.</p>
+          <div class="mv-actions">
+            <button type="button" class="quiet" id="goal-export" disabled>Télécharger l’objectif</button>
+            <label for="goal-import">Rouvrir un fichier d’objectif<input id="goal-import" type="file" accept=".json,application/json"></label>
+          </div>
+          <p><a href="#edition-history">Retrouver les preuves publiques d’une édition antérieure</a></p>
+        </details>
     <dl class="mv-measures">
       <div><dt>Outils qualifiés</dt><dd>2</dd></div>
       <div><dt>Rejeu Endpoint public contrôlé</dt><dd>7 mesures vérifiées par SQLite</dd></div>
@@ -136,9 +197,7 @@
       <div><dt>Gains de productivité et résultats économiques des membres</dt><dd>Pas encore mesurés</dd></div>
     </dl>
     <p>Vous pouvez exporter un reçu local après une évaluation Endpoint. Il contient les empreintes des preuves, la portée de l’essai et l’état de la vérification. Le reçu reste en votre possession. Pour vos propres données, il omet les valeurs de charge, le texte source, les entrées et les renseignements sur le portefeuille.</p>
-    <label class="mv-check"><input type="checkbox" id="mv-consent">Préparer un reçu local pour cette tâche. Décochez la case pour retirer votre consentement avant l’exportation.</label>
-    <div class="mv-actions">
-      <button type="button" class="quiet" id="mv-export" disabled>Exporter le reçu</button>
+    <div class="mv-actions mf-reopen">
       <label for="mv-import">Vérifier l’intégrité d’un reçu<input id="mv-import" type="file" accept=".json,application/json"></label>
     </div>
     <p id="mv-receipt-status" role="status" class="status"></p>
@@ -154,4 +213,5 @@
     <p>Le contrôle d’intégrité compare les empreintes. Les données restent sur votre appareil. Si vous souhaitez participer à un essai comparatif, consultez les modalités et ce que vous pourriez choisir de partager.</p>
     <p class="mv-links"><a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/main/publication/FRONTIER-MEMBER-VALUE.md#prospective-member-evaluation">Consulter le protocole de participation volontaire</a></p>
   </section>
+  <p class="mf-disclosure">La vérification du portefeuille ouvre l’espace membre. Les fichiers de recherche et les outils sont publics. Les objectifs et les résultats locaux restent sur cet appareil.</p>
 </div>

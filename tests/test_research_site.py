@@ -731,7 +731,9 @@ console.log('11 wallet qualification checks and both workspace open/lock fixture
         for name, public_note in (('index.html', 'hosted as public GitHub Pages files'),
                                   ('fr.html', 'fichiers publics sur GitHub Pages')):
             with self.subTest(page=name):
-                page = (self.source / 'frontier-omega-alpha' / name).read_text()
+                language = 'fr' if name == 'fr.html' else 'en'
+                template = (ROOT / 'products' / 'frontier-member-tools' / f'member.{language}.html').read_text()
+                page = (self.source / 'frontier-omega-alpha' / name).read_text().replace('<!-- FRONTIER_MEMBER_VALUE -->', template)
                 before, workspace = page.split('<section id="member" class="frame workspace" hidden', 1)
                 workspace, after = workspace.split('<section id="member-preview"', 1)
                 self.assertIn(public_note, before)
@@ -751,7 +753,9 @@ console.log('11 wallet qualification checks and both workspace open/lock fixture
     def test_frontier_alpha_workspace_links_to_bilingual_public_packets(self):
         for name in ('index.html', 'fr.html'):
             with self.subTest(page=name):
-                page = (self.source / 'frontier-omega-alpha' / name).read_text()
+                language = 'fr' if name == 'fr.html' else 'en'
+                template = (ROOT / 'products' / 'frontier-member-tools' / f'member.{language}.html').read_text()
+                page = (self.source / 'frontier-omega-alpha' / name).read_text().replace('<!-- FRONTIER_MEMBER_VALUE -->', template)
                 before, packets = page.split('id="research" aria-labelledby="public-results-title"', 1)
                 workspace = before.split('id="member"', 1)[1]
                 packets = packets.split('</section>', 1)[0]

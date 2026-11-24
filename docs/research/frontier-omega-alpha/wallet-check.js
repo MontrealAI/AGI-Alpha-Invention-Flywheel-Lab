@@ -151,6 +151,7 @@ function mount(){
   const buttons=[club,...document.querySelectorAll('[data-connect]')];
   const memberNav=el('member-nav'),route=el('member-route');
   const briefButton=el('open-brief'),briefStatus=el('brief-status'),brief=el('brief-content');
+  if (!route || !briefButton) return; // Member HTML is inserted by public release staging.
   const say=k=>{status.textContent=s[k]??s.unavailable;};
   const selectedWallet=()=>{
     const injected=window.ethereum;
@@ -263,6 +264,7 @@ function mount(){
       memberNav.href='#member';
       route.textContent=s[path==='club'?'clubVerified':'tokenVerified'];
       member.hidden=false;
+      window.dispatchEvent(new Event('frontier:member-enter'));
       el('workspace-title').focus({preventScroll:true});
       window.scrollTo({top:0,behavior:'instant'});
       timer=setTimeout(lock,sessionLifetime);

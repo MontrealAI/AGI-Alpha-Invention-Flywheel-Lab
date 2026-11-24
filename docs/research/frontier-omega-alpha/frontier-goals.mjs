@@ -1,5 +1,5 @@
 const vocabulary = {
-  screening: /\b(?:endpoints?|sqlite|latency|latence|ttft|throughput|token throughput|charge admissible|debit de jetons)\b/u,
+  screening: /\b(?:endpoints?|sqlite|latency|latence|ttft|throughput|highest (?:documented |tested )?concurrency|charge (?:simultanee |testee )?admissible|debit de jetons)\b/u,
   archive: /\b(?:noaa|ncar|gfs|grib|forecast temperatures?|weather forecasts?|archiv\w* (?:forecasts?|meteo)|previsions? (?:meteo|historiques?|noaa))\b/u,
   reconstruction: /\b(?:missing (?:measurements?|observations?)|measurements? reconstruction|mesures? manquantes?|multiband|multibande|gaussian process|processus gaussien)\b/u,
   resilience: /\b(?:fink|alerce|broker|fallback|source (?:failure|outage)|repli|panne du fournisseur)\b/u,
@@ -28,8 +28,9 @@ function actionFor(record, context) {
   const operating = /\b(?:production|operational|operationnel\w*|deploy\w*|deploi\w*|live traffic|real traffic|real workload|trafic reel|charge reelle|sla|slo)\b/u;
   const browserOnly = /\b(?:browser only|in (?:the|my) browser|no (?:install|installation)|dans (?:le|mon) navigateur|sans installation)\b/u;
   const offline = /\b(?:offline|hors ligne|sans (?:internet|reseau))\b/u;
+  const otherPlatform = /\b(?:windows|macos|mac os|iphone|ipad|android|mobile|sans linux|without linux)\b/u;
   if (record.tool === 'endpoint' && !operating.test(context)) return 'demo';
-  if (record.tool === 'archive' && !browserOnly.test(context) && !offline.test(context)) return 'tool';
+  if (record.tool === 'archive' && !browserOnly.test(context) && !offline.test(context) && !otherPlatform.test(context)) return 'tool';
   return 'review';
 }
 
@@ -46,14 +47,15 @@ export function rankOpportunities(records, goal) {
     if (requestedVersion && !matchesVersion) continue;
     const titleTerms = terms(record.title);
     const summaryTerms = terms(record.subject);
-    const lexical = [...queryTerms].reduce((score, term) =>
-      score + (titleTerms.has(term) ? 5 : summaryTerms.has(term) ? 1 : 0), 0);
+    const hits = [...queryTerms].filter(term => titleTerms.has(term) || summaryTerms.has(term));
+    const lexical = hits.reduce((score, term) => score + (titleTerms.has(term) ? 5 : 1), 0);
     const topic = outcome.includes(record.outcome) ? 12 : 0;
     const suggested = preferences[record.outcome] || 0;
-    if (!matchesVersion && !topic && !suggested && lexical < 5) continue;
-    const score = (matchesVersion ? 100 : 0) + topic + suggested + lexical;
+    if (!matchesVersion && !topic && !suggested && (hits.length < 2 || lexical < 5)) continue;
+    const score = (matchesVersion ? 100 : 0) + topic + suggested + Math.min(lexical, 25);
     const maturity = record.state === 'discovered' ? 0 : 1;
-    ranks.push({record, score, maturity, action: actionFor(record, query)});
+    const basis = matchesVersion ? 'version' : topic ? 'topic' : suggested ? 'suggestion' : 'terms';
+    ranks.push({record, score, maturity, basis, terms: hits.slice(0, 4), action: actionFor(record, query)});
   }
   return ranks.sort((a, b) => b.score - a.score || b.maturity - a.maturity
     || b.record.observed.localeCompare(a.record.observed) || a.record.id.localeCompare(b.record.id));
@@ -126,6 +128,10 @@ const labels = {
     review: ['Open the decision brief', 'Follow the evidence and the strongest alternative before choosing a tool.'],
     prerequisite: 'This archive package needs the qualified Linux setup and the public NOAA origin for a new query.',
     abstain: 'The current evidence supports a bounded benchmark screen. A real operating decision still requires authorized requirements and independent custody.',
+    relevance: {
+      version: 'Matches the source version you named.', topic: 'Matches the task or instrument you named.',
+      suggestion: 'Selected for this starting point from the current research.', terms: 'Matching terms in the evidence',
+    },
   },
   fr: {
     empty: 'Saisissez un objectif ou choisissez une des suggestions.',
@@ -141,16 +147,22 @@ const labels = {
     review: ['Ouvrir le dossier décisionnel', 'Examinez les preuves et la meilleure solution de rechange avant de choisir un outil.'],
     prerequisite: 'Cet outil nécessite l’environnement Linux qualifié et le site public de la NOAA pour une nouvelle requête.',
     abstain: 'Les preuves permettent une évaluation de banc d’essai. Une décision opérationnelle nécessite des exigences autorisées et une garde indépendante.',
+    relevance: {
+      version: 'Correspond à la version de la source indiquée.', topic: 'Correspond à la tâche ou à l’instrument indiqué.',
+      suggestion: 'Sélectionné dans les recherches actuelles pour ce point de départ.', terms: 'Termes correspondants dans les preuves',
+    },
   },
 };
 
-export function setupGoals(member, launchDemo) {
+export function setupGoals(member, runner, shell) {
   const id = key => document.getElementById(key);
   const words = labels[document.documentElement.lang] || labels.en;
   const form = id('goal-form');
   const input = id('goal-text');
   const submit = id('goal-submit');
   const status = id('goal-status');
+  const fileStatus = id('goal-file-status');
+  const journey = id('mf-journey');
   const result = id('goal-result');
   const title = id('goal-result-title');
   const proof = id('goal-proof');
@@ -158,19 +170,23 @@ export function setupGoals(member, launchDemo) {
   const available = id('goal-available');
   const save = id('goal-export');
   const open = id('goal-import');
+  const related = id('goal-linked-evidence');
   const chips = [...form.querySelectorAll('[data-goal]')];
   const records = [...member.querySelectorAll('[data-mv-record]')].map(readBrief);
   const byId = new Map(records.map(record => [record.id, record]));
-  let state, generation = 0;
+  let state, lastGoal, generation = 0;
   const active = () => !member.hidden;
 
   function display(goal, prior) {
     const [match] = rankOpportunities(records, goal);
     const record = match?.record;
     const pin = record ? {id: record.id, version: record.version, review: record.review} : null;
+    const submitted = JSON.stringify(goal);
+    if (lastGoal && lastGoal !== submitted) runner.clear();
+    lastGoal = submitted;
     state = {schema, goal, pin};
     save.disabled = false;
-    result.hidden = !match;
+    journey.hidden = result.hidden = related.hidden = !match;
     for (const chip of chips) chip.setAttribute('aria-pressed', String(chip.dataset.goal === goal.preset));
     const descriptions = [];
     if (prior) {
@@ -181,14 +197,25 @@ export function setupGoals(member, launchDemo) {
       if (record && record.id !== prior.id) descriptions.push(words.reranked);
     }
     if (!match) descriptions.push(words.missing);
-    status.textContent = descriptions.join(' ');
-    if (!match) return;
+    status.textContent = fileStatus.textContent = descriptions.join(' ');
+    shell.show(id('my-frontier'), {focus:false, remember:true});
+    if (!match) {
+      input.focus();
+      return;
+    }
+    shell.step(match.action === 'review' ? 2 : 1);
     result.dataset.record = record.id;
     result.dataset.action = match.action;
     title.textContent = record.title;
+    id('goal-ambition').textContent = goal.text || chips.find(chip => chip.dataset.goal === goal.preset).textContent;
     id('goal-evidence-state').textContent = record.evidence + ' · ' + record.observed.slice(0, 10);
+    id('goal-match').textContent = match.basis === 'terms'
+      ? words.relevance.terms + ' · ' + match.terms.join(', ') : words.relevance[match.basis];
     for (const fact of result.querySelectorAll('[data-goal-fact]')) fact.textContent = record.fields[fact.dataset.goalFact];
     proof.href = '#decision-' + record.id;
+    const relatedLink = related.querySelector('a');
+    relatedLink.textContent = record.title;
+    relatedLink.href = proof.hash;
     id('goal-source').href = record.url;
     const [verb, detail] = words[match.action];
     action.textContent = verb;
@@ -201,8 +228,12 @@ export function setupGoals(member, launchDemo) {
   function clear() {
     generation++;
     state = undefined;
-    result.hidden = save.disabled = true;
-    status.textContent = '';
+    journey.hidden = result.hidden = related.hidden = save.disabled = true;
+    status.textContent = fileStatus.textContent = '';
+    id('goal-ambition').textContent = id('goal-match').textContent = '';
+    delete result.dataset.record;
+    delete result.dataset.action;
+    shell.step(0);
     for (const chip of chips) chip.setAttribute('aria-pressed', 'false');
   }
 
@@ -215,31 +246,47 @@ export function setupGoals(member, launchDemo) {
     else status.textContent = words.empty;
   });
   input.addEventListener('input', clear);
+  input.addEventListener('keydown', event => {
+    if (event.key === 'Enter' && !event.shiftKey && !event.isComposing) {
+      event.preventDefault();
+      form.requestSubmit();
+    }
+  });
+  id('goal-edit').addEventListener('click', () => input.focus());
   for (const chip of chips) chip.addEventListener('click', () => {
     if (!active()) return;
     generation++;
     input.value = '';
     display({preset: chip.dataset.goal});
   });
+  id('mf-quick-run').addEventListener('click', event => {
+    if (!active() || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    event.preventDefault();
+    generation++;
+    input.value = '';
+    display({preset:'endpoint'});
+  });
   action.addEventListener('click', event => {
     if (!active() || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
     if (result.dataset.action === 'demo') {
       event.preventDefault();
-      void launchDemo();
+      void runner.launchDemo();
     } else if (result.dataset.action === 'review') {
       event.preventDefault();
       proof.click();
     } else {
+      event.preventDefault();
       const card = id('tool-archive');
       const details = card.querySelector('.mf-instructions');
       details.open = true;
+      shell.show(card, {remember:true});
       details.querySelector('summary').focus({preventScroll: true});
     }
   });
   save.addEventListener('click', () => {
     if (!active() || !state) return;
     downloadJSON(state, 'frontier-goal.json');
-    status.textContent = words.saved;
+    fileStatus.textContent = words.saved;
   });
   open.addEventListener('change', async () => {
     if (!active()) return;
@@ -254,11 +301,12 @@ export function setupGoals(member, launchDemo) {
       input.value = goal.text || '';
       display(goal, pin);
     } catch {
-      if (token === generation && active()) status.textContent = words.invalid;
+      if (token === generation && active()) fileStatus.textContent = words.invalid;
     }
   });
   window.addEventListener('frontier:member-lock', () => {
     clear();
+    lastGoal = undefined;
     form.reset();
     open.value = '';
     id('goal-keeper').open = false;
