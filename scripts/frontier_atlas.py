@@ -377,6 +377,7 @@ def prepare(output, revision, event, run, request=source_with_retry):
     member.build_inventor(directory)
     member.build_learning(directory)
     member.build_activation(directory)
+    member.build_amplification(directory,revision)
     (directory / LEDGER).write_bytes(raw)
     files = [(file.relative_to(output).as_posix(), digest(file.read_bytes()))
              for file in sorted(output.rglob('*')) if file.is_file()]
@@ -435,7 +436,8 @@ def verify_live(expected, revision, run, request=source_with_retry):
     if (revision or foundry) and set(foundry) != set(member.FOUNDRY_ASSETS):
         raise ValueError('Unexpected Foundry asset set')
     for name, expected_hash in foundry.items():
-        if digest(request(watch.SITE + name, 500_000)) != expected_hash:
+        maximum=1_500_000 if name==member.AMPLIFICATION_ZIP else 500_000
+        if digest(request(watch.SITE + name, maximum)) != expected_hash:
             raise ValueError('Live Foundry bytes do not match')
     editions = release['decision_edition_sha256']
     if set(editions) != {name.removeprefix('frontier-omega-alpha/') for name in site.DECISION_EDITION_ASSETS}:
@@ -460,6 +462,7 @@ def verify_live(expected, revision, run, request=source_with_retry):
                 or 'id="access"' not in entrance or 'data-connect="token"' not in entrance
                 or 'id="member-value"' not in workspace or 'id="mv-endpoint-run"' not in workspace
                 or (foundry and 'id="my-intelligence"' not in workspace)
+                or (member.AMPLIFICATION_ZIP in foundry and 'id="foundry-amplification-replay"' not in workspace)
                 or f'data-preview-count="{len(ids)}"' not in preview
                 or any(marker in html for marker in (member.MARKER, member.PREVIEW_MARKER, '<!-- MV_SAMPLE -->'))):
             raise ValueError('Unpublished member-workbench rendering')

@@ -12,6 +12,8 @@ The [FRONTIER Ω learning companion](../../products/frontier-member-tools/adapti
 
 The [activation companion](../../products/frontier-member-tools/activation/README.md) starts from a public bottleneck map, resumes bounded model investigations and restores exact evidence in a scoped public replay. Its [registered report](../../publication/activation/REPORT.md) binds the two compiler revisions, independent byte-cover comparison and prospective phase observer. Candidate code and live retrieval authority run in separate paths.
 
+The [activation amplification workflow](../../products/frontier-member-tools/activation/AMPLIFICATION.md) adds matched model experiments over a committed development set and a separate confirmation set. Use it to compare exact outcomes and construction resources before adopting a proposed instrument. [The workload report](../../publication/amplification/REPORT.md) records the tested evidence contract, ordinary alternatives, executable candidates and operating scope.
+
 For economic-game construction, start with the [cart operator and recovery guide](../../campaign/omega-economy-v4/README.md). It connects executable menus, an exhaustive buyer-choice check, independently accepted work, native collections and a funded successor. The [paid-reach study](../../campaign/omega-paid-reach-20261104/README.md) tests the next operating decision: whether earned cash can buy access to additional voluntary buyers at a profit after costs. Each comparison account has its own identity and liabilities. The [economic and physical-data verdicts](../../campaign/omega-economy-v4/OPERATING_RESULT.md) explain where conventional methods tie or win.
 
 ### Read the current evidence before adopting

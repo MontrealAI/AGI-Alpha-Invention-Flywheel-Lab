@@ -19,6 +19,10 @@ class NativeRefused(ValueError):
     pass
 
 
+class NativeUnavailable(NativeRefused):
+    pass
+
+
 # Loading this worker and installing its kernel policy happen before a candidate
 # is decoded or executed. Bind only a system interpreter and runtime libraries.
 WORKER = r'''
@@ -78,7 +82,7 @@ except Exception as error:
 
 def command(memory, cpu, cap):
     if platform.system() != 'Linux' or platform.machine() != 'x86_64':
-        raise NativeRefused('NATIVE_PLATFORM')
+        raise NativeUnavailable('NATIVE_PLATFORM')
     unshare = shutil.which('unshare', path='/usr/bin:/bin')
     bubblewrap = shutil.which('bwrap', path='/usr/bin:/bin')
     interpreter = Path('/usr/bin/python3').resolve()
@@ -87,7 +91,7 @@ def command(memory, cpu, cap):
     loader = Path('/lib64/ld-linux-x86-64.so.2')
     if not (unshare and bubblewrap and interpreter.is_file() and stdlib.is_dir()
             and libraries.is_dir() and loader.is_file()):
-        raise NativeRefused('NATIVE_DEPENDENCIES')
+        raise NativeUnavailable('NATIVE_DEPENDENCIES')
     return [unshare, '--user', '--map-root-user', '--net', bubblewrap,
             '--unshare-pid', '--unshare-uts', '--unshare-ipc', '--clearenv',
             '--cap-drop', 'ALL', '--die-with-parent', '--new-session',
@@ -123,11 +127,11 @@ def run(source, inputs, *, cpu=3, memory=160 * 1024 * 1024, cap=48_000):
         except subprocess.TimeoutExpired as error:
             raise NativeRefused('NATIVE_WALL_LIMIT') from error
         except OSError as error:
-            raise NativeRefused('NATIVE_START') from error
+            raise NativeUnavailable('NATIVE_START') from error
         stderr.seek(0)
         first = stderr.readline(48).strip()
         if first != b'FRONTIER_NATIVE_V1':
-            raise NativeRefused('NATIVE_ISOLATION_REFUSED')
+            raise NativeUnavailable('NATIVE_ISOLATION_REFUSED')
         if completed.returncode != 0:
             raise NativeRefused('NATIVE_PROCESS_LIMIT_OR_FAILURE')
         stdout.seek(0)
@@ -154,3 +158,8 @@ def run(source, inputs, *, cpu=3, memory=160 * 1024 * 1024, cap=48_000):
     except (ValueError, RecursionError) as error:
         raise NativeRefused('NATIVE_OUTPUT') from error
     return {**parsed, 'wall_ns': perf_counter_ns() - start}
+
+
+def require_worker():
+    if run('def solve(value):\n return value', 'ready').get('result') != 'ready':
+        raise NativeUnavailable('NATIVE_STARTUP_CHECK')

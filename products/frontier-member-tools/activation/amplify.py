@@ -11,7 +11,7 @@ from types import SimpleNamespace
 from bridge.instruments import strict_portable_json
 from bridge.output_schema import validate_output
 from model_step import brief, object_schema, step
-from native_experiment import NativeRefused, run as native
+from native_experiment import NativeRefused, NativeUnavailable, require_worker, run as native
 from pages import digest
 from study import atomic, lock
 
@@ -48,6 +48,8 @@ def assess(source, cases):
             output = native(source, case['input'])
             accepted = 'result' in output and canonical(output['result']) == canonical(expected)
             rows.append({'id': case['id'], 'accepted': accepted, **output})
+        except NativeUnavailable:
+            raise
         except NativeRefused as error:
             rows.append({'id': case['id'], 'accepted': False, 'error': str(error)})
     return rows
@@ -88,6 +90,8 @@ def proposed_instrument(proposal, contract, cases, feedback):
                 and all(type(item) is str and 0 < len(item) <= 240 for item in result)):
             return {'used': False, 'reason': 'INVALID_INSTRUMENT_OUTPUT', 'wall_ns': answer['wall_ns']}
         return {'used': True, 'notes': result, 'wall_ns': answer['wall_ns']}
+    except NativeUnavailable:
+        raise
     except NativeRefused as error:
         return {'used': False, 'reason': str(error)}
 
@@ -95,6 +99,7 @@ def proposed_instrument(proposal, contract, cases, feedback):
 def design(args):
     policy, freeze = read(args.registration)
     cases = development(args.development, policy['development_sha256'])
+    require_worker()
     task = ('Invent an executable diagnostic instrument that helps the same model construct correct research '
             'software from evidence. Use the contract and development examples. You may construct a semantic '
             'map, an invariant extractor, an example transformer, or a different helpful mechanism. The '
@@ -189,6 +194,7 @@ def construct(args):
             raise ValueError('STUDY_BINDING')
         if record['state'] != 'RUNNING':
             return record
+        require_worker()
         atomic(path, record)
         while len(record['attempts']) < spec['attempts']:
             if int(time()) >= args.until:
@@ -274,6 +280,7 @@ def compare(args):
 def evaluate(args):
     policy, freeze = read(args.registration)
     cases = development(args.confirmation, policy['confirmation_sha256'])
+    require_worker()
     report = {'schema': SCHEMA, 'registration_sha256': freeze, 'objective': policy['objective'], 'arms': {}}
     for checkpoint in args.checkpoints:
         record, binding = read(checkpoint)

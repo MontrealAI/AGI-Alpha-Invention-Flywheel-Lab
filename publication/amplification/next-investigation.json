@@ -1,0 +1,59 @@
+{
+  "schema": "frontier/inventor-run-v1",
+  "model": "qwen3-4b-instruct-2507-q4_k_m",
+  "config_sha256": "a3492b54b8c9154ab8bbe109637259402ea4f0e40edd60932e643d5a7fd48946",
+  "output_budget": 1280,
+  "binding": {
+    "kind": "amplification-next-investigation",
+    "request_tokens": 640,
+    "prompt_sha256": "aa987414d691ae9670c32332ceed322fd919e99b0764a004cfa4367cdded410f",
+    "schema_sha256": "12f665eb84d39f453d364f73b49b25f466526d4642953145647bad622507314b",
+    "attempts": 2
+  },
+  "events": [
+    {
+      "prompt_sha256": "2a7227fa9bd86f8b5a5fa245dc770c5da0fc68fe54a05e4d8971efd596421dc6",
+      "reserved_output": 640,
+      "usage": {
+        "input_tokens": 748,
+        "output_tokens": 305
+      },
+      "plan_sha256": "344faa5a8b3fc4ae47f66d5dad143977256fc391f7c2e5f48c01071345cac397",
+      "reported_model": "/workspace/scratch/839ede97aa6c/frontier-runtime/model.gguf",
+      "response_sha256": "e46e2d3d7d3b30a74f0a85fa5e6ec4576e8452a38def7ffe769d4abaa8f5ba0a",
+      "used_output": 305,
+      "status": "SEALED",
+      "wall_ns": 42351656902,
+      "draft": {
+        "objective": "Establish a reusable diagnostic protocol for scientific invention that can be validated against conventional benchmarks without reliance on external instrumentation or physical experimentation.",
+        "beneficiary": "MONTREAL.AI",
+        "observed_limit": "The diagnostic output from the 4B model in the initial trial failed to parse prose into key-value lines, resulting in 'INVALID_INSTRUMENT_OUTPUT' and no accepted workloads. This failure persists in the calibration phase,",
+        "intervention": "Implement a concrete, observable diagnostic protocol that parses prose inputs into structured key-value outputs using a minimal, publicly accessible, and independently verifiable logic — such as a deterministic pattern-matching rule set or ",
+        "strong_control": "The 8K trial showed that the same model (qwen3-4b-instruct-2507-q4_k_m) succeeded in proposing a new diagnostic after a revision, and conventional solvers accepted all 12 public负荷.",
+        "decisive_test": "A deterministic, publicly available text-to-key-value parser, implemented in Python, must be applied to a known, standardized scientific prose input (e.g., a published calibration block) and produce a structured output that matches the gold",
+        "why_this_now": "The current diagnostic fails due to unstructured output, which prevents any downstream validation. Without a reliable, reproducible parsing step, no scientific invention can be objectively evaluated. "
+      },
+      "candidate": {
+        "objective": "Establish a reusable diagnostic protocol for scientific invention that can be validated against conventional benchmarks without reliance on external instrumentation or physical experimentation.",
+        "beneficiary": "MONTREAL.AI",
+        "observed_limit": "The diagnostic output from the 4B model in the initial trial failed to parse prose into key-value lines, resulting in 'INVALID_INSTRUMENT_OUTPUT' and no accepted workloads. This failure persists in the calibration phase,",
+        "intervention": "Implement a concrete, observable diagnostic protocol that parses prose inputs into structured key-value outputs using a minimal, publicly accessible, and independently verifiable logic — such as a deterministic pattern-matching rule set or ",
+        "strong_control": "The 8K trial showed that the same model (qwen3-4b-instruct-2507-q4_k_m) succeeded in proposing a new diagnostic after a revision, and conventional solvers accepted all 12 public负荷.",
+        "decisive_test": "A deterministic, publicly available text-to-key-value parser, implemented in Python, must be applied to a known, standardized scientific prose input (e.g., a published calibration block) and produce a structured output that matches the gold",
+        "why_this_now": "The current diagnostic fails due to unstructured output, which prevents any downstream validation. Without a reliable, reproducible parsing step, no scientific invention can be objectively evaluated. "
+      }
+    }
+  ],
+  "status": "SEALED",
+  "result": {
+    "objective": "Establish a reusable diagnostic protocol for scientific invention that can be validated against conventional benchmarks without reliance on external instrumentation or physical experimentation.",
+    "beneficiary": "MONTREAL.AI",
+    "observed_limit": "The diagnostic output from the 4B model in the initial trial failed to parse prose into key-value lines, resulting in 'INVALID_INSTRUMENT_OUTPUT' and no accepted workloads. This failure persists in the calibration phase,",
+    "intervention": "Implement a concrete, observable diagnostic protocol that parses prose inputs into structured key-value outputs using a minimal, publicly accessible, and independently verifiable logic — such as a deterministic pattern-matching rule set or ",
+    "strong_control": "The 8K trial showed that the same model (qwen3-4b-instruct-2507-q4_k_m) succeeded in proposing a new diagnostic after a revision, and conventional solvers accepted all 12 public负荷.",
+    "decisive_test": "A deterministic, publicly available text-to-key-value parser, implemented in Python, must be applied to a known, standardized scientific prose input (e.g., a published calibration block) and produce a structured output that matches the gold",
+    "why_this_now": "The current diagnostic fails due to unstructured output, which prevents any downstream validation. Without a reliable, reproducible parsing step, no scientific invention can be objectively evaluated. "
+  },
+  "spent_output": 305,
+  "pending": null
+}

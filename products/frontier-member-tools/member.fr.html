@@ -139,6 +139,12 @@
     <p class="mf-section-intro">Bibliothèque d’outils Frontier Ω</p>
     <p>Exécutez les outils publiés ou téléchargez une version précise avec son format d’entrée, son vérificateur, ses limites et ses droits d’utilisation.</p>
     <div class="mv-grid"><!-- MV_TOOLS --></div>
+    <article class="foundry-entry" id="foundry-amplify">
+      <h4>Amplifier mon intelligence</h4>
+      <p>Comparez votre modèle local avec et sans instrument expérimental. Utilisez les mêmes cas de développement et confiez à l’évaluateur des cas de confirmation distincts.</p>
+      <p class="mv-links"><a href="frontier-activation-1.1.0.zip" download>Télécharger l’utilitaire local</a>
+        <a href="#foundry-amplification-results">Voir la comparaison des modèles</a></p>
+    </article>
     <article class="foundry-entry">
       <h4>Alpha Genesis HARNESS</h4>
       <p>Transformez votre règle en un outil HARNESS à portée limitée, vérifiez-le sur des cas séparés et conservez un fichier réutilisable.</p>
@@ -310,6 +316,22 @@
     <p class="mf-section-intro">Atelier de vérification des résultats</p>
     <p>Les résultats restent dans cette session. Téléchargez un objectif ou un reçu pour le rouvrir sur un appareil que vous contrôlez.</p>
     <p><a href="#foundry-library">Ouvrir votre bibliothèque de capacités</a></p>
+    <section class="foundry-stage foundry-learning" id="foundry-amplification-results" aria-labelledby="foundry-amplification-title">
+      <h4 id="foundry-amplification-title">Amplification de l’intelligence</h4>
+      <!-- AMPLIFICATION_RESULTS -->
+      <details>
+        <summary>Rejouer l’exemple de mesures d’inférence</summary>
+        <p>Cherchez une charge étayée sur deux configurations distinctes testées avec la tâche de programmation de Qwen, à au moins 90 jetons par seconde par utilisateur et avec un délai au premier jeton d’au plus 390 ms au 90e centile.</p>
+        <template id="foundry-amplification-example"><!-- AMPLIFICATION_EXAMPLE --></template>
+        <button id="foundry-amplification-replay" type="button" class="quiet">Exécuter sur cet appareil</button>
+        <p id="foundry-amplification-replay-status" class="status" role="status"></p>
+      </details>
+      <p><a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/main/publication/amplification/REPORT.md">Lire la comparaison et les instructions de rejeu</a></p>
+      <div class="mv-actions"><label for="foundry-amplification-open">Ouvrir un point de reprise local
+        <input id="foundry-amplification-open" type="file" accept=".json,application/json"></label></div>
+      <p class="status" id="foundry-amplification-status" role="status"></p>
+      <ol id="foundry-amplification-attempts" class="foundry-learning-steps" hidden></ol>
+    </section>
     <section class="foundry-stage foundry-learning" id="foundry-bottlenecks" aria-labelledby="foundry-bottlenecks-title">
       <h4 id="foundry-bottlenecks-title">Carte des blocages en invention</h4>
       <p>Consultez les causes et les comparaisons publiées. Ouvrez votre point de reprise pour voir les étapes consignées par l’utilitaire local.</p>
