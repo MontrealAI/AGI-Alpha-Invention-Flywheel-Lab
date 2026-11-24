@@ -185,6 +185,10 @@ async function foundryJourney(page, language, width) {
     '158aa880e2a282915f011ff8c4786ec0641b6d5da82178a9e131d0c64a17499c');
   const substrateZip = await (await online.get(base + 'frontier-activation-1.2.0.zip')).body();
   assert.equal(createHash('sha256').update(substrateZip).digest('hex'), release.foundry_sha256['frontier-activation-1.2.0.zip']);
+  assert.equal(release.foundry_sha256['frontier-activation-1.2.0.zip'],
+    'f4bc4141d5c86c251b04a9a2d129b65ab610242e5422755161e4882bb35cda06');
+  const liberationZip = await (await online.get(base + 'frontier-activation-1.3.0.zip')).body();
+  assert.equal(createHash('sha256').update(liberationZip).digest('hex'), release.foundry_sha256['frontier-activation-1.3.0.zip']);
   const example = await page.locator('#foundry-public-data').evaluate(node => JSON.parse(node.content.textContent));
   const context = page.context();
   await context.setOffline(true);
@@ -327,6 +331,13 @@ async function foundryJourney(page, language, width) {
     await page.locator('#foundry-substrate-replay').press('Enter');
     assert.match(await page.locator('#foundry-substrate-replay-status').textContent(),
       /(?:Covariance-sensitive|Dépend de la covariance).*5817.*175–267 s.*paper:T8:L98/);
+    await destination(page, 'mv-tools');
+    await page.locator('a[href="#foundry-liberation-results"]').press('Enter');
+    assert.equal(await page.locator(':focus').getAttribute('id'), 'foundry-liberation-title');
+    await page.locator('#foundry-liberation-results summary').press('Enter');
+    assert.deepEqual(await page.locator('#foundry-liberation-results tr td:nth-child(2)').allTextContents(),
+      ['96 / 106', '93 / 106', '93 / 106', '94 / 106']);
+    assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
     const contextFile = {schema:'frontier/amplification-v1', objective:'Local measurement fixture',
       binding:{model:'Local model fixture', arm:'amplified'}, state:'DEVELOPMENT_PASS',
       attempts:[{number:1,scores:{accepted:2,cases:2}}]};
