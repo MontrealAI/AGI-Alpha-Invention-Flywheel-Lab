@@ -203,7 +203,7 @@ def source_inputs(public):
                        ('atlas-release.json','member-value.json','endpoint-evidence-screen-1.0.0.zip')}})
 
 
-def main(root, public, seed, selection=None, observations=False):
+def main(root, public, seed, selection=None, observations=False, larger=False):
     development = root/'constructor'
     confirmation = root/'evaluator'
     development.mkdir(mode=0o700, parents=True)
@@ -234,9 +234,10 @@ def main(root, public, seed, selection=None, observations=False):
          'incumbent':'Dependency inspection and a conventional graph traversal.'},
     ]
     save(development/'opportunities.json',cards)
+    small = selection is not None and not larger
     registration = {'schema':'frontier/inventor-registration-v1','commitments':commitments,
-        'opportunities':digest(cards),'source':provenance,'model':SMALL_MODEL if selection else MODEL,
-        'model_weights_sha256':SMALL_WEIGHTS if selection else WEIGHTS,
+        'opportunities':digest(cards),'source':provenance,'model':SMALL_MODEL if small else MODEL,
+        'model_weights_sha256':SMALL_WEIGHTS if small else WEIGHTS,
         'runtime_archive_sha256':RUNTIME,'output_budgets':{'opportunity':256,'construction':640,'method':512},
         'arms':['original','ordinary','augmented','withdrawn','conventional'],'public_replay_cases_per_mission':1}
     if selection:
@@ -247,6 +248,10 @@ def main(root, public, seed, selection=None, observations=False):
         save(development/'fixed-opportunity.json', selection)
     if observations:
         registration['development_feedback'] = 'observations'
+    if larger:
+        if not selection or not observations:
+            raise ValueError('The larger-model follow-up requires the frozen choice and observed feedback.')
+        registration['output_budgets']['construction'] = 320
     save(root/'registration.json', registration)
     save(confirmation/'generation.json',{'seed':str(seed),'scope':'Public controlled examples and one release replay per mission.'})
 
@@ -258,6 +263,7 @@ if __name__ == '__main__':
     parser.add_argument('--seed',type=int)
     parser.add_argument('--reuse-selection',type=Path)
     parser.add_argument('--observations',action='store_true')
+    parser.add_argument('--larger-constructor',action='store_true')
     args = parser.parse_args()
     selected = json.loads(args.reuse_selection.read_bytes()) if args.reuse_selection else None
-    main(args.root,args.public,secrets.randbits(63) if args.seed is None else args.seed,selected,args.observations)
+    main(args.root,args.public,secrets.randbits(63) if args.seed is None else args.seed,selected,args.observations,args.larger_constructor)
