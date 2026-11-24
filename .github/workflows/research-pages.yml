@@ -18,6 +18,7 @@ on:
       - 'publication/frontier-public-holds.json'
       - 'publication/frontier-foundry/**'
       - 'publication/inventor/**'
+      - 'publication/adaptive/**'
       - 'tests/test_frontier_public_watch.py'
       - 'tests/test_frontier_atlas.py'
       - 'tests/live_frontier_browser.cjs'
@@ -47,6 +48,7 @@ on:
       - 'publication/frontier-public-holds.json'
       - 'publication/frontier-foundry/**'
       - 'publication/inventor/**'
+      - 'publication/adaptive/**'
       - 'tests/test_frontier_public_watch.py'
       - 'tests/test_frontier_atlas.py'
       - 'tests/live_frontier_browser.cjs'
@@ -100,6 +102,7 @@ jobs:
             publication/frontier-foundry/successor-study
             publication/frontier-foundry/successor-followup
             publication/inventor
+            publication/adaptive
             tests/test_frontier_public_watch.py
             tests/test_frontier_atlas.py
             tests/test_research_site.py
@@ -145,7 +148,8 @@ jobs:
         run: |
           python3 -m unittest discover -s tests -p 'test_member_value.py' -v
           node --test tests/test_member_tools.mjs
-          python3 scripts/qualify_frontier_member.py "$RUNNER_TEMP/research-site/frontier-omega-alpha"
+          python3 -m pip install --target "$RUNNER_TEMP/frontier-wasm" --require-hashes -r products/frontier-member-tools/adaptive/requirements-linux.txt
+          PYTHONPATH="$RUNNER_TEMP/frontier-wasm" python3 scripts/qualify_frontier_member.py "$RUNNER_TEMP/research-site/frontier-omega-alpha"
           python3 docs/research/frontier-omega-alpha/decision-editions/verify.py all --directory \
             "$RUNNER_TEMP/research-site/frontier-omega-alpha/decision-editions"
       - name: Qualify both member entrances on the candidate artifact
@@ -253,6 +257,7 @@ jobs:
             docs/research/frontier-omega-alpha/decision-editions/verify.py
             docs/research/frontier-omega-alpha/decision-editions/index.json
             tests/live_frontier_browser.cjs
+            products/frontier-member-tools/adaptive/requirements-linux.txt
           sparse-checkout-cone-mode: false
       - name: Verify the actual public English and French pages and ledger bytes
         env:
@@ -292,10 +297,11 @@ jobs:
           packages="$RUNNER_TEMP/frontier-distributed"
           mkdir -p "$packages"
           origin="https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/frontier-omega-alpha"
-          for artifact in atlas-release.json member-value.json endpoint-evidence-screen-1.0.0.zip noaa-archive-point-1.0.0.zip frontier-foundry-1.0.0.zip frontier-foundry-1.1.0.zip frontier-inventor-1.0.0.zip; do
+          for artifact in atlas-release.json member-value.json endpoint-evidence-screen-1.0.0.zip noaa-archive-point-1.0.0.zip frontier-foundry-1.0.0.zip frontier-foundry-1.1.0.zip frontier-inventor-1.0.0.zip frontier-learning-1.0.0.zip; do
             curl --fail --silent --show-error --retry 2 --max-time 20 --max-filesize 20000000 "$origin/$artifact" --output "$packages/$artifact"
           done
-          python3 scripts/qualify_frontier_member.py "$packages" | tee "$RUNNER_TEMP/frontier-distributed.json"
+          python3 -m pip install --target "$RUNNER_TEMP/frontier-wasm" --require-hashes -r products/frontier-member-tools/adaptive/requirements-linux.txt
+          PYTHONPATH="$RUNNER_TEMP/frontier-wasm" python3 scripts/qualify_frontier_member.py "$packages" | tee "$RUNNER_TEMP/frontier-distributed.json"
           cat "$RUNNER_TEMP/frontier-distributed.json" >> "$GITHUB_STEP_SUMMARY"
           editions="$packages/decision-editions"
           mkdir "$editions"
