@@ -27,12 +27,14 @@ ARCHIVE_ZIP = 'noaa-archive-point-1.0.0.zip'
 MEMBER_JSON = 'member-value.json'
 FOUNDRY_ZIP = 'frontier-foundry-1.0.0.zip'
 STUDY_ZIP = 'frontier-foundry-1.1.0.zip'
+INVENTOR_ZIP = 'frontier-inventor-1.0.0.zip'
 FOUNDRY_ENGINE = 'harness-engine.js'
 FOUNDRY_INPUT = 'FOUNDRY_PUBLIC_DATA'
 HARNESS_PIN = '39e76570c851b3527d78a526053a9ea2a611a993'
 HARNESS = 'products/alpha-genesis-harness/'
 FOUNDRY_ASSETS = ('foundry-core.mjs', 'foundry-ui.mjs', 'foundry-study.mjs', 'outcome-receipt.mjs',
-                  FOUNDRY_ENGINE, FOUNDRY_ZIP, STUDY_ZIP)
+                  FOUNDRY_ENGINE, FOUNDRY_ZIP, STUDY_ZIP, INVENTOR_ZIP)
+INVENTOR_EVIDENCE = MAIN / 'publication/inventor'
 
 OUTPUTS = frozenset(SITE + name for name in (ENDPOINT_ZIP, ARCHIVE_ZIP, MEMBER_JSON))
 MARKER = '<!-- FRONTIER_MEMBER_VALUE -->'
@@ -189,6 +191,58 @@ def build_foundry(destination):
             'Bounded local successor studies and offline verification. The deployment receipt binds the integration.',
             version='1.1.0')
     return legacy
+
+
+def build_inventor(destination):
+    files = {name:(TOOLS / 'inventor' / name).read_bytes() for name in
+             ('README.md','inventor.py','inventor_verify.py','relational.py','reproduce.py')}
+    files.update({name:(TOOLS / 'foundry' / name).read_bytes() for name in
+                  ('provider.py','study.py','formulas.py','local.example.json')})
+    files.update({name:pinned(HARNESS_PIN, HARNESS + name) for name in
+                  ('LICENSE','NOTICE','bridge/adapters.py','bridge/instruments.py','bridge/output_schema.py','bridge/streaming.py')})
+    for name in ('evidence.json','reproduction.json','diagnostic-evidence.json','diagnostic-reproduction.json',
+                 'larger-evidence.json','larger-reproduction.json','REGISTRATION.md','RESOURCE-FOLLOWUP.md',
+                 'DIAGNOSTIC-FOLLOWUP.md','LARGER-FOLLOWUP.md','REPORT.md','run_pilot.py','protocol.py'):
+        files['study/'+name] = (INVENTOR_EVIDENCE/name).read_bytes()
+    return package(destination / INVENTOR_ZIP, files, 'frontier-inventor', HARNESS_PIN,
+                   'Local read-only SQL construction, public-data replay and registered discovery-policy comparisons.')
+
+
+def render_inventor(fr):
+    evidence = json.loads((INVENTOR_EVIDENCE / 'evidence.json').read_bytes())
+    missions = {'editions':('Atlas edition selection','Sélection des éditions de l’Atlas'),
+                'endpoint':('Endpoint capacity','Capacité des services d’inférence'),
+                'impact':('Release dependencies','Dépendances de la publication')}
+    arms = {'original':('Original inventor','Inventeur initial'), 'ordinary':('Ordinary reuse','Réemploi ordinaire'),
+            'augmented':('Augmented inventor','Inventeur augmenté'), 'withdrawn':('Method withdrawn','Méthode retirée'),
+            'conventional':('Conventional reference','Référence conventionnelle')}
+    first = evidence.get('first_mission')
+    introduction = (('Première mission choisie par le modèle' if fr else 'First mission chosen by the model') +
+                    ' — ' + missions[first][fr] + '.') if first in missions else (
+                    'Le modèle s’est abstenu de choisir une première mission.' if fr else 'The model abstained from selecting a first mission.')
+    rows = []
+    for name in (['first'] if 'first' in evidence['assessments'] else []) + sorted(k for k in evidence['assessments'] if k != 'first'):
+        result = evidence['assessments'][name]['assessment']
+        label = ('Première invention' if fr else 'First invention') if name == 'first' else arms[result['arm']][fr]
+        decision = ('Concordance' if fr else 'Matched') if result['verdict'] == 'MATCHED' else ('Refusé' if fr else 'Rejected')
+        rows.append(f'<tr><th scope="row">{escape(missions[result["mission"]][fr])}</th><td>{escape(label)}</td>'
+                    f'<td>{int(result["matched"])}/{int(result["total"])}</td><td>{decision}</td></tr>')
+    followups = (
+        ('diagnostic-evidence.json','Observed-output follow-up','Essai avec écarts observés'),
+        ('larger-evidence.json','Larger-model follow-up','Essai avec le modèle de 8 milliards'),
+    )
+    for filename, en, french in followups:
+        result = json.loads((INVENTOR_EVIDENCE / filename).read_bytes())['assessments']['first']['assessment']
+        label = french if fr else en
+        decision = ('Concordance' if fr else 'Matched') if result['verdict'] == 'MATCHED' else ('Refusé' if fr else 'Rejected')
+        rows.append(f'<tr><th scope="row">{escape(missions[result["mission"]][fr])}</th><td>{label}</td>'
+                    f'<td>{int(result["matched"])}/{int(result["total"])}</td><td>{decision}</td></tr>')
+    if not rows:
+        return f'<p>{escape(introduction)}</p>'
+    headings = ('Mission','Démarche','Cas','Résultat') if fr else ('Mission','Arm','Cases','Outcome')
+    return f'<p>{escape(introduction)}</p><div class="foundry-pilot-table" tabindex="0" role="region" aria-label="{headings[-1]}">' \
+           '<table><thead><tr>' + ''.join(f'<th scope="col">{label}</th>' for label in headings) + \
+           '</tr></thead><tbody>' + ''.join(rows) + '</tbody></table></div>'
 
 
 def build_tools(destination):
@@ -745,6 +799,7 @@ def render(lang, compiled, sample):
     replacements = {
         '<!-- MF_FEATURE -->': feature_html(compiled['member_first']['edition'], compiled, lang),
         '<!-- ' + FOUNDRY_INPUT + ' -->': escape(stable(foundry_example(fr)).decode()),
+        '<!-- INVENTOR_PILOT_RESULTS -->': render_inventor(fr),
         '<!-- MF_UPDATED -->': timestamp_html(compiled['updated_at']),
         '<!-- MV_TIMELINE -->': ''.join(highlights),
         '<!-- MV_FILTERS -->': controls(briefs, fr),
