@@ -196,6 +196,19 @@ def qualify_successors(directory, root, release):
                            'matched':{name:arm['comparison']['matched'] if arm['comparison'] else None
                                       for name, arm in comparison['outcomes'].items()}}
     require(set(outcomes['successor-study']['matched'].values()) == {43}, 'Failed boundary cases were lost')
+    require(set(outcomes['successor-followup']['matched'].values()) == {49}, 'Clarified cohort did not reproduce')
+
+    clarified = json.loads((root / 'successor-followup/report.json').read_bytes())['report']
+    (root / 'mission.json').write_bytes(member.stable(clarified['plan']['study']['task']))
+    (root / 'candidate.json').write_bytes(member.stable(clarified['attempts']['direct']['candidate']))
+    asset, _ = call(root, 'node', 'foundry-cli.mjs', 'retain', 'mission.json', 'candidate.json',
+                    'successor-followup/cases.json')
+    (root / 'capability.json').write_bytes(member.stable(asset))
+    valid = {'previous_end':7,'start':8,'end':9,'object_bytes':10,'body_bytes':2,'same_version':True}
+    for item, expected_result in ((valid, True), ({**valid,'end':10,'body_bytes':3}, False)):
+        (root / 'fresh.json').write_bytes(member.stable(item))
+        reuse, _ = call(root, 'node', 'foundry-cli.mjs', 'run', 'capability.json', 'successor-followup/cases.json', 'fresh.json')
+        require(reuse == {'appendable':expected_result}, 'Retained candidate failed a fresh boundary case')
 
     report = json.loads((root / 'successor-study/report.json').read_bytes())
     tampered = deepcopy(report)
@@ -230,7 +243,7 @@ def qualify_successors(directory, root, release):
     resumed, _ = call(root, *invocation)
     require(set(attempt['status'] for attempt in resumed.values()) == {'INTERRUPTED'},
             'An interrupted arm was dispatched again')
-    return {'package_sha256':expected, 'replayed':outcomes, 'denied_controls':4}
+    return {'package_sha256':expected, 'replayed':outcomes, 'retained_fresh_cases':2, 'denied_controls':4}
 
 
 def qualify(directory, live=False):
