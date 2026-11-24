@@ -97,7 +97,6 @@ function setup() {
   const maximumLibraryItems = 32;
   let task, sealed, suite, saved, publicReplay, checked, generation = 0;
   let busy = false;
-  const controls = root.querySelectorAll('input, textarea, button');
   const form = get('form');
 
   function render() {
@@ -108,11 +107,10 @@ function setup() {
     get('retain').disabled = busy || !checked || !get('export-consent').checked;
     get('copy').disabled = busy || !task || !get('share').checked;
     get('kit').disabled = busy || !task || !get('share').checked;
-    get('library-files').disabled = busy || !globalThis.crypto?.subtle;
-    get('study-report').disabled = get('study-cases').disabled = busy;
     get('study-check').disabled = busy || !globalThis.crypto?.subtle ||
       !get('study-report').files.length || !get('study-cases').files.length;
-    for (const name of ['sample','freeze','open','candidate','verify','case-template','mission-download','project']) {
+    for (const name of ['sample','freeze','candidate','verify','case-template','mission-download','project',
+      'open','candidate-file','cases','mission-file','library-files','study-report','study-cases']) {
       get(name).disabled = busy || !globalThis.crypto?.subtle;
     }
   }
@@ -425,9 +423,6 @@ function setup() {
       get('mission').open = true;
     }
   }));
-  for (const control of controls) {
-    if (!globalThis.crypto?.subtle && control.type === 'file') control.disabled = true;
-  }
   render();
 }
 

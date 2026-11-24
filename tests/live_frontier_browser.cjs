@@ -247,8 +247,12 @@ async function foundryJourney(page, language, width) {
     const result = await page.evaluate(raw => globalThis.HarnessEngine.importProject(raw), file);
     assert.equal(result.artifactProvenance.verification, 'UNKNOWN');
     assert.deepEqual(result.instrumentSpec.inputs, ['start','finish']);
+    await page.locator('#foundry-response').fill('');
     await page.locator('#foundry-candidate-file').setInputFiles(content('native-project.json', result));
-    await page.waitForFunction(() => JSON.parse(document.getElementById('foundry-response').value).name === 'Elapsed');
+    await page.waitForFunction(() => {
+      const reply = document.getElementById('foundry-response').value;
+      return reply && JSON.parse(reply).name === 'Elapsed' && !document.getElementById('foundry-cases').disabled;
+    });
     const hash = await page.locator('#foundry-mission-hash').textContent();
     await page.locator('#foundry-cases').setInputFiles(content('cases.json', {schema:'frontier/foundry-cases-v1',
       mission_sha256:hash,reference:'Browser qualification fixture, direct integer arithmetic',
