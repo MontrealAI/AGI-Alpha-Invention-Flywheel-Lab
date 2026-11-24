@@ -30,15 +30,18 @@ STUDY_ZIP = 'frontier-foundry-1.1.0.zip'
 INVENTOR_ZIP = 'frontier-inventor-1.0.0.zip'
 LEARNING_ZIP = 'frontier-learning-1.0.0.zip'
 ACTIVATION_ZIP = 'frontier-activation-1.0.0.zip'
+AMPLIFICATION_ZIP = 'frontier-activation-1.1.0.zip'
 FOUNDRY_ENGINE = 'harness-engine.js'
 FOUNDRY_INPUT = 'FOUNDRY_PUBLIC_DATA'
 HARNESS_PIN = '39e76570c851b3527d78a526053a9ea2a611a993'
 HARNESS = 'products/alpha-genesis-harness/'
 FOUNDRY_ASSETS = ('foundry-core.mjs', 'foundry-ui.mjs', 'foundry-study.mjs', 'outcome-receipt.mjs',
-                  FOUNDRY_ENGINE, FOUNDRY_ZIP, STUDY_ZIP, INVENTOR_ZIP, LEARNING_ZIP, ACTIVATION_ZIP)
+                  FOUNDRY_ENGINE, FOUNDRY_ZIP, STUDY_ZIP, INVENTOR_ZIP, LEARNING_ZIP, ACTIVATION_ZIP,
+                  AMPLIFICATION_ZIP)
 INVENTOR_EVIDENCE = MAIN / 'publication/inventor'
 LEARNING_EVIDENCE = MAIN / 'publication/adaptive'
 ACTIVATION_EVIDENCE = MAIN / 'publication/activation'
+AMPLIFICATION_EVIDENCE = MAIN / 'publication/amplification'
 
 OUTPUTS = frozenset(SITE + name for name in (ENDPOINT_ZIP, ARCHIVE_ZIP, MEMBER_JSON))
 MARKER = '<!-- FRONTIER_MEMBER_VALUE -->'
@@ -248,7 +251,7 @@ def render_learning(fr):
             '</tr></thead><tbody>'+rows+'</tbody></table></div>')
 
 
-def build_activation(destination):
+def activation_files():
     files={name:(TOOLS/'activation'/name).read_bytes() for name in (
         'README.md','activate.py','model_step.py','packets.py','phase.py','table_program.py',
         'verify_activation.py','reproduce_activation.py','research_next.py')}
@@ -267,8 +270,59 @@ def build_activation(destination):
         'catalogue','commitments','learning-replay-development','learning-replay-confirmation',
         'local-runner-development','local-runner-confirmation','inventor-audit-development','inventor-audit-confirmation'))
     files.update({f'study/{name}':(ACTIVATION_EVIDENCE/name).read_bytes() for name in names})
-    return package(destination/ACTIVATION_ZIP,files,'frontier-activation',HARNESS_PIN,
+    return files
+
+
+def build_activation(destination):
+    return package(destination/ACTIVATION_ZIP,activation_files(),'frontier-activation',HARNESS_PIN,
                    'Public evidence recovery, bounded Wasm table construction, and prospective Pages shadow forecasts.')
+
+
+def build_amplification(destination, revision):
+    files=activation_files()
+    for name in ('AMPLIFICATION.md','amplify.py','native_experiment.py','route_environment.py','reproduce_amplification.py',
+                 'calibration_environment.py','refine_amplification.py','discover_amplification.py'):
+        files[name]=(TOOLS/'activation'/name).read_bytes()
+    for name in ('REPORT.md','registration.json','discovery.json','development.json','confirmation.json',
+                 'provenance.json','trial.json','comparisons.json','build_cases.py','repair-registration.json',
+                 'context-followup.json','transfer-registration.json','calibration-development.json',
+                 'calibration-confirmation.json','calibration-trial.json','build_calibration.py','record_results.py',
+                 'next-investigation.json','phase-additional.json','diagnostic-audit.json',
+                 'initial-research-input.txt','next-research-input.txt'):
+        files[f'study/amplification/{name}']=(AMPLIFICATION_EVIDENCE/name).read_bytes()
+    return package(destination/AMPLIFICATION_ZIP,files,'frontier-activation',revision,
+                   'Activation 1.1 with a separate native research sandbox, matched comparisons, and exact workload replay.',
+                   version='1.1.0')
+
+
+def render_amplification(fr):
+    study=json.loads((AMPLIFICATION_EVIDENCE/'comparisons.json').read_bytes())
+    headings=('Modèle','Accès direct','HARNESS','Avec instrument') if fr else ('Model','Direct','HARNESS','With instrument')
+    rows=[]
+    for model, title, arms in (
+        ('qwen3-4b-instruct-2507-q4_k_m','Qwen3-4B · 4K',study['arms']),
+        ('qwen3-8b-q4-k-m','Qwen3-8B · 4K',study['arms']),
+        ('qwen3-4b-instruct-2507-q4_k_m','Qwen3-4B · 8K',study['revised_arms']),
+    ):
+        cells=[]
+        for method in ('direct','harness','amplified'):
+            arm=arms.get(model+'/'+method)
+            cells.append(f'{int(arm["accepted"])}/{int(study["held_cases"])}' if arm is not None else '—')
+        rows.append(f'<tr><th scope="row">{title}</th>'+''.join(f'<td>{value}</td>' for value in cells)+'</tr>')
+    if any(study['same_model_amplification'].values()):
+        scope='Le seuil de l’essai circonscrit a été atteint.' if fr else 'The bounded comparison met its registered threshold.'
+    elif study['revised_arms'] and not any(arm.get('selected_instrument_used') for arm in study['revised_arms'].values()):
+        scope=('L’instrument expérimental a échoué aux contrôles et n’a pas guidé la construction.' if fr else
+               'The experimental instrument failed validation and did not guide construction.')
+    else:
+        scope='Aucun gain n’a atteint le seuil de l’essai.' if fr else 'No gain met the registered threshold.'
+    accepted, total=(int(study['conventional'][key]) for key in ('accepted','cases'))
+    context=(f'Référence exacte · {accepted}/{total} cas de confirmation.' if fr else
+             f'Exact reference · {accepted}/{total} confirmation cases.')
+    label='Résultats de confirmation' if fr else 'Confirmation results'
+    return (f'<p>{scope} {context}</p><div class="foundry-pilot-table" tabindex="0" role="region" aria-label="{label}">'
+            '<table><thead><tr>'+''.join(f'<th scope="col">{value}</th>' for value in headings)+
+            '</tr></thead><tbody>'+''.join(rows)+'</tbody></table></div>')
 
 
 def render_activation(fr):
@@ -889,6 +943,8 @@ def render(lang, compiled, sample):
         '<!-- INVENTOR_PILOT_RESULTS -->': render_inventor(fr),
         '<!-- LEARNING_RESULTS -->': render_learning(fr),
         '<!-- ACTIVATION_MAP -->': render_activation(fr),
+        '<!-- AMPLIFICATION_RESULTS -->': render_amplification(fr),
+        '<!-- AMPLIFICATION_EXAMPLE -->': escape(stable(json.loads((AMPLIFICATION_EVIDENCE/'trial.json').read_bytes())).decode()),
         '<!-- MF_UPDATED -->': timestamp_html(compiled['updated_at']),
         '<!-- MV_TIMELINE -->': ''.join(highlights),
         '<!-- MV_FILTERS -->': controls(briefs, fr),

@@ -179,6 +179,8 @@ async function foundryJourney(page, language, width) {
   assert.equal(createHash('sha256').update(learningZip).digest('hex'), release.foundry_sha256['frontier-learning-1.0.0.zip']);
   const activationZip = await (await online.get(base + 'frontier-activation-1.0.0.zip')).body();
   assert.equal(createHash('sha256').update(activationZip).digest('hex'), release.foundry_sha256['frontier-activation-1.0.0.zip']);
+  const amplificationZip = await (await online.get(base + 'frontier-activation-1.1.0.zip')).body();
+  assert.equal(createHash('sha256').update(amplificationZip).digest('hex'), release.foundry_sha256['frontier-activation-1.1.0.zip']);
   const example = await page.locator('#foundry-public-data').evaluate(node => JSON.parse(node.content.textContent));
   const context = page.context();
   await context.setOffline(true);
@@ -307,6 +309,22 @@ async function foundryJourney(page, language, width) {
     }));
     await page.locator('#foundry-activation-steps li').waitFor();
     assert.equal(await page.locator('#foundry-activation-steps li').count(), 1);
+    const amplification = page.locator('#foundry-amplification-results');
+    assert.equal(await amplification.locator('tbody tr').count(), 3);
+    await amplification.locator('summary').press('Enter');
+    await page.locator('#foundry-amplification-replay').press('Enter');
+    const displayed = await page.locator('#foundry-amplification-replay-status').textContent();
+    assert.match(displayed, /256.*e045, e072/);
+    const contextFile = {schema:'frontier/amplification-v1', objective:'Local measurement fixture',
+      binding:{model:'Local model fixture', arm:'amplified'}, state:'DEVELOPMENT_PASS',
+      attempts:[{number:1,scores:{accepted:2,cases:2}}]};
+    await page.locator('#foundry-amplification-open').setInputFiles(content('amplification-status.json', {...contextFile,
+      attempts:[{number:1,scores:{accepted:3,cases:2}}]}));
+    await page.waitForFunction(() => document.getElementById('foundry-amplification-status').textContent.includes('amplification-status.json'));
+    assert.equal(await amplification.locator('ol li').count(), 0);
+    await page.locator('#foundry-amplification-open').setInputFiles(content('amplification-status.json', contextFile));
+    await page.waitForFunction(() => document.getElementById('foundry-amplification-status').textContent.includes('Local measurement fixture'));
+    assert.equal(await amplification.locator('ol li').count(), 1);
     await page.locator('#foundry-study-reopen summary').click();
     await page.locator('#foundry-study-report').setInputFiles(content('report.json', fixture.bundle));
     const studyCases = page.locator('#foundry-study-cases');
@@ -653,6 +671,9 @@ async function walletPaths(browser, language, width) {
     assert.equal(await page.locator('#foundry-learning-steps li').count(), 0);
     assert.equal(await page.locator('#foundry-activation-status').textContent(), '');
     assert.equal(await page.locator('#foundry-activation-steps li').count(), 0);
+    assert.equal(await page.locator('#foundry-amplification-status').textContent(), '');
+    assert.equal(await page.locator('#foundry-amplification-attempts li').count(), 0);
+    assert.equal(await page.locator('#foundry-amplification-replay-status').textContent(), '');
     assert.equal(await page.locator('#goal-result').isVisible(), false);
     assert.equal(await page.locator('#goal-export').isEnabled(), false);
     assert.equal(await page.locator('#access').isVisible(), true);

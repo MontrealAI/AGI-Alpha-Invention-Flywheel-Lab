@@ -338,6 +338,24 @@ def qualify_activation(directory,root,release):
     return {'package_sha256':expected,'replayed_ns':elapsed,**evidence}
 
 
+def qualify_amplification(directory,root,release):
+    expected=release['foundry_sha256'][member.AMPLIFICATION_ZIP]
+    manifest=install(directory/member.AMPLIFICATION_ZIP,root,{'sha256':expected})
+    require(manifest['id']=='frontier-activation' and manifest['version']=='1.1.0' and
+            manifest['source']==member.commit_url(release['source_commit']),'Wrong amplification companion')
+    evidence,elapsed=call(root,sys.executable,'reproduce_amplification.py')
+    require(evidence['exact_controls']==evidence['cases']==12 and evidence['calibration']['exact_controls']==6,
+            'Amplification control failed')
+    result,_=call(root,sys.executable,'route_environment.py','study/amplification/trial.json')
+    require(result=={'load':256,'witnesses':['e045','e072'],'operational_adoption':'ABSTAIN'},
+            'Distinct-system witness failed')
+    calibration,_=call(root,sys.executable,'calibration_environment.py','study/amplification/calibration-trial.json')
+    require(calibration=={'slack':[154525728350382,1892645562643243],'witness':['row-07','row-02']},
+            'Exact calibration witness failed')
+    return {'package_sha256':expected,'replayed_ns':elapsed,'worked_contract':result,
+            'calibration_witness':calibration,**evidence}
+
+
 def qualify(directory, live=False):
     manifest = json.loads((directory / member.MEMBER_JSON).read_bytes())
     tools = manifest['capabilities']
@@ -362,6 +380,8 @@ def qualify(directory, live=False):
                     results['learning'] = qualify_learning(directory,root/'learning',release)
                 if member.ACTIVATION_ZIP in release['foundry_sha256']:
                     results['activation'] = qualify_activation(directory,root/'activation',release)
+                if member.AMPLIFICATION_ZIP in release['foundry_sha256']:
+                    results['amplification'] = qualify_amplification(directory,root/'amplification',release)
         return results
 
 

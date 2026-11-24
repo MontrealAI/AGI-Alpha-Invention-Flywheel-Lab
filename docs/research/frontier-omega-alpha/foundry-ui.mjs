@@ -153,7 +153,7 @@ function setup() {
     get('study-check').disabled = busy || !globalThis.crypto?.subtle ||
       !get('study-report').files.length || !get('study-cases').files.length;
     for (const name of ['sample','freeze','candidate','verify','case-template','mission-download','project',
-      'open','candidate-file','cases','mission-file','library-files','study-report','study-cases','inventor-open','learning-open','activation-open']) {
+      'open','candidate-file','cases','mission-file','library-files','study-report','study-cases','inventor-open','learning-open','activation-open','amplification-open']) {
       const control = get(name);
       if (control) control.disabled = busy || !globalThis.crypto?.subtle;
     }
@@ -492,6 +492,74 @@ function setup() {
         'Open activation-status.json from the local companion.');
     }
   }));
+  function clearAmplification() {
+    const list = get('amplification-attempts');
+    if (!list) return;
+    put(get('amplification-status'), '');
+    list.replaceChildren();
+    list.hidden = true;
+  }
+  get('amplification-replay')?.addEventListener('click', () => {
+    const output = get('amplification-replay-status');
+    if (!active()) return;
+    const example = readJSON(get('amplification-example').content.textContent);
+    const best = new Map();
+    for (const [evidence, system, load, rate, latency, verified] of example.rows) {
+      if (!verified || rate === null || latency === null || rate < example.rate_min || latency > example.latency_max) continue;
+      const previous = best.get(system);
+      if (!previous || previous.load < load || (previous.load === load && evidence < previous.evidence)) {
+        best.set(system, {evidence, load});
+      }
+    }
+    const ordered = [...best.values()].sort((left, right) => right.load - left.load ||
+      (left.evidence < right.evidence ? -1 : 1));
+    const chosen = ordered.slice(0, example.system_count);
+    if (chosen.length !== example.system_count) {
+      put(output, fr ? 'Mesures insuffisantes pour ce contrat.' : 'Insufficient measurements for this contract.');
+      return;
+    }
+    const items = chosen.map(row => row.evidence).join(', ');
+    put(output, fr ? `Plancher des charges mesurées · ${chosen.at(-1).load}. Preuves ${items}. Adoption opérationnelle en abstention.` :
+      `Measured capacity floor · ${chosen.at(-1).load}. Evidence ${items}. Operational adoption remains ABSTAIN.`);
+  });
+  get('amplification-open')?.addEventListener('change', launch(async alive => {
+    clearAmplification();
+    const arms = fr ? {direct:'Accès direct',harness:'HARNESS',amplified:'HARNESS avec instrument'} :
+      {direct:'Direct',harness:'HARNESS',amplified:'HARNESS with instrument'};
+    const states = fr ? {RUNNING:'En cours à l’export',DEVELOPMENT_PASS:'Développement réussi',EXHAUSTED:'Essai terminé'} :
+      {RUNNING:'Running at export',DEVELOPMENT_PASS:'Development passed',EXHAUSTED:'Trial complete'};
+    try {
+      const snapshot = await fileValue(get('amplification-open'));
+      if (!alive()) return;
+      const title = snapshot?.objective;
+      const model = snapshot?.binding?.model;
+      const arm = snapshot?.binding?.arm;
+      const state = snapshot?.state;
+      const attempts = snapshot?.attempts;
+      const validNumber = value => Number.isSafeInteger(value) && value >= 0;
+      if (snapshot?.schema !== 'frontier/amplification-v1' || !Object.hasOwn(arms,arm) || !Object.hasOwn(states,state) ||
+          typeof title !== 'string' || !title.length || title.length > 420 || typeof model !== 'string' || !model.length || model.length > 160 ||
+          !Array.isArray(attempts) || attempts.length > 50 || attempts.some((attempt, index) => attempt?.number !== index + 1 ||
+            !validNumber(attempt.scores?.accepted) || !validNumber(attempt.scores?.cases) || attempt.scores.accepted > attempt.scores.cases)) {
+        throw new Error('AMPLIFICATION_STATUS');
+      }
+      put(get('amplification-status'), [title, model, arms[arm], states[state]].join(' · '));
+      const list = get('amplification-attempts');
+      for (const attempt of attempts) {
+        const item = document.createElement('li');
+        const label = document.createElement('strong');
+        const result = document.createElement('span');
+        put(label, (fr ? 'Essai de développement ' : 'Development attempt ') + attempt.number);
+        put(result, `${attempt.scores.accepted}/${attempt.scores.cases}`);
+        item.append(label, result);
+        list.append(item);
+      }
+      list.hidden = !attempts.length;
+    } catch {
+      if (alive()) put(get('amplification-status'), fr ? 'Ouvrez le fichier amplification-status.json de l’utilitaire.' :
+        'Open amplification-status.json from the local companion.');
+    }
+  }));
   get('study-check').addEventListener('click', launch(async alive => {
     clearStudy();
     try {
@@ -556,7 +624,7 @@ function setup() {
   window.addEventListener('frontier:member-lock', () => {
     library.clear();
     updateLibrary();
-    for (const key of ['library-files','study-report','study-cases','inventor-open','learning-open','activation-open']) {
+    for (const key of ['library-files','study-report','study-cases','inventor-open','learning-open','activation-open','amplification-open']) {
       const control = get(key);
       if (control) control.value = '';
     }
@@ -564,6 +632,8 @@ function setup() {
     put(get('inventor-local'), '');
     clearLearning();
     clearActivation();
+    clearAmplification();
+    if (get('amplification-replay-status')) put(get('amplification-replay-status'), '');
     clearStudy();
     clear(true);
   });
