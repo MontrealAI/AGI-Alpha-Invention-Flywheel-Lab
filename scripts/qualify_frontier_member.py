@@ -3,6 +3,7 @@
 import argparse
 from copy import deepcopy
 import json
+import os
 from pathlib import Path, PurePosixPath
 import subprocess
 import sys
@@ -110,18 +111,84 @@ def qualify_archive(package, root, expected, live):
             'live_queries': actual, 'full_cost': None, 'test_case': 'controlled-public'}
 
 
+def qualify_foundry(directory, root, release):
+    expected = release['foundry_sha256'][member.FOUNDRY_ZIP]
+    install(directory / member.FOUNDRY_ZIP, root, {'sha256': expected})
+    example = json.loads((root / 'example.json').read_bytes())
+    demo, wall_ns = call(root, 'node', 'foundry-cli.mjs', 'demo')
+    require(demo['summary']['matched'] == demo['summary']['total'] == 6
+            and demo['result'] == {'bytes':327680,'ordered':True}, 'Public archive replay changed')
+    retained, _ = call(root, 'node', 'foundry-cli.mjs', 'recheck', 'retained/noaa-window.json', 'retained/noaa-cases.json')
+    reused, _ = call(root, 'node', 'foundry-cli.mjs', 'run', 'retained/noaa-window.json', 'retained/noaa-cases.json',
+                     'retained/noaa-reuse-input.json')
+    require(retained['summary']['matched'] == 14 and reused == {'bytes':32,'ordered':True},
+            'The packaged reference model candidate failed reproducible verification')
+    subprocess.run([sys.executable,'-c', "import json; from formulas import formula_candidate; "
+                    "a=json.load(open('example.json')); "
+                    "d=formula_candidate(a['task'],'bytes = end - start + 1\\nordered = start <= end'); "
+                    "assert d['outputs'] == a['candidate']['outputs']"], cwd=root, check=True)
+    for name, value in (('task', 'task'), ('draft','candidate'), ('cases','suite'), ('input','sample')):
+        (root / f'{name}.json').write_bytes(member.stable(example[value]))
+    sealed, _ = call(root, 'node', 'foundry-cli.mjs', 'retain', 'task.json', 'draft.json', 'cases.json')
+    (root / 'asset.json').write_bytes(member.stable(sealed))
+    original, _ = call(root, 'node', 'foundry-cli.mjs', 'recheck', 'asset.json', 'cases.json')
+    recalc, reuse_ns = call(root, 'node', 'foundry-cli.mjs', 'run', 'asset.json', 'cases.json', 'input.json')
+    require(original['summary']['matched'] == 6 and recalc == demo['result'], 'Retained instrument could not be reused')
+    modified = deepcopy(sealed)
+    modified['asset']['candidate']['outputs']['bytes'] = 1
+    (root / 'altered.json').write_bytes(member.stable(modified))
+    call(root, 'node', 'foundry-cli.mjs', 'recheck', 'altered.json', 'cases.json', expected=2)
+    modified['asset']['candidate_sha256'] = member.digest(member.stable(modified['asset']['candidate']))
+    modified['sha256'] = member.digest(member.stable(modified['asset']))
+    (root / 'altered.json').write_bytes(member.stable(modified))
+    call(root, 'node', 'foundry-cli.mjs', 'recheck', 'altered.json', 'cases.json', expected=2)
+    wrong = deepcopy(example['suite'])
+    wrong['cases'][0]['expected']['bytes'] = 17
+    (root / 'other-cases.json').write_bytes(member.stable(wrong))
+    call(root, 'node', 'foundry-cli.mjs', 'recheck', 'asset.json', 'other-cases.json', expected=2)
+    (root / 'input.json').write_bytes(b'{"start":1,"end":2000000001}')
+    call(root, 'node', 'foundry-cli.mjs', 'run', 'asset.json', 'cases.json', 'input.json', expected=2)
+    (root / 'draft.json').write_bytes(b'{"name":"refuse","inputs":["start","end"],"outputs":{"bytes":{"op":"exec","args":["rejected"]},"ordered":true}}')
+    call(root, 'node', 'foundry-cli.mjs', 'seal', 'task.json', 'draft.json', expected=2)
+    cfg = json.loads((root / 'local.example.json').read_bytes())
+    state, _ = call(root, sys.executable, 'provider.py', '--config', 'local.example.json', 'status')
+    require(state['local_only'] is True and state['providers'][0]['local'], 'Offline provider default cannot be reproduced')
+    cfg['providers']['localhost-inference']['base_url'] = 'https://example.invalid/v1'
+    (root / 'held.json').write_bytes(member.stable(cfg))
+    call(root, sys.executable, 'provider.py', '--config', 'held.json', 'status', expected=2)
+    cfg['local_only'], cfg['allow_paid_requests'], cfg['session_budget_usd'] = False,True,1
+    provider = cfg['providers']['localhost-inference']
+    provider['key_env'] = 'FOUNDRY_TEST_ONLY'
+    provider['models']['replace-with-your-model-id']['input_per_million'] = 1
+    (root / 'held.json').write_bytes(member.stable(cfg))
+    (root / 'prompt.txt').write_text('This is a denial fixture. No request may be sent.')
+    attempt = subprocess.run([sys.executable,'provider.py','--config','held.json','generate',
+                              '--provider','localhost-inference','--model','replace-with-your-model-id',
+                              '--prompt','prompt.txt'], capture_output=True, cwd=root,
+                             env={**os.environ,'FOUNDRY_TEST_ONLY':'fixture-never-a-real-credential'})
+    require(attempt.returncode == 2 and b'CONSENT' in attempt.stderr and b'Dispatching' not in attempt.stderr
+            and b'fixture-never-a-real-credential' not in attempt.stderr, 'Unapproved remote dispatch was not refused')
+    return {'archive_sample_matches':6,'reference_model_candidate_matches':14,'offline_reuse':True,'demo_wall_ns':wall_ns,'reuse_wall_ns':reuse_ns,
+            'package_sha256':expected,'negative_controls':7,'real_member_trial':None}
+
+
 def qualify(directory, live=False):
     manifest = json.loads((directory / member.MEMBER_JSON).read_bytes())
     tools = manifest['capabilities']
     with TemporaryDirectory() as work:
         root = Path(work)
-        return {
+        results = {
             'endpoint': qualify_endpoint(directory / member.ENDPOINT_ZIP, root / 'endpoint',
                                          tools['endpoint'], manifest['endpoint_reference']),
             'archive': qualify_archive(directory / member.ARCHIVE_ZIP, root / 'archive',
                                        tools['archive'], live),
             'measured_productivity': None,
         }
+        if (directory / 'atlas-release.json').is_file():
+            release = json.loads((directory / 'atlas-release.json').read_bytes())
+            if 'foundry_sha256' in release:
+                results['foundry'] = qualify_foundry(directory, root / 'foundry', release)
+        return results
 
 
 if __name__ == '__main__':

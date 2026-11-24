@@ -575,3 +575,41 @@ body:has(#member:not([hidden]):not([data-public-view])) #main > :not(#member) { 
   .goal-evidence, #mv-screen-result { grid-template-columns: 1fr; }
 }
 @media (max-width: 420px) { .mv-facets { grid-template-columns: 1fr; } }
+
+.mf-bar-inner .mf-intelligence-link { color: #f4d38f; display: inline-flex; align-items: center; min-height: 44px; font-size: .85rem; }
+.foundry-panel { max-width: 890px; }
+.foundry-panel > h3 span { color: #f4d38f; }
+.foundry-example, .foundry-entry {
+  background: linear-gradient(135deg, #342146, #1d1428 68%);
+  border: 1px solid #745b78;
+  border-inline-start: 3px solid #e7c58c;
+  border-radius: .7rem;
+  padding: clamp(1rem, 3vw, 1.65rem);
+  margin-block: 1rem 1.5rem;
+}
+.foundry-example { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: .85rem 1.5rem; }
+.foundry-example p { margin: 0; }
+.foundry-example .packet-meta { margin-block-end: .35rem; }
+.foundry-stage { border-block-start: 1px solid #594566; padding-block: 1rem; margin-block: 1rem; }
+.foundry-stage summary, .foundry-stage label { color: #f9ebd6; }
+.foundry-stage summary { cursor: pointer; padding: .6rem 0; }
+.foundry-stage label:not(.mv-check) { display: block; margin-block: .85rem .3rem; }
+.foundry-stage input:not([type=checkbox]), .foundry-stage textarea {
+  width: 100%; max-width: 100%; box-sizing: border-box;
+  color: #f9ebef; background: #21182b; border: 1px solid #886b93; border-radius: .4rem;
+  padding: .55rem .75rem; margin-block: .25rem .6rem; font: inherit;
+}
+.foundry-stage input[type=file] { font-size: .88rem; }
+.foundry-stage textarea { resize: vertical; }
+.foundry-stage .foundry-fields { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: .25rem 1rem; }
+.foundry-stage .foundry-modes { display: grid; gap: .3rem; margin-block: .5rem; }
+.foundry-stage pre, .foundry-stage .foundry-comparison { white-space: pre-wrap; overflow-wrap: anywhere; }
+.foundry-stage pre:not(:empty) { padding: .85rem; border: 1px solid #594566; background: #21182b; border-radius: .4rem; max-height: 18rem; overflow: auto; }
+.foundry-stage .foundry-binding { color: #e6cdaa; font-size: .88rem; }
+.foundry-panel .mv-actions { align-items: start; }
+.foundry-panel .mv-actions label { margin: 0; }
+@media (max-width: 640px) {
+  .mf-bar-inner .mf-intelligence-link { grid-row: 3; grid-column: 1 / -1; width: fit-content; min-height: 44px; }
+  .foundry-example, .foundry-stage .foundry-fields { grid-template-columns: 1fr; }
+  .foundry-example .entry-button { width: 100%; white-space: normal; }
+}

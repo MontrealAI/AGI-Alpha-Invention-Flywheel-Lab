@@ -1,0 +1,519 @@
+{
+  "asset": {
+    "error": "",
+    "output": {
+      "asset": {
+        "candidate": {
+          "inputs": [
+            "end",
+            "start"
+          ],
+          "name": "s1-formulas",
+          "outputs": {
+            "bytes": {
+              "args": [
+                {
+                  "args": [
+                    {
+                      "field": "end"
+                    },
+                    {
+                      "field": "start"
+                    }
+                  ],
+                  "op": "sub"
+                },
+                1
+              ],
+              "op": "add"
+            },
+            "ordered": {
+              "args": [
+                {
+                  "field": "start"
+                },
+                {
+                  "field": "end"
+                }
+              ],
+              "op": "lte"
+            }
+          }
+        },
+        "candidate_sha256": "b37b5c4dfb92770295cf26a12aefdf6a355effe61bb834689f4049588cc98d23",
+        "comparison": {
+          "matched": 14,
+          "reference": "RFC 9110 and observed NOAA ranges at 6a635b77012fb45b4d96c404a33fa04327c19674",
+          "suite_sha256": "2a05d358f9d5a948da93012ac278df620b4d55dffa44efa75cce367959d519ac",
+          "total": 14,
+          "verdict": "MATCHED"
+        },
+        "mission": {
+          "acceptance": "Every result must match the observed byte count in the historical receipt.",
+          "alternative": "Python integer arithmetic, RFC 9110 §14.1.2.",
+          "inputs": {
+            "end": {
+              "max": 2000000000,
+              "min": 0
+            },
+            "start": {
+              "max": 2000000000,
+              "min": 0
+            }
+          },
+          "language": "en",
+          "objective": "Check the byte count of an archived NOAA response window.",
+          "outputs": {
+            "bytes": "integer",
+            "ordered": "boolean"
+          },
+          "rule": "Return bytes = end - start + 1 and ordered = start <= end. Abstain if ordered is false.",
+          "schema": "frontier/foundry-mission-v1"
+        },
+        "mission_sha256": "b11982f2845a9998104d669e239dde767e8bcc4c451a8bd3ae5538d1d47ec2b8",
+        "runtime": "alpha-genesis-harness@0.3.0",
+        "schema": "frontier/foundry-asset-v1"
+      },
+      "sha256": "ab26310e2bd51d624733db78717195d7d8e3b7b73af836b859e1d8a372748f15"
+    },
+    "returncode": 0,
+    "wall_ns": 127369007
+  },
+  "attempts": {
+    "s1-formulas": {
+      "candidate": {
+        "inputs": [
+          "end",
+          "start"
+        ],
+        "name": "s1-formulas",
+        "outputs": {
+          "bytes": {
+            "args": [
+              {
+                "args": [
+                  {
+                    "field": "end"
+                  },
+                  {
+                    "field": "start"
+                  }
+                ],
+                "op": "sub"
+              },
+              1
+            ],
+            "op": "add"
+          },
+          "ordered": {
+            "args": [
+              {
+                "field": "start"
+              },
+              {
+                "field": "end"
+              }
+            ],
+            "op": "lte"
+          }
+        }
+      },
+      "candidate_sha256": "b37b5c4dfb92770295cf26a12aefdf6a355effe61bb834689f4049588cc98d23",
+      "compilation_ns": 513744,
+      "cost": {
+        "accounted": 0.0,
+        "amount": 0.0,
+        "attempts": 1,
+        "basis": "reported_usage_at_user_rates",
+        "complete_cost_known": false,
+        "currency": "USD"
+      },
+      "formulas": {
+        "bytes": "end - start + 1",
+        "ordered": "start <= end"
+      },
+      "max_output_tokens": 256,
+      "model": "qwen3-4b-instruct-2507-q4_k_m",
+      "model_wall_ns": 3691321099,
+      "prompt": "Complete two formulas using start and end (integers). The range includes both endpoints. For start=5 and end=7, bytes is 3 and ordered is True. Return only these two assignments, replacing each blank with a Python expression:\nbytes = ___\nordered = ___\nThe second assignment tests whether the first offset is at or before the last.",
+      "prompt_sha256": "8d042de945870de29d98a886324166c2ad62ca93a611a2727b0a19281a8b2f55",
+      "provider": "llama",
+      "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+      "reported_model": "qwen3-4b-instruct-2507-q4_k_m",
+      "requested_model": "qwen3-4b-instruct-2507-q4_k_m",
+      "run_id": "2773a4053d8a4a858b51a6d796c5e58f",
+      "text": "bytes = end - start + 1  \nordered = start <= end",
+      "tool_calls": [],
+      "usage": {
+        "input_tokens": 80,
+        "output_tokens": 15
+      },
+      "usage_class": "local_compute"
+    },
+    "s2_executable": {
+      "compilation_ns": 380155,
+      "construction_failure": "Formula uses an unsupported expression or function.",
+      "cost": {
+        "accounted": 0.0,
+        "amount": 0.0,
+        "attempts": 1,
+        "basis": "reported_usage_at_user_rates",
+        "complete_cost_known": false,
+        "currency": "USD"
+      },
+      "max_output_tokens": 256,
+      "model": "qwen3-4b-instruct-2507-q4_k_m",
+      "model_wall_ns": 6475407799,
+      "prompt": "Return only one Python assignment: matches = ___. The scalar inputs are start, end, length and body. Return True if all three tests pass: start is at most end; end is strictly less than length; the number of bytes in the inclusive window equals body. Use and, comparisons and arithmetic.\nS1 executable expressions: {\"bytes\":{\"args\":[{\"args\":[{\"field\":\"end\"},{\"field\":\"start\"}],\"op\":\"sub\"},1],\"op\":\"add\"},\"ordered\":{\"args\":[{\"field\":\"start\"},{\"field\":\"end\"}],\"op\":\"lte\"}} Example: start=5, end=7 gives bytes=3 and ordered=True.",
+      "prompt_sha256": "a268da0f93dbb1d36bd9eb911b6728db97df44e8ab3b9b3df25f67c926786839",
+      "provider": "llama",
+      "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+      "reported_model": "qwen3-4b-instruct-2507-q4_k_m",
+      "requested_model": "qwen3-4b-instruct-2507-q4_k_m",
+      "run_id": "dd70ffcbe3384ed8acbd0dfa85c82dd3",
+      "text": "matches = (start <= end) and (end < length) and ((end - start + 1) == len(body))",
+      "tool_calls": [],
+      "usage": {
+        "input_tokens": 134,
+        "output_tokens": 27
+      },
+      "usage_class": "local_compute"
+    },
+    "s2_ordinary": {
+      "compilation_ns": 195626,
+      "construction_failure": "Formula uses an unsupported expression or function.",
+      "cost": {
+        "accounted": 0.0,
+        "amount": 0.0,
+        "attempts": 1,
+        "basis": "reported_usage_at_user_rates",
+        "complete_cost_known": false,
+        "currency": "USD"
+      },
+      "max_output_tokens": 256,
+      "model": "qwen3-4b-instruct-2507-q4_k_m",
+      "model_wall_ns": 6376615787,
+      "prompt": "Return only one Python assignment: matches = ___. The scalar inputs are start, end, length and body. Return True if all three tests pass: start is at most end; end is strictly less than length; the number of bytes in the inclusive window equals body. Use and, comparisons and arithmetic.\nS1 assignments: bytes = end - start + 1; ordered = start <= end. Example: start=5, end=7 gives bytes=3 and ordered=True.",
+      "prompt_sha256": "b02cd2612cc3630e6e0673363388c642c4993c875d4facd5d48591bcccc9194c",
+      "provider": "llama",
+      "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+      "reported_model": "qwen3-4b-instruct-2507-q4_k_m",
+      "requested_model": "qwen3-4b-instruct-2507-q4_k_m",
+      "run_id": "d415da41c5cd4060bdfd60b275d5c8d8",
+      "text": "matches = (start <= end) and (end < length) and ((end - start + 1) == len(body))",
+      "tool_calls": [],
+      "usage": {
+        "input_tokens": 105,
+        "output_tokens": 27
+      },
+      "usage_class": "local_compute"
+    }
+  },
+  "baseline_registration": "ada2b9f9a12997d8968df53cc316ce81f730fc3b",
+  "beneficiary_acceptance": null,
+  "commercial_evidence": null,
+  "compiler_sha256": "46d43d4a017f1d32fcd9e05b32316a6fffac27e1a9572ab9ffbbf87338f00322",
+  "complete_cost": null,
+  "fresh_observation": {
+    "body_bytes": 32,
+    "body_sha256": "76bafc45fdf85a4c15f5190c042f5e45c64c2b7d021d53f140aacddfb695747e",
+    "curl_exit": 0,
+    "etag": "\"68658a7aec094dbab9432349e4ae4236\"",
+    "http": "HTTP/2 206 ",
+    "range": "bytes 0-31/534403916",
+    "requested_range": "bytes=0-31",
+    "status": "OBSERVED",
+    "url": "https://noaa-gfs-bdp-pds.s3.amazonaws.com/gfs.20240120/00/atmos/gfs.t00z.pgrb2.0p25.f024",
+    "wall_ns": 4655548178
+  },
+  "fresh_run": {
+    "error": "",
+    "output": {
+      "bytes": 32,
+      "ordered": true
+    },
+    "returncode": 0,
+    "wall_ns": 119944653
+  },
+  "fresh_run_matches_observation": true,
+  "invalid_inputs": {
+    "excess": {
+      "error": "Foundry: INPUT\n",
+      "output": "",
+      "returncode": 2,
+      "wall_ns": 92802030
+    },
+    "fraction": {
+      "error": "Foundry: INPUT\n",
+      "output": "",
+      "returncode": 2,
+      "wall_ns": 92412614
+    },
+    "missing": {
+      "error": "Foundry: INPUT\n",
+      "output": "",
+      "returncode": 2,
+      "wall_ns": 89896413
+    }
+  },
+  "model": "qwen3-4b-instruct-2507-q4_k_m",
+  "receipt_source": "6a635b77012fb45b4d96c404a33fa04327c19674",
+  "registration": "353f4842483425c27389a652d0d1388d5683462c",
+  "runtime_setup_ns": 4035778542,
+  "s1_grade": {
+    "error": "",
+    "output": {
+      "rows": [
+        {
+          "actual": {
+            "bytes": 327680,
+            "ordered": true
+          },
+          "case": 1,
+          "expected": {
+            "bytes": 327680,
+            "ordered": true
+          },
+          "matches": true
+        },
+        {
+          "actual": {
+            "bytes": 871740,
+            "ordered": true
+          },
+          "case": 2,
+          "expected": {
+            "bytes": 871740,
+            "ordered": true
+          },
+          "matches": true
+        },
+        {
+          "actual": {
+            "bytes": 327680,
+            "ordered": true
+          },
+          "case": 3,
+          "expected": {
+            "bytes": 327680,
+            "ordered": true
+          },
+          "matches": true
+        },
+        {
+          "actual": {
+            "bytes": 868999,
+            "ordered": true
+          },
+          "case": 4,
+          "expected": {
+            "bytes": 868999,
+            "ordered": true
+          },
+          "matches": true
+        },
+        {
+          "actual": {
+            "bytes": 327680,
+            "ordered": true
+          },
+          "case": 5,
+          "expected": {
+            "bytes": 327680,
+            "ordered": true
+          },
+          "matches": true
+        },
+        {
+          "actual": {
+            "bytes": 871465,
+            "ordered": true
+          },
+          "case": 6,
+          "expected": {
+            "bytes": 871465,
+            "ordered": true
+          },
+          "matches": true
+        },
+        {
+          "actual": {
+            "bytes": 327680,
+            "ordered": true
+          },
+          "case": 7,
+          "expected": {
+            "bytes": 327680,
+            "ordered": true
+          },
+          "matches": true
+        },
+        {
+          "actual": {
+            "bytes": 519321,
+            "ordered": true
+          },
+          "case": 8,
+          "expected": {
+            "bytes": 519321,
+            "ordered": true
+          },
+          "matches": true
+        },
+        {
+          "actual": {
+            "bytes": 327680,
+            "ordered": true
+          },
+          "case": 9,
+          "expected": {
+            "bytes": 327680,
+            "ordered": true
+          },
+          "matches": true
+        },
+        {
+          "actual": {
+            "bytes": 517255,
+            "ordered": true
+          },
+          "case": 10,
+          "expected": {
+            "bytes": 517255,
+            "ordered": true
+          },
+          "matches": true
+        },
+        {
+          "actual": {
+            "bytes": 327680,
+            "ordered": true
+          },
+          "case": 11,
+          "expected": {
+            "bytes": 327680,
+            "ordered": true
+          },
+          "matches": true
+        },
+        {
+          "actual": {
+            "bytes": 513535,
+            "ordered": true
+          },
+          "case": 12,
+          "expected": {
+            "bytes": 513535,
+            "ordered": true
+          },
+          "matches": true
+        },
+        {
+          "actual": {
+            "bytes": 1,
+            "ordered": true
+          },
+          "case": 13,
+          "expected": {
+            "bytes": 1,
+            "ordered": true
+          },
+          "matches": true
+        },
+        {
+          "actual": {
+            "bytes": -3,
+            "ordered": false
+          },
+          "case": 14,
+          "expected": {
+            "bytes": -3,
+            "ordered": false
+          },
+          "matches": true
+        }
+      ],
+      "summary": {
+        "matched": 14,
+        "reference": "RFC 9110 and observed NOAA ranges at 6a635b77012fb45b4d96c404a33fa04327c19674",
+        "suite_sha256": "2a05d358f9d5a948da93012ac278df620b4d55dffa44efa75cce367959d519ac",
+        "total": 14,
+        "verdict": "MATCHED"
+      }
+    },
+    "returncode": 0,
+    "wall_ns": 114206650
+  },
+  "s1_seal": {
+    "error": "",
+    "output": {
+      "instrument": {
+        "inputs": [
+          "end",
+          "start"
+        ],
+        "name": "s1-formulas",
+        "outputs": {
+          "bytes": {
+            "args": [
+              {
+                "args": [
+                  {
+                    "field": "end"
+                  },
+                  {
+                    "field": "start"
+                  }
+                ],
+                "op": "sub"
+              },
+              1
+            ],
+            "op": "add"
+          },
+          "ordered": {
+            "args": [
+              {
+                "field": "start"
+              },
+              {
+                "field": "end"
+              }
+            ],
+            "op": "lte"
+          }
+        }
+      },
+      "instrument_sha256": "b37b5c4dfb92770295cf26a12aefdf6a355effe61bb834689f4049588cc98d23",
+      "mission_sha256": "b11982f2845a9998104d669e239dde767e8bcc4c451a8bd3ae5538d1d47ec2b8",
+      "task": {
+        "acceptance": "Every result must match the observed byte count in the historical receipt.",
+        "alternative": "Python integer arithmetic, RFC 9110 §14.1.2.",
+        "inputs": {
+          "end": {
+            "max": 2000000000,
+            "min": 0
+          },
+          "start": {
+            "max": 2000000000,
+            "min": 0
+          }
+        },
+        "language": "en",
+        "objective": "Check the byte count of an archived NOAA response window.",
+        "outputs": {
+          "bytes": "integer",
+          "ordered": "boolean"
+        },
+        "rule": "Return bytes = end - start + 1 and ordered = start <= end. Abstain if ordered is false.",
+        "schema": "frontier/foundry-mission-v1"
+      }
+    },
+    "returncode": 0,
+    "wall_ns": 130127223
+  },
+  "schema": "frontier/foundry-formula-trial-v1",
+  "seed": 283,
+  "temperature": 0,
+  "weights_sha256": "2fde00ce69dd4899c70d020845e2638353015bba0fdf161b3eb965f2bca4464e"
+}

@@ -1,0 +1,188 @@
+{
+  "beneficiary_acceptance": null,
+  "classic_comparator": "Python integer arithmetic with counts bound to public NOAA receipts",
+  "comparative_advantage": "INSUFFICIENT EVIDENCE",
+  "complete_cost": null,
+  "construction_attempts": {
+    "direct-s1": {
+      "cost": {
+        "accounted": 0.0,
+        "amount": 0.0,
+        "attempts": 1,
+        "basis": "reported_usage_at_user_rates",
+        "complete_cost_known": false,
+        "currency": "USD"
+      },
+      "elapsed_ns": 12210989804,
+      "model": "qwen2.5-0.5b-q4_k_m",
+      "prompt": "For each start/end pair in order, output JSON only. Return an array of objects containing bytes (end - start + 1) and ordered (start <= end). Inputs: [{\"start\":406923678,\"end\":407251357},{\"start\":406923678,\"end\":407795417},{\"start\":412681604,\"end\":413009283},{\"start\":412681604,\"end\":413550602},{\"start\":413793511,\"end\":414121190},{\"start\":413793511,\"end\":414664975},{\"start\":426642289,\"end\":426969968},{\"start\":426642289,\"end\":427161609},{\"start\":421887149,\"end\":422214828},{\"start\":421887149,\"end\":422404403},{\"start\":423253432,\"end\":423581111},{\"start\":423253432,\"end\":423766966},{\"start\":7,\"end\":7},{\"start\":8,\"end\":4}]",
+      "prompt_sha256": "b6fa34e005a01d25988f728f87cff5ce20950037f7f742b23542ef5a016b1110",
+      "provider": "llama",
+      "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+      "reported_model": "qwen2.5-0.5b-q4_k_m",
+      "requested_model": "qwen2.5-0.5b-q4_k_m",
+      "run_id": "direct-s1",
+      "text": "```json\n[\n  {\"start\": 406923678, \"end\": 407251357},\n  {\"start\": 406923678, \"end\": 407795417},\n  {\"start\": 412681604, \"end\": 413009283},\n  {\"start\": 412681604, \"end\": 413550602},\n  {\"start\": 413793511, \"end\": 414121190},\n  {\"start\": 413793511, \"end\": 414664975},\n  {\"start\": 426642289, \"end\": 426969968},\n  {\"start\": 426642289, \"end\": 427161609},\n  {\"start\": 421887149, \"end\": 422214828},\n  {\"start\": 421887149, \"end\": 422404403},\n  {\"start\": 423253432, \"end\": 423581111},\n  {\"start\": 423253432, \"end\": 423766966},\n  {\"start\": 7, \"end\": 7}\n]\n```",
+      "tool_calls": [],
+      "usage": {
+        "input_tokens": 370,
+        "output_tokens": 368
+      },
+      "usage_class": "local_compute"
+    },
+    "s1": {
+      "candidate_file_sha256": "9ffdc73653be4aadc8cdd5baa7975e3627dc2064c5dad6859453eff12c84fab3",
+      "cost": {
+        "accounted": 0.0,
+        "amount": 0.0,
+        "attempts": 1,
+        "basis": "reported_usage_at_user_rates",
+        "complete_cost_known": false,
+        "currency": "USD"
+      },
+      "elapsed_ns": 20710731011,
+      "model": "qwen2.5-0.5b-q4_k_m",
+      "prompt": "Return one JSON object representing a bounded HARNESS instrument. Return only JSON.\nExactly three top-level keys: name, inputs, outputs.\ninputs is an array of these declared names: [\"end\",\"start\"]\noutputs is an object with one expression per declared output name.\nExpressions are safe integer, boolean or text literals, {\"field\":\"name\"}, or {\"op\":\"add\",\"args\":[1,2]}.\nAllowed operators: add, sub, mul, min, max, eq, lt, lte, gt, gte, and, or, not. Use sub, comparisons and not with their usual arity.\nArguments must be expressions. Use raw numeric literals. No assignments, source code, nested data lookups, permissions or confirmations.\nSyntax example for an unrelated task: {\"name\":\"Example\",\"inputs\":[\"x\",\"y\"],\"outputs\":{\"total\":{\"op\":\"add\",\"args\":[{\"field\":\"x\"},{\"field\":\"y\"}]}}}\nMission: {\"acceptance\":\"Every result must match the observed byte count in the historical receipt.\",\"alternative\":\"Python integer arithmetic, RFC 9110 §14.1.2.\",\"inputs\":{\"end\":{\"max\":2000000000,\"min\":0},\"start\":{\"max\":2000000000,\"min\":0}},\"language\":\"en\",\"objective\":\"Check the byte count of an archived NOAA response window.\",\"outputs\":{\"bytes\":\"integer\",\"ordered\":\"boolean\"},\"rule\":\"Return bytes = end - start + 1 and ordered = start <= end. Abstain if ordered is false.\",\"schema\":\"frontier/foundry-mission-v1\"}\n",
+      "prompt_sha256": "d2026c3704010283594b59e8cfec3e233ddbf79ea75046dfe52a8e0c31b70149",
+      "provider": "llama",
+      "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+      "reported_model": "qwen2.5-0.5b-q4_k_m",
+      "requested_model": "qwen2.5-0.5b-q4_k_m",
+      "run_id": "s1",
+      "seal": {
+        "error": "Foundry: CANDIDATE\n",
+        "output": "",
+        "returncode": 2,
+        "wall_ns": 144958241
+      },
+      "text": "```json\n{\n  \"name\": \"NOAA Response Window\",\n  \"inputs\": [\n    {\n      \"name\": \"end\",\n      \"inputs\": [\"end\"],\n      \"outputs\": {\n        \"bytes\": {\n          \"op\": \"add\",\n          \"args\": [\n            {\n              \"field\": \"end\"\n            }\n          ]\n        }\n      }\n    },\n    {\n      \"name\": \"start\",\n      \"inputs\": [\"start\"],\n      \"outputs\": {\n        \"bytes\": {\n          \"op\": \"add\",\n          \"args\": [\n            {\n              \"field\": \"start\"\n            }\n          ]\n        }\n      }\n    }\n  ],\n  \"outputs\": {\n    \"bytes\": {\n      \"op\": \"add\",\n      \"args\": [\n        {\n          \"field\": \"end\"\n        },\n        {\n          \"field\": \"start\"\n        }\n      ]\n    },\n    \"ordered\": {\n      \"op\": \"eq\",\n      \"args\": [\n        {\n          \"field\": \"start\"\n        },\n        {\n          \"field\": \"end\"\n        }\n      ]\n    }\n  },\n  \"rule\": {\n    \"acceptance\": \"Every result must match the observed byte count in the historical receipt.\",\n    \"alternative\": \"Python integer arithmetic, RFC 9110 §14.1.2.\",\n    \"inputs\": {\n      \"end\": {\n        \"max\": 2000000000,\n        \"min\": 0\n      },\n      \"start\": {\n        \"max\": 2000000000,\n        \"min\": 0\n      }\n    },\n    \"language\": \"en\",\n    \"objective\": \"Check the byte count of an archived NOAA response window.\",\n    \"schema\": \"frontier/foundry-mission-v1\"\n  }\n}\n```",
+      "tool_calls": [],
+      "usage": {
+        "input_tokens": 362,
+        "output_tokens": 385
+      },
+      "usage_class": "local_compute"
+    },
+    "s1-syntax-repair": {
+      "candidate_file_sha256": "9ffdc73653be4aadc8cdd5baa7975e3627dc2064c5dad6859453eff12c84fab3",
+      "cost": {
+        "accounted": 0.0,
+        "amount": 0.0,
+        "attempts": 1,
+        "basis": "reported_usage_at_user_rates",
+        "complete_cost_known": false,
+        "currency": "USD"
+      },
+      "elapsed_ns": 14523068821,
+      "model": "qwen2.5-0.5b-q4_k_m",
+      "prompt": "Return one JSON object representing a bounded HARNESS instrument. Return only JSON.\nExactly three top-level keys: name, inputs, outputs.\ninputs is an array of these declared names: [\"end\",\"start\"]\noutputs is an object with one expression per declared output name.\nExpressions are safe integer, boolean or text literals, {\"field\":\"name\"}, or {\"op\":\"add\",\"args\":[1,2]}.\nAllowed operators: add, sub, mul, min, max, eq, lt, lte, gt, gte, and, or, not. Use sub, comparisons and not with their usual arity.\nArguments must be expressions. Use raw numeric literals. No assignments, source code, nested data lookups, permissions or confirmations.\nSyntax example for an unrelated task: {\"name\":\"Example\",\"inputs\":[\"x\",\"y\"],\"outputs\":{\"total\":{\"op\":\"add\",\"args\":[{\"field\":\"x\"},{\"field\":\"y\"}]}}}\nMission: {\"acceptance\":\"Every result must match the observed byte count in the historical receipt.\",\"alternative\":\"Python integer arithmetic, RFC 9110 §14.1.2.\",\"inputs\":{\"end\":{\"max\":2000000000,\"min\":0},\"start\":{\"max\":2000000000,\"min\":0}},\"language\":\"en\",\"objective\":\"Check the byte count of an archived NOAA response window.\",\"outputs\":{\"bytes\":\"integer\",\"ordered\":\"boolean\"},\"rule\":\"Return bytes = end - start + 1 and ordered = start <= end. Abstain if ordered is false.\",\"schema\":\"frontier/foundry-mission-v1\"}\n\nOnly repair the output JSON structure. Previous reply:\n```json\n{\n  \"name\": \"NOAA Response Window\",\n  \"inputs\": [\n    {\n      \"name\": \"end\",\n      \"inputs\": [\"end\"],\n      \"outputs\": {\n        \"bytes\": {\n          \"op\": \"add\",\n          \"args\": [\n            {\n              \"field\": \"end\"\n            }\n          ]\n        }\n      }\n    },\n    {\n      \"name\": \"start\",\n      \"inputs\": [\"start\"],\n      \"outputs\": {\n        \"bytes\": {\n          \"op\": \"add\",\n          \"args\": [\n            {\n              \"field\": \"start\"\n            }\n          ]\n        }\n      }\n    }\n  ],\n  \"outputs\": {\n    \"bytes\": {\n      \"op\": \"add\",\n      \"args\": [\n        {\n          \"field\": \"end\"\n        },\n        {\n          \"field\": \"start\"\n        }\n      ]\n    },\n    \"ordered\": {\n      \"op\": \"eq\",\n      \"args\": [\n        {\n          \"field\": \"start\"\n        },\n        {\n          \"field\": \"end\"\n        }\n      ]\n    }\n  },\n  \"rule\": {\n    \"acceptance\": \"Every result must match the observed byte count in the historical receipt.\",\n    \"alternative\": \"Python integer arithmetic, RFC 9110 §14.1.2.\",\n    \"inputs\": {\n      \"end\": {\n        \"max\": 2000000000,\n        \"min\": 0\n      },\n      \"start\": {\n        \"max\": 2000000000,\n        \"min\": 0\n      }\n    },\n    \"language\": \"en\",\n    \"objective\": \"Check the byte count of an archived NOAA response window.\",\n    \"schema\": \"frontier/foundry-mission-v1\"\n  }\n}\n```",
+      "prompt_sha256": "0144b4e2b0735a0373f26a696cde8c295c4b3ceca79b3be2549a61326a7f1eb8",
+      "provider": "llama",
+      "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+      "reported_model": "qwen2.5-0.5b-q4_k_m",
+      "requested_model": "qwen2.5-0.5b-q4_k_m",
+      "run_id": "s1-syntax-repair",
+      "seal": {
+        "error": "Foundry: CANDIDATE\n",
+        "output": "",
+        "returncode": 2,
+        "wall_ns": 98917105
+      },
+      "text": "```json\n{\n  \"name\": \"NOAA Response Window\",\n  \"inputs\": [\n    {\n      \"name\": \"end\",\n      \"inputs\": [\"end\"],\n      \"outputs\": {\n        \"bytes\": {\n          \"op\": \"add\",\n          \"args\": [\n            {\n              \"field\": \"end\"\n            }\n          ]\n        }\n      }\n    },\n    {\n      \"name\": \"start\",\n      \"inputs\": [\"start\"],\n      \"outputs\": {\n        \"bytes\": {\n          \"op\": \"add\",\n          \"args\": [\n            {\n              \"field\": \"start\"\n            }\n          ]\n        }\n      }\n    }\n  ],\n  \"outputs\": {\n    \"bytes\": {\n      \"op\": \"add\",\n      \"args\": [\n        {\n          \"field\": \"end\"\n        },\n        {\n          \"field\": \"start\"\n        }\n      ]\n    },\n    \"ordered\": {\n      \"op\": \"eq\",\n      \"args\": [\n        {\n          \"field\": \"start\"\n        },\n        {\n          \"field\": \"end\"\n        }\n      ]\n    }\n  },\n  \"rule\": {\n    \"acceptance\": \"Every result must match the observed byte count in the historical receipt.\",\n    \"alternative\": \"Python integer arithmetic, RFC 9110 §14.1.2.\",\n    \"inputs\": {\n      \"end\": {\n        \"max\": 2000000000,\n        \"min\": 0\n      },\n      \"start\": {\n        \"max\": 2000000000,\n        \"min\": 0\n      }\n    },\n    \"language\": \"en\",\n    \"objective\": \"Check the byte count of an archived NOAA response window.\",\n    \"schema\": \"frontier/foundry-mission-v1\"\n  }\n}\n```",
+      "tool_calls": [],
+      "usage": {
+        "input_tokens": 756,
+        "output_tokens": 385
+      },
+      "usage_class": "local_compute"
+    },
+    "s2-ordinary-reuse": {
+      "candidate_file_sha256": "81f807ad350e5d749b0308eef673e749cf4ccf77d5608a75f3b0742f24d92af4",
+      "cost": {
+        "accounted": 0.0,
+        "amount": 0.0,
+        "attempts": 1,
+        "basis": "reported_usage_at_user_rates",
+        "complete_cost_known": false,
+        "currency": "USD"
+      },
+      "elapsed_ns": 3481932246,
+      "model": "qwen2.5-0.5b-q4_k_m",
+      "prompt": "Return one JSON object representing a bounded HARNESS instrument. Return only JSON.\nExactly three top-level keys: name, inputs, outputs.\ninputs is an array of these declared names: [\"body\",\"end\",\"length\",\"start\"]\noutputs is an object with one expression per declared output name.\nExpressions are safe integer, boolean or text literals, {\"field\":\"name\"}, or {\"op\":\"add\",\"args\":[1,2]}.\nAllowed operators: add, sub, mul, min, max, eq, lt, lte, gt, gte, and, or, not. Use sub, comparisons and not with their usual arity.\nArguments must be expressions. Use raw numeric literals. No assignments, source code, nested data lookups, permissions or confirmations.\nSyntax example for an unrelated task: {\"name\":\"Example\",\"inputs\":[\"x\",\"y\"],\"outputs\":{\"total\":{\"op\":\"add\",\"args\":[{\"field\":\"x\"},{\"field\":\"y\"}]}}}\nMission: {\"acceptance\":\"Every original and malformed byte window agrees with the Python/RFC reference.\",\"alternative\":\"Python integer arithmetic, RFC 9110 §14.1.2.\",\"inputs\":{\"body\":{\"max\":2000000000,\"min\":0},\"end\":{\"max\":2000000000,\"min\":0},\"length\":{\"max\":2000000000,\"min\":0},\"start\":{\"max\":2000000000,\"min\":0}},\"language\":\"en\",\"objective\":\"Check that the archived response length agrees with the partial byte window.\",\"outputs\":{\"matches\":\"boolean\"},\"rule\":\"Return matches = start <= end and end < length and body == end - start + 1.\",\"schema\":\"frontier/foundry-mission-v1\"}\n\nS1 knowledge: inputs start, end. bytes = end - start + 1. ordered = start <= end. Outputs bytes (integer) and ordered (boolean). Example: start 5 end 7 gives bytes 3 and ordered true.",
+      "prompt_sha256": "07bafc4d052964cf9ab12d1a606a0655d93f6eeabcff26231ca986eca39c8888",
+      "provider": "llama",
+      "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+      "reported_model": "qwen2.5-0.5b-q4_k_m",
+      "requested_model": "qwen2.5-0.5b-q4_k_m",
+      "run_id": "s2-ordinary-reuse",
+      "seal": {
+        "error": "Foundry: CANDIDATE\n",
+        "output": "",
+        "returncode": 2,
+        "wall_ns": 122923374
+      },
+      "text": "```json\n{\n  \"name\": \"length\",\n  \"inputs\": [\"body\", \"end\", \"length\", \"start\"],\n  \"outputs\": {\n    \"matches\": \"boolean\",\n    \"ordered\": true\n  }\n}\n```",
+      "tool_calls": [],
+      "usage": {
+        "input_tokens": 449,
+        "output_tokens": 50
+      },
+      "usage_class": "local_compute"
+    }
+  },
+  "control_predecessor": {
+    "historical_case_count": 12,
+    "invalid_input_controls": [
+      "missing",
+      "out-of-domain",
+      "fraction"
+    ],
+    "standalone_input_already_in_historical_suite": true
+  },
+  "direct_grade": {
+    "expected": 14,
+    "status": "INVALID_OUTPUT"
+  },
+  "discovery": {
+    "has_more": false,
+    "models": [
+      {
+        "configured": true,
+        "id": "qwen2.5-0.5b-q4_k_m"
+      }
+    ],
+    "scope": "Provider-reported first page; listing does not prove generation access or model capability."
+  },
+  "host": "Linux-6.18.57-x86_64-with-glibc2.41",
+  "model": "qwen2.5-0.5b-q4_k_m",
+  "model_sha256": "74a4da8c9fdbcd15bd1f6d01d621410d31c6fc00986f5eb687824e7b93d7a9db",
+  "node": "v24.22.3",
+  "output_token_limit": 512,
+  "python_s1": {
+    "includes_setup_review_maintenance": false,
+    "kernel_ns": 10141,
+    "matched": 14,
+    "total": 14
+  },
+  "python_s2": {
+    "kernel_ns": 15666,
+    "total": 26
+  },
+  "realized_economic_value": null,
+  "registration": "ada2b9f9a12997d8968df53cc316ce81f730fc3b",
+  "runtime": "llama.cpp b12242 CPU-only, four threads, 4096 context, parallel=1, prompt cache disabled",
+  "runtime_setup_ns": 2044309943,
+  "s1_grade": {
+    "status": "NO_VALID_CANDIDATE"
+  },
+  "s1_reference_source": "6a635b77012fb45b4d96c404a33fa04327c19674",
+  "s2-ordinary-reuse": {
+    "status": "NO_VALID_CANDIDATE"
+  },
+  "s2-retained": {
+    "status": "NO_QUALIFIED_S1"
+  },
+  "schema": "frontier/registered-foundry-trial-v1",
+  "seed": 283,
+  "temperature": 0
+}

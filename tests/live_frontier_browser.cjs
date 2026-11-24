@@ -157,6 +157,83 @@ function fakeWallet() {
   state.emit = (event, payload) => listeners.get(event)?.(payload);
 }
 
+async function foundryJourney(page, language, width) {
+  const french = language === 'fr';
+  const nav = page.locator('.mf-intelligence-link');
+  await nav.press('Enter');
+  assert.equal(await nav.getAttribute('aria-current'), 'page');
+  assert.equal(await page.locator(':focus').getAttribute('id'), 'my-intelligence-title');
+  assert.equal(await page.locator('[data-member-view]:visible').count(), 1);
+  assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
+  await capture(page, language, width, 'my-intelligence');
+  const online = page.request;
+  const release = await (await online.get(base + 'atlas-release.json')).json();
+  const zip = await (await online.get(base + 'frontier-foundry-1.0.0.zip')).body();
+  assert.equal(createHash('sha256').update(zip).digest('hex'), release.foundry_sha256['frontier-foundry-1.0.0.zip']);
+  const example = await page.locator('#foundry-public-data').evaluate(node => JSON.parse(node.content.textContent));
+  const context = page.context();
+  await context.setOffline(true);
+  try {
+    await page.locator('#foundry-sample').click();
+    await page.waitForFunction(() => document.getElementById('foundry-comparison').textContent.includes('6/6'));
+    assert.deepEqual(JSON.parse(await page.locator('#foundry-output').textContent()), {bytes:327680,ordered:true});
+    const exportButton = page.locator('#foundry-retain');
+    assert.equal(await exportButton.isEnabled(), false);
+    await page.locator('#foundry-export-consent').check();
+    const downloaded = page.waitForEvent('download');
+    await exportButton.click();
+    const original = JSON.parse(await readFile(await (await downloaded).path(), 'utf8'));
+    const altered = structuredClone(original);
+    altered.asset.candidate.outputs.bytes = 1;
+    const open = page.locator('#foundry-open');
+    await open.setInputFiles(content('altered.json', altered));
+    await page.waitForFunction(lang => document.getElementById('foundry-status').textContent.includes(
+      lang === 'fr' ? 'changé' : 'changed'), language);
+    await open.setInputFiles(content('retained.json', original));
+    await page.waitForFunction(lang => document.getElementById('foundry-comparison').textContent.includes(
+      lang === 'fr' ? 'intégrité' : 'integrity'), language);
+    assert.equal(await page.locator('#foundry-run').isEnabled(), false);
+    await page.locator('#foundry-cases').setInputFiles(content('original-cases.json', example.suite));
+    await page.waitForFunction(() => document.getElementById('foundry-comparison').textContent.includes('6/6'));
+    await page.locator('#foundry-inputs').fill('{"start":0,"end":31}');
+    await page.locator('#foundry-run').click();
+    assert.deepEqual(JSON.parse(await page.locator('#foundry-output').textContent()), {bytes:32,ordered:true});
+    await page.locator('#foundry-clear').click();
+    assert.equal(await page.locator('#foundry-output').textContent(), '');
+
+    await page.locator('#foundry-mission summary').click();
+    for (const [id,value] of Object.entries({objective:french ? 'Compter les minutes' : 'Count elapsed minutes',
+      rule:'Return elapsed = finish - start.', fields:'start:integer, finish:integer', outputs:'elapsed:integer',
+      alternative:'Integer subtraction', acceptance:'Exact result from the authorized clock readings'})) {
+      await page.locator('#foundry-' + id).fill(value);
+    }
+    await page.locator('#foundry-freeze').click();
+    await page.locator('#foundry-handoff').waitFor({state:'visible'});
+    const prompt = await page.locator('#foundry-prompt').inputValue();
+    assert.ok(prompt.includes('Exact result from the authorized clock readings'));
+    assert.equal(await page.locator('#foundry-copy').isEnabled(), false);
+    const allowed = {name:'Elapsed',inputs:['start','finish'],outputs:{elapsed:{op:'sub',args:[{field:'finish'},{field:'start'}]}}};
+    await page.locator('#foundry-response').fill(JSON.stringify({...allowed, instructions:'untrusted code'}));
+    await page.locator('#foundry-candidate').click();
+    assert.equal(await page.locator('#foundry-verification').isVisible(), false);
+    await page.locator('#foundry-response').fill(JSON.stringify(allowed));
+    await page.locator('#foundry-candidate').click();
+    await page.locator('#foundry-verification').waitFor({state:'visible'});
+    const exported = page.waitForEvent('download');
+    await page.locator('#foundry-project').click();
+    const file = await readFile(await (await exported).path(), 'utf8');
+    const result = await page.evaluate(raw => globalThis.HarnessEngine.importProject(raw), file);
+    assert.equal(result.artifactProvenance.verification, 'UNKNOWN');
+    assert.deepEqual(result.instrumentSpec.inputs, ['start','finish']);
+    const hash = await page.locator('#foundry-mission-hash').textContent();
+    await page.locator('#foundry-cases').setInputFiles(content('cases.json', {schema:'frontier/foundry-cases-v1',
+      mission_sha256:hash,reference:'Browser qualification fixture, direct integer arithmetic',
+      cases:[{input:{start:10,finish:13},expected:{elapsed:3}}]}));
+    await page.waitForFunction(() => document.getElementById('foundry-comparison').textContent.includes('1/1'));
+    await capture(page, language, width, 'foundry-verified');
+  } finally { await context.setOffline(false); }
+}
+
 async function destination(page, name) {
   const nav = page.locator(`.mf-destinations a[href="#${name}"]`);
   await nav.press('Enter');
@@ -459,6 +536,7 @@ async function walletPaths(browser, language, width) {
     await matchGoal(page, admitted.source_version, admitted.id, 'review');
     assert.equal(admitted.evidence, 'source-identity-only');
 
+    await foundryJourney(page, language, width);
     await page.locator('.mf-public-link').click();
     assert.equal(await page.locator('#possibility-shifts').isVisible(), true);
     assert.equal(await member.isVisible(), false);
@@ -472,6 +550,8 @@ async function walletPaths(browser, language, width) {
     assert.equal(await page.locator('#mv-screen-result').textContent(), '');
     assert.equal(await page.locator('#mv-consent').isChecked(), false);
     assert.equal(await page.locator('#goal-text').inputValue(), '');
+    assert.equal(await page.locator('#foundry-objective').inputValue(), '');
+    assert.equal(await page.locator('#foundry-comparison').textContent(), '');
     assert.equal(await page.locator('#goal-result').isVisible(), false);
     assert.equal(await page.locator('#goal-export').isEnabled(), false);
     assert.equal(await page.locator('#access').isVisible(), true);
@@ -533,7 +613,8 @@ async function walletPaths(browser, language, width) {
       scriptedFirstUseMs:scriptedMs, scriptedJourney:'sign in → goal → run → export → recheck',
       goalAwareRanking:true, savedGoalRecheck:true, missingEvidenceCheck:true, liveEvidenceFingerprints:true, restoredAfterSignIn:true,
       appShell:true, keyboardNavigation:true, publicAtlasReturn:true,
-      executionFailureAndRetry:true,
+      executionFailureAndRetry:true, foundryOfflineReplay:true, foundryManualHandoffFixture:true,
+      foundryNativeProject:true, foundryAssetReopen:true,
       offlineRunAndReceipt: true, receiptTamperDenial: true, rehashedReceiptDenial:true, archivedEditionDownloads:true,
       lock: true, expiry: true, reconnect: true, accountSwitchDenial: true });
   } finally {
