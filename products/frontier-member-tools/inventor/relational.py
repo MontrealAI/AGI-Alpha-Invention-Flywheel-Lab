@@ -53,6 +53,8 @@ def evaluate(schema, tables, sql):
     with closing(sqlite3.connect(':memory:', cached_statements=0)) as db:
         db.execute('PRAGMA trusted_schema=OFF')
         db.execute('PRAGMA temp_store=MEMORY')
+        # The companion runs in its own CLI process. Keep SQLite heap use bounded there.
+        db.execute('PRAGMA hard_heap_limit=67108864')
         for table, columns in schema.items():
             rows = tables[table]
             if not isinstance(rows, list) or len(rows) > 512:

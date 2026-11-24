@@ -203,7 +203,7 @@ def source_inputs(public):
                        ('atlas-release.json','member-value.json','endpoint-evidence-screen-1.0.0.zip')}})
 
 
-def main(root, public, seed, selection=None):
+def main(root, public, seed, selection=None, observations=False):
     development = root/'constructor'
     confirmation = root/'evaluator'
     development.mkdir(mode=0o700, parents=True)
@@ -245,6 +245,8 @@ def main(root, public, seed, selection=None):
             raise ValueError('A sealed opportunity selection from the larger model is required.')
         registration['opportunity_run_sha256'] = digest(selection)
         save(development/'fixed-opportunity.json', selection)
+    if observations:
+        registration['development_feedback'] = 'observations'
     save(root/'registration.json', registration)
     save(confirmation/'generation.json',{'seed':str(seed),'scope':'Public controlled examples and one release replay per mission.'})
 
@@ -255,6 +257,7 @@ if __name__ == '__main__':
     parser.add_argument('public',type=Path)
     parser.add_argument('--seed',type=int)
     parser.add_argument('--reuse-selection',type=Path)
+    parser.add_argument('--observations',action='store_true')
     args = parser.parse_args()
     selected = json.loads(args.reuse_selection.read_bytes()) if args.reuse_selection else None
-    main(args.root,args.public,secrets.randbits(63) if args.seed is None else args.seed,selected)
+    main(args.root,args.public,secrets.randbits(63) if args.seed is None else args.seed,selected,args.observations)

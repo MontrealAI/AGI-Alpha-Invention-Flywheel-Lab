@@ -23,7 +23,8 @@ def grade(registration, mission, cases, artifact, arm):
         binding = artifact['binding']
         require(binding['kind'] == 'construction' and binding['arm'] == arm and
                 binding['mission_sha256'] == commitment['mission'] and
-                binding['cases_sha256'] == commitment['development'], 'RUN_BINDING')
+                binding['cases_sha256'] == commitment['development'] and
+                binding.get('development_feedback') == registration.get('development_feedback'), 'RUN_BINDING')
         candidate = artifact['result']
         development_status = artifact['status']
     require(development_status in ('CONVENTIONAL','SEALED','DEVELOPMENT_INCOMPLETE','ABSTAIN'), 'RUN_OPEN')

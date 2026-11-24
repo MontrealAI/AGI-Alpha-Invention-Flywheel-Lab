@@ -13,7 +13,7 @@ def load(path):
     return json.loads(path.read_bytes())
 
 
-def main(study, companion, config):
+def main(study, companion, config, first_only=False):
     registration = load(study/'registration.json')
     constructor, evaluator = study/'constructor', study/'evaluator'
     output = study/'observed'
@@ -26,9 +26,10 @@ def main(study, companion, config):
         return json.loads(subprocess.run(command, check=True, stdout=subprocess.PIPE).stdout)
 
     def construct(kind, label, meeting, budget, *arguments):
+        feedback = ('--observations',) if kind == 'construct' and registration.get('development_feedback') else ()
         return execute('inventor.py',kind,'--workspace',blocks/label,'--input',meeting,
                        '--config',config,'--provider','localhost-inference','--model',registration['model'],
-                       '--budget',budget,*arguments)
+                       '--budget',budget,*arguments,*feedback)
 
     def assess(name, label, candidate, arm):
         result = execute('inventor_verify.py',study/'registration.json',constructor/f'{name}.json',
@@ -59,7 +60,7 @@ def main(study, companion, config):
     assess(first,'first',blocks/'first/run.json','original')
     for name in MISSIONS:
         assess(name,f'{name}-conventional',evaluator/f'{name}-incumbent.json','conventional')
-    if runs['first']['result'] is not None:
+    if not first_only and runs['first']['result'] is not None:
         runs['method'] = construct('learn','method',blocks/'first/run.json',budgets['method'],'--development',dev)
         if runs['method']['status'] == 'SEALED':
             prior = output/'prior.json'
@@ -84,5 +85,6 @@ if __name__ == '__main__':
     parser.add_argument('study',type=Path)
     parser.add_argument('companion',type=Path)
     parser.add_argument('config',type=Path)
+    parser.add_argument('--first-only',action='store_true')
     args = parser.parse_args()
-    main(args.study.resolve(), args.companion.resolve(), args.config.resolve())
+    main(args.study.resolve(), args.companion.resolve(), args.config.resolve(), args.first_only)
