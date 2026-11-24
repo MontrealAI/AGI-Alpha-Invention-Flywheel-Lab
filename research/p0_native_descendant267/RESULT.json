@@ -1,0 +1,100 @@
+{
+  "accepted": false,
+  "actual_commerce": false,
+  "cache_reuse_qualified": false,
+  "cases": [
+    {
+      "audit_hits": 183,
+      "audit_launches": 5,
+      "authorize_launches": 2,
+      "descendant_legacy_launches": 0,
+      "descendant_patched_launches": 0,
+      "diagnostic_markers": [],
+      "exit": 0,
+      "isolated_boots": 7,
+      "method": "test_public_cli_upgrade_operation_resume_audit_and_scoreboard",
+      "private_log_sha256": "db978ea45f3f0d7061db6326435154642c2b21f16615b569ec701de7b7307a28",
+      "waited_child_cpu_seconds": 95.68816,
+      "wall_seconds": 97.084755078
+    },
+    {
+      "audit_hits": 197,
+      "audit_launches": 109,
+      "authorize_launches": 4,
+      "descendant_legacy_launches": 0,
+      "descendant_patched_launches": 54,
+      "diagnostic_markers": [
+        "TimeoutExpired"
+      ],
+      "exit": 1,
+      "isolated_boots": 113,
+      "method": "test_forward_engine_only_upgrade_preserves_prior_transition_and_same_business",
+      "private_log_sha256": "b9f577669784f4863d256f65fa0daafb9345ab555a02d6db7d74f838723f8de1",
+      "waited_child_cpu_seconds": 94.79172600000001,
+      "wall_seconds": 254.96949964499998
+    },
+    {
+      "audit_hits": 181,
+      "audit_launches": 1,
+      "authorize_launches": 1,
+      "descendant_legacy_launches": 0,
+      "descendant_patched_launches": 0,
+      "diagnostic_markers": [],
+      "exit": 0,
+      "isolated_boots": 2,
+      "method": "test_cached_historical_audit_rechecks_source_and_artifact_bytes",
+      "private_log_sha256": "bb065bd6b362e5046c07d8d3eb9d50b5084aee1d3632703cef1943d4092439ee",
+      "waited_child_cpu_seconds": 81.928595,
+      "wall_seconds": 82.24081548100003
+    }
+  ],
+  "context_checks": {
+    "changed_dependency_rejected": true,
+    "changed_evidence_invalidates": true,
+    "changed_service_rejected": true,
+    "changed_source_rejected": true,
+    "nested_history_abstains": true,
+    "pending_evidence_abstains": true,
+    "stable_context": true
+  },
+  "dependency_count": 171,
+  "dependency_manifest_sha256": "4c972d209e9d72f06660dfcba3cdf40f1d7f78af58fae5d226791ea3cf3d0e33",
+  "original_account_accessed": false,
+  "owner_commit": "ced6c1cb004887dcdafaea59a2976020be649f8e",
+  "owner_tests_sha256": "0e8f4c71206f1d1b4962bca22b9cda5272f750cb84bce5e92f274d75d99470c4",
+  "owner_tests_unchanged": true,
+  "patch_sha256": "b69494f384381ea75be501979a829d70681b17e8f5c10bdd32b4cfded5489d82",
+  "patched_source_unchanged": true,
+  "prior_research_commit": "1851100612b8c80a1852f413057bdb635de62d3a",
+  "probe_sha256": "dbb225555093b6798cfcab3cebbef97d57a100d581db15c790534e87569d0a13",
+  "scope": "Native fixture research; no nested memoization or security-sandbox qualification",
+  "static_gates": [
+    {
+      "accepted": true,
+      "name": "changed_bootstrap_codec"
+    },
+    {
+      "accepted": true,
+      "name": "changed_bootstrap_manifest"
+    },
+    {
+      "accepted": true,
+      "name": "unknown_codecless_inventory"
+    },
+    {
+      "accepted": true,
+      "name": "changed_historical_codec"
+    },
+    {
+      "accepted": true,
+      "name": "exact_legacy_selects_bootstrap"
+    },
+    {
+      "accepted": true,
+      "name": "historical_codec_selects_import"
+    }
+  ],
+  "waited_child_cpu_seconds": 272.411287,
+  "wall_seconds": 434.384236845,
+  "whole_episode_billing_usd": null
+}
