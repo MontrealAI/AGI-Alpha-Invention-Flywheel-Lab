@@ -1,0 +1,80 @@
+{
+  "accepted": false,
+  "actual_commerce": false,
+  "cache_reuse_qualified": false,
+  "cases": [
+    {
+      "audit_launches": 161,
+      "authorize_launches": 2,
+      "diagnostic_markers": [
+        "TimeoutExpired"
+      ],
+      "exit": 1,
+      "method": "test_public_cli_upgrade_operation_resume_audit_and_scoreboard",
+      "private_log_sha256": "ea8e30f7be10108d91101dfe5d8459a7ac589f5297b89c68b0f3a307e9597d80",
+      "waited_child_cpu_seconds": 44.529948,
+      "wall_seconds": 166.56344958300002
+    },
+    {
+      "audit_launches": 291,
+      "authorize_launches": 4,
+      "diagnostic_markers": [
+        "TimeoutExpired"
+      ],
+      "exit": 1,
+      "method": "test_forward_engine_only_upgrade_preserves_prior_transition_and_same_business",
+      "private_log_sha256": "e6ea5f3d30e348e057e69fc13e9c0a4c9cebac7ddfa4e6d9876d0af781c4e8c4",
+      "waited_child_cpu_seconds": 119.538535,
+      "wall_seconds": 280.20613513899997
+    },
+    {
+      "audit_launches": 182,
+      "authorize_launches": 1,
+      "diagnostic_markers": [],
+      "exit": 0,
+      "method": "test_cached_historical_audit_rechecks_source_and_artifact_bytes",
+      "private_log_sha256": "f52795ce2b0d1be0bf570816439c770cbf2793b9b67eeb0a4b478536185ec9d7",
+      "waited_child_cpu_seconds": 181.89704200000006,
+      "wall_seconds": 182.79806553100002
+    }
+  ],
+  "dependency_count": 171,
+  "dependency_manifest_sha256": "4c972d209e9d72f06660dfcba3cdf40f1d7f78af58fae5d226791ea3cf3d0e33",
+  "original_account_accessed": false,
+  "owner_commit": "ced6c1cb004887dcdafaea59a2976020be649f8e",
+  "owner_tests_sha256": "0e8f4c71206f1d1b4962bca22b9cda5272f750cb84bce5e92f274d75d99470c4",
+  "owner_tests_unchanged": true,
+  "patch_sha256": "6db9bb9b0edbb2929a25623cf87ecbbcdaa9cffd011552988d8d784375491fbf",
+  "patched_source_unchanged": true,
+  "prior_research_commit": "1851100612b8c80a1852f413057bdb635de62d3a",
+  "probe_sha256": "98b740d520f4c69beabf58f244a67d7276b4ceb84b611075717263fe2e0900da",
+  "static_gates": [
+    {
+      "accepted": true,
+      "name": "changed_bootstrap_codec"
+    },
+    {
+      "accepted": true,
+      "name": "changed_bootstrap_manifest"
+    },
+    {
+      "accepted": true,
+      "name": "unknown_codecless_inventory"
+    },
+    {
+      "accepted": true,
+      "name": "changed_historical_codec"
+    },
+    {
+      "accepted": true,
+      "name": "exact_legacy_selects_bootstrap"
+    },
+    {
+      "accepted": true,
+      "name": "historical_codec_selects_import"
+    }
+  ],
+  "waited_child_cpu_seconds": 345.96787500000005,
+  "wall_seconds": 629.624171554,
+  "whole_episode_billing_usd": null
+}
