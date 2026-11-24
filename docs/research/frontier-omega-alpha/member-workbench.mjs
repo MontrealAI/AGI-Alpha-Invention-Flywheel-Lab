@@ -127,6 +127,13 @@ function setupExplorer() {
       ? [...cards].sort(([a], [b]) => b.dataset.observed.localeCompare(a.dataset.observed)) : cards;
     grid.append(...sorted.map(([card]) => card));
   });
+  window.addEventListener('frontier:member-lock', () => {
+    query.value = order.value = '';
+    for (const select of filters) select.value = '';
+    order.selectedIndex = 0;
+    grid.append(...cards.map(([card]) => card));
+    update();
+  });
   for (const link of member.querySelectorAll('[data-mv-open]')) {
     link.addEventListener('click', event => {
       if (member.hidden || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
@@ -352,7 +359,7 @@ ${current.rows.length} ${words.rows} · ${words.floor} ${current.minimum_tokens_
     noResult.hidden = true;
     keep.hidden = !hasCrypto;
     shell.step(4);
-    if (!member.hasAttribute('data-public-view')) shell.show(resultArea, {remember:true});
+    if (!member.hasAttribute('data-public-view')) shell.show(resultPanel, {remember:true});
     tell(words.sync);
     enable();
     return true;

@@ -588,7 +588,9 @@ class ResearchSiteTests(unittest.TestCase):
         import os
         import subprocess
         for name in ('index.html', 'fr.html'):
-            page = (self.source / 'frontier-omega-alpha' / name).read_text()
+            language = 'fr' if name == 'fr.html' else 'en'
+            template = (ROOT / 'products' / 'frontier-member-tools' / f'member.{language}.html').read_text()
+            page = (self.source / 'frontier-omega-alpha' / name).read_text().replace('<!-- FRONTIER_MEMBER_VALUE -->', template)
             self.assertIn('src="wallet-check.js"', page)
             self.assertIn("connect-src 'none'", page)
             self.assertIn('data-connect="club" disabled', page)

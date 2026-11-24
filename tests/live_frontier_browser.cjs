@@ -274,6 +274,9 @@ async function guidedJourney(page, language, width, started) {
     assert.match(await page.locator('.mf-steps [aria-current="step"]').innerText(), /Result|Résultat/);
     assert.equal(await page.locator('#my-frontier').isVisible(), true);
     assert.equal(await page.locator('#mv-tools').isVisible(), false);
+    const metric = await output.locator('.mf-result-metric strong').boundingBox();
+    const bar = await page.locator('.mf-bar').boundingBox();
+    assert.ok(metric.y >= bar.y + bar.height, 'The sticky header must not obscure the outcome');
     await capture(page, language, width, 'guided-result');
     await output.locator('summary').press('Enter');
     assert.match(await output.locator('.mv-plan').innerText(), /100[\s\S]*500/);
