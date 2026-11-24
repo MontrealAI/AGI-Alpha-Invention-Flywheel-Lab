@@ -1,0 +1,166 @@
+{
+  "actual_commerce": false,
+  "baseline_context_checks": {
+    "changed_dependency_rejected": true,
+    "changed_evidence_invalidates": true,
+    "changed_service_rejected": true,
+    "changed_source_rejected": true,
+    "nested_history_abstains": true,
+    "pending_evidence_abstains": true,
+    "stable_context": true
+  },
+  "baseline_patch_sha256": "b69494f384381ea75be501979a829d70681b17e8f5c10bdd32b4cfded5489d82",
+  "baseline_static_gates": [
+    {
+      "accepted": true,
+      "name": "changed_bootstrap_codec"
+    },
+    {
+      "accepted": true,
+      "name": "changed_bootstrap_manifest"
+    },
+    {
+      "accepted": true,
+      "name": "unknown_codecless_inventory"
+    },
+    {
+      "accepted": true,
+      "name": "changed_historical_codec"
+    },
+    {
+      "accepted": true,
+      "name": "exact_legacy_selects_bootstrap"
+    },
+    {
+      "accepted": true,
+      "name": "historical_codec_selects_import"
+    }
+  ],
+  "dependency_manifest_sha256": "4c972d209e9d72f06660dfcba3cdf40f1d7f78af58fae5d226791ea3cf3d0e33",
+  "descendant_anchors": {
+    "child_wait": 2,
+    "descendant_closure_check": 1,
+    "descendant_total": 1,
+    "inventory": 1
+  },
+  "diagnostic_markers": [
+    "TimeoutExpired"
+  ],
+  "diagnostic_usable": true,
+  "instrumented_anchors": {
+    "authorize": 1,
+    "child_wait": 1,
+    "inventory": 1,
+    "launch_total": 1,
+    "leaf_context": 1,
+    "load_jobs": 2,
+    "post_launch_source_check": 1,
+    "source_inventory": 1,
+    "ticket_body": 1,
+    "verify_historical": 1
+  },
+  "instrumented_patch_sha256": "7fa728ba9d44b28128cf9304c475e646cd39fc923d6db9969f64194d89965e04",
+  "instrumented_source_unchanged": true,
+  "legacy_launch_counts": {
+    "audit": 109,
+    "audit_hit": 200,
+    "authorize": 4,
+    "boot": 113,
+    "descendant_patched": 54
+  },
+  "method": "test_forward_engine_only_upgrade_preserves_prior_transition_and_same_business",
+  "native_accepted": false,
+  "native_exit": 1,
+  "original_account_accessed": false,
+  "owner_commit": "ced6c1cb004887dcdafaea59a2976020be649f8e",
+  "owner_test_sha256": "0e8f4c71206f1d1b4962bca22b9cda5272f750cb84bce5e92f274d75d99470c4",
+  "owner_test_unchanged": true,
+  "prior_commit": "1851100612b8c80a1852f413057bdb635de62d3a",
+  "private_log_sha256": "20e9753ca13aec0c6729889b4196637ad6441d1ac9142647b807221c7fbb9ee0",
+  "probe_sha256": "df2b8e20448fa1a8dc07edeecba1e0883a1dc8e493eed533beeedf5117f826f1",
+  "trace": {
+    "ambiguous_parent_wait_matches": 54,
+    "audit_input_wait_spans": 163,
+    "distinct_correlated_boot_input_digests": 3,
+    "distinct_exact_audit_input_digests": 3,
+    "interpretation": "Inclusive timings overlap across phases and processes; duplicate spans are not distinct physical launches. Exact input repetition is not cache eligibility. Unclosed spans are censored, not zero time.",
+    "invalid_pairs": 0,
+    "isolated_boot_spans": 113,
+    "malformed_rows": 0,
+    "missing_parent_wait_matches": 0,
+    "observed_boots_with_correlated_audit_input": 109,
+    "orphan_end": 0,
+    "phase_totals": {
+      "authorize": {
+        "count": 4,
+        "inclusive_ns": 13324021745,
+        "returned": 4
+      },
+      "boot_observed": {
+        "count": 113,
+        "inclusive_ns": 5520402,
+        "returned": 113
+      },
+      "child_wait": {
+        "count": 167,
+        "inclusive_ns": 219463549524,
+        "returned": 167
+      },
+      "descendant_total": {
+        "count": 54,
+        "inclusive_ns": 28499234378,
+        "returned": 54
+      },
+      "inventory": {
+        "count": 1081,
+        "inclusive_ns": 46224893778,
+        "returned": 1081
+      },
+      "launch_total": {
+        "count": 114,
+        "inclusive_ns": 248452973945,
+        "returned": 113
+      },
+      "leaf_context": {
+        "count": 367,
+        "inclusive_ns": 35399599250,
+        "returned": 367
+      },
+      "load_jobs": {
+        "count": 419,
+        "inclusive_ns": 61579496712,
+        "returned": 419
+      },
+      "post_launch_source_check": {
+        "count": 113,
+        "inclusive_ns": 9338733861,
+        "returned": 113
+      },
+      "source_inventory": {
+        "count": 968,
+        "inclusive_ns": 29423587418,
+        "returned": 968
+      },
+      "ticket_body": {
+        "count": 310,
+        "inclusive_ns": 371012099,
+        "returned": 310
+      },
+      "verify_historical": {
+        "count": 310,
+        "inclusive_ns": 345841999479,
+        "returned": 309
+      }
+    },
+    "repeated_correlated_boot_inputs": 106,
+    "repeated_exact_input_wait_spans": 160,
+    "single_parent_wait_matches": 59,
+    "spans_completed": 4020,
+    "spans_started": 4020,
+    "unclosed_spans": 0,
+    "usable": true
+  },
+  "waited_child_cpu_seconds": 94.309581,
+  "wall_seconds": 256.25624670900004,
+  "whole_episode_billing_usd": null
+}
