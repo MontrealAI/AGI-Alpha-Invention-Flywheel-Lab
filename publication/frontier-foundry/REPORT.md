@@ -24,6 +24,25 @@ The comparison separates measurement, acceptance and authority. The public archi
 
 A live streaming Qwen3 request returned two valid assignments separated by a semicolon. The initial importer required one assignment per line and correctly stopped without making an executable file. I changed the importer to inspect Python's syntax tree and accept named scalar assignments with either separator. It rejects execution statements and uses the existing HARNESS formula compiler to emit only data. Independent review identified an expansion risk. The updated importer counts expanded nodes before serializing. The corrected packaged path discovered the model, previewed the request, streamed a reply, compiled and checked **6/6**, and exported a reusable capability. The model call took **5.22 s** with **146** input and **15** output tokens. The [operation receipt](companion-operation.json) preserves both the failure and the resulting artifact identity.
 
+## New task · archive continuation
+
+The [registered comparisons](SUCCESSOR-STUDY.md) measured whether a retained byte-window instrument helped a local Qwen3-4B construct an archive-continuation validator. Two bounded NOAA reads matched the independently fetched combined bytes in each cohort. Each cohort comprised one such observation and 48 generated verification cases kept outside the model prompts.
+
+| Cohort | Conventional incumbent | Direct | Ordinary reuse | Reuse by named outputs |
+| --- | ---: | ---: | ---: | ---: |
+| Initial contract | 49/49 | 43/49 | 43/49 | 43/49 |
+| Clarified zero-based boundary | 49/49 | 49/49 | 49/49 | 49/49 |
+
+The first three model outputs used `end <= object_bytes` and accepted six out-of-bounds responses. The second comparison gave every arm a developer-written clarification with the strict bound. It used a fresh holdout and a different archive object. All three candidates tied again. Both named-output arms left the inherited outputs unused. The clarified instrument is usable offline in the registered scope. Keep the conventional incumbent for operation.
+
+Initial construction took 48.91 s per arm on this CPU host, including local validation. Initial reported input tokens were 243, 314 and 337, and output tokens were 37, 35 and 35. Clarified construction took 13.80, 14.19 and 13.81 s with input token counts of 276, 347 and 370, and 35 output tokens each. The three public acquisitions took 10.97 s and 14.20 s in the respective cohorts. An in-process Python oracle evaluated the first 49 rows in 29 µs on the same host. These measurements cover different steps. End-to-end advantage and complete cost remain unknown. No paid model request or customer transaction occurred. Work acceptance, setup and labor costs, energy, maintenance and realized value remain unmeasured.
+
+- [Initial report](successor-study/report.json) · [cases](successor-study/cases.json) · [source receipt](successor-study/source.json)
+- [Clarified report](successor-followup/report.json) · [cases](successor-followup/cases.json) · [source receipt](successor-followup/source.json)
+- [Companion commands and operating boundaries](../../products/frontier-member-tools/foundry/SUCCESSORS.md)
+
+The portable reports contain the exact plans, candidates, case commitments and comparison fingerprints. The NOAA retrieval and Python oracle supplied separate reference evidence. The studies ran under one development operator on a shared host. Independent administrative custody requires the approval tracked in #565.
+
 ## Versions and reproduction
 
 - [Initial registration](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/ada2b9f9a12997d8968df53cc316ce81f730fc3b/publication/frontier-foundry/REGISTRATION.md) and [exact failure receipt](archive-trial.json).
@@ -57,3 +76,5 @@ Les fichiers ci-dessus conservent les réponses initiales de Qwen2.5-0.5B, les d
 Dans la rubrique **Mon intelligence**, lancez le rejeu ou figez une mission. Ouvrez un instrument HARNESS et des cas issus d’une méthode de référence, puis exécutez et exportez le résultat. Suivez les mêmes commandes hors ligne pour réutiliser l’instrument exact, sans charger le modèle. La référence signée, le protocole public, les réponses du modèle et les empreintes sont conservés. Les fichiers éditoriaux servis par Pages sont publics. L’accès à l’interface demeure réservé aux comptes admissibles. Les dossiers #550 et #565 demeurent applicables.
 
 Les relevés établissent une qualification technique et un réemploi sur une nouvelle entrée publique. Ils ne démontrent ni avantage économique ni amélioration récursive. L’évaluation humaine, l’acceptation d’une mission membre réelle et la mesure des coûts complets restent à établir.
+
+Pour la nouvelle décision de reprise d’un transfert météo, les trois démarches Qwen3 ont d’abord réussi **43 cas sur 49**, contre **49 sur 49** pour Python. Elles ont toutes accepté par erreur six réponses dont la dernière position égalait la longueur de l’objet. Après avoir précisé que la numérotation commence à zéro, les trois démarches et Python ont réussi **49 cas sur 49** sur une nouvelle grille. Chaque série comprenait 48 cas générés et une observation NOAA vérifiée séparément. Les sorties nommées de l’instrument antérieur n’ont servi dans aucune démarche. Les résultats justifient de garder la référence conventionnelle. L’utilitaire 1.1 permet de refaire les deux comparaisons hors ligne.

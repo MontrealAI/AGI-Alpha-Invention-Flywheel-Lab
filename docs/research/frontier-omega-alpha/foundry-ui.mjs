@@ -2,6 +2,7 @@ import {downloadJSON} from './frontier-goals.mjs';
 import {fingerprint} from './outcome-receipt.mjs';
 import {compare, fieldsFromText, freeze, harnessProject, importDraft, kinds, maxBytes, mission,
   promptFor, readJSON, reopen, requalify, retain, run} from './foundry-core.mjs';
+import {replayStudy, studyArms} from './foundry-study.mjs';
 
 const id = name => document.getElementById(name);
 const root = id('my-intelligence');
@@ -21,6 +22,17 @@ const words = fr ? {
   clipboard:'Sélectionnez et copiez la consigne affichée.',
   saved:'Fichier préparé sur cet appareil.',
   bad:'Vérifiez le format et les limites affichés. L’instrument précédent a été conservé.',
+  libraryReady:'Intégrité des fichiers contrôlée. Rouvrez un instrument avec sa grille d’origine.',
+  libraryFull:'La bibliothèque de session peut contenir jusqu’à 32 capacités. Retirez des éléments pour en ouvrir d’autres.',
+  libraryRemoved:'Capacité retirée de la session.', libraryOpen:'Rouvrir pour vérifier', libraryExport:'Exporter', libraryRemove:'Retirer',
+  studyReady:'Les résultats ont été reproduits avec la grille enregistrée.',
+  studyKeep:'L’outil de référence a réussi tous les cas. Conservez-le pour l’utilisation courante.',
+  studyReview:'Examinez les écarts avant de choisir un outil.',
+  studyOpen:'Examiner l’instrument', studyScope:'Durées locales observées. Le coût complet et l’acceptation du travail restent à établir.',
+  studyLabels:['Référence conventionnelle','Construction directe','Réemploi ordinaire','Réemploi par noms de sorties'],
+  studyFailures:{NO_CANDIDATE:'Aucun instrument valide', PROVIDER_ERROR:'Erreur de connexion ou du modèle',
+    INTERRUPTED:'Interrompu', PENDING:'En attente'},
+  STUDY:'Le rapport ou la grille diffère du protocole enregistré. Ouvrez les fichiers d’origine.',
   FIELDS:'Utilisez des noms uniques suivis de :integer, :boolean ou :text.',
   MISSION:'Précisez le résultat, la règle, la méthode de référence et les critères d’acceptation.',
   CANDIDATE:'La réponse ne respecte pas le format HARNESS ou les champs de la mission.',
@@ -48,6 +60,17 @@ const words = fr ? {
   clipboard:'Select and copy the displayed prompt.',
   saved:'File prepared on this device.',
   bad:'Check the displayed format and limits. The previous instrument has been kept.',
+  libraryReady:'File integrity checked. Reopen an instrument with its original case sheet.',
+  libraryFull:'This session holds up to 32 capabilities. Remove entries to open more.',
+  libraryRemoved:'Capability removed from this session.', libraryOpen:'Reopen for verification', libraryExport:'Export', libraryRemove:'Remove',
+  studyReady:'Results reproduced with the registered case sheet.',
+  studyKeep:'The conventional incumbent passed every case. Keep it for current use.',
+  studyReview:'Review the differences before choosing an instrument.',
+  studyOpen:'Inspect instrument', studyScope:'These are local timings. Complete cost and work acceptance require separate evidence.',
+  studyLabels:['Conventional incumbent','Direct construction','Ordinary reuse','Reuse by named outputs'],
+  studyFailures:{NO_CANDIDATE:'No valid instrument', PROVIDER_ERROR:'Connection or model error',
+    INTERRUPTED:'Interrupted', PENDING:'Pending'},
+  STUDY:'The report or cases differ from the registered study. Open the original files.',
   FIELDS:'Use unique names followed by :integer, :boolean or :text.',
   MISSION:'Specify the outcome, rule, reference method and acceptance criteria.',
   CANDIDATE:'The reply does not match the HARNESS format or mission fields.',
@@ -70,6 +93,8 @@ function setup() {
   const status = value => put(get('status'), value);
   const showJSON = (node, value) => put(node, JSON.stringify(value, null, 2));
   const json = key => readJSON(get(key).value, key === 'response');
+  const library = new Map();
+  const maximumLibraryItems = 32;
   let task, sealed, suite, saved, publicReplay, checked, generation = 0;
   let busy = false;
   const controls = root.querySelectorAll('input, textarea, button');
@@ -83,9 +108,57 @@ function setup() {
     get('retain').disabled = busy || !checked || !get('export-consent').checked;
     get('copy').disabled = busy || !task || !get('share').checked;
     get('kit').disabled = busy || !task || !get('share').checked;
+    get('library-files').disabled = busy || !globalThis.crypto?.subtle;
+    get('study-report').disabled = get('study-cases').disabled = busy;
+    get('study-check').disabled = busy || !globalThis.crypto?.subtle ||
+      !get('study-report').files.length || !get('study-cases').files.length;
     for (const name of ['sample','freeze','open','candidate','verify','case-template','mission-download','project']) {
       get(name).disabled = busy || !globalThis.crypto?.subtle;
     }
+  }
+
+  function updateLibrary() {
+    const items = get('library-items');
+    items.replaceChildren();
+    for (const [hash, envelope] of library) {
+      const asset = envelope.asset;
+      const entry = document.createElement('li');
+      const title = document.createElement('strong');
+      const scope = document.createElement('p');
+      const actions = document.createElement('div');
+      actions.className = 'mv-actions';
+      put(title, asset.mission.objective);
+      put(scope, `${asset.runtime} · ${asset.comparison.matched}/${asset.comparison.total} · ${hash.slice(0, 12)}`);
+      function button(label, action) {
+        const control = document.createElement('button');
+        control.type = 'button';
+        control.className = 'quiet';
+        put(control, label);
+        control.addEventListener('click', action);
+        actions.append(control);
+      }
+      button(words.libraryOpen, launch(async alive => {
+        if (await openAsset(envelope, alive)) location.hash = 'foundry-verification';
+      }));
+      button(words.libraryExport, () => {
+        if (active()) downloadJSON(envelope, `frontier-capability-${hash.slice(0, 12)}.json`);
+      });
+      button(words.libraryRemove, () => {
+        if (!active() || busy) return;
+        library.delete(hash);
+        updateLibrary();
+        put(get('library-status'), words.libraryRemoved);
+        get('library-files').focus();
+      });
+      entry.append(title, scope, actions);
+      items.append(entry);
+    }
+  }
+
+  function clearStudy() {
+    put(get('study-status'), '');
+    get('study-outcomes').replaceChildren();
+    get('study-outcomes').hidden = true;
   }
 
   function clear(lock = false) {
@@ -159,10 +232,21 @@ function setup() {
     status(checked ? (publicReplay ? words.sample : words.current) : words.rejected);
   }
 
-  async function fileValue(node, allowFence = false) {
-    const file = node.files[0];
+  async function readFile(file, allowFence = false) {
     if (!file || file.size > maxBytes) throw new Error('FILE');
     return readJSON(await file.text(), allowFence);
+  }
+  const fileValue = (node, allowFence) => readFile(node.files[0], allowFence);
+
+  async function openAsset(envelope, alive) {
+    const item = await reopen(envelope);
+    if (!alive() || !await start(item.frozen.task, alive)) return false;
+    saved = item;
+    sealed = item.frozen;
+    put(get('seal'), sealed.instrument_sha256);
+    put(get('comparison'), words.imported);
+    status(words.imported);
+    return true;
   }
 
   form.addEventListener('submit', launch(alive => start({
@@ -230,17 +314,87 @@ function setup() {
     const asset = await retain(sealed, suite);
     if (!alive() || !get('export-consent').checked) return;
     downloadJSON(asset, 'frontier-capability.json');
+    if (library.size < maximumLibraryItems) {
+      library.set(asset.sha256, asset);
+      updateLibrary();
+    }
     status(words.saved);
   }));
   get('open').addEventListener('change', launch(async alive => {
     const data = await fileValue(get('open'));
-    const item = await reopen(data);
-    if (!alive() || !await start(item.frozen.task, alive)) return;
-    saved = item;
-    sealed = item.frozen;
-    put(get('seal'), sealed.instrument_sha256);
-    put(get('comparison'), words.imported);
-    status(words.imported);
+    if (alive()) await openAsset(data, alive);
+  }));
+  get('library-files').addEventListener('change', launch(async alive => {
+    const field = get('library-files');
+    const message = get('library-status');
+    const files = [...field.files];
+    field.value = '';
+    if (files.length > maximumLibraryItems) { put(message, words.libraryFull); return; }
+    const opened = new Map(library);
+    try {
+      for (const file of files) {
+        const envelope = await readFile(file);
+        if (!alive()) return;
+        await reopen(envelope);
+        if (!alive()) return;
+        opened.set(envelope.sha256, envelope);
+      }
+      if (opened.size > maximumLibraryItems) { put(message, words.libraryFull); return; }
+      for (const [hash, envelope] of opened) library.set(hash, envelope);
+      updateLibrary();
+      put(message, words.libraryReady);
+    } catch (error) {
+      if (alive()) put(message, Object.hasOwn(words, error.message) ? words[error.message] : words.bad);
+    }
+  }));
+  for (const key of ['study-report','study-cases']) {
+    get(key).addEventListener('change', () => { clearStudy(); render(); });
+  }
+  get('study-check').addEventListener('click', launch(async alive => {
+    clearStudy();
+    try {
+      const bundleFile = get('study-report').files[0];
+      const casesFile = get('study-cases').files[0];
+      const cases = await readFile(casesFile);
+      const report = await replayStudy(await readFile(bundleFile), cases);
+      if (!alive() || bundleFile !== get('study-report').files[0] || casesFile !== get('study-cases').files[0]) return;
+      const {reference, outcomes, decision} = report.comparison;
+      const result = get('study-outcomes');
+      [null, ...studyArms].forEach((arm, index) => {
+        const armResult = arm ? outcomes[arm] : null;
+        const measure = arm ? armResult.comparison : reference;
+        const attempt = arm ? report.attempts[arm] : null;
+        const entry = document.createElement('div');
+        const term = document.createElement('dt');
+        const value = document.createElement('dd');
+        put(term, words.studyLabels[index]);
+        put(value, measure ? `${measure.matched}/${measure.total}` : words.studyFailures[armResult.status]);
+        if (Number.isSafeInteger(attempt?.elapsed_ns)) {
+          value.append(' · ' + (attempt.elapsed_ns / 1e9).toLocaleString(fr ? 'fr-CA' : 'en-CA', {maximumFractionDigits:2}) + ' s');
+        }
+        if (attempt && measure?.verdict === 'MATCHED') {
+          const open = document.createElement('button');
+          open.type = 'button';
+          open.className = 'quiet';
+          put(open, words.studyOpen);
+          open.addEventListener('click', launch(async stillOpen => {
+            if (!await start(report.plan.study.task, stillOpen)) return;
+            await applyCandidate(attempt.candidate, stillOpen);
+            if (!stillOpen()) return;
+            await acceptCases(cases, stillOpen);
+            if (stillOpen()) location.hash = 'foundry-verification';
+          }));
+          value.append(document.createElement('br'), open);
+        }
+        entry.append(term, value);
+        result.append(entry);
+      });
+      result.hidden = false;
+      put(get('study-status'), [words.studyReady, decision === 'KEEP_INCUMBENT' ? words.studyKeep : words.studyReview,
+        words.studyScope].join(' '));
+    } catch (error) {
+      if (alive()) put(get('study-status'), Object.hasOwn(words, error.message) ? words[error.message] : words.bad);
+    }
   }));
   get('sample').addEventListener('click', launch(async alive => {
     const example = readJSON(get('public-data').content.textContent);
@@ -257,7 +411,14 @@ function setup() {
     clear(true);
     get('mission').querySelector('summary').focus();
   });
-  window.addEventListener('frontier:member-lock', () => clear(true));
+  window.addEventListener('frontier:member-lock', () => {
+    library.clear();
+    updateLibrary();
+    for (const key of ['library-files','study-report','study-cases']) get(key).value = '';
+    put(get('library-status'), '');
+    clearStudy();
+    clear(true);
+  });
   document.querySelectorAll('[data-foundry-start]').forEach(link => link.addEventListener('click', () => {
     if (active() && !task) {
       if (!get('objective').value) get('objective').value = id('goal-text').value;

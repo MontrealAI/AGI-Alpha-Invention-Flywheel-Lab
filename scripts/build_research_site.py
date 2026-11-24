@@ -79,6 +79,7 @@ ASSETS += (
     'frontier-omega-alpha/frontier-goals.mjs',
     'frontier-omega-alpha/foundry-core.mjs',
     'frontier-omega-alpha/foundry-ui.mjs',
+    'frontier-omega-alpha/foundry-study.mjs',
 ) + DECISION_EDITION_ASSETS
 FILES = PAPERS + PAGES + ASSETS + ('publication-manifest.json',)
 PUBLIC_SITE = 'https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/'
@@ -100,6 +101,7 @@ ATLAS_OUTPUTS = frozenset({
     'frontier-omega-alpha/member-value.json', 'frontier-omega-alpha/endpoint-evidence-screen-1.0.0.zip',
     'frontier-omega-alpha/noaa-archive-point-1.0.0.zip',
     'frontier-omega-alpha/frontier-foundry-1.0.0.zip',
+    'frontier-omega-alpha/frontier-foundry-1.1.0.zip',
 })
 STATES = ('discovered', 'qualified', 'testing', 'verified', 'falsified', 'abstain', 'retained', 'deployed', 'value-verified')
 POSSIBILITY_SOURCE_PATTERNS = (

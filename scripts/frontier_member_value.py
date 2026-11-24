@@ -26,11 +26,13 @@ ENDPOINT_ZIP = 'endpoint-evidence-screen-1.0.0.zip'
 ARCHIVE_ZIP = 'noaa-archive-point-1.0.0.zip'
 MEMBER_JSON = 'member-value.json'
 FOUNDRY_ZIP = 'frontier-foundry-1.0.0.zip'
+STUDY_ZIP = 'frontier-foundry-1.1.0.zip'
 FOUNDRY_ENGINE = 'harness-engine.js'
 FOUNDRY_INPUT = 'FOUNDRY_PUBLIC_DATA'
 HARNESS_PIN = '39e76570c851b3527d78a526053a9ea2a611a993'
 HARNESS = 'products/alpha-genesis-harness/'
-FOUNDRY_ASSETS = ('foundry-core.mjs', 'foundry-ui.mjs', 'outcome-receipt.mjs', FOUNDRY_ENGINE, FOUNDRY_ZIP)
+FOUNDRY_ASSETS = ('foundry-core.mjs', 'foundry-ui.mjs', 'foundry-study.mjs', 'outcome-receipt.mjs',
+                  FOUNDRY_ENGINE, FOUNDRY_ZIP, STUDY_ZIP)
 
 OUTPUTS = frozenset(SITE + name for name in (ENDPOINT_ZIP, ARCHIVE_ZIP, MEMBER_JSON))
 MARKER = '<!-- FRONTIER_MEMBER_VALUE -->'
@@ -91,8 +93,8 @@ def archive_bytes():
     return contents
 
 
-def package(path, files, name, pin, scope):
-    manifest = {'schema': 'frontier/portable-capability-v1', 'id': name, 'version': '1.0.0',
+def package(path, files, name, pin, scope, version='1.0.0'):
+    manifest = {'schema': 'frontier/portable-capability-v1', 'id': name, 'version': version,
                 'source': commit_url(pin), 'rights': RIGHTS, 'qualification_scope': scope,
                 'file_sha256': {key: digest(value) for key, value in files.items()}}
     with ZipFile(path, 'w', compression=ZIP_STORED) as release:
@@ -137,8 +139,8 @@ def foundry_example(fr=False):
 
 
 def build_foundry(destination):
-    source = TOOLS / 'foundry'
-    files = {name: (source / name).read_bytes() for name in
+    companion = TOOLS / 'foundry'
+    files = {name: (companion / name).read_bytes() for name in
              ('README.md', 'foundry-cli.mjs', 'provider.py', 'formulas.py', 'local.example.json')}
     files.update({name: (ASSETS / name).read_bytes() for name in ('foundry-core.mjs', 'outcome-receipt.mjs')})
     files.update({name: pinned(HARNESS_PIN, HARNESS + name) for name in
@@ -173,9 +175,20 @@ def build_foundry(destination):
     })
     files[FOUNDRY_ENGINE] = pinned(HARNESS_PIN, HARNESS + 'app/engine.js')
     (destination / FOUNDRY_ENGINE).write_bytes(files[FOUNDRY_ENGINE])
-    return package(destination / FOUNDRY_ZIP, files, 'frontier-foundry', HARNESS_PIN,
-                   'Bounded HARNESS exchange and offline replay. Source identifies the upstream HARNESS pin. '
-                   'The deployment receipt identifies integration source and distributed file hashes.')
+    legacy = package(destination / FOUNDRY_ZIP, files, 'frontier-foundry', HARNESS_PIN,
+                     'Bounded HARNESS exchange and offline replay. Source identifies the upstream HARNESS pin. '
+                     'The deployment receipt identifies integration source and distributed file hashes.')
+    studies = {name: (companion / name).read_bytes() for name in
+               ('study-cli.mjs', 'study-seal.mjs', 'study.py', 'SUCCESSORS.md')}
+    studies['foundry-study.mjs'] = (ASSETS / 'foundry-study.mjs').read_bytes()
+    for trial in ('successor-study', 'successor-followup'):
+        for name in ('report.json', 'cases.json', 'source.json'):
+            path = f'{trial}/{name}'
+            studies[path] = (publication / path).read_bytes()
+    package(destination / STUDY_ZIP, {**files, **studies}, 'frontier-foundry', HARNESS_PIN,
+            'Bounded local successor studies and offline verification. The deployment receipt binds the integration.',
+            version='1.1.0')
+    return legacy
 
 
 def build_tools(destination):
