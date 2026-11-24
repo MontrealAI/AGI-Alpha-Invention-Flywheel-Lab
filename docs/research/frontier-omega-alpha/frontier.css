@@ -617,6 +617,7 @@ body:has(#member:not([hidden]):not([data-public-view])) #main > :not(#member) { 
 .foundry-pilot-table thead { background: #281b36; color: #f4d38f; }
 .foundry-pilot-table tbody tr + tr { border-top: 1px solid #594566; }
 .foundry-learning { border-top: 1px solid #987950; }
+#foundry-cascade-results { scroll-margin-block-start: calc(var(--member-scroll-offset) + 2rem); }
 .foundry-learning-steps:not([hidden]) { display: grid; gap: .5rem; padding-left: 1.35rem; }
 .foundry-learning-steps li { padding: .48rem .65rem; background: #20172c; border-radius: .35rem; }
 .foundry-learning-steps li strong { color: #f4d38f; margin-right: .55rem; }

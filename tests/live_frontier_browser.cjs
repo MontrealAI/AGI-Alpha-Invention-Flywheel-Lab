@@ -353,6 +353,9 @@ async function foundryJourney(page, language, width) {
     await destination(page, 'mv-tools');
     await page.locator('a[href="#foundry-cascade-results"]').press('Enter');
     assert.equal(await page.locator(':focus').getAttribute('id'), 'foundry-cascade-title');
+    const headingIsClear = await page.locator('#foundry-cascade-title').evaluate(heading =>
+      heading.getBoundingClientRect().top >= document.querySelector('.mf-bar').getBoundingClientRect().bottom);
+    assert.ok(headingIsClear, 'Cascade heading must clear the sticky member navigation');
     const cascade = page.getByRole('region', {name:'Activation 1.4 · Cascade'});
     assert.match(await cascade.innerText(), /11.*16|16.*11/);
     const {observed} = cascadeStudies['cascade-fresh-domain.json'];
