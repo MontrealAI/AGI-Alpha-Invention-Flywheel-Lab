@@ -193,6 +193,20 @@ async function memberWorkbench(page, language) {
     card => [card.id.slice('decision-'.length), card.querySelector('[data-review]').dataset.review]));
   assert.equal(rendered.length, expected.size);
   assert.ok(rendered.every(([id, digest]) => digest === expected.get(id) && /^[a-f0-9]{64}$/.test(digest)));
+  const catalogueResponse = await page.request.get(base + 'decision-editions/index.json');
+  assert.equal(catalogueResponse.status(), 200);
+  const catalogue = await catalogueResponse.json();
+  const archiveBox = page.locator('#edition-history');
+  await archiveBox.locator('summary').click();
+  for (const edition of catalogue.editions) {
+    const download = page.waitForEvent('download');
+    await archiveBox.locator(`a[download][href$="/${edition.run}.tar.zst"]`).click();
+    const raw = await readFile(await (await download).path());
+    assert.equal(raw.length, edition.archive_bytes);
+    assert.equal(createHash('sha256').update(raw).digest('hex'), edition.archive_sha256);
+  }
+  assert.ok(await archiveBox.locator('a[download][href$="/verify.py"]').isVisible());
+  await archiveBox.locator('summary').click();
   for (const key of ['endpoint', 'archive']) {
     const tool = page.locator('#tool-' + key);
     if (!await tool.locator('.mf-instructions').evaluate(el => el.open)) {
@@ -446,7 +460,7 @@ async function walletPaths(browser, language, width) {
       brief:'001 v1.2', arrivalAboveFold:true, featuredBrief:true, downloadHashes:true, publicBenchmarkedScreen:140,
       scriptedFirstUseMs:scriptedMs, scriptedJourney:'sign in → goal → run → export → recheck',
       goalAwareRanking:true, savedGoalRecheck:true, liveEvidenceFingerprints:true, restoredAfterSignIn:true,
-      offlineRunAndReceipt: true, receiptTamperDenial: true, rehashedReceiptDenial:true,
+      offlineRunAndReceipt: true, receiptTamperDenial: true, rehashedReceiptDenial:true, archivedEditionDownloads:true,
       lock: true, expiry: true, reconnect: true, accountSwitchDenial: true });
   } finally {
     await page.close();

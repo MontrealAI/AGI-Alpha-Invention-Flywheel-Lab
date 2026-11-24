@@ -387,6 +387,10 @@ def prepare(output, revision, event, run, request=source_with_retry):
                'records': len(ledger['records']), 'states': dict(Counter(row['state'] for row in ledger['records'])),
                'projection_sha256': digest(canonical_json([files, preview])),
                'workflow_run': run, 'checked_at': datetime.now(timezone.utc).isoformat(timespec='seconds')}
+    release['decision_edition_sha256'] = {
+        name.removeprefix('frontier-omega-alpha/'): fingerprint
+        for name, fingerprint in files if name in site.DECISION_EDITION_ASSETS
+    }
     accepted = [version for versions in references.values() for version in versions]
     if accepted:
         newest = max(accepted, key=lambda version: version['observed_at'])
@@ -420,6 +424,12 @@ def verify_live(expected, revision, run, request=source_with_retry):
     for filename in (member.ENDPOINT_ZIP, member.ARCHIVE_ZIP):
         if digest(request(watch.SITE + filename, 500_000)) != release['public_capability_sha256'][filename]:
             raise ValueError('Live tool bytes do not match')
+    editions = release['decision_edition_sha256']
+    if set(editions) != {name.removeprefix('frontier-omega-alpha/') for name in site.DECISION_EDITION_ASSETS}:
+        raise ValueError('Unexpected historical edition asset set')
+    for name, fingerprint in editions.items():
+        if digest(request(watch.SITE + name, 500_000)) != fingerprint:
+            raise ValueError('Live historical edition bytes do not match')
     for path in ('', 'fr.html'):
         html = request(watch.SITE + path, LEDGER_LIMIT).decode()
         parser = site.Links()

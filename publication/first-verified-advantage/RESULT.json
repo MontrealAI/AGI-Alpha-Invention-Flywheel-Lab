@@ -1,0 +1,232 @@
+{
+  "acquisition": [
+    {
+      "bytes": 33776171,
+      "run": "45278828750",
+      "sha256": "0f0b4dbaa079c705d395d1177c94269c6e43df47b9322ed468e55a5d7e81f164",
+      "state": "downloaded",
+      "wall_ns": 1545799802
+    },
+    {
+      "bytes": 33787232,
+      "run": "45287921702",
+      "sha256": "c1982edfabbd8aa4606a29ed73ed3c407885a06376087175a4835640bb469bfe",
+      "state": "downloaded",
+      "wall_ns": 1557842802
+    }
+  ],
+  "acquisition_notes": "Two authorized reference archive transfers ran concurrently; times exclude connector preparation, external service and labor.",
+  "cases": [
+    {
+      "arms": {
+        "conventional_cold": {
+          "accepted": true,
+          "bytes": 17471,
+          "prepare": {
+            "cpu_ns": 15007000,
+            "wall_ns": 14941939
+          },
+          "recover": {
+            "cpu_ns": 4716000,
+            "wall_ns": 4716103
+          },
+          "verify": {
+            "cpu_ns": 1157000,
+            "wall_ns": 1159568
+          }
+        },
+        "native_actions": {
+          "accepted": true,
+          "bytes": 33776171,
+          "extract_and_verify": {
+            "cpu_ns": 176395000,
+            "wall_ns": 176407313
+          }
+        },
+        "record_delta_cold": {
+          "accepted": true,
+          "bytes": 17695,
+          "prepare": {
+            "cpu_ns": 10623000,
+            "wall_ns": 10537907
+          },
+          "recover": {
+            "cpu_ns": 5877000,
+            "wall_ns": 5750035
+          },
+          "verify": {
+            "cpu_ns": 813000,
+            "wall_ns": 815739
+          }
+        }
+      },
+      "artifact": "14868632154",
+      "files": {
+        "atlas-ledger.json": {
+          "bytes": 39428,
+          "sha256": "53d5558e90389176d6612419442d232bac6cb9dddaa5c7f02d541df8511a855c"
+        },
+        "atlas-release.json": {
+          "bytes": 1218,
+          "sha256": "37749040ed3e9dddafd7ae582755623bfb186db8d82b727a1c65b9aa235d2005"
+        },
+        "member-value.json": {
+          "bytes": 68779,
+          "sha256": "341980419241e5c5f19e2614a19a0f6fb2fa1026294cad4297fec818228067e8"
+        }
+      },
+      "original_sha256": "0f0b4dbaa079c705d395d1177c94269c6e43df47b9322ed468e55a5d7e81f164",
+      "packaged_sha256": "740b55bfadce074b6f670226551bbb20c7d3d096ddf008b243cb09e022d51c9f",
+      "run": "45278828750",
+      "scope": {
+        "records": 16
+      },
+      "source": "b74243343c3de43cdb9c390277e8ba7e66b5642c"
+    },
+    {
+      "arms": {
+        "conventional_cold": {
+          "accepted": true,
+          "bytes": 18114,
+          "prepare": {
+            "cpu_ns": 20233000,
+            "wall_ns": 19940292
+          },
+          "recover": {
+            "cpu_ns": 3457000,
+            "wall_ns": 3298068
+          },
+          "verify": {
+            "cpu_ns": 854000,
+            "wall_ns": 856403
+          }
+        },
+        "conventional_warm": {
+          "accepted": true,
+          "bytes": 900,
+          "predecessor_setup": {
+            "cpu_ns": 187000,
+            "wall_ns": 189591
+          },
+          "prepare": {
+            "cpu_ns": 5973000,
+            "wall_ns": 5864102
+          },
+          "recover": {
+            "cpu_ns": 2829000,
+            "wall_ns": 2742501
+          },
+          "verify": {
+            "cpu_ns": 819000,
+            "wall_ns": 821173
+          }
+        },
+        "native_actions": {
+          "accepted": true,
+          "bytes": 33787232,
+          "extract_and_verify": {
+            "cpu_ns": 175180000,
+            "wall_ns": 175176138
+          }
+        },
+        "record_delta_cold": {
+          "accepted": true,
+          "bytes": 18293,
+          "prepare": {
+            "cpu_ns": 8141000,
+            "wall_ns": 8288476
+          },
+          "recover": {
+            "cpu_ns": 6540000,
+            "wall_ns": 6463395
+          },
+          "verify": {
+            "cpu_ns": 836000,
+            "wall_ns": 838342
+          }
+        },
+        "record_delta_warm": {
+          "accepted": true,
+          "bytes": 2780,
+          "prepare": {
+            "cpu_ns": 10525000,
+            "wall_ns": 10398661
+          },
+          "recover": {
+            "cpu_ns": 6066000,
+            "wall_ns": 5936404
+          },
+          "verify": {
+            "cpu_ns": 653000,
+            "wall_ns": 654360
+          }
+        }
+      },
+      "artifact": "14872168386",
+      "files": {
+        "atlas-ledger.json": {
+          "bytes": 41111,
+          "sha256": "83335886ce2a420d124e0d203f2ee826dea009471a5007cc14a073308999766a"
+        },
+        "atlas-release.json": {
+          "bytes": 1218,
+          "sha256": "069c6aa2a77ad5a7227b672002662a1e5f165e985d97dab710103cb7d9272389"
+        },
+        "member-value.json": {
+          "bytes": 79228,
+          "sha256": "4e88bb5313eb5d7068c97289e1f8b2042d9c103fc1430032071fa232be91c7a6"
+        }
+      },
+      "original_sha256": "c1982edfabbd8aa4606a29ed73ed3c407885a06376087175a4835640bb469bfe",
+      "packaged_sha256": "40c1b3632bc9a4f9567a411fae75ca3afcea06c5018412163a1d8881e11ed81f",
+      "run": "45287921702",
+      "scope": {
+        "records": 19
+      },
+      "source": "1cf2bc9b60afe6e9f5b253b4ec92fd3bab6a0e38"
+    }
+  ],
+  "challenger_frozen_commit": "f6264d87df4619c27e9b5f20a8c3cb3696d3afa8",
+  "complete_cost": null,
+  "decision": "INFERIOR on registered measured matched comparison; retain conventional self-contained archives.",
+  "denied_controls": [
+    "wrong_predecessor",
+    "wrong_external_anchor",
+    "absent_predecessor",
+    "truncated_candidate",
+    "truncated_conventional",
+    "wrong_workflow_identity",
+    "different_edition_same_names",
+    "missing_file",
+    "extra_mutable_file",
+    "spoofed_untrusted_source_hash",
+    "malformed_tar",
+    "wrong_native_dictionary"
+  ],
+  "execution_commit": "1bc5d7ee20eb6eb80eb6a4eb8c9390465bfd8e02",
+  "independent_member_acceptance": null,
+  "realized_revenue": null,
+  "realized_savings": null,
+  "registration": "ac9043afa4e94bce481e06d0bc9256abed34dfae",
+  "schema": "frontier/public-edition-recovery-result-v1",
+  "software": {
+    "machine": "x86_64",
+    "python": "3.12.14",
+    "system": "Linux",
+    "zstd": "*** Zstandard CLI (64-bit) v1.5.7, by Yann Collet ***"
+  },
+  "two_edition_totals": {
+    "candidate": {
+      "bytes": 20475,
+      "prepare_recover_verify_wall_ns": 34093106
+    },
+    "conventional": {
+      "bytes": 18371,
+      "prepare_recover_verify_wall_ns": 30434977
+    }
+  },
+  "witness_jobs": {
+    "45278828750": 138057925690,
+    "45287921702": 138089289983
+  }
+}
