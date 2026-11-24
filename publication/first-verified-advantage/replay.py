@@ -111,6 +111,8 @@ def tar_restore(raw):
 
 def zstd_direct(raw, *args):
     # The conventional comparator invokes the vendor's normal CLI separately.
+    if '-d' not in args and any(arg.startswith('--patch-from=') for arg in args):
+        args = (*args, f'--stream-size={len(raw)}')
     return subprocess.run(('zstd', '-q', '-c', *args), input=raw, capture_output=True, check=True).stdout
 
 
@@ -195,12 +197,13 @@ def execute(vault, output):
                     'record_delta_cold': {'bytes': len(factored), **factored_cost}}
             (check_dir / f'{run}.tar.zst').write_bytes(baseline)
             if index == 0:
-                base_tar.write_bytes(tar_bytes(original))
+                _, predecessor_setup = timed(lambda: base_tar.write_bytes(tar_bytes(original)))
             else:
                 old = all_files[0]
                 warm, warm_cost = conventional(original, original, contract, base_tar)
                 proposal, proposal_cost = challenger(original, original, contract, old)
-                arms.update({'conventional_warm': {'bytes': len(warm), **warm_cost},
+                arms.update({'conventional_warm': {'bytes': len(warm), **warm_cost,
+                                                    'predecessor_setup': predecessor_setup},
                              'record_delta_warm': {'bytes': len(proposal), **proposal_cost}})
                 denied = controls(original, old, contract, inputs[0], base_tar, baseline, proposal)
             shots.append({'run': run, 'artifact': contract['artifact'], 'source': contract['source'],
