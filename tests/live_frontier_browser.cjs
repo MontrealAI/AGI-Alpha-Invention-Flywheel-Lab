@@ -319,6 +319,10 @@ async function foundryJourney(page, language, width) {
     await page.locator('#foundry-amplification-replay').press('Enter');
     const displayed = await page.locator('#foundry-amplification-replay-status').textContent();
     assert.match(displayed, /256.*e045, e072/);
+    await destination(page, 'mv-tools');
+    await page.locator('a[href="#foundry-substrate-results"]').press('Enter');
+    assert.equal(await page.locator('a[href="#mv-results"]').first().getAttribute('aria-current'), 'page');
+    assert.equal(await page.locator(':focus').getAttribute('id'), 'foundry-substrate-title');
     await page.locator('#foundry-substrate-results summary').press('Enter');
     await page.locator('#foundry-substrate-replay').press('Enter');
     assert.match(await page.locator('#foundry-substrate-replay-status').textContent(),

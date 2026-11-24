@@ -311,7 +311,7 @@ def build_substrate(destination, revision):
     for filename in ('REGISTRATION.json', 'BINDINGS.json', 'CASE.json', 'DEVELOPMENT.json', 'CONFIRMATION.json',
                      'SURVEYS.json', 'MANUAL-PACKET.json', 'MANUAL-RESPONSE.json', 'manual-candidate.json',
                      'REPORT.md', 'assemble.py', 'RESULTS.json', 'NEXT.json', 'LOCAL-CONFIG.json',
-                     'model-evidence.json', 'record.py'):
+                     'model-evidence.json', 'record.py', 'covariance_pilot.py', 'PILOT-REGISTRATION.json', 'PILOT-RESULT.json'):
         files[f'study/substrate/{filename}'] = (SUBSTRATE_EVIDENCE/filename).read_bytes()
     return package(destination/SUBSTRATE_ZIP,files,'frontier-activation',revision,
                    'Exact scientific environments and bounded research on source-grounded executable knowledge.',
@@ -334,9 +334,9 @@ def render_substrate(fr):
     total = results['scoped_reference']['all_source_row_horizons_agree']
     manual = results['operator_assisted']['confirmation']['accepted']
     if fr:
-        return (f'<p>Deux calculs indépendants concordent sur {total:,} vérifications des sources. '
-                f'L’artefact construit avec transfert manuel et la référence exacte réussissent chacun {manual}/28 cas de confirmation.</p>'
-                .replace(',', '\u202f'))
+        grouped = f'{total:,}'.replace(',', '\u202f')
+        return (f'<p>Deux calculs indépendants concordent sur {grouped} vérifications des sources. '
+                f'L’artefact construit avec transfert manuel et la référence exacte réussissent chacun {manual}/28 cas de confirmation.</p>')
     return (f'<p>Two independent calculations agree on {total:,} source checks. '
             f'The manually transferred artifact and the exact reference each pass {manual}/28 held cases.</p>')
 

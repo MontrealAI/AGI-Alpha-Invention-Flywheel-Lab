@@ -34,6 +34,10 @@ HARNESS = ('Work as a scientific constructor under HARNESS. Identify the researc
            'development examples, construct a bounded artifact, inspect the supplied interface carefully '
            'and produce an executable implementation that will be independently evaluated.\n')
 CODE = object_schema({'source':brief(5000)})
+NEXT = object_schema({
+    'action':{'type':'string','enum':['recover_covariance','separate_domain','retain_exact_tools']},
+    'reason':brief(160),'test':brief(200),'limitation':brief(140),
+})
 
 
 def projection(value, arm):
@@ -71,6 +75,22 @@ def constructed(args):
     prompt=body(args.development,args.arm)
     result=step(args.workspace,args.config,args.model,CODE,prompt,'substrate-'+args.arm,args.tokens,attempts=1,
                 deadline=args.until)
+    print(json.dumps(result,sort_keys=True,ensure_ascii=False))
+
+
+def investigate(args):
+    with args.brief.open('rb') as stream:
+        data = stream.read(4001)
+    if not 0<len(data)<=4000:
+        raise ValueError('RESEARCH_BRIEF_SIZE')
+    prompt = (
+        'Choose and justify the most consequential next scientific experiment for MONTREAL.AI. '
+        'Use the dated facts below. Stop before claiming public work has operational acceptance. '
+        'Return action from the listed alternatives, a short reason, a decisive test and one limitation. '
+        'End every sentence. Treat BJD TDB anchors as days; two formats for transits are one scientific domain.\n'
+        + data.decode())
+    result = step(args.workspace,args.config,args.model,NEXT,prompt,'substrate-next-correction',args.tokens,
+                  attempts=1,deadline=args.until)
     print(json.dumps(result,sort_keys=True,ensure_ascii=False))
 
 
@@ -169,6 +189,13 @@ def main():
     build.add_argument('--until',type=int,required=True)
     build.add_argument('--tokens',type=int,default=1050)
     build.set_defaults(action=constructed)
+    next_cmd=sub.add_parser('investigate')
+    for flag in ('brief','workspace','config'):
+        next_cmd.add_argument('--'+flag,type=Path,required=True)
+    next_cmd.add_argument('--model',required=True)
+    next_cmd.add_argument('--until',type=int,required=True)
+    next_cmd.add_argument('--tokens',type=int,default=288)
+    next_cmd.set_defaults(action=investigate)
     receive=sub.add_parser('import')
     for flag in ('packet','response','output'):
         receive.add_argument('--'+flag,type=Path,required=True)

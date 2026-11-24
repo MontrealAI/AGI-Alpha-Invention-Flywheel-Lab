@@ -23,6 +23,13 @@ The publication table is the machine-readable Table 8 of Kokori et al. (2026), [
 
 The transit tool gives the range of model standard deviation consistent with the reported marginal errors and an unspecified correlation. The result assumes a linear ephemeris and BJD TDB for both the fitted center and the anchor. It does not assess changing periods, validate a timing provenance claim, or give a probability-calibrated observing window. Operational adoption also remains in abstention for the Endpoint sample.
 
+The reproduced pilot uses the [older Table 7](https://content.cld.iop.org/journals/0067-0049/265/1/4/revision1/apjsac9da4t7_mrt.txt) and the [DRD original mid-time archive](https://osf.io/download/8xzsr/) with the newer Table 8. It reports row availability and a retrospective weighted fit rather than a new scheduling decision.
+
+```sh
+PYTHONPATH="$PWD" python3 study/substrate/covariance_pilot.py \
+  /path/to/table8.txt /path/to/earlier-table7.txt /path/to/mid-time-by-planet.zip
+```
+
 ## Evaluator and reviewed handoff
 
 For native candidate execution use x86-64 Linux with the x86-64 system Python, `unshare`, `bubblewrap`, `libseccomp.so.2` and working unprivileged user/network namespaces. The worker fails closed if these conditions do not hold. The exact workbench and non-native verification work separately on any supported Python host.

@@ -1,13 +1,15 @@
 """Summarize the completed condition-specific scientific construction tests."""
 
 import argparse
+from contextlib import redirect_stdout
+from io import StringIO
 import json
 from pathlib import Path
 from types import SimpleNamespace
 
 from native_experiment import run
 from science_substrate import canonical, read_json
-from substrate_study import ARMS, evaluate, projection
+from substrate_study import ARMS, body, evaluate, projection
 
 
 def emit(path, data):
@@ -32,8 +34,6 @@ def summary(run_state):
 
 
 def evaluated(path, candidate, arm):
-    from contextlib import redirect_stdout
-    from io import StringIO
     stdout = StringIO()
     with redirect_stdout(stdout):
         evaluate(SimpleNamespace(candidate=path, confirmation=candidate, arm=arm))
@@ -74,7 +74,8 @@ def main():
                 continue
             held, dev = evaluated(path,confirmation,arm), evaluated(path,development,arm)
             entry = {'run':run_state,'confirmation':held,'development':dev}
-            arms[arm] = {**summary(run_state), 'development':measurement(dev),'confirmation':measurement(held)}
+            arms[arm] = {**summary(run_state),'prompt_bytes':len(body(development,arm).encode()),
+                         'development':measurement(dev),'confirmation':measurement(held)}
             if arm=='typed':
                 arms[arm]['named_use'] = named_use(run_state,read_json(development)[0])
             evidence[model+'/'+arm] = entry
