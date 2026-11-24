@@ -49,6 +49,7 @@
             <button type="button" class="quiet" id="goal-export" disabled>Télécharger l’objectif</button>
             <label for="goal-import">Rouvrir un fichier d’objectif<input id="goal-import" type="file" accept=".json,application/json"></label>
           </div>
+          <p><a href="#edition-history">Retrouver les preuves publiques d’une édition antérieure</a></p>
         </details>
       </div>
     </section>
@@ -68,6 +69,17 @@
     <ul class="mv-timeline"><!-- MV_TIMELINE --></ul>
     <p class="mv-links"><a href="member-value.json">Preuves décisionnelles versionnées</a>
       <a href="atlas-release.json">Reçu de la publication en ligne</a></p>
+    <details id="edition-history">
+      <summary>Récupérer une édition décisionnelle antérieure</summary>
+      <p>Retrouvez le registre de l’Atlas, les décisions bilingues et le reçu d’origine. Vérifiez ce qu’indiquait une édition après la mise à jour du catalogue. Ces fichiers de preuve sont publics. Chaque archive est autonome.</p>
+      <ul class="mv-timeline">
+        <li><a href="decision-editions/45278828750.tar.zst" download>23 novembre à 17 h 21, heure de Toronto · 16 décisions</a></li>
+        <li><a href="decision-editions/45287921702.tar.zst" download>23 novembre à 18 h 20, heure de Toronto · 19 décisions</a></li>
+      </ul>
+      <p class="mv-links"><a href="decision-editions/index.json">Empreintes et exécutions d’origine</a>
+        <a href="decision-editions/verify.py" download>Télécharger le vérificateur Linux</a>
+        <a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/main/publication/first-verified-advantage/REPORT.md#français">Guide de démarrage et comparaison</a></p>
+    </details>
   </section>
   <section class="mv-section" id="mv-better" aria-labelledby="mv-better-title">
     <h3 id="mv-better-title">Mieux comprendre</h3>

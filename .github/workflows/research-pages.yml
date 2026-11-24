@@ -138,6 +138,8 @@ jobs:
           python3 -m unittest discover -s tests -p 'test_member_value.py' -v
           node --test tests/test_member_tools.mjs
           python3 scripts/qualify_frontier_member.py "$RUNNER_TEMP/research-site/frontier-omega-alpha"
+          python3 docs/research/frontier-omega-alpha/decision-editions/verify.py all --directory \
+            "$RUNNER_TEMP/research-site/frontier-omega-alpha/decision-editions"
       - name: Qualify both member entrances on the candidate artifact
         if: github.event_name == 'pull_request'
         shell: bash
@@ -228,6 +230,8 @@ jobs:
             scripts/qualify_frontier_member.py
             scripts/frontier_public_watch.py
             scripts/build_research_site.py
+            docs/research/frontier-omega-alpha/decision-editions/verify.py
+            docs/research/frontier-omega-alpha/decision-editions/index.json
             tests/live_frontier_browser.cjs
           sparse-checkout-cone-mode: false
       - name: Verify the actual public English and French pages and ledger bytes
@@ -271,3 +275,12 @@ jobs:
           done
           python3 scripts/qualify_frontier_member.py "$packages" | tee "$RUNNER_TEMP/frontier-distributed.json"
           cat "$RUNNER_TEMP/frontier-distributed.json" >> "$GITHUB_STEP_SUMMARY"
+          editions="$packages/decision-editions"
+          mkdir "$editions"
+          for asset in index.json 45278828750.tar.zst 45287921702.tar.zst; do
+            curl --fail --silent --show-error --retry 2 --max-time 20 --max-filesize 500000 \
+              "$origin/decision-editions/$asset" --output "$editions/$asset"
+          done
+          cmp docs/research/frontier-omega-alpha/decision-editions/index.json "$editions/index.json"
+          python3 docs/research/frontier-omega-alpha/decision-editions/verify.py all --directory "$editions" \
+            | tee -a "$GITHUB_STEP_SUMMARY"

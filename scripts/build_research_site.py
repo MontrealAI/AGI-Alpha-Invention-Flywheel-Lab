@@ -63,6 +63,10 @@ PAGES += ('alpha-genesis-live.html', 'alpha-genesis-live-studio.html')
 PAGES += ('ignition/index.html', 'ignition/demo.html')
 ASSETS += ('ignition/studio.css', 'ignition/public.js')
 PAGES += ('frontier-omega-alpha/index.html', 'frontier-omega-alpha/fr.html')
+DECISION_EDITION_ASSETS = tuple(
+    f'frontier-omega-alpha/decision-editions/{name}'
+    for name in ('index.json', 'verify.py', '45278828750.tar.zst', '45287921702.tar.zst')
+)
 ASSETS += (
     'frontier-omega-alpha/frontier.css',
     'frontier-omega-alpha/wallet-check.js',
@@ -73,7 +77,7 @@ ASSETS += (
     'frontier-omega-alpha/outcome-receipt.mjs',
     'frontier-omega-alpha/member-workbench.mjs',
     'frontier-omega-alpha/frontier-goals.mjs',
-)
+) + DECISION_EDITION_ASSETS
 FILES = PAPERS + PAGES + ASSETS + ('publication-manifest.json',)
 PUBLIC_SITE = 'https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/'
 EXTERNAL_RESEARCH_REFERENCES = frozenset({

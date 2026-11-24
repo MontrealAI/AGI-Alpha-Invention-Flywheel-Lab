@@ -1,0 +1,20 @@
+{
+  "schema": "frontier/public-edition-recovery-attempts-v1",
+  "attempts": [
+    {
+      "source": "f6264d87df4619c27e9b5f20a8c3cb3696d3afa8",
+      "state": "pre-execution environment failure",
+      "failure": "/usr/bin/time was unavailable on the clean local runner.",
+      "correction": "Use the Bash time builtin. No change to the preregistered comparison."
+    },
+    {
+      "source": "f6264d87df4619c27e9b5f20a8c3cb3696d3afa8",
+      "state": "comparison interrupted",
+      "wall_seconds": 0.485,
+      "user_seconds": 0.393,
+      "system_seconds": 0.093,
+      "failure": "The conventional Zstandard arm exited 42. Patching piped standard input requires the exact --stream-size.",
+      "correction": "Supply the measured stdin length and record prior tar preparation. Retry the two original cases with identical acceptance and challenger code."
+    }
+  ]
+}

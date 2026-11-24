@@ -602,7 +602,7 @@ class ResearchSiteTests(unittest.TestCase):
              'frontier-omega-alpha/wallet-check.js', 'frontier-omega-alpha/member-brief-001.js',
              'frontier-omega-alpha/atlas.js', 'frontier-omega-alpha/endpoint-screen.mjs',
              'frontier-omega-alpha/outcome-receipt.mjs', 'frontier-omega-alpha/member-workbench.mjs',
-             'frontier-omega-alpha/frontier-goals.mjs'},
+             'frontier-omega-alpha/frontier-goals.mjs', *site.DECISION_EDITION_ASSETS},
         )
         source = (self.source / 'frontier-omega-alpha' / 'wallet-check.js').read_text()
         self.assertIn("await import('./member-brief-001.js')", source)
@@ -766,6 +766,27 @@ console.log('11 wallet qualification checks and both workspace open/lock fixture
                 for evidence in ('frontier-cycle.json', 'qwen-gguf-maintenance.json',
                                  'engineering-receipt.json', 'economic_alpha/qualification.json'):
                     self.assertIn(evidence, packets)
+
+    def test_historical_edition_verifier_rejects_swapped_same_name(self):
+        import json
+        import subprocess
+
+        directory = self.source / 'frontier-omega-alpha/decision-editions'
+        verifier = directory / 'verify.py'
+        earlier, later = [row['run'] for row in json.loads((directory / 'index.json').read_text())['editions']]
+        recovered = self.root / 'recovered'
+        launch = ['python3', str(verifier), earlier, '--output', str(recovered)]
+        success = subprocess.run(launch, check=True, capture_output=True, text=True)
+        self.assertEqual(json.loads(success.stdout)['status'], 'MATCHED_PINNED_EDITION')
+        self.assertEqual({p.name for p in recovered.iterdir()},
+                         {'atlas-release.json', 'atlas-ledger.json', 'member-value.json'})
+        target = directory / f'{earlier}.tar.zst'
+        shutil.copyfile(directory / f'{later}.tar.zst', target)
+        new_output = self.root / 'refused'
+        denied = subprocess.run(launch[:-1] + [str(new_output)], capture_output=True, text=True)
+        self.assertEqual(denied.returncode, 2)
+        self.assertIn('ABSTAIN', denied.stderr)
+        self.assertFalse(new_output.exists())
 
     def test_preferred_home_design_keeps_studio_and_published_anchors(self):
         home = (self.source / 'index.html').read_text()

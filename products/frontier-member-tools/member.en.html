@@ -49,6 +49,7 @@
             <button type="button" class="quiet" id="goal-export" disabled>Download current goal</button>
             <label for="goal-import">Reopen a goal file<input id="goal-import" type="file" accept=".json,application/json"></label>
           </div>
+          <p><a href="#edition-history">Recover the public evidence from a past edition</a></p>
         </details>
       </div>
     </section>
@@ -68,6 +69,17 @@
     <ul class="mv-timeline"><!-- MV_TIMELINE --></ul>
     <p class="mv-links"><a href="member-value.json">Versioned decision evidence</a>
       <a href="atlas-release.json">Live publication receipt</a></p>
+    <details id="edition-history">
+      <summary>Recover a past decision edition</summary>
+      <p>Get the original Atlas ledger, bilingual decisions and release receipt. Use them to check what a past edition said after the live catalogue changes. These are public evidence files. Each download works on its own.</p>
+      <ul class="mv-timeline">
+        <li><a href="decision-editions/45278828750.tar.zst" download>November 23, 17:21 Toronto · 16 decisions</a></li>
+        <li><a href="decision-editions/45287921702.tar.zst" download>November 23, 18:20 Toronto · 19 decisions</a></li>
+      </ul>
+      <p class="mv-links"><a href="decision-editions/index.json">Pinned digests and source runs</a>
+        <a href="decision-editions/verify.py" download>Download Linux verifier</a>
+        <a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/main/publication/first-verified-advantage/REPORT.md">Quick start and comparison</a></p>
+    </details>
   </section>
   <section class="mv-section" id="mv-better" aria-labelledby="mv-better-title">
     <h3 id="mv-better-title">Understand better</h3>
