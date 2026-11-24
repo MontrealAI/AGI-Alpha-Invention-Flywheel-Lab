@@ -1,0 +1,79 @@
+{
+  "actual_billing_usd": null,
+  "actual_commerce": false,
+  "arms": {
+    "cold_baseline": {
+      "accepted": true,
+      "cold": true,
+      "direct_launches": 1,
+      "published_unchanged": true,
+      "receipt_equal": true
+    },
+    "cold_invalid": {
+      "accepted": false,
+      "alias_removed": false,
+      "cold": true,
+      "direct_launches": 1,
+      "exception_type": "ValueError",
+      "historical_audit_rejected": true,
+      "published_unchanged": true,
+      "receipt_equal": false,
+      "timeout": false
+    },
+    "cold_valid": {
+      "accepted": true,
+      "alias_removed": true,
+      "cold": true,
+      "direct_launches": 1,
+      "published_unchanged": true,
+      "receipt_equal": true
+    },
+    "restored_cold": {
+      "accepted": true,
+      "cold": true,
+      "direct_launches": 1,
+      "published_unchanged": true,
+      "receipt_equal": true
+    },
+    "warm_clean": {
+      "accepted": true,
+      "cold": false,
+      "direct_launches": 0,
+      "published_unchanged": true,
+      "receipt_equal": true
+    },
+    "warm_invalid": {
+      "accepted": true,
+      "alias_removed": false,
+      "cold": false,
+      "direct_launches": 0,
+      "published_unchanged": true,
+      "receipt_equal": true
+    },
+    "warm_valid": {
+      "accepted": true,
+      "alias_removed": false,
+      "cold": false,
+      "direct_launches": 0,
+      "published_unchanged": true,
+      "receipt_equal": true
+    }
+  },
+  "diagnostic_accepted": true,
+  "invariants": {
+    "all_referenced_blob_checks": true,
+    "signer_inode_unchanged": true,
+    "source_inventory_unchanged": true,
+    "state_and_native_history_unchanged": true
+  },
+  "native_second_authorization": true,
+  "original_account_accessed": false,
+  "owner_commit": "ced6c1cb004887dcdafaea59a2976020be649f8e",
+  "probe_sha256": "28d281c17785c0f2f8a8348f3b54a1bd818991dddffc4f4d64c046fb9e300808",
+  "reuse_equivalent": false,
+  "second_transition_committed": false,
+  "self_cpu_seconds": 8.843529,
+  "stage": "complete",
+  "waited_child_cpu_seconds": 8.085396,
+  "wall_seconds": 17.120018901999998
+}
