@@ -1,0 +1,45 @@
+name: Agent cache ceiling 259 public metadata
+on:
+  push:
+    branches: [research/agent-cache-ceiling259-20261124]
+    paths: ['.github/workflows/agent-cache-ceiling259.yml']
+permissions:
+  contents: read
+jobs:
+  replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record platform job execution start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Check registered arithmetic and schema before data
+        run: |
+          mkdir -p "$RUNNER_TEMP/agent-cache259"
+          python -B research/agent_cache_ceiling259/replay.py --self-test 2>&1 | tee "$RUNNER_TEMP/agent-cache259/self-test.txt"
+      - name: Fixed June 1 and June 7 date arms (no retries)
+        shell: bash
+        run: |
+          set +e
+          for date in 2026-06-01 2026-06-07; do
+            python -B research/agent_cache_ceiling259/replay.py --date "$date" --receipt "$RUNNER_TEMP/agent-cache259/$date.json"
+            rc=$?
+            echo "$date $rc" >> "$RUNNER_TEMP/agent-cache259/exits.txt"
+          done
+          awk '$2 != 0 { bad=1 } END { exit (bad || NR != 2) }' "$RUNNER_TEMP/agent-cache259/exits.txt"
+      - name: Preserve compact aggregate and failed-arm receipts only
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: agent-cache259-public-aggregates
+          path: |
+            ${{ runner.temp }}/agent-cache259/*.json
+            ${{ runner.temp }}/agent-cache259/*.txt
+          if-no-files-found: error
+          retention-days: 7
