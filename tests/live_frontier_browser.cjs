@@ -157,16 +157,27 @@ function fakeWallet() {
   state.emit = (event, payload) => listeners.get(event)?.(payload);
 }
 
+async function destination(page, name) {
+  const nav = page.locator(`.mf-destinations a[href="#${name}"]`);
+  await nav.press('Enter');
+  assert.equal(await nav.getAttribute('aria-current'), 'page');
+  assert.equal(await page.locator('[data-member-view]:visible').count(), 1);
+  assert.equal(await page.locator(`#${name}`).isVisible(), true);
+}
+
 async function memberWorkbench(page, language) {
   const workbench = page.locator('#member-value');
   assert.equal(await workbench.isVisible(), true);
-  assert.match(await page.locator('#workspace-title').innerText(), /Member First Ω/i);
+  assert.match(await page.locator('.mf-brand').innerText(), /Member First Ω/i);
   assert.equal(await page.locator('.mf-verified').isVisible(), true);
   assert.match(await page.locator('.mf-disclosure').innerText(), /public/);
   assert.equal(await page.locator('.mv-nav a').count(), 4);
+  await destination(page, 'mv-earlier');
+  assert.equal(await page.locator(':focus').getAttribute('id'), 'mv-earlier-title');
   const featured = page.locator('#mf-edition');
   await featured.waitFor({state:'visible'});
   assert.equal(await featured.locator('dl dt').count(), 5);
+  assert.equal(await featured.locator('details').evaluate(node => node.open), false);
   const openDecision = featured.locator('[data-mv-open]');
   const id = (await openDecision.getAttribute('href')).slice(1);
   const target = page.locator(`[id=${JSON.stringify(id)}]`);
@@ -196,6 +207,7 @@ async function memberWorkbench(page, language) {
   const catalogueResponse = await page.request.get(base + 'decision-editions/index.json');
   assert.equal(catalogueResponse.status(), 200);
   const catalogue = await catalogueResponse.json();
+  await destination(page, 'mv-tools');
   const archiveBox = page.locator('#edition-history');
   await archiveBox.locator('summary').click();
   for (const edition of catalogue.editions) {
@@ -223,6 +235,7 @@ async function memberWorkbench(page, language) {
 }
 
 async function matchGoal(page, goal, record, action) {
+  if (!await page.locator('#goal-text').isVisible()) await destination(page, 'my-frontier');
   await page.locator('#goal-text').fill(goal);
   await page.locator('#goal-text').press('Enter');
   const result = page.locator('#goal-result');
@@ -247,6 +260,8 @@ async function guidedJourney(page, language, width, started) {
     assert.equal(await result.getAttribute('data-record'), 'shift-autonomous-endpoint');
     assert.equal(await result.getAttribute('data-action'), 'demo');
     assert.equal(await page.locator(':focus').getAttribute('id'), 'goal-result-title');
+    assert.match(await page.locator('#goal-ambition').innerText(), /endpoint|service d’IA/i);
+    assert.equal(await result.locator('#goal-source').getAttribute('href') !== '#mv-better', true);
     assert.match(await result.locator('[data-goal-fact="alternative"]').innerText(), /SQLite/);
     assert.match(await result.locator('#goal-evidence-state').innerText(), /ABSTAIN|abstention/i);
     await page.locator('#goal-action').click();
@@ -256,6 +271,18 @@ async function guidedJourney(page, language, width, started) {
     assert.match(await output.innerText(), /ABSTAIN|abstention/i);
     assert.match(await output.innerText(), /demonstration|démonstration/i);
     assert.match(await output.innerText(), /SQLite/);
+    assert.match(await page.locator('.mf-steps [aria-current="step"]').innerText(), /Result|Résultat/);
+    assert.equal(await page.locator('#my-frontier').isVisible(), true);
+    assert.equal(await page.locator('#mv-tools').isVisible(), false);
+    const metric = await output.locator('.mf-result-metric strong').boundingBox();
+    const bar = await page.locator('.mf-bar').boundingBox();
+    assert.ok(metric.y >= bar.y + bar.height, 'The sticky header must not obscure the outcome');
+    await capture(page, language, width, 'guided-result');
+    await output.locator('summary').press('Enter');
+    assert.match(await output.locator('.mv-plan').innerText(), /100[\s\S]*500/);
+    assert.match(await output.locator('details').innerText(), /147\.612074/);
+    assert.match(await output.locator('a').last().getAttribute('href'), /^https:\/\/results\.mlcommons\.org\//);
+    await output.locator('summary').press('Enter');
     assert.equal(await page.locator('#mv-export').isEnabled(), false);
     await page.locator('#mv-keep-result').click();
     assert.equal(await page.locator(':focus').getAttribute('id'), 'mv-consent');
@@ -273,6 +300,8 @@ async function guidedJourney(page, language, width, started) {
     assert.equal(proof.receipt.realized_member_value, null);
     assert.ok(!receipt.includes(Buffer.from('GB300')));
     assert.ok(!receipt.includes(Buffer.from('0x' + '12'.repeat(20))));
+    await destination(page, 'mv-results');
+    assert.equal(await page.locator('#mf-current-result').isVisible(), true);
     await page.locator('#mv-import').setInputFiles({name:'proof.json',mimeType:'application/json',buffer:receipt});
     await page.waitForFunction(() => document.getElementById('mv-receipt-status').textContent.includes('SQLite'));
     scriptedMs = Math.round(performance.now() - started);
@@ -303,6 +332,7 @@ async function guidedJourney(page, language, width, started) {
     assert.match(await result.locator('#goal-evidence-state').innerText(), /falsified|réfuté/i);
     const typed = 'NOAA';
     await matchGoal(page, typed, 'shift-archive-point', 'tool');
+    await destination(page, 'mv-results');
     await page.locator('#goal-keeper summary').click();
     const goalDownload = page.waitForEvent('download');
     await page.locator('#goal-export').click();
@@ -314,11 +344,18 @@ async function guidedJourney(page, language, width, started) {
     await page.waitForFunction(lang => document.getElementById('goal-status').textContent.includes(
       lang === 'fr' ? 'concorde' : 'matches today'), language);
     const old = {...saved, pin:{...saved.pin, review:'0'.repeat(64)}};
+    await destination(page, 'mv-results');
     await page.locator('#goal-import').setInputFiles(content('older.json', old));
     await page.waitForFunction(lang => document.getElementById('goal-status').textContent.includes(
       lang === 'fr' ? 'a changé' : 'has changed'), language);
-    await page.locator('#goal-import').setInputFiles(content('invalid.json', {wallet:'invalid'}));
+    const missing = {...saved, pin:{...saved.pin, id:'removed-evidence'}};
+    await destination(page, 'mv-results');
+    await page.locator('#goal-import').setInputFiles(content('missing.json', missing));
     await page.waitForFunction(lang => document.getElementById('goal-status').textContent.includes(
+      lang === 'fr' ? 'absentes' : 'unavailable'), language);
+    await destination(page, 'mv-results');
+    await page.locator('#goal-import').setInputFiles(content('invalid.json', {wallet:'invalid'}));
+    await page.waitForFunction(lang => document.getElementById('goal-file-status').textContent.includes(
       lang === 'fr' ? 'Impossible' : 'could not be opened'), language);
     await matchGoal(page, fr ? 'Accorder un harmonica avec de la cire d’abeille' : 'Tune a harmonica reed with beeswax', null);
     assert.match(await page.locator('#goal-status').innerText(), /match|correspondance/i);
@@ -329,6 +366,29 @@ async function guidedJourney(page, language, width, started) {
     () => [document.documentElement.clientWidth, document.documentElement.scrollWidth]);
   assert.ok(renderedWidth <= viewportWidth);
   return {scriptedMs, saved};
+}
+
+async function rejectBrokenRun(page, language) {
+  const fr = language === 'fr';
+  // Fail only the final result-digest call inside this isolated browser fixture.
+  await page.evaluate(() => {
+    const original = crypto.subtle.digest.bind(crypto.subtle);
+    crypto.subtle.digest = async (algorithm, payload) => {
+      if (new TextDecoder().decode(payload).includes('frontier/endpoint-result-v1')) throw Error('test interruption');
+      return original(algorithm, payload);
+    };
+    window.restoreScreenDigest = () => { crypto.subtle.digest = original; };
+  });
+  await page.locator('#mf-quick-run').click();
+  await page.locator('#goal-action').click();
+  await page.waitForFunction(phrase => document.getElementById('mv-run-status').textContent.includes(phrase),
+    fr ? 'interrompue' : 'interrupted');
+  assert.equal(await page.locator('#mv-screen-result').isVisible(), false);
+  assert.equal(await page.locator('#mv-export').isEnabled(), false);
+  await page.evaluate(() => window.restoreScreenDigest());
+  await page.locator('#goal-action').click();
+  await page.locator('#mv-screen-result').waitFor({state:'visible'});
+  assert.match(await page.locator('#mv-screen-result').textContent(), /140/);
 }
 
 async function walletPaths(browser, language, width) {
@@ -373,20 +433,23 @@ async function walletPaths(browser, language, width) {
     assert.equal(await page.locator('#member-preview').isVisible(), false);
     assert.equal(await page.locator('#member-nav').getAttribute('href'), '#member');
     assert.match(await page.locator('#member-route').innerText(), /\$AGIALPHA/);
+    assert.match(await page.locator('#workspace-title').innerText(), /My Frontier|Ma frontière/i);
+    assert.equal(await page.locator('#possibility-shifts').isVisible(), false);
+    assert.equal(await page.locator('#mf-edition').isVisible(), false);
+    assert.equal(await page.locator('[data-member-view]:visible').count(), 1);
+    assert.equal(await page.locator('.mf-destinations [aria-current="page"]').getAttribute('href'), '#my-frontier');
     const arrival = await page.locator('#mf-quick-run').boundingBox();
     const goalInput = await page.locator('#goal-text').boundingBox();
     const goalSubmit = await page.locator('#goal-submit').boundingBox();
     const scroll = await page.evaluate(() => scrollY);
-    assert.ok(arrival.y >= 0 && arrival.y + arrival.height <= dimensions(width).height,
-      `Recommended action beyond the ${language} ${width}px first screen. Scroll ${scroll}, box ${JSON.stringify(arrival)}`);
+    const preset = await page.locator('[data-goal="endpoint"]').boundingBox();
+    assert.ok([arrival, preset].some(box => box.y >= 0 && box.y + box.height <= dimensions(width).height),
+      `Endpoint starting points beyond the ${language} ${width}px first screen. Scroll ${scroll}, box ${JSON.stringify(preset)}`);
     assert.ok([goalInput, goalSubmit].every(box => box.y >= 0 && box.y + box.height <= dimensions(width).height));
+    await capture(page, language, width, 'arrival-token');
     const {scriptedMs, saved} = await guidedJourney(page, language, width, started);
-    if (language === 'en') {
-      await page.locator('#goal-text').fill('');
-      await page.locator('#goal-keeper').evaluate(details => { details.open = false; });
-      await page.evaluate(() => scrollTo({top:0, behavior:'instant'}));
-      await capture(page, language, width, 'arrival-token');
-    }
+    await rejectBrokenRun(page, language);
+    await destination(page, 'mv-earlier');
     await page.locator('#open-brief').click();
     await brief.waitFor({ state: 'visible' });
     assert.match(await brief.innerText(), /1\.2/);
@@ -395,6 +458,13 @@ async function walletPaths(browser, language, width) {
     const admitted = manifest.briefs.find(row => row.id.startsWith('watch-arxiv-'));
     await matchGoal(page, admitted.source_version, admitted.id, 'review');
     assert.equal(admitted.evidence, 'source-identity-only');
+
+    await page.locator('.mf-public-link').click();
+    assert.equal(await page.locator('#possibility-shifts').isVisible(), true);
+    assert.equal(await member.isVisible(), false);
+    await page.locator('#member-nav').click();
+    assert.equal(await page.locator('#my-frontier').isVisible(), true);
+    assert.equal(await page.locator('#goal-result').getAttribute('data-record'), admitted.id);
 
     await page.clock.fastForward(301_000);
     await member.waitFor({ state: 'hidden' });
@@ -421,12 +491,14 @@ async function walletPaths(browser, language, width) {
     await club.click();
     await member.waitFor({ state: 'visible' });
     assert.match(await page.locator('#member-route').innerText(), /AGI CLUB/);
-    if (language === 'fr') await capture(page, language, width, 'arrival-club');
+    await capture(page, language, width, 'arrival-club');
+    await destination(page, 'mv-results');
     await page.locator('#goal-keeper summary').click();
     await page.locator('#goal-import').setInputFiles(content('recovered.json', saved));
     await page.waitForFunction(() => document.getElementById('goal-result').dataset.record === 'shift-archive-point'
       && !document.getElementById('goal-result').hidden);
     assert.equal(await page.locator('#goal-text').inputValue(), 'NOAA');
+    await destination(page, 'mv-earlier');
     await page.locator('#open-brief').click();
     await brief.waitFor({ state: 'visible' });
     assert.match(await brief.innerText(), /1\.2/);
@@ -459,7 +531,9 @@ async function walletPaths(browser, language, width) {
       eligibleRoutes:['AGI CLUB','AGIALPHA'], rejects:['wrong network','under balance','expired name','canceled signature'],
       brief:'001 v1.2', arrivalAboveFold:true, featuredBrief:true, downloadHashes:true, publicBenchmarkedScreen:140,
       scriptedFirstUseMs:scriptedMs, scriptedJourney:'sign in → goal → run → export → recheck',
-      goalAwareRanking:true, savedGoalRecheck:true, liveEvidenceFingerprints:true, restoredAfterSignIn:true,
+      goalAwareRanking:true, savedGoalRecheck:true, missingEvidenceCheck:true, liveEvidenceFingerprints:true, restoredAfterSignIn:true,
+      appShell:true, keyboardNavigation:true, publicAtlasReturn:true,
+      executionFailureAndRetry:true,
       offlineRunAndReceipt: true, receiptTamperDenial: true, rehashedReceiptDenial:true, archivedEditionDownloads:true,
       lock: true, expiry: true, reconnect: true, accountSwitchDenial: true });
   } finally {

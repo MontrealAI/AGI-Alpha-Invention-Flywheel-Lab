@@ -601,8 +601,8 @@ def feature_html(slot, compiled, lang):
     title = escape(local['title'])
     reference = row['evidence_links'][0]
     kind = EDITION_LABELS[row['edition_kind']][fr]
-    inputs = ('why', 'possibility', 'alternative', 'next', 'uncertainty')
-    facts = ''.join(f'<div><dt>{FIELDS[name][fr]}</dt><dd>{escape(local[name])}</dd></div>' for name in inputs)
+    def facts(fields):
+        return ''.join(f'<div><dt>{FIELDS[name][fr]}</dt><dd>{escape(local[name])}</dd></div>' for name in fields)
     label = 'Dossier à la une' if fr else 'Featured intelligence briefing'
     brief = 'Ouvrir le dossier décisionnel' if fr else 'Open the decision brief'
     runs = 'Vérification de publication' if fr else 'Publication verification'
@@ -610,7 +610,10 @@ def feature_html(slot, compiled, lang):
         f'<article class="mf-feature" id="mf-edition" data-edition-run="{slot["member_run"]}">'
         f'<p class="packet-meta">{label} · {kind}</p><h4>{title}</h4><p>{escape(local["change"])}</p>'
         f'<p class="mf-meta">{timestamp_html(row["updated_at"])} · {escape(row["source_version"])}</p>'
-        f'<dl>{facts}</dl><p class="mv-links"><a class="mf-action" data-mv-open href="#decision-{row["id"]}">{brief}</a>'
+        f'<dl>{facts(("why", "next"))}</dl>'
+        f'<details><summary>{"Examiner les preuves et leurs limites" if fr else "Inspect the evidence and its limits"}</summary>'
+        f'<dl>{facts(("possibility", "alternative", "uncertainty"))}</dl></details>'
+        f'<p class="mv-links"><a class="mf-action" data-mv-open href="#decision-{row["id"]}">{brief}</a>'
         f'<a href="{escape(reference["url"])}">{escape(reference[lang])}</a>'
         f'<a href="{editions.RUNS}{slot["member_run"]}">{runs}</a></p></article>'
     )

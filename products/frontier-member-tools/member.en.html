@@ -1,89 +1,117 @@
 <div class="mv" id="member-value">
-  <header class="mv-heading">
-    <section class="goal-studio" id="my-frontier" aria-labelledby="my-frontier-title">
-      <p class="packet-meta">MY FRONTIER Ω</p>
-      <h3 id="my-frontier-title">Your next frontier begins here.</h3>
+  <header class="mf-bar">
+    <div class="mf-bar-inner">
+      <div class="mf-brand"><span class="seal" aria-hidden="true">Ω</span><strong>Member First Ω</strong></div>
+      <div class="mf-session">
+        <span class="mf-verified" id="member-route"></span>
+        <a class="mf-public-link" href="#possibility-shifts">Public Atlas <span aria-hidden="true">↗</span></a>
+        <a class="mf-language" lang="fr" hreflang="fr" href="fr.html" aria-label="Français">FR</a>
+        <button id="lock" class="quiet" type="button">Lock</button>
+      </div>
+    </div>
+    <nav class="mv-nav mf-destinations" aria-label="Member First destinations">
+      <a href="#my-frontier" aria-current="page">My Frontier</a>
+      <a href="#mv-earlier">Intelligence</a>
+      <a href="#mv-tools">Capabilities</a>
+      <a href="#mv-results">My results</a>
+    </nav>
+  </header>
+  <section id="my-frontier" class="mf-view" aria-labelledby="workspace-title" data-member-view>
+    <div class="mf-arrival">
+      <h2 id="workspace-title" tabindex="-1">My Frontier <span>Ω</span></h2>
+      <p>Discover, understand and act on what the evidence makes possible.</p>
+    </div>
+    <div class="mf-canvas">
+      <section class="goal-studio" aria-labelledby="my-frontier-title">
+        <h3 id="my-frontier-title">What will you make possible?</h3>
       <form id="goal-form" aria-describedby="goal-local">
-        <label for="goal-text">What would you like intelligence to make possible for you?</label>
+        <label for="goal-text">Describe your ambition, problem or desired result.</label>
         <div class="goal-input">
-          <input id="goal-text" type="search" maxlength="200" autocomplete="off" spellcheck="false"
-            placeholder="e.g. Find a historical NOAA forecast">
+          <textarea id="goal-text" rows="2" maxlength="200" autocomplete="off" spellcheck="false"
+            placeholder="e.g. Find a historical NOAA forecast"></textarea>
           <button id="goal-submit" type="submit" class="entry-button" disabled>Find my next move <span aria-hidden="true">→</span></button>
         </div>
-        <div class="goal-quick">
-          <p id="goal-local">Your goal is matched to the current research in this browser.</p>
-          <a id="mf-quick-run" href="#mv-endpoint-run">Try the public Endpoint demo <span aria-hidden="true">→</span></a>
-        </div>
+        <p id="goal-local">Matched to the current research on this device.</p>
         <div class="goal-presets" role="group" aria-label="Suggested goals">
           <button type="button" data-goal="endpoint" aria-pressed="false">Check an AI endpoint</button>
           <button type="button" data-goal="archive" aria-pressed="false">Retrieve a forecast</button>
+        </div>
+        <details class="goal-more"><summary>More starting points</summary>
+          <div class="goal-presets">
           <button type="button" data-goal="workflow" aria-pressed="false">Improve a workflow</button>
           <button type="button" data-goal="verify" aria-pressed="false">Check a claim</button>
           <button type="button" data-goal="discover" aria-pressed="false">Find an opportunity</button>
           <button type="button" data-goal="build" aria-pressed="false">Build an AI capability</button>
-        </div>
+          </div>
+        </details>
       </form>
-      <p id="goal-status" class="status" role="status"></p>
+        <div id="goal-status" class="status" role="status"></div>
+      </section>
+      <aside class="mf-sample" aria-labelledby="mf-sample-title">
+        <p class="packet-meta">Public demonstration</p>
+        <h3 id="mf-sample-title">Experience your first verified capability</h3>
+        <p>Find the highest documented AI concurrency that meets both benchmark limits. Check it against SQLite and keep a receipt.</p>
+        <a id="mf-quick-run" href="#goal-result">Try the Endpoint example <span aria-hidden="true">→</span></a>
+      </aside>
+    </div>
+    <div class="mf-journey" id="mf-journey" hidden>
+      <ol class="mf-steps" aria-label="Journey progress">
+        <li aria-current="step"><span aria-hidden="true">01</span><b>Ambition</b></li>
+        <li><span aria-hidden="true">02</span><b>Opportunity</b></li>
+        <li><span aria-hidden="true">03</span><b>Advantage</b></li>
+        <li><span aria-hidden="true">04</span><b>Action</b></li>
+        <li><span aria-hidden="true">05</span><b>Result</b></li>
+      </ol>
       <article class="goal-result" id="goal-result" hidden aria-labelledby="goal-result-title">
         <p class="packet-meta">THE UNSEEN ADVANTAGE Ω</p>
         <h4 id="goal-result-title" tabindex="-1"></h4>
-        <p id="goal-evidence-state" class="goal-evidence-state"></p>
+        <p id="goal-ambition"></p><p id="goal-evidence-state" class="goal-evidence-state"></p>
+        <p class="goal-match" id="goal-match"></p>
         <div class="goal-next">
           <div><h5>The next move</h5><p data-goal-fact="next"></p><p id="goal-available"></p></div>
           <a id="goal-action" class="entry-button" href="#mv-better"></a>
         </div>
         <dl class="goal-evidence">
           <div><dt>The possibility</dt><dd data-goal-fact="possibility"></dd></div>
-          <div><dt>Why this might work</dt><dd data-goal-fact="why"></dd></div>
+          <div><dt>What changed</dt><dd data-goal-fact="change"></dd></div>
+          <div><dt>Why it matters</dt><dd data-goal-fact="why"></dd></div>
           <div><dt>The strongest alternative</dt><dd data-goal-fact="alternative"></dd></div>
           <div><dt>The evidence and its limits</dt><dd data-goal-fact="uncertainty"></dd></div>
         </dl>
         <p class="mv-links"><a id="goal-proof" href="#mv-better" data-mv-open>Open evidence and history</a>
           <a id="goal-source" href="#mv-better">Open primary source</a></p>
+        <button type="button" id="goal-edit" class="quiet">Edit ambition</button>
       </article>
-      <div class="goal-quick">
-        <details id="goal-keeper">
-          <summary>Keep or reopen a goal</summary>
-          <p>Your goal lives here until you leave or lock the session. A downloaded goal file includes what you entered. Keep it somewhere you control.</p>
-          <div class="mv-actions">
-            <button type="button" class="quiet" id="goal-export" disabled>Download current goal</button>
-            <label for="goal-import">Reopen a goal file<input id="goal-import" type="file" accept=".json,application/json"></label>
-          </div>
-          <p><a href="#edition-history">Recover the public evidence from a past edition</a></p>
-        </details>
+    </div>
+    <p id="mv-run-status" class="status" role="status"></p>
+    <section id="mf-outcome" class="mf-outcome" hidden aria-labelledby="mf-outcome-title">
+      <h3 id="mf-outcome-title">What you accomplished</h3>
+      <div id="mv-screen-result" hidden tabindex="-1" role="group" aria-labelledby="mf-outcome-title"></div>
+      <div class="mf-result-followup">
+        <a id="mv-keep-result" class="quiet" href="#mv-consent" hidden>Keep the result</a>
+        <a href="#mv-results">Reopen or check a receipt</a>
+        <a href="#mv-endpoint-run">Use an authorized batch</a>
+      </div>
+      <div id="mf-keep-controls" hidden>
+        <label class="mv-check"><input type="checkbox" id="mv-consent">Prepare a local receipt for this task. You can withdraw consent before export.</label>
+        <button type="button" class="quiet" id="mv-export" disabled>Export outcome receipt</button>
+        <p id="mv-export-status" class="status" role="status"></p>
       </div>
     </section>
-    <nav class="mv-nav" aria-label="Member First destinations">
-      <a href="#mv-earlier"><strong>Latest intelligence</strong><span>Open the featured briefing</span></a>
-      <a href="#mv-better"><strong>Your next opportunity</strong><span>Explore evidence and decisions</span></a>
-      <a href="#mv-tools"><strong>Frontier capabilities</strong><span>Use a qualified tool</span></a>
-      <a href="#mv-results"><strong>Outcome Workbench</strong><span>Inspect and verify results</span></a>
-    </nav>
-    <p class="mf-disclosure">Wallet verification opens this member view. Its research and tool files are public.</p>
-  </header>
-  <section class="mv-section" id="mv-earlier" aria-labelledby="mv-earlier-title">
-    <h3 id="mv-earlier-title">Discover earlier</h3>
+  </section>
+  <section class="mv-section" id="mv-earlier" aria-labelledby="mv-earlier-title" data-member-view hidden>
+    <h3 id="mv-earlier-title" tabindex="-1">Intelligence</h3>
     <p class="mf-section-intro">Member First Intelligence · Evidence updated <!-- MF_UPDATED --></p>
+    <aside class="mf-goal-link" id="goal-linked-evidence" hidden>
+      <p>Relevant to your goal</p><a data-mv-open href="#mv-better"></a>
+    </aside>
     <!-- MF_FEATURE -->
     <h4 class="mf-subhead">Recent research changes</h4>
     <ul class="mv-timeline"><!-- MV_TIMELINE --></ul>
     <p class="mv-links"><a href="member-value.json">Versioned decision evidence</a>
       <a href="atlas-release.json">Live publication receipt</a></p>
-    <details id="edition-history">
-      <summary>Recover a past decision edition</summary>
-      <p>Get the original Atlas ledger, bilingual decisions and release receipt. Use them to check what a past edition said after the live catalogue changes. These are public evidence files. Each download works on its own.</p>
-      <ul class="mv-timeline">
-        <li><a href="decision-editions/45278828750.tar.zst" download>November 23, 17:21 Toronto · 16 decisions</a></li>
-        <li><a href="decision-editions/45287921702.tar.zst" download>November 23, 18:20 Toronto · 19 decisions</a></li>
-      </ul>
-      <p class="mv-links"><a href="decision-editions/index.json">Pinned digests and source runs</a>
-        <a href="decision-editions/verify.py" download>Download Linux verifier</a>
-        <a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/main/publication/first-verified-advantage/REPORT.md">Quick start and comparison</a></p>
-    </details>
-  </section>
   <section class="mv-section" id="mv-better" aria-labelledby="mv-better-title">
-    <h3 id="mv-better-title">Understand better</h3>
-    <p class="mf-section-intro">Frontier Decision Desk</p>
+    <h3 id="mv-better-title">Decision Desk</h3>
     <p>Review the opportunity, its evidence, the strongest alternative and the next move. A confirmed source can still be an untested lead.</p>
     <div class="mv-filters" id="mv-filters" hidden>
       <label for="mv-query">Search decision briefs<input id="mv-query" type="search" maxlength="120" autocomplete="off" aria-controls="mv-records"></label>
@@ -93,8 +121,18 @@
     </div>
     <div class="mv-grid" id="mv-records"><!-- MV_BRIEFS --></div>
   </section>
-  <section class="mv-section" id="mv-tools" aria-labelledby="mv-tools-title">
-    <h3 id="mv-tools-title">Gain capabilities</h3>
+      <div class="brief-entry" data-nosnippet>
+        <button class="quiet" id="open-brief" type="button" aria-controls="brief-content" aria-expanded="false">Open the member brief</button>
+        <p class="status" id="brief-status" role="status"></p>
+        <article class="brief-content" id="brief-content" hidden></article>
+      </div>
+      <details class="mf-related"><summary>Related public research</summary><ul>
+        <li><a href="#packet-lean">Lean 4.36</a></li><li><a href="#packet-qwen">Qwen GGUF</a></li>
+        <li><a href="#research-packet">Formal proof receipts</a></li><li><a href="#packet-retrofit">ALPHA-1 retrofit</a></li>
+      </ul></details>
+  </section>
+  <section class="mv-section" id="mv-tools" aria-labelledby="mv-tools-title" data-member-view hidden>
+    <h3 id="mv-tools-title" tabindex="-1">Capabilities</h3>
     <p class="mf-section-intro">Frontier Ω Capability Library</p>
     <p>Run the published tools or download an exact version with its input format, verifier, operating limits and rights.</p>
     <div class="mv-grid"><!-- MV_TOOLS --></div>
@@ -105,9 +143,7 @@
       <template id="mv-endpoint-reference"><!-- MV_REFERENCE --></template>
       <template id="mv-endpoint-manifest"><!-- MV_TOOL_MANIFEST --></template>
       <button type="button" class="entry-button" id="mv-demo">Run public demonstration</button>
-      <p id="mv-run-status" role="status" class="status"></p>
-      <div id="mv-screen-result" hidden tabindex="-1"></div>
-      <a id="mv-keep-result" class="quiet" href="#mv-consent" hidden>Keep the result</a>
+      <p id="mv-tool-status" role="status" class="status"></p>
       <details>
         <summary>Use an authorized batch or inspect the plan</summary>
         <p>Use the ZIP’s sample format for local data. Freeze the inputs and comparator before running. Processing stays in this browser.</p>
@@ -124,10 +160,35 @@
         </div>
       </details>
     </section>
+    <details id="edition-history">
+      <summary>Historical decision edition recovery</summary>
+      <p>Get the original Atlas ledger, bilingual decisions and release receipt. Use them to check what a past edition said after the live catalogue changes. These are public evidence files. Each download works on its own.</p>
+      <ul class="mv-timeline">
+        <li><a href="decision-editions/45278828750.tar.zst" download>November 23, 17:21 Toronto · 16 decisions</a></li>
+        <li><a href="decision-editions/45287921702.tar.zst" download>November 23, 18:20 Toronto · 19 decisions</a></li>
+      </ul>
+      <p>Conventional Zstandard won the matched recovery comparison. Linux verifier and exact download digests are available.</p>
+      <p class="mv-links"><a href="decision-editions/index.json">Pinned digests and source runs</a>
+        <a href="decision-editions/verify.py" download>Download Linux verifier</a>
+        <a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/main/publication/first-verified-advantage/REPORT.md">Quick start and comparison</a></p>
+    </details>
   </section>
-  <section class="mv-section" id="mv-results" aria-labelledby="mv-results-title">
-    <h3 id="mv-results-title">Achieve results</h3>
+  <section class="mv-section" id="mv-results" aria-labelledby="mv-results-title" data-member-view hidden>
+    <h3 id="mv-results-title" tabindex="-1">My results</h3>
     <p class="mf-section-intro">Outcome Workbench</p>
+    <p>Results stay in this session. Download a goal or receipt to reopen it later on a device you control.</p>
+    <p id="mf-result-empty">No result in this session. Start with the public Endpoint example in My Frontier.</p>
+    <p><a id="mf-current-result" href="#mv-screen-result" hidden>Return to this session’s result</a></p>
+        <details id="goal-keeper">
+          <p id="goal-file-status" class="status" role="status"></p>
+          <summary>Keep or reopen a goal</summary>
+          <p>Your goal lives here until you leave or lock the session. A downloaded goal file includes what you entered. Keep it somewhere you control.</p>
+          <div class="mv-actions">
+            <button type="button" class="quiet" id="goal-export" disabled>Download current goal</button>
+            <label for="goal-import">Reopen a goal file<input id="goal-import" type="file" accept=".json,application/json"></label>
+          </div>
+          <p><a href="#edition-history">Recover the public evidence from a past edition</a></p>
+        </details>
     <dl class="mv-measures">
       <div><dt>Qualified tools</dt><dd>2</dd></div>
       <div><dt>Controlled public endpoint replay</dt><dd>7 measured rows, checked against SQLite</dd></div>
@@ -136,9 +197,7 @@
       <div><dt>Member productivity advantage and economic results</dt><dd>Not yet measured</dd></div>
     </dl>
     <p>You can export a local receipt for a completed endpoint screen. It contains evidence fingerprints, test scope and verification status. The receipt stays with you. For your own data it omits the measured load, source text, input rows and wallet information.</p>
-    <label class="mv-check"><input type="checkbox" id="mv-consent">Prepare a local outcome receipt for this task. Clear this box to withdraw consent before export.</label>
-    <div class="mv-actions">
-      <button type="button" class="quiet" id="mv-export" disabled>Export outcome receipt</button>
+    <div class="mv-actions mf-reopen">
       <label for="mv-import">Check a receipt’s integrity<input id="mv-import" type="file" accept=".json,application/json"></label>
     </div>
     <p id="mv-receipt-status" role="status" class="status"></p>
@@ -154,4 +213,5 @@
     <p>An integrity check compares hashes. Task data stays on this device. If you wish to volunteer for a matched evaluation, review what it requires and what you would consent to share.</p>
     <p class="mv-links"><a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/main/publication/FRONTIER-MEMBER-VALUE.md#prospective-member-evaluation">Read the voluntary evaluation protocol</a></p>
   </section>
+  <p class="mf-disclosure">Wallet verification opens this member view. Research and tool files are public. Goals and local results stay on this device.</p>
 </div>
