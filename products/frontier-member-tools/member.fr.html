@@ -143,6 +143,12 @@
       <p>Transformez votre règle en un outil HARNESS à portée limitée, vérifiez-le sur des cas séparés et conservez un fichier réutilisable.</p>
       <a class="mf-action" href="#my-intelligence" data-foundry-start>Ouvrir l’atelier de capacités <span aria-hidden="true">→</span></a>
     </article>
+    <article class="foundry-entry" id="foundry-inventor">
+      <h4>Inventer une capacité</h4>
+      <p>Confiez à un modèle local un problème portant sur des tables de données. Il propose une requête, la teste et peut la corriger à l’aide de cas de développement. L’évaluateur conserve les cas de confirmation.</p>
+      <p class="mv-links"><a href="frontier-inventor-1.0.0.zip" download>Télécharger l’utilitaire d’invention</a>
+        <a href="#foundry-inventor-results">Voir les résultats de recherche</a></p>
+    </article>
     <section class="foundry-stage" id="foundry-library" aria-labelledby="foundry-library-title">
       <h4 id="foundry-library-title">Votre bibliothèque de capacités</h4>
       <p>Ouvrez les capacités à partir de vos fichiers. Utilisez les grilles d’origine pour les requalifier. La liste s’efface à la fermeture ou au verrouillage.</p>
@@ -291,6 +297,19 @@
     <p class="mf-section-intro">Atelier de vérification des résultats</p>
     <p>Les résultats restent dans cette session. Téléchargez un objectif ou un reçu pour le rouvrir sur un appareil que vous contrôlez.</p>
     <p><a href="#foundry-library">Ouvrir votre bibliothèque de capacités</a></p>
+    <section class="foundry-stage" id="foundry-inventor-results" aria-labelledby="foundry-inventor-title">
+      <h4 id="foundry-inventor-title">Améliorer l’inventeur</h4>
+      <p>Consultez l’expérience publique sur le choix des cas de développement. Reproduisez la comparaison dans l’utilitaire avant d’utiliser un instrument.</p>
+      <details id="foundry-inventor-comparison">
+        <summary>Examiner la comparaison des démarches</summary>
+        <!-- INVENTOR_PILOT_RESULTS -->
+        <p class="mv-links"><a href="frontier-inventor-1.0.0.zip" download>Télécharger les preuves et les outils de rejeu</a>
+          <a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/main/publication/inventor/REPORT.md">Lire le verdict de l’expérience</a></p>
+      </details>
+      <div class="mv-actions"><label for="foundry-inventor-open">Ouvrir un point de reprise d’invention
+        <input id="foundry-inventor-open" type="file" accept=".json,application/json"></label></div>
+      <p class="status" id="foundry-inventor-local" role="status"></p>
+    </section>
     <section class="foundry-stage" id="foundry-study" aria-labelledby="foundry-study-title">
       <h4 id="foundry-study-title">Études de succession</h4>
       <p>Évaluez si un instrument vérifié aide un modèle local à créer un outil pour une nouvelle tâche. L’utilitaire compare la construction directe, le réemploi ordinaire et le réemploi par noms de sorties avec les mêmes cas et un outil de référence.</p>

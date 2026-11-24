@@ -611,6 +611,11 @@ body:has(#member:not([hidden]):not([data-public-view])) #main > :not(#member) { 
 .foundry-library-items { padding: 0; list-style: none; }
 .foundry-library-items li { padding: .85rem 0; border-top: 1px solid #594566; overflow-wrap: anywhere; }
 .foundry-library-items p { margin: .35rem 0; color: #e6cdaa; font-size: .9rem; }
+.foundry-pilot-table { max-width: 100%; overflow-x: auto; border: 1px solid #594566; border-radius: .4rem; }
+.foundry-pilot-table table { width: 100%; border-collapse: collapse; text-align: left; }
+.foundry-pilot-table th, .foundry-pilot-table td { padding: .55rem .7rem; overflow-wrap: anywhere; }
+.foundry-pilot-table thead { background: #281b36; color: #f4d38f; }
+.foundry-pilot-table tbody tr + tr { border-top: 1px solid #594566; }
 @media (max-width: 640px) {
   .mf-bar-inner .mf-intelligence-link { grid-row: 3; grid-column: 1 / -1; width: fit-content; min-height: 44px; }
   .foundry-example, .foundry-stage .foundry-fields { grid-template-columns: 1fr; }

@@ -173,6 +173,8 @@ async function foundryJourney(page, language, width) {
   assert.equal(release.foundry_sha256['frontier-foundry-1.0.0.zip'], '6306d7adf5841cedfff40cf0b8fd3aa5d77b42d8b3108717a48c81f3946e08cb');
   const studyZip = await (await online.get(base + 'frontier-foundry-1.1.0.zip')).body();
   assert.equal(createHash('sha256').update(studyZip).digest('hex'), release.foundry_sha256['frontier-foundry-1.1.0.zip']);
+  const inventorZip = await (await online.get(base + 'frontier-inventor-1.0.0.zip')).body();
+  assert.equal(createHash('sha256').update(inventorZip).digest('hex'), release.foundry_sha256['frontier-inventor-1.0.0.zip']);
   const example = await page.locator('#foundry-public-data').evaluate(node => JSON.parse(node.content.textContent));
   const context = page.context();
   await context.setOffline(true);
@@ -205,6 +207,7 @@ async function foundryJourney(page, language, width) {
     assert.equal(await page.locator('#foundry-output').textContent(), '');
 
     await destination(page, 'mv-tools');
+    assert.equal(await page.locator('#foundry-inventor a[download]').count(), 1);
     const items = page.locator('#foundry-library-items li');
     assert.equal(await items.count(), 1);
     const picker = page.locator('#foundry-library-files');
@@ -276,6 +279,14 @@ async function foundryJourney(page, language, width) {
       return {cases, bundle:await evaluateStudy(plan,cases,{direct:fail,ordinary:good,retained:good})};
     }, {example, original});
     await destination(page, 'mv-results');
+    const inventor = page.locator('#foundry-inventor-comparison');
+    await inventor.locator('summary').press('Enter');
+    assert.equal(await inventor.locator('tbody tr').count() >= 3, true);
+    assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
+    await page.locator('#foundry-inventor-open').setInputFiles(content('run.json', {
+      schema:'frontier/inventor-run-v1', model:'Local inventor fixture', status:'SEALED', events:[{}],
+    }));
+    await page.waitForFunction(() => document.getElementById('foundry-inventor-local').textContent.includes('Local inventor fixture'));
     await page.locator('#foundry-study-reopen summary').click();
     await page.locator('#foundry-study-report').setInputFiles(content('report.json', fixture.bundle));
     const studyCases = page.locator('#foundry-study-cases');
@@ -617,6 +628,7 @@ async function walletPaths(browser, language, width) {
     assert.equal(await page.locator('#foundry-comparison').textContent(), '');
     assert.equal(await page.locator('#foundry-library-items li').count(), 0);
     assert.equal(await page.locator('#foundry-study-outcomes dd').count(), 0);
+    assert.equal(await page.locator('#foundry-inventor-local').textContent(), '');
     assert.equal(await page.locator('#goal-result').isVisible(), false);
     assert.equal(await page.locator('#goal-export').isEnabled(), false);
     assert.equal(await page.locator('#access').isVisible(), true);
@@ -680,6 +692,7 @@ async function walletPaths(browser, language, width) {
       appShell:true, keyboardNavigation:true, publicAtlasReturn:true,
       executionFailureAndRetry:true, foundryOfflineReplay:true, foundryManualHandoffFixture:true,
       foundryNativeProject:true, foundryAssetReopen:true, foundryPortfolio:true, foundrySuccessorStudyReplay:true,
+      foundryInventorPilot:true,
       offlineRunAndReceipt: true, receiptTamperDenial: true, rehashedReceiptDenial:true, archivedEditionDownloads:true,
       lock: true, expiry: true, reconnect: true, accountSwitchDenial: true });
   } finally {

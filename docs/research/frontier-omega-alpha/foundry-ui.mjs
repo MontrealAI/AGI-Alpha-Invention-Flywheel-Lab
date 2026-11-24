@@ -8,6 +8,14 @@ const id = name => document.getElementById(name);
 const root = id('my-intelligence');
 const member = id('member');
 const fr = document.documentElement.lang === 'fr';
+
+const inventorStatus = fr ? {
+  RUNNING:'En cours ou en pause', SELECTED:'Possibilité choisie', SEALED:'Candidat préparé',
+  DEVELOPMENT_INCOMPLETE:'Vérification de développement incomplète', ABSTAIN:'Abstention',
+} : {
+  RUNNING:'Running or paused', SELECTED:'Opportunity selected', SEALED:'Candidate sealed',
+  DEVELOPMENT_INCOMPLETE:'Development checks incomplete', ABSTAIN:'Abstained',
+};
 const words = fr ? {
   frozen:'Mission figée. Choisissez comment obtenir un instrument.',
   sealed:'Instrument scellé. Ouvrez maintenant vos cas de vérification.',
@@ -110,7 +118,7 @@ function setup() {
     get('study-check').disabled = busy || !globalThis.crypto?.subtle ||
       !get('study-report').files.length || !get('study-cases').files.length;
     for (const name of ['sample','freeze','candidate','verify','case-template','mission-download','project',
-      'open','candidate-file','cases','mission-file','library-files','study-report','study-cases']) {
+      'open','candidate-file','cases','mission-file','library-files','study-report','study-cases','inventor-open']) {
       get(name).disabled = busy || !globalThis.crypto?.subtle;
     }
   }
@@ -348,6 +356,25 @@ function setup() {
   for (const key of ['study-report','study-cases']) {
     get(key).addEventListener('change', () => { clearStudy(); render(); });
   }
+  get('inventor-open').addEventListener('change', launch(async alive => {
+    const local = get('inventor-local');
+    put(local, '');
+    try {
+      const run = await fileValue(get('inventor-open'));
+      if (!alive()) return;
+      if (run?.schema !== 'frontier/inventor-run-v1' || typeof run.model !== 'string' || !run.model.trim() || run.model.length > 160 ||
+          typeof run.status !== 'string' || !Object.hasOwn(inventorStatus, run.status) ||
+          !Array.isArray(run.events) || run.events.length > 64) {
+        throw new Error('CHECKPOINT');
+      }
+      const count = run.events.length;
+      put(local, `${run.model} · ${inventorStatus[run.status]} · ${count} ${fr ? 'appels consignés' : 'recorded requests'}. ` +
+        (fr ? 'Point de reprise local. Utilisez l’évaluateur pour confirmer le résultat.' :
+          'Local checkpoint. Use the evaluator to confirm the result.'));
+    } catch {
+      if (alive()) put(local, fr ? 'Ouvrez le fichier run.json produit par l’utilitaire.' : 'Open the run.json file produced by the companion.');
+    }
+  }));
   get('study-check').addEventListener('click', launch(async alive => {
     clearStudy();
     try {
@@ -412,8 +439,9 @@ function setup() {
   window.addEventListener('frontier:member-lock', () => {
     library.clear();
     updateLibrary();
-    for (const key of ['library-files','study-report','study-cases']) get(key).value = '';
+    for (const key of ['library-files','study-report','study-cases','inventor-open']) get(key).value = '';
     put(get('library-status'), '');
+    put(get('inventor-local'), '');
     clearStudy();
     clear(true);
   });

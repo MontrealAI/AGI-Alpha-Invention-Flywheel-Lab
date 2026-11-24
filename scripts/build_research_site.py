@@ -102,6 +102,7 @@ ATLAS_OUTPUTS = frozenset({
     'frontier-omega-alpha/noaa-archive-point-1.0.0.zip',
     'frontier-omega-alpha/frontier-foundry-1.0.0.zip',
     'frontier-omega-alpha/frontier-foundry-1.1.0.zip',
+    'frontier-omega-alpha/frontier-inventor-1.0.0.zip',
 })
 STATES = ('discovered', 'qualified', 'testing', 'verified', 'falsified', 'abstain', 'retained', 'deployed', 'value-verified')
 POSSIBILITY_SOURCE_PATTERNS = (

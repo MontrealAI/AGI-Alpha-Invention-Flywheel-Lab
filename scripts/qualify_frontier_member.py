@@ -246,6 +246,76 @@ def qualify_successors(directory, root, release):
     return {'package_sha256':expected, 'replayed':outcomes, 'retained_fresh_cases':2, 'denied_controls':4}
 
 
+def qualify_inventor(directory, root, release):
+    expected = release['foundry_sha256'][member.INVENTOR_ZIP]
+    manifest = install(directory / member.INVENTOR_ZIP, root, {'sha256':expected})
+    require(manifest['id'] == 'frontier-inventor', 'Wrong invention companion')
+    report, elapsed = call(root, sys.executable, 'reproduce.py')
+    diagnostic, _ = call(root, sys.executable, 'reproduce.py', '--diagnostic')
+    larger, _ = call(root, sys.executable, 'reproduce.py', '--larger')
+    comparison = report['comparisons']
+    require(set(comparison) >= {f'{name}-conventional' for name in ('editions','endpoint','impact')} and
+            all(row['matched'] == row['total'] == 9 for name,row in comparison.items() if name.endswith('-conventional')),
+            'Independent conventional comparison did not reproduce')
+    denial = '''from relational import QueryRefused, evaluate
+schema = {'source':{'id':'TEXT'}}
+data = {'source':[{'id':'caption'}]}
+assert evaluate(schema,data,'SELECT id FROM source') == [['caption']]
+for sql in ('ATTACH DATABASE ":memory:" AS external', 'SELECT name FROM sqlite_schema',
+            "SELECT load_extension('permission-test')", 'WITH x AS (SELECT 1) DELETE FROM source',
+            'WITH RECURSIVE x(n) AS (SELECT 1 UNION ALL SELECT n+1 FROM x) SELECT SUM(n) FROM x'):
+    try:
+        evaluate(schema,data,sql)
+    except QueryRefused:
+        continue
+    raise AssertionError('A forbidden or unbounded query completed')
+'''
+    subprocess.run([sys.executable, '-c', denial], cwd=root, check=True)
+    recovery = '''from pathlib import Path
+from types import SimpleNamespace
+from inventor import Run
+model = SimpleNamespace(name='recovery-fixture', config_sha256='test-only')
+path = Path('interrupted.json')
+run = Run(path,model,256,{'kind':'construction'})
+run.state['pending'] = {'reserved_output':256,'prompt_sha256':'a'*64}
+run.save()
+resumed = Run(path,model,256,{'kind':'construction'})
+assert resumed.remaining == 0 and resumed.state['pending'] is None
+assert resumed.state['events'][0]['status'] == 'INTERRUPTED'
+assert Run(path,model,256,{'kind':'construction'}).state == resumed.state
+'''
+    subprocess.run([sys.executable, '-c', recovery], cwd=root, check=True)
+
+    for prefix, options, cohort in (('',(),report), ('diagnostic-',('--diagnostic',),diagnostic),
+                                    ('larger-',('--larger',),larger)):
+        first = next((label for label,value in cohort['comparisons'].items() if value['verdict'] == 'MATCHED' and
+                      not label.endswith('-conventional')), None)
+        if first:
+            break
+    else:
+        prefix, options, first = '', (), 'impact-conventional'
+    study = json.loads((root/'study'/f'{prefix}reproduction.json').read_bytes())
+    evidence = json.loads((root/'study'/f'{prefix}evidence.json').read_bytes())
+    scope = evidence['assessments'][first]['assessment']['mission']
+    item = study['missions'][scope]['confirmation'][0]
+    (root/'reuse.json').write_bytes(member.stable(item['input']))
+    result, _ = call(root, sys.executable, 'reproduce.py', *options, '--apply', first, 'reuse.json')
+    require(sorted(result['result']) == sorted(item['expected']), 'Reopened query did not reproduce the held case')
+    fresh = {'node':[{'name':name} for name in ('input-refresh','evidence-check','publish','unaffected')],
+             'edge':[{'input':'input-refresh','downstream':'evidence-check'},
+                     {'input':'evidence-check','downstream':'publish'},
+                     {'input':'evidence-check','downstream':'unknown'},
+                     {'input':'unknown','downstream':'unaffected'}],
+             'changed':[{'name':'input-refresh'}]}
+    (root/'fresh.json').write_bytes(member.stable(fresh))
+    fresh_result, _ = call(root, sys.executable, 'reproduce.py', '--apply', 'impact-conventional', 'fresh.json')
+    require(sorted(fresh_result['result']) == [['evidence-check'],['input-refresh'],['publish']],
+            'Reopened reference missed transitive impact on fresh input')
+    return {'package_sha256':expected,'evidence_sha256':report['evidence_sha256'],
+            'compared':comparison,'diagnostic':diagnostic['comparisons'],'larger':larger['comparisons'],'offline_wall_ns':elapsed,
+            'reopened':first,'fresh_impact':fresh_result['result'],'denied_controls':5,'interruption_recovery':True}
+
+
 def qualify(directory, live=False):
     manifest = json.loads((directory / member.MEMBER_JSON).read_bytes())
     tools = manifest['capabilities']
@@ -264,6 +334,8 @@ def qualify(directory, live=False):
                 results['foundry'] = qualify_foundry(directory, root / 'foundry', release)
                 if member.STUDY_ZIP in release['foundry_sha256']:
                     results['successors'] = qualify_successors(directory, root / 'successors', release)
+                if member.INVENTOR_ZIP in release['foundry_sha256']:
+                    results['inventor'] = qualify_inventor(directory, root / 'inventor', release)
         return results
 
 
