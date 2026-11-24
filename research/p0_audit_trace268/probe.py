@@ -188,9 +188,9 @@ def summarize(path):
     boots=[a for a in start.values() if a['phase']=='boot_observed']
     # Patched descendant mediation calls _g_real_run from inside _p0262_launch.
     # Nested same-process wait spans can refer to the same physical child.
-    # Collapse only the correlation candidates, not the recorded spans.
+    # Retain ambiguity explicitly, rather than manufacturing a physical edge.
     all_waits=[(a,end.get(a['id'])) for a in start.values() if a['phase']=='child_wait']
-    edges=0; ambiguous=0; missing=0
+    edges=0; ambiguous=0; missing=0; innermost_requests=Counter()
     for boot in boots:
         candidates=[(a,b) for a,b in all_waits if a['proc']==boot['parent']
                     and a['ns']<=boot['ns'] and (b is None or boot['ns']<=b['ns'])]
@@ -200,6 +200,11 @@ def summarize(path):
             ambiguous+=1
         else:
             missing+=1
+        if candidates:
+            # One observed boot is one process observation, not every nested span.
+            nearest=max(candidates,key=lambda pair:pair[0]['ns'])[0]
+            if 'request' in nearest:
+                innermost_requests[nearest['request']]+=1
     return {'usable':bool(waits and boots and not malformed and not invalid and not (set(end)-set(start))),
         'spans_started':len(start),'spans_completed':len(completed),
         'unclosed_spans':len(set(start)-set(end)),'orphan_end':len(set(end)-set(start)),
@@ -207,6 +212,9 @@ def summarize(path):
         'phase_totals':dict(phases),'distinct_exact_audit_input_digests':len(request_counts),
         'audit_input_wait_spans':sum(request_counts.values()),
         'repeated_exact_input_wait_spans':sum(n-1 for n in request_counts.values()),
+        'observed_boots_with_correlated_audit_input':sum(innermost_requests.values()),
+        'distinct_correlated_boot_input_digests':len(innermost_requests),
+        'repeated_correlated_boot_inputs':sum(n-1 for n in innermost_requests.values()),
         'isolated_boot_spans':len(boots),'single_parent_wait_matches':edges,
         'ambiguous_parent_wait_matches':ambiguous,'missing_parent_wait_matches':missing,
         'interpretation':'Inclusive timings overlap across phases and processes; duplicate spans are not distinct physical launches. Exact input repetition is not cache eligibility. Unclosed spans are censored, not zero time.'}
