@@ -20,6 +20,10 @@ The earlier standalone archive receipt was separately produced but reused an ide
 
 The comparison separates measurement, acceptance and authority. The public archive records, RFC 9110 and integer arithmetic give independent technical references. The experiment did not use an evaluator-controlled hidden corpus, a separately administered host, or a consenting member. The recorded process timings use a shared host and exclude complete labor, review, energy, maintenance, failure and hosting costs. The local route spent no API fees. A chargeable provider account was not used. No monetary benefit, recursive improvement or productive superiority has been established.
 
+## Local companion release check
+
+A live streaming Qwen3 request returned two valid assignments separated by a semicolon. The initial importer required one assignment per line and correctly stopped without making an executable file. I changed the importer to inspect Python's syntax tree and accept named scalar assignments with either separator. It rejects execution statements and uses the existing HARNESS formula compiler to emit only data. Independent review identified an expansion risk. The updated importer counts expanded nodes before serializing. The corrected packaged path discovered the model, previewed the request, streamed a reply, compiled and checked **6/6**, and exported a reusable capability. The model call took **5.22 s** with **146** input and **15** output tokens. The [operation receipt](companion-operation.json) preserves both the failure and the resulting artifact identity.
+
 ## Versions and reproduction
 
 - [Initial registration](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/ada2b9f9a12997d8968df53cc316ce81f730fc3b/publication/frontier-foundry/REGISTRATION.md) and [exact failure receipt](archive-trial.json).

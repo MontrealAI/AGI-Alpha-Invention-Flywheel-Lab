@@ -1,7 +1,7 @@
 // Node 22+ offline operation. All authority remains with the local operator.
 import {readFile, stat, open} from 'node:fs/promises';
 import {fileURLToPath} from 'node:url';
-import {compare, formulaPrompt, freeze, maxBytes, promptFor, readJSON, reopen, requalify, retain, run} from './foundry-core.mjs';
+import {compare, formulaPrompt, freeze, importDraft, maxBytes, promptFor, readJSON, reopen, requalify, retain, run} from './foundry-core.mjs';
 
 async function read(path, fence = false) {
   const info = await stat(path);
@@ -33,7 +33,8 @@ try {
     const verified = await requalify(item, await read(files[1]));
     print(command === 'recheck' ? verified : run(item.frozen, await read(files[2])));
   } else {
-    const frozen = await freeze(await read(files[0]), await read(files[1], true));
+    const task = await read(files[0]);
+    const frozen = await freeze(task, importDraft(await read(files[1], true), task));
     if (command === 'seal') print(frozen);
     else {
       const sheet = await read(files[2]);

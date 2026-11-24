@@ -190,7 +190,7 @@ async function foundryJourney(page, language, width) {
     await page.waitForFunction(lang => document.getElementById('foundry-status').textContent.includes(
       lang === 'fr' ? 'changé' : 'changed'), language);
     await open.setInputFiles(content('retained.json', original));
-    await page.waitForFunction(lang => document.getElementById('foundry-comparison').textContent.includes(
+    await page.waitForFunction(lang => document.getElementById('foundry-comparison').textContent.toLowerCase().includes(
       lang === 'fr' ? 'intégrité' : 'integrity'), language);
     assert.equal(await page.locator('#foundry-run').isEnabled(), false);
     await page.locator('#foundry-cases').setInputFiles(content('original-cases.json', example.suite));
@@ -225,6 +225,8 @@ async function foundryJourney(page, language, width) {
     const result = await page.evaluate(raw => globalThis.HarnessEngine.importProject(raw), file);
     assert.equal(result.artifactProvenance.verification, 'UNKNOWN');
     assert.deepEqual(result.instrumentSpec.inputs, ['start','finish']);
+    await page.locator('#foundry-candidate-file').setInputFiles(content('native-project.json', result));
+    await page.waitForFunction(() => JSON.parse(document.getElementById('foundry-response').value).name === 'Elapsed');
     const hash = await page.locator('#foundry-mission-hash').textContent();
     await page.locator('#foundry-cases').setInputFiles(content('cases.json', {schema:'frontier/foundry-cases-v1',
       mission_sha256:hash,reference:'Browser qualification fixture, direct integer arithmetic',

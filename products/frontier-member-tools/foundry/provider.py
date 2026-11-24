@@ -37,7 +37,7 @@ def request_plan(runtime, provider, model, prompt, limit, stream):
         raise BridgeError('CONTEXT', 'The declared context window is too small for these bounds.')
     reserved = (Decimal(size) * m.input_price + Decimal(limit) * m.output_price) / 1_000_000
     if provider.remote and (not runtime.allow_paid or reserved > runtime.budget.limit):
-        raise BridgeError('BUDGET', 'Remote inference requires declared applicable prices and an explicit sufficient USD budget.')
+        raise BridgeError('BUDGET', 'Remote inference requires declared applicable prices and a sufficient explicit USD budget.')
     plan = {'provider': provider.id, 'kind': provider.kind, 'model': model, 'endpoint': provider.base,
             'remote': provider.remote, 'prompt_sha256': sha256(prompt.encode()).hexdigest(),
             'max_output_tokens': limit, 'input_token_bound': size, 'stream': stream,

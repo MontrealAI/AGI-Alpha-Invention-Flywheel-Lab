@@ -1,6 +1,6 @@
 import {downloadJSON} from './frontier-goals.mjs';
 import {fingerprint} from './outcome-receipt.mjs';
-import {candidate, compare, fieldsFromText, freeze, harnessProject, kinds, maxBytes, mission,
+import {compare, fieldsFromText, freeze, harnessProject, importDraft, kinds, maxBytes, mission,
   promptFor, readJSON, reopen, requalify, retain, run} from './foundry-core.mjs';
 
 const id = name => document.getElementById(name);
@@ -134,7 +134,7 @@ function setup() {
 
   async function applyCandidate(draft, alive) {
     if (!task) return;
-    const frozen = await freeze(task, draft);
+    const frozen = await freeze(task, importDraft(draft, task));
     if (!alive()) return;
     sealed = frozen;
     saved = suite = undefined;
@@ -205,9 +205,8 @@ function setup() {
   get('candidate-file').addEventListener('change', launch(async alive => {
     const draft = await fileValue(get('candidate-file'), true);
     if (!alive()) return;
-    candidate(draft, task);
-    get('response').value = JSON.stringify(draft, null, 2);
     await applyCandidate(draft, alive);
+    if (alive()) get('response').value = JSON.stringify(sealed.instrument, null, 2);
   }));
   get('case-template').addEventListener('click', () => {
     if (!active() || !sealed || busy) return;
@@ -256,7 +255,7 @@ function setup() {
   }));
   get('clear').addEventListener('click', () => {
     clear(true);
-    get('objective').focus();
+    get('mission').querySelector('summary').focus();
   });
   window.addEventListener('frontier:member-lock', () => clear(true));
   document.querySelectorAll('[data-foundry-start]').forEach(link => link.addEventListener('click', () => {

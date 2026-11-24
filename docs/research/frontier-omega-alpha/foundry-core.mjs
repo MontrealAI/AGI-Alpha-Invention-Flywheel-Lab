@@ -86,7 +86,7 @@ export function formulaPrompt(value) {
   return [
     'Return one assignment per output, in plain text. Use scalar Python expressions only.',
     'Inputs: ' + Object.keys(task.inputs).join(', ') + '.',
-    'Output assignments: ' + Object.keys(task.outputs).map(key => key + ' = ___').join('; ') + '.',
+    'Output assignments, one per line:\n' + Object.keys(task.outputs).map(key => key + ' = ___').join('\n'),
     'Use exact integers, booleans or text. Allowed operations include +, -, *, comparisons, and, or, not, min and max.',
     'Do not use len, assignment within an expression, external tools, loops or code blocks.',
     'Objective: ' + task.objective,
@@ -114,6 +114,18 @@ export function candidate(value, task) {
   try { engine.constructInstrument(value); }
   catch { throw new Error('CANDIDATE'); }
   return structuredClone(value);
+}
+
+export function importDraft(value, task) {
+  if (value?.schema !== 'alpha-genesis-project/v1') return candidate(value, task);
+  try {
+    const project = engine.importProject(JSON.stringify(value));
+    const spec = project.instrumentSpec;
+    need(project.engineVersion === engine.VERSION && project.objective === task.objective &&
+      spec?.schema === 'alpha-genesis-instrument/v1' && Array.isArray(spec.effects) &&
+      spec.effects.length === 0 && spec.authority === 'pure-data-only', 'CANDIDATE');
+    return candidate({name:spec.name, inputs:spec.inputs, outputs:spec.outputs}, task);
+  } catch { throw new Error('CANDIDATE'); }
 }
 
 export async function freeze(task, draft) {

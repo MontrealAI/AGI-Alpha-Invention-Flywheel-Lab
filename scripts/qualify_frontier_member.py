@@ -125,8 +125,15 @@ def qualify_foundry(directory, root, release):
             'The packaged reference model candidate failed reproducible verification')
     subprocess.run([sys.executable,'-c', "import json; from formulas import formula_candidate; "
                     "a=json.load(open('example.json')); "
-                    "d=formula_candidate(a['task'],'bytes = end - start + 1\\nordered = start <= end'); "
+                    "d=formula_candidate(a['task'],'bytes = end - start + 1; ordered = start <= end'); "
                     "assert d['outputs'] == a['candidate']['outputs']"], cwd=root, check=True)
+    subprocess.run([sys.executable,'-c',
+                    "from formulas import bound_expansion\n"
+                    "tree={'field':'x'}\n"
+                    "for _ in range(11): tree={'op':'eq','args':[tree,tree]}\n"
+                    "try: bound_expansion(tree)\n"
+                    "except ValueError: pass\n"
+                    "else: raise AssertionError('Expansion bound was not applied')"], cwd=root, check=True)
     for name, value in (('task', 'task'), ('draft','candidate'), ('cases','suite'), ('input','sample')):
         (root / f'{name}.json').write_bytes(member.stable(example[value]))
     sealed, _ = call(root, 'node', 'foundry-cli.mjs', 'retain', 'task.json', 'draft.json', 'cases.json')
@@ -169,7 +176,7 @@ def qualify_foundry(directory, root, release):
     require(attempt.returncode == 2 and b'CONSENT' in attempt.stderr and b'Dispatching' not in attempt.stderr
             and b'fixture-never-a-real-credential' not in attempt.stderr, 'Unapproved remote dispatch was not refused')
     return {'archive_sample_matches':6,'reference_model_candidate_matches':14,'offline_reuse':True,'demo_wall_ns':wall_ns,'reuse_wall_ns':reuse_ns,
-            'package_sha256':expected,'negative_controls':7,'real_member_trial':None}
+            'package_sha256':expected,'negative_controls':8,'real_member_trial':None}
 
 
 def qualify(directory, live=False):
