@@ -9,7 +9,7 @@ import re
 from .adapters import BridgeError, strict_json
 from . import mission_evidence, mission_outcomes, mission_schema_context, mission_sources
 from .workflow_schemas import response_schema
-from .workflows import DEFAULT_TOOLS, RUN, TERMINAL, TOOLS, WorkflowService, digest, encoded, filename, require
+from .workflows import DEFAULT_TOOLS, RUN, TERMINAL, TOOLS, WorkflowService, digest, encoded, filename, instrument_repairs, require
 
 
 SPEC_FIELDS = frozenset({
@@ -382,15 +382,7 @@ class UniversalMissionService(WorkflowService):
         self._verify(state)
         checks_passed = state["verification"]["passed"]
         required_checks = bool(state["spec"]["acceptance"])
-        proposal = next(event for event in reversed(state["events"]) if event["kind"] == "route_proposed")
-        turn_events = state["events"][proposal["index"] + 1:]
-        repairs = {}
-        for event in turn_events:
-            detail = event["detail"]
-            if event["kind"] == "tool_refused" and detail.get("code") == "INSTRUMENT_STRUCTURE":
-                repairs[detail["artifact"]] = detail["reason"]
-            elif event["kind"] == "tool_completed" and detail["tool"] == "construct_instrument":
-                repairs.pop(detail["outcome"]["artifact"], None)
+        repairs = instrument_repairs(state["events"])
         if repairs:
             guidance = ("Corrigez les instruments refusés avant de les exécuter. "
                         if state["spec"]["mission"]["language"] == "fr"
@@ -417,6 +409,8 @@ class UniversalMissionService(WorkflowService):
             event["kind"] == "tool_completed" and event["detail"]["outcome"].get("operation_executed", True)
             for event in state["events"]
         )
+        proposal = next(event for event in reversed(state["events"]) if event["kind"] == "route_proposed")
+        turn_events = state["events"][proposal["index"] + 1:]
         refused = any(event["kind"] == "tool_refused"
                       and event["detail"].get("code") not in {"INSTRUMENT_STRUCTURE", "INSTRUMENT_DEPENDENCY"}
                       for event in turn_events)

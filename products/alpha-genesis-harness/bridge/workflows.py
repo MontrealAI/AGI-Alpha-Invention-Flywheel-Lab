@@ -103,6 +103,31 @@ def filename(name):
     return name
 
 
+def instrument_repairs(events):
+    """Recover pending construction refusals from durable action receipts."""
+    repairs = {}
+    for event in events if isinstance(events, list) else []:
+        detail = event.get("detail") if isinstance(event, dict) else None
+        if not isinstance(detail, dict):
+            continue
+        kind = event.get("kind")
+        if (kind == "tool_refused" and detail.get("code") == "INSTRUMENT_STRUCTURE"
+                or kind == "instrument_refusal_restored"):
+            name, reason = detail.get("artifact"), detail.get("reason")
+            if (isinstance(name, str) and NAME.fullmatch(name) and name.endswith(".json")
+                    and ".." not in name and isinstance(reason, str)):
+                repairs[name] = reason[:500]
+        elif kind == "tool_completed" and detail.get("tool") == "construct_instrument":
+            outcome = detail.get("outcome")
+            if isinstance(outcome, dict) and isinstance(outcome.get("artifact"), str):
+                repairs.pop(outcome["artifact"], None)
+    return repairs
+
+
+def require_rebuilt_instrument(name, repairs):
+    require(name not in repairs, f"{name}: resubmit the corrected construction before running it.", "INSTRUMENT_DEPENDENCY")
+
+
 def _regular(path, maximum=MAX_STATE):
     """No-follow open, bounded read, same inode check; never accepts device files."""
     try:
@@ -559,12 +584,15 @@ class WorkflowService:
 
     def _verify(self, state, *, final=False):
         checks = []
+        repairs = instrument_repairs(state["events"])
         acceptance = state["spec"]["acceptance"]
         if state.get("workshop") and not final:
             acceptance = acceptance[:state["workshop"]["challenge_start"]]
         for case in acceptance + state.get("adversarial_cases", []):
             record = {"artifact": case["artifact"], "kind": case["kind"], "passed": False}
             try:
+                if case["kind"] == "instrument":
+                    require_rebuilt_instrument(case["artifact"], repairs)
                 meta = state["artifacts"].get(case["artifact"])
                 require(meta is not None, "Required artifact is absent.")
                 raw = self._read_artifact(state, case["artifact"])
@@ -621,7 +649,9 @@ class WorkflowService:
 
     def _after_builder(self, state, response):
         self._verify(state)
-        if "adversary" in state["spec"]["roles"]:
+        if instrument_repairs(state["events"]):
+            state["phase"] = "builder"
+        elif "adversary" in state["spec"]["roles"]:
             state["phase"] = "adversary"
         elif "critic" in state["spec"]["roles"]:
             state["phase"] = "critic"
@@ -846,7 +876,7 @@ class WorkflowService:
                     if role == "builder":
                         require(not set(response) - {"summary", "actions", "done"} and isinstance(response.get("actions"), list) and len(response["actions"]) <= 8, "Builder response must contain at most eight actions.")
                         self._record_builder_proposal(state, response)
-                        rejected_instruments = set()
+                        rejected_instruments = set(instrument_repairs(state["events"]))
                         for action_index, action in enumerate(response["actions"]):
                             stop = self._authority_stop(state)
                             if stop:
@@ -859,9 +889,8 @@ class WorkflowService:
                             tool = action.get("tool") if isinstance(action, dict) else None
                             artifact = action.get("name") if isinstance(action, dict) else None
                             try:
-                                if (tool == "run_instrument" and tool in state["spec"]["tool_permissions"]
-                                        and isinstance(artifact, str) and artifact in rejected_instruments):
-                                    raise BridgeError("INSTRUMENT_DEPENDENCY", f"{artifact}: resubmit the corrected construction before running it.")
+                                if tool == "run_instrument" and tool in state["spec"]["tool_permissions"] and isinstance(artifact, str):
+                                    require_rebuilt_instrument(artifact, rejected_instruments)
                                 outcome = self._tool(state, action)
                                 if tool == "construct_instrument":
                                     rejected_instruments.discard(artifact)
@@ -1103,6 +1132,8 @@ class WorkflowService:
         state["verification"] = {"passed": False, "checks": [], "scope": "Imported historical output; current acceptance not rechecked."}
         state["adversarial_cases"], state["unadjudicated_counterexamples"] = [], []
         self._event(state, "imported", {"source_run": old.get("id"), "export_sha256": value["sha256"], "historical_status": old.get("status"), "current_verification": "NOT_VERIFIED", "historical_events": old.get("events", [])})
+        for name, reason in instrument_repairs(old.get("events")).items():
+            self._event(state, "instrument_refusal_restored", {"artifact": name, "reason": reason})
 
     def import_archive(self, value):
         old = self._validate_import(value)
@@ -1138,6 +1169,7 @@ class WorkflowService:
         with self._lock(capability_id):
             prior = self._load(capability_id)
             require(prior["status"] == "complete" and prior["verification"]["passed"], "Only a locally verified complete capability may be inherited.")
+            require(not instrument_repairs(prior["events"]), "The source capability has unresolved instrument revisions.", "INSTRUMENT_DEPENDENCY")
             if prior.get("workshop"):
                 from .workshop import require_compatible
                 require_compatible(self, state, prior)
@@ -1150,6 +1182,7 @@ class WorkflowService:
         with self._lock(capability_id):
             state = self._load(capability_id)
             require(state["status"] == "complete" and state["verification"]["passed"], "Capability is not locally verified.")
+            require(not instrument_repairs(state["events"]), "The capability has unresolved instrument revisions.", "INSTRUMENT_DEPENDENCY")
             if state.get("workshop"):
                 from .workshop import require_current_evidence
                 require_current_evidence(self, state)

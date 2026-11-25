@@ -28,6 +28,7 @@ const messages = {
     browserStarting: 'Preparing the browser’s model…', browserDownloading: value => `Downloading the browser’s model · ${value}`,
     browserRunning: 'The browser’s model is working on your ambition…', browserCanceled: 'The browser model was canceled. Your ambition is still here.',
     browserUnavailable: 'The browser could not complete this request. Try again or continue with another intelligence option.',
+    browserUnverified: 'This browser did not pass the on-device model check. Your ambition is ready for another intelligence option.',
     browserWait: 'Finish or cancel the current run and provider setup before starting the browser model.',
     pausedNext: 'Continue when you have the right intelligence or the missing information.',
     canceledNext: 'Open a new mission or resume this one.',
@@ -62,6 +63,7 @@ const messages = {
     browserStarting: 'Préparation du modèle du navigateur…', browserDownloading: value => `Téléchargement du modèle du navigateur · ${value}`,
     browserRunning: 'Le modèle du navigateur travaille sur votre ambition…', browserCanceled: 'Le modèle du navigateur a été arrêté. Votre ambition est toujours ici.',
     browserUnavailable: 'Le navigateur n’a pas pu terminer cette demande. Réessayez ou choisissez une autre intelligence.',
+    browserUnverified: 'Le navigateur n’a pas réussi le test du modèle local. Votre ambition est prête pour une autre intelligence.',
     browserWait: 'Terminez ou annulez l’exécution et la configuration du fournisseur avant de lancer le modèle du navigateur.',
     pausedNext: 'Poursuivez lorsque l’intelligence ou les renseignements nécessaires sont disponibles.',
     canceledNext: 'Ouvrez une nouvelle mission ou reprenez celle-ci.',
@@ -505,8 +507,11 @@ export function setupMissionConsole(member, shell) {
       const result = await runBrowserStarter({ambition:snapshot.ambition, language:snapshot.language, signal:controller.signal,
         onProgress(value) {
           if (token !== serial || !active()) return;
-          const message = value < 1 ? words.browserDownloading(new Intl.NumberFormat(language, {style:'percent'}).format(value)) : words.browserRunning;
+          const message = value < 1 ? words.browserDownloading(new Intl.NumberFormat(language, {style:'percent'}).format(value)) : words.browserStarting;
           if (node('intelligence-browser-status').textContent !== message) text('intelligence-browser-status', message);
+        },
+        onReady() {
+          if (token === serial && active()) text('intelligence-browser-status', words.browserRunning);
         }});
       if (token !== serial || !active()) return;
       const report = await returnedText(result, undefined, 'browser-text');
@@ -515,11 +520,12 @@ export function setupMissionConsole(member, shell) {
       accept(report, run);
       text('intelligence-browser-status', words.review);
       shell.show(node('frontier-mission-panel'), {remember:true});
-    } catch {
+    } catch (error) {
       if (token !== serial || !active()) return;
       if (run) mission = interruptMission(mission, run, 'BROWSER_MODEL_FAILED');
-      render(words.browserUnavailable);
-      text('intelligence-browser-status', words.browserUnavailable);
+      const message = error?.message === 'BROWSER_MODEL_UNVERIFIED' ? words.browserUnverified : words.browserUnavailable;
+      render(message);
+      text('intelligence-browser-status', message);
     } finally {
       if (token === serial) { activeRequest = undefined; browserBusy(false); }
     }

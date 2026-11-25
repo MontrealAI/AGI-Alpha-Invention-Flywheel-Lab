@@ -65,18 +65,21 @@ def payoff_check(name, matrix, p, q):
 
 
 class InstrumentConstructionTest(unittest.TestCase):
+    def scope(self, ambition, acceptance=()):
+        return {
+            "ambition": ambition, "language": "en", "provider": "fixture", "model": "authored-constructor",
+            "expires_at": (datetime.now(timezone.utc) + timedelta(minutes=3)).isoformat(),
+            "max_turns": 5, "max_actions": 15, "max_output_tokens": 2048,
+            "acceptance": list(acceptance),
+        }
+
     def mission(self, ambition, responses, *, acceptance=()):
         temp = TemporaryDirectory()
         self.addCleanup(temp.cleanup)
         runtime = FixtureRuntime(responses)
         service = UniversalMissionService(runtime, Path(temp.name) / "missions")
         self.addCleanup(service.close)
-        view = service.submit({
-            "ambition": ambition, "language": "en", "provider": "fixture", "model": "authored-constructor",
-            "expires_at": (datetime.now(timezone.utc) + timedelta(minutes=3)).isoformat(),
-            "max_turns": 5, "max_actions": 15, "max_output_tokens": 2048,
-            "acceptance": list(acceptance),
-        })
+        view = service.submit(self.scope(ambition, acceptance))
         return service, runtime, view["id"]
 
     def assert_recorded_bytes(self, spec, fingerprint):
@@ -181,3 +184,64 @@ class InstrumentConstructionTest(unittest.TestCase):
             evaluate(unknown_branch, {"flag": False})
         with self.assertRaisesRegex(ValueError, "if condition must be boolean"):
             validate_instrument({"inputs": [], "outputs": {"value": {"formula": "choose(1, 2, 3)"}}})
+
+    def test_later_turn_cannot_execute_or_replay_stale_instrument_after_restart(self):
+        name = "calibration.json"
+        ambition = "Construct and refine a calibration check."
+        run = exercise(name, {})
+        initial = construct(name, {"inputs": [], "outputs": {"value": 1}})
+        invalid = construct(name, {"inputs": [], "outputs": {"value": {"op": "if", "args": [True, 9]}}})
+        corrected = construct(name, {"inputs": [], "outputs": {"value": {"op": "if", "args": [True, 9, 0]}}})
+        service, _, ident = self.mission(ambition, [propose(initial, run), propose(invalid)])
+        self.assertEqual(service.step(ident)["status"], "ready")
+        refused = service.step(ident)
+        self.assertEqual(refused["status"], "ready")
+        self.assertEqual(service.pause(ident)["status"], "paused")
+        root = service.root
+        service.close()
+
+        updated = UniversalMissionService(FixtureRuntime([propose(run, done=True), propose(corrected, run, done=True)]), root)
+        self.addCleanup(updated.close)
+        self.assertEqual(updated.get(ident)["status"], "paused")
+        self.assertEqual(updated.resume(ident, background=False)["status"], "ready")
+        stale = updated.step(ident)
+        self.assertEqual(stale["status"], "ready")
+        self.assertIn("Found 2", stale["feedback"])
+        self.assertIn("INSTRUMENT_DEPENDENCY", [event["detail"].get("code") for event in stale["events"]])
+        computations = [event["detail"]["outcome"] for event in stale["events"]
+                        if event["kind"] == "tool_completed" and event["detail"]["tool"] == "run_instrument"]
+        self.assertEqual([outcome["output"] for outcome in computations], [{"value": 1}])
+        repaired = updated.step(ident)
+        self.assertEqual(repaired["status"], "needs_review")
+        computations = [event["detail"]["outcome"] for event in repaired["events"]
+                        if event["kind"] == "tool_completed" and event["detail"]["tool"] == "run_instrument"]
+        self.assertEqual([outcome["output"] for outcome in computations], [{"value": 1}, {"value": 9}])
+
+    def test_archive_recovery_carries_refusal_to_new_scope_and_blocks_stale_verification(self):
+        ambition = "Check the expected calibration value."
+        name = "calibration.json"
+        initial = construct(name, {"inputs": [], "outputs": {"value": 1}})
+        invalid = construct(name, {"inputs": [], "outputs": {"value": {"formula": "choose(true, 9)"}}})
+        corrected = construct(name, {"inputs": [], "outputs": {"value": {"formula": "choose(true, 9, 0)"}}})
+        acceptance = [{"artifact": name, "kind": "instrument", "input": {}, "expected": {"value": 9}}]
+        service, _, ident = self.mission(ambition, [
+            propose(initial), propose(invalid), propose(exercise(name, {}), done=True),
+            propose(corrected, exercise(name, {}), done=True),
+        ], acceptance=acceptance)
+        self.assertEqual(service.step(ident)["verification"]["checks"][0]["actual"], {"value": 1})
+        rejected = service.step(ident)
+        self.assertNotIn("actual", rejected["verification"]["checks"][0])
+        archive = service.export(ident)
+        imported = service.import_archive(archive, self.scope(ambition, acceptance))
+        self.assertEqual(imported["status"], "paused")
+        self.assertTrue(any(event["kind"] == "instrument_refusal_restored" for event in imported["events"]))
+        self.assertEqual(service.export(imported["id"])["files"][name], archive["files"][name])
+        service.resume(imported["id"], background=False)
+        stale = service.step(imported["id"])
+        self.assertEqual(stale["status"], "ready")
+        self.assertIn("resubmit the corrected construction", stale["verification"]["checks"][0]["error"])
+        self.assertFalse(any(event["kind"] == "tool_completed" for event in stale["events"]))
+        resolved = service.step(imported["id"])
+        self.assertEqual(resolved["status"], "needs_review")
+        self.assertTrue(resolved["verification"]["passed"])
+        self.assertEqual(resolved["verification"]["checks"][0]["actual"], {"value": 9})
