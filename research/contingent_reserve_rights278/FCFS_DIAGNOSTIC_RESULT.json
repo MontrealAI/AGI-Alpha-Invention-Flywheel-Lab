@@ -1,0 +1,67 @@
+{
+  "sourceCommit": "483a2ac80711f53509c29ad07c5d63271c262682",
+  "sourceBlob": "51dbe296f9397d1768b1fae1a1237d0aacf8c5fc",
+  "schema": "reserve-rights278/fcfs-diagnostic-v1",
+  "parentFailureCommit": "2f5704970ad96afc1e206d2fc14498757ad31394",
+  "pairs": 565,
+  "occupancyChecks": 7496,
+  "mismatches": 0,
+  "arms": [
+    {
+      "id": "per_pool_cap_two",
+      "best": [
+        0,
+        4
+      ],
+      "total": 4,
+      "expected": 4,
+      "pass": true,
+      "qualifyingPairs": 106
+    },
+    {
+      "id": "per_pool_cap_two_dual_min",
+      "best": [
+        2,
+        4
+      ],
+      "total": 6,
+      "expected": 6,
+      "pass": true,
+      "qualifyingPairs": 78
+    },
+    {
+      "id": "total_cap_four_arbitrary_concentration",
+      "best": [
+        0,
+        6
+      ],
+      "total": 6,
+      "expected": 6,
+      "pass": true,
+      "qualifyingPairs": 100
+    },
+    {
+      "id": "unbounded_fcfs",
+      "best": null,
+      "total": null,
+      "expected": null,
+      "pass": true,
+      "qualifyingPairs": 0
+    },
+    {
+      "id": "enforceable_zero_occupancy",
+      "best": [
+        0,
+        2
+      ],
+      "total": 2,
+      "expected": 2,
+      "pass": true,
+      "qualifyingPairs": 118
+    }
+  ],
+  "pass": true,
+  "original278EngineeringPass": false,
+  "wallMs": 2,
+  "actualBilling": null
+}
