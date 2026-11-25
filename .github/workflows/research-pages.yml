@@ -221,7 +221,7 @@ jobs:
           python3 -m unittest discover -s tests -p 'test_member_value.py' -v
           node --test tests/test_member_tools.mjs tests/test_frontier_mission.mjs tests/test_frontier_mission_router.mjs tests/test_frontier_browser_model.mjs
           for suite in test_pages_missions.py test_universal_missions.py test_mission_contracts.py test_mission_tools.py test_intelligence_profiles.py test_mission_evidence.py test_mission_schema_context.py test_mission_outcomes.py test_outcome_driven_missions.py test_bridge.py test_instrument_construction.py test_native_intelligence.py test_paired_intelligence.py; do
-            python3 -m unittest discover -s products/alpha-genesis-harness/tests -p "$suite" -v
+            PYTHONPATH="$PWD/products/alpha-genesis-harness" python3 -m unittest discover -s products/alpha-genesis-harness/tests -p "$suite" -v
           done
           python3 -m pip install --target "$RUNNER_TEMP/frontier-wasm" --require-hashes -r products/frontier-member-tools/adaptive/requirements-linux.txt
           PYTHONPATH="$RUNNER_TEMP/frontier-wasm" python3 scripts/qualify_frontier_member.py "$RUNNER_TEMP/research-site/frontier-omega-alpha"
