@@ -135,6 +135,7 @@ ATLAS_OUTPUTS = frozenset({
     'frontier-omega-alpha/frontier-harness-executor-1.3.0.zip',
     'frontier-omega-alpha/frontier-harness-executor-1.3.0-cef4d1c.zip',
     'frontier-omega-alpha/frontier-harness-executor-1.4.0.zip',
+    'frontier-omega-alpha/frontier-harness-executor-1.5.0.zip',
     'frontier-omega-alpha/opportunity-capture.json',
 })
 STATES = ('discovered', 'qualified', 'testing', 'verified', 'falsified', 'abstain', 'retained', 'deployed', 'value-verified')

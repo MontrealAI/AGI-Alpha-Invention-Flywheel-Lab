@@ -1,0 +1,256 @@
+{
+  "artifact_archive_sha256": "efde49618b8341688e96f7f7e672297b173872b2f5d7abc04f9228dc527905e1",
+  "complete_cost_known": false,
+  "hosted_job": 139497603779,
+  "model_sha256": "2fde00ce69dd4899c70d020845e2638353015bba0fdf161b3eb965f2bca4464e",
+  "official_base_release_gate": "PASS",
+  "official_example_qualifications": {
+    "independent_export": "FAIL",
+    "local_inference": "PASS",
+    "multi_agent": "PASS",
+    "parallel_exploration": "PASS",
+    "quote_construction": "FAIL",
+    "single_agent": "PASS",
+    "successor_reuse": "FAIL",
+    "workshop": "PASS"
+  },
+  "official_overall_verdict": "FAIL",
+  "old_quote_006": [
+    {
+      "checks": 7,
+      "completions": 3,
+      "deterministic_checks_passed": 0,
+      "id": "manufacturing_construct",
+      "model_calls": 3,
+      "request_error_codes": [],
+      "status": "exhausted",
+      "wall_seconds": 517.4552386959999
+    },
+    {
+      "checks": 0,
+      "completions": 0,
+      "deterministic_checks_passed": 0,
+      "id": "lab_inherit",
+      "model_calls": null,
+      "request_error_codes": [],
+      "status": "BLOCKED",
+      "wall_seconds": null
+    },
+    {
+      "checks": 4,
+      "completions": 3,
+      "deterministic_checks_passed": 0,
+      "id": "lab_fresh",
+      "model_calls": 3,
+      "request_error_codes": [],
+      "status": "exhausted",
+      "wall_seconds": 523.8860391479999
+    }
+  ],
+  "paid_model_requests": 0,
+  "product_tree_sha": "0a4e0493def7fa45bd7b63cd622bf2d5517df223",
+  "qualification": "Downloaded portable artifacts reran with trusted exact candidate evaluator bytes. Independent replay scope excludes beneficiary adoption and comparative economics.",
+  "runtime_sha256": "fe211d00c4754aa67aaa492d2c755ab0f6ef60bf30eee3c0c74a3496189cde17",
+  "source_revision": "258cd9b6b559951e7618b6ebba3bd24cde74d355",
+  "workflow_run": 45697208730,
+  "workshop_replay": {
+    "contrast": {
+      "checks": [
+        {
+          "bundle_sha256": "48e2797b5cf4e4ec0a80a79b80089405b38f80383fc1152f0e3ea0cc5ea1181f",
+          "events": {
+            "created": 1,
+            "finished": 1,
+            "model_completed": 1,
+            "model_queued": 1,
+            "model_started": 1,
+            "route_proposed": 1,
+            "tool_completed": 1,
+            "verification": 2
+          },
+          "hosted_checked": 9,
+          "hosted_passed": 9,
+          "hosted_wall_seconds": 62.97385377299997,
+          "instrument_sha256": "7eba473f3b640f4bb3223af286235d5a668257f2e7b7a0b9fbb5a81263027518",
+          "local_independent_replay_wall_seconds": 0.07741033099591732,
+          "name": "contrast",
+          "registered_checks": 9,
+          "remote_portable_exit": 0,
+          "running_model_completions": 1,
+          "status": "complete"
+        }
+      ],
+      "verdict": "PASS"
+    },
+    "quote": {
+      "checks": [
+        {
+          "bundle_sha256": "59b3519c081aa592a018cdc3bc76c291b08e31b7d4bc6491413ca663c32db2ed",
+          "events": {
+            "created": 1,
+            "finished": 1,
+            "model_completed": 1,
+            "model_queued": 1,
+            "model_started": 1,
+            "route_proposed": 1,
+            "tool_completed": 1,
+            "verification": 2
+          },
+          "hosted_checked": 7,
+          "hosted_passed": 7,
+          "hosted_wall_seconds": 52.26671723199979,
+          "instrument_sha256": "557fe2e1fc4c4169f932b82527ca3a7b764c8ab326c03d8f82504681ea8992d2",
+          "local_independent_replay_wall_seconds": 0.06158094000420533,
+          "name": "quote-manufacturing",
+          "registered_checks": 7,
+          "remote_portable_exit": 0,
+          "running_model_completions": 1,
+          "status": "complete"
+        },
+        {
+          "bundle_sha256": "e627c59658c8cf72a76c7b71ae9638ebe326174ed906c025ace6159704537dd8",
+          "events": {
+            "created": 1,
+            "finished": 1,
+            "inherited": 1,
+            "model_completed": 1,
+            "model_queued": 1,
+            "model_started": 1,
+            "route_proposed": 1,
+            "verification": 3
+          },
+          "hosted_checked": 4,
+          "hosted_passed": 4,
+          "hosted_wall_seconds": 52.810656524000024,
+          "instrument_sha256": "557fe2e1fc4c4169f932b82527ca3a7b764c8ab326c03d8f82504681ea8992d2",
+          "local_independent_replay_wall_seconds": 0.09758609799609985,
+          "name": "quote-lab",
+          "registered_checks": 4,
+          "remote_portable_exit": 0,
+          "running_model_completions": 1,
+          "status": "complete"
+        }
+      ],
+      "quote_replay": {
+        "ordinary_passed": 11,
+        "protocol_sha256": "4eafe9112f48d34425adb8c744da0c40393188f650bcad1be0641bd293b693fb",
+        "rows": [
+          {
+            "artifact_sha256": "557fe2e1fc4c4169f932b82527ca3a7b764c8ab326c03d8f82504681ea8992d2",
+            "case": "quote-manufacturing",
+            "out_of_range_refused": true,
+            "registered_cases": 7
+          },
+          {
+            "artifact_sha256": "557fe2e1fc4c4169f932b82527ca3a7b764c8ab326c03d8f82504681ea8992d2",
+            "case": "quote-lab",
+            "out_of_range_refused": true,
+            "registered_cases": 4
+          }
+        ],
+        "same_artifact": true,
+        "scope": "Same planning contract and frozen cases through the Workshop interface. The direct formula is a strong control."
+      },
+      "verdict": "PASS"
+    },
+    "vertical": {
+      "checks": [
+        {
+          "bundle_sha256": "757d31ab0baa7d591b76da47609e24e5c84c84cd09d5a5230a24a095482ed72c",
+          "events": {
+            "created": 1,
+            "finished": 1,
+            "model_completed": 2,
+            "model_queued": 2,
+            "model_started": 2,
+            "route_proposed": 2,
+            "tool_completed": 1,
+            "tool_refused": 1,
+            "verification": 3
+          },
+          "hosted_checked": 18,
+          "hosted_passed": 18,
+          "hosted_wall_seconds": 135.435359435,
+          "instrument_sha256": "9bfac4b87c2191d390c2d09909fe81e2ebb0b21e961289a56529444ef48f5172",
+          "local_independent_replay_wall_seconds": 0.09075340299750678,
+          "name": "foundry",
+          "registered_checks": 18,
+          "remote_portable_exit": 0,
+          "running_model_completions": 2,
+          "status": "complete"
+        },
+        {
+          "bundle_sha256": "5c978327e1f836e800e0aa4c3c4b0b32ae4f420d665749096bfb5275e948feac",
+          "events": {
+            "created": 1,
+            "finished": 1,
+            "inherited": 1,
+            "model_completed": 1,
+            "model_queued": 1,
+            "model_started": 1,
+            "route_proposed": 1,
+            "verification": 3
+          },
+          "hosted_checked": 6,
+          "hosted_passed": 6,
+          "hosted_wall_seconds": 76.52343883499998,
+          "instrument_sha256": "9bfac4b87c2191d390c2d09909fe81e2ebb0b21e961289a56529444ef48f5172",
+          "local_independent_replay_wall_seconds": 0.04995513200992718,
+          "name": "foundry-fresh",
+          "registered_checks": 6,
+          "remote_portable_exit": 0,
+          "running_model_completions": 1,
+          "status": "complete"
+        },
+        {
+          "bundle_sha256": "7690d6b1a921e2ec21fb583bda69c538207efc282370875343f0a77e55f70f5f",
+          "events": {
+            "created": 1,
+            "finished": 1,
+            "model_completed": 1,
+            "model_queued": 1,
+            "model_started": 1,
+            "route_proposed": 1,
+            "tool_completed": 1,
+            "verification": 2
+          },
+          "hosted_checked": 10,
+          "hosted_passed": 10,
+          "hosted_wall_seconds": 55.57757086399988,
+          "instrument_sha256": "87f74203901d4b4c00fe172c299065e2be090632d1d80af9e6950282c2ead8c8",
+          "local_independent_replay_wall_seconds": 0.09858275199076161,
+          "name": "arrangement",
+          "registered_checks": 10,
+          "remote_portable_exit": 0,
+          "running_model_completions": 1,
+          "status": "complete"
+        },
+        {
+          "bundle_sha256": "7d72ede60b1b47d47ed0154221ba43166af4e5660c3a16f41ac8062dab020894",
+          "events": {
+            "created": 1,
+            "finished": 1,
+            "model_completed": 1,
+            "model_queued": 1,
+            "model_started": 1,
+            "route_proposed": 1,
+            "tool_completed": 1,
+            "verification": 2
+          },
+          "hosted_checked": 4,
+          "hosted_passed": 4,
+          "hosted_wall_seconds": 21.629061813000135,
+          "instrument_sha256": "8fae00492b0ddccc7f2b1add678a2c64e90de3db2c765c34c83b37bf1577eb4a",
+          "local_independent_replay_wall_seconds": 0.05228640300629195,
+          "name": "custom",
+          "registered_checks": 4,
+          "remote_portable_exit": 0,
+          "running_model_completions": 1,
+          "status": "complete"
+        }
+      ],
+      "unchanged_artifact_reuse": true,
+      "verdict": "PASS"
+    }
+  }
+}

@@ -1,0 +1,202 @@
+{
+  "artifact_id": 15055016008,
+  "artifact_sha256": "5816fd54cb5f3a8ca0dd235d6bd841eee1b18795c794a22a1c7af7f1d8b22044",
+  "local_model_job": 139425417465,
+  "overall": "FAIL",
+  "qualification": {
+    "independent_export": "FAIL",
+    "local_inference": "PASS",
+    "multi_agent": "PASS",
+    "parallel_exploration": "PASS",
+    "quote_construction": "FAIL",
+    "single_agent": "PASS",
+    "successor_reuse": "FAIL",
+    "workshop": "FAIL"
+  },
+  "quote_006": {
+    "arms": [
+      {
+        "arm": "manufacturing_construct",
+        "checks_passed": 0,
+        "checks_run": 7,
+        "events": {
+          "created": 1,
+          "critique": 1,
+          "model_completed": 3,
+          "model_queued": 3,
+          "model_started": 3,
+          "stopped": 1,
+          "tool_completed": 1,
+          "tool_refused": 1,
+          "verification": 2
+        },
+        "model_calls": 3,
+        "observed_tool_refusals": [
+          {
+            "code": "INSTRUMENT_STRUCTURE",
+            "reason": "quote.json: $.outputs[\"declared_cost_cents\"].args[0]: Input field root was not declared.",
+            "tool": "construct_instrument"
+          }
+        ],
+        "output_fields_observed": [],
+        "request_errors": [],
+        "status": "exhausted",
+        "tool_actions": 2,
+        "wall_seconds": 443.271957691
+      },
+      {
+        "arm": "lab_inherit",
+        "checks_passed": 0,
+        "checks_run": 0,
+        "events": {},
+        "model_calls": null,
+        "observed_tool_refusals": [],
+        "output_fields_observed": [],
+        "request_errors": [],
+        "status": "BLOCKED",
+        "tool_actions": null,
+        "wall_seconds": null
+      },
+      {
+        "arm": "lab_fresh",
+        "checks_passed": 0,
+        "checks_run": 4,
+        "events": {
+          "created": 1,
+          "critique": 2,
+          "model_completed": 4,
+          "model_queued": 4,
+          "model_started": 4,
+          "stopped": 1,
+          "tool_completed": 3,
+          "verification": 2
+        },
+        "model_calls": 4,
+        "observed_tool_refusals": [],
+        "output_fields_observed": [
+          "valid"
+        ],
+        "request_errors": [],
+        "status": "exhausted",
+        "tool_actions": 3,
+        "wall_seconds": 931.019889095
+      }
+    ],
+    "model_sha": "2fde00ce69dd4899c70d020845e2638353015bba0fdf161b3eb965f2bca4464e",
+    "status": "FAIL"
+  },
+  "release_qualification": "FAIL",
+  "scope": "Public hosted #603 candidate baseline artifact, same product Git tree as #605 main",
+  "source_product_tree": "cc9c4cad669409e7c9753eba79d88234f8fd6648",
+  "source_revision": "f30faebcc7246a12dda35d9b8fb8d68d883f4e22",
+  "source_unchanged": true,
+  "workflow_run": 45676524294,
+  "workshop": {
+    "cases": [
+      {
+        "case": "foundry",
+        "checks": 18,
+        "events": {
+          "created": 1,
+          "finished": 1,
+          "model_completed": 2,
+          "model_queued": 2,
+          "model_started": 2,
+          "route_proposed": 2,
+          "tool_completed": 1,
+          "tool_refused": 1,
+          "verification": 3
+        },
+        "instrument_sha256": "4cb0676ec0c3dabaa20521a003cb7be0bbea35b97f68c326bbee7cf85f65f128",
+        "passed": 18,
+        "portable_exit": 0,
+        "status": "complete",
+        "wall_seconds": 142.79850279999982
+      },
+      {
+        "case": "foundry-fresh",
+        "checks": 6,
+        "events": {
+          "created": 1,
+          "finished": 1,
+          "inherited": 1,
+          "model_completed": 1,
+          "model_queued": 1,
+          "model_started": 1,
+          "route_proposed": 1,
+          "tool_completed": 1,
+          "verification": 3
+        },
+        "instrument_sha256": "6b0c3473cdd6cee77da0eb97f661f76ba5fc5230c25b8812d59261ade1b05236",
+        "passed": 6,
+        "portable_exit": 0,
+        "status": "complete",
+        "wall_seconds": 107.24978141600013
+      },
+      {
+        "case": "arrangement",
+        "checks": 10,
+        "events": {
+          "created": 1,
+          "finished": 1,
+          "model_completed": 1,
+          "model_queued": 1,
+          "model_started": 1,
+          "route_proposed": 1,
+          "tool_completed": 1,
+          "verification": 2
+        },
+        "instrument_sha256": "87f74203901d4b4c00fe172c299065e2be090632d1d80af9e6950282c2ead8c8",
+        "passed": 10,
+        "portable_exit": 0,
+        "status": "complete",
+        "wall_seconds": 55.66792697999995
+      },
+      {
+        "case": "custom",
+        "checks": 4,
+        "events": {
+          "created": 1,
+          "finished": 1,
+          "model_completed": 1,
+          "model_queued": 1,
+          "model_started": 1,
+          "route_proposed": 1,
+          "tool_completed": 1,
+          "verification": 2
+        },
+        "instrument_sha256": "8fae00492b0ddccc7f2b1add678a2c64e90de3db2c765c34c83b37bf1577eb4a",
+        "passed": 4,
+        "portable_exit": 0,
+        "status": "complete",
+        "wall_seconds": 18.42348856900003
+      },
+      {
+        "case": "contrast",
+        "checks": 9,
+        "events": {
+          "created": 1,
+          "finished": 1,
+          "model_completed": 1,
+          "model_queued": 1,
+          "model_started": 1,
+          "route_proposed": 1,
+          "tool_completed": 1,
+          "verification": 2
+        },
+        "instrument_sha256": "7eba473f3b640f4bb3223af286235d5a668257f2e7b7a0b9fbb5a81263027518",
+        "passed": 9,
+        "portable_exit": 0,
+        "status": "complete",
+        "wall_seconds": 47.789420874999905
+      }
+    ],
+    "contrast_status": "PASS",
+    "fresh_first_check_before_rewrite": {
+      "passed": true,
+      "position": "first verification before the builder, after inheritance"
+    },
+    "same_successor_artifact": false,
+    "status": "FAIL"
+  }
+}

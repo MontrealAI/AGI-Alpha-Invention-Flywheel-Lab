@@ -1,0 +1,386 @@
+{
+  "total": {
+    "cases": 10,
+    "queries": 26,
+    "label_correct": 20,
+    "cited_correct": 16,
+    "false_known": 2,
+    "abstained": 4,
+    "exact_cases": 2
+  },
+  "groups": {
+    "en": {
+      "cases": 5,
+      "queries": 12,
+      "label_correct": 9,
+      "cited_correct": 6,
+      "false_known": 2,
+      "abstained": 1,
+      "exact_cases": 0
+    },
+    "functional-disclosure-with-signed-gate": {
+      "cases": 1,
+      "queries": 2,
+      "label_correct": 2,
+      "cited_correct": 1,
+      "false_known": 0,
+      "abstained": 0,
+      "exact_cases": 0
+    },
+    "appeal-round-scoped-hearing": {
+      "cases": 1,
+      "queries": 3,
+      "label_correct": 3,
+      "cited_correct": 2,
+      "false_known": 0,
+      "abstained": 1,
+      "exact_cases": 0
+    },
+    "pooled-role-token-retention": {
+      "cases": 1,
+      "queries": 2,
+      "label_correct": 1,
+      "cited_correct": 1,
+      "false_known": 0,
+      "abstained": 0,
+      "exact_cases": 0
+    },
+    "conditional-delivery-after-permission": {
+      "cases": 1,
+      "queries": 2,
+      "label_correct": 1,
+      "cited_correct": 1,
+      "false_known": 1,
+      "abstained": 0,
+      "exact_cases": 0
+    },
+    "fr": {
+      "cases": 5,
+      "queries": 14,
+      "label_correct": 11,
+      "cited_correct": 10,
+      "false_known": 0,
+      "abstained": 3,
+      "exact_cases": 2
+    },
+    "role-relay-with-retained-boundary": {
+      "cases": 1,
+      "queries": 3,
+      "label_correct": 3,
+      "cited_correct": 3,
+      "false_known": 0,
+      "abstained": 1,
+      "exact_cases": 1
+    },
+    "unchosen-round-versus-executed-choice": {
+      "cases": 1,
+      "queries": 3,
+      "label_correct": 2,
+      "cited_correct": 2,
+      "false_known": 0,
+      "abstained": 1,
+      "exact_cases": 0
+    },
+    "same-authority-unresolved-protocol": {
+      "cases": 1,
+      "queries": 2,
+      "label_correct": 1,
+      "cited_correct": 1,
+      "false_known": 0,
+      "abstained": 0,
+      "exact_cases": 0
+    },
+    "shared-signal-state-underdetermination": {
+      "cases": 1,
+      "queries": 3,
+      "label_correct": 2,
+      "cited_correct": 1,
+      "false_known": 0,
+      "abstained": 0,
+      "exact_cases": 0
+    },
+    "stage-aware-screen-summary": {
+      "cases": 1,
+      "queries": 3,
+      "label_correct": 2,
+      "cited_correct": 1,
+      "false_known": 1,
+      "abstained": 0,
+      "exact_cases": 0
+    },
+    "frozen-packet-keys-and-fragment-composition": {
+      "cases": 1,
+      "queries": 3,
+      "label_correct": 3,
+      "cited_correct": 3,
+      "false_known": 0,
+      "abstained": 1,
+      "exact_cases": 1
+    }
+  },
+  "cases": [
+    {
+      "id": "gate-score",
+      "cases": 1,
+      "queries": 2,
+      "label_correct": 2,
+      "cited_correct": 1,
+      "false_known": 0,
+      "abstained": 0,
+      "exact_cases": 0,
+      "misses": [
+        {
+          "query": 1,
+          "oracle": {
+            "access": "known",
+            "witness": [
+              2,
+              3
+            ]
+          },
+          "predicted": {
+            "access": "known",
+            "witness": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "postponed-appeal",
+      "cases": 1,
+      "queries": 3,
+      "label_correct": 3,
+      "cited_correct": 2,
+      "false_known": 0,
+      "abstained": 1,
+      "exact_cases": 0,
+      "misses": [
+        {
+          "query": 1,
+          "oracle": {
+            "access": "hidden",
+            "witness": [
+              1
+            ]
+          },
+          "predicted": {
+            "access": "hidden",
+            "witness": 2
+          }
+        }
+      ]
+    },
+    {
+      "id": "one-of-two-readers",
+      "cases": 1,
+      "queries": 2,
+      "label_correct": 1,
+      "cited_correct": 1,
+      "false_known": 0,
+      "abstained": 0,
+      "exact_cases": 0,
+      "misses": [
+        {
+          "query": 2,
+          "oracle": {
+            "access": "unclear",
+            "witness": [
+              1,
+              5
+            ]
+          },
+          "predicted": {
+            "access": "hidden",
+            "witness": 5
+          }
+        }
+      ]
+    },
+    {
+      "id": "sealed-transfer",
+      "cases": 1,
+      "queries": 2,
+      "label_correct": 1,
+      "cited_correct": 1,
+      "false_known": 1,
+      "abstained": 0,
+      "exact_cases": 0,
+      "misses": [
+        {
+          "query": 1,
+          "oracle": {
+            "access": "unclear",
+            "witness": [
+              2,
+              3
+            ]
+          },
+          "predicted": {
+            "access": "known",
+            "witness": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "split-credentials",
+      "cases": 1,
+      "queries": 3,
+      "label_correct": 3,
+      "cited_correct": 3,
+      "false_known": 0,
+      "abstained": 1,
+      "exact_cases": 1,
+      "misses": []
+    },
+    {
+      "id": "refund-switch",
+      "cases": 1,
+      "queries": 3,
+      "label_correct": 2,
+      "cited_correct": 2,
+      "false_known": 0,
+      "abstained": 1,
+      "exact_cases": 0,
+      "misses": [
+        {
+          "query": 3,
+          "oracle": {
+            "access": "hidden",
+            "witness": [
+              4
+            ]
+          },
+          "predicted": {
+            "access": "unclear",
+            "witness": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "contradictory-consultation",
+      "cases": 1,
+      "queries": 2,
+      "label_correct": 1,
+      "cited_correct": 1,
+      "false_known": 0,
+      "abstained": 0,
+      "exact_cases": 0,
+      "misses": [
+        {
+          "query": 1,
+          "oracle": {
+            "access": "unclear",
+            "witness": [
+              1,
+              2,
+              3
+            ]
+          },
+          "predicted": {
+            "access": "hidden",
+            "witness": 3
+          }
+        }
+      ]
+    },
+    {
+      "id": "signal-two-causes",
+      "cases": 1,
+      "queries": 3,
+      "label_correct": 2,
+      "cited_correct": 1,
+      "false_known": 0,
+      "abstained": 0,
+      "exact_cases": 0,
+      "misses": [
+        {
+          "query": 2,
+          "oracle": {
+            "access": "unclear",
+            "witness": [
+              1,
+              2,
+              3
+            ]
+          },
+          "predicted": {
+            "access": "hidden",
+            "witness": 0
+          }
+        },
+        {
+          "query": 3,
+          "oracle": {
+            "access": "hidden",
+            "witness": [
+              4
+            ]
+          },
+          "predicted": {
+            "access": "hidden",
+            "witness": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "unequal-token-outcomes",
+      "cases": 1,
+      "queries": 3,
+      "label_correct": 2,
+      "cited_correct": 1,
+      "false_known": 1,
+      "abstained": 0,
+      "exact_cases": 0,
+      "misses": [
+        {
+          "query": 1,
+          "oracle": {
+            "access": "unclear",
+            "witness": [
+              1,
+              2,
+              3
+            ]
+          },
+          "predicted": {
+            "access": "known",
+            "witness": 4
+          }
+        },
+        {
+          "query": 2,
+          "oracle": {
+            "access": "known",
+            "witness": [
+              2,
+              3
+            ]
+          },
+          "predicted": {
+            "access": "known",
+            "witness": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "two-forms-removed",
+      "cases": 1,
+      "queries": 3,
+      "label_correct": 3,
+      "cited_correct": 3,
+      "false_known": 0,
+      "abstained": 1,
+      "exact_cases": 1,
+      "misses": []
+    }
+  ],
+  "sources": {
+    "local_control_sha256": "e03ba615c1fe9b5cc0db09d0551487cafb978258d57ef42f90882e64829eecb1",
+    "oracle_sha256": "bfc4c4c11f3e74d682f780222f8bf8d8b1b74c3a733e0caf790b540e93f62574",
+    "case_sha256": "caa9bd9596b36bded98d84c26f54bbfbd329587de1dee2c14c08a9d3a3db9529"
+  }
+}

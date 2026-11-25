@@ -70,12 +70,17 @@ INTELLIGENCE_EXECUTOR_SHA256 = '0436a351d4ec5c5af48dbed9f93847c90a3fc6ac0e73a6a3
 ORIGINAL_INTELLIGENCE_EXECUTOR_ZIP = 'frontier-harness-executor-1.3.0-cef4d1c.zip'
 ORIGINAL_INTELLIGENCE_EXECUTOR_BASELINE = 'cef4d1caa38b14555613dc25d180c42798b62b78'
 ORIGINAL_INTELLIGENCE_EXECUTOR_SHA256 = '443f0288f5057f7b6f87ce875b8f009736a738c916bde06440adfce3fb4c7b1c'
-EXECUTOR_ZIP = 'frontier-harness-executor-1.4.0.zip'
+WORKSPACE_EXECUTOR_ZIP = 'frontier-harness-executor-1.4.0.zip'
+WORKSPACE_EXECUTOR_BASELINE = '769afbd910ef952d15038422fd674e15f4cefc38'
+WORKSPACE_EXECUTOR_SHA256 = 'e629873ce9e048b41b69756f18250b767c1f643a27853e37a2ee4fcffd59c195'
+EXECUTOR_VERSION = '1.5.0'
+EXECUTOR_ZIP = f'frontier-harness-executor-{EXECUTOR_VERSION}.zip'
 HISTORICAL_EXECUTORS = {LEGACY_EXECUTOR_ZIP: LEGACY_EXECUTOR_SHA256,
                         PREVIOUS_EXECUTOR_ZIP: PREVIOUS_EXECUTOR_SHA256,
                         OUTCOME_EXECUTOR_ZIP: OUTCOME_EXECUTOR_SHA256,
                         INTELLIGENCE_EXECUTOR_ZIP: INTELLIGENCE_EXECUTOR_SHA256,
-                        ORIGINAL_INTELLIGENCE_EXECUTOR_ZIP: ORIGINAL_INTELLIGENCE_EXECUTOR_SHA256}
+                        ORIGINAL_INTELLIGENCE_EXECUTOR_ZIP: ORIGINAL_INTELLIGENCE_EXECUTOR_SHA256,
+                        WORKSPACE_EXECUTOR_ZIP: WORKSPACE_EXECUTOR_SHA256}
 EXECUTION_PUBLICATION = MAIN / 'publication/mission-executor'
 EVIDENCE_PUBLICATION = MAIN / 'publication/evidence-bound'
 OUTCOME_PUBLICATION = MAIN / 'publication/outcome-driven'
@@ -547,12 +552,20 @@ def build_mission_executor(destination, revision):
     sources.update({name: harness / name for name in ('app/frontier-pairing.js', 'bridge/mission_documents.py')})
     names = ['runtime/' + name for name in sources] + ['START-HERE.html']
     bundle_sources = {name: executor_source_path(name) for name in names}
+    workspace = {name: pinned(WORKSPACE_EXECUTOR_BASELINE, path) for name, path in bundle_sources.items()}
+    released = package(destination / WORKSPACE_EXECUTOR_ZIP, workspace, 'frontier-harness-executor',
+                       WORKSPACE_EXECUTOR_BASELINE,
+                       'Private HARNESS missions with companion approval, local intelligence and mission-scoped provider authorization.',
+                       version='1.4.0')
+    if released['sha256'] != WORKSPACE_EXECUTOR_SHA256:
+        raise ValueError(f'The published archive {WORKSPACE_EXECUTOR_ZIP} changed')
     files = {name: (MAIN / source).read_bytes() for name, source in bundle_sources.items()}
     # An Atlas or research update with the same companion files retains the archive's source and bytes.
     payload_revision = executor_payload_revision(revision, bundle_sources.values())
     return package(destination / EXECUTOR_ZIP, files, 'frontier-harness-executor', payload_revision,
-                   'Private HARNESS missions with companion approval, local intelligence and mission-scoped provider authorization.',
-                   version='1.4.0')
+                   'Private HARNESS missions with companion approval, local intelligence, mission-scoped provider authorization '
+                   'and requalified Workshop instrument reuse.',
+                   version=EXECUTOR_VERSION)
 
 
 def build_public_missions(destination, revision):

@@ -1,0 +1,42 @@
+{
+  "schema": "frontier/strategic-evidence-pointer-fit/v1",
+  "base": "HuggingFaceTB/SmolLM2-135M-Instruct",
+  "base_revision": "12fd25f77366fa6b3b4b768ec3050bf629380bac",
+  "base_files_sha256": {
+    "config.json": "8eb740e8bbe4cff95ea7b4588d17a2432deb16e8075bc5828ff7ba9be94d982a",
+    "tokenizer.json": "9ca9acddb6525a194ec8ac7a87f24fbba7232a9a15ffa1af0c1224fcd888e47c",
+    "tokenizer_config.json": "4ec77d44f62efeb38d7e044a1db318f6a939438425312dfa333b8382dbad98df",
+    "special_tokens_map.json": "2b7379f3ae813529281a5c602bc5a11c1d4e0a99107aaa597fe936c1e813ca52",
+    "model.safetensors": "5af571cbf074e6d21a03528d2330792e532ca608f24ac70a143f6b369968ab8c"
+  },
+  "base_dtype": "bfloat16",
+  "base_trainable": false,
+  "registration_sha256": "dc19ca14c1716bf59538d9ad3104eeca25e7e580ab12646f5c184db54f4c6b81",
+  "initial_parameter_sha256": "bbae02b785876e8f7f3b7de16e681a9f24c77bc379a34489bfe980146bd10be9",
+  "checkpoint": {
+    "sha256": "1ed70867630eb0a7f6ce0d47c76a16ebedd0a31c2d8c798834d27e57ed7fb01c",
+    "parameter_sha256": "7f359102c0f46c0bcaa9cf3657f0a659c0b84c33303ce5e40f7e3cc08b462430",
+    "changed_parameters": 122880,
+    "trainable_parameters": 122880,
+    "bytes": 495672
+  },
+  "train_queries": 120,
+  "development_queries": 24,
+  "updates": 60,
+  "model_train_tokens": 66684,
+  "supervised_tokens": 480,
+  "development_before": {
+    "access": 1.4767525990804036,
+    "witness": 1.8275261123975117
+  },
+  "development_after": {
+    "access": 1.542956958214442,
+    "witness": 1.7179863254229228
+  },
+  "wall_seconds": 94.59889613300038,
+  "cpu_seconds": 280.50327445,
+  "peak_memory_bytes": 1341145088,
+  "python": "3.12.14",
+  "torch": "2.8.0+cpu",
+  "transformers": "4.55.4"
+}

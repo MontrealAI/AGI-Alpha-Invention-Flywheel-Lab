@@ -1,0 +1,51 @@
+{
+  "schema": "frontier/game-theory-observation-learning-registration/v1",
+  "mission": "Build frontier AI LLM for Game Theory.",
+  "objective": "Learn a cited, decision-time information-access interpreter for finite games, with fail-closed information-partition construction.",
+  "beneficiary": "MONTREAL.AI research in strategic protocol construction and review",
+  "created_utc": "2026-11-25T20:39:37.940165Z",
+  "base_source_revision": "381548297673bb7f646ffab7da49456839080a0d",
+  "base_model": "HuggingFaceTB/SmolLM2-135M-Instruct",
+  "base_model_revision": "12fd25f77366fa6b3b4b768ec3050bf629380bac",
+  "base_model_sha256": "5af571cbf074e6d21a03528d2330792e532ca608f24ac70a143f6b369968ab8c",
+  "base_model_license": "Apache-2.0",
+  "loader_sha256": "bdde088ca5d9ba68f94a43f3382cf99b8d7ec6352d37ca81aea4d608e4c81f88",
+  "code_sha256": {
+    "fit.py": "2e3f7ca5adfff8e2fa95dc56bab0f8824b2db0bb693d572116e8ebc3f234d711",
+    "curriculum.py": "699cdee6085e8687f9dc3f2848f0181c60a5a26d3c358ec9f4b729081f2652d8"
+  },
+  "data_sha256": {
+    "train": "79d0a037a714ddaef8ad7430df8fc320a4c44acd9998a62524c1ad87d8a9df1c",
+    "development": "fdb806eb6e2e3efbd05aa69d19fbc44289b9b70ff41fd5f26ddc7bbaceeffb53"
+  },
+  "fit": {
+    "seed": 823734,
+    "threads": 3,
+    "batch_size": 4,
+    "epochs": 2,
+    "expected_updates": 60,
+    "rank": 8,
+    "alpha": 16,
+    "tail_layers": 8,
+    "learning_rate": 0.001
+  },
+  "fixed_training_conditions": "One 60-update CPU AdamW fit. The set of 120 synthetic lessons is disjoint from 24 development texts. Training and development share four construction families; the independent confirmation uses different structures. No model, paid service, Internet retrieval or protected case used in fitting.",
+  "confirmation": "Two author panels if feasible. Primary panel is the first independent author assigned specifically for this experiment; independently freeze brief and oracle bytes before predictions. Complete case requires an exact access category and admissible rule citation in every query. Protect oracle from constructor until all candidate outputs freeze. Register any additional panels as external confirmation before their predictions; no selection based on model results.",
+  "comparisons": [
+    "base_direct",
+    "base_retrieval",
+    "base_word_lookup",
+    "adapted_direct",
+    "included_codex_direct",
+    "exact_reviewed_history_reference"
+  ],
+  "resource_conditions": "Same architecture, tokenizer, local process and case inputs for base/adapted arms. One direct prompt, a two-example ordinary retrieval arm and a word lookup tool arm. Separate included Codex control receives raw briefs and the same semantics; backend identity and compute remain unobserved. Neither evaluator nor operator may authorize promotion from model self-report.",
+  "primary_go": {
+    "minimum_cited_query_accuracy": 0.8,
+    "minimum_exact_case_accuracy": 0.75,
+    "minimum_exact_case_improvement_over_strongest_base": 0.15,
+    "maximum_false_known": 0,
+    "minimum_independently_confirmed_nontrivial_partitions": 3
+  },
+  "stopping_rule": "Finish the single registered fit and blind panel before changing anything. A prospective intervention requires new registration, separate held cases and reason. No promotion on technical execution or an unqualified interpretation."
+}

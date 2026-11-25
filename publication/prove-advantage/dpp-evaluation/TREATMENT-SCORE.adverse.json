@@ -1,0 +1,139 @@
+{
+  "cases": 5,
+  "correct_dispositions": 5,
+  "exact_evidence": 5,
+  "whole_case_acceptance": 5,
+  "false_supported": 0,
+  "expected_distribution": {
+    "conflicting": 1,
+    "contradicted": 1,
+    "insufficient": 1,
+    "supported": 2
+  },
+  "missing": 0,
+  "scores": [
+    {
+      "id": "control-1",
+      "field": "batteryWeight",
+      "expected": "conflicting",
+      "observed": "conflicting",
+      "decision_correct": true,
+      "evidence_exact": true,
+      "reason_present": true,
+      "fully_accepted": true,
+      "unsafe_false_support": false,
+      "observed_evidence": [
+        "sim-1",
+        "sim-2"
+      ],
+      "reference_evidence_choices": [
+        [
+          "sim-1",
+          "sim-2"
+        ]
+      ],
+      "rationale": "Applicable observations give different values for the same scope.",
+      "evaluator_reason": "Two in-scope same-authority rows disagree and no replacement date or priority resolves them."
+    },
+    {
+      "id": "control-2",
+      "field": "nominalVoltage",
+      "expected": "contradicted",
+      "observed": "contradicted",
+      "decision_correct": true,
+      "evidence_exact": true,
+      "reason_present": true,
+      "fully_accepted": true,
+      "unsafe_false_support": false,
+      "observed_evidence": [
+        "sim-2"
+      ],
+      "reference_evidence_choices": [
+        [
+          "sim-2"
+        ]
+      ],
+      "rationale": "Source-located nominal voltage compared to the claim in the exact requested scope.",
+      "evaluator_reason": "Only the DC battery row applies. The AC inverter output is another boundary."
+    },
+    {
+      "id": "control-3",
+      "field": "batteryCapacity",
+      "expected": "insufficient",
+      "observed": "insufficient",
+      "decision_correct": true,
+      "evidence_exact": true,
+      "reason_present": true,
+      "fully_accepted": true,
+      "unsafe_false_support": false,
+      "observed_evidence": [],
+      "reference_evidence_choices": [
+        [],
+        [
+          "sim-3"
+        ],
+        [
+          "sim-1",
+          "sim-2",
+          "sim-3"
+        ]
+      ],
+      "rationale": "No supplied observation established the required rated electrical capacity for this exact scope.",
+      "evaluator_reason": "Two clues address wrong revision or market. The in-scope product gives usable rather than rated charge."
+    },
+    {
+      "id": "control-4",
+      "field": "batteryCapacity",
+      "expected": "supported",
+      "observed": "supported",
+      "decision_correct": true,
+      "evidence_exact": true,
+      "reason_present": true,
+      "fully_accepted": true,
+      "unsafe_false_support": false,
+      "observed_evidence": [
+        "sim-2"
+      ],
+      "reference_evidence_choices": [
+        [
+          "sim-2"
+        ]
+      ],
+      "rationale": "Source-located rated electrical capacity compared to the claim in the exact requested scope.",
+      "evaluator_reason": "Applicable support is the whole-system cell, not the same numeric module value."
+    },
+    {
+      "id": "control-5",
+      "field": "nominalVoltage",
+      "expected": "supported",
+      "observed": "supported",
+      "decision_correct": true,
+      "evidence_exact": true,
+      "reason_present": true,
+      "fully_accepted": true,
+      "unsafe_false_support": false,
+      "observed_evidence": [
+        "sim-1",
+        "sim-2"
+      ],
+      "reference_evidence_choices": [
+        [
+          "sim-1"
+        ],
+        [
+          "sim-2"
+        ],
+        [
+          "sim-1",
+          "sim-2"
+        ]
+      ],
+      "rationale": "Source-located nominal voltage compared to the claim in the exact requested scope.",
+      "evaluator_reason": "Two applicable sources confirm the same nominal DC value"
+    }
+  ],
+  "input_sha256": "9ac9534c2d0178aa995ff690e01971170a0aaf9e27c29491c61e88c834b330c2",
+  "oracle_sha256": "074e10ec50224c6b5338eba74a141d26924472da194b00c32de1c73894d26ae3",
+  "predictions_sha256": "9ee6a07a2481811b5a88519c452452c585b568045bb8f137508a0b5a0666e97f",
+  "evaluation_scope": "Supplied documents and registered engineering claim dimensions only. Reason presence is machine-checked; reviewer compares substantive rationale separately."
+}

@@ -1,0 +1,155 @@
+{
+  "cases": 6,
+  "correct_dispositions": 6,
+  "exact_evidence": 6,
+  "whole_case_acceptance": 6,
+  "false_supported": 0,
+  "expected_distribution": {
+    "supported": 2,
+    "contradicted": 2,
+    "insufficient": 2
+  },
+  "missing": 0,
+  "scores": [
+    {
+      "id": "confirm-01",
+      "field": "batteryWeight",
+      "expected": "supported",
+      "observed": "supported",
+      "decision_correct": true,
+      "evidence_exact": true,
+      "reason_present": true,
+      "fully_accepted": true,
+      "unsafe_false_support": false,
+      "observed_evidence": [
+        "sr-01"
+      ],
+      "reference_evidence_choices": [
+        [
+          "sr-01"
+        ]
+      ],
+      "rationale": "The source-located net battery weight was compared to the claim for the exact product column.",
+      "evaluator_reason": "The 114 kg row is for the SBR096 system. The 33 kg row is for a single component."
+    },
+    {
+      "id": "confirm-02",
+      "field": "nominalVoltage",
+      "expected": "contradicted",
+      "observed": "contradicted",
+      "decision_correct": true,
+      "evidence_exact": true,
+      "reason_present": true,
+      "fully_accepted": true,
+      "unsafe_false_support": false,
+      "observed_evidence": [
+        "sr-01",
+        "sr-03"
+      ],
+      "reference_evidence_choices": [
+        [
+          "sr-01"
+        ],
+        [
+          "sr-03"
+        ],
+        [
+          "sr-01",
+          "sr-03"
+        ]
+      ],
+      "rationale": "The source-located nominal voltage was compared to the claim for the exact product column.",
+      "evaluator_reason": "Both applicable documents specify a 128 V nominal voltage for SBR064. 146 V is a range boundary."
+    },
+    {
+      "id": "confirm-03",
+      "field": "batteryCapacity",
+      "expected": "insufficient",
+      "observed": "insufficient",
+      "decision_correct": true,
+      "evidence_exact": true,
+      "reason_present": true,
+      "fully_accepted": true,
+      "unsafe_false_support": false,
+      "observed_evidence": [],
+      "reference_evidence_choices": [
+        [],
+        [
+          "sr-01"
+        ]
+      ],
+      "rationale": "No supplied observation established the required rated electrical capacity for this exact scope.",
+      "evaluator_reason": "Usable energy, DC voltage and continuous current do not document rated Ah."
+    },
+    {
+      "id": "confirm-04",
+      "field": "batteryWeight",
+      "expected": "supported",
+      "observed": "supported",
+      "decision_correct": true,
+      "evidence_exact": true,
+      "reason_present": true,
+      "fully_accepted": true,
+      "unsafe_false_support": false,
+      "observed_evidence": [
+        "gw-01"
+      ],
+      "reference_evidence_choices": [
+        [
+          "gw-01"
+        ]
+      ],
+      "rationale": "The source-located net battery weight was compared to the claim for the exact product column.",
+      "evaluator_reason": "The named system's exact column reads 158 kg and remains distinct from its module spec."
+    },
+    {
+      "id": "confirm-05",
+      "field": "nominalVoltage",
+      "expected": "contradicted",
+      "observed": "contradicted",
+      "decision_correct": true,
+      "evidence_exact": true,
+      "reason_present": true,
+      "fully_accepted": true,
+      "unsafe_false_support": false,
+      "observed_evidence": [
+        "gw-01"
+      ],
+      "reference_evidence_choices": [
+        [
+          "gw-01"
+        ]
+      ],
+      "rationale": "The source-located nominal voltage was compared to the claim for the exact product column.",
+      "evaluator_reason": "409.6 V is the explicit nominal entry for the requested battery system. 307.2 V belongs to LX F9.8-H."
+    },
+    {
+      "id": "confirm-06",
+      "field": "batteryCapacity",
+      "expected": "insufficient",
+      "observed": "insufficient",
+      "decision_correct": true,
+      "evidence_exact": true,
+      "reason_present": true,
+      "fully_accepted": true,
+      "unsafe_false_support": false,
+      "observed_evidence": [],
+      "reference_evidence_choices": [
+        [],
+        [
+          "gw-03"
+        ],
+        [
+          "gw-02",
+          "gw-03"
+        ]
+      ],
+      "rationale": "No supplied observation established the required rated electrical capacity for this exact scope.",
+      "evaluator_reason": "25 A is present as the charge/discharge current. The accompanying energy is usable kWh. Neither is rated capacity in Ah."
+    }
+  ],
+  "input_sha256": "e6b88a46d9e3d8d918d92b20de34a2e51cbba8510e51a9f68bb6de84c53f625c",
+  "oracle_sha256": "a17ac3dad3d07586a74ed0473fb76afca7e12ed37dc2e17fb9a85243e13a1731",
+  "predictions_sha256": "8655f0f1059da9f121498b220ffe25cfe778217256798bc44558d78de4a1ad8a",
+  "evaluation_scope": "Supplied documents and registered engineering claim dimensions only. Reason presence is machine-checked; reviewer compares substantive rationale separately."
+}

@@ -1,0 +1,51 @@
+{
+  "objective": "Retrospective reconstruction of daily precipitation water equivalent at a temporarily withheld target gauge for a single fixed Montréal-area week. Study of two methods on real public observations.",
+  "scope": "Exploratory research only. No forecasts, safety, dispatch, insurance adjudication, commercial or general superiority claim.",
+  "registered_utc": "2026-11-25T20:48:10+00:00",
+  "primary": {
+    "data": "PARDIG-NRT 2016–2025 archived time-series Zarr v3, open release 2026-11-13",
+    "base": "https://storage.googleapis.com/pardig_1/NRT/zarr_rechunked_as_timeseries/2016_to_2025/predictions.zarr/",
+    "metadata_sha256": "8dca3cdd17d3d960fe86f0b35d1991532281a10858e1a02057ecc48eface4092",
+    "publisher_documentation": "https://developers.google.com/weathernext/guides/pardig",
+    "unit": "instantaneous meters per hour water equivalent at valid time",
+    "spatial": "nearest 0.1° grid cell to the reference coordinates, no interpolation or calibration",
+    "aggregation": "Trapezoid integration of 97 complete equally spaced instant rates across each UTC day. Convert m to mm and multiply trapezoid sum by 0.25 h. Same first/last left/right rectangle variants for sensitivity."
+  },
+  "reference": {
+    "name": "MONTREAL/PIERRE ELLIOTT TRUDEAU INTL",
+    "station_id": 30165,
+    "climate_identifier": "702S006",
+    "coordinates_lon_lat": [
+      -73.74166666666666,
+      45.467777777777776
+    ],
+    "treatment_access": "Target hourly amount is held out from candidate and ordinary proxy and used only when scoring."
+  },
+  "ordinary_alternative": {
+    "name": "MONTREAL/ST-HUBERT",
+    "station_id": 48374,
+    "climate_identifier": "7027329",
+    "coordinates_lon_lat": [
+      -73.41694444444444,
+      45.5175
+    ],
+    "method": "Use the closest continuously listed alternate public automated hourly gauge among sources verified in the target inventory with hourly coverage and an explicit open archive input. Carry its same UTC-day total to the withheld target. No fitted calibration or post-result gauge substitution."
+  },
+  "source_metadata": "https://api.weather.gc.ca/collections/climate-stations/items?f=json&bbox=-74.1,45.3,-73.35,45.8&limit=125",
+  "gauge_data": "https://climate.weather.gc.ca/climate_data/bulk_data_e.html?format=csv&stationID={station_id}&Year=2025&Month=10&Day=1&timeframe=1&submit=Download+Data",
+  "gauge_documentation": "https://www.climate.meteo.gc.ca/doc/Technical_Documentation.pdf",
+  "window": {
+    "start_utc_inclusive": "2025-10-13T00:00:00Z",
+    "end_utc_exclusive": "2025-10-20T00:00:00Z",
+    "selection": "Seven consecutive complete UTC days fixed without reading precipitation values. Both stations must identify exactly as registered.",
+    "gauge_timing": "Read Date/Time (LST) as fixed UTC−05:00. Sum the 24 numeric precipitation amounts for timestamps ending 01:00 UTC through the following midnight UTC. The historical file must carry a labeled hourly field in mm and identifiable timestamp semantics.",
+    "completeness": "Withhold a day for an absent or duplicate timestamp, empty/nonfinite/negative value, any nonempty precipitation flag, unknown location/timing/units, or unavailable sources. Preserve method-specific abstentions. Never substitute zeros."
+  },
+  "scoring": {
+    "primary": "Mean absolute error across common complete days only. Also report coverage, every daily value and >=1.0-mm research threshold agreement, with separate held-target gauge direct lookup when available.",
+    "advance_condition": "At least four paired complete days, held reference has wet and dry days at the declared threshold, absolute MAE reduction of at least 0.2 mm and no loss in threshold classifications. The direction must survive left/right rectangle sensitivity. Even meeting this gate only permits another independent retrospective trial.",
+    "adverse_condition": "A tie, score reversal, inadequate nontrivial coverage, or sensitivity reversal fails the comparative advancement gate. No outside-case superiority inference."
+  },
+  "timing_falsifier": "Historical archives do not establish initial release times. No prospective operation advances without first-seen records for each estimate and baseline and complete data available by a predeclared six-hour review deadline across a new prospective cohort.",
+  "resources": "One bounded primary 5x5 archive tile, only required coordinate chunks, two public station CSVs, local CPU/zstd, no paid or private data. At most 8 MiB compressed source payload for the 5x5 tile, 256 KiB per CSV. Keep SHA-256, receipts and selected scalar samples only."
+}

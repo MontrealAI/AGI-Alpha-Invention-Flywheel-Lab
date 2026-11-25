@@ -1,0 +1,262 @@
+[
+  {
+    "id": "gate-score",
+    "language": "en",
+    "family": "functional-disclosure-with-signed-gate",
+    "rules": [
+      "The certified dispatch score S can only be 12 or 15. The warehouse archivist retains the signed certificate throughout.",
+      "Before her release choice, Amina receives a green token if and only if the certified S is 15.",
+      "The current dispatch trace records that Amina received a green token before her release choice.",
+      "Amina cannot access the signature itself until after she makes the release choice."
+    ],
+    "queries": [
+      {
+        "observer": "Amina",
+        "decision": "release choice",
+        "datum": "certified S"
+      },
+      {
+        "observer": "Amina",
+        "decision": "release choice",
+        "datum": "the signature"
+      }
+    ]
+  },
+  {
+    "id": "postponed-appeal",
+    "language": "en",
+    "family": "appeal-round-scoped-hearing",
+    "rules": [
+      "Jon selects an initial allocation before any ranking order can be read by him.",
+      "In every eligible session Jon is handed the complete ranking order after recording the initial allocation.",
+      "Only then can Jon decide to retain or revise the allocation, and the order remains readable for this revision choice.",
+      "A sealed cost estimate is mentioned on the cover but no rule specifies whether it is ever shown to Jon."
+    ],
+    "queries": [
+      {
+        "observer": "Jon",
+        "decision": "initial allocation",
+        "datum": "complete ranking order"
+      },
+      {
+        "observer": "Jon",
+        "decision": "retain-or-revise choice",
+        "datum": "complete ranking order"
+      },
+      {
+        "observer": "Jon",
+        "decision": "retain-or-revise choice",
+        "datum": "sealed cost estimate"
+      }
+    ]
+  },
+  {
+    "id": "one-of-two-readers",
+    "language": "en",
+    "family": "pooled-role-token-retention",
+    "rules": [
+      "A coordinator must assign Priya one temporary role: Recorder or Examiner. Either assignment is eligible.",
+      "The Recorder receives the same checksum C on the recording form before role duties.",
+      "The Examiner receives the same checksum C on the inspection form before role duties.",
+      "After completing either duty, Priya keeps her form and records the final escalation choice.",
+      "The inspection form includes a reviewer name not shown on the recording form. Only those two forms are available before the final choice."
+    ],
+    "queries": [
+      {
+        "observer": "Priya",
+        "decision": "final escalation choice",
+        "datum": "checksum C"
+      },
+      {
+        "observer": "Priya",
+        "decision": "final escalation choice",
+        "datum": "reviewer name"
+      }
+    ]
+  },
+  {
+    "id": "sealed-transfer",
+    "language": "en",
+    "family": "conditional-delivery-after-permission",
+    "rules": [
+      "Mara is allowed to see the sealed estimate and can issue her counteroffer regardless of the estimate.",
+      "The broker sends Mara the signed estimate before her counteroffer only if an independent acknowledgement has arrived.",
+      "The trace does not say whether the acknowledgement arrived. Both cases are eligible.",
+      "The bidder names remain inaccessible to Mara until her counteroffer is confirmed, even if the estimate was sent."
+    ],
+    "queries": [
+      {
+        "observer": "Mara",
+        "decision": "counteroffer",
+        "datum": "signed estimate"
+      },
+      {
+        "observer": "Mara",
+        "decision": "counteroffer",
+        "datum": "bidder names"
+      }
+    ]
+  },
+  {
+    "id": "split-credentials",
+    "language": "fr",
+    "family": "role-relay-with-retained-boundary",
+    "rules": [
+      "Avant le choix de validité, Inès reçoit le numéro de lot L de chaque demande admissible et conserve le message.",
+      "Le contrôleur reçoit une enveloppe qui contient L et la clé K. La règle lui interdit de remettre K à Inès tant que son choix de validité n’est pas enregistré.",
+      "Le montant M figure sur une autre page. Les règles ne disent jamais qui la reçoit."
+    ],
+    "queries": [
+      {
+        "observer": "Inès",
+        "decision": "choix de validité",
+        "datum": "numéro de lot L"
+      },
+      {
+        "observer": "Inès",
+        "decision": "choix de validité",
+        "datum": "clé K"
+      },
+      {
+        "observer": "Inès",
+        "decision": "choix de validité",
+        "datum": "montant M"
+      }
+    ]
+  },
+  {
+    "id": "refund-switch",
+    "language": "fr",
+    "family": "unchosen-round-versus-executed-choice",
+    "rules": [
+      "Éloi décide d’abord du remboursement depuis un formulaire vierge. Pour cette décision, les deux projections de recettes lui sont cachées.",
+      "L’agent remet toujours les projections détaillées à Éloi aussitôt le remboursement enregistré.",
+      "Éloi peut alors décider de demander ou non un audit en gardant les projections sous les yeux.",
+      "La liste nominative des clients n’est accessible à Éloi qu’après la décision de demander ou non cet audit."
+    ],
+    "queries": [
+      {
+        "observer": "Éloi",
+        "decision": "décision de remboursement",
+        "datum": "projections détaillées de recettes"
+      },
+      {
+        "observer": "Éloi",
+        "decision": "décision de demander ou non un audit",
+        "datum": "projections détaillées de recettes"
+      },
+      {
+        "observer": "Éloi",
+        "decision": "décision de demander ou non un audit",
+        "datum": "liste nominative des clients"
+      }
+    ]
+  },
+  {
+    "id": "contradictory-consultation",
+    "language": "fr",
+    "family": "same-authority-unresolved-protocol",
+    "rules": [
+      "Dans ce règlement, aucune clause n’a priorité sur une autre. Les deux règles suivantes concernent le même choix de déléguer, dans toutes les séances admissibles.",
+      "Le rapport R est remis à Sofia avant qu’elle décide de déléguer.",
+      "Le rapport R demeure inaccessible à Sofia jusqu’à l’enregistrement de sa décision de déléguer.",
+      "Dans toutes les séances, Sofia reçoit le numéro de référence N lorsque le choix de déléguer s’affiche, avant de répondre."
+    ],
+    "queries": [
+      {
+        "observer": "Sofia",
+        "decision": "choix de déléguer",
+        "datum": "rapport R"
+      },
+      {
+        "observer": "Sofia",
+        "decision": "choix de déléguer",
+        "datum": "numéro de référence N"
+      }
+    ]
+  },
+  {
+    "id": "signal-two-causes",
+    "language": "fr",
+    "family": "shared-signal-state-underdetermination",
+    "rules": [
+      "Chaque groupe reçoit A ou B comme catégorie de dossier. Chaque dossier est actif ou clos. Les quatre combinaisons sont admissibles.",
+      "À l’ouverture de son choix d’ordonnancement, Maya reçoit un jeton rouge si et seulement si le dossier est actif.",
+      "Maya reçoit effectivement le jeton rouge et fait son choix. Aucun autre indice sur la catégorie ne lui est communiqué avant ce choix.",
+      "Maya ne peut lire le journal des fermetures qu’après avoir terminé ce choix."
+    ],
+    "queries": [
+      {
+        "observer": "Maya",
+        "decision": "choix d’ordonnancement",
+        "datum": "état actif ou clos"
+      },
+      {
+        "observer": "Maya",
+        "decision": "choix d’ordonnancement",
+        "datum": "catégorie A ou B"
+      },
+      {
+        "observer": "Maya",
+        "decision": "choix d’ordonnancement",
+        "datum": "journal des fermetures"
+      }
+    ]
+  },
+  {
+    "id": "unequal-token-outcomes",
+    "language": "en",
+    "family": "stage-aware-screen-summary",
+    "rules": [
+      "The value T is either 2, 4, or 8. All choices are eligible before any other condition.",
+      "Before his summary choice Lev sees the label SMALL if and only if T is 2 or 4.",
+      "This trace records SMALL. The screen discloses no extra detail before the summary choice.",
+      "After the summary choice, Lev sees the exact T before his reserve choice."
+    ],
+    "queries": [
+      {
+        "observer": "Lev",
+        "decision": "summary choice",
+        "datum": "exact T"
+      },
+      {
+        "observer": "Lev",
+        "decision": "summary choice",
+        "datum": "whether T is smaller than 8"
+      },
+      {
+        "observer": "Lev",
+        "decision": "reserve choice",
+        "datum": "exact T"
+      }
+    ]
+  },
+  {
+    "id": "two-forms-removed",
+    "language": "fr",
+    "family": "frozen-packet-keys-and-fragment-composition",
+    "rules": [
+      "Avant le choix de mise en commun, Nadir reçoit toujours sur deux fiches les fragments P et Q en clair.",
+      "Le registre précise que le code complet C est exactement la concaténation de P suivie de Q. Nadir garde les deux fiches jusqu’à sa décision.",
+      "Le mot de passe W du serveur n’est sur aucune fiche et reste inaccessible à Nadir jusqu’après ce choix.",
+      "Un avis mentionne un budget auxiliaire, sans indiquer qu’il est communiqué à Nadir."
+    ],
+    "queries": [
+      {
+        "observer": "Nadir",
+        "decision": "choix de mise en commun",
+        "datum": "code complet C"
+      },
+      {
+        "observer": "Nadir",
+        "decision": "choix de mise en commun",
+        "datum": "mot de passe W"
+      },
+      {
+        "observer": "Nadir",
+        "decision": "choix de mise en commun",
+        "datum": "budget auxiliaire"
+      }
+    ]
+  }
+]

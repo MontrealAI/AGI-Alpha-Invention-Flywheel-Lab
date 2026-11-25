@@ -1,0 +1,571 @@
+{
+  "schema": "frontier/strategic-reviewed-partition-replay/v1",
+  "status": "scoped reviewed partition and certified value",
+  "scope": "Explicit complete access record, finite histories and fixed action sets. Synthetic examples.",
+  "independent_reference": "retained exact rational normal-form enumeration plus explicit pair comparisons",
+  "value_of_earlier_disclosure": "1/4",
+  "incomplete_input_refused": true,
+  "code_sha256": {
+    "partition.py": "70a15f5873e48c90b6f6f84af1c9b93837c0f00772ae158a87fa9c18ce519fe1",
+    "retained_certifier": "0dc18b0048ee72d2219f57cdb5d3957916a1e1d125789d332e88e9d5dd250343",
+    "retained_normal_form": "8abe10b56bfe9001b274159bf6c6d405e6aa4d22dced99882efafa0d1cb478e3"
+  },
+  "records_sha256": "4bf70c47a4404098d63b92f85076fe0947cfa8021bd727c7b33bbb3169b31107",
+  "records": {
+    "early": {
+      "case": {
+        "id": "independent-bids-early",
+        "language": "en",
+        "family": "observation-policy-handoff",
+        "rules": [
+          "The reserve colour appears only on the planner’s terminal before bids are locked.",
+          "The competing shipper decides at the same time and cannot read the reserve colour."
+        ],
+        "queries": [
+          {
+            "observer": "planner",
+            "decision": "sealed bid",
+            "datum": "reserve colour"
+          },
+          {
+            "observer": "shipper",
+            "decision": "sealed bid",
+            "datum": "reserve colour"
+          }
+        ]
+      },
+      "reviewed": [
+        {
+          "access": "known",
+          "witness": [
+            1
+          ]
+        },
+        {
+          "access": "hidden",
+          "witness": [
+            2
+          ]
+        }
+      ],
+      "histories": [
+        {
+          "id": "north",
+          "signals": {
+            "reserve colour": "green"
+          }
+        },
+        {
+          "id": "south",
+          "signals": {
+            "reserve colour": "red"
+          }
+        }
+      ],
+      "partitions": [
+        {
+          "observer": "planner",
+          "decision": "sealed bid",
+          "reviewed_claims": {
+            "reserve colour": {
+              "access": "known",
+              "witness": [
+                1
+              ]
+            }
+          },
+          "visible_signals": [
+            "reserve colour"
+          ],
+          "status": "compiled",
+          "classes": [
+            [
+              "north"
+            ],
+            [
+              "south"
+            ]
+          ]
+        },
+        {
+          "observer": "shipper",
+          "decision": "sealed bid",
+          "reviewed_claims": {
+            "reserve colour": {
+              "access": "hidden",
+              "witness": [
+                2
+              ]
+            }
+          },
+          "visible_signals": [],
+          "status": "compiled",
+          "classes": [
+            [
+              "north",
+              "south"
+            ]
+          ]
+        }
+      ],
+      "separate_observation_reference": [
+        [
+          [
+            "north"
+          ],
+          [
+            "south"
+          ]
+        ],
+        [
+          [
+            "north",
+            "south"
+          ]
+        ]
+      ],
+      "game": {
+        "actions": [
+          2,
+          2
+        ],
+        "states": [
+          {
+            "p": "1/2",
+            "row_type": "type0",
+            "col_type": "type0",
+            "payoff": [
+              [
+                2,
+                -1
+              ],
+              [
+                0,
+                0
+              ]
+            ]
+          },
+          {
+            "p": "1/2",
+            "row_type": "type1",
+            "col_type": "type0",
+            "payoff": [
+              [
+                0,
+                0
+              ],
+              [
+                -1,
+                2
+              ]
+            ]
+          }
+        ]
+      },
+      "certificate": {
+        "disclosure": "none",
+        "exact_interval": [
+          "1/2",
+          "10000000001/20000000000"
+        ],
+        "gap": "1/20000000000",
+        "certificate": "accepted",
+        "row_policy": [
+          {
+            "observed_types": [
+              "type0"
+            ],
+            "probabilities": [
+              "1",
+              "0"
+            ]
+          },
+          {
+            "observed_types": [
+              "type1"
+            ],
+            "probabilities": [
+              "0",
+              "1"
+            ]
+          }
+        ],
+        "col_policy": [
+          {
+            "observed_types": [
+              "type0"
+            ],
+            "probabilities": [
+              "6666666667/10000000000",
+              "3333333333/10000000000"
+            ]
+          }
+        ]
+      },
+      "enumeration_reference": {
+        "value": "1/2",
+        "row_types": [
+          "type0",
+          "type1"
+        ],
+        "column_types": [
+          "type0"
+        ],
+        "pure_policy_matrix_shape": [
+          4,
+          2
+        ],
+        "pure_policy_matrix_sha256": "f73d35f18815099cfc85c6cd96108f2009172ec320b197caf9782587f5980729",
+        "row_policy_mix": [
+          {
+            "moves": [
+              0,
+              1
+            ],
+            "mass": "1"
+          }
+        ],
+        "column_policy_mix": [
+          {
+            "moves": [
+              0
+            ],
+            "mass": "2/3"
+          },
+          {
+            "moves": [
+              1
+            ],
+            "mass": "1/3"
+          }
+        ],
+        "row_minimum_achieved": "1/2",
+        "column_maximum_achieved": "1/2"
+      },
+      "analytical_value": "1/2"
+    },
+    "late": {
+      "case": {
+        "id": "independent-bids-late",
+        "language": "en",
+        "family": "observation-policy-handoff",
+        "rules": [
+          "The reserve colour stays locked until both bids are final; the planner receives it after.",
+          "The competing shipper decides at the same time and cannot read the reserve colour."
+        ],
+        "queries": [
+          {
+            "observer": "planner",
+            "decision": "sealed bid",
+            "datum": "reserve colour"
+          },
+          {
+            "observer": "shipper",
+            "decision": "sealed bid",
+            "datum": "reserve colour"
+          }
+        ]
+      },
+      "reviewed": [
+        {
+          "access": "hidden",
+          "witness": [
+            1
+          ]
+        },
+        {
+          "access": "hidden",
+          "witness": [
+            2
+          ]
+        }
+      ],
+      "histories": [
+        {
+          "id": "north",
+          "signals": {
+            "reserve colour": "green"
+          }
+        },
+        {
+          "id": "south",
+          "signals": {
+            "reserve colour": "red"
+          }
+        }
+      ],
+      "partitions": [
+        {
+          "observer": "planner",
+          "decision": "sealed bid",
+          "reviewed_claims": {
+            "reserve colour": {
+              "access": "hidden",
+              "witness": [
+                1
+              ]
+            }
+          },
+          "visible_signals": [],
+          "status": "compiled",
+          "classes": [
+            [
+              "north",
+              "south"
+            ]
+          ]
+        },
+        {
+          "observer": "shipper",
+          "decision": "sealed bid",
+          "reviewed_claims": {
+            "reserve colour": {
+              "access": "hidden",
+              "witness": [
+                2
+              ]
+            }
+          },
+          "visible_signals": [],
+          "status": "compiled",
+          "classes": [
+            [
+              "north",
+              "south"
+            ]
+          ]
+        }
+      ],
+      "separate_observation_reference": [
+        [
+          [
+            "north",
+            "south"
+          ]
+        ],
+        [
+          [
+            "north",
+            "south"
+          ]
+        ]
+      ],
+      "game": {
+        "actions": [
+          2,
+          2
+        ],
+        "states": [
+          {
+            "p": "1/2",
+            "row_type": "type0",
+            "col_type": "type0",
+            "payoff": [
+              [
+                2,
+                -1
+              ],
+              [
+                0,
+                0
+              ]
+            ]
+          },
+          {
+            "p": "1/2",
+            "row_type": "type0",
+            "col_type": "type0",
+            "payoff": [
+              [
+                0,
+                0
+              ],
+              [
+                -1,
+                2
+              ]
+            ]
+          }
+        ]
+      },
+      "certificate": {
+        "disclosure": "none",
+        "exact_interval": [
+          "1/4",
+          "1/4"
+        ],
+        "gap": "0",
+        "certificate": "accepted",
+        "row_policy": [
+          {
+            "observed_types": [
+              "type0"
+            ],
+            "probabilities": [
+              "1/2",
+              "1/2"
+            ]
+          }
+        ],
+        "col_policy": [
+          {
+            "observed_types": [
+              "type0"
+            ],
+            "probabilities": [
+              "1/2",
+              "1/2"
+            ]
+          }
+        ]
+      },
+      "enumeration_reference": {
+        "value": "1/4",
+        "row_types": [
+          "type0"
+        ],
+        "column_types": [
+          "type0"
+        ],
+        "pure_policy_matrix_shape": [
+          2,
+          2
+        ],
+        "pure_policy_matrix_sha256": "f742f0085ce05911276980e19d5f37d0ed32b06a82c7fb75e2684d3c1b8abd75",
+        "row_policy_mix": [
+          {
+            "moves": [
+              0
+            ],
+            "mass": "1/2"
+          },
+          {
+            "moves": [
+              1
+            ],
+            "mass": "1/2"
+          }
+        ],
+        "column_policy_mix": [
+          {
+            "moves": [
+              0
+            ],
+            "mass": "1/2"
+          },
+          {
+            "moves": [
+              1
+            ],
+            "mass": "1/2"
+          }
+        ],
+        "row_minimum_achieved": "1/4",
+        "column_maximum_achieved": "1/4"
+      },
+      "analytical_value": "1/4"
+    },
+    "conditional": {
+      "case": {
+        "id": "independent-bids-conditional",
+        "language": "en",
+        "family": "observation-policy-handoff",
+        "rules": [
+          "The planner might receive the reserve colour early, depending on an unrecorded approval.",
+          "The competing shipper decides at the same time and cannot read the reserve colour."
+        ],
+        "queries": [
+          {
+            "observer": "planner",
+            "decision": "sealed bid",
+            "datum": "reserve colour"
+          },
+          {
+            "observer": "shipper",
+            "decision": "sealed bid",
+            "datum": "reserve colour"
+          }
+        ]
+      },
+      "reviewed": [
+        {
+          "access": "unclear",
+          "witness": [
+            1
+          ]
+        },
+        {
+          "access": "hidden",
+          "witness": [
+            2
+          ]
+        }
+      ],
+      "histories": [
+        {
+          "id": "north",
+          "signals": {
+            "reserve colour": "green"
+          }
+        },
+        {
+          "id": "south",
+          "signals": {
+            "reserve colour": "red"
+          }
+        }
+      ],
+      "partitions": [
+        {
+          "observer": "planner",
+          "decision": "sealed bid",
+          "reviewed_claims": {
+            "reserve colour": {
+              "access": "unclear",
+              "witness": [
+                1
+              ]
+            }
+          },
+          "visible_signals": [],
+          "status": "withheld",
+          "unresolved_signals": [
+            "reserve colour"
+          ]
+        },
+        {
+          "observer": "shipper",
+          "decision": "sealed bid",
+          "reviewed_claims": {
+            "reserve colour": {
+              "access": "hidden",
+              "witness": [
+                2
+              ]
+            }
+          },
+          "visible_signals": [],
+          "status": "compiled",
+          "classes": [
+            [
+              "north",
+              "south"
+            ]
+          ]
+        }
+      ],
+      "separate_observation_reference": [
+        null,
+        [
+          [
+            "north",
+            "south"
+          ]
+        ]
+      ],
+      "status": "withheld before policy construction"
+    }
+  },
+  "wall_seconds": 0.015103493991773576,
+  "cpu_seconds": 0.03451129700000011
+}

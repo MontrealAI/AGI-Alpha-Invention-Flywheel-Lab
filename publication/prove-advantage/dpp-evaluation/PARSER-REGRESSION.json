@@ -1,0 +1,83 @@
+{
+  "original_code_sha256": "911be246982e1a03610675580f345dcae898048f358489b72b056f0a2707c489",
+  "corrected_code_sha256": "4f3719f9db0ca6001eb3f9bad9ec5525d97cdb762fe412fe73ae3c447c755bb6",
+  "outcomes": [
+    {
+      "part": "PRIMARY",
+      "count": 16,
+      "matchedFrozen": true,
+      "input_sha256": "4eb5fe5c4ea2451dc29a6fe8218fc046676d17419e49d0368485bde8b7c10c2c",
+      "frozen_prediction_sha256": "226dbdce354890c589346bd6d6498c39baa81c8d854dedf00bb96ebc73b34221",
+      "changes_vs_original_withdrawal": [
+        {
+          "id": "batt-10",
+          "decision": "contradicted",
+          "evidence": [
+            "b1"
+          ]
+        },
+        {
+          "id": "batt-11",
+          "decision": "insufficient",
+          "evidence": []
+        },
+        {
+          "id": "batt-12",
+          "decision": "insufficient",
+          "evidence": []
+        },
+        {
+          "id": "batt-13",
+          "decision": "contradicted",
+          "evidence": [
+            "b2"
+          ]
+        },
+        {
+          "id": "batt-16",
+          "decision": "insufficient",
+          "evidence": []
+        }
+      ],
+      "differences_from_frozen_using_original_input": [
+        {
+          "id": "batt-02",
+          "decision": "insufficient",
+          "evidence": []
+        },
+        {
+          "id": "batt-05",
+          "decision": "insufficient",
+          "evidence": []
+        }
+      ]
+    },
+    {
+      "part": "ADVERSE",
+      "count": 5,
+      "matchedFrozen": true,
+      "input_sha256": "34a868b079664ee4051303b3ff74882ae419065edd4d6c4ea41d533da5e6d07a",
+      "frozen_prediction_sha256": "9ee6a07a2481811b5a88519c452452c585b568045bb8f137508a0b5a0666e97f",
+      "changes_vs_original_withdrawal": [
+        {
+          "id": "control-2",
+          "decision": "contradicted",
+          "evidence": [
+            "sim-2"
+          ]
+        }
+      ],
+      "differences_from_frozen_using_original_input": []
+    },
+    {
+      "part": "CONFIRMATION",
+      "count": 6,
+      "matchedFrozen": true,
+      "input_sha256": "45213ac412587b8205ab4ca2b018ec14dee7aa694f02b8c36afd9d1e4fae54bb",
+      "frozen_prediction_sha256": "8655f0f1059da9f121498b220ffe25cfe778217256798bc44558d78de4a1ad8a",
+      "differences_from_frozen_using_original_input": []
+    }
+  ],
+  "verdict": "25 decisions reproduce on original inputs and 27 after two explicit source column-label annotations",
+  "reviewed_primary_packet_sha256": "f4f9e2c1e715b688a3ad623c5da1adef1c13c813b60637064e828af214b5a231"
+}
