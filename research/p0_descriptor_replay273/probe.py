@@ -142,17 +142,22 @@ def main():
                 else:shutil.copytree(saved,store)
                 old_alias=saved/('.pending-'+ref)
                 new_alias=store/('.pending-'+ref)
-                os.link(saved/ref,old_alias)
+                if invalid:
+                    badname=sha(b'expected different development bytes')
+                    bad=saved/badname
+                    bad.write_bytes(b'invalid development evidence')
+                    old_alias=saved/('.pending-'+badname)
+                    os.link(bad,old_alias)
+                else:os.link(saved/ref,old_alias)
                 if not empty:os.link(store/ref,new_alias)
-                if invalid:(saved/ref).write_bytes(b'invalid development evidence')
                 try:
                     row=invoke(name,expected_route,bound=True)
                     row['original_alias_removed']=not old_alias.exists()
                     row['replacement_alias_retained']=new_alias.exists() if not empty else None
                     return row
                 finally:
-                    if invalid:(saved/ref).write_bytes(original)
                     old_alias.unlink(missing_ok=True)
+                    if invalid:bad.unlink(missing_ok=True)
             finally:
                 if store.exists():shutil.rmtree(store)
                 saved.rename(store)
