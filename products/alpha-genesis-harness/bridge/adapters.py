@@ -572,6 +572,10 @@ class Runtime:
             for attempt in range(attempt_limit):
                 if cancel.is_set():
                     raise BridgeError("CANCELLED", "Run cancelled. Completed or sent attempts remain accounted.", 409)
+                if cancelled_before_dispatch is not None and cancelled_before_dispatch():
+                    error = BridgeError("CANCELLED", "Request authority ended before the next transport attempt.", 409)
+                    error.pre_dispatch = attempts == 0
+                    raise error
                 attempts += 1
                 attempt_accounted = False
                 try:

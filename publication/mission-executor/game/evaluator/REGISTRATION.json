@@ -1,0 +1,20 @@
+{
+  "at": "2026-11-25T02:30:20.599136+00:00",
+  "files": {
+    "held_games.json": "b93d0bb05f92a27b5e16afd4075067ed48d3eb1ae43fe68c43c7bf24d79795ba",
+    "held_missions.json": "97a52f79a671e46e959967ef7b18f9a80287e2e9cfb0d02cfc65882bff804048",
+    "revisions.json": "c28cb020797c085856f2b26d935fc67a5def044dfc600e92174d2672fe74dcdb"
+  },
+  "missions": {
+    "acceptance": "validate actual operated steps, result, and artifact separately; language and intake-only are insufficient",
+    "custody": "separate task author and evaluator account context under the same workspace administrator; not independent administrator, production grading authority, or #565 custody",
+    "selection": "all eight cases remain in denominator; resource limits can yield NOT TESTED rather than pass"
+  },
+  "schema": "frontier/independent-evaluation-registration-v1",
+  "strategic": {
+    "acceptance": "exact candidate lower/upper enclose independent minimax LP values to 1e-7 * max(1, payoff scale), interval width <= 5e-7 * max(1, payoff scale), and all distributions feasible",
+    "comparison": "separate enumerated normal-form pure strategies, primal and dual HiGHS, and separately recomputed candidate bounds from returned row and column plans using exact rational arithmetic",
+    "full_dense_bound": "perform explicit matrices for up to 6,000,000 integers per case; beyond that use separable exact candidate certificate bounds, do not describe absent brute-force as a win",
+    "selection": "six fixed boundary/scientific controls plus five reproducibly generated cases before source freeze"
+  }
+}

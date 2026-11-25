@@ -1,0 +1,18 @@
+{
+  "schema": "frontier/observation-cost-transfer-plan-v1",
+  "question": "Can a retained solver deliver the same contract for a new economic decision instrument as ordinary normalized-matrix construction, and does its use materially improve measured execution?",
+  "work_product": "Exact verified interval for the break-even acquisition price, five quoted-price decisions, and comparison with the optimized blind allocation.",
+  "scope": "The decision maker commits to either buying one specified noisy observation or using the optimized no-observation policy before an opponent reacts. The acquired signal remains private. Payoff units and costs are declared synthetic quantities.",
+  "objective_math": "The gross value of the forced noisy policy does not depend on a single fixed acquisition charge. Subtract charge after bounding its minimax value. The fee limit is the difference between noisy and blind minimax values. The interval subtracts upper from lower for its lower bound and lower from upper for its upper bound. Clamp each endpoint to zero because the forced observation may be ignored at zero charge.",
+  "arms": {
+    "retained": "Use the exact retained sparse path-flow optimizer and its exact verifier on both forced contracts.",
+    "ordinary": "Construct the complete strategic payoff normal form from exact rational declared inputs, solve a conventional primal linear program and take the dual from its multipliers, and recompute exact bounds on the resulting feasible strategies.",
+    "remove_retained": "Replace the sparse solver with the ordinary implementation. Its guarantee and quoted decisions must survive removal across all three cases.",
+    "remove_signal": "Use the best optimized blind route. Derive the threshold for paying for this no-information channel over using its free counterpart."
+  },
+  "pairing": "Seven paired same-host repetitions for each frozen case. Alternate arm order with case and repetition parity; use production-quality exact strategy verification in both. Record each wall and process-CPU measure, cold first sample, median ratio, normal-form pairs and constructed sparse coefficients. No arm sees outputs from the other.",
+  "acceptance": "Both fee intervals must overlap, widths must be at most twice the applicable half-ppm game bound in the absolute payoff units, and all five price dispositions must agree per case. A quote is buy only if below the certified lower threshold, skip only if above the upper, unresolved or tie otherwise. No-information ablation must have no strictly positive threshold.",
+  "comparison_rule": "Claim this bounded runtime advantage only if equality of accepted output holds and the median retained time is at least 20 percent lower than the ordinary arm in two of three cases. Individual single-case advantages may be reported with scope. A normal-form tie or win preserves the conventional alternative. Optimization speed and correct asset reuse do not establish improved discovery, improved invention, ROI or revenue.",
+  "denominator": {"cases": 3, "quotes_per_case": 5, "paired_repetitions": 7},
+  "stop_rule": "Run all registered cases and repetitions. Report malformed, nonqualifying and interrupted outcomes without dropping them."
+}

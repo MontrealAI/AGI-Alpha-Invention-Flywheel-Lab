@@ -1,0 +1,1104 @@
+{
+  "schema": "frontier/production-claim-comparison-v1",
+  "first": {
+    "capture": {
+      "schema": "frontier/production-claim-capture-v1",
+      "job": "game",
+      "source_commit": "8944f51db7b8e7fce8630503046c2a257cf62e44",
+      "workflow_run": "45532943859",
+      "ledger_sha256": "4b1b271f6d818a37c94e0d5f7866c5f68f4eda99be8460cbf21807bcd90906c0",
+      "elapsed_seconds": 10.587239,
+      "requests": {
+        "release-initial.json": {
+          "url": "https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/frontier-omega-alpha/atlas-release.json",
+          "sha256": "cb057d54effee721cf4346d5cea10618fd3156da52cf642217273ec8ed7f3d80",
+          "bytes": 3867,
+          "date": "Wed, 25 Nov 2026 02:33:43 GMT",
+          "acquired_at_utc": "2026-11-25T02:33:43.268258+00:00",
+          "elapsed_seconds": 3.993644
+        },
+        "index.html": {
+          "url": "https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/frontier-omega-alpha/",
+          "sha256": "d318ad9bb2fd251c677bd98271dba69dc2289f653bedd3f5a2bd60a98b9d22f9",
+          "bytes": 379423,
+          "date": "Wed, 25 Nov 2026 02:33:46 GMT",
+          "acquired_at_utc": "2026-11-25T02:33:46.356066+00:00",
+          "elapsed_seconds": 3.087072
+        },
+        "fr.html": {
+          "url": "https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/frontier-omega-alpha/fr.html",
+          "sha256": "2fb9657803988b9ccaaf1b062411ad9d3a4f44cfd267d18ee3955ca4a87a90ad",
+          "bytes": 404613,
+          "date": "Wed, 25 Nov 2026 02:33:46 GMT",
+          "acquired_at_utc": "2026-11-25T02:33:46.323839+00:00",
+          "elapsed_seconds": 3.054433
+        },
+        "game-receipt.json": {
+          "url": "https://raw.githubusercontent.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/8944f51db7b8e7fce8630503046c2a257cf62e44/publication/universal/game-theory/MISSION-RECEIPT.json",
+          "sha256": "d973034163ed5dbb399198565ca239538cf7ad03d1633a87d018e774cc245b15",
+          "bytes": 9568,
+          "date": "Wed, 25 Nov 2026 02:33:46 GMT",
+          "acquired_at_utc": "2026-11-25T02:33:47.007970+00:00",
+          "elapsed_seconds": 3.737835
+        },
+        "example-verification.json": {
+          "url": "https://raw.githubusercontent.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/8944f51db7b8e7fce8630503046c2a257cf62e44/publication/universal/game-theory/EXAMPLE-VERIFICATION.json",
+          "sha256": "d190c0cd6ae2c4e49d2f174edcab034e1393de4bb27ae6fb9cee36e4f9ba18d0",
+          "bytes": 675,
+          "date": "Wed, 25 Nov 2026 02:33:46 GMT",
+          "acquired_at_utc": "2026-11-25T02:33:46.961449+00:00",
+          "elapsed_seconds": 3.690786
+        },
+        "release-final.json": {
+          "url": "https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/frontier-omega-alpha/atlas-release.json",
+          "sha256": "cb057d54effee721cf4346d5cea10618fd3156da52cf642217273ec8ed7f3d80",
+          "bytes": 3867,
+          "date": "Wed, 25 Nov 2026 02:33:49 GMT",
+          "acquired_at_utc": "2026-11-25T02:33:49.861174+00:00",
+          "elapsed_seconds": 2.849397
+        }
+      },
+      "response_bytes": 802013
+    },
+    "plan_sha256": "e8837ba26b4f5c42b86b35ed8bfb6c0485c1ef2cb9c020f21e3eb8f9df26f58e",
+    "arm_source_sha256": {
+      "retained": "099c25d466cd87bb6c723ca040a1ce016037c041a7cc65b7d0359c7548ff426b",
+      "ordinary": "89cdf9efae4a0f64fe182c69701111f406e2a85caabb7178b52306358d17610a"
+    },
+    "timing": {
+      "retained": {
+        "median_local_wall_seconds": 0.10679,
+        "median_local_cpu_seconds": 0.106526,
+        "common_capture_plus_local_wall_seconds": 10.694029,
+        "capture_response_bytes": 802013
+      },
+      "ordinary": {
+        "median_local_wall_seconds": 0.077257,
+        "median_local_cpu_seconds": 0.076578,
+        "common_capture_plus_local_wall_seconds": 10.664496,
+        "capture_response_bytes": 802013
+      }
+    },
+    "samples": [
+      {
+        "arm": "retained",
+        "wall_seconds": 0.108515,
+        "process_cpu_seconds": 0.106526,
+        "report_sha256": "5468c9ef19813523e7d94305728ca964c20edbfec92cf0a5a9692707dc8c9ce5"
+      },
+      {
+        "arm": "ordinary",
+        "wall_seconds": 0.077257,
+        "process_cpu_seconds": 0.076578,
+        "report_sha256": "898729f15a5c32d332a7c4a28d4a7e8387b4e6044a4debee36dcb7fd5b8bf320"
+      },
+      {
+        "arm": "ordinary",
+        "wall_seconds": 0.076718,
+        "process_cpu_seconds": 0.076408,
+        "report_sha256": "898729f15a5c32d332a7c4a28d4a7e8387b4e6044a4debee36dcb7fd5b8bf320"
+      },
+      {
+        "arm": "retained",
+        "wall_seconds": 0.10578,
+        "process_cpu_seconds": 0.105509,
+        "report_sha256": "5468c9ef19813523e7d94305728ca964c20edbfec92cf0a5a9692707dc8c9ce5"
+      },
+      {
+        "arm": "retained",
+        "wall_seconds": 0.124475,
+        "process_cpu_seconds": 0.122954,
+        "report_sha256": "5468c9ef19813523e7d94305728ca964c20edbfec92cf0a5a9692707dc8c9ce5"
+      },
+      {
+        "arm": "ordinary",
+        "wall_seconds": 0.09785,
+        "process_cpu_seconds": 0.097464,
+        "report_sha256": "898729f15a5c32d332a7c4a28d4a7e8387b4e6044a4debee36dcb7fd5b8bf320"
+      },
+      {
+        "arm": "ordinary",
+        "wall_seconds": 0.123222,
+        "process_cpu_seconds": 0.11639,
+        "report_sha256": "898729f15a5c32d332a7c4a28d4a7e8387b4e6044a4debee36dcb7fd5b8bf320"
+      },
+      {
+        "arm": "retained",
+        "wall_seconds": 0.100572,
+        "process_cpu_seconds": 0.100005,
+        "report_sha256": "5468c9ef19813523e7d94305728ca964c20edbfec92cf0a5a9692707dc8c9ce5"
+      },
+      {
+        "arm": "retained",
+        "wall_seconds": 0.10679,
+        "process_cpu_seconds": 0.106542,
+        "report_sha256": "5468c9ef19813523e7d94305728ca964c20edbfec92cf0a5a9692707dc8c9ce5"
+      },
+      {
+        "arm": "ordinary",
+        "wall_seconds": 0.059166,
+        "process_cpu_seconds": 0.058844,
+        "report_sha256": "898729f15a5c32d332a7c4a28d4a7e8387b4e6044a4debee36dcb7fd5b8bf320"
+      }
+    ],
+    "outputs": {
+      "retained": {
+        "schema": "frontier/production-claim-evidence-v1",
+        "job": "game",
+        "decision": "PASS",
+        "page_sha256": {
+          "en": "d318ad9bb2fd251c677bd98271dba69dc2289f653bedd3f5a2bd60a98b9d22f9",
+          "fr": "2fb9657803988b9ccaaf1b062411ad9d3a4f44cfd267d18ee3955ca4a87a90ad"
+        },
+        "evidence_sha256": {
+          "game-receipt.json": "d973034163ed5dbb399198565ca239538cf7ad03d1633a87d018e774cc245b15",
+          "example-verification.json": "d190c0cd6ae2c4e49d2f174edcab034e1393de4bb27ae6fb9cee36e4f9ba18d0"
+        },
+        "claims": [
+          {
+            "id": "randomized-guarantee",
+            "language": "en",
+            "expected": "-49.5",
+            "found": "-49.5",
+            "evidence": "example-verification.json",
+            "receipt_locator": {
+              "path": [
+                "lower_numerator"
+              ],
+              "denominator": [
+                "denominator"
+              ]
+            },
+            "rendered_witness": "randomizing guarantees −49.5 versus a ",
+            "decision": "PASS"
+          },
+          {
+            "id": "randomized-guarantee",
+            "language": "fr",
+            "expected": "-49.5",
+            "found": "-49.5",
+            "evidence": "example-verification.json",
+            "receipt_locator": {
+              "path": [
+                "lower_numerator"
+              ],
+              "denominator": [
+                "denominator"
+              ]
+            },
+            "rendered_witness": "la stratégie aléatoire garantit −49,5, contre ",
+            "decision": "PASS"
+          },
+          {
+            "id": "nominal-worst-case",
+            "language": "en",
+            "expected": "-99",
+            "found": "-99",
+            "evidence": "game-receipt.json",
+            "receipt_locator": {
+              "path": [
+                "example",
+                "nominal_policy_worst_case"
+              ]
+            },
+            "rendered_witness": " versus a −99 worst case",
+            "decision": "PASS"
+          },
+          {
+            "id": "nominal-worst-case",
+            "language": "fr",
+            "expected": "-99",
+            "found": "-99",
+            "evidence": "game-receipt.json",
+            "receipt_locator": {
+              "path": [
+                "example",
+                "nominal_policy_worst_case"
+              ]
+            },
+            "rendered_witness": ", contre −99 dans le pire cas",
+            "decision": "PASS"
+          },
+          {
+            "id": "held-games",
+            "language": "en",
+            "expected": "6",
+            "found": "6",
+            "evidence": "game-receipt.json",
+            "receipt_locator": {
+              "path": [
+                "evaluation",
+                "candidate_qualified"
+              ]
+            },
+            "rendered_witness": ". six independently authored test games",
+            "decision": "PASS"
+          },
+          {
+            "id": "held-games",
+            "language": "fr",
+            "expected": "6",
+            "found": "6",
+            "evidence": "game-receipt.json",
+            "receipt_locator": {
+              "path": [
+                "evaluation",
+                "candidate_qualified"
+              ]
+            },
+            "rendered_witness": ". les six jeux d’essai conçus indépendamment",
+            "decision": "PASS"
+          },
+          {
+            "id": "max-pure-pairs",
+            "language": "en",
+            "expected": "211775256",
+            "found": "211775256",
+            "evidence": "game-receipt.json",
+            "receipt_locator": {
+              "path": [
+                "evaluation",
+                "cases"
+              ],
+              "max": [
+                "implicit_pairs"
+              ]
+            },
+            "rendered_witness": "including one with 211,775,256 possible action pairs",
+            "decision": "PASS"
+          },
+          {
+            "id": "max-pure-pairs",
+            "language": "fr",
+            "expected": "211775256",
+            "found": "211775256",
+            "evidence": "game-receipt.json",
+            "receipt_locator": {
+              "path": [
+                "evaluation",
+                "cases"
+              ],
+              "max": [
+                "implicit_pairs"
+              ]
+            },
+            "rendered_witness": "dont un comportant 211 775 256 paires d’actions possibles",
+            "decision": "PASS"
+          }
+        ],
+        "plan_sha256": "e8837ba26b4f5c42b86b35ed8bfb6c0485c1ef2cb9c020f21e3eb8f9df26f58e"
+      },
+      "ordinary": {
+        "claims": [
+          {
+            "id": "randomized-guarantee",
+            "language": "en",
+            "rendered_witness": "randomizing guarantees −49.5 versus a ",
+            "decision": "PASS"
+          },
+          {
+            "id": "nominal-worst-case",
+            "language": "en",
+            "rendered_witness": " versus a −99 worst case",
+            "decision": "PASS"
+          },
+          {
+            "id": "held-games",
+            "language": "en",
+            "rendered_witness": ". Six independently authored test games",
+            "decision": "PASS"
+          },
+          {
+            "id": "max-pure-pairs",
+            "language": "en",
+            "rendered_witness": "including one with 211,775,256 possible action pairs",
+            "decision": "PASS"
+          },
+          {
+            "id": "randomized-guarantee",
+            "language": "fr",
+            "rendered_witness": "la stratégie aléatoire garantit −49,5, contre ",
+            "decision": "PASS"
+          },
+          {
+            "id": "nominal-worst-case",
+            "language": "fr",
+            "rendered_witness": ", contre −99 dans le pire cas",
+            "decision": "PASS"
+          },
+          {
+            "id": "held-games",
+            "language": "fr",
+            "rendered_witness": ". Les six jeux d’essai conçus indépendamment",
+            "decision": "PASS"
+          },
+          {
+            "id": "max-pure-pairs",
+            "language": "fr",
+            "rendered_witness": "dont un comportant 211 775 256 paires d’actions possibles",
+            "decision": "PASS"
+          }
+        ],
+        "decision": "PASS",
+        "evidence_sha256": {
+          "game-receipt.json": "d973034163ed5dbb399198565ca239538cf7ad03d1633a87d018e774cc245b15",
+          "example-verification.json": "d190c0cd6ae2c4e49d2f174edcab034e1393de4bb27ae6fb9cee36e4f9ba18d0"
+        },
+        "page_sha256": {
+          "en": "d318ad9bb2fd251c677bd98271dba69dc2289f653bedd3f5a2bd60a98b9d22f9",
+          "fr": "2fb9657803988b9ccaaf1b062411ad9d3a4f44cfd267d18ee3955ca4a87a90ad"
+        }
+      }
+    }
+  },
+  "repeat": {
+    "capture": {
+      "schema": "frontier/production-claim-capture-v1",
+      "job": "opportunity",
+      "source_commit": "8944f51db7b8e7fce8630503046c2a257cf62e44",
+      "workflow_run": "45532943859",
+      "ledger_sha256": "4b1b271f6d818a37c94e0d5f7866c5f68f4eda99be8460cbf21807bcd90906c0",
+      "elapsed_seconds": 10.750575,
+      "requests": {
+        "release-initial.json": {
+          "url": "https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/frontier-omega-alpha/atlas-release.json",
+          "sha256": "cb057d54effee721cf4346d5cea10618fd3156da52cf642217273ec8ed7f3d80",
+          "bytes": 3867,
+          "date": "Wed, 25 Nov 2026 02:35:18 GMT",
+          "acquired_at_utc": "2026-11-25T02:35:18.179216+00:00",
+          "elapsed_seconds": 4.063006
+        },
+        "index.html": {
+          "url": "https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/frontier-omega-alpha/",
+          "sha256": "d318ad9bb2fd251c677bd98271dba69dc2289f653bedd3f5a2bd60a98b9d22f9",
+          "bytes": 379423,
+          "date": "Wed, 25 Nov 2026 02:35:21 GMT",
+          "acquired_at_utc": "2026-11-25T02:35:21.084159+00:00",
+          "elapsed_seconds": 2.904181
+        },
+        "fr.html": {
+          "url": "https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/frontier-omega-alpha/fr.html",
+          "sha256": "2fb9657803988b9ccaaf1b062411ad9d3a4f44cfd267d18ee3955ca4a87a90ad",
+          "bytes": 404613,
+          "date": "Wed, 25 Nov 2026 02:35:21 GMT",
+          "acquired_at_utc": "2026-11-25T02:35:21.152522+00:00",
+          "elapsed_seconds": 2.972131
+        },
+        "radar-control.json": {
+          "url": "https://raw.githubusercontent.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/8944f51db7b8e7fce8630503046c2a257cf62e44/publication/opportunity/discovery/RADAR-CONTROL.json",
+          "sha256": "caeb0a4c8fdaa749aa1dc09d12263d518367d6430c906c25e9a8aef941f5e8d4",
+          "bytes": 32304,
+          "date": "Wed, 25 Nov 2026 02:35:21 GMT",
+          "acquired_at_utc": "2026-11-25T02:35:22.023780+00:00",
+          "elapsed_seconds": 3.841873
+        },
+        "hy-mt3.json": {
+          "url": "https://raw.githubusercontent.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/8944f51db7b8e7fce8630503046c2a257cf62e44/publication/opportunity/discovery/pilot-receipts/hy-mt3.json",
+          "sha256": "cec12cb2208f3ba92052789ba30576145e7501349ef905a5c1ee4390cbadff7c",
+          "bytes": 11236,
+          "date": "Wed, 25 Nov 2026 02:35:22 GMT",
+          "acquired_at_utc": "2026-11-25T02:35:22.134398+00:00",
+          "elapsed_seconds": 3.951784
+        },
+        "hy-mt2.json": {
+          "url": "https://raw.githubusercontent.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/8944f51db7b8e7fce8630503046c2a257cf62e44/publication/opportunity/discovery/pilot-receipts/hy-mt2.json",
+          "sha256": "23b137d84f91d554f2a1ad32542321142bd7471d940a69c26e32dbd98999fca9",
+          "bytes": 11423,
+          "date": "Wed, 25 Nov 2026 02:35:21 GMT",
+          "acquired_at_utc": "2026-11-25T02:35:22.031805+00:00",
+          "elapsed_seconds": 3.848839
+        },
+        "release-final.json": {
+          "url": "https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/frontier-omega-alpha/atlas-release.json",
+          "sha256": "cb057d54effee721cf4346d5cea10618fd3156da52cf642217273ec8ed7f3d80",
+          "bytes": 3867,
+          "date": "Wed, 25 Nov 2026 02:35:24 GMT",
+          "acquired_at_utc": "2026-11-25T02:35:24.864192+00:00",
+          "elapsed_seconds": 2.728798
+        }
+      },
+      "response_bytes": 846733
+    },
+    "plan_sha256": "095db49ccf02112f67924dc77e1da4e4b5fbc141d4d55da6e79fee00363734cd",
+    "arm_source_sha256": {
+      "retained": "099c25d466cd87bb6c723ca040a1ce016037c041a7cc65b7d0359c7548ff426b",
+      "ordinary": "89cdf9efae4a0f64fe182c69701111f406e2a85caabb7178b52306358d17610a"
+    },
+    "timing": {
+      "retained": {
+        "median_local_wall_seconds": 0.099432,
+        "median_local_cpu_seconds": 0.099194,
+        "common_capture_plus_local_wall_seconds": 10.850007,
+        "capture_response_bytes": 846733
+      },
+      "ordinary": {
+        "median_local_wall_seconds": 0.061764,
+        "median_local_cpu_seconds": 0.061494,
+        "common_capture_plus_local_wall_seconds": 10.812339,
+        "capture_response_bytes": 846733
+      }
+    },
+    "samples": [
+      {
+        "arm": "retained",
+        "wall_seconds": 0.108463,
+        "process_cpu_seconds": 0.106731,
+        "report_sha256": "f6391dd0a60a14a4f8c44dd6517fe1bb8946b65461dd60cbca095916de96a83a"
+      },
+      {
+        "arm": "ordinary",
+        "wall_seconds": 0.065659,
+        "process_cpu_seconds": 0.065358,
+        "report_sha256": "40dd67a89977571897d54a3619bfd4cc02a409840f0bd856504251abbe8dfd64"
+      },
+      {
+        "arm": "ordinary",
+        "wall_seconds": 0.073721,
+        "process_cpu_seconds": 0.073456,
+        "report_sha256": "40dd67a89977571897d54a3619bfd4cc02a409840f0bd856504251abbe8dfd64"
+      },
+      {
+        "arm": "retained",
+        "wall_seconds": 0.099432,
+        "process_cpu_seconds": 0.099194,
+        "report_sha256": "f6391dd0a60a14a4f8c44dd6517fe1bb8946b65461dd60cbca095916de96a83a"
+      },
+      {
+        "arm": "retained",
+        "wall_seconds": 0.101435,
+        "process_cpu_seconds": 0.101155,
+        "report_sha256": "f6391dd0a60a14a4f8c44dd6517fe1bb8946b65461dd60cbca095916de96a83a"
+      },
+      {
+        "arm": "ordinary",
+        "wall_seconds": 0.058215,
+        "process_cpu_seconds": 0.057956,
+        "report_sha256": "40dd67a89977571897d54a3619bfd4cc02a409840f0bd856504251abbe8dfd64"
+      },
+      {
+        "arm": "ordinary",
+        "wall_seconds": 0.061764,
+        "process_cpu_seconds": 0.061494,
+        "report_sha256": "40dd67a89977571897d54a3619bfd4cc02a409840f0bd856504251abbe8dfd64"
+      },
+      {
+        "arm": "retained",
+        "wall_seconds": 0.09628,
+        "process_cpu_seconds": 0.096019,
+        "report_sha256": "f6391dd0a60a14a4f8c44dd6517fe1bb8946b65461dd60cbca095916de96a83a"
+      },
+      {
+        "arm": "retained",
+        "wall_seconds": 0.098216,
+        "process_cpu_seconds": 0.097925,
+        "report_sha256": "f6391dd0a60a14a4f8c44dd6517fe1bb8946b65461dd60cbca095916de96a83a"
+      },
+      {
+        "arm": "ordinary",
+        "wall_seconds": 0.05764,
+        "process_cpu_seconds": 0.057374,
+        "report_sha256": "40dd67a89977571897d54a3619bfd4cc02a409840f0bd856504251abbe8dfd64"
+      }
+    ],
+    "outputs": {
+      "retained": {
+        "schema": "frontier/production-claim-evidence-v1",
+        "job": "opportunity",
+        "decision": "PASS",
+        "page_sha256": {
+          "en": "d318ad9bb2fd251c677bd98271dba69dc2289f653bedd3f5a2bd60a98b9d22f9",
+          "fr": "2fb9657803988b9ccaaf1b062411ad9d3a4f44cfd267d18ee3955ca4a87a90ad"
+        },
+        "evidence_sha256": {
+          "radar-control.json": "caeb0a4c8fdaa749aa1dc09d12263d518367d6430c906c25e9a8aef941f5e8d4",
+          "hy-mt3.json": "cec12cb2208f3ba92052789ba30576145e7501349ef905a5c1ee4390cbadff7c",
+          "hy-mt2.json": "23b137d84f91d554f2a1ad32542321142bd7471d940a69c26e32dbd98999fca9"
+        },
+        "claims": [
+          {
+            "id": "montreal-records",
+            "language": "en",
+            "expected": "10",
+            "found": "10",
+            "evidence": "radar-control.json",
+            "receipt_locator": {
+              "path": [
+                "sites",
+                "montreal",
+                "nisar",
+                "query_hits"
+              ]
+            },
+            "rendered_witness": "shortlists cover 10 montréal",
+            "decision": "PASS"
+          },
+          {
+            "id": "montreal-records",
+            "language": "fr",
+            "expected": "10",
+            "found": "10",
+            "evidence": "radar-control.json",
+            "receipt_locator": {
+              "path": [
+                "sites",
+                "montreal",
+                "nisar",
+                "query_hits"
+              ]
+            },
+            "rendered_witness": "repéré 10 produits à montréal",
+            "decision": "PASS"
+          },
+          {
+            "id": "quebec-records",
+            "language": "en",
+            "expected": "11",
+            "found": "11",
+            "evidence": "radar-control.json",
+            "receipt_locator": {
+              "path": [
+                "sites",
+                "quebec-city",
+                "nisar",
+                "query_hits"
+              ]
+            },
+            "rendered_witness": "montréal and 11 québec city catalog",
+            "decision": "PASS"
+          },
+          {
+            "id": "quebec-records",
+            "language": "fr",
+            "expected": "11",
+            "found": "11",
+            "evidence": "radar-control.json",
+            "receipt_locator": {
+              "path": [
+                "sites",
+                "quebec-city",
+                "nisar",
+                "query_hits"
+              ]
+            },
+            "rendered_witness": "montréal et 11 à québec.",
+            "decision": "PASS"
+          },
+          {
+            "id": "montreal-early-reference",
+            "language": "en",
+            "expected": "4",
+            "found": "4",
+            "evidence": "radar-control.json",
+            "receipt_locator": {
+              "path": [
+                "sites",
+                "montreal",
+                "nisar",
+                "reference_before_window"
+              ]
+            },
+            "rendered_witness": ". four reference acquisitions at each point",
+            "decision": "PASS"
+          },
+          {
+            "id": "montreal-early-reference",
+            "language": "fr",
+            "expected": "4",
+            "found": "4",
+            "evidence": "radar-control.json",
+            "receipt_locator": {
+              "path": [
+                "sites",
+                "montreal",
+                "nisar",
+                "reference_before_window"
+              ]
+            },
+            "rendered_witness": "à chaque point, quatre acquisitions de référence",
+            "decision": "PASS"
+          },
+          {
+            "id": "quebec-early-reference",
+            "language": "en",
+            "expected": "4",
+            "found": "4",
+            "evidence": "radar-control.json",
+            "receipt_locator": {
+              "path": [
+                "sites",
+                "quebec-city",
+                "nisar",
+                "reference_before_window"
+              ]
+            },
+            "rendered_witness": ". four reference acquisitions at each point",
+            "decision": "PASS"
+          },
+          {
+            "id": "quebec-early-reference",
+            "language": "fr",
+            "expected": "4",
+            "found": "4",
+            "evidence": "radar-control.json",
+            "receipt_locator": {
+              "path": [
+                "sites",
+                "quebec-city",
+                "nisar",
+                "reference_before_window"
+              ]
+            },
+            "rendered_witness": "à chaque point, quatre acquisitions de référence",
+            "decision": "PASS"
+          },
+          {
+            "id": "new-model-anchors",
+            "language": "en",
+            "expected": "8",
+            "found": "8",
+            "evidence": "hy-mt3.json",
+            "receipt_locator": {
+              "path": [
+                "anchor_pass_by_use"
+              ],
+              "sum": true
+            },
+            "rendered_witness": "names and numbers in 8/",
+            "decision": "PASS"
+          },
+          {
+            "id": "new-model-anchors",
+            "language": "fr",
+            "expected": "8",
+            "found": "8",
+            "evidence": "hy-mt3.json",
+            "receipt_locator": {
+              "path": [
+                "anchor_pass_by_use"
+              ],
+              "sum": true
+            },
+            "rendered_witness": "noms et les chiffres attendus dans 8 passages sur ",
+            "decision": "PASS"
+          },
+          {
+            "id": "new-model-denominator",
+            "language": "en",
+            "expected": "8",
+            "found": "8",
+            "evidence": "hy-mt3.json",
+            "receipt_locator": {
+              "path": [
+                "rows"
+              ],
+              "count": true
+            },
+            "rendered_witness": "names and numbers in 8/8 passages",
+            "decision": "PASS"
+          },
+          {
+            "id": "new-model-denominator",
+            "language": "fr",
+            "expected": "8",
+            "found": "8",
+            "evidence": "hy-mt3.json",
+            "receipt_locator": {
+              "path": [
+                "rows"
+              ],
+              "count": true
+            },
+            "rendered_witness": "dans 8 passages sur 8, contre ",
+            "decision": "PASS"
+          },
+          {
+            "id": "prior-model-anchors",
+            "language": "en",
+            "expected": "7",
+            "found": "7",
+            "evidence": "hy-mt2.json",
+            "receipt_locator": {
+              "path": [
+                "anchor_pass_by_use"
+              ],
+              "sum": true
+            },
+            "rendered_witness": "previous model preserved them in 7/",
+            "decision": "PASS"
+          },
+          {
+            "id": "prior-model-anchors",
+            "language": "fr",
+            "expected": "7",
+            "found": "7",
+            "evidence": "hy-mt2.json",
+            "receipt_locator": {
+              "path": [
+                "anchor_pass_by_use"
+              ],
+              "sum": true
+            },
+            "rendered_witness": "contre 7 sur 8 pour le",
+            "decision": "PASS"
+          },
+          {
+            "id": "prior-model-denominator",
+            "language": "en",
+            "expected": "8",
+            "found": "8",
+            "evidence": "hy-mt2.json",
+            "receipt_locator": {
+              "path": [
+                "rows"
+              ],
+              "count": true
+            },
+            "rendered_witness": "previous model preserved them in 7/8.",
+            "decision": "PASS"
+          },
+          {
+            "id": "prior-model-denominator",
+            "language": "fr",
+            "expected": "8",
+            "found": "8",
+            "evidence": "hy-mt2.json",
+            "receipt_locator": {
+              "path": [
+                "rows"
+              ],
+              "count": true
+            },
+            "rendered_witness": "contre 7 sur 8 pour le modèle précédent",
+            "decision": "PASS"
+          }
+        ],
+        "plan_sha256": "095db49ccf02112f67924dc77e1da4e4b5fbc141d4d55da6e79fee00363734cd"
+      },
+      "ordinary": {
+        "claims": [
+          {
+            "id": "montreal-records",
+            "language": "en",
+            "rendered_witness": "shortlists cover 10 Montréal",
+            "decision": "PASS"
+          },
+          {
+            "id": "quebec-records",
+            "language": "en",
+            "rendered_witness": "Montréal and 11 Québec City catalog",
+            "decision": "PASS"
+          },
+          {
+            "id": "montreal-early-reference",
+            "language": "en",
+            "rendered_witness": ". Four reference acquisitions at each point",
+            "decision": "PASS"
+          },
+          {
+            "id": "quebec-early-reference",
+            "language": "en",
+            "rendered_witness": ". Four reference acquisitions at each point",
+            "decision": "PASS"
+          },
+          {
+            "id": "new-model-anchors",
+            "language": "en",
+            "rendered_witness": "names and numbers in 8/",
+            "decision": "PASS"
+          },
+          {
+            "id": "new-model-denominator",
+            "language": "en",
+            "rendered_witness": "names and numbers in 8/8 passages",
+            "decision": "PASS"
+          },
+          {
+            "id": "prior-model-anchors",
+            "language": "en",
+            "rendered_witness": "previous model preserved them in 7/",
+            "decision": "PASS"
+          },
+          {
+            "id": "prior-model-denominator",
+            "language": "en",
+            "rendered_witness": "previous model preserved them in 7/8.",
+            "decision": "PASS"
+          },
+          {
+            "id": "montreal-records",
+            "language": "fr",
+            "rendered_witness": "repéré 10 produits à Montréal",
+            "decision": "PASS"
+          },
+          {
+            "id": "quebec-records",
+            "language": "fr",
+            "rendered_witness": "Montréal et 11 à Québec.",
+            "decision": "PASS"
+          },
+          {
+            "id": "montreal-early-reference",
+            "language": "fr",
+            "rendered_witness": "À chaque point, quatre acquisitions de référence",
+            "decision": "PASS"
+          },
+          {
+            "id": "quebec-early-reference",
+            "language": "fr",
+            "rendered_witness": "À chaque point, quatre acquisitions de référence",
+            "decision": "PASS"
+          },
+          {
+            "id": "new-model-anchors",
+            "language": "fr",
+            "rendered_witness": "noms et les chiffres attendus dans 8 passages sur ",
+            "decision": "PASS"
+          },
+          {
+            "id": "new-model-denominator",
+            "language": "fr",
+            "rendered_witness": "dans 8 passages sur 8, contre ",
+            "decision": "PASS"
+          },
+          {
+            "id": "prior-model-anchors",
+            "language": "fr",
+            "rendered_witness": "contre 7 sur 8 pour le",
+            "decision": "PASS"
+          },
+          {
+            "id": "prior-model-denominator",
+            "language": "fr",
+            "rendered_witness": "contre 7 sur 8 pour le modèle précédent",
+            "decision": "PASS"
+          }
+        ],
+        "decision": "PASS",
+        "evidence_sha256": {
+          "radar-control.json": "caeb0a4c8fdaa749aa1dc09d12263d518367d6430c906c25e9a8aef941f5e8d4",
+          "hy-mt3.json": "cec12cb2208f3ba92052789ba30576145e7501349ef905a5c1ee4390cbadff7c",
+          "hy-mt2.json": "23b137d84f91d554f2a1ad32542321142bd7471d940a69c26e32dbd98999fca9"
+        },
+        "page_sha256": {
+          "en": "d318ad9bb2fd251c677bd98271dba69dc2289f653bedd3f5a2bd60a98b9d22f9",
+          "fr": "2fb9657803988b9ccaaf1b062411ad9d3a4f44cfd267d18ee3955ca4a87a90ad"
+        }
+      }
+    }
+  },
+  "controlled_failures": {
+    "reversed-payoff-sign": [
+      {
+        "arm": "retained",
+        "wall_seconds": 0.094383,
+        "process_cpu_seconds": 0.094041,
+        "report_sha256": "477ab969a0c411ed9db0d1338d212d08f9a0c11e23d2e7a47f33c1a94a277717",
+        "report": {
+          "schema": "frontier/production-claim-evidence-v1",
+          "job": "game",
+          "decision": "HOLD",
+          "page_sha256": {
+            "en": "d318ad9bb2fd251c677bd98271dba69dc2289f653bedd3f5a2bd60a98b9d22f9",
+            "fr": "21b8d42352090a96f043851e80e26925bbce375a4dd063750ad6ea34e2573a88"
+          },
+          "evidence_sha256": {
+            "game-receipt.json": "d973034163ed5dbb399198565ca239538cf7ad03d1633a87d018e774cc245b15",
+            "example-verification.json": "d190c0cd6ae2c4e49d2f174edcab034e1393de4bb27ae6fb9cee36e4f9ba18d0"
+          },
+          "plan_sha256": "e8837ba26b4f5c42b86b35ed8bfb6c0485c1ef2cb9c020f21e3eb8f9df26f58e",
+          "held_claims": [
+            [
+              "randomized-guarantee",
+              "fr"
+            ]
+          ]
+        }
+      },
+      {
+        "arm": "ordinary",
+        "wall_seconds": 0.060072,
+        "process_cpu_seconds": 0.059798,
+        "report_sha256": "698ae1308dac9e191648e694614c1a0f0ca4753f447f0c8b1c86858b15b54960",
+        "report": {
+          "decision": "HOLD",
+          "evidence_sha256": {
+            "game-receipt.json": "d973034163ed5dbb399198565ca239538cf7ad03d1633a87d018e774cc245b15",
+            "example-verification.json": "d190c0cd6ae2c4e49d2f174edcab034e1393de4bb27ae6fb9cee36e4f9ba18d0"
+          },
+          "page_sha256": {
+            "en": "d318ad9bb2fd251c677bd98271dba69dc2289f653bedd3f5a2bd60a98b9d22f9",
+            "fr": "21b8d42352090a96f043851e80e26925bbce375a4dd063750ad6ea34e2573a88"
+          },
+          "held_claims": [
+            [
+              "randomized-guarantee",
+              "fr"
+            ]
+          ]
+        }
+      }
+    ],
+    "ambiguous-duplicate-mission": [
+      {
+        "arm": "retained",
+        "wall_seconds": 0.091,
+        "process_cpu_seconds": 0.090771,
+        "report_sha256": "2c071f2f4ea9cf02f36dab4b76dc9c6f7606ebca69494b98019179a3ae079cdd",
+        "report": {
+          "decision": "HOLD",
+          "reason": "game does not identify exactly one source fragment",
+          "held_claims": []
+        }
+      },
+      {
+        "arm": "ordinary",
+        "wall_seconds": 0.056724,
+        "process_cpu_seconds": 0.056469,
+        "report_sha256": "a78f547069d5b6175373b204b10517f3a63e5d584a8ee1991542edf4c3f7da42",
+        "report": {
+          "decision": "HOLD",
+          "reason": "ambiguous XPath match",
+          "held_claims": []
+        }
+      }
+    ],
+    "altered-authority": [
+      {
+        "arm": "retained",
+        "wall_seconds": 0.031638,
+        "process_cpu_seconds": 0.031406,
+        "report_sha256": "7c98dfbec40635db7d922cefd8a4d0fc0cb8b204de3f0c5c4866b1f6ea781e5a",
+        "report": {
+          "decision": "HOLD",
+          "reason": "source receipt mismatch for example-verification.json",
+          "held_claims": []
+        }
+      },
+      {
+        "arm": "ordinary",
+        "wall_seconds": 0.042784,
+        "process_cpu_seconds": 0.042505,
+        "report_sha256": "2ae1a5d5f186ece3fb2454963a8368a8ad130fee34dc7d4b5ae175292fdf6296",
+        "report": {
+          "decision": "HOLD",
+          "reason": "source receipt mismatch",
+          "held_claims": []
+        }
+      }
+    ],
+    "interchanged-site-counts": [
+      {
+        "arm": "retained",
+        "wall_seconds": 0.097893,
+        "process_cpu_seconds": 0.097645,
+        "report_sha256": "f0a7313b030328f331002036ed36cb0ed6fe16e0688ce8a414ee12c3edaffe1e",
+        "report": {
+          "schema": "frontier/production-claim-evidence-v1",
+          "job": "opportunity",
+          "decision": "HOLD",
+          "page_sha256": {
+            "en": "d318ad9bb2fd251c677bd98271dba69dc2289f653bedd3f5a2bd60a98b9d22f9",
+            "fr": "451e83a41ab67eed85d86093dda8d759035735c44738bc34893a6cccb8f75dbd"
+          },
+          "evidence_sha256": {
+            "radar-control.json": "caeb0a4c8fdaa749aa1dc09d12263d518367d6430c906c25e9a8aef941f5e8d4",
+            "hy-mt3.json": "cec12cb2208f3ba92052789ba30576145e7501349ef905a5c1ee4390cbadff7c",
+            "hy-mt2.json": "23b137d84f91d554f2a1ad32542321142bd7471d940a69c26e32dbd98999fca9"
+          },
+          "plan_sha256": "095db49ccf02112f67924dc77e1da4e4b5fbc141d4d55da6e79fee00363734cd",
+          "held_claims": [
+            [
+              "montreal-records",
+              "fr"
+            ],
+            [
+              "quebec-records",
+              "fr"
+            ]
+          ]
+        }
+      },
+      {
+        "arm": "ordinary",
+        "wall_seconds": 0.065554,
+        "process_cpu_seconds": 0.065184,
+        "report_sha256": "5d773129a20975fad6470887bb19d97ef9962f5a18c90f1e1f3338b15fe02338",
+        "report": {
+          "decision": "HOLD",
+          "evidence_sha256": {
+            "radar-control.json": "caeb0a4c8fdaa749aa1dc09d12263d518367d6430c906c25e9a8aef941f5e8d4",
+            "hy-mt3.json": "cec12cb2208f3ba92052789ba30576145e7501349ef905a5c1ee4390cbadff7c",
+            "hy-mt2.json": "23b137d84f91d554f2a1ad32542321142bd7471d940a69c26e32dbd98999fca9"
+          },
+          "page_sha256": {
+            "en": "d318ad9bb2fd251c677bd98271dba69dc2289f653bedd3f5a2bd60a98b9d22f9",
+            "fr": "451e83a41ab67eed85d86093dda8d759035735c44738bc34893a6cccb8f75dbd"
+          },
+          "held_claims": [
+            [
+              "montreal-records",
+              "fr"
+            ],
+            [
+              "quebec-records",
+              "fr"
+            ]
+          ]
+        }
+      }
+    ],
+    "changed-denominator": [
+      {
+        "arm": "retained",
+        "wall_seconds": 0.098706,
+        "process_cpu_seconds": 0.098411,
+        "report_sha256": "37f87bb3631804f3bffaf578cf2ac1f2f563cdf818ef6d104c20e28f18018410",
+        "report": {
+          "schema": "frontier/production-claim-evidence-v1",
+          "job": "opportunity",
+          "decision": "HOLD",
+          "page_sha256": {
+            "en": "d318ad9bb2fd251c677bd98271dba69dc2289f653bedd3f5a2bd60a98b9d22f9",
+            "fr": "eae54e48d889356970a2d9714460fb75864591a744548689c397d36f93c6226f"
+          },
+          "evidence_sha256": {
+            "radar-control.json": "caeb0a4c8fdaa749aa1dc09d12263d518367d6430c906c25e9a8aef941f5e8d4",
+            "hy-mt3.json": "cec12cb2208f3ba92052789ba30576145e7501349ef905a5c1ee4390cbadff7c",
+            "hy-mt2.json": "23b137d84f91d554f2a1ad32542321142bd7471d940a69c26e32dbd98999fca9"
+          },
+          "plan_sha256": "095db49ccf02112f67924dc77e1da4e4b5fbc141d4d55da6e79fee00363734cd",
+          "held_claims": [
+            [
+              "new-model-denominator",
+              "fr"
+            ]
+          ]
+        }
+      },
+      {
+        "arm": "ordinary",
+        "wall_seconds": 0.06074,
+        "process_cpu_seconds": 0.060392,
+        "report_sha256": "29a6370f76024d86fe3bef9097f3a10f26a61fc7fa36e39217dc42bd81e0e975",
+        "report": {
+          "decision": "HOLD",
+          "evidence_sha256": {
+            "radar-control.json": "caeb0a4c8fdaa749aa1dc09d12263d518367d6430c906c25e9a8aef941f5e8d4",
+            "hy-mt3.json": "cec12cb2208f3ba92052789ba30576145e7501349ef905a5c1ee4390cbadff7c",
+            "hy-mt2.json": "23b137d84f91d554f2a1ad32542321142bd7471d940a69c26e32dbd98999fca9"
+          },
+          "page_sha256": {
+            "en": "d318ad9bb2fd251c677bd98271dba69dc2289f653bedd3f5a2bd60a98b9d22f9",
+            "fr": "eae54e48d889356970a2d9714460fb75864591a744548689c397d36f93c6226f"
+          },
+          "held_claims": [
+            [
+              "new-model-denominator",
+              "fr"
+            ]
+          ]
+        }
+      }
+    ]
+  }
+}

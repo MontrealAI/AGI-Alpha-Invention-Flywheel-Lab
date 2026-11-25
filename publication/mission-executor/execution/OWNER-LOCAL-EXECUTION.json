@@ -1,0 +1,724 @@
+{
+  "archive": {
+    "schema": "alpha-genesis-workflow-export/v1",
+    "state": {
+      "actions": 11,
+      "adversarial_cases": [],
+      "artifacts": {
+        "RUN_INSTRUMENT.py": {
+          "bytes": 15742,
+          "kind": "trusted_runner",
+          "sha256": "46d43d4a017f1d32fcd9e05b32316a6fffac27e1a9572ab9ffbbf87338f00322"
+        },
+        "data.csv": {
+          "bytes": 87,
+          "kind": "dataset",
+          "sha256": "13cc41cb59ec66c59ef54f9588fe1d0213eff51b6e350ef8e6aa3bc803da25ed"
+        },
+        "game_theory_model.json": {
+          "bytes": 266,
+          "kind": "instrument",
+          "sha256": "9721a11f33ee0bdc182cd043ef6cd063b81579d2b6aac1cf3ae9ccd6b191d079"
+        },
+        "game_theory_table.json": {
+          "bytes": 260,
+          "kind": "table_instrument",
+          "sha256": "5f60de638e2e30dae6ad409dc7b3412133b164ebf1334c4b20d6940a007beee0"
+        }
+      },
+      "capability_id": null,
+      "created_at": "2026-11-25T02:52:35.444420+00:00",
+      "epoch": 0,
+      "events": [
+        {
+          "at": "2026-11-25T02:52:35.444434+00:00",
+          "detail": {
+            "acceptance_source": "Operator-frozen conditions; independence is not inferred.",
+            "spec_hash": "0bd0448aa785087f81599d6b624f549e87261cd9ba84322f599db20d841f6b10"
+          },
+          "index": 0,
+          "kind": "created",
+          "previous": "0000000000000000000000000000000000000000000000000000000000000000",
+          "sha256": "c9bf84db6917923bacf7bd0b343fd6e4ed701592a590e5fa7e0915fa3a74b395"
+        },
+        {
+          "at": "2026-11-25T02:52:35.447809+00:00",
+          "detail": {
+            "model": "qwen3-8b-q4_k_m",
+            "provider": "llama-cpp",
+            "role": "builder",
+            "scope": "Waiting for selected service capacity; no model call or construction iteration consumed."
+          },
+          "index": 1,
+          "kind": "model_queued",
+          "previous": "c9bf84db6917923bacf7bd0b343fd6e4ed701592a590e5fa7e0915fa3a74b395",
+          "sha256": "8ff5c4e8db6c0bde3b4602196c46571666cd59d6ed530bc079bc6b777e7b15ff"
+        },
+        {
+          "at": "2026-11-25T02:52:35.449490+00:00",
+          "detail": {
+            "model": "qwen3-8b-q4_k_m",
+            "provider": "llama-cpp",
+            "role": "builder",
+            "run_id": "wf_2ccf323745c23cc00b6ab92d_fe9e69438424e439"
+          },
+          "index": 2,
+          "kind": "model_started",
+          "previous": "8ff5c4e8db6c0bde3b4602196c46571666cd59d6ed530bc079bc6b777e7b15ff",
+          "sha256": "193c299dddd3954e087edfb98bb6e960f12f1b5dfcd602e0c676366049b3b1d8"
+        },
+        {
+          "at": "2026-11-25T02:53:20.765473+00:00",
+          "detail": {
+            "cost": {
+              "accounted": 0.0,
+              "amount": 0.0,
+              "attempts": 1,
+              "basis": "reported_usage_at_user_rates",
+              "complete_cost_known": false,
+              "currency": "USD"
+            },
+            "model": "qwen3-8b-q4_k_m",
+            "provider": "llama-cpp",
+            "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+            "reported_model": "qwen3-8b-q4_k_m",
+            "requested_model": "qwen3-8b-q4_k_m",
+            "response_sha256": "d9c8f917e0e2be6a73582d08afd1826d5c34ae0f5b743c0e4d9ba0c9f7c49ed3",
+            "role": "builder",
+            "run_id": "wf_2ccf323745c23cc00b6ab92d_fe9e69438424e439",
+            "usage": {
+              "input_tokens": 758,
+              "output_tokens": 331
+            }
+          },
+          "index": 3,
+          "kind": "model_completed",
+          "previous": "193c299dddd3954e087edfb98bb6e960f12f1b5dfcd602e0c676366049b3b1d8",
+          "sha256": "2ffa1d48e5dfe94c1559db6caff04870a6251eb11335c660b0bfefde2af8bcaa"
+        },
+        {
+          "at": "2026-11-25T02:53:20.765528+00:00",
+          "detail": {
+            "proposed_actions": 3,
+            "summary": "Initialize the development environment with essential tools for building Frontier AI for Game Theory."
+          },
+          "index": 4,
+          "kind": "route_proposed",
+          "previous": "2ffa1d48e5dfe94c1559db6caff04870a6251eb11335c660b0bfefde2af8bcaa",
+          "sha256": "1afb0688700378e34e15c506358e65708928c0a5b5432a12e19c9488bd8bd948"
+        },
+        {
+          "at": "2026-11-25T02:53:20.768427+00:00",
+          "detail": {
+            "outcome": {
+              "action_id": "bd1a55f40b456e7425ab8d2db582c1aa57657a65eb54cc3edbbda44caf37e9b9",
+              "artifact": "game_theory_model.json",
+              "bytes": 490,
+              "kind": "instrument",
+              "operation_executed": true,
+              "run": "python3 RUN_INSTRUMENT.py game_theory_model.json input.json",
+              "sha256": "4c4a7559fbf480e911f853e19f89b6a9788a09e84598a697db3bea40f5abe995"
+            },
+            "tool": "construct_instrument"
+          },
+          "index": 5,
+          "kind": "tool_completed",
+          "previous": "1afb0688700378e34e15c506358e65708928c0a5b5432a12e19c9488bd8bd948",
+          "sha256": "fdf697be04a42f33e5db62a12e4447da7edcb6642f04c556bd50d69cf61069ab"
+        },
+        {
+          "at": "2026-11-25T02:53:20.770588+00:00",
+          "detail": {
+            "outcome": {
+              "action_id": "761cc5f888e4b870d2f0325df6446a0c9d15ad93cd210e6c70c3277cea1b3d2c",
+              "artifact": "data.csv",
+              "bytes": 87,
+              "kind": "dataset",
+              "operation_executed": true,
+              "sha256": "13cc41cb59ec66c59ef54f9588fe1d0213eff51b6e350ef8e6aa3bc803da25ed"
+            },
+            "tool": "write_dataset"
+          },
+          "index": 6,
+          "kind": "tool_completed",
+          "previous": "fdf697be04a42f33e5db62a12e4447da7edcb6642f04c556bd50d69cf61069ab",
+          "sha256": "3c53e5bf492cfdff642c6f88b90b878cd62ffff9d5d92c0b3b5eb4c450161aab"
+        },
+        {
+          "at": "2026-11-25T02:53:20.771973+00:00",
+          "detail": {
+            "proposal_fields": [
+              "input",
+              "name",
+              "tool"
+            ],
+            "reason": "Unsupported expression operation.",
+            "tool": "run_instrument"
+          },
+          "index": 7,
+          "kind": "tool_refused",
+          "previous": "3c53e5bf492cfdff642c6f88b90b878cd62ffff9d5d92c0b3b5eb4c450161aab",
+          "sha256": "7e12972763346e6d32be30215cd9f94dd547373ae1bdfa8fe8db899fa88ca442"
+        },
+        {
+          "at": "2026-11-25T02:53:20.772955+00:00",
+          "detail": {
+            "artifact_hashes": {
+              "RUN_INSTRUMENT.py": "46d43d4a017f1d32fcd9e05b32316a6fffac27e1a9572ab9ffbbf87338f00322",
+              "data.csv": "13cc41cb59ec66c59ef54f9588fe1d0213eff51b6e350ef8e6aa3bc803da25ed",
+              "game_theory_model.json": "4c4a7559fbf480e911f853e19f89b6a9788a09e84598a697db3bea40f5abe995"
+            },
+            "checks": [],
+            "passed": false,
+            "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification.",
+            "spec_hash": "0bd0448aa785087f81599d6b624f549e87261cd9ba84322f599db20d841f6b10"
+          },
+          "index": 8,
+          "kind": "verification",
+          "previous": "7e12972763346e6d32be30215cd9f94dd547373ae1bdfa8fe8db899fa88ca442",
+          "sha256": "68d95aea0b6b1019e19acaf40c48b1719cd493201ea163a9dcf1e48cc0516812"
+        },
+        {
+          "at": "2026-11-25T02:53:20.775766+00:00",
+          "detail": {
+            "model": "qwen3-8b-q4_k_m",
+            "provider": "llama-cpp",
+            "role": "builder",
+            "scope": "Waiting for selected service capacity; no model call or construction iteration consumed."
+          },
+          "index": 9,
+          "kind": "model_queued",
+          "previous": "68d95aea0b6b1019e19acaf40c48b1719cd493201ea163a9dcf1e48cc0516812",
+          "sha256": "9435c1665abfcda2980f719c574bde34454d37909500c32b6c0c1776f90355c5"
+        },
+        {
+          "at": "2026-11-25T02:53:20.778328+00:00",
+          "detail": {
+            "model": "qwen3-8b-q4_k_m",
+            "provider": "llama-cpp",
+            "role": "builder",
+            "run_id": "wf_2ccf323745c23cc00b6ab92d_edba2923f3a78ecb"
+          },
+          "index": 10,
+          "kind": "model_started",
+          "previous": "9435c1665abfcda2980f719c574bde34454d37909500c32b6c0c1776f90355c5",
+          "sha256": "840797a266fc5472286c244ebeedbd916828d7fc3c331e1062e113c0ad47024f"
+        },
+        {
+          "at": "2026-11-25T02:53:46.904966+00:00",
+          "detail": {
+            "cost": {
+              "accounted": 0.0,
+              "amount": 0.0,
+              "attempts": 1,
+              "basis": "reported_usage_at_user_rates",
+              "complete_cost_known": false,
+              "currency": "USD"
+            },
+            "model": "qwen3-8b-q4_k_m",
+            "provider": "llama-cpp",
+            "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+            "reported_model": "qwen3-8b-q4_k_m",
+            "requested_model": "qwen3-8b-q4_k_m",
+            "response_sha256": "ee1cbe95dba5e66e11c5dc01ae7c86dfe6fd76d187bacd58ab45682f37d380be",
+            "role": "builder",
+            "run_id": "wf_2ccf323745c23cc00b6ab92d_edba2923f3a78ecb",
+            "usage": {
+              "input_tokens": 1272,
+              "output_tokens": 170
+            }
+          },
+          "index": 11,
+          "kind": "model_completed",
+          "previous": "840797a266fc5472286c244ebeedbd916828d7fc3c331e1062e113c0ad47024f",
+          "sha256": "50d44f9ceb0eeb65ca228686779ad0ac4787488a417ae131b9e2b70549ba0125"
+        },
+        {
+          "at": "2026-11-25T02:53:46.905075+00:00",
+          "detail": {
+            "proposed_actions": 2,
+            "summary": "Construct and run a game theory model using the provided instrument and dataset."
+          },
+          "index": 12,
+          "kind": "route_proposed",
+          "previous": "50d44f9ceb0eeb65ca228686779ad0ac4787488a417ae131b9e2b70549ba0125",
+          "sha256": "865503e8a3e859ea963e9769f1037e852b4cbacb4634c7a71a9d41014a2bd674"
+        },
+        {
+          "at": "2026-11-25T02:53:46.905128+00:00",
+          "detail": {
+            "proposal_fields": [
+              "name",
+              "schema",
+              "sql",
+              "tool"
+            ],
+            "reason": "TABLE_ARTIFACT_NAME",
+            "tool": "construct_table"
+          },
+          "index": 13,
+          "kind": "tool_refused",
+          "previous": "865503e8a3e859ea963e9769f1037e852b4cbacb4634c7a71a9d41014a2bd674",
+          "sha256": "0931937741843acc071c49e8c72c82894407c5b21a93b50864f36262c8097475"
+        },
+        {
+          "at": "2026-11-25T02:53:46.909871+00:00",
+          "detail": {
+            "proposal_fields": [
+              "input",
+              "name",
+              "tool"
+            ],
+            "reason": "TABLE_ARTIFACT_NAME",
+            "tool": "run_table"
+          },
+          "index": 14,
+          "kind": "tool_refused",
+          "previous": "0931937741843acc071c49e8c72c82894407c5b21a93b50864f36262c8097475",
+          "sha256": "53596e7387ed0478a65e39ab0adf645480ab4c8a5a035a5ce39efdd785c0b1de"
+        },
+        {
+          "at": "2026-11-25T02:53:46.914184+00:00",
+          "detail": {
+            "artifact_hashes": {
+              "RUN_INSTRUMENT.py": "46d43d4a017f1d32fcd9e05b32316a6fffac27e1a9572ab9ffbbf87338f00322",
+              "data.csv": "13cc41cb59ec66c59ef54f9588fe1d0213eff51b6e350ef8e6aa3bc803da25ed",
+              "game_theory_model.json": "4c4a7559fbf480e911f853e19f89b6a9788a09e84598a697db3bea40f5abe995"
+            },
+            "checks": [],
+            "passed": false,
+            "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification.",
+            "spec_hash": "0bd0448aa785087f81599d6b624f549e87261cd9ba84322f599db20d841f6b10"
+          },
+          "index": 15,
+          "kind": "verification",
+          "previous": "53596e7387ed0478a65e39ab0adf645480ab4c8a5a035a5ce39efdd785c0b1de",
+          "sha256": "7778a781c740819dcb7b727f00371d10fdb044aea364818fabfdf1920f139723"
+        },
+        {
+          "at": "2026-11-25T02:53:46.918571+00:00",
+          "detail": {
+            "model": "qwen3-8b-q4_k_m",
+            "provider": "llama-cpp",
+            "role": "builder",
+            "scope": "Waiting for selected service capacity; no model call or construction iteration consumed."
+          },
+          "index": 16,
+          "kind": "model_queued",
+          "previous": "7778a781c740819dcb7b727f00371d10fdb044aea364818fabfdf1920f139723",
+          "sha256": "a9e69349c6984f3ec5e73fb8c93f84fafce18169e9248c23b1178d0ca2fe2d53"
+        },
+        {
+          "at": "2026-11-25T02:53:46.922351+00:00",
+          "detail": {
+            "model": "qwen3-8b-q4_k_m",
+            "provider": "llama-cpp",
+            "role": "builder",
+            "run_id": "wf_2ccf323745c23cc00b6ab92d_624416225d26ddfd"
+          },
+          "index": 17,
+          "kind": "model_started",
+          "previous": "a9e69349c6984f3ec5e73fb8c93f84fafce18169e9248c23b1178d0ca2fe2d53",
+          "sha256": "24ae9ca825292baddc6cbb1c0e73257a4cd5e752c0d8af94d289e148a388bca8"
+        },
+        {
+          "at": "2026-11-25T02:54:25.898760+00:00",
+          "detail": {
+            "cost": {
+              "accounted": 0.0,
+              "amount": 0.0,
+              "attempts": 1,
+              "basis": "reported_usage_at_user_rates",
+              "complete_cost_known": false,
+              "currency": "USD"
+            },
+            "model": "qwen3-8b-q4_k_m",
+            "provider": "llama-cpp",
+            "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+            "reported_model": "qwen3-8b-q4_k_m",
+            "requested_model": "qwen3-8b-q4_k_m",
+            "response_sha256": "ffc378e22a53163f0520e2cc8ef5b8527c4d7a6ad4053e06b0b72c4a2b24a4cd",
+            "role": "builder",
+            "run_id": "wf_2ccf323745c23cc00b6ab92d_624416225d26ddfd",
+            "usage": {
+              "input_tokens": 1329,
+              "output_tokens": 376
+            }
+          },
+          "index": 18,
+          "kind": "model_completed",
+          "previous": "24ae9ca825292baddc6cbb1c0e73257a4cd5e752c0d8af94d289e148a388bca8",
+          "sha256": "40d1fffb015ac769d4c0fb12b3e5aa1778de5919cafd07c008ee1751bc9f86fa"
+        },
+        {
+          "at": "2026-11-25T02:54:25.898821+00:00",
+          "detail": {
+            "proposed_actions": 4,
+            "summary": "Create a table-based instrument for game theory calculations and execute it on a synthetic dataset."
+          },
+          "index": 19,
+          "kind": "route_proposed",
+          "previous": "40d1fffb015ac769d4c0fb12b3e5aa1778de5919cafd07c008ee1751bc9f86fa",
+          "sha256": "06d199e4033a4c472e776a06a0f08c9722ab9b7c94e2eb89962a561f4a699d5f"
+        },
+        {
+          "at": "2026-11-25T02:54:25.951902+00:00",
+          "detail": {
+            "outcome": {
+              "action_id": "e92ffdbf1cd3eb64b50895f5e5d3daf19586c46afc8e4f34415ae63b51316026",
+              "artifact": "game_theory_table.json",
+              "bytes": 268,
+              "evaluator_sha256": "48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d",
+              "kind": "table_instrument",
+              "operation_executed": true,
+              "previous_sha256": null,
+              "qualification": "UNVERIFIED",
+              "sha256": "937d695d5c46e551f51614db39c35c35a257fadd0983aa11dc88ace66b0dd08a",
+              "sqlite_version": "3.53.1",
+              "status": "CANDIDATE_VALIDATED_ON_EMPTY_TABLES"
+            },
+            "tool": "construct_table"
+          },
+          "index": 20,
+          "kind": "tool_completed",
+          "previous": "06d199e4033a4c472e776a06a0f08c9722ab9b7c94e2eb89962a561f4a699d5f",
+          "sha256": "7022b1601b822b55d124ba740a2caac268af8b7d327d30042179f9107d8a9f97"
+        },
+        {
+          "at": "2026-11-25T02:54:26.001338+00:00",
+          "detail": {
+            "outcome": {
+              "action_id": "e3a0df39f14d819a7786de42b32441dd8ccc50691d81d6bdd15f0e0dd6ec6e52",
+              "artifact": "game_theory_table.json",
+              "artifact_sha256": "937d695d5c46e551f51614db39c35c35a257fadd0983aa11dc88ace66b0dd08a",
+              "dataset": null,
+              "evaluator_sha256": "48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d",
+              "input_origin": "MODEL_DEVELOPMENT_FIXTURE",
+              "input_sha256": "945fdc5bafa369a2a682fea74d04527365033ebd2a3102164d2089f7fe1ce178",
+              "operation_executed": true,
+              "output_sha256": "3b1f90e1d3f3ea6a0f82621d53372145babce9916fa37172ad2a700cf37f1a41",
+              "qualification": "UNVERIFIED",
+              "rows": [
+                [
+                  "A",
+                  "Cooperate",
+                  3
+                ],
+                [
+                  "A",
+                  "Defect",
+                  5
+                ],
+                [
+                  "B",
+                  "Cooperate",
+                  3
+                ],
+                [
+                  "B",
+                  "Defect",
+                  5
+                ]
+              ],
+              "sqlite_version": "3.53.1",
+              "status": "EXECUTED"
+            },
+            "tool": "run_table"
+          },
+          "index": 21,
+          "kind": "tool_completed",
+          "previous": "7022b1601b822b55d124ba740a2caac268af8b7d327d30042179f9107d8a9f97",
+          "sha256": "88e96a967512f0240ad8c9f6ddd876ddf4568786da8d996ac4d8d333b6e24073"
+        },
+        {
+          "at": "2026-11-25T02:54:26.004688+00:00",
+          "detail": {
+            "outcome": {
+              "action_id": "e7160e257310b2a2103de60b0b3a29b44a0b78dae9cf9ad641aca60d1fe84648",
+              "artifact": "game_theory_model.json",
+              "bytes": 266,
+              "kind": "instrument",
+              "operation_executed": true,
+              "run": "python3 RUN_INSTRUMENT.py game_theory_model.json input.json",
+              "sha256": "9721a11f33ee0bdc182cd043ef6cd063b81579d2b6aac1cf3ae9ccd6b191d079"
+            },
+            "tool": "construct_instrument"
+          },
+          "index": 22,
+          "kind": "tool_completed",
+          "previous": "88e96a967512f0240ad8c9f6ddd876ddf4568786da8d996ac4d8d333b6e24073",
+          "sha256": "a058f779ba992ea2617fa1249666e1237e354897a114eedbecbf57135f2f3b1d"
+        },
+        {
+          "at": "2026-11-25T02:54:26.006358+00:00",
+          "detail": {
+            "proposal_fields": [
+              "input",
+              "name",
+              "tool"
+            ],
+            "reason": "Input field root was not declared.",
+            "tool": "run_instrument"
+          },
+          "index": 23,
+          "kind": "tool_refused",
+          "previous": "a058f779ba992ea2617fa1249666e1237e354897a114eedbecbf57135f2f3b1d",
+          "sha256": "b3e710e4f7a864d01cbad980d47f37d0628f2858167c841b7eaba7acf2dd7150"
+        },
+        {
+          "at": "2026-11-25T02:54:26.007538+00:00",
+          "detail": {
+            "artifact_hashes": {
+              "RUN_INSTRUMENT.py": "46d43d4a017f1d32fcd9e05b32316a6fffac27e1a9572ab9ffbbf87338f00322",
+              "data.csv": "13cc41cb59ec66c59ef54f9588fe1d0213eff51b6e350ef8e6aa3bc803da25ed",
+              "game_theory_model.json": "9721a11f33ee0bdc182cd043ef6cd063b81579d2b6aac1cf3ae9ccd6b191d079",
+              "game_theory_table.json": "937d695d5c46e551f51614db39c35c35a257fadd0983aa11dc88ace66b0dd08a"
+            },
+            "checks": [],
+            "passed": false,
+            "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification.",
+            "spec_hash": "0bd0448aa785087f81599d6b624f549e87261cd9ba84322f599db20d841f6b10"
+          },
+          "index": 24,
+          "kind": "verification",
+          "previous": "b3e710e4f7a864d01cbad980d47f37d0628f2858167c841b7eaba7acf2dd7150",
+          "sha256": "21af666db27177bd8469b90135b2c70c7a2e03b55c5016b8d904a12f95ab2c5b"
+        },
+        {
+          "at": "2026-11-25T02:54:26.010495+00:00",
+          "detail": {
+            "model": "qwen3-8b-q4_k_m",
+            "provider": "llama-cpp",
+            "role": "builder",
+            "scope": "Waiting for selected service capacity; no model call or construction iteration consumed."
+          },
+          "index": 25,
+          "kind": "model_queued",
+          "previous": "21af666db27177bd8469b90135b2c70c7a2e03b55c5016b8d904a12f95ab2c5b",
+          "sha256": "cd039284057a9ce0e00c723590325b0193876b53c5ad1e1b23561cad28c92aa2"
+        },
+        {
+          "at": "2026-11-25T02:54:26.014368+00:00",
+          "detail": {
+            "model": "qwen3-8b-q4_k_m",
+            "provider": "llama-cpp",
+            "role": "builder",
+            "run_id": "wf_2ccf323745c23cc00b6ab92d_a5a69596dfa8ec2a"
+          },
+          "index": 26,
+          "kind": "model_started",
+          "previous": "cd039284057a9ce0e00c723590325b0193876b53c5ad1e1b23561cad28c92aa2",
+          "sha256": "9f1a2a2ee5c469004fd490b801ba3648fc4bc0459b36401be0ccf6ee709e3e21"
+        },
+        {
+          "at": "2026-11-25T02:55:14.064890+00:00",
+          "detail": {
+            "cost": {
+              "accounted": 0.0,
+              "amount": 0.0,
+              "attempts": 1,
+              "basis": "reported_usage_at_user_rates",
+              "complete_cost_known": false,
+              "currency": "USD"
+            },
+            "model": "qwen3-8b-q4_k_m",
+            "provider": "llama-cpp",
+            "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+            "reported_model": "qwen3-8b-q4_k_m",
+            "requested_model": "qwen3-8b-q4_k_m",
+            "response_sha256": "48ebdb144cb352b1e70c388891f4767360d654619d9dbe6f85241858f7c12bcb",
+            "role": "builder",
+            "run_id": "wf_2ccf323745c23cc00b6ab92d_a5a69596dfa8ec2a",
+            "usage": {
+              "input_tokens": 1892,
+              "output_tokens": 232
+            }
+          },
+          "index": 27,
+          "kind": "model_completed",
+          "previous": "9f1a2a2ee5c469004fd490b801ba3648fc4bc0459b36401be0ccf6ee709e3e21",
+          "sha256": "85b7251a4991c4a55ea971d547637d2208083c6b40a5dc80dc2a582dc39003e3"
+        },
+        {
+          "at": "2026-11-25T02:55:14.064942+00:00",
+          "detail": {
+            "proposed_actions": 2,
+            "summary": "Initialize and validate the game theory table instrument with a synthetic dataset for testing."
+          },
+          "index": 28,
+          "kind": "route_proposed",
+          "previous": "85b7251a4991c4a55ea971d547637d2208083c6b40a5dc80dc2a582dc39003e3",
+          "sha256": "84c2a2ed1cb5d373d28bb4f923a1a530c9ba9bb2a80450c1a8d2024d9956abfc"
+        },
+        {
+          "at": "2026-11-25T02:55:14.118533+00:00",
+          "detail": {
+            "outcome": {
+              "action_id": "46ca48f2a6e66907c9967001bf07fdde8ee575a4ddc69d3c585a4908e5a75fcc",
+              "artifact": "game_theory_table.json",
+              "bytes": 260,
+              "evaluator_sha256": "48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d",
+              "kind": "table_instrument",
+              "operation_executed": true,
+              "previous_sha256": "937d695d5c46e551f51614db39c35c35a257fadd0983aa11dc88ace66b0dd08a",
+              "qualification": "UNVERIFIED",
+              "sha256": "5f60de638e2e30dae6ad409dc7b3412133b164ebf1334c4b20d6940a007beee0",
+              "sqlite_version": "3.53.1",
+              "status": "CANDIDATE_VALIDATED_ON_EMPTY_TABLES"
+            },
+            "tool": "construct_table"
+          },
+          "index": 29,
+          "kind": "tool_completed",
+          "previous": "84c2a2ed1cb5d373d28bb4f923a1a530c9ba9bb2a80450c1a8d2024d9956abfc",
+          "sha256": "93adac144a0429f6144eb2f310e62c0722ee13bd05efc8da22911a5c41f75498"
+        },
+        {
+          "at": "2026-11-25T02:55:14.152408+00:00",
+          "detail": {
+            "outcome": {
+              "action_id": "f4deac3fd2e33b8b32a75b23983b659329c008fa60cfef86683a2cc7effc2130",
+              "artifact": "game_theory_table.json",
+              "artifact_sha256": "5f60de638e2e30dae6ad409dc7b3412133b164ebf1334c4b20d6940a007beee0",
+              "dataset": null,
+              "evaluator_sha256": "48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d",
+              "input_origin": "MODEL_DEVELOPMENT_FIXTURE",
+              "input_sha256": "8680f717b93745c25644d7cfaaa01918b3db2271627033b08032eee5ac2bbb2b",
+              "operation_executed": true,
+              "output_sha256": "3b1f90e1d3f3ea6a0f82621d53372145babce9916fa37172ad2a700cf37f1a41",
+              "qualification": "UNVERIFIED",
+              "rows": [
+                [
+                  "A",
+                  "Cooperate",
+                  3
+                ],
+                [
+                  "A",
+                  "Defect",
+                  5
+                ],
+                [
+                  "B",
+                  "Cooperate",
+                  3
+                ],
+                [
+                  "B",
+                  "Defect",
+                  5
+                ]
+              ],
+              "sqlite_version": "3.53.1",
+              "status": "EXECUTED"
+            },
+            "tool": "run_table"
+          },
+          "index": 30,
+          "kind": "tool_completed",
+          "previous": "93adac144a0429f6144eb2f310e62c0722ee13bd05efc8da22911a5c41f75498",
+          "sha256": "e9698402ff0c60564b1c714933f93184de22076bbee526e06680eb718f26db24"
+        },
+        {
+          "at": "2026-11-25T02:55:14.154091+00:00",
+          "detail": {
+            "artifact_hashes": {
+              "RUN_INSTRUMENT.py": "46d43d4a017f1d32fcd9e05b32316a6fffac27e1a9572ab9ffbbf87338f00322",
+              "data.csv": "13cc41cb59ec66c59ef54f9588fe1d0213eff51b6e350ef8e6aa3bc803da25ed",
+              "game_theory_model.json": "9721a11f33ee0bdc182cd043ef6cd063b81579d2b6aac1cf3ae9ccd6b191d079",
+              "game_theory_table.json": "5f60de638e2e30dae6ad409dc7b3412133b164ebf1334c4b20d6940a007beee0"
+            },
+            "checks": [],
+            "passed": false,
+            "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification.",
+            "spec_hash": "0bd0448aa785087f81599d6b624f549e87261cd9ba84322f599db20d841f6b10"
+          },
+          "index": 31,
+          "kind": "verification",
+          "previous": "e9698402ff0c60564b1c714933f93184de22076bbee526e06680eb718f26db24",
+          "sha256": "13ba2723c82363b55a3c8ec3eee31f8e20ff08b35b2a1454e28583deb8f0e51b"
+        },
+        {
+          "at": "2026-11-25T02:55:14.172082+00:00",
+          "detail": {
+            "reason": "Declared model-call allocation exhausted; no further inference dispatched."
+          },
+          "index": 32,
+          "kind": "stopped",
+          "previous": "13ba2723c82363b55a3c8ec3eee31f8e20ff08b35b2a1454e28583deb8f0e51b",
+          "sha256": "98904bbe92c5dc3d18ead41aa259801adfc773f723572be9ca880e0e7d6b7a44"
+        }
+      ],
+      "feedback": "Inspect actual tool receipts and revise as needed.",
+      "id": "wf_2ccf323745c23cc00b6ab92d",
+      "inflight": null,
+      "iteration": 4,
+      "model_call_limit": 4,
+      "model_calls": 4,
+      "phase": "builder",
+      "research": "",
+      "schema": "alpha-genesis-workflow/v1",
+      "spec": {
+        "acceptance": [],
+        "context": "",
+        "local_only": true,
+        "max_actions": 14,
+        "max_iterations": 4,
+        "max_operations": 10000,
+        "max_output_tokens": 900,
+        "mission": {
+          "expires_at": "2026-11-25T03:42:35.437207+00:00",
+          "language": "en",
+          "original_ambition": "Build Frontier AI for Game Theory.",
+          "requirements": {},
+          "schema": "frontier-universal-execution/v1"
+        },
+        "objective": "Build Frontier AI for Game Theory.",
+        "roles": {
+          "builder": {
+            "model": "qwen3-8b-q4_k_m",
+            "provider": "llama-cpp"
+          }
+        },
+        "strategy": "single-model",
+        "tool_permissions": [
+          "construct_instrument",
+          "read_artifact",
+          "run_instrument",
+          "write_dataset",
+          "write_document",
+          "assess_capability",
+          "assess_composition",
+          "construct_table",
+          "invoke_capability",
+          "run_table"
+        ]
+      },
+      "spec_hash": "0bd0448aa785087f81599d6b624f549e87261cd9ba84322f599db20d841f6b10",
+      "status": "exhausted",
+      "unadjudicated_counterexamples": [],
+      "updated_at": "2026-11-25T02:55:14.172082+00:00",
+      "verification": {
+        "artifact_hashes": {
+          "RUN_INSTRUMENT.py": "46d43d4a017f1d32fcd9e05b32316a6fffac27e1a9572ab9ffbbf87338f00322",
+          "data.csv": "13cc41cb59ec66c59ef54f9588fe1d0213eff51b6e350ef8e6aa3bc803da25ed",
+          "game_theory_model.json": "9721a11f33ee0bdc182cd043ef6cd063b81579d2b6aac1cf3ae9ccd6b191d079",
+          "game_theory_table.json": "5f60de638e2e30dae6ad409dc7b3412133b164ebf1334c4b20d6940a007beee0"
+        },
+        "checks": [],
+        "passed": false,
+        "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification.",
+        "spec_hash": "0bd0448aa785087f81599d6b624f549e87261cd9ba84322f599db20d841f6b10"
+      }
+    },
+    "files": {
+      "RUN_INSTRUMENT.py": "# SPDX-License-Identifier: Apache-2.0\n\"\"\"Portable bounded instrument evaluator. Never evaluates Python or shell source.\"\"\"\nfrom __future__ import annotations\n\nimport argparse\nimport ast\nimport hashlib\nfrom io import StringIO\nimport json\nimport math\nfrom pathlib import Path\nimport re\nimport tokenize\n\n\n# Pin source at this module's own load, before a later lazy GENESIS import.\nLOADED_SOURCE_SHA256 = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()\n\ndef finite(value, depth=0):\n    if depth > 32:\n        raise ValueError(\"Input nesting bound exceeded.\")\n    if isinstance(value, float) and not math.isfinite(value):\n        raise ValueError(\"Nonfinite numbers are not supported.\")\n    if type(value) in {int, float} and (type(value) is int or value.is_integer()) and abs(value) > 9007199254740991:\n        raise ValueError(\"Integer exceeds the exact portable numerical range.\")\n    if isinstance(value, (list, dict)):\n        for item in (value.values() if isinstance(value, dict) else value):\n            finite(item, depth + 1)\n    return value\n\n\ndef _json_equal(left, right):\n    \"\"\"Compare JSON values recursively without treating booleans as numbers.\"\"\"\n    if type(left) in {int, float} and type(right) in {int, float}:\n        return left == right\n    if type(left) is not type(right):\n        return False\n    if isinstance(left, list):\n        return len(left) == len(right) and all(_json_equal(a, b) for a, b in zip(left, right))\n    if isinstance(left, dict):\n        return set(left) == set(right) and all(_json_equal(left[key], right[key]) for key in left)\n    return left == right\n\n\n_BINARY = {ast.Add: \"add\", ast.Sub: \"sub\", ast.Mult: \"mul\", ast.Div: \"div\"}\n_COMPARISONS = {ast.Eq: \"eq\", ast.Lt: \"lt\", ast.LtE: \"lte\", ast.Gt: \"gt\", ast.GtE: \"gte\"}\n_FUNCTIONS = {\"abs\", \"min\", \"max\", \"sum\", \"count\", \"choose\"}\n_JSON_LITERALS = {\"true\": True, \"false\": False, \"null\": None}\n\n\ndef compile_formula(source, bindings):\n    \"\"\"Translate a small expression syntax to evaluator operations. Never compile Python bytecode.\"\"\"\n    if not isinstance(source, str) or not 0 < len(source) <= 1024:\n        raise ValueError(\"Formula text must be between 1 and 1024 characters.\")\n    source = source.strip()\n    if \"\\n\" in source or \"\\r\" in source:\n        raise ValueError(\"Each formula must fit on one line.\")\n    try:\n        if \"&&\" in source or \"||\" in source:\n            # Accept common boolean spellings only at operator tokens, never\n            # inside a literal or an identifier.\n            tokens = list(tokenize.generate_tokens(StringIO(source).readline))\n            aliases = {\"&\": \" and \", \"|\": \" or \"}\n            replacements = [(left.start[1], right.end[1], aliases[left.string])\n                            for left, right in zip(tokens, tokens[1:])\n                            if left.type == right.type == tokenize.OP and left.string in aliases\n                            and left.string == right.string and left.end == right.start]\n            for start, end, replacement in reversed(replacements):\n                source = source[:start] + replacement + source[end:]\n        expression = ast.parse(source, mode=\"eval\").body\n    except (SyntaxError, RecursionError, tokenize.TokenError) as error:\n        raise ValueError(\"Formula syntax is invalid.\") from error\n\n    def operation(name, *args):\n        return {\"op\": name, \"args\": list(args)}\n\n    def translate(node, depth=0):\n        if depth > 24:\n            raise ValueError(\"Formula nesting bound exhausted.\")\n        def child(value):\n            return translate(value, depth + 1)\n        if isinstance(node, ast.Constant) and type(node.value) in {type(None), bool, int, float, str}:\n            return finite(node.value)\n        if isinstance(node, ast.Name):\n            if node.id in _JSON_LITERALS:\n                return _JSON_LITERALS[node.id]\n            return {\"ref\" if node.id in bindings else \"field\": node.id}\n        if isinstance(node, ast.List):\n            return [child(item) for item in node.elts]\n        if isinstance(node, ast.BinOp) and type(node.op) in _BINARY:\n            return operation(_BINARY[type(node.op)], child(node.left), child(node.right))\n        if isinstance(node, ast.UnaryOp) and isinstance(node.op, (ast.Not, ast.USub)):\n            return operation(\"not\", child(node.operand)) if isinstance(node.op, ast.Not) else operation(\"sub\", 0, child(node.operand))\n        if isinstance(node, ast.BoolOp):\n            return operation(\"and\" if isinstance(node.op, ast.And) else \"or\", *(child(item) for item in node.values))\n        if isinstance(node, ast.Compare) and all(type(op) in _COMPARISONS for op in node.ops):\n            # Adjacent comparisons share the middle expression. Compiling it\n            # twice would expand nested chains exponentially before evaluation.\n            operands = [child(part) for part in (node.left, *node.comparators)]\n            terms = [operation(_COMPARISONS[type(op)], operands[i], operands[i + 1]) for i, op in enumerate(node.ops)]\n            return terms[0] if len(terms) == 1 else operation(\"and\", *terms)\n        if isinstance(node, ast.IfExp):\n            return operation(\"if\", child(node.test), child(node.body), child(node.orelse))\n        if isinstance(node, ast.Call) and isinstance(node.func, ast.Name) and node.func.id in _FUNCTIONS and not node.keywords:\n            return operation(\"if\" if node.func.id == \"choose\" else node.func.id, *(child(arg) for arg in node.args))\n        raise ValueError(\"Formula uses an unsupported expression or function.\")\n\n    return translate(expression)\n\n\ndef evaluate(spec, inputs, max_operations=10000):\n    \"\"\"Evaluate a JSON expression grammar, with no IO or dynamic code execution.\"\"\"\n    allowed_keys = {\"name\", \"inputs\", \"outputs\", \"description\", \"conditions\", \"limitations\", \"bindings\"}\n    if not isinstance(spec, dict):\n        kind = {type(None): \"null\", bool: \"boolean\", int: \"number\", float: \"number\", str: \"string\", list: \"array\"}.get(type(spec), \"non-JSON type\")\n        raise ValueError(\"Unsupported instrument specification. Expected a JSON object at the root; received \" + kind + \".\")\n    unsupported_keys = set(spec) - allowed_keys\n    if unsupported_keys:\n        names = sorted(key for key in unsupported_keys if isinstance(key, str))\n        # Names are untrusted too: escape controls, bound size, and never render values.\n        shown = [key if len(key) <= 64 else key[:64] + \"...[truncated]\" for key in names[:8]]\n        details = json.dumps(shown)\n        if len(names) > len(shown):\n            details += \" (\" + str(len(names) - len(shown)) + \" additional key names omitted)\"\n        if len(unsupported_keys) != len(names):\n            details += \"; \" + str(len(unsupported_keys) - len(names)) + \" <non-string key> entries\"\n        raise ValueError(\"Unsupported instrument specification. Unsupported top-level keys: \" + details\n                         + \". Allowed top-level keys: \" + json.dumps(sorted(allowed_keys))\n                         + '. Named calculations belong inside the \"outputs\" object, not at the instrument root.')\n    if not isinstance(spec.get(\"inputs\"), list) or any(not isinstance(k, str) for k in spec[\"inputs\"]):\n        raise ValueError(\"Instrument inputs must be field names.\")\n    if not isinstance(inputs, dict) or any(k not in inputs for k in spec[\"inputs\"]):\n        raise ValueError(\"A declared instrument input is missing.\")\n    if not isinstance(spec.get(\"outputs\"), dict) or not spec[\"outputs\"]:\n        raise ValueError(\"An instrument needs named output expressions.\")\n    if type(max_operations) is not int or max_operations < 1:\n        raise ValueError(\"A positive operation bound is required.\")\n    bindings = spec.get(\"bindings\", {})\n    if not isinstance(bindings, dict) or len(bindings) > 128 or any(\n        not isinstance(key, str) or re.fullmatch(r\"[A-Za-z][A-Za-z0-9_]{0,63}\", key) is None for key in bindings\n    ):\n        raise ValueError(\"Instrument bindings require up to 128 simple names.\")\n    resolved, resolving, compiled = {}, set(), {}\n    count = 0\n\n    def number(v):\n        if type(v) not in {int, float}:\n            raise ValueError(\"Arithmetic requires numeric operands.\")\n        return finite(v)\n\n    def visit(value, depth=0, location=\"$\"):\n        nonlocal count\n        count += 1\n        if count > max_operations or depth > 32:\n            raise ValueError(\"Instrument operation or nesting bound exhausted.\")\n        if value is None or type(value) in {str, int, float, bool}:\n            return finite(value)\n        if isinstance(value, list):\n            return [visit(v, depth + 1, f\"{location}[{index}]\") for index, v in enumerate(value)]\n        if not isinstance(value, dict):\n            raise ValueError(\"Only JSON expressions are supported.\")\n        if set(value) == {\"formula\"}:\n            source = value[\"formula\"]\n            if not isinstance(source, str):\n                raise ValueError(\"Formula text is required.\")\n            if source not in compiled:\n                compiled[source] = compile_formula(source, bindings)\n            return visit(compiled[source], depth + 1, location + \".formula\")\n        if set(value) == {\"ref\"}:\n            name = value[\"ref\"]\n            if not isinstance(name, str) or name not in bindings:\n                raise ValueError(\"Unknown instrument binding.\")\n            if name in resolving:\n                raise ValueError(\"Instrument bindings cannot reference a cycle.\")\n            if name not in resolved:\n                resolving.add(name)\n                try:\n                    resolved[name] = visit(bindings[name], depth + 1, \"$.bindings.\" + name)\n                finally:\n                    resolving.remove(name)\n            return resolved[name]\n        if set(value) == {\"field\"}:\n            path = value[\"field\"]\n            if not isinstance(path, str) or not path:\n                raise ValueError(\"Invalid input field.\")\n            if path.split(\".\")[0] not in spec[\"inputs\"]:\n                # A model once used {\"field\":\"2\"} for the number 2. Keep the\n                # evaluator fail-closed, but make its retry feedback actionable.\n                # Do not echo arbitrary untrusted field paths into model context.\n                if len(path) <= 32 and re.fullmatch(r\"-?(?:0|[1-9][0-9]*)(?:\\.[0-9]+)?(?:[eE][+-]?[0-9]+)?\", path):\n                    raise ValueError('Input field root was not declared. A numeric constant is a raw JSON number (for example 2), not {\"field\":\"2\"}. Only declared input names use {\"field\":\"name\"}.')\n                raise ValueError(\"Input field root was not declared.\")\n            at = inputs\n            for part in path.split(\".\"):\n                if part in {\"__proto__\", \"prototype\", \"constructor\"} or not isinstance(at, dict) or part not in at:\n                    raise ValueError(\"Missing or unsafe input field.\")\n                at = at[part]\n            return finite(at)\n        if set(value) != {\"op\", \"args\"} or not isinstance(value[\"args\"], list):\n            if set(value) in ({\"literal\"}, {\"value\"}, {\"const\"}):\n                raise ValueError(location + ': a literal is a raw JSON value (for example 7), not a literal/value/const object. Input references use exactly {\"field\":\"name\"}.')\n            raise ValueError(location + ': an operation must contain exactly \"op\" and an \"args\" array; received keys ' + \", \".join(sorted(map(str, value))) + \".\")\n        op, raw = value[\"op\"], value[\"args\"]\n        if op == \"if\":\n            if len(raw) != 3:\n                raise ValueError(\"if needs three operands.\")\n            cond = visit(raw[0], depth + 1, location + \".args[0]\")\n            if type(cond) is not bool:\n                raise ValueError(\"if condition must be boolean.\")\n            branch = 1 if cond else 2\n            return visit(raw[branch], depth + 1, f\"{location}.args[{branch}]\")\n        args = [visit(v, depth + 1, f\"{location}.args[{index}]\") for index, v in enumerate(raw)]\n        if op in {\"add\", \"mul\", \"min\", \"max\"}:\n            if not args:\n                raise ValueError(\"Arithmetic needs operands.\")\n            vals = [number(v) for v in args]\n            result = vals[0]\n            for val in vals[1:]:\n                result = finite(result + val if op == \"add\" else result * val if op == \"mul\" else min(result, val) if op == \"min\" else max(result, val))\n        elif op in {\"sub\", \"div\"}:\n            if len(args) != 2:\n                raise ValueError(\"Binary arithmetic needs two operands.\")\n            a, b = map(number, args)\n            if op == \"div\" and b == 0:\n                raise ValueError(\"Division by zero.\")\n            result = a - b if op == \"sub\" else a / b\n        elif op == \"abs\":\n            if len(args) != 1:\n                raise ValueError(\"abs needs one numeric operand.\")\n            result = abs(number(args[0]))\n        elif op in {\"eq\", \"lt\", \"lte\", \"gt\", \"gte\"}:\n            if len(args) != 2:\n                raise ValueError(\"Comparison needs two operands.\")\n            a, b = args\n            if op == \"eq\":\n                result = _json_equal(a, b)\n            else:\n                a, b = number(a), number(b)\n                result = a < b if op == \"lt\" else a <= b if op == \"lte\" else a > b if op == \"gt\" else a >= b\n        elif op in {\"and\", \"or\", \"not\"}:\n            if not args or any(type(v) is not bool for v in args) or (op == \"not\" and len(args) != 1):\n                raise ValueError(\"Boolean operation needs boolean operands.\")\n            result = all(args) if op == \"and\" else any(args) if op == \"or\" else not args[0]\n        elif op in {\"sum\", \"count\"}:\n            if len(args) != 1 or not isinstance(args[0], list):\n                raise ValueError(\"sum/count needs one array.\")\n            result = len(args[0]) if op == \"count\" else 0\n            if op == \"sum\":\n                for item in args[0]:\n                    count += 1\n                    if count > max_operations:\n                        raise ValueError(\"Instrument operation bound exhausted.\")\n                    result = finite(result + number(item))\n        else:\n            raise ValueError(\"Unsupported expression operation.\")\n        return finite(result)\n\n    finite(inputs)\n    result = {key: visit(expr, location=\"$.outputs[\" + json.dumps(key) + \"]\") for key, expr in spec[\"outputs\"].items()}\n    return {\"output\": result, \"operations\": count, \"scope\": \"Bounded declarative execution; acceptance must be checked separately.\"}\n\n\n\ndef strict_portable_json(raw):\n    \"\"\"Refuse ambiguous or nonstandard JSON before standalone artifact execution.\"\"\"\n    def unique_members(pairs):\n        result = {}\n        for key, value in pairs:\n            if key in result:\n                raise ValueError(\"Invalid JSON: duplicate object member.\")\n            result[key] = value\n        return result\n\n    def nonfinite_constant(_token):\n        raise ValueError(\"Invalid JSON: non-finite number token.\")\n\n    def finite_float(token):\n        value = float(token)\n        if not math.isfinite(value):\n            raise ValueError(\"Invalid JSON: floating-point overflow.\")\n        return value\n\n    return json.loads(raw, object_pairs_hook=unique_members,\n                      parse_constant=nonfinite_constant, parse_float=finite_float)\n\n\ndef main():\n    parser = argparse.ArgumentParser(description=__doc__)\n    parser.add_argument(\"instrument\", type=Path)\n    parser.add_argument(\"input\", type=Path)\n    parser.add_argument(\"--max-operations\", type=int, default=10000)\n    args = parser.parse_args()\n    print(json.dumps(evaluate(strict_portable_json(args.instrument.read_text()), strict_portable_json(args.input.read_text()), args.max_operations), ensure_ascii=False, allow_nan=False, indent=2))\n\n\nif __name__ == \"__main__\":\n    main()\n",
+      "data.csv": "player1_strategy,player2_strategy,payoff1,payoff2\r\n0,0,3,3\r\n0,1,0,5\r\n1,0,5,0\r\n1,1,1,1\r\n",
+      "game_theory_model.json": "{\n  \"inputs\": [\n    \"player\",\n    \"strategy\"\n  ],\n  \"name\": \"GameTheoryModel\",\n  \"outputs\": {\n    \"total_payoff\": {\n      \"args\": [\n        {\n          \"field\": \"payoff\"\n        },\n        {\n          \"field\": \"count\"\n        }\n      ],\n      \"op\": \"mul\"\n    }\n  }\n}",
+      "game_theory_table.json": "{\"evaluator_sha256\":\"48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d\",\"schema\":\"frontier/bounded-table-instrument-v1\",\"sql\":\"SELECT agent, action, score FROM events\",\"table_schema\":{\"events\":{\"action\":\"TEXT\",\"agent\":\"TEXT\",\"score\":\"INTEGER\"}}}"
+    },
+    "notice": "Contains your objective, context and artifacts. Inspect before sharing. No connector credentials or workspace integrity key included. Recorded verification is historical; recheck imported work.",
+    "sha256": "f614f7bf4aad571f47614439b78965824195798d3dbbf26ff294284b2df9628d"
+  },
+  "elapsed_seconds": 159.24049591799985
+}

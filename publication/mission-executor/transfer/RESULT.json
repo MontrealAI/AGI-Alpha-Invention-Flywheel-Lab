@@ -1,0 +1,3118 @@
+{
+  "accepted_cases": 3,
+  "accepted_quote_comparisons": 15,
+  "completed_at": "2026-11-25T03:02:25.220032+00:00",
+  "declared_speed_gate": "PASS",
+  "materially_faster_cases": 2,
+  "operating_scope": "Matched process-local computation and exact outcome checks. Includes optimizer initialization in the first sample and records method-order effects. Complete construction, integration, maintenance and financial costs remain unobserved.",
+  "outcomes": [
+    {
+      "first_certificates_independently_recomputed": {
+        "ordinary": {
+          "none": {
+            "certificate": {
+              "column": [
+                {
+                  "allocation": [
+                    1,
+                    0
+                  ],
+                  "mass": 500000000,
+                  "scenario": "warehouse-east"
+                },
+                {
+                  "allocation": [
+                    0,
+                    1
+                  ],
+                  "mass": 500000000,
+                  "scenario": "warehouse-west"
+                }
+              ],
+              "denominator": 1000000000,
+              "game_sha256": "1d4665550093332760d1e1af404e011ca69ec428e3d5f160a011a8730724b452",
+              "row": [
+                {
+                  "instrument": "none",
+                  "mass": 1000000000,
+                  "signals": {
+                    "blank": [
+                      {
+                        "allocation": [
+                          0,
+                          1
+                        ],
+                        "mass": 500000000
+                      },
+                      {
+                        "allocation": [
+                          1,
+                          0
+                        ],
+                        "mass": 500000000
+                      }
+                    ]
+                  }
+                }
+              ],
+              "schema": "frontier/costly-observation-certificate-v1"
+            },
+            "independent": {
+              "column_support": 2,
+              "lower": "-3",
+              "lower_best_adversary": {
+                "allocation": [
+                  1,
+                  0
+                ],
+                "scenario": "warehouse-east"
+              },
+              "row_instrument_count": 1,
+              "upper": "-3",
+              "upper_best_contingent_plan": {
+                "blank": [
+                  0,
+                  1
+                ]
+              },
+              "upper_best_instrument": "none",
+              "upper_by_instrument": {
+                "none": "-3"
+              },
+              "width": "0"
+            }
+          },
+          "probe": {
+            "certificate": {
+              "column": [
+                {
+                  "allocation": [
+                    1,
+                    0
+                  ],
+                  "mass": 875000000,
+                  "scenario": "warehouse-east"
+                },
+                {
+                  "allocation": [
+                    0,
+                    1
+                  ],
+                  "mass": 125000000,
+                  "scenario": "warehouse-west"
+                }
+              ],
+              "denominator": 1000000000,
+              "game_sha256": "b5357c285b099c550223f4796fe35963a2dced6d6d131ad8ee7ad6604b045e19",
+              "row": [
+                {
+                  "instrument": "probe",
+                  "mass": 1000000000,
+                  "signals": {
+                    "east": [
+                      {
+                        "allocation": [
+                          1,
+                          0
+                        ],
+                        "mass": 1000000000
+                      }
+                    ],
+                    "west": [
+                      {
+                        "allocation": [
+                          0,
+                          1
+                        ],
+                        "mass": 1000000000
+                      }
+                    ]
+                  }
+                }
+              ],
+              "schema": "frontier/costly-observation-certificate-v1"
+            },
+            "independent": {
+              "column_support": 2,
+              "lower": "-3/4",
+              "lower_best_adversary": {
+                "allocation": [
+                  1,
+                  0
+                ],
+                "scenario": "warehouse-east"
+              },
+              "row_instrument_count": 1,
+              "upper": "-3/4",
+              "upper_best_contingent_plan": {
+                "east": [
+                  1,
+                  0
+                ],
+                "west": [
+                  0,
+                  1
+                ]
+              },
+              "upper_best_instrument": "probe",
+              "upper_by_instrument": {
+                "probe": "-3/4"
+              },
+              "width": "0"
+            }
+          }
+        },
+        "retained": {
+          "none": {
+            "certificate": {
+              "column": [
+                {
+                  "allocation": [
+                    1,
+                    0
+                  ],
+                  "mass": 500000000,
+                  "scenario": "warehouse-east"
+                },
+                {
+                  "allocation": [
+                    0,
+                    1
+                  ],
+                  "mass": 500000000,
+                  "scenario": "warehouse-west"
+                }
+              ],
+              "denominator": 1000000000,
+              "game_sha256": "1d4665550093332760d1e1af404e011ca69ec428e3d5f160a011a8730724b452",
+              "row": [
+                {
+                  "instrument": "none",
+                  "mass": 1000000000,
+                  "signals": {
+                    "blank": [
+                      {
+                        "allocation": [
+                          0,
+                          1
+                        ],
+                        "mass": 500000000
+                      },
+                      {
+                        "allocation": [
+                          1,
+                          0
+                        ],
+                        "mass": 500000000
+                      }
+                    ]
+                  }
+                }
+              ],
+              "schema": "frontier/costly-observation-certificate-v1"
+            },
+            "independent": {
+              "column_support": 2,
+              "lower": "-3",
+              "lower_best_adversary": {
+                "allocation": [
+                  1,
+                  0
+                ],
+                "scenario": "warehouse-east"
+              },
+              "row_instrument_count": 1,
+              "upper": "-3",
+              "upper_best_contingent_plan": {
+                "blank": [
+                  0,
+                  1
+                ]
+              },
+              "upper_best_instrument": "none",
+              "upper_by_instrument": {
+                "none": "-3"
+              },
+              "width": "0"
+            }
+          },
+          "probe": {
+            "certificate": {
+              "column": [
+                {
+                  "allocation": [
+                    1,
+                    0
+                  ],
+                  "mass": 125000000,
+                  "scenario": "warehouse-east"
+                },
+                {
+                  "allocation": [
+                    0,
+                    1
+                  ],
+                  "mass": 875000000,
+                  "scenario": "warehouse-west"
+                }
+              ],
+              "denominator": 1000000000,
+              "game_sha256": "b5357c285b099c550223f4796fe35963a2dced6d6d131ad8ee7ad6604b045e19",
+              "row": [
+                {
+                  "instrument": "probe",
+                  "mass": 1000000000,
+                  "signals": {
+                    "east": [
+                      {
+                        "allocation": [
+                          1,
+                          0
+                        ],
+                        "mass": 1000000000
+                      }
+                    ],
+                    "west": [
+                      {
+                        "allocation": [
+                          0,
+                          1
+                        ],
+                        "mass": 1000000000
+                      }
+                    ]
+                  }
+                }
+              ],
+              "schema": "frontier/costly-observation-certificate-v1"
+            },
+            "independent": {
+              "column_support": 2,
+              "lower": "-3/4",
+              "lower_best_adversary": {
+                "allocation": [
+                  1,
+                  0
+                ],
+                "scenario": "warehouse-east"
+              },
+              "row_instrument_count": 1,
+              "upper": "-3/4",
+              "upper_best_contingent_plan": {
+                "east": [
+                  0,
+                  1
+                ],
+                "west": [
+                  0,
+                  1
+                ]
+              },
+              "upper_best_instrument": "probe",
+              "upper_by_instrument": {
+                "probe": "-3/4"
+              },
+              "width": "0"
+            }
+          }
+        }
+      },
+      "id": "opposed-two-lane",
+      "median": {
+        "ordinary": {
+          "cpu_s": 0.003624057000000014,
+          "wall_s": 0.003626813999744627
+        },
+        "retained": {
+          "cpu_s": 0.005469084000000013,
+          "wall_s": 0.005467313000281138
+        }
+      },
+      "repetitions": {
+        "ordinary": [
+          {
+            "cpu_s": 0.004204580999999985,
+            "fee_interval": [
+              "9/4",
+              "9/4"
+            ],
+            "forced": {
+              "none": {
+                "explicit_payoff_entries": 8,
+                "interval": [
+                  "-3",
+                  "-3"
+                ]
+              },
+              "probe": {
+                "explicit_payoff_entries": 16,
+                "interval": [
+                  "-3/4",
+                  "-3/4"
+                ]
+              }
+            },
+            "quoted_decisions": {
+              "0": "BUY",
+              "1": "BUY",
+              "1/2": "BUY",
+              "2": "BUY",
+              "3": "SKIP"
+            },
+            "wall_s": 0.004204683999887493
+          },
+          {
+            "cpu_s": 0.003312262999999982,
+            "fee_interval": [
+              "9/4",
+              "9/4"
+            ],
+            "forced": {
+              "none": {
+                "explicit_payoff_entries": 8,
+                "interval": [
+                  "-3",
+                  "-3"
+                ]
+              },
+              "probe": {
+                "explicit_payoff_entries": 16,
+                "interval": [
+                  "-3/4",
+                  "-3/4"
+                ]
+              }
+            },
+            "quoted_decisions": {
+              "0": "BUY",
+              "1": "BUY",
+              "1/2": "BUY",
+              "2": "BUY",
+              "3": "SKIP"
+            },
+            "wall_s": 0.0033152269998026895
+          },
+          {
+            "cpu_s": 0.0029104439999999565,
+            "fee_interval": [
+              "9/4",
+              "9/4"
+            ],
+            "forced": {
+              "none": {
+                "explicit_payoff_entries": 8,
+                "interval": [
+                  "-3",
+                  "-3"
+                ]
+              },
+              "probe": {
+                "explicit_payoff_entries": 16,
+                "interval": [
+                  "-3/4",
+                  "-3/4"
+                ]
+              }
+            },
+            "quoted_decisions": {
+              "0": "BUY",
+              "1": "BUY",
+              "1/2": "BUY",
+              "2": "BUY",
+              "3": "SKIP"
+            },
+            "wall_s": 0.002909465999891836
+          },
+          {
+            "cpu_s": 0.003624057000000014,
+            "fee_interval": [
+              "9/4",
+              "9/4"
+            ],
+            "forced": {
+              "none": {
+                "explicit_payoff_entries": 8,
+                "interval": [
+                  "-3",
+                  "-3"
+                ]
+              },
+              "probe": {
+                "explicit_payoff_entries": 16,
+                "interval": [
+                  "-3/4",
+                  "-3/4"
+                ]
+              }
+            },
+            "quoted_decisions": {
+              "0": "BUY",
+              "1": "BUY",
+              "1/2": "BUY",
+              "2": "BUY",
+              "3": "SKIP"
+            },
+            "wall_s": 0.003626813999744627
+          },
+          {
+            "cpu_s": 0.003744815999999984,
+            "fee_interval": [
+              "9/4",
+              "9/4"
+            ],
+            "forced": {
+              "none": {
+                "explicit_payoff_entries": 8,
+                "interval": [
+                  "-3",
+                  "-3"
+                ]
+              },
+              "probe": {
+                "explicit_payoff_entries": 16,
+                "interval": [
+                  "-3/4",
+                  "-3/4"
+                ]
+              }
+            },
+            "quoted_decisions": {
+              "0": "BUY",
+              "1": "BUY",
+              "1/2": "BUY",
+              "2": "BUY",
+              "3": "SKIP"
+            },
+            "wall_s": 0.0037433900001815346
+          },
+          {
+            "cpu_s": 0.003908710999999898,
+            "fee_interval": [
+              "9/4",
+              "9/4"
+            ],
+            "forced": {
+              "none": {
+                "explicit_payoff_entries": 8,
+                "interval": [
+                  "-3",
+                  "-3"
+                ]
+              },
+              "probe": {
+                "explicit_payoff_entries": 16,
+                "interval": [
+                  "-3/4",
+                  "-3/4"
+                ]
+              }
+            },
+            "quoted_decisions": {
+              "0": "BUY",
+              "1": "BUY",
+              "1/2": "BUY",
+              "2": "BUY",
+              "3": "SKIP"
+            },
+            "wall_s": 0.003914897999948153
+          },
+          {
+            "cpu_s": 0.0035073930000000253,
+            "fee_interval": [
+              "9/4",
+              "9/4"
+            ],
+            "forced": {
+              "none": {
+                "explicit_payoff_entries": 8,
+                "interval": [
+                  "-3",
+                  "-3"
+                ]
+              },
+              "probe": {
+                "explicit_payoff_entries": 16,
+                "interval": [
+                  "-3/4",
+                  "-3/4"
+                ]
+              }
+            },
+            "quoted_decisions": {
+              "0": "BUY",
+              "1": "BUY",
+              "1/2": "BUY",
+              "2": "BUY",
+              "3": "SKIP"
+            },
+            "wall_s": 0.0035563090000323427
+          }
+        ],
+        "retained": [
+          {
+            "cpu_s": 0.02763711000000002,
+            "fee_interval": [
+              "9/4",
+              "9/4"
+            ],
+            "forced": {
+              "none": {
+                "interval": [
+                  "-3",
+                  "-3"
+                ],
+                "sparse_nonzeros": 68,
+                "sparse_variables": 26
+              },
+              "probe": {
+                "interval": [
+                  "-3/4",
+                  "-3/4"
+                ],
+                "sparse_nonzeros": 97,
+                "sparse_variables": 34
+              }
+            },
+            "quoted_decisions": {
+              "0": "BUY",
+              "1": "BUY",
+              "1/2": "BUY",
+              "2": "BUY",
+              "3": "SKIP"
+            },
+            "wall_s": 0.014369830999839905
+          },
+          {
+            "cpu_s": 0.005158162000000077,
+            "fee_interval": [
+              "9/4",
+              "9/4"
+            ],
+            "forced": {
+              "none": {
+                "interval": [
+                  "-3",
+                  "-3"
+                ],
+                "sparse_nonzeros": 68,
+                "sparse_variables": 26
+              },
+              "probe": {
+                "interval": [
+                  "-3/4",
+                  "-3/4"
+                ],
+                "sparse_nonzeros": 97,
+                "sparse_variables": 34
+              }
+            },
+            "quoted_decisions": {
+              "0": "BUY",
+              "1": "BUY",
+              "1/2": "BUY",
+              "2": "BUY",
+              "3": "SKIP"
+            },
+            "wall_s": 0.005204327000228659
+          },
+          {
+            "cpu_s": 0.004939174999999962,
+            "fee_interval": [
+              "9/4",
+              "9/4"
+            ],
+            "forced": {
+              "none": {
+                "interval": [
+                  "-3",
+                  "-3"
+                ],
+                "sparse_nonzeros": 68,
+                "sparse_variables": 26
+              },
+              "probe": {
+                "interval": [
+                  "-3/4",
+                  "-3/4"
+                ],
+                "sparse_nonzeros": 97,
+                "sparse_variables": 34
+              }
+            },
+            "quoted_decisions": {
+              "0": "BUY",
+              "1": "BUY",
+              "1/2": "BUY",
+              "2": "BUY",
+              "3": "SKIP"
+            },
+            "wall_s": 0.004942283000218595
+          },
+          {
+            "cpu_s": 0.004959844999999907,
+            "fee_interval": [
+              "9/4",
+              "9/4"
+            ],
+            "forced": {
+              "none": {
+                "interval": [
+                  "-3",
+                  "-3"
+                ],
+                "sparse_nonzeros": 68,
+                "sparse_variables": 26
+              },
+              "probe": {
+                "interval": [
+                  "-3/4",
+                  "-3/4"
+                ],
+                "sparse_nonzeros": 97,
+                "sparse_variables": 34
+              }
+            },
+            "quoted_decisions": {
+              "0": "BUY",
+              "1": "BUY",
+              "1/2": "BUY",
+              "2": "BUY",
+              "3": "SKIP"
+            },
+            "wall_s": 0.004963836000115407
+          },
+          {
+            "cpu_s": 0.006424317000000013,
+            "fee_interval": [
+              "9/4",
+              "9/4"
+            ],
+            "forced": {
+              "none": {
+                "interval": [
+                  "-3",
+                  "-3"
+                ],
+                "sparse_nonzeros": 68,
+                "sparse_variables": 26
+              },
+              "probe": {
+                "interval": [
+                  "-3/4",
+                  "-3/4"
+                ],
+                "sparse_nonzeros": 97,
+                "sparse_variables": 34
+              }
+            },
+            "quoted_decisions": {
+              "0": "BUY",
+              "1": "BUY",
+              "1/2": "BUY",
+              "2": "BUY",
+              "3": "SKIP"
+            },
+            "wall_s": 0.006426424999972369
+          },
+          {
+            "cpu_s": 0.005990341000000066,
+            "fee_interval": [
+              "9/4",
+              "9/4"
+            ],
+            "forced": {
+              "none": {
+                "interval": [
+                  "-3",
+                  "-3"
+                ],
+                "sparse_nonzeros": 68,
+                "sparse_variables": 26
+              },
+              "probe": {
+                "interval": [
+                  "-3/4",
+                  "-3/4"
+                ],
+                "sparse_nonzeros": 97,
+                "sparse_variables": 34
+              }
+            },
+            "quoted_decisions": {
+              "0": "BUY",
+              "1": "BUY",
+              "1/2": "BUY",
+              "2": "BUY",
+              "3": "SKIP"
+            },
+            "wall_s": 0.005995826999878773
+          },
+          {
+            "cpu_s": 0.005469084000000013,
+            "fee_interval": [
+              "9/4",
+              "9/4"
+            ],
+            "forced": {
+              "none": {
+                "interval": [
+                  "-3",
+                  "-3"
+                ],
+                "sparse_nonzeros": 68,
+                "sparse_variables": 26
+              },
+              "probe": {
+                "interval": [
+                  "-3/4",
+                  "-3/4"
+                ],
+                "sparse_nonzeros": 97,
+                "sparse_variables": 34
+              }
+            },
+            "quoted_decisions": {
+              "0": "BUY",
+              "1": "BUY",
+              "1/2": "BUY",
+              "2": "BUY",
+              "3": "SKIP"
+            },
+            "wall_s": 0.005467313000281138
+          }
+        ]
+      },
+      "wall_retained_to_ordinary_ratio": 1.5074699173065134,
+      "without_observation": {
+        "fee_interval": [
+          "0",
+          "0"
+        ],
+        "proof": "Giving two copies of the same optimized no-signal contract yields identical certified minimax payoff for both. The difference is exactly zero. The blind baseline is solved in both arms.",
+        "quoted_decisions": {
+          "0": "UNRESOLVED_OR_TIE",
+          "1": "SKIP",
+          "1/2": "SKIP",
+          "2": "SKIP",
+          "3": "SKIP"
+        }
+      }
+    },
+    {
+      "first_certificates_independently_recomputed": {
+        "ordinary": {
+          "none": {
+            "certificate": {
+              "column": [
+                {
+                  "allocation": [
+                    3,
+                    0,
+                    0
+                  ],
+                  "mass": 90909091,
+                  "scenario": "priority-combine"
+                },
+                {
+                  "allocation": [
+                    0,
+                    0,
+                    4
+                  ],
+                  "mass": 416666667,
+                  "scenario": "priority-returns"
+                },
+                {
+                  "allocation": [
+                    1,
+                    0,
+                    3
+                  ],
+                  "mass": 310606060,
+                  "scenario": "priority-returns"
+                },
+                {
+                  "allocation": [
+                    2,
+                    0,
+                    2
+                  ],
+                  "mass": 53030303,
+                  "scenario": "priority-returns"
+                },
+                {
+                  "allocation": [
+                    3,
+                    0,
+                    1
+                  ],
+                  "mass": 128787879,
+                  "scenario": "priority-returns"
+                }
+              ],
+              "denominator": 1000000000,
+              "game_sha256": "330c8b72c013895c995bbf1d3d4b57bddce105bbce6a1ea660a491d6306ef84e",
+              "row": [
+                {
+                  "instrument": "none",
+                  "mass": 1000000000,
+                  "signals": {
+                    "blank": [
+                      {
+                        "allocation": [
+                          0,
+                          0,
+                          3
+                        ],
+                        "mass": 193181818
+                      },
+                      {
+                        "allocation": [
+                          1,
+                          0,
+                          2
+                        ],
+                        "mass": 193181818
+                      },
+                      {
+                        "allocation": [
+                          2,
+                          0,
+                          1
+                        ],
+                        "mass": 113636364
+                      },
+                      {
+                        "allocation": [
+                          2,
+                          1,
+                          0
+                        ],
+                        "mass": 465909091
+                      },
+                      {
+                        "allocation": [
+                          3,
+                          0,
+                          0
+                        ],
+                        "mass": 34090909
+                      }
+                    ]
+                  }
+                }
+              ],
+              "schema": "frontier/costly-observation-certificate-v1"
+            },
+            "independent": {
+              "column_support": 5,
+              "lower": "-1556818183/250000000",
+              "lower_best_adversary": {
+                "allocation": [
+                  2,
+                  0,
+                  2
+                ],
+                "scenario": "priority-returns"
+              },
+              "row_instrument_count": 1,
+              "upper": "-6227272721/1000000000",
+              "upper_best_contingent_plan": {
+                "blank": [
+                  1,
+                  0,
+                  2
+                ]
+              },
+              "upper_best_instrument": "none",
+              "upper_by_instrument": {
+                "none": "-6227272721/1000000000"
+              },
+              "width": "11/1000000000"
+            }
+          },
+          "probe": {
+            "certificate": {
+              "column": [
+                {
+                  "allocation": [
+                    0,
+                    0,
+                    4
+                  ],
+                  "mass": 433333333,
+                  "scenario": "priority-returns"
+                },
+                {
+                  "allocation": [
+                    1,
+                    0,
+                    3
+                  ],
+                  "mass": 366666667,
+                  "scenario": "priority-returns"
+                },
+                {
+                  "allocation": [
+                    2,
+                    0,
+                    2
+                  ],
+                  "mass": 33333333,
+                  "scenario": "priority-returns"
+                },
+                {
+                  "allocation": [
+                    3,
+                    0,
+                    1
+                  ],
+                  "mass": 166666667,
+                  "scenario": "priority-returns"
+                }
+              ],
+              "denominator": 1000000000,
+              "game_sha256": "2be53f5ccd7c956b5bd8e9447234adda33b8ad41041476fa2b7f020971d95ae0",
+              "row": [
+                {
+                  "instrument": "probe",
+                  "mass": 1000000000,
+                  "signals": {
+                    "busy": [
+                      {
+                        "allocation": [
+                          0,
+                          0,
+                          3
+                        ],
+                        "mass": 700000000
+                      },
+                      {
+                        "allocation": [
+                          2,
+                          0,
+                          1
+                        ],
+                        "mass": 300000000
+                      }
+                    ],
+                    "clear": [
+                      {
+                        "allocation": [
+                          0,
+                          0,
+                          3
+                        ],
+                        "mass": 58333333
+                      },
+                      {
+                        "allocation": [
+                          1,
+                          0,
+                          2
+                        ],
+                        "mass": 641666667
+                      },
+                      {
+                        "allocation": [
+                          2,
+                          1,
+                          0
+                        ],
+                        "mass": 300000000
+                      }
+                    ],
+                    "hold": [
+                      {
+                        "allocation": [
+                          0,
+                          0,
+                          3
+                        ],
+                        "mass": 86805556
+                      },
+                      {
+                        "allocation": [
+                          1,
+                          0,
+                          2
+                        ],
+                        "mass": 213194444
+                      },
+                      {
+                        "allocation": [
+                          2,
+                          0,
+                          1
+                        ],
+                        "mass": 58333333
+                      },
+                      {
+                        "allocation": [
+                          2,
+                          1,
+                          0
+                        ],
+                        "mass": 641666667
+                      }
+                    ]
+                  }
+                }
+              ],
+              "schema": "frontier/costly-observation-certificate-v1"
+            },
+            "independent": {
+              "column_support": 4,
+              "lower": "-2480000001/400000000",
+              "lower_best_adversary": {
+                "allocation": [
+                  3,
+                  0,
+                  1
+                ],
+                "scenario": "priority-returns"
+              },
+              "row_instrument_count": 1,
+              "upper": "-3099999999/500000000",
+              "upper_best_contingent_plan": {
+                "busy": [
+                  0,
+                  0,
+                  3
+                ],
+                "clear": [
+                  0,
+                  0,
+                  3
+                ],
+                "hold": [
+                  0,
+                  0,
+                  3
+                ]
+              },
+              "upper_best_instrument": "probe",
+              "upper_by_instrument": {
+                "probe": "-3099999999/500000000"
+              },
+              "width": "9/2000000000"
+            }
+          }
+        },
+        "retained": {
+          "none": {
+            "certificate": {
+              "column": [
+                {
+                  "allocation": [
+                    3,
+                    0,
+                    0
+                  ],
+                  "mass": 90909091,
+                  "scenario": "priority-combine"
+                },
+                {
+                  "allocation": [
+                    0,
+                    0,
+                    4
+                  ],
+                  "mass": 416666667,
+                  "scenario": "priority-returns"
+                },
+                {
+                  "allocation": [
+                    1,
+                    0,
+                    3
+                  ],
+                  "mass": 310606060,
+                  "scenario": "priority-returns"
+                },
+                {
+                  "allocation": [
+                    2,
+                    0,
+                    2
+                  ],
+                  "mass": 53030303,
+                  "scenario": "priority-returns"
+                },
+                {
+                  "allocation": [
+                    3,
+                    0,
+                    1
+                  ],
+                  "mass": 128787879,
+                  "scenario": "priority-returns"
+                }
+              ],
+              "denominator": 1000000000,
+              "game_sha256": "330c8b72c013895c995bbf1d3d4b57bddce105bbce6a1ea660a491d6306ef84e",
+              "row": [
+                {
+                  "instrument": "none",
+                  "mass": 1000000000,
+                  "signals": {
+                    "blank": [
+                      {
+                        "allocation": [
+                          0,
+                          0,
+                          3
+                        ],
+                        "mass": 193181818
+                      },
+                      {
+                        "allocation": [
+                          1,
+                          0,
+                          2
+                        ],
+                        "mass": 193181818
+                      },
+                      {
+                        "allocation": [
+                          2,
+                          0,
+                          1
+                        ],
+                        "mass": 113636364
+                      },
+                      {
+                        "allocation": [
+                          2,
+                          1,
+                          0
+                        ],
+                        "mass": 465909091
+                      },
+                      {
+                        "allocation": [
+                          3,
+                          0,
+                          0
+                        ],
+                        "mass": 34090909
+                      }
+                    ]
+                  }
+                }
+              ],
+              "schema": "frontier/costly-observation-certificate-v1"
+            },
+            "independent": {
+              "column_support": 5,
+              "lower": "-1556818183/250000000",
+              "lower_best_adversary": {
+                "allocation": [
+                  2,
+                  0,
+                  2
+                ],
+                "scenario": "priority-returns"
+              },
+              "row_instrument_count": 1,
+              "upper": "-6227272721/1000000000",
+              "upper_best_contingent_plan": {
+                "blank": [
+                  1,
+                  0,
+                  2
+                ]
+              },
+              "upper_best_instrument": "none",
+              "upper_by_instrument": {
+                "none": "-6227272721/1000000000"
+              },
+              "width": "11/1000000000"
+            }
+          },
+          "probe": {
+            "certificate": {
+              "column": [
+                {
+                  "allocation": [
+                    0,
+                    0,
+                    4
+                  ],
+                  "mass": 433333333,
+                  "scenario": "priority-returns"
+                },
+                {
+                  "allocation": [
+                    1,
+                    0,
+                    3
+                  ],
+                  "mass": 366666667,
+                  "scenario": "priority-returns"
+                },
+                {
+                  "allocation": [
+                    2,
+                    0,
+                    2
+                  ],
+                  "mass": 33333333,
+                  "scenario": "priority-returns"
+                },
+                {
+                  "allocation": [
+                    3,
+                    0,
+                    1
+                  ],
+                  "mass": 166666667,
+                  "scenario": "priority-returns"
+                }
+              ],
+              "denominator": 1000000000,
+              "game_sha256": "2be53f5ccd7c956b5bd8e9447234adda33b8ad41041476fa2b7f020971d95ae0",
+              "row": [
+                {
+                  "instrument": "probe",
+                  "mass": 1000000000,
+                  "signals": {
+                    "busy": [
+                      {
+                        "allocation": [
+                          2,
+                          1,
+                          0
+                        ],
+                        "mass": 1000000000
+                      }
+                    ],
+                    "clear": [
+                      {
+                        "allocation": [
+                          2,
+                          0,
+                          1
+                        ],
+                        "mass": 1000000000
+                      }
+                    ],
+                    "hold": [
+                      {
+                        "allocation": [
+                          0,
+                          0,
+                          3
+                        ],
+                        "mass": 266666667
+                      },
+                      {
+                        "allocation": [
+                          1,
+                          0,
+                          2
+                        ],
+                        "mass": 266666667
+                      },
+                      {
+                        "allocation": [
+                          2,
+                          0,
+                          1
+                        ],
+                        "mass": 50000000
+                      },
+                      {
+                        "allocation": [
+                          2,
+                          1,
+                          0
+                        ],
+                        "mass": 416666666
+                      }
+                    ]
+                  }
+                }
+              ],
+              "schema": "frontier/costly-observation-certificate-v1"
+            },
+            "independent": {
+              "column_support": 4,
+              "lower": "-2480000001/400000000",
+              "lower_best_adversary": {
+                "allocation": [
+                  0,
+                  0,
+                  4
+                ],
+                "scenario": "priority-returns"
+              },
+              "row_instrument_count": 1,
+              "upper": "-3099999999/500000000",
+              "upper_best_contingent_plan": {
+                "busy": [
+                  0,
+                  0,
+                  3
+                ],
+                "clear": [
+                  0,
+                  0,
+                  3
+                ],
+                "hold": [
+                  0,
+                  0,
+                  3
+                ]
+              },
+              "upper_best_instrument": "probe",
+              "upper_by_instrument": {
+                "probe": "-3099999999/500000000"
+              },
+              "width": "9/2000000000"
+            }
+          }
+        }
+      },
+      "id": "three-warehouse-states",
+      "median": {
+        "ordinary": {
+          "cpu_s": 0.020779557000000004,
+          "wall_s": 0.020790388000023086
+        },
+        "retained": {
+          "cpu_s": 0.011288921999999979,
+          "wall_s": 0.011297820999971009
+        }
+      },
+      "repetitions": {
+        "ordinary": [
+          {
+            "cpu_s": 0.03530485900000002,
+            "fee_interval": [
+              "54545437/2000000000",
+              "13636367/500000000"
+            ],
+            "forced": {
+              "none": {
+                "explicit_payoff_entries": 310,
+                "interval": [
+                  "-1556818183/250000000",
+                  "-6227272721/1000000000"
+                ]
+              },
+              "probe": {
+                "explicit_payoff_entries": 31000,
+                "interval": [
+                  "-2480000001/400000000",
+                  "-3099999999/500000000"
+                ]
+              }
+            },
+            "quoted_decisions": {
+              "0": "BUY",
+              "1": "SKIP",
+              "1/2": "SKIP",
+              "2": "SKIP",
+              "3": "SKIP"
+            },
+            "wall_s": 0.04904999400014276
+          },
+          {
+            "cpu_s": 0.020779557000000004,
+            "fee_interval": [
+              "54545437/2000000000",
+              "13636367/500000000"
+            ],
+            "forced": {
+              "none": {
+                "explicit_payoff_entries": 310,
+                "interval": [
+                  "-1556818183/250000000",
+                  "-6227272721/1000000000"
+                ]
+              },
+              "probe": {
+                "explicit_payoff_entries": 31000,
+                "interval": [
+                  "-2480000001/400000000",
+                  "-3099999999/500000000"
+                ]
+              }
+            },
+            "quoted_decisions": {
+              "0": "BUY",
+              "1": "SKIP",
+              "1/2": "SKIP",
+              "2": "SKIP",
+              "3": "SKIP"
+            },
+            "wall_s": 0.020790388000023086
+          },
+          {
+            "cpu_s": 0.01985000200000009,
+            "fee_interval": [
+              "54545437/2000000000",
+              "13636367/500000000"
+            ],
+            "forced": {
+              "none": {
+                "explicit_payoff_entries": 310,
+                "interval": [
+                  "-1556818183/250000000",
+                  "-6227272721/1000000000"
+                ]
+              },
+              "probe": {
+                "explicit_payoff_entries": 31000,
+                "interval": [
+                  "-2480000001/400000000",
+                  "-3099999999/500000000"
+                ]
+              }
+            },
+            "quoted_decisions": {
+              "0": "BUY",
+              "1": "SKIP",
+              "1/2": "SKIP",
+              "2": "SKIP",
+              "3": "SKIP"
+            },
+            "wall_s": 0.01991067499966448
+          },
+          {
+            "cpu_s": 0.019008258000000056,
+            "fee_interval": [
+              "54545437/2000000000",
+              "13636367/500000000"
+            ],
+            "forced": {
+              "none": {
+                "explicit_payoff_entries": 310,
+                "interval": [
+                  "-1556818183/250000000",
+                  "-6227272721/1000000000"
+                ]
+              },
+              "probe": {
+                "explicit_payoff_entries": 31000,
+                "interval": [
+                  "-2480000001/400000000",
+                  "-3099999999/500000000"
+                ]
+              }
+            },
+            "quoted_decisions": {
+              "0": "BUY",
+              "1": "SKIP",
+              "1/2": "SKIP",
+              "2": "SKIP",
+              "3": "SKIP"
+            },
+            "wall_s": 0.0190153180001289
+          },
+          {
+            "cpu_s": 0.01924912600000006,
+            "fee_interval": [
+              "54545437/2000000000",
+              "13636367/500000000"
+            ],
+            "forced": {
+              "none": {
+                "explicit_payoff_entries": 310,
+                "interval": [
+                  "-1556818183/250000000",
+                  "-6227272721/1000000000"
+                ]
+              },
+              "probe": {
+                "explicit_payoff_entries": 31000,
+                "interval": [
+                  "-2480000001/400000000",
+                  "-3099999999/500000000"
+                ]
+              }
+            },
+            "quoted_decisions": {
+              "0": "BUY",
+              "1": "SKIP",
+              "1/2": "SKIP",
+              "2": "SKIP",
+              "3": "SKIP"
+            },
+            "wall_s": 0.019261918000211153
+          },
+          {
+            "cpu_s": 0.024204095999999953,
+            "fee_interval": [
+              "54545437/2000000000",
+              "13636367/500000000"
+            ],
+            "forced": {
+              "none": {
+                "explicit_payoff_entries": 310,
+                "interval": [
+                  "-1556818183/250000000",
+                  "-6227272721/1000000000"
+                ]
+              },
+              "probe": {
+                "explicit_payoff_entries": 31000,
+                "interval": [
+                  "-2480000001/400000000",
+                  "-3099999999/500000000"
+                ]
+              }
+            },
+            "quoted_decisions": {
+              "0": "BUY",
+              "1": "SKIP",
+              "1/2": "SKIP",
+              "2": "SKIP",
+              "3": "SKIP"
+            },
+            "wall_s": 0.03797948000010365
+          },
+          {
+            "cpu_s": 0.029522114000000044,
+            "fee_interval": [
+              "54545437/2000000000",
+              "13636367/500000000"
+            ],
+            "forced": {
+              "none": {
+                "explicit_payoff_entries": 310,
+                "interval": [
+                  "-1556818183/250000000",
+                  "-6227272721/1000000000"
+                ]
+              },
+              "probe": {
+                "explicit_payoff_entries": 31000,
+                "interval": [
+                  "-2480000001/400000000",
+                  "-3099999999/500000000"
+                ]
+              }
+            },
+            "quoted_decisions": {
+              "0": "BUY",
+              "1": "SKIP",
+              "1/2": "SKIP",
+              "2": "SKIP",
+              "3": "SKIP"
+            },
+            "wall_s": 0.0295475380003154
+          }
+        ],
+        "retained": [
+          {
+            "cpu_s": 0.011148832999999914,
+            "fee_interval": [
+              "54545437/2000000000",
+              "13636367/500000000"
+            ],
+            "forced": {
+              "none": {
+                "interval": [
+                  "-1556818183/250000000",
+                  "-6227272721/1000000000"
+                ],
+                "sparse_nonzeros": 340,
+                "sparse_variables": 98
+              },
+              "probe": {
+                "interval": [
+                  "-2480000001/400000000",
+                  "-3099999999/500000000"
+                ],
+                "sparse_nonzeros": 598,
+                "sparse_variables": 158
+              }
+            },
+            "quoted_decisions": {
+              "0": "BUY",
+              "1": "SKIP",
+              "1/2": "SKIP",
+              "2": "SKIP",
+              "3": "SKIP"
+            },
+            "wall_s": 0.011151661999974749
+          },
+          {
+            "cpu_s": 0.011288921999999979,
+            "fee_interval": [
+              "54545437/2000000000",
+              "13636367/500000000"
+            ],
+            "forced": {
+              "none": {
+                "interval": [
+                  "-1556818183/250000000",
+                  "-6227272721/1000000000"
+                ],
+                "sparse_nonzeros": 340,
+                "sparse_variables": 98
+              },
+              "probe": {
+                "interval": [
+                  "-2480000001/400000000",
+                  "-3099999999/500000000"
+                ],
+                "sparse_nonzeros": 598,
+                "sparse_variables": 158
+              }
+            },
+            "quoted_decisions": {
+              "0": "BUY",
+              "1": "SKIP",
+              "1/2": "SKIP",
+              "2": "SKIP",
+              "3": "SKIP"
+            },
+            "wall_s": 0.011297820999971009
+          },
+          {
+            "cpu_s": 0.012554817000000051,
+            "fee_interval": [
+              "54545437/2000000000",
+              "13636367/500000000"
+            ],
+            "forced": {
+              "none": {
+                "interval": [
+                  "-1556818183/250000000",
+                  "-6227272721/1000000000"
+                ],
+                "sparse_nonzeros": 340,
+                "sparse_variables": 98
+              },
+              "probe": {
+                "interval": [
+                  "-2480000001/400000000",
+                  "-3099999999/500000000"
+                ],
+                "sparse_nonzeros": 598,
+                "sparse_variables": 158
+              }
+            },
+            "quoted_decisions": {
+              "0": "BUY",
+              "1": "SKIP",
+              "1/2": "SKIP",
+              "2": "SKIP",
+              "3": "SKIP"
+            },
+            "wall_s": 0.0125621429997409
+          },
+          {
+            "cpu_s": 0.01085824099999999,
+            "fee_interval": [
+              "54545437/2000000000",
+              "13636367/500000000"
+            ],
+            "forced": {
+              "none": {
+                "interval": [
+                  "-1556818183/250000000",
+                  "-6227272721/1000000000"
+                ],
+                "sparse_nonzeros": 340,
+                "sparse_variables": 98
+              },
+              "probe": {
+                "interval": [
+                  "-2480000001/400000000",
+                  "-3099999999/500000000"
+                ],
+                "sparse_nonzeros": 598,
+                "sparse_variables": 158
+              }
+            },
+            "quoted_decisions": {
+              "0": "BUY",
+              "1": "SKIP",
+              "1/2": "SKIP",
+              "2": "SKIP",
+              "3": "SKIP"
+            },
+            "wall_s": 0.010912682000252971
+          },
+          {
+            "cpu_s": 0.012250863999999972,
+            "fee_interval": [
+              "54545437/2000000000",
+              "13636367/500000000"
+            ],
+            "forced": {
+              "none": {
+                "interval": [
+                  "-1556818183/250000000",
+                  "-6227272721/1000000000"
+                ],
+                "sparse_nonzeros": 340,
+                "sparse_variables": 98
+              },
+              "probe": {
+                "interval": [
+                  "-2480000001/400000000",
+                  "-3099999999/500000000"
+                ],
+                "sparse_nonzeros": 598,
+                "sparse_variables": 158
+              }
+            },
+            "quoted_decisions": {
+              "0": "BUY",
+              "1": "SKIP",
+              "1/2": "SKIP",
+              "2": "SKIP",
+              "3": "SKIP"
+            },
+            "wall_s": 0.012303203000101348
+          },
+          {
+            "cpu_s": 0.01116584899999995,
+            "fee_interval": [
+              "54545437/2000000000",
+              "13636367/500000000"
+            ],
+            "forced": {
+              "none": {
+                "interval": [
+                  "-1556818183/250000000",
+                  "-6227272721/1000000000"
+                ],
+                "sparse_nonzeros": 340,
+                "sparse_variables": 98
+              },
+              "probe": {
+                "interval": [
+                  "-2480000001/400000000",
+                  "-3099999999/500000000"
+                ],
+                "sparse_nonzeros": 598,
+                "sparse_variables": 158
+              }
+            },
+            "quoted_decisions": {
+              "0": "BUY",
+              "1": "SKIP",
+              "1/2": "SKIP",
+              "2": "SKIP",
+              "3": "SKIP"
+            },
+            "wall_s": 0.011172272999829147
+          },
+          {
+            "cpu_s": 0.015602475999999976,
+            "fee_interval": [
+              "54545437/2000000000",
+              "13636367/500000000"
+            ],
+            "forced": {
+              "none": {
+                "interval": [
+                  "-1556818183/250000000",
+                  "-6227272721/1000000000"
+                ],
+                "sparse_nonzeros": 340,
+                "sparse_variables": 98
+              },
+              "probe": {
+                "interval": [
+                  "-2480000001/400000000",
+                  "-3099999999/500000000"
+                ],
+                "sparse_nonzeros": 598,
+                "sparse_variables": 158
+              }
+            },
+            "quoted_decisions": {
+              "0": "BUY",
+              "1": "SKIP",
+              "1/2": "SKIP",
+              "2": "SKIP",
+              "3": "SKIP"
+            },
+            "wall_s": 0.015611188999628212
+          }
+        ]
+      },
+      "wall_retained_to_ordinary_ratio": 0.5434155918570862,
+      "without_observation": {
+        "fee_interval": [
+          "0",
+          "0"
+        ],
+        "proof": "Giving two copies of the same optimized no-signal contract yields identical certified minimax payoff for both. The difference is exactly zero. The blind baseline is solved in both arms.",
+        "quoted_decisions": {
+          "0": "UNRESOLVED_OR_TIE",
+          "1": "SKIP",
+          "1/2": "SKIP",
+          "2": "SKIP",
+          "3": "SKIP"
+        }
+      }
+    },
+    {
+      "first_certificates_independently_recomputed": {
+        "ordinary": {
+          "none": {
+            "certificate": {
+              "column": [
+                {
+                  "allocation": [
+                    0,
+                    1,
+                    2,
+                    2
+                  ],
+                  "mass": 320512820,
+                  "scenario": "spread"
+                },
+                {
+                  "allocation": [
+                    0,
+                    2,
+                    3,
+                    0
+                  ],
+                  "mass": 46153846,
+                  "scenario": "spread"
+                },
+                {
+                  "allocation": [
+                    0,
+                    3,
+                    2,
+                    0
+                  ],
+                  "mass": 133333333,
+                  "scenario": "spread"
+                },
+                {
+                  "allocation": [
+                    2,
+                    1,
+                    2,
+                    0
+                  ],
+                  "mass": 43589744,
+                  "scenario": "spread"
+                },
+                {
+                  "allocation": [
+                    2,
+                    2,
+                    1,
+                    0
+                  ],
+                  "mass": 276923077,
+                  "scenario": "spread"
+                },
+                {
+                  "allocation": [
+                    1,
+                    0,
+                    0,
+                    2
+                  ],
+                  "mass": 89743590,
+                  "scenario": "concentrated"
+                },
+                {
+                  "allocation": [
+                    2,
+                    0,
+                    0,
+                    1
+                  ],
+                  "mass": 89743590,
+                  "scenario": "concentrated"
+                }
+              ],
+              "denominator": 1000000000,
+              "game_sha256": "7433d8e8dcabe62ca35138c5f3fff1c94156f040e152766b66a7158864c0337d",
+              "row": [
+                {
+                  "instrument": "none",
+                  "mass": 1000000000,
+                  "signals": {
+                    "blank": [
+                      {
+                        "allocation": [
+                          0,
+                          0,
+                          2,
+                          2
+                        ],
+                        "mass": 384615385
+                      },
+                      {
+                        "allocation": [
+                          1,
+                          0,
+                          2,
+                          1
+                        ],
+                        "mass": 76923077
+                      },
+                      {
+                        "allocation": [
+                          1,
+                          2,
+                          0,
+                          1
+                        ],
+                        "mass": 76923077
+                      },
+                      {
+                        "allocation": [
+                          2,
+                          0,
+                          0,
+                          2
+                        ],
+                        "mass": 76923077
+                      },
+                      {
+                        "allocation": [
+                          2,
+                          2,
+                          0,
+                          0
+                        ],
+                        "mass": 384615384
+                      }
+                    ]
+                  }
+                }
+              ],
+              "schema": "frontier/costly-observation-certificate-v1"
+            },
+            "independent": {
+              "column_support": 7,
+              "lower": "-2769230773/1000000000",
+              "lower_best_adversary": {
+                "allocation": [
+                  1,
+                  0,
+                  0,
+                  2
+                ],
+                "scenario": "concentrated"
+              },
+              "row_instrument_count": 1,
+              "upper": "-692307691/250000000",
+              "upper_best_contingent_plan": {
+                "blank": [
+                  2,
+                  0,
+                  0,
+                  2
+                ]
+              },
+              "upper_best_instrument": "none",
+              "upper_by_instrument": {
+                "none": "-692307691/250000000"
+              },
+              "width": "9/1000000000"
+            }
+          },
+          "probe": {
+            "certificate": {
+              "column": [
+                {
+                  "allocation": [
+                    2,
+                    0,
+                    0,
+                    2
+                  ],
+                  "mass": 257611241,
+                  "scenario": "overlap"
+                },
+                {
+                  "allocation": [
+                    0,
+                    2,
+                    1,
+                    2
+                  ],
+                  "mass": 151053864,
+                  "scenario": "spread"
+                },
+                {
+                  "allocation": [
+                    0,
+                    2,
+                    3,
+                    0
+                  ],
+                  "mass": 101873537,
+                  "scenario": "spread"
+                },
+                {
+                  "allocation": [
+                    0,
+                    3,
+                    2,
+                    0
+                  ],
+                  "mass": 220140515,
+                  "scenario": "spread"
+                },
+                {
+                  "allocation": [
+                    1,
+                    1,
+                    3,
+                    0
+                  ],
+                  "mass": 118266979,
+                  "scenario": "spread"
+                },
+                {
+                  "allocation": [
+                    2,
+                    1,
+                    1,
+                    1
+                  ],
+                  "mass": 118266979,
+                  "scenario": "spread"
+                },
+                {
+                  "allocation": [
+                    2,
+                    1,
+                    2,
+                    0
+                  ],
+                  "mass": 32786885,
+                  "scenario": "spread"
+                }
+              ],
+              "denominator": 1000000000,
+              "game_sha256": "f6f8f3ec9bf3d8c442516ce6116af3f8265f5058ef46567a15cf7464c43562af",
+              "row": [
+                {
+                  "instrument": "probe",
+                  "mass": 1000000000,
+                  "signals": {
+                    "high": [
+                      {
+                        "allocation": [
+                          0,
+                          0,
+                          3,
+                          1
+                        ],
+                        "mass": 10168467
+                      },
+                      {
+                        "allocation": [
+                          0,
+                          2,
+                          0,
+                          2
+                        ],
+                        "mass": 315705976
+                      },
+                      {
+                        "allocation": [
+                          0,
+                          2,
+                          2,
+                          0
+                        ],
+                        "mass": 114905190
+                      },
+                      {
+                        "allocation": [
+                          0,
+                          3,
+                          0,
+                          1
+                        ],
+                        "mass": 35498980
+                      },
+                      {
+                        "allocation": [
+                          1,
+                          0,
+                          2,
+                          1
+                        ],
+                        "mass": 162347964
+                      },
+                      {
+                        "allocation": [
+                          1,
+                          0,
+                          3,
+                          0
+                        ],
+                        "mass": 35498980
+                      },
+                      {
+                        "allocation": [
+                          1,
+                          3,
+                          0,
+                          0
+                        ],
+                        "mass": 10168467
+                      },
+                      {
+                        "allocation": [
+                          2,
+                          0,
+                          2,
+                          0
+                        ],
+                        "mass": 240887286
+                      },
+                      {
+                        "allocation": [
+                          2,
+                          2,
+                          0,
+                          0
+                        ],
+                        "mass": 74818690
+                      }
+                    ],
+                    "low": [
+                      {
+                        "allocation": [
+                          0,
+                          2,
+                          0,
+                          2
+                        ],
+                        "mass": 315705976
+                      },
+                      {
+                        "allocation": [
+                          1,
+                          2,
+                          0,
+                          1
+                        ],
+                        "mass": 20336934
+                      },
+                      {
+                        "allocation": [
+                          2,
+                          0,
+                          0,
+                          2
+                        ],
+                        "mass": 348251114
+                      },
+                      {
+                        "allocation": [
+                          2,
+                          0,
+                          2,
+                          0
+                        ],
+                        "mass": 315705976
+                      }
+                    ]
+                  }
+                }
+              ],
+              "schema": "frontier/costly-observation-certificate-v1"
+            },
+            "independent": {
+              "column_support": 7,
+              "lower": "-1346604217/500000000",
+              "lower_best_adversary": {
+                "allocation": [
+                  0,
+                  2,
+                  3,
+                  0
+                ],
+                "scenario": "spread"
+              },
+              "row_instrument_count": 1,
+              "upper": "-1346604213/500000000",
+              "upper_best_contingent_plan": {
+                "high": [
+                  0,
+                  3,
+                  0,
+                  1
+                ],
+                "low": [
+                  0,
+                  3,
+                  0,
+                  1
+                ]
+              },
+              "upper_best_instrument": "probe",
+              "upper_by_instrument": {
+                "probe": "-1346604213/500000000"
+              },
+              "width": "1/125000000"
+            }
+          }
+        },
+        "retained": {
+          "none": {
+            "certificate": {
+              "column": [
+                {
+                  "allocation": [
+                    0,
+                    1,
+                    2,
+                    2
+                  ],
+                  "mass": 43589744,
+                  "scenario": "spread"
+                },
+                {
+                  "allocation": [
+                    0,
+                    2,
+                    1,
+                    2
+                  ],
+                  "mass": 276923077,
+                  "scenario": "spread"
+                },
+                {
+                  "allocation": [
+                    0,
+                    2,
+                    3,
+                    0
+                  ],
+                  "mass": 46153846,
+                  "scenario": "spread"
+                },
+                {
+                  "allocation": [
+                    0,
+                    3,
+                    2,
+                    0
+                  ],
+                  "mass": 133333333,
+                  "scenario": "spread"
+                },
+                {
+                  "allocation": [
+                    2,
+                    1,
+                    2,
+                    0
+                  ],
+                  "mass": 320512821,
+                  "scenario": "spread"
+                },
+                {
+                  "allocation": [
+                    1,
+                    0,
+                    0,
+                    2
+                  ],
+                  "mass": 89743589,
+                  "scenario": "concentrated"
+                },
+                {
+                  "allocation": [
+                    2,
+                    0,
+                    0,
+                    1
+                  ],
+                  "mass": 89743590,
+                  "scenario": "concentrated"
+                }
+              ],
+              "denominator": 1000000000,
+              "game_sha256": "7433d8e8dcabe62ca35138c5f3fff1c94156f040e152766b66a7158864c0337d",
+              "row": [
+                {
+                  "instrument": "none",
+                  "mass": 1000000000,
+                  "signals": {
+                    "blank": [
+                      {
+                        "allocation": [
+                          0,
+                          2,
+                          0,
+                          2
+                        ],
+                        "mass": 384615385
+                      },
+                      {
+                        "allocation": [
+                          1,
+                          0,
+                          2,
+                          1
+                        ],
+                        "mass": 76923077
+                      },
+                      {
+                        "allocation": [
+                          1,
+                          2,
+                          0,
+                          1
+                        ],
+                        "mass": 76923077
+                      },
+                      {
+                        "allocation": [
+                          2,
+                          0,
+                          0,
+                          2
+                        ],
+                        "mass": 76923076
+                      },
+                      {
+                        "allocation": [
+                          2,
+                          0,
+                          2,
+                          0
+                        ],
+                        "mass": 384615385
+                      }
+                    ]
+                  }
+                }
+              ],
+              "schema": "frontier/costly-observation-certificate-v1"
+            },
+            "independent": {
+              "column_support": 7,
+              "lower": "-138461539/50000000",
+              "lower_best_adversary": {
+                "allocation": [
+                  1,
+                  0,
+                  0,
+                  2
+                ],
+                "scenario": "concentrated"
+              },
+              "row_instrument_count": 1,
+              "upper": "-2769230759/1000000000",
+              "upper_best_contingent_plan": {
+                "blank": [
+                  0,
+                  2,
+                  2,
+                  0
+                ]
+              },
+              "upper_best_instrument": "none",
+              "upper_by_instrument": {
+                "none": "-2769230759/1000000000"
+              },
+              "width": "21/1000000000"
+            }
+          },
+          "probe": {
+            "certificate": {
+              "column": [
+                {
+                  "allocation": [
+                    2,
+                    0,
+                    0,
+                    2
+                  ],
+                  "mass": 257611241,
+                  "scenario": "overlap"
+                },
+                {
+                  "allocation": [
+                    0,
+                    1,
+                    2,
+                    2
+                  ],
+                  "mass": 151053864,
+                  "scenario": "spread"
+                },
+                {
+                  "allocation": [
+                    0,
+                    2,
+                    3,
+                    0
+                  ],
+                  "mass": 101873537,
+                  "scenario": "spread"
+                },
+                {
+                  "allocation": [
+                    0,
+                    3,
+                    1,
+                    1
+                  ],
+                  "mass": 118266979,
+                  "scenario": "spread"
+                },
+                {
+                  "allocation": [
+                    0,
+                    3,
+                    2,
+                    0
+                  ],
+                  "mass": 101873536,
+                  "scenario": "spread"
+                },
+                {
+                  "allocation": [
+                    1,
+                    1,
+                    3,
+                    0
+                  ],
+                  "mass": 118266979,
+                  "scenario": "spread"
+                },
+                {
+                  "allocation": [
+                    2,
+                    2,
+                    1,
+                    0
+                  ],
+                  "mass": 151053864,
+                  "scenario": "spread"
+                }
+              ],
+              "denominator": 1000000000,
+              "game_sha256": "f6f8f3ec9bf3d8c442516ce6116af3f8265f5058ef46567a15cf7464c43562af",
+              "row": [
+                {
+                  "instrument": "probe",
+                  "mass": 1000000000,
+                  "signals": {
+                    "high": [
+                      {
+                        "allocation": [
+                          0,
+                          0,
+                          2,
+                          2
+                        ],
+                        "mass": 105679157
+                      },
+                      {
+                        "allocation": [
+                          0,
+                          0,
+                          3,
+                          1
+                        ],
+                        "mass": 45667447
+                      },
+                      {
+                        "allocation": [
+                          0,
+                          2,
+                          2,
+                          0
+                        ],
+                        "mass": 522248244
+                      },
+                      {
+                        "allocation": [
+                          1,
+                          2,
+                          0,
+                          1
+                        ],
+                        "mass": 175058548
+                      },
+                      {
+                        "allocation": [
+                          1,
+                          3,
+                          0,
+                          0
+                        ],
+                        "mass": 45667447
+                      },
+                      {
+                        "allocation": [
+                          2,
+                          0,
+                          2,
+                          0
+                        ],
+                        "mass": 87529274
+                      },
+                      {
+                        "allocation": [
+                          2,
+                          2,
+                          0,
+                          0
+                        ],
+                        "mass": 18149883
+                      }
+                    ],
+                    "low": [
+                      {
+                        "allocation": [
+                          2,
+                          0,
+                          0,
+                          2
+                        ],
+                        "mass": 1000000000
+                      }
+                    ]
+                  }
+                }
+              ],
+              "schema": "frontier/costly-observation-certificate-v1"
+            },
+            "independent": {
+              "column_support": 7,
+              "lower": "-547057963/203125000",
+              "lower_best_adversary": {
+                "allocation": [
+                  0,
+                  2,
+                  3,
+                  0
+                ],
+                "scenario": "spread"
+              },
+              "row_instrument_count": 1,
+              "upper": "-1346604213/500000000",
+              "upper_best_contingent_plan": {
+                "high": [
+                  0,
+                  3,
+                  0,
+                  1
+                ],
+                "low": [
+                  0,
+                  3,
+                  0,
+                  1
+                ]
+              },
+              "upper_best_instrument": "probe",
+              "upper_by_instrument": {
+                "probe": "-1346604213/500000000"
+              },
+              "width": "47/6500000000"
+            }
+          }
+        }
+      },
+      "id": "overlapping-neutral-probe",
+      "median": {
+        "ordinary": {
+          "cpu_s": 0.0889975380000001,
+          "wall_s": 0.10291624699993918
+        },
+        "retained": {
+          "cpu_s": 0.02120444900000007,
+          "wall_s": 0.02674016799983292
+        }
+      },
+      "repetitions": {
+        "ordinary": [
+          {
+            "cpu_s": 0.11297831000000003,
+            "fee_interval": [
+              "7602233/100000000",
+              "76022347/1000000000"
+            ],
+            "forced": {
+              "none": {
+                "explicit_payoff_entries": 3885,
+                "interval": [
+                  "-2769230773/1000000000",
+                  "-692307691/250000000"
+                ]
+              },
+              "probe": {
+                "explicit_payoff_entries": 135975,
+                "interval": [
+                  "-1346604217/500000000",
+                  "-1346604213/500000000"
+                ]
+              }
+            },
+            "quoted_decisions": {
+              "0": "BUY",
+              "1": "SKIP",
+              "1/2": "SKIP",
+              "2": "SKIP",
+              "3": "SKIP"
+            },
+            "wall_s": 0.13378480200026388
+          },
+          {
+            "cpu_s": 0.09301871100000003,
+            "fee_interval": [
+              "7602233/100000000",
+              "76022347/1000000000"
+            ],
+            "forced": {
+              "none": {
+                "explicit_payoff_entries": 3885,
+                "interval": [
+                  "-2769230773/1000000000",
+                  "-692307691/250000000"
+                ]
+              },
+              "probe": {
+                "explicit_payoff_entries": 135975,
+                "interval": [
+                  "-1346604217/500000000",
+                  "-1346604213/500000000"
+                ]
+              }
+            },
+            "quoted_decisions": {
+              "0": "BUY",
+              "1": "SKIP",
+              "1/2": "SKIP",
+              "2": "SKIP",
+              "3": "SKIP"
+            },
+            "wall_s": 0.11091493600042668
+          },
+          {
+            "cpu_s": 0.06025462300000006,
+            "fee_interval": [
+              "7602233/100000000",
+              "76022347/1000000000"
+            ],
+            "forced": {
+              "none": {
+                "explicit_payoff_entries": 3885,
+                "interval": [
+                  "-2769230773/1000000000",
+                  "-692307691/250000000"
+                ]
+              },
+              "probe": {
+                "explicit_payoff_entries": 135975,
+                "interval": [
+                  "-1346604217/500000000",
+                  "-1346604213/500000000"
+                ]
+              }
+            },
+            "quoted_decisions": {
+              "0": "BUY",
+              "1": "SKIP",
+              "1/2": "SKIP",
+              "2": "SKIP",
+              "3": "SKIP"
+            },
+            "wall_s": 0.06039197699965371
+          },
+          {
+            "cpu_s": 0.057866197000000064,
+            "fee_interval": [
+              "7602233/100000000",
+              "76022347/1000000000"
+            ],
+            "forced": {
+              "none": {
+                "explicit_payoff_entries": 3885,
+                "interval": [
+                  "-2769230773/1000000000",
+                  "-692307691/250000000"
+                ]
+              },
+              "probe": {
+                "explicit_payoff_entries": 135975,
+                "interval": [
+                  "-1346604217/500000000",
+                  "-1346604213/500000000"
+                ]
+              }
+            },
+            "quoted_decisions": {
+              "0": "BUY",
+              "1": "SKIP",
+              "1/2": "SKIP",
+              "2": "SKIP",
+              "3": "SKIP"
+            },
+            "wall_s": 0.0677427450000323
+          },
+          {
+            "cpu_s": 0.0889975380000001,
+            "fee_interval": [
+              "7602233/100000000",
+              "76022347/1000000000"
+            ],
+            "forced": {
+              "none": {
+                "explicit_payoff_entries": 3885,
+                "interval": [
+                  "-2769230773/1000000000",
+                  "-692307691/250000000"
+                ]
+              },
+              "probe": {
+                "explicit_payoff_entries": 135975,
+                "interval": [
+                  "-1346604217/500000000",
+                  "-1346604213/500000000"
+                ]
+              }
+            },
+            "quoted_decisions": {
+              "0": "BUY",
+              "1": "SKIP",
+              "1/2": "SKIP",
+              "2": "SKIP",
+              "3": "SKIP"
+            },
+            "wall_s": 0.10291624699993918
+          },
+          {
+            "cpu_s": 0.09109737299999998,
+            "fee_interval": [
+              "7602233/100000000",
+              "76022347/1000000000"
+            ],
+            "forced": {
+              "none": {
+                "explicit_payoff_entries": 3885,
+                "interval": [
+                  "-2769230773/1000000000",
+                  "-692307691/250000000"
+                ]
+              },
+              "probe": {
+                "explicit_payoff_entries": 135975,
+                "interval": [
+                  "-1346604217/500000000",
+                  "-1346604213/500000000"
+                ]
+              }
+            },
+            "quoted_decisions": {
+              "0": "BUY",
+              "1": "SKIP",
+              "1/2": "SKIP",
+              "2": "SKIP",
+              "3": "SKIP"
+            },
+            "wall_s": 0.12985183799992228
+          },
+          {
+            "cpu_s": 0.08077445000000005,
+            "fee_interval": [
+              "7602233/100000000",
+              "76022347/1000000000"
+            ],
+            "forced": {
+              "none": {
+                "explicit_payoff_entries": 3885,
+                "interval": [
+                  "-2769230773/1000000000",
+                  "-692307691/250000000"
+                ]
+              },
+              "probe": {
+                "explicit_payoff_entries": 135975,
+                "interval": [
+                  "-1346604217/500000000",
+                  "-1346604213/500000000"
+                ]
+              }
+            },
+            "quoted_decisions": {
+              "0": "BUY",
+              "1": "SKIP",
+              "1/2": "SKIP",
+              "2": "SKIP",
+              "3": "SKIP"
+            },
+            "wall_s": 0.09269208899968362
+          }
+        ],
+        "retained": [
+          {
+            "cpu_s": 0.02120444900000007,
+            "fee_interval": [
+              "197658047/2600000000",
+              "38011177/500000000"
+            ],
+            "forced": {
+              "none": {
+                "interval": [
+                  "-138461539/50000000",
+                  "-2769230759/1000000000"
+                ],
+                "sparse_nonzeros": 688,
+                "sparse_variables": 173
+              },
+              "probe": {
+                "interval": [
+                  "-547057963/203125000",
+                  "-1346604213/500000000"
+                ],
+                "sparse_nonzeros": 940,
+                "sparse_variables": 233
+              }
+            },
+            "quoted_decisions": {
+              "0": "BUY",
+              "1": "SKIP",
+              "1/2": "SKIP",
+              "2": "SKIP",
+              "3": "SKIP"
+            },
+            "wall_s": 0.02130397000019002
+          },
+          {
+            "cpu_s": 0.020620268999999913,
+            "fee_interval": [
+              "197658047/2600000000",
+              "38011177/500000000"
+            ],
+            "forced": {
+              "none": {
+                "interval": [
+                  "-138461539/50000000",
+                  "-2769230759/1000000000"
+                ],
+                "sparse_nonzeros": 688,
+                "sparse_variables": 173
+              },
+              "probe": {
+                "interval": [
+                  "-547057963/203125000",
+                  "-1346604213/500000000"
+                ],
+                "sparse_nonzeros": 940,
+                "sparse_variables": 233
+              }
+            },
+            "quoted_decisions": {
+              "0": "BUY",
+              "1": "SKIP",
+              "1/2": "SKIP",
+              "2": "SKIP",
+              "3": "SKIP"
+            },
+            "wall_s": 0.02067596599999888
+          },
+          {
+            "cpu_s": 0.018780887999999996,
+            "fee_interval": [
+              "197658047/2600000000",
+              "38011177/500000000"
+            ],
+            "forced": {
+              "none": {
+                "interval": [
+                  "-138461539/50000000",
+                  "-2769230759/1000000000"
+                ],
+                "sparse_nonzeros": 688,
+                "sparse_variables": 173
+              },
+              "probe": {
+                "interval": [
+                  "-547057963/203125000",
+                  "-1346604213/500000000"
+                ],
+                "sparse_nonzeros": 940,
+                "sparse_variables": 233
+              }
+            },
+            "quoted_decisions": {
+              "0": "BUY",
+              "1": "SKIP",
+              "1/2": "SKIP",
+              "2": "SKIP",
+              "3": "SKIP"
+            },
+            "wall_s": 0.03635845100006918
+          },
+          {
+            "cpu_s": 0.02036698200000009,
+            "fee_interval": [
+              "197658047/2600000000",
+              "38011177/500000000"
+            ],
+            "forced": {
+              "none": {
+                "interval": [
+                  "-138461539/50000000",
+                  "-2769230759/1000000000"
+                ],
+                "sparse_nonzeros": 688,
+                "sparse_variables": 173
+              },
+              "probe": {
+                "interval": [
+                  "-547057963/203125000",
+                  "-1346604213/500000000"
+                ],
+                "sparse_nonzeros": 940,
+                "sparse_variables": 233
+              }
+            },
+            "quoted_decisions": {
+              "0": "BUY",
+              "1": "SKIP",
+              "1/2": "SKIP",
+              "2": "SKIP",
+              "3": "SKIP"
+            },
+            "wall_s": 0.02040260500007207
+          },
+          {
+            "cpu_s": 0.032225058999999945,
+            "fee_interval": [
+              "197658047/2600000000",
+              "38011177/500000000"
+            ],
+            "forced": {
+              "none": {
+                "interval": [
+                  "-138461539/50000000",
+                  "-2769230759/1000000000"
+                ],
+                "sparse_nonzeros": 688,
+                "sparse_variables": 173
+              },
+              "probe": {
+                "interval": [
+                  "-547057963/203125000",
+                  "-1346604213/500000000"
+                ],
+                "sparse_nonzeros": 940,
+                "sparse_variables": 233
+              }
+            },
+            "quoted_decisions": {
+              "0": "BUY",
+              "1": "SKIP",
+              "1/2": "SKIP",
+              "2": "SKIP",
+              "3": "SKIP"
+            },
+            "wall_s": 0.032353029000205424
+          },
+          {
+            "cpu_s": 0.026706911,
+            "fee_interval": [
+              "197658047/2600000000",
+              "38011177/500000000"
+            ],
+            "forced": {
+              "none": {
+                "interval": [
+                  "-138461539/50000000",
+                  "-2769230759/1000000000"
+                ],
+                "sparse_nonzeros": 688,
+                "sparse_variables": 173
+              },
+              "probe": {
+                "interval": [
+                  "-547057963/203125000",
+                  "-1346604213/500000000"
+                ],
+                "sparse_nonzeros": 940,
+                "sparse_variables": 233
+              }
+            },
+            "quoted_decisions": {
+              "0": "BUY",
+              "1": "SKIP",
+              "1/2": "SKIP",
+              "2": "SKIP",
+              "3": "SKIP"
+            },
+            "wall_s": 0.02674016799983292
+          },
+          {
+            "cpu_s": 0.026702876999999958,
+            "fee_interval": [
+              "197658047/2600000000",
+              "38011177/500000000"
+            ],
+            "forced": {
+              "none": {
+                "interval": [
+                  "-138461539/50000000",
+                  "-2769230759/1000000000"
+                ],
+                "sparse_nonzeros": 688,
+                "sparse_variables": 173
+              },
+              "probe": {
+                "interval": [
+                  "-547057963/203125000",
+                  "-1346604213/500000000"
+                ],
+                "sparse_nonzeros": 940,
+                "sparse_variables": 233
+              }
+            },
+            "quoted_decisions": {
+              "0": "BUY",
+              "1": "SKIP",
+              "1/2": "SKIP",
+              "2": "SKIP",
+              "3": "SKIP"
+            },
+            "wall_s": 0.031031681000058597
+          }
+        ]
+      },
+      "wall_retained_to_ordinary_ratio": 0.25982455423047757,
+      "without_observation": {
+        "fee_interval": [
+          "0",
+          "0"
+        ],
+        "proof": "Giving two copies of the same optimized no-signal contract yields identical certified minimax payoff for both. The difference is exactly zero. The blind baseline is solved in both arms.",
+        "quoted_decisions": {
+          "0": "UNRESOLVED_OR_TIE",
+          "1": "SKIP",
+          "1/2": "SKIP",
+          "2": "SKIP",
+          "3": "SKIP"
+        }
+      }
+    }
+  ],
+  "registration_sha256": "95a81b6e3224ad9f0e0206b23a7c1e703a929c61c25a823dd954150b9ffb58fe",
+  "runtime": {
+    "numpy": "2.3.5",
+    "python": "3.12.14",
+    "scipy": "1.17.0"
+  },
+  "schema": "frontier/observation-cost-transfer-receipt-v1"
+}

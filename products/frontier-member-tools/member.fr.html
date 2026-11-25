@@ -67,7 +67,23 @@
         <p id="mission-published-summary"></p>
         <p class="mv-links" id="mission-published-links"></p>
       </div>
+      <section id="mission-execution" class="mission-execution" aria-labelledby="execution-title" hidden>
+        <h5 id="execution-title">Exécution locale</h5>
+        <p id="execution-status" role="status"></p>
+        <p id="execution-counts" class="packet-meta"></p>
+        <div id="execution-understanding" hidden><h6>Interprétation et action proposées</h6><p id="execution-proposal"></p></div>
+        <pre id="execution-result" hidden></pre>
+        <details><summary>Journal d’exécution et fichiers produits</summary><ol id="execution-events"></ol><ul id="execution-artifacts"></ul></details>
+        <div class="mv-actions">
+          <button id="execution-pause" type="button" class="quiet" hidden>Suspendre l’exécution</button>
+          <button id="execution-resume" type="button" class="quiet" hidden>Reprendre l’exécution</button>
+          <button id="execution-cancel" type="button" class="quiet" hidden>Annuler l’exécution</button>
+          <button id="execution-retry" type="button" class="quiet" hidden>Vérifier la mission transmise</button>
+          <button id="execution-export" type="button" class="quiet" disabled>Télécharger le dossier d’exécution</button>
+        </div>
+      </section>
       <div class="mv-actions mission-actions">
+        <button id="execution-send-current" type="button" class="entry-button" hidden>Démarrer l’exécution locale</button>
         <button id="mission-run-local" type="button" class="entry-button" hidden>Exécuter avec mon modèle local</button>
         <a id="mission-configure" class="quiet" href="#mission-intelligence">Configurer mon intelligence</a>
         <button id="mission-prepare" type="button" class="quiet">Préparer une mission assistée</button>
@@ -269,9 +285,22 @@
   <section class="mv-section foundry-panel" id="my-intelligence" aria-labelledby="my-intelligence-title" data-member-view hidden>
     <h3 id="my-intelligence-title" tabindex="-1">Mon intelligence <span>Ω</span></h3>
     <p class="mf-section-intro">Transformez une règle vérifiable en un outil que vous pouvez conserver.</p>
-    <p>Les fichiers sont traités sur cet appareil. Les fichiers diffusés par Pages sont publics. Les missions, entrées et résultats que vous ajoutez restent dans la session en cours. Le verrouillage les efface. Un fichier exporté peut contenir votre objectif, vos règles et votre instrument.</p>
+    <p>Ce poste traite les fichiers de mission sur cet appareil. Le verrouillage efface la session du navigateur. Un exécuteur jumelé conserve ses propres fichiers de reprise privés sur votre appareil.</p>
     <details class="foundry-stage mission-connection" id="mission-intelligence">
       <summary>Connecter un modèle à cette mission</summary>
+      <details class="mission-execution-connection">
+        <summary>Exécuter des missions sur votre appareil</summary>
+        <p>Démarrez HARNESS sur votre appareil et saisissez le code à usage unique qu’il affiche. L’activation lance ensuite le travail dans les limites que vous avez choisies sur cet appareil.</p>
+        <p class="mv-links"><a href="frontier-harness-executor-1.0.0.zip" download>Télécharger l’exécuteur local</a>
+          <a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/main/publication/mission-executor/README.md#français">Configuration et périmètre d’utilisation</a></p>
+        <form id="execution-code-form" autocomplete="off">
+          <label for="execution-code">Code de jumelage à usage unique</label>
+          <input type="password" id="execution-code" required maxlength="43" autocomplete="off" spellcheck="false">
+          <button type="submit" class="quiet">Jumeler ce navigateur</button>
+        </form>
+        <p id="execution-connection" role="status"></p>
+        <button id="execution-disconnect" type="button" class="quiet" hidden>Déconnecter et suspendre le travail en cours</button>
+      </details>
       <form id="mission-connection-form" autocomplete="off">
         <h4>Inférence locale</h4>
         <div class="foundry-fields">
@@ -520,6 +549,9 @@ python3 verify_factory.py</code></pre>
         <label for="mission-import">Rouvrir un fichier de mission<input id="mission-import" type="file" accept=".json,application/json"></label>
       </div>
       <p id="mission-file-status" class="status" role="status"></p>
+      <button id="execution-open-saved" type="button" class="quiet" disabled>Ouvrir les missions de l’exécuteur</button>
+      <p id="execution-results-status" role="status"></p>
+      <ul id="execution-saved-list"></ul>
     </details>
         <details id="goal-keeper">
           <p id="goal-file-status" class="status" role="status"></p>

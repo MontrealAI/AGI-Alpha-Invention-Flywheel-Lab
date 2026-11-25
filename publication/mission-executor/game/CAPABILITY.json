@@ -1,0 +1,57 @@
+{
+  "schema": "frontier/retained-research-capability-v1",
+  "id": "costly-observation-strategic-allocation",
+  "version": "1.0.0",
+  "purpose": {
+    "en": "Choose costly noisy observations and contingent allocations with a certified worst-case expected payoff interval.",
+    "fr": "Choisir des observations bruitées à coût explicite et des allocations conditionnelles avec un intervalle certifié du gain espéré garanti."
+  },
+  "input": {
+    "schema_id": "frontier/costly-observation-game-v1",
+    "row_budget": "nonnegative integer",
+    "scenarios": "nonempty array of unique IDs, nonnegative integer column budgets and nonnegative integer weights on common lanes",
+    "instruments": "nonempty array of unique IDs with costs and scenario-indexed channel rows",
+    "cost_units": "same payoff units as lane weights",
+    "channel": "exact nonnegative rational strings or integers, with one common signal alphabet per instrument and every row summing exactly to one",
+    "outside_option": "optional free constant-signal instrument",
+    "preconditions": [
+      "Finite one-shot zero-sum allocation with additive signed lane payoffs.",
+      "The opponent observes the declared policy and chooses its scenario and allocation before learning the selected instrument or observed signal.",
+      "The row player can privately draw and pay for one instrument and condition its allocation on that signal.",
+      "Channel distributions, payoff units, feasible budgets and acquisition costs are supplied by the caller."
+    ],
+    "alternative": "Use separately announced-instrument comparisons when the opponent observes selection before acting."
+  },
+  "output": {
+    "schema_id": "frontier/costly-observation-certificate-v1",
+    "description": "Source-bound feasible instrument masses, signal-conditional allocation policies, opponent scenario-allocation mixture and exact rational best-response bounds.",
+    "acceptance": "QUALIFIED requires exact gap at most one part per million of the largest scenario weight total with a floor of one. A wider valid interval gives BOUND_ONLY.",
+    "verifier": "observation.py"
+  },
+  "authority": {
+    "effects": ["local CPU computation", "write new caller-selected files"],
+    "real_observations": "none",
+    "network": "none",
+    "financial_transactions": "none",
+    "evaluator_custody": "independently authored cases and executable checks in a shared administrative workspace"
+  },
+  "execution": {
+    "solver": "solve_observation.py",
+    "comparators": "compare_observation.py",
+    "scope_characteristic": "Pseudo-polynomial in numeric budgets and proportional to instrument-signal branches.",
+    "tested_environment": {"python": "3.12.14", "numpy": "2.3.5", "scipy": "1.17.0"},
+    "standard_library_proof_replay": true,
+    "retained_source_commit": "8944f51db7b8e7fce8630503046c2a257cf62e44"
+  },
+  "precision_limitation": "Candidate probabilities are constructed with HiGHS numerical arithmetic and integer rounding. Exact intervals decide acceptance on the declared payoff scale.",
+  "qualification": {
+    "status": "qualified-research-scope",
+    "held_games": 11,
+    "held_suite_sha256": "b93d0bb05f92a27b5e16afd4075067ed48d3eb1ae43fe68c43c7bf24d79795ba",
+    "source_plan_sha256": "968b2dd99ae65f95431ae58fcdc5e276b82862c3773b05c66313694e0f32bd1d",
+    "independent_report_sha256": "6b02ecb5bdd2658ff88541e7d59d72d78278dae2896d3bddeaf39e7ddb9be64b",
+    "independent_comparators_sha256": "c7c1a98e089d4b8828f06bec5e50d0b70ff3bd8ee2fa0cf35e643b3861bf4271",
+    "retention": "Exact source files, artifact, certificates, declared game scope and acceptance evidence.",
+    "requalification": "Solve and check new instances. A changed model hash invalidates old certificates. New information timing, payoff structure or software source requires its own qualification."
+  }
+}

@@ -80,6 +80,7 @@ ASSETS += (
     'frontier-omega-alpha/frontier-mission.mjs',
     'frontier-omega-alpha/frontier-mission-router.mjs',
     'frontier-omega-alpha/frontier-mission-ui.mjs',
+    'frontier-omega-alpha/frontier-execution.mjs',
     'frontier-omega-alpha/foundry-core.mjs',
     'frontier-omega-alpha/foundry-ui.mjs',
     'frontier-omega-alpha/foundry-study.mjs',
@@ -119,6 +120,8 @@ ATLAS_OUTPUTS = frozenset({
     'frontier-omega-alpha/frontier-activation-1.5.0.zip',
     'frontier-omega-alpha/factory-results.json',
     'frontier-omega-alpha/frontier-game-theory-1.0.0.zip',
+    'frontier-omega-alpha/frontier-game-observation-1.0.0.zip',
+    'frontier-omega-alpha/frontier-harness-executor-1.0.0.zip',
     'frontier-omega-alpha/opportunity-capture.json',
 })
 STATES = ('discovered', 'qualified', 'testing', 'verified', 'falsified', 'abstain', 'retained', 'deployed', 'value-verified')

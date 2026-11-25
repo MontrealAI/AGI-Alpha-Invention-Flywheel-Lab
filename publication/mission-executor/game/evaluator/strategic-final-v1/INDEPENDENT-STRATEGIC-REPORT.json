@@ -1,0 +1,1227 @@
+{
+  "candidate_accepted": 11,
+  "candidate_source_sha256": {
+    "EXAMPLE.json": "8fe8748cd9a817ede0ffa412f18eff394552bd953abd8f572ede85b8ac35c8eb",
+    "compare_observation.py": "44fb73cb2908078ccb97c4c3dadb50ee568afa6339e24ccf44f42af189e38d37",
+    "observation.py": "740c3228348ad946acd3fa86771379aff4958dea413f7626db9db137205ac119",
+    "retained_allocation.py": "2224cc9da9f4914ba5f0bc323f936a3f7b4f5d22d63a913ec1fc207923942858",
+    "solve_observation.py": "5423e736b55f4a7131c5554663d4463d27ef502f788c3a70e10f2f02b10bf4bb"
+  },
+  "completed_at": "2026-11-25T02:34:03.449252+00:00",
+  "count": 11,
+  "explicit_normal_form_count": 11,
+  "held_game_sha256": "b93d0bb05f92a27b5e16afd4075067ed48d3eb1ae43fe68c43c7bf24d79795ba",
+  "independent_method_sha256": "25e672267539d2facf39f8af902f2f8f7b1d2c73c5ece12ad925944079157d13",
+  "registration_sha256": "4417b33af28d8d0acfdd814714f8dd837d94fe6d2414c885c3ba2fbcd061d274",
+  "results": [
+    {
+      "candidate_claim": {
+        "certificate_sha256": "a51636ac1c7577fc9717089b55d713b192b309cb5441dcd9adb12e385560b342",
+        "game_sha256": "247851f64c69d0b02e56a76d6310a283ae4471b4e5119b7a19958640763b8f5c",
+        "instrument_mixture": {
+          "read": "1"
+        },
+        "lower": "0",
+        "lower_witness": {
+          "allocation": [
+            0,
+            1
+          ],
+          "scenario": "east"
+        },
+        "scale": 19,
+        "tolerance_parts_per_million": 1,
+        "upper": "0",
+        "upper_witness": {
+          "allocations": {
+            "dark": [
+              1,
+              0
+            ],
+            "light": [
+              1,
+              0
+            ]
+          },
+          "instrument": "read"
+        },
+        "verdict": "QUALIFIED",
+        "width": "0"
+      },
+      "candidate_seconds": 0.6864937479999753,
+      "certificate_sha256": "3a9cfc7897e1c6558124958b393e2492eff96b0276d5bb569b4599ba122e3509",
+      "comparisons": {
+        "encloses_conventional_primal_and_dual": true,
+        "exact_claims_equal_independent_arithmetic": true,
+        "narrow": true
+      },
+      "id": "g01",
+      "independent_certificate": {
+        "column_support": 1,
+        "lower": "0",
+        "lower_best_adversary": {
+          "allocation": [
+            0,
+            1
+          ],
+          "scenario": "east"
+        },
+        "row_instrument_count": 1,
+        "upper": "0",
+        "upper_best_contingent_plan": {
+          "blank": [
+            1,
+            0
+          ]
+        },
+        "upper_best_instrument": "none",
+        "upper_by_instrument": {
+          "none": "0",
+          "read": "0"
+        },
+        "width": "0"
+      },
+      "independent_control": {
+        "announced_instrument_control": {
+          "none": -4.95,
+          "read": -0.0
+        },
+        "announcement_controls_seconds": 0.003328434999957608,
+        "columns": 4,
+        "potential_cells": 24,
+        "preparation_seconds": 0.0008670340000662691,
+        "private_mix": {
+          "achieved_by_column_policy": 0.0,
+          "achieved_by_row_policy": 0.0,
+          "maximin": -0.0,
+          "minimax": -0.0
+        },
+        "private_mixture_gain": 0.0,
+        "raw_row_actions": 2,
+        "registered_cell_bound": 6000000,
+        "row_plans_by_instrument": {
+          "none": 2,
+          "read": 4
+        },
+        "saddle_seconds": 0.005729215999963344,
+        "scale_denominator": 1,
+        "status": "computed",
+        "weight_scale": 19
+      },
+      "negative_controls": {
+        "candidate_changed_game_rejected": true,
+        "candidate_invalid_mass_rejected": true,
+        "independent_invalid_mass_rejected": true
+      },
+      "returncode": 0,
+      "setting_sha256": "df51597643367b8db10b7d3cf881d6ff5b05265b5a13e7d34b5949045cb9f606",
+      "status": "accepted",
+      "time_started": "2026-11-25T02:33:49.799442+00:00",
+      "verifier_returncode": 0,
+      "verifier_seconds": 0.07297930800018548
+    },
+    {
+      "candidate_claim": {
+        "certificate_sha256": "ee64854b0958b3547c00fc50da3c326557c9373ef2429d03c787c7779b1fc19a",
+        "game_sha256": "451b692e83f24aa8418d9524c7ff0372f49f6e5349294b9dc17b27fded9db7a8",
+        "instrument_mixture": {
+          "none": "1"
+        },
+        "lower": "-99/20",
+        "lower_witness": {
+          "allocation": [
+            0,
+            1
+          ],
+          "scenario": "east"
+        },
+        "scale": 19,
+        "tolerance_parts_per_million": 1,
+        "upper": "-99/20",
+        "upper_witness": {
+          "allocations": {
+            "blank": [
+              1,
+              0
+            ]
+          },
+          "instrument": "none"
+        },
+        "verdict": "QUALIFIED",
+        "width": "0"
+      },
+      "candidate_seconds": 0.44979367600012665,
+      "certificate_sha256": "a630069d8becb870225430f3172b41ccd2e2fae0695e27e551bd3319202c7c2d",
+      "comparisons": {
+        "encloses_conventional_primal_and_dual": true,
+        "exact_claims_equal_independent_arithmetic": true,
+        "narrow": true
+      },
+      "id": "g02",
+      "independent_certificate": {
+        "column_support": 2,
+        "lower": "-99/20",
+        "lower_best_adversary": {
+          "allocation": [
+            0,
+            1
+          ],
+          "scenario": "east"
+        },
+        "row_instrument_count": 1,
+        "upper": "-99/20",
+        "upper_best_contingent_plan": {
+          "blank": [
+            0,
+            1
+          ]
+        },
+        "upper_best_instrument": "none",
+        "upper_by_instrument": {
+          "expensive": "-31/2",
+          "none": "-99/20"
+        },
+        "width": "0"
+      },
+      "independent_control": {
+        "announced_instrument_control": {
+          "expensive": -15.5,
+          "none": -4.95
+        },
+        "announcement_controls_seconds": 0.0021192269998664415,
+        "columns": 4,
+        "potential_cells": 24,
+        "preparation_seconds": 0.0003234660000543954,
+        "private_mix": {
+          "achieved_by_column_policy": -4.95,
+          "achieved_by_row_policy": -4.95,
+          "maximin": -4.949999999999999,
+          "minimax": -4.950000000000003
+        },
+        "private_mixture_gain": 8.881784197001252e-16,
+        "raw_row_actions": 2,
+        "registered_cell_bound": 6000000,
+        "row_plans_by_instrument": {
+          "expensive": 4,
+          "none": 2
+        },
+        "saddle_seconds": 0.0030795810000654456,
+        "scale_denominator": 2,
+        "status": "computed",
+        "weight_scale": 19
+      },
+      "returncode": 0,
+      "setting_sha256": "4ce4722ecbb5ddeb2e967eba9b0477d8dd1bd98847061b61ac8db7c0d79ab5a4",
+      "status": "accepted",
+      "time_started": "2026-11-25T02:33:50.691031+00:00",
+      "verifier_returncode": 0,
+      "verifier_seconds": 0.05336864500009142
+    },
+    {
+      "candidate_claim": {
+        "certificate_sha256": "3983934716f8c2e3d775003cc23ae8fbe1701f6ea0dc4f0c71a4e136f227a0f0",
+        "game_sha256": "93853b5332618040137c72d9cd695471c826d91d60374295be0a27f05990dd8f",
+        "instrument_mixture": {
+          "none": "1484057/31250000",
+          "scan": "29765943/31250000"
+        },
+        "lower": "-1725184449/710937500",
+        "lower_witness": {
+          "allocation": [
+            0,
+            1
+          ],
+          "scenario": "east"
+        },
+        "scale": 19,
+        "tolerance_parts_per_million": 1,
+        "upper": "-303329133/125000000",
+        "upper_witness": {
+          "allocations": {
+            "blank": [
+              1,
+              0
+            ]
+          },
+          "instrument": "none"
+        },
+        "verdict": "QUALIFIED",
+        "width": "81/11375000000"
+      },
+      "candidate_seconds": 0.40085581599987563,
+      "certificate_sha256": "77a358b98e279cf3cf1dba13e71aecf6430c864c4c364336ba0380f6e0dd2867",
+      "comparisons": {
+        "encloses_conventional_primal_and_dual": true,
+        "exact_claims_equal_independent_arithmetic": true,
+        "narrow": true
+      },
+      "id": "g03",
+      "independent_certificate": {
+        "column_support": 2,
+        "lower": "-1725184449/710937500",
+        "lower_best_adversary": {
+          "allocation": [
+            0,
+            1
+          ],
+          "scenario": "east"
+        },
+        "row_instrument_count": 2,
+        "upper": "-303329133/125000000",
+        "upper_best_contingent_plan": {
+          "blank": [
+            1,
+            0
+          ]
+        },
+        "upper_best_instrument": "none",
+        "upper_by_instrument": {
+          "none": "-303329133/125000000",
+          "scan": "-33123541387/13650000000"
+        },
+        "width": "81/11375000000"
+      },
+      "independent_control": {
+        "announced_instrument_control": {
+          "none": -4.95,
+          "scan": -2.4605543710021323
+        },
+        "announcement_controls_seconds": 0.003087433000018791,
+        "columns": 4,
+        "potential_cells": 24,
+        "preparation_seconds": 0.00023864799982220575,
+        "private_mix": {
+          "achieved_by_column_policy": -2.4266330684241124,
+          "achieved_by_row_policy": -2.4266330684241133,
+          "maximin": -2.4266330684241133,
+          "minimax": -2.4266330684241133
+        },
+        "private_mixture_gain": 0.03392130257801895,
+        "raw_row_actions": 2,
+        "registered_cell_bound": 6000000,
+        "row_plans_by_instrument": {
+          "none": 2,
+          "scan": 4
+        },
+        "saddle_seconds": 0.003236025999967751,
+        "scale_denominator": 546,
+        "status": "computed",
+        "weight_scale": 19
+      },
+      "returncode": 0,
+      "setting_sha256": "22bb70231ffad6c1807b6ddd5b8008d4dc14b9e3928b763d71372a91d8263926",
+      "status": "accepted",
+      "time_started": "2026-11-25T02:33:51.202237+00:00",
+      "verifier_returncode": 0,
+      "verifier_seconds": 0.0715235150000808
+    },
+    {
+      "candidate_claim": {
+        "certificate_sha256": "049fad4a8283184461fb06b150e0797c874dfa75caa8ead6f77d22683845e238",
+        "game_sha256": "12b9ffe92d3dacdb31edbfd4fde53001194d7cb072605c65480d0eb9d848afda",
+        "instrument_mixture": {
+          "none": "1"
+        },
+        "lower": "-416666667/62500000",
+        "lower_witness": {
+          "allocation": [
+            0,
+            0,
+            3
+          ],
+          "scenario": "wet"
+        },
+        "scale": 22,
+        "tolerance_parts_per_million": 1,
+        "upper": "-3333333331/500000000",
+        "upper_witness": {
+          "allocations": {
+            "blank": [
+              0,
+              0,
+              2
+            ]
+          },
+          "instrument": "none"
+        },
+        "verdict": "QUALIFIED",
+        "width": "1/100000000"
+      },
+      "candidate_seconds": 0.42877891900002396,
+      "certificate_sha256": "2f046d125309081d2ab8cd32e03c7e19c300b3de2d37b9ab2b507012b9525ef6",
+      "comparisons": {
+        "encloses_conventional_primal_and_dual": true,
+        "exact_claims_equal_independent_arithmetic": true,
+        "narrow": true
+      },
+      "id": "g04",
+      "independent_certificate": {
+        "column_support": 3,
+        "lower": "-416666667/62500000",
+        "lower_best_adversary": {
+          "allocation": [
+            0,
+            0,
+            3
+          ],
+          "scenario": "wet"
+        },
+        "row_instrument_count": 1,
+        "upper": "-3333333331/500000000",
+        "upper_best_contingent_plan": {
+          "blank": [
+            0,
+            0,
+            2
+          ]
+        },
+        "upper_best_instrument": "none",
+        "upper_by_instrument": {
+          "none": "-3333333331/500000000",
+          "signal": "-46833333303/6500000000"
+        },
+        "width": "1/100000000"
+      },
+      "independent_control": {
+        "announced_instrument_control": {
+          "none": -6.666666666666668,
+          "signal": -7.205128205128204
+        },
+        "announcement_controls_seconds": 0.005032578000054855,
+        "columns": 19,
+        "potential_cells": 4218,
+        "preparation_seconds": 0.0009277359999941837,
+        "private_mix": {
+          "achieved_by_column_policy": -6.666666666666668,
+          "achieved_by_row_policy": -6.666666666666668,
+          "maximin": -6.666666666666668,
+          "minimax": -6.666666666666668
+        },
+        "private_mixture_gain": 0.0,
+        "raw_row_actions": 6,
+        "registered_cell_bound": 6000000,
+        "row_plans_by_instrument": {
+          "none": 6,
+          "signal": 216
+        },
+        "saddle_seconds": 0.014779273999920406,
+        "scale_denominator": 780,
+        "status": "computed",
+        "weight_scale": 22
+      },
+      "returncode": 0,
+      "setting_sha256": "cd4e846c7f077c2d1a32b8d9c3283b303625c406a81c4c8ab1b1bf91faa73665",
+      "status": "accepted",
+      "time_started": "2026-11-25T02:33:51.700074+00:00",
+      "verifier_returncode": 0,
+      "verifier_seconds": 0.04859491600018373
+    },
+    {
+      "candidate_claim": {
+        "certificate_sha256": "fd9cf55f89ffcb741a232582125a2cf0a2c7e5824360d194aa8b27faea1efd8e",
+        "game_sha256": "b8d43d41d5ce7954ff8ce4b3e0247b8f05d1aaee39ce51f45b317d3fe90e5675",
+        "instrument_mixture": {
+          "none": "1"
+        },
+        "lower": "-16",
+        "lower_witness": {
+          "allocation": [
+            0,
+            1,
+            1
+          ],
+          "scenario": "active"
+        },
+        "scale": 45,
+        "tolerance_parts_per_million": 1,
+        "upper": "-16",
+        "upper_witness": {
+          "allocations": {
+            "blank": [
+              0,
+              0,
+              0
+            ]
+          },
+          "instrument": "none"
+        },
+        "verdict": "QUALIFIED",
+        "width": "0"
+      },
+      "candidate_seconds": 0.35906290800016905,
+      "certificate_sha256": "2864353a87d1268447f7e42f778de88be234c9109bb16f1e7a862e0fdea2dfbe",
+      "comparisons": {
+        "encloses_conventional_primal_and_dual": true,
+        "exact_claims_equal_independent_arithmetic": true,
+        "narrow": true
+      },
+      "id": "g05",
+      "independent_certificate": {
+        "column_support": 1,
+        "lower": "-16",
+        "lower_best_adversary": {
+          "allocation": [
+            0,
+            1,
+            1
+          ],
+          "scenario": "active"
+        },
+        "row_instrument_count": 1,
+        "upper": "-16",
+        "upper_best_contingent_plan": {
+          "blank": [
+            0,
+            0,
+            0
+          ]
+        },
+        "upper_best_instrument": "none",
+        "upper_by_instrument": {
+          "listen": "-1649/103",
+          "none": "-16"
+        },
+        "width": "0"
+      },
+      "independent_control": {
+        "announced_instrument_control": {
+          "listen": -16.009708737864077,
+          "none": -16.0
+        },
+        "announcement_controls_seconds": 0.0028031260001171177,
+        "columns": 7,
+        "potential_cells": 14,
+        "preparation_seconds": 0.00020252400008757832,
+        "private_mix": {
+          "achieved_by_column_policy": -16.0,
+          "achieved_by_row_policy": -16.0,
+          "maximin": -16.0,
+          "minimax": -16.0
+        },
+        "private_mixture_gain": 0.0,
+        "raw_row_actions": 1,
+        "registered_cell_bound": 6000000,
+        "row_plans_by_instrument": {
+          "listen": 1,
+          "none": 1
+        },
+        "saddle_seconds": 0.0036534839998694224,
+        "scale_denominator": 103,
+        "status": "computed",
+        "weight_scale": 45
+      },
+      "returncode": 0,
+      "setting_sha256": "ab3364e297983f47130553488f3e86ad97547600077fbb6c5e78014b9d264ced",
+      "status": "accepted",
+      "time_started": "2026-11-25T02:33:52.188725+00:00",
+      "verifier_returncode": 0,
+      "verifier_seconds": 0.05532910300007643
+    },
+    {
+      "candidate_claim": {
+        "certificate_sha256": "c8b0bbf806341e666d4cb9c932d0e835898850004ad60ceccd093248bff2d7fb",
+        "game_sha256": "125a927a4020c6c08aec9c36c38ef1efe68bd7db4c1650cff272ea00d509c96d",
+        "instrument_mixture": {
+          "direct": "363260759/500000000",
+          "none": "136739241/500000000"
+        },
+        "lower": "-11676123887/14000000000",
+        "lower_witness": {
+          "allocation": [
+            0,
+            1,
+            0
+          ],
+          "scenario": "smooth"
+        },
+        "scale": 22,
+        "tolerance_parts_per_million": 1,
+        "upper": "-1587952833/1904000000",
+        "upper_witness": {
+          "allocations": {
+            "clear": [
+              3,
+              0,
+              0
+            ],
+            "dim": [
+              0,
+              0,
+              3
+            ]
+          },
+          "instrument": "direct"
+        },
+        "verdict": "QUALIFIED",
+        "width": "977/119000000000"
+      },
+      "candidate_seconds": 0.5055134110000381,
+      "certificate_sha256": "eb5a25861b8b8b726340d1981f2914a4551daa3be9bbe2e8be17cc9db831183e",
+      "comparisons": {
+        "encloses_conventional_primal_and_dual": true,
+        "exact_claims_equal_independent_arithmetic": true,
+        "narrow": true
+      },
+      "id": "g06",
+      "independent_certificate": {
+        "column_support": 3,
+        "lower": "-11676123887/14000000000",
+        "lower_best_adversary": {
+          "allocation": [
+            0,
+            1,
+            0
+          ],
+          "scenario": "smooth"
+        },
+        "row_instrument_count": 2,
+        "upper": "-1587952833/1904000000",
+        "upper_best_contingent_plan": {
+          "clear": [
+            3,
+            0,
+            0
+          ],
+          "dim": [
+            0,
+            0,
+            3
+          ]
+        },
+        "upper_best_instrument": "direct",
+        "upper_by_instrument": {
+          "direct": "-1587952833/1904000000",
+          "none": "-834008847/1000000000",
+          "repeat": "-7838061929/7000000000"
+        },
+        "width": "977/119000000000"
+      },
+      "independent_control": {
+        "announced_instrument_control": {
+          "direct": -0.9076655052264807,
+          "none": -1.1005291005291005,
+          "repeat": -1.2085674528231463
+        },
+        "announcement_controls_seconds": 0.007181639000009454,
+        "columns": 19,
+        "potential_cells": 3990,
+        "preparation_seconds": 0.000911100000166698,
+        "private_mix": {
+          "achieved_by_column_policy": -0.8340088474895839,
+          "achieved_by_row_policy": -0.8340088474895854,
+          "maximin": -0.8340088474895853,
+          "minimax": -0.8340088474895846
+        },
+        "private_mixture_gain": 0.07365665773689545,
+        "raw_row_actions": 10,
+        "registered_cell_bound": 6000000,
+        "row_plans_by_instrument": {
+          "direct": 100,
+          "none": 10,
+          "repeat": 100
+        },
+        "saddle_seconds": 0.014328906999935498,
+        "scale_denominator": 7140,
+        "status": "computed",
+        "weight_scale": 22
+      },
+      "returncode": 0,
+      "setting_sha256": "13c0aa0b799c3eb7fc29aff5c722736889000ca985a6b2296bb2d0f3ac69fe3a",
+      "status": "accepted",
+      "time_started": "2026-11-25T02:33:52.626889+00:00",
+      "verifier_returncode": 0,
+      "verifier_seconds": 0.06159847999992962
+    },
+    {
+      "candidate_claim": {
+        "certificate_sha256": "cfdd0a31fdefd5ce336f19adcf078569a8fc62e08a775ecfa5ee9428133a034d",
+        "game_sha256": "08c2d3e759b71a4bdf7adfa700c9446e50f6c35bb45095e684b163682b65bffb",
+        "instrument_mixture": {
+          "none": "1"
+        },
+        "lower": "-23322580649/1000000000",
+        "lower_witness": {
+          "allocation": [
+            2,
+            1
+          ],
+          "scenario": "s1"
+        },
+        "scale": 31,
+        "tolerance_parts_per_million": 1,
+        "upper": "-11661290321/500000000",
+        "upper_witness": {
+          "allocations": {
+            "blank": [
+              1,
+              0
+            ]
+          },
+          "instrument": "none"
+        },
+        "verdict": "QUALIFIED",
+        "width": "7/1000000000"
+      },
+      "candidate_seconds": 0.3669067640000776,
+      "certificate_sha256": "105bdfc2e812f63969ffc485cea000ef1d76a03215ebd4a39c07b4ae6c4b843c",
+      "comparisons": {
+        "encloses_conventional_primal_and_dual": true,
+        "exact_claims_equal_independent_arithmetic": true,
+        "narrow": true
+      },
+      "id": "g07",
+      "independent_certificate": {
+        "column_support": 2,
+        "lower": "-23322580649/1000000000",
+        "lower_best_adversary": {
+          "allocation": [
+            2,
+            1
+          ],
+          "scenario": "s1"
+        },
+        "row_instrument_count": 1,
+        "upper": "-11661290321/500000000",
+        "upper_best_contingent_plan": {
+          "blank": [
+            1,
+            0
+          ]
+        },
+        "upper_best_instrument": "none",
+        "upper_by_instrument": {
+          "none": "-11661290321/500000000",
+          "scan0": "-130274193531/5500000000",
+          "scan1": "-129774193531/5500000000",
+          "scan2": "-131274193531/5500000000"
+        },
+        "width": "7/1000000000"
+      },
+      "independent_control": {
+        "announced_instrument_control": {
+          "none": -23.32258064516129,
+          "scan0": -23.686217008797655,
+          "scan1": -23.59530791788856,
+          "scan2": -23.868035190615835
+        },
+        "announcement_controls_seconds": 0.0053454989999863756,
+        "columns": 11,
+        "potential_cells": 154,
+        "preparation_seconds": 0.0004792699999143224,
+        "private_mix": {
+          "achieved_by_column_policy": -23.322580645161292,
+          "achieved_by_row_policy": -23.322580645161292,
+          "maximin": -23.32258064516129,
+          "minimax": -23.322580645161292
+        },
+        "private_mixture_gain": 0.0,
+        "raw_row_actions": 2,
+        "registered_cell_bound": 6000000,
+        "row_plans_by_instrument": {
+          "none": 2,
+          "scan0": 4,
+          "scan1": 4,
+          "scan2": 4
+        },
+        "saddle_seconds": 0.003925233000018125,
+        "scale_denominator": 838695,
+        "status": "computed",
+        "weight_scale": 31
+      },
+      "returncode": 0,
+      "setting_sha256": "689b465d805dcbf7d5896d171f65136da1a5f69c280f339842fb0d78f8843210",
+      "status": "accepted",
+      "time_started": "2026-11-25T02:33:53.206734+00:00",
+      "verifier_returncode": 0,
+      "verifier_seconds": 0.05757759800007989
+    },
+    {
+      "candidate_claim": {
+        "certificate_sha256": "d6177e64e95d2869282133b767830f366fe164eb9037057377e000ddb6b1db6e",
+        "game_sha256": "41602d8cf79b0d6c8f4bc0b8a80999de6629a08fcba52b0e53e1d879ead8b864",
+        "instrument_mixture": {
+          "none": "1"
+        },
+        "lower": "-5365073251/500000000",
+        "lower_witness": {
+          "allocation": [
+            1,
+            0,
+            2
+          ],
+          "scenario": "s3"
+        },
+        "scale": 31,
+        "tolerance_parts_per_million": 1,
+        "upper": "-2146029297/200000000",
+        "upper_witness": {
+          "allocations": {
+            "blank": [
+              3,
+              0,
+              0
+            ]
+          },
+          "instrument": "none"
+        },
+        "verdict": "QUALIFIED",
+        "width": "17/1000000000"
+      },
+      "candidate_seconds": 0.4867761339999106,
+      "certificate_sha256": "21c8a80b21761ab413037da7aeb3686e38df07972e2b49a955244b70bac6c4f7",
+      "comparisons": {
+        "encloses_conventional_primal_and_dual": true,
+        "exact_claims_equal_independent_arithmetic": true,
+        "narrow": true
+      },
+      "id": "g08",
+      "independent_certificate": {
+        "column_support": 5,
+        "lower": "-5365073251/500000000",
+        "lower_best_adversary": {
+          "allocation": [
+            1,
+            0,
+            2
+          ],
+          "scenario": "s3"
+        },
+        "row_instrument_count": 1,
+        "upper": "-2146029297/200000000",
+        "upper_best_contingent_plan": {
+          "blank": [
+            3,
+            0,
+            0
+          ]
+        },
+        "upper_best_instrument": "none",
+        "upper_by_instrument": {
+          "none": "-2146029297/200000000",
+          "scan0": "-337406692443/30800000000",
+          "scan1": "-1779090015941/156750000000",
+          "scan2": "-61707093313/5500000000"
+        },
+        "width": "17/1000000000"
+      },
+      "independent_control": {
+        "announced_instrument_control": {
+          "none": -10.730146491904396,
+          "scan0": -10.981060606060455,
+          "scan1": -11.435606060606059,
+          "scan2": -11.253787878787806
+        },
+        "announcement_controls_seconds": 0.010369343000093068,
+        "columns": 38,
+        "potential_cells": 11780,
+        "preparation_seconds": 0.0010943150000457535,
+        "private_mix": {
+          "achieved_by_column_policy": -10.73014649190439,
+          "achieved_by_row_policy": -10.730146491898212,
+          "maximin": -10.730146491897312,
+          "minimax": -10.730146491904392
+        },
+        "private_mixture_gain": 7.084111075528199e-12,
+        "raw_row_actions": 10,
+        "registered_cell_bound": 6000000,
+        "row_plans_by_instrument": {
+          "none": 10,
+          "scan0": 100,
+          "scan1": 100,
+          "scan2": 100
+        },
+        "saddle_seconds": 0.017685865999965245,
+        "scale_denominator": 12113640,
+        "status": "computed",
+        "weight_scale": 31
+      },
+      "returncode": 0,
+      "setting_sha256": "ef8b6c556a81081493443d232a3dd643901ee2529ac0fff6a9c1e9e1fec88a35",
+      "status": "accepted",
+      "time_started": "2026-11-25T02:33:53.662255+00:00",
+      "verifier_returncode": 0,
+      "verifier_seconds": 0.05009283799995501
+    },
+    {
+      "candidate_claim": {
+        "certificate_sha256": "2d67a895ea0ea94a86d2a629278f8ac3eee8363e0458e34cd22c311d90c92a93",
+        "game_sha256": "1d9c345f36c433e81e1d8437f7350d25d78188de0ef13479292f6b0f5a81e50e",
+        "instrument_mixture": {
+          "none": "1"
+        },
+        "lower": "-1043478261/100000000",
+        "lower_witness": {
+          "allocation": [
+            0,
+            2,
+            2,
+            0
+          ],
+          "scenario": "s0"
+        },
+        "scale": 56,
+        "tolerance_parts_per_million": 1,
+        "upper": "-10434782601/1000000000",
+        "upper_witness": {
+          "allocations": {
+            "blank": [
+              0,
+              2,
+              1,
+              0
+            ]
+          },
+          "instrument": "none"
+        },
+        "verdict": "QUALIFIED",
+        "width": "9/1000000000"
+      },
+      "candidate_seconds": 0.43495541200013577,
+      "certificate_sha256": "98a354898de0f5263d83d73f67fd959518afb914cf0040be97be40482b366ac3",
+      "comparisons": {
+        "encloses_conventional_primal_and_dual": true,
+        "exact_claims_equal_independent_arithmetic": true,
+        "narrow": true
+      },
+      "id": "g09",
+      "independent_certificate": {
+        "column_support": 5,
+        "lower": "-1043478261/100000000",
+        "lower_best_adversary": {
+          "allocation": [
+            0,
+            2,
+            2,
+            0
+          ],
+          "scenario": "s0"
+        },
+        "row_instrument_count": 1,
+        "upper": "-10434782601/1000000000",
+        "upper_best_contingent_plan": {
+          "blank": [
+            0,
+            1,
+            2,
+            0
+          ]
+        },
+        "upper_best_instrument": "none",
+        "upper_by_instrument": {
+          "none": "-10434782601/1000000000",
+          "scan0": "-120782608611/11000000000",
+          "scan1": "-121782608611/11000000000",
+          "scan2": "-123782608611/11000000000"
+        },
+        "width": "9/1000000000"
+      },
+      "independent_control": {
+        "announced_instrument_control": {
+          "none": -10.43478260869565,
+          "scan0": -10.980237154150196,
+          "scan1": -11.071146245059278,
+          "scan2": -11.252964426877469
+        },
+        "announcement_controls_seconds": 0.04613349500004915,
+        "columns": 69,
+        "potential_cells": 84180,
+        "preparation_seconds": 0.0025700650000999303,
+        "private_mix": {
+          "achieved_by_column_policy": -10.43478260869565,
+          "achieved_by_row_policy": -10.434782608695654,
+          "maximin": -10.434782608695652,
+          "minimax": -10.434782608695652
+        },
+        "private_mixture_gain": -1.7763568394002505e-15,
+        "raw_row_actions": 20,
+        "registered_cell_bound": 6000000,
+        "row_plans_by_instrument": {
+          "none": 20,
+          "scan0": 400,
+          "scan1": 400,
+          "scan2": 400
+        },
+        "saddle_seconds": 0.0774190899999212,
+        "scale_denominator": 1021020,
+        "status": "computed",
+        "weight_scale": 56
+      },
+      "returncode": 0,
+      "setting_sha256": "bcefb75ed8f1961eeb37385daaa9e9d2659496efc0b84d50e03cb295681425f5",
+      "status": "accepted",
+      "time_started": "2026-11-25T02:33:54.328496+00:00",
+      "verifier_returncode": 0,
+      "verifier_seconds": 0.051723075999916546
+    },
+    {
+      "candidate_claim": {
+        "certificate_sha256": "308b35a27732527d26f427143d0886470941e5a9902e397700b33bb729671b90",
+        "game_sha256": "3cd7d234199ad254f0df4ae7cb0c1346d039c4875c206fa646b7d9e05268f1b7",
+        "instrument_mixture": {
+          "scan0": "396743121/500000000",
+          "scan1": "103256879/500000000"
+        },
+        "lower": "-2752709454529/836000000000",
+        "lower_witness": {
+          "allocation": [
+            0,
+            1,
+            0,
+            2
+          ],
+          "scenario": "s2"
+        },
+        "scale": 36,
+        "tolerance_parts_per_million": 1,
+        "upper": "-28975888933/8800000000",
+        "upper_witness": {
+          "allocations": {
+            "q0": [
+              0,
+              0,
+              0,
+              3
+            ],
+            "q1": [
+              0,
+              1,
+              0,
+              2
+            ],
+            "q2": [
+              0,
+              3,
+              0,
+              0
+            ]
+          },
+          "instrument": "scan0"
+        },
+        "verdict": "QUALIFIED",
+        "width": "2947/418000000000"
+      },
+      "candidate_seconds": 0.36161168000012367,
+      "certificate_sha256": "9f30cddc4ee80a1247a631ad0726e51f70af30f7411aa70b68328ad2344a62a5",
+      "comparisons": {
+        "encloses_conventional_primal_and_dual": true,
+        "exact_claims_equal_independent_arithmetic": true,
+        "narrow": true
+      },
+      "id": "g10",
+      "independent_certificate": {
+        "column_support": 9,
+        "lower": "-2752709454529/836000000000",
+        "lower_best_adversary": {
+          "allocation": [
+            0,
+            1,
+            0,
+            2
+          ],
+          "scenario": "s2"
+        },
+        "row_instrument_count": 2,
+        "upper": "-28975888933/8800000000",
+        "upper_best_contingent_plan": {
+          "q0": [
+            0,
+            0,
+            0,
+            3
+          ],
+          "q1": [
+            0,
+            1,
+            0,
+            2
+          ],
+          "q2": [
+            0,
+            3,
+            0,
+            0
+          ]
+        },
+        "upper_best_instrument": "scan0",
+        "upper_by_instrument": {
+          "none": "-3358982163/1000000000",
+          "scan0": "-28975888933/8800000000",
+          "scan1": "-11699015171387/3553000000000",
+          "scan2": "-43848325464907/12870000000000"
+        },
+        "width": "2947/418000000000"
+      },
+      "independent_control": {
+        "announced_instrument_control": {
+          "none": -4.929910980758445,
+          "scan0": -3.3354384524078595,
+          "scan1": -4.236077942799007,
+          "scan2": -4.128494551490742
+        },
+        "announcement_controls_seconds": 0.73834513099996,
+        "columns": 74,
+        "potential_cells": 1777480,
+        "preparation_seconds": 0.10026378799989288,
+        "private_mix": {
+          "achieved_by_column_policy": -3.292714653725544,
+          "achieved_by_row_policy": -3.2927146537255463,
+          "maximin": -3.2927146537255445,
+          "minimax": -3.292714653725545
+        },
+        "private_mixture_gain": 0.04272379868231502,
+        "raw_row_actions": 20,
+        "registered_cell_bound": 6000000,
+        "row_plans_by_instrument": {
+          "none": 20,
+          "scan0": 8000,
+          "scan1": 8000,
+          "scan2": 8000
+        },
+        "saddle_seconds": 3.309227834000012,
+        "scale_denominator": 1396755360,
+        "status": "computed",
+        "weight_scale": 36
+      },
+      "returncode": 0,
+      "setting_sha256": "20d6875998f65e2ec823aae9945a4773852b89c131c8397bb5316a6b65dfbfef",
+      "status": "accepted",
+      "time_started": "2026-11-25T02:33:58.968992+00:00",
+      "verifier_returncode": 0,
+      "verifier_seconds": 0.04687716199987335
+    },
+    {
+      "candidate_claim": {
+        "certificate_sha256": "249e45fbfcf3f48f5a0eae51d3df25737bfa88042782d8d1a94f49d469d42844",
+        "game_sha256": "2f43d6934358c4f4d2be9c7616f7c7d22bfde825f6a2c87b3a049aa6b811b2a0",
+        "instrument_mixture": {
+          "none": "72034619/1000000000",
+          "scan0": "1499773/20000000",
+          "scan1": "21415523/31250000",
+          "scan2": "33535999/200000000"
+        },
+        "lower": "-21088315549/4400000000",
+        "lower_witness": {
+          "allocation": [
+            0,
+            0,
+            0,
+            1,
+            2
+          ],
+          "scenario": "s2"
+        },
+        "scale": 74,
+        "tolerance_parts_per_million": 1,
+        "upper": "-10016949849549/2090000000000",
+        "upper_witness": {
+          "allocations": {
+            "q0": [
+              0,
+              0,
+              2,
+              1,
+              1
+            ],
+            "q1": [
+              0,
+              0,
+              1,
+              2,
+              1
+            ]
+          },
+          "instrument": "scan0"
+        },
+        "verdict": "QUALIFIED",
+        "width": "18113/1045000000000"
+      },
+      "candidate_seconds": 0.6132233840000936,
+      "certificate_sha256": "3471b94071481218fdc4d6141d3429116321aba9f58759e890576ce3d5a6a634",
+      "comparisons": {
+        "encloses_conventional_primal_and_dual": true,
+        "exact_claims_equal_independent_arithmetic": true,
+        "narrow": true
+      },
+      "id": "g11",
+      "independent_certificate": {
+        "column_support": 9,
+        "lower": "-21088315549/4400000000",
+        "lower_best_adversary": {
+          "allocation": [
+            0,
+            0,
+            0,
+            1,
+            2
+          ],
+          "scenario": "s2"
+        },
+        "row_instrument_count": 4,
+        "upper": "-10016949849549/2090000000000",
+        "upper_best_contingent_plan": {
+          "q0": [
+            0,
+            0,
+            2,
+            1,
+            1
+          ],
+          "q1": [
+            0,
+            0,
+            1,
+            2,
+            1
+          ]
+        },
+        "upper_best_instrument": "scan0",
+        "upper_by_instrument": {
+          "none": "-1198199743/250000000",
+          "scan0": "-10016949849549/2090000000000",
+          "scan1": "-421766310091/88000000000",
+          "scan2": "-354283700699/73920000000"
+        },
+        "width": "18113/1045000000000"
+      },
+      "independent_control": {
+        "announced_instrument_control": {
+          "none": -6.584825700615175,
+          "scan0": -6.6196315223989854,
+          "scan1": -5.14149764121525,
+          "scan2": -6.049002214594427
+        },
+        "announcement_controls_seconds": 0.7340025099999821,
+        "columns": 155,
+        "potential_cells": 2289350,
+        "preparation_seconds": 0.024000830000204587,
+        "private_mix": {
+          "achieved_by_column_policy": -4.792798982991716,
+          "achieved_by_row_policy": -4.792798982991718,
+          "maximin": -4.792798982991719,
+          "minimax": -4.792798982991717
+        },
+        "private_mixture_gain": 0.3486986582235314,
+        "raw_row_actions": 70,
+        "registered_cell_bound": 6000000,
+        "row_plans_by_instrument": {
+          "none": 70,
+          "scan0": 4900,
+          "scan1": 4900,
+          "scan2": 4900
+        },
+        "saddle_seconds": 2.606293328999982,
+        "scale_denominator": 1053360,
+        "status": "computed",
+        "weight_scale": 74
+      },
+      "returncode": 0,
+      "setting_sha256": "4d06b667f5d9abdc52844e6b1bef78dd2a2a332d70f5e30d1ddf88efcb3f5042",
+      "status": "accepted",
+      "time_started": "2026-11-25T02:34:02.756663+00:00",
+      "verifier_returncode": 0,
+      "verifier_seconds": 0.05628187900015291
+    }
+  ],
+  "schema": "frontier/observation-game-independent-holdout-v1",
+  "started_at": "2026-11-25T02:33:49.789495+00:00"
+}

@@ -430,6 +430,45 @@ def qualify_game_theory(directory, root, release):
     return {'package_sha256': expected, 'replayed_ns': elapsed, 'held_cases': 6, **result}
 
 
+def qualify_observation_game(directory, root, release):
+    archive_path = directory / member.OBSERVATION_ZIP
+    expected = release['universal_mission_sha256'][member.OBSERVATION_ZIP]
+    require(expected == member.OBSERVATION_SHA256 and member.digest(archive_path.read_bytes()) == expected,
+            'Observation game archive digest mismatch')
+    with ZipFile(archive_path) as archive:
+        archive.extractall(root)
+    study = root / 'publication/mission-executor/game'
+    recorded = json.loads((study / 'EXAMPLE-VERIFICATION.json').read_bytes())
+    result, elapsed = call(study, sys.executable, '-S', 'observation.py', 'EXAMPLE.json', 'EXAMPLE-CERTIFICATE.json')
+    require(result == recorded and result['verdict'] == 'QUALIFIED', 'Observation certificate replay changed')
+    return {'package_sha256': expected, 'replayed_ns': elapsed, 'held_games': 11, **result}
+
+
+def qualify_mission_executor(directory, root, release):
+    expected = release['universal_mission_sha256'][member.EXECUTOR_ZIP]
+    manifest = install(directory / member.EXECUTOR_ZIP, root, {'sha256': expected})
+    require(manifest['id'] == 'frontier-harness-executor', 'Wrong local executor package')
+    require(manifest['source'] == member.commit_url(release['source_commit']), 'Executor source binding changed')
+    script = '''
+import json, pathlib, sys
+sys.path.insert(0, str(pathlib.Path.cwd()))
+from bridge.adapters import Runtime, strict_json
+from bridge.instruments import evaluate
+from bridge.mission_contracts import describe
+from bridge.mission_tools import EVALUATOR_SHA256
+from bridge.server import HarnessServer
+from bridge.universal_missions import UniversalMissionService
+runtime = Runtime(strict_json(pathlib.Path('local-model.example.json').read_bytes()))
+calculation = evaluate({'name':'dated check','inputs':['x'],'outputs':{'doubled':{'op':'mul','args':[{'field':'x'},2]}}},{'x':7})
+print(json.dumps({'local': runtime.local_only, 'registered': len(describe()), 'value': calculation['output']['doubled'],
+                  'sql_evaluator': EVALUATOR_SHA256, 'bridge': HarnessServer.__name__, 'service': UniversalMissionService.__name__}))
+'''
+    result, elapsed = call(root, sys.executable, '-I', '-S', '-c', script)
+    require(result['local'] and result['registered'] >= 2 and result['value'] == 14,
+            'Distributed executor entry points failed')
+    return {'package_sha256': expected, 'replayed_ns': elapsed, **result}
+
+
 def qualify(directory, live=False):
     manifest = json.loads((directory / member.MEMBER_JSON).read_bytes())
     tools = manifest['capabilities']
@@ -468,6 +507,10 @@ def qualify(directory, live=False):
                 game = root / 'game-theory'
                 game.mkdir()
                 results['game_theory'] = qualify_game_theory(directory, game, release)
+                if member.OBSERVATION_ZIP in release['universal_mission_sha256']:
+                    results['observation_game'] = qualify_observation_game(directory, root / 'observation', release)
+                if member.EXECUTOR_ZIP in release['universal_mission_sha256']:
+                    results['mission_executor'] = qualify_mission_executor(directory, root / 'executor', release)
         return results
 
 

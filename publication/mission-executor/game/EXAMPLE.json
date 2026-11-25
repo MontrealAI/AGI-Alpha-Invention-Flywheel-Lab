@@ -1,0 +1,19 @@
+{
+  "schema": "frontier/costly-observation-game-v1",
+  "row_budget": 1,
+  "scenarios": [
+    {"id": "north", "column_budget": 0, "weights": [12, 0]},
+    {"id": "south", "column_budget": 0, "weights": [0, 12]}
+  ],
+  "instruments": [
+    {"id": "none", "cost": "0", "channel": {"north": {"silent": "1"}, "south": {"silent": "1"}}},
+    {
+      "id": "north-test", "cost": "2",
+      "channel": {"north": {"trigger": "1", "quiet": "0"}, "south": {"trigger": "1/2", "quiet": "1/2"}}
+    },
+    {
+      "id": "south-test", "cost": "2",
+      "channel": {"north": {"trigger": "1/2", "quiet": "1/2"}, "south": {"trigger": "1", "quiet": "0"}}
+    }
+  ]
+}

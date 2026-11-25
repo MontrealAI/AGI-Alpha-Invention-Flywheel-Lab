@@ -67,7 +67,23 @@
         <p id="mission-published-summary"></p>
         <p class="mv-links" id="mission-published-links"></p>
       </div>
+      <section id="mission-execution" class="mission-execution" aria-labelledby="execution-title" hidden>
+        <h5 id="execution-title">Local execution</h5>
+        <p id="execution-status" role="status"></p>
+        <p id="execution-counts" class="packet-meta"></p>
+        <div id="execution-understanding" hidden><h6>Proposed understanding and action</h6><p id="execution-proposal"></p></div>
+        <pre id="execution-result" hidden></pre>
+        <details><summary>Run events and artifacts</summary><ol id="execution-events"></ol><ul id="execution-artifacts"></ul></details>
+        <div class="mv-actions">
+          <button id="execution-pause" type="button" class="quiet" hidden>Pause execution</button>
+          <button id="execution-resume" type="button" class="quiet" hidden>Resume execution</button>
+          <button id="execution-cancel" type="button" class="quiet" hidden>Cancel execution</button>
+          <button id="execution-retry" type="button" class="quiet" hidden>Check the submitted mission</button>
+          <button id="execution-export" type="button" class="quiet" disabled>Download execution record</button>
+        </div>
+      </section>
       <div class="mv-actions mission-actions">
+        <button id="execution-send-current" type="button" class="entry-button" hidden>Start local execution</button>
         <button id="mission-run-local" type="button" class="entry-button" hidden>Run with my local model</button>
         <a id="mission-configure" class="quiet" href="#mission-intelligence">Configure intelligence</a>
         <button id="mission-prepare" type="button" class="quiet">Prepare an assisted mission</button>
@@ -269,9 +285,22 @@
   <section class="mv-section foundry-panel" id="my-intelligence" aria-labelledby="my-intelligence-title" data-member-view hidden>
     <h3 id="my-intelligence-title" tabindex="-1">My intelligence <span>Ω</span></h3>
     <p class="mf-section-intro">Turn a rule you can verify into a small tool you can keep.</p>
-    <p>This workbench processes files on this device. Pages is a public-file service. The mission, inputs and results you add here stay in the current session. Locking clears them. An exported file can contain your objective, rules and candidate.</p>
+    <p>This workbench processes mission files on this device. Locking clears the browser session. A paired executor keeps its own private checkpoints on your device.</p>
     <details class="foundry-stage mission-connection" id="mission-intelligence">
       <summary>Connect a model for this mission</summary>
+      <details class="mission-execution-connection">
+        <summary>Run missions with your local executor</summary>
+        <p>Start HARNESS on your device and enter the one-use code it prints. Activation then starts work within the limits you selected on that device.</p>
+        <p class="mv-links"><a href="frontier-harness-executor-1.0.0.zip" download>Download the local executor</a>
+          <a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/main/publication/mission-executor/README.md">Setup and operating scope</a></p>
+        <form id="execution-code-form" autocomplete="off">
+          <label for="execution-code">One-use pairing code</label>
+          <input type="password" id="execution-code" required maxlength="43" autocomplete="off" spellcheck="false">
+          <button type="submit" class="quiet">Pair this browser</button>
+        </form>
+        <p id="execution-connection" role="status"></p>
+        <button id="execution-disconnect" type="button" class="quiet" hidden>Disconnect and pause running work</button>
+      </details>
       <form id="mission-connection-form" autocomplete="off">
         <h4>Local inference</h4>
         <div class="foundry-fields">
@@ -520,6 +549,9 @@ python3 verify_factory.py</code></pre>
         <label for="mission-import">Reopen a mission file<input id="mission-import" type="file" accept=".json,application/json"></label>
       </div>
       <p id="mission-file-status" class="status" role="status"></p>
+      <button id="execution-open-saved" type="button" class="quiet" disabled>Open saved executor missions</button>
+      <p id="execution-results-status" role="status"></p>
+      <ul id="execution-saved-list"></ul>
     </details>
         <details id="goal-keeper">
           <p id="goal-file-status" class="status" role="status"></p>

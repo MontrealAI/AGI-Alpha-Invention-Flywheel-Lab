@@ -462,6 +462,12 @@ body:has(#member:not([hidden]):not([data-public-view])) #main > :not(#member) { 
 }
 .mission-console pre { white-space: pre-wrap; overflow-wrap: anywhere; max-height: 24rem; overflow: auto; color: var(--ink); }
 .mission-published { border-inline-start: 2px solid #d0a977; padding: .45rem .9rem; margin-block: 1.1rem; }
+.mission-execution { border-inline-start: 2px solid #d0a977; padding: .45rem .9rem; margin-block: 1.1rem; overflow-wrap: anywhere; }
+.mission-execution h5 { margin-block: .45rem; color: #f4d8a5; font-size: .94rem; }
+.mission-execution :is(ol, ul), #execution-saved-list { padding-inline-start: 1.35rem; }
+.mission-execution-connection { margin-block-end: 1.15rem; }
+.mission-execution-connection label { display: block; }
+.mission-execution-connection input { max-width: 100%; }
 .mission-console .mv-actions a, .mission-capabilities a { display: inline-flex; align-items: center; min-height: 44px; }
 .mission-keeper { margin-block: 1.15rem .65rem; }
 @media (max-width: 680px) { .mission-brief { grid-template-columns: 1fr; } }

@@ -39,7 +39,7 @@ NAME = re.compile(r"[A-Za-z0-9][A-Za-z0-9_.-]{0,99}\Z")
 RUN = re.compile(r"wf_[a-f0-9]{24}\Z")
 TOOLS = frozenset({"write_document", "write_dataset", "construct_instrument", "run_instrument", "read_artifact", "retrieve_source"})
 DEFAULT_TOOLS = sorted(TOOLS - {"retrieve_source"})
-TERMINAL = {"complete", "cancelled", "failed", "needs_review", "exhausted"}
+TERMINAL = {"complete", "cancelled", "failed", "needs_review", "exhausted", "expired", "revoked"}
 MAX_FILE = 1_048_576
 MAX_STATE = 16_777_216
 _WORKSPACES = {}
@@ -130,6 +130,12 @@ def _atomic(path, data):
 
 class WorkflowService:
     """One local service owns each private root. No shell, payments, or external tools."""
+
+    spec_extensions = frozenset()
+    objective_limit = 12_000
+    tool_names = TOOLS
+    extra_artifact_suffixes = {}
+
     def __init__(self, runtime, private_root, *, server_source_sha256=None):
         if isinstance(runtime, Runtime):
             from .services import AccessRuntime
@@ -297,8 +303,9 @@ class WorkflowService:
         require(isinstance(spec, dict), "Workflow specification must be an object.")
         spec = strict_json(encoded(spec))  # Detach caller-owned containers and reject nonfinite values.
         allowed = {"objective", "context", "roles", "acceptance", "max_iterations", "max_actions", "tool_permissions", "local_only", "strategy", "max_output_tokens", "max_operations", "inherited_capability", "approaches", "adaptive_after_failures", "adversarial_oracles"}
-        require(not set(spec) - allowed, "Unknown workflow specification field.")
-        require(isinstance(spec.get("objective"), str) and 0 < len(spec["objective"]) <= 12000, "A nonempty objective of at most 12,000 characters is required.")
+        require(not set(spec) - (allowed | self.spec_extensions), "Unknown workflow specification field.")
+        require(isinstance(spec.get("objective"), str) and 0 < len(spec["objective"]) <= self.objective_limit,
+                f"A nonempty objective of at most {self.objective_limit:,} characters is required.")
         spec.setdefault("context", "")
         require(isinstance(spec["context"], str) and len(spec["context"].encode()) <= MAX_FILE // 4, "Context must be text under 256 KiB.")
         roles = spec.get("roles")
@@ -316,7 +323,7 @@ class WorkflowService:
         required_roles = {"single-model": {"builder"}, "actor-critic": {"builder", "critic"}, "researcher-builder-verifier": {"researcher", "builder", "critic"}, "strategist-economist": {"builder", "economist"}, "adversarial-review": {"builder", "adversary"}, "parallel-exploration": {"builder"}, "adaptive": {"builder"}}
         require(required_roles[spec["strategy"]].issubset(roles), "The selected strategy requires its actual model roles; configure the missing role.")
         spec.setdefault("tool_permissions", DEFAULT_TOOLS)
-        require(isinstance(spec["tool_permissions"], list) and all(x in TOOLS for x in spec["tool_permissions"]), "Tool permissions must name supported bounded tools.")
+        require(isinstance(spec["tool_permissions"], list) and all(x in self.tool_names for x in spec["tool_permissions"]), "Tool permissions must name supported bounded tools.")
         spec.setdefault("acceptance", [])
         require(isinstance(spec["acceptance"], list) and len(spec["acceptance"]) <= 1000, "Acceptance must be a bounded array of checks.")
         for check in spec["acceptance"]:
@@ -468,11 +475,13 @@ class WorkflowService:
         require(name not in {"state.json", "RUN_INSTRUMENT.py"} or kind == "trusted_runner", "Reserved artifact filename.")
         require(kind != "trusted_runner" or name == "RUN_INSTRUMENT.py", "Trusted runner has one fixed filename.")
         require(name != "state.json", "State checkpoint cannot be written as an artifact.")
-        require(kind in {"instrument", "document", "dataset", "trusted_runner", "source"}, "Unknown artifact kind.")
+        require(kind in {"instrument", "document", "dataset", "trusted_runner", "source"} or kind in self.extra_artifact_suffixes, "Unknown artifact kind.")
         require(kind != "instrument" or name.endswith(".json"), "Instruments must be JSON files.")
         require(kind != "document" or name.endswith((".md", ".txt")), "Documents must be Markdown or plain text.")
         require(kind != "dataset" or name.endswith(".csv"), "Datasets must be CSV files.")
         require(kind != "source" or name.endswith(".json"), "Sources must be provenance JSON files.")
+        require(kind not in self.extra_artifact_suffixes or name.endswith(self.extra_artifact_suffixes[kind]),
+                "Artifact filename does not match its format.")
         require(isinstance(content, str) and len(content.encode()) <= MAX_FILE, "Artifact must be UTF-8 text under 1 MiB.")
         require(kind != "trusted_runner" or content.encode() == _regular(Path(__file__).with_name("instruments.py"), MAX_FILE), "Runner content must match this edition's fixed evaluator.")
         raw = content.encode()
@@ -576,12 +585,44 @@ class WorkflowService:
             state["verification"]["stage"] = "final" if final else "development"
         self._event(state, "verification", state["verification"])
 
+    def _authority_stop(self, state):
+        """Return a terminal status for a revoked or expired execution authority."""
+        return None
+
+    def _stop_for_authority(self, state, status):
+        state["status"] = status
+        self._event(state, "authority_stopped", {"status": status})
+
+    def _response_schema(self, state, role):
+        if state.get("workshop") and role == "builder":
+            from .workshop import BUILDER_SCHEMA
+            return BUILDER_SCHEMA
+        return response_schema(role, state["spec"]["tool_permissions"], state["spec"]["max_actions"] - state["actions"])
+
+    def _record_builder_proposal(self, state, response):
+        if state.get("workshop") and isinstance(response.get("summary"), str):
+            self._event(state, "route_proposed", {"summary": self.runtime.redact(response["summary"][:3000])})
+
+    def _after_builder(self, state, response):
+        self._verify(state)
+        if "adversary" in state["spec"]["roles"]:
+            state["phase"] = "adversary"
+        elif "critic" in state["spec"]["roles"]:
+            state["phase"] = "critic"
+        else:
+            self._after_review(state, "accept" if state["verification"]["passed"] else "revise")
+
     def step(self, ident, _parent=None):
         require(not self._closed, "Workflow service is closed.", "WORKFLOW_STATE")
         with self._lock(ident):
             state = self._load(ident)
             if state.get("parent_run"):
                 require(_parent == state["parent_run"], "Internal exploration branches are controlled through their parent workflow.", "WORKFLOW_PERMISSION")
+            stop = self._authority_stop(state)
+            if stop:
+                self._stop_for_authority(state, stop)
+                self._save(state)
+                return self._view(state)
             from .workflow_strategies import PARENT_STRATEGIES, call_limit
             if state["spec"]["strategy"] in PARENT_STRATEGIES:
                 from .workflow_strategies import step as strategy_step
@@ -608,7 +649,7 @@ class WorkflowService:
         def cancelled():
             with self._lock(ident):
                 current = self._load(ident)
-                return self._closed or current["epoch"] != epoch or current["status"] in TERMINAL | {"paused"}
+                return self._closed or current["epoch"] != epoch or current["status"] in TERMINAL | {"paused"} or self._authority_stop(current) is not None
         admitted = False
         try:
             with self.runtime.execution_slot(route, cancelled=cancelled) as admission:
@@ -620,8 +661,12 @@ class WorkflowService:
             with self._lock(ident):
                 current = self._load(ident)
                 if current["epoch"] == epoch and current["status"] not in TERMINAL | {"paused"}:
-                    current["status"] = "paused"
-                    self._event(current, "admission_refused", {"code": error.code, "scope": "No model dispatch or attempt allowance consumed; inspect the selected connection before explicit resume."})
+                    stop = self._authority_stop(current)
+                    if stop:
+                        self._stop_for_authority(current, stop)
+                    else:
+                        current["status"] = "paused"
+                        self._event(current, "admission_refused", {"code": error.code, "scope": "No model dispatch or attempt allowance consumed; inspect the selected connection before explicit resume."})
                     self._save(current)
                 return self._view(current)
         finally:
@@ -640,6 +685,11 @@ class WorkflowService:
             require(ident not in self._inflight, "A model request is already in progress.", "WORKFLOW_BUSY")
             require(state["inflight"] is None, "An interrupted request needs explicit resume before new dispatch.", "WORKFLOW_STATE")
             require(state["status"] not in TERMINAL | {"paused"}, "Resume a paused/interrupted workflow before stepping; terminal runs cannot dispatch.", "WORKFLOW_STATE")
+            stop = self._authority_stop(state)
+            if stop:
+                self._stop_for_authority(state, stop)
+                self._save(state)
+                return self._view(state)
             self._check_routes(state["spec"])
             if state.get("workshop"):
                 from .workshop import require_current_evidence
@@ -675,12 +725,7 @@ class WorkflowService:
                 model = getattr(configured, "models", {}).get(route["model"])
                 if (getattr(configured, "kind", None) in {"openai", "ollama"}
                         and not getattr(configured, "remote", True) and getattr(model, "json_schema", False) is True):
-                    if state.get("workshop") and role == "builder":
-                        from .workshop import BUILDER_SCHEMA
-                        request["json_schema"] = BUILDER_SCHEMA
-                    else:
-                        request["json_schema"] = response_schema(role, state["spec"]["tool_permissions"],
-                                                                 state["spec"]["max_actions"] - state["actions"])
+                    request["json_schema"] = self._response_schema(state, role)
                 elif getattr(configured, "kind", None) != "anthropic" and getattr(model, "json_mode", False) is True:
                     request["json_mode"] = True
             progress = {"characters": 0, "reported": 0}
@@ -719,7 +764,11 @@ class WorkflowService:
                         current["iteration"] -= 1
                     current["inflight"] = None
                     if current["epoch"] == epoch:
-                        current["status"] = "paused"
+                        stop = self._authority_stop(current)
+                        if stop:
+                            self._stop_for_authority(current, stop)
+                        else:
+                            current["status"] = "paused"
                     self._event(current, "model_not_dispatched", {"run_id": request_id, "code": error.code, "attempt_allowance_restored": True})
                     self._save(current)
                     self._release_closed_lease()
@@ -738,7 +787,10 @@ class WorkflowService:
             if current.get("workshop"):
                 from .workshop import current_evidence
                 stale_sources = not current_evidence(self, current)
-            if current["epoch"] != epoch or current["status"] in {"cancelled", "paused"} or stale_sources:
+            stop = self._authority_stop(current)
+            if current["epoch"] != epoch or current["status"] in {"cancelled", "paused"} or stale_sources or stop:
+                if stop:
+                    self._stop_for_authority(current, stop)
                 if stale_sources and current["status"] == "running":
                     current["status"] = "needs_review"
                 self._event(current, "late_result_discarded", {"run_id": request_id, "usage": result.get("usage"), "cost": result.get("cost")})
@@ -776,9 +828,12 @@ class WorkflowService:
                     require(isinstance(response, dict), "Model must return a JSON object.")
                     if role == "builder":
                         require(not set(response) - {"summary", "actions", "done"} and isinstance(response.get("actions"), list) and len(response["actions"]) <= 8, "Builder response must contain at most eight actions.")
-                        if state.get("workshop") and isinstance(response.get("summary"), str):
-                            self._event(state, "route_proposed", {"summary": self.runtime.redact(response["summary"][:3000])})
+                        self._record_builder_proposal(state, response)
                         for action_index, action in enumerate(response["actions"]):
+                            stop = self._authority_stop(state)
+                            if stop:
+                                self._stop_for_authority(state, stop)
+                                break
                             if state["actions"] >= state["spec"]["max_actions"]:
                                 self._event(state, "actions_truncated", {"remaining_proposals_refused": len(response["actions"]) - action_index, "reason": "Declared tool-action allocation exhausted. Durable artifacts are still independently checked and reviewed."})
                                 break
@@ -791,13 +846,12 @@ class WorkflowService:
                                 state["feedback"] = "Tool failed or refused: " + str(error)[:500]
                             # Each local action is durable before moving to the next one.
                             self._save(state)
-                        self._verify(state)
-                        if "adversary" in state["spec"]["roles"]:
-                            state["phase"] = "adversary"
-                        elif "critic" in state["spec"]["roles"]:
-                            state["phase"] = "critic"
-                        else:
-                            self._after_review(state, "accept" if state["verification"]["passed"] else "revise")
+                        if state["status"] == "running":
+                            stop = self._authority_stop(state)
+                            if stop:
+                                self._stop_for_authority(state, stop)
+                            else:
+                                self._after_builder(state, response)
                     elif role == "adversary":
                         self._adversarial_review(state, response)
                     else:
@@ -983,11 +1037,13 @@ class WorkflowService:
             require(isinstance(content, str) and len(content.encode()) <= MAX_FILE and hashlib.sha256(content.encode()).hexdigest() == old["artifacts"][name]["sha256"], "Exported artifact checksum failed.", "WORKFLOW_INTEGRITY")
             require(name != "state.json", "Reserved import filename.")
             kind = old["artifacts"][name].get("kind")
-            require(kind in {"instrument", "document", "dataset", "trusted_runner", "source"}, "Unknown artifact kind.")
+            require(kind in {"instrument", "document", "dataset", "trusted_runner", "source"} or kind in self.extra_artifact_suffixes, "Unknown artifact kind.")
             require(kind != "instrument" or name.endswith(".json"), "Imported instrument must be JSON.")
             require(kind != "document" or name.endswith((".md", ".txt")), "Imported document must be plain text or Markdown.")
             require(kind != "dataset" or name.endswith(".csv"), "Imported dataset must be CSV.")
             require(kind != "source" or name.endswith(".json"), "Imported source must be provenance JSON.")
+            require(kind not in self.extra_artifact_suffixes or name.endswith(self.extra_artifact_suffixes[kind]),
+                    "Imported artifact filename does not match its format.")
             require(kind != "trusted_runner" or name == "RUN_INSTRUMENT.py", "Imported runner must have its fixed filename.")
             if name == "RUN_INSTRUMENT.py":
                 require(kind == "trusted_runner" and content.encode() == _regular(Path(__file__).with_name("instruments.py"), MAX_FILE), "Imported runner does not match this edition's trusted evaluator.")
