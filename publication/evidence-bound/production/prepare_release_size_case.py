@@ -41,7 +41,8 @@ def prepare(directory, revision):
     manifest = {"schema": "frontier/local-mission-input-v1", "ambition": AMBITION, "language": "fr",
                 "context": ("Les deux longueurs proviennent des archives publiques vérifiées. Calculez la différence "
                             "current_bytes moins previous_bytes avec le champ de sortie difference. "
-                            "Rattachez le calcul à la revendication archive_delta et au jeu release_sizes."),
+                            "Utilisez le même nom de fichier difference_calculator.json dans les deux opérations. "
+                            "Lancez cet instrument avec le jeu release_sizes et la revendication archive_delta."),
                 "tools": ["construct_instrument", "run_instrument"],
                 "requirements": {"evidence": {"inputs": {"release_sizes": record}, "claims": [claim]}}}
     return manifest, {"release_revision": revision, "archive_statistics": verified, "expected_delta_bytes": difference}

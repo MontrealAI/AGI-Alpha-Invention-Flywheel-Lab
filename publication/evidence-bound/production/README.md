@@ -4,6 +4,8 @@ The browser test uses an isolated eligibility fixture, the distributed website a
 
 The [candidate owner replay](CANDIDATE-OWNER.json) ran the exact English ambition with Qwen3-8B on Linux. The downloaded launcher opened a one-use guide, the browser discovered the running model on its standard port, and a real schema-constrained readiness request completed. The page sent the original ambition once and reopened the running journal. One model response constructed and ran a table on generated development data. The one-turn lease then ended. This established transport, actual inference, and construction in the declared scope. The result supplied no independently accepted strategic capability.
 
+The [French mobile candidate replay](CANDIDATE-FR-RESTART.json) discovered Qwen3-8B, executed two model requests and reopened the same portable checkpoint after a fresh connector process. The model constructed a calculator but failed to run it against the bound inputs. The page withheld the numerical claim. This establishes profile and journal recovery and preserves the actual numerical failure.
+
 The [portable restore replay](RESTORE-REPLAY.json) executes the native bridge, journal and isolated SQL worker with authored action responses. The approved numerical manifest matches the exact ambition and language. The restored journal preserves its old files and ancestry and opens in pause. All three claims await fresh execution. The same quantities bind again under the newly approved manifest. A French-only manifest grants no evidence permissions on the English archive. The original proposal never receives fresh authority through the checksum alone.
 
 ## Reproduce
