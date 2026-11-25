@@ -1,0 +1,176 @@
+{
+  "sourceCommit": "202d3a3f365206941abed7e7c32f65340afe4f24",
+  "sourceBlob": "7929730037417ec77cddb6da09c0b4545f33e2b5",
+  "schema": "reserve-rights278/v1",
+  "registeredCases": 8,
+  "comparisons": 13673,
+  "mismatches": 0,
+  "arms": [
+    {
+      "id": "one_independent",
+      "scenarios": 4,
+      "pairs": 121,
+      "valid": 118,
+      "best": [
+        0,
+        2
+      ],
+      "total": 2,
+      "usdMills": 573120,
+      "directReferenceMills": 2292480,
+      "directReferenceEquivalentUnderDeclaredShocks": true,
+      "witnessAtZero": {
+        "ok": false,
+        "done": 0,
+        "demand": 2
+      }
+    },
+    {
+      "id": "two_concurrent",
+      "scenarios": 10,
+      "pairs": 121,
+      "valid": 111,
+      "best": [
+        0,
+        4
+      ],
+      "total": 4,
+      "usdMills": 1146240,
+      "directReferenceMills": 2292480,
+      "directReferenceEquivalentUnderDeclaredShocks": true,
+      "witnessAtZero": {
+        "ok": false,
+        "done": 0,
+        "demand": 2
+      }
+    },
+    {
+      "id": "all_correlated",
+      "scenarios": 15,
+      "pairs": 121,
+      "valid": 85,
+      "best": [
+        0,
+        8
+      ],
+      "total": 8,
+      "usdMills": 2292480,
+      "directReferenceMills": 2292480,
+      "directReferenceEquivalentUnderDeclaredShocks": true,
+      "witnessAtZero": {
+        "ok": false,
+        "done": 0,
+        "demand": 2
+      }
+    },
+    {
+      "id": "one_pool_loss",
+      "scenarios": 12,
+      "pairs": 121,
+      "valid": 81,
+      "best": [
+        2,
+        2
+      ],
+      "total": 4,
+      "usdMills": 1146240,
+      "directReferenceMills": 2292480,
+      "directReferenceEquivalentUnderDeclaredShocks": false,
+      "witnessAtZero": {
+        "ok": false,
+        "done": 0,
+        "demand": 2
+      }
+    },
+    {
+      "id": "all_plus_pool_loss",
+      "scenarios": 45,
+      "pairs": 121,
+      "valid": 9,
+      "best": [
+        8,
+        8
+      ],
+      "total": 16,
+      "usdMills": 4584960,
+      "directReferenceMills": 2292480,
+      "directReferenceEquivalentUnderDeclaredShocks": false,
+      "witnessAtZero": {
+        "ok": false,
+        "done": 0,
+        "demand": 2
+      }
+    },
+    {
+      "id": "restricted_same_org_routes",
+      "scenarios": 4,
+      "pairs": 121,
+      "valid": 81,
+      "best": [
+        2,
+        2
+      ],
+      "total": 4,
+      "usdMills": 1146240,
+      "directReferenceMills": 2292480,
+      "directReferenceEquivalentUnderDeclaredShocks": false,
+      "witnessAtZero": {
+        "ok": false,
+        "done": 0,
+        "demand": 2
+      }
+    },
+    {
+      "id": "uncontrolled_fcfs",
+      "scenarios": 8,
+      "pairs": 121,
+      "valid": 106,
+      "best": [
+        0,
+        4
+      ],
+      "total": 4,
+      "usdMills": 1146240,
+      "directReferenceMills": 2292480,
+      "directReferenceEquivalentUnderDeclaredShocks": false,
+      "witnessAtZero": {
+        "ok": false,
+        "done": 0,
+        "demand": 2
+      }
+    },
+    {
+      "id": "external_org_no_right",
+      "scenarios": 15,
+      "pairs": 121,
+      "valid": 0,
+      "best": null,
+      "total": null,
+      "usdMills": null,
+      "directReferenceMills": 2292480,
+      "directReferenceEquivalentUnderDeclaredShocks": false,
+      "witnessAtZero": {
+        "ok": false,
+        "done": 0,
+        "demand": 2
+      }
+    }
+  ],
+  "invariants": {
+    "allHallAgree": true,
+    "registeredMinima": false,
+    "noRightsRefused": true,
+    "allCorrelatedEliminatesSavings": true,
+    "commonReserveFailureNeedsDuplication": true,
+    "fcfsOccupationCosted": false,
+    "sourcePriceInteger": true
+  },
+  "engineeringPass": false,
+  "commercial": "NO_DEPLOY",
+  "actualContracts": 0,
+  "actualRevenueUSD": 0,
+  "nativeAccount": null,
+  "nativeProfit": null,
+  "actualBilling": null,
+  "wallMs": 90
+}
