@@ -455,6 +455,31 @@ def build_factory(destination):
                                     '1.5.0')
 
 
+def executor_source_path(name):
+    special = {
+        'START-HERE.html': f'docs/research/{SITE}companion-start.html',
+        'runtime/bridge/relational.py': 'products/frontier-member-tools/inventor/relational.py',
+        'runtime/bridge/mission_assets/endpoint-screen.mjs': f'docs/research/{SITE}endpoint-screen.mjs',
+        'runtime/local-model.example.json': 'publication/mission-executor/local-model.example.json',
+    }
+    if name in special:
+        return special[name]
+    if not re.fullmatch(r'runtime/[A-Za-z0-9._/-]+', name) or any(
+            part in ('', '.', '..') for part in name.split('/')):
+        raise ValueError('Unexpected companion payload path')
+    return f'{HARNESS}{name.removeprefix("runtime/")}'
+
+
+def executor_payload_revision(revision, paths):
+    if not re.fullmatch(r'[0-9a-f]{40}', revision):
+        raise ValueError('Invalid site source revision')
+    payload = subprocess.check_output(
+        ['git', 'log', '--first-parent', '-1', '--format=%H', revision, '--', *paths], cwd=MAIN, text=True).strip()
+    if not re.fullmatch(r'[0-9a-f]{40}', payload):
+        raise ValueError('The companion payload source is unavailable')
+    return payload
+
+
 def build_mission_executor(destination, revision):
     harness = MAIN / HARNESS
     bridges = ('__init__', 'adapters', 'chatgpt', 'codex', 'codex_permissions', 'deployment', 'frontier_monitor',
@@ -516,15 +541,11 @@ def build_mission_executor(destination, revision):
             raise ValueError(f'The published archive {filename} changed')
     del sources['START.md']
     sources.update({name: harness / name for name in ('app/frontier-pairing.js', 'bridge/mission_documents.py')})
-    bundle_sources = {'runtime/' + name: source for name, source in sources.items()}
-    bundle_sources['START-HERE.html'] = ASSETS / 'companion-start.html'
-    files = {name: source.read_bytes() for name, source in bundle_sources.items()}
-    paths = [source.relative_to(MAIN).as_posix() for source in bundle_sources.values()]
+    names = ['runtime/' + name for name in sources] + ['START-HERE.html']
+    bundle_sources = {name: executor_source_path(name) for name in names}
+    files = {name: (MAIN / source).read_bytes() for name, source in bundle_sources.items()}
     # An Atlas or research update with the same companion files retains the archive's source and bytes.
-    payload_revision = subprocess.check_output(
-        ['git', 'log', '--first-parent', '-1', '--format=%H', revision, '--', *paths], cwd=MAIN, text=True).strip()
-    if not re.fullmatch(r'[0-9a-f]{40}', payload_revision):
-        raise ValueError('The companion payload source is unavailable')
+    payload_revision = executor_payload_revision(revision, bundle_sources.values())
     return package(destination / EXECUTOR_ZIP, files, 'frontier-harness-executor', payload_revision,
                    'Private HARNESS missions with companion approval, local intelligence and mission-scoped provider authorization.',
                    version='1.4.0')
