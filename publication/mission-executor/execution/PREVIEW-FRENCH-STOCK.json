@@ -1,0 +1,313 @@
+{
+  "browser_execution": {
+    "actions": 5,
+    "base": "http://127.0.0.1:8767/frontier-omega-alpha/",
+    "checkpoint_sha256": "a7db4ca49c500314adec269668611bf80793f97768cbc206398c8aee8405e536",
+    "counts": "Actions 5 · Appels au modèle 2",
+    "files": [
+      "RUN_INSTRUMENT.py",
+      "result.md",
+      "stock_alert.json"
+    ],
+    "language": "fr",
+    "model_calls": 2,
+    "module_sha256": "3d3acf2f9f214ae7e489cf5c312b0754702e8666660af27e34c35dd6537fb769",
+    "original_ambition": "Créez un instrument local réutilisable pour une alerte de stock. Les deux entrées sont stock et seuil. La sortie alerte vaut vrai exactement quand stock est strictement inférieur à seuil. Exécutez l’instrument pour stock=6 et seuil=9. Conservez l’instrument et indiquez le résultat de cette exécution.",
+    "received_archive_sha256": "c46eacc41131ab32df5819d52499fcf1ccc2c392779d7083c7e25650a6f3ef42",
+    "release_revision": "c864193b5793196e4b8eb0b99d718b9b0269ffbc",
+    "result_label": "En attente d’une évaluation indépendante",
+    "same_device_reopened": false,
+    "status": "needs_review",
+    "tool_results": [
+      {
+        "at": "2026-11-25T03:13:32.172429+00:00",
+        "detail": {
+          "cost": {
+            "accounted": 0,
+            "amount": 0,
+            "attempts": 1,
+            "basis": "reported_usage_at_user_rates",
+            "complete_cost_known": false,
+            "currency": "USD"
+          },
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+          "reported_model": "qwen3-8b-q4_k_m",
+          "requested_model": "qwen3-8b-q4_k_m",
+          "response_sha256": "6e1a16879a6f6b2207ea7204b0c88deb10f2958fb7cb542580f2f9fa1aaa7ff3",
+          "role": "builder",
+          "run_id": "wf_206f937173f9937e97a49383_98b2d9e506bd2625",
+          "usage": {
+            "input_tokens": 840,
+            "output_tokens": 218
+          }
+        },
+        "index": 3,
+        "kind": "model_completed",
+        "previous": "a169dff27a56b1617e29a4adff455b6b18c872abd8e92f1687f01f546537b60a",
+        "sha256": "07ede2f5ff713357a76aa58ccda5c2677bbf9c4b4a77d2adaf063002544b9f6d"
+      },
+      {
+        "at": "2026-11-25T03:13:32.176660+00:00",
+        "detail": {
+          "outcome": {
+            "action_id": "56a1b7d660c7c9393cfe664a814a68da8f8a8469f002743e8b1b469d291524bd",
+            "artifact": "stock_alert.json",
+            "bytes": 254,
+            "kind": "instrument",
+            "operation_executed": true,
+            "run": "python3 RUN_INSTRUMENT.py stock_alert.json input.json",
+            "sha256": "97cc8e1c4d36fe57e88cb1a490c8d6e16672103821c140214394c4c985d54584"
+          },
+          "tool": "construct_instrument"
+        },
+        "index": 5,
+        "kind": "tool_completed",
+        "previous": "0cbbf0619ff814872ef0eab1e8420aa91ea286bb8aea89fa2c6ec10e4a3ca841",
+        "sha256": "f1224cc5f0e254a04e0b8d9ef3859956d85931ce95d47d9ee562ab5a3694a8df"
+      },
+      {
+        "at": "2026-11-25T03:13:32.178609+00:00",
+        "detail": {
+          "outcome": {
+            "action_id": "57f9b808e3cc7cddb4e9939188276f8bff95532a2e5bf8d816856322fac31deb",
+            "operation_executed": true,
+            "operations": 3,
+            "output": {
+              "alerte": true
+            },
+            "scope": "Bounded declarative execution; acceptance must be checked separately."
+          },
+          "tool": "run_instrument"
+        },
+        "index": 6,
+        "kind": "tool_completed",
+        "previous": "f1224cc5f0e254a04e0b8d9ef3859956d85931ce95d47d9ee562ab5a3694a8df",
+        "sha256": "5627217091e33495ad65f6f94d1daff4cfb6e791f7f6a57734db53971e55aa62"
+      },
+      {
+        "at": "2026-11-25T03:14:11.590016+00:00",
+        "detail": {
+          "cost": {
+            "accounted": 0,
+            "amount": 0,
+            "attempts": 1,
+            "basis": "reported_usage_at_user_rates",
+            "complete_cost_known": false,
+            "currency": "USD"
+          },
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+          "reported_model": "qwen3-8b-q4_k_m",
+          "requested_model": "qwen3-8b-q4_k_m",
+          "response_sha256": "4395877a2648982b70b56597b0f15f2a8798c47663a74aa1697ce515ed5cecec",
+          "role": "builder",
+          "run_id": "wf_206f937173f9937e97a49383_f3266300c0b66613",
+          "usage": {
+            "input_tokens": 1214,
+            "output_tokens": 255
+          }
+        },
+        "index": 10,
+        "kind": "model_completed",
+        "previous": "354c012d1ac505a92166aef01ae691d6831b699b41e3035db6286caf67a8c095",
+        "sha256": "e321f23953026e68059b7d8b0544aa92fe8c9c1230f3426c5cd720dc50bba354"
+      },
+      {
+        "at": "2026-11-25T03:14:11.590255+00:00",
+        "detail": {
+          "outcome": {
+            "action_id": "cca131071eac065ff0ff3136500aa60610a60b1546a2ed63de7bb2b1e35325c0",
+            "artifact": "stock_alert.json",
+            "content": "{\n  \"inputs\": [\n    \"stock\",\n    \"seuil\"\n  ],\n  \"name\": \"Alerte de stock\",\n  \"outputs\": {\n    \"alerte\": {\n      \"args\": [\n        {\n          \"field\": \"stock\"\n        },\n        {\n          \"field\": \"seuil\"\n        }\n      ],\n      \"op\": \"lt\"\n    }\n  }\n}",
+            "operation_executed": true
+          },
+          "tool": "read_artifact"
+        },
+        "index": 12,
+        "kind": "tool_completed",
+        "previous": "8468a14e77627d09f17e9dc0aff570699937e7611ae5d394f137471d6d59ab04",
+        "sha256": "28a5677d48a5760b8038efea9765f8c1aa3a2670efa6e059b971ec0aa9322394"
+      },
+      {
+        "at": "2026-11-25T03:14:11.592429+00:00",
+        "detail": {
+          "outcome": {
+            "operation_executed": false,
+            "prior_outcome": {
+              "action_id": "57f9b808e3cc7cddb4e9939188276f8bff95532a2e5bf8d816856322fac31deb",
+              "operation_executed": true,
+              "operations": 3,
+              "output": {
+                "alerte": true
+              },
+              "scope": "Bounded declarative execution; acceptance must be checked separately."
+            },
+            "replayed_from": "5627217091e33495ad65f6f94d1daff4cfb6e791f7f6a57734db53971e55aa62"
+          },
+          "tool": "run_instrument"
+        },
+        "index": 13,
+        "kind": "tool_completed",
+        "previous": "28a5677d48a5760b8038efea9765f8c1aa3a2670efa6e059b971ec0aa9322394",
+        "sha256": "d678d0150fd8cffa93b696257a9a9baf278e18ece96776585716e6882dd35b70"
+      },
+      {
+        "at": "2026-11-25T03:14:11.597581+00:00",
+        "detail": {
+          "outcome": {
+            "action_id": "8a035a2cad8f0b2fe12ab8d9340216d84459b86ed81003957b44e160b43648a7",
+            "artifact": "result.md",
+            "bytes": 274,
+            "kind": "document",
+            "operation_executed": true,
+            "sha256": "aa876293b1319c1c5d2d2317207d49e4e31d89572323189af5c5fc048c08de66"
+          },
+          "tool": "write_document"
+        },
+        "index": 14,
+        "kind": "tool_completed",
+        "previous": "d678d0150fd8cffa93b696257a9a9baf278e18ece96776585716e6882dd35b70",
+        "sha256": "a580d6f19273c9c905cefc8bc8c430149ab6fc3a17307a36faa1da895ac91c65"
+      }
+    ],
+    "trace": [
+      "POST pair",
+      "POST submit",
+      "POST get",
+      "POST get",
+      "POST get",
+      "POST get",
+      "POST get",
+      "POST get",
+      "POST get",
+      "POST get",
+      "POST get",
+      "POST get",
+      "POST get",
+      "POST get",
+      "POST get",
+      "POST get",
+      "POST get",
+      "POST get",
+      "POST get",
+      "POST get",
+      "POST get",
+      "POST get",
+      "POST get",
+      "POST get",
+      "POST get",
+      "POST get",
+      "POST get",
+      "POST get",
+      "POST get",
+      "POST get",
+      "POST get",
+      "POST get",
+      "POST get",
+      "POST get",
+      "POST get",
+      "POST get",
+      "POST get",
+      "POST get",
+      "POST get",
+      "POST get",
+      "POST get",
+      "POST get",
+      "POST get",
+      "POST get",
+      "POST get",
+      "POST get",
+      "POST get",
+      "POST get",
+      "POST get",
+      "POST get",
+      "POST get",
+      "POST get",
+      "POST get",
+      "POST get",
+      "POST get",
+      "POST get",
+      "POST get",
+      "POST get",
+      "POST get",
+      "POST get",
+      "POST get",
+      "POST get",
+      "POST get",
+      "POST get",
+      "POST get",
+      "POST get",
+      "POST get",
+      "POST get",
+      "POST get",
+      "POST export"
+    ],
+    "wallet": "isolated fixture, no financial transaction",
+    "workflow_run": "45540555555"
+  },
+  "checked": [
+    {
+      "direct_comparison": true,
+      "result": true,
+      "seuil": 9,
+      "stock": 6
+    },
+    {
+      "direct_comparison": false,
+      "result": false,
+      "seuil": 9,
+      "stock": 9
+    },
+    {
+      "direct_comparison": false,
+      "result": false,
+      "seuil": 9,
+      "stock": 12
+    },
+    {
+      "direct_comparison": true,
+      "result": true,
+      "seuil": 1,
+      "stock": 0
+    },
+    {
+      "direct_comparison": false,
+      "result": false,
+      "seuil": 0,
+      "stock": 0
+    },
+    {
+      "direct_comparison": true,
+      "result": true,
+      "seuil": 101,
+      "stock": 100
+    }
+  ],
+  "installed_archive_sha256": "ccbc3990be326388881439a0c6d66a10fdfd984cc53b3c09701f9ad6c13b8cdd",
+  "portable_instrument": {
+    "inputs": [
+      "stock",
+      "seuil"
+    ],
+    "name": "Alerte de stock",
+    "outputs": {
+      "alerte": {
+        "args": [
+          {
+            "field": "stock"
+          },
+          {
+            "field": "seuil"
+          }
+        ],
+        "op": "lt"
+      }
+    }
+  },
+  "portable_instrument_sha256": "97cc8e1c4d36fe57e88cb1a490c8d6e16672103821c140214394c4c985d54584",
+  "schema": "frontier/browser-preview-development-v1",
+  "scope": "Actual bilingual Preview/browser-to-installed-connector transport. French stock alert with synthetic values, a development witness distinct from the independently frozen generality study."
+}
