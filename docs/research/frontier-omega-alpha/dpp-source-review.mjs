@@ -13,6 +13,17 @@ const isObject = value => value !== null && typeof value === 'object' && !Array.
 const tidy = value => typeof value === 'string' ? value.normalize('NFC').trim().toLowerCase().replace(/\s+/gu, ' ') : '';
 const digest = /^[a-f0-9]{64}$/u;
 const decimal = /^([+-]?)(\d{1,12})(?:[.,](\d{1,8}))?$/u;
+const qualificationHeading = /(?:^|[:—–(]\s*|\s-\s+)(?:max(?:imums?|ima)?|min(?:imums?|ima)?|(?:upper|lower) (?:bounds?|limits?|estimates?)|bounds?|limits?|caps?|ceilings?|floors?|at (?:most|least)|approximat\p{L}*|estimat\p{L}*|typical|indicative|provisional|preliminary|not (?:reported|measured)|(?:valeurs?|mesures?|données) (?:maximales?|minimales?|approximatives?|indicatives?|estim[ée]es?|provisoires?|préliminaires?)|limites?|bornes?|estimations?|environ|à titre indicatif)(?=$|[\s.:,—–…/)])/iu;
+const boundedPropertyHeading = /^(?:max(?:imum)?|min(?:imum)?)\.?\s+(?:(?:continuous|operating|peak|rated|charge|charging|discharge|discharging|and|allowable|input|output|net|battery|pack|system|module|DC|AC)(?:\s*\/\s*|\s+))*(current|voltage|capacity|weight|mass|power|energy)\s*(?:\((?:AC|DC)\)\s*)?:?\s*/iu;
+const boundedPropertyUnits = new Map([
+  ['current', new Map([['a',0], ['ma',3]])],
+  ['voltage', fields.get('nominalVoltage').units],
+  ['capacity', fields.get('batteryCapacity').units],
+  ['weight', fields.get('batteryWeight').units],
+  ['mass', fields.get('batteryWeight').units],
+  ['power', new Map([['kw',0], ['w',3]])],
+  ['energy', new Map([['kwh',0], ['wh',3]])],
+]);
 
 function exactQuantity(value, unit, units) {
   if (typeof value !== 'string' && !Number.isFinite(value)) return undefined;
@@ -57,6 +68,17 @@ function clauses(text) {
   return text.split(/[;\r\n]+|\.\s+(?=\p{Lu}[\p{L}\p{N}-]{2,}\b)|\.$/u).map(part => part.trim()).filter(Boolean);
 }
 
+function qualifiedSection(part) {
+  const heading = part.replace(/<\/?(?:h[1-6]|strong|em|b|i)>|[*_`]/giu, '')
+    .replace(/^(?:(?:[#>•●◦▪+—–-]+|\d+[.)])\s*)+/u, '').trim();
+  if (!qualificationHeading.test(heading)) return false;
+  // A complete bound on one named property is a field row, not a section heading.
+  const field = boundedPropertyHeading.exec(heading);
+  if (!field) return true;
+  const units = boundedPropertyUnits.get(field[1].toLowerCase());
+  return !measurementValues(heading.slice(field[0].length), units, true).length;
+}
+
 function columnHeaders(parts) {
   const headers = [];
   for (const [index, part] of parts.entries()) {
@@ -76,21 +98,23 @@ function quoteQuantifies(quote, excerpt, observation, {heading, units}) {
   // Parse complete labelled clauses. An unsupported expression cannot contribute a suffix.
   const expected = exactQuantity(observation.value, observation.unit, units);
   if (expected === undefined || !excerpt.includes(quote)) return false;
-  const cited = clauses(quote);
-  const available = clauses(excerpt);
-  if (!available.some((_, start) => cited.every((part, index) => available[start + index] === part))) return false;
   // Preserve compatibility characters such as superscript footnote digits.
   const read = text => clauses(text.normalize('NFC').replace(/[^\S\r\n]+/gu, ' '));
+  const sourceParts = read(excerpt);
   const parts = read(quote);
+  const starts = sourceParts.flatMap((_, start) => parts.every((part, index) => sourceParts[start + index] === part) ? [start] : []);
+  if (starts.length !== 1 || parts.length === 0) return false;
+  // A source section heading still applies when the supplied quote begins at its field row.
+  const qualified = sourceParts.findIndex(qualifiedSection);
   const tables = columnHeaders(parts);
-  if (tables.length > 1 || tables.length !== columnHeaders(read(excerpt)).length) return false;
+  if (tables.length > 1 || tables.length !== columnHeaders(sourceParts).length) return false;
   const [table] = tables;
   const model = tidy(observation.target.model);
   const positions = table?.labels.flatMap((models, index) => models.includes(model) ? [index] : []) ?? [];
   if (table && (table.labels.length < 2 || table.labels.some(models => models.includes('')) || positions.length !== 1)) return false;
   return parts.some((clause, index) => {
     const prefix = heading.exec(clause);
-    if (!prefix || table && index <= table.index) return false;
+    if (!prefix || (table && index <= table.index) || (qualified >= 0 && starts[0] + index >= qualified)) return false;
     const text = clause.slice(prefix[0].length);
     const sharedAcrossBoth = /\s+in both columns$/iu.test(text);
     const values = measurementValues(text.replace(/\s+in both columns$/iu, ''), units, Boolean(table));

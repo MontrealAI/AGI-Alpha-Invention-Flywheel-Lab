@@ -166,3 +166,31 @@ test('a multi-model row binds the value to its exact supervised column label', (
   assert.equal(review('Model columns: Alpha Pack, Beta Pack, Extra Pack. Weight: 72.2 kg in both columns.',[72.2]).decision, 'insufficient');
   assert.equal(review('Model columns: Alpha Pack, Beta Pack. Weight: 72.2 kg.',[72.2]).decision, 'insufficient');
 });
+
+test('a qualified source section cannot support exact readings or be cropped to remove its heading', () => {
+  const target = {model:'Example Pack',level:'system'};
+  const row = 'Net battery weight: 64 kg.';
+  const review = (excerpt, quote = excerpt) => reviewClaim({
+    id:'section-check',target,field:'batteryWeight',claim:{value:64,unit:'kg'},
+    sources:[{id:'table',excerpt,url:'https://example.org/data',locator:'section',sha256:'a'.repeat(64)}],
+    observations:[{source:'table',target,field:'batteryWeight',quote,value:64,unit:'kg'}],
+  }).decision;
+  for (const heading of ['Maximum values …\n', 'Upper limits; ', 'Table 3 — Estimates\n', 'Table 3 - Estimates\n',
+    'Data (approximate). ', 'Valeurs maximales\n', 'Limite supérieure; ', 'À titre indicatif\n', 'Données provisoires\n',
+    '## Maximum values\n', '• Upper limits; ', '- Upper limits\n', '**Estimated values**\n', '> Upper limits\n',
+    '<h3>Maximum values</h3>\n']) {
+    const excerpt = heading + row;
+    assert.equal(review(excerpt), 'insufficient');
+    assert.equal(review(excerpt, row), 'insufficient');
+  }
+  assert.equal(review('Maximum continuous charging/discharging current: 30 A.\n' + row), 'supported');
+  assert.equal(review('Maximum operating current: 30 A.\n' + row), 'supported');
+  assert.equal(review('Maximum discharge current: 30 A.\n' + row), 'supported');
+  assert.equal(review('Maximum charging/discharging current: 25 / 30 A.\n' + row), 'supported');
+  assert.equal(review('Maximum operating voltage: 68 V.\n' + row), 'supported');
+  assert.equal(review('Minimum discharge voltage: 48 V.\n' + row), 'supported');
+  assert.equal(review('Maximum operating values for 30 A.\n' + row), 'insufficient');
+  assert.equal(review('Maximum discharge current: 30 kg.\n' + row), 'insufficient');
+  assert.equal(review('Independent measurements.\n' + row), 'supported');
+  assert.equal(review(row + '\nUpper limits for a subsequent section.'), 'supported');
+});
