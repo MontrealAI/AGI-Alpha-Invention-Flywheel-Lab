@@ -1,0 +1,287 @@
+{
+  "accepted_complete": 0,
+  "cases": {
+    "m01": {
+      "disposition": "original observed",
+      "elapsed_seconds": 63.207534528,
+      "full_task": "FAIL",
+      "note": "512 actual output tokens and provider finish_reason=length. No authorized tools ran. The incomplete first proposal also included undeclared operation names.",
+      "partial": "Provider truncation safely paused mission",
+      "provider_requests": 1,
+      "source": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/f3859299e2ce7d8a3199781f91309534e4bd82e4/publication/mission-executor/holdout/primary/INDEPENDENT-QUALITATIVE-VERDICTS.json",
+      "source_result_sha256": "bc78593881f628a46627362c9fdf47229d9dbcd474727b49b20b3cfa19ad08e5",
+      "status": "paused",
+      "usage_observed_from_provider": {
+        "completion_tokens": 512,
+        "prompt_tokens": 749
+      }
+    },
+    "m02": {
+      "actual_executed_operations": [],
+      "artifacts": 0,
+      "checkpoint_sha256": "3fb8094863dafeb4c9b751a425deec3a9d4ae10c0e6a5a39ac09eaa47296b86a",
+      "disposition": "historical regression replay after public disclosure",
+      "elapsed_seconds": 63.16338642399933,
+      "full_task": "FAIL",
+      "independent_reference": "inventory_enumeration",
+      "note": "The first model completion reached the original cap. No optimization, verified manifest or reusable implementation ran. The original exact optimum is 22 points, 11 kg, gauge/mount/optic.",
+      "provider_receipts": [
+        {
+          "dispatch_elapsed_seconds": 63.08445783800016,
+          "fingerprint": "b12242-3b4d6ab3f",
+          "finish_reason": "length",
+          "receipt": "m02/provider-01.response.json",
+          "serialized_request_sha256": "bd79675e4bbb064b3b5ec9f137dc45c2afd81840d53dea5054872f8c9c454909",
+          "sha256": "58e72c2b73a11e31c140fbea5bf2afb874f05fd8a3eccc0022086e284bc6baf3",
+          "transport_error_code": null,
+          "usage": {
+            "completion_tokens": 512,
+            "prompt_tokens": 885,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            },
+            "total_tokens": 1397
+          }
+        }
+      ],
+      "provider_requests": 1,
+      "source": "m02/INDEPENDENT-RUNTIME-RESULT.json",
+      "source_result_sha256": "8103668981f80623e918d6bf2c0b8c757295ee768add3125aa9cd935ff51eed9",
+      "status": "paused"
+    },
+    "m03": {
+      "actual_executed_operations": [],
+      "artifacts": 0,
+      "checkpoint_sha256": "8abb0564d100174876e2da4f28da269f44cd78b461932d52b2e4cfaa786e54e7",
+      "disposition": "historical regression replay after public disclosure",
+      "elapsed_seconds": 194.6356280480004,
+      "full_task": "FAIL",
+      "independent_reference": "utc_interval_union",
+      "note": "The first model completion reached the original cap. No time normalization or union ran. The independently verified union is 28 minutes.",
+      "provider_receipts": [
+        {
+          "dispatch_elapsed_seconds": 194.46323900799962,
+          "fingerprint": "b12242-3b4d6ab3f",
+          "finish_reason": "length",
+          "receipt": "m03/provider-01.response.json",
+          "serialized_request_sha256": "5f2c3b971406e6e786ec85573ba31969a3f77d7a79ef964e34f71d13b247d5b7",
+          "sha256": "0bed7de18f96cb949b231673c742fed4aa097def7f54046e5a4e1552915302f2",
+          "transport_error_code": null,
+          "usage": {
+            "completion_tokens": 512,
+            "prompt_tokens": 942,
+            "prompt_tokens_details": {
+              "cached_tokens": 3
+            },
+            "total_tokens": 1454
+          }
+        }
+      ],
+      "provider_requests": 1,
+      "source": "m03/INDEPENDENT-RUNTIME-RESULT.json",
+      "source_result_sha256": "b2f66a91da427e780ab7825ca279772047b2f16077e281ca38c68bc2317e268a",
+      "status": "paused"
+    },
+    "m04": {
+      "disposition": "original observed",
+      "elapsed_seconds": 286.3534761410001,
+      "full_task": "FAIL",
+      "note": "Initial 12-hour vs installed 24-hour horizon. Actual assessment and attempted invocation returned INCOMPATIBLE with executed=false. Identical operations replayed as non-executions. The terminal document mislabeled the requested interval as 24 hours.",
+      "partial": "PASS independent typed scope check and blocked invocation",
+      "provider_requests": 6,
+      "source": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/f3859299e2ce7d8a3199781f91309534e4bd82e4/publication/mission-executor/holdout/primary/INDEPENDENT-QUALITATIVE-VERDICTS.json",
+      "source_result_sha256": "88e42969895d2944afab6be59bc55dd47b52d4214ab0aa9b3de55a7e0bf72078",
+      "status": "needs_review",
+      "usage_observed_from_provider": {
+        "completion_tokens": 1292,
+        "prompt_tokens": 12007
+      }
+    },
+    "m05": {
+      "disposition": "original observed",
+      "elapsed_seconds": 157.2541576460003,
+      "full_task": "FAIL",
+      "note": "No numerical rate and no data access. The six-turn run exhausted. Its French documents asked for generic test data without specifying the necessary paired volumes and durations.",
+      "partial": "PASS safe abstention from computing absent-source measurement",
+      "provider_requests": 6,
+      "source": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/f3859299e2ce7d8a3199781f91309534e4bd82e4/publication/mission-executor/holdout/primary/INDEPENDENT-QUALITATIVE-VERDICTS.json",
+      "source_result_sha256": "de0ee753a8f8dc5ac2d95affa25e3618c3e514d6598675d41d96c0a06150db77",
+      "status": "exhausted",
+      "usage_observed_from_provider": {
+        "completion_tokens": 945,
+        "prompt_tokens": 5606
+      }
+    },
+    "m06": {
+      "disposition": "original separate observed follow-up",
+      "elapsed_seconds": 93.18414455899983,
+      "full_task": "FAIL",
+      "note": "Actual table operations and artifacts were observed. The calculation was wrong and no artifact passed independent reuse.",
+      "provider_requests": 2,
+      "source": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/e39f5b7cf965c5838ba1e1a6c85c59c73bb34e0a/publication/mission-executor/production/HELD-MIXTURE-FOLLOWUP.json",
+      "source_result_sha256": "0e380f3878e355e16b57f1b2921d1a12a4b547b7d7251b7acb9a87ecef74aef1",
+      "status": "exhausted"
+    },
+    "m07": {
+      "actual_executed_operations": [],
+      "artifacts": 0,
+      "checkpoint_sha256": "fa9e355488c4986aa5cd0cea8026a3d123b8ea66ecc842b78c5be8fb601ddea7",
+      "disposition": "historical regression replay after public disclosure",
+      "elapsed_seconds": 251.442715358,
+      "full_task": "FAIL",
+      "independent_reference": "choose_source_revision",
+      "note": "The first model completion reached the original cap and no tools ran. The original runner did not issue the archived revisions fixture to the mission. The known fixture decision is silver.",
+      "provider_receipts": [
+        {
+          "dispatch_elapsed_seconds": 251.36302775500008,
+          "fingerprint": "b12242-3b4d6ab3f",
+          "finish_reason": "length",
+          "receipt": "m07/provider-01.response.json",
+          "serialized_request_sha256": "550eb91274017c74c9b9237d7947999f361078116719934c0ecec425f50b63f0",
+          "sha256": "07cecfb4c3235af37638f41641c5f96827521eace87d106dddcbe4d2b2cc52d0",
+          "transport_error_code": null,
+          "usage": {
+            "completion_tokens": 512,
+            "prompt_tokens": 863,
+            "prompt_tokens_details": {
+              "cached_tokens": 3
+            },
+            "total_tokens": 1375
+          }
+        }
+      ],
+      "provider_requests": 1,
+      "source": "m07/INDEPENDENT-RUNTIME-RESULT.json",
+      "source_result_sha256": "2fdb53d96265a5e933c195f7158785f295124916b3a097e46e92946f937739a8",
+      "status": "paused"
+    },
+    "m08": {
+      "actual_executed_operations": [
+        "construct_instrument",
+        "construct_instrument",
+        "run_instrument",
+        "read_artifact",
+        "write_document",
+        "write_document"
+      ],
+      "artifacts": 3,
+      "checkpoint_sha256": "3673f8a6d3e5518f6fcf037010fc8a8d926a9901e4aee2d8370fff729525908a",
+      "disposition": "historical regression replay after public disclosure",
+      "elapsed_seconds": 245.1580821359994,
+      "full_task": "FAIL",
+      "independent_reference": "two_lane_minimax",
+      "note": "Five actual model turns reached the 16-action limit. A constructed instrument executed and returned 0.5 for the value and witness. No executed result certified the reference bound of -63/16 or supplied the required independently checkable optimal strategies.",
+      "provider_receipts": [
+        {
+          "dispatch_elapsed_seconds": 91.23142663400085,
+          "fingerprint": "b12242-3b4d6ab3f",
+          "finish_reason": "stop",
+          "receipt": "m08/provider-01.response.json",
+          "serialized_request_sha256": "67de8e0c8473c384e664287f64e233b063f8617d585f626b33cfaa2cc6bac032",
+          "sha256": "6639a001c0bb2dfa25bae8d72c59088e268bd9c650dc955b35efe2de2ea11e61",
+          "transport_error_code": null,
+          "usage": {
+            "completion_tokens": 319,
+            "prompt_tokens": 932,
+            "prompt_tokens_details": {
+              "cached_tokens": 3
+            },
+            "total_tokens": 1251
+          }
+        },
+        {
+          "dispatch_elapsed_seconds": 39.04644414500035,
+          "fingerprint": "b12242-3b4d6ab3f",
+          "finish_reason": "stop",
+          "receipt": "m08/provider-02.response.json",
+          "serialized_request_sha256": "bc9bf93c16d35f0a1754a1a019dfc6750577a6f0e187674e1857d635f4c501f8",
+          "sha256": "a37d44ab311fe024015578b554e536458b0d3fba7097a61eaaa6065ed85b88dd",
+          "transport_error_code": null,
+          "usage": {
+            "completion_tokens": 339,
+            "prompt_tokens": 1108,
+            "prompt_tokens_details": {
+              "cached_tokens": 900
+            },
+            "total_tokens": 1447
+          }
+        },
+        {
+          "dispatch_elapsed_seconds": 32.325059546000375,
+          "fingerprint": "b12242-3b4d6ab3f",
+          "finish_reason": "stop",
+          "receipt": "m08/provider-03.response.json",
+          "serialized_request_sha256": "cbd76ca3834f8bce83a3e52d4c0d362863519a31e98531b62bd9a2f8c83041e5",
+          "sha256": "ae31312d9914510fb137bf09f4a742febbd650e86cb1cc578d0ecb3f15495b07",
+          "transport_error_code": null,
+          "usage": {
+            "completion_tokens": 235,
+            "prompt_tokens": 1322,
+            "prompt_tokens_details": {
+              "cached_tokens": 890
+            },
+            "total_tokens": 1557
+          }
+        },
+        {
+          "dispatch_elapsed_seconds": 42.07011345199953,
+          "fingerprint": "b12242-3b4d6ab3f",
+          "finish_reason": "stop",
+          "receipt": "m08/provider-04.response.json",
+          "serialized_request_sha256": "5e7d24da90598dc19454e4dfff15994fb961ef7e2ced174cb3b42e5784174ddc",
+          "sha256": "cf26da559567eb60d9ea8fcdce3709f4f2a6655fd0de399214727eb223608152",
+          "transport_error_code": null,
+          "usage": {
+            "completion_tokens": 261,
+            "prompt_tokens": 1539,
+            "prompt_tokens_details": {
+              "cached_tokens": 898
+            },
+            "total_tokens": 1800
+          }
+        },
+        {
+          "dispatch_elapsed_seconds": 40.20615155099949,
+          "fingerprint": "b12242-3b4d6ab3f",
+          "finish_reason": "stop",
+          "receipt": "m08/provider-05.response.json",
+          "serialized_request_sha256": "26e780e74f2afb81dd17028730a919c05f41dfdf88c4ca99015174ca06e3f1b5",
+          "sha256": "98abf8bf6e3cf41828aba8ea3a43b4ab178e728c40daf226ebd87771b97ad047",
+          "transport_error_code": null,
+          "usage": {
+            "completion_tokens": 192,
+            "prompt_tokens": 1813,
+            "prompt_tokens_details": {
+              "cached_tokens": 971
+            },
+            "total_tokens": 2005
+          }
+        }
+      ],
+      "provider_requests": 5,
+      "source": "m08/INDEPENDENT-RUNTIME-RESULT.json",
+      "source_result_sha256": "51a540cd5b9cc67aea5231c0bb61b1d16f4874955b21a4a39fc9b7bf9da1b16e",
+      "status": "exhausted"
+    }
+  },
+  "cases_with_actual_model_trials": 8,
+  "historical_replays": [
+    "m02",
+    "m03",
+    "m07",
+    "m08"
+  ],
+  "prior_dispositions_preserved": [
+    "m01",
+    "m04",
+    "m05",
+    "m06"
+  ],
+  "prior_registration_sha256": "4417b33af28d8d0acfdd814714f8dd837d94fe6d2414c885c3ba2fbcd061d274",
+  "prior_registration_url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/f3859299e2ce7d8a3199781f91309534e4bd82e4/publication/mission-executor/holdout/REGISTRATION.json",
+  "registered_cases": 8,
+  "replay_registration_sha256": "e39a193d8ca0ec5c8a2c055278397ae9662658b338d6a4dd17500d7c73596270",
+  "runtime_cost_scope": "Timing varies under shared CPU. Complete hosting, operator and model resource cost were not observed. Local requests had no paid API charges executed.",
+  "schema": "frontier/historical-mission-dispositions-v1",
+  "scope": "Original limits apply to the four replays. Known outcomes had been published. The original mixture follow-up used a separate observer window. No fresh generality or custody inference follows."
+}

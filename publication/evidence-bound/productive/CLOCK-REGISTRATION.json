@@ -1,0 +1,35 @@
+{
+  "schema": "frontier/independent-clock-cross-check-v1",
+  "registered_at_utc": "2026-11-25T04:04:38.379457+00:00",
+  "astropy_version": "7.2.0",
+  "target_icrs_degrees": [
+    73.980231,
+    -63.260063
+  ],
+  "approximated_saao_geodetic": [
+    20.810694444444444,
+    -32.379444444444445,
+    1798
+  ],
+  "reference": "https://www.saao.ac.za/astronomers/sutherland/",
+  "photometry": {
+    "missing": {
+      "url": "https://exofop.ipac.caltech.edu/tess/get_file.php?id=74164",
+      "sha256": "c612790fba6198ab2f43fead64b65cea2222b51adea6159b92466c5d461c2ddd"
+    },
+    "control": {
+      "url": "https://exofop.ipac.caltech.edu/tess/get_file.php?id=948869",
+      "sha256": "6a8253d0f22497d719676936d3efaeb0657b3f8baa4222f0c6349e257fa7d18e"
+    }
+  },
+  "control_acceptance": "Compare explicitly recorded November 2023 BJD_TDB to Astropy recomputation from JD_UTC for every original row. Require max discrepancy 0.5 s. Preserve original column; separation judgment remains diagnostic.",
+  "method": "Use Astropy builtin barycentric projection plus UTC-to-TDB scale conversion with shipped IERS tables and no network, with the site approximation bounded at Earth radius/c. Compare against separately retrieved geometric geocenter vectors from JPL Horizons in ICRF/TDB with allowance for topocentric light path.",
+  "tess_reference": {
+    "source_sha256": "3c8a5da4d0e1d21f9b9c8606543f8bb44577095a03b3b5b1bcb47bf79d8d24b4",
+    "sector": 27,
+    "mid_bjd_tdb": 2459056.352421992,
+    "duration_hour": 5.45130354849211,
+    "conditional_timing_max_minutes": 1.5491741633741185
+  },
+  "use": "Decide chronology of an already-declared false pairing. Neither reconstructed timestamps nor this historical diagnostic imply a newly detected transit, new independent photons, or any verified observing window."
+}

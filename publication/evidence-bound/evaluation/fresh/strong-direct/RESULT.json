@@ -1,0 +1,100 @@
+{
+  "accepted_held_reuse": 2,
+  "accepted_initial": 3,
+  "author_clock_scope": "From the first explicit clock reading, immediately after initial inspection of the public input, through public executions and the ordering check.",
+  "author_observed_seconds": 76.606,
+  "candidate_hash_manifest_sha256": "c0993bdd1ac2ee31e2f3dc945dd918e1efbdd4a6abb57b16e1c18a54c26e4efc",
+  "case_registration_sha256": "591e595b8b32bee948a2cfed14d189cc7719641b5dabf5a181af7f1ac1cf88dd",
+  "cases": {
+    "eb-f01": {
+      "artifact": "blend.py",
+      "artifact_sha256": "a7b2f58e1939ab32b95785c2186c0e7768bec8d3c2f557a19a0b5f7859b8e54b",
+      "runs": {
+        "held_reuse": {
+          "accepted": true,
+          "exit_code": 0,
+          "input_sha256": "5ea4463764060b681c8d5750d5f78ada7bf9a03faa7e059f34b87989932a2461",
+          "measured_launch_seconds": 0.05674160000125994,
+          "normalized_authoritative_value": {
+            "blend_concentration": "118361/85",
+            "blend_volume": "17/8",
+            "solute_mass": "118361/40"
+          },
+          "output_sha256": "273d223218cb362d57dd44479e17fdf68a7d82b67fe2475789117e6edd7d8b50"
+        },
+        "initial": {
+          "accepted": true,
+          "exit_code": 0,
+          "input_sha256": "dc4524602b7eac6743c185edddd37625d275ae1a07c335a05cc8e2cf710d7a5f",
+          "measured_launch_seconds": 0.07467861300028744,
+          "normalized_authoritative_value": {
+            "blend_concentration": "60625/78",
+            "blend_volume": "117/25",
+            "solute_mass": "7275/2"
+          },
+          "output_sha256": "dde88009dd8d9e2cb15a5e21f14b5df4e570f1dee4b4522a7263efbdc54a627e"
+        }
+      }
+    },
+    "eb-f02": {
+      "artifact": "acceptance.py",
+      "artifact_sha256": "ebddd1cf8f9a02c788f3d18f1108f4d4f2e6822243ba5f98ec9aa493846129a1",
+      "runs": {
+        "held_reuse": {
+          "accepted": true,
+          "exit_code": 0,
+          "input_sha256": "2077f772c3b7b3e389bbe7dbde0040e393d8ce9a07bcf8e0ee03c414476ec6dc",
+          "measured_launch_seconds": 0.06223912600034964,
+          "normalized_authoritative_value": {
+            "acceptance_ratio": "7/10",
+            "accepted_total": "21",
+            "attempt_total": "30"
+          },
+          "output_sha256": "2169be1d9d2912bcf57746b8202fa95a4373cfdbe0e9edc4caac5f43ecde8c63"
+        },
+        "initial": {
+          "accepted": true,
+          "exit_code": 0,
+          "input_sha256": "bf50822a1a2fe685aeca6a55ca1d85b3e1f82dd3f7da6e4750f7909d487755ea",
+          "measured_launch_seconds": 0.062365857000258984,
+          "normalized_authoritative_value": {
+            "acceptance_ratio": "11/18",
+            "accepted_total": "55",
+            "attempt_total": "90"
+          },
+          "output_sha256": "93c7ba8ce5842232face6a832372490dd67c932aef3a2b8288f78afe989563d6"
+        }
+      }
+    },
+    "eb-f03": {
+      "artifact": "flow.py",
+      "artifact_sha256": "2fd68f9a236937db53c4aa781049ce23a4dc6fc9d59c97a55378e1a2b8f5f78f",
+      "runs": {
+        "initial": {
+          "accepted": true,
+          "exit_code": 0,
+          "input_sha256": "07c991673d1b4235d06c84b56534c7f98e900b06e985ed10c9520639a517df6c",
+          "measured_launch_seconds": 0.05859106000025349,
+          "normalized_authoritative_value": {
+            "decision": "ABSTAIN",
+            "missing": [
+              "ligne-11.minutes"
+            ]
+          },
+          "output_sha256": "5bc4bcf438620bf1bf94456052a7a1b5af2e3f99415883aa9ec12c35a0887b63"
+        }
+      }
+    }
+  },
+  "cases_sha256": "bacc8e169a43b42eb3c43d515f110a99ad57199c0535ee0e21c56145468bb35a",
+  "full_cost_known": false,
+  "held_reuse_planned": 2,
+  "information": "The separate author received the sanitized initial data and objective. The evaluator independently executed the frozen code on original data and previously withheld reuse inputs. Shared administrative setup.",
+  "initial_planned": 3,
+  "observed_output_file_sha256": "b7bd255e06ee2395f481f61d71e529b44505233366873a5d6f78bddd8370c3e1",
+  "oracle_sha256": "ae9a24ea18fbea2eb72250ab95b9303bc3ea26c9076a3b2d32170cfc452f22a5",
+  "public_inputs_sha256": "4c3dcfae3838ff646f88ed007f23bdc794d9f0900fc0ba53267bd0b20875660d",
+  "schema": "frontier/strong-direct-assisted-supplement-v1",
+  "scope": "Three synthetic local cases. Standalone included-Codex assisted construction. No live-source arm, equal-compute comparison, or autonomous-construction claim.",
+  "timing": "POST_REGISTRATION_DIFFERENT_COMPUTE"
+}

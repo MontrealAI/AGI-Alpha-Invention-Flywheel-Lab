@@ -1,0 +1,510 @@
+{
+  "case_sha256": "bacc8e169a43b42eb3c43d515f110a99ad57199c0535ee0e21c56145468bb35a",
+  "cases": {
+    "eb-f01": {
+      "actual_provider_requests": 0,
+      "archive_sha256": "250c6be984cc8b6296917bb9d884f5ba2a9751cb19d1e07d227fed5ff61c0901",
+      "evidence": [
+        {
+          "claim_contract_sha256": "0e9f8932236629151eb1f4fd8a21af4f81cc5a3618221f7a266facb0c320e7b8",
+          "dataset": "reservoir",
+          "dimension": "mass_per_volume",
+          "event_sha256": "f0955f7427cb480049c031665cb70e967271a47db929ad8c1a2990191e5d9298",
+          "executed_value": "60625/78",
+          "execution_receipt": {
+            "asserted_value": null,
+            "claim_contract_sha256": "0e9f8932236629151eb1f4fd8a21af4f81cc5a3618221f7a266facb0c320e7b8",
+            "claim_id": "blend_concentration",
+            "input": {
+              "id": "reservoir",
+              "kind": "table",
+              "origin": "AUTHORIZED_MISSION_INPUT",
+              "parents": {},
+              "sha256": "dc4524602b7eac6743c185edddd37625d275ae1a07c335a05cc8e2cf710d7a5f",
+              "version": "b2"
+            },
+            "lineage": [
+              {
+                "id": "reservoir",
+                "kind": "table",
+                "origin": "AUTHORIZED_MISSION_INPUT",
+                "parents": {},
+                "sha256": "dc4524602b7eac6743c185edddd37625d275ae1a07c335a05cc8e2cf710d7a5f",
+                "version": "b2"
+              }
+            ],
+            "locator": [
+              "rows",
+              0,
+              0
+            ],
+            "mission_id": "wf_cd3a57135251556d4e44470f",
+            "operation": {
+              "artifact": "audited_calculation.json",
+              "artifact_sha256": "90f1e3ae3d0ee67cdb03e4626fbce9887323ba26ab984a89058a4989c2ee90c1",
+              "sqlite_version": "3.53.1",
+              "tool": "run_table",
+              "version_sha256": "48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d"
+            },
+            "output_sha256": "89223ed015d8e70de735e41efb44cd018b1f9bdff34ecc7c58c0ff9870f027c0",
+            "result_artifact": null,
+            "revision_sha256": "9f0f6c0b25660d7daa9e99aebd8be91fe2651f63e5fb6e67446b4928da5476d1",
+            "schema": "frontier/mission-claim-execution/v1",
+            "sha256": "e2ca20c8d77bb2c10d1f6aad9a86ac1155b14c37be1a011fd31db04cc196dc20"
+          },
+          "id": "blend_concentration",
+          "locator": [
+            "rows",
+            0,
+            0
+          ],
+          "mission_id": "wf_cd3a57135251556d4e44470f",
+          "reason": "MATCHES_FROZEN_REFERENCE",
+          "reference": {
+            "source": "Independent exact Fraction control",
+            "value": "60625/78"
+          },
+          "requires": {
+            "input_class": "case_author_fixture",
+            "quantity_type": "mixture_balance",
+            "volume_additive": true
+          },
+          "revision_sha256": "9f0f6c0b25660d7daa9e99aebd8be91fe2651f63e5fb6e67446b4928da5476d1",
+          "source_version": "b2",
+          "status": "VERIFIED",
+          "unit": "mg/L",
+          "value": "60625/78"
+        },
+        {
+          "claim_contract_sha256": "7c2061dc0259db9c4f8ba782676b2038be6862f733088a301c65ddd849a82ae3",
+          "dataset": "reservoir",
+          "dimension": "mass",
+          "event_sha256": "5f6061105875d9b88a10ccabc0500e6d3111870ab46eedf1cc929c3af2209cc0",
+          "executed_value": "7275/2",
+          "execution_receipt": {
+            "asserted_value": null,
+            "claim_contract_sha256": "7c2061dc0259db9c4f8ba782676b2038be6862f733088a301c65ddd849a82ae3",
+            "claim_id": "solute_mass",
+            "input": {
+              "id": "reservoir",
+              "kind": "table",
+              "origin": "AUTHORIZED_MISSION_INPUT",
+              "parents": {},
+              "sha256": "dc4524602b7eac6743c185edddd37625d275ae1a07c335a05cc8e2cf710d7a5f",
+              "version": "b2"
+            },
+            "lineage": [
+              {
+                "id": "reservoir",
+                "kind": "table",
+                "origin": "AUTHORIZED_MISSION_INPUT",
+                "parents": {},
+                "sha256": "dc4524602b7eac6743c185edddd37625d275ae1a07c335a05cc8e2cf710d7a5f",
+                "version": "b2"
+              }
+            ],
+            "locator": [
+              "rows",
+              0,
+              1
+            ],
+            "mission_id": "wf_cd3a57135251556d4e44470f",
+            "operation": {
+              "artifact": "audited_calculation.json",
+              "artifact_sha256": "90f1e3ae3d0ee67cdb03e4626fbce9887323ba26ab984a89058a4989c2ee90c1",
+              "sqlite_version": "3.53.1",
+              "tool": "run_table",
+              "version_sha256": "48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d"
+            },
+            "output_sha256": "89223ed015d8e70de735e41efb44cd018b1f9bdff34ecc7c58c0ff9870f027c0",
+            "result_artifact": null,
+            "revision_sha256": "9f0f6c0b25660d7daa9e99aebd8be91fe2651f63e5fb6e67446b4928da5476d1",
+            "schema": "frontier/mission-claim-execution/v1",
+            "sha256": "816669e7842c3b452f89c76244f4372169097f888354fa3feacd44d9f3a50439"
+          },
+          "id": "solute_mass",
+          "locator": [
+            "rows",
+            0,
+            1
+          ],
+          "mission_id": "wf_cd3a57135251556d4e44470f",
+          "reason": "MATCHES_FROZEN_REFERENCE",
+          "reference": {
+            "source": "Independent exact Fraction control",
+            "value": "7275/2"
+          },
+          "requires": {
+            "input_class": "case_author_fixture",
+            "quantity_type": "mixture_balance",
+            "volume_additive": true
+          },
+          "revision_sha256": "9f0f6c0b25660d7daa9e99aebd8be91fe2651f63e5fb6e67446b4928da5476d1",
+          "source_version": "b2",
+          "status": "VERIFIED",
+          "unit": "mg",
+          "value": "7275/2"
+        },
+        {
+          "claim_contract_sha256": "f74076b4d0038687289197109ff25c3fd8f3f6493e61ef61c940240eec6699fd",
+          "dataset": "reservoir",
+          "dimension": "volume",
+          "event_sha256": "74cf0b5c808f9971ca2a60126484e3e45a8798806d042c8611d5cde3c1e26e99",
+          "executed_value": "117/25",
+          "execution_receipt": {
+            "asserted_value": null,
+            "claim_contract_sha256": "f74076b4d0038687289197109ff25c3fd8f3f6493e61ef61c940240eec6699fd",
+            "claim_id": "blend_volume",
+            "input": {
+              "id": "reservoir",
+              "kind": "table",
+              "origin": "AUTHORIZED_MISSION_INPUT",
+              "parents": {},
+              "sha256": "dc4524602b7eac6743c185edddd37625d275ae1a07c335a05cc8e2cf710d7a5f",
+              "version": "b2"
+            },
+            "lineage": [
+              {
+                "id": "reservoir",
+                "kind": "table",
+                "origin": "AUTHORIZED_MISSION_INPUT",
+                "parents": {},
+                "sha256": "dc4524602b7eac6743c185edddd37625d275ae1a07c335a05cc8e2cf710d7a5f",
+                "version": "b2"
+              }
+            ],
+            "locator": [
+              "rows",
+              0,
+              2
+            ],
+            "mission_id": "wf_cd3a57135251556d4e44470f",
+            "operation": {
+              "artifact": "audited_calculation.json",
+              "artifact_sha256": "90f1e3ae3d0ee67cdb03e4626fbce9887323ba26ab984a89058a4989c2ee90c1",
+              "sqlite_version": "3.53.1",
+              "tool": "run_table",
+              "version_sha256": "48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d"
+            },
+            "output_sha256": "89223ed015d8e70de735e41efb44cd018b1f9bdff34ecc7c58c0ff9870f027c0",
+            "result_artifact": null,
+            "revision_sha256": "9f0f6c0b25660d7daa9e99aebd8be91fe2651f63e5fb6e67446b4928da5476d1",
+            "schema": "frontier/mission-claim-execution/v1",
+            "sha256": "61217720984d07f576168dfa4889cbca2dc65058ec5c6c8e3bf53bd9990061ff"
+          },
+          "id": "blend_volume",
+          "locator": [
+            "rows",
+            0,
+            2
+          ],
+          "mission_id": "wf_cd3a57135251556d4e44470f",
+          "reason": "MATCHES_FROZEN_REFERENCE",
+          "reference": {
+            "source": "Independent exact Fraction control",
+            "value": "117/25"
+          },
+          "requires": {
+            "input_class": "case_author_fixture",
+            "quantity_type": "mixture_balance",
+            "volume_additive": true
+          },
+          "revision_sha256": "9f0f6c0b25660d7daa9e99aebd8be91fe2651f63e5fb6e67446b4928da5476d1",
+          "source_version": "b2",
+          "status": "VERIFIED",
+          "unit": "L",
+          "value": "117/25"
+        }
+      ],
+      "executed_operations": 4,
+      "fresh_reuse": {
+        "input_sha256": "5ea4463764060b681c8d5750d5f78ada7bf9a03faa7e059f34b87989932a2461",
+        "matched": true,
+        "output_sha256": "c9f65c379e78be183a21f57eeb2f7b1fbc98f1fca15661fe82a47cccd24b2938",
+        "rows": [
+          [
+            "2959025/2125",
+            "2959025/1000",
+            "2125/1000"
+          ]
+        ]
+      },
+      "mode": "KNOWN_CASE_OPERATOR_ASSISTED",
+      "operator_authorship_seconds": null,
+      "runtime_seconds": 0.28292972599956556,
+      "workflow_status": "needs_review"
+    },
+    "eb-f02": {
+      "actual_provider_requests": 0,
+      "archive_sha256": "c939a5e5472a7fc7158e3b22d1c991875611481ffa90db67cf48811be171f4d8",
+      "evidence": [
+        {
+          "claim_contract_sha256": "f90b100f1c48283a6a765625a069c7edfe20160572b5ee0e7f082b6b8f7561cb",
+          "dataset": "shift_ledger",
+          "dimension": "dimensionless",
+          "event_sha256": "12f11b01df4bec6fcb7164603f4fafb00a88cae7a444a8d927df4704e1063ecd",
+          "executed_value": "11/18",
+          "execution_receipt": {
+            "asserted_value": null,
+            "claim_contract_sha256": "f90b100f1c48283a6a765625a069c7edfe20160572b5ee0e7f082b6b8f7561cb",
+            "claim_id": "acceptance_ratio",
+            "input": {
+              "id": "shift_ledger",
+              "kind": "table",
+              "origin": "AUTHORIZED_MISSION_INPUT",
+              "parents": {},
+              "sha256": "bf50822a1a2fe685aeca6a55ca1d85b3e1f82dd3f7da6e4750f7909d487755ea",
+              "version": "s4"
+            },
+            "lineage": [
+              {
+                "id": "shift_ledger",
+                "kind": "table",
+                "origin": "AUTHORIZED_MISSION_INPUT",
+                "parents": {},
+                "sha256": "bf50822a1a2fe685aeca6a55ca1d85b3e1f82dd3f7da6e4750f7909d487755ea",
+                "version": "s4"
+              }
+            ],
+            "locator": [
+              "rows",
+              0,
+              0
+            ],
+            "mission_id": "wf_5acb56f17dfda40f90ebdb57",
+            "operation": {
+              "artifact": "audited_calculation.json",
+              "artifact_sha256": "470799c4503963c8d32f562dc03b9aafd03443a21d4ce2bac4550f7a454e7225",
+              "sqlite_version": "3.53.1",
+              "tool": "run_table",
+              "version_sha256": "48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d"
+            },
+            "output_sha256": "aac956bc3d53a505abe477ad52d49ffd693efa7e9c10063d8a3e3be776c4b005",
+            "result_artifact": null,
+            "revision_sha256": "87b184bcf678d840f5ab51bbc7a8029bef4a5cc94904cba8a17483159a3d3f78",
+            "schema": "frontier/mission-claim-execution/v1",
+            "sha256": "0b6868b9b170a725b639860288b809c2e6d3fe79365bf8fdceb6d830a5740be9"
+          },
+          "id": "acceptance_ratio",
+          "locator": [
+            "rows",
+            0,
+            0
+          ],
+          "mission_id": "wf_5acb56f17dfda40f90ebdb57",
+          "reason": "MATCHES_FROZEN_REFERENCE",
+          "reference": {
+            "source": "Independent exact Fraction control",
+            "value": "11/18"
+          },
+          "requires": {
+            "event_count_kind": "operator_observation",
+            "input_class": "case_author_fixture",
+            "revision_convention": "highest_per_lane"
+          },
+          "revision_sha256": "87b184bcf678d840f5ab51bbc7a8029bef4a5cc94904cba8a17483159a3d3f78",
+          "source_version": "s4",
+          "status": "VERIFIED",
+          "unit": "ratio",
+          "value": "11/18"
+        },
+        {
+          "claim_contract_sha256": "b51d6be39d7b60d4f7c89dbf9a418308f4ee5492562da27f16237471c27edc1a",
+          "dataset": "shift_ledger",
+          "dimension": "count",
+          "event_sha256": "9ffa94c2596c721293bfa8d68f42d7693fe33129aef56e605cf89c525b4e61dc",
+          "executed_value": "55",
+          "execution_receipt": {
+            "asserted_value": null,
+            "claim_contract_sha256": "b51d6be39d7b60d4f7c89dbf9a418308f4ee5492562da27f16237471c27edc1a",
+            "claim_id": "accepted_total",
+            "input": {
+              "id": "shift_ledger",
+              "kind": "table",
+              "origin": "AUTHORIZED_MISSION_INPUT",
+              "parents": {},
+              "sha256": "bf50822a1a2fe685aeca6a55ca1d85b3e1f82dd3f7da6e4750f7909d487755ea",
+              "version": "s4"
+            },
+            "lineage": [
+              {
+                "id": "shift_ledger",
+                "kind": "table",
+                "origin": "AUTHORIZED_MISSION_INPUT",
+                "parents": {},
+                "sha256": "bf50822a1a2fe685aeca6a55ca1d85b3e1f82dd3f7da6e4750f7909d487755ea",
+                "version": "s4"
+              }
+            ],
+            "locator": [
+              "rows",
+              0,
+              1
+            ],
+            "mission_id": "wf_5acb56f17dfda40f90ebdb57",
+            "operation": {
+              "artifact": "audited_calculation.json",
+              "artifact_sha256": "470799c4503963c8d32f562dc03b9aafd03443a21d4ce2bac4550f7a454e7225",
+              "sqlite_version": "3.53.1",
+              "tool": "run_table",
+              "version_sha256": "48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d"
+            },
+            "output_sha256": "aac956bc3d53a505abe477ad52d49ffd693efa7e9c10063d8a3e3be776c4b005",
+            "result_artifact": null,
+            "revision_sha256": "87b184bcf678d840f5ab51bbc7a8029bef4a5cc94904cba8a17483159a3d3f78",
+            "schema": "frontier/mission-claim-execution/v1",
+            "sha256": "85390015116af8acd13f9fd6cfb79abf17c2f46d5b743a347f073fd667d1a91d"
+          },
+          "id": "accepted_total",
+          "locator": [
+            "rows",
+            0,
+            1
+          ],
+          "mission_id": "wf_5acb56f17dfda40f90ebdb57",
+          "reason": "MATCHES_FROZEN_REFERENCE",
+          "reference": {
+            "source": "Independent exact Fraction control",
+            "value": "55"
+          },
+          "requires": {
+            "event_count_kind": "operator_observation",
+            "input_class": "case_author_fixture",
+            "revision_convention": "highest_per_lane"
+          },
+          "revision_sha256": "87b184bcf678d840f5ab51bbc7a8029bef4a5cc94904cba8a17483159a3d3f78",
+          "source_version": "s4",
+          "status": "VERIFIED",
+          "unit": "count",
+          "value": "55"
+        },
+        {
+          "claim_contract_sha256": "0eef61cc25737e54d39aedbb173f9fc65c921115b67fdacc25cbfd294eb7f6eb",
+          "dataset": "shift_ledger",
+          "dimension": "count",
+          "event_sha256": "629ecbffe0632b293bee7c64651ea43047719e86746565672502ecf5046a8d45",
+          "executed_value": "90",
+          "execution_receipt": {
+            "asserted_value": null,
+            "claim_contract_sha256": "0eef61cc25737e54d39aedbb173f9fc65c921115b67fdacc25cbfd294eb7f6eb",
+            "claim_id": "attempt_total",
+            "input": {
+              "id": "shift_ledger",
+              "kind": "table",
+              "origin": "AUTHORIZED_MISSION_INPUT",
+              "parents": {},
+              "sha256": "bf50822a1a2fe685aeca6a55ca1d85b3e1f82dd3f7da6e4750f7909d487755ea",
+              "version": "s4"
+            },
+            "lineage": [
+              {
+                "id": "shift_ledger",
+                "kind": "table",
+                "origin": "AUTHORIZED_MISSION_INPUT",
+                "parents": {},
+                "sha256": "bf50822a1a2fe685aeca6a55ca1d85b3e1f82dd3f7da6e4750f7909d487755ea",
+                "version": "s4"
+              }
+            ],
+            "locator": [
+              "rows",
+              0,
+              2
+            ],
+            "mission_id": "wf_5acb56f17dfda40f90ebdb57",
+            "operation": {
+              "artifact": "audited_calculation.json",
+              "artifact_sha256": "470799c4503963c8d32f562dc03b9aafd03443a21d4ce2bac4550f7a454e7225",
+              "sqlite_version": "3.53.1",
+              "tool": "run_table",
+              "version_sha256": "48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d"
+            },
+            "output_sha256": "aac956bc3d53a505abe477ad52d49ffd693efa7e9c10063d8a3e3be776c4b005",
+            "result_artifact": null,
+            "revision_sha256": "87b184bcf678d840f5ab51bbc7a8029bef4a5cc94904cba8a17483159a3d3f78",
+            "schema": "frontier/mission-claim-execution/v1",
+            "sha256": "45632b075b707ad45b905f383bbb7d4c47222d4472270a5b5a3061eec6faf31e"
+          },
+          "id": "attempt_total",
+          "locator": [
+            "rows",
+            0,
+            2
+          ],
+          "mission_id": "wf_5acb56f17dfda40f90ebdb57",
+          "reason": "MATCHES_FROZEN_REFERENCE",
+          "reference": {
+            "source": "Independent exact Fraction control",
+            "value": "90"
+          },
+          "requires": {
+            "event_count_kind": "operator_observation",
+            "input_class": "case_author_fixture",
+            "revision_convention": "highest_per_lane"
+          },
+          "revision_sha256": "87b184bcf678d840f5ab51bbc7a8029bef4a5cc94904cba8a17483159a3d3f78",
+          "source_version": "s4",
+          "status": "VERIFIED",
+          "unit": "count",
+          "value": "90"
+        }
+      ],
+      "executed_operations": 4,
+      "fresh_reuse": {
+        "input_sha256": "2077f772c3b7b3e389bbe7dbde0040e393d8ce9a07bcf8e0ee03c414476ec6dc",
+        "matched": true,
+        "output_sha256": "aba1e57a517fa38ad55ff6aefe6579aa2e8ce7d837f37d00cbdec61fef708c9e",
+        "rows": [
+          [
+            "21/30",
+            21,
+            30
+          ]
+        ]
+      },
+      "mode": "KNOWN_CASE_OPERATOR_ASSISTED",
+      "operator_authorship_seconds": null,
+      "runtime_seconds": 0.24554387600073824,
+      "workflow_status": "needs_review"
+    },
+    "eb-f03": {
+      "actual_provider_requests": 0,
+      "archive_sha256": "14c064919e8fe06fbcea637dba320780bc117fc240c95a08671abf4781bff5ba",
+      "evidence": [
+        {
+          "claim_contract_sha256": "8ec7f236a6a8e33d6665ccf9049fae50ecd9564bbd7c72053ee4f231f03ff776",
+          "dataset": "line_log",
+          "dimension": "volume_per_time",
+          "id": "flow_rate",
+          "locator": [
+            "rows",
+            0,
+            0
+          ],
+          "mission_id": "wf_2a338dcfdb6e20d1c84a809f",
+          "reason": "REQUIRED_FIELD_MISSING",
+          "requires": {
+            "clock": "paired_elapsed_minutes",
+            "input_class": "case_author_fixture",
+            "scope": "all_listed_sessions"
+          },
+          "revision_sha256": "ccaebebc40041e931fd2dfb836854f4d6938680e6e3062232b5a21756d0badd8",
+          "source_version": "j3",
+          "status": "ABSTAIN",
+          "unit": "L/min"
+        }
+      ],
+      "executed_operations": 0,
+      "fresh_reuse": null,
+      "mode": "KNOWN_CASE_OPERATOR_ASSISTED",
+      "operator_authorship_seconds": null,
+      "runtime_seconds": 0.016308207999827573,
+      "workflow_status": "needs_review"
+    }
+  },
+  "execution_backend_sha256": "1a2d88f9740f1abafe6184fdd44a2b49fdd4d356ea4514a590083710d90a0624",
+  "oracle_sha256": "ae9a24ea18fbea2eb72250ab95b9303bc3ea26c9076a3b2d32170cfc452f22a5",
+  "runner_sha256": "162875829f8edfdcff1b94fb7f4d12ceed81db43454d4a199155f546d0e768f6",
+  "schema": "frontier/known-case-assisted-native-controls-v1",
+  "scope": "Retrospective assisted controls after the case and runtime freezes. Ordinary authored commands, real native tool execution, no model execution. Outside the primary model comparison."
+}

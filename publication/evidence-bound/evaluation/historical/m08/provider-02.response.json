@@ -1,0 +1,39 @@
+{
+  "elapsed_seconds": 39.04644414500035,
+  "payload_as_decoded_by_native_transport": {
+    "choices": [
+      {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "content": "{\n  \"summary\": \"Créer un instrument pour calculer la valeur minimax du jeu d'allocation de ressources à somme nulle décrit dans l'ambition.\",\n  \"actions\": [\n    {\n      \"tool\": \"construct_instrument\",\n      \"name\": \"minimax.json\",\n      \"spec\": {\n        \"name\": \"MinimaxCalculator\",\n        \"inputs\": [\"allocation\", \"scenarios\", \"weights\"],\n        \"outputs\": {\n          \"minimax_value\": {\n            \"args\": [\n              {\"field\": \"allocation\"},\n              {\"field\": \"scenarios\"},\n              {\"field\": \"weights\"}\n            ],\n            \"op\": \"minimax\"\n          }\n        }\n      }\n    },\n    {\n      \"tool\": \"write_dataset\",\n      \"name\": \"data.csv\",\n      \"columns\": [\"allocation\", \"scenarios\", \"weights\"],\n      \"rows\": [\n        [1, [{\"scenario\": \"alpha\", \"weights\": [9, 2]}, {\"scenario\": \"beta\", \"weights\": [4, 13]}], [9, 2, 4, 13]]\n      ]\n    },\n    {\n      \"tool\": \"run_instrument\",\n      \"name\": \"minimax.json\",\n      \"input\": {\n        \"allocation\": 1,\n        \"scenarios\": [{\"scenario\": \"alpha\", \"weights\": [9, 2]}, {\"scenario\": \"beta\", \"weights\": [4, 13]}],\n        \"weights\": [9, 2, 4, 13]\n      }\n    }\n  ],\n  \"done\": false\n}",
+          "role": "assistant"
+        }
+      }
+    ],
+    "created": 1795579947,
+    "id": "chatcmpl-hEqTzd83fmqLGqBCd0xEMqbAc4Zrf1bN",
+    "model": "qwen3-8b-q4_k_m",
+    "object": "chat.completion",
+    "system_fingerprint": "b12242-3b4d6ab3f",
+    "timings": {
+      "cache_n": 900,
+      "predicted_ms": 34020.445,
+      "predicted_n": 339,
+      "predicted_per_second": 9.935202199736072,
+      "predicted_per_token_ms": 100.65220414201184,
+      "prompt_ms": 5014.583,
+      "prompt_n": 208,
+      "prompt_per_second": 41.479022283607634,
+      "prompt_per_token_ms": 24.108572115384614
+    },
+    "usage": {
+      "completion_tokens": 339,
+      "prompt_tokens": 1108,
+      "prompt_tokens_details": {
+        "cached_tokens": 900
+      },
+      "total_tokens": 1447
+    }
+  }
+}

@@ -1,0 +1,106 @@
+{
+  "cases": {
+    "eb-f01": {
+      "accepted": true,
+      "elapsed_seconds": 0.13200998200045433,
+      "primary_execution": {
+        "artifact_sha256": "90f1e3ae3d0ee67cdb03e4626fbce9887323ba26ab984a89058a4989c2ee90c1",
+        "evaluator_sha256": "48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d",
+        "input_sha256": "dc4524602b7eac6743c185edddd37625d275ae1a07c335a05cc8e2cf710d7a5f",
+        "output_sha256": "89223ed015d8e70de735e41efb44cd018b1f9bdff34ecc7c58c0ff9870f027c0",
+        "qualification": "UNVERIFIED",
+        "rows": [
+          [
+            "3637500/4680",
+            "3637500/1000",
+            "4680/1000"
+          ]
+        ],
+        "sqlite_version": "3.53.1",
+        "status": "EXECUTED"
+      },
+      "reused_execution": {
+        "artifact_sha256": "90f1e3ae3d0ee67cdb03e4626fbce9887323ba26ab984a89058a4989c2ee90c1",
+        "evaluator_sha256": "48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d",
+        "input_sha256": "5ea4463764060b681c8d5750d5f78ada7bf9a03faa7e059f34b87989932a2461",
+        "output_sha256": "c9f65c379e78be183a21f57eeb2f7b1fbc98f1fca15661fe82a47cccd24b2938",
+        "qualification": "UNVERIFIED",
+        "rows": [
+          [
+            "2959025/2125",
+            "2959025/1000",
+            "2125/1000"
+          ]
+        ],
+        "sqlite_version": "3.53.1",
+        "status": "EXECUTED"
+      },
+      "tool": {
+        "evaluator_sha256": "48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d",
+        "schema": "frontier/bounded-table-instrument-v1",
+        "sql": "WITH normalized AS (\n  SELECT CASE volume_unit WHEN 'mL' THEN volume WHEN 'dL' THEN volume * 100 WHEN 'L' THEN volume * 1000 END AS ml,\n         CASE concentration_unit WHEN 'mg/L' THEN concentration WHEN 'ug/mL' THEN concentration WHEN 'g/L' THEN concentration * 1000 END AS mg_l\n  FROM batches\n), totals AS (\n  SELECT SUM(ml) AS volume_n, SUM(ml * mg_l) AS mass_n\n  FROM normalized HAVING COUNT(ml) = COUNT(*) AND COUNT(mg_l) = COUNT(*) AND SUM(ml) > 0\n)\nSELECT CAST(mass_n AS TEXT) || '/' || CAST(volume_n AS TEXT),\n       CAST(mass_n AS TEXT) || '/1000', CAST(volume_n AS TEXT) || '/1000'\nFROM totals",
+        "table_schema": {
+          "batches": {
+            "concentration": "INTEGER",
+            "concentration_unit": "TEXT",
+            "lot": "TEXT",
+            "volume": "INTEGER",
+            "volume_unit": "TEXT"
+          }
+        }
+      }
+    },
+    "eb-f02": {
+      "accepted": true,
+      "elapsed_seconds": 0.1385747750000519,
+      "primary_execution": {
+        "artifact_sha256": "470799c4503963c8d32f562dc03b9aafd03443a21d4ce2bac4550f7a454e7225",
+        "evaluator_sha256": "48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d",
+        "input_sha256": "bf50822a1a2fe685aeca6a55ca1d85b3e1f82dd3f7da6e4750f7909d487755ea",
+        "output_sha256": "aac956bc3d53a505abe477ad52d49ffd693efa7e9c10063d8a3e3be776c4b005",
+        "qualification": "UNVERIFIED",
+        "rows": [
+          [
+            "55/90",
+            55,
+            90
+          ]
+        ],
+        "sqlite_version": "3.53.1",
+        "status": "EXECUTED"
+      },
+      "reused_execution": {
+        "artifact_sha256": "470799c4503963c8d32f562dc03b9aafd03443a21d4ce2bac4550f7a454e7225",
+        "evaluator_sha256": "48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d",
+        "input_sha256": "2077f772c3b7b3e389bbe7dbde0040e393d8ce9a07bcf8e0ee03c414476ec6dc",
+        "output_sha256": "aba1e57a517fa38ad55ff6aefe6579aa2e8ce7d837f37d00cbdec61fef708c9e",
+        "qualification": "UNVERIFIED",
+        "rows": [
+          [
+            "21/30",
+            21,
+            30
+          ]
+        ],
+        "sqlite_version": "3.53.1",
+        "status": "EXECUTED"
+      },
+      "tool": {
+        "evaluator_sha256": "48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d",
+        "schema": "frontier/bounded-table-instrument-v1",
+        "sql": "WITH latest AS (\n  SELECT l.* FROM ledger AS l\n  WHERE l.revision = (SELECT MAX(prior.revision) FROM ledger AS prior WHERE prior.lane = l.lane)\n), totals AS (\n  SELECT SUM(accepted) AS good, SUM(attempts) AS total FROM latest\n  WHERE state = 'active' HAVING SUM(attempts) > 0 AND SUM(accepted) BETWEEN 0 AND SUM(attempts)\n)\nSELECT CAST(good AS TEXT) || '/' || CAST(total AS TEXT), good, total\nFROM totals",
+        "table_schema": {
+          "ledger": {
+            "accepted": "INTEGER",
+            "attempts": "INTEGER",
+            "lane": "TEXT",
+            "revision": "INTEGER",
+            "state": "TEXT"
+          }
+        }
+      }
+    }
+  },
+  "schema": "frontier/fresh-authored-ordinary-sql-control-v1",
+  "scope": "Reusable read-only SQLite tools authored directly by the independent evaluator with knowledge of the task. The tools ran on both frozen datasets and matched the independently computed exact fraction references. This known-case assisted reference was withheld from all model arms. Human construction and full costs are unmeasured."
+}

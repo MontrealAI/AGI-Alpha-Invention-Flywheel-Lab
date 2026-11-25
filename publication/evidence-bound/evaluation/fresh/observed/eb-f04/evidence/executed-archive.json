@@ -1,0 +1,430 @@
+{
+  "files": {},
+  "notice": "Contains your objective, context and artifacts. Inspect before sharing. No connector credentials or workspace integrity key included. Recorded verification is historical; recheck imported work.",
+  "schema": "alpha-genesis-workflow-export/v1",
+  "sha256": "3b9f739a07468379851adae4a62f31f8dc8ecd49d3f74115ec899350235849e7",
+  "state": {
+    "actions": 6,
+    "adversarial_cases": [],
+    "artifacts": {},
+    "capability_id": null,
+    "created_at": "2026-11-25T04:34:48.015641+00:00",
+    "epoch": 0,
+    "events": [
+      {
+        "at": "2026-11-25T04:34:48.015653+00:00",
+        "detail": {
+          "acceptance_source": "Operator-frozen conditions; independence is not inferred.",
+          "spec_hash": "5464ee3a02b59d2d906711dae585a4ce0a9fe624f64ddc040309e566cb13b7be"
+        },
+        "index": 0,
+        "kind": "created",
+        "previous": "0000000000000000000000000000000000000000000000000000000000000000",
+        "sha256": "58dff1cf7647baded4934f9701773507a667be7dda7e2f6fb1044514fb732907"
+      },
+      {
+        "at": "2026-11-25T04:34:48.018887+00:00",
+        "detail": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "role": "builder",
+          "scope": "Waiting for selected service capacity; no model call or construction iteration consumed."
+        },
+        "index": 1,
+        "kind": "model_queued",
+        "previous": "58dff1cf7647baded4934f9701773507a667be7dda7e2f6fb1044514fb732907",
+        "sha256": "621c1003e7fd922b537ac8b97fbdac09ffc3275125f0f1dc8b3cae41da10a41f"
+      },
+      {
+        "at": "2026-11-25T04:34:48.020630+00:00",
+        "detail": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "role": "builder",
+          "run_id": "wf_cdc212a55c8e035ac657e2b3_a14456b49f3c3083"
+        },
+        "index": 2,
+        "kind": "model_started",
+        "previous": "621c1003e7fd922b537ac8b97fbdac09ffc3275125f0f1dc8b3cae41da10a41f",
+        "sha256": "e627b2c810072b398b73c110ec1f7b60de35bdd11ae030ca67f4a9784185cdf4"
+      },
+      {
+        "at": "2026-11-25T04:35:17.652588+00:00",
+        "detail": {
+          "cost": {
+            "accounted": 0.0,
+            "amount": 0.0,
+            "attempts": 1,
+            "basis": "reported_usage_at_user_rates",
+            "complete_cost_known": false,
+            "currency": "USD"
+          },
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+          "reported_model": "qwen3-8b-q4_k_m",
+          "requested_model": "qwen3-8b-q4_k_m",
+          "response_sha256": "5f4df5cfd480b4574f5dbf89e5b3a6c3d441903daaf7625fb762e9e04eb7ca20",
+          "role": "builder",
+          "run_id": "wf_cdc212a55c8e035ac657e2b3_a14456b49f3c3083",
+          "usage": {
+            "input_tokens": 717,
+            "output_tokens": 197
+          }
+        },
+        "index": 3,
+        "kind": "model_completed",
+        "previous": "e627b2c810072b398b73c110ec1f7b60de35bdd11ae030ca67f4a9784185cdf4",
+        "sha256": "27f743a4f785c9ddec8ce13424324d24678f17539414dfe83eb5968c3a87cbe3"
+      },
+      {
+        "at": "2026-11-25T04:35:17.652637+00:00",
+        "detail": {
+          "disposition": "PROPOSED",
+          "proposed_actions": 2,
+          "summary": "Fetch and inspect the patchlevel headers from the specified URLs to determine the versions and select an eligible label."
+        },
+        "index": 4,
+        "kind": "route_proposed",
+        "previous": "27f743a4f785c9ddec8ce13424324d24678f17539414dfe83eb5968c3a87cbe3",
+        "sha256": "ad7014fbad5ba6fb58788ec77f19071f666aa5c3fb775f449f7cf554cb8a6a8c"
+      },
+      {
+        "at": "2026-11-25T04:35:17.652965+00:00",
+        "detail": {
+          "proposal_fields": [
+            "name",
+            "tool",
+            "url"
+          ],
+          "reason": "Use an exact allowlisted HTTPS host resolving only to public addresses.",
+          "tool": "retrieve_source"
+        },
+        "index": 5,
+        "kind": "tool_refused",
+        "previous": "ad7014fbad5ba6fb58788ec77f19071f666aa5c3fb775f449f7cf554cb8a6a8c",
+        "sha256": "5f7bdc2547c5d8b25cfad34b0c04e10cb4b7ae50750179a72fbf5e593c4a5c6d"
+      },
+      {
+        "at": "2026-11-25T04:35:17.660356+00:00",
+        "detail": {
+          "proposal_fields": [
+            "name",
+            "tool",
+            "url"
+          ],
+          "reason": "Use an exact allowlisted HTTPS host resolving only to public addresses.",
+          "tool": "retrieve_source"
+        },
+        "index": 6,
+        "kind": "tool_refused",
+        "previous": "5f7bdc2547c5d8b25cfad34b0c04e10cb4b7ae50750179a72fbf5e593c4a5c6d",
+        "sha256": "fec7201199cd242011fc8ce68fe6a7083d378bc8f07a4e3fb84af203fb63a4a4"
+      },
+      {
+        "at": "2026-11-25T04:35:17.661465+00:00",
+        "detail": {
+          "artifact_hashes": {},
+          "checks": [],
+          "passed": false,
+          "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification.",
+          "spec_hash": "5464ee3a02b59d2d906711dae585a4ce0a9fe624f64ddc040309e566cb13b7be"
+        },
+        "index": 7,
+        "kind": "verification",
+        "previous": "fec7201199cd242011fc8ce68fe6a7083d378bc8f07a4e3fb84af203fb63a4a4",
+        "sha256": "d332d73a5dcb8008d5cc5ee81a10099787aacae5a92d67318603e8ff7aee806d"
+      },
+      {
+        "at": "2026-11-25T04:35:17.663217+00:00",
+        "detail": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "role": "builder",
+          "scope": "Waiting for selected service capacity; no model call or construction iteration consumed."
+        },
+        "index": 8,
+        "kind": "model_queued",
+        "previous": "d332d73a5dcb8008d5cc5ee81a10099787aacae5a92d67318603e8ff7aee806d",
+        "sha256": "a308a1bb2ce152a36811e84aa8b8ec93b14e8f5b22b061d86fea5da12cc5fc8e"
+      },
+      {
+        "at": "2026-11-25T04:35:17.665114+00:00",
+        "detail": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "role": "builder",
+          "run_id": "wf_cdc212a55c8e035ac657e2b3_bc796ea7e92f7026"
+        },
+        "index": 9,
+        "kind": "model_started",
+        "previous": "a308a1bb2ce152a36811e84aa8b8ec93b14e8f5b22b061d86fea5da12cc5fc8e",
+        "sha256": "2fd5b7d4bec06aa8ede2319cf2d2cdc38f988fbd6297ab9258b652f4e2f672f8"
+      },
+      {
+        "at": "2026-11-25T04:35:37.237286+00:00",
+        "detail": {
+          "cost": {
+            "accounted": 0.0,
+            "amount": 0.0,
+            "attempts": 1,
+            "basis": "reported_usage_at_user_rates",
+            "complete_cost_known": false,
+            "currency": "USD"
+          },
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+          "reported_model": "qwen3-8b-q4_k_m",
+          "requested_model": "qwen3-8b-q4_k_m",
+          "response_sha256": "e5fef2c4e316e617a868453a2a1ca9644314d84e8d834e7367444d3b2c1fa63f",
+          "role": "builder",
+          "run_id": "wf_cdc212a55c8e035ac657e2b3_bc796ea7e92f7026",
+          "usage": {
+            "input_tokens": 796,
+            "output_tokens": 197
+          }
+        },
+        "index": 10,
+        "kind": "model_completed",
+        "previous": "2fd5b7d4bec06aa8ede2319cf2d2cdc38f988fbd6297ab9258b652f4e2f672f8",
+        "sha256": "abbbb1f811c51ff4664f2ca950ed9a6b817ab8307efa4b21570886e09faf4109"
+      },
+      {
+        "at": "2026-11-25T04:35:37.237344+00:00",
+        "detail": {
+          "disposition": "PROPOSED",
+          "proposed_actions": 2,
+          "summary": "Retrieve the patchlevel.h files from the approved URLs to determine the versions and select the eligible label."
+        },
+        "index": 11,
+        "kind": "route_proposed",
+        "previous": "abbbb1f811c51ff4664f2ca950ed9a6b817ab8307efa4b21570886e09faf4109",
+        "sha256": "49db4c188fb57c56183f56009c37a48d9a4f473b21b84d0696ba4e6fbc828389"
+      },
+      {
+        "at": "2026-11-25T04:35:37.237433+00:00",
+        "detail": {
+          "proposal_fields": [
+            "name",
+            "tool",
+            "url"
+          ],
+          "reason": "Source provenance filename must end in .json.",
+          "tool": "retrieve_source"
+        },
+        "index": 12,
+        "kind": "tool_refused",
+        "previous": "49db4c188fb57c56183f56009c37a48d9a4f473b21b84d0696ba4e6fbc828389",
+        "sha256": "56f357c05a4a16d75f3b314a893b0f9ce134e42328a7efa4e636a3c4ddf8823c"
+      },
+      {
+        "at": "2026-11-25T04:35:37.244635+00:00",
+        "detail": {
+          "proposal_fields": [
+            "name",
+            "tool",
+            "url"
+          ],
+          "reason": "Source provenance filename must end in .json.",
+          "tool": "retrieve_source"
+        },
+        "index": 13,
+        "kind": "tool_refused",
+        "previous": "56f357c05a4a16d75f3b314a893b0f9ce134e42328a7efa4e636a3c4ddf8823c",
+        "sha256": "536579171c45ed6fb8d8a43a5c64bfe81d460503c4915bed821e872fbea18a37"
+      },
+      {
+        "at": "2026-11-25T04:35:37.246062+00:00",
+        "detail": {
+          "artifact_hashes": {},
+          "checks": [],
+          "passed": false,
+          "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification.",
+          "spec_hash": "5464ee3a02b59d2d906711dae585a4ce0a9fe624f64ddc040309e566cb13b7be"
+        },
+        "index": 14,
+        "kind": "verification",
+        "previous": "536579171c45ed6fb8d8a43a5c64bfe81d460503c4915bed821e872fbea18a37",
+        "sha256": "27b4348adb09ff2cc4e8169b38db4e2f7780a9ab77752da668f28567635ed689"
+      },
+      {
+        "at": "2026-11-25T04:35:37.248369+00:00",
+        "detail": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "role": "builder",
+          "scope": "Waiting for selected service capacity; no model call or construction iteration consumed."
+        },
+        "index": 15,
+        "kind": "model_queued",
+        "previous": "27b4348adb09ff2cc4e8169b38db4e2f7780a9ab77752da668f28567635ed689",
+        "sha256": "a6fb6bc3fdc7ce269f12c15591b6015e202a9c15f779fff2ff0b28cc8e9e0e24"
+      },
+      {
+        "at": "2026-11-25T04:35:37.250981+00:00",
+        "detail": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "role": "builder",
+          "run_id": "wf_cdc212a55c8e035ac657e2b3_2324aa0ebb881d6d"
+        },
+        "index": 16,
+        "kind": "model_started",
+        "previous": "a6fb6bc3fdc7ce269f12c15591b6015e202a9c15f779fff2ff0b28cc8e9e0e24",
+        "sha256": "9cd911d6b730906ec3898a32d82fc66d08f1e29b78664f171bbf824d87cf4450"
+      },
+      {
+        "at": "2026-11-25T04:36:00.080845+00:00",
+        "detail": {
+          "cost": {
+            "accounted": 0.0,
+            "amount": 0.0,
+            "attempts": 1,
+            "basis": "reported_usage_at_user_rates",
+            "complete_cost_known": false,
+            "currency": "USD"
+          },
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+          "reported_model": "qwen3-8b-q4_k_m",
+          "requested_model": "qwen3-8b-q4_k_m",
+          "response_sha256": "12e43c5269982e68f7cc99c40a256bea123679151b82c7be256dea42705291ea",
+          "role": "builder",
+          "run_id": "wf_cdc212a55c8e035ac657e2b3_2324aa0ebb881d6d",
+          "usage": {
+            "input_tokens": 860,
+            "output_tokens": 228
+          }
+        },
+        "index": 17,
+        "kind": "model_completed",
+        "previous": "9cd911d6b730906ec3898a32d82fc66d08f1e29b78664f171bbf824d87cf4450",
+        "sha256": "11b6f95b33e51e2557075f963ecdc50d4dc02c2ea2c0d3c94135f15cd4d17ee7"
+      },
+      {
+        "at": "2026-11-25T04:36:00.081006+00:00",
+        "detail": {
+          "disposition": "PROPOSED",
+          "proposed_actions": 2,
+          "summary": "The first action is to retrieve the source files from the approved URLs using the retrieve_source tool, ensuring the filenames end in .json. Once the files are retrieved, the next step will be to parse the header content to extract the version information."
+        },
+        "index": 18,
+        "kind": "route_proposed",
+        "previous": "11b6f95b33e51e2557075f963ecdc50d4dc02c2ea2c0d3c94135f15cd4d17ee7",
+        "sha256": "cfccc57afdba84095c187f619632af773a7b2babde24ab9683c6f1605171a227"
+      },
+      {
+        "at": "2026-11-25T04:36:00.081228+00:00",
+        "detail": {
+          "proposal_fields": [
+            "name",
+            "tool",
+            "url"
+          ],
+          "reason": "Use an exact allowlisted HTTPS host resolving only to public addresses.",
+          "tool": "retrieve_source"
+        },
+        "index": 19,
+        "kind": "tool_refused",
+        "previous": "cfccc57afdba84095c187f619632af773a7b2babde24ab9683c6f1605171a227",
+        "sha256": "434026e31b848bfcb7f30c9fadb2efe4b56761f52e3bab548050dc56782bd44e"
+      },
+      {
+        "at": "2026-11-25T04:36:00.085785+00:00",
+        "detail": {
+          "proposal_fields": [
+            "name",
+            "tool",
+            "url"
+          ],
+          "reason": "Use an exact allowlisted HTTPS host resolving only to public addresses.",
+          "tool": "retrieve_source"
+        },
+        "index": 20,
+        "kind": "tool_refused",
+        "previous": "434026e31b848bfcb7f30c9fadb2efe4b56761f52e3bab548050dc56782bd44e",
+        "sha256": "abc29871582931449ef8035bac471e59870c504d3bfae5e68f60c6c90d50accf"
+      },
+      {
+        "at": "2026-11-25T04:36:00.087163+00:00",
+        "detail": {
+          "artifact_hashes": {},
+          "checks": [],
+          "passed": false,
+          "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification.",
+          "spec_hash": "5464ee3a02b59d2d906711dae585a4ce0a9fe624f64ddc040309e566cb13b7be"
+        },
+        "index": 21,
+        "kind": "verification",
+        "previous": "abc29871582931449ef8035bac471e59870c504d3bfae5e68f60c6c90d50accf",
+        "sha256": "572d21522bb325eaa4e7381c3f6d32442d5e19459192a4c4ad19a00d5e0f0ab2"
+      },
+      {
+        "at": "2026-11-25T04:36:00.090031+00:00",
+        "detail": {
+          "reason": "Declared model-call allocation exhausted; no further inference dispatched."
+        },
+        "index": 22,
+        "kind": "stopped",
+        "previous": "572d21522bb325eaa4e7381c3f6d32442d5e19459192a4c4ad19a00d5e0f0ab2",
+        "sha256": "4cba704b45cbe8a9d562fad6fd6adc4cb10acb8ca776f322e9ac34082f699780"
+      }
+    ],
+    "feedback": "Inspect actual tool receipts and revise as needed.",
+    "id": "wf_cdc212a55c8e035ac657e2b3",
+    "inflight": null,
+    "iteration": 3,
+    "model_call_limit": 3,
+    "model_calls": 3,
+    "phase": "builder",
+    "research": "",
+    "schema": "alpha-genesis-workflow/v1",
+    "spec": {
+      "acceptance": [],
+      "context": "Inspect both exact approved URLs and include both header content digests in the result. Record the selected answer on its own line as `Selected-label: <label>`. Replace <label> with the applicable source label exactly once. Source labels and URLs: {\"alpha\": \"https://raw.githubusercontent.com/python/cpython/55fee9cf216abe4ec0d1139f94b1930fbd0c7644/Include/patchlevel.h\", \"bravo\": \"https://raw.githubusercontent.com/python/cpython/6cb20a219a860eaf687b2d968b41c480c7461909/Include/patchlevel.h\"}",
+      "local_only": false,
+      "max_actions": 14,
+      "max_iterations": 3,
+      "max_operations": 10000,
+      "max_output_tokens": 768,
+      "mission": {
+        "expires_at": "2026-11-25T06:34:48.005525+00:00",
+        "language": "en",
+        "original_ambition": "Choose a published interpreter baseline for a reproducibility script that requires CPython 3.12 with patch level at least 10. Fetch and inspect both approved pinned upstream patch-level headers. Determine their versions from the header fields and cite both source identities. Select the eligible label even if the other label is a newer version series. Abstain if the required evidence could not be retrieved.",
+        "requirements": {
+          "public_sources": [
+            "https://raw.githubusercontent.com/python/cpython/55fee9cf216abe4ec0d1139f94b1930fbd0c7644/Include/patchlevel.h",
+            "https://raw.githubusercontent.com/python/cpython/6cb20a219a860eaf687b2d968b41c480c7461909/Include/patchlevel.h"
+          ]
+        },
+        "schema": "frontier-universal-execution/v1"
+      },
+      "objective": "Choose a published interpreter baseline for a reproducibility script that requires CPython 3.12 with patch level at least 10. Fetch and inspect both approved pinned upstream patch-level headers. Determine their versions from the header fields and cite both source identities. Select the eligible label even if the other label is a newer version series. Abstain if the required evidence could not be retrieved.",
+      "roles": {
+        "builder": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp"
+        }
+      },
+      "strategy": "single-model",
+      "tool_permissions": [
+        "retrieve_source",
+        "read_artifact",
+        "write_document"
+      ]
+    },
+    "spec_hash": "5464ee3a02b59d2d906711dae585a4ce0a9fe624f64ddc040309e566cb13b7be",
+    "status": "exhausted",
+    "unadjudicated_counterexamples": [],
+    "updated_at": "2026-11-25T04:36:00.090031+00:00",
+    "verification": {
+      "artifact_hashes": {},
+      "checks": [],
+      "passed": false,
+      "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification.",
+      "spec_hash": "5464ee3a02b59d2d906711dae585a4ce0a9fe624f64ddc040309e566cb13b7be"
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "content": "{\n  \"decision\": \"ANSWER\",\n  \"queries\": [\n    \"WITH latest_revisions AS (SELECT lane, MAX(revision) AS latest_revision FROM ledger WHERE state = 'active' GROUP BY lane), active_lane_data AS (SELECT l.accepted, l.attempts, l.lane FROM ledger l JOIN latest_revisions lr ON l.lane = lr.lane AND l.revision = lr.latest_revision AND l.state = 'active') SELECT SUM(accepted) AS accepted_total, SUM(attempts) AS attempt_total, ROUND(SUM(accepted) / SUM(attempts), 2) AS acceptance_ratio FROM active_lane_data;\"\n  ],\n  \"fetch\": [\"ledger\"],\n  \"values\": {\n    \"acceptance_ratio\": \"0.85\",\n    \"accepted_total\": \"123\",\n    \"attempt_total\": \"145\"\n  },\n  \"missing\": [],\n  \"answer\": \"The exact daily acceptance ratio for the team across review lanes is 0.85. This is calculated by dividing the total accepted outputs (123) by the total attempts (145). The computation considers only the latest revision for each lane that is active, excluding any retired records.\"\n}",
+        "role": "assistant"
+      }
+    }
+  ],
+  "created": 1795581287,
+  "id": "chatcmpl-VCVfDEOnDZf9YmSAqjuISAp9AqKsDpAA",
+  "model": "qwen3-8b-q4_k_m",
+  "object": "chat.completion",
+  "system_fingerprint": "b12242-3b4d6ab3f",
+  "timings": {
+    "cache_n": 528,
+    "predicted_ms": 22746.274,
+    "predicted_n": 251,
+    "predicted_per_second": 10.990811066463017,
+    "predicted_per_token_ms": 90.985096,
+    "prompt_ms": 13889.868,
+    "prompt_n": 788,
+    "prompt_per_second": 56.73200062088423,
+    "prompt_per_token_ms": 17.62673604060914
+  },
+  "usage": {
+    "completion_tokens": 251,
+    "prompt_tokens": 1316,
+    "prompt_tokens_details": {
+      "cached_tokens": 528
+    },
+    "total_tokens": 1567
+  }
+}

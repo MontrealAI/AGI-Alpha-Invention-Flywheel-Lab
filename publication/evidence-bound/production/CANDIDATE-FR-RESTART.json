@@ -1,0 +1,328 @@
+{
+  "mission_result": "ABSTAIN on the typed numerical claim; no binding against exact inputs succeeded. The journal exhaustion and known filename errors are recorded.",
+  "oracle_delta_bytes": 106251,
+  "restart": {
+    "ambition": "Comparez la taille exacte des deux archives publiques de HARNESS, versions 1.0.0 et 1.1.0, et calculez de combien d’octets la version 1.1.0 est plus grande.",
+    "base": "http://127.0.0.1:8767/frontier-omega-alpha/",
+    "checkpoint_sha256": "9915b754cb1d69b55fd9555acc9f98636ee15bdc614e1cdd10357303873efe84",
+    "executor_sha256": "7bc7d32f6ea05fdb8741d2cc6635aeaad6d6d45488063071cf7fe7ef939a8f16",
+    "export_sha256": "72cb12a40d9c638cb427bd30cab84bcf24c737ac9e5065edd266d0bdfb9b9862",
+    "language": "fr",
+    "mode": "restart",
+    "module_sha256": "bf38040798584f5834dd536a4fe40247a1a1b3cca2f2eb3c4d8d7c36ea8f1630",
+    "operations": [
+      "pair",
+      "intelligence-reconnect",
+      "list",
+      "get",
+      "export"
+    ],
+    "release_revision": "9c52ff15007755911f446d57ab301be4dbbb490d",
+    "selection": {
+      "check": {
+        "at": "2026-11-25T04:46:23.779734+00:00",
+        "elapsed_ms": 3407,
+        "format": "json_schema",
+        "input_tokens": 35,
+        "output_tokens": 28
+      },
+      "mode": "hybrid",
+      "model": "qwen3-8b-q4_k_m",
+      "provider": "frontier-local-641ae16dc5810b8e3c02fba9297f06dca125d4a68a106d1b6c364b9f2cb0a5ab",
+      "ready": true
+    },
+    "setup": {
+      "automatic_return": false,
+      "exact_submit_count": 0,
+      "guide_one_use": true,
+      "reopened": true
+    },
+    "state": {
+      "actions": 10,
+      "files": [
+        "RUN_INSTRUMENT.py",
+        "difference_calculator.json"
+      ],
+      "id": "wf_8755edafb1e250192cc6b2e3",
+      "model_calls": 2,
+      "phase": "builder",
+      "recorded_events": [
+        {
+          "kind": "created"
+        },
+        {
+          "kind": "model_queued"
+        },
+        {
+          "kind": "model_started"
+        },
+        {
+          "kind": "model_completed",
+          "usage": {
+            "input_tokens": 1194,
+            "output_tokens": 557
+          }
+        },
+        {
+          "kind": "route_proposed"
+        },
+        {
+          "kind": "tool_refused",
+          "reason": "Read access is restricted to this run's declared artifacts.",
+          "tool": "run_instrument"
+        },
+        {
+          "kind": "tool_refused",
+          "reason": "Instrument filename must end in .json.",
+          "tool": "construct_instrument"
+        },
+        {
+          "kind": "tool_refused",
+          "reason": "Read access is restricted to this run's declared artifacts.",
+          "tool": "run_instrument"
+        },
+        {
+          "kind": "tool_refused",
+          "reason": "Instrument filename must end in .json.",
+          "tool": "construct_instrument"
+        },
+        {
+          "kind": "tool_refused",
+          "reason": "Read access is restricted to this run's declared artifacts.",
+          "tool": "run_instrument"
+        },
+        {
+          "kind": "tool_refused",
+          "reason": "Instrument filename must end in .json.",
+          "tool": "construct_instrument"
+        },
+        {
+          "kind": "tool_refused",
+          "reason": "Read access is restricted to this run's declared artifacts.",
+          "tool": "run_instrument"
+        },
+        {
+          "kind": "tool_refused",
+          "reason": "Instrument filename must end in .json.",
+          "tool": "construct_instrument"
+        },
+        {
+          "kind": "verification"
+        },
+        {
+          "kind": "claim_dispositions"
+        },
+        {
+          "kind": "model_queued"
+        },
+        {
+          "kind": "model_started"
+        },
+        {
+          "kind": "model_completed",
+          "usage": {
+            "input_tokens": 1386,
+            "output_tokens": 194
+          }
+        },
+        {
+          "kind": "route_proposed"
+        },
+        {
+          "kind": "tool_refused",
+          "reason": "Read access is restricted to this run's declared artifacts.",
+          "tool": "run_instrument"
+        },
+        {
+          "kind": "tool_completed",
+          "tool": "construct_instrument"
+        },
+        {
+          "kind": "verification"
+        },
+        {
+          "kind": "claim_dispositions"
+        },
+        {
+          "kind": "stopped",
+          "reason": "Declared model-call allocation exhausted; no further inference dispatched."
+        }
+      ],
+      "status": "exhausted"
+    },
+    "visible_claims": [
+      "archive_delta · Preuves indisponibles"
+    ],
+    "wallet": "isolated eligibility fixture",
+    "workflow_run": "2026112504"
+  },
+  "same_checkpoint_after_connector_restart": true,
+  "same_tree_main_commit": "f8b8f95b1ef10641a82d1b98f4b13e0b8cd5bb43",
+  "same_tree_pr_head": "b6448d253dc5c3903a3349b9d8589fafa419c776",
+  "scope": "Exact same source tree as merged #594, candidate local Pages staging only; isolated eligibility fixture. Real CPU Qwen3-8B.",
+  "source_revision": "9c52ff15007755911f446d57ab301be4dbbb490d",
+  "start": {
+    "ambition": "Comparez la taille exacte des deux archives publiques de HARNESS, versions 1.0.0 et 1.1.0, et calculez de combien d’octets la version 1.1.0 est plus grande.",
+    "base": "http://127.0.0.1:8767/frontier-omega-alpha/",
+    "checkpoint_sha256": "9915b754cb1d69b55fd9555acc9f98636ee15bdc614e1cdd10357303873efe84",
+    "discovery": [
+      {
+        "configured": false,
+        "engine": "llama-cpp",
+        "model": "qwen3-8b-q4_k_m"
+      }
+    ],
+    "executor_sha256": "7bc7d32f6ea05fdb8741d2cc6635aeaad6d6d45488063071cf7fe7ef939a8f16",
+    "export_sha256": "72cb12a40d9c638cb427bd30cab84bcf24c737ac9e5065edd266d0bdfb9b9862",
+    "language": "fr",
+    "mode": "start",
+    "module_sha256": "bf38040798584f5834dd536a4fe40247a1a1b3cca2f2eb3c4d8d7c36ea8f1630",
+    "operations": [
+      "pair",
+      "intelligence-discover",
+      "intelligence-connect",
+      "submit",
+      "list",
+      "get",
+      "export"
+    ],
+    "release_revision": "9c52ff15007755911f446d57ab301be4dbbb490d",
+    "selection": {
+      "check": {
+        "at": "2026-11-25T04:44:25.088478+00:00",
+        "elapsed_ms": 4644,
+        "format": "json_schema",
+        "input_tokens": 35,
+        "output_tokens": 28
+      },
+      "mode": "hybrid",
+      "model": "qwen3-8b-q4_k_m",
+      "provider": "frontier-local-641ae16dc5810b8e3c02fba9297f06dca125d4a68a106d1b6c364b9f2cb0a5ab",
+      "ready": true
+    },
+    "setup": {
+      "automatic_return": true,
+      "exact_submit_count": 1,
+      "guide_one_use": true,
+      "reopened": true
+    },
+    "state": {
+      "actions": 10,
+      "files": [
+        "RUN_INSTRUMENT.py",
+        "difference_calculator.json"
+      ],
+      "id": "wf_8755edafb1e250192cc6b2e3",
+      "model_calls": 2,
+      "phase": "builder",
+      "recorded_events": [
+        {
+          "kind": "created"
+        },
+        {
+          "kind": "model_queued"
+        },
+        {
+          "kind": "model_started"
+        },
+        {
+          "kind": "model_completed",
+          "usage": {
+            "input_tokens": 1194,
+            "output_tokens": 557
+          }
+        },
+        {
+          "kind": "route_proposed"
+        },
+        {
+          "kind": "tool_refused",
+          "reason": "Read access is restricted to this run's declared artifacts.",
+          "tool": "run_instrument"
+        },
+        {
+          "kind": "tool_refused",
+          "reason": "Instrument filename must end in .json.",
+          "tool": "construct_instrument"
+        },
+        {
+          "kind": "tool_refused",
+          "reason": "Read access is restricted to this run's declared artifacts.",
+          "tool": "run_instrument"
+        },
+        {
+          "kind": "tool_refused",
+          "reason": "Instrument filename must end in .json.",
+          "tool": "construct_instrument"
+        },
+        {
+          "kind": "tool_refused",
+          "reason": "Read access is restricted to this run's declared artifacts.",
+          "tool": "run_instrument"
+        },
+        {
+          "kind": "tool_refused",
+          "reason": "Instrument filename must end in .json.",
+          "tool": "construct_instrument"
+        },
+        {
+          "kind": "tool_refused",
+          "reason": "Read access is restricted to this run's declared artifacts.",
+          "tool": "run_instrument"
+        },
+        {
+          "kind": "tool_refused",
+          "reason": "Instrument filename must end in .json.",
+          "tool": "construct_instrument"
+        },
+        {
+          "kind": "verification"
+        },
+        {
+          "kind": "claim_dispositions"
+        },
+        {
+          "kind": "model_queued"
+        },
+        {
+          "kind": "model_started"
+        },
+        {
+          "kind": "model_completed",
+          "usage": {
+            "input_tokens": 1386,
+            "output_tokens": 194
+          }
+        },
+        {
+          "kind": "route_proposed"
+        },
+        {
+          "kind": "tool_refused",
+          "reason": "Read access is restricted to this run's declared artifacts.",
+          "tool": "run_instrument"
+        },
+        {
+          "kind": "tool_completed",
+          "tool": "construct_instrument"
+        },
+        {
+          "kind": "verification"
+        },
+        {
+          "kind": "claim_dispositions"
+        },
+        {
+          "kind": "stopped",
+          "reason": "Declared model-call allocation exhausted; no further inference dispatched."
+        }
+      ],
+      "status": "exhausted"
+    },
+    "visible_claims": [
+      "archive_delta · Preuves indisponibles"
+    ],
+    "wallet": "isolated eligibility fixture",
+    "workflow_run": "2026112504"
+  }
+}

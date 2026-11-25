@@ -1,0 +1,70 @@
+{
+  "schema": "frontier/toi216-barycentric-clock-reconciliation-v1",
+  "registration_sha256": "d32b84552699da2554a9856bea7bd3e3b2abf8d9426ff6d6c35bf1dfd485bb61",
+  "jpl_source_receipts": {
+    "missing": {
+      "url": "https://ssd.jpl.nasa.gov/api/horizons.api?format=json&COMMAND=399&CENTER=500%400&MAKE_EPHEM=YES&EPHEM_TYPE=VECTORS&START_TIME=2020-07-26+02%3A55&STOP_TIME=2020-07-26+04%3A45&STEP_SIZE=5m&REF_PLANE=FRAME&REF_SYSTEM=ICRF&VEC_TABLE=2&VEC_CORR=NONE&OUT_UNITS=KM-S&CSV_FORMAT=YES&TIME_TYPE=TDB&OBJ_DATA=NO",
+      "sha256": "23a33debbb27df3221e226f8af9404d5c5255759882bd49f2d0ced19f5fa7341",
+      "body_bytes": 9298,
+      "acquired_at_utc": "2026-11-25T04:04:43.536116+00:00"
+    },
+    "control": {
+      "url": "https://ssd.jpl.nasa.gov/api/horizons.api?format=json&COMMAND=399&CENTER=500%400&MAKE_EPHEM=YES&EPHEM_TYPE=VECTORS&START_TIME=2023-11-10+19%3A35&STOP_TIME=2023-11-11+02%3A35&STEP_SIZE=5m&REF_PLANE=FRAME&REF_SYSTEM=ICRF&VEC_TABLE=2&VEC_CORR=NONE&OUT_UNITS=KM-S&CSV_FORMAT=YES&TIME_TYPE=TDB&OBJ_DATA=NO",
+      "sha256": "e317f21935c5945caafb80cd6dc77843d914a993459e943758af9e9e3dab7535",
+      "body_bytes": 21450,
+      "acquired_at_utc": "2026-11-25T04:04:48.408581+00:00"
+    }
+  },
+  "control_passed": true,
+  "visits": {
+    "missing": {
+      "rows": 72,
+      "zero_published_bjd": 72,
+      "published_jd_utc_bounds": [
+        2459056.626377,
+        2459056.687591
+      ],
+      "reconstructed_bjd_tdb_bounds": [
+        2459056.627371475,
+        2459056.6885862597
+      ],
+      "reconstructed_total_correction_seconds": [
+        85.92264801263809,
+        85.9904408454895
+      ],
+      "maximum_site_to_JPL_geocenter_difference_s": 0.016298717082449343,
+      "tess_sector_27_nominal_last_contact_bjd_tdb": 2459056.465990816,
+      "first_sample_after_contact_hours": 3.8731358237564564,
+      "minimum_gap_with_1000_s_margin_hours": 3.5953580459786787
+    },
+    "control": {
+      "rows": 408,
+      "zero_published_bjd": 0,
+      "published_jd_utc_bounds": [
+        2460259.31968669,
+        2460259.6032563252
+      ],
+      "reconstructed_bjd_tdb_bounds": [
+        2460259.3211330925,
+        2460259.604700896
+      ],
+      "reconstructed_total_correction_seconds": [
+        124.81091022491455,
+        124.96918737888336
+      ],
+      "maximum_site_to_JPL_geocenter_difference_s": 0.01831637015164489,
+      "maximum_discrepancy_to_original_s": 0.025829672813415527,
+      "median_discrepancy_to_original_s": 0.023536384105682373,
+      "clock_control_qualified": true
+    }
+  },
+  "attribution": "ABSTAIN",
+  "forecast": "ABSTAIN",
+  "completion_scope": "Reproducible chronology. No new flux fit or physically independent confirmation.",
+  "elapsed_seconds": 0.921205,
+  "software": {
+    "Astropy": "7.2.0",
+    "NumPy": "2.5.5",
+    "Horizons_ephemeris": "DE441"
+  }
+}

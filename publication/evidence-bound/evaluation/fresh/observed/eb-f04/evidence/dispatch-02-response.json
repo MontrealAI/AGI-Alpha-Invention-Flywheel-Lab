@@ -1,0 +1,36 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "content": "{\n  \"summary\": \"Retrieve the patchlevel.h files from the approved URLs to determine the versions and select the eligible label.\",\n  \"actions\": [\n    {\n      \"tool\": \"retrieve_source\",\n      \"name\": \"evidence_alpha\",\n      \"url\": \"https://raw.githubusercontent.com/python/cpython/55fee9cf216abe4ec0d1139f94b1930fbd0c7644/Include/patchlevel.h\"\n    },\n    {\n      \"tool\": \"retrieve_source\",\n      \"name\": \"evidence_bravo\",\n      \"url\": \"https://raw.githubusercontent.com/python/cpython/6cb20a219a860eaf687b2d968b41c480c7461909/Include/patchlevel.h\"\n    }\n  ],\n  \"done\": false\n}",
+        "role": "assistant"
+      }
+    }
+  ],
+  "created": 1795581337,
+  "id": "chatcmpl-rRC8VUWxQinUmaqzO34XUylc4UriG9l3",
+  "model": "qwen3-8b-q4_k_m",
+  "object": "chat.completion",
+  "system_fingerprint": "b12242-3b4d6ab3f",
+  "timings": {
+    "cache_n": 580,
+    "predicted_ms": 15769.069,
+    "predicted_n": 197,
+    "predicted_per_second": 12.429395800094476,
+    "predicted_per_token_ms": 80.45443367346938,
+    "prompt_ms": 3789.25,
+    "prompt_n": 216,
+    "prompt_per_second": 57.00336478194893,
+    "prompt_per_token_ms": 17.542824074074073
+  },
+  "usage": {
+    "completion_tokens": 197,
+    "prompt_tokens": 796,
+    "prompt_tokens_details": {
+      "cached_tokens": 580
+    },
+    "total_tokens": 993
+  }
+}

@@ -1,0 +1,77 @@
+{
+  "cases": {
+    "eb-f01": {
+      "accepted": true,
+      "elapsed_seconds": 7.928000013635028e-05,
+      "fresh_reuse": {
+        "blend_concentration": "118361/85",
+        "blend_volume": "17/8",
+        "solute_mass": "118361/40"
+      },
+      "primary": {
+        "blend_concentration": "60625/78",
+        "blend_volume": "117/25",
+        "solute_mass": "7275/2"
+      },
+      "source": "Authorized simulation or observation rows"
+    },
+    "eb-f02": {
+      "accepted": true,
+      "elapsed_seconds": 1.2819999938074034e-05,
+      "fresh_reuse": {
+        "acceptance_ratio": "7/10",
+        "accepted_total": "21",
+        "attempt_total": "30"
+      },
+      "primary": {
+        "acceptance_ratio": "11/18",
+        "accepted_total": "55",
+        "attempt_total": "90"
+      },
+      "source": "Authorized simulation or observation rows"
+    },
+    "eb-f03": {
+      "accepted": true,
+      "elapsed_seconds": 2.9540005925809965e-06,
+      "fresh_reuse": null,
+      "primary": {
+        "decision": "ABSTAIN",
+        "missing": [
+          "ligne-11.minutes"
+        ]
+      },
+      "source": "Authorized simulation or observation rows"
+    },
+    "eb-f04": {
+      "accepted": true,
+      "elapsed_seconds": 0.0008002240001587779,
+      "fresh_reuse": null,
+      "primary": {
+        "decision": "USE",
+        "headers": {
+          "alpha": {
+            "sha256": "6d09cebdb07346b76b8f9176f5d23773c8c8dd12605eabdbfd0a7461ec86c408",
+            "version": [
+              3,
+              12,
+              11
+            ]
+          },
+          "bravo": {
+            "sha256": "d539cfabe79088f3e418b9498389e1143da2cf797368b6cf6bdd31d21eb3ff9b",
+            "version": [
+              3,
+              13,
+              5
+            ]
+          }
+        },
+        "revision": "alpha"
+      },
+      "source": "Evaluator-acquired bytes, independently parsed"
+    }
+  },
+  "reference_sha256": "09cf2ca0d00e86a104f85609199d76674ded7fa00b018a8a5b1a2a3a5895db30",
+  "schema": "frontier/fresh-independent-conventional-control-v1",
+  "scope": "Executed conventional controls authored by the independent evaluator with knowledge of case structure. Operator research, source acquisition, implementation and full costs were not measured. Local fraction and parsing time only."
+}

@@ -1,0 +1,521 @@
+{
+  "candidate_backend_manifest_sha256": "11d2eabf4934938720d5e5c53f1f3d90ecbece1bc92955e8fee30fa797e8eebd",
+  "candidate_backend_revision": "aa42b078e10a745f22f0ce2dba8fceaca8caabba",
+  "cases": {
+    "eb-f01": {
+      "direct": {
+        "actual_provider_dispatches": 3,
+        "artifacts": {
+          "observed/eb-f01/direct/direct-tool-journal.json": {
+            "original_file_sha256": "9d7b800a62012c5b139af887718e12488b07a46bbe824bb31f7a7af29f9cb205",
+            "published_file_sha256": "9d7b800a62012c5b139af887718e12488b07a46bbe824bb31f7a7af29f9cb205"
+          },
+          "observed/eb-f01/direct/dispatch-01-receipt.json": {
+            "original_file_sha256": "e3a64b2df558744fc6230fb1e82adbcec0c823a44f8fe403cfdec60a79e722be",
+            "published_file_sha256": "e3a64b2df558744fc6230fb1e82adbcec0c823a44f8fe403cfdec60a79e722be"
+          },
+          "observed/eb-f01/direct/dispatch-01-response.json": {
+            "original_file_sha256": "00bed9bb0ae6644efda471d6ffaf5c456e1a41889081de83d39618413ace173a",
+            "published_file_sha256": "00bed9bb0ae6644efda471d6ffaf5c456e1a41889081de83d39618413ace173a"
+          },
+          "observed/eb-f01/direct/dispatch-02-receipt.json": {
+            "original_file_sha256": "b8ce1b91df5085993ec926b32cf7e3bb83c48c7d8317a5f964ef40ebde9e0e27",
+            "published_file_sha256": "b8ce1b91df5085993ec926b32cf7e3bb83c48c7d8317a5f964ef40ebde9e0e27"
+          },
+          "observed/eb-f01/direct/dispatch-02-response.json": {
+            "original_file_sha256": "c1414b76a10606be901e8541e816675e8f013b9dd91d4dc1471f01b180573e1d",
+            "published_file_sha256": "c1414b76a10606be901e8541e816675e8f013b9dd91d4dc1471f01b180573e1d"
+          },
+          "observed/eb-f01/direct/dispatch-03-receipt.json": {
+            "original_file_sha256": "e1f1a208ad77d270b855f9fc13f63a0c0d1dab4632510d28a685303db79a1597",
+            "published_file_sha256": "e1f1a208ad77d270b855f9fc13f63a0c0d1dab4632510d28a685303db79a1597"
+          },
+          "observed/eb-f01/direct/dispatch-03-response.json": {
+            "original_file_sha256": "4676faf1eccaaedd0b855006e03a632d1af5bee53aed2fd9286ccb14b4ca5096",
+            "published_file_sha256": "4676faf1eccaaedd0b855006e03a632d1af5bee53aed2fd9286ccb14b4ca5096"
+          },
+          "observed/eb-f01/direct/execution-registration.json": {
+            "original_file_sha256": "efd312791c5f21ead24a22dcbc6b579eacc8ea8febad604760707cb9e18061e6",
+            "published_file_sha256": "efd312791c5f21ead24a22dcbc6b579eacc8ea8febad604760707cb9e18061e6"
+          },
+          "observed/eb-f01/direct/result.json": {
+            "original_file_sha256": "ea09b344853b8306ec3bb763529bf80cf3cae64962001e69e1d38bdd8e9ad4f7",
+            "published_file_sha256": "ea09b344853b8306ec3bb763529bf80cf3cae64962001e69e1d38bdd8e9ad4f7"
+          }
+        },
+        "complete_cost_known": false,
+        "correct_reusable_query": false,
+        "exact_reported_values": false,
+        "logged_actions": 12,
+        "operator_actions_after_case_start": 0,
+        "operator_preparation_and_review_seconds": null,
+        "orchestrator_cpu_seconds": 0.5476899999999999,
+        "provider_seconds": 213.40068572700056,
+        "task_elapsed_seconds": 213.9324431390005,
+        "token_usage": {
+          "observed_tokens_in": 4783,
+          "observed_tokens_out": 1458,
+          "unknown_token_replies": 0
+        },
+        "verdict": "FAIL"
+      },
+      "evidence": {
+        "accepted_complete_calculation": false,
+        "actual_provider_dispatches": 3,
+        "actual_tool_events": 9,
+        "artifacts": {
+          "observed/eb-f01/evidence/dispatch-01-receipt.json": {
+            "original_file_sha256": "c5fc19beca76c6cecb08e27e3912ca4f58bd9aa7dd3156aac759b2e963eeb097",
+            "published_file_sha256": "c5fc19beca76c6cecb08e27e3912ca4f58bd9aa7dd3156aac759b2e963eeb097"
+          },
+          "observed/eb-f01/evidence/dispatch-01-response.json": {
+            "original_file_sha256": "634a885b077a86bab7eca9a5074643afcc2d7df335629e3cd6d523e0737b3897",
+            "published_file_sha256": "634a885b077a86bab7eca9a5074643afcc2d7df335629e3cd6d523e0737b3897"
+          },
+          "observed/eb-f01/evidence/dispatch-02-receipt.json": {
+            "original_file_sha256": "833243275475305cafbd9dc6f51c4705439b510aef3dac792627e6aba018ec33",
+            "published_file_sha256": "833243275475305cafbd9dc6f51c4705439b510aef3dac792627e6aba018ec33"
+          },
+          "observed/eb-f01/evidence/dispatch-02-response.json": {
+            "original_file_sha256": "468ec813e24180ec55025ccedbca9915e59b38cc3e4b25e161b3b2908f8e79fa",
+            "published_file_sha256": "468ec813e24180ec55025ccedbca9915e59b38cc3e4b25e161b3b2908f8e79fa"
+          },
+          "observed/eb-f01/evidence/dispatch-03-receipt.json": {
+            "original_file_sha256": "b210c7bda5a0079d9c3a05b523325bcd33e7427b270d894942891d0b11fd68d1",
+            "published_file_sha256": "b210c7bda5a0079d9c3a05b523325bcd33e7427b270d894942891d0b11fd68d1"
+          },
+          "observed/eb-f01/evidence/dispatch-03-response.json": {
+            "original_file_sha256": "1d73b950c24b3208f1b1d674106e2a3f2791bbda3ba427f070334f5bd75dfdd3",
+            "published_file_sha256": "1d73b950c24b3208f1b1d674106e2a3f2791bbda3ba427f070334f5bd75dfdd3"
+          },
+          "observed/eb-f01/evidence/executed-archive.json": {
+            "original_file_sha256": "f643362e4fd9d96397656122a31e9eb55038c9b13d58310bbb2377ecd5eda779",
+            "published_file_sha256": "f643362e4fd9d96397656122a31e9eb55038c9b13d58310bbb2377ecd5eda779"
+          },
+          "observed/eb-f01/evidence/execution-registration.json": {
+            "original_file_sha256": "a683ce437f1bf5de7b7f3560b1c21e4a9881971852526ac63909d109c9c11fbd",
+            "published_file_sha256": "a683ce437f1bf5de7b7f3560b1c21e4a9881971852526ac63909d109c9c11fbd"
+          },
+          "observed/eb-f01/evidence/result.json": {
+            "original_file_sha256": "968b2d164d5f16c87e5050e9645726ebace26a2f81857dbea56d2032a54fd53a",
+            "published_file_sha256": "968b2d164d5f16c87e5050e9645726ebace26a2f81857dbea56d2032a54fd53a"
+          }
+        },
+        "complete_cost_known": false,
+        "correct_bound_claims": false,
+        "logged_actions": 14,
+        "operator_actions_after_case_start": 0,
+        "operator_preparation_and_review_seconds": null,
+        "orchestrator_cpu_seconds": 2.873005,
+        "provider_seconds": 217.02458008200028,
+        "task_elapsed_seconds": 217.43248517200027,
+        "token_usage": {
+          "observed_tokens_in": 5955,
+          "observed_tokens_out": 1084,
+          "unknown_token_replies": 0
+        },
+        "verdict": "FAIL",
+        "workflow_status": "exhausted"
+      },
+      "language": "fr",
+      "previous": {
+        "verdict": "UNRUN"
+      },
+      "task": "Mixed-unit solute balance"
+    },
+    "eb-f02": {
+      "direct": {
+        "actual_provider_dispatches": 3,
+        "artifacts": {
+          "observed/eb-f02/direct/direct-tool-journal.json": {
+            "original_file_sha256": "4b662ce90dae8896926a6028eca98a82f7a0e9f9e52a8bd4316deb94c72bca3c",
+            "published_file_sha256": "4b662ce90dae8896926a6028eca98a82f7a0e9f9e52a8bd4316deb94c72bca3c"
+          },
+          "observed/eb-f02/direct/dispatch-01-receipt.json": {
+            "original_file_sha256": "da9cd0473a8ebe57e70113c3c94d03206eff614f2e1aecca33d00577b2392d4a",
+            "published_file_sha256": "da9cd0473a8ebe57e70113c3c94d03206eff614f2e1aecca33d00577b2392d4a"
+          },
+          "observed/eb-f02/direct/dispatch-01-response.json": {
+            "original_file_sha256": "1738ae0bdab2df6b41608ea98675685ea7efae3edd3d4091a648e87a0fc13d0d",
+            "published_file_sha256": "1738ae0bdab2df6b41608ea98675685ea7efae3edd3d4091a648e87a0fc13d0d"
+          },
+          "observed/eb-f02/direct/dispatch-02-receipt.json": {
+            "original_file_sha256": "d48f8528a91eb0847323092c2a5d26f8ff6f44eda5f1fe3f8cbf9325dc900986",
+            "published_file_sha256": "d48f8528a91eb0847323092c2a5d26f8ff6f44eda5f1fe3f8cbf9325dc900986"
+          },
+          "observed/eb-f02/direct/dispatch-02-response.json": {
+            "original_file_sha256": "bd6ac099e2ef699e9b365752749fc449af144aedac21fc104372376d453d6f67",
+            "published_file_sha256": "bd6ac099e2ef699e9b365752749fc449af144aedac21fc104372376d453d6f67"
+          },
+          "observed/eb-f02/direct/dispatch-03-receipt.json": {
+            "original_file_sha256": "b6f1965f9a5998e6967781cc9b2b321c770a5624c4e38905e5784a398b4655bb",
+            "published_file_sha256": "b6f1965f9a5998e6967781cc9b2b321c770a5624c4e38905e5784a398b4655bb"
+          },
+          "observed/eb-f02/direct/dispatch-03-response.json": {
+            "original_file_sha256": "03072ce50f5787bb6a7dc4fdf19bef76227c0bd7b3bf49b4892d23f67d01c511",
+            "published_file_sha256": "03072ce50f5787bb6a7dc4fdf19bef76227c0bd7b3bf49b4892d23f67d01c511"
+          },
+          "observed/eb-f02/direct/execution-registration.json": {
+            "original_file_sha256": "d623d307e5a0b0d92caf1a9c3e29c8c0687bc6d354f873028fa07a0d1ab00a9e",
+            "published_file_sha256": "d623d307e5a0b0d92caf1a9c3e29c8c0687bc6d354f873028fa07a0d1ab00a9e"
+          },
+          "observed/eb-f02/direct/result.json": {
+            "original_file_sha256": "d65dd22cde4baf5aa4a2dd8fb874f68bf404cde7f184768c43aa909ce0ef61f8",
+            "published_file_sha256": "d65dd22cde4baf5aa4a2dd8fb874f68bf404cde7f184768c43aa909ce0ef61f8"
+          }
+        },
+        "complete_cost_known": false,
+        "correct_reusable_query": false,
+        "exact_reported_values": false,
+        "logged_actions": 6,
+        "operator_actions_after_case_start": 0,
+        "operator_preparation_and_review_seconds": null,
+        "orchestrator_cpu_seconds": 0.143799,
+        "provider_seconds": 104.02566835799917,
+        "task_elapsed_seconds": 104.15803138000047,
+        "token_usage": {
+          "observed_tokens_in": 2863,
+          "observed_tokens_out": 753,
+          "unknown_token_replies": 0
+        },
+        "verdict": "FAIL"
+      },
+      "evidence": {
+        "accepted_complete_calculation": false,
+        "actual_provider_dispatches": 3,
+        "actual_tool_events": 0,
+        "artifacts": {
+          "observed/eb-f02/evidence/dispatch-01-receipt.json": {
+            "original_file_sha256": "9403b3918d6927af0c3b9245393b25fa52ab23be37f8ba16a85a35d307923ceb",
+            "published_file_sha256": "9403b3918d6927af0c3b9245393b25fa52ab23be37f8ba16a85a35d307923ceb"
+          },
+          "observed/eb-f02/evidence/dispatch-01-response.json": {
+            "original_file_sha256": "4c889ba1e726ebf7f9a205c4574efe2a2ca53f3d897963428b56d8e2f853bf25",
+            "published_file_sha256": "4c889ba1e726ebf7f9a205c4574efe2a2ca53f3d897963428b56d8e2f853bf25"
+          },
+          "observed/eb-f02/evidence/dispatch-02-receipt.json": {
+            "original_file_sha256": "4a8a95ed1e30c3a477201c484c18722ba8b5f2f9e11ab1b750c35e1876a65fab",
+            "published_file_sha256": "4a8a95ed1e30c3a477201c484c18722ba8b5f2f9e11ab1b750c35e1876a65fab"
+          },
+          "observed/eb-f02/evidence/dispatch-02-response.json": {
+            "original_file_sha256": "c1349c5bd34281ff5d438500c016ce05dcd1a66309a9cd68750b5e9ccd60ccae",
+            "published_file_sha256": "c1349c5bd34281ff5d438500c016ce05dcd1a66309a9cd68750b5e9ccd60ccae"
+          },
+          "observed/eb-f02/evidence/dispatch-03-receipt.json": {
+            "original_file_sha256": "6d391ea17f47c948096d52b1f88333fd83eb515fa57540166fdfb04492b685d9",
+            "published_file_sha256": "6d391ea17f47c948096d52b1f88333fd83eb515fa57540166fdfb04492b685d9"
+          },
+          "observed/eb-f02/evidence/dispatch-03-response.json": {
+            "original_file_sha256": "3b4370c11b703e1812e708d18ab72d0681c65c3afe1810c30e8f6b3583956302",
+            "published_file_sha256": "3b4370c11b703e1812e708d18ab72d0681c65c3afe1810c30e8f6b3583956302"
+          },
+          "observed/eb-f02/evidence/executed-archive.json": {
+            "original_file_sha256": "69ad8be805e054ec2ae644bf3ad5f5be78786e04e21b6159f7a69e51193b65b2",
+            "published_file_sha256": "69ad8be805e054ec2ae644bf3ad5f5be78786e04e21b6159f7a69e51193b65b2"
+          },
+          "observed/eb-f02/evidence/execution-registration.json": {
+            "original_file_sha256": "f1e5ab89dfbc641db396703f75b3f9f3605a8ef0506a16bd6d217393bf8ea26d",
+            "published_file_sha256": "f1e5ab89dfbc641db396703f75b3f9f3605a8ef0506a16bd6d217393bf8ea26d"
+          },
+          "observed/eb-f02/evidence/result.json": {
+            "original_file_sha256": "9b3d6cf6a5e041321c3f42408aaf25b34f37f517b46ca847570eb1ad54ecaa69",
+            "published_file_sha256": "9b3d6cf6a5e041321c3f42408aaf25b34f37f517b46ca847570eb1ad54ecaa69"
+          }
+        },
+        "complete_cost_known": false,
+        "correct_bound_claims": false,
+        "logged_actions": 3,
+        "operator_actions_after_case_start": 0,
+        "operator_preparation_and_review_seconds": null,
+        "orchestrator_cpu_seconds": 1.284103,
+        "provider_seconds": 99.02244342700214,
+        "task_elapsed_seconds": 99.23637152099946,
+        "token_usage": {
+          "observed_tokens_in": 4169,
+          "observed_tokens_out": 507,
+          "unknown_token_replies": 0
+        },
+        "verdict": "FAIL",
+        "workflow_status": "exhausted"
+      },
+      "language": "en",
+      "previous": {
+        "verdict": "UNRUN"
+      },
+      "task": "Revision-aware operating decision"
+    },
+    "eb-f03": {
+      "direct": {
+        "actual_provider_dispatches": 3,
+        "artifacts": {
+          "observed/eb-f03/direct/direct-tool-journal.json": {
+            "original_file_sha256": "d7120957a4e15737cfe6badd7ee0ef954ef05a4cd282ecc3057c8db4915d914c",
+            "published_file_sha256": "d7120957a4e15737cfe6badd7ee0ef954ef05a4cd282ecc3057c8db4915d914c"
+          },
+          "observed/eb-f03/direct/dispatch-01-receipt.json": {
+            "original_file_sha256": "79d139a2963f72496b96052dcb53c1b2e500ba8e8347cc4bb351b1f3b497ba3a",
+            "published_file_sha256": "79d139a2963f72496b96052dcb53c1b2e500ba8e8347cc4bb351b1f3b497ba3a"
+          },
+          "observed/eb-f03/direct/dispatch-01-response.json": {
+            "original_file_sha256": "d1763b9e45b230fda4c5b7d33164e5705d5757d491948b506e3db3842552a0cb",
+            "published_file_sha256": "d1763b9e45b230fda4c5b7d33164e5705d5757d491948b506e3db3842552a0cb"
+          },
+          "observed/eb-f03/direct/dispatch-02-receipt.json": {
+            "original_file_sha256": "6864256d0191e86b25341fb36f1caff0ac8446af1afb5df2029090925cab656c",
+            "published_file_sha256": "6864256d0191e86b25341fb36f1caff0ac8446af1afb5df2029090925cab656c"
+          },
+          "observed/eb-f03/direct/dispatch-02-response.json": {
+            "original_file_sha256": "e2dd0f6c100630b4e2fd8927f118b5ff178b5ce5da1130389bc5e12ec8634300",
+            "published_file_sha256": "e2dd0f6c100630b4e2fd8927f118b5ff178b5ce5da1130389bc5e12ec8634300"
+          },
+          "observed/eb-f03/direct/dispatch-03-receipt.json": {
+            "original_file_sha256": "8b60727b10fc8b4d6afb282d87ab51f144a611ec572d819d38c8fd96b9e0d8cd",
+            "published_file_sha256": "8b60727b10fc8b4d6afb282d87ab51f144a611ec572d819d38c8fd96b9e0d8cd"
+          },
+          "observed/eb-f03/direct/dispatch-03-response.json": {
+            "original_file_sha256": "e0fdeeaa24f7dbfd68944c59d5f6a4ceee1b73e67202db5132409ceb999fe70b",
+            "published_file_sha256": "e0fdeeaa24f7dbfd68944c59d5f6a4ceee1b73e67202db5132409ceb999fe70b"
+          },
+          "observed/eb-f03/direct/execution-registration.json": {
+            "original_file_sha256": "3af0a4be065ba9241953e72b675941f090596c20d247288483539c088bd6cfca",
+            "published_file_sha256": "3af0a4be065ba9241953e72b675941f090596c20d247288483539c088bd6cfca"
+          },
+          "observed/eb-f03/direct/result.json": {
+            "original_file_sha256": "46c1d9126954f35acdf3a28ca8f41684a457ff3b7561bc8e29b2db5c25c508dd",
+            "published_file_sha256": "46c1d9126954f35acdf3a28ca8f41684a457ff3b7561bc8e29b2db5c25c508dd"
+          }
+        },
+        "complete_cost_known": false,
+        "logged_actions": 6,
+        "operator_actions_after_case_start": 0,
+        "operator_preparation_and_review_seconds": null,
+        "orchestrator_cpu_seconds": 0.166797,
+        "precise_missing_evidence": true,
+        "provider_seconds": 67.49779417899936,
+        "task_elapsed_seconds": 67.65207880800062,
+        "token_usage": {
+          "observed_tokens_in": 2196,
+          "observed_tokens_out": 411,
+          "unknown_token_replies": 0
+        },
+        "unsupported_numerical_claim": true,
+        "verdict": "FAIL"
+      },
+      "evidence": {
+        "actual_provider_dispatches": 3,
+        "actual_tool_events": 1,
+        "artifacts": {
+          "observed/eb-f03/evidence/dispatch-01-receipt.json": {
+            "original_file_sha256": "4d9a1ecbba5d3cd519942c004cca3291a6599c37675c432023842cbe662740cb",
+            "published_file_sha256": "4d9a1ecbba5d3cd519942c004cca3291a6599c37675c432023842cbe662740cb"
+          },
+          "observed/eb-f03/evidence/dispatch-01-response.json": {
+            "original_file_sha256": "bb349d1890168943c015f9a1c484da7281a9b814197c2d1ccfb9ff1dcfba4cba",
+            "published_file_sha256": "bb349d1890168943c015f9a1c484da7281a9b814197c2d1ccfb9ff1dcfba4cba"
+          },
+          "observed/eb-f03/evidence/dispatch-02-receipt.json": {
+            "original_file_sha256": "a2a7e10589607c92f7f5e7c88fa20b6275e66ca671d5b37f02038391eee39949",
+            "published_file_sha256": "a2a7e10589607c92f7f5e7c88fa20b6275e66ca671d5b37f02038391eee39949"
+          },
+          "observed/eb-f03/evidence/dispatch-02-response.json": {
+            "original_file_sha256": "20111869d9bb6df3fe16cd426ef38b076ae3366ec91eb1b8bd50313aa28d71b1",
+            "published_file_sha256": "20111869d9bb6df3fe16cd426ef38b076ae3366ec91eb1b8bd50313aa28d71b1"
+          },
+          "observed/eb-f03/evidence/dispatch-03-receipt.json": {
+            "original_file_sha256": "3dc929032f88ea57ea34f66b9a0800b12f52a8a6dff995e9b89c633dc8e87d3a",
+            "published_file_sha256": "3dc929032f88ea57ea34f66b9a0800b12f52a8a6dff995e9b89c633dc8e87d3a"
+          },
+          "observed/eb-f03/evidence/dispatch-03-response.json": {
+            "original_file_sha256": "f376bb9becdbee1d20f0a81f41e993d686f52d7d9d22d1b4f3cb9eaa1293c7a8",
+            "published_file_sha256": "f376bb9becdbee1d20f0a81f41e993d686f52d7d9d22d1b4f3cb9eaa1293c7a8"
+          },
+          "observed/eb-f03/evidence/executed-archive.json": {
+            "original_file_sha256": "b23ae7636495a27b186cde4c9666021f8fe98f1a339e6d9124d650638fbaae1f",
+            "published_file_sha256": "b23ae7636495a27b186cde4c9666021f8fe98f1a339e6d9124d650638fbaae1f"
+          },
+          "observed/eb-f03/evidence/execution-registration.json": {
+            "original_file_sha256": "0cd2e829d0dc673982183b83966d653286bf98be41edf32e73b83914eb409da5",
+            "published_file_sha256": "0cd2e829d0dc673982183b83966d653286bf98be41edf32e73b83914eb409da5"
+          },
+          "observed/eb-f03/evidence/result.json": {
+            "original_file_sha256": "391502a9638a321b444b7a6fc2cfe4ba37754e724a2017c029cb811ee007e599",
+            "published_file_sha256": "391502a9638a321b444b7a6fc2cfe4ba37754e724a2017c029cb811ee007e599"
+          }
+        },
+        "complete_cost_known": false,
+        "logged_actions": 5,
+        "operator_actions_after_case_start": 0,
+        "operator_preparation_and_review_seconds": null,
+        "orchestrator_cpu_seconds": 0.9590949999999998,
+        "precise_missing_evidence": true,
+        "provider_seconds": 103.36083790199973,
+        "task_elapsed_seconds": 103.65815431200008,
+        "token_usage": {
+          "observed_tokens_in": 3655,
+          "observed_tokens_out": 621,
+          "unknown_token_replies": 0
+        },
+        "unsupported_numerical_claim": true,
+        "verdict": "FAIL",
+        "withheld_answer": true,
+        "workflow_status": "exhausted"
+      },
+      "language": "fr",
+      "previous": {
+        "verdict": "UNRUN"
+      },
+      "task": "Missing paired measurement"
+    },
+    "eb-f04": {
+      "direct": {
+        "actual_provider_dispatches": 3,
+        "artifacts": {
+          "observed/eb-f04/direct/direct-tool-journal.json": {
+            "original_file_sha256": "cadd3592a1be1477d1060ec8d612356fb6f410ae040d9fa44836a45b08f39dab",
+            "published_file_sha256": "cadd3592a1be1477d1060ec8d612356fb6f410ae040d9fa44836a45b08f39dab"
+          },
+          "observed/eb-f04/direct/dispatch-01-receipt.json": {
+            "original_file_sha256": "7b3dd80b332c8721ed57204110faf8c59f1bd2fa8f41c7854ff14aa776a2852f",
+            "published_file_sha256": "7b3dd80b332c8721ed57204110faf8c59f1bd2fa8f41c7854ff14aa776a2852f"
+          },
+          "observed/eb-f04/direct/dispatch-01-response.json": {
+            "original_file_sha256": "cd650366ac1d57def03604dc7b5765edfdf1c0828fee4d3fbb8f52696d3f11ae",
+            "published_file_sha256": "cd650366ac1d57def03604dc7b5765edfdf1c0828fee4d3fbb8f52696d3f11ae"
+          },
+          "observed/eb-f04/direct/dispatch-02-receipt.json": {
+            "original_file_sha256": "a1b38137bd770d7452ed7f1ae3f640f439a289353678ed12ca8f914544852ea9",
+            "published_file_sha256": "a1b38137bd770d7452ed7f1ae3f640f439a289353678ed12ca8f914544852ea9"
+          },
+          "observed/eb-f04/direct/dispatch-02-response.json": {
+            "original_file_sha256": "742dc242b111df540f8a32c1d44812c1140a4913cfebb235c951eb9cb13c3d1e",
+            "published_file_sha256": "742dc242b111df540f8a32c1d44812c1140a4913cfebb235c951eb9cb13c3d1e"
+          },
+          "observed/eb-f04/direct/dispatch-03-receipt.json": {
+            "original_file_sha256": "654cd748fae46457f6670de1e9437874557dce4db4400ddffae437ff10b954b8",
+            "published_file_sha256": "654cd748fae46457f6670de1e9437874557dce4db4400ddffae437ff10b954b8"
+          },
+          "observed/eb-f04/direct/dispatch-03-response.json": {
+            "original_file_sha256": "3f6a6b703b25ddfd6cdf7439ccc1f13aca9f1ffb8d0cb62ebebb3425a7718449",
+            "published_file_sha256": "3f6a6b703b25ddfd6cdf7439ccc1f13aca9f1ffb8d0cb62ebebb3425a7718449"
+          },
+          "observed/eb-f04/direct/execution-registration.json": {
+            "original_file_sha256": "e8cb3706feaad23b700e45c1e6359030f8ab708038953835a834df4152cb68d1",
+            "published_file_sha256": "e8cb3706feaad23b700e45c1e6359030f8ab708038953835a834df4152cb68d1"
+          },
+          "observed/eb-f04/direct/result.json": {
+            "original_file_sha256": "7834888ce9fb03378c5af5e93bb5b051d67174f42d5583d2ec5f3ea06598b01f",
+            "published_file_sha256": "7834888ce9fb03378c5af5e93bb5b051d67174f42d5583d2ec5f3ea06598b01f"
+          }
+        },
+        "complete_cost_known": false,
+        "exact_selected_label": true,
+        "logged_actions": 12,
+        "operator_actions_after_case_start": 0,
+        "operator_preparation_and_review_seconds": null,
+        "orchestrator_cpu_seconds": 0.02139300000000001,
+        "provider_seconds": 83.65948796800149,
+        "source_fetch_attempts": 6,
+        "task_elapsed_seconds": 83.66740765800023,
+        "token_usage": {
+          "observed_tokens_in": 2332,
+          "observed_tokens_out": 615,
+          "unknown_token_replies": 0
+        },
+        "verdict": "FAIL",
+        "verified_source_digests": {}
+      },
+      "evidence": {
+        "actual_provider_dispatches": 3,
+        "actual_tool_events": 0,
+        "artifacts": {
+          "observed/eb-f04/evidence/dispatch-01-receipt.json": {
+            "original_file_sha256": "6271d9902e5237b8b08e057ab636d10ab2db2d54ea2fb32ca34da7ec0c49b6ed",
+            "published_file_sha256": "6271d9902e5237b8b08e057ab636d10ab2db2d54ea2fb32ca34da7ec0c49b6ed"
+          },
+          "observed/eb-f04/evidence/dispatch-01-response.json": {
+            "original_file_sha256": "6feed86fa6d756f850c6539e0d8595d4f3b58b3290154ea2fa73e51ad4e9c67a",
+            "published_file_sha256": "6feed86fa6d756f850c6539e0d8595d4f3b58b3290154ea2fa73e51ad4e9c67a"
+          },
+          "observed/eb-f04/evidence/dispatch-02-receipt.json": {
+            "original_file_sha256": "fda4cf69c77523230fff3490ffaba3cd8c33611b4fb24547f60788f379bc0cda",
+            "published_file_sha256": "fda4cf69c77523230fff3490ffaba3cd8c33611b4fb24547f60788f379bc0cda"
+          },
+          "observed/eb-f04/evidence/dispatch-02-response.json": {
+            "original_file_sha256": "6e8ecd94cdc53bd6ba1f35a056101bb32c5bbbc4d4354f2784b56ee8bdcc041f",
+            "published_file_sha256": "6e8ecd94cdc53bd6ba1f35a056101bb32c5bbbc4d4354f2784b56ee8bdcc041f"
+          },
+          "observed/eb-f04/evidence/dispatch-03-receipt.json": {
+            "original_file_sha256": "1e26c89c0066d919886bfdeb836ebb9ff0cb84efecc5b9fc919af6af16328421",
+            "published_file_sha256": "1e26c89c0066d919886bfdeb836ebb9ff0cb84efecc5b9fc919af6af16328421"
+          },
+          "observed/eb-f04/evidence/dispatch-03-response.json": {
+            "original_file_sha256": "9542d4cec4e69d2720b40331a76c45dcc123ac15da1ad98e78024833920d1774",
+            "published_file_sha256": "9542d4cec4e69d2720b40331a76c45dcc123ac15da1ad98e78024833920d1774"
+          },
+          "observed/eb-f04/evidence/executed-archive.json": {
+            "original_file_sha256": "87a8d5628044a32f7b6b9a65852981040c3faa460db5ce0c9f0315ec607c6dae",
+            "published_file_sha256": "87a8d5628044a32f7b6b9a65852981040c3faa460db5ce0c9f0315ec607c6dae"
+          },
+          "observed/eb-f04/evidence/execution-registration.json": {
+            "original_file_sha256": "cceb5f8b798c2b35add114972a3382053312d945371160f25c5b3f4cb89e90f2",
+            "published_file_sha256": "cceb5f8b798c2b35add114972a3382053312d945371160f25c5b3f4cb89e90f2"
+          },
+          "observed/eb-f04/evidence/result.json": {
+            "original_file_sha256": "5be1e6c3bcc7bfbc0c2b76043c55fe84f7e3736ef7d48923d7752c2e43a39ba7",
+            "published_file_sha256": "5be1e6c3bcc7bfbc0c2b76043c55fe84f7e3736ef7d48923d7752c2e43a39ba7"
+          }
+        },
+        "complete_cost_known": false,
+        "exact_selected_label": false,
+        "logged_actions": 6,
+        "operator_actions_after_case_start": 0,
+        "operator_preparation_and_review_seconds": null,
+        "orchestrator_cpu_seconds": 0.490212,
+        "provider_seconds": 72.02070452899898,
+        "source_fetch_attempts": 6,
+        "task_elapsed_seconds": 72.19970088900118,
+        "token_usage": {
+          "observed_tokens_in": 2373,
+          "observed_tokens_out": 622,
+          "unknown_token_replies": 0
+        },
+        "verdict": "FAIL",
+        "verified_source_digests": {},
+        "workflow_status": "exhausted"
+      },
+      "language": "en",
+      "previous": {
+        "verdict": "UNRUN"
+      },
+      "task": "Pinned source acquisition and interpreter selection"
+    }
+  },
+  "control_scope": "The evaluator separately executed four exact references and two reusable SQL tools against both primary and unseen reuse data. Solver writing and reviewer cost were not measured.",
+  "experiment_scope": "English and French synthetic/engineering missions. Primary arms share the same local model, evidence and allowances. Full costs and separated administrative custody are unmeasured. Approximate wall fractions do not establish end-to-end cost advantage.",
+  "operator_assistance": "Case authoring, approval scope, model setup, exact references and final scoring were assisted. No operator proposal or artifact was injected into model runs.",
+  "registration_sha256": "591e595b8b32bee948a2cfed14d189cc7719641b5dabf5a181af7f1ac1cf88dd",
+  "schema": "frontier/fresh-independent-mission-results-v1",
+  "scoring": {
+    "direct": {
+      "accepted": 0,
+      "failed": 4,
+      "planned": 4,
+      "unrun": 0,
+      "unsettled_or_interrupted": 0
+    },
+    "evidence": {
+      "accepted": 0,
+      "failed": 4,
+      "planned": 4,
+      "unrun": 0,
+      "unsettled_or_interrupted": 0
+    },
+    "previous": {
+      "accepted": 0,
+      "failed": 0,
+      "planned": 4,
+      "unrun": 4,
+      "unsettled_or_interrupted": 0
+    }
+  }
+}

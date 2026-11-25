@@ -1,0 +1,662 @@
+{
+  "files": {},
+  "notice": "Contains your objective, context and artifacts. Inspect before sharing. No connector credentials or workspace integrity key included. Recorded verification is historical; recheck imported work.",
+  "schema": "alpha-genesis-workflow-export/v1",
+  "sha256": "c033261b5c7c5197397e48dcc16d2c10f1b1c747f88bc135a4baf4e34e29d8a5",
+  "state": {
+    "actions": 3,
+    "adversarial_cases": [],
+    "artifacts": {},
+    "capability_id": null,
+    "created_at": "2026-11-25T04:31:24.455818+00:00",
+    "epoch": 0,
+    "events": [
+      {
+        "at": "2026-11-25T04:31:24.455829+00:00",
+        "detail": {
+          "acceptance_source": "Operator-frozen conditions; independence is not inferred.",
+          "spec_hash": "0a122245005470d3a9332fb5cc4cfc89737153b5a35cb9d0b0fb6552d7392419"
+        },
+        "index": 0,
+        "kind": "created",
+        "previous": "0000000000000000000000000000000000000000000000000000000000000000",
+        "sha256": "6972c42e8da4186c4496497ca9b0991f62950b2cda301f4ea9a2c73f86562dac"
+      },
+      {
+        "at": "2026-11-25T04:31:24.458938+00:00",
+        "detail": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "role": "builder",
+          "scope": "Waiting for selected service capacity; no model call or construction iteration consumed."
+        },
+        "index": 1,
+        "kind": "model_queued",
+        "previous": "6972c42e8da4186c4496497ca9b0991f62950b2cda301f4ea9a2c73f86562dac",
+        "sha256": "e354b399ad84cd3be24b4d01c52d0c7302992401e6358e9bf877367ec2e34208"
+      },
+      {
+        "at": "2026-11-25T04:31:24.461232+00:00",
+        "detail": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "role": "builder",
+          "run_id": "wf_82ae448155331ce204afe7b7_8b10769e700a8f5a"
+        },
+        "index": 2,
+        "kind": "model_started",
+        "previous": "e354b399ad84cd3be24b4d01c52d0c7302992401e6358e9bf877367ec2e34208",
+        "sha256": "42028bb3029c6303dc9c6d2af3d411175de9c1283c15e1e36d3c9b0ea1de69f3"
+      },
+      {
+        "at": "2026-11-25T04:32:02.563628+00:00",
+        "detail": {
+          "cost": {
+            "accounted": 0.0,
+            "amount": 0.0,
+            "attempts": 1,
+            "basis": "reported_usage_at_user_rates",
+            "complete_cost_known": false,
+            "currency": "USD"
+          },
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+          "reported_model": "qwen3-8b-q4_k_m",
+          "requested_model": "qwen3-8b-q4_k_m",
+          "response_sha256": "8cd831f3d14f45ae367c2bf0925ac1f4da1c963572762070d5b5cb61f2cb0e79",
+          "role": "builder",
+          "run_id": "wf_82ae448155331ce204afe7b7_8b10769e700a8f5a",
+          "usage": {
+            "input_tokens": 1313,
+            "output_tokens": 153
+          }
+        },
+        "index": 3,
+        "kind": "model_completed",
+        "previous": "42028bb3029c6303dc9c6d2af3d411175de9c1283c15e1e36d3c9b0ea1de69f3",
+        "sha256": "8095cd1796a7f25b8ae020e721620a302067b790e7b75d0115c3813f2b870eed"
+      },
+      {
+        "at": "2026-11-25T04:32:02.563681+00:00",
+        "detail": {
+          "disposition": "PROPOSED",
+          "proposed_actions": 1,
+          "summary": "Start by constructing a table to filter and calculate the necessary values for the acceptance ratio and totals."
+        },
+        "index": 4,
+        "kind": "route_proposed",
+        "previous": "8095cd1796a7f25b8ae020e721620a302067b790e7b75d0115c3813f2b870eed",
+        "sha256": "604fb26e91e8c72050650ca940026cd99d77da031d095455b3a0e3f8b3b386f8"
+      },
+      {
+        "at": "2026-11-25T04:32:02.596204+00:00",
+        "detail": {
+          "proposal_fields": [
+            "name",
+            "schema",
+            "sql",
+            "tool"
+          ],
+          "reason": "TABLE_SQL_ERROR",
+          "tool": "construct_table"
+        },
+        "index": 5,
+        "kind": "tool_refused",
+        "previous": "604fb26e91e8c72050650ca940026cd99d77da031d095455b3a0e3f8b3b386f8",
+        "sha256": "af40e190d4e2fcba199bac6fc77c10201b5494debd4de3bc99f3826c9048d70f"
+      },
+      {
+        "at": "2026-11-25T04:32:02.598181+00:00",
+        "detail": {
+          "artifact_hashes": {},
+          "checks": [],
+          "passed": false,
+          "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification.",
+          "spec_hash": "0a122245005470d3a9332fb5cc4cfc89737153b5a35cb9d0b0fb6552d7392419"
+        },
+        "index": 6,
+        "kind": "verification",
+        "previous": "af40e190d4e2fcba199bac6fc77c10201b5494debd4de3bc99f3826c9048d70f",
+        "sha256": "5b91a1114616c107553a00e66d8e627674d25703d30d70effa347cff31ed35d2"
+      },
+      {
+        "at": "2026-11-25T04:32:02.598358+00:00",
+        "detail": {
+          "claims": [
+            {
+              "id": "acceptance_ratio",
+              "reason": "NO_BOUND_EXECUTION",
+              "status": "ABSTAIN"
+            },
+            {
+              "id": "accepted_total",
+              "reason": "NO_BOUND_EXECUTION",
+              "status": "ABSTAIN"
+            },
+            {
+              "id": "attempt_total",
+              "reason": "NO_BOUND_EXECUTION",
+              "status": "ABSTAIN"
+            }
+          ],
+          "status": "ABSTAIN"
+        },
+        "index": 7,
+        "kind": "claim_dispositions",
+        "previous": "5b91a1114616c107553a00e66d8e627674d25703d30d70effa347cff31ed35d2",
+        "sha256": "aa3b9d270d3afc483cb01e4ca883761ada820c1b462c81df8de961a80126017a"
+      },
+      {
+        "at": "2026-11-25T04:32:02.600968+00:00",
+        "detail": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "role": "builder",
+          "scope": "Waiting for selected service capacity; no model call or construction iteration consumed."
+        },
+        "index": 8,
+        "kind": "model_queued",
+        "previous": "aa3b9d270d3afc483cb01e4ca883761ada820c1b462c81df8de961a80126017a",
+        "sha256": "61a76026bbbabff8f130a45b0600ebccdceef691e210caf8612b34184fb848e6"
+      },
+      {
+        "at": "2026-11-25T04:32:02.603333+00:00",
+        "detail": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "role": "builder",
+          "run_id": "wf_82ae448155331ce204afe7b7_1162d006697427d1"
+        },
+        "index": 9,
+        "kind": "model_started",
+        "previous": "61a76026bbbabff8f130a45b0600ebccdceef691e210caf8612b34184fb848e6",
+        "sha256": "4fb7c935f97c0654f4690fa7678b712e6e57a01753b619702aa8cb1df60e156a"
+      },
+      {
+        "at": "2026-11-25T04:32:32.576987+00:00",
+        "detail": {
+          "cost": {
+            "accounted": 0.0,
+            "amount": 0.0,
+            "attempts": 1,
+            "basis": "reported_usage_at_user_rates",
+            "complete_cost_known": false,
+            "currency": "USD"
+          },
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+          "reported_model": "qwen3-8b-q4_k_m",
+          "requested_model": "qwen3-8b-q4_k_m",
+          "response_sha256": "89607d0aedb285af9470bf366e6c1dcdf61b4f879676a0036d0d8c522a6212c3",
+          "role": "builder",
+          "run_id": "wf_82ae448155331ce204afe7b7_1162d006697427d1",
+          "usage": {
+            "input_tokens": 1414,
+            "output_tokens": 180
+          }
+        },
+        "index": 10,
+        "kind": "model_completed",
+        "previous": "4fb7c935f97c0654f4690fa7678b712e6e57a01753b619702aa8cb1df60e156a",
+        "sha256": "71ac51ed63f56130c327fc898fdfa2aef6abb99f9780d53fd0c43e2162c639f3"
+      },
+      {
+        "at": "2026-11-25T04:32:32.577049+00:00",
+        "detail": {
+          "disposition": "PROPOSED",
+          "proposed_actions": 1,
+          "summary": "Start by constructing a table to calculate the accepted and attempted outputs per lane, ensuring only the latest revision is used and retired lanes are ignored."
+        },
+        "index": 11,
+        "kind": "route_proposed",
+        "previous": "71ac51ed63f56130c327fc898fdfa2aef6abb99f9780d53fd0c43e2162c639f3",
+        "sha256": "18187766f50f17b194bbc7fccc690bfc4acf17058ac9e55a8ef746c04b1e5563"
+      },
+      {
+        "at": "2026-11-25T04:32:32.627704+00:00",
+        "detail": {
+          "proposal_fields": [
+            "name",
+            "schema",
+            "sql",
+            "tool"
+          ],
+          "reason": "TABLE_SQL_ERROR",
+          "tool": "construct_table"
+        },
+        "index": 12,
+        "kind": "tool_refused",
+        "previous": "18187766f50f17b194bbc7fccc690bfc4acf17058ac9e55a8ef746c04b1e5563",
+        "sha256": "bf8943682790a629780fc73b0e38c222ef43c52a54f8edf87f03c36451e0cab4"
+      },
+      {
+        "at": "2026-11-25T04:32:32.630025+00:00",
+        "detail": {
+          "artifact_hashes": {},
+          "checks": [],
+          "passed": false,
+          "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification.",
+          "spec_hash": "0a122245005470d3a9332fb5cc4cfc89737153b5a35cb9d0b0fb6552d7392419"
+        },
+        "index": 13,
+        "kind": "verification",
+        "previous": "bf8943682790a629780fc73b0e38c222ef43c52a54f8edf87f03c36451e0cab4",
+        "sha256": "d7643850f648457fa65d5299ff70d542b8867914b457b2a29ab4cefad207cbb7"
+      },
+      {
+        "at": "2026-11-25T04:32:32.630208+00:00",
+        "detail": {
+          "claims": [
+            {
+              "id": "acceptance_ratio",
+              "reason": "NO_BOUND_EXECUTION",
+              "status": "ABSTAIN"
+            },
+            {
+              "id": "accepted_total",
+              "reason": "NO_BOUND_EXECUTION",
+              "status": "ABSTAIN"
+            },
+            {
+              "id": "attempt_total",
+              "reason": "NO_BOUND_EXECUTION",
+              "status": "ABSTAIN"
+            }
+          ],
+          "status": "ABSTAIN"
+        },
+        "index": 14,
+        "kind": "claim_dispositions",
+        "previous": "d7643850f648457fa65d5299ff70d542b8867914b457b2a29ab4cefad207cbb7",
+        "sha256": "6e0a226713a4fad472c8d300e63c71c94468b36e2b240cc9632294b238f6724a"
+      },
+      {
+        "at": "2026-11-25T04:32:32.632656+00:00",
+        "detail": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "role": "builder",
+          "scope": "Waiting for selected service capacity; no model call or construction iteration consumed."
+        },
+        "index": 15,
+        "kind": "model_queued",
+        "previous": "6e0a226713a4fad472c8d300e63c71c94468b36e2b240cc9632294b238f6724a",
+        "sha256": "0fd7e4a1c0bf845abf83c2df2771cc3fdc868c447e9b3db8dc6d47de79b4a80b"
+      },
+      {
+        "at": "2026-11-25T04:32:32.634752+00:00",
+        "detail": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "role": "builder",
+          "run_id": "wf_82ae448155331ce204afe7b7_5efb480cccbfa77a"
+        },
+        "index": 16,
+        "kind": "model_started",
+        "previous": "0fd7e4a1c0bf845abf83c2df2771cc3fdc868c447e9b3db8dc6d47de79b4a80b",
+        "sha256": "de340e7c079f0e74f667a201357ff0c62e74fab92cad020c3418c1706dd25d77"
+      },
+      {
+        "at": "2026-11-25T04:33:03.598810+00:00",
+        "detail": {
+          "cost": {
+            "accounted": 0.0,
+            "amount": 0.0,
+            "attempts": 1,
+            "basis": "reported_usage_at_user_rates",
+            "complete_cost_known": false,
+            "currency": "USD"
+          },
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+          "reported_model": "qwen3-8b-q4_k_m",
+          "requested_model": "qwen3-8b-q4_k_m",
+          "response_sha256": "40749fb947f0702a55baa90ed08cc53e1f4bb3d2d0a8faa0d755a0f1d6be1b23",
+          "role": "builder",
+          "run_id": "wf_82ae448155331ce204afe7b7_5efb480cccbfa77a",
+          "usage": {
+            "input_tokens": 1442,
+            "output_tokens": 174
+          }
+        },
+        "index": 17,
+        "kind": "model_completed",
+        "previous": "de340e7c079f0e74f667a201357ff0c62e74fab92cad020c3418c1706dd25d77",
+        "sha256": "1632fb924e7305baafdf3cc09fccc41ceca02d05d80432edf03a9a0ba40ee732"
+      },
+      {
+        "at": "2026-11-25T04:33:03.598858+00:00",
+        "detail": {
+          "disposition": "PROPOSED",
+          "proposed_actions": 1,
+          "summary": "Start by constructing a table to calculate the sum of accepted and attempts for each lane's latest revision, filtering out retired lanes."
+        },
+        "index": 18,
+        "kind": "route_proposed",
+        "previous": "1632fb924e7305baafdf3cc09fccc41ceca02d05d80432edf03a9a0ba40ee732",
+        "sha256": "3026aaa69e314c475e4a9f07655a26ef3b27dd1963b8f451e1257ff96ead21b1"
+      },
+      {
+        "at": "2026-11-25T04:33:03.633965+00:00",
+        "detail": {
+          "proposal_fields": [
+            "name",
+            "schema",
+            "sql",
+            "tool"
+          ],
+          "reason": "TABLE_SQL_ERROR",
+          "tool": "construct_table"
+        },
+        "index": 19,
+        "kind": "tool_refused",
+        "previous": "3026aaa69e314c475e4a9f07655a26ef3b27dd1963b8f451e1257ff96ead21b1",
+        "sha256": "016aa4889210ef3309ca8be00eae3b5545f859e8c13ca1ed54d58953c95c102d"
+      },
+      {
+        "at": "2026-11-25T04:33:03.636042+00:00",
+        "detail": {
+          "artifact_hashes": {},
+          "checks": [],
+          "passed": false,
+          "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification.",
+          "spec_hash": "0a122245005470d3a9332fb5cc4cfc89737153b5a35cb9d0b0fb6552d7392419"
+        },
+        "index": 20,
+        "kind": "verification",
+        "previous": "016aa4889210ef3309ca8be00eae3b5545f859e8c13ca1ed54d58953c95c102d",
+        "sha256": "d5dfcf00a640712015e52111dd29dcb059618d176373f35c54e4fb1e66c042c5"
+      },
+      {
+        "at": "2026-11-25T04:33:03.636226+00:00",
+        "detail": {
+          "claims": [
+            {
+              "id": "acceptance_ratio",
+              "reason": "NO_BOUND_EXECUTION",
+              "status": "ABSTAIN"
+            },
+            {
+              "id": "accepted_total",
+              "reason": "NO_BOUND_EXECUTION",
+              "status": "ABSTAIN"
+            },
+            {
+              "id": "attempt_total",
+              "reason": "NO_BOUND_EXECUTION",
+              "status": "ABSTAIN"
+            }
+          ],
+          "status": "ABSTAIN"
+        },
+        "index": 21,
+        "kind": "claim_dispositions",
+        "previous": "d5dfcf00a640712015e52111dd29dcb059618d176373f35c54e4fb1e66c042c5",
+        "sha256": "9aaf6ec5693d14599dc9812547be5fdaa7edc87c35faea1010879c5c7eb0407e"
+      },
+      {
+        "at": "2026-11-25T04:33:03.639512+00:00",
+        "detail": {
+          "reason": "Declared model-call allocation exhausted; no further inference dispatched."
+        },
+        "index": 22,
+        "kind": "stopped",
+        "previous": "9aaf6ec5693d14599dc9812547be5fdaa7edc87c35faea1010879c5c7eb0407e",
+        "sha256": "790b9b334c39520f79c50517ca00e4fb3ee00a0264ad7ac377983e824cf13c60"
+      }
+    ],
+    "feedback": "Resolve the unverified registered claims with authorized inputs: [{\"id\":\"acceptance_ratio\",\"reason\":\"NO_BOUND_EXECUTION\",\"status\":\"ABSTAIN\"},{\"id\":\"accepted_total\",\"reason\":\"NO_BOUND_EXECUTION\",\"status\":\"ABSTAIN\"},{\"id\":\"attempt_total\",\"reason\":\"NO_BOUND_EXECUTION\",\"status\":\"ABSTAIN\"}]",
+    "id": "wf_82ae448155331ce204afe7b7",
+    "inflight": null,
+    "iteration": 3,
+    "model_call_limit": 3,
+    "model_calls": 3,
+    "phase": "builder",
+    "research": "",
+    "schema": "alpha-genesis-workflow/v1",
+    "spec": {
+      "acceptance": [],
+      "context": "Each lane/revision pair is unique in the supplied table. Table schema: {\"ledger\": {\"accepted\": \"INTEGER\", \"attempts\": \"INTEGER\", \"lane\": \"TEXT\", \"revision\": \"INTEGER\", \"state\": \"TEXT\"}}. Use a single output row in this column order: acceptance_ratio, accepted_total, attempt_total. Report exact integers or rational text n/d. A SQLite SELECT may return rational text using || to concatenate the numerator, slash, and denominator when appropriate.",
+      "local_only": true,
+      "max_actions": 14,
+      "max_iterations": 3,
+      "max_operations": 10000,
+      "max_output_tokens": 768,
+      "mission": {
+        "expires_at": "2026-11-25T06:31:24.445309+00:00",
+        "language": "en",
+        "original_ambition": "Build an exact daily acceptance ratio for a team validating outputs across review lanes. The supplied ledger contains both current and superseded records. For each lane use its latest revision. Ignore a lane whose latest revision is retired. Divide the pooled accepted outputs by the pooled attempts, and show both counts. Keep a reusable computation that would correctly handle a different ordering of the event records.",
+        "requirements": {
+          "approved_tables": {
+            "shift_ledger": {
+              "ledger": [
+                {
+                  "accepted": 0,
+                  "attempts": 0,
+                  "lane": "eagle",
+                  "revision": 4,
+                  "state": "retired"
+                },
+                {
+                  "accepted": 42,
+                  "attempts": 49,
+                  "lane": "heron",
+                  "revision": 1,
+                  "state": "active"
+                },
+                {
+                  "accepted": 9,
+                  "attempts": 17,
+                  "lane": "kingfisher",
+                  "revision": 4,
+                  "state": "active"
+                },
+                {
+                  "accepted": 57,
+                  "attempts": 61,
+                  "lane": "eagle",
+                  "revision": 1,
+                  "state": "active"
+                },
+                {
+                  "accepted": 15,
+                  "attempts": 25,
+                  "lane": "crow",
+                  "revision": 7,
+                  "state": "active"
+                },
+                {
+                  "accepted": 31,
+                  "attempts": 48,
+                  "lane": "heron",
+                  "revision": 3,
+                  "state": "active"
+                },
+                {
+                  "accepted": 26,
+                  "attempts": 26,
+                  "lane": "crow",
+                  "revision": 5,
+                  "state": "active"
+                },
+                {
+                  "accepted": 28,
+                  "attempts": 29,
+                  "lane": "kingfisher",
+                  "revision": 3,
+                  "state": "active"
+                }
+              ]
+            }
+          },
+          "evidence": {
+            "claims": [
+              {
+                "dataset": "shift_ledger",
+                "dimension": "dimensionless",
+                "id": "acceptance_ratio",
+                "locator": [
+                  "rows",
+                  0,
+                  0
+                ],
+                "required_fields": [
+                  [
+                    "ledger",
+                    "accepted"
+                  ],
+                  [
+                    "ledger",
+                    "attempts"
+                  ],
+                  [
+                    "ledger",
+                    "lane"
+                  ],
+                  [
+                    "ledger",
+                    "revision"
+                  ],
+                  [
+                    "ledger",
+                    "state"
+                  ]
+                ],
+                "requires": {
+                  "event_count_kind": "operator_observation",
+                  "input_class": "case_author_fixture",
+                  "revision_convention": "highest_per_lane"
+                },
+                "tool": "run_table",
+                "unit": "ratio",
+                "version": "s4"
+              },
+              {
+                "dataset": "shift_ledger",
+                "dimension": "count",
+                "id": "accepted_total",
+                "locator": [
+                  "rows",
+                  0,
+                  1
+                ],
+                "required_fields": [
+                  [
+                    "ledger",
+                    "accepted"
+                  ],
+                  [
+                    "ledger",
+                    "attempts"
+                  ],
+                  [
+                    "ledger",
+                    "lane"
+                  ],
+                  [
+                    "ledger",
+                    "revision"
+                  ],
+                  [
+                    "ledger",
+                    "state"
+                  ]
+                ],
+                "requires": {
+                  "event_count_kind": "operator_observation",
+                  "input_class": "case_author_fixture",
+                  "revision_convention": "highest_per_lane"
+                },
+                "tool": "run_table",
+                "unit": "count",
+                "version": "s4"
+              },
+              {
+                "dataset": "shift_ledger",
+                "dimension": "count",
+                "id": "attempt_total",
+                "locator": [
+                  "rows",
+                  0,
+                  2
+                ],
+                "required_fields": [
+                  [
+                    "ledger",
+                    "accepted"
+                  ],
+                  [
+                    "ledger",
+                    "attempts"
+                  ],
+                  [
+                    "ledger",
+                    "lane"
+                  ],
+                  [
+                    "ledger",
+                    "revision"
+                  ],
+                  [
+                    "ledger",
+                    "state"
+                  ]
+                ],
+                "requires": {
+                  "event_count_kind": "operator_observation",
+                  "input_class": "case_author_fixture",
+                  "revision_convention": "highest_per_lane"
+                },
+                "tool": "run_table",
+                "unit": "count",
+                "version": "s4"
+              }
+            ],
+            "inputs": {
+              "shift_ledger": {
+                "facts": {
+                  "event_count_kind": "operator_observation",
+                  "input_class": "case_author_fixture",
+                  "revision_convention": "highest_per_lane"
+                },
+                "kind": "table",
+                "origin": "AUTHORIZED_MISSION_INPUT",
+                "sha256": "bf50822a1a2fe685aeca6a55ca1d85b3e1f82dd3f7da6e4750f7909d487755ea",
+                "version": "s4"
+              }
+            }
+          }
+        },
+        "schema": "frontier-universal-execution/v1"
+      },
+      "objective": "Build an exact daily acceptance ratio for a team validating outputs across review lanes. The supplied ledger contains both current and superseded records. For each lane use its latest revision. Ignore a lane whose latest revision is retired. Divide the pooled accepted outputs by the pooled attempts, and show both counts. Keep a reusable computation that would correctly handle a different ordering of the event records.",
+      "roles": {
+        "builder": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp"
+        }
+      },
+      "strategy": "single-model",
+      "tool_permissions": [
+        "construct_table",
+        "run_table",
+        "read_artifact",
+        "write_document"
+      ]
+    },
+    "spec_hash": "0a122245005470d3a9332fb5cc4cfc89737153b5a35cb9d0b0fb6552d7392419",
+    "status": "exhausted",
+    "unadjudicated_counterexamples": [],
+    "updated_at": "2026-11-25T04:33:03.639512+00:00",
+    "verification": {
+      "artifact_hashes": {},
+      "checks": [],
+      "passed": false,
+      "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification.",
+      "spec_hash": "0a122245005470d3a9332fb5cc4cfc89737153b5a35cb9d0b0fb6552d7392419"
+    }
+  }
+}

@@ -1,0 +1,245 @@
+{
+  "accepted_complete_calculation": false,
+  "actual_provider_dispatches": 3,
+  "actual_tool_events": 9,
+  "archive_sha256": "c12f63dda194824a4815b8e2c3067b4ad44e3fd3f91af60fcb9f8018281df414",
+  "arm": "evidence",
+  "claim_reports": [
+    {
+      "claim_contract_sha256": "296e7fc92187a0e839b92d7b29edfc4c9f723250cc6c0de53d30594fa6f17df9",
+      "dataset": "reservoir",
+      "dimension": "mass_per_volume",
+      "id": "blend_concentration",
+      "locator": [
+        "rows",
+        0,
+        0
+      ],
+      "mission_id": "wf_c4ba1ad69dfe7549dc7a4bda",
+      "reason": "NO_BOUND_EXECUTION",
+      "requires": {
+        "input_class": "case_author_fixture",
+        "quantity_type": "mixture_balance",
+        "volume_additive": true
+      },
+      "revision_sha256": "e9f5d097a6847064cf4ab6820e059809a9d94ceecf7a64e3137253798511629d",
+      "source_version": "b2",
+      "status": "ABSTAIN",
+      "unit": "mg/L"
+    },
+    {
+      "claim_contract_sha256": "973a70b5c3561458a0f3884d474fefc94c760504511e4a783ab2768f297d16a0",
+      "dataset": "reservoir",
+      "dimension": "mass",
+      "id": "solute_mass",
+      "locator": [
+        "rows",
+        0,
+        1
+      ],
+      "mission_id": "wf_c4ba1ad69dfe7549dc7a4bda",
+      "reason": "NO_BOUND_EXECUTION",
+      "requires": {
+        "input_class": "case_author_fixture",
+        "quantity_type": "mixture_balance",
+        "volume_additive": true
+      },
+      "revision_sha256": "e9f5d097a6847064cf4ab6820e059809a9d94ceecf7a64e3137253798511629d",
+      "source_version": "b2",
+      "status": "ABSTAIN",
+      "unit": "mg"
+    },
+    {
+      "claim_contract_sha256": "9c7365dcdb87047e81a24e05e0c7da83cf804a6cf798e43253aef1cb59c1c153",
+      "dataset": "reservoir",
+      "dimension": "volume",
+      "id": "blend_volume",
+      "locator": [
+        "rows",
+        0,
+        2
+      ],
+      "mission_id": "wf_c4ba1ad69dfe7549dc7a4bda",
+      "reason": "NO_BOUND_EXECUTION",
+      "requires": {
+        "input_class": "case_author_fixture",
+        "quantity_type": "mixture_balance",
+        "volume_additive": true
+      },
+      "revision_sha256": "e9f5d097a6847064cf4ab6820e059809a9d94ceecf7a64e3137253798511629d",
+      "source_version": "b2",
+      "status": "ABSTAIN",
+      "unit": "L"
+    }
+  ],
+  "complete_cost_known": false,
+  "correct_bound_claims": false,
+  "id": "eb-f01",
+  "logged_actions": 14,
+  "matching_dataset_runs": [
+    {
+      "artifact": "table.json",
+      "correct_primary_row": false,
+      "event_sha256": "be97c0e80a6f3d1921659c145e413bccb2b2ff43e9cf1e8c6181af3cf389fbd5",
+      "fresh_reuse": {
+        "matched": false,
+        "reason": "initial output or final artifact identity differs"
+      },
+      "rows": [
+        [
+          1,
+          "g/L",
+          780,
+          "mL",
+          "sureau"
+        ],
+        [
+          375,
+          "ug/mL",
+          9,
+          "dL",
+          "merisier"
+        ],
+        [
+          840,
+          "mg/L",
+          3,
+          "L",
+          "tilleul"
+        ]
+      ]
+    },
+    {
+      "artifact": "conversion_table.json",
+      "correct_primary_row": false,
+      "event_sha256": "f3363785abc3d0792d6ce9139833d2e72500694139505146c82bc006d3ce62bf",
+      "fresh_reuse": {
+        "matched": false,
+        "reason": "initial output or final artifact identity differs"
+      },
+      "rows": [
+        [
+          1,
+          "g/L",
+          "sureau",
+          780,
+          "mL",
+          1000,
+          0
+        ],
+        [
+          375,
+          "ug/mL",
+          "merisier",
+          9,
+          "dL",
+          375,
+          0
+        ],
+        [
+          840,
+          "mg/L",
+          "tilleul",
+          3,
+          "L",
+          840,
+          3
+        ]
+      ]
+    },
+    {
+      "artifact": "mix_table.json",
+      "correct_primary_row": false,
+      "event_sha256": "e58aae28855600fba6ac579ebeea84a19e038dcb6331aefc6102b69a04fcd52c",
+      "fresh_reuse": {
+        "matched": false,
+        "reason": "initial output or final artifact identity differs"
+      },
+      "rows": [
+        [
+          1,
+          "g/L",
+          780,
+          "mL"
+        ],
+        [
+          375,
+          "ug/mL",
+          9,
+          "dL"
+        ],
+        [
+          840,
+          "mg/L",
+          3,
+          "L"
+        ]
+      ]
+    }
+  ],
+  "mission_id": "wf_c4ba1ad69dfe7549dc7a4bda",
+  "model_calls": 3,
+  "model_server_cpu_accounted_here": false,
+  "operator_actions_after_case_start": 0,
+  "operator_preparation_and_review_seconds": null,
+  "orchestrator_cpu_seconds": 2.873005,
+  "paid_provider_requests": 0,
+  "provider_seconds": 217.02458008200028,
+  "refusals": [
+    {
+      "proposal_fields": [
+        "name",
+        "tool"
+      ],
+      "reason": "Read access is restricted to this run's declared artifacts.",
+      "tool": "read_artifact"
+    },
+    {
+      "proposal_fields": [
+        "name",
+        "schema",
+        "sql",
+        "tool"
+      ],
+      "reason": "TABLE_SQL_ERROR",
+      "tool": "construct_table"
+    },
+    {
+      "proposal_fields": [
+        "input",
+        "name",
+        "tool"
+      ],
+      "reason": "TABLE_ARTIFACT_KIND",
+      "tool": "run_table"
+    },
+    {
+      "proposal_fields": [
+        "name",
+        "schema",
+        "sql",
+        "tool"
+      ],
+      "reason": "TABLE_SCHEMA",
+      "tool": "construct_table"
+    },
+    {
+      "proposal_fields": [
+        "name",
+        "schema",
+        "sql",
+        "tool"
+      ],
+      "reason": "TABLE_SCHEMA",
+      "tool": "construct_table"
+    }
+  ],
+  "task_elapsed_seconds": 217.43248517200027,
+  "token_usage": {
+    "observed_tokens_in": 5955,
+    "observed_tokens_out": 1084,
+    "unknown_token_replies": 0
+  },
+  "verdict": "FAIL",
+  "workflow_status": "exhausted"
+}

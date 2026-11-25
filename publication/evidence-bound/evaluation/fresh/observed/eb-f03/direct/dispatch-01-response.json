@@ -1,0 +1,36 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "content": "{\n  \"decision\": \"CONTINUE\",\n  \"queries\": [\n    \"SELECT SUM(litres) AS total_litres, SUM(minutes) AS total_minutes FROM logs;\"\n  ],\n  \"fetch\": [\"logs\"],\n  \"values\": {},\n  \"missing\": [\"minutes\"],\n  \"answer\": \"Impossible de calculer le débit agrégé en L/min pour l’intégralité des trois séances d’essai de la ligne car la mesure 'minutes' est manquante dans la séance 'ligne-11'.\"\n}",
+        "role": "assistant"
+      }
+    }
+  ],
+  "created": 1795581038,
+  "id": "chatcmpl-lEusb2x6vWyrsLwjxzNmkxyYHoOOkYid",
+  "model": "qwen3-8b-q4_k_m",
+  "object": "chat.completion",
+  "system_fingerprint": "b12242-3b4d6ab3f",
+  "timings": {
+    "cache_n": 3,
+    "predicted_ms": 11519.528,
+    "predicted_n": 115,
+    "predicted_per_second": 9.896238804228783,
+    "predicted_per_token_ms": 101.04849122807018,
+    "prompt_ms": 10333.542,
+    "prompt_n": 443,
+    "prompt_per_second": 42.870102042455535,
+    "prompt_per_token_ms": 23.326279909706546
+  },
+  "usage": {
+    "completion_tokens": 115,
+    "prompt_tokens": 446,
+    "prompt_tokens_details": {
+      "cached_tokens": 3
+    },
+    "total_tokens": 561
+  }
+}

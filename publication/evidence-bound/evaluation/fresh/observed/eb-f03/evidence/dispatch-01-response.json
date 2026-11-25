@@ -1,0 +1,36 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "content": "{\n  \"summary\": \"Calculer le débit agrégé en L/min pour l’intégralité des trois séances d’essai de la ligne à partir des données fournies.\",\n  \"actions\": [\n    {\n      \"tool\": \"construct_table\",\n      \"name\": \"table.json\",\n      \"schema\": {\n        \"events\": {\n          \"score\": \"INTEGER\"\n        }\n      },\n      \"sql\": \"SELECT SUM(litres / minutes) AS flow_rate FROM logs WHERE session IN ('ligne-9', 'ligne-11', 'ligne-14')\"\n    },\n    {\n      \"tool\": \"run_table\",\n      \"name\": \"table.json\",\n      \"input\": {\n        \"dataset\": \"line_log\"\n      }\n    },\n    {\n      \"tool\": \"write_document\",\n      \"name\": \"result.md\",\n      \"content\": \"Le débit agrégé en L/min pour les trois séances d'essai de la ligne est calculé. Pour la séance 'ligne-9', le débit est de 2,7647 L/min (47 litres / 17 minutes). Pour la séance 'ligne-11', la mesure est absente car la durée (minutes) est nulle. Pour la séance 'ligne-14', le débit est de 2,3939 L/min (79 litres / 33 minutes). Aucune mesure n'a été remplacée. Le résultat final est une somme des débits des séances valides.\"\n    }\n  ],\n  \"done\": false\n}",
+        "role": "assistant"
+      }
+    }
+  ],
+  "created": 1795580961,
+  "id": "chatcmpl-j4z0IAe04pz7jVIi3d2AHbnxfZNvgFvh",
+  "model": "qwen3-8b-q4_k_m",
+  "object": "chat.completion",
+  "system_fingerprint": "b12242-3b4d6ab3f",
+  "timings": {
+    "cache_n": 3,
+    "predicted_ms": 31230.186,
+    "predicted_n": 339,
+    "predicted_per_second": 10.82286221414115,
+    "predicted_per_token_ms": 92.397,
+    "prompt_ms": 17299.563,
+    "prompt_n": 998,
+    "prompt_per_second": 57.68931851053117,
+    "prompt_per_token_ms": 17.33423146292585
+  },
+  "usage": {
+    "completion_tokens": 339,
+    "prompt_tokens": 1001,
+    "prompt_tokens_details": {
+      "cached_tokens": 3
+    },
+    "total_tokens": 1340
+  }
+}

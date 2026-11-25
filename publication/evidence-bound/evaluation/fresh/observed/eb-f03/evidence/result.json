@@ -1,0 +1,94 @@
+{
+  "actual_provider_dispatches": 3,
+  "actual_tool_events": 1,
+  "archive_sha256": "fc2061496de89e0c72a1a976dcbcc8a413ebd92c44b33b7d5d567832d63bd9ab",
+  "arm": "evidence",
+  "authorized_numerical_run": false,
+  "claim_reports": [
+    {
+      "claim_contract_sha256": "8ec7f236a6a8e33d6665ccf9049fae50ecd9564bbd7c72053ee4f231f03ff776",
+      "dataset": "line_log",
+      "dimension": "volume_per_time",
+      "id": "flow_rate",
+      "locator": [
+        "rows",
+        0,
+        0
+      ],
+      "mission_id": "wf_5bec64f2061e5d861990861d",
+      "reason": "REQUIRED_FIELD_MISSING",
+      "requires": {
+        "clock": "paired_elapsed_minutes",
+        "input_class": "case_author_fixture",
+        "scope": "all_listed_sessions"
+      },
+      "revision_sha256": "70bd6bcd338f633add4a1099934fb3579db693b60407a3b6cf6cd5606281c3ff",
+      "source_version": "j3",
+      "status": "ABSTAIN",
+      "unit": "L/min"
+    }
+  ],
+  "complete_cost_known": false,
+  "id": "eb-f03",
+  "logged_actions": 5,
+  "mission_id": "wf_5bec64f2061e5d861990861d",
+  "model_calls": 3,
+  "model_server_cpu_accounted_here": false,
+  "operator_actions_after_case_start": 0,
+  "operator_preparation_and_review_seconds": null,
+  "orchestrator_cpu_seconds": 0.9590949999999998,
+  "paid_provider_requests": 0,
+  "precise_missing_evidence": true,
+  "provider_seconds": 103.36083790199973,
+  "refusals": [
+    {
+      "proposal_fields": [
+        "name",
+        "schema",
+        "sql",
+        "tool"
+      ],
+      "reason": "TABLE_SQL_ERROR",
+      "tool": "construct_table"
+    },
+    {
+      "proposal_fields": [
+        "input",
+        "name",
+        "tool"
+      ],
+      "reason": "TABLE_ARTIFACT_KIND",
+      "tool": "run_table"
+    },
+    {
+      "proposal_fields": [
+        "name",
+        "schema",
+        "sql",
+        "tool"
+      ],
+      "reason": "TABLE_SQL_ERROR",
+      "tool": "construct_table"
+    },
+    {
+      "proposal_fields": [
+        "name",
+        "schema",
+        "sql",
+        "tool"
+      ],
+      "reason": "TABLE_SQL_ERROR",
+      "tool": "construct_table"
+    }
+  ],
+  "task_elapsed_seconds": 103.65815431200008,
+  "token_usage": {
+    "observed_tokens_in": 3655,
+    "observed_tokens_out": 621,
+    "unknown_token_replies": 0
+  },
+  "unsupported_numerical_claim": true,
+  "verdict": "FAIL",
+  "withheld_answer": true,
+  "workflow_status": "exhausted"
+}

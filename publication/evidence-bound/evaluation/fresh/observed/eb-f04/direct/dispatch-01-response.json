@@ -1,0 +1,36 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "content": "{\n  \"decision\": \"CONTINUE\",\n  \"queries\": [\n    \"SELECT * FROM headers WHERE url IN ('https://raw.githubusercontent.com/python/cpython/55fee9cf216abe4ec0d1139f94b1930fbd0c7644/Include/patchlevel.h', 'https://raw.githubusercontent.com/python/cpython/6cb20a219a860eaf687b2d968b41c480c7461909/Include/patchlevel.h')\",\n    \"SELECT * FROM patchlevel WHERE version >= '3.12.10'\"\n  ],\n  \"fetch\": [\"alpha\", \"bravo\"],\n  \"values\": {\n    \"version\": \"3.12.10\",\n    \"source\": \"alpha\"\n  },\n  \"missing\": [],\n  \"answer\": \"Selected-label: alpha\"\n}",
+        "role": "assistant"
+      }
+    }
+  ],
+  "created": 1795581385,
+  "id": "chatcmpl-JIPKdKGzjOY2B4yvcexyXd3h9YEy4d6t",
+  "model": "qwen3-8b-q4_k_m",
+  "object": "chat.completion",
+  "system_fingerprint": "b12242-3b4d6ab3f",
+  "timings": {
+    "cache_n": 3,
+    "predicted_ms": 17658.982,
+    "predicted_n": 205,
+    "predicted_per_second": 11.552194798091985,
+    "predicted_per_token_ms": 86.56363725490196,
+    "prompt_ms": 7285.163,
+    "prompt_n": 422,
+    "prompt_per_second": 57.925951691128944,
+    "prompt_per_token_ms": 17.26341943127962
+  },
+  "usage": {
+    "completion_tokens": 205,
+    "prompt_tokens": 425,
+    "prompt_tokens_details": {
+      "cached_tokens": 3
+    },
+    "total_tokens": 630
+  }
+}

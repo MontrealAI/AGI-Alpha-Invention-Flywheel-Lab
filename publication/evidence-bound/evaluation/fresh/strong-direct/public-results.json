@@ -1,0 +1,114 @@
+{
+  "comparison": "Direct included-Codex assisted construction. Separately scorable. No preregistered equal-compute arm.",
+  "public_input": "public-inputs.json",
+  "public_input_sha256": "4c3dcfae3838ff646f88ed007f23bdc794d9f0900fc0ba53267bd0b20875660d",
+  "elapsed": {
+    "recorded_start_utc": "2026-11-25T04:41:00.923823+00:00",
+    "recorded_end_utc": "2026-11-25T04:42:17.530127+00:00",
+    "recorded_wall_seconds": 76.606,
+    "clock_scope": "From the first explicit clock reading, immediately after initial inspection of the public input, through public executions and the ordering check.",
+    "compute_cost": "Included Codex inference tokens, compute, and monetary cost were not observable."
+  },
+  "tools": [
+    "Local shell and workspace patch editing",
+    "Python 3.12.14 standard library",
+    "SHA-256 via hashlib"
+  ],
+  "method": "Read-only JSON input and deterministic exact integer or Fraction arithmetic",
+  "public_ordering_check": {
+    "eb-f02_reversed_ledger_same_result": true
+  },
+  "runs": {
+    "eb-f01": {
+      "artifact": "candidate/blend.py",
+      "sha256": "a7b2f58e1939ab32b95785c2186c0e7768bec8d3c2f557a19a0b5f7859b8e54b",
+      "invocation": [
+        "python3",
+        "-I",
+        "-B",
+        "candidate/blend.py",
+        "public-inputs.json"
+      ],
+      "launch_wall_ms": 42.982,
+      "exit_code": 0,
+      "observed": {
+        "mass_volume_conserved": true,
+        "metrics": {
+          "blend_concentration": {
+            "denominator": 78,
+            "numerator": 60625,
+            "unit": "mg/L"
+          },
+          "blend_volume": {
+            "denominator": 25,
+            "numerator": 117,
+            "unit": "L"
+          },
+          "solute_mass": {
+            "denominator": 2,
+            "numerator": 7275,
+            "unit": "mg"
+          }
+        },
+        "status": "ok"
+      }
+    },
+    "eb-f02": {
+      "artifact": "candidate/acceptance.py",
+      "sha256": "ebddd1cf8f9a02c788f3d18f1108f4d4f2e6822243ba5f98ec9aa493846129a1",
+      "invocation": [
+        "python3",
+        "-I",
+        "-B",
+        "candidate/acceptance.py",
+        "public-inputs.json"
+      ],
+      "launch_wall_ms": 29.795,
+      "exit_code": 0,
+      "observed": {
+        "metrics": {
+          "acceptance_ratio": {
+            "denominator": 18,
+            "numerator": 11,
+            "unit": "ratio"
+          },
+          "accepted_total": {
+            "denominator": 1,
+            "numerator": 55,
+            "unit": "count"
+          },
+          "attempt_total": {
+            "denominator": 1,
+            "numerator": 90,
+            "unit": "count"
+          }
+        },
+        "status": "ok"
+      }
+    },
+    "eb-f03": {
+      "artifact": "candidate/flow.py",
+      "sha256": "2fd68f9a236937db53c4aa781049ce23a4dc6fc9d59c97a55378e1a2b8f5f78f",
+      "invocation": [
+        "python3",
+        "-I",
+        "-B",
+        "candidate/flow.py",
+        "public-inputs.json"
+      ],
+      "launch_wall_ms": 46.5,
+      "exit_code": 0,
+      "observed": {
+        "metrics": {},
+        "missing": [
+          {
+            "field": "minutes",
+            "session": "ligne-11",
+            "unit": "min"
+          }
+        ],
+        "status": "abstain"
+      }
+    }
+  }
+}

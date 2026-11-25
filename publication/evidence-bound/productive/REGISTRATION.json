@@ -1,0 +1,43 @@
+{
+  "schema": "frontier/local-model-evidence-study-v1",
+  "registered_at_utc": "2026-11-25T04:01:25.187022+00:00",
+  "use": "Select the next existing dual-TITAN owner run from the two already proposed models. Inspect authoritative GGUF allocation prerequisites without transferring weight payloads.",
+  "test_case_selection": "The two preexisting candidate model families, with the public exact publisher quantization specified by the owner workstream. Tensor contents and layout, actual runtime fit, throughput and mission success were not seen when selecting cases.",
+  "sources": {
+    "first": {
+      "repository": "Qwen/Qwen3-30B-A3B-GGUF",
+      "revision": "e4d4bafdfb96a411a163846265362aceb0b9c63a",
+      "filename": "Qwen3-30B-A3B-Q4_K_M.gguf",
+      "size_bytes": 18556685824,
+      "registry_linked_sha256": "0d003f6662faee786ed5da3e31b29c978de5ae5d275c8794c606a7f3c01aa8f5",
+      "registry_response_sha256": "6837f2af0099a5bd34b631fb0905ca3e1118bb289aa0ed5e0f266310e5123ce7",
+      "registry_url": "https://huggingface.co/api/models/Qwen/Qwen3-30B-A3B-GGUF?blobs=true"
+    },
+    "repeat": {
+      "repository": "ggml-org/gpt-oss-20b-GGUF",
+      "revision": "41e8a94d15d62070b36cf4553a0250717ecf46b8",
+      "filename": "gpt-oss-20b-MXFP4.gguf",
+      "size_bytes": 12109566624,
+      "registry_linked_sha256": "27cd6c432c7672cb812a92f611cf3ba7bbc35928262bb1e1253ff4ee6ae35901",
+      "registry_response_sha256": "5edbba7c01fbad0dc589c9676e5e024e3d2977ab4d080faef81b6767c25b9d6f",
+      "registry_url": "https://huggingface.co/api/models/ggml-org/gpt-oss-20b-GGUF?blobs=true"
+    }
+  },
+  "acceptance": "Both parsers agree exactly on covered metadata, tensor IDs, dimensions, data types, positions, aligned data offset and recorded weight payload size. For each source request require exact publisher revision, object size and linked digest, and exact bounded 206 response. Preserve weight integrity and measured GPU fit as unqualified.",
+  "comparators": {
+    "retained_prefix": "One adaptive prefix fetch and selective GGUF-v3 metadata model preflight using only standard library and curl.",
+    "ordinary_remote": "Unchanged official huggingface.js GGUF parser with its own serial range reads under the same approved transport.",
+    "ordinary_coalesced": "Unchanged official parser on the candidate cut of otherwise identical bytes. Represents a conventional coalesced range fetch followed by offline decoding."
+  },
+  "metrics": [
+    "total coupled request time",
+    "request count",
+    "wire response body bytes",
+    "verifier processing time",
+    "cold setup",
+    "matched/scope result",
+    "held clean/altered controls"
+  ],
+  "go": "Publication-copy and planning scope qualify only upon independent exact agreement. Speed gain over ordinary streaming is [at least 20% lower end-to-end wall on both objects] and must be considered alongside conventional coalescing. No economic promotion absent a measured accepted operational outcome with complete costs.",
+  "limits": "Each observation allows at most 10,000,000 downloaded source body bytes. No model tensor downloads beyond incidental bytes inside one bounded GGUF prefix. No weights consumed by an inference process."
+}

@@ -1,0 +1,292 @@
+[
+  {
+    "ambition": "Préparer le bilan de masse du mélange d’essai à partir des relevés fournis et conserver un instrument réutilisable. Convertir selon les unités de chaque ligne et supposer que les volumes s’additionnent. Établir la concentration finale en mg/L, la masse totale en mg et le volume total en L. Fournir des rapports exacts et vérifier leur cohérence par conservation masse-volume.",
+    "confirmation": {
+      "batches": [
+        {
+          "concentration": 117,
+          "concentration_unit": "ug/mL",
+          "lot": "sureau",
+          "volume": 325,
+          "volume_unit": "mL"
+        },
+        {
+          "concentration": 3,
+          "concentration_unit": "g/L",
+          "lot": "aubepine",
+          "volume": 8,
+          "volume_unit": "dL"
+        },
+        {
+          "concentration": 521,
+          "concentration_unit": "mg/L",
+          "lot": "prunier",
+          "volume": 1,
+          "volume_unit": "L"
+        }
+      ]
+    },
+    "data": {
+      "batches": [
+        {
+          "concentration": 1,
+          "concentration_unit": "g/L",
+          "lot": "sureau",
+          "volume": 780,
+          "volume_unit": "mL"
+        },
+        {
+          "concentration": 375,
+          "concentration_unit": "ug/mL",
+          "lot": "merisier",
+          "volume": 9,
+          "volume_unit": "dL"
+        },
+        {
+          "concentration": 840,
+          "concentration_unit": "mg/L",
+          "lot": "tilleul",
+          "volume": 3,
+          "volume_unit": "L"
+        }
+      ]
+    },
+    "dataset": "reservoir",
+    "facts": {
+      "input_class": "case_author_fixture",
+      "quantity_type": "mixture_balance",
+      "volume_additive": true
+    },
+    "id": "eb-f01",
+    "lang": "fr",
+    "metrics": [
+      [
+        "blend_concentration",
+        "mg/L",
+        "mass_per_volume"
+      ],
+      [
+        "solute_mass",
+        "mg",
+        "mass"
+      ],
+      [
+        "blend_volume",
+        "L",
+        "volume"
+      ]
+    ],
+    "oracle": "balance",
+    "schema": {
+      "batches": {
+        "concentration": "INTEGER",
+        "concentration_unit": "TEXT",
+        "lot": "TEXT",
+        "volume": "INTEGER",
+        "volume_unit": "TEXT"
+      }
+    },
+    "version": "b2"
+  },
+  {
+    "ambition": "Build an exact daily acceptance ratio for a team validating outputs across review lanes. The supplied ledger contains both current and superseded records. For each lane use its latest revision. Ignore a lane whose latest revision is retired. Divide the pooled accepted outputs by the pooled attempts, and show both counts. Keep a reusable computation that would correctly handle a different ordering of the event records.",
+    "confirmation": {
+      "ledger": [
+        {
+          "accepted": 0,
+          "attempts": 0,
+          "lane": "beaver",
+          "revision": 9,
+          "state": "retired"
+        },
+        {
+          "accepted": 57,
+          "attempts": 58,
+          "lane": "beaver",
+          "revision": 3,
+          "state": "active"
+        },
+        {
+          "accepted": 4,
+          "attempts": 11,
+          "lane": "salamander",
+          "revision": 6,
+          "state": "active"
+        },
+        {
+          "accepted": 0,
+          "attempts": 0,
+          "lane": "mink",
+          "revision": 1,
+          "state": "retired"
+        },
+        {
+          "accepted": 17,
+          "attempts": 19,
+          "lane": "mink",
+          "revision": 2,
+          "state": "active"
+        },
+        {
+          "accepted": 5,
+          "attempts": 5,
+          "lane": "salamander",
+          "revision": 4,
+          "state": "active"
+        }
+      ]
+    },
+    "data": {
+      "ledger": [
+        {
+          "accepted": 0,
+          "attempts": 0,
+          "lane": "eagle",
+          "revision": 4,
+          "state": "retired"
+        },
+        {
+          "accepted": 42,
+          "attempts": 49,
+          "lane": "heron",
+          "revision": 1,
+          "state": "active"
+        },
+        {
+          "accepted": 9,
+          "attempts": 17,
+          "lane": "kingfisher",
+          "revision": 4,
+          "state": "active"
+        },
+        {
+          "accepted": 57,
+          "attempts": 61,
+          "lane": "eagle",
+          "revision": 1,
+          "state": "active"
+        },
+        {
+          "accepted": 15,
+          "attempts": 25,
+          "lane": "crow",
+          "revision": 7,
+          "state": "active"
+        },
+        {
+          "accepted": 31,
+          "attempts": 48,
+          "lane": "heron",
+          "revision": 3,
+          "state": "active"
+        },
+        {
+          "accepted": 26,
+          "attempts": 26,
+          "lane": "crow",
+          "revision": 5,
+          "state": "active"
+        },
+        {
+          "accepted": 28,
+          "attempts": 29,
+          "lane": "kingfisher",
+          "revision": 3,
+          "state": "active"
+        }
+      ]
+    },
+    "dataset": "shift_ledger",
+    "facts": {
+      "event_count_kind": "operator_observation",
+      "input_class": "case_author_fixture",
+      "revision_convention": "highest_per_lane"
+    },
+    "id": "eb-f02",
+    "lang": "en",
+    "metrics": [
+      [
+        "acceptance_ratio",
+        "ratio",
+        "dimensionless"
+      ],
+      [
+        "accepted_total",
+        "count",
+        "count"
+      ],
+      [
+        "attempt_total",
+        "count",
+        "count"
+      ]
+    ],
+    "oracle": "ledger_ratio",
+    "schema": {
+      "ledger": {
+        "accepted": "INTEGER",
+        "attempts": "INTEGER",
+        "lane": "TEXT",
+        "revision": "INTEGER",
+        "state": "TEXT"
+      }
+    },
+    "version": "s4"
+  },
+  {
+    "ambition": "Donner le débit agrégé en L/min pour l’intégralité des trois séances d’essai de la ligne en utilisant le journal approuvé. Des cellules vides peuvent signaler une mesure absente. Si un bilan complet ne peut pas être établi, ne remplacer aucune mesure et indiquer exactement la séance et la mesure nécessaires avant de répondre.",
+    "data": {
+      "logs": [
+        {
+          "litres": 47,
+          "minutes": 17,
+          "session": "ligne-9"
+        },
+        {
+          "litres": 61,
+          "minutes": null,
+          "session": "ligne-11"
+        },
+        {
+          "litres": 79,
+          "minutes": 33,
+          "session": "ligne-14"
+        }
+      ]
+    },
+    "dataset": "line_log",
+    "facts": {
+      "clock": "paired_elapsed_minutes",
+      "input_class": "case_author_fixture",
+      "scope": "all_listed_sessions"
+    },
+    "id": "eb-f03",
+    "lang": "fr",
+    "metrics": [
+      [
+        "flow_rate",
+        "L/min",
+        "volume_per_time"
+      ]
+    ],
+    "oracle": "observation_rate",
+    "schema": {
+      "logs": {
+        "litres": "INTEGER",
+        "minutes": "INTEGER",
+        "session": "TEXT"
+      }
+    },
+    "version": "j3"
+  },
+  {
+    "ambition": "Choose a published interpreter baseline for a reproducibility script that requires CPython 3.12 with patch level at least 10. Fetch and inspect both approved pinned upstream patch-level headers. Determine their versions from the header fields and cite both source identities. Select the eligible label even if the other label is a newer version series. Abstain if the required evidence could not be retrieved.",
+    "id": "eb-f04",
+    "lang": "en",
+    "oracle": "select_header",
+    "sources": {
+      "alpha": "https://raw.githubusercontent.com/python/cpython/55fee9cf216abe4ec0d1139f94b1930fbd0c7644/Include/patchlevel.h",
+      "bravo": "https://raw.githubusercontent.com/python/cpython/6cb20a219a860eaf687b2d968b41c480c7461909/Include/patchlevel.h"
+    }
+  }
+]

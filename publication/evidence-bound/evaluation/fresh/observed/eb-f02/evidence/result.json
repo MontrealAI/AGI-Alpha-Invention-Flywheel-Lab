@@ -1,0 +1,128 @@
+{
+  "accepted_complete_calculation": false,
+  "actual_provider_dispatches": 3,
+  "actual_tool_events": 0,
+  "archive_sha256": "c033261b5c7c5197397e48dcc16d2c10f1b1c747f88bc135a4baf4e34e29d8a5",
+  "arm": "evidence",
+  "claim_reports": [
+    {
+      "claim_contract_sha256": "ba1240565e59d41aa598347e7695667db30431a50c40b831fcef051efeda132c",
+      "dataset": "shift_ledger",
+      "dimension": "dimensionless",
+      "id": "acceptance_ratio",
+      "locator": [
+        "rows",
+        0,
+        0
+      ],
+      "mission_id": "wf_82ae448155331ce204afe7b7",
+      "reason": "NO_BOUND_EXECUTION",
+      "requires": {
+        "event_count_kind": "operator_observation",
+        "input_class": "case_author_fixture",
+        "revision_convention": "highest_per_lane"
+      },
+      "revision_sha256": "0a122245005470d3a9332fb5cc4cfc89737153b5a35cb9d0b0fb6552d7392419",
+      "source_version": "s4",
+      "status": "ABSTAIN",
+      "unit": "ratio"
+    },
+    {
+      "claim_contract_sha256": "9a96771e7c82c116d323db48f080f9ae2a436e767831d8c3cb3bdf54a326291f",
+      "dataset": "shift_ledger",
+      "dimension": "count",
+      "id": "accepted_total",
+      "locator": [
+        "rows",
+        0,
+        1
+      ],
+      "mission_id": "wf_82ae448155331ce204afe7b7",
+      "reason": "NO_BOUND_EXECUTION",
+      "requires": {
+        "event_count_kind": "operator_observation",
+        "input_class": "case_author_fixture",
+        "revision_convention": "highest_per_lane"
+      },
+      "revision_sha256": "0a122245005470d3a9332fb5cc4cfc89737153b5a35cb9d0b0fb6552d7392419",
+      "source_version": "s4",
+      "status": "ABSTAIN",
+      "unit": "count"
+    },
+    {
+      "claim_contract_sha256": "a6e9dd4537efde7ab68ad09506fea75013751bd04b6c407521dc1b8f6f299314",
+      "dataset": "shift_ledger",
+      "dimension": "count",
+      "id": "attempt_total",
+      "locator": [
+        "rows",
+        0,
+        2
+      ],
+      "mission_id": "wf_82ae448155331ce204afe7b7",
+      "reason": "NO_BOUND_EXECUTION",
+      "requires": {
+        "event_count_kind": "operator_observation",
+        "input_class": "case_author_fixture",
+        "revision_convention": "highest_per_lane"
+      },
+      "revision_sha256": "0a122245005470d3a9332fb5cc4cfc89737153b5a35cb9d0b0fb6552d7392419",
+      "source_version": "s4",
+      "status": "ABSTAIN",
+      "unit": "count"
+    }
+  ],
+  "complete_cost_known": false,
+  "correct_bound_claims": false,
+  "id": "eb-f02",
+  "logged_actions": 3,
+  "matching_dataset_runs": [],
+  "mission_id": "wf_82ae448155331ce204afe7b7",
+  "model_calls": 3,
+  "model_server_cpu_accounted_here": false,
+  "operator_actions_after_case_start": 0,
+  "operator_preparation_and_review_seconds": null,
+  "orchestrator_cpu_seconds": 1.284103,
+  "paid_provider_requests": 0,
+  "provider_seconds": 99.02244342700214,
+  "refusals": [
+    {
+      "proposal_fields": [
+        "name",
+        "schema",
+        "sql",
+        "tool"
+      ],
+      "reason": "TABLE_SQL_ERROR",
+      "tool": "construct_table"
+    },
+    {
+      "proposal_fields": [
+        "name",
+        "schema",
+        "sql",
+        "tool"
+      ],
+      "reason": "TABLE_SQL_ERROR",
+      "tool": "construct_table"
+    },
+    {
+      "proposal_fields": [
+        "name",
+        "schema",
+        "sql",
+        "tool"
+      ],
+      "reason": "TABLE_SQL_ERROR",
+      "tool": "construct_table"
+    }
+  ],
+  "task_elapsed_seconds": 99.23637152099946,
+  "token_usage": {
+    "observed_tokens_in": 4169,
+    "observed_tokens_out": 507,
+    "unknown_token_replies": 0
+  },
+  "verdict": "FAIL",
+  "workflow_status": "exhausted"
+}

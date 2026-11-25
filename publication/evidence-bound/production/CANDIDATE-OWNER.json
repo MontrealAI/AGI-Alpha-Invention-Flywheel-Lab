@@ -1,0 +1,114 @@
+{
+  "ambition": "Build frontier AI LLM for Game Theory.",
+  "base": "http://127.0.0.1:8767/frontier-omega-alpha/",
+  "bounds": {
+    "actions": 10,
+    "max_output_tokens": 520,
+    "model_turns": 1,
+    "private_lease_minutes": 25
+  },
+  "checkpoint_sha256": "73f03323a04d33b4eeedae4004449ae511c6dafa27a5df0f88de96dbf8c66d17",
+  "class": "candidate exact-tree local preview, no production or real member qualification",
+  "discovery": [
+    {
+      "configured": false,
+      "engine": "llama-cpp",
+      "model": "qwen3-8b-q4_k_m"
+    }
+  ],
+  "engine": {
+    "model_sha256": "d98cdcbd03e17ce47681435b5150e34c1417f50b5c0019dd560e4882c5745785",
+    "name": "llama.cpp",
+    "platform": "Linux CPU",
+    "version": "b12242"
+  },
+  "executor_sha256": "d6a3194e2f8f8cb87bcbce96f949a613e2d4264792f7e46bbb3c38378bb5dbea",
+  "export_sha256": "b2980f62d530f7f9ff5b69379cec2f1727b7b830983e699f4f036882aff43495",
+  "git_tree": "8522aa1be6ef84bfa984a933ae2a799b72295fa2",
+  "language": "en",
+  "mode": "start",
+  "module_sha256": "bf38040798584f5834dd536a4fe40247a1a1b3cca2f2eb3c4d8d7c36ea8f1630",
+  "operations": [
+    "pair",
+    "intelligence-discover",
+    "intelligence-connect",
+    "submit",
+    "list",
+    "get",
+    "export"
+  ],
+  "release_revision": "a5da54043cd8061a4f608d9fe943a63501d4c004",
+  "same_tree_pr_head": "5510fce8c65730b15667d6633cab6442876f4cfb",
+  "scope": "Real local readiness and one complete model response. The table used model-generated development data. The run reached its declared model-turn allocation before any independently accepted strategic result.",
+  "selection": {
+    "check": {
+      "at": "2026-11-25T04:20:13.523885+00:00",
+      "elapsed_ms": 4221,
+      "format": "json_schema",
+      "input_tokens": 35,
+      "output_tokens": 29
+    },
+    "mode": "hybrid",
+    "model": "qwen3-8b-q4_k_m",
+    "provider": "frontier-local-641ae16dc5810b8e3c02fba9297f06dca125d4a68a106d1b6c364b9f2cb0a5ab",
+    "ready": true
+  },
+  "setup": {
+    "automatic_return": true,
+    "exact_submit_count": 1,
+    "guide_one_use": true,
+    "reopened": true
+  },
+  "state": {
+    "actions": 2,
+    "files": [
+      "game_theory_table.json"
+    ],
+    "id": "wf_e3b04712fe257362329a1566",
+    "model_calls": 1,
+    "phase": "builder",
+    "recorded_events": [
+      {
+        "kind": "created"
+      },
+      {
+        "kind": "model_queued"
+      },
+      {
+        "kind": "model_started"
+      },
+      {
+        "kind": "model_completed",
+        "usage": {
+          "input_tokens": 797,
+          "output_tokens": 239
+        }
+      },
+      {
+        "kind": "route_proposed"
+      },
+      {
+        "kind": "tool_completed",
+        "tool": "construct_table"
+      },
+      {
+        "kind": "tool_completed",
+        "tool": "run_table"
+      },
+      {
+        "kind": "verification"
+      },
+      {
+        "kind": "stopped",
+        "reason": "Declared model-call allocation exhausted; no further inference dispatched."
+      }
+    ],
+    "status": "exhausted"
+  },
+  "tool_input_origins": [
+    null,
+    "MODEL_DEVELOPMENT_FIXTURE"
+  ],
+  "wallet": "isolated eligibility fixture",
+  "workflow_run": "2026112503"
+}

@@ -1,0 +1,25 @@
+{
+  "objective": "Reconcile published earthquake catalog events in a historical rectangle crossing the antimeridian and retain a portable event selection audit.",
+  "scope": "Historical catalog records. The constructed tool selects recorded observations and supports reproducible audits.",
+  "source": "https://earthquake.usgs.gov/fdsnws/event/1/",
+  "catalog": "USGS ANSS Comprehensive Earthquake Catalog",
+  "development_window": {"start": "2025-07-01T00:00:00Z", "end": "2025-08-01T00:00:00Z", "south": -25, "north": -12, "west": 175, "east": -175},
+  "observed_reuse_window": {"start": "2025-06-01T00:00:00Z", "end": "2025-07-01T00:00:00Z", "south": -25, "north": -12, "west": 175, "east": -175},
+  "source_magnitude_floor": 4,
+  "audit_magnitude_floor": 4.5,
+  "source_requests": "Three credential-free exact GET queries per window. Acquire two canonical-longitude halves and an independently queried wrapped rectangle. Bounded to 131072 bytes each.",
+  "specification": {
+    "current_revision": "Only the greatest published update timestamp for an event ID is eligible.",
+    "conflict": "If distinct observed records remain for the same event ID at the greatest timestamp, disclose the conflict and withhold that ID.",
+    "longitude": "Closed interval on canonical longitudes with exactly +180 equivalent to -180. A reversed west/east interval is the union of its two dateline halves.",
+    "latitude": "Closed south/north interval.",
+    "magnitude": "Include a known decimal magnitude at least equal to the declared minimum.",
+    "time": "Half-open interval of integer event timestamps in UTC milliseconds."
+  },
+  "comparators": [
+    "Conventional local SQLite aggregate and range filter using exact rational-text collation.",
+    "USGS direct dateline-crossing query using shifted longitude 175 through 185 degrees and the same latitude, time and magnitude envelope."
+  ],
+  "acceptance": "Exact event-ID equality between specialist and SQLite in both windows, and exact equality of qualifying IDs from the split and wrapped USGS observations. Independent evaluator selects and freezes held inputs under separate authoring before candidate source is handed over.",
+  "promotion_scope": "Admit a deterministic portable audit only in its observed record schema and revision semantics. Recording CPU time does not establish superiority, hazard forecast, invention compounding or commercial value."
+}

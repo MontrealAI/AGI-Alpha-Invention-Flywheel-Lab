@@ -1,0 +1,63 @@
+{
+  "artifact_count": 0,
+  "elapsed_seconds": 194.6356280480004,
+  "evaluation": {
+    "actual_operations": [],
+    "actual_tool_operations": 0,
+    "bound_provider_receipts": [
+      {
+        "code": "PROVIDER_RESPONSE",
+        "message": "Model request failed. Its provider allowance or cost may have been consumed; inspect connection before explicitly resuming.",
+        "model": "qwen3-8b-q4_k_m",
+        "provider": "llama-cpp",
+        "role": "builder",
+        "run_id": "wf_a9473970c5c170157576bd09_640f9f27f6b98c80",
+        "session_budget_snapshot": {
+          "committed": 0.0,
+          "currency": "USD",
+          "limit": 0.0,
+          "locked": false,
+          "remaining": 0.0,
+          "reserved": 0.0,
+          "scope": "process-session"
+        },
+        "usage_status": "UNKNOWN"
+      }
+    ],
+    "later_model_dispatch_after_first_operation": false,
+    "no_data_operations": true,
+    "outcome": {
+      "available_documents": [],
+      "blocker_events": [],
+      "qualification": "INDEPENDENT_REVIEW_REQUIRED"
+    },
+    "proposals": [],
+    "refusals": [
+      {
+        "code": "PROVIDER_RESPONSE",
+        "message": "Model request failed. Its provider allowance or cost may have been consumed; inspect connection before explicitly resuming.",
+        "model": "qwen3-8b-q4_k_m",
+        "provider": "llama-cpp",
+        "role": "builder",
+        "run_id": "wf_a9473970c5c170157576bd09_640f9f27f6b98c80",
+        "session_budget_snapshot": {
+          "committed": 0.0,
+          "currency": "USD",
+          "limit": 0.0,
+          "locked": false,
+          "remaining": 0.0,
+          "reserved": 0.0,
+          "scope": "process-session"
+        },
+        "usage_status": "UNKNOWN"
+      }
+    ],
+    "settled_scope_checks": []
+  },
+  "exact_checkpoint_sha256": "8abb0564d100174876e2da4f28da269f44cd78b461932d52b2e4cfaa786e54e7",
+  "id": "m03",
+  "independent_reference_seconds": 9.60750003287103e-05,
+  "mission_id": "wf_a9473970c5c170157576bd09",
+  "model": "qwen3-8b-q4_k_m",
+  "status": "paused"
+}

@@ -1,0 +1,39 @@
+{
+  "elapsed_seconds": 32.325059546000375,
+  "payload_as_decoded_by_native_transport": {
+    "choices": [
+      {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "content": "{\n  \"summary\": \"Définir et exécuter un instrument pour calculer la valeur minimax du jeu d’allocation de ressources.\",\n  \"actions\": [\n    {\n      \"tool\": \"construct_instrument\",\n      \"name\": \"minimax.json\",\n      \"spec\": {\n        \"inputs\": [\"x\", \"y\"],\n        \"name\": \"minimax\",\n        \"outputs\": {\n          \"value\": {\n            \"args\": [\n              {\n                \"field\": \"x\"\n              },\n              {\n                \"field\": \"y\"\n              }\n            ],\n            \"op\": \"min\"\n          },\n          \"witness\": {\n            \"args\": [\n              {\n                \"field\": \"x\"\n              },\n              {\n                \"field\": \"y\"\n              }\n            ],\n            \"op\": \"max\"\n          }\n        }\n      }\n    },\n    {\n      \"tool\": \"run_instrument\",\n      \"name\": \"minimax.json\",\n      \"input\": {\n        \"x\": 0.5,\n        \"y\": 0.5\n      }\n    }\n  ],\n  \"done\": false\n}",
+          "role": "assistant"
+        }
+      }
+    ],
+    "created": 1795579979,
+    "id": "chatcmpl-JcaA7fcHUrcOrEdyP9FqvNp8Nv6HFpsa",
+    "model": "qwen3-8b-q4_k_m",
+    "object": "chat.completion",
+    "system_fingerprint": "b12242-3b4d6ab3f",
+    "timings": {
+      "cache_n": 890,
+      "predicted_ms": 23932.494,
+      "predicted_n": 235,
+      "predicted_per_second": 9.77750166781615,
+      "predicted_per_token_ms": 102.27561538461538,
+      "prompt_ms": 8383.175,
+      "prompt_n": 432,
+      "prompt_per_second": 51.53178837373669,
+      "prompt_per_token_ms": 19.405497685185182
+    },
+    "usage": {
+      "completion_tokens": 235,
+      "prompt_tokens": 1322,
+      "prompt_tokens_details": {
+        "cached_tokens": 890
+      },
+      "total_tokens": 1557
+    }
+  }
+}

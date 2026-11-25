@@ -1,0 +1,39 @@
+{
+  "confirmation_excluded": true,
+  "description": "Procedurally generated perfect-information game rules and an unobserved adversary move. Opposite labels within a matched pair vary the acquisition fee.",
+  "development_distribution": "Two opposing payoff rows, magnitudes 17\u201323, even symmetric accuracy 58\u201396%",
+  "input_origin": "SYNTHETIC_LEARNING_ENVIRONMENT",
+  "labels": "Exact rational minimax, cross-replayed",
+  "retained_source": "c0a14ba028092db648516718f9127ae8166df63e",
+  "schema": "frontier/strategic-purchase-data-v1",
+  "source_sha256": {
+    "game.py": "89840b39cec337ec563bfc64571c95ddb6a896f75593981710c1e083b44f743a",
+    "generate.py": "f7176944b6f1b18d479f28d4e94783c65358b6251fc220ef1d874d6f8009a41f",
+    "observation.py": "740c3228348ad946acd3fa86771379aff4958dea413f7626db9db137205ac119"
+  },
+  "splits": {
+    "development": {
+      "file": "development.jsonl",
+      "labels": {
+        "BUY": 32,
+        "SKIP": 32
+      },
+      "records": 64,
+      "retained_exact_verifications": 128,
+      "seed": 71291,
+      "sha256": "ecdada57250fa53fcca8c4751798b81133365a23c89ba4929e0404e3108bd9d3"
+    },
+    "train": {
+      "file": "train.jsonl",
+      "labels": {
+        "BUY": 160,
+        "SKIP": 160
+      },
+      "records": 320,
+      "retained_exact_verifications": 640,
+      "seed": 42073,
+      "sha256": "a76dad42c8f9ff34c8863985f3140712de05447b414f50b8011ad4e5a563b71f"
+    }
+  },
+  "training_distribution": "Two opposing payoff rows, magnitudes 2\u201316, odd symmetric accuracy 57\u201399%"
+}
