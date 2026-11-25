@@ -402,6 +402,7 @@ export function setupMissionConsole(member, shell) {
       const restored = await importMission(await file.text());
       if (attempt !== serial || !active()) return;
       resetRequest();
+      localRuns.clear();
       mission = restored;
       atlas = undefined;
       input.value = mission.ambition;
