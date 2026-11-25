@@ -1,0 +1,72 @@
+{
+  "actual_billing_usd": null,
+  "actual_commerce": false,
+  "arms": {
+    "fresh_baseline": {
+      "accepted": true,
+      "direct_launches": 1,
+      "receipt_equal": true,
+      "route_matches_parent": true
+    },
+    "fresh_empty_replacement": {
+      "accepted": false,
+      "direct_launches": 1,
+      "exception_type": "ValueError",
+      "historical_rejected": true,
+      "original_alias_retained": true,
+      "original_blob_unchanged": true,
+      "receipt_equal": false,
+      "replacement_alias_removed": null,
+      "route_matches_parent": false,
+      "route_rejected": false,
+      "timeout": false
+    },
+    "fresh_identical_replacement": {
+      "accepted": true,
+      "direct_launches": 1,
+      "original_alias_retained": true,
+      "original_blob_unchanged": true,
+      "receipt_equal": true,
+      "replacement_alias_removed": true,
+      "route_matches_parent": false
+    },
+    "guarded_identical_replacement": {
+      "accepted": false,
+      "direct_launches": 0,
+      "exception_type": "ValueError",
+      "historical_rejected": false,
+      "original_alias_retained": true,
+      "original_blob_unchanged": true,
+      "receipt_equal": false,
+      "replacement_alias_removed": false,
+      "route_matches_parent": false,
+      "route_rejected": true,
+      "timeout": false
+    },
+    "restored_fresh": {
+      "accepted": true,
+      "alias_removed": true,
+      "direct_launches": 1,
+      "receipt_equal": true,
+      "route_matches_parent": true
+    }
+  },
+  "diagnostic_accepted": true,
+  "invariants": {
+    "directory_identity_restored": true,
+    "referenced_blob_unchanged": true,
+    "signer_inode_unchanged": true,
+    "source_inventory_unchanged": true,
+    "state_and_native_history_unchanged": true
+  },
+  "native_second_authorization": true,
+  "original_account_accessed": false,
+  "owner_commit": "ced6c1cb004887dcdafaea59a2976020be649f8e",
+  "probe_sha256": "1ce8e654a391f697e3a781757cac2295a42db42051cef9f6c6b983ac78da68d0",
+  "route_equivalent": false,
+  "second_transition_committed": false,
+  "self_cpu_seconds": 8.928799999999999,
+  "stage": "complete",
+  "waited_child_cpu_seconds": 8.823058999999999,
+  "wall_seconds": 18.01020666000001
+}
