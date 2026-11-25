@@ -17,6 +17,8 @@ The registered primary acceptance required 15/16 with zero false support. Both a
 
 The typed check passed the five separate synthetic scope and conflict cases. With scope removed it passed three of five dispositions and produced two false supports. The withdrawn arm supplied no rationales, so it did not qualify as a complete submission. A separately observed challenge also showed that a wrong column label can pass the arithmetic check when both values occur in the same excerpt. Independent source interpretation still matters.
 
+Code review caught a parser boundary after the freeze. Scientific notation and an attached tolerance could be mistaken for standalone quantities. The corrected production candidate rejects those suffixes, and its regression replay preserves all 27 frozen primary, adverse and confirmation decisions and attributions, including the previous withdrawal results. The ordinary-reuse timing applies to the original source revision.
+
 The official conventional JSON Schema accepted the supplied official example and three individually altered, correctly typed measurement values. It rejected the same three fields when assigned invalid types. This tests shape, while a competent conventional source review can perform the independent evidence assessment. The October schema's nested declaration object also rejected a hypothetical integrity member at that location. The November matrix describes integrity information for the declaration. The test observes a seam in those particular artifacts. Registry-level representations and legal treatment remain outside the experiment.
 
 ## Operate the retained artifact

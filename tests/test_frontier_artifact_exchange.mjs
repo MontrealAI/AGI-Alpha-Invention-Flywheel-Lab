@@ -5,6 +5,7 @@ import {File} from 'node:buffer';
 import {readMissionArtifact, inspectReturnedWork} from '../docs/research/frontier-omega-alpha/frontier-artifact-exchange.mjs';
 import {createMission, reviseMission, addMissionArtifacts, exportMission, importMission} from '../docs/research/frontier-omega-alpha/frontier-mission.mjs';
 import {fingerprint} from '../docs/research/frontier-omega-alpha/outcome-receipt.mjs';
+import {reviewClaim} from '../docs/research/frontier-omega-alpha/dpp-source-review.mjs';
 
 globalThis.crypto ??= webcrypto;
 
@@ -41,4 +42,22 @@ test('review intake rejects unsafe names, disallowed binaries, invalid UTF-8 and
     new File(['{"nbformat":4}'], 'study.ipynb'),
   ]) await assert.rejects(readMissionArtifact(file, 1));
   assert.equal((await readMissionArtifact(new File(['{"nbformat":4,"cells":[]}'], 'study.ipynb'), 1)).kind, 'notebook');
+});
+
+test('quantity checks reject exponents, tolerances and range suffixes as independent measurements', () => {
+  const target = {model:'Example Pack',level:'system'};
+  const review = (quote, value) => reviewClaim({
+    id:'weight', target, field:'batteryWeight', claim:{value,unit:'kg'},
+    sources:[{id:'datasheet',excerpt:quote,url:'https://example.org/data',locator:'table',sha256:'a'.repeat(64)}],
+    observations:[{source:'datasheet',target,field:'batteryWeight',quote,value,unit:'kg'}],
+  }).decision;
+  assert.equal(review('Net battery weight: 6.4e1 kg.', 1), 'insufficient');
+  assert.equal(review('Net battery weight: 6.4e+1 kg.', 1), 'insufficient');
+  assert.equal(review('Net battery weight: 64 ± 2 kg.', 2), 'insufficient');
+  assert.equal(review('Net battery weight: 64 ± 2 kg.', 64), 'supported');
+  assert.equal(review('Net battery weight: 64 (±2) kg.', 64), 'supported');
+  assert.equal(review('Net battery weight: 60 – 68 kg.', 68), 'insufficient');
+  assert.equal(review('Net battery weight: 1/2 kg.', 2), 'insufficient');
+  assert.equal(review('Net battery weight: 1 200 kg.', 200), 'insufficient');
+  assert.equal(review('Net battery weights by column: 64 / 80 / 100 kg.', 80), 'supported');
 });

@@ -33,10 +33,17 @@ function validSource(item) {
 
 function quoteQuantifies(quote, observation, units) {
   // A source row can state a unit once after an ordered series of configuration columns.
-  const tokens = quote.matchAll(/(?<![\d.,])([+-]?\d{1,12}(?:[.,]\d{1,8})?(?:\s*\/\s*[+-]?\d{1,12}(?:[.,]\d{1,8})?)*)\s*(?:\(±\s*\d+(?:[.,]\d+)?\)\s*)?(mAh|Ah|kg|g|mV|V)(?:dc|ac)?\b/giu);
   const expected = exactQuantity(observation.value, observation.unit, units);
-  return expected !== undefined && Array.from(tokens).some(([, values, unit]) =>
-    values.split('/').some(value => exactQuantity(value.trim(), unit, units) === expected));
+  if (expected === undefined) return false;
+  const tokens = quote.matchAll(/(?<![\p{L}\p{N}.,+±−–—-])([+-]?\d{1,12}(?:[.,]\d{1,8})?(?:\s+\/\s+[+-]?\d{1,12}(?:[.,]\d{1,8})?)*)\s*(?:(?:\(±\s*\d+(?:[.,]\d+)?\)|±\s*\d+(?:[.,]\d+)?)\s*)?(mAh|Ah|kg|g|mV|V)(?:dc|ac)?\b/giu);
+  for (const match of tokens) {
+    // A suffix after a range separator, exponent, or unsupported tolerance is not a new value.
+    const before = quote.slice(0, match.index);
+    if (/(?:\d|\))\s*(?:[±−–—+\/-]|[eE][+-]?)\s*$/u.test(before) || /\d\p{Zs}+$/u.test(before)) continue;
+    const [, values, unit] = match;
+    if (values.split('/').some(value => exactQuantity(value.trim(), unit, units) === expected)) return true;
+  }
+  return false;
 }
 
 export function reviewClaim(input) {
