@@ -1,0 +1,221 @@
+{
+  "authorized_resources": [
+    "Public primary research",
+    "Local Python, NumPy, SciPy/HiGHS",
+    "Separate Codex evaluation context"
+  ],
+  "card": {
+    "en": {
+      "summary": "This completed assisted mission built and ran a solver for strategic allocation with hidden payoff scenarios. Its two randomized policies carry exact payoff bounds that replay without an optimizer. In the included example, randomizing guarantees −49.5 versus a −99 worst case for the nominal pure policy.",
+      "title": "Verified strategic allocation",
+      "verification": "Six independently authored test games passed exact verification, including one with 211,775,256 possible action pairs."
+    },
+    "fr": {
+      "summary": "Cette mission assistée a construit et exécuté un solveur d’allocation stratégique face à des scénarios de gains cachés. Ses deux stratégies aléatoires sont accompagnées de bornes exactes, vérifiables sans solveur. Dans l’exemple fourni, la stratégie aléatoire garantit −49,5, contre −99 dans le pire cas pour la stratégie nominale pure.",
+      "title": "Allocation stratégique vérifiée",
+      "verification": "Les six jeux d’essai conçus indépendamment ont satisfait la vérification exacte, dont un comportant 211 775 256 paires d’actions possibles."
+    }
+  },
+  "decisions": {
+    "commercial_productivity": "NO-GO",
+    "finite_strategic_allocation_solver": "GO",
+    "frontier_solver_superiority": "NO-GO",
+    "general_game_playing_intelligence": "NO-GO",
+    "recursive_improvement": "NO-GO",
+    "standalone_certificate_verifier": "GO"
+  },
+  "evaluation": {
+    "candidate_qualified": 6,
+    "cases": [
+      {
+        "agrees_with_independent_explicit_minimax": true,
+        "id": "one-lane",
+        "implicit_pairs": 3,
+        "lower": "-2",
+        "methods": {
+          "dense": {
+            "certificate_sha256": "98e46f6edd1e20ebfbb5a6d307d55f3a93ebbc3e1a46aa73725e15e10926df1e",
+            "startup_inclusive_seconds": 0.984532,
+            "verdict": "QUALIFIED"
+          },
+          "double-oracle": {
+            "certificate_sha256": "98e46f6edd1e20ebfbb5a6d307d55f3a93ebbc3e1a46aa73725e15e10926df1e",
+            "startup_inclusive_seconds": 0.657018,
+            "verdict": "QUALIFIED"
+          },
+          "sparse-path-lp": {
+            "certificate_sha256": "98e46f6edd1e20ebfbb5a6d307d55f3a93ebbc3e1a46aa73725e15e10926df1e",
+            "startup_inclusive_seconds": 0.623465,
+            "verdict": "QUALIFIED"
+          }
+        },
+        "upper": "-2",
+        "width": "0"
+      },
+      {
+        "agrees_with_independent_explicit_minimax": true,
+        "id": "zero-lanes-in-payoff",
+        "implicit_pairs": 21,
+        "lower": "0",
+        "methods": {
+          "dense": {
+            "certificate_sha256": "4b6dc54a2b80990aa9df6d517672b5f438015371562d194bc2e9ca8d4fe9a082",
+            "startup_inclusive_seconds": 0.731831,
+            "verdict": "QUALIFIED"
+          },
+          "double-oracle": {
+            "certificate_sha256": "4b6dc54a2b80990aa9df6d517672b5f438015371562d194bc2e9ca8d4fe9a082",
+            "startup_inclusive_seconds": 0.845536,
+            "verdict": "QUALIFIED"
+          },
+          "sparse-path-lp": {
+            "certificate_sha256": "4b6dc54a2b80990aa9df6d517672b5f438015371562d194bc2e9ca8d4fe9a082",
+            "startup_inclusive_seconds": 0.792087,
+            "verdict": "QUALIFIED"
+          }
+        },
+        "upper": "0",
+        "width": "0"
+      },
+      {
+        "agrees_with_independent_explicit_minimax": true,
+        "id": "single-asymmetric",
+        "implicit_pairs": 1960,
+        "lower": "217577197/125000000",
+        "methods": {
+          "dense": {
+            "certificate_sha256": "f6d2e9d3bd9eccf80c970dd546c34ce7cae332febb53ef83e8ab85ff85bd0d70",
+            "startup_inclusive_seconds": 1.135696,
+            "verdict": "QUALIFIED"
+          },
+          "double-oracle": {
+            "certificate_sha256": "f6d2e9d3bd9eccf80c970dd546c34ce7cae332febb53ef83e8ab85ff85bd0d70",
+            "startup_inclusive_seconds": 0.791015,
+            "verdict": "QUALIFIED"
+          },
+          "sparse-path-lp": {
+            "certificate_sha256": "f6d2e9d3bd9eccf80c970dd546c34ce7cae332febb53ef83e8ab85ff85bd0d70",
+            "startup_inclusive_seconds": 0.524931,
+            "verdict": "QUALIFIED"
+          }
+        },
+        "upper": "1740617579/1000000000",
+        "width": "3/1000000000"
+      },
+      {
+        "agrees_with_independent_explicit_minimax": true,
+        "id": "shared-policy",
+        "implicit_pairs": 50880,
+        "lower": "-1242331677/250000000",
+        "methods": {
+          "dense": {
+            "certificate_sha256": "c6a0f010f8a98bfe7eb7127a87fa06c07eef0b99969a3ed08e683143396b1a34",
+            "startup_inclusive_seconds": 0.772524,
+            "verdict": "QUALIFIED"
+          },
+          "double-oracle": {
+            "certificate_sha256": "6a78aa059b8e3b92ad0ea3f6a98a5c176ee6ec1f3b99304ddc4017dfd5a1fde9",
+            "startup_inclusive_seconds": 0.879761,
+            "verdict": "QUALIFIED"
+          },
+          "sparse-path-lp": {
+            "certificate_sha256": "6d8448bafc400d1a5f58e5df890c4e39506528e32777c9ea85083bb9e80ed995",
+            "startup_inclusive_seconds": 0.675229,
+            "verdict": "QUALIFIED"
+          }
+        },
+        "upper": "-993865337/200000000",
+        "width": "23/1000000000"
+      },
+      {
+        "agrees_with_independent_explicit_minimax": true,
+        "id": "different-edges",
+        "implicit_pairs": 9520,
+        "lower": "-13",
+        "methods": {
+          "dense": {
+            "certificate_sha256": "7308e98574a1225ad5043a53ee5eef33b8e66ab8a867ab1b60fc6c0d226bb856",
+            "startup_inclusive_seconds": 0.775514,
+            "verdict": "QUALIFIED"
+          },
+          "double-oracle": {
+            "certificate_sha256": "62a926b8930694cff6c3b013c8bccbd2351da67a28bc041a969cc5ba28fe9bac",
+            "startup_inclusive_seconds": 0.707067,
+            "verdict": "QUALIFIED"
+          },
+          "sparse-path-lp": {
+            "certificate_sha256": "4fb93b43abc9897417e175bf3d19d8b96ed6fe5a1b7a84a7f6d13a0b8db09f31",
+            "startup_inclusive_seconds": 0.781272,
+            "verdict": "QUALIFIED"
+          }
+        },
+        "upper": "-13",
+        "width": "0"
+      },
+      {
+        "agrees_with_independent_explicit_minimax": null,
+        "id": "implicit-scale",
+        "implicit_pairs": 211775256,
+        "lower": "-8120545101/1000000000",
+        "methods": {
+          "dense": {
+            "certificate_sha256": null,
+            "startup_inclusive_seconds": 1.149181,
+            "verdict": "OUTSIDE_REGISTERED_MATRIX_BUDGET"
+          },
+          "double-oracle": {
+            "certificate_sha256": "d0cfa2eac0b595c377b1c91c78b4425bfcb83570414e030fbf4743bb6a8a2213",
+            "startup_inclusive_seconds": 1.435646,
+            "verdict": "QUALIFIED"
+          },
+          "sparse-path-lp": {
+            "certificate_sha256": "406d8f2e58f304ff5dad0f178687e429240c6adf5ff73ec702f2f8a43bdd9fb7",
+            "startup_inclusive_seconds": 0.765609,
+            "verdict": "QUALIFIED"
+          }
+        },
+        "upper": "-4060272523/500000000",
+        "width": "11/200000000"
+      }
+    ],
+    "completed_at": "2026-11-25T01:39:51.714023+00:00",
+    "conventional_double_oracle_qualified": 6,
+    "conventional_explicit_matrix_values_confirmed": 5,
+    "execution_custody": "Separate evaluator and code in the shared workspace, with preconstruction input freeze.",
+    "held_cases_sha256": "678eec8a0d2f42f708c3f2e85226a80f64528dde13f9c39c7165de74797d7c25",
+    "independent_report_sha256": "50afb18c8987bed873a4465d01bb26144e8b0aa4ee9df2f137f5ffc1a22785a8",
+    "independent_verifier_sha256": "f61d85a49d87c48d1f6bc6e47f7d3256c5ba1fea6b13cbce0e871f343238bca3",
+    "protocol_sha256": "0f6560943e26a5e65a598500cf23c7ba90b5a13474b0f64debec662f5a679620",
+    "tamper_control": "Rejected by both verifiers",
+    "valid_suboptimal_control": "BOUND_ONLY, width 24"
+  },
+  "example": {
+    "certificate_sha256": "608de60f7e5b5b01b763f47b2a881d4673702f79572e037336467a9874cc17b6",
+    "nominal_policy_worst_case": "-99",
+    "randomized_value": "-49.5",
+    "scenario_foreknown_value": "0",
+    "verification_verdict": "QUALIFIED"
+  },
+  "execution_mode": "included-codex-assisted",
+  "follow_on": {
+    "checks_sha256": "247df37bbbc0087c99fd234205ae4e39d5fdebfa95c9e31baa538e3a295c30ca",
+    "conditional_gain_interval": [
+      "1.834381564",
+      "1.834381601"
+    ],
+    "construction": "Rank exact binary scenario disclosures with a certified conditional strategy for every answer.",
+    "status": "exploratory-post-hold",
+    "subgame_certificates_confirmed": 7
+  },
+  "id": "game-theory-verified-strategic-allocation",
+  "interpreted_outcome": "Produce a reusable, certifiably reliable solver for zero-sum allocation with adversarial hidden payoff scenarios.",
+  "original_ambition": "Build Frontier AI for Game Theory.",
+  "schema": "frontier/executed-public-research-mission-v1",
+  "scope": "Finite declared integer budgets, common lanes, additive nonnegative integer weights, and private simultaneous allocation.",
+  "source_sha256": {
+    "baselines.py": "94a5894906cba6962e812fb3582a432351246bd7de902b48fa2d8ad6e61bf64a",
+    "solve.py": "abf3eeab97637c2491597788d0fa8802ee5ba3e33ea38860080e8e9be52f2413",
+    "verify.py": "57d4f4281df204ac1d9f9290f72240df9dedf7ea78844a7009dad4a3aced9121"
+  },
+  "status": "scoped-research-result-verified"
+}

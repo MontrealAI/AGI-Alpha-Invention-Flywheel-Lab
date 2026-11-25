@@ -1,6 +1,7 @@
 import {screen, validate} from './endpoint-screen.mjs';
 import {fingerprint, freezeScreen, outcome, verifyOutcome} from './outcome-receipt.mjs';
 import {downloadJSON, setupGoals} from './frontier-goals.mjs';
+import {setupMissionConsole} from './frontier-mission-ui.mjs';
 
 const id = key => document.getElementById(key);
 const member = id('member');
@@ -436,5 +437,6 @@ ${current.rows.length} ${words.rows} · ${words.floor} ${current.minimum_tokens_
 if (id('member-value')) {
   const shell = setupShell();
   setupExplorer();
-  setupGoals(member, setupRunner(shell), shell);
+  const mission = setupMissionConsole(member, shell);
+  setupGoals(member, setupRunner(shell), shell, mission);
 }

@@ -1,0 +1,2548 @@
+{
+  "completed_utc": "2026-11-25T01:39:51.714023+00:00",
+  "frozen_plan_sha256": "0f6560943e26a5e65a598500cf23c7ba90b5a13474b0f64debec662f5a679620",
+  "held_sha256": "678eec8a0d2f42f708c3f2e85226a80f64528dde13f9c39c7165de74797d7c25",
+  "independent_verifier_sha256": "f61d85a49d87c48d1f6bc6e47f7d3256c5ba1fea6b13cbce0e871f343238bca3",
+  "owner_ambition": "Build Frontier AI for Game Theory.",
+  "protocol_wall_timeout_s": 90,
+  "results": [
+    {
+      "column_actions": 3,
+      "explicit_matrix_control": {
+        "complete_wall_s": 0.022246554,
+        "matrix_cells": 3,
+        "robust_minimax_value": -2.0,
+        "scenario_visible_values": {
+          "equal": -0.0,
+          "past": -2.0,
+          "short": 3.0
+        }
+      },
+      "id": "one-lane",
+      "implicit_pairs": 3,
+      "methods": {
+        "dense": {
+          "agrees_independent_explicit_matrix": true,
+          "certificate_sha256": "98e46f6edd1e20ebfbb5a6d307d55f3a93ebbc3e1a46aa73725e15e10926df1e",
+          "exact_bound_agreement": true,
+          "independent": {
+            "col_upper": "-2",
+            "column_deviations": {
+              "equal": {
+                "allocation": [
+                  2
+                ],
+                "payoff": "0"
+              },
+              "past": {
+                "allocation": [
+                  3
+                ],
+                "payoff": "-2"
+              },
+              "short": {
+                "allocation": [
+                  1
+                ],
+                "payoff": "3"
+              }
+            },
+            "column_support": 1,
+            "passed_gap": true,
+            "row_deviation_allocation": [
+              2
+            ],
+            "row_lower": "-2",
+            "row_support": 1,
+            "tolerance": "9/1000000",
+            "wall_s": 0.0003176799800712615,
+            "width": "0",
+            "worst_scenario": "past"
+          },
+          "instrumented": {
+            "columns": 3,
+            "entries": 3,
+            "method": "explicit matrix HiGHS",
+            "prepare_seconds": 0.0002973969967570156,
+            "rows": 1,
+            "solve_seconds": 0.007326393999392167,
+            "verification": {
+              "certificate_sha256": "3ee707c1e218232936d9db325dde63cf85b7e3a2966ce8b7ce65f07656b01db1",
+              "column_support": 1,
+              "denominator": 1000000000,
+              "game_sha256": "6b25d2613b35472db5c7501d5bc12db77c8356c9c85a832184bbe8790acf1222",
+              "lower_numerator": -2000000000,
+              "lower_witness": {
+                "allocation": [
+                  3
+                ],
+                "scenario": "past"
+              },
+              "row_support": 1,
+              "scale": 9,
+              "scope": "declared finite zero-sum game and hidden payoff scenarios",
+              "tolerance_parts_per_million": 1,
+              "upper_numerator": -2000000000,
+              "upper_witness": {
+                "allocation": [
+                  2
+                ]
+              },
+              "verdict": "QUALIFIED",
+              "width_numerator": 0
+            },
+            "whole_seconds": 0.00781882501905784
+          },
+          "returncode": 0,
+          "status": "process-complete",
+          "stderr": "",
+          "stdout": "",
+          "supplied_verdict": "QUALIFIED",
+          "verdict_agreement": true,
+          "wall_s": 0.9845321390021127
+        },
+        "double-oracle": {
+          "agrees_independent_explicit_matrix": true,
+          "certificate_sha256": "98e46f6edd1e20ebfbb5a6d307d55f3a93ebbc3e1a46aa73725e15e10926df1e",
+          "exact_bound_agreement": true,
+          "independent": {
+            "col_upper": "-2",
+            "column_deviations": {
+              "equal": {
+                "allocation": [
+                  2
+                ],
+                "payoff": "0"
+              },
+              "past": {
+                "allocation": [
+                  3
+                ],
+                "payoff": "-2"
+              },
+              "short": {
+                "allocation": [
+                  1
+                ],
+                "payoff": "3"
+              }
+            },
+            "column_support": 1,
+            "passed_gap": true,
+            "row_deviation_allocation": [
+              2
+            ],
+            "row_lower": "-2",
+            "row_support": 1,
+            "tolerance": "9/1000000",
+            "wall_s": 0.0003530049871187657,
+            "width": "0",
+            "worst_scenario": "past"
+          },
+          "instrumented": {
+            "iteration_limit": 128,
+            "iterations": 1,
+            "method": "double oracle with exact knapsack deviation search and HiGHS restricted games",
+            "profiles": [
+              [
+                1,
+                1,
+                3,
+                -2000000000,
+                -2000000000
+              ]
+            ],
+            "status": "QUALIFIED",
+            "verification": {
+              "certificate_sha256": "3ee707c1e218232936d9db325dde63cf85b7e3a2966ce8b7ce65f07656b01db1",
+              "column_support": 1,
+              "denominator": 1000000000,
+              "game_sha256": "6b25d2613b35472db5c7501d5bc12db77c8356c9c85a832184bbe8790acf1222",
+              "lower_numerator": -2000000000,
+              "lower_witness": {
+                "allocation": [
+                  3
+                ],
+                "scenario": "past"
+              },
+              "row_support": 1,
+              "scale": 9,
+              "scope": "declared finite zero-sum game and hidden payoff scenarios",
+              "tolerance_parts_per_million": 1,
+              "upper_numerator": -2000000000,
+              "upper_witness": {
+                "allocation": [
+                  2
+                ]
+              },
+              "verdict": "QUALIFIED",
+              "width_numerator": 0
+            },
+            "whole_seconds": 0.006109312002081424
+          },
+          "returncode": 0,
+          "status": "process-complete",
+          "stderr": "",
+          "stdout": "",
+          "supplied_verdict": "QUALIFIED",
+          "verdict_agreement": true,
+          "wall_s": 0.6570179710106459
+        },
+        "sparse-path-lp": {
+          "agrees_independent_explicit_matrix": true,
+          "certificate_sha256": "98e46f6edd1e20ebfbb5a6d307d55f3a93ebbc3e1a46aa73725e15e10926df1e",
+          "exact_bound_agreement": true,
+          "independent": {
+            "col_upper": "-2",
+            "column_deviations": {
+              "equal": {
+                "allocation": [
+                  2
+                ],
+                "payoff": "0"
+              },
+              "past": {
+                "allocation": [
+                  3
+                ],
+                "payoff": "-2"
+              },
+              "short": {
+                "allocation": [
+                  1
+                ],
+                "payoff": "3"
+              }
+            },
+            "column_support": 1,
+            "passed_gap": true,
+            "row_deviation_allocation": [
+              2
+            ],
+            "row_lower": "-2",
+            "row_support": 1,
+            "tolerance": "9/1000000",
+            "wall_s": 0.00022414900013245642,
+            "width": "0",
+            "worst_scenario": "past"
+          },
+          "instrumented": {
+            "equalities": 16,
+            "inequalities": 6,
+            "lp_value": -2.0,
+            "matrix_nonzeros": 47,
+            "method": "sparse allocation flow and scenario shortest-path LP (HiGHS IPM)",
+            "prepare_seconds": 0.0010033569997176528,
+            "round_and_verify_seconds": 0.0004459159972611815,
+            "solve_seconds": 0.008940389001509175,
+            "variables": 20,
+            "verification": {
+              "certificate_sha256": "3ee707c1e218232936d9db325dde63cf85b7e3a2966ce8b7ce65f07656b01db1",
+              "column_support": 1,
+              "denominator": 1000000000,
+              "game_sha256": "6b25d2613b35472db5c7501d5bc12db77c8356c9c85a832184bbe8790acf1222",
+              "lower_numerator": -2000000000,
+              "lower_witness": {
+                "allocation": [
+                  3
+                ],
+                "scenario": "past"
+              },
+              "row_support": 1,
+              "scale": 9,
+              "scope": "declared finite zero-sum game and hidden payoff scenarios",
+              "tolerance_parts_per_million": 1,
+              "upper_numerator": -2000000000,
+              "upper_witness": {
+                "allocation": [
+                  2
+                ]
+              },
+              "verdict": "QUALIFIED",
+              "width_numerator": 0
+            },
+            "whole_seconds": 0.010389661998488009
+          },
+          "returncode": 0,
+          "status": "process-complete",
+          "stderr": "",
+          "stdout": "",
+          "supplied_verdict": "QUALIFIED",
+          "verdict_agreement": true,
+          "wall_s": 0.6234653740248177
+        }
+      },
+      "row_actions": 1
+    },
+    {
+      "column_actions": 21,
+      "explicit_matrix_control": {
+        "complete_wall_s": 0.01052049,
+        "matrix_cells": 21,
+        "robust_minimax_value": -0.0,
+        "scenario_visible_values": {
+          "immaterial": -0.0,
+          "zero": -0.0
+        }
+      },
+      "id": "zero-lanes-in-payoff",
+      "implicit_pairs": 21,
+      "methods": {
+        "dense": {
+          "agrees_independent_explicit_matrix": true,
+          "certificate_sha256": "4b6dc54a2b80990aa9df6d517672b5f438015371562d194bc2e9ca8d4fe9a082",
+          "exact_bound_agreement": true,
+          "independent": {
+            "col_upper": "0",
+            "column_deviations": {
+              "immaterial": {
+                "allocation": [
+                  0,
+                  0,
+                  0,
+                  3
+                ],
+                "payoff": "0"
+              },
+              "zero": {
+                "allocation": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "payoff": "0"
+              }
+            },
+            "column_support": 1,
+            "passed_gap": true,
+            "row_deviation_allocation": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "row_lower": "0",
+            "row_support": 1,
+            "tolerance": "1/1000000",
+            "wall_s": 0.0002663539780769497,
+            "width": "0",
+            "worst_scenario": "zero"
+          },
+          "instrumented": {
+            "columns": 21,
+            "entries": 21,
+            "method": "explicit matrix HiGHS",
+            "prepare_seconds": 0.00023534498177468777,
+            "rows": 1,
+            "solve_seconds": 0.009326514002168551,
+            "verification": {
+              "certificate_sha256": "69e55e4cc1caa181fe35608b0268f469003111ba8e0d1ec726ce8cd5b0590152",
+              "column_support": 1,
+              "denominator": 1000000000,
+              "game_sha256": "9a677d0f71d8b2cdead5534ea64092a98d70d330250e97f84ee530f6768d350d",
+              "lower_numerator": 0,
+              "lower_witness": {
+                "allocation": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "scenario": "zero"
+              },
+              "row_support": 1,
+              "scale": 1,
+              "scope": "declared finite zero-sum game and hidden payoff scenarios",
+              "tolerance_parts_per_million": 1,
+              "upper_numerator": 0,
+              "upper_witness": {
+                "allocation": [
+                  0,
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "verdict": "QUALIFIED",
+              "width_numerator": 0
+            },
+            "whole_seconds": 0.009937658003764227
+          },
+          "returncode": 0,
+          "status": "process-complete",
+          "stderr": "",
+          "stdout": "",
+          "supplied_verdict": "QUALIFIED",
+          "verdict_agreement": true,
+          "wall_s": 0.7318311630224343
+        },
+        "double-oracle": {
+          "agrees_independent_explicit_matrix": true,
+          "certificate_sha256": "4b6dc54a2b80990aa9df6d517672b5f438015371562d194bc2e9ca8d4fe9a082",
+          "exact_bound_agreement": true,
+          "independent": {
+            "col_upper": "0",
+            "column_deviations": {
+              "immaterial": {
+                "allocation": [
+                  0,
+                  0,
+                  0,
+                  3
+                ],
+                "payoff": "0"
+              },
+              "zero": {
+                "allocation": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "payoff": "0"
+              }
+            },
+            "column_support": 1,
+            "passed_gap": true,
+            "row_deviation_allocation": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "row_lower": "0",
+            "row_support": 1,
+            "tolerance": "1/1000000",
+            "wall_s": 0.00022571999579668045,
+            "width": "0",
+            "worst_scenario": "zero"
+          },
+          "instrumented": {
+            "iteration_limit": 128,
+            "iterations": 1,
+            "method": "double oracle with exact knapsack deviation search and HiGHS restricted games",
+            "profiles": [
+              [
+                1,
+                1,
+                6,
+                0,
+                0
+              ]
+            ],
+            "status": "QUALIFIED",
+            "verification": {
+              "certificate_sha256": "69e55e4cc1caa181fe35608b0268f469003111ba8e0d1ec726ce8cd5b0590152",
+              "column_support": 1,
+              "denominator": 1000000000,
+              "game_sha256": "9a677d0f71d8b2cdead5534ea64092a98d70d330250e97f84ee530f6768d350d",
+              "lower_numerator": 0,
+              "lower_witness": {
+                "allocation": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "scenario": "zero"
+              },
+              "row_support": 1,
+              "scale": 1,
+              "scope": "declared finite zero-sum game and hidden payoff scenarios",
+              "tolerance_parts_per_million": 1,
+              "upper_numerator": 0,
+              "upper_witness": {
+                "allocation": [
+                  0,
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "verdict": "QUALIFIED",
+              "width_numerator": 0
+            },
+            "whole_seconds": 0.003917620022548363
+          },
+          "returncode": 0,
+          "status": "process-complete",
+          "stderr": "",
+          "stdout": "",
+          "supplied_verdict": "QUALIFIED",
+          "verdict_agreement": true,
+          "wall_s": 0.8455362840031739
+        },
+        "sparse-path-lp": {
+          "agrees_independent_explicit_matrix": true,
+          "certificate_sha256": "4b6dc54a2b80990aa9df6d517672b5f438015371562d194bc2e9ca8d4fe9a082",
+          "exact_bound_agreement": true,
+          "independent": {
+            "col_upper": "0",
+            "column_deviations": {
+              "immaterial": {
+                "allocation": [
+                  0,
+                  0,
+                  0,
+                  3
+                ],
+                "payoff": "0"
+              },
+              "zero": {
+                "allocation": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "payoff": "0"
+              }
+            },
+            "column_support": 1,
+            "passed_gap": true,
+            "row_deviation_allocation": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "row_lower": "0",
+            "row_support": 1,
+            "tolerance": "1/1000000",
+            "wall_s": 0.0002029470051638782,
+            "width": "0",
+            "worst_scenario": "zero"
+          },
+          "instrumented": {
+            "equalities": 30,
+            "inequalities": 34,
+            "lp_value": -0.0,
+            "matrix_nonzeros": 137,
+            "method": "sparse allocation flow and scenario shortest-path LP (HiGHS IPM)",
+            "prepare_seconds": 0.0009361109987366945,
+            "round_and_verify_seconds": 0.008583904011175036,
+            "solve_seconds": 0.005547325010411441,
+            "variables": 48,
+            "verification": {
+              "certificate_sha256": "69e55e4cc1caa181fe35608b0268f469003111ba8e0d1ec726ce8cd5b0590152",
+              "column_support": 1,
+              "denominator": 1000000000,
+              "game_sha256": "9a677d0f71d8b2cdead5534ea64092a98d70d330250e97f84ee530f6768d350d",
+              "lower_numerator": 0,
+              "lower_witness": {
+                "allocation": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "scenario": "zero"
+              },
+              "row_support": 1,
+              "scale": 1,
+              "scope": "declared finite zero-sum game and hidden payoff scenarios",
+              "tolerance_parts_per_million": 1,
+              "upper_numerator": 0,
+              "upper_witness": {
+                "allocation": [
+                  0,
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "verdict": "QUALIFIED",
+              "width_numerator": 0
+            },
+            "whole_seconds": 0.015067340020323172
+          },
+          "returncode": 0,
+          "status": "process-complete",
+          "stderr": "",
+          "stdout": "",
+          "supplied_verdict": "QUALIFIED",
+          "verdict_agreement": true,
+          "wall_s": 0.7920865820196923
+        }
+      },
+      "row_actions": 1
+    },
+    {
+      "column_actions": 35,
+      "explicit_matrix_control": {
+        "complete_wall_s": 0.00730133,
+        "matrix_cells": 1960,
+        "robust_minimax_value": 1.7406175771971548,
+        "scenario_visible_values": {
+          "scarce": 1.7406175771971548
+        }
+      },
+      "id": "single-asymmetric",
+      "implicit_pairs": 1960,
+      "methods": {
+        "dense": {
+          "agrees_independent_explicit_matrix": true,
+          "certificate_sha256": "f6d2e9d3bd9eccf80c970dd546c34ce7cae332febb53ef83e8ab85ff85bd0d70",
+          "exact_bound_agreement": true,
+          "independent": {
+            "col_upper": "1740617579/1000000000",
+            "column_deviations": {
+              "scarce": {
+                "allocation": [
+                  0,
+                  4,
+                  0,
+                  0
+                ],
+                "payoff": "217577197/125000000"
+              }
+            },
+            "column_support": 6,
+            "passed_gap": true,
+            "row_deviation_allocation": [
+              0,
+              5,
+              0,
+              0
+            ],
+            "row_lower": "217577197/125000000",
+            "row_support": 6,
+            "tolerance": "11/1000000",
+            "wall_s": 0.0003923150070477277,
+            "width": "3/1000000000",
+            "worst_scenario": "scarce"
+          },
+          "instrumented": {
+            "columns": 35,
+            "entries": 1960,
+            "method": "explicit matrix HiGHS",
+            "prepare_seconds": 0.00030631801928393543,
+            "rows": 56,
+            "solve_seconds": 0.008613042999058962,
+            "verification": {
+              "certificate_sha256": "c38781da5ef480ec381a9934878566e5abb83b90fbb92fac8c417c2159ed31a1",
+              "column_support": 6,
+              "denominator": 1000000000,
+              "game_sha256": "fefd196ef48d45b3bba9b23a8eb0b3431acba3319c12a2e1818cef3ecd56d142",
+              "lower_numerator": 1740617576,
+              "lower_witness": {
+                "allocation": [
+                  0,
+                  4,
+                  0,
+                  0
+                ],
+                "scenario": "scarce"
+              },
+              "row_support": 6,
+              "scale": 11,
+              "scope": "declared finite zero-sum game and hidden payoff scenarios",
+              "tolerance_parts_per_million": 1,
+              "upper_numerator": 1740617579,
+              "upper_witness": {
+                "allocation": [
+                  0,
+                  5,
+                  0,
+                  0
+                ]
+              },
+              "verdict": "QUALIFIED",
+              "width_numerator": 3
+            },
+            "whole_seconds": 0.009294421004597098
+          },
+          "returncode": 0,
+          "status": "process-complete",
+          "stderr": "",
+          "stdout": "",
+          "supplied_verdict": "QUALIFIED",
+          "verdict_agreement": true,
+          "wall_s": 1.1356963879952673
+        },
+        "double-oracle": {
+          "agrees_independent_explicit_matrix": true,
+          "certificate_sha256": "f6d2e9d3bd9eccf80c970dd546c34ce7cae332febb53ef83e8ab85ff85bd0d70",
+          "exact_bound_agreement": true,
+          "independent": {
+            "col_upper": "1740617579/1000000000",
+            "column_deviations": {
+              "scarce": {
+                "allocation": [
+                  0,
+                  4,
+                  0,
+                  0
+                ],
+                "payoff": "217577197/125000000"
+              }
+            },
+            "column_support": 6,
+            "passed_gap": true,
+            "row_deviation_allocation": [
+              0,
+              5,
+              0,
+              0
+            ],
+            "row_lower": "217577197/125000000",
+            "row_support": 6,
+            "tolerance": "11/1000000",
+            "wall_s": 0.00040671697934158146,
+            "width": "3/1000000000",
+            "worst_scenario": "scarce"
+          },
+          "instrumented": {
+            "iteration_limit": 128,
+            "iterations": 8,
+            "method": "double oracle with exact knapsack deviation search and HiGHS restricted games",
+            "profiles": [
+              [
+                1,
+                5,
+                5,
+                -3999999999,
+                3999999997
+              ],
+              [
+                2,
+                6,
+                6,
+                750000000,
+                5000000000
+              ],
+              [
+                3,
+                7,
+                7,
+                584210528,
+                2376315790
+              ],
+              [
+                4,
+                8,
+                8,
+                340000000,
+                3640000000
+              ],
+              [
+                5,
+                9,
+                9,
+                1054054053,
+                2220077222
+              ],
+              [
+                6,
+                10,
+                10,
+                1542857145,
+                2157142858
+              ],
+              [
+                7,
+                11,
+                11,
+                1734939757,
+                1884337350
+              ],
+              [
+                8,
+                12,
+                11,
+                1740617576,
+                1740617579
+              ]
+            ],
+            "status": "QUALIFIED",
+            "verification": {
+              "certificate_sha256": "c38781da5ef480ec381a9934878566e5abb83b90fbb92fac8c417c2159ed31a1",
+              "column_support": 6,
+              "denominator": 1000000000,
+              "game_sha256": "fefd196ef48d45b3bba9b23a8eb0b3431acba3319c12a2e1818cef3ecd56d142",
+              "lower_numerator": 1740617576,
+              "lower_witness": {
+                "allocation": [
+                  0,
+                  4,
+                  0,
+                  0
+                ],
+                "scenario": "scarce"
+              },
+              "row_support": 6,
+              "scale": 11,
+              "scope": "declared finite zero-sum game and hidden payoff scenarios",
+              "tolerance_parts_per_million": 1,
+              "upper_numerator": 1740617579,
+              "upper_witness": {
+                "allocation": [
+                  0,
+                  5,
+                  0,
+                  0
+                ]
+              },
+              "verdict": "QUALIFIED",
+              "width_numerator": 3
+            },
+            "whole_seconds": 0.03591548197437078
+          },
+          "returncode": 0,
+          "status": "process-complete",
+          "stderr": "",
+          "stdout": "",
+          "supplied_verdict": "QUALIFIED",
+          "verdict_agreement": true,
+          "wall_s": 0.7910151969990693
+        },
+        "sparse-path-lp": {
+          "agrees_independent_explicit_matrix": true,
+          "certificate_sha256": "f6d2e9d3bd9eccf80c970dd546c34ce7cae332febb53ef83e8ab85ff85bd0d70",
+          "exact_bound_agreement": true,
+          "independent": {
+            "col_upper": "1740617579/1000000000",
+            "column_deviations": {
+              "scarce": {
+                "allocation": [
+                  0,
+                  4,
+                  0,
+                  0
+                ],
+                "payoff": "217577197/125000000"
+              }
+            },
+            "column_support": 6,
+            "passed_gap": true,
+            "row_deviation_allocation": [
+              0,
+              5,
+              0,
+              0
+            ],
+            "row_lower": "217577197/125000000",
+            "row_support": 6,
+            "tolerance": "11/1000000",
+            "wall_s": 0.00037708200397901237,
+            "width": "3/1000000000",
+            "worst_scenario": "scarce"
+          },
+          "instrumented": {
+            "equalities": 64,
+            "inequalities": 41,
+            "lp_value": 1.7406175771971502,
+            "matrix_nonzeros": 379,
+            "method": "sparse allocation flow and scenario shortest-path LP (HiGHS IPM)",
+            "prepare_seconds": 0.001039199996739626,
+            "round_and_verify_seconds": 0.0006496919959317893,
+            "solve_seconds": 0.0072490290040150285,
+            "variables": 116,
+            "verification": {
+              "certificate_sha256": "c38781da5ef480ec381a9934878566e5abb83b90fbb92fac8c417c2159ed31a1",
+              "column_support": 6,
+              "denominator": 1000000000,
+              "game_sha256": "fefd196ef48d45b3bba9b23a8eb0b3431acba3319c12a2e1818cef3ecd56d142",
+              "lower_numerator": 1740617576,
+              "lower_witness": {
+                "allocation": [
+                  0,
+                  4,
+                  0,
+                  0
+                ],
+                "scenario": "scarce"
+              },
+              "row_support": 6,
+              "scale": 11,
+              "scope": "declared finite zero-sum game and hidden payoff scenarios",
+              "tolerance_parts_per_million": 1,
+              "upper_numerator": 1740617579,
+              "upper_witness": {
+                "allocation": [
+                  0,
+                  5,
+                  0,
+                  0
+                ]
+              },
+              "verdict": "QUALIFIED",
+              "width_numerator": 3
+            },
+            "whole_seconds": 0.008937920996686444
+          },
+          "returncode": 0,
+          "status": "process-complete",
+          "stderr": "",
+          "stdout": "",
+          "supplied_verdict": "QUALIFIED",
+          "verdict_agreement": true,
+          "wall_s": 0.5249306829937268
+        }
+      },
+      "row_actions": 56
+    },
+    {
+      "column_actions": 424,
+      "explicit_matrix_control": {
+        "complete_wall_s": 0.12633862,
+        "matrix_cells": 50880,
+        "robust_minimax_value": -4.969326697536924,
+        "scenario_visible_values": {
+          "east": -0.0,
+          "high-north": 2.8942307692307696,
+          "wide": -2.7203713817586017
+        }
+      },
+      "id": "shared-policy",
+      "implicit_pairs": 50880,
+      "methods": {
+        "dense": {
+          "agrees_independent_explicit_matrix": true,
+          "certificate_sha256": "c6a0f010f8a98bfe7eb7127a87fa06c07eef0b99969a3ed08e683143396b1a34",
+          "exact_bound_agreement": true,
+          "independent": {
+            "col_upper": "-1242331671/250000000",
+            "column_deviations": {
+              "east": {
+                "allocation": [
+                  1,
+                  4,
+                  0,
+                  2
+                ],
+                "payoff": "-4969326699/1000000000"
+              },
+              "high-north": {
+                "allocation": [
+                  4,
+                  0,
+                  2,
+                  0
+                ],
+                "payoff": "-2484663347/500000000"
+              },
+              "wide": {
+                "allocation": [
+                  0,
+                  3,
+                  3,
+                  3
+                ],
+                "payoff": "-4969326707/1000000000"
+              }
+            },
+            "column_support": 19,
+            "passed_gap": true,
+            "row_deviation_allocation": [
+              6,
+              0,
+              1,
+              0
+            ],
+            "row_lower": "-4969326707/1000000000",
+            "row_support": 20,
+            "tolerance": "7/500000",
+            "wall_s": 0.0012358849926386029,
+            "width": "23/1000000000",
+            "worst_scenario": "wide"
+          },
+          "instrumented": {
+            "columns": 424,
+            "entries": 50880,
+            "method": "explicit matrix HiGHS",
+            "prepare_seconds": 0.0022072170104365796,
+            "rows": 120,
+            "solve_seconds": 0.0429580369964242,
+            "verification": {
+              "certificate_sha256": "caa53b6791d9c7e7dd4da47c10b855d6d8bfbe30d0e5f95621677201e75ae6a5",
+              "column_support": 19,
+              "denominator": 1000000000,
+              "game_sha256": "f359504a76a61f2a6bb0d3353c3f8f6180c8daa8ec6ab1022e3981a2092ef046",
+              "lower_numerator": -4969326707,
+              "lower_witness": {
+                "allocation": [
+                  0,
+                  3,
+                  3,
+                  3
+                ],
+                "scenario": "wide"
+              },
+              "row_support": 20,
+              "scale": 14,
+              "scope": "declared finite zero-sum game and hidden payoff scenarios",
+              "tolerance_parts_per_million": 1,
+              "upper_numerator": -4969326684,
+              "upper_witness": {
+                "allocation": [
+                  6,
+                  0,
+                  1,
+                  0
+                ]
+              },
+              "verdict": "QUALIFIED",
+              "width_numerator": 23
+            },
+            "whole_seconds": 0.04590697700041346
+          },
+          "returncode": 0,
+          "status": "process-complete",
+          "stderr": "",
+          "stdout": "",
+          "supplied_verdict": "QUALIFIED",
+          "verdict_agreement": true,
+          "wall_s": 0.7725236510159448
+        },
+        "double-oracle": {
+          "agrees_independent_explicit_matrix": true,
+          "certificate_sha256": "6a78aa059b8e3b92ad0ea3f6a98a5c176ee6ec1f3b99304ddc4017dfd5a1fde9",
+          "exact_bound_agreement": true,
+          "independent": {
+            "col_upper": "-2484663339/500000000",
+            "column_deviations": {
+              "east": {
+                "allocation": [
+                  1,
+                  4,
+                  0,
+                  2
+                ],
+                "payoff": "-4969326697/1000000000"
+              },
+              "high-north": {
+                "allocation": [
+                  2,
+                  0,
+                  4,
+                  0
+                ],
+                "payoff": "-2484663351/500000000"
+              },
+              "wide": {
+                "allocation": [
+                  0,
+                  1,
+                  1,
+                  7
+                ],
+                "payoff": "-2484663353/500000000"
+              }
+            },
+            "column_support": 19,
+            "passed_gap": true,
+            "row_deviation_allocation": [
+              6,
+              0,
+              0,
+              1
+            ],
+            "row_lower": "-2484663353/500000000",
+            "row_support": 19,
+            "tolerance": "7/500000",
+            "wall_s": 0.0014973639918025583,
+            "width": "7/250000000",
+            "worst_scenario": "wide"
+          },
+          "instrumented": {
+            "iteration_limit": 128,
+            "iterations": 31,
+            "method": "double oracle with exact knapsack deviation search and HiGHS restricted games",
+            "profiles": [
+              [
+                1,
+                5,
+                15,
+                -9782945736,
+                3271317830
+              ],
+              [
+                2,
+                6,
+                16,
+                -11192660551,
+                1376146788
+              ],
+              [
+                3,
+                7,
+                17,
+                -9432217893,
+                -1637042800
+              ],
+              [
+                4,
+                8,
+                18,
+                -7578417608,
+                -1974485017
+              ],
+              [
+                5,
+                9,
+                19,
+                -7941273009,
+                -1821416008
+              ],
+              [
+                6,
+                10,
+                20,
+                -7281167111,
+                -2382720729
+              ],
+              [
+                7,
+                11,
+                21,
+                -7408954760,
+                -2881284468
+              ],
+              [
+                8,
+                12,
+                22,
+                -6379702964,
+                -3389964001
+              ],
+              [
+                9,
+                13,
+                23,
+                -6767123288,
+                1123287676
+              ],
+              [
+                10,
+                14,
+                24,
+                -6817098708,
+                -3103988417
+              ],
+              [
+                11,
+                15,
+                25,
+                -5970526671,
+                -2287265605
+              ],
+              [
+                12,
+                16,
+                26,
+                -6928139998,
+                -3186515080
+              ],
+              [
+                13,
+                17,
+                27,
+                -6850121218,
+                -3986039782
+              ],
+              [
+                14,
+                18,
+                28,
+                -5947939453,
+                -4500519960
+              ],
+              [
+                15,
+                19,
+                29,
+                -5546755719,
+                -3975448361
+              ],
+              [
+                16,
+                20,
+                30,
+                -5948253638,
+                -4335116416
+              ],
+              [
+                17,
+                21,
+                31,
+                -5630638601,
+                -4443898103
+              ],
+              [
+                18,
+                22,
+                32,
+                -5396470600,
+                -4477567834
+              ],
+              [
+                19,
+                23,
+                33,
+                -5196770079,
+                -4722465497
+              ],
+              [
+                20,
+                24,
+                34,
+                -5276731470,
+                -4776502297
+              ],
+              [
+                21,
+                25,
+                35,
+                -5201809488,
+                -4836241232
+              ],
+              [
+                22,
+                26,
+                36,
+                -5283644045,
+                -4671870549
+              ],
+              [
+                23,
+                27,
+                37,
+                -5391570907,
+                -4835923860
+              ],
+              [
+                24,
+                28,
+                38,
+                -5740317708,
+                -4837538420
+              ],
+              [
+                25,
+                29,
+                39,
+                -5143043816,
+                -4870569746
+              ],
+              [
+                26,
+                30,
+                40,
+                -5278297271,
+                -4899734755
+              ],
+              [
+                27,
+                31,
+                41,
+                -5213164744,
+                -4948615190
+              ],
+              [
+                28,
+                32,
+                42,
+                -5270103824,
+                -4929971393
+              ],
+              [
+                29,
+                33,
+                43,
+                -5385844736,
+                -4965753413
+              ],
+              [
+                30,
+                34,
+                44,
+                -5128834882,
+                -4957134983
+              ],
+              [
+                31,
+                35,
+                45,
+                -4969326706,
+                -4969326678
+              ]
+            ],
+            "status": "QUALIFIED",
+            "verification": {
+              "certificate_sha256": "edd1d0e04f55d77eb6d9d35030e90dadd7f8ba1d306d565b2f7f222b7c8fa4ef",
+              "column_support": 19,
+              "denominator": 1000000000,
+              "game_sha256": "f359504a76a61f2a6bb0d3353c3f8f6180c8daa8ec6ab1022e3981a2092ef046",
+              "lower_numerator": -4969326706,
+              "lower_witness": {
+                "allocation": [
+                  0,
+                  1,
+                  1,
+                  7
+                ],
+                "scenario": "wide"
+              },
+              "row_support": 19,
+              "scale": 14,
+              "scope": "declared finite zero-sum game and hidden payoff scenarios",
+              "tolerance_parts_per_million": 1,
+              "upper_numerator": -4969326678,
+              "upper_witness": {
+                "allocation": [
+                  6,
+                  0,
+                  0,
+                  1
+                ]
+              },
+              "verdict": "QUALIFIED",
+              "width_numerator": 28
+            },
+            "whole_seconds": 0.1457541759882588
+          },
+          "returncode": 0,
+          "status": "process-complete",
+          "stderr": "",
+          "stdout": "",
+          "supplied_verdict": "QUALIFIED",
+          "verdict_agreement": true,
+          "wall_s": 0.8797606010048185
+        },
+        "sparse-path-lp": {
+          "agrees_independent_explicit_matrix": true,
+          "certificate_sha256": "6d8448bafc400d1a5f58e5df890c4e39506528e32777c9ea85083bb9e80ed995",
+          "exact_bound_agreement": true,
+          "independent": {
+            "col_upper": "-993865337/200000000",
+            "column_deviations": {
+              "east": {
+                "allocation": [
+                  1,
+                  4,
+                  0,
+                  2
+                ],
+                "payoff": "-2484663349/500000000"
+              },
+              "high-north": {
+                "allocation": [
+                  3,
+                  0,
+                  3,
+                  0
+                ],
+                "payoff": "-1242331677/250000000"
+              },
+              "wide": {
+                "allocation": [
+                  0,
+                  6,
+                  1,
+                  2
+                ],
+                "payoff": "-4969326697/1000000000"
+              }
+            },
+            "column_support": 19,
+            "passed_gap": true,
+            "row_deviation_allocation": [
+              1,
+              5,
+              1,
+              0
+            ],
+            "row_lower": "-1242331677/250000000",
+            "row_support": 19,
+            "tolerance": "7/500000",
+            "wall_s": 0.0014597559929825366,
+            "width": "23/1000000000",
+            "worst_scenario": "high-north"
+          },
+          "instrumented": {
+            "equalities": 160,
+            "inequalities": 291,
+            "lp_value": -4.969326697536927,
+            "matrix_nonzeros": 1433,
+            "method": "sparse allocation flow and scenario shortest-path LP (HiGHS IPM)",
+            "prepare_seconds": 0.0017809919954743236,
+            "round_and_verify_seconds": 0.0019264669972471893,
+            "solve_seconds": 0.02293599900440313,
+            "variables": 302,
+            "verification": {
+              "certificate_sha256": "870355820b890152378b78f1d713b871f5b67779bac20639b3df5431373e5e3c",
+              "column_support": 19,
+              "denominator": 1000000000,
+              "game_sha256": "f359504a76a61f2a6bb0d3353c3f8f6180c8daa8ec6ab1022e3981a2092ef046",
+              "lower_numerator": -4969326708,
+              "lower_witness": {
+                "allocation": [
+                  3,
+                  0,
+                  3,
+                  0
+                ],
+                "scenario": "high-north"
+              },
+              "row_support": 19,
+              "scale": 14,
+              "scope": "declared finite zero-sum game and hidden payoff scenarios",
+              "tolerance_parts_per_million": 1,
+              "upper_numerator": -4969326685,
+              "upper_witness": {
+                "allocation": [
+                  1,
+                  5,
+                  1,
+                  0
+                ]
+              },
+              "verdict": "QUALIFIED",
+              "width_numerator": 23
+            },
+            "whole_seconds": 0.026643457997124642
+          },
+          "returncode": 0,
+          "status": "process-complete",
+          "stderr": "",
+          "stdout": "",
+          "supplied_verdict": "QUALIFIED",
+          "verdict_agreement": true,
+          "wall_s": 0.6752286800183356
+        }
+      },
+      "negative_controls": {
+        "feasible_but_suboptimal": {
+          "certificate_sha256": "ed5bd6232264d56ed1f6015473cc86343f3809a1104850ee8f2c19808f4bd13a",
+          "exact_bound_agreement": true,
+          "independent": {
+            "col_upper": "12",
+            "column_deviations": {
+              "east": {
+                "allocation": [
+                  0,
+                  1,
+                  0,
+                  6
+                ],
+                "payoff": "-8"
+              },
+              "high-north": {
+                "allocation": [
+                  0,
+                  0,
+                  1,
+                  5
+                ],
+                "payoff": "2"
+              },
+              "wide": {
+                "allocation": [
+                  0,
+                  1,
+                  1,
+                  7
+                ],
+                "payoff": "-12"
+              }
+            },
+            "column_support": 1,
+            "passed_gap": false,
+            "row_deviation_allocation": [
+              4,
+              1,
+              1,
+              1
+            ],
+            "row_lower": "-12",
+            "row_support": 1,
+            "tolerance": "7/500000",
+            "wall_s": 0.0007650640036445111,
+            "width": "24",
+            "worst_scenario": "wide"
+          },
+          "supplied_verdict": "BOUND_ONLY",
+          "verdict_agreement": true
+        },
+        "malformed_mass_independently_rejected": true,
+        "malformed_mass_supplied_rejected": true
+      },
+      "row_actions": 120
+    },
+    {
+      "column_actions": 476,
+      "explicit_matrix_control": {
+        "complete_wall_s": 0.037594407,
+        "matrix_cells": 9520,
+        "robust_minimax_value": -13.0,
+        "scenario_visible_values": {
+          "balanced": -0.0,
+          "crowded": -13.0,
+          "quiet": 9.0
+        }
+      },
+      "id": "different-edges",
+      "implicit_pairs": 9520,
+      "methods": {
+        "dense": {
+          "agrees_independent_explicit_matrix": true,
+          "certificate_sha256": "7308e98574a1225ad5043a53ee5eef33b8e66ab8a867ab1b60fc6c0d226bb856",
+          "exact_bound_agreement": true,
+          "independent": {
+            "col_upper": "-13",
+            "column_deviations": {
+              "balanced": {
+                "allocation": [
+                  0,
+                  0,
+                  3,
+                  0
+                ],
+                "payoff": "0"
+              },
+              "crowded": {
+                "allocation": [
+                  1,
+                  1,
+                  4,
+                  6
+                ],
+                "payoff": "-13"
+              },
+              "quiet": {
+                "allocation": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "payoff": "2"
+              }
+            },
+            "column_support": 1,
+            "passed_gap": true,
+            "row_deviation_allocation": [
+              3,
+              0,
+              0,
+              0
+            ],
+            "row_lower": "-13",
+            "row_support": 1,
+            "tolerance": "13/1000000",
+            "wall_s": 0.0008843999821692705,
+            "width": "0",
+            "worst_scenario": "crowded"
+          },
+          "instrumented": {
+            "columns": 476,
+            "entries": 9520,
+            "method": "explicit matrix HiGHS",
+            "prepare_seconds": 0.0012002289877273142,
+            "rows": 20,
+            "solve_seconds": 0.01842081901850179,
+            "verification": {
+              "certificate_sha256": "71d36d2e8e2621a0b88338863b4cc0f756001f98cbd1662e4dd569045f666a88",
+              "column_support": 1,
+              "denominator": 1000000000,
+              "game_sha256": "1c9fc5fe0d8dfd21923f01bb8b6a71ee8f9eb13443f153083ea82f2a9f3fc1f7",
+              "lower_numerator": -13000000000,
+              "lower_witness": {
+                "allocation": [
+                  1,
+                  1,
+                  4,
+                  6
+                ],
+                "scenario": "crowded"
+              },
+              "row_support": 1,
+              "scale": 13,
+              "scope": "declared finite zero-sum game and hidden payoff scenarios",
+              "tolerance_parts_per_million": 1,
+              "upper_numerator": -13000000000,
+              "upper_witness": {
+                "allocation": [
+                  3,
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "verdict": "QUALIFIED",
+              "width_numerator": 0
+            },
+            "whole_seconds": 0.020044389995746315
+          },
+          "returncode": 0,
+          "status": "process-complete",
+          "stderr": "",
+          "stdout": "",
+          "supplied_verdict": "QUALIFIED",
+          "verdict_agreement": true,
+          "wall_s": 0.7755139910150319
+        },
+        "double-oracle": {
+          "agrees_independent_explicit_matrix": true,
+          "certificate_sha256": "62a926b8930694cff6c3b013c8bccbd2351da67a28bc041a969cc5ba28fe9bac",
+          "exact_bound_agreement": true,
+          "independent": {
+            "col_upper": "-13",
+            "column_deviations": {
+              "balanced": {
+                "allocation": [
+                  0,
+                  1,
+                  1,
+                  1
+                ],
+                "payoff": "-8"
+              },
+              "crowded": {
+                "allocation": [
+                  1,
+                  1,
+                  1,
+                  9
+                ],
+                "payoff": "-13"
+              },
+              "quiet": {
+                "allocation": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "payoff": "1"
+              }
+            },
+            "column_support": 1,
+            "passed_gap": true,
+            "row_deviation_allocation": [
+              3,
+              0,
+              0,
+              0
+            ],
+            "row_lower": "-13",
+            "row_support": 1,
+            "tolerance": "13/1000000",
+            "wall_s": 0.0005557140102609992,
+            "width": "0",
+            "worst_scenario": "crowded"
+          },
+          "instrumented": {
+            "iteration_limit": 128,
+            "iterations": 6,
+            "method": "double oracle with exact knapsack deviation search and HiGHS restricted games",
+            "profiles": [
+              [
+                1,
+                5,
+                11,
+                -13000000000,
+                -6500000000
+              ],
+              [
+                2,
+                5,
+                12,
+                -13000000000,
+                -11222222222
+              ],
+              [
+                3,
+                5,
+                13,
+                -13000000000,
+                -10600000000
+              ],
+              [
+                4,
+                6,
+                14,
+                -13000000000,
+                -11315789472
+              ],
+              [
+                5,
+                6,
+                15,
+                -13000000000,
+                -10818181817
+              ],
+              [
+                6,
+                7,
+                16,
+                -13000000000,
+                -13000000000
+              ]
+            ],
+            "status": "QUALIFIED",
+            "verification": {
+              "certificate_sha256": "e749f5d6fa12225162139fb2837f078656dd830dd369ae65cac56eb4c88643e2",
+              "column_support": 1,
+              "denominator": 1000000000,
+              "game_sha256": "1c9fc5fe0d8dfd21923f01bb8b6a71ee8f9eb13443f153083ea82f2a9f3fc1f7",
+              "lower_numerator": -13000000000,
+              "lower_witness": {
+                "allocation": [
+                  1,
+                  1,
+                  1,
+                  9
+                ],
+                "scenario": "crowded"
+              },
+              "row_support": 1,
+              "scale": 13,
+              "scope": "declared finite zero-sum game and hidden payoff scenarios",
+              "tolerance_parts_per_million": 1,
+              "upper_numerator": -13000000000,
+              "upper_witness": {
+                "allocation": [
+                  3,
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "verdict": "QUALIFIED",
+              "width_numerator": 0
+            },
+            "whole_seconds": 0.02128557101241313
+          },
+          "returncode": 0,
+          "status": "process-complete",
+          "stderr": "",
+          "stdout": "",
+          "supplied_verdict": "QUALIFIED",
+          "verdict_agreement": true,
+          "wall_s": 0.70706675000838
+        },
+        "sparse-path-lp": {
+          "agrees_independent_explicit_matrix": true,
+          "certificate_sha256": "4fb93b43abc9897417e175bf3d19d8b96ed6fe5a1b7a84a7f6d13a0b8db09f31",
+          "exact_bound_agreement": true,
+          "independent": {
+            "col_upper": "-13",
+            "column_deviations": {
+              "balanced": {
+                "allocation": [
+                  0,
+                  0,
+                  3,
+                  0
+                ],
+                "payoff": "-142857143/200000000"
+              },
+              "crowded": {
+                "allocation": [
+                  2,
+                  3,
+                  4,
+                  3
+                ],
+                "payoff": "-13"
+              },
+              "quiet": {
+                "allocation": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "payoff": "642857143/250000000"
+              }
+            },
+            "column_support": 1,
+            "passed_gap": true,
+            "row_deviation_allocation": [
+              3,
+              0,
+              0,
+              0
+            ],
+            "row_lower": "-13",
+            "row_support": 2,
+            "tolerance": "13/1000000",
+            "wall_s": 0.0009290860034525394,
+            "width": "0",
+            "worst_scenario": "crowded"
+          },
+          "instrumented": {
+            "equalities": 104,
+            "inequalities": 243,
+            "lp_value": -13.0,
+            "matrix_nonzeros": 954,
+            "method": "sparse allocation flow and scenario shortest-path LP (HiGHS IPM)",
+            "prepare_seconds": 0.0014165309839881957,
+            "round_and_verify_seconds": 0.0011336909956298769,
+            "solve_seconds": 0.012546354002552107,
+            "variables": 177,
+            "verification": {
+              "certificate_sha256": "444d719ee2305f6d154571b80da75f5ecc0cfe6d84191d88a47830da2036657c",
+              "column_support": 1,
+              "denominator": 1000000000,
+              "game_sha256": "1c9fc5fe0d8dfd21923f01bb8b6a71ee8f9eb13443f153083ea82f2a9f3fc1f7",
+              "lower_numerator": -13000000000,
+              "lower_witness": {
+                "allocation": [
+                  2,
+                  3,
+                  4,
+                  3
+                ],
+                "scenario": "crowded"
+              },
+              "row_support": 2,
+              "scale": 13,
+              "scope": "declared finite zero-sum game and hidden payoff scenarios",
+              "tolerance_parts_per_million": 1,
+              "upper_numerator": -13000000000,
+              "upper_witness": {
+                "allocation": [
+                  3,
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "verdict": "QUALIFIED",
+              "width_numerator": 0
+            },
+            "whole_seconds": 0.01509657598217018
+          },
+          "returncode": 0,
+          "status": "process-complete",
+          "stderr": "",
+          "stdout": "",
+          "supplied_verdict": "QUALIFIED",
+          "verdict_agreement": true,
+          "wall_s": 0.7812715450127143
+        }
+      },
+      "row_actions": 20
+    },
+    {
+      "column_actions": 24717,
+      "id": "implicit-scale",
+      "implicit_pairs": 211775256,
+      "methods": {
+        "dense": {
+          "instrumented": {
+            "columns": 24717,
+            "entry_limit": 250000,
+            "method": "explicit matrix HiGHS",
+            "rows": 8568,
+            "status": "OUTSIDE_REGISTERED_MATRIX_BUDGET"
+          },
+          "returncode": 0,
+          "status": "process-complete",
+          "stderr": "",
+          "stdout": "",
+          "wall_s": 1.1491813079919666
+        },
+        "double-oracle": {
+          "certificate_sha256": "d0cfa2eac0b595c377b1c91c78b4425bfcb83570414e030fbf4743bb6a8a2213",
+          "exact_bound_agreement": true,
+          "independent": {
+            "col_upper": "-2030136261/250000000",
+            "column_deviations": {
+              "shift": {
+                "allocation": [
+                  1,
+                  3,
+                  6,
+                  0,
+                  1,
+                  0
+                ],
+                "payoff": "-8120545107/1000000000"
+              },
+              "tight": {
+                "allocation": [
+                  9,
+                  0,
+                  3,
+                  3,
+                  0,
+                  1
+                ],
+                "payoff": "-203013627/25000000"
+              }
+            },
+            "column_support": 33,
+            "passed_gap": true,
+            "row_deviation_allocation": [
+              2,
+              4,
+              3,
+              0,
+              4,
+              0
+            ],
+            "row_lower": "-8120545107/1000000000",
+            "row_support": 29,
+            "tolerance": "3/125000",
+            "wall_s": 0.09200981000321917,
+            "width": "63/1000000000",
+            "worst_scenario": "shift"
+          },
+          "instrumented": {
+            "iteration_limit": 128,
+            "iterations": 69,
+            "method": "double oracle with exact knapsack deviation search and HiGHS restricted games",
+            "profiles": [
+              [
+                1,
+                7,
+                14,
+                -18096774192,
+                10129032248
+              ],
+              [
+                2,
+                8,
+                15,
+                -21733333334,
+                12703703707
+              ],
+              [
+                3,
+                9,
+                16,
+                -15468750000,
+                3031250000
+              ],
+              [
+                4,
+                10,
+                17,
+                -20617769102,
+                3999023699
+              ],
+              [
+                5,
+                11,
+                18,
+                -15689413572,
+                -194682159
+              ],
+              [
+                6,
+                12,
+                19,
+                -15627079426,
+                -723251409
+              ],
+              [
+                7,
+                13,
+                20,
+                -12269414515,
+                -1330701551
+              ],
+              [
+                8,
+                14,
+                21,
+                -11118901557,
+                -2766274381
+              ],
+              [
+                9,
+                15,
+                22,
+                -11560415203,
+                -5441270015
+              ],
+              [
+                10,
+                16,
+                23,
+                -10840398540,
+                -4080424601
+              ],
+              [
+                11,
+                17,
+                24,
+                -14689095741,
+                -5629109265
+              ],
+              [
+                12,
+                18,
+                25,
+                -10075759451,
+                -5122162153
+              ],
+              [
+                13,
+                19,
+                26,
+                -12182440106,
+                -6030744358
+              ],
+              [
+                14,
+                20,
+                27,
+                -10670231939,
+                -4593633366
+              ],
+              [
+                15,
+                21,
+                28,
+                -10110976684,
+                -6173699633
+              ],
+              [
+                16,
+                22,
+                29,
+                -11867739204,
+                -6320683893
+              ],
+              [
+                17,
+                23,
+                30,
+                -10111580627,
+                -4957448009
+              ],
+              [
+                18,
+                24,
+                31,
+                -10323699147,
+                -6503678607
+              ],
+              [
+                19,
+                25,
+                32,
+                -10925074358,
+                -6188206685
+              ],
+              [
+                20,
+                26,
+                33,
+                -9370481116,
+                -5378949466
+              ],
+              [
+                21,
+                27,
+                34,
+                -10469421330,
+                -6590762495
+              ],
+              [
+                22,
+                28,
+                35,
+                -9385913352,
+                -6638086878
+              ],
+              [
+                23,
+                29,
+                36,
+                -9712123853,
+                -6687086930
+              ],
+              [
+                24,
+                30,
+                37,
+                -9428874251,
+                -7191928837
+              ],
+              [
+                25,
+                31,
+                38,
+                -9411836442,
+                -6737356034
+              ],
+              [
+                26,
+                32,
+                39,
+                -9365760569,
+                -6567685660
+              ],
+              [
+                27,
+                33,
+                40,
+                -9268893253,
+                -6608548295
+              ],
+              [
+                28,
+                34,
+                41,
+                -9082024664,
+                -7045338137
+              ],
+              [
+                29,
+                35,
+                42,
+                -9260462073,
+                -6580408590
+              ],
+              [
+                30,
+                36,
+                43,
+                -9166031112,
+                -7124328079
+              ],
+              [
+                31,
+                37,
+                44,
+                -9272301953,
+                -7483485083
+              ],
+              [
+                32,
+                38,
+                45,
+                -9166087643,
+                -7325509352
+              ],
+              [
+                33,
+                39,
+                46,
+                -9454775837,
+                -6937099781
+              ],
+              [
+                34,
+                40,
+                47,
+                -9529796333,
+                -7098901109
+              ],
+              [
+                35,
+                41,
+                48,
+                -9243774462,
+                -7442828377
+              ],
+              [
+                36,
+                42,
+                49,
+                -8969539653,
+                -7343837803
+              ],
+              [
+                37,
+                43,
+                50,
+                -9008127384,
+                -7379807929
+              ],
+              [
+                38,
+                44,
+                51,
+                -9386474587,
+                -7298976189
+              ],
+              [
+                39,
+                45,
+                52,
+                -8725973316,
+                -7396267102
+              ],
+              [
+                40,
+                46,
+                53,
+                -8572207945,
+                -7352503149
+              ],
+              [
+                41,
+                47,
+                54,
+                -8784139481,
+                -7657360158
+              ],
+              [
+                42,
+                48,
+                55,
+                -8531154841,
+                -7571887061
+              ],
+              [
+                43,
+                49,
+                56,
+                -8546428208,
+                -7712728294
+              ],
+              [
+                44,
+                50,
+                57,
+                -8731386505,
+                -7788027105
+              ],
+              [
+                45,
+                51,
+                58,
+                -8758650652,
+                -7777185234
+              ],
+              [
+                46,
+                52,
+                59,
+                -8453728164,
+                -7800566165
+              ],
+              [
+                47,
+                53,
+                60,
+                -8569394860,
+                -7867770216
+              ],
+              [
+                48,
+                54,
+                61,
+                -8482171214,
+                -7805480370
+              ],
+              [
+                49,
+                55,
+                62,
+                -8423138587,
+                -7891765682
+              ],
+              [
+                50,
+                56,
+                63,
+                -8379982796,
+                -7798883003
+              ],
+              [
+                51,
+                57,
+                64,
+                -8338647371,
+                -7789899874
+              ],
+              [
+                52,
+                58,
+                65,
+                -8377223551,
+                -7868657739
+              ],
+              [
+                53,
+                59,
+                66,
+                -8320087448,
+                -7848805413
+              ],
+              [
+                54,
+                60,
+                67,
+                -8360499200,
+                -7812152762
+              ],
+              [
+                55,
+                61,
+                68,
+                -8297261394,
+                -7858334849
+              ],
+              [
+                56,
+                62,
+                69,
+                -8216959462,
+                -7903732339
+              ],
+              [
+                57,
+                63,
+                70,
+                -8193274109,
+                -7901426189
+              ],
+              [
+                58,
+                64,
+                71,
+                -8182778783,
+                -7937784938
+              ],
+              [
+                59,
+                65,
+                72,
+                -8192997594,
+                -7941383979
+              ],
+              [
+                60,
+                66,
+                73,
+                -8191052864,
+                -7996608013
+              ],
+              [
+                61,
+                67,
+                74,
+                -8159715045,
+                -8047306451
+              ],
+              [
+                62,
+                68,
+                75,
+                -8200236332,
+                -8032858317
+              ],
+              [
+                63,
+                69,
+                76,
+                -8202333579,
+                -8054371850
+              ],
+              [
+                64,
+                70,
+                77,
+                -8174887741,
+                -8038973115
+              ],
+              [
+                65,
+                71,
+                78,
+                -8168817732,
+                -8054335570
+              ],
+              [
+                66,
+                72,
+                79,
+                -8151249139,
+                -8067232071
+              ],
+              [
+                67,
+                73,
+                80,
+                -8128821742,
+                -8034152005
+              ],
+              [
+                68,
+                74,
+                81,
+                -8123244268,
+                -8084219997
+              ],
+              [
+                69,
+                75,
+                82,
+                -8120545107,
+                -8120545044
+              ]
+            ],
+            "status": "QUALIFIED",
+            "verification": {
+              "certificate_sha256": "556bca6c8e049a9560e1af4dee4f15f1315920b938195bba469023b207ed7467",
+              "column_support": 33,
+              "denominator": 1000000000,
+              "game_sha256": "f9f5f9367a4eba204b3a77a362ca8fa187c54f45fcecd1e6c55861d693e07b4d",
+              "lower_numerator": -8120545107,
+              "lower_witness": {
+                "allocation": [
+                  1,
+                  3,
+                  6,
+                  0,
+                  1,
+                  0
+                ],
+                "scenario": "shift"
+              },
+              "row_support": 29,
+              "scale": 24,
+              "scope": "declared finite zero-sum game and hidden payoff scenarios",
+              "tolerance_parts_per_million": 1,
+              "upper_numerator": -8120545044,
+              "upper_witness": {
+                "allocation": [
+                  2,
+                  4,
+                  3,
+                  0,
+                  4,
+                  0
+                ]
+              },
+              "verdict": "QUALIFIED",
+              "width_numerator": 63
+            },
+            "whole_seconds": 0.4701788510137703
+          },
+          "returncode": 0,
+          "status": "process-complete",
+          "stderr": "",
+          "stdout": "",
+          "supplied_verdict": "QUALIFIED",
+          "verdict_agreement": true,
+          "wall_s": 1.4356455329980236
+        },
+        "sparse-path-lp": {
+          "certificate_sha256": "406d8f2e58f304ff5dad0f178687e429240c6adf5ff73ec702f2f8a43bdd9fb7",
+          "exact_bound_agreement": true,
+          "independent": {
+            "col_upper": "-4060272523/500000000",
+            "column_deviations": {
+              "shift": {
+                "allocation": [
+                  1,
+                  1,
+                  2,
+                  0,
+                  7,
+                  0
+                ],
+                "payoff": "-4060272539/500000000"
+              },
+              "tight": {
+                "allocation": [
+                  3,
+                  0,
+                  5,
+                  6,
+                  0,
+                  2
+                ],
+                "payoff": "-8120545101/1000000000"
+              }
+            },
+            "column_support": 33,
+            "passed_gap": true,
+            "row_deviation_allocation": [
+              0,
+              4,
+              2,
+              1,
+              5,
+              1
+            ],
+            "row_lower": "-8120545101/1000000000",
+            "row_support": 30,
+            "tolerance": "3/125000",
+            "wall_s": 0.09009304599021561,
+            "width": "11/200000000",
+            "worst_scenario": "tight"
+          },
+          "instrumented": {
+            "equalities": 331,
+            "inequalities": 984,
+            "lp_value": -8.120545073375203,
+            "matrix_nonzeros": 4868,
+            "method": "sparse allocation flow and scenario shortest-path LP (HiGHS IPM)",
+            "prepare_seconds": 0.004813730978639796,
+            "round_and_verify_seconds": 0.005309628992108628,
+            "solve_seconds": 0.12996730001759715,
+            "variables": 856,
+            "verification": {
+              "certificate_sha256": "522239eb05195e7f825c25f89fd1b2bfea2900ac72aef0ee9f7f6790d94c5c12",
+              "column_support": 33,
+              "denominator": 1000000000,
+              "game_sha256": "f9f5f9367a4eba204b3a77a362ca8fa187c54f45fcecd1e6c55861d693e07b4d",
+              "lower_numerator": -8120545101,
+              "lower_witness": {
+                "allocation": [
+                  3,
+                  0,
+                  5,
+                  6,
+                  0,
+                  2
+                ],
+                "scenario": "tight"
+              },
+              "row_support": 30,
+              "scale": 24,
+              "scope": "declared finite zero-sum game and hidden payoff scenarios",
+              "tolerance_parts_per_million": 1,
+              "upper_numerator": -8120545046,
+              "upper_witness": {
+                "allocation": [
+                  0,
+                  4,
+                  2,
+                  1,
+                  5,
+                  1
+                ]
+              },
+              "verdict": "QUALIFIED",
+              "width_numerator": 55
+            },
+            "whole_seconds": 0.14009065998834558
+          },
+          "returncode": 0,
+          "status": "process-complete",
+          "stderr": "",
+          "stdout": "",
+          "supplied_verdict": "QUALIFIED",
+          "verdict_agreement": true,
+          "wall_s": 0.7656092010147404
+        }
+      },
+      "row_actions": 8568
+    }
+  ],
+  "runtime": {
+    "numpy_scipy": "2.3.5 1.17.0",
+    "platform": "Linux-6.18.57-x86_64-with-glibc2.41",
+    "python": "3.12.14",
+    "threads": 1
+  },
+  "source_sha256": {
+    "baselines.py": "94a5894906cba6962e812fb3582a432351246bd7de902b48fa2d8ad6e61bf64a",
+    "solve.py": "abf3eeab97637c2491597788d0fa8802ee5ba3e33ea38860080e8e9be52f2413",
+    "verify.py": "57d4f4281df204ac1d9f9290f72240df9dedf7ea78844a7009dad4a3aced9121"
+  },
+  "started_utc": "2026-11-25T01:39:33.461760+00:00"
+}
