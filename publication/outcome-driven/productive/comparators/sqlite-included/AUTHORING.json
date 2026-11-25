@@ -1,0 +1,32 @@
+{
+  "schema": "frontier-included-codex-sqlite-control-authorship-v1",
+  "author_context": "One included Codex sibling session with an input-only handoff in the same administrative environment",
+  "case_count": 3,
+  "cases_sha256": "738bfc3db56d4ece5af8a4896280c6fa98f729a7d0dce4d714e4d54c0ec60253",
+  "predictions_sha256": "091032dd67167cb3120eeca9f5b4ea966d362652f624fa12d4cd1a805115e07f",
+  "execution_sha256": "14499268936eaf3fa5bda8e2d5886e997fd2c6472649f4092834c35ec22410a6",
+  "runner_sha256": "b8a5877553de627c54a2a0a1b212bf583e582e8a83fbb5bf5c1d67eb41cf9739",
+  "timing_scope": "Observed local wall-clock sample before reading input case bodies through authoring, execution, output freezing and review of primary results. Clock precision is one second. Time before the input handoff and independent evaluation are outside this interval.",
+  "started_at_utc": "2026-11-25T14:20:17Z",
+  "predictions_frozen_at_utc": "2026-11-25T14:21:13Z",
+  "elapsed_seconds": 56,
+  "input_policy": "Authorized synthetic initial cases and public protocol only. No held outputs, oracle, withheld-use rows or evaluation feedback were consulted when constructing or freezing the response.",
+  "execution": {
+    "python": "3.12.14",
+    "sqlite": "3.53.1",
+    "observed_queries": 3,
+    "run_wall_ns": 1165485,
+    "run_cpu_ns": 1163613,
+    "method": "One SQLite memory database per case. Load the authorized strict schema, enable query_only, run a reusable SELECT, and reduce exact rational text with Fraction. The missing-pair query names the affected cycle and field without running an aggregate on partial data. No execution cycle required a repair."
+  },
+  "resources": {
+    "public_source_reads": 0,
+    "separately_billable_model_requests": 0,
+    "workspace_external_spend_usd": 0,
+    "included_model_exact_identity": null,
+    "included_model_token_usage": null,
+    "included_model_compute_cost": null,
+    "complete_cost": null
+  },
+  "qualification_scope": "Exploratory assisted comparison after primary registration. Different model compute and execution context. The frozen responses have no score in this receipt and do not alter registered materiality."
+}

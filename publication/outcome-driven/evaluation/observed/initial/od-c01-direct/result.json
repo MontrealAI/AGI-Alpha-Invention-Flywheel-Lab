@@ -1,0 +1,50 @@
+{
+  "action_attempts": 1,
+  "actual_tool_events": 1,
+  "approved_runs": [
+    {
+      "held_reuse": {
+        "input_sha256": "82029493c704906fedb41cf2ba4d26570c3ae49cad4624b4710d4cb732d186ff",
+        "matched": true,
+        "output_sha256": "fbae533e359f761c7730a3f71b8ad7b8bf71a86568973be4cf1ab9a4f38452d8",
+        "rows": [
+          [
+            "452/789"
+          ]
+        ]
+      },
+      "primary_exact": true,
+      "query": "WITH filtered_journeys AS (SELECT journeys.capacity, journeys.minutes, journeys.occupied FROM journeys JOIN services ON journeys.line_id = services.line_id WHERE services.scope = 'regular' AND journeys.state = 'operated'), aggregated AS (SELECT SUM(occupied * minutes) AS total_occupied_time, SUM(capacity * minutes) AS total_capacity_time FROM filtered_journeys) SELECT total_occupied_time || '/' || total_capacity_time AS occupancy_ratio FROM aggregated;"
+    }
+  ],
+  "arm": "direct",
+  "case": "od-c01",
+  "complete_economic_cost_known": false,
+  "false_user_facing_acceptance": false,
+  "final_response": {
+    "decision": "ABSTAIN",
+    "explanation": "The query is valid and would calculate the seat-time occupancy ratio for regular campus shuttle service. However, the line_id 'airport' in the services table has a scope of 'charter', which is excluded. The query would only include the 'harbor' and 'orchard' lines, which are regular. The calculation would be (7*11 + 11*19 + 5*17) / (13*11 + 14*19 + 13*17) = (77 + 209 + 85) / (143 + 266 + 221) = 371 / 630 = 371/630.",
+    "missing": [
+      "The query requires joining journeys with services on line_id, filtering for scope='regular' and state='operated'. However, the line_id 'airport' in the services"
+    ],
+    "queries": [
+      "WITH filtered_journeys AS (SELECT journeys.capacity, journeys.minutes, journeys.occupied FROM journeys JOIN services ON journeys.line_id = services.line_id WHERE services.scope = 'regular' AND journeys.state = 'operated'), aggregated AS (SELECT SUM(occupied * minutes) AS total_occupied_time, SUM(capacity * minutes) AS total_capacity_time FROM filtered_journeys) SELECT total_occupied_time || '/' || total_capacity_time AS occupancy_ratio FROM aggregated;"
+    ],
+    "result": {}
+  },
+  "observed_provider_dispatches": 1,
+  "observed_usage": {
+    "observed_tokens_in": 550,
+    "observed_tokens_out": 329,
+    "unknown_token_replies": 0
+  },
+  "operator_actions_after_case_start": 0,
+  "operator_preparation_and_review_seconds": null,
+  "orchestrator_cpu_seconds": 0.09325800000000006,
+  "paid_requests": 0,
+  "provider_elapsed_seconds": 131.56239266599732,
+  "reusable_on_withheld": true,
+  "task_elapsed_seconds": 131.65387864600052,
+  "verdict": "FAIL",
+  "verified_primary": false
+}

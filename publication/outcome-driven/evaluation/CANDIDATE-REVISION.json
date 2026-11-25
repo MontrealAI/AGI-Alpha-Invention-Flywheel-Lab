@@ -1,0 +1,32 @@
+{
+  "checked_at_utc": "2026-11-25T14:32:17.475109+00:00",
+  "freeze_sha256": "4e5c7c2f9393b0bad7e8e6e01d9fa400563ffd1f967686c4aa595e3295aec123",
+  "git_revision_comparisons": {
+    "5955c08d36d31b77a310720ae2ba17142fca9794": {
+      "different": {},
+      "paths": 34,
+      "same": 34
+    },
+    "f61020768e0a1e18da46e6c1a3426bef63c9a925": {
+      "different": {},
+      "paths": 34,
+      "same": 34
+    }
+  },
+  "review_corrected_release_candidate": {
+    "changed_paths": {
+      "products/alpha-genesis-harness/bridge/mission_schema_context.py": {
+        "experiment": "d80f99dc5d1bae55f3cf8e4bc1667508b66be08d9835bd9581b5788cd1593b59",
+        "review_corrected": "9829f19ec2fb180ab30bf358e97e354e0ded30e2771f231484193b2e97fd5547"
+      },
+      "products/alpha-genesis-harness/bridge/universal_missions.py": {
+        "experiment": "cba68e523973f01ed299353aae6fbea18b2a9f5c21e606f7cf69519f88c3eb68",
+        "review_corrected": "42d4037a83b616fed050a5d3b3bb764496be33a08fcaec74bc87a34c113ca8ab"
+      }
+    },
+    "matched_paths": 32,
+    "revision": "2dcf1f252e7bb6eff528a2ef60e3314cab477e88",
+    "scope": "Code review corrected a contradictory explicit-schema declaration fallthrough. The registered synthetic missions used valid data with no explicit conflict. The measured model trials used the pre-correction frozen source. The review-corrected code was not used to rerun those trials."
+  },
+  "scope": "Exact content map of every source path consumed by the evaluation runner. Git trees include other application files outside comparison."
+}

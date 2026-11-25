@@ -1,0 +1,558 @@
+{
+  "assisted_control": {
+    "archived_input_sha256": "250c6be984cc8b6296917bb9d884f5ba2a9751cb19d1e07d227fed5ff61c0901",
+    "historical_bytes_sha256": "195792f6e0bf1a52000f9ea3f59324f37ce722606e9b76b76de801487e323be7",
+    "verified_now": [
+      {
+        "assumptions": {
+          "input_class": "case_author_fixture",
+          "quantity_type": "mixture_balance",
+          "volume_additive": true
+        },
+        "claim_contract_sha256": "0e9f8932236629151eb1f4fd8a21af4f81cc5a3618221f7a266facb0c320e7b8",
+        "dataset": "reservoir",
+        "dimension": "mass_per_volume",
+        "event_sha256": "f0955f7427cb480049c031665cb70e967271a47db929ad8c1a2990191e5d9298",
+        "execution_sha256": "e2ca20c8d77bb2c10d1f6aad9a86ac1155b14c37be1a011fd31db04cc196dc20",
+        "id": "blend_concentration",
+        "reference_tolerance": "0",
+        "source_version": "b2",
+        "status": "VERIFIED",
+        "unit": "mg/L",
+        "value": "60625/78"
+      },
+      {
+        "assumptions": {
+          "input_class": "case_author_fixture",
+          "quantity_type": "mixture_balance",
+          "volume_additive": true
+        },
+        "claim_contract_sha256": "7c2061dc0259db9c4f8ba782676b2038be6862f733088a301c65ddd849a82ae3",
+        "dataset": "reservoir",
+        "dimension": "mass",
+        "event_sha256": "5f6061105875d9b88a10ccabc0500e6d3111870ab46eedf1cc929c3af2209cc0",
+        "execution_sha256": "816669e7842c3b452f89c76244f4372169097f888354fa3feacd44d9f3a50439",
+        "id": "solute_mass",
+        "reference_tolerance": "0",
+        "source_version": "b2",
+        "status": "VERIFIED",
+        "unit": "mg",
+        "value": "7275/2"
+      },
+      {
+        "assumptions": {
+          "input_class": "case_author_fixture",
+          "quantity_type": "mixture_balance",
+          "volume_additive": true
+        },
+        "claim_contract_sha256": "f74076b4d0038687289197109ff25c3fd8f3f6493e61ef61c940240eec6699fd",
+        "dataset": "reservoir",
+        "dimension": "volume",
+        "event_sha256": "74cf0b5c808f9971ca2a60126484e3e45a8798806d042c8611d5cde3c1e26e99",
+        "execution_sha256": "61217720984d07f576168dfa4889cbca2dc65058ec5c6c8e3bf53bd9990061ff",
+        "id": "blend_volume",
+        "reference_tolerance": "0",
+        "source_version": "b2",
+        "status": "VERIFIED",
+        "unit": "L",
+        "value": "117/25"
+      }
+    ]
+  },
+  "classification": "Recorded-artifact replay, zero model requests, no mission rerun or promotion.",
+  "negative_controls": {
+    "changed_input_bytes": {
+      "status": "BLOCKED",
+      "unresolved": [
+        {
+          "claim_contract_sha256": "0e9f8932236629151eb1f4fd8a21af4f81cc5a3618221f7a266facb0c320e7b8",
+          "dataset": "reservoir",
+          "dimension": "mass_per_volume",
+          "id": "blend_concentration",
+          "reason": "INPUT_BYTES_CHANGED",
+          "status": "REJECTED",
+          "unit": "mg/L"
+        },
+        {
+          "claim_contract_sha256": "7c2061dc0259db9c4f8ba782676b2038be6862f733088a301c65ddd849a82ae3",
+          "dataset": "reservoir",
+          "dimension": "mass",
+          "id": "solute_mass",
+          "reason": "INPUT_BYTES_CHANGED",
+          "status": "REJECTED",
+          "unit": "mg"
+        },
+        {
+          "claim_contract_sha256": "f74076b4d0038687289197109ff25c3fd8f3f6493e61ef61c940240eec6699fd",
+          "dataset": "reservoir",
+          "dimension": "volume",
+          "id": "blend_volume",
+          "reason": "INPUT_BYTES_CHANGED",
+          "status": "REJECTED",
+          "unit": "L"
+        }
+      ]
+    },
+    "different_mission_revision": {
+      "status": "BLOCKED",
+      "unresolved": [
+        {
+          "claim_contract_sha256": "0e9f8932236629151eb1f4fd8a21af4f81cc5a3618221f7a266facb0c320e7b8",
+          "dataset": "reservoir",
+          "dimension": "mass_per_volume",
+          "id": "blend_concentration",
+          "reason": "EXECUTION_SCOPE_MISMATCH",
+          "status": "REJECTED",
+          "unit": "mg/L"
+        },
+        {
+          "claim_contract_sha256": "7c2061dc0259db9c4f8ba782676b2038be6862f733088a301c65ddd849a82ae3",
+          "dataset": "reservoir",
+          "dimension": "mass",
+          "id": "solute_mass",
+          "reason": "EXECUTION_SCOPE_MISMATCH",
+          "status": "REJECTED",
+          "unit": "mg"
+        },
+        {
+          "claim_contract_sha256": "f74076b4d0038687289197109ff25c3fd8f3f6493e61ef61c940240eec6699fd",
+          "dataset": "reservoir",
+          "dimension": "volume",
+          "id": "blend_volume",
+          "reason": "EXECUTION_SCOPE_MISMATCH",
+          "status": "REJECTED",
+          "unit": "L"
+        }
+      ]
+    },
+    "synthetic_fixture_substitution": {
+      "status": "BLOCKED",
+      "unresolved": [
+        {
+          "claim_contract_sha256": "0e9f8932236629151eb1f4fd8a21af4f81cc5a3618221f7a266facb0c320e7b8",
+          "dataset": "reservoir",
+          "dimension": "mass_per_volume",
+          "id": "blend_concentration",
+          "message": "La provenance des données est inadmissible pour cette affirmation.",
+          "reason": "INPUT_ORIGIN_INELIGIBLE",
+          "status": "REJECTED",
+          "unit": "mg/L"
+        },
+        {
+          "claim_contract_sha256": "7c2061dc0259db9c4f8ba782676b2038be6862f733088a301c65ddd849a82ae3",
+          "dataset": "reservoir",
+          "dimension": "mass",
+          "id": "solute_mass",
+          "message": "La provenance des données est inadmissible pour cette affirmation.",
+          "reason": "INPUT_ORIGIN_INELIGIBLE",
+          "status": "REJECTED",
+          "unit": "mg"
+        },
+        {
+          "claim_contract_sha256": "f74076b4d0038687289197109ff25c3fd8f3f6493e61ef61c940240eec6699fd",
+          "dataset": "reservoir",
+          "dimension": "volume",
+          "id": "blend_volume",
+          "message": "La provenance des données est inadmissible pour cette affirmation.",
+          "reason": "INPUT_ORIGIN_INELIGIBLE",
+          "status": "REJECTED",
+          "unit": "L"
+        }
+      ]
+    }
+  },
+  "previous_failed_runs": {
+    "eb-f01": {
+      "approved_schema": {
+        "datasets": {
+          "reservoir": {
+            "id": "reservoir",
+            "issues": [],
+            "kind": "table",
+            "lineage": [
+              {
+                "id": "reservoir",
+                "kind": "table",
+                "origin": "AUTHORIZED_MISSION_INPUT",
+                "parents": {},
+                "sha256": "dc4524602b7eac6743c185edddd37625d275ae1a07c335a05cc8e2cf710d7a5f",
+                "version": "b2"
+              }
+            ],
+            "origin": "AUTHORIZED_MISSION_INPUT",
+            "parents": {},
+            "schema": {
+              "batches": {
+                "concentration": "INTEGER",
+                "concentration_unit": "TEXT",
+                "lot": "TEXT",
+                "volume": "INTEGER",
+                "volume_unit": "TEXT"
+              }
+            },
+            "sha256": "dc4524602b7eac6743c185edddd37625d275ae1a07c335a05cc8e2cf710d7a5f",
+            "status": "AVAILABLE",
+            "tables": {
+              "batches": {
+                "fields": {
+                  "concentration": {
+                    "missing_rows": 0,
+                    "null_rows": 0,
+                    "observed_types": [
+                      "INTEGER"
+                    ],
+                    "type": "INTEGER"
+                  },
+                  "concentration_unit": {
+                    "missing_rows": 0,
+                    "null_rows": 0,
+                    "observed_types": [
+                      "TEXT"
+                    ],
+                    "type": "TEXT"
+                  },
+                  "lot": {
+                    "missing_rows": 0,
+                    "null_rows": 0,
+                    "observed_types": [
+                      "TEXT"
+                    ],
+                    "type": "TEXT"
+                  },
+                  "volume": {
+                    "missing_rows": 0,
+                    "null_rows": 0,
+                    "observed_types": [
+                      "INTEGER"
+                    ],
+                    "type": "INTEGER"
+                  },
+                  "volume_unit": {
+                    "missing_rows": 0,
+                    "null_rows": 0,
+                    "observed_types": [
+                      "TEXT"
+                    ],
+                    "type": "TEXT"
+                  }
+                },
+                "row_count": 3
+              }
+            },
+            "version": "b2"
+          }
+        },
+        "omitted_datasets": 0
+      },
+      "archive_sha256": "c12f63dda194824a4815b8e2c3067b4ad44e3fd3f91af60fcb9f8018281df414",
+      "archived_drafts": [],
+      "outcome_status": "UNVERIFIED",
+      "previous_refusals": [
+        "Read access is restricted to this run's declared artifacts.",
+        "TABLE_SQL_ERROR",
+        "TABLE_ARTIFACT_KIND",
+        "TABLE_SCHEMA",
+        "TABLE_SCHEMA"
+      ],
+      "public_archive_bytes_sha256": "f643362e4fd9d96397656122a31e9eb55038c9b13d58310bbb2377ecd5eda779",
+      "recorded_workflow_disposition": "exhausted",
+      "unresolved": [
+        {
+          "claim_contract_sha256": "296e7fc92187a0e839b92d7b29edfc4c9f723250cc6c0de53d30594fa6f17df9",
+          "dataset": "reservoir",
+          "dimension": "mass_per_volume",
+          "id": "blend_concentration",
+          "message": "Exécutez le calcul sur les données approuvées.",
+          "reason": "NO_BOUND_EXECUTION",
+          "status": "ABSTAIN",
+          "unit": "mg/L"
+        },
+        {
+          "claim_contract_sha256": "973a70b5c3561458a0f3884d474fefc94c760504511e4a783ab2768f297d16a0",
+          "dataset": "reservoir",
+          "dimension": "mass",
+          "id": "solute_mass",
+          "message": "Exécutez le calcul sur les données approuvées.",
+          "reason": "NO_BOUND_EXECUTION",
+          "status": "ABSTAIN",
+          "unit": "mg"
+        },
+        {
+          "claim_contract_sha256": "9c7365dcdb87047e81a24e05e0c7da83cf804a6cf798e43253aef1cb59c1c153",
+          "dataset": "reservoir",
+          "dimension": "volume",
+          "id": "blend_volume",
+          "message": "Exécutez le calcul sur les données approuvées.",
+          "reason": "NO_BOUND_EXECUTION",
+          "status": "ABSTAIN",
+          "unit": "L"
+        }
+      ],
+      "verified_conclusions": []
+    },
+    "eb-f02": {
+      "approved_schema": {
+        "datasets": {
+          "shift_ledger": {
+            "id": "shift_ledger",
+            "issues": [],
+            "kind": "table",
+            "lineage": [
+              {
+                "id": "shift_ledger",
+                "kind": "table",
+                "origin": "AUTHORIZED_MISSION_INPUT",
+                "parents": {},
+                "sha256": "bf50822a1a2fe685aeca6a55ca1d85b3e1f82dd3f7da6e4750f7909d487755ea",
+                "version": "s4"
+              }
+            ],
+            "origin": "AUTHORIZED_MISSION_INPUT",
+            "parents": {},
+            "schema": {
+              "ledger": {
+                "accepted": "INTEGER",
+                "attempts": "INTEGER",
+                "lane": "TEXT",
+                "revision": "INTEGER",
+                "state": "TEXT"
+              }
+            },
+            "sha256": "bf50822a1a2fe685aeca6a55ca1d85b3e1f82dd3f7da6e4750f7909d487755ea",
+            "status": "AVAILABLE",
+            "tables": {
+              "ledger": {
+                "fields": {
+                  "accepted": {
+                    "missing_rows": 0,
+                    "null_rows": 0,
+                    "observed_types": [
+                      "INTEGER"
+                    ],
+                    "type": "INTEGER"
+                  },
+                  "attempts": {
+                    "missing_rows": 0,
+                    "null_rows": 0,
+                    "observed_types": [
+                      "INTEGER"
+                    ],
+                    "type": "INTEGER"
+                  },
+                  "lane": {
+                    "missing_rows": 0,
+                    "null_rows": 0,
+                    "observed_types": [
+                      "TEXT"
+                    ],
+                    "type": "TEXT"
+                  },
+                  "revision": {
+                    "missing_rows": 0,
+                    "null_rows": 0,
+                    "observed_types": [
+                      "INTEGER"
+                    ],
+                    "type": "INTEGER"
+                  },
+                  "state": {
+                    "missing_rows": 0,
+                    "null_rows": 0,
+                    "observed_types": [
+                      "TEXT"
+                    ],
+                    "type": "TEXT"
+                  }
+                },
+                "row_count": 8
+              }
+            },
+            "version": "s4"
+          }
+        },
+        "omitted_datasets": 0
+      },
+      "archive_sha256": "c033261b5c7c5197397e48dcc16d2c10f1b1c747f88bc135a4baf4e34e29d8a5",
+      "archived_drafts": [],
+      "outcome_status": "UNVERIFIED",
+      "previous_refusals": [
+        "TABLE_SQL_ERROR",
+        "TABLE_SQL_ERROR",
+        "TABLE_SQL_ERROR"
+      ],
+      "public_archive_bytes_sha256": "69ad8be805e054ec2ae644bf3ad5f5be78786e04e21b6159f7a69e51193b65b2",
+      "recorded_workflow_disposition": "exhausted",
+      "unresolved": [
+        {
+          "claim_contract_sha256": "ba1240565e59d41aa598347e7695667db30431a50c40b831fcef051efeda132c",
+          "dataset": "shift_ledger",
+          "dimension": "dimensionless",
+          "id": "acceptance_ratio",
+          "message": "Run the calculation against its approved inputs.",
+          "reason": "NO_BOUND_EXECUTION",
+          "status": "ABSTAIN",
+          "unit": "ratio"
+        },
+        {
+          "claim_contract_sha256": "9a96771e7c82c116d323db48f080f9ae2a436e767831d8c3cb3bdf54a326291f",
+          "dataset": "shift_ledger",
+          "dimension": "count",
+          "id": "accepted_total",
+          "message": "Run the calculation against its approved inputs.",
+          "reason": "NO_BOUND_EXECUTION",
+          "status": "ABSTAIN",
+          "unit": "count"
+        },
+        {
+          "claim_contract_sha256": "a6e9dd4537efde7ab68ad09506fea75013751bd04b6c407521dc1b8f6f299314",
+          "dataset": "shift_ledger",
+          "dimension": "count",
+          "id": "attempt_total",
+          "message": "Run the calculation against its approved inputs.",
+          "reason": "NO_BOUND_EXECUTION",
+          "status": "ABSTAIN",
+          "unit": "count"
+        }
+      ],
+      "verified_conclusions": []
+    },
+    "eb-f03": {
+      "approved_schema": {
+        "datasets": {
+          "line_log": {
+            "id": "line_log",
+            "issues": [],
+            "kind": "table",
+            "lineage": [
+              {
+                "id": "line_log",
+                "kind": "table",
+                "origin": "AUTHORIZED_MISSION_INPUT",
+                "parents": {},
+                "sha256": "07c991673d1b4235d06c84b56534c7f98e900b06e985ed10c9520639a517df6c",
+                "version": "j3"
+              }
+            ],
+            "missing_requirements": [
+              {
+                "path": [
+                  "logs",
+                  "minutes"
+                ],
+                "unavailable_rows": 1
+              }
+            ],
+            "origin": "AUTHORIZED_MISSION_INPUT",
+            "parents": {},
+            "schema": {
+              "logs": {
+                "litres": "INTEGER",
+                "minutes": "INTEGER",
+                "session": "TEXT"
+              }
+            },
+            "sha256": "07c991673d1b4235d06c84b56534c7f98e900b06e985ed10c9520639a517df6c",
+            "status": "AVAILABLE",
+            "tables": {
+              "logs": {
+                "fields": {
+                  "litres": {
+                    "missing_rows": 0,
+                    "null_rows": 0,
+                    "observed_types": [
+                      "INTEGER"
+                    ],
+                    "type": "INTEGER"
+                  },
+                  "minutes": {
+                    "missing_rows": 0,
+                    "null_rows": 1,
+                    "observed_types": [
+                      "INTEGER"
+                    ],
+                    "type": "INTEGER"
+                  },
+                  "session": {
+                    "missing_rows": 0,
+                    "null_rows": 0,
+                    "observed_types": [
+                      "TEXT"
+                    ],
+                    "type": "TEXT"
+                  }
+                },
+                "row_count": 3
+              }
+            },
+            "version": "j3"
+          }
+        },
+        "omitted_datasets": 0
+      },
+      "archive_sha256": "fc2061496de89e0c72a1a976dcbcc8a413ebd92c44b33b7d5d567832d63bd9ab",
+      "archived_drafts": [
+        "Le débit agrégé en L/min pour les trois séances d'essai de la ligne est calculé. Pour la séance 'ligne-9', le débit est de 2,7647 L/min (47 litres / 17 minutes). Pour la séance 'ligne-11', la mesure est absente car la durée (minutes) est nulle. Pour la séance 'ligne-14', le débit est de 2,3939 L/min (79 litres / 33 minutes). Aucune mesure n'a été remplacée. Le résultat final est une somme des débits des séances valides."
+      ],
+      "outcome_status": "ABSTAIN",
+      "previous_refusals": [
+        "TABLE_SQL_ERROR",
+        "TABLE_ARTIFACT_KIND",
+        "TABLE_SQL_ERROR",
+        "TABLE_SQL_ERROR"
+      ],
+      "public_archive_bytes_sha256": "b23ae7636495a27b186cde4c9666021f8fe98f1a339e6d9124d650638fbaae1f",
+      "recorded_workflow_disposition": "exhausted",
+      "unresolved": [
+        {
+          "claim_contract_sha256": "8ec7f236a6a8e33d6665ccf9049fae50ecd9564bbd7c72053ee4f231f03ff776",
+          "dataset": "line_log",
+          "dimension": "volume_per_time",
+          "id": "flow_rate",
+          "message": "Un champ ou une observation requise manque.",
+          "missing": [
+            {
+              "label": "logs[1].minutes",
+              "path": [
+                "logs",
+                "minutes"
+              ],
+              "row_index": 1
+            }
+          ],
+          "missing_truncated": false,
+          "reason": "REQUIRED_FIELD_MISSING",
+          "status": "ABSTAIN",
+          "unit": "L/min"
+        }
+      ],
+      "verified_conclusions": []
+    },
+    "eb-f04": {
+      "approved_schema": {
+        "datasets": {},
+        "omitted_datasets": 0
+      },
+      "archive_sha256": "3b9f739a07468379851adae4a62f31f8dc8ecd49d3f74115ec899350235849e7",
+      "archived_drafts": [],
+      "outcome_status": "UNVERIFIED",
+      "previous_refusals": [
+        "Use an exact allowlisted HTTPS host resolving only to public addresses.",
+        "Use an exact allowlisted HTTPS host resolving only to public addresses.",
+        "Source provenance filename must end in .json.",
+        "Source provenance filename must end in .json.",
+        "Use an exact allowlisted HTTPS host resolving only to public addresses.",
+        "Use an exact allowlisted HTTPS host resolving only to public addresses."
+      ],
+      "public_archive_bytes_sha256": "87a8d5628044a32f7b6b9a65852981040c3faa460db5ce0c9f0315ec607c6dae",
+      "recorded_workflow_disposition": "exhausted",
+      "unresolved": [],
+      "verified_conclusions": []
+    }
+  },
+  "source_bytes_sha256": {
+    "mission_evidence.py": "241e266745ee7c884afe02fc3362e27ef5e3c5a4be1d7b3b0288e5b799c00919",
+    "mission_outcomes.py": "cd8b954d573f590afde750cbe3e343cf4b3f89c66425d563eca80637167aacc1",
+    "mission_schema_context.py": "d80f99dc5d1bae55f3cf8e4bc1667508b66be08d9835bd9581b5788cd1593b59"
+  },
+  "unsupported_admitted": 0
+}

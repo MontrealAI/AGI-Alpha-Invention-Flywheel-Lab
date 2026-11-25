@@ -1,0 +1,202 @@
+{
+  "files": {},
+  "notice": "Contains your objective, context and artifacts. Inspect before sharing. No connector credentials or workspace integrity key included. Recorded verification is historical; recheck imported work.",
+  "schema": "alpha-genesis-workflow-export/v1",
+  "sha256": "8a921d09f4debf4aee8b900d82e96eadf389d2f911b37e7ad67fd13d4e238f8c",
+  "state": {
+    "actions": 0,
+    "adversarial_cases": [],
+    "artifacts": {},
+    "capability_id": null,
+    "created_at": "2026-11-25T14:17:39.781921+00:00",
+    "epoch": 0,
+    "events": [
+      {
+        "at": "2026-11-25T14:17:39.781933+00:00",
+        "detail": {
+          "acceptance_source": "Operator-frozen conditions; independence is not inferred.",
+          "spec_hash": "337c5886c175a4a5d5322832600e92bcbb40422f5012b91f9845e1888ec94e65"
+        },
+        "index": 0,
+        "kind": "created",
+        "previous": "0000000000000000000000000000000000000000000000000000000000000000",
+        "sha256": "a98bd30e31c9250ff8d7aac5be877c6488ffc1734b7899aab676f2dacba317ce"
+      },
+      {
+        "at": "2026-11-25T14:17:39.797112+00:00",
+        "detail": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "role": "builder",
+          "scope": "Waiting for selected service capacity; no model call or construction iteration consumed."
+        },
+        "index": 1,
+        "kind": "model_queued",
+        "previous": "a98bd30e31c9250ff8d7aac5be877c6488ffc1734b7899aab676f2dacba317ce",
+        "sha256": "4607a502caa32c7b3b97f56df7302c12678f57a2c6482c825c4f2b43475ef61a"
+      },
+      {
+        "at": "2026-11-25T14:17:39.808860+00:00",
+        "detail": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "role": "builder",
+          "run_id": "wf_ebe5f3c61c0a99c81e390220_d147e37711436c8e"
+        },
+        "index": 2,
+        "kind": "model_started",
+        "previous": "4607a502caa32c7b3b97f56df7302c12678f57a2c6482c825c4f2b43475ef61a",
+        "sha256": "f8bd9e0f7342ed2443e58598ee6a36ee6c3e7ca00267b3a5585bc24eb6ee4b0b"
+      },
+      {
+        "at": "2026-11-25T14:20:34.920335+00:00",
+        "detail": {
+          "code": "PROVIDER_CONNECTION",
+          "message": "Model request failed. Its provider allowance or cost may have been consumed; inspect connection before explicitly resuming.",
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "role": "builder",
+          "run_id": "wf_ebe5f3c61c0a99c81e390220_d147e37711436c8e",
+          "session_budget_snapshot": {
+            "committed": 0.0,
+            "currency": "USD",
+            "limit": 0.0,
+            "locked": false,
+            "remaining": 0.0,
+            "reserved": 0.0,
+            "scope": "process-session"
+          },
+          "usage_status": "UNKNOWN"
+        },
+        "index": 3,
+        "kind": "model_error",
+        "previous": "f8bd9e0f7342ed2443e58598ee6a36ee6c3e7ca00267b3a5585bc24eb6ee4b0b",
+        "sha256": "eb07b23beb8152cdf5917f2e5ecaa8b5e7d1841ad6fe9417343ebc0d1d635c3d"
+      }
+    ],
+    "feedback": "",
+    "id": "wf_ebe5f3c61c0a99c81e390220",
+    "inflight": null,
+    "iteration": 1,
+    "model_call_limit": 2,
+    "model_calls": 1,
+    "phase": "builder",
+    "research": "",
+    "schema": "alpha-genesis-workflow/v1",
+    "spec": {
+      "acceptance": [],
+      "context": "Diviser la somme de toutes les énergies mesurées (J) par la somme de toutes les durées correspondantes (s), pour obtenir des watts. Les deux mesures sont nécessaires pour chaque cycle. Identifier toute cellule indisponible par table, index de ligne à partir de zéro et colonne, ou par cycle et colonne. Ne pas remplacer les durées manquantes ni recalculer sur un sous-ensemble.\nSchema of the authorized tables: {\"mesures\":{\"cycle\":\"TEXT\",\"duree_s\":\"INTEGER\",\"energie_j\":\"INTEGER\"}}",
+      "local_only": true,
+      "max_actions": 10,
+      "max_iterations": 2,
+      "max_operations": 10000,
+      "max_output_tokens": 560,
+      "mission": {
+        "expires_at": "2026-11-25T14:32:39.779830+00:00",
+        "language": "fr",
+        "original_ambition": "Déterminez la puissance moyenne exacte de ce banc d’essai sur tous les cycles autorisés. Si une mesure appariée requise manque, indiquez précisément la cellule et abstenez-vous de donner la puissance totale.",
+        "requirements": {
+          "approved_tables": {
+            "cycles-banc-39": {
+              "mesures": [
+                {
+                  "cycle": "tulipe-7",
+                  "duree_s": 13,
+                  "energie_j": 83
+                },
+                {
+                  "cycle": "piquet-5",
+                  "duree_s": null,
+                  "energie_j": 127
+                },
+                {
+                  "cycle": "verre-2",
+                  "duree_s": 17,
+                  "energie_j": 214
+                },
+                {
+                  "cycle": "satin-4",
+                  "duree_s": 9,
+                  "energie_j": 77
+                }
+              ]
+            }
+          },
+          "evidence": {
+            "claims": [
+              {
+                "dataset": "cycles-banc-39",
+                "dimension": "energy/time",
+                "id": "puissance",
+                "locator": [
+                  "rows",
+                  0,
+                  0
+                ],
+                "required_fields": [
+                  [
+                    "mesures",
+                    "cycle"
+                  ],
+                  [
+                    "mesures",
+                    "duree_s"
+                  ],
+                  [
+                    "mesures",
+                    "energie_j"
+                  ]
+                ],
+                "requires": {
+                  "missing_value": "null",
+                  "require_all_pairs": true,
+                  "scope": "all cycles"
+                },
+                "tool": "run_table",
+                "unit": "W",
+                "version": "energie-temps-v1"
+              }
+            ],
+            "inputs": {
+              "cycles-banc-39": {
+                "facts": {
+                  "missing_value": "null",
+                  "require_all_pairs": true,
+                  "scope": "all cycles"
+                },
+                "kind": "table",
+                "origin": "AUTHORIZED_MISSION_INPUT",
+                "sha256": "3bff180e1964ea3167275bd3deeeccd1832c3c81334deb1bd439f0c99ac0a702",
+                "version": "energie-temps-v1"
+              }
+            }
+          }
+        },
+        "schema": "frontier-universal-execution/v1"
+      },
+      "objective": "Déterminez la puissance moyenne exacte de ce banc d’essai sur tous les cycles autorisés. Si une mesure appariée requise manque, indiquez précisément la cellule et abstenez-vous de donner la puissance totale.",
+      "roles": {
+        "builder": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp"
+        }
+      },
+      "strategy": "single-model",
+      "tool_permissions": [
+        "construct_table",
+        "run_table",
+        "read_artifact",
+        "write_document"
+      ]
+    },
+    "spec_hash": "337c5886c175a4a5d5322832600e92bcbb40422f5012b91f9845e1888ec94e65",
+    "status": "paused",
+    "unadjudicated_counterexamples": [],
+    "updated_at": "2026-11-25T14:20:34.920335+00:00",
+    "verification": {
+      "checks": [],
+      "passed": false,
+      "scope": "No checks executed."
+    }
+  }
+}

@@ -1,0 +1,38 @@
+[
+  {
+    "decision": "ANSWER",
+    "explanation": "The numerator counts occupied seat-minutes and the denominator counts capacity seat-minutes over the same operated journeys with regular service.",
+    "id": "od-c01",
+    "missing": [],
+    "queries": [
+      "SELECT CAST(SUM(j.occupied * j.minutes) AS TEXT) || '/' ||\n       CAST(SUM(j.capacity * j.minutes) AS TEXT) AS occupancy\n  FROM journeys AS j\n  JOIN services AS s ON j.line_id = s.line_id\n WHERE j.state = 'operated' AND s.scope = 'regular'\nHAVING SUM(j.capacity * j.minutes) > 0"
+    ],
+    "result": {
+      "occupancy": "53/90"
+    }
+  },
+  {
+    "decision": "ANSWER",
+    "explanation": "Les charges sont converties en kg et les distances en m. La somme entière des kg·m est divisée exactement par un million pour obtenir des t·km.",
+    "id": "od-c02",
+    "missing": [],
+    "queries": [
+      "WITH conversions AS (\n    SELECT CASE u_charge WHEN 'kg' THEN charge WHEN 't' THEN charge * 1000 END AS kg,\n           CASE u_trajet WHEN 'm' THEN trajet WHEN 'km' THEN trajet * 1000 END AS m\n      FROM expeditions\n)\nSELECT CAST(SUM(kg * m) AS TEXT) || '/1000000' AS travail\n  FROM conversions\nHAVING COUNT(*) > 0 AND COUNT(kg) = COUNT(*) AND COUNT(m) = COUNT(*)"
+    ],
+    "result": {
+      "travail": "857549/40000"
+    }
+  },
+  {
+    "decision": "ABSTAIN",
+    "explanation": "Mesure requise manquante pour piquet-5.duree_s. La puissance moyenne de tous les cycles est indéterminée.",
+    "id": "od-c03",
+    "missing": [
+      "mesures[1].duree_s"
+    ],
+    "queries": [
+      "SELECT cycle, 'duree_s' AS field FROM mesures WHERE duree_s IS NULL\nUNION ALL\nSELECT cycle, 'energie_j' AS field FROM mesures WHERE energie_j IS NULL\nORDER BY cycle, field"
+    ],
+    "result": {}
+  }
+]

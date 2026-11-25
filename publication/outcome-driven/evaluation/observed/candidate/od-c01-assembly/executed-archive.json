@@ -1,0 +1,377 @@
+{
+  "files": {},
+  "notice": "Contains your objective, context and artifacts. Inspect before sharing. No connector credentials or workspace integrity key included. Recorded verification is historical; recheck imported work.",
+  "schema": "alpha-genesis-workflow-export/v1",
+  "sha256": "4919e45f6a7a7274add073ee4539a127bccda2b0a88686caaa7bfdaa59ddac7d",
+  "state": {
+    "actions": 1,
+    "adversarial_cases": [],
+    "artifacts": {},
+    "capability_id": null,
+    "created_at": "2026-11-25T14:31:07.896448+00:00",
+    "epoch": 0,
+    "events": [
+      {
+        "at": "2026-11-25T14:31:07.896457+00:00",
+        "detail": {
+          "acceptance_source": "Operator-frozen conditions; independence is not inferred.",
+          "spec_hash": "65ad7577dc2021cb923f3b38a821ad126e9c7770281377f7966fe371dfd6e3de"
+        },
+        "index": 0,
+        "kind": "created",
+        "previous": "0000000000000000000000000000000000000000000000000000000000000000",
+        "sha256": "789fdfb0365980d5960595fb3edf74ed74e023819ff819c96bbf053f04ce2068"
+      },
+      {
+        "at": "2026-11-25T14:31:07.899814+00:00",
+        "detail": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "role": "builder",
+          "scope": "Waiting for selected service capacity; no model call or construction iteration consumed."
+        },
+        "index": 1,
+        "kind": "model_queued",
+        "previous": "789fdfb0365980d5960595fb3edf74ed74e023819ff819c96bbf053f04ce2068",
+        "sha256": "696d8297cd170c87da8cd0b380ab261c2d2be12e2be034c49e1cccdf221459ba"
+      },
+      {
+        "at": "2026-11-25T14:31:07.901831+00:00",
+        "detail": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "role": "builder",
+          "run_id": "wf_5c4944d970a87f113dbf8d05_6ef5f3b75f7f278b"
+        },
+        "index": 2,
+        "kind": "model_started",
+        "previous": "696d8297cd170c87da8cd0b380ab261c2d2be12e2be034c49e1cccdf221459ba",
+        "sha256": "b1531372c69f5d26e84b2a4dbf187af375445577bb4c4f26782d6166852ccb3b"
+      },
+      {
+        "at": "2026-11-25T14:31:49.140677+00:00",
+        "detail": {
+          "cost": {
+            "accounted": 0.0,
+            "amount": 0.0,
+            "attempts": 1,
+            "basis": "reported_usage_at_user_rates",
+            "complete_cost_known": false,
+            "currency": "USD"
+          },
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+          "reported_model": "qwen3-8b-q4_k_m",
+          "requested_model": "qwen3-8b-q4_k_m",
+          "response_sha256": "dbc55979aa77111894d6be7834999849aadb1d071b6936cb02799ee481138614",
+          "role": "builder",
+          "run_id": "wf_5c4944d970a87f113dbf8d05_6ef5f3b75f7f278b",
+          "usage": {
+            "input_tokens": 1164,
+            "output_tokens": 138
+          }
+        },
+        "index": 3,
+        "kind": "model_completed",
+        "previous": "b1531372c69f5d26e84b2a4dbf187af375445577bb4c4f26782d6166852ccb3b",
+        "sha256": "d56a1dc8d0cc0b1aa4287b75eabf91971e32081b77f10cc79c5fb0c928404595"
+      },
+      {
+        "at": "2026-11-25T14:31:49.140725+00:00",
+        "detail": {
+          "disposition": "PROPOSED",
+          "proposed_actions": 1,
+          "summary": "Start by constructing a table to calculate the seat-time occupancy ratio using the provided development dataset."
+        },
+        "index": 4,
+        "kind": "route_proposed",
+        "previous": "d56a1dc8d0cc0b1aa4287b75eabf91971e32081b77f10cc79c5fb0c928404595",
+        "sha256": "71fc9679cdb9a67fd3286b42b5de61836c37f8a49652da757e28150b5a5bc65b"
+      },
+      {
+        "at": "2026-11-25T14:31:49.178272+00:00",
+        "detail": {
+          "proposal_fields": [
+            "name",
+            "schema",
+            "sql",
+            "tool"
+          ],
+          "reason": "TABLE_SQL_ERROR",
+          "tool": "construct_table"
+        },
+        "index": 5,
+        "kind": "tool_refused",
+        "previous": "71fc9679cdb9a67fd3286b42b5de61836c37f8a49652da757e28150b5a5bc65b",
+        "sha256": "63617ee8f5719d1cb7b0164b2ee2fd42b15957bc989a9a536194e4318cc03a1f"
+      },
+      {
+        "at": "2026-11-25T14:31:49.180411+00:00",
+        "detail": {
+          "artifact_hashes": {},
+          "checks": [],
+          "passed": false,
+          "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification.",
+          "spec_hash": "65ad7577dc2021cb923f3b38a821ad126e9c7770281377f7966fe371dfd6e3de"
+        },
+        "index": 6,
+        "kind": "verification",
+        "previous": "63617ee8f5719d1cb7b0164b2ee2fd42b15957bc989a9a536194e4318cc03a1f",
+        "sha256": "b1efd6f75c113384eb74da04dd183211fa83d01a045877e60382dab957f75343"
+      },
+      {
+        "at": "2026-11-25T14:31:49.180531+00:00",
+        "detail": {
+          "claims": [
+            {
+              "id": "occupancy",
+              "reason": "NO_BOUND_EXECUTION",
+              "status": "ABSTAIN"
+            }
+          ],
+          "status": "ABSTAIN"
+        },
+        "index": 7,
+        "kind": "claim_dispositions",
+        "previous": "b1efd6f75c113384eb74da04dd183211fa83d01a045877e60382dab957f75343",
+        "sha256": "4a36a035016b13e32fc99773ff1ccc5e67e893e93113d8157a4c69c61e1bc654"
+      },
+      {
+        "at": "2026-11-25T14:31:49.183810+00:00",
+        "detail": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "role": "builder",
+          "scope": "Waiting for selected service capacity; no model call or construction iteration consumed."
+        },
+        "index": 8,
+        "kind": "model_queued",
+        "previous": "4a36a035016b13e32fc99773ff1ccc5e67e893e93113d8157a4c69c61e1bc654",
+        "sha256": "839deab3b1c54a7f78b9862a251264fdb72cb1d1a5b6bd28fb6835b069e2e58b"
+      },
+      {
+        "at": "2026-11-25T14:31:49.187263+00:00",
+        "detail": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "role": "builder",
+          "run_id": "wf_5c4944d970a87f113dbf8d05_48996bdbd942a48e"
+        },
+        "index": 9,
+        "kind": "model_started",
+        "previous": "839deab3b1c54a7f78b9862a251264fdb72cb1d1a5b6bd28fb6835b069e2e58b",
+        "sha256": "384249f4cc7d47cfe4ede0e2e797bed2089b5329999563ea30f6bf2f9da5b581"
+      },
+      {
+        "at": "2026-11-25T14:33:13.312798+00:00",
+        "detail": {
+          "code": "PROVIDER_RESPONSE",
+          "message": "Model request failed. Its provider allowance or cost may have been consumed; inspect connection before explicitly resuming.",
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "role": "builder",
+          "run_id": "wf_5c4944d970a87f113dbf8d05_48996bdbd942a48e",
+          "session_budget_snapshot": {
+            "committed": 0.0,
+            "currency": "USD",
+            "limit": 0.0,
+            "locked": false,
+            "remaining": 0.0,
+            "reserved": 0.0,
+            "scope": "process-session"
+          },
+          "usage_status": "UNKNOWN"
+        },
+        "index": 10,
+        "kind": "model_error",
+        "previous": "384249f4cc7d47cfe4ede0e2e797bed2089b5329999563ea30f6bf2f9da5b581",
+        "sha256": "d69fd1f70f6a233e99aa2530eea0b7659ea4f6e6b157bba375e3cb80b96bc326"
+      }
+    ],
+    "feedback": "Resolve the unverified registered claims with authorized inputs: [{\"id\":\"occupancy\",\"reason\":\"NO_BOUND_EXECUTION\",\"status\":\"ABSTAIN\"}]",
+    "id": "wf_5c4944d970a87f113dbf8d05",
+    "inflight": null,
+    "iteration": 2,
+    "model_call_limit": 2,
+    "model_calls": 2,
+    "phase": "builder",
+    "research": "",
+    "schema": "alpha-genesis-workflow/v1",
+    "spec": {
+      "acceptance": [],
+      "context": "Join journeys.line_id to services.line_id, whose key is unique. The rows have no missing required measurements. Include scope=regular and state=operated only. Divide the sum of occupied seats times minutes by the sum of offered capacity times minutes over those same trips. Minutes and capacities are positive. Supply one exact rational result in the sole output column.\nSchema of the authorized tables: {\"journeys\":{\"capacity\":\"INTEGER\",\"departure\":\"TEXT\",\"line_id\":\"TEXT\",\"minutes\":\"INTEGER\",\"occupied\":\"INTEGER\",\"state\":\"TEXT\"},\"services\":{\"line_id\":\"TEXT\",\"scope\":\"TEXT\"}}",
+      "local_only": true,
+      "max_actions": 10,
+      "max_iterations": 2,
+      "max_operations": 10000,
+      "max_output_tokens": 560,
+      "mission": {
+        "expires_at": "2026-11-25T14:46:07.895503+00:00",
+        "language": "en",
+        "original_ambition": "Build and run a reusable exact calculator for the seat-time occupancy ratio of regular campus shuttle service. Exclude cancelled trips and charter service. Give the fraction for my authorized records.",
+        "requirements": {
+          "approved_tables": {
+            "mobility-bay-16": {
+              "journeys": [
+                {
+                  "capacity": 13,
+                  "departure": "u14",
+                  "line_id": "harbor",
+                  "minutes": 11,
+                  "occupied": 7,
+                  "state": "operated"
+                },
+                {
+                  "capacity": 14,
+                  "departure": "u15",
+                  "line_id": "orchard",
+                  "minutes": 19,
+                  "occupied": 11,
+                  "state": "operated"
+                },
+                {
+                  "capacity": 13,
+                  "departure": "u16",
+                  "line_id": "harbor",
+                  "minutes": 8,
+                  "occupied": 0,
+                  "state": "cancelled"
+                },
+                {
+                  "capacity": 20,
+                  "departure": "u17",
+                  "line_id": "airport",
+                  "minutes": 33,
+                  "occupied": 18,
+                  "state": "operated"
+                },
+                {
+                  "capacity": 13,
+                  "departure": "u18",
+                  "line_id": "harbor",
+                  "minutes": 17,
+                  "occupied": 5,
+                  "state": "operated"
+                }
+              ],
+              "services": [
+                {
+                  "line_id": "harbor",
+                  "scope": "regular"
+                },
+                {
+                  "line_id": "orchard",
+                  "scope": "regular"
+                },
+                {
+                  "line_id": "airport",
+                  "scope": "charter"
+                }
+              ]
+            }
+          },
+          "evidence": {
+            "claims": [
+              {
+                "dataset": "mobility-bay-16",
+                "dimension": "seat-time/seat-time",
+                "id": "occupancy",
+                "locator": [
+                  "rows",
+                  0,
+                  0
+                ],
+                "reference": {
+                  "source": "Independent exact study reference",
+                  "value": "53/90"
+                },
+                "required_fields": [
+                  [
+                    "journeys",
+                    "capacity"
+                  ],
+                  [
+                    "journeys",
+                    "departure"
+                  ],
+                  [
+                    "journeys",
+                    "line_id"
+                  ],
+                  [
+                    "journeys",
+                    "minutes"
+                  ],
+                  [
+                    "journeys",
+                    "occupied"
+                  ],
+                  [
+                    "journeys",
+                    "state"
+                  ],
+                  [
+                    "services",
+                    "line_id"
+                  ],
+                  [
+                    "services",
+                    "scope"
+                  ]
+                ],
+                "requires": {
+                  "duration_weighting": "seat-time",
+                  "required_state": "operated",
+                  "service_scope": "regular"
+                },
+                "tool": "run_table",
+                "unit": "ratio",
+                "version": "regular-service-schema-v1"
+              }
+            ],
+            "inputs": {
+              "mobility-bay-16": {
+                "facts": {
+                  "duration_weighting": "seat-time",
+                  "required_state": "operated",
+                  "service_scope": "regular"
+                },
+                "kind": "table",
+                "origin": "AUTHORIZED_MISSION_INPUT",
+                "sha256": "1254123afb7e62f80c924f50959cd8430ae2b4ad6528e82fdc3d04a6b54df491",
+                "version": "regular-service-schema-v1"
+              }
+            }
+          }
+        },
+        "schema": "frontier-universal-execution/v1"
+      },
+      "objective": "Build and run a reusable exact calculator for the seat-time occupancy ratio of regular campus shuttle service. Exclude cancelled trips and charter service. Give the fraction for my authorized records.",
+      "roles": {
+        "builder": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp"
+        }
+      },
+      "strategy": "single-model",
+      "tool_permissions": [
+        "construct_table",
+        "run_table",
+        "read_artifact",
+        "write_document"
+      ]
+    },
+    "spec_hash": "65ad7577dc2021cb923f3b38a821ad126e9c7770281377f7966fe371dfd6e3de",
+    "status": "paused",
+    "unadjudicated_counterexamples": [],
+    "updated_at": "2026-11-25T14:33:13.312798+00:00",
+    "verification": {
+      "artifact_hashes": {},
+      "checks": [],
+      "passed": false,
+      "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification.",
+      "spec_hash": "65ad7577dc2021cb923f3b38a821ad126e9c7770281377f7966fe371dfd6e3de"
+    }
+  }
+}

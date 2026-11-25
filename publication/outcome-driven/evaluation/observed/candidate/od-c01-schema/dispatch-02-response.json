@@ -1,0 +1,36 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "content": "{\n  \"summary\": \"The first action is to construct a SQL table query that joins the journeys and services tables, filters for regular service and operated state, and calculates the seat-time occupancy ratio.\",\n  \"actions\": [\n    {\n      \"tool\": \"construct_table\",\n      \"name\": \"query.json\",\n      \"dataset\": \"mobility-bay-16\",\n      \"sql\": \"SELECT SUM(journeys.occupied * journeys.minutes) / SUM(journeys.capacity * journeys.minutes) AS occupancy_ratio FROM journeys JOIN services ON journeys.line_id = services.line_id WHERE services.scope = 'regular' AND journeys.state = 'operated'\"\n    }\n  ],\n  \"done\": false\n}",
+        "role": "assistant"
+      }
+    }
+  ],
+  "created": 1795616924,
+  "id": "chatcmpl-X62ZzFvlPx9Yfer3670fxqUzbTw4rXSN",
+  "model": "qwen3-8b-q4_k_m",
+  "object": "chat.completion",
+  "system_fingerprint": "b12242-3b4d6ab3f",
+  "timings": {
+    "cache_n": 979,
+    "predicted_ms": 39855.423,
+    "predicted_n": 144,
+    "predicted_per_second": 3.5879684428390077,
+    "predicted_per_token_ms": 278.70925174825175,
+    "prompt_ms": 23835.221,
+    "prompt_n": 972,
+    "prompt_per_second": 40.77998689418487,
+    "prompt_per_token_ms": 24.52183230452675
+  },
+  "usage": {
+    "completion_tokens": 144,
+    "prompt_tokens": 1951,
+    "prompt_tokens_details": {
+      "cached_tokens": 979
+    },
+    "total_tokens": 2095
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "allow_paid_requests": false,
+  "local_only": true,
+  "max_attempts": 1,
+  "max_concurrent_requests": 1,
+  "providers": {
+    "llama-cpp": {
+      "base_url": "http://127.0.0.1:38461/v1",
+      "kind": "openai",
+      "label": "Qwen3-8B via local llama.cpp",
+      "models": {
+        "qwen3-8b-q4_k_m": {
+          "context_window": 16384,
+          "input_per_million": "0",
+          "input_token_overhead": 256,
+          "json_mode": true,
+          "json_schema": true,
+          "max_output_tokens": 2048,
+          "output_per_million": "0"
+        }
+      },
+      "output_limit_field": "max_tokens"
+    }
+  },
+  "session_budget_usd": 0,
+  "timeout_seconds": 175
+}

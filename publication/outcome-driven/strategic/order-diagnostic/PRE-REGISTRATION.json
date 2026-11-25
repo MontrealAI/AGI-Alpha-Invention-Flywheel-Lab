@@ -1,0 +1,65 @@
+{
+  "candidate": "Partial-order ancestor closure with constraints induced by monotone availability assertions.",
+  "checks": [
+    "16 exact named fixture classifications",
+    "136 exact complete evidence records against enumerative reference",
+    "zero omitted or spurious private findings against reference",
+    "minimum one case of each disposition"
+  ],
+  "factorial": {
+    "cases": 120,
+    "max_events": 7,
+    "order": [
+      "usable",
+      "transitive",
+      "incomparable",
+      "late",
+      "policy-after-state",
+      "cyclic"
+    ],
+    "revisions": [
+      "closed",
+      "open",
+      "feedback",
+      "provisional"
+    ],
+    "visibility": [
+      "explicit",
+      "unknown-opponent",
+      "opponent-sees",
+      "other-actor-sees",
+      "conflict"
+    ]
+  },
+  "fixtures": [
+    "complete-private",
+    "transitive-private",
+    "relabel-reorder-private",
+    "inferred-announcement",
+    "late",
+    "adaptive-signal",
+    "adaptive-row",
+    "open-revisions",
+    "unproved-observer-denial",
+    "leaked-signal",
+    "unordered-binding",
+    "incompatible-availability",
+    "explicit-cycle",
+    "external-observer",
+    "late-and-adaptive",
+    "early-provisional-choice"
+  ],
+  "question": "Can explicit, partially ordered temporal and visibility facts prove the strategic timing class without accepting unknown facts as evidence?",
+  "reference": "Enumerate total event orders and intersect the facts true for every feasible first-observation time in every consistent order.",
+  "registered_at_utc": "2026-11-25T14:34:04+00:00",
+  "schema": "frontier/strategic-order-registration-v1",
+  "scope": "New synthetic structured inputs, all authored in this implementation workstream. No prose extraction, learned inference, external custody, model updates, product integration, or promotion.",
+  "semantics": [
+    "An availability assertion names an event outcome, an actor, a checkpoint, and whether the actor can access that concrete outcome by the checkpoint.",
+    "An event outcome cannot be available before its event. Within the experiment, established access persists at later checkpoints.",
+    "Private requires public notice and policy available to the opponent when the hidden state is fixed, strict state-to-signal-to-binding order, payer access and denial for other declared actors by binding, and closed revision coverage with every listed revision earlier than fixation.",
+    "A named possible opponent revision with proven earlier access to the realized signal or bound action establishes adaptive. If adaptive and late are both proved, return adaptive and retain both facts.",
+    "Binding strictly before signal proves late. Remaining consistent unresolved or incompatible witnesses produce unknown. A contradictory set of constraints produces invalid."
+  ],
+  "source_context": "297a51c25c48031e1e6f964835f4dfae3ddb8023"
+}

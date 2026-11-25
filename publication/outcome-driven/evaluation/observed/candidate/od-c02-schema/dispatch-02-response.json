@@ -1,0 +1,36 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "content": "{\n  \"summary\": \"La première action consiste à construire un instrument SQL pour calculer les tonnes-kilomètres à partir des données du relevé d’expéditions. Cet instrument sera ensuite exécuté pour obtenir des résultats précis.\",\n  \"actions\": [\n    {\n      \"tool\": \"construct_table\",\n      \"name\": \"query.json\",\n      \"dataset\": \"releve-transport-27\",\n      \"sql\": \"SELECT lot, charge, trajet, u_charge, u_trajet FROM expeditions;\"\n    },\n    {\n      \"tool\": \"run_table\",\n      \"name\": \"query.json\",\n      \"input\": {\n        \"dataset\": \"releve-transport-27\"\n      }\n    },\n    {\n      \"tool\": \"read_artifact\",\n      \"name\": \"query.json\"\n    },\n    {\n      \"tool\": \"write_document\",\n      \"name\": \"result.md\",\n      \"content\": \"Les données du relevé d’expéditions ont été chargées et affichées. Les colonnes incluent lot, charge, trajet, u_charge et u_trajet. Les unités de charge et de trajet sont respectivement kg, t, m et km. Les données sont prêtes pour le calcul des tonnes-kilomètres.\"\n    },\n    {\n      \"tool\": \"construct_table\",\n      \"name\": \"query-tkm.json\",\n      \"dataset\": \"releve-transport-27\",\n      \"sql\": \"SELECT lot, (charge * trajet) AS produit FROM expeditions;\"\n    },\n    {\n      \"tool\": \"run_table\",\n      \"name\": \"query-tkm.json\",\n      \"input\": {\n        \"dataset\": \"releve-transport-27\"\n      }\n    },\n    {\n      \"tool\": \"read_artifact\",\n      \"name\": \"query-tkm.json\"\n    },\n    {\n      \"tool\": \"write_document\",\n      \"name\": \"result.md\",\n      \"content\": \"Les produits de la charge et du trajet ont été calculés pour chaque ligne. Les résultats intermédiaires sont prêts pour la conversion en tonnes-kilomètres en tenant compte des unités respectives.\"\n    }\n  ],\n  \"done\": false\n}",
+        "role": "assistant"
+      }
+    }
+  ],
+  "created": 1795617699,
+  "id": "chatcmpl-1oAx5h1CosehvMNdRyYJqaXuSEU8x2HN",
+  "model": "qwen3-8b-q4_k_m",
+  "object": "chat.completion",
+  "system_fingerprint": "b12242-3b4d6ab3f",
+  "timings": {
+    "cache_n": 923,
+    "predicted_ms": 66706.2,
+    "predicted_n": 480,
+    "predicted_per_second": 7.180741820100681,
+    "predicted_per_token_ms": 139.26137787056368,
+    "prompt_ms": 33589.051,
+    "prompt_n": 1380,
+    "prompt_per_second": 41.084816596932136,
+    "prompt_per_token_ms": 24.339892028985506
+  },
+  "usage": {
+    "completion_tokens": 480,
+    "prompt_tokens": 2303,
+    "prompt_tokens_details": {
+      "cached_tokens": 923
+    },
+    "total_tokens": 2783
+  }
+}

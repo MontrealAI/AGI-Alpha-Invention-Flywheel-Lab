@@ -1,0 +1,105 @@
+{
+  "schema": "frontier/production-telemetry-assisted-assessment/v1",
+  "assessed_at": "2026-11-25T14:55:08.566677+00:00",
+  "registration_sha256": "667dbd4f647caaeec2522bf94de8de8f19056c8b29a13853c3e24b0bc0d39bdc",
+  "original_automatic_assessment_sha256": "04cd75397a20d61b9fd03185cb91f8de90677e8790f3d7bee92b686f988f1374",
+  "assisted_artifact": "TELEMETRY-CLASSIFIER.json",
+  "assisted_artifact_sha256": "949ab5761685562c6fe270cfb3aebbe5aa844e629ce15f77aa3085412a41aebc",
+  "release_revision": "9a53a4b8bb7eb3d5f82f50effcf44e3ec1291d19",
+  "released_executor_sha256": "dd37e23f26294f14632c0c501ad13b3255bf96c493541efc4683dfc213dad939",
+  "trusted_evaluator_sha256": "9c7dede3414cebcf2a99043cb1ef39e546f5b413157e53d2959d131cbfdb8eb7",
+  "construction": "A maintainer prepared a separate deterministic candidate using the original prompt thresholds. The evaluator replayed the frozen bytes.",
+  "method": "Use the manifest-pinned standard library evaluator pulled from the downloaded live executor archive and the unchanged held registration. Score exact classification against independent labels and the ordinary Python reference.",
+  "decision": "PASS",
+  "qualification": "GO_FOR_BOUNDED_ASSISTED_ARTIFACT",
+  "assisted_exact_matches": 12,
+  "ordinary_python_exact_matches": 12,
+  "held_cases_total": 12,
+  "cases": [
+    {
+      "id": "zero_plateau",
+      "expected": "normal",
+      "actual": "normal",
+      "ordinary_python": "normal",
+      "exit_code": 0
+    },
+    {
+      "id": "high_plateau",
+      "expected": "normal",
+      "actual": "normal",
+      "ordinary_python": "normal",
+      "exit_code": 0
+    },
+    {
+      "id": "opposite_direction",
+      "expected": "normal",
+      "actual": "normal",
+      "ordinary_python": "normal",
+      "exit_code": 0
+    },
+    {
+      "id": "upper_increment",
+      "expected": "normal",
+      "actual": "normal",
+      "ordinary_python": "normal",
+      "exit_code": 0
+    },
+    {
+      "id": "joint_inclusive_boundary",
+      "expected": "wrap",
+      "actual": "wrap",
+      "ordinary_python": "wrap",
+      "exit_code": 0
+    },
+    {
+      "id": "maximum_to_zero",
+      "expected": "wrap",
+      "actual": "wrap",
+      "ordinary_python": "wrap",
+      "exit_code": 0
+    },
+    {
+      "id": "upper_previous_inclusive_current",
+      "expected": "wrap",
+      "actual": "wrap",
+      "ordinary_python": "wrap",
+      "exit_code": 0
+    },
+    {
+      "id": "inside_wrap_window",
+      "expected": "wrap",
+      "actual": "wrap",
+      "ordinary_python": "wrap",
+      "exit_code": 0
+    },
+    {
+      "id": "one_below_previous_threshold",
+      "expected": "reset",
+      "actual": "reset",
+      "ordinary_python": "reset",
+      "exit_code": 0
+    },
+    {
+      "id": "one_above_current_threshold",
+      "expected": "reset",
+      "actual": "reset",
+      "ordinary_python": "reset",
+      "exit_code": 0
+    },
+    {
+      "id": "maximum_previous_current_over_boundary",
+      "expected": "reset",
+      "actual": "reset",
+      "ordinary_python": "reset",
+      "exit_code": 0
+    },
+    {
+      "id": "small_decrease",
+      "expected": "reset",
+      "actual": "reset",
+      "ordinary_python": "reset",
+      "exit_code": 0
+    }
+  ],
+  "scope_limit": "This result qualifies local replay of the separate assisted artifact under the stated contract. The browser-produced artifact remains a separate NO-GO at 0/12. The assisted score ties ordinary Python. Live manual handoff and independent custody require their own evidence."
+}

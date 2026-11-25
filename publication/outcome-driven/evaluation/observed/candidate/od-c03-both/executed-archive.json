@@ -1,0 +1,302 @@
+{
+  "files": {
+    "query.json": "{\"evaluator_sha256\":\"48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d\",\"schema\":\"frontier/bounded-table-instrument-v1\",\"sql\":\"SELECT mesures.cycle, mesures.duree_s, mesures.energie_j FROM mesures;\",\"table_schema\":{\"mesures\":{\"cycle\":\"TEXT\",\"duree_s\":\"INTEGER\",\"energie_j\":\"INTEGER\"}}}"
+  },
+  "notice": "Contains your objective, context and artifacts. Inspect before sharing. No connector credentials or workspace integrity key included. Recorded verification is historical; recheck imported work.",
+  "schema": "alpha-genesis-workflow-export/v1",
+  "sha256": "2e48ca43d54b4582ea597d5ade9639e8ac918684fc33f4039479438ab536289c",
+  "state": {
+    "actions": 1,
+    "adversarial_cases": [],
+    "artifacts": {
+      "query.json": {
+        "bytes": 300,
+        "kind": "table_instrument",
+        "sha256": "442a3e5fad7117c9f874e33259edfeaa81c8aa659511560331c777f3a9f21fa0"
+      }
+    },
+    "capability_id": null,
+    "created_at": "2026-11-25T14:30:31.563560+00:00",
+    "epoch": 0,
+    "events": [
+      {
+        "at": "2026-11-25T14:30:31.563572+00:00",
+        "detail": {
+          "acceptance_source": "Operator-frozen conditions; independence is not inferred.",
+          "spec_hash": "c64ff6e138942644685adcdcf975b7078bdb500f17bd8ceaff8e118f4fb59111"
+        },
+        "index": 0,
+        "kind": "created",
+        "previous": "0000000000000000000000000000000000000000000000000000000000000000",
+        "sha256": "162203e6e20db3fd4a7c04b87c28007f33a79e5a37dd9a88d0b2f57e03997630"
+      },
+      {
+        "at": "2026-11-25T14:30:31.567889+00:00",
+        "detail": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "role": "builder",
+          "scope": "Waiting for selected service capacity; no model call or construction iteration consumed."
+        },
+        "index": 1,
+        "kind": "model_queued",
+        "previous": "162203e6e20db3fd4a7c04b87c28007f33a79e5a37dd9a88d0b2f57e03997630",
+        "sha256": "b9d1d6ea931abdc834deddd7ba7395b905e80ed226368957e281f43a5c8e44f3"
+      },
+      {
+        "at": "2026-11-25T14:30:31.570739+00:00",
+        "detail": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "role": "builder",
+          "run_id": "wf_1d4a453a41776be88fd9db0e_165cb768a7eb0b57"
+        },
+        "index": 2,
+        "kind": "model_started",
+        "previous": "b9d1d6ea931abdc834deddd7ba7395b905e80ed226368957e281f43a5c8e44f3",
+        "sha256": "d35e2a6e90093eb81a84baf5023b139548a50bce1a2954e19aea6d5568eb2afd"
+      },
+      {
+        "at": "2026-11-25T14:31:07.703585+00:00",
+        "detail": {
+          "cost": {
+            "accounted": 0.0,
+            "amount": 0.0,
+            "attempts": 1,
+            "basis": "reported_usage_at_user_rates",
+            "complete_cost_known": false,
+            "currency": "USD"
+          },
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+          "reported_model": "qwen3-8b-q4_k_m",
+          "requested_model": "qwen3-8b-q4_k_m",
+          "response_sha256": "6ad400f39d751bf1c4cc972ea25db4706f6daa12099630b013925a47a933dd11",
+          "role": "builder",
+          "run_id": "wf_1d4a453a41776be88fd9db0e_165cb768a7eb0b57",
+          "usage": {
+            "input_tokens": 1355,
+            "output_tokens": 105
+          }
+        },
+        "index": 3,
+        "kind": "model_completed",
+        "previous": "d35e2a6e90093eb81a84baf5023b139548a50bce1a2954e19aea6d5568eb2afd",
+        "sha256": "1ac69d73d382ff0e45f2c3f7a75b3ffac0b682352426286d7caee3c77eb5b41a"
+      },
+      {
+        "at": "2026-11-25T14:31:07.703631+00:00",
+        "detail": {
+          "disposition": "PROPOSED",
+          "proposed_actions": 1,
+          "summary": "Lancer la construction de la table SQL pour extraire les données nécessaires à la calcul de la puissance moyenne."
+        },
+        "index": 4,
+        "kind": "route_proposed",
+        "previous": "1ac69d73d382ff0e45f2c3f7a75b3ffac0b682352426286d7caee3c77eb5b41a",
+        "sha256": "e0ea5ce8b7c67d7b90cf86b5fb2a4d24d47cc47f57820fabe4ab551741e0ab9d"
+      },
+      {
+        "at": "2026-11-25T14:31:07.739268+00:00",
+        "detail": {
+          "outcome": {
+            "action_id": "abe0451953a3db6d2157eb8232689789682edecdf15980f7ee64db608e2fe335",
+            "artifact": "query.json",
+            "bytes": 300,
+            "evaluator_sha256": "48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d",
+            "kind": "table_instrument",
+            "operation_executed": true,
+            "previous_sha256": null,
+            "qualification": "UNVERIFIED",
+            "sha256": "442a3e5fad7117c9f874e33259edfeaa81c8aa659511560331c777f3a9f21fa0",
+            "sqlite_version": "3.53.1",
+            "status": "CANDIDATE_VALIDATED_ON_EMPTY_TABLES"
+          },
+          "tool": "construct_table"
+        },
+        "index": 5,
+        "kind": "tool_completed",
+        "previous": "e0ea5ce8b7c67d7b90cf86b5fb2a4d24d47cc47f57820fabe4ab551741e0ab9d",
+        "sha256": "77901608aba89c1f407a8739c88384a27c3ed553e2b2f77ab5f69a9e1aaf1cd0"
+      },
+      {
+        "at": "2026-11-25T14:31:07.740324+00:00",
+        "detail": {
+          "artifact_hashes": {
+            "query.json": "442a3e5fad7117c9f874e33259edfeaa81c8aa659511560331c777f3a9f21fa0"
+          },
+          "checks": [],
+          "passed": false,
+          "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification.",
+          "spec_hash": "c64ff6e138942644685adcdcf975b7078bdb500f17bd8ceaff8e118f4fb59111"
+        },
+        "index": 6,
+        "kind": "verification",
+        "previous": "77901608aba89c1f407a8739c88384a27c3ed553e2b2f77ab5f69a9e1aaf1cd0",
+        "sha256": "029b4059f1664ee1a6936b164ac5aec6b21b1f88f3c7c1ebad67100a0fe42ea7"
+      },
+      {
+        "at": "2026-11-25T14:31:07.740415+00:00",
+        "detail": {
+          "claims": [
+            {
+              "id": "puissance",
+              "reason": "REQUIRED_FIELD_MISSING",
+              "status": "ABSTAIN"
+            }
+          ],
+          "status": "ABSTAIN"
+        },
+        "index": 7,
+        "kind": "claim_dispositions",
+        "previous": "029b4059f1664ee1a6936b164ac5aec6b21b1f88f3c7c1ebad67100a0fe42ea7",
+        "sha256": "76d8d91f539ce8f8f1d567fc9b4c4a442ac98c840efa47c2fd78057df2393b88"
+      },
+      {
+        "at": "2026-11-25T14:31:07.740429+00:00",
+        "detail": {
+          "claims": [
+            {
+              "id": "puissance",
+              "reason": "REQUIRED_FIELD_MISSING",
+              "status": "ABSTAIN"
+            }
+          ]
+        },
+        "index": 8,
+        "kind": "awaiting_evidence",
+        "previous": "76d8d91f539ce8f8f1d567fc9b4c4a442ac98c840efa47c2fd78057df2393b88",
+        "sha256": "d1558fb6c8e2e2ee202021258691f33a72429de1348407b4a62157e945a045ab"
+      }
+    ],
+    "feedback": "",
+    "id": "wf_1d4a453a41776be88fd9db0e",
+    "inflight": null,
+    "iteration": 1,
+    "model_call_limit": 2,
+    "model_calls": 1,
+    "phase": "builder",
+    "research": "",
+    "schema": "alpha-genesis-workflow/v1",
+    "spec": {
+      "acceptance": [],
+      "context": "Diviser la somme de toutes les énergies mesurées (J) par la somme de toutes les durées correspondantes (s), pour obtenir des watts. Les deux mesures sont nécessaires pour chaque cycle. Identifier toute cellule indisponible par table, index de ligne à partir de zéro et colonne, ou par cycle et colonne. Ne pas remplacer les durées manquantes ni recalculer sur un sous-ensemble.\nSchema of the authorized tables: {\"mesures\":{\"cycle\":\"TEXT\",\"duree_s\":\"INTEGER\",\"energie_j\":\"INTEGER\"}}",
+      "local_only": true,
+      "max_actions": 10,
+      "max_iterations": 2,
+      "max_operations": 10000,
+      "max_output_tokens": 560,
+      "mission": {
+        "expires_at": "2026-11-25T14:45:31.562482+00:00",
+        "language": "fr",
+        "original_ambition": "Déterminez la puissance moyenne exacte de ce banc d’essai sur tous les cycles autorisés. Si une mesure appariée requise manque, indiquez précisément la cellule et abstenez-vous de donner la puissance totale.",
+        "requirements": {
+          "approved_tables": {
+            "cycles-banc-39": {
+              "mesures": [
+                {
+                  "cycle": "tulipe-7",
+                  "duree_s": 13,
+                  "energie_j": 83
+                },
+                {
+                  "cycle": "piquet-5",
+                  "duree_s": null,
+                  "energie_j": 127
+                },
+                {
+                  "cycle": "verre-2",
+                  "duree_s": 17,
+                  "energie_j": 214
+                },
+                {
+                  "cycle": "satin-4",
+                  "duree_s": 9,
+                  "energie_j": 77
+                }
+              ]
+            }
+          },
+          "evidence": {
+            "claims": [
+              {
+                "dataset": "cycles-banc-39",
+                "dimension": "energy/time",
+                "id": "puissance",
+                "locator": [
+                  "rows",
+                  0,
+                  0
+                ],
+                "required_fields": [
+                  [
+                    "mesures",
+                    "cycle"
+                  ],
+                  [
+                    "mesures",
+                    "duree_s"
+                  ],
+                  [
+                    "mesures",
+                    "energie_j"
+                  ]
+                ],
+                "requires": {
+                  "missing_value": "null",
+                  "require_all_pairs": true,
+                  "scope": "all cycles"
+                },
+                "tool": "run_table",
+                "unit": "W",
+                "version": "energie-temps-v1"
+              }
+            ],
+            "inputs": {
+              "cycles-banc-39": {
+                "facts": {
+                  "missing_value": "null",
+                  "require_all_pairs": true,
+                  "scope": "all cycles"
+                },
+                "kind": "table",
+                "origin": "AUTHORIZED_MISSION_INPUT",
+                "sha256": "3bff180e1964ea3167275bd3deeeccd1832c3c81334deb1bd439f0c99ac0a702",
+                "version": "energie-temps-v1"
+              }
+            }
+          }
+        },
+        "schema": "frontier-universal-execution/v1"
+      },
+      "objective": "Déterminez la puissance moyenne exacte de ce banc d’essai sur tous les cycles autorisés. Si une mesure appariée requise manque, indiquez précisément la cellule et abstenez-vous de donner la puissance totale.",
+      "roles": {
+        "builder": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp"
+        }
+      },
+      "strategy": "single-model",
+      "tool_permissions": [
+        "construct_table",
+        "run_table",
+        "read_artifact",
+        "write_document"
+      ]
+    },
+    "spec_hash": "c64ff6e138942644685adcdcf975b7078bdb500f17bd8ceaff8e118f4fb59111",
+    "status": "needs_review",
+    "unadjudicated_counterexamples": [],
+    "updated_at": "2026-11-25T14:31:07.740429+00:00",
+    "verification": {
+      "artifact_hashes": {
+        "query.json": "442a3e5fad7117c9f874e33259edfeaa81c8aa659511560331c777f3a9f21fa0"
+      },
+      "checks": [],
+      "passed": false,
+      "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification.",
+      "spec_hash": "c64ff6e138942644685adcdcf975b7078bdb500f17bd8ceaff8e118f4fb59111"
+    }
+  }
+}

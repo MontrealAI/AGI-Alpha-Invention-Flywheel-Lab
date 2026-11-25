@@ -1,0 +1,260 @@
+{
+  "files": {},
+  "notice": "Contains your objective, context and artifacts. Inspect before sharing. No connector credentials or workspace integrity key included. Recorded verification is historical; recheck imported work.",
+  "schema": "alpha-genesis-workflow-export/v1",
+  "sha256": "45a26d5b80c684baceb89ba10ddff253209f9b2f2d3e2d7a5d4bea88ab71321b",
+  "state": {
+    "actions": 0,
+    "adversarial_cases": [],
+    "artifacts": {},
+    "capability_id": null,
+    "created_at": "2026-11-25T14:11:49.457111+00:00",
+    "epoch": 0,
+    "events": [
+      {
+        "at": "2026-11-25T14:11:49.457126+00:00",
+        "detail": {
+          "acceptance_source": "Operator-frozen conditions; independence is not inferred.",
+          "spec_hash": "ac0300e7a547bba2cc18a036b63190d426c1f037e0c0129286eb78c82256666f"
+        },
+        "index": 0,
+        "kind": "created",
+        "previous": "0000000000000000000000000000000000000000000000000000000000000000",
+        "sha256": "043a0332fb5d4600b393ed29573a59cf1b92016f1269823e46a4e57b05b22480"
+      },
+      {
+        "at": "2026-11-25T14:11:49.460488+00:00",
+        "detail": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "role": "builder",
+          "scope": "Waiting for selected service capacity; no model call or construction iteration consumed."
+        },
+        "index": 1,
+        "kind": "model_queued",
+        "previous": "043a0332fb5d4600b393ed29573a59cf1b92016f1269823e46a4e57b05b22480",
+        "sha256": "d06a6bb6c1ae220b0bf5817044dcea47a35890a2de6749be716e281b392b6dea"
+      },
+      {
+        "at": "2026-11-25T14:11:49.462176+00:00",
+        "detail": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "role": "builder",
+          "run_id": "wf_56abaa439cca406a65881e04_1a0536afe797116b"
+        },
+        "index": 2,
+        "kind": "model_started",
+        "previous": "d06a6bb6c1ae220b0bf5817044dcea47a35890a2de6749be716e281b392b6dea",
+        "sha256": "85179eece995d11d7f19e63b91c89ca07a1ae8f1d04e7612f87f9782cd56c2ab"
+      },
+      {
+        "at": "2026-11-25T14:14:44.577698+00:00",
+        "detail": {
+          "code": "PROVIDER_CONNECTION",
+          "message": "Model request failed. Its provider allowance or cost may have been consumed; inspect connection before explicitly resuming.",
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "role": "builder",
+          "run_id": "wf_56abaa439cca406a65881e04_1a0536afe797116b",
+          "session_budget_snapshot": {
+            "committed": 0.0,
+            "currency": "USD",
+            "limit": 0.0,
+            "locked": false,
+            "remaining": 0.0,
+            "reserved": 0.0,
+            "scope": "process-session"
+          },
+          "usage_status": "UNKNOWN"
+        },
+        "index": 3,
+        "kind": "model_error",
+        "previous": "85179eece995d11d7f19e63b91c89ca07a1ae8f1d04e7612f87f9782cd56c2ab",
+        "sha256": "6673254fc7626d0bc33a14f51c901439b1cbe7e25aac3799145b25bb7833342c"
+      }
+    ],
+    "feedback": "",
+    "id": "wf_56abaa439cca406a65881e04",
+    "inflight": null,
+    "iteration": 1,
+    "model_call_limit": 2,
+    "model_calls": 1,
+    "phase": "builder",
+    "research": "",
+    "schema": "alpha-genesis-workflow/v1",
+    "spec": {
+      "acceptance": [],
+      "context": "Join journeys.line_id to services.line_id, whose key is unique. The rows have no missing required measurements. Include scope=regular and state=operated only. Divide the sum of occupied seats times minutes by the sum of offered capacity times minutes over those same trips. Minutes and capacities are positive. Supply one exact rational result in the sole output column.\nSchema of the authorized tables: {\"journeys\":{\"capacity\":\"INTEGER\",\"departure\":\"TEXT\",\"line_id\":\"TEXT\",\"minutes\":\"INTEGER\",\"occupied\":\"INTEGER\",\"state\":\"TEXT\"},\"services\":{\"line_id\":\"TEXT\",\"scope\":\"TEXT\"}}",
+      "local_only": true,
+      "max_actions": 10,
+      "max_iterations": 2,
+      "max_operations": 10000,
+      "max_output_tokens": 560,
+      "mission": {
+        "expires_at": "2026-11-25T14:26:49.446854+00:00",
+        "language": "en",
+        "original_ambition": "Build and run a reusable exact calculator for the seat-time occupancy ratio of regular campus shuttle service. Exclude cancelled trips and charter service. Give the fraction for my authorized records.",
+        "requirements": {
+          "approved_tables": {
+            "mobility-bay-16": {
+              "journeys": [
+                {
+                  "capacity": 13,
+                  "departure": "u14",
+                  "line_id": "harbor",
+                  "minutes": 11,
+                  "occupied": 7,
+                  "state": "operated"
+                },
+                {
+                  "capacity": 14,
+                  "departure": "u15",
+                  "line_id": "orchard",
+                  "minutes": 19,
+                  "occupied": 11,
+                  "state": "operated"
+                },
+                {
+                  "capacity": 13,
+                  "departure": "u16",
+                  "line_id": "harbor",
+                  "minutes": 8,
+                  "occupied": 0,
+                  "state": "cancelled"
+                },
+                {
+                  "capacity": 20,
+                  "departure": "u17",
+                  "line_id": "airport",
+                  "minutes": 33,
+                  "occupied": 18,
+                  "state": "operated"
+                },
+                {
+                  "capacity": 13,
+                  "departure": "u18",
+                  "line_id": "harbor",
+                  "minutes": 17,
+                  "occupied": 5,
+                  "state": "operated"
+                }
+              ],
+              "services": [
+                {
+                  "line_id": "harbor",
+                  "scope": "regular"
+                },
+                {
+                  "line_id": "orchard",
+                  "scope": "regular"
+                },
+                {
+                  "line_id": "airport",
+                  "scope": "charter"
+                }
+              ]
+            }
+          },
+          "evidence": {
+            "claims": [
+              {
+                "dataset": "mobility-bay-16",
+                "dimension": "seat-time/seat-time",
+                "id": "occupancy",
+                "locator": [
+                  "rows",
+                  0,
+                  0
+                ],
+                "reference": {
+                  "source": "Independent exact study reference",
+                  "value": "53/90"
+                },
+                "required_fields": [
+                  [
+                    "journeys",
+                    "capacity"
+                  ],
+                  [
+                    "journeys",
+                    "departure"
+                  ],
+                  [
+                    "journeys",
+                    "line_id"
+                  ],
+                  [
+                    "journeys",
+                    "minutes"
+                  ],
+                  [
+                    "journeys",
+                    "occupied"
+                  ],
+                  [
+                    "journeys",
+                    "state"
+                  ],
+                  [
+                    "services",
+                    "line_id"
+                  ],
+                  [
+                    "services",
+                    "scope"
+                  ]
+                ],
+                "requires": {
+                  "duration_weighting": "seat-time",
+                  "required_state": "operated",
+                  "service_scope": "regular"
+                },
+                "tool": "run_table",
+                "unit": "ratio",
+                "version": "regular-service-schema-v1"
+              }
+            ],
+            "inputs": {
+              "mobility-bay-16": {
+                "facts": {
+                  "duration_weighting": "seat-time",
+                  "required_state": "operated",
+                  "service_scope": "regular"
+                },
+                "kind": "table",
+                "origin": "AUTHORIZED_MISSION_INPUT",
+                "sha256": "1254123afb7e62f80c924f50959cd8430ae2b4ad6528e82fdc3d04a6b54df491",
+                "version": "regular-service-schema-v1"
+              }
+            }
+          }
+        },
+        "schema": "frontier-universal-execution/v1"
+      },
+      "objective": "Build and run a reusable exact calculator for the seat-time occupancy ratio of regular campus shuttle service. Exclude cancelled trips and charter service. Give the fraction for my authorized records.",
+      "roles": {
+        "builder": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp"
+        }
+      },
+      "strategy": "single-model",
+      "tool_permissions": [
+        "construct_table",
+        "run_table",
+        "read_artifact",
+        "write_document"
+      ]
+    },
+    "spec_hash": "ac0300e7a547bba2cc18a036b63190d426c1f037e0c0129286eb78c82256666f",
+    "status": "paused",
+    "unadjudicated_counterexamples": [],
+    "updated_at": "2026-11-25T14:14:44.577698+00:00",
+    "verification": {
+      "checks": [],
+      "passed": false,
+      "scope": "No checks executed."
+    }
+  }
+}

@@ -1,0 +1,82 @@
+{
+  "actual_host_cost": "Unknown",
+  "actual_inference_cost": "No provider requests",
+  "archive_sha256": "9575b20c9baa854bf17b6fe3f505e85b52e442189f697a41389ff95be12addef",
+  "dom_qualification": "NOT TESTED: no explicit DOM dependency directory supplied",
+  "omega_qualification": {
+    "complete_costs_known": false,
+    "correctness": "PASS",
+    "evidence_files": [
+      "OMEGA-DEMONSTRATION.json",
+      "OMEGA-FRESH-SOURCE-FREEZE.json",
+      "OMEGA-FRESH-SUCCESSOR.json"
+    ],
+    "fresh_successor_status": "PASS",
+    "scientific_verdict": "NO_SUPERIORITY_ESTABLISHED: competent content-addressed ordinary reuse ties; complete costs remain unknown.",
+    "source_sha256": {
+      "candidate": "3139533177999aca5d5f8eeb5ec4a515c10ff58ac6a7ea405b974457df871c1e",
+      "evaluator": "320d9636f941c5debe23e4f95c9722cd4c570789e842cf639514db68b5baac1d",
+      "execution_services": "41b71b3f946f0912898558995f2c83f1f09b0cb2d5f9203bfecbef301de4a081",
+      "interpreter": "9c7dede3414cebcf2a99043cb1ef39e546f5b413157e53d2959d131cbfdb8eb7",
+      "original_protocol": "5d4b2141e8bf02f398e6a9a8508417d53105f6927b186ca49a92b1a42ddf12d5",
+      "output_schema": "9877d088cad20b89b6b8d7322c4472840f21098e6b5bcb3eb008d84bfccc28cf",
+      "protocol": "b0d93574f9fecb5f2b9374ba6371ffacb687c3466ec1bc6d64fe5629fe5b44a8",
+      "provider_contracts": "9c38e369ff350baa6b5a0cdb6ec0c717e0b4704834ceaf22324ffa021624caef",
+      "workflow_helpers": "860ad47a0b773993256a8e4fe069faf1afcec88cddce0680a5b5cc63bd66d324",
+      "workflow_schemas": "2b4a028595e0462be8bd90e8ac6dae97665e124c200784cea26e2f19eb82dc26",
+      "workflow_strategies": "bb639bfe6467c1da816149fc5918f785f9df8053b3e5fc841f9e0cdef3115124"
+    },
+    "strong_control_advantage": "NOT_ESTABLISHED"
+  },
+  "operations": [
+    {
+      "entry": "suite",
+      "returncode": 0,
+      "wall_seconds": 1.484651
+    },
+    {
+      "entry": "test_*.py",
+      "returncode": 0,
+      "wall_seconds": 41.01548
+    },
+    {
+      "entry": "launch.py",
+      "returncode": 0,
+      "wall_seconds": 0.22151
+    },
+    {
+      "entry": "suite",
+      "returncode": 0,
+      "wall_seconds": 0.303588
+    },
+    {
+      "entry": "bridge.workflows",
+      "returncode": 0,
+      "wall_seconds": 0.312051
+    },
+    {
+      "entry": "bridge.genesis_next",
+      "returncode": 0,
+      "wall_seconds": 0.332051
+    },
+    {
+      "entry": "scripts/qualify_genesis_successor.py",
+      "returncode": 0,
+      "wall_seconds": 0.075159
+    },
+    {
+      "entry": "scripts/qualify_genesis_successor.py",
+      "returncode": 0,
+      "wall_seconds": 0.344901
+    },
+    {
+      "entry": "bridge.strategy_demo",
+      "returncode": 0,
+      "wall_seconds": 0.332474
+    }
+  ],
+  "schema": "alpha-genesis-harness-downloaded-operation/v1",
+  "scope": "Extracted-byte automated operation on this host; not cross-platform, authenticated-provider or commercial qualification.",
+  "source_revision": "2dcf1f252e7bb6eff528a2ef60e3314cab477e88",
+  "verdict": "PASSED IN SCOPE"
+}

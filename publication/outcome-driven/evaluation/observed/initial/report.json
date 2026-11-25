@@ -1,0 +1,410 @@
+{
+  "active_model_dispatches": 7,
+  "cases": [
+    {
+      "action_attempts": 0,
+      "actual_tool_events": 0,
+      "approved_runs": [],
+      "archive_sha256": "45a26d5b80c684baceb89ba10ddff253209f9b2f2d3e2d7a5d4bea88ab71321b",
+      "arm": "previous",
+      "case": "od-c01",
+      "complete_economic_cost_known": false,
+      "evidence": {
+        "claims": [
+          {
+            "claim_contract_sha256": "7ac1a27d1c28ccedf161429f4491b1da7848cd418c8f4f8d9fec2686a8a5a4e5",
+            "dataset": "mobility-bay-16",
+            "dimension": "seat-time/seat-time",
+            "id": "occupancy",
+            "locator": [
+              "rows",
+              0,
+              0
+            ],
+            "mission_id": "wf_56abaa439cca406a65881e04",
+            "reason": "NO_BOUND_EXECUTION",
+            "requires": {
+              "duration_weighting": "seat-time",
+              "required_state": "operated",
+              "service_scope": "regular"
+            },
+            "revision_sha256": "ac0300e7a547bba2cc18a036b63190d426c1f037e0c0129286eb78c82256666f",
+            "source_version": "regular-service-schema-v1",
+            "status": "ABSTAIN",
+            "unit": "ratio"
+          }
+        ],
+        "scope": "Case-specific numerical agreement and source binding. Independent custody and production admission are separate.",
+        "status": "ABSTAIN"
+      },
+      "false_user_facing_acceptance": false,
+      "mission_id": "wf_56abaa439cca406a65881e04",
+      "observed_provider_dispatches": 1,
+      "observed_usage": {
+        "observed_tokens_in": 0,
+        "observed_tokens_out": 0,
+        "unknown_token_replies": 1
+      },
+      "operator_actions_after_case_start": 0,
+      "operator_preparation_and_review_seconds": null,
+      "orchestrator_cpu_seconds": 1.2398209999999998,
+      "outcome_surface": {},
+      "paid_requests": 0,
+      "provider_elapsed_seconds": 175.107377843,
+      "raw_drafts": [],
+      "raw_explicit_contradiction": false,
+      "refusals": [
+        {
+          "code": "PROVIDER_CONNECTION",
+          "kind": "model_error",
+          "message": "Model request failed. Its provider allowance or cost may have been consumed; inspect connection before explicitly resuming.",
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "role": "builder",
+          "run_id": "wf_56abaa439cca406a65881e04_1a0536afe797116b",
+          "session_budget_snapshot": {
+            "committed": 0.0,
+            "currency": "USD",
+            "limit": 0.0,
+            "locked": false,
+            "remaining": 0.0,
+            "reserved": 0.0,
+            "scope": "process-session"
+          },
+          "usage_status": "UNKNOWN"
+        }
+      ],
+      "reusable_on_withheld": false,
+      "task_elapsed_seconds": 175.20271201599826,
+      "tool_input_origins": [],
+      "verdict": "FAIL",
+      "verified_primary": false,
+      "workflow_status": "paused"
+    },
+    {
+      "action_attempts": 0,
+      "actual_tool_events": 0,
+      "approved_runs": [],
+      "arm": "direct",
+      "case": "od-c02",
+      "complete_economic_cost_known": false,
+      "false_user_facing_acceptance": false,
+      "final_response": {
+        "decision": "CONTINUE",
+        "explanation": "",
+        "missing": [],
+        "result": {}
+      },
+      "observed_provider_dispatches": 1,
+      "observed_usage": {
+        "observed_tokens_in": 0,
+        "observed_tokens_out": 0,
+        "unknown_token_replies": 1
+      },
+      "operator_actions_after_case_start": 0,
+      "operator_preparation_and_review_seconds": null,
+      "orchestrator_cpu_seconds": 0.018377000000000088,
+      "paid_requests": 0,
+      "provider_elapsed_seconds": 175.11606138299976,
+      "reusable_on_withheld": false,
+      "task_elapsed_seconds": 175.14694016800058,
+      "verdict": "FAIL",
+      "verified_primary": false
+    },
+    {
+      "action_attempts": 0,
+      "actual_tool_events": 0,
+      "archive_sha256": "8a921d09f4debf4aee8b900d82e96eadf389d2f911b37e7ad67fd13d4e238f8c",
+      "arm": "previous",
+      "case": "od-c03",
+      "complete_economic_cost_known": false,
+      "evidence": {
+        "claims": [
+          {
+            "claim_contract_sha256": "588d71530ca3d7ad764a70e371827ff69577015c414fbf57e63d5cbd1bfade5a",
+            "dataset": "cycles-banc-39",
+            "dimension": "energy/time",
+            "id": "puissance",
+            "locator": [
+              "rows",
+              0,
+              0
+            ],
+            "mission_id": "wf_ebe5f3c61c0a99c81e390220",
+            "reason": "REQUIRED_FIELD_MISSING",
+            "requires": {
+              "missing_value": "null",
+              "require_all_pairs": true,
+              "scope": "all cycles"
+            },
+            "revision_sha256": "337c5886c175a4a5d5322832600e92bcbb40422f5012b91f9845e1888ec94e65",
+            "source_version": "energie-temps-v1",
+            "status": "ABSTAIN",
+            "unit": "W"
+          }
+        ],
+        "scope": "Case-specific numerical agreement and source binding. Independent custody and production admission are separate.",
+        "status": "ABSTAIN"
+      },
+      "false_user_facing_acceptance": false,
+      "mission_id": "wf_ebe5f3c61c0a99c81e390220",
+      "observed_provider_dispatches": 1,
+      "observed_usage": {
+        "observed_tokens_in": 0,
+        "observed_tokens_out": 0,
+        "unknown_token_replies": 1
+      },
+      "operator_actions_after_case_start": 0,
+      "operator_preparation_and_review_seconds": null,
+      "orchestrator_cpu_seconds": 1.140454,
+      "outcome_surface": {},
+      "paid_requests": 0,
+      "precise_missing_cell": false,
+      "provider_elapsed_seconds": 175.10430986999563,
+      "raw_drafts": [],
+      "raw_explicit_contradiction": false,
+      "refusals": [
+        {
+          "code": "PROVIDER_CONNECTION",
+          "kind": "model_error",
+          "message": "Model request failed. Its provider allowance or cost may have been consumed; inspect connection before explicitly resuming.",
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "role": "builder",
+          "run_id": "wf_ebe5f3c61c0a99c81e390220_d147e37711436c8e",
+          "session_budget_snapshot": {
+            "committed": 0.0,
+            "currency": "USD",
+            "limit": 0.0,
+            "locked": false,
+            "remaining": 0.0,
+            "reserved": 0.0,
+            "scope": "process-session"
+          },
+          "usage_status": "UNKNOWN"
+        }
+      ],
+      "task_elapsed_seconds": 175.2587962749967,
+      "tool_input_origins": [],
+      "verdict": "FAIL",
+      "withheld_total": true,
+      "workflow_status": "paused"
+    },
+    {
+      "action_attempts": 1,
+      "actual_tool_events": 1,
+      "approved_runs": [
+        {
+          "held_reuse": {
+            "input_sha256": "82029493c704906fedb41cf2ba4d26570c3ae49cad4624b4710d4cb732d186ff",
+            "matched": true,
+            "output_sha256": "fbae533e359f761c7730a3f71b8ad7b8bf71a86568973be4cf1ab9a4f38452d8",
+            "rows": [
+              [
+                "452/789"
+              ]
+            ]
+          },
+          "primary_exact": true,
+          "query": "WITH filtered_journeys AS (SELECT journeys.capacity, journeys.minutes, journeys.occupied FROM journeys JOIN services ON journeys.line_id = services.line_id WHERE services.scope = 'regular' AND journeys.state = 'operated'), aggregated AS (SELECT SUM(occupied * minutes) AS total_occupied_time, SUM(capacity * minutes) AS total_capacity_time FROM filtered_journeys) SELECT total_occupied_time || '/' || total_capacity_time AS occupancy_ratio FROM aggregated;"
+        }
+      ],
+      "arm": "direct",
+      "case": "od-c01",
+      "complete_economic_cost_known": false,
+      "false_user_facing_acceptance": false,
+      "final_response": {
+        "decision": "ABSTAIN",
+        "explanation": "The query is valid and would calculate the seat-time occupancy ratio for regular campus shuttle service. However, the line_id 'airport' in the services table has a scope of 'charter', which is excluded. The query would only include the 'harbor' and 'orchard' lines, which are regular. The calculation would be (7*11 + 11*19 + 5*17) / (13*11 + 14*19 + 13*17) = (77 + 209 + 85) / (143 + 266 + 221) = 371 / 630 = 371/630.",
+        "missing": [
+          "The query requires joining journeys with services on line_id, filtering for scope='regular' and state='operated'. However, the line_id 'airport' in the services"
+        ],
+        "queries": [
+          "WITH filtered_journeys AS (SELECT journeys.capacity, journeys.minutes, journeys.occupied FROM journeys JOIN services ON journeys.line_id = services.line_id WHERE services.scope = 'regular' AND journeys.state = 'operated'), aggregated AS (SELECT SUM(occupied * minutes) AS total_occupied_time, SUM(capacity * minutes) AS total_capacity_time FROM filtered_journeys) SELECT total_occupied_time || '/' || total_capacity_time AS occupancy_ratio FROM aggregated;"
+        ],
+        "result": {}
+      },
+      "observed_provider_dispatches": 1,
+      "observed_usage": {
+        "observed_tokens_in": 550,
+        "observed_tokens_out": 329,
+        "unknown_token_replies": 0
+      },
+      "operator_actions_after_case_start": 0,
+      "operator_preparation_and_review_seconds": null,
+      "orchestrator_cpu_seconds": 0.09325800000000006,
+      "paid_requests": 0,
+      "provider_elapsed_seconds": 131.56239266599732,
+      "reusable_on_withheld": true,
+      "task_elapsed_seconds": 131.65387864600052,
+      "verdict": "FAIL",
+      "verified_primary": false
+    },
+    {
+      "action_attempts": 10,
+      "actual_tool_events": 4,
+      "approved_runs": [],
+      "archive_sha256": "674af325bf1b5b22904b75a42c877f7372208bcf9e3f62159cb2573f5462532e",
+      "arm": "previous",
+      "case": "od-c02",
+      "complete_economic_cost_known": false,
+      "evidence": {
+        "claims": [
+          {
+            "claim_contract_sha256": "6192f5e3ff54a8143b92b4b1f9a3b6e84922280839c0aa48a71e8d759d53038d",
+            "dataset": "releve-transport-27",
+            "dimension": "mass*distance",
+            "id": "travail",
+            "locator": [
+              "rows",
+              0,
+              0
+            ],
+            "mission_id": "wf_5439a054e8c4812c0719094d",
+            "reason": "NO_BOUND_EXECUTION",
+            "requires": {
+              "aggregation": "sum-of-products",
+              "charge_units": [
+                "kg",
+                "t"
+              ],
+              "distance_units": [
+                "m",
+                "km"
+              ]
+            },
+            "revision_sha256": "3aa0f938401be12aa09e4d3ecd6dd526c511c8095bbc820fa5aa50d63e9440d8",
+            "source_version": "registre-tonne-km-v1",
+            "status": "ABSTAIN",
+            "unit": "t·km"
+          }
+        ],
+        "scope": "Case-specific numerical agreement and source binding. Independent custody and production admission are separate.",
+        "status": "ABSTAIN"
+      },
+      "false_user_facing_acceptance": false,
+      "mission_id": "wf_5439a054e8c4812c0719094d",
+      "observed_provider_dispatches": 2,
+      "observed_usage": {
+        "observed_tokens_in": 2912,
+        "observed_tokens_out": 937,
+        "unknown_token_replies": 0
+      },
+      "operator_actions_after_case_start": 0,
+      "operator_preparation_and_review_seconds": null,
+      "orchestrator_cpu_seconds": 2.247631,
+      "outcome_surface": {},
+      "paid_requests": 0,
+      "provider_elapsed_seconds": 178.3192465510001,
+      "raw_drafts": [
+        "Vérification des unités des données d'expéditions effectuée. Toutes les unités sont valides et conformes aux exigences.",
+        "Calculer les tonnes-kilomètres à partir des données du relevé d’expéditions en utilisant les unités fournies et en convertissant les valeurs en tonnes et kilomètres.",
+        "Calculer exactement les tonnes-kilomètres à partir des données d'expéditions autorisées, en respectant les unités et les conversions."
+      ],
+      "raw_explicit_contradiction": false,
+      "refusals": [
+        {
+          "kind": "tool_refused",
+          "proposal_fields": [
+            "input",
+            "name",
+            "tool"
+          ],
+          "reason": "TABLE_INPUT",
+          "tool": "run_table"
+        },
+        {
+          "kind": "tool_refused",
+          "proposal_fields": [
+            "name",
+            "schema",
+            "sql",
+            "tool"
+          ],
+          "reason": "TABLE_ARTIFACT_NAME",
+          "tool": "construct_table"
+        },
+        {
+          "kind": "tool_refused",
+          "proposal_fields": [
+            "input",
+            "name",
+            "tool"
+          ],
+          "reason": "TABLE_ARTIFACT_NAME",
+          "tool": "run_table"
+        },
+        {
+          "kind": "tool_refused",
+          "proposal_fields": [
+            "name",
+            "tool"
+          ],
+          "reason": "Read access is restricted to this run's declared artifacts.",
+          "tool": "read_artifact"
+        },
+        {
+          "kind": "tool_refused",
+          "proposal_fields": [
+            "name",
+            "schema",
+            "sql",
+            "tool"
+          ],
+          "reason": "TABLE_ARTIFACT_NAME",
+          "tool": "construct_table"
+        },
+        {
+          "kind": "tool_refused",
+          "proposal_fields": [
+            "input",
+            "name",
+            "tool"
+          ],
+          "reason": "TABLE_ARTIFACT_NAME",
+          "tool": "run_table"
+        }
+      ],
+      "reusable_on_withheld": false,
+      "task_elapsed_seconds": 178.6023122980041,
+      "tool_input_origins": [],
+      "verdict": "FAIL",
+      "verified_primary": false,
+      "workflow_status": "exhausted"
+    },
+    {
+      "action_attempts": 1,
+      "actual_tool_events": 1,
+      "arm": "direct",
+      "case": "od-c03",
+      "complete_economic_cost_known": false,
+      "false_user_facing_acceptance": false,
+      "final_response": {
+        "decision": "ABSTAIN",
+        "explanation": "La mesure pour le cycle 'piquet-5' manque la durée (duree_s) et l'énergie (energie_j), ce qui rend impossible le calcul de la puissance moyenne. Les deux mesures sont nécessaires pour chaque cycle, et la cellule 'mesures|1|duree_s' ainsi que 'mesures|1|energie_j' sont absentes. Par conséquent, la puissance moyenne ne peut pas être calculée et la réponse est 'ABSTAIN'.",
+        "missing": [
+          "mesures|1|duree_s",
+          "mesures|1|energie_j"
+        ],
+        "queries": [
+          "WITH all_cycles AS (SELECT * FROM mesures WHERE cycle IN ('tulipe-7', 'piquet-5', 'verre-2', 'satin-4')) SELECT SUM(energie_j) AS total_energy, SUM(duree_s) AS total_time FROM all_cycles WHERE duree_s IS NOT NULL AND energie_j IS NOT NULL;"
+        ],
+        "result": {}
+      },
+      "observed_provider_dispatches": 1,
+      "observed_usage": {
+        "observed_tokens_in": 474,
+        "observed_tokens_out": 254,
+        "unknown_token_replies": 0
+      },
+      "operator_actions_after_case_start": 0,
+      "operator_preparation_and_review_seconds": null,
+      "orchestrator_cpu_seconds": 0.038596000000000075,
+      "paid_requests": 0,
+      "precise_missing_cell": true,
+      "provider_elapsed_seconds": 31.892470047001552,
+      "task_elapsed_seconds": 31.929088682998554,
+      "verdict": "ACCEPT"
+    }
+  ]
+}

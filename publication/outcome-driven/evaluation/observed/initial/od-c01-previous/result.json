@@ -1,0 +1,80 @@
+{
+  "action_attempts": 0,
+  "actual_tool_events": 0,
+  "approved_runs": [],
+  "archive_sha256": "45a26d5b80c684baceb89ba10ddff253209f9b2f2d3e2d7a5d4bea88ab71321b",
+  "arm": "previous",
+  "case": "od-c01",
+  "complete_economic_cost_known": false,
+  "evidence": {
+    "claims": [
+      {
+        "claim_contract_sha256": "7ac1a27d1c28ccedf161429f4491b1da7848cd418c8f4f8d9fec2686a8a5a4e5",
+        "dataset": "mobility-bay-16",
+        "dimension": "seat-time/seat-time",
+        "id": "occupancy",
+        "locator": [
+          "rows",
+          0,
+          0
+        ],
+        "mission_id": "wf_56abaa439cca406a65881e04",
+        "reason": "NO_BOUND_EXECUTION",
+        "requires": {
+          "duration_weighting": "seat-time",
+          "required_state": "operated",
+          "service_scope": "regular"
+        },
+        "revision_sha256": "ac0300e7a547bba2cc18a036b63190d426c1f037e0c0129286eb78c82256666f",
+        "source_version": "regular-service-schema-v1",
+        "status": "ABSTAIN",
+        "unit": "ratio"
+      }
+    ],
+    "scope": "Case-specific numerical agreement and source binding. Independent custody and production admission are separate.",
+    "status": "ABSTAIN"
+  },
+  "false_user_facing_acceptance": false,
+  "mission_id": "wf_56abaa439cca406a65881e04",
+  "observed_provider_dispatches": 1,
+  "observed_usage": {
+    "observed_tokens_in": 0,
+    "observed_tokens_out": 0,
+    "unknown_token_replies": 1
+  },
+  "operator_actions_after_case_start": 0,
+  "operator_preparation_and_review_seconds": null,
+  "orchestrator_cpu_seconds": 1.2398209999999998,
+  "outcome_surface": {},
+  "paid_requests": 0,
+  "provider_elapsed_seconds": 175.107377843,
+  "raw_drafts": [],
+  "raw_explicit_contradiction": false,
+  "refusals": [
+    {
+      "code": "PROVIDER_CONNECTION",
+      "kind": "model_error",
+      "message": "Model request failed. Its provider allowance or cost may have been consumed; inspect connection before explicitly resuming.",
+      "model": "qwen3-8b-q4_k_m",
+      "provider": "llama-cpp",
+      "role": "builder",
+      "run_id": "wf_56abaa439cca406a65881e04_1a0536afe797116b",
+      "session_budget_snapshot": {
+        "committed": 0.0,
+        "currency": "USD",
+        "limit": 0.0,
+        "locked": false,
+        "remaining": 0.0,
+        "reserved": 0.0,
+        "scope": "process-session"
+      },
+      "usage_status": "UNKNOWN"
+    }
+  ],
+  "reusable_on_withheld": false,
+  "task_elapsed_seconds": 175.20271201599826,
+  "tool_input_origins": [],
+  "verdict": "FAIL",
+  "verified_primary": false,
+  "workflow_status": "paused"
+}

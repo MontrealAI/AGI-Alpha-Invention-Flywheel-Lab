@@ -1,0 +1,72 @@
+{
+  "body": {
+    "max_tokens": 560,
+    "messages": [
+      {
+        "content": "Solve the actual user task exactly. Use ordinary read-only SQLite with the supplied table schema and rows. Candidate SQL must be SELECT or WITH and return all registered values as exact integers or rational text. SQL may concatenate exact integer numerator and denominator with '||' and '/'. Use the user's language for explanation. Reuse the same query on other rows of these tables. On missing required observations, output ABSTAIN, pinpoint the cell, and return an empty result. A complete numeric result requires the same approved rows, executed query, and exact metric keys. Output one JSON object with decision, queries, result, missing and explanation. Tool checks report reference agreement separately.\n{\"previous\":[],\"task\":{\"ambition\":\"Construisez puis utilisez un instrument réutilisable qui calcule exactement les tonnes-kilomètres de mon relevé d’expéditions autorisé. Donnez un résultat exact en t·km.\",\"data\":{\"expeditions\":[{\"charge\":237,\"lot\":\"p17\",\"trajet\":425,\"u_charge\":\"kg\",\"u_trajet\":\"m\"},{\"charge\":3,\"lot\":\"p18\",\"trajet\":1190,\"u_charge\":\"t\",\"u_trajet\":\"m\"},{\"charge\":942,\"lot\":\"p19\",\"trajet\":4,\"u_charge\":\"kg\",\"u_trajet\":\"km\"},{\"charge\":2,\"lot\":\"p20\",\"trajet\":7,\"u_charge\":\"t\",\"u_trajet\":\"km\"}]},\"dataset\":\"releve-transport-27\",\"facts\":{\"aggregation\":\"sum-of-products\",\"charge_units\":[\"kg\",\"t\"],\"distance_units\":[\"m\",\"km\"]},\"lang\":\"fr\",\"metrics\":[[\"travail\",\"t·km\",\"mass*distance\"]],\"schema\":{\"expeditions\":{\"charge\":\"INTEGER\",\"lot\":\"TEXT\",\"trajet\":\"INTEGER\",\"u_charge\":\"TEXT\",\"u_trajet\":\"TEXT\"}},\"semantics\":\"Additionner, pour chaque ligne, le produit de la charge en tonnes et du trajet en kilomètres. Une tonne vaut 1000 kg et un kilomètre vaut 1000 m. Les unités u_charge et u_trajet distinguent ces cas. Les mesures sont entières dans les unités inscrites, et positives. Renvoyer une colonne, un résultat exact, sans division entière tronquée (texte numérateur/dénominateur permis).\"}}",
+        "role": "user"
+      }
+    ],
+    "model": "qwen3-8b-q4_k_m",
+    "response_format": {
+      "json_schema": {
+        "name": "harness_output",
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "decision": {
+              "enum": [
+                "CONTINUE",
+                "ANSWER",
+                "ABSTAIN"
+              ]
+            },
+            "explanation": {
+              "maxLength": 900,
+              "type": "string"
+            },
+            "missing": {
+              "items": {
+                "maxLength": 160,
+                "type": "string"
+              },
+              "maxItems": 12,
+              "type": "array"
+            },
+            "queries": {
+              "items": {
+                "maxLength": 6000,
+                "type": "string"
+              },
+              "maxItems": 4,
+              "type": "array"
+            },
+            "result": {
+              "additionalProperties": {
+                "maxLength": 100,
+                "type": "string"
+              },
+              "type": "object"
+            }
+          },
+          "required": [
+            "decision",
+            "queries",
+            "result",
+            "missing",
+            "explanation"
+          ],
+          "type": "object"
+        },
+        "strict": true
+      },
+      "type": "json_schema"
+    },
+    "seed": 4242,
+    "stream": false,
+    "temperature": 0
+  },
+  "canonical_body_sha256": "1a67468972fcbdf38839648a259342aaeaa48668dad8d010619000e173f6b81c",
+  "endpoint": "http://127.0.0.1:38461/v1/chat/completions",
+  "transport_body_sha256": "e50a536fdecde350c86b33fcdd126603e32949e804d0a8c6abbe4efca0c8665f"
+}

@@ -1,0 +1,127 @@
+{
+  "ambition": "Construisez puis utilisez un instrument réutilisable qui calcule exactement les tonnes-kilomètres de mon relevé d’expéditions autorisé. Donnez un résultat exact en t·km.",
+  "context": "Additionner, pour chaque ligne, le produit de la charge en tonnes et du trajet en kilomètres. Une tonne vaut 1000 kg et un kilomètre vaut 1000 m. Les unités u_charge et u_trajet distinguent ces cas. Les mesures sont entières dans les unités inscrites, et positives. Renvoyer une colonne, un résultat exact, sans division entière tronquée (texte numérateur/dénominateur permis).\nSchema of the authorized tables: {\"expeditions\":{\"charge\":\"INTEGER\",\"lot\":\"TEXT\",\"trajet\":\"INTEGER\",\"u_charge\":\"TEXT\",\"u_trajet\":\"TEXT\"}}",
+  "expires_at": "2026-11-25T14:48:13.387602+00:00",
+  "language": "fr",
+  "local_only": true,
+  "max_actions": 10,
+  "max_output_tokens": 560,
+  "max_turns": 2,
+  "model": "qwen3-8b-q4_k_m",
+  "provider": "llama-cpp",
+  "requirements": {
+    "approved_tables": {
+      "releve-transport-27": {
+        "expeditions": [
+          {
+            "charge": 237,
+            "lot": "p17",
+            "trajet": 425,
+            "u_charge": "kg",
+            "u_trajet": "m"
+          },
+          {
+            "charge": 3,
+            "lot": "p18",
+            "trajet": 1190,
+            "u_charge": "t",
+            "u_trajet": "m"
+          },
+          {
+            "charge": 942,
+            "lot": "p19",
+            "trajet": 4,
+            "u_charge": "kg",
+            "u_trajet": "km"
+          },
+          {
+            "charge": 2,
+            "lot": "p20",
+            "trajet": 7,
+            "u_charge": "t",
+            "u_trajet": "km"
+          }
+        ]
+      }
+    },
+    "evidence": {
+      "claims": [
+        {
+          "dataset": "releve-transport-27",
+          "dimension": "mass*distance",
+          "id": "travail",
+          "locator": [
+            "rows",
+            0,
+            0
+          ],
+          "reference": {
+            "source": "Independent exact study reference",
+            "value": "857549/40000"
+          },
+          "required_fields": [
+            [
+              "expeditions",
+              "charge"
+            ],
+            [
+              "expeditions",
+              "lot"
+            ],
+            [
+              "expeditions",
+              "trajet"
+            ],
+            [
+              "expeditions",
+              "u_charge"
+            ],
+            [
+              "expeditions",
+              "u_trajet"
+            ]
+          ],
+          "requires": {
+            "aggregation": "sum-of-products",
+            "charge_units": [
+              "kg",
+              "t"
+            ],
+            "distance_units": [
+              "m",
+              "km"
+            ]
+          },
+          "tool": "run_table",
+          "unit": "t·km",
+          "version": "registre-tonne-km-v1"
+        }
+      ],
+      "inputs": {
+        "releve-transport-27": {
+          "facts": {
+            "aggregation": "sum-of-products",
+            "charge_units": [
+              "kg",
+              "t"
+            ],
+            "distance_units": [
+              "m",
+              "km"
+            ]
+          },
+          "kind": "table",
+          "origin": "AUTHORIZED_MISSION_INPUT",
+          "sha256": "009b8565af22d6841217d06fa4cce1864041f012c1acf9a1525567bddcd3f9cd",
+          "version": "registre-tonne-km-v1"
+        }
+      }
+    }
+  },
+  "tools": [
+    "construct_table",
+    "run_table",
+    "read_artifact",
+    "write_document"
+  ]
+}

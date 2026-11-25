@@ -1,0 +1,95 @@
+{
+  "ambition": "Déterminez la puissance moyenne exacte de ce banc d’essai sur tous les cycles autorisés. Si une mesure appariée requise manque, indiquez précisément la cellule et abstenez-vous de donner la puissance totale.",
+  "context": "Diviser la somme de toutes les énergies mesurées (J) par la somme de toutes les durées correspondantes (s), pour obtenir des watts. Les deux mesures sont nécessaires pour chaque cycle. Identifier toute cellule indisponible par table, index de ligne à partir de zéro et colonne, ou par cycle et colonne. Ne pas remplacer les durées manquantes ni recalculer sur un sous-ensemble.\nSchema of the authorized tables: {\"mesures\":{\"cycle\":\"TEXT\",\"duree_s\":\"INTEGER\",\"energie_j\":\"INTEGER\"}}",
+  "expires_at": "2026-11-25T14:45:31.562482+00:00",
+  "language": "fr",
+  "local_only": true,
+  "max_actions": 10,
+  "max_output_tokens": 560,
+  "max_turns": 2,
+  "model": "qwen3-8b-q4_k_m",
+  "provider": "llama-cpp",
+  "requirements": {
+    "approved_tables": {
+      "cycles-banc-39": {
+        "mesures": [
+          {
+            "cycle": "tulipe-7",
+            "duree_s": 13,
+            "energie_j": 83
+          },
+          {
+            "cycle": "piquet-5",
+            "duree_s": null,
+            "energie_j": 127
+          },
+          {
+            "cycle": "verre-2",
+            "duree_s": 17,
+            "energie_j": 214
+          },
+          {
+            "cycle": "satin-4",
+            "duree_s": 9,
+            "energie_j": 77
+          }
+        ]
+      }
+    },
+    "evidence": {
+      "claims": [
+        {
+          "dataset": "cycles-banc-39",
+          "dimension": "energy/time",
+          "id": "puissance",
+          "locator": [
+            "rows",
+            0,
+            0
+          ],
+          "required_fields": [
+            [
+              "mesures",
+              "cycle"
+            ],
+            [
+              "mesures",
+              "duree_s"
+            ],
+            [
+              "mesures",
+              "energie_j"
+            ]
+          ],
+          "requires": {
+            "missing_value": "null",
+            "require_all_pairs": true,
+            "scope": "all cycles"
+          },
+          "tool": "run_table",
+          "unit": "W",
+          "version": "energie-temps-v1"
+        }
+      ],
+      "inputs": {
+        "cycles-banc-39": {
+          "facts": {
+            "missing_value": "null",
+            "require_all_pairs": true,
+            "scope": "all cycles"
+          },
+          "kind": "table",
+          "origin": "AUTHORIZED_MISSION_INPUT",
+          "sha256": "3bff180e1964ea3167275bd3deeeccd1832c3c81334deb1bd439f0c99ac0a702",
+          "version": "energie-temps-v1"
+        }
+      }
+    }
+  },
+  "tools": [
+    "construct_table",
+    "run_table",
+    "read_artifact",
+    "write_document"
+  ]
+}

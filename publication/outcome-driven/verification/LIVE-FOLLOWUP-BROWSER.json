@@ -1,0 +1,18 @@
+{
+  "actions": 10,
+  "artifacts": [
+    "RUN_INSTRUMENT.py",
+    "telemetry_classifier.json"
+  ],
+  "checkpoint_sha256": "696849a322eef64a80d2928fe0784de1ad057bbd880b97d242bbd32df4d5a3c5",
+  "export_sha256": "ac4a1d539693418c5d4706ad233c6c5bff50b439f47cabc8e3d95a2798644088",
+  "id": "wf_9d764f83a92a10d24f34817f",
+  "model_calls": 3,
+  "new_intelligence_setup_calls": 0,
+  "original_ambition": "Build a portable classifier for pairs of integers named previous and current from a 16-bit telemetry counter. Output classification as normal for a nondecrease, wrap for a decrease when previous is at least 65000 and current is at most 535, and reset for all other decreases. Demonstrate the three cases.",
+  "revision": "9a53a4b8bb7eb3d5f82f50effcf44e3ec1291d19",
+  "same_model": "qwen3-8b-q4_k_m",
+  "same_pair": true,
+  "status": "exhausted",
+  "visible_outcome": "Mission outcome\n\nReview the recorded work and evidence to assess completion."
+}

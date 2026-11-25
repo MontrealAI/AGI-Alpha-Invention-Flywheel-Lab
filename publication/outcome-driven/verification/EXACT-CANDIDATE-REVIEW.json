@@ -1,0 +1,136 @@
+{
+  "schema": "frontier/exact-candidate-review/v1",
+  "repository": "MontrealAI/AGI-Alpha-Invention-Flywheel-Lab",
+  "pull_request": 596,
+  "candidate_revision": "f61020768e0a1e18da46e6c1a3426bef63c9a925",
+  "candidate_tree": "5d3ad133a20386cfb4ac531ac69126c68d74b770",
+  "base_revision": "297a51c25c48031e1e6f964835f4dfae3ddb8023",
+  "revision_checks": ["GitHub pull request head metadata", "origin refs/pull/596/head", "local Git commit and tree"],
+  "review_input": "Exact Git archive tested in an isolated temporary directory",
+  "review_scope": {
+    "included": ["Runtime and Pages integration", "Evidence projection and provenance", "Exact evaluation", "Source capture scope", "Archive recovery", "Package contents and compatibility"],
+    "separate_gates": ["Schema implementation authored by this reviewer", "Independent custody", "Live production verification", "Owner account and model access", "Scientific outcome qualification"]
+  },
+  "decision": "NO_BLOCKING_FINDING_IN_REVIEW_SCOPE",
+  "source_file_sha256": {
+    ".github/workflows/research-pages.yml": "20aabd01d20596fd685f3f924d2dbed78292bf4bf41f544780b6e2ae0e4091d1",
+    "docs/research/frontier-omega-alpha/frontier-execution.mjs": "19fd1f442b3e4fd8a89141c45788b960ace97c66b9857200b8d2b573420529a7",
+    "products/alpha-genesis-harness/bridge/instruments.py": "9c7dede3414cebcf2a99043cb1ef39e546f5b413157e53d2959d131cbfdb8eb7",
+    "products/alpha-genesis-harness/bridge/mission_evidence.py": "241e266745ee7c884afe02fc3362e27ef5e3c5a4be1d7b3b0288e5b799c00919",
+    "products/alpha-genesis-harness/bridge/mission_outcomes.py": "cd8b954d573f590afde750cbe3e343cf4b3f89c66425d563eca80637167aacc1",
+    "products/alpha-genesis-harness/bridge/mission_sources.py": "ed59a80ca03467c0222041990afa9c57a604a8fa30c4898dd99a81b0641361c3",
+    "products/alpha-genesis-harness/bridge/pages_missions.py": "38fdf181b186fbaaf8e0c0f9249f2660b1152ee5c60ccf7423dc824ff1d6b9b7",
+    "products/alpha-genesis-harness/bridge/universal_missions.py": "cba68e523973f01ed299353aae6fbea18b2a9f5c21e606f7cf69519f88c3eb68",
+    "products/alpha-genesis-harness/bridge/workflows.py": "860ad47a0b773993256a8e4fe069faf1afcec88cddce0680a5b5cc63bd66d324",
+    "products/frontier-member-tools/member.en.html": "709750e60a6d98d8d2de605b417bef72be36b5cd3f114efbede2884da83cc112",
+    "products/frontier-member-tools/member.fr.html": "42c1c5330c88be1883b4e1ad1f35d18429b67ed269b833602562bca6fba604fb",
+    "scripts/build_research_site.py": "4520727dc6faf0ded0d40160c6f0f3aa835ff4882d2bd5fec865545bf20bafda",
+    "scripts/frontier_atlas.py": "9999c499783f505ffe1b2dc29cb7a19fedfe909b1e37e84b27b0536851b48201",
+    "scripts/frontier_member_value.py": "5539cb2c50f08e845612db501212d2d6037461aad4368df6e5014ed0aa2ba889",
+    "scripts/qualify_frontier_member.py": "02ab05272c0233e74fb5801a3dd0ff1af54f30b667c791e70f89f8f39e07035e"
+  },
+  "tests": {
+    "git_diff_check_passed": true,
+    "node_module_syntax_passed": true,
+    "python_passed": 75,
+    "python_by_suite": {
+      "test_workflows.py": 21,
+      "test_universal_missions.py": 15,
+      "test_mission_outcomes.py": 10,
+      "test_mission_evidence.py": 8,
+      "test_pages_missions.py": 8,
+      "test_outcome_driven_missions.py": 2,
+      "test_instrument_diagnostics.py": 6,
+      "test_member_value.py": 5
+    },
+    "node_passed": 19,
+    "node_suites": ["tests/test_member_tools.mjs", "tests/test_frontier_mission.mjs", "tests/test_frontier_mission_router.mjs"]
+  },
+  "mixed_assets": {
+    "method": "Node DOM harness using exact release HTML element IDs and JavaScript modules with simulated loopback responses",
+    "languages": ["en", "fr"],
+    "columns": ["member_html", "wire_response", "browser_module"],
+    "combinations_per_language": [
+      ["1.1", "1.1", "1.1"],
+      ["1.1", "1.1", "1.2"],
+      ["1.1", "1.2", "1.2"],
+      ["1.2", "1.1", "1.2"],
+      ["1.2", "1.2", "1.2"],
+      ["1.2", "1.2", "1.1"]
+    ],
+    "passed": 12,
+    "checks": ["Pair and submit", "Conditional contract display", "Localized rejection fallback", "Draft and raw output stay outside supported conclusions"]
+  },
+  "executor_package": {
+    "name": "frontier-harness-executor-1.2.0.zip",
+    "sha256": "b29bb7a271ff55380102026c7fff9a792ccc974cbcc9950e91c0677bb3d3bd1e",
+    "bytes": 1166101,
+    "manifest_file_count": 50,
+    "rebuilds_match": true,
+    "source_revision_and_manifest_verified": true,
+    "isolated_install_smoke_passed": true
+  },
+  "legacy_recovery": {
+    "published_archive_sha256": {
+      "1.0.0": "0e2c15569abd9112565f25485fa75c225764de6190cbded4e83127865bf5b9e3",
+      "1.1.0": "58e1aac31e1cd1bfb92c53f213a16e28a7009580dd06072a029a331f959a491a"
+    },
+    "historical_runner_sha256": "46d43d4a017f1d32fcd9e05b32316a6fffac27e1a9572ab9ffbbf87338f00322",
+    "local_1_1_checkpoint_reopened_with_bound_conclusion": true,
+    "portable_restore_checks_passed_for_both": ["Fresh authority", "Paused with no active conclusion", "Unchanged instrument bytes", "Current trusted runner", "New verified receipt after fresh execution", "Unrecognized runner refused"]
+  },
+  "revision_followups": [
+    {
+      "candidate_revision": "5955c08d36d31b77a310720ae2ba17142fca9794",
+      "candidate_tree": "aab1e3c334f04c2383b78e498f84dd89b722d3e6",
+      "parent_revision": "f61020768e0a1e18da46e6c1a3426bef63c9a925",
+      "remote_pull_head_matched": true,
+      "exact_changed_files_sha256": {
+        "products/alpha-genesis-harness/tests/test_universal_missions.py": "771bf42195d6fbeb651557f0af2dc6bc655d55664cdd93585c74c7d655e1f305"
+      },
+      "production_source_unchanged": true,
+      "prior_standalone_failure": {
+        "archive_sha256": "5299dad4db79c7ddde1086c1e3d165e0edda688d45de978460215968a053cb6c",
+        "test": "test_import_replaces_exact_released_runner_and_rejects_rehashed_edits",
+        "python_passed": 14,
+        "python_errors": 1,
+        "error": "FileNotFoundError",
+        "cause": "The test attempted to load a historical checkpoint from a publication directory outside the extracted product."
+      },
+      "corrected_standalone_test": {
+        "test": "test_import_replaces_only_the_pinned_runner_and_rejects_rehashed_edits",
+        "fixture": "A self-contained synthetic legacy runner pinned within the test. The exact published runner was separately exercised in the preceding compatibility replay.",
+        "checks": ["Pinned historical runner replaced with current trusted bytes on paused import", "Modified runner refused after recomputing archive and artifact checksums", "No extra model dispatch during import"],
+        "outcome": "PASS"
+      },
+      "native_archive": {
+        "name": "ALPHA_GENESIS_HARNESS_0.3.0_source-bound_5955c08d36d3.zip",
+        "sha256": "64ffad00aabc99782529eed560e4258006451e82f17e25d3a3a337e4ddac783e",
+        "source_product_tree": "d0030f67bf962caaae5e06837767bf711c014c45",
+        "bytes": 1230767,
+        "manifest_file_count": 294,
+        "test_context": "Focused Python discovery from extracted exact source-bound product bytes outside the repository",
+        "python_passed": 70,
+        "python_by_suite": {
+          "test_universal_missions.py": 15,
+          "test_workflows.py": 21,
+          "test_mission_outcomes.py": 10,
+          "test_mission_evidence.py": 8,
+          "test_pages_missions.py": 8,
+          "test_outcome_driven_missions.py": 2,
+          "test_instrument_diagnostics.py": 6
+        }
+      },
+      "executor_package": {
+        "name": "frontier-harness-executor-1.2.0.zip",
+        "sha256": "46e78f225c2f0f582253669d2112ce90e2dccb6afdc5104fc9d66bcdd1dbc171",
+        "bytes": 1166101,
+        "manifest_file_count": 50,
+        "rebuilds_match": true,
+        "source_revision_and_manifest_verified": true,
+        "isolated_install_smoke_passed": true
+      },
+      "decision": "STANDALONE_REGRESSION_RESOLVED_NO_BLOCKING_FINDING_IN_REVIEW_SCOPE"
+    }
+  ]
+}

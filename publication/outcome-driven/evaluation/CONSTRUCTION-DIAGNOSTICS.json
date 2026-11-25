@@ -1,0 +1,234 @@
+{
+  "executions": [
+    {
+      "arm": "previous",
+      "case": "od-c01",
+      "construction_diagnostics": [],
+      "observed_archive_sha256": "45a26d5b80c684baceb89ba10ddff253209f9b2f2d3e2d7a5d4bea88ab71321b",
+      "observed_verdict": "FAIL"
+    },
+    {
+      "arm": "previous",
+      "case": "od-c03",
+      "construction_diagnostics": [],
+      "observed_archive_sha256": "8a921d09f4debf4aee8b900d82e96eadf389d2f911b37e7ad67fd13d4e238f8c",
+      "observed_verdict": "FAIL"
+    },
+    {
+      "arm": "previous",
+      "case": "od-c02",
+      "construction_diagnostics": [
+        {
+          "artifact": "table.json",
+          "bound_run_observed": false,
+          "diagnosis": "Query could not run on approved data.",
+          "error": "TABLE_INPUT",
+          "sha256": "c5717d0345999929203c1f188921d023bf1c274a835c5767d005c248fd84e041"
+        }
+      ],
+      "observed_archive_sha256": "674af325bf1b5b22904b75a42c877f7372208bcf9e3f62159cb2573f5462532e",
+      "observed_verdict": "FAIL"
+    },
+    {
+      "arm": "schema",
+      "case": "od-c01",
+      "construction_diagnostics": [
+        {
+          "artifact": "query.json",
+          "bound_run_observed": false,
+          "output_sha256": "db407f11d7ede59abaab0e98e097ff2dae10a048207b801745d7199ef19c2387",
+          "primary_exact": false,
+          "rows": [
+            [
+              0
+            ]
+          ],
+          "sha256": "78445a21e51540c1329c5d7a4edfe6feca10501d97ac4429748bd1f6410d27f5"
+        }
+      ],
+      "observed_archive_sha256": "8f94a2b061288881c7b85bdb3d6ee781dc829344bb3d8d92a7feb6cd672f5f92",
+      "observed_verdict": "FAIL"
+    },
+    {
+      "arm": "assembly",
+      "case": "od-c02",
+      "construction_diagnostics": [],
+      "observed_archive_sha256": "04caf110b1322e75c1418931ce94ea2e548409c61a3776b4902fcd289dad0ffe",
+      "observed_verdict": "FAIL"
+    },
+    {
+      "arm": "both",
+      "case": "od-c03",
+      "construction_diagnostics": [
+        {
+          "artifact": "query.json",
+          "bound_run_observed": false,
+          "diagnosis": "Missing required data. No numerical audit run.",
+          "sha256": "442a3e5fad7117c9f874e33259edfeaa81c8aa659511560331c777f3a9f21fa0"
+        }
+      ],
+      "observed_archive_sha256": "2e48ca43d54b4582ea597d5ade9639e8ac918684fc33f4039479438ab536289c",
+      "observed_verdict": "ACCEPT"
+    },
+    {
+      "arm": "assembly",
+      "case": "od-c01",
+      "construction_diagnostics": [],
+      "observed_archive_sha256": "4919e45f6a7a7274add073ee4539a127bccda2b0a88686caaa7bfdaa59ddac7d",
+      "observed_verdict": "FAIL"
+    },
+    {
+      "arm": "both",
+      "case": "od-c02",
+      "construction_diagnostics": [
+        {
+          "artifact": "query.json",
+          "bound_run_observed": false,
+          "output_sha256": "1207dace2b202b1cad5efab31fa2618029d2b46ac9b27b027ac997413a8dda57",
+          "primary_exact": false,
+          "rows": [
+            [
+              "p17",
+              100725
+            ],
+            [
+              "p18",
+              3570
+            ],
+            [
+              "p19",
+              3768
+            ],
+            [
+              "p20",
+              14
+            ]
+          ],
+          "sha256": "6e07fb7c348f84d2ab3bfb2881b3f53d0785e4eeedf945adeb3cc12edb8153ba"
+        }
+      ],
+      "observed_archive_sha256": "c19c6725a6ff4acacfe922752ae0fc890602c6a83afd44fab20cdee07fd13b86",
+      "observed_verdict": "FAIL"
+    },
+    {
+      "arm": "schema",
+      "case": "od-c03",
+      "construction_diagnostics": [
+        {
+          "artifact": "query.json",
+          "bound_run_observed": false,
+          "diagnosis": "Missing required data. No numerical audit run.",
+          "sha256": "b7a9be648ff148b4f7663fb3a48a6d43757221e4528fbb69b452fa37f7f23154"
+        }
+      ],
+      "observed_archive_sha256": "694263db3131953ad83797233396ebcfc9771d4f176da113d1c994fb64ed2fdd",
+      "observed_verdict": "ACCEPT"
+    },
+    {
+      "arm": "both",
+      "case": "od-c01",
+      "construction_diagnostics": [
+        {
+          "artifact": "query.json",
+          "bound_run_observed": false,
+          "output_sha256": "db407f11d7ede59abaab0e98e097ff2dae10a048207b801745d7199ef19c2387",
+          "primary_exact": false,
+          "rows": [
+            [
+              0
+            ]
+          ],
+          "sha256": "78445a21e51540c1329c5d7a4edfe6feca10501d97ac4429748bd1f6410d27f5"
+        }
+      ],
+      "observed_archive_sha256": "8d188d18fff85169f4d1bb6455b9b76c0ce13a4eada4f2f42f02969d8d244b4b",
+      "observed_verdict": "FAIL"
+    },
+    {
+      "arm": "schema",
+      "case": "od-c02",
+      "construction_diagnostics": [
+        {
+          "artifact": "query-tkm.json",
+          "bound_run_observed": false,
+          "output_sha256": "1207dace2b202b1cad5efab31fa2618029d2b46ac9b27b027ac997413a8dda57",
+          "primary_exact": false,
+          "rows": [
+            [
+              "p17",
+              100725
+            ],
+            [
+              "p18",
+              3570
+            ],
+            [
+              "p19",
+              3768
+            ],
+            [
+              "p20",
+              14
+            ]
+          ],
+          "sha256": "747f15ebe999bf768e700f20ff4ec29d01de754893f14e28c78c27e05ecc2102"
+        },
+        {
+          "artifact": "query.json",
+          "bound_run_observed": false,
+          "output_sha256": "7de0a92e31b18a0368a92fe50a4569acbe714bfb2d9079c94094c9ea8a3af6cb",
+          "primary_exact": false,
+          "rows": [
+            [
+              "p17",
+              237,
+              425,
+              "kg",
+              "m"
+            ],
+            [
+              "p18",
+              3,
+              1190,
+              "t",
+              "m"
+            ],
+            [
+              "p19",
+              942,
+              4,
+              "kg",
+              "km"
+            ],
+            [
+              "p20",
+              2,
+              7,
+              "t",
+              "km"
+            ]
+          ],
+          "sha256": "c13621f60f342a1d89804509642a347239773b85b7846616e094ac5603befef6"
+        }
+      ],
+      "observed_archive_sha256": "7639abab3757740634b83fb0ede6908a506097def3551b4ab33c2ab489499cd5",
+      "observed_verdict": "FAIL"
+    },
+    {
+      "arm": "assembly",
+      "case": "od-c03",
+      "construction_diagnostics": [
+        {
+          "artifact": "table.json",
+          "bound_run_observed": false,
+          "diagnosis": "Missing required data. No numerical audit run.",
+          "sha256": "81011ef60f857dbf29cd886a53828c0692b23fc73086117799977be9663c2550"
+        }
+      ],
+      "observed_archive_sha256": "c06f41f0a314b483c9e56efc81c088a7c1d1f8a0c05462d51f43473332bd9c4d",
+      "observed_verdict": "ACCEPT"
+    }
+  ],
+  "schema": "frontier/outcome-driven-construction-diagnostics-v1",
+  "scope": "Independent retrospective SQL replay on sealed synthetic inputs. No inference calls or mission reruns. Recorded mission verdicts remain fixed."
+}

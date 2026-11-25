@@ -1,0 +1,123 @@
+{
+  "action_attempts": 2,
+  "actual_tool_events": 2,
+  "approved_runs": [],
+  "archive_sha256": "8d188d18fff85169f4d1bb6455b9b76c0ce13a4eada4f2f42f02969d8d244b4b",
+  "arm": "both",
+  "case": "od-c01",
+  "complete_economic_cost_known": false,
+  "evidence": {
+    "claims": [
+      {
+        "claim_contract_sha256": "7ac1a27d1c28ccedf161429f4491b1da7848cd418c8f4f8d9fec2686a8a5a4e5",
+        "dataset": "mobility-bay-16",
+        "dimension": "seat-time/seat-time",
+        "id": "occupancy",
+        "locator": [
+          "rows",
+          0,
+          0
+        ],
+        "mission_id": "wf_9037604ffe5c05285c24981a",
+        "reason": "NO_BOUND_EXECUTION",
+        "requires": {
+          "duration_weighting": "seat-time",
+          "required_state": "operated",
+          "service_scope": "regular"
+        },
+        "revision_sha256": "bd5ad86c6f028d18069f5d0ad01df7b9dd60e0e5868741540b7a2fd86f56dcad",
+        "source_version": "regular-service-schema-v1",
+        "status": "ABSTAIN",
+        "unit": "ratio"
+      }
+    ],
+    "scope": "Case-specific numerical agreement and source binding. Independent custody and production admission are separate.",
+    "status": "ABSTAIN"
+  },
+  "false_user_facing_acceptance": false,
+  "mission_id": "wf_9037604ffe5c05285c24981a",
+  "observed_provider_dispatches": 2,
+  "observed_usage": {
+    "observed_tokens_in": 3530,
+    "observed_tokens_out": 267,
+    "unknown_token_replies": 0
+  },
+  "operator_actions_after_case_start": 0,
+  "operator_preparation_and_review_seconds": null,
+  "orchestrator_cpu_seconds": 0.885663000000001,
+  "outcome_surface": {
+    "conclusions": [],
+    "contract": {
+      "abstention_conditions": [],
+      "alternatives": [],
+      "approved_inputs": [
+        {
+          "id": "mobility-bay-16",
+          "kind": "table",
+          "origin": "AUTHORIZED_MISSION_INPUT",
+          "source_version": "regular-service-schema-v1"
+        }
+      ],
+      "approved_source_captures": [],
+      "approved_source_count": 0,
+      "assumptions": [],
+      "constraints": [],
+      "criteria": [],
+      "deliverable": "Build and run a reusable exact calculator for the seat-time occupancy ratio of regular campus shuttle service. Exclude cancelled trips and charter service. Give the fraction for my authorized records.",
+      "objective": "Build and run a reusable exact calculator for the seat-time occupancy ratio of regular campus shuttle service. Exclude cancelled trips and charter service. Give the fraction for my authorized records.",
+      "original_ambition": "Build and run a reusable exact calculator for the seat-time occupancy ratio of regular campus shuttle service. Exclude cancelled trips and charter service. Give the fraction for my authorized records.",
+      "required_claims": [
+        "occupancy"
+      ],
+      "resource_envelope": {
+        "local_only": true,
+        "max_actions": 10,
+        "max_iterations": 2,
+        "max_operations": 10000,
+        "max_output_tokens": 560,
+        "tool_permissions": [
+          "construct_table",
+          "run_table",
+          "read_artifact",
+          "write_document"
+        ]
+      },
+      "verification": null
+    },
+    "contract_sha256": "0d1d8a58cf2f9672b53fd39d494665fad2d5664d4293f0734cca8fd8e3647428",
+    "independent_acceptance": "NOT_ESTABLISHED",
+    "language": "en",
+    "message": "Review the recorded work and evidence to assess completion.",
+    "mission_id": "wf_9037604ffe5c05285c24981a",
+    "quantitative_report_ready": false,
+    "revision_sha256": "bd5ad86c6f028d18069f5d0ad01df7b9dd60e0e5868741540b7a2fd86f56dcad",
+    "schema": "frontier/mission-outcome/v1",
+    "status": "UNVERIFIED",
+    "unresolved": [
+      {
+        "claim_contract_sha256": "7ac1a27d1c28ccedf161429f4491b1da7848cd418c8f4f8d9fec2686a8a5a4e5",
+        "dataset": "mobility-bay-16",
+        "dimension": "seat-time/seat-time",
+        "id": "occupancy",
+        "message": "Run the calculation against its approved inputs.",
+        "reason": "NO_BOUND_EXECUTION",
+        "status": "ABSTAIN",
+        "unit": "ratio"
+      }
+    ]
+  },
+  "paid_requests": 0,
+  "provider_elapsed_seconds": 90.0378109779922,
+  "raw_drafts": [
+    "Start by constructing a SQL table to filter and join the relevant data for calculating the seat-time occupancy ratio.",
+    "The first action is to construct a SQL query to join the journeys and services tables, filter for regular service and operated trips, and calculate the seat-time occupancy ratio."
+  ],
+  "raw_explicit_contradiction": false,
+  "refusals": [],
+  "reusable_on_withheld": false,
+  "task_elapsed_seconds": 90.34744175300148,
+  "tool_input_origins": [],
+  "verdict": "FAIL",
+  "verified_primary": false,
+  "workflow_status": "exhausted"
+}

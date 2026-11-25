@@ -1,0 +1,279 @@
+{
+  "april_attribution": "ABSTAIN",
+  "observation_admission": "EMPTY_TARGET_PRODUCTS",
+  "physical_confirmation": false,
+  "positive_transport_control": {
+    "asas_sn_id": 8590141875,
+    "does_not_establish_coverage_for_toi216": true,
+    "finite_dated_rows": 830,
+    "same_telescope_api": true
+  },
+  "pyarrow": "22.0.0",
+  "request_receipts": {
+    "asassn-source": {
+      "acquired_utc": "2026-11-25T14:26:10.167543+00:00",
+      "bytes": 30167,
+      "final_url": "https://raw.githubusercontent.com/asas-sn/skypatrol/master/pyasassn/client.py",
+      "sha256": "8f00bb5930c60219f1cf45c1975c1d0c9567b976923aeaf39a0f4692cee9b33b",
+      "status": 200,
+      "url": "https://raw.githubusercontent.com/asas-sn/skypatrol/master/pyasassn/client.py"
+    },
+    "asassn-ui": {
+      "acquired_utc": "2026-11-25T14:26:10.176509+00:00",
+      "error": "HTTPError",
+      "reason": "Too Many Requests",
+      "status": 429,
+      "url": "https://asas-sn.osu.edu/photometry"
+    },
+    "asassn-v1": {
+      "acquired_utc": "2026-11-25T14:26:10.175518+00:00",
+      "bytes": 4762,
+      "final_url": "https://www.astronomy.ohio-state.edu/asassn/public/",
+      "sha256": "72fefc964f40a068c9ca7f5d172a4db838e6b9188db04fd2c77b62fd0c764d32",
+      "status": 200,
+      "url": "https://www.astronomy.ohio-state.edu/asassn/public/"
+    },
+    "asassn-v1-coordinate": {
+      "error": "HTTPError",
+      "reason": "Not Found",
+      "status": 404,
+      "url": "https://www.astronomy.ohio-state.edu/light_curve_sendinput",
+      "utc": "2026-11-25T14:26:54.760282+00:00"
+    },
+    "asassn-v1-session": {
+      "bytes": 4762,
+      "content_type": "text/html",
+      "final_url": "https://www.astronomy.ohio-state.edu/asassn/public/",
+      "sha256": "72fefc964f40a068c9ca7f5d172a4db838e6b9188db04fd2c77b62fd0c764d32",
+      "status": 200,
+      "url": "https://www.astronomy.ohio-state.edu/asassn/public/",
+      "utc": "2026-11-25T14:26:47.006933+00:00"
+    },
+    "asassn-v2-alternate-photometry": {
+      "bytes": 3267,
+      "columns": [
+        "asas_sn_id",
+        "camera",
+        "image_id",
+        "quality",
+        "__index_level_0__"
+      ],
+      "content_type": "text/html",
+      "payload": null,
+      "row_groups": 1,
+      "rows": 0,
+      "sha256": "f3802c7be6f744a904fe1bc3664b85821017b6253d3e714f4f92409b9e5b8e19",
+      "status": 200,
+      "url": "http://asassn-data02.ifa.hawaii.edu:9006/get_block/query_hash-bGlzdGxlbi0xX2xpc3RmaXJzdC02NTI4MzU0MTU0MTFfbGlzdGVuZC02NTI4MzU0MTU0MTF8Y2F0%0AYWxvZy1tYXN0ZXJfbGlzdHxpZF9jb2wtYXNhc19zbl9pZHxjb2xzLWFzYXNfc25faWQvcmFfZGVn%0AL2RlY19kZWcvY2F0YWxvZ19zb3VyY2Vz%0A-block_idx-0-catalog-master_list",
+      "utc": "2026-11-25T14:30:24.859373+00:00"
+    },
+    "asassn-v2-control-photometry": {
+      "bytes": 67199,
+      "columns": [
+        "asas_sn_id",
+        "jd",
+        "flux",
+        "flux_err",
+        "mag",
+        "mag_err",
+        "limit",
+        "fwhm",
+        "image_id",
+        "camera",
+        "quality",
+        "__index_level_0__"
+      ],
+      "content_type": "text/html",
+      "payload": null,
+      "row_groups": 1,
+      "rows": 830,
+      "sha256": "7bcaf53567dc0c370f39a2a7dd10375fac0c273514fd9db2da6e400f2f50a44f",
+      "status": 200,
+      "url": "http://asassn-data01.ifa.hawaii.edu:9006/get_block/query_hash-bGlzdGxlbi0xX2xpc3RmaXJzdC04NTkwMTQxODc1X2xpc3RlbmQtODU5MDE0MTg3NXxjYXRhbG9n%0ALW1hc3Rlcl9saXN0fGlkX2NvbC1hc2FzX3NuX2lkfGNvbHMtYXNhc19zbl9pZC9yYV9kZWcvZGVj%0AX2RlZy9jYXRhbG9nX3NvdXJjZXM=%0A-block_idx-0-catalog-master_list",
+      "utc": "2026-11-25T14:30:20.564260+00:00"
+    },
+    "asassn-v2-control-target": {
+      "bytes": 4399,
+      "columns": [
+        "asas_sn_id",
+        "ra_deg",
+        "dec_deg",
+        "item",
+        "__index_level_0__"
+      ],
+      "content_type": "text/html",
+      "payload": {
+        "catalog": "master_list",
+        "cols": [
+          "asas_sn_id",
+          "ra_deg",
+          "dec_deg",
+          "catalog_sources"
+        ],
+        "download": true,
+        "format": "arrow",
+        "id_col": "asas_sn_id",
+        "tar_ids": [
+          8590141875
+        ]
+      },
+      "row_groups": 1,
+      "rows": 1,
+      "sha256": "5b2491ad2bee664087c5b5740d663f6a20ceb8ed5bd82269e5a397623abb257b",
+      "status": 200,
+      "url": "http://asassn-lb01.ifa.hawaii.edu:9006/lookup_targets/catalog_list",
+      "utc": "2026-11-25T14:30:16.358495+00:00"
+    },
+    "asassn-v2-health": {
+      "bytes": 335,
+      "content_type": "text/html",
+      "final_url": "http://asassn-lb01.ifa.hawaii.edu:9006/get_current_message",
+      "sha256": "e84ba3a719f5a3718502932fb63a081fb8a804b71a65a666f1e2c9b2c43d5113",
+      "status": 200,
+      "url": "http://asassn-lb01.ifa.hawaii.edu:9006/get_current_message",
+      "utc": "2026-11-25T14:26:47.003512+00:00"
+    },
+    "asassn-v2-hosts": {
+      "bytes": 192,
+      "content_type": "text/html",
+      "final_url": "http://asassn-lb01.ifa.hawaii.edu:9006/get_block_servers",
+      "payload": null,
+      "sha256": "18356636c99958848459e231ff82a94c6ea276a8e7a0558ed501f410d14ad5f8",
+      "status": 200,
+      "url": "http://asassn-lb01.ifa.hawaii.edu:9006/get_block_servers",
+      "utc": "2026-11-25T14:28:24.634093+00:00"
+    },
+    "asassn-v2-master": {
+      "bytes": 4398,
+      "columns": [
+        "asas_sn_id",
+        "ra_deg",
+        "dec_deg",
+        "item",
+        "__index_level_0__"
+      ],
+      "content_type": "text/html",
+      "matched_targets": [
+        {
+          "__index_level_0__": 0,
+          "asas_sn_id": 652835415411,
+          "catalog_sources": [
+            "stellar_main",
+            "tic"
+          ],
+          "dec_deg": -63.260330090000004,
+          "ra_deg": 73.98001293
+        }
+      ],
+      "payload": {
+        "catalog": "master_list",
+        "cols": [
+          "asas_sn_id",
+          "ra_deg",
+          "dec_deg",
+          "catalog_sources"
+        ],
+        "download": true,
+        "format": "arrow",
+        "id_col": "asas_sn_id",
+        "tar_ids": [
+          652835415411
+        ]
+      },
+      "row_groups": 1,
+      "rows": 1,
+      "sha256": "e6db03a99d59381504a8b00f54e92e0ea666031fe38bb75ba7fe160bd53942c9",
+      "status": 200,
+      "url": "http://asassn-lb01.ifa.hawaii.edu:9006/lookup_targets/catalog_list",
+      "utc": "2026-11-25T14:29:35.112918+00:00"
+    },
+    "asassn-v2-master-photometry": {
+      "bytes": 3267,
+      "columns": [
+        "asas_sn_id",
+        "camera",
+        "image_id",
+        "quality",
+        "__index_level_0__"
+      ],
+      "content_type": "text/html",
+      "payload": null,
+      "row_groups": 1,
+      "rows": 0,
+      "sha256": "f3802c7be6f744a904fe1bc3664b85821017b6253d3e714f4f92409b9e5b8e19",
+      "status": 200,
+      "url": "http://asassn-data01.ifa.hawaii.edu:9006/get_block/query_hash-bGlzdGxlbi0xX2xpc3RmaXJzdC02NTI4MzU0MTU0MTFfbGlzdGVuZC02NTI4MzU0MTU0MTF8Y2F0%0AYWxvZy1tYXN0ZXJfbGlzdHxpZF9jb2wtYXNhc19zbl9pZHxjb2xzLWFzYXNfc25faWQvcmFfZGVn%0AL2RlY19kZWcvY2F0YWxvZ19zb3VyY2Vz%0A-block_idx-0-catalog-master_list",
+      "utc": "2026-11-25T14:29:38.930388+00:00"
+    },
+    "asassn-v2-photometry": {
+      "bytes": 3267,
+      "columns": [
+        "asas_sn_id",
+        "camera",
+        "image_id",
+        "quality",
+        "__index_level_0__"
+      ],
+      "content_type": "text/html",
+      "row_groups": 1,
+      "rows": 0,
+      "sha256": "f3802c7be6f744a904fe1bc3664b85821017b6253d3e714f4f92409b9e5b8e19",
+      "status": 200,
+      "target_rows": [
+        {
+          "__index_level_0__": 0,
+          "asas_sn_id": 652835415411,
+          "dec_deg": -63.260330090000004,
+          "ra_deg": 73.98001293,
+          "tic_id": 55652896
+        }
+      ],
+      "transport": "Official public Sky Patrol API, anonymous HTTP, no credentials.",
+      "url": "http://asassn-data01.ifa.hawaii.edu:9006/get_block/query_hash-bGlzdGxlbi0xX2xpc3RmaXJzdC01NTY1Mjg5Nl9saXN0ZW5kLTU1NjUyODk2fGNhdGFsb2ctc3Rl%0AbGxhcl9tYWlufGlkX2NvbC10aWNfaWR8Y29scy1hc2FzX3NuX2lkL3JhX2RlZy9kZWNfZGVnL3Rp%0AY19pZA==%0A-block_idx-0-catalog-stellar_main",
+      "utc": "2026-11-25T14:29:00.171996+00:00"
+    },
+    "asassn-v2-target": {
+      "bytes": 4224,
+      "content_type": "text/html",
+      "final_url": "http://asassn-lb01.ifa.hawaii.edu:9006/lookup_targets/catalog_list",
+      "payload": {
+        "catalog": "stellar_main",
+        "cols": [
+          "asas_sn_id",
+          "ra_deg",
+          "dec_deg",
+          "tic_id"
+        ],
+        "download": true,
+        "format": "arrow",
+        "id_col": "tic_id",
+        "tar_ids": [
+          55652896
+        ]
+      },
+      "sha256": "3204fd35a7d391f5a8ccfcfaeecc27e7aaea8067751a3df38e92c9a11692cae3",
+      "status": 200,
+      "url": "http://asassn-lb01.ifa.hawaii.edu:9006/lookup_targets/catalog_list",
+      "utc": "2026-11-25T14:28:24.633052+00:00"
+    }
+  },
+  "same_target_and_month_positive_control": false,
+  "schema": "frontier/toi216-asassn-physical-admission-v1",
+  "scope": "Bounded public data acquisition. Archive absence of returned photometry does not establish absence of exposures.",
+  "target_id": {
+    "TIC": 55652896,
+    "asas_sn_id": 652835415411,
+    "separation_arcsec": 1.024352529964025
+  },
+  "target_rows_by_block": {
+    "asassn-v2-alternate-photometry": 0,
+    "asassn-v2-master-photometry": 0,
+    "asassn-v2-photometry": 0
+  },
+  "transport_control_registration": {
+    "control_asas_sn_id": 8590141875,
+    "frozen_utc": "2026-11-25T14:30:02.025091+00:00",
+    "scope": "Public client example has historical photometry. Positive transport test uses same API protocol with its known target and requires a nonempty decoded photometry block with JD. This control is not TOI-216 and cannot qualify April coverage.",
+    "source": "https://github.com/asas-sn/skypatrol#downloading-curves"
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "admission": {
+    "maximum_false_solver_proposals": 0,
+    "minimum_certified_supported_cases": 2,
+    "minimum_full_outcome_rate": 0.8,
+    "minimum_material_gain_over_strongest_baseline_percentage_points": 10,
+    "note": "An evidence guard preventing actual false execution cannot substitute for zero misleading proposals in the study.",
+    "primary": "adapted_method_with_numeric_tool"
+  },
+  "comparators": [
+    "unchanged base direct",
+    "unchanged base method",
+    "unchanged base two retrieved examples",
+    "method and retrieval with exact authorized missing-field tool",
+    "conservative ordinary rules and exact authorized missing-field tool",
+    "same augmented and unaugmented trained arms for interpretation"
+  ],
+  "counterfactual_controls": "Conjunction beats independently offered ordinary rules and strongest base configuration; gold semantic contracts govern actual candidate execution on all arms. The evaluator checks exact missing state from the numerical record. Report per-slot and exact whole-task performance separately.",
+  "counts": {
+    "development": 32,
+    "train": 128
+  },
+  "data_sha256": {
+    "development": "1a8aa93c1812231ca71350b65ada923b5b6d20a2a50ac8004aeb9bf247c035b7",
+    "train": "371b7f48755a58ab9db1f36aa3b2dbc30d0cf52c64accd54162c1ecc2a48e088"
+  },
+  "prior_source": "297a51c25c48031e1e6f964835f4dfae3ddb8023",
+  "prior_teacher": "publication/evidence-bound/strategic/game.py",
+  "registered_at": "2026-11-25T14:10:59.729453+00:00",
+  "schema": "frontier/strategic-formalization-registration-v1",
+  "scope": "Synthetic games. Author-authored training and development prose. Confirmation prose and expected interpretations independently authored outside this fit. Shared project administration without separate evaluator custody.",
+  "source_sha256": {
+    "cases.py": "6d2dc9a7356add743a09060bdf86445af9a16bba29d3ebec33ac155abacb363c",
+    "fit.py": "9c466ffdf171069848afbc6503f5263a120bd67f58ccc5068906b62c8ee70010",
+    "formalize.py": "08bea008263355b5ee69d6daf74540a583329108cb9b426d2880a6c498cbe002"
+  },
+  "stop": "One fixed 48-update attempt. Stop on nonfinite loss or resource error. Score the frozen final checkpoint only. No correction using confirmation.",
+  "target": "Three independent semantic fields formalize bilingual imperfect-information strategic briefs and determine whether an exact game may be instantiated.",
+  "training": {
+    "alpha": 16,
+    "batch_size": 8,
+    "clip_max_norm": 1.0,
+    "epochs": 3,
+    "learning_rate": 0.003,
+    "optimizer": "AdamW",
+    "rank": 8,
+    "seed": 112525,
+    "tail_layers": 8,
+    "threads": 3
+  }
+}

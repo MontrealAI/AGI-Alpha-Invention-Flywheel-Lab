@@ -1,0 +1,12 @@
+{
+  "name": "16-bit telemetry counter transition",
+  "description": "Classify a transition under the operator's thresholds for forward and unchanged values, wraparound, and resets.",
+  "inputs": ["previous", "current"],
+  "conditions": ["previous and current are integers from 0 through 65535"],
+  "limitations": ["The threshold rule is a convention for this input contract. It does not establish the physical cause of a transition."],
+  "outputs": {
+    "classification": {
+      "formula": "choose(current >= previous, 'normal', choose(previous >= 65000 and current <= 535, 'wrap', 'reset'))"
+    }
+  }
+}
