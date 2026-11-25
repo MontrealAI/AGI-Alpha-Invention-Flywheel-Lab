@@ -5,11 +5,15 @@ import {
   createMission, reviseMission, prepareMission, beginMission, recordMission, interruptMission,
   cancelMission, continueMission, exportMission, importMission, missionPacket, bindMissionRequest,
   addMissionInstruction, checkMissionDocuments, setMissionDocuments, maxDocuments, maxDocumentBytes,
+  addMissionArtifacts,
 } from './frontier-mission.mjs';
 import {
   createMissionRequest, createMissionPrompt, runLocalMission, validateLocalMissionConfig,
 } from './frontier-mission-router.mjs';
 import {createAssistedBrief, maximumReturnedBytes, readAssistedReply, renderAssistedWork, workPreview} from './frontier-assisted-work.mjs';
+import {inspectReturnedWork, readMissionArtifact, maximumArtifacts, maximumArtifactBytes} from './frontier-artifact-exchange.mjs';
+import {loadMissionContextSources, selectMissionContext, missionContextLines, missionIntelligencePackage} from './frontier-mission-context.mjs';
+import {reviewBatterySources, sourceReviewSchema} from './dpp-source-review.mjs';
 
 const messages = {
   en: {
@@ -56,6 +60,28 @@ const messages = {
     fileChanged: 'Continue the mission to use your updated sources.',
     restoreFiles: 'The companion holds these source files for this mission.',
     continueBusy: 'The current operation is still being stopped. Try again after it settles.',
+    evidenceAppend: 'Selected public evidence is included when you copy or download the ordinary brief.',
+    evidenceGap: 'No public evidence matched this mission’s scope. You can use the brief directly.',
+    evidenceUnavailable: 'Public evidence is temporarily unavailable. You can use the brief directly.',
+    evidenceHeading: 'Selected public evidence and tools to review',
+    openSource: 'Open source',
+    openTool: 'Open tool',
+    deliverablesMissing: names => `Files still needed · ${names.join(', ')}. Download them from your assistant and add them here.`,
+    deliverablesRetained: count => `${count} file${count === 1 ? '' : 's'} retained for review.`,
+    deliverablesSnippet: 'The reply contains a code example. Add the actual source file for review or an authorized test.',
+    deliverablesReady: 'Add the actual files your assistant produced, or bring them back later.',
+    deliverablesInvalid: 'Choose up to eight supported UTF-8 files, with a combined limit of 256 KiB.',
+    duplicateReply: 'That exact reply is already in this mission. Bring back a new finding, test or file.',
+    useFile: 'Stage for private companion review',
+    artifactUnverified: 'Imported file · verification pending',
+    askFiles: 'Ask the assistant for the actual files',
+    continueAssistant: 'Continue with ChatGPT',
+    reviewSourceClaims: 'Check supplied battery measurements',
+    claimReviewScope: 'This check compares quantities and scope labels in the supplied excerpts. It leaves source interpretation and regulatory acceptance for review.',
+    claimReviewInvalid: 'This evidence package could not be checked. Review its case, source and observation fields.',
+    downloadClaimReview: 'Download check receipt',
+    retainClaimReview: 'Keep check receipt with mission',
+    claimDecisions: {supported:'Supported by supplied observations',contradicted:'Contradicted',insufficient:'Insufficient',conflicting:'Conflicting'},
     routes: {direct:'Direct answer',capability:'Existing capability',composition:'Capability composition',adaptation:'Adaptation',
       research:'Frontier research',invention:'New invention',continuing:'Continuing investigation',clarification:'Clarification or abstention'},
   },
@@ -103,6 +129,28 @@ const messages = {
     fileChanged: 'Poursuivez la mission pour utiliser les sources mises à jour.',
     restoreFiles: 'Le compagnon conserve ces fichiers sources pour la mission.',
     continueBusy: 'L’opération en cours s’arrête. Réessayez une fois l’arrêt confirmé.',
+    evidenceAppend: 'Les éléments publics sélectionnés accompagnent le résumé ordinaire lorsque vous le copiez ou le téléchargez.',
+    evidenceGap: 'Aucune donnée publique trouvée ne correspond à la portée de la mission. Vous pouvez utiliser le résumé directement.',
+    evidenceUnavailable: 'Les données probantes publiques sont temporairement indisponibles. Vous pouvez utiliser le résumé directement.',
+    evidenceHeading: 'Données publiques et outils sélectionnés à examiner',
+    openSource: 'Ouvrir la source',
+    openTool: 'Ouvrir l’outil',
+    deliverablesMissing: names => `Fichiers à obtenir · ${names.join(', ')}. Téléchargez-les dans votre assistant, puis ajoutez-les ici.`,
+    deliverablesRetained: count => `${count} fichier${count === 1 ? '' : 's'} à examiner.`,
+    deliverablesSnippet: 'La réponse contient un exemple de code. Ajoutez le fichier source pour l’examiner ou réaliser un essai autorisé.',
+    deliverablesReady: 'Ajoutez les fichiers produits par votre assistant maintenant ou plus tard.',
+    deliverablesInvalid: 'Choisissez au plus huit fichiers UTF-8 pris en charge, pour un total maximal de 256 Kio.',
+    duplicateReply: 'Cette réponse exacte figure déjà dans la mission. Rapportez un nouveau résultat, un essai ou un fichier.',
+    useFile: 'Préparer l’examen dans le compagnon privé',
+    artifactUnverified: 'Fichier ajouté · vérification à venir',
+    askFiles: 'Demander les fichiers à l’assistant',
+    continueAssistant: 'Poursuivre avec ChatGPT',
+    reviewSourceClaims: 'Vérifier les mesures de batterie fournies',
+    claimReviewScope: 'Ce contrôle compare les valeurs et les portées des extraits fournis. L’interprétation des sources et l’acceptation réglementaire restent à vérifier.',
+    claimReviewInvalid: 'Ce dossier ne peut pas être vérifié. Examinez les cas, les sources et les observations.',
+    downloadClaimReview: 'Télécharger le relevé de vérification',
+    retainClaimReview: 'Conserver le relevé dans la mission',
+    claimDecisions: {supported:'Sources fournies à l’appui',contradicted:'Contredit',insufficient:'Insuffisant',conflicting:'Contradictoire'},
     routes: {direct:'Réponse directe',capability:'Capacité existante',composition:'Composition de capacités',adaptation:'Adaptation',
       research:'Recherche de pointe',invention:'Nouvelle invention',continuing:'Enquête à poursuivre',clarification:'Précision ou abstention'},
   },
@@ -131,8 +179,8 @@ const show = (key, visible) => { node(key).hidden = !visible; };
 const encoder = new TextEncoder();
 const browserModelId = 'browser-gemini-nano';
 
-function downloadText(value, filename) {
-  const url = URL.createObjectURL(new Blob([value], {type:'text/plain;charset=utf-8'}));
+function downloadText(value, filename, type = 'text/plain;charset=utf-8') {
+  const url = URL.createObjectURL(new Blob([value], {type}));
   const link = document.createElement('a');
   link.href = url;
   link.download = filename;
@@ -163,8 +211,11 @@ export function setupMissionConsole(member, shell) {
   const available = [...routes, ...registered];
   const capabilities = available.map(([id,, title, scope]) => ({id, title:title[i], scope:scope[i]}));
   const localRuns = new Set();
+  const observedFileChecks = new Map();
   let mission, request, connection, activeRequest, atlas, unmatchedWork, serial = 0;
   let entryDocuments, recoveredDocuments, fileSerial = 0, editingAmbition = false;
+  let evidenceSources, evidenceLoad, evidenceContext, selectedEvidence, assistedDraft;
+  let artifactSerial = 0;
   let browserCheck = 0;
   const active = () => !member.hidden;
   const files = () => mission ? mission.documents ?? recoveredDocuments ?? [] : entryDocuments ?? [];
@@ -227,6 +278,160 @@ export function setupMissionConsole(member, shell) {
   function currentReport() {
     return mission?.reports.findLast(report => report.revision === mission.revision);
   }
+
+  function resultFiles() {
+    return (mission?.workFiles ?? []).filter(file => file.revision === mission.revision);
+  }
+
+  function workInspection(report) {
+    const original = report?.artifacts?.find(file => file.kind === 'assisted-original' || file.kind === 'assisted-text');
+    return inspectReturnedWork(original?.content ?? report?.work, resultFiles());
+  }
+
+  function evidenceBundle(file) {
+    if (!/\.json$/iu.test(file.name)) return null;
+    const value = JSON.parse(file.content.replace(/^\ufeff/u, ''));
+    return value?.schema === sourceReviewSchema ? value : null;
+  }
+
+  function claimReviewControls(file, container) {
+    const bundle = evidenceBundle(file);
+    if (!bundle) return;
+    const key = `${mission.id}:${file.revision}:${file.sha256}`;
+    const result = observedFileChecks.get(key);
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'quiet';
+    button.textContent = words.reviewSourceClaims;
+    button.addEventListener('click', () => {
+      if (!active()) return;
+      try {
+        const checked = reviewBatterySources(bundle);
+        observedFileChecks.set(key, {...checked, inputSha256:file.sha256, evidenceScope:'supplied-observations'});
+        text('mission-deliverable-feedback', words.claimReviewScope);
+        render();
+        const displayed = node('mission-deliverable-list').querySelector(`[data-file-claim-review="${file.sha256}"]`);
+        if (displayed) { displayed.closest('details').open = true; displayed.focus(); }
+      } catch { text('mission-deliverable-feedback', words.claimReviewInvalid); }
+    });
+    container.append(button);
+    if (!result) return;
+    const output = document.createElement('div');
+    output.setAttribute('role','status');
+    output.tabIndex = -1;
+    output.dataset.fileClaimReview = file.sha256;
+    const summary = document.createElement('ul');
+    summary.replaceChildren(...result.results.map(item => {
+      const row = document.createElement('li');
+      row.textContent = [item.id, words.claimDecisions[item.decision], item.evidence.join(', ')].filter(Boolean).join(' · ');
+      return row;
+    }));
+    const download = document.createElement('button');
+    download.type = 'button';
+    download.className = 'quiet';
+    download.textContent = words.downloadClaimReview;
+    download.addEventListener('click', () => {
+      if (active()) downloadJSON(result, 'frontier-source-review.json');
+    });
+    const retain = document.createElement('button');
+    retain.type = 'button';
+    retain.className = 'quiet';
+    retain.textContent = words.retainClaimReview;
+    retain.addEventListener('click', async () => {
+      if (!active() || !mission || ['running','canceled'].includes(mission.status)) return;
+      const {id,revision} = mission;
+      const name = `source-review-${file.sha256.slice(0,12)}.json`;
+      try {
+        const receipt = await readMissionArtifact(new File([JSON.stringify(result, null, 2) + '\n'], name), revision);
+        if (!active() || mission?.id !== id || mission.revision !== revision || ['running','canceled'].includes(mission.status)) return;
+        mission = addMissionArtifacts(mission, [receipt]);
+        render();
+        text('mission-deliverable-feedback', words.deliverablesRetained(mission.workFiles.length));
+      } catch {
+        if (active() && mission?.id === id && mission.revision === revision) {
+          text('mission-deliverable-feedback', words.deliverablesInvalid);
+        }
+      }
+    });
+    output.append(summary, download, retain);
+    container.append(output);
+  }
+
+  function stageArtifact(file) {
+    const name = /\.(txt|md|csv|tsv|json)$/iu.test(file.name) ? file.name : file.name + '.txt';
+    try {
+      const existing = files().find(source => source.name === name);
+      if (existing && existing.text !== file.content) throw Error('ARTIFACT_NAME');
+      const sources = existing ? files() : [...files(), {name, text:file.content}];
+      changeFiles(sources);
+      node('mission-files').open = true;
+      node('mission-document-consent').focus();
+    } catch { text('mission-deliverable-feedback', words.fileInput); }
+  }
+
+  function renderDeliverables(report) {
+    const returned = mission?.workFiles ?? [];
+    const inspection = workInspection(report);
+    const panel = node('mission-deliverables');
+    show('mission-deliverables', Boolean(mission));
+    if (!mission) panel.open = false;
+    const message = inspection.missing.length ? words.deliverablesMissing(inspection.missing)
+      : returned.length ? words.deliverablesRetained(returned.length)
+      : inspection.sourceSnippet ? words.deliverablesSnippet : words.deliverablesReady;
+    text('mission-deliverable-status', mission ? message : '');
+    node('mission-deliverable-import').disabled = !mission || ['running','canceled'].includes(mission.status);
+    node('mission-deliverable-list').replaceChildren(...returned.map(file => {
+      const row = document.createElement('li');
+      const record = document.createElement('details');
+      const caption = document.createElement('summary');
+      caption.textContent = file.name;
+      const status = document.createElement('p');
+      status.textContent = `${words.artifactUnverified} · ${file.bytes} B`;
+      const preview = document.createElement('pre');
+      preview.textContent = workPreview(file.content);
+      const hash = document.createElement('p');
+      hash.textContent = 'SHA-256 ' + file.sha256;
+      const download = document.createElement('button');
+      download.type = 'button';
+      download.className = 'quiet';
+      download.textContent = words.fileDownload;
+      download.addEventListener('click', () => {
+        if (active()) downloadText(file.content, file.name, 'application/octet-stream');
+      });
+      record.append(caption, status, preview, hash, download);
+      claimReviewControls(file, record);
+      if (file.bytes <= maxDocumentBytes && !['running','canceled'].includes(mission.status)) {
+        const stage = document.createElement('button');
+        stage.type = 'button';
+        stage.className = 'quiet';
+        stage.textContent = words.useFile;
+        stage.addEventListener('click', () => { if (active()) stageArtifact(file); });
+        record.append(stage);
+      }
+      row.append(record);
+      return row;
+    }));
+    return inspection;
+  }
+
+  node('mission-deliverable-import').addEventListener('change', async event => {
+    const selected = Array.from(event.target.files);
+    event.target.value = '';
+    if (!active() || !mission || !selected.length || ['running','canceled'].includes(mission.status)) return;
+    const ticket = ++artifactSerial;
+    const {id, revision} = mission;
+    const sameRevision = () => active() && ticket === artifactSerial && mission?.id === id && mission.revision === revision
+      && !['running','canceled'].includes(mission.status);
+    try {
+      if (selected.length > maximumArtifacts || selected.reduce((sum, file) => sum + file.size, 0) > maximumArtifactBytes) throw Error('ARTIFACT_LIMIT');
+      const imported = await Promise.all(selected.map(file => readMissionArtifact(file, revision)));
+      if (!sameRevision()) return;
+      mission = addMissionArtifacts(mission, imported);
+      node('mission-deliverables').open = true;
+      text('mission-deliverable-feedback', '');
+      render();
+    } catch { if (sameRevision()) text('mission-deliverable-feedback', words.deliverablesInvalid); }
+  });
 
   function renderFiles() {
     const documents = files();
@@ -313,12 +518,15 @@ export function setupMissionConsole(member, shell) {
 
   function resetHandoff() {
     request = undefined;
+    evidenceContext = selectedEvidence = assistedDraft = undefined;
     for (const id of ['mission-prompt','mission-reply','mission-import-artifact']) node(id).value = '';
     node('mission-technical').checked = false;
     text('mission-copy-status', '');
     resetAssistedImport();
     node('mission-handoff').open = false;
     show('mission-handoff', false);
+    show('mission-evidence-context', false);
+    node('mission-context-items').replaceChildren();
     updateHandoffControls();
   }
 
@@ -342,7 +550,9 @@ export function setupMissionConsole(member, shell) {
     const running = state === 'running' && mission.run.model === browserModelId;
     text('mission-status', message ?? native?.status
       ?? (report && state === 'review' ? labels.join(' · ') : running ? words.browserRunning : words[state]));
-    text('mission-next', native?.nextAction ?? (state === 'canceled' ? words.canceledNext : state === 'paused' ? words.pausedNext
+    const missing = state === 'review' ? workInspection(report).missing : [];
+    text('mission-next', native?.nextAction ?? (missing.length ? words.deliverablesMissing(missing)
+      : state === 'canceled' ? words.canceledNext : state === 'paused' ? words.pausedNext
       : state === 'waiting' ? words.assisted : state === 'running' ? words.localNext
       : state === 'ready' && missionPacket(mission).instruction ? words.nextInstruction : report?.nextAction ?? words.choose));
   }
@@ -367,6 +577,8 @@ export function setupMissionConsole(member, shell) {
     }));
     execution.updateControls();
     if (!mission) {
+      renderDeliverables();
+      text('mission-deliverable-feedback', '');
       delete panel.dataset.state;
       delete panel.dataset.route;
       for (const key of ['mission-ambition','mission-next','mission-status','mission-original','mission-objective','mission-route','mission-work','mission-published-summary']) text(key, '');
@@ -390,6 +602,8 @@ export function setupMissionConsole(member, shell) {
     renderAssistedWork(node('mission-work'), report?.work);
     show('mission-work-panel', Boolean(report?.work));
     show('mission-continue-assisted', report?.provider === 'assisted' && state === 'review');
+    const inspection = renderDeliverables(report);
+    text('mission-continue-assisted', inspection.missing.length ? words.askFiles : words.continueAssistant);
     const files = mission.reports.filter(item => item.revision === mission.revision)
       .flatMap(item => item.artifacts ?? []).filter(item => ['assisted-text','browser-text'].includes(item?.kind) && typeof item.content === 'string');
     show('mission-returned-files', files.length > 0);
@@ -512,6 +726,8 @@ export function setupMissionConsole(member, shell) {
       context.push(`${words.contextObjective}: ${previous.objective.slice(0,450)}`);
       context.push(`${words.contextAction}: ${previous.nextAction.slice(0,450)}`);
       if (previous.work) context.push(`${words.contextWork}: ${previous.work.slice(0,450)}`);
+      const missing = workInspection(previous).missing;
+      if (missing.length) context.push(words.deliverablesMissing(missing.slice(0,4)));
     }
     const {missionId, revision, language, originalAmbition, ambition, instruction} = packet;
     if (instruction) context.push(words.contextInstruction, instruction);
@@ -533,6 +749,7 @@ export function setupMissionConsole(member, shell) {
       resetHandoff();
       request = prepared;
       updateAssistedBrief();
+      refreshEvidence();
     }
     const handoff = node('mission-handoff');
     handoff.hidden = false;
@@ -542,11 +759,77 @@ export function setupMissionConsole(member, shell) {
   function updateAssistedBrief() {
     if (!request) return;
     const context = request.context.filter(value => !value.startsWith(`${words.contextRun}: `));
-    node('mission-prompt').value = node('mission-technical').checked ? createMissionPrompt(request)
-      : createAssistedBrief(request, context, Boolean(mission.reports.length));
+    const prompt = node('mission-prompt');
+    prompt.readOnly = node('mission-technical').checked;
+    prompt.value = prompt.readOnly ? createMissionPrompt(request)
+      : assistedDraft ?? createAssistedBrief(request, context, Boolean(mission.reports.length));
+    show('mission-evidence-context', !prompt.readOnly && Boolean(evidenceContext));
     text('mission-copy-status', '');
     updateHandoffControls();
   }
+
+  function renderEvidence() {
+    const items = evidenceContext?.items ?? [];
+    show('mission-evidence-context', Boolean(request) && !node('mission-technical').checked && Boolean(evidenceContext));
+    text('mission-context-status', items.length ? words.evidenceAppend
+      : evidenceSources?.release ? words.evidenceGap : words.evidenceUnavailable);
+    show('mission-context-download', items.length > 0);
+    node('mission-context-items').replaceChildren(...items.map(item => {
+      const row = document.createElement('li');
+      const label = document.createElement('label');
+      const include = document.createElement('input');
+      include.type = 'checkbox';
+      include.checked = selectedEvidence.has(item.id);
+      include.addEventListener('change', () => {
+        if (include.checked) selectedEvidence.add(item.id);
+        else selectedEvidence.delete(item.id);
+      });
+      label.append(include, document.createTextNode(' ' + item.title));
+      const detail = document.createElement('p');
+      detail.textContent = [item.fact, item.scope, item.source.date].join(' · ');
+      row.append(label, detail);
+      const links = new Map([[item.source.url, words.openSource], [item.recordURL, words.openSource],
+        [item.artifact?.url, words.openTool]]);
+      for (const [href, title] of links) {
+        if (!href?.startsWith('https://')) continue;
+        const link = document.createElement('a');
+        link.href = href;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        link.textContent = title;
+        row.append(link, document.createTextNode(' '));
+      }
+      return row;
+    }));
+  }
+
+  function refreshEvidence() {
+    if (!evidenceSources) {
+      evidenceLoad ??= loadMissionContextSources(new URL('.', import.meta.url)).catch(() => ({}));
+      const prepared = request;
+      void evidenceLoad.then(sources => {
+        evidenceSources = sources;
+        if (active() && request === prepared) refreshEvidence();
+      });
+      return;
+    }
+    const {ambition, instruction, language:missionLanguage} = missionPacket(mission);
+    evidenceContext = selectMissionContext({ambition, instruction, language:missionLanguage, ...evidenceSources});
+    selectedEvidence = new Set(evidenceContext.items.map(item => item.id));
+    renderEvidence();
+  }
+
+  function sharedBrief() {
+    const prompt = node('mission-prompt');
+    const rows = !prompt.readOnly && evidenceContext ? missionContextLines(evidenceContext, [...selectedEvidence]) : [];
+    return rows.length ? `${prompt.value}\n\n${words.evidenceHeading}\n${rows.join('\n\n')}` : prompt.value;
+  }
+
+  node('mission-context-download').addEventListener('click', () => {
+    if (!active() || !request || !evidenceContext) return;
+    const packet = missionIntelligencePackage(missionPacket(mission), evidenceContext, [...selectedEvidence]);
+    downloadJSON({...packet, brief:sharedBrief()}, 'frontier-reviewed-mission.json');
+  });
 
   async function prepareAssistance({focus = true} = {}) {
     if (!active()) return;
@@ -588,22 +871,31 @@ export function setupMissionConsole(member, shell) {
   node('mission-continue-assisted').addEventListener('click', prepareAssistance);
   for (const button of member.querySelectorAll('[data-frontier-assisted]')) button.addEventListener('click', prepareAssistance);
 
-  node('mission-technical').addEventListener('change', updateAssistedBrief);
+  node('mission-technical').addEventListener('change', () => {
+    if (node('mission-technical').checked) assistedDraft = node('mission-prompt').value;
+    updateAssistedBrief();
+  });
   node('mission-copy').addEventListener('click', async () => {
     if (!active() || !request) return;
     const token = serial;
+    const reviewed = sharedBrief();
     try {
-      await navigator.clipboard.writeText(node('mission-prompt').value);
+      await navigator.clipboard.writeText(reviewed);
       if (token === serial && active()) text('mission-copy-status', words.copy);
     } catch {
       if (token !== serial || !active()) return;
+      if (!node('mission-prompt').readOnly) {
+        node('mission-prompt').value = reviewed;
+        selectedEvidence?.clear();
+        if (evidenceContext) renderEvidence();
+      }
       node('mission-prompt').focus();
       node('mission-prompt').select();
       text('mission-copy-status', words.select);
     }
   });
   node('mission-prompt-download').addEventListener('click', () => {
-    if (active() && request) downloadText(node('mission-prompt').value, 'frontier-mission-brief.txt');
+    if (active() && request) downloadText(sharedBrief(), 'frontier-mission-brief.txt');
   });
 
   function resetAssistedImport() {
@@ -625,9 +917,15 @@ export function setupMissionConsole(member, shell) {
     const label = filename?.replace(/[\u0000-\u001f\u007f]/gu, '').slice(0, 120).trim() || words.originalResponse;
     const artifact = await textArtifact(result.raw, filename ? 'assisted-text' : 'assisted-original', label);
     if (token !== serial || !canImportAssisted()) return;
+    if (!filename && mission.reports.some(report => report.revision === mission.revision && report.artifacts?.some(
+      file => file.kind === 'assisted-original' && file.sha256 === artifact.sha256))) {
+      text('mission-handoff-status', words.duplicateReply);
+      return;
+    }
     const receipt = result.receipt ?? {route:'continuing', objective:mission.ambition, nextAction:words.workReview};
     const work = workPreview(result.work.trim() ? result.work : result.raw);
     accept({...receipt, work, artifacts:[artifact]}, mission.run.id);
+    if (workInspection(currentReport()).missing.length) node('mission-deliverables').open = true;
     const workPanel = node('mission-work-panel');
     if (workPanel.getClientRects().length) {
       workPanel.querySelector('summary').focus({preventScroll:true});
@@ -877,6 +1175,7 @@ export function setupMissionConsole(member, shell) {
       node('mission-files').open = false;
       execution.clearView();
       localRuns.clear();
+      observedFileChecks.clear();
       input.value = '';
       input.dispatchEvent(new Event('input'));
       render();
@@ -948,6 +1247,7 @@ export function setupMissionConsole(member, shell) {
     node('mission-files').open = false;
     if (settings.parentElement !== node('intelligence-settings-slot')) node('intelligence-settings-slot').append(settings);
     localRuns.clear();
+    observedFileChecks.clear();
     browserCheck++;
     show('intelligence-browser', false);
     node('mission-connection-form').reset();

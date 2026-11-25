@@ -70,7 +70,13 @@
         <div class="mission-handoff-grid">
           <div>
             <label for="mission-prompt">Your mission brief</label>
-            <textarea id="mission-prompt" rows="7" readonly></textarea>
+            <textarea id="mission-prompt" rows="7" maxlength="49152"></textarea>
+            <details id="mission-evidence-context" hidden>
+              <summary>Evidence and tools for this mission</summary>
+              <p id="mission-context-status" role="status"></p>
+              <ul id="mission-context-items" class="mission-returned-files"></ul>
+              <button id="mission-context-download" type="button" class="quiet" hidden>Download reviewed mission package</button>
+            </details>
             <div class="mv-actions">
               <button id="mission-copy" type="button" class="entry-button" disabled>Copy brief</button>
               <a id="mission-assistant" href="https://chatgpt.com/" target="_blank" hidden rel="noopener noreferrer">Open ChatGPT <span aria-hidden="true">↗</span></a>
@@ -115,6 +121,16 @@
         <button id="mission-use-returned" class="quiet" type="button" hidden>Use this work with my private companion</button>
         <ul class="mv-links mission-capabilities" id="mission-capabilities"></ul>
       </div>
+      <details id="mission-deliverables" class="mission-handoff" hidden>
+        <summary>Result files and checks</summary>
+        <p id="mission-deliverable-status" role="status"></p>
+        <div class="mv-actions">
+          <label for="mission-deliverable-import">Add actual files<input id="mission-deliverable-import" type="file" accept=".txt,.md,.csv,.tsv,.json,.ipynb,.py,.js,.mjs,.ts,.sql,.yaml,.yml" multiple></label>
+        </div>
+        <p>Source, data, notebook and text files · up to 256 KiB total.</p>
+        <p id="mission-deliverable-feedback" role="status"></p>
+        <ul id="mission-deliverable-list" class="mission-returned-files"></ul>
+      </details>
       <div id="mission-published" class="mission-published" hidden>
         <h5>Published work on this exact ambition</h5>
         <p id="mission-published-summary"></p>

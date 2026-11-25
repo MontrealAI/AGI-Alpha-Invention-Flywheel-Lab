@@ -613,7 +613,9 @@ async function ownerConnectionJourney(page, language, width) {
   assert.equal(page.context().pages().length, pages);
   assert.deepEqual(externalRequests, []);
   await page.locator('#mission-copy').click();
-  assert.deepEqual(await page.evaluate(() => window.reviewedBriefWrites), [brief]);
+  const originalCopy = await page.evaluate(() => window.reviewedBriefWrites);
+  assert.equal(originalCopy.length, 1);
+  assert.ok(originalCopy[0].startsWith(brief));
   await capture(page, language, width, 'default-assisted-brief');
   await page.locator('#mission-configure').click();
   const choices = page.locator('#frontier-mission-panel .intelligence-grid');
@@ -657,7 +659,7 @@ async function ownerConnectionJourney(page, language, width) {
   await page.locator('#mission-continue-assisted').click();
   await prompt.waitFor({state:'visible'});
   assert.ok((await prompt.inputValue()).includes('Check the scope'));
-  assert.deepEqual(await page.evaluate(() => window.reviewedBriefWrites), [brief]);
+  assert.deepEqual(await page.evaluate(() => window.reviewedBriefWrites), originalCopy);
   await page.locator('#mission-follow-up').fill('Use the comparator output as the next piece of evidence.');
   await page.locator('#mission-follow-up-form button').click();
   assert.equal(await page.locator('#mission-dialogue-list li').last().textContent(), 'Use the comparator output as the next piece of evidence.');
@@ -686,6 +688,93 @@ async function ownerConnectionJourney(page, language, width) {
   page.off('request', observe);
   await page.evaluate(() => { delete navigator.clipboard.writeText; });
   await page.locator('#mission-new').click();
+}
+
+async function proofOfAdvantageJourney(page, language, width) {
+  const origin = new URL(base).origin;
+  const external = [];
+  const watch = request => {
+    if (request.method() === 'POST' || new URL(request.url()).origin !== origin) external.push(request.url());
+  };
+  page.on('request', watch);
+  try {
+    await page.evaluate(() => {
+      window.advantageClipboard = [];
+      navigator.clipboard.writeText = async text => { window.advantageClipboard.push(text); };
+    });
+    const ambition = 'CAPTURE THE EXPONENTIAL';
+    await page.locator('#goal-text').fill(ambition);
+    await page.locator('#goal-submit').click();
+    const prompt = page.locator('#mission-prompt');
+    await prompt.waitFor({state:'visible'});
+    assert.equal(await prompt.getAttribute('readonly'), null);
+    const evidence = page.locator('#mission-evidence-context');
+    await evidence.waitFor({state:'visible'});
+    await evidence.locator('summary').click();
+    const study = evidence.locator('li').filter({hasText:/Battery passport source review|Passeports de batterie/u});
+    await study.waitFor({state:'visible'});
+    assert.match(await study.innerText(), /14\/16.*6\/6/u);
+    const modified = (await prompt.inputValue()) + '\n\nInspect the actual files and cite the relevant source.';
+    await prompt.fill(modified);
+    await page.locator('#mission-copy').click();
+    const copied = await page.evaluate(() => window.advantageClipboard[0]);
+    assert.ok(copied.startsWith(modified) && /14\/16.*6\/6/u.test(copied));
+    await study.getByRole('checkbox').uncheck();
+    await page.locator('#mission-copy').click();
+    assert.doesNotMatch(await page.evaluate(() => window.advantageClipboard[1]), /14\/16.*6\/6/u);
+    const reply = 'I completed a calculation. [Download the file](sandbox:/mnt/data/claimed.py).';
+    await page.locator('#mission-reply').fill(reply);
+    await page.locator('#mission-import-reply').click();
+    const files = page.locator('#mission-deliverables');
+    await files.locator('input').waitFor({state:'visible'});
+    assert.match(await page.locator('#mission-next').innerText(), /claimed\.py/u);
+    assert.equal(await files.locator('ul li').count(), 0);
+    const source = Buffer.from('\ufeff# Returned source\r\nraise RuntimeError("must not execute")\r\n');
+    const input = files.locator('#mission-deliverable-import');
+    const filename = 'frontier-battery-source-example.json';
+    const sample = await (await page.request.get(base + filename)).body();
+    await input.setInputFiles([{name:'claimed.py',mimeType:'text/plain',buffer:source},
+      {name:filename,mimeType:'application/json',buffer:sample}]);
+    const entries = page.locator('#mission-deliverable-list > li');
+    await entries.last().waitFor({state:'visible'});
+    assert.equal(await entries.count(), 2);
+    assert.doesNotMatch(await page.locator('#mission-next').innerText(), /claimed\.py/u);
+    await entries.first().locator('summary').click();
+    const original = page.waitForEvent('download');
+    await entries.first().getByRole('button',{name:/Download original text|Télécharger le texte original/u}).click();
+    const sourceDownload = await original;
+    assert.equal(sourceDownload.suggestedFilename(),'claimed.py');
+    assert.deepEqual(await readFile(await sourceDownload.path()), source);
+    await entries.last().locator('summary').click();
+    await entries.last().getByRole('button',{name:/Check supplied battery measurements|Vérifier les mesures de batterie fournies/u}).click();
+    const receipt = files.locator('[data-file-claim-review]');
+    await receipt.waitFor({state:'visible'});
+    assert.match(await receipt.innerText(), /example-pack-mass · (?:Contradicted|Contredit) · example-table/u);
+    await receipt.getByRole('button',{name:/Keep check receipt|Conserver le relevé/u}).click();
+    await page.waitForFunction(() => document.querySelectorAll('#mission-deliverable-list > li').length === 3);
+    await destination(page,'mv-results');
+    if (!await page.locator('#mission-keeper').evaluate(value => value.open)) await page.locator('#mission-keeper summary').click();
+    const exported = page.waitForEvent('download');
+    await page.locator('#mission-export').click();
+    const mission = JSON.parse(await readFile(await (await exported).path()));
+    assert.equal(mission.mission.originalAmbition, ambition);
+    const delivered = mission.mission.workFiles;
+    assert.equal(delivered.length, 3);
+    assert.equal(delivered[0].sha256,createHash('sha256').update(source).digest('hex'));
+    assert.equal(JSON.parse(delivered[2].content).inputSha256,delivered[1].sha256);
+    await page.locator('#mission-import').setInputFiles(content('frontier-mission.json',mission));
+    await files.waitFor({state:'visible'});
+    assert.equal(await entries.count(),3);
+    assert.deepEqual(external,[]);
+    await capture(page, language, width, 'actual-results-and-checks');
+    await page.locator('#mission-new').click();
+    checks.push({kind:'proof-of-advantage-ui',language,width,exactAmbition:true,
+      editableBriefAndSelectableEvidence:true,missingSandboxArtifact:true,exactFileBytes:true,localEvidenceCheck:true,
+      retainedReceiptAndRecovery:true,noExternalDispatch:true});
+  } finally {
+    page.off('request',watch);
+    await page.evaluate(() => { delete navigator.clipboard.writeText; });
+  }
 }
 
 async function pairedRevisionJourney(browser, language) {
@@ -1234,6 +1323,7 @@ async function walletPaths(browser, language, width) {
     assert.ok([goalInput, goalSubmit].every(box => box.y >= 0 && box.y + box.height <= dimensions(width).height));
     await capture(page, language, width, 'arrival-token');
     await ownerConnectionJourney(page, language, width);
+    if (width === (language === 'fr' ? 390 : 1440)) await proofOfAdvantageJourney(page, language, width);
     await universalMission(page, language, width);
     await missionSourceRecovery(page, language);
     const {scriptedMs, saved} = await guidedJourney(page, language, width, started);
