@@ -1,0 +1,69 @@
+{
+  "artifact_registry_observability": {
+    "first_observed_presence_utc": "2026-11-25T01:43:15.616Z",
+    "kind": "INTERVAL_CENSORED",
+    "last_observed_absence_utc": "2026-11-25T01:41:38.146Z"
+  },
+  "baseline_asset_witnessed": false,
+  "event": {
+    "created_at": "2026-11-25T01:42:40Z",
+    "digest": "sha256:bfd7db111f7a283089c0c3573a3924ad0aea05fc555134c186b04dac6dc2c348",
+    "id": 789619386,
+    "name": "FreeCAD_weekly-2026.11.25-Linux-aarch64.AppImage",
+    "size": 697690632,
+    "state": "uploaded",
+    "updated_at": "2026-11-25T01:42:57Z"
+  },
+  "failed": 4,
+  "failed_observations": [
+    {
+      "error": "MISSED_SLOT_WORKER_INTERRUPTED_NO_REQUEST",
+      "requested_at_utc": "2026-11-25T01:24:39.433Z",
+      "sequence": 15
+    },
+    {
+      "error": "MISSED_SLOT_WORKER_INTERRUPTED_NO_REQUEST",
+      "requested_at_utc": "2026-11-25T01:24:39.436Z",
+      "sequence": 16
+    },
+    {
+      "error": "MISSED_SLOT_WORKER_INTERRUPTED_NO_REQUEST",
+      "requested_at_utc": "2026-11-25T01:24:39.438Z",
+      "sequence": 17
+    },
+    {
+      "error": "MISSED_SLOT_WORKER_INTERRUPTED_NO_REQUEST",
+      "requested_at_utc": "2026-11-25T01:24:39.440Z",
+      "sequence": 18
+    }
+  ],
+  "first_observed_at_utc": "2026-11-25T00:55:44.149Z",
+  "last_verified_at_utc": "2026-11-25T01:43:15.616Z",
+  "limits": "Both methods consume the same official public samples. This measures exact artifact attestation and scoped verification in one staged release, without proving global onset, independent acquisition lead, stable production operation or economics.",
+  "median_ordinary_check_ms": "0.003795",
+  "median_request_ms": "3437.180864",
+  "median_retained_adjudication_ms": "0.162915",
+  "observation_disposition": "SAME_SNAPSHOT_DETECTION",
+  "pipeline_lead_s": 0,
+  "public_observations": 31,
+  "registration": {
+    "acceptance": "Exact public non-draft prerelease; exact Linux aarch64 AppImage asset; uploaded state; positive size; SHA-256 digest.",
+    "asset": "FreeCAD_weekly-2026.11.25-Linux-aarch64.AppImage",
+    "comparison": "Strong exact-source ordinary validator and retained stage adjudicator receive the identical recorded source byte stream. Null acquisition lead by design; this is a matched attestation and verification trial.",
+    "frozen_at_utc": "2026-11-25T00:55:39.708Z",
+    "maximum_samples": 37,
+    "publication_clock": "Asset created_at and updated_at are registry metadata. Measure actionability from first observed qualifying payload.",
+    "retained_sha256": "b62e251d1fbe039804775b27b99267c7b1fc41428cfc39acfee5411b8e30ab41",
+    "sampling_interval_s": 95,
+    "source": "https://api.github.com/repos/FreeCAD/FreeCAD/releases/tags/weekly-2026.11.25",
+    "source_sha256": "0ac808c6daeac64aa6dce422bdfcf5beb283c1d233fc692f03038ebb3ca4a39a",
+    "stop": "Stop after first qualifying jointly witnessed asset, fixed sample count, or a local STOP file. Report absent events and failures.",
+    "tag": "weekly-2026.11.25"
+  },
+  "registration_sha256": "2339381d467366cfd985f106e5d373f41e94c44eb5eb64555d00527fccd134cc",
+  "successful": 27,
+  "tag_as_asset_rejections": 27,
+  "total_response_bytes": 119624,
+  "trace_sha256": "c233052657313a52050fa42225046aa7659346ad229acdcac0183a9889dae96b",
+  "verified_event_observed_at_utc": "2026-11-25T01:43:15.616Z"
+}
