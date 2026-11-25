@@ -1,0 +1,1061 @@
+[
+  {
+    "game": {
+      "instruments": [
+        {
+          "channel": {
+            "east": {
+              "blank": "1"
+            },
+            "west": {
+              "blank": "1"
+            }
+          },
+          "cost": "0",
+          "id": "none"
+        },
+        {
+          "channel": {
+            "east": {
+              "dark": "0",
+              "light": "1"
+            },
+            "west": {
+              "dark": "1",
+              "light": "0"
+            }
+          },
+          "cost": "0",
+          "id": "read"
+        }
+      ],
+      "row_budget": 1,
+      "scenarios": [
+        {
+          "column_budget": 1,
+          "id": "east",
+          "weights": [
+            3,
+            12
+          ]
+        },
+        {
+          "column_budget": 1,
+          "id": "west",
+          "weights": [
+            15,
+            4
+          ]
+        }
+      ],
+      "schema": "frontier/costly-observation-game-v1"
+    },
+    "id": "g01"
+  },
+  {
+    "game": {
+      "instruments": [
+        {
+          "channel": {
+            "east": {
+              "blank": "1"
+            },
+            "west": {
+              "blank": "1"
+            }
+          },
+          "cost": "0",
+          "id": "none"
+        },
+        {
+          "channel": {
+            "east": {
+              "dark": "0",
+              "light": "1"
+            },
+            "west": {
+              "dark": "1",
+              "light": "0"
+            }
+          },
+          "cost": "31/2",
+          "id": "expensive"
+        }
+      ],
+      "row_budget": 1,
+      "scenarios": [
+        {
+          "column_budget": 1,
+          "id": "east",
+          "weights": [
+            3,
+            12
+          ]
+        },
+        {
+          "column_budget": 1,
+          "id": "west",
+          "weights": [
+            15,
+            4
+          ]
+        }
+      ],
+      "schema": "frontier/costly-observation-game-v1"
+    },
+    "id": "g02"
+  },
+  {
+    "game": {
+      "instruments": [
+        {
+          "channel": {
+            "east": {
+              "blank": "1"
+            },
+            "west": {
+              "blank": "1"
+            }
+          },
+          "cost": "0",
+          "id": "none"
+        },
+        {
+          "channel": {
+            "east": {
+              "left": "11/13",
+              "right": "2/13"
+            },
+            "west": {
+              "left": "1/6",
+              "right": "5/6"
+            }
+          },
+          "cost": "5/7",
+          "id": "scan"
+        }
+      ],
+      "row_budget": 1,
+      "scenarios": [
+        {
+          "column_budget": 1,
+          "id": "east",
+          "weights": [
+            3,
+            12
+          ]
+        },
+        {
+          "column_budget": 1,
+          "id": "west",
+          "weights": [
+            15,
+            4
+          ]
+        }
+      ],
+      "schema": "frontier/costly-observation-game-v1"
+    },
+    "id": "g03"
+  },
+  {
+    "game": {
+      "instruments": [
+        {
+          "channel": {
+            "rough": {
+              "blank": "1"
+            },
+            "smooth": {
+              "blank": "1"
+            },
+            "wet": {
+              "blank": "1"
+            }
+          },
+          "cost": "0",
+          "id": "none"
+        },
+        {
+          "channel": {
+            "rough": {
+              "blue": "0",
+              "green": "2/5",
+              "red": "3/5"
+            },
+            "smooth": {
+              "blue": "1/2",
+              "green": "1/4",
+              "red": "1/4"
+            },
+            "wet": {
+              "blue": "1/3",
+              "green": "2/3",
+              "red": "0"
+            }
+          },
+          "cost": "7/13",
+          "id": "signal"
+        }
+      ],
+      "row_budget": 2,
+      "scenarios": [
+        {
+          "column_budget": 2,
+          "id": "rough",
+          "weights": [
+            8,
+            1,
+            5
+          ]
+        },
+        {
+          "column_budget": 1,
+          "id": "smooth",
+          "weights": [
+            2,
+            11,
+            7
+          ]
+        },
+        {
+          "column_budget": 3,
+          "id": "wet",
+          "weights": [
+            6,
+            4,
+            12
+          ]
+        }
+      ],
+      "schema": "frontier/costly-observation-game-v1"
+    },
+    "id": "g04"
+  },
+  {
+    "game": {
+      "instruments": [
+        {
+          "channel": {
+            "active": {
+              "blank": "1"
+            },
+            "idle": {
+              "blank": "1"
+            }
+          },
+          "cost": "0",
+          "id": "none"
+        },
+        {
+          "channel": {
+            "active": {
+              "once": "1"
+            },
+            "idle": {
+              "once": "1"
+            }
+          },
+          "cost": "1/103",
+          "id": "listen"
+        }
+      ],
+      "row_budget": 0,
+      "scenarios": [
+        {
+          "column_budget": 0,
+          "id": "idle",
+          "weights": [
+            19,
+            15,
+            11
+          ]
+        },
+        {
+          "column_budget": 2,
+          "id": "active",
+          "weights": [
+            4,
+            9,
+            7
+          ]
+        }
+      ],
+      "schema": "frontier/costly-observation-game-v1"
+    },
+    "id": "g05"
+  },
+  {
+    "game": {
+      "instruments": [
+        {
+          "channel": {
+            "rough": {
+              "blank": "1"
+            },
+            "smooth": {
+              "blank": "1"
+            },
+            "wet": {
+              "blank": "1"
+            }
+          },
+          "cost": "0",
+          "id": "none"
+        },
+        {
+          "channel": {
+            "rough": {
+              "clear": "13/17",
+              "dim": "4/17"
+            },
+            "smooth": {
+              "clear": "5/6",
+              "dim": "1/6"
+            },
+            "wet": {
+              "clear": "2/5",
+              "dim": "3/5"
+            }
+          },
+          "cost": "2/7",
+          "id": "direct"
+        },
+        {
+          "channel": {
+            "rough": {
+              "negative": "265/1020",
+              "positive": "755/1020"
+            },
+            "smooth": {
+              "negative": "249/1020",
+              "positive": "771/1020"
+            },
+            "wet": {
+              "negative": "408/1020",
+              "positive": "612/1020"
+            }
+          },
+          "cost": "2/7",
+          "id": "repeat"
+        }
+      ],
+      "row_budget": 3,
+      "scenarios": [
+        {
+          "column_budget": 2,
+          "id": "rough",
+          "weights": [
+            8,
+            1,
+            5
+          ]
+        },
+        {
+          "column_budget": 1,
+          "id": "smooth",
+          "weights": [
+            2,
+            11,
+            7
+          ]
+        },
+        {
+          "column_budget": 3,
+          "id": "wet",
+          "weights": [
+            6,
+            4,
+            12
+          ]
+        }
+      ],
+      "schema": "frontier/costly-observation-game-v1"
+    },
+    "id": "g06"
+  },
+  {
+    "game": {
+      "instruments": [
+        {
+          "channel": {
+            "s0": {
+              "blank": "1"
+            },
+            "s1": {
+              "blank": "1"
+            },
+            "s2": {
+              "blank": "1"
+            }
+          },
+          "cost": "0",
+          "id": "none"
+        },
+        {
+          "channel": {
+            "s0": {
+              "q0": "10/13",
+              "q1": "3/13"
+            },
+            "s1": {
+              "q0": "4/5",
+              "q1": "1/5"
+            },
+            "s2": {
+              "q0": "12/23",
+              "q1": "11/23"
+            }
+          },
+          "cost": "4/11",
+          "id": "scan0"
+        },
+        {
+          "channel": {
+            "s0": {
+              "q0": "12/17",
+              "q1": "5/17"
+            },
+            "s1": {
+              "q0": "1/5",
+              "q1": "4/5"
+            },
+            "s2": {
+              "q0": "1/3",
+              "q1": "2/3"
+            }
+          },
+          "cost": "3/11",
+          "id": "scan1"
+        },
+        {
+          "channel": {
+            "s0": {
+              "q0": "2/5",
+              "q1": "3/5"
+            },
+            "s1": {
+              "q0": "2/11",
+              "q1": "9/11"
+            },
+            "s2": {
+              "q0": "2/3",
+              "q1": "1/3"
+            }
+          },
+          "cost": "6/11",
+          "id": "scan2"
+        }
+      ],
+      "row_budget": 1,
+      "scenarios": [
+        {
+          "column_budget": 4,
+          "id": "s0",
+          "weights": [
+            19,
+            0
+          ]
+        },
+        {
+          "column_budget": 3,
+          "id": "s1",
+          "weights": [
+            14,
+            17
+          ]
+        },
+        {
+          "column_budget": 1,
+          "id": "s2",
+          "weights": [
+            19,
+            5
+          ]
+        }
+      ],
+      "schema": "frontier/costly-observation-game-v1"
+    },
+    "id": "g07"
+  },
+  {
+    "game": {
+      "instruments": [
+        {
+          "channel": {
+            "s0": {
+              "blank": "1"
+            },
+            "s1": {
+              "blank": "1"
+            },
+            "s2": {
+              "blank": "1"
+            },
+            "s3": {
+              "blank": "1"
+            }
+          },
+          "cost": "0",
+          "id": "none"
+        },
+        {
+          "channel": {
+            "s0": {
+              "q0": "3/14",
+              "q1": "11/14"
+            },
+            "s1": {
+              "q0": "1/3",
+              "q1": "2/3"
+            },
+            "s2": {
+              "q0": "5/12",
+              "q1": "7/12"
+            },
+            "s3": {
+              "q0": "2/5",
+              "q1": "3/5"
+            }
+          },
+          "cost": "3/11",
+          "id": "scan0"
+        },
+        {
+          "channel": {
+            "s0": {
+              "q0": "8/9",
+              "q1": "1/9"
+            },
+            "s1": {
+              "q0": "6/11",
+              "q1": "5/11"
+            },
+            "s2": {
+              "q0": "11/23",
+              "q1": "12/23"
+            },
+            "s3": {
+              "q0": "9/19",
+              "q1": "10/19"
+            }
+          },
+          "cost": "8/11",
+          "id": "scan1"
+        },
+        {
+          "channel": {
+            "s0": {
+              "q0": "1/3",
+              "q1": "2/3"
+            },
+            "s1": {
+              "q0": "1/3",
+              "q1": "2/3"
+            },
+            "s2": {
+              "q0": "1/8",
+              "q1": "7/8"
+            },
+            "s3": {
+              "q0": "11/20",
+              "q1": "9/20"
+            }
+          },
+          "cost": "6/11",
+          "id": "scan2"
+        }
+      ],
+      "row_budget": 3,
+      "scenarios": [
+        {
+          "column_budget": 4,
+          "id": "s0",
+          "weights": [
+            18,
+            6,
+            3
+          ]
+        },
+        {
+          "column_budget": 1,
+          "id": "s1",
+          "weights": [
+            17,
+            4,
+            0
+          ]
+        },
+        {
+          "column_budget": 3,
+          "id": "s2",
+          "weights": [
+            3,
+            1,
+            1
+          ]
+        },
+        {
+          "column_budget": 3,
+          "id": "s3",
+          "weights": [
+            7,
+            8,
+            16
+          ]
+        }
+      ],
+      "schema": "frontier/costly-observation-game-v1"
+    },
+    "id": "g08"
+  },
+  {
+    "game": {
+      "instruments": [
+        {
+          "channel": {
+            "s0": {
+              "blank": "1"
+            },
+            "s1": {
+              "blank": "1"
+            },
+            "s2": {
+              "blank": "1"
+            },
+            "s3": {
+              "blank": "1"
+            }
+          },
+          "cost": "0",
+          "id": "none"
+        },
+        {
+          "channel": {
+            "s0": {
+              "q0": "3/5",
+              "q1": "2/5"
+            },
+            "s1": {
+              "q0": "5/12",
+              "q1": "7/12"
+            },
+            "s2": {
+              "q0": "2/7",
+              "q1": "5/7"
+            },
+            "s3": {
+              "q0": "8/13",
+              "q1": "5/13"
+            }
+          },
+          "cost": "6/11",
+          "id": "scan0"
+        },
+        {
+          "channel": {
+            "s0": {
+              "q0": "9/10",
+              "q1": "1/10"
+            },
+            "s1": {
+              "q0": "7/10",
+              "q1": "3/10"
+            },
+            "s2": {
+              "q0": "2/3",
+              "q1": "1/3"
+            },
+            "s3": {
+              "q0": "12/17",
+              "q1": "5/17"
+            }
+          },
+          "cost": "7/11",
+          "id": "scan1"
+        },
+        {
+          "channel": {
+            "s0": {
+              "q0": "1/2",
+              "q1": "1/2"
+            },
+            "s1": {
+              "q0": "11/20",
+              "q1": "9/20"
+            },
+            "s2": {
+              "q0": "1/3",
+              "q1": "2/3"
+            },
+            "s3": {
+              "q0": "6/11",
+              "q1": "5/11"
+            }
+          },
+          "cost": "9/11",
+          "id": "scan2"
+        }
+      ],
+      "row_budget": 3,
+      "scenarios": [
+        {
+          "column_budget": 4,
+          "id": "s0",
+          "weights": [
+            16,
+            16,
+            15,
+            9
+          ]
+        },
+        {
+          "column_budget": 2,
+          "id": "s1",
+          "weights": [
+            12,
+            16,
+            3,
+            1
+          ]
+        },
+        {
+          "column_budget": 3,
+          "id": "s2",
+          "weights": [
+            3,
+            12,
+            6,
+            2
+          ]
+        },
+        {
+          "column_budget": 1,
+          "id": "s3",
+          "weights": [
+            12,
+            13,
+            3,
+            7
+          ]
+        }
+      ],
+      "schema": "frontier/costly-observation-game-v1"
+    },
+    "id": "g09"
+  },
+  {
+    "game": {
+      "instruments": [
+        {
+          "channel": {
+            "s0": {
+              "blank": "1"
+            },
+            "s1": {
+              "blank": "1"
+            },
+            "s2": {
+              "blank": "1"
+            },
+            "s3": {
+              "blank": "1"
+            },
+            "s4": {
+              "blank": "1"
+            }
+          },
+          "cost": "0",
+          "id": "none"
+        },
+        {
+          "channel": {
+            "s0": {
+              "q0": "4/17",
+              "q1": "4/17",
+              "q2": "9/17"
+            },
+            "s1": {
+              "q0": "1/6",
+              "q1": "1/6",
+              "q2": "2/3"
+            },
+            "s2": {
+              "q0": "5/12",
+              "q1": "1/3",
+              "q2": "1/4"
+            },
+            "s3": {
+              "q0": "5/8",
+              "q1": "1/8",
+              "q2": "1/4"
+            },
+            "s4": {
+              "q0": "5/11",
+              "q1": "1/2",
+              "q2": "1/22"
+            }
+          },
+          "cost": "1/11",
+          "id": "scan0"
+        },
+        {
+          "channel": {
+            "s0": {
+              "q0": "4/11",
+              "q1": "7/22",
+              "q2": "7/22"
+            },
+            "s1": {
+              "q0": "4/17",
+              "q1": "12/17",
+              "q2": "1/17"
+            },
+            "s2": {
+              "q0": "4/19",
+              "q1": "12/19",
+              "q2": "3/19"
+            },
+            "s3": {
+              "q0": "10/21",
+              "q1": "1/3",
+              "q2": "4/21"
+            },
+            "s4": {
+              "q0": "1/2",
+              "q1": "5/18",
+              "q2": "2/9"
+            }
+          },
+          "cost": "7/11",
+          "id": "scan1"
+        },
+        {
+          "channel": {
+            "s0": {
+              "q0": "5/16",
+              "q1": "11/32",
+              "q2": "11/32"
+            },
+            "s1": {
+              "q0": "11/27",
+              "q1": "11/27",
+              "q2": "5/27"
+            },
+            "s2": {
+              "q0": "11/26",
+              "q1": "3/13",
+              "q2": "9/26"
+            },
+            "s3": {
+              "q0": "1/14",
+              "q1": "3/7",
+              "q2": "1/2"
+            },
+            "s4": {
+              "q0": "2/5",
+              "q1": "3/20",
+              "q2": "9/20"
+            }
+          },
+          "cost": "1/11",
+          "id": "scan2"
+        }
+      ],
+      "row_budget": 3,
+      "scenarios": [
+        {
+          "column_budget": 1,
+          "id": "s0",
+          "weights": [
+            1,
+            13,
+            15,
+            4
+          ]
+        },
+        {
+          "column_budget": 3,
+          "id": "s1",
+          "weights": [
+            0,
+            11,
+            6,
+            7
+          ]
+        },
+        {
+          "column_budget": 3,
+          "id": "s2",
+          "weights": [
+            0,
+            13,
+            5,
+            18
+          ]
+        },
+        {
+          "column_budget": 2,
+          "id": "s3",
+          "weights": [
+            7,
+            6,
+            0,
+            14
+          ]
+        },
+        {
+          "column_budget": 3,
+          "id": "s4",
+          "weights": [
+            4,
+            3,
+            15,
+            11
+          ]
+        }
+      ],
+      "schema": "frontier/costly-observation-game-v1"
+    },
+    "id": "g10"
+  },
+  {
+    "game": {
+      "instruments": [
+        {
+          "channel": {
+            "s0": {
+              "blank": "1"
+            },
+            "s1": {
+              "blank": "1"
+            },
+            "s2": {
+              "blank": "1"
+            },
+            "s3": {
+              "blank": "1"
+            }
+          },
+          "cost": "0",
+          "id": "none"
+        },
+        {
+          "channel": {
+            "s0": {
+              "q0": "12/19",
+              "q1": "7/19"
+            },
+            "s1": {
+              "q0": "11/14",
+              "q1": "3/14"
+            },
+            "s2": {
+              "q0": "4/5",
+              "q1": "1/5"
+            },
+            "s3": {
+              "q0": "11/21",
+              "q1": "10/21"
+            }
+          },
+          "cost": "2/11",
+          "id": "scan0"
+        },
+        {
+          "channel": {
+            "s0": {
+              "q0": "2/3",
+              "q1": "1/3"
+            },
+            "s1": {
+              "q0": "7/9",
+              "q1": "2/9"
+            },
+            "s2": {
+              "q0": "7/16",
+              "q1": "9/16"
+            },
+            "s3": {
+              "q0": "11/19",
+              "q1": "8/19"
+            }
+          },
+          "cost": "9/11",
+          "id": "scan1"
+        },
+        {
+          "channel": {
+            "s0": {
+              "q0": "4/7",
+              "q1": "3/7"
+            },
+            "s1": {
+              "q0": "1/3",
+              "q1": "2/3"
+            },
+            "s2": {
+              "q0": "7/16",
+              "q1": "9/16"
+            },
+            "s3": {
+              "q0": "3/7",
+              "q1": "4/7"
+            }
+          },
+          "cost": "6/11",
+          "id": "scan2"
+        }
+      ],
+      "row_budget": 4,
+      "scenarios": [
+        {
+          "column_budget": 3,
+          "id": "s0",
+          "weights": [
+            13,
+            0,
+            15,
+            19,
+            15
+          ]
+        },
+        {
+          "column_budget": 4,
+          "id": "s1",
+          "weights": [
+            19,
+            5,
+            9,
+            4,
+            0
+          ]
+        },
+        {
+          "column_budget": 3,
+          "id": "s2",
+          "weights": [
+            0,
+            5,
+            16,
+            14,
+            18
+          ]
+        },
+        {
+          "column_budget": 2,
+          "id": "s3",
+          "weights": [
+            11,
+            16,
+            16,
+            13,
+            18
+          ]
+        }
+      ],
+      "schema": "frontier/costly-observation-game-v1"
+    },
+    "id": "g11"
+  }
+]

@@ -28,6 +28,10 @@ SUFFIXES = {".py", ".js", ".cjs", ".mjs", ".html", ".css", ".md", ".txt", ".json
 REQUIRED = {"LICENSE", "NOTICE", "README.md", "START-HERE.html", "VERSION.json", "THIRD-PARTY.json", "app/index.html", "app/app.js", "app/engine.js", "app/styles.css"}
 BLOCKED_PARTS = {"__pycache__", "node_modules", ".git", ".venv", "venv", "private", "credentials", "dist"}
 MANIFEST_NAME = "RELEASE-MANIFEST.json"
+MISSION_ASSETS = {
+    "bridge/relational.py": "products/frontier-member-tools/inventor/relational.py",
+    "bridge/mission_assets/endpoint-screen.mjs": "docs/research/frontier-omega-alpha/endpoint-screen.mjs",
+}
 
 
 def git(*args: str) -> bytes:
@@ -87,6 +91,20 @@ def collect(revision: str, candidate: bool) -> tuple[dict[str, bytes], str, str 
                 raise ValueError(f"Only ordinary source files may be distributed: {relative}")
             content[relative] = git("cat-file", "blob", blob)
         tree = git("rev-parse", resolved + ":" + PREFIX.rstrip("/")).decode().strip()
+    if "bridge/universal_missions.py" in content:
+        for target, source in MISSION_ASSETS.items():
+            if target in content:
+                raise ValueError(f"Mission asset path already supplied by the product tree: {target}")
+            if candidate:
+                path = REPOSITORY / source
+                if path.is_symlink() or not path.is_file():
+                    raise ValueError(f"Mission asset must be an ordinary source file: {source}")
+                content[target] = path.read_bytes()
+            else:
+                entry = git("ls-tree", resolved, "--", source).decode().strip().split()
+                if len(entry) != 4 or entry[0] not in {"100644", "100755"} or entry[1] != "blob" or entry[3] != source:
+                    raise ValueError(f"Mission asset missing from the exact Git source: {source}")
+                content[target] = git("cat-file", "blob", entry[2])
     missing = REQUIRED.difference(content)
     if missing:
         raise ValueError("Required product files are absent: " + ", ".join(sorted(missing)))
@@ -117,6 +135,8 @@ def build(output: Path, revision: str, candidate: bool = False) -> dict:
         "qualification": "Build integrity is not customer, provider, commerce or research qualification; see evidence/.",
         "files": [{"path": name, "bytes": len(data), "sha256": digest(data)} for name, data in sorted(files.items())],
     }
+    if "bridge/universal_missions.py" in files:
+        manifest["additional_source_paths"] = MISSION_ASSETS
     files[MANIFEST_NAME] = (json.dumps(manifest, ensure_ascii=False, indent=2, sort_keys=True) + "\n").encode()
     output.mkdir(parents=True, exist_ok=True)
     archive = output / f"{root}_{mode}_{source_revision[:12]}.zip"
@@ -195,6 +215,10 @@ def verify_snapshot(snapshot: bytes, expected_sha256: str | None = None, expecte
         expected = [record["path"] for record in records]
         if len(expected) != len(set(expected)) or set(relative) != set(expected) | {MANIFEST_NAME} or not REQUIRED.issubset(expected):
             raise ValueError("Manifest inventory does not match archive")
+        linked_assets = manifest.get("additional_source_paths", {})
+        expected_assets = MISSION_ASSETS if "bridge/universal_missions.py" in expected else {}
+        if linked_assets != expected_assets or not set(expected_assets).issubset(expected):
+            raise ValueError("Mission asset source mapping does not match archive inventory")
         for record in records:
             data = bundle.read(root + record["path"])
             if len(data) != record.get("bytes") or digest(data) != record.get("sha256"):

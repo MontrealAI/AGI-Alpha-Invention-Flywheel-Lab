@@ -177,10 +177,10 @@ export function setupGoals(member, runner, shell, mission) {
   let state, lastGoal, generation = 0;
   const active = () => !member.hidden;
 
-  function display(goal, prior, activate = false) {
+  function display(goal, prior, activate = false, execute = false) {
     if (activate) {
       status.textContent = '';
-      if (!mission.start(goal.text)) return;
+      if (!mission.start(goal.text, {execute})) return;
     }
     const [match] = rankOpportunities(records, goal);
     const record = match?.record;
@@ -247,7 +247,7 @@ export function setupGoals(member, runner, shell, mission) {
     if (!active()) return;
     generation++;
     const query = input.value;
-    if (query.trim()) display({text: query}, undefined, true);
+    if (query.trim()) display({text: query}, undefined, true, true);
     else status.textContent = words.empty;
   });
   input.addEventListener('input', clear);

@@ -1,0 +1,19 @@
+{
+  "registered_at_utc": "2026-11-25T02:30:46.867+00:00",
+  "source_sha256": "f07f7eaeb86ee69417d28ea88e2fd1599117eb4993d072865b01e39eec1b8714",
+  "release_id": 457501084,
+  "tag": "weekly-2026.11.25",
+  "targets": [
+    "FreeCAD_weekly-2026.11.25-macOS11-arm64.dmg",
+    "FreeCAD_weekly-2026.11.25-Windows-x86_64.7z"
+  ],
+  "arms": {
+    "tag": "https://api.github.com/repos/FreeCAD/FreeCAD/releases/tags/weekly-2026.11.25",
+    "assets": "https://api.github.com/repos/FreeCAD/FreeCAD/releases/457501084/assets?per_page=100"
+  },
+  "interval_seconds": 95,
+  "maximum_rounds": 14,
+  "acceptance": "Exact target name and published release identity with uploaded, nonempty asset and digest",
+  "comparison": "Independent concurrent acquisition paths on one GitHub registry with equal poll cadence, body limits, and ETag policy",
+  "stop": "Both arms see both exact targets, planned maximum, or STOP file"
+}

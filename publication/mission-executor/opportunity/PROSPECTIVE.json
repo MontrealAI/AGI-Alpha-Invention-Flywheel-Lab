@@ -1,0 +1,84 @@
+{
+  "schema": "frontier/prospective-independent-acquisition-v1",
+  "registration": {
+    "registered_at_utc": "2026-11-25T02:30:46.867+00:00",
+    "source_sha256": "f07f7eaeb86ee69417d28ea88e2fd1599117eb4993d072865b01e39eec1b8714",
+    "release_id": 457501084,
+    "tag": "weekly-2026.11.25",
+    "targets": [
+      "FreeCAD_weekly-2026.11.25-macOS11-arm64.dmg",
+      "FreeCAD_weekly-2026.11.25-Windows-x86_64.7z"
+    ],
+    "arms": {
+      "tag": "https://api.github.com/repos/FreeCAD/FreeCAD/releases/tags/weekly-2026.11.25",
+      "assets": "https://api.github.com/repos/FreeCAD/FreeCAD/releases/457501084/assets?per_page=100"
+    },
+    "interval_seconds": 95,
+    "maximum_rounds": 14,
+    "acceptance": "Exact target name and published release identity with uploaded, nonempty asset and digest",
+    "comparison": "Independent concurrent acquisition paths on one GitHub registry with equal poll cadence, body limits, and ETag policy",
+    "stop": "Both arms see both exact targets, planned maximum, or STOP file"
+  },
+  "arms": {
+    "tag": {
+      "completed_attestations": 13,
+      "failures": 1,
+      "http_not_modified": 10,
+      "received_response_bytes": 33457,
+      "median_request_seconds": 3.448002,
+      "targets": {
+        "FreeCAD_weekly-2026.11.25-macOS11-arm64.dmg": {
+          "first_observed_at": null,
+          "last_observed_absence": "2026-11-25T02:51:25.258+00:00",
+          "registry_metadata_at_positive_observation": null,
+          "censoring": "RIGHT"
+        },
+        "FreeCAD_weekly-2026.11.25-Windows-x86_64.7z": {
+          "first_observed_at": null,
+          "last_observed_absence": "2026-11-25T02:51:25.258+00:00",
+          "registry_metadata_at_positive_observation": null,
+          "censoring": "RIGHT"
+        }
+      }
+    },
+    "assets": {
+      "completed_attestations": 13,
+      "failures": 1,
+      "http_not_modified": 10,
+      "received_response_bytes": 25600,
+      "median_request_seconds": 3.404287,
+      "targets": {
+        "FreeCAD_weekly-2026.11.25-macOS11-arm64.dmg": {
+          "first_observed_at": null,
+          "last_observed_absence": "2026-11-25T02:51:25.275+00:00",
+          "registry_metadata_at_positive_observation": null,
+          "censoring": "RIGHT"
+        },
+        "FreeCAD_weekly-2026.11.25-Windows-x86_64.7z": {
+          "first_observed_at": null,
+          "last_observed_absence": "2026-11-25T02:51:25.275+00:00",
+          "registry_metadata_at_positive_observation": null,
+          "censoring": "RIGHT"
+        }
+      }
+    }
+  },
+  "comparisons": {
+    "FreeCAD_weekly-2026.11.25-macOS11-arm64.dmg": {
+      "observed_tag_minus_assets_seconds": null,
+      "same_round": null,
+      "lead_qualified": false,
+      "reason": "At least one first exact positive observation is missing."
+    },
+    "FreeCAD_weekly-2026.11.25-Windows-x86_64.7z": {
+      "observed_tag_minus_assets_seconds": null,
+      "same_round": null,
+      "lead_qualified": false,
+      "reason": "At least one first exact positive observation is missing."
+    }
+  },
+  "last_observation": "2026-11-25T02:51:25.275+00:00",
+  "completed_scheduled_rounds": 14,
+  "observation_trace_sha256": "5924c6083785c58036cdde4ca151680b6ba7a166b227d8d5ef09372bf3134ec4",
+  "scope": "Finite same-registry probe with independent request paths. No asset download, first-mover performance, complete acquisition advantage or operating savings are established by this summary."
+}

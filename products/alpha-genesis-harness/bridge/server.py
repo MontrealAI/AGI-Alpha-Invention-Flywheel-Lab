@@ -24,6 +24,7 @@ LOADED_SOURCE_SHA256 = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
 if not __package__:
     sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from bridge.adapters import BridgeError, MAX_BODY, Runtime, retrieve_source, strict_json
+from bridge.pages_missions import ALLOWED_HEADERS, PAGES_ORIGIN, PREFIX as MISSIONS_PREFIX
 from bridge.services import AccessRuntime
 
 PRODUCT = Path(__file__).resolve().parent.parent
@@ -81,6 +82,7 @@ class HarnessServer(ThreadingHTTPServer):
         self._local_connections = None
         self._upgrade_foundry = None
         self._frontier_monitor = None
+        self.pages_missions = None
         self._workflow_lock = threading.RLock()
         self.token = secrets.token_urlsafe(32)
         self.app_path = Path(app_path).resolve()
@@ -105,7 +107,23 @@ class HarnessServer(ThreadingHTTPServer):
                 self._workflows = WorkflowService(self.runtime, self.workspace, server_source_sha256=LOADED_SOURCE_SHA256)
             return self._workflows
 
+    def enable_pages_missions(self, *, provider, model, **policy):
+        from bridge.pages_missions import PagesMissions
+        from bridge.universal_missions import UniversalMissionService
+        configured = self.runtime.provider(provider)
+        if configured.remote or model not in configured.models:
+            raise BridgeError("MISSION_PROVIDER", "Select an explicitly configured local model.")
+        service = UniversalMissionService(self.runtime, self.workspace / "universal-missions",
+                                          server_source_sha256=LOADED_SOURCE_SHA256)
+        try:
+            self.pages_missions = PagesMissions(service, role={"provider": provider, "model": model}, **policy)
+        except Exception:
+            service.close()
+            raise
+
     def server_close(self):
+        if self.pages_missions is not None:
+            self.pages_missions.service.close()
         if self._frontier_monitor is not None:
             self._frontier_monitor.close()
         if self._upgrade_foundry is not None:
@@ -159,16 +177,24 @@ class Handler(BaseHTTPRequestHandler):
         super().setup()
         self.connection.settimeout(15)
 
-    def send_bytes(self, status, data, mime="application/json; charset=utf-8"):
+    def send_bytes(self, status, data, mime="application/json; charset=utf-8", cors=None):
         self.send_response(status)
         self.send_header("Content-Type", mime)
         self.send_header("Content-Length", str(len(data)))
         self.send_header("Cache-Control", "no-store")
         self.send_header("X-Content-Type-Options", "nosniff")
         self.send_header("Referrer-Policy", "no-referrer")
-        self.send_header("Cross-Origin-Resource-Policy", "same-origin")
+        self.send_header("Cross-Origin-Resource-Policy", "cross-origin" if cors else "same-origin")
         self.send_header("X-Frame-Options", "DENY")
         self.send_header("Content-Security-Policy", "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'none'")
+        if cors:
+            self.send_header("Access-Control-Allow-Origin", cors)
+            self.send_header("Vary", "Origin, Access-Control-Request-Method, Access-Control-Request-Headers")
+            if self.command == "OPTIONS" and status == 204:
+                self.send_header("Access-Control-Allow-Methods", "POST")
+                self.send_header("Access-Control-Allow-Headers", ", ".join(sorted(ALLOWED_HEADERS)))
+                if self.headers.get_all("Access-Control-Request-Private-Network") == ["true"]:
+                    self.send_header("Access-Control-Allow-Private-Network", "true")
         self.end_headers()
         try:
             self.wfile.write(data)
@@ -204,8 +230,10 @@ class Handler(BaseHTTPRequestHandler):
         # Portable run archives may be larger than an individual prompt. This
         # exception applies only to import; generated content remains bounded.
         limit = 17 * 1024 * 1024 if self.path == "/api/workflows/import" else MAX_BODY
+        if self.path.startswith(MISSIONS_PREFIX):
+            limit = 32 * 1024
         if size > limit:
-            raise BridgeError("BODY", f"Request exceeds {limit // (1024 * 1024)} MiB.", 413)
+            raise BridgeError("BODY", f"Request exceeds {limit // 1024} KiB.", 413)
         data = self.rfile.read(size)
         if len(data) != size:
             raise BridgeError("BODY", "Incomplete request body.")
@@ -254,6 +282,8 @@ class Handler(BaseHTTPRequestHandler):
             self.json(500, {"error": {"code": "LOCAL_IO", "message": "Application resource unavailable."}})
 
     def do_POST(self):
+        if self.path.startswith(MISSIONS_PREFIX):
+            return self.frontier_mission()
         try:
             self.boundary(authenticated=True)
             data = self.body()
@@ -312,6 +342,40 @@ class Handler(BaseHTTPRequestHandler):
         except Exception:
             self.json(500, {"error": {"code": "INTERNAL", "message": "Connector failed safely. Inspect configuration and retry with a new run ID."},
                             "budget": self.server.runtime.budget.view()})
+
+    def frontier_mission(self):
+        bridge = self.server.pages_missions
+        cors = None
+        operation = None
+        try:
+            if bridge is None:
+                raise BridgeError("MISSION_DISABLED", "Local mission access is disabled.", 404)
+            operation = self.path[len(MISSIONS_PREFIX):]
+            bridge.admit(host=self.headers.get_all("Host"), expected_host=self.server.host,
+                         origin=self.headers.get_all("Origin"), operation=operation,
+                         preflight=self.command == "OPTIONS", method=self.headers.get_all("Access-Control-Request-Method"),
+                         headers=self.headers.get_all("Access-Control-Request-Headers", []))
+            cors = bridge.origin
+            if self.command == "OPTIONS":
+                return self.send_bytes(204, b"", cors=cors)
+            tokens = self.headers.get_all("X-Frontier-Session", [])
+            commands = self.headers.get_all("X-Frontier-Command", [])
+            if len(tokens) > 1 or len(commands) > 1:
+                raise BridgeError("MISSION_HEADERS", "Duplicate mission credentials or request identity.", 400)
+            value = bridge.dispatch(operation, self.body(), session=tokens[0] if tokens else None,
+                                    command=commands[0] if commands else None)
+            code = 200
+        except BridgeError as error:
+            code, value = error.status, {"error": {"code": error.code}}
+        except (ValueError, TypeError, OverflowError, UnicodeError):
+            code, value = 400, {"error": {"code": "MISSION_INPUT"}}
+        except Exception:
+            code, value = 500, {"error": {"code": "MISSION_EXECUTION"}}
+        content = json.dumps(value, ensure_ascii=False, allow_nan=False)
+        sanitized = self.server.runtime.redact(content)
+        if operation == "export" and code == 200 and sanitized != content:
+            return self.send_bytes(409, b'{"error":{"code":"MISSION_EXPORT_SECRET"}}', cors=cors)
+        return self.send_bytes(code, sanitized.encode(), cors=cors)
 
     def connection_action(self, category, action, data):
         allowed = {"status", "connect", "select", "disconnect", "models", "generate", "cancel"}
@@ -455,21 +519,54 @@ class Handler(BaseHTTPRequestHandler):
         return getattr(service, action)(data)
 
     def do_OPTIONS(self):
+        if self.path.startswith(MISSIONS_PREFIX):
+            return self.frontier_mission()
         self.json(403, {"error": {"code": "CORS", "message": "Cross-origin access is disabled."}})
 
 
 def main():
     parser = argparse.ArgumentParser(description="Optional private loopback connector; no paid requests enabled by default.")
     parser.add_argument("--config", type=Path, help="Private JSON configuration containing environment names, never API keys")
-    parser.add_argument("--port", type=int, default=8765)
+    parser.add_argument("--port", type=int, help="Loopback port (8765, or 38463 with Pages missions)")
     parser.add_argument("--no-browser", action="store_true")
     parser.add_argument("--workspace", type=Path, help="Private persistent workflow directory (outside the application)")
+    parser.add_argument("--pages-missions", action="store_true", help="Allow the member page to pair to this private workspace")
+    parser.add_argument("--pages-origin", default=PAGES_ORIGIN, help="The production Pages origin or exact loopback preview origin")
+    parser.add_argument("--mission-provider", default="llama-cpp")
+    parser.add_argument("--mission-model", help="Exact configured local model identity for Pages missions")
+    parser.add_argument("--mission-lease-minutes", type=int, default=60)
+    parser.add_argument("--mission-turns", type=int, default=8)
+    parser.add_argument("--mission-actions", type=int, default=24)
+    parser.add_argument("--mission-output-tokens", type=int, default=1024)
+    parser.add_argument("--mission-import", type=Path, help="Restore a historical execution record, paused under the new local lease")
     args = parser.parse_args()
+    server = None
     try:
+        if args.mission_import and not args.pages_missions:
+            raise BridgeError("MISSION_AUTHORITY", "Mission import requires an explicit local mission policy.")
         config = strict_json(args.config.read_bytes()) if args.config else {}
         runtime = Runtime(config)
-        server = HarnessServer(("127.0.0.1", args.port), runtime, config=config, workspace=args.workspace)
+        port = args.port if args.port is not None else 38463 if args.pages_missions else 8765
+        server = HarnessServer(("127.0.0.1", port), runtime, config=config, workspace=args.workspace)
+        if args.pages_missions:
+            if not args.workspace or not args.mission_model:
+                raise BridgeError("MISSION_AUTHORITY", "Pages missions require an explicit private workspace and local model.")
+            server.enable_pages_missions(provider=args.mission_provider, model=args.mission_model,
+                                         origin=args.pages_origin, lease_minutes=args.mission_lease_minutes,
+                                         turns=args.mission_turns, actions=args.mission_actions,
+                                         output_tokens=args.mission_output_tokens,
+                                         announce=lambda code: print("FRONTIER Ω one-use pairing code: " + code, flush=True))
+            if args.mission_import:
+                from bridge.workflows import MAX_STATE
+                with args.mission_import.open("rb") as item:
+                    raw = item.read(MAX_STATE + 1)
+                if len(raw) > MAX_STATE:
+                    raise BridgeError("MISSION_INPUT", "Historical mission record exceeds the import limit.")
+                restored = server.pages_missions.import_local(strict_json(raw))
+                print(f"Historical FRONTIER Ω mission restored in paused state: {restored['id']}", flush=True)
     except (BridgeError, OSError, KeyError, TypeError, ValueError):
+        if server is not None:
+            server.server_close()
         print("Connector could not start. Check the private configuration and choose an available loopback port.", file=sys.stderr)
         return 1
     print(f"ALPHA GENESIS HARNESS: {server.origin}")

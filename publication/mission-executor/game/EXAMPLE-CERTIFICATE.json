@@ -1,0 +1,73 @@
+{
+  "column": [
+    {
+      "allocation": [
+        0,
+        0
+      ],
+      "mass": 500000000,
+      "scenario": "north"
+    },
+    {
+      "allocation": [
+        0,
+        0
+      ],
+      "mass": 500000000,
+      "scenario": "south"
+    }
+  ],
+  "denominator": 1000000000,
+  "game_sha256": "73335927fdccac56d032f507d73d64b2b088132de4b6284b9e5d3dd944a4b994",
+  "row": [
+    {
+      "instrument": "north-test",
+      "mass": 500000000,
+      "signals": {
+        "quiet": [
+          {
+            "allocation": [
+              0,
+              1
+            ],
+            "mass": 500000000
+          }
+        ],
+        "trigger": [
+          {
+            "allocation": [
+              1,
+              0
+            ],
+            "mass": 500000000
+          }
+        ]
+      }
+    },
+    {
+      "instrument": "south-test",
+      "mass": 500000000,
+      "signals": {
+        "quiet": [
+          {
+            "allocation": [
+              1,
+              0
+            ],
+            "mass": 500000000
+          }
+        ],
+        "trigger": [
+          {
+            "allocation": [
+              0,
+              1
+            ],
+            "mass": 500000000
+          }
+        ]
+      }
+    }
+  ],
+  "schema": "frontier/costly-observation-certificate-v1"
+}

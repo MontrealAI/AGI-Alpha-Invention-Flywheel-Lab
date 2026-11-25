@@ -75,7 +75,7 @@ def _definitions():
     return definitions
 
 
-def response_schema(role, permissions=(), remaining_actions=8):
+def response_schema(role, permissions=(), remaining_actions=8, *, extra_arguments=None, generic_values=False):
     """Return a fresh syntax schema derived only from role and tool authority.
 
     This is a generation aid, not a replacement evaluator. In particular, schemas
@@ -102,6 +102,10 @@ def response_schema(role, permissions=(), remaining_actions=8):
         "read_artifact": {},
         "retrieve_source": {"url": {"type": "string"}},
     }
+    if extra_arguments is not None:
+        if set(arguments) & set(extra_arguments):
+            raise ValueError("Additional workflow tools cannot replace registered tool schemas.")
+        arguments.update(extra_arguments)
     if not isinstance(permissions, (list, tuple, set, frozenset)) or any(tool not in arguments for tool in permissions):
         raise ValueError("Unknown workflow tool permission.")
     actions = [_object({"tool": {"const": tool}, "name": {"type": "string"}, **arguments[tool]})
@@ -109,6 +113,6 @@ def response_schema(role, permissions=(), remaining_actions=8):
     array = {"type": "array", "maxItems": min(8, remaining_actions) if actions else 0,
              "items": {"anyOf": actions} if actions else {"type": "null"}}
     schema = _object({"summary": {"type": "string"}, "actions": array, "done": {"type": "boolean"}})
-    if any(tool in permissions for tool in ("construct_instrument", "run_instrument")):
+    if generic_values or any(tool in permissions for tool in ("construct_instrument", "run_instrument")):
         schema["$defs"] = _definitions()
     return schema

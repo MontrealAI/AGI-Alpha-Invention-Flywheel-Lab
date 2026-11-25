@@ -1,0 +1,15 @@
+{
+  "schema": "frontier/ground-cadence-diagnostic-v1",
+  "registered_at_utc": "2026-11-25T02:41:15.096535+00:00",
+  "diagnostic_target": "ExoFOP-scheduled TOI 216.02 (TOI-216 b), 2023-11-10 LCO-SAAO 1 m i-prime",
+  "source": "https://exofop.ipac.caltech.edu/tess/get_file.php?id=948869",
+  "metadata": {
+    "url": "https://exofop.ipac.caltech.edu/tess/target.php?id=55652896",
+    "sha256": "7a1c9ea175a70c28e94b8d02e878a498d4622e331497283f1ee80e59a710ef79",
+    "stated_frames": 408,
+    "stated_duration_minutes": 408
+  },
+  "selection": "The previously unprocessed visit in the inspected Factory and Cascade reports was chosen from public schedule and file metadata only. No raw fluxes, timing values or observer notes were read. This epoch is separate from the disputed April 2023 observation.",
+  "required_clock": "Explicit finite JD_UTC and BJD_TDB, strictly increasing. Valid offset within 1000 seconds, with span within 5 seconds.",
+  "fit": "Use two established b geometries from joint_transit.py at 8944f51d. Scan all visit centers, durations 1.0–4.2 h and positive depths 0.0018–0.0125. Compare airmass and linear time baselines and independent trapezoids. Require a minimum null-model difference of 36 across candidate geometries, 8 samples before and after first/fourth contact, interior center and shape estimates, and model-midpoint span at most 300 seconds. Report conditional evidence. No predictive or April confirmation."
+}

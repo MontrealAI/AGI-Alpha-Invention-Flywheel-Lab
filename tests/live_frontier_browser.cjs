@@ -572,7 +572,7 @@ async function universalMission(page, language, width) {
   const panel = page.locator('#frontier-mission-panel');
   const original = 'Build Frontier AI for Game Theory.';
   const initialRequests = [];
-  const observe = request => { if (request.url().startsWith('http://127.0.0.1:38461/') || request.url().startsWith('http://127.0.0.1:11434/')) initialRequests.push(request.url()); };
+  const observe = request => { if (/^http:\/\/127\.0\.0\.1:(38461|11434|38463)\//u.test(request.url())) initialRequests.push(request.url()); };
   page.on('request', observe);
   try {
     await page.locator('#goal-text').fill(original);
@@ -582,12 +582,14 @@ async function universalMission(page, language, width) {
     assert.equal(await panel.getAttribute('data-state'), 'ready');
     assert.equal(await page.locator('#goal-result').isVisible(), false);
     assert.match(await page.locator('#mission-published-summary').innerText(), /−49[.,]5/u);
-    assert.equal(await page.locator('#mission-published-links a[download]').getAttribute('href'), 'frontier-game-theory-1.0.0.zip');
+    assert.deepEqual(await page.locator('#mission-published-links a[download]').evaluateAll(links => links.map(link => link.getAttribute('href'))),
+      ['frontier-game-theory-1.0.0.zip','frontier-game-observation-1.0.0.zip']);
     await page.locator('#mission-prepare').click();
     const prompt = page.locator('#mission-prompt');
     await prompt.waitFor({state:'visible'});
     assert.match(await prompt.inputValue(), /Build Frontier AI for Game Theory\./u);
     assert.match(await prompt.inputValue(), language === 'fr' ? /Écrivez en français/u : /Write text in English/u);
+    assert.match(await prompt.inputValue(), language === 'fr' ? /Identifiant de l’exécution en cours/u : /Current mission run reference/u);
     assert.match(await prompt.inputValue(), /NOAA GFS(?: historical)? f024/u);
     assert.match(await prompt.inputValue(), /game-theory-verified-strategic-allocation/u);
     assert.equal(await page.locator('#mission-copy').isEnabled(), false);

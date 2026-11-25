@@ -1,0 +1,33 @@
+{
+  "ambition": "Build Frontier AI for Game Theory.",
+  "analytic_witness": {
+    "free_no_observation_value": "6",
+    "fully_informed_free_upper_control": "12",
+    "private_mixed_value": "7",
+    "public_best_value": "6"
+  },
+  "candidate_qualification": "Exact feasible strategy interval width at most one part per million times max(1, maximum scenario sum of lane weights).",
+  "candidate_sha256": {
+    "EXAMPLE.json": "8fe8748cd9a817ede0ffa412f18eff394552bd953abd8f572ede85b8ac35c8eb",
+    "compare_observation.py": "44fb73cb2908078ccb97c4c3dadb50ee568afa6339e24ccf44f42af189e38d37",
+    "observation.py": "740c3228348ad946acd3fa86771379aff4958dea413f7626db9db137205ac119",
+    "retained_allocation.py": "2224cc9da9f4914ba5f0bc323f936a3f7b4f5d22d63a913ec1fc207923942858",
+    "solve_observation.py": "5423e736b55f4a7131c5554663d4463d27ef502f788c3a70e10f2f02b10bf4bb"
+  },
+  "comparator_arms": [
+    "explicit full normal-form HiGHS",
+    "restricted full normal-form HiGHS with exact double-oracle deviations",
+    "best single publicly announced instrument",
+    "no-information and clairvoyant scenario controls"
+  ],
+  "double_oracle_iteration_budget": 128,
+  "explicit_entry_budget": 250000,
+  "frozen_at_utc": "2026-11-25T02:33:14.846533+00:00",
+  "held_inputs_commitment_sha256": "b93d0bb05f92a27b5e16afd4075067ed48d3eb1ae43fe68c43c7bf24d79795ba",
+  "independent_acceptance": "Evaluator separately froze a half-ppm interval-width threshold, an independently enumerated normal-form LP and exact deviations before candidate disclosure.",
+  "registered_development_games": 30,
+  "registered_development_seed": 42529,
+  "schema": "frontier/costly-observation-registration-v1",
+  "scope": "Finite one-shot zero-sum allocation with optional private observation menu, exact rational channels, a cost per draw, and a scenario-aware opponent choosing before the draw.",
+  "stopping_rule": "Report every frozen held case and all 30 development cases. Preserve time, resource, numerical, and verifier failures."
+}

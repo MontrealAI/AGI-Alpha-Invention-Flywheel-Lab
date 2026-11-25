@@ -1,0 +1,183 @@
+{
+  "schema": "frontier/production-claim-plan-v1",
+  "job": "opportunity",
+  "selectors": {
+    "radar": {
+      "tag": "article",
+      "attribute": "data-opportunity",
+      "value": "nisar-l2-quebec"
+    },
+    "translation": {
+      "tag": "article",
+      "attribute": "data-opportunity",
+      "value": "hy-mt3-q4"
+    }
+  },
+  "evidence_sha256": {
+    "radar-control.json": "caeb0a4c8fdaa749aa1dc09d12263d518367d6430c906c25e9a8aef941f5e8d4",
+    "hy-mt3.json": "cec12cb2208f3ba92052789ba30576145e7501349ef905a5c1ee4390cbadff7c",
+    "hy-mt2.json": "23b137d84f91d554f2a1ad32542321142bd7471d940a69c26e32dbd98999fca9"
+  },
+  "claims": [
+    {
+      "id": "montreal-records",
+      "selector": "radar",
+      "source": "radar-control.json",
+      "expected": {
+        "path": [
+          "sites",
+          "montreal",
+          "nisar",
+          "query_hits"
+        ]
+      },
+      "en": [
+        "shortlists cover ",
+        " Montréal"
+      ],
+      "fr": [
+        "repéré ",
+        " produits à Montréal"
+      ]
+    },
+    {
+      "id": "quebec-records",
+      "selector": "radar",
+      "source": "radar-control.json",
+      "expected": {
+        "path": [
+          "sites",
+          "quebec-city",
+          "nisar",
+          "query_hits"
+        ]
+      },
+      "en": [
+        "Montréal and ",
+        " Québec City catalog"
+      ],
+      "fr": [
+        "Montréal et ",
+        " à Québec."
+      ]
+    },
+    {
+      "id": "montreal-early-reference",
+      "selector": "radar",
+      "source": "radar-control.json",
+      "expected": {
+        "path": [
+          "sites",
+          "montreal",
+          "nisar",
+          "reference_before_window"
+        ]
+      },
+      "en": [
+        ". ",
+        " reference acquisitions at each point"
+      ],
+      "fr": [
+        "À chaque point, ",
+        " acquisitions de référence"
+      ]
+    },
+    {
+      "id": "quebec-early-reference",
+      "selector": "radar",
+      "source": "radar-control.json",
+      "expected": {
+        "path": [
+          "sites",
+          "quebec-city",
+          "nisar",
+          "reference_before_window"
+        ]
+      },
+      "en": [
+        ". ",
+        " reference acquisitions at each point"
+      ],
+      "fr": [
+        "À chaque point, ",
+        " acquisitions de référence"
+      ]
+    },
+    {
+      "id": "new-model-anchors",
+      "selector": "translation",
+      "source": "hy-mt3.json",
+      "expected": {
+        "path": [
+          "anchor_pass_by_use"
+        ],
+        "sum": true
+      },
+      "en": [
+        "names and numbers in ",
+        "/"
+      ],
+      "fr": [
+        "noms et les chiffres attendus dans ",
+        " passages sur "
+      ]
+    },
+    {
+      "id": "new-model-denominator",
+      "selector": "translation",
+      "source": "hy-mt3.json",
+      "expected": {
+        "path": [
+          "rows"
+        ],
+        "count": true
+      },
+      "en": [
+        "names and numbers in 8/",
+        " passages"
+      ],
+      "fr": [
+        "dans 8 passages sur ",
+        ", contre "
+      ]
+    },
+    {
+      "id": "prior-model-anchors",
+      "selector": "translation",
+      "source": "hy-mt2.json",
+      "expected": {
+        "path": [
+          "anchor_pass_by_use"
+        ],
+        "sum": true
+      },
+      "en": [
+        "previous model preserved them in ",
+        "/"
+      ],
+      "fr": [
+        "contre ",
+        " sur 8 pour le"
+      ]
+    },
+    {
+      "id": "prior-model-denominator",
+      "selector": "translation",
+      "source": "hy-mt2.json",
+      "expected": {
+        "path": [
+          "rows"
+        ],
+        "count": true
+      },
+      "en": [
+        "previous model preserved them in 7/",
+        "."
+      ],
+      "fr": [
+        "contre 7 sur ",
+        " pour le modèle précédent"
+      ]
+    }
+  ]
+}

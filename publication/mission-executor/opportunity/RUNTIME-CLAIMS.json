@@ -1,0 +1,427 @@
+{
+  "schema": "frontier/authorized-publication-mission-v1",
+  "mode": "INCLUDED_CODEX_AUTHORED_TRANSPORT_DEVELOPMENT_ONLY",
+  "input_sha256": "1c8e3a2d438221dc657c245423a9d0de93eb77559b1376f1965a779aba881cd6",
+  "counts_from_separate_conventional_code": [
+    [
+      "game",
+      "en",
+      4,
+      4
+    ],
+    [
+      "game",
+      "fr",
+      4,
+      4
+    ],
+    [
+      "opportunity",
+      "en",
+      8,
+      8
+    ],
+    [
+      "opportunity",
+      "fr",
+      8,
+      8
+    ]
+  ],
+  "runtime_turns": 3,
+  "actual_actions": 5,
+  "statuses": [
+    {
+      "status": "ready",
+      "results": [
+        [
+          [
+            "en",
+            12,
+            12
+          ],
+          [
+            "fr",
+            12,
+            12
+          ]
+        ]
+      ]
+    },
+    {
+      "status": "ready",
+      "results": [
+        [
+          [
+            "en",
+            12,
+            12
+          ],
+          [
+            "fr",
+            12,
+            12
+          ]
+        ],
+        [
+          [
+            "game",
+            "en",
+            4,
+            4
+          ],
+          [
+            "game",
+            "fr",
+            4,
+            4
+          ],
+          [
+            "opportunity",
+            "en",
+            8,
+            8
+          ],
+          [
+            "opportunity",
+            "fr",
+            8,
+            8
+          ]
+        ]
+      ]
+    },
+    {
+      "status": "needs_review",
+      "results": [
+        [
+          [
+            "en",
+            12,
+            12
+          ],
+          [
+            "fr",
+            12,
+            12
+          ]
+        ],
+        [
+          [
+            "game",
+            "en",
+            4,
+            4
+          ],
+          [
+            "game",
+            "fr",
+            4,
+            4
+          ],
+          [
+            "opportunity",
+            "en",
+            8,
+            8
+          ],
+          [
+            "opportunity",
+            "fr",
+            8,
+            8
+          ]
+        ]
+      ]
+    }
+  ],
+  "complete_local_wall_seconds": 0.247271,
+  "limitations": "Actual bounded local execution with authored proposals. Separate comparison shares the administrator. This is development use of the candidate runtime, with no live provider or economic advantage claim.",
+  "full_operator_receipt_sha256": "592227ab883b403569dd27a680c78cf5814b4cd4971c83e51cff104ed7ed0924",
+  "runtime_source_sha256": {
+    "universal_missions.py": "ae80daceef6d88fe83f1cee59ac308ebac0e7f17281026484d158e9244f1da44",
+    "workflows.py": "a0a5b9ea3a89a8932d2f8a7249b0babe90338a2a1b0134a81596813f57a5d960",
+    "mission_tools.py": "c64452be8a9831e936daf14b7073684637371da208bc8da0c1bdf519477ce948"
+  },
+  "final_status": "needs_review",
+  "qualification": "UNVERIFIED",
+  "original_ambition": "Produce an evidence-bound bilingual release decision from the checked Game Theory and Opportunity Capture claims by retaining separate totals by publication and language.",
+  "artifact_files": {
+    "publication-checks.json": "{\"evaluator_sha256\":\"48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d\",\"schema\":\"frontier/bounded-table-instrument-v1\",\"sql\":\"SELECT edition, language, COUNT(*), SUM(accepted) FROM checks GROUP BY edition, language ORDER BY edition, language\",\"table_schema\":{\"checks\":{\"accepted\":\"INTEGER\",\"claim_id\":\"TEXT\",\"edition\":\"TEXT\",\"language\":\"TEXT\"}}}",
+    "verified-claims.md": "# Qualified-scope publication check\n\nThese are the recorded live quantitative witnesses, grouped by publication and language.\n\n| Publication | Language | Checks | Accepted |\n| --- | --- | ---: | ---: |\n| game | en | 4 | 4 |\n| game | fr | 4 | 4 |\n| opportunity | en | 8 | 8 |\n| opportunity | fr | 8 | 8 |\n\nThe complete comparative trial measures matching accuracy within this scope. No commercial benefit is established.\n"
+  },
+  "verified_event_receipts": [
+    {
+      "at": "2026-11-25T02:47:43.641872+00:00",
+      "detail": {
+        "cost": {
+          "amount": null,
+          "basis": "AUTHORED_FIXTURE_NO_INFERENCE",
+          "complete_cost_known": false
+        },
+        "model": "authored-codex-operator",
+        "provider": "fixture",
+        "qualification": "AUTHORED_FIXTURE_NOT_LIVE_MODEL",
+        "reported_model": null,
+        "requested_model": "authored-codex-operator",
+        "response_sha256": "b57072421d6661e4c58efe35e863c3fc8d2776377968d20c255378bcb389befe",
+        "role": "builder",
+        "run_id": "wf_ce004f6aae4ee11e3e1178e7_e53bd05d561db5af",
+        "usage": {
+          "input_tokens": null,
+          "output_tokens": null
+        }
+      },
+      "index": 2,
+      "kind": "model_completed",
+      "previous": "be394f2864296adbe98a943c5316c3680035f4b65ed68519b01216350f31e416",
+      "sha256": "c81da429eabbe03f3c1696b342c859b381370ff5048879549fe4569a0a4ed8b2"
+    },
+    {
+      "at": "2026-11-25T02:47:43.641907+00:00",
+      "detail": {
+        "proposed_actions": 2,
+        "summary": "Compute a preliminary count by language from the actual checked publication claims."
+      },
+      "index": 3,
+      "kind": "route_proposed",
+      "previous": "c81da429eabbe03f3c1696b342c859b381370ff5048879549fe4569a0a4ed8b2",
+      "sha256": "342bb5d267a7c24b85f29d5f4d5926f8069f48abc74eac4da7ec0c329bc3b990"
+    },
+    {
+      "at": "2026-11-25T02:47:43.707332+00:00",
+      "detail": {
+        "outcome": {
+          "action_id": "b1b50f8eee2638d4a770303f90cc74800ae20775d5870f01053eb668cd9f490e",
+          "artifact": "publication-checks.json",
+          "bytes": 334,
+          "evaluator_sha256": "48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d",
+          "kind": "table_instrument",
+          "operation_executed": true,
+          "previous_sha256": null,
+          "qualification": "UNVERIFIED",
+          "sha256": "061d9133a837ef3a35f83ee899ffe25c841043ac670f91ba59371f9bf90e64fe",
+          "sqlite_version": "3.53.1",
+          "status": "CANDIDATE_VALIDATED_ON_EMPTY_TABLES"
+        },
+        "tool": "construct_table"
+      },
+      "index": 4,
+      "kind": "tool_completed",
+      "previous": "342bb5d267a7c24b85f29d5f4d5926f8069f48abc74eac4da7ec0c329bc3b990",
+      "sha256": "8c654353342becf10d67dc2e5b6883ee35058954ffaf1345ba9d394b325bd59c"
+    },
+    {
+      "at": "2026-11-25T02:47:43.763328+00:00",
+      "detail": {
+        "outcome": {
+          "action_id": "cb8efb86cf684c2230e4cf1f8035f60ce2066aee0efea29ab984bfb8f78e9f92",
+          "artifact": "publication-checks.json",
+          "artifact_sha256": "061d9133a837ef3a35f83ee899ffe25c841043ac670f91ba59371f9bf90e64fe",
+          "dataset": "publication-evidence",
+          "evaluator_sha256": "48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d",
+          "input_origin": "OPERATOR_APPROVED_DATASET",
+          "input_sha256": "06b455e4acc5256783313eb5582d89f8f6f420cd1e26b4d8f1a96dc077c2ded8",
+          "operation_executed": true,
+          "output_sha256": "c1b53a5b095ace4eb4d73f2c2110a2a945f3e5daae91739629e0acb91c7fa512",
+          "qualification": "UNVERIFIED",
+          "rows": [
+            [
+              "en",
+              12,
+              12
+            ],
+            [
+              "fr",
+              12,
+              12
+            ]
+          ],
+          "sqlite_version": "3.53.1",
+          "status": "EXECUTED"
+        },
+        "tool": "run_table"
+      },
+      "index": 5,
+      "kind": "tool_completed",
+      "previous": "8c654353342becf10d67dc2e5b6883ee35058954ffaf1345ba9d394b325bd59c",
+      "sha256": "919ee0e300c4c7ab1e492a2b95f7ecc5571c61440e8b3ef736c7480d62bb96f3"
+    },
+    {
+      "at": "2026-11-25T02:47:43.769376+00:00",
+      "detail": {
+        "cost": {
+          "amount": null,
+          "basis": "AUTHORED_FIXTURE_NO_INFERENCE",
+          "complete_cost_known": false
+        },
+        "model": "authored-codex-operator",
+        "provider": "fixture",
+        "qualification": "AUTHORED_FIXTURE_NOT_LIVE_MODEL",
+        "reported_model": null,
+        "requested_model": "authored-codex-operator",
+        "response_sha256": "6749f4fae8320cab5bcc42ae09332642bf214bf0b53521c9b99d7798e61fbbdb",
+        "role": "builder",
+        "run_id": "wf_ce004f6aae4ee11e3e1178e7_68a6b34f08a92e3e",
+        "usage": {
+          "input_tokens": null,
+          "output_tokens": null
+        }
+      },
+      "index": 8,
+      "kind": "model_completed",
+      "previous": "ea842f4cc61eb7ee00b07805c07ce7bbfc3145d483c8324af030e539b43c5ab5",
+      "sha256": "0da28d951b34582d2eb4fb6b458b8b7d80ddd713613907b2d37af2c7850080b4"
+    },
+    {
+      "at": "2026-11-25T02:47:43.769420+00:00",
+      "detail": {
+        "proposed_actions": 2,
+        "summary": "The actual result collapsed distinct publication jobs. Extend the instrument to retain both keys."
+      },
+      "index": 9,
+      "kind": "route_proposed",
+      "previous": "0da28d951b34582d2eb4fb6b458b8b7d80ddd713613907b2d37af2c7850080b4",
+      "sha256": "1fd258bed45803187eb6f03f559ed3ff319ac94c76b4c60c7ba8920d4cb000bf"
+    },
+    {
+      "at": "2026-11-25T02:47:43.810266+00:00",
+      "detail": {
+        "outcome": {
+          "action_id": "3520b1464137f18f64ee2b5f58a23202e751c004be9b143d48027373da788281",
+          "artifact": "publication-checks.json",
+          "bytes": 361,
+          "evaluator_sha256": "48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d",
+          "kind": "table_instrument",
+          "operation_executed": true,
+          "previous_sha256": "061d9133a837ef3a35f83ee899ffe25c841043ac670f91ba59371f9bf90e64fe",
+          "qualification": "UNVERIFIED",
+          "sha256": "35ada12823b1643e5335b080c23f1074fe045d525a3c08ad555f62987ed6e249",
+          "sqlite_version": "3.53.1",
+          "status": "CANDIDATE_VALIDATED_ON_EMPTY_TABLES"
+        },
+        "tool": "construct_table"
+      },
+      "index": 10,
+      "kind": "tool_completed",
+      "previous": "1fd258bed45803187eb6f03f559ed3ff319ac94c76b4c60c7ba8920d4cb000bf",
+      "sha256": "e527cbd274be7fa5eca5e28be8822910511466066a2429eeaa9247a9d8b8b944"
+    },
+    {
+      "at": "2026-11-25T02:47:43.859748+00:00",
+      "detail": {
+        "outcome": {
+          "action_id": "e78052b61e251fe5a25efa7b7661793710f5ed0dfebd8fa133616b88bf3548e4",
+          "artifact": "publication-checks.json",
+          "artifact_sha256": "35ada12823b1643e5335b080c23f1074fe045d525a3c08ad555f62987ed6e249",
+          "dataset": "publication-evidence",
+          "evaluator_sha256": "48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d",
+          "input_origin": "OPERATOR_APPROVED_DATASET",
+          "input_sha256": "06b455e4acc5256783313eb5582d89f8f6f420cd1e26b4d8f1a96dc077c2ded8",
+          "operation_executed": true,
+          "output_sha256": "c34cc4c4c4fb7880fdee593b8475b6fc511d85979e9595e407fbd2185bf482af",
+          "qualification": "UNVERIFIED",
+          "rows": [
+            [
+              "game",
+              "en",
+              4,
+              4
+            ],
+            [
+              "game",
+              "fr",
+              4,
+              4
+            ],
+            [
+              "opportunity",
+              "en",
+              8,
+              8
+            ],
+            [
+              "opportunity",
+              "fr",
+              8,
+              8
+            ]
+          ],
+          "sqlite_version": "3.53.1",
+          "status": "EXECUTED"
+        },
+        "tool": "run_table"
+      },
+      "index": 11,
+      "kind": "tool_completed",
+      "previous": "e527cbd274be7fa5eca5e28be8822910511466066a2429eeaa9247a9d8b8b944",
+      "sha256": "c574b38173cfeb7c9d6b1b557bf02739515d307fc6bd20627eea73e6c24cdd84"
+    },
+    {
+      "index": 14,
+      "at": "2026-11-25T02:47:43.866660+00:00",
+      "kind": "model_completed",
+      "detail": {
+        "role": "builder",
+        "provider": "fixture",
+        "model": "authored-codex-operator",
+        "requested_model": "authored-codex-operator",
+        "reported_model": null,
+        "run_id": "wf_ce004f6aae4ee11e3e1178e7_554f46088dc28afd",
+        "usage": {
+          "input_tokens": null,
+          "output_tokens": null
+        },
+        "cost": {
+          "amount": null,
+          "basis": "AUTHORED_FIXTURE_NO_INFERENCE",
+          "complete_cost_known": false
+        },
+        "qualification": "AUTHORED_FIXTURE_NOT_LIVE_MODEL",
+        "response_sha256": "bbbcbf487108b072b35ca6b62745b5b55b289e1fce32e2df621a2934e0c2ce97"
+      },
+      "previous": "294b612d51e76b46f46dbaf29847932dabc001cb495727d9405ade0bb455c16e",
+      "sha256": "0f72f70317b2c77a4a22435601067a1347c583cad8ce45932b3f5e09d944da5f"
+    },
+    {
+      "index": 15,
+      "at": "2026-11-25T02:47:43.866704+00:00",
+      "kind": "route_proposed",
+      "detail": {
+        "summary": "Record accepted counts after agreement with the ordinary comparator.",
+        "proposed_actions": 1
+      },
+      "previous": "0f72f70317b2c77a4a22435601067a1347c583cad8ce45932b3f5e09d944da5f",
+      "sha256": "78e0b13fcb9e40f260c5e7133119db619c89beffd68b3e44936b19d311ec4cea"
+    },
+    {
+      "index": 16,
+      "at": "2026-11-25T02:47:43.867695+00:00",
+      "kind": "tool_completed",
+      "detail": {
+        "tool": "write_document",
+        "outcome": {
+          "artifact": "verified-claims.md",
+          "sha256": "63be089d2fedec2173f406f882244619efc8a56094b96adc02d5ad8b75002dc8",
+          "bytes": 420,
+          "kind": "document",
+          "action_id": "d45a44a3fda27178f2216ffb896514e0724cc6e2434f7deb1e012447aebc2d61",
+          "operation_executed": true
+        }
+      },
+      "previous": "78e0b13fcb9e40f260c5e7133119db619c89beffd68b3e44936b19d311ec4cea",
+      "sha256": "723307054984f32e3cd56edcbc613d8428d77a9a388e64818eb61f8b99a2ff82"
+    },
+    {
+      "index": 18,
+      "at": "2026-11-25T02:47:43.868787+00:00",
+      "kind": "awaiting_independent_evaluation",
+      "detail": {
+        "development_checks_passed": false,
+        "scope": "Actual artifacts and tool results are recorded. Separate acceptance is required."
+      },
+      "previous": "b3f37ba75d301ce41967c0d8d806bee966feb31d1c86c1140d25ac8afa8350ff",
+      "sha256": "ede9e00231e59de9e4296e283d7a0fa416c60f4e68cb8480bcd669c80a767099"
+    }
+  ]
+}

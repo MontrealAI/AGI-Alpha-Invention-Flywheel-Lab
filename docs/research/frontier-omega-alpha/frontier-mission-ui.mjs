@@ -1,4 +1,5 @@
 import {downloadJSON} from './frontier-goals.mjs';
+import {setupExecution} from './frontier-execution.mjs';
 import {
   createMission, reviseMission, prepareMission, beginMission, recordMission, interruptMission,
   cancelMission, continueMission, exportMission, importMission, missionPacket, bindMissionRequest,
@@ -27,6 +28,9 @@ const messages = {
     copy: 'Reviewed prompt copied.', select: 'The reviewed prompt is selected for copying.',
     localSource: 'Local model result', manualSource: 'Assisted result', restoredSource: 'Restored work record', unpublished: 'Verification pending',
     publicReport: 'Read the completed study', publicArtifact: 'Download the verified research tool',
+    contextRun: 'Current mission run reference', contextAtlas: 'Public Atlas lead with unverified applicability',
+    contextObjective: 'Previous unverified objective', contextAction: 'Previous unverified next action',
+    contextWork: 'Excerpt from previous unverified work',
     routes: {direct:'Direct answer',capability:'Existing capability',composition:'Capability composition',adaptation:'Adaptation',
       research:'Frontier research',invention:'New invention',continuing:'Continuing investigation',clarification:'Clarification or abstention'},
   },
@@ -49,6 +53,9 @@ const messages = {
     copy: 'Consigne relue copiée.', select: 'La consigne relue est sélectionnée pour la copier.',
     localSource: 'Résultat du modèle local', manualSource: 'Résultat assisté', restoredSource: 'Travail rétabli', unpublished: 'Vérification à venir',
     publicReport: 'Lire l’étude terminée', publicArtifact: 'Télécharger l’outil de recherche vérifié',
+    contextRun: 'Identifiant de l’exécution en cours', contextAtlas: 'Piste publique de l’Atlas dont l’applicabilité reste à vérifier',
+    contextObjective: 'Objectif précédent à vérifier', contextAction: 'Prochaine action précédente à vérifier',
+    contextWork: 'Extrait du travail précédent à vérifier',
     routes: {direct:'Réponse directe',capability:'Capacité existante',composition:'Composition de capacités',adaptation:'Adaptation',
       research:'Recherche de pointe',invention:'Nouvelle invention',continuing:'Enquête à poursuivre',clarification:'Précision ou abstention'},
   },
@@ -89,7 +96,7 @@ function publicRuns() {
     const entries = JSON.parse(node('mission-public-runs').content.textContent);
     return entries.filter(row => typeof row.ambition === 'string' && typeof row.en === 'string' && typeof row.fr === 'string'
       && /^frontier-[a-z0-9.-]+\.zip$/u.test(row.download)
-      && /^https:\/\/github\.com\/MontrealAI\/AGI-Alpha-Invention-Flywheel-Lab\/blob\/[0-9a-f]{40}\/publication\/universal\/[a-zA-Z0-9/._-]+\.md$/u.test(row.report)
+      && /^https:\/\/github\.com\/MontrealAI\/AGI-Alpha-Invention-Flywheel-Lab\/blob\/[0-9a-f]{40}\/publication\/(universal|mission-executor)\/[a-zA-Z0-9/._-]+\.md$/u.test(row.report)
       && typeof row.capability?.id === 'string' && /^[a-z0-9][a-z0-9-]{1,63}$/u.test(row.capability.id)
       && [row.capability.en, row.capability.fr, row.capability.scopeEn, row.capability.scopeFr]
         .every(value => typeof value === 'string' && value.length > 0 && value.length <= 300));
@@ -109,6 +116,20 @@ export function setupMissionConsole(member, shell) {
   const localRuns = new Set();
   let mission, request, connection, activeRequest, atlas, serial = 0;
   const active = () => !member.hidden;
+  const execution = setupExecution(member, language, {
+    currentAmbition: () => mission?.ambition,
+    onOpen({ambition, original_ambition: originalAmbition}) {
+      stopRequest();
+      resetHandoff();
+      mission = createMission(originalAmbition, {language});
+      if (originalAmbition !== ambition) mission = reviseMission(mission, ambition);
+      atlas = undefined;
+      input.value = ambition;
+      input.dispatchEvent(new Event('input'));
+      render();
+      shell.show(node('frontier-mission-panel'), {remember:true});
+    },
+  });
 
   function currentReport() {
     return mission?.reports.findLast(report => report.revision === mission.revision);
@@ -134,6 +155,7 @@ export function setupMissionConsole(member, shell) {
     panel.hidden = !mission;
     node('mission-export').disabled = !mission;
     show('mission-return', Boolean(mission));
+    execution.updateControls();
     if (!mission) {
       delete panel.dataset.state;
       delete panel.dataset.route;
@@ -182,16 +204,19 @@ export function setupMissionConsole(member, shell) {
       item.append(link, document.createTextNode(` · ${scope[i]}`));
       return item;
     }));
-    const published = priorRuns.find(row => row.ambition === mission.ambition.trim());
-    show('mission-published', Boolean(published));
-    text('mission-published-summary', published?.[language]);
+    const published = priorRuns.filter(row => row.ambition === mission.ambition.trim());
+    show('mission-published', published.length > 0);
+    text('mission-published-summary', published.map(row => row[language]).join(' '));
     node('mission-published-links').replaceChildren();
-    if (published) for (const [href, label] of [[published.report, words.publicReport], [published.download, words.publicArtifact]]) {
-      const link = document.createElement('a');
-      link.href = href;
-      link.textContent = label;
-      if (href === published.download) link.download = '';
-      node('mission-published-links').append(link);
+    for (const row of published) {
+      const label = row.capability[language];
+      for (const [href, title] of [[row.report, words.publicReport], [row.download, words.publicArtifact]]) {
+        const link = document.createElement('a');
+        link.href = href;
+        link.textContent = `${title} · ${label}`;
+        if (href === row.download) link.download = '';
+        node('mission-published-links').append(link);
+      }
     }
     show('mission-run-local', Boolean(connection) && state !== 'canceled' && state !== 'running');
     show('mission-pause', state === 'running' || state === 'waiting');
@@ -206,7 +231,7 @@ export function setupMissionConsole(member, shell) {
     activeRequest = undefined;
   }
 
-  function start(ambition) {
+  function start(ambition, {execute = false} = {}) {
     if (!active()) return false;
     try {
       const updated = mission ? (mission.ambition !== ambition ? reviseMission(mission, ambition) : mission)
@@ -219,6 +244,8 @@ export function setupMissionConsole(member, shell) {
       atlas = undefined;
       render();
       shell.show(node('frontier-mission-panel'), {remember:true});
+      if (execute) execution.activate(ambition);
+      else execution.clearView();
       return true;
     } catch {
       text('goal-status', words.invalidMission);
@@ -228,13 +255,13 @@ export function setupMissionConsole(member, shell) {
 
   async function requestForMission() {
     const packet = missionPacket(mission);
-    const context = [`Current mission run reference: ${packet.runId}`];
-    if (atlas) context.push(`Public Atlas lead, applicability unverified: ${atlas.title} · ${atlas.evidence} · ${atlas.url}`);
+    const context = [`${words.contextRun}: ${packet.runId}`];
+    if (atlas) context.push(`${words.contextAtlas}: ${atlas.title} · ${atlas.evidence} · ${atlas.url}`);
     if (packet.previousReport) {
       const previous = packet.previousReport;
-      context.push(`Previous objective, unverified: ${previous.objective.slice(0,450)}`);
-      context.push(`Previous next action, unverified: ${previous.nextAction.slice(0,450)}`);
-      if (previous.work) context.push(`Previous work excerpt, unverified: ${previous.work.slice(0,450)}`);
+      context.push(`${words.contextObjective}: ${previous.objective.slice(0,450)}`);
+      context.push(`${words.contextAction}: ${previous.nextAction.slice(0,450)}`);
+      if (previous.work) context.push(`${words.contextWork}: ${previous.work.slice(0,450)}`);
     }
     const {missionId, revision, language, originalAmbition, ambition} = packet;
     return createMissionRequest({missionId, revision, language, originalAmbition, ambition, context, capabilities});
@@ -370,6 +397,7 @@ export function setupMissionConsole(member, shell) {
     if (!active()) return;
     resetRequest();
     mission = atlas = undefined;
+    execution.clearView();
     localRuns.clear();
     input.value = '';
     input.dispatchEvent(new Event('input'));
@@ -404,6 +432,7 @@ export function setupMissionConsole(member, shell) {
       resetRequest();
       localRuns.clear();
       mission = restored;
+      execution.clearView();
       atlas = undefined;
       input.value = mission.ambition;
       input.dispatchEvent(new Event('input'));

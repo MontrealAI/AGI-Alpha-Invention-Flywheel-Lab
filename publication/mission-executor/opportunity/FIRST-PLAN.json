@@ -1,0 +1,99 @@
+{
+  "schema": "frontier/production-claim-plan-v1",
+  "job": "game",
+  "selectors": {
+    "game": {
+      "tag": "template",
+      "attribute": "id",
+      "value": "mission-public-runs",
+      "mission": "game-theory-verified-strategic-allocation"
+    }
+  },
+  "evidence_sha256": {
+    "game-receipt.json": "d973034163ed5dbb399198565ca239538cf7ad03d1633a87d018e774cc245b15",
+    "example-verification.json": "d190c0cd6ae2c4e49d2f174edcab034e1393de4bb27ae6fb9cee36e4f9ba18d0"
+  },
+  "claims": [
+    {
+      "id": "randomized-guarantee",
+      "selector": "game",
+      "source": "example-verification.json",
+      "expected": {
+        "path": [
+          "lower_numerator"
+        ],
+        "denominator": [
+          "denominator"
+        ]
+      },
+      "en": [
+        "randomizing guarantees ",
+        " versus a "
+      ],
+      "fr": [
+        "la stratégie aléatoire garantit ",
+        ", contre "
+      ]
+    },
+    {
+      "id": "nominal-worst-case",
+      "selector": "game",
+      "source": "game-receipt.json",
+      "expected": {
+        "path": [
+          "example",
+          "nominal_policy_worst_case"
+        ]
+      },
+      "en": [
+        " versus a ",
+        " worst case"
+      ],
+      "fr": [
+        ", contre ",
+        " dans le pire cas"
+      ]
+    },
+    {
+      "id": "held-games",
+      "selector": "game",
+      "source": "game-receipt.json",
+      "expected": {
+        "path": [
+          "evaluation",
+          "candidate_qualified"
+        ]
+      },
+      "en": [
+        ". ",
+        " independently authored test games"
+      ],
+      "fr": [
+        ". Les ",
+        " jeux d’essai conçus indépendamment"
+      ]
+    },
+    {
+      "id": "max-pure-pairs",
+      "selector": "game",
+      "source": "game-receipt.json",
+      "expected": {
+        "path": [
+          "evaluation",
+          "cases"
+        ],
+        "max": [
+          "implicit_pairs"
+        ]
+      },
+      "en": [
+        "including one with ",
+        " possible action pairs"
+      ],
+      "fr": [
+        "dont un comportant ",
+        " paires d’actions possibles"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,195 @@
+{
+  "configured_api_charge_usd_per_run": 0,
+  "cpu_binary_archive_sha256": "909eef25cd53e6601c8a07c866d8dbb2983e74177088d55182137a8fb8255d62",
+  "exact_owner_receipt_sha256": "a2d1038f43f2bf4e3906ea51509333e25865a09965e915f19e633676b1c1b01b",
+  "fresh_compute_cost": null,
+  "mode": "Qwen3-8B Q4 K M. JSON mode in iterations 1–2, structured mode in iteration 3.",
+  "model_revision": "7c41481f57cb95916b40956ab2f0b139b296d974",
+  "permitted_paid_requests": false,
+  "provider": "llama.cpp b12242 on numeric device loopback",
+  "runs": [
+    {
+      "accepted_provider_responses": 4,
+      "action_attempts": 14,
+      "actual_operations": [],
+      "checkpoint_sha256": "04b78864da6b1f29eb17c3191485bbd8c3a0d2d3b7de6d5dafb91bf0cae16103",
+      "dispatched": 4,
+      "errors": [
+        "Tool not authorized.",
+        "Tool not authorized.",
+        "Tool not authorized.",
+        "Tool not authorized.",
+        "Tool not authorized.",
+        "Tool not authorized.",
+        "Tool not authorized.",
+        "Tool not authorized.",
+        "Tool not authorized.",
+        "Tool not authorized.",
+        "Tool not authorized.",
+        "Tool not authorized.",
+        "Tool not authorized.",
+        "Tool not authorized."
+      ],
+      "files": [],
+      "iteration": 1,
+      "seconds": 60.74367517099995,
+      "status": "exhausted",
+      "task": "owner",
+      "validation": []
+    },
+    {
+      "accepted_provider_responses": 4,
+      "action_attempts": 10,
+      "actual_operations": [],
+      "checkpoint_sha256": "6e025c71a3946ac7d0aa01ab36e94602bbe0f5a3e5f104f255ac9295330b02c7",
+      "dispatched": 4,
+      "errors": [
+        "Tool not authorized.",
+        "Tool not authorized.",
+        "Tool not authorized.",
+        "Tool not authorized.",
+        "Tool not authorized.",
+        "Tool not authorized.",
+        "Tool not authorized.",
+        "Tool not authorized.",
+        "Tool not authorized.",
+        "Tool not authorized."
+      ],
+      "files": [],
+      "iteration": 1,
+      "seconds": 97.43746865399999,
+      "status": "exhausted",
+      "task": "units",
+      "validation": [
+        {
+          "artifact": "area.json",
+          "error": "Required artifact is absent.",
+          "kind": "instrument",
+          "passed": false
+        }
+      ]
+    },
+    {
+      "accepted_provider_responses": 4,
+      "action_attempts": 8,
+      "actual_operations": [],
+      "checkpoint_sha256": "329fc05f8931a3e430e69924ef87330f30a4131291ef2fe2e82bf303c65991fa",
+      "dispatched": 4,
+      "errors": [
+        "TABLE_ARTIFACT_NAME",
+        "TABLE_ARTIFACT_NAME",
+        "TABLE_ARTIFACT_NAME",
+        "TABLE_ARTIFACT_NAME",
+        "TABLE_ARTIFACT_NAME",
+        "TABLE_ARTIFACT_NAME",
+        "TABLE_ARTIFACT_NAME",
+        "TABLE_ARTIFACT_KIND"
+      ],
+      "files": [],
+      "iteration": 2,
+      "seconds": 103.374219842,
+      "status": "exhausted",
+      "task": "owner",
+      "validation": []
+    },
+    {
+      "accepted_provider_responses": 4,
+      "action_attempts": 10,
+      "actual_operations": [
+        "construct_instrument",
+        "write_document",
+        "construct_instrument",
+        "construct_instrument",
+        "read_artifact",
+        "write_document"
+      ],
+      "checkpoint_sha256": "c40ad149771e59e3ca62ef98e08c4015c1c3e6d8f8ea44bdefbe741a22d36845",
+      "dispatched": 4,
+      "errors": [
+        "Input field root was not declared.",
+        "Read access is restricted to this run's declared artifacts.",
+        "Malformed or unsupported response: A valid finite JSON object is required.",
+        "Input field root was not declared.",
+        "Input field root was not declared."
+      ],
+      "files": [
+        "RUN_INSTRUMENT.py",
+        "area.json",
+        "result.md"
+      ],
+      "iteration": 2,
+      "seconds": 247.04496053499997,
+      "status": "exhausted",
+      "task": "units",
+      "validation": [
+        {
+          "artifact": "area.json",
+          "error": "Input field root was not declared.",
+          "kind": "instrument",
+          "passed": false
+        }
+      ]
+    },
+    {
+      "accepted_provider_responses": 4,
+      "action_attempts": 11,
+      "actual_operations": [
+        "construct_instrument",
+        "write_dataset",
+        "construct_table",
+        "run_table",
+        "construct_instrument",
+        "construct_table",
+        "run_table"
+      ],
+      "checkpoint_sha256": "f614f7bf4aad571f47614439b78965824195798d3dbbf26ff294284b2df9628d",
+      "dispatched": 4,
+      "errors": [
+        "Unsupported expression operation.",
+        "TABLE_ARTIFACT_NAME",
+        "TABLE_ARTIFACT_NAME",
+        "Input field root was not declared."
+      ],
+      "files": [
+        "RUN_INSTRUMENT.py",
+        "data.csv",
+        "game_theory_model.json",
+        "game_theory_table.json"
+      ],
+      "iteration": 3,
+      "seconds": 159.24049591799985,
+      "status": "exhausted",
+      "task": "owner",
+      "validation": []
+    },
+    {
+      "accepted_provider_responses": 0,
+      "action_attempts": 0,
+      "actual_operations": [],
+      "checkpoint_sha256": "00be0524a16f5217d6af09ccb1bc0f1f072985bbada4693124f535c30777492e",
+      "dispatched": 1,
+      "errors": [
+        "SCHEMA_RESPONSE"
+      ],
+      "files": [],
+      "iteration": 3,
+      "seconds": 29.088574682999933,
+      "status": "paused",
+      "task": "units",
+      "validation": []
+    }
+  ],
+  "schema": "frontier/local-invention-development-v1",
+  "scope": "Actual CPU loopback inference on public development tasks. Exploratory prototypes, without independent acceptance.",
+  "structured_runtime_source": {
+    "adapters.py": "a05127970eb11bb08cc98ed7ef9e05f9a723f51c66f9a5bfaa9f2242bb6275a6",
+    "instruments.py": "46d43d4a017f1d32fcd9e05b32316a6fffac27e1a9572ab9ffbbf87338f00322",
+    "mission_contracts.py": "0c33042b2b0e3d8e259180b5877e6847ef84965ff56d4791fa13cc38cbe9aee7",
+    "mission_tools.py": "c64452be8a9831e936daf14b7073684637371da208bc8da0c1bdf519477ce948",
+    "universal_missions.py": "edba844b31c637b95d88249b946fd3390957d2e17244f036b4ce687d5d95f083",
+    "workflow_schemas.py": "2b4a028595e0462be8bd90e8ac6dae97665e124c200784cea26e2f19eb82dc26",
+    "workflows.py": "a0a5b9ea3a89a8932d2f8a7249b0babe90338a2a1b0134a81596813f57a5d960"
+  },
+  "structured_source_manifest_sha256": "312250b40d7916fa68cb37340f3fa923a84202668bfb83c0783f682fb3c7f8dd",
+  "weights_sha256": "d98cdcbd03e17ce47681435b5150e34c1417f50b5c0019dd560e4882c5745785"
+}

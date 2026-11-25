@@ -1,0 +1,71 @@
+{
+  "schema": "frontier/observation-cost-transfer-inputs-v1",
+  "cases": [
+    {
+      "id": "opposed-two-lane",
+      "quotes": ["0", "1/2", "1", "2", "3"],
+      "game": {
+        "schema": "frontier/costly-observation-game-v1",
+        "row_budget": 1,
+        "scenarios": [
+          {"id": "warehouse-east", "column_budget": 1, "weights": [8, 2]},
+          {"id": "warehouse-west", "column_budget": 1, "weights": [2, 8]}
+        ],
+        "instruments": [
+          {"id": "none", "cost": "0", "channel": {"warehouse-east": {"blank": "1"}, "warehouse-west": {"blank": "1"}}},
+          {"id": "probe", "cost": "0", "channel": {
+            "warehouse-east": {"east": "7/8", "west": "1/8"},
+            "warehouse-west": {"east": "1/8", "west": "7/8"}
+          }}
+        ]
+      }
+    },
+    {
+      "id": "three-warehouse-states",
+      "quotes": ["0", "1/2", "1", "2", "3"],
+      "game": {
+        "schema": "frontier/costly-observation-game-v1",
+        "row_budget": 3,
+        "scenarios": [
+          {"id": "priority-combine", "column_budget": 3, "weights": [11, 3, 6]},
+          {"id": "priority-crossdock", "column_budget": 2, "weights": [3, 10, 6]},
+          {"id": "priority-returns", "column_budget": 4, "weights": [6, 2, 12]}
+        ],
+        "instruments": [
+          {"id": "none", "cost": "0", "channel": {
+            "priority-combine": {"blank": "1"}, "priority-crossdock": {"blank": "1"},
+            "priority-returns": {"blank": "1"}
+          }},
+          {"id": "probe", "cost": "0", "channel": {
+            "priority-combine": {"clear": "13/16", "busy": "1/8", "hold": "1/16"},
+            "priority-crossdock": {"clear": "1/8", "busy": "3/4", "hold": "1/8"},
+            "priority-returns": {"clear": "1/16", "busy": "3/16", "hold": "3/4"}
+          }}
+        ]
+      }
+    },
+    {
+      "id": "overlapping-neutral-probe",
+      "quotes": ["0", "1/2", "1", "2", "3"],
+      "game": {
+        "schema": "frontier/costly-observation-game-v1",
+        "row_budget": 4,
+        "scenarios": [
+          {"id": "overlap", "column_budget": 4, "weights": [5, 3, 3, 5]},
+          {"id": "spread", "column_budget": 5, "weights": [4, 5, 5, 4]},
+          {"id": "concentrated", "column_budget": 3, "weights": [8, 1, 1, 8]}
+        ],
+        "instruments": [
+          {"id": "none", "cost": "0", "channel": {
+            "overlap": {"blank": "1"}, "spread": {"blank": "1"}, "concentrated": {"blank": "1"}
+          }},
+          {"id": "probe", "cost": "0", "channel": {
+            "overlap": {"low": "5/13", "high": "8/13"},
+            "spread": {"low": "5/13", "high": "8/13"},
+            "concentrated": {"low": "6/13", "high": "7/13"}
+          }}
+        ]
+      }
+    }
+  ]
+}

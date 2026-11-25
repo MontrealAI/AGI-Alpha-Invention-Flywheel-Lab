@@ -1,0 +1,149 @@
+{
+  "schema": "frontier/mission-semantic-qualification-receipt-v1",
+  "recorded_at": "2026-11-25T02:39:39.182021+00:00",
+  "base_revision": "8944f51db7b8e7fce8630503046c2a257cf62e44",
+  "python": "3.12.14",
+  "node": "v24.22.3",
+  "implementation_sha256": "0c33042b2b0e3d8e259180b5877e6847ef84965ff56d4791fa13cc38cbe9aee7",
+  "tests": "python -m unittest discover -s tests -p test_mission_contracts.py",
+  "tests_passed": 13,
+  "inputs": {
+    "released_endpoint_archive_sha256": "e546212a8b79203c8618b0817a5079d3ce4f51a23b13664b62334a9649528443",
+    "released_noaa_archive_sha256": "a17ab75332f11a71f7acd5121418d46cf116fc43d521098e11cbea1ea620499f",
+    "released_endpoint_sample_file_sha256": "59a55127ec07ae801a85f834afbfbb6b1f01bdaecdcb9159f1cd434741afcbae"
+  },
+  "endpoint": [
+    {
+      "id": "downloaded_immutable_sample",
+      "input_sha256": "d091bfd655de34e884e8753ab6041f63ba9b739d5d38cfe776b5f56b9194231a",
+      "decision": {
+        "capability_id": "endpoint-screen",
+        "status": "COMPATIBLE",
+        "reason": "BOUND_SCREENING_CONTRACT_MATCH",
+        "input_sha256": "d091bfd655de34e884e8753ab6041f63ba9b739d5d38cfe776b5f56b9194231a",
+        "contract_sha256": "1d44fde6ebfd20579b1eb0a3fd0dd5acb77eb2a83071e80568a5fb1c22242a28",
+        "source_revision": "522542e525e96556285560e65e4443c85cc7b709"
+      },
+      "result_sha256": "016471e1e456b370551ff3d262425ff142de80eb6f83aa3f38e18e8129526245",
+      "rows": 7,
+      "screening": "QUALIFIED_TESTED_POINT",
+      "highest_tested_load": 140,
+      "operating_adoption": "ABSTAIN",
+      "matched_all_rows": true,
+      "guarded_process_wall_ns": 31639850,
+      "sqlite_process_wall_ns": 44830560
+    },
+    {
+      "id": "stricter_p90_control",
+      "input_sha256": "110617a8e916bc866e45c5c36e99b65a6d8e7b753e7877568f165768a57ec5eb",
+      "decision": {
+        "capability_id": "endpoint-screen",
+        "status": "COMPATIBLE",
+        "reason": "BOUND_SCREENING_CONTRACT_MATCH",
+        "input_sha256": "110617a8e916bc866e45c5c36e99b65a6d8e7b753e7877568f165768a57ec5eb",
+        "contract_sha256": "1d44fde6ebfd20579b1eb0a3fd0dd5acb77eb2a83071e80568a5fb1c22242a28",
+        "source_revision": "522542e525e96556285560e65e4443c85cc7b709"
+      },
+      "result_sha256": "f06dc8dd5bb483a402ec89f6a7087bdd49ae93c9d9e63ba126122a3ae6195e31",
+      "rows": 7,
+      "screening": "QUALIFIED_TESTED_POINT",
+      "highest_tested_load": 35,
+      "operating_adoption": "ABSTAIN",
+      "matched_all_rows": true,
+      "guarded_process_wall_ns": 51456536,
+      "sqlite_process_wall_ns": 28413457
+    },
+    {
+      "id": "higher_rate_floor_control",
+      "input_sha256": "803a1c4aa321447ea54bdd1b6ac66f6d285d2019380956fe4c7d6b1af7c0e055",
+      "decision": {
+        "capability_id": "endpoint-screen",
+        "status": "COMPATIBLE",
+        "reason": "BOUND_SCREENING_CONTRACT_MATCH",
+        "input_sha256": "803a1c4aa321447ea54bdd1b6ac66f6d285d2019380956fe4c7d6b1af7c0e055",
+        "contract_sha256": "1d44fde6ebfd20579b1eb0a3fd0dd5acb77eb2a83071e80568a5fb1c22242a28",
+        "source_revision": "522542e525e96556285560e65e4443c85cc7b709"
+      },
+      "result_sha256": "6669583d7eca32cba4e491299641b320f36c14ca9032cb72a182d6b89a513ed2",
+      "rows": 7,
+      "screening": "QUALIFIED_TESTED_POINT",
+      "highest_tested_load": 70,
+      "operating_adoption": "ABSTAIN",
+      "matched_all_rows": true,
+      "guarded_process_wall_ns": 49336678,
+      "sqlite_process_wall_ns": 30372324
+    },
+    {
+      "id": "missing_p90_evidence_control",
+      "input_sha256": "49b1e8140bcff1540d0b91c9eadc28952a9e58ecab5c0be2aa49ef8d9f606742",
+      "decision": {
+        "capability_id": "endpoint-screen",
+        "status": "COMPATIBLE",
+        "reason": "BOUND_SCREENING_CONTRACT_MATCH",
+        "input_sha256": "49b1e8140bcff1540d0b91c9eadc28952a9e58ecab5c0be2aa49ef8d9f606742",
+        "contract_sha256": "1d44fde6ebfd20579b1eb0a3fd0dd5acb77eb2a83071e80568a5fb1c22242a28",
+        "source_revision": "522542e525e96556285560e65e4443c85cc7b709"
+      },
+      "result_sha256": "38af8eed1b1e79f9e46a650c5d89884e31dac8fa4f95a24fae16331c7b089cbc",
+      "rows": 7,
+      "screening": "ABSTAIN",
+      "highest_tested_load": null,
+      "operating_adoption": "ABSTAIN",
+      "matched_all_rows": true,
+      "guarded_process_wall_ns": 68985662,
+      "sqlite_process_wall_ns": 27525512
+    }
+  ],
+  "noaa": {
+    "exact_12h_regression": {
+      "decision": {
+        "capability_id": "noaa-archive",
+        "status": "INCOMPATIBLE",
+        "reason": "NOAA_F024_REQUIRES_EXACTLY_24_HOURS",
+        "contract_sha256": "8a8fcc2a36f3a56ec1b75796d425d54cacd4f501c75bc4de25fa411f6e1f4cce",
+        "source_revision": "6a635b77012fb45b4d96c404a33fa04327c19674"
+      },
+      "executed": false
+    },
+    "off_native_grid": {
+      "decision": {
+        "capability_id": "noaa-archive",
+        "status": "INCOMPATIBLE",
+        "reason": "POINT_NOT_ON_NATIVE_QUARTER_DEGREE_GRID",
+        "contract_sha256": "8a8fcc2a36f3a56ec1b75796d425d54cacd4f501c75bc4de25fa411f6e1f4cce",
+        "source_revision": "6a635b77012fb45b4d96c404a33fa04327c19674"
+      },
+      "executed": false
+    },
+    "scope_compatible": {
+      "capability_id": "noaa-archive",
+      "status": "COMPATIBLE",
+      "reason": "EXACT_FORECAST_SCOPE_MATCH",
+      "evidence_status": "ARCHIVE_BYTES_UNCHECKED",
+      "contract_sha256": "8a8fcc2a36f3a56ec1b75796d425d54cacd4f501c75bc4de25fa411f6e1f4cce",
+      "source_revision": "6a635b77012fb45b4d96c404a33fa04327c19674"
+    },
+    "scope_compatible_without_retrieval_authority": {
+      "decision": {
+        "capability_id": "noaa-archive",
+        "status": "UNAUTHORIZED",
+        "reason": "NATIVE_ARCHIVE_RETRIEVAL_NOT_GRANTED",
+        "contract_sha256": "8a8fcc2a36f3a56ec1b75796d425d54cacd4f501c75bc4de25fa411f6e1f4cce",
+        "source_revision": "6a635b77012fb45b4d96c404a33fa04327c19674"
+      },
+      "executed": false
+    },
+    "native_release_offline_historical_signature_audit": {
+      "conventional_service_agreement": 5,
+      "direct_origin_budget_cases": 6,
+      "registered_cases": 6,
+      "signature_verified": true
+    }
+  },
+  "limits": [
+    "Trusted structured requirements are supplied outside the model. Model arguments alone never authorize reuse.",
+    "The fixed comparison checks objective, units, time basis, version, scope, underlying bytes and declared applicability. It does not certify the empirical quality of submitted evidence.",
+    "The historical NOAA audit and Endpoint baseline are reproducibility controls. Declared applicability does not retrieve new NOAA bytes or time before productive work.",
+    "Timing covers the scoped dispatcher and SQLite process calls. Complete work and provider costs remain outside this trial."
+  ]
+}

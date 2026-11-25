@@ -8,6 +8,7 @@ import json
 import re
 from pathlib import Path
 import subprocess
+import sys
 from zipfile import ZipFile, ZipInfo, ZIP_STORED
 
 import frontier_member_first as editions
@@ -52,9 +53,14 @@ FACTORY_SHA256 = '5a29bc8d215895216201b85dcf6f5af6709d0ecea857792cf24b3cc4d20ec7
 FACTORY_RESULTS = 'factory-results.json'
 GAME_THEORY_ZIP = 'frontier-game-theory-1.0.0.zip'
 GAME_THEORY_SHA256 = '5cf63237c4e41aece421d0330286e0521b572f4406e69915c01d66b104b11fcb'
+OBSERVATION_ZIP = 'frontier-game-observation-1.0.0.zip'
+OBSERVATION_SHA256 = '63c5554fade9082f84e5092fccea75da8aeab00af1d39feff83cd1e85a60f1df'
+EXECUTOR_ZIP = 'frontier-harness-executor-1.0.0.zip'
+EXECUTION_PUBLICATION = MAIN / 'publication/mission-executor'
 MISSION_MARKER = '<!-- UNIVERSAL_PUBLIC_RUNS -->'
 PUBLIC_MISSIONS = MAIN / 'publication/universal'
-MISSION_ASSETS = ('frontier-mission.mjs', 'frontier-mission-router.mjs', 'frontier-mission-ui.mjs', GAME_THEORY_ZIP)
+MISSION_ASSETS = ('frontier-mission.mjs', 'frontier-mission-router.mjs', 'frontier-mission-ui.mjs',
+                  'frontier-execution.mjs', GAME_THEORY_ZIP, OBSERVATION_ZIP, EXECUTOR_ZIP)
 ACTIVATION_ARCHIVE_SHA256 = {
     ACTIVATION_ZIP: ACTIVATION_SHA256,
     AMPLIFICATION_ZIP: AMPLIFICATION_SHA256, SUBSTRATE_ZIP: SUBSTRATE_SHA256,
@@ -139,7 +145,8 @@ def archive_bytes():
 
 def package(path, files, name, pin, scope, version='1.0.0'):
     manifest = {'schema': 'frontier/portable-capability-v1', 'id': name, 'version': version,
-                'source': commit_url(pin), 'rights': RIGHTS, 'qualification_scope': scope,
+                'source': commit_url(pin),
+                'rights': RIGHTS, 'qualification_scope': scope,
                 'file_sha256': {key: digest(value) for key, value in files.items()}}
     with ZipFile(path, 'w', compression=ZIP_STORED) as release:
         for filename, raw in sorted({**files, 'manifest.json': stable(manifest) + b'\n'}.items()):
@@ -422,6 +429,23 @@ def build_factory(destination):
                                     '1.5.0')
 
 
+def build_mission_executor(destination, revision):
+    harness = MAIN / HARNESS
+    bridges = ('__init__', 'adapters', 'chatgpt', 'codex', 'codex_permissions', 'deployment', 'frontier_monitor',
+               'genesis_next', 'instruments', 'mission_contracts', 'mission_tools', 'onboarding', 'output_schema',
+               'pages_missions', 'proof_to_market', 'server', 'services', 'strategy_demo', 'streaming', 'universal_missions',
+               'upgrade_foundry', 'workflow_demo', 'workflow_schemas', 'workflow_strategies', 'workflows', 'workshop', 'workshop_protocol')
+    asset_paths = ('LICENSE', 'NOTICE', *(f'bridge/{name}.py' for name in bridges),
+                   'app/index.html', 'app/app.js', 'app/engine.js', 'app/styles.css', 'app/workshop.js')
+    files = {name: (harness / name).read_bytes() for name in asset_paths}
+    files['bridge/relational.py'] = (TOOLS / 'inventor/relational.py').read_bytes()
+    files['bridge/mission_assets/endpoint-screen.mjs'] = (ASSETS / 'endpoint-screen.mjs').read_bytes()
+    files['START.md'] = (EXECUTION_PUBLICATION / 'README.md').read_bytes()
+    files['local-model.example.json'] = (EXECUTION_PUBLICATION / 'local-model.example.json').read_bytes()
+    return package(destination / EXECUTOR_ZIP, files, 'frontier-harness-executor', revision,
+                   'Permission-bounded local HARNESS missions, development checks and source-bound output.')
+
+
 def build_public_missions(destination, revision):
     directory = PUBLIC_MISSIONS / 'game-theory'
     archive = (directory / GAME_THEORY_ZIP).read_bytes()
@@ -435,7 +459,7 @@ def build_public_missions(destination, revision):
                 or bundle.read('game-theory/REPORT.md') != (MAIN / report).read_bytes()):
             raise ValueError('The public mission report differs from the portable receipt')
     (destination / GAME_THEORY_ZIP).write_bytes(archive)
-    return escape(stable([{
+    public = [{
         'ambition': receipt['original_ambition'], 'download': GAME_THEORY_ZIP,
         'report': f'{MONTREAL}/blob/{revision}/{report.as_posix()}',
         'capability': {
@@ -447,7 +471,24 @@ def build_public_missions(destination, revision):
         },
         **{lang: ' '.join(receipt['card'][lang][field] for field in ('summary', 'verification'))
            for lang in ('en', 'fr')},
-    }]).decode())
+    }]
+    observation = EXECUTION_PUBLICATION / 'game'
+    observation_zip = destination / OBSERVATION_ZIP
+    subprocess.run((sys.executable, '-S', str(observation / 'package_game.py'), str(observation_zip)),
+                   check=True, capture_output=True)
+    if digest(observation_zip.read_bytes()) != OBSERVATION_SHA256:
+        raise ValueError('The independently qualified observation-game archive changed')
+    capability = json.loads((observation / 'CAPABILITY.json').read_bytes())
+    public.append({
+        'ambition': receipt['original_ambition'], 'download': OBSERVATION_ZIP,
+        'report': f'{MONTREAL}/blob/{revision}/{(observation / "REPORT.md").relative_to(MAIN).as_posix()}',
+        'en': 'New solver for costly noisy observations and contingent allocations. Eleven independently authored games passed exact checks.',
+        'fr': 'Nouveau solveur pour les observations bruitées à coût explicite et les allocations conditionnelles. Les onze jeux indépendants ont réussi les vérifications exactes.',
+        'capability': {'id': capability['id'], 'en': 'Costly observation solver', 'fr': 'Solveur d’observations à coût explicite',
+                       'scopeEn': capability['purpose']['en'], 'scopeFr': capability['purpose']['fr']},
+    })
+    build_mission_executor(destination, revision)
+    return escape(stable(public).decode())
 
 
 def render_cascade(fr):
