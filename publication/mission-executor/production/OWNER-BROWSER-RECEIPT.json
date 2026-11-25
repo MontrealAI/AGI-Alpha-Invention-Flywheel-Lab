@@ -1,0 +1,597 @@
+{
+  "base": "https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/frontier-omega-alpha/",
+  "status": "exhausted",
+  "result_label": "Authorized resources exhausted",
+  "counts": "Actions 14 · Model calls 4",
+  "language": "en",
+  "original_ambition": "Build Frontier AI for Game Theory.",
+  "same_device_reopened": true,
+  "recovered_preexisting_interruption": true,
+  "wallet": "isolated fixture, no financial transaction",
+  "release_revision": "c0a14ba028092db648516718f9127ae8166df63e",
+  "workflow_run": "45540764490",
+  "module_sha256": "3d3acf2f9f214ae7e489cf5c312b0754702e8666660af27e34c35dd6537fb769",
+  "model_calls": 4,
+  "actions": 14,
+  "tool_results": [
+    {
+      "at": "2026-11-25T03:40:47.827374+00:00",
+      "detail": {
+        "cost": {
+          "accounted": 0,
+          "amount": 0,
+          "attempts": 1,
+          "basis": "reported_usage_at_user_rates",
+          "complete_cost_known": false,
+          "currency": "USD"
+        },
+        "model": "qwen3-8b-q4_k_m",
+        "provider": "llama-cpp",
+        "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+        "reported_model": "qwen3-8b-q4_k_m",
+        "requested_model": "qwen3-8b-q4_k_m",
+        "response_sha256": "58300c63ba4c3d327d89b7918eadf9f6719aeb1f671c2b23d31c3b84c9281bf7",
+        "role": "builder",
+        "run_id": "wf_501816598604a821e8efe47c_4dec9f1d663b6acf",
+        "usage": {
+          "input_tokens": 758,
+          "output_tokens": 286
+        }
+      },
+      "index": 7,
+      "kind": "model_completed",
+      "previous": "b4640bd4cba4525afa7be6d4404303e59f846a668fbe83e8c115b84d18c0ec5f",
+      "sha256": "e7d382870024333fc234d65679a35637a450afc571620fd463b67427340f59be"
+    },
+    {
+      "at": "2026-11-25T03:40:47.831492+00:00",
+      "detail": {
+        "outcome": {
+          "action_id": "42748f6b74d82e4104782751c2fa70a0caa8f457bd42e710251ff7c42500e27e",
+          "artifact": "game_model.json",
+          "bytes": 362,
+          "kind": "instrument",
+          "operation_executed": true,
+          "run": "python3 RUN_INSTRUMENT.py game_model.json input.json",
+          "sha256": "4b36b9823adbfdf116f846e8cb62283e5c59583c196aa8d62498c0263d10ae54"
+        },
+        "tool": "construct_instrument"
+      },
+      "index": 9,
+      "kind": "tool_completed",
+      "previous": "fc2c38fba2a67629e806fd06cd4b694c13437cdd9e2fe27bb03dac500a7ea0c3",
+      "sha256": "9006bb3c0ab3c9e78a4e2daa27d2cafd8ed42c2c3f09160c0d899d79a7839d1e"
+    },
+    {
+      "at": "2026-11-25T03:40:47.832813+00:00",
+      "detail": {
+        "proposal_fields": [
+          "columns",
+          "name",
+          "rows",
+          "tool"
+        ],
+        "reason": "Dataset cells must be scalar JSON values.",
+        "tool": "write_dataset"
+      },
+      "index": 10,
+      "kind": "tool_refused",
+      "previous": "9006bb3c0ab3c9e78a4e2daa27d2cafd8ed42c2c3f09160c0d899d79a7839d1e",
+      "sha256": "96b78bc78f247dcbf448e53774c9c93a2b8083d40edcaeabb00097ad0956fbda"
+    },
+    {
+      "at": "2026-11-25T03:40:47.834270+00:00",
+      "detail": {
+        "proposal_fields": [
+          "input",
+          "name",
+          "tool"
+        ],
+        "reason": "Unsupported expression operation.",
+        "tool": "run_instrument"
+      },
+      "index": 11,
+      "kind": "tool_refused",
+      "previous": "96b78bc78f247dcbf448e53774c9c93a2b8083d40edcaeabb00097ad0956fbda",
+      "sha256": "e64c2445e32c6ac51ec6204299edf18909dd4d12d7c7e3b12e2261b2a2261981"
+    },
+    {
+      "at": "2026-11-25T03:42:25.712435+00:00",
+      "detail": {
+        "cost": {
+          "accounted": 0,
+          "amount": 0,
+          "attempts": 1,
+          "basis": "reported_usage_at_user_rates",
+          "complete_cost_known": false,
+          "currency": "USD"
+        },
+        "model": "qwen3-8b-q4_k_m",
+        "provider": "llama-cpp",
+        "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+        "reported_model": "qwen3-8b-q4_k_m",
+        "requested_model": "qwen3-8b-q4_k_m",
+        "response_sha256": "df1d59703ff7ec7acdbc6784d9d93006d608de3602bd8315953fad8bb716d83a",
+        "role": "builder",
+        "run_id": "wf_501816598604a821e8efe47c_59fd5c6eead59884",
+        "usage": {
+          "input_tokens": 1080,
+          "output_tokens": 763
+        }
+      },
+      "index": 15,
+      "kind": "model_completed",
+      "previous": "61155fd576dec7d94053ce15b9821110216e41c3898c282a1c4696ad00dce6a1",
+      "sha256": "4734733a9049ce261d5dcc545524a7963005093ac8a066492bd5d44f3521c121"
+    },
+    {
+      "at": "2026-11-25T03:42:25.716846+00:00",
+      "detail": {
+        "outcome": {
+          "action_id": "c3b7ccc18e787b3f4c970546ff1babc3e95b3828efe41c826041216fc496b6bc",
+          "artifact": "game_model.json",
+          "bytes": 352,
+          "kind": "instrument",
+          "operation_executed": true,
+          "run": "python3 RUN_INSTRUMENT.py game_model.json input.json",
+          "sha256": "5862c7c6ac5a5fe9ca8b22a4304291ecdd25ae461d0b69bb4a016f6c0683b7d5"
+        },
+        "tool": "construct_instrument"
+      },
+      "index": 17,
+      "kind": "tool_completed",
+      "previous": "1527904c82d13f7078bf983a4e81dba14c891306d0bbf9597b04b8f603563868",
+      "sha256": "b9e5655754791c98bd5ffc9a15a13db7785d4741b703df0fc24de55f0a09b36f"
+    },
+    {
+      "at": "2026-11-25T03:42:25.718622+00:00",
+      "detail": {
+        "proposal_fields": [
+          "input",
+          "name",
+          "tool"
+        ],
+        "reason": "Unsupported expression operation.",
+        "tool": "run_instrument"
+      },
+      "index": 18,
+      "kind": "tool_refused",
+      "previous": "b9e5655754791c98bd5ffc9a15a13db7785d4741b703df0fc24de55f0a09b36f",
+      "sha256": "ba8347c77828021b708baef1d6a88712889575f45fb47cc6f81a7c6d9a3d6ae0"
+    },
+    {
+      "at": "2026-11-25T03:42:25.720887+00:00",
+      "detail": {
+        "outcome": {
+          "action_id": "a58f1c92912ab890ba286af556df6ad30c701443bc5864d58bccad5885d50a7a",
+          "artifact": "game_results.csv",
+          "bytes": 102,
+          "kind": "dataset",
+          "operation_executed": true,
+          "sha256": "9139efff3f3c8e7b0dae32b0e9d88bb834a6e2cd33dd6f9450db09e7c711d385"
+        },
+        "tool": "write_dataset"
+      },
+      "index": 19,
+      "kind": "tool_completed",
+      "previous": "ba8347c77828021b708baef1d6a88712889575f45fb47cc6f81a7c6d9a3d6ae0",
+      "sha256": "266ed1096bb55bba4ce814f12642716acb6a40aff302e7faae2df68ca9bd6011"
+    },
+    {
+      "at": "2026-11-25T03:42:25.723055+00:00",
+      "detail": {
+        "outcome": {
+          "action_id": "a4e7015410a87ca405ef16fe24d575c670fcde3db7e84e6e7294d720f0fa053e",
+          "artifact": "result.md",
+          "bytes": 169,
+          "kind": "document",
+          "operation_executed": true,
+          "sha256": "7c50591293795a8316a00b5618fb2a4d49ed9baea031d73d9aee742f8a80b770"
+        },
+        "tool": "write_document"
+      },
+      "index": 20,
+      "kind": "tool_completed",
+      "previous": "266ed1096bb55bba4ce814f12642716acb6a40aff302e7faae2df68ca9bd6011",
+      "sha256": "907d8f08198bf5c0b944191828807954b61429af890d4c753aebd2063490ed10"
+    },
+    {
+      "at": "2026-11-25T03:42:25.732521+00:00",
+      "detail": {
+        "outcome": {
+          "action_id": "74e42bff8447a9225d59bf239b5026012e1fea1858ec68811f70e93cc15d6542",
+          "artifact": "scope.json",
+          "bytes": 120,
+          "kind": "observation",
+          "observed": {
+            "decision": {
+              "capability_id": null,
+              "reason": "NO_QUALIFIED_CAPABILITY_CONTRACT",
+              "status": "UNDETERMINED"
+            },
+            "executed": false
+          },
+          "operation_executed": false,
+          "reason": "NO_QUALIFIED_CAPABILITY_CONTRACT",
+          "sha256": "5962d774cc4fe4a7f053a743511e1c5d968cb359c1d598d30bc5dc2a7820c673",
+          "status": "UNDETERMINED"
+        },
+        "tool": "assess_capability"
+      },
+      "index": 21,
+      "kind": "tool_completed",
+      "previous": "907d8f08198bf5c0b944191828807954b61429af890d4c753aebd2063490ed10",
+      "sha256": "59bd66ed322f76101bb61045a0d8c355804221ab0fcae99bf3df10c5e8e7ebb5"
+    },
+    {
+      "at": "2026-11-25T03:42:25.734595+00:00",
+      "detail": {
+        "outcome": {
+          "action_id": "243c9a757eaf0009dca188e8e92a964a431bc1e1845ec4fc7a6497eb5eefeea8",
+          "artifact": "scope.json",
+          "bytes": 105,
+          "kind": "observation",
+          "observed": {
+            "decision": {
+              "link": 0,
+              "reason": "UNKNOWN_COMPOSITION_INTERFACE",
+              "status": "UNDETERMINED"
+            },
+            "executed": false
+          },
+          "operation_executed": false,
+          "reason": "UNKNOWN_COMPOSITION_INTERFACE",
+          "sha256": "3ad709f2df51cbe2a4e063783a9f81a46f44d17af45d8b935691d13c45e4ac83",
+          "status": "UNDETERMINED"
+        },
+        "tool": "assess_composition"
+      },
+      "index": 22,
+      "kind": "tool_completed",
+      "previous": "59bd66ed322f76101bb61045a0d8c355804221ab0fcae99bf3df10c5e8e7ebb5",
+      "sha256": "29a0e29a2ace508203db902ed0baab3cabdc44ed9e631586645dab0c040d9ec6"
+    },
+    {
+      "at": "2026-11-25T03:42:25.735735+00:00",
+      "detail": {
+        "outcome": {
+          "action_id": "19a5827e79abfea9a45a649d8c15486c491f15f05d9a1d0ec911f1be18926b41",
+          "artifact": "result.json",
+          "bytes": 120,
+          "kind": "observation",
+          "observed": {
+            "decision": {
+              "capability_id": null,
+              "reason": "NO_QUALIFIED_CAPABILITY_CONTRACT",
+              "status": "UNDETERMINED"
+            },
+            "executed": false
+          },
+          "operation_executed": false,
+          "reason": "NO_QUALIFIED_CAPABILITY_CONTRACT",
+          "sha256": "5962d774cc4fe4a7f053a743511e1c5d968cb359c1d598d30bc5dc2a7820c673",
+          "status": "UNDETERMINED"
+        },
+        "tool": "invoke_capability"
+      },
+      "index": 23,
+      "kind": "tool_completed",
+      "previous": "29a0e29a2ace508203db902ed0baab3cabdc44ed9e631586645dab0c040d9ec6",
+      "sha256": "9452dc627270a3db23d3e87ddcb7a17e9698d490f010536f81abcc3fedd696aa"
+    },
+    {
+      "at": "2026-11-25T03:42:25.773004+00:00",
+      "detail": {
+        "outcome": {
+          "action_id": "76fea71912c6f77fd53cd89394d2cc0a32617da1381fe559607b9cc78ea66e04",
+          "artifact": "game_table.json",
+          "bytes": 268,
+          "evaluator_sha256": "48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d",
+          "kind": "table_instrument",
+          "operation_executed": true,
+          "previous_sha256": null,
+          "qualification": "UNVERIFIED",
+          "sha256": "937d695d5c46e551f51614db39c35c35a257fadd0983aa11dc88ace66b0dd08a",
+          "sqlite_version": "3.53.1",
+          "status": "CANDIDATE_VALIDATED_ON_EMPTY_TABLES"
+        },
+        "tool": "construct_table"
+      },
+      "index": 24,
+      "kind": "tool_completed",
+      "previous": "9452dc627270a3db23d3e87ddcb7a17e9698d490f010536f81abcc3fedd696aa",
+      "sha256": "c33b3b9eea65a11fada57c3cbfabbd8f02ac3334f723c8954c45ad82fd1e122e"
+    },
+    {
+      "at": "2026-11-25T03:43:39.547892+00:00",
+      "detail": {
+        "cost": {
+          "accounted": 0,
+          "amount": 0,
+          "attempts": 1,
+          "basis": "reported_usage_at_user_rates",
+          "complete_cost_known": false,
+          "currency": "USD"
+        },
+        "model": "qwen3-8b-q4_k_m",
+        "provider": "llama-cpp",
+        "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+        "reported_model": "qwen3-8b-q4_k_m",
+        "requested_model": "qwen3-8b-q4_k_m",
+        "response_sha256": "5b6ca2ac5e7da0e9c49dadedf84ae78e571a3155c8ae731c726367486a9f02de",
+        "role": "builder",
+        "run_id": "wf_501816598604a821e8efe47c_224bc29b4a7750ca",
+        "usage": {
+          "input_tokens": 2274,
+          "output_tokens": 306
+        }
+      },
+      "index": 28,
+      "kind": "model_completed",
+      "previous": "1ba080bd18c6874c504599f18f050d11b60e7ca94a3fe831511bc23098e7943b",
+      "sha256": "06a80e20f9c827bfb1b0eb2fda36fb662400bc6f5002060484bb296ac6581715"
+    },
+    {
+      "at": "2026-11-25T03:43:39.552464+00:00",
+      "detail": {
+        "outcome": {
+          "action_id": "30f9465f07572574769b9f5b3da8fca903e8950fd4d11dea7812010c72ce09bc",
+          "artifact": "game_model.json",
+          "bytes": 322,
+          "kind": "instrument",
+          "operation_executed": true,
+          "run": "python3 RUN_INSTRUMENT.py game_model.json input.json",
+          "sha256": "3325eb96b11a1f2aa4d804cafcbf253e44f171642210f3faf85187ea2ebe9990"
+        },
+        "tool": "construct_instrument"
+      },
+      "index": 30,
+      "kind": "tool_completed",
+      "previous": "4b017cdb2aa1e68e284e016aea3333fe88b5d721d9952145dc69994b9f130d9c",
+      "sha256": "1b590e4605c3fbb5f8aceeca1eda60ef7c9e4b7874ee29d44f838571f621e5ca"
+    },
+    {
+      "at": "2026-11-25T03:43:39.555600+00:00",
+      "detail": {
+        "proposal_fields": [
+          "input",
+          "name",
+          "tool"
+        ],
+        "reason": "Input field root was not declared.",
+        "tool": "run_instrument"
+      },
+      "index": 31,
+      "kind": "tool_refused",
+      "previous": "1b590e4605c3fbb5f8aceeca1eda60ef7c9e4b7874ee29d44f838571f621e5ca",
+      "sha256": "a37cdf2be970c57fe851665e886c91518711ecc8f029ed527dfd2fc62a0b5b94"
+    },
+    {
+      "at": "2026-11-25T03:43:39.558395+00:00",
+      "detail": {
+        "outcome": {
+          "action_id": "3a2e12c516740dd4ddf867d5130b68cb70a2592c220c18e71bf7b8fa80905e85",
+          "artifact": "game_results.csv",
+          "bytes": 106,
+          "kind": "dataset",
+          "operation_executed": true,
+          "sha256": "e0b8f56f0fec68d8a0282116d465e8a03f67def82dd622346abab612a6c559b6"
+        },
+        "tool": "write_dataset"
+      },
+      "index": 32,
+      "kind": "tool_completed",
+      "previous": "a37cdf2be970c57fe851665e886c91518711ecc8f029ed527dfd2fc62a0b5b94",
+      "sha256": "39e9a101b0aea57a972e44010b216c87a6eacf15ab07c885c4ea104688198af4"
+    }
+  ],
+  "checkpoint_sha256": "6a07ff152440245c5ed9d8d9f7cb2e756538d12c84393f9c8dfd8228ce91c03d",
+  "received_archive_sha256": "18cbef27bdca2a954cc0eea019fb7e3b5b5eea8a885691aec3908c995acd2f26",
+  "files": [
+    "RUN_INSTRUMENT.py",
+    "game_model.json",
+    "game_results.csv",
+    "game_table.json",
+    "result.json",
+    "result.md",
+    "scope.json"
+  ],
+  "trace": [
+    "POST pair",
+    "POST list",
+    "POST get",
+    "POST resume",
+    "POST pair",
+    "POST list",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST get",
+    "POST export"
+  ]
+}

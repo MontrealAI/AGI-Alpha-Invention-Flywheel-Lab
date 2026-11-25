@@ -1,0 +1,150 @@
+{
+  "schema": "frontier/owner-production-evaluation-v1",
+  "scope": "Observed local CPU inference and local tools under the exact production ambition. Model construction and this server checkpoint do not establish strategic superiority.",
+  "status": "exhausted",
+  "attempted_requests": 4,
+  "completed_provider_responses": 3,
+  "action_attempts": 14,
+  "files": [
+    "RUN_INSTRUMENT.py",
+    "game_model.json",
+    "game_results.csv",
+    "game_table.json",
+    "result.json",
+    "result.md",
+    "scope.json"
+  ],
+  "chronology": [
+    {
+      "kind": "interruption_recovered",
+      "tool": null,
+      "ran": null,
+      "reason": null,
+      "artifact": null,
+      "output": null
+    },
+    {
+      "kind": "tool_completed",
+      "tool": "construct_instrument",
+      "ran": true,
+      "reason": null,
+      "artifact": "game_model.json",
+      "output": null
+    },
+    {
+      "kind": "tool_refused",
+      "tool": "write_dataset",
+      "ran": null,
+      "reason": "Dataset cells must be scalar JSON values.",
+      "artifact": null,
+      "output": null
+    },
+    {
+      "kind": "tool_refused",
+      "tool": "run_instrument",
+      "ran": null,
+      "reason": "Unsupported expression operation.",
+      "artifact": null,
+      "output": null
+    },
+    {
+      "kind": "tool_completed",
+      "tool": "construct_instrument",
+      "ran": true,
+      "reason": null,
+      "artifact": "game_model.json",
+      "output": null
+    },
+    {
+      "kind": "tool_refused",
+      "tool": "run_instrument",
+      "ran": null,
+      "reason": "Unsupported expression operation.",
+      "artifact": null,
+      "output": null
+    },
+    {
+      "kind": "tool_completed",
+      "tool": "write_dataset",
+      "ran": true,
+      "reason": null,
+      "artifact": "game_results.csv",
+      "output": null
+    },
+    {
+      "kind": "tool_completed",
+      "tool": "write_document",
+      "ran": true,
+      "reason": null,
+      "artifact": "result.md",
+      "output": null
+    },
+    {
+      "kind": "tool_completed",
+      "tool": "assess_capability",
+      "ran": false,
+      "reason": "NO_QUALIFIED_CAPABILITY_CONTRACT",
+      "artifact": "scope.json",
+      "output": null
+    },
+    {
+      "kind": "tool_completed",
+      "tool": "assess_composition",
+      "ran": false,
+      "reason": "UNKNOWN_COMPOSITION_INTERFACE",
+      "artifact": "scope.json",
+      "output": null
+    },
+    {
+      "kind": "tool_completed",
+      "tool": "invoke_capability",
+      "ran": false,
+      "reason": "NO_QUALIFIED_CAPABILITY_CONTRACT",
+      "artifact": "result.json",
+      "output": null
+    },
+    {
+      "kind": "tool_completed",
+      "tool": "construct_table",
+      "ran": true,
+      "reason": null,
+      "artifact": "game_table.json",
+      "output": null
+    },
+    {
+      "kind": "tool_completed",
+      "tool": "construct_instrument",
+      "ran": true,
+      "reason": null,
+      "artifact": "game_model.json",
+      "output": null
+    },
+    {
+      "kind": "tool_refused",
+      "tool": "run_instrument",
+      "ran": null,
+      "reason": "Input field root was not declared.",
+      "artifact": null,
+      "output": null
+    },
+    {
+      "kind": "tool_completed",
+      "tool": "write_dataset",
+      "ran": true,
+      "reason": null,
+      "artifact": "game_results.csv",
+      "output": null
+    },
+    {
+      "kind": "stopped",
+      "tool": null,
+      "ran": null,
+      "reason": "Declared model-call allocation exhausted; no further inference dispatched.",
+      "artifact": null,
+      "output": null
+    }
+  ],
+  "archive_sha256": "6a07ff152440245c5ed9d8d9f7cb2e756538d12c84393f9c8dfd8228ce91c03d",
+  "exact_production_revision": "c0a14ba028092db648516718f9127ae8166df63e",
+  "independent_strategic_acceptance_of_this_run": false
+}

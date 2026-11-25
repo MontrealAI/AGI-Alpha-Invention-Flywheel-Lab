@@ -1,0 +1,104 @@
+{
+  "schema": "frontier/live-french-stock-control-v1",
+  "scope": "Separate deterministic checks of an actual live French browser-created asset, single public development case.",
+  "run_sha256": "c802c9cb84fe8ba857b2ac533042c6cd9b565d00e21e5c30a45bbe5756a3b7d5",
+  "artifact_sha256": "e126fecc3db7d517bb5afe52134732c47d29196c38cbd19d829da47cbc7559dd",
+  "all_matched": true,
+  "checks": [
+    {
+      "stock": 6,
+      "seuil": 9,
+      "actual": {
+        "alerte": true
+      },
+      "expected": {
+        "alerte": true
+      },
+      "matched": true
+    },
+    {
+      "stock": 9,
+      "seuil": 9,
+      "actual": {
+        "alerte": false
+      },
+      "expected": {
+        "alerte": false
+      },
+      "matched": true
+    },
+    {
+      "stock": 12,
+      "seuil": 9,
+      "actual": {
+        "alerte": false
+      },
+      "expected": {
+        "alerte": false
+      },
+      "matched": true
+    },
+    {
+      "stock": 0,
+      "seuil": 1,
+      "actual": {
+        "alerte": true
+      },
+      "expected": {
+        "alerte": true
+      },
+      "matched": true
+    },
+    {
+      "stock": 0,
+      "seuil": 0,
+      "actual": {
+        "alerte": false
+      },
+      "expected": {
+        "alerte": false
+      },
+      "matched": true
+    },
+    {
+      "stock": 100,
+      "seuil": 101,
+      "actual": {
+        "alerte": true
+      },
+      "expected": {
+        "alerte": true
+      },
+      "matched": true
+    }
+  ],
+  "events": [
+    [
+      "construct_instrument",
+      null,
+      true
+    ],
+    [
+      "run_instrument",
+      {
+        "alerte": true
+      },
+      true
+    ],
+    [
+      "read_artifact",
+      null,
+      true
+    ],
+    [
+      "run_instrument",
+      null,
+      false
+    ],
+    [
+      "read_artifact",
+      null,
+      false
+    ]
+  ]
+}

@@ -1,0 +1,704 @@
+{
+  "scope": "Visible operator development acceptance, separate arithmetic replay. No held confirmations or protected custody.",
+  "source_review_head": "43be110e92cbcde4feaf04b3e97311caeeb17aac",
+  "elapsed_seconds": 135.113699173,
+  "archive": {
+    "schema": "alpha-genesis-workflow-export/v1",
+    "state": {
+      "actions": 12,
+      "adversarial_cases": [],
+      "artifacts": {
+        "RUN_INSTRUMENT.py": {
+          "bytes": 15742,
+          "kind": "trusted_runner",
+          "sha256": "46d43d4a017f1d32fcd9e05b32316a6fffac27e1a9572ab9ffbbf87338f00322"
+        },
+        "capacity.json": {
+          "bytes": 254,
+          "kind": "instrument",
+          "sha256": "7332148402352e251bd88dabd4e6915b0f285573693568f5eadf191634543ede"
+        },
+        "capacity_check.json": {
+          "bytes": 415,
+          "kind": "instrument",
+          "sha256": "15142beeef87ecd4e935e046fe621b4308ae0a2184065d60ee4f4f2842eecea0"
+        },
+        "operations.md": {
+          "bytes": 158,
+          "kind": "document",
+          "sha256": "6c9fa357060f1a0f3f704e3ea7de78fa82c0b3373c1b29e68a63d2ede2edc241"
+        }
+      },
+      "capability_id": null,
+      "created_at": "2026-11-25T03:27:11.241631+00:00",
+      "epoch": 0,
+      "events": [
+        {
+          "at": "2026-11-25T03:27:11.241643+00:00",
+          "detail": {
+            "acceptance_source": "Operator-frozen conditions; independence is not inferred.",
+            "spec_hash": "80007f546fc0c3b553faf1da9fd5f1dd418a0e9ef06b47acfc6b18632abf7f55"
+          },
+          "index": 0,
+          "kind": "created",
+          "previous": "0000000000000000000000000000000000000000000000000000000000000000",
+          "sha256": "d55fdcad93ca41dbd042d5ce70d86f4edb1cb60fbbed86b33746d0ca5504313f"
+        },
+        {
+          "at": "2026-11-25T03:27:11.243678+00:00",
+          "detail": {
+            "model": "qwen3-8b-q4_k_m",
+            "provider": "llama-cpp",
+            "role": "builder",
+            "scope": "Waiting for selected service capacity; no model call or construction iteration consumed."
+          },
+          "index": 1,
+          "kind": "model_queued",
+          "previous": "d55fdcad93ca41dbd042d5ce70d86f4edb1cb60fbbed86b33746d0ca5504313f",
+          "sha256": "a620fbd526d2e3dd0b0e68c29966ef60e346b0d4fdce228214cee220337cc9c9"
+        },
+        {
+          "at": "2026-11-25T03:27:11.245488+00:00",
+          "detail": {
+            "model": "qwen3-8b-q4_k_m",
+            "provider": "llama-cpp",
+            "role": "builder",
+            "run_id": "wf_9703bf66009abd3e06f7cf45_1259d400bc20e724"
+          },
+          "index": 2,
+          "kind": "model_started",
+          "previous": "a620fbd526d2e3dd0b0e68c29966ef60e346b0d4fdce228214cee220337cc9c9",
+          "sha256": "e78fa0d4f2f8db42bde937279af444f75c4443c9b8405df4824aaaa1d2918aae"
+        },
+        {
+          "at": "2026-11-25T03:27:49.598713+00:00",
+          "detail": {
+            "cost": {
+              "accounted": 0.0,
+              "amount": 0.0,
+              "attempts": 1,
+              "basis": "reported_usage_at_user_rates",
+              "complete_cost_known": false,
+              "currency": "USD"
+            },
+            "model": "qwen3-8b-q4_k_m",
+            "provider": "llama-cpp",
+            "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+            "reported_model": "qwen3-8b-q4_k_m",
+            "requested_model": "qwen3-8b-q4_k_m",
+            "response_sha256": "80c9a494ed206c6c654bbfe44e5c06da1f0d0d951c515d9efce9afc0222f8db4",
+            "role": "builder",
+            "run_id": "wf_9703bf66009abd3e06f7cf45_1259d400bc20e724",
+            "usage": {
+              "input_tokens": 614,
+              "output_tokens": 285
+            }
+          },
+          "index": 3,
+          "kind": "model_completed",
+          "previous": "e78fa0d4f2f8db42bde937279af444f75c4443c9b8405df4824aaaa1d2918aae",
+          "sha256": "20aa07fb5f9d24b962908e5cbaee5a9134fc4626445a6b374874b9c9cc95e425"
+        },
+        {
+          "at": "2026-11-25T03:27:49.598782+00:00",
+          "detail": {
+            "proposed_actions": 3,
+            "summary": "Construct and validate a reusable instrument to calculate the percentage of consumed capacity using the formula pct = (used / total) * 100. Verify with the given example and document the result."
+          },
+          "index": 4,
+          "kind": "route_proposed",
+          "previous": "20aa07fb5f9d24b962908e5cbaee5a9134fc4626445a6b374874b9c9cc95e425",
+          "sha256": "186a45480331f54bb23f4dd10884e96fdd089d37668af683e41460fbbe37b2b2"
+        },
+        {
+          "at": "2026-11-25T03:27:49.604008+00:00",
+          "detail": {
+            "outcome": {
+              "action_id": "e4e977fe5e82e4ba6c6c412e1516f7da0ac705c2bb5b610ebebcc3a0059c4fb8",
+              "artifact": "capacity.json",
+              "bytes": 397,
+              "kind": "instrument",
+              "operation_executed": true,
+              "run": "python3 RUN_INSTRUMENT.py capacity.json input.json",
+              "sha256": "b2af05cecaf1bb571e45088598e1304d151701e9b1c2389db47c243423371eaa"
+            },
+            "tool": "construct_instrument"
+          },
+          "index": 5,
+          "kind": "tool_completed",
+          "previous": "186a45480331f54bb23f4dd10884e96fdd089d37668af683e41460fbbe37b2b2",
+          "sha256": "d8b1ff3c9e1ed40afeb12c2a36a5058f3706d4f4878d53b6a26129f957ff8137"
+        },
+        {
+          "at": "2026-11-25T03:27:49.605388+00:00",
+          "detail": {
+            "proposal_fields": [
+              "input",
+              "name",
+              "tool"
+            ],
+            "reason": "$.outputs[\"pct\"]: an operation must contain exactly \"op\" and an \"args\" array; received keys args, op, then.",
+            "tool": "run_instrument"
+          },
+          "index": 6,
+          "kind": "tool_refused",
+          "previous": "d8b1ff3c9e1ed40afeb12c2a36a5058f3706d4f4878d53b6a26129f957ff8137",
+          "sha256": "dbad0b2b57b2d71a01119e06b12e35ebdb063dd76a062860a3041bf76d9fc1f1"
+        },
+        {
+          "at": "2026-11-25T03:27:49.607217+00:00",
+          "detail": {
+            "outcome": {
+              "action_id": "fc3521bd6ebe57c938d9d972a518bdefdd66295145de0e7c0efa887785c19edb",
+              "artifact": "operations.md",
+              "bytes": 157,
+              "kind": "document",
+              "operation_executed": true,
+              "sha256": "5eb23e4304b41b7dee73f53fbc1b8c87919d25a6c7f00b9d98e84a6d506bd624"
+            },
+            "tool": "write_document"
+          },
+          "index": 7,
+          "kind": "tool_completed",
+          "previous": "dbad0b2b57b2d71a01119e06b12e35ebdb063dd76a062860a3041bf76d9fc1f1",
+          "sha256": "4cb3e1ee506ed4d98e531ba9c74ef7786cd69f75a5968151e3b32ed0f880ae48"
+        },
+        {
+          "at": "2026-11-25T03:27:49.608806+00:00",
+          "detail": {
+            "artifact_hashes": {
+              "RUN_INSTRUMENT.py": "46d43d4a017f1d32fcd9e05b32316a6fffac27e1a9572ab9ffbbf87338f00322",
+              "capacity.json": "b2af05cecaf1bb571e45088598e1304d151701e9b1c2389db47c243423371eaa",
+              "operations.md": "5eb23e4304b41b7dee73f53fbc1b8c87919d25a6c7f00b9d98e84a6d506bd624"
+            },
+            "checks": [
+              {
+                "artifact": "capacity.json",
+                "error": "$.outputs[\"pct\"]: an operation must contain exactly \"op\" and an \"args\" array; received keys args, op, then.",
+                "kind": "instrument",
+                "passed": false
+              },
+              {
+                "artifact": "operations.md",
+                "kind": "document",
+                "passed": true
+              }
+            ],
+            "passed": false,
+            "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification.",
+            "spec_hash": "80007f546fc0c3b553faf1da9fd5f1dd418a0e9ef06b47acfc6b18632abf7f55"
+          },
+          "index": 8,
+          "kind": "verification",
+          "previous": "4cb3e1ee506ed4d98e531ba9c74ef7786cd69f75a5968151e3b32ed0f880ae48",
+          "sha256": "554f5117d39ee2ddfff49a9ec5b8ec7291abedb66abed854917ed38d79f6e31c"
+        },
+        {
+          "at": "2026-11-25T03:27:49.611323+00:00",
+          "detail": {
+            "model": "qwen3-8b-q4_k_m",
+            "provider": "llama-cpp",
+            "role": "builder",
+            "scope": "Waiting for selected service capacity; no model call or construction iteration consumed."
+          },
+          "index": 9,
+          "kind": "model_queued",
+          "previous": "554f5117d39ee2ddfff49a9ec5b8ec7291abedb66abed854917ed38d79f6e31c",
+          "sha256": "e5904adb2cd3a9c1481545033fb0da0e15092e82ed6a1933cb373b2c18a2b90a"
+        },
+        {
+          "at": "2026-11-25T03:27:49.614351+00:00",
+          "detail": {
+            "model": "qwen3-8b-q4_k_m",
+            "provider": "llama-cpp",
+            "role": "builder",
+            "run_id": "wf_9703bf66009abd3e06f7cf45_474561b53e589e02"
+          },
+          "index": 10,
+          "kind": "model_started",
+          "previous": "e5904adb2cd3a9c1481545033fb0da0e15092e82ed6a1933cb373b2c18a2b90a",
+          "sha256": "f3ec93494f9b75f741adb4d250e9a3067f990e0d48c1b3d528a22cc64743deda"
+        },
+        {
+          "at": "2026-11-25T03:28:24.757729+00:00",
+          "detail": {
+            "cost": {
+              "accounted": 0.0,
+              "amount": 0.0,
+              "attempts": 1,
+              "basis": "reported_usage_at_user_rates",
+              "complete_cost_known": false,
+              "currency": "USD"
+            },
+            "model": "qwen3-8b-q4_k_m",
+            "provider": "llama-cpp",
+            "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+            "reported_model": "qwen3-8b-q4_k_m",
+            "requested_model": "qwen3-8b-q4_k_m",
+            "response_sha256": "c67374a524639dfc437b095adc0798ac394af92b57261f09d3b995ea51dea6c6",
+            "role": "builder",
+            "run_id": "wf_9703bf66009abd3e06f7cf45_474561b53e589e02",
+            "usage": {
+              "input_tokens": 1217,
+              "output_tokens": 207
+            }
+          },
+          "index": 11,
+          "kind": "model_completed",
+          "previous": "f3ec93494f9b75f741adb4d250e9a3067f990e0d48c1b3d528a22cc64743deda",
+          "sha256": "1a500b9de5902db3f01499fc7d5316b02acce2c250fbc5fc8fbb8ebb0d021015"
+        },
+        {
+          "at": "2026-11-25T03:28:24.757832+00:00",
+          "detail": {
+            "proposed_actions": 3,
+            "summary": "Fix the capacity instrument by correcting the pct operation format and verify the example."
+          },
+          "index": 12,
+          "kind": "route_proposed",
+          "previous": "1a500b9de5902db3f01499fc7d5316b02acce2c250fbc5fc8fbb8ebb0d021015",
+          "sha256": "6d675f470f6cfbb77ec99893f91084bdbfc279a06fdcf38732518494d193c212"
+        },
+        {
+          "at": "2026-11-25T03:28:24.760284+00:00",
+          "detail": {
+            "outcome": {
+              "action_id": "17e18e779a2b9f5f31317baafd3bec7d10ef86bd56acc68da4240282b613bef9",
+              "artifact": "capacity.json",
+              "bytes": 243,
+              "kind": "instrument",
+              "operation_executed": true,
+              "run": "python3 RUN_INSTRUMENT.py capacity.json input.json",
+              "sha256": "5ac79b7cf72307a532d7465e6fb50da0c02bf06aa9c8e224ab099762ac1981da"
+            },
+            "tool": "construct_instrument"
+          },
+          "index": 13,
+          "kind": "tool_completed",
+          "previous": "6d675f470f6cfbb77ec99893f91084bdbfc279a06fdcf38732518494d193c212",
+          "sha256": "7f7323c2f8dd437cac19db7b9345bb8249980e1bf89bf71d65d0f4fbc3ddd88a"
+        },
+        {
+          "at": "2026-11-25T03:28:24.761610+00:00",
+          "detail": {
+            "outcome": {
+              "action_id": "7ba4c72126925e047222d5a3874d347bdfa15590bfc1b1310f1227282c431857",
+              "operation_executed": true,
+              "operations": 3,
+              "output": {
+                "pct": 0.15
+              },
+              "scope": "Bounded declarative execution; acceptance must be checked separately."
+            },
+            "tool": "run_instrument"
+          },
+          "index": 14,
+          "kind": "tool_completed",
+          "previous": "7f7323c2f8dd437cac19db7b9345bb8249980e1bf89bf71d65d0f4fbc3ddd88a",
+          "sha256": "5a7a8ae955012b6e99d948ef43c315ae8d2f01ecddaa5451bee6ac666835ba57"
+        },
+        {
+          "at": "2026-11-25T03:28:24.763724+00:00",
+          "detail": {
+            "outcome": {
+              "action_id": "83fb4ab5e99032eec57dc1e1e6ef6e4e579db81ba2913eed0f951aae7d13568e",
+              "artifact": "operations.md",
+              "bytes": 50,
+              "kind": "document",
+              "operation_executed": true,
+              "sha256": "ac97cff39aca48c7937673aa1593623e67c647520885b2735a6de3e64d59308f"
+            },
+            "tool": "write_document"
+          },
+          "index": 15,
+          "kind": "tool_completed",
+          "previous": "5a7a8ae955012b6e99d948ef43c315ae8d2f01ecddaa5451bee6ac666835ba57",
+          "sha256": "daad548260d86275c05e0f27b3b6c7937c4ec37cf563347951e6aa7ae8ffe11f"
+        },
+        {
+          "at": "2026-11-25T03:28:24.765057+00:00",
+          "detail": {
+            "artifact_hashes": {
+              "RUN_INSTRUMENT.py": "46d43d4a017f1d32fcd9e05b32316a6fffac27e1a9572ab9ffbbf87338f00322",
+              "capacity.json": "5ac79b7cf72307a532d7465e6fb50da0c02bf06aa9c8e224ab099762ac1981da",
+              "operations.md": "ac97cff39aca48c7937673aa1593623e67c647520885b2735a6de3e64d59308f"
+            },
+            "checks": [
+              {
+                "actual": {
+                  "pct": 0.15
+                },
+                "artifact": "capacity.json",
+                "expected": {
+                  "pct": 15
+                },
+                "kind": "instrument",
+                "operations": 3,
+                "passed": false
+              },
+              {
+                "artifact": "operations.md",
+                "kind": "document",
+                "passed": true
+              }
+            ],
+            "passed": false,
+            "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification.",
+            "spec_hash": "80007f546fc0c3b553faf1da9fd5f1dd418a0e9ef06b47acfc6b18632abf7f55"
+          },
+          "index": 16,
+          "kind": "verification",
+          "previous": "daad548260d86275c05e0f27b3b6c7937c4ec37cf563347951e6aa7ae8ffe11f",
+          "sha256": "99c3210aadb36c6606cea8c5e55cc278b6e3aeb82d55a3ce8d9a2da080a1093f"
+        },
+        {
+          "at": "2026-11-25T03:28:24.767967+00:00",
+          "detail": {
+            "model": "qwen3-8b-q4_k_m",
+            "provider": "llama-cpp",
+            "role": "builder",
+            "scope": "Waiting for selected service capacity; no model call or construction iteration consumed."
+          },
+          "index": 17,
+          "kind": "model_queued",
+          "previous": "99c3210aadb36c6606cea8c5e55cc278b6e3aeb82d55a3ce8d9a2da080a1093f",
+          "sha256": "515cfb699eca9e767b1ca54e58d08bf862f5512234b174e187d24397c30c7b8a"
+        },
+        {
+          "at": "2026-11-25T03:28:24.770933+00:00",
+          "detail": {
+            "model": "qwen3-8b-q4_k_m",
+            "provider": "llama-cpp",
+            "role": "builder",
+            "run_id": "wf_9703bf66009abd3e06f7cf45_48f3326f6f4b7819"
+          },
+          "index": 18,
+          "kind": "model_started",
+          "previous": "515cfb699eca9e767b1ca54e58d08bf862f5512234b174e187d24397c30c7b8a",
+          "sha256": "e61dc7ce9693a3e947163577056124e5d1affb887e47025ee2666f1b2afa4dff"
+        },
+        {
+          "at": "2026-11-25T03:29:26.336967+00:00",
+          "detail": {
+            "cost": {
+              "accounted": 0.0,
+              "amount": 0.0,
+              "attempts": 1,
+              "basis": "reported_usage_at_user_rates",
+              "complete_cost_known": false,
+              "currency": "USD"
+            },
+            "model": "qwen3-8b-q4_k_m",
+            "provider": "llama-cpp",
+            "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+            "reported_model": "qwen3-8b-q4_k_m",
+            "requested_model": "qwen3-8b-q4_k_m",
+            "response_sha256": "88c5f7541c31d3af72aa98a05d096a9b71509380faf012e4935e20714169f3a5",
+            "role": "builder",
+            "run_id": "wf_9703bf66009abd3e06f7cf45_48f3326f6f4b7819",
+            "usage": {
+              "input_tokens": 1460,
+              "output_tokens": 395
+            }
+          },
+          "index": 19,
+          "kind": "model_completed",
+          "previous": "e61dc7ce9693a3e947163577056124e5d1affb887e47025ee2666f1b2afa4dff",
+          "sha256": "26f112c7f437417ba237419830486460475edb2b6d8b9abb9085b92742aed599"
+        },
+        {
+          "at": "2026-11-25T03:29:26.337025+00:00",
+          "detail": {
+            "proposed_actions": 6,
+            "summary": "Revised the instrument to fix the operation structure and verify the percentage calculation using the correct formula."
+          },
+          "index": 20,
+          "kind": "route_proposed",
+          "previous": "26f112c7f437417ba237419830486460475edb2b6d8b9abb9085b92742aed599",
+          "sha256": "ad0ad765d0d49b866652a73a8da9e0e929e0d8b726b6becd7ab36c5bc2852f37"
+        },
+        {
+          "at": "2026-11-25T03:29:26.339537+00:00",
+          "detail": {
+            "outcome": {
+              "action_id": "084ff8fa4246f9bf35ae713f9233807fb2c3674310d97fa4e80ddd38cd5740dd",
+              "artifact": "capacity.json",
+              "bytes": 254,
+              "kind": "instrument",
+              "operation_executed": true,
+              "run": "python3 RUN_INSTRUMENT.py capacity.json input.json",
+              "sha256": "7332148402352e251bd88dabd4e6915b0f285573693568f5eadf191634543ede"
+            },
+            "tool": "construct_instrument"
+          },
+          "index": 21,
+          "kind": "tool_completed",
+          "previous": "ad0ad765d0d49b866652a73a8da9e0e929e0d8b726b6becd7ab36c5bc2852f37",
+          "sha256": "c637294b79d8eb30abfd4839333ba8296446d7700bae6d867c80022572b1d3ef"
+        },
+        {
+          "at": "2026-11-25T03:29:26.341117+00:00",
+          "detail": {
+            "outcome": {
+              "action_id": "4aef9307dcf55e7164a1f68afd4b81cd6326d14ddcccef0cf6ad09b24af7cf3c",
+              "operation_executed": true,
+              "operations": 3,
+              "output": {
+                "pct": 0.15
+              },
+              "scope": "Bounded declarative execution; acceptance must be checked separately."
+            },
+            "tool": "run_instrument"
+          },
+          "index": 22,
+          "kind": "tool_completed",
+          "previous": "c637294b79d8eb30abfd4839333ba8296446d7700bae6d867c80022572b1d3ef",
+          "sha256": "039e222c808ef62cfd22d34d9022f9882e3af759941cfbcf148b030fe00395b4"
+        },
+        {
+          "at": "2026-11-25T03:29:26.343572+00:00",
+          "detail": {
+            "outcome": {
+              "action_id": "ca280e50de87b7fab7f3658d3b08ed12ff2bb75656904565c1004a2ba0503876",
+              "artifact": "operations.md",
+              "bytes": 158,
+              "kind": "document",
+              "operation_executed": true,
+              "sha256": "6c9fa357060f1a0f3f704e3ea7de78fa82c0b3373c1b29e68a63d2ede2edc241"
+            },
+            "tool": "write_document"
+          },
+          "index": 23,
+          "kind": "tool_completed",
+          "previous": "039e222c808ef62cfd22d34d9022f9882e3af759941cfbcf148b030fe00395b4",
+          "sha256": "04b96b0e8997b5a9a786eec7f190e389b6bc0d57b99d79aa15b25d4575f54ead"
+        },
+        {
+          "at": "2026-11-25T03:29:26.344856+00:00",
+          "detail": {
+            "outcome": {
+              "action_id": "8e874bcb9d0ea64de084b08b32a432d29ed9bdd06ab990dea42d5fe05106eec6",
+              "artifact": "capacity.json",
+              "content": "{\n  \"inputs\": [\n    \"used\",\n    \"total\"\n  ],\n  \"name\": \"Capacity Percentage\",\n  \"outputs\": {\n    \"pct\": {\n      \"args\": [\n        {\n          \"field\": \"used\"\n        },\n        {\n          \"field\": \"total\"\n        }\n      ],\n      \"op\": \"div\"\n    }\n  }\n}",
+              "operation_executed": true
+            },
+            "tool": "read_artifact"
+          },
+          "index": 24,
+          "kind": "tool_completed",
+          "previous": "04b96b0e8997b5a9a786eec7f190e389b6bc0d57b99d79aa15b25d4575f54ead",
+          "sha256": "48c874a0b045f0c4f229d0dfec4745cf61afc08849ce4a7042c65f206dc39ad4"
+        },
+        {
+          "at": "2026-11-25T03:29:26.346185+00:00",
+          "detail": {
+            "outcome": {
+              "action_id": "5f0364d426a384d6e377c30dbab60f744f648ebb738598922894bc1fbb32d97e",
+              "artifact": "operations.md",
+              "content": "Executed capacity audit: used=9, total=60, pct=0.15 (15%). The instrument calculates the percentage of consumed capacity using the formula pct = used / total.",
+              "operation_executed": true
+            },
+            "tool": "read_artifact"
+          },
+          "index": 25,
+          "kind": "tool_completed",
+          "previous": "48c874a0b045f0c4f229d0dfec4745cf61afc08849ce4a7042c65f206dc39ad4",
+          "sha256": "28757fad591d66099f35e45f070b8984c646da908a831fbbc68f5c024f57a178"
+        },
+        {
+          "at": "2026-11-25T03:29:26.348488+00:00",
+          "detail": {
+            "outcome": {
+              "action_id": "97b601caef49ebac0e86b23769f6c88937d871b38b02ad4e1523ee482a6e5fc2",
+              "artifact": "capacity_check.json",
+              "bytes": 415,
+              "kind": "instrument",
+              "operation_executed": true,
+              "run": "python3 RUN_INSTRUMENT.py capacity_check.json input.json",
+              "sha256": "15142beeef87ecd4e935e046fe621b4308ae0a2184065d60ee4f4f2842eecea0"
+            },
+            "tool": "construct_instrument"
+          },
+          "index": 26,
+          "kind": "tool_completed",
+          "previous": "28757fad591d66099f35e45f070b8984c646da908a831fbbc68f5c024f57a178",
+          "sha256": "96795c2b12e681e08e8f510e0fcde295098307af16c7efeaeda758bd69ced657"
+        },
+        {
+          "at": "2026-11-25T03:29:26.349960+00:00",
+          "detail": {
+            "artifact_hashes": {
+              "RUN_INSTRUMENT.py": "46d43d4a017f1d32fcd9e05b32316a6fffac27e1a9572ab9ffbbf87338f00322",
+              "capacity.json": "7332148402352e251bd88dabd4e6915b0f285573693568f5eadf191634543ede",
+              "capacity_check.json": "15142beeef87ecd4e935e046fe621b4308ae0a2184065d60ee4f4f2842eecea0",
+              "operations.md": "6c9fa357060f1a0f3f704e3ea7de78fa82c0b3373c1b29e68a63d2ede2edc241"
+            },
+            "checks": [
+              {
+                "actual": {
+                  "pct": 0.15
+                },
+                "artifact": "capacity.json",
+                "expected": {
+                  "pct": 15
+                },
+                "kind": "instrument",
+                "operations": 3,
+                "passed": false
+              },
+              {
+                "artifact": "operations.md",
+                "kind": "document",
+                "passed": true
+              }
+            ],
+            "passed": false,
+            "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification.",
+            "spec_hash": "80007f546fc0c3b553faf1da9fd5f1dd418a0e9ef06b47acfc6b18632abf7f55"
+          },
+          "index": 27,
+          "kind": "verification",
+          "previous": "96795c2b12e681e08e8f510e0fcde295098307af16c7efeaeda758bd69ced657",
+          "sha256": "08121cbcf1bb4d20c27a716706d2f0c0dddcb3b86edcbcb8388f117576bb9f31"
+        },
+        {
+          "at": "2026-11-25T03:29:26.353769+00:00",
+          "detail": {
+            "reason": "Declared model-call allocation exhausted; no further inference dispatched."
+          },
+          "index": 28,
+          "kind": "stopped",
+          "previous": "08121cbcf1bb4d20c27a716706d2f0c0dddcb3b86edcbcb8388f117576bb9f31",
+          "sha256": "79e1ddc9b06327f0b7864f7475849bcbb351ae2f83599339940b2593ba44ebe9"
+        }
+      ],
+      "feedback": "Review failed development checks and actual tool results. Continue or revise.",
+      "id": "wf_9703bf66009abd3e06f7cf45",
+      "inflight": null,
+      "iteration": 3,
+      "model_call_limit": 3,
+      "model_calls": 3,
+      "phase": "builder",
+      "research": "",
+      "schema": "alpha-genesis-workflow/v1",
+      "spec": {
+        "acceptance": [
+          {
+            "artifact": "capacity.json",
+            "expected": {
+              "pct": 15
+            },
+            "input": {
+              "total": 60,
+              "used": 9
+            },
+            "kind": "instrument"
+          },
+          {
+            "artifact": "operations.md",
+            "contains": [
+              "Executed capacity audit"
+            ],
+            "kind": "document",
+            "min_chars": 26
+          }
+        ],
+        "context": "",
+        "local_only": true,
+        "max_actions": 12,
+        "max_iterations": 3,
+        "max_operations": 10000,
+        "max_output_tokens": 920,
+        "mission": {
+          "expires_at": "2026-11-25T03:47:11.232729+00:00",
+          "language": "en",
+          "original_ambition": "Build and exercise a reusable local instrument for the percentage of a consumed capacity. The two inputs are used and total. Use the percentage label pct. Verify an example, keep the actual instrument and write an English operator note recording the result.",
+          "requirements": {},
+          "schema": "frontier-universal-execution/v1"
+        },
+        "objective": "Build and exercise a reusable local instrument for the percentage of a consumed capacity. The two inputs are used and total. Use the percentage label pct. Verify an example, keep the actual instrument and write an English operator note recording the result.",
+        "roles": {
+          "builder": {
+            "model": "qwen3-8b-q4_k_m",
+            "provider": "llama-cpp"
+          }
+        },
+        "strategy": "single-model",
+        "tool_permissions": [
+          "construct_instrument",
+          "run_instrument",
+          "write_document",
+          "read_artifact"
+        ]
+      },
+      "spec_hash": "80007f546fc0c3b553faf1da9fd5f1dd418a0e9ef06b47acfc6b18632abf7f55",
+      "status": "exhausted",
+      "unadjudicated_counterexamples": [],
+      "updated_at": "2026-11-25T03:29:26.353769+00:00",
+      "verification": {
+        "artifact_hashes": {
+          "RUN_INSTRUMENT.py": "46d43d4a017f1d32fcd9e05b32316a6fffac27e1a9572ab9ffbbf87338f00322",
+          "capacity.json": "7332148402352e251bd88dabd4e6915b0f285573693568f5eadf191634543ede",
+          "capacity_check.json": "15142beeef87ecd4e935e046fe621b4308ae0a2184065d60ee4f4f2842eecea0",
+          "operations.md": "6c9fa357060f1a0f3f704e3ea7de78fa82c0b3373c1b29e68a63d2ede2edc241"
+        },
+        "checks": [
+          {
+            "actual": {
+              "pct": 0.15
+            },
+            "artifact": "capacity.json",
+            "expected": {
+              "pct": 15
+            },
+            "kind": "instrument",
+            "operations": 3,
+            "passed": false
+          },
+          {
+            "artifact": "operations.md",
+            "kind": "document",
+            "passed": true
+          }
+        ],
+        "passed": false,
+        "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification.",
+        "spec_hash": "80007f546fc0c3b553faf1da9fd5f1dd418a0e9ef06b47acfc6b18632abf7f55"
+      }
+    },
+    "files": {
+      "RUN_INSTRUMENT.py": "# SPDX-License-Identifier: Apache-2.0\n\"\"\"Portable bounded instrument evaluator. Never evaluates Python or shell source.\"\"\"\nfrom __future__ import annotations\n\nimport argparse\nimport ast\nimport hashlib\nfrom io import StringIO\nimport json\nimport math\nfrom pathlib import Path\nimport re\nimport tokenize\n\n\n# Pin source at this module's own load, before a later lazy GENESIS import.\nLOADED_SOURCE_SHA256 = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()\n\ndef finite(value, depth=0):\n    if depth > 32:\n        raise ValueError(\"Input nesting bound exceeded.\")\n    if isinstance(value, float) and not math.isfinite(value):\n        raise ValueError(\"Nonfinite numbers are not supported.\")\n    if type(value) in {int, float} and (type(value) is int or value.is_integer()) and abs(value) > 9007199254740991:\n        raise ValueError(\"Integer exceeds the exact portable numerical range.\")\n    if isinstance(value, (list, dict)):\n        for item in (value.values() if isinstance(value, dict) else value):\n            finite(item, depth + 1)\n    return value\n\n\ndef _json_equal(left, right):\n    \"\"\"Compare JSON values recursively without treating booleans as numbers.\"\"\"\n    if type(left) in {int, float} and type(right) in {int, float}:\n        return left == right\n    if type(left) is not type(right):\n        return False\n    if isinstance(left, list):\n        return len(left) == len(right) and all(_json_equal(a, b) for a, b in zip(left, right))\n    if isinstance(left, dict):\n        return set(left) == set(right) and all(_json_equal(left[key], right[key]) for key in left)\n    return left == right\n\n\n_BINARY = {ast.Add: \"add\", ast.Sub: \"sub\", ast.Mult: \"mul\", ast.Div: \"div\"}\n_COMPARISONS = {ast.Eq: \"eq\", ast.Lt: \"lt\", ast.LtE: \"lte\", ast.Gt: \"gt\", ast.GtE: \"gte\"}\n_FUNCTIONS = {\"abs\", \"min\", \"max\", \"sum\", \"count\", \"choose\"}\n_JSON_LITERALS = {\"true\": True, \"false\": False, \"null\": None}\n\n\ndef compile_formula(source, bindings):\n    \"\"\"Translate a small expression syntax to evaluator operations. Never compile Python bytecode.\"\"\"\n    if not isinstance(source, str) or not 0 < len(source) <= 1024:\n        raise ValueError(\"Formula text must be between 1 and 1024 characters.\")\n    source = source.strip()\n    if \"\\n\" in source or \"\\r\" in source:\n        raise ValueError(\"Each formula must fit on one line.\")\n    try:\n        if \"&&\" in source or \"||\" in source:\n            # Accept common boolean spellings only at operator tokens, never\n            # inside a literal or an identifier.\n            tokens = list(tokenize.generate_tokens(StringIO(source).readline))\n            aliases = {\"&\": \" and \", \"|\": \" or \"}\n            replacements = [(left.start[1], right.end[1], aliases[left.string])\n                            for left, right in zip(tokens, tokens[1:])\n                            if left.type == right.type == tokenize.OP and left.string in aliases\n                            and left.string == right.string and left.end == right.start]\n            for start, end, replacement in reversed(replacements):\n                source = source[:start] + replacement + source[end:]\n        expression = ast.parse(source, mode=\"eval\").body\n    except (SyntaxError, RecursionError, tokenize.TokenError) as error:\n        raise ValueError(\"Formula syntax is invalid.\") from error\n\n    def operation(name, *args):\n        return {\"op\": name, \"args\": list(args)}\n\n    def translate(node, depth=0):\n        if depth > 24:\n            raise ValueError(\"Formula nesting bound exhausted.\")\n        def child(value):\n            return translate(value, depth + 1)\n        if isinstance(node, ast.Constant) and type(node.value) in {type(None), bool, int, float, str}:\n            return finite(node.value)\n        if isinstance(node, ast.Name):\n            if node.id in _JSON_LITERALS:\n                return _JSON_LITERALS[node.id]\n            return {\"ref\" if node.id in bindings else \"field\": node.id}\n        if isinstance(node, ast.List):\n            return [child(item) for item in node.elts]\n        if isinstance(node, ast.BinOp) and type(node.op) in _BINARY:\n            return operation(_BINARY[type(node.op)], child(node.left), child(node.right))\n        if isinstance(node, ast.UnaryOp) and isinstance(node.op, (ast.Not, ast.USub)):\n            return operation(\"not\", child(node.operand)) if isinstance(node.op, ast.Not) else operation(\"sub\", 0, child(node.operand))\n        if isinstance(node, ast.BoolOp):\n            return operation(\"and\" if isinstance(node.op, ast.And) else \"or\", *(child(item) for item in node.values))\n        if isinstance(node, ast.Compare) and all(type(op) in _COMPARISONS for op in node.ops):\n            # Adjacent comparisons share the middle expression. Compiling it\n            # twice would expand nested chains exponentially before evaluation.\n            operands = [child(part) for part in (node.left, *node.comparators)]\n            terms = [operation(_COMPARISONS[type(op)], operands[i], operands[i + 1]) for i, op in enumerate(node.ops)]\n            return terms[0] if len(terms) == 1 else operation(\"and\", *terms)\n        if isinstance(node, ast.IfExp):\n            return operation(\"if\", child(node.test), child(node.body), child(node.orelse))\n        if isinstance(node, ast.Call) and isinstance(node.func, ast.Name) and node.func.id in _FUNCTIONS and not node.keywords:\n            return operation(\"if\" if node.func.id == \"choose\" else node.func.id, *(child(arg) for arg in node.args))\n        raise ValueError(\"Formula uses an unsupported expression or function.\")\n\n    return translate(expression)\n\n\ndef evaluate(spec, inputs, max_operations=10000):\n    \"\"\"Evaluate a JSON expression grammar, with no IO or dynamic code execution.\"\"\"\n    allowed_keys = {\"name\", \"inputs\", \"outputs\", \"description\", \"conditions\", \"limitations\", \"bindings\"}\n    if not isinstance(spec, dict):\n        kind = {type(None): \"null\", bool: \"boolean\", int: \"number\", float: \"number\", str: \"string\", list: \"array\"}.get(type(spec), \"non-JSON type\")\n        raise ValueError(\"Unsupported instrument specification. Expected a JSON object at the root; received \" + kind + \".\")\n    unsupported_keys = set(spec) - allowed_keys\n    if unsupported_keys:\n        names = sorted(key for key in unsupported_keys if isinstance(key, str))\n        # Names are untrusted too: escape controls, bound size, and never render values.\n        shown = [key if len(key) <= 64 else key[:64] + \"...[truncated]\" for key in names[:8]]\n        details = json.dumps(shown)\n        if len(names) > len(shown):\n            details += \" (\" + str(len(names) - len(shown)) + \" additional key names omitted)\"\n        if len(unsupported_keys) != len(names):\n            details += \"; \" + str(len(unsupported_keys) - len(names)) + \" <non-string key> entries\"\n        raise ValueError(\"Unsupported instrument specification. Unsupported top-level keys: \" + details\n                         + \". Allowed top-level keys: \" + json.dumps(sorted(allowed_keys))\n                         + '. Named calculations belong inside the \"outputs\" object, not at the instrument root.')\n    if not isinstance(spec.get(\"inputs\"), list) or any(not isinstance(k, str) for k in spec[\"inputs\"]):\n        raise ValueError(\"Instrument inputs must be field names.\")\n    if not isinstance(inputs, dict) or any(k not in inputs for k in spec[\"inputs\"]):\n        raise ValueError(\"A declared instrument input is missing.\")\n    if not isinstance(spec.get(\"outputs\"), dict) or not spec[\"outputs\"]:\n        raise ValueError(\"An instrument needs named output expressions.\")\n    if type(max_operations) is not int or max_operations < 1:\n        raise ValueError(\"A positive operation bound is required.\")\n    bindings = spec.get(\"bindings\", {})\n    if not isinstance(bindings, dict) or len(bindings) > 128 or any(\n        not isinstance(key, str) or re.fullmatch(r\"[A-Za-z][A-Za-z0-9_]{0,63}\", key) is None for key in bindings\n    ):\n        raise ValueError(\"Instrument bindings require up to 128 simple names.\")\n    resolved, resolving, compiled = {}, set(), {}\n    count = 0\n\n    def number(v):\n        if type(v) not in {int, float}:\n            raise ValueError(\"Arithmetic requires numeric operands.\")\n        return finite(v)\n\n    def visit(value, depth=0, location=\"$\"):\n        nonlocal count\n        count += 1\n        if count > max_operations or depth > 32:\n            raise ValueError(\"Instrument operation or nesting bound exhausted.\")\n        if value is None or type(value) in {str, int, float, bool}:\n            return finite(value)\n        if isinstance(value, list):\n            return [visit(v, depth + 1, f\"{location}[{index}]\") for index, v in enumerate(value)]\n        if not isinstance(value, dict):\n            raise ValueError(\"Only JSON expressions are supported.\")\n        if set(value) == {\"formula\"}:\n            source = value[\"formula\"]\n            if not isinstance(source, str):\n                raise ValueError(\"Formula text is required.\")\n            if source not in compiled:\n                compiled[source] = compile_formula(source, bindings)\n            return visit(compiled[source], depth + 1, location + \".formula\")\n        if set(value) == {\"ref\"}:\n            name = value[\"ref\"]\n            if not isinstance(name, str) or name not in bindings:\n                raise ValueError(\"Unknown instrument binding.\")\n            if name in resolving:\n                raise ValueError(\"Instrument bindings cannot reference a cycle.\")\n            if name not in resolved:\n                resolving.add(name)\n                try:\n                    resolved[name] = visit(bindings[name], depth + 1, \"$.bindings.\" + name)\n                finally:\n                    resolving.remove(name)\n            return resolved[name]\n        if set(value) == {\"field\"}:\n            path = value[\"field\"]\n            if not isinstance(path, str) or not path:\n                raise ValueError(\"Invalid input field.\")\n            if path.split(\".\")[0] not in spec[\"inputs\"]:\n                # A model once used {\"field\":\"2\"} for the number 2. Keep the\n                # evaluator fail-closed, but make its retry feedback actionable.\n                # Do not echo arbitrary untrusted field paths into model context.\n                if len(path) <= 32 and re.fullmatch(r\"-?(?:0|[1-9][0-9]*)(?:\\.[0-9]+)?(?:[eE][+-]?[0-9]+)?\", path):\n                    raise ValueError('Input field root was not declared. A numeric constant is a raw JSON number (for example 2), not {\"field\":\"2\"}. Only declared input names use {\"field\":\"name\"}.')\n                raise ValueError(\"Input field root was not declared.\")\n            at = inputs\n            for part in path.split(\".\"):\n                if part in {\"__proto__\", \"prototype\", \"constructor\"} or not isinstance(at, dict) or part not in at:\n                    raise ValueError(\"Missing or unsafe input field.\")\n                at = at[part]\n            return finite(at)\n        if set(value) != {\"op\", \"args\"} or not isinstance(value[\"args\"], list):\n            if set(value) in ({\"literal\"}, {\"value\"}, {\"const\"}):\n                raise ValueError(location + ': a literal is a raw JSON value (for example 7), not a literal/value/const object. Input references use exactly {\"field\":\"name\"}.')\n            raise ValueError(location + ': an operation must contain exactly \"op\" and an \"args\" array; received keys ' + \", \".join(sorted(map(str, value))) + \".\")\n        op, raw = value[\"op\"], value[\"args\"]\n        if op == \"if\":\n            if len(raw) != 3:\n                raise ValueError(\"if needs three operands.\")\n            cond = visit(raw[0], depth + 1, location + \".args[0]\")\n            if type(cond) is not bool:\n                raise ValueError(\"if condition must be boolean.\")\n            branch = 1 if cond else 2\n            return visit(raw[branch], depth + 1, f\"{location}.args[{branch}]\")\n        args = [visit(v, depth + 1, f\"{location}.args[{index}]\") for index, v in enumerate(raw)]\n        if op in {\"add\", \"mul\", \"min\", \"max\"}:\n            if not args:\n                raise ValueError(\"Arithmetic needs operands.\")\n            vals = [number(v) for v in args]\n            result = vals[0]\n            for val in vals[1:]:\n                result = finite(result + val if op == \"add\" else result * val if op == \"mul\" else min(result, val) if op == \"min\" else max(result, val))\n        elif op in {\"sub\", \"div\"}:\n            if len(args) != 2:\n                raise ValueError(\"Binary arithmetic needs two operands.\")\n            a, b = map(number, args)\n            if op == \"div\" and b == 0:\n                raise ValueError(\"Division by zero.\")\n            result = a - b if op == \"sub\" else a / b\n        elif op == \"abs\":\n            if len(args) != 1:\n                raise ValueError(\"abs needs one numeric operand.\")\n            result = abs(number(args[0]))\n        elif op in {\"eq\", \"lt\", \"lte\", \"gt\", \"gte\"}:\n            if len(args) != 2:\n                raise ValueError(\"Comparison needs two operands.\")\n            a, b = args\n            if op == \"eq\":\n                result = _json_equal(a, b)\n            else:\n                a, b = number(a), number(b)\n                result = a < b if op == \"lt\" else a <= b if op == \"lte\" else a > b if op == \"gt\" else a >= b\n        elif op in {\"and\", \"or\", \"not\"}:\n            if not args or any(type(v) is not bool for v in args) or (op == \"not\" and len(args) != 1):\n                raise ValueError(\"Boolean operation needs boolean operands.\")\n            result = all(args) if op == \"and\" else any(args) if op == \"or\" else not args[0]\n        elif op in {\"sum\", \"count\"}:\n            if len(args) != 1 or not isinstance(args[0], list):\n                raise ValueError(\"sum/count needs one array.\")\n            result = len(args[0]) if op == \"count\" else 0\n            if op == \"sum\":\n                for item in args[0]:\n                    count += 1\n                    if count > max_operations:\n                        raise ValueError(\"Instrument operation bound exhausted.\")\n                    result = finite(result + number(item))\n        else:\n            raise ValueError(\"Unsupported expression operation.\")\n        return finite(result)\n\n    finite(inputs)\n    result = {key: visit(expr, location=\"$.outputs[\" + json.dumps(key) + \"]\") for key, expr in spec[\"outputs\"].items()}\n    return {\"output\": result, \"operations\": count, \"scope\": \"Bounded declarative execution; acceptance must be checked separately.\"}\n\n\n\ndef strict_portable_json(raw):\n    \"\"\"Refuse ambiguous or nonstandard JSON before standalone artifact execution.\"\"\"\n    def unique_members(pairs):\n        result = {}\n        for key, value in pairs:\n            if key in result:\n                raise ValueError(\"Invalid JSON: duplicate object member.\")\n            result[key] = value\n        return result\n\n    def nonfinite_constant(_token):\n        raise ValueError(\"Invalid JSON: non-finite number token.\")\n\n    def finite_float(token):\n        value = float(token)\n        if not math.isfinite(value):\n            raise ValueError(\"Invalid JSON: floating-point overflow.\")\n        return value\n\n    return json.loads(raw, object_pairs_hook=unique_members,\n                      parse_constant=nonfinite_constant, parse_float=finite_float)\n\n\ndef main():\n    parser = argparse.ArgumentParser(description=__doc__)\n    parser.add_argument(\"instrument\", type=Path)\n    parser.add_argument(\"input\", type=Path)\n    parser.add_argument(\"--max-operations\", type=int, default=10000)\n    args = parser.parse_args()\n    print(json.dumps(evaluate(strict_portable_json(args.instrument.read_text()), strict_portable_json(args.input.read_text()), args.max_operations), ensure_ascii=False, allow_nan=False, indent=2))\n\n\nif __name__ == \"__main__\":\n    main()\n",
+      "capacity.json": "{\n  \"inputs\": [\n    \"used\",\n    \"total\"\n  ],\n  \"name\": \"Capacity Percentage\",\n  \"outputs\": {\n    \"pct\": {\n      \"args\": [\n        {\n          \"field\": \"used\"\n        },\n        {\n          \"field\": \"total\"\n        }\n      ],\n      \"op\": \"div\"\n    }\n  }\n}",
+      "capacity_check.json": "{\n  \"inputs\": [\n    \"used\",\n    \"total\"\n  ],\n  \"name\": \"Capacity Percentage Check\",\n  \"outputs\": {\n    \"pct\": {\n      \"args\": [\n        {\n          \"field\": \"used\"\n        },\n        {\n          \"field\": \"total\"\n        }\n      ],\n      \"op\": \"div\"\n    },\n    \"expected\": {\n      \"args\": [\n        {\n          \"field\": \"pct\"\n        },\n        {\n          \"value\": 15\n        }\n      ],\n      \"op\": \"eq\"\n    }\n  }\n}",
+      "operations.md": "Executed capacity audit: used=9, total=60, pct=0.15 (15%). The instrument calculates the percentage of consumed capacity using the formula pct = used / total."
+    },
+    "notice": "Contains your objective, context and artifacts. Inspect before sharing. No connector credentials or workspace integrity key included. Recorded verification is historical; recheck imported work.",
+    "sha256": "eeb32447da2eb11d24437c35372f315c1b29866df05fdf45ce42127718c5394b"
+  },
+  "fresh_arithmetic_checks": [
+    {
+      "used": 6,
+      "total": 8,
+      "output": {
+        "pct": 0.75
+      },
+      "matched": false
+    },
+    {
+      "used": 0,
+      "total": 7,
+      "output": {
+        "pct": 0.0
+      },
+      "matched": true
+    },
+    {
+      "used": 22,
+      "total": 25,
+      "output": {
+        "pct": 0.88
+      },
+      "matched": false
+    }
+  ]
+}

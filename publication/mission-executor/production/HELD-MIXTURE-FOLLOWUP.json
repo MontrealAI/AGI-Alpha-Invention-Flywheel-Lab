@@ -1,0 +1,271 @@
+{
+  "case_checkpoint_status": "exhausted",
+  "checkpoint_events": [
+    {
+      "detail": {
+        "proposed_actions": 3,
+        "summary": "First, convert all volumes to liters and concentrations to mg/L to ensure uniformity. Then calculate the total solute mass and final concentration."
+      },
+      "index": 4,
+      "kind": "route_proposed"
+    },
+    {
+      "detail": {
+        "proposal_fields": [
+          "name",
+          "schema",
+          "sql",
+          "tool"
+        ],
+        "reason": "TABLE_SQL_ERROR",
+        "tool": "construct_table"
+      },
+      "index": 5,
+      "kind": "tool_refused"
+    },
+    {
+      "detail": {
+        "proposal_fields": [
+          "input",
+          "name",
+          "tool"
+        ],
+        "reason": "TABLE_ARTIFACT_KIND",
+        "tool": "run_table"
+      },
+      "index": 6,
+      "kind": "tool_refused"
+    },
+    {
+      "detail": {
+        "outcome": {
+          "action_id": "cfd1a01870762479f8bcccfd42c4b2b1f96932a928866ae64353c7293cf276b1",
+          "artifact": "result.md",
+          "bytes": 333,
+          "kind": "document",
+          "operation_executed": true,
+          "sha256": "769dfee2bc4076dee1c3733e55ad7e7bff12e31356005d4bbc83bb117d852e07"
+        },
+        "tool": "write_document"
+      },
+      "index": 7,
+      "kind": "tool_completed"
+    },
+    {
+      "detail": {
+        "proposed_actions": 3,
+        "summary": "Starting with the provided data, convert the concentrations and volumes to consistent units, calculate the total mass of solute, and compute the final concentration in mg/L."
+      },
+      "index": 12,
+      "kind": "route_proposed"
+    },
+    {
+      "detail": {
+        "outcome": {
+          "action_id": "5e5122d74d6436436703dcf4f8ee5284064eec191249e7f53d6fb7cf4eae8540",
+          "artifact": "table.json",
+          "bytes": 219,
+          "evaluator_sha256": "48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d",
+          "kind": "table_instrument",
+          "operation_executed": true,
+          "previous_sha256": null,
+          "qualification": "UNVERIFIED",
+          "sha256": "c5717d0345999929203c1f188921d023bf1c274a835c5767d005c248fd84e041",
+          "sqlite_version": "3.53.1",
+          "status": "CANDIDATE_VALIDATED_ON_EMPTY_TABLES"
+        },
+        "tool": "construct_table"
+      },
+      "index": 13,
+      "kind": "tool_completed"
+    },
+    {
+      "detail": {
+        "outcome": {
+          "action_id": "7a22d8591758296ccfc2f0be698091585cfee398fa4171a9cc1945ce169b47d3",
+          "artifact": "table.json",
+          "artifact_sha256": "c5717d0345999929203c1f188921d023bf1c274a835c5767d005c248fd84e041",
+          "dataset": null,
+          "evaluator_sha256": "48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d",
+          "input_origin": "MODEL_DEVELOPMENT_FIXTURE",
+          "input_sha256": "e18fc6b09d1aa8c23844fcb4e7c27c65f985f4cc1f8737ba8732be250dcb9ef1",
+          "operation_executed": true,
+          "output_sha256": "24227028f5989317de063afa979c6b34bfd191537b8fd2ed796a820bf47b2024",
+          "qualification": "UNVERIFIED",
+          "rows": [
+            [
+              2
+            ]
+          ],
+          "sqlite_version": "3.53.1",
+          "status": "EXECUTED"
+        },
+        "tool": "run_table"
+      },
+      "index": 14,
+      "kind": "tool_completed"
+    },
+    {
+      "detail": {
+        "outcome": {
+          "action_id": "b6cd0f07310bce4a594347421d0e4865fb0f2f02f59a5d7750feb4eba423c96e",
+          "artifact": "result.md",
+          "bytes": 64,
+          "kind": "document",
+          "operation_executed": true,
+          "sha256": "c3e983dd4ebdb3b9293e3b26e4a9ed4aba88b741fae45209c460a7cd3bd350b3"
+        },
+        "tool": "write_document"
+      },
+      "index": 15,
+      "kind": "tool_completed"
+    }
+  ],
+  "elapsed_held_case_seconds": 93.18414455899983,
+  "grade_source_sha256": "1b440e5c90c9ec868729554d34792ef4a73987919f4bbe0fefc91feeca351aa8",
+  "historical_export_sha256": "71bbd04e705b2b89a7674084f65aa853e54a4cdc650e2407688069a272c35bdb",
+  "id": "m06",
+  "independent_case_result_sha256": "ebca1c35e7201478f951929d89b359ee0342978fe873a5306292228f53869e65",
+  "independent_new_rows_reference": [
+    {
+      "final_concentration_mg_per_l": "3495/11",
+      "final_volume_l": "33/20",
+      "mass_by_row_mg": [
+        "1905/4",
+        "48"
+      ],
+      "mass_reconstructed_from_output_mg": "2097/4",
+      "solute_mass_mg": "2097/4"
+    }
+  ],
+  "last_checkpoint_sha256": "4c0c96fb985c7d8a919033c608d51bd3aec144806a7670b316ae4f918432a35e",
+  "measured_at_utc": "2026-11-25T03:33:56.872399+00:00",
+  "mode": "Genuine Qwen3-8B CPU loopback, separate held case and observer window.",
+  "primary_report_sha256_unchanged": "1936b13704ca8a6e338e69af66d51b4ea372dd09dd08079fb6966349771a3ebe",
+  "process_exit_status": 0,
+  "provider_calls_observed": [
+    {
+      "actual_serialized_request_sha256": "f6fa23e54d34cce78dd944282df6335e563cf0c699e7077ba8d919f4d289f271",
+      "call": "provider-01",
+      "finish_reason": "stop",
+      "observed_elapsed_seconds": 64.02489754999988,
+      "observed_usage": {
+        "completion_tokens": 514,
+        "prompt_tokens": 799,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "total_tokens": 1313
+      },
+      "proposed_actions": [
+        {
+          "name": "table.json",
+          "schema": {
+            "events": {
+              "concentration_hundredths": "INTEGER",
+              "concentration_unit": "TEXT",
+              "volume_hundredths": "INTEGER",
+              "volume_unit": "TEXT"
+            }
+          },
+          "sql": "SELECT volume_hundredths, volume_unit, concentration_hundredths, concentration_unit FROM batches",
+          "tool": "construct_table"
+        },
+        {
+          "input": {
+            "fixtures": {
+              "events": [
+                {
+                  "concentration_hundredths": 240,
+                  "concentration_unit": "g/L",
+                  "volume_hundredths": 75000,
+                  "volume_unit": "mL"
+                },
+                {
+                  "concentration_hundredths": 95000,
+                  "concentration_unit": "mg/L",
+                  "volume_hundredths": 160,
+                  "volume_unit": "L"
+                },
+                {
+                  "concentration_hundredths": 0,
+                  "concentration_unit": "mg/L",
+                  "volume_hundredths": 25000,
+                  "volume_unit": "mL"
+                }
+              ]
+            }
+          },
+          "name": "table.json",
+          "tool": "run_table"
+        },
+        {
+          "content": "Converted volumes to liters and concentrations to mg/L for uniformity. Batch A: 0.75 L, 240 g/L = 240000 mg/L. Batch B: 1.6 L, 95000 mg/L. Batch C: 0.25 L, 0 mg/L. Total solute mass is 240000 * 0.75 + 95000 * 1.6 + 0 * 0.25 = 360000 mg. Final volume is 0.75 + 1.6 + 0.25 = 2.6 L. Final concentration is 360000 / 2.6 = 138461.54 mg/L.",
+          "name": "result.md",
+          "tool": "write_document"
+        }
+      ],
+      "saved_payload_sha256": "59ef6ebc62bb2ea0e225748c69dfb90017764b7808600e23c72f68c8d0a56b9e"
+    },
+    {
+      "actual_serialized_request_sha256": "0b06d3328999066c355d2aabf0f0f99421eb231d8c88ed3f285b0156973766b9",
+      "call": "provider-02",
+      "finish_reason": "stop",
+      "observed_elapsed_seconds": 28.75375558199994,
+      "observed_usage": {
+        "completion_tokens": 196,
+        "prompt_tokens": 1089,
+        "prompt_tokens_details": {
+          "cached_tokens": 534
+        },
+        "total_tokens": 1285
+      },
+      "proposed_actions": [
+        {
+          "name": "table.json",
+          "schema": {
+            "events": {
+              "score": "INTEGER"
+            }
+          },
+          "sql": "SELECT SUM(score) FROM events",
+          "tool": "construct_table"
+        },
+        {
+          "input": {
+            "fixtures": {
+              "events": [
+                {
+                  "score": 2
+                }
+              ]
+            }
+          },
+          "name": "table.json",
+          "tool": "run_table"
+        },
+        {
+          "content": "Useful results, assumptions, and what has actually been checked.",
+          "name": "result.md",
+          "tool": "write_document"
+        }
+      ],
+      "saved_payload_sha256": "4b9755f2702ffdb5cf119e2b74de9fefd6161173dcbd4c669f0f86f359fd00a2"
+    }
+  ],
+  "qualifying_artifact_outcome": "FAIL",
+  "reference": {
+    "final_concentration_mg_per_l": "16600/13",
+    "final_volume_l": "13/5",
+    "mass_by_row_mg": [
+      "1800",
+      "1520",
+      "0"
+    ],
+    "mass_reconstructed_from_output_mg": "3320",
+    "solute_mass_mg": "3320"
+  },
+  "schema": "frontier/separate-held-runtime-followup-v1",
+  "source_registration_sha256": "a73d7b8c8fe01d024e5f396525e4d56d04a0c5ec03483e637363dba9a6bb2825",
+  "timing_boundary_seconds_including_model_startup": 135
+}

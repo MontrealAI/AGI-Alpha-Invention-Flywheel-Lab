@@ -1,0 +1,59 @@
+{
+  "base": "http://127.0.0.1:8767/frontier-omega-alpha/",
+  "status": "paused",
+  "result_label": "Paused",
+  "counts": "Actions 0 · Model calls 1",
+  "language": "en",
+  "original_ambition": "Build Frontier AI for Game Theory.",
+  "same_device_reopened": false,
+  "wallet": "isolated fixture, no financial transaction",
+  "release_revision": "c864193b5793196e4b8eb0b99d718b9b0269ffbc",
+  "workflow_run": "45540555555",
+  "module_sha256": "3d3acf2f9f214ae7e489cf5c312b0754702e8666660af27e34c35dd6537fb769",
+  "model_calls": 1,
+  "actions": 0,
+  "tool_results": [
+    {
+      "at": "2026-11-25T03:29:20.602876+00:00",
+      "detail": {
+        "code": "PROVIDER_CONNECTION",
+        "message": "Model request failed. Its provider allowance or cost may have been consumed; inspect connection before explicitly resuming.",
+        "model": "qwen3-8b-q4_k_m",
+        "provider": "llama-cpp",
+        "role": "builder",
+        "run_id": "wf_77b753526aa72432e9546445_91a3144ed4790558",
+        "session_budget_snapshot": {
+          "committed": 0,
+          "currency": "USD",
+          "limit": 0,
+          "locked": false,
+          "remaining": 0,
+          "reserved": 0,
+          "scope": "process-session"
+        },
+        "usage_status": "UNKNOWN"
+      },
+      "index": 3,
+      "kind": "model_error",
+      "previous": "a06ff0eb913901033bd51ea3446cb199be1d8788fcb8b31ecdcab201d5719a2a",
+      "sha256": "f132af2b31e37af8f5dae48ab72c38903ab7ea6df06819fdf8267ba3a7b55052"
+    }
+  ],
+  "checkpoint_sha256": "8dc31d28a8390588563d0ecb39c826b85f7cf04932c30936503c5c212316c2bc",
+  "received_archive_sha256": "7112cd220a2b5a3b1e39d2dbe5202f5255e8262f6e05aa9f70445a1fc8153618",
+  "files": [],
+  "trace": [
+    "POST pair",
+    "POST submit",
+    "POST get",
+    "POST export",
+    "POST submit",
+    "POST get",
+    "POST export"
+  ],
+  "linked_revision": {
+    "checkpoint_sha256": "f95b572521e9e501298df1ea5bf70df87bf94ce2bcd3a60cf048ab57240c8ca4",
+    "original_kept": true,
+    "previous_kept": true
+  }
+}
