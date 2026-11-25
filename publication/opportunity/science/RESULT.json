@@ -1,0 +1,100 @@
+{
+  "accepted_paired_events": 0,
+  "baseline": "436bb1b142a0da1f2c272f77821b75c3efdd73fe",
+  "bindings": {
+    "GROUND.json": "9c4b3b16e9a2bcbb818907f7242136b7cf785f21465fa1c548f74981d8791b46",
+    "REGISTRATION.json": "3e6b94b7614c78c5ccf8c1325ea88e7f588f2dfec0eb0bab6d86cb4476803a39",
+    "TESS.json": "bcbdb199389375f2d6456509cabd2a5c9b1521a81355ab4d1d007f486c56135d"
+  },
+  "case": {
+    "date_utc": "2020-07-26",
+    "exofop_file_id": 74164,
+    "ground_instrument": "LCOGT SAAO 1m i-band",
+    "ground_role": "TIC 55652896.01 outer-planet observation in ExoFOP grid",
+    "scheduled_ground_label": "TOI-216c",
+    "tess_sector": 27,
+    "wide_match_band_bjd_tdb": [
+      2459055.5,
+      2459058.5
+    ]
+  },
+  "comparison": {
+    "coarse_chronology": {
+      "coarse_clock_allowance_seconds": 1000,
+      "independent_ground_first_exposure_jd_utc": 2459056.626377,
+      "raw_cross_scale_gap_hours": 3.8492684215307236,
+      "remaining_gap_hours_under_allowance": 3.571490643752946,
+      "scope": "Post-fit chronology diagnostic. No precise UTC-to-TDB conversion or new fit was performed.",
+      "tess_fourth_contact_bjd_tdb": 2459056.465990816,
+      "timescale_reference": "https://doi.org/10.1086/655938"
+    }
+  },
+  "forecast_qualification": "ABSTAIN",
+  "forecast_scope": "Attribution evidence from a held historical event does not by itself calibrate predictive windows. No forecast comparison or observing recommendation may be admitted without independently held sequences and calibrated equal-or-better coverage. April 2023 remains diagnostic.",
+  "ground": {
+    "contact_coverage": "The JD_UTC visit is shorter than the candidate minimum transit duration of 4.3 h.",
+    "ground_reducer_error": "Too few independent ground samples or duplicate BJD_TDB",
+    "ground_visit_elapsed_hour": 1.4691359996795654,
+    "ground_visit_utc": [
+      "2020-07-26T03:01:58.972801+00:00",
+      "2020-07-26T04:30:07.862400+00:00"
+    ],
+    "nonpositive_bjd_tdb_rows": 72,
+    "plausible_bjd_tdb_rows": 0,
+    "positive_jd_utc_rows": 72,
+    "samples": 72,
+    "source": {
+      "bytes": 395568,
+      "file_id": 74164,
+      "file_name": "TIC55652896-01_20200726_LCO-SAAO-1m0_i_measurements.tbl",
+      "sha256": "c612790fba6198ab2f43fead64b65cea2222b51adea6159b92466c5d461c2ddd",
+      "url": "https://exofop.ipac.caltech.edu/tess/get_file.php?id=74164"
+    },
+    "verdict": "ABSTAIN_INVALID_BJD_TDB_AND_SHORT_VISIT"
+  },
+  "paired_attribution_verdict": "ABSTAIN_GROUND_CLOCK_AND_COVERAGE",
+  "schema": "frontier/independent-transit-confirmation-result-v1",
+  "tess": {
+    "eligible_tess_only_measurements": [
+      {
+        "depth_ppt": 17.684552236569687,
+        "duration_hour": 5.45130354849211,
+        "fitted_components": 1,
+        "mid_bjd_tdb": 2459056.352421992,
+        "planet": "TOI-216c",
+        "sector": 27,
+        "timing_error_min": [
+          1.5096650643681642,
+          1.5491741633741185
+        ]
+      }
+    ],
+    "screened_abstentions": 0,
+    "software": {
+      "numpy": "2.3.5",
+      "python": "3.12.14",
+      "scipy": "1.17.0"
+    },
+    "source_product": {
+      "bjd_reference": 2457000.0,
+      "cadence_s": 120.0,
+      "camera": 4,
+      "ccd": 1,
+      "effective_exposure_s": 118.80000000000001,
+      "file_name": "tess2020186164531-s0027-0000000055652896-0189-s_lc.fits",
+      "finite_quality_zero_cadences": 15735,
+      "flux_column": "PDCSAP_FLUX",
+      "original_cadences": 17546,
+      "quality_rule": "QUALITY == 0",
+      "sap_cadences": 15735,
+      "sector": 27,
+      "source_bytes": 1785600,
+      "source_sha256": "7e231174f9336e31b2367f3e0a3ee3fcb5d9ac34de46f6d81e0208c017065727",
+      "source_uri": "https://mast.stsci.edu/api/v0.1/Download/file/?uri=mast:TESS/product/tess2020186164531-s0027-0000000055652896-0189-s_lc.fits",
+      "spoc_pipeline": "spoc-5.0.9-20200827",
+      "tic_id": 55652896,
+      "time_basis": "BJD_TDB"
+    },
+    "time_system": "BJD_TDB"
+  }
+}

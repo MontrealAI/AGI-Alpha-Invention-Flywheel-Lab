@@ -1,0 +1,94 @@
+[
+  {
+    "action": "TEST",
+    "exact_scope_facts": {
+      "gpu_architecture": "gfx1103 Hawk Point / RDNA 3",
+      "host_check": "Use the exact APU/OS/kernel/driver/framework compatibility matrix and then observe the target workload.",
+      "new_gfx1103_ryzen_apus": 18,
+      "new_ryzen_apus": [
+        "AMD Ryzen 7 PRO 253",
+        "AMD Ryzen 7 PRO 249",
+        "AMD Ryzen 7 PRO 217",
+        "AMD Ryzen 5 PRO 225",
+        "AMD Ryzen 5 PRO 224",
+        "AMD Ryzen 5 PRO 216",
+        "AMD Ryzen 3 PRO 205",
+        "AMD Ryzen 7 253",
+        "AMD Ryzen 7 249",
+        "AMD Ryzen 7 217",
+        "AMD Ryzen 5 225",
+        "AMD Ryzen 5 224",
+        "AMD Ryzen 5 216",
+        "AMD Ryzen 3 205",
+        "AMD Ryzen 9 180",
+        "AMD Ryzen 7 165",
+        "AMD Ryzen 7 155",
+        "AMD Ryzen 5 125"
+      ],
+      "release_note_scope": [
+        "Linux",
+        "Windows"
+      ],
+      "sdk": "10.2.0",
+      "separate_discrete_gpu": "AMD Radeon PRO W7900D",
+      "vllm": "0.32 (highlight 0.32.0)",
+      "vllm_os": "Linux",
+      "vllm_python": "3.14",
+      "vllm_pytorch": "2.14.0",
+      "wsl2_qualification": "AMD records a known WSL2 AI-workload failure affecting selected APUs including gfx1103."
+    },
+    "first_party_date_utc": "2026-11-18",
+    "id": "rocm-102-gfx1103",
+    "source_urls": [
+      "https://rocm.docs.amd.com/en/develop/about/release-notes.html",
+      "https://rocm.docs.amd.com/en/develop/compatibility/compatibility-matrix.html"
+    ],
+    "unsupported_claims": [
+      "all Linux or Windows combinations",
+      "native Windows vLLM",
+      "vLLM operational validation, performance or readiness on a named real host",
+      "ROCm update installs or runs on the owner NVIDIA workstation"
+    ],
+    "verdict": "DOCUMENTED"
+  },
+  {
+    "action": "HOLD",
+    "exact_scope_facts": {
+      "all_turing_board_rows_as_printed": [
+        "Quadro RTX 8000",
+        "Quadro RTX 6000",
+        "Quadro RTX A6000",
+        "Quadro RTX 5000",
+        "Quadro RTX A5000",
+        "Quadro RTX 4000",
+        "Quadro RTX A4000",
+        "NVIDIA T1000 8GB",
+        "NVIDIA T600",
+        "NVIDIA T400 4GB",
+        "NVIDIA T400",
+        "NVIDIA T400E",
+        "NVIDIA T4, T4G"
+      ],
+      "channel": "Linux NVIDIA Data Center GPU R620",
+      "cuda_toolkit_scope": "13.x",
+      "data_center_turing_boards": [
+        "NVIDIA T4",
+        "NVIDIA T4G"
+      ],
+      "driver": "620.70.10",
+      "owner_host_operation_observed": false,
+      "titan_rtx_named_in_document": false
+    },
+    "first_party_date_utc": "2026-11-23",
+    "id": "nv-r620-titan",
+    "source_urls": [
+      "https://docs.nvidia.com/datacenter/tesla/tesla-release-notes-620-70-10/index.html"
+    ],
+    "unsupported_claims": [
+      "model-specific support for TITAN RTX from this document",
+      "compatible dual-card operation on the owner Ubuntu machine",
+      "the examined notes rule out all TITAN RTX operation on other appropriate drivers"
+    ],
+    "verdict": "ABSTAIN"
+  }
+]

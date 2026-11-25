@@ -7,6 +7,7 @@ on:
       - 'scripts/build_research_site.py'
       - 'scripts/frontier_public_watch.py'
       - 'scripts/frontier_atlas.py'
+      - 'scripts/frontier_opportunity_capture.py'
       - 'scripts/frontier_member_value.py'
       - 'scripts/frontier_member_first.py'
       - 'scripts/qualify_frontier_member.py'
@@ -25,6 +26,7 @@ on:
       - 'publication/liberation/**'
       - 'publication/cascade/**'
       - 'publication/factory/**'
+      - 'publication/opportunity/**'
       - 'tests/test_frontier_public_watch.py'
       - 'tests/test_frontier_atlas.py'
       - 'tests/live_frontier_browser.cjs'
@@ -43,6 +45,7 @@ on:
       - 'scripts/build_research_site.py'
       - 'scripts/frontier_public_watch.py'
       - 'scripts/frontier_atlas.py'
+      - 'scripts/frontier_opportunity_capture.py'
       - 'scripts/frontier_member_value.py'
       - 'scripts/frontier_member_first.py'
       - 'scripts/qualify_frontier_member.py'
@@ -61,6 +64,7 @@ on:
       - 'publication/liberation/**'
       - 'publication/cascade/**'
       - 'publication/factory/**'
+      - 'publication/opportunity/**'
       - 'tests/test_frontier_public_watch.py'
       - 'tests/test_frontier_atlas.py'
       - 'tests/live_frontier_browser.cjs'
@@ -100,6 +104,7 @@ jobs:
             scripts/build_research_site.py
             scripts/frontier_public_watch.py
             scripts/frontier_atlas.py
+            scripts/frontier_opportunity_capture.py
             scripts/frontier_member_value.py
             scripts/frontier_member_first.py
             scripts/qualify_frontier_member.py
@@ -121,6 +126,7 @@ jobs:
             publication/liberation
             publication/cascade
             publication/factory
+            publication/opportunity
             tests/test_frontier_public_watch.py
             tests/test_frontier_atlas.py
             tests/test_research_site.py
@@ -267,6 +273,7 @@ jobs:
           persist-credentials: false
           sparse-checkout: |
             scripts/frontier_atlas.py
+            scripts/frontier_opportunity_capture.py
             scripts/frontier_member_value.py
             scripts/frontier_member_first.py
             scripts/qualify_frontier_member.py

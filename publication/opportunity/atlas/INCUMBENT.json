@@ -1,0 +1,507 @@
+{
+  "account_provider_billing": null,
+  "actual_human_attention_seconds": null,
+  "arm": "incumbent",
+  "base_commit": "436bb1b142a0da1f2c272f77821b75c3efdd73fe",
+  "complete_attributable_financial_cost": null,
+  "cutoff_utc": "2026-11-24T23:59:59Z",
+  "cycles": [
+    {
+      "additional_search_request_bytes": null,
+      "corrections": [],
+      "cycle": 1,
+      "direct_http_attempts": 9,
+      "direct_http_successes": 9,
+      "direct_request_interval_union_seconds": 8.667918,
+      "direct_response_bytes": 1150664,
+      "frozen_at_utc": "2026-11-25T00:55:46.750144049Z",
+      "observed_whole_arm_seconds": 106.171491,
+      "outside_measured_direct_request_intervals_seconds": 97.503573,
+      "python_control_process_cpu_s": null,
+      "rows": [
+        {
+          "action": "TEST",
+          "exact_scope_facts": {
+            "artifact": "FreeCAD_26.3rc2-Linux-aarch64.AppImage",
+            "artifact_created_utc": "2026-10-18T13:56:54Z",
+            "artifact_declared_sha256": "3317611742c66cd61de5013da4a6b3119f36c8809782f2ceac343267791d8478",
+            "artifact_state": "uploaded",
+            "channel": "prerelease / release candidate",
+            "product": "FreeCAD 26.3 Release Candidate 2",
+            "release_published_utc": "2026-10-18T06:44:39Z",
+            "tag": "26.3rc2",
+            "tested_scope": "Public release asset metadata only. The release checklist explicitly reserves it for testing."
+          },
+          "first_party_date_utc": "2026-10-18",
+          "id": "fc-263rc2-arm",
+          "source_urls": [
+            "https://github.com/FreeCAD/FreeCAD/releases/tag/26.3rc2",
+            "https://api.github.com/repos/FreeCAD/FreeCAD/releases/tags/26.3rc2",
+            "https://github.com/FreeCAD/FreeCAD/discussions/32821"
+          ],
+          "unsupported_claims": [
+            "Stable production channel",
+            "Compatibility or performance on a target machine",
+            "The artifact was already in the release at its initial publication minute"
+          ],
+          "verdict": "DOCUMENTED"
+        },
+        {
+          "action": "TEST",
+          "exact_scope_facts": {
+            "cpu_architecture": "x86_64 (OCI linux/amd64)",
+            "cuda_version": "13.0",
+            "exact_image_tags": {
+              "Ampere": "ecpe4s/e4s-cuda:26.11-cuda80",
+              "Blackwell": "ecpe4s/e4s-cuda:26.11-cuda120",
+              "Hopper": "ecpe4s/e4s-cuda:26.11-cuda90"
+            },
+            "linux_amd64_manifest_sha256": {
+              "26.11-cuda120": "0518687bd9af6fa62b689fdce583886d4d8cdeb0d4ab560d5de28d2ffdedccff",
+              "26.11-cuda80": "106c49d46c812aaeec619d515ef6ace477a284c2c5df7ec364ed7537c507570e",
+              "26.11-cuda90": "f41d57fa67b15d0763c3f64274d0d176aee369e805fc365ba633b6c32b385f79"
+            },
+            "named_nvidia_architectures": [
+              "Ampere",
+              "Hopper",
+              "Blackwell"
+            ],
+            "os": "Ubuntu 24.04 LTS",
+            "product": "E4S 26.11",
+            "registry_last_push_date_utc": "2026-11-13",
+            "stage": "Project announcement of container availability, container catalogue and public registry metadata"
+          },
+          "first_party_date_utc": "2026-11-16",
+          "id": "e4s-2611-cuda24",
+          "source_urls": [
+            "https://e4s.io/news/NEWS_RELEASE_E4S_26.11.pdf",
+            "https://e4s.io/container-download/",
+            "https://hub.docker.com/v2/namespaces/ecpe4s/repositories/e4s-cuda/tags/26.11-cuda80",
+            "https://hub.docker.com/v2/namespaces/ecpe4s/repositories/e4s-cuda/tags/26.11-cuda90",
+            "https://hub.docker.com/v2/namespaces/ecpe4s/repositories/e4s-cuda/tags/26.11-cuda120"
+          ],
+          "unsupported_claims": [
+            "Turing or arbitrary NVIDIA GPU support from the listed Ubuntu x86_64 images",
+            "Successful local pull or executed workloads",
+            "One exact tag works for all supported NVIDIA architectures",
+            "Registry last push certifies the first-ever public push"
+          ],
+          "verdict": "DOCUMENTED"
+        }
+      ],
+      "source_responses": [
+        {
+          "bytes": 434798,
+          "completed_at": "2026-11-25T00:54:24.144744+00:00",
+          "final_url": "https://api.github.com/repos/FreeCAD/FreeCAD/releases?per_page=15",
+          "name": "fc-release-list",
+          "sha256": "f536ba101aebbb71dc737f3c7e6d08a9219c33529cc68f5ee85b77c1357b7ef4",
+          "started_at": "2026-11-25T00:54:19.450790+00:00",
+          "status": 200,
+          "url": "https://api.github.com/repos/FreeCAD/FreeCAD/releases?per_page=15",
+          "wall_s": 4.693997
+        },
+        {
+          "bytes": 262084,
+          "completed_at": "2026-11-25T00:54:23.660354+00:00",
+          "final_url": "https://github.com/FreeCAD/FreeCAD/discussions/32821",
+          "name": "fc-discussion",
+          "sha256": "84bcc07b4324563d8fe1f35499e706f2147441c753935f8a58fa53ab78fed111",
+          "started_at": "2026-11-25T00:54:19.451960+00:00",
+          "status": 200,
+          "url": "https://github.com/FreeCAD/FreeCAD/discussions/32821",
+          "wall_s": 4.208409
+        },
+        {
+          "bytes": 364396,
+          "completed_at": "2026-11-25T00:54:23.396640+00:00",
+          "final_url": "https://e4s.io/news/NEWS_RELEASE_E4S_26.11.pdf",
+          "name": "e4s-pdf",
+          "sha256": "7c32beb60c009968d86b352485985abc8dcbb099737b846a72bb71e4ec0cea47",
+          "started_at": "2026-11-25T00:54:19.452533+00:00",
+          "status": 200,
+          "url": "https://e4s.io/news/NEWS_RELEASE_E4S_26.11.pdf",
+          "wall_s": 3.944135
+        },
+        {
+          "bytes": 25114,
+          "completed_at": "2026-11-25T00:54:23.436306+00:00",
+          "final_url": "https://e4s.io/",
+          "name": "e4s-site",
+          "sha256": "ea40d8abfce4253d5c94a095052bdb440e3c9b65159501b8f79b841fbb80f9c3",
+          "started_at": "2026-11-25T00:54:19.453148+00:00",
+          "status": 200,
+          "url": "https://e4s.io/",
+          "wall_s": 3.983172
+        },
+        {
+          "bytes": 21835,
+          "completed_at": "2026-11-25T00:55:11.444047+00:00",
+          "final_url": "https://api.github.com/repos/FreeCAD/FreeCAD/releases/tags/26.3rc2",
+          "last_modified": "Sun, 18 Oct 2026 15:01:45 GMT",
+          "name": "fc-tag",
+          "sha256": "e4bcb27a543ecea2abe2062ca3b8b43bd091c2a982778800dd3f049ff3628acd",
+          "started_at": "2026-11-25T00:55:07.470083+00:00",
+          "status": 200,
+          "url": "https://api.github.com/repos/FreeCAD/FreeCAD/releases/tags/26.3rc2",
+          "wall_s": 3.97398
+        },
+        {
+          "bytes": 39019,
+          "completed_at": "2026-11-25T00:55:11.057094+00:00",
+          "final_url": "https://e4s.io/container-download/",
+          "last_modified": "Tue, 24 Nov 2026 06:06:07 GMT",
+          "name": "e4s-container",
+          "sha256": "ac5a79a1a9c2a7e7014118771755b647d084e2fe8f01df082c427898ec4c1028",
+          "started_at": "2026-11-25T00:55:07.471520+00:00",
+          "status": 200,
+          "url": "https://e4s.io/container-download/",
+          "wall_s": 3.585593
+        },
+        {
+          "bytes": 1139,
+          "completed_at": "2026-11-25T00:55:11.378403+00:00",
+          "final_url": "https://hub.docker.com/v2/namespaces/ecpe4s/repositories/e4s-cuda/tags/26.11-cuda80",
+          "last_modified": null,
+          "name": "e4s-reg-cuda80",
+          "sha256": "5cb65135addd2388d6603790f71187fc5918d3e552f3c5ba0614eff25fc2a154",
+          "started_at": "2026-11-25T00:55:07.472300+00:00",
+          "status": 200,
+          "url": "https://hub.docker.com/v2/namespaces/ecpe4s/repositories/e4s-cuda/tags/26.11-cuda80",
+          "wall_s": 3.906117
+        },
+        {
+          "bytes": 1139,
+          "completed_at": "2026-11-25T00:55:11.443647+00:00",
+          "final_url": "https://hub.docker.com/v2/namespaces/ecpe4s/repositories/e4s-cuda/tags/26.11-cuda90",
+          "last_modified": null,
+          "name": "e4s-reg-cuda90",
+          "sha256": "516900e3032970cc07325a61e93c0a9d1c107a191e3b63d31ec1636ee91a7666",
+          "started_at": "2026-11-25T00:55:07.473135+00:00",
+          "status": 200,
+          "url": "https://hub.docker.com/v2/namespaces/ecpe4s/repositories/e4s-cuda/tags/26.11-cuda90",
+          "wall_s": 3.970527
+        },
+        {
+          "bytes": 1140,
+          "completed_at": "2026-11-25T00:55:11.376268+00:00",
+          "final_url": "https://hub.docker.com/v2/namespaces/ecpe4s/repositories/e4s-cuda/tags/26.11-cuda120",
+          "last_modified": null,
+          "name": "e4s-reg-cuda120",
+          "sha256": "a74c805a606a6d8919eb38b493ce17ec573cc96845ac88fff708459d675df8cb",
+          "started_at": "2026-11-25T00:55:07.474926+00:00",
+          "status": 200,
+          "url": "https://hub.docker.com/v2/namespaces/ecpe4s/repositories/e4s-cuda/tags/26.11-cuda120",
+          "wall_s": 3.90136
+        }
+      ],
+      "started_at_utc": "2026-11-25T00:54:00.578653561Z",
+      "verification_runtime_wall_s": null,
+      "verifier_feedback_used": false
+    },
+    {
+      "additional_search_request_bytes": null,
+      "corrections": [],
+      "cycle": 2,
+      "direct_http_attempts": 4,
+      "direct_http_successes": 4,
+      "direct_request_interval_union_seconds": 4.058187,
+      "direct_response_bytes": 1330522,
+      "frozen_at_utc": "2026-11-25T00:58:52.121580281Z",
+      "observed_whole_arm_seconds": 39.90848,
+      "outside_measured_direct_request_intervals_seconds": 35.850293,
+      "python_control_process_cpu_s": null,
+      "rows": [
+        {
+          "action": "TEST",
+          "exact_scope_facts": {
+            "architecture": "gfx1103 Hawk Point (RDNA 3)",
+            "host_condition": "Confirm the exact machine, OS and kernel, matched driver and package versions and observe accepted vLLM workload execution.",
+            "new_amd_devices_count": 19,
+            "new_ryzen_apus_count": 18,
+            "new_ryzen_breakdown": "7 Ryzen PRO 200, 7 Ryzen 200, 4 Ryzen 100. The separately named Radeon PRO W7900D is outside this APU count.",
+            "product": "ROCm Core SDK 10.2.0",
+            "release_notes_operating_systems": [
+              "Linux",
+              "Windows"
+            ],
+            "stage": "AMD release documentation and compatibility matrix",
+            "vllm_row_os": "Linux",
+            "vllm_row_requirements": "Python 3.14, requires PyTorch 2.14.0",
+            "vllm_version": "0.32 (0.32.0 in the highlights)",
+            "windows_matrix_scope": "Ryzen matrix lists Windows 11 25H2 and Adrenalin 26.11.2. Verify the exact model and platform rows."
+          },
+          "first_party_date_utc": "2026-11-18",
+          "id": "rocm-102-gfx1103",
+          "source_urls": [
+            "https://rocm.docs.amd.com/en/develop/about/release-notes.html",
+            "https://rocm.docs.amd.com/en/docs-10.2.0/about/release-notes.html",
+            "https://rocm.docs.amd.com/en/docs-10.2.0/compatibility/compatibility-matrix.html"
+          ],
+          "unsupported_claims": [
+            "Native Windows vLLM from the Linux framework row",
+            "Universal support across all Ryzen, OS or kernel combinations",
+            "Successful installation or workload performance on any particular host"
+          ],
+          "verdict": "DOCUMENTED"
+        },
+        {
+          "action": "HOLD",
+          "exact_scope_facts": {
+            "driver": "620.70.10",
+            "host_compatibility_status": "Not established by the identified release materials",
+            "host_operation_observed": false,
+            "other_turing_listed_examples": [
+              "Quadro RTX 8000",
+              "Quadro RTX 6000",
+              "NVIDIA T1000 8GB",
+              "NVIDIA T600",
+              "NVIDIA T400"
+            ],
+            "release_type": "NVIDIA Linux Data Center driver, Release 620",
+            "turing_boards": [
+              "NVIDIA T4",
+              "NVIDIA T4G"
+            ],
+            "turing_scope": "T4 and T4G are named in the virtualization family table and as Data Center T Series products. The separate RTX/T Series table names additional boards. No table names TITAN RTX."
+          },
+          "first_party_date_utc": "2026-11-23",
+          "id": "nv-r620-titan",
+          "source_urls": [
+            "https://docs.nvidia.com/datacenter/tesla/tesla-release-notes-620-70-10/index.html",
+            "https://www.nvidia.com/en-us/drivers/details/285695/"
+          ],
+          "unsupported_claims": [
+            "Treat any Turing chip as a model-specific driver match",
+            "Compatibility or incompatibility for TITAN RTX based on omission alone",
+            "Driver installation, load, two-card operation, inference or improvement on the owner's workstation"
+          ],
+          "verdict": "ABSTAIN"
+        }
+      ],
+      "source_responses": [
+        {
+          "bytes": 518849,
+          "completed_at": "2026-11-25T00:58:16.057919+00:00",
+          "final_url": "https://rocm.docs.amd.com/en/develop/about/release-notes.html",
+          "last_modified": "Mon, 23 Nov 2026 18:31:52 GMT",
+          "name": "rocm",
+          "sha256": "aac4b63b02dd9ec4552d60a65246bc83b9c2b320d9ba97a50c42967d74029736",
+          "started_at": "2026-11-25T00:58:12.487279+00:00",
+          "status": 200,
+          "url": "https://rocm.docs.amd.com/en/develop/about/release-notes.html",
+          "wall_s": 3.570658
+        },
+        {
+          "bytes": 516884,
+          "completed_at": "2026-11-25T00:58:16.027871+00:00",
+          "final_url": "https://rocm.docs.amd.com/en/docs-10.2.0/about/release-notes.html",
+          "last_modified": "Thu, 19 Nov 2026 23:44:06 GMT",
+          "name": "rocm-pinned",
+          "sha256": "7d6a7646cf674331f8bcb129657ec741a7d16bf5a13db937e1a49d47ef49f5de",
+          "started_at": "2026-11-25T00:58:12.488930+00:00",
+          "status": 200,
+          "url": "https://rocm.docs.amd.com/en/docs-10.2.0/about/release-notes.html",
+          "wall_s": 3.538959
+        },
+        {
+          "bytes": 173643,
+          "completed_at": "2026-11-25T00:58:16.026581+00:00",
+          "final_url": "https://rocm.docs.amd.com/en/docs-10.2.0/compatibility/compatibility-matrix.html",
+          "last_modified": "Thu, 19 Nov 2026 23:44:06 GMT",
+          "name": "rocm-matrix",
+          "sha256": "d762324a4135c2eb321cbcfbdf393f5e76434453d4952db849df11c4275cf48f",
+          "started_at": "2026-11-25T00:58:12.489720+00:00",
+          "status": 200,
+          "url": "https://rocm.docs.amd.com/en/docs-10.2.0/compatibility/compatibility-matrix.html",
+          "wall_s": 3.536914
+        },
+        {
+          "bytes": 121146,
+          "completed_at": "2026-11-25T00:58:16.545466+00:00",
+          "final_url": "https://docs.nvidia.com/datacenter/tesla/tesla-release-notes-620-70-10/index.html",
+          "last_modified": "Tue, 24 Nov 2026 14:52:01 GMT",
+          "name": "nvidia",
+          "sha256": "448d8ad5b6d0bd849350d9295360d90190aac25554f21ac6874ded67dcb61a0d",
+          "started_at": "2026-11-25T00:58:12.490328+00:00",
+          "status": 200,
+          "url": "https://docs.nvidia.com/datacenter/tesla/tesla-release-notes-620-70-10/index.html",
+          "wall_s": 4.055157
+        }
+      ],
+      "started_at_utc": "2026-11-25T00:58:12.213100894Z",
+      "verification_runtime_wall_s": null,
+      "verifier_feedback_used": false
+    }
+  ],
+  "direct_response_bytes": 2481186,
+  "external_paid_calls_in_trial": 0,
+  "independence": "One included Codex context operated both arms. It independently acquired response bytes for each arm. The second arm in each cycle inherited endpoint discovery and semantic knowledge. No other arm or reference answers supplied these decisions.",
+  "input_sha256": "396d3f354874daa7378c043af4daa78ec325d0a485afbb1dde2456150375129d",
+  "live_checkpoint_setup": {
+    "atlas_code_sha256": "267d9d767d8a2e4a92c367d24f2396810d2aea0889cd450acc77f4d4e14ea7d0",
+    "checked_at": "2026-11-25T00:31:57+00:00",
+    "elapsed_s": 7.497609,
+    "latest_accepted_reference": {
+      "observed_at": "2026-11-24T23:55:09Z",
+      "publisher_commit": "c1f719b0e0440ff9f7e141e5967658127350b837"
+    },
+    "ledger_sha256": "485b1d1e5f91f16b7a1d8b50ad15258badafa934b803a7e3f37d8f1a088f2caf",
+    "records": 64,
+    "source_commit": "436bb1b142a0da1f2c272f77821b75c3efdd73fe",
+    "states": {
+      "abstain": 1,
+      "discovered": 58,
+      "falsified": 3,
+      "verified": 2
+    },
+    "watch_code_sha256": "b3af899323c32153932c51cfe7f80d653bcc33360fa46119cfe3e0e227847a63",
+    "workflow_run": "45518735176"
+  },
+  "method": "Current Atlas exact-source metadata and editorial rules. After native registered intake excludes the supplied source surfaces, conduct primary-source editorial review and decide qualified scope.",
+  "observed_work_seconds": 146.079971,
+  "operating_sequence": "Cycle 1 incumbent then structured. Cycle 2 structured then incumbent.",
+  "production_scope": "Actual public source evidence review for the Atlas. No physical workload, human employee control, publication authority or independent decision acceptance is implied by this receipt.",
+  "realized_cash_savings": null,
+  "realized_productive_savings": null,
+  "rows": [
+    {
+      "action": "TEST",
+      "exact_scope_facts": {
+        "artifact": "FreeCAD_26.3rc2-Linux-aarch64.AppImage",
+        "artifact_created_utc": "2026-10-18T13:56:54Z",
+        "artifact_declared_sha256": "3317611742c66cd61de5013da4a6b3119f36c8809782f2ceac343267791d8478",
+        "artifact_state": "uploaded",
+        "channel": "prerelease / release candidate",
+        "product": "FreeCAD 26.3 Release Candidate 2",
+        "release_published_utc": "2026-10-18T06:44:39Z",
+        "tag": "26.3rc2",
+        "tested_scope": "Public release asset metadata only. The release checklist explicitly reserves it for testing."
+      },
+      "first_party_date_utc": "2026-10-18",
+      "id": "fc-263rc2-arm",
+      "source_urls": [
+        "https://github.com/FreeCAD/FreeCAD/releases/tag/26.3rc2",
+        "https://api.github.com/repos/FreeCAD/FreeCAD/releases/tags/26.3rc2",
+        "https://github.com/FreeCAD/FreeCAD/discussions/32821"
+      ],
+      "unsupported_claims": [
+        "Stable production channel",
+        "Compatibility or performance on a target machine",
+        "The artifact was already in the release at its initial publication minute"
+      ],
+      "verdict": "DOCUMENTED"
+    },
+    {
+      "action": "TEST",
+      "exact_scope_facts": {
+        "cpu_architecture": "x86_64 (OCI linux/amd64)",
+        "cuda_version": "13.0",
+        "exact_image_tags": {
+          "Ampere": "ecpe4s/e4s-cuda:26.11-cuda80",
+          "Blackwell": "ecpe4s/e4s-cuda:26.11-cuda120",
+          "Hopper": "ecpe4s/e4s-cuda:26.11-cuda90"
+        },
+        "linux_amd64_manifest_sha256": {
+          "26.11-cuda120": "0518687bd9af6fa62b689fdce583886d4d8cdeb0d4ab560d5de28d2ffdedccff",
+          "26.11-cuda80": "106c49d46c812aaeec619d515ef6ace477a284c2c5df7ec364ed7537c507570e",
+          "26.11-cuda90": "f41d57fa67b15d0763c3f64274d0d176aee369e805fc365ba633b6c32b385f79"
+        },
+        "named_nvidia_architectures": [
+          "Ampere",
+          "Hopper",
+          "Blackwell"
+        ],
+        "os": "Ubuntu 24.04 LTS",
+        "product": "E4S 26.11",
+        "registry_last_push_date_utc": "2026-11-13",
+        "stage": "Project announcement of container availability, container catalogue and public registry metadata"
+      },
+      "first_party_date_utc": "2026-11-16",
+      "id": "e4s-2611-cuda24",
+      "source_urls": [
+        "https://e4s.io/news/NEWS_RELEASE_E4S_26.11.pdf",
+        "https://e4s.io/container-download/",
+        "https://hub.docker.com/v2/namespaces/ecpe4s/repositories/e4s-cuda/tags/26.11-cuda80",
+        "https://hub.docker.com/v2/namespaces/ecpe4s/repositories/e4s-cuda/tags/26.11-cuda90",
+        "https://hub.docker.com/v2/namespaces/ecpe4s/repositories/e4s-cuda/tags/26.11-cuda120"
+      ],
+      "unsupported_claims": [
+        "Turing or arbitrary NVIDIA GPU support from the listed Ubuntu x86_64 images",
+        "Successful local pull or executed workloads",
+        "One exact tag works for all supported NVIDIA architectures",
+        "Registry last push certifies the first-ever public push"
+      ],
+      "verdict": "DOCUMENTED"
+    },
+    {
+      "action": "TEST",
+      "exact_scope_facts": {
+        "architecture": "gfx1103 Hawk Point (RDNA 3)",
+        "host_condition": "Confirm the exact machine, OS and kernel, matched driver and package versions and observe accepted vLLM workload execution.",
+        "new_amd_devices_count": 19,
+        "new_ryzen_apus_count": 18,
+        "new_ryzen_breakdown": "7 Ryzen PRO 200, 7 Ryzen 200, 4 Ryzen 100. The separately named Radeon PRO W7900D is outside this APU count.",
+        "product": "ROCm Core SDK 10.2.0",
+        "release_notes_operating_systems": [
+          "Linux",
+          "Windows"
+        ],
+        "stage": "AMD release documentation and compatibility matrix",
+        "vllm_row_os": "Linux",
+        "vllm_row_requirements": "Python 3.14, requires PyTorch 2.14.0",
+        "vllm_version": "0.32 (0.32.0 in the highlights)",
+        "windows_matrix_scope": "Ryzen matrix lists Windows 11 25H2 and Adrenalin 26.11.2. Verify the exact model and platform rows."
+      },
+      "first_party_date_utc": "2026-11-18",
+      "id": "rocm-102-gfx1103",
+      "source_urls": [
+        "https://rocm.docs.amd.com/en/develop/about/release-notes.html",
+        "https://rocm.docs.amd.com/en/docs-10.2.0/about/release-notes.html",
+        "https://rocm.docs.amd.com/en/docs-10.2.0/compatibility/compatibility-matrix.html"
+      ],
+      "unsupported_claims": [
+        "Native Windows vLLM from the Linux framework row",
+        "Universal support across all Ryzen, OS or kernel combinations",
+        "Successful installation or workload performance on any particular host"
+      ],
+      "verdict": "DOCUMENTED"
+    },
+    {
+      "action": "HOLD",
+      "exact_scope_facts": {
+        "driver": "620.70.10",
+        "host_compatibility_status": "Not established by the identified release materials",
+        "host_operation_observed": false,
+        "other_turing_listed_examples": [
+          "Quadro RTX 8000",
+          "Quadro RTX 6000",
+          "NVIDIA T1000 8GB",
+          "NVIDIA T600",
+          "NVIDIA T400"
+        ],
+        "release_type": "NVIDIA Linux Data Center driver, Release 620",
+        "turing_boards": [
+          "NVIDIA T4",
+          "NVIDIA T4G"
+        ],
+        "turing_scope": "T4 and T4G are named in the virtualization family table and as Data Center T Series products. The separate RTX/T Series table names additional boards. No table names TITAN RTX."
+      },
+      "first_party_date_utc": "2026-11-23",
+      "id": "nv-r620-titan",
+      "source_urls": [
+        "https://docs.nvidia.com/datacenter/tesla/tesla-release-notes-620-70-10/index.html",
+        "https://www.nvidia.com/en-us/drivers/details/285695/"
+      ],
+      "unsupported_claims": [
+        "Treat any Turing chip as a model-specific driver match",
+        "Compatibility or incompatibility for TITAN RTX based on omission alone",
+        "Driver installation, load, two-card operation, inference or improvement on the owner's workstation"
+      ],
+      "verdict": "ABSTAIN"
+    }
+  ],
+  "schema": "atlas-whole-work-control/v1",
+  "shared_input_ready_at_utc": "2026-11-25T00:54:00.578653561Z",
+  "timing_scope": "Wall elapsed from this arm starting each cycle to frozen answer. Intervals include tool waits, reasoning, source interpretation, serialization and any correction. Direct request windows can overlap. Remaining time after those windows cannot be apportioned precisely among browsing, interpretation, scripting, verification and orchestration."
+}

@@ -39,6 +39,8 @@ async function publicAtlas(browser, language, width) {
     assert.equal(await page.locator('#possibility-shifts #foundry-cascade-results').count(), 0);
     assert.equal(await page.locator('#foundry-factory-results').isVisible(), false);
     assert.equal(await page.locator('#possibility-shifts #foundry-factory-results').count(), 0);
+    assert.equal(await page.locator('#opportunity-capture').isVisible(), false);
+    assert.equal(await page.locator('#possibility-shifts #opportunity-capture').count(), 0);
     assert.equal(await page.locator('#club-form').isVisible(), false);
     assert.match(await page.locator('h1').innerText(), /Member First Ω/i);
     assert.equal(await page.locator('.entry-pillars li').count(), 4);
@@ -826,6 +828,22 @@ async function walletPaths(browser, language, width) {
     await member.waitFor({ state: 'visible' });
     assert.match(await page.locator('#member-route').innerText(), /AGI CLUB/);
     await capture(page, language, width, 'arrival-club');
+    await page.locator('a[href="#opportunity-capture"]').press('Enter');
+    const opportunity = page.locator('#opportunity-capture');
+    assert.equal(await opportunity.isVisible(), true);
+    const entry = await opportunity.evaluate(section => ({
+      headingTop: section.querySelector('h4').getBoundingClientRect().top,
+      headerBottom: document.querySelector('.mf-bar').getBoundingClientRect().bottom,
+      disclosureOpen: section.querySelector('details').open
+    }));
+    assert.ok(entry.headingTop >= entry.headerBottom - 1);
+    assert.equal(entry.disclosureOpen, false);
+    const study = await (await page.request.get(base + 'opportunity-capture.json')).json();
+    assert.ok(study.opportunities.length >= 2);
+    assert.deepEqual(await opportunity.locator('[data-opportunity]').evaluateAll(cards =>
+      cards.map(card => [card.dataset.opportunity, card.dataset.stage])),
+    study.opportunities.map(row => [row.id, row.state]));
+    await capture(page, language, width, 'opportunity-capture');
     await destination(page, 'mv-results');
     await page.locator('#goal-keeper summary').click();
     await page.locator('#goal-import').setInputFiles(content('recovered.json', saved));
@@ -878,6 +896,7 @@ async function walletPaths(browser, language, width) {
       foundryInventorPilot:true,
       cascadeEvidenceAndDownload:true,
       factoryEvidenceAndDownloads:true,
+      opportunityCapture:true,
       offlineRunAndReceipt: true, receiptTamperDenial: true, rehashedReceiptDenial:true, archivedEditionDownloads:true,
       lock: true, expiry: true, reconnect: true, accountSwitchDenial: true });
   } finally {

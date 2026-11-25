@@ -1,0 +1,251 @@
+{
+  "schema": "frontier/opportunity-capture-v1",
+  "baseline_revision": "436bb1b142a0da1f2c272f77821b75c3efdd73fe",
+  "atlas_cutoff_utc": "2026-11-24T23:59:59Z",
+  "summary": {
+    "en": "Two NISAR catalog shortlists and four Atlas decisions passed independent checks. The established Atlas research workflow remains the production choice. The portfolio shows the evidence and next check for each opportunity.",
+    "fr": "Deux sélections de produits NISAR et quatre décisions de l’Atlas ont passé des vérifications indépendantes. La méthode de recherche actuelle de l’Atlas reste en service. Le portefeuille présente les preuves et la prochaine vérification pour chaque possibilité."
+  },
+  "opportunities": [
+    {
+      "id": "nisar-l2-quebec",
+      "state": "OPERATING",
+      "action": "TEST",
+      "evidence_stage": "PUBLIC_CATALOG_METADATA",
+      "first_party_date_utc": "2026-11-06",
+      "evidence": [
+        "https://nisar-docs.asf.alaska.edu/availability-overview/",
+        "https://cmr.earthdata.nasa.gov/search/granules.umm_json",
+        "https://api.daac.asf.alaska.edu/services/search/param"
+      ],
+      "beneficiary": "MONTREAL.AI scientific-data planning",
+      "strongest_existing_alternative": "NASA CMR and ASF queries, with existing OPERA Sentinel-1 and other available SAR products.",
+      "acceptance_receipt": "discovery/RADAR-CONTROL.json",
+      "capability": "discovery/catalog_probe.py",
+      "operating_scope": "Read-only exact public catalog shortlists for planned radar research.",
+      "repeat_use": {
+        "montreal": {
+          "validated_products": 10,
+          "earlier_reference_inputs": 4,
+          "longest_exact_chain_links": 2
+        },
+        "quebec-city": {
+          "validated_products": 11,
+          "earlier_reference_inputs": 4,
+          "longest_exact_chain_links": 2
+        }
+      },
+      "required_resources": "Public catalog metadata for planning. Owner-approved Earthdata access and qualified processing for downstream imagery.",
+      "unverified": "Site performance, relative cost and actual demand.",
+      "follow_up_trigger": "An authorized, genuinely consequential task and matching incumbent comparison.",
+      "en": {
+        "title": "NISAR catalog planning",
+        "finding": "The accepted shortlists cover 10 Montréal and 11 Québec City catalog records. Four reference acquisitions at each point precede October 21.",
+        "next": "Use the exact input links to plan a focused data comparison. Imagery and site findings require separate validation."
+      },
+      "fr": {
+        "title": "Planification à partir du catalogue NISAR",
+        "finding": "Les recherches ont repéré 10 produits à Montréal et 11 à Québec. À chaque point, quatre acquisitions de référence sont antérieures au 21 octobre.",
+        "next": "Utiliser les liens entre les acquisitions pour préparer une comparaison ciblée. Les images et les conclusions sur le terrain exigent une validation distincte."
+      }
+    },
+    {
+      "id": "hy-mt3-q4",
+      "state": "INVESTIGATING",
+      "action": "TEST",
+      "evidence_stage": "LOCAL_DRAFT_ANCHORS",
+      "first_party_date_utc": "2026-11-24",
+      "evidence": [
+        "https://github.com/Tencent-Hunyuan/Hy-MT"
+      ],
+      "beneficiary": "MONTREAL.AI bilingual technical publishing",
+      "strongest_existing_alternative": "Earlier official Hy-MT2 Q4 or a bilingual technical editor with ordinary tools.",
+      "en": {
+        "title": "Local technical translation",
+        "finding": "Hy-MT3 preserved the required names and numbers in 8/8 passages. The previous model preserved them in 7/8. Technical French still needed editing.",
+        "next": "Compare complete review and correction effort on a new bilingual release."
+      },
+      "fr": {
+        "title": "Traduction technique locale",
+        "finding": "Hy-MT3 a conservé les noms et les chiffres attendus dans 8 passages sur 8, contre 7 sur 8 pour le modèle précédent. Le français technique exigeait encore des corrections.",
+        "next": "Comparer le temps de révision et de correction sur une nouvelle publication bilingue."
+      }
+    },
+    {
+      "id": "h2d-mixed-nozzles",
+      "state": "BLOCKED",
+      "action": "HOLD",
+      "evidence_stage": "PUBLISHED_SOFTWARE_SUPPORT",
+      "first_party_date_utc": "2026-11-24",
+      "evidence": [
+        "https://github.com/bambulab/BambuStudio/releases/tag/v02.09.02.62"
+      ],
+      "beneficiary": "MONTREAL.AI manufacturing feasibility",
+      "strongest_existing_alternative": "Best ordinary single-nozzle or multi-stage production workflow under equal acceptance.",
+      "en": {
+        "title": "Mixed-nozzle H2D production",
+        "finding": "Bambu Studio documents support for the H2D with Filament Track Switch. The physical comparison needs an authorized compatible printer and a genuine job.",
+        "next": "Verify the installed configuration and compare accepted parts on two real jobs."
+      },
+      "fr": {
+        "title": "Production H2D à buses mixtes",
+        "finding": "Bambu Studio documente la prise en charge du H2D avec Filament Track Switch. L’essai physique exige une imprimante compatible autorisée et une tâche réelle.",
+        "next": "Vérifier la configuration installée et comparer les pièces acceptées pour deux tâches réelles."
+      }
+    },
+    {
+      "id": "fc-263rc2-arm",
+      "state": "VERIFIED",
+      "action": "TEST",
+      "evidence_stage": "EXACT_PRERELEASE_ARTIFACT",
+      "first_party_date_utc": "2026-10-18",
+      "evidence": [
+        "https://api.github.com/repos/FreeCAD/FreeCAD/releases/tags/26.3rc2"
+      ],
+      "beneficiary": "MONTREAL.AI portable CAD research intake",
+      "strongest_existing_alternative": "Official release metadata and exact artifact check.",
+      "en": {
+        "title": "FreeCAD on Linux aarch64",
+        "finding": "The October 18 release candidate has a listed aarch64 AppImage with a recorded digest.",
+        "next": "Run an ordinary CAD acceptance case on authorized hardware before promoting it."
+      },
+      "fr": {
+        "title": "FreeCAD sous Linux aarch64",
+        "finding": "La version candidate du 18 octobre publie une AppImage aarch64 dont l’empreinte est documentée.",
+        "next": "Vérifier une tâche de CAO sur un appareil autorisé avant de recommander son adoption."
+      }
+    },
+    {
+      "id": "e4s-2611-cuda24",
+      "state": "VERIFIED",
+      "action": "TEST",
+      "evidence_stage": "EXACT_REGISTRY_TAGS",
+      "first_party_date_utc": "2026-11-16",
+      "evidence": [
+        "https://e4s.io/news/NEWS_RELEASE_E4S_26.11.pdf",
+        "https://e4s.io/container-download/"
+      ],
+      "beneficiary": "MONTREAL.AI reproducible scientific-container planning",
+      "strongest_existing_alternative": "Official publisher table and native registry checks.",
+      "en": {
+        "title": "E4S CUDA containers",
+        "finding": "E4S 26.11 lists CUDA 13.0 on Ubuntu 24.04 LTS x86_64, with exact tags for Ampere, Hopper and Blackwell.",
+        "next": "Select a supported host architecture and measure an actual scientific workload."
+      },
+      "fr": {
+        "title": "Conteneurs CUDA d’E4S",
+        "finding": "E4S 26.11 documente CUDA 13.0 sous Ubuntu 24.04 LTS x86_64, avec des étiquettes précises pour Ampere, Hopper et Blackwell.",
+        "next": "Choisir une architecture prise en charge et mesurer une tâche scientifique réelle."
+      }
+    },
+    {
+      "id": "rocm-102-gfx1103",
+      "state": "VERIFIED",
+      "action": "TEST",
+      "evidence_stage": "DOCUMENTED_PLATFORM_SUPPORT",
+      "first_party_date_utc": "2026-11-18",
+      "evidence": [
+        "https://rocm.docs.amd.com/en/docs-10.2.0/about/release-notes.html"
+      ],
+      "beneficiary": "MONTREAL.AI local-intelligence portability",
+      "strongest_existing_alternative": "Native AMD compatibility table plus a host-specific test.",
+      "en": {
+        "title": "ROCm for Ryzen gfx1103",
+        "finding": "AMD lists 18 additional Ryzen models. The stated vLLM configuration is Linux with Python 3.14 and PyTorch 2.14.0.",
+        "next": "Confirm the exact Ryzen model and run a meaningful inference task."
+      },
+      "fr": {
+        "title": "ROCm pour Ryzen gfx1103",
+        "finding": "AMD indique 18 modèles Ryzen supplémentaires. La configuration vLLM annoncée utilise Linux, Python 3.14 et PyTorch 2.14.0.",
+        "next": "Confirmer le modèle Ryzen exact et mesurer une tâche d’inférence utile."
+      }
+    },
+    {
+      "id": "nv-r620-titan",
+      "state": "ABSTAIN",
+      "action": "HOLD",
+      "evidence_stage": "VENDOR_DRIVER_SCOPE",
+      "first_party_date_utc": "2026-11-23",
+      "evidence": [
+        "https://docs.nvidia.com/datacenter/tesla/tesla-release-notes-620-70-10/index.html"
+      ],
+      "beneficiary": "MONTREAL.AI owner-host GPU qualification",
+      "strongest_existing_alternative": "Actual owner-host inventory and task receipt.",
+      "en": {
+        "title": "TITAN RTX workstation",
+        "finding": "The R620 Data Center driver release names T4 and T4G in its Turing virtualization row. TITAN RTX operation on the workstation remains unverified.",
+        "next": "Use the existing owner-host qualification procedure with the installed driver."
+      },
+      "fr": {
+        "title": "Poste de travail TITAN RTX",
+        "finding": "Les notes du pilote R620 pour centres de données citent T4 et T4G dans la ligne consacrée à la virtualisation Turing. Le fonctionnement des TITAN RTX sur le poste demeure à vérifier.",
+        "next": "Exécuter la procédure de qualification existante avec le pilote installé."
+      }
+    }
+  ],
+  "comparison": {
+    "accepted": {
+      "incumbent": [
+        4,
+        4
+      ],
+      "direct": [
+        4,
+        4
+      ],
+      "conventional": [
+        4,
+        4
+      ],
+      "integrated": [
+        4,
+        4
+      ],
+      "scope_withdrawn_primary": [
+        3,
+        4
+      ]
+    },
+    "whole_work_wall_seconds": {
+      "incumbent_disjoint_cycles": 146.079971,
+      "conventional_disjoint_cycles": 137.135195,
+      "direct_with_transition": 184.568277,
+      "integrated_with_transition": 265.154376
+    },
+    "cash_savings_cad": null,
+    "net_productive_value_cad": null,
+    "realized_revenue_cad": null,
+    "human_attention_seconds": null,
+    "independent_assessment": "atlas/SCORES.json"
+  },
+  "receipts": {
+    "ATLAS-INPUT.json": "396d3f354874daa7378c043af4daa78ec325d0a485afbb1dde2456150375129d",
+    "atlas/SCORES.json": "b693f1e918088e0b8804705914d792bd17c0cd0b92893249cd29ccfd3ddb65d3",
+    "atlas/DIRECT.json": "fa5edf732e274de067a419468e049adb44579e14f6ef7fde3f435ee087a0255e",
+    "atlas/CONVENTIONAL.json": "55f98b95fc16d01016244199825752f4367ad01f26c2340bc69d84a51f995bdc",
+    "atlas/INCUMBENT.json": "c8522e3ea071569b4d6dc28cae1ee556f33f32299f21ac3ced485f2b374f66ad",
+    "atlas/SUBMISSION.json": "42b04820b8fb26c445af5a56b5620c524f8c2061199046ae504577414b049052",
+    "discovery/RADAR.json": "a59b17ef8234e4d6c959b292e871799a82af6c4e56cfe5b907fdff5fa611fef5",
+    "discovery/RADAR-CONTROL.json": "caeb0a4c8fdaa749aa1dc09d12263d518367d6430c906c25e9a8aef941f5e8d4",
+    "discovery/RADAR-REPLAY.json": "eabf6fe61c9eb88a0a15d095b70b2cb57381b51a15445dba2a44c27daa841a01",
+    "discovery/translation_protocol.json": "ec8af708e6f88df5f33f3cd5c2a32c9f2e5251b74b894b64c883a4d08c5228f8",
+    "discovery/pilot-receipts/hy-mt2.json": "23b137d84f91d554f2a1ad32542321142bd7471d940a69c26e32dbd98999fca9",
+    "discovery/pilot-receipts/hy-mt3.json": "cec12cb2208f3ba92052789ba30576145e7501349ef905a5c1ee4390cbadff7c",
+    "science/RESULT.json": "3c8a5da4d0e1d21f9b9c8606543f8bb44577095a03b3b5b1bcb47bf79d8d24b4",
+    "science/DIRECT-SCIENCE.json": "0c1e817d4ff493e86e1e0c705e31ee4e746a84b286393ed9c720e167a733c953",
+    "prospective/OBSERVED.json": "349379af21832a23c9176b72720ae732a4e435505b6752a089b5cbc4b7b3907a",
+    "prospective/registration.json": "2339381d467366cfd985f106e5d373f41e94c44eb5eb64555d00527fccd134cc",
+    "prospective/observations.jsonl": "fc362710d08afe2206d8a0e6ef5244f13f8d73cc2ab81025b29756f7b742becf"
+  },
+  "prospective": {
+    "public_observations": 10,
+    "successful": 10,
+    "failed": 0,
+    "first_observed_at_utc": "2026-11-25T00:55:44.149Z",
+    "last_verified_at_utc": "2026-11-25T01:09:57.764Z",
+    "observation_disposition": "RIGHT_CENSORED_DURING_OBSERVATION",
+    "verified_event_observed_at_utc": null,
+    "pipeline_lead_s": null,
+    "receipt": "prospective/OBSERVED.json"
+  }
+}

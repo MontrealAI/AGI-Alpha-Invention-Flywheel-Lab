@@ -1,0 +1,474 @@
+{
+  "cases": [
+    {
+      "as_of": "2026-11-24T23:59:59Z",
+      "id": "fc-263rc2-arm",
+      "kind": "product_stage",
+      "records": [
+        {
+          "id": "freecad-published-asset",
+          "role": "first_party_release",
+          "scope": {
+            "arch": "aarch64",
+            "channel": "prerelease",
+            "feature": "appimage-release",
+            "os": "linux",
+            "product": "freecad",
+            "tag": "26.3rc2"
+          },
+          "source": "freecad-release",
+          "verified_by": "2026-10-18T13:58:05Z"
+        }
+      ],
+      "scope": {
+        "arch": "aarch64",
+        "channel": "prerelease",
+        "feature": "appimage-release",
+        "os": "linux",
+        "product": "freecad",
+        "tag": "26.3rc2"
+      },
+      "stage": "software_support"
+    },
+    {
+      "as_of": "2026-11-24T23:59:59Z",
+      "id": "e4s-2611-cuda24",
+      "kind": "product_stage",
+      "records": [
+        {
+          "id": "e4s-public-release",
+          "role": "first_party_release",
+          "scope": {
+            "edition": "26.11",
+            "feature": "cuda-container-release",
+            "os": "ubuntu-24.04",
+            "product": "e4s"
+          },
+          "source": "e4s-release",
+          "verified_by": "2026-11-17T07:59:59Z"
+        },
+        {
+          "id": "e4s-ampere-catalog",
+          "role": "documentation",
+          "scope": {
+            "arch": "amd64",
+            "edition": "26.11",
+            "feature": "cuda-container-release",
+            "gpu": "ampere",
+            "os": "ubuntu-24.04",
+            "product": "e4s",
+            "tag": "26.11-cuda80"
+          },
+          "source": "e4s-catalog",
+          "verified_by": "2026-11-25T00:55:24Z"
+        },
+        {
+          "id": "e4s-published-tag",
+          "role": "first_party_release",
+          "scope": {
+            "arch": "amd64",
+            "edition": "26.11",
+            "feature": "cuda-container-release",
+            "gpu": "ampere",
+            "os": "ubuntu-24.04",
+            "product": "e4s",
+            "tag": "26.11-cuda80"
+          },
+          "source": "e4s-docker",
+          "verified_by": "2026-11-14T21:21:05Z"
+        }
+      ],
+      "scope": {
+        "arch": "amd64",
+        "edition": "26.11",
+        "feature": "cuda-container-release",
+        "gpu": "ampere",
+        "os": "ubuntu-24.04",
+        "product": "e4s",
+        "tag": "26.11-cuda80"
+      },
+      "stage": "software_support"
+    },
+    {
+      "as_of": "2026-11-24T23:59:59Z",
+      "id": "fc-263rc2-stable-guard",
+      "kind": "product_stage",
+      "records": [
+        {
+          "id": "freecad-published-asset",
+          "role": "first_party_release",
+          "scope": {
+            "arch": "aarch64",
+            "channel": "prerelease",
+            "feature": "appimage-release",
+            "os": "linux",
+            "product": "freecad",
+            "tag": "26.3rc2"
+          },
+          "source": "freecad-release",
+          "verified_by": "2026-10-18T13:58:05Z"
+        }
+      ],
+      "scope": {
+        "arch": "aarch64",
+        "channel": "stable",
+        "feature": "appimage-release",
+        "os": "linux",
+        "product": "freecad",
+        "tag": "26.3rc2"
+      },
+      "stage": "software_support"
+    },
+    {
+      "as_of": "2026-11-24T23:59:59Z",
+      "id": "e4s-2611-turing-guard",
+      "kind": "product_stage",
+      "records": [
+        {
+          "id": "e4s-public-release",
+          "role": "first_party_release",
+          "scope": {
+            "edition": "26.11",
+            "feature": "cuda-container-release",
+            "os": "ubuntu-24.04",
+            "product": "e4s"
+          },
+          "source": "e4s-release",
+          "verified_by": "2026-11-17T07:59:59Z"
+        },
+        {
+          "id": "e4s-ampere-catalog",
+          "role": "documentation",
+          "scope": {
+            "arch": "amd64",
+            "edition": "26.11",
+            "feature": "cuda-container-release",
+            "gpu": "ampere",
+            "os": "ubuntu-24.04",
+            "product": "e4s",
+            "tag": "26.11-cuda80"
+          },
+          "source": "e4s-catalog",
+          "verified_by": "2026-11-25T00:55:24Z"
+        },
+        {
+          "id": "e4s-published-tag",
+          "role": "first_party_release",
+          "scope": {
+            "arch": "amd64",
+            "edition": "26.11",
+            "feature": "cuda-container-release",
+            "gpu": "ampere",
+            "os": "ubuntu-24.04",
+            "product": "e4s",
+            "tag": "26.11-cuda80"
+          },
+          "source": "e4s-docker",
+          "verified_by": "2026-11-14T21:21:05Z"
+        }
+      ],
+      "scope": {
+        "arch": "amd64",
+        "edition": "26.11",
+        "feature": "cuda-container-release",
+        "gpu": "turing",
+        "os": "ubuntu-24.04",
+        "product": "e4s",
+        "tag": "26.11-cuda80"
+      },
+      "stage": "software_support"
+    }
+  ],
+  "schema": "frontier/evidence-truth-v1",
+  "scope_notes": {
+    "classification": "Analyst-declared exact source projection independently reviewable from the original bytes",
+    "e4s_catalog_clock": "Current mutable catalog is tied to acquisition and corroborates the pre-cutoff public Docker tag. Its page content is not backdated.",
+    "e4s_release_clock": "Nov 16 on the PDF is Eugene calendar date. The core sees the end of that local day in UTC."
+  },
+  "sources": [
+    {
+      "binding": "source_bytes",
+      "id": "freecad-release",
+      "published_at": "2026-10-18T06:44:39Z",
+      "sha256": "e4bcb27a543ecea2abe2062ca3b8b43bd091c2a982778800dd3f049ff3628acd",
+      "url": "https://api.github.com/repos/FreeCAD/FreeCAD/releases/tags/26.3rc2"
+    },
+    {
+      "binding": "source_bytes",
+      "id": "e4s-release",
+      "published_at": "2026-11-17T07:59:59Z",
+      "sha256": "7c32beb60c009968d86b352485985abc8dcbb099737b846a72bb71e4ec0cea47",
+      "url": "https://e4s.io/news/NEWS_RELEASE_E4S_26.11.pdf"
+    },
+    {
+      "binding": "source_bytes",
+      "id": "e4s-catalog",
+      "published_at": "2026-11-25T00:55:24Z",
+      "sha256": "ac5a79a1a9c2a7e7014118771755b647d084e2fe8f01df082c427898ec4c1028",
+      "url": "https://e4s.io/container-download/"
+    },
+    {
+      "binding": "source_bytes",
+      "id": "e4s-docker",
+      "published_at": "2026-11-14T21:21:05Z",
+      "sha256": "5cb65135addd2388d6603790f71187fc5918d3e552f3c5ba0614eff25fc2a154",
+      "url": "https://hub.docker.com/v2/repositories/ecpe4s/e4s-cuda/tags/26.11-cuda80"
+    }
+  ],
+  "witnesses": {
+    "e4s-2611-cuda24": {
+      "e4s-ampere-catalog": [
+        {
+          "json_path": [],
+          "quote": "ecpe4s/e4s-cuda:26.11-cuda80",
+          "representation": "utf8"
+        },
+        {
+          "json_path": [],
+          "quote": "Ampere-generation GPUs",
+          "representation": "utf8"
+        }
+      ],
+      "e4s-public-release": [
+        {
+          "json_path": [],
+          "quote": "November 16, 2026",
+          "representation": "pdf_text"
+        },
+        {
+          "json_path": [],
+          "quote": "Ubuntu 24.04 LTS",
+          "representation": "pdf_text"
+        },
+        {
+          "json_path": [],
+          "quote": "CUDA (Ampere, Hopper, and Blackwell)",
+          "representation": "pdf_text"
+        },
+        {
+          "json_path": [],
+          "quote": "CUDA 13.0",
+          "representation": "pdf_text"
+        }
+      ],
+      "e4s-published-tag": [
+        {
+          "json_path": [
+            "name"
+          ],
+          "quote": "26.11-cuda80",
+          "representation": "utf8"
+        },
+        {
+          "json_path": [
+            "tag_status"
+          ],
+          "quote": "active",
+          "representation": "utf8"
+        },
+        {
+          "json_path": [
+            "images",
+            0,
+            "architecture"
+          ],
+          "quote": "amd64",
+          "representation": "utf8"
+        },
+        {
+          "json_path": [
+            "tag_last_pushed"
+          ],
+          "quote": "2026-11-13T08:41:39.326419Z",
+          "representation": "utf8"
+        },
+        {
+          "json_path": [
+            "images",
+            0,
+            "last_pulled"
+          ],
+          "quote": "2026-11-14T21:21:04.109733369Z",
+          "representation": "utf8"
+        }
+      ]
+    },
+    "e4s-2611-turing-guard": {
+      "e4s-ampere-catalog": [
+        {
+          "json_path": [],
+          "quote": "ecpe4s/e4s-cuda:26.11-cuda80",
+          "representation": "utf8"
+        },
+        {
+          "json_path": [],
+          "quote": "Ampere-generation GPUs",
+          "representation": "utf8"
+        }
+      ],
+      "e4s-public-release": [
+        {
+          "json_path": [],
+          "quote": "November 16, 2026",
+          "representation": "pdf_text"
+        },
+        {
+          "json_path": [],
+          "quote": "Ubuntu 24.04 LTS",
+          "representation": "pdf_text"
+        },
+        {
+          "json_path": [],
+          "quote": "CUDA (Ampere, Hopper, and Blackwell)",
+          "representation": "pdf_text"
+        },
+        {
+          "json_path": [],
+          "quote": "CUDA 13.0",
+          "representation": "pdf_text"
+        }
+      ],
+      "e4s-published-tag": [
+        {
+          "json_path": [
+            "name"
+          ],
+          "quote": "26.11-cuda80",
+          "representation": "utf8"
+        },
+        {
+          "json_path": [
+            "tag_status"
+          ],
+          "quote": "active",
+          "representation": "utf8"
+        },
+        {
+          "json_path": [
+            "images",
+            0,
+            "architecture"
+          ],
+          "quote": "amd64",
+          "representation": "utf8"
+        },
+        {
+          "json_path": [
+            "tag_last_pushed"
+          ],
+          "quote": "2026-11-13T08:41:39.326419Z",
+          "representation": "utf8"
+        },
+        {
+          "json_path": [
+            "images",
+            0,
+            "last_pulled"
+          ],
+          "quote": "2026-11-14T21:21:04.109733369Z",
+          "representation": "utf8"
+        }
+      ]
+    },
+    "fc-263rc2-arm": {
+      "freecad-published-asset": [
+        {
+          "json_path": [
+            "tag_name"
+          ],
+          "quote": "26.3rc2",
+          "representation": "utf8"
+        },
+        {
+          "json_path": [
+            "published_at"
+          ],
+          "quote": "2026-10-18T06:44:39Z",
+          "representation": "utf8"
+        },
+        {
+          "json_path": [],
+          "quote": "\"prerelease\":true",
+          "representation": "utf8"
+        },
+        {
+          "json_path": [
+            "assets",
+            0,
+            "name"
+          ],
+          "quote": "FreeCAD_26.3rc2-Linux-aarch64.AppImage",
+          "representation": "utf8"
+        },
+        {
+          "json_path": [
+            "assets",
+            0,
+            "state"
+          ],
+          "quote": "uploaded",
+          "representation": "utf8"
+        },
+        {
+          "json_path": [
+            "assets",
+            0,
+            "updated_at"
+          ],
+          "quote": "2026-10-18T13:58:05Z",
+          "representation": "utf8"
+        }
+      ]
+    },
+    "fc-263rc2-stable-guard": {
+      "freecad-published-asset": [
+        {
+          "json_path": [
+            "tag_name"
+          ],
+          "quote": "26.3rc2",
+          "representation": "utf8"
+        },
+        {
+          "json_path": [
+            "published_at"
+          ],
+          "quote": "2026-10-18T06:44:39Z",
+          "representation": "utf8"
+        },
+        {
+          "json_path": [],
+          "quote": "\"prerelease\":true",
+          "representation": "utf8"
+        },
+        {
+          "json_path": [
+            "assets",
+            0,
+            "name"
+          ],
+          "quote": "FreeCAD_26.3rc2-Linux-aarch64.AppImage",
+          "representation": "utf8"
+        },
+        {
+          "json_path": [
+            "assets",
+            0,
+            "state"
+          ],
+          "quote": "uploaded",
+          "representation": "utf8"
+        },
+        {
+          "json_path": [
+            "assets",
+            0,
+            "updated_at"
+          ],
+          "quote": "2026-10-18T13:58:05Z",
+          "representation": "utf8"
+        }
+      ]
+    }
+  }
+}

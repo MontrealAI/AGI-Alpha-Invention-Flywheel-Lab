@@ -72,6 +72,7 @@ class MemberValueTests(unittest.TestCase):
                 self.assertIn(produced['capabilities']['archive']['sha256'], html[language])
                 self.assertIn('data-edition-run="1"', html[language])
                 self.assertEqual(html[language].count('data-mv-open'), 7)
+                self.assertEqual(html[language].count('href="#opportunity-capture"'), 1)
                 self.assertIn('id="goal-form"', html[language])
                 self.assertEqual(html[language].count('data-member-view'), 5)
                 self.assertEqual(html[language].count('id="mv-consent"'), 1)

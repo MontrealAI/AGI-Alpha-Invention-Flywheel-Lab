@@ -1,0 +1,260 @@
+{
+  "cases": [
+    {
+      "as_of": "2026-11-24T23:59:59Z",
+      "id": "rocm-102-gfx1103",
+      "kind": "product_stage",
+      "records": [
+        {
+          "id": "amd-vllm-linux-release-note",
+          "role": "first_party_release",
+          "scope": {
+            "feature": "vllm-documented",
+            "gpu": "gfx1103",
+            "os": "linux",
+            "product": "rocm-core-sdk",
+            "python": "3.14",
+            "pytorch": "2.14.0",
+            "sdk": "10.2.0",
+            "vllm": "0.32"
+          },
+          "source": "amd-rocm",
+          "verified_by": "2026-11-19T11:59:59Z"
+        }
+      ],
+      "scope": {
+        "feature": "vllm-documented",
+        "gpu": "gfx1103",
+        "os": "linux",
+        "product": "rocm-core-sdk",
+        "python": "3.14",
+        "pytorch": "2.14.0",
+        "sdk": "10.2.0",
+        "vllm": "0.32"
+      },
+      "stage": "software_support"
+    },
+    {
+      "as_of": "2026-11-24T23:59:59Z",
+      "id": "nv-r620-titan",
+      "kind": "product_stage",
+      "records": [
+        {
+          "id": "nvidia-r620-datacenter-turing-row",
+          "role": "first_party_release",
+          "scope": {
+            "architecture": "turing",
+            "board": "t4-or-t4g",
+            "driver": "620.70.10",
+            "feature": "data-center-driver-documentation",
+            "os": "linux",
+            "product": "nvidia-r620"
+          },
+          "source": "nvidia-r620",
+          "verified_by": "2026-11-24T11:59:59Z"
+        }
+      ],
+      "scope": {
+        "architecture": "turing",
+        "board": "titan-rtx",
+        "configuration": "dual",
+        "distro": "ubuntu",
+        "driver": "620.70.10",
+        "feature": "data-center-driver-documentation",
+        "os": "linux",
+        "product": "nvidia-r620"
+      },
+      "stage": "software_support"
+    },
+    {
+      "as_of": "2026-11-24T23:59:59Z",
+      "id": "rocm-102-vllm-windows-guard",
+      "kind": "product_stage",
+      "records": [
+        {
+          "id": "amd-vllm-linux-release-note",
+          "role": "first_party_release",
+          "scope": {
+            "feature": "vllm-documented",
+            "gpu": "gfx1103",
+            "os": "linux",
+            "product": "rocm-core-sdk",
+            "python": "3.14",
+            "pytorch": "2.14.0",
+            "sdk": "10.2.0",
+            "vllm": "0.32"
+          },
+          "source": "amd-rocm",
+          "verified_by": "2026-11-19T11:59:59Z"
+        }
+      ],
+      "scope": {
+        "feature": "vllm-documented",
+        "gpu": "gfx1103",
+        "os": "windows",
+        "product": "rocm-core-sdk",
+        "python": "3.14",
+        "pytorch": "2.14.0",
+        "sdk": "10.2.0",
+        "vllm": "0.32"
+      },
+      "stage": "software_support"
+    },
+    {
+      "as_of": "2026-11-24T23:59:59Z",
+      "id": "nv-r620-titan-operation-guard",
+      "kind": "product_stage",
+      "records": [
+        {
+          "id": "nvidia-r620-datacenter-turing-row",
+          "role": "first_party_release",
+          "scope": {
+            "architecture": "turing",
+            "board": "t4-or-t4g",
+            "driver": "620.70.10",
+            "feature": "data-center-driver-documentation",
+            "os": "linux",
+            "product": "nvidia-r620"
+          },
+          "source": "nvidia-r620",
+          "verified_by": "2026-11-24T11:59:59Z"
+        }
+      ],
+      "scope": {
+        "architecture": "turing",
+        "board": "titan-rtx",
+        "configuration": "dual",
+        "distro": "ubuntu",
+        "driver": "620.70.10",
+        "feature": "data-center-driver-documentation",
+        "os": "linux",
+        "product": "nvidia-r620"
+      },
+      "stage": "machine_operation"
+    }
+  ],
+  "schema": "frontier/evidence-truth-v1",
+  "scope_notes": "Date-only first-party edition imprints use a conservative date-to-instant bound. Actual host observation and vendor table scope are independent.",
+  "sources": [
+    {
+      "binding": "source_bytes",
+      "id": "amd-rocm",
+      "published_at": "2026-11-19T11:59:59Z",
+      "sha256": "aac4b63b02dd9ec4552d60a65246bc83b9c2b320d9ba97a50c42967d74029736",
+      "url": "https://rocm.docs.amd.com/en/develop/about/release-notes.html"
+    },
+    {
+      "binding": "source_bytes",
+      "id": "nvidia-r620",
+      "published_at": "2026-11-24T11:59:59Z",
+      "sha256": "448d8ad5b6d0bd849350d9295360d90190aac25554f21ac6874ded67dcb61a0d",
+      "url": "https://docs.nvidia.com/datacenter/tesla/tesla-release-notes-620-70-10/index.html"
+    }
+  ],
+  "witnesses": {
+    "nv-r620-titan": {
+      "nvidia-r620-datacenter-turing-row": [
+        {
+          "json_path": [],
+          "quote": "Linux driver release date: 11/23/2026"
+        },
+        {
+          "json_path": [],
+          "quote": "NVIDIA T4, T4G"
+        },
+        {
+          "json_path": [],
+          "quote": "Data Center T-Series Products"
+        },
+        {
+          "json_path": [],
+          "quote": "620.70.10"
+        }
+      ]
+    },
+    "nv-r620-titan-operation-guard": {
+      "nvidia-r620-datacenter-turing-row": [
+        {
+          "json_path": [],
+          "quote": "Linux driver release date: 11/23/2026"
+        },
+        {
+          "json_path": [],
+          "quote": "NVIDIA T4, T4G"
+        },
+        {
+          "json_path": [],
+          "quote": "Data Center T-Series Products"
+        },
+        {
+          "json_path": [],
+          "quote": "620.70.10"
+        }
+      ]
+    },
+    "rocm-102-gfx1103": {
+      "amd-vllm-linux-release-note": [
+        {
+          "json_path": [],
+          "quote": "2026-11-18"
+        },
+        {
+          "json_path": [],
+          "quote": "Applies to Linux and Windows"
+        },
+        {
+          "json_path": [],
+          "quote": "AMD Ryzen 7 PRO 253"
+        },
+        {
+          "json_path": [],
+          "quote": "AMD Ryzen 5 125"
+        },
+        {
+          "json_path": [],
+          "quote": "gfx1103"
+        },
+        {
+          "json_path": [],
+          "quote": "3.14 (requires PyTorch 2.14.0)"
+        },
+        {
+          "json_path": [],
+          "quote": "Actual support might vary by AMD GPU or APU."
+        }
+      ]
+    },
+    "rocm-102-vllm-windows-guard": {
+      "amd-vllm-linux-release-note": [
+        {
+          "json_path": [],
+          "quote": "2026-11-18"
+        },
+        {
+          "json_path": [],
+          "quote": "Applies to Linux and Windows"
+        },
+        {
+          "json_path": [],
+          "quote": "AMD Ryzen 7 PRO 253"
+        },
+        {
+          "json_path": [],
+          "quote": "AMD Ryzen 5 125"
+        },
+        {
+          "json_path": [],
+          "quote": "gfx1103"
+        },
+        {
+          "json_path": [],
+          "quote": "3.14 (requires PyTorch 2.14.0)"
+        },
+        {
+          "json_path": [],
+          "quote": "Actual support might vary by AMD GPU or APU."
+        }
+      ]
+    }
+  }
+}

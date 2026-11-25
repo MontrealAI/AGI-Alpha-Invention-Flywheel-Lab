@@ -395,9 +395,10 @@ def qualify_cascade(directory, root, release):
 
 def qualify_factory(directory, root, release):
     expected=release['foundry_sha256'][member.FACTORY_ZIP]
+    require(expected==member.FACTORY_SHA256,'Archived Factory workbench differs from Activation 1.5')
     manifest=install(directory/member.FACTORY_ZIP,root,{'sha256':expected})
     require(manifest['id']=='frontier-activation' and manifest['version']=='1.5.0'
-            and manifest['source']==member.commit_url(release['source_commit']),'Wrong factory workbench source')
+            and manifest['source']==member.commit_url(member.FACTORY_PIN),'Wrong factory workbench source')
     require((directory/member.FACTORY_RESULTS).read_bytes()==(root/'study/factory/FACTORY.json').read_bytes(),
             'Factory public and portable evidence differ')
     evidence,elapsed=call(root,sys.executable,'verify_factory.py')

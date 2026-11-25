@@ -1,0 +1,324 @@
+{
+  "arm": "integrated-retained",
+  "cost_unknowns": [
+    "actual human attention",
+    "provider account billing",
+    "central infrastructure allocation",
+    "complete attributable maintenance/capital costs",
+    "realized cash benefit"
+  ],
+  "cycles": [
+    {
+      "answers": [
+        {
+          "action": "TEST",
+          "exact_scope_facts": {
+            "asset": "FreeCAD_26.3rc2-Linux-aarch64.AppImage",
+            "asset_declared_sha256": "sha256:3317611742c66cd61de5013da4a6b3119f36c8809782f2ceac343267791d8478",
+            "asset_state": "uploaded",
+            "asset_uploaded_by": "2026-10-18T13:58:05Z",
+            "channel": "prerelease (release candidate 2, intended for testing)",
+            "download_url": "https://github.com/FreeCAD/FreeCAD/releases/download/26.3rc2/FreeCAD_26.3rc2-Linux-aarch64.AppImage",
+            "release_published_at": "2026-10-18T06:44:39Z",
+            "tag": "26.3rc2"
+          },
+          "first_party_date_utc": "2026-10-18",
+          "id": "fc-263rc2-arm",
+          "source_urls": [
+            "https://github.com/FreeCAD/FreeCAD/releases/tag/26.3rc2",
+            "https://api.github.com/repos/FreeCAD/FreeCAD/releases/tags/26.3rc2"
+          ],
+          "unsupported_claims": [
+            "stable or production release",
+            "binary executed or qualified on an actual aarch64 host",
+            "asset already visible at the earlier release timestamp"
+          ],
+          "verdict": "DOCUMENTED"
+        },
+        {
+          "action": "TEST",
+          "exact_scope_facts": {
+            "architecture": "x86_64 (amd64)",
+            "catalog_note": "Volta is a distinct ppc64le catalog row",
+            "cuda_version": "13.0",
+            "distribution": "Ubuntu 24.04 LTS",
+            "exact_docker_image_tags": [
+              "ecpe4s/e4s-cuda:26.11-cuda80",
+              "ecpe4s/e4s-cuda:26.11-cuda90",
+              "ecpe4s/e4s-cuda:26.11-cuda120"
+            ],
+            "named_nvidia_scopes": [
+              "Ampere",
+              "Hopper",
+              "Blackwell"
+            ],
+            "registry_amd64_digest": "sha256:106c49d46c812aaeec619d515ef6ace477a284c2c5df7ec364ed7537c507570e",
+            "registry_last_pushed_at": "2026-11-13T08:41:39.326419Z",
+            "release": "26.11",
+            "tag_independently_confirmed_in_registry": "ecpe4s/e4s-cuda:26.11-cuda80"
+          },
+          "first_party_date_utc": "2026-11-16",
+          "id": "e4s-2611-cuda24",
+          "source_urls": [
+            "https://e4s.io/news/NEWS_RELEASE_E4S_26.11.pdf",
+            "https://e4s.io/container-download/",
+            "https://hub.docker.com/v2/repositories/ecpe4s/e4s-cuda/tags/26.11-cuda80"
+          ],
+          "unsupported_claims": [
+            "E4S x86_64 TITAN RTX or other Turing support",
+            "any image pulled or run here",
+            "exact uptime or image availability before the observed registry timestamps"
+          ],
+          "verdict": "DOCUMENTED"
+        }
+      ],
+      "binding_ns": 180241416,
+      "cycle": "first",
+      "measured": {
+        "answers_sha256": "6745f24fdbef529e108b832f6e595595c3634c179132a85085c4899cb0aefafb",
+        "corrections": [
+          "First capture command stopped before any HTTP call because the bridge package was absent from PYTHONPATH. A corrected command ran.",
+          "Followed the project PDF announcement to the first-party catalog and separately retrieved registry metadata for the exact public tag."
+        ],
+        "cost_notes": "Whole-work stopwatch includes code wiring, acquisition, interpretation, corrections, and frozen submission. Human attention, actual provider billing, and infrastructure attribution were not observed.",
+        "decisions_sha256": "ffb8310a0b5d3555a5b7689c5fdf3b6427652a84725c537cc1bcbd78eb1644e6",
+        "engine_sha256": "b62e251d1fbe039804775b27b99267c7b1fc41428cfc39acfee5411b8e30ab41",
+        "frozen_at": "2026-11-25T00:57:05.682951Z",
+        "interpretation_end": "2026-11-25T00:57:05.501686Z",
+        "projection_sha256": "84df3a82ba44a247c1a811257bceb620353f9d952a2e50c447bea48697ae35c7",
+        "raw_body_bytes": 688469,
+        "raw_fetch_elapsed_seconds": 21.595972666,
+        "ready_at": "2026-11-25T00:54:21.379776563Z",
+        "request_count": 5,
+        "whole_work_elapsed_seconds": 164.303175
+      },
+      "primary_captures": {
+        "e4s-catalog": {
+          "bytes": 39019,
+          "elapsed_ns": 3657128920,
+          "finished_at": "2026-11-25T00:55:24.935902Z",
+          "sha256": "ac5a79a1a9c2a7e7014118771755b647d084e2fe8f01df082c427898ec4c1028",
+          "started_at": "2026-11-25T00:55:21.278756Z",
+          "status": 200,
+          "url": "https://e4s.io/container-download/"
+        },
+        "e4s-docker": {
+          "bytes": 1139,
+          "elapsed_ns": 4174522486,
+          "finished_at": "2026-11-25T00:55:29.112162Z",
+          "sha256": "5cb65135addd2388d6603790f71187fc5918d3e552f3c5ba0614eff25fc2a154",
+          "started_at": "2026-11-25T00:55:24.937621Z",
+          "status": 200,
+          "url": "https://hub.docker.com/v2/repositories/ecpe4s/e4s-cuda/tags/26.11-cuda80"
+        },
+        "e4s-release": {
+          "bytes": 364396,
+          "elapsed_ns": 4221385001,
+          "finished_at": "2026-11-25T00:55:04.687873Z",
+          "sha256": "7c32beb60c009968d86b352485985abc8dcbb099737b846a72bb71e4ec0cea47",
+          "started_at": "2026-11-25T00:55:00.466475Z",
+          "status": 200,
+          "url": "https://e4s.io/news/NEWS_RELEASE_E4S_26.11.pdf"
+        },
+        "freecad-discussion": {
+          "bytes": 262080,
+          "elapsed_ns": 3588489426,
+          "finished_at": "2026-11-25T00:55:00.465216Z",
+          "sha256": "a2cbf1c9de9fbed8df65ee4327b04d3200debdc3772a7b3aced1ebde7339d052",
+          "started_at": "2026-11-25T00:54:56.876708Z",
+          "status": 200,
+          "url": "https://github.com/FreeCAD/FreeCAD/discussions/32821"
+        },
+        "freecad-release": {
+          "bytes": 21835,
+          "elapsed_ns": 5954446833,
+          "finished_at": "2026-11-25T00:54:56.876024Z",
+          "sha256": "e4bcb27a543ecea2abe2062ca3b8b43bd091c2a982778800dd3f049ff3628acd",
+          "started_at": "2026-11-25T00:54:50.921521Z",
+          "status": 200,
+          "url": "https://api.github.com/repos/FreeCAD/FreeCAD/releases/tags/26.3rc2"
+        }
+      },
+      "retained_ns": 162021,
+      "scope_withdrawal_flips": [
+        "e4s-2611-turing-guard",
+        "fc-263rc2-stable-guard"
+      ],
+      "verdicts_retained": {
+        "e4s-2611-cuda24": "DOCUMENTED_BY_CUTOFF",
+        "e4s-2611-turing-guard": "ABSTAIN_UNESTABLISHED",
+        "fc-263rc2-arm": "DOCUMENTED_BY_CUTOFF",
+        "fc-263rc2-stable-guard": "ABSTAIN_UNESTABLISHED"
+      },
+      "verdicts_without_exact_qualifiers": {
+        "e4s-2611-cuda24": "DOCUMENTED_BY_CUTOFF",
+        "e4s-2611-turing-guard": "DOCUMENTED_BY_CUTOFF",
+        "fc-263rc2-arm": "DOCUMENTED_BY_CUTOFF",
+        "fc-263rc2-stable-guard": "DOCUMENTED_BY_CUTOFF"
+      },
+      "withdrawn_ns": 205270
+    },
+    {
+      "answers": [
+        {
+          "action": "TEST",
+          "exact_scope_facts": {
+            "gpu_architecture": "gfx1103 Hawk Point / RDNA 3",
+            "host_check": "Use the exact APU/OS/kernel/driver/framework compatibility matrix and then observe the target workload.",
+            "new_gfx1103_ryzen_apus": 18,
+            "new_ryzen_apus": [
+              "AMD Ryzen 7 PRO 253",
+              "AMD Ryzen 7 PRO 249",
+              "AMD Ryzen 7 PRO 217",
+              "AMD Ryzen 5 PRO 225",
+              "AMD Ryzen 5 PRO 224",
+              "AMD Ryzen 5 PRO 216",
+              "AMD Ryzen 3 PRO 205",
+              "AMD Ryzen 7 253",
+              "AMD Ryzen 7 249",
+              "AMD Ryzen 7 217",
+              "AMD Ryzen 5 225",
+              "AMD Ryzen 5 224",
+              "AMD Ryzen 5 216",
+              "AMD Ryzen 3 205",
+              "AMD Ryzen 9 180",
+              "AMD Ryzen 7 165",
+              "AMD Ryzen 7 155",
+              "AMD Ryzen 5 125"
+            ],
+            "release_note_scope": [
+              "Linux",
+              "Windows"
+            ],
+            "sdk": "10.2.0",
+            "separate_discrete_gpu": "AMD Radeon PRO W7900D",
+            "vllm": "0.32 (highlight 0.32.0)",
+            "vllm_os": "Linux",
+            "vllm_python": "3.14",
+            "vllm_pytorch": "2.14.0",
+            "wsl2_qualification": "AMD records a known WSL2 AI-workload failure affecting selected APUs including gfx1103."
+          },
+          "first_party_date_utc": "2026-11-18",
+          "id": "rocm-102-gfx1103",
+          "source_urls": [
+            "https://rocm.docs.amd.com/en/develop/about/release-notes.html",
+            "https://rocm.docs.amd.com/en/develop/compatibility/compatibility-matrix.html"
+          ],
+          "unsupported_claims": [
+            "all Linux or Windows combinations",
+            "native Windows vLLM",
+            "vLLM operational validation, performance or readiness on a named real host",
+            "ROCm update installs or runs on the owner NVIDIA workstation"
+          ],
+          "verdict": "DOCUMENTED"
+        },
+        {
+          "action": "HOLD",
+          "exact_scope_facts": {
+            "all_turing_board_rows_as_printed": [
+              "Quadro RTX 8000",
+              "Quadro RTX 6000",
+              "Quadro RTX A6000",
+              "Quadro RTX 5000",
+              "Quadro RTX A5000",
+              "Quadro RTX 4000",
+              "Quadro RTX A4000",
+              "NVIDIA T1000 8GB",
+              "NVIDIA T600",
+              "NVIDIA T400 4GB",
+              "NVIDIA T400",
+              "NVIDIA T400E",
+              "NVIDIA T4, T4G"
+            ],
+            "channel": "Linux NVIDIA Data Center GPU R620",
+            "cuda_toolkit_scope": "13.x",
+            "data_center_turing_boards": [
+              "NVIDIA T4",
+              "NVIDIA T4G"
+            ],
+            "driver": "620.70.10",
+            "owner_host_operation_observed": false,
+            "titan_rtx_named_in_document": false
+          },
+          "first_party_date_utc": "2026-11-23",
+          "id": "nv-r620-titan",
+          "source_urls": [
+            "https://docs.nvidia.com/datacenter/tesla/tesla-release-notes-620-70-10/index.html"
+          ],
+          "unsupported_claims": [
+            "model-specific support for TITAN RTX from this document",
+            "compatible dual-card operation on the owner Ubuntu machine",
+            "the examined notes rule out all TITAN RTX operation on other appropriate drivers"
+          ],
+          "verdict": "ABSTAIN"
+        }
+      ],
+      "binding_ns": 37335527,
+      "cycle": "repeat",
+      "measured": {
+        "answers_sha256": "a4c27baa5e1cb74d36a9417777a5154bec42eb2dbb58714e7382a99cbc9d6c23",
+        "arm_sha256": "d4ba6ab841fa78a81f2b3c246206095095cf86a691d9c458e2db900e685139dd",
+        "corrections": [
+          "Optional BeautifulSoup parse was unavailable. Existing fetched bytes were inspected with stdlib and exact source locators."
+        ],
+        "cost_notes": "Whole-work stopwatch includes acquisition and source interpretation. Human attention, actual provider billing and infrastructure attribution were not observed. Different questions prevent a matched first-vs-repeat cost claim.",
+        "decisions_sha256": "075b3347c2b25a198ec24be94ac183d19b3b25be6b6e2d96ed6f245c59ecf1f4",
+        "frozen_at": "2026-11-25T00:58:46.534152Z",
+        "interpretation_end": "2026-11-25T00:58:46.495792Z",
+        "projection_sha256": "1b44476aba27e2a2db588d3b34efc45df45755bbc7a019d51eef85c3416f38e1",
+        "raw_body_bytes": 639995,
+        "raw_fetch_elapsed_seconds": 10.217113074,
+        "ready_at": "2026-11-25T00:57:15.031627020Z",
+        "request_count": 2,
+        "whole_work_elapsed_seconds": 91.502525
+      },
+      "primary_captures": {
+        "amd-rocm": {
+          "bytes": 518849,
+          "elapsed_ns": 6603306957,
+          "finished_at": "2026-11-25T00:57:21.740706Z",
+          "sha256": "aac4b63b02dd9ec4552d60a65246bc83b9c2b320d9ba97a50c42967d74029736",
+          "started_at": "2026-11-25T00:57:15.137381Z",
+          "status": 200,
+          "url": "https://rocm.docs.amd.com/en/develop/about/release-notes.html"
+        },
+        "nvidia-r620": {
+          "bytes": 121146,
+          "elapsed_ns": 3613806117,
+          "finished_at": "2026-11-25T00:57:25.357005Z",
+          "sha256": "448d8ad5b6d0bd849350d9295360d90190aac25554f21ac6874ded67dcb61a0d",
+          "started_at": "2026-11-25T00:57:21.743178Z",
+          "status": 200,
+          "url": "https://docs.nvidia.com/datacenter/tesla/tesla-release-notes-620-70-10/index.html"
+        }
+      },
+      "retained_ns": 150211,
+      "scope_withdrawal_flips": [
+        "nv-r620-titan",
+        "rocm-102-vllm-windows-guard"
+      ],
+      "verdicts_retained": {
+        "nv-r620-titan": "ABSTAIN_UNESTABLISHED",
+        "nv-r620-titan-operation-guard": "ABSTAIN_UNESTABLISHED",
+        "rocm-102-gfx1103": "DOCUMENTED_BY_CUTOFF",
+        "rocm-102-vllm-windows-guard": "ABSTAIN_UNESTABLISHED"
+      },
+      "verdicts_without_exact_qualifiers": {
+        "nv-r620-titan": "DOCUMENTED_BY_CUTOFF",
+        "nv-r620-titan-operation-guard": "ABSTAIN_UNESTABLISHED",
+        "rocm-102-gfx1103": "DOCUMENTED_BY_CUTOFF",
+        "rocm-102-vllm-windows-guard": "DOCUMENTED_BY_CUTOFF"
+      },
+      "withdrawn_ns": 201767
+    }
+  ],
+  "diagnostics": "Additional scope probes are within-run diagnostics drawn from the same documents. Only the four independently assigned Atlas questions contribute to primary acceptance.",
+  "method": "Operator-declared source facts, fixed-capture byte receipts, existing evidence_truth time/scope/role checks. Repeated independent two-question cycles. No post-reveal repairs.",
+  "other_corrections": [
+    "The first verification command passed the full projection to the released source parser instead of the source array. The adapter was repaired on unchanged source bytes before freeze. The failed projection and CLI failure are retained in scratch."
+  ],
+  "question_input_sha256": "396d3f354874daa7378c043af4daa78ec325d0a485afbb1dde2456150375129d",
+  "schema": "frontier/atlas-productivity-arm-v1",
+  "submission_frozen_before_reference_reveal": true,
+  "whole_work_all_elapsed_seconds": 265.154376
+}

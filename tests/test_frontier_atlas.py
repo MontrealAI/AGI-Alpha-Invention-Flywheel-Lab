@@ -13,6 +13,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'scripts'))
 import frontier_atlas as atlas
 import frontier_public_watch as watch
+import frontier_opportunity_capture as capture
 
 from test_frontier_public_watch import PAPER, inbox, item, paper_page
 
@@ -115,3 +116,23 @@ class AtlasPublicationTests(TestCase):
         receipt = {'projection_sha256': 'b' * 64}
         self.assertTrue(atlas.same_deployment(receipt, {**receipt, 'checked_at': DAY}))
         self.assertFalse(atlas.same_deployment(receipt, {'projection_sha256': 'c' * 64}))
+
+    def test_opportunity_intake_does_not_promote_a_monitor_reference(self):
+        raw = [(A, DAY, inbox([item(PAPER + 'v1')]))]
+        request = Mock(return_value=paper_page(PAPER + 'v1'))
+        refs, _, rejected = atlas.read_inbox_history(raw, set(), request)
+        self.assertFalse(rejected)
+        ledger = atlas.assemble({}, refs)
+        study = atlas.canonical_json({'schema': capture.SCHEMA, 'opportunities': []})
+        observation, = capture.projection(ledger, study)['monitor_intake']
+        self.assertEqual(observation['state'], 'DISCOVERED')
+        self.assertEqual(observation['evidence_stage'], 'PRIMARY_METADATA')
+        self.assertEqual(observation['publisher_commit'], A)
+
+    def test_opportunity_value_requires_a_separate_observed_receipt(self):
+        study = {'schema': capture.SCHEMA, 'receipts': {'evaluation': 'a' * 64}, 'opportunities': [{
+            'id': 'observed-case', 'state': 'VALUE CAPTURED', 'action': 'HOLD', 'evidence': ['witness'],
+            'acceptance_receipt': 'evaluation',
+        }]}
+        with self.assertRaisesRegex(ValueError, 'observed outcome'):
+            capture.parse(atlas.canonical_json(study))
