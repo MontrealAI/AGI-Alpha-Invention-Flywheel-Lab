@@ -58,13 +58,18 @@ OBSERVATION_SHA256 = '63c5554fade9082f84e5092fccea75da8aeab00af1d39feff83cd1e85a
 LEGACY_EXECUTOR_ZIP = 'frontier-harness-executor-1.0.0.zip'
 EXECUTOR_BASELINE = 'c0a14ba028092db648516718f9127ae8166df63e'
 LEGACY_EXECUTOR_SHA256 = '0e2c15569abd9112565f25485fa75c225764de6190cbded4e83127865bf5b9e3'
-EXECUTOR_ZIP = 'frontier-harness-executor-1.1.0.zip'
+PREVIOUS_EXECUTOR_ZIP = 'frontier-harness-executor-1.1.0.zip'
+PREVIOUS_EXECUTOR_BASELINE = '297a51c25c48031e1e6f964835f4dfae3ddb8023'
+PREVIOUS_EXECUTOR_SHA256 = '58e1aac31e1cd1bfb92c53f213a16e28a7009580dd06072a029a331f959a491a'
+EXECUTOR_ZIP = 'frontier-harness-executor-1.2.0.zip'
 EXECUTION_PUBLICATION = MAIN / 'publication/mission-executor'
 EVIDENCE_PUBLICATION = MAIN / 'publication/evidence-bound'
+OUTCOME_PUBLICATION = MAIN / 'publication/outcome-driven'
 MISSION_MARKER = '<!-- UNIVERSAL_PUBLIC_RUNS -->'
 PUBLIC_MISSIONS = MAIN / 'publication/universal'
 MISSION_ASSETS = ('frontier-mission.mjs', 'frontier-mission-router.mjs', 'frontier-mission-ui.mjs',
-                  'frontier-execution.mjs', GAME_THEORY_ZIP, OBSERVATION_ZIP, LEGACY_EXECUTOR_ZIP, EXECUTOR_ZIP)
+                  'frontier-execution.mjs', GAME_THEORY_ZIP, OBSERVATION_ZIP,
+                  LEGACY_EXECUTOR_ZIP, PREVIOUS_EXECUTOR_ZIP, EXECUTOR_ZIP)
 ACTIVATION_ARCHIVE_SHA256 = {
     ACTIVATION_ZIP: ACTIVATION_SHA256,
     AMPLIFICATION_ZIP: AMPLIFICATION_SHA256, SUBSTRATE_ZIP: SUBSTRATE_SHA256,
@@ -459,10 +464,21 @@ def build_mission_executor(destination, revision):
         'docs/CHATGPT-PLAN.md', 'docs/MODEL-CONNECTIONS.md', 'scripts/probe_codex_sandbox.py',
         'Launch-FRONTIER.sh', 'Launch-FRONTIER.command', 'Launch-FRONTIER.cmd',
     )})
+    previous = {name: pinned(PREVIOUS_EXECUTOR_BASELINE, source.relative_to(MAIN).as_posix())
+                for name, source in sources.items()}
+    released = package(destination / PREVIOUS_EXECUTOR_ZIP, previous, 'frontier-harness-executor', PREVIOUS_EXECUTOR_BASELINE,
+                       'Permission-bounded local HARNESS missions with verified model selection and evidence-bound claims.',
+                       version='1.1.0')
+    if released['sha256'] != PREVIOUS_EXECUTOR_SHA256:
+        raise ValueError('The published HARNESS executor 1.1.0 changed')
+    sources['START.md'] = OUTCOME_PUBLICATION / 'README.md'
+    sources.update({name: harness / name for name in (
+        'bridge/mission_schema_context.py', 'bridge/mission_outcomes.py', 'bridge/mission_sources.py',
+    )})
     files = {name: source.read_bytes() for name, source in sources.items()}
     return package(destination / EXECUTOR_ZIP, files, 'frontier-harness-executor', revision,
-                   'Permission-bounded local HARNESS missions with verified model selection and evidence-bound claims.',
-                   version='1.1.0')
+                   'Local HARNESS missions with approved constructor schemas, exact arithmetic and evidence-derived outcomes.',
+                   version='1.2.0')
 
 
 def build_public_missions(destination, revision):

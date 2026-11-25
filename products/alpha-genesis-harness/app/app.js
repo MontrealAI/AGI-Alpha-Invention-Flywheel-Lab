@@ -377,8 +377,23 @@
     const message=(status.enabled?messages[verification.state]:unavailable[status.reason_code])||status.reason||t('Check this connection.','Vérifiez cette connexion.');
     append(box,el('p',observed?'connection-ready':'inline-note',message));
     const last=status.enabled&&verification.last_completion;
-    if(last?.model&&Number.isInteger(last.completed_at_unix)){
+    const validModel = typeof last?.model === 'string' && last.model.length <= 200 &&
+      /^[A-Za-z0-9]/.test(last.model) && !/[^A-Za-z0-9_.:/-]/.test(last.model);
+    if(last?.route===provider&&validModel&&Number.isSafeInteger(last.completed_at_unix)&&last.completed_at_unix>0){
       append(box,el('p','bounded-details',t('Last completed request','Dernière requête terminée')+' · '+last.model+' · '+dateText(last.completed_at_unix*1000)));
+      const receiptButton=el('button','button secondary',t('Download connection receipt','Télécharger la preuve de connexion'));
+      receiptButton.type='button';
+      receiptButton.onclick=()=>{
+        const usage={};
+        for(const field of ['input_tokens','output_tokens']){
+          const value=last.usage?.[field];
+          usage[field]=Number.isSafeInteger(value)&&value>=0?value:null;
+        }
+        const receipt={schema:'alpha-genesis-official-inference-receipt-v1',scope:'provider_completion_only',
+          route:provider,model:last.model,completed_at_unix:last.completed_at_unix,usage};
+        download('frontier-'+provider+'-connection-receipt.json',JSON.stringify(receipt,null,2)+'\n');
+      };
+      append(box,receiptButton);
     }
   }
   function renderPlan(){

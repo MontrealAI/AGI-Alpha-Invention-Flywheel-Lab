@@ -678,7 +678,13 @@ def retrieve_source(url, allowed_hosts, previous=None, resolver=socket.getaddrin
         addresses = {row[4][0] for row in resolver(u.hostname, 443, type=socket.SOCK_STREAM)}
         if not addresses or any(not ipaddress.ip_address(a).is_global for a in addresses):
             raise ValueError()
-    except (ValueError, TypeError, OSError):
+    except socket.gaierror as error:
+        if error.errno == socket.EAI_AGAIN:
+            raise BridgeError("SOURCE_DNS_TEMPORARY", "Source name resolution is temporarily unavailable.", 502) from None
+        raise BridgeError("SOURCE_DNS", "Source name could not be resolved.", 502) from None
+    except OSError:
+        raise BridgeError("SOURCE_DNS", "Source name could not be resolved.", 502) from None
+    except (ValueError, TypeError):
         raise BridgeError("SOURCE_URL", "Use an exact allowlisted HTTPS host resolving only to public addresses.") from None
     if previous is not None and (not isinstance(previous, str) or not re.fullmatch(r"[a-f0-9]{64}", previous)):
         raise BridgeError("SOURCE_HASH", "The previous source identity must be a SHA-256 hex digest.")

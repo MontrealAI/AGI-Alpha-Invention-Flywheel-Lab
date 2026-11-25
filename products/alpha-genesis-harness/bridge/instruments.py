@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import ast
+from fractions import Fraction
 import hashlib
 from io import StringIO
 import json
@@ -46,6 +47,44 @@ _BINARY = {ast.Add: "add", ast.Sub: "sub", ast.Mult: "mul", ast.Div: "div"}
 _COMPARISONS = {ast.Eq: "eq", ast.Lt: "lt", ast.LtE: "lte", ast.Gt: "gt", ast.GtE: "gte"}
 _FUNCTIONS = {"abs", "min", "max", "sum", "count", "choose"}
 _JSON_LITERALS = {"true": True, "false": False, "null": None}
+EXACT_NUMBER = re.compile(r"[+-]?\d{1,40}(?:/\d{1,40}|\.\d{1,40})?\Z", re.ASCII)
+EXACT_LIMIT = 10**40
+
+
+def _bounded_value(value):
+    if isinstance(value, Fraction):
+        if abs(value.numerator) >= EXACT_LIMIT or value.denominator >= EXACT_LIMIT:
+            raise ValueError("Exact number exceeds the rational magnitude or precision limit.")
+        return value
+    return finite(value)
+
+
+def _exact_number(value):
+    if type(value) in (int, Fraction):
+        return _bounded_value(Fraction(value))
+    if isinstance(value, str) and EXACT_NUMBER.fullmatch(value):
+        try:
+            return _bounded_value(Fraction(value))
+        except (ValueError, ZeroDivisionError) as error:
+            raise ValueError("Invalid or out-of-range exact rational operand.") from error
+    raise ValueError("Exact arithmetic needs an integer or a decimal or fraction string.")
+
+
+def _equal_exact(left, right):
+    if type(left) is float or type(right) is float:
+        raise ValueError("Exact arithmetic needs an integer or a decimal or fraction string.")
+    if all(type(value) in (int, Fraction) or isinstance(value, str) and EXACT_NUMBER.fullmatch(value)
+           for value in (left, right)):
+        return _exact_number(left) == _exact_number(right)
+    return _json_equal(left, right)
+
+
+def _portable_exact(value):
+    if isinstance(value, Fraction):
+        return str(value)
+    if isinstance(value, list):
+        return [_portable_exact(item) for item in value]
+    return value
 
 
 def compile_formula(source, bindings):
@@ -110,7 +149,7 @@ def compile_formula(source, bindings):
 
 def evaluate(spec, inputs, max_operations=10000):
     """Evaluate a JSON expression grammar, with no IO or dynamic code execution."""
-    allowed_keys = {"name", "inputs", "outputs", "description", "conditions", "limitations", "bindings"}
+    allowed_keys = {"name", "inputs", "outputs", "description", "conditions", "limitations", "bindings", "numeric_mode"}
     if not isinstance(spec, dict):
         kind = {type(None): "null", bool: "boolean", int: "number", float: "number", str: "string", list: "array"}.get(type(spec), "non-JSON type")
         raise ValueError("Unsupported instrument specification. Expected a JSON object at the root; received " + kind + ".")
@@ -135,6 +174,9 @@ def evaluate(spec, inputs, max_operations=10000):
         raise ValueError("An instrument needs named output expressions.")
     if type(max_operations) is not int or max_operations < 1:
         raise ValueError("A positive operation bound is required.")
+    exact = "numeric_mode" in spec
+    if exact and spec["numeric_mode"] != "exact-rational":
+        raise ValueError("The supported numeric mode is exact-rational.")
     bindings = spec.get("bindings", {})
     if not isinstance(bindings, dict) or len(bindings) > 128 or any(
         not isinstance(key, str) or re.fullmatch(r"[A-Za-z][A-Za-z0-9_]{0,63}", key) is None for key in bindings
@@ -144,6 +186,8 @@ def evaluate(spec, inputs, max_operations=10000):
     count = 0
 
     def number(v):
+        if exact:
+            return _exact_number(v)
         if type(v) not in {int, float}:
             raise ValueError("Arithmetic requires numeric operands.")
         return finite(v)
@@ -216,7 +260,7 @@ def evaluate(spec, inputs, max_operations=10000):
             vals = [number(v) for v in args]
             result = vals[0]
             for val in vals[1:]:
-                result = finite(result + val if op == "add" else result * val if op == "mul" else min(result, val) if op == "min" else max(result, val))
+                result = _bounded_value(result + val if op == "add" else result * val if op == "mul" else min(result, val) if op == "min" else max(result, val))
         elif op in {"sub", "div"}:
             if len(args) != 2:
                 raise ValueError("Binary arithmetic needs two operands.")
@@ -233,7 +277,7 @@ def evaluate(spec, inputs, max_operations=10000):
                 raise ValueError("Comparison needs two operands.")
             a, b = args
             if op == "eq":
-                result = _json_equal(a, b)
+                result = _equal_exact(a, b) if exact else _json_equal(a, b)
             else:
                 a, b = number(a), number(b)
                 result = a < b if op == "lt" else a <= b if op == "lte" else a > b if op == "gt" else a >= b
@@ -250,13 +294,15 @@ def evaluate(spec, inputs, max_operations=10000):
                     count += 1
                     if count > max_operations:
                         raise ValueError("Instrument operation bound exhausted.")
-                    result = finite(result + number(item))
+                    result = _bounded_value(result + number(item))
         else:
             raise ValueError("Unsupported expression operation.")
-        return finite(result)
+        return _bounded_value(result)
 
     finite(inputs)
     result = {key: visit(expr, location="$.outputs[" + json.dumps(key) + "]") for key, expr in spec["outputs"].items()}
+    if exact:
+        result = {key: _portable_exact(value) for key, value in result.items()}
     return {"output": result, "operations": count, "scope": "Bounded declarative execution; acceptance must be checked separately."}
 
 

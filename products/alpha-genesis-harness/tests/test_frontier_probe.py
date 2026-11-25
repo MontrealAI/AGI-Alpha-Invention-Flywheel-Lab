@@ -33,7 +33,8 @@ class FrontierProbeTests(unittest.TestCase):
         self.assertNotIn(content.decode(), str(result))
 
     def test_transport_blocks_are_not_live_passes(self):
-        for code in ("SOURCE_URL", "SOURCE_CONNECTION", "SOURCE_HTTP", "SOURCE_TYPE", "SOURCE_SIZE"):
+        for code in ("SOURCE_URL", "SOURCE_DNS", "SOURCE_DNS_TEMPORARY", "SOURCE_CONNECTION", "SOURCE_HTTP",
+                     "SOURCE_TYPE", "SOURCE_SIZE"):
             with self.subTest(code=code), patch("bridge.frontier_monitor.retrieve_source", side_effect=BridgeError(code, "untrusted-body")) as source:
                 result = probe()
             self.assertEqual(source.call_count, 1)

@@ -180,7 +180,7 @@ class PagesMissions:
                 "status": state["status"], "phase": state.get("phase"), "worker_active": state.get("worker_active", False),
                 "expires_at": state.get("expires_at"), "qualification": state.get("qualification"),
                 "verification": {"passed": verification.get("passed", False), "scope": verification.get("scope")},
-                "evidence": state.get("evidence"),
+                "evidence": state.get("evidence"), "outcome": state.get("outcome"),
                 "actions": state.get("actions", 0), "model_calls": state.get("model_calls", 0), "proposal": proposal,
                 "events": events, "artifacts": artifacts}
 

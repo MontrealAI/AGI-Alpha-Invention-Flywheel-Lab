@@ -1,0 +1,90 @@
+{
+  "schema": "frontier/outcome-intelligence-activation-preflight/v1",
+  "recorded_at_utc": "2026-11-25T14:18:35Z",
+  "scope": "Engineering host, native connector protocol fixtures and separate public source acquisition. The owner's workstation and accounts were outside this observation.",
+  "official_account": {
+    "chatgpt_plan_live_inference": "NO_GO_PENDING_OWNER_CONSENT_AND_COMPLETION",
+    "paid_or_remote_plan_distribution": "NO_GO_PENDING_APPLICABLE_APPROVAL",
+    "api_credit_funded_inference": "NO_GO_PENDING_ELIGIBLE_GRANT_PROJECT_AND_LIMIT",
+    "real_credentials_used": false,
+    "provider_inference_dispatches": 0,
+    "paid_dispatches": 0,
+    "registration_and_consent": "https://developers.openai.com/siwc/token-sharing-open-source/sign-in",
+    "paid_or_remote_interest": "https://openai.com/form/sign-in-with-chatgpt-interest/",
+    "api_credit_conditions": "https://help.openai.com/en/articles/20001626-api-credits-benefit-for-eligible-chatgpt-subscriptions"
+  },
+  "native_codex_probe": {
+    "runtime_version": "codex-cli 0.172.0-alpha.2",
+    "command": "python -B products/alpha-genesis-harness/scripts/probe_codex_sandbox.py --work-root <private-scratch>",
+    "script_sha256": "437ff2b6af06670b3f04456fc5260af424428703471caaac57a6667d1686da1e",
+    "named_profile_protocol": "PASS",
+    "native_sandbox": "BLOCKED",
+    "exit_code": 2,
+    "code": "CODEX_SANDBOX_UNAVAILABLE",
+    "diagnostic": "host_sandbox_operation_not_permitted",
+    "oauth_backed_process_started": false,
+    "inference_dispatches": 0
+  },
+  "native_redacted_receipt_fixture": {
+    "app_sha256": "44ad4e36396838b8f23d378d9bd45507e9173b1d45f09fb5f0ba29c7c1661a46",
+    "replay_sha256": "2098d6249f4efa49a131ce554a0c4da245321cfb91e50cbdfa201b2c2a24f8ed",
+    "fixture": "products/alpha-genesis-harness/evidence/UI_AGENTIC_REPLAY.cjs",
+    "verdict": "PASS",
+    "scenarios": 29,
+    "scope": "English ChatGPT and French Codex with mocked statuses. Authorization without completion and logging out suppress export. Route, model, completion time and validated token counts are included. Account identifiers, prompt, response and unrelated fields are omitted."
+  },
+  "local_public_source_probe": {
+    "script": "products/alpha-genesis-harness/scripts/probe_frontier_monitor.py",
+    "attempted_at_utc": "2026-11-25T14:13:46.434935+00:00",
+    "target_host": "developers.openai.com",
+    "observation_attempts": 1,
+    "exit_code": 2,
+    "result": "SOURCE_DNS_TEMPORARY",
+    "http_dispatch_verified": false,
+    "source_bytes_received": 0,
+    "standing_monitoring_started": false
+  },
+  "separate_public_connector": {
+    "operation": "Fetch two exact CPython commits at Include/patchlevel.h through the authorized GitHub connector and independently check Git blob and SHA-256 digests.",
+    "status": "PASS_FOR_OPERATOR_SOURCE_ACQUISITION",
+    "sources": [
+      {
+        "revision": "55fee9cf216abe4ec0d1139f94b1930fbd0c7644",
+        "blob_sha1": "45b770003cb854f1d412f398e21c06dc75a40ce8",
+        "bytes": 1301,
+        "sha256": "6d09cebdb07346b76b8f9176f5d23773c8c8dd12605eabdbfd0a7461ec86c408"
+      },
+      {
+        "revision": "6cb20a219a860eaf687b2d968b41c480c7461909",
+        "blob_sha1": "7447c0b19d8612b53d9abcbcd6c7a75a18020d2f",
+        "bytes": 1299,
+        "sha256": "d539cfabe79088f3e418b9498389e1143da2cf797368b6cf6bdd31d21eb3ff9b"
+      }
+    ]
+  },
+  "hardware_observation": {
+    "host_scope": "Engineering environment only",
+    "system": "Linux x86_64",
+    "memory_total_bytes": 10451427328,
+    "nvidia_device_nodes": 0,
+    "nvidia_smi_available": false,
+    "available_full_local_weights_observed": [
+      {"model": "Qwen3-8B Q4_K_M", "format": "GGUF", "bytes": 5027783488},
+      {"model": "SmolLM2-135M", "format": "safetensors", "bytes": 269060552}
+    ],
+    "larger_model_headers_only": true,
+    "owner_workstation_gpu_execution": "NO_GO_PENDING_OWNER_HOST_RUN"
+  },
+  "owner_gpu_launcher_preflight": {
+    "launcher": "publication/outcome-driven/intelligence/qualify_owner_gpu.py",
+    "launcher_sha256": "942b9b0bc73d8e7f5acfaeb48d85b0e2a2d42afb592cf5a6094b350d84f6beba",
+    "actual_local_launch": {
+      "exit_code": 2,
+      "status": "BLOCKED",
+      "diagnostic": "nvidia-smi is unavailable on this host.",
+      "inference_dispatches": 0,
+      "output": "Sanitized RECEIPT.json only"
+    },
+    "log_parser_check": "PASS on actual previous b12242 CPU log with 16,384 context and 24 prefill and generation rate records per type. GPU inventory and placement parsing passed with fixtures."
+  }
+}
