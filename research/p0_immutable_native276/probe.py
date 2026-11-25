@@ -200,7 +200,7 @@ def main():
         ledger_files=[case.world/'STATE.json',case.world/'account.sqlite.actions.jsonl',
                       case.world/'account.sqlite.connected-journal.json']
         before=[p.read_bytes() for p in ledger_files]
-        inventory=[u.source_inventory(p) for p in (initial_source,case.new,future)]
+        native_inventories=[u.source_inventory(p) for p in (initial_source,case.new,future)]
         fixture_root=Path(os.environ['P0276_FIXTURE']).resolve()
         stage=Path(os.environ['P0276_STAGE']).resolve()
         control=Path(os.environ['P0276_CONTROL']).resolve()
@@ -326,7 +326,7 @@ finally:os.close(new)
             finally:alias.unlink(missing_ok=True)
         receipt['stage']='invariants'
         invariants={'state_and_native_history_unchanged':before==[p.read_bytes() for p in ledger_files],
-                    'source_inventory_unchanged':inventory==[u.source_inventory(p) for p in (initial_source,case.new,future)],
+                    'source_inventory_unchanged':native_inventories==[u.source_inventory(p) for p in (initial_source,case.new,future)],
                     'signer_inode_unchanged':case.key.stat().st_ino==case.key_inode,
                     'referenced_blob_unchanged':published.read_bytes()==original,
                     'directory_identity_restored':route_identity(store)==original_route}
