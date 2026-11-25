@@ -1,0 +1,132 @@
+{
+  "action_attempts": 1,
+  "actual_tool_events": 1,
+  "archive_sha256": "2e48ca43d54b4582ea597d5ade9639e8ac918684fc33f4039479438ab536289c",
+  "arm": "both",
+  "case": "od-c03",
+  "complete_economic_cost_known": false,
+  "evidence": {
+    "claims": [
+      {
+        "claim_contract_sha256": "588d71530ca3d7ad764a70e371827ff69577015c414fbf57e63d5cbd1bfade5a",
+        "dataset": "cycles-banc-39",
+        "dimension": "energy/time",
+        "id": "puissance",
+        "locator": [
+          "rows",
+          0,
+          0
+        ],
+        "mission_id": "wf_1d4a453a41776be88fd9db0e",
+        "reason": "REQUIRED_FIELD_MISSING",
+        "requires": {
+          "missing_value": "null",
+          "require_all_pairs": true,
+          "scope": "all cycles"
+        },
+        "revision_sha256": "c64ff6e138942644685adcdcf975b7078bdb500f17bd8ceaff8e118f4fb59111",
+        "source_version": "energie-temps-v1",
+        "status": "ABSTAIN",
+        "unit": "W"
+      }
+    ],
+    "scope": "Case-specific numerical agreement and source binding. Independent custody and production admission are separate.",
+    "status": "ABSTAIN"
+  },
+  "false_user_facing_acceptance": false,
+  "mission_id": "wf_1d4a453a41776be88fd9db0e",
+  "observed_provider_dispatches": 1,
+  "observed_usage": {
+    "observed_tokens_in": 1355,
+    "observed_tokens_out": 105,
+    "unknown_token_replies": 0
+  },
+  "operator_actions_after_case_start": 0,
+  "operator_preparation_and_review_seconds": null,
+  "orchestrator_cpu_seconds": 0.4348130000000001,
+  "outcome_surface": {
+    "conclusions": [],
+    "contract": {
+      "abstention_conditions": [],
+      "alternatives": [],
+      "approved_inputs": [
+        {
+          "id": "cycles-banc-39",
+          "kind": "table",
+          "origin": "AUTHORIZED_MISSION_INPUT",
+          "source_version": "energie-temps-v1"
+        }
+      ],
+      "approved_source_captures": [],
+      "approved_source_count": 0,
+      "assumptions": [],
+      "constraints": [],
+      "criteria": [],
+      "deliverable": "Déterminez la puissance moyenne exacte de ce banc d’essai sur tous les cycles autorisés. Si une mesure appariée requise manque, indiquez précisément la cellule et abstenez-vous de donner la puissance totale.",
+      "objective": "Déterminez la puissance moyenne exacte de ce banc d’essai sur tous les cycles autorisés. Si une mesure appariée requise manque, indiquez précisément la cellule et abstenez-vous de donner la puissance totale.",
+      "original_ambition": "Déterminez la puissance moyenne exacte de ce banc d’essai sur tous les cycles autorisés. Si une mesure appariée requise manque, indiquez précisément la cellule et abstenez-vous de donner la puissance totale.",
+      "required_claims": [
+        "puissance"
+      ],
+      "resource_envelope": {
+        "local_only": true,
+        "max_actions": 10,
+        "max_iterations": 2,
+        "max_operations": 10000,
+        "max_output_tokens": 560,
+        "tool_permissions": [
+          "construct_table",
+          "run_table",
+          "read_artifact",
+          "write_document"
+        ]
+      },
+      "verification": null
+    },
+    "contract_sha256": "9f82e20c7b6490684bc954dba3c99744b5a254aabef5959c5a4cb3473fb990c2",
+    "independent_acceptance": "NOT_ESTABLISHED",
+    "language": "fr",
+    "message": "Une donnée ou une observation requise manque. Fournissez les éléments indiqués avant de tirer la conclusion.",
+    "mission_id": "wf_1d4a453a41776be88fd9db0e",
+    "quantitative_report_ready": false,
+    "revision_sha256": "c64ff6e138942644685adcdcf975b7078bdb500f17bd8ceaff8e118f4fb59111",
+    "schema": "frontier/mission-outcome/v1",
+    "status": "ABSTAIN",
+    "unresolved": [
+      {
+        "claim_contract_sha256": "588d71530ca3d7ad764a70e371827ff69577015c414fbf57e63d5cbd1bfade5a",
+        "dataset": "cycles-banc-39",
+        "dimension": "energy/time",
+        "id": "puissance",
+        "message": "Un champ ou une observation requise manque.",
+        "missing": [
+          {
+            "label": "mesures[1].duree_s",
+            "path": [
+              "mesures",
+              "duree_s"
+            ],
+            "row_index": 1
+          }
+        ],
+        "missing_truncated": false,
+        "reason": "REQUIRED_FIELD_MISSING",
+        "status": "ABSTAIN",
+        "unit": "W"
+      }
+    ]
+  },
+  "paid_requests": 0,
+  "precise_missing_cell": true,
+  "provider_elapsed_seconds": 36.127900056002545,
+  "raw_drafts": [
+    "Lancer la construction de la table SQL pour extraire les données nécessaires à la calcul de la puissance moyenne."
+  ],
+  "raw_explicit_contradiction": false,
+  "refusals": [],
+  "task_elapsed_seconds": 36.33240848699643,
+  "tool_input_origins": [],
+  "verdict": "ACCEPT",
+  "withheld_total": true,
+  "workflow_status": "needs_review"
+}

@@ -1,0 +1,137 @@
+{
+  "ambition": "Build frontier AI LLM for Game Theory.",
+  "base": "https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/frontier-omega-alpha/",
+  "checkpoint_sha256": "f425c70bc13245567e2d0d87e8b7af18b3306fcdf41e73369d36a8f5be439a9c",
+  "discovery": [
+    {
+      "configured": false,
+      "engine": "llama-cpp",
+      "model": "qwen3-8b-q4_k_m"
+    }
+  ],
+  "executor_sha256": "dd37e23f26294f14632c0c501ad13b3255bf96c493541efc4683dfc213dad939",
+  "export_sha256": "f7fd303ee25dc70c3238e37487179943546e69c8f77921211b5e26e451af605c",
+  "language": "en",
+  "mode": "start",
+  "model_error_events": [
+    {
+      "code": "PROVIDER_RESPONSE",
+      "model": "qwen3-8b-q4_k_m",
+      "provider": "frontier-local-641ae16dc5810b8e3c02fba9297f06dca125d4a68a106d1b6c364b9f2cb0a5ab"
+    }
+  ],
+  "module_sha256": "19fd1f442b3e4fd8a89141c45788b960ace97c66b9857200b8d2b573420529a7",
+  "operations": [
+    "pair",
+    "intelligence-discover",
+    "intelligence-connect",
+    "submit",
+    "list",
+    "get",
+    "export"
+  ],
+  "release_revision": "9a53a4b8bb7eb3d5f82f50effcf44e3ec1291d19",
+  "selection": {
+    "check": {
+      "at": "2026-11-25T14:47:51.642833+00:00",
+      "elapsed_ms": 3835,
+      "format": "json_schema",
+      "input_tokens": 35,
+      "output_tokens": 28
+    },
+    "mode": "hybrid",
+    "model": "qwen3-8b-q4_k_m",
+    "provider": "frontier-local-641ae16dc5810b8e3c02fba9297f06dca125d4a68a106d1b6c364b9f2cb0a5ab",
+    "ready": true
+  },
+  "setup": {
+    "automatic_return": true,
+    "exact_submit_count": 1,
+    "guide_one_use": true,
+    "reopened": true
+  },
+  "state": {
+    "actions": 4,
+    "files": [
+      "RUN_INSTRUMENT.py",
+      "game_theory_calculator.json"
+    ],
+    "id": "wf_c4af3d32fc5ff722ba6e5c87",
+    "model_calls": 3,
+    "phase": "builder",
+    "recorded_events": [
+      {
+        "kind": "created"
+      },
+      {
+        "kind": "model_queued"
+      },
+      {
+        "kind": "model_started"
+      },
+      {
+        "kind": "model_completed",
+        "usage": {
+          "input_tokens": 850,
+          "output_tokens": 213
+        }
+      },
+      {
+        "kind": "route_proposed"
+      },
+      {
+        "kind": "tool_completed",
+        "tool": "construct_instrument"
+      },
+      {
+        "kind": "tool_completed",
+        "tool": "run_instrument"
+      },
+      {
+        "kind": "verification"
+      },
+      {
+        "kind": "model_queued"
+      },
+      {
+        "kind": "model_started"
+      },
+      {
+        "kind": "model_completed",
+        "usage": {
+          "input_tokens": 1238,
+          "output_tokens": 234
+        }
+      },
+      {
+        "kind": "route_proposed"
+      },
+      {
+        "kind": "tool_completed",
+        "tool": "construct_instrument"
+      },
+      {
+        "kind": "tool_refused",
+        "reason": "if needs three operands.",
+        "tool": "run_instrument"
+      },
+      {
+        "kind": "verification"
+      },
+      {
+        "kind": "model_queued"
+      },
+      {
+        "kind": "model_started"
+      },
+      {
+        "kind": "model_error"
+      }
+    ],
+    "status": "paused"
+  },
+  "visible_claims": [],
+  "visible_outcome": "Mission outcome\n\nReview the recorded work and evidence to assess completion.",
+  "wallet": "isolated eligibility fixture",
+  "workflow_run": "45637319050"
+}

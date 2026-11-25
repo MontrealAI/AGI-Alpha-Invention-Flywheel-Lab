@@ -1,0 +1,708 @@
+{
+  "files": {
+    "query-tkm.json": "{\"evaluator_sha256\":\"48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d\",\"schema\":\"frontier/bounded-table-instrument-v1\",\"sql\":\"SELECT lot, (charge * trajet) AS produit FROM expeditions;\",\"table_schema\":{\"expeditions\":{\"charge\":\"INTEGER\",\"lot\":\"TEXT\",\"trajet\":\"INTEGER\",\"u_charge\":\"TEXT\",\"u_trajet\":\"TEXT\"}}}",
+    "query.json": "{\"evaluator_sha256\":\"48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d\",\"schema\":\"frontier/bounded-table-instrument-v1\",\"sql\":\"SELECT lot, charge, trajet, u_charge, u_trajet FROM expeditions;\",\"table_schema\":{\"expeditions\":{\"charge\":\"INTEGER\",\"lot\":\"TEXT\",\"trajet\":\"INTEGER\",\"u_charge\":\"TEXT\",\"u_trajet\":\"TEXT\"}}}",
+    "result.md": "Les produits de la charge et du trajet ont été calculés pour chaque ligne. Les résultats intermédiaires sont prêts pour la conversion en tonnes-kilomètres en tenant compte des unités respectives."
+  },
+  "notice": "Contains your objective, context and artifacts. Inspect before sharing. No connector credentials or workspace integrity key included. Recorded verification is historical; recheck imported work.",
+  "schema": "alpha-genesis-workflow-export/v1",
+  "sha256": "7639abab3757740634b83fb0ede6908a506097def3551b4ab33c2ab489499cd5",
+  "state": {
+    "actions": 10,
+    "adversarial_cases": [],
+    "artifacts": {
+      "query-tkm.json": {
+        "bytes": 322,
+        "kind": "table_instrument",
+        "sha256": "747f15ebe999bf768e700f20ff4ec29d01de754893f14e28c78c27e05ecc2102"
+      },
+      "query.json": {
+        "bytes": 328,
+        "kind": "table_instrument",
+        "sha256": "c13621f60f342a1d89804509642a347239773b85b7846616e094ac5603befef6"
+      },
+      "result.md": {
+        "bytes": 203,
+        "kind": "document",
+        "sha256": "f7ca351f518b905db7e9707c31c35a10720081759ff508d829d7815ff6adf8ad"
+      }
+    },
+    "capability_id": null,
+    "created_at": "2026-11-25T14:39:10.327722+00:00",
+    "epoch": 0,
+    "events": [
+      {
+        "at": "2026-11-25T14:39:10.327732+00:00",
+        "detail": {
+          "acceptance_source": "Operator-frozen conditions; independence is not inferred.",
+          "spec_hash": "7f9d9363b4d58fb85d305ff0871549c5c0709a3d38426789d7d92835b91fff7d"
+        },
+        "index": 0,
+        "kind": "created",
+        "previous": "0000000000000000000000000000000000000000000000000000000000000000",
+        "sha256": "88cb53d3faeca71873b30db88cd155348778f8e2c005ec1c5766a8b4c1541cd7"
+      },
+      {
+        "at": "2026-11-25T14:39:10.332275+00:00",
+        "detail": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "role": "builder",
+          "scope": "Waiting for selected service capacity; no model call or construction iteration consumed."
+        },
+        "index": 1,
+        "kind": "model_queued",
+        "previous": "88cb53d3faeca71873b30db88cd155348778f8e2c005ec1c5766a8b4c1541cd7",
+        "sha256": "bc741fd1cc11530a027895529a8469c9f85b3cba2d2968947e8fda5aad3625b8"
+      },
+      {
+        "at": "2026-11-25T14:39:10.334327+00:00",
+        "detail": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "role": "builder",
+          "run_id": "wf_ecc49b531544cfb2b3c731df_8a48d93101538912"
+        },
+        "index": 2,
+        "kind": "model_started",
+        "previous": "bc741fd1cc11530a027895529a8469c9f85b3cba2d2968947e8fda5aad3625b8",
+        "sha256": "94d790350980d6c8e6552a430253396fd6146ccdc33f41ccb25e49b4bd151ef8"
+      },
+      {
+        "at": "2026-11-25T14:39:59.040946+00:00",
+        "detail": {
+          "cost": {
+            "accounted": 0.0,
+            "amount": 0.0,
+            "attempts": 1,
+            "basis": "reported_usage_at_user_rates",
+            "complete_cost_known": false,
+            "currency": "USD"
+          },
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+          "reported_model": "qwen3-8b-q4_k_m",
+          "requested_model": "qwen3-8b-q4_k_m",
+          "response_sha256": "900b4b056891237ddedc545e2f96605f7718b2c804f9d1d49cd9da0f6e5dd0c1",
+          "role": "builder",
+          "run_id": "wf_ecc49b531544cfb2b3c731df_8a48d93101538912",
+          "usage": {
+            "input_tokens": 1493,
+            "output_tokens": 160
+          }
+        },
+        "index": 3,
+        "kind": "model_completed",
+        "previous": "94d790350980d6c8e6552a430253396fd6146ccdc33f41ccb25e49b4bd151ef8",
+        "sha256": "281b57e2d999f8fc9691a64102f366a1d679bca01d69d65da28ee8f85fbcb6cb"
+      },
+      {
+        "at": "2026-11-25T14:39:59.040999+00:00",
+        "detail": {
+          "disposition": "PROPOSED",
+          "proposed_actions": 2,
+          "summary": "Construire un instrument SQL pour calculer les tonnes-kilomètres à partir des données du relevé d'expéditions."
+        },
+        "index": 4,
+        "kind": "route_proposed",
+        "previous": "281b57e2d999f8fc9691a64102f366a1d679bca01d69d65da28ee8f85fbcb6cb",
+        "sha256": "de1ef2544cb8c938d5eced143262d8f8c825d28ba966f3c6f8d4bc9f3460a337"
+      },
+      {
+        "at": "2026-11-25T14:39:59.091376+00:00",
+        "detail": {
+          "outcome": {
+            "action_id": "834f7fb4acc36d59c8866fdbc056b16de036b065f4549b66d850d06ccf0150be",
+            "artifact": "query.json",
+            "bytes": 388,
+            "evaluator_sha256": "48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d",
+            "kind": "table_instrument",
+            "operation_executed": true,
+            "previous_sha256": null,
+            "qualification": "UNVERIFIED",
+            "sha256": "4425ae668b7731bae4799981f812909b42f8b23af000b791cd4346455feb1696",
+            "sqlite_version": "3.53.1",
+            "status": "CANDIDATE_VALIDATED_ON_EMPTY_TABLES"
+          },
+          "tool": "construct_table"
+        },
+        "index": 5,
+        "kind": "tool_completed",
+        "previous": "de1ef2544cb8c938d5eced143262d8f8c825d28ba966f3c6f8d4bc9f3460a337",
+        "sha256": "b9d82402b0d6b682f35f97748f34313dd7c6ba68ca1e228970cfda31de466bfe"
+      },
+      {
+        "at": "2026-11-25T14:39:59.123998+00:00",
+        "detail": {
+          "outcome": {
+            "action_id": "3c2205ba39863c2e1b23285af5abb634aac7b0966354e8b3d24f5ee467fbe82d",
+            "artifact": "query.json",
+            "artifact_sha256": "4425ae668b7731bae4799981f812909b42f8b23af000b791cd4346455feb1696",
+            "dataset": "releve-transport-27",
+            "evaluator_sha256": "48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d",
+            "input_origin": "OPERATOR_APPROVED_DATASET",
+            "input_sha256": "009b8565af22d6841217d06fa4cce1864041f012c1acf9a1525567bddcd3f9cd",
+            "operation_executed": true,
+            "output_sha256": "7de0a92e31b18a0368a92fe50a4569acbe714bfb2d9079c94094c9ea8a3af6cb",
+            "qualification": "UNVERIFIED",
+            "rows": [
+              [
+                "p17",
+                237,
+                425,
+                "kg",
+                "m"
+              ],
+              [
+                "p18",
+                3,
+                1190,
+                "t",
+                "m"
+              ],
+              [
+                "p19",
+                942,
+                4,
+                "kg",
+                "km"
+              ],
+              [
+                "p20",
+                2,
+                7,
+                "t",
+                "km"
+              ]
+            ],
+            "sqlite_version": "3.53.1",
+            "status": "EXECUTED"
+          },
+          "tool": "run_table"
+        },
+        "index": 6,
+        "kind": "tool_completed",
+        "previous": "b9d82402b0d6b682f35f97748f34313dd7c6ba68ca1e228970cfda31de466bfe",
+        "sha256": "9354c6318344cc11889bc6836a6b3e6471b78dfdfad27afa066d1173d910520a"
+      },
+      {
+        "at": "2026-11-25T14:39:59.125278+00:00",
+        "detail": {
+          "artifact_hashes": {
+            "query.json": "4425ae668b7731bae4799981f812909b42f8b23af000b791cd4346455feb1696"
+          },
+          "checks": [],
+          "passed": false,
+          "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification.",
+          "spec_hash": "7f9d9363b4d58fb85d305ff0871549c5c0709a3d38426789d7d92835b91fff7d"
+        },
+        "index": 7,
+        "kind": "verification",
+        "previous": "9354c6318344cc11889bc6836a6b3e6471b78dfdfad27afa066d1173d910520a",
+        "sha256": "c095567c2b6a04940a9068a43cf286f8474545e83e6d0e1d42223a8d629df119"
+      },
+      {
+        "at": "2026-11-25T14:39:59.125386+00:00",
+        "detail": {
+          "claims": [
+            {
+              "id": "travail",
+              "reason": "NO_BOUND_EXECUTION",
+              "status": "ABSTAIN"
+            }
+          ],
+          "status": "ABSTAIN"
+        },
+        "index": 8,
+        "kind": "claim_dispositions",
+        "previous": "c095567c2b6a04940a9068a43cf286f8474545e83e6d0e1d42223a8d629df119",
+        "sha256": "bbeb280133780cd9b5be9891fb50bebbddc82da9d743d834e59c5dc34db75d11"
+      },
+      {
+        "at": "2026-11-25T14:39:59.128701+00:00",
+        "detail": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "role": "builder",
+          "scope": "Waiting for selected service capacity; no model call or construction iteration consumed."
+        },
+        "index": 9,
+        "kind": "model_queued",
+        "previous": "bbeb280133780cd9b5be9891fb50bebbddc82da9d743d834e59c5dc34db75d11",
+        "sha256": "9a1a0a4b73090b558d8a922e559420f364296763259e9ff46917285eabe84c94"
+      },
+      {
+        "at": "2026-11-25T14:39:59.130912+00:00",
+        "detail": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "role": "builder",
+          "run_id": "wf_ecc49b531544cfb2b3c731df_e2fcc4418eac7a6a"
+        },
+        "index": 10,
+        "kind": "model_started",
+        "previous": "9a1a0a4b73090b558d8a922e559420f364296763259e9ff46917285eabe84c94",
+        "sha256": "d005847f032bcd73d438330500630c576ce81174e500fa824e128c52cddfc950"
+      },
+      {
+        "at": "2026-11-25T14:41:39.442504+00:00",
+        "detail": {
+          "cost": {
+            "accounted": 0.0,
+            "amount": 0.0,
+            "attempts": 1,
+            "basis": "reported_usage_at_user_rates",
+            "complete_cost_known": false,
+            "currency": "USD"
+          },
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+          "reported_model": "qwen3-8b-q4_k_m",
+          "requested_model": "qwen3-8b-q4_k_m",
+          "response_sha256": "6afe9a8bef23e7922274d25af53fcc37b4151e26ad1eeec58f3b9fab08816092",
+          "role": "builder",
+          "run_id": "wf_ecc49b531544cfb2b3c731df_e2fcc4418eac7a6a",
+          "usage": {
+            "input_tokens": 2303,
+            "output_tokens": 480
+          }
+        },
+        "index": 11,
+        "kind": "model_completed",
+        "previous": "d005847f032bcd73d438330500630c576ce81174e500fa824e128c52cddfc950",
+        "sha256": "c090da3221a1ac4e2cf6a79a4f9bb1f1f9a0fb245c7e883a39edc1f6a11e59e5"
+      },
+      {
+        "at": "2026-11-25T14:41:39.442589+00:00",
+        "detail": {
+          "disposition": "PROPOSED",
+          "proposed_actions": 8,
+          "summary": "La première action consiste à construire un instrument SQL pour calculer les tonnes-kilomètres à partir des données du relevé d’expéditions. Cet instrument sera ensuite exécuté pour obtenir des résultats précis."
+        },
+        "index": 12,
+        "kind": "route_proposed",
+        "previous": "c090da3221a1ac4e2cf6a79a4f9bb1f1f9a0fb245c7e883a39edc1f6a11e59e5",
+        "sha256": "a8ec54fbe94aa15de849a32adf5c17dbd1f433cffcb9729a109ccc894a86f98d"
+      },
+      {
+        "at": "2026-11-25T14:41:39.498165+00:00",
+        "detail": {
+          "outcome": {
+            "action_id": "8db8a1a480ea4c9bcacbf7ad8e06907570e602e748844f9c611ad7215b7c1d4d",
+            "artifact": "query.json",
+            "bytes": 328,
+            "evaluator_sha256": "48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d",
+            "kind": "table_instrument",
+            "operation_executed": true,
+            "previous_sha256": "4425ae668b7731bae4799981f812909b42f8b23af000b791cd4346455feb1696",
+            "qualification": "UNVERIFIED",
+            "sha256": "c13621f60f342a1d89804509642a347239773b85b7846616e094ac5603befef6",
+            "sqlite_version": "3.53.1",
+            "status": "CANDIDATE_VALIDATED_ON_EMPTY_TABLES"
+          },
+          "tool": "construct_table"
+        },
+        "index": 13,
+        "kind": "tool_completed",
+        "previous": "a8ec54fbe94aa15de849a32adf5c17dbd1f433cffcb9729a109ccc894a86f98d",
+        "sha256": "166529731540a3d0f0b5281160e257ff3b34322e91da05c8acab72f351ac8bbd"
+      },
+      {
+        "at": "2026-11-25T14:41:39.530185+00:00",
+        "detail": {
+          "outcome": {
+            "action_id": "04b34e101e3d594b30160aee65992cab8be19f89880f134856d8c66563604db7",
+            "artifact": "query.json",
+            "artifact_sha256": "c13621f60f342a1d89804509642a347239773b85b7846616e094ac5603befef6",
+            "dataset": "releve-transport-27",
+            "evaluator_sha256": "48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d",
+            "input_origin": "OPERATOR_APPROVED_DATASET",
+            "input_sha256": "009b8565af22d6841217d06fa4cce1864041f012c1acf9a1525567bddcd3f9cd",
+            "operation_executed": true,
+            "output_sha256": "7de0a92e31b18a0368a92fe50a4569acbe714bfb2d9079c94094c9ea8a3af6cb",
+            "qualification": "UNVERIFIED",
+            "rows": [
+              [
+                "p17",
+                237,
+                425,
+                "kg",
+                "m"
+              ],
+              [
+                "p18",
+                3,
+                1190,
+                "t",
+                "m"
+              ],
+              [
+                "p19",
+                942,
+                4,
+                "kg",
+                "km"
+              ],
+              [
+                "p20",
+                2,
+                7,
+                "t",
+                "km"
+              ]
+            ],
+            "sqlite_version": "3.53.1",
+            "status": "EXECUTED"
+          },
+          "tool": "run_table"
+        },
+        "index": 14,
+        "kind": "tool_completed",
+        "previous": "166529731540a3d0f0b5281160e257ff3b34322e91da05c8acab72f351ac8bbd",
+        "sha256": "17c7bddcc55041edf50bb3ae670211e21a7645630990a45268bf25818698e4ca"
+      },
+      {
+        "at": "2026-11-25T14:41:39.532299+00:00",
+        "detail": {
+          "outcome": {
+            "action_id": "6bec93c5f24af059b4a298a84d45eb0c57de6d44f27f625e5d710e0fbbf27bf7",
+            "artifact": "query.json",
+            "content": "{\"evaluator_sha256\":\"48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d\",\"schema\":\"frontier/bounded-table-instrument-v1\",\"sql\":\"SELECT lot, charge, trajet, u_charge, u_trajet FROM expeditions;\",\"table_schema\":{\"expeditions\":{\"charge\":\"INTEGER\",\"lot\":\"TEXT\",\"trajet\":\"INTEGER\",\"u_charge\":\"TEXT\",\"u_trajet\":\"TEXT\"}}}",
+            "operation_executed": true
+          },
+          "tool": "read_artifact"
+        },
+        "index": 15,
+        "kind": "tool_completed",
+        "previous": "17c7bddcc55041edf50bb3ae670211e21a7645630990a45268bf25818698e4ca",
+        "sha256": "5fabe957fe586e52452388fdca519fbbfd3bccf5c02d35f6cd698916fe5eb5fc"
+      },
+      {
+        "at": "2026-11-25T14:41:39.534220+00:00",
+        "detail": {
+          "outcome": {
+            "action_id": "eb96e3d6ce0bb178cc976fbaa6cde0aede3f30f60d20dd896db464daeb9d6612",
+            "artifact": "result.md",
+            "bytes": 276,
+            "kind": "document",
+            "operation_executed": true,
+            "sha256": "80e15373f3a509957de9218a7373525493d3744282a39e081a92231ebf2f6b75"
+          },
+          "tool": "write_document"
+        },
+        "index": 16,
+        "kind": "tool_completed",
+        "previous": "5fabe957fe586e52452388fdca519fbbfd3bccf5c02d35f6cd698916fe5eb5fc",
+        "sha256": "752482c0305a00700935d86c7c472ef5f45a24fb1b1eae3b0cadca0ca81edfb2"
+      },
+      {
+        "at": "2026-11-25T14:41:39.565477+00:00",
+        "detail": {
+          "outcome": {
+            "action_id": "ad01b9bfb2379f0875d2e3a77bc9f3554910438cfc9e04bb430ab9f83b493650",
+            "artifact": "query-tkm.json",
+            "bytes": 322,
+            "evaluator_sha256": "48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d",
+            "kind": "table_instrument",
+            "operation_executed": true,
+            "previous_sha256": null,
+            "qualification": "UNVERIFIED",
+            "sha256": "747f15ebe999bf768e700f20ff4ec29d01de754893f14e28c78c27e05ecc2102",
+            "sqlite_version": "3.53.1",
+            "status": "CANDIDATE_VALIDATED_ON_EMPTY_TABLES"
+          },
+          "tool": "construct_table"
+        },
+        "index": 17,
+        "kind": "tool_completed",
+        "previous": "752482c0305a00700935d86c7c472ef5f45a24fb1b1eae3b0cadca0ca81edfb2",
+        "sha256": "caab2a8067a03f49c906a042bdd6ab49aefb25569b2f59a2e2b13fcbb071a11a"
+      },
+      {
+        "at": "2026-11-25T14:41:39.596448+00:00",
+        "detail": {
+          "outcome": {
+            "action_id": "0a9c02861df6b1c79662d68886de3b4d257455d01b056d335a8f2a75de13bd62",
+            "artifact": "query-tkm.json",
+            "artifact_sha256": "747f15ebe999bf768e700f20ff4ec29d01de754893f14e28c78c27e05ecc2102",
+            "dataset": "releve-transport-27",
+            "evaluator_sha256": "48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d",
+            "input_origin": "OPERATOR_APPROVED_DATASET",
+            "input_sha256": "009b8565af22d6841217d06fa4cce1864041f012c1acf9a1525567bddcd3f9cd",
+            "operation_executed": true,
+            "output_sha256": "1207dace2b202b1cad5efab31fa2618029d2b46ac9b27b027ac997413a8dda57",
+            "qualification": "UNVERIFIED",
+            "rows": [
+              [
+                "p17",
+                100725
+              ],
+              [
+                "p18",
+                3570
+              ],
+              [
+                "p19",
+                3768
+              ],
+              [
+                "p20",
+                14
+              ]
+            ],
+            "sqlite_version": "3.53.1",
+            "status": "EXECUTED"
+          },
+          "tool": "run_table"
+        },
+        "index": 18,
+        "kind": "tool_completed",
+        "previous": "caab2a8067a03f49c906a042bdd6ab49aefb25569b2f59a2e2b13fcbb071a11a",
+        "sha256": "14f636a116f4f36dddad94c589889660ca114a9b7b02571bb48ad1d0c1d81cf4"
+      },
+      {
+        "at": "2026-11-25T14:41:39.598246+00:00",
+        "detail": {
+          "outcome": {
+            "action_id": "424b551c7e53668c3b142af8fe408defbef77f27ae3fb21f502e0958063c0522",
+            "artifact": "query-tkm.json",
+            "content": "{\"evaluator_sha256\":\"48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d\",\"schema\":\"frontier/bounded-table-instrument-v1\",\"sql\":\"SELECT lot, (charge * trajet) AS produit FROM expeditions;\",\"table_schema\":{\"expeditions\":{\"charge\":\"INTEGER\",\"lot\":\"TEXT\",\"trajet\":\"INTEGER\",\"u_charge\":\"TEXT\",\"u_trajet\":\"TEXT\"}}}",
+            "operation_executed": true
+          },
+          "tool": "read_artifact"
+        },
+        "index": 19,
+        "kind": "tool_completed",
+        "previous": "14f636a116f4f36dddad94c589889660ca114a9b7b02571bb48ad1d0c1d81cf4",
+        "sha256": "0508fc60a8d3929befc7becdf6f0c2f6cf22644d4db252621151a7648a6fa622"
+      },
+      {
+        "at": "2026-11-25T14:41:39.600058+00:00",
+        "detail": {
+          "outcome": {
+            "action_id": "0203a015c9bf835eab1abac4baf871b15af89344c92c2063700bb191801875cb",
+            "artifact": "result.md",
+            "bytes": 203,
+            "kind": "document",
+            "operation_executed": true,
+            "sha256": "f7ca351f518b905db7e9707c31c35a10720081759ff508d829d7815ff6adf8ad"
+          },
+          "tool": "write_document"
+        },
+        "index": 20,
+        "kind": "tool_completed",
+        "previous": "0508fc60a8d3929befc7becdf6f0c2f6cf22644d4db252621151a7648a6fa622",
+        "sha256": "e9f4343e90fb10619234753281ae865810bc489a4871dcfded504d2cd0560d70"
+      },
+      {
+        "at": "2026-11-25T14:41:39.601043+00:00",
+        "detail": {
+          "artifact_hashes": {
+            "query-tkm.json": "747f15ebe999bf768e700f20ff4ec29d01de754893f14e28c78c27e05ecc2102",
+            "query.json": "c13621f60f342a1d89804509642a347239773b85b7846616e094ac5603befef6",
+            "result.md": "f7ca351f518b905db7e9707c31c35a10720081759ff508d829d7815ff6adf8ad"
+          },
+          "checks": [],
+          "passed": false,
+          "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification.",
+          "spec_hash": "7f9d9363b4d58fb85d305ff0871549c5c0709a3d38426789d7d92835b91fff7d"
+        },
+        "index": 21,
+        "kind": "verification",
+        "previous": "e9f4343e90fb10619234753281ae865810bc489a4871dcfded504d2cd0560d70",
+        "sha256": "bd2f71b8da0b54d37564ac017ea2e7b687ec257279a37c9f819f0fa1b8c7d821"
+      },
+      {
+        "at": "2026-11-25T14:41:39.601138+00:00",
+        "detail": {
+          "claims": [
+            {
+              "id": "travail",
+              "reason": "NO_BOUND_EXECUTION",
+              "status": "ABSTAIN"
+            }
+          ],
+          "status": "ABSTAIN"
+        },
+        "index": 22,
+        "kind": "claim_dispositions",
+        "previous": "bd2f71b8da0b54d37564ac017ea2e7b687ec257279a37c9f819f0fa1b8c7d821",
+        "sha256": "a551e1837ef9769924247f152351aea6a568fd66e06bffe76b3c729f28532097"
+      },
+      {
+        "at": "2026-11-25T14:41:39.606759+00:00",
+        "detail": {
+          "reason": "Declared model-call allocation exhausted; no further inference dispatched."
+        },
+        "index": 23,
+        "kind": "stopped",
+        "previous": "a551e1837ef9769924247f152351aea6a568fd66e06bffe76b3c729f28532097",
+        "sha256": "6542fbbb09ba26854165a1d65de1c93d1cb911418f0f6b3739f4092564a9b89e"
+      }
+    ],
+    "feedback": "Resolve the unverified registered claims with authorized inputs: [{\"id\":\"travail\",\"reason\":\"NO_BOUND_EXECUTION\",\"status\":\"ABSTAIN\"}]",
+    "id": "wf_ecc49b531544cfb2b3c731df",
+    "inflight": null,
+    "iteration": 2,
+    "model_call_limit": 2,
+    "model_calls": 2,
+    "phase": "builder",
+    "research": "",
+    "schema": "alpha-genesis-workflow/v1",
+    "spec": {
+      "acceptance": [],
+      "context": "Additionner, pour chaque ligne, le produit de la charge en tonnes et du trajet en kilomètres. Une tonne vaut 1000 kg et un kilomètre vaut 1000 m. Les unités u_charge et u_trajet distinguent ces cas. Les mesures sont entières dans les unités inscrites, et positives. Renvoyer une colonne, un résultat exact, sans division entière tronquée (texte numérateur/dénominateur permis).\nSchema of the authorized tables: {\"expeditions\":{\"charge\":\"INTEGER\",\"lot\":\"TEXT\",\"trajet\":\"INTEGER\",\"u_charge\":\"TEXT\",\"u_trajet\":\"TEXT\"}}",
+      "local_only": true,
+      "max_actions": 10,
+      "max_iterations": 2,
+      "max_operations": 10000,
+      "max_output_tokens": 560,
+      "mission": {
+        "expires_at": "2026-11-25T14:54:10.326742+00:00",
+        "language": "fr",
+        "original_ambition": "Construisez puis utilisez un instrument réutilisable qui calcule exactement les tonnes-kilomètres de mon relevé d’expéditions autorisé. Donnez un résultat exact en t·km.",
+        "requirements": {
+          "approved_tables": {
+            "releve-transport-27": {
+              "expeditions": [
+                {
+                  "charge": 237,
+                  "lot": "p17",
+                  "trajet": 425,
+                  "u_charge": "kg",
+                  "u_trajet": "m"
+                },
+                {
+                  "charge": 3,
+                  "lot": "p18",
+                  "trajet": 1190,
+                  "u_charge": "t",
+                  "u_trajet": "m"
+                },
+                {
+                  "charge": 942,
+                  "lot": "p19",
+                  "trajet": 4,
+                  "u_charge": "kg",
+                  "u_trajet": "km"
+                },
+                {
+                  "charge": 2,
+                  "lot": "p20",
+                  "trajet": 7,
+                  "u_charge": "t",
+                  "u_trajet": "km"
+                }
+              ]
+            }
+          },
+          "evidence": {
+            "claims": [
+              {
+                "dataset": "releve-transport-27",
+                "dimension": "mass*distance",
+                "id": "travail",
+                "locator": [
+                  "rows",
+                  0,
+                  0
+                ],
+                "reference": {
+                  "source": "Independent exact study reference",
+                  "value": "857549/40000"
+                },
+                "required_fields": [
+                  [
+                    "expeditions",
+                    "charge"
+                  ],
+                  [
+                    "expeditions",
+                    "lot"
+                  ],
+                  [
+                    "expeditions",
+                    "trajet"
+                  ],
+                  [
+                    "expeditions",
+                    "u_charge"
+                  ],
+                  [
+                    "expeditions",
+                    "u_trajet"
+                  ]
+                ],
+                "requires": {
+                  "aggregation": "sum-of-products",
+                  "charge_units": [
+                    "kg",
+                    "t"
+                  ],
+                  "distance_units": [
+                    "m",
+                    "km"
+                  ]
+                },
+                "tool": "run_table",
+                "unit": "t·km",
+                "version": "registre-tonne-km-v1"
+              }
+            ],
+            "inputs": {
+              "releve-transport-27": {
+                "facts": {
+                  "aggregation": "sum-of-products",
+                  "charge_units": [
+                    "kg",
+                    "t"
+                  ],
+                  "distance_units": [
+                    "m",
+                    "km"
+                  ]
+                },
+                "kind": "table",
+                "origin": "AUTHORIZED_MISSION_INPUT",
+                "sha256": "009b8565af22d6841217d06fa4cce1864041f012c1acf9a1525567bddcd3f9cd",
+                "version": "registre-tonne-km-v1"
+              }
+            }
+          }
+        },
+        "schema": "frontier-universal-execution/v1"
+      },
+      "objective": "Construisez puis utilisez un instrument réutilisable qui calcule exactement les tonnes-kilomètres de mon relevé d’expéditions autorisé. Donnez un résultat exact en t·km.",
+      "roles": {
+        "builder": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp"
+        }
+      },
+      "strategy": "single-model",
+      "tool_permissions": [
+        "construct_table",
+        "run_table",
+        "read_artifact",
+        "write_document"
+      ]
+    },
+    "spec_hash": "7f9d9363b4d58fb85d305ff0871549c5c0709a3d38426789d7d92835b91fff7d",
+    "status": "exhausted",
+    "unadjudicated_counterexamples": [],
+    "updated_at": "2026-11-25T14:41:39.606759+00:00",
+    "verification": {
+      "artifact_hashes": {
+        "query-tkm.json": "747f15ebe999bf768e700f20ff4ec29d01de754893f14e28c78c27e05ecc2102",
+        "query.json": "c13621f60f342a1d89804509642a347239773b85b7846616e094ac5603befef6",
+        "result.md": "f7ca351f518b905db7e9707c31c35a10720081759ff508d829d7815ff6adf8ad"
+      },
+      "checks": [],
+      "passed": false,
+      "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification.",
+      "spec_hash": "7f9d9363b4d58fb85d305ff0871549c5c0709a3d38426789d7d92835b91fff7d"
+    }
+  }
+}

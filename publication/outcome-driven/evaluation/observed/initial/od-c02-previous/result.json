@@ -1,0 +1,132 @@
+{
+  "action_attempts": 10,
+  "actual_tool_events": 4,
+  "approved_runs": [],
+  "archive_sha256": "674af325bf1b5b22904b75a42c877f7372208bcf9e3f62159cb2573f5462532e",
+  "arm": "previous",
+  "case": "od-c02",
+  "complete_economic_cost_known": false,
+  "evidence": {
+    "claims": [
+      {
+        "claim_contract_sha256": "6192f5e3ff54a8143b92b4b1f9a3b6e84922280839c0aa48a71e8d759d53038d",
+        "dataset": "releve-transport-27",
+        "dimension": "mass*distance",
+        "id": "travail",
+        "locator": [
+          "rows",
+          0,
+          0
+        ],
+        "mission_id": "wf_5439a054e8c4812c0719094d",
+        "reason": "NO_BOUND_EXECUTION",
+        "requires": {
+          "aggregation": "sum-of-products",
+          "charge_units": [
+            "kg",
+            "t"
+          ],
+          "distance_units": [
+            "m",
+            "km"
+          ]
+        },
+        "revision_sha256": "3aa0f938401be12aa09e4d3ecd6dd526c511c8095bbc820fa5aa50d63e9440d8",
+        "source_version": "registre-tonne-km-v1",
+        "status": "ABSTAIN",
+        "unit": "t·km"
+      }
+    ],
+    "scope": "Case-specific numerical agreement and source binding. Independent custody and production admission are separate.",
+    "status": "ABSTAIN"
+  },
+  "false_user_facing_acceptance": false,
+  "mission_id": "wf_5439a054e8c4812c0719094d",
+  "observed_provider_dispatches": 2,
+  "observed_usage": {
+    "observed_tokens_in": 2912,
+    "observed_tokens_out": 937,
+    "unknown_token_replies": 0
+  },
+  "operator_actions_after_case_start": 0,
+  "operator_preparation_and_review_seconds": null,
+  "orchestrator_cpu_seconds": 2.247631,
+  "outcome_surface": {},
+  "paid_requests": 0,
+  "provider_elapsed_seconds": 178.3192465510001,
+  "raw_drafts": [
+    "Vérification des unités des données d'expéditions effectuée. Toutes les unités sont valides et conformes aux exigences.",
+    "Calculer les tonnes-kilomètres à partir des données du relevé d’expéditions en utilisant les unités fournies et en convertissant les valeurs en tonnes et kilomètres.",
+    "Calculer exactement les tonnes-kilomètres à partir des données d'expéditions autorisées, en respectant les unités et les conversions."
+  ],
+  "raw_explicit_contradiction": false,
+  "refusals": [
+    {
+      "kind": "tool_refused",
+      "proposal_fields": [
+        "input",
+        "name",
+        "tool"
+      ],
+      "reason": "TABLE_INPUT",
+      "tool": "run_table"
+    },
+    {
+      "kind": "tool_refused",
+      "proposal_fields": [
+        "name",
+        "schema",
+        "sql",
+        "tool"
+      ],
+      "reason": "TABLE_ARTIFACT_NAME",
+      "tool": "construct_table"
+    },
+    {
+      "kind": "tool_refused",
+      "proposal_fields": [
+        "input",
+        "name",
+        "tool"
+      ],
+      "reason": "TABLE_ARTIFACT_NAME",
+      "tool": "run_table"
+    },
+    {
+      "kind": "tool_refused",
+      "proposal_fields": [
+        "name",
+        "tool"
+      ],
+      "reason": "Read access is restricted to this run's declared artifacts.",
+      "tool": "read_artifact"
+    },
+    {
+      "kind": "tool_refused",
+      "proposal_fields": [
+        "name",
+        "schema",
+        "sql",
+        "tool"
+      ],
+      "reason": "TABLE_ARTIFACT_NAME",
+      "tool": "construct_table"
+    },
+    {
+      "kind": "tool_refused",
+      "proposal_fields": [
+        "input",
+        "name",
+        "tool"
+      ],
+      "reason": "TABLE_ARTIFACT_NAME",
+      "tool": "run_table"
+    }
+  ],
+  "reusable_on_withheld": false,
+  "task_elapsed_seconds": 178.6023122980041,
+  "tool_input_origins": [],
+  "verdict": "FAIL",
+  "verified_primary": false,
+  "workflow_status": "exhausted"
+}

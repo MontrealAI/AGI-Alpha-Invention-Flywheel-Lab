@@ -1,0 +1,381 @@
+{
+  "completed_at": "2026-11-25T14:13:31.931006+00:00",
+  "cost_scope": {
+    "acquisition_host_network_cost": null,
+    "energy_joules": null,
+    "included_codex_authoring_cost": null,
+    "operator_attention_and_recurring_maintenance_cost": null,
+    "paid_model_requests": 0,
+    "public_get_requests": 11,
+    "real_transactions": 0,
+    "receipts_usd": null,
+    "response_body_bytes": 172803
+  },
+  "files_sha256": {
+    "FOLLOWUP-REGISTRATION.json": "bd28e4393c5f4131e901a4770a6634ce23e7d88a6f39fa9a4a5e88d1a6a7d28a",
+    "FOLLOWUP.json": "b6edaefd5b60eee1bab5a0289cf657de991c561ccdc71884342429b96bede586",
+    "OBSERVATIONS.json": "d34bc020661e4e96027867be3e2009348aaafcb63642467a21a4d1f66be71724",
+    "REGISTRATION.json": "6c1087b12c16c85e4e3cc16f12c8eab31d4b372f4889077e02440aef925ac4f1",
+    "assess.py": "96052084be93cb6969541d0a4d63becccb155ec33a0e1bf4c28ff92f844aafd1",
+    "capture.py": "4e690e9cb3bfaccc81b753f56ef6c6966eccba0462d5f5a9a294ad8e2d0ef683",
+    "ordinary.py": "a424124772a4761838213f0e660e942ce66ffbb156656e509e478434e5c94e0c",
+    "retained.py": "e8408b1a3765242a1a54f331a7682e5f55b63032d536c1caa93dc862da24591b"
+  },
+  "pages": [
+    {
+      "metrics": {
+        "ordinary.py": {
+          "cpu_seconds": {
+            "max": 0.045192,
+            "median": 0.034572,
+            "min": 0.030894
+          },
+          "wall_seconds": {
+            "max": 0.091233,
+            "median": 0.037292,
+            "min": 0.031731
+          }
+        },
+        "retained.py": {
+          "cpu_seconds": {
+            "max": 0.045596,
+            "median": 0.037364,
+            "min": 0.03145
+          },
+          "wall_seconds": {
+            "max": 0.081961,
+            "median": 0.048876,
+            "min": 0.031858
+          }
+        }
+      },
+      "observed_result": {
+        "case": "reviewed-product",
+        "decision": "GO",
+        "expected_commit": "f8b8f95b1ef10641a82d1b98f4b13e0b8cd5bb43",
+        "expected_run": 45547873631,
+        "longest_observed_wait": "build",
+        "reason": null,
+        "scope": "historical",
+        "wait_seconds": {
+          "build": 729,
+          "deploy": 578,
+          "verify-live": 95
+        },
+        "wall_to_verified_seconds": 1525
+      },
+      "repetitions_per_arm": 9,
+      "scope": "historical",
+      "shared_observation_acquisition": {
+        "acquisition_cpu_seconds": 0.019416,
+        "acquisition_wall_seconds": 12.660483
+      }
+    },
+    {
+      "metrics": {
+        "ordinary.py": {
+          "cpu_seconds": {
+            "max": 0.072355,
+            "median": 0.035831,
+            "min": 0.029841
+          },
+          "wall_seconds": {
+            "max": 0.074753,
+            "median": 0.039994,
+            "min": 0.03026
+          }
+        },
+        "retained.py": {
+          "cpu_seconds": {
+            "max": 0.04155,
+            "median": 0.03482,
+            "min": 0.031086
+          },
+          "wall_seconds": {
+            "max": 0.043082,
+            "median": 0.035865,
+            "min": 0.031946
+          }
+        }
+      },
+      "observed_result": {
+        "case": "current-research",
+        "decision": "HOLD",
+        "expected_commit": "297a51c25c48031e1e6f964835f4dfae3ddb8023",
+        "expected_run": 45551096060,
+        "longest_observed_wait": "build",
+        "reason": "STALE_OR_MISSING_PUBLICATION",
+        "scope": "current_at_capture",
+        "wait_seconds": {
+          "build": 97,
+          "deploy": 48,
+          "verify-live": 19
+        },
+        "wall_to_verified_seconds": 274
+      },
+      "repetitions_per_arm": 9,
+      "scope": "current_at_capture",
+      "shared_observation_acquisition": {
+        "acquisition_cpu_seconds": 0.032378,
+        "acquisition_wall_seconds": 13.496069
+      }
+    },
+    {
+      "metrics": {
+        "ordinary.py": {
+          "cpu_seconds": {
+            "max": 0.04091,
+            "median": 0.033546,
+            "min": 0.027151
+          },
+          "wall_seconds": {
+            "max": 0.043487,
+            "median": 0.033823,
+            "min": 0.028706
+          }
+        },
+        "retained.py": {
+          "cpu_seconds": {
+            "max": 0.043899,
+            "median": 0.038823,
+            "min": 0.029304
+          },
+          "wall_seconds": {
+            "max": 0.058105,
+            "median": 0.041728,
+            "min": 0.029541
+          }
+        }
+      },
+      "observed_result": {
+        "case": "current-scheduled-publication",
+        "decision": "GO",
+        "expected_commit": "297a51c25c48031e1e6f964835f4dfae3ddb8023",
+        "expected_run": 45614033463,
+        "longest_observed_wait": "deploy",
+        "reason": null,
+        "scope": "current_at_capture",
+        "wait_seconds": {
+          "build": 4,
+          "deploy": 6,
+          "verify-live": 3
+        },
+        "wall_to_verified_seconds": 132
+      },
+      "repetitions_per_arm": 9,
+      "scope": "current_at_capture",
+      "shared_observation_acquisition": {
+        "acquisition_cpu_seconds": 0.018547,
+        "acquisition_wall_seconds": 10.241938
+      }
+    }
+  ],
+  "pages_controls": {
+    "duplicate_job": {
+      "case": "reviewed-product",
+      "decision": "HOLD",
+      "expected_commit": "f8b8f95b1ef10641a82d1b98f4b13e0b8cd5bb43",
+      "expected_run": 45547873631,
+      "reason": "INCOMPLETE_JOB_LIST",
+      "scope": "historical"
+    },
+    "failed_verification": {
+      "case": "reviewed-product",
+      "decision": "HOLD",
+      "expected_commit": "f8b8f95b1ef10641a82d1b98f4b13e0b8cd5bb43",
+      "expected_run": 45547873631,
+      "reason": "JOB_NOT_SUCCESSFUL",
+      "scope": "historical"
+    },
+    "fixture_origin": {
+      "case": "reviewed-product",
+      "decision": "HOLD",
+      "expected_commit": "f8b8f95b1ef10641a82d1b98f4b13e0b8cd5bb43",
+      "expected_run": 45547873631,
+      "reason": "INELIGIBLE_OBSERVATION",
+      "scope": "historical"
+    },
+    "missing_job": {
+      "case": "reviewed-product",
+      "decision": "HOLD",
+      "expected_commit": "f8b8f95b1ef10641a82d1b98f4b13e0b8cd5bb43",
+      "expected_run": 45547873631,
+      "reason": "INCOMPLETE_JOB_LIST",
+      "scope": "historical"
+    },
+    "missing_timing": {
+      "case": "reviewed-product",
+      "decision": "GO",
+      "expected_commit": "f8b8f95b1ef10641a82d1b98f4b13e0b8cd5bb43",
+      "expected_run": 45547873631,
+      "longest_observed_wait": null,
+      "reason": null,
+      "scope": "historical",
+      "wait_seconds": {
+        "build": null,
+        "deploy": 578,
+        "verify-live": 95
+      },
+      "wall_to_verified_seconds": 1525
+    },
+    "stale_receipt": {
+      "case": "reviewed-product",
+      "decision": "HOLD",
+      "expected_commit": "f8b8f95b1ef10641a82d1b98f4b13e0b8cd5bb43",
+      "expected_run": 45547873631,
+      "longest_observed_wait": "build",
+      "reason": "STALE_OR_MISSING_PUBLICATION",
+      "scope": "historical",
+      "wait_seconds": {
+        "build": 729,
+        "deploy": 578,
+        "verify-live": 95
+      },
+      "wall_to_verified_seconds": 1525
+    },
+    "wrong_commit": {
+      "case": "reviewed-product",
+      "decision": "HOLD",
+      "expected_commit": "f8b8f95b1ef10641a82d1b98f4b13e0b8cd5bb43",
+      "expected_run": 45547873631,
+      "reason": "WRONG_RUN",
+      "scope": "historical"
+    }
+  },
+  "schema": "frontier-outcome-driven-productive-assessment-v1",
+  "transfer": {
+    "controls": {
+      "different_local_digest": {
+        "decision": "HOLD",
+        "expected_tag": "b12242",
+        "reason": "ARCHIVE_IDENTITY_MISMATCH",
+        "scope": "captured_linux_cpu_archive"
+      },
+      "missing_bytes": {
+        "decision": "HOLD",
+        "expected_tag": "b12242",
+        "reason": "ARCHIVE_UNAVAILABLE",
+        "scope": "captured_linux_cpu_archive"
+      },
+      "publisher_digest_altered": {
+        "decision": "HOLD",
+        "expected_tag": "b12242",
+        "reason": "ARCHIVE_IDENTITY_MISMATCH",
+        "scope": "captured_linux_cpu_archive"
+      },
+      "wrong_tag": {
+        "decision": "HOLD",
+        "expected_tag": "b12242",
+        "reason": "WRONG_UPSTREAM_RELEASE",
+        "scope": "captured_linux_cpu_archive"
+      }
+    },
+    "inventor_promotion": "NO-GO",
+    "metrics": {
+      "conventional_integration": {
+        "cpu_seconds": {
+          "max": 0.055708,
+          "median": 0.029386,
+          "min": 0.023696
+        },
+        "wall_seconds": {
+          "max": 0.071725,
+          "median": 0.030247,
+          "min": 0.025487
+        }
+      },
+      "ordinary_reuse": {
+        "cpu_seconds": {
+          "max": 0.006833,
+          "median": 0.003733,
+          "min": 0.002706
+        },
+        "wall_seconds": {
+          "max": 0.007962,
+          "median": 0.005184,
+          "min": 0.002868
+        }
+      },
+      "original": {
+        "cpu_seconds": {
+          "max": 0.04647,
+          "median": 0.035195,
+          "min": 0.02804
+        },
+        "wall_seconds": {
+          "max": 0.074722,
+          "median": 0.036875,
+          "min": 0.028828
+        }
+      },
+      "retained": {
+        "cpu_seconds": {
+          "max": 0.04538,
+          "median": 0.03383,
+          "min": 0.028718
+        },
+        "wall_seconds": {
+          "max": 0.060799,
+          "median": 0.039864,
+          "min": 0.029009
+        }
+      },
+      "withdrawn": {
+        "cpu_seconds": {
+          "max": 0.044053,
+          "median": 0.036326,
+          "min": 0.02566
+        },
+        "wall_seconds": {
+          "max": 0.047294,
+          "median": 0.037757,
+          "min": 0.026011
+        }
+      }
+    },
+    "output": {
+      "conventional_integration": {
+        "archive_bytes": 23158635,
+        "asset_id": 729746370,
+        "decision": "GO",
+        "expected_tag": "b12242",
+        "publisher_prerelease": true,
+        "reason": null,
+        "scope": "captured_linux_cpu_archive",
+        "server_members": [
+          "llama-b12242/llama-server"
+        ],
+        "sha256": "909eef25cd53e6601c8a07c866d8dbb2983e74177088d55182137a8fb8255d62"
+      },
+      "ordinary_reuse": true,
+      "original": {
+        "decision": "HOLD",
+        "reason": "ORIGINAL_SCOPE_UNSUPPORTED"
+      },
+      "retained": {
+        "archive_bytes": 23158635,
+        "asset_id": 729746370,
+        "decision": "GO",
+        "expected_tag": "b12242",
+        "publisher_prerelease": true,
+        "reason": null,
+        "scope": "captured_linux_cpu_archive",
+        "server_members": [
+          "llama-b12242/llama-server"
+        ],
+        "sha256": "909eef25cd53e6601c8a07c866d8dbb2983e74177088d55182137a8fb8255d62"
+      },
+      "withdrawn": {
+        "decision": "HOLD",
+        "expected_tag": "b12242",
+        "reason": "PUBLISHER_ORIGIN_UNBOUND",
+        "scope": "captured_linux_cpu_archive"
+      }
+    },
+    "repetitions_per_arm": 9,
+    "shared_observation_acquisition": {
+      "acquisition_cpu_seconds": 0.275671,
+      "acquisition_wall_seconds": 5.206243
+    }
+  }
+}

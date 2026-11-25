@@ -1,0 +1,175 @@
+{
+  "action_attempts": 10,
+  "actual_tool_events": 10,
+  "approved_runs": [
+    {
+      "artifact": "query.json",
+      "bound": false,
+      "held_reuse": {
+        "matched": false
+      },
+      "primary_exact": false,
+      "rows": [
+        [
+          "p17",
+          237,
+          425,
+          "kg",
+          "m"
+        ],
+        [
+          "p18",
+          3,
+          1190,
+          "t",
+          "m"
+        ],
+        [
+          "p19",
+          942,
+          4,
+          "kg",
+          "km"
+        ],
+        [
+          "p20",
+          2,
+          7,
+          "t",
+          "km"
+        ]
+      ]
+    },
+    {
+      "artifact": "query.json",
+      "bound": false,
+      "held_reuse": {
+        "matched": false
+      },
+      "primary_exact": false,
+      "rows": [
+        [
+          "p17",
+          237,
+          425,
+          "kg",
+          "m"
+        ],
+        [
+          "p18",
+          3,
+          1190,
+          "t",
+          "m"
+        ],
+        [
+          "p19",
+          942,
+          4,
+          "kg",
+          "km"
+        ],
+        [
+          "p20",
+          2,
+          7,
+          "t",
+          "km"
+        ]
+      ]
+    },
+    {
+      "artifact": "query-tkm.json",
+      "bound": false,
+      "held_reuse": {
+        "matched": false
+      },
+      "primary_exact": false,
+      "rows": [
+        [
+          "p17",
+          100725
+        ],
+        [
+          "p18",
+          3570
+        ],
+        [
+          "p19",
+          3768
+        ],
+        [
+          "p20",
+          14
+        ]
+      ]
+    }
+  ],
+  "archive_sha256": "7639abab3757740634b83fb0ede6908a506097def3551b4ab33c2ab489499cd5",
+  "arm": "schema",
+  "case": "od-c02",
+  "complete_economic_cost_known": false,
+  "evidence": {
+    "claims": [
+      {
+        "claim_contract_sha256": "6192f5e3ff54a8143b92b4b1f9a3b6e84922280839c0aa48a71e8d759d53038d",
+        "dataset": "releve-transport-27",
+        "dimension": "mass*distance",
+        "id": "travail",
+        "locator": [
+          "rows",
+          0,
+          0
+        ],
+        "mission_id": "wf_ecc49b531544cfb2b3c731df",
+        "reason": "NO_BOUND_EXECUTION",
+        "requires": {
+          "aggregation": "sum-of-products",
+          "charge_units": [
+            "kg",
+            "t"
+          ],
+          "distance_units": [
+            "m",
+            "km"
+          ]
+        },
+        "revision_sha256": "7f9d9363b4d58fb85d305ff0871549c5c0709a3d38426789d7d92835b91fff7d",
+        "source_version": "registre-tonne-km-v1",
+        "status": "ABSTAIN",
+        "unit": "t·km"
+      }
+    ],
+    "scope": "Case-specific numerical agreement and source binding. Independent custody and production admission are separate.",
+    "status": "ABSTAIN"
+  },
+  "false_user_facing_acceptance": false,
+  "mission_id": "wf_ecc49b531544cfb2b3c731df",
+  "observed_provider_dispatches": 2,
+  "observed_usage": {
+    "observed_tokens_in": 3796,
+    "observed_tokens_out": 640,
+    "unknown_token_replies": 0
+  },
+  "operator_actions_after_case_start": 0,
+  "operator_preparation_and_review_seconds": null,
+  "orchestrator_cpu_seconds": 1.7876010000000004,
+  "outcome_surface": {},
+  "paid_requests": 0,
+  "provider_elapsed_seconds": 149.00728821299708,
+  "raw_drafts": [
+    "Les produits de la charge et du trajet ont été calculés pour chaque ligne. Les résultats intermédiaires sont prêts pour la conversion en tonnes-kilomètres en tenant compte des unités respectives.",
+    "Construire un instrument SQL pour calculer les tonnes-kilomètres à partir des données du relevé d'expéditions.",
+    "La première action consiste à construire un instrument SQL pour calculer les tonnes-kilomètres à partir des données du relevé d’expéditions. Cet instrument sera ensuite exécuté pour obtenir des résultats précis."
+  ],
+  "raw_explicit_contradiction": false,
+  "refusals": [],
+  "reusable_on_withheld": false,
+  "task_elapsed_seconds": 149.48194373399747,
+  "tool_input_origins": [
+    "OPERATOR_APPROVED_DATASET"
+  ],
+  "verdict": "FAIL",
+  "verified_primary": false,
+  "workflow_status": "exhausted"
+}

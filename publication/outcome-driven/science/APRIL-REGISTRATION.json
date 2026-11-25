@@ -1,0 +1,36 @@
+{
+  "baseline_revision": "297a51c25c48031e1e6f964835f4dfae3ddb8023",
+  "clock_test": {
+    "authority": "JPL Horizons Earth center and Sun center state vectors versus solar-system barycenter, ICRF with TIME_TYPE=TDB and VEC_CORR=NONE. Independent conventional comparison uses Astropy bundled ephemeris without downloads. Time pairs use UTC versus TDB, geometric uncorrected versus heliocentric or barycentric, and conservative ground-to-geocenter plus TESS topocenter allowance.",
+    "decision": "Define indistinguishable as less than the larger of 120 s and three combined timing scales, adding the 2 s site/instrument allowance. Test both frozen inner fits and the c fit. If every plausible conversion and half-day bookkeeping variant remains outside the threshold, reject only the registered common-clock aliases. Do not assign the underlying error or establish a physical transit.",
+    "methods": "For the same literal disputed number, convert JD_UTC, JD_TDB, BJD_UTC, BJD_TDB, HJD_UTC and HJD_TDB to BJD_TDB. Iterate inverse light-time to tolerance below 0.001 s. Compare each JPL and Astropy conversion within 0.1 s at geocenter. Allow a deliberately generous independent site/instrument margin of 2 s. Treat noon/midnight bookkeeping separately as signed half-day shifts.",
+    "negative_control": "Shift the known center to a synthetic conventional clock representation and require recovery at sub-0.1 s. A response with incorrect frame, center, ephemeris interval or units must fail admission."
+  },
+  "focal_bjd_tdb": "2460056.8146",
+  "forecast_and_operation": "No new calendar forecast or observing action. This confirmation concerns timing-scope admission only.",
+  "frozen_utc": "2026-11-25T14:25:56+00:00",
+  "input_selection": "Use UTC calendar April 2023 for coverage and 2023-04-21 to 2023-04-29 for JPL vectors. Use only the disputed raw numeric timing and the already frozen Sector 64 inner and outer fitted references for classification. Positive ASAS-SN archive control comes from the same target and month, requiring any public April time rows before interpreting sparse coverage as a source-specific negative. If public data is unavailable, acquisition is BLOCKED rather than zero. No other epoch counts as a physical confirmation.",
+  "object": {
+    "icrs_dec_deg": -63.260063,
+    "icrs_ra_deg": 73.980231,
+    "name": "TOI-216",
+    "tic": 55652896
+  },
+  "physical_admission": {
+    "calendar_and_bjd_windows": "Signed midpoint frequency and time bounds are recorded for the catalogue center, frozen c reference and nearest b reference. Each contact interval uses the corresponding prior frozen b or c duration, with an exterior hour on each side.",
+    "endpoint": "ASAS-SN public Sky Patrol v2 target match anchored by TIC, or the official legacy public coordinate form if no anonymous documented v2 path works",
+    "minimum_gate": "Require independent photons, verified target, calibrated flux and uncertainty, documented timestamps and observatory or time correction, and at least three quality-good observations each before first contact, across ingress, across egress, and after last contact. Each ingress and egress covers a quarter of the nominal duration as a generous first screen. Without coverage, do not fit or assert physical presence or absence. With coverage, preregister fit and attribution tests separately before opening flux values."
+  },
+  "question": "Can otherwise plausible clock standards explain the discrepant catalogue timing? Do independently collected public ASAS-SN exposures cover the disputed April 2023 windows with usable time and flux support?",
+  "resource_limits": {
+    "max_public_metadata_requests": 16,
+    "max_raw_response_bytes_each": 4000000,
+    "max_wall_seconds_per_request": 30,
+    "no_auth_or_payments": true
+  },
+  "schema": "frontier/toi216-april-independent-clock-coverage-registration-v1",
+  "source_binding": {
+    "publication/cascade/POST-REVEAL-INPUT.json": "c5e725d5e0b1efd774e3c1f03ba3404247946d6817b9cdcc4b52ac60123bcaf0",
+    "publication/factory/TRANSIT.json": "57652f0c6a7bd9ed49de805172b48bd6bcf689b4a13111f7b536c20a44ebad25"
+  }
+}

@@ -1,0 +1,142 @@
+{
+  "schema": "frontier/production-telemetry-repeat-assessment/v1",
+  "assessed_at": "2026-11-25T14:54:31.362222+00:00",
+  "registration_sha256": "667dbd4f647caaeec2522bf94de8de8f19056c8b29a13853c3e24b0bc0d39bdc",
+  "deployment": {
+    "browser_entry": "https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/frontier-omega-alpha/#my-frontier",
+    "source_revision": "9a53a4b8bb7eb3d5f82f50effcf44e3ec1291d19",
+    "reviewed_revision_same_tree": "2dcf1f252e7bb6eff528a2ef60e3314cab477e88",
+    "source_tree": "09d65a79d6b74bef02121ba5eb6ccaa29a9d338a",
+    "workflow_run": "45637319050",
+    "executor": "frontier-harness-executor-1.2.0.zip",
+    "executor_sha256": "dd37e23f26294f14632c0c501ad13b3255bf96c493541efc4683dfc213dad939",
+    "browser_module_sha256": "19fd1f442b3e4fd8a89141c45788b960ace97c66b9857200b8d2b573420529a7",
+    "live_release_receipt_sha256": "8c74392dda4753ad549dadfaac90d23d3d70aebc1efe4a25ad37dde07c97fb4d"
+  },
+  "transport": {
+    "decision": "PASS",
+    "scope": "Public production Pages with an isolated wallet eligibility fixture and actual local inference.",
+    "local_model": "qwen3-8b-q4_k_m",
+    "exact_ambition_sha256": "9153c43128c6ed10ce9c48bd57e75f5c27efb6c4e8a0f9b504bbd43941b7708c",
+    "fresh_mission": true,
+    "same_paired_intelligence": true,
+    "new_intelligence_setup_calls": 0,
+    "browser_session_initial_receipt_sha256": "af3c872444e1240cfa2d5f88cd17c37bef4e3681d9ac3565e9f0b5b4251f01e5",
+    "browser_session_restart_receipt_sha256": "1cbf8cb0a138456ac69c87294a9c3829b0294c4c68160558b775c265806a6b14",
+    "browser_repeat_receipt_sha256": "cad55b29f88a7d4176faedf229080f86ef9864ed9379ec66c7cd4942fd03cf6d",
+    "downloaded_archive_sha256": "ac4a1d539693418c5d4706ad233c6c5bff50b439f47cabc8e3d95a2798644088",
+    "checkpoint_sha256": "696849a322eef64a80d2928fe0784de1ad057bbd880b97d242bbd32df4d5a3c5",
+    "artifact_and_event_checksums_verified": true,
+    "artifact_bound_to_construction_event": true
+  },
+  "observed_production_execution": {
+    "status": "exhausted",
+    "model_completed_responses": 3,
+    "tool_actions": 10,
+    "artifact_constructions": 3,
+    "refused_classification_runs": 7,
+    "classification_demonstrations_completed": 0,
+    "refusal": "if needs three operands.",
+    "development_verification_passed": false
+  },
+  "independent_computation": {
+    "decision": "FAIL",
+    "qualification": "NO_GO",
+    "artifact": "telemetry_classifier.json",
+    "artifact_sha256": "b6bdcf7b40194f35723d03000ab317969ea544920c9bb7ee493dfcf52967e724",
+    "artifact_bytes_utf8": "{\n  \"inputs\": [\n    \"previous\",\n    \"current\"\n  ],\n  \"name\": \"TelemetryClassifier\",\n  \"outputs\": {\n    \"classification\": {\n      \"args\": [\n        {\n          \"field\": \"previous\"\n        },\n        {\n          \"field\": \"current\"\n        }\n      ],\n      \"op\": \"if\"\n    }\n  }\n}",
+    "trusted_evaluator_sha256": "9c7dede3414cebcf2a99043cb1ef39e546f5b413157e53d2959d131cbfdb8eb7",
+    "method": "Replay unchanged archived JSON with the installed trusted standalone evaluator and typed registration inputs. Each call ran in isolated Python without model access.",
+    "replay_error": "if needs three operands.",
+    "candidate_exact_matches": 0,
+    "ordinary_python_exact_matches": 12,
+    "held_cases_total": 12,
+    "cases": [
+      {
+        "id": "zero_plateau",
+        "expected": "normal",
+        "actual": null,
+        "ordinary_python": "normal",
+        "exit_code": 1
+      },
+      {
+        "id": "high_plateau",
+        "expected": "normal",
+        "actual": null,
+        "ordinary_python": "normal",
+        "exit_code": 1
+      },
+      {
+        "id": "opposite_direction",
+        "expected": "normal",
+        "actual": null,
+        "ordinary_python": "normal",
+        "exit_code": 1
+      },
+      {
+        "id": "upper_increment",
+        "expected": "normal",
+        "actual": null,
+        "ordinary_python": "normal",
+        "exit_code": 1
+      },
+      {
+        "id": "joint_inclusive_boundary",
+        "expected": "wrap",
+        "actual": null,
+        "ordinary_python": "wrap",
+        "exit_code": 1
+      },
+      {
+        "id": "maximum_to_zero",
+        "expected": "wrap",
+        "actual": null,
+        "ordinary_python": "wrap",
+        "exit_code": 1
+      },
+      {
+        "id": "upper_previous_inclusive_current",
+        "expected": "wrap",
+        "actual": null,
+        "ordinary_python": "wrap",
+        "exit_code": 1
+      },
+      {
+        "id": "inside_wrap_window",
+        "expected": "wrap",
+        "actual": null,
+        "ordinary_python": "wrap",
+        "exit_code": 1
+      },
+      {
+        "id": "one_below_previous_threshold",
+        "expected": "reset",
+        "actual": null,
+        "ordinary_python": "reset",
+        "exit_code": 1
+      },
+      {
+        "id": "one_above_current_threshold",
+        "expected": "reset",
+        "actual": null,
+        "ordinary_python": "reset",
+        "exit_code": 1
+      },
+      {
+        "id": "maximum_previous_current_over_boundary",
+        "expected": "reset",
+        "actual": null,
+        "ordinary_python": "reset",
+        "exit_code": 1
+      },
+      {
+        "id": "small_decrease",
+        "expected": "reset",
+        "actual": null,
+        "ordinary_python": "reset",
+        "exit_code": 1
+      }
+    ]
+  },
+  "scope_limit": "The result covers one unchanged artifact and one separately authored held case set under shared project administration. The browser transfer and the independently scored computation have separate decisions."
+}

@@ -1,0 +1,96 @@
+{
+  "ambition": "Build Frontier AI for Game Theory.",
+  "base": "https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/frontier-omega-alpha/",
+  "checkpoint_sha256": "e60ef2d8915389eb7719fd2ddedbcb328e813618929c2d1dd625c53d64fd55ff",
+  "discovery": [
+    {
+      "configured": false,
+      "engine": "llama-cpp",
+      "model": "qwen3-8b-q4_k_m"
+    }
+  ],
+  "executor_sha256": "dd37e23f26294f14632c0c501ad13b3255bf96c493541efc4683dfc213dad939",
+  "export_sha256": "b54ee466c64b1fa48492954074337c379f5c9327750e99bdd9dfe9b6850bab2d",
+  "language": "en",
+  "mode": "start",
+  "module_sha256": "19fd1f442b3e4fd8a89141c45788b960ace97c66b9857200b8d2b573420529a7",
+  "operations": [
+    "pair",
+    "intelligence-discover",
+    "intelligence-connect",
+    "submit",
+    "list",
+    "get",
+    "export"
+  ],
+  "release_revision": "9a53a4b8bb7eb3d5f82f50effcf44e3ec1291d19",
+  "selection": {
+    "check": {
+      "at": "2026-11-25T14:56:48.932580+00:00",
+      "elapsed_ms": 3875,
+      "format": "json_schema",
+      "input_tokens": 35,
+      "output_tokens": 28
+    },
+    "mode": "hybrid",
+    "model": "qwen3-8b-q4_k_m",
+    "provider": "frontier-local-641ae16dc5810b8e3c02fba9297f06dca125d4a68a106d1b6c364b9f2cb0a5ab",
+    "ready": true
+  },
+  "setup": {
+    "automatic_return": true,
+    "exact_submit_count": 1,
+    "guide_one_use": true,
+    "reopened": true
+  },
+  "state": {
+    "actions": 2,
+    "files": [],
+    "id": "wf_de2d6ea82c13f2e290865a10",
+    "model_calls": 1,
+    "phase": "builder",
+    "recorded_events": [
+      {
+        "kind": "created"
+      },
+      {
+        "kind": "model_queued"
+      },
+      {
+        "kind": "model_started"
+      },
+      {
+        "kind": "model_completed",
+        "usage": {
+          "input_tokens": 848,
+          "output_tokens": 299
+        }
+      },
+      {
+        "kind": "route_proposed"
+      },
+      {
+        "kind": "tool_refused",
+        "reason": "Instrument filename must end in .json.",
+        "tool": "construct_instrument"
+      },
+      {
+        "kind": "tool_refused",
+        "reason": "Read access is restricted to this run's declared artifacts.",
+        "tool": "run_instrument"
+      },
+      {
+        "kind": "verification"
+      },
+      {
+        "kind": "stopped",
+        "reason": "Declared model-call allocation exhausted; no further inference dispatched."
+      }
+    ],
+    "status": "exhausted"
+  },
+  "visible_claims": [],
+  "visible_outcome": "Mission outcome\n\nReview the recorded work and evidence to assess completion.",
+  "wallet": "isolated eligibility fixture",
+  "workflow_run": "45637319050"
+}

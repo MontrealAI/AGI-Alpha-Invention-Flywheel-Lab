@@ -1,0 +1,36 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "content": "{\n  \"summary\": \"Lancer la construction de la table SQL pour extraire les données nécessaires à la calcul de la puissance moyenne.\",\n  \"actions\": [\n    {\n      \"tool\": \"construct_table\",\n      \"name\": \"query.json\",\n      \"dataset\": \"cycles-banc-39\",\n      \"sql\": \"SELECT mesures.cycle, mesures.duree_s, mesures.energie_j FROM mesures;\"\n    }\n  ],\n  \"done\": false\n}",
+        "role": "assistant"
+      }
+    }
+  ],
+  "created": 1795617067,
+  "id": "chatcmpl-9JBT8IHqSg8yzfRV8mv6iO7oGethvzlX",
+  "model": "qwen3-8b-q4_k_m",
+  "object": "chat.completion",
+  "system_fingerprint": "b12242-3b4d6ab3f",
+  "timings": {
+    "cache_n": 297,
+    "predicted_ms": 12600.168,
+    "predicted_n": 105,
+    "predicted_per_second": 8.253858202525553,
+    "predicted_per_token_ms": 121.15546153846154,
+    "prompt_ms": 23517.248,
+    "prompt_n": 1058,
+    "prompt_per_second": 44.98825712940562,
+    "prompt_per_token_ms": 22.22802268431002
+  },
+  "usage": {
+    "completion_tokens": 105,
+    "prompt_tokens": 1355,
+    "prompt_tokens_details": {
+      "cached_tokens": 297
+    },
+    "total_tokens": 1460
+  }
+}

@@ -1,0 +1,215 @@
+[
+  {
+    "ambition": "Build and run a reusable exact calculator for the seat-time occupancy ratio of regular campus shuttle service. Exclude cancelled trips and charter service. Give the fraction for my authorized records.",
+    "data": {
+      "journeys": [
+        {
+          "capacity": 13,
+          "departure": "u14",
+          "line_id": "harbor",
+          "minutes": 11,
+          "occupied": 7,
+          "state": "operated"
+        },
+        {
+          "capacity": 14,
+          "departure": "u15",
+          "line_id": "orchard",
+          "minutes": 19,
+          "occupied": 11,
+          "state": "operated"
+        },
+        {
+          "capacity": 13,
+          "departure": "u16",
+          "line_id": "harbor",
+          "minutes": 8,
+          "occupied": 0,
+          "state": "cancelled"
+        },
+        {
+          "capacity": 20,
+          "departure": "u17",
+          "line_id": "airport",
+          "minutes": 33,
+          "occupied": 18,
+          "state": "operated"
+        },
+        {
+          "capacity": 13,
+          "departure": "u18",
+          "line_id": "harbor",
+          "minutes": 17,
+          "occupied": 5,
+          "state": "operated"
+        }
+      ],
+      "services": [
+        {
+          "line_id": "harbor",
+          "scope": "regular"
+        },
+        {
+          "line_id": "orchard",
+          "scope": "regular"
+        },
+        {
+          "line_id": "airport",
+          "scope": "charter"
+        }
+      ]
+    },
+    "dataset": "mobility-bay-16",
+    "facts": {
+      "duration_weighting": "seat-time",
+      "required_state": "operated",
+      "service_scope": "regular"
+    },
+    "id": "od-c01",
+    "lang": "en",
+    "metrics": [
+      [
+        "occupancy",
+        "ratio",
+        "seat-time/seat-time"
+      ]
+    ],
+    "oracle": "occupancy",
+    "schema": {
+      "journeys": {
+        "capacity": "INTEGER",
+        "departure": "TEXT",
+        "line_id": "TEXT",
+        "minutes": "INTEGER",
+        "occupied": "INTEGER",
+        "state": "TEXT"
+      },
+      "services": {
+        "line_id": "TEXT",
+        "scope": "TEXT"
+      }
+    },
+    "semantics": "Join journeys.line_id to services.line_id, whose key is unique. The rows have no missing required measurements. Include scope=regular and state=operated only. Divide the sum of occupied seats times minutes by the sum of offered capacity times minutes over those same trips. Minutes and capacities are positive. Supply one exact rational result in the sole output column.",
+    "version": "regular-service-schema-v1"
+  },
+  {
+    "ambition": "Construisez puis utilisez un instrument réutilisable qui calcule exactement les tonnes-kilomètres de mon relevé d’expéditions autorisé. Donnez un résultat exact en t·km.",
+    "data": {
+      "expeditions": [
+        {
+          "charge": 237,
+          "lot": "p17",
+          "trajet": 425,
+          "u_charge": "kg",
+          "u_trajet": "m"
+        },
+        {
+          "charge": 3,
+          "lot": "p18",
+          "trajet": 1190,
+          "u_charge": "t",
+          "u_trajet": "m"
+        },
+        {
+          "charge": 942,
+          "lot": "p19",
+          "trajet": 4,
+          "u_charge": "kg",
+          "u_trajet": "km"
+        },
+        {
+          "charge": 2,
+          "lot": "p20",
+          "trajet": 7,
+          "u_charge": "t",
+          "u_trajet": "km"
+        }
+      ]
+    },
+    "dataset": "releve-transport-27",
+    "facts": {
+      "aggregation": "sum-of-products",
+      "charge_units": [
+        "kg",
+        "t"
+      ],
+      "distance_units": [
+        "m",
+        "km"
+      ]
+    },
+    "id": "od-c02",
+    "lang": "fr",
+    "metrics": [
+      [
+        "travail",
+        "t·km",
+        "mass*distance"
+      ]
+    ],
+    "oracle": "transport",
+    "schema": {
+      "expeditions": {
+        "charge": "INTEGER",
+        "lot": "TEXT",
+        "trajet": "INTEGER",
+        "u_charge": "TEXT",
+        "u_trajet": "TEXT"
+      }
+    },
+    "semantics": "Additionner, pour chaque ligne, le produit de la charge en tonnes et du trajet en kilomètres. Une tonne vaut 1000 kg et un kilomètre vaut 1000 m. Les unités u_charge et u_trajet distinguent ces cas. Les mesures sont entières dans les unités inscrites, et positives. Renvoyer une colonne, un résultat exact, sans division entière tronquée (texte numérateur/dénominateur permis).",
+    "version": "registre-tonne-km-v1"
+  },
+  {
+    "ambition": "Déterminez la puissance moyenne exacte de ce banc d’essai sur tous les cycles autorisés. Si une mesure appariée requise manque, indiquez précisément la cellule et abstenez-vous de donner la puissance totale.",
+    "data": {
+      "mesures": [
+        {
+          "cycle": "tulipe-7",
+          "duree_s": 13,
+          "energie_j": 83
+        },
+        {
+          "cycle": "piquet-5",
+          "duree_s": null,
+          "energie_j": 127
+        },
+        {
+          "cycle": "verre-2",
+          "duree_s": 17,
+          "energie_j": 214
+        },
+        {
+          "cycle": "satin-4",
+          "duree_s": 9,
+          "energie_j": 77
+        }
+      ]
+    },
+    "dataset": "cycles-banc-39",
+    "facts": {
+      "missing_value": "null",
+      "require_all_pairs": true,
+      "scope": "all cycles"
+    },
+    "id": "od-c03",
+    "lang": "fr",
+    "metrics": [
+      [
+        "puissance",
+        "W",
+        "energy/time"
+      ]
+    ],
+    "oracle": "power",
+    "schema": {
+      "mesures": {
+        "cycle": "TEXT",
+        "duree_s": "INTEGER",
+        "energie_j": "INTEGER"
+      }
+    },
+    "semantics": "Diviser la somme de toutes les énergies mesurées (J) par la somme de toutes les durées correspondantes (s), pour obtenir des watts. Les deux mesures sont nécessaires pour chaque cycle. Identifier toute cellule indisponible par table, index de ligne à partir de zéro et colonne, ou par cycle et colonne. Ne pas remplacer les durées manquantes ni recalculer sur un sous-ensemble.",
+    "version": "energie-temps-v1"
+  }
+]

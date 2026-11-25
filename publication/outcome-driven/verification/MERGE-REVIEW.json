@@ -1,0 +1,73 @@
+{
+  "schema": "frontier/exact-release-review/v1",
+  "pull_request": 596,
+  "approved_base": "297a51c25c48031e1e6f964835f4dfae3ddb8023",
+  "reviewed_candidate": "2dcf1f252e7bb6eff528a2ef60e3314cab477e88",
+  "candidate_tree": "09d65a79d6b74bef02121ba5eb6ccaa29a9d338a",
+  "merged_source": "9a53a4b8bb7eb3d5f82f50effcf44e3ec1291d19",
+  "merged_tree": "09d65a79d6b74bef02121ba5eb6ccaa29a9d338a",
+  "same_release_tree": true,
+  "code_review": {
+    "status": "completed",
+    "unresolved_findings": false,
+    "url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/pull/596#issuecomment-7165189080"
+  },
+  "security_review": {
+    "status": "completed",
+    "found_issues": false,
+    "url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/pull/596#issuecomment-7165645480"
+  },
+  "pages_candidate": {
+    "run_id": 45635483037,
+    "jobs": [
+      {
+        "id": 139279660763,
+        "name": "build",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 139280619115,
+        "name": "verify-live",
+        "status": "completed",
+        "conclusion": "skipped"
+      },
+      {
+        "id": 139280619447,
+        "name": "deploy",
+        "status": "completed",
+        "conclusion": "skipped"
+      }
+    ]
+  },
+  "native_candidate": {
+    "run_id": 45635482651,
+    "jobs": [
+      {
+        "id": 139279660093,
+        "name": "qualify",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 139279660904,
+        "name": "local-model-qualification",
+        "status": "in_progress",
+        "conclusion": null
+      },
+      {
+        "id": 139281458399,
+        "name": "platform-first-use (macos-15)",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 139281458504,
+        "name": "platform-first-use (windows-2025)",
+        "status": "completed",
+        "conclusion": "success"
+      }
+    ]
+  },
+  "scope": "The hosted Pages build, native extracted-package qualification, both first-use platform jobs, and independent review completed before the squash merge. The hosted local-model campaign was still in progress."
+}

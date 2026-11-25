@@ -1,0 +1,48 @@
+{
+  "schema": "frontier-outcome-driven-productivity-registration-v1",
+  "registered_at": "2026-11-25T14:08:33Z",
+  "source_commit": "297a51c25c48031e1e6f964835f4dfae3ddb8023",
+  "beneficiary": "MONTREAL.AI release and local inference operators",
+  "productive_need": "Determine the exact release to use, whether production is verified, and which phase consumed the elapsed time. Distinguish platform wait from running scientific or deployment work.",
+  "alternatives_considered": [
+    {"objective": "Exact publication timeline and production go/hold", "selection": "Selected. Two separately shipped release decisions, observed queue delay, and useful evidence within authorized public inputs."},
+    {"objective": "Restore GPU-assisted inference on the existing owner host", "selection": "Awaiting owner-side authorization and observations. Public checkpoint metadata alone cannot establish actual fit or useful throughput."},
+    {"objective": "Use NISAR observation to affect a real site decision", "selection": "Actual accepted imagery task and its operator are absent. Another catalogue shortlist would duplicate the earlier experiment."}
+  ],
+  "o1": {
+    "title": "MONTREAL.AI Pages release verification and actionable delay accounting",
+    "cases": [
+      {"id": "reviewed-product", "commit": "f8b8f95b1ef10641a82d1b98f4b13e0b8cd5bb43", "workflow_run": 45547873631, "publication_witness": "d4527cb28e5bed6a0ff15a0d1fc2effa9de76a4a:/publication/evidence-bound/production/LIVE-RELEASE.json", "intent": "Historical verified deployment of product #594; identify the longest included platform waiting interval from actual timestamps."},
+      {"id": "current-research", "commit": "297a51c25c48031e1e6f964835f4dfae3ddb8023", "workflow_run_selection": "Earliest positive-id push run of research-pages.yml for the exact commit on main. Retain later observations separately.", "publication_witness": "https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/frontier-omega-alpha/atlas-release.json", "intent": "Decide whether the expected research revision is currently served, reconcile the three job statuses and identify the longest included waiting interval."}
+    ],
+    "acceptance": [
+      "Authoritative Actions workflow, main push, exact SHA and attempt agree. Required build, deploy and verify-live jobs are each observed exactly once with success for a GO.",
+      "Independently acquired production receipt must match expected SHA and expected run. Give explicit HOLD when missing or different, without saying a historical successful verification is current.",
+      "Job waiting intervals use the duration from job creation to its first recorded setup or other started step. Do not treat the job-level started_at as runner assignment. Mark missing, inverted or otherwise invalid intervals unavailable.",
+      "Report total submitted-to-verified elapsed time, per-job proxy wait and largest observed wait when complete. Missing timing keeps the wait finding bounded, and missing gate facts keep the decision on hold."
+    ],
+    "counterfactual": "Competent deterministic conventional implementation with the same full normalized primary observations and publication witness, using independent direct conditionals and exact standard-library timestamp arithmetic. Both get the same one-time acquisition and allowed source projection.",
+    "repetitions": "9 end-to-end local fresh-process executions per method and case, alternating within case with medians, low/high and CPU. Report source acquisition separately; matching bytes are not refetched for each method.",
+    "materiality": "All actual source facts and outputs must agree with the conventional witness, with zero false acceptances in the registered negative controls. A speed advantage requires at least 20% and one wall second per whole process on each repeat case, with operator/inference/development costs available for economic promotion. A technical tie selects the simpler incumbent.",
+    "controls": ["wrong commit", "missing required job", "unsuccessful verify-live", "equal-shaped fixture origin", "stale production witness", "missing first-step timing", "duplicate job identity"]
+  },
+  "o2": {
+    "title": "Separate runtime source acquisition acceptance for the approved Linux CPU local model engine",
+    "publisher": "https://api.github.com/repos/ggml-org/llama.cpp/releases/tags/b12242",
+    "artifact": "llama-b12242-bin-ubuntu-x64.tar.gz",
+    "operator_scope": "Already downloaded b12242 archive and working Linux CPU environment. Read existing approved archive and logs only. No new binary, execution or network authorization beyond official public metadata is inferred.",
+    "lineage": "I0 is included Codex construction with ordinary Python and public inputs. O1 is publication operation. A1 is the reusable stage decision and receipt. R1 is retained immutable document projection, exact source binding, required-fact checklist and first-failing prerequisite. O2 is independent of Pages and uses an upstream software asset to establish local runtime provenance and payload completeness. Conventional integration, competent ordinary reuse and an independently evaluated matching inventor remain explicit comparators.",
+    "arms": [
+      {"id": "original", "scope": "Historical O1-specific operator path, unchanged. The O2 mismatch must be an explicit out-of-scope observation."},
+      {"id": "withdrawn", "scope": "Same O2 candidate observation and checks but remove the assertion of publisher identity/digest. This arm must hold because no scoped authority can support the output."},
+      {"id": "retained", "scope": "Use R1 scoped record gate and independent conventional file measurement. Actual O2 identity and records must be verified."},
+      {"id": "ordinary-reuse", "scope": "Competent adaptation of the same complete information and prior rule semantics to direct ordinary positive comparisons. No withholding prior work."},
+      {"id": "conventional-integration", "scope": "Independent ordinary SHA-256/size observations and separately implemented conventional O2 checks. Shared acquisition held fixed amongst all arms."}
+    ],
+    "acceptance": "Actual named official b12242 file has uploaded state, complete SHA-256 and exact byte count. Separately read and hash the existing artifact. If those and tag/name match in scope, qualify provenance and captured bytes only. Archive structure and recorded installed runtime version are distinct evidence. Never infer GPU compatibility, all extraction paths, authorization for new builds, or cross-platform operation.",
+    "controls": ["publisher digest altered", "wrong release tag", "same-sized different digest", "bytes missing"],
+    "materiality": "Inventor improvement requires a fresh independently controlled objective and matched authoring conditions plus a construction quality or whole-work cost gain against the strongest equal-content baseline. Without these, record the measured same-author mechanism transfer as bounded only and decline I1 promotion."
+  },
+  "stopping": "Two Pages decisions, one distinct captured runtime source decision and registered denial controls. Anonymous public GET only, final use measured within the existing environment. No rerun, cancellation, credential use, charges, service installation, scheduler mutation, commercial contact or private host action. Any missing required resource leaves that outcome explicitly pending or held.",
+  "cost_limits": "Report local measured elapsed/CPU and observed acquisition count/body bytes; paid-provider requests and actual payments are zero. Included Codex authoring wall window is disclosed, with inference resource use, acquisition proxy cost, recurring labor, memory power, business benefit and actual revenue separately unknown or unperformed."
+}

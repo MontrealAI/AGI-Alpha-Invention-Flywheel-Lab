@@ -1,0 +1,72 @@
+{
+  "body": {
+    "max_tokens": 560,
+    "messages": [
+      {
+        "content": "Solve the actual user task exactly. Use ordinary read-only SQLite with the supplied table schema and rows. Candidate SQL must be SELECT or WITH and return all registered values as exact integers or rational text. SQL may concatenate exact integer numerator and denominator with '||' and '/'. Use the user's language for explanation. Reuse the same query on other rows of these tables. On missing required observations, output ABSTAIN, pinpoint the cell, and return an empty result. A complete numeric result requires the same approved rows, executed query, and exact metric keys. Output one JSON object with decision, queries, result, missing and explanation. Tool checks report reference agreement separately.\n{\"previous\":[],\"task\":{\"ambition\":\"Déterminez la puissance moyenne exacte de ce banc d’essai sur tous les cycles autorisés. Si une mesure appariée requise manque, indiquez précisément la cellule et abstenez-vous de donner la puissance totale.\",\"data\":{\"mesures\":[{\"cycle\":\"tulipe-7\",\"duree_s\":13,\"energie_j\":83},{\"cycle\":\"piquet-5\",\"duree_s\":null,\"energie_j\":127},{\"cycle\":\"verre-2\",\"duree_s\":17,\"energie_j\":214},{\"cycle\":\"satin-4\",\"duree_s\":9,\"energie_j\":77}]},\"dataset\":\"cycles-banc-39\",\"facts\":{\"missing_value\":\"null\",\"require_all_pairs\":true,\"scope\":\"all cycles\"},\"lang\":\"fr\",\"metrics\":[[\"puissance\",\"W\",\"energy/time\"]],\"schema\":{\"mesures\":{\"cycle\":\"TEXT\",\"duree_s\":\"INTEGER\",\"energie_j\":\"INTEGER\"}},\"semantics\":\"Diviser la somme de toutes les énergies mesurées (J) par la somme de toutes les durées correspondantes (s), pour obtenir des watts. Les deux mesures sont nécessaires pour chaque cycle. Identifier toute cellule indisponible par table, index de ligne à partir de zéro et colonne, ou par cycle et colonne. Ne pas remplacer les durées manquantes ni recalculer sur un sous-ensemble.\"}}",
+        "role": "user"
+      }
+    ],
+    "model": "qwen3-8b-q4_k_m",
+    "response_format": {
+      "json_schema": {
+        "name": "harness_output",
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "decision": {
+              "enum": [
+                "CONTINUE",
+                "ANSWER",
+                "ABSTAIN"
+              ]
+            },
+            "explanation": {
+              "maxLength": 900,
+              "type": "string"
+            },
+            "missing": {
+              "items": {
+                "maxLength": 160,
+                "type": "string"
+              },
+              "maxItems": 12,
+              "type": "array"
+            },
+            "queries": {
+              "items": {
+                "maxLength": 6000,
+                "type": "string"
+              },
+              "maxItems": 4,
+              "type": "array"
+            },
+            "result": {
+              "additionalProperties": {
+                "maxLength": 100,
+                "type": "string"
+              },
+              "type": "object"
+            }
+          },
+          "required": [
+            "decision",
+            "queries",
+            "result",
+            "missing",
+            "explanation"
+          ],
+          "type": "object"
+        },
+        "strict": true
+      },
+      "type": "json_schema"
+    },
+    "seed": 4242,
+    "stream": false,
+    "temperature": 0
+  },
+  "canonical_body_sha256": "acf9dfe902dbd75dfcce8e09ca9e5550f045314af87a86187e6c7af061675d5f",
+  "endpoint": "http://127.0.0.1:38461/v1/chat/completions",
+  "transport_body_sha256": "b6ed7d6bef72c309c8a8ca082ed2b5ff843b3be37001d28adea12bf8342d6f53"
+}

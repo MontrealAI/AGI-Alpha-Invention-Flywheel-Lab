@@ -1,0 +1,36 @@
+{
+  "choices": [
+    {
+      "finish_reason": "length",
+      "index": 0,
+      "message": {
+        "content": "{\n  \"summary\": \"Construct a query to calculate the seat-time occupancy ratio using the provided dataset, focusing on regular service trips that are operated.\",\n  \"actions\": [\n    {\n      \"tool\": \"construct_table\",\n      \"name\": \"occupancy_table\",\n      \"schema\": {\n        \"events\": {\n          \"score\": \"INTEGER\"\n        }\n      },\n      \"sql\": \"SELECT SUM(journeys.occupied * journeys.minutes) / SUM(journeys.capacity * journeys.minutes) AS occupancy_ratio FROM journeys JOIN services ON journeys.line_id = services.line_id WHERE services.scope = 'regular' AND journeys.state = 'operated'\"\n    },\n    {\n      \"tool\": \"run_table\",\n      \"name\": \"occupancy_table\",\n      \"input\": {\n        \"fixtures\": {\n          \"events\": [\n            {\"capacity\": 13, \"departure\": \"u14\", \"line_id\": \"harbor\", \"minutes\": 11, \"occupied\": 7, \"state\": \"operated\"},\n            {\"capacity\": 14, \"departure\": \"u15\", \"line_id\": \"orchard\", \"minutes\": 19, \"occupied\": 11, \"state\": \"operated\"},\n            {\"capacity\": 20, \"departure\": \"u17\", \"line_id\": \"airport\", \"minutes\": 33, \"occupied\": 18, \"state\": \"operated\"},\n            {\"capacity\": 13, \"departure\": \"u18\", \"line_id\": \"harbor\", \"minutes\": 17, \"occupied\": 5, \"state\": \"operated\"}\n          ]\n        }\n      }\n    },\n    {\n      \"tool\": \"read_artifact\",\n      \"name\": \"calc.json\"\n    },\n    {\n      \"tool\": \"write_document\",\n      \"name\": \"result.md\",\n      \"content\": \"The seat-time occupancy ratio for regular campus shuttle service trips that are operated is calculated as follows: the sum of occupied seats times minutes is divided by the sum of offered capacity times minutes. The result is an exact rational number representing the occupancy ratio.\"\n    },\n    {\n      \"tool\": \"construct_table\",\n      \"name\": \"occupancy_table\",\n      \"schema\": {\n        \"events\": {\n          \"score\": \"INTEGER\"\n        }\n      },\n      \"sql\": \"SELECT SUM(journeys.occupied * journeys.minutes) AS total_occupied, SUM(journeys.capacity * journeys.minutes) AS total_capacity FROM journeys JOIN services ON journeys.line_id = services.line_id WHERE services.scope = 'regular' AND journeys.state = 'operated'\"\n    },\n    {\n      \"tool\": \"run_table\",\n     ",
+        "role": "assistant"
+      }
+    }
+  ],
+  "created": 1795617193,
+  "id": "chatcmpl-KU6NHStack5hZcjNm7ClPMe3ZcUksmrR",
+  "model": "qwen3-8b-q4_k_m",
+  "object": "chat.completion",
+  "system_fingerprint": "b12242-3b4d6ab3f",
+  "timings": {
+    "cache_n": 699,
+    "predicted_ms": 72104.862,
+    "predicted_n": 560,
+    "predicted_per_second": 7.752597876132126,
+    "predicted_per_token_ms": 128.98901967799642,
+    "prompt_ms": 12001.962,
+    "prompt_n": 524,
+    "prompt_per_second": 43.659528333784095,
+    "prompt_per_token_ms": 22.904507633587784
+  },
+  "usage": {
+    "completion_tokens": 560,
+    "prompt_tokens": 1223,
+    "prompt_tokens_details": {
+      "cached_tokens": 699
+    },
+    "total_tokens": 1783
+  }
+}

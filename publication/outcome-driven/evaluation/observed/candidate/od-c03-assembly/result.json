@@ -1,0 +1,135 @@
+{
+  "action_attempts": 5,
+  "actual_tool_events": 5,
+  "archive_sha256": "c06f41f0a314b483c9e56efc81c088a7c1d1f8a0c05462d51f43473332bd9c4d",
+  "arm": "assembly",
+  "case": "od-c03",
+  "complete_economic_cost_known": false,
+  "evidence": {
+    "claims": [
+      {
+        "claim_contract_sha256": "588d71530ca3d7ad764a70e371827ff69577015c414fbf57e63d5cbd1bfade5a",
+        "dataset": "cycles-banc-39",
+        "dimension": "energy/time",
+        "id": "puissance",
+        "locator": [
+          "rows",
+          0,
+          0
+        ],
+        "mission_id": "wf_72610fca3e2140c2bd4c37a1",
+        "reason": "REQUIRED_FIELD_MISSING",
+        "requires": {
+          "missing_value": "null",
+          "require_all_pairs": true,
+          "scope": "all cycles"
+        },
+        "revision_sha256": "2686c296376850505012c7aec752f9eec0de48546dda09d108f40fe7a929181a",
+        "source_version": "energie-temps-v1",
+        "status": "ABSTAIN",
+        "unit": "W"
+      }
+    ],
+    "scope": "Case-specific numerical agreement and source binding. Independent custody and production admission are separate.",
+    "status": "ABSTAIN"
+  },
+  "false_user_facing_acceptance": false,
+  "mission_id": "wf_72610fca3e2140c2bd4c37a1",
+  "observed_provider_dispatches": 1,
+  "observed_usage": {
+    "observed_tokens_in": 1067,
+    "observed_tokens_out": 436,
+    "unknown_token_replies": 0
+  },
+  "operator_actions_after_case_start": 0,
+  "operator_preparation_and_review_seconds": null,
+  "orchestrator_cpu_seconds": 0.7027840000000012,
+  "outcome_surface": {
+    "conclusions": [],
+    "contract": {
+      "abstention_conditions": [],
+      "alternatives": [],
+      "approved_inputs": [
+        {
+          "id": "cycles-banc-39",
+          "kind": "table",
+          "origin": "AUTHORIZED_MISSION_INPUT",
+          "source_version": "energie-temps-v1"
+        }
+      ],
+      "approved_source_captures": [],
+      "approved_source_count": 0,
+      "assumptions": [],
+      "constraints": [],
+      "criteria": [],
+      "deliverable": "Déterminez la puissance moyenne exacte de ce banc d’essai sur tous les cycles autorisés. Si une mesure appariée requise manque, indiquez précisément la cellule et abstenez-vous de donner la puissance totale.",
+      "objective": "Déterminez la puissance moyenne exacte de ce banc d’essai sur tous les cycles autorisés. Si une mesure appariée requise manque, indiquez précisément la cellule et abstenez-vous de donner la puissance totale.",
+      "original_ambition": "Déterminez la puissance moyenne exacte de ce banc d’essai sur tous les cycles autorisés. Si une mesure appariée requise manque, indiquez précisément la cellule et abstenez-vous de donner la puissance totale.",
+      "required_claims": [
+        "puissance"
+      ],
+      "resource_envelope": {
+        "local_only": true,
+        "max_actions": 10,
+        "max_iterations": 2,
+        "max_operations": 10000,
+        "max_output_tokens": 560,
+        "tool_permissions": [
+          "construct_table",
+          "run_table",
+          "read_artifact",
+          "write_document"
+        ]
+      },
+      "verification": null
+    },
+    "contract_sha256": "9f82e20c7b6490684bc954dba3c99744b5a254aabef5959c5a4cb3473fb990c2",
+    "independent_acceptance": "NOT_ESTABLISHED",
+    "language": "fr",
+    "message": "Une donnée ou une observation requise manque. Fournissez les éléments indiqués avant de tirer la conclusion.",
+    "mission_id": "wf_72610fca3e2140c2bd4c37a1",
+    "quantitative_report_ready": false,
+    "revision_sha256": "2686c296376850505012c7aec752f9eec0de48546dda09d108f40fe7a929181a",
+    "schema": "frontier/mission-outcome/v1",
+    "status": "ABSTAIN",
+    "unresolved": [
+      {
+        "claim_contract_sha256": "588d71530ca3d7ad764a70e371827ff69577015c414fbf57e63d5cbd1bfade5a",
+        "dataset": "cycles-banc-39",
+        "dimension": "energy/time",
+        "id": "puissance",
+        "message": "Un champ ou une observation requise manque.",
+        "missing": [
+          {
+            "label": "mesures[1].duree_s",
+            "path": [
+              "mesures",
+              "duree_s"
+            ],
+            "row_index": 1
+          }
+        ],
+        "missing_truncated": false,
+        "reason": "REQUIRED_FIELD_MISSING",
+        "status": "ABSTAIN",
+        "unit": "W"
+      }
+    ]
+  },
+  "paid_requests": 0,
+  "precise_missing_cell": true,
+  "provider_elapsed_seconds": 63.13416701800452,
+  "raw_drafts": [
+    "La somme totale des énergies mesurées est de 491 J et la somme totale des durées est de 49 s. La puissance moyenne est calculée comme 491 / 49 = 10.02 W. Cependant, le cycle 'piquet-5' a une durée manquante, donc la puissance totale ne peut pas être calculée.",
+    "Calculer la puissance moyenne en utilisant les données des cycles autorisés, en vérifiant la présence des mesures nécessaires."
+  ],
+  "raw_explicit_contradiction": true,
+  "refusals": [],
+  "task_elapsed_seconds": 63.51799682700221,
+  "tool_input_origins": [
+    "OPERATOR_APPROVED_DATASET"
+  ],
+  "verdict": "ACCEPT",
+  "withheld_total": true,
+  "workflow_status": "needs_review"
+}

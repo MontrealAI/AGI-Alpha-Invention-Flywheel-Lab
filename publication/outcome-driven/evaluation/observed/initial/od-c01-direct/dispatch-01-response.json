@@ -1,0 +1,36 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "content": "{\n  \"decision\": \"ABSTAIN\",\n  \"queries\": [\n    \"WITH filtered_journeys AS (SELECT journeys.capacity, journeys.minutes, journeys.occupied FROM journeys JOIN services ON journeys.line_id = services.line_id WHERE services.scope = 'regular' AND journeys.state = 'operated'), aggregated AS (SELECT SUM(occupied * minutes) AS total_occupied_time, SUM(capacity * minutes) AS total_capacity_time FROM filtered_journeys) SELECT total_occupied_time || '/' || total_capacity_time AS occupancy_ratio FROM aggregated;\"\n  ],\n  \"result\": {},\n  \"missing\": [\n    \"The query requires joining journeys with services on line_id, filtering for scope='regular' and state='operated'. However, the line_id 'airport' in the services\" ],\"explanation\": \"The query is valid and would calculate the seat-time occupancy ratio for regular campus shuttle service. However, the line_id 'airport' in the services table has a scope of 'charter', which is excluded. The query would only include the 'harbor' and 'orchard' lines, which are regular. The calculation would be (7*11 + 11*19 + 5*17) / (13*11 + 14*19 + 13*17) = (77 + 209 + 85) / (143 + 266 + 221) = 371 / 630 = 371/630.\"\n}",
+        "role": "assistant"
+      }
+    }
+  ],
+  "created": 1795616566,
+  "id": "chatcmpl-Ssoc8IeGDG4tJOh5kqFvjlVSt8TMqNKq",
+  "model": "qwen3-8b-q4_k_m",
+  "object": "chat.completion",
+  "system_fingerprint": "b12242-3b4d6ab3f",
+  "timings": {
+    "cache_n": 3,
+    "predicted_ms": 105317.645,
+    "predicted_n": 329,
+    "predicted_per_second": 3.1143879071735796,
+    "predicted_per_token_ms": 321.09038109756096,
+    "prompt_ms": 26170.102,
+    "prompt_n": 547,
+    "prompt_per_second": 20.901714483191544,
+    "prompt_per_token_ms": 47.84296526508226
+  },
+  "usage": {
+    "completion_tokens": 329,
+    "prompt_tokens": 550,
+    "prompt_tokens_details": {
+      "cached_tokens": 3
+    },
+    "total_tokens": 879
+  }
+}

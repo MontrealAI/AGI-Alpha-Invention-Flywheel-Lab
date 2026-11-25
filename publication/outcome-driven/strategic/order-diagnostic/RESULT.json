@@ -1,0 +1,96 @@
+{
+  "ambiguous_binding_control": {
+    "proof": {
+      "complete_revision_coverage": true,
+      "feedback_revisions": [],
+      "fix_before_signal": true,
+      "notice_before_fix": true,
+      "opponent_has_notice": true,
+      "opponent_has_policy": true,
+      "policy_before_fix": true,
+      "revisions_before_fix": [],
+      "row_before_signal": false,
+      "signal_access_by_row": {
+        "observer": false,
+        "pilot": null,
+        "rival": false
+      },
+      "signal_before_row": false
+    },
+    "timing": "unknown"
+  },
+  "cases": 136,
+  "crossed_cases": 120,
+  "disagreements": [],
+  "evidence_sha256": "9358acdb49da2c3e677494cbb8d378eabadc71870cbf5f68738b95425a64336c",
+  "false_privates": [],
+  "late_and_adaptive_control": {
+    "proof": {
+      "complete_revision_coverage": true,
+      "feedback_revisions": [
+        [
+          "change",
+          "binding"
+        ]
+      ],
+      "fix_before_signal": true,
+      "notice_before_fix": true,
+      "opponent_has_notice": true,
+      "opponent_has_policy": true,
+      "policy_before_fix": true,
+      "revisions_before_fix": [],
+      "row_before_signal": true,
+      "signal_access_by_row": {
+        "observer": false,
+        "pilot": false,
+        "rival": false
+      },
+      "signal_before_row": false
+    },
+    "timing": "adaptive"
+  },
+  "missed_privates": [],
+  "named_cases": {
+    "adaptive-row": "adaptive",
+    "adaptive-signal": "adaptive",
+    "complete-private": "private",
+    "early-provisional-choice": "private",
+    "explicit-cycle": "invalid",
+    "external-observer": "unknown",
+    "incompatible-availability": "invalid",
+    "inferred-announcement": "private",
+    "late": "late",
+    "late-and-adaptive": "adaptive",
+    "leaked-signal": "unknown",
+    "open-revisions": "unknown",
+    "relabel-reorder-private": "private",
+    "transitive-private": "private",
+    "unordered-binding": "unknown",
+    "unproved-observer-denial": "unknown"
+  },
+  "named_checks_passed": 16,
+  "passed": true,
+  "processor": "x86_64",
+  "python": "3.12.14",
+  "reference_dispositions": {
+    "adaptive": 23,
+    "invalid": 42,
+    "late": 13,
+    "private": 9,
+    "unknown": 49
+  },
+  "reference_evidence_sha256": "9358acdb49da2c3e677494cbb8d378eabadc71870cbf5f68738b95425a64336c",
+  "registration_sha256": "c5d02a10b320a93848f897349f11790fad0d5d31665bdbe16967c8551ac9c4c2",
+  "schema": "frontier/strategic-order-assay-v1",
+  "source_sha256": {
+    "assay.py": "a7bcacbb99ef849ff68bc28d2b5a9884892939310b5c97abdcb31e7536c5d59c",
+    "reference.py": "7959f79d0d768a4e7b31f438541508818f4c0ba26b383a37c9815355c1def6bb",
+    "witness.py": "ffc0ae31c932b69d47c568a3082d59a24c6cb9ca712b200af039131502ee0057"
+  },
+  "structured_inputs_sha256": "cf8ead513fd2f3717fdd559670910cdf07cb8aa38b080f7c048f0362f0436a2d",
+  "wall_seconds": {
+    "closure": 0.005295103001117241,
+    "enumeration": 0.14577852199727204
+  },
+  "whole_proof_matches": 136
+}

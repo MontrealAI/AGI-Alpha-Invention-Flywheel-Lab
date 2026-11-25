@@ -1,0 +1,166 @@
+{
+  "capture_operations": 6,
+  "claim": {
+    "assumptions": {
+      "floor": [
+        3,
+        13,
+        4
+      ],
+      "pinned_headers": [
+        "alpha",
+        "bravo"
+      ],
+      "release_level": "final"
+    },
+    "claim_contract_sha256": "dea84a9c579ccb8234b9dec57e037501498907a35fe40bc8725ca190cc48557c",
+    "dataset": "cpython_versions",
+    "dimension": "release_count",
+    "event_sha256": "a103b2247fef3789942a496bb382b3de296fe53758e590947209b68eb4518898",
+    "execution_sha256": "2c523ff7c6025e7aab73ec6ef560ef65919299dd1cd3ff9a9b1c5225430ce116",
+    "id": "eligible_releases",
+    "reference_tolerance": "0",
+    "source_version": "e42405b17cdc43491233ff8eca35a0466bf6192a7371357f9e35a6f76a7e57fe",
+    "status": "VERIFIED",
+    "unit": "versions",
+    "value": "1"
+  },
+  "edge_artifact_sha256": "01dfa94b059b7706f7fcce1fc9f10e55f63340f7be215b66df742316e9488f57",
+  "independent": {
+    "binding_sha256": "df2e523137b163ddf4a86b1ac989a927552d644f3e05a12f4601a8b48319d868",
+    "exact_versions": {
+      "alpha": [
+        3,
+        12,
+        11
+      ],
+      "bravo": [
+        3,
+        13,
+        5
+      ]
+    },
+    "floor": [
+      3,
+      13,
+      4
+    ],
+    "independent_count": 1,
+    "sources": {
+      "alpha": {
+        "acquisition": "Authorized GitHub connector, exact commit and Git blob verified",
+        "content_type": "text/plain",
+        "sha256": "6d09cebdb07346b76b8f9176f5d23773c8c8dd12605eabdbfd0a7461ec86c408",
+        "url": "https://github.com/python/cpython/blob/55fee9cf216abe4ec0d1139f94b1930fbd0c7644/Include/patchlevel.h",
+        "version": "55fee9cf216abe4ec0d1139f94b1930fbd0c7644"
+      },
+      "bravo": {
+        "acquisition": "Authorized GitHub connector, exact commit and Git blob verified",
+        "content_type": "text/plain",
+        "sha256": "d539cfabe79088f3e418b9498389e1143da2cf797368b6cf6bdd31d21eb3ff9b",
+        "url": "https://github.com/python/cpython/blob/6cb20a219a860eaf687b2d968b41c480c7461909/Include/patchlevel.h",
+        "version": "6cb20a219a860eaf687b2d968b41c480c7461909"
+      }
+    }
+  },
+  "release_scope": "Preflight control under a mechanically authored local test provider. Reuse checked on synthetic edge cases. No inference or independent operational adoption in these records.",
+  "retained_files": {
+    "RUN_INSTRUMENT.py": "9c7dede3414cebcf2a99043cb1ef39e546f5b413157e53d2959d131cbfdb8eb7",
+    "alpha.json": "d5e6169eef7a13e9c5ff88eda125ef795e1534fd35bc9ed93cad712e17644b8d",
+    "bravo.json": "e5f577374d048bf09a1b90141796c2ea086bcba4b0a03b4a237044f5a7b1654d",
+    "versions.json": "113c3e54f5e0f3bdf706e483f1360289733d91d090da2cc413644f5aefc3ed73"
+  },
+  "scope": "Real pinned source registration and exact operations; separately authored constructor, zero live model calls.",
+  "standalone_edge_cases_of_fixture_artifact": [
+    {
+      "count": 1,
+      "floor": [
+        3,
+        13,
+        4
+      ],
+      "left": [
+        2,
+        99,
+        99
+      ],
+      "right": [
+        3,
+        13,
+        4
+      ]
+    },
+    {
+      "count": 0,
+      "floor": [
+        4,
+        0,
+        1
+      ],
+      "left": [
+        4,
+        0,
+        0
+      ],
+      "right": [
+        3,
+        99,
+        99
+      ]
+    },
+    {
+      "count": 2,
+      "floor": [
+        3,
+        0,
+        1
+      ],
+      "left": [
+        4,
+        0,
+        0
+      ],
+      "right": [
+        3,
+        0,
+        1
+      ]
+    },
+    {
+      "count": 1,
+      "floor": [
+        3,
+        9,
+        0
+      ],
+      "left": [
+        3,
+        45,
+        0
+      ],
+      "right": [
+        3,
+        8,
+        7
+      ]
+    },
+    {
+      "count": 0,
+      "floor": [
+        3,
+        12,
+        12
+      ],
+      "left": [
+        3,
+        12,
+        10
+      ],
+      "right": [
+        3,
+        12,
+        11
+      ]
+    }
+  ]
+}

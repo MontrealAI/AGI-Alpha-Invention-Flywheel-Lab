@@ -1,0 +1,407 @@
+{
+  "bindings": {
+    "all_checks_passed": true,
+    "archive_sha256": "f7fd303ee25dc70c3238e37487179943546e69c8f77921211b5e26e451af605c",
+    "checkpoint_sha256": "f425c70bc13245567e2d0d87e8b7af18b3306fcdf41e73369d36a8f5be439a9c",
+    "checks": {
+      "archive_byte_hash_matches_browser_export": true,
+      "archived_runner_bytes_match_release_without_running_them": true,
+      "artifact_hashes_and_lengths_match_archive_and_last_verification": true,
+      "browser_capture_state_matches_archive": true,
+      "canonical_archive_hash_matches_browser_checkpoint": true,
+      "captured_ambition_matches_frozen_objective": true,
+      "every_journal_event_hash_and_link_matches": true,
+      "executor_zip_matches_live_release_and_browser_hashes": true,
+      "frozen_intent_digest_matches": true,
+      "installed_manifest_evaluator_and_workflow_match_executor_zip": true,
+      "live_revision_and_workflow_match_browser_and_release": true,
+      "published_browser_receipt_matches_capture": true,
+      "released_git_source_manifest_and_installed_evaluator_agree": true
+    },
+    "installed_evaluator_sha256": "9c7dede3414cebcf2a99043cb1ef39e546f5b413157e53d2959d131cbfdb8eb7",
+    "journal_events": 18,
+    "journal_tip_sha256": "8ae579c59ae87219805d41f0aeb4f9f874e8e0eaefaebcb8661b3180752d8f75",
+    "released_workflow_source_sha256": "860ad47a0b773993256a8e4fe069faf1afcec88cddce0680a5b5cc63bd66d324",
+    "scope": "Content binding of captured release, installed code and portable export. External signing and custody were unobserved."
+  },
+  "checked_at_utc": "2026-11-25T14:54:02.253494+00:00",
+  "decisions": {
+    "deterministic_refusal": "GO for the tested malformed conditional and missing input paths.",
+    "exported_payoff_solver": "NO-GO. As exported it refused every complete reference case before returning a payoff.",
+    "live_mission_intake_and_real_local_inference": "GO for the observed test wording and local connector configuration.",
+    "production_game_theory_outcome": "NO-GO in this run. No qualified calculator, operator-frozen acceptance check, or accepted scientific finding.",
+    "scientific_scope": "A narrow synthetic audit of the reviewed evaluator and the exported declarative payoff calculator. Equilibrium computation, novelty and frontier superiority remain unverified."
+  },
+  "exported_artifact": {
+    "archived_runner_executed": false,
+    "bytes": 487,
+    "conditional_arity_by_output": {
+      "payoff1": 2,
+      "payoff2": 2
+    },
+    "inputs": [
+      "player1_strategy",
+      "player2_strategy"
+    ],
+    "name": "game_theory_calculator.json",
+    "required_condition_type": "boolean",
+    "required_conditional_arity": 3,
+    "sha256": "8e1dd35b53871bedbd85d94bfb18ed613171d26f7b9c012f8229d9b1716c5fde",
+    "tested_as_is": true
+  },
+  "independent_replay": {
+    "distinct_games_same_input": "The same declared strategy input requires (3,3) in Prisoner’s Dilemma and (2,1) in Battle of the Sexes. An arbitrary-game calculator needs a game definition or an explicit fixed-game scope.",
+    "ordinary_reference": "Exact sum of payoff terms weighted by independent pure or mixed strategy probabilities using fractions.Fraction.",
+    "positive_evaluator_calibration": {
+      "inputs": {
+        "p": "3/4",
+        "q": "1/3"
+      },
+      "operations": 24,
+      "origin": "Reviewer-authored matching-pennies formula, separate from mission artifact.",
+      "outputs": {
+        "payoff1": "-1/6",
+        "payoff2": "1/6"
+      },
+      "passed": true,
+      "reference": [
+        "-1/6",
+        "1/6"
+      ]
+    },
+    "reference_cases": [
+      {
+        "case": "prisoners-dilemma-mutual-cooperation",
+        "exported_instrument": {
+          "exception": "ValueError",
+          "outputs": null,
+          "reason": "if needs three operands.",
+          "status": "refused"
+        },
+        "inputs": {
+          "player1_strategy": [
+            "1",
+            "0"
+          ],
+          "player2_strategy": [
+            "1",
+            "0"
+          ]
+        },
+        "matrix_payoffs": [
+          [
+            [
+              3,
+              3
+            ],
+            [
+              0,
+              5
+            ]
+          ],
+          [
+            [
+              5,
+              0
+            ],
+            [
+              1,
+              1
+            ]
+          ]
+        ],
+        "payoff_match": false,
+        "reference_payoffs": [
+          "3",
+          "3"
+        ]
+      },
+      {
+        "case": "prisoners-dilemma-asymmetric-pure",
+        "exported_instrument": {
+          "exception": "ValueError",
+          "outputs": null,
+          "reason": "if needs three operands.",
+          "status": "refused"
+        },
+        "inputs": {
+          "player1_strategy": [
+            "0",
+            "1"
+          ],
+          "player2_strategy": [
+            "1",
+            "0"
+          ]
+        },
+        "matrix_payoffs": [
+          [
+            [
+              3,
+              3
+            ],
+            [
+              0,
+              5
+            ]
+          ],
+          [
+            [
+              5,
+              0
+            ],
+            [
+              1,
+              1
+            ]
+          ]
+        ],
+        "payoff_match": false,
+        "reference_payoffs": [
+          "5",
+          "0"
+        ]
+      },
+      {
+        "case": "matching-pennies-mixed",
+        "exported_instrument": {
+          "exception": "ValueError",
+          "outputs": null,
+          "reason": "if needs three operands.",
+          "status": "refused"
+        },
+        "inputs": {
+          "player1_strategy": [
+            "1/2",
+            "1/2"
+          ],
+          "player2_strategy": [
+            "1/2",
+            "1/2"
+          ]
+        },
+        "matrix_payoffs": [
+          [
+            [
+              1,
+              -1
+            ],
+            [
+              -1,
+              1
+            ]
+          ],
+          [
+            [
+              -1,
+              1
+            ],
+            [
+              1,
+              -1
+            ]
+          ]
+        ],
+        "payoff_match": false,
+        "reference_payoffs": [
+          "0",
+          "0"
+        ]
+      },
+      {
+        "case": "battle-of-the-sexes-asymmetric-mixed",
+        "exported_instrument": {
+          "exception": "ValueError",
+          "outputs": null,
+          "reason": "if needs three operands.",
+          "status": "refused"
+        },
+        "inputs": {
+          "player1_strategy": [
+            "3/4",
+            "1/4"
+          ],
+          "player2_strategy": [
+            "1/3",
+            "2/3"
+          ]
+        },
+        "matrix_payoffs": [
+          [
+            [
+              2,
+              1
+            ],
+            [
+              0,
+              0
+            ]
+          ],
+          [
+            [
+              0,
+              0
+            ],
+            [
+              1,
+              2
+            ]
+          ]
+        ],
+        "payoff_match": false,
+        "reference_payoffs": [
+          "2/3",
+          "7/12"
+        ]
+      },
+      {
+        "case": "battle-of-the-sexes-same-inputs-as-pd",
+        "exported_instrument": {
+          "exception": "ValueError",
+          "outputs": null,
+          "reason": "if needs three operands.",
+          "status": "refused"
+        },
+        "inputs": {
+          "player1_strategy": [
+            "1",
+            "0"
+          ],
+          "player2_strategy": [
+            "1",
+            "0"
+          ]
+        },
+        "matrix_payoffs": [
+          [
+            [
+              2,
+              1
+            ],
+            [
+              0,
+              0
+            ]
+          ],
+          [
+            [
+              0,
+              0
+            ],
+            [
+              1,
+              2
+            ]
+          ]
+        ],
+        "payoff_match": false,
+        "reference_payoffs": [
+          "2",
+          "1"
+        ]
+      }
+    ],
+    "reference_cases_matched": 0,
+    "supplemental_interface_controls": {
+      "boolean": {
+        "exception": "ValueError",
+        "outputs": null,
+        "reason": "if needs three operands.",
+        "status": "refused"
+      },
+      "categorical": {
+        "exception": "ValueError",
+        "outputs": null,
+        "reason": "if needs three operands.",
+        "status": "refused"
+      },
+      "missing_second_player": {
+        "exception": "ValueError",
+        "outputs": null,
+        "reason": "A declared instrument input is missing.",
+        "status": "refused"
+      },
+      "numeric": {
+        "exception": "ValueError",
+        "outputs": null,
+        "reason": "if needs three operands.",
+        "status": "refused"
+      }
+    }
+  },
+  "intent": {
+    "captured_ambition": "Build frontier AI LLM for Game Theory.",
+    "frozen_spec_sha256": "e9fa9ee40207de2d7a3766621280a90b18a338dbf4c6737d5738637b88b0a81a",
+    "original_correction_literal": "Build Frontier AI for Game Theory.",
+    "original_correction_literal_tested_by_this_capture": false,
+    "preserved": true
+  },
+  "observed_journey": {
+    "actions": 4,
+    "completed_models": [
+      "qwen3-8b-q4_k_m"
+    ],
+    "constructed_revisions": [
+      {
+        "artifact_bytes": 435,
+        "artifact_sha256": "4909e60e52e546a3dfb1942ea3494573643b7371d3d22fc4bde3be817ab9b0ad",
+        "index": 5
+      },
+      {
+        "artifact_bytes": 487,
+        "artifact_sha256": "8e1dd35b53871bedbd85d94bfb18ed613171d26f7b9c012f8229d9b1716c5fde",
+        "index": 12
+      }
+    ],
+    "earlier_revision_development_execution": {
+      "executed": true,
+      "fixture_payoffs": {
+        "payoff1": 6,
+        "payoff2": 6
+      },
+      "independently_verified": false,
+      "index": 6,
+      "input_origin": "MODEL_DEVELOPMENT_FIXTURE",
+      "operations": 6,
+      "tested_artifact_sha256": "4909e60e52e546a3dfb1942ea3494573643b7371d3d22fc4bde3be817ab9b0ad"
+    },
+    "exported_revision_failed_execution": {
+      "index": 13,
+      "reason": "if needs three operands.",
+      "tested_artifact_sha256": "8e1dd35b53871bedbd85d94bfb18ed613171d26f7b9c012f8229d9b1716c5fde",
+      "tool": "run_instrument"
+    },
+    "final_verification_passed": false,
+    "input_acceptance_cases": 0,
+    "journal_verification": [
+      {
+        "artifact_sha256": "4909e60e52e546a3dfb1942ea3494573643b7371d3d22fc4bde3be817ab9b0ad",
+        "checks": 0,
+        "index": 7,
+        "passed": false
+      },
+      {
+        "artifact_sha256": "8e1dd35b53871bedbd85d94bfb18ed613171d26f7b9c012f8229d9b1716c5fde",
+        "checks": 0,
+        "index": 14,
+        "passed": false
+      }
+    ],
+    "model_attempts": 3,
+    "model_completions": 2,
+    "model_errors": [
+      "PROVIDER_RESPONSE"
+    ],
+    "phase": "builder",
+    "status": "paused",
+    "visible_accepted_claims": 0
+  },
+  "release": {
+    "browser_module_sha256_reported": "19fd1f442b3e4fd8a89141c45788b960ace97c66b9857200b8d2b573420529a7",
+    "browser_receipt": "LIVE-OWNER-BROWSER.json",
+    "executor_zip_sha256": "dd37e23f26294f14632c0c501ad13b3255bf96c493541efc4683dfc213dad939",
+    "revision": "9a53a4b8bb7eb3d5f82f50effcf44e3ec1291d19",
+    "workflow_run": "45637319050"
+  },
+  "schema": "frontier/live-owner-artifact-assessment-v1"
+}

@@ -1,0 +1,84 @@
+{
+  "action_attempts": 5,
+  "actual_tool_events": 3,
+  "archive_sha256": "694263db3131953ad83797233396ebcfc9771d4f176da113d1c994fb64ed2fdd",
+  "arm": "schema",
+  "case": "od-c03",
+  "complete_economic_cost_known": false,
+  "evidence": {
+    "claims": [
+      {
+        "claim_contract_sha256": "588d71530ca3d7ad764a70e371827ff69577015c414fbf57e63d5cbd1bfade5a",
+        "dataset": "cycles-banc-39",
+        "dimension": "energy/time",
+        "id": "puissance",
+        "locator": [
+          "rows",
+          0,
+          0
+        ],
+        "mission_id": "wf_cb69e5b60656dfb509928f6b",
+        "reason": "REQUIRED_FIELD_MISSING",
+        "requires": {
+          "missing_value": "null",
+          "require_all_pairs": true,
+          "scope": "all cycles"
+        },
+        "revision_sha256": "cd6aef754ffc76df38e61787c8d936d4bf797c70be54a7f61f319e62a0557253",
+        "source_version": "energie-temps-v1",
+        "status": "ABSTAIN",
+        "unit": "W"
+      }
+    ],
+    "scope": "Case-specific numerical agreement and source binding. Independent custody and production admission are separate.",
+    "status": "ABSTAIN"
+  },
+  "false_user_facing_acceptance": false,
+  "mission_id": "wf_cb69e5b60656dfb509928f6b",
+  "observed_provider_dispatches": 2,
+  "observed_usage": {
+    "observed_tokens_in": 3721,
+    "observed_tokens_out": 487,
+    "unknown_token_replies": 0
+  },
+  "operator_actions_after_case_start": 0,
+  "operator_preparation_and_review_seconds": null,
+  "orchestrator_cpu_seconds": 1.4437070000000007,
+  "outcome_surface": {},
+  "paid_requests": 0,
+  "precise_missing_cell": true,
+  "provider_elapsed_seconds": 120.29342947599798,
+  "raw_drafts": [
+    "La somme totale des énergies mesurées est de 397 J et la somme totale des durées est de 40 s. Cependant, une mesure manquante dans la colonne 'duree_s' pour le cycle 'piquet-5' empêche le calcul complet de la puissance moyenne. La puissance moyenne ne peut pas être calculée en raison de cette absence de données.",
+    "L'objectif est de calculer la puissance moyenne exacte du banc d'essai sur tous les cycles autorisés. Cela nécessite de diviser la somme totale des énergies mesurées par la somme totale des durées. Cependant, une mesure manquante dans la colonne 'duree_s' pour le cycle 'piquet-5' empêche le calcul complet.",
+    "La première action consiste à identifier les cellules manquantes dans les données fournies pour le banc d’essai, en particulier la colonne 'duree_s' pour le cycle 'piquet-5'. Cela permettra de vérifier si les données sont suffisantes pour calculer la puissance moyenne."
+  ],
+  "raw_explicit_contradiction": false,
+  "refusals": [
+    {
+      "kind": "tool_refused",
+      "proposal_fields": [
+        "name",
+        "tool"
+      ],
+      "reason": "Read access is restricted to this run's declared artifacts.",
+      "tool": "read_artifact"
+    },
+    {
+      "kind": "tool_refused",
+      "proposal_fields": [
+        "name",
+        "tool"
+      ],
+      "reason": "Read access is restricted to this run's declared artifacts.",
+      "tool": "read_artifact"
+    }
+  ],
+  "task_elapsed_seconds": 120.49937910799781,
+  "tool_input_origins": [
+    "OPERATOR_APPROVED_DATASET"
+  ],
+  "verdict": "ACCEPT",
+  "withheld_total": true,
+  "workflow_status": "exhausted"
+}

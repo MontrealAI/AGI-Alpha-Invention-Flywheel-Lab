@@ -1,0 +1,36 @@
+{
+  "choices": [
+    {
+      "finish_reason": "length",
+      "index": 0,
+      "message": {
+        "content": "{\n  \"summary\": \"Calculer les tonnes-kilomètres à partir des données du relevé d’expéditions en utilisant les unités fournies et en respectant les contraintes de conversion.\",\n  \"actions\": [\n    {\n      \"tool\": \"construct_table\",\n      \"name\": \"table.json\",\n      \"schema\": {\n        \"expeditions\": {\n          \"charge\": \"INTEGER\",\n          \"lot\": \"TEXT\",\n          \"trajet\": \"INTEGER\",\n          \"u_charge\": \"TEXT\",\n          \"u_trajet\": \"TEXT\"\n        }\n      },\n      \"sql\": \"SELECT charge, trajet, u_charge, u_trajet FROM expeditions\"\n    },\n    {\n      \"tool\": \"run_table\",\n      \"name\": \"table.json\",\n      \"input\": {\n        \"dataset\": \"releve-transport-27\"\n      }\n    },\n    {\n      \"tool\": \"read_artifact\",\n      \"name\": \"calc.json\"\n    },\n    {\n      \"tool\": \"write_document\",\n      \"name\": \"result.md\",\n      \"content\": \"Calcul des tonnes-kilomètres à partir des données du relevé d’expéditions. Les unités kg et t sont converties en tonnes, et les unités m et km sont converties en kilomètres. Le calcul est effectué en multipliant la charge (en tonnes) par le trajet (en kilomètres) pour chaque ligne, puis en sommant les résultats.\"\n    },\n    {\n      \"tool\": \"construct_table\",\n      \"name\": \"table_tonnes_km.json\",\n      \"schema\": {\n        \"expeditions\": {\n          \"tonnes_km\": \"TEXT\"\n        }\n      },\n      \"sql\": \"SELECT (CASE WHEN u_charge = 'kg' THEN charge / 1000 ELSE charge END) * (CASE WHEN u_trajet = 'm' THEN trajet / 1000 ELSE trajet END) AS tonnes_km FROM expeditions\"\n    },\n    {\n      \"tool\": \"run_table\",\n      \"name\": \"table_tonnes_km.json\",\n      \"input\": {\n        \"dataset\": \"releve-transport-27\"\n      }\n    },\n    {\n      \"tool\": \"read_artifact\",\n      \"name\": \"table_tonnes_km.json\"\n    },\n    {\n      \"tool\": \"write_document\",\n      \"name\": \"result.md\",\n      \"content\": \"Résultat exact des tonnes-kilomètres calculés pour chaque ligne du relevé d’expéditions. Les unités ont été converties en tonnes et kilomètres, et",
+        "role": "assistant"
+      }
+    }
+  ],
+  "created": 1795617031,
+  "id": "chatcmpl-CF4fhg4WyQy0WFs3FlLLLyjxV8UR6rem",
+  "model": "qwen3-8b-q4_k_m",
+  "object": "chat.completion",
+  "system_fingerprint": "b12242-3b4d6ab3f",
+  "timings": {
+    "cache_n": 3,
+    "predicted_ms": 68320.649,
+    "predicted_n": 560,
+    "predicted_per_second": 8.182006584861336,
+    "predicted_per_token_ms": 122.21940787119858,
+    "prompt_ms": 38651.241,
+    "prompt_n": 1154,
+    "prompt_per_second": 29.856738623217815,
+    "prompt_per_token_ms": 33.49327642980936
+  },
+  "usage": {
+    "completion_tokens": 560,
+    "prompt_tokens": 1157,
+    "prompt_tokens_details": {
+      "cached_tokens": 3
+    },
+    "total_tokens": 1717
+  }
+}

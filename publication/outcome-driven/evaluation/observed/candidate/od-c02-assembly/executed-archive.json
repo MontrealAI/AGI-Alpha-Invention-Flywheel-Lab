@@ -1,0 +1,234 @@
+{
+  "files": {},
+  "notice": "Contains your objective, context and artifacts. Inspect before sharing. No connector credentials or workspace integrity key included. Recorded verification is historical; recheck imported work.",
+  "schema": "alpha-genesis-workflow-export/v1",
+  "sha256": "04caf110b1322e75c1418931ce94ea2e548409c61a3776b4902fcd289dad0ffe",
+  "state": {
+    "actions": 0,
+    "adversarial_cases": [],
+    "artifacts": {},
+    "capability_id": null,
+    "created_at": "2026-11-25T14:28:44.380374+00:00",
+    "epoch": 0,
+    "events": [
+      {
+        "at": "2026-11-25T14:28:44.380385+00:00",
+        "detail": {
+          "acceptance_source": "Operator-frozen conditions; independence is not inferred.",
+          "spec_hash": "be1582e60e6bb8811966cf7e54007a248ccd46f4500327c2687602b3e91da1df"
+        },
+        "index": 0,
+        "kind": "created",
+        "previous": "0000000000000000000000000000000000000000000000000000000000000000",
+        "sha256": "9fe6a0383545b44ced2ab1bc6f339252acb48a1d2b0d8e6347861e2dd403df43"
+      },
+      {
+        "at": "2026-11-25T14:28:44.385714+00:00",
+        "detail": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "role": "builder",
+          "scope": "Waiting for selected service capacity; no model call or construction iteration consumed."
+        },
+        "index": 1,
+        "kind": "model_queued",
+        "previous": "9fe6a0383545b44ced2ab1bc6f339252acb48a1d2b0d8e6347861e2dd403df43",
+        "sha256": "effa4c89d65be3d7a2821053b48318abf842a5ea15094ddd833ce7eacaa610cd"
+      },
+      {
+        "at": "2026-11-25T14:28:44.388667+00:00",
+        "detail": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "role": "builder",
+          "run_id": "wf_2ebcf72f5771fa167da77d3b_e26827e76601b245"
+        },
+        "index": 2,
+        "kind": "model_started",
+        "previous": "effa4c89d65be3d7a2821053b48318abf842a5ea15094ddd833ce7eacaa610cd",
+        "sha256": "065dcd35fd8a41a8904f272216e536e98ba2c0ba2e4b39d515b07fe123208edf"
+      },
+      {
+        "at": "2026-11-25T14:30:31.384810+00:00",
+        "detail": {
+          "code": "PROVIDER_RESPONSE",
+          "message": "Model request failed. Its provider allowance or cost may have been consumed; inspect connection before explicitly resuming.",
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "role": "builder",
+          "run_id": "wf_2ebcf72f5771fa167da77d3b_e26827e76601b245",
+          "session_budget_snapshot": {
+            "committed": 0.0,
+            "currency": "USD",
+            "limit": 0.0,
+            "locked": false,
+            "remaining": 0.0,
+            "reserved": 0.0,
+            "scope": "process-session"
+          },
+          "usage_status": "UNKNOWN"
+        },
+        "index": 3,
+        "kind": "model_error",
+        "previous": "065dcd35fd8a41a8904f272216e536e98ba2c0ba2e4b39d515b07fe123208edf",
+        "sha256": "f3f5f4f411cce25248691b9aba47ecc8d5687b3f52906a8b4619d5d85bad4ae0"
+      }
+    ],
+    "feedback": "",
+    "id": "wf_2ebcf72f5771fa167da77d3b",
+    "inflight": null,
+    "iteration": 1,
+    "model_call_limit": 2,
+    "model_calls": 1,
+    "phase": "builder",
+    "research": "",
+    "schema": "alpha-genesis-workflow/v1",
+    "spec": {
+      "acceptance": [],
+      "context": "Additionner, pour chaque ligne, le produit de la charge en tonnes et du trajet en kilomètres. Une tonne vaut 1000 kg et un kilomètre vaut 1000 m. Les unités u_charge et u_trajet distinguent ces cas. Les mesures sont entières dans les unités inscrites, et positives. Renvoyer une colonne, un résultat exact, sans division entière tronquée (texte numérateur/dénominateur permis).\nSchema of the authorized tables: {\"expeditions\":{\"charge\":\"INTEGER\",\"lot\":\"TEXT\",\"trajet\":\"INTEGER\",\"u_charge\":\"TEXT\",\"u_trajet\":\"TEXT\"}}",
+      "local_only": true,
+      "max_actions": 10,
+      "max_iterations": 2,
+      "max_operations": 10000,
+      "max_output_tokens": 560,
+      "mission": {
+        "expires_at": "2026-11-25T14:43:44.379283+00:00",
+        "language": "fr",
+        "original_ambition": "Construisez puis utilisez un instrument réutilisable qui calcule exactement les tonnes-kilomètres de mon relevé d’expéditions autorisé. Donnez un résultat exact en t·km.",
+        "requirements": {
+          "approved_tables": {
+            "releve-transport-27": {
+              "expeditions": [
+                {
+                  "charge": 237,
+                  "lot": "p17",
+                  "trajet": 425,
+                  "u_charge": "kg",
+                  "u_trajet": "m"
+                },
+                {
+                  "charge": 3,
+                  "lot": "p18",
+                  "trajet": 1190,
+                  "u_charge": "t",
+                  "u_trajet": "m"
+                },
+                {
+                  "charge": 942,
+                  "lot": "p19",
+                  "trajet": 4,
+                  "u_charge": "kg",
+                  "u_trajet": "km"
+                },
+                {
+                  "charge": 2,
+                  "lot": "p20",
+                  "trajet": 7,
+                  "u_charge": "t",
+                  "u_trajet": "km"
+                }
+              ]
+            }
+          },
+          "evidence": {
+            "claims": [
+              {
+                "dataset": "releve-transport-27",
+                "dimension": "mass*distance",
+                "id": "travail",
+                "locator": [
+                  "rows",
+                  0,
+                  0
+                ],
+                "reference": {
+                  "source": "Independent exact study reference",
+                  "value": "857549/40000"
+                },
+                "required_fields": [
+                  [
+                    "expeditions",
+                    "charge"
+                  ],
+                  [
+                    "expeditions",
+                    "lot"
+                  ],
+                  [
+                    "expeditions",
+                    "trajet"
+                  ],
+                  [
+                    "expeditions",
+                    "u_charge"
+                  ],
+                  [
+                    "expeditions",
+                    "u_trajet"
+                  ]
+                ],
+                "requires": {
+                  "aggregation": "sum-of-products",
+                  "charge_units": [
+                    "kg",
+                    "t"
+                  ],
+                  "distance_units": [
+                    "m",
+                    "km"
+                  ]
+                },
+                "tool": "run_table",
+                "unit": "t·km",
+                "version": "registre-tonne-km-v1"
+              }
+            ],
+            "inputs": {
+              "releve-transport-27": {
+                "facts": {
+                  "aggregation": "sum-of-products",
+                  "charge_units": [
+                    "kg",
+                    "t"
+                  ],
+                  "distance_units": [
+                    "m",
+                    "km"
+                  ]
+                },
+                "kind": "table",
+                "origin": "AUTHORIZED_MISSION_INPUT",
+                "sha256": "009b8565af22d6841217d06fa4cce1864041f012c1acf9a1525567bddcd3f9cd",
+                "version": "registre-tonne-km-v1"
+              }
+            }
+          }
+        },
+        "schema": "frontier-universal-execution/v1"
+      },
+      "objective": "Construisez puis utilisez un instrument réutilisable qui calcule exactement les tonnes-kilomètres de mon relevé d’expéditions autorisé. Donnez un résultat exact en t·km.",
+      "roles": {
+        "builder": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp"
+        }
+      },
+      "strategy": "single-model",
+      "tool_permissions": [
+        "construct_table",
+        "run_table",
+        "read_artifact",
+        "write_document"
+      ]
+    },
+    "spec_hash": "be1582e60e6bb8811966cf7e54007a248ccd46f4500327c2687602b3e91da1df",
+    "status": "paused",
+    "unadjudicated_counterexamples": [],
+    "updated_at": "2026-11-25T14:30:31.384810+00:00",
+    "verification": {
+      "checks": [],
+      "passed": false,
+      "scope": "No checks executed."
+    }
+  }
+}

@@ -1,0 +1,96 @@
+{
+  "actual_config": {
+    "allow_paid_requests": false,
+    "local_only": true,
+    "max_attempts": 1,
+    "max_concurrent_requests": 1,
+    "providers": {
+      "llama-cpp": {
+        "base_url": "http://127.0.0.1:38461/v1",
+        "kind": "openai",
+        "label": "Qwen3-8B via local llama.cpp",
+        "models": {
+          "qwen3-8b-q4_k_m": {
+            "context_window": 16384,
+            "input_per_million": "0",
+            "input_token_overhead": 256,
+            "json_mode": true,
+            "json_schema": true,
+            "max_output_tokens": 2048,
+            "output_per_million": "0"
+          }
+        },
+        "output_limit_field": "max_tokens"
+      }
+    },
+    "session_budget_usd": 0,
+    "timeout_seconds": 175
+  },
+  "case_registration_sha256": "cfb88bf4441a8ffb950054c8eabd5c53e480e6c749f7085e9f08d180af022485",
+  "config_sha256": "e817856d2dde414d7dd69bbb25c2536d1dc47f8fbddf427f1303e79945489262",
+  "model": "qwen3-8b-q4_k_m",
+  "order": [
+    [
+      "od-c01",
+      "previous"
+    ],
+    [
+      "od-c02",
+      "direct"
+    ],
+    [
+      "od-c03",
+      "previous"
+    ],
+    [
+      "od-c01",
+      "direct"
+    ],
+    [
+      "od-c02",
+      "previous"
+    ],
+    [
+      "od-c03",
+      "direct"
+    ]
+  ],
+  "phase": "initial",
+  "provider": "llama-cpp",
+  "runner_sha256": "1018b94c3e21ca8303233373d87e38d92ad279627d09c9e5853d42abaf4d8d66",
+  "source_files": {
+    "docs/research/frontier-omega-alpha/endpoint-screen.mjs": "d4312e2a4650cbf8310d65989271e34578e165944ca542a38b4e465d6497486b",
+    "products/alpha-genesis-harness/bridge/__init__.py": "e90b6ac556de209e9a8073bd9fa3308967ce9ac6d8a78a1d3cd261f45579a5bc",
+    "products/alpha-genesis-harness/bridge/adapters.py": "2d2ddd4021803e2bcba73ec26c496dad5481206358fb5c88c7d80475a034d6cd",
+    "products/alpha-genesis-harness/bridge/chatgpt.py": "c5b302c7ea68e8344fad42ed7dd7a2670c1e358a14d548b2d3da6bac87024934",
+    "products/alpha-genesis-harness/bridge/codex.py": "510589c3d85befcc426066b401c95cb558c41a15578587792da3e27a79a858c8",
+    "products/alpha-genesis-harness/bridge/codex_permissions.py": "ec1dbc1e20b9ca3ae6f4ea5a7c15256e63a4a50413a40321a0281552ee130f66",
+    "products/alpha-genesis-harness/bridge/deployment.py": "e1e26863241cef1c2de294cf4594bea420c9d8db53848e6f81566531ba68be0e",
+    "products/alpha-genesis-harness/bridge/frontier_monitor.py": "5c2802c349c012325be5a97fb00d17d9256f004ced3790c44e6022fd2a3fe71d",
+    "products/alpha-genesis-harness/bridge/genesis_next.py": "3139533177999aca5d5f8eeb5ec4a515c10ff58ac6a7ea405b974457df871c1e",
+    "products/alpha-genesis-harness/bridge/instruments.py": "46d43d4a017f1d32fcd9e05b32316a6fffac27e1a9572ab9ffbbf87338f00322",
+    "products/alpha-genesis-harness/bridge/intelligence_profiles.py": "c4bf7f249c8827661da6b80b61bc2db2e18a9255178d4cc6031f800ca23c9e8d",
+    "products/alpha-genesis-harness/bridge/mission_contracts.py": "0c33042b2b0e3d8e259180b5877e6847ef84965ff56d4791fa13cc38cbe9aee7",
+    "products/alpha-genesis-harness/bridge/mission_evidence.py": "2682255f3841cfb4ba09385d7caa0971c2364708c36c2f0d115337dfa11ea71b",
+    "products/alpha-genesis-harness/bridge/mission_tools.py": "c64452be8a9831e936daf14b7073684637371da208bc8da0c1bdf519477ce948",
+    "products/alpha-genesis-harness/bridge/onboarding.py": "6a94b257aefa5d50a26ad394af3569d1435bb4cf17a9e2a452b0da2e488dfbdc",
+    "products/alpha-genesis-harness/bridge/output_schema.py": "9877d088cad20b89b6b8d7322c4472840f21098e6b5bcb3eb008d84bfccc28cf",
+    "products/alpha-genesis-harness/bridge/pages_missions.py": "79b232fbc8be6b02e623dfcba2d0e2c8095804f1fe044e2298925c5bab17b7a6",
+    "products/alpha-genesis-harness/bridge/proof_to_market.py": "757e7579f17efed8d378f47ede6fbe2971e311272b4b4ca84269cb2efb3c19cd",
+    "products/alpha-genesis-harness/bridge/server.py": "7d0c8aeee8b7f5ec182aab14a0d122c88ac873a10db07fb1389d0206dd5b98cc",
+    "products/alpha-genesis-harness/bridge/services.py": "41b71b3f946f0912898558995f2c83f1f09b0cb2d5f9203bfecbef301de4a081",
+    "products/alpha-genesis-harness/bridge/strategy_demo.py": "40e4b72a5dd677ad4359c4c3904a72b415b2692523cf72e73a07c25e27d5cb01",
+    "products/alpha-genesis-harness/bridge/streaming.py": "81e028e405d3da93a8186d151e3183f1a640780d03234efcfe783a8af1551837",
+    "products/alpha-genesis-harness/bridge/universal_missions.py": "b11e601e5557d7457c2e6bf90f0fc4c44e2dc7e7411ec7dfc9ed7882027f8579",
+    "products/alpha-genesis-harness/bridge/upgrade_foundry.py": "b98c9d7b85b932570f2e9792c03e8ee43b46599ebd9a198445b25ea890e95d72",
+    "products/alpha-genesis-harness/bridge/workflow_demo.py": "218a085688e26ef60ae8ac7033a9ab08bc81bc2c65335a46c2302f8889590d1c",
+    "products/alpha-genesis-harness/bridge/workflow_schemas.py": "2b4a028595e0462be8bd90e8ac6dae97665e124c200784cea26e2f19eb82dc26",
+    "products/alpha-genesis-harness/bridge/workflow_strategies.py": "bb639bfe6467c1da816149fc5918f785f9df8053b3e5fc841f9e0cdef3115124",
+    "products/alpha-genesis-harness/bridge/workflows.py": "a0a5b9ea3a89a8932d2f8a7249b0babe90338a2a1b0134a81596813f57a5d960",
+    "products/alpha-genesis-harness/bridge/workshop.py": "51a5dd7009feef231ace9deeca57cf601c19aa747aac3bf00fb9abcdca89650c",
+    "products/alpha-genesis-harness/bridge/workshop_protocol.py": "7cfc34181f2a5745cbf81e40a2c9f41d71f2d677085ac50959fc144a578b6356",
+    "products/frontier-member-tools/inventor/relational.py": "48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d"
+  },
+  "source_revision": "297a51c25c48031e1e6f964835f4dfae3ddb8023",
+  "source_sha256": "5107a81b46e2776a3490d5ef267d3af14213a6fbcfbda9cb5817040567be354c"
+}

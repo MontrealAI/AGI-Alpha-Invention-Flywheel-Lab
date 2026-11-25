@@ -1,0 +1,32 @@
+{
+  "schema": "frontier/schema-scope-review/v1",
+  "reviewed_at": "2026-11-25T14:36:29Z",
+  "revision": "2dcf1f252e7bb6eff528a2ef60e3314cab477e88",
+  "parent": "5955c08d36d31b77a310720ae2ba17142fca9794",
+  "tree": "09d65a79d6b74bef02121ba5eb6ccaa29a9d338a",
+  "decision": "PASS",
+  "scope": "P2 declared schema guard at the SQLite worker and verified claim boundary for explicit SQL using an approved dataset.",
+  "evidence": {
+    "method": "Read-only diff review and tests from an isolated exact Git archive with the shipped relational evaluator. A separate synthetic probe wrapped the actual SQLite worker and inspected the authorized local constructor fixture prompt.",
+    "diff_check_passed": true,
+    "test_mission_schema_context_passed": 8,
+    "test_mission_tools_passed": 6,
+    "claim_bound_conflicts_rejected": 6,
+    "claim_bound_conflict_execution_receipts": 0,
+    "claim_bound_conflict_supported_conclusions": 0,
+    "separately_authored_unbound_cases": 8,
+    "prompt_schema_delivery_modes": [true, false],
+    "conflicts": ["type", "range", "nullability"],
+    "unbound_conflict_dispatches_refused": 6,
+    "unbound_conflict_worker_calls_with_rows": 0,
+    "unbound_compatible_worker_calls_with_rows": 2,
+    "unbound_compatible_results_correct": 2,
+    "authorized_local_constructor_prompts_with_raw_rows": 8
+  },
+  "scope_limit": "The approved datasets in this review were authorized for model interpretation. The constructor prompt included those rows in both modes. The declared constraints determined whether the rows could enter the SQL worker or substantiate a verified claim. This decision covers that computation boundary. Model access to authorized inputs is a separate boundary, and remote data handling was outside this test.",
+  "source_sha256": {
+    "mission_schema_context.py": "9829f19ec2fb180ab30bf358e97e354e0ded30e2771f231484193b2e97fd5547",
+    "mission_tools.py": "c64452be8a9831e936daf14b7073684637371da208bc8da0c1bdf519477ce948",
+    "universal_missions.py": "42d4037a83b616fed050a5d3b3bb764496be33a08fcaec74bc87a34c113ca8ab"
+  }
+}

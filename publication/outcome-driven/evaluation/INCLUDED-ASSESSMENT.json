@@ -1,0 +1,100 @@
+{
+  "authoring_sha256": "3c14235f3610e4cf2b8f05a0e7a1c6f4df9fbf1921f268095ea097fa7aa3402e",
+  "cases": [
+    {
+      "case": "od-c01",
+      "executed_primary_exact": true,
+      "false_user_facing_acceptance": false,
+      "reported_primary_exact": true,
+      "reusable_on_withheld": true,
+      "verdict": "ACCEPT",
+      "verified_queries": [
+        {
+          "artifact_sha256": "5ac573afb4048f4802179f923747818b8edb3588491fb95b1fd82d94568ad644",
+          "held_reuse": {
+            "input_sha256": "82029493c704906fedb41cf2ba4d26570c3ae49cad4624b4710d4cb732d186ff",
+            "matched": true,
+            "output_sha256": "fbae533e359f761c7730a3f71b8ad7b8bf71a86568973be4cf1ab9a4f38452d8",
+            "rows": [
+              [
+                "452/789"
+              ]
+            ]
+          },
+          "input_sha256": "1254123afb7e62f80c924f50959cd8430ae2b4ad6528e82fdc3d04a6b54df491",
+          "output_sha256": "279d97ae38641140ca3d3b7e617e070d32e4293cd06c9518e3cd394a3b3b7120",
+          "primary_exact": true,
+          "query": "SELECT CAST(SUM(j.occupied * j.minutes) AS TEXT) || '/' ||\n       CAST(SUM(j.capacity * j.minutes) AS TEXT) AS occupancy\n  FROM journeys AS j\n  JOIN services AS s ON j.line_id = s.line_id\n WHERE j.state = 'operated' AND s.scope = 'regular'\nHAVING SUM(j.capacity * j.minutes) > 0",
+          "rows": [
+            [
+              "371/630"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "case": "od-c02",
+      "executed_primary_exact": true,
+      "false_user_facing_acceptance": false,
+      "reported_primary_exact": true,
+      "reusable_on_withheld": true,
+      "verdict": "ACCEPT",
+      "verified_queries": [
+        {
+          "artifact_sha256": "484e66cab8d4216a9dcb7009eb359c4781ab93ea13ae827c045a77edec7f9805",
+          "held_reuse": {
+            "input_sha256": "053ac623963c83bd97e970aa70ffd0b0d54f28e96d9df64653ef1064f42d716f",
+            "matched": true,
+            "output_sha256": "556dabaa311db29bbbd91f9d6a990963f2d6787c86b4561291c5ba3a752af768",
+            "rows": [
+              [
+                "21504490/1000000"
+              ]
+            ]
+          },
+          "input_sha256": "009b8565af22d6841217d06fa4cce1864041f012c1acf9a1525567bddcd3f9cd",
+          "output_sha256": "5508d7d0b3818b3c6475c4009974fbf973ab6b856b414f8c0b97576238fc2124",
+          "primary_exact": true,
+          "query": "WITH conversions AS (\n    SELECT CASE u_charge WHEN 'kg' THEN charge WHEN 't' THEN charge * 1000 END AS kg,\n           CASE u_trajet WHEN 'm' THEN trajet WHEN 'km' THEN trajet * 1000 END AS m\n      FROM expeditions\n)\nSELECT CAST(SUM(kg * m) AS TEXT) || '/1000000' AS travail\n  FROM conversions\nHAVING COUNT(*) > 0 AND COUNT(kg) = COUNT(*) AND COUNT(m) = COUNT(*)",
+          "rows": [
+            [
+              "21438725/1000000"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "case": "od-c03",
+      "false_user_facing_acceptance": false,
+      "precise_missing_cell": true,
+      "verdict": "ACCEPT",
+      "verified_queries": [
+        {
+          "artifact_sha256": "bb6671d527f40bb0c64abecf4875eaf07647231fc0a9727b722bd2a14c6e6315",
+          "input_sha256": "3bff180e1964ea3167275bd3deeeccd1832c3c81334deb1bd439f0c99ac0a702",
+          "output_sha256": "5d9227128e8cecbd5d3f2c5ed6b3a0a860d758cb92e4f31afe63aa695c8263ea",
+          "primary_exact": false,
+          "query": "SELECT cycle, 'duree_s' AS field FROM mesures WHERE duree_s IS NULL\nUNION ALL\nSELECT cycle, 'energie_j' AS field FROM mesures WHERE energie_j IS NULL\nORDER BY cycle, field",
+          "rows": [
+            [
+              "piquet-5",
+              "duree_s"
+            ]
+          ]
+        }
+      ],
+      "withheld_total": true
+    }
+  ],
+  "cases_sha256": "738bfc3db56d4ece5af8a4896280c6fa98f729a7d0dce4d714e4d54c0ec60253",
+  "evaluated": 3,
+  "false_acceptances": 0,
+  "predictions_sha256": "091032dd67167cb3120eeca9f5b4ea966d362652f624fa12d4cd1a805115e07f",
+  "registration_sha256": "cfb88bf4441a8ffb950054c8eabd5c53e480e6c749f7085e9f08d180af022485",
+  "schema": "frontier/outcome-driven-assisted-comparison-v1",
+  "scope": "Post-registration included-Codex plus ordinary SQLite, same locked information and independent scoring. Different compute. Excluded from the registered materiality test.",
+  "separate_evaluation_seconds": 0.493228026003635,
+  "strict_acceptances": 3
+}

@@ -1,0 +1,559 @@
+{
+  "observations": [
+    {
+      "body_bytes": 14972,
+      "captured_at": "2026-11-25T14:10:09.843934+00:00",
+      "elapsed_seconds": 5.710788,
+      "raw_sha256": "635eacd2335caa68a1abd48c6923733741a5eb283e8c629e76759b2dc8ade263",
+      "url": "https://api.github.com/repos/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/45547873631"
+    },
+    {
+      "body_bytes": 9056,
+      "captured_at": "2026-11-25T14:10:13.456387+00:00",
+      "elapsed_seconds": 3.612512,
+      "raw_sha256": "b7a7a3233e255de4a294d6fd02dffbbab364d845f5b79a3f2dce44333327be94",
+      "url": "https://api.github.com/repos/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/45547873631/attempts/1/jobs?per_page=100"
+    },
+    {
+      "body_bytes": 4274,
+      "captured_at": "2026-11-25T14:10:16.793465+00:00",
+      "elapsed_seconds": 3.336805,
+      "raw_sha256": "28d31243460a78977d13466e5b48a6279a62ed716c4f0bab3d2ebad6193d1a13",
+      "url": "https://raw.githubusercontent.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/d4527cb28e5bed6a0ff15a0d1fc2effa9de76a4a/publication/evidence-bound/production/LIVE-RELEASE.json"
+    },
+    {
+      "body_bytes": 15243,
+      "captured_at": "2026-11-25T14:10:19.978294+00:00",
+      "elapsed_seconds": 3.184706,
+      "raw_sha256": "7259da927014d8e23fa957913b8e32b643a3c9e6cfb50a51b52dafccf7cdc51a",
+      "url": "https://api.github.com/repos/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/workflows/research-pages.yml/runs?head_sha=297a51c25c48031e1e6f964835f4dfae3ddb8023&event=push&per_page=100"
+    },
+    {
+      "body_bytes": 15207,
+      "captured_at": "2026-11-25T14:10:23.068473+00:00",
+      "elapsed_seconds": 3.089724,
+      "raw_sha256": "65b36d90f7163336e66627d3ff49987ca914f48dbf6ffc1361ef13fedd27b724",
+      "url": "https://api.github.com/repos/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/45551096060"
+    },
+    {
+      "body_bytes": 9056,
+      "captured_at": "2026-11-25T14:10:26.748813+00:00",
+      "elapsed_seconds": 3.680217,
+      "raw_sha256": "4f5f6a922b613aa200ac3085155579547feb68acc39e0ec77dbb8e6105ac81b5",
+      "url": "https://api.github.com/repos/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/45551096060/attempts/1/jobs?per_page=100"
+    },
+    {
+      "body_bytes": 4274,
+      "captured_at": "2026-11-25T14:10:30.289523+00:00",
+      "elapsed_seconds": 3.540317,
+      "raw_sha256": "27066883edc1e1ab76e387e87e8b6d49e8cbbe2138679d1199d22131f86caf1a",
+      "url": "https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/frontier-omega-alpha/atlas-release.json"
+    },
+    {
+      "body_bytes": 72235,
+      "captured_at": "2026-11-25T14:10:35.204339+00:00",
+      "elapsed_seconds": 4.914696,
+      "raw_sha256": "f3b5c95371e43b5f97d500e8ff3813d508b85930cd79ec5eee976ea4196c0ff7",
+      "url": "https://api.github.com/repos/ggml-org/llama.cpp/releases/tags/b12242"
+    }
+  ],
+  "pages": [
+    {
+      "acquisition_cpu_seconds": 0.019416,
+      "acquisition_wall_seconds": 12.660483,
+      "expected_commit": "f8b8f95b1ef10641a82d1b98f4b13e0b8cd5bb43",
+      "expected_run": 45547873631,
+      "facts": {
+        "jobs": [
+          {
+            "completed_at": "2026-11-25T04:48:50Z",
+            "conclusion": "success",
+            "created_at": "2026-11-25T04:35:54Z",
+            "head_sha": "f8b8f95b1ef10641a82d1b98f4b13e0b8cd5bb43",
+            "id": 138981716958,
+            "name": "build",
+            "run_attempt": 1,
+            "run_id": 45547873631,
+            "status": "completed",
+            "steps": [
+              {
+                "name": "Set up job",
+                "number": 1,
+                "started_at": "2026-11-25T04:48:03Z"
+              },
+              {
+                "name": "Record platform job execution start",
+                "number": 2,
+                "started_at": "2026-11-25T04:48:05Z"
+              },
+              {
+                "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+                "number": 3,
+                "started_at": "2026-11-25T04:48:05Z"
+              },
+              {
+                "name": "Build only the public website allowlist",
+                "number": 4,
+                "started_at": "2026-11-25T04:48:09Z"
+              },
+              {
+                "name": "Test watch publication, replay, rejection and recovery",
+                "number": 5,
+                "started_at": "2026-11-25T04:48:10Z"
+              },
+              {
+                "name": "Replay the ALPHA-1 availability correction",
+                "number": 6,
+                "started_at": "2026-11-25T04:48:10Z"
+              },
+              {
+                "name": "Replay approved public Git history and stage the bilingual Atlas",
+                "number": 7,
+                "started_at": "2026-11-25T04:48:11Z"
+              },
+              {
+                "name": "Qualify public member briefs, receipts and exact portable packages",
+                "number": 8,
+                "started_at": "2026-11-25T04:48:26Z"
+              },
+              {
+                "name": "Qualify both member entrances on the candidate artifact",
+                "number": 9,
+                "started_at": "2026-11-25T04:48:39Z"
+              },
+              {
+                "name": "Retain staged member qualification evidence",
+                "number": 10,
+                "started_at": "2026-11-25T04:48:39Z"
+              },
+              {
+                "name": "Qualify prepared Conclave experiment",
+                "number": 11,
+                "started_at": "2026-11-25T04:48:39Z"
+              },
+              {
+                "name": "Verify ALPHA GENESIS LIVE agent, construction and evidence",
+                "number": 12,
+                "started_at": "2026-11-25T04:48:40Z"
+              },
+              {
+                "name": "Validate original PDFs, links and publication boundary",
+                "number": 13,
+                "started_at": "2026-11-25T04:48:41Z"
+              },
+              {
+                "name": "Check interactive research calculations and decisions",
+                "number": 14,
+                "started_at": "2026-11-25T04:48:43Z"
+              },
+              {
+                "name": "Reproduce OUT-ACCELERATE exact worked example",
+                "number": 15,
+                "started_at": "2026-11-25T04:48:43Z"
+              },
+              {
+                "name": "Qualify and add the standalone HARNESS preview",
+                "number": 16,
+                "started_at": "2026-11-25T04:48:43Z"
+              },
+              {
+                "name": "Upload the allowlisted Pages artifact",
+                "number": 17,
+                "started_at": "2026-11-25T04:48:44Z"
+              },
+              {
+                "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+                "number": 34,
+                "started_at": "2026-11-25T04:48:48Z"
+              },
+              {
+                "name": "Complete job",
+                "number": 35,
+                "started_at": "2026-11-25T04:48:48Z"
+              }
+            ]
+          },
+          {
+            "completed_at": "2026-11-25T04:58:38Z",
+            "conclusion": "success",
+            "created_at": "2026-11-25T04:48:51Z",
+            "head_sha": "f8b8f95b1ef10641a82d1b98f4b13e0b8cd5bb43",
+            "id": 138986407230,
+            "name": "deploy",
+            "run_attempt": 1,
+            "run_id": 45547873631,
+            "status": "completed",
+            "steps": [
+              {
+                "name": "Set up job",
+                "number": 1,
+                "started_at": "2026-11-25T04:58:29Z"
+              },
+              {
+                "name": "Record platform job execution start",
+                "number": 2,
+                "started_at": "2026-11-25T04:58:30Z"
+              },
+              {
+                "name": "Check existing Pages configuration",
+                "number": 3,
+                "started_at": "2026-11-25T04:58:30Z"
+              },
+              {
+                "name": "Deploy the public website",
+                "number": 4,
+                "started_at": "2026-11-25T04:58:30Z"
+              },
+              {
+                "name": "Complete job",
+                "number": 5,
+                "started_at": "2026-11-25T04:58:36Z"
+              }
+            ]
+          },
+          {
+            "completed_at": "2026-11-25T05:01:18Z",
+            "conclusion": "success",
+            "created_at": "2026-11-25T04:58:38Z",
+            "head_sha": "f8b8f95b1ef10641a82d1b98f4b13e0b8cd5bb43",
+            "id": 138989847106,
+            "name": "verify-live",
+            "run_attempt": 1,
+            "run_id": 45547873631,
+            "status": "completed",
+            "steps": [
+              {
+                "name": "Set up job",
+                "number": 1,
+                "started_at": "2026-11-25T05:00:13Z"
+              },
+              {
+                "name": "Record platform job execution start",
+                "number": 2,
+                "started_at": "2026-11-25T05:00:13Z"
+              },
+              {
+                "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+                "number": 3,
+                "started_at": "2026-11-25T05:00:13Z"
+              },
+              {
+                "name": "Verify the actual public English and French pages and ledger bytes",
+                "number": 4,
+                "started_at": "2026-11-25T05:00:14Z"
+              },
+              {
+                "name": "Exercise live desktop, mobile and transaction-free member paths",
+                "number": 5,
+                "started_at": "2026-11-25T05:00:16Z"
+              },
+              {
+                "name": "Save verified production screenshots",
+                "number": 6,
+                "started_at": "2026-11-25T05:01:06Z"
+              },
+              {
+                "name": "Download and independently execute the actual production packages",
+                "number": 7,
+                "started_at": "2026-11-25T05:01:07Z"
+              },
+              {
+                "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+                "number": 14,
+                "started_at": "2026-11-25T05:01:16Z"
+              },
+              {
+                "name": "Complete job",
+                "number": 15,
+                "started_at": "2026-11-25T05:01:17Z"
+              }
+            ]
+          }
+        ],
+        "run": {
+          "conclusion": "success",
+          "created_at": "2026-11-25T04:35:53Z",
+          "event": "push",
+          "head_branch": "main",
+          "head_sha": "f8b8f95b1ef10641a82d1b98f4b13e0b8cd5bb43",
+          "id": 45547873631,
+          "path": ".github/workflows/research-pages.yml",
+          "run_attempt": 1,
+          "status": "completed"
+        },
+        "witness": {
+          "source_commit": "f8b8f95b1ef10641a82d1b98f4b13e0b8cd5bb43",
+          "workflow_run": "45547873631"
+        }
+      },
+      "id": "reviewed-product",
+      "origin": "observed_pinned_transcript",
+      "study_scope": "historical",
+      "witness_source": "https://raw.githubusercontent.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/d4527cb28e5bed6a0ff15a0d1fc2effa9de76a4a/publication/evidence-bound/production/LIVE-RELEASE.json"
+    },
+    {
+      "acquisition_cpu_seconds": 0.032378,
+      "acquisition_wall_seconds": 13.496069,
+      "expected_commit": "297a51c25c48031e1e6f964835f4dfae3ddb8023",
+      "expected_run": 45551096060,
+      "facts": {
+        "jobs": [
+          {
+            "completed_at": "2026-11-25T05:07:19Z",
+            "conclusion": "success",
+            "created_at": "2026-11-25T05:05:00Z",
+            "head_sha": "297a51c25c48031e1e6f964835f4dfae3ddb8023",
+            "id": 138992193042,
+            "name": "build",
+            "run_attempt": 1,
+            "run_id": 45551096060,
+            "status": "completed",
+            "steps": [
+              {
+                "name": "Set up job",
+                "number": 1,
+                "started_at": "2026-11-25T05:06:37Z"
+              },
+              {
+                "name": "Record platform job execution start",
+                "number": 2,
+                "started_at": "2026-11-25T05:06:38Z"
+              },
+              {
+                "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+                "number": 3,
+                "started_at": "2026-11-25T05:06:38Z"
+              },
+              {
+                "name": "Build only the public website allowlist",
+                "number": 4,
+                "started_at": "2026-11-25T05:06:41Z"
+              },
+              {
+                "name": "Test watch publication, replay, rejection and recovery",
+                "number": 5,
+                "started_at": "2026-11-25T05:06:41Z"
+              },
+              {
+                "name": "Replay the ALPHA-1 availability correction",
+                "number": 6,
+                "started_at": "2026-11-25T05:06:42Z"
+              },
+              {
+                "name": "Replay approved public Git history and stage the bilingual Atlas",
+                "number": 7,
+                "started_at": "2026-11-25T05:06:43Z"
+              },
+              {
+                "name": "Qualify public member briefs, receipts and exact portable packages",
+                "number": 8,
+                "started_at": "2026-11-25T05:06:57Z"
+              },
+              {
+                "name": "Qualify both member entrances on the candidate artifact",
+                "number": 9,
+                "started_at": "2026-11-25T05:07:09Z"
+              },
+              {
+                "name": "Retain staged member qualification evidence",
+                "number": 10,
+                "started_at": "2026-11-25T05:07:09Z"
+              },
+              {
+                "name": "Qualify prepared Conclave experiment",
+                "number": 11,
+                "started_at": "2026-11-25T05:07:09Z"
+              },
+              {
+                "name": "Verify ALPHA GENESIS LIVE agent, construction and evidence",
+                "number": 12,
+                "started_at": "2026-11-25T05:07:10Z"
+              },
+              {
+                "name": "Validate original PDFs, links and publication boundary",
+                "number": 13,
+                "started_at": "2026-11-25T05:07:11Z"
+              },
+              {
+                "name": "Check interactive research calculations and decisions",
+                "number": 14,
+                "started_at": "2026-11-25T05:07:14Z"
+              },
+              {
+                "name": "Reproduce OUT-ACCELERATE exact worked example",
+                "number": 15,
+                "started_at": "2026-11-25T05:07:14Z"
+              },
+              {
+                "name": "Qualify and add the standalone HARNESS preview",
+                "number": 16,
+                "started_at": "2026-11-25T05:07:14Z"
+              },
+              {
+                "name": "Upload the allowlisted Pages artifact",
+                "number": 17,
+                "started_at": "2026-11-25T05:07:14Z"
+              },
+              {
+                "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+                "number": 34,
+                "started_at": "2026-11-25T05:07:17Z"
+              },
+              {
+                "name": "Complete job",
+                "number": 35,
+                "started_at": "2026-11-25T05:07:17Z"
+              }
+            ]
+          },
+          {
+            "completed_at": "2026-11-25T05:08:15Z",
+            "conclusion": "success",
+            "created_at": "2026-11-25T05:07:19Z",
+            "head_sha": "297a51c25c48031e1e6f964835f4dfae3ddb8023",
+            "id": 138993038101,
+            "name": "deploy",
+            "run_attempt": 1,
+            "run_id": 45551096060,
+            "status": "completed",
+            "steps": [
+              {
+                "name": "Set up job",
+                "number": 1,
+                "started_at": "2026-11-25T05:08:07Z"
+              },
+              {
+                "name": "Record platform job execution start",
+                "number": 2,
+                "started_at": "2026-11-25T05:08:08Z"
+              },
+              {
+                "name": "Check existing Pages configuration",
+                "number": 3,
+                "started_at": "2026-11-25T05:08:08Z"
+              },
+              {
+                "name": "Deploy the public website",
+                "number": 4,
+                "started_at": "2026-11-25T05:08:08Z"
+              },
+              {
+                "name": "Complete job",
+                "number": 5,
+                "started_at": "2026-11-25T05:08:14Z"
+              }
+            ]
+          },
+          {
+            "completed_at": "2026-11-25T05:09:34Z",
+            "conclusion": "success",
+            "created_at": "2026-11-25T05:08:15Z",
+            "head_sha": "297a51c25c48031e1e6f964835f4dfae3ddb8023",
+            "id": 138993382004,
+            "name": "verify-live",
+            "run_attempt": 1,
+            "run_id": 45551096060,
+            "status": "completed",
+            "steps": [
+              {
+                "name": "Set up job",
+                "number": 1,
+                "started_at": "2026-11-25T05:08:34Z"
+              },
+              {
+                "name": "Record platform job execution start",
+                "number": 2,
+                "started_at": "2026-11-25T05:08:35Z"
+              },
+              {
+                "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+                "number": 3,
+                "started_at": "2026-11-25T05:08:35Z"
+              },
+              {
+                "name": "Verify the actual public English and French pages and ledger bytes",
+                "number": 4,
+                "started_at": "2026-11-25T05:08:38Z"
+              },
+              {
+                "name": "Exercise live desktop, mobile and transaction-free member paths",
+                "number": 5,
+                "started_at": "2026-11-25T05:08:40Z"
+              },
+              {
+                "name": "Save verified production screenshots",
+                "number": 6,
+                "started_at": "2026-11-25T05:09:25Z"
+              },
+              {
+                "name": "Download and independently execute the actual production packages",
+                "number": 7,
+                "started_at": "2026-11-25T05:09:26Z"
+              },
+              {
+                "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+                "number": 14,
+                "started_at": "2026-11-25T05:09:33Z"
+              },
+              {
+                "name": "Complete job",
+                "number": 15,
+                "started_at": "2026-11-25T05:09:33Z"
+              }
+            ]
+          }
+        ],
+        "run": {
+          "conclusion": "success",
+          "created_at": "2026-11-25T05:05:00Z",
+          "event": "push",
+          "head_branch": "main",
+          "head_sha": "297a51c25c48031e1e6f964835f4dfae3ddb8023",
+          "id": 45551096060,
+          "path": ".github/workflows/research-pages.yml",
+          "run_attempt": 1,
+          "status": "completed"
+        },
+        "witness": {
+          "source_commit": "297a51c25c48031e1e6f964835f4dfae3ddb8023",
+          "workflow_run": "45614033463"
+        }
+      },
+      "id": "current-research",
+      "origin": "observed_public",
+      "study_scope": "current_at_capture",
+      "witness_source": "https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/frontier-omega-alpha/atlas-release.json"
+    }
+  ],
+  "registration_sha256": "6c1087b12c16c85e4e3cc16f12c8eab31d4b372f4889077e02440aef925ac4f1",
+  "upstream": {
+    "acquisition_cpu_seconds": 0.275671,
+    "acquisition_wall_seconds": 5.206243,
+    "archive": {
+      "ordinary_sha256": "909eef25cd53e6601c8a07c866d8dbb2983e74177088d55182137a8fb8255d62",
+      "server_members": [
+        "llama-b12242/llama-server"
+      ],
+      "sha256": "909eef25cd53e6601c8a07c866d8dbb2983e74177088d55182137a8fb8255d62",
+      "size": 23158635
+    },
+    "expected_name": "llama-b12242-bin-ubuntu-x64.tar.gz",
+    "expected_tag": "b12242",
+    "origin": "observed_upstream_publisher",
+    "release": {
+      "assets": [
+        {
+          "digest": "sha256:909eef25cd53e6601c8a07c866d8dbb2983e74177088d55182137a8fb8255d62",
+          "id": 729746370,
+          "name": "llama-b12242-bin-ubuntu-x64.tar.gz",
+          "size": 23158635,
+          "state": "uploaded"
+        }
+      ],
+      "draft": false,
+      "id": 439859799,
+      "prerelease": true,
+      "tag": "b12242"
+    }
+  }
+}

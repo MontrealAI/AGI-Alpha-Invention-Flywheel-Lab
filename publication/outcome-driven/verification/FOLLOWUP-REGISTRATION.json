@@ -1,0 +1,143 @@
+{
+  "schema": "frontier/production-telemetry-repeat-registration/v1",
+  "frozen_at": "2026-11-25T14:32:22.294409+00:00",
+  "ambition": "Build a portable classifier for pairs of integers named previous and current from a 16-bit telemetry counter. Output classification as normal for a nondecrease, wrap for a decrease when previous is at least 65000 and current is at most 535, and reset for all other decreases. Demonstrate the three cases.",
+  "ambition_utf8_sha256": "9153c43128c6ed10ce9c48bd57e75f5c27efb6c4e8a0f9b504bbd43941b7708c",
+  "scope": {
+    "input_domain": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 65535,
+      "fields": [
+        "previous",
+        "current"
+      ]
+    },
+    "fixtures": "Synthetic counter readings with no member data or external sources.",
+    "separation": "The production run receives the ambition only. Held inputs and labels are controlled separately from artifact construction within the shared workspace and are never sent to any model. This is held evaluation under shared administration.",
+    "claim": "One unseen objective and one portable artifact. The cases test this classifier. They establish neither generality across task families nor superiority to ordinary computation."
+  },
+  "transport_acceptance": {
+    "requires": [
+      "Capture the observed live Pages asset revision and installed local executor identity for the browser journey.",
+      "Show exact UTF-8 ambition transfer from the browser to a fresh authorized local model mission, with the original ambition retained in its exported state.",
+      "Obtain the artifact from that browser mission export. Validate the archive checksum, each selected artifact checksum, and the binding to the mission that executed."
+    ],
+    "claim": "A qualifying transfer establishes the observed journey and provenance. Computation has a separate acceptance decision."
+  },
+  "computation_acceptance": {
+    "requires": [
+      "The exported artifact has a portable runnable representation with the named inputs previous and current and a classification output.",
+      "Replay the archived artifact bytes from the first completed repeat artifact in a clean environment with the trusted evaluator and record artifact and evaluator SHA-256. Use the typed input objects and exact lowercase labels frozen here.",
+      "The unchanged candidate agrees with the frozen labels and the ordinary Python reference on every held case, including all three classes. Retain all disagreements and errors if present."
+    ],
+    "primary_decision": "PASS only on 12 of 12 exact classifications. A missing or unevaluable artifact remains unverified.",
+    "baseline_claim": "A tied result supports this bounded artifact and provides no measured improvement over ordinary Python."
+  },
+  "ordinary_python": [
+    "def classify(previous, current):",
+    "    if current >= previous:",
+    "        return \"normal\"",
+    "    if previous >= 65000 and current <= 535:",
+    "        return \"wrap\"",
+    "    return \"reset\""
+  ],
+  "held_cases": [
+    {
+      "id": "zero_plateau",
+      "input": {
+        "previous": 0,
+        "current": 0
+      },
+      "expected": "normal"
+    },
+    {
+      "id": "high_plateau",
+      "input": {
+        "previous": 65000,
+        "current": 65000
+      },
+      "expected": "normal"
+    },
+    {
+      "id": "opposite_direction",
+      "input": {
+        "previous": 535,
+        "current": 65000
+      },
+      "expected": "normal"
+    },
+    {
+      "id": "upper_increment",
+      "input": {
+        "previous": 65534,
+        "current": 65535
+      },
+      "expected": "normal"
+    },
+    {
+      "id": "joint_inclusive_boundary",
+      "input": {
+        "previous": 65000,
+        "current": 535
+      },
+      "expected": "wrap"
+    },
+    {
+      "id": "maximum_to_zero",
+      "input": {
+        "previous": 65535,
+        "current": 0
+      },
+      "expected": "wrap"
+    },
+    {
+      "id": "upper_previous_inclusive_current",
+      "input": {
+        "previous": 65535,
+        "current": 535
+      },
+      "expected": "wrap"
+    },
+    {
+      "id": "inside_wrap_window",
+      "input": {
+        "previous": 65281,
+        "current": 271
+      },
+      "expected": "wrap"
+    },
+    {
+      "id": "one_below_previous_threshold",
+      "input": {
+        "previous": 64999,
+        "current": 0
+      },
+      "expected": "reset"
+    },
+    {
+      "id": "one_above_current_threshold",
+      "input": {
+        "previous": 65000,
+        "current": 536
+      },
+      "expected": "reset"
+    },
+    {
+      "id": "maximum_previous_current_over_boundary",
+      "input": {
+        "previous": 65535,
+        "current": 536
+      },
+      "expected": "reset"
+    },
+    {
+      "id": "small_decrease",
+      "input": {
+        "previous": 1,
+        "current": 0
+      },
+      "expected": "reset"
+    }
+  ]
+}

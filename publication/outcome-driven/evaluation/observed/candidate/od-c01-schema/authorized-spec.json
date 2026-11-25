@@ -1,0 +1,153 @@
+{
+  "ambition": "Build and run a reusable exact calculator for the seat-time occupancy ratio of regular campus shuttle service. Exclude cancelled trips and charter service. Give the fraction for my authorized records.",
+  "context": "Join journeys.line_id to services.line_id, whose key is unique. The rows have no missing required measurements. Include scope=regular and state=operated only. Divide the sum of occupied seats times minutes by the sum of offered capacity times minutes over those same trips. Minutes and capacities are positive. Supply one exact rational result in the sole output column.\nSchema of the authorized tables: {\"journeys\":{\"capacity\":\"INTEGER\",\"departure\":\"TEXT\",\"line_id\":\"TEXT\",\"minutes\":\"INTEGER\",\"occupied\":\"INTEGER\",\"state\":\"TEXT\"},\"services\":{\"line_id\":\"TEXT\",\"scope\":\"TEXT\"}}",
+  "expires_at": "2026-11-25T14:41:50.509283+00:00",
+  "language": "en",
+  "local_only": true,
+  "max_actions": 10,
+  "max_output_tokens": 560,
+  "max_turns": 2,
+  "model": "qwen3-8b-q4_k_m",
+  "provider": "llama-cpp",
+  "requirements": {
+    "approved_tables": {
+      "mobility-bay-16": {
+        "journeys": [
+          {
+            "capacity": 13,
+            "departure": "u14",
+            "line_id": "harbor",
+            "minutes": 11,
+            "occupied": 7,
+            "state": "operated"
+          },
+          {
+            "capacity": 14,
+            "departure": "u15",
+            "line_id": "orchard",
+            "minutes": 19,
+            "occupied": 11,
+            "state": "operated"
+          },
+          {
+            "capacity": 13,
+            "departure": "u16",
+            "line_id": "harbor",
+            "minutes": 8,
+            "occupied": 0,
+            "state": "cancelled"
+          },
+          {
+            "capacity": 20,
+            "departure": "u17",
+            "line_id": "airport",
+            "minutes": 33,
+            "occupied": 18,
+            "state": "operated"
+          },
+          {
+            "capacity": 13,
+            "departure": "u18",
+            "line_id": "harbor",
+            "minutes": 17,
+            "occupied": 5,
+            "state": "operated"
+          }
+        ],
+        "services": [
+          {
+            "line_id": "harbor",
+            "scope": "regular"
+          },
+          {
+            "line_id": "orchard",
+            "scope": "regular"
+          },
+          {
+            "line_id": "airport",
+            "scope": "charter"
+          }
+        ]
+      }
+    },
+    "evidence": {
+      "claims": [
+        {
+          "dataset": "mobility-bay-16",
+          "dimension": "seat-time/seat-time",
+          "id": "occupancy",
+          "locator": [
+            "rows",
+            0,
+            0
+          ],
+          "reference": {
+            "source": "Independent exact study reference",
+            "value": "53/90"
+          },
+          "required_fields": [
+            [
+              "journeys",
+              "capacity"
+            ],
+            [
+              "journeys",
+              "departure"
+            ],
+            [
+              "journeys",
+              "line_id"
+            ],
+            [
+              "journeys",
+              "minutes"
+            ],
+            [
+              "journeys",
+              "occupied"
+            ],
+            [
+              "journeys",
+              "state"
+            ],
+            [
+              "services",
+              "line_id"
+            ],
+            [
+              "services",
+              "scope"
+            ]
+          ],
+          "requires": {
+            "duration_weighting": "seat-time",
+            "required_state": "operated",
+            "service_scope": "regular"
+          },
+          "tool": "run_table",
+          "unit": "ratio",
+          "version": "regular-service-schema-v1"
+        }
+      ],
+      "inputs": {
+        "mobility-bay-16": {
+          "facts": {
+            "duration_weighting": "seat-time",
+            "required_state": "operated",
+            "service_scope": "regular"
+          },
+          "kind": "table",
+          "origin": "AUTHORIZED_MISSION_INPUT",
+          "sha256": "1254123afb7e62f80c924f50959cd8430ae2b4ad6528e82fdc3d04a6b54df491",
+          "version": "regular-service-schema-v1"
+        }
+      }
+    }
+  },
+  "tools": [
+    "construct_table",
+    "run_table",
+    "read_artifact",
+    "write_document"
+  ]
+}
