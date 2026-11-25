@@ -1,0 +1,1000 @@
+{
+  "schema": "flexible-compute-envelope277/v1",
+  "scope": "historical notice timing plus authored workloads; not measured compute or power",
+  "dates": [
+    "06-11",
+    "06-12",
+    "06-18",
+    "07-01",
+    "07-02",
+    "07-03",
+    "07-04",
+    "07-05",
+    "07-15",
+    "07-16",
+    "07-17",
+    "08-06",
+    "08-07",
+    "08-08",
+    "08-09",
+    "08-10",
+    "08-11",
+    "08-13",
+    "08-17"
+  ],
+  "days": 138,
+  "H": 3312,
+  "C": 24,
+  "A": 20,
+  "K": 19,
+  "tinyCalendars": 16,
+  "checks": {
+    "noticeCount": true,
+    "curtailedHours": true,
+    "miniatureExhaustive": true,
+    "fullStressAttainsEnvelope": true,
+    "observedMatchesEDF": true,
+    "robustMatchesStressEDF": true,
+    "robustImpliesObserved": true,
+    "workConservation": true
+  },
+  "accepted": true,
+  "thresholds": [
+    {
+      "D": 1,
+      "gridObserved": 20,
+      "gridRobust": 20,
+      "exactIntegerObserved": 20,
+      "exactIntegerRobust": 20
+    },
+    {
+      "D": 8,
+      "gridObserved": 12,
+      "gridRobust": 12,
+      "exactIntegerObserved": 9,
+      "exactIntegerRobust": 10
+    },
+    {
+      "D": 24,
+      "gridObserved": 8,
+      "gridRobust": 8,
+      "exactIntegerObserved": 1,
+      "exactIntegerRobust": 8
+    },
+    {
+      "D": 48,
+      "gridObserved": 0,
+      "gridRobust": 8,
+      "exactIntegerObserved": 0,
+      "exactIntegerRobust": 4
+    }
+  ],
+  "arms": [
+    {
+      "D": 1,
+      "F": 0,
+      "observed": {
+        "accepted": false,
+        "minSlack": -500,
+        "binding": {
+          "length": 127,
+          "curtailedHours": 42,
+          "demand": 2540,
+          "capacity": 2040
+        }
+      },
+      "robust": {
+        "accepted": false,
+        "minSlack": -1436,
+        "binding": {
+          "length": 439,
+          "curtailedHours": 133,
+          "demand": 8780,
+          "capacity": 7344
+        }
+      },
+      "edfObserved": {
+        "accepted": false,
+        "completed": 63580,
+        "missed": 2660,
+        "firstMissDeadlineHour": 639,
+        "offered": 66240
+      },
+      "edfStress": {
+        "accepted": false,
+        "completed": 63580,
+        "missed": 2660,
+        "firstMissDeadlineHour": 15,
+        "offered": 66240
+      }
+    },
+    {
+      "D": 1,
+      "F": 8,
+      "observed": {
+        "accepted": false,
+        "minSlack": -164,
+        "binding": {
+          "length": 127,
+          "curtailedHours": 42,
+          "demand": 2540,
+          "capacity": 2376
+        }
+      },
+      "robust": {
+        "accepted": false,
+        "minSlack": -372,
+        "binding": {
+          "length": 439,
+          "curtailedHours": 133,
+          "demand": 8780,
+          "capacity": 8408
+        }
+      },
+      "edfObserved": {
+        "accepted": false,
+        "completed": 64644,
+        "missed": 1596,
+        "firstMissDeadlineHour": 639,
+        "offered": 66240
+      },
+      "edfStress": {
+        "accepted": false,
+        "completed": 64644,
+        "missed": 1596,
+        "firstMissDeadlineHour": 15,
+        "offered": 66240
+      }
+    },
+    {
+      "D": 1,
+      "F": 12,
+      "observed": {
+        "accepted": false,
+        "minSlack": -56,
+        "binding": {
+          "length": 7,
+          "curtailedHours": 7,
+          "demand": 140,
+          "capacity": 84
+        }
+      },
+      "robust": {
+        "accepted": false,
+        "minSlack": -56,
+        "binding": {
+          "length": 7,
+          "curtailedHours": 7,
+          "demand": 140,
+          "capacity": 84
+        }
+      },
+      "edfObserved": {
+        "accepted": false,
+        "completed": 65176,
+        "missed": 1064,
+        "firstMissDeadlineHour": 639,
+        "offered": 66240
+      },
+      "edfStress": {
+        "accepted": false,
+        "completed": 65176,
+        "missed": 1064,
+        "firstMissDeadlineHour": 15,
+        "offered": 66240
+      }
+    },
+    {
+      "D": 1,
+      "F": 16,
+      "observed": {
+        "accepted": false,
+        "minSlack": -28,
+        "binding": {
+          "length": 7,
+          "curtailedHours": 7,
+          "demand": 140,
+          "capacity": 112
+        }
+      },
+      "robust": {
+        "accepted": false,
+        "minSlack": -28,
+        "binding": {
+          "length": 7,
+          "curtailedHours": 7,
+          "demand": 140,
+          "capacity": 112
+        }
+      },
+      "edfObserved": {
+        "accepted": false,
+        "completed": 65708,
+        "missed": 532,
+        "firstMissDeadlineHour": 639,
+        "offered": 66240
+      },
+      "edfStress": {
+        "accepted": false,
+        "completed": 65708,
+        "missed": 532,
+        "firstMissDeadlineHour": 15,
+        "offered": 66240
+      }
+    },
+    {
+      "D": 1,
+      "F": 20,
+      "observed": {
+        "accepted": true,
+        "minSlack": 0,
+        "binding": {
+          "length": 1,
+          "curtailedHours": 1,
+          "demand": 20,
+          "capacity": 20
+        }
+      },
+      "robust": {
+        "accepted": true,
+        "minSlack": 0,
+        "binding": {
+          "length": 1,
+          "curtailedHours": 1,
+          "demand": 20,
+          "capacity": 20
+        }
+      },
+      "edfObserved": {
+        "accepted": true,
+        "completed": 66240,
+        "missed": 0,
+        "firstMissDeadlineHour": null,
+        "offered": 66240
+      },
+      "edfStress": {
+        "accepted": true,
+        "completed": 66240,
+        "missed": 0,
+        "firstMissDeadlineHour": null,
+        "offered": 66240
+      }
+    },
+    {
+      "D": 1,
+      "F": 24,
+      "observed": {
+        "accepted": true,
+        "minSlack": 4,
+        "binding": {
+          "length": 1,
+          "curtailedHours": 1,
+          "demand": 20,
+          "capacity": 24
+        }
+      },
+      "robust": {
+        "accepted": true,
+        "minSlack": 4,
+        "binding": {
+          "length": 1,
+          "curtailedHours": 1,
+          "demand": 20,
+          "capacity": 24
+        }
+      },
+      "edfObserved": {
+        "accepted": true,
+        "completed": 66240,
+        "missed": 0,
+        "firstMissDeadlineHour": null,
+        "offered": 66240
+      },
+      "edfStress": {
+        "accepted": true,
+        "completed": 66240,
+        "missed": 0,
+        "firstMissDeadlineHour": null,
+        "offered": 66240
+      }
+    },
+    {
+      "D": 8,
+      "F": 0,
+      "observed": {
+        "accepted": false,
+        "minSlack": -360,
+        "binding": {
+          "length": 127,
+          "curtailedHours": 42,
+          "demand": 2400,
+          "capacity": 2040
+        }
+      },
+      "robust": {
+        "accepted": false,
+        "minSlack": -1296,
+        "binding": {
+          "length": 439,
+          "curtailedHours": 133,
+          "demand": 8640,
+          "capacity": 7344
+        }
+      },
+      "edfObserved": {
+        "accepted": false,
+        "completed": 65236,
+        "missed": 864,
+        "firstMissDeadlineHour": 666,
+        "offered": 66100
+      },
+      "edfStress": {
+        "accepted": false,
+        "completed": 64804,
+        "missed": 1296,
+        "firstMissDeadlineHour": 42,
+        "offered": 66100
+      }
+    },
+    {
+      "D": 8,
+      "F": 8,
+      "observed": {
+        "accepted": false,
+        "minSlack": -24,
+        "binding": {
+          "length": 127,
+          "curtailedHours": 42,
+          "demand": 2400,
+          "capacity": 2376
+        }
+      },
+      "robust": {
+        "accepted": false,
+        "minSlack": -232,
+        "binding": {
+          "length": 439,
+          "curtailedHours": 133,
+          "demand": 8640,
+          "capacity": 8408
+        }
+      },
+      "edfObserved": {
+        "accepted": false,
+        "completed": 66068,
+        "missed": 32,
+        "firstMissDeadlineHour": 1221,
+        "offered": 66100
+      },
+      "edfStress": {
+        "accepted": false,
+        "completed": 65868,
+        "missed": 232,
+        "firstMissDeadlineHour": 117,
+        "offered": 66100
+      }
+    },
+    {
+      "D": 8,
+      "F": 12,
+      "observed": {
+        "accepted": true,
+        "minSlack": 88,
+        "binding": {
+          "length": 8,
+          "curtailedHours": 7,
+          "demand": 20,
+          "capacity": 108
+        }
+      },
+      "robust": {
+        "accepted": true,
+        "minSlack": 88,
+        "binding": {
+          "length": 8,
+          "curtailedHours": 7,
+          "demand": 20,
+          "capacity": 108
+        }
+      },
+      "edfObserved": {
+        "accepted": true,
+        "completed": 66100,
+        "missed": 0,
+        "firstMissDeadlineHour": null,
+        "offered": 66100
+      },
+      "edfStress": {
+        "accepted": true,
+        "completed": 66100,
+        "missed": 0,
+        "firstMissDeadlineHour": null,
+        "offered": 66100
+      }
+    },
+    {
+      "D": 8,
+      "F": 16,
+      "observed": {
+        "accepted": true,
+        "minSlack": 116,
+        "binding": {
+          "length": 8,
+          "curtailedHours": 7,
+          "demand": 20,
+          "capacity": 136
+        }
+      },
+      "robust": {
+        "accepted": true,
+        "minSlack": 116,
+        "binding": {
+          "length": 8,
+          "curtailedHours": 7,
+          "demand": 20,
+          "capacity": 136
+        }
+      },
+      "edfObserved": {
+        "accepted": true,
+        "completed": 66100,
+        "missed": 0,
+        "firstMissDeadlineHour": null,
+        "offered": 66100
+      },
+      "edfStress": {
+        "accepted": true,
+        "completed": 66100,
+        "missed": 0,
+        "firstMissDeadlineHour": null,
+        "offered": 66100
+      }
+    },
+    {
+      "D": 8,
+      "F": 20,
+      "observed": {
+        "accepted": true,
+        "minSlack": 144,
+        "binding": {
+          "length": 8,
+          "curtailedHours": 7,
+          "demand": 20,
+          "capacity": 164
+        }
+      },
+      "robust": {
+        "accepted": true,
+        "minSlack": 144,
+        "binding": {
+          "length": 8,
+          "curtailedHours": 7,
+          "demand": 20,
+          "capacity": 164
+        }
+      },
+      "edfObserved": {
+        "accepted": true,
+        "completed": 66100,
+        "missed": 0,
+        "firstMissDeadlineHour": null,
+        "offered": 66100
+      },
+      "edfStress": {
+        "accepted": true,
+        "completed": 66100,
+        "missed": 0,
+        "firstMissDeadlineHour": null,
+        "offered": 66100
+      }
+    },
+    {
+      "D": 8,
+      "F": 24,
+      "observed": {
+        "accepted": true,
+        "minSlack": 172,
+        "binding": {
+          "length": 8,
+          "curtailedHours": 7,
+          "demand": 20,
+          "capacity": 192
+        }
+      },
+      "robust": {
+        "accepted": true,
+        "minSlack": 172,
+        "binding": {
+          "length": 8,
+          "curtailedHours": 7,
+          "demand": 20,
+          "capacity": 192
+        }
+      },
+      "edfObserved": {
+        "accepted": true,
+        "completed": 66100,
+        "missed": 0,
+        "firstMissDeadlineHour": null,
+        "offered": 66100
+      },
+      "edfStress": {
+        "accepted": true,
+        "completed": 66100,
+        "missed": 0,
+        "firstMissDeadlineHour": null,
+        "offered": 66100
+      }
+    },
+    {
+      "D": 24,
+      "F": 0,
+      "observed": {
+        "accepted": false,
+        "minSlack": -40,
+        "binding": {
+          "length": 127,
+          "curtailedHours": 42,
+          "demand": 2080,
+          "capacity": 2040
+        }
+      },
+      "robust": {
+        "accepted": false,
+        "minSlack": -976,
+        "binding": {
+          "length": 439,
+          "curtailedHours": 133,
+          "demand": 8320,
+          "capacity": 7344
+        }
+      },
+      "edfObserved": {
+        "accepted": false,
+        "completed": 65740,
+        "missed": 40,
+        "firstMissDeadlineHour": 2108,
+        "offered": 65780
+      },
+      "edfStress": {
+        "accepted": false,
+        "completed": 64804,
+        "missed": 976,
+        "firstMissDeadlineHour": 140,
+        "offered": 65780
+      }
+    },
+    {
+      "D": 24,
+      "F": 8,
+      "observed": {
+        "accepted": true,
+        "minSlack": 296,
+        "binding": {
+          "length": 127,
+          "curtailedHours": 42,
+          "demand": 2080,
+          "capacity": 2376
+        }
+      },
+      "robust": {
+        "accepted": true,
+        "minSlack": 88,
+        "binding": {
+          "length": 439,
+          "curtailedHours": 133,
+          "demand": 8320,
+          "capacity": 8408
+        }
+      },
+      "edfObserved": {
+        "accepted": true,
+        "completed": 65780,
+        "missed": 0,
+        "firstMissDeadlineHour": null,
+        "offered": 65780
+      },
+      "edfStress": {
+        "accepted": true,
+        "completed": 65780,
+        "missed": 0,
+        "firstMissDeadlineHour": null,
+        "offered": 65780
+      }
+    },
+    {
+      "D": 24,
+      "F": 12,
+      "observed": {
+        "accepted": true,
+        "minSlack": 416,
+        "binding": {
+          "length": 31,
+          "curtailedHours": 14,
+          "demand": 160,
+          "capacity": 576
+        }
+      },
+      "robust": {
+        "accepted": true,
+        "minSlack": 416,
+        "binding": {
+          "length": 31,
+          "curtailedHours": 14,
+          "demand": 160,
+          "capacity": 576
+        }
+      },
+      "edfObserved": {
+        "accepted": true,
+        "completed": 65780,
+        "missed": 0,
+        "firstMissDeadlineHour": null,
+        "offered": 65780
+      },
+      "edfStress": {
+        "accepted": true,
+        "completed": 65780,
+        "missed": 0,
+        "firstMissDeadlineHour": null,
+        "offered": 65780
+      }
+    },
+    {
+      "D": 24,
+      "F": 16,
+      "observed": {
+        "accepted": true,
+        "minSlack": 472,
+        "binding": {
+          "length": 31,
+          "curtailedHours": 14,
+          "demand": 160,
+          "capacity": 632
+        }
+      },
+      "robust": {
+        "accepted": true,
+        "minSlack": 472,
+        "binding": {
+          "length": 31,
+          "curtailedHours": 14,
+          "demand": 160,
+          "capacity": 632
+        }
+      },
+      "edfObserved": {
+        "accepted": true,
+        "completed": 65780,
+        "missed": 0,
+        "firstMissDeadlineHour": null,
+        "offered": 65780
+      },
+      "edfStress": {
+        "accepted": true,
+        "completed": 65780,
+        "missed": 0,
+        "firstMissDeadlineHour": null,
+        "offered": 65780
+      }
+    },
+    {
+      "D": 24,
+      "F": 20,
+      "observed": {
+        "accepted": true,
+        "minSlack": 528,
+        "binding": {
+          "length": 24,
+          "curtailedHours": 7,
+          "demand": 20,
+          "capacity": 548
+        }
+      },
+      "robust": {
+        "accepted": true,
+        "minSlack": 528,
+        "binding": {
+          "length": 24,
+          "curtailedHours": 7,
+          "demand": 20,
+          "capacity": 548
+        }
+      },
+      "edfObserved": {
+        "accepted": true,
+        "completed": 65780,
+        "missed": 0,
+        "firstMissDeadlineHour": null,
+        "offered": 65780
+      },
+      "edfStress": {
+        "accepted": true,
+        "completed": 65780,
+        "missed": 0,
+        "firstMissDeadlineHour": null,
+        "offered": 65780
+      }
+    },
+    {
+      "D": 24,
+      "F": 24,
+      "observed": {
+        "accepted": true,
+        "minSlack": 556,
+        "binding": {
+          "length": 24,
+          "curtailedHours": 7,
+          "demand": 20,
+          "capacity": 576
+        }
+      },
+      "robust": {
+        "accepted": true,
+        "minSlack": 556,
+        "binding": {
+          "length": 24,
+          "curtailedHours": 7,
+          "demand": 20,
+          "capacity": 576
+        }
+      },
+      "edfObserved": {
+        "accepted": true,
+        "completed": 65780,
+        "missed": 0,
+        "firstMissDeadlineHour": null,
+        "offered": 65780
+      },
+      "edfStress": {
+        "accepted": true,
+        "completed": 65780,
+        "missed": 0,
+        "firstMissDeadlineHour": null,
+        "offered": 65780
+      }
+    },
+    {
+      "D": 48,
+      "F": 0,
+      "observed": {
+        "accepted": true,
+        "minSlack": 440,
+        "binding": {
+          "length": 127,
+          "curtailedHours": 42,
+          "demand": 1600,
+          "capacity": 2040
+        }
+      },
+      "robust": {
+        "accepted": false,
+        "minSlack": -496,
+        "binding": {
+          "length": 439,
+          "curtailedHours": 133,
+          "demand": 7840,
+          "capacity": 7344
+        }
+      },
+      "edfObserved": {
+        "accepted": true,
+        "completed": 65300,
+        "missed": 0,
+        "firstMissDeadlineHour": null,
+        "offered": 65300
+      },
+      "edfStress": {
+        "accepted": false,
+        "completed": 64804,
+        "missed": 496,
+        "firstMissDeadlineHour": 306,
+        "offered": 65300
+      }
+    },
+    {
+      "D": 48,
+      "F": 8,
+      "observed": {
+        "accepted": true,
+        "minSlack": 776,
+        "binding": {
+          "length": 127,
+          "curtailedHours": 42,
+          "demand": 1600,
+          "capacity": 2376
+        }
+      },
+      "robust": {
+        "accepted": true,
+        "minSlack": 568,
+        "binding": {
+          "length": 439,
+          "curtailedHours": 133,
+          "demand": 7840,
+          "capacity": 8408
+        }
+      },
+      "edfObserved": {
+        "accepted": true,
+        "completed": 65300,
+        "missed": 0,
+        "firstMissDeadlineHour": null,
+        "offered": 65300
+      },
+      "edfStress": {
+        "accepted": true,
+        "completed": 65300,
+        "missed": 0,
+        "firstMissDeadlineHour": null,
+        "offered": 65300
+      }
+    },
+    {
+      "D": 48,
+      "F": 12,
+      "observed": {
+        "accepted": true,
+        "minSlack": 908,
+        "binding": {
+          "length": 55,
+          "curtailedHours": 21,
+          "demand": 160,
+          "capacity": 1068
+        }
+      },
+      "robust": {
+        "accepted": true,
+        "minSlack": 908,
+        "binding": {
+          "length": 55,
+          "curtailedHours": 21,
+          "demand": 160,
+          "capacity": 1068
+        }
+      },
+      "edfObserved": {
+        "accepted": true,
+        "completed": 65300,
+        "missed": 0,
+        "firstMissDeadlineHour": null,
+        "offered": 65300
+      },
+      "edfStress": {
+        "accepted": true,
+        "completed": 65300,
+        "missed": 0,
+        "firstMissDeadlineHour": null,
+        "offered": 65300
+      }
+    },
+    {
+      "D": 48,
+      "F": 16,
+      "observed": {
+        "accepted": true,
+        "minSlack": 992,
+        "binding": {
+          "length": 55,
+          "curtailedHours": 21,
+          "demand": 160,
+          "capacity": 1152
+        }
+      },
+      "robust": {
+        "accepted": true,
+        "minSlack": 992,
+        "binding": {
+          "length": 55,
+          "curtailedHours": 21,
+          "demand": 160,
+          "capacity": 1152
+        }
+      },
+      "edfObserved": {
+        "accepted": true,
+        "completed": 65300,
+        "missed": 0,
+        "firstMissDeadlineHour": null,
+        "offered": 65300
+      },
+      "edfStress": {
+        "accepted": true,
+        "completed": 65300,
+        "missed": 0,
+        "firstMissDeadlineHour": null,
+        "offered": 65300
+      }
+    },
+    {
+      "D": 48,
+      "F": 20,
+      "observed": {
+        "accepted": true,
+        "minSlack": 1076,
+        "binding": {
+          "length": 48,
+          "curtailedHours": 14,
+          "demand": 20,
+          "capacity": 1096
+        }
+      },
+      "robust": {
+        "accepted": true,
+        "minSlack": 1076,
+        "binding": {
+          "length": 48,
+          "curtailedHours": 14,
+          "demand": 20,
+          "capacity": 1096
+        }
+      },
+      "edfObserved": {
+        "accepted": true,
+        "completed": 65300,
+        "missed": 0,
+        "firstMissDeadlineHour": null,
+        "offered": 65300
+      },
+      "edfStress": {
+        "accepted": true,
+        "completed": 65300,
+        "missed": 0,
+        "firstMissDeadlineHour": null,
+        "offered": 65300
+      }
+    },
+    {
+      "D": 48,
+      "F": 24,
+      "observed": {
+        "accepted": true,
+        "minSlack": 1132,
+        "binding": {
+          "length": 48,
+          "curtailedHours": 14,
+          "demand": 20,
+          "capacity": 1152
+        }
+      },
+      "robust": {
+        "accepted": true,
+        "minSlack": 1132,
+        "binding": {
+          "length": 48,
+          "curtailedHours": 14,
+          "demand": 20,
+          "capacity": 1152
+        }
+      },
+      "edfObserved": {
+        "accepted": true,
+        "completed": 65300,
+        "missed": 0,
+        "firstMissDeadlineHour": null,
+        "offered": 65300
+      },
+      "edfStress": {
+        "accepted": true,
+        "completed": 65300,
+        "missed": 0,
+        "firstMissDeadlineHour": null,
+        "offered": 65300
+      }
+    }
+  ],
+  "commerce": {
+    "nativeAccount": false,
+    "realContracts": 0,
+    "realRevenue": 0,
+    "completeCostProfit": null,
+    "actualBilling": "UNKNOWN",
+    "targetAchieved": false
+  },
+  "decision": "NO_DEPLOY_PENDING_BENEFICIARY_AND_COMPLETE_COST_EVIDENCE",
+  "freeze": "a485f96531be81c294d058611547f26b1c800b10",
+  "executableBlob": "9879d5e279c016364bacce038266f9a654ecaa8f",
+  "elapsedMs": 800,
+  "execution": "same JS function as published source; in-process V8, not hosted CI or independent external replay",
+  "cpuSeconds": null
+}
