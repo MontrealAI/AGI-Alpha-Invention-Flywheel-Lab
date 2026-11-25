@@ -596,7 +596,8 @@ def main():
     try:
         if (args.mission_import or args.mission_evidence or args.pairing_guide) and not args.pages_missions:
             raise BridgeError("MISSION_AUTHORITY", "Mission setup requires an explicit local mission policy.")
-        config = strict_json(args.config.read_bytes()) if args.config else {"local_only": True} if args.pages_missions else {}
+        config = strict_json(args.config.read_bytes()) if args.config else (
+            {"local_only": True, "timeout_seconds": 180} if args.pages_missions else {})
         runtime = Runtime(config)
         port = args.port if args.port is not None else 38463 if args.pages_missions else 8765
         server = HarnessServer(("127.0.0.1", port), runtime, config=config, workspace=args.workspace)

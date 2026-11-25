@@ -355,7 +355,10 @@ def validate(source, *, staged=False):
         for link in parser.links:
             url = urlsplit(link)
             if url.scheme:
-                frontier_source = name in POSSIBILITY_PAGES and (possibility_source(link) or link in ('https://metamask.io/download', 'https://chatgpt.com/'))
+                frontier_source = name in POSSIBILITY_PAGES and (possibility_source(link) or link in (
+                    'https://metamask.io/download', 'https://chatgpt.com/', 'https://ollama.com/download',
+                    'https://lmstudio.ai/download', 'https://docs.vllm.ai/en/latest/getting_started/installation/',
+                ))
                 if not frontier_source and link not in EXTERNAL_RESEARCH_REFERENCES and (url.scheme != 'https' or url.netloc != 'github.com'):
                     raise ValueError(f'Unexpected external link: {link}')
                 continue
