@@ -298,6 +298,8 @@ class UniversalMissionService(WorkflowService):
         }
         if mission["original_ambition"] != spec["objective"]:
             payload["original_ambition"] = mission["original_ambition"]
+        if spec["acceptance"]:
+            payload["operator_development_acceptance"] = bounded_preview(spec["acceptance"], 4500)
         if (CAPABILITY_TOOLS.intersection(tools) or COMPOSITION_TOOL in tools) and mission["requirements"].get("capabilities"):
             from .mission_contracts import describe
             ids = mission["requirements"]["capabilities"]

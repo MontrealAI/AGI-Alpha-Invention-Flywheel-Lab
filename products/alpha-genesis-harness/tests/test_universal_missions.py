@@ -94,6 +94,23 @@ class UniversalMissionTests(unittest.TestCase):
         self.assertEqual(result["parent_run_id"], ident)
         self.assertEqual(result["objective"], "Solve a revised problem.")
 
+    def test_model_sees_operator_document_acceptance_even_when_ambition_omits_it(self):
+        good = "Evidence checked. Release marker seven."
+        write_without = {"tool": "write_document", "name": "report.md", "content": "Evidence checked."}
+        write_with = {**write_without, "content": good}
+        requirements = [{"artifact": "report.md", "kind": "document", "min_chars": 30,
+                         "contains": ["Release marker seven."]}]
+        service, runtime = self.service([propose(write_without), propose(write_with, done=True)])
+        spec = specification(ambition="Prepare a local evidence summary.", acceptance=requirements)
+        ident = service.submit(spec)["id"]
+        self.assertFalse(service.step(ident)["verification"]["passed"])
+        result = service.step(ident)
+        for call in runtime.calls:
+            payload = json.loads(call["prompt"].split("\nUNTRUSTED_MISSION_DATA\n", 1)[1])
+            self.assertEqual(payload["operator_development_acceptance"], requirements)
+        self.assertTrue(result["verification"]["passed"])
+        self.assertEqual(result["status"], "needs_review")
+
     def test_import_requires_new_scope_and_never_restores_acceptance(self):
         service, _ = self.service([propose(construct(), compute(), done=True)])
         intent = specification()
