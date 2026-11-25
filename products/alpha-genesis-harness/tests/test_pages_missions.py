@@ -63,6 +63,11 @@ class Workflows:
     def export(self, ident):
         return {"state": self.get(ident), "files": {}}
 
+    def import_archive(self, archive, spec):
+        ident = "wf_" + uuid4().hex[:24]
+        self.submit(spec, ident)
+        return self.change(ident, "paused")
+
     def close(self):
         pass
 
@@ -189,6 +194,25 @@ class PagesMissionTests(unittest.TestCase):
         self.assertFalse(worker.is_alive())
         self.assertEqual(results[0][0], 403)
         self.assertIsNone(self.send("intelligence-status", token=new_token)[2]["selection"])
+
+    def test_import_rebinds_only_the_exact_operator_manifest(self):
+        goal = {"ambition": "Exploiter les données approuvées.", "language": "fr"}
+        trusted = {"approved_tables": {"current": {"entries": [{"n": 42}]}}}
+        pages = PagesMissions(self.service, role={"provider": "local", "model": "author-fixture"},
+                              evidence_input={"schema": "frontier/local-mission-input-v1", **goal,
+                                              "requirements": trusted, "tools": ["run_table"]},
+                              clock=lambda: self.now, announce=self.codes.append)
+        archive = {"state": {"spec": {"objective": goal["ambition"], "mission": {
+            "language": "fr", "requirements": {"approved_tables": {"obsolete": {"entries": [{"n": 1}]}}},
+        }}}}
+        matching = pages.import_local(archive)
+        self.assertEqual(matching["status"], "paused")
+        self.assertEqual(self.service.inputs[matching["id"]]["requirements"], trusted)
+        self.assertEqual(self.service.inputs[matching["id"]]["tools"], ["run_table"])
+        archive["state"]["spec"]["mission"]["language"] = "en"
+        other = pages.import_local(archive)
+        self.assertNotIn("requirements", self.service.inputs[other["id"]])
+        self.assertNotIn("tools", self.service.inputs[other["id"]])
 
     def test_local_pairing_guide_is_single_use_and_cross_origin_denied(self):
         url = self.server.create_pairing_guide(self.codes[-1])

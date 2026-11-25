@@ -184,17 +184,11 @@ class PagesMissions:
                 "actions": state.get("actions", 0), "model_calls": state.get("model_calls", 0), "proposal": proposal,
                 "events": events, "artifacts": artifacts}
 
-    def _submit(self, body, command):
-        check(set(body) in ({"ambition", "language"}, {"ambition", "language", "previous"}), "MISSION_INPUT")
-        ambition = body["ambition"]
-        check(isinstance(ambition, str) and ambition.strip() and len(ambition.encode()) <= 24 * 1024,
-              "MISSION_AMBITION")
-        check(body["language"] in ("en", "fr"), "MISSION_LANGUAGE")
-        ident = "wf_" + hashlib.sha256(("frontier-pages-mission-v1:" + command).encode()).hexdigest()[:24]
-        spec = {"ambition": ambition, "language": body["language"], **self._scope(require_ready=True),
+    def _mission_spec(self, ambition, language):
+        spec = {"ambition": ambition, "language": language, **self._scope(require_ready=True),
                 "expires_at": self.expires.isoformat()}
         manifest = self.evidence_input
-        if manifest and manifest["ambition"] == ambition and manifest["language"] == body["language"]:
+        if manifest and manifest["ambition"] == ambition and manifest["language"] == language:
             spec.update({key: manifest[key] for key in ("requirements", "context", "tools") if key in manifest})
         selection = self.intelligence.current() if self._selection else None
         if selection and selection.get("mode") == "hybrid":
@@ -202,6 +196,16 @@ class PagesMissions:
                           "Use the local model for interpretation, missing work and repair. "
                           "Check inputs and applicability before using an existing result.")
             spec["context"] = "\n".join(part for part in (preference, spec.get("context", "")) if part)
+        return spec
+
+    def _submit(self, body, command):
+        check(set(body) in ({"ambition", "language"}, {"ambition", "language", "previous"}), "MISSION_INPUT")
+        ambition = body["ambition"]
+        check(isinstance(ambition, str) and ambition.strip() and len(ambition.encode()) <= 24 * 1024,
+              "MISSION_AMBITION")
+        check(body["language"] in ("en", "fr"), "MISSION_LANGUAGE")
+        ident = "wf_" + hashlib.sha256(("frontier-pages-mission-v1:" + command).encode()).hexdigest()[:24]
+        spec = self._mission_spec(ambition, body["language"])
         if "previous" in body:
             previous = body["previous"]
             check(isinstance(previous, str) and RUN.fullmatch(previous) and previous != ident, "MISSION_INPUT")
@@ -230,8 +234,7 @@ class PagesMissions:
         check(isinstance(archive, dict) and isinstance(archive.get("state"), dict), "MISSION_INPUT")
         old = archive["state"].get("spec")
         check(isinstance(old, dict) and isinstance(old.get("mission"), dict), "MISSION_INPUT")
-        spec = {"ambition": old.get("objective"), "language": old["mission"].get("language"),
-                **self._scope(require_ready=True), "expires_at": self.expires.isoformat()}
+        spec = self._mission_spec(old.get("objective"), old["mission"].get("language"))
         return self._summary(self.service.import_archive(archive, spec))
 
     def dispatch(self, operation, body, *, session=None, command=None):
