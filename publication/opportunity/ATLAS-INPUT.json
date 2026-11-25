@@ -1,0 +1,49 @@
+{
+  "id": "opportunity-capture-atlas-20261124",
+  "base_commit": "436bb1b142a0da1f2c272f77821b75c3efdd73fe",
+  "cutoff_utc": "2026-11-24T23:59:59Z",
+  "shared_access": "Same seed URLs, cutoff, outputs, public primary-source access and included tooling. Whole-work times start at arm input readiness, and stop at frozen submission. Retained mechanism and evaluator answers separated. Actual accountable human time and end-to-end billing require separate evidence.",
+  "productive_cycles": [
+    [
+      "fc-263rc2-arm",
+      "e4s-2611-cuda24"
+    ],
+    [
+      "rocm-102-gfx1103",
+      "nv-r620-titan"
+    ]
+  ],
+  "cases": [
+    {
+      "id": "fc-263rc2-arm",
+      "question": "What channel and exact primary release tag/date apply to FreeCAD 26.3 Release Candidate 2, and is a public Linux aarch64 AppImage artifact witnessed in that exact release?",
+      "seeds": [
+        "https://github.com/FreeCAD/FreeCAD/releases",
+        "https://github.com/FreeCAD/FreeCAD/discussions/32821"
+      ]
+    },
+    {
+      "id": "e4s-2611-cuda24",
+      "question": "Is E4S 26.11 published for the Ubuntu 24.04 LTS x86_64 NVIDIA CUDA container configuration; name the actual CUDA version, named supported architecture scope and first-party date, and give exact released image tag if verifiable, else abstain on tag specifically.",
+      "seeds": [
+        "https://e4s.io/news/NEWS_RELEASE_E4S_26.11.pdf"
+      ]
+    },
+    {
+      "id": "rocm-102-gfx1103",
+      "question": "For ROCm Core SDK 10.2.0, determine what is newly manufacturer-documented for Ryzen gfx1103 APUs on Windows and Linux, record release date/count and the exact limits of that claim for running vLLM on a specific host.",
+      "seeds": [
+        "https://rocm.docs.amd.com/en/develop/about/release-notes.html"
+      ]
+    },
+    {
+      "id": "nv-r620-titan",
+      "question": "Do NVIDIA's 620.70.10 Linux Data Center driver release materials establish model-specific compatibility and operation on the owner's dual NVIDIA TITAN RTX Ubuntu workstation; bind exact release date and Turing board names.",
+      "seeds": [
+        "https://docs.nvidia.com/datacenter/tesla/tesla-release-notes-620-70-10/index.html"
+      ]
+    }
+  ],
+  "output": "Rows {id,verdict:DOCUMENTED|ABSTAIN|REJECT,first_party_date_utc:YYYY-MM-DD or null,exact_scope_facts:{...},source_urls:[...],unsupported_claims:[...],action:TEST|MONITOR|HOLD}",
+  "acceptance": "Accept exact evidence stage and identity, date and material facts, primary cited witness and honest scope. Support absent witnesses with scoped abstention. Record disposition from accepted evidence."
+}
