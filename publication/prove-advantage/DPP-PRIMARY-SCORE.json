@@ -1,0 +1,73 @@
+{
+  "reports": {
+    "direct_primary": {
+      "receipt_sha256": "266030392e31c65622c715b5ed5cb269cac05328647c81d0f7965bd16e6b0325",
+      "source_predictions_sha256": "539fa45f280aaa56ffbc75f075314715a397ca1257652aa52a1ae9f0fa12e684",
+      "count": 16,
+      "right_dispositions": 14,
+      "right_disposition_and_attribution": 14,
+      "conforming_records_with_reason": 14,
+      "provided_reason": 16,
+      "false_support": 0,
+      "primary_common_cases_after_excluding_ambiguous_module_pair": {
+        "count": 14,
+        "passed": 14
+      }
+    },
+    "product_primary": {
+      "receipt_sha256": "27dc388f6dac526dc626ce356f46a0515959c711e99491bc5eb6810117f065b8",
+      "source_predictions_sha256": "226dbdce354890c589346bd6d6498c39baa81c8d854dedf00bb96ebc73b34221",
+      "count": 16,
+      "right_dispositions": 14,
+      "right_disposition_and_attribution": 14,
+      "conforming_records_with_reason": 14,
+      "provided_reason": 16,
+      "false_support": 0,
+      "primary_common_cases_after_excluding_ambiguous_module_pair": {
+        "count": 14,
+        "passed": 14
+      }
+    },
+    "product_adversarial": {
+      "receipt_sha256": "b864546d4617864a6448b35d3606700084639b9a18018472f169afe05a06acc1",
+      "source_predictions_sha256": "9ee6a07a2481811b5a88519c452452c585b568045bb8f137508a0b5a0666e97f",
+      "count": 5,
+      "right_dispositions": 5,
+      "right_disposition_and_attribution": 5,
+      "conforming_records_with_reason": 5,
+      "provided_reason": 5,
+      "false_support": 0,
+      "primary_common_cases_after_excluding_ambiguous_module_pair": null
+    },
+    "withdrawal_primary": {
+      "receipt_sha256": "8a0ba0c3b116bb7c4f08d70b29441d3f1628d77907aaec829c1ba8f8b24497b1",
+      "source_predictions_sha256": "a63fbaf6847f0eeeb63551bf7bddab5193e015b69f81036adb3a24fd365ba9ab",
+      "count": 16,
+      "right_dispositions": 6,
+      "right_disposition_and_attribution": 5,
+      "conforming_records_with_reason": 0,
+      "provided_reason": 0,
+      "false_support": 3,
+      "primary_common_cases_after_excluding_ambiguous_module_pair": {
+        "count": 14,
+        "passed": 0
+      }
+    },
+    "withdrawal_adversarial": {
+      "receipt_sha256": "bdeb94aa24741790682ebaa7a40bad32606718b23a61a79a2281b201f33c780a",
+      "source_predictions_sha256": "1f4f2287d6b0f004922f32d62d440b5de05fda132022dd7d8c7bc6521be8b81b",
+      "count": 5,
+      "right_dispositions": 3,
+      "right_disposition_and_attribution": 2,
+      "conforming_records_with_reason": 0,
+      "provided_reason": 0,
+      "false_support": 2,
+      "primary_common_cases_after_excluding_ambiguous_module_pair": null
+    }
+  },
+  "test_scope": "Evidence support only. Both actual model/product predictions and engineering withdrawal are separately frozen.",
+  "shared_custody": "Separate constructor and evaluator roles under shared workspace administration.",
+  "primary_protocol_deviation": "Evaluator provided the direct arm's first aggregate and two ambiguous case decisions to the treatment owner before the treatment was frozen. The treatment recorded matching conservative dispositions. Those cases are excluded from the shared 14-case sensitivity; neither the full primary packet nor the sensitivity provides a new external-blind confirmation.",
+  "adjudication": "The manufacturer table header explicitly classifies BMS+PACK as a battery module for the named T-BAT H 5.8 V3. The frozen excerpt names the BMS+PACK unit without supplying the full header. Both matched arms withheld these cases. Their predictions and original answer key stay frozen.",
+  "decision": "No demonstrated accepted-outcome gain over competent direct use on the primary dataset. The adverse controls and withdrawal support the importance of typed, source-bound scope checks in the measured rule. Product-added value, actual economic return, compliance and frontier amplification remain unmeasured."
+}

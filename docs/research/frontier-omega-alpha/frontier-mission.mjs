@@ -1,5 +1,6 @@
 import {fingerprint} from './outcome-receipt.mjs';
 import {createMissionRequest, missionRouteRequest} from './frontier-mission-router.mjs';
+import {isMissionArtifact, maximumArtifacts, maximumArtifactBytes, verifyMissionArtifact} from './frontier-artifact-exchange.mjs';
 
 export const missionSchema = 'frontier/universal-mission-v1';
 export const maxAmbitionBytes = 24 * 1024;
@@ -150,6 +151,32 @@ export function setMissionDocuments(mission, documents) {
   return update(mission, {documents: structuredClone(documents)});
 }
 
+function validWorkFiles(files, revision) {
+  return Array.isArray(files) && files.length <= maximumArtifacts &&
+    files.every(file => isMissionArtifact(file) && file.revision <= revision) &&
+    files.reduce((total, file) => total + file.bytes, 0) <= maximumArtifactBytes;
+}
+
+export function addMissionArtifacts(mission, artifacts) {
+  const files = [...(mission.workFiles ?? [])];
+  for (const item of artifacts) {
+    need(isMissionArtifact(item) && item.revision === mission.revision, 'MISSION_ARTIFACT');
+    if (!files.some(file => file.name === item.name && file.revision === item.revision && file.sha256 === item.sha256)) {
+      files.push({...item});
+    }
+  }
+  need(validWorkFiles(files, mission.revision), 'MISSION_ARTIFACT');
+  return update(mission, {workFiles:files});
+}
+
+export function removeMissionArtifact(mission, file) {
+  const files = mission.workFiles ?? [];
+  const index = files.findIndex(item => item.revision === file.revision && item.name === file.name
+    && item.sha256 === file.sha256);
+  if (index < 0) return mission;
+  return update(mission, {workFiles:files.toSpliced(index, 1)});
+}
+
 function start(mission, {route = null, provider = null, model = null}, status) {
   if (mission.status === 'running' || mission.status === 'canceled') return mission;
   need(validSelection(route, provider, model) && (status === 'waiting' || provider !== null), 'MISSION_ROUTE');
@@ -239,7 +266,7 @@ function sequence(mission, runId) {
 function checkMission(mission) {
   const required = ['schema', 'id', 'language', 'originalAmbition', 'ambition', 'revision', 'revisions',
     'status', 'runSequence', 'run', 'request', 'reports', 'incidents', 'createdAt', 'updatedAt'];
-  need(allowedKeys(mission, [...required, 'turns', 'documents']) && required.every(key => Object.hasOwn(mission, key)));
+  need(allowedKeys(mission, [...required, 'turns', 'documents', 'workFiles']) && required.every(key => Object.hasOwn(mission, key)));
   need(mission.schema === missionSchema && typeof mission.id === 'string' && uuid.test(mission.id)
     && ['en', 'fr'].includes(mission.language) && states.includes(mission.status)
     && instant(mission.createdAt) && instant(mission.updatedAt) && mission.createdAt <= mission.updatedAt
@@ -267,6 +294,7 @@ function checkMission(mission) {
     }
   }
   if (Object.hasOwn(mission, 'documents')) need(validDocuments(mission.documents));
+  if (Object.hasOwn(mission, 'workFiles')) need(validWorkFiles(mission.workFiles, mission.revision), 'MISSION_ARTIFACT');
 
   need(Array.isArray(reports) && Array.isArray(incidents));
   let lastRun = 0;
@@ -310,6 +338,7 @@ export async function exportMission(mission) {
   checkMission(mission);
   const snapshot = bounded(structuredClone(mission));
   if (snapshot.request !== null) await checkedRequest(snapshot, snapshot.request);
+  for (const file of snapshot.workFiles ?? []) need(await verifyMissionArtifact(file), 'MISSION_ARTIFACT');
   return {mission: snapshot, sha256: await fingerprint(snapshot)};
 }
 
@@ -325,6 +354,7 @@ export async function importMission(value) {
   const mission = bounded(structuredClone(value.mission));
   need(await fingerprint(mission) === digest, 'MISSION_DIGEST');
   if (mission.request !== null) await checkedRequest(mission, mission.request);
+  for (const file of mission.workFiles ?? []) need(await verifyMissionArtifact(file), 'MISSION_ARTIFACT');
   if (mission.status === 'running') return interruptMission(mission, mission.run.id, 'checkpoint-restored');
   return mission;
 }

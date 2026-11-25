@@ -1,0 +1,47 @@
+[
+  {
+    "id": "confirm-01",
+    "decision": "supported",
+    "evidence": [
+      "sr-01"
+    ],
+    "reason": "The second system column names SBR096 and gives a total weight of 114 kg. The shared 33 kg row is for a single battery module."
+  },
+  {
+    "id": "confirm-02",
+    "decision": "contradicted",
+    "evidence": [
+      "sr-01",
+      "sr-03"
+    ],
+    "reason": "Both manufacturer tables give 128 V as the nominal battery-system voltage in the SBR064 column. In Ver22, 146 V is the upper operating endpoint."
+  },
+  {
+    "id": "confirm-03",
+    "decision": "insufficient",
+    "evidence": [],
+    "reason": "Ver22 states usable energy, nominal voltage and a maximum charging/discharging current. Their values do not constitute a documented rated electrical Ah for SBR128."
+  },
+  {
+    "id": "confirm-04",
+    "decision": "supported",
+    "evidence": [
+      "gw-01"
+    ],
+    "reason": "The second system column identifies LX F9.8-H and states 158 kg. The separate LX F3.3-H module is a different equipment level."
+  },
+  {
+    "id": "confirm-05",
+    "decision": "contradicted",
+    "evidence": [
+      "gw-01"
+    ],
+    "reason": "LX F13.1-H is the third column and has nominal system voltage 409.6 V. The requested 307.2 V is the second column for LX F9.8-H."
+  },
+  {
+    "id": "confirm-06",
+    "decision": "insufficient",
+    "evidence": [],
+    "reason": "The 25 A field measures charge and discharge current. The other fields give usable energy and separate module specifications, leaving rated system Ah undocumented."
+  }
+]

@@ -1,0 +1,27 @@
+{
+  "schema": "frontier/battery-source-review-v1",
+  "cases": [
+    {
+      "id": "example-pack-mass",
+      "target": {"model":"Example Storage 04","version":"2.0","level":"system","market":"EU"},
+      "field": "batteryWeight",
+      "claim": {"value":"68","unit":"kg"},
+      "sources": [{
+        "id":"example-table",
+        "url":"https://example.org/battery-source-review",
+        "date":"2026-11-25",
+        "locator":"Fictional example · data table",
+        "sha256":"e28a64ed3ca227a6fc142fc6dca7bf72029f08a3510e8e09f6271801cff712dc",
+        "excerpt":"Example Storage 04 version 2.0 EU. Complete battery net weight: 64 kg."
+      }],
+      "observations": [{
+        "source":"example-table",
+        "quote":"Complete battery net weight: 64 kg.",
+        "field":"batteryWeight",
+        "target":{"model":"Example Storage 04","version":"2.0","level":"system","market":"EU"},
+        "value":"64",
+        "unit":"kg"
+      }]
+    }
+  ]
+}
