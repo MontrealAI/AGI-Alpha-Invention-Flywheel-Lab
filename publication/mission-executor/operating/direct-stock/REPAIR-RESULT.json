@@ -1,0 +1,103 @@
+{
+  "schema": "frontier/direct-stock-comparator-result-v1",
+  "elapsed_seconds": 14.771404870999959,
+  "provider_raw_sha256": "cffca5a4c2b29e2543064ee5ba836ce670b64ae544f222d050855ab8947d6ae4",
+  "finish_reason": "stop",
+  "usage": {
+    "completion_tokens": 90,
+    "prompt_tokens": 391,
+    "total_tokens": 481,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    }
+  },
+  "accepted": true,
+  "replays": [
+    {
+      "stock": 6,
+      "seuil": 9,
+      "actual": {
+        "alerte": true
+      },
+      "expected": {
+        "alerte": true
+      },
+      "passed": true
+    },
+    {
+      "stock": 9,
+      "seuil": 9,
+      "actual": {
+        "alerte": false
+      },
+      "expected": {
+        "alerte": false
+      },
+      "passed": true
+    },
+    {
+      "stock": 12,
+      "seuil": 9,
+      "actual": {
+        "alerte": false
+      },
+      "expected": {
+        "alerte": false
+      },
+      "passed": true
+    },
+    {
+      "stock": 0,
+      "seuil": 1,
+      "actual": {
+        "alerte": true
+      },
+      "expected": {
+        "alerte": true
+      },
+      "passed": true
+    },
+    {
+      "stock": 0,
+      "seuil": 0,
+      "actual": {
+        "alerte": false
+      },
+      "expected": {
+        "alerte": false
+      },
+      "passed": true
+    },
+    {
+      "stock": 100,
+      "seuil": 101,
+      "actual": {
+        "alerte": true
+      },
+      "expected": {
+        "alerte": true
+      },
+      "passed": true
+    }
+  ],
+  "instrument": {
+    "name": "alerte_stock",
+    "inputs": [
+      "stock",
+      "seuil"
+    ],
+    "outputs": {
+      "alerte": {
+        "op": "lt",
+        "args": [
+          {
+            "field": "stock"
+          },
+          {
+            "field": "seuil"
+          }
+        ]
+      }
+    }
+  }
+}

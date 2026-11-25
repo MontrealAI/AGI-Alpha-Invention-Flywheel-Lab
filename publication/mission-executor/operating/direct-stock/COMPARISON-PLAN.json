@@ -1,0 +1,50 @@
+{
+  "schema": "frontier/direct-stock-comparator-v1",
+  "profile": "Post-hoc matched comparator on a known synthetic browser development case. One provider request to the same model, weights, host and inference server. Tests are the existing six pairs. The artifact from each arm must itself replay without a model. Prior HARNESS outcome was known.",
+  "request": {
+    "model": "qwen3-8b-q4_k_m",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Read the member objective and return one JSON object with instrument and stated_example. The instrument is a portable calculation, with fields name (text), inputs (array of field names), and outputs (object mapping output labels to expressions). Expressions use {\"field\":\"x\"} for input, bare numbers, or {\"op\":\"...\",\"args\":[...]} for operations. Operations available are add, sub, mul, div, lt, lte, gt, gte, eq, and, or, not, and if. Choose the exact labels requested. stated_example is the output object for the requested input fixture. A separate evaluator will execute it. Do not state that it was independently verified. Respond with JSON only.\n\nCréez un instrument local réutilisable pour une alerte de stock. Les deux entrées sont stock et seuil. La sortie alerte vaut vrai exactement quand stock est strictement inférieur à seuil. Exécutez l’instrument pour stock=6 et seuil=9. Conservez l’instrument et indiquez le résultat de cette exécution."
+      }
+    ],
+    "max_tokens": 1800,
+    "response_format": {
+      "type": "json_object"
+    }
+  },
+  "controls": [
+    {
+      "stock": 6,
+      "seuil": 9,
+      "alert": true
+    },
+    {
+      "stock": 9,
+      "seuil": 9,
+      "alert": false
+    },
+    {
+      "stock": 12,
+      "seuil": 9,
+      "alert": false
+    },
+    {
+      "stock": 0,
+      "seuil": 1,
+      "alert": true
+    },
+    {
+      "stock": 0,
+      "seuil": 0,
+      "alert": false
+    },
+    {
+      "stock": 100,
+      "seuil": 101,
+      "alert": true
+    }
+  ],
+  "prior_checkpoint_sha256": "a7db4ca49c500314adec269668611bf80793f97768cbc206398c8aee8405e536"
+}

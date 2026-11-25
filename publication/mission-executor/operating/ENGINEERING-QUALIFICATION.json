@@ -1,0 +1,29 @@
+{
+  "schema": "frontier/local-dev-matched-qualifications-v1",
+  "comparison_scope": "Known stock-alert development case, post-hoc test with both arms using same Qwen checkpoint and CPU host. Both arms used two actual model requests. The direct arm had one guided repair after a real evaluator refusal. The measured endpoints differ: durable controller span includes tools and feedback; direct sum is provider requests plus no separate editor time.",
+  "harness": {
+    "model_calls": 2,
+    "actions": 5,
+    "correct_on_6_cases": true,
+    "run_creation_through_settlement_seconds": 81.384203,
+    "prompt_tokens": 2054,
+    "output_tokens": 473
+  },
+  "direct": {
+    "model_calls": 2,
+    "first_refusal": "$.outputs[\"alerte\"]: an operation must contain exactly \"op\" and an \"args\" array; received keys expr.",
+    "after_repair_6_cases_pass": true,
+    "provider_time_sum_seconds": 29.210805183000048,
+    "prompt_tokens": 627,
+    "output_tokens": 187
+  },
+  "complete_economics": null,
+  "standalone_candidate": {
+    "scope": "Extracted-byte automated operation on this host; not cross-platform, authenticated-provider or commercial qualification.",
+    "archive_sha256": "7cf337d265f5332c3b55ba26e27d6d8847044294e587e8c749b5524754706791",
+    "source_revision": "9f0aa58b5880a7249ca362c81628968c939ac8a0",
+    "verdict": "PASSED IN SCOPE",
+    "operations": 15,
+    "all_exit_codes_zero": true
+  }
+}
