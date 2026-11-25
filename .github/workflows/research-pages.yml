@@ -193,7 +193,8 @@ jobs:
             sleep "$((2 * attempt))"
           done
           git fetch --no-tags --depth=1 --filter=blob:none origin \
-            522542e525e96556285560e65e4443c85cc7b709 6a635b77012fb45b4d96c404a33fa04327c19674 c0a14ba028092db648516718f9127ae8166df63e
+            522542e525e96556285560e65e4443c85cc7b709 6a635b77012fb45b4d96c404a33fa04327c19674
+          git cat-file -e 'c0a14ba028092db648516718f9127ae8166df63e^{commit}'
           python3 scripts/frontier_atlas.py stage "$RUNNER_TEMP/research-site" \
             "$GITHUB_EVENT_NAME" "$GITHUB_SHA" "$GITHUB_RUN_ID" >> "$GITHUB_OUTPUT"
       - name: Qualify public member briefs, receipts and exact portable packages

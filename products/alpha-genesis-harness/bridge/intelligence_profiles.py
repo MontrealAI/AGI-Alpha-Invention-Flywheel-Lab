@@ -32,7 +32,7 @@ GUIDES = {"ollama": "https://ollama.com/download", "lm-studio": "https://lmstudi
 PREFERENCE = "frontier-local-intelligence/v1"
 MODES = ("local", "hybrid")
 HASH = re.compile(r"[0-9a-f]{64}\Z")
-PROBE_PROMPT = 'Connection check. Add 17 and 25. Respond with one JSON object containing only the integer field "answer".'
+PROBE_PROMPT = 'Connection check. Return the integer 42 in the JSON field "answer". Follow the required output format exactly.'
 PROBE_SCHEMA = {"type": "object", "properties": {"answer": {"type": "integer"}},
                 "required": ["answer"], "additionalProperties": False}
 READINESS_KINDS = ("json_schema", "json", "prompt_json")
@@ -321,6 +321,10 @@ class IntelligenceProfiles:
             schema = dict(PROBE_SCHEMA, properties=dict(PROBE_SCHEMA["properties"], check={"type": "string", "const": marker}),
                           required=["answer", "check"])
         url, body = route.request(model, PROBE_PROMPT, limit, json_mode=output_format == "json", json_schema=schema)
+        if route.kind == "ollama":
+            body["options"]["temperature"] = 0
+        else:
+            body["temperature"] = 0
         probe_id = "frontier-readiness-" + secrets.token_hex(16)
         admit()
         with self.base._lock:
