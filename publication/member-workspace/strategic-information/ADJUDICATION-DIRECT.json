@@ -1,0 +1,261 @@
+{
+  "input_sha256": "f2a8a289e440249d70c3fc987ea9566f75dadf7b6b23bc5a53f3b41301bcea7d",
+  "predictions_sha256": "20604cf020afdc283d575e72d0d53717839a6d7aa3929c7f94419e3379ed9148",
+  "sealed_oracle_sha256": "e0b4dd1736379f68a5f55ddfb7928796673d56e76e4099a9db5393c8f7681411",
+  "candidate_solver_sha256": "0dc18b0048ee72d2219f57cdb5d3957916a1e1d125789d332e88e9d5dd250343",
+  "engine_checks": {
+    "no_states": "At least one complete chance state is required.",
+    "boolean_action_count": "An ordered action set is required for each player.",
+    "zero_probability": "Each included state needs positive probability.",
+    "negative_probability": "Each included state needs positive probability.",
+    "unnormalized_probability": "Joint probabilities must sum to one exactly.",
+    "undefined_rational": "Use exact integers or rational strings.",
+    "ragged_matrix": "Every payoff table must follow the declared action order.",
+    "float_instead_of_rational": "Use exact integers or rational strings.",
+    "empty_private_type": "Each private type needs a stable label.",
+    "unsupported_disclosure": "Declare whose observation rights change."
+  },
+  "count_qualified": 13,
+  "cases": {
+    "case-01": {
+      "language": "en",
+      "evidence_quotes_exact": true,
+      "number_of_quotes": 6,
+      "expected_disposition": "admit",
+      "reported_disposition": "solved",
+      "qualified": true,
+      "disclosure_matches": true,
+      "exact_game_declaration": true,
+      "baseline": {
+        "reference_value": "389/684",
+        "candidate_interval": [
+          "2274853801/4000000000",
+          "11374269007/20000000000"
+        ],
+        "gap": "1/10000000000",
+        "all_pure_responses_replayed": true,
+        "candidate_verdict": "accepted"
+      },
+      "counterfactual": {
+        "reference_value": "661/1596",
+        "candidate_interval": [
+          "12424812029/30000000000",
+          "4969924813/12000000000"
+        ],
+        "gap": "7/60000000000",
+        "all_pure_responses_replayed": true,
+        "candidate_verdict": "accepted"
+      },
+      "change_interval": [
+        "-9273182963/60000000000",
+        "-185463659/1200000000"
+      ],
+      "reference_change": "-185/1197"
+    },
+    "case-02": {
+      "language": "fr",
+      "evidence_quotes_exact": true,
+      "number_of_quotes": 5,
+      "expected_disposition": "admit",
+      "reported_disposition": "solved",
+      "qualified": true,
+      "disclosure_matches": true,
+      "exact_game_declaration": true,
+      "baseline": {
+        "reference_value": "1/2",
+        "candidate_interval": [
+          "1/2",
+          "50000000001/100000000000"
+        ],
+        "gap": "1/100000000000",
+        "all_pure_responses_replayed": true,
+        "candidate_verdict": "accepted"
+      }
+    },
+    "case-03": {
+      "language": "en",
+      "evidence_quotes_exact": true,
+      "number_of_quotes": 3,
+      "expected_disposition": "withhold",
+      "reported_disposition": "withheld",
+      "qualified": true,
+      "review_criterion": "non-zero-sum objectives",
+      "grounded_refusal": true
+    },
+    "case-04": {
+      "language": "en",
+      "evidence_quotes_exact": true,
+      "number_of_quotes": 5,
+      "expected_disposition": "admit",
+      "reported_disposition": "solved",
+      "qualified": true,
+      "disclosure_matches": true,
+      "exact_game_declaration": true,
+      "baseline": {
+        "reference_value": "138/343",
+        "candidate_interval": [
+          "281632653/700000000",
+          "14081632657/35000000000"
+        ],
+        "gap": "1/5000000000",
+        "all_pure_responses_replayed": true,
+        "candidate_verdict": "accepted"
+      }
+    },
+    "case-05": {
+      "language": "fr",
+      "evidence_quotes_exact": true,
+      "number_of_quotes": 2,
+      "expected_disposition": "withhold",
+      "reported_disposition": "withheld",
+      "qualified": true,
+      "review_criterion": "observable sequential action and subsequent revision",
+      "grounded_refusal": true
+    },
+    "case-06": {
+      "language": "fr",
+      "evidence_quotes_exact": true,
+      "number_of_quotes": 6,
+      "expected_disposition": "admit",
+      "reported_disposition": "solved",
+      "qualified": true,
+      "disclosure_matches": true,
+      "exact_game_declaration": true,
+      "baseline": {
+        "reference_value": "13/10",
+        "candidate_interval": [
+          "13/10",
+          "32500000001/25000000000"
+        ],
+        "gap": "1/25000000000",
+        "all_pure_responses_replayed": true,
+        "candidate_verdict": "accepted"
+      }
+    },
+    "case-07": {
+      "language": "en",
+      "evidence_quotes_exact": true,
+      "number_of_quotes": 4,
+      "expected_disposition": "withhold",
+      "reported_disposition": "withheld",
+      "qualified": true,
+      "review_criterion": "unaccounted joint types and payoffs for the remaining 3/40",
+      "grounded_refusal": true
+    },
+    "case-08": {
+      "language": "en",
+      "evidence_quotes_exact": true,
+      "number_of_quotes": 5,
+      "expected_disposition": "admit",
+      "reported_disposition": "solved",
+      "qualified": true,
+      "disclosure_matches": true,
+      "exact_game_declaration": true,
+      "baseline": {
+        "reference_value": "193/204",
+        "candidate_interval": [
+          "15137254901/16000000000",
+          "7568627451/8000000000"
+        ],
+        "gap": "1/16000000000",
+        "all_pure_responses_replayed": true,
+        "candidate_verdict": "accepted"
+      }
+    },
+    "case-09": {
+      "language": "fr",
+      "evidence_quotes_exact": true,
+      "number_of_quotes": 5,
+      "expected_disposition": "admit",
+      "reported_disposition": "solved",
+      "qualified": true,
+      "disclosure_matches": true,
+      "exact_game_declaration": true,
+      "baseline": {
+        "reference_value": "-3/4",
+        "candidate_interval": [
+          "-3/4",
+          "-3/4"
+        ],
+        "gap": "0",
+        "all_pure_responses_replayed": true,
+        "candidate_verdict": "accepted"
+      }
+    },
+    "case-10": {
+      "language": "fr",
+      "evidence_quotes_exact": true,
+      "number_of_quotes": 3,
+      "expected_disposition": "withhold",
+      "reported_disposition": "withheld",
+      "qualified": true,
+      "review_criterion": "unresolved action axes and payoff sign owner",
+      "grounded_refusal": true
+    },
+    "case-11": {
+      "language": "en",
+      "evidence_quotes_exact": true,
+      "number_of_quotes": 5,
+      "expected_disposition": "admit",
+      "reported_disposition": "solved",
+      "qualified": true,
+      "disclosure_matches": true,
+      "exact_game_declaration": true,
+      "baseline": {
+        "reference_value": "43/42",
+        "candidate_interval": [
+          "61428571423/60000000000",
+          "6142857143/6000000000"
+        ],
+        "gap": "7/60000000000",
+        "all_pure_responses_replayed": true,
+        "candidate_verdict": "accepted"
+      }
+    },
+    "case-12": {
+      "language": "en",
+      "evidence_quotes_exact": true,
+      "number_of_quotes": 3,
+      "expected_disposition": "withhold",
+      "reported_disposition": "withheld",
+      "qualified": true,
+      "review_criterion": "conflicting observations in two current instructions",
+      "grounded_refusal": true
+    },
+    "case-13": {
+      "language": "fr",
+      "evidence_quotes_exact": true,
+      "number_of_quotes": 5,
+      "expected_disposition": "admit",
+      "reported_disposition": "solved",
+      "qualified": true,
+      "disclosure_matches": true,
+      "exact_game_declaration": true,
+      "baseline": {
+        "reference_value": "104/153",
+        "candidate_interval": [
+          "10196078431/15000000000",
+          "81568627453/120000000000"
+        ],
+        "gap": "1/24000000000",
+        "all_pure_responses_replayed": true,
+        "candidate_verdict": "accepted"
+      },
+      "counterfactual": {
+        "reference_value": "281/1020",
+        "candidate_interval": [
+          "4132352941/15000000000",
+          "2754901961/10000000000"
+        ],
+        "gap": "1/30000000000",
+        "all_pure_responses_replayed": true,
+        "candidate_verdict": "accepted"
+      },
+      "change_interval": [
+        "-1940392157/4800000000",
+        "-12127450979/30000000000"
+      ],
+      "reference_change": "-1237/3060"
+    }
+  }
+}

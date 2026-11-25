@@ -1,0 +1,86 @@
+{
+  "child_cpu_seconds": null,
+  "critique_verdicts": [
+    "revise"
+  ],
+  "driver_source_unchanged": null,
+  "frozen_checks": {
+    "cases": 7,
+    "passed": 0
+  },
+  "historical_hosted_source": "504a4c86dae6568e7b50eb09f371c515e5398063",
+  "historical_hosted_verdict": "FAIL",
+  "historical_product_tree": "c7fc43f31762992a59acd28d554a3448591ca50e",
+  "lease": {
+    "driver_exit": 130,
+    "production_preemption": true,
+    "scope": "Historical quote 006 manufacturing arm only",
+    "wall_seconds": 524.3338308780003
+  },
+  "local_completion": "PREEMPTED",
+  "local_first_request": {
+    "configured_transport_timeout_seconds": 600,
+    "matches_historical_request": true,
+    "max_output_tokens": 4096,
+    "prompt_sha256": "5f2cca0214199364891517c1556f0611367738b275682ba533f57caf2bf6c93c",
+    "schema_sha256": "a7fcb99ddc5b8461cdc42e272b16500cdff1c47ac0d25311eb2dec944fad24bb"
+  },
+  "local_runtime_aggregate": {
+    "scope": "Recorded llama.cpp task timings only",
+    "source_log_sha256": "ad2a124c2dd33cc0c221b2828a1830cc8e23f60d8451308391124b2e9afabe3f",
+    "tasks": [
+      {
+        "eval": {
+          "milliseconds": 46700.56,
+          "tokens": 262
+        },
+        "prompt_eval": {
+          "milliseconds": 55710.23,
+          "tokens": 1445
+        },
+        "slot": 0,
+        "task": 0,
+        "total": {
+          "milliseconds": 102410.79,
+          "tokens": 1707
+        }
+      },
+      {
+        "eval": {
+          "milliseconds": 79123.6,
+          "tokens": 416
+        },
+        "prompt_eval": {
+          "milliseconds": 78783.01,
+          "tokens": 2062
+        },
+        "slot": 0,
+        "task": 263,
+        "total": {
+          "milliseconds": 157906.62,
+          "tokens": 2478
+        }
+      }
+    ]
+  },
+  "manufacturing_state": "paused",
+  "model_completions": 2,
+  "model_requests": 3,
+  "original_pinned_model_sha256": "2fde00ce69dd4899c70d020845e2638353015bba0fdf161b3eb965f2bca4464e",
+  "portable_boundary": {
+    "cases": 0,
+    "refused": 0
+  },
+  "portable_checks": {
+    "cases": 0,
+    "passed": 0
+  },
+  "protocol_sha256": "4eafe9112f48d34425adb8c744da0c40393188f650bcad1be0641bd293b693fb",
+  "quote_artifact_sha256": "f708630bcc5d954527a44327bc313a0344767fd5a2b6a374e22953f74d7f4280",
+  "raw_prompts_and_cases_exported": false,
+  "registered_other_inference_arms": "Outside this replay",
+  "request_observations": [],
+  "runtime_binary_sha256": "fe211d00c4754aa67aaa492d2c755ab0f6ef60bf30eee3c0c74a3496189cde17",
+  "scope": "Original quote 006 manufacturing arm on a separate Linux host",
+  "tool_actions": 1
+}

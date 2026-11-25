@@ -1,0 +1,224 @@
+{
+  "staged_candidate_tree": "ee9da6666a28b0ecd162a7ea07743ee586c60331",
+  "frozen_source_sha256": "5ebd77cbeffa3bfa175781dcc5851bad8921ac2fe2543155d3fc6c9a3fa5e1e2",
+  "frozen_document_sha256": "5c582c3284778470598258f5c17c9e71f4542998daa2285d4e5d6bc61176bf83",
+  "test": {
+    "ambition": "Prepare a release review for the strategic-protocol parser using the attached independent held evaluation. Build the evidence table release-review.csv containing every arm. Use the source column names arm, exact_records, held_cases, and expected_dispositions. Record what the evidence supports about whether the adapted model improves whole-record accuracy. The review is for the release owner. Use the table, not a prose-only reply.",
+    "follow_up": "Extend the prior release review with the number of false scope proposals. Produce release-review-risk.csv with every prior arm and columns arm, exact_records, held_cases, expected_dispositions, false_scope_count. Use the authorized source column for the new metric and preserve the earlier measured values. Copy neither external data nor new assumptions into the CSV."
+  },
+  "native_variants": {
+    "qwen_8b_16k_schema": [
+      {
+        "stage": "initial",
+        "status": "paused",
+        "seconds": 67.025,
+        "calls_started": 1,
+        "completed_replies": 0,
+        "actions_attempted": 0,
+        "completed_tool_operations": 0,
+        "response_refusals": 0,
+        "errors": [
+          "PROVIDER_CONNECTION"
+        ],
+        "files": [],
+        "exact_csv_accepted": false,
+        "exact_original_and_source_preserved": true
+      },
+      {
+        "stage": "follow-up",
+        "status": "paused",
+        "seconds": 2.008,
+        "calls_started": 1,
+        "completed_replies": 0,
+        "actions_attempted": 0,
+        "completed_tool_operations": 0,
+        "response_refusals": 0,
+        "errors": [
+          "PROVIDER_CONNECTION"
+        ],
+        "files": [],
+        "exact_csv_accepted": false,
+        "exact_original_and_source_preserved": true
+      }
+    ],
+    "qwen_8b_4k_schema": [
+      {
+        "stage": "initial",
+        "status": "paused",
+        "seconds": 211.116,
+        "calls_started": 1,
+        "completed_replies": 0,
+        "actions_attempted": 0,
+        "completed_tool_operations": 0,
+        "response_refusals": 0,
+        "errors": [
+          "PROVIDER_CONNECTION"
+        ],
+        "files": [],
+        "exact_csv_accepted": false,
+        "exact_original_and_source_preserved": true
+      },
+      {
+        "stage": "follow-up",
+        "status": "paused",
+        "seconds": 211.251,
+        "calls_started": 1,
+        "completed_replies": 0,
+        "actions_attempted": 0,
+        "completed_tool_operations": 0,
+        "response_refusals": 0,
+        "errors": [
+          "PROVIDER_CONNECTION"
+        ],
+        "files": [],
+        "exact_csv_accepted": false,
+        "exact_original_and_source_preserved": true
+      }
+    ],
+    "compact_candidate": [
+      {
+        "stage": "initial",
+        "status": "exhausted",
+        "seconds": 76.744,
+        "calls_started": 4,
+        "completed_replies": 4,
+        "actions_attempted": 2,
+        "completed_tool_operations": 0,
+        "response_refusals": 3,
+        "errors": [],
+        "files": [],
+        "exact_csv_accepted": false,
+        "exact_original_and_source_preserved": true
+      },
+      {
+        "stage": "follow-up",
+        "status": "paused",
+        "seconds": 119.847,
+        "calls_started": 3,
+        "completed_replies": 2,
+        "actions_attempted": 0,
+        "completed_tool_operations": 0,
+        "response_refusals": 2,
+        "errors": [
+          "PROVIDER_RESPONSE"
+        ],
+        "files": [],
+        "exact_csv_accepted": false,
+        "exact_original_and_source_preserved": true
+      }
+    ],
+    "qwen_8b_4k_json_candidate": [
+      {
+        "stage": "initial",
+        "status": "paused",
+        "seconds": 211.262,
+        "calls_started": 1,
+        "completed_replies": 0,
+        "actions_attempted": 0,
+        "completed_tool_operations": 0,
+        "response_refusals": 0,
+        "errors": [
+          "PROVIDER_CONNECTION"
+        ],
+        "files": [],
+        "exact_csv_accepted": false,
+        "exact_original_and_source_preserved": true
+      },
+      {
+        "stage": "follow-up",
+        "status": "paused",
+        "seconds": 211.374,
+        "calls_started": 1,
+        "completed_replies": 0,
+        "actions_attempted": 0,
+        "completed_tool_operations": 0,
+        "response_refusals": 0,
+        "errors": [
+          "PROVIDER_CONNECTION"
+        ],
+        "files": [],
+        "exact_csv_accepted": false,
+        "exact_original_and_source_preserved": true
+      }
+    ],
+    "compact_scratch_only_omission_overlay": [
+      {
+        "stage": "initial",
+        "status": "exhausted",
+        "seconds": 120.588,
+        "calls_started": 3,
+        "completed_replies": 3,
+        "actions_attempted": 12,
+        "completed_tool_operations": 0,
+        "response_refusals": 0,
+        "errors": [],
+        "files": [],
+        "exact_csv_accepted": false,
+        "exact_original_and_source_preserved": true
+      },
+      {
+        "stage": "follow-up",
+        "status": "needs_review",
+        "seconds": 40.196,
+        "calls_started": 1,
+        "completed_replies": 1,
+        "actions_attempted": 8,
+        "completed_tool_operations": 8,
+        "response_refusals": 0,
+        "errors": [],
+        "files": [
+          "base_direct.csv",
+          "base_retrieval.csv",
+          "included_direct.csv",
+          "strategic-holdout-score.csv"
+        ],
+        "exact_csv_accepted": false,
+        "exact_original_and_source_preserved": true
+      }
+    ]
+  },
+  "direct_compact": [
+    {
+      "stage": "initial",
+      "completed_replies": 4,
+      "seconds": 41.702,
+      "exact_csv_accepted": false,
+      "post_hoc_exact_matches_after_removing_lone_csv_language_marker": 0
+    },
+    {
+      "stage": "follow-up",
+      "completed_replies": 4,
+      "seconds": 171.206,
+      "exact_csv_accepted": false,
+      "post_hoc_exact_matches_after_removing_lone_csv_language_marker": 1
+    }
+  ],
+  "direct_deterministic_projection": [
+    {
+      "artifact": "release-review.csv",
+      "matched_rows": 4,
+      "matched_schema": [
+        "arm",
+        "exact_records",
+        "held_cases",
+        "expected_dispositions"
+      ],
+      "elapsed_ms": 0.115765,
+      "artifact_sha256": "1562e99dea2ed266c74eae81c92d39861d4da9ae0a8c891a83142363862906f1"
+    },
+    {
+      "artifact": "release-review-risk.csv",
+      "matched_rows": 4,
+      "matched_schema": [
+        "arm",
+        "exact_records",
+        "held_cases",
+        "expected_dispositions",
+        "false_scope_count"
+      ],
+      "elapsed_ms": 0.100551,
+      "artifact_sha256": "946adedc02554d037d169bcd8d38477007db093dc6dd0f8c0be939ebc90bfcfb"
+    }
+  ],
+  "boundaries": "Shared-admin Linux CPU experiment against published report data. Covers one source-bound work product and one restart. Not production browser, economic gain, general intelligence or promotion of a specialist."
+}

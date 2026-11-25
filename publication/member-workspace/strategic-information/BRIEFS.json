@@ -1,0 +1,69 @@
+{
+  "cases": [
+    {
+      "id": "case-01",
+      "language": "en",
+      "ambition": "I need an exact strategic recommendation for the meter batching trial. The public calibration binder defines a zero-sum score: the dispatcher maximizes the listed score and the auditor gets its negative. A private draw selects one of four binder rows before either side moves. The dispatcher receives only its amber or blue flag. The auditor receives only its near or away flag. Neither sees the actual binder row or the other flag before they each choose once simultaneously. Dispatcher choices in order: Batch, Separate. Auditor choices in order: Sample, Inspect. Each matrix below has dispatcher choices as rows and auditor choices as columns.\n- X has probability 1/4, amber/near, [[2.5, -1], [0, 2]].\n- Y has probability 1/4, amber/near, [[1, 0], [-2, 1]].\n- Z has probability 1/3, blue/near, [[-1, 2], [3, -1]].\n- W has probability 1/6, blue/away, [[4, -2], [-1, 2]].\nDetermine the value with the current information. The proposed policy would additionally tell the auditor the dispatcher's flag before both choices. Test that counterfactual separately; the dispatcher still sees only its own flag."
+    },
+    {
+      "id": "case-02",
+      "language": "fr",
+      "ambition": "Je veux calculer le gain garanti d'une démonstration miniature d'inspection de texture. Le modéliste reçoit le signal privé « sec » ou « humide ». L'équipe de comparaison reçoit seulement son propre signal « pale » ou « fonce ». Les deux choisissent une seule fois en même temps, sans communication et sans connaître le tirage latent. Le cahier de distribution est public. Il attribue 30 % à sec/pale, 20 % à humide/pale, 10 % à sec/fonce et 40 % à humide/fonce. Le modéliste choisit Filtre (première ligne) ou Échantillon (deuxième ligne). L'équipe de comparaison choisit Lisse (première colonne) ou Grenu (deuxième colonne). Ses gains sont exactement les opposés du score du modéliste. Matrices du modéliste dans le même ordre que le cahier : [[3, 0], [-1, 1]] ; [[-2, 4], [0, -1]] ; [[2, -3], [1, 2]] ; [[-1, 1], [2, -2]]."
+    },
+    {
+      "id": "case-03",
+      "language": "en",
+      "ambition": "Find the play that guarantees each person their best score in a two-person pottery judging exercise. They choose Slate or Globe at the same instant. Both are maximizing their own point totals. Both see only their own card, whose joint distribution is listed on a public poster. The posted payoff for the (Slate, Slate) pair on one card combination is Alice 4 and Bob 3. The organizer confirms that these are the separate scores being optimized and their sum varies across the rest of the table. I can send the rest after you tell me whether this matches your strategy instrument."
+    },
+    {
+      "id": "case-04",
+      "language": "en",
+      "ambition": "We have a miniature experiment in exhibit-label decisions. Public deck probabilities are two, one, one, one, and two of seven equally likely cards, grouped as A through E. The label author chooses Memo before Trace in the matrix row ordering. This describes the layout. The reviewer chooses Pull before Push in the column ordering. Both choose simultaneously once after their private signal. The deck group is hidden. Only the author's tag is named a, b, or c. Only the reviewer's tag is named inland or shore. Table, in deck-group order:\nA = a/inland, [[3, -2], [-1, 1]]\nB = a/shore, [[-2, 3], [1, -1]]\nC = b/inland, [[0, 2], [2, 0]]\nD = c/inland, [[3, 1], [-1, 2]]\nE = c/shore, [[-3, 1], [4, -2]]\nThey optimize opposite quantities. Listed scores are the label author's and the reviewer's are their negatives. I'd like the exact value and an auditable encoding."
+    },
+    {
+      "id": "case-05",
+      "language": "fr",
+      "ambition": "Établissez le jeu exact d'un exercice de négociation à deux équipes. Le classeur donne un score d'écart signé et un tirage initial dont les équipes reçoivent des indices privés différents. L'équipe d'achat choisit le premier prix. Le fournisseur voit ce prix avant de choisir une réponse, puis l'équipe d'achat peut publier un indice privé et revoir son prix. Le barème change selon l'ordre de ces opérations. Est-ce que je peux lancer cette situation dans votre solveur comme si chacun choisissait une fois?"
+    },
+    {
+      "id": "case-06",
+      "language": "fr",
+      "ambition": "Calculez un équilibre pour cette simulation sur papier du réglage de deux mini-vitrines. Les relevés pondèrent quatre fiches par 12, 18, 24 et 6 tirages, en tout 60. Le public connaît les fiches et leurs poids. La fiche précise du jeu reste secrète. La première équipe reçoit seulement sa cote bas/moyen/haut, et la seconde seulement son témoin clair/sombre. Chacune décide en même temps et une seule fois, sans voir la cote ou le témoin de l'autre. La première équipe peut avancer ou patienter, dans cet ordre. La deuxième équipe peut ouvrir ou fermer, dans cet ordre. Les lignes et colonnes suivent respectivement les choix des première et deuxième équipes. Le score de la deuxième équipe est le négatif de chaque valeur indiquée, qui revient à la première. Fiches dans l'ordre des poids : bas/clair [[2, -1], [0, 3]], moyen/clair [[-3, 1], [2, 0]], haut/sombre [[1, -4], [3, 1]], moyen/sombre [[2, 1], [-2, 3]]."
+    },
+    {
+      "id": "case-07",
+      "language": "en",
+      "ambition": "Please calculate a policy for our two-player zero-sum box-labeling lab. Each participant has a private signal, acts once simultaneously, and sees no other information. The lab log has exactly 40 trials. It lists 18 Low/Soft and 19 High/Hard draws, with both players' 2-by-2 row-payoff matrices. Three entries after those counts are blank. The lab lead says the three could mix other signal pairs or could be repeats, and cannot confirm their payoff table or tags. Use the exact probabilities if the data are sufficient."
+    },
+    {
+      "id": "case-08",
+      "language": "en",
+      "ambition": "Build an independently checkable game from a glossary compatibility exercise. Four mutually exclusive possible trial cards each carry exact prior weights of 1/8 compact/contrast, 3/8 compact/parallel, 2/8 long/contrast and 2/8 long/parallel. People know the distribution and all four payoff matrices, but the realized card is hidden. Only the drafter sees compact or long. Only the matching editor sees contrast or parallel. They make simultaneous one-off choices without any contact. The layout is Share and Hold for drafter rows, Bind and Skip for editor columns. Scores for the drafter in card order are [[0, 2], [-1, 3]], [[-1.5, 2], [4, -1]], [[2, 0], [1, -1]], and [[-2, 3], [1, 2]]. Editor scores are the negatives. The organizer plans to publish the complete card after both choices. This appears in the product brief and is not advance information."
+    },
+    {
+      "id": "case-09",
+      "language": "fr",
+      "ambition": "Voici un classeur de jeu fictif de gestion des présentoirs. Sur chaque fiche publique de probabilité 1/4, un chiffre est le bénéfice du concurrent, jamais celui du gestionnaire. Le gestionnaire maximise l'opposé de ce chiffre, case par case. Le classeur place les deux choix du concurrent, Un et Deux, sur les lignes de ses tableaux. Il place les choix du gestionnaire, A et B, sur ses colonnes. Pour votre format de référence, mettez le gestionnaire en ligne (A, puis B) et le concurrent en colonne (Un, puis Deux). Les deux agissent simultanément, une fois, et connaissent seulement leur propre étiquette, jamais la fiche réalisée. Le gestionnaire reçoit mat ou brillant. Le concurrent reçoit neuf ou ancien. Dans l'ordre mat/neuf, mat/ancien, brillant/neuf, brillant/ancien, les tableaux du bénéfice du concurrent sont [[4, -1], [0, 2]], [[-2, 3], [1, 0]], [[0, 2], [-3, 1]] et [[1, -1], [2, 3]]."
+    },
+    {
+      "id": "case-10",
+      "language": "fr",
+      "ambition": "On veut mesurer la valeur d'un jeu à deux personnes dans l'atelier de reliure. Une seule décision simultanée et aucune communication. Les deux fiches de prior et les étiquettes privées sont bien définies dans les règles. L'export comporte les scores [[5, -1], [2, 0]] et [[-2, 3], [0, 1]]. Le responsable assure que c'est un jeu à somme nulle. Le classeur a perdu à la fois les en-têtes des lignes et des colonnes ainsi que la mention du joueur à qui correspondent les signes. Les choix des deux joueurs portent exactement les mêmes noms. Puis-je publier une recommandation de jeu à partir de cet export?"
+    },
+    {
+      "id": "case-11",
+      "language": "en",
+      "ambition": "Benchmark a paper-only relay-card scoring game for our operations course. Public scores are per operation. The public draw is backed by 12 equal-likelihood tokens, comprising 1 first/check, 3 first/hold, 2 last/check and 6 last/hold. The drawn composition is hidden. The controller privately sees first or last, and the opponent sees only check or hold. The controller and opponent each decide once at the same time and have no other signals. Lay out row actions Inspect, File and column actions Select, Wait. The controller's payoffs are opposite the opponent's. In the order of token groups listed above, row scores are [[2, -3], [0, 4]], [[5, 1], [-2, 1]], [[1, -1], [3, 1]], and [[0, 3], [2, -2]]. Produce the guarantee for the controller."
+    },
+    {
+      "id": "case-12",
+      "language": "en",
+      "ambition": "Turn our one-shot simultaneous palette contest into an equilibrium case. The players optimize opposite scores and choices have already been transcribed in the published joint probability and payoff table. The current run book says the stage lead reads the Front sticker aloud to everyone before choices. The current player instructions for the same run say the Front sticker must be known only to the first player. The person running the contest cannot tell which instructions will be followed, and said the score tables may differ by sticker. I need the unconditional recommendation from the records I have."
+    },
+    {
+      "id": "case-13",
+      "language": "fr",
+      "ambition": "Je souhaite une référence de stratégie pour ce petit jeu d'affichage de calendriers, puis la même évaluation pour une variante avec divulgation. Le registre public indique les six tirages H/C 2 sur 12, H/V 4 sur 12, E/L 1 sur 12, R/C 1 sur 12, R/V 2 sur 12 et S/L 2 sur 12. Une fois le tirage caché sélectionné, l'équipe calendrier connaît seulement sa saison H, E, R ou S. L'équipe afficheur connaît seulement son témoin C, V ou L. Sans communication, les deux choisissent en même temps, une seule fois. Les deux actions calendrier sont Continuer et Lancer en lignes, dans cet ordre. Les deux actions afficheur sont Afficher et Décaler en colonnes, dans cet ordre. Les points du calendrier sont l'opposé de ceux de l'afficheur. Dans l'ordre du registre, les six matrices du calendrier sont [[2, -2], [1, 0]], [[-1, 4], [0, 2]], [[0, 1], [-3, 5]], [[3, 0], [-1, 1]], [[-1.5, 2], [3, -2]], [[2, -1], [0, 3]]. Dans la variante seulement, les deux équipes reçoivent en plus le signal de l'autre avant d'agir. Elles ne reçoivent aucun autre détail sur le tirage."
+    }
+  ]
+}

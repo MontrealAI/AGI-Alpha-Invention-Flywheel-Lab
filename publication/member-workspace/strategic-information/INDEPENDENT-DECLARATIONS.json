@@ -1,0 +1,651 @@
+{
+  "input_sha256": "f2a8a289e440249d70c3fc987ea9566f75dadf7b6b23bc5a53f3b41301bcea7d",
+  "cases": {
+    "case-01": {
+      "verdict": "admit",
+      "game": {
+        "actions": [
+          2,
+          2
+        ],
+        "states": [
+          {
+            "p": "1/4",
+            "row_type": "amber",
+            "col_type": "near",
+            "payoff": [
+              [
+                "5/2",
+                -1
+              ],
+              [
+                0,
+                2
+              ]
+            ]
+          },
+          {
+            "p": "1/4",
+            "row_type": "amber",
+            "col_type": "near",
+            "payoff": [
+              [
+                1,
+                0
+              ],
+              [
+                -2,
+                1
+              ]
+            ]
+          },
+          {
+            "p": "1/3",
+            "row_type": "blue",
+            "col_type": "near",
+            "payoff": [
+              [
+                -1,
+                2
+              ],
+              [
+                3,
+                -1
+              ]
+            ]
+          },
+          {
+            "p": "1/6",
+            "row_type": "blue",
+            "col_type": "away",
+            "payoff": [
+              [
+                4,
+                -2
+              ],
+              [
+                -1,
+                2
+              ]
+            ]
+          }
+        ]
+      },
+      "counterfactual_reveal": "column"
+    },
+    "case-02": {
+      "verdict": "admit",
+      "game": {
+        "actions": [
+          2,
+          2
+        ],
+        "states": [
+          {
+            "p": "3/10",
+            "row_type": "sec",
+            "col_type": "pale",
+            "payoff": [
+              [
+                3,
+                0
+              ],
+              [
+                -1,
+                1
+              ]
+            ]
+          },
+          {
+            "p": "1/5",
+            "row_type": "humide",
+            "col_type": "pale",
+            "payoff": [
+              [
+                -2,
+                4
+              ],
+              [
+                0,
+                -1
+              ]
+            ]
+          },
+          {
+            "p": "1/10",
+            "row_type": "sec",
+            "col_type": "fonce",
+            "payoff": [
+              [
+                2,
+                -3
+              ],
+              [
+                1,
+                2
+              ]
+            ]
+          },
+          {
+            "p": "2/5",
+            "row_type": "humide",
+            "col_type": "fonce",
+            "payoff": [
+              [
+                -1,
+                1
+              ],
+              [
+                2,
+                -2
+              ]
+            ]
+          }
+        ]
+      },
+      "counterfactual_reveal": null
+    },
+    "case-03": {
+      "verdict": "withhold",
+      "reason": "Each player optimizes a separate non-zero-sum score. The full distribution and scores are also absent.",
+      "source": "separate scores being optimized and their sum varies"
+    },
+    "case-04": {
+      "verdict": "admit",
+      "game": {
+        "actions": [
+          2,
+          2
+        ],
+        "states": [
+          {
+            "p": "2/7",
+            "row_type": "a",
+            "col_type": "inland",
+            "payoff": [
+              [
+                3,
+                -2
+              ],
+              [
+                -1,
+                1
+              ]
+            ]
+          },
+          {
+            "p": "1/7",
+            "row_type": "a",
+            "col_type": "shore",
+            "payoff": [
+              [
+                -2,
+                3
+              ],
+              [
+                1,
+                -1
+              ]
+            ]
+          },
+          {
+            "p": "1/7",
+            "row_type": "b",
+            "col_type": "inland",
+            "payoff": [
+              [
+                0,
+                2
+              ],
+              [
+                2,
+                0
+              ]
+            ]
+          },
+          {
+            "p": "1/7",
+            "row_type": "c",
+            "col_type": "inland",
+            "payoff": [
+              [
+                3,
+                1
+              ],
+              [
+                -1,
+                2
+              ]
+            ]
+          },
+          {
+            "p": "2/7",
+            "row_type": "c",
+            "col_type": "shore",
+            "payoff": [
+              [
+                -3,
+                1
+              ],
+              [
+                4,
+                -2
+              ]
+            ]
+          }
+        ]
+      },
+      "counterfactual_reveal": null
+    },
+    "case-05": {
+      "verdict": "withhold",
+      "reason": "The parties act sequentially, observe prior moves and may disclose a signal and revise. A simultaneous one-move declaration would change the game.",
+      "source": "Le fournisseur voit ce prix avant de choisir une réponse"
+    },
+    "case-06": {
+      "verdict": "admit",
+      "game": {
+        "actions": [
+          2,
+          2
+        ],
+        "states": [
+          {
+            "p": "1/5",
+            "row_type": "bas",
+            "col_type": "clair",
+            "payoff": [
+              [
+                2,
+                -1
+              ],
+              [
+                0,
+                3
+              ]
+            ]
+          },
+          {
+            "p": "3/10",
+            "row_type": "moyen",
+            "col_type": "clair",
+            "payoff": [
+              [
+                -3,
+                1
+              ],
+              [
+                2,
+                0
+              ]
+            ]
+          },
+          {
+            "p": "2/5",
+            "row_type": "haut",
+            "col_type": "sombre",
+            "payoff": [
+              [
+                1,
+                -4
+              ],
+              [
+                3,
+                1
+              ]
+            ]
+          },
+          {
+            "p": "1/10",
+            "row_type": "moyen",
+            "col_type": "sombre",
+            "payoff": [
+              [
+                2,
+                1
+              ],
+              [
+                -2,
+                3
+              ]
+            ]
+          }
+        ]
+      },
+      "counterfactual_reveal": null
+    },
+    "case-07": {
+      "verdict": "withhold",
+      "reason": "The remaining three trials do not establish their private types or payoffs. Inferring one missing state or filling unknown payoff cells is unsupported.",
+      "source": "the three could mix other signal pairs or could be repeats"
+    },
+    "case-08": {
+      "verdict": "admit",
+      "game": {
+        "actions": [
+          2,
+          2
+        ],
+        "states": [
+          {
+            "p": "1/8",
+            "row_type": "compact",
+            "col_type": "contrast",
+            "payoff": [
+              [
+                0,
+                2
+              ],
+              [
+                -1,
+                3
+              ]
+            ]
+          },
+          {
+            "p": "3/8",
+            "row_type": "compact",
+            "col_type": "parallel",
+            "payoff": [
+              [
+                "-3/2",
+                2
+              ],
+              [
+                4,
+                -1
+              ]
+            ]
+          },
+          {
+            "p": "1/4",
+            "row_type": "long",
+            "col_type": "contrast",
+            "payoff": [
+              [
+                2,
+                0
+              ],
+              [
+                1,
+                -1
+              ]
+            ]
+          },
+          {
+            "p": "1/4",
+            "row_type": "long",
+            "col_type": "parallel",
+            "payoff": [
+              [
+                -2,
+                3
+              ],
+              [
+                1,
+                2
+              ]
+            ]
+          }
+        ]
+      },
+      "counterfactual_reveal": null
+    },
+    "case-09": {
+      "verdict": "admit",
+      "game": {
+        "actions": [
+          2,
+          2
+        ],
+        "states": [
+          {
+            "p": "1/4",
+            "row_type": "mat",
+            "col_type": "neuf",
+            "payoff": [
+              [
+                -4,
+                0
+              ],
+              [
+                1,
+                -2
+              ]
+            ]
+          },
+          {
+            "p": "1/4",
+            "row_type": "mat",
+            "col_type": "ancien",
+            "payoff": [
+              [
+                2,
+                -1
+              ],
+              [
+                -3,
+                0
+              ]
+            ]
+          },
+          {
+            "p": "1/4",
+            "row_type": "brillant",
+            "col_type": "neuf",
+            "payoff": [
+              [
+                0,
+                3
+              ],
+              [
+                -2,
+                -1
+              ]
+            ]
+          },
+          {
+            "p": "1/4",
+            "row_type": "brillant",
+            "col_type": "ancien",
+            "payoff": [
+              [
+                -1,
+                -2
+              ],
+              [
+                1,
+                -3
+              ]
+            ]
+          }
+        ]
+      },
+      "counterfactual_reveal": null
+    },
+    "case-10": {
+      "verdict": "withhold",
+      "reason": "The axes and sign owner are unknown. Even granting the stated priors, multiple distinct matrices fit the source.",
+      "source": "a perdu à la fois les en-têtes des lignes et des colonnes ainsi que la mention du joueur à qui correspondent les signes"
+    },
+    "case-11": {
+      "verdict": "admit",
+      "game": {
+        "actions": [
+          2,
+          2
+        ],
+        "states": [
+          {
+            "p": "1/12",
+            "row_type": "first",
+            "col_type": "check",
+            "payoff": [
+              [
+                2,
+                -3
+              ],
+              [
+                0,
+                4
+              ]
+            ]
+          },
+          {
+            "p": "1/4",
+            "row_type": "first",
+            "col_type": "hold",
+            "payoff": [
+              [
+                5,
+                1
+              ],
+              [
+                -2,
+                1
+              ]
+            ]
+          },
+          {
+            "p": "1/6",
+            "row_type": "last",
+            "col_type": "check",
+            "payoff": [
+              [
+                1,
+                -1
+              ],
+              [
+                3,
+                1
+              ]
+            ]
+          },
+          {
+            "p": "1/2",
+            "row_type": "last",
+            "col_type": "hold",
+            "payoff": [
+              [
+                0,
+                3
+              ],
+              [
+                2,
+                -2
+              ]
+            ]
+          }
+        ]
+      },
+      "counterfactual_reveal": null
+    },
+    "case-12": {
+      "verdict": "withhold",
+      "reason": "The same run is described by conflicting observations. The two possible information structures must remain separate until the actual rule is established.",
+      "source": "reads the Front sticker aloud to everyone before choices"
+    },
+    "case-13": {
+      "verdict": "admit",
+      "game": {
+        "actions": [
+          2,
+          2
+        ],
+        "states": [
+          {
+            "p": "1/6",
+            "row_type": "H",
+            "col_type": "C",
+            "payoff": [
+              [
+                2,
+                -2
+              ],
+              [
+                1,
+                0
+              ]
+            ]
+          },
+          {
+            "p": "1/3",
+            "row_type": "H",
+            "col_type": "V",
+            "payoff": [
+              [
+                -1,
+                4
+              ],
+              [
+                0,
+                2
+              ]
+            ]
+          },
+          {
+            "p": "1/12",
+            "row_type": "E",
+            "col_type": "L",
+            "payoff": [
+              [
+                0,
+                1
+              ],
+              [
+                -3,
+                5
+              ]
+            ]
+          },
+          {
+            "p": "1/12",
+            "row_type": "R",
+            "col_type": "C",
+            "payoff": [
+              [
+                3,
+                0
+              ],
+              [
+                -1,
+                1
+              ]
+            ]
+          },
+          {
+            "p": "1/6",
+            "row_type": "R",
+            "col_type": "V",
+            "payoff": [
+              [
+                "-3/2",
+                2
+              ],
+              [
+                3,
+                -2
+              ]
+            ]
+          },
+          {
+            "p": "1/6",
+            "row_type": "S",
+            "col_type": "L",
+            "payoff": [
+              [
+                2,
+                -1
+              ],
+              [
+                0,
+                3
+              ]
+            ]
+          }
+        ]
+      },
+      "counterfactual_reveal": "both"
+    }
+  }
+}

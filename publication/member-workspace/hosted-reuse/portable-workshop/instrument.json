@@ -1,0 +1,62 @@
+{
+  "inputs": [
+    "observed",
+    "trusted",
+    "affine",
+    "low",
+    "mid",
+    "high",
+    "lower",
+    "upper",
+    "maxResidual",
+    "maxDrift",
+    "minSpan",
+    "reading"
+  ],
+  "bindings": {
+    "span": {
+      "formula": "max(high, low) - min(high, low)"
+    },
+    "mid_center": {
+      "formula": "(low + high) / 2"
+    },
+    "span_ge_minSpan": {
+      "formula": "span >= minSpan"
+    },
+    "reading_in_range": {
+      "formula": "reading >= low && reading <= high"
+    },
+    "mid_close_to_center": {
+      "formula": "abs(mid - mid_center) <= maxResidual"
+    },
+    "all_booleans_true": {
+      "formula": "observed && trusted && affine"
+    },
+    "supported": {
+      "formula": "all_booleans_true && span_ge_minSpan && reading_in_range && mid_close_to_center"
+    },
+    "corrected": {
+      "formula": "choose(supported, 10 * (reading - low) / (high - low), None)"
+    },
+    "defect": {
+      "formula": "choose(supported, corrected < lower || corrected > upper, None)"
+    },
+    "drift": {
+      "formula": "choose(supported, abs(low) > maxDrift || abs(high - 10) > maxDrift, None)"
+    }
+  },
+  "outputs": {
+    "status": {
+      "formula": "choose(supported, \"supported\", \"unsupported\")"
+    },
+    "corrected": {
+      "formula": "corrected"
+    },
+    "defect": {
+      "formula": "defect"
+    },
+    "drift": {
+      "formula": "drift"
+    }
+  }
+}
