@@ -1,4 +1,138 @@
 {
+  "filename_operator_guidance_followup": {
+    "raw_difference": 106251,
+    "raw_input_origin": "MODEL_DEVELOPMENT_FIXTURE",
+    "receipt": {
+      "ambition": "Comparez la taille exacte des deux archives publiques de HARNESS, versions 1.0.0 et 1.1.0, et calculez de combien d’octets la version 1.1.0 est plus grande.",
+      "base": "http://127.0.0.1:8767/frontier-omega-alpha/",
+      "checkpoint_sha256": "6623afa52aa505e6f125067658cebd370b2d92f225cf2a8a34d55c27b38caee6",
+      "discovery": [
+        {
+          "configured": false,
+          "engine": "llama-cpp",
+          "model": "qwen3-8b-q4_k_m"
+        }
+      ],
+      "executor_sha256": "7bc7d32f6ea05fdb8741d2cc6635aeaad6d6d45488063071cf7fe7ef939a8f16",
+      "export_sha256": "e33f92db8a1c2af42df43807538d696d099151a5f9e8e05a552a0c9d7a0cf623",
+      "language": "fr",
+      "mode": "start",
+      "module_sha256": "bf38040798584f5834dd536a4fe40247a1a1b3cca2f2eb3c4d8d7c36ea8f1630",
+      "operations": [
+        "pair",
+        "intelligence-discover",
+        "intelligence-connect",
+        "submit",
+        "list",
+        "get",
+        "export"
+      ],
+      "release_revision": "9c52ff15007755911f446d57ab301be4dbbb490d",
+      "selection": {
+        "check": {
+          "at": "2026-11-25T04:48:18.040241+00:00",
+          "elapsed_ms": 5946,
+          "format": "json_schema",
+          "input_tokens": 35,
+          "output_tokens": 29
+        },
+        "mode": "hybrid",
+        "model": "qwen3-8b-q4_k_m",
+        "provider": "frontier-local-641ae16dc5810b8e3c02fba9297f06dca125d4a68a106d1b6c364b9f2cb0a5ab",
+        "ready": true
+      },
+      "setup": {
+        "automatic_return": true,
+        "exact_submit_count": 1,
+        "guide_one_use": true,
+        "reopened": true
+      },
+      "state": {
+        "actions": 3,
+        "files": [
+          "RUN_INSTRUMENT.py",
+          "difference_calculator.json"
+        ],
+        "id": "wf_2be8ed4b837074ee7f790204",
+        "model_calls": 2,
+        "phase": "builder",
+        "recorded_events": [
+          {
+            "kind": "created"
+          },
+          {
+            "kind": "model_queued"
+          },
+          {
+            "kind": "model_started"
+          },
+          {
+            "kind": "model_completed",
+            "usage": {
+              "input_tokens": 1211,
+              "output_tokens": 112
+            }
+          },
+          {
+            "kind": "route_proposed"
+          },
+          {
+            "kind": "tool_refused",
+            "reason": "Read access is restricted to this run's declared artifacts.",
+            "tool": "run_instrument"
+          },
+          {
+            "kind": "verification"
+          },
+          {
+            "kind": "claim_dispositions"
+          },
+          {
+            "kind": "model_queued"
+          },
+          {
+            "kind": "model_started"
+          },
+          {
+            "kind": "model_completed",
+            "usage": {
+              "input_tokens": 1276,
+              "output_tokens": 195
+            }
+          },
+          {
+            "kind": "route_proposed"
+          },
+          {
+            "kind": "tool_completed",
+            "tool": "construct_instrument"
+          },
+          {
+            "kind": "tool_completed",
+            "tool": "run_instrument"
+          },
+          {
+            "kind": "verification"
+          },
+          {
+            "kind": "claim_dispositions"
+          },
+          {
+            "kind": "stopped",
+            "reason": "Declared model-call allocation exhausted; no further inference dispatched."
+          }
+        ],
+        "status": "exhausted"
+      },
+      "visible_claims": [
+        "archive_delta · Preuves indisponibles"
+      ],
+      "wallet": "isolated eligibility fixture",
+      "workflow_run": "2026112504"
+    },
+    "registered_claim_withheld": true,
+    "scope": "Separately observed candidate retry with explicit identical filenames, not a new held case."
+  },
   "mission_result": "ABSTAIN on the typed numerical claim; no binding against exact inputs succeeded. The journal exhaustion and known filename errors are recorded.",
   "oracle_delta_bytes": 106251,
   "restart": {

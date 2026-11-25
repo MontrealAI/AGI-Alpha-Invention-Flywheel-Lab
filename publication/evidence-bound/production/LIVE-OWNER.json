@@ -1,0 +1,376 @@
+{
+  "approved_scope": "Linux CPU, native locally paired Qwen3-8B Q4_K_M with llama.cpp b12242, isolated eligibility fixture, actual public English entry",
+  "artifacts": {
+    "RUN_INSTRUMENT.py": {
+      "kind": "trusted_runner",
+      "sha256": "46d43d4a017f1d32fcd9e05b32316a6fffac27e1a9572ab9ffbbf87338f00322"
+    },
+    "game_data.csv": {
+      "kind": "dataset",
+      "sha256": "65c0c1f6398fb7e5408d86dda53773f843996bf067ac9a1007caa663fb2cb0fb"
+    },
+    "game_model.json": {
+      "kind": "instrument",
+      "sha256": "28a6a248379eedcacd8b3ad42f9a4041ce63648be99bc334cabcf480c65faf6c"
+    },
+    "game_table.json": {
+      "kind": "table_instrument",
+      "sha256": "c5717d0345999929203c1f188921d023bf1c274a835c5767d005c248fd84e041"
+    }
+  },
+  "bounds": {
+    "actions": 10,
+    "output_tokens_per_turn": 780,
+    "private_lease_minutes": 25,
+    "turns": 3
+  },
+  "git_tree": "e34b5ad42c71adef555613e2f07cad7443f3db38",
+  "model_weight_sha256": "d98cdcbd03e17ce47681435b5150e34c1417f50b5c0019dd560e4882c5745785",
+  "release": "f8b8f95b1ef10641a82d1b98f4b13e0b8cd5bb43",
+  "reported_tool_input_origins": [
+    "MODEL_DEVELOPMENT_FIXTURE"
+  ],
+  "restart": {
+    "ambition": "Build frontier AI LLM for Game Theory.",
+    "base": "https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/frontier-omega-alpha/",
+    "checkpoint_sha256": "fad6184a0e72e071a8086ada2c3b85b04a81631c0933b09bb7c21b9700b5274f",
+    "executor_sha256": "2b3125ba64c28f3c1b0ffd9988b0e25106a3e996c5eb6d0c32659531bfc32ccf",
+    "export_sha256": "99dc3359c39890b576025ebad8b2c63fc311588835b9e52e18386f7440b9b913",
+    "language": "en",
+    "mode": "restart",
+    "module_sha256": "bf38040798584f5834dd536a4fe40247a1a1b3cca2f2eb3c4d8d7c36ea8f1630",
+    "operations": [
+      "pair",
+      "intelligence-reconnect",
+      "list",
+      "get",
+      "export"
+    ],
+    "release_revision": "f8b8f95b1ef10641a82d1b98f4b13e0b8cd5bb43",
+    "selection": {
+      "check": {
+        "at": "2026-11-25T05:02:08.747948+00:00",
+        "elapsed_ms": 2936,
+        "format": "json_schema",
+        "input_tokens": 35,
+        "output_tokens": 29
+      },
+      "mode": "hybrid",
+      "model": "qwen3-8b-q4_k_m",
+      "provider": "frontier-local-641ae16dc5810b8e3c02fba9297f06dca125d4a68a106d1b6c364b9f2cb0a5ab",
+      "ready": true
+    },
+    "setup": {
+      "automatic_return": false,
+      "exact_submit_count": 0,
+      "guide_one_use": true,
+      "reopened": true
+    },
+    "state": {
+      "actions": 10,
+      "files": [
+        "RUN_INSTRUMENT.py",
+        "game_data.csv",
+        "game_model.json",
+        "game_table.json"
+      ],
+      "id": "wf_fa273b0e465e7b7c61fd8407",
+      "model_calls": 3,
+      "phase": "builder",
+      "recorded_events": [
+        {
+          "kind": "created"
+        },
+        {
+          "kind": "model_queued"
+        },
+        {
+          "kind": "model_started"
+        },
+        {
+          "kind": "model_completed",
+          "usage": {
+            "input_tokens": 797,
+            "output_tokens": 362
+          }
+        },
+        {
+          "kind": "route_proposed"
+        },
+        {
+          "kind": "tool_completed",
+          "tool": "construct_table"
+        },
+        {
+          "kind": "tool_completed",
+          "tool": "write_dataset"
+        },
+        {
+          "kind": "tool_completed",
+          "tool": "construct_instrument"
+        },
+        {
+          "kind": "tool_refused",
+          "reason": "sum/count needs one array.",
+          "tool": "run_instrument"
+        },
+        {
+          "kind": "verification"
+        },
+        {
+          "kind": "model_queued"
+        },
+        {
+          "kind": "model_started"
+        },
+        {
+          "kind": "model_completed",
+          "usage": {
+            "input_tokens": 1647,
+            "output_tokens": 261
+          }
+        },
+        {
+          "kind": "route_proposed"
+        },
+        {
+          "kind": "tool_completed",
+          "tool": "construct_table"
+        },
+        {
+          "kind": "tool_refused",
+          "reason": "TABLE_DATASET_AUTHORITY",
+          "tool": "run_table"
+        },
+        {
+          "kind": "tool_completed",
+          "tool": "construct_instrument"
+        },
+        {
+          "kind": "tool_completed",
+          "tool": "run_instrument"
+        },
+        {
+          "kind": "verification"
+        },
+        {
+          "kind": "model_queued"
+        },
+        {
+          "kind": "model_started"
+        },
+        {
+          "kind": "model_completed",
+          "usage": {
+            "input_tokens": 1687,
+            "output_tokens": 155
+          }
+        },
+        {
+          "kind": "route_proposed"
+        },
+        {
+          "kind": "tool_completed",
+          "tool": "write_dataset"
+        },
+        {
+          "kind": "tool_completed",
+          "tool": "construct_table"
+        },
+        {
+          "kind": "verification"
+        },
+        {
+          "kind": "stopped",
+          "reason": "Declared model-call allocation exhausted; no further inference dispatched."
+        }
+      ],
+      "status": "exhausted"
+    },
+    "visible_claims": [],
+    "wallet": "isolated eligibility fixture",
+    "workflow_run": "45547873631"
+  },
+  "same_exact_export_after_connector_restart": true,
+  "science_verdict": "No independently accepted strategic result. Installed local execution constructed development artifacts and exhausted the declared budget. The independent specialist fit was a separate assisted experiment.",
+  "selected_events_utc": [
+    "2026-11-25T04:59:36.273195+00:00",
+    "2026-11-25T05:00:29.056333+00:00",
+    "2026-11-25T05:00:29.122537+00:00",
+    "2026-11-25T05:01:11.168956+00:00",
+    "2026-11-25T05:01:11.224466+00:00",
+    "2026-11-25T05:01:45.400825+00:00",
+    "2026-11-25T05:01:45.464125+00:00"
+  ],
+  "start": {
+    "ambition": "Build frontier AI LLM for Game Theory.",
+    "base": "https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/frontier-omega-alpha/",
+    "checkpoint_sha256": "fad6184a0e72e071a8086ada2c3b85b04a81631c0933b09bb7c21b9700b5274f",
+    "discovery": [
+      {
+        "configured": false,
+        "engine": "llama-cpp",
+        "model": "qwen3-8b-q4_k_m"
+      }
+    ],
+    "executor_sha256": "2b3125ba64c28f3c1b0ffd9988b0e25106a3e996c5eb6d0c32659531bfc32ccf",
+    "export_sha256": "99dc3359c39890b576025ebad8b2c63fc311588835b9e52e18386f7440b9b913",
+    "language": "en",
+    "mode": "start",
+    "module_sha256": "bf38040798584f5834dd536a4fe40247a1a1b3cca2f2eb3c4d8d7c36ea8f1630",
+    "operations": [
+      "pair",
+      "intelligence-discover",
+      "intelligence-connect",
+      "submit",
+      "list",
+      "get",
+      "export"
+    ],
+    "release_revision": "f8b8f95b1ef10641a82d1b98f4b13e0b8cd5bb43",
+    "selection": {
+      "check": {
+        "at": "2026-11-25T04:59:36.243116+00:00",
+        "elapsed_ms": 5554,
+        "format": "json_schema",
+        "input_tokens": 35,
+        "output_tokens": 29
+      },
+      "mode": "hybrid",
+      "model": "qwen3-8b-q4_k_m",
+      "provider": "frontier-local-641ae16dc5810b8e3c02fba9297f06dca125d4a68a106d1b6c364b9f2cb0a5ab",
+      "ready": true
+    },
+    "setup": {
+      "automatic_return": true,
+      "exact_submit_count": 1,
+      "guide_one_use": true,
+      "reopened": true
+    },
+    "state": {
+      "actions": 10,
+      "files": [
+        "RUN_INSTRUMENT.py",
+        "game_data.csv",
+        "game_model.json",
+        "game_table.json"
+      ],
+      "id": "wf_fa273b0e465e7b7c61fd8407",
+      "model_calls": 3,
+      "phase": "builder",
+      "recorded_events": [
+        {
+          "kind": "created"
+        },
+        {
+          "kind": "model_queued"
+        },
+        {
+          "kind": "model_started"
+        },
+        {
+          "kind": "model_completed",
+          "usage": {
+            "input_tokens": 797,
+            "output_tokens": 362
+          }
+        },
+        {
+          "kind": "route_proposed"
+        },
+        {
+          "kind": "tool_completed",
+          "tool": "construct_table"
+        },
+        {
+          "kind": "tool_completed",
+          "tool": "write_dataset"
+        },
+        {
+          "kind": "tool_completed",
+          "tool": "construct_instrument"
+        },
+        {
+          "kind": "tool_refused",
+          "reason": "sum/count needs one array.",
+          "tool": "run_instrument"
+        },
+        {
+          "kind": "verification"
+        },
+        {
+          "kind": "model_queued"
+        },
+        {
+          "kind": "model_started"
+        },
+        {
+          "kind": "model_completed",
+          "usage": {
+            "input_tokens": 1647,
+            "output_tokens": 261
+          }
+        },
+        {
+          "kind": "route_proposed"
+        },
+        {
+          "kind": "tool_completed",
+          "tool": "construct_table"
+        },
+        {
+          "kind": "tool_refused",
+          "reason": "TABLE_DATASET_AUTHORITY",
+          "tool": "run_table"
+        },
+        {
+          "kind": "tool_completed",
+          "tool": "construct_instrument"
+        },
+        {
+          "kind": "tool_completed",
+          "tool": "run_instrument"
+        },
+        {
+          "kind": "verification"
+        },
+        {
+          "kind": "model_queued"
+        },
+        {
+          "kind": "model_started"
+        },
+        {
+          "kind": "model_completed",
+          "usage": {
+            "input_tokens": 1687,
+            "output_tokens": 155
+          }
+        },
+        {
+          "kind": "route_proposed"
+        },
+        {
+          "kind": "tool_completed",
+          "tool": "write_dataset"
+        },
+        {
+          "kind": "tool_completed",
+          "tool": "construct_table"
+        },
+        {
+          "kind": "verification"
+        },
+        {
+          "kind": "stopped",
+          "reason": "Declared model-call allocation exhausted; no further inference dispatched."
+        }
+      ],
+      "status": "exhausted"
+    },
+    "visible_claims": [],
+    "wallet": "isolated eligibility fixture",
+    "workflow_run": "45547873631"
+  },
+  "workflow_run": "45547873631"
+}

@@ -1,0 +1,233 @@
+{
+  "authorized_input_manifest": {
+    "ambition": "Comparez la taille exacte des deux archives publiques de HARNESS, versions 1.0.0 et 1.1.0, et calculez de combien d’octets la version 1.1.0 est plus grande.",
+    "context": "Les deux longueurs proviennent des archives publiques vérifiées. Calculez la différence current_bytes moins previous_bytes avec le champ de sortie difference. Construisez difference_calculator.json en premier. Puis appelez run_instrument avec le même nom, input:{\"dataset\":\"release_sizes\"} et claim:{\"id\":\"archive_delta\",\"unit\":\"octets\",\"dimension\":\"file_size\"}. Utilisez le jeu autorisé sans copier les valeurs.",
+    "language": "fr",
+    "requirements": {
+      "evidence": {
+        "claims": [
+          {
+            "dataset": "release_sizes",
+            "dimension": "file_size",
+            "id": "archive_delta",
+            "locator": [
+              "output",
+              "difference"
+            ],
+            "reference": {
+              "source": "Separate os.stat size subtraction of two checked public archive files",
+              "value": "106251"
+            },
+            "required_fields": [
+              [
+                "previous_bytes"
+              ],
+              [
+                "current_bytes"
+              ]
+            ],
+            "requires": {
+              "new": "2b3125ba64c28f3c1b0ffd9988b0e25106a3e996c5eb6d0c32659531bfc32ccf",
+              "old": "0e2c15569abd9112565f25485fa75c225764de6190cbded4e83127865bf5b9e3",
+              "quantity": "archive_file_size"
+            },
+            "tool": "run_instrument",
+            "unit": "octets",
+            "version": "f8b8f95b1ef10641a82d1b98f4b13e0b8cd5bb43"
+          }
+        ],
+        "inputs": {
+          "release_sizes": {
+            "facts": {
+              "new": "2b3125ba64c28f3c1b0ffd9988b0e25106a3e996c5eb6d0c32659531bfc32ccf",
+              "old": "0e2c15569abd9112565f25485fa75c225764de6190cbded4e83127865bf5b9e3",
+              "quantity": "archive_file_size"
+            },
+            "kind": "values",
+            "origin": "VERIFIED_EXTERNAL_SOURCE",
+            "sha256": "f6a1ff2b0e7b5eca042931ffe36d6a1a96f5a02a34eff3ce368c57f3f030e05c",
+            "source": "Exact official Pages archives and release receipt",
+            "values": {
+              "current_bytes": 1122252,
+              "previous_bytes": 1016001
+            },
+            "version": "f8b8f95b1ef10641a82d1b98f4b13e0b8cd5bb43"
+          }
+        }
+      }
+    },
+    "schema": "frontier/local-mission-input-v1",
+    "tools": [
+      "construct_instrument",
+      "run_instrument"
+    ]
+  },
+  "classification": "Case quantity verified against an independent byte-count reference; whole mission awaits independent review.",
+  "observed": [
+    {
+      "claim_execution": {
+        "asserted_value": null,
+        "claim_contract_sha256": "9e7bbc0ac3ba8005ee0cec34fca272df738e8fd94ae841e1a40ca398bef9f2f6",
+        "claim_id": "archive_delta",
+        "input": {
+          "id": "release_sizes",
+          "kind": "values",
+          "origin": "VERIFIED_EXTERNAL_SOURCE",
+          "parents": {},
+          "sha256": "f6a1ff2b0e7b5eca042931ffe36d6a1a96f5a02a34eff3ce368c57f3f030e05c",
+          "source": "Exact official Pages archives and release receipt",
+          "version": "f8b8f95b1ef10641a82d1b98f4b13e0b8cd5bb43"
+        },
+        "lineage": [
+          {
+            "id": "release_sizes",
+            "kind": "values",
+            "origin": "VERIFIED_EXTERNAL_SOURCE",
+            "parents": {},
+            "sha256": "f6a1ff2b0e7b5eca042931ffe36d6a1a96f5a02a34eff3ce368c57f3f030e05c",
+            "source": "Exact official Pages archives and release receipt",
+            "version": "f8b8f95b1ef10641a82d1b98f4b13e0b8cd5bb43"
+          }
+        ],
+        "locator": [
+          "output",
+          "difference"
+        ],
+        "mission_id": "wf_2b4a3f938d0439a847b1ca7f",
+        "operation": {
+          "artifact": "difference_calculator.json",
+          "artifact_sha256": "848ba3f501b706579a05333d9cc023eba2554876d1f0582736c1b580662fb6d8",
+          "tool": "run_instrument",
+          "version_sha256": "46d43d4a017f1d32fcd9e05b32316a6fffac27e1a9572ab9ffbbf87338f00322"
+        },
+        "output_sha256": "5a3d079739485578e057a3babd0edbb3eac72e00c9f52f35135d9d90cab520da",
+        "result_artifact": null,
+        "revision_sha256": "917dfa6e312cddfb040bc151cb5d211f7d66eea154f5a606199c9b44cb3f5a09",
+        "schema": "frontier/mission-claim-execution/v1",
+        "sha256": "706a8d0c1b879a8a011bcf36d26155b48e230f2e1440058f409e66a1757e208e"
+      },
+      "input_origin": "VERIFIED_EXTERNAL_SOURCE",
+      "output": {
+        "difference": 106251
+      }
+    }
+  ],
+  "operation_sha256": null,
+  "receipt": {
+    "ambition": "Comparez la taille exacte des deux archives publiques de HARNESS, versions 1.0.0 et 1.1.0, et calculez de combien d’octets la version 1.1.0 est plus grande.",
+    "base": "https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/frontier-omega-alpha/",
+    "checkpoint_sha256": "0ca7b7c5ec92ff72a010ade4b266b1c96c20b73cf1c95d02ae19ad3833a754d1",
+    "discovery": [
+      {
+        "configured": false,
+        "engine": "llama-cpp",
+        "model": "qwen3-8b-q4_k_m"
+      }
+    ],
+    "executor_sha256": "2b3125ba64c28f3c1b0ffd9988b0e25106a3e996c5eb6d0c32659531bfc32ccf",
+    "export_sha256": "fbdcaf7352e463d05c56da34b56683d7661191be6348dc6bd7b64e50a491e759",
+    "language": "fr",
+    "mode": "start",
+    "module_sha256": "bf38040798584f5834dd536a4fe40247a1a1b3cca2f2eb3c4d8d7c36ea8f1630",
+    "operations": [
+      "pair",
+      "intelligence-discover",
+      "intelligence-connect",
+      "submit",
+      "list",
+      "get",
+      "export"
+    ],
+    "release_revision": "f8b8f95b1ef10641a82d1b98f4b13e0b8cd5bb43",
+    "selection": {
+      "check": {
+        "at": "2026-11-25T05:02:25.450726+00:00",
+        "elapsed_ms": 2240,
+        "format": "json_schema",
+        "input_tokens": 35,
+        "output_tokens": 29
+      },
+      "mode": "hybrid",
+      "model": "qwen3-8b-q4_k_m",
+      "provider": "frontier-local-641ae16dc5810b8e3c02fba9297f06dca125d4a68a106d1b6c364b9f2cb0a5ab",
+      "ready": true
+    },
+    "setup": {
+      "automatic_return": true,
+      "exact_submit_count": 1,
+      "guide_one_use": true,
+      "reopened": true
+    },
+    "state": {
+      "actions": 2,
+      "files": [
+        "RUN_INSTRUMENT.py",
+        "difference_calculator.json"
+      ],
+      "id": "wf_2b4a3f938d0439a847b1ca7f",
+      "model_calls": 1,
+      "phase": "builder",
+      "recorded_events": [
+        {
+          "kind": "created"
+        },
+        {
+          "kind": "model_queued"
+        },
+        {
+          "kind": "model_started"
+        },
+        {
+          "kind": "model_completed",
+          "usage": {
+            "input_tokens": 1254,
+            "output_tokens": 219
+          }
+        },
+        {
+          "kind": "route_proposed"
+        },
+        {
+          "kind": "tool_completed",
+          "tool": "construct_instrument"
+        },
+        {
+          "kind": "tool_completed",
+          "tool": "run_instrument"
+        },
+        {
+          "kind": "verification"
+        },
+        {
+          "kind": "claim_dispositions"
+        },
+        {
+          "kind": "awaiting_independent_evaluation"
+        }
+      ],
+      "status": "needs_review"
+    },
+    "visible_claims": [
+      "archive_delta · 106251 octets · Vérifié selon la référence déclarée"
+    ],
+    "wallet": "isolated eligibility fixture",
+    "workflow_run": "45547873631"
+  },
+  "reference": {
+    "archive_statistics": {
+      "1.0.0": {
+        "bytes": 1016001,
+        "sha256": "0e2c15569abd9112565f25485fa75c225764de6190cbded4e83127865bf5b9e3",
+        "source": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/commit/c0a14ba028092db648516718f9127ae8166df63e"
+      },
+      "1.1.0": {
+        "bytes": 1122252,
+        "sha256": "2b3125ba64c28f3c1b0ffd9988b0e25106a3e996c5eb6d0c32659531bfc32ccf",
+        "source": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/commit/f8b8f95b1ef10641a82d1b98f4b13e0b8cd5bb43"
+      }
+    },
+    "expected_delta_bytes": 106251,
+    "release_revision": "f8b8f95b1ef10641a82d1b98f4b13e0b8cd5bb43"
+  },
+  "scope": "Real Qwen3-8B on Linux CPU and mobile Chromium on live French Pages; isolated eligibility fixture and locally authorized input from verified public releases. The operator specified the claim binding fields after separate negative preview runs. This is targeted release acceptance, distinct from the blind study."
+}
