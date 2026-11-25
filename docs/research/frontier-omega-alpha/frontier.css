@@ -456,6 +456,27 @@ body:has(#member:not([hidden]):not([data-public-view])) #main > :not(#member) { 
 .mission-brief p, #mission-original { white-space: pre-wrap; overflow-wrap: anywhere; }
 .mission-brief p { max-height: 16rem; overflow-y: auto; }
 .mission-console :is(details, .mission-actions, .mission-secondary) { margin-top: .95rem; }
+.mission-files, .mission-follow-up { padding: .85rem 1rem; border: 1px solid #775979; border-radius: .45rem; }
+.mission-files { max-width: 68ch; margin-block: .95rem; }
+.mission-files > summary, #mission-dialogue > summary { cursor: pointer; color: #f4d8a5; }
+.mission-files input[type='file'] { display: block; width: 100%; margin-block: .45rem; color: var(--ink); }
+.mission-files .mv-check { align-items: center; }
+.mission-files p { margin-block: .35rem; }
+.mission-files ul, #mission-dialogue ol { padding-inline-start: 1.35rem; overflow-wrap: anywhere; }
+.mission-follow-up { display: grid; gap: .65rem; max-width: 68ch; }
+.mission-follow-up button { justify-self: start; }
+.mission-follow-up textarea { resize: vertical; }
+#mission-dialogue li { white-space: pre-wrap; }
+.mission-handoff { padding: clamp(.9rem, 2.5vw, 1.6rem); border: 1px solid #a07a62; border-radius: .45rem;
+  background: linear-gradient(150deg, #302039, #21172d 75%); }
+.mission-handoff > summary { font: 400 clamp(1.25rem, 3vw, 2rem)/1.15 var(--serif); color: #ffe1aa; cursor: pointer; }
+.mission-handoff > p { max-width: 75ch; margin-block: .75rem 1rem; }
+.mission-handoff-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 1rem; }
+.mission-handoff-grid textarea { display: block; margin-top: .5rem; }
+.mission-handoff-grid :is(label,summary) { color: #f4d8a5; }
+.mission-handoff-grid :is(.mv-actions,details) { margin-top: .4rem; }
+.mission-handoff-grid input[type='file'] { margin-top: .25rem; }
+@media (max-width: 680px) { .mission-handoff-grid { grid-template-columns: 1fr; } }
 .mission-console textarea, .mission-connection :is(select,input) {
   width: 100%; padding: .6rem; color: var(--ink); background: #190f23; border: 1px solid #9a80a5;
   border-radius: .35rem; font: inherit;
@@ -489,8 +510,8 @@ body:has(#member:not([hidden]):not([data-public-view])) #main > :not(#member) { 
 .intelligence-option h4, .intelligence-next h4 { color: #ffe1aa; margin: 0 0 .45rem; font-size: 1.1rem; }
 .intelligence-option p { color: #e5d6e9; margin: 0 0 .9rem; }
 .intelligence-option button { margin-top: auto; min-height: 44px; max-width: 100%; text-align: start; }
-.intelligence-browser { width: 100%; margin-top: .9rem; padding-top: .8rem; border-top: 1px solid #775979; }
 .intelligence-browser p:last-child { margin: .45rem 0 0; }
+.intelligence-hybrid-options { margin-block: .65rem; }
 .intelligence-next {
   margin-block: .95rem 1.2rem;
   padding: .95rem;
@@ -504,6 +525,16 @@ body:has(#member:not([hidden]):not([data-public-view])) #main > :not(#member) { 
 #execution-code-form input { width: min(100%,32rem); margin: .35rem .4rem .35rem 0; }
 #mission-import-artifact { display: block; max-width: 100%; color: var(--ink); }
 .mission-returned-files { padding-inline-start: 1.35rem; overflow-wrap: anywhere; }
+#mission-work-panel { scroll-margin-block-start: calc(var(--member-scroll-offset) + 1.25rem); }
+.mission-reading { color: var(--ink); max-width: 76ch; overflow-wrap: anywhere; line-height: 1.65; }
+.mission-reading p { white-space: pre-wrap; }
+.mission-reading p + p { margin-block-start: .65rem; }
+.mission-reading h5 { margin-block: 1.15rem .35rem; }
+.mission-reading ul, .mission-reading ol { padding-inline-start: 1.45rem; }
+.mission-reading .mission-table { max-width: 100%; overflow-x: auto; margin-block: .8rem; }
+.mission-reading table { width: 100%; border-collapse: collapse; }
+.mission-reading th, .mission-reading td { padding: .45rem .6rem; border: 1px solid #775979; text-align: start; }
+.mission-reading th { color: #ffe1aa; background: #23182f; }
 #intelligence-select-form { margin-block: .8rem; }
 #intelligence-select-form select { width: 100%; max-width: 36rem; }
 #intelligence-select-form label:has(input) { margin-block: .65rem; }

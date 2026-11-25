@@ -4,6 +4,9 @@ import {createMissionRequest, missionRouteRequest} from './frontier-mission-rout
 export const missionSchema = 'frontier/universal-mission-v1';
 export const maxAmbitionBytes = 24 * 1024;
 export const maxMissionBytes = 2 * 1024 * 1024;
+export const maxInstructionBytes = 2 * 1024;
+export const maxDocumentBytes = 96 * 1024;
+export const maxDocuments = 8;
 export const routes = Object.freeze([
   'direct', 'capability', 'composition', 'adaptation', 'research', 'invention', 'continuing', 'clarification',
 ]);
@@ -122,6 +125,31 @@ export function reviseMission(mission, ambition) {
     run: null, request: null, status: 'ready'}, at);
 }
 
+export function addMissionInstruction(mission, instruction) {
+  need(text(instruction, maxInstructionBytes), 'MISSION_INSTRUCTION');
+  const at = timestamp(mission.updatedAt);
+  const turns = [...(mission.turns ?? []), {revision: mission.revision, instruction, at}];
+  return update(continueMission(mission), {turns}, at);
+}
+
+function validDocuments(value) {
+  return Array.isArray(value) && value.length <= maxDocuments && Array.from(value).every(document =>
+    exact(document, ['name', 'text']) && text(document.name, 200) && !/[\\/:\r\n\t]/u.test(document.name)
+    && !['.', '..'].includes(document.name)
+    && text(document.text, maxDocumentBytes)) && new Set(value.map(document => document.name)).size === value.length
+    && value.reduce((total, document) => total + encoder.encode(document.text).length, 0) <= maxDocumentBytes;
+}
+
+export function checkMissionDocuments(documents) {
+  need(validDocuments(documents), 'MISSION_DOCUMENTS');
+  return documents;
+}
+
+export function setMissionDocuments(mission, documents) {
+  checkMissionDocuments(documents);
+  return update(mission, {documents: structuredClone(documents)});
+}
+
 function start(mission, {route = null, provider = null, model = null}, status) {
   if (mission.status === 'running' || mission.status === 'canceled') return mission;
   need(validSelection(route, provider, model) && (status === 'waiting' || provider !== null), 'MISSION_ROUTE');
@@ -198,7 +226,8 @@ export function missionPacket(mission) {
   // Configuration credentials and execution permissions are outside this projection.
   return freeze({schema: 'frontier/universal-mission-packet-v1', missionId: mission.id, revision: mission.revision,
     runId: mission.run?.id ?? null, language: mission.language, originalAmbition: mission.originalAmbition,
-    ambition: mission.ambition, previousReport: mission.reports.at(-1) ?? null});
+    ambition: mission.ambition, previousReport: mission.reports.at(-1) ?? null,
+    instruction: mission.turns?.findLast(item => item.revision === mission.revision)?.instruction ?? null});
 }
 
 function sequence(mission, runId) {
@@ -208,8 +237,9 @@ function sequence(mission, runId) {
 }
 
 function checkMission(mission) {
-  need(exact(mission, ['schema', 'id', 'language', 'originalAmbition', 'ambition', 'revision', 'revisions',
-    'status', 'runSequence', 'run', 'request', 'reports', 'incidents', 'createdAt', 'updatedAt']));
+  const required = ['schema', 'id', 'language', 'originalAmbition', 'ambition', 'revision', 'revisions',
+    'status', 'runSequence', 'run', 'request', 'reports', 'incidents', 'createdAt', 'updatedAt'];
+  need(allowedKeys(mission, [...required, 'turns', 'documents']) && required.every(key => Object.hasOwn(mission, key)));
   need(mission.schema === missionSchema && typeof mission.id === 'string' && uuid.test(mission.id)
     && ['en', 'fr'].includes(mission.language) && states.includes(mission.status)
     && instant(mission.createdAt) && instant(mission.updatedAt) && mission.createdAt <= mission.updatedAt
@@ -227,6 +257,16 @@ function checkMission(mission) {
     && revisions.at(-1).ambition === mission.ambition);
   const validTime = (revision, at) => integer(revision, 1) && revision <= mission.revision
     && instant(at) && at >= revisions[revision - 1].at && at <= mission.updatedAt;
+  if (Object.hasOwn(mission, 'turns')) {
+    need(Array.isArray(mission.turns));
+    let last = mission.createdAt;
+    for (const turn of mission.turns) {
+      need(exact(turn, ['revision', 'instruction', 'at']) && validTime(turn.revision, turn.at)
+        && turn.at >= last && text(turn.instruction, maxInstructionBytes));
+      last = turn.at;
+    }
+  }
+  if (Object.hasOwn(mission, 'documents')) need(validDocuments(mission.documents));
 
   need(Array.isArray(reports) && Array.isArray(incidents));
   let lastRun = 0;

@@ -1,3 +1,6 @@
+import {connectCompanion} from './frontier-companion-link.mjs';
+import {missionPacket} from './frontier-mission.mjs';
+
 const base = 'http://127.0.0.1:38463/api/frontier-missions/';
 const node = id => document.getElementById(id);
 const text = (id, value) => { if (node(id).textContent !== value) node(id).textContent = value; };
@@ -7,16 +10,31 @@ const approvalStates = new Set(['awaiting_consent','approval_required']);
 const localDevice = () => !(navigator.userAgentData?.mobile || /Android|iPad|iPhone|iPod/u.test(navigator.userAgent)
   || (navigator.maxTouchPoints > 1 && /Macintosh/u.test(navigator.userAgent)));
 
-function ambitionBody(mission, previous) {
+function download(blob, name) {
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = name;
+  link.click();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+function ambitionBody(mission, previous, {local = false} = {}) {
   const body = {ambition:mission.ambition,language:mission.language};
   if (previous) body.previous = previous;
   else if (mission.originalAmbition !== mission.ambition) body.original_ambition = mission.originalAmbition;
+  const {instruction} = missionPacket(mission);
+  if (instruction) body.instruction = instruction;
+  if (local && mission.documents) body.documents = mission.documents;
   return body;
 }
 
 function checkAmbition(result, mission, id = result.id) {
+  const {instruction} = missionPacket(mission);
   if (result.id !== id || result.ambition !== mission.ambition || result.language !== mission.language
-      || result.original_ambition !== mission.originalAmbition) throw new Error('MISSION_BINDING');
+      || result.original_ambition !== mission.originalAmbition || (instruction && result.instruction !== instruction)) {
+    throw new Error('MISSION_BINDING');
+  }
 }
 const copy = {
   en: {
@@ -36,11 +54,24 @@ const copy = {
     savedModel: 'Reconnect to check your saved model before resuming.',
     configuredModel: 'Local model configured',
     memory: value => `${value} GiB of available memory`,
+    installed: value => `${value} GiB of installed memory`,
     storage: value => `${value} GiB of free workspace storage`,
     modelUnavailable: 'The selected model could not complete the connection check. Make sure it is loaded and try again.',
     settingsBusy: 'Finish checking the model before starting more work.',
     missionActive: 'Pause the active mission before changing models.',
-    companion: 'Open the desktop companion and enter its one-use code. You can return to this mission after pairing.',
+    companion: 'Connect the desktop companion to continue with this ambition.',
+    companionFallback: 'Open the companion, then try again or use a pairing code.',
+    approveCompanion: 'Approve the connection in your desktop companion.',
+    chooseFiles: 'Confirm which source files the private companion can use.',
+    changedSources: 'The sources changed after submission. Reconnect and reopen the saved run to check its status before sending new sources.',
+    localFiles: 'This mission has local source files. Remove them before preparing a provider request.',
+    fileUnavailable: 'The companion could not verify this file. Try downloading the run record.',
+    downloadFile: name => `Download ${name}`,
+    dimensions: {technical_correctness:'Technical correctness',semantic_correctness:'Answers the registered question',
+      objective_relevance:'Relevance to your ambition',frontier_advantage:'Advantage over alternatives'},
+    verdicts: {PROVEN:'Proven',PARTIAL:'Partial',EXPERIMENTAL:'Experimental','NOT TESTED':'Pending evaluation',NOT_TESTED:'Pending evaluation',
+      BLOCKED:'Blocked',FAIL:'Failed',ABSTAIN:'Insufficient evidence'},
+    criteria: {milestone:'Milestone',beneficiary:'Who benefits',deliverable:'Deliverable',acceptance:'How to evaluate it',alternative:'Alternative',assumptions:'Assumptions'},
     desktopOnly: 'Continue on a desktop computer for local or provider setup, or use an assistant on this device.',
     staging: 'Saving the current ambition in the private companion for review…',
     nativeSetup: 'Choose or connect a provider in private setup. The companion will ask you to approve the exact mission and usage limits.',
@@ -54,7 +85,8 @@ const copy = {
     localReady: 'Your local model is ready for this mission.', hybridReady: 'Your local model is ready. Verified tools are preferred when they fit the mission.',
     evidenceStates: {VERIFIED:'Checked against the registered reference', SOURCE_BOUND:'Result from bound inputs, awaiting verification',
       UNVERIFIED:'Unverified', EXECUTED:'Executed', PROPOSED:'Proposed', REJECTED:'Rejected', ABSTAIN:'Evidence unavailable'},
-    origins: {AUTHORIZED_MISSION_INPUT:'Authorized mission input', OPERATOR_SUPPLIED_OBSERVATION:'Operator observation',
+    origins: {AUTHORIZED_MISSION_INPUT:'Authorized mission input', AUTHORIZED_MEMBER_DOCUMENT:'Authorized private source file',
+      OPERATOR_SUPPLIED_OBSERVATION:'Operator observation',
       OPERATOR_APPROVED_DATASET:'Approved dataset', VERIFIED_EXTERNAL_SOURCE:'Verified external source',
       OPERATOR_PINNED_SOURCE_CAPTURE:'Operator-approved source capture',
       MODEL_DEVELOPMENT_FIXTURE:'Generated development fixture', DEVELOPMENT_FIXTURE:'Development fixture',
@@ -65,6 +97,17 @@ const copy = {
       complete:'Completed within the registered checks',needs_review:'Awaiting independent evaluation',
       exhausted:'Authorized resources exhausted',revoked:'Authority revoked',expired:'Authority expired',failed:'Execution failed',
       awaiting_consent:'Waiting for provider approval',approval_required:'Provider approval required',superseded:'Replaced by a new revision'},
+    next: {ready:'The companion is preparing the run.', running:'Follow the work in Mission execution.',
+      paused:'Resume the saved run or add an instruction to change the approach.',
+      interrupted:'Review the run activity, then resume or add an instruction.',
+      awaiting_consent:'Review the mission and provider permission in the private companion.',
+      approval_required:'Review current provider permission to continue this mission.',
+      exhausted:'Review what was attempted and add an instruction for the next run.',
+      cancelled:'Open a new mission or add an instruction to start a new run.',
+      expired:'Review the expired permission and choose how to continue.',
+      revoked:'Choose an authorized model to continue.',
+      failed:'Review the run activity and choose how to continue.'},
+    nextReview: 'Review the evidence, work files and remaining checks below.',
     events: {created:'Mission recorded',model_started:'Model request sent',model_completed:'Model result received',
       remote_mission_approved:'Provider permission approved',authority_stopped:'Authority ended',
       tool_completed:'Tool operation recorded',tool_refused:'Tool refused',response_refused:'Model response refused',
@@ -88,11 +131,24 @@ const copy = {
     savedModel: 'Reconnectez le modèle enregistré pour le vérifier avant de reprendre.',
     configuredModel: 'Modèle local configuré',
     memory: value => `${value} Gio de mémoire disponible`,
+    installed: value => `${value} Gio de mémoire installée`,
     storage: value => `${value} Gio d’espace de travail libre`,
     modelUnavailable: 'Le modèle sélectionné n’a pas terminé la vérification. Assurez-vous qu’il est chargé et réessayez.',
     settingsBusy: 'Attendez la fin de la vérification du modèle avant de lancer un autre travail.',
     missionActive: 'Suspendez la mission en cours avant de changer de modèle.',
-    companion: 'Ouvrez le compagnon de bureau et saisissez son code à usage unique. Vous pourrez revenir à cette mission après le jumelage.',
+    companion: 'Jumelez le compagnon de bureau pour poursuivre cette ambition.',
+    companionFallback: 'Ouvrez le compagnon, puis réessayez ou utilisez un code de jumelage.',
+    approveCompanion: 'Approuvez le jumelage dans votre compagnon de bureau.',
+    chooseFiles: 'Confirmez les fichiers sources que le compagnon privé peut utiliser.',
+    changedSources: 'Les sources ont changé après l’envoi. Reconnectez le compagnon et rouvrez l’exécution sauvegardée pour vérifier son état avant de transmettre les nouvelles sources.',
+    localFiles: 'La mission contient des sources locales. Retirez-les avant de préparer une demande au fournisseur.',
+    fileUnavailable: 'Le compagnon n’a pas pu vérifier ce fichier. Essayez de télécharger le dossier d’exécution.',
+    downloadFile: name => `Télécharger ${name}`,
+    dimensions: {technical_correctness:'Exactitude technique',semantic_correctness:'Réponse à la question déclarée',
+      objective_relevance:'Pertinence pour votre ambition',frontier_advantage:'Avantage sur les autres options'},
+    verdicts: {PROVEN:'Démontré',PARTIAL:'Partiel',EXPERIMENTAL:'Expérimental','NOT TESTED':'À évaluer',NOT_TESTED:'À évaluer',
+      BLOCKED:'Bloqué',FAIL:'Échec',ABSTAIN:'Preuves insuffisantes'},
+    criteria: {milestone:'Étape',beneficiary:'Pour qui',deliverable:'Livrable',acceptance:'Comment l’évaluer',alternative:'Autre approche',assumptions:'Hypothèses'},
     desktopOnly: 'Poursuivez sur un ordinateur pour configurer un modèle local ou un fournisseur, ou utilisez un assistant sur cet appareil.',
     staging: 'Enregistrement de l’ambition dans le compagnon privé pour examen…',
     nativeSetup: 'Choisissez ou connectez un fournisseur dans la configuration privée. Vous devrez approuver la mission précise et ses limites d’utilisation.',
@@ -106,7 +162,8 @@ const copy = {
     localReady: 'Votre modèle local est prêt pour cette mission.', hybridReady: 'Votre modèle local est prêt. Les outils vérifiés sont privilégiés quand ils conviennent à la mission.',
     evidenceStates: {VERIFIED:'Vérifié selon la référence déclarée', SOURCE_BOUND:'Résultat issu des données liées, en attente de vérification',
       UNVERIFIED:'Non vérifié', EXECUTED:'Exécuté', PROPOSED:'Proposé', REJECTED:'Rejeté', ABSTAIN:'Preuves indisponibles'},
-    origins: {AUTHORIZED_MISSION_INPUT:'Données de mission autorisées', OPERATOR_SUPPLIED_OBSERVATION:'Observation de l’opérateur',
+    origins: {AUTHORIZED_MISSION_INPUT:'Données de mission autorisées', AUTHORIZED_MEMBER_DOCUMENT:'Fichier source privé autorisé',
+      OPERATOR_SUPPLIED_OBSERVATION:'Observation de l’opérateur',
       OPERATOR_APPROVED_DATASET:'Jeu de données approuvé', VERIFIED_EXTERNAL_SOURCE:'Source externe vérifiée',
       OPERATOR_PINNED_SOURCE_CAPTURE:'Source archivée et approuvée par l’opérateur',
       MODEL_DEVELOPMENT_FIXTURE:'Données d’essai générées', DEVELOPMENT_FIXTURE:'Données d’essai',
@@ -117,6 +174,17 @@ const copy = {
       complete:'Terminée selon les contrôles enregistrés',needs_review:'En attente d’une évaluation indépendante',
       exhausted:'Ressources autorisées épuisées',revoked:'Autorisation révoquée',expired:'Autorisation expirée',failed:'Échec de l’exécution',
       awaiting_consent:'En attente de l’approbation du fournisseur',approval_required:'Approbation du fournisseur requise',superseded:'Remplacée par une nouvelle révision'},
+    next: {ready:'Le compagnon prépare l’exécution.', running:'Suivez le travail dans la section Exécution de la mission.',
+      paused:'Reprenez l’exécution sauvegardée ou ajoutez une consigne pour changer d’approche.',
+      interrupted:'Consultez le journal, puis reprenez ou ajoutez une consigne.',
+      awaiting_consent:'Examinez la mission et l’autorisation du fournisseur dans le compagnon privé.',
+      approval_required:'Examinez l’autorisation du fournisseur pour poursuivre cette mission.',
+      exhausted:'Examinez les tentatives et ajoutez une consigne pour la prochaine exécution.',
+      cancelled:'Ouvrez une nouvelle mission ou ajoutez une consigne pour relancer le travail.',
+      expired:'Vérifiez l’autorisation expirée et choisissez comment poursuivre.',
+      revoked:'Choisissez un modèle autorisé pour poursuivre.',
+      failed:'Consultez le journal et choisissez comment poursuivre.'},
+    nextReview: 'Examinez ci-dessous les preuves, les fichiers et les contrôles restants.',
     events: {created:'Mission enregistrée',model_started:'Demande envoyée au modèle',model_completed:'Résultat du modèle reçu',
       remote_mission_approved:'Autorisation du fournisseur accordée',authority_stopped:'Autorisation terminée',
       tool_completed:'Opération de l’outil enregistrée',tool_refused:'Opération refusée',response_refused:'Réponse du modèle refusée',
@@ -125,15 +193,20 @@ const copy = {
   },
 };
 
-export function setupExecution(member, language, {onOpen, currentAmbition, currentMission, returnToMission, showSetup}) {
+export function setupExecution(member, language, {onOpen, currentAmbition, currentMission, returnToMission, showSetup,
+  localFilesConsent, filesAttached, updateSummary, onChooseRoute}) {
   const words = copy[language];
   const available = () => !member.hidden;
   let session, commandScope, view, pending, busyEpoch, serial = 0, timer;
   let queuedAmbition, ready = false, setupBusy = false;
   let selectedRoute, localSelection, nativeSetup, previousRun, viewMissionKey;
+  let pairingRequest;
   const desktop = localDevice();
   const pairingPanel = member.querySelector('.mission-execution-connection');
-  const status = message => text('execution-status', message);
+  const status = message => {
+    text('execution-status', message);
+    updateSummary();
+  };
   const missionKey = (mission = currentMission()) => mission ? `${mission.id}:${mission.revision}` : undefined;
 
   async function request(action, body = {}, command, authorizedSession = session, authorizedCommands = commandScope) {
@@ -153,6 +226,7 @@ export function setupExecution(member, language, {onOpen, currentAmbition, curre
     if (error.message === 'MISSION_FRESH_SCOPE') return words.freshScope;
     if (error.message === 'MISSION_INTELLIGENCE_REQUIRED') return words.chooseModel;
     if (error.message === 'MISSION_INTELLIGENCE_UNAVAILABLE') return words.nativeNotSaved;
+    if (error.message === 'MISSION_DOCUMENT_LOCAL_ONLY') return words.localFiles;
     if (error.message === 'MISSION_INTELLIGENCE_CONSENT') return words.nativeRequired;
     if (error.message === 'MISSION_INTELLIGENCE_BUSY') return words.settingsBusy;
     if (error.message === 'MISSION_ACTIVE') return words.missionActive;
@@ -164,6 +238,9 @@ export function setupExecution(member, language, {onOpen, currentAmbition, curre
 
   function updateControls() {
     node('execution-code-form').hidden = !desktop || Boolean(session);
+    node('execution-manual-code').hidden = !desktop || Boolean(session);
+    node('execution-connect-companion').hidden = !desktop || Boolean(session);
+    node('execution-connect-companion').disabled = Boolean(pairingRequest);
     node('execution-open-saved').disabled = !session;
     node('execution-recover').hidden = !session;
     node('execution-disconnect').hidden = !session;
@@ -253,6 +330,62 @@ export function setupExecution(member, language, {onOpen, currentAmbition, curre
     }));
   }
 
+  function renderQualification(result) {
+    const rows = Object.entries(words.dimensions);
+    const values = result?.qualification_dimensions;
+    node('execution-dimensions').hidden = !values;
+    node('execution-dimensions-list').replaceChildren(...(values ? rows.map(([key,label]) => {
+      const row = document.createElement('div');
+      const heading = document.createElement('dt');
+      const status = document.createElement('dd');
+      heading.textContent = label;
+      status.textContent = words.verdicts[values[key]] ?? words.verdicts.ABSTAIN;
+      row.append(heading,status);
+      return row;
+    }) : []));
+    const contract = result?.proposed_contract;
+    node('execution-proposed-contract').hidden = !contract;
+    node('execution-proposed-fields').replaceChildren(...(contract ? Object.entries(words.criteria).flatMap(([key,label]) => {
+      const value = contract[key];
+      if (!(typeof value === 'string' || Array.isArray(value)) || !value.length) return [];
+      const row = document.createElement('div');
+      const heading = document.createElement('dt');
+      const detail = document.createElement('dd');
+      heading.textContent = label;
+      detail.textContent = Array.isArray(value) ? value.join('\n') : value;
+      row.append(heading,detail);
+      return [row];
+    }) : []));
+    const sources = result?.documents ?? [];
+    node('execution-source-record').hidden = !sources.length;
+    node('execution-sources').replaceChildren(...sources.map(source => {
+      const row = document.createElement('li');
+      row.textContent = `${source.name} · SHA-256 ${source.sha256}`;
+      return row;
+    }));
+  }
+
+  async function downloadArtifact(result, artifact, button) {
+    const pairing = session;
+    button.disabled = true;
+    try {
+      const blob = await request('export', {id:result.id});
+      if (pairing !== session || view?.id !== result.id || !available()) return;
+      const body = JSON.parse(await blob.text());
+      const content = body.files?.[artifact.name];
+      if (typeof content !== 'string' || body.state?.id !== result.id) throw new Error('MISSION_ARTIFACT');
+      const bytes = new TextEncoder().encode(content);
+      const hash = new Uint8Array(await crypto.subtle.digest('SHA-256', bytes));
+      const digest = [...hash].map(value => value.toString(16).padStart(2,'0')).join('');
+      if (digest !== artifact.sha256) throw new Error('MISSION_ARTIFACT');
+      if (pairing === session && view?.id === result.id && available()) {
+        download(new Blob([bytes], {type:'application/octet-stream'}), artifact.name);
+      }
+    } catch {
+      if (pairing === session && view?.id === result.id && available()) text('execution-artifact-status', words.fileUnavailable);
+    } finally { button.disabled = false; }
+  }
+
   function follow(result, key = viewMissionKey ?? missionKey()) {
     view = result;
     viewMissionKey = key;
@@ -283,9 +416,20 @@ export function setupExecution(member, language, {onOpen, currentAmbition, curre
     text('execution-result-origin', (latest && words.origins[latest.input_origin]) || words.rawOutput);
     node('execution-preview').hidden = !latest;
     renderEvidence(result.evidence, result.outcome);
-    node('execution-artifacts').replaceChildren(...(result.artifacts ?? []).map(artifact => {
+    renderQualification(result);
+    const artifacts = result.artifacts ?? [];
+    node('execution-delivery').hidden = !artifacts.length;
+    node('execution-artifacts').replaceChildren(...artifacts.map(artifact => {
       const li = document.createElement('li');
-      li.textContent = artifact.name;
+      if (!result.worker_active && !activeStates.has(result.status) && /^[0-9a-f]{64}$/u.test(artifact.sha256 ?? '')
+        && /^[a-zA-Z0-9][a-zA-Z0-9._-]*\.(csv|json|md|txt)$/u.test(artifact.name ?? '')) {
+        const file = document.createElement('button');
+        file.type = 'button';
+        file.className = 'quiet';
+        file.textContent = words.downloadFile(artifact.name);
+        file.addEventListener('click', () => void downloadArtifact(result, artifact, file));
+        li.append(file);
+      } else li.textContent = artifact.name;
       return li;
     }));
     if (nativeSetup?.id === result.id) updateNativeSetup(result, nativeSetup);
@@ -346,6 +490,7 @@ export function setupExecution(member, language, {onOpen, currentAmbition, curre
 
   async function prepareNativeSetup() {
     const mission = currentMission();
+    if (mission && filesAttached()) { showRoute(words.localFiles); return; }
     if (!mission) {
       displayNativeLink(nativeLink());
       showRoute(words.nativeConfiguration);
@@ -439,28 +584,38 @@ export function setupExecution(member, language, {onOpen, currentAmbition, curre
     node('execution-preview').hidden = true;
     node('execution-approve').hidden = true;
     renderEvidence();
+    renderQualification();
+    node('execution-delivery').hidden = true;
+    text('execution-artifact-status', '');
     for (const id of ['execution-events','execution-artifacts']) node(id).replaceChildren();
     updateControls();
   }
 
-  async function activate(ambition) {
+  async function activate(ambition, {continuation = false} = {}) {
+    if (!available() || currentAmbition() !== ambition || nativeSetup) return;
+    onChooseRoute();
     const mission = currentMission();
-    if (!available() || !mission || mission.ambition !== ambition || nativeSetup) return;
+    if (!mission) return;
     const key = missionKey(mission);
-    if (view && viewMissionKey === key && view.status !== 'cancelled') return;
+    if (!continuation && view && viewMissionKey === key && view.status !== 'cancelled') return;
     if (selectedRoute === 'api') {
       showSetup();
       if (session) return prepareNativeSetup();
       if (desktop) { pairingPanel.open = true; showRoute(words.companion); }
       return;
     }
+    if (!localFilesConsent()) { showSetup(); showRoute(words.chooseFiles); return; }
     if (!session || !ready || setupBusy) {
-      queuedAmbition = {ambition,key};
+      queuedAmbition = {ambition,key,continuation};
       return;
     }
     const retry = pending?.key === key ? pending : undefined;
     const command = retry?.command ?? crypto.randomUUID();
-    const body = retry?.body ?? ambitionBody(mission, previousRun);
+    const body = ambitionBody(mission, previousRun, {local:true});
+    if (retry && JSON.stringify(retry.body) !== JSON.stringify(body)) {
+      status(words.changedSources);
+      return;
+    }
     const epoch = ++serial;
     clearTimeout(timer);
     pending = {ambition,body,command,key};
@@ -474,6 +629,9 @@ export function setupExecution(member, language, {onOpen, currentAmbition, curre
     node('execution-understanding').hidden = true;
     node('execution-preview').hidden = true;
     renderEvidence();
+    renderQualification();
+    node('execution-delivery').hidden = true;
+    text('execution-artifact-status','');
     for (const id of ['execution-events','execution-artifacts']) node(id).replaceChildren();
     status(words.starting);
     try {
@@ -488,7 +646,7 @@ export function setupExecution(member, language, {onOpen, currentAmbition, curre
         requirePairing(error);
         if (error.message === 'MISSION_INTELLIGENCE_REQUIRED') {
           ready = false;
-          queuedAmbition = {ambition,key};
+          queuedAmbition = {ambition,key,continuation};
           pending = undefined;
         }
         status(errorMessage(error));
@@ -510,10 +668,10 @@ export function setupExecution(member, language, {onOpen, currentAmbition, curre
 
   function startWaiting() {
     if (!ready || !queuedAmbition || queuedAmbition.key !== missionKey() || selectedRoute === 'api') return;
-    const {ambition} = queuedAmbition;
+    const {ambition,continuation} = queuedAmbition;
     queuedAmbition = undefined;
     returnToMission();
-    activate(ambition);
+    activate(ambition, {continuation});
   }
 
   async function intelligenceAction(action, body, {findAndCheck = false} = {}) {
@@ -535,8 +693,10 @@ export function setupExecution(member, language, {onOpen, currentAmbition, curre
         const formatGiB = bytes => Number.isFinite(bytes) && bytes >= 0
           ? new Intl.NumberFormat(language, {maximumFractionDigits: 1}).format(bytes / (1024 ** 3)) : null;
         const memory = formatGiB(host.available_memory_bytes);
+        const installed = formatGiB(host.physical_memory_bytes);
         const storage = formatGiB(host.available_workspace_bytes);
-        text('intelligence-device', [host.system, memory && words.memory(memory), storage && words.storage(storage)].filter(Boolean).join(' · '));
+        text('intelligence-device', [host.system, memory ? words.memory(memory) : installed && words.installed(installed),
+          storage && words.storage(storage)].filter(Boolean).join(' · '));
         node('intelligence-install').hidden = Boolean(choices.length);
         node('intelligence-choice').replaceChildren(...choices.map(choice => {
           const option = document.createElement('option');
@@ -592,8 +752,10 @@ export function setupExecution(member, language, {onOpen, currentAmbition, curre
 
   async function chooseIntelligence(route) {
     if (!available() || busyEpoch === serial) return;
+    if (route === 'api' && filesAttached()) { showSetup(); showRoute(words.localFiles); return; }
     if (route !== 'api' && nativeSetup && !await cancelPendingSetup()) return;
     if (!available()) return;
+    onChooseRoute();
     selectedRoute = route;
     displayNativeLink();
     showSetup();
@@ -604,7 +766,7 @@ export function setupExecution(member, language, {onOpen, currentAmbition, curre
     } else if (!session) {
       pairingPanel.open = true;
       showRoute(words.companion);
-      node('execution-code').focus();
+      node('execution-connect-companion').focus();
     } else if (route === 'api') {
       await prepareNativeSetup();
       if (available() && !node('my-intelligence').hidden) node('intelligence-next-title').focus();
@@ -643,17 +805,13 @@ export function setupExecution(member, language, {onOpen, currentAmbition, curre
       mode:node('intelligence-hybrid').checked ? 'hybrid' : 'local'});
   });
 
-  node('execution-code-form').addEventListener('submit', async event => {
-    event.preventDefault();
+  async function pair(body) {
     if (!available() || !desktop || session) return;
-    const input = node('execution-code');
-    const code = input.value.trim();
-    input.value = '';
     const epoch = ++serial;
     clearTimeout(timer);
     text('execution-connection', words.pairing);
     try {
-      const result = await request('pair', {code});
+      const result = await request('pair', body);
       if (epoch !== serial || !available()) {
         request('release', {}, undefined, result.session).catch(() => {});
         return;
@@ -677,7 +835,35 @@ export function setupExecution(member, language, {onOpen, currentAmbition, curre
       else if (selectedRoute === 'local' || selectedRoute === 'hybrid') await findLocalIntelligence();
       else startWaiting();
     } catch (error) {
-      if (epoch === serial && available()) text('execution-connection', error.message === 'MISSION_PAIRING' ? words.pairInvalid : errorMessage(error));
+      if (epoch === serial && available()) text('execution-connection', body.code && error.message === 'MISSION_PAIRING' ? words.pairInvalid : errorMessage(error));
+    }
+  }
+  node('execution-code-form').addEventListener('submit', event => {
+    event.preventDefault();
+    const input = node('execution-code');
+    const code = input.value.trim();
+    input.value = '';
+    pairingRequest?.abort();
+    void pair({code});
+  });
+  node('execution-connect-companion').addEventListener('click', async () => {
+    if (!available() || !desktop || session || pairingRequest) return;
+    const controller = new AbortController();
+    pairingRequest = controller;
+    text('execution-connection', words.approveCompanion);
+    updateControls();
+    try {
+      const handoff = await connectCompanion(language, controller.signal);
+      if (controller.signal.aborted || !available() || session) return;
+      if (handoff) await pair(handoff);
+      if (!session && available() && !controller.signal.aborted) {
+        text('execution-connection', words.companionFallback);
+        node('execution-manual-code').open = true;
+        node('execution-code').focus();
+      }
+    } finally {
+      if (controller === pairingRequest) pairingRequest = undefined;
+      updateControls();
     }
   });
 
@@ -694,12 +880,7 @@ export function setupExecution(member, language, {onOpen, currentAmbition, curre
       const result = await request(action, {id:view.id}, action === 'export' ? undefined : crypto.randomUUID());
       if (epoch !== serial || !available()) return;
       if (action === 'export') {
-        const url = URL.createObjectURL(result);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = 'frontier-execution.json';
-        link.click();
-        setTimeout(() => URL.revokeObjectURL(url), 1000);
+        download(result, 'frontier-execution.json');
       } else follow(result);
     } catch (error) {
       if (epoch === serial && available()) { requirePairing(error); status(errorMessage(error)); }
@@ -773,6 +954,8 @@ export function setupExecution(member, language, {onOpen, currentAmbition, curre
   });
 
   function sealSession() {
+    pairingRequest?.abort();
+    pairingRequest = undefined;
     if (session) request('release').catch(() => {});
     session = commandScope = undefined;
     ready = false;
@@ -791,8 +974,40 @@ export function setupExecution(member, language, {onOpen, currentAmbition, curre
   window.addEventListener('frontier:member-lock', sealSession);
   window.addEventListener('pagehide', sealSession);
   updateControls();
+  async function pauseActive(action = 'pause') {
+    if (pending || busyEpoch === serial) return false;
+    const activeView = view?.worker_active || activeStates.has(view?.status);
+    if (!activeView && !(action === 'cancel' && resumable.has(view?.status))) return true;
+    if (!session || !available() || !view?.id) return false;
+    const epoch = ++serial;
+    busyEpoch = epoch;
+    clearTimeout(timer);
+    updateControls();
+    try {
+      const next = await request(action, {id:view.id}, crypto.randomUUID());
+      if (serial !== epoch || !available()) return false;
+      follow(next);
+      return !next.worker_active && !activeStates.has(next.status);
+    } catch (error) {
+      if (serial === epoch && available()) { requirePairing(error); status(errorMessage(error)); }
+      return false;
+    } finally {
+      if (busyEpoch === epoch) { busyEpoch = undefined; updateControls(); }
+    }
+  }
   return {activate, clearView, updateControls, cancelPendingSetup,
+    pauseActive,
+    summary() {
+      const key = missionKey();
+      if (!key) return;
+      if (view && viewMissionKey === key) return {status:node('execution-status').textContent,
+        nextAction:words.next[view.status] ?? words.nextReview};
+      if (pending?.key === key) return {status:node('execution-status').textContent,
+        nextAction:words.next.ready};
+    },
+    hasPreferredRoute: () => selectedRoute === 'api' || Boolean(session && ready),
     hasPendingSetup: () => Boolean(nativeSetup),
-    hasActiveWork: () => Boolean(pending || view?.worker_active || activeStates.has(view?.status)),
+    hasActiveWork: (action = 'pause') => Boolean(pending || view?.worker_active || activeStates.has(view?.status)
+      || (action === 'cancel' && resumable.has(view?.status))),
     clearWaiting() { queuedAmbition = selectedRoute = undefined; }};
 }

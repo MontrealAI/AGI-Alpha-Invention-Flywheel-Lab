@@ -10,6 +10,8 @@ import threading
 from urllib.parse import urlsplit
 
 from .adapters import BridgeError
+from . import mission_documents
+from .universal_missions import INSTRUCTION_LIMIT, text_field
 from .workflows import RUN, digest, encoded
 
 
@@ -23,6 +25,7 @@ OPERATIONS = INTELLIGENCE | {"pair", "submit", "get", "list", "pause", "resume",
 COMMANDS = frozenset({"submit", "pause", "resume", "cancel", "disconnect", PREPARE})
 COMMAND_ID = re.compile(r"[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}\Z")
 TOKEN = re.compile(r"[A-Za-z0-9_-]{43}\Z")
+PAIR_PROOF = re.compile(r"[0-9a-f]{64}\Z")
 ALLOWED_HEADERS = frozenset({"content-type", "x-frontier-session", "x-frontier-command"})
 DRAFT_FORMAT = "frontier-paired-mission-draft/v1"
 
@@ -79,6 +82,7 @@ class PagesMissions:
         self._session = None
         self._command_scope = None
         self._code = None
+        self._pairing_approval = None
         self._commands = {}
         self._setup_tickets = {}
         self._mission_tickets = {}
@@ -88,6 +92,32 @@ class PagesMissions:
         code = secrets.token_urlsafe(32)
         self._code = hashlib.sha256(code.encode()).digest()
         self.announce(code)
+
+    def approve_connection(self, body):
+        """Issue a short-lived native approval bound to the requesting tab's proof."""
+        proof = body.get("proof_sha256")
+        check(set(body) == {"proof_sha256", "consent"} and body["consent"] is True
+              and isinstance(proof, str) and PAIR_PROOF.fullmatch(proof), "MISSION_PAIRING", 403)
+        with self._lock:
+            now = self.clock()
+            check(now < self.expires, "MISSION_LEASE_EXPIRED", 403)
+            grant = secrets.token_urlsafe(32)
+            self._pairing_approval = (hashlib.sha256(grant.encode()).digest(), proof,
+                                      min(self.expires, now + timedelta(minutes=1)))
+            return {"approval": grant}
+
+    def _check_pairing(self, body):
+        if set(body) == {"code"}:
+            self._verify(body["code"], self._code, "MISSION_PAIRING")
+        else:
+            check(set(body) == {"approval", "proof"}, "MISSION_INPUT")
+            entry = self._pairing_approval
+            proof = body["proof"]
+            check(entry is not None and self.clock() < entry[2] and isinstance(proof, str)
+                  and PAIR_PROOF.fullmatch(proof)
+                  and hmac.compare_digest(hashlib.sha256(proof.encode()).hexdigest(), entry[1]), "MISSION_PAIRING", 403)
+            self._verify(body["approval"], entry[0], "MISSION_PAIRING")
+        self._pairing_approval = None
 
     def _verify(self, provided, expected, reason):
         check(isinstance(provided, str) and TOKEN.fullmatch(provided) and expected is not None
@@ -258,6 +288,9 @@ class PagesMissions:
         return {"id": state["id"], "ambition": state["objective"], "language": state.get("language", "en"),
                 "original_ambition": state.get("original_ambition", state["objective"]),
                 "parent_run_id": state.get("parent_run_id"),
+                "instruction": state.get("instruction", ""), "documents": state.get("documents", []),
+                "proposed_contract": state.get("proposed_contract"),
+                "qualification_dimensions": state.get("qualification_dimensions"),
                 "status": state["status"], "phase": state.get("phase"), "worker_active": state.get("worker_active", False),
                 "expires_at": state.get("expires_at"), "qualification": state.get("qualification"),
                 "verification": {"passed": verification.get("passed", False), "scope": verification.get("scope")},
@@ -267,7 +300,7 @@ class PagesMissions:
 
     def _mission_spec(self, ambition, language):
         spec = {"ambition": ambition, "language": language, **self._scope(require_ready=True),
-                "expires_at": self.expires.isoformat()}
+                "expires_at": self.expires.isoformat(), "member_workspace": True}
         manifest = self.evidence_input
         if manifest and manifest["ambition"] == ambition and manifest["language"] == language:
             spec.update({key: manifest[key] for key in ("requirements", "context", "tools") if key in manifest})
@@ -280,13 +313,20 @@ class PagesMissions:
         return spec
 
     def _ambition(self, body, command):
-        check(set(body) in ({"ambition", "language"}, {"ambition", "language", "previous"},
-                            {"ambition", "language", "original_ambition"}), "MISSION_INPUT")
+        required = {"ambition", "language"}
+        fields = set(body)
+        check(required <= fields <= required | {"previous", "original_ambition", "instruction", "documents"}
+              and not {"previous", "original_ambition"} <= fields, "MISSION_INPUT")
         for key in ("ambition", "original_ambition"):
             if key in body:
                 ambition = body[key]
                 check(isinstance(ambition, str) and ambition.strip() and len(ambition.encode()) <= 24 * 1024,
                       "MISSION_AMBITION")
+        if "instruction" in body:
+            instruction = body["instruction"]
+            check(text_field(instruction, INSTRUCTION_LIMIT) and instruction.strip(), "MISSION_INSTRUCTION")
+        if "documents" in body:
+            mission_documents.validate(body["documents"])
         check(body["language"] in ("en", "fr"), "MISSION_LANGUAGE")
         ident = "wf_" + hashlib.sha256(("frontier-pages-mission-v1:" + command).encode()).hexdigest()[:24]
         if "previous" in body:
@@ -294,19 +334,31 @@ class PagesMissions:
             check(isinstance(previous, str) and RUN.fullmatch(previous) and previous != ident, "MISSION_INPUT")
         return ident
 
+    def _replace(self, ident):
+        if self.remote and self.service.stage_record(ident):
+            self.service.supersede_stage(ident)
+            self._remove_ticket(ident)
+        else:
+            self.service.cancel(ident)
+
     def _submit(self, body, command):
         ident = self._ambition(body, command)
         check(not self.remote or not self.service.stage_record(ident), "MISSION_IDENTITY_CONFLICT", 409)
         spec = self._mission_spec(body["ambition"], body["language"])
+        spec.update({key: body[key] for key in ("instruction", "documents") if key in body})
+        if self.remote:
+            texts = [body.get("instruction", "")]
+            for document in body.get("documents", []):
+                texts.extend((document["name"], document["text"]))
+            self.service.check_member_text(*texts)
         previous = body.get("previous")
         if previous:
             staging = self.service.stage_record(previous) if self.remote else None
-            if staging:
+            if staging and not self.service.has_execution(previous):
                 view = self.service.revise_from_stage(staging, spec, ident)
-                self.service.supersede_stage(previous)
-                self._remove_ticket(previous)
             else:
                 view = self.service.revise(previous, spec, identity=ident)
+            self._replace(previous)
         elif "original_ambition" in body:
             view = self.service.submit(spec, identity=ident, original_ambition=body["original_ambition"])
         else:
@@ -317,10 +369,11 @@ class PagesMissions:
 
     def _prepare(self, body, command):
         check(self.remote, "MISSION_INTELLIGENCE_UNAVAILABLE", 404)
+        check("documents" not in body, "MISSION_DOCUMENT_LOCAL_ONLY", 403)
         ident = self._ambition(body, command)
         row = self.service.stage(ident, body)
         if body.get("previous"):
-            self._remove_ticket(body["previous"])
+            self._replace(body["previous"])
         return self._stage_response(row, issue=True)
 
     def _get(self, ident, issue=False):
@@ -369,6 +422,8 @@ class PagesMissions:
             draft = archive.get("mission")
             check(isinstance(draft, dict) and {"ambition", "language", "original_ambition"} <= set(draft), "MISSION_INPUT")
             body = {key: draft[key] for key in ("ambition", "language", "original_ambition")}
+            if draft.get("instruction"):
+                body["instruction"] = draft["instruction"]
             ident = self._ambition(body, secrets.token_hex(16))
             return self._stage_response(self.service.stage(ident, body))
         check(isinstance(archive, dict) and isinstance(archive.get("state"), dict), "MISSION_INPUT")
@@ -383,8 +438,7 @@ class PagesMissions:
         with self._lock:
             check(self.clock() < self.expires, "MISSION_LEASE_EXPIRED", 403)
             if operation == "pair":
-                check(set(body) == {"code"}, "MISSION_INPUT")
-                self._verify(body["code"], self._code, "MISSION_PAIRING")
+                self._check_pairing(body)
                 token = secrets.token_urlsafe(32)
                 self._session = hashlib.sha256(token.encode()).digest()
                 self._command_scope = secrets.token_hex(12)
@@ -398,6 +452,7 @@ class PagesMissions:
             if operation == "release":
                 check(not body, "MISSION_INPUT")
                 self._session = self._command_scope = None
+                self._pairing_approval = None
                 self._clear_tickets()
                 return {"released": True}
             if operation in COMMANDS:
@@ -422,6 +477,7 @@ class PagesMissions:
             elif operation == "disconnect":
                 check(not body, "MISSION_INPUT")
                 self._session = self._command_scope = None
+                self._pairing_approval = None
                 self._clear_tickets()
                 for row in self.service.list()["runs"]:
                     if row["status"] == "running" or row.get("worker_active"):

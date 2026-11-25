@@ -1,4 +1,5 @@
 import http.client
+import hashlib
 import json
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -145,6 +146,66 @@ class PagesMissionTests(unittest.TestCase):
         self.assertEqual(status, 200)
         self.command_scope = result["command_scope"]
         return result["session"]
+
+    def test_native_pairing_needs_private_consent_and_redeems_only_for_its_tab(self):
+        path = "/api/frontier-intelligence/pair-approve"
+        proof = "1" * 64
+        body = {"proof_sha256": hashlib.sha256(proof.encode()).hexdigest(), "consent": True}
+        native = {"X-Harness-Token": self.server.token}
+        self.assertEqual(self.send(path, body, origin=None)[0], 403)
+        self.assertEqual(self.send(path, body, other=native)[0], 403)
+        self.assertEqual(self.send("pair-approve", body)[0], 403)
+        self.assertEqual(self.send(path, {**body, "consent": False}, origin=None, other=native)[0], 403)
+        old_manual = self.codes[-1]
+        approved = self.send(path, body, origin=None, other=native)
+        self.assertEqual(approved[0], 200)
+        grant = approved[2]["approval"]
+        self.assertNotEqual(grant, old_manual)
+        self.assertEqual(self.send("pair", {"approval": grant, "proof": "2" * 64})[0], 403)
+        self.assertEqual(self.send("pair", {"approval": grant, "proof": proof}, origin="https://unrelated.example")[0], 403)
+        self.assertEqual(self.send("list")[0], 403)
+        paired = self.send("pair", {"approval": grant, "proof": proof})
+        self.assertEqual(paired[0], 200)
+        self.assertEqual(self.service.starts, 0)
+        self.assertEqual(self.send("pair", {"approval": grant, "proof": proof})[0], 403)
+        self.assertEqual(self.send("pair", {"code": old_manual})[0], 403)
+        token = self.pair()
+        self.assertEqual(self.send("list", token=paired[2]["session"])[0], 403)
+        self.assertEqual(self.send("list", token=token)[0], 200)
+
+    def test_native_pairing_grant_expires_and_release_revokes_it(self):
+        token = self.pair()
+        path = "/api/frontier-intelligence/pair-approve"
+        proof = "3" * 64
+        body = {"proof_sha256": hashlib.sha256(proof.encode()).hexdigest(), "consent": True}
+        native = {"X-Harness-Token": self.server.token}
+        approved = self.send(path, body, origin=None, other=native)[2]["approval"]
+        self.now += timedelta(minutes=1)
+        self.assertEqual(self.send("pair", {"approval": approved, "proof": proof})[0], 403)
+        approved = self.send(path, body, origin=None, other=native)[2]["approval"]
+        self.assertEqual(self.send("release", token=token)[0], 200)
+        self.assertEqual(self.send("pair", {"approval": approved, "proof": proof})[0], 403)
+
+    def test_connection_page_allows_only_exact_top_level_navigation_from_pages(self):
+        navigation = {"Sec-Fetch-Site": "cross-site", "Sec-Fetch-Mode": "navigate", "Sec-Fetch-Dest": "document"}
+        for path, headers, expected in (
+            ("/frontier-connect?lang=fr", navigation, 200),
+            ("/frontier-connect?lang=fr", {**navigation, "Sec-Fetch-Dest": "iframe"}, 403),
+            ("/frontier-connect?lang=fr", {**navigation, "Origin": PAGES_ORIGIN}, 403),
+            ("/frontier-connect?lang=fr&approval=extra", navigation, 403),
+        ):
+            with self.subTest(path=path, headers=headers):
+                connection = http.client.HTTPConnection("127.0.0.1", self.server.server_port, timeout=3)
+                try:
+                    connection.request("GET", path, headers=headers)
+                    response = connection.getresponse()
+                    self.assertEqual(response.status, expected)
+                    if expected == 200:
+                        self.assertEqual(response.headers["X-Frame-Options"], "DENY")
+                        self.assertIn('Jumeler le compagnon FRONTIER Ω', response.read().decode())
+                        self.assertNotIn('Access-Control-Allow-Origin', response.headers)
+                finally:
+                    connection.close()
 
     def enable_discovery(self, *, evidence_input=None):
         profiles = Profiles()

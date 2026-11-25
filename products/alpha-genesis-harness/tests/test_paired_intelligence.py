@@ -1,6 +1,7 @@
 # SPDX-License-Identifier: Apache-2.0
 """Fixture transport tests for paired mission scope and native API execution."""
 import http.client
+import hashlib
 import json
 from pathlib import Path
 import sys
@@ -42,6 +43,7 @@ class PairedIntelligenceTests(unittest.TestCase):
         self.block = None
         self.block_after = 0
         self.proposal = PROPOSAL
+        self.local_reply = None
         self._launch()
         self.addCleanup(self._close)
 
@@ -73,7 +75,8 @@ class PairedIntelligenceTests(unittest.TestCase):
         if url == LOCAL_ENDPOINT + "/chat/completions":
             self.assertNotIn("Authorization", headers)
             self.local_calls.append(body)
-            return {"choices": [{"message": {"content": json.dumps(self.proposal)}}],
+            reply = self.local_reply(body) if self.local_reply else self.proposal
+            return {"choices": [{"message": {"content": json.dumps(reply)}}],
                     "usage": {"prompt_tokens": 43, "completion_tokens": 24}}
         self.assertTrue(url.startswith("https://api.openai.com/v1/"))
         self.assertEqual(headers["Authorization"], "Bearer " + SECRET)
@@ -360,6 +363,150 @@ class PairedIntelligenceTests(unittest.TestCase):
         self.wait_for_stop(successor["id"])
         self.assertEqual(self.mission_calls, [])
 
+    def test_document_lineage_and_follow_up_survive_restart_and_portable_import(self):
+        self._close()
+        self._launch(local=True)
+        ambition = "  Vérifier la relève d'un instrument de terrain.\n"
+        marker = "Verrou opérateur TX-731"
+        original = "\ufeff" + "a" * 476 + "🌌\n" + marker + "\r\n"
+        attachment = {"name": "preuve-source.txt", "text": original}
+        fields = {"milestone": "Diagnostiquer la présence d'un verrou de relève", "beneficiary": "Opérateur du capteur",
+                  "deliverable": "Note de relève traçable", "acceptance": "Relever le code exact du document",
+                  "alternative": "Vérification manuelle du registre d'exploitation", "assumptions": "Le fichier est fourni par l’opérateur"}
+
+        def interpret(body):
+            payload = json.loads(body["messages"][0]["content"].split("\nUNTRUSTED_MISSION_DATA\n", 1)[1])
+            snapshot = payload["authorized_local_documents"][0]
+            self.assertNotIn(marker, snapshot["first_excerpt"]["text"])
+            self.assertEqual(snapshot["first_excerpt"]["next_offset"], 479)
+            if not payload["latest_tool_results"]:
+                return {"summary": "Examiner la provenance, puis confirmer le code.", "done": False, "actions": [
+                    {"tool": "propose_outcome", "name": "outcome.json", **fields},
+                    {"tool": "read_mission_document", "name": "source.json", "document": 1, "offset": 479}]}
+            excerpt = payload["latest_tool_results"][-1]["untrusted_source_excerpt"]
+            self.assertEqual(excerpt["text"], "🌌\n" + marker + "\r\n")
+            return {"summary": "Le registre de relève contient le code exact.", "done": True, "actions": [
+                {"tool": "write_document", "name": "note.md", "content": "Source : " + excerpt["name"] + "\n" + marker}]}
+
+        self.local_reply = interpret
+        body = {"ambition": ambition, "language": "fr", "documents": [attachment]}
+        opened = self.expect(self.paired("submit", body, command=True))
+        result = self.wait_for_stop(opened["id"])
+        self.assertEqual((result["status"], result["model_calls"], result["actions"]), ("needs_review", 2, 3))
+        document = {"id": 1, "name": attachment["name"], "sha256": hashlib.sha256(original.encode()).hexdigest(),
+                    "bytes": len(original.encode())}
+        self.assertEqual(result["documents"], [document])
+        self.assertEqual(result["proposed_contract"], fields)
+        self.assertEqual(result["qualification_dimensions"], dict.fromkeys(("technical_correctness", "semantic_correctness",
+                                                                             "objective_relevance", "frontier_advantage"), "NOT_TESTED"))
+        self.assertEqual(result["outcome"]["independent_acceptance"], "NOT_ESTABLISHED")
+        self.assertNotIn(original, json.dumps(result))
+        self.assertEqual(self.server.pages_missions.service.export(result["id"])["files"]["note.md"],
+                         "Source : preuve-source.txt\n" + marker)
+
+        self._close()
+        self._launch(local=True)
+        receipt = self.expect(self.paired("get", {"id": result["id"]}))
+        self.assertEqual(receipt["documents"], [document])
+        instruction = "  Réutilisez le code dans une fiche courte.\n"
+
+        def continue_work(body):
+            payload = json.loads(body["messages"][0]["content"].split("\nUNTRUSTED_MISSION_DATA\n", 1)[1])
+            self.assertEqual(payload["member_follow_up"], instruction)
+            self.assertEqual(payload["authorized_local_documents"][0]["sha256"], document["sha256"])
+            evidence = payload["previous_local_work"]
+            self.assertEqual(evidence["status_at_continuation"], "needs_review")
+            self.assertIn(marker, evidence["artifacts"][0]["excerpt"])
+            return {"summary": "Fiche courte construite.", "done": True, "actions": [
+                {"tool": "write_document", "name": "fiche.md", "content": marker}]}
+
+        self.local_reply = continue_work
+        next_body = {"ambition": ambition, "language": "fr", "instruction": instruction, "previous": result["id"]}
+        successor = self.expect(self.paired("submit", next_body, command=True))
+        receipt = self.wait_for_stop(successor["id"])
+        self.assertEqual((receipt["original_ambition"], receipt["parent_run_id"], receipt["instruction"]),
+                         (ambition, result["id"], instruction))
+        snapshot = self.expect(self.paired("export", {"id": successor["id"]}))
+        self.assertEqual(snapshot["state"]["spec"]["mission"]["documents"], [attachment])
+        self.assertEqual(snapshot["files"], {"fiche.md": marker})
+        restored = self.server.pages_missions.import_local(snapshot)
+        self.assertEqual((restored["instruction"], restored["documents"], restored["original_ambition"]),
+                         (instruction, [document], ambition))
+        self.assertEqual(restored["qualification_dimensions"]["objective_relevance"], "NOT_TESTED")
+
+    def test_provider_follow_up_needs_native_review_and_does_not_inherit_local_documents(self):
+        self._close()
+        self._launch(local=True)
+        document = {"name": "propriete.txt", "text": "PRIVATE-ORIGINAL-ONLY"}
+        body = {"ambition": AMBITION, "language": "en"}
+        self.expect(self.paired("prepare-intelligence", {**body, "documents": [document]}, command=True),
+                    403, "MISSION_DOCUMENT_LOCAL_ONLY")
+        self.expect(self.paired("submit", {**body, "documents": [{"name": "../forbidden.txt", "text": "data"}]}, command=True),
+                    400, "MISSION_DOCUMENT_INPUT")
+        self.expect(self.paired("submit", {**body, "documents": [{"name": "large.txt", "text": "x" * 98305}]}, command=True),
+                    400, "MISSION_DOCUMENT_LIMIT")
+        first = self.expect(self.paired("submit", {**body, "documents": [document]}, command=True))
+        self.assertEqual(self.wait_for_stop(first["id"])["status"], "needs_review")
+        instruction = "  Check the strongest applicable alternative.\n"
+        body = {**body, "instruction": instruction, "previous": first["id"]}
+        staged = self.expect(self.paired("prepare-intelligence", body, command=True))
+        self.assertEqual((staged["instruction"], staged["documents"], staged["model_calls"]), (instruction, [], 0))
+        self.assertEqual(self.mission_calls, [])
+        review = self.expect(self.native("mission-review", {"ticket": staged["setup_ticket"], "profile": self.profile()}))
+        self.assertEqual(review["instruction"], instruction)
+        self.expect(self.native("mission-authorize", {"ticket": staged["setup_ticket"], "revision": review["revision"],
+                                                     "profile": review["profile"]["id"], "consent": True}))
+        self.assertEqual(self.wait_for_stop(staged["id"])["status"], "needs_review")
+        self.assertEqual(len(self.mission_calls), 1)
+        prompt = self.mission_calls[0]["input"][0]["content"]
+        payload = json.loads(prompt.split("\nUNTRUSTED_MISSION_DATA\n", 1)[1])
+        self.assertEqual(payload["member_follow_up"], instruction)
+        self.assertNotIn("previous_local_work", payload)
+        self.assertNotIn("authorized_local_documents", payload)
+        self.assertNotIn(document["text"], prompt)
+
+    def test_late_local_result_cannot_modify_superseded_mission(self):
+        self._close()
+        self._launch(local=True)
+        entered, release = Event(), Event()
+        self.addCleanup(release.set)
+
+        def delayed(body):
+            if len(self.local_calls) == 1:
+                entered.set()
+                self.assertTrue(release.wait(4))
+                return {"summary": "Old work arrived late", "done": True, "actions": [
+                    {"tool": "write_document", "name": "old-work.md", "content": "Canceled result"}]}
+            return {"summary": "The new route ran", "done": True, "actions": [
+                {"tool": "write_document", "name": "new-work.md", "content": "Current authorized result"}]}
+
+        self.local_reply = delayed
+        body = {"ambition": AMBITION, "language": "en"}
+        prior = self.expect(self.paired("submit", body, command=True))
+        self.assertTrue(entered.wait(3))
+        successor = self.expect(self.paired("submit", {**body, "previous": prior["id"], "instruction": "Try an independent approach."}, command=True))
+        release.set()
+        latest = self.wait_for_stop(successor["id"])
+        old = self.wait_for_stop(prior["id"])
+        self.assertEqual((old["status"], old["artifacts"], old["actions"]), ("cancelled", [], 0))
+        self.assertEqual([item["name"] for item in latest["artifacts"]], ["new-work.md"])
+        self.assertEqual(latest["parent_run_id"], prior["id"])
+
+    def test_superseding_active_provider_run_does_not_reuse_its_permission(self):
+        profile = self.profile()
+        first = self.prepare()
+        self.block = Event()
+        self.expect(self.native("mission-authorize", self.checked_review(first, profile)))
+        self.assertTrue(self.mission_started.wait(3))
+        revised = self.expect(self.paired("prepare-intelligence", {"ambition": AMBITION, "language": "en",
+            "previous": first["id"], "instruction": "Continue with the revised evidence requirement."}, command=True))
+        self.assertEqual(revised["status"], "awaiting_consent")
+        self.block.set()
+        old = self.wait_for_stop(first["id"])
+        self.assertEqual((old["status"], old["actions"], old["artifacts"]), ("superseded", 0, []))
+        successor = self.expect(self.paired("get", {"id": revised["id"]}))
+        self.assertEqual((successor["status"], successor["model_calls"], len(self.mission_calls)), ("awaiting_consent", 0, 1))
+
     def test_both_ambitions_are_independently_bounded_and_previous_cannot_be_overridden(self):
         maximal = "é" * (12 * 1024)
         body = {"ambition": maximal, "language": "fr", "original_ambition": maximal + " "}
@@ -372,10 +519,14 @@ class PairedIntelligenceTests(unittest.TestCase):
                             400, "MISSION_AMBITION")
                 self.expect(self.paired(operation, {**body, "original_ambition": "Override", "previous": "wf_" + "a" * 24},
                                         command=True), 400, "MISSION_INPUT")
-        pending = self.expect(self.paired("prepare-intelligence", {**body, "original_ambition": "à" + maximal[1:]},
-                                          command=True))
+        body["original_ambition"] = "à" + maximal[1:]
+        instruction = "é" * 1024
+        self.expect(self.paired("prepare-intelligence", {**body, "instruction": instruction + "x"}, command=True),
+                    400, "MISSION_INSTRUCTION")
+        pending = self.expect(self.paired("prepare-intelligence", {**body, "instruction": instruction}, command=True))
         self.assertEqual(pending["ambition"], maximal)
         self.assertEqual(len(pending["original_ambition"].encode()), 24 * 1024)
+        self.assertEqual(pending["instruction"], instruction)
 
 
 if __name__ == "__main__":

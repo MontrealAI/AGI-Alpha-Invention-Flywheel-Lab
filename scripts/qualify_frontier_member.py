@@ -454,6 +454,9 @@ def qualify_mission_executor(directory, root, release):
     manifest = install(directory / member.EXECUTOR_ZIP, root, {'sha256': expected})
     require(manifest['id'] == 'frontier-harness-executor', 'Wrong local executor package')
     require(manifest['source'] == member.commit_url(release['source_commit']), 'Executor source binding changed')
+    runtime = root / 'runtime'
+    require((root / 'START-HERE.html').is_file() and (runtime / 'app/frontier-pairing.js').is_file(),
+            'Distributed companion entry and pairing are missing')
     script = '''
 import json, pathlib, sys
 sys.path.insert(0, str(pathlib.Path.cwd()))
@@ -481,11 +484,11 @@ print(json.dumps({'local': runtime.local_only, 'registered': len(describe()), 'v
                   'native_setup': callable(NativeIntelligenceService.verify), 'paired_setup': callable(PairedMissionService),
                   'profiles': IntelligenceProfiles.__name__, 'evidence': callable(assess_claims)}))
 '''
-    result, elapsed = call(root, sys.executable, '-I', '-S', '-c', script)
+    result, elapsed = call(runtime, sys.executable, '-I', '-S', '-c', script)
     require(result['local'] and result['registered'] >= 2 and result['value'] == 14 and result['evidence']
             and result['exact'] == '3/20' and result['outcome'] and result['schema'] and result['pinned_source']
-            and result['native_setup'] and result['paired_setup'] and (root / 'app/native-intelligence.js').is_file()
-            and all((root / name).is_file() for name in ('Launch-FRONTIER.sh', 'Launch-FRONTIER.command', 'Launch-FRONTIER.cmd')),
+            and result['native_setup'] and result['paired_setup'] and (runtime / 'app/native-intelligence.js').is_file()
+            and all((runtime / name).is_file() for name in ('Launch-FRONTIER.sh', 'Launch-FRONTIER.command', 'Launch-FRONTIER.cmd')),
             'Distributed executor entry points failed')
     return {'package_sha256': expected, 'replayed_ns': elapsed, **result}
 

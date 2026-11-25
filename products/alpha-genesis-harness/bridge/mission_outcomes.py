@@ -233,6 +233,15 @@ def _status(required, conclusions, unresolved, execution_status, authority):
     return "PENDING"
 
 
+def _qualification_dimensions(verification, status):
+    technical = "NOT_TESTED"
+    if verification.get("checks"):
+        technical = "PARTIAL" if verification.get("passed") else "FAIL"
+    semantic = {"VERIFIED": "PROVEN", "PARTIAL": "PARTIAL", "ABSTAIN": "ABSTAIN"}.get(status, "NOT_TESTED")
+    return {"technical_correctness": technical, "semantic_correctness": semantic,
+            "objective_relevance": "NOT_TESTED", "frontier_advantage": "NOT_TESTED"}
+
+
 def assemble_outcome(state, evidence, *, authority=None):
     """Project freshly assessed server evidence without reading any proposed prose."""
     spec, mission = state["spec"], state["spec"]["mission"]
@@ -251,4 +260,5 @@ def assemble_outcome(state, evidence, *, authority=None):
             "contract_sha256": digest(contract), "contract": contract, "language": language,
             "status": status, "message": MESSAGES[status][language_index], "conclusions": conclusions,
             "unresolved": unresolved, "quantitative_report_ready": status == "VERIFIED",
+            "qualification_dimensions": _qualification_dimensions(state.get("verification", {}), status),
             "independent_acceptance": "NOT_ESTABLISHED"}

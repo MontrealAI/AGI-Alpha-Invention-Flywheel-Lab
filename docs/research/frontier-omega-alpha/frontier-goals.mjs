@@ -178,13 +178,12 @@ export function setupGoals(member, runner, shell, mission) {
   const active = () => !member.hidden;
 
   function display(goal, prior, activate = false, execute = false) {
-    if (activate) {
-      status.textContent = '';
-      if (!mission.start(goal.text, {execute})) return;
-    }
     const [match] = rankOpportunities(records, goal);
     const record = match?.record;
-    if (activate) mission.setAtlas(record);
+    if (activate) {
+      status.textContent = '';
+      if (!mission.start(goal.text, {execute,atlasLead:record})) return;
+    }
     const pin = record ? {id: record.id, version: record.version, review: record.review} : null;
     const submitted = JSON.stringify(goal);
     if (lastGoal && lastGoal !== submitted) runner.clear();
