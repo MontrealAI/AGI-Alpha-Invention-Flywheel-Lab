@@ -11,7 +11,7 @@ from pathlib import Path
 import re
 import subprocess
 
-ASSETS = ("index.html", "app.js", "engine.js", "styles.css", "workshop.js")
+ASSETS = ("index.html", "app.js", "engine.js", "styles.css", "workshop.js", "native-intelligence.js")
 
 
 def main():

@@ -608,6 +608,7 @@ class ResearchSiteTests(unittest.TestCase):
              'frontier-omega-alpha/frontier-goals.mjs', 'frontier-omega-alpha/foundry-core.mjs',
              'frontier-omega-alpha/frontier-mission.mjs', 'frontier-omega-alpha/frontier-mission-router.mjs',
              'frontier-omega-alpha/frontier-mission-ui.mjs', 'frontier-omega-alpha/frontier-execution.mjs',
+             'frontier-omega-alpha/frontier-browser-model.mjs',
              'frontier-omega-alpha/foundry-ui.mjs', 'frontier-omega-alpha/foundry-study.mjs',
              *site.DECISION_EDITION_ASSETS},
         )
