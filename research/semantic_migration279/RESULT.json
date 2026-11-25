@@ -1,0 +1,505 @@
+{
+  "freeze": "cfbbcc5c1ed0c8a894d4156559cb987db851416d",
+  "blob": "84f6d8724b7893378614473a9a198dd60ccad5c7",
+  "execution": "same exact round-trip verified JavaScript function body in included tool V8 isolate; standalone module and hosted CI not executed",
+  "wall_ms": 982,
+  "cpu_seconds": null,
+  "actual_billing": null,
+  "source_snapshot_hash": null,
+  "scope": "authored finite integer-domain representation equivalence, public formula parameters; no native business or SSA application",
+  "source_example_2026_dimes": 26098,
+  "source_example_pass": true,
+  "arms": 21,
+  "passed": 21,
+  "total_exhaustive_evaluations": 1440018,
+  "total_certificate_endpoint_evaluations": 5535,
+  "results": [
+    {
+      "case": "pia2026",
+      "arm": "exact",
+      "expected": "EQUIVALENT",
+      "proof": {
+        "status": "EQUIVALENT",
+        "endpoints": 60,
+        "groups": 30,
+        "witness": null
+      },
+      "control": {
+        "status": "EQUIVALENT",
+        "evaluated": 20001,
+        "mismatches": 0,
+        "first": null
+      },
+      "witnessConfirmed": true,
+      "pass": true
+    },
+    {
+      "case": "pia2026",
+      "arm": "equivalent_split",
+      "expected": "EQUIVALENT",
+      "proof": {
+        "status": "EQUIVALENT",
+        "endpoints": 62,
+        "groups": 32,
+        "witness": null
+      },
+      "control": {
+        "status": "EQUIVALENT",
+        "evaluated": 20001,
+        "mismatches": 0,
+        "first": null
+      },
+      "witnessConfirmed": true,
+      "pass": true
+    },
+    {
+      "case": "pia2026",
+      "arm": "bend_plus_one",
+      "expected": "NOT_EQUIVALENT",
+      "proof": {
+        "status": "NOT_EQUIVALENT",
+        "endpoints": 61,
+        "groups": 31,
+        "witness": {
+          "x": 1287,
+          "reference": 11577,
+          "candidate": 11583
+        }
+      },
+      "control": {
+        "status": "NOT_EQUIVALENT",
+        "evaluated": 20001,
+        "mismatches": 18714,
+        "first": {
+          "x": 1287,
+          "reference": 11577,
+          "candidate": 11583
+        }
+      },
+      "witnessConfirmed": true,
+      "pass": true
+    },
+    {
+      "case": "pia2026",
+      "arm": "rate_plus_one",
+      "expected": "NOT_EQUIVALENT",
+      "proof": {
+        "status": "NOT_EQUIVALENT",
+        "endpoints": 60,
+        "groups": 30,
+        "witness": {
+          "x": 1290,
+          "reference": 11586,
+          "candidate": 11587
+        }
+      },
+      "control": {
+        "status": "NOT_EQUIVALENT",
+        "evaluated": 20001,
+        "mismatches": 18709,
+        "first": {
+          "x": 1290,
+          "reference": 11586,
+          "candidate": 11587
+        }
+      },
+      "witnessConfirmed": true,
+      "pass": true
+    },
+    {
+      "case": "pia2026",
+      "arm": "rounding_offset",
+      "expected": "NOT_EQUIVALENT",
+      "proof": {
+        "status": "NOT_EQUIVALENT",
+        "endpoints": 60,
+        "groups": 30,
+        "witness": {
+          "x": 1289,
+          "reference": 11583,
+          "candidate": 11584
+        }
+      },
+      "control": {
+        "status": "NOT_EQUIVALENT",
+        "evaluated": 20001,
+        "mismatches": 2584,
+        "first": {
+          "x": 1289,
+          "reference": 11583,
+          "candidate": 11584
+        }
+      },
+      "witnessConfirmed": true,
+      "pass": true
+    },
+    {
+      "case": "pia2026",
+      "arm": "isolated_point",
+      "expected": "NOT_EQUIVALENT",
+      "proof": {
+        "status": "NOT_EQUIVALENT",
+        "endpoints": 62,
+        "groups": 32,
+        "witness": {
+          "x": 1287,
+          "reference": 11577,
+          "candidate": 11578
+        }
+      },
+      "control": {
+        "status": "NOT_EQUIVALENT",
+        "evaluated": 20001,
+        "mismatches": 1,
+        "first": {
+          "x": 1287,
+          "reference": 11577,
+          "candidate": 11578
+        }
+      },
+      "witnessConfirmed": true,
+      "pass": true
+    },
+    {
+      "case": "pia2026",
+      "arm": "missing_point",
+      "expected": "REJECT_INVALID_DOMAIN",
+      "proof": {
+        "status": "REJECT_INVALID_DOMAIN",
+        "endpoints": 0,
+        "groups": 0
+      },
+      "control": {
+        "status": "REJECT_INVALID_DOMAIN",
+        "evaluated": 0
+      },
+      "witnessConfirmed": true,
+      "pass": true
+    },
+    {
+      "case": "pia2027",
+      "arm": "exact",
+      "expected": "EQUIVALENT",
+      "proof": {
+        "status": "EQUIVALENT",
+        "endpoints": 60,
+        "groups": 30,
+        "witness": null
+      },
+      "control": {
+        "status": "EQUIVALENT",
+        "evaluated": 20001,
+        "mismatches": 0,
+        "first": null
+      },
+      "witnessConfirmed": true,
+      "pass": true
+    },
+    {
+      "case": "pia2027",
+      "arm": "equivalent_split",
+      "expected": "EQUIVALENT",
+      "proof": {
+        "status": "EQUIVALENT",
+        "endpoints": 62,
+        "groups": 32,
+        "witness": null
+      },
+      "control": {
+        "status": "EQUIVALENT",
+        "evaluated": 20001,
+        "mismatches": 0,
+        "first": null
+      },
+      "witnessConfirmed": true,
+      "pass": true
+    },
+    {
+      "case": "pia2027",
+      "arm": "bend_plus_one",
+      "expected": "NOT_EQUIVALENT",
+      "proof": {
+        "status": "NOT_EQUIVALENT",
+        "endpoints": 61,
+        "groups": 31,
+        "witness": {
+          "x": 1341,
+          "reference": 12063,
+          "candidate": 12069
+        }
+      },
+      "control": {
+        "status": "NOT_EQUIVALENT",
+        "evaluated": 20001,
+        "mismatches": 18660,
+        "first": {
+          "x": 1341,
+          "reference": 12063,
+          "candidate": 12069
+        }
+      },
+      "witnessConfirmed": true,
+      "pass": true
+    },
+    {
+      "case": "pia2027",
+      "arm": "rate_plus_one",
+      "expected": "NOT_EQUIVALENT",
+      "proof": {
+        "status": "NOT_EQUIVALENT",
+        "endpoints": 60,
+        "groups": 30,
+        "witness": {
+          "x": 1344,
+          "reference": 12072,
+          "candidate": 12073
+        }
+      },
+      "control": {
+        "status": "NOT_EQUIVALENT",
+        "evaluated": 20001,
+        "mismatches": 18655,
+        "first": {
+          "x": 1344,
+          "reference": 12072,
+          "candidate": 12073
+        }
+      },
+      "witnessConfirmed": true,
+      "pass": true
+    },
+    {
+      "case": "pia2027",
+      "arm": "rounding_offset",
+      "expected": "NOT_EQUIVALENT",
+      "proof": {
+        "status": "NOT_EQUIVALENT",
+        "endpoints": 60,
+        "groups": 30,
+        "witness": {
+          "x": 1343,
+          "reference": 12069,
+          "candidate": 12070
+        }
+      },
+      "control": {
+        "status": "NOT_EQUIVALENT",
+        "evaluated": 20001,
+        "mismatches": 2694,
+        "first": {
+          "x": 1343,
+          "reference": 12069,
+          "candidate": 12070
+        }
+      },
+      "witnessConfirmed": true,
+      "pass": true
+    },
+    {
+      "case": "pia2027",
+      "arm": "isolated_point",
+      "expected": "NOT_EQUIVALENT",
+      "proof": {
+        "status": "NOT_EQUIVALENT",
+        "endpoints": 62,
+        "groups": 32,
+        "witness": {
+          "x": 1341,
+          "reference": 12063,
+          "candidate": 12064
+        }
+      },
+      "control": {
+        "status": "NOT_EQUIVALENT",
+        "evaluated": 20001,
+        "mismatches": 1,
+        "first": {
+          "x": 1341,
+          "reference": 12063,
+          "candidate": 12064
+        }
+      },
+      "witnessConfirmed": true,
+      "pass": true
+    },
+    {
+      "case": "pia2027",
+      "arm": "missing_point",
+      "expected": "REJECT_INVALID_DOMAIN",
+      "proof": {
+        "status": "REJECT_INVALID_DOMAIN",
+        "endpoints": 0,
+        "groups": 0
+      },
+      "control": {
+        "status": "REJECT_INVALID_DOMAIN",
+        "evaluated": 0
+      },
+      "witnessConfirmed": true,
+      "pass": true
+    },
+    {
+      "case": "familymax2027",
+      "arm": "exact",
+      "expected": "EQUIVALENT",
+      "proof": {
+        "status": "EQUIVALENT",
+        "endpoints": 800,
+        "groups": 400,
+        "witness": null
+      },
+      "control": {
+        "status": "EQUIVALENT",
+        "evaluated": 200001,
+        "mismatches": 0,
+        "first": null
+      },
+      "witnessConfirmed": true,
+      "pass": true
+    },
+    {
+      "case": "familymax2027",
+      "arm": "equivalent_split",
+      "expected": "EQUIVALENT",
+      "proof": {
+        "status": "EQUIVALENT",
+        "endpoints": 802,
+        "groups": 402,
+        "witness": null
+      },
+      "control": {
+        "status": "EQUIVALENT",
+        "evaluated": 200001,
+        "mismatches": 0,
+        "first": null
+      },
+      "witnessConfirmed": true,
+      "pass": true
+    },
+    {
+      "case": "familymax2027",
+      "arm": "bend_plus_one",
+      "expected": "NOT_EQUIVALENT",
+      "proof": {
+        "status": "NOT_EQUIVALENT",
+        "endpoints": 801,
+        "groups": 401,
+        "witness": {
+          "x": 17121,
+          "reference": 25682,
+          "candidate": 25681
+        }
+      },
+      "control": {
+        "status": "NOT_EQUIVALENT",
+        "evaluated": 200001,
+        "mismatches": 182880,
+        "first": {
+          "x": 17121,
+          "reference": 25682,
+          "candidate": 25681
+        }
+      },
+      "witnessConfirmed": true,
+      "pass": true
+    },
+    {
+      "case": "familymax2027",
+      "arm": "rate_plus_one",
+      "expected": "NOT_EQUIVALENT",
+      "proof": {
+        "status": "NOT_EQUIVALENT",
+        "endpoints": 800,
+        "groups": 400,
+        "witness": {
+          "x": 17131,
+          "reference": 25709,
+          "candidate": 25710
+        }
+      },
+      "control": {
+        "status": "NOT_EQUIVALENT",
+        "evaluated": 200001,
+        "mismatches": 182829,
+        "first": {
+          "x": 17131,
+          "reference": 25709,
+          "candidate": 25710
+        }
+      },
+      "witnessConfirmed": true,
+      "pass": true
+    },
+    {
+      "case": "familymax2027",
+      "arm": "rounding_offset",
+      "expected": "NOT_EQUIVALENT",
+      "proof": {
+        "status": "NOT_EQUIVALENT",
+        "endpoints": 800,
+        "groups": 400,
+        "witness": {
+          "x": 17121,
+          "reference": 25682,
+          "candidate": 25683
+        }
+      },
+      "control": {
+        "status": "NOT_EQUIVALENT",
+        "evaluated": 200001,
+        "mismatches": 3642,
+        "first": {
+          "x": 17121,
+          "reference": 25682,
+          "candidate": 25683
+        }
+      },
+      "witnessConfirmed": true,
+      "pass": true
+    },
+    {
+      "case": "familymax2027",
+      "arm": "isolated_point",
+      "expected": "NOT_EQUIVALENT",
+      "proof": {
+        "status": "NOT_EQUIVALENT",
+        "endpoints": 802,
+        "groups": 402,
+        "witness": {
+          "x": 17121,
+          "reference": 25682,
+          "candidate": 25683
+        }
+      },
+      "control": {
+        "status": "NOT_EQUIVALENT",
+        "evaluated": 200001,
+        "mismatches": 1,
+        "first": {
+          "x": 17121,
+          "reference": 25682,
+          "candidate": 25683
+        }
+      },
+      "witnessConfirmed": true,
+      "pass": true
+    },
+    {
+      "case": "familymax2027",
+      "arm": "missing_point",
+      "expected": "REJECT_INVALID_DOMAIN",
+      "proof": {
+        "status": "REJECT_INVALID_DOMAIN",
+        "endpoints": 0,
+        "groups": 0
+      },
+      "control": {
+        "status": "REJECT_INVALID_DOMAIN",
+        "evaluated": 0
+      },
+      "witnessConfirmed": true,
+      "pass": true
+    }
+  ],
+  "commercial_verdict": "UNQUALIFIED_NO_DEPLOY"
+}
