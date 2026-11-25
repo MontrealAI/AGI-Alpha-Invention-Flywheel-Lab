@@ -194,3 +194,21 @@ test('a qualified source section cannot support exact readings or be cropped to 
   assert.equal(review('Independent measurements.\n' + row), 'supported');
   assert.equal(review(row + '\nUpper limits for a subsequent section.'), 'supported');
 });
+
+test('explicit peer headings end a qualifier without dropping inherited limits in subsections', () => {
+  const target = {model:'Example Pack',level:'system'};
+  const row = 'Net battery weight: 64 kg.';
+  const review = excerpt => reviewClaim({
+    id:'heading-level',target,field:'batteryWeight',claim:{value:68,unit:'kg'},
+    sources:[{id:'manual',excerpt,url:'https://example.org/data',locator:'two sections',sha256:'a'.repeat(64)}],
+    observations:[{source:'manual',target,field:'batteryWeight',quote:row,value:64,unit:'kg'}],
+  }).decision;
+  const first = '## Upper limits\nMaximum discharge current: 30 A.\n';
+  assert.equal(review(first + '## Measured specifications\n' + row), 'contradicted');
+  assert.equal(review(first + '# Measured specifications\n' + row), 'contradicted');
+  assert.equal(review(first + '### Measured specifications\n' + row), 'insufficient');
+  assert.equal(review(first + 'Measured specifications\n' + row), 'insufficient');
+  assert.equal(review('## Maximum discharge current: 30 A.\n' + row), 'insufficient');
+  assert.equal(review('<h2 class="table">Limites supérieures</h2>\n<h2>Mesures exactes</h2>\n' + row), 'contradicted');
+  assert.equal(review('## Upper limits\n### Estimates\n### Measured examples\n' + row), 'insufficient');
+});

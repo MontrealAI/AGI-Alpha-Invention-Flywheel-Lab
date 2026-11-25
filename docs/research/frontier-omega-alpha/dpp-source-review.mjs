@@ -68,15 +68,38 @@ function clauses(text) {
   return text.split(/[;\r\n]+|\.\s+(?=\p{Lu}[\p{L}\p{N}-]{2,}\b)|\.$/u).map(part => part.trim()).filter(Boolean);
 }
 
-function qualifiedSection(part) {
-  const heading = part.replace(/<\/?(?:h[1-6]|strong|em|b|i)>|[*_`]/giu, '')
+function sectionDepth(part) {
+  const text = part.replace(/^(?:>\s*)+/u, '');
+  const markdown = text.match(/^(#{1,6})\s+\S/u);
+  if (markdown) return markdown[1].length;
+  const html = text.match(/^<h([1-6])(?:\s[^>]*)?>/iu);
+  return html ? Number(html[1]) : undefined;
+}
+
+function qualifiedSection(part, isHeading) {
+  const heading = part.replace(/<\/?(?:h[1-6]|strong|em|b|i)(?:\s[^>]*)?>|[*_`]/giu, '')
     .replace(/^(?:(?:[#>•●◦▪+—–-]+|\d+[.)])\s*)+/u, '').trim();
   if (!qualificationHeading.test(heading)) return false;
+  if (isHeading) return true;
   // A complete bound on one named property is a field row, not a section heading.
   const field = boundedPropertyHeading.exec(heading);
   if (!field) return true;
   const units = boundedPropertyUnits.get(field[1].toLowerCase());
   return !measurementValues(heading.slice(field[0].length), units, true).length;
+}
+
+function sectionQualifications(parts) {
+  const active = [];
+  let depth = 1;
+  return parts.map(part => {
+    const level = sectionDepth(part);
+    if (level !== undefined) {
+      while (active.at(-1) >= level) active.pop();
+      depth = level;
+    }
+    if (qualifiedSection(part, level !== undefined) && active.at(-1) !== depth) active.push(depth);
+    return active.length > 0;
+  });
 }
 
 function columnHeaders(parts) {
@@ -105,7 +128,7 @@ function quoteQuantifies(quote, excerpt, observation, {heading, units}) {
   const starts = sourceParts.flatMap((_, start) => parts.every((part, index) => sourceParts[start + index] === part) ? [start] : []);
   if (starts.length !== 1 || parts.length === 0) return false;
   // A source section heading still applies when the supplied quote begins at its field row.
-  const qualified = sourceParts.findIndex(qualifiedSection);
+  const qualified = sectionQualifications(sourceParts);
   const tables = columnHeaders(parts);
   if (tables.length > 1 || tables.length !== columnHeaders(sourceParts).length) return false;
   const [table] = tables;
@@ -114,7 +137,7 @@ function quoteQuantifies(quote, excerpt, observation, {heading, units}) {
   if (table && (table.labels.length < 2 || table.labels.some(models => models.includes('')) || positions.length !== 1)) return false;
   return parts.some((clause, index) => {
     const prefix = heading.exec(clause);
-    if (!prefix || (table && index <= table.index) || (qualified >= 0 && starts[0] + index >= qualified)) return false;
+    if (!prefix || (table && index <= table.index) || qualified[starts[0] + index]) return false;
     const text = clause.slice(prefix[0].length);
     const sharedAcrossBoth = /\s+in both columns$/iu.test(text);
     const values = measurementValues(text.replace(/\s+in both columns$/iu, ''), units, Boolean(table));
