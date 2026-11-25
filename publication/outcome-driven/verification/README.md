@@ -34,3 +34,5 @@ python3 -I -S bridge/instruments.py /path/to/TELEMETRY-CLASSIFIER.json input.jso
 ```
 
 The unchanged [automatic artifact grade](FOLLOWUP-ASSESSMENT.json) and the [assisted repair grade](FOLLOWUP-ASSISTED-ASSESSMENT.json) use the same held cases and separate provenance.
+
+The automatic grade binds the original browser captures and the private downloaded journal. Published JSON receipts use reviewed serialization and may add diagnostic fields. The [public receipt map](FOLLOWUP-PROJECTION-MAP.json) records both digests and checks the shared JSON fields.
