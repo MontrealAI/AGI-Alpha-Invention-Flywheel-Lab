@@ -10,7 +10,7 @@ const fields = new Map([
 ]);
 const scopeFields = ['model','version','market','level','boundary'];
 const isObject = value => value !== null && typeof value === 'object' && !Array.isArray(value);
-const tidy = value => typeof value === 'string' ? value.normalize('NFKC').trim().toLowerCase().replace(/\s+/gu, ' ') : '';
+const tidy = value => typeof value === 'string' ? value.normalize('NFC').trim().toLowerCase().replace(/\s+/gu, ' ') : '';
 const digest = /^[a-f0-9]{64}$/u;
 const decimal = /^([+-]?)(\d{1,12})(?:[.,](\d{1,8}))?$/u;
 
@@ -42,7 +42,7 @@ function validSource(item) {
 }
 
 function measurementValues(text, units, ordered) {
-  const parts = text.trim().replace(/\s+in both columns$/iu, '').split(/\s+\/\s+|,\s+(?=[+-]?\d)/u);
+  const parts = text.trim().split(/\s+\/\s+|,\s+(?=[+-]?\d)/u);
   if (parts.length > 1 && !ordered) return [];
   const readings = parts.map(part => part.match(/^([+-]?\d{1,12}(?:[.,]\d{1,8})?)\s*(?:(?:\(±\s*\d+(?:[.,]\d+)?\)|±\s*\d+(?:[.,]\d+)?)\s*)?([a-z]+)?$/iu));
   if (readings.some(row => !row)) return [];
@@ -57,11 +57,19 @@ function clauses(text) {
   return text.split(/[;\r\n]+|\.\s+(?=\p{Lu}[\p{L}\p{N}-]{2,}\b)|\.$/u).map(part => part.trim()).filter(Boolean);
 }
 
-function hasColumnLabels(parts) {
-  return parts.some((part, index) =>
-    /^(?:model columns|colonnes des systèmes)\s*:\s*[^,]+,\s*\S/iu.test(part) ||
-    /^modules in series\s+(?:\d+s\s+\/\s+)+\d+s$/iu.test(part) ||
-    /\bin first column$/iu.test(part) && /\bin second(?: column)?$/iu.test(parts[index + 1] ?? ''));
+function columnHeaders(parts) {
+  const headers = [];
+  for (const [index, part] of parts.entries()) {
+    const columns = part.match(/^(?:model columns|colonnes des systèmes)\s*:\s*(.*)$/iu);
+    const first = part.match(/^(.+) in first column$/iu);
+    const second = (parts[index + 1] ?? '').match(/^(.+) in second(?: column)?$/iu);
+    if (columns) headers.push({index, labels:columns[1].split(',').map(model => [tidy(model)])});
+    else if (first && second) {
+      const labels = [first[1], second[1]].map(group => group.split(/\s+and\s+/iu).map(tidy));
+      headers.push({index:index + 1, labels});
+    }
+  }
+  return headers;
 }
 
 function quoteQuantifies(quote, excerpt, observation, {heading, units}) {
@@ -72,14 +80,24 @@ function quoteQuantifies(quote, excerpt, observation, {heading, units}) {
   const available = clauses(excerpt);
   if (!available.some((_, start) => cited.every((part, index) => available[start + index] === part))) return false;
   // Preserve compatibility characters such as superscript footnote digits.
-  const normal = quote.normalize('NFC').replace(/[^\S\r\n]+/gu, ' ');
-  const parts = clauses(normal);
-  const orderedTable = hasColumnLabels(parts);
-  return parts.some(clause => {
+  const read = text => clauses(text.normalize('NFC').replace(/[^\S\r\n]+/gu, ' '));
+  const parts = read(quote);
+  const tables = columnHeaders(parts);
+  if (tables.length > 1 || tables.length !== columnHeaders(read(excerpt)).length) return false;
+  const [table] = tables;
+  const model = tidy(observation.target.model);
+  const positions = table?.labels.flatMap((models, index) => models.includes(model) ? [index] : []) ?? [];
+  if (table && (table.labels.length < 2 || table.labels.some(models => models.includes('')) || positions.length !== 1)) return false;
+  return parts.some((clause, index) => {
     const prefix = heading.exec(clause);
-    if (!prefix) return false;
-    const ordered = orderedTable || /\b(?:table of weights?|by column)\b/iu.test(prefix[0]);
-    return measurementValues(clause.slice(prefix[0].length), units, ordered).includes(expected);
+    if (!prefix || table && index <= table.index) return false;
+    const text = clause.slice(prefix[0].length);
+    const sharedAcrossBoth = /\s+in both columns$/iu.test(text);
+    const values = measurementValues(text.replace(/\s+in both columns$/iu, ''), units, Boolean(table));
+    if (!table || sharedAcrossBoth) {
+      return (!sharedAcrossBoth || table?.labels.length === 2) && values.length === 1 && values[0] === expected;
+    }
+    return values.length === table.labels.length && values[positions[0]] === expected;
   });
 }
 

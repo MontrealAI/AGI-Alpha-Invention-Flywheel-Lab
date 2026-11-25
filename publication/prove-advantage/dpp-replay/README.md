@@ -11,6 +11,8 @@ sha256sum --check SHA256SUMS --quiet
 python replay-scores.py
 ```
 
-The Node replay checks all 27 frozen dispositions and evidence sets on the installed source code. It also reports the differences when scope is removed. The corrected parser excludes two branded inline weight descriptions in the primary withdrawal and an inverter-output reading in the adverse withdrawal. Both original withdrawal files remain archived. Their scores describe the original experiment.
+The original typed inputs and predictions remain frozen. On the installed checker, 25 of those 27 decisions and source IDs reproduce with the original bytes. Two FENECON reference inputs are withheld because the source note describes short series labels without naming the model in each column. `PRIMARY-COLUMN-LABELS.json` records the reviewed expansion of the original three labels from Table 17. The replay makes that change in memory, then reproduces all 27 decisions and evidence sets. Run `node publication/prove-advantage/dpp-replay/replay.mjs --reviewed-primary` from the repository root to produce the revised packet for the application. Source files remain available at their original links and the input hashes remain unchanged.
+
+The Node replay also shows five primary and one adverse change when declared scope is withdrawn from the checked inputs under the current column-binding code. Both original withdrawal files remain archived. Their scores describe the original experiment.
 
 The scoring replay uses the independent evaluator's registered disposition, source attribution and rationale-presence rules. Competent direct and FRONTIER Ω both score 14/16 and 6/6 on the two battery cohorts. Adequate interpretation of the source labels, scope and rationale still needs independent review. The frozen primary result also records the two shared ambiguities and early disclosure. [Matched report](../DPP.md)
