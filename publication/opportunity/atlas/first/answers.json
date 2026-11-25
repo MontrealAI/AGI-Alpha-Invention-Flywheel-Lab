@@ -1,0 +1,63 @@
+[
+  {
+    "action": "TEST",
+    "exact_scope_facts": {
+      "asset": "FreeCAD_26.3rc2-Linux-aarch64.AppImage",
+      "asset_declared_sha256": "sha256:3317611742c66cd61de5013da4a6b3119f36c8809782f2ceac343267791d8478",
+      "asset_state": "uploaded",
+      "asset_uploaded_by": "2026-10-18T13:58:05Z",
+      "channel": "prerelease (release candidate 2, intended for testing)",
+      "download_url": "https://github.com/FreeCAD/FreeCAD/releases/download/26.3rc2/FreeCAD_26.3rc2-Linux-aarch64.AppImage",
+      "release_published_at": "2026-10-18T06:44:39Z",
+      "tag": "26.3rc2"
+    },
+    "first_party_date_utc": "2026-10-18",
+    "id": "fc-263rc2-arm",
+    "source_urls": [
+      "https://github.com/FreeCAD/FreeCAD/releases/tag/26.3rc2",
+      "https://api.github.com/repos/FreeCAD/FreeCAD/releases/tags/26.3rc2"
+    ],
+    "unsupported_claims": [
+      "stable or production release",
+      "binary executed or qualified on an actual aarch64 host",
+      "asset already visible at the earlier release timestamp"
+    ],
+    "verdict": "DOCUMENTED"
+  },
+  {
+    "action": "TEST",
+    "exact_scope_facts": {
+      "architecture": "x86_64 (amd64)",
+      "catalog_note": "Volta is a distinct ppc64le catalog row",
+      "cuda_version": "13.0",
+      "distribution": "Ubuntu 24.04 LTS",
+      "exact_docker_image_tags": [
+        "ecpe4s/e4s-cuda:26.11-cuda80",
+        "ecpe4s/e4s-cuda:26.11-cuda90",
+        "ecpe4s/e4s-cuda:26.11-cuda120"
+      ],
+      "named_nvidia_scopes": [
+        "Ampere",
+        "Hopper",
+        "Blackwell"
+      ],
+      "registry_amd64_digest": "sha256:106c49d46c812aaeec619d515ef6ace477a284c2c5df7ec364ed7537c507570e",
+      "registry_last_pushed_at": "2026-11-13T08:41:39.326419Z",
+      "release": "26.11",
+      "tag_independently_confirmed_in_registry": "ecpe4s/e4s-cuda:26.11-cuda80"
+    },
+    "first_party_date_utc": "2026-11-16",
+    "id": "e4s-2611-cuda24",
+    "source_urls": [
+      "https://e4s.io/news/NEWS_RELEASE_E4S_26.11.pdf",
+      "https://e4s.io/container-download/",
+      "https://hub.docker.com/v2/repositories/ecpe4s/e4s-cuda/tags/26.11-cuda80"
+    ],
+    "unsupported_claims": [
+      "E4S x86_64 TITAN RTX or other Turing support",
+      "any image pulled or run here",
+      "exact uptime or image availability before the observed registry timestamps"
+    ],
+    "verdict": "DOCUMENTED"
+  }
+]

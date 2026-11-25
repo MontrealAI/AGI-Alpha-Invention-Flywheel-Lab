@@ -115,6 +115,7 @@ ATLAS_OUTPUTS = frozenset({
     'frontier-omega-alpha/cascade-fresh-domain.json',
     'frontier-omega-alpha/frontier-activation-1.5.0.zip',
     'frontier-omega-alpha/factory-results.json',
+    'frontier-omega-alpha/opportunity-capture.json',
 })
 STATES = ('discovered', 'qualified', 'testing', 'verified', 'falsified', 'abstain', 'retained', 'deployed', 'value-verified')
 POSSIBILITY_SOURCE_PATTERNS = (

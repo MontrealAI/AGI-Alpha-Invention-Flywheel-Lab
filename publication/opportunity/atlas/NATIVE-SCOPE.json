@@ -1,0 +1,60 @@
+{
+  "base_commit": "436bb1b142a0da1f2c272f77821b75c3efdd73fe",
+  "source_namespaces": {
+    "lean4": "leanprover/lean4",
+    "llama-cpp": "ggml-org/llama.cpp",
+    "vllm": "vllm-project/vllm",
+    "rocm": "ROCm/rocm-systems",
+    "ollama": "ollama/ollama",
+    "scipy": "scipy/scipy"
+  },
+  "observations": [
+    {
+      "id": "fc-263rc2-arm",
+      "direct_candidate_editorial_links_admissible": {
+        "https://github.com/FreeCAD/FreeCAD/releases": false,
+        "https://github.com/FreeCAD/FreeCAD/discussions/32821": false,
+        "https://github.com/FreeCAD/FreeCAD/releases/tag/26.3rc2": true
+      },
+      "exact_native_watch_source_identity": {
+        "https://github.com/FreeCAD/FreeCAD/releases": false,
+        "https://github.com/FreeCAD/FreeCAD/discussions/32821": false,
+        "https://github.com/FreeCAD/FreeCAD/releases/tag/26.3rc2": false
+      }
+    },
+    {
+      "id": "e4s-2611-cuda24",
+      "direct_candidate_editorial_links_admissible": {
+        "https://e4s.io/news/NEWS_RELEASE_E4S_26.11.pdf": false,
+        "https://e4s.io/container-download/": false
+      },
+      "exact_native_watch_source_identity": {
+        "https://e4s.io/news/NEWS_RELEASE_E4S_26.11.pdf": false,
+        "https://e4s.io/container-download/": false
+      }
+    },
+    {
+      "id": "rocm-102-gfx1103",
+      "direct_candidate_editorial_links_admissible": {
+        "https://rocm.docs.amd.com/en/develop/about/release-notes.html": false,
+        "https://rocm.docs.amd.com/en/docs-10.2.0/about/release-notes.html": false
+      },
+      "exact_native_watch_source_identity": {
+        "https://rocm.docs.amd.com/en/develop/about/release-notes.html": false,
+        "https://rocm.docs.amd.com/en/docs-10.2.0/about/release-notes.html": false
+      }
+    },
+    {
+      "id": "nv-r620-titan",
+      "direct_candidate_editorial_links_admissible": {
+        "https://docs.nvidia.com/datacenter/tesla/tesla-release-notes-620-70-10/index.html": false,
+        "https://www.nvidia.com/en-us/drivers/details/285695/": false
+      },
+      "exact_native_watch_source_identity": {
+        "https://docs.nvidia.com/datacenter/tesla/tesla-release-notes-620-70-10/index.html": false,
+        "https://www.nvidia.com/en-us/drivers/details/285695/": false
+      }
+    }
+  ],
+  "interpretation": "Current watch accepts exact registered GitHub tags and arXiv references. This test exercises the admitted route for the case URLs, not the wider private research of its monitors. Existing Atlas can cite a MONTREAL.AI immutable research commit for outside direct links. Editorial source review remains possible without modifying this gate."
+}

@@ -31,6 +31,7 @@ STUDY_ZIP = 'frontier-foundry-1.1.0.zip'
 INVENTOR_ZIP = 'frontier-inventor-1.0.0.zip'
 LEARNING_ZIP = 'frontier-learning-1.0.0.zip'
 ACTIVATION_ZIP = 'frontier-activation-1.0.0.zip'
+ACTIVATION_SHA256 = '66ecb99d319ec1c4aa0455e672ef9866e5bf44adb54e59845b19ccc26d98d17c'
 AMPLIFICATION_ZIP = 'frontier-activation-1.1.0.zip'
 AMPLIFICATION_PIN = '3e229271a5408961a8ad686fa32d0b0f2fd08663'
 AMPLIFICATION_SHA256 = '158aa880e2a282915f011ff8c4786ec0641b6d5da82178a9e131d0c64a17499c'
@@ -45,10 +46,14 @@ CASCADE_PIN = '0415b78818f795a7adef802e467ef076c00026db'
 CASCADE_SHA256 = '075e28dae9c58c3b856eaad57faaf9ffe189cae925954211266dcef95ac9335e'
 CASCADE_STUDIES = {'cascade-results.json': 'RESULTS.json', 'cascade-fresh-domain.json': 'FRESH-DOMAIN.json'}
 FACTORY_ZIP = 'frontier-activation-1.5.0.zip'
+FACTORY_PIN = '436bb1b142a0da1f2c272f77821b75c3efdd73fe'
+FACTORY_SHA256 = '5a29bc8d215895216201b85dcf6f5af6709d0ecea857792cf24b3cc4d20ec791'
 FACTORY_RESULTS = 'factory-results.json'
 ACTIVATION_ARCHIVE_SHA256 = {
+    ACTIVATION_ZIP: ACTIVATION_SHA256,
     AMPLIFICATION_ZIP: AMPLIFICATION_SHA256, SUBSTRATE_ZIP: SUBSTRATE_SHA256,
     LIBERATION_ZIP: LIBERATION_SHA256, CASCADE_ZIP: CASCADE_SHA256,
+    FACTORY_ZIP: FACTORY_SHA256,
 }
 FOUNDRY_ENGINE = 'harness-engine.js'
 FOUNDRY_INPUT = 'FOUNDRY_PUBLIC_DATA'
@@ -308,8 +313,9 @@ def activation_files():
 
 
 def build_activation(destination):
-    return package(destination/ACTIVATION_ZIP,activation_files(),'frontier-activation',HARNESS_PIN,
-                   'Public evidence recovery, bounded Wasm table construction, and prospective Pages shadow forecasts.')
+    return build_activation_archive(destination / ACTIVATION_ZIP, activation_files(), HARNESS_PIN,
+                                    'Public evidence recovery, bounded Wasm table construction, and prospective Pages shadow forecasts.',
+                                    '1.0.0')
 
 
 def amplification_files():
@@ -393,19 +399,21 @@ def build_cascade(destination):
                                     '1.4.0')
 
 
-def build_factory(destination, revision):
+def build_factory(destination):
     files = cascade_files()
     for filename in ('evidence_truth.py', 'evidence_control.py', 'verify_factory.py', 'joint_transit.py'):
-        files[filename] = (TOOLS / 'activation' / filename).read_bytes()
+        path = TOOLS.relative_to(MAIN) / 'activation' / filename
+        files[filename] = pinned(FACTORY_PIN, path.as_posix())
     for filename in ('REGISTRATION.md', 'REPORT.md', 'GATES.md', 'EVIDENCE.json', 'EVIDENCE-SOURCES.json',
                      'TRANSIT-INPUT.json', 'TRANSIT.json', 'FACTORY.json', 'hurricane-lineage-control.py',
                      'ground/README.md', 'ground/fit_ground.py', 'ground/fetch_ground.py',
                      'ground/GROUND-ONLY-REGISTRATION.json', 'ground/EXOFOP-FILES.json'):
-        files[f'study/factory/{filename}'] = (FACTORY_EVIDENCE / filename).read_bytes()
+        path = FACTORY_EVIDENCE.relative_to(MAIN) / filename
+        files[f'study/factory/{filename}'] = pinned(FACTORY_PIN, path.as_posix())
     (destination / FACTORY_RESULTS).write_bytes(files['study/factory/FACTORY.json'])
-    return package(destination / FACTORY_ZIP, files, 'frontier-activation', revision,
-                   'Read-only historical evidence rulings, source lineage, and astronomical attribution.',
-                   version='1.5.0')
+    return build_activation_archive(destination / FACTORY_ZIP, files, FACTORY_PIN,
+                                    'Read-only historical evidence rulings, source lineage, and astronomical attribution.',
+                                    '1.5.0')
 
 
 def render_cascade(fr):
@@ -459,7 +467,8 @@ def render_cascade(fr):
 
 
 def render_factory(fr):
-    summary = json.loads((FACTORY_EVIDENCE / 'FACTORY.json').read_bytes())['summary']
+    path = FACTORY_EVIDENCE.relative_to(MAIN) / 'FACTORY.json'
+    summary = json.loads(pinned(FACTORY_PIN, path.as_posix()))['summary']
     industry, hurricane, transit = (summary[key] for key in ('industry', 'hurricane', 'transit'))
 
     def witnessed(case, label, source_label):

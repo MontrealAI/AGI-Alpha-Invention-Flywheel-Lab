@@ -19,6 +19,7 @@ import build_research_site as site
 import frontier_public_watch as watch
 import frontier_member_value as member
 import frontier_member_first as editions
+import frontier_opportunity_capture as capture
 
 
 INBOX_ANCHOR = '5db5637d42c0f675cc7689674d5db7ceb91930da'
@@ -355,6 +356,8 @@ def prepare(output, revision, event, run, request=source_with_retry):
         history(BRANCH, INBOX_ANCHOR, watch.INBOX_FILE, 4096), holds, request, cache)
     editorial = editorial_history(history(revision, EDITORIAL_ANCHOR, EDITORIAL_PATH, site.POSSIBILITY_MAX_BYTES))
     ledger = assemble(editorial, references)
+    opportunity_raw, opportunity = capture.source_study()
+    ledger['opportunity_capture'] = capture.projection(ledger, opportunity_raw)
     raw = canonical_json(ledger)
     if len(raw) > LEDGER_LIMIT:
         raise ValueError('Public ledger exceeds the supported single-file transfer limit')
@@ -366,7 +369,11 @@ def prepare(output, revision, event, run, request=source_with_retry):
     for page, lang in watch.PAGES.items():
         source = Path(EDITORIAL_PATH).parent / page
         html = render(source.read_text(), lang, ledger, selected, references, sealed)
-        for marker, contents in ((member.MARKER, member_pages[lang]),
+        workbench = member_pages[lang]
+        if workbench.count(capture.MARKER) != 1:
+            raise ValueError('Unexpected opportunity workbench template')
+        workbench = workbench.replace(capture.MARKER, capture.render(opportunity, lang, revision))
+        for marker, contents in ((member.MARKER, workbench),
                                  (member.PREVIEW_MARKER, member.home_preview(member_view, lang)),
                                  (member.PUBLIC_FEATURE_MARKER, member.public_feature(member_view, lang))):
             if html.count(marker) != 1:
@@ -381,7 +388,8 @@ def prepare(output, revision, event, run, request=source_with_retry):
     member.build_substrate(directory)
     member.build_liberation(directory)
     member.build_cascade(directory)
-    member.build_factory(directory, revision)
+    member.build_factory(directory)
+    (directory / capture.ASSET).write_bytes(opportunity_raw)
     (directory / LEDGER).write_bytes(raw)
     files = [(file.relative_to(output).as_posix(), digest(file.read_bytes()))
              for file in sorted(output.rglob('*')) if file.is_file()]
@@ -390,6 +398,7 @@ def prepare(output, revision, event, run, request=source_with_retry):
                   'products/alpha-genesis-harness/examples/customer-mission.json').decode()
     release = {'schema': 'frontier-omega-alpha/atlas-release-v1', 'source_commit': revision,
                'content_updated_at': ledger['updated_at'], 'ledger_sha256': sealed,
+               'opportunity_capture_sha256': digest(opportunity_raw),
                'member_value_sha256': member_digest,
                'member_first': member_view['member_first'],
                'public_capability_sha256': {v['download']: v['sha256'] for v in member_view['capabilities'].values()},
@@ -424,6 +433,14 @@ def verify_live(expected, revision, run, request=source_with_retry):
     if digest(raw) != expected:
         raise ValueError('Live ledger bytes do not match')
     ledger = json.loads(raw)
+    has_opportunity = 'opportunity_capture_sha256' in release
+    if has_opportunity != ('opportunity_capture' in ledger):
+        raise ValueError('Opportunity capture release and Atlas disagree')
+    if has_opportunity:
+        opportunity_raw = request(watch.SITE + capture.ASSET, LEDGER_LIMIT)
+        if (digest(opportunity_raw) != release['opportunity_capture_sha256']
+                or capture.projection(ledger, opportunity_raw) != ledger['opportunity_capture']):
+            raise ValueError('Live opportunity evidence does not bind the Atlas')
     member_raw = request(watch.SITE + member.MEMBER_JSON, LEDGER_LIMIT)
     if digest(member_raw) != release['member_value_sha256']:
         raise ValueError('Live member evidence bytes do not match')
@@ -480,9 +497,12 @@ def verify_live(expected, revision, run, request=source_with_retry):
                 or (member.FACTORY_ZIP in foundry and ('id="foundry-factory-results"' not in workspace
                     or 'id="foundry-factory-results"' in atlas
                     or any(f'href="{name}"' not in workspace for name in (member.FACTORY_ZIP, member.FACTORY_RESULTS))))
+                or (has_opportunity and (f'id="{capture.SECTION}"' not in workspace
+                    or f'id="{capture.SECTION}"' in atlas or f'href="{capture.ASSET}"' not in workspace
+                    or f'href="{capture.report_url(release["source_commit"])}"' not in workspace))
                 or f'data-preview-count="{len(ids)}"' not in preview
                 or any(marker in html for marker in (member.MARKER, member.PREVIEW_MARKER,
-                                                     '<!-- MV_SAMPLE -->', '<!-- FACTORY_RESULTS -->'))):
+                                                     '<!-- MV_SAMPLE -->', '<!-- FACTORY_RESULTS -->', capture.MARKER))):
             raise ValueError('Unpublished member-workbench rendering')
         edition = sequenced['edition']
         public = sequenced['public_feature']

@@ -1,0 +1,138 @@
+{
+  "action": "HOLD_FORECAST_ADOPTION",
+  "analysis": {
+    "approximate_overlap_diagnostic": {
+      "approximate_tess_dip_end_bjd_tdb": 2459056.4785615,
+      "minimum_ground_start_later_than_tess_end_s_with_15_min_scale_margin": 11871.259206533432,
+      "paired_ground_exposures_at_candidate_even_with_15_min_scale_margin": 0
+    },
+    "ground": {
+      "archive_coverage": "Egress",
+      "bjd_tdb_values": {
+        "0.0": 72
+      },
+      "camera": "SINISTRO",
+      "filter": "I",
+      "instrument": "LCO-SAAO-1m0 (1.0 m)",
+      "jd_utc_range": [
+        2459056.626377,
+        2459056.687591
+      ],
+      "observation_id": 4145,
+      "raw_flux_error_median": 0.000212,
+      "raw_flux_relative_min_median_max": [
+        0.196642,
+        0.197519,
+        0.198261
+      ],
+      "rows": 72,
+      "target": "TIC 55652896.01",
+      "utc_range_approximate": [
+        "2020-07-26T03:01:58.972801+00:00",
+        "2020-07-26T04:30:07.862400+00:00"
+      ],
+      "valid_published_bjd_tdb_rows": 0
+    },
+    "tess": {
+      "bjdreff": "0.00000000",
+      "bjdrefi": "2457000",
+      "cadences_near_ground_utc_with_15_min_scale_margin": 59,
+      "ordinary_grid_dip": {
+        "approximate_center_bjd_tdb": 2459056.3535615,
+        "delta_chi2": 4479.955401946569,
+        "depth_relative": 0.01660033054951855,
+        "duration_d": 0.25,
+        "ingress_d": 0.05,
+        "interior_and_contacts_samples": 180,
+        "purpose": "Exploratory ordinary grid fit, conditional shape, not an independent ground timing."
+      },
+      "quality_zero_finite_cadences": 15735,
+      "quality_zero_finite_range_bjd_tdb": [
+        2459036.2786968118,
+        2459059.7706483416
+      ],
+      "sector": "27",
+      "telescope": "TESS",
+      "tic": "55652896",
+      "timesys": "TDB",
+      "total_cadences": 17546
+    }
+  },
+  "arm": "Included Codex direct, ordinary source inspection and independently implemented local fit",
+  "clock_diagnostic_scope": "The 15-minute margin covers a conservative broad Earth-to-barycenter propagation and UTC-to-TDB difference. It is an exclusion bound and not a synthesized valid BJD_TDB timestamp or a ground reduction. The ordinary TESS grid fit searched a neighborhood anchored on the ground observing window and was a contextual check, not a new formal scientific timing measurement.",
+  "computed_output_sha256": "9453a325ab16c9bff29c26b6edd372ad712780c49f1431d66ec72c4bfc9b600c",
+  "direct_response_bytes": 6346462,
+  "frozen_utc": "2026-11-25T01:01:42.094277+00:00",
+  "human_attention_seconds": null,
+  "limitations": [
+    "The archive identifies the data as egress coverage; this was treated as intake metadata. It does not provide valid common-basis times or a ground midpoint.",
+    "No observatory booking, expenditure, host measurement or new observations occurred.",
+    "The initial independent FITS parser required a correction for implicit repeat count in the TFORM cards. It was fixed before the first numeric computation."
+  ],
+  "paid_provider_requests_observed": 0,
+  "prerequisites": {
+    "explicit_valid_common_clock": "FAIL: all 72 archived BJD_TDB values zero",
+    "independent_instrument": "PASS",
+    "matched_midpoints": "UNQUALIFIED: no independent ground midpoint",
+    "sufficient_paired_local_coverage": "FAIL: egress-only intake metadata and zero ground samples at exploratory TESS event even under a conservative 15-minute time-scale margin"
+  },
+  "question": "Qualification of ExoFOP file 74164 as a physically independent same-event timing confirmation for TIC 55652896 / TESS Sector 27",
+  "schema": "montreal-ai/atlas-direct-science-v1",
+  "script_sha256": "9e511fba1030c39703098553c603f732780b21b5a2bec1173bad1ea31c9e422a",
+  "source_captures": [
+    {
+      "bytes": 395568,
+      "end_utc": "2026-11-25T00:59:59.753112+00:00",
+      "filename": "attachment; filename=TIC55652896-01_20200726_LCO-SAAO-1m0_i_measurements.tbl",
+      "id": "exofop-74164",
+      "media": "text/plain;charset=UTF-8",
+      "resolved_url": "https://exofop.ipac.caltech.edu/tess/get_file.php?id=74164",
+      "sha256": "c612790fba6198ab2f43fead64b65cea2222b51adea6159b92466c5d461c2ddd",
+      "start_utc": "2026-11-25T00:59:54.634301+00:00",
+      "status": 200,
+      "url": "https://exofop.ipac.caltech.edu/tess/get_file.php?id=74164",
+      "wall_s": 5.1188420789840166
+    },
+    {
+      "bytes": 225875,
+      "end_utc": "2026-11-25T01:00:03.944685+00:00",
+      "filename": null,
+      "id": "exofop-target",
+      "media": "text/html; charset=UTF-8",
+      "resolved_url": "https://exofop.ipac.caltech.edu/tess/target.php?id=55652896",
+      "sha256": "43451ec3cc644e9b93e910c5ec157f06741e1c9ab8213c22e3556224e72033c9",
+      "start_utc": "2026-11-25T00:59:54.635167+00:00",
+      "status": 200,
+      "url": "https://exofop.ipac.caltech.edu/tess/target.php?id=55652896",
+      "wall_s": 9.309542572998907
+    },
+    {
+      "bytes": 3939419,
+      "end_utc": "2026-11-25T01:00:01.800898+00:00",
+      "filename": null,
+      "id": "mast-sector27",
+      "media": "application/x-sh",
+      "resolved_url": "https://archive.stsci.edu/missions/tess/download_scripts/sector/tesscurl_sector_27_lc.sh",
+      "sha256": "1f0425cc611c148816a683ce535a897e3f21f7397d2f8d370445e6c554fa40bf",
+      "start_utc": "2026-11-25T00:59:54.635883+00:00",
+      "status": 200,
+      "url": "https://archive.stsci.edu/missions/tess/download_scripts/sector/tesscurl_sector_27_lc.sh",
+      "wall_s": 7.165036291000433
+    },
+    {
+      "bytes": 1785600,
+      "end_utc": "2026-11-25T01:00:29.864270+00:00",
+      "id": "tess-s27-fits",
+      "media": "application/fits",
+      "resolved_url": "https://stpubdata.s3.us-east-1.amazonaws.com/tess/public/tid/s0027/0000/0000/5565/2896/tess2020186164531-s0027-0000000055652896-0189-s_lc.fits",
+      "sha256": "7e231174f9336e31b2367f3e0a3ee3fcb5d9ac34de46f6d81e0208c017065727",
+      "start_utc": "2026-11-25T01:00:20.404865+00:00",
+      "status": 200,
+      "url": "https://mast.stsci.edu/api/v0.1/Download/file/?uri=mast:TESS/product/tess2020186164531-s0027-0000000055652896-0189-s_lc.fits",
+      "wall_s": 9.459433323005214
+    }
+  ],
+  "started_utc": "2026-11-25T00:59:40.844432+00:00",
+  "verdict": "ABSTAIN",
+  "whole_work_elapsed_s": 121.249845
+}
