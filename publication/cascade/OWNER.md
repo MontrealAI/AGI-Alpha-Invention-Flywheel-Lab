@@ -16,6 +16,10 @@ Identify the chosen access route under A and the precise scopes approved under B
 
 The public portable toolkit contains the exact loopback command and receipt contract. For an owner-run GPU test, start an already approved local inference runtime on loopback, record the visible hardware and version, bind the model digest, and run the packaged comparison against that endpoint. The current release proves included Codex construction and the observed CPU model trials. GPU throughput and official frontier provider entitlement require a real receipt.
 
+For decision A, an eligible owner can approve one public, bounded test through the native connector’s official ChatGPT consent flow. Keep the account and any credits in the services that own them. ChatGPT plan access needs a completed request on the authorized account and route. API-credit use needs the eligible grant in the intended API organization, a preauthorized project and limit, and both provider usage and credit ledger receipts. Codex construction additionally needs a host that passes the credential-free isolation check. Paid or hosted distribution follows the applicable OpenAI approval path. [Native setup and qualification](../../products/alpha-genesis-harness/docs/CHATGPT-PLAN.md)
+
+If the next accepted task under E uses H2D, name an existing approved machine, operator and material and approve one actual job with a defined acceptance check. Any spending or commercial fulfillment stays within the existing owner authorization.
+
 ## Décisions du propriétaire
 
 - **Calcul.** Indiquer une intégration déjà autorisée ou exécuter la procédure dans `REPLAY.md` sur le poste Ubuntu à deux TITAN RTX. Transmettre le relevé de matériel, de placement GPU, de débit et de résultats, sans clé ni identifiant secret.

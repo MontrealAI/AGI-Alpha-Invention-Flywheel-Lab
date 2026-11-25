@@ -1,0 +1,19 @@
+{
+  "schema": "frontier/historical-catalog-audit/v1",
+  "id": "usgs-dateline-revision-audit",
+  "status": "GO",
+  "scope": "Portable exact historical event-ID selection using supplied USGS-shaped observations, explicit point bounds and maximum update timestamps.",
+  "entrypoint": ["python", "-B", "specialist.py", "CASE.json"],
+  "source_sha256": "a02bc2e1065c67a492a9d9cb3ee4ee79035ebe51796671c9d72dc54ec01bf6b9",
+  "observed_result_sha256": "5fad046f297cc9b547e83c689069966fdc245f4e8806c3c783a807392a8cba17",
+  "evaluation": {
+    "reference_cases": 40,
+    "passed_cases": 40,
+    "false_included_ids": 0,
+    "split_and_wrapped_source_agreement_windows": 2,
+    "held_registration_sha256": "98700874dc394b0fcb8557d56ac28b220c4efe5697c7b8c2c11698e4cb00e213",
+    "evidence": "../specialization-evaluation/"
+  },
+  "resource_boundary": "Offline single-process standard-library execution over caller-supplied records. Optional acquisition performs only the declared bounded public URLs.",
+  "retention": "Source, executable interface, exact inputs, comparator and receipts preserved for repeat use. General mission selection and runtime product admission remain separate gates."
+}

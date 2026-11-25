@@ -1,0 +1,3113 @@
+{
+  "candidate_sha256": "a02bc2e1065c67a492a9d9cb3ee4ee79035ebe51796671c9d72dc54ec01bf6b9",
+  "decision": "GO_SCOPED",
+  "grade_source_sha256": "6503820f3938c980a65f2c3dc552311af91e7965a356f81e6d59edc942b36322",
+  "observed_scope": "Two exact cold CLI invocations per panel per executable. Ordinary SQLite is a warmed in-process approximate comparator.",
+  "panels": [
+    {
+      "arms": {
+        "candidate": {
+          "child_cpu_ns": [
+            40769000,
+            34785000
+          ],
+          "exact": true,
+          "predictions": {
+            "conflicting": [],
+            "included": [
+              "at-start",
+              "edge-east",
+              "edge-negative",
+              "edge-positive",
+              "edge-west",
+              "far-east",
+              "far-west",
+              "north-limit",
+              "south-limit",
+              "threshold"
+            ]
+          },
+          "wall_ns": [
+            50705848,
+            35056957
+          ]
+        },
+        "exact_oracle": {
+          "child_cpu_ns": [
+            46910000,
+            38313000
+          ],
+          "exact": true,
+          "predictions": {
+            "conflicting": [],
+            "included": [
+              "at-start",
+              "edge-east",
+              "edge-negative",
+              "edge-positive",
+              "edge-west",
+              "far-east",
+              "far-west",
+              "north-limit",
+              "south-limit",
+              "threshold"
+            ]
+          },
+          "wall_ns": [
+            59760800,
+            56318231
+          ]
+        },
+        "ordinary_sqlite": {
+          "child_cpu_ns": [],
+          "exact": true,
+          "predictions": {
+            "conflicting": [],
+            "included": [
+              "at-start",
+              "edge-east",
+              "edge-negative",
+              "edge-positive",
+              "edge-west",
+              "far-east",
+              "far-west",
+              "north-limit",
+              "south-limit",
+              "threshold"
+            ]
+          },
+          "wall_ns": [
+            1417272,
+            605230
+          ]
+        }
+      },
+      "expected": {
+        "conflicting": [],
+        "included": [
+          "at-start",
+          "edge-east",
+          "edge-negative",
+          "edge-positive",
+          "edge-west",
+          "far-east",
+          "far-west",
+          "north-limit",
+          "south-limit",
+          "threshold"
+        ]
+      },
+      "family": "boundary",
+      "id": "seam-box"
+    },
+    {
+      "arms": {
+        "candidate": {
+          "child_cpu_ns": [
+            32075000,
+            26470000
+          ],
+          "exact": true,
+          "predictions": {
+            "conflicting": [],
+            "included": [
+              "at-start",
+              "edge-negative",
+              "edge-positive",
+              "edge-west",
+              "far-east",
+              "north-limit",
+              "south-limit"
+            ]
+          },
+          "wall_ns": [
+            32352949,
+            26748419
+          ]
+        },
+        "exact_oracle": {
+          "child_cpu_ns": [
+            27962000,
+            29001000
+          ],
+          "exact": true,
+          "predictions": {
+            "conflicting": [],
+            "included": [
+              "at-start",
+              "edge-negative",
+              "edge-positive",
+              "edge-west",
+              "far-east",
+              "north-limit",
+              "south-limit"
+            ]
+          },
+          "wall_ns": [
+            28273473,
+            43002019
+          ]
+        },
+        "ordinary_sqlite": {
+          "child_cpu_ns": [],
+          "exact": true,
+          "predictions": {
+            "conflicting": [],
+            "included": [
+              "at-start",
+              "edge-negative",
+              "edge-positive",
+              "edge-west",
+              "far-east",
+              "north-limit",
+              "south-limit"
+            ]
+          },
+          "wall_ns": [
+            526752,
+            294022
+          ]
+        }
+      },
+      "expected": {
+        "conflicting": [],
+        "included": [
+          "at-start",
+          "edge-negative",
+          "edge-positive",
+          "edge-west",
+          "far-east",
+          "north-limit",
+          "south-limit"
+        ]
+      },
+      "family": "boundary",
+      "id": "right-connected"
+    },
+    {
+      "arms": {
+        "candidate": {
+          "child_cpu_ns": [
+            26547000,
+            26290000
+          ],
+          "exact": true,
+          "predictions": {
+            "conflicting": [],
+            "included": [
+              "edge-east",
+              "edge-negative",
+              "edge-positive",
+              "far-west",
+              "north-limit",
+              "south-limit",
+              "threshold"
+            ]
+          },
+          "wall_ns": [
+            36608480,
+            26569099
+          ]
+        },
+        "exact_oracle": {
+          "child_cpu_ns": [
+            27048000,
+            27820000
+          ],
+          "exact": true,
+          "predictions": {
+            "conflicting": [],
+            "included": [
+              "edge-east",
+              "edge-negative",
+              "edge-positive",
+              "far-west",
+              "north-limit",
+              "south-limit",
+              "threshold"
+            ]
+          },
+          "wall_ns": [
+            27340980,
+            28143857
+          ]
+        },
+        "ordinary_sqlite": {
+          "child_cpu_ns": [],
+          "exact": true,
+          "predictions": {
+            "conflicting": [],
+            "included": [
+              "edge-east",
+              "edge-negative",
+              "edge-positive",
+              "far-west",
+              "north-limit",
+              "south-limit",
+              "threshold"
+            ]
+          },
+          "wall_ns": [
+            454755,
+            511660
+          ]
+        }
+      },
+      "expected": {
+        "conflicting": [],
+        "included": [
+          "edge-east",
+          "edge-negative",
+          "edge-positive",
+          "far-west",
+          "north-limit",
+          "south-limit",
+          "threshold"
+        ]
+      },
+      "family": "boundary",
+      "id": "left-connected"
+    },
+    {
+      "arms": {
+        "candidate": {
+          "child_cpu_ns": [
+            28383000,
+            26653000
+          ],
+          "exact": true,
+          "predictions": {
+            "conflicting": [],
+            "included": [
+              "edge-negative",
+              "edge-positive",
+              "north-limit",
+              "south-limit"
+            ]
+          },
+          "wall_ns": [
+            38424673,
+            40677472
+          ]
+        },
+        "exact_oracle": {
+          "child_cpu_ns": [
+            27350000,
+            26154000
+          ],
+          "exact": true,
+          "predictions": {
+            "conflicting": [],
+            "included": [
+              "edge-negative",
+              "edge-positive",
+              "north-limit",
+              "south-limit"
+            ]
+          },
+          "wall_ns": [
+            27657415,
+            26565142
+          ]
+        },
+        "ordinary_sqlite": {
+          "child_cpu_ns": [],
+          "exact": true,
+          "predictions": {
+            "conflicting": [],
+            "included": [
+              "edge-negative",
+              "edge-positive",
+              "north-limit",
+              "south-limit"
+            ]
+          },
+          "wall_ns": [
+            534113,
+            295435
+          ]
+        }
+      },
+      "expected": {
+        "conflicting": [],
+        "included": [
+          "edge-negative",
+          "edge-positive",
+          "north-limit",
+          "south-limit"
+        ]
+      },
+      "family": "boundary",
+      "id": "degenerate-positive"
+    },
+    {
+      "arms": {
+        "candidate": {
+          "child_cpu_ns": [
+            27356000,
+            27632000
+          ],
+          "exact": true,
+          "predictions": {
+            "conflicting": [],
+            "included": [
+              "edge-negative",
+              "edge-positive",
+              "north-limit",
+              "south-limit"
+            ]
+          },
+          "wall_ns": [
+            27726659,
+            42827276
+          ]
+        },
+        "exact_oracle": {
+          "child_cpu_ns": [
+            47663000,
+            27535000
+          ],
+          "exact": true,
+          "predictions": {
+            "conflicting": [],
+            "included": [
+              "edge-negative",
+              "edge-positive",
+              "north-limit",
+              "south-limit"
+            ]
+          },
+          "wall_ns": [
+            49154755,
+            27962935
+          ]
+        },
+        "ordinary_sqlite": {
+          "child_cpu_ns": [],
+          "exact": true,
+          "predictions": {
+            "conflicting": [],
+            "included": [
+              "edge-negative",
+              "edge-positive",
+              "north-limit",
+              "south-limit"
+            ]
+          },
+          "wall_ns": [
+            468495,
+            477118
+          ]
+        }
+      },
+      "expected": {
+        "conflicting": [],
+        "included": [
+          "edge-negative",
+          "edge-positive",
+          "north-limit",
+          "south-limit"
+        ]
+      },
+      "family": "boundary",
+      "id": "degenerate-wrap"
+    },
+    {
+      "arms": {
+        "candidate": {
+          "child_cpu_ns": [
+            25824000,
+            28161000
+          ],
+          "exact": true,
+          "predictions": {
+            "conflicting": [],
+            "included": [
+              "at-start",
+              "edge-east",
+              "edge-negative",
+              "edge-positive",
+              "edge-west",
+              "far-east",
+              "far-west",
+              "north-limit",
+              "south-limit",
+              "threshold",
+              "zero-meridian"
+            ]
+          },
+          "wall_ns": [
+            27233608,
+            28521596
+          ]
+        },
+        "exact_oracle": {
+          "child_cpu_ns": [
+            27263000,
+            27693000
+          ],
+          "exact": true,
+          "predictions": {
+            "conflicting": [],
+            "included": [
+              "at-start",
+              "edge-east",
+              "edge-negative",
+              "edge-positive",
+              "edge-west",
+              "far-east",
+              "far-west",
+              "north-limit",
+              "south-limit",
+              "threshold",
+              "zero-meridian"
+            ]
+          },
+          "wall_ns": [
+            46044520,
+            29240928
+          ]
+        },
+        "ordinary_sqlite": {
+          "child_cpu_ns": [],
+          "exact": true,
+          "predictions": {
+            "conflicting": [],
+            "included": [
+              "at-start",
+              "edge-east",
+              "edge-negative",
+              "edge-positive",
+              "edge-west",
+              "far-east",
+              "far-west",
+              "north-limit",
+              "south-limit",
+              "threshold",
+              "zero-meridian"
+            ]
+          },
+          "wall_ns": [
+            482996,
+            255895
+          ]
+        }
+      },
+      "expected": {
+        "conflicting": [],
+        "included": [
+          "at-start",
+          "edge-east",
+          "edge-negative",
+          "edge-positive",
+          "edge-west",
+          "far-east",
+          "far-west",
+          "north-limit",
+          "south-limit",
+          "threshold",
+          "zero-meridian"
+        ]
+      },
+      "family": "boundary",
+      "id": "full-circumference"
+    },
+    {
+      "arms": {
+        "candidate": {
+          "child_cpu_ns": [
+            27580000,
+            25944000
+          ],
+          "exact": true,
+          "predictions": {
+            "conflicting": [
+              "conflict-lat",
+              "conflict-time",
+              "outside-conflict"
+            ],
+            "included": [
+              "latest-enters",
+              "old-conflict-resolved",
+              "same-physical-id"
+            ]
+          },
+          "wall_ns": [
+            27948935,
+            27377726
+          ]
+        },
+        "exact_oracle": {
+          "child_cpu_ns": [
+            27638000,
+            26744000
+          ],
+          "exact": true,
+          "predictions": {
+            "conflicting": [
+              "conflict-lat",
+              "conflict-time",
+              "outside-conflict"
+            ],
+            "included": [
+              "latest-enters",
+              "old-conflict-resolved",
+              "same-physical-id"
+            ]
+          },
+          "wall_ns": [
+            34880820,
+            40823659
+          ]
+        },
+        "ordinary_sqlite": {
+          "child_cpu_ns": [],
+          "exact": false,
+          "predictions": {
+            "conflicting": [
+              "conflict-time",
+              "outside-conflict"
+            ],
+            "included": [
+              "conflict-lat",
+              "latest-enters",
+              "old-conflict-resolved",
+              "same-physical-id"
+            ]
+          },
+          "wall_ns": [
+            522275,
+            532160
+          ]
+        }
+      },
+      "expected": {
+        "conflicting": [
+          "conflict-lat",
+          "conflict-time",
+          "outside-conflict"
+        ],
+        "included": [
+          "latest-enters",
+          "old-conflict-resolved",
+          "same-physical-id"
+        ]
+      },
+      "family": "revision",
+      "id": "revision-quarantine"
+    },
+    {
+      "arms": {
+        "candidate": {
+          "child_cpu_ns": [
+            26734000,
+            26422000
+          ],
+          "exact": true,
+          "predictions": {
+            "conflicting": [],
+            "included": [
+              "exact-magnitude",
+              "latitude-near-in",
+              "left-just-inside",
+              "right-just-inside",
+              "smallest-magnitude-in"
+            ]
+          },
+          "wall_ns": [
+            27170112,
+            26870752
+          ]
+        },
+        "exact_oracle": {
+          "child_cpu_ns": [
+            26389000,
+            27969000
+          ],
+          "exact": true,
+          "predictions": {
+            "conflicting": [],
+            "included": [
+              "exact-magnitude",
+              "latitude-near-in",
+              "left-just-inside",
+              "right-just-inside",
+              "smallest-magnitude-in"
+            ]
+          },
+          "wall_ns": [
+            26758424,
+            46050669
+          ]
+        },
+        "ordinary_sqlite": {
+          "child_cpu_ns": [],
+          "exact": false,
+          "predictions": {
+            "conflicting": [],
+            "included": [
+              "exact-magnitude",
+              "latitude-near-in",
+              "latitude-near-out",
+              "left-just-inside",
+              "left-just-outside",
+              "near-magnitude-out",
+              "right-just-inside",
+              "right-just-outside",
+              "smallest-magnitude-in"
+            ]
+          },
+          "wall_ns": [
+            513763,
+            293802
+          ]
+        }
+      },
+      "expected": {
+        "conflicting": [],
+        "included": [
+          "exact-magnitude",
+          "latitude-near-in",
+          "left-just-inside",
+          "right-just-inside",
+          "smallest-magnitude-in"
+        ]
+      },
+      "family": "precision",
+      "id": "exact-decimal"
+    },
+    {
+      "arms": {
+        "candidate": {
+          "child_cpu_ns": [
+            27215000,
+            27143000
+          ],
+          "exact": true,
+          "predictions": {
+            "conflicting": [
+              "hold-00-3739d0",
+              "hold-00-b10430",
+              "hold-00-fe5a12"
+            ],
+            "included": [
+              "hold-00-5d8b11"
+            ]
+          },
+          "wall_ns": [
+            45364887,
+            27487370
+          ]
+        },
+        "exact_oracle": {
+          "child_cpu_ns": [
+            26824000,
+            27748000
+          ],
+          "exact": true,
+          "predictions": {
+            "conflicting": [
+              "hold-00-3739d0",
+              "hold-00-b10430",
+              "hold-00-fe5a12"
+            ],
+            "included": [
+              "hold-00-5d8b11"
+            ]
+          },
+          "wall_ns": [
+            27192348,
+            28163067
+          ]
+        },
+        "ordinary_sqlite": {
+          "child_cpu_ns": [],
+          "exact": true,
+          "predictions": {
+            "conflicting": [
+              "hold-00-3739d0",
+              "hold-00-b10430",
+              "hold-00-fe5a12"
+            ],
+            "included": [
+              "hold-00-5d8b11"
+            ]
+          },
+          "wall_ns": [
+            492752,
+            503447
+          ]
+        }
+      },
+      "expected": {
+        "conflicting": [
+          "hold-00-3739d0",
+          "hold-00-b10430",
+          "hold-00-fe5a12"
+        ],
+        "included": [
+          "hold-00-5d8b11"
+        ]
+      },
+      "family": "seeded",
+      "id": "seeded-00"
+    },
+    {
+      "arms": {
+        "candidate": {
+          "child_cpu_ns": [
+            25710000,
+            25250000
+          ],
+          "exact": true,
+          "predictions": {
+            "conflicting": [
+              "hold-01-8dd79a",
+              "hold-01-efc777",
+              "hold-01-f50f0c"
+            ],
+            "included": [
+              "hold-01-602410"
+            ]
+          },
+          "wall_ns": [
+            40888515,
+            44357202
+          ]
+        },
+        "exact_oracle": {
+          "child_cpu_ns": [
+            25574000,
+            25233000
+          ],
+          "exact": true,
+          "predictions": {
+            "conflicting": [
+              "hold-01-8dd79a",
+              "hold-01-efc777",
+              "hold-01-f50f0c"
+            ],
+            "included": [
+              "hold-01-602410"
+            ]
+          },
+          "wall_ns": [
+            25955075,
+            25572501
+          ]
+        },
+        "ordinary_sqlite": {
+          "child_cpu_ns": [],
+          "exact": true,
+          "predictions": {
+            "conflicting": [
+              "hold-01-8dd79a",
+              "hold-01-efc777",
+              "hold-01-f50f0c"
+            ],
+            "included": [
+              "hold-01-602410"
+            ]
+          },
+          "wall_ns": [
+            524820,
+            275695
+          ]
+        }
+      },
+      "expected": {
+        "conflicting": [
+          "hold-01-8dd79a",
+          "hold-01-efc777",
+          "hold-01-f50f0c"
+        ],
+        "included": [
+          "hold-01-602410"
+        ]
+      },
+      "family": "seeded",
+      "id": "seeded-01"
+    },
+    {
+      "arms": {
+        "candidate": {
+          "child_cpu_ns": [
+            25985000,
+            26012000
+          ],
+          "exact": true,
+          "predictions": {
+            "conflicting": [
+              "hold-02-617ba0",
+              "hold-02-8629dd",
+              "hold-02-f0eb5a"
+            ],
+            "included": [
+              "hold-02-1c9f44",
+              "hold-02-451446",
+              "hold-02-cd5906",
+              "hold-02-dd3f85"
+            ]
+          },
+          "wall_ns": [
+            26313034,
+            44053165
+          ]
+        },
+        "exact_oracle": {
+          "child_cpu_ns": [
+            25269000,
+            25988000
+          ],
+          "exact": true,
+          "predictions": {
+            "conflicting": [
+              "hold-02-617ba0",
+              "hold-02-8629dd",
+              "hold-02-f0eb5a"
+            ],
+            "included": [
+              "hold-02-1c9f44",
+              "hold-02-451446",
+              "hold-02-cd5906",
+              "hold-02-dd3f85"
+            ]
+          },
+          "wall_ns": [
+            25604219,
+            27425467
+          ]
+        },
+        "ordinary_sqlite": {
+          "child_cpu_ns": [],
+          "exact": true,
+          "predictions": {
+            "conflicting": [
+              "hold-02-617ba0",
+              "hold-02-8629dd",
+              "hold-02-f0eb5a"
+            ],
+            "included": [
+              "hold-02-1c9f44",
+              "hold-02-451446",
+              "hold-02-cd5906",
+              "hold-02-dd3f85"
+            ]
+          },
+          "wall_ns": [
+            516216,
+            516046
+          ]
+        }
+      },
+      "expected": {
+        "conflicting": [
+          "hold-02-617ba0",
+          "hold-02-8629dd",
+          "hold-02-f0eb5a"
+        ],
+        "included": [
+          "hold-02-1c9f44",
+          "hold-02-451446",
+          "hold-02-cd5906",
+          "hold-02-dd3f85"
+        ]
+      },
+      "family": "seeded",
+      "id": "seeded-02"
+    },
+    {
+      "arms": {
+        "candidate": {
+          "child_cpu_ns": [
+            26127000,
+            28321000
+          ],
+          "exact": true,
+          "predictions": {
+            "conflicting": [
+              "hold-03-b16057",
+              "hold-03-bcec58"
+            ],
+            "included": []
+          },
+          "wall_ns": [
+            26467917,
+            28686774
+          ]
+        },
+        "exact_oracle": {
+          "child_cpu_ns": [
+            26197000,
+            26903000
+          ],
+          "exact": true,
+          "predictions": {
+            "conflicting": [
+              "hold-03-b16057",
+              "hold-03-bcec58"
+            ],
+            "included": []
+          },
+          "wall_ns": [
+            40267663,
+            27253659
+          ]
+        },
+        "ordinary_sqlite": {
+          "child_cpu_ns": [],
+          "exact": true,
+          "predictions": {
+            "conflicting": [
+              "hold-03-b16057",
+              "hold-03-bcec58"
+            ],
+            "included": []
+          },
+          "wall_ns": [
+            474814,
+            254313
+          ]
+        }
+      },
+      "expected": {
+        "conflicting": [
+          "hold-03-b16057",
+          "hold-03-bcec58"
+        ],
+        "included": []
+      },
+      "family": "seeded",
+      "id": "seeded-03"
+    },
+    {
+      "arms": {
+        "candidate": {
+          "child_cpu_ns": [
+            30238000,
+            24993000
+          ],
+          "exact": true,
+          "predictions": {
+            "conflicting": [
+              "hold-04-a4fc6b",
+              "hold-04-d26b1d"
+            ],
+            "included": []
+          },
+          "wall_ns": [
+            36025892,
+            25312920
+          ]
+        },
+        "exact_oracle": {
+          "child_cpu_ns": [
+            27546000,
+            25906000
+          ],
+          "exact": true,
+          "predictions": {
+            "conflicting": [
+              "hold-04-a4fc6b",
+              "hold-04-d26b1d"
+            ],
+            "included": []
+          },
+          "wall_ns": [
+            42734773,
+            37139767
+          ]
+        },
+        "ordinary_sqlite": {
+          "child_cpu_ns": [],
+          "exact": true,
+          "predictions": {
+            "conflicting": [
+              "hold-04-a4fc6b",
+              "hold-04-d26b1d"
+            ],
+            "included": []
+          },
+          "wall_ns": [
+            473422,
+            461795
+          ]
+        }
+      },
+      "expected": {
+        "conflicting": [
+          "hold-04-a4fc6b",
+          "hold-04-d26b1d"
+        ],
+        "included": []
+      },
+      "family": "seeded",
+      "id": "seeded-04"
+    },
+    {
+      "arms": {
+        "candidate": {
+          "child_cpu_ns": [
+            24795000,
+            25580000
+          ],
+          "exact": true,
+          "predictions": {
+            "conflicting": [
+              "hold-05-2f9d4d",
+              "hold-05-3914c5"
+            ],
+            "included": [
+              "hold-05-26b0de",
+              "hold-05-3211c3"
+            ]
+          },
+          "wall_ns": [
+            25225739,
+            25907524
+          ]
+        },
+        "exact_oracle": {
+          "child_cpu_ns": [
+            26082000,
+            26924000
+          ],
+          "exact": true,
+          "predictions": {
+            "conflicting": [
+              "hold-05-2f9d4d",
+              "hold-05-3914c5"
+            ],
+            "included": [
+              "hold-05-26b0de",
+              "hold-05-3211c3"
+            ]
+          },
+          "wall_ns": [
+            27535694,
+            41005041
+          ]
+        },
+        "ordinary_sqlite": {
+          "child_cpu_ns": [],
+          "exact": true,
+          "predictions": {
+            "conflicting": [
+              "hold-05-2f9d4d",
+              "hold-05-3914c5"
+            ],
+            "included": [
+              "hold-05-26b0de",
+              "hold-05-3211c3"
+            ]
+          },
+          "wall_ns": [
+            479772,
+            298899
+          ]
+        }
+      },
+      "expected": {
+        "conflicting": [
+          "hold-05-2f9d4d",
+          "hold-05-3914c5"
+        ],
+        "included": [
+          "hold-05-26b0de",
+          "hold-05-3211c3"
+        ]
+      },
+      "family": "seeded",
+      "id": "seeded-05"
+    },
+    {
+      "arms": {
+        "candidate": {
+          "child_cpu_ns": [
+            26319000,
+            26706000
+          ],
+          "exact": true,
+          "predictions": {
+            "conflicting": [
+              "hold-06-0d90ca",
+              "hold-06-c54016"
+            ],
+            "included": [
+              "hold-06-06cc63",
+              "hold-06-74e73e"
+            ]
+          },
+          "wall_ns": [
+            27739409,
+            45302906
+          ]
+        },
+        "exact_oracle": {
+          "child_cpu_ns": [
+            27066000,
+            29147000
+          ],
+          "exact": true,
+          "predictions": {
+            "conflicting": [
+              "hold-06-0d90ca",
+              "hold-06-c54016"
+            ],
+            "included": [
+              "hold-06-06cc63",
+              "hold-06-74e73e"
+            ]
+          },
+          "wall_ns": [
+            27442143,
+            30639171
+          ]
+        },
+        "ordinary_sqlite": {
+          "child_cpu_ns": [],
+          "exact": true,
+          "predictions": {
+            "conflicting": [
+              "hold-06-0d90ca",
+              "hold-06-c54016"
+            ],
+            "included": [
+              "hold-06-06cc63",
+              "hold-06-74e73e"
+            ]
+          },
+          "wall_ns": [
+            462675,
+            486262
+          ]
+        }
+      },
+      "expected": {
+        "conflicting": [
+          "hold-06-0d90ca",
+          "hold-06-c54016"
+        ],
+        "included": [
+          "hold-06-06cc63",
+          "hold-06-74e73e"
+        ]
+      },
+      "family": "seeded",
+      "id": "seeded-06"
+    },
+    {
+      "arms": {
+        "candidate": {
+          "child_cpu_ns": [
+            26340000,
+            26455000
+          ],
+          "exact": true,
+          "predictions": {
+            "conflicting": [
+              "hold-07-8223e0",
+              "hold-07-9739c3"
+            ],
+            "included": []
+          },
+          "wall_ns": [
+            27805209,
+            27949036
+          ]
+        },
+        "exact_oracle": {
+          "child_cpu_ns": [
+            27126000,
+            28879000
+          ],
+          "exact": true,
+          "predictions": {
+            "conflicting": [
+              "hold-07-8223e0",
+              "hold-07-9739c3"
+            ],
+            "included": []
+          },
+          "wall_ns": [
+            41215127,
+            29346196
+          ]
+        },
+        "ordinary_sqlite": {
+          "child_cpu_ns": [],
+          "exact": true,
+          "predictions": {
+            "conflicting": [
+              "hold-07-8223e0",
+              "hold-07-9739c3"
+            ],
+            "included": []
+          },
+          "wall_ns": [
+            504348,
+            258539
+          ]
+        }
+      },
+      "expected": {
+        "conflicting": [
+          "hold-07-8223e0",
+          "hold-07-9739c3"
+        ],
+        "included": []
+      },
+      "family": "seeded",
+      "id": "seeded-07"
+    },
+    {
+      "arms": {
+        "candidate": {
+          "child_cpu_ns": [
+            29113000,
+            27960000
+          ],
+          "exact": true,
+          "predictions": {
+            "conflicting": [],
+            "included": []
+          },
+          "wall_ns": [
+            29480047,
+            44916599
+          ]
+        },
+        "exact_oracle": {
+          "child_cpu_ns": [
+            30362000,
+            63786000
+          ],
+          "exact": true,
+          "predictions": {
+            "conflicting": [],
+            "included": []
+          },
+          "wall_ns": [
+            44460998,
+            64257742
+          ]
+        },
+        "ordinary_sqlite": {
+          "child_cpu_ns": [],
+          "exact": true,
+          "predictions": {
+            "conflicting": [],
+            "included": []
+          },
+          "wall_ns": [
+            464188,
+            406552
+          ]
+        }
+      },
+      "expected": {
+        "conflicting": [],
+        "included": []
+      },
+      "family": "seeded",
+      "id": "seeded-08"
+    },
+    {
+      "arms": {
+        "candidate": {
+          "child_cpu_ns": [
+            30096000,
+            26971000
+          ],
+          "exact": true,
+          "predictions": {
+            "conflicting": [
+              "hold-09-16cf90",
+              "hold-09-18a1cc",
+              "hold-09-4faceb"
+            ],
+            "included": [
+              "hold-09-2af810"
+            ]
+          },
+          "wall_ns": [
+            45489946,
+            42480701
+          ]
+        },
+        "exact_oracle": {
+          "child_cpu_ns": [
+            28930000,
+            28091000
+          ],
+          "exact": true,
+          "predictions": {
+            "conflicting": [
+              "hold-09-16cf90",
+              "hold-09-18a1cc",
+              "hold-09-4faceb"
+            ],
+            "included": [
+              "hold-09-2af810"
+            ]
+          },
+          "wall_ns": [
+            30393111,
+            28458380
+          ]
+        },
+        "ordinary_sqlite": {
+          "child_cpu_ns": [],
+          "exact": true,
+          "predictions": {
+            "conflicting": [
+              "hold-09-16cf90",
+              "hold-09-18a1cc",
+              "hold-09-4faceb"
+            ],
+            "included": [
+              "hold-09-2af810"
+            ]
+          },
+          "wall_ns": [
+            534625,
+            295775
+          ]
+        }
+      },
+      "expected": {
+        "conflicting": [
+          "hold-09-16cf90",
+          "hold-09-18a1cc",
+          "hold-09-4faceb"
+        ],
+        "included": [
+          "hold-09-2af810"
+        ]
+      },
+      "family": "seeded",
+      "id": "seeded-09"
+    },
+    {
+      "arms": {
+        "candidate": {
+          "child_cpu_ns": [
+            28463000,
+            40040000
+          ],
+          "exact": true,
+          "predictions": {
+            "conflicting": [
+              "hold-10-1b60f8",
+              "hold-10-b71d27"
+            ],
+            "included": []
+          },
+          "wall_ns": [
+            28808238,
+            58908451
+          ]
+        },
+        "exact_oracle": {
+          "child_cpu_ns": [
+            27847000,
+            41317000
+          ],
+          "exact": true,
+          "predictions": {
+            "conflicting": [
+              "hold-10-1b60f8",
+              "hold-10-b71d27"
+            ],
+            "included": []
+          },
+          "wall_ns": [
+            28254704,
+            41787628
+          ]
+        },
+        "ordinary_sqlite": {
+          "child_cpu_ns": [],
+          "exact": true,
+          "predictions": {
+            "conflicting": [
+              "hold-10-1b60f8",
+              "hold-10-b71d27"
+            ],
+            "included": []
+          },
+          "wall_ns": [
+            575135,
+            682297
+          ]
+        }
+      },
+      "expected": {
+        "conflicting": [
+          "hold-10-1b60f8",
+          "hold-10-b71d27"
+        ],
+        "included": []
+      },
+      "family": "seeded",
+      "id": "seeded-10"
+    },
+    {
+      "arms": {
+        "candidate": {
+          "child_cpu_ns": [
+            28428000,
+            35261000
+          ],
+          "exact": true,
+          "predictions": {
+            "conflicting": [
+              "hold-11-2ca282",
+              "hold-11-dce16b",
+              "hold-11-e707c2"
+            ],
+            "included": [
+              "hold-11-7ba2cb"
+            ]
+          },
+          "wall_ns": [
+            42527777,
+            35804239
+          ]
+        },
+        "exact_oracle": {
+          "child_cpu_ns": [
+            32172000,
+            35150000
+          ],
+          "exact": true,
+          "predictions": {
+            "conflicting": [
+              "hold-11-2ca282",
+              "hold-11-dce16b",
+              "hold-11-e707c2"
+            ],
+            "included": [
+              "hold-11-7ba2cb"
+            ]
+          },
+          "wall_ns": [
+            32588402,
+            50602336
+          ]
+        },
+        "ordinary_sqlite": {
+          "child_cpu_ns": [],
+          "exact": true,
+          "predictions": {
+            "conflicting": [
+              "hold-11-2ca282",
+              "hold-11-dce16b",
+              "hold-11-e707c2"
+            ],
+            "included": [
+              "hold-11-7ba2cb"
+            ]
+          },
+          "wall_ns": [
+            715876,
+            435976
+          ]
+        }
+      },
+      "expected": {
+        "conflicting": [
+          "hold-11-2ca282",
+          "hold-11-dce16b",
+          "hold-11-e707c2"
+        ],
+        "included": [
+          "hold-11-7ba2cb"
+        ]
+      },
+      "family": "seeded",
+      "id": "seeded-11"
+    },
+    {
+      "arms": {
+        "candidate": {
+          "child_cpu_ns": [
+            35670000,
+            30975000
+          ],
+          "exact": true,
+          "predictions": {
+            "conflicting": [
+              "hold-12-4757bd",
+              "hold-12-8e9e2b",
+              "hold-12-fcd592"
+            ],
+            "included": [
+              "hold-12-51811e"
+            ]
+          },
+          "wall_ns": [
+            49820730,
+            31345383
+          ]
+        },
+        "exact_oracle": {
+          "child_cpu_ns": [
+            36948000,
+            26403000
+          ],
+          "exact": true,
+          "predictions": {
+            "conflicting": [
+              "hold-12-4757bd",
+              "hold-12-8e9e2b",
+              "hold-12-fcd592"
+            ],
+            "included": [
+              "hold-12-51811e"
+            ]
+          },
+          "wall_ns": [
+            37460269,
+            44635501
+          ]
+        },
+        "ordinary_sqlite": {
+          "child_cpu_ns": [],
+          "exact": true,
+          "predictions": {
+            "conflicting": [
+              "hold-12-4757bd",
+              "hold-12-8e9e2b",
+              "hold-12-fcd592"
+            ],
+            "included": [
+              "hold-12-51811e"
+            ]
+          },
+          "wall_ns": [
+            679262,
+            502896
+          ]
+        }
+      },
+      "expected": {
+        "conflicting": [
+          "hold-12-4757bd",
+          "hold-12-8e9e2b",
+          "hold-12-fcd592"
+        ],
+        "included": [
+          "hold-12-51811e"
+        ]
+      },
+      "family": "seeded",
+      "id": "seeded-12"
+    },
+    {
+      "arms": {
+        "candidate": {
+          "child_cpu_ns": [
+            25883000,
+            26771000
+          ],
+          "exact": true,
+          "predictions": {
+            "conflicting": [
+              "hold-13-609ef3"
+            ],
+            "included": []
+          },
+          "wall_ns": [
+            26231232,
+            27227330
+          ]
+        },
+        "exact_oracle": {
+          "child_cpu_ns": [
+            25635000,
+            26743000
+          ],
+          "exact": true,
+          "predictions": {
+            "conflicting": [
+              "hold-13-609ef3"
+            ],
+            "included": []
+          },
+          "wall_ns": [
+            26020764,
+            40721746
+          ]
+        },
+        "ordinary_sqlite": {
+          "child_cpu_ns": [],
+          "exact": true,
+          "predictions": {
+            "conflicting": [
+              "hold-13-609ef3"
+            ],
+            "included": []
+          },
+          "wall_ns": [
+            456847,
+            226040
+          ]
+        }
+      },
+      "expected": {
+        "conflicting": [
+          "hold-13-609ef3"
+        ],
+        "included": []
+      },
+      "family": "seeded",
+      "id": "seeded-13"
+    },
+    {
+      "arms": {
+        "candidate": {
+          "child_cpu_ns": [
+            25534000,
+            27658000
+          ],
+          "exact": true,
+          "predictions": {
+            "conflicting": [
+              "hold-14-9d0ead"
+            ],
+            "included": []
+          },
+          "wall_ns": [
+            25865702,
+            41836772
+          ]
+        },
+        "exact_oracle": {
+          "child_cpu_ns": [
+            26090000,
+            28121000
+          ],
+          "exact": true,
+          "predictions": {
+            "conflicting": [
+              "hold-14-9d0ead"
+            ],
+            "included": []
+          },
+          "wall_ns": [
+            26424251,
+            28558511
+          ]
+        },
+        "ordinary_sqlite": {
+          "child_cpu_ns": [],
+          "exact": true,
+          "predictions": {
+            "conflicting": [
+              "hold-14-9d0ead"
+            ],
+            "included": []
+          },
+          "wall_ns": [
+            469005,
+            478300
+          ]
+        }
+      },
+      "expected": {
+        "conflicting": [
+          "hold-14-9d0ead"
+        ],
+        "included": []
+      },
+      "family": "seeded",
+      "id": "seeded-14"
+    },
+    {
+      "arms": {
+        "candidate": {
+          "child_cpu_ns": [
+            49334000,
+            36779000
+          ],
+          "exact": true,
+          "predictions": {
+            "conflicting": [
+              "hold-15-49ca70",
+              "hold-15-53281a",
+              "hold-15-89c793"
+            ],
+            "included": []
+          },
+          "wall_ns": [
+            63451104,
+            37204486
+          ]
+        },
+        "exact_oracle": {
+          "child_cpu_ns": [
+            35920000,
+            38007000
+          ],
+          "exact": true,
+          "predictions": {
+            "conflicting": [
+              "hold-15-49ca70",
+              "hold-15-53281a",
+              "hold-15-89c793"
+            ],
+            "included": []
+          },
+          "wall_ns": [
+            36338512,
+            54004351
+          ]
+        },
+        "ordinary_sqlite": {
+          "child_cpu_ns": [],
+          "exact": true,
+          "predictions": {
+            "conflicting": [
+              "hold-15-49ca70",
+              "hold-15-53281a",
+              "hold-15-89c793"
+            ],
+            "included": []
+          },
+          "wall_ns": [
+            689206,
+            401544
+          ]
+        }
+      },
+      "expected": {
+        "conflicting": [
+          "hold-15-49ca70",
+          "hold-15-53281a",
+          "hold-15-89c793"
+        ],
+        "included": []
+      },
+      "family": "seeded",
+      "id": "seeded-15"
+    },
+    {
+      "arms": {
+        "candidate": {
+          "child_cpu_ns": [
+            32224000,
+            36247000
+          ],
+          "exact": true,
+          "predictions": {
+            "conflicting": [
+              "hold-16-6fffeb",
+              "hold-16-9668f9"
+            ],
+            "included": [
+              "hold-16-52f9b6",
+              "hold-16-aba376"
+            ]
+          },
+          "wall_ns": [
+            42396203,
+            36734018
+          ]
+        },
+        "exact_oracle": {
+          "child_cpu_ns": [
+            33215000,
+            34979000
+          ],
+          "exact": true,
+          "predictions": {
+            "conflicting": [
+              "hold-16-6fffeb",
+              "hold-16-9668f9"
+            ],
+            "included": [
+              "hold-16-52f9b6",
+              "hold-16-aba376"
+            ]
+          },
+          "wall_ns": [
+            33828562,
+            47434205
+          ]
+        },
+        "ordinary_sqlite": {
+          "child_cpu_ns": [],
+          "exact": true,
+          "predictions": {
+            "conflicting": [
+              "hold-16-6fffeb",
+              "hold-16-9668f9"
+            ],
+            "included": [
+              "hold-16-52f9b6",
+              "hold-16-aba376"
+            ]
+          },
+          "wall_ns": [
+            612121,
+            491449
+          ]
+        }
+      },
+      "expected": {
+        "conflicting": [
+          "hold-16-6fffeb",
+          "hold-16-9668f9"
+        ],
+        "included": [
+          "hold-16-52f9b6",
+          "hold-16-aba376"
+        ]
+      },
+      "family": "seeded",
+      "id": "seeded-16"
+    },
+    {
+      "arms": {
+        "candidate": {
+          "child_cpu_ns": [
+            25570000,
+            38862000
+          ],
+          "exact": true,
+          "predictions": {
+            "conflicting": [
+              "hold-17-3a7cbd",
+              "hold-17-edc169"
+            ],
+            "included": []
+          },
+          "wall_ns": [
+            25941036,
+            45827473
+          ]
+        },
+        "exact_oracle": {
+          "child_cpu_ns": [
+            27362000,
+            28940000
+          ],
+          "exact": true,
+          "predictions": {
+            "conflicting": [
+              "hold-17-3a7cbd",
+              "hold-17-edc169"
+            ],
+            "included": []
+          },
+          "wall_ns": [
+            29138439,
+            47259332
+          ]
+        },
+        "ordinary_sqlite": {
+          "child_cpu_ns": [],
+          "exact": true,
+          "predictions": {
+            "conflicting": [
+              "hold-17-3a7cbd",
+              "hold-17-edc169"
+            ],
+            "included": []
+          },
+          "wall_ns": [
+            460443,
+            289716
+          ]
+        }
+      },
+      "expected": {
+        "conflicting": [
+          "hold-17-3a7cbd",
+          "hold-17-edc169"
+        ],
+        "included": []
+      },
+      "family": "seeded",
+      "id": "seeded-17"
+    },
+    {
+      "arms": {
+        "candidate": {
+          "child_cpu_ns": [
+            29295000,
+            34023000
+          ],
+          "exact": true,
+          "predictions": {
+            "conflicting": [
+              "hold-18-2029d5",
+              "hold-18-3505a3",
+              "hold-18-5f8f02"
+            ],
+            "included": [
+              "hold-18-840943",
+              "hold-18-aed2f5"
+            ]
+          },
+          "wall_ns": [
+            29823274,
+            34816413
+          ]
+        },
+        "exact_oracle": {
+          "child_cpu_ns": [
+            27932000,
+            36061000
+          ],
+          "exact": true,
+          "predictions": {
+            "conflicting": [
+              "hold-18-2029d5",
+              "hold-18-3505a3",
+              "hold-18-5f8f02"
+            ],
+            "included": [
+              "hold-18-840943",
+              "hold-18-aed2f5"
+            ]
+          },
+          "wall_ns": [
+            43104238,
+            50640512
+          ]
+        },
+        "ordinary_sqlite": {
+          "child_cpu_ns": [],
+          "exact": true,
+          "predictions": {
+            "conflicting": [
+              "hold-18-2029d5",
+              "hold-18-3505a3",
+              "hold-18-5f8f02"
+            ],
+            "included": [
+              "hold-18-840943",
+              "hold-18-aed2f5"
+            ]
+          },
+          "wall_ns": [
+            1206394,
+            642867
+          ]
+        }
+      },
+      "expected": {
+        "conflicting": [
+          "hold-18-2029d5",
+          "hold-18-3505a3",
+          "hold-18-5f8f02"
+        ],
+        "included": [
+          "hold-18-840943",
+          "hold-18-aed2f5"
+        ]
+      },
+      "family": "seeded",
+      "id": "seeded-18"
+    },
+    {
+      "arms": {
+        "candidate": {
+          "child_cpu_ns": [
+            34530000,
+            29478000
+          ],
+          "exact": true,
+          "predictions": {
+            "conflicting": [],
+            "included": []
+          },
+          "wall_ns": [
+            35104466,
+            30070996
+          ]
+        },
+        "exact_oracle": {
+          "child_cpu_ns": [
+            32699000,
+            28532000
+          ],
+          "exact": true,
+          "predictions": {
+            "conflicting": [],
+            "included": []
+          },
+          "wall_ns": [
+            48423677,
+            28948318
+          ]
+        },
+        "ordinary_sqlite": {
+          "child_cpu_ns": [],
+          "exact": true,
+          "predictions": {
+            "conflicting": [],
+            "included": []
+          },
+          "wall_ns": [
+            505821,
+            188073
+          ]
+        }
+      },
+      "expected": {
+        "conflicting": [],
+        "included": []
+      },
+      "family": "seeded",
+      "id": "seeded-19"
+    },
+    {
+      "arms": {
+        "candidate": {
+          "child_cpu_ns": [
+            37889000,
+            36429000
+          ],
+          "exact": true,
+          "predictions": {
+            "conflicting": [
+              "hold-20-511810",
+              "hold-20-ba3ba1"
+            ],
+            "included": [
+              "hold-20-28187f"
+            ]
+          },
+          "wall_ns": [
+            38370529,
+            36920198
+          ]
+        },
+        "exact_oracle": {
+          "child_cpu_ns": [
+            30523000,
+            39296000
+          ],
+          "exact": true,
+          "predictions": {
+            "conflicting": [
+              "hold-20-511810",
+              "hold-20-ba3ba1"
+            ],
+            "included": [
+              "hold-20-28187f"
+            ]
+          },
+          "wall_ns": [
+            40798320,
+            53593834
+          ]
+        },
+        "ordinary_sqlite": {
+          "child_cpu_ns": [],
+          "exact": true,
+          "predictions": {
+            "conflicting": [
+              "hold-20-511810",
+              "hold-20-ba3ba1"
+            ],
+            "included": [
+              "hold-20-28187f"
+            ]
+          },
+          "wall_ns": [
+            568985,
+            601275
+          ]
+        }
+      },
+      "expected": {
+        "conflicting": [
+          "hold-20-511810",
+          "hold-20-ba3ba1"
+        ],
+        "included": [
+          "hold-20-28187f"
+        ]
+      },
+      "family": "seeded",
+      "id": "seeded-20"
+    },
+    {
+      "arms": {
+        "candidate": {
+          "child_cpu_ns": [
+            36939000,
+            27115000
+          ],
+          "exact": true,
+          "predictions": {
+            "conflicting": [
+              "hold-21-d88886"
+            ],
+            "included": [
+              "hold-21-bb639f"
+            ]
+          },
+          "wall_ns": [
+            37376118,
+            28592222
+          ]
+        },
+        "exact_oracle": {
+          "child_cpu_ns": [
+            29930000,
+            31244000
+          ],
+          "exact": true,
+          "predictions": {
+            "conflicting": [
+              "hold-21-d88886"
+            ],
+            "included": [
+              "hold-21-bb639f"
+            ]
+          },
+          "wall_ns": [
+            48012570,
+            32722375
+          ]
+        },
+        "ordinary_sqlite": {
+          "child_cpu_ns": [],
+          "exact": true,
+          "predictions": {
+            "conflicting": [
+              "hold-21-d88886"
+            ],
+            "included": [
+              "hold-21-bb639f"
+            ]
+          },
+          "wall_ns": [
+            527694,
+            270016
+          ]
+        }
+      },
+      "expected": {
+        "conflicting": [
+          "hold-21-d88886"
+        ],
+        "included": [
+          "hold-21-bb639f"
+        ]
+      },
+      "family": "seeded",
+      "id": "seeded-21"
+    },
+    {
+      "arms": {
+        "candidate": {
+          "child_cpu_ns": [
+            37489000,
+            34539000
+          ],
+          "exact": true,
+          "predictions": {
+            "conflicting": [
+              "hold-22-4850b0",
+              "hold-22-717436",
+              "hold-22-bdcf7f"
+            ],
+            "included": [
+              "hold-22-ff97f2"
+            ]
+          },
+          "wall_ns": [
+            38023858,
+            48844320
+          ]
+        },
+        "exact_oracle": {
+          "child_cpu_ns": [
+            33369000,
+            38227000
+          ],
+          "exact": true,
+          "predictions": {
+            "conflicting": [
+              "hold-22-4850b0",
+              "hold-22-717436",
+              "hold-22-bdcf7f"
+            ],
+            "included": [
+              "hold-22-ff97f2"
+            ]
+          },
+          "wall_ns": [
+            47556629,
+            39167208
+          ]
+        },
+        "ordinary_sqlite": {
+          "child_cpu_ns": [],
+          "exact": true,
+          "predictions": {
+            "conflicting": [
+              "hold-22-4850b0",
+              "hold-22-717436",
+              "hold-22-bdcf7f"
+            ],
+            "included": [
+              "hold-22-ff97f2"
+            ]
+          },
+          "wall_ns": [
+            665921,
+            817470
+          ]
+        }
+      },
+      "expected": {
+        "conflicting": [
+          "hold-22-4850b0",
+          "hold-22-717436",
+          "hold-22-bdcf7f"
+        ],
+        "included": [
+          "hold-22-ff97f2"
+        ]
+      },
+      "family": "seeded",
+      "id": "seeded-22"
+    },
+    {
+      "arms": {
+        "candidate": {
+          "child_cpu_ns": [
+            36375000,
+            36979000
+          ],
+          "exact": true,
+          "predictions": {
+            "conflicting": [
+              "hold-23-006e62",
+              "hold-23-ea556c"
+            ],
+            "included": [
+              "hold-23-3f6216"
+            ]
+          },
+          "wall_ns": [
+            51916862,
+            51201766
+          ]
+        },
+        "exact_oracle": {
+          "child_cpu_ns": [
+            30782000,
+            34029000
+          ],
+          "exact": true,
+          "predictions": {
+            "conflicting": [
+              "hold-23-006e62",
+              "hold-23-ea556c"
+            ],
+            "included": [
+              "hold-23-3f6216"
+            ]
+          },
+          "wall_ns": [
+            31246919,
+            35567149
+          ]
+        },
+        "ordinary_sqlite": {
+          "child_cpu_ns": [],
+          "exact": true,
+          "predictions": {
+            "conflicting": [
+              "hold-23-006e62",
+              "hold-23-ea556c"
+            ],
+            "included": [
+              "hold-23-3f6216"
+            ]
+          },
+          "wall_ns": [
+            563367,
+            246971
+          ]
+        }
+      },
+      "expected": {
+        "conflicting": [
+          "hold-23-006e62",
+          "hold-23-ea556c"
+        ],
+        "included": [
+          "hold-23-3f6216"
+        ]
+      },
+      "family": "seeded",
+      "id": "seeded-23"
+    },
+    {
+      "arms": {
+        "candidate": {
+          "child_cpu_ns": [
+            29423000,
+            26725000
+          ],
+          "exact": true,
+          "predictions": {
+            "conflicting": [],
+            "included": [
+              "at-start",
+              "edge-east",
+              "edge-negative",
+              "edge-positive",
+              "edge-west",
+              "far-east",
+              "far-west",
+              "north-limit",
+              "south-limit",
+              "threshold"
+            ]
+          },
+          "wall_ns": [
+            48620714,
+            27093448
+          ]
+        },
+        "exact_oracle": {
+          "child_cpu_ns": [
+            31195000,
+            28045000
+          ],
+          "exact": true,
+          "predictions": {
+            "conflicting": [],
+            "included": [
+              "at-start",
+              "edge-east",
+              "edge-negative",
+              "edge-positive",
+              "edge-west",
+              "far-east",
+              "far-west",
+              "north-limit",
+              "south-limit",
+              "threshold"
+            ]
+          },
+          "wall_ns": [
+            31664443,
+            29639188
+          ]
+        },
+        "ordinary_sqlite": {
+          "child_cpu_ns": [],
+          "exact": true,
+          "predictions": {
+            "conflicting": [],
+            "included": [
+              "at-start",
+              "edge-east",
+              "edge-negative",
+              "edge-positive",
+              "edge-west",
+              "far-east",
+              "far-west",
+              "north-limit",
+              "south-limit",
+              "threshold"
+            ]
+          },
+          "wall_ns": [
+            646722,
+            469907
+          ]
+        }
+      },
+      "expected": {
+        "conflicting": [],
+        "included": [
+          "at-start",
+          "edge-east",
+          "edge-negative",
+          "edge-positive",
+          "edge-west",
+          "far-east",
+          "far-west",
+          "north-limit",
+          "south-limit",
+          "threshold"
+        ]
+      },
+      "family": "invariance",
+      "id": "permuted-seam"
+    },
+    {
+      "arms": {
+        "candidate": {
+          "child_cpu_ns": [
+            32566000,
+            27227000
+          ],
+          "exact": true,
+          "predictions": {
+            "conflicting": [],
+            "included": [
+              "at-start",
+              "edge-east",
+              "edge-negative",
+              "edge-positive",
+              "edge-west",
+              "far-east",
+              "far-west",
+              "north-limit",
+              "south-limit",
+              "threshold"
+            ]
+          },
+          "wall_ns": [
+            46738824,
+            46379915
+          ]
+        },
+        "exact_oracle": {
+          "child_cpu_ns": [
+            27604000,
+            27224000
+          ],
+          "exact": true,
+          "predictions": {
+            "conflicting": [],
+            "included": [
+              "at-start",
+              "edge-east",
+              "edge-negative",
+              "edge-positive",
+              "edge-west",
+              "far-east",
+              "far-west",
+              "north-limit",
+              "south-limit",
+              "threshold"
+            ]
+          },
+          "wall_ns": [
+            28018870,
+            27651056
+          ]
+        },
+        "ordinary_sqlite": {
+          "child_cpu_ns": [],
+          "exact": true,
+          "predictions": {
+            "conflicting": [],
+            "included": [
+              "at-start",
+              "edge-east",
+              "edge-negative",
+              "edge-positive",
+              "edge-west",
+              "far-east",
+              "far-west",
+              "north-limit",
+              "south-limit",
+              "threshold"
+            ]
+          },
+          "wall_ns": [
+            528044,
+            337317
+          ]
+        }
+      },
+      "expected": {
+        "conflicting": [],
+        "included": [
+          "at-start",
+          "edge-east",
+          "edge-negative",
+          "edge-positive",
+          "edge-west",
+          "far-east",
+          "far-west",
+          "north-limit",
+          "south-limit",
+          "threshold"
+        ]
+      },
+      "family": "invariance",
+      "id": "equivalent-representation"
+    },
+    {
+      "arms": {
+        "candidate": {
+          "child_cpu_ns": [
+            26193000,
+            33805000
+          ],
+          "exact": true,
+          "predictions": {
+            "conflicting": [],
+            "included": [
+              "at-start",
+              "edge-east",
+              "edge-negative",
+              "edge-positive",
+              "edge-west",
+              "far-east",
+              "far-west",
+              "north-limit",
+              "south-limit",
+              "threshold"
+            ]
+          },
+          "wall_ns": [
+            26575700,
+            51956401
+          ]
+        },
+        "exact_oracle": {
+          "child_cpu_ns": [
+            27277000,
+            38986000
+          ],
+          "exact": true,
+          "predictions": {
+            "conflicting": [],
+            "included": [
+              "at-start",
+              "edge-east",
+              "edge-negative",
+              "edge-positive",
+              "edge-west",
+              "far-east",
+              "far-west",
+              "north-limit",
+              "south-limit",
+              "threshold"
+            ]
+          },
+          "wall_ns": [
+            27732659,
+            39543593
+          ]
+        },
+        "ordinary_sqlite": {
+          "child_cpu_ns": [],
+          "exact": true,
+          "predictions": {
+            "conflicting": [],
+            "included": [
+              "at-start",
+              "edge-east",
+              "edge-negative",
+              "edge-positive",
+              "edge-west",
+              "far-east",
+              "far-west",
+              "north-limit",
+              "south-limit",
+              "threshold"
+            ]
+          },
+          "wall_ns": [
+            522716,
+            725051
+          ]
+        }
+      },
+      "expected": {
+        "conflicting": [],
+        "included": [
+          "at-start",
+          "edge-east",
+          "edge-negative",
+          "edge-positive",
+          "edge-west",
+          "far-east",
+          "far-west",
+          "north-limit",
+          "south-limit",
+          "threshold"
+        ]
+      },
+      "family": "invariance",
+      "id": "dominated-old-data"
+    },
+    {
+      "arms": {
+        "candidate": {
+          "child_cpu_ns": [
+            28672000,
+            26217000
+          ],
+          "exact": true,
+          "predictions": {
+            "conflicting": [],
+            "included": [
+              "at-start",
+              "edge-east",
+              "edge-negative",
+              "edge-positive",
+              "edge-west",
+              "far-east",
+              "far-west",
+              "north-limit",
+              "south-limit",
+              "threshold"
+            ]
+          },
+          "wall_ns": [
+            46888490,
+            41562803
+          ]
+        },
+        "exact_oracle": {
+          "child_cpu_ns": [
+            26911000,
+            27740000
+          ],
+          "exact": true,
+          "predictions": {
+            "conflicting": [],
+            "included": [
+              "at-start",
+              "edge-east",
+              "edge-negative",
+              "edge-positive",
+              "edge-west",
+              "far-east",
+              "far-west",
+              "north-limit",
+              "south-limit",
+              "threshold"
+            ]
+          },
+          "wall_ns": [
+            27365578,
+            28172867
+          ]
+        },
+        "ordinary_sqlite": {
+          "child_cpu_ns": [],
+          "exact": true,
+          "predictions": {
+            "conflicting": [],
+            "included": [
+              "at-start",
+              "edge-east",
+              "edge-negative",
+              "edge-positive",
+              "edge-west",
+              "far-east",
+              "far-west",
+              "north-limit",
+              "south-limit",
+              "threshold"
+            ]
+          },
+          "wall_ns": [
+            516878,
+            252600
+          ]
+        }
+      },
+      "expected": {
+        "conflicting": [],
+        "included": [
+          "at-start",
+          "edge-east",
+          "edge-negative",
+          "edge-positive",
+          "edge-west",
+          "far-east",
+          "far-west",
+          "north-limit",
+          "south-limit",
+          "threshold"
+        ]
+      },
+      "family": "invariance",
+      "id": "shifted-latitude"
+    },
+    {
+      "arms": {
+        "candidate": {
+          "child_cpu_ns": [
+            27473000,
+            27020000
+          ],
+          "exact": true,
+          "predictions": {
+            "conflicting": [],
+            "included": [
+              "usc000rki5",
+              "usc000rkii",
+              "usc000rkjv",
+              "usc000rknc",
+              "usc000rksk",
+              "usc000rkvn",
+              "usc000rkzn",
+              "usc000rm6k"
+            ]
+          },
+          "wall_ns": [
+            29033225,
+            41150343
+          ]
+        },
+        "exact_oracle": {
+          "child_cpu_ns": [
+            27581000,
+            34714000
+          ],
+          "exact": true,
+          "predictions": {
+            "conflicting": [],
+            "included": [
+              "usc000rki5",
+              "usc000rkii",
+              "usc000rkjv",
+              "usc000rknc",
+              "usc000rksk",
+              "usc000rkvn",
+              "usc000rkzn",
+              "usc000rm6k"
+            ]
+          },
+          "wall_ns": [
+            28006601,
+            35152580
+          ]
+        },
+        "ordinary_sqlite": {
+          "child_cpu_ns": [],
+          "exact": true,
+          "predictions": {
+            "conflicting": [],
+            "included": [
+              "usc000rki5",
+              "usc000rkii",
+              "usc000rkjv",
+              "usc000rknc",
+              "usc000rksk",
+              "usc000rkvn",
+              "usc000rkzn",
+              "usc000rm6k"
+            ]
+          },
+          "wall_ns": [
+            459221,
+            665201
+          ]
+        }
+      },
+      "expected": {
+        "conflicting": [],
+        "included": [
+          "usc000rki5",
+          "usc000rkii",
+          "usc000rkjv",
+          "usc000rknc",
+          "usc000rksk",
+          "usc000rkvn",
+          "usc000rkzn",
+          "usc000rm6k"
+        ]
+      },
+      "family": "USGS",
+      "id": "aleutians-complete"
+    },
+    {
+      "arms": {
+        "candidate": {
+          "child_cpu_ns": [
+            36347000,
+            25187000
+          ],
+          "exact": true,
+          "predictions": {
+            "conflicting": [],
+            "included": []
+          },
+          "wall_ns": [
+            36804485,
+            44302164
+          ]
+        },
+        "exact_oracle": {
+          "child_cpu_ns": [
+            35462000,
+            32011000
+          ],
+          "exact": true,
+          "predictions": {
+            "conflicting": [],
+            "included": []
+          },
+          "wall_ns": [
+            49646574,
+            32440551
+          ]
+        },
+        "ordinary_sqlite": {
+          "child_cpu_ns": [],
+          "exact": true,
+          "predictions": {
+            "conflicting": [],
+            "included": []
+          },
+          "wall_ns": [
+            607374,
+            300432
+          ]
+        }
+      },
+      "expected": {
+        "conflicting": [],
+        "included": []
+      },
+      "family": "USGS",
+      "id": "aleutians-western-lobe"
+    },
+    {
+      "arms": {
+        "candidate": {
+          "child_cpu_ns": [
+            30436000,
+            35574000
+          ],
+          "exact": true,
+          "predictions": {
+            "conflicting": [],
+            "included": [
+              "usc000rki5",
+              "usc000rkii",
+              "usc000rkjv",
+              "usc000rknc",
+              "usc000rkvn"
+            ]
+          },
+          "wall_ns": [
+            30869778,
+            49734406
+          ]
+        },
+        "exact_oracle": {
+          "child_cpu_ns": [
+            26562000,
+            31502000
+          ],
+          "exact": true,
+          "predictions": {
+            "conflicting": [],
+            "included": [
+              "usc000rki5",
+              "usc000rkii",
+              "usc000rkjv",
+              "usc000rknc",
+              "usc000rkvn"
+            ]
+          },
+          "wall_ns": [
+            26970967,
+            31946893
+          ]
+        },
+        "ordinary_sqlite": {
+          "child_cpu_ns": [],
+          "exact": true,
+          "predictions": {
+            "conflicting": [],
+            "included": [
+              "usc000rki5",
+              "usc000rkii",
+              "usc000rkjv",
+              "usc000rknc",
+              "usc000rkvn"
+            ]
+          },
+          "wall_ns": [
+            477398,
+            486081
+          ]
+        }
+      },
+      "expected": {
+        "conflicting": [],
+        "included": [
+          "usc000rki5",
+          "usc000rkii",
+          "usc000rkjv",
+          "usc000rknc",
+          "usc000rkvn"
+        ]
+      },
+      "family": "USGS",
+      "id": "aleutians-higher-threshold"
+    },
+    {
+      "arms": {
+        "candidate": {
+          "child_cpu_ns": [
+            24795000,
+            26298000
+          ],
+          "exact": true,
+          "predictions": {
+            "conflicting": [],
+            "included": []
+          },
+          "wall_ns": [
+            25098617,
+            27712658
+          ]
+        },
+        "exact_oracle": {
+          "child_cpu_ns": [
+            37871000,
+            26395000
+          ],
+          "exact": true,
+          "predictions": {
+            "conflicting": [],
+            "included": []
+          },
+          "wall_ns": [
+            55060037,
+            26771523
+          ]
+        },
+        "ordinary_sqlite": {
+          "child_cpu_ns": [],
+          "exact": true,
+          "predictions": {
+            "conflicting": [],
+            "included": []
+          },
+          "wall_ns": [
+            647815,
+            234703
+          ]
+        }
+      },
+      "expected": {
+        "conflicting": [],
+        "included": []
+      },
+      "family": "USGS",
+      "id": "aleutians-exact-cutoff"
+    }
+  ],
+  "python": "3.12.14",
+  "reg_sha256": "98700874dc394b0fcb8557d56ac28b220c4efe5697c7b8c2c11698e4cb00e213",
+  "schema": "frontier/independent-geospatial-holdout-result/v1",
+  "scores": {
+    "candidate": {
+      "exact_cases": 40,
+      "false_positive_ids": 0,
+      "median_child_cpu_ns": 27645000.0,
+      "median_wall_ns": 35915065.5,
+      "strata": {
+        "USGS": {
+          "passed": 4,
+          "total": 4
+        },
+        "boundary": {
+          "passed": 6,
+          "total": 6
+        },
+        "invariance": {
+          "passed": 4,
+          "total": 4
+        },
+        "precision": {
+          "passed": 1,
+          "total": 1
+        },
+        "revision": {
+          "passed": 1,
+          "total": 1
+        },
+        "seeded": {
+          "passed": 24,
+          "total": 24
+        }
+      },
+      "total_cases": 40
+    },
+    "exact_oracle": {
+      "exact_cases": 40,
+      "false_positive_ids": 0,
+      "median_child_cpu_ns": 27965500.0,
+      "median_wall_ns": 32514476.5,
+      "strata": {
+        "USGS": {
+          "passed": 4,
+          "total": 4
+        },
+        "boundary": {
+          "passed": 6,
+          "total": 6
+        },
+        "invariance": {
+          "passed": 4,
+          "total": 4
+        },
+        "precision": {
+          "passed": 1,
+          "total": 1
+        },
+        "revision": {
+          "passed": 1,
+          "total": 1
+        },
+        "seeded": {
+          "passed": 24,
+          "total": 24
+        }
+      },
+      "total_cases": 40
+    },
+    "ordinary_sqlite": {
+      "exact_cases": 38,
+      "false_positive_ids": 5,
+      "median_child_cpu_ns": null,
+      "median_wall_ns": 488855.5,
+      "strata": {
+        "USGS": {
+          "passed": 4,
+          "total": 4
+        },
+        "boundary": {
+          "passed": 6,
+          "total": 6
+        },
+        "invariance": {
+          "passed": 4,
+          "total": 4
+        },
+        "precision": {
+          "passed": 0,
+          "total": 1
+        },
+        "revision": {
+          "passed": 0,
+          "total": 1
+        },
+        "seeded": {
+          "passed": 24,
+          "total": 24
+        }
+      },
+      "total_cases": 40
+    }
+  },
+  "sqlite": "3.53.1"
+}
