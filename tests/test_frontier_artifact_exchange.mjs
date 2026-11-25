@@ -175,13 +175,16 @@ test('a qualified source section cannot support exact readings or be cropped to 
     sources:[{id:'table',excerpt,url:'https://example.org/data',locator:'section',sha256:'a'.repeat(64)}],
     observations:[{source:'table',target,field:'batteryWeight',quote,value:64,unit:'kg'}],
   }).decision;
-  for (const heading of ['Maximum values …\n', 'Upper limits; ', 'Table 3 — Estimates\n', 'Data (approximate). ',
-    'Valeurs maximales\n', 'Limite supérieure; ', 'À titre indicatif\n']) {
+  for (const heading of ['Maximum values …\n', 'Upper limits; ', 'Table 3 — Estimates\n', 'Table 3 - Estimates\n',
+    'Data (approximate). ', 'Valeurs maximales\n', 'Limite supérieure; ', 'À titre indicatif\n', 'Données provisoires\n',
+    '## Maximum values\n', '• Upper limits; ', '- Upper limits\n', '**Estimated values**\n', '> Upper limits\n',
+    '<h3>Maximum values</h3>\n']) {
     const excerpt = heading + row;
     assert.equal(review(excerpt), 'insufficient');
     assert.equal(review(excerpt, row), 'insufficient');
   }
   assert.equal(review('Maximum continuous charging/discharging current: 30 A.\n' + row), 'supported');
+  assert.equal(review('Maximum operating current: 30 A.\n' + row), 'supported');
   assert.equal(review('Independent measurements.\n' + row), 'supported');
   assert.equal(review(row + '\nUpper limits for a subsequent section.'), 'supported');
 });

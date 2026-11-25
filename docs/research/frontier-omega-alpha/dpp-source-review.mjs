@@ -13,8 +13,8 @@ const isObject = value => value !== null && typeof value === 'object' && !Array.
 const tidy = value => typeof value === 'string' ? value.normalize('NFC').trim().toLowerCase().replace(/\s+/gu, ' ') : '';
 const digest = /^[a-f0-9]{64}$/u;
 const decimal = /^([+-]?)(\d{1,12})(?:[.,](\d{1,8}))?$/u;
-const qualificationHeading = /(?:^|[:—–(]\s*)(?:max(?:imum)?|min(?:imum)?|(?:upper|lower) (?:bounds?|limits?|estimates?)|bounds?|limits?|caps?|ceilings?|floors?|at (?:most|least)|approximat\p{L}*|estimat\p{L}*|typical|indicative|provisional|not (?:reported|measured)|(?:valeurs?|mesures?|données) (?:maximales?|minimales?|approximatives?|indicatives?|estim[ée]es?)|limites?|bornes?|estimations?|environ|à titre indicatif)(?=$|[\s.:,—–…/)])/iu;
-const separateCurrent = /^maximum (?:continuous )?(?:charge|charging)\s*\/\s*(?:discharge|discharging) current\s*:?\s*\d+(?:[.,]\d+)?\s*A$/iu;
+const qualificationHeading = /(?:^|[:—–(]\s*|\s-\s+)(?:max(?:imums?|ima)?|min(?:imums?|ima)?|(?:upper|lower) (?:bounds?|limits?|estimates?)|bounds?|limits?|caps?|ceilings?|floors?|at (?:most|least)|approximat\p{L}*|estimat\p{L}*|typical|indicative|provisional|preliminary|not (?:reported|measured)|(?:valeurs?|mesures?|données) (?:maximales?|minimales?|approximatives?|indicatives?|estim[ée]es?|provisoires?|préliminaires?)|limites?|bornes?|estimations?|environ|à titre indicatif)(?=$|[\s.:,—–…/)])/iu;
+const separateCurrent = /^max(?:imum)? (?:continuous |operating )?(?:(?:charge|charging)\s*\/\s*(?:discharge|discharging) )?current\s*:?\s*\d+(?:[.,]\d+)?\s*A$/iu;
 
 function exactQuantity(value, unit, units) {
   if (typeof value !== 'string' && !Number.isFinite(value)) return undefined;
@@ -59,6 +59,12 @@ function clauses(text) {
   return text.split(/[;\r\n]+|\.\s+(?=\p{Lu}[\p{L}\p{N}-]{2,}\b)|\.$/u).map(part => part.trim()).filter(Boolean);
 }
 
+function qualifiedSection(part) {
+  const heading = part.replace(/<\/?(?:h[1-6]|strong|em|b|i)>|[*_`]/giu, '')
+    .replace(/^(?:(?:[#>•●◦▪+—–-]+|\d+[.)])\s*)+/u, '').trim();
+  return qualificationHeading.test(heading) && !separateCurrent.test(heading);
+}
+
 function columnHeaders(parts) {
   const headers = [];
   for (const [index, part] of parts.entries()) {
@@ -85,7 +91,7 @@ function quoteQuantifies(quote, excerpt, observation, {heading, units}) {
   const starts = sourceParts.flatMap((_, start) => parts.every((part, index) => sourceParts[start + index] === part) ? [start] : []);
   if (starts.length !== 1 || parts.length === 0) return false;
   // A source section heading still applies when the supplied quote begins at its field row.
-  const qualified = sourceParts.findIndex(part => qualificationHeading.test(part) && !separateCurrent.test(part));
+  const qualified = sourceParts.findIndex(qualifiedSection);
   const tables = columnHeaders(parts);
   if (tables.length > 1 || tables.length !== columnHeaders(sourceParts).length) return false;
   const [table] = tables;
