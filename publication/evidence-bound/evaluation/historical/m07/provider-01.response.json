@@ -1,0 +1,39 @@
+{
+  "elapsed_seconds": 251.36302775500008,
+  "payload_as_decoded_by_native_transport": {
+    "choices": [
+      {
+        "finish_reason": "length",
+        "index": 0,
+        "message": {
+          "content": "{\n  \"summary\": \"Identify the latest qualified revision from revisions.json by 2025-03-15T12:00:00Z, ensuring distinct source fingerprints and observed status.\",\n  \"actions\": [\n    {\n      \"tool\": \"read_artifact\",\n      \"name\": \"revisions.json\"\n    },\n    {\n      \"tool\": \"construct_table\",\n      \"name\": \"revisions_table.json\",\n      \"schema\": {\n        \"revisions\": {\n          \"revision_id\": \"TEXT\",\n          \"timestamp\": \"TEXT\",\n          \"source_fingerprint_1\": \"TEXT\",\n          \"source_fingerprint_2\": \"TEXT\",\n          \"status\": \"TEXT\"\n        }\n      },\n      \"sql\": \"SELECT revision_id, timestamp, source_fingerprint_1, source_fingerprint_2, status FROM revisions\"\n    },\n    {\n      \"tool\": \"run_table\",\n      \"name\": \"revisions_table.json\",\n      \"input\": {\n        \"dataset\": \"revisions_table\"\n      }\n    },\n    {\n      \"tool\": \"construct_table\",\n      \"name\": \"filtered_revisions_table.json\",\n      \"schema\": {\n        \"revisions\": {\n          \"revision_id\": \"TEXT\",\n          \"timestamp\": \"TEXT\",\n          \"source_fingerprint_1\": \"TEXT\",\n          \"source_fingerprint_2\": \"TEXT\",\n          \"status\": \"TEXT\"\n        }\n      },\n      \"sql\": \"SELECT revision_id, timestamp, source_fingerprint_1, source_fingerprint_2, status FROM revisions WHERE status = 'observed' AND source_fingerprint_1 != source_fingerprint_2 AND timestamp <= '2025-03-15T12:00:00Z'\"\n    },\n    {\n      \"tool\": \"run_table\",\n      \"name\": \"filtered_revisions_table.json\",\n      \"input\": {\n        \"dataset\": \"filtered_revisions_table\"\n      }\n    },\n    {\n      \"tool\": \"construct_table\",\n      \"name\": \"latest_revision_table.json\",\n      \"schema\": {\n        \"revisions\": {\n          \"revision_id\": \"TEXT\",\n          \"timestamp\": \"TEXT\"\n        }\n      },\n      \"sql\": \"SELECT revision_id, timestamp FROM filtered_revisions ORDER BY timestamp DESC\"\n    },\n    {\n      \"tool\": \"run_table\",\n      \"name\": \"latest_revision_table.json\",\n      \"input\": {\n        \"dataset\": \"",
+          "role": "assistant"
+        }
+      }
+    ],
+    "created": 1795579817,
+    "id": "chatcmpl-iKYYChWH1jJNAEVZuGbd8APEcdgbg6R5",
+    "model": "qwen3-8b-q4_k_m",
+    "object": "chat.completion",
+    "system_fingerprint": "b12242-3b4d6ab3f",
+    "timings": {
+      "cache_n": 3,
+      "predicted_ms": 231936.951,
+      "predicted_n": 512,
+      "predicted_per_second": 2.2031849508964183,
+      "predicted_per_token_ms": 453.8883581213307,
+      "prompt_ms": 19414.579,
+      "prompt_n": 860,
+      "prompt_per_second": 44.29660823446133,
+      "prompt_per_token_ms": 22.57509186046512
+    },
+    "usage": {
+      "completion_tokens": 512,
+      "prompt_tokens": 863,
+      "prompt_tokens_details": {
+        "cached_tokens": 3
+      },
+      "total_tokens": 1375
+    }
+  }
+}

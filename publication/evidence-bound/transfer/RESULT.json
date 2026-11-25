@@ -1,0 +1,779 @@
+{
+  "frozen": {
+    "candidate": "aa42b078e10a745f22f0ce2dba8fceaca8caabba",
+    "candidate_tree": "dab63b5461958e328b11782ca3a11a2a8a9cd5bd",
+    "original": "c0a14ba028092db648516718f9127ae8166df63e",
+    "source_sha256": "425013f8fe08f91a28db5b0451dbd4f4f1cc658315f6055392feda7c1304b4c8",
+    "tree_equivalent_public_head": "43d6192655d922d886bceb0b4e61be8bcfaa766e"
+  },
+  "python": "3.12.14",
+  "registration_sha256": "0fed2762ba73c22f4f45d889f7f044ccbb82d23621a24c9626b010aac5c48474",
+  "results": {
+    "ordinary": {
+      "exact_dispositions": 6,
+      "false_accepted": 0,
+      "median_panel_cpu_seconds": 6.390549999999925e-05,
+      "median_panel_wall_seconds": 6.33505e-05,
+      "panels": {
+        "exact": {
+          "decision": {
+            "status": "VERIFIED",
+            "value": "5"
+          },
+          "detail": {
+            "portable_bytes": 385,
+            "portable_summary_sha256": "60b473524d8110a72de00d69498ab55883c2b57390b03d4226b17221ec1af981"
+          },
+          "exact": true,
+          "runs": [
+            {
+              "cpu_seconds": 0.00046305899999999484,
+              "wall_seconds": 0.000488404
+            },
+            {
+              "cpu_seconds": 9.461099999999445e-05,
+              "wall_seconds": 9.4392e-05
+            },
+            {
+              "cpu_seconds": 7.960900000000132e-05,
+              "wall_seconds": 7.9179e-05
+            }
+          ]
+        },
+        "false-prose": {
+          "decision": {
+            "reason": "CLAIM_CONTRADICTS_EXECUTED_RESULT",
+            "status": "REJECTED"
+          },
+          "detail": {
+            "portable_bytes": 418,
+            "portable_summary_sha256": "ae5bac1e24ba21e99a4bdb6fb35a4c879470ee32bbcaa8cb7a00c516e11e2616"
+          },
+          "exact": true,
+          "runs": [
+            {
+              "cpu_seconds": 0.00013539199999999807,
+              "wall_seconds": 0.000134272
+            },
+            {
+              "cpu_seconds": 0.00010139099999999929,
+              "wall_seconds": 0.000100882
+            },
+            {
+              "cpu_seconds": 7.878699999999683e-05,
+              "wall_seconds": 7.8388e-05
+            }
+          ]
+        },
+        "fixture": {
+          "decision": {
+            "reason": "INPUT_ORIGIN_INELIGIBLE",
+            "status": "REJECTED"
+          },
+          "detail": {
+            "portable_bytes": 408,
+            "portable_summary_sha256": "44255e6ff88b73ec6aa2a9fff4c7dc9cafdfae7af408391f1d8fb6bea9e85b56"
+          },
+          "exact": true,
+          "runs": [
+            {
+              "cpu_seconds": 2.7770999999995882e-05,
+              "wall_seconds": 2.7662e-05
+            },
+            {
+              "cpu_seconds": 2.8361999999997056e-05,
+              "wall_seconds": 2.8513e-05
+            },
+            {
+              "cpu_seconds": 2.4886999999994275e-05,
+              "wall_seconds": 2.4828e-05
+            }
+          ]
+        },
+        "incorrect-tool": {
+          "decision": {
+            "reason": "REFERENCE_DISAGREES",
+            "status": "REJECTED"
+          },
+          "detail": {
+            "portable_bytes": 404,
+            "portable_summary_sha256": "c7379ac4bad1ee0ab2994f5c4706e078911a26866d72786b6b8f473d7e27cfec"
+          },
+          "exact": true,
+          "runs": [
+            {
+              "cpu_seconds": 0.00010990300000000147,
+              "wall_seconds": 0.000109264
+            },
+            {
+              "cpu_seconds": 8.423599999999448e-05,
+              "wall_seconds": 8.3676e-05
+            },
+            {
+              "cpu_seconds": 7.551299999999928e-05,
+              "wall_seconds": 7.5153e-05
+            }
+          ]
+        },
+        "missing": {
+          "decision": {
+            "reason": "REQUIRED_FIELD_MISSING",
+            "status": "ABSTAIN"
+          },
+          "detail": {
+            "portable_bytes": 406,
+            "portable_summary_sha256": "7d2ec0508f6a2c82c8fc50f551cc73dddd240e328d059c3cd259e9c6ca4ba29a"
+          },
+          "exact": true,
+          "runs": [
+            {
+              "cpu_seconds": 2.7610999999996833e-05,
+              "wall_seconds": 2.7472e-05
+            },
+            {
+              "cpu_seconds": 5.2297999999999234e-05,
+              "wall_seconds": 5.1548e-05
+            },
+            {
+              "cpu_seconds": 2.2143000000002244e-05,
+              "wall_seconds": 2.2063e-05
+            }
+          ]
+        },
+        "staging": {
+          "decision": {
+            "reason": "INPUT_VERSION_MISMATCH",
+            "status": "REJECTED"
+          },
+          "detail": {
+            "portable_bytes": 407,
+            "portable_summary_sha256": "9857fec94f77abd81390b41d7eab41f137f2ea0c7d8d993d6c329691214c63ae"
+          },
+          "exact": true,
+          "runs": [
+            {
+              "cpu_seconds": 2.8462999999999405e-05,
+              "wall_seconds": 2.8382e-05
+            },
+            {
+              "cpu_seconds": 2.1702000000005384e-05,
+              "wall_seconds": 2.1753e-05
+            },
+            {
+              "cpu_seconds": 1.9879000000000424e-05,
+              "wall_seconds": 1.9829e-05
+            }
+          ]
+        }
+      }
+    },
+    "original": {
+      "exact_dispositions": 0,
+      "false_accepted": 0,
+      "median_panel_cpu_seconds": 0.07810775799999997,
+      "median_panel_wall_seconds": 0.0787568305,
+      "panels": {
+        "exact": {
+          "decision": {
+            "status": "UNRESOLVED"
+          },
+          "detail": {
+            "input_origin": "OPERATOR_APPROVED_DATASET",
+            "native_qualification": "UNVERIFIED",
+            "native_status": "needs_review",
+            "portable_bytes": 8263,
+            "portable_summary_sha256": "8d6b7f6df66592703cfed469525c4e65aff4677f25bc8b09dc3865cd7d94e4d3",
+            "raw_rows": [
+              [
+                5
+              ]
+            ],
+            "source_binding_present": false
+          },
+          "exact": false,
+          "runs": [
+            {
+              "cpu_seconds": 0.38097165499999996,
+              "wall_seconds": 0.377481257
+            },
+            {
+              "cpu_seconds": 0.08629558199999976,
+              "wall_seconds": 0.089090451
+            },
+            {
+              "cpu_seconds": 0.0716621420000001,
+              "wall_seconds": 0.071336968
+            }
+          ]
+        },
+        "false-prose": {
+          "decision": {
+            "status": "UNRESOLVED"
+          },
+          "detail": {
+            "input_origin": "OPERATOR_APPROVED_DATASET",
+            "native_qualification": "UNVERIFIED",
+            "native_status": "needs_review",
+            "portable_bytes": 8263,
+            "portable_summary_sha256": "45ee67f4fe0e25511295ef70cfc161713844fe5e14c37acd6ba8987b2370c781",
+            "raw_rows": [
+              [
+                5
+              ]
+            ],
+            "source_binding_present": false
+          },
+          "exact": false,
+          "runs": [
+            {
+              "cpu_seconds": 0.10419901300000001,
+              "wall_seconds": 0.103895306
+            },
+            {
+              "cpu_seconds": 0.07948020299999992,
+              "wall_seconds": 0.079161048
+            },
+            {
+              "cpu_seconds": 0.06793003000000009,
+              "wall_seconds": 0.06760773
+            }
+          ]
+        },
+        "fixture": {
+          "decision": {
+            "status": "UNRESOLVED"
+          },
+          "detail": {
+            "input_origin": "MODEL_DEVELOPMENT_FIXTURE",
+            "native_qualification": "UNVERIFIED",
+            "native_status": "needs_review",
+            "portable_bytes": 8252,
+            "portable_summary_sha256": "f7f17f0525dbcf4caed220356d1075f81b47fc91c0984ee09ed34a3fa8187a6c",
+            "raw_rows": [
+              [
+                5
+              ]
+            ],
+            "source_binding_present": false
+          },
+          "exact": false,
+          "runs": [
+            {
+              "cpu_seconds": 0.06697060399999999,
+              "wall_seconds": 0.070382133
+            },
+            {
+              "cpu_seconds": 0.08250421100000005,
+              "wall_seconds": 0.082191626
+            },
+            {
+              "cpu_seconds": 0.06856938300000004,
+              "wall_seconds": 0.068267037
+            }
+          ]
+        },
+        "incorrect-tool": {
+          "decision": {
+            "status": "UNRESOLVED"
+          },
+          "detail": {
+            "input_origin": "OPERATOR_APPROVED_DATASET",
+            "native_qualification": "UNVERIFIED",
+            "native_status": "needs_review",
+            "portable_bytes": 8315,
+            "portable_summary_sha256": "ace4eac8b2811dc8628121736ff8da6b4f4fa4f64a3d2caf36a17487f44ae483",
+            "raw_rows": [
+              [
+                4
+              ]
+            ],
+            "source_binding_present": false
+          },
+          "exact": false,
+          "runs": [
+            {
+              "cpu_seconds": 0.07673531300000003,
+              "wall_seconds": 0.078352613
+            },
+            {
+              "cpu_seconds": 0.10364019000000013,
+              "wall_seconds": 0.103298241
+            },
+            {
+              "cpu_seconds": 0.07362103200000014,
+              "wall_seconds": 0.073337156
+            }
+          ]
+        },
+        "missing": {
+          "decision": {
+            "status": "UNRESOLVED"
+          },
+          "detail": {
+            "input_origin": null,
+            "native_qualification": "UNVERIFIED",
+            "native_status": "ready",
+            "portable_bytes": 7261,
+            "portable_summary_sha256": "f2539c7d075c34d5c4dd54f90a17c0ca22777fc2d043cdbf68da84fc04eb1668",
+            "raw_rows": null,
+            "source_binding_present": false
+          },
+          "exact": false,
+          "runs": [
+            {
+              "cpu_seconds": 0.08246712200000006,
+              "wall_seconds": 0.082203931
+            },
+            {
+              "cpu_seconds": 0.07168271800000015,
+              "wall_seconds": 0.071352842
+            },
+            {
+              "cpu_seconds": 0.0914314479999998,
+              "wall_seconds": 0.091149166
+            }
+          ]
+        },
+        "staging": {
+          "decision": {
+            "status": "UNRESOLVED"
+          },
+          "detail": {
+            "input_origin": "OPERATOR_APPROVED_DATASET",
+            "native_qualification": "UNVERIFIED",
+            "native_status": "needs_review",
+            "portable_bytes": 8263,
+            "portable_summary_sha256": "8ea63fe5f66cf580d0c0a3b6e70ee12ecdfdbf4d54a36828cb9114b3749feeee",
+            "raw_rows": [
+              [
+                4
+              ]
+            ],
+            "source_binding_present": false
+          },
+          "exact": false,
+          "runs": [
+            {
+              "cpu_seconds": 0.08353814700000006,
+              "wall_seconds": 0.083266589
+            },
+            {
+              "cpu_seconds": 0.07117289699999985,
+              "wall_seconds": 0.070781854
+            },
+            {
+              "cpu_seconds": 0.06932790399999988,
+              "wall_seconds": 0.069037069
+            }
+          ]
+        }
+      }
+    },
+    "retained": {
+      "exact_dispositions": 6,
+      "false_accepted": 0,
+      "median_panel_cpu_seconds": 0.06930028999999988,
+      "median_panel_wall_seconds": 0.069040006,
+      "panels": {
+        "exact": {
+          "decision": {
+            "status": "VERIFIED",
+            "value": "5"
+          },
+          "detail": {
+            "input_origin": "DERIVED_DATA",
+            "native_qualification": "UNVERIFIED",
+            "native_status": "needs_review",
+            "portable_bytes": 14479,
+            "portable_summary_sha256": "2a86291d226c84dd9b11ab99f4f86665248371ca24abfa196111b54a22883f1c",
+            "raw_rows": [
+              [
+                5
+              ]
+            ],
+            "source_binding_present": true
+          },
+          "exact": true,
+          "runs": [
+            {
+              "cpu_seconds": 0.07829871600000002,
+              "wall_seconds": 0.077624588
+            },
+            {
+              "cpu_seconds": 0.07132054099999996,
+              "wall_seconds": 0.071033501
+            },
+            {
+              "cpu_seconds": 0.06728003899999979,
+              "wall_seconds": 0.067046511
+            }
+          ]
+        },
+        "false-prose": {
+          "decision": {
+            "reason": "CLAIM_CONTRADICTS_EXECUTED_RESULT",
+            "status": "REJECTED"
+          },
+          "detail": {
+            "input_origin": "DERIVED_DATA",
+            "native_qualification": "UNVERIFIED",
+            "native_status": "ready",
+            "portable_bytes": 14243,
+            "portable_summary_sha256": "48751592066e140edf6efd2147ec1c10e442ee1c5f6c1243bd85c361a25c21e6",
+            "raw_rows": [
+              [
+                5
+              ]
+            ],
+            "source_binding_present": true
+          },
+          "exact": true,
+          "runs": [
+            {
+              "cpu_seconds": 0.072983888,
+              "wall_seconds": 0.072798856
+            },
+            {
+              "cpu_seconds": 0.07241528099999994,
+              "wall_seconds": 0.072364653
+            },
+            {
+              "cpu_seconds": 0.07649833900000003,
+              "wall_seconds": 0.076154157
+            }
+          ]
+        },
+        "fixture": {
+          "decision": {
+            "reason": "INPUT_ORIGIN_INELIGIBLE",
+            "status": "REJECTED"
+          },
+          "detail": {
+            "input_origin": null,
+            "native_qualification": "UNVERIFIED",
+            "native_status": "ready",
+            "portable_bytes": 11842,
+            "portable_summary_sha256": "c59d4534e39cd73d7ca3efb4aaf66218de963748efff127f75254afe88693b68",
+            "raw_rows": null,
+            "source_binding_present": false
+          },
+          "exact": true,
+          "runs": [
+            {
+              "cpu_seconds": 0.038400199000000024,
+              "wall_seconds": 0.038230952
+            },
+            {
+              "cpu_seconds": 0.035912818999999985,
+              "wall_seconds": 0.035785104
+            },
+            {
+              "cpu_seconds": 0.04212092700000003,
+              "wall_seconds": 0.042165449
+            }
+          ]
+        },
+        "incorrect-tool": {
+          "decision": {
+            "reason": "REFERENCE_DISAGREES",
+            "status": "REJECTED"
+          },
+          "detail": {
+            "input_origin": "DERIVED_DATA",
+            "native_qualification": "UNVERIFIED",
+            "native_status": "ready",
+            "portable_bytes": 14267,
+            "portable_summary_sha256": "dff8eb7a8078f7ccc35cd9d5e611469e5e70f304e027b2c5350ad4cc602e4a9e",
+            "raw_rows": [
+              [
+                4
+              ]
+            ],
+            "source_binding_present": true
+          },
+          "exact": true,
+          "runs": [
+            {
+              "cpu_seconds": 0.07187349899999995,
+              "wall_seconds": 0.072508404
+            },
+            {
+              "cpu_seconds": 0.0736727880000001,
+              "wall_seconds": 0.073301883
+            },
+            {
+              "cpu_seconds": 0.07742328899999995,
+              "wall_seconds": 0.077097901
+            }
+          ]
+        },
+        "missing": {
+          "decision": {
+            "reason": "REQUIRED_FIELD_MISSING",
+            "status": "ABSTAIN"
+          },
+          "detail": {
+            "input_origin": null,
+            "native_qualification": "UNVERIFIED",
+            "native_status": "ready",
+            "portable_bytes": 11496,
+            "portable_summary_sha256": "bc0623b1cb776614852509c47d612b467788291204eb393afe4872f5b8196542",
+            "raw_rows": null,
+            "source_binding_present": false
+          },
+          "exact": true,
+          "runs": [
+            {
+              "cpu_seconds": 0.04289976599999998,
+              "wall_seconds": 0.042710429
+            },
+            {
+              "cpu_seconds": 0.059840465999999926,
+              "wall_seconds": 0.059697083
+            },
+            {
+              "cpu_seconds": 0.036943235000000074,
+              "wall_seconds": 0.0367929
+            }
+          ]
+        },
+        "staging": {
+          "decision": {
+            "reason": "INPUT_VERSION_MISMATCH",
+            "status": "REJECTED"
+          },
+          "detail": {
+            "input_origin": null,
+            "native_qualification": "UNVERIFIED",
+            "native_status": "ready",
+            "portable_bytes": 11765,
+            "portable_summary_sha256": "534375848e4f2eeb7bd418e14bb16db3cb36972adc94f3819f30509d5fc4935a",
+            "raw_rows": null,
+            "source_binding_present": false
+          },
+          "exact": true,
+          "runs": [
+            {
+              "cpu_seconds": 0.04135860700000002,
+              "wall_seconds": 0.041190433
+            },
+            {
+              "cpu_seconds": 0.20026356899999997,
+              "wall_seconds": 0.206859079
+            },
+            {
+              "cpu_seconds": 0.037886000000000086,
+              "wall_seconds": 0.037707174
+            }
+          ]
+        }
+      }
+    },
+    "withdrawal": {
+      "exact_dispositions": 0,
+      "false_accepted": 0,
+      "median_panel_cpu_seconds": 0.06713255949999997,
+      "median_panel_wall_seconds": 0.0668376815,
+      "panels": {
+        "exact": {
+          "decision": {
+            "status": "UNRESOLVED"
+          },
+          "detail": {
+            "input_origin": "OPERATOR_APPROVED_DATASET",
+            "native_qualification": "UNVERIFIED",
+            "native_status": "needs_review",
+            "portable_bytes": 8288,
+            "portable_summary_sha256": "067b5211ed8a5a26ceaba8e1427d8febe251b2a967479c0a430c7aaf6092c2be",
+            "raw_rows": [
+              [
+                5
+              ]
+            ],
+            "source_binding_present": false
+          },
+          "exact": false,
+          "runs": [
+            {
+              "cpu_seconds": 0.07978955100000001,
+              "wall_seconds": 0.079475146
+            },
+            {
+              "cpu_seconds": 0.06884930499999997,
+              "wall_seconds": 0.068563697
+            },
+            {
+              "cpu_seconds": 0.06377714099999987,
+              "wall_seconds": 0.063553463
+            }
+          ]
+        },
+        "false-prose": {
+          "decision": {
+            "status": "UNRESOLVED"
+          },
+          "detail": {
+            "input_origin": "OPERATOR_APPROVED_DATASET",
+            "native_qualification": "UNVERIFIED",
+            "native_status": "needs_review",
+            "portable_bytes": 8288,
+            "portable_summary_sha256": "c484f925acfb6e37cc2953303539cddfbf37d1b71425680df1ad60690f35586f",
+            "raw_rows": [
+              [
+                5
+              ]
+            ],
+            "source_binding_present": false
+          },
+          "exact": false,
+          "runs": [
+            {
+              "cpu_seconds": 0.06686896599999992,
+              "wall_seconds": 0.066591241
+            },
+            {
+              "cpu_seconds": 0.06536597099999997,
+              "wall_seconds": 0.065084421
+            },
+            {
+              "cpu_seconds": 0.06739615300000001,
+              "wall_seconds": 0.067084122
+            }
+          ]
+        },
+        "fixture": {
+          "decision": {
+            "status": "UNRESOLVED"
+          },
+          "detail": {
+            "input_origin": "MODEL_DEVELOPMENT_FIXTURE",
+            "native_qualification": "UNVERIFIED",
+            "native_status": "needs_review",
+            "portable_bytes": 8277,
+            "portable_summary_sha256": "eb810e05fa01345f016d4f79951144a903b7b15cbecaa60622fa18de9f602f62",
+            "raw_rows": [
+              [
+                5
+              ]
+            ],
+            "source_binding_present": false
+          },
+          "exact": false,
+          "runs": [
+            {
+              "cpu_seconds": 0.06879426099999997,
+              "wall_seconds": 0.068464278
+            },
+            {
+              "cpu_seconds": 0.06920234199999986,
+              "wall_seconds": 0.068852531
+            },
+            {
+              "cpu_seconds": 0.06456826000000015,
+              "wall_seconds": 0.064320912
+            }
+          ]
+        },
+        "incorrect-tool": {
+          "decision": {
+            "status": "UNRESOLVED"
+          },
+          "detail": {
+            "input_origin": "OPERATOR_APPROVED_DATASET",
+            "native_qualification": "UNVERIFIED",
+            "native_status": "needs_review",
+            "portable_bytes": 8340,
+            "portable_summary_sha256": "c5f7159d55e58fea1ebcb8b8b6f6038a47b97214d496613cb51a443fd50c2a7f",
+            "raw_rows": [
+              [
+                4
+              ]
+            ],
+            "source_binding_present": false
+          },
+          "exact": false,
+          "runs": [
+            {
+              "cpu_seconds": 0.07079863200000003,
+              "wall_seconds": 0.070500951
+            },
+            {
+              "cpu_seconds": 0.06384938699999998,
+              "wall_seconds": 0.063531921
+            },
+            {
+              "cpu_seconds": 0.0650875609999999,
+              "wall_seconds": 0.064820893
+            }
+          ]
+        },
+        "missing": {
+          "decision": {
+            "status": "UNRESOLVED"
+          },
+          "detail": {
+            "input_origin": null,
+            "native_qualification": "UNVERIFIED",
+            "native_status": "ready",
+            "portable_bytes": 7286,
+            "portable_summary_sha256": "247ef044673bab2a386bd06814a65da5ad0d2c53665bbccc5857922be1f6976d",
+            "raw_rows": null,
+            "source_binding_present": false
+          },
+          "exact": false,
+          "runs": [
+            {
+              "cpu_seconds": 0.06837228999999995,
+              "wall_seconds": 0.068068602
+            },
+            {
+              "cpu_seconds": 0.06394911199999997,
+              "wall_seconds": 0.063626102
+            },
+            {
+              "cpu_seconds": 0.06351579699999998,
+              "wall_seconds": 0.063269881
+            }
+          ]
+        },
+        "staging": {
+          "decision": {
+            "status": "UNRESOLVED"
+          },
+          "detail": {
+            "input_origin": "OPERATOR_APPROVED_DATASET",
+            "native_qualification": "UNVERIFIED",
+            "native_status": "needs_review",
+            "portable_bytes": 8288,
+            "portable_summary_sha256": "de3e7a062d804f0040ceb02757f808df47e1460c13dac0c90c64ec90cc91526c",
+            "raw_rows": [
+              [
+                4
+              ]
+            ],
+            "source_binding_present": false
+          },
+          "exact": false,
+          "runs": [
+            {
+              "cpu_seconds": 0.066173435,
+              "wall_seconds": 0.065874333
+            },
+            {
+              "cpu_seconds": 0.06759363400000007,
+              "wall_seconds": 0.067239566
+            },
+            {
+              "cpu_seconds": 0.0753997460000001,
+              "wall_seconds": 0.075125184
+            }
+          ]
+        }
+      }
+    }
+  },
+  "schema": "frontier/controlled-release-evidence-replay/v1",
+  "scope": "Local authored replays with actual shipped bytes captured previously and exact negative controls. Zero inference calls.",
+  "source_receipt": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/45540764490",
+  "sqlite": "3.53.1"
+}

@@ -1,0 +1,39 @@
+{
+  "elapsed_seconds": 194.46323900799962,
+  "payload_as_decoded_by_native_transport": {
+    "choices": [
+      {
+        "finish_reason": "length",
+        "index": 0,
+        "message": {
+          "content": "{\n  \"summary\": \"Convertir les horaires en UTC, fusionner les intervalles et calculer la durée totale.\",\n  \"actions\": [\n    {\n      \"tool\": \"construct_instrument\",\n      \"name\": \"convert_utc\",\n      \"spec\": {\n        \"name\": \"Convert UTC\",\n        \"inputs\": [\"date_str\", \"time_zone\"],\n        \"outputs\": {\n          \"utc_datetime\": {\n            \"args\": [\n              {\"field\": \"date_str\"},\n              {\"field\": \"time_zone\"}\n            ],\n            \"op\": \"convert_utc\"\n          }\n        }\n      }\n    },\n    {\n      \"tool\": \"run_instrument\",\n      \"name\": \"convert_utc\",\n      \"input\": {\n        \"date_str\": \"2025-11-14 23 h 58\",\n        \"time_zone\": \"UTC−05\"\n      }\n    },\n    {\n      \"tool\": \"run_instrument\",\n      \"name\": \"convert_utc\",\n      \"input\": {\n        \"date_str\": \"2025-11-15 00 h 11\",\n        \"time_zone\": \"UTC−05\"\n      }\n    },\n    {\n      \"tool\": \"run_instrument\",\n      \"name\": \"convert_utc\",\n      \"input\": {\n        \"date_str\": \"2025-11-15 05 h 06\",\n        \"time_zone\": \"UTC\"\n      }\n    },\n    {\n      \"tool\": \"run_instrument\",\n      \"name\": \"convert_utc\",\n      \"input\": {\n        \"date_str\": \"2025-11-15 05 h 20\",\n        \"time_zone\": \"UTC\"\n      }\n    },\n    {\n      \"tool\": \"run_instrument\",\n      \"name\": \"convert_utc\",\n      \"input\": {\n        \"date_str\": \"2025-11-15 06 h 19\",\n        \"time_zone\": \"UTC+01\"\n      }\n    },\n    {\n      \"tool\": \"run_instrument\",\n      \"name\": \"convert_utc\",\n      \"input\": {\n        \"date_str\": \"2025-11-15 06 h 26\",\n        \"time_zone\": \"UTC+01\"\n      }\n    },\n    {\n      \"tool\": \"construct_instrument\",\n      \"name",
+          "role": "assistant"
+        }
+      }
+    ],
+    "created": 1795579565,
+    "id": "chatcmpl-kxwB3efb2fJJAapkHwn7eTIhzpoWSgBU",
+    "model": "qwen3-8b-q4_k_m",
+    "object": "chat.completion",
+    "system_fingerprint": "b12242-3b4d6ab3f",
+    "timings": {
+      "cache_n": 3,
+      "predicted_ms": 176196.727,
+      "predicted_n": 512,
+      "predicted_per_second": 2.9001673793861107,
+      "predicted_per_token_ms": 344.80768493150686,
+      "prompt_ms": 18250.915,
+      "prompt_n": 939,
+      "prompt_per_second": 51.44947527288358,
+      "prompt_per_token_ms": 19.436544195953143
+    },
+    "usage": {
+      "completion_tokens": 512,
+      "prompt_tokens": 942,
+      "prompt_tokens_details": {
+        "cached_tokens": 3
+      },
+      "total_tokens": 1454
+    }
+  }
+}

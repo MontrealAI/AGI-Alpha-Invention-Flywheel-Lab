@@ -1,0 +1,19 @@
+{
+  "convention": "BUY exactly when the robust gain after fee is positive. Ties SKIP.",
+  "exact_reference_sha256": "6b196ffc684573ee2cce0e80b31eabb6442789388be183db8c5c6d5bf72807a3",
+  "generator_sha256": "adcc64083e70b0e361f57e8ad37d05a36c9bd227f088731e260512d4b2fbe598",
+  "input_sha256": "76e4de62311f14124855d59147bcf0587fe3b268ee231beaba3841d8727b92d5",
+  "materiality": "Primary admission requires at least 36/48 exact decisions, eight more correct than the strongest matched no-tool base comparator, at least 60% exact decisions in each of the three 12-case strata, and at most two false purchases on the eight exact ties. Compare actual rates, robust regret, abstention and wall time separately. Ordinary exact-solver routing is a strong complete control. Paired cases share a structure and the population is synthetic.",
+  "oracle_sha256": "88874c6a6c218d6f81c1220adb4f2b6c389d3d9dd2f6de085737a68dbc3fcb77",
+  "planned_cases": 48,
+  "predeclared_strata": {
+    "asymmetric-extra-action": 12,
+    "asymmetric-two": 12,
+    "boundary-adjacent": 4,
+    "boundary-tie": 8,
+    "value-shift": 12
+  },
+  "registered_at_utc": "2026-11-25T04:00:40.342361+00:00",
+  "schema": "frontier/independent-strategic-confirmation/v1",
+  "scope": "Independent case authorship and private evaluation files under the same administrative environment. Not separated custody or an operational claim."
+}

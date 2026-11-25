@@ -1,0 +1,397 @@
+{
+  "adapter_sha256": "f278bd65102ef04e060ccade71fde2a92a7438064af3e95be53e7b744e6c64a3",
+  "admission": "NO-GO for specialist admission",
+  "base_sha256": "5af571cbf074e6d21a03528d2330792e532ca608f24ac70a143f6b369968ab8c",
+  "cases": 48,
+  "constant_skip_control": {
+    "accepted": 28
+  },
+  "exact_reference_source_sha256": "6b196ffc684573ee2cce0e80b31eabb6442789388be183db8c5c6d5bf72807a3",
+  "exact_solver": {
+    "accepted": 48,
+    "baseline_uses_explicit_payoff_and_signal_structure": true,
+    "wall_seconds": 0.15066352799931337
+  },
+  "label_counts": {
+    "BUY": 20,
+    "SKIP": 28
+  },
+  "limits": "Synthetic one-observation decisions. Paired cases share structure. Scores are probabilities conditional on the two forced response tokens. Distinct evaluator context on one administrative setup. No full-cost or frontier superiority claim.",
+  "matched_arms": {
+    "adapted_direct": {
+      "accepted": 28,
+      "boundary_adjacent_exact_pairs": 0,
+      "brier": 0.23950840713217267,
+      "false_buys_on_exact_ties": 0,
+      "observed_batch_wall_seconds": 11.802016998,
+      "predicted_decisions": {
+        "SKIP": 48
+      },
+      "regret_total": "53619738639578831952468096858271771363/2453259248278076967133379511635498400",
+      "strata": {
+        "asymmetric-extra-action": {
+          "accepted": 6,
+          "brier": 0.25739171060306737,
+          "total": 12
+        },
+        "asymmetric-two": {
+          "accepted": 6,
+          "brier": 0.25052684233705197,
+          "total": 12
+        },
+        "boundary-adjacent": {
+          "accepted": 2,
+          "brier": 0.2623830636631701,
+          "total": 4
+        },
+        "boundary-tie": {
+          "accepted": 8,
+          "brier": 0.16266404221374653,
+          "total": 8
+        },
+        "value-shift": {
+          "accepted": 6,
+          "brier": 0.2542113595583502,
+          "total": 12
+        }
+      },
+      "total": 48,
+      "total_prompt_tokens": 7359,
+      "value_shift_consistent_pairs": 6
+    },
+    "adapted_method": {
+      "accepted": 27,
+      "boundary_adjacent_exact_pairs": 1,
+      "brier": 0.24486686815331687,
+      "false_buys_on_exact_ties": 4,
+      "observed_batch_wall_seconds": 17.40891154900146,
+      "predicted_decisions": {
+        "BUY": 31,
+        "SKIP": 17
+      },
+      "regret_total": "3177524861603108786161440880667/59881485321391229832800391200",
+      "strata": {
+        "asymmetric-extra-action": {
+          "accepted": 6,
+          "brier": 0.24363266824355043,
+          "total": 12
+        },
+        "asymmetric-two": {
+          "accepted": 9,
+          "brier": 0.23666818779315082,
+          "total": 12
+        },
+        "boundary-adjacent": {
+          "accepted": 3,
+          "brier": 0.2491284785954504,
+          "total": 4
+        },
+        "boundary-tie": {
+          "accepted": 4,
+          "brier": 0.2555310430953708,
+          "total": 8
+        },
+        "value-shift": {
+          "accepted": 5,
+          "brier": 0.2457697616478356,
+          "total": 12
+        }
+      },
+      "total": 48,
+      "total_prompt_tokens": 11199,
+      "value_shift_consistent_pairs": 5
+    },
+    "adapted_retrieval": {
+      "accepted": 40,
+      "boundary_adjacent_exact_pairs": 1,
+      "brier": 0.16263438707389846,
+      "false_buys_on_exact_ties": 5,
+      "observed_batch_wall_seconds": 20.06979466300163,
+      "predicted_decisions": {
+        "BUY": 24,
+        "SKIP": 24
+      },
+      "regret_total": "100689513/9978800",
+      "strata": {
+        "asymmetric-extra-action": {
+          "accepted": 12,
+          "brier": 0.0937806939796404,
+          "total": 12
+        },
+        "asymmetric-two": {
+          "accepted": 11,
+          "brier": 0.09991483716411187,
+          "total": 12
+        },
+        "boundary-adjacent": {
+          "accepted": 3,
+          "brier": 0.19002825482704644,
+          "total": 4
+        },
+        "boundary-tie": {
+          "accepted": 3,
+          "brier": 0.4124938607876667,
+          "total": 8
+        },
+        "value-shift": {
+          "accepted": 11,
+          "brier": 0.11850335835104835,
+          "total": 12
+        }
+      },
+      "total": 48,
+      "total_prompt_tokens": 14830,
+      "value_shift_consistent_pairs": 5
+    },
+    "adapted_verified-tool": {
+      "accepted": 27,
+      "boundary_adjacent_exact_pairs": 0,
+      "brier": 0.24459137659063943,
+      "false_buys_on_exact_ties": 0,
+      "observed_batch_wall_seconds": 22.882133108000744,
+      "predicted_decisions": {
+        "BUY": 1,
+        "SKIP": 47
+      },
+      "regret_total": "282822243597194863758900594800431048973/10630790075871666857577977883753826400",
+      "strata": {
+        "asymmetric-extra-action": {
+          "accepted": 5,
+          "brier": 0.24017674500077005,
+          "total": 12
+        },
+        "asymmetric-two": {
+          "accepted": 6,
+          "brier": 0.2609878520144198,
+          "total": 12
+        },
+        "boundary-adjacent": {
+          "accepted": 2,
+          "brier": 0.2536142374223558,
+          "total": 4
+        },
+        "boundary-tie": {
+          "accepted": 8,
+          "brier": 0.20675471642882792,
+          "total": 8
+        },
+        "value-shift": {
+          "accepted": 6,
+          "brier": 0.25482635258736397,
+          "total": 12
+        }
+      },
+      "total": 48,
+      "total_prompt_tokens": 12816,
+      "value_shift_consistent_pairs": 6
+    },
+    "base_direct": {
+      "accepted": 26,
+      "boundary_adjacent_exact_pairs": 0,
+      "brier": 0.2454314587187477,
+      "false_buys_on_exact_ties": 3,
+      "observed_batch_wall_seconds": 16.940202818000216,
+      "predicted_decisions": {
+        "BUY": 20,
+        "SKIP": 28
+      },
+      "regret_total": "62407307515862684996970893947608633/1601269927408339692852663626190880",
+      "strata": {
+        "asymmetric-extra-action": {
+          "accepted": 5,
+          "brier": 0.25412633803891144,
+          "total": 12
+        },
+        "asymmetric-two": {
+          "accepted": 9,
+          "brier": 0.23340745125549156,
+          "total": 12
+        },
+        "boundary-adjacent": {
+          "accepted": 1,
+          "brier": 0.25185328519094985,
+          "total": 4
+        },
+        "boundary-tie": {
+          "accepted": 5,
+          "brier": 0.24643819924558763,
+          "total": 8
+        },
+        "value-shift": {
+          "accepted": 6,
+          "brier": 0.24594881768654608,
+          "total": 12
+        }
+      },
+      "total": 48,
+      "total_prompt_tokens": 7359,
+      "value_shift_consistent_pairs": 2
+    },
+    "base_method": {
+      "accepted": 20,
+      "boundary_adjacent_exact_pairs": 0,
+      "brier": 0.2715447329537699,
+      "false_buys_on_exact_ties": 8,
+      "observed_batch_wall_seconds": 12.158563346000847,
+      "predicted_decisions": {
+        "BUY": 48
+      },
+      "regret_total": "5708790707392168596482529783305353/77973526657954428896192077949760",
+      "strata": {
+        "asymmetric-extra-action": {
+          "accepted": 6,
+          "brier": 0.2609775503913694,
+          "total": 12
+        },
+        "asymmetric-two": {
+          "accepted": 6,
+          "brier": 0.23806391875654676,
+          "total": 12
+        },
+        "boundary-adjacent": {
+          "accepted": 2,
+          "brier": 0.26158007238409375,
+          "total": 4
+        },
+        "boundary-tie": {
+          "accepted": 0,
+          "brier": 0.3565379691204851,
+          "total": 8
+        },
+        "value-shift": {
+          "accepted": 6,
+          "brier": 0.2622521257921422,
+          "total": 12
+        }
+      },
+      "total": 48,
+      "total_prompt_tokens": 11199,
+      "value_shift_consistent_pairs": 6
+    },
+    "base_retrieval": {
+      "accepted": 40,
+      "boundary_adjacent_exact_pairs": 1,
+      "brier": 0.16595217648791896,
+      "false_buys_on_exact_ties": 5,
+      "observed_batch_wall_seconds": 21.895362525000564,
+      "predicted_decisions": {
+        "BUY": 24,
+        "SKIP": 24
+      },
+      "regret_total": "100689513/9978800",
+      "strata": {
+        "asymmetric-extra-action": {
+          "accepted": 12,
+          "brier": 0.09577293750545161,
+          "total": 12
+        },
+        "asymmetric-two": {
+          "accepted": 11,
+          "brier": 0.10494313530604431,
+          "total": 12
+        },
+        "boundary-adjacent": {
+          "accepted": 3,
+          "brier": 0.1862681432601312,
+          "total": 4
+        },
+        "boundary-tie": {
+          "accepted": 3,
+          "brier": 0.42332053754975174,
+          "total": 8
+        },
+        "value-shift": {
+          "accepted": 11,
+          "brier": 0.11878956035363508,
+          "total": 12
+        }
+      },
+      "total": 48,
+      "total_prompt_tokens": 14830,
+      "value_shift_consistent_pairs": 5
+    },
+    "base_verified-tool": {
+      "accepted": 21,
+      "boundary_adjacent_exact_pairs": 0,
+      "brier": 0.2556097033245202,
+      "false_buys_on_exact_ties": 8,
+      "observed_batch_wall_seconds": 23.45614225600184,
+      "predicted_decisions": {
+        "BUY": 33,
+        "SKIP": 15
+      },
+      "regret_total": "63409730042139902384368634817148541/1299347461098639903852459130372800",
+      "strata": {
+        "asymmetric-extra-action": {
+          "accepted": 7,
+          "brier": 0.24227050001274666,
+          "total": 12
+        },
+        "asymmetric-two": {
+          "accepted": 6,
+          "brier": 0.25225510784602706,
+          "total": 12
+        },
+        "boundary-adjacent": {
+          "accepted": 2,
+          "brier": 0.2474454454614632,
+          "total": 4
+        },
+        "boundary-tie": {
+          "accepted": 0,
+          "brier": 0.2977146681570768,
+          "total": 8
+        },
+        "value-shift": {
+          "accepted": 6,
+          "brier": 0.24695494484743477,
+          "total": 12
+        }
+      },
+      "total": 48,
+      "total_prompt_tokens": 12816,
+      "value_shift_consistent_pairs": 2
+    }
+  },
+  "matched_decisions_changed_by_adaptation": {
+    "direct": 20,
+    "method": 17,
+    "retrieval": 0,
+    "verified-tool": 32
+  },
+  "oracle_admissibility": "Exact rational primal and dual witnesses agreed on all cases.",
+  "peak_predictor_process_memory_bytes": 674746368,
+  "prediction_bytes_sha256": "da5a6b46be5ec94928c493e2fe741716c357cb2c40bc85e462cb9b855caf40f1",
+  "predictive_scoring_wall_seconds": 146.72750327999984,
+  "predictor_sha256": "bdde088ca5d9ba68f94a43f3382cf99b8d7ec6352d37ca81aea4d608e4c81f88",
+  "preregistered_gates": {
+    "adapted_direct": {
+      "at_least_8_more_than_strongest_no_tool_base": false,
+      "at_most_2_false_purchases_on_exact_ties": true,
+      "each_12_case_stratum_at_least_60_percent": false,
+      "minimum_36_of_48": false
+    },
+    "adapted_method": {
+      "at_least_8_more_than_strongest_no_tool_base": false,
+      "at_most_2_false_purchases_on_exact_ties": false,
+      "each_12_case_stratum_at_least_60_percent": false,
+      "minimum_36_of_48": false
+    },
+    "adapted_retrieval": {
+      "at_least_8_more_than_strongest_no_tool_base": false,
+      "at_most_2_false_purchases_on_exact_ties": false,
+      "each_12_case_stratum_at_least_60_percent": true,
+      "minimum_36_of_48": true
+    }
+  },
+  "registration_sha256": "4df9caa128e65096a85f9faea372415fc56fae24550b792aba63ce1b7a27fdf7",
+  "schema": "frontier/independent-strategic-llm-result-v1",
+  "strata": {
+    "asymmetric-extra-action": 12,
+    "asymmetric-two": 12,
+    "boundary-adjacent": 4,
+    "boundary-tie": 8,
+    "value-shift": 12
+  },
+  "strongest_matched_no_tool_base_arm": "base_retrieval"
+}

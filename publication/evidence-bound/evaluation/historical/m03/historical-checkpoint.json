@@ -1,0 +1,132 @@
+{
+  "files": {},
+  "notice": "Contains your objective, context and artifacts. Inspect before sharing. No connector credentials or workspace integrity key included. Recorded verification is historical; recheck imported work.",
+  "schema": "alpha-genesis-workflow-export/v1",
+  "sha256": "8abb0564d100174876e2da4f28da269f44cd78b461932d52b2e4cfaa786e54e7",
+  "state": {
+    "actions": 0,
+    "adversarial_cases": [],
+    "artifacts": {},
+    "capability_id": null,
+    "created_at": "2026-11-25T04:02:51.033629+00:00",
+    "epoch": 0,
+    "events": [
+      {
+        "at": "2026-11-25T04:02:51.033639+00:00",
+        "detail": {
+          "acceptance_source": "Operator-frozen conditions; independence is not inferred.",
+          "spec_hash": "920a2fe26c1e41994cd5786027bd24531d3b7d0cc138061e7e1cb6907ea1e0f0"
+        },
+        "index": 0,
+        "kind": "created",
+        "previous": "0000000000000000000000000000000000000000000000000000000000000000",
+        "sha256": "2ab39adbf2c948c4354220837e2a9ec50e56c91e06834b81dc734cae69552a35"
+      },
+      {
+        "at": "2026-11-25T04:02:51.037374+00:00",
+        "detail": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "role": "builder",
+          "scope": "Waiting for selected service capacity; no model call or construction iteration consumed."
+        },
+        "index": 1,
+        "kind": "model_queued",
+        "previous": "2ab39adbf2c948c4354220837e2a9ec50e56c91e06834b81dc734cae69552a35",
+        "sha256": "cf82d201169dfd55a7725aa6eee1896a89bb61fc5db24beb116b0be30c3aa9a1"
+      },
+      {
+        "at": "2026-11-25T04:02:51.039733+00:00",
+        "detail": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "role": "builder",
+          "run_id": "wf_a9473970c5c170157576bd09_640f9f27f6b98c80"
+        },
+        "index": 2,
+        "kind": "model_started",
+        "previous": "cf82d201169dfd55a7725aa6eee1896a89bb61fc5db24beb116b0be30c3aa9a1",
+        "sha256": "400e1ca312ee77b7736a84fbd9045d9a0b018b3e4272643ac4e1707813b8bbfd"
+      },
+      {
+        "at": "2026-11-25T04:06:05.509028+00:00",
+        "detail": {
+          "code": "PROVIDER_RESPONSE",
+          "message": "Model request failed. Its provider allowance or cost may have been consumed; inspect connection before explicitly resuming.",
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "role": "builder",
+          "run_id": "wf_a9473970c5c170157576bd09_640f9f27f6b98c80",
+          "session_budget_snapshot": {
+            "committed": 0.0,
+            "currency": "USD",
+            "limit": 0.0,
+            "locked": false,
+            "remaining": 0.0,
+            "reserved": 0.0,
+            "scope": "process-session"
+          },
+          "usage_status": "UNKNOWN"
+        },
+        "index": 3,
+        "kind": "model_error",
+        "previous": "400e1ca312ee77b7736a84fbd9045d9a0b018b3e4272643ac4e1707813b8bbfd",
+        "sha256": "8aecb94f144edb3c74a531d1a0bf54aa83b190a8bed19edfe8d68b537a2e6e1a"
+      }
+    ],
+    "feedback": "",
+    "id": "wf_a9473970c5c170157576bd09",
+    "inflight": null,
+    "iteration": 1,
+    "model_call_limit": 6,
+    "model_calls": 1,
+    "phase": "builder",
+    "research": "",
+    "schema": "alpha-genesis-workflow/v1",
+    "spec": {
+      "acceptance": [],
+      "context": "",
+      "local_only": true,
+      "max_actions": 16,
+      "max_iterations": 6,
+      "max_operations": 10000,
+      "max_output_tokens": 512,
+      "mission": {
+        "expires_at": "2026-11-25T06:02:51.032345+00:00",
+        "language": "fr",
+        "original_ambition": "Reconstituez l’arrêt réel d’un bac de mesure sur une horloge de référence. Les trois rapports indiquent [2025-11-14 23 h 58, 2025-11-15 00 h 11) UTC−05, [2025-11-15 05 h 06, 05 h 20) UTC et [2025-11-15 06 h 19, 06 h 26) UTC+01. Convertissez tout en UTC, fusionnez les recouvrements, puis donnez la durée totale sans double comptage. Conservez des étapes exécutées qui permettent de refaire le calcul avec d’autres segments.",
+        "requirements": {},
+        "schema": "frontier-universal-execution/v1"
+      },
+      "objective": "Reconstituez l’arrêt réel d’un bac de mesure sur une horloge de référence. Les trois rapports indiquent [2025-11-14 23 h 58, 2025-11-15 00 h 11) UTC−05, [2025-11-15 05 h 06, 05 h 20) UTC et [2025-11-15 06 h 19, 06 h 26) UTC+01. Convertissez tout en UTC, fusionnez les recouvrements, puis donnez la durée totale sans double comptage. Conservez des étapes exécutées qui permettent de refaire le calcul avec d’autres segments.",
+      "roles": {
+        "builder": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp"
+        }
+      },
+      "strategy": "single-model",
+      "tool_permissions": [
+        "construct_instrument",
+        "read_artifact",
+        "run_instrument",
+        "write_dataset",
+        "write_document",
+        "assess_capability",
+        "assess_composition",
+        "construct_table",
+        "invoke_capability",
+        "run_table"
+      ]
+    },
+    "spec_hash": "920a2fe26c1e41994cd5786027bd24531d3b7d0cc138061e7e1cb6907ea1e0f0",
+    "status": "paused",
+    "unadjudicated_counterexamples": [],
+    "updated_at": "2026-11-25T04:06:05.509028+00:00",
+    "verification": {
+      "checks": [],
+      "passed": false,
+      "scope": "No checks executed."
+    }
+  }
+}

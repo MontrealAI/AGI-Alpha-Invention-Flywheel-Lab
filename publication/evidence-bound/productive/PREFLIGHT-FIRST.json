@@ -1,0 +1,224 @@
+{
+  "source": {
+    "repository": "Qwen/Qwen3-30B-A3B-GGUF",
+    "revision": "e4d4bafdfb96a411a163846265362aceb0b9c63a",
+    "filename": "Qwen3-30B-A3B-Q4_K_M.gguf",
+    "size_bytes": 18556685824,
+    "registry_linked_sha256": "0d003f6662faee786ed5da3e31b29c978de5ae5d275c8794c606a7f3c01aa8f5",
+    "registry_response_sha256": "6837f2af0099a5bd34b631fb0905ca3e1118bb289aa0ed5e0f266310e5123ce7",
+    "registry_url": "https://huggingface.co/api/models/Qwen/Qwen3-30B-A3B-GGUF?blobs=true"
+  },
+  "stock_run_first": false,
+  "verified_exact_matches": 579,
+  "conforming_field_count": 8,
+  "metadata": {
+    "general.architecture": "qwen3moe",
+    "qwen3moe.block_count": 48,
+    "qwen3moe.context_length": 40960,
+    "qwen3moe.embedding_length": 2048,
+    "qwen3moe.attention.head_count": 32,
+    "qwen3moe.attention.head_count_kv": 4,
+    "qwen3moe.attention.key_length": 128,
+    "qwen3moe.attention.value_length": 128
+  },
+  "facts": {
+    "architecture": "qwen3moe",
+    "native_context_tokens": 40960,
+    "block_count": 48,
+    "tensor_count": 579,
+    "tensor_index_sha256": "ac54bcd14387c11a827ac03ba8b89e66e072cb183df3cd506ee510c56b97201a",
+    "tensor_data_offset": 5969408,
+    "tensor_storage_span_bytes": 18550716416,
+    "declared_parameter_elements": 30532122624,
+    "layer_allocation_spans_bytes": {
+      "global": 430290944,
+      "0": 403596288,
+      "1": 403596288,
+      "2": 403596288,
+      "3": 403596288,
+      "4": 403596288,
+      "5": 403596288,
+      "6": 351421440,
+      "7": 351421440,
+      "8": 403596288,
+      "9": 351421440,
+      "10": 351421440,
+      "11": 403596288,
+      "12": 351421440,
+      "13": 351421440,
+      "14": 403596288,
+      "15": 351421440,
+      "16": 351421440,
+      "17": 403596288,
+      "18": 351421440,
+      "19": 351421440,
+      "20": 403596288,
+      "21": 351421440,
+      "22": 351421440,
+      "23": 403596288,
+      "24": 351421440,
+      "25": 351421440,
+      "26": 403596288,
+      "27": 351421440,
+      "28": 351421440,
+      "29": 403596288,
+      "30": 351421440,
+      "31": 351421440,
+      "32": 403596288,
+      "33": 351421440,
+      "34": 351421440,
+      "35": 403596288,
+      "36": 351421440,
+      "37": 351421440,
+      "38": 403596288,
+      "39": 351421440,
+      "40": 351421440,
+      "41": 403596288,
+      "42": 403596288,
+      "43": 403596288,
+      "44": 403596288,
+      "45": 403596288,
+      "46": 403596288,
+      "47": 403596288
+    },
+    "storage_scope": "File spans from ordered offsets, including GGUF alignment. No allocation or weight payload was measured."
+  },
+  "retention_conditions": {
+    "requested_context_tokens": [
+      4096,
+      32768
+    ],
+    "observed_gpu_fit": null,
+    "disposition": "AWAIT_OWNER_RUNTIME_TELEMETRY",
+    "retention": "operator planning evidence",
+    "dense_f16_kv_scenario_bytes": {
+      "4096": 402653184,
+      "32768": 3221225472
+    },
+    "assumptions": "One sequence, full dense per-layer allocation, both KV formats float16. Actual sliding-window, layout and scratch allocations may differ."
+  },
+  "timings": {
+    "candidate": {
+      "wall_seconds": 7.123159,
+      "cpu_seconds": 0.219545,
+      "captures": [
+        {
+          "url": "https://huggingface.co/Qwen/Qwen3-30B-A3B-GGUF/resolve/e4d4bafdfb96a411a163846265362aceb0b9c63a/Qwen3-30B-A3B-Q4_K_M.gguf",
+          "response_body_bytes": 8000000,
+          "response_sha256": "1c11bce01dc5a57a84acff6441b7cfbb2b878248169afed3803f0ef91a8552d2",
+          "elapsed_seconds": 6.813117,
+          "recorded_at_utc": "2026-11-25T04:05:21.743347+00:00",
+          "http_status": 206,
+          "content_range": "bytes 0-7999999/18556685824",
+          "status_chain": [
+            200,
+            302,
+            200,
+            206
+          ],
+          "source_etag": "\"44de44cef6c4fd894ed6e6e2e981cd772f39678662b46414647011ad0f92ad42\"",
+          "source_date_utc": "Wed, 25 Nov 2026 04:05:21 GMT",
+          "publisher_revision": "e4d4bafdfb96a411a163846265362aceb0b9c63a",
+          "publisher_linked_digest": "0d003f6662faee786ed5da3e31b29c978de5ae5d275c8794c606a7f3c01aa8f5"
+        }
+      ],
+      "wire_body_bytes": 8000000
+    },
+    "ordinary_stock": {
+      "wall_seconds": 29.247057,
+      "cpu_seconds": 1.394975,
+      "captures": [
+        {
+          "url": "https://huggingface.co/Qwen/Qwen3-30B-A3B-GGUF/resolve/e4d4bafdfb96a411a163846265362aceb0b9c63a/Qwen3-30B-A3B-Q4_K_M.gguf",
+          "response_body_bytes": 2000000,
+          "response_sha256": "6d23c58613260cc3f28b58b10daaa9251253bd3127f35736a61132207aa085fe",
+          "elapsed_seconds": 6.68415,
+          "recorded_at_utc": "2026-11-25T04:05:29.158057+00:00",
+          "http_status": 206,
+          "content_range": "bytes 0-1999999/18556685824",
+          "status_chain": [
+            200,
+            302,
+            200,
+            206
+          ],
+          "source_etag": "\"44de44cef6c4fd894ed6e6e2e981cd772f39678662b46414647011ad0f92ad42\"",
+          "source_date_utc": "Wed, 25 Nov 2026 04:05:29 GMT",
+          "publisher_revision": "e4d4bafdfb96a411a163846265362aceb0b9c63a",
+          "publisher_linked_digest": "0d003f6662faee786ed5da3e31b29c978de5ae5d275c8794c606a7f3c01aa8f5"
+        },
+        {
+          "url": "https://huggingface.co/Qwen/Qwen3-30B-A3B-GGUF/resolve/e4d4bafdfb96a411a163846265362aceb0b9c63a/Qwen3-30B-A3B-Q4_K_M.gguf",
+          "response_body_bytes": 2000000,
+          "response_sha256": "47253a1930d063929dfbae3009c2c9878999377b391bbf76ae5eaf26c1b8e221",
+          "elapsed_seconds": 6.417207,
+          "recorded_at_utc": "2026-11-25T04:05:36.015293+00:00",
+          "http_status": 206,
+          "content_range": "bytes 2000000-3999999/18556685824",
+          "status_chain": [
+            200,
+            302,
+            200,
+            206
+          ],
+          "source_etag": "\"44de44cef6c4fd894ed6e6e2e981cd772f39678662b46414647011ad0f92ad42\"",
+          "source_date_utc": "Wed, 25 Nov 2026 04:05:35 GMT",
+          "publisher_revision": "e4d4bafdfb96a411a163846265362aceb0b9c63a",
+          "publisher_linked_digest": "0d003f6662faee786ed5da3e31b29c978de5ae5d275c8794c606a7f3c01aa8f5"
+        },
+        {
+          "url": "https://huggingface.co/Qwen/Qwen3-30B-A3B-GGUF/resolve/e4d4bafdfb96a411a163846265362aceb0b9c63a/Qwen3-30B-A3B-Q4_K_M.gguf",
+          "response_body_bytes": 2000000,
+          "response_sha256": "4e3db0145d8c040d9399185e5fa695045a5cf10902b1ce05e2b37d76b62647cf",
+          "elapsed_seconds": 7.248741,
+          "recorded_at_utc": "2026-11-25T04:05:43.818853+00:00",
+          "http_status": 206,
+          "content_range": "bytes 4000000-5999999/18556685824",
+          "status_chain": [
+            200,
+            302,
+            200,
+            206
+          ],
+          "source_etag": "\"44de44cef6c4fd894ed6e6e2e981cd772f39678662b46414647011ad0f92ad42\"",
+          "source_date_utc": "Wed, 25 Nov 2026 04:05:43 GMT",
+          "publisher_revision": "e4d4bafdfb96a411a163846265362aceb0b9c63a",
+          "publisher_linked_digest": "0d003f6662faee786ed5da3e31b29c978de5ae5d275c8794c606a7f3c01aa8f5"
+        },
+        {
+          "url": "https://huggingface.co/Qwen/Qwen3-30B-A3B-GGUF/resolve/e4d4bafdfb96a411a163846265362aceb0b9c63a/Qwen3-30B-A3B-Q4_K_M.gguf",
+          "response_body_bytes": 2000000,
+          "response_sha256": "aeef7504279c5d200f984a935184833e21f2962d1086bb218ef39ca26733dd4b",
+          "elapsed_seconds": 7.026355,
+          "recorded_at_utc": "2026-11-25T04:05:51.186059+00:00",
+          "http_status": 206,
+          "content_range": "bytes 6000000-7999999/18556685824",
+          "status_chain": [
+            200,
+            302,
+            200,
+            206
+          ],
+          "source_etag": "\"44de44cef6c4fd894ed6e6e2e981cd772f39678662b46414647011ad0f92ad42\"",
+          "source_date_utc": "Wed, 25 Nov 2026 04:05:51 GMT",
+          "publisher_revision": "e4d4bafdfb96a411a163846265362aceb0b9c63a",
+          "publisher_linked_digest": "0d003f6662faee786ed5da3e31b29c978de5ae5d275c8794c606a7f3c01aa8f5"
+        }
+      ],
+      "wire_body_bytes": 8000000
+    },
+    "ordinary_same_prefix": {
+      "wall_seconds": 1.027652,
+      "cpu_seconds": 0.942199,
+      "shared_captures": true,
+      "additional_wire_body_bytes": 0
+    }
+  },
+  "controls_refused": {
+    "truncated_index": "metadata and tensor index need a longer prefix",
+    "invalid_magic": "expected version-3 little-endian GGUF",
+    "file_size_before_data": "tensor offsets are inconsistent with the registry size",
+    "same_size_different_release_digest": "linked object differs from exact public publisher metadata"
+  },
+  "full_weight_digest_independently_verified": false
+}

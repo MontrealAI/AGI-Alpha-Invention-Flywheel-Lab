@@ -1,0 +1,225 @@
+{
+  "artifact_count": 3,
+  "elapsed_seconds": 245.1580821359994,
+  "evaluation": {
+    "actual_operations": [
+      "construct_instrument",
+      "construct_instrument",
+      "run_instrument",
+      "read_artifact",
+      "write_document",
+      "write_document"
+    ],
+    "actual_tool_operations": 6,
+    "bound_provider_receipts": [
+      {
+        "cost": {
+          "accounted": 0.0,
+          "amount": 0.0,
+          "attempts": 1,
+          "basis": "reported_usage_at_user_rates",
+          "complete_cost_known": false,
+          "currency": "USD"
+        },
+        "model": "qwen3-8b-q4_k_m",
+        "provider": "llama-cpp",
+        "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+        "reported_model": "qwen3-8b-q4_k_m",
+        "requested_model": "qwen3-8b-q4_k_m",
+        "response_sha256": "2528eb4cf381b6c14e13e2c86d859b79df288066b5f954392b8fc9efd25dbbcc",
+        "role": "builder",
+        "run_id": "wf_c9aa6d37735da89660b602ea_7d3c8491c8380afb",
+        "usage": {
+          "input_tokens": 932,
+          "output_tokens": 319
+        }
+      },
+      {
+        "cost": {
+          "accounted": 0.0,
+          "amount": 0.0,
+          "attempts": 1,
+          "basis": "reported_usage_at_user_rates",
+          "complete_cost_known": false,
+          "currency": "USD"
+        },
+        "model": "qwen3-8b-q4_k_m",
+        "provider": "llama-cpp",
+        "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+        "reported_model": "qwen3-8b-q4_k_m",
+        "requested_model": "qwen3-8b-q4_k_m",
+        "response_sha256": "fb6f961055c1cd65eca85aff84b261fdfc4dd491d9691c805dd460c9a6cc0af0",
+        "role": "builder",
+        "run_id": "wf_c9aa6d37735da89660b602ea_fd4359396b476f93",
+        "usage": {
+          "input_tokens": 1108,
+          "output_tokens": 339
+        }
+      },
+      {
+        "cost": {
+          "accounted": 0.0,
+          "amount": 0.0,
+          "attempts": 1,
+          "basis": "reported_usage_at_user_rates",
+          "complete_cost_known": false,
+          "currency": "USD"
+        },
+        "model": "qwen3-8b-q4_k_m",
+        "provider": "llama-cpp",
+        "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+        "reported_model": "qwen3-8b-q4_k_m",
+        "requested_model": "qwen3-8b-q4_k_m",
+        "response_sha256": "84fa83aede59e39a9f0c386857bd0bb262cde569d37326690ff7c0570b9e4b93",
+        "role": "builder",
+        "run_id": "wf_c9aa6d37735da89660b602ea_3e5b3bd3f63ac2cd",
+        "usage": {
+          "input_tokens": 1322,
+          "output_tokens": 235
+        }
+      },
+      {
+        "cost": {
+          "accounted": 0.0,
+          "amount": 0.0,
+          "attempts": 1,
+          "basis": "reported_usage_at_user_rates",
+          "complete_cost_known": false,
+          "currency": "USD"
+        },
+        "model": "qwen3-8b-q4_k_m",
+        "provider": "llama-cpp",
+        "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+        "reported_model": "qwen3-8b-q4_k_m",
+        "requested_model": "qwen3-8b-q4_k_m",
+        "response_sha256": "cd0131c10dc92a145fe45c1e9e1ad975f095986b8c64d6c7e56fab08ffb94bd4",
+        "role": "builder",
+        "run_id": "wf_c9aa6d37735da89660b602ea_2050b4bad86bf9b3",
+        "usage": {
+          "input_tokens": 1539,
+          "output_tokens": 261
+        }
+      },
+      {
+        "cost": {
+          "accounted": 0.0,
+          "amount": 0.0,
+          "attempts": 1,
+          "basis": "reported_usage_at_user_rates",
+          "complete_cost_known": false,
+          "currency": "USD"
+        },
+        "model": "qwen3-8b-q4_k_m",
+        "provider": "llama-cpp",
+        "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+        "reported_model": "qwen3-8b-q4_k_m",
+        "requested_model": "qwen3-8b-q4_k_m",
+        "response_sha256": "d64ca2d38d452e25222e8f69f7190da5edb5384742cbc381a56389e9beb84ecb",
+        "role": "builder",
+        "run_id": "wf_c9aa6d37735da89660b602ea_9fb666ca55c3d2da",
+        "usage": {
+          "input_tokens": 1813,
+          "output_tokens": 192
+        }
+      }
+    ],
+    "later_model_dispatch_after_first_operation": true,
+    "no_data_operations": true,
+    "outcome": {
+      "available_documents": [
+        "result.md"
+      ],
+      "blocker_events": [],
+      "qualification": "INDEPENDENT_REVIEW_REQUIRED"
+    },
+    "proposals": [
+      "Définir le problème de minimax et construire un instrument pour calculer les gains pour chaque allocation possible",
+      "Créer un instrument pour calculer la valeur minimax du jeu d'allocation de ressources à somme nulle décrit dans l'ambition.",
+      "Définir et exécuter un instrument pour calculer la valeur minimax du jeu d’allocation de ressources.",
+      "Calculer la valeur minimax pour le jeu d'allocation de ressources à somme nulle en utilisant les données fournies et vérifier le témoin indépendant.",
+      "Reviser et valider la stratégie minimax en utilisant les outils disponibles pour garantir l'exactitude des calculs et la robustesse de la solution."
+    ],
+    "refusals": [
+      {
+        "proposal_fields": [
+          "name",
+          "spec",
+          "tool"
+        ],
+        "reason": "Instrument filename must end in .json.",
+        "tool": "construct_instrument"
+      },
+      {
+        "proposal_fields": [
+          "input",
+          "name",
+          "tool"
+        ],
+        "reason": "Read access is restricted to this run's declared artifacts.",
+        "tool": "run_instrument"
+      },
+      {
+        "proposal_fields": [
+          "input",
+          "name",
+          "tool"
+        ],
+        "reason": "Read access is restricted to this run's declared artifacts.",
+        "tool": "run_instrument"
+      },
+      {
+        "proposal_fields": [
+          "input",
+          "name",
+          "tool"
+        ],
+        "reason": "Read access is restricted to this run's declared artifacts.",
+        "tool": "run_instrument"
+      },
+      {
+        "proposal_fields": [
+          "input",
+          "name",
+          "tool"
+        ],
+        "reason": "Read access is restricted to this run's declared artifacts.",
+        "tool": "run_instrument"
+      },
+      {
+        "proposal_fields": [
+          "columns",
+          "name",
+          "rows",
+          "tool"
+        ],
+        "reason": "Dataset cells must be scalar JSON values.",
+        "tool": "write_dataset"
+      },
+      {
+        "proposal_fields": [
+          "input",
+          "name",
+          "tool"
+        ],
+        "reason": "Unsupported expression operation.",
+        "tool": "run_instrument"
+      },
+      {
+        "proposal_fields": [
+          "input",
+          "name",
+          "tool"
+        ],
+        "reason": "A declared instrument input is missing.",
+        "tool": "run_instrument"
+      }
+    ],
+    "settled_scope_checks": []
+  },
+  "exact_checkpoint_sha256": "3673f8a6d3e5518f6fcf037010fc8a8d926a9901e4aee2d8370fff729525908a",
+  "id": "m08",
+  "independent_reference_seconds": 0.00029143900064809714,
+  "mission_id": "wf_c9aa6d37735da89660b602ea",
+  "model": "qwen3-8b-q4_k_m",
+  "status": "exhausted"
+}

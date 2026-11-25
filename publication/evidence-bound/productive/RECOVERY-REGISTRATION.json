@@ -1,0 +1,22 @@
+{
+  "schema": "frontier/model-preflight-bounded-recovery-v1",
+  "registered_at_utc": "2026-11-25T04:07:13.714597+00:00",
+  "original_plan_sha256": "741ca558267133d52f0438ee2afebffde77b4018a20e0112849a1dcb9dd05f53",
+  "observed_primary_failure": {
+    "case": "repeat",
+    "candidate_transferred_body_bytes": 10000000,
+    "candidate_partial_sha256": "958395d187661a3464d1accf924ee992f735bfcb1e9712f0402847beb266556e",
+    "candidate_reason": "GGUF index is incomplete at 10,000,000 bytes",
+    "stock_reason": "Official default decoder requested more than 10,000,000 bytes",
+    "original_source_sha256": {
+      "gguf_preflight.py": "8c8a813436a36250ea000063f5c95146890301447b6e7d7d5704cbef63e777e5",
+      "fetch_gguf_range.py": "2476fd42fbc19823006779d092a1b6bcb30914c9d3f7d9d553b79dbf9c7e06c1",
+      "ordinary_gguf.mjs": "17ba02d21dee553eba2aea5918c97f73f6e7c0e34025cbe31b0c43eeaad62088",
+      "run_preflight.py": "60836ebf4d2db653ddf2eb2ab8957341b09b11c6441b7268a1b56456cc5856c3"
+    }
+  },
+  "recovery_condition": "Use a separately recorded larger observation on the same immutable publisher object. The earlier 10 MB run remains incomplete. Both arms require the same prospective 20 MB cap. Candidate begins with 14 MB and may request one 6 MB extension. Cap applies to each arm in this registered recovery.",
+  "repeat_publisher_source_sha256": "27cd6c432c7672cb812a92f611cf3ba7bbc35928262bb1e1253ff4ee6ae35901",
+  "same_acceptance": "No endpoint-specific payload is inferred. Require unchanged independent parser agreement and do not substitute live inference or GPU fit evidence.",
+  "classification": "Adaptive recovery and separate scope observation. Cannot qualify original performance threshold which required two successes under the first cap."
+}

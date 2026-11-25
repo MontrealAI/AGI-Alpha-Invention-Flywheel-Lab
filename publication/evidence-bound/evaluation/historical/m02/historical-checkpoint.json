@@ -1,0 +1,132 @@
+{
+  "files": {},
+  "notice": "Contains your objective, context and artifacts. Inspect before sharing. No connector credentials or workspace integrity key included. Recorded verification is historical; recheck imported work.",
+  "schema": "alpha-genesis-workflow-export/v1",
+  "sha256": "3fb8094863dafeb4c9b751a425deec3a9d4ae10c0e6a5a39ac09eaa47296b86a",
+  "state": {
+    "actions": 0,
+    "adversarial_cases": [],
+    "artifacts": {},
+    "capability_id": null,
+    "created_at": "2026-11-25T04:01:47.876072+00:00",
+    "epoch": 0,
+    "events": [
+      {
+        "at": "2026-11-25T04:01:47.876084+00:00",
+        "detail": {
+          "acceptance_source": "Operator-frozen conditions; independence is not inferred.",
+          "spec_hash": "5ccd8cc69a3c4970cc73201098db6bbd6ea231ff648cb345358ec171af483671"
+        },
+        "index": 0,
+        "kind": "created",
+        "previous": "0000000000000000000000000000000000000000000000000000000000000000",
+        "sha256": "fc74e6e98deaeb55d811a3c2d165df0600a59f76959c245a334bc9ac5e09f7b1"
+      },
+      {
+        "at": "2026-11-25T04:01:47.879700+00:00",
+        "detail": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "role": "builder",
+          "scope": "Waiting for selected service capacity; no model call or construction iteration consumed."
+        },
+        "index": 1,
+        "kind": "model_queued",
+        "previous": "fc74e6e98deaeb55d811a3c2d165df0600a59f76959c245a334bc9ac5e09f7b1",
+        "sha256": "b54dd849965d31e676dce8c81cbf50b12313246f26d92521816e63fd4469f7e4"
+      },
+      {
+        "at": "2026-11-25T04:01:47.881539+00:00",
+        "detail": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "role": "builder",
+          "run_id": "wf_c185d5da201d003ed64e675b_6876da63b76e85b2"
+        },
+        "index": 2,
+        "kind": "model_started",
+        "previous": "b54dd849965d31e676dce8c81cbf50b12313246f26d92521816e63fd4469f7e4",
+        "sha256": "f83dceb997b5eacafe1f5685e318b6a656a528c277ad7daf9c705bf818eb3384"
+      },
+      {
+        "at": "2026-11-25T04:02:50.974804+00:00",
+        "detail": {
+          "code": "PROVIDER_RESPONSE",
+          "message": "Model request failed. Its provider allowance or cost may have been consumed; inspect connection before explicitly resuming.",
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "role": "builder",
+          "run_id": "wf_c185d5da201d003ed64e675b_6876da63b76e85b2",
+          "session_budget_snapshot": {
+            "committed": 0.0,
+            "currency": "USD",
+            "limit": 0.0,
+            "locked": false,
+            "remaining": 0.0,
+            "reserved": 0.0,
+            "scope": "process-session"
+          },
+          "usage_status": "UNKNOWN"
+        },
+        "index": 3,
+        "kind": "model_error",
+        "previous": "f83dceb997b5eacafe1f5685e318b6a656a528c277ad7daf9c705bf818eb3384",
+        "sha256": "879503db120b13d2f983f27989ad67e69c72cab211697bb29266bde3da8a0776"
+      }
+    ],
+    "feedback": "",
+    "id": "wf_c185d5da201d003ed64e675b",
+    "inflight": null,
+    "iteration": 1,
+    "model_call_limit": 6,
+    "model_calls": 1,
+    "phase": "builder",
+    "research": "",
+    "schema": "alpha-genesis-workflow/v1",
+    "spec": {
+      "acceptance": [],
+      "context": "",
+      "local_only": true,
+      "max_actions": 16,
+      "max_iterations": 6,
+      "max_operations": 10000,
+      "max_output_tokens": 512,
+      "mission": {
+        "expires_at": "2026-11-25T06:01:47.868735+00:00",
+        "language": "en",
+        "original_ambition": "Choose a rehearsal inventory bundle with greatest total recovery points. At most three distinct items and 11 kilograms fit. Optic weighs 5 and gives 11 points, mount weighs 2 and gives 2, torch weighs 3 and gives 8, gauge weighs 4 and gives 9, bag weighs 1 and gives 3, and seal weighs 2 and gives 1. An optic requires the mount. A torch and gauge are incompatible in the same bundle. Give the optimal manifest and independently check why nothing better fits. Create a reusable small tool or computational receipt that can run on a different catalog. These are planning points, not prices.",
+        "requirements": {},
+        "schema": "frontier-universal-execution/v1"
+      },
+      "objective": "Choose a rehearsal inventory bundle with greatest total recovery points. At most three distinct items and 11 kilograms fit. Optic weighs 5 and gives 11 points, mount weighs 2 and gives 2, torch weighs 3 and gives 8, gauge weighs 4 and gives 9, bag weighs 1 and gives 3, and seal weighs 2 and gives 1. An optic requires the mount. A torch and gauge are incompatible in the same bundle. Give the optimal manifest and independently check why nothing better fits. Create a reusable small tool or computational receipt that can run on a different catalog. These are planning points, not prices.",
+      "roles": {
+        "builder": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp"
+        }
+      },
+      "strategy": "single-model",
+      "tool_permissions": [
+        "construct_instrument",
+        "read_artifact",
+        "run_instrument",
+        "write_dataset",
+        "write_document",
+        "assess_capability",
+        "assess_composition",
+        "construct_table",
+        "invoke_capability",
+        "run_table"
+      ]
+    },
+    "spec_hash": "5ccd8cc69a3c4970cc73201098db6bbd6ea231ff648cb345358ec171af483671",
+    "status": "paused",
+    "unadjudicated_counterexamples": [],
+    "updated_at": "2026-11-25T04:02:50.974804+00:00",
+    "verification": {
+      "checks": [],
+      "passed": false,
+      "scope": "No checks executed."
+    }
+  }
+}

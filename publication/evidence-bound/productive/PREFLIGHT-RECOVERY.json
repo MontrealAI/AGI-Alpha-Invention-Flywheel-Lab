@@ -1,0 +1,275 @@
+{
+  "schema": "frontier/model-preflight-execution-v1",
+  "started_at_utc": "2026-11-25T04:07:33.426123+00:00",
+  "completed_at_utc": "2026-11-25T04:08:49.570660+00:00",
+  "registration_sha256": "741ca558267133d52f0438ee2afebffde77b4018a20e0112849a1dcb9dd05f53",
+  "recovery_registration_sha256": "5a54db345f95c51282d1be02116d7b1db1026a4e1025aba7a8121010ccbb78b2",
+  "study_code_sha256": {
+    "fetch_gguf_range.py": "42a4a5058e33a9242556f94a7b67a24fe2b8839be44cb81176339dff903478e4",
+    "gguf_preflight.py": "8c8a813436a36250ea000063f5c95146890301447b6e7d7d5704cbef63e777e5",
+    "ordinary_gguf.mjs": "4259eea77d4f133fbb00edd277061dbfda7fd9c0a4f82e90cc00ae360e63eaa7",
+    "run_preflight.py": "18dc72e1a36502ecf42b70f1f1828f62dcb7a393319ecff133892a30ff775d07"
+  },
+  "official_gguf_parse_bundle_sha256": "5b4504545146ae03bdc148fe0875250999d46dbd1cd2d5e9d4433512f728db1f",
+  "cases": {
+    "repeat": {
+      "source": {
+        "repository": "ggml-org/gpt-oss-20b-GGUF",
+        "revision": "41e8a94d15d62070b36cf4553a0250717ecf46b8",
+        "filename": "gpt-oss-20b-MXFP4.gguf",
+        "size_bytes": 12109566624,
+        "registry_linked_sha256": "27cd6c432c7672cb812a92f611cf3ba7bbc35928262bb1e1253ff4ee6ae35901",
+        "registry_response_sha256": "5edbba7c01fbad0dc589c9676e5e024e3d2977ab4d080faef81b6767c25b9d6f",
+        "registry_url": "https://huggingface.co/api/models/ggml-org/gpt-oss-20b-GGUF?blobs=true"
+      },
+      "stock_run_first": true,
+      "verified_exact_matches": 459,
+      "conforming_field_count": 9,
+      "metadata": {
+        "general.architecture": "gpt-oss",
+        "gpt-oss.block_count": 24,
+        "gpt-oss.context_length": 131072,
+        "gpt-oss.embedding_length": 2880,
+        "gpt-oss.attention.head_count": 64,
+        "gpt-oss.attention.head_count_kv": 8,
+        "gpt-oss.attention.key_length": 64,
+        "gpt-oss.attention.value_length": 64,
+        "gpt-oss.attention.sliding_window": 128
+      },
+      "facts": {
+        "architecture": "gpt-oss",
+        "native_context_tokens": 131072,
+        "block_count": 24,
+        "tensor_count": 459,
+        "tensor_index_sha256": "5a24265263b1c3565bc003f13099bae82d596eec2eb8e8685b705e15922f4231",
+        "tensor_data_offset": 13008288,
+        "tensor_storage_span_bytes": 12096558336,
+        "declared_parameter_elements": 20914757184,
+        "layer_allocation_spans_bytes": {
+          "global": 1230670080,
+          "0": 452745344,
+          "1": 452745344,
+          "2": 452745344,
+          "3": 452745344,
+          "4": 452745344,
+          "5": 452745344,
+          "6": 452745344,
+          "7": 452745344,
+          "8": 452745344,
+          "9": 452745344,
+          "10": 452745344,
+          "11": 452745344,
+          "12": 452745344,
+          "13": 452745344,
+          "14": 452745344,
+          "15": 452745344,
+          "16": 452745344,
+          "17": 452745344,
+          "18": 452745344,
+          "19": 452745344,
+          "20": 452745344,
+          "21": 452745344,
+          "22": 452745344,
+          "23": 452745344
+        },
+        "storage_scope": "File spans from ordered offsets, including GGUF alignment. No allocation or weight payload was measured."
+      },
+      "retention_conditions": {
+        "requested_context_tokens": [
+          4096,
+          32768
+        ],
+        "observed_gpu_fit": null,
+        "disposition": "AWAIT_OWNER_RUNTIME_TELEMETRY",
+        "retention": "operator planning evidence",
+        "dense_f16_kv_scenario_bytes": {
+          "4096": 201326592,
+          "32768": 1610612736
+        },
+        "assumptions": "One sequence, full dense per-layer allocation, both KV formats float16. Actual sliding-window, layout and scratch allocations may differ."
+      },
+      "timings": {
+        "candidate": {
+          "wall_seconds": 12.38509,
+          "cpu_seconds": 0.402363,
+          "captures": [
+            {
+              "url": "https://huggingface.co/ggml-org/gpt-oss-20b-GGUF/resolve/41e8a94d15d62070b36cf4553a0250717ecf46b8/gpt-oss-20b-MXFP4.gguf",
+              "response_body_bytes": 14000000,
+              "response_sha256": "5c7d38f937dab5ac9b238b26295b4fb2cddaccbaa79fe59c78d062fe01b5ebe3",
+              "elapsed_seconds": 11.975397,
+              "recorded_at_utc": "2026-11-25T04:08:45.903028+00:00",
+              "http_status": 206,
+              "content_range": "bytes 0-13999999/12109566624",
+              "status_chain": [
+                200,
+                302,
+                200,
+                206
+              ],
+              "source_etag": "\"92afc8083009bc73e40fcc3ba9b50d0b0dbcc409468263d21029c2228b7f4e2c\"",
+              "source_date_utc": "Wed, 25 Nov 2026 04:08:45 GMT",
+              "publisher_revision": "41e8a94d15d62070b36cf4553a0250717ecf46b8",
+              "publisher_linked_digest": "27cd6c432c7672cb812a92f611cf3ba7bbc35928262bb1e1253ff4ee6ae35901"
+            }
+          ],
+          "wire_body_bytes": 14000000
+        },
+        "ordinary_stock": {
+          "wall_seconds": 60.499071,
+          "cpu_seconds": 3.911466,
+          "captures": [
+            {
+              "url": "https://huggingface.co/ggml-org/gpt-oss-20b-GGUF/resolve/41e8a94d15d62070b36cf4553a0250717ecf46b8/gpt-oss-20b-MXFP4.gguf",
+              "response_body_bytes": 2000000,
+              "response_sha256": "0348cb710073587a24b54bbad25999024fbab83ae828e92ba9fe50b8848418b1",
+              "elapsed_seconds": 8.396695,
+              "recorded_at_utc": "2026-11-25T04:07:42.163889+00:00",
+              "http_status": 206,
+              "content_range": "bytes 0-1999999/12109566624",
+              "status_chain": [
+                200,
+                302,
+                200,
+                206
+              ],
+              "source_etag": "\"92afc8083009bc73e40fcc3ba9b50d0b0dbcc409468263d21029c2228b7f4e2c\"",
+              "source_date_utc": "Wed, 25 Nov 2026 04:07:41 GMT",
+              "publisher_revision": "41e8a94d15d62070b36cf4553a0250717ecf46b8",
+              "publisher_linked_digest": "27cd6c432c7672cb812a92f611cf3ba7bbc35928262bb1e1253ff4ee6ae35901"
+            },
+            {
+              "url": "https://huggingface.co/ggml-org/gpt-oss-20b-GGUF/resolve/41e8a94d15d62070b36cf4553a0250717ecf46b8/gpt-oss-20b-MXFP4.gguf",
+              "response_body_bytes": 2000000,
+              "response_sha256": "7888197e6ee0420ccb01a9adcd2de79cc7f184bfa6da93d796f30736c6e7d138",
+              "elapsed_seconds": 8.805406,
+              "recorded_at_utc": "2026-11-25T04:07:51.463187+00:00",
+              "http_status": 206,
+              "content_range": "bytes 2000000-3999999/12109566624",
+              "status_chain": [
+                200,
+                302,
+                200,
+                206
+              ],
+              "source_etag": "\"92afc8083009bc73e40fcc3ba9b50d0b0dbcc409468263d21029c2228b7f4e2c\"",
+              "source_date_utc": "Wed, 25 Nov 2026 04:07:51 GMT",
+              "publisher_revision": "41e8a94d15d62070b36cf4553a0250717ecf46b8",
+              "publisher_linked_digest": "27cd6c432c7672cb812a92f611cf3ba7bbc35928262bb1e1253ff4ee6ae35901"
+            },
+            {
+              "url": "https://huggingface.co/ggml-org/gpt-oss-20b-GGUF/resolve/41e8a94d15d62070b36cf4553a0250717ecf46b8/gpt-oss-20b-MXFP4.gguf",
+              "response_body_bytes": 2000000,
+              "response_sha256": "e5ab0f6fca30a3eda8d71226f90fd30352383a3f5cd6c111dff71b7b323b847a",
+              "elapsed_seconds": 7.183514,
+              "recorded_at_utc": "2026-11-25T04:07:59.310954+00:00",
+              "http_status": 206,
+              "content_range": "bytes 4000000-5999999/12109566624",
+              "status_chain": [
+                200,
+                302,
+                200,
+                206
+              ],
+              "source_etag": "\"92afc8083009bc73e40fcc3ba9b50d0b0dbcc409468263d21029c2228b7f4e2c\"",
+              "source_date_utc": "Wed, 25 Nov 2026 04:07:59 GMT",
+              "publisher_revision": "41e8a94d15d62070b36cf4553a0250717ecf46b8",
+              "publisher_linked_digest": "27cd6c432c7672cb812a92f611cf3ba7bbc35928262bb1e1253ff4ee6ae35901"
+            },
+            {
+              "url": "https://huggingface.co/ggml-org/gpt-oss-20b-GGUF/resolve/41e8a94d15d62070b36cf4553a0250717ecf46b8/gpt-oss-20b-MXFP4.gguf",
+              "response_body_bytes": 2000000,
+              "response_sha256": "f949393acc4e7f27efe3b5bd1d26ab0d06ab08f499caa4414366f1ea3059c935",
+              "elapsed_seconds": 7.570954,
+              "recorded_at_utc": "2026-11-25T04:08:07.368183+00:00",
+              "http_status": 206,
+              "content_range": "bytes 6000000-7999999/12109566624",
+              "status_chain": [
+                200,
+                302,
+                200,
+                206
+              ],
+              "source_etag": "\"92afc8083009bc73e40fcc3ba9b50d0b0dbcc409468263d21029c2228b7f4e2c\"",
+              "source_date_utc": "Wed, 25 Nov 2026 04:08:07 GMT",
+              "publisher_revision": "41e8a94d15d62070b36cf4553a0250717ecf46b8",
+              "publisher_linked_digest": "27cd6c432c7672cb812a92f611cf3ba7bbc35928262bb1e1253ff4ee6ae35901"
+            },
+            {
+              "url": "https://huggingface.co/ggml-org/gpt-oss-20b-GGUF/resolve/41e8a94d15d62070b36cf4553a0250717ecf46b8/gpt-oss-20b-MXFP4.gguf",
+              "response_body_bytes": 2000000,
+              "response_sha256": "ebe3633d4c20073eecd292cdb54d304e0cbdac700033089a5de940fce669b7d1",
+              "elapsed_seconds": 8.344109,
+              "recorded_at_utc": "2026-11-25T04:08:16.382883+00:00",
+              "http_status": 206,
+              "content_range": "bytes 8000000-9999999/12109566624",
+              "status_chain": [
+                200,
+                302,
+                200,
+                206
+              ],
+              "source_etag": "\"92afc8083009bc73e40fcc3ba9b50d0b0dbcc409468263d21029c2228b7f4e2c\"",
+              "source_date_utc": "Wed, 25 Nov 2026 04:08:16 GMT",
+              "publisher_revision": "41e8a94d15d62070b36cf4553a0250717ecf46b8",
+              "publisher_linked_digest": "27cd6c432c7672cb812a92f611cf3ba7bbc35928262bb1e1253ff4ee6ae35901"
+            },
+            {
+              "url": "https://huggingface.co/ggml-org/gpt-oss-20b-GGUF/resolve/41e8a94d15d62070b36cf4553a0250717ecf46b8/gpt-oss-20b-MXFP4.gguf",
+              "response_body_bytes": 2000000,
+              "response_sha256": "03a6ab06e543d6d1b0c28776126e6c0a4d0a29f6c91240c3f29ff693b9a8cb1d",
+              "elapsed_seconds": 6.806009,
+              "recorded_at_utc": "2026-11-25T04:08:23.990811+00:00",
+              "http_status": 206,
+              "content_range": "bytes 10000000-11999999/12109566624",
+              "status_chain": [
+                200,
+                302,
+                200,
+                206
+              ],
+              "source_etag": "\"92afc8083009bc73e40fcc3ba9b50d0b0dbcc409468263d21029c2228b7f4e2c\"",
+              "source_date_utc": "Wed, 25 Nov 2026 04:08:23 GMT",
+              "publisher_revision": "41e8a94d15d62070b36cf4553a0250717ecf46b8",
+              "publisher_linked_digest": "27cd6c432c7672cb812a92f611cf3ba7bbc35928262bb1e1253ff4ee6ae35901"
+            },
+            {
+              "url": "https://huggingface.co/ggml-org/gpt-oss-20b-GGUF/resolve/41e8a94d15d62070b36cf4553a0250717ecf46b8/gpt-oss-20b-MXFP4.gguf",
+              "response_body_bytes": 2000000,
+              "response_sha256": "2fe5f04a48055df7625f46fce78e95607fc094a8170bede6c56df190780c0af6",
+              "elapsed_seconds": 7.300713,
+              "recorded_at_utc": "2026-11-25T04:08:32.278984+00:00",
+              "http_status": 206,
+              "content_range": "bytes 12000000-13999999/12109566624",
+              "status_chain": [
+                200,
+                302,
+                200,
+                206
+              ],
+              "source_etag": "\"92afc8083009bc73e40fcc3ba9b50d0b0dbcc409468263d21029c2228b7f4e2c\"",
+              "source_date_utc": "Wed, 25 Nov 2026 04:08:32 GMT",
+              "publisher_revision": "41e8a94d15d62070b36cf4553a0250717ecf46b8",
+              "publisher_linked_digest": "27cd6c432c7672cb812a92f611cf3ba7bbc35928262bb1e1253ff4ee6ae35901"
+            }
+          ],
+          "wire_body_bytes": 14000000
+        },
+        "ordinary_same_prefix": {
+          "wall_seconds": 2.796155,
+          "cpu_seconds": 2.682104,
+          "shared_captures": true,
+          "additional_wire_body_bytes": 0
+        }
+      },
+      "controls_refused": {
+        "truncated_index": "metadata and tensor index need a longer prefix",
+        "invalid_magic": "expected version-3 little-endian GGUF",
+        "file_size_before_data": "tensor offsets are inconsistent with the registry size",
+        "same_size_different_release_digest": "linked object differs from exact public publisher metadata"
+      },
+      "full_weight_digest_independently_verified": false
+    }
+  },
+  "authority": "Anonymous original Registry and bounded linked publisher data. Local CPU parse only."
+}

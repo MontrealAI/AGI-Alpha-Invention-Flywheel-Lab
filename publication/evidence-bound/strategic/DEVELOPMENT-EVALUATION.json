@@ -1,0 +1,97 @@
+{
+  "adapter_sha256": "f278bd65102ef04e060ccade71fde2a92a7438064af3e95be53e7b744e6c64a3",
+  "development_sha256": "ecdada57250fa53fcca8c4751798b81133365a23c89ba4929e0404e3108bd9d3",
+  "outcomes": {
+    "adapted_direct": {
+      "both_pair_members_correct": 0,
+      "cases": 64,
+      "correct": 32,
+      "mean_opportunity_loss": "271798151934992982015283938304545244931466590295164840822924818401011/363268101479349453564955072347424767329113117588697871418918760236800",
+      "observed_batched_seconds": 10.104643209999267,
+      "pairs": 32,
+      "pairs_with_buy_score_decrease_when_fee_increases": 17
+    },
+    "adapted_method": {
+      "both_pair_members_correct": 4,
+      "cases": 64,
+      "correct": 36,
+      "mean_opportunity_loss": "59729979132817862271850282512938914751642159491347936268138987/93305470607762565030275589268190165009305839986381257699929600",
+      "observed_batched_seconds": 28.451057815999775,
+      "pairs": 32,
+      "pairs_with_buy_score_decrease_when_fee_increases": 14
+    },
+    "adapted_retrieval": {
+      "both_pair_members_correct": 14,
+      "cases": 64,
+      "correct": 46,
+      "mean_opportunity_loss": "113442067195768594378069392431464468639/294644990263061869511976148663883491200",
+      "observed_batched_seconds": 33.83112800099752,
+      "pairs": 32,
+      "pairs_with_buy_score_decrease_when_fee_increases": 22
+    },
+    "adapted_verified-tool": {
+      "both_pair_members_correct": 0,
+      "cases": 64,
+      "correct": 32,
+      "mean_opportunity_loss": "271798151934992982015283938304545244931466590295164840822924818401011/363268101479349453564955072347424767329113117588697871418918760236800",
+      "observed_batched_seconds": 20.798203508998995,
+      "pairs": 32,
+      "pairs_with_buy_score_decrease_when_fee_increases": 13
+    },
+    "base_direct": {
+      "both_pair_members_correct": 1,
+      "cases": 64,
+      "correct": 31,
+      "mean_opportunity_loss": "14916427423538145991151622420715832833428701275031349543052059683/20926184595140957606207268201700784430952107928724783053597094400",
+      "observed_batched_seconds": 16.611903314999836,
+      "pairs": 32,
+      "pairs_with_buy_score_decrease_when_fee_increases": 15
+    },
+    "base_method": {
+      "both_pair_members_correct": 0,
+      "cases": 64,
+      "correct": 32,
+      "mean_opportunity_loss": "267427936198416363120196247211163394072685693625558562064532716325489/363268101479349453564955072347424767329113117588697871418918760236800",
+      "observed_batched_seconds": 19.458105452999916,
+      "pairs": 32,
+      "pairs_with_buy_score_decrease_when_fee_increases": 15
+    },
+    "base_retrieval": {
+      "both_pair_members_correct": 14,
+      "cases": 64,
+      "correct": 46,
+      "mean_opportunity_loss": "113442067195768594378069392431464468639/294644990263061869511976148663883491200",
+      "observed_batched_seconds": 33.20189797099829,
+      "pairs": 32,
+      "pairs_with_buy_score_decrease_when_fee_increases": 23
+    },
+    "base_verified-tool": {
+      "both_pair_members_correct": 3,
+      "cases": 64,
+      "correct": 30,
+      "mean_opportunity_loss": "57418124486519669889999208585109628124977125149054953530929/82047606265945457767669041945294249432377120410021044355200",
+      "observed_batched_seconds": 22.23936546600089,
+      "pairs": 32,
+      "pairs_with_buy_score_decrease_when_fee_increases": 14
+    },
+    "fee_only_train_calibrated": {
+      "both_pair_members_correct": 5,
+      "cases": 64,
+      "correct": 37,
+      "mean_opportunity_loss": "20596485282088673615242929462646470042166336972861350971758337/34099202989442864018070979818400849816721868100970652108910080",
+      "pairs": 32,
+      "threshold": 3
+    },
+    "standalone_exact_solver": {
+      "both_pair_members_correct": 32,
+      "cases": 64,
+      "correct": 64,
+      "elapsed_seconds": 0.029393292000349902,
+      "mean_opportunity_loss": "0",
+      "pairs": 32
+    }
+  },
+  "predictions_sha256": "f1442013357ec631b27baf18c4a7363fece0121f9e85ee8bc191ef263ae0118a",
+  "schema": "frontier/strategic-development-evaluation-v1",
+  "scope": "Known development split, disjoint from fitting and excluded from independent confirmation"
+}

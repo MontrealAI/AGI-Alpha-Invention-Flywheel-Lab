@@ -1,0 +1,784 @@
+{
+  "schema": "frontier/retained-model-preflight-mission/v1",
+  "observation_receipt_sha256": {
+    "PREFLIGHT-FIRST.json": "62f9de87c76ddbe9830f3d3771acb389c112568a8277fa589a67aa5c61d50113",
+    "PREFLIGHT-RECOVERY.json": "959b26b3ac7f8008e26037cd6618ab6af9998c9014862fffd02384880822f365"
+  },
+  "authority": "Authored local action transport against exact acquired public model metadata. No model invocation or GPU run.",
+  "storage_reopened": true,
+  "original_ambition": "Prepare the next authorized dual-TITAN RTX comparison using exact publisher model layouts.",
+  "mission_status": "ready",
+  "evidence": {
+    "status": "UNVERIFIED",
+    "claims": [
+      {
+        "id": "qwen-dense-kv",
+        "dataset": "qwen",
+        "unit": "byte",
+        "dimension": "information",
+        "locator": [
+          "output",
+          "kv_bytes"
+        ],
+        "requires": {
+          "actual_gpu_allocation": false,
+          "scenario": "one fully dense float16 sequence"
+        },
+        "mission_id": "wf_ed58a2fcf531c026e948e0b6",
+        "revision_sha256": "173fe78255155d2c9f225f8eba51973ce5a39704392d2677dc490cf90416b61d",
+        "source_version": "e4d4bafdfb96a411a163846265362aceb0b9c63a",
+        "claim_contract_sha256": "70e21456a1420044f54708b99ae3bbeb2241ea94487192b6f6ed414329f36d06",
+        "execution_receipt": {
+          "schema": "frontier/mission-claim-execution/v1",
+          "mission_id": "wf_ed58a2fcf531c026e948e0b6",
+          "revision_sha256": "173fe78255155d2c9f225f8eba51973ce5a39704392d2677dc490cf90416b61d",
+          "claim_id": "qwen-dense-kv",
+          "claim_contract_sha256": "70e21456a1420044f54708b99ae3bbeb2241ea94487192b6f6ed414329f36d06",
+          "operation": {
+            "tool": "run_instrument",
+            "artifact": "dense-kv.json",
+            "artifact_sha256": "aad88dae08ea437fe6e4dd0e383e303aeb41fdeec5a68fe6b5629c875a08c625",
+            "version_sha256": "46d43d4a017f1d32fcd9e05b32316a6fffac27e1a9572ab9ffbbf87338f00322"
+          },
+          "input": {
+            "id": "qwen",
+            "kind": "values",
+            "origin": "DERIVED_DATA",
+            "version": "e4d4bafdfb96a411a163846265362aceb0b9c63a",
+            "sha256": "f6e817e810ac20958fac6fdf9873d5c42c8b8ad4e6187f356a9abe200a7071d4",
+            "parents": {
+              "qwen-publisher": "a9d790bccc12fe2cdf2e5aa913294395ecf852ccaac7df6766e956ed4cf590e4"
+            }
+          },
+          "lineage": [
+            {
+              "id": "qwen-publisher",
+              "kind": "values",
+              "origin": "VERIFIED_EXTERNAL_SOURCE",
+              "version": "e4d4bafdfb96a411a163846265362aceb0b9c63a",
+              "sha256": "a9d790bccc12fe2cdf2e5aa913294395ecf852ccaac7df6766e956ed4cf590e4",
+              "parents": {},
+              "source": "https://huggingface.co/Qwen/Qwen3-30B-A3B-GGUF/resolve/e4d4bafdfb96a411a163846265362aceb0b9c63a/Qwen3-30B-A3B-Q4_K_M.gguf"
+            },
+            {
+              "id": "qwen",
+              "kind": "values",
+              "origin": "DERIVED_DATA",
+              "version": "e4d4bafdfb96a411a163846265362aceb0b9c63a",
+              "sha256": "f6e817e810ac20958fac6fdf9873d5c42c8b8ad4e6187f356a9abe200a7071d4",
+              "parents": {
+                "qwen-publisher": "a9d790bccc12fe2cdf2e5aa913294395ecf852ccaac7df6766e956ed4cf590e4"
+              }
+            }
+          ],
+          "locator": [
+            "output",
+            "kv_bytes"
+          ],
+          "output_sha256": "ef0b36017967ff6ddcd5505cc1db931b55f0e4f219c0f0dc956a1fc276d985fd",
+          "asserted_value": null,
+          "result_artifact": null,
+          "sha256": "d0c6dbc07ef4459cf9ec6b3ada7a2ba091bb18c7269eeb956afd5e114461831b"
+        },
+        "event_sha256": "99e457ebe87f5ccc34fa3400fd0b428736a2a7bb36d2fd18091dab9c89681a6c",
+        "executed_value": "3221225472",
+        "status": "VERIFIED",
+        "reason": "MATCHES_FROZEN_REFERENCE",
+        "value": "3221225472",
+        "reference": {
+          "source": "Per-tensor Python integer sum cross-checked with the captured model planning output",
+          "value": "3221225472"
+        }
+      },
+      {
+        "id": "gpt-oss-dense-kv",
+        "dataset": "gpt-oss",
+        "unit": "byte",
+        "dimension": "information",
+        "locator": [
+          "output",
+          "kv_bytes"
+        ],
+        "requires": {
+          "actual_gpu_allocation": false,
+          "scenario": "one fully dense float16 sequence"
+        },
+        "mission_id": "wf_ed58a2fcf531c026e948e0b6",
+        "revision_sha256": "173fe78255155d2c9f225f8eba51973ce5a39704392d2677dc490cf90416b61d",
+        "source_version": "41e8a94d15d62070b36cf4553a0250717ecf46b8",
+        "claim_contract_sha256": "33aaf56396292a6db23fca6692f4ed0d910e807c14717d8489ed47847f740227",
+        "execution_receipt": {
+          "schema": "frontier/mission-claim-execution/v1",
+          "mission_id": "wf_ed58a2fcf531c026e948e0b6",
+          "revision_sha256": "173fe78255155d2c9f225f8eba51973ce5a39704392d2677dc490cf90416b61d",
+          "claim_id": "gpt-oss-dense-kv",
+          "claim_contract_sha256": "33aaf56396292a6db23fca6692f4ed0d910e807c14717d8489ed47847f740227",
+          "operation": {
+            "tool": "run_instrument",
+            "artifact": "dense-kv.json",
+            "artifact_sha256": "aad88dae08ea437fe6e4dd0e383e303aeb41fdeec5a68fe6b5629c875a08c625",
+            "version_sha256": "46d43d4a017f1d32fcd9e05b32316a6fffac27e1a9572ab9ffbbf87338f00322"
+          },
+          "input": {
+            "id": "gpt-oss",
+            "kind": "values",
+            "origin": "DERIVED_DATA",
+            "version": "41e8a94d15d62070b36cf4553a0250717ecf46b8",
+            "sha256": "100bee6454f9753aaada923b521c807f8cbec1bba77e1d459b495fec1975cd13",
+            "parents": {
+              "gpt-oss-publisher": "03a054bddd2e4f7f8434050be712b62a0d554140fc9f9511742e3a65bbbe5475"
+            }
+          },
+          "lineage": [
+            {
+              "id": "gpt-oss-publisher",
+              "kind": "values",
+              "origin": "VERIFIED_EXTERNAL_SOURCE",
+              "version": "41e8a94d15d62070b36cf4553a0250717ecf46b8",
+              "sha256": "03a054bddd2e4f7f8434050be712b62a0d554140fc9f9511742e3a65bbbe5475",
+              "parents": {},
+              "source": "https://huggingface.co/ggml-org/gpt-oss-20b-GGUF/resolve/41e8a94d15d62070b36cf4553a0250717ecf46b8/gpt-oss-20b-MXFP4.gguf"
+            },
+            {
+              "id": "gpt-oss",
+              "kind": "values",
+              "origin": "DERIVED_DATA",
+              "version": "41e8a94d15d62070b36cf4553a0250717ecf46b8",
+              "sha256": "100bee6454f9753aaada923b521c807f8cbec1bba77e1d459b495fec1975cd13",
+              "parents": {
+                "gpt-oss-publisher": "03a054bddd2e4f7f8434050be712b62a0d554140fc9f9511742e3a65bbbe5475"
+              }
+            }
+          ],
+          "locator": [
+            "output",
+            "kv_bytes"
+          ],
+          "output_sha256": "a651110cf4eec8559cb98988dbc38f000170707e40b0e31795e1bc0cedfcd55d",
+          "asserted_value": null,
+          "result_artifact": null,
+          "sha256": "a34a9fc89f6d231c7652b0f28b5704fd18a23e3fdd8eddece4e376fd225d9c81"
+        },
+        "event_sha256": "1b810bc38813c93217b3d048039b88b5f95667bfecf2b9b57b6bbd466eb5912a",
+        "executed_value": "1610612736",
+        "status": "VERIFIED",
+        "reason": "MATCHES_FROZEN_REFERENCE",
+        "value": "1610612736",
+        "reference": {
+          "source": "Per-tensor Python integer sum cross-checked with the captured model planning output",
+          "value": "1610612736"
+        }
+      },
+      {
+        "id": "qwen-measured-gpu",
+        "dataset": "qwen-telemetry",
+        "unit": "byte",
+        "dimension": "information",
+        "locator": [
+          "output",
+          "resident_bytes"
+        ],
+        "requires": {
+          "actual_gpu_allocation": true
+        },
+        "mission_id": "wf_ed58a2fcf531c026e948e0b6",
+        "revision_sha256": "173fe78255155d2c9f225f8eba51973ce5a39704392d2677dc490cf90416b61d",
+        "source_version": "owner-host-measurement-v1",
+        "claim_contract_sha256": "dbc8ce23e3a1b265460444273be9c26e7c4f5956358f3fe5fd9c907bfb660df1",
+        "status": "ABSTAIN",
+        "reason": "REQUIRED_FIELD_MISSING"
+      }
+    ],
+    "scope": "Case-specific numerical agreement and source binding. Independent custody and production admission are separate."
+  },
+  "portable_archive": {
+    "schema": "alpha-genesis-workflow-export/v1",
+    "state": {
+      "actions": 5,
+      "adversarial_cases": [],
+      "artifacts": {
+        "RUN_INSTRUMENT.py": {
+          "bytes": 15742,
+          "kind": "trusted_runner",
+          "sha256": "46d43d4a017f1d32fcd9e05b32316a6fffac27e1a9572ab9ffbbf87338f00322"
+        },
+        "dense-kv.json": {
+          "bytes": 472,
+          "kind": "instrument",
+          "sha256": "aad88dae08ea437fe6e4dd0e383e303aeb41fdeec5a68fe6b5629c875a08c625"
+        },
+        "gpu-memory.json": {
+          "bytes": 199,
+          "kind": "instrument",
+          "sha256": "9a05273b775602eec7c4b122ce16930a0e0180e232c8d0c4ef1e7017b3f7fe03"
+        }
+      },
+      "capability_id": null,
+      "created_at": "2026-11-25T04:12:55.542930+00:00",
+      "epoch": 0,
+      "events": [
+        {
+          "at": "2026-11-25T04:12:55.542949+00:00",
+          "detail": {
+            "acceptance_source": "Operator-frozen conditions; independence is not inferred.",
+            "spec_hash": "173fe78255155d2c9f225f8eba51973ce5a39704392d2677dc490cf90416b61d"
+          },
+          "index": 0,
+          "kind": "created",
+          "previous": "0000000000000000000000000000000000000000000000000000000000000000",
+          "sha256": "05e0d2a6277a95468242e98bd46dce94d5b988f96f7111f4dca912ab145ccfcc"
+        },
+        {
+          "at": "2026-11-25T04:12:55.561152+00:00",
+          "detail": {
+            "model": "authored-layout-calculator",
+            "provider": "fixture",
+            "role": "builder",
+            "run_id": "wf_ed58a2fcf531c026e948e0b6_c148a402c2722bc1"
+          },
+          "index": 1,
+          "kind": "model_started",
+          "previous": "05e0d2a6277a95468242e98bd46dce94d5b988f96f7111f4dca912ab145ccfcc",
+          "sha256": "946dacfe94c24f9c17c45b339ad6cb9eb10b5cf0e21cd1df4f3cbc46165a1a2f"
+        },
+        {
+          "at": "2026-11-25T04:12:55.564753+00:00",
+          "detail": {
+            "cost": {
+              "amount": null,
+              "basis": "AUTHORED_FIXTURE_NO_INFERENCE",
+              "complete_cost_known": false
+            },
+            "model": "authored-layout-calculator",
+            "provider": "fixture",
+            "qualification": "AUTHORED_FIXTURE_NOT_LIVE_MODEL",
+            "reported_model": null,
+            "requested_model": "authored-layout-calculator",
+            "response_sha256": "871020f3196d6e47be59cdc89412705b64470ee1011f990b8d175381e32a6b48",
+            "role": "builder",
+            "run_id": "wf_ed58a2fcf531c026e948e0b6_c148a402c2722bc1",
+            "usage": {
+              "input_tokens": null,
+              "output_tokens": null
+            }
+          },
+          "index": 2,
+          "kind": "model_completed",
+          "previous": "946dacfe94c24f9c17c45b339ad6cb9eb10b5cf0e21cd1df4f3cbc46165a1a2f",
+          "sha256": "b02be79d5edf3451c8bed7f6344a4b307800f4879f9afb5a9f586604ac87ac81"
+        },
+        {
+          "at": "2026-11-25T04:12:55.564811+00:00",
+          "detail": {
+            "disposition": "PROPOSED",
+            "proposed_actions": 5,
+            "summary": "Calculate each registered dense cache scenario and check telemetry availability."
+          },
+          "index": 3,
+          "kind": "route_proposed",
+          "previous": "b02be79d5edf3451c8bed7f6344a4b307800f4879f9afb5a9f586604ac87ac81",
+          "sha256": "c9ab3e1aa3b7eaec5d11343f2bc23b1f3fc48fceaf19e338e64dc0e3e020057e"
+        },
+        {
+          "at": "2026-11-25T04:12:55.572648+00:00",
+          "detail": {
+            "outcome": {
+              "action_id": "a8ea744b8377fc752ebc995804682a76df9e5c82ded5c472639983b9d2c2ab8f",
+              "artifact": "dense-kv.json",
+              "bytes": 472,
+              "kind": "instrument",
+              "operation_executed": true,
+              "run": "python3 RUN_INSTRUMENT.py dense-kv.json input.json",
+              "sha256": "aad88dae08ea437fe6e4dd0e383e303aeb41fdeec5a68fe6b5629c875a08c625"
+            },
+            "tool": "construct_instrument"
+          },
+          "index": 4,
+          "kind": "tool_completed",
+          "previous": "c9ab3e1aa3b7eaec5d11343f2bc23b1f3fc48fceaf19e338e64dc0e3e020057e",
+          "sha256": "8b0765bc68b90c2826286d63f9f7472f99445e9fd337fa0573c7366fccb30092"
+        },
+        {
+          "at": "2026-11-25T04:12:55.579970+00:00",
+          "detail": {
+            "outcome": {
+              "action_id": "ff8fb0d410b626bd5a85295a7120e87fb0b7b7746e9939ad49860024a8407b6e",
+              "artifact": "gpu-memory.json",
+              "bytes": 199,
+              "kind": "instrument",
+              "operation_executed": true,
+              "run": "python3 RUN_INSTRUMENT.py gpu-memory.json input.json",
+              "sha256": "9a05273b775602eec7c4b122ce16930a0e0180e232c8d0c4ef1e7017b3f7fe03"
+            },
+            "tool": "construct_instrument"
+          },
+          "index": 5,
+          "kind": "tool_completed",
+          "previous": "8b0765bc68b90c2826286d63f9f7472f99445e9fd337fa0573c7366fccb30092",
+          "sha256": "8b02918224b69ca1704fb191aa7c8596615b57ed551fab6a40a09e09ba27feac"
+        },
+        {
+          "at": "2026-11-25T04:12:55.587812+00:00",
+          "detail": {
+            "outcome": {
+              "action_id": "1f0fbddb4a5b0f41a32e1a621598008d17724a7c8528a9d1caada057a4b83a68",
+              "claim_execution": {
+                "asserted_value": null,
+                "claim_contract_sha256": "70e21456a1420044f54708b99ae3bbeb2241ea94487192b6f6ed414329f36d06",
+                "claim_id": "qwen-dense-kv",
+                "input": {
+                  "id": "qwen",
+                  "kind": "values",
+                  "origin": "DERIVED_DATA",
+                  "parents": {
+                    "qwen-publisher": "a9d790bccc12fe2cdf2e5aa913294395ecf852ccaac7df6766e956ed4cf590e4"
+                  },
+                  "sha256": "f6e817e810ac20958fac6fdf9873d5c42c8b8ad4e6187f356a9abe200a7071d4",
+                  "version": "e4d4bafdfb96a411a163846265362aceb0b9c63a"
+                },
+                "lineage": [
+                  {
+                    "id": "qwen-publisher",
+                    "kind": "values",
+                    "origin": "VERIFIED_EXTERNAL_SOURCE",
+                    "parents": {},
+                    "sha256": "a9d790bccc12fe2cdf2e5aa913294395ecf852ccaac7df6766e956ed4cf590e4",
+                    "source": "https://huggingface.co/Qwen/Qwen3-30B-A3B-GGUF/resolve/e4d4bafdfb96a411a163846265362aceb0b9c63a/Qwen3-30B-A3B-Q4_K_M.gguf",
+                    "version": "e4d4bafdfb96a411a163846265362aceb0b9c63a"
+                  },
+                  {
+                    "id": "qwen",
+                    "kind": "values",
+                    "origin": "DERIVED_DATA",
+                    "parents": {
+                      "qwen-publisher": "a9d790bccc12fe2cdf2e5aa913294395ecf852ccaac7df6766e956ed4cf590e4"
+                    },
+                    "sha256": "f6e817e810ac20958fac6fdf9873d5c42c8b8ad4e6187f356a9abe200a7071d4",
+                    "version": "e4d4bafdfb96a411a163846265362aceb0b9c63a"
+                  }
+                ],
+                "locator": [
+                  "output",
+                  "kv_bytes"
+                ],
+                "mission_id": "wf_ed58a2fcf531c026e948e0b6",
+                "operation": {
+                  "artifact": "dense-kv.json",
+                  "artifact_sha256": "aad88dae08ea437fe6e4dd0e383e303aeb41fdeec5a68fe6b5629c875a08c625",
+                  "tool": "run_instrument",
+                  "version_sha256": "46d43d4a017f1d32fcd9e05b32316a6fffac27e1a9572ab9ffbbf87338f00322"
+                },
+                "output_sha256": "ef0b36017967ff6ddcd5505cc1db931b55f0e4f219c0f0dc956a1fc276d985fd",
+                "result_artifact": null,
+                "revision_sha256": "173fe78255155d2c9f225f8eba51973ce5a39704392d2677dc490cf90416b61d",
+                "schema": "frontier/mission-claim-execution/v1",
+                "sha256": "d0c6dbc07ef4459cf9ec6b3ada7a2ba091bb18c7269eeb956afd5e114461831b"
+              },
+              "input_origin": "DERIVED_DATA",
+              "operation_executed": true,
+              "operations": 12,
+              "output": {
+                "kv_bytes": 3221225472
+              },
+              "scope": "Bounded declarative execution; acceptance must be checked separately."
+            },
+            "tool": "run_instrument"
+          },
+          "index": 6,
+          "kind": "tool_completed",
+          "previous": "8b02918224b69ca1704fb191aa7c8596615b57ed551fab6a40a09e09ba27feac",
+          "sha256": "99e457ebe87f5ccc34fa3400fd0b428736a2a7bb36d2fd18091dab9c89681a6c"
+        },
+        {
+          "at": "2026-11-25T04:12:55.596500+00:00",
+          "detail": {
+            "outcome": {
+              "action_id": "1894d0a3d7c21b9fcce908f0f8873864eb97e50349bba76c57dd7c554e6a73ae",
+              "claim_execution": {
+                "asserted_value": null,
+                "claim_contract_sha256": "33aaf56396292a6db23fca6692f4ed0d910e807c14717d8489ed47847f740227",
+                "claim_id": "gpt-oss-dense-kv",
+                "input": {
+                  "id": "gpt-oss",
+                  "kind": "values",
+                  "origin": "DERIVED_DATA",
+                  "parents": {
+                    "gpt-oss-publisher": "03a054bddd2e4f7f8434050be712b62a0d554140fc9f9511742e3a65bbbe5475"
+                  },
+                  "sha256": "100bee6454f9753aaada923b521c807f8cbec1bba77e1d459b495fec1975cd13",
+                  "version": "41e8a94d15d62070b36cf4553a0250717ecf46b8"
+                },
+                "lineage": [
+                  {
+                    "id": "gpt-oss-publisher",
+                    "kind": "values",
+                    "origin": "VERIFIED_EXTERNAL_SOURCE",
+                    "parents": {},
+                    "sha256": "03a054bddd2e4f7f8434050be712b62a0d554140fc9f9511742e3a65bbbe5475",
+                    "source": "https://huggingface.co/ggml-org/gpt-oss-20b-GGUF/resolve/41e8a94d15d62070b36cf4553a0250717ecf46b8/gpt-oss-20b-MXFP4.gguf",
+                    "version": "41e8a94d15d62070b36cf4553a0250717ecf46b8"
+                  },
+                  {
+                    "id": "gpt-oss",
+                    "kind": "values",
+                    "origin": "DERIVED_DATA",
+                    "parents": {
+                      "gpt-oss-publisher": "03a054bddd2e4f7f8434050be712b62a0d554140fc9f9511742e3a65bbbe5475"
+                    },
+                    "sha256": "100bee6454f9753aaada923b521c807f8cbec1bba77e1d459b495fec1975cd13",
+                    "version": "41e8a94d15d62070b36cf4553a0250717ecf46b8"
+                  }
+                ],
+                "locator": [
+                  "output",
+                  "kv_bytes"
+                ],
+                "mission_id": "wf_ed58a2fcf531c026e948e0b6",
+                "operation": {
+                  "artifact": "dense-kv.json",
+                  "artifact_sha256": "aad88dae08ea437fe6e4dd0e383e303aeb41fdeec5a68fe6b5629c875a08c625",
+                  "tool": "run_instrument",
+                  "version_sha256": "46d43d4a017f1d32fcd9e05b32316a6fffac27e1a9572ab9ffbbf87338f00322"
+                },
+                "output_sha256": "a651110cf4eec8559cb98988dbc38f000170707e40b0e31795e1bc0cedfcd55d",
+                "result_artifact": null,
+                "revision_sha256": "173fe78255155d2c9f225f8eba51973ce5a39704392d2677dc490cf90416b61d",
+                "schema": "frontier/mission-claim-execution/v1",
+                "sha256": "a34a9fc89f6d231c7652b0f28b5704fd18a23e3fdd8eddece4e376fd225d9c81"
+              },
+              "input_origin": "DERIVED_DATA",
+              "operation_executed": true,
+              "operations": 12,
+              "output": {
+                "kv_bytes": 1610612736
+              },
+              "scope": "Bounded declarative execution; acceptance must be checked separately."
+            },
+            "tool": "run_instrument"
+          },
+          "index": 7,
+          "kind": "tool_completed",
+          "previous": "99e457ebe87f5ccc34fa3400fd0b428736a2a7bb36d2fd18091dab9c89681a6c",
+          "sha256": "1b810bc38813c93217b3d048039b88b5f95667bfecf2b9b57b6bbd466eb5912a"
+        },
+        {
+          "at": "2026-11-25T04:12:55.598631+00:00",
+          "detail": {
+            "claim_id": "qwen-measured-gpu",
+            "reason": "REQUIRED_FIELD_MISSING",
+            "status": "ABSTAIN"
+          },
+          "index": 8,
+          "kind": "claim_refused",
+          "previous": "1b810bc38813c93217b3d048039b88b5f95667bfecf2b9b57b6bbd466eb5912a",
+          "sha256": "aab91198fa58985c19068fd73a4842be7bf3c617947455c83dfd6cd9be5bdd1e"
+        },
+        {
+          "at": "2026-11-25T04:12:55.598656+00:00",
+          "detail": {
+            "proposal_fields": [
+              "claim",
+              "input",
+              "name",
+              "tool"
+            ],
+            "reason": "REQUIRED_FIELD_MISSING",
+            "tool": "run_instrument"
+          },
+          "index": 9,
+          "kind": "tool_refused",
+          "previous": "aab91198fa58985c19068fd73a4842be7bf3c617947455c83dfd6cd9be5bdd1e",
+          "sha256": "e7db55d25701856ff06b12c78ddc0242d504b5cc7d06dbc95004f5a23a82bfe1"
+        },
+        {
+          "at": "2026-11-25T04:12:55.600466+00:00",
+          "detail": {
+            "artifact_hashes": {
+              "RUN_INSTRUMENT.py": "46d43d4a017f1d32fcd9e05b32316a6fffac27e1a9572ab9ffbbf87338f00322",
+              "dense-kv.json": "aad88dae08ea437fe6e4dd0e383e303aeb41fdeec5a68fe6b5629c875a08c625",
+              "gpu-memory.json": "9a05273b775602eec7c4b122ce16930a0e0180e232c8d0c4ef1e7017b3f7fe03"
+            },
+            "checks": [],
+            "passed": false,
+            "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification.",
+            "spec_hash": "173fe78255155d2c9f225f8eba51973ce5a39704392d2677dc490cf90416b61d"
+          },
+          "index": 10,
+          "kind": "verification",
+          "previous": "e7db55d25701856ff06b12c78ddc0242d504b5cc7d06dbc95004f5a23a82bfe1",
+          "sha256": "43c492c9a5f3a344ac19b7700630a0fd0d0ca8e9a7f85cc17efcb52664f70ad7"
+        },
+        {
+          "at": "2026-11-25T04:12:55.601038+00:00",
+          "detail": {
+            "claims": [
+              {
+                "id": "qwen-dense-kv",
+                "reason": "MATCHES_FROZEN_REFERENCE",
+                "status": "VERIFIED"
+              },
+              {
+                "id": "gpt-oss-dense-kv",
+                "reason": "MATCHES_FROZEN_REFERENCE",
+                "status": "VERIFIED"
+              },
+              {
+                "id": "qwen-measured-gpu",
+                "reason": "REQUIRED_FIELD_MISSING",
+                "status": "ABSTAIN"
+              }
+            ],
+            "status": "UNVERIFIED"
+          },
+          "index": 11,
+          "kind": "claim_dispositions",
+          "previous": "43c492c9a5f3a344ac19b7700630a0fd0d0ca8e9a7f85cc17efcb52664f70ad7",
+          "sha256": "e82ed0275311a72e1709d9fe8054450e66b3c05989d698f38dcdef727ab42a7a"
+        }
+      ],
+      "feedback": "Resolve the unverified registered claims with authorized inputs: [{\"id\":\"qwen-dense-kv\",\"reason\":\"MATCHES_FROZEN_REFERENCE\",\"status\":\"VERIFIED\"},{\"id\":\"gpt-oss-dense-kv\",\"reason\":\"MATCHES_FROZEN_REFERENCE\",\"status\":\"VERIFIED\"},{\"id\":\"qwen-measured-gpu\",\"reason\":\"REQUIRED_FIELD_MISSING\",\"status\":\"ABSTAIN\"}]",
+      "id": "wf_ed58a2fcf531c026e948e0b6",
+      "inflight": null,
+      "iteration": 1,
+      "model_call_limit": 1,
+      "model_calls": 1,
+      "phase": "builder",
+      "research": "",
+      "schema": "alpha-genesis-workflow/v1",
+      "spec": {
+        "acceptance": [],
+        "context": "Public GGUF headers and layout. Owner-host GPU telemetry is unavailable.",
+        "local_only": true,
+        "max_actions": 5,
+        "max_iterations": 1,
+        "max_operations": 10000,
+        "max_output_tokens": 1024,
+        "mission": {
+          "expires_at": "2026-11-25T04:15:55.529898+00:00",
+          "language": "en",
+          "original_ambition": "Prepare the next authorized dual-TITAN RTX comparison using exact publisher model layouts.",
+          "requirements": {
+            "evidence": {
+              "claims": [
+                {
+                  "dataset": "qwen",
+                  "dimension": "information",
+                  "id": "qwen-dense-kv",
+                  "locator": [
+                    "output",
+                    "kv_bytes"
+                  ],
+                  "reference": {
+                    "source": "Per-tensor Python integer sum cross-checked with the captured model planning output",
+                    "value": "3221225472"
+                  },
+                  "required_fields": [
+                    [
+                      "layers"
+                    ],
+                    [
+                      "heads"
+                    ],
+                    [
+                      "key_width"
+                    ],
+                    [
+                      "value_width"
+                    ]
+                  ],
+                  "requires": {
+                    "actual_gpu_allocation": false,
+                    "scenario": "one fully dense float16 sequence"
+                  },
+                  "tool": "run_instrument",
+                  "unit": "byte",
+                  "version": "e4d4bafdfb96a411a163846265362aceb0b9c63a"
+                },
+                {
+                  "dataset": "gpt-oss",
+                  "dimension": "information",
+                  "id": "gpt-oss-dense-kv",
+                  "locator": [
+                    "output",
+                    "kv_bytes"
+                  ],
+                  "reference": {
+                    "source": "Per-tensor Python integer sum cross-checked with the captured model planning output",
+                    "value": "1610612736"
+                  },
+                  "required_fields": [
+                    [
+                      "layers"
+                    ],
+                    [
+                      "heads"
+                    ],
+                    [
+                      "key_width"
+                    ],
+                    [
+                      "value_width"
+                    ]
+                  ],
+                  "requires": {
+                    "actual_gpu_allocation": false,
+                    "scenario": "one fully dense float16 sequence"
+                  },
+                  "tool": "run_instrument",
+                  "unit": "byte",
+                  "version": "41e8a94d15d62070b36cf4553a0250717ecf46b8"
+                },
+                {
+                  "dataset": "qwen-telemetry",
+                  "dimension": "information",
+                  "id": "qwen-measured-gpu",
+                  "locator": [
+                    "output",
+                    "resident_bytes"
+                  ],
+                  "required_fields": [
+                    [
+                      "measured_gpu_resident_bytes"
+                    ]
+                  ],
+                  "requires": {
+                    "actual_gpu_allocation": true
+                  },
+                  "tool": "run_instrument",
+                  "unit": "byte",
+                  "version": "owner-host-measurement-v1"
+                }
+              ],
+              "inputs": {
+                "gpt-oss": {
+                  "facts": {
+                    "actual_gpu_allocation": false,
+                    "scenario": "one fully dense float16 sequence"
+                  },
+                  "kind": "values",
+                  "origin": "DERIVED_DATA",
+                  "parents": {
+                    "gpt-oss-publisher": "03a054bddd2e4f7f8434050be712b62a0d554140fc9f9511742e3a65bbbe5475"
+                  },
+                  "sha256": "100bee6454f9753aaada923b521c807f8cbec1bba77e1d459b495fec1975cd13",
+                  "values": {
+                    "heads": 8,
+                    "key_width": 64,
+                    "layers": 24,
+                    "value_width": 64
+                  },
+                  "version": "41e8a94d15d62070b36cf4553a0250717ecf46b8"
+                },
+                "gpt-oss-publisher": {
+                  "facts": {
+                    "exact_range_digest": "5c7d38f937dab5ac9b238b26295b4fb2cddaccbaa79fe59c78d062fe01b5ebe3"
+                  },
+                  "kind": "values",
+                  "origin": "VERIFIED_EXTERNAL_SOURCE",
+                  "sha256": "03a054bddd2e4f7f8434050be712b62a0d554140fc9f9511742e3a65bbbe5475",
+                  "source": "https://huggingface.co/ggml-org/gpt-oss-20b-GGUF/resolve/41e8a94d15d62070b36cf4553a0250717ecf46b8/gpt-oss-20b-MXFP4.gguf",
+                  "values": {
+                    "general.architecture": "gpt-oss",
+                    "gpt-oss.attention.head_count": 64,
+                    "gpt-oss.attention.head_count_kv": 8,
+                    "gpt-oss.attention.key_length": 64,
+                    "gpt-oss.attention.sliding_window": 128,
+                    "gpt-oss.attention.value_length": 64,
+                    "gpt-oss.block_count": 24,
+                    "gpt-oss.context_length": 131072,
+                    "gpt-oss.embedding_length": 2880
+                  },
+                  "version": "41e8a94d15d62070b36cf4553a0250717ecf46b8"
+                },
+                "qwen": {
+                  "facts": {
+                    "actual_gpu_allocation": false,
+                    "scenario": "one fully dense float16 sequence"
+                  },
+                  "kind": "values",
+                  "origin": "DERIVED_DATA",
+                  "parents": {
+                    "qwen-publisher": "a9d790bccc12fe2cdf2e5aa913294395ecf852ccaac7df6766e956ed4cf590e4"
+                  },
+                  "sha256": "f6e817e810ac20958fac6fdf9873d5c42c8b8ad4e6187f356a9abe200a7071d4",
+                  "values": {
+                    "heads": 4,
+                    "key_width": 128,
+                    "layers": 48,
+                    "value_width": 128
+                  },
+                  "version": "e4d4bafdfb96a411a163846265362aceb0b9c63a"
+                },
+                "qwen-publisher": {
+                  "facts": {
+                    "exact_range_digest": "1c11bce01dc5a57a84acff6441b7cfbb2b878248169afed3803f0ef91a8552d2"
+                  },
+                  "kind": "values",
+                  "origin": "VERIFIED_EXTERNAL_SOURCE",
+                  "sha256": "a9d790bccc12fe2cdf2e5aa913294395ecf852ccaac7df6766e956ed4cf590e4",
+                  "source": "https://huggingface.co/Qwen/Qwen3-30B-A3B-GGUF/resolve/e4d4bafdfb96a411a163846265362aceb0b9c63a/Qwen3-30B-A3B-Q4_K_M.gguf",
+                  "values": {
+                    "general.architecture": "qwen3moe",
+                    "qwen3moe.attention.head_count": 32,
+                    "qwen3moe.attention.head_count_kv": 4,
+                    "qwen3moe.attention.key_length": 128,
+                    "qwen3moe.attention.value_length": 128,
+                    "qwen3moe.block_count": 48,
+                    "qwen3moe.context_length": 40960,
+                    "qwen3moe.embedding_length": 2048
+                  },
+                  "version": "e4d4bafdfb96a411a163846265362aceb0b9c63a"
+                },
+                "qwen-telemetry": {
+                  "facts": {
+                    "actual_gpu_allocation": true
+                  },
+                  "kind": "values",
+                  "origin": "OPERATOR_SUPPLIED_OBSERVATION",
+                  "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+                  "values": {},
+                  "version": "owner-host-measurement-v1"
+                }
+              }
+            }
+          },
+          "schema": "frontier-universal-execution/v1"
+        },
+        "objective": "Prepare the next authorized dual-TITAN RTX comparison using exact publisher model layouts.",
+        "roles": {
+          "builder": {
+            "model": "authored-layout-calculator",
+            "provider": "fixture"
+          }
+        },
+        "strategy": "single-model",
+        "tool_permissions": [
+          "construct_instrument",
+          "run_instrument"
+        ]
+      },
+      "spec_hash": "173fe78255155d2c9f225f8eba51973ce5a39704392d2677dc490cf90416b61d",
+      "status": "ready",
+      "unadjudicated_counterexamples": [],
+      "updated_at": "2026-11-25T04:12:55.601038+00:00",
+      "verification": {
+        "artifact_hashes": {
+          "RUN_INSTRUMENT.py": "46d43d4a017f1d32fcd9e05b32316a6fffac27e1a9572ab9ffbbf87338f00322",
+          "dense-kv.json": "aad88dae08ea437fe6e4dd0e383e303aeb41fdeec5a68fe6b5629c875a08c625",
+          "gpu-memory.json": "9a05273b775602eec7c4b122ce16930a0e0180e232c8d0c4ef1e7017b3f7fe03"
+        },
+        "checks": [],
+        "passed": false,
+        "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification.",
+        "spec_hash": "173fe78255155d2c9f225f8eba51973ce5a39704392d2677dc490cf90416b61d"
+      }
+    },
+    "files": {
+      "RUN_INSTRUMENT.py": "# SPDX-License-Identifier: Apache-2.0\n\"\"\"Portable bounded instrument evaluator. Never evaluates Python or shell source.\"\"\"\nfrom __future__ import annotations\n\nimport argparse\nimport ast\nimport hashlib\nfrom io import StringIO\nimport json\nimport math\nfrom pathlib import Path\nimport re\nimport tokenize\n\n\n# Pin source at this module's own load, before a later lazy GENESIS import.\nLOADED_SOURCE_SHA256 = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()\n\ndef finite(value, depth=0):\n    if depth > 32:\n        raise ValueError(\"Input nesting bound exceeded.\")\n    if isinstance(value, float) and not math.isfinite(value):\n        raise ValueError(\"Nonfinite numbers are not supported.\")\n    if type(value) in {int, float} and (type(value) is int or value.is_integer()) and abs(value) > 9007199254740991:\n        raise ValueError(\"Integer exceeds the exact portable numerical range.\")\n    if isinstance(value, (list, dict)):\n        for item in (value.values() if isinstance(value, dict) else value):\n            finite(item, depth + 1)\n    return value\n\n\ndef _json_equal(left, right):\n    \"\"\"Compare JSON values recursively without treating booleans as numbers.\"\"\"\n    if type(left) in {int, float} and type(right) in {int, float}:\n        return left == right\n    if type(left) is not type(right):\n        return False\n    if isinstance(left, list):\n        return len(left) == len(right) and all(_json_equal(a, b) for a, b in zip(left, right))\n    if isinstance(left, dict):\n        return set(left) == set(right) and all(_json_equal(left[key], right[key]) for key in left)\n    return left == right\n\n\n_BINARY = {ast.Add: \"add\", ast.Sub: \"sub\", ast.Mult: \"mul\", ast.Div: \"div\"}\n_COMPARISONS = {ast.Eq: \"eq\", ast.Lt: \"lt\", ast.LtE: \"lte\", ast.Gt: \"gt\", ast.GtE: \"gte\"}\n_FUNCTIONS = {\"abs\", \"min\", \"max\", \"sum\", \"count\", \"choose\"}\n_JSON_LITERALS = {\"true\": True, \"false\": False, \"null\": None}\n\n\ndef compile_formula(source, bindings):\n    \"\"\"Translate a small expression syntax to evaluator operations. Never compile Python bytecode.\"\"\"\n    if not isinstance(source, str) or not 0 < len(source) <= 1024:\n        raise ValueError(\"Formula text must be between 1 and 1024 characters.\")\n    source = source.strip()\n    if \"\\n\" in source or \"\\r\" in source:\n        raise ValueError(\"Each formula must fit on one line.\")\n    try:\n        if \"&&\" in source or \"||\" in source:\n            # Accept common boolean spellings only at operator tokens, never\n            # inside a literal or an identifier.\n            tokens = list(tokenize.generate_tokens(StringIO(source).readline))\n            aliases = {\"&\": \" and \", \"|\": \" or \"}\n            replacements = [(left.start[1], right.end[1], aliases[left.string])\n                            for left, right in zip(tokens, tokens[1:])\n                            if left.type == right.type == tokenize.OP and left.string in aliases\n                            and left.string == right.string and left.end == right.start]\n            for start, end, replacement in reversed(replacements):\n                source = source[:start] + replacement + source[end:]\n        expression = ast.parse(source, mode=\"eval\").body\n    except (SyntaxError, RecursionError, tokenize.TokenError) as error:\n        raise ValueError(\"Formula syntax is invalid.\") from error\n\n    def operation(name, *args):\n        return {\"op\": name, \"args\": list(args)}\n\n    def translate(node, depth=0):\n        if depth > 24:\n            raise ValueError(\"Formula nesting bound exhausted.\")\n        def child(value):\n            return translate(value, depth + 1)\n        if isinstance(node, ast.Constant) and type(node.value) in {type(None), bool, int, float, str}:\n            return finite(node.value)\n        if isinstance(node, ast.Name):\n            if node.id in _JSON_LITERALS:\n                return _JSON_LITERALS[node.id]\n            return {\"ref\" if node.id in bindings else \"field\": node.id}\n        if isinstance(node, ast.List):\n            return [child(item) for item in node.elts]\n        if isinstance(node, ast.BinOp) and type(node.op) in _BINARY:\n            return operation(_BINARY[type(node.op)], child(node.left), child(node.right))\n        if isinstance(node, ast.UnaryOp) and isinstance(node.op, (ast.Not, ast.USub)):\n            return operation(\"not\", child(node.operand)) if isinstance(node.op, ast.Not) else operation(\"sub\", 0, child(node.operand))\n        if isinstance(node, ast.BoolOp):\n            return operation(\"and\" if isinstance(node.op, ast.And) else \"or\", *(child(item) for item in node.values))\n        if isinstance(node, ast.Compare) and all(type(op) in _COMPARISONS for op in node.ops):\n            # Adjacent comparisons share the middle expression. Compiling it\n            # twice would expand nested chains exponentially before evaluation.\n            operands = [child(part) for part in (node.left, *node.comparators)]\n            terms = [operation(_COMPARISONS[type(op)], operands[i], operands[i + 1]) for i, op in enumerate(node.ops)]\n            return terms[0] if len(terms) == 1 else operation(\"and\", *terms)\n        if isinstance(node, ast.IfExp):\n            return operation(\"if\", child(node.test), child(node.body), child(node.orelse))\n        if isinstance(node, ast.Call) and isinstance(node.func, ast.Name) and node.func.id in _FUNCTIONS and not node.keywords:\n            return operation(\"if\" if node.func.id == \"choose\" else node.func.id, *(child(arg) for arg in node.args))\n        raise ValueError(\"Formula uses an unsupported expression or function.\")\n\n    return translate(expression)\n\n\ndef evaluate(spec, inputs, max_operations=10000):\n    \"\"\"Evaluate a JSON expression grammar, with no IO or dynamic code execution.\"\"\"\n    allowed_keys = {\"name\", \"inputs\", \"outputs\", \"description\", \"conditions\", \"limitations\", \"bindings\"}\n    if not isinstance(spec, dict):\n        kind = {type(None): \"null\", bool: \"boolean\", int: \"number\", float: \"number\", str: \"string\", list: \"array\"}.get(type(spec), \"non-JSON type\")\n        raise ValueError(\"Unsupported instrument specification. Expected a JSON object at the root; received \" + kind + \".\")\n    unsupported_keys = set(spec) - allowed_keys\n    if unsupported_keys:\n        names = sorted(key for key in unsupported_keys if isinstance(key, str))\n        # Names are untrusted too: escape controls, bound size, and never render values.\n        shown = [key if len(key) <= 64 else key[:64] + \"...[truncated]\" for key in names[:8]]\n        details = json.dumps(shown)\n        if len(names) > len(shown):\n            details += \" (\" + str(len(names) - len(shown)) + \" additional key names omitted)\"\n        if len(unsupported_keys) != len(names):\n            details += \"; \" + str(len(unsupported_keys) - len(names)) + \" <non-string key> entries\"\n        raise ValueError(\"Unsupported instrument specification. Unsupported top-level keys: \" + details\n                         + \". Allowed top-level keys: \" + json.dumps(sorted(allowed_keys))\n                         + '. Named calculations belong inside the \"outputs\" object, not at the instrument root.')\n    if not isinstance(spec.get(\"inputs\"), list) or any(not isinstance(k, str) for k in spec[\"inputs\"]):\n        raise ValueError(\"Instrument inputs must be field names.\")\n    if not isinstance(inputs, dict) or any(k not in inputs for k in spec[\"inputs\"]):\n        raise ValueError(\"A declared instrument input is missing.\")\n    if not isinstance(spec.get(\"outputs\"), dict) or not spec[\"outputs\"]:\n        raise ValueError(\"An instrument needs named output expressions.\")\n    if type(max_operations) is not int or max_operations < 1:\n        raise ValueError(\"A positive operation bound is required.\")\n    bindings = spec.get(\"bindings\", {})\n    if not isinstance(bindings, dict) or len(bindings) > 128 or any(\n        not isinstance(key, str) or re.fullmatch(r\"[A-Za-z][A-Za-z0-9_]{0,63}\", key) is None for key in bindings\n    ):\n        raise ValueError(\"Instrument bindings require up to 128 simple names.\")\n    resolved, resolving, compiled = {}, set(), {}\n    count = 0\n\n    def number(v):\n        if type(v) not in {int, float}:\n            raise ValueError(\"Arithmetic requires numeric operands.\")\n        return finite(v)\n\n    def visit(value, depth=0, location=\"$\"):\n        nonlocal count\n        count += 1\n        if count > max_operations or depth > 32:\n            raise ValueError(\"Instrument operation or nesting bound exhausted.\")\n        if value is None or type(value) in {str, int, float, bool}:\n            return finite(value)\n        if isinstance(value, list):\n            return [visit(v, depth + 1, f\"{location}[{index}]\") for index, v in enumerate(value)]\n        if not isinstance(value, dict):\n            raise ValueError(\"Only JSON expressions are supported.\")\n        if set(value) == {\"formula\"}:\n            source = value[\"formula\"]\n            if not isinstance(source, str):\n                raise ValueError(\"Formula text is required.\")\n            if source not in compiled:\n                compiled[source] = compile_formula(source, bindings)\n            return visit(compiled[source], depth + 1, location + \".formula\")\n        if set(value) == {\"ref\"}:\n            name = value[\"ref\"]\n            if not isinstance(name, str) or name not in bindings:\n                raise ValueError(\"Unknown instrument binding.\")\n            if name in resolving:\n                raise ValueError(\"Instrument bindings cannot reference a cycle.\")\n            if name not in resolved:\n                resolving.add(name)\n                try:\n                    resolved[name] = visit(bindings[name], depth + 1, \"$.bindings.\" + name)\n                finally:\n                    resolving.remove(name)\n            return resolved[name]\n        if set(value) == {\"field\"}:\n            path = value[\"field\"]\n            if not isinstance(path, str) or not path:\n                raise ValueError(\"Invalid input field.\")\n            if path.split(\".\")[0] not in spec[\"inputs\"]:\n                # A model once used {\"field\":\"2\"} for the number 2. Keep the\n                # evaluator fail-closed, but make its retry feedback actionable.\n                # Do not echo arbitrary untrusted field paths into model context.\n                if len(path) <= 32 and re.fullmatch(r\"-?(?:0|[1-9][0-9]*)(?:\\.[0-9]+)?(?:[eE][+-]?[0-9]+)?\", path):\n                    raise ValueError('Input field root was not declared. A numeric constant is a raw JSON number (for example 2), not {\"field\":\"2\"}. Only declared input names use {\"field\":\"name\"}.')\n                raise ValueError(\"Input field root was not declared.\")\n            at = inputs\n            for part in path.split(\".\"):\n                if part in {\"__proto__\", \"prototype\", \"constructor\"} or not isinstance(at, dict) or part not in at:\n                    raise ValueError(\"Missing or unsafe input field.\")\n                at = at[part]\n            return finite(at)\n        if set(value) != {\"op\", \"args\"} or not isinstance(value[\"args\"], list):\n            if set(value) in ({\"literal\"}, {\"value\"}, {\"const\"}):\n                raise ValueError(location + ': a literal is a raw JSON value (for example 7), not a literal/value/const object. Input references use exactly {\"field\":\"name\"}.')\n            raise ValueError(location + ': an operation must contain exactly \"op\" and an \"args\" array; received keys ' + \", \".join(sorted(map(str, value))) + \".\")\n        op, raw = value[\"op\"], value[\"args\"]\n        if op == \"if\":\n            if len(raw) != 3:\n                raise ValueError(\"if needs three operands.\")\n            cond = visit(raw[0], depth + 1, location + \".args[0]\")\n            if type(cond) is not bool:\n                raise ValueError(\"if condition must be boolean.\")\n            branch = 1 if cond else 2\n            return visit(raw[branch], depth + 1, f\"{location}.args[{branch}]\")\n        args = [visit(v, depth + 1, f\"{location}.args[{index}]\") for index, v in enumerate(raw)]\n        if op in {\"add\", \"mul\", \"min\", \"max\"}:\n            if not args:\n                raise ValueError(\"Arithmetic needs operands.\")\n            vals = [number(v) for v in args]\n            result = vals[0]\n            for val in vals[1:]:\n                result = finite(result + val if op == \"add\" else result * val if op == \"mul\" else min(result, val) if op == \"min\" else max(result, val))\n        elif op in {\"sub\", \"div\"}:\n            if len(args) != 2:\n                raise ValueError(\"Binary arithmetic needs two operands.\")\n            a, b = map(number, args)\n            if op == \"div\" and b == 0:\n                raise ValueError(\"Division by zero.\")\n            result = a - b if op == \"sub\" else a / b\n        elif op == \"abs\":\n            if len(args) != 1:\n                raise ValueError(\"abs needs one numeric operand.\")\n            result = abs(number(args[0]))\n        elif op in {\"eq\", \"lt\", \"lte\", \"gt\", \"gte\"}:\n            if len(args) != 2:\n                raise ValueError(\"Comparison needs two operands.\")\n            a, b = args\n            if op == \"eq\":\n                result = _json_equal(a, b)\n            else:\n                a, b = number(a), number(b)\n                result = a < b if op == \"lt\" else a <= b if op == \"lte\" else a > b if op == \"gt\" else a >= b\n        elif op in {\"and\", \"or\", \"not\"}:\n            if not args or any(type(v) is not bool for v in args) or (op == \"not\" and len(args) != 1):\n                raise ValueError(\"Boolean operation needs boolean operands.\")\n            result = all(args) if op == \"and\" else any(args) if op == \"or\" else not args[0]\n        elif op in {\"sum\", \"count\"}:\n            if len(args) != 1 or not isinstance(args[0], list):\n                raise ValueError(\"sum/count needs one array.\")\n            result = len(args[0]) if op == \"count\" else 0\n            if op == \"sum\":\n                for item in args[0]:\n                    count += 1\n                    if count > max_operations:\n                        raise ValueError(\"Instrument operation bound exhausted.\")\n                    result = finite(result + number(item))\n        else:\n            raise ValueError(\"Unsupported expression operation.\")\n        return finite(result)\n\n    finite(inputs)\n    result = {key: visit(expr, location=\"$.outputs[\" + json.dumps(key) + \"]\") for key, expr in spec[\"outputs\"].items()}\n    return {\"output\": result, \"operations\": count, \"scope\": \"Bounded declarative execution; acceptance must be checked separately.\"}\n\n\n\ndef strict_portable_json(raw):\n    \"\"\"Refuse ambiguous or nonstandard JSON before standalone artifact execution.\"\"\"\n    def unique_members(pairs):\n        result = {}\n        for key, value in pairs:\n            if key in result:\n                raise ValueError(\"Invalid JSON: duplicate object member.\")\n            result[key] = value\n        return result\n\n    def nonfinite_constant(_token):\n        raise ValueError(\"Invalid JSON: non-finite number token.\")\n\n    def finite_float(token):\n        value = float(token)\n        if not math.isfinite(value):\n            raise ValueError(\"Invalid JSON: floating-point overflow.\")\n        return value\n\n    return json.loads(raw, object_pairs_hook=unique_members,\n                      parse_constant=nonfinite_constant, parse_float=finite_float)\n\n\ndef main():\n    parser = argparse.ArgumentParser(description=__doc__)\n    parser.add_argument(\"instrument\", type=Path)\n    parser.add_argument(\"input\", type=Path)\n    parser.add_argument(\"--max-operations\", type=int, default=10000)\n    args = parser.parse_args()\n    print(json.dumps(evaluate(strict_portable_json(args.instrument.read_text()), strict_portable_json(args.input.read_text()), args.max_operations), ensure_ascii=False, allow_nan=False, indent=2))\n\n\nif __name__ == \"__main__\":\n    main()\n",
+      "dense-kv.json": "{\n  \"name\": \"Dense float16 KV cache planning scenario\",\n  \"inputs\": [\n    \"layers\",\n    \"heads\",\n    \"key_width\",\n    \"value_width\"\n  ],\n  \"outputs\": {\n    \"kv_bytes\": {\n      \"formula\": \"32768 * 2 * layers * heads * (key_width + value_width)\"\n    }\n  },\n  \"conditions\": \"One sequence of exactly 32,768 tokens, dense float16 cache on each block.\",\n  \"limitations\": \"Model loading, measured resident memory, inference throughput and GPU fit require owner-host telemetry.\"\n}",
+      "gpu-memory.json": "{\n  \"name\": \"Read observed owner-host GPU memory\",\n  \"inputs\": [\n    \"measured_gpu_resident_bytes\"\n  ],\n  \"outputs\": {\n    \"resident_bytes\": {\n      \"field\": \"measured_gpu_resident_bytes\"\n    }\n  }\n}"
+    },
+    "notice": "Contains your objective, context and artifacts. Inspect before sharing. No connector credentials or workspace integrity key included. Recorded verification is historical; recheck imported work.",
+    "sha256": "c275b5317670299e0ecbcd062c3ab2b47e8d0a1904f6ad89d02fd060b9e8898c"
+  }
+}

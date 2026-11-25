@@ -1,0 +1,63 @@
+{
+  "artifact_count": 0,
+  "elapsed_seconds": 63.16338642399933,
+  "evaluation": {
+    "actual_operations": [],
+    "actual_tool_operations": 0,
+    "bound_provider_receipts": [
+      {
+        "code": "PROVIDER_RESPONSE",
+        "message": "Model request failed. Its provider allowance or cost may have been consumed; inspect connection before explicitly resuming.",
+        "model": "qwen3-8b-q4_k_m",
+        "provider": "llama-cpp",
+        "role": "builder",
+        "run_id": "wf_c185d5da201d003ed64e675b_6876da63b76e85b2",
+        "session_budget_snapshot": {
+          "committed": 0.0,
+          "currency": "USD",
+          "limit": 0.0,
+          "locked": false,
+          "remaining": 0.0,
+          "reserved": 0.0,
+          "scope": "process-session"
+        },
+        "usage_status": "UNKNOWN"
+      }
+    ],
+    "later_model_dispatch_after_first_operation": false,
+    "no_data_operations": true,
+    "outcome": {
+      "available_documents": [],
+      "blocker_events": [],
+      "qualification": "INDEPENDENT_REVIEW_REQUIRED"
+    },
+    "proposals": [],
+    "refusals": [
+      {
+        "code": "PROVIDER_RESPONSE",
+        "message": "Model request failed. Its provider allowance or cost may have been consumed; inspect connection before explicitly resuming.",
+        "model": "qwen3-8b-q4_k_m",
+        "provider": "llama-cpp",
+        "role": "builder",
+        "run_id": "wf_c185d5da201d003ed64e675b_6876da63b76e85b2",
+        "session_budget_snapshot": {
+          "committed": 0.0,
+          "currency": "USD",
+          "limit": 0.0,
+          "locked": false,
+          "remaining": 0.0,
+          "reserved": 0.0,
+          "scope": "process-session"
+        },
+        "usage_status": "UNKNOWN"
+      }
+    ],
+    "settled_scope_checks": []
+  },
+  "exact_checkpoint_sha256": "3fb8094863dafeb4c9b751a425deec3a9d4ae10c0e6a5a39ac09eaa47296b86a",
+  "id": "m02",
+  "independent_reference_seconds": 0.00026712199996836716,
+  "mission_id": "wf_c185d5da201d003ed64e675b",
+  "model": "qwen3-8b-q4_k_m",
+  "status": "paused"
+}
