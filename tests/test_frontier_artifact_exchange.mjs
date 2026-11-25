@@ -165,6 +165,10 @@ test('a multi-model row binds the value to its exact supervised column label', (
   assert.equal(review('Alpha Pack and Alpha Plus in first column. Beta and Beta Pack in second. Weight: 72.2 kg in both columns.',[72.2]).decision, 'supported');
   assert.equal(review('Model columns: Alpha Pack, Beta Pack, Extra Pack. Weight: 72.2 kg in both columns.',[72.2]).decision, 'insufficient');
   assert.equal(review('Model columns: Alpha Pack, Beta Pack. Weight: 72.2 kg.',[72.2]).decision, 'insufficient');
+  const example = `Model columns: Beta Pack, Alpha Pack.\n${row}`;
+  const source = 'Model columns: Alpha Pack, Beta Pack.\n    ' + example;
+  assert.equal(review(source,[72.2],example).decision, 'insufficient');
+  assert.equal(review(source,[72.2,68.5]).decision, 'contradicted');
 });
 
 test('a qualified source section cannot support exact readings or be cropped to remove its heading', () => {

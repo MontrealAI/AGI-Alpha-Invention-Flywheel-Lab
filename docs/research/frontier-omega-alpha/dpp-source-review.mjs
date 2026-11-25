@@ -139,19 +139,20 @@ function quoteQuantifies(quote, excerpt, observation, {heading, units}) {
   const parts = sourceClauses(quote);
   const starts = sourceParts.flatMap((_, start) => parts.every(({part}, index) => sourceParts[start + index]?.part === part) ? [start] : []);
   if (starts.length !== 1 || parts.length === 0) return false;
+  const citedParts = sourceParts.slice(starts[0], starts[0] + parts.length);
   // A source section heading still applies when the supplied quote begins at its field row.
   const qualified = sectionQualifications(sourceParts);
   const readColumns = rows => columnHeaders(rows.map(row => row.indented ? '' : row.part));
-  const tables = readColumns(parts);
+  const tables = readColumns(citedParts);
   if (tables.length > 1 || tables.length !== readColumns(sourceParts).length) return false;
   const [table] = tables;
   const model = tidy(observation.target.model);
   const positions = table?.labels.flatMap((models, index) => models.includes(model) ? [index] : []) ?? [];
   if (table && (table.labels.length < 2 || table.labels.some(models => models.includes('')) || positions.length !== 1)) return false;
-  return parts.some(({part:clause}, index) => {
+  return citedParts.some(({part:clause, indented}, index) => {
     const source = starts[0] + index;
     const prefix = heading.exec(clause);
-    if (!prefix || sourceParts[source].indented || (table && index <= table.index) || qualified[source]) return false;
+    if (!prefix || indented || (table && index <= table.index) || qualified[source]) return false;
     const text = clause.slice(prefix[0].length);
     const sharedAcrossBoth = /\s+in both columns$/iu.test(text);
     const values = measurementValues(text.replace(/\s+in both columns$/iu, ''), units, Boolean(table));
