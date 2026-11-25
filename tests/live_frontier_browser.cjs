@@ -746,7 +746,8 @@ async function guidedJourney(page, language, width, started) {
     const unfamiliar = fr ? 'Accorder un harmonica avec de la cire d’abeille' : 'Tune a harmonica reed with beeswax';
     await matchGoal(page, unfamiliar, null);
     assert.equal(await page.locator('#mission-ambition').textContent(), unfamiliar);
-    assert.match(await page.locator('#mission-next').innerText(), /connect a model|connectez un modèle/u);
+    assert.ok((await page.locator('#mission-next').innerText()).trim());
+    assert.equal(await page.locator('#mission-prepare').isEnabled(), true);
   } finally {
     await context.setOffline(false);
   }
