@@ -13,6 +13,8 @@ const isObject = value => value !== null && typeof value === 'object' && !Array.
 const tidy = value => typeof value === 'string' ? value.normalize('NFC').trim().toLowerCase().replace(/\s+/gu, ' ') : '';
 const digest = /^[a-f0-9]{64}$/u;
 const decimal = /^([+-]?)(\d{1,12})(?:[.,](\d{1,8}))?$/u;
+const qualificationHeading = /(?:^|[:—–(]\s*)(?:max(?:imum)?|min(?:imum)?|(?:upper|lower) (?:bounds?|limits?|estimates?)|bounds?|limits?|caps?|ceilings?|floors?|at (?:most|least)|approximat\p{L}*|estimat\p{L}*|typical|indicative|provisional|not (?:reported|measured)|(?:valeurs?|mesures?|données) (?:maximales?|minimales?|approximatives?|indicatives?|estim[ée]es?)|limites?|bornes?|estimations?|environ|à titre indicatif)(?=$|[\s.:,—–…/)])/iu;
+const separateCurrent = /^maximum (?:continuous )?(?:charge|charging)\s*\/\s*(?:discharge|discharging) current\s*:?\s*\d+(?:[.,]\d+)?\s*A$/iu;
 
 function exactQuantity(value, unit, units) {
   if (typeof value !== 'string' && !Number.isFinite(value)) return undefined;
@@ -76,21 +78,23 @@ function quoteQuantifies(quote, excerpt, observation, {heading, units}) {
   // Parse complete labelled clauses. An unsupported expression cannot contribute a suffix.
   const expected = exactQuantity(observation.value, observation.unit, units);
   if (expected === undefined || !excerpt.includes(quote)) return false;
-  const cited = clauses(quote);
-  const available = clauses(excerpt);
-  if (!available.some((_, start) => cited.every((part, index) => available[start + index] === part))) return false;
   // Preserve compatibility characters such as superscript footnote digits.
   const read = text => clauses(text.normalize('NFC').replace(/[^\S\r\n]+/gu, ' '));
+  const sourceParts = read(excerpt);
   const parts = read(quote);
+  const starts = sourceParts.flatMap((_, start) => parts.every((part, index) => sourceParts[start + index] === part) ? [start] : []);
+  if (starts.length !== 1 || parts.length === 0) return false;
+  // A source section heading still applies when the supplied quote begins at its field row.
+  const qualified = sourceParts.findIndex(part => qualificationHeading.test(part) && !separateCurrent.test(part));
   const tables = columnHeaders(parts);
-  if (tables.length > 1 || tables.length !== columnHeaders(read(excerpt)).length) return false;
+  if (tables.length > 1 || tables.length !== columnHeaders(sourceParts).length) return false;
   const [table] = tables;
   const model = tidy(observation.target.model);
   const positions = table?.labels.flatMap((models, index) => models.includes(model) ? [index] : []) ?? [];
   if (table && (table.labels.length < 2 || table.labels.some(models => models.includes('')) || positions.length !== 1)) return false;
   return parts.some((clause, index) => {
     const prefix = heading.exec(clause);
-    if (!prefix || table && index <= table.index) return false;
+    if (!prefix || (table && index <= table.index) || (qualified >= 0 && starts[0] + index >= qualified)) return false;
     const text = clause.slice(prefix[0].length);
     const sharedAcrossBoth = /\s+in both columns$/iu.test(text);
     const values = measurementValues(text.replace(/\s+in both columns$/iu, ''), units, Boolean(table));
