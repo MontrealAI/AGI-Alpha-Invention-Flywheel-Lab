@@ -13,11 +13,11 @@ import {createAssistedBrief, maximumReturnedBytes, readAssistedReply, renderAssi
 
 const messages = {
   en: {
-    ready: 'Mission opened on this device.', waiting: 'Assisted mission prepared. No model request has run.',
+    ready: 'Mission opened on this device.', waiting: 'Your brief is ready.',
     running: 'Waiting for your local model…', review: 'Work returned for your review.',
     paused: 'Mission paused. Its ambition and completed work are still here.', canceled: 'Mission canceled.',
     choose: 'Choose intelligence to start work on this ambition. You can also use a qualified capability or continue with an assistant.',
-    assisted: 'Review your brief, then bring the work back here.',
+    assisted: 'Copy the brief into ChatGPT or another AI you use, then bring its answer back here.',
     localNext: 'Review the local result and its assumptions before using it.',
     error: 'The local model did not return a usable response. Check the running service, model name and connection, or continue with an assisted mission.',
     config: 'Local settings saved for this tab. The first mission request will check the connection.', invalidConfig: 'Enter the exact model name and choose a supported runtime.',
@@ -60,11 +60,11 @@ const messages = {
       research:'Frontier research',invention:'New invention',continuing:'Continuing investigation',clarification:'Clarification or abstention'},
   },
   fr: {
-    ready: 'Mission ouverte sur cet appareil.', waiting: 'Mission assistée préparée. Aucun modèle n’a été sollicité.',
+    ready: 'Mission ouverte sur cet appareil.', waiting: 'Votre résumé est prêt.',
     running: 'En attente de votre modèle local…', review: 'Travail reçu pour examen.',
     paused: 'Mission en pause. Son ambition et le travail accompli sont conservés.', canceled: 'Mission annulée.',
     choose: 'Choisissez une intelligence pour commencer le travail. Vous pouvez aussi utiliser une capacité qualifiée ou poursuivre avec un assistant.',
-    assisted: 'Relisez le résumé de mission, puis rapportez le travail ici.',
+    assisted: 'Copiez le résumé dans ChatGPT ou une autre IA de votre choix, puis rapportez la réponse ici.',
     localNext: 'Examinez le résultat local et ses hypothèses avant de l’utiliser.',
     error: 'Le modèle local n’a pas fourni de réponse exploitable. Vérifiez le service, le nom du modèle et la connexion, ou poursuivez avec une mission assistée.',
     config: 'Paramètres locaux conservés pour cet onglet. La première requête vérifiera la connexion.', invalidConfig: 'Indiquez le nom exact du modèle et choisissez un environnement pris en charge.',
@@ -194,6 +194,13 @@ export function setupMissionConsole(member, shell) {
     currentMission: () => ['canceled','running'].includes(mission?.status) ? undefined : mission,
     localFilesConsent: () => !files().length || node('mission-document-consent').checked,
     filesAttached: () => files().length > 0,
+    updateSummary: () => renderHeadline(),
+    onChooseRoute() {
+      if (mission?.status !== 'waiting' || mission.run?.provider !== 'assisted') return;
+      resetRequest();
+      mission = continueMission(mission);
+      render();
+    },
     returnToMission: () => shell.show(node('frontier-mission-panel'), {remember:true}),
     showSetup,
     onOpen({ambition, original_ambition: originalAmbition = ambition, language: missionLanguage, instruction, documents}) {
@@ -299,6 +306,7 @@ export function setupMissionConsole(member, shell) {
     if (!files().length && preferred === 'assisted') { void prepareAssistance(); return; }
     if (!files().length && preferred === browserModelId) { node('intelligence-browser-start').click(); return; }
     if (!files().length && connection && !execution.hasPreferredRoute()) { void runConfiguredModel(); return; }
+    if (!files().length && !execution.hasPreferredRoute()) { void prepareAssistance({focus:false}); return; }
     if (!execution.hasPreferredRoute()) showSetup();
     void execution.activate(mission.ambition, {continuation});
   }
@@ -306,19 +314,37 @@ export function setupMissionConsole(member, shell) {
   function resetHandoff() {
     request = undefined;
     for (const id of ['mission-prompt','mission-reply','mission-import-artifact']) node(id).value = '';
-    node('mission-share').checked = false;
     node('mission-technical').checked = false;
+    text('mission-copy-status', '');
     resetAssistedImport();
     node('mission-handoff').open = false;
     show('mission-handoff', false);
-    authorizeShare();
+    updateHandoffControls();
   }
 
-  function authorizeShare() {
-    const permitted = Boolean(request && node('mission-share').checked && active());
+  function updateHandoffControls() {
+    const permitted = Boolean(request && active());
     for (const id of ['mission-copy','mission-prompt-download']) node(id).disabled = !permitted;
     show('mission-assistant', permitted);
     show('mission-codex', permitted);
+  }
+
+  function renderHeadline(message) {
+    if (!mission) return;
+    const state = mission.status;
+    const report = currentReport();
+    const native = state === 'ready' ? execution.summary() : null;
+    const observed = localRuns.has(report?.runId);
+    const browserReport = observed && report.model === browserModelId;
+    const source = report?.provider === 'assisted' ? words.manualSource
+      : browserReport ? words.browserSource : observed ? words.localSource : words.restoredSource;
+    const labels = [source, observed && !browserReport ? report.model : null, words.unpublished].filter(Boolean);
+    const running = state === 'running' && mission.run.model === browserModelId;
+    text('mission-status', message ?? native?.status
+      ?? (report && state === 'review' ? labels.join(' · ') : running ? words.browserRunning : words[state]));
+    text('mission-next', native?.nextAction ?? (state === 'canceled' ? words.canceledNext : state === 'paused' ? words.pausedNext
+      : state === 'waiting' ? words.assisted : state === 'running' ? words.localNext
+      : state === 'ready' && missionPacket(mission).instruction ? words.nextInstruction : report?.nextAction ?? words.choose));
   }
 
   function render(message) {
@@ -357,16 +383,7 @@ export function setupMissionConsole(member, shell) {
     text('mission-ambition', mission.ambition);
     text('mission-original', mission.originalAmbition);
     show('mission-history', mission.originalAmbition !== mission.ambition);
-    const observed = localRuns.has(report?.runId);
-    const browserReport = observed && report.model === browserModelId;
-    const source = report?.provider === 'assisted' ? words.manualSource
-      : browserReport ? words.browserSource : observed ? words.localSource : words.restoredSource;
-    const labels = [source, observed && !browserReport ? report.model : null, words.unpublished].filter(Boolean);
-    const running = state === 'running' && mission.run.model === browserModelId;
-    text('mission-status', message ?? (report && state === 'review' ? labels.join(' · ') : running ? words.browserRunning : words[state]));
-    text('mission-next', state === 'canceled' ? words.canceledNext : state === 'paused' ? words.pausedNext
-      : state === 'waiting' ? words.assisted : state === 'running' ? words.localNext
-      : state === 'ready' && missionPacket(mission).instruction ? words.nextInstruction : report?.nextAction ?? words.choose);
+    renderHeadline(message);
     show('mission-understanding', Boolean(report));
     text('mission-route', words.routes[route]);
     text('mission-objective', report?.objective);
@@ -435,6 +452,7 @@ export function setupMissionConsole(member, shell) {
     show('mission-continue', ['paused','canceled','review'].includes(state));
     node('mission-cancel').disabled = state === 'canceled';
     node('mission-prepare').disabled = state === 'running' || state === 'canceled';
+    show('mission-prepare', state !== 'waiting' || mission.run?.provider !== 'assisted');
   }
 
   function stopRequest() {
@@ -526,11 +544,11 @@ export function setupMissionConsole(member, shell) {
     const context = request.context.filter(value => !value.startsWith(`${words.contextRun}: `));
     node('mission-prompt').value = node('mission-technical').checked ? createMissionPrompt(request)
       : createAssistedBrief(request, context, Boolean(mission.reports.length));
-    node('mission-share').checked = false;
-    authorizeShare();
+    text('mission-copy-status', '');
+    updateHandoffControls();
   }
 
-  async function prepareAssistance() {
+  async function prepareAssistance({focus = true} = {}) {
     if (!active()) return;
     if (!mission) {
       shell.show(input, {remember:true});
@@ -549,7 +567,8 @@ export function setupMissionConsole(member, shell) {
       return;
     }
     if (!active() || previous !== mission) return;
-    shell.show(node('frontier-mission-panel'), {remember:true});
+    shell.show(node('frontier-mission-panel'), {remember:true,focus});
+    if (settings.parentElement === node('mission-inline-intelligence')) settings.open = false;
     execution.clearWaiting();
     const token = ++serial;
     try {
@@ -562,7 +581,7 @@ export function setupMissionConsole(member, shell) {
       }
       revealHandoff(mission.request);
       render();
-      node('mission-handoff').querySelector('summary').focus();
+      if (focus) node('mission-handoff').querySelector('summary').focus();
     } catch { if (token === serial && active()) render(words.invalidMission); }
   }
   node('mission-prepare').addEventListener('click', prepareAssistance);
@@ -570,22 +589,21 @@ export function setupMissionConsole(member, shell) {
   for (const button of member.querySelectorAll('[data-frontier-assisted]')) button.addEventListener('click', prepareAssistance);
 
   node('mission-technical').addEventListener('change', updateAssistedBrief);
-  node('mission-share').addEventListener('change', authorizeShare);
   node('mission-copy').addEventListener('click', async () => {
-    if (!active() || !request || !node('mission-share').checked) return;
+    if (!active() || !request) return;
     const token = serial;
     try {
       await navigator.clipboard.writeText(node('mission-prompt').value);
-      if (token === serial && active()) text('mission-handoff-status', words.copy);
+      if (token === serial && active()) text('mission-copy-status', words.copy);
     } catch {
       if (token !== serial || !active()) return;
       node('mission-prompt').focus();
       node('mission-prompt').select();
-      text('mission-handoff-status', words.select);
+      text('mission-copy-status', words.select);
     }
   });
   node('mission-prompt-download').addEventListener('click', () => {
-    if (active() && request && node('mission-share').checked) downloadText(node('mission-prompt').value, 'frontier-mission-brief.txt');
+    if (active() && request) downloadText(node('mission-prompt').value, 'frontier-mission-brief.txt');
   });
 
   function resetAssistedImport() {

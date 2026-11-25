@@ -206,7 +206,7 @@ jobs:
           # Fetch archive revisions before restoring the first-parent history they may be part of.
           git fetch --no-tags --depth=1 --filter=blob:none origin \
             522542e525e96556285560e65e4443c85cc7b709 6a635b77012fb45b4d96c404a33fa04327c19674 \
-            cef4d1caa38b14555613dc25d180c42798b62b78
+            cef4d1caa38b14555613dc25d180c42798b62b78 3aa1fd3373e4d44969c26d78c6f3dfd8c7274f6c
           for attempt in 1 2 3; do
             if git fetch --no-tags --filter=blob:none --shallow-since=2026-11-22T00:00:00Z origin \
                 "$GITHUB_SHA" refs/heads/frontier-watch-public:refs/remotes/origin/frontier-watch-public; then
@@ -385,7 +385,8 @@ jobs:
               frontier-activation-1.5.0.zip factory-results.json frontier-game-theory-1.0.0.zip \
               frontier-game-observation-1.0.0.zip frontier-harness-executor-1.0.0.zip \
               frontier-harness-executor-1.1.0.zip frontier-harness-executor-1.2.0.zip \
-              frontier-harness-executor-1.3.0.zip frontier-harness-executor-1.4.0.zip; do
+              frontier-harness-executor-1.3.0.zip frontier-harness-executor-1.3.0-cef4d1c.zip \
+              frontier-harness-executor-1.4.0.zip; do
             curl --fail --silent --show-error --retry 2 --max-time 20 --max-filesize 20000000 "$origin/$artifact" --output "$packages/$artifact"
           done
           python3 -m pip install --target "$RUNNER_TEMP/frontier-wasm" --require-hashes -r products/frontier-member-tools/adaptive/requirements-linux.txt

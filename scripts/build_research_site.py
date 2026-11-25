@@ -129,6 +129,7 @@ ATLAS_OUTPUTS = frozenset({
     'frontier-omega-alpha/frontier-harness-executor-1.1.0.zip',
     'frontier-omega-alpha/frontier-harness-executor-1.2.0.zip',
     'frontier-omega-alpha/frontier-harness-executor-1.3.0.zip',
+    'frontier-omega-alpha/frontier-harness-executor-1.3.0-cef4d1c.zip',
     'frontier-omega-alpha/frontier-harness-executor-1.4.0.zip',
     'frontier-omega-alpha/opportunity-capture.json',
 })

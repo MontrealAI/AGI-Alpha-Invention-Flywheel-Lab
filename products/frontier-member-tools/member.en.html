@@ -64,6 +64,39 @@
         <div><h5>Next useful action</h5><p id="mission-next"></p></div>
       </div>
       <details id="mission-history" hidden><summary>Original ambition</summary><p id="mission-original"></p></details>
+      <details class="mission-handoff" id="mission-handoff" hidden>
+        <summary>Work with ChatGPT or another AI</summary>
+        <p>Use your own ChatGPT Pro account or any AI you prefer. Review the brief and copy only what you can share.</p>
+        <div class="mission-handoff-grid">
+          <div>
+            <label for="mission-prompt">Your mission brief</label>
+            <textarea id="mission-prompt" rows="7" readonly></textarea>
+            <div class="mv-actions">
+              <button id="mission-copy" type="button" class="entry-button" disabled>Copy brief</button>
+              <a id="mission-assistant" href="https://chatgpt.com/" target="_blank" hidden rel="noopener noreferrer">Open ChatGPT <span aria-hidden="true">↗</span></a>
+            </div>
+            <p id="mission-copy-status" role="status"></p>
+            <details>
+              <summary>More ways to use this brief</summary>
+              <div class="mv-actions">
+                <a id="mission-codex" href="https://chatgpt.com/codex/" target="_blank" hidden rel="noopener noreferrer">Open Codex <span aria-hidden="true">↗</span></a>
+                <button id="mission-prompt-download" type="button" class="quiet" disabled>Download brief</button>
+              </div>
+              <label class="mv-check"><input id="mission-technical" type="checkbox"> Request a structured reply</label>
+            </details>
+          </div>
+          <div>
+            <label for="mission-reply">Paste your AI’s reply</label>
+            <textarea id="mission-reply" rows="7" maxlength="32768" placeholder="Bring your answer back here" autocomplete="off" spellcheck="false"></textarea>
+            <div class="mv-actions">
+              <button id="mission-import-reply" type="button" class="entry-button">Add the reply to this mission</button>
+              <label for="mission-import-artifact">Add a text file instead (up to 32 KiB)<input id="mission-import-artifact" type="file"></label>
+            </div>
+            <p id="mission-handoff-status" class="status" role="status"></p>
+            <button id="mission-keep-unverified" type="button" class="quiet" aria-describedby="mission-handoff-status" hidden>Keep as unverified work in this mission</button>
+          </div>
+        </div>
+      </details>
       <div id="mission-understanding" hidden>
         <dl class="goal-evidence">
           <div><dt>Approach</dt><dd id="mission-route"></dd></div>
@@ -136,36 +169,11 @@
       <div class="mv-actions mission-actions">
         <button id="execution-send-current" type="button" class="entry-button" hidden>Start local execution</button>
         <button id="mission-run-local" type="button" class="entry-button" hidden>Run with my local model</button>
-        <button type="button" id="mission-configure" class="quiet">Change intelligence</button>
-        <button id="mission-prepare" type="button" class="quiet">Prepare an assisted mission</button>
+        <button type="button" id="mission-configure" class="quiet">Other intelligence options</button>
+        <button id="mission-prepare" type="button" class="quiet">Copy the brief for an AI assistant</button>
         <button id="mission-pause" type="button" class="quiet" hidden>Pause</button>
         <button id="mission-continue" type="button" class="quiet" hidden>Continue investigation</button>
       </div>
-      <details id="mission-handoff" hidden>
-        <summary>Work with your assistant</summary>
-        <p>Review and copy your brief into your own ChatGPT or Codex session. Bring the work back here to continue this mission.</p>
-        <label for="mission-prompt">Your mission brief</label>
-        <textarea id="mission-prompt" rows="7" readonly></textarea>
-        <details>
-          <summary>Technical format</summary>
-          <label class="mv-check"><input id="mission-technical" type="checkbox"> Use a structured response for this mission</label>
-        </details>
-        <label class="mv-check"><input id="mission-share" type="checkbox"> I reviewed this brief and have permission to share it with my assistant.</label>
-        <div class="mv-actions">
-          <button id="mission-copy" type="button" class="entry-button" disabled>Copy brief</button>
-          <a id="mission-assistant" href="https://chatgpt.com/" target="_blank" hidden rel="noopener noreferrer">Open ChatGPT in a new tab</a>
-          <a id="mission-codex" href="https://chatgpt.com/codex/" target="_blank" hidden rel="noopener noreferrer">Open Codex in a new tab</a>
-          <button id="mission-prompt-download" type="button" class="quiet" disabled>Download brief</button>
-        </div>
-        <label for="mission-reply">Paste the work you received</label>
-        <textarea id="mission-reply" rows="5" maxlength="32768" autocomplete="off" spellcheck="false"></textarea>
-        <div class="mv-actions">
-          <button id="mission-import-reply" type="button" class="entry-button">Keep work for review</button>
-          <label for="mission-import-artifact">Or add a text file (up to 32 KiB)<input id="mission-import-artifact" type="file"></label>
-        </div>
-        <p id="mission-handoff-status" class="status" role="status"></p>
-        <button id="mission-keep-unverified" type="button" class="quiet" aria-describedby="mission-handoff-status" hidden>Keep as unverified work in this mission</button>
-      </details>
       <div class="mv-actions mission-secondary">
         <button id="mission-revise" type="button" class="quiet">Revise ambition</button>
         <button id="mission-cancel" type="button" class="quiet">Cancel</button>

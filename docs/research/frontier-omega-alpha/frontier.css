@@ -467,6 +467,16 @@ body:has(#member:not([hidden]):not([data-public-view])) #main > :not(#member) { 
 .mission-follow-up button { justify-self: start; }
 .mission-follow-up textarea { resize: vertical; }
 #mission-dialogue li { white-space: pre-wrap; }
+.mission-handoff { padding: clamp(.9rem, 2.5vw, 1.6rem); border: 1px solid #a07a62; border-radius: .45rem;
+  background: linear-gradient(150deg, #302039, #21172d 75%); }
+.mission-handoff > summary { font: 400 clamp(1.25rem, 3vw, 2rem)/1.15 var(--serif); color: #ffe1aa; cursor: pointer; }
+.mission-handoff > p { max-width: 75ch; margin-block: .75rem 1rem; }
+.mission-handoff-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 1rem; }
+.mission-handoff-grid textarea { display: block; margin-top: .5rem; }
+.mission-handoff-grid :is(label,summary) { color: #f4d8a5; }
+.mission-handoff-grid :is(.mv-actions,details) { margin-top: .4rem; }
+.mission-handoff-grid input[type='file'] { margin-top: .25rem; }
+@media (max-width: 680px) { .mission-handoff-grid { grid-template-columns: 1fr; } }
 .mission-console textarea, .mission-connection :is(select,input) {
   width: 100%; padding: .6rem; color: var(--ink); background: #190f23; border: 1px solid #9a80a5;
   border-radius: .35rem; font: inherit;

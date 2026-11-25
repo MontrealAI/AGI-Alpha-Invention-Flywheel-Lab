@@ -97,6 +97,17 @@ const copy = {
       complete:'Completed within the registered checks',needs_review:'Awaiting independent evaluation',
       exhausted:'Authorized resources exhausted',revoked:'Authority revoked',expired:'Authority expired',failed:'Execution failed',
       awaiting_consent:'Waiting for provider approval',approval_required:'Provider approval required',superseded:'Replaced by a new revision'},
+    next: {ready:'The companion is preparing the run.', running:'Follow the work in Mission execution.',
+      paused:'Resume the saved run or add an instruction to change the approach.',
+      interrupted:'Review the run activity, then resume or add an instruction.',
+      awaiting_consent:'Review the mission and provider permission in the private companion.',
+      approval_required:'Review current provider permission to continue this mission.',
+      exhausted:'Review what was attempted and add an instruction for the next run.',
+      cancelled:'Open a new mission or add an instruction to start a new run.',
+      expired:'Review the expired permission and choose how to continue.',
+      revoked:'Choose an authorized model to continue.',
+      failed:'Review the run activity and choose how to continue.'},
+    nextReview: 'Review the evidence, work files and remaining checks below.',
     events: {created:'Mission recorded',model_started:'Model request sent',model_completed:'Model result received',
       remote_mission_approved:'Provider permission approved',authority_stopped:'Authority ended',
       tool_completed:'Tool operation recorded',tool_refused:'Tool refused',response_refused:'Model response refused',
@@ -163,6 +174,17 @@ const copy = {
       complete:'Terminée selon les contrôles enregistrés',needs_review:'En attente d’une évaluation indépendante',
       exhausted:'Ressources autorisées épuisées',revoked:'Autorisation révoquée',expired:'Autorisation expirée',failed:'Échec de l’exécution',
       awaiting_consent:'En attente de l’approbation du fournisseur',approval_required:'Approbation du fournisseur requise',superseded:'Remplacée par une nouvelle révision'},
+    next: {ready:'Le compagnon prépare l’exécution.', running:'Suivez le travail dans la section Exécution de la mission.',
+      paused:'Reprenez l’exécution sauvegardée ou ajoutez une consigne pour changer d’approche.',
+      interrupted:'Consultez le journal, puis reprenez ou ajoutez une consigne.',
+      awaiting_consent:'Examinez la mission et l’autorisation du fournisseur dans le compagnon privé.',
+      approval_required:'Examinez l’autorisation du fournisseur pour poursuivre cette mission.',
+      exhausted:'Examinez les tentatives et ajoutez une consigne pour la prochaine exécution.',
+      cancelled:'Ouvrez une nouvelle mission ou ajoutez une consigne pour relancer le travail.',
+      expired:'Vérifiez l’autorisation expirée et choisissez comment poursuivre.',
+      revoked:'Choisissez un modèle autorisé pour poursuivre.',
+      failed:'Consultez le journal et choisissez comment poursuivre.'},
+    nextReview: 'Examinez ci-dessous les preuves, les fichiers et les contrôles restants.',
     events: {created:'Mission enregistrée',model_started:'Demande envoyée au modèle',model_completed:'Résultat du modèle reçu',
       remote_mission_approved:'Autorisation du fournisseur accordée',authority_stopped:'Autorisation terminée',
       tool_completed:'Opération de l’outil enregistrée',tool_refused:'Opération refusée',response_refused:'Réponse du modèle refusée',
@@ -172,7 +194,7 @@ const copy = {
 };
 
 export function setupExecution(member, language, {onOpen, currentAmbition, currentMission, returnToMission, showSetup,
-  localFilesConsent, filesAttached}) {
+  localFilesConsent, filesAttached, updateSummary, onChooseRoute}) {
   const words = copy[language];
   const available = () => !member.hidden;
   let session, commandScope, view, pending, busyEpoch, serial = 0, timer;
@@ -181,7 +203,10 @@ export function setupExecution(member, language, {onOpen, currentAmbition, curre
   let pairingRequest;
   const desktop = localDevice();
   const pairingPanel = member.querySelector('.mission-execution-connection');
-  const status = message => text('execution-status', message);
+  const status = message => {
+    text('execution-status', message);
+    updateSummary();
+  };
   const missionKey = (mission = currentMission()) => mission ? `${mission.id}:${mission.revision}` : undefined;
 
   async function request(action, body = {}, command, authorizedSession = session, authorizedCommands = commandScope) {
@@ -567,8 +592,10 @@ export function setupExecution(member, language, {onOpen, currentAmbition, curre
   }
 
   async function activate(ambition, {continuation = false} = {}) {
+    if (!available() || currentAmbition() !== ambition || nativeSetup) return;
+    onChooseRoute();
     const mission = currentMission();
-    if (!available() || !mission || mission.ambition !== ambition || nativeSetup) return;
+    if (!mission) return;
     const key = missionKey(mission);
     if (!continuation && view && viewMissionKey === key && view.status !== 'cancelled') return;
     if (selectedRoute === 'api') {
@@ -728,6 +755,7 @@ export function setupExecution(member, language, {onOpen, currentAmbition, curre
     if (route === 'api' && filesAttached()) { showSetup(); showRoute(words.localFiles); return; }
     if (route !== 'api' && nativeSetup && !await cancelPendingSetup()) return;
     if (!available()) return;
+    onChooseRoute();
     selectedRoute = route;
     displayNativeLink();
     showSetup();
@@ -969,6 +997,14 @@ export function setupExecution(member, language, {onOpen, currentAmbition, curre
   }
   return {activate, clearView, updateControls, cancelPendingSetup,
     pauseActive,
+    summary() {
+      const key = missionKey();
+      if (!key) return;
+      if (view && viewMissionKey === key) return {status:node('execution-status').textContent,
+        nextAction:words.next[view.status] ?? words.nextReview};
+      if (pending?.key === key) return {status:node('execution-status').textContent,
+        nextAction:words.next.ready};
+    },
     hasPreferredRoute: () => selectedRoute === 'api' || Boolean(session && ready),
     hasPendingSetup: () => Boolean(nativeSetup),
     hasActiveWork: (action = 'pause') => Boolean(pending || view?.worker_active || activeStates.has(view?.status)
