@@ -165,6 +165,10 @@ test('a multi-model row binds the value to its exact supervised column label', (
   assert.equal(review('Alpha Pack and Alpha Plus in first column. Beta and Beta Pack in second. Weight: 72.2 kg in both columns.',[72.2]).decision, 'supported');
   assert.equal(review('Model columns: Alpha Pack, Beta Pack, Extra Pack. Weight: 72.2 kg in both columns.',[72.2]).decision, 'insufficient');
   assert.equal(review('Model columns: Alpha Pack, Beta Pack. Weight: 72.2 kg.',[72.2]).decision, 'insufficient');
+  const example = `Model columns: Beta Pack, Alpha Pack.\n${row}`;
+  const source = 'Model columns: Alpha Pack, Beta Pack.\n    ' + example;
+  assert.equal(review(source,[72.2],example).decision, 'insufficient');
+  assert.equal(review(source,[72.2,68.5]).decision, 'contradicted');
 });
 
 test('a qualified source section cannot support exact readings or be cropped to remove its heading', () => {
@@ -193,4 +197,34 @@ test('a qualified source section cannot support exact readings or be cropped to 
   assert.equal(review('Maximum discharge current: 30 kg.\n' + row), 'insufficient');
   assert.equal(review('Independent measurements.\n' + row), 'supported');
   assert.equal(review(row + '\nUpper limits for a subsequent section.'), 'supported');
+});
+
+test('explicit peer headings end a qualifier without dropping inherited limits in subsections', () => {
+  const target = {model:'Example Pack',level:'system'};
+  const row = 'Net battery weight: 64 kg.';
+  const review = excerpt => reviewClaim({
+    id:'heading-level',target,field:'batteryWeight',claim:{value:68,unit:'kg'},
+    sources:[{id:'manual',excerpt,url:'https://example.org/data',locator:'two sections',sha256:'a'.repeat(64)}],
+    observations:[{source:'manual',target,field:'batteryWeight',quote:row,value:64,unit:'kg'}],
+  }).decision;
+  const first = '## Upper limits\nMaximum discharge current: 30 A.\n';
+  assert.equal(review(first + '## Measured specifications\n' + row), 'contradicted');
+  assert.equal(review(first + '# Measured specifications\n' + row), 'contradicted');
+  assert.equal(review(first + '### Measured specifications\n' + row), 'insufficient');
+  assert.equal(review(first + 'Measured specifications\n' + row), 'insufficient');
+  assert.equal(review('## Maximum discharge current: 30 A.\n' + row), 'insufficient');
+  assert.equal(review('<h2 class="table">Limites supérieures</h2>\n<h2>Mesures exactes</h2>\n' + row), 'contradicted');
+  assert.equal(review('## Upper limits\n### Estimates\n### Measured examples\n' + row), 'insufficient');
+  assert.equal(review('## Measured specifications\n' + row + '\n## Upper limits'), 'contradicted');
+  assert.equal(review('## Upper limits\n' + row + '\n## Measured specifications\n' + row), 'insufficient');
+  for (const text of ['<h2>', '<h2></h2>', '<h2><em></em></h2>', '<h2>Measured</h3>', '> ## Measured specifications',
+    '## ---', '```md\n## Measured specifications\n```', '~~~\n## Measured specifications\n~~~',
+    '    ## Measured specifications', '\t## Measured specifications', 'Note; ## Measured specifications',
+    '    <h2>Measured specifications</h2>', 'Note; <h2>Measured specifications</h2>',
+    '<pre>\n## Measured specifications\n</pre>', '<!--\n## Measured specifications\n-->',
+    '<h2 hidden>Measured specifications</h2>']) {
+    assert.equal(review(first + text + '\n' + row), 'insufficient');
+  }
+  assert.equal(review(first + '- Example\n   ## Measured specifications\n' + row), 'insufficient');
+  assert.equal(review('## Measured specifications\n    ' + row), 'insufficient');
 });
