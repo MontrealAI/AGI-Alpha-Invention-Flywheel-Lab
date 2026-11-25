@@ -1,0 +1,255 @@
+{
+  "schema": "frontier/battery-source-review-v1",
+  "cases": [
+    {
+      "id": "confirm-01",
+      "target": {
+        "model": "SBR096",
+        "level": "system",
+        "version": "Ver22"
+      },
+      "field": "batteryWeight",
+      "claim": {
+        "value": 114,
+        "unit": "kg"
+      },
+      "sources": [
+        {
+          "id": "sr-02",
+          "url": "https://info-support.sungrowpower.com/application/pdf/2025/03/04/SBR064-256-UEN-Ver22-202502.pdf",
+          "date": "2025-02-20",
+          "sha256": "288b673f8ec495df1a5b92a7c8ce23276e675c96d869da5e03522e2c9c2f41f9",
+          "locator": "SBR064-256-UEN-Ver22-202502, §10.1 Table 10-1, p.58. Technical parameters of high voltage LFP battery (SBR064/SBR096/SBR128/SBR160). System Data, Battery Module row.",
+          "excerpt": "Technical parameters of high voltage LFP battery. Model columns: SBR064, SBR096, SBR128, SBR160. System Data, Battery Module: 3.2 kWh, 33 kg, shared row."
+        },
+        {
+          "id": "sr-01",
+          "url": "https://info-support.sungrowpower.com/application/pdf/2025/03/04/SBR064-256-UEN-Ver22-202502.pdf",
+          "date": "2025-02-20",
+          "sha256": "288b673f8ec495df1a5b92a7c8ce23276e675c96d869da5e03522e2c9c2f41f9",
+          "locator": "SBR064-256-UEN-Ver22-202502, §10.1 Table 10-1, pp.58–59. Technical parameters of high voltage LFP battery (SBR064/SBR096/SBR128/SBR160). System Data and General Data.",
+          "excerpt": "Technical parameters of high voltage LFP battery. Model columns: SBR064, SBR096, SBR128, SBR160.\nSystem Data — Energy (usable): 6.4 kWh, 9.6 kWh, 12.8 kWh, 16 kWh. Nominal voltage: 128 V, 192 V, 256 V, 320 V. Operating voltage: 108–146 V, 162–219 V, 216–292 V, 270–365 V. Maximum continuous charging/discharging current: 30 A.\nGeneral Data — Weight: 89 kg, 114 kg, 147 kg, 180 kg."
+        }
+      ],
+      "observations": [
+        {
+          "source": "sr-01",
+          "quote": "Technical parameters of high voltage LFP battery. Model columns: SBR064, SBR096, SBR128, SBR160.\nSystem Data — Energy (usable): 6.4 kWh, 9.6 kWh, 12.8 kWh, 16 kWh. Nominal voltage: 128 V, 192 V, 256 V, 320 V. Operating voltage: 108–146 V, 162–219 V, 216–292 V, 270–365 V. Maximum continuous charging/discharging current: 30 A.\nGeneral Data — Weight: 89 kg, 114 kg, 147 kg, 180 kg.",
+          "field": "batteryWeight",
+          "target": {
+            "model": "SBR096",
+            "level": "system",
+            "version": "Ver22"
+          },
+          "value": 114,
+          "unit": "kg"
+        }
+      ]
+    },
+    {
+      "id": "confirm-02",
+      "target": {
+        "model": "SBR064",
+        "level": "system",
+        "boundary": "DC"
+      },
+      "field": "nominalVoltage",
+      "claim": {
+        "value": 146,
+        "unit": "V"
+      },
+      "sources": [
+        {
+          "id": "sr-01",
+          "url": "https://info-support.sungrowpower.com/application/pdf/2025/03/04/SBR064-256-UEN-Ver22-202502.pdf",
+          "date": "2025-02-20",
+          "sha256": "288b673f8ec495df1a5b92a7c8ce23276e675c96d869da5e03522e2c9c2f41f9",
+          "locator": "SBR064-256-UEN-Ver22-202502, §10.1 Table 10-1, pp.58–59. Technical parameters of high voltage LFP battery (SBR064/SBR096/SBR128/SBR160). System Data and General Data.",
+          "excerpt": "Technical parameters of high voltage LFP battery. Model columns: SBR064, SBR096, SBR128, SBR160.\nSystem Data — Energy (usable): 6.4 kWh, 9.6 kWh, 12.8 kWh, 16 kWh. Nominal voltage: 128 V, 192 V, 256 V, 320 V. Operating voltage: 108–146 V, 162–219 V, 216–292 V, 270–365 V. Maximum continuous charging/discharging current: 30 A.\nGeneral Data — Weight: 89 kg, 114 kg, 147 kg, 180 kg."
+        },
+        {
+          "id": "sr-03",
+          "url": "https://info-support.sungrowpower.com/application/pdf/2024/09/13/DS_20240907_SBR064_096_128_160_192_224_256_Datasheet_V5_EN.pdf",
+          "date": "2024-09-07",
+          "sha256": "764e9b1937973713dfa3385d5fd03078ba191591f670fb5489e0dad1df583033",
+          "locator": "Sungrow Datasheet Version 5, SBR064–256, Technical Specifications p.2, System data and General data.",
+          "excerpt": "Model columns: SBR064, SBR096, SBR128, SBR160, SBR192, SBR224, SBR256.\nNominal voltage: 128 V, 192 V, 256 V, 320 V, 384 V, 448 V, 512 V. Weight: 89 kg, 114 kg, 147 kg, 180 kg, 213 kg, 246 kg, 279 kg."
+        }
+      ],
+      "observations": [
+        {
+          "source": "sr-01",
+          "quote": "Technical parameters of high voltage LFP battery. Model columns: SBR064, SBR096, SBR128, SBR160.\nSystem Data — Energy (usable): 6.4 kWh, 9.6 kWh, 12.8 kWh, 16 kWh. Nominal voltage: 128 V, 192 V, 256 V, 320 V. Operating voltage: 108–146 V, 162–219 V, 216–292 V, 270–365 V. Maximum continuous charging/discharging current: 30 A.\nGeneral Data — Weight: 89 kg, 114 kg, 147 kg, 180 kg.",
+          "field": "nominalVoltage",
+          "target": {
+            "model": "SBR064",
+            "level": "system",
+            "boundary": "DC"
+          },
+          "value": 128,
+          "unit": "V"
+        },
+        {
+          "source": "sr-03",
+          "quote": "Model columns: SBR064, SBR096, SBR128, SBR160, SBR192, SBR224, SBR256.\nNominal voltage: 128 V, 192 V, 256 V, 320 V, 384 V, 448 V, 512 V. Weight: 89 kg, 114 kg, 147 kg, 180 kg, 213 kg, 246 kg, 279 kg.",
+          "field": "nominalVoltage",
+          "target": {
+            "model": "SBR064",
+            "level": "system",
+            "boundary": "DC"
+          },
+          "value": 128,
+          "unit": "V"
+        }
+      ]
+    },
+    {
+      "id": "confirm-03",
+      "target": {
+        "model": "SBR128",
+        "level": "system",
+        "version": "Ver22"
+      },
+      "field": "batteryCapacity",
+      "claim": {
+        "value": 50,
+        "unit": "Ah"
+      },
+      "sources": [
+        {
+          "id": "sr-01",
+          "url": "https://info-support.sungrowpower.com/application/pdf/2025/03/04/SBR064-256-UEN-Ver22-202502.pdf",
+          "date": "2025-02-20",
+          "sha256": "288b673f8ec495df1a5b92a7c8ce23276e675c96d869da5e03522e2c9c2f41f9",
+          "locator": "SBR064-256-UEN-Ver22-202502, §10.1 Table 10-1, pp.58–59. Technical parameters of high voltage LFP battery (SBR064/SBR096/SBR128/SBR160). System Data and General Data.",
+          "excerpt": "Technical parameters of high voltage LFP battery. Model columns: SBR064, SBR096, SBR128, SBR160.\nSystem Data — Energy (usable): 6.4 kWh, 9.6 kWh, 12.8 kWh, 16 kWh. Nominal voltage: 128 V, 192 V, 256 V, 320 V. Operating voltage: 108–146 V, 162–219 V, 216–292 V, 270–365 V. Maximum continuous charging/discharging current: 30 A.\nGeneral Data — Weight: 89 kg, 114 kg, 147 kg, 180 kg."
+        }
+      ],
+      "observations": []
+    },
+    {
+      "id": "confirm-04",
+      "target": {
+        "model": "LX F9.8-H",
+        "level": "system",
+        "version": "V1.0"
+      },
+      "field": "batteryWeight",
+      "claim": {
+        "value": 158,
+        "unit": "kg"
+      },
+      "sources": [
+        {
+          "id": "gw-02",
+          "url": "https://fr.goodwe.com/template/frgoodwecom/images/2307/GW_Lynx%20Home%20F%20Series%20%28HV%29_Datasheet-FR.pdf",
+          "date": "2022-01-26",
+          "sha256": "26b12d672abaaad463394a903b6026692c54522cf34a379d79286069054d9787",
+          "locator": "GoodWe-Single page-20220126-FR-V1.0, p.2, Lynx Home série F, Données techniques. Rangée Module de batterie.",
+          "excerpt": "Données techniques. Correspondance des ensembles: LX F6.6-H, LX F9.8-H, LX F13.1-H, LX F16.4-H. Module de batterie: LX F3.3-H, 102,4 V, 3,27 kWh. Nombre de modules dans les systèmes: 2, 3, 4, 5."
+        },
+        {
+          "id": "gw-01",
+          "url": "https://fr.goodwe.com/template/frgoodwecom/images/2307/GW_Lynx%20Home%20F%20Series%20%28HV%29_Datasheet-FR.pdf",
+          "date": "2022-01-26",
+          "sha256": "26b12d672abaaad463394a903b6026692c54522cf34a379d79286069054d9787",
+          "locator": "GoodWe-Single page-20220126-FR-V1.0, p.2, Lynx Home série F, Données techniques. Rangées des modèles système et de l’alimentation.",
+          "excerpt": "Données techniques. Colonnes des systèmes: LX F6.6-H, LX F9.8-H, LX F13.1-H, LX F16.4-H.\nTension nominale: 204,8 V, 307,2 V, 409,6 V, 512 V. Plage de tension de fonctionnement: 182,4–230,4 V, 273,6–345,6 V, 364,8–460,8 V, 456–576 V.\nPoids: 115 kg, 158 kg, 201 kg, 244 kg."
+        }
+      ],
+      "observations": [
+        {
+          "source": "gw-01",
+          "quote": "Données techniques. Colonnes des systèmes: LX F6.6-H, LX F9.8-H, LX F13.1-H, LX F16.4-H.\nTension nominale: 204,8 V, 307,2 V, 409,6 V, 512 V. Plage de tension de fonctionnement: 182,4–230,4 V, 273,6–345,6 V, 364,8–460,8 V, 456–576 V.\nPoids: 115 kg, 158 kg, 201 kg, 244 kg.",
+          "field": "batteryWeight",
+          "target": {
+            "model": "LX F9.8-H",
+            "level": "system",
+            "version": "V1.0"
+          },
+          "value": 158,
+          "unit": "kg"
+        }
+      ]
+    },
+    {
+      "id": "confirm-05",
+      "target": {
+        "model": "LX F13.1-H",
+        "level": "system",
+        "version": "V1.0",
+        "boundary": "DC"
+      },
+      "field": "nominalVoltage",
+      "claim": {
+        "value": 307.2,
+        "unit": "V"
+      },
+      "sources": [
+        {
+          "id": "gw-01",
+          "url": "https://fr.goodwe.com/template/frgoodwecom/images/2307/GW_Lynx%20Home%20F%20Series%20%28HV%29_Datasheet-FR.pdf",
+          "date": "2022-01-26",
+          "sha256": "26b12d672abaaad463394a903b6026692c54522cf34a379d79286069054d9787",
+          "locator": "GoodWe-Single page-20220126-FR-V1.0, p.2, Lynx Home série F, Données techniques. Rangées des modèles système et de l’alimentation.",
+          "excerpt": "Données techniques. Colonnes des systèmes: LX F6.6-H, LX F9.8-H, LX F13.1-H, LX F16.4-H.\nTension nominale: 204,8 V, 307,2 V, 409,6 V, 512 V. Plage de tension de fonctionnement: 182,4–230,4 V, 273,6–345,6 V, 364,8–460,8 V, 456–576 V.\nPoids: 115 kg, 158 kg, 201 kg, 244 kg."
+        },
+        {
+          "id": "gw-02",
+          "url": "https://fr.goodwe.com/template/frgoodwecom/images/2307/GW_Lynx%20Home%20F%20Series%20%28HV%29_Datasheet-FR.pdf",
+          "date": "2022-01-26",
+          "sha256": "26b12d672abaaad463394a903b6026692c54522cf34a379d79286069054d9787",
+          "locator": "GoodWe-Single page-20220126-FR-V1.0, p.2, Lynx Home série F, Données techniques. Rangée Module de batterie.",
+          "excerpt": "Données techniques. Correspondance des ensembles: LX F6.6-H, LX F9.8-H, LX F13.1-H, LX F16.4-H. Module de batterie: LX F3.3-H, 102,4 V, 3,27 kWh. Nombre de modules dans les systèmes: 2, 3, 4, 5."
+        }
+      ],
+      "observations": [
+        {
+          "source": "gw-01",
+          "quote": "Données techniques. Colonnes des systèmes: LX F6.6-H, LX F9.8-H, LX F13.1-H, LX F16.4-H.\nTension nominale: 204,8 V, 307,2 V, 409,6 V, 512 V. Plage de tension de fonctionnement: 182,4–230,4 V, 273,6–345,6 V, 364,8–460,8 V, 456–576 V.\nPoids: 115 kg, 158 kg, 201 kg, 244 kg.",
+          "field": "nominalVoltage",
+          "target": {
+            "model": "LX F13.1-H",
+            "level": "system",
+            "version": "V1.0",
+            "boundary": "DC"
+          },
+          "value": 409.6,
+          "unit": "V"
+        }
+      ]
+    },
+    {
+      "id": "confirm-06",
+      "target": {
+        "model": "LX F9.8-H",
+        "level": "system",
+        "version": "V1.0"
+      },
+      "field": "batteryCapacity",
+      "claim": {
+        "value": 25,
+        "unit": "Ah"
+      },
+      "sources": [
+        {
+          "id": "gw-03",
+          "url": "https://fr.goodwe.com/template/frgoodwecom/images/2307/GW_Lynx%20Home%20F%20Series%20%28HV%29_Datasheet-FR.pdf",
+          "date": "2022-01-26",
+          "sha256": "26b12d672abaaad463394a903b6026692c54522cf34a379d79286069054d9787",
+          "locator": "GoodWe-Single page-20220126-FR-V1.0, p.2, Lynx Home série F, Données techniques. Rangées Énergie utilisable et Courant nominal de charge/décharge.",
+          "excerpt": "Colonnes des systèmes: LX F6.6-H, LX F9.8-H, LX F13.1-H, LX F16.4-H. Énergie utilisable: 6,55 kWh, 9,83 kWh, 13,10 kWh, 16,38 kWh. Courant nominal de charge/décharge (commun aux modèles): 25 A."
+        },
+        {
+          "id": "gw-02",
+          "url": "https://fr.goodwe.com/template/frgoodwecom/images/2307/GW_Lynx%20Home%20F%20Series%20%28HV%29_Datasheet-FR.pdf",
+          "date": "2022-01-26",
+          "sha256": "26b12d672abaaad463394a903b6026692c54522cf34a379d79286069054d9787",
+          "locator": "GoodWe-Single page-20220126-FR-V1.0, p.2, Lynx Home série F, Données techniques. Rangée Module de batterie.",
+          "excerpt": "Données techniques. Correspondance des ensembles: LX F6.6-H, LX F9.8-H, LX F13.1-H, LX F16.4-H. Module de batterie: LX F3.3-H, 102,4 V, 3,27 kWh. Nombre de modules dans les systèmes: 2, 3, 4, 5."
+        }
+      ],
+      "observations": []
+    }
+  ]
+}

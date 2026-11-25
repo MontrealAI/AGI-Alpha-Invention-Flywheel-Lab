@@ -1,0 +1,819 @@
+{
+  "schema": "frontier/battery-source-review-v1",
+  "cases": [
+    {
+      "id": "batt-01",
+      "target": {
+        "model": "FENECON Home 10 battery module",
+        "level": "module",
+        "version": "2025.11.01"
+      },
+      "field": "batteryWeight",
+      "claim": {
+        "value": 26.5,
+        "unit": "kg"
+      },
+      "sources": [
+        {
+          "id": "a5",
+          "url": "https://docs.fenecon.de/en/home/home_6-10-15/betrieb_und_serviceanleitung/assembly_and_operating_instructions_Home_6-10-15.html",
+          "date": "2026-06-30",
+          "sha256": "50c230a28e44774707671599ef1f664c3bf3a8b07c3666e62b45e000cf53895a",
+          "locator": "Home 6, 10 & 15 manual, revision 2026.06.01, §3.7 Table 16",
+          "excerpt": "Home 6, 10 & 15 battery module. Usable capacity 62.4 Ah/2.80 kWh; rated voltage 44.8 V; output voltage range 39.2 V to 50.4 V; weight 30 kg."
+        },
+        {
+          "id": "a1",
+          "url": "https://docs.fenecon.de/pdfs/en/home/home_10/betrieb_und_serviceanleitung/assembly_and_operating_instructions_Home_10.pdf",
+          "date": "2025-11-03",
+          "sha256": "6c80b4ac22c1dc54d4f303a3e70c13e831b7c76c4d18b9f5a6fb61499b748746",
+          "locator": "Home 10 manual, v2025.11.01, §3.8 Table 16; printed p.38 from downloaded PDF",
+          "excerpt": "Home 10 battery module, v2025.11.01. Usable capacity 49.1 Ah/2.2 kWh; rated voltage 44.8 V; output voltage range 39.2 V to 50.4 V; weight 26.5 kg."
+        }
+      ],
+      "observations": [
+        {
+          "source": "a5",
+          "quote": "Home 6, 10 & 15 battery module. Usable capacity 62.4 Ah/2.80 kWh; rated voltage 44.8 V; output voltage range 39.2 V to 50.4 V; weight 30 kg.",
+          "field": "batteryWeight",
+          "target": {
+            "model": "FENECON Home 6/10/15 battery module",
+            "version": "2026.06.01",
+            "level": "module"
+          },
+          "value": 30,
+          "unit": "kg"
+        },
+        {
+          "source": "a1",
+          "quote": "Home 10 battery module, v2025.11.01. Usable capacity 49.1 Ah/2.2 kWh; rated voltage 44.8 V; output voltage range 39.2 V to 50.4 V; weight 26.5 kg.",
+          "field": "batteryWeight",
+          "target": {
+            "model": "FENECON Home 10 battery module",
+            "level": "module",
+            "version": "2025.11.01"
+          },
+          "value": 26.5,
+          "unit": "kg"
+        }
+      ]
+    },
+    {
+      "id": "batt-02",
+      "target": {
+        "model": "FENECON Home 10 5S",
+        "level": "system",
+        "version": "2025.11.01"
+      },
+      "field": "batteryWeight",
+      "claim": {
+        "value": 133.5,
+        "unit": "kg"
+      },
+      "sources": [
+        {
+          "id": "a2",
+          "url": "https://docs.fenecon.de/pdfs/en/home/home_10/betrieb_und_serviceanleitung/assembly_and_operating_instructions_Home_10.pdf",
+          "date": "2025-11-03",
+          "sha256": "6c80b4ac22c1dc54d4f303a3e70c13e831b7c76c4d18b9f5a6fb61499b748746",
+          "locator": "Home 10 manual, v2025.11.01, §3.8.1 Table 17; printed p.39",
+          "excerpt": "Home 10 battery stack, v2025.11.01. Modules in series 4S / 5S / 6S. Nominal capacity 8.8 / 11.0 / 13.2 kWh; weight 133.5 / 160.0 / 186.5 kg; rated voltage 179.2 / 224 / 268.8 V; output voltage ranges 156.8–201.6 / 196–252 / 235.2–302.4 V."
+        },
+        {
+          "id": "a1",
+          "url": "https://docs.fenecon.de/pdfs/en/home/home_10/betrieb_und_serviceanleitung/assembly_and_operating_instructions_Home_10.pdf",
+          "date": "2025-11-03",
+          "sha256": "6c80b4ac22c1dc54d4f303a3e70c13e831b7c76c4d18b9f5a6fb61499b748746",
+          "locator": "Home 10 manual, v2025.11.01, §3.8 Table 16; printed p.38 from downloaded PDF",
+          "excerpt": "Home 10 battery module, v2025.11.01. Usable capacity 49.1 Ah/2.2 kWh; rated voltage 44.8 V; output voltage range 39.2 V to 50.4 V; weight 26.5 kg."
+        }
+      ],
+      "observations": [
+        {
+          "source": "a2",
+          "quote": "Home 10 battery stack, v2025.11.01. Modules in series 4S / 5S / 6S. Nominal capacity 8.8 / 11.0 / 13.2 kWh; weight 133.5 / 160.0 / 186.5 kg; rated voltage 179.2 / 224 / 268.8 V; output voltage ranges 156.8–201.6 / 196–252 / 235.2–302.4 V.",
+          "field": "batteryWeight",
+          "target": {
+            "model": "FENECON Home 10 5S",
+            "level": "system",
+            "version": "2025.11.01"
+          },
+          "value": 160,
+          "unit": "kg"
+        },
+        {
+          "source": "a1",
+          "quote": "Home 10 battery module, v2025.11.01. Usable capacity 49.1 Ah/2.2 kWh; rated voltage 44.8 V; output voltage range 39.2 V to 50.4 V; weight 26.5 kg.",
+          "field": "batteryWeight",
+          "target": {
+            "model": "FENECON Home 10 battery module",
+            "version": "2025.11.01",
+            "level": "module"
+          },
+          "value": 26.5,
+          "unit": "kg"
+        }
+      ]
+    },
+    {
+      "id": "batt-03",
+      "target": {
+        "model": "FENECON Home 10 4S",
+        "level": "system",
+        "version": "2025.11.01"
+      },
+      "field": "batteryWeight",
+      "claim": {
+        "value": 26.5,
+        "unit": "kg"
+      },
+      "sources": [
+        {
+          "id": "a1",
+          "url": "https://docs.fenecon.de/pdfs/en/home/home_10/betrieb_und_serviceanleitung/assembly_and_operating_instructions_Home_10.pdf",
+          "date": "2025-11-03",
+          "sha256": "6c80b4ac22c1dc54d4f303a3e70c13e831b7c76c4d18b9f5a6fb61499b748746",
+          "locator": "Home 10 manual, v2025.11.01, §3.8 Table 16; printed p.38 from downloaded PDF",
+          "excerpt": "Home 10 battery module, v2025.11.01. Usable capacity 49.1 Ah/2.2 kWh; rated voltage 44.8 V; output voltage range 39.2 V to 50.4 V; weight 26.5 kg."
+        },
+        {
+          "id": "a5",
+          "url": "https://docs.fenecon.de/en/home/home_6-10-15/betrieb_und_serviceanleitung/assembly_and_operating_instructions_Home_6-10-15.html",
+          "date": "2026-06-30",
+          "sha256": "50c230a28e44774707671599ef1f664c3bf3a8b07c3666e62b45e000cf53895a",
+          "locator": "Home 6, 10 & 15 manual, revision 2026.06.01, §3.7 Table 16",
+          "excerpt": "Home 6, 10 & 15 battery module. Usable capacity 62.4 Ah/2.80 kWh; rated voltage 44.8 V; output voltage range 39.2 V to 50.4 V; weight 30 kg."
+        }
+      ],
+      "observations": [
+        {
+          "source": "a1",
+          "quote": "Home 10 battery module, v2025.11.01. Usable capacity 49.1 Ah/2.2 kWh; rated voltage 44.8 V; output voltage range 39.2 V to 50.4 V; weight 26.5 kg.",
+          "field": "batteryWeight",
+          "target": {
+            "model": "FENECON Home 10 battery module",
+            "version": "2025.11.01",
+            "level": "module"
+          },
+          "value": 26.5,
+          "unit": "kg"
+        },
+        {
+          "source": "a5",
+          "quote": "Home 6, 10 & 15 battery module. Usable capacity 62.4 Ah/2.80 kWh; rated voltage 44.8 V; output voltage range 39.2 V to 50.4 V; weight 30 kg.",
+          "field": "batteryWeight",
+          "target": {
+            "model": "FENECON Home 6/10/15 battery module",
+            "version": "2026.06.01",
+            "level": "module"
+          },
+          "value": 30,
+          "unit": "kg"
+        }
+      ]
+    },
+    {
+      "id": "batt-04",
+      "target": {
+        "model": "FENECON Home 10 battery module",
+        "level": "module",
+        "version": "2025.11.01"
+      },
+      "field": "batteryCapacity",
+      "claim": {
+        "value": 49.1,
+        "unit": "Ah"
+      },
+      "sources": [
+        {
+          "id": "a1",
+          "url": "https://docs.fenecon.de/pdfs/en/home/home_10/betrieb_und_serviceanleitung/assembly_and_operating_instructions_Home_10.pdf",
+          "date": "2025-11-03",
+          "sha256": "6c80b4ac22c1dc54d4f303a3e70c13e831b7c76c4d18b9f5a6fb61499b748746",
+          "locator": "Home 10 manual, v2025.11.01, §3.8 Table 16; printed p.38 from downloaded PDF",
+          "excerpt": "Home 10 battery module, v2025.11.01. Usable capacity 49.1 Ah/2.2 kWh; rated voltage 44.8 V; output voltage range 39.2 V to 50.4 V; weight 26.5 kg."
+        }
+      ],
+      "observations": [
+        {
+          "source": "a1",
+          "quote": "Home 10 battery module, v2025.11.01. Usable capacity 49.1 Ah/2.2 kWh; rated voltage 44.8 V; output voltage range 39.2 V to 50.4 V; weight 26.5 kg.",
+          "field": "usableCapacity",
+          "target": {
+            "model": "FENECON Home 10 battery module",
+            "level": "module",
+            "version": "2025.11.01"
+          },
+          "value": 49.1,
+          "unit": "Ah"
+        }
+      ]
+    },
+    {
+      "id": "batt-05",
+      "target": {
+        "model": "FENECON Home 10 5S",
+        "level": "system",
+        "version": "2025.11.01",
+        "boundary": "DC"
+      },
+      "field": "nominalVoltage",
+      "claim": {
+        "value": 224,
+        "unit": "V"
+      },
+      "sources": [
+        {
+          "id": "a3",
+          "url": "https://docs.fenecon.de/pdfs/en/home/home_10/betrieb_und_serviceanleitung/assembly_and_operating_instructions_Home_10.pdf",
+          "date": "2025-11-03",
+          "sha256": "6c80b4ac22c1dc54d4f303a3e70c13e831b7c76c4d18b9f5a6fb61499b748746",
+          "locator": "Home 10 manual, v2025.11.01, §6.4.3",
+          "excerpt": "AC connection of the FENECON Home 10 EMS box. An external 230 V power supply is required to supply the FENECON Home 10-EMS box."
+        },
+        {
+          "id": "a2",
+          "url": "https://docs.fenecon.de/pdfs/en/home/home_10/betrieb_und_serviceanleitung/assembly_and_operating_instructions_Home_10.pdf",
+          "date": "2025-11-03",
+          "sha256": "6c80b4ac22c1dc54d4f303a3e70c13e831b7c76c4d18b9f5a6fb61499b748746",
+          "locator": "Home 10 manual, v2025.11.01, §3.8.1 Table 17; printed p.39",
+          "excerpt": "Home 10 battery stack, v2025.11.01. Modules in series 4S / 5S / 6S. Nominal capacity 8.8 / 11.0 / 13.2 kWh; weight 133.5 / 160.0 / 186.5 kg; rated voltage 179.2 / 224 / 268.8 V; output voltage ranges 156.8–201.6 / 196–252 / 235.2–302.4 V."
+        }
+      ],
+      "observations": [
+        {
+          "source": "a3",
+          "quote": "AC connection of the FENECON Home 10 EMS box. An external 230 V power supply is required to supply the FENECON Home 10-EMS box.",
+          "field": "supplyVoltage",
+          "target": {
+            "model": "FENECON Home 10 EMS box",
+            "level": "accessory",
+            "boundary": "AC"
+          },
+          "value": 230,
+          "unit": "V"
+        },
+        {
+          "source": "a2",
+          "quote": "Home 10 battery stack, v2025.11.01. Modules in series 4S / 5S / 6S. Nominal capacity 8.8 / 11.0 / 13.2 kWh; weight 133.5 / 160.0 / 186.5 kg; rated voltage 179.2 / 224 / 268.8 V; output voltage ranges 156.8–201.6 / 196–252 / 235.2–302.4 V.",
+          "field": "nominalVoltage",
+          "target": {
+            "model": "FENECON Home 10 5S",
+            "level": "system",
+            "version": "2025.11.01",
+            "boundary": "DC"
+          },
+          "value": 224,
+          "unit": "V"
+        }
+      ]
+    },
+    {
+      "id": "batt-06",
+      "target": {
+        "model": "FENECON Home 10 5S",
+        "level": "system",
+        "version": "2025.11.01",
+        "boundary": "DC"
+      },
+      "field": "nominalVoltage",
+      "claim": {
+        "value": 230,
+        "unit": "V"
+      },
+      "sources": [
+        {
+          "id": "a3",
+          "url": "https://docs.fenecon.de/pdfs/en/home/home_10/betrieb_und_serviceanleitung/assembly_and_operating_instructions_Home_10.pdf",
+          "date": "2025-11-03",
+          "sha256": "6c80b4ac22c1dc54d4f303a3e70c13e831b7c76c4d18b9f5a6fb61499b748746",
+          "locator": "Home 10 manual, v2025.11.01, §6.4.3",
+          "excerpt": "AC connection of the FENECON Home 10 EMS box. An external 230 V power supply is required to supply the FENECON Home 10-EMS box."
+        }
+      ],
+      "observations": [
+        {
+          "source": "a3",
+          "quote": "AC connection of the FENECON Home 10 EMS box. An external 230 V power supply is required to supply the FENECON Home 10-EMS box.",
+          "field": "supplyVoltage",
+          "target": {
+            "model": "FENECON Home 10 EMS box",
+            "level": "accessory",
+            "boundary": "AC"
+          },
+          "value": 230,
+          "unit": "V"
+        }
+      ]
+    },
+    {
+      "id": "batt-07",
+      "target": {
+        "model": "FENECON Home 10 battery module",
+        "level": "module",
+        "version": "2026.07.01"
+      },
+      "field": "batteryWeight",
+      "claim": {
+        "value": 26.5,
+        "unit": "kg"
+      },
+      "sources": [
+        {
+          "id": "a1",
+          "url": "https://docs.fenecon.de/pdfs/en/home/home_10/betrieb_und_serviceanleitung/assembly_and_operating_instructions_Home_10.pdf",
+          "date": "2025-11-03",
+          "sha256": "6c80b4ac22c1dc54d4f303a3e70c13e831b7c76c4d18b9f5a6fb61499b748746",
+          "locator": "Home 10 manual, v2025.11.01, §3.8 Table 16; printed p.38 from downloaded PDF",
+          "excerpt": "Home 10 battery module, v2025.11.01. Usable capacity 49.1 Ah/2.2 kWh; rated voltage 44.8 V; output voltage range 39.2 V to 50.4 V; weight 26.5 kg."
+        }
+      ],
+      "observations": [
+        {
+          "source": "a1",
+          "quote": "Home 10 battery module, v2025.11.01. Usable capacity 49.1 Ah/2.2 kWh; rated voltage 44.8 V; output voltage range 39.2 V to 50.4 V; weight 26.5 kg.",
+          "field": "batteryWeight",
+          "target": {
+            "model": "FENECON Home 10 battery module",
+            "version": "2025.11.01",
+            "level": "module"
+          },
+          "value": 26.5,
+          "unit": "kg"
+        }
+      ]
+    },
+    {
+      "id": "batt-08",
+      "target": {
+        "model": "FENECON Home 10 battery module",
+        "level": "module",
+        "version": "2026.07.01"
+      },
+      "field": "batteryWeight",
+      "claim": {
+        "value": 26.5,
+        "unit": "kg"
+      },
+      "sources": [
+        {
+          "id": "a4",
+          "url": "https://docs.fenecon.de/en/home/home_10/betrieb_und_serviceanleitung/assembly_and_operating_instructions_Home_10.html",
+          "date": "2026-07-01",
+          "sha256": "b5d60d7215a3c8c3d906bff3d329184b73095a9935e3f073a5f5feb9174522de",
+          "locator": "Home 10 manual, HTML revision history §1.3 and Table 16 in §3.8",
+          "excerpt": "Home 10 HTML revision 2026.07.01. Table 16, battery module. Usable capacity 49.1 Ah/2.2 kWh; rated voltage 44.8 V; output voltage range 39.2 V to 50.4 V; weight 26.5 kg."
+        },
+        {
+          "id": "a1",
+          "url": "https://docs.fenecon.de/pdfs/en/home/home_10/betrieb_und_serviceanleitung/assembly_and_operating_instructions_Home_10.pdf",
+          "date": "2025-11-03",
+          "sha256": "6c80b4ac22c1dc54d4f303a3e70c13e831b7c76c4d18b9f5a6fb61499b748746",
+          "locator": "Home 10 manual, v2025.11.01, §3.8 Table 16; printed p.38 from downloaded PDF",
+          "excerpt": "Home 10 battery module, v2025.11.01. Usable capacity 49.1 Ah/2.2 kWh; rated voltage 44.8 V; output voltage range 39.2 V to 50.4 V; weight 26.5 kg."
+        },
+        {
+          "id": "a5",
+          "url": "https://docs.fenecon.de/en/home/home_6-10-15/betrieb_und_serviceanleitung/assembly_and_operating_instructions_Home_6-10-15.html",
+          "date": "2026-06-30",
+          "sha256": "50c230a28e44774707671599ef1f664c3bf3a8b07c3666e62b45e000cf53895a",
+          "locator": "Home 6, 10 & 15 manual, revision 2026.06.01, §3.7 Table 16",
+          "excerpt": "Home 6, 10 & 15 battery module. Usable capacity 62.4 Ah/2.80 kWh; rated voltage 44.8 V; output voltage range 39.2 V to 50.4 V; weight 30 kg."
+        }
+      ],
+      "observations": [
+        {
+          "source": "a4",
+          "quote": "Home 10 HTML revision 2026.07.01. Table 16, battery module. Usable capacity 49.1 Ah/2.2 kWh; rated voltage 44.8 V; output voltage range 39.2 V to 50.4 V; weight 26.5 kg.",
+          "field": "batteryWeight",
+          "target": {
+            "model": "FENECON Home 10 battery module",
+            "level": "module",
+            "version": "2026.07.01"
+          },
+          "value": 26.5,
+          "unit": "kg"
+        },
+        {
+          "source": "a1",
+          "quote": "Home 10 battery module, v2025.11.01. Usable capacity 49.1 Ah/2.2 kWh; rated voltage 44.8 V; output voltage range 39.2 V to 50.4 V; weight 26.5 kg.",
+          "field": "batteryWeight",
+          "target": {
+            "model": "FENECON Home 10 battery module",
+            "version": "2025.11.01",
+            "level": "module"
+          },
+          "value": 26.5,
+          "unit": "kg"
+        },
+        {
+          "source": "a5",
+          "quote": "Home 6, 10 & 15 battery module. Usable capacity 62.4 Ah/2.80 kWh; rated voltage 44.8 V; output voltage range 39.2 V to 50.4 V; weight 30 kg.",
+          "field": "batteryWeight",
+          "target": {
+            "model": "FENECON Home 6/10/15 battery module",
+            "version": "2026.06.01",
+            "level": "module"
+          },
+          "value": 30,
+          "unit": "kg"
+        }
+      ]
+    },
+    {
+      "id": "batt-09",
+      "target": {
+        "model": "T-BAT H 5.8 V2",
+        "level": "module",
+        "version": "15.0",
+        "market": "UK"
+      },
+      "field": "batteryCapacity",
+      "claim": {
+        "value": 50,
+        "unit": "Ah"
+      },
+      "sources": [
+        {
+          "id": "b2",
+          "url": "https://au.solaxpower.com/uploads/file/solax-t-bat-sys-hv-5.8-t58-datasheet-en-au.pdf",
+          "date": "2026-09-15",
+          "sha256": "eed132141be0fd59642c515c9418c85f799fc7853f3c62614e301135d9d14c11",
+          "locator": "T58 AU datasheet, V1.2 650.00122.00.EN-AU, Technical Specifications p.2, General Information",
+          "excerpt": "T-BAT H 5.8 V3, AU. Nominal voltage 115.2 V; operating voltage range 100–130 V; nominal energy 5.8 kWh; usable energy 5.5 kWh at 95% DoD; maximum charge/discharge current 35 A."
+        },
+        {
+          "id": "b1",
+          "url": "https://uk.solaxpower.com/uploads/file/t-bat-sys-hv-5.8-user-manual-en.pdf",
+          "date": "2024-11-18",
+          "sha256": "23675c87561fe4c8d3afe6a9791afc79ca4b30c89e7a04132ecdce9502856198",
+          "locator": "UK-hosted Triple Power manual, Version 15.0, §3.3.2 Performance",
+          "excerpt": "T-BAT H 5.8 and T-BAT H 5.8 V2 in first column. HV11550 and HV11550 V2 in second. Weight 72.2 kg / 68.5 kg; nominal voltage 115.2 / 115.2 Vdc; operating voltage 100–131 Vdc in both columns; nominal capacity 50 Ah in both columns."
+        }
+      ],
+      "observations": [
+        {
+          "source": "b1",
+          "quote": "T-BAT H 5.8 and T-BAT H 5.8 V2 in first column. HV11550 and HV11550 V2 in second. Weight 72.2 kg / 68.5 kg; nominal voltage 115.2 / 115.2 Vdc; operating voltage 100–131 Vdc in both columns; nominal capacity 50 Ah in both columns.",
+          "field": "batteryCapacity",
+          "target": {
+            "model": "T-BAT H 5.8 V2",
+            "level": "module",
+            "version": "15.0",
+            "market": "UK"
+          },
+          "value": 50,
+          "unit": "Ah"
+        }
+      ]
+    },
+    {
+      "id": "batt-10",
+      "target": {
+        "model": "HV11550 V2",
+        "level": "module",
+        "version": "15.0",
+        "market": "UK"
+      },
+      "field": "batteryWeight",
+      "claim": {
+        "value": 72.2,
+        "unit": "kg"
+      },
+      "sources": [
+        {
+          "id": "b1",
+          "url": "https://uk.solaxpower.com/uploads/file/t-bat-sys-hv-5.8-user-manual-en.pdf",
+          "date": "2024-11-18",
+          "sha256": "23675c87561fe4c8d3afe6a9791afc79ca4b30c89e7a04132ecdce9502856198",
+          "locator": "UK-hosted Triple Power manual, Version 15.0, §3.3.2 Performance",
+          "excerpt": "T-BAT H 5.8 and T-BAT H 5.8 V2 in first column. HV11550 and HV11550 V2 in second. Weight 72.2 kg / 68.5 kg; nominal voltage 115.2 / 115.2 Vdc; operating voltage 100–131 Vdc in both columns; nominal capacity 50 Ah in both columns."
+        }
+      ],
+      "observations": [
+        {
+          "source": "b1",
+          "quote": "T-BAT H 5.8 and T-BAT H 5.8 V2 in first column. HV11550 and HV11550 V2 in second. Weight 72.2 kg / 68.5 kg; nominal voltage 115.2 / 115.2 Vdc; operating voltage 100–131 Vdc in both columns; nominal capacity 50 Ah in both columns.",
+          "field": "batteryWeight",
+          "target": {
+            "model": "HV11550 V2",
+            "level": "module",
+            "version": "15.0",
+            "market": "UK"
+          },
+          "value": 68.5,
+          "unit": "kg"
+        },
+        {
+          "source": "b1",
+          "quote": "T-BAT H 5.8 and T-BAT H 5.8 V2 in first column. HV11550 and HV11550 V2 in second. Weight 72.2 kg / 68.5 kg; nominal voltage 115.2 / 115.2 Vdc; operating voltage 100–131 Vdc in both columns; nominal capacity 50 Ah in both columns.",
+          "field": "batteryWeight",
+          "target": {
+            "model": "T-BAT H 5.8 V2",
+            "level": "module",
+            "version": "15.0",
+            "market": "UK"
+          },
+          "value": 72.2,
+          "unit": "kg"
+        }
+      ]
+    },
+    {
+      "id": "batt-11",
+      "target": {
+        "model": "T-BAT H 5.8 V3",
+        "level": "module",
+        "version": "1.2",
+        "market": "AU"
+      },
+      "field": "batteryCapacity",
+      "claim": {
+        "value": 50,
+        "unit": "Ah"
+      },
+      "sources": [
+        {
+          "id": "b2",
+          "url": "https://au.solaxpower.com/uploads/file/solax-t-bat-sys-hv-5.8-t58-datasheet-en-au.pdf",
+          "date": "2026-09-15",
+          "sha256": "eed132141be0fd59642c515c9418c85f799fc7853f3c62614e301135d9d14c11",
+          "locator": "T58 AU datasheet, V1.2 650.00122.00.EN-AU, Technical Specifications p.2, General Information",
+          "excerpt": "T-BAT H 5.8 V3, AU. Nominal voltage 115.2 V; operating voltage range 100–130 V; nominal energy 5.8 kWh; usable energy 5.5 kWh at 95% DoD; maximum charge/discharge current 35 A."
+        },
+        {
+          "id": "b1",
+          "url": "https://uk.solaxpower.com/uploads/file/t-bat-sys-hv-5.8-user-manual-en.pdf",
+          "date": "2024-11-18",
+          "sha256": "23675c87561fe4c8d3afe6a9791afc79ca4b30c89e7a04132ecdce9502856198",
+          "locator": "UK-hosted Triple Power manual, Version 15.0, §3.3.2 Performance",
+          "excerpt": "T-BAT H 5.8 and T-BAT H 5.8 V2 in first column. HV11550 and HV11550 V2 in second. Weight 72.2 kg / 68.5 kg; nominal voltage 115.2 / 115.2 Vdc; operating voltage 100–131 Vdc in both columns; nominal capacity 50 Ah in both columns."
+        }
+      ],
+      "observations": [
+        {
+          "source": "b1",
+          "quote": "T-BAT H 5.8 and T-BAT H 5.8 V2 in first column. HV11550 and HV11550 V2 in second. Weight 72.2 kg / 68.5 kg; nominal voltage 115.2 / 115.2 Vdc; operating voltage 100–131 Vdc in both columns; nominal capacity 50 Ah in both columns.",
+          "field": "batteryCapacity",
+          "target": {
+            "model": "T-BAT H 5.8 V2",
+            "level": "module",
+            "version": "15.0",
+            "market": "UK"
+          },
+          "value": 50,
+          "unit": "Ah"
+        }
+      ]
+    },
+    {
+      "id": "batt-12",
+      "target": {
+        "model": "T-BAT H 5.8 V3",
+        "level": "module",
+        "version": "1.2",
+        "market": "AU"
+      },
+      "field": "batteryWeight",
+      "claim": {
+        "value": 72.2,
+        "unit": "kg"
+      },
+      "sources": [
+        {
+          "id": "b1",
+          "url": "https://uk.solaxpower.com/uploads/file/t-bat-sys-hv-5.8-user-manual-en.pdf",
+          "date": "2024-11-18",
+          "sha256": "23675c87561fe4c8d3afe6a9791afc79ca4b30c89e7a04132ecdce9502856198",
+          "locator": "UK-hosted Triple Power manual, Version 15.0, §3.3.2 Performance",
+          "excerpt": "T-BAT H 5.8 and T-BAT H 5.8 V2 in first column. HV11550 and HV11550 V2 in second. Weight 72.2 kg / 68.5 kg; nominal voltage 115.2 / 115.2 Vdc; operating voltage 100–131 Vdc in both columns; nominal capacity 50 Ah in both columns."
+        },
+        {
+          "id": "b3",
+          "url": "https://au.solaxpower.com/uploads/file/solax-t-bat-sys-hv-5.8-t58-datasheet-en-au.pdf",
+          "date": "2026-09-15",
+          "sha256": "eed132141be0fd59642c515c9418c85f799fc7853f3c62614e301135d9d14c11",
+          "locator": "T58 AU datasheet, V1.2 650.00122.00.EN-AU, Technical Specifications p.2, BMS+PACK and Battery Model",
+          "excerpt": "T-BAT H 5.8 V3 BMS+PACK net weight 61.5 (±1) kg. HV11550-A V3 separate battery module net weight 59.5 (±1) kg."
+        }
+      ],
+      "observations": [
+        {
+          "source": "b3",
+          "quote": "T-BAT H 5.8 V3 BMS+PACK net weight 61.5 (±1) kg. HV11550-A V3 separate battery module net weight 59.5 (±1) kg.",
+          "field": "batteryWeight",
+          "target": {
+            "model": "T-BAT H 5.8 V3 BMS+PACK",
+            "level": "assembled battery",
+            "version": "1.2",
+            "market": "AU"
+          },
+          "value": 61.5,
+          "unit": "kg"
+        },
+        {
+          "source": "b1",
+          "quote": "T-BAT H 5.8 and T-BAT H 5.8 V2 in first column. HV11550 and HV11550 V2 in second. Weight 72.2 kg / 68.5 kg; nominal voltage 115.2 / 115.2 Vdc; operating voltage 100–131 Vdc in both columns; nominal capacity 50 Ah in both columns.",
+          "field": "batteryWeight",
+          "target": {
+            "model": "T-BAT H 5.8 V2",
+            "level": "module",
+            "version": "15.0",
+            "market": "UK"
+          },
+          "value": 72.2,
+          "unit": "kg"
+        }
+      ]
+    },
+    {
+      "id": "batt-13",
+      "target": {
+        "model": "T-BAT H 5.8 V3",
+        "level": "system",
+        "version": "1.2",
+        "market": "AU",
+        "boundary": "DC"
+      },
+      "field": "nominalVoltage",
+      "claim": {
+        "value": 130,
+        "unit": "V"
+      },
+      "sources": [
+        {
+          "id": "b2",
+          "url": "https://au.solaxpower.com/uploads/file/solax-t-bat-sys-hv-5.8-t58-datasheet-en-au.pdf",
+          "date": "2026-09-15",
+          "sha256": "eed132141be0fd59642c515c9418c85f799fc7853f3c62614e301135d9d14c11",
+          "locator": "T58 AU datasheet, V1.2 650.00122.00.EN-AU, Technical Specifications p.2, General Information",
+          "excerpt": "T-BAT H 5.8 V3, AU. Nominal voltage 115.2 V; operating voltage range 100–130 V; nominal energy 5.8 kWh; usable energy 5.5 kWh at 95% DoD; maximum charge/discharge current 35 A."
+        },
+        {
+          "id": "b1",
+          "url": "https://uk.solaxpower.com/uploads/file/t-bat-sys-hv-5.8-user-manual-en.pdf",
+          "date": "2024-11-18",
+          "sha256": "23675c87561fe4c8d3afe6a9791afc79ca4b30c89e7a04132ecdce9502856198",
+          "locator": "UK-hosted Triple Power manual, Version 15.0, §3.3.2 Performance",
+          "excerpt": "T-BAT H 5.8 and T-BAT H 5.8 V2 in first column. HV11550 and HV11550 V2 in second. Weight 72.2 kg / 68.5 kg; nominal voltage 115.2 / 115.2 Vdc; operating voltage 100–131 Vdc in both columns; nominal capacity 50 Ah in both columns."
+        }
+      ],
+      "observations": [
+        {
+          "source": "b2",
+          "quote": "T-BAT H 5.8 V3, AU. Nominal voltage 115.2 V; operating voltage range 100–130 V; nominal energy 5.8 kWh; usable energy 5.5 kWh at 95% DoD; maximum charge/discharge current 35 A.",
+          "field": "nominalVoltage",
+          "target": {
+            "model": "T-BAT H 5.8 V3",
+            "level": "system",
+            "version": "1.2",
+            "market": "AU",
+            "boundary": "DC"
+          },
+          "value": 115.2,
+          "unit": "V"
+        },
+        {
+          "source": "b1",
+          "quote": "T-BAT H 5.8 and T-BAT H 5.8 V2 in first column. HV11550 and HV11550 V2 in second. Weight 72.2 kg / 68.5 kg; nominal voltage 115.2 / 115.2 Vdc; operating voltage 100–131 Vdc in both columns; nominal capacity 50 Ah in both columns.",
+          "field": "nominalVoltage",
+          "target": {
+            "model": "T-BAT H 5.8 V2",
+            "level": "module",
+            "version": "15.0",
+            "market": "UK",
+            "boundary": "DC"
+          },
+          "value": 115.2,
+          "unit": "V"
+        }
+      ]
+    },
+    {
+      "id": "batt-14",
+      "target": {
+        "model": "T-BAT H 5.8 V2",
+        "level": "module",
+        "version": "15.0",
+        "market": "UK",
+        "boundary": "AC"
+      },
+      "field": "nominalVoltage",
+      "claim": {
+        "value": 115.2,
+        "unit": "V"
+      },
+      "sources": [
+        {
+          "id": "b1",
+          "url": "https://uk.solaxpower.com/uploads/file/t-bat-sys-hv-5.8-user-manual-en.pdf",
+          "date": "2024-11-18",
+          "sha256": "23675c87561fe4c8d3afe6a9791afc79ca4b30c89e7a04132ecdce9502856198",
+          "locator": "UK-hosted Triple Power manual, Version 15.0, §3.3.2 Performance",
+          "excerpt": "T-BAT H 5.8 and T-BAT H 5.8 V2 in first column. HV11550 and HV11550 V2 in second. Weight 72.2 kg / 68.5 kg; nominal voltage 115.2 / 115.2 Vdc; operating voltage 100–131 Vdc in both columns; nominal capacity 50 Ah in both columns."
+        }
+      ],
+      "observations": [
+        {
+          "source": "b1",
+          "quote": "T-BAT H 5.8 and T-BAT H 5.8 V2 in first column. HV11550 and HV11550 V2 in second. Weight 72.2 kg / 68.5 kg; nominal voltage 115.2 / 115.2 Vdc; operating voltage 100–131 Vdc in both columns; nominal capacity 50 Ah in both columns.",
+          "field": "nominalVoltage",
+          "target": {
+            "model": "T-BAT H 5.8 V2",
+            "level": "module",
+            "version": "15.0",
+            "market": "UK",
+            "boundary": "DC"
+          },
+          "value": 115.2,
+          "unit": "V"
+        }
+      ]
+    },
+    {
+      "id": "batt-15",
+      "target": {
+        "model": "T-BAT H 5.8 V2",
+        "level": "module",
+        "version": "15.0",
+        "market": "UK"
+      },
+      "field": "batteryCapacity",
+      "claim": {
+        "value": 50,
+        "unit": "Ah"
+      },
+      "sources": [
+        {
+          "id": "b2",
+          "url": "https://au.solaxpower.com/uploads/file/solax-t-bat-sys-hv-5.8-t58-datasheet-en-au.pdf",
+          "date": "2026-09-15",
+          "sha256": "eed132141be0fd59642c515c9418c85f799fc7853f3c62614e301135d9d14c11",
+          "locator": "T58 AU datasheet, V1.2 650.00122.00.EN-AU, Technical Specifications p.2, General Information",
+          "excerpt": "T-BAT H 5.8 V3, AU. Nominal voltage 115.2 V; operating voltage range 100–130 V; nominal energy 5.8 kWh; usable energy 5.5 kWh at 95% DoD; maximum charge/discharge current 35 A."
+        }
+      ],
+      "observations": []
+    },
+    {
+      "id": "batt-16",
+      "target": {
+        "model": "T-BAT H 5.8 V3",
+        "level": "module",
+        "version": "1.2",
+        "market": "AU"
+      },
+      "field": "batteryWeight",
+      "claim": {
+        "value": 61.5,
+        "unit": "kg"
+      },
+      "sources": [
+        {
+          "id": "b3",
+          "url": "https://au.solaxpower.com/uploads/file/solax-t-bat-sys-hv-5.8-t58-datasheet-en-au.pdf",
+          "date": "2026-09-15",
+          "sha256": "eed132141be0fd59642c515c9418c85f799fc7853f3c62614e301135d9d14c11",
+          "locator": "T58 AU datasheet, V1.2 650.00122.00.EN-AU, Technical Specifications p.2, BMS+PACK and Battery Model",
+          "excerpt": "T-BAT H 5.8 V3 BMS+PACK net weight 61.5 (±1) kg. HV11550-A V3 separate battery module net weight 59.5 (±1) kg."
+        },
+        {
+          "id": "b1",
+          "url": "https://uk.solaxpower.com/uploads/file/t-bat-sys-hv-5.8-user-manual-en.pdf",
+          "date": "2024-11-18",
+          "sha256": "23675c87561fe4c8d3afe6a9791afc79ca4b30c89e7a04132ecdce9502856198",
+          "locator": "UK-hosted Triple Power manual, Version 15.0, §3.3.2 Performance",
+          "excerpt": "T-BAT H 5.8 and T-BAT H 5.8 V2 in first column. HV11550 and HV11550 V2 in second. Weight 72.2 kg / 68.5 kg; nominal voltage 115.2 / 115.2 Vdc; operating voltage 100–131 Vdc in both columns; nominal capacity 50 Ah in both columns."
+        }
+      ],
+      "observations": [
+        {
+          "source": "b3",
+          "quote": "T-BAT H 5.8 V3 BMS+PACK net weight 61.5 (±1) kg. HV11550-A V3 separate battery module net weight 59.5 (±1) kg.",
+          "field": "batteryWeight",
+          "target": {
+            "model": "T-BAT H 5.8 V3 BMS+PACK",
+            "level": "assembled battery",
+            "version": "1.2",
+            "market": "AU"
+          },
+          "value": 61.5,
+          "unit": "kg"
+        },
+        {
+          "source": "b1",
+          "quote": "T-BAT H 5.8 and T-BAT H 5.8 V2 in first column. HV11550 and HV11550 V2 in second. Weight 72.2 kg / 68.5 kg; nominal voltage 115.2 / 115.2 Vdc; operating voltage 100–131 Vdc in both columns; nominal capacity 50 Ah in both columns.",
+          "field": "batteryWeight",
+          "target": {
+            "model": "T-BAT H 5.8 V2",
+            "level": "module",
+            "version": "15.0",
+            "market": "UK"
+          },
+          "value": 72.2,
+          "unit": "kg"
+        }
+      ]
+    }
+  ]
+}

@@ -83,11 +83,18 @@ test('compound dimensions are not field measurements, while same-unit table colu
     observations:[{source:'table',target,field,quote,value,unit}],
   }).decision;
   assert.equal(review('Specific capacity: 100 Ah/kg.',100,'batteryCapacity','Ah'), 'insufficient');
+  assert.equal(review('Rated capacity: 100 Ah÷kg.',100,'batteryCapacity','Ah'), 'insufficient');
+  assert.equal(review('Rated capacity: 100 Ah／kg.',100,'batteryCapacity','Ah'), 'insufficient');
+  for (const separator of ["'", '’', '_']) {
+    assert.equal(review(`Rated capacity: 1${separator}200 mAh.`,200,'batteryCapacity','mAh'), 'insufficient');
+  }
   assert.equal(review('Mass per unit energy: 10 kg/kWh.',10), 'insufficient');
   assert.equal(review('Mass per unit energy: 10 kg per kWh.',10), 'insufficient');
   assert.equal(review('Mass relationship: 10 kg·m⁻³.',10), 'insufficient');
   assert.equal(review('Experimental ratio: 100 Ah / 5 kg.',5), 'insufficient');
   assert.equal(review('Specified net weight: 1,200 kg.',1.2), 'insufficient');
+  assert.equal(review('Net battery weight: < 64 kg.',64), 'insufficient');
+  assert.equal(review('Net battery weight: 64 to 68 kg.',68), 'insufficient');
   assert.equal(review('Table of weights: 72.2 kg / 68.5 kg.',72.2), 'supported');
   assert.equal(review('Table of weights: 72.2 kg / 68.5 kg.',68.5), 'supported');
 });

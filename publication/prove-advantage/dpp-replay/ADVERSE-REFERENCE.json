@@ -1,0 +1,61 @@
+{
+  "control-1": {
+    "decision": "conflicting",
+    "evidence": [
+      [
+        "sim-1",
+        "sim-2"
+      ]
+    ],
+    "reason": "Two in-scope same-authority rows disagree and no replacement date or priority resolves them."
+  },
+  "control-2": {
+    "decision": "contradicted",
+    "evidence": [
+      [
+        "sim-2"
+      ]
+    ],
+    "reason": "Only the DC battery row applies. The AC inverter output is another boundary."
+  },
+  "control-3": {
+    "decision": "insufficient",
+    "evidence": [
+      [],
+      [
+        "sim-3"
+      ],
+      [
+        "sim-1",
+        "sim-2",
+        "sim-3"
+      ]
+    ],
+    "reason": "Two clues address wrong revision or market. The in-scope product gives usable rather than rated charge."
+  },
+  "control-4": {
+    "decision": "supported",
+    "evidence": [
+      [
+        "sim-2"
+      ]
+    ],
+    "reason": "Applicable support is the whole-system cell, not the same numeric module value."
+  },
+  "control-5": {
+    "decision": "supported",
+    "evidence": [
+      [
+        "sim-1"
+      ],
+      [
+        "sim-2"
+      ],
+      [
+        "sim-1",
+        "sim-2"
+      ]
+    ],
+    "reason": "Two applicable sources confirm the same nominal DC value"
+  }
+}
