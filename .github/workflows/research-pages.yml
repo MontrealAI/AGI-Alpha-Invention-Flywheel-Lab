@@ -375,6 +375,7 @@ jobs:
         if: needs.deploy.result == 'success'
         shell: bash
         run: |
+          git fetch --no-tags --filter=blob:none --shallow-since=2026-11-22T00:00:00Z origin "$GITHUB_SHA"
           packages="$RUNNER_TEMP/frontier-distributed"
           mkdir -p "$packages"
           origin="https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/frontier-omega-alpha"

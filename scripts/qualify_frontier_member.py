@@ -447,13 +447,32 @@ def qualify_observation_game(directory, root, release):
     return {'package_sha256': expected, 'replayed_ns': elapsed, 'held_games': 11, **result}
 
 
+def verify_executor_source(root, manifest, site_revision):
+    paths = {name: member.executor_source_path(name) for name in manifest['file_sha256']}
+    revision = member.executor_payload_revision(site_revision, paths.values())
+    require(manifest['source'] == member.commit_url(revision), 'Executor payload source binding changed')
+    tree = subprocess.check_output(['git', 'ls-tree', '-r', '-z', '--full-tree', revision, '--', *paths.values()],
+                                   cwd=member.MAIN)
+    blobs = {}
+    for item in tree.split(b'\0')[:-1]:
+        header, path = item.split(b'\t', 1)
+        mode, kind, fingerprint = header.split()
+        require(kind == b'blob' and mode in (b'100644', b'100755'), 'Unexpected executor source entry')
+        blobs[path.decode()] = fingerprint
+    for name, path in paths.items():
+        fingerprint = subprocess.check_output(['git', 'hash-object', '--no-filters', '--', str((root / name).resolve())],
+                                              cwd=member.MAIN).strip()
+        require(blobs.get(path) == fingerprint, f'Executor payload differs from Git source for {name}')
+    return revision
+
+
 def qualify_mission_executor(directory, root, release):
     expected = release['universal_mission_sha256'][member.EXECUTOR_ZIP]
     for name, fingerprint in member.HISTORICAL_EXECUTORS.items():
         require(member.digest((directory / name).read_bytes()) == fingerprint, f'Published archive bytes changed for {name}')
     manifest = install(directory / member.EXECUTOR_ZIP, root, {'sha256': expected})
     require(manifest['id'] == 'frontier-harness-executor', 'Wrong local executor package')
-    require(manifest['source'] == member.commit_url(release['source_commit']), 'Executor source binding changed')
+    payload_revision = verify_executor_source(root, manifest, release['source_commit'])
     runtime = root / 'runtime'
     require((root / 'START-HERE.html').is_file() and (runtime / 'app/frontier-pairing.js').is_file(),
             'Distributed companion entry and pairing are missing')
@@ -490,7 +509,7 @@ print(json.dumps({'local': runtime.local_only, 'registered': len(describe()), 'v
             and result['native_setup'] and result['paired_setup'] and (runtime / 'app/native-intelligence.js').is_file()
             and all((runtime / name).is_file() for name in ('Launch-FRONTIER.sh', 'Launch-FRONTIER.command', 'Launch-FRONTIER.cmd')),
             'Distributed executor entry points failed')
-    return {'package_sha256': expected, 'replayed_ns': elapsed, **result}
+    return {'package_sha256': expected, 'payload_revision': payload_revision, 'replayed_ns': elapsed, **result}
 
 
 def qualify(directory, live=False):
