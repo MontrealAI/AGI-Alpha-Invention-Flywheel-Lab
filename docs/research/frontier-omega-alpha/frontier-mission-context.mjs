@@ -330,10 +330,8 @@ export function missionContextLines(context, selectedIds) {
   }).filter(line => encoder.encode(line).length <= 2048);
 }
 
-/** Export only explicitly projected mission text and the selected public items. */
-export function missionIntelligencePackage(packet, context, selectedIds) {
-  const {missionId, revision, language, originalAmbition, ambition, instruction} = packet;
-  return {schema:packageSchema, missionId, revision, language, originalAmbition, ambition,
-    ...(typeof instruction === 'string' && instruction && {instruction}),
+/** Export the member-reviewed text and selected public items. */
+export function missionIntelligencePackage(brief, context, selectedIds) {
+  return {schema:packageSchema, language:context.language, brief,
     context:structuredClone(selectedItems(context, selectedIds))};
 }
