@@ -1,0 +1,64 @@
+name: P0-272 native historical route-boundary
+on:
+  push:
+    branches: ['research/p0-native-route-boundary272']
+    paths: ['.github/workflows/p0-native-route-boundary272.yml']
+permissions:
+  contents: read
+jobs:
+  native-route-boundary:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record platform job execution start
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+          sparse-checkout: |
+            research/p0_native_route_boundary272
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ced6c1cb004887dcdafaea59a2976020be649f8e
+          path: owner272
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12.16'
+      - name: Verify pinned owner and development source
+        run: |
+          set -euo pipefail
+          test "$(git hash-object research/p0_native_route_boundary272/probe.py)" = 8f5882b1eb3a9fb1170d7cfe23ee2b618d7f09b0
+          test "$(git hash-object owner272/connected_enterprise/upgrades.py)" = 9866d004c412fc05c9f6292cf898307f177359df
+          test "$(git hash-object owner272/connected_enterprise/finance.py)" = c01e5cd97fb32b3e5fcd5cea190424d8f4f5d5ec
+          test "$(git hash-object owner272/connected_enterprise/transition_evidence.py)" = 2397091ef8e1960ad13950693d5b3cd04e2ff7c5
+          test "$(git hash-object owner272/tests/test_connected_operating_upgrade.py)" = fc4917ae2ef6ff90ac0c8df9606dbfdd181d428b
+          test -z "$(find owner272 -name '*.pyc' -print -quit)"
+          python -B -c 'import ast,pathlib; ast.parse(pathlib.Path("research/p0_native_route_boundary272/probe.py").read_text())'
+          mv owner272 "$RUNNER_TEMP/owner272"
+      - name: Install previously pinned public wheels
+        run: |
+          set -euo pipefail
+          cat > "$RUNNER_TEMP/p0272-pins.txt" <<'EOF'
+          cryptography==50.0.2 --hash=sha256:9dab55f57c74c3cad24c323bacbbd04be4705ba6eb0d92e920b1fc4837ed5079
+          cffi==2.1.1 --hash=sha256:c1453022f490d2459a11819d83ad1d586e9ff65a12ac3e705ffebd46d3685dcf
+          pycparser==3.11 --hash=sha256:51d5a8ba2be0bbe440b99d2112604c95bbbc3c2748a64260186c541e1729cd80
+          EOF
+          python -m pip download --only-binary=:all: --require-hashes --no-deps -r "$RUNNER_TEMP/p0272-pins.txt" -d "$RUNNER_TEMP/p0272-wheels"
+          python -m pip install --no-index --no-deps --no-compile --require-hashes --find-links "$RUNNER_TEMP/p0272-wheels" -r "$RUNNER_TEMP/p0272-pins.txt"
+      - name: Execute one registered native route-identity comparison
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -m 700 "$RUNNER_TEMP/p0272-private"
+          env -i PATH="$PATH" HOME="$RUNNER_TEMP/p0272-private" TMPDIR="$RUNNER_TEMP/p0272-private" PYTHONDONTWRITEBYTECODE=1 \
+            python -B research/p0_native_route_boundary272/probe.py "$RUNNER_TEMP/owner272" "$RUNNER_TEMP/P0_272.json" \
+            > "$RUNNER_TEMP/p0272-private/probe.log" 2>&1
+      - name: Retain only compact public receipt
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: p0-272-native-route-boundary
+          path: ${{ runner.temp }}/P0_272.json
+          if-no-files-found: warn
+          retention-days: 7
