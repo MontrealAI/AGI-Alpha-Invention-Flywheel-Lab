@@ -25,7 +25,7 @@ LOADED_SOURCE_SHA256 = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
 if not __package__:
     sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from bridge.adapters import BridgeError, MAX_BODY, Runtime, retrieve_source, strict_json
-from bridge.pages_missions import ALLOWED_HEADERS, PAGES_ORIGIN, PREFIX as MISSIONS_PREFIX
+from bridge.pages_missions import ALLOWED_HEADERS, PAGES_ORIGIN, PREPARE as MISSION_PREPARE, PREFIX as MISSIONS_PREFIX
 from bridge.services import AccessRuntime
 
 PRODUCT = Path(__file__).resolve().parent.parent
@@ -294,6 +294,9 @@ class Handler(BaseHTTPRequestHandler):
         limit = 17 * 1024 * 1024 if self.path == "/api/workflows/import" else MAX_BODY
         if self.path.startswith(MISSIONS_PREFIX):
             limit = 32 * 1024
+            if self.path[len(MISSIONS_PREFIX):] in {MISSION_PREPARE, "submit"}:
+                # Each byte in two 24 KiB texts can occupy six bytes as a JSON escape.
+                limit = (2 * 24 * 6 + 1) * 1024
         if size > limit:
             raise BridgeError("BODY", f"Request exceeds {limit // 1024} KiB.", 413)
         data = self.rfile.read(size)

@@ -70,13 +70,18 @@ class UniversalMissionService(WorkflowService):
         self.outcome_assembly = outcome_assembly is True
         super().__init__(runtime, private_root, server_source_sha256=server_source_sha256)
 
-    def _workflow_spec(self, supplied, *, prior=None):
+    def _workflow_spec(self, supplied, *, prior=None, original_ambition=None):
         require(isinstance(supplied, dict) and SPEC_FIELDS <= set(supplied) <= SPEC_FIELDS | OPTIONAL_FIELDS,
                 "Mission specification has missing or unknown fields.", "MISSION_INPUT")
         spec = strict_json(encoded(supplied))
         ambition = spec["ambition"]
         require(text_field(ambition, self.objective_limit) and bool(ambition.strip()),
                 "Enter a nonempty ambition within 24 KiB.", "MISSION_INPUT")
+        original = prior["spec"]["mission"]["original_ambition"] if prior is not None else original_ambition
+        if original is None:
+            original = ambition
+        require(text_field(original, self.objective_limit) and bool(original.strip()),
+                "The original ambition must be nonempty and within 24 KiB.", "MISSION_INPUT")
         require(spec["language"] in ("en", "fr"), "Mission language must be en or fr.", "MISSION_INPUT")
         deadline = expires(spec["expires_at"]).isoformat()
         context = spec.get("context", "")
@@ -112,9 +117,8 @@ class UniversalMissionService(WorkflowService):
         if "outcome" in requirements:
             mission_outcomes.validate_contract(requirements["outcome"], requirements)
         mission = {"schema": MISSION_SCHEMA, "language": spec["language"], "expires_at": deadline,
-                   "requirements": requirements, "original_ambition": ambition}
+                   "requirements": requirements, "original_ambition": original}
         if prior is not None:
-            mission["original_ambition"] = prior["spec"]["mission"]["original_ambition"]
             mission["parent_run_id"] = prior["id"]
         return {
             "objective": ambition, "context": context, "mission": mission,
@@ -145,9 +149,9 @@ class UniversalMissionService(WorkflowService):
                     "Mission authority has expired.", "MISSION_AUTHORITY")
             return super().create(spec, _identity=identity)
 
-    def submit(self, spec, identity=None):
+    def submit(self, spec, identity=None, *, original_ambition=None):
         """Persist an operator-assembled scope. Transport authentication is the caller's boundary."""
-        return self._submit(self._workflow_spec(spec), identity)
+        return self._submit(self._workflow_spec(spec, original_ambition=original_ambition), identity)
 
     def revise(self, ident, spec, identity=None):
         """Create a separately authorized successor with the exact original ambition retained."""

@@ -137,7 +137,7 @@ class PairedMissionService(UniversalMissionService):
         file = self.root / ident / "state.json"
         return file.exists() or file.is_symlink()
 
-    def stage(self, ident, body, *, imported_original=None):
+    def stage(self, ident, body):
         with self._stage_lock:
             records = self._stage_records()
             earlier = records.get(ident)
@@ -146,7 +146,7 @@ class PairedMissionService(UniversalMissionService):
                 return earlier
             require(not self.has_execution(ident), "MISSION_IDENTITY_CONFLICT", 409)
             previous = body.get("previous")
-            original = body["ambition"] if imported_original is None else imported_original
+            original = body.get("original_ambition", body["ambition"])
             if previous:
                 require(previous != ident, "MISSION_INPUT", 400)
                 old = records.get(previous)
@@ -245,7 +245,7 @@ class PairedMissionService(UniversalMissionService):
                 if predecessor:
                     self.revise_from_stage({"id": predecessor, "original_ambition": row["original_ambition"]}, inputs, ident)
                 else:
-                    self.submit(inputs, identity=ident)
+                    self.submit(inputs, identity=ident, original_ambition=row["original_ambition"])
             with self._lock(ident):
                 state = self._load(ident)
                 spec = state["spec"]

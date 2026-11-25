@@ -21,6 +21,7 @@ AMBITION = "Build frontier AI LLM for Game Theory."
 SECRET = "fixture-only-never-a-real-api-key"
 MODEL = "fixture-strategic-model"
 PROJECT = "proj_paired_fixture"
+LOCAL_ENDPOINT = "http://127.0.0.1:47881/v1"
 INSTRUMENT = {"tool": "construct_instrument", "name": "regret.json", "spec": {
     "inputs": ["deviate", "current"], "outputs": {"regret": {"op": "max", "args": [
         0, {"op": "sub", "args": [{"field": "deviate"}, {"field": "current"}]}]}}}}
@@ -35,6 +36,7 @@ class PairedIntelligenceTests(unittest.TestCase):
         self.addCleanup(folder.cleanup)
         self.workspace = Path(folder.name) / "workspace"
         self.mission_calls = []
+        self.local_calls = []
         self.probe_calls = 0
         self.mission_started = Event()
         self.block = None
@@ -43,12 +45,17 @@ class PairedIntelligenceTests(unittest.TestCase):
         self._launch()
         self.addCleanup(self._close)
 
-    def _launch(self):
+    def _launch(self, *, local=False):
         self.codes = []
         self.config = {"local_only": True, "source_hosts": []}
+        selection = {}
+        if local:
+            self.config["providers"] = {"local-fixture": {"kind": "openai", "base_url": LOCAL_ENDPOINT,
+                "models": {MODEL: {"input_per_million": 0, "output_per_million": 0}}}}
+            selection = {"provider": "local-fixture", "model": MODEL}
         self.server = HarnessServer(("127.0.0.1", 0), Runtime(self.config, sender=self.sender),
                                     config=self.config, workspace=self.workspace)
-        self.server.enable_pages_missions(announce=self.codes.append, turns=4, output_tokens=512)
+        self.server.enable_pages_missions(announce=self.codes.append, turns=4, output_tokens=512, **selection)
         self.worker = Thread(target=self.server.serve_forever, kwargs={"poll_interval": .01}, daemon=True)
         self.worker.start()
         self.pair()
@@ -63,6 +70,11 @@ class PairedIntelligenceTests(unittest.TestCase):
             self.server = None
 
     def sender(self, url, headers, body=None, timeout=None):
+        if url == LOCAL_ENDPOINT + "/chat/completions":
+            self.assertNotIn("Authorization", headers)
+            self.local_calls.append(body)
+            return {"choices": [{"message": {"content": json.dumps(self.proposal)}}],
+                    "usage": {"prompt_tokens": 43, "completion_tokens": 24}}
         self.assertTrue(url.startswith("https://api.openai.com/v1/"))
         self.assertEqual(headers["Authorization"], "Bearer " + SECRET)
         self.assertEqual(headers["OpenAI-Project"], PROJECT)
@@ -294,6 +306,76 @@ class PairedIntelligenceTests(unittest.TestCase):
             result = self.wait_for_stop(pending["id"])
         self.assertEqual((result["status"], result["model_calls"]), ("awaiting_consent", 0))
         self.assertEqual(self.mission_calls, [])
+
+    def test_first_api_stage_binds_browser_revision_and_original_through_restart_and_execution(self):
+        profile = self.profile()
+        command = str(uuid4())
+        body = {"ambition": "  Mesurer le regret stratégique.\n", "language": "fr",
+                "original_ambition": "  Explorer les incitatifs et les équilibres.\n"}
+        pending = self.expect(self.paired("prepare-intelligence", body, command=command))
+        self.assertEqual(pending["original_ambition"], body["original_ambition"])
+        self.assertIsNone(pending["parent_run_id"])
+        self._close()
+        self._launch()
+        ident = {"id": pending["id"]}
+        self.expect(self.paired("prepare-intelligence", {**body, "original_ambition": "Changed history"}, command=command),
+                    409, "MISSION_COMMAND_CHANGED")
+        recovered = self.expect(self.paired("mission-intelligence-status", ident))
+        review = self.expect(self.native("mission-review", {"ticket": recovered["setup_ticket"], "profile": profile}))
+        self.assertEqual((review["ambition"], review["original_ambition"], review["parent_run_id"]),
+                         (body["ambition"], body["original_ambition"], None))
+        self.expect(self.native("mission-authorize", {"ticket": recovered["setup_ticket"], "profile": profile,
+                                                     "revision": review["revision"], "consent": True}))
+        result = self.wait_for_stop(ident["id"])
+        self.assertEqual((result["id"], result["status"], result["original_ambition"], result["parent_run_id"]),
+                         (pending["id"], "needs_review", body["original_ambition"], None))
+        prompt = self.mission_calls[0]["input"][0]["content"]
+        mission_data = json.loads(prompt.split("\nUNTRUSTED_MISSION_DATA\n", 1)[1])
+        self.assertEqual((mission_data["ambition"], mission_data["original_ambition"]),
+                         (body["ambition"], body["original_ambition"]))
+
+    def test_first_local_submit_persists_browser_original_and_trusts_native_previous(self):
+        self._close()
+        self._launch(local=True)
+        body = {"ambition": "Measure the first concrete result.\n", "language": "en",
+                "original_ambition": "  Establish a repeatable strategic experiment.\n"}
+        opened = self.expect(self.paired("submit", body, command=True))
+        result = self.wait_for_stop(opened["id"])
+        self.assertEqual((result["status"], result["original_ambition"], result["parent_run_id"]),
+                         ("needs_review", body["original_ambition"], None))
+        prompt = self.local_calls[0]["messages"][0]["content"]
+        mission_data = json.loads(prompt.split("\nUNTRUSTED_MISSION_DATA\n", 1)[1])
+        self.assertEqual((mission_data["ambition"], mission_data["original_ambition"]),
+                         (body["ambition"], body["original_ambition"]))
+        self._close()
+        self._launch(local=True)
+        recovered = self.expect(self.paired("get", {"id": opened["id"]}))
+        self.assertEqual(recovered["original_ambition"], body["original_ambition"])
+        revised_body = {"ambition": "Test the alternative.", "language": "en", "previous": opened["id"]}
+        self.expect(self.paired("submit", {**revised_body, "original_ambition": "Override history"}, command=True),
+                    400, "MISSION_INPUT")
+        successor = self.expect(self.paired("submit", revised_body, command=True))
+        self.assertEqual((successor["original_ambition"], successor["parent_run_id"]),
+                         (body["original_ambition"], opened["id"]))
+        self.wait_for_stop(successor["id"])
+        self.assertEqual(self.mission_calls, [])
+
+    def test_both_ambitions_are_independently_bounded_and_previous_cannot_be_overridden(self):
+        maximal = "é" * (12 * 1024)
+        body = {"ambition": maximal, "language": "fr", "original_ambition": maximal + " "}
+        for operation in ("prepare-intelligence", "submit"):
+            with self.subTest(operation=operation):
+                self.expect(self.paired(operation, body, command=True), 400, "MISSION_AMBITION")
+                self.expect(self.paired(operation, {**body, "ambition": " \n", "original_ambition": "Valid"},
+                                        command=True), 400, "MISSION_AMBITION")
+                self.expect(self.paired(operation, {**body, "original_ambition": " \n"}, command=True),
+                            400, "MISSION_AMBITION")
+                self.expect(self.paired(operation, {**body, "original_ambition": "Override", "previous": "wf_" + "a" * 24},
+                                        command=True), 400, "MISSION_INPUT")
+        pending = self.expect(self.paired("prepare-intelligence", {**body, "original_ambition": "à" + maximal[1:]},
+                                          command=True))
+        self.assertEqual(pending["ambition"], maximal)
+        self.assertEqual(len(pending["original_ambition"].encode()), 24 * 1024)
 
 
 if __name__ == "__main__":

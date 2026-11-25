@@ -628,6 +628,69 @@ async function ownerConnectionJourney(page, language, width) {
   await page.locator('#mission-new').click();
 }
 
+async function pairedRevisionJourney(browser, language) {
+  const page = await browser.newPage({viewport:dimensions(1440)});
+  try {
+    await page.addInitScript(fakeWallet);
+    await page.addInitScript(() => {
+      const fetchPublic = window.fetch.bind(window);
+      const fixture = window.missionPairFixture = {operations:[]};
+      window.fetch = async (url, options) => {
+        const prefix = 'http://127.0.0.1:38463/api/frontier-missions/';
+        if (!String(url).startsWith(prefix)) return fetchPublic(url, options);
+        const action = url.slice(prefix.length);
+        const body = JSON.parse(options.body);
+        fixture.operations.push({action,body,credentials:options.credentials,referrerPolicy:options.referrerPolicy});
+        const respond = value => new Response(JSON.stringify(value));
+        if (action === 'pair') return respond({session:'S'.repeat(43),command_scope:'0'.repeat(24),
+          scope:{},intelligence:{selection:null},expires_at:'2080-01-01T00:00:00Z'});
+        if (action === 'prepare-intelligence') {
+          const idempotency = options.headers['X-Frontier-Command'].split('.')[1];
+          const digest = new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode('frontier-pages-mission-v1:' + idempotency)));
+          const id = 'wf_' + [...digest.slice(0,12)].map(value => value.toString(16).padStart(2,'0')).join('');
+          fixture.record = {id,ambition:body.ambition,original_ambition:body.original_ambition,language:body.language,
+            status:'awaiting_consent',actions:0,model_calls:0,events:[],artifacts:[]};
+          return respond({...fixture.record,setup_ticket:'T'.repeat(43)});
+        }
+        if (action === 'cancel' && body.id === fixture.record?.id) return respond({...fixture.record,status:'cancelled'});
+        if (action === 'release') return respond({released:true});
+        throw Error(`Unexpected isolated fixture operation ${action}`);
+      };
+    });
+    await page.goto(base + (language === 'fr' ? 'fr.html' : ''));
+    await page.locator('[data-connect="token"]').click();
+    await page.locator('#member').waitFor({state:'visible'});
+    const original = 'Build frontier AI LLM for Game Theory.';
+    const revised = 'Evaluate a strategy using a public example.\nÉtablir un cas de vérification indépendant.';
+    for (const ambition of [original, revised]) {
+      await page.locator('#goal-text').fill(ambition);
+      await page.locator('#goal-submit').click();
+    }
+    await page.locator('#mission-configure').click();
+    await page.locator('[data-frontier-connection="api"]').click();
+    await page.locator('#execution-code').fill('P'.repeat(43));
+    await page.locator('#execution-code-form button').click();
+    const link = page.locator('#intelligence-open-native');
+    await link.waitFor({state:'visible'});
+    const native = new URL(await link.getAttribute('href'));
+    assert.equal(native.origin, 'http://127.0.0.1:38463');
+    assert.deepEqual(Object.fromEntries(native.searchParams), {setup:'intelligence',route:'api',lang:language});
+    assert.equal(native.hash, '#ticket=' + 'T'.repeat(43));
+    const observed = () => page.evaluate(() => window.missionPairFixture.operations);
+    const operations = await observed();
+    assert.deepEqual(operations.map(row => row.action), ['pair','prepare-intelligence']);
+    assert.deepEqual(operations[1], {action:'prepare-intelligence', body:{ambition:revised,language,original_ambition:original},
+      credentials:'omit',referrerPolicy:'no-referrer'});
+    await page.locator('#intelligence-cancel-native').click();
+    await link.waitFor({state:'hidden'});
+    await page.waitForFunction(() => window.missionPairFixture.operations.at(-1)?.action === 'cancel');
+    assert.equal(await page.locator('#mission-ambition').textContent(), revised);
+    assert.equal(await page.locator('#mission-original').textContent(), original);
+    assert.deepEqual((await observed()).map(row => row.action), ['pair','prepare-intelligence','cancel']);
+    checks.push({kind:'paired-browser-fixture',language,exactOriginalAndRevision:true,scopedNativeLink:true,reviewCanceled:true});
+  } finally { await page.close(); }
+}
+
 async function universalMission(page, language, width) {
   const panel = page.locator('#frontier-mission-panel');
   const original = 'Build Frontier AI for Game Theory.';
@@ -1050,6 +1113,7 @@ async function walletPaths(browser, language, width) {
         await publicAtlas(browser, language, width);
         await walletPaths(browser, language, width);
       }
+      await pairedRevisionJourney(browser, language);
     }
     process.stdout.write(JSON.stringify(checks, null, 2) + '\n');
   } finally {

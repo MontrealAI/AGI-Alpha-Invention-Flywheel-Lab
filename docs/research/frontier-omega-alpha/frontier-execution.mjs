@@ -6,6 +6,18 @@ const resumable = new Set(['paused','interrupted','ready']);
 const approvalStates = new Set(['awaiting_consent','approval_required']);
 const localDevice = () => !(navigator.userAgentData?.mobile || /Android|iPad|iPhone|iPod/u.test(navigator.userAgent)
   || (navigator.maxTouchPoints > 1 && /Macintosh/u.test(navigator.userAgent)));
+
+function ambitionBody(mission, previous) {
+  const body = {ambition:mission.ambition,language:mission.language};
+  if (previous) body.previous = previous;
+  else if (mission.originalAmbition !== mission.ambition) body.original_ambition = mission.originalAmbition;
+  return body;
+}
+
+function checkAmbition(result, mission, id = result.id) {
+  if (result.id !== id || result.ambition !== mission.ambition || result.language !== mission.language
+      || result.original_ambition !== mission.originalAmbition) throw new Error('MISSION_BINDING');
+}
 const copy = {
   en: {
     paired: 'Paired with the local executor', unpaired: 'Pair with the local executor again to reopen its records.',
@@ -320,7 +332,10 @@ export function setupExecution(member, language, {onOpen, currentAmbition, curre
     const pairing = session;
     try {
       const result = await request(renewTicket ? 'mission-intelligence-status' : 'get', {id:attempt.id});
-      if (epoch === serial && session === pairing && attempt === nativeSetup && !attempt.canceling && available()) follow(result);
+      if (epoch === serial && session === pairing && attempt === nativeSetup && !attempt.canceling && available() && attempt.key === missionKey()) {
+        checkAmbition(result, currentMission(), attempt.id);
+        follow(result);
+      }
     } catch (error) {
       if (attempt === nativeSetup && session === pairing && available()) {
         requirePairing(error);
@@ -343,8 +358,7 @@ export function setupExecution(member, language, {onOpen, currentAmbition, curre
     const command = crypto.randomUUID();
     const pairing = session;
     const commandNamespace = commandScope;
-    const body = {ambition:mission.ambition, language:mission.language};
-    if (previousRun) body.previous = previousRun;
+    const body = ambitionBody(mission, previousRun);
     const attempt = {key:missionKey(mission)};
     nativeSetup = attempt;
     const epoch = ++serial;
@@ -358,9 +372,7 @@ export function setupExecution(member, language, {onOpen, currentAmbition, curre
       attempt.id = 'wf_' + [...digest.slice(0,12)].map(value => value.toString(16).padStart(2,'0')).join('');
       if (attempt.canceling || attempt !== nativeSetup || pairing !== session || !available()) return;
       const result = await request('prepare-intelligence', body, command, pairing, commandNamespace);
-      if (result.id !== attempt.id || result.ambition !== body.ambition || result.language !== body.language) {
-        throw new Error('MISSION_BINDING');
-      }
+      checkAmbition(result, mission, attempt.id);
       return result;
     })();
     try {
@@ -446,12 +458,12 @@ export function setupExecution(member, language, {onOpen, currentAmbition, curre
       queuedAmbition = {ambition,key};
       return;
     }
-    const retry = pending?.ambition === ambition ? pending : undefined;
+    const retry = pending?.key === key ? pending : undefined;
     const command = retry?.command ?? crypto.randomUUID();
-    const previous = retry?.previous ?? previousRun;
+    const body = retry?.body ?? ambitionBody(mission, previousRun);
     const epoch = ++serial;
     clearTimeout(timer);
-    pending = {ambition,command,previous};
+    pending = {ambition,body,command,key};
     queuedAmbition = undefined;
     view = undefined;
     node('mission-execution').hidden = false;
@@ -465,10 +477,12 @@ export function setupExecution(member, language, {onOpen, currentAmbition, curre
     for (const id of ['execution-events','execution-artifacts']) node(id).replaceChildren();
     status(words.starting);
     try {
-      const body = {ambition,language:mission.language};
-      if (previous) body.previous = previous;
       const result = await request('submit', body, command);
-      if (serial === epoch && available()) { pending = undefined; follow(result, key); }
+      if (serial === epoch && available()) {
+        checkAmbition(result, mission);
+        pending = undefined;
+        follow(result, key);
+      }
     } catch (error) {
       if (serial === epoch && available()) {
         requirePairing(error);

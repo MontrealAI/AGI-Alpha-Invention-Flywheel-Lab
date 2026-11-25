@@ -280,10 +280,13 @@ class PagesMissions:
         return spec
 
     def _ambition(self, body, command):
-        check(set(body) in ({"ambition", "language"}, {"ambition", "language", "previous"}), "MISSION_INPUT")
-        ambition = body["ambition"]
-        check(isinstance(ambition, str) and ambition.strip() and len(ambition.encode()) <= 24 * 1024,
-              "MISSION_AMBITION")
+        check(set(body) in ({"ambition", "language"}, {"ambition", "language", "previous"},
+                            {"ambition", "language", "original_ambition"}), "MISSION_INPUT")
+        for key in ("ambition", "original_ambition"):
+            if key in body:
+                ambition = body[key]
+                check(isinstance(ambition, str) and ambition.strip() and len(ambition.encode()) <= 24 * 1024,
+                      "MISSION_AMBITION")
         check(body["language"] in ("en", "fr"), "MISSION_LANGUAGE")
         ident = "wf_" + hashlib.sha256(("frontier-pages-mission-v1:" + command).encode()).hexdigest()[:24]
         if "previous" in body:
@@ -304,6 +307,8 @@ class PagesMissions:
                 self._remove_ticket(previous)
             else:
                 view = self.service.revise(previous, spec, identity=ident)
+        elif "original_ambition" in body:
+            view = self.service.submit(spec, identity=ident, original_ambition=body["original_ambition"])
         else:
             view = self.service.submit(spec, identity=ident)
         if view["status"] == "ready" and view.get("model_calls", 0) == 0 and not view.get("worker_active"):
@@ -363,11 +368,9 @@ class PagesMissions:
         if self.remote and isinstance(archive, dict) and archive.get("schema") == DRAFT_FORMAT:
             draft = archive.get("mission")
             check(isinstance(draft, dict) and {"ambition", "language", "original_ambition"} <= set(draft), "MISSION_INPUT")
-            body = {key: draft[key] for key in ("ambition", "language")}
+            body = {key: draft[key] for key in ("ambition", "language", "original_ambition")}
             ident = self._ambition(body, secrets.token_hex(16))
-            original = draft["original_ambition"]
-            check(isinstance(original, str) and original.strip() and len(original.encode()) <= 24 * 1024, "MISSION_INPUT")
-            return self._stage_response(self.service.stage(ident, body, imported_original=original))
+            return self._stage_response(self.service.stage(ident, body))
         check(isinstance(archive, dict) and isinstance(archive.get("state"), dict), "MISSION_INPUT")
         old = archive["state"].get("spec")
         check(isinstance(old, dict) and isinstance(old.get("mission"), dict), "MISSION_INPUT")
