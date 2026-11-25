@@ -1,0 +1,553 @@
+{
+  "files": {
+    "result.md": "Le débit agrégé en L/min pour les trois séances d'essai de la ligne est calculé. Pour la séance 'ligne-9', le débit est de 2,7647 L/min (47 litres / 17 minutes). Pour la séance 'ligne-11', la mesure est absente car la durée (minutes) est nulle. Pour la séance 'ligne-14', le débit est de 2,3939 L/min (79 litres / 33 minutes). Aucune mesure n'a été remplacée. Le résultat final est une somme des débits des séances valides."
+  },
+  "notice": "Contains your objective, context and artifacts. Inspect before sharing. No connector credentials or workspace integrity key included. Recorded verification is historical; recheck imported work.",
+  "schema": "alpha-genesis-workflow-export/v1",
+  "sha256": "fc2061496de89e0c72a1a976dcbcc8a413ebd92c44b33b7d5d567832d63bd9ab",
+  "state": {
+    "actions": 5,
+    "adversarial_cases": [],
+    "artifacts": {
+      "result.md": {
+        "bytes": 440,
+        "kind": "document",
+        "sha256": "36ac32a0ca32f6cf9dda6266d7e4aee0a8709e1a74094babcf9c4578b0b69cb3"
+      }
+    },
+    "capability_id": null,
+    "created_at": "2026-11-25T04:28:32.950632+00:00",
+    "epoch": 0,
+    "events": [
+      {
+        "at": "2026-11-25T04:28:32.950643+00:00",
+        "detail": {
+          "acceptance_source": "Operator-frozen conditions; independence is not inferred.",
+          "spec_hash": "70bd6bcd338f633add4a1099934fb3579db693b60407a3b6cf6cd5606281c3ff"
+        },
+        "index": 0,
+        "kind": "created",
+        "previous": "0000000000000000000000000000000000000000000000000000000000000000",
+        "sha256": "a3d91ffb3936f64e49158419febbfaf484099e164173f9dc769923f06426a118"
+      },
+      {
+        "at": "2026-11-25T04:28:32.954483+00:00",
+        "detail": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "role": "builder",
+          "scope": "Waiting for selected service capacity; no model call or construction iteration consumed."
+        },
+        "index": 1,
+        "kind": "model_queued",
+        "previous": "a3d91ffb3936f64e49158419febbfaf484099e164173f9dc769923f06426a118",
+        "sha256": "e8200fd78a672f935a086b4900d14bc6684632226bf6d8373af29d2fb0a971b8"
+      },
+      {
+        "at": "2026-11-25T04:28:32.956429+00:00",
+        "detail": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "role": "builder",
+          "run_id": "wf_5bec64f2061e5d861990861d_5da30880e62e6639"
+        },
+        "index": 2,
+        "kind": "model_started",
+        "previous": "e8200fd78a672f935a086b4900d14bc6684632226bf6d8373af29d2fb0a971b8",
+        "sha256": "9d99c8a6048c50f71ba6fa5e6e78a5d19ae334748262ba18b71cca91696c8d4a"
+      },
+      {
+        "at": "2026-11-25T04:29:21.506354+00:00",
+        "detail": {
+          "cost": {
+            "accounted": 0.0,
+            "amount": 0.0,
+            "attempts": 1,
+            "basis": "reported_usage_at_user_rates",
+            "complete_cost_known": false,
+            "currency": "USD"
+          },
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+          "reported_model": "qwen3-8b-q4_k_m",
+          "requested_model": "qwen3-8b-q4_k_m",
+          "response_sha256": "7ef2b3a679704d727ceac932e66f815370359c5e29561582c176a2081289c584",
+          "role": "builder",
+          "run_id": "wf_5bec64f2061e5d861990861d_5da30880e62e6639",
+          "usage": {
+            "input_tokens": 1001,
+            "output_tokens": 339
+          }
+        },
+        "index": 3,
+        "kind": "model_completed",
+        "previous": "9d99c8a6048c50f71ba6fa5e6e78a5d19ae334748262ba18b71cca91696c8d4a",
+        "sha256": "b0e0000d7b148cc45fe5530d07d8917a636aae177c2e5046dec35c731fd81a84"
+      },
+      {
+        "at": "2026-11-25T04:29:21.506414+00:00",
+        "detail": {
+          "disposition": "PROPOSED",
+          "proposed_actions": 3,
+          "summary": "Calculer le débit agrégé en L/min pour l’intégralité des trois séances d’essai de la ligne à partir des données fournies."
+        },
+        "index": 4,
+        "kind": "route_proposed",
+        "previous": "b0e0000d7b148cc45fe5530d07d8917a636aae177c2e5046dec35c731fd81a84",
+        "sha256": "95ccdf83d0aed5f485557975b1efa489cb841af51f0cb53d2e0a079859d3cdef"
+      },
+      {
+        "at": "2026-11-25T04:29:21.537170+00:00",
+        "detail": {
+          "proposal_fields": [
+            "name",
+            "schema",
+            "sql",
+            "tool"
+          ],
+          "reason": "TABLE_SQL_ERROR",
+          "tool": "construct_table"
+        },
+        "index": 5,
+        "kind": "tool_refused",
+        "previous": "95ccdf83d0aed5f485557975b1efa489cb841af51f0cb53d2e0a079859d3cdef",
+        "sha256": "0c706186785172c1f96a0714c41e1f27e35ad909248256eddd84f4622d77c2e1"
+      },
+      {
+        "at": "2026-11-25T04:29:21.538919+00:00",
+        "detail": {
+          "proposal_fields": [
+            "input",
+            "name",
+            "tool"
+          ],
+          "reason": "TABLE_ARTIFACT_KIND",
+          "tool": "run_table"
+        },
+        "index": 6,
+        "kind": "tool_refused",
+        "previous": "0c706186785172c1f96a0714c41e1f27e35ad909248256eddd84f4622d77c2e1",
+        "sha256": "ad95236dfef9044696229bb87ac4b6c0f67a395d26dd87c6c3dd805adb04c0e8"
+      },
+      {
+        "at": "2026-11-25T04:29:21.540972+00:00",
+        "detail": {
+          "outcome": {
+            "action_id": "f60f938ccc14e16e653c091cb26bb1073652a3bce2a4a3f3aca860781f820bdc",
+            "artifact": "result.md",
+            "bytes": 440,
+            "kind": "document",
+            "operation_executed": true,
+            "sha256": "36ac32a0ca32f6cf9dda6266d7e4aee0a8709e1a74094babcf9c4578b0b69cb3"
+          },
+          "tool": "write_document"
+        },
+        "index": 7,
+        "kind": "tool_completed",
+        "previous": "ad95236dfef9044696229bb87ac4b6c0f67a395d26dd87c6c3dd805adb04c0e8",
+        "sha256": "2ea7b056c9ab5ff6b565bcc990e3261a46129ac8a434b76b7b2936eb1af0b573"
+      },
+      {
+        "at": "2026-11-25T04:29:21.542195+00:00",
+        "detail": {
+          "artifact_hashes": {
+            "result.md": "36ac32a0ca32f6cf9dda6266d7e4aee0a8709e1a74094babcf9c4578b0b69cb3"
+          },
+          "checks": [],
+          "passed": false,
+          "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification.",
+          "spec_hash": "70bd6bcd338f633add4a1099934fb3579db693b60407a3b6cf6cd5606281c3ff"
+        },
+        "index": 8,
+        "kind": "verification",
+        "previous": "2ea7b056c9ab5ff6b565bcc990e3261a46129ac8a434b76b7b2936eb1af0b573",
+        "sha256": "9ffffcff2e42bc78321880097711913d15a826da3edc534b2331e5e9b52c0d8c"
+      },
+      {
+        "at": "2026-11-25T04:29:21.542278+00:00",
+        "detail": {
+          "claims": [
+            {
+              "id": "flow_rate",
+              "reason": "REQUIRED_FIELD_MISSING",
+              "status": "ABSTAIN"
+            }
+          ],
+          "status": "ABSTAIN"
+        },
+        "index": 9,
+        "kind": "claim_dispositions",
+        "previous": "9ffffcff2e42bc78321880097711913d15a826da3edc534b2331e5e9b52c0d8c",
+        "sha256": "e44fcd9ab89cb1adc5b76bcec54104fb07e5e989fb30d8b1b0a2fd7d64ff8c6e"
+      },
+      {
+        "at": "2026-11-25T04:29:21.544572+00:00",
+        "detail": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "role": "builder",
+          "scope": "Waiting for selected service capacity; no model call or construction iteration consumed."
+        },
+        "index": 10,
+        "kind": "model_queued",
+        "previous": "e44fcd9ab89cb1adc5b76bcec54104fb07e5e989fb30d8b1b0a2fd7d64ff8c6e",
+        "sha256": "e2f68000b06f513601ffbc0f022996d944089e75a8471ff8b98726960b718993"
+      },
+      {
+        "at": "2026-11-25T04:29:21.547022+00:00",
+        "detail": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "role": "builder",
+          "run_id": "wf_5bec64f2061e5d861990861d_c1a84a5f74d851ed"
+        },
+        "index": 11,
+        "kind": "model_started",
+        "previous": "e2f68000b06f513601ffbc0f022996d944089e75a8471ff8b98726960b718993",
+        "sha256": "626f8a33b17759c48ab801bd637d759f4c225f73333dcae3cde38674722c05c1"
+      },
+      {
+        "at": "2026-11-25T04:29:51.464509+00:00",
+        "detail": {
+          "cost": {
+            "accounted": 0.0,
+            "amount": 0.0,
+            "attempts": 1,
+            "basis": "reported_usage_at_user_rates",
+            "complete_cost_known": false,
+            "currency": "USD"
+          },
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+          "reported_model": "qwen3-8b-q4_k_m",
+          "requested_model": "qwen3-8b-q4_k_m",
+          "response_sha256": "f2230d83a22f94c3a5a3d72d77a483a3b3b88497d343530c3d00ae2715454143",
+          "role": "builder",
+          "run_id": "wf_5bec64f2061e5d861990861d_c1a84a5f74d851ed",
+          "usage": {
+            "input_tokens": 1313,
+            "output_tokens": 136
+          }
+        },
+        "index": 12,
+        "kind": "model_completed",
+        "previous": "626f8a33b17759c48ab801bd637d759f4c225f73333dcae3cde38674722c05c1",
+        "sha256": "4ded79cd1c54e355cbe9f8a0292e016911bad2bed8c1bfb5da5d535d837399c6"
+      },
+      {
+        "at": "2026-11-25T04:29:51.464590+00:00",
+        "detail": {
+          "disposition": "PROPOSED",
+          "proposed_actions": 1,
+          "summary": "La première action consiste à construire une table SQL pour calculer le débit agrégé en L/min à partir des données des trois séances d'essai."
+        },
+        "index": 13,
+        "kind": "route_proposed",
+        "previous": "4ded79cd1c54e355cbe9f8a0292e016911bad2bed8c1bfb5da5d535d837399c6",
+        "sha256": "04cab9128308187462f5184dc4bdcdf1b9b97ec3c56937cfd72be2c6da707ff1"
+      },
+      {
+        "at": "2026-11-25T04:29:51.494046+00:00",
+        "detail": {
+          "proposal_fields": [
+            "name",
+            "schema",
+            "sql",
+            "tool"
+          ],
+          "reason": "TABLE_SQL_ERROR",
+          "tool": "construct_table"
+        },
+        "index": 14,
+        "kind": "tool_refused",
+        "previous": "04cab9128308187462f5184dc4bdcdf1b9b97ec3c56937cfd72be2c6da707ff1",
+        "sha256": "110c37698f4b286292e8f463a44dc9033809bd9f6a03edfb491e437c1260bdb2"
+      },
+      {
+        "at": "2026-11-25T04:29:51.496043+00:00",
+        "detail": {
+          "artifact_hashes": {
+            "result.md": "36ac32a0ca32f6cf9dda6266d7e4aee0a8709e1a74094babcf9c4578b0b69cb3"
+          },
+          "checks": [],
+          "passed": false,
+          "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification.",
+          "spec_hash": "70bd6bcd338f633add4a1099934fb3579db693b60407a3b6cf6cd5606281c3ff"
+        },
+        "index": 15,
+        "kind": "verification",
+        "previous": "110c37698f4b286292e8f463a44dc9033809bd9f6a03edfb491e437c1260bdb2",
+        "sha256": "6e110e49008997249d173fb23f2978dcbbd410aee67f7697ac027a0214af5b1e"
+      },
+      {
+        "at": "2026-11-25T04:29:51.496131+00:00",
+        "detail": {
+          "claims": [
+            {
+              "id": "flow_rate",
+              "reason": "REQUIRED_FIELD_MISSING",
+              "status": "ABSTAIN"
+            }
+          ],
+          "status": "ABSTAIN"
+        },
+        "index": 16,
+        "kind": "claim_dispositions",
+        "previous": "6e110e49008997249d173fb23f2978dcbbd410aee67f7697ac027a0214af5b1e",
+        "sha256": "51a3783e78d9f5dbd24c592b7591579f4d888c48ddceece68c361354eaa488fa"
+      },
+      {
+        "at": "2026-11-25T04:29:51.498648+00:00",
+        "detail": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "role": "builder",
+          "scope": "Waiting for selected service capacity; no model call or construction iteration consumed."
+        },
+        "index": 17,
+        "kind": "model_queued",
+        "previous": "51a3783e78d9f5dbd24c592b7591579f4d888c48ddceece68c361354eaa488fa",
+        "sha256": "f0cdc23593ceb423a509524a7a3e7931eb69909038ec791f4cdd2c19cd235d8a"
+      },
+      {
+        "at": "2026-11-25T04:29:51.501269+00:00",
+        "detail": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "role": "builder",
+          "run_id": "wf_5bec64f2061e5d861990861d_6547bfd02990bd34"
+        },
+        "index": 18,
+        "kind": "model_started",
+        "previous": "f0cdc23593ceb423a509524a7a3e7931eb69909038ec791f4cdd2c19cd235d8a",
+        "sha256": "d888e18f50f24a5095d088783f853a5186ab1cfd1f8577f873a93fdc1b592400"
+      },
+      {
+        "at": "2026-11-25T04:30:16.413102+00:00",
+        "detail": {
+          "cost": {
+            "accounted": 0.0,
+            "amount": 0.0,
+            "attempts": 1,
+            "basis": "reported_usage_at_user_rates",
+            "complete_cost_known": false,
+            "currency": "USD"
+          },
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+          "reported_model": "qwen3-8b-q4_k_m",
+          "requested_model": "qwen3-8b-q4_k_m",
+          "response_sha256": "cbecd639b92b016f3228a74c697e914dbff1c69a2b88711d9713addff53e7769",
+          "role": "builder",
+          "run_id": "wf_5bec64f2061e5d861990861d_6547bfd02990bd34",
+          "usage": {
+            "input_tokens": 1341,
+            "output_tokens": 146
+          }
+        },
+        "index": 19,
+        "kind": "model_completed",
+        "previous": "d888e18f50f24a5095d088783f853a5186ab1cfd1f8577f873a93fdc1b592400",
+        "sha256": "214574d5ba61a706fea8ac57ec85606ac4a7c29a4b84abf3fade5d69feb368d8"
+      },
+      {
+        "at": "2026-11-25T04:30:16.413154+00:00",
+        "detail": {
+          "disposition": "PROPOSED",
+          "proposed_actions": 1,
+          "summary": "La première action consiste à construire une table SQL pour calculer le débit agrégé en L/min pour les trois séances d'essai de la ligne, en utilisant les données fournies."
+        },
+        "index": 20,
+        "kind": "route_proposed",
+        "previous": "214574d5ba61a706fea8ac57ec85606ac4a7c29a4b84abf3fade5d69feb368d8",
+        "sha256": "ef6c6f10706eac88787da8603eb09d1e5f9ee3d6a083681e57bd5ea9499e5bb0"
+      },
+      {
+        "at": "2026-11-25T04:30:16.444917+00:00",
+        "detail": {
+          "proposal_fields": [
+            "name",
+            "schema",
+            "sql",
+            "tool"
+          ],
+          "reason": "TABLE_SQL_ERROR",
+          "tool": "construct_table"
+        },
+        "index": 21,
+        "kind": "tool_refused",
+        "previous": "ef6c6f10706eac88787da8603eb09d1e5f9ee3d6a083681e57bd5ea9499e5bb0",
+        "sha256": "bb16e05deef94710da695e436b33946dcb26dcaf6614e574779d5550c1ce0fe5"
+      },
+      {
+        "at": "2026-11-25T04:30:16.446973+00:00",
+        "detail": {
+          "artifact_hashes": {
+            "result.md": "36ac32a0ca32f6cf9dda6266d7e4aee0a8709e1a74094babcf9c4578b0b69cb3"
+          },
+          "checks": [],
+          "passed": false,
+          "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification.",
+          "spec_hash": "70bd6bcd338f633add4a1099934fb3579db693b60407a3b6cf6cd5606281c3ff"
+        },
+        "index": 22,
+        "kind": "verification",
+        "previous": "bb16e05deef94710da695e436b33946dcb26dcaf6614e574779d5550c1ce0fe5",
+        "sha256": "69b246f48cf5bb9052639079aa64142a08fb04fb183f2d6887ba32cb5b0e9640"
+      },
+      {
+        "at": "2026-11-25T04:30:16.447126+00:00",
+        "detail": {
+          "claims": [
+            {
+              "id": "flow_rate",
+              "reason": "REQUIRED_FIELD_MISSING",
+              "status": "ABSTAIN"
+            }
+          ],
+          "status": "ABSTAIN"
+        },
+        "index": 23,
+        "kind": "claim_dispositions",
+        "previous": "69b246f48cf5bb9052639079aa64142a08fb04fb183f2d6887ba32cb5b0e9640",
+        "sha256": "45d89848ec97873f7a62dcff509dddd6b0fab66864a51aade145239733ecf8f1"
+      },
+      {
+        "at": "2026-11-25T04:30:16.451447+00:00",
+        "detail": {
+          "reason": "Declared model-call allocation exhausted; no further inference dispatched."
+        },
+        "index": 24,
+        "kind": "stopped",
+        "previous": "45d89848ec97873f7a62dcff509dddd6b0fab66864a51aade145239733ecf8f1",
+        "sha256": "c27c94bd446dbbd78f3b3ebc74e7e8e5abd6ef030df6bb1c14c068132b47ae72"
+      }
+    ],
+    "feedback": "Resolve the unverified registered claims with authorized inputs: [{\"id\":\"flow_rate\",\"reason\":\"REQUIRED_FIELD_MISSING\",\"status\":\"ABSTAIN\"}]",
+    "id": "wf_5bec64f2061e5d861990861d",
+    "inflight": null,
+    "iteration": 3,
+    "model_call_limit": 3,
+    "model_calls": 3,
+    "phase": "builder",
+    "research": "",
+    "schema": "alpha-genesis-workflow/v1",
+    "spec": {
+      "acceptance": [],
+      "context": "A null observed field is missing. It must never be silently set to zero or replaced by example data. Table schema: {\"logs\": {\"litres\": \"INTEGER\", \"minutes\": \"INTEGER\", \"session\": \"TEXT\"}}. Use a single output row in this column order: flow_rate. Report exact integers or rational text n/d. A SQLite SELECT may return rational text using || to concatenate the numerator, slash, and denominator when appropriate.",
+      "local_only": true,
+      "max_actions": 14,
+      "max_iterations": 3,
+      "max_operations": 10000,
+      "max_output_tokens": 768,
+      "mission": {
+        "expires_at": "2026-11-25T06:28:32.940614+00:00",
+        "language": "fr",
+        "original_ambition": "Donner le débit agrégé en L/min pour l’intégralité des trois séances d’essai de la ligne en utilisant le journal approuvé. Des cellules vides peuvent signaler une mesure absente. Si un bilan complet ne peut pas être établi, ne remplacer aucune mesure et indiquer exactement la séance et la mesure nécessaires avant de répondre.",
+        "requirements": {
+          "approved_tables": {
+            "line_log": {
+              "logs": [
+                {
+                  "litres": 47,
+                  "minutes": 17,
+                  "session": "ligne-9"
+                },
+                {
+                  "litres": 61,
+                  "minutes": null,
+                  "session": "ligne-11"
+                },
+                {
+                  "litres": 79,
+                  "minutes": 33,
+                  "session": "ligne-14"
+                }
+              ]
+            }
+          },
+          "evidence": {
+            "claims": [
+              {
+                "dataset": "line_log",
+                "dimension": "volume_per_time",
+                "id": "flow_rate",
+                "locator": [
+                  "rows",
+                  0,
+                  0
+                ],
+                "required_fields": [
+                  [
+                    "logs",
+                    "litres"
+                  ],
+                  [
+                    "logs",
+                    "minutes"
+                  ],
+                  [
+                    "logs",
+                    "session"
+                  ]
+                ],
+                "requires": {
+                  "clock": "paired_elapsed_minutes",
+                  "input_class": "case_author_fixture",
+                  "scope": "all_listed_sessions"
+                },
+                "tool": "run_table",
+                "unit": "L/min",
+                "version": "j3"
+              }
+            ],
+            "inputs": {
+              "line_log": {
+                "facts": {
+                  "clock": "paired_elapsed_minutes",
+                  "input_class": "case_author_fixture",
+                  "scope": "all_listed_sessions"
+                },
+                "kind": "table",
+                "origin": "AUTHORIZED_MISSION_INPUT",
+                "sha256": "07c991673d1b4235d06c84b56534c7f98e900b06e985ed10c9520639a517df6c",
+                "version": "j3"
+              }
+            }
+          }
+        },
+        "schema": "frontier-universal-execution/v1"
+      },
+      "objective": "Donner le débit agrégé en L/min pour l’intégralité des trois séances d’essai de la ligne en utilisant le journal approuvé. Des cellules vides peuvent signaler une mesure absente. Si un bilan complet ne peut pas être établi, ne remplacer aucune mesure et indiquer exactement la séance et la mesure nécessaires avant de répondre.",
+      "roles": {
+        "builder": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp"
+        }
+      },
+      "strategy": "single-model",
+      "tool_permissions": [
+        "construct_table",
+        "run_table",
+        "read_artifact",
+        "write_document"
+      ]
+    },
+    "spec_hash": "70bd6bcd338f633add4a1099934fb3579db693b60407a3b6cf6cd5606281c3ff",
+    "status": "exhausted",
+    "unadjudicated_counterexamples": [],
+    "updated_at": "2026-11-25T04:30:16.451447+00:00",
+    "verification": {
+      "artifact_hashes": {
+        "result.md": "36ac32a0ca32f6cf9dda6266d7e4aee0a8709e1a74094babcf9c4578b0b69cb3"
+      },
+      "checks": [],
+      "passed": false,
+      "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification.",
+      "spec_hash": "70bd6bcd338f633add4a1099934fb3579db693b60407a3b6cf6cd5606281c3ff"
+    }
+  }
+}

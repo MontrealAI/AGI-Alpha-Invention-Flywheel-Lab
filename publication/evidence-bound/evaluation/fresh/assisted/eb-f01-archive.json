@@ -1,0 +1,608 @@
+{
+  "files": {
+    "audited_calculation.json": "{\"evaluator_sha256\":\"48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d\",\"schema\":\"frontier/bounded-table-instrument-v1\",\"sql\":\"WITH normalized AS (\\n  SELECT CASE volume_unit WHEN 'mL' THEN volume WHEN 'dL' THEN volume * 100 WHEN 'L' THEN volume * 1000 END AS ml,\\n         CASE concentration_unit WHEN 'mg/L' THEN concentration WHEN 'ug/mL' THEN concentration WHEN 'g/L' THEN concentration * 1000 END AS mg_l\\n  FROM batches\\n), totals AS (\\n  SELECT SUM(ml) AS volume_n, SUM(ml * mg_l) AS mass_n\\n  FROM normalized HAVING COUNT(ml) = COUNT(*) AND COUNT(mg_l) = COUNT(*) AND SUM(ml) > 0\\n)\\nSELECT CAST(mass_n AS TEXT) || '/' || CAST(volume_n AS TEXT),\\n       CAST(mass_n AS TEXT) || '/1000', CAST(volume_n AS TEXT) || '/1000'\\nFROM totals\",\"table_schema\":{\"batches\":{\"concentration\":\"INTEGER\",\"concentration_unit\":\"TEXT\",\"lot\":\"TEXT\",\"volume\":\"INTEGER\",\"volume_unit\":\"TEXT\"}}}"
+  },
+  "notice": "Contains your objective, context and artifacts. Inspect before sharing. No connector credentials or workspace integrity key included. Recorded verification is historical; recheck imported work.",
+  "schema": "alpha-genesis-workflow-export/v1",
+  "sha256": "250c6be984cc8b6296917bb9d884f5ba2a9751cb19d1e07d227fed5ff61c0901",
+  "state": {
+    "actions": 4,
+    "adversarial_cases": [],
+    "artifacts": {
+      "audited_calculation.json": {
+        "bytes": 894,
+        "kind": "table_instrument",
+        "sha256": "90f1e3ae3d0ee67cdb03e4626fbce9887323ba26ab984a89058a4989c2ee90c1"
+      }
+    },
+    "capability_id": null,
+    "created_at": "2026-11-25T04:33:45.844346+00:00",
+    "epoch": 0,
+    "events": [
+      {
+        "at": "2026-11-25T04:33:45.844358+00:00",
+        "detail": {
+          "acceptance_source": "Operator-frozen conditions; independence is not inferred.",
+          "spec_hash": "9f0f6c0b25660d7daa9e99aebd8be91fe2651f63e5fb6e67446b4928da5476d1"
+        },
+        "index": 0,
+        "kind": "created",
+        "previous": "0000000000000000000000000000000000000000000000000000000000000000",
+        "sha256": "dd4fa8cd0f7b614ab7be27d5ec9f85354a2458b81b020ca7582aca7258a8a185"
+      },
+      {
+        "at": "2026-11-25T04:33:45.846936+00:00",
+        "detail": {
+          "model": "evaluator-authored-control",
+          "provider": "fixture",
+          "role": "builder",
+          "run_id": "wf_cd3a57135251556d4e44470f_f94fd1307c20353e"
+        },
+        "index": 1,
+        "kind": "model_started",
+        "previous": "dd4fa8cd0f7b614ab7be27d5ec9f85354a2458b81b020ca7582aca7258a8a185",
+        "sha256": "b6f863f9ec5e7ef467591e74ee3aa942c7c6cd8ad3a729fcc13c74f891f9638e"
+      },
+      {
+        "at": "2026-11-25T04:33:45.852217+00:00",
+        "detail": {
+          "cost": {
+            "amount": null,
+            "basis": "AUTHORED_FIXTURE_NO_INFERENCE",
+            "complete_cost_known": false
+          },
+          "model": "evaluator-authored-control",
+          "provider": "fixture",
+          "qualification": "AUTHORED_FIXTURE_NOT_LIVE_MODEL",
+          "reported_model": null,
+          "requested_model": "evaluator-authored-control",
+          "response_sha256": "1c1923bacac2e1daba2cea1380264e59c7d6d878e9717094f0c22ad2ebc9db85",
+          "role": "builder",
+          "run_id": "wf_cd3a57135251556d4e44470f_f94fd1307c20353e",
+          "usage": {
+            "input_tokens": null,
+            "output_tokens": null
+          }
+        },
+        "index": 2,
+        "kind": "model_completed",
+        "previous": "b6f863f9ec5e7ef467591e74ee3aa942c7c6cd8ad3a729fcc13c74f891f9638e",
+        "sha256": "37f74c3b2d0eb290cdd1e6f9abc347838fc71529df40be6da32ff3a7160e0b68"
+      },
+      {
+        "at": "2026-11-25T04:33:45.852258+00:00",
+        "detail": {
+          "disposition": "PROPOSED",
+          "proposed_actions": 4,
+          "summary": "Effectuer le calcul exact autorisé."
+        },
+        "index": 3,
+        "kind": "route_proposed",
+        "previous": "37f74c3b2d0eb290cdd1e6f9abc347838fc71529df40be6da32ff3a7160e0b68",
+        "sha256": "e84a900d0abc18a16c0bc6e6b8c775ae64a014af17319a501428c22f467336db"
+      },
+      {
+        "at": "2026-11-25T04:33:45.916609+00:00",
+        "detail": {
+          "outcome": {
+            "action_id": "d99062ac7cae37bc2c55f9374474f3b7b7d15e85bf0e0f138650b04ba3cd0a74",
+            "artifact": "audited_calculation.json",
+            "bytes": 894,
+            "evaluator_sha256": "48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d",
+            "kind": "table_instrument",
+            "operation_executed": true,
+            "previous_sha256": null,
+            "qualification": "UNVERIFIED",
+            "sha256": "90f1e3ae3d0ee67cdb03e4626fbce9887323ba26ab984a89058a4989c2ee90c1",
+            "sqlite_version": "3.53.1",
+            "status": "CANDIDATE_VALIDATED_ON_EMPTY_TABLES"
+          },
+          "tool": "construct_table"
+        },
+        "index": 4,
+        "kind": "tool_completed",
+        "previous": "e84a900d0abc18a16c0bc6e6b8c775ae64a014af17319a501428c22f467336db",
+        "sha256": "b8198d524c424342d51ed572243408f854f9521a7d253e69ab12e292ebce4c52"
+      },
+      {
+        "at": "2026-11-25T04:33:45.973733+00:00",
+        "detail": {
+          "outcome": {
+            "action_id": "b1da45e17ea0cb70c4f8d2bed1589702427d5bb7a1568f06f45c93e8c23df4c2",
+            "artifact": "audited_calculation.json",
+            "artifact_sha256": "90f1e3ae3d0ee67cdb03e4626fbce9887323ba26ab984a89058a4989c2ee90c1",
+            "claim_execution": {
+              "asserted_value": null,
+              "claim_contract_sha256": "0e9f8932236629151eb1f4fd8a21af4f81cc5a3618221f7a266facb0c320e7b8",
+              "claim_id": "blend_concentration",
+              "input": {
+                "id": "reservoir",
+                "kind": "table",
+                "origin": "AUTHORIZED_MISSION_INPUT",
+                "parents": {},
+                "sha256": "dc4524602b7eac6743c185edddd37625d275ae1a07c335a05cc8e2cf710d7a5f",
+                "version": "b2"
+              },
+              "lineage": [
+                {
+                  "id": "reservoir",
+                  "kind": "table",
+                  "origin": "AUTHORIZED_MISSION_INPUT",
+                  "parents": {},
+                  "sha256": "dc4524602b7eac6743c185edddd37625d275ae1a07c335a05cc8e2cf710d7a5f",
+                  "version": "b2"
+                }
+              ],
+              "locator": [
+                "rows",
+                0,
+                0
+              ],
+              "mission_id": "wf_cd3a57135251556d4e44470f",
+              "operation": {
+                "artifact": "audited_calculation.json",
+                "artifact_sha256": "90f1e3ae3d0ee67cdb03e4626fbce9887323ba26ab984a89058a4989c2ee90c1",
+                "sqlite_version": "3.53.1",
+                "tool": "run_table",
+                "version_sha256": "48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d"
+              },
+              "output_sha256": "89223ed015d8e70de735e41efb44cd018b1f9bdff34ecc7c58c0ff9870f027c0",
+              "result_artifact": null,
+              "revision_sha256": "9f0f6c0b25660d7daa9e99aebd8be91fe2651f63e5fb6e67446b4928da5476d1",
+              "schema": "frontier/mission-claim-execution/v1",
+              "sha256": "e2ca20c8d77bb2c10d1f6aad9a86ac1155b14c37be1a011fd31db04cc196dc20"
+            },
+            "dataset": "reservoir",
+            "evaluator_sha256": "48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d",
+            "input_origin": "AUTHORIZED_MISSION_INPUT",
+            "input_sha256": "dc4524602b7eac6743c185edddd37625d275ae1a07c335a05cc8e2cf710d7a5f",
+            "operation_executed": true,
+            "output_sha256": "89223ed015d8e70de735e41efb44cd018b1f9bdff34ecc7c58c0ff9870f027c0",
+            "qualification": "UNVERIFIED",
+            "rows": [
+              [
+                "3637500/4680",
+                "3637500/1000",
+                "4680/1000"
+              ]
+            ],
+            "sqlite_version": "3.53.1",
+            "status": "EXECUTED"
+          },
+          "tool": "run_table"
+        },
+        "index": 5,
+        "kind": "tool_completed",
+        "previous": "b8198d524c424342d51ed572243408f854f9521a7d253e69ab12e292ebce4c52",
+        "sha256": "f0955f7427cb480049c031665cb70e967271a47db929ad8c1a2990191e5d9298"
+      },
+      {
+        "at": "2026-11-25T04:33:46.022119+00:00",
+        "detail": {
+          "outcome": {
+            "action_id": "c1d4bcc2aa40880db58b66a4dd80a0dcd47c4d83f4ab40a1a297b70c66cc85e5",
+            "artifact": "audited_calculation.json",
+            "artifact_sha256": "90f1e3ae3d0ee67cdb03e4626fbce9887323ba26ab984a89058a4989c2ee90c1",
+            "claim_execution": {
+              "asserted_value": null,
+              "claim_contract_sha256": "7c2061dc0259db9c4f8ba782676b2038be6862f733088a301c65ddd849a82ae3",
+              "claim_id": "solute_mass",
+              "input": {
+                "id": "reservoir",
+                "kind": "table",
+                "origin": "AUTHORIZED_MISSION_INPUT",
+                "parents": {},
+                "sha256": "dc4524602b7eac6743c185edddd37625d275ae1a07c335a05cc8e2cf710d7a5f",
+                "version": "b2"
+              },
+              "lineage": [
+                {
+                  "id": "reservoir",
+                  "kind": "table",
+                  "origin": "AUTHORIZED_MISSION_INPUT",
+                  "parents": {},
+                  "sha256": "dc4524602b7eac6743c185edddd37625d275ae1a07c335a05cc8e2cf710d7a5f",
+                  "version": "b2"
+                }
+              ],
+              "locator": [
+                "rows",
+                0,
+                1
+              ],
+              "mission_id": "wf_cd3a57135251556d4e44470f",
+              "operation": {
+                "artifact": "audited_calculation.json",
+                "artifact_sha256": "90f1e3ae3d0ee67cdb03e4626fbce9887323ba26ab984a89058a4989c2ee90c1",
+                "sqlite_version": "3.53.1",
+                "tool": "run_table",
+                "version_sha256": "48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d"
+              },
+              "output_sha256": "89223ed015d8e70de735e41efb44cd018b1f9bdff34ecc7c58c0ff9870f027c0",
+              "result_artifact": null,
+              "revision_sha256": "9f0f6c0b25660d7daa9e99aebd8be91fe2651f63e5fb6e67446b4928da5476d1",
+              "schema": "frontier/mission-claim-execution/v1",
+              "sha256": "816669e7842c3b452f89c76244f4372169097f888354fa3feacd44d9f3a50439"
+            },
+            "dataset": "reservoir",
+            "evaluator_sha256": "48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d",
+            "input_origin": "AUTHORIZED_MISSION_INPUT",
+            "input_sha256": "dc4524602b7eac6743c185edddd37625d275ae1a07c335a05cc8e2cf710d7a5f",
+            "operation_executed": true,
+            "output_sha256": "89223ed015d8e70de735e41efb44cd018b1f9bdff34ecc7c58c0ff9870f027c0",
+            "qualification": "UNVERIFIED",
+            "rows": [
+              [
+                "3637500/4680",
+                "3637500/1000",
+                "4680/1000"
+              ]
+            ],
+            "sqlite_version": "3.53.1",
+            "status": "EXECUTED"
+          },
+          "tool": "run_table"
+        },
+        "index": 6,
+        "kind": "tool_completed",
+        "previous": "f0955f7427cb480049c031665cb70e967271a47db929ad8c1a2990191e5d9298",
+        "sha256": "5f6061105875d9b88a10ccabc0500e6d3111870ab46eedf1cc929c3af2209cc0"
+      },
+      {
+        "at": "2026-11-25T04:33:46.078042+00:00",
+        "detail": {
+          "outcome": {
+            "action_id": "58932eca96b9a01d275e536f040e40f37f227821268fe1185f9bea154de95634",
+            "artifact": "audited_calculation.json",
+            "artifact_sha256": "90f1e3ae3d0ee67cdb03e4626fbce9887323ba26ab984a89058a4989c2ee90c1",
+            "claim_execution": {
+              "asserted_value": null,
+              "claim_contract_sha256": "f74076b4d0038687289197109ff25c3fd8f3f6493e61ef61c940240eec6699fd",
+              "claim_id": "blend_volume",
+              "input": {
+                "id": "reservoir",
+                "kind": "table",
+                "origin": "AUTHORIZED_MISSION_INPUT",
+                "parents": {},
+                "sha256": "dc4524602b7eac6743c185edddd37625d275ae1a07c335a05cc8e2cf710d7a5f",
+                "version": "b2"
+              },
+              "lineage": [
+                {
+                  "id": "reservoir",
+                  "kind": "table",
+                  "origin": "AUTHORIZED_MISSION_INPUT",
+                  "parents": {},
+                  "sha256": "dc4524602b7eac6743c185edddd37625d275ae1a07c335a05cc8e2cf710d7a5f",
+                  "version": "b2"
+                }
+              ],
+              "locator": [
+                "rows",
+                0,
+                2
+              ],
+              "mission_id": "wf_cd3a57135251556d4e44470f",
+              "operation": {
+                "artifact": "audited_calculation.json",
+                "artifact_sha256": "90f1e3ae3d0ee67cdb03e4626fbce9887323ba26ab984a89058a4989c2ee90c1",
+                "sqlite_version": "3.53.1",
+                "tool": "run_table",
+                "version_sha256": "48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d"
+              },
+              "output_sha256": "89223ed015d8e70de735e41efb44cd018b1f9bdff34ecc7c58c0ff9870f027c0",
+              "result_artifact": null,
+              "revision_sha256": "9f0f6c0b25660d7daa9e99aebd8be91fe2651f63e5fb6e67446b4928da5476d1",
+              "schema": "frontier/mission-claim-execution/v1",
+              "sha256": "61217720984d07f576168dfa4889cbca2dc65058ec5c6c8e3bf53bd9990061ff"
+            },
+            "dataset": "reservoir",
+            "evaluator_sha256": "48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d",
+            "input_origin": "AUTHORIZED_MISSION_INPUT",
+            "input_sha256": "dc4524602b7eac6743c185edddd37625d275ae1a07c335a05cc8e2cf710d7a5f",
+            "operation_executed": true,
+            "output_sha256": "89223ed015d8e70de735e41efb44cd018b1f9bdff34ecc7c58c0ff9870f027c0",
+            "qualification": "UNVERIFIED",
+            "rows": [
+              [
+                "3637500/4680",
+                "3637500/1000",
+                "4680/1000"
+              ]
+            ],
+            "sqlite_version": "3.53.1",
+            "status": "EXECUTED"
+          },
+          "tool": "run_table"
+        },
+        "index": 7,
+        "kind": "tool_completed",
+        "previous": "5f6061105875d9b88a10ccabc0500e6d3111870ab46eedf1cc929c3af2209cc0",
+        "sha256": "74cf0b5c808f9971ca2a60126484e3e45a8798806d042c8611d5cde3c1e26e99"
+      },
+      {
+        "at": "2026-11-25T04:33:46.080308+00:00",
+        "detail": {
+          "artifact_hashes": {
+            "audited_calculation.json": "90f1e3ae3d0ee67cdb03e4626fbce9887323ba26ab984a89058a4989c2ee90c1"
+          },
+          "checks": [],
+          "passed": false,
+          "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification.",
+          "spec_hash": "9f0f6c0b25660d7daa9e99aebd8be91fe2651f63e5fb6e67446b4928da5476d1"
+        },
+        "index": 8,
+        "kind": "verification",
+        "previous": "74cf0b5c808f9971ca2a60126484e3e45a8798806d042c8611d5cde3c1e26e99",
+        "sha256": "7a76a125225ed5916784a6f6e33aba8248c16278edfe2b162e22e3edc7f73238"
+      },
+      {
+        "at": "2026-11-25T04:33:46.080938+00:00",
+        "detail": {
+          "claims": [
+            {
+              "id": "blend_concentration",
+              "reason": "MATCHES_FROZEN_REFERENCE",
+              "status": "VERIFIED"
+            },
+            {
+              "id": "solute_mass",
+              "reason": "MATCHES_FROZEN_REFERENCE",
+              "status": "VERIFIED"
+            },
+            {
+              "id": "blend_volume",
+              "reason": "MATCHES_FROZEN_REFERENCE",
+              "status": "VERIFIED"
+            }
+          ],
+          "status": "VERIFIED"
+        },
+        "index": 9,
+        "kind": "claim_dispositions",
+        "previous": "7a76a125225ed5916784a6f6e33aba8248c16278edfe2b162e22e3edc7f73238",
+        "sha256": "6393a87f3557cc274e3a51ccfbc55083c890e6609fdf8bf4b6b2822e66a77d60"
+      },
+      {
+        "at": "2026-11-25T04:33:46.080958+00:00",
+        "detail": {
+          "development_checks_passed": false,
+          "scope": "Case-specific numerical agreement and source binding. Independent custody and production admission are separate."
+        },
+        "index": 10,
+        "kind": "awaiting_independent_evaluation",
+        "previous": "6393a87f3557cc274e3a51ccfbc55083c890e6609fdf8bf4b6b2822e66a77d60",
+        "sha256": "93e14ae4291477dd1d762ddbc49eb1d7c64186c3e7f9f5b5f5b4b0338228556b"
+      }
+    ],
+    "feedback": "",
+    "id": "wf_cd3a57135251556d4e44470f",
+    "inflight": null,
+    "iteration": 1,
+    "model_call_limit": 3,
+    "model_calls": 1,
+    "phase": "builder",
+    "research": "",
+    "schema": "alpha-genesis-workflow/v1",
+    "spec": {
+      "acceptance": [],
+      "context": "Treat ug/mL as micrograms per millilitre. 1 g is 1000 mg. 1 L is 10 dL or 1000 mL. Table schema: {\"batches\": {\"concentration\": \"INTEGER\", \"concentration_unit\": \"TEXT\", \"lot\": \"TEXT\", \"volume\": \"INTEGER\", \"volume_unit\": \"TEXT\"}}. Use a single output row in this column order: blend_concentration, solute_mass, blend_volume. Report exact integers or rational text n/d. A SQLite SELECT may return rational text using || to concatenate the numerator, slash, and denominator when appropriate.",
+      "local_only": true,
+      "max_actions": 14,
+      "max_iterations": 3,
+      "max_operations": 10000,
+      "max_output_tokens": 768,
+      "mission": {
+        "expires_at": "2026-11-25T06:33:45.835973+00:00",
+        "language": "fr",
+        "original_ambition": "Préparer le bilan de masse du mélange d’essai à partir des relevés fournis et conserver un instrument réutilisable. Convertir selon les unités de chaque ligne et supposer que les volumes s’additionnent. Établir la concentration finale en mg/L, la masse totale en mg et le volume total en L. Fournir des rapports exacts et vérifier leur cohérence par conservation masse-volume.",
+        "requirements": {
+          "approved_tables": {
+            "reservoir": {
+              "batches": [
+                {
+                  "concentration": 1,
+                  "concentration_unit": "g/L",
+                  "lot": "sureau",
+                  "volume": 780,
+                  "volume_unit": "mL"
+                },
+                {
+                  "concentration": 375,
+                  "concentration_unit": "ug/mL",
+                  "lot": "merisier",
+                  "volume": 9,
+                  "volume_unit": "dL"
+                },
+                {
+                  "concentration": 840,
+                  "concentration_unit": "mg/L",
+                  "lot": "tilleul",
+                  "volume": 3,
+                  "volume_unit": "L"
+                }
+              ]
+            }
+          },
+          "evidence": {
+            "claims": [
+              {
+                "dataset": "reservoir",
+                "dimension": "mass_per_volume",
+                "id": "blend_concentration",
+                "locator": [
+                  "rows",
+                  0,
+                  0
+                ],
+                "reference": {
+                  "source": "Independent exact Fraction control",
+                  "value": "60625/78"
+                },
+                "required_fields": [
+                  [
+                    "batches",
+                    "concentration"
+                  ],
+                  [
+                    "batches",
+                    "concentration_unit"
+                  ],
+                  [
+                    "batches",
+                    "lot"
+                  ],
+                  [
+                    "batches",
+                    "volume"
+                  ],
+                  [
+                    "batches",
+                    "volume_unit"
+                  ]
+                ],
+                "requires": {
+                  "input_class": "case_author_fixture",
+                  "quantity_type": "mixture_balance",
+                  "volume_additive": true
+                },
+                "tool": "run_table",
+                "unit": "mg/L",
+                "version": "b2"
+              },
+              {
+                "dataset": "reservoir",
+                "dimension": "mass",
+                "id": "solute_mass",
+                "locator": [
+                  "rows",
+                  0,
+                  1
+                ],
+                "reference": {
+                  "source": "Independent exact Fraction control",
+                  "value": "7275/2"
+                },
+                "required_fields": [
+                  [
+                    "batches",
+                    "concentration"
+                  ],
+                  [
+                    "batches",
+                    "concentration_unit"
+                  ],
+                  [
+                    "batches",
+                    "lot"
+                  ],
+                  [
+                    "batches",
+                    "volume"
+                  ],
+                  [
+                    "batches",
+                    "volume_unit"
+                  ]
+                ],
+                "requires": {
+                  "input_class": "case_author_fixture",
+                  "quantity_type": "mixture_balance",
+                  "volume_additive": true
+                },
+                "tool": "run_table",
+                "unit": "mg",
+                "version": "b2"
+              },
+              {
+                "dataset": "reservoir",
+                "dimension": "volume",
+                "id": "blend_volume",
+                "locator": [
+                  "rows",
+                  0,
+                  2
+                ],
+                "reference": {
+                  "source": "Independent exact Fraction control",
+                  "value": "117/25"
+                },
+                "required_fields": [
+                  [
+                    "batches",
+                    "concentration"
+                  ],
+                  [
+                    "batches",
+                    "concentration_unit"
+                  ],
+                  [
+                    "batches",
+                    "lot"
+                  ],
+                  [
+                    "batches",
+                    "volume"
+                  ],
+                  [
+                    "batches",
+                    "volume_unit"
+                  ]
+                ],
+                "requires": {
+                  "input_class": "case_author_fixture",
+                  "quantity_type": "mixture_balance",
+                  "volume_additive": true
+                },
+                "tool": "run_table",
+                "unit": "L",
+                "version": "b2"
+              }
+            ],
+            "inputs": {
+              "reservoir": {
+                "facts": {
+                  "input_class": "case_author_fixture",
+                  "quantity_type": "mixture_balance",
+                  "volume_additive": true
+                },
+                "kind": "table",
+                "origin": "AUTHORIZED_MISSION_INPUT",
+                "sha256": "dc4524602b7eac6743c185edddd37625d275ae1a07c335a05cc8e2cf710d7a5f",
+                "version": "b2"
+              }
+            }
+          }
+        },
+        "schema": "frontier-universal-execution/v1"
+      },
+      "objective": "Préparer le bilan de masse du mélange d’essai à partir des relevés fournis et conserver un instrument réutilisable. Convertir selon les unités de chaque ligne et supposer que les volumes s’additionnent. Établir la concentration finale en mg/L, la masse totale en mg et le volume total en L. Fournir des rapports exacts et vérifier leur cohérence par conservation masse-volume.",
+      "roles": {
+        "builder": {
+          "model": "evaluator-authored-control",
+          "provider": "fixture"
+        }
+      },
+      "strategy": "single-model",
+      "tool_permissions": [
+        "construct_table",
+        "run_table",
+        "read_artifact",
+        "write_document"
+      ]
+    },
+    "spec_hash": "9f0f6c0b25660d7daa9e99aebd8be91fe2651f63e5fb6e67446b4928da5476d1",
+    "status": "needs_review",
+    "unadjudicated_counterexamples": [],
+    "updated_at": "2026-11-25T04:33:46.080958+00:00",
+    "verification": {
+      "artifact_hashes": {
+        "audited_calculation.json": "90f1e3ae3d0ee67cdb03e4626fbce9887323ba26ab984a89058a4989c2ee90c1"
+      },
+      "checks": [],
+      "passed": false,
+      "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification.",
+      "spec_hash": "9f0f6c0b25660d7daa9e99aebd8be91fe2651f63e5fb6e67446b4928da5476d1"
+    }
+  }
+}

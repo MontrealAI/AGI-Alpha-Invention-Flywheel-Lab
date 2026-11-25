@@ -1,0 +1,246 @@
+{
+  "files": {},
+  "notice": "Contains your objective, context and artifacts. Inspect before sharing. No connector credentials or workspace integrity key included. Recorded verification is historical; recheck imported work.",
+  "schema": "alpha-genesis-workflow-export/v1",
+  "sha256": "14c064919e8fe06fbcea637dba320780bc117fc240c95a08671abf4781bff5ba",
+  "state": {
+    "actions": 0,
+    "adversarial_cases": [],
+    "artifacts": {},
+    "capability_id": null,
+    "created_at": "2026-11-25T04:33:46.365489+00:00",
+    "epoch": 0,
+    "events": [
+      {
+        "at": "2026-11-25T04:33:46.365499+00:00",
+        "detail": {
+          "acceptance_source": "Operator-frozen conditions; independence is not inferred.",
+          "spec_hash": "ccaebebc40041e931fd2dfb836854f4d6938680e6e3062232b5a21756d0badd8"
+        },
+        "index": 0,
+        "kind": "created",
+        "previous": "0000000000000000000000000000000000000000000000000000000000000000",
+        "sha256": "6cb26a75260af4f5acb80f9058f65198f441efb21c01398e39c9cbcfc14bede1"
+      },
+      {
+        "at": "2026-11-25T04:33:46.372314+00:00",
+        "detail": {
+          "model": "evaluator-authored-control",
+          "provider": "fixture",
+          "role": "builder",
+          "run_id": "wf_2a338dcfdb6e20d1c84a809f_16641cc6f929db49"
+        },
+        "index": 1,
+        "kind": "model_started",
+        "previous": "6cb26a75260af4f5acb80f9058f65198f441efb21c01398e39c9cbcfc14bede1",
+        "sha256": "9d40f6a2176f39dd5ae6e1d73c2b8a582de5b76dba99a8f15103092c882865b8"
+      },
+      {
+        "at": "2026-11-25T04:33:46.375919+00:00",
+        "detail": {
+          "cost": {
+            "amount": null,
+            "basis": "AUTHORED_FIXTURE_NO_INFERENCE",
+            "complete_cost_known": false
+          },
+          "model": "evaluator-authored-control",
+          "provider": "fixture",
+          "qualification": "AUTHORED_FIXTURE_NOT_LIVE_MODEL",
+          "reported_model": null,
+          "requested_model": "evaluator-authored-control",
+          "response_sha256": "3712af9cab03d194b117149e251fafac9d0a700d6b88ebb2de89679b7fdf419b",
+          "role": "builder",
+          "run_id": "wf_2a338dcfdb6e20d1c84a809f_16641cc6f929db49",
+          "usage": {
+            "input_tokens": null,
+            "output_tokens": null
+          }
+        },
+        "index": 2,
+        "kind": "model_completed",
+        "previous": "9d40f6a2176f39dd5ae6e1d73c2b8a582de5b76dba99a8f15103092c882865b8",
+        "sha256": "1e08cc02c2eedfdd34f074e8991945d220b2e4c6cd8efae63b481ec1477ecbe5"
+      },
+      {
+        "at": "2026-11-25T04:33:46.375968+00:00",
+        "detail": {
+          "disposition": "PROPOSED",
+          "proposed_actions": 0,
+          "summary": "Le journal autorisé ne contient pas ligne-11.minutes. Il faut obtenir cette durée avant de calculer le débit agrégé."
+        },
+        "index": 3,
+        "kind": "route_proposed",
+        "previous": "1e08cc02c2eedfdd34f074e8991945d220b2e4c6cd8efae63b481ec1477ecbe5",
+        "sha256": "a7a7e99d6933feb3b49ab4ddc5644475a92ca7f5fac7004018bf6359fde512dd"
+      },
+      {
+        "at": "2026-11-25T04:33:46.375994+00:00",
+        "detail": {
+          "artifact_hashes": {},
+          "checks": [],
+          "passed": false,
+          "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification.",
+          "spec_hash": "ccaebebc40041e931fd2dfb836854f4d6938680e6e3062232b5a21756d0badd8"
+        },
+        "index": 4,
+        "kind": "verification",
+        "previous": "a7a7e99d6933feb3b49ab4ddc5644475a92ca7f5fac7004018bf6359fde512dd",
+        "sha256": "22adaf58410329b122e41be1729ca047d3e0dfb2ec91100aa1606b252590421d"
+      },
+      {
+        "at": "2026-11-25T04:33:46.376080+00:00",
+        "detail": {
+          "claims": [
+            {
+              "id": "flow_rate",
+              "reason": "REQUIRED_FIELD_MISSING",
+              "status": "ABSTAIN"
+            }
+          ],
+          "status": "ABSTAIN"
+        },
+        "index": 5,
+        "kind": "claim_dispositions",
+        "previous": "22adaf58410329b122e41be1729ca047d3e0dfb2ec91100aa1606b252590421d",
+        "sha256": "d144646c585f90f4ec7974fc6126e6b623dd0a4d476850f8a5d27e45d0941b67"
+      },
+      {
+        "at": "2026-11-25T04:33:46.376097+00:00",
+        "detail": {
+          "claims": [
+            {
+              "id": "flow_rate",
+              "reason": "REQUIRED_FIELD_MISSING",
+              "status": "ABSTAIN"
+            }
+          ]
+        },
+        "index": 6,
+        "kind": "awaiting_evidence",
+        "previous": "d144646c585f90f4ec7974fc6126e6b623dd0a4d476850f8a5d27e45d0941b67",
+        "sha256": "2aa2537a2014b9b00107f04b6bc972f305bb705e81a363299ac31cab6f87f8fc"
+      }
+    ],
+    "feedback": "",
+    "id": "wf_2a338dcfdb6e20d1c84a809f",
+    "inflight": null,
+    "iteration": 1,
+    "model_call_limit": 3,
+    "model_calls": 1,
+    "phase": "builder",
+    "research": "",
+    "schema": "alpha-genesis-workflow/v1",
+    "spec": {
+      "acceptance": [],
+      "context": "A null observed field is missing. It must never be silently set to zero or replaced by example data. Table schema: {\"logs\": {\"litres\": \"INTEGER\", \"minutes\": \"INTEGER\", \"session\": \"TEXT\"}}. Use a single output row in this column order: flow_rate. Report exact integers or rational text n/d. A SQLite SELECT may return rational text using || to concatenate the numerator, slash, and denominator when appropriate.",
+      "local_only": true,
+      "max_actions": 14,
+      "max_iterations": 3,
+      "max_operations": 10000,
+      "max_output_tokens": 768,
+      "mission": {
+        "expires_at": "2026-11-25T06:33:46.364655+00:00",
+        "language": "fr",
+        "original_ambition": "Donner le débit agrégé en L/min pour l’intégralité des trois séances d’essai de la ligne en utilisant le journal approuvé. Des cellules vides peuvent signaler une mesure absente. Si un bilan complet ne peut pas être établi, ne remplacer aucune mesure et indiquer exactement la séance et la mesure nécessaires avant de répondre.",
+        "requirements": {
+          "approved_tables": {
+            "line_log": {
+              "logs": [
+                {
+                  "litres": 47,
+                  "minutes": 17,
+                  "session": "ligne-9"
+                },
+                {
+                  "litres": 61,
+                  "minutes": null,
+                  "session": "ligne-11"
+                },
+                {
+                  "litres": 79,
+                  "minutes": 33,
+                  "session": "ligne-14"
+                }
+              ]
+            }
+          },
+          "evidence": {
+            "claims": [
+              {
+                "dataset": "line_log",
+                "dimension": "volume_per_time",
+                "id": "flow_rate",
+                "locator": [
+                  "rows",
+                  0,
+                  0
+                ],
+                "required_fields": [
+                  [
+                    "logs",
+                    "litres"
+                  ],
+                  [
+                    "logs",
+                    "minutes"
+                  ],
+                  [
+                    "logs",
+                    "session"
+                  ]
+                ],
+                "requires": {
+                  "clock": "paired_elapsed_minutes",
+                  "input_class": "case_author_fixture",
+                  "scope": "all_listed_sessions"
+                },
+                "tool": "run_table",
+                "unit": "L/min",
+                "version": "j3"
+              }
+            ],
+            "inputs": {
+              "line_log": {
+                "facts": {
+                  "clock": "paired_elapsed_minutes",
+                  "input_class": "case_author_fixture",
+                  "scope": "all_listed_sessions"
+                },
+                "kind": "table",
+                "origin": "AUTHORIZED_MISSION_INPUT",
+                "sha256": "07c991673d1b4235d06c84b56534c7f98e900b06e985ed10c9520639a517df6c",
+                "version": "j3"
+              }
+            }
+          }
+        },
+        "schema": "frontier-universal-execution/v1"
+      },
+      "objective": "Donner le débit agrégé en L/min pour l’intégralité des trois séances d’essai de la ligne en utilisant le journal approuvé. Des cellules vides peuvent signaler une mesure absente. Si un bilan complet ne peut pas être établi, ne remplacer aucune mesure et indiquer exactement la séance et la mesure nécessaires avant de répondre.",
+      "roles": {
+        "builder": {
+          "model": "evaluator-authored-control",
+          "provider": "fixture"
+        }
+      },
+      "strategy": "single-model",
+      "tool_permissions": [
+        "construct_table",
+        "run_table",
+        "read_artifact",
+        "write_document"
+      ]
+    },
+    "spec_hash": "ccaebebc40041e931fd2dfb836854f4d6938680e6e3062232b5a21756d0badd8",
+    "status": "needs_review",
+    "unadjudicated_counterexamples": [],
+    "updated_at": "2026-11-25T04:33:46.376097+00:00",
+    "verification": {
+      "artifact_hashes": {},
+      "checks": [],
+      "passed": false,
+      "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification.",
+      "spec_hash": "ccaebebc40041e931fd2dfb836854f4d6938680e6e3062232b5a21756d0badd8"
+    }
+  }
+}

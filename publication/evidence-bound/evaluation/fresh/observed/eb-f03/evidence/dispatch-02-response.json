@@ -1,0 +1,36 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "content": "{\n  \"summary\": \"La première action consiste à construire une table SQL pour calculer le débit agrégé en L/min à partir des données des trois séances d'essai.\",\n  \"actions\": [\n    {\n      \"tool\": \"construct_table\",\n      \"name\": \"table.json\",\n      \"schema\": {\n        \"events\": {\n          \"score\": \"INTEGER\"\n        }\n      },\n      \"sql\": \"SELECT SUM(litres / minutes) AS flow_rate FROM logs WHERE session IN ('ligne-9', 'ligne-11', 'ligne-14')\"\n    }\n  ],\n  \"done\": false\n}",
+        "role": "assistant"
+      }
+    }
+  ],
+  "created": 1795580991,
+  "id": "chatcmpl-K3HpugdFeMeaLDFKpiFuUqDZurOwJmvf",
+  "model": "qwen3-8b-q4_k_m",
+  "object": "chat.completion",
+  "system_fingerprint": "b12242-3b4d6ab3f",
+  "timings": {
+    "cache_n": 608,
+    "predicted_ms": 17043.358,
+    "predicted_n": 136,
+    "predicted_per_second": 7.920974258711223,
+    "predicted_per_token_ms": 126.24709629629629,
+    "prompt_ms": 12859.858,
+    "prompt_n": 705,
+    "prompt_per_second": 54.82175619668584,
+    "prompt_per_token_ms": 18.240933333333334
+  },
+  "usage": {
+    "completion_tokens": 136,
+    "prompt_tokens": 1313,
+    "prompt_tokens_details": {
+      "cached_tokens": 608
+    },
+    "total_tokens": 1449
+  }
+}

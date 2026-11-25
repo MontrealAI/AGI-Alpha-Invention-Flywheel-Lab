@@ -1,0 +1,36 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "content": "{\n  \"summary\": \"Start by constructing a table to calculate the sum of accepted and attempts for each lane's latest revision, filtering out retired lanes.\",\n  \"actions\": [\n    {\n      \"tool\": \"construct_table\",\n      \"name\": \"table.json\",\n      \"schema\": {\n        \"events\": {\n          \"lane\": \"TEXT\",\n          \"revision\": \"INTEGER\",\n          \"state\": \"TEXT\",\n          \"accepted\": \"INTEGER\",\n          \"attempts\": \"INTEGER\"\n        }\n      },\n      \"sql\": \"SELECT ledger.lane, ledger.revision, ledger.state, SUM(ledger.accepted) AS accepted, SUM(ledger.attempts) AS attempts FROM ledger WHERE ledger.state = 'active' GROUP BY ledger.lane, ledger.revision ORDER BY ledger.lane;\"\n    }\n  ],\n  \"done\": false\n}",
+        "role": "assistant"
+      }
+    }
+  ],
+  "created": 1795581183,
+  "id": "chatcmpl-NL04X7Cocr0qzM8sQ6sqTMg8jTR6L0wb",
+  "model": "qwen3-8b-q4_k_m",
+  "object": "chat.completion",
+  "system_fingerprint": "b12242-3b4d6ab3f",
+  "timings": {
+    "cache_n": 804,
+    "predicted_ms": 18072.204,
+    "predicted_n": 174,
+    "predicted_per_second": 9.572711773284542,
+    "predicted_per_token_ms": 104.4636069364162,
+    "prompt_ms": 12870.246,
+    "prompt_n": 638,
+    "prompt_per_second": 49.57170204827476,
+    "prompt_per_token_ms": 20.17279937304075
+  },
+  "usage": {
+    "completion_tokens": 174,
+    "prompt_tokens": 1442,
+    "prompt_tokens_details": {
+      "cached_tokens": 804
+    },
+    "total_tokens": 1616
+  }
+}

@@ -1,0 +1,1001 @@
+{
+  "files": {
+    "conversion_table.json": "{\"evaluator_sha256\":\"48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d\",\"schema\":\"frontier/bounded-table-instrument-v1\",\"sql\":\"SELECT *, CASE WHEN concentration_unit = 'g/L' THEN concentration * 1000 WHEN concentration_unit = 'ug/mL' THEN concentration * 1000 / 1000 WHEN concentration_unit = 'mg/L' THEN concentration END AS converted_concentration, CASE WHEN volume_unit = 'mL' THEN volume / 1000 WHEN volume_unit = 'dL' THEN volume / 10 WHEN volume_unit = 'L' THEN volume END AS converted_volume FROM batches\",\"table_schema\":{\"batches\":{\"concentration\":\"INTEGER\",\"concentration_unit\":\"TEXT\",\"lot\":\"TEXT\",\"volume\":\"INTEGER\",\"volume_unit\":\"TEXT\"}}}",
+    "mix_table.json": "{\"evaluator_sha256\":\"48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d\",\"schema\":\"frontier/bounded-table-instrument-v1\",\"sql\":\"SELECT concentration, concentration_unit, volume, volume_unit FROM batches\",\"table_schema\":{\"batches\":{\"concentration\":\"INTEGER\",\"concentration_unit\":\"TEXT\",\"lot\":\"TEXT\",\"volume\":\"INTEGER\",\"volume_unit\":\"TEXT\"}}}",
+    "table.json": "{\"evaluator_sha256\":\"48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d\",\"schema\":\"frontier/bounded-table-instrument-v1\",\"sql\":\"SELECT SUM(score) FROM events\",\"table_schema\":{\"events\":{\"score\":\"INTEGER\"}}}"
+  },
+  "notice": "Contains your objective, context and artifacts. Inspect before sharing. No connector credentials or workspace integrity key included. Recorded verification is historical; recheck imported work.",
+  "schema": "alpha-genesis-workflow-export/v1",
+  "sha256": "c12f63dda194824a4815b8e2c3067b4ad44e3fd3f91af60fcb9f8018281df414",
+  "state": {
+    "actions": 14,
+    "adversarial_cases": [],
+    "artifacts": {
+      "conversion_table.json": {
+        "bytes": 664,
+        "kind": "table_instrument",
+        "sha256": "6afc57ec766a1a217b385939e1373f9efb4e88695b10d13a83bdb64bc13ecfe7"
+      },
+      "mix_table.json": {
+        "bytes": 354,
+        "kind": "table_instrument",
+        "sha256": "2d562227679953b7932a24a14070cf5821aeb3fe716050116528f6c4914de202"
+      },
+      "table.json": {
+        "bytes": 219,
+        "kind": "table_instrument",
+        "sha256": "c5717d0345999929203c1f188921d023bf1c274a835c5767d005c248fd84e041"
+      }
+    },
+    "capability_id": null,
+    "created_at": "2026-11-25T04:21:21.414241+00:00",
+    "epoch": 0,
+    "events": [
+      {
+        "at": "2026-11-25T04:21:21.414252+00:00",
+        "detail": {
+          "acceptance_source": "Operator-frozen conditions; independence is not inferred.",
+          "spec_hash": "e9f5d097a6847064cf4ab6820e059809a9d94ceecf7a64e3137253798511629d"
+        },
+        "index": 0,
+        "kind": "created",
+        "previous": "0000000000000000000000000000000000000000000000000000000000000000",
+        "sha256": "2133dd130d596aa6042a0ade49d68ecebd3ca9fd5347e03eee9110b0de7a01af"
+      },
+      {
+        "at": "2026-11-25T04:21:21.418509+00:00",
+        "detail": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "role": "builder",
+          "scope": "Waiting for selected service capacity; no model call or construction iteration consumed."
+        },
+        "index": 1,
+        "kind": "model_queued",
+        "previous": "2133dd130d596aa6042a0ade49d68ecebd3ca9fd5347e03eee9110b0de7a01af",
+        "sha256": "e859d940ca1b8c0fc15d66cb7f21aa8c62b3320260575a1f1b2e46a4a48baeed"
+      },
+      {
+        "at": "2026-11-25T04:21:21.421735+00:00",
+        "detail": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "role": "builder",
+          "run_id": "wf_c4ba1ad69dfe7549dc7a4bda_33a1713fa55369fb"
+        },
+        "index": 2,
+        "kind": "model_started",
+        "previous": "e859d940ca1b8c0fc15d66cb7f21aa8c62b3320260575a1f1b2e46a4a48baeed",
+        "sha256": "1ec421fb0a62f0539ac67216752d7830afc1bdd84cb56dc2e7c6a2d7c728ba78"
+      },
+      {
+        "at": "2026-11-25T04:22:50.969047+00:00",
+        "detail": {
+          "cost": {
+            "accounted": 0.0,
+            "amount": 0.0,
+            "attempts": 1,
+            "basis": "reported_usage_at_user_rates",
+            "complete_cost_known": false,
+            "currency": "USD"
+          },
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+          "reported_model": "qwen3-8b-q4_k_m",
+          "requested_model": "qwen3-8b-q4_k_m",
+          "response_sha256": "8862d70a7c10078230b9e81f10a8ce23326026fc828119d0018302378ec14aa9",
+          "role": "builder",
+          "run_id": "wf_c4ba1ad69dfe7549dc7a4bda_33a1713fa55369fb",
+          "usage": {
+            "input_tokens": 1287,
+            "output_tokens": 592
+          }
+        },
+        "index": 3,
+        "kind": "model_completed",
+        "previous": "1ec421fb0a62f0539ac67216752d7830afc1bdd84cb56dc2e7c6a2d7c728ba78",
+        "sha256": "935f4781494c178537d978f616c0b01b18b799ed77428c657897cd591a8f63be"
+      },
+      {
+        "at": "2026-11-25T04:22:50.969105+00:00",
+        "detail": {
+          "disposition": "PROPOSED",
+          "proposed_actions": 8,
+          "summary": "Calculer la concentration finale en mg/L, la masse totale en mg et le volume total en L en utilisant les données fournies."
+        },
+        "index": 4,
+        "kind": "route_proposed",
+        "previous": "935f4781494c178537d978f616c0b01b18b799ed77428c657897cd591a8f63be",
+        "sha256": "0184f34820140310860e262549d9722826d97a65b56c62407cb2a81612f6e769"
+      },
+      {
+        "at": "2026-11-25T04:22:51.006285+00:00",
+        "detail": {
+          "outcome": {
+            "action_id": "f1fde2f44da91e1c7bf255d4b0c9e37304a78bd41ed3b4957214630b5d2f49e7",
+            "artifact": "table.json",
+            "bytes": 359,
+            "evaluator_sha256": "48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d",
+            "kind": "table_instrument",
+            "operation_executed": true,
+            "previous_sha256": null,
+            "qualification": "UNVERIFIED",
+            "sha256": "c7c1942273f116a93df77e3aa5dcec9a11e4c9eae60b429ebed00f2917dbbc51",
+            "sqlite_version": "3.53.1",
+            "status": "CANDIDATE_VALIDATED_ON_EMPTY_TABLES"
+          },
+          "tool": "construct_table"
+        },
+        "index": 5,
+        "kind": "tool_completed",
+        "previous": "0184f34820140310860e262549d9722826d97a65b56c62407cb2a81612f6e769",
+        "sha256": "f272cfca36ef8e09b06b2271d0a49c66cb10a65a18cc13aacb2ef697f5656d48"
+      },
+      {
+        "at": "2026-11-25T04:22:51.038259+00:00",
+        "detail": {
+          "outcome": {
+            "action_id": "7ca73bee5ab8c8676f852242e3200f04d0ddefbde243809bcbb64701826b2db2",
+            "artifact": "table.json",
+            "artifact_sha256": "c7c1942273f116a93df77e3aa5dcec9a11e4c9eae60b429ebed00f2917dbbc51",
+            "dataset": "reservoir",
+            "evaluator_sha256": "48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d",
+            "input_origin": "OPERATOR_APPROVED_DATASET",
+            "input_sha256": "dc4524602b7eac6743c185edddd37625d275ae1a07c335a05cc8e2cf710d7a5f",
+            "operation_executed": true,
+            "output_sha256": "fa092d8cc8e4fd6463f4eb9e8bf54a1a1fd5c0b11645a3e04ff2b1890ba3caba",
+            "qualification": "UNVERIFIED",
+            "rows": [
+              [
+                1,
+                "g/L",
+                780,
+                "mL",
+                "sureau"
+              ],
+              [
+                375,
+                "ug/mL",
+                9,
+                "dL",
+                "merisier"
+              ],
+              [
+                840,
+                "mg/L",
+                3,
+                "L",
+                "tilleul"
+              ]
+            ],
+            "sqlite_version": "3.53.1",
+            "status": "EXECUTED"
+          },
+          "tool": "run_table"
+        },
+        "index": 6,
+        "kind": "tool_completed",
+        "previous": "f272cfca36ef8e09b06b2271d0a49c66cb10a65a18cc13aacb2ef697f5656d48",
+        "sha256": "be97c0e80a6f3d1921659c145e413bccb2b2ff43e9cf1e8c6181af3cf389fbd5"
+      },
+      {
+        "at": "2026-11-25T04:22:51.040102+00:00",
+        "detail": {
+          "proposal_fields": [
+            "name",
+            "tool"
+          ],
+          "reason": "Read access is restricted to this run's declared artifacts.",
+          "tool": "read_artifact"
+        },
+        "index": 7,
+        "kind": "tool_refused",
+        "previous": "be97c0e80a6f3d1921659c145e413bccb2b2ff43e9cf1e8c6181af3cf389fbd5",
+        "sha256": "bf7f6e57ba78b39fdaea9dd89b785eb3f0c109895c0393d825e834fe31492847"
+      },
+      {
+        "at": "2026-11-25T04:22:51.075802+00:00",
+        "detail": {
+          "outcome": {
+            "action_id": "4d15bc07e8fd3e6d0758339a9132ff619663e78d66b7fa3c1a4a39956f6ea601",
+            "artifact": "conversion_table.json",
+            "bytes": 664,
+            "evaluator_sha256": "48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d",
+            "kind": "table_instrument",
+            "operation_executed": true,
+            "previous_sha256": null,
+            "qualification": "UNVERIFIED",
+            "sha256": "6afc57ec766a1a217b385939e1373f9efb4e88695b10d13a83bdb64bc13ecfe7",
+            "sqlite_version": "3.53.1",
+            "status": "CANDIDATE_VALIDATED_ON_EMPTY_TABLES"
+          },
+          "tool": "construct_table"
+        },
+        "index": 8,
+        "kind": "tool_completed",
+        "previous": "bf7f6e57ba78b39fdaea9dd89b785eb3f0c109895c0393d825e834fe31492847",
+        "sha256": "0e9db8cee2bf7c68f64bf9157b7e1282d59787adefbba227500d363fc3a282ec"
+      },
+      {
+        "at": "2026-11-25T04:22:51.108070+00:00",
+        "detail": {
+          "outcome": {
+            "action_id": "355c9b85f82908e3d8b1a317352794d8ebde9008813c188a740922cfcb3f0f75",
+            "artifact": "conversion_table.json",
+            "artifact_sha256": "6afc57ec766a1a217b385939e1373f9efb4e88695b10d13a83bdb64bc13ecfe7",
+            "dataset": "reservoir",
+            "evaluator_sha256": "48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d",
+            "input_origin": "OPERATOR_APPROVED_DATASET",
+            "input_sha256": "dc4524602b7eac6743c185edddd37625d275ae1a07c335a05cc8e2cf710d7a5f",
+            "operation_executed": true,
+            "output_sha256": "f59857ae8424713ff9ff3e4dc67e502eeeda6b10637da724b703444d9112bb1a",
+            "qualification": "UNVERIFIED",
+            "rows": [
+              [
+                1,
+                "g/L",
+                "sureau",
+                780,
+                "mL",
+                1000,
+                0
+              ],
+              [
+                375,
+                "ug/mL",
+                "merisier",
+                9,
+                "dL",
+                375,
+                0
+              ],
+              [
+                840,
+                "mg/L",
+                "tilleul",
+                3,
+                "L",
+                840,
+                3
+              ]
+            ],
+            "sqlite_version": "3.53.1",
+            "status": "EXECUTED"
+          },
+          "tool": "run_table"
+        },
+        "index": 9,
+        "kind": "tool_completed",
+        "previous": "0e9db8cee2bf7c68f64bf9157b7e1282d59787adefbba227500d363fc3a282ec",
+        "sha256": "f3363785abc3d0792d6ce9139833d2e72500694139505146c82bc006d3ce62bf"
+      },
+      {
+        "at": "2026-11-25T04:22:51.141188+00:00",
+        "detail": {
+          "proposal_fields": [
+            "name",
+            "schema",
+            "sql",
+            "tool"
+          ],
+          "reason": "TABLE_SQL_ERROR",
+          "tool": "construct_table"
+        },
+        "index": 10,
+        "kind": "tool_refused",
+        "previous": "f3363785abc3d0792d6ce9139833d2e72500694139505146c82bc006d3ce62bf",
+        "sha256": "5aa884aef7c4a8dcf41b465c527e8b13e1260470e07ecd43f04deb9b9a0175ad"
+      },
+      {
+        "at": "2026-11-25T04:22:51.142850+00:00",
+        "detail": {
+          "proposal_fields": [
+            "input",
+            "name",
+            "tool"
+          ],
+          "reason": "TABLE_ARTIFACT_KIND",
+          "tool": "run_table"
+        },
+        "index": 11,
+        "kind": "tool_refused",
+        "previous": "5aa884aef7c4a8dcf41b465c527e8b13e1260470e07ecd43f04deb9b9a0175ad",
+        "sha256": "01406b881cd7a61016bab8baf400847179c8228f048503604e399c7211145e4e"
+      },
+      {
+        "at": "2026-11-25T04:22:51.143972+00:00",
+        "detail": {
+          "proposal_fields": [
+            "name",
+            "schema",
+            "sql",
+            "tool"
+          ],
+          "reason": "TABLE_SCHEMA",
+          "tool": "construct_table"
+        },
+        "index": 12,
+        "kind": "tool_refused",
+        "previous": "01406b881cd7a61016bab8baf400847179c8228f048503604e399c7211145e4e",
+        "sha256": "a94aa6a2eeeab94e9e9de5c115fdeb0a2dee8dec02c3a9c49340ba51fc0018f5"
+      },
+      {
+        "at": "2026-11-25T04:22:51.145095+00:00",
+        "detail": {
+          "artifact_hashes": {
+            "conversion_table.json": "6afc57ec766a1a217b385939e1373f9efb4e88695b10d13a83bdb64bc13ecfe7",
+            "table.json": "c7c1942273f116a93df77e3aa5dcec9a11e4c9eae60b429ebed00f2917dbbc51"
+          },
+          "checks": [],
+          "passed": false,
+          "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification.",
+          "spec_hash": "e9f5d097a6847064cf4ab6820e059809a9d94ceecf7a64e3137253798511629d"
+        },
+        "index": 13,
+        "kind": "verification",
+        "previous": "a94aa6a2eeeab94e9e9de5c115fdeb0a2dee8dec02c3a9c49340ba51fc0018f5",
+        "sha256": "666482f1fd06e6c5212d693dd3748fa2c1249e42d1aea00f0803fa7144625ea0"
+      },
+      {
+        "at": "2026-11-25T04:22:51.145258+00:00",
+        "detail": {
+          "claims": [
+            {
+              "id": "blend_concentration",
+              "reason": "NO_BOUND_EXECUTION",
+              "status": "ABSTAIN"
+            },
+            {
+              "id": "solute_mass",
+              "reason": "NO_BOUND_EXECUTION",
+              "status": "ABSTAIN"
+            },
+            {
+              "id": "blend_volume",
+              "reason": "NO_BOUND_EXECUTION",
+              "status": "ABSTAIN"
+            }
+          ],
+          "status": "ABSTAIN"
+        },
+        "index": 14,
+        "kind": "claim_dispositions",
+        "previous": "666482f1fd06e6c5212d693dd3748fa2c1249e42d1aea00f0803fa7144625ea0",
+        "sha256": "f969594b3c1a4b175510b4b6f28989b493d8aebd3a11745637e7efe94bed8868"
+      },
+      {
+        "at": "2026-11-25T04:22:51.149641+00:00",
+        "detail": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "role": "builder",
+          "scope": "Waiting for selected service capacity; no model call or construction iteration consumed."
+        },
+        "index": 15,
+        "kind": "model_queued",
+        "previous": "f969594b3c1a4b175510b4b6f28989b493d8aebd3a11745637e7efe94bed8868",
+        "sha256": "0a4bbce90a8efa40be759f21bde56f4077940960252209001b346740c2f4e03e"
+      },
+      {
+        "at": "2026-11-25T04:22:51.152788+00:00",
+        "detail": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "role": "builder",
+          "run_id": "wf_c4ba1ad69dfe7549dc7a4bda_a84ec71e084e50e8"
+        },
+        "index": 16,
+        "kind": "model_started",
+        "previous": "0a4bbce90a8efa40be759f21bde56f4077940960252209001b346740c2f4e03e",
+        "sha256": "efeee9166b02f9727a1d7091137c556a64e39f992ec64f50e7d1b4670681d6be"
+      },
+      {
+        "at": "2026-11-25T04:23:47.552762+00:00",
+        "detail": {
+          "cost": {
+            "accounted": 0.0,
+            "amount": 0.0,
+            "attempts": 1,
+            "basis": "reported_usage_at_user_rates",
+            "complete_cost_known": false,
+            "currency": "USD"
+          },
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+          "reported_model": "qwen3-8b-q4_k_m",
+          "requested_model": "qwen3-8b-q4_k_m",
+          "response_sha256": "8d17fc781695d475c969e364c6bedd48cf1be424948a0999c2c42f6d617e7315",
+          "role": "builder",
+          "run_id": "wf_c4ba1ad69dfe7549dc7a4bda_a84ec71e084e50e8",
+          "usage": {
+            "input_tokens": 2303,
+            "output_tokens": 148
+          }
+        },
+        "index": 17,
+        "kind": "model_completed",
+        "previous": "efeee9166b02f9727a1d7091137c556a64e39f992ec64f50e7d1b4670681d6be",
+        "sha256": "3046d30ffd74c010593f9c29f88e067787b8009862a244ea0acd6f939953e4bb"
+      },
+      {
+        "at": "2026-11-25T04:23:47.552871+00:00",
+        "detail": {
+          "disposition": "PROPOSED",
+          "proposed_actions": 1,
+          "summary": "L'objectif est de calculer le bilan de masse et le volume total du mélange d'essai à partir des données fournies, en utilisant les outils disponibles et en respectant les unités de chaque ligne. La première action consiste à construire une table avec la requête SQL appropriée pour la somme des scores."
+        },
+        "index": 18,
+        "kind": "route_proposed",
+        "previous": "3046d30ffd74c010593f9c29f88e067787b8009862a244ea0acd6f939953e4bb",
+        "sha256": "9301b5e24111059cc81e103bcf0cd15e0df0f55fdfc086d1053a9fd73a5805b1"
+      },
+      {
+        "at": "2026-11-25T04:23:47.590062+00:00",
+        "detail": {
+          "outcome": {
+            "action_id": "ef404d1d480934dc1bb58cb7ea3ae5e176d3406df2c87bc00cc8b163fca84b47",
+            "artifact": "table.json",
+            "bytes": 219,
+            "evaluator_sha256": "48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d",
+            "kind": "table_instrument",
+            "operation_executed": true,
+            "previous_sha256": "c7c1942273f116a93df77e3aa5dcec9a11e4c9eae60b429ebed00f2917dbbc51",
+            "qualification": "UNVERIFIED",
+            "sha256": "c5717d0345999929203c1f188921d023bf1c274a835c5767d005c248fd84e041",
+            "sqlite_version": "3.53.1",
+            "status": "CANDIDATE_VALIDATED_ON_EMPTY_TABLES"
+          },
+          "tool": "construct_table"
+        },
+        "index": 19,
+        "kind": "tool_completed",
+        "previous": "9301b5e24111059cc81e103bcf0cd15e0df0f55fdfc086d1053a9fd73a5805b1",
+        "sha256": "3c29eaa0d483dc5b513352bd3e93da42d4f0cd2b736c3d43ad25480e91825a7f"
+      },
+      {
+        "at": "2026-11-25T04:23:47.593678+00:00",
+        "detail": {
+          "artifact_hashes": {
+            "conversion_table.json": "6afc57ec766a1a217b385939e1373f9efb4e88695b10d13a83bdb64bc13ecfe7",
+            "table.json": "c5717d0345999929203c1f188921d023bf1c274a835c5767d005c248fd84e041"
+          },
+          "checks": [],
+          "passed": false,
+          "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification.",
+          "spec_hash": "e9f5d097a6847064cf4ab6820e059809a9d94ceecf7a64e3137253798511629d"
+        },
+        "index": 20,
+        "kind": "verification",
+        "previous": "3c29eaa0d483dc5b513352bd3e93da42d4f0cd2b736c3d43ad25480e91825a7f",
+        "sha256": "19c384b1ad0fd63957e702f7e5c3799eed56b097ed3e40618b5a9a69a80ca62b"
+      },
+      {
+        "at": "2026-11-25T04:23:47.593852+00:00",
+        "detail": {
+          "claims": [
+            {
+              "id": "blend_concentration",
+              "reason": "NO_BOUND_EXECUTION",
+              "status": "ABSTAIN"
+            },
+            {
+              "id": "solute_mass",
+              "reason": "NO_BOUND_EXECUTION",
+              "status": "ABSTAIN"
+            },
+            {
+              "id": "blend_volume",
+              "reason": "NO_BOUND_EXECUTION",
+              "status": "ABSTAIN"
+            }
+          ],
+          "status": "ABSTAIN"
+        },
+        "index": 21,
+        "kind": "claim_dispositions",
+        "previous": "19c384b1ad0fd63957e702f7e5c3799eed56b097ed3e40618b5a9a69a80ca62b",
+        "sha256": "d9b609d1edff7dddaca19912c133b8424c6400553076e0629c14bb9cb160dbe8"
+      },
+      {
+        "at": "2026-11-25T04:23:47.598814+00:00",
+        "detail": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "role": "builder",
+          "scope": "Waiting for selected service capacity; no model call or construction iteration consumed."
+        },
+        "index": 22,
+        "kind": "model_queued",
+        "previous": "d9b609d1edff7dddaca19912c133b8424c6400553076e0629c14bb9cb160dbe8",
+        "sha256": "7fbba206e7e2491b909887805420cdbc30c371c802bc051ffd3ef3e1e2852f3b"
+      },
+      {
+        "at": "2026-11-25T04:23:47.603186+00:00",
+        "detail": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "role": "builder",
+          "run_id": "wf_c4ba1ad69dfe7549dc7a4bda_5b4290b746cb72e1"
+        },
+        "index": 23,
+        "kind": "model_started",
+        "previous": "7fbba206e7e2491b909887805420cdbc30c371c802bc051ffd3ef3e1e2852f3b",
+        "sha256": "423520b1b545381b5754d78c7300081b8c720eb1c19cda0d695edd43eb340648"
+      },
+      {
+        "at": "2026-11-25T04:24:58.710567+00:00",
+        "detail": {
+          "cost": {
+            "accounted": 0.0,
+            "amount": 0.0,
+            "attempts": 1,
+            "basis": "reported_usage_at_user_rates",
+            "complete_cost_known": false,
+            "currency": "USD"
+          },
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+          "reported_model": "qwen3-8b-q4_k_m",
+          "requested_model": "qwen3-8b-q4_k_m",
+          "response_sha256": "1dbd18e573e8b625e431afb627935ee8ba268a7b0fbafc1907b7151682082400",
+          "role": "builder",
+          "run_id": "wf_c4ba1ad69dfe7549dc7a4bda_5b4290b746cb72e1",
+          "usage": {
+            "input_tokens": 2365,
+            "output_tokens": 344
+          }
+        },
+        "index": 24,
+        "kind": "model_completed",
+        "previous": "423520b1b545381b5754d78c7300081b8c720eb1c19cda0d695edd43eb340648",
+        "sha256": "9bc8c6ddb8cc98979b42a8bbc7ff20d247e539fe9807df6d4c9d1e80b2d24e4d"
+      },
+      {
+        "at": "2026-11-25T04:24:58.710633+00:00",
+        "detail": {
+          "disposition": "PROPOSED",
+          "proposed_actions": 5,
+          "summary": "Lire et utiliser le fichier 'table.json' pour extraire les données des lots et calculer les valeurs de concentration finale, masse totale et volume total."
+        },
+        "index": 25,
+        "kind": "route_proposed",
+        "previous": "9bc8c6ddb8cc98979b42a8bbc7ff20d247e539fe9807df6d4c9d1e80b2d24e4d",
+        "sha256": "59895e6155b98f728897169cf18e4ad5d5a49c7aea83887b56a290717be67026"
+      },
+      {
+        "at": "2026-11-25T04:24:58.710839+00:00",
+        "detail": {
+          "outcome": {
+            "action_id": "e718562e365a5a8ab5eddd3af8e7bcd175f6a4f6776fc8bcfe8ee79ea9830678",
+            "artifact": "table.json",
+            "content": "{\"evaluator_sha256\":\"48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d\",\"schema\":\"frontier/bounded-table-instrument-v1\",\"sql\":\"SELECT SUM(score) FROM events\",\"table_schema\":{\"events\":{\"score\":\"INTEGER\"}}}",
+            "operation_executed": true
+          },
+          "tool": "read_artifact"
+        },
+        "index": 26,
+        "kind": "tool_completed",
+        "previous": "59895e6155b98f728897169cf18e4ad5d5a49c7aea83887b56a290717be67026",
+        "sha256": "e6bd2339070e6774b92f7d64802cabb0a3b708966112d34c82a40cb0e0c0db76"
+      },
+      {
+        "at": "2026-11-25T04:24:58.759500+00:00",
+        "detail": {
+          "outcome": {
+            "action_id": "56dae4046d119782d0ec1ee5e5c21bd0b2419190d0267ed0100f1447535be5e3",
+            "artifact": "mix_table.json",
+            "bytes": 354,
+            "evaluator_sha256": "48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d",
+            "kind": "table_instrument",
+            "operation_executed": true,
+            "previous_sha256": null,
+            "qualification": "UNVERIFIED",
+            "sha256": "2d562227679953b7932a24a14070cf5821aeb3fe716050116528f6c4914de202",
+            "sqlite_version": "3.53.1",
+            "status": "CANDIDATE_VALIDATED_ON_EMPTY_TABLES"
+          },
+          "tool": "construct_table"
+        },
+        "index": 27,
+        "kind": "tool_completed",
+        "previous": "e6bd2339070e6774b92f7d64802cabb0a3b708966112d34c82a40cb0e0c0db76",
+        "sha256": "b73723a4f3341be9dd681246d51ee4cda9df545999d4df6ef076b4692d39f5a9"
+      },
+      {
+        "at": "2026-11-25T04:24:58.791665+00:00",
+        "detail": {
+          "outcome": {
+            "action_id": "434b231901cbe2e20c7b311e6fb7f4e1c6f6bade46e34fdab427c86177a6449d",
+            "artifact": "mix_table.json",
+            "artifact_sha256": "2d562227679953b7932a24a14070cf5821aeb3fe716050116528f6c4914de202",
+            "dataset": "reservoir",
+            "evaluator_sha256": "48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d",
+            "input_origin": "OPERATOR_APPROVED_DATASET",
+            "input_sha256": "dc4524602b7eac6743c185edddd37625d275ae1a07c335a05cc8e2cf710d7a5f",
+            "operation_executed": true,
+            "output_sha256": "30cf933c1f27f46fd8a4a9e2d76c3a411d3ad44622f8ed33aa735b868e8e4788",
+            "qualification": "UNVERIFIED",
+            "rows": [
+              [
+                1,
+                "g/L",
+                780,
+                "mL"
+              ],
+              [
+                375,
+                "ug/mL",
+                9,
+                "dL"
+              ],
+              [
+                840,
+                "mg/L",
+                3,
+                "L"
+              ]
+            ],
+            "sqlite_version": "3.53.1",
+            "status": "EXECUTED"
+          },
+          "tool": "run_table"
+        },
+        "index": 28,
+        "kind": "tool_completed",
+        "previous": "b73723a4f3341be9dd681246d51ee4cda9df545999d4df6ef076b4692d39f5a9",
+        "sha256": "e58aae28855600fba6ac579ebeea84a19e038dcb6331aefc6102b69a04fcd52c"
+      },
+      {
+        "at": "2026-11-25T04:24:58.793437+00:00",
+        "detail": {
+          "proposal_fields": [
+            "name",
+            "schema",
+            "sql",
+            "tool"
+          ],
+          "reason": "TABLE_SCHEMA",
+          "tool": "construct_table"
+        },
+        "index": 29,
+        "kind": "tool_refused",
+        "previous": "e58aae28855600fba6ac579ebeea84a19e038dcb6331aefc6102b69a04fcd52c",
+        "sha256": "a0370007f1ddf7c82172735371c2990eca3508a5a31225d5473251cf5aa6df1c"
+      },
+      {
+        "at": "2026-11-25T04:24:58.794940+00:00",
+        "detail": {
+          "outcome": {
+            "operation_executed": false,
+            "prior_outcome": {
+              "action_id": "355c9b85f82908e3d8b1a317352794d8ebde9008813c188a740922cfcb3f0f75",
+              "artifact": "conversion_table.json",
+              "artifact_sha256": "6afc57ec766a1a217b385939e1373f9efb4e88695b10d13a83bdb64bc13ecfe7",
+              "dataset": "reservoir",
+              "evaluator_sha256": "48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d",
+              "input_origin": "OPERATOR_APPROVED_DATASET",
+              "input_sha256": "dc4524602b7eac6743c185edddd37625d275ae1a07c335a05cc8e2cf710d7a5f",
+              "operation_executed": true,
+              "output_sha256": "f59857ae8424713ff9ff3e4dc67e502eeeda6b10637da724b703444d9112bb1a",
+              "qualification": "UNVERIFIED",
+              "rows": [
+                [
+                  1,
+                  "g/L",
+                  "sureau",
+                  780,
+                  "mL",
+                  1000,
+                  0
+                ],
+                [
+                  375,
+                  "ug/mL",
+                  "merisier",
+                  9,
+                  "dL",
+                  375,
+                  0
+                ],
+                [
+                  840,
+                  "mg/L",
+                  "tilleul",
+                  3,
+                  "L",
+                  840,
+                  3
+                ]
+              ],
+              "sqlite_version": "3.53.1",
+              "status": "EXECUTED"
+            },
+            "replayed_from": "f3363785abc3d0792d6ce9139833d2e72500694139505146c82bc006d3ce62bf"
+          },
+          "tool": "run_table"
+        },
+        "index": 30,
+        "kind": "tool_completed",
+        "previous": "a0370007f1ddf7c82172735371c2990eca3508a5a31225d5473251cf5aa6df1c",
+        "sha256": "4f6acbc136dd98a20251cdcbbff8015e4f99bb8f161989a8bf428b70f73b4825"
+      },
+      {
+        "at": "2026-11-25T04:24:58.796373+00:00",
+        "detail": {
+          "artifact_hashes": {
+            "conversion_table.json": "6afc57ec766a1a217b385939e1373f9efb4e88695b10d13a83bdb64bc13ecfe7",
+            "mix_table.json": "2d562227679953b7932a24a14070cf5821aeb3fe716050116528f6c4914de202",
+            "table.json": "c5717d0345999929203c1f188921d023bf1c274a835c5767d005c248fd84e041"
+          },
+          "checks": [],
+          "passed": false,
+          "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification.",
+          "spec_hash": "e9f5d097a6847064cf4ab6820e059809a9d94ceecf7a64e3137253798511629d"
+        },
+        "index": 31,
+        "kind": "verification",
+        "previous": "4f6acbc136dd98a20251cdcbbff8015e4f99bb8f161989a8bf428b70f73b4825",
+        "sha256": "c9bf4df23c190d505918497408c276e18e7739a0fd8881ae81e022820d4f2658"
+      },
+      {
+        "at": "2026-11-25T04:24:58.796531+00:00",
+        "detail": {
+          "claims": [
+            {
+              "id": "blend_concentration",
+              "reason": "NO_BOUND_EXECUTION",
+              "status": "ABSTAIN"
+            },
+            {
+              "id": "solute_mass",
+              "reason": "NO_BOUND_EXECUTION",
+              "status": "ABSTAIN"
+            },
+            {
+              "id": "blend_volume",
+              "reason": "NO_BOUND_EXECUTION",
+              "status": "ABSTAIN"
+            }
+          ],
+          "status": "ABSTAIN"
+        },
+        "index": 32,
+        "kind": "claim_dispositions",
+        "previous": "c9bf4df23c190d505918497408c276e18e7739a0fd8881ae81e022820d4f2658",
+        "sha256": "eba0085bf8f0d3dcd092c5b1417bb5ca50b42b0c954a69e5caabc5b399bd835f"
+      },
+      {
+        "at": "2026-11-25T04:24:58.802483+00:00",
+        "detail": {
+          "reason": "Declared model-call allocation exhausted; no further inference dispatched."
+        },
+        "index": 33,
+        "kind": "stopped",
+        "previous": "eba0085bf8f0d3dcd092c5b1417bb5ca50b42b0c954a69e5caabc5b399bd835f",
+        "sha256": "5e817ca38c66310b6234c6f9d0c4d40c30230c125f0836d005f8264dd3781883"
+      }
+    ],
+    "feedback": "Resolve the unverified registered claims with authorized inputs: [{\"id\":\"blend_concentration\",\"reason\":\"NO_BOUND_EXECUTION\",\"status\":\"ABSTAIN\"},{\"id\":\"solute_mass\",\"reason\":\"NO_BOUND_EXECUTION\",\"status\":\"ABSTAIN\"},{\"id\":\"blend_volume\",\"reason\":\"NO_BOUND_EXECUTION\",\"status\":\"ABSTAIN\"}]",
+    "id": "wf_c4ba1ad69dfe7549dc7a4bda",
+    "inflight": null,
+    "iteration": 3,
+    "model_call_limit": 3,
+    "model_calls": 3,
+    "phase": "builder",
+    "research": "",
+    "schema": "alpha-genesis-workflow/v1",
+    "spec": {
+      "acceptance": [],
+      "context": "Treat ug/mL as micrograms per millilitre. 1 g is 1000 mg. 1 L is 10 dL or 1000 mL. Table schema: {\"batches\": {\"concentration\": \"INTEGER\", \"concentration_unit\": \"TEXT\", \"lot\": \"TEXT\", \"volume\": \"INTEGER\", \"volume_unit\": \"TEXT\"}}. Use a single output row in this column order: blend_concentration, solute_mass, blend_volume. Report exact integers or rational text n/d. A SQLite SELECT may return rational text using || to concatenate the numerator, slash, and denominator when appropriate.",
+      "local_only": true,
+      "max_actions": 14,
+      "max_iterations": 3,
+      "max_operations": 10000,
+      "max_output_tokens": 768,
+      "mission": {
+        "expires_at": "2026-11-25T06:21:21.403779+00:00",
+        "language": "fr",
+        "original_ambition": "Préparer le bilan de masse du mélange d’essai à partir des relevés fournis et conserver un instrument réutilisable. Convertir selon les unités de chaque ligne et supposer que les volumes s’additionnent. Établir la concentration finale en mg/L, la masse totale en mg et le volume total en L. Fournir des rapports exacts et vérifier leur cohérence par conservation masse-volume.",
+        "requirements": {
+          "approved_tables": {
+            "reservoir": {
+              "batches": [
+                {
+                  "concentration": 1,
+                  "concentration_unit": "g/L",
+                  "lot": "sureau",
+                  "volume": 780,
+                  "volume_unit": "mL"
+                },
+                {
+                  "concentration": 375,
+                  "concentration_unit": "ug/mL",
+                  "lot": "merisier",
+                  "volume": 9,
+                  "volume_unit": "dL"
+                },
+                {
+                  "concentration": 840,
+                  "concentration_unit": "mg/L",
+                  "lot": "tilleul",
+                  "volume": 3,
+                  "volume_unit": "L"
+                }
+              ]
+            }
+          },
+          "evidence": {
+            "claims": [
+              {
+                "dataset": "reservoir",
+                "dimension": "mass_per_volume",
+                "id": "blend_concentration",
+                "locator": [
+                  "rows",
+                  0,
+                  0
+                ],
+                "required_fields": [
+                  [
+                    "batches",
+                    "concentration"
+                  ],
+                  [
+                    "batches",
+                    "concentration_unit"
+                  ],
+                  [
+                    "batches",
+                    "lot"
+                  ],
+                  [
+                    "batches",
+                    "volume"
+                  ],
+                  [
+                    "batches",
+                    "volume_unit"
+                  ]
+                ],
+                "requires": {
+                  "input_class": "case_author_fixture",
+                  "quantity_type": "mixture_balance",
+                  "volume_additive": true
+                },
+                "tool": "run_table",
+                "unit": "mg/L",
+                "version": "b2"
+              },
+              {
+                "dataset": "reservoir",
+                "dimension": "mass",
+                "id": "solute_mass",
+                "locator": [
+                  "rows",
+                  0,
+                  1
+                ],
+                "required_fields": [
+                  [
+                    "batches",
+                    "concentration"
+                  ],
+                  [
+                    "batches",
+                    "concentration_unit"
+                  ],
+                  [
+                    "batches",
+                    "lot"
+                  ],
+                  [
+                    "batches",
+                    "volume"
+                  ],
+                  [
+                    "batches",
+                    "volume_unit"
+                  ]
+                ],
+                "requires": {
+                  "input_class": "case_author_fixture",
+                  "quantity_type": "mixture_balance",
+                  "volume_additive": true
+                },
+                "tool": "run_table",
+                "unit": "mg",
+                "version": "b2"
+              },
+              {
+                "dataset": "reservoir",
+                "dimension": "volume",
+                "id": "blend_volume",
+                "locator": [
+                  "rows",
+                  0,
+                  2
+                ],
+                "required_fields": [
+                  [
+                    "batches",
+                    "concentration"
+                  ],
+                  [
+                    "batches",
+                    "concentration_unit"
+                  ],
+                  [
+                    "batches",
+                    "lot"
+                  ],
+                  [
+                    "batches",
+                    "volume"
+                  ],
+                  [
+                    "batches",
+                    "volume_unit"
+                  ]
+                ],
+                "requires": {
+                  "input_class": "case_author_fixture",
+                  "quantity_type": "mixture_balance",
+                  "volume_additive": true
+                },
+                "tool": "run_table",
+                "unit": "L",
+                "version": "b2"
+              }
+            ],
+            "inputs": {
+              "reservoir": {
+                "facts": {
+                  "input_class": "case_author_fixture",
+                  "quantity_type": "mixture_balance",
+                  "volume_additive": true
+                },
+                "kind": "table",
+                "origin": "AUTHORIZED_MISSION_INPUT",
+                "sha256": "dc4524602b7eac6743c185edddd37625d275ae1a07c335a05cc8e2cf710d7a5f",
+                "version": "b2"
+              }
+            }
+          }
+        },
+        "schema": "frontier-universal-execution/v1"
+      },
+      "objective": "Préparer le bilan de masse du mélange d’essai à partir des relevés fournis et conserver un instrument réutilisable. Convertir selon les unités de chaque ligne et supposer que les volumes s’additionnent. Établir la concentration finale en mg/L, la masse totale en mg et le volume total en L. Fournir des rapports exacts et vérifier leur cohérence par conservation masse-volume.",
+      "roles": {
+        "builder": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp"
+        }
+      },
+      "strategy": "single-model",
+      "tool_permissions": [
+        "construct_table",
+        "run_table",
+        "read_artifact",
+        "write_document"
+      ]
+    },
+    "spec_hash": "e9f5d097a6847064cf4ab6820e059809a9d94ceecf7a64e3137253798511629d",
+    "status": "exhausted",
+    "unadjudicated_counterexamples": [],
+    "updated_at": "2026-11-25T04:24:58.802483+00:00",
+    "verification": {
+      "artifact_hashes": {
+        "conversion_table.json": "6afc57ec766a1a217b385939e1373f9efb4e88695b10d13a83bdb64bc13ecfe7",
+        "mix_table.json": "2d562227679953b7932a24a14070cf5821aeb3fe716050116528f6c4914de202",
+        "table.json": "c5717d0345999929203c1f188921d023bf1c274a835c5767d005c248fd84e041"
+      },
+      "checks": [],
+      "passed": false,
+      "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification.",
+      "spec_hash": "e9f5d097a6847064cf4ab6820e059809a9d94ceecf7a64e3137253798511629d"
+    }
+  }
+}

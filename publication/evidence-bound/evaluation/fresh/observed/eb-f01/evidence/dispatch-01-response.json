@@ -1,0 +1,36 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "content": "{\n  \"summary\": \"Calculer la concentration finale en mg/L, la masse totale en mg et le volume total en L en utilisant les données fournies.\",\n  \"actions\": [\n    {\n      \"tool\": \"construct_table\",\n      \"name\": \"table.json\",\n      \"schema\": {\n        \"batches\": {\n          \"concentration\": \"INTEGER\",\n          \"concentration_unit\": \"TEXT\",\n          \"lot\": \"TEXT\",\n          \"volume\": \"INTEGER\",\n          \"volume_unit\": \"TEXT\"\n        }\n      },\n      \"sql\": \"SELECT concentration, concentration_unit, volume, volume_unit, lot FROM batches\"\n    },\n    {\n      \"tool\": \"run_table\",\n      \"name\": \"table.json\",\n      \"input\": {\n        \"dataset\": \"reservoir\"\n      }\n    },\n    {\n      \"tool\": \"read_artifact\",\n      \"name\": \"calc.json\"\n    },\n    {\n      \"tool\": \"construct_table\",\n      \"name\": \"conversion_table.json\",\n      \"schema\": {\n        \"batches\": {\n          \"concentration\": \"INTEGER\",\n          \"concentration_unit\": \"TEXT\",\n          \"lot\": \"TEXT\",\n          \"volume\": \"INTEGER\",\n          \"volume_unit\": \"TEXT\"\n        }\n      },\n      \"sql\": \"SELECT *, CASE WHEN concentration_unit = 'g/L' THEN concentration * 1000 WHEN concentration_unit = 'ug/mL' THEN concentration * 1000 / 1000 WHEN concentration_unit = 'mg/L' THEN concentration END AS converted_concentration, CASE WHEN volume_unit = 'mL' THEN volume / 1000 WHEN volume_unit = 'dL' THEN volume / 10 WHEN volume_unit = 'L' THEN volume END AS converted_volume FROM batches\"\n    },\n    {\n      \"tool\": \"run_table\",\n      \"name\": \"conversion_table.json\",\n      \"input\": {\n        \"dataset\": \"reservoir\"\n      }\n    },\n    {\n      \"tool\": \"construct_table\",\n      \"name\": \"mass_table.json\",\n      \"schema\": {\n        \"batches\": {\n          \"solute_mass\": \"INTEGER\"\n        }\n      },\n      \"sql\": \"SELECT SUM(converted_concentration * converted_volume * 1000) AS solute_mass FROM conversion_table\"\n    },\n    {\n      \"tool\": \"run_table\",\n      \"name\": \"mass_table.json\",\n      \"input\": {\n        \"dataset\": \"reservoir\"\n      }\n    },\n    {\n      \"tool\": \"construct_table\",\n      \"name\": \"volume_table.json\",\n      \"schema\": {\n        \"batches\": {\n          \"blend_volume\": \"FLOAT\"\n        }\n      },\n      \"sql\": \"SELECT SUM(converted_volume) AS blend_volume FROM conversion_table\"\n    }\n  ],\n  \"done\": false\n}",
+        "role": "assistant"
+      }
+    }
+  ],
+  "created": 1795580570,
+  "id": "chatcmpl-cH96D0q7YEnXuzUqMeycsuedaAkioP95",
+  "model": "qwen3-8b-q4_k_m",
+  "object": "chat.completion",
+  "system_fingerprint": "b12242-3b4d6ab3f",
+  "timings": {
+    "cache_n": 0,
+    "predicted_ms": 64563.312,
+    "predicted_n": 592,
+    "predicted_per_second": 9.153805492506333,
+    "predicted_per_token_ms": 109.24418274111675,
+    "prompt_ms": 24959.023,
+    "prompt_n": 1287,
+    "prompt_per_second": 51.56451837077116,
+    "prompt_per_token_ms": 19.393180264180266
+  },
+  "usage": {
+    "completion_tokens": 592,
+    "prompt_tokens": 1287,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    },
+    "total_tokens": 1879
+  }
+}

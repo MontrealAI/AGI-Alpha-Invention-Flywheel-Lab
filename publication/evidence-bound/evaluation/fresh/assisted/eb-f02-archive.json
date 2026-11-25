@@ -1,0 +1,643 @@
+{
+  "files": {
+    "audited_calculation.json": "{\"evaluator_sha256\":\"48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d\",\"schema\":\"frontier/bounded-table-instrument-v1\",\"sql\":\"WITH latest AS (\\n  SELECT l.* FROM ledger AS l\\n  WHERE l.revision = (SELECT MAX(prior.revision) FROM ledger AS prior WHERE prior.lane = l.lane)\\n), totals AS (\\n  SELECT SUM(accepted) AS good, SUM(attempts) AS total FROM latest\\n  WHERE state = 'active' HAVING SUM(attempts) > 0 AND SUM(accepted) BETWEEN 0 AND SUM(attempts)\\n)\\nSELECT CAST(good AS TEXT) || '/' || CAST(total AS TEXT), good, total\\nFROM totals\",\"table_schema\":{\"ledger\":{\"accepted\":\"INTEGER\",\"attempts\":\"INTEGER\",\"lane\":\"TEXT\",\"revision\":\"INTEGER\",\"state\":\"TEXT\"}}}"
+  },
+  "notice": "Contains your objective, context and artifacts. Inspect before sharing. No connector credentials or workspace integrity key included. Recorded verification is historical; recheck imported work.",
+  "schema": "alpha-genesis-workflow-export/v1",
+  "sha256": "c939a5e5472a7fc7158e3b22d1c991875611481ffa90db67cf48811be171f4d8",
+  "state": {
+    "actions": 4,
+    "adversarial_cases": [],
+    "artifacts": {
+      "audited_calculation.json": {
+        "bytes": 676,
+        "kind": "table_instrument",
+        "sha256": "470799c4503963c8d32f562dc03b9aafd03443a21d4ce2bac4550f7a454e7225"
+      }
+    },
+    "capability_id": null,
+    "created_at": "2026-11-25T04:33:46.119910+00:00",
+    "epoch": 0,
+    "events": [
+      {
+        "at": "2026-11-25T04:33:46.119920+00:00",
+        "detail": {
+          "acceptance_source": "Operator-frozen conditions; independence is not inferred.",
+          "spec_hash": "87b184bcf678d840f5ab51bbc7a8029bef4a5cc94904cba8a17483159a3d3f78"
+        },
+        "index": 0,
+        "kind": "created",
+        "previous": "0000000000000000000000000000000000000000000000000000000000000000",
+        "sha256": "4aad5102238f0fe18a18a6956538806f1e9655a6e31514cc768180d4b5fc9cfb"
+      },
+      {
+        "at": "2026-11-25T04:33:46.124157+00:00",
+        "detail": {
+          "model": "evaluator-authored-control",
+          "provider": "fixture",
+          "role": "builder",
+          "run_id": "wf_5acb56f17dfda40f90ebdb57_00201d38dc043f13"
+        },
+        "index": 1,
+        "kind": "model_started",
+        "previous": "4aad5102238f0fe18a18a6956538806f1e9655a6e31514cc768180d4b5fc9cfb",
+        "sha256": "e00c90e65efd2fc37534678af72f783d785228bd1df993e27db9d77075bc96b6"
+      },
+      {
+        "at": "2026-11-25T04:33:46.127734+00:00",
+        "detail": {
+          "cost": {
+            "amount": null,
+            "basis": "AUTHORED_FIXTURE_NO_INFERENCE",
+            "complete_cost_known": false
+          },
+          "model": "evaluator-authored-control",
+          "provider": "fixture",
+          "qualification": "AUTHORED_FIXTURE_NOT_LIVE_MODEL",
+          "reported_model": null,
+          "requested_model": "evaluator-authored-control",
+          "response_sha256": "b1e2e098f3757da41de0f86938983a825b6d335f18be36b9f94d55f3189ba6da",
+          "role": "builder",
+          "run_id": "wf_5acb56f17dfda40f90ebdb57_00201d38dc043f13",
+          "usage": {
+            "input_tokens": null,
+            "output_tokens": null
+          }
+        },
+        "index": 2,
+        "kind": "model_completed",
+        "previous": "e00c90e65efd2fc37534678af72f783d785228bd1df993e27db9d77075bc96b6",
+        "sha256": "e4e2565b8484e3018a815153432c7200f536f9a4ab379b3f5eb2be575fa6841a"
+      },
+      {
+        "at": "2026-11-25T04:33:46.127774+00:00",
+        "detail": {
+          "disposition": "PROPOSED",
+          "proposed_actions": 4,
+          "summary": "Run the authorized exact calculation."
+        },
+        "index": 3,
+        "kind": "route_proposed",
+        "previous": "e4e2565b8484e3018a815153432c7200f536f9a4ab379b3f5eb2be575fa6841a",
+        "sha256": "9558c3ed1a71abbab75732f5f714237aec978e01898e59dabe5541381dc14cb2"
+      },
+      {
+        "at": "2026-11-25T04:33:46.181931+00:00",
+        "detail": {
+          "outcome": {
+            "action_id": "d21effe031a51b907bcf9f199fb0a31f9aca7e91131e0bacc42e14a5f4905223",
+            "artifact": "audited_calculation.json",
+            "bytes": 676,
+            "evaluator_sha256": "48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d",
+            "kind": "table_instrument",
+            "operation_executed": true,
+            "previous_sha256": null,
+            "qualification": "UNVERIFIED",
+            "sha256": "470799c4503963c8d32f562dc03b9aafd03443a21d4ce2bac4550f7a454e7225",
+            "sqlite_version": "3.53.1",
+            "status": "CANDIDATE_VALIDATED_ON_EMPTY_TABLES"
+          },
+          "tool": "construct_table"
+        },
+        "index": 4,
+        "kind": "tool_completed",
+        "previous": "9558c3ed1a71abbab75732f5f714237aec978e01898e59dabe5541381dc14cb2",
+        "sha256": "be804bb6b562d4823264ab864b42322b6e722689e86f8279b55ed643f8136eda"
+      },
+      {
+        "at": "2026-11-25T04:33:46.215672+00:00",
+        "detail": {
+          "outcome": {
+            "action_id": "6108ca91f37b6d64efa9db4471061165951ac093c325c4c3c7c731de23b50180",
+            "artifact": "audited_calculation.json",
+            "artifact_sha256": "470799c4503963c8d32f562dc03b9aafd03443a21d4ce2bac4550f7a454e7225",
+            "claim_execution": {
+              "asserted_value": null,
+              "claim_contract_sha256": "f90b100f1c48283a6a765625a069c7edfe20160572b5ee0e7f082b6b8f7561cb",
+              "claim_id": "acceptance_ratio",
+              "input": {
+                "id": "shift_ledger",
+                "kind": "table",
+                "origin": "AUTHORIZED_MISSION_INPUT",
+                "parents": {},
+                "sha256": "bf50822a1a2fe685aeca6a55ca1d85b3e1f82dd3f7da6e4750f7909d487755ea",
+                "version": "s4"
+              },
+              "lineage": [
+                {
+                  "id": "shift_ledger",
+                  "kind": "table",
+                  "origin": "AUTHORIZED_MISSION_INPUT",
+                  "parents": {},
+                  "sha256": "bf50822a1a2fe685aeca6a55ca1d85b3e1f82dd3f7da6e4750f7909d487755ea",
+                  "version": "s4"
+                }
+              ],
+              "locator": [
+                "rows",
+                0,
+                0
+              ],
+              "mission_id": "wf_5acb56f17dfda40f90ebdb57",
+              "operation": {
+                "artifact": "audited_calculation.json",
+                "artifact_sha256": "470799c4503963c8d32f562dc03b9aafd03443a21d4ce2bac4550f7a454e7225",
+                "sqlite_version": "3.53.1",
+                "tool": "run_table",
+                "version_sha256": "48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d"
+              },
+              "output_sha256": "aac956bc3d53a505abe477ad52d49ffd693efa7e9c10063d8a3e3be776c4b005",
+              "result_artifact": null,
+              "revision_sha256": "87b184bcf678d840f5ab51bbc7a8029bef4a5cc94904cba8a17483159a3d3f78",
+              "schema": "frontier/mission-claim-execution/v1",
+              "sha256": "0b6868b9b170a725b639860288b809c2e6d3fe79365bf8fdceb6d830a5740be9"
+            },
+            "dataset": "shift_ledger",
+            "evaluator_sha256": "48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d",
+            "input_origin": "AUTHORIZED_MISSION_INPUT",
+            "input_sha256": "bf50822a1a2fe685aeca6a55ca1d85b3e1f82dd3f7da6e4750f7909d487755ea",
+            "operation_executed": true,
+            "output_sha256": "aac956bc3d53a505abe477ad52d49ffd693efa7e9c10063d8a3e3be776c4b005",
+            "qualification": "UNVERIFIED",
+            "rows": [
+              [
+                "55/90",
+                55,
+                90
+              ]
+            ],
+            "sqlite_version": "3.53.1",
+            "status": "EXECUTED"
+          },
+          "tool": "run_table"
+        },
+        "index": 5,
+        "kind": "tool_completed",
+        "previous": "be804bb6b562d4823264ab864b42322b6e722689e86f8279b55ed643f8136eda",
+        "sha256": "12f11b01df4bec6fcb7164603f4fafb00a88cae7a444a8d927df4704e1063ecd"
+      },
+      {
+        "at": "2026-11-25T04:33:46.260164+00:00",
+        "detail": {
+          "outcome": {
+            "action_id": "11ce899d2dd58dc177e4cb1d5aa61e2cb3dabfd9d46ed04aceb63c5481d271de",
+            "artifact": "audited_calculation.json",
+            "artifact_sha256": "470799c4503963c8d32f562dc03b9aafd03443a21d4ce2bac4550f7a454e7225",
+            "claim_execution": {
+              "asserted_value": null,
+              "claim_contract_sha256": "b51d6be39d7b60d4f7c89dbf9a418308f4ee5492562da27f16237471c27edc1a",
+              "claim_id": "accepted_total",
+              "input": {
+                "id": "shift_ledger",
+                "kind": "table",
+                "origin": "AUTHORIZED_MISSION_INPUT",
+                "parents": {},
+                "sha256": "bf50822a1a2fe685aeca6a55ca1d85b3e1f82dd3f7da6e4750f7909d487755ea",
+                "version": "s4"
+              },
+              "lineage": [
+                {
+                  "id": "shift_ledger",
+                  "kind": "table",
+                  "origin": "AUTHORIZED_MISSION_INPUT",
+                  "parents": {},
+                  "sha256": "bf50822a1a2fe685aeca6a55ca1d85b3e1f82dd3f7da6e4750f7909d487755ea",
+                  "version": "s4"
+                }
+              ],
+              "locator": [
+                "rows",
+                0,
+                1
+              ],
+              "mission_id": "wf_5acb56f17dfda40f90ebdb57",
+              "operation": {
+                "artifact": "audited_calculation.json",
+                "artifact_sha256": "470799c4503963c8d32f562dc03b9aafd03443a21d4ce2bac4550f7a454e7225",
+                "sqlite_version": "3.53.1",
+                "tool": "run_table",
+                "version_sha256": "48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d"
+              },
+              "output_sha256": "aac956bc3d53a505abe477ad52d49ffd693efa7e9c10063d8a3e3be776c4b005",
+              "result_artifact": null,
+              "revision_sha256": "87b184bcf678d840f5ab51bbc7a8029bef4a5cc94904cba8a17483159a3d3f78",
+              "schema": "frontier/mission-claim-execution/v1",
+              "sha256": "85390015116af8acd13f9fd6cfb79abf17c2f46d5b743a347f073fd667d1a91d"
+            },
+            "dataset": "shift_ledger",
+            "evaluator_sha256": "48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d",
+            "input_origin": "AUTHORIZED_MISSION_INPUT",
+            "input_sha256": "bf50822a1a2fe685aeca6a55ca1d85b3e1f82dd3f7da6e4750f7909d487755ea",
+            "operation_executed": true,
+            "output_sha256": "aac956bc3d53a505abe477ad52d49ffd693efa7e9c10063d8a3e3be776c4b005",
+            "qualification": "UNVERIFIED",
+            "rows": [
+              [
+                "55/90",
+                55,
+                90
+              ]
+            ],
+            "sqlite_version": "3.53.1",
+            "status": "EXECUTED"
+          },
+          "tool": "run_table"
+        },
+        "index": 6,
+        "kind": "tool_completed",
+        "previous": "12f11b01df4bec6fcb7164603f4fafb00a88cae7a444a8d927df4704e1063ecd",
+        "sha256": "9ffa94c2596c721293bfa8d68f42d7693fe33129aef56e605cf89c525b4e61dc"
+      },
+      {
+        "at": "2026-11-25T04:33:46.293972+00:00",
+        "detail": {
+          "outcome": {
+            "action_id": "85bc2f4d222ea3181bc5e94a16bce45927843f3d0d544323a89c4b1dfcbcff4e",
+            "artifact": "audited_calculation.json",
+            "artifact_sha256": "470799c4503963c8d32f562dc03b9aafd03443a21d4ce2bac4550f7a454e7225",
+            "claim_execution": {
+              "asserted_value": null,
+              "claim_contract_sha256": "0eef61cc25737e54d39aedbb173f9fc65c921115b67fdacc25cbfd294eb7f6eb",
+              "claim_id": "attempt_total",
+              "input": {
+                "id": "shift_ledger",
+                "kind": "table",
+                "origin": "AUTHORIZED_MISSION_INPUT",
+                "parents": {},
+                "sha256": "bf50822a1a2fe685aeca6a55ca1d85b3e1f82dd3f7da6e4750f7909d487755ea",
+                "version": "s4"
+              },
+              "lineage": [
+                {
+                  "id": "shift_ledger",
+                  "kind": "table",
+                  "origin": "AUTHORIZED_MISSION_INPUT",
+                  "parents": {},
+                  "sha256": "bf50822a1a2fe685aeca6a55ca1d85b3e1f82dd3f7da6e4750f7909d487755ea",
+                  "version": "s4"
+                }
+              ],
+              "locator": [
+                "rows",
+                0,
+                2
+              ],
+              "mission_id": "wf_5acb56f17dfda40f90ebdb57",
+              "operation": {
+                "artifact": "audited_calculation.json",
+                "artifact_sha256": "470799c4503963c8d32f562dc03b9aafd03443a21d4ce2bac4550f7a454e7225",
+                "sqlite_version": "3.53.1",
+                "tool": "run_table",
+                "version_sha256": "48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d"
+              },
+              "output_sha256": "aac956bc3d53a505abe477ad52d49ffd693efa7e9c10063d8a3e3be776c4b005",
+              "result_artifact": null,
+              "revision_sha256": "87b184bcf678d840f5ab51bbc7a8029bef4a5cc94904cba8a17483159a3d3f78",
+              "schema": "frontier/mission-claim-execution/v1",
+              "sha256": "45632b075b707ad45b905f383bbb7d4c47222d4472270a5b5a3061eec6faf31e"
+            },
+            "dataset": "shift_ledger",
+            "evaluator_sha256": "48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d",
+            "input_origin": "AUTHORIZED_MISSION_INPUT",
+            "input_sha256": "bf50822a1a2fe685aeca6a55ca1d85b3e1f82dd3f7da6e4750f7909d487755ea",
+            "operation_executed": true,
+            "output_sha256": "aac956bc3d53a505abe477ad52d49ffd693efa7e9c10063d8a3e3be776c4b005",
+            "qualification": "UNVERIFIED",
+            "rows": [
+              [
+                "55/90",
+                55,
+                90
+              ]
+            ],
+            "sqlite_version": "3.53.1",
+            "status": "EXECUTED"
+          },
+          "tool": "run_table"
+        },
+        "index": 7,
+        "kind": "tool_completed",
+        "previous": "9ffa94c2596c721293bfa8d68f42d7693fe33129aef56e605cf89c525b4e61dc",
+        "sha256": "629ecbffe0632b293bee7c64651ea43047719e86746565672502ecf5046a8d45"
+      },
+      {
+        "at": "2026-11-25T04:33:46.301151+00:00",
+        "detail": {
+          "artifact_hashes": {
+            "audited_calculation.json": "470799c4503963c8d32f562dc03b9aafd03443a21d4ce2bac4550f7a454e7225"
+          },
+          "checks": [],
+          "passed": false,
+          "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification.",
+          "spec_hash": "87b184bcf678d840f5ab51bbc7a8029bef4a5cc94904cba8a17483159a3d3f78"
+        },
+        "index": 8,
+        "kind": "verification",
+        "previous": "629ecbffe0632b293bee7c64651ea43047719e86746565672502ecf5046a8d45",
+        "sha256": "5603546b592db64c1a36772b501b03ddecfc14428f279a64c8dbccdcf6c249c8"
+      },
+      {
+        "at": "2026-11-25T04:33:46.301650+00:00",
+        "detail": {
+          "claims": [
+            {
+              "id": "acceptance_ratio",
+              "reason": "MATCHES_FROZEN_REFERENCE",
+              "status": "VERIFIED"
+            },
+            {
+              "id": "accepted_total",
+              "reason": "MATCHES_FROZEN_REFERENCE",
+              "status": "VERIFIED"
+            },
+            {
+              "id": "attempt_total",
+              "reason": "MATCHES_FROZEN_REFERENCE",
+              "status": "VERIFIED"
+            }
+          ],
+          "status": "VERIFIED"
+        },
+        "index": 9,
+        "kind": "claim_dispositions",
+        "previous": "5603546b592db64c1a36772b501b03ddecfc14428f279a64c8dbccdcf6c249c8",
+        "sha256": "b21203aa9a4a7634f5dcf5a453bc1b709fdcb6a9be6bea43e27f0d3fb1d6f303"
+      },
+      {
+        "at": "2026-11-25T04:33:46.301664+00:00",
+        "detail": {
+          "development_checks_passed": false,
+          "scope": "Case-specific numerical agreement and source binding. Independent custody and production admission are separate."
+        },
+        "index": 10,
+        "kind": "awaiting_independent_evaluation",
+        "previous": "b21203aa9a4a7634f5dcf5a453bc1b709fdcb6a9be6bea43e27f0d3fb1d6f303",
+        "sha256": "4ca96f7ae0ee915e291e1f0e266fd82e25754c8ed332f37026b625f0642b56d4"
+      }
+    ],
+    "feedback": "",
+    "id": "wf_5acb56f17dfda40f90ebdb57",
+    "inflight": null,
+    "iteration": 1,
+    "model_call_limit": 3,
+    "model_calls": 1,
+    "phase": "builder",
+    "research": "",
+    "schema": "alpha-genesis-workflow/v1",
+    "spec": {
+      "acceptance": [],
+      "context": "Each lane/revision pair is unique in the supplied table. Table schema: {\"ledger\": {\"accepted\": \"INTEGER\", \"attempts\": \"INTEGER\", \"lane\": \"TEXT\", \"revision\": \"INTEGER\", \"state\": \"TEXT\"}}. Use a single output row in this column order: acceptance_ratio, accepted_total, attempt_total. Report exact integers or rational text n/d. A SQLite SELECT may return rational text using || to concatenate the numerator, slash, and denominator when appropriate.",
+      "local_only": true,
+      "max_actions": 14,
+      "max_iterations": 3,
+      "max_operations": 10000,
+      "max_output_tokens": 768,
+      "mission": {
+        "expires_at": "2026-11-25T06:33:46.119017+00:00",
+        "language": "en",
+        "original_ambition": "Build an exact daily acceptance ratio for a team validating outputs across review lanes. The supplied ledger contains both current and superseded records. For each lane use its latest revision. Ignore a lane whose latest revision is retired. Divide the pooled accepted outputs by the pooled attempts, and show both counts. Keep a reusable computation that would correctly handle a different ordering of the event records.",
+        "requirements": {
+          "approved_tables": {
+            "shift_ledger": {
+              "ledger": [
+                {
+                  "accepted": 0,
+                  "attempts": 0,
+                  "lane": "eagle",
+                  "revision": 4,
+                  "state": "retired"
+                },
+                {
+                  "accepted": 42,
+                  "attempts": 49,
+                  "lane": "heron",
+                  "revision": 1,
+                  "state": "active"
+                },
+                {
+                  "accepted": 9,
+                  "attempts": 17,
+                  "lane": "kingfisher",
+                  "revision": 4,
+                  "state": "active"
+                },
+                {
+                  "accepted": 57,
+                  "attempts": 61,
+                  "lane": "eagle",
+                  "revision": 1,
+                  "state": "active"
+                },
+                {
+                  "accepted": 15,
+                  "attempts": 25,
+                  "lane": "crow",
+                  "revision": 7,
+                  "state": "active"
+                },
+                {
+                  "accepted": 31,
+                  "attempts": 48,
+                  "lane": "heron",
+                  "revision": 3,
+                  "state": "active"
+                },
+                {
+                  "accepted": 26,
+                  "attempts": 26,
+                  "lane": "crow",
+                  "revision": 5,
+                  "state": "active"
+                },
+                {
+                  "accepted": 28,
+                  "attempts": 29,
+                  "lane": "kingfisher",
+                  "revision": 3,
+                  "state": "active"
+                }
+              ]
+            }
+          },
+          "evidence": {
+            "claims": [
+              {
+                "dataset": "shift_ledger",
+                "dimension": "dimensionless",
+                "id": "acceptance_ratio",
+                "locator": [
+                  "rows",
+                  0,
+                  0
+                ],
+                "reference": {
+                  "source": "Independent exact Fraction control",
+                  "value": "11/18"
+                },
+                "required_fields": [
+                  [
+                    "ledger",
+                    "accepted"
+                  ],
+                  [
+                    "ledger",
+                    "attempts"
+                  ],
+                  [
+                    "ledger",
+                    "lane"
+                  ],
+                  [
+                    "ledger",
+                    "revision"
+                  ],
+                  [
+                    "ledger",
+                    "state"
+                  ]
+                ],
+                "requires": {
+                  "event_count_kind": "operator_observation",
+                  "input_class": "case_author_fixture",
+                  "revision_convention": "highest_per_lane"
+                },
+                "tool": "run_table",
+                "unit": "ratio",
+                "version": "s4"
+              },
+              {
+                "dataset": "shift_ledger",
+                "dimension": "count",
+                "id": "accepted_total",
+                "locator": [
+                  "rows",
+                  0,
+                  1
+                ],
+                "reference": {
+                  "source": "Independent exact Fraction control",
+                  "value": "55"
+                },
+                "required_fields": [
+                  [
+                    "ledger",
+                    "accepted"
+                  ],
+                  [
+                    "ledger",
+                    "attempts"
+                  ],
+                  [
+                    "ledger",
+                    "lane"
+                  ],
+                  [
+                    "ledger",
+                    "revision"
+                  ],
+                  [
+                    "ledger",
+                    "state"
+                  ]
+                ],
+                "requires": {
+                  "event_count_kind": "operator_observation",
+                  "input_class": "case_author_fixture",
+                  "revision_convention": "highest_per_lane"
+                },
+                "tool": "run_table",
+                "unit": "count",
+                "version": "s4"
+              },
+              {
+                "dataset": "shift_ledger",
+                "dimension": "count",
+                "id": "attempt_total",
+                "locator": [
+                  "rows",
+                  0,
+                  2
+                ],
+                "reference": {
+                  "source": "Independent exact Fraction control",
+                  "value": "90"
+                },
+                "required_fields": [
+                  [
+                    "ledger",
+                    "accepted"
+                  ],
+                  [
+                    "ledger",
+                    "attempts"
+                  ],
+                  [
+                    "ledger",
+                    "lane"
+                  ],
+                  [
+                    "ledger",
+                    "revision"
+                  ],
+                  [
+                    "ledger",
+                    "state"
+                  ]
+                ],
+                "requires": {
+                  "event_count_kind": "operator_observation",
+                  "input_class": "case_author_fixture",
+                  "revision_convention": "highest_per_lane"
+                },
+                "tool": "run_table",
+                "unit": "count",
+                "version": "s4"
+              }
+            ],
+            "inputs": {
+              "shift_ledger": {
+                "facts": {
+                  "event_count_kind": "operator_observation",
+                  "input_class": "case_author_fixture",
+                  "revision_convention": "highest_per_lane"
+                },
+                "kind": "table",
+                "origin": "AUTHORIZED_MISSION_INPUT",
+                "sha256": "bf50822a1a2fe685aeca6a55ca1d85b3e1f82dd3f7da6e4750f7909d487755ea",
+                "version": "s4"
+              }
+            }
+          }
+        },
+        "schema": "frontier-universal-execution/v1"
+      },
+      "objective": "Build an exact daily acceptance ratio for a team validating outputs across review lanes. The supplied ledger contains both current and superseded records. For each lane use its latest revision. Ignore a lane whose latest revision is retired. Divide the pooled accepted outputs by the pooled attempts, and show both counts. Keep a reusable computation that would correctly handle a different ordering of the event records.",
+      "roles": {
+        "builder": {
+          "model": "evaluator-authored-control",
+          "provider": "fixture"
+        }
+      },
+      "strategy": "single-model",
+      "tool_permissions": [
+        "construct_table",
+        "run_table",
+        "read_artifact",
+        "write_document"
+      ]
+    },
+    "spec_hash": "87b184bcf678d840f5ab51bbc7a8029bef4a5cc94904cba8a17483159a3d3f78",
+    "status": "needs_review",
+    "unadjudicated_counterexamples": [],
+    "updated_at": "2026-11-25T04:33:46.301664+00:00",
+    "verification": {
+      "artifact_hashes": {
+        "audited_calculation.json": "470799c4503963c8d32f562dc03b9aafd03443a21d4ce2bac4550f7a454e7225"
+      },
+      "checks": [],
+      "passed": false,
+      "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification.",
+      "spec_hash": "87b184bcf678d840f5ab51bbc7a8029bef4a5cc94904cba8a17483159a3d3f78"
+    }
+  }
+}

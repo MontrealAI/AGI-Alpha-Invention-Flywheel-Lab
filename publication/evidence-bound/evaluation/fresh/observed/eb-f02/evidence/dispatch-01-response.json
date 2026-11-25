@@ -1,0 +1,36 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "content": "{\n  \"summary\": \"Start by constructing a table to filter and calculate the necessary values for the acceptance ratio and totals.\",\n  \"actions\": [\n    {\n      \"tool\": \"construct_table\",\n      \"name\": \"table.json\",\n      \"schema\": {\n        \"events\": {\n          \"accepted\": \"INTEGER\",\n          \"attempts\": \"INTEGER\",\n          \"lane\": \"TEXT\",\n          \"revision\": \"INTEGER\",\n          \"state\": \"TEXT\"\n        }\n      },\n      \"sql\": \"SELECT lane, MAX(revision) AS latest_revision, SUM(accepted) AS accepted_total, SUM(attempts) AS attempt_total FROM ledger GROUP BY lane HAVING state = 'active'\"\n    }\n  ],\n  \"done\": false\n}",
+        "role": "assistant"
+      }
+    }
+  ],
+  "created": 1795581122,
+  "id": "chatcmpl-KTUMqFGan4xRSHN1mYWQIT9eZ8EuiPqh",
+  "model": "qwen3-8b-q4_k_m",
+  "object": "chat.completion",
+  "system_fingerprint": "b12242-3b4d6ab3f",
+  "timings": {
+    "cache_n": 3,
+    "predicted_ms": 14825.565,
+    "predicted_n": 153,
+    "predicted_per_second": 10.252560357733415,
+    "predicted_per_token_ms": 97.53661184210527,
+    "prompt_ms": 23258.074,
+    "prompt_n": 1310,
+    "prompt_per_second": 56.32452626988804,
+    "prompt_per_token_ms": 17.75425496183206
+  },
+  "usage": {
+    "completion_tokens": 153,
+    "prompt_tokens": 1313,
+    "prompt_tokens_details": {
+      "cached_tokens": 3
+    },
+    "total_tokens": 1466
+  }
+}

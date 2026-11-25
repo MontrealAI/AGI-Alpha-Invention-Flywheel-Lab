@@ -1,0 +1,105 @@
+[
+  {
+    "proposal": {
+      "answer": "Impossible de calculer le débit agrégé en L/min pour l’intégralité des trois séances d’essai de la ligne car la mesure 'minutes' est manquante dans la séance 'ligne-11'.",
+      "decision": "CONTINUE",
+      "fetch": [
+        "logs"
+      ],
+      "missing": [
+        "minutes"
+      ],
+      "queries": [
+        "SELECT SUM(litres) AS total_litres, SUM(minutes) AS total_minutes FROM logs;"
+      ],
+      "values": {}
+    },
+    "tool_feedback": [
+      {
+        "input_sha256": "07c991673d1b4235d06c84b56534c7f98e900b06e985ed10c9520639a517df6c",
+        "output_sha256": "4ae70999925681753feb205cf4e294dc684c8db33cfb04808478a25fef7fbb30",
+        "query": "SELECT SUM(litres) AS total_litres, SUM(minutes) AS total_minutes FROM logs;",
+        "rows": [
+          [
+            187,
+            50
+          ]
+        ]
+      },
+      {
+        "refused": "No matching authorized source.",
+        "source": "logs"
+      }
+    ]
+  },
+  {
+    "proposal": {
+      "answer": "Le débit agrégé en L/min pour l’intégralité des trois séances d’essai de la ligne est de 187/50 L/min. Cependant, la mesure 'minutes' est manquante dans la séance 'ligne-11', ce qui rend la calcul impossible pour cette séance.",
+      "decision": "ANSWER",
+      "fetch": [
+        "logs"
+      ],
+      "missing": [
+        "minutes"
+      ],
+      "queries": [
+        "SELECT SUM(litres) AS total_litres, SUM(minutes) AS total_minutes FROM logs;"
+      ],
+      "values": {
+        "flow_rate": "187/50"
+      }
+    },
+    "tool_feedback": [
+      {
+        "input_sha256": "07c991673d1b4235d06c84b56534c7f98e900b06e985ed10c9520639a517df6c",
+        "output_sha256": "4ae70999925681753feb205cf4e294dc684c8db33cfb04808478a25fef7fbb30",
+        "query": "SELECT SUM(litres) AS total_litres, SUM(minutes) AS total_minutes FROM logs;",
+        "rows": [
+          [
+            187,
+            50
+          ]
+        ]
+      },
+      {
+        "refused": "No matching authorized source.",
+        "source": "logs"
+      }
+    ]
+  },
+  {
+    "proposal": {
+      "answer": "Le débit agrégé en L/min pour l’intégralité des trois séances d’essai de la ligne est de 187/50 L/min. Cependant, la mesure 'minutes' est manquante dans la séance 'ligne-11', ce qui rend le calcul impossible pour cette séance.",
+      "decision": "ANSWER",
+      "fetch": [
+        "logs"
+      ],
+      "missing": [
+        "minutes"
+      ],
+      "queries": [
+        "SELECT SUM(litres) AS total_litres, SUM(minutes) AS total_minutes FROM logs;"
+      ],
+      "values": {
+        "flow_rate": "187/50"
+      }
+    },
+    "tool_feedback": [
+      {
+        "input_sha256": "07c991673d1b4235d06c84b56534c7f98e900b06e985ed10c9520639a517df6c",
+        "output_sha256": "4ae70999925681753feb205cf4e294dc684c8db33cfb04808478a25fef7fbb30",
+        "query": "SELECT SUM(litres) AS total_litres, SUM(minutes) AS total_minutes FROM logs;",
+        "rows": [
+          [
+            187,
+            50
+          ]
+        ]
+      },
+      {
+        "refused": "No matching authorized source.",
+        "source": "logs"
+      }
+    ]
+  }
+]

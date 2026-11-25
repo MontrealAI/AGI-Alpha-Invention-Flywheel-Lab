@@ -1,0 +1,46 @@
+{
+  "actual_provider_dispatches": 3,
+  "arm": "direct",
+  "cited_both_pinned_sources": true,
+  "complete_cost_known": false,
+  "exact_selected_label": true,
+  "expected_revision": "alpha",
+  "final_response": {
+    "answer": "Selected-label: alpha",
+    "decision": "ANSWER",
+    "fetch": [
+      "alpha",
+      "bravo"
+    ],
+    "missing": [],
+    "queries": [
+      "SELECT * FROM headers WHERE url IN ('https://raw.githubusercontent.com/python/cpython/55fee9cf216abe4ec0d1139f94b1930fbd0c7644/Include/patchlevel.h', 'https://raw.githubusercontent.com/python/cpython/6cb20a219a860eaf687b2d968b41c480c7461909/Include/patchlevel.h')",
+      "SELECT * FROM patchlevel WHERE version >= '3.12.10'"
+    ],
+    "values": {
+      "source": "alpha",
+      "version": "3.12.10"
+    }
+  },
+  "id": "eb-f04",
+  "logged_actions": 12,
+  "model_server_cpu_accounted_here": false,
+  "operator_actions_after_case_start": 0,
+  "operator_preparation_and_review_seconds": null,
+  "orchestrator_cpu_seconds": 0.02139300000000001,
+  "paid_provider_requests": 0,
+  "provider_seconds": 83.65948796800149,
+  "reported_both_versions": false,
+  "selected_label_reports": [
+    "alpha"
+  ],
+  "source_fetch_attempts": 6,
+  "task_elapsed_seconds": 83.66740765800023,
+  "token_usage": {
+    "observed_tokens_in": 2332,
+    "observed_tokens_out": 615,
+    "unknown_token_replies": 0
+  },
+  "verdict": "FAIL",
+  "verified_source_digests": {}
+}

@@ -1,0 +1,40 @@
+{
+  "actual_provider_dispatches": 3,
+  "arm": "direct",
+  "candidate_decision": "ANSWER",
+  "complete_cost_known": false,
+  "correct_reusable_query": false,
+  "exact_reported_values": false,
+  "final_response": {
+    "answer": "The exact daily acceptance ratio for the team across review lanes is 0.85. This is calculated by dividing the total accepted outputs (123) by the total attempts (145). The computation considers only the latest revision for each lane that is active, excluding any retired records.",
+    "decision": "ANSWER",
+    "fetch": [
+      "ledger"
+    ],
+    "missing": [],
+    "queries": [
+      "WITH latest_revisions AS (SELECT lane, MAX(revision) AS latest_revision FROM ledger WHERE state = 'active' GROUP BY lane), active_lane_data AS (SELECT l.accepted, l.attempts, l.lane FROM ledger l JOIN latest_revisions lr ON l.lane = lr.lane AND l.revision = lr.latest_revision AND l.state = 'active') SELECT SUM(accepted) AS accepted_total, SUM(attempts) AS attempt_total, ROUND(SUM(accepted) / SUM(attempts), 2) AS acceptance_ratio FROM active_lane_data;"
+    ],
+    "values": {
+      "acceptance_ratio": "0.85",
+      "accepted_total": "123",
+      "attempt_total": "145"
+    }
+  },
+  "id": "eb-f02",
+  "logged_actions": 6,
+  "model_server_cpu_accounted_here": false,
+  "operator_actions_after_case_start": 0,
+  "operator_preparation_and_review_seconds": null,
+  "orchestrator_cpu_seconds": 0.143799,
+  "paid_provider_requests": 0,
+  "provider_seconds": 104.02566835799917,
+  "queries": [],
+  "task_elapsed_seconds": 104.15803138000047,
+  "token_usage": {
+    "observed_tokens_in": 2863,
+    "observed_tokens_out": 753,
+    "unknown_token_replies": 0
+  },
+  "verdict": "FAIL"
+}
