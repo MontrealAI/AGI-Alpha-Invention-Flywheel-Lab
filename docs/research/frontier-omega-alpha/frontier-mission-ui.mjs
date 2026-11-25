@@ -56,9 +56,11 @@ const messages = {
 
 const routes = [
   ['endpoint-screen','#mv-endpoint-run',['Endpoint Evidence Screen','Évaluation Endpoint'],
-    ['Run the bounded latency and throughput screen on authorized measurements.','Évaluer la latence et le débit à partir de mesures autorisées.']],
+    ['Select a tested load from authorized same-scope measurements of P90 first-token latency and per-user throughput. Missing results, untested loads and different workload scopes require their own evidence.',
+      'Choisir une charge testée selon la latence P90 du premier jeton et le débit par utilisateur, à partir de mesures autorisées et comparables. Les charges non testées et les autres scénarios exigent leurs propres mesures.']],
   ['noaa-archive','#tool-archive',['NOAA Archive Point','Point d’archive NOAA'],
-    ['Retrieve supported historical forecast points with the qualified local package.','Retrouver des prévisions historiques prises en charge avec l’outil local qualifié.']],
+    ['NOAA GFS historical f024 forecast only, with exactly 24 hours from initialization to valid time. It returns 2 m air temperature at an exact native 0.25° grid cell in kelvin. The package runs with Linux, Python 3.12, curl and OpenSSL.',
+      'Prévision historique NOAA GFS f024 seulement, avec exactement 24 heures entre l’initialisation et l’heure de validité. Température de l’air à 2 m en kelvins pour une cellule exacte de la grille de 0,25°. Linux, Python 3.12, curl et OpenSSL requis.']],
   ['harness','#foundry-mission',['HARNESS capability construction','Construction d’une capacité HARNESS'],
     ['Define scalar inputs, a deterministic rule and independently held acceptance cases.','Définir des entrées scalaires, une règle déterministe et des cas d’acceptation gardés séparément.']],
   ['scientific-evidence','#foundry-factory-results',['Scientific Truth Engine','Moteur de validation scientifique'],
@@ -87,7 +89,10 @@ function publicRuns() {
     const entries = JSON.parse(node('mission-public-runs').content.textContent);
     return entries.filter(row => typeof row.ambition === 'string' && typeof row.en === 'string' && typeof row.fr === 'string'
       && /^frontier-[a-z0-9.-]+\.zip$/u.test(row.download)
-      && /^https:\/\/github\.com\/MontrealAI\/AGI-Alpha-Invention-Flywheel-Lab\/blob\/[0-9a-f]{40}\/publication\/universal\/[a-zA-Z0-9/._-]+\.md$/u.test(row.report));
+      && /^https:\/\/github\.com\/MontrealAI\/AGI-Alpha-Invention-Flywheel-Lab\/blob\/[0-9a-f]{40}\/publication\/universal\/[a-zA-Z0-9/._-]+\.md$/u.test(row.report)
+      && typeof row.capability?.id === 'string' && /^[a-z0-9][a-z0-9-]{1,63}$/u.test(row.capability.id)
+      && [row.capability.en, row.capability.fr, row.capability.scopeEn, row.capability.scopeFr]
+        .every(value => typeof value === 'string' && value.length > 0 && value.length <= 300));
   } catch { return []; }
 }
 
@@ -97,7 +102,10 @@ export function setupMissionConsole(member, shell) {
   const i = language === 'fr' ? 1 : 0;
   const input = node('goal-text');
   const priorRuns = publicRuns();
-  const capabilities = routes.map(([id,, title, scope]) => ({id, title:title[i], scope:scope[i]}));
+  const registered = priorRuns.map(({capability, download}) => [capability.id, download,
+    [capability.en, capability.fr], [capability.scopeEn, capability.scopeFr]]);
+  const available = [...routes, ...registered];
+  const capabilities = available.map(([id,, title, scope]) => ({id, title:title[i], scope:scope[i]}));
   const localRuns = new Set();
   let mission, request, connection, activeRequest, atlas, serial = 0;
   const active = () => !member.hidden;
@@ -159,18 +167,19 @@ export function setupMissionConsole(member, shell) {
       item.textContent = value;
       return item;
     }));
-    const picked = routes.filter(([id]) => report?.capabilityIds?.includes(id));
-    node('mission-capabilities').replaceChildren(...picked.map(([, href, title]) => {
+    const picked = available.filter(([id]) => report?.capabilityIds?.includes(id));
+    node('mission-capabilities').replaceChildren(...picked.map(([, href, title, scope]) => {
       const item = document.createElement('li');
       const link = document.createElement('a');
       link.href = href;
       link.textContent = title[i];
+      if (href.endsWith('.zip')) link.download = '';
       if (href === '#foundry-mission') link.addEventListener('click', () => {
         const value = report.objective;
         if (value.length <= 360 && !node('foundry-objective').value) node('foundry-objective').value = value;
         node('foundry-mission').open = true;
       });
-      item.append(link);
+      item.append(link, document.createTextNode(` · ${scope[i]}`));
       return item;
     }));
     const published = priorRuns.find(row => row.ambition === mission.ambition.trim());

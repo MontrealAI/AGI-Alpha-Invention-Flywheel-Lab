@@ -41,7 +41,7 @@ In **Prepare an assisted mission**, review the complete prompt, opt in to copyin
 | Path | Execution and decision |
 | --- | --- |
 | Universal browser intake | General text is the mission identity. Related Atlas evidence is optional. Direct routes and research routes share the same request contract. |
-| Deterministic reuse and construction | The existing Endpoint, NOAA, HARNESS and evidence tools remain available using their own scope and checkers. The mission can identify and open qualified tools and carry the interpreted objective to the bounded HARNESS authoring surface. |
+| Deterministic reuse and construction | The router receives exact operating limits for qualified tools. Their scope remains visible alongside a model suggestion. The mission can carry the interpreted objective to bounded HARNESS authoring and make an independently accepted portable solver available for later missions. |
 | Living Atlas and Opportunity Capture | Published primary lead and evidence can inform the mission. The existing independent Atlas and NISAR/Sentinel checks remain in the previous release. |
 | Scientific Truth Engine and Productive Intelligence Factory | Published scope, attribution and evidence-lineage checks remain callable from their current workbench and portable releases. |
 | Substrate, Scientific Discovery and Cascade | Existing experiments are accessible in Capabilities and Activation packages; their published qualification scopes apply. |

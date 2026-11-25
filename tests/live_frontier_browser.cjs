@@ -588,6 +588,8 @@ async function universalMission(page, language, width) {
     await prompt.waitFor({state:'visible'});
     assert.match(await prompt.inputValue(), /Build Frontier AI for Game Theory\./u);
     assert.match(await prompt.inputValue(), language === 'fr' ? /Écrivez en français/u : /Write text in English/u);
+    assert.match(await prompt.inputValue(), /NOAA GFS(?: historical)? f024/u);
+    assert.match(await prompt.inputValue(), /game-theory-verified-strategic-allocation/u);
     assert.equal(await page.locator('#mission-copy').isEnabled(), false);
     const requestId = (await prompt.inputValue()).match(/"requestId":"([a-f0-9]{64})"/u)[1];
     const reply = {schema:'frontier/mission-route-result-v1', requestId, route:'invention',

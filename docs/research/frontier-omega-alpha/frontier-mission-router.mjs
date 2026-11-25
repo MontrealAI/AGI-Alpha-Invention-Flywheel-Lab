@@ -103,6 +103,7 @@ const missionInstructions = {
     guidance: [
       'A missing catalogue match never ends a mission. Work out what can be answered, researched, built or tested.',
       'Begin work on broad ambitions. If several milestones could serve the ambition, select one useful and reversible milestone yourself, state your assumptions, and preserve the larger objective. Design choices and broad scope are not reasons to choose clarify.',
+      'Choose capability or composition only when all required inputs and conditions fit the listed scopes. Explain any mismatch and choose adaptation or research when needed. Use clarify for indispensable missing information.',
       'For direct work, give the actual answer. For research or invention, give one preliminary technical result such as a worked example or an evaluation design with a named baseline and a falsifiable check. In nextAction, name the first step that advances that work.',
       'Report only actions genuinely taken. Treat new methods, citations and results as unverified until independently checked. Never invent computation, sources or permissions.',
       'No authority to run code, acquire credentials, access private data, publish, spend or act externally is granted here. Propose allowed safe steps only.',
@@ -124,6 +125,7 @@ const missionInstructions = {
     guidance: [
       'Poursuivez la mission même si le catalogue ne contient aucune correspondance. Déterminez ce qui peut être résolu, étudié, construit ou testé.',
       'Amorcez le travail même si l’ambition est vaste. Si plusieurs étapes sont envisageables, choisissez vous-même une première étape utile et réversible. Indiquez vos hypothèses et préservez l’objectif général. Les choix de conception et la portée du sujet ne justifient pas la voie clarify.',
+      'Choisissez capability ou composition uniquement si toutes les données et conditions requises correspondent aux portées indiquées. Expliquez tout écart et choisissez adaptation ou research au besoin. Utilisez clarify si un renseignement indispensable manque.',
       'Pour une réponse directe, fournissez le résultat concret. Pour la recherche ou l’invention, présentez un premier résultat technique, par exemple un calcul détaillé ou un protocole qui nomme la méthode de référence et formule un test réfutable. Nommez la prochaine action concrète dans nextAction.',
       'Rapportez uniquement les actions réellement effectuées. Les méthodes, sources citées et résultats restent à vérifier de façon indépendante. N’inventez aucun calcul, aucune source et aucune autorisation.',
       'Ce travail n’autorise ni l’exécution de code, ni l’obtention de codes d’accès, ni l’accès à des données privées, ni la publication, ni les dépenses, ni les actions externes. Proposez seulement des étapes autorisées et sûres.',

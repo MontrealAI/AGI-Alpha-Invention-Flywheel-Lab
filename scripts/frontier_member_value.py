@@ -438,6 +438,13 @@ def build_public_missions(destination, revision):
     return escape(stable([{
         'ambition': receipt['original_ambition'], 'download': GAME_THEORY_ZIP,
         'report': f'{MONTREAL}/blob/{revision}/{report.as_posix()}',
+        'capability': {
+            'id': receipt['id'], 'en': receipt['card']['en']['title'], 'fr': receipt['card']['fr']['title'],
+            'scopeEn': 'Zero-sum strategic allocation with declared hidden payoff scenarios. ' + receipt['scope'],
+            'scopeFr': ('Allocation stratégique à somme nulle. Budgets entiers finis et déclarés, axes communs, '
+                        'poids entiers non négatifs et additifs, '
+                        'allocations simultanées privées et scénarios de gains cachés.'),
+        },
         **{lang: ' '.join(receipt['card'][lang][field] for field in ('summary', 'verification'))
            for lang in ('en', 'fr')},
     }]).decode())
