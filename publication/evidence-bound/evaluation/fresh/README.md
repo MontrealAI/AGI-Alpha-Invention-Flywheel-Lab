@@ -13,6 +13,10 @@ The evidence-bound executor and the ordinary same-model comparator each complete
 
 An explicitly assisted native replay independently verified all six numeric claims across both calculation cases and replayed each compiled SQL artifact on the withheld dataset. It also produced a precise abstention for the missing duration with no numeric claim. The operator supplied the SQL and exact claim bindings. This qualifies the tested native execution and evidence mechanism under correct inputs and actions. The four independent conventional references also matched, including the two interpreter headers acquired separately by the evaluator. [Assisted native replay](assisted/RESULT.json) · [Ordinary SQL control](ORDINARY-SQL-CONTROL.json) · [Conventional references](CONVENTIONAL-REFERENCE.json)
 
+A separate post-registration comparison gave an included-Codex author the three initial local tasks without the oracle or reuse data. Three standalone Python artifacts independently passed all three initial tasks and both withheld reuse checks. This comparison used different compute and covered three local tasks. [Strong direct assisted comparison](strong-direct/README.md)
+
+A separate included-Codex construction used the three local ambitions and their initial authorized inputs after the registered trial. The evaluator accepted **3/3** primary outcomes and **2/2** unseen reuse checks on the frozen Python tools. This was a different-compute assisted comparison. The source acquisition case and a full comparable cost were outside its scope. [Direct assisted comparison](strong-direct/RESULT.json)
+
 ## Method and replay
 
 The registration specifies the tasks, information parity, acceptance conditions and limits before model execution. The candidate uses the mission backend frozen at `aa42b078e10a745f22f0ce2dba8fceaca8caabba`. The two primary arms use the same credential-free Qwen3-8B server for at most three calls, 768 output tokens per call and 14 tool attempts per case. [Registration](REGISTRATION.json) · [Executed local model](../QWEN-LOCAL-IDENTITY.json)
