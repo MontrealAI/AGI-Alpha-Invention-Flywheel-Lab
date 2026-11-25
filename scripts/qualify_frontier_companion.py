@@ -39,12 +39,14 @@ def launch(package, fingerprint, revision):
                 pending.put(None)
 
             Thread(target=read_output, daemon=True).start()
-            start = monotonic()
+            started_at = monotonic()
+            deadline = started_at + 60
             origin = None
             pairing_code_printed = False
-            while monotonic() - start < 20 and not origin:
+            safe_diagnostics = []
+            while monotonic() < deadline and not origin:
                 try:
-                    line = pending.get(timeout=max(0, 20 - (monotonic() - start)))
+                    line = pending.get(timeout=max(0, deadline - monotonic()))
                 except Empty:
                     break
                 if line is None:
@@ -53,7 +55,12 @@ def launch(package, fingerprint, revision):
                     pairing_code_printed = len(line.strip().split()[-1]) == 43
                 if line.startswith('ALPHA GENESIS HARNESS: http://127.0.0.1:'):
                     origin = line.strip().split()[-1]
-            require(origin and pairing_code_printed, 'Companion did not present the local pairing entrance')
+                if line.startswith(('FRONTIER requires Python', 'Connector could not start.')):
+                    safe_diagnostics.append(line.strip())
+            require(origin and pairing_code_printed, 'Companion did not present the local pairing entrance '
+                    f'(exit={process.poll()}, pairing_announced={pairing_code_printed}, '
+                    f'loopback_announced={bool(origin)}, reported={safe_diagnostics})')
+            startup_ms = round((monotonic() - started_at) * 1000)
             local_http = build_opener(ProxyHandler({}))
             with local_http.open(origin + '/?setup=intelligence&route=api&lang=fr', timeout=5) as page:
                 require(b'native-intelligence.js' in page.read() and page.headers['X-Frame-Options'] == 'DENY',
@@ -67,7 +74,8 @@ def launch(package, fingerprint, revision):
             require(status['profiles'] == [], 'A clean companion must have no inherited provider account')
             return {'source_commit': revision, 'sha256': fingerprint, 'version': manifest['version'],
                     'os': system, 'launcher': launcher, 'pairing_code_available': True,
-                    'private_setup_served': True, 'default_provider_profiles': 0, 'inference_calls': 0}
+                    'private_setup_served': True, 'default_provider_profiles': 0, 'inference_calls': 0,
+                    'startup_ms': startup_ms}
         finally:
             if system == 'Windows' and process.poll() is None:
                 subprocess.run(['taskkill', '/PID', str(process.pid), '/T', '/F'], capture_output=True, timeout=10)

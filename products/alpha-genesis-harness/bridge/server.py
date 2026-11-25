@@ -13,6 +13,7 @@ import json
 import mimetypes
 from pathlib import Path
 import secrets
+from socketserver import TCPServer
 import sys
 import threading
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -75,6 +76,11 @@ class NativeMechanism:
 class HarnessServer(ThreadingHTTPServer):
     daemon_threads = True
     allow_reuse_address = True
+
+    def server_bind(self):
+        # The service accepts only a literal loopback host. Starting it needs no name lookup.
+        TCPServer.server_bind(self)
+        self.server_name, self.server_port = self.server_address
 
     def __init__(self, address, runtime=None, app_path=APP, *, config=None, workspace=None):
         if address[0] != "127.0.0.1":
@@ -703,8 +709,8 @@ def main():
             server.server_close()
         print("Connector could not start. Check the private configuration and choose an available loopback port.", file=sys.stderr)
         return 1
-    print(f"ALPHA GENESIS HARNESS: {server.origin}")
-    print("Private process-session connector. Closing it resets this session guard; it does not reset provider bills.")
+    print(f"ALPHA GENESIS HARNESS: {server.origin}", flush=True)
+    print("Private process-session connector. Closing it resets this session guard; it does not reset provider bills.", flush=True)
     if not args.no_browser:
         webbrowser.open(guide_url or server.origin)
     try:

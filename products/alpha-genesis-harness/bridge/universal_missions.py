@@ -382,17 +382,19 @@ class UniversalMissionService(WorkflowService):
         self._verify(state)
         checks_passed = state["verification"]["passed"]
         required_checks = bool(state["spec"]["acceptance"])
-        repairs = instrument_repairs(state["events"])
+        evidence = None
+        if "evidence" in state["spec"]["mission"]["requirements"]:
+            evidence = self._evidence(state)
+            dispositions = [{key: claim[key] for key in ("id", "status", "reason")} for claim in evidence["claims"]]
+            self._event(state, "claim_dispositions", {"status": evidence["status"], "claims": dispositions})
+        repairs = instrument_repairs(state.get("events"))
         if repairs:
             guidance = ("Corrigez les instruments refusés avant de les exécuter. "
                         if state["spec"]["mission"]["language"] == "fr"
                         else "Correct the refused instruments before running them. ")
             state["feedback"] = guidance + " ".join(reason[:360] for reason in list(repairs.values())[:4])
             return
-        if "evidence" in state["spec"]["mission"]["requirements"]:
-            evidence = self._evidence(state)
-            dispositions = [{key: claim[key] for key in ("id", "status", "reason")} for claim in evidence["claims"]]
-            self._event(state, "claim_dispositions", {"status": evidence["status"], "claims": dispositions})
+        if evidence is not None:
             sufficient_progress = evidence["status"] == "VERIFIED" or response["done"] and evidence["status"] == "SOURCE_BOUND"
             if sufficient_progress and (checks_passed or not required_checks):
                 state["status"] = "needs_review"

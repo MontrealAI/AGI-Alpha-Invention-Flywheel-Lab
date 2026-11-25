@@ -372,6 +372,15 @@ class HTTPBoundaryTests(unittest.TestCase):
         self.assertEqual(self.call("GET", "/api/status")[0], 403)
         self.assertEqual(self.call("OPTIONS", "/api/generate")[0], 403)
 
+    def test_connector_starts_without_resolving_the_loopback_host(self):
+        with patch("socket.getfqdn", side_effect=AssertionError("Unexpected name lookup")):
+            server = HarnessServer(("127.0.0.1", 0), Runtime(), self.directory.name)
+            try:
+                self.assertEqual(server.server_name, "127.0.0.1")
+                self.assertGreater(server.server_port, 0)
+            finally:
+                server.server_close()
+
     def test_post_requires_token_and_json(self):
         self.assertEqual(self.call("POST", "/api/generate", {"Content-Type": "application/json"}, "{}")[0], 403)
         headers = {"X-Harness-Token": self.server.token, "Content-Type": "text/plain"}

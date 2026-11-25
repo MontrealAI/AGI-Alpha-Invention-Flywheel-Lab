@@ -52,6 +52,7 @@ REASON_MESSAGES = {
     "CLAIM_CONTRADICTS_EXECUTED_RESULT": ("The proposed value differs from the executed value.", "La valeur proposée diffère de la valeur calculée."),
     "INPUT_ORIGIN_INELIGIBLE": ("The input provenance is ineligible for this claim.", "La provenance des données est inadmissible pour cette affirmation."),
     "INPUT_ASSUMPTIONS_INCOMPATIBLE": ("The input assumptions are incompatible with this claim.", "Les hypothèses des données sont incompatibles avec cette affirmation."),
+    "INSTRUMENT_REPAIR_REQUIRED": ("Correct the instrument and rerun the calculation on the approved inputs.", "Corrigez l’instrument et relancez le calcul sur les données approuvées."),
     "EXECUTION_OPERATION_STALE": ("The calculation must be rerun with the current operation.", "Le calcul doit être relancé avec l’opération actuelle."),
     "OUTCOME_EVIDENCE_SCOPE_MISMATCH": ("The evidence belongs to a different or incomplete scope.", "Les preuves relèvent d’un périmètre différent ou incomplet."),
 }
