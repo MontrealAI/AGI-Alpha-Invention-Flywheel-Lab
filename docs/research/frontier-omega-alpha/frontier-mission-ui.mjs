@@ -303,6 +303,22 @@ export function setupMissionConsole(member, shell) {
     } catch { if (token === serial && active()) render(words.invalidMission); }
   });
 
+  // The connection chooser must lead back to the actual member mission, not a
+  // repository README. This is explicitly the assisted route: no dispatch,
+  // credential collection, or sharing occurs until the member reviews the brief.
+  for (const button of member.querySelectorAll('[data-frontier-assisted]')) {
+    button.addEventListener('click', () => {
+      if (!active()) return;
+      if (!mission) {
+        shell.show(input, {remember:true});
+        input.focus();
+        return;
+      }
+      shell.show(node('frontier-mission-panel'), {remember:true});
+      if (!node('mission-prepare').disabled) node('mission-prepare').click();
+    });
+  }
+
   node('mission-share').addEventListener('change', authorizeShare);
   node('mission-copy').addEventListener('click', async () => {
     if (!active() || !request || !node('mission-share').checked) return;

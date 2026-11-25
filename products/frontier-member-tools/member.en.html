@@ -294,18 +294,23 @@
       <summary>Choose how to run your mission</summary>
       <details class="intelligence-choice">
         <summary>Use my ChatGPT subscription</summary>
-        <p>Use the official connection when the application and your plan qualify. Review a prepared handoff if the connection is unavailable.</p>
-        <p class="mv-links"><a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/main/publication/evidence-bound/README.md#chatgpt-and-codex">ChatGPT and Codex setup</a> <a href="#my-intelligence" data-local-intelligence-workbench target="_blank" rel="noopener noreferrer" hidden>Open ChatGPT and Codex on this device</a></p>
+        <p>Bring your own ChatGPT account. You can use it for this ambition now through a reviewed assisted mission; automatic subscription-powered execution requires an eligible, separately authorized connection and is not yet qualified here.</p>
+        <div class="foundry-actions"><button type="button" class="entry-button" data-frontier-assisted>Use my ChatGPT now · assisted</button></div>
+        <p class="foundry-reference">Review the prepared brief, open ChatGPT with your existing account, and return its response to this mission. No API key or paid fallback is used by this page.</p>
+        <details><summary>Already have an authorized native HARNESS connection?</summary>
+          <p>Open the separately launched private HARNESS application on this device and choose ChatGPT plan access. The standard paired Pages executor is local-only; this does not enable automatic subscription inference for the member mission.</p>
+          <p><a href="http://127.0.0.1:8765/" target="_blank" rel="noopener noreferrer">Open my configured private HARNESS</a></p>
+        </details>
       </details>
       <details class="intelligence-choice mission-execution-connection" open>
         <summary>Use intelligence on my computer</summary>
         <p>Extract the download. Open the Launch-FRONTIER file for your system and bring the one-use code here.</p>
         <p class="mv-links"><a href="frontier-harness-executor-1.2.0.zip" download>Download the local executor</a>
-          <a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/main/publication/evidence-bound/README.md">Local setup guide</a></p>
+          <a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/main/publication/outcome-driven/README.md">Optional technical guide</a></p>
         <form id="execution-code-form" autocomplete="off">
           <label for="execution-code">One-use pairing code</label>
           <input type="password" id="execution-code" required maxlength="43" autocomplete="off" spellcheck="false">
-          <button type="submit" class="quiet">Pair this browser</button>
+          <button type="submit" class="entry-button">Pair this browser</button>
         </form>
         <p id="execution-connection" role="status"></p>
         <div id="intelligence-local-controls" hidden>
@@ -330,8 +335,10 @@
       </details>
       <details class="intelligence-choice">
         <summary>Connect an AI provider</summary>
-        <p>Configure a provider in the local HARNESS workbench. Review the exact account, model and spending limits before running. API credits for eligible subscriptions use a separate API organization.</p>
-        <p class="mv-links"><a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/main/publication/evidence-bound/README.md#authorized-api-access">Provider and API credit setup</a> <a href="#my-intelligence" data-local-intelligence-workbench target="_blank" rel="noopener noreferrer" hidden>Open the local HARNESS workbench</a></p>
+        <p>Automatic API connection is not yet available in the paired member executor. Do not enter API keys on this public site. A separately configured private HARNESS can use approved provider connections and budgets.</p>
+        <p><a class="quiet" href="http://127.0.0.1:8765/" target="_blank" rel="noopener noreferrer">Open my configured private HARNESS</a></p>
+        <p>Open this only if you have already launched the authorized native application on this device. It will not connect the current mission automatically. While that connection is unavailable, use an assistant you already have with your saved ambition.</p>
+        <div class="foundry-actions"><button type="button" class="entry-button" data-frontier-assisted>Use my AI assistant · assisted</button></div>
       </details>
       <details class="intelligence-choice">
         <summary>Use intelligent hybrid execution</summary>
@@ -340,6 +347,7 @@
       </details>
       <details class="intelligence-choice">
         <summary>Advanced connection settings</summary>
+        <p class="mv-links"><a href="#my-intelligence" data-local-intelligence-workbench target="_blank" rel="noopener noreferrer" hidden>Open paired local-only workbench</a> <a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/main/publication/evidence-bound/README.md#chatgpt-and-codex">Technical provider documentation</a></p>
       <form id="mission-connection-form" autocomplete="off">
         <h4>Local inference</h4>
         <div class="foundry-fields">

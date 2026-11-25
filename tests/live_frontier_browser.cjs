@@ -584,9 +584,21 @@ async function universalMission(page, language, width) {
     assert.match(await page.locator('#mission-published-summary').innerText(), /−49[.,]5/u);
     assert.deepEqual(await page.locator('#mission-published-links a[download]').evaluateAll(links => links.map(link => link.getAttribute('href'))),
       ['frontier-game-theory-1.0.0.zip','frontier-game-observation-1.0.0.zip']);
-    await page.locator('#mission-prepare').click();
+    // Exercise the owner's failed onboarding path in both locales, not only
+    // the older assisted button. A choice must reopen the exact ambition with
+    // review required; it must not open documentation or dispatch inference.
+    await page.locator('#mission-configure').click();
+    const choice = page.locator('[data-frontier-assisted]').nth(language === 'fr' ? 1 : 0);
+    const section = choice.locator('xpath=ancestor::details[1]');
+    if (!await choice.isVisible()) await section.locator('summary').first().click();
+    const pageUrl = page.url();
+    await choice.click();
     const prompt = page.locator('#mission-prompt');
     await prompt.waitFor({state:'visible'});
+    assert.equal(new URL(page.url()).origin, new URL(pageUrl).origin);
+    assert.equal(await panel.locator('#mission-ambition').textContent(), original);
+    assert.equal(await page.locator('#mission-share').isChecked(), false);
+    assert.equal(await page.locator('#mission-assistant').isVisible(), false);
     assert.match(await prompt.inputValue(), /Build Frontier AI for Game Theory\./u);
     assert.match(await prompt.inputValue(), language === 'fr' ? /Écrivez en français/u : /Write text in English/u);
     assert.match(await prompt.inputValue(), language === 'fr' ? /Identifiant de l’exécution en cours/u : /Current mission run reference/u);
