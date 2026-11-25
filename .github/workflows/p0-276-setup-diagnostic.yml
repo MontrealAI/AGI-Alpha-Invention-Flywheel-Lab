@@ -1,0 +1,35 @@
+name: P0-276 separate synthetic setup localization
+on:
+  push:
+    branches: ['research/p0-immutable-native276']
+    paths: ['.github/workflows/p0-276-setup-diagnostic.yml']
+permissions:
+  contents: read
+jobs:
+  setup-localization:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record platform job execution start
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+          sparse-checkout: |
+            research/p0_immutable_native276
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12.16'
+      - name: Verify and execute one frozen synthetic diagnostic
+        run: |
+          set -euo pipefail
+          test "$(git hash-object research/p0_immutable_native276/setup_diagnostic.py)" = edb3a37a1c84760c2b0059bea8f8b26714db6882
+          python -B research/p0_immutable_native276/setup_diagnostic.py "$RUNNER_TEMP/P0_276_SETUP.json"
+      - name: Retain compact nonfinancial receipt only
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: p0-276-setup-diagnostic
+          path: ${{ runner.temp }}/P0_276_SETUP.json
+          if-no-files-found: warn
+          retention-days: 7
