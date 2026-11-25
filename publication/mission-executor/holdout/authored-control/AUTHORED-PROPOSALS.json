@@ -1,0 +1,465 @@
+[
+  {
+    "actions": [
+      {
+        "name": "inverse-affine.json",
+        "spec": {
+          "inputs": [
+            "c1",
+            "c2",
+            "o1",
+            "o2",
+            "target"
+          ],
+          "name": "Inverse affine calibration",
+          "outputs": {
+            "command": {
+              "args": [
+                {
+                  "field": "target"
+                }
+              ],
+              "op": "formula"
+            },
+            "round_trip_mm": {
+              "args": [
+                {
+                  "args": [
+                    {
+                      "args": [
+                        {
+                          "args": [
+                            {
+                              "field": "c1"
+                            },
+                            {
+                              "field": "c2"
+                            }
+                          ],
+                          "op": "eq"
+                        }
+                      ],
+                      "op": "not"
+                    },
+                    {
+                      "args": [
+                        {
+                          "args": [
+                            {
+                              "field": "o1"
+                            },
+                            {
+                              "field": "o2"
+                            }
+                          ],
+                          "op": "eq"
+                        }
+                      ],
+                      "op": "not"
+                    }
+                  ],
+                  "op": "and"
+                },
+                {
+                  "args": [
+                    {
+                      "field": "o1"
+                    },
+                    {
+                      "args": [
+                        {
+                          "args": [
+                            {
+                              "args": [
+                                {
+                                  "args": [
+                                    {
+                                      "field": "c1"
+                                    },
+                                    {
+                                      "args": [
+                                        {
+                                          "args": [
+                                            {
+                                              "args": [
+                                                {
+                                                  "field": "target"
+                                                },
+                                                {
+                                                  "field": "o1"
+                                                }
+                                              ],
+                                              "op": "sub"
+                                            },
+                                            {
+                                              "args": [
+                                                {
+                                                  "field": "c2"
+                                                },
+                                                {
+                                                  "field": "c1"
+                                                }
+                                              ],
+                                              "op": "sub"
+                                            }
+                                          ],
+                                          "op": "mul"
+                                        },
+                                        {
+                                          "args": [
+                                            {
+                                              "field": "o2"
+                                            },
+                                            {
+                                              "field": "o1"
+                                            }
+                                          ],
+                                          "op": "sub"
+                                        }
+                                      ],
+                                      "op": "div"
+                                    }
+                                  ],
+                                  "op": "add"
+                                },
+                                {
+                                  "field": "c1"
+                                }
+                              ],
+                              "op": "sub"
+                            },
+                            {
+                              "args": [
+                                {
+                                  "field": "o2"
+                                },
+                                {
+                                  "field": "o1"
+                                }
+                              ],
+                              "op": "sub"
+                            }
+                          ],
+                          "op": "mul"
+                        },
+                        {
+                          "args": [
+                            {
+                              "field": "c2"
+                            },
+                            {
+                              "field": "c1"
+                            }
+                          ],
+                          "op": "sub"
+                        }
+                      ],
+                      "op": "div"
+                    }
+                  ],
+                  "op": "add"
+                },
+                null
+              ],
+              "op": "if"
+            }
+          }
+        },
+        "tool": "construct_instrument"
+      },
+      {
+        "input": {
+          "c1": 120.0,
+          "c2": 380.0,
+          "o1": 117.2,
+          "o2": 373.3,
+          "target": 216.4
+        },
+        "name": "inverse-affine.json",
+        "tool": "run_instrument"
+      }
+    ],
+    "done": false,
+    "summary": "Rejouons la forme d'expression refusée pour obtenir un diagnostic réel."
+  },
+  {
+    "actions": [
+      {
+        "name": "inverse-affine.json",
+        "spec": {
+          "inputs": [
+            "c1",
+            "c2",
+            "o1",
+            "o2",
+            "target"
+          ],
+          "name": "Inverse affine calibration",
+          "outputs": {
+            "command": {
+              "args": [
+                {
+                  "args": [
+                    {
+                      "args": [
+                        {
+                          "args": [
+                            {
+                              "field": "c1"
+                            },
+                            {
+                              "field": "c2"
+                            }
+                          ],
+                          "op": "eq"
+                        }
+                      ],
+                      "op": "not"
+                    },
+                    {
+                      "args": [
+                        {
+                          "args": [
+                            {
+                              "field": "o1"
+                            },
+                            {
+                              "field": "o2"
+                            }
+                          ],
+                          "op": "eq"
+                        }
+                      ],
+                      "op": "not"
+                    }
+                  ],
+                  "op": "and"
+                },
+                {
+                  "args": [
+                    {
+                      "field": "c1"
+                    },
+                    {
+                      "args": [
+                        {
+                          "args": [
+                            {
+                              "args": [
+                                {
+                                  "field": "target"
+                                },
+                                {
+                                  "field": "o1"
+                                }
+                              ],
+                              "op": "sub"
+                            },
+                            {
+                              "args": [
+                                {
+                                  "field": "c2"
+                                },
+                                {
+                                  "field": "c1"
+                                }
+                              ],
+                              "op": "sub"
+                            }
+                          ],
+                          "op": "mul"
+                        },
+                        {
+                          "args": [
+                            {
+                              "field": "o2"
+                            },
+                            {
+                              "field": "o1"
+                            }
+                          ],
+                          "op": "sub"
+                        }
+                      ],
+                      "op": "div"
+                    }
+                  ],
+                  "op": "add"
+                },
+                null
+              ],
+              "op": "if"
+            },
+            "round_trip_mm": {
+              "args": [
+                {
+                  "args": [
+                    {
+                      "args": [
+                        {
+                          "args": [
+                            {
+                              "field": "c1"
+                            },
+                            {
+                              "field": "c2"
+                            }
+                          ],
+                          "op": "eq"
+                        }
+                      ],
+                      "op": "not"
+                    },
+                    {
+                      "args": [
+                        {
+                          "args": [
+                            {
+                              "field": "o1"
+                            },
+                            {
+                              "field": "o2"
+                            }
+                          ],
+                          "op": "eq"
+                        }
+                      ],
+                      "op": "not"
+                    }
+                  ],
+                  "op": "and"
+                },
+                {
+                  "args": [
+                    {
+                      "field": "o1"
+                    },
+                    {
+                      "args": [
+                        {
+                          "args": [
+                            {
+                              "args": [
+                                {
+                                  "args": [
+                                    {
+                                      "field": "c1"
+                                    },
+                                    {
+                                      "args": [
+                                        {
+                                          "args": [
+                                            {
+                                              "args": [
+                                                {
+                                                  "field": "target"
+                                                },
+                                                {
+                                                  "field": "o1"
+                                                }
+                                              ],
+                                              "op": "sub"
+                                            },
+                                            {
+                                              "args": [
+                                                {
+                                                  "field": "c2"
+                                                },
+                                                {
+                                                  "field": "c1"
+                                                }
+                                              ],
+                                              "op": "sub"
+                                            }
+                                          ],
+                                          "op": "mul"
+                                        },
+                                        {
+                                          "args": [
+                                            {
+                                              "field": "o2"
+                                            },
+                                            {
+                                              "field": "o1"
+                                            }
+                                          ],
+                                          "op": "sub"
+                                        }
+                                      ],
+                                      "op": "div"
+                                    }
+                                  ],
+                                  "op": "add"
+                                },
+                                {
+                                  "field": "c1"
+                                }
+                              ],
+                              "op": "sub"
+                            },
+                            {
+                              "args": [
+                                {
+                                  "field": "o2"
+                                },
+                                {
+                                  "field": "o1"
+                                }
+                              ],
+                              "op": "sub"
+                            }
+                          ],
+                          "op": "mul"
+                        },
+                        {
+                          "args": [
+                            {
+                              "field": "c2"
+                            },
+                            {
+                              "field": "c1"
+                            }
+                          ],
+                          "op": "sub"
+                        }
+                      ],
+                      "op": "div"
+                    }
+                  ],
+                  "op": "add"
+                },
+                null
+              ],
+              "op": "if"
+            }
+          }
+        },
+        "tool": "construct_instrument"
+      },
+      {
+        "input": {
+          "c1": 120.0,
+          "c2": 380.0,
+          "o1": 117.2,
+          "o2": 373.3,
+          "target": 216.4
+        },
+        "name": "inverse-affine.json",
+        "tool": "run_instrument"
+      },
+      {
+        "input": {
+          "c1": 120.0,
+          "c2": 380.0,
+          "o1": 117.2,
+          "o2": 373.3,
+          "target": 289.8
+        },
+        "name": "inverse-affine.json",
+        "tool": "run_instrument"
+      }
+    ],
+    "done": true,
+    "summary": "Le test a refusé l'opération inconnue. Représentons la calibration par les opérations arithmétiques prises en charge."
+  }
+]

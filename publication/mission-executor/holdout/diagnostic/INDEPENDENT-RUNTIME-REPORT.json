@@ -1,0 +1,208 @@
+{
+  "dated_utc": "2026-11-25T03:10:18.738344+00:00",
+  "elapsed_seconds": 227.36762936800005,
+  "held_registration_sha256": "4417b33af28d8d0acfdd814714f8dd837d94fe6d2414c885c3ba2fbcd061d274",
+  "not_tested": [
+    "m02",
+    "m03",
+    "m04",
+    "m05",
+    "m06",
+    "m07",
+    "m08"
+  ],
+  "outcomes": {
+    "m01": {
+      "artifact_count": 3,
+      "elapsed_seconds": 227.35787335400028,
+      "evaluation": {
+        "actual_operations": [
+          "construct_instrument",
+          "write_document",
+          "construct_instrument",
+          "write_document",
+          "read_artifact",
+          "write_document",
+          "construct_instrument",
+          "write_document"
+        ],
+        "actual_tool_operations": 8,
+        "bound_provider_receipts": [
+          {
+            "cost": {
+              "accounted": 0.0,
+              "amount": 0.0,
+              "attempts": 1,
+              "basis": "reported_usage_at_user_rates",
+              "complete_cost_known": false,
+              "currency": "USD"
+            },
+            "model": "qwen3-8b-q4_k_m",
+            "provider": "llama-cpp",
+            "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+            "reported_model": "qwen3-8b-q4_k_m",
+            "requested_model": "qwen3-8b-q4_k_m",
+            "response_sha256": "fe5e905ecce1a873471252d6a88cb8d6a29a9c61d69f86611e9fbebb2f91ad4e",
+            "role": "builder",
+            "run_id": "wf_520e5f8f2e575679685afe77_c3f776cfcf6e9ae9",
+            "usage": {
+              "input_tokens": 749,
+              "output_tokens": 505
+            }
+          },
+          {
+            "cost": {
+              "accounted": 0.0,
+              "amount": 0.0,
+              "attempts": 1,
+              "basis": "reported_usage_at_user_rates",
+              "complete_cost_known": false,
+              "currency": "USD"
+            },
+            "model": "qwen3-8b-q4_k_m",
+            "provider": "llama-cpp",
+            "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+            "reported_model": "qwen3-8b-q4_k_m",
+            "requested_model": "qwen3-8b-q4_k_m",
+            "response_sha256": "a354d91cd9cca64e7d9a7e7fb48d232d8d38b71578a83b2555567c6b06ebde5d",
+            "role": "builder",
+            "run_id": "wf_520e5f8f2e575679685afe77_35785b8f56000d63",
+            "usage": {
+              "input_tokens": 1297,
+              "output_tokens": 739
+            }
+          },
+          {
+            "cost": {
+              "accounted": 0.0,
+              "amount": 0.0,
+              "attempts": 1,
+              "basis": "reported_usage_at_user_rates",
+              "complete_cost_known": false,
+              "currency": "USD"
+            },
+            "model": "qwen3-8b-q4_k_m",
+            "provider": "llama-cpp",
+            "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+            "reported_model": "qwen3-8b-q4_k_m",
+            "requested_model": "qwen3-8b-q4_k_m",
+            "response_sha256": "8f38523bcca27f426fe277287cb4c8442ea1c5b51627b588273df28616eb9e5a",
+            "role": "builder",
+            "run_id": "wf_520e5f8f2e575679685afe77_f047457ea2cda6b3",
+            "usage": {
+              "input_tokens": 1542,
+              "output_tokens": 497
+            }
+          }
+        ],
+        "later_model_dispatch_after_first_operation": true,
+        "no_data_operations": true,
+        "outcome": {
+          "confirmations": [
+            {
+              "artifact": "affine_inverter.json",
+              "confirmed": false,
+              "error": "Unsupported expression operation.",
+              "sha256": "d3d20c8f5fb538482f3db4027db7c4bbc8dbe91934f2d13c657e689077d53dd1"
+            }
+          ],
+          "forward_targets_returned_by_a_tool": false,
+          "found_both_required_commands": false,
+          "qualification": "FAIL",
+          "runtime_outputs": [],
+          "successful_reusable_artifact": false
+        },
+        "proposals": [
+          "Création d'un calculateur affine inversible pour convertir des commandes en mesures et vice versa, en utilisant des points calibrés.",
+          "Construction et test du calculateur affine pour inverser la calibration avec les points donnés, suivi de vérification des cibles.",
+          "Construction d'un calculateur affine inversible avec les données fournies et vérification des cibles"
+        ],
+        "refusals": [
+          {
+            "proposal_fields": [
+              "input",
+              "name",
+              "tool"
+            ],
+            "reason": "Unsupported expression operation.",
+            "tool": "run_instrument"
+          },
+          {
+            "proposal_fields": [
+              "input",
+              "name",
+              "tool"
+            ],
+            "reason": "Unsupported expression operation.",
+            "tool": "run_instrument"
+          },
+          {
+            "proposal_fields": [
+              "input",
+              "name",
+              "tool"
+            ],
+            "reason": "Unsupported expression operation.",
+            "tool": "run_instrument"
+          },
+          {
+            "proposal_fields": [
+              "input",
+              "name",
+              "tool"
+            ],
+            "reason": "Unsupported expression operation.",
+            "tool": "run_instrument"
+          },
+          {
+            "proposal_fields": [
+              "input",
+              "name",
+              "tool"
+            ],
+            "reason": "Unsupported expression operation.",
+            "tool": "run_instrument"
+          },
+          {
+            "proposal_fields": [
+              "input",
+              "name",
+              "tool"
+            ],
+            "reason": "Unsupported expression operation.",
+            "tool": "run_instrument"
+          },
+          {
+            "proposal_fields": [
+              "input",
+              "name",
+              "tool"
+            ],
+            "reason": "Unsupported expression operation.",
+            "tool": "run_instrument"
+          },
+          {
+            "proposal_fields": [
+              "input",
+              "name",
+              "tool"
+            ],
+            "reason": "Unsupported expression operation.",
+            "tool": "run_instrument"
+          }
+        ],
+        "settled_scope_checks": []
+      },
+      "exact_checkpoint_sha256": "697a2740dbf63621238c90b0c0c6755fa93ef9ace550e6c3a372a3402f872723",
+      "id": "m01",
+      "independent_reference_seconds": 0.00011519300005602418,
+      "mission_id": "wf_520e5f8f2e575679685afe77",
+      "model": "qwen3-8b-q4_k_m",
+      "status": "exhausted"
+    }
+  },
+  "run_scope": [
+    "m01"
+  ],
+  "schema": "frontier/live-held-mission-v1"
+}

@@ -1,0 +1,250 @@
+{
+  "registration": "4417b33af28d8d0acfdd814714f8dd837d94fe6d2414c885c3ba2fbcd061d274",
+  "results": {
+    "m01": {
+      "confirmation": [
+        {
+          "commands": [
+            "-331/62",
+            "-1273/434"
+          ],
+          "forward_replay": [
+            "-1/2",
+            "11/7"
+          ],
+          "offset": "295/72",
+          "slope": "31/36"
+        },
+        {
+          "status": "non-invertible"
+        }
+      ],
+      "initial": {
+        "commands": [
+          "43480/197",
+          "58160/197"
+        ],
+        "forward_replay": [
+          "1082/5",
+          "1449/5"
+        ],
+        "offset": "-1",
+        "slope": "197/200"
+      },
+      "oracle": "inverse_affine"
+    },
+    "m02": {
+      "confirmation": [
+        {
+          "candidate_count": 16,
+          "feasible_count": 10,
+          "optimal_feasible_manifests": [
+            {
+              "kg": 8,
+              "manifest": [
+                "roller",
+                "screw"
+              ]
+            }
+          ],
+          "optimal_points": 33
+        }
+      ],
+      "initial": {
+        "candidate_count": 42,
+        "feasible_count": 27,
+        "optimal_feasible_manifests": [
+          {
+            "kg": 11,
+            "manifest": [
+              "gauge",
+              "mount",
+              "optic"
+            ]
+          }
+        ],
+        "optimal_points": 22
+      },
+      "oracle": "inventory_enumeration"
+    },
+    "m03": {
+      "confirmation": [],
+      "initial": {
+        "aligned_intervals_utc": [
+          [
+            "2025-11-15T04:58:00Z",
+            "2025-11-15T05:11:00Z"
+          ],
+          [
+            "2025-11-15T05:06:00Z",
+            "2025-11-15T05:20:00Z"
+          ],
+          [
+            "2025-11-15T05:19:00Z",
+            "2025-11-15T05:26:00Z"
+          ]
+        ],
+        "disjoint_intervals_utc": [
+          [
+            "2025-11-15T04:58:00Z",
+            "2025-11-15T05:26:00Z"
+          ]
+        ],
+        "total_minutes": 28
+      },
+      "oracle": "utc_interval_union"
+    },
+    "m04": {
+      "confirmation": [],
+      "initial": {
+        "compatible": false,
+        "derived_horizon_hours": "12",
+        "execution_allowed": false,
+        "grid_aligned": true,
+        "installed_horizon_hours": "24",
+        "needed_equivalent_horizon_hours_tag": "f012",
+        "state": "INCOMPATIBLE"
+      },
+      "oracle": "forecast_scope"
+    },
+    "m05": {
+      "confirmation": [],
+      "initial": {
+        "accessed_sources": [],
+        "disposition": "MISSING_INPUT",
+        "numerical_result": null,
+        "required_inputs": [
+          "authorized paired volume and duration measurements"
+        ]
+      },
+      "oracle": "missing_required_evidence"
+    },
+    "m06": {
+      "confirmation": [
+        {
+          "final_concentration_mg_per_l": "3495/11",
+          "final_volume_l": "33/20",
+          "mass_by_row_mg": [
+            "1905/4",
+            "48"
+          ],
+          "mass_reconstructed_from_output_mg": "2097/4",
+          "solute_mass_mg": "2097/4"
+        }
+      ],
+      "initial": {
+        "final_concentration_mg_per_l": "16600/13",
+        "final_volume_l": "13/5",
+        "mass_by_row_mg": [
+          "1800",
+          "1520",
+          "0"
+        ],
+        "mass_reconstructed_from_output_mg": "3320",
+        "solute_mass_mg": "3320"
+      },
+      "oracle": "concentration_balance"
+    },
+    "m07": {
+      "confirmation": [],
+      "initial": {
+        "higher_rank_exclusions": [
+          {
+            "reason": "outside cutoff",
+            "revision": "ember"
+          },
+          {
+            "reason": "duplicate sources",
+            "revision": "frost"
+          },
+          {
+            "reason": "unobserved",
+            "revision": "solar"
+          }
+        ],
+        "input_sha256": "c28cb020797c085856f2b26d935fc67a5def044dfc600e92174d2672fe74dcdb",
+        "matched_fingerprints": [
+          "s1",
+          "s2"
+        ],
+        "revision": "silver"
+      },
+      "oracle": "choose_source_revision"
+    },
+    "m08": {
+      "confirmation": [],
+      "initial": {
+        "adversary_witness": [
+          {
+            "allocation": [
+              1,
+              0
+            ],
+            "probability": "9/16",
+            "scenario": "alpha"
+          },
+          {
+            "allocation": [
+              0,
+              1
+            ],
+            "probability": "7/16",
+            "scenario": "beta"
+          }
+        ],
+        "exact_lower": "-63/16",
+        "exact_upper": "-63/16",
+        "matrix_columns": [
+          {
+            "allocation": [
+              0,
+              1
+            ],
+            "payoffs": [
+              "7",
+              "0"
+            ],
+            "scenario": "alpha"
+          },
+          {
+            "allocation": [
+              1,
+              0
+            ],
+            "payoffs": [
+              "0",
+              "-7"
+            ],
+            "scenario": "alpha"
+          },
+          {
+            "allocation": [
+              0,
+              1
+            ],
+            "payoffs": [
+              "-9",
+              "0"
+            ],
+            "scenario": "beta"
+          },
+          {
+            "allocation": [
+              1,
+              0
+            ],
+            "payoffs": [
+              "0",
+              "9"
+            ],
+            "scenario": "beta"
+          }
+        ],
+        "value": "-63/16",
+        "weight_on_first_lane": "7/16",
+        "weight_on_second_lane": "9/16"
+      },
+      "oracle": "two_lane_minimax"
+    }
+  }
+}

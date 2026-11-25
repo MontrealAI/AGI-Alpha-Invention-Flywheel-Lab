@@ -1,0 +1,333 @@
+{
+  "files": {
+    "RUN_INSTRUMENT.py": "# SPDX-License-Identifier: Apache-2.0\n\"\"\"Portable bounded instrument evaluator. Never evaluates Python or shell source.\"\"\"\nfrom __future__ import annotations\n\nimport argparse\nimport ast\nimport hashlib\nfrom io import StringIO\nimport json\nimport math\nfrom pathlib import Path\nimport re\nimport tokenize\n\n\n# Pin source at this module's own load, before a later lazy GENESIS import.\nLOADED_SOURCE_SHA256 = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()\n\ndef finite(value, depth=0):\n    if depth > 32:\n        raise ValueError(\"Input nesting bound exceeded.\")\n    if isinstance(value, float) and not math.isfinite(value):\n        raise ValueError(\"Nonfinite numbers are not supported.\")\n    if type(value) in {int, float} and (type(value) is int or value.is_integer()) and abs(value) > 9007199254740991:\n        raise ValueError(\"Integer exceeds the exact portable numerical range.\")\n    if isinstance(value, (list, dict)):\n        for item in (value.values() if isinstance(value, dict) else value):\n            finite(item, depth + 1)\n    return value\n\n\ndef _json_equal(left, right):\n    \"\"\"Compare JSON values recursively without treating booleans as numbers.\"\"\"\n    if type(left) in {int, float} and type(right) in {int, float}:\n        return left == right\n    if type(left) is not type(right):\n        return False\n    if isinstance(left, list):\n        return len(left) == len(right) and all(_json_equal(a, b) for a, b in zip(left, right))\n    if isinstance(left, dict):\n        return set(left) == set(right) and all(_json_equal(left[key], right[key]) for key in left)\n    return left == right\n\n\n_BINARY = {ast.Add: \"add\", ast.Sub: \"sub\", ast.Mult: \"mul\", ast.Div: \"div\"}\n_COMPARISONS = {ast.Eq: \"eq\", ast.Lt: \"lt\", ast.LtE: \"lte\", ast.Gt: \"gt\", ast.GtE: \"gte\"}\n_FUNCTIONS = {\"abs\", \"min\", \"max\", \"sum\", \"count\", \"choose\"}\n_JSON_LITERALS = {\"true\": True, \"false\": False, \"null\": None}\n\n\ndef compile_formula(source, bindings):\n    \"\"\"Translate a small expression syntax to evaluator operations. Never compile Python bytecode.\"\"\"\n    if not isinstance(source, str) or not 0 < len(source) <= 1024:\n        raise ValueError(\"Formula text must be between 1 and 1024 characters.\")\n    source = source.strip()\n    if \"\\n\" in source or \"\\r\" in source:\n        raise ValueError(\"Each formula must fit on one line.\")\n    try:\n        if \"&&\" in source or \"||\" in source:\n            # Accept common boolean spellings only at operator tokens, never\n            # inside a literal or an identifier.\n            tokens = list(tokenize.generate_tokens(StringIO(source).readline))\n            aliases = {\"&\": \" and \", \"|\": \" or \"}\n            replacements = [(left.start[1], right.end[1], aliases[left.string])\n                            for left, right in zip(tokens, tokens[1:])\n                            if left.type == right.type == tokenize.OP and left.string in aliases\n                            and left.string == right.string and left.end == right.start]\n            for start, end, replacement in reversed(replacements):\n                source = source[:start] + replacement + source[end:]\n        expression = ast.parse(source, mode=\"eval\").body\n    except (SyntaxError, RecursionError, tokenize.TokenError) as error:\n        raise ValueError(\"Formula syntax is invalid.\") from error\n\n    def operation(name, *args):\n        return {\"op\": name, \"args\": list(args)}\n\n    def translate(node, depth=0):\n        if depth > 24:\n            raise ValueError(\"Formula nesting bound exhausted.\")\n        def child(value):\n            return translate(value, depth + 1)\n        if isinstance(node, ast.Constant) and type(node.value) in {type(None), bool, int, float, str}:\n            return finite(node.value)\n        if isinstance(node, ast.Name):\n            if node.id in _JSON_LITERALS:\n                return _JSON_LITERALS[node.id]\n            return {\"ref\" if node.id in bindings else \"field\": node.id}\n        if isinstance(node, ast.List):\n            return [child(item) for item in node.elts]\n        if isinstance(node, ast.BinOp) and type(node.op) in _BINARY:\n            return operation(_BINARY[type(node.op)], child(node.left), child(node.right))\n        if isinstance(node, ast.UnaryOp) and isinstance(node.op, (ast.Not, ast.USub)):\n            return operation(\"not\", child(node.operand)) if isinstance(node.op, ast.Not) else operation(\"sub\", 0, child(node.operand))\n        if isinstance(node, ast.BoolOp):\n            return operation(\"and\" if isinstance(node.op, ast.And) else \"or\", *(child(item) for item in node.values))\n        if isinstance(node, ast.Compare) and all(type(op) in _COMPARISONS for op in node.ops):\n            # Adjacent comparisons share the middle expression. Compiling it\n            # twice would expand nested chains exponentially before evaluation.\n            operands = [child(part) for part in (node.left, *node.comparators)]\n            terms = [operation(_COMPARISONS[type(op)], operands[i], operands[i + 1]) for i, op in enumerate(node.ops)]\n            return terms[0] if len(terms) == 1 else operation(\"and\", *terms)\n        if isinstance(node, ast.IfExp):\n            return operation(\"if\", child(node.test), child(node.body), child(node.orelse))\n        if isinstance(node, ast.Call) and isinstance(node.func, ast.Name) and node.func.id in _FUNCTIONS and not node.keywords:\n            return operation(\"if\" if node.func.id == \"choose\" else node.func.id, *(child(arg) for arg in node.args))\n        raise ValueError(\"Formula uses an unsupported expression or function.\")\n\n    return translate(expression)\n\n\ndef evaluate(spec, inputs, max_operations=10000):\n    \"\"\"Evaluate a JSON expression grammar, with no IO or dynamic code execution.\"\"\"\n    allowed_keys = {\"name\", \"inputs\", \"outputs\", \"description\", \"conditions\", \"limitations\", \"bindings\"}\n    if not isinstance(spec, dict):\n        kind = {type(None): \"null\", bool: \"boolean\", int: \"number\", float: \"number\", str: \"string\", list: \"array\"}.get(type(spec), \"non-JSON type\")\n        raise ValueError(\"Unsupported instrument specification. Expected a JSON object at the root; received \" + kind + \".\")\n    unsupported_keys = set(spec) - allowed_keys\n    if unsupported_keys:\n        names = sorted(key for key in unsupported_keys if isinstance(key, str))\n        # Names are untrusted too: escape controls, bound size, and never render values.\n        shown = [key if len(key) <= 64 else key[:64] + \"...[truncated]\" for key in names[:8]]\n        details = json.dumps(shown)\n        if len(names) > len(shown):\n            details += \" (\" + str(len(names) - len(shown)) + \" additional key names omitted)\"\n        if len(unsupported_keys) != len(names):\n            details += \"; \" + str(len(unsupported_keys) - len(names)) + \" <non-string key> entries\"\n        raise ValueError(\"Unsupported instrument specification. Unsupported top-level keys: \" + details\n                         + \". Allowed top-level keys: \" + json.dumps(sorted(allowed_keys))\n                         + '. Named calculations belong inside the \"outputs\" object, not at the instrument root.')\n    if not isinstance(spec.get(\"inputs\"), list) or any(not isinstance(k, str) for k in spec[\"inputs\"]):\n        raise ValueError(\"Instrument inputs must be field names.\")\n    if not isinstance(inputs, dict) or any(k not in inputs for k in spec[\"inputs\"]):\n        raise ValueError(\"A declared instrument input is missing.\")\n    if not isinstance(spec.get(\"outputs\"), dict) or not spec[\"outputs\"]:\n        raise ValueError(\"An instrument needs named output expressions.\")\n    if type(max_operations) is not int or max_operations < 1:\n        raise ValueError(\"A positive operation bound is required.\")\n    bindings = spec.get(\"bindings\", {})\n    if not isinstance(bindings, dict) or len(bindings) > 128 or any(\n        not isinstance(key, str) or re.fullmatch(r\"[A-Za-z][A-Za-z0-9_]{0,63}\", key) is None for key in bindings\n    ):\n        raise ValueError(\"Instrument bindings require up to 128 simple names.\")\n    resolved, resolving, compiled = {}, set(), {}\n    count = 0\n\n    def number(v):\n        if type(v) not in {int, float}:\n            raise ValueError(\"Arithmetic requires numeric operands.\")\n        return finite(v)\n\n    def visit(value, depth=0, location=\"$\"):\n        nonlocal count\n        count += 1\n        if count > max_operations or depth > 32:\n            raise ValueError(\"Instrument operation or nesting bound exhausted.\")\n        if value is None or type(value) in {str, int, float, bool}:\n            return finite(value)\n        if isinstance(value, list):\n            return [visit(v, depth + 1, f\"{location}[{index}]\") for index, v in enumerate(value)]\n        if not isinstance(value, dict):\n            raise ValueError(\"Only JSON expressions are supported.\")\n        if set(value) == {\"formula\"}:\n            source = value[\"formula\"]\n            if not isinstance(source, str):\n                raise ValueError(\"Formula text is required.\")\n            if source not in compiled:\n                compiled[source] = compile_formula(source, bindings)\n            return visit(compiled[source], depth + 1, location + \".formula\")\n        if set(value) == {\"ref\"}:\n            name = value[\"ref\"]\n            if not isinstance(name, str) or name not in bindings:\n                raise ValueError(\"Unknown instrument binding.\")\n            if name in resolving:\n                raise ValueError(\"Instrument bindings cannot reference a cycle.\")\n            if name not in resolved:\n                resolving.add(name)\n                try:\n                    resolved[name] = visit(bindings[name], depth + 1, \"$.bindings.\" + name)\n                finally:\n                    resolving.remove(name)\n            return resolved[name]\n        if set(value) == {\"field\"}:\n            path = value[\"field\"]\n            if not isinstance(path, str) or not path:\n                raise ValueError(\"Invalid input field.\")\n            if path.split(\".\")[0] not in spec[\"inputs\"]:\n                # A model once used {\"field\":\"2\"} for the number 2. Keep the\n                # evaluator fail-closed, but make its retry feedback actionable.\n                # Do not echo arbitrary untrusted field paths into model context.\n                if len(path) <= 32 and re.fullmatch(r\"-?(?:0|[1-9][0-9]*)(?:\\.[0-9]+)?(?:[eE][+-]?[0-9]+)?\", path):\n                    raise ValueError('Input field root was not declared. A numeric constant is a raw JSON number (for example 2), not {\"field\":\"2\"}. Only declared input names use {\"field\":\"name\"}.')\n                raise ValueError(\"Input field root was not declared.\")\n            at = inputs\n            for part in path.split(\".\"):\n                if part in {\"__proto__\", \"prototype\", \"constructor\"} or not isinstance(at, dict) or part not in at:\n                    raise ValueError(\"Missing or unsafe input field.\")\n                at = at[part]\n            return finite(at)\n        if set(value) != {\"op\", \"args\"} or not isinstance(value[\"args\"], list):\n            if set(value) in ({\"literal\"}, {\"value\"}, {\"const\"}):\n                raise ValueError(location + ': a literal is a raw JSON value (for example 7), not a literal/value/const object. Input references use exactly {\"field\":\"name\"}.')\n            raise ValueError(location + ': an operation must contain exactly \"op\" and an \"args\" array; received keys ' + \", \".join(sorted(map(str, value))) + \".\")\n        op, raw = value[\"op\"], value[\"args\"]\n        if op == \"if\":\n            if len(raw) != 3:\n                raise ValueError(\"if needs three operands.\")\n            cond = visit(raw[0], depth + 1, location + \".args[0]\")\n            if type(cond) is not bool:\n                raise ValueError(\"if condition must be boolean.\")\n            branch = 1 if cond else 2\n            return visit(raw[branch], depth + 1, f\"{location}.args[{branch}]\")\n        args = [visit(v, depth + 1, f\"{location}.args[{index}]\") for index, v in enumerate(raw)]\n        if op in {\"add\", \"mul\", \"min\", \"max\"}:\n            if not args:\n                raise ValueError(\"Arithmetic needs operands.\")\n            vals = [number(v) for v in args]\n            result = vals[0]\n            for val in vals[1:]:\n                result = finite(result + val if op == \"add\" else result * val if op == \"mul\" else min(result, val) if op == \"min\" else max(result, val))\n        elif op in {\"sub\", \"div\"}:\n            if len(args) != 2:\n                raise ValueError(\"Binary arithmetic needs two operands.\")\n            a, b = map(number, args)\n            if op == \"div\" and b == 0:\n                raise ValueError(\"Division by zero.\")\n            result = a - b if op == \"sub\" else a / b\n        elif op == \"abs\":\n            if len(args) != 1:\n                raise ValueError(\"abs needs one numeric operand.\")\n            result = abs(number(args[0]))\n        elif op in {\"eq\", \"lt\", \"lte\", \"gt\", \"gte\"}:\n            if len(args) != 2:\n                raise ValueError(\"Comparison needs two operands.\")\n            a, b = args\n            if op == \"eq\":\n                result = _json_equal(a, b)\n            else:\n                a, b = number(a), number(b)\n                result = a < b if op == \"lt\" else a <= b if op == \"lte\" else a > b if op == \"gt\" else a >= b\n        elif op in {\"and\", \"or\", \"not\"}:\n            if not args or any(type(v) is not bool for v in args) or (op == \"not\" and len(args) != 1):\n                raise ValueError(\"Boolean operation needs boolean operands.\")\n            result = all(args) if op == \"and\" else any(args) if op == \"or\" else not args[0]\n        elif op in {\"sum\", \"count\"}:\n            if len(args) != 1 or not isinstance(args[0], list):\n                raise ValueError(\"sum/count needs one array.\")\n            result = len(args[0]) if op == \"count\" else 0\n            if op == \"sum\":\n                for item in args[0]:\n                    count += 1\n                    if count > max_operations:\n                        raise ValueError(\"Instrument operation bound exhausted.\")\n                    result = finite(result + number(item))\n        else:\n            raise ValueError(\"Unsupported expression operation.\")\n        return finite(result)\n\n    finite(inputs)\n    result = {key: visit(expr, location=\"$.outputs[\" + json.dumps(key) + \"]\") for key, expr in spec[\"outputs\"].items()}\n    return {\"output\": result, \"operations\": count, \"scope\": \"Bounded declarative execution; acceptance must be checked separately.\"}\n\n\n\ndef strict_portable_json(raw):\n    \"\"\"Refuse ambiguous or nonstandard JSON before standalone artifact execution.\"\"\"\n    def unique_members(pairs):\n        result = {}\n        for key, value in pairs:\n            if key in result:\n                raise ValueError(\"Invalid JSON: duplicate object member.\")\n            result[key] = value\n        return result\n\n    def nonfinite_constant(_token):\n        raise ValueError(\"Invalid JSON: non-finite number token.\")\n\n    def finite_float(token):\n        value = float(token)\n        if not math.isfinite(value):\n            raise ValueError(\"Invalid JSON: floating-point overflow.\")\n        return value\n\n    return json.loads(raw, object_pairs_hook=unique_members,\n                      parse_constant=nonfinite_constant, parse_float=finite_float)\n\n\ndef main():\n    parser = argparse.ArgumentParser(description=__doc__)\n    parser.add_argument(\"instrument\", type=Path)\n    parser.add_argument(\"input\", type=Path)\n    parser.add_argument(\"--max-operations\", type=int, default=10000)\n    args = parser.parse_args()\n    print(json.dumps(evaluate(strict_portable_json(args.instrument.read_text()), strict_portable_json(args.input.read_text()), args.max_operations), ensure_ascii=False, allow_nan=False, indent=2))\n\n\nif __name__ == \"__main__\":\n    main()\n",
+    "inverse-affine.json": "{\n  \"name\": \"Inverse affine calibration\",\n  \"inputs\": [\n    \"c1\",\n    \"c2\",\n    \"o1\",\n    \"o2\",\n    \"target\"\n  ],\n  \"outputs\": {\n    \"command\": {\n      \"op\": \"if\",\n      \"args\": [\n        {\n          \"op\": \"and\",\n          \"args\": [\n            {\n              \"op\": \"not\",\n              \"args\": [\n                {\n                  \"op\": \"eq\",\n                  \"args\": [\n                    {\n                      \"field\": \"c1\"\n                    },\n                    {\n                      \"field\": \"c2\"\n                    }\n                  ]\n                }\n              ]\n            },\n            {\n              \"op\": \"not\",\n              \"args\": [\n                {\n                  \"op\": \"eq\",\n                  \"args\": [\n                    {\n                      \"field\": \"o1\"\n                    },\n                    {\n                      \"field\": \"o2\"\n                    }\n                  ]\n                }\n              ]\n            }\n          ]\n        },\n        {\n          \"op\": \"add\",\n          \"args\": [\n            {\n              \"field\": \"c1\"\n            },\n            {\n              \"op\": \"div\",\n              \"args\": [\n                {\n                  \"op\": \"mul\",\n                  \"args\": [\n                    {\n                      \"op\": \"sub\",\n                      \"args\": [\n                        {\n                          \"field\": \"target\"\n                        },\n                        {\n                          \"field\": \"o1\"\n                        }\n                      ]\n                    },\n                    {\n                      \"op\": \"sub\",\n                      \"args\": [\n                        {\n                          \"field\": \"c2\"\n                        },\n                        {\n                          \"field\": \"c1\"\n                        }\n                      ]\n                    }\n                  ]\n                },\n                {\n                  \"op\": \"sub\",\n                  \"args\": [\n                    {\n                      \"field\": \"o2\"\n                    },\n                    {\n                      \"field\": \"o1\"\n                    }\n                  ]\n                }\n              ]\n            }\n          ]\n        },\n        null\n      ]\n    },\n    \"round_trip_mm\": {\n      \"op\": \"if\",\n      \"args\": [\n        {\n          \"op\": \"and\",\n          \"args\": [\n            {\n              \"op\": \"not\",\n              \"args\": [\n                {\n                  \"op\": \"eq\",\n                  \"args\": [\n                    {\n                      \"field\": \"c1\"\n                    },\n                    {\n                      \"field\": \"c2\"\n                    }\n                  ]\n                }\n              ]\n            },\n            {\n              \"op\": \"not\",\n              \"args\": [\n                {\n                  \"op\": \"eq\",\n                  \"args\": [\n                    {\n                      \"field\": \"o1\"\n                    },\n                    {\n                      \"field\": \"o2\"\n                    }\n                  ]\n                }\n              ]\n            }\n          ]\n        },\n        {\n          \"op\": \"add\",\n          \"args\": [\n            {\n              \"field\": \"o1\"\n            },\n            {\n              \"op\": \"div\",\n              \"args\": [\n                {\n                  \"op\": \"mul\",\n                  \"args\": [\n                    {\n                      \"op\": \"sub\",\n                      \"args\": [\n                        {\n                          \"op\": \"add\",\n                          \"args\": [\n                            {\n                              \"field\": \"c1\"\n                            },\n                            {\n                              \"op\": \"div\",\n                              \"args\": [\n                                {\n                                  \"op\": \"mul\",\n                                  \"args\": [\n                                    {\n                                      \"op\": \"sub\",\n                                      \"args\": [\n                                        {\n                                          \"field\": \"target\"\n                                        },\n                                        {\n                                          \"field\": \"o1\"\n                                        }\n                                      ]\n                                    },\n                                    {\n                                      \"op\": \"sub\",\n                                      \"args\": [\n                                        {\n                                          \"field\": \"c2\"\n                                        },\n                                        {\n                                          \"field\": \"c1\"\n                                        }\n                                      ]\n                                    }\n                                  ]\n                                },\n                                {\n                                  \"op\": \"sub\",\n                                  \"args\": [\n                                    {\n                                      \"field\": \"o2\"\n                                    },\n                                    {\n                                      \"field\": \"o1\"\n                                    }\n                                  ]\n                                }\n                              ]\n                            }\n                          ]\n                        },\n                        {\n                          \"field\": \"c1\"\n                        }\n                      ]\n                    },\n                    {\n                      \"op\": \"sub\",\n                      \"args\": [\n                        {\n                          \"field\": \"o2\"\n                        },\n                        {\n                          \"field\": \"o1\"\n                        }\n                      ]\n                    }\n                  ]\n                },\n                {\n                  \"op\": \"sub\",\n                  \"args\": [\n                    {\n                      \"field\": \"c2\"\n                    },\n                    {\n                      \"field\": \"c1\"\n                    }\n                  ]\n                }\n              ]\n            }\n          ]\n        },\n        null\n      ]\n    }\n  }\n}"
+  },
+  "notice": "Contains your objective, context and artifacts. Inspect before sharing. No connector credentials or workspace integrity key included. Recorded verification is historical; recheck imported work.",
+  "schema": "alpha-genesis-workflow-export/v1",
+  "sha256": "dafe3288f176bbe985875f4c19c8561eb098692bfaece264f61d9b044afe91df",
+  "state": {
+    "actions": 5,
+    "adversarial_cases": [],
+    "artifacts": {
+      "RUN_INSTRUMENT.py": {
+        "bytes": 15742,
+        "kind": "trusted_runner",
+        "sha256": "46d43d4a017f1d32fcd9e05b32316a6fffac27e1a9572ab9ffbbf87338f00322"
+      },
+      "inverse-affine.json": {
+        "bytes": 6445,
+        "kind": "instrument",
+        "sha256": "48bb46ebdc59f5a15e5ddc075f86f11085594d742dbbe403a6f56c97ddb63f75"
+      }
+    },
+    "capability_id": null,
+    "created_at": "2026-11-25T03:10:43.973911+00:00",
+    "epoch": 0,
+    "events": [
+      {
+        "at": "2026-11-25T03:10:43.973922+00:00",
+        "detail": {
+          "acceptance_source": "Operator-frozen conditions; independence is not inferred.",
+          "spec_hash": "fa78d3d9869eef6299e60d68d27a7ca6ebbe46d99e840e34aad80d3d6f633832"
+        },
+        "index": 0,
+        "kind": "created",
+        "previous": "0000000000000000000000000000000000000000000000000000000000000000",
+        "sha256": "91ca72041eaaf4f5406ee6db5631507c0eed67fd90b82a4a375eae9a00b81305"
+      },
+      {
+        "at": "2026-11-25T03:10:43.975878+00:00",
+        "detail": {
+          "model": "authored-constructor",
+          "provider": "fixture",
+          "role": "builder",
+          "run_id": "wf_7df729dc5eb37933f3a1d3e6_a7f09959ddb0bd52"
+        },
+        "index": 1,
+        "kind": "model_started",
+        "previous": "91ca72041eaaf4f5406ee6db5631507c0eed67fd90b82a4a375eae9a00b81305",
+        "sha256": "41baa935b05b267ed00a12da0244fb908169cab8f30ed7b2f4a62db6254cabc6"
+      },
+      {
+        "at": "2026-11-25T03:10:43.977376+00:00",
+        "detail": {
+          "cost": {
+            "amount": null,
+            "basis": "AUTHORED_FIXTURE_NO_INFERENCE",
+            "complete_cost_known": false
+          },
+          "model": "authored-constructor",
+          "provider": "fixture",
+          "qualification": "AUTHORED_FIXTURE_NOT_LIVE_MODEL",
+          "reported_model": null,
+          "requested_model": "authored-constructor",
+          "response_sha256": "e6bc28f0713f64a86f08e3c164d5c16653ba8fc9ff319aa0189e8aad758e4707",
+          "role": "builder",
+          "run_id": "wf_7df729dc5eb37933f3a1d3e6_a7f09959ddb0bd52",
+          "usage": {
+            "input_tokens": null,
+            "output_tokens": null
+          }
+        },
+        "index": 2,
+        "kind": "model_completed",
+        "previous": "41baa935b05b267ed00a12da0244fb908169cab8f30ed7b2f4a62db6254cabc6",
+        "sha256": "49c3111e2b1ffa6ca3d21f16835f5694f8a7781c8d6ccc7d6c80aa43184b0c7d"
+      },
+      {
+        "at": "2026-11-25T03:10:43.977424+00:00",
+        "detail": {
+          "proposed_actions": 2,
+          "summary": "Rejouons la forme d'expression refusée pour obtenir un diagnostic réel."
+        },
+        "index": 3,
+        "kind": "route_proposed",
+        "previous": "49c3111e2b1ffa6ca3d21f16835f5694f8a7781c8d6ccc7d6c80aa43184b0c7d",
+        "sha256": "1dda2eaf075b4596c617bd9e5deda529b0bbadafdde29db9c4f099bb9c9d87cf"
+      },
+      {
+        "at": "2026-11-25T03:10:43.980801+00:00",
+        "detail": {
+          "outcome": {
+            "action_id": "270eeb526db024fb965de267cf32a447a159053dfc59e63cd132c6cfe4820751",
+            "artifact": "inverse-affine.json",
+            "bytes": 4403,
+            "kind": "instrument",
+            "operation_executed": true,
+            "run": "python3 RUN_INSTRUMENT.py inverse-affine.json input.json",
+            "sha256": "da4cf7d7935d73d32c7fa9ae166da9e6ebd1bb556c55f35b2f0b051899f2300b"
+          },
+          "tool": "construct_instrument"
+        },
+        "index": 4,
+        "kind": "tool_completed",
+        "previous": "1dda2eaf075b4596c617bd9e5deda529b0bbadafdde29db9c4f099bb9c9d87cf",
+        "sha256": "e9253cde3725cdd56341767e504b4ceba9af6c11b0eabf8954173591589fe66a"
+      },
+      {
+        "at": "2026-11-25T03:10:43.982384+00:00",
+        "detail": {
+          "proposal_fields": [
+            "input",
+            "name",
+            "tool"
+          ],
+          "reason": "Unsupported expression operation.",
+          "tool": "run_instrument"
+        },
+        "index": 5,
+        "kind": "tool_refused",
+        "previous": "e9253cde3725cdd56341767e504b4ceba9af6c11b0eabf8954173591589fe66a",
+        "sha256": "267e88b072f1110f5f308d06102bfd58d6e42215340e9d4b10c0dd5682aa79d2"
+      },
+      {
+        "at": "2026-11-25T03:10:43.983706+00:00",
+        "detail": {
+          "artifact_hashes": {
+            "RUN_INSTRUMENT.py": "46d43d4a017f1d32fcd9e05b32316a6fffac27e1a9572ab9ffbbf87338f00322",
+            "inverse-affine.json": "da4cf7d7935d73d32c7fa9ae166da9e6ebd1bb556c55f35b2f0b051899f2300b"
+          },
+          "checks": [],
+          "passed": false,
+          "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification.",
+          "spec_hash": "fa78d3d9869eef6299e60d68d27a7ca6ebbe46d99e840e34aad80d3d6f633832"
+        },
+        "index": 6,
+        "kind": "verification",
+        "previous": "267e88b072f1110f5f308d06102bfd58d6e42215340e9d4b10c0dd5682aa79d2",
+        "sha256": "a1a52a2232dd490c061128dc30bab4e1f74b965cbe72df70fb2d4c43f29de764"
+      },
+      {
+        "at": "2026-11-25T03:10:43.986326+00:00",
+        "detail": {
+          "model": "authored-constructor",
+          "provider": "fixture",
+          "role": "builder",
+          "run_id": "wf_7df729dc5eb37933f3a1d3e6_c990940cf9788b3c"
+        },
+        "index": 7,
+        "kind": "model_started",
+        "previous": "a1a52a2232dd490c061128dc30bab4e1f74b965cbe72df70fb2d4c43f29de764",
+        "sha256": "64fd39e7281d60fe4af6449b4fae813c64c62173439e85b3791e078525231fcc"
+      },
+      {
+        "at": "2026-11-25T03:10:43.988514+00:00",
+        "detail": {
+          "cost": {
+            "amount": null,
+            "basis": "AUTHORED_FIXTURE_NO_INFERENCE",
+            "complete_cost_known": false
+          },
+          "model": "authored-constructor",
+          "provider": "fixture",
+          "qualification": "AUTHORED_FIXTURE_NOT_LIVE_MODEL",
+          "reported_model": null,
+          "requested_model": "authored-constructor",
+          "response_sha256": "cbd569ea8fa77681e591480e6ebc3aaa9df2b62bf8f229cd42897ae046b81f3e",
+          "role": "builder",
+          "run_id": "wf_7df729dc5eb37933f3a1d3e6_c990940cf9788b3c",
+          "usage": {
+            "input_tokens": null,
+            "output_tokens": null
+          }
+        },
+        "index": 8,
+        "kind": "model_completed",
+        "previous": "64fd39e7281d60fe4af6449b4fae813c64c62173439e85b3791e078525231fcc",
+        "sha256": "a2f5950806bc9702cd4c422b423bef40c7024454a3fe9845dd7ec3397197e207"
+      },
+      {
+        "at": "2026-11-25T03:10:43.988614+00:00",
+        "detail": {
+          "proposed_actions": 3,
+          "summary": "Le test a refusé l'opération inconnue. Représentons la calibration par les opérations arithmétiques prises en charge."
+        },
+        "index": 9,
+        "kind": "route_proposed",
+        "previous": "a2f5950806bc9702cd4c422b423bef40c7024454a3fe9845dd7ec3397197e207",
+        "sha256": "ae9fce5f3b41d3b3ec9fe6b4f7d4d0e7e79a8852bb2ea0220fa1296eec5e24ab"
+      },
+      {
+        "at": "2026-11-25T03:10:43.990470+00:00",
+        "detail": {
+          "outcome": {
+            "action_id": "b532d50a1867133f90841b6eec80ae75ce001f183f0931aba9b5028e04449952",
+            "artifact": "inverse-affine.json",
+            "bytes": 6445,
+            "kind": "instrument",
+            "operation_executed": true,
+            "run": "python3 RUN_INSTRUMENT.py inverse-affine.json input.json",
+            "sha256": "48bb46ebdc59f5a15e5ddc075f86f11085594d742dbbe403a6f56c97ddb63f75"
+          },
+          "tool": "construct_instrument"
+        },
+        "index": 10,
+        "kind": "tool_completed",
+        "previous": "ae9fce5f3b41d3b3ec9fe6b4f7d4d0e7e79a8852bb2ea0220fa1296eec5e24ab",
+        "sha256": "a5808b0806b4b73057abf7fa2da0b685cf40240dafd78408b04d6f9816c425ac"
+      },
+      {
+        "at": "2026-11-25T03:10:43.992314+00:00",
+        "detail": {
+          "outcome": {
+            "action_id": "bd78520aa649ec39f541e951e2864c00eea10887bf571d54e53725f53d7a2e5d",
+            "operation_executed": true,
+            "operations": 58,
+            "output": {
+              "command": 220.71065989847716,
+              "round_trip_mm": 216.40000000000003
+            },
+            "scope": "Bounded declarative execution; acceptance must be checked separately."
+          },
+          "tool": "run_instrument"
+        },
+        "index": 11,
+        "kind": "tool_completed",
+        "previous": "a5808b0806b4b73057abf7fa2da0b685cf40240dafd78408b04d6f9816c425ac",
+        "sha256": "366c90003dc125931ee9c986f97f076e3e353d3476f0c0748d4f2139c545888d"
+      },
+      {
+        "at": "2026-11-25T03:10:43.993997+00:00",
+        "detail": {
+          "outcome": {
+            "action_id": "e0bebd216d4fbb3853506ac2dc6533108c1d30daaf1a0b836d88c49eb8fe55de",
+            "operation_executed": true,
+            "operations": 58,
+            "output": {
+              "command": 295.2284263959391,
+              "round_trip_mm": 289.8
+            },
+            "scope": "Bounded declarative execution; acceptance must be checked separately."
+          },
+          "tool": "run_instrument"
+        },
+        "index": 12,
+        "kind": "tool_completed",
+        "previous": "366c90003dc125931ee9c986f97f076e3e353d3476f0c0748d4f2139c545888d",
+        "sha256": "2e9816d73485bf8ba98e6fb962053a9ef5cda120727a5dc286b8603779dfadac"
+      },
+      {
+        "at": "2026-11-25T03:10:43.995315+00:00",
+        "detail": {
+          "artifact_hashes": {
+            "RUN_INSTRUMENT.py": "46d43d4a017f1d32fcd9e05b32316a6fffac27e1a9572ab9ffbbf87338f00322",
+            "inverse-affine.json": "48bb46ebdc59f5a15e5ddc075f86f11085594d742dbbe403a6f56c97ddb63f75"
+          },
+          "checks": [],
+          "passed": false,
+          "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification.",
+          "spec_hash": "fa78d3d9869eef6299e60d68d27a7ca6ebbe46d99e840e34aad80d3d6f633832"
+        },
+        "index": 13,
+        "kind": "verification",
+        "previous": "2e9816d73485bf8ba98e6fb962053a9ef5cda120727a5dc286b8603779dfadac",
+        "sha256": "cf24977badec2653f9358d01f3b75cbccab63e4b1bab6fd9d244924fe0266d1d"
+      },
+      {
+        "at": "2026-11-25T03:10:43.995347+00:00",
+        "detail": {
+          "development_checks_passed": false,
+          "scope": "Actual artifacts and tool results are recorded. Separate acceptance is required."
+        },
+        "index": 14,
+        "kind": "awaiting_independent_evaluation",
+        "previous": "cf24977badec2653f9358d01f3b75cbccab63e4b1bab6fd9d244924fe0266d1d",
+        "sha256": "63d2f3bf7512a11bc85f194350fbbffd2a9f38e942fa3844a2dedbf5e6bb920b"
+      }
+    ],
+    "feedback": "Inspect actual tool receipts and revise as needed.",
+    "id": "wf_7df729dc5eb37933f3a1d3e6",
+    "inflight": null,
+    "iteration": 2,
+    "model_call_limit": 2,
+    "model_calls": 2,
+    "phase": "builder",
+    "research": "",
+    "schema": "alpha-genesis-workflow/v1",
+    "spec": {
+      "acceptance": [],
+      "context": "Pour l'essai de réemploi, interface du calculateur: champs numériques c1 et c2 pour les commandes de calibration, o1 et o2 pour leurs mesures, target pour la cible. La sortie de la commande doit s'appeler command. Vous pouvez retourner d'autres sorties pertinentes. Exécutez les deux cibles et vérifiez effectivement la projection avant la synthèse.",
+      "local_only": true,
+      "max_actions": 16,
+      "max_iterations": 2,
+      "max_operations": 10000,
+      "max_output_tokens": 1024,
+      "mission": {
+        "expires_at": "2026-11-25T05:10:43.966914+00:00",
+        "language": "fr",
+        "original_ambition": "Pour préparer des gabarits numériques, fabriquez un petit calculateur réutilisable qui inverse une calibration affine. Les positions commandées 120 et 380 donnent respectivement 117,2 mm et 373,3 mm mesurés. Calculez les commandes pour viser 216,4 mm et 289,8 mm. Le calculateur doit aussi fonctionner avec deux autres points fournis ultérieurement et rejeter une calibration non inversible. Fournissez un résultat chiffré et une vérification aller-retour. Aucune machine ne doit être actionnée.",
+        "requirements": {},
+        "schema": "frontier-universal-execution/v1"
+      },
+      "objective": "Pour préparer des gabarits numériques, fabriquez un petit calculateur réutilisable qui inverse une calibration affine. Les positions commandées 120 et 380 donnent respectivement 117,2 mm et 373,3 mm mesurés. Calculez les commandes pour viser 216,4 mm et 289,8 mm. Le calculateur doit aussi fonctionner avec deux autres points fournis ultérieurement et rejeter une calibration non inversible. Fournissez un résultat chiffré et une vérification aller-retour. Aucune machine ne doit être actionnée.",
+      "roles": {
+        "builder": {
+          "model": "authored-constructor",
+          "provider": "fixture"
+        }
+      },
+      "strategy": "single-model",
+      "tool_permissions": [
+        "construct_instrument",
+        "run_instrument",
+        "write_document",
+        "read_artifact"
+      ]
+    },
+    "spec_hash": "fa78d3d9869eef6299e60d68d27a7ca6ebbe46d99e840e34aad80d3d6f633832",
+    "status": "needs_review",
+    "unadjudicated_counterexamples": [],
+    "updated_at": "2026-11-25T03:10:43.995347+00:00",
+    "verification": {
+      "artifact_hashes": {
+        "RUN_INSTRUMENT.py": "46d43d4a017f1d32fcd9e05b32316a6fffac27e1a9572ab9ffbbf87338f00322",
+        "inverse-affine.json": "48bb46ebdc59f5a15e5ddc075f86f11085594d742dbbe403a6f56c97ddb63f75"
+      },
+      "checks": [],
+      "passed": false,
+      "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification.",
+      "spec_hash": "fa78d3d9869eef6299e60d68d27a7ca6ebbe46d99e840e34aad80d3d6f633832"
+    }
+  }
+}

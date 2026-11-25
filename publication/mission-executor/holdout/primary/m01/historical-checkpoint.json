@@ -1,0 +1,126 @@
+{
+  "files": {},
+  "notice": "Contains your objective, context and artifacts. Inspect before sharing. No connector credentials or workspace integrity key included. Recorded verification is historical; recheck imported work.",
+  "schema": "alpha-genesis-workflow-export/v1",
+  "sha256": "1e56226c83909ba3073d0762b4ae3cc9e47e8f3b8267ff13dc88b67c7bb1b0d1",
+  "state": {
+    "actions": 0,
+    "adversarial_cases": [],
+    "artifacts": {},
+    "capability_id": null,
+    "created_at": "2026-11-25T02:57:25.034507+00:00",
+    "epoch": 0,
+    "events": [
+      {
+        "at": "2026-11-25T02:57:25.034518+00:00",
+        "detail": {
+          "acceptance_source": "Operator-frozen conditions; independence is not inferred.",
+          "spec_hash": "84f3bc22613e4cb76acce69329c55c9bdf735417d7fcb6923e35590200220ae5"
+        },
+        "index": 0,
+        "kind": "created",
+        "previous": "0000000000000000000000000000000000000000000000000000000000000000",
+        "sha256": "29bf49702b9226804c5135522334fd0023f0638d0c689c90e9ade44e6ef5b2ed"
+      },
+      {
+        "at": "2026-11-25T02:57:25.037837+00:00",
+        "detail": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "role": "builder",
+          "scope": "Waiting for selected service capacity; no model call or construction iteration consumed."
+        },
+        "index": 1,
+        "kind": "model_queued",
+        "previous": "29bf49702b9226804c5135522334fd0023f0638d0c689c90e9ade44e6ef5b2ed",
+        "sha256": "a7182e73092ddc8d7a679950fddaa2e376c77edb07aa0434bcfbdd0dd697d0ae"
+      },
+      {
+        "at": "2026-11-25T02:57:25.039671+00:00",
+        "detail": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "role": "builder",
+          "run_id": "wf_764cd4ffae8b7da3429062f9_9e5e7c40d621657a"
+        },
+        "index": 2,
+        "kind": "model_started",
+        "previous": "a7182e73092ddc8d7a679950fddaa2e376c77edb07aa0434bcfbdd0dd697d0ae",
+        "sha256": "c8b9e51f3d7e97692f6740184e2c39620b3fd37926f5e054e5d416a5f50b839e"
+      },
+      {
+        "at": "2026-11-25T02:58:28.144455+00:00",
+        "detail": {
+          "code": "PROVIDER_RESPONSE",
+          "message": "Model request failed. Its provider allowance or cost may have been consumed; inspect connection before explicitly resuming.",
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "role": "builder",
+          "run_id": "wf_764cd4ffae8b7da3429062f9_9e5e7c40d621657a",
+          "session_budget_snapshot": {
+            "committed": 0.0,
+            "currency": "USD",
+            "limit": 0.0,
+            "locked": false,
+            "remaining": 0.0,
+            "reserved": 0.0,
+            "scope": "process-session"
+          },
+          "usage_status": "UNKNOWN"
+        },
+        "index": 3,
+        "kind": "model_error",
+        "previous": "c8b9e51f3d7e97692f6740184e2c39620b3fd37926f5e054e5d416a5f50b839e",
+        "sha256": "e4991c0c5eadbf66a123832183ac04c14b778f80f45ef2614efeaa3b53ad7bba"
+      }
+    ],
+    "feedback": "",
+    "id": "wf_764cd4ffae8b7da3429062f9",
+    "inflight": null,
+    "iteration": 1,
+    "model_call_limit": 6,
+    "model_calls": 1,
+    "phase": "builder",
+    "research": "",
+    "schema": "alpha-genesis-workflow/v1",
+    "spec": {
+      "acceptance": [],
+      "context": "Pour l'essai de réemploi, interface du calculateur: champs numériques c1 et c2 pour les commandes de calibration, o1 et o2 pour leurs mesures, target pour la cible. La sortie de la commande doit s'appeler command. Vous pouvez retourner d'autres sorties pertinentes. Exécutez les deux cibles et vérifiez effectivement la projection avant la synthèse.",
+      "local_only": true,
+      "max_actions": 16,
+      "max_iterations": 6,
+      "max_operations": 10000,
+      "max_output_tokens": 512,
+      "mission": {
+        "expires_at": "2026-11-25T04:57:25.026751+00:00",
+        "language": "fr",
+        "original_ambition": "Pour préparer des gabarits numériques, fabriquez un petit calculateur réutilisable qui inverse une calibration affine. Les positions commandées 120 et 380 donnent respectivement 117,2 mm et 373,3 mm mesurés. Calculez les commandes pour viser 216,4 mm et 289,8 mm. Le calculateur doit aussi fonctionner avec deux autres points fournis ultérieurement et rejeter une calibration non inversible. Fournissez un résultat chiffré et une vérification aller-retour. Aucune machine ne doit être actionnée.",
+        "requirements": {},
+        "schema": "frontier-universal-execution/v1"
+      },
+      "objective": "Pour préparer des gabarits numériques, fabriquez un petit calculateur réutilisable qui inverse une calibration affine. Les positions commandées 120 et 380 donnent respectivement 117,2 mm et 373,3 mm mesurés. Calculez les commandes pour viser 216,4 mm et 289,8 mm. Le calculateur doit aussi fonctionner avec deux autres points fournis ultérieurement et rejeter une calibration non inversible. Fournissez un résultat chiffré et une vérification aller-retour. Aucune machine ne doit être actionnée.",
+      "roles": {
+        "builder": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp"
+        }
+      },
+      "strategy": "single-model",
+      "tool_permissions": [
+        "construct_instrument",
+        "run_instrument",
+        "write_document",
+        "read_artifact"
+      ]
+    },
+    "spec_hash": "84f3bc22613e4cb76acce69329c55c9bdf735417d7fcb6923e35590200220ae5",
+    "status": "paused",
+    "unadjudicated_counterexamples": [],
+    "updated_at": "2026-11-25T02:58:28.144455+00:00",
+    "verification": {
+      "checks": [],
+      "passed": false,
+      "scope": "No checks executed."
+    }
+  }
+}

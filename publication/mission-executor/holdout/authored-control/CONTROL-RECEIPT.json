@@ -1,0 +1,47 @@
+{
+  "authorship_elapsed": "not measured",
+  "case": "m01",
+  "elapsed_seconds_of_runtime": 0.03179964099990684,
+  "exact_backend_manifest_sha256": "1c68b716f6cfd58fa0eacbe818b40c100ca78120b2875386e1d2e131edb30414",
+  "frozen_authoritative_executions": 5,
+  "independently_recomputed": {
+    "confirmations": [
+      {
+        "artifact": "inverse-affine.json",
+        "checks": [
+          {
+            "command_outputs": [
+              220.71065989847716,
+              295.2284263959391
+            ],
+            "matched_independently": true
+          },
+          {
+            "command_outputs": [
+              -5.338709677419355,
+              -2.9331797235023043
+            ],
+            "matched_independently": true
+          },
+          {
+            "non_invertible_refused": true,
+            "return": null
+          }
+        ],
+        "confirmed": true,
+        "sha256": "48bb46ebdc59f5a15e5ddc075f86f11085594d742dbbe403a6f56c97ddb63f75"
+      }
+    ],
+    "forward_targets_returned_by_a_tool": true,
+    "found_both_required_commands": true,
+    "qualification": "ACCEPT",
+    "runtime_outputs": [
+      220.71065989847716,
+      295.2284263959391
+    ],
+    "successful_reusable_artifact": true
+  },
+  "limits": "This is an actual same-runtime comparator with declared authored proposals, not a fresh holdout passed by a local model. Constructor knows the original fixture.",
+  "model_requests": 0,
+  "proposal_mode": "Codex-authored, known-case fixture packets supplied by evaluator"
+}

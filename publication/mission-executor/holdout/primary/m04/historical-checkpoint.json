@@ -1,0 +1,852 @@
+{
+  "files": {
+    "result.json": "{\"decision\":{\"capability_id\":\"noaa-archive\",\"contract_sha256\":\"8a8fcc2a36f3a56ec1b75796d425d54cacd4f501c75bc4de25fa411f6e1f4cce\",\"reason\":\"NOAA_F024_REQUIRES_EXACTLY_24_HOURS\",\"source_revision\":\"6a635b77012fb45b4d96c404a33fa04327c19674\",\"status\":\"INCOMPATIBLE\"},\"executed\":false}",
+    "result.md": "The NOAA GFS archive point capability is incompatible for the requested 24-hour forecast due to the requirement for exact 24-hour lead time. A qualified source or adapter is needed to deliver the checked horizon.",
+    "scope.json": "{\"decision\":{\"capability_id\":\"noaa-archive\",\"contract_sha256\":\"8a8fcc2a36f3a56ec1b75796d425d54cacd4f501c75bc4de25fa411f6e1f4cce\",\"reason\":\"NOAA_F024_REQUIRES_EXACTLY_24_HOURS\",\"source_revision\":\"6a635b77012fb45b4d96c404a33fa04327c19674\",\"status\":\"INCOMPATIBLE\"},\"executed\":false}"
+  },
+  "notice": "Contains your objective, context and artifacts. Inspect before sharing. No connector credentials or workspace integrity key included. Recorded verification is historical; recheck imported work.",
+  "schema": "alpha-genesis-workflow-export/v1",
+  "sha256": "6bacb2f539e7ff31f424481bed2cf3c62d3f6e74b2b34741bf38901f7423b186",
+  "state": {
+    "actions": 8,
+    "adversarial_cases": [],
+    "artifacts": {
+      "result.json": {
+        "bytes": 279,
+        "kind": "observation",
+        "sha256": "c7cecc13f51d28ee88f3b45673690a723244a6b26c25a71ec4de560ff84b0124"
+      },
+      "result.md": {
+        "bytes": 212,
+        "kind": "document",
+        "sha256": "851a068fe967096e5d0c0bda4503c8eeb9f9f1a41ee080384a54dca3442ccc9f"
+      },
+      "scope.json": {
+        "bytes": 279,
+        "kind": "observation",
+        "sha256": "c7cecc13f51d28ee88f3b45673690a723244a6b26c25a71ec4de560ff84b0124"
+      }
+    },
+    "capability_id": null,
+    "created_at": "2026-11-25T02:58:28.235291+00:00",
+    "epoch": 0,
+    "events": [
+      {
+        "at": "2026-11-25T02:58:28.235303+00:00",
+        "detail": {
+          "acceptance_source": "Operator-frozen conditions; independence is not inferred.",
+          "spec_hash": "9f63ea25ffb036d8ee9d9f33891d796702b497a8f64170345f1501b2e7d84471"
+        },
+        "index": 0,
+        "kind": "created",
+        "previous": "0000000000000000000000000000000000000000000000000000000000000000",
+        "sha256": "65461d1ceb53ad224efbe74d674d4d63b5838b4048ec687b53cd1fa91fe1827e"
+      },
+      {
+        "at": "2026-11-25T02:58:28.238809+00:00",
+        "detail": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "role": "builder",
+          "scope": "Waiting for selected service capacity; no model call or construction iteration consumed."
+        },
+        "index": 1,
+        "kind": "model_queued",
+        "previous": "65461d1ceb53ad224efbe74d674d4d63b5838b4048ec687b53cd1fa91fe1827e",
+        "sha256": "c83e80b56111c8ca3b6eb2e69a67e0f7017928269f9db216798bd94d02c20667"
+      },
+      {
+        "at": "2026-11-25T02:58:28.240590+00:00",
+        "detail": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "role": "builder",
+          "run_id": "wf_167ab20c3a62abe994059499_d9183f0cab8e4342"
+        },
+        "index": 2,
+        "kind": "model_started",
+        "previous": "c83e80b56111c8ca3b6eb2e69a67e0f7017928269f9db216798bd94d02c20667",
+        "sha256": "e73ed045c47044907bd386c8a039c200b66e0ebd1fe65f84af5de3f1412a615c"
+      },
+      {
+        "at": "2026-11-25T02:59:09.108753+00:00",
+        "detail": {
+          "cost": {
+            "accounted": 0.0,
+            "amount": 0.0,
+            "attempts": 1,
+            "basis": "reported_usage_at_user_rates",
+            "complete_cost_known": false,
+            "currency": "USD"
+          },
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+          "reported_model": "qwen3-8b-q4_k_m",
+          "requested_model": "qwen3-8b-q4_k_m",
+          "response_sha256": "a8d0026abc8fbb7906291e6ea80fce1c19c623c5a45e2ff652cd1f5f5fca0f05",
+          "role": "builder",
+          "run_id": "wf_167ab20c3a62abe994059499_d9183f0cab8e4342",
+          "usage": {
+            "input_tokens": 1168,
+            "output_tokens": 173
+          }
+        },
+        "index": 3,
+        "kind": "model_completed",
+        "previous": "e73ed045c47044907bd386c8a039c200b66e0ebd1fe65f84af5de3f1412a615c",
+        "sha256": "19d3fc8e4c0babac570edefffc92f616c9289b9cc92e222f597125b8e3c709d3"
+      },
+      {
+        "at": "2026-11-25T02:59:09.108803+00:00",
+        "detail": {
+          "proposed_actions": 1,
+          "summary": "Check if the NOAA GFS archive point capability supports retrieving 2 m air temperature in kelvin at the specified coordinates and time for the given horizon."
+        },
+        "index": 4,
+        "kind": "route_proposed",
+        "previous": "19d3fc8e4c0babac570edefffc92f616c9289b9cc92e222f597125b8e3c709d3",
+        "sha256": "2f08b271ee7ff1fd91c9e97a4a1756fc42931611ebb57f8d6840bed1e86c794e"
+      },
+      {
+        "at": "2026-11-25T02:59:09.111340+00:00",
+        "detail": {
+          "outcome": {
+            "action_id": "a1ebe461c4ebb2b60cda864e864852849ca4ca7a57c850a64f49a2f2309eba34",
+            "artifact": "scope.json",
+            "bytes": 279,
+            "kind": "observation",
+            "observed": {
+              "decision": {
+                "capability_id": "noaa-archive",
+                "contract_sha256": "8a8fcc2a36f3a56ec1b75796d425d54cacd4f501c75bc4de25fa411f6e1f4cce",
+                "reason": "NOAA_F024_REQUIRES_EXACTLY_24_HOURS",
+                "source_revision": "6a635b77012fb45b4d96c404a33fa04327c19674",
+                "status": "INCOMPATIBLE"
+              },
+              "executed": false
+            },
+            "operation_executed": false,
+            "reason": "NOAA_F024_REQUIRES_EXACTLY_24_HOURS",
+            "sha256": "c7cecc13f51d28ee88f3b45673690a723244a6b26c25a71ec4de560ff84b0124",
+            "status": "INCOMPATIBLE"
+          },
+          "tool": "assess_capability"
+        },
+        "index": 5,
+        "kind": "tool_completed",
+        "previous": "2f08b271ee7ff1fd91c9e97a4a1756fc42931611ebb57f8d6840bed1e86c794e",
+        "sha256": "edf03cb9271d3e94190275ff947f19bf6aa02173f486e5e1dfbc6d165092c1f3"
+      },
+      {
+        "at": "2026-11-25T02:59:09.112819+00:00",
+        "detail": {
+          "artifact_hashes": {
+            "scope.json": "c7cecc13f51d28ee88f3b45673690a723244a6b26c25a71ec4de560ff84b0124"
+          },
+          "checks": [],
+          "passed": false,
+          "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification.",
+          "spec_hash": "9f63ea25ffb036d8ee9d9f33891d796702b497a8f64170345f1501b2e7d84471"
+        },
+        "index": 6,
+        "kind": "verification",
+        "previous": "edf03cb9271d3e94190275ff947f19bf6aa02173f486e5e1dfbc6d165092c1f3",
+        "sha256": "162819ba261c2146364c955159582cc10e49b360bcc868bcf4a89b0491f57411"
+      },
+      {
+        "at": "2026-11-25T02:59:09.115391+00:00",
+        "detail": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "role": "builder",
+          "scope": "Waiting for selected service capacity; no model call or construction iteration consumed."
+        },
+        "index": 7,
+        "kind": "model_queued",
+        "previous": "162819ba261c2146364c955159582cc10e49b360bcc868bcf4a89b0491f57411",
+        "sha256": "dfa45dfbc7389d369da7d705886c182ebad8436e0e6377182942de5547cf8942"
+      },
+      {
+        "at": "2026-11-25T02:59:09.120122+00:00",
+        "detail": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "role": "builder",
+          "run_id": "wf_167ab20c3a62abe994059499_bef62d9632b38f05"
+        },
+        "index": 8,
+        "kind": "model_started",
+        "previous": "dfa45dfbc7389d369da7d705886c182ebad8436e0e6377182942de5547cf8942",
+        "sha256": "adbf0f36f85cba9f8ea2303ebc02ad13bf346a9acd2f2b841ac98e98a389479b"
+      },
+      {
+        "at": "2026-11-25T02:59:52.598381+00:00",
+        "detail": {
+          "cost": {
+            "accounted": 0.0,
+            "amount": 0.0,
+            "attempts": 1,
+            "basis": "reported_usage_at_user_rates",
+            "complete_cost_known": false,
+            "currency": "USD"
+          },
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+          "reported_model": "qwen3-8b-q4_k_m",
+          "requested_model": "qwen3-8b-q4_k_m",
+          "response_sha256": "f5cb48f026d90848cfd1380063cc589b10666a7b853b73ecdb3fc87965c4236f",
+          "role": "builder",
+          "run_id": "wf_167ab20c3a62abe994059499_bef62d9632b38f05",
+          "usage": {
+            "input_tokens": 1583,
+            "output_tokens": 169
+          }
+        },
+        "index": 9,
+        "kind": "model_completed",
+        "previous": "adbf0f36f85cba9f8ea2303ebc02ad13bf346a9acd2f2b841ac98e98a389479b",
+        "sha256": "d6f921b2d0f80642a82abd87d55bea599bc83b201b549c4e3379630d84f9b901"
+      },
+      {
+        "at": "2026-11-25T02:59:52.598444+00:00",
+        "detail": {
+          "proposed_actions": 1,
+          "summary": "Assess if the NOAA GFS archive point capability supports the specified 2 m air temperature retrieval at the given coordinates and time."
+        },
+        "index": 10,
+        "kind": "route_proposed",
+        "previous": "d6f921b2d0f80642a82abd87d55bea599bc83b201b549c4e3379630d84f9b901",
+        "sha256": "f072a074cd3f041c994505f281f3981c0b8a037cf3066bb77bc29ca82217a628"
+      },
+      {
+        "at": "2026-11-25T02:59:52.598485+00:00",
+        "detail": {
+          "outcome": {
+            "operation_executed": false,
+            "prior_outcome": {
+              "action_id": "a1ebe461c4ebb2b60cda864e864852849ca4ca7a57c850a64f49a2f2309eba34",
+              "artifact": "scope.json",
+              "bytes": 279,
+              "kind": "observation",
+              "observed": {
+                "decision": {
+                  "capability_id": "noaa-archive",
+                  "contract_sha256": "8a8fcc2a36f3a56ec1b75796d425d54cacd4f501c75bc4de25fa411f6e1f4cce",
+                  "reason": "NOAA_F024_REQUIRES_EXACTLY_24_HOURS",
+                  "source_revision": "6a635b77012fb45b4d96c404a33fa04327c19674",
+                  "status": "INCOMPATIBLE"
+                },
+                "executed": false
+              },
+              "operation_executed": false,
+              "reason": "NOAA_F024_REQUIRES_EXACTLY_24_HOURS",
+              "sha256": "c7cecc13f51d28ee88f3b45673690a723244a6b26c25a71ec4de560ff84b0124",
+              "status": "INCOMPATIBLE"
+            },
+            "replayed_from": "edf03cb9271d3e94190275ff947f19bf6aa02173f486e5e1dfbc6d165092c1f3"
+          },
+          "tool": "assess_capability"
+        },
+        "index": 11,
+        "kind": "tool_completed",
+        "previous": "f072a074cd3f041c994505f281f3981c0b8a037cf3066bb77bc29ca82217a628",
+        "sha256": "47045af574f70922dd68c402241d2ce57d1ac4c18cdf603f74c585ddc0409a21"
+      },
+      {
+        "at": "2026-11-25T02:59:52.604035+00:00",
+        "detail": {
+          "artifact_hashes": {
+            "scope.json": "c7cecc13f51d28ee88f3b45673690a723244a6b26c25a71ec4de560ff84b0124"
+          },
+          "checks": [],
+          "passed": false,
+          "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification.",
+          "spec_hash": "9f63ea25ffb036d8ee9d9f33891d796702b497a8f64170345f1501b2e7d84471"
+        },
+        "index": 12,
+        "kind": "verification",
+        "previous": "47045af574f70922dd68c402241d2ce57d1ac4c18cdf603f74c585ddc0409a21",
+        "sha256": "70e4b3128c27da7a72b8fa5b2cd5f032d2f781c9bd73f8a4834fdcd9b49e9767"
+      },
+      {
+        "at": "2026-11-25T02:59:52.606417+00:00",
+        "detail": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "role": "builder",
+          "scope": "Waiting for selected service capacity; no model call or construction iteration consumed."
+        },
+        "index": 13,
+        "kind": "model_queued",
+        "previous": "70e4b3128c27da7a72b8fa5b2cd5f032d2f781c9bd73f8a4834fdcd9b49e9767",
+        "sha256": "e5127d1697aaa048e919ea63a03cbd30d7016302040092b28be6b9308c00e67b"
+      },
+      {
+        "at": "2026-11-25T02:59:52.608907+00:00",
+        "detail": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "role": "builder",
+          "run_id": "wf_167ab20c3a62abe994059499_5249e6fcc92be039"
+        },
+        "index": 14,
+        "kind": "model_started",
+        "previous": "e5127d1697aaa048e919ea63a03cbd30d7016302040092b28be6b9308c00e67b",
+        "sha256": "2b90fe743029021cbcdcfb77dd481c8161b63f80b1a43f811241a4e1d7b9a753"
+      },
+      {
+        "at": "2026-11-25T03:00:27.833738+00:00",
+        "detail": {
+          "cost": {
+            "accounted": 0.0,
+            "amount": 0.0,
+            "attempts": 1,
+            "basis": "reported_usage_at_user_rates",
+            "complete_cost_known": false,
+            "currency": "USD"
+          },
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+          "reported_model": "qwen3-8b-q4_k_m",
+          "requested_model": "qwen3-8b-q4_k_m",
+          "response_sha256": "19b42e58694466208e8ffc8b453a6bf81d00bb8ece0778829853f0c2e217e8bb",
+          "role": "builder",
+          "run_id": "wf_167ab20c3a62abe994059499_5249e6fcc92be039",
+          "usage": {
+            "input_tokens": 1985,
+            "output_tokens": 198
+          }
+        },
+        "index": 15,
+        "kind": "model_completed",
+        "previous": "2b90fe743029021cbcdcfb77dd481c8161b63f80b1a43f811241a4e1d7b9a753",
+        "sha256": "e9cd40b150faf755746597a49bc71d4993546f29ecb078515fa3fb8903e52ccf"
+      },
+      {
+        "at": "2026-11-25T03:00:27.833789+00:00",
+        "detail": {
+          "proposed_actions": 1,
+          "summary": "The NOAA GFS archive point capability does not support the requested 24-hour forecast horizon for the specified location and time. A qualified source or adapter is required to retrieve the 2 m air temperature in kelvin at the specified coordinates."
+        },
+        "index": 16,
+        "kind": "route_proposed",
+        "previous": "e9cd40b150faf755746597a49bc71d4993546f29ecb078515fa3fb8903e52ccf",
+        "sha256": "429c7e195d7559ca3260472a7949bd6357372bc4f2244324aafa2115d1eb7e00"
+      },
+      {
+        "at": "2026-11-25T03:00:27.833845+00:00",
+        "detail": {
+          "proposal_fields": [
+            "input",
+            "name",
+            "tool"
+          ],
+          "reason": "Capability actions need a name, capability_id and typed input.",
+          "tool": "assess_capability"
+        },
+        "index": 17,
+        "kind": "tool_refused",
+        "previous": "429c7e195d7559ca3260472a7949bd6357372bc4f2244324aafa2115d1eb7e00",
+        "sha256": "be16daf786bd1caa89d163610a29670b9faab3f5a2d57320c3289f1089daa491"
+      },
+      {
+        "at": "2026-11-25T03:00:27.835693+00:00",
+        "detail": {
+          "artifact_hashes": {
+            "scope.json": "c7cecc13f51d28ee88f3b45673690a723244a6b26c25a71ec4de560ff84b0124"
+          },
+          "checks": [],
+          "passed": false,
+          "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification.",
+          "spec_hash": "9f63ea25ffb036d8ee9d9f33891d796702b497a8f64170345f1501b2e7d84471"
+        },
+        "index": 18,
+        "kind": "verification",
+        "previous": "be16daf786bd1caa89d163610a29670b9faab3f5a2d57320c3289f1089daa491",
+        "sha256": "45250bf3be8fcc55e3e8bb01ff0c1a96b54a9a64c35ba278f44350c367579874"
+      },
+      {
+        "at": "2026-11-25T03:00:27.838251+00:00",
+        "detail": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "role": "builder",
+          "scope": "Waiting for selected service capacity; no model call or construction iteration consumed."
+        },
+        "index": 19,
+        "kind": "model_queued",
+        "previous": "45250bf3be8fcc55e3e8bb01ff0c1a96b54a9a64c35ba278f44350c367579874",
+        "sha256": "7c6d6d980b77c753445c6b5596ce941b6ab5b89476e4093d1e80f3ea276508af"
+      },
+      {
+        "at": "2026-11-25T03:00:27.841115+00:00",
+        "detail": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "role": "builder",
+          "run_id": "wf_167ab20c3a62abe994059499_7f802307cfa44a9b"
+        },
+        "index": 20,
+        "kind": "model_started",
+        "previous": "7c6d6d980b77c753445c6b5596ce941b6ab5b89476e4093d1e80f3ea276508af",
+        "sha256": "c0f9bd9a84f61addad35321625d223e7319ac9a52de067ce7420e8e0e68293a9"
+      },
+      {
+        "at": "2026-11-25T03:00:52.709661+00:00",
+        "detail": {
+          "cost": {
+            "accounted": 0.0,
+            "amount": 0.0,
+            "attempts": 1,
+            "basis": "reported_usage_at_user_rates",
+            "complete_cost_known": false,
+            "currency": "USD"
+          },
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+          "reported_model": "qwen3-8b-q4_k_m",
+          "requested_model": "qwen3-8b-q4_k_m",
+          "response_sha256": "bb2945ccf3ce9dd1d95e2fea27a1a39116e4d181dce179a09fb7dd3c114aed4e",
+          "role": "builder",
+          "run_id": "wf_167ab20c3a62abe994059499_7f802307cfa44a9b",
+          "usage": {
+            "input_tokens": 2020,
+            "output_tokens": 185
+          }
+        },
+        "index": 21,
+        "kind": "model_completed",
+        "previous": "c0f9bd9a84f61addad35321625d223e7319ac9a52de067ce7420e8e0e68293a9",
+        "sha256": "90993eb0cb4e354a4f0e238af1b21cf2173ddf2ac1d94dcbe793c09fef723b5f"
+      },
+      {
+        "at": "2026-11-25T03:00:52.709721+00:00",
+        "detail": {
+          "proposed_actions": 1,
+          "summary": "The NOAA GFS archive point capability is incompatible with the required 24-hour forecast horizon. A qualified source or adapter is needed to retrieve 2 m air temperature in Kelvin at the specified location and time."
+        },
+        "index": 22,
+        "kind": "route_proposed",
+        "previous": "90993eb0cb4e354a4f0e238af1b21cf2173ddf2ac1d94dcbe793c09fef723b5f",
+        "sha256": "25411f3b9e5624777a66e31570fbe180990a8b904c43ffbd5413d6d96d7aa43e"
+      },
+      {
+        "at": "2026-11-25T03:00:52.709770+00:00",
+        "detail": {
+          "outcome": {
+            "operation_executed": false,
+            "prior_outcome": {
+              "action_id": "a1ebe461c4ebb2b60cda864e864852849ca4ca7a57c850a64f49a2f2309eba34",
+              "artifact": "scope.json",
+              "bytes": 279,
+              "kind": "observation",
+              "observed": {
+                "decision": {
+                  "capability_id": "noaa-archive",
+                  "contract_sha256": "8a8fcc2a36f3a56ec1b75796d425d54cacd4f501c75bc4de25fa411f6e1f4cce",
+                  "reason": "NOAA_F024_REQUIRES_EXACTLY_24_HOURS",
+                  "source_revision": "6a635b77012fb45b4d96c404a33fa04327c19674",
+                  "status": "INCOMPATIBLE"
+                },
+                "executed": false
+              },
+              "operation_executed": false,
+              "reason": "NOAA_F024_REQUIRES_EXACTLY_24_HOURS",
+              "sha256": "c7cecc13f51d28ee88f3b45673690a723244a6b26c25a71ec4de560ff84b0124",
+              "status": "INCOMPATIBLE"
+            },
+            "replayed_from": "edf03cb9271d3e94190275ff947f19bf6aa02173f486e5e1dfbc6d165092c1f3"
+          },
+          "tool": "assess_capability"
+        },
+        "index": 23,
+        "kind": "tool_completed",
+        "previous": "25411f3b9e5624777a66e31570fbe180990a8b904c43ffbd5413d6d96d7aa43e",
+        "sha256": "711f436c73686918045b8d0a7b728c98a14606d689eddabedd805f0230e1ff2d"
+      },
+      {
+        "at": "2026-11-25T03:00:52.715102+00:00",
+        "detail": {
+          "artifact_hashes": {
+            "scope.json": "c7cecc13f51d28ee88f3b45673690a723244a6b26c25a71ec4de560ff84b0124"
+          },
+          "checks": [],
+          "passed": false,
+          "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification.",
+          "spec_hash": "9f63ea25ffb036d8ee9d9f33891d796702b497a8f64170345f1501b2e7d84471"
+        },
+        "index": 24,
+        "kind": "verification",
+        "previous": "711f436c73686918045b8d0a7b728c98a14606d689eddabedd805f0230e1ff2d",
+        "sha256": "0250b441fd4da510eb5d68d30eb70ea081bf1ab9c50440d9f2e4809d4de430df"
+      },
+      {
+        "at": "2026-11-25T03:00:52.718602+00:00",
+        "detail": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "role": "builder",
+          "scope": "Waiting for selected service capacity; no model call or construction iteration consumed."
+        },
+        "index": 25,
+        "kind": "model_queued",
+        "previous": "0250b441fd4da510eb5d68d30eb70ea081bf1ab9c50440d9f2e4809d4de430df",
+        "sha256": "cbd5238518efb0cd1d0efd1a9269d9eebc24b0dc34761bf63662e2e67570b222"
+      },
+      {
+        "at": "2026-11-25T03:00:52.721921+00:00",
+        "detail": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "role": "builder",
+          "run_id": "wf_167ab20c3a62abe994059499_140b67c3c95ca572"
+        },
+        "index": 26,
+        "kind": "model_started",
+        "previous": "cbd5238518efb0cd1d0efd1a9269d9eebc24b0dc34761bf63662e2e67570b222",
+        "sha256": "ca897dc43037b98f5c5fe6b50170ae7c764696aa487e07f328e85a7b02770021"
+      },
+      {
+        "at": "2026-11-25T03:01:32.593184+00:00",
+        "detail": {
+          "cost": {
+            "accounted": 0.0,
+            "amount": 0.0,
+            "attempts": 1,
+            "basis": "reported_usage_at_user_rates",
+            "complete_cost_known": false,
+            "currency": "USD"
+          },
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+          "reported_model": "qwen3-8b-q4_k_m",
+          "requested_model": "qwen3-8b-q4_k_m",
+          "response_sha256": "80a6bcd49c1dbd9073767b50625e96675f6b97de2787efb97743a5af38cfe8f8",
+          "role": "builder",
+          "run_id": "wf_167ab20c3a62abe994059499_140b67c3c95ca572",
+          "usage": {
+            "input_tokens": 2422,
+            "output_tokens": 192
+          }
+        },
+        "index": 27,
+        "kind": "model_completed",
+        "previous": "ca897dc43037b98f5c5fe6b50170ae7c764696aa487e07f328e85a7b02770021",
+        "sha256": "ef2ea9e98ac04c7fc4a5abf0e65ae11a9fa1e925c4bf45b0f91e586fd26e3d15"
+      },
+      {
+        "at": "2026-11-25T03:01:32.593230+00:00",
+        "detail": {
+          "proposed_actions": 1,
+          "summary": "The NOAA GFS archive point capability is incompatible with the requested 24-hour forecast due to a specific constraint. The next step is to check if there is a qualified alternative source or adapter that can provide the required 2 m air temperature data."
+        },
+        "index": 28,
+        "kind": "route_proposed",
+        "previous": "ef2ea9e98ac04c7fc4a5abf0e65ae11a9fa1e925c4bf45b0f91e586fd26e3d15",
+        "sha256": "b4388bd255aa11f9c1b447105cba4a74fb72884603382fc27bf935bc48f1d0f7"
+      },
+      {
+        "at": "2026-11-25T03:01:32.593432+00:00",
+        "detail": {
+          "outcome": {
+            "action_id": "9bd6e13fcf0ba226a39539c4a722742228e4f827e153fd942882eca4bb62f954",
+            "artifact": "result.json",
+            "bytes": 279,
+            "kind": "observation",
+            "observed": {
+              "decision": {
+                "capability_id": "noaa-archive",
+                "contract_sha256": "8a8fcc2a36f3a56ec1b75796d425d54cacd4f501c75bc4de25fa411f6e1f4cce",
+                "reason": "NOAA_F024_REQUIRES_EXACTLY_24_HOURS",
+                "source_revision": "6a635b77012fb45b4d96c404a33fa04327c19674",
+                "status": "INCOMPATIBLE"
+              },
+              "executed": false
+            },
+            "operation_executed": false,
+            "reason": "NOAA_F024_REQUIRES_EXACTLY_24_HOURS",
+            "sha256": "c7cecc13f51d28ee88f3b45673690a723244a6b26c25a71ec4de560ff84b0124",
+            "status": "INCOMPATIBLE"
+          },
+          "tool": "invoke_capability"
+        },
+        "index": 29,
+        "kind": "tool_completed",
+        "previous": "b4388bd255aa11f9c1b447105cba4a74fb72884603382fc27bf935bc48f1d0f7",
+        "sha256": "9548e69d6dc77f77f6e6c6b002880f1ae03653c379389178f7f4d0d60fcb1679"
+      },
+      {
+        "at": "2026-11-25T03:01:32.595353+00:00",
+        "detail": {
+          "artifact_hashes": {
+            "result.json": "c7cecc13f51d28ee88f3b45673690a723244a6b26c25a71ec4de560ff84b0124",
+            "scope.json": "c7cecc13f51d28ee88f3b45673690a723244a6b26c25a71ec4de560ff84b0124"
+          },
+          "checks": [],
+          "passed": false,
+          "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification.",
+          "spec_hash": "9f63ea25ffb036d8ee9d9f33891d796702b497a8f64170345f1501b2e7d84471"
+        },
+        "index": 30,
+        "kind": "verification",
+        "previous": "9548e69d6dc77f77f6e6c6b002880f1ae03653c379389178f7f4d0d60fcb1679",
+        "sha256": "3001d24de5d889929ca5c10bbabb7cf271394cfa787dec9357653631fb1798e0"
+      },
+      {
+        "at": "2026-11-25T03:01:32.599156+00:00",
+        "detail": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "role": "builder",
+          "scope": "Waiting for selected service capacity; no model call or construction iteration consumed."
+        },
+        "index": 31,
+        "kind": "model_queued",
+        "previous": "3001d24de5d889929ca5c10bbabb7cf271394cfa787dec9357653631fb1798e0",
+        "sha256": "f52ff81aedab66dc99f8301534c4c21c6a03260b64b78bd6b347331e32b156f4"
+      },
+      {
+        "at": "2026-11-25T03:01:32.602712+00:00",
+        "detail": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "role": "builder",
+          "run_id": "wf_167ab20c3a62abe994059499_8c965ab63905e3b6"
+        },
+        "index": 32,
+        "kind": "model_started",
+        "previous": "f52ff81aedab66dc99f8301534c4c21c6a03260b64b78bd6b347331e32b156f4",
+        "sha256": "92145628ecb2df8fe76b636bb5eafd9a1a01601e69a93f59601bc0fa5d0cf6aa"
+      },
+      {
+        "at": "2026-11-25T03:03:14.438161+00:00",
+        "detail": {
+          "cost": {
+            "accounted": 0.0,
+            "amount": 0.0,
+            "attempts": 1,
+            "basis": "reported_usage_at_user_rates",
+            "complete_cost_known": false,
+            "currency": "USD"
+          },
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+          "reported_model": "qwen3-8b-q4_k_m",
+          "requested_model": "qwen3-8b-q4_k_m",
+          "response_sha256": "4c553b5b1650b20401c9d6dc9b9174ca9fa74252abbabe9c9a4c939562eb4362",
+          "role": "builder",
+          "run_id": "wf_167ab20c3a62abe994059499_8c965ab63905e3b6",
+          "usage": {
+            "input_tokens": 2829,
+            "output_tokens": 375
+          }
+        },
+        "index": 33,
+        "kind": "model_completed",
+        "previous": "92145628ecb2df8fe76b636bb5eafd9a1a01601e69a93f59601bc0fa5d0cf6aa",
+        "sha256": "774e6fbaae0f2ac91d133e3e386346ebd907671af143147a19b020525eff1077"
+      },
+      {
+        "at": "2026-11-25T03:03:14.438213+00:00",
+        "detail": {
+          "proposed_actions": 3,
+          "summary": "The NOAA GFS archive point capability is incompatible for the requested 24-hour forecast due to the requirement for exact 24-hour lead time. A qualified source or adapter is needed to deliver the checked horizon."
+        },
+        "index": 34,
+        "kind": "route_proposed",
+        "previous": "774e6fbaae0f2ac91d133e3e386346ebd907671af143147a19b020525eff1077",
+        "sha256": "ddc839c9e1d2bce2261a67d77c7ead89379ff530aaa0dc2bdddf5d15a9980500"
+      },
+      {
+        "at": "2026-11-25T03:03:14.438318+00:00",
+        "detail": {
+          "outcome": {
+            "operation_executed": false,
+            "prior_outcome": {
+              "action_id": "a1ebe461c4ebb2b60cda864e864852849ca4ca7a57c850a64f49a2f2309eba34",
+              "artifact": "scope.json",
+              "bytes": 279,
+              "kind": "observation",
+              "observed": {
+                "decision": {
+                  "capability_id": "noaa-archive",
+                  "contract_sha256": "8a8fcc2a36f3a56ec1b75796d425d54cacd4f501c75bc4de25fa411f6e1f4cce",
+                  "reason": "NOAA_F024_REQUIRES_EXACTLY_24_HOURS",
+                  "source_revision": "6a635b77012fb45b4d96c404a33fa04327c19674",
+                  "status": "INCOMPATIBLE"
+                },
+                "executed": false
+              },
+              "operation_executed": false,
+              "reason": "NOAA_F024_REQUIRES_EXACTLY_24_HOURS",
+              "sha256": "c7cecc13f51d28ee88f3b45673690a723244a6b26c25a71ec4de560ff84b0124",
+              "status": "INCOMPATIBLE"
+            },
+            "replayed_from": "edf03cb9271d3e94190275ff947f19bf6aa02173f486e5e1dfbc6d165092c1f3"
+          },
+          "tool": "assess_capability"
+        },
+        "index": 35,
+        "kind": "tool_completed",
+        "previous": "ddc839c9e1d2bce2261a67d77c7ead89379ff530aaa0dc2bdddf5d15a9980500",
+        "sha256": "61b0b343a6933819b9cd179bcb85f4c3783f5b4bea35a336c6dca01f215e90a3"
+      },
+      {
+        "at": "2026-11-25T03:03:14.440423+00:00",
+        "detail": {
+          "outcome": {
+            "operation_executed": false,
+            "prior_outcome": {
+              "action_id": "9bd6e13fcf0ba226a39539c4a722742228e4f827e153fd942882eca4bb62f954",
+              "artifact": "result.json",
+              "bytes": 279,
+              "kind": "observation",
+              "observed": {
+                "decision": {
+                  "capability_id": "noaa-archive",
+                  "contract_sha256": "8a8fcc2a36f3a56ec1b75796d425d54cacd4f501c75bc4de25fa411f6e1f4cce",
+                  "reason": "NOAA_F024_REQUIRES_EXACTLY_24_HOURS",
+                  "source_revision": "6a635b77012fb45b4d96c404a33fa04327c19674",
+                  "status": "INCOMPATIBLE"
+                },
+                "executed": false
+              },
+              "operation_executed": false,
+              "reason": "NOAA_F024_REQUIRES_EXACTLY_24_HOURS",
+              "sha256": "c7cecc13f51d28ee88f3b45673690a723244a6b26c25a71ec4de560ff84b0124",
+              "status": "INCOMPATIBLE"
+            },
+            "replayed_from": "9548e69d6dc77f77f6e6c6b002880f1ae03653c379389178f7f4d0d60fcb1679"
+          },
+          "tool": "invoke_capability"
+        },
+        "index": 36,
+        "kind": "tool_completed",
+        "previous": "61b0b343a6933819b9cd179bcb85f4c3783f5b4bea35a336c6dca01f215e90a3",
+        "sha256": "4678d5f252f20a6739be01c3f10409c9bd0ab96c62da5de4a5856bfaa00cb30e"
+      },
+      {
+        "at": "2026-11-25T03:03:14.445010+00:00",
+        "detail": {
+          "outcome": {
+            "action_id": "75c827743c1c3f7ff7bdf5f367fff7e15109565c113e195bffa1c76608136ccb",
+            "artifact": "result.md",
+            "bytes": 212,
+            "kind": "document",
+            "operation_executed": true,
+            "sha256": "851a068fe967096e5d0c0bda4503c8eeb9f9f1a41ee080384a54dca3442ccc9f"
+          },
+          "tool": "write_document"
+        },
+        "index": 37,
+        "kind": "tool_completed",
+        "previous": "4678d5f252f20a6739be01c3f10409c9bd0ab96c62da5de4a5856bfaa00cb30e",
+        "sha256": "54aece1eef61737c409238c291cb8bb61b50d115bc535a95f4fbdb610021c9f0"
+      },
+      {
+        "at": "2026-11-25T03:03:14.446289+00:00",
+        "detail": {
+          "artifact_hashes": {
+            "result.json": "c7cecc13f51d28ee88f3b45673690a723244a6b26c25a71ec4de560ff84b0124",
+            "result.md": "851a068fe967096e5d0c0bda4503c8eeb9f9f1a41ee080384a54dca3442ccc9f",
+            "scope.json": "c7cecc13f51d28ee88f3b45673690a723244a6b26c25a71ec4de560ff84b0124"
+          },
+          "checks": [],
+          "passed": false,
+          "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification.",
+          "spec_hash": "9f63ea25ffb036d8ee9d9f33891d796702b497a8f64170345f1501b2e7d84471"
+        },
+        "index": 38,
+        "kind": "verification",
+        "previous": "54aece1eef61737c409238c291cb8bb61b50d115bc535a95f4fbdb610021c9f0",
+        "sha256": "dcddff91b4a3bf08b54c80b798fb4be45c6df55684478a3603327f0ad646a1b1"
+      },
+      {
+        "at": "2026-11-25T03:03:14.446398+00:00",
+        "detail": {
+          "development_checks_passed": false,
+          "scope": "Actual artifacts and tool results are recorded. Separate acceptance is required."
+        },
+        "index": 39,
+        "kind": "awaiting_independent_evaluation",
+        "previous": "dcddff91b4a3bf08b54c80b798fb4be45c6df55684478a3603327f0ad646a1b1",
+        "sha256": "2e2b79fba2eefedaa111bd016d122a5173693177b300b4bc3584c23ddb5e60c9"
+      }
+    ],
+    "feedback": "Inspect actual tool receipts and revise as needed.",
+    "id": "wf_167ab20c3a62abe994059499",
+    "inflight": null,
+    "iteration": 6,
+    "model_call_limit": 6,
+    "model_calls": 6,
+    "phase": "builder",
+    "research": "",
+    "schema": "alpha-genesis-workflow/v1",
+    "spec": {
+      "acceptance": [],
+      "context": "Use the operator-bound facts for an actual capability assessment before deciding. Provide the checked lead time and the next qualified requirement. No public retrieval URL or external action is authorized.",
+      "local_only": true,
+      "max_actions": 16,
+      "max_iterations": 6,
+      "max_operations": 10000,
+      "max_output_tokens": 512,
+      "mission": {
+        "expires_at": "2026-11-25T04:58:28.234481+00:00",
+        "language": "en",
+        "original_ambition": "Use the installed NOAA GFS archive point capability only if qualified to retrieve 2 m air temperature in kelvin at latitude 45.5, longitude −73.5, initialization 2025-01-17 18:00 UTC and valid time 2025-01-18 06:00 UTC. Tell me whether the candidate actually supports that horizon. If it cannot, deliver the checked horizon and what separately qualified source or adapter would be required. Do not invent a weather measurement.",
+        "requirements": {
+          "capabilities": {
+            "noaa-archive": {
+              "grid_degrees": "0.25",
+              "issued_at": "2025-01-17T18:00:00+00:00",
+              "latitude": "45.5",
+              "longitude": "-73.5",
+              "quantity": "air_temperature_at_2m",
+              "result_kind": "model_forecast",
+              "source": "NOAA GFS public archive",
+              "time_basis": "UTC",
+              "unit": "K",
+              "valid_at": "2025-01-18T06:00:00+00:00",
+              "version": "1.0.0"
+            }
+          }
+        },
+        "schema": "frontier-universal-execution/v1"
+      },
+      "objective": "Use the installed NOAA GFS archive point capability only if qualified to retrieve 2 m air temperature in kelvin at latitude 45.5, longitude −73.5, initialization 2025-01-17 18:00 UTC and valid time 2025-01-18 06:00 UTC. Tell me whether the candidate actually supports that horizon. If it cannot, deliver the checked horizon and what separately qualified source or adapter would be required. Do not invent a weather measurement.",
+      "roles": {
+        "builder": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp"
+        }
+      },
+      "strategy": "single-model",
+      "tool_permissions": [
+        "assess_capability",
+        "invoke_capability",
+        "write_document"
+      ]
+    },
+    "spec_hash": "9f63ea25ffb036d8ee9d9f33891d796702b497a8f64170345f1501b2e7d84471",
+    "status": "needs_review",
+    "unadjudicated_counterexamples": [],
+    "updated_at": "2026-11-25T03:03:14.446398+00:00",
+    "verification": {
+      "artifact_hashes": {
+        "result.json": "c7cecc13f51d28ee88f3b45673690a723244a6b26c25a71ec4de560ff84b0124",
+        "result.md": "851a068fe967096e5d0c0bda4503c8eeb9f9f1a41ee080384a54dca3442ccc9f",
+        "scope.json": "c7cecc13f51d28ee88f3b45673690a723244a6b26c25a71ec4de560ff84b0124"
+      },
+      "checks": [],
+      "passed": false,
+      "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification.",
+      "spec_hash": "9f63ea25ffb036d8ee9d9f33891d796702b497a8f64170345f1501b2e7d84471"
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "ambition": "Pour préparer des gabarits numériques, fabriquez un petit calculateur réutilisable qui inverse une calibration affine. Les positions commandées 120 et 380 donnent respectivement 117,2 mm et 373,3 mm mesurés. Calculez les commandes pour viser 216,4 mm et 289,8 mm. Le calculateur doit aussi fonctionner avec deux autres points fournis ultérieurement et rejeter une calibration non inversible. Fournissez un résultat chiffré et une vérification aller-retour. Aucune machine ne doit être actionnée.",
+  "context": "Pour l'essai de réemploi, interface du calculateur: champs numériques c1 et c2 pour les commandes de calibration, o1 et o2 pour leurs mesures, target pour la cible. La sortie de la commande doit s'appeler command. Vous pouvez retourner d'autres sorties pertinentes. Exécutez les deux cibles et vérifiez effectivement la projection avant la synthèse.",
+  "expires_at": "2026-11-25T04:57:25.026751+00:00",
+  "language": "fr",
+  "local_only": true,
+  "max_actions": 16,
+  "max_output_tokens": 512,
+  "max_turns": 6,
+  "model": "qwen3-8b-q4_k_m",
+  "provider": "llama-cpp",
+  "tools": [
+    "construct_instrument",
+    "run_instrument",
+    "write_document",
+    "read_artifact"
+  ]
+}

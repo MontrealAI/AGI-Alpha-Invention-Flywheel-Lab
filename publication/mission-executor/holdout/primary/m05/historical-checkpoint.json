@@ -1,0 +1,704 @@
+{
+  "files": {
+    "demande_info.md": "Demande d’informations sur les essais et les mesures disponibles concernant la nouvelle conduite de l’atelier.",
+    "result.md": "Le journal d’essais privé n’est pas accessible, aucun mesure n’est fournie, et aucun accès à des données externes n’est autorisé. Aucun calcul du débit moyen de la nouvelle conduite ne peut être effectué. Le résultat est inconnu. Demandez les données nécessaires pour poursuivre."
+  },
+  "notice": "Contains your objective, context and artifacts. Inspect before sharing. No connector credentials or workspace integrity key included. Recorded verification is historical; recheck imported work.",
+  "schema": "alpha-genesis-workflow-export/v1",
+  "sha256": "5001cd4dbebb00ae56098565bd3ef69ef93a5581c8f671e66de2e60df4c98a9c",
+  "state": {
+    "actions": 6,
+    "adversarial_cases": [],
+    "artifacts": {
+      "demande_info.md": {
+        "bytes": 114,
+        "kind": "document",
+        "sha256": "be88502d65bbbaf870dbb81d74b294b7e950cabaa38edbb565267dfa0a0f89a8"
+      },
+      "result.md": {
+        "bytes": 298,
+        "kind": "document",
+        "sha256": "915cc6ac4dc634107ed52aa154378d8a9f72738329339abbdda89ce7f093c90e"
+      }
+    },
+    "capability_id": null,
+    "created_at": "2026-11-25T03:03:14.588661+00:00",
+    "epoch": 0,
+    "events": [
+      {
+        "at": "2026-11-25T03:03:14.588671+00:00",
+        "detail": {
+          "acceptance_source": "Operator-frozen conditions; independence is not inferred.",
+          "spec_hash": "4c3fe4136bae08f8199d790b94fa00f696861318c5b4db71f008bb327fdd1395"
+        },
+        "index": 0,
+        "kind": "created",
+        "previous": "0000000000000000000000000000000000000000000000000000000000000000",
+        "sha256": "f9cfd4a04bee2b8a18f70ff8b1ee6f4131d3c3f3ac57969c62d57fda664a9fcc"
+      },
+      {
+        "at": "2026-11-25T03:03:14.591578+00:00",
+        "detail": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "role": "builder",
+          "scope": "Waiting for selected service capacity; no model call or construction iteration consumed."
+        },
+        "index": 1,
+        "kind": "model_queued",
+        "previous": "f9cfd4a04bee2b8a18f70ff8b1ee6f4131d3c3f3ac57969c62d57fda664a9fcc",
+        "sha256": "76a8fca5c3243d52c3659e487e764766e998f2dd582fa30e2d521709c1515886"
+      },
+      {
+        "at": "2026-11-25T03:03:14.593254+00:00",
+        "detail": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "role": "builder",
+          "run_id": "wf_8909c2712e532aca39ee2f40_ef8192f25a765f9a"
+        },
+        "index": 2,
+        "kind": "model_started",
+        "previous": "76a8fca5c3243d52c3659e487e764766e998f2dd582fa30e2d521709c1515886",
+        "sha256": "1f34f00139078763a565bd0d0c5f7d0867b642faffd26e21f9bd72af3a82f930"
+      },
+      {
+        "at": "2026-11-25T03:03:37.044796+00:00",
+        "detail": {
+          "cost": {
+            "accounted": 0.0,
+            "amount": 0.0,
+            "attempts": 1,
+            "basis": "reported_usage_at_user_rates",
+            "complete_cost_known": false,
+            "currency": "USD"
+          },
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+          "reported_model": "qwen3-8b-q4_k_m",
+          "requested_model": "qwen3-8b-q4_k_m",
+          "response_sha256": "b7fd8b2d84d182a2f676a59503e00f540082ddd13016459d5a5aa8030571f9d3",
+          "role": "builder",
+          "run_id": "wf_8909c2712e532aca39ee2f40_ef8192f25a765f9a",
+          "usage": {
+            "input_tokens": 456,
+            "output_tokens": 179
+          }
+        },
+        "index": 3,
+        "kind": "model_completed",
+        "previous": "1f34f00139078763a565bd0d0c5f7d0867b642faffd26e21f9bd72af3a82f930",
+        "sha256": "ca315a72c9b1f95e8c5a3a143a51d4fc2ae3db7c424ef1787c8b2a95183eb23b"
+      },
+      {
+        "at": "2026-11-25T03:03:37.044838+00:00",
+        "detail": {
+          "proposed_actions": 1,
+          "summary": "Aucun journal d'essais ou données n'est disponible pour calculer le débit moyen de la nouvelle conduite. L'objectif est de déterminer l'état réel du résultat et de demander les informations indispensables pour avancer."
+        },
+        "index": 4,
+        "kind": "route_proposed",
+        "previous": "ca315a72c9b1f95e8c5a3a143a51d4fc2ae3db7c424ef1787c8b2a95183eb23b",
+        "sha256": "6b743a75e6ebf8f247e751cbb44458dbded0237e056de4781d319c625e409844"
+      },
+      {
+        "at": "2026-11-25T03:03:37.046350+00:00",
+        "detail": {
+          "outcome": {
+            "action_id": "1995807fd0e31bd8e79a55aabc150afd040e0837d82748d2cbd6b0ae86c764cb",
+            "artifact": "result.md",
+            "bytes": 313,
+            "kind": "document",
+            "operation_executed": true,
+            "sha256": "1cd7d5a0a5b667c9947bff65c2003ba4e6ab47ec516ecee3bace962a4baf2989"
+          },
+          "tool": "write_document"
+        },
+        "index": 5,
+        "kind": "tool_completed",
+        "previous": "6b743a75e6ebf8f247e751cbb44458dbded0237e056de4781d319c625e409844",
+        "sha256": "f9fdccd763c2a84f576afef37265879d6c96deb122c797d134d268c488a752ab"
+      },
+      {
+        "at": "2026-11-25T03:03:37.047759+00:00",
+        "detail": {
+          "artifact_hashes": {
+            "result.md": "1cd7d5a0a5b667c9947bff65c2003ba4e6ab47ec516ecee3bace962a4baf2989"
+          },
+          "checks": [],
+          "passed": false,
+          "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification.",
+          "spec_hash": "4c3fe4136bae08f8199d790b94fa00f696861318c5b4db71f008bb327fdd1395"
+        },
+        "index": 6,
+        "kind": "verification",
+        "previous": "f9fdccd763c2a84f576afef37265879d6c96deb122c797d134d268c488a752ab",
+        "sha256": "6b1a4efe87b65707b0646d96f3fa09cfa381762c808c3f70b79738b9aa312d7d"
+      },
+      {
+        "at": "2026-11-25T03:03:37.050442+00:00",
+        "detail": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "role": "builder",
+          "scope": "Waiting for selected service capacity; no model call or construction iteration consumed."
+        },
+        "index": 7,
+        "kind": "model_queued",
+        "previous": "6b1a4efe87b65707b0646d96f3fa09cfa381762c808c3f70b79738b9aa312d7d",
+        "sha256": "9238006efa3c562c58522e4eb589a5a6e975dd513a09e71400e8a43673fc3dae"
+      },
+      {
+        "at": "2026-11-25T03:03:37.053359+00:00",
+        "detail": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "role": "builder",
+          "run_id": "wf_8909c2712e532aca39ee2f40_9b9ed045abef67dc"
+        },
+        "index": 8,
+        "kind": "model_started",
+        "previous": "9238006efa3c562c58522e4eb589a5a6e975dd513a09e71400e8a43673fc3dae",
+        "sha256": "058f17e8397620b72bc2d72c86c7b89f14873440a71cf7b9d4dc2e28e6ed909a"
+      },
+      {
+        "at": "2026-11-25T03:03:55.838788+00:00",
+        "detail": {
+          "cost": {
+            "accounted": 0.0,
+            "amount": 0.0,
+            "attempts": 1,
+            "basis": "reported_usage_at_user_rates",
+            "complete_cost_known": false,
+            "currency": "USD"
+          },
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+          "reported_model": "qwen3-8b-q4_k_m",
+          "requested_model": "qwen3-8b-q4_k_m",
+          "response_sha256": "d17ebe0fab563125f4bb85cb691841e18ecb51b06bc2e4a727ed168bdcaee957",
+          "role": "builder",
+          "run_id": "wf_8909c2712e532aca39ee2f40_9b9ed045abef67dc",
+          "usage": {
+            "input_tokens": 686,
+            "output_tokens": 155
+          }
+        },
+        "index": 9,
+        "kind": "model_completed",
+        "previous": "058f17e8397620b72bc2d72c86c7b89f14873440a71cf7b9d4dc2e28e6ed909a",
+        "sha256": "27da949bff79fa445c569e7f9c1a6060423af7cffd02f35fb0a432def521fe38"
+      },
+      {
+        "at": "2026-11-25T03:03:55.838842+00:00",
+        "detail": {
+          "proposed_actions": 1,
+          "summary": "Aucun journal d'essais ou mesure n'est disponible pour calculer le débit moyen de la nouvelle conduite. La mission nécessite des données fiables pour obtenir un résultat vérifié. Un document a été créé avec les résultats actuels, mais il n'y a pas de données pour le calcul."
+        },
+        "index": 10,
+        "kind": "route_proposed",
+        "previous": "27da949bff79fa445c569e7f9c1a6060423af7cffd02f35fb0a432def521fe38",
+        "sha256": "48b17f83a4c2336626361f4f040565b09d80c6f7429901b94e4d164ee4e5519e"
+      },
+      {
+        "at": "2026-11-25T03:03:55.840334+00:00",
+        "detail": {
+          "outcome": {
+            "action_id": "65b5ab66b0d4995157993ca49a6c420af059c6e98a356398e83f4249812f7a1c",
+            "artifact": "result.md",
+            "bytes": 180,
+            "kind": "document",
+            "operation_executed": true,
+            "sha256": "1a5034c470c52e5ce81f04864ae794a08a03386ffd20921ed71fe67fe8c30358"
+          },
+          "tool": "write_document"
+        },
+        "index": 11,
+        "kind": "tool_completed",
+        "previous": "48b17f83a4c2336626361f4f040565b09d80c6f7429901b94e4d164ee4e5519e",
+        "sha256": "152a4ad6434a4c58e6d2c07c5975403c7ca212cdfc09b6530979f6b8eba7204b"
+      },
+      {
+        "at": "2026-11-25T03:03:55.841679+00:00",
+        "detail": {
+          "artifact_hashes": {
+            "result.md": "1a5034c470c52e5ce81f04864ae794a08a03386ffd20921ed71fe67fe8c30358"
+          },
+          "checks": [],
+          "passed": false,
+          "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification.",
+          "spec_hash": "4c3fe4136bae08f8199d790b94fa00f696861318c5b4db71f008bb327fdd1395"
+        },
+        "index": 12,
+        "kind": "verification",
+        "previous": "152a4ad6434a4c58e6d2c07c5975403c7ca212cdfc09b6530979f6b8eba7204b",
+        "sha256": "cf188ab5630393bbe13b127cbfed5d37857c5b56d0e544f6b6ea6f8c07140396"
+      },
+      {
+        "at": "2026-11-25T03:03:55.844269+00:00",
+        "detail": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "role": "builder",
+          "scope": "Waiting for selected service capacity; no model call or construction iteration consumed."
+        },
+        "index": 13,
+        "kind": "model_queued",
+        "previous": "cf188ab5630393bbe13b127cbfed5d37857c5b56d0e544f6b6ea6f8c07140396",
+        "sha256": "89cd37db627538778814e5e8323e954b9a16160bf055fe3449617b2c47dab7a9"
+      },
+      {
+        "at": "2026-11-25T03:03:55.850460+00:00",
+        "detail": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "role": "builder",
+          "run_id": "wf_8909c2712e532aca39ee2f40_7ead185c363ee97a"
+        },
+        "index": 14,
+        "kind": "model_started",
+        "previous": "89cd37db627538778814e5e8323e954b9a16160bf055fe3449617b2c47dab7a9",
+        "sha256": "49bc51395c105f99028cb8a65189356111421c826c497099d979b97fb3aa1866"
+      },
+      {
+        "at": "2026-11-25T03:04:20.373190+00:00",
+        "detail": {
+          "cost": {
+            "accounted": 0.0,
+            "amount": 0.0,
+            "attempts": 1,
+            "basis": "reported_usage_at_user_rates",
+            "complete_cost_known": false,
+            "currency": "USD"
+          },
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+          "reported_model": "qwen3-8b-q4_k_m",
+          "requested_model": "qwen3-8b-q4_k_m",
+          "response_sha256": "1a125092cf7326358a6785803c6aaa5d9d5e39ad0381523d85a985011139a7da",
+          "role": "builder",
+          "run_id": "wf_8909c2712e532aca39ee2f40_7ead185c363ee97a",
+          "usage": {
+            "input_tokens": 851,
+            "output_tokens": 185
+          }
+        },
+        "index": 15,
+        "kind": "model_completed",
+        "previous": "49bc51395c105f99028cb8a65189356111421c826c497099d979b97fb3aa1866",
+        "sha256": "c9e59bc539d0638e98ca196dd38670004f7c9bc1516b0c367a0ee7d059c8a465"
+      },
+      {
+        "at": "2026-11-25T03:04:20.373250+00:00",
+        "detail": {
+          "proposed_actions": 1,
+          "summary": "Le document 'result.md' a été écrit et modifié. Il contient des résultats, des hypothèses et des vérifications effectives, mais aucun journal d’essais ou mesure n’est disponible pour calculer le débit moyen de la nouvelle conduite. La mission est bloquée par l’absence de données."
+        },
+        "index": 16,
+        "kind": "route_proposed",
+        "previous": "c9e59bc539d0638e98ca196dd38670004f7c9bc1516b0c367a0ee7d059c8a465",
+        "sha256": "735eff3ddfe93b61298bb2304dfe06fac889828a70badfbb0ccee25d5ab9ef08"
+      },
+      {
+        "at": "2026-11-25T03:04:20.375492+00:00",
+        "detail": {
+          "outcome": {
+            "action_id": "478c4e5befcdcdb85fc48ec00ee51c4dd68329c7d78831e819c691dc4014780c",
+            "artifact": "result.md",
+            "bytes": 298,
+            "kind": "document",
+            "operation_executed": true,
+            "sha256": "915cc6ac4dc634107ed52aa154378d8a9f72738329339abbdda89ce7f093c90e"
+          },
+          "tool": "write_document"
+        },
+        "index": 17,
+        "kind": "tool_completed",
+        "previous": "735eff3ddfe93b61298bb2304dfe06fac889828a70badfbb0ccee25d5ab9ef08",
+        "sha256": "5d40426eae130e314a57ad4d8f66df88bcc226f4bd0386dc0baed567aa13f853"
+      },
+      {
+        "at": "2026-11-25T03:04:20.376963+00:00",
+        "detail": {
+          "artifact_hashes": {
+            "result.md": "915cc6ac4dc634107ed52aa154378d8a9f72738329339abbdda89ce7f093c90e"
+          },
+          "checks": [],
+          "passed": false,
+          "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification.",
+          "spec_hash": "4c3fe4136bae08f8199d790b94fa00f696861318c5b4db71f008bb327fdd1395"
+        },
+        "index": 18,
+        "kind": "verification",
+        "previous": "5d40426eae130e314a57ad4d8f66df88bcc226f4bd0386dc0baed567aa13f853",
+        "sha256": "b2592afdbf56f85fa0fb2ee4b5c9339e5bd2232bdd262fbad2b50e488d70c010"
+      },
+      {
+        "at": "2026-11-25T03:04:20.379616+00:00",
+        "detail": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "role": "builder",
+          "scope": "Waiting for selected service capacity; no model call or construction iteration consumed."
+        },
+        "index": 19,
+        "kind": "model_queued",
+        "previous": "b2592afdbf56f85fa0fb2ee4b5c9339e5bd2232bdd262fbad2b50e488d70c010",
+        "sha256": "6cf8d4acac8c3f082ba2f3f87dc64d7cf67c9791541be93f137c064f7f1c8069"
+      },
+      {
+        "at": "2026-11-25T03:04:20.382084+00:00",
+        "detail": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "role": "builder",
+          "run_id": "wf_8909c2712e532aca39ee2f40_daa82b218fa7fc3a"
+        },
+        "index": 20,
+        "kind": "model_started",
+        "previous": "6cf8d4acac8c3f082ba2f3f87dc64d7cf67c9791541be93f137c064f7f1c8069",
+        "sha256": "67d67e0228dce84696f062a06426dae4b7a790a2edc5ba71d6bf5f035a33f8b6"
+      },
+      {
+        "at": "2026-11-25T03:04:45.509461+00:00",
+        "detail": {
+          "cost": {
+            "accounted": 0.0,
+            "amount": 0.0,
+            "attempts": 1,
+            "basis": "reported_usage_at_user_rates",
+            "complete_cost_known": false,
+            "currency": "USD"
+          },
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+          "reported_model": "qwen3-8b-q4_k_m",
+          "requested_model": "qwen3-8b-q4_k_m",
+          "response_sha256": "71c25c9c3524f542470451fb41e33c6b436ce696d0d1b9d27c9285a08d98c5f6",
+          "role": "builder",
+          "run_id": "wf_8909c2712e532aca39ee2f40_daa82b218fa7fc3a",
+          "usage": {
+            "input_tokens": 999,
+            "output_tokens": 131
+          }
+        },
+        "index": 21,
+        "kind": "model_completed",
+        "previous": "67d67e0228dce84696f062a06426dae4b7a790a2edc5ba71d6bf5f035a33f8b6",
+        "sha256": "64d764a2ca73eb3b3f4c2418c4888c56430edf92a166a2cf2959e5db84aa4d13"
+      },
+      {
+        "at": "2026-11-25T03:04:45.509517+00:00",
+        "detail": {
+          "proposed_actions": 1,
+          "summary": "Le document result.md a été mis à jour avec les résultats et les informations actuelles. Aucun journal d’essais n’est disponible, donc les résultats sont basés sur les informations disponibles. Une action supplémentaire est nécessaire pour demander plus de renseignements."
+        },
+        "index": 22,
+        "kind": "route_proposed",
+        "previous": "64d764a2ca73eb3b3f4c2418c4888c56430edf92a166a2cf2959e5db84aa4d13",
+        "sha256": "6551f9eb02b3e2bfcb6f54c0a0e2292f0daba509405c0a5c35a9d9d703d84a49"
+      },
+      {
+        "at": "2026-11-25T03:04:45.513356+00:00",
+        "detail": {
+          "outcome": {
+            "action_id": "80dbce1686d452069ed5668b5f9c3daff12a530accaa7275053a04c58ef70ae2",
+            "artifact": "demande_info.md",
+            "bytes": 99,
+            "kind": "document",
+            "operation_executed": true,
+            "sha256": "5e78d45eeab50cdd93719d1753ae536b81fb6d4de9aa1ef864ed39e9fc935174"
+          },
+          "tool": "write_document"
+        },
+        "index": 23,
+        "kind": "tool_completed",
+        "previous": "6551f9eb02b3e2bfcb6f54c0a0e2292f0daba509405c0a5c35a9d9d703d84a49",
+        "sha256": "6f0d746a3c45ab227ea834f7be5116b13ee247f25d464da8b8308dd21edb5e55"
+      },
+      {
+        "at": "2026-11-25T03:04:45.515329+00:00",
+        "detail": {
+          "artifact_hashes": {
+            "demande_info.md": "5e78d45eeab50cdd93719d1753ae536b81fb6d4de9aa1ef864ed39e9fc935174",
+            "result.md": "915cc6ac4dc634107ed52aa154378d8a9f72738329339abbdda89ce7f093c90e"
+          },
+          "checks": [],
+          "passed": false,
+          "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification.",
+          "spec_hash": "4c3fe4136bae08f8199d790b94fa00f696861318c5b4db71f008bb327fdd1395"
+        },
+        "index": 24,
+        "kind": "verification",
+        "previous": "6f0d746a3c45ab227ea834f7be5116b13ee247f25d464da8b8308dd21edb5e55",
+        "sha256": "914c5a0da1fa389fbe37d6cfee7331545473e2d20df2ab799792cbcfd6e22a86"
+      },
+      {
+        "at": "2026-11-25T03:04:45.518847+00:00",
+        "detail": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "role": "builder",
+          "scope": "Waiting for selected service capacity; no model call or construction iteration consumed."
+        },
+        "index": 25,
+        "kind": "model_queued",
+        "previous": "914c5a0da1fa389fbe37d6cfee7331545473e2d20df2ab799792cbcfd6e22a86",
+        "sha256": "7dcf88ad6f3ba4b9daaa69c780ac643d30363aee3b37ab94d7bce0b38e0ed8e7"
+      },
+      {
+        "at": "2026-11-25T03:04:45.522181+00:00",
+        "detail": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "role": "builder",
+          "run_id": "wf_8909c2712e532aca39ee2f40_8f85a08f145aba39"
+        },
+        "index": 26,
+        "kind": "model_started",
+        "previous": "7dcf88ad6f3ba4b9daaa69c780ac643d30363aee3b37ab94d7bce0b38e0ed8e7",
+        "sha256": "be4b664228c33d9d4317f2042a88bb2c3b2d994e562c6d85bb7bf94d2a14ddb3"
+      },
+      {
+        "at": "2026-11-25T03:05:19.876514+00:00",
+        "detail": {
+          "cost": {
+            "accounted": 0.0,
+            "amount": 0.0,
+            "attempts": 1,
+            "basis": "reported_usage_at_user_rates",
+            "complete_cost_known": false,
+            "currency": "USD"
+          },
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+          "reported_model": "qwen3-8b-q4_k_m",
+          "requested_model": "qwen3-8b-q4_k_m",
+          "response_sha256": "118b875b7a3f7a85c67808ca30d9278afe4d6953d6a63088d552b9b64153e908",
+          "role": "builder",
+          "run_id": "wf_8909c2712e532aca39ee2f40_8f85a08f145aba39",
+          "usage": {
+            "input_tokens": 1225,
+            "output_tokens": 169
+          }
+        },
+        "index": 27,
+        "kind": "model_completed",
+        "previous": "be4b664228c33d9d4317f2042a88bb2c3b2d994e562c6d85bb7bf94d2a14ddb3",
+        "sha256": "a03bb09b7aa87505a426fe58622c61605e341a9404cf28059814d6eecc2e8855"
+      },
+      {
+        "at": "2026-11-25T03:05:19.876591+00:00",
+        "detail": {
+          "proposed_actions": 1,
+          "summary": "Aucun journal d’essais ou mesure n’est disponible pour calculer le débit moyen de la nouvelle conduite. Les actions précédentes ont généré des documents, mais sans données de base, il n’est pas possible de calculer un débit moyen vérifié. Le prochain pas est d’obtenir des informations nécessaires pour continuer."
+        },
+        "index": 28,
+        "kind": "route_proposed",
+        "previous": "a03bb09b7aa87505a426fe58622c61605e341a9404cf28059814d6eecc2e8855",
+        "sha256": "8b6f97c521b51f1f431cb78fef4b723201b3c05cbfad9ebc2e39a3c1d4d4fb42"
+      },
+      {
+        "at": "2026-11-25T03:05:19.878433+00:00",
+        "detail": {
+          "outcome": {
+            "action_id": "55b93f2e3b6545c6669766660eac40a771bdf6c62e12423a715e250ecd80a1d1",
+            "artifact": "demande_info.md",
+            "bytes": 207,
+            "kind": "document",
+            "operation_executed": true,
+            "sha256": "30aec762b2f04b35df61bd1bdfe4b8534b9b7d637b986b3ea3441c5c9b4da139"
+          },
+          "tool": "write_document"
+        },
+        "index": 29,
+        "kind": "tool_completed",
+        "previous": "8b6f97c521b51f1f431cb78fef4b723201b3c05cbfad9ebc2e39a3c1d4d4fb42",
+        "sha256": "f79b3f7203165e8eca8d029af8c488631514006a55c7f9ca2e3846d551ee6127"
+      },
+      {
+        "at": "2026-11-25T03:05:19.879764+00:00",
+        "detail": {
+          "artifact_hashes": {
+            "demande_info.md": "30aec762b2f04b35df61bd1bdfe4b8534b9b7d637b986b3ea3441c5c9b4da139",
+            "result.md": "915cc6ac4dc634107ed52aa154378d8a9f72738329339abbdda89ce7f093c90e"
+          },
+          "checks": [],
+          "passed": false,
+          "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification.",
+          "spec_hash": "4c3fe4136bae08f8199d790b94fa00f696861318c5b4db71f008bb327fdd1395"
+        },
+        "index": 30,
+        "kind": "verification",
+        "previous": "f79b3f7203165e8eca8d029af8c488631514006a55c7f9ca2e3846d551ee6127",
+        "sha256": "90d0c236e2a1d81d2331f78da1d7619185e40192ce83ac07643b9ad7d548d246"
+      },
+      {
+        "at": "2026-11-25T03:05:19.883176+00:00",
+        "detail": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "role": "builder",
+          "scope": "Waiting for selected service capacity; no model call or construction iteration consumed."
+        },
+        "index": 31,
+        "kind": "model_queued",
+        "previous": "90d0c236e2a1d81d2331f78da1d7619185e40192ce83ac07643b9ad7d548d246",
+        "sha256": "d859c6356c7afb48aa5b6df308dd38cad273010a762ff9e50982de33def76293"
+      },
+      {
+        "at": "2026-11-25T03:05:19.886884+00:00",
+        "detail": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "role": "builder",
+          "run_id": "wf_8909c2712e532aca39ee2f40_3dd72971e4c64165"
+        },
+        "index": 32,
+        "kind": "model_started",
+        "previous": "d859c6356c7afb48aa5b6df308dd38cad273010a762ff9e50982de33def76293",
+        "sha256": "5cf2c1329120dcd08414e3e211c9179234f3c9e3b4ff76f221c1807b9576a39f"
+      },
+      {
+        "at": "2026-11-25T03:05:51.664709+00:00",
+        "detail": {
+          "cost": {
+            "accounted": 0.0,
+            "amount": 0.0,
+            "attempts": 1,
+            "basis": "reported_usage_at_user_rates",
+            "complete_cost_known": false,
+            "currency": "USD"
+          },
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp",
+          "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+          "reported_model": "qwen3-8b-q4_k_m",
+          "requested_model": "qwen3-8b-q4_k_m",
+          "response_sha256": "d11afb2350db625ea4c23b2bfe4e67d457e0a265bb60ae1419b1c2eb0a4c7e73",
+          "role": "builder",
+          "run_id": "wf_8909c2712e532aca39ee2f40_3dd72971e4c64165",
+          "usage": {
+            "input_tokens": 1389,
+            "output_tokens": 126
+          }
+        },
+        "index": 33,
+        "kind": "model_completed",
+        "previous": "5cf2c1329120dcd08414e3e211c9179234f3c9e3b4ff76f221c1807b9576a39f",
+        "sha256": "3ccdb4bdc3a8147aeded216399584c13ae4d36857555dbcb46a205e138bf9297"
+      },
+      {
+        "at": "2026-11-25T03:05:51.664800+00:00",
+        "detail": {
+          "proposed_actions": 1,
+          "summary": "Aucun journal d’essais ou mesure n’est disponible pour calculer le débit moyen de la nouvelle conduite. Aucun accès externe n’est autorisé, donc une demande d’informations est nécessaire pour avancer."
+        },
+        "index": 34,
+        "kind": "route_proposed",
+        "previous": "3ccdb4bdc3a8147aeded216399584c13ae4d36857555dbcb46a205e138bf9297",
+        "sha256": "6ad6a799dea414d65855380bdd8b77ee418f80c8a9bcc1f142c458303d04a112"
+      },
+      {
+        "at": "2026-11-25T03:05:51.666398+00:00",
+        "detail": {
+          "outcome": {
+            "action_id": "3cf7c7fdd72e64777139e6f59b086c33afca63d3c5c7314145d682c6b0553029",
+            "artifact": "demande_info.md",
+            "bytes": 114,
+            "kind": "document",
+            "operation_executed": true,
+            "sha256": "be88502d65bbbaf870dbb81d74b294b7e950cabaa38edbb565267dfa0a0f89a8"
+          },
+          "tool": "write_document"
+        },
+        "index": 35,
+        "kind": "tool_completed",
+        "previous": "6ad6a799dea414d65855380bdd8b77ee418f80c8a9bcc1f142c458303d04a112",
+        "sha256": "1fa81236a67b3b4cf285189332d87335eceb4565dbb2b19e889b8118cd1ec024"
+      },
+      {
+        "at": "2026-11-25T03:05:51.668243+00:00",
+        "detail": {
+          "artifact_hashes": {
+            "demande_info.md": "be88502d65bbbaf870dbb81d74b294b7e950cabaa38edbb565267dfa0a0f89a8",
+            "result.md": "915cc6ac4dc634107ed52aa154378d8a9f72738329339abbdda89ce7f093c90e"
+          },
+          "checks": [],
+          "passed": false,
+          "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification.",
+          "spec_hash": "4c3fe4136bae08f8199d790b94fa00f696861318c5b4db71f008bb327fdd1395"
+        },
+        "index": 36,
+        "kind": "verification",
+        "previous": "1fa81236a67b3b4cf285189332d87335eceb4565dbb2b19e889b8118cd1ec024",
+        "sha256": "a292c5092de89051be5d4c25e5d40b81b6b217fa8bd7904b0a215764f82cb97d"
+      },
+      {
+        "at": "2026-11-25T03:05:51.673828+00:00",
+        "detail": {
+          "reason": "Declared model-call allocation exhausted; no further inference dispatched."
+        },
+        "index": 37,
+        "kind": "stopped",
+        "previous": "a292c5092de89051be5d4c25e5d40b81b6b217fa8bd7904b0a215764f82cb97d",
+        "sha256": "81454c1fbd9c8b4d0a32ae7192c11916310e4172b79d0b05ee6e9f2343a31059"
+      }
+    ],
+    "feedback": "Inspect actual tool receipts and revise as needed.",
+    "id": "wf_8909c2712e532aca39ee2f40",
+    "inflight": null,
+    "iteration": 6,
+    "model_call_limit": 6,
+    "model_calls": 6,
+    "phase": "builder",
+    "research": "",
+    "schema": "alpha-genesis-workflow/v1",
+    "spec": {
+      "acceptance": [],
+      "context": "L'inventaire des journaux autorisés est vide. Aucun accès externe ni calcul avec données fictives n'est autorisé.",
+      "local_only": true,
+      "max_actions": 16,
+      "max_iterations": 6,
+      "max_operations": 10000,
+      "max_output_tokens": 512,
+      "mission": {
+        "expires_at": "2026-11-25T05:03:14.588240+00:00",
+        "language": "fr",
+        "original_ambition": "Calculez le débit moyen vérifié de la nouvelle conduite de l’atelier à partir de mon journal d’essais privé. Aucun journal, aucune mesure et aucune autorisation d’accès à un dossier privé n’accompagnent cette mission. Expliquez l’état réel du résultat et demandez seulement le renseignement indispensable. Aucun appel externe.",
+        "requirements": {},
+        "schema": "frontier-universal-execution/v1"
+      },
+      "objective": "Calculez le débit moyen vérifié de la nouvelle conduite de l’atelier à partir de mon journal d’essais privé. Aucun journal, aucune mesure et aucune autorisation d’accès à un dossier privé n’accompagnent cette mission. Expliquez l’état réel du résultat et demandez seulement le renseignement indispensable. Aucun appel externe.",
+      "roles": {
+        "builder": {
+          "model": "qwen3-8b-q4_k_m",
+          "provider": "llama-cpp"
+        }
+      },
+      "strategy": "single-model",
+      "tool_permissions": [
+        "write_document"
+      ]
+    },
+    "spec_hash": "4c3fe4136bae08f8199d790b94fa00f696861318c5b4db71f008bb327fdd1395",
+    "status": "exhausted",
+    "unadjudicated_counterexamples": [],
+    "updated_at": "2026-11-25T03:05:51.673828+00:00",
+    "verification": {
+      "artifact_hashes": {
+        "demande_info.md": "be88502d65bbbaf870dbb81d74b294b7e950cabaa38edbb565267dfa0a0f89a8",
+        "result.md": "915cc6ac4dc634107ed52aa154378d8a9f72738329339abbdda89ce7f093c90e"
+      },
+      "checks": [],
+      "passed": false,
+      "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification.",
+      "spec_hash": "4c3fe4136bae08f8199d790b94fa00f696861318c5b4db71f008bb327fdd1395"
+    }
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "ambition": "Use the installed NOAA GFS archive point capability only if qualified to retrieve 2 m air temperature in kelvin at latitude 45.5, longitude −73.5, initialization 2025-01-17 18:00 UTC and valid time 2025-01-18 06:00 UTC. Tell me whether the candidate actually supports that horizon. If it cannot, deliver the checked horizon and what separately qualified source or adapter would be required. Do not invent a weather measurement.",
+  "context": "Use the operator-bound facts for an actual capability assessment before deciding. Provide the checked lead time and the next qualified requirement. No public retrieval URL or external action is authorized.",
+  "expires_at": "2026-11-25T04:58:28.234481+00:00",
+  "language": "en",
+  "local_only": true,
+  "max_actions": 16,
+  "max_output_tokens": 512,
+  "max_turns": 6,
+  "model": "qwen3-8b-q4_k_m",
+  "provider": "llama-cpp",
+  "requirements": {
+    "capabilities": {
+      "noaa-archive": {
+        "grid_degrees": "0.25",
+        "issued_at": "2025-01-17T18:00:00+00:00",
+        "latitude": "45.5",
+        "longitude": "-73.5",
+        "quantity": "air_temperature_at_2m",
+        "result_kind": "model_forecast",
+        "source": "NOAA GFS public archive",
+        "time_basis": "UTC",
+        "unit": "K",
+        "valid_at": "2025-01-18T06:00:00+00:00",
+        "version": "1.0.0"
+      }
+    }
+  },
+  "tools": [
+    "assess_capability",
+    "invoke_capability",
+    "write_document"
+  ]
+}

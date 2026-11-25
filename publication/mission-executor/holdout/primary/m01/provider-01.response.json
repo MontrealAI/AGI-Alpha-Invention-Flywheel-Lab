@@ -1,0 +1,39 @@
+{
+  "elapsed_seconds": 63.1017587780002,
+  "payload_as_decoded_by_native_transport": {
+    "choices": [
+      {
+        "finish_reason": "length",
+        "index": 0,
+        "message": {
+          "content": "{\n  \"summary\": \"Créer un calculateur affine inversible avec des points de calibration et calculer les commandes pour des cibles spécifiques.\",\n  \"actions\": [\n    {\n      \"tool\": \"construct_instrument\",\n      \"name\": \"affine_calculator.json\",\n      \"spec\": {\n        \"inputs\": [\"c1\", \"c2\", \"o1\", \"o2\", \"target\"],\n        \"name\": \"Affine Inverse Calculator\",\n        \"outputs\": {\n          \"command\": {\n            \"args\": [\n              {\"field\": \"c1\"},\n              {\"field\": \"c2\"},\n              {\"field\": \"o1\"},\n              {\"field\": \"o2\"},\n              {\"field\": \"target\"}\n            ],\n            \"op\": \"affine_inverse\"\n          },\n          \"slope\": {\n            \"args\": [\n              {\"field\": \"o2\"},\n              {\"field\": \"o1\"},\n              {\"field\": \"c2\"},\n              {\"field\": \"c1\"}\n            ],\n            \"op\": \"slope\"\n          },\n          \"intercept\": {\n            \"args\": [\n              {\"field\": \"o1\"},\n              {\"field\": \"slope\"},\n              {\"field\": \"c1\"}\n            ],\n            \"op\": \"intercept\"\n          },\n          \"valid\": {\n            \"args\": [\n              {\"field\": \"slope\"},\n              {\"field\": \"intercept\"}\n            ],\n            \"op\": \"valid\"\n          }\n        }\n      }\n    },\n    {\n      \"tool\": \"run_instrument\",\n      \"name\": \"affine_calculator.json\",\n      \"input\": {\n        \"c1\": 120,\n        \"c2\": 380,\n        \"o1\": 117.2,\n        \"o2\": 373.3,\n        \"target\": 216.4\n      }\n    },\n    {\n      \"tool\": \"run_instrument\",\n      \"name\": \"affine_calculator.json\",\n      \"input\": {\n        \"c1\": 120,\n        \"c2\": 380,\n        \"o1\": 117.2,\n        \"o2\": 373.3,\n        \"target\": 289.8\n      }\n    },\n    {\n      \"tool\": \"read_artifact\",\n      \"name\": \"affine_calculator.json\"\n    },\n    {\n      \"tool\": \"write",
+          "role": "assistant"
+        }
+      }
+    ],
+    "created": 1795575508,
+    "id": "chatcmpl-ussV6loZftTDGTeXNtchtfU1F3Mt1JAP",
+    "model": "qwen3-8b-q4_k_m",
+    "object": "chat.completion",
+    "system_fingerprint": "b12242-3b4d6ab3f",
+    "timings": {
+      "cache_n": 0,
+      "predicted_ms": 49527.698,
+      "predicted_n": 512,
+      "predicted_per_second": 10.317459131655989,
+      "predicted_per_token_ms": 96.9230880626223,
+      "prompt_ms": 13559.731,
+      "prompt_n": 749,
+      "prompt_per_second": 55.23708398050079,
+      "prompt_per_token_ms": 18.103779706275034
+    },
+    "usage": {
+      "completion_tokens": 512,
+      "prompt_tokens": 749,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "total_tokens": 1261
+    }
+  }
+}
