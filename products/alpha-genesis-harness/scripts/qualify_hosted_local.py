@@ -287,7 +287,7 @@ def main():
                     record['qualifications']['local_inference'] = 'PASS'
         record['quote_overall_status'] = quote.get('status') if quote else 'NOT_TESTED'
         workshop_scopes = {'vertical': {'foundry', 'foundry-fresh', 'arrangement', 'custom'},
-                           'contrast': {'contrast'}}
+                           'contrast': {'contrast'}, 'quote': {'quote-manufacturing', 'quote-lab'}}
         workshop_results = {}
         for scope, expected_names in workshop_scopes.items():
             workshop_dir = work/('workshop-' + scope)
@@ -313,7 +313,8 @@ def main():
             workshop_results[scope] = bool(workshop_valid and workshop_run['returncode'] == 0 and
                                            workshop.get('status') == 'PASS' and accepted == expected_names)
         record['workshop_scopes'] = workshop_results
-        record['qualifications']['workshop'] = 'PASS' if all(workshop_results.values()) else 'FAIL'
+        record['qualifications']['workshop'] = 'PASS' if workshop_results['vertical'] and workshop_results['contrast'] else 'FAIL'
+        record['quote_workshop_replay'] = 'PASS' if workshop_results['quote'] else 'FAIL'
         record['raw_output_notice'] = 'Raw model responses and event transcripts in receipts are untrusted provenance, not accepted claims. Portable quote artifacts are published only when their frozen cases pass; a failed arm publishes no accepted artifact. Extra model-authored project files are not published.'
     except Exception as error:
         record['error'] = {'type': type(error).__name__, 'message': sanitized_log(str(error))[:1000]}
@@ -330,7 +331,8 @@ def main():
             and all(value == 'PASS' for value in record['qualifications'].values())
             and record.get('quote_overall_status') == 'PASS') else 'FAIL'
         record['release_qualification'] = release_qualification(record)
-        for log_name in ['quote-command.log', 'workflow-command.log', 'strategy-command.log', 'workshop-vertical.log', 'workshop-contrast.log']:
+        for log_name in ['quote-command.log', 'workflow-command.log', 'strategy-command.log',
+                         'workshop-vertical.log', 'workshop-contrast.log', 'workshop-quote.log']:
             log_path = work/log_name
             if log_path.is_file():
                 with log_path.open('rb') as stream:
