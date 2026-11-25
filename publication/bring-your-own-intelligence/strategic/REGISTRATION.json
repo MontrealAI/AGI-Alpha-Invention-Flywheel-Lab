@@ -1,0 +1,47 @@
+{
+  "ambition": "Build frontier AI LLM for Game Theory.",
+  "criterion": "Advance to a larger confirmation only if adapted yields at least 6/8 full exact records, beats both unchanged-base arms in exact records, certifies both families with agreement on reviewed scope, and proposes zero false solver admissions. Standing deployment requires larger independent custody.",
+  "data_sha256": {
+    "development": "2532f476c520747038e46e0f728979ae87a2f7be3ee383aabb6ce3709c4a8d94",
+    "train": "817f2232da3ca74c2a5c1018068b6d1c21ee2f91f34780a8dc908e0ce807d989"
+  },
+  "development_cases": 12,
+  "fit": {
+    "alpha": 16,
+    "batch_size": 4,
+    "epochs": 3,
+    "learning_rate": 0.0016,
+    "rank": 8,
+    "seed": 21894,
+    "tail_layers": 8,
+    "threads": 3
+  },
+  "held_cases": 8,
+  "held_input_sha256": "c41c0ea88d10b000b9bb260965011014799cbc7970f1b25624685d69f2a894fc",
+  "held_reference_sha256": "a84e3bc64d7f0b7bcf790e4566b68a55d0cdbf570e2571b64e2a0305264ae95d",
+  "model_arms": [
+    "base_direct",
+    "base_retrieval",
+    "adapted_direct"
+  ],
+  "prediction_protocol": "Same direct instruction for base and adapted arm. Competent unchanged-base control retrieves two in-language/family cases. Greedy free-form JSON is parsed strictly without repair. No held label is exposed before raw predictions freeze.",
+  "preflight": {
+    "prior_registration_sha256": "30ea28c178dbcab18beead2463d47cac0d45d09685ecdbea4820e0d0a53873d7",
+    "result": "Blocked identical omitted-timeline prose in train and development before opening model or creating checkpoint. Development template corrected. No held files opened and no updates under the prior registration."
+  },
+  "question": "Can a small local LoRA learn a four-field strategic event record from bilingual prose across two families?",
+  "reference_tools": [
+    "independently reviewed strategic event record",
+    "independent rational maximin",
+    "integer cross-product bilateral surplus"
+  ],
+  "schema": "frontier/strategic-protocol-registration/v1",
+  "source_sha256": {
+    "assess.py": "081ba045683500ac1554194e31726e56c0a4b9889f83ef75378ed4dda862c40f",
+    "curriculum.py": "2c4f1096b55b51cbb90d37c9c9dd8a21a126e04d9bb67332c1cf06d152542946",
+    "fit.py": "b1ea9efe9d193f9a060c7017eb9c5be84c52395b825e98ae2e3e11fb79b5ac3b",
+    "protocols.py": "6bb2434f4a89ffdc193ae09a24607eb1f6a9cf4dc5401ca1c255743530807e0b"
+  },
+  "stopping_rule": "One CPU fit, no checkpoint selection or hyperparameter retries; loss is measured on generated development cases. Score the single final checkpoint on all eight separately authored held cases.",
+  "training_cases": 44
+}

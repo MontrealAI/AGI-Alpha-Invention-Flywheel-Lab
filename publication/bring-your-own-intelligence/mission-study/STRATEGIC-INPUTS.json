@@ -1,0 +1,79 @@
+[
+  {
+    "id": "timing-x01",
+    "lang": "en",
+    "brief": "A cooperative is choosing a protected or open maintenance plan. The payoff table gives net maintenance minutes saved: rows are the plans in that order and columns are a clean or fouled intake. The planner publicly announces whether it will purchase a scanner reading and binds its full contingent decision rule, which may mix. Before any reading or maintenance action the operator observes both commitments and fixes the intake state irrevocably. If the reading was purchased, only the planner sees the clean-or-fouled indication before executing the binding maintenance action. The signal's correct-class probabilities by true state are the percentages supplied. The reading fee is deducted in the same maintenance minutes from the payoff in either state. Should the planner buy a reading to improve its guaranteed result?",
+    "payoffs": [
+      [
+        60,
+        -60
+      ],
+      [
+        -60,
+        60
+      ]
+    ],
+    "accuracy": [
+      83,
+      79
+    ],
+    "fee": 6
+  },
+  {
+    "id": "timing-x02",
+    "lang": "fr",
+    "brief": "Une coopérative doit choisir le tunnel court ou le tunnel long. Le tableau mesure les points de disponibilité, avec les deux itinéraires dans cet ordre et les états sec ou mouillé en colonnes. Le coordinateur peut commander un relevé à un coût de trois points de disponibilité, dans la même unité que les gains. L'exploitant constate la commande et fixe l'état, qui ne peut plus changer. Le coordinateur arrête alors son itinéraire de façon irrévocable. Ce n'est qu'après cet arrêt que le relevé éventuellement commandé est remis au coordinateur. Les pourcentages fournis donnent la précision par état. La commande améliore-t-elle la garantie?",
+    "payoffs": [
+      [
+        32,
+        -14
+      ],
+      [
+        -8,
+        26
+      ]
+    ],
+    "accuracy": [
+      100,
+      100
+    ],
+    "fee": 3
+  },
+  {
+    "id": "timing-x03",
+    "lang": "en",
+    "brief": "A queue operator may purchase a preview before choosing routine or fast service, in that row order. Column states are normal load and peak load. The payoffs are capacity credits. The preview is private and the two percentages specify the correct-class probability by current state at the moment of preview. The opponent is expressly allowed to see the actual service action and then replace the load state, with the final load governing the payoff. The preview fee is in compute seconds, and no exchange rate to capacity credits is authorized. Should we buy the optional preview?",
+    "payoffs": [
+      [
+        45,
+        -50
+      ],
+      [
+        -40,
+        37
+      ]
+    ],
+    "accuracy": [
+      96,
+      94
+    ],
+    "fee": 4
+  },
+  {
+    "id": "timing-x04",
+    "lang": "fr",
+    "brief": "Pour un tableau de gains de préparation, les lignes sont démarrage immédiat et démarrage différé. Les colonnes sont le scénario stable et le scénario perturbé. Les gains sont exprimés en points de productivité. Le document évoque la possibilité d'acheter une prévision, mais ne donne ni son prix ni sa précision par scénario. Il ne précise pas qui reçoit la prévision, quand le scénario devient définitif, ni si la prévision précède l'engagement de l'action. Peut-on décider s'il faut acheter la prévision?",
+    "payoffs": [
+      [
+        20,
+        -6
+      ],
+      [
+        -4,
+        14
+      ]
+    ],
+    "accuracy": null,
+    "fee": null
+  }
+]

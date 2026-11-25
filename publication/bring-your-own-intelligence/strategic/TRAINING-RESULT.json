@@ -1,0 +1,57 @@
+{
+  "adapter_dtype": "float32",
+  "base": "HuggingFaceTB/SmolLM2-135M-Instruct",
+  "base_dtype": "bfloat16",
+  "base_files_sha256": {
+    "config.json": "8eb740e8bbe4cff95ea7b4588d17a2432deb16e8075bc5828ff7ba9be94d982a",
+    "model.safetensors": "5af571cbf074e6d21a03528d2330792e532ca608f24ac70a143f6b369968ab8c",
+    "special_tokens_map.json": "2b7379f3ae813529281a5c602bc5a11c1d4e0a99107aaa597fe936c1e813ca52",
+    "tokenizer.json": "9ca9acddb6525a194ec8ac7a87f24fbba7232a9a15ffa1af0c1224fcd888e47c",
+    "tokenizer_config.json": "4ec77d44f62efeb38d7e044a1db318f6a939438425312dfa333b8382dbad98df"
+  },
+  "base_requires_grad": false,
+  "base_revision": "12fd25f77366fa6b3b4b768ec3050bf629380bac",
+  "checkpoint": {
+    "bytes": 495672,
+    "changed_parameters": 122880,
+    "parameter_sha256": "05d8a87d8abc163c088044ad8cc10b9fb3dc9549882f1139c87708846879b529",
+    "sha256": "9dbf08d161b597111a6b090b2146d65deb79ce25e8e6fd7a54e416c2da563e4b",
+    "trainable_parameters": 122880
+  },
+  "cpu_seconds": 219.313207546,
+  "development_cases": 12,
+  "development_loss_after": 0.13166391280920883,
+  "development_loss_before": 0.5130851600776639,
+  "final_step": {
+    "epoch": 3,
+    "input_and_target_tokens": 1583,
+    "loss": 0.10012824088335037,
+    "target_tokens": 154,
+    "update": 33
+  },
+  "first_step": {
+    "epoch": 1,
+    "input_and_target_tokens": 1445,
+    "loss": 0.4839506149291992,
+    "target_tokens": 154,
+    "update": 1
+  },
+  "initial_parameter_sha256": "a8eaf3c9e20a9e5d75348a5c7035504aa252b12f0c0c60d94af4e1c4e13c972c",
+  "peak_memory_bytes": 1389649920,
+  "python": "3.12.14",
+  "registration_sha256": "2e0e6087c731c96e9053fda71286f5151d493a734ac8232e1c193f9d501870de",
+  "schema": "frontier/strategic-protocol-model-fit/v1",
+  "source_sha256": {
+    "assess.py": "081ba045683500ac1554194e31726e56c0a4b9889f83ef75378ed4dda862c40f",
+    "curriculum.py": "2c4f1096b55b51cbb90d37c9c9dd8a21a126e04d9bb67332c1cf06d152542946",
+    "fit.py": "b1ea9efe9d193f9a060c7017eb9c5be84c52395b825e98ae2e3e11fb79b5ac3b",
+    "protocols.py": "6bb2434f4a89ffdc193ae09a24607eb1f6a9cf4dc5401ca1c255743530807e0b"
+  },
+  "torch": "2.8.0+cpu",
+  "total_supervised_tokens": 5184,
+  "total_train_tokens": 51420,
+  "train_cases": 44,
+  "transformers": "4.55.4",
+  "updates": 33,
+  "wall_seconds": 73.85822565900162
+}
