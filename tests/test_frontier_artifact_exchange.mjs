@@ -74,3 +74,20 @@ test('quantity checks reject exponents, tolerances and range suffixes as indepen
   assert.equal(review('Net battery weight: 1 200 kg.', 200), 'insufficient');
   assert.equal(review('Net battery weights by column: 64 / 80 / 100 kg.', 80), 'supported');
 });
+
+test('compound dimensions are not field measurements, while same-unit table columns remain usable', () => {
+  const target = {model:'Example Pack',level:'system'};
+  const review = (quote, value, field = 'batteryWeight', unit = 'kg') => reviewClaim({
+    id:'field-check',target,field,claim:{value,unit},
+    sources:[{id:'table',excerpt:quote,url:'https://example.org/data',locator:'table',sha256:'f'.repeat(64)}],
+    observations:[{source:'table',target,field,quote,value,unit}],
+  }).decision;
+  assert.equal(review('Specific capacity: 100 Ah/kg.',100,'batteryCapacity','Ah'), 'insufficient');
+  assert.equal(review('Mass per unit energy: 10 kg/kWh.',10), 'insufficient');
+  assert.equal(review('Mass per unit energy: 10 kg per kWh.',10), 'insufficient');
+  assert.equal(review('Mass relationship: 10 kg·m⁻³.',10), 'insufficient');
+  assert.equal(review('Experimental ratio: 100 Ah / 5 kg.',5), 'insufficient');
+  assert.equal(review('Specified net weight: 1,200 kg.',1.2), 'insufficient');
+  assert.equal(review('Table of weights: 72.2 kg / 68.5 kg.',72.2), 'supported');
+  assert.equal(review('Table of weights: 72.2 kg / 68.5 kg.',68.5), 'supported');
+});

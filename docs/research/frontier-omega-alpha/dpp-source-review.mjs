@@ -13,6 +13,8 @@ const decimal = /^([+-]?)(\d{1,12})(?:[.,](\d{1,8}))?$/u;
 
 function exactQuantity(value, unit, units) {
   if (typeof value !== 'string' && !Number.isFinite(value)) return undefined;
+  // Without a source locale, a three-digit group after one separator is ambiguous.
+  if (typeof value === 'string' && /^[+-]?[1-9]\d{0,2}[.,]\d{3}$/u.test(value)) return undefined;
   const match = String(value).match(decimal);
   const scale = units.get(tidy(unit));
   if (!match || scale === undefined) return undefined;
@@ -31,6 +33,20 @@ function validSource(item) {
     typeof item.locator === 'string' && item.locator.trim().length > 0 && digest.test(item.sha256 ?? '');
 }
 
+function standaloneUnit(before, after, units) {
+  const tail = after.trimStart();
+  if (/^(?:[·⋅×*^\p{No}⁄∕]|\.(?=[\p{L}\p{N}])|(?:per|par)\b|[a-zµμ]+\s*(?:\^|[−-]\d|\p{No}))/iu.test(tail)) return false;
+  if (/^\s+(?:m|s|g|kg|a|ah|v|wh|kwh)\b/iu.test(after)) return false;
+  if (tail.startsWith('/')) {
+    // Preserve same-dimension table alternatives such as "72.2 kg / 68.5 kg".
+    const next = tail.match(/^\/\s+[+-]?\d{1,12}(?:[.,]\d{1,8})?\s*(mAh|Ah|kg|g|mV|V)(?:dc|ac)?\b/iu);
+    if (!next || !units.has(tidy(next[1]))) return false;
+  }
+  const previous = before.match(/([a-zµμ]+)\s*[/⁄∕]\s*$/iu);
+  if (previous && !units.has(tidy(previous[1].replace(/(?:dc|ac)$/iu, '')))) return false;
+  return true;
+}
+
 function quoteQuantifies(quote, observation, units) {
   // A source row can state a unit once after an ordered series of configuration columns.
   const expected = exactQuantity(observation.value, observation.unit, units);
@@ -39,7 +55,8 @@ function quoteQuantifies(quote, observation, units) {
   for (const match of tokens) {
     // A suffix after a range separator, exponent, or unsupported tolerance is not a new value.
     const before = quote.slice(0, match.index);
-    if (/(?:\d|\))\s*(?:[±−–—+\/-]|[eE][+-]?)\s*$/u.test(before) || /\d\p{Zs}+$/u.test(before)) continue;
+    if (/(?:\d|\))\s*(?:[±−–—+\/×*·-]|[eE][+-]?)\s*$/u.test(before) || /\d\p{Zs}+$/u.test(before)) continue;
+    if (!standaloneUnit(before, quote.slice(match.index + match[0].length), units)) continue;
     const [, values, unit] = match;
     if (values.split('/').some(value => exactQuantity(value.trim(), unit, units) === expected)) return true;
   }
