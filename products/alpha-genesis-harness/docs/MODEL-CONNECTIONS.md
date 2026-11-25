@@ -12,7 +12,26 @@ The three automated access categories share one workspace but have different aut
 
 ## Local models without cloud credentials
 
-Start the optional connector, then use **Local** in the Intelligence workspace to discover and connect an installed server/model. Declare the exact model ID and demonstrated capabilities. Advanced operators can instead use a private copy of `bridge/config.local-only.example.json`. The supported compatibility configurations cover Ollama, LM Studio, llama.cpp, vLLM and MLX servers. They do not install the servers or model weights. Follow [provider protocols](PROVIDER-PROTOCOLS.md) for supported fields and the difference between compatibility and live verification.
+### MY FRONTIER Ω
+
+Start the connector with `Launch-FRONTIER.sh` on Linux, `Launch-FRONTIER.command` on macOS or `Launch-FRONTIER.cmd` on Windows. Pair the member page, open **Intelligence**, and select **Find local models**. Choose a model reported by your running runtime and authorize the connection test. The connector checks standard numeric loopback endpoints and eligible endpoints from the private HARNESS configuration. For compatible runtimes that report a local file path, the member page shows the model filename and the connector uses the exact runtime identifier privately.
+
+| Runtime | Default connector inventory | Official setup |
+| --- | --- | --- |
+| Ollama | `127.0.0.1:11434/api/tags` | [Install Ollama](https://ollama.com/download) |
+| LM Studio | `127.0.0.1:1234/v1/models` | [Install LM Studio](https://lmstudio.ai/download) |
+| llama.cpp | `127.0.0.1:8080/v1/models` | [llama.cpp releases](https://github.com/ggml-org/llama.cpp/releases) |
+| vLLM | `127.0.0.1:8000/v1/models` | [Install vLLM](https://docs.vllm.ai/en/latest/getting_started/installation/) |
+
+If the list is empty, start your already installed runtime. If you need a runtime or model, use its official installation instructions. Check the exact weight and runtime downloads, license, context size, storage and working memory on the model and runtime release pages. The discovery response reports operating system, CPU and supported memory and storage measurements for comparison. Verify published checksums when available, and start the runtime on numeric loopback. Choose an installation and model download yourself before returning to the same mission in **Intelligence**.
+
+The connector validates an actual response to a short arithmetic request before enabling the selected route. It records the observed format, response time and token counts when reported. Schema-mode testing includes a random value supplied only in the schema. If the automatic route cannot demonstrate schema output, it can test JSON mode or prompt-constrained JSON. This checks the connection and observed format. Suitability for a particular mission depends on its own evidence and evaluation.
+
+The private HARNESS workspace remembers the selected route and local or hybrid preference. After restarting the connector, use **Reconnect my model** to check the same route again. Hybrid mode available through this connection combines local inference and permitted local capabilities. Separately authorize any external model access. Discovery and the readiness request carry no mission text.
+
+### Advanced HARNESS configuration
+
+In the standalone HARNESS, use **Local** in the Intelligence workspace to discover and connect an installed server and model. Declare the exact model ID and demonstrated capabilities. Advanced operators can instead use a private copy of `bridge/config.local-only.example.json`. The supported compatibility configurations cover Ollama, LM Studio, llama.cpp, vLLM and MLX servers. Follow [provider protocols](PROVIDER-PROTOCOLS.md) for supported fields and the difference between compatibility and live verification.
 
 Local-only configuration denies remote provider access. Public-source retrieval must also remain disabled for a fully local workflow. The HARNESS cannot certify another local program's network behavior; use OS-level isolation if your use requires that separate guarantee. Local token rates of zero mean no declared API token charge, not free hardware or electricity.
 
@@ -48,7 +67,9 @@ For manual use, create a prompt in the HARNESS, copy it to your independently op
 
 Les trois catégories automatisées — modèles locaux, API et forfait ChatGPT — ont des autorisations, lieux de traitement et règles de coût distincts. Le parcours manuel reste disponible sans connexion automatique.
 
-**Local :** utilisez une copie privée de `bridge/config.local-only.example.json`, installez le serveur et le modèle séparément, puis indiquez le modèle exact. Le mode local doit également désactiver la recherche externe. Un test avec réponses préparées n'est pas une inférence locale réelle.
+**Local dans MY FRONTIER Ω.** Démarrez le connecteur avec le lanceur correspondant à votre système, associez la page membre et choisissez **Détecter les modèles locaux** dans **Intelligence**. Sélectionnez un modèle trouvé et autorisez le test. Si la liste est vide, démarrez un serveur local installé ou suivez le guide officiel du tableau ci-dessus. Vérifiez la licence, la taille du téléchargement, l'empreinte publiée et les besoins en mémoire et en espace disque avant d'installer le modèle. Revenez dans **Intelligence** pour reprendre la même mission. Le test valide une réponse réelle et le format utilisé. Après un redémarrage, choisissez **Reconnecter mon modèle** pour revérifier la sélection conservée dans l'espace privé HARNESS. Le mode hybride utilise l'inférence et les capacités locales autorisées. Autorisez séparément tout accès à un modèle externe.
+
+**Configuration avancée dans HARNESS.** Utilisez une copie privée de `bridge/config.local-only.example.json`, installez le serveur et le modèle séparément, puis indiquez le modèle exact. Désactivez la recherche externe pour un fonctionnement entièrement local. Vérifiez les paramètres réseau du serveur choisi pour éviter le relais vers un service distant.
 
 **API :** configurez le fournisseur, le modèle, ses capacités démontrées, les tarifs et le budget. Les clés restent dans l'environnement privé. Un adaptateur de protocole testé n'est pas une connexion de compte vérifiée.
 

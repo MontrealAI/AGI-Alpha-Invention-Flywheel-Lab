@@ -72,6 +72,9 @@ class CodexTests(unittest.TestCase):
         self.assertEqual(self.calls, [])
 
     def test_handshake_sandbox_credentials_and_constructed_artifact(self):
+        before = self.service.status()
+        self.assertEqual(before["runtime_verification"]["state"], "SCHEMA_VERIFIED")
+        self.assertEqual(before["verification"], {"state": "AUTHORIZED", "last_completion": None})
         result = self.service.generate(self.request())
         command, options = self.calls[0]
         self.assertEqual(command[1:4], ["app-server", "--listen", "stdio://"])
@@ -89,6 +92,11 @@ class CodexTests(unittest.TestCase):
         self.assertEqual(result["artifacts"][0]["path"], "result.txt")
         self.assertIsNone(result["cost"]["amount"])
         self.assertTrue(self.process.done)
+        status = self.service.status()
+        self.assertEqual(status["runtime_verification"]["state"], "NATIVE_BOUNDARY_CHECK_PASSED")
+        self.assertEqual(status["verification"]["state"], "INFERENCE_OBSERVED")
+        self.assertEqual(status["verification"]["last_completion"]["route"], "codex")
+        self.assertEqual(self.plan.status()["verification"], {"state": "AUTHORIZED", "last_completion": None})
 
     def test_wrong_turn_and_incomplete_cannot_pass(self):
         self.messages[-1]["params"]["turn"]["id"] = "other-turn"

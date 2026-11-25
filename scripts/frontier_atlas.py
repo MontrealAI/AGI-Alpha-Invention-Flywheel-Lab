@@ -474,7 +474,8 @@ def verify_live(expected, revision, run, request=source_with_retry):
     if mission and (set(mission) != set(member.MISSION_ASSETS)
                     or mission[member.GAME_THEORY_ZIP] != member.GAME_THEORY_SHA256
                     or mission[member.OBSERVATION_ZIP] != member.OBSERVATION_SHA256
-                    or any(digest(request(watch.SITE + name, 2_000_000 if name == member.EXECUTOR_ZIP else 500_000)) != fingerprint
+                    or mission[member.LEGACY_EXECUTOR_ZIP] != member.LEGACY_EXECUTOR_SHA256
+                    or any(digest(request(watch.SITE + name, 2_000_000 if name in {member.EXECUTOR_ZIP, member.LEGACY_EXECUTOR_ZIP} else 500_000)) != fingerprint
                            for name, fingerprint in mission.items())):
         raise ValueError('Live universal mission bytes do not match')
     editions = release['decision_edition_sha256']

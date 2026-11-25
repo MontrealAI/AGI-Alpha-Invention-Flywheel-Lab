@@ -56,15 +56,27 @@ open-source/local eligibility requirements:
 4. Return to the HARNESS after the loopback callback succeeds. The account
    selector distinguishes registrations even when their email addresses match.
 5. Load models from the connected account, select one, then run a small useful
-   task. A model listing alone does not verify inference entitlement.
-6. Accept live integration qualification only after the application receives
-   `response.completed` and records the returned result and usage.
+   task using the current mission brief.
+6. Check the connection status after the request. Authorization permits a
+   request. The first valid `response.completed` with output establishes an
+   observed execution on that connection.
+
+The native connector stores separate HTTP plan and Codex completion receipts
+per account in its protected vault. The latest receipt contains the route, model,
+completion time and provider-reported token counts, when available. Sign-in,
+catalog discovery and incomplete responses never create a receipt. Reconsent,
+revocation and loss of usable credentials remove or suppress current
+qualification. A late result after an account switch remains associated with the
+original request and cannot qualify the newly selected connection. Completing a
+request establishes provider execution. Accepting its result still requires
+mission-specific verification.
 
 The local session limit counts started requests or Codex turns. A Codex turn
 can perform several internal model calls. This limit is neither a token cap
 nor a monetary ceiling. Set the app's actual plan and credit permissions in
 [ChatGPT Settings → Usage](https://chatgpt.com/settings/usage). No usage amount
-is translated into an invented API dollar cost. Provider limits may apply.
+is translated into an invented API dollar cost. Review app-specific limits and
+the use of any ChatGPT credits in the same settings.
 
 ## Paid edition: approval before activation
 
@@ -73,6 +85,8 @@ the [Sign in with ChatGPT interest form](https://openai.com/form/sign-in-with-ch
 The registration/partner process and eligibility decision belong to OpenAI.
 An Apache license does not establish approval for the paid package.
 
+The public Pages experience opens the native connector or a reviewed manual
+handoff. It does not act as a hosted Sign in with ChatGPT inference client.
 The paid distribution defaults to disabled. When OpenAI has actually granted
 the applicable permission, record the approval reference in private local
 configuration and follow any provider-supplied integration conditions:
@@ -106,8 +120,9 @@ returning account identity. It uses OpenAI's OIDC discovery and trusted JWKS.
 Only the granted scopes enable inference; declined plan consent leaves identity
 sign-in usable without authorizing model requests.
 
-Credentials stay in `~/.config/alpha-genesis-harness/chatgpt-auth.json` on Unix,
-or the `alpha-genesis-harness` directory beneath `%APPDATA%` on Windows.
+The HARNESS launcher stores credentials in the local user's
+`~/.alpha-genesis-harness/chatgpt/chatgpt-auth.json` by default. An embedding
+application can supply its own private data root.
 Unix storage requires a user-owned 0700 directory and 0600 file. Windows uses
 the current user's DPAPI protection. Windows behavior is implemented but has
 not been verified on an actual Windows machine for this release. Tokens do not
@@ -161,6 +176,26 @@ contract evidence, not proof of a successful authenticated Pro request.
 | Interrupted stream | Preserve the failed attempt; retry explicitly with a new run ID if appropriate. |
 | Browser cannot open | Configure a system browser on the local host and retry. Headless manual-token pasting is unsupported. |
 
+## Promotional API credits for eligible ChatGPT subscribers
+
+1. Open the official benefit guide and check current eligibility from the
+   ChatGPT or API Platform account you control. Activation is handled by OpenAI.
+2. Select the receiving API organization you own. Confirm the grant in that
+   organization's API Billing → Credit grants. A project used for the mission
+   must belong to this organization and be authorized to use its API access.
+3. Keep API execution paused when you require zero additional expenditure and
+   cannot enforce that boundary. OpenAI applies purchased API credits after
+   promotional credits expire or run out. The HARNESS does not activate
+   recharge, change billing settings or verify account balances.
+4. For a later authorized qualification, retain private evidence tying the
+   provider request, organization, project, actual usage and applicable
+   credit deduction together. Usage counters alone do not establish the balance
+   used or the cash charged. Protect all account identifiers and credentials.
+
+The API promotion does not fund signed-in Codex usage or Codex via API keys.
+Signed-in Codex and OAuth plan inference follow ChatGPT usage settings.
+[Official API credits benefit guide](https://help.openai.com/en/articles/20001626-api-credits-benefit-for-eligible-chatgpt-subscriptions)
+
 ## Codex engineering pathway
 
 Install the official Codex CLI separately. Use the HARNESS's authorized ChatGPT
@@ -176,15 +211,16 @@ preexisting credential file. Enable Codex explicitly:
   },
   "codex": {
     "allow_execution": true,
-    "allow_workspace_write": true,
-    "workspace_root": "/absolute/path/to/private-harness-work"
+    "allow_workspace_write": false
   }
 }
 ```
 
 For the paid edition, the same commercial gate applies. Use the actual
 distribution and approval state. An optional `executable` field selects an
-absolute path to the trusted official `codex` executable.
+absolute path to the trusted official `codex` executable. The default connector
+uses its own private `codex-workspaces` directory. Enable workspace writes only
+when the specific engineering task needs them and you authorize them.
 
 Each run has a new isolated workspace and a protected `CODEX_HOME` in a sibling directory outside the writable execution root. The bridge uses the
 documented app-server initialize → thread/start → turn/start protocol and a
@@ -251,11 +287,11 @@ read the JSON reason and correct the host/runtime without disabling isolation.
 The public stable CLI `0.167.0` and preview `0.169.0-alpha.7` expose the required
 named-profile contract. The initial legacy RPC approach did not, and was replaced.
 Official npm downloads were integrity-checked before isolated schema inspection.
-The current engineering container rejects native sandbox setup with
-`Operation not permitted`; no authenticated model execution was attempted.
-See `evidence/CODEX-CLI-COMPATIBILITY.json`. This host restriction is not a claim
-that every supported computer is incompatible. A real completed model turn and
-commercial authorization remain separate qualification requirements.
+The currently installed `0.172.0-alpha.2` reported the required profile
+interfaces in schema inspection and the profile was accepted in a local
+app-server session. The native command failed with `Operation not permitted`.
+The authentication path stayed closed. A separate supported host must pass the
+native check before an eligible account can qualify an actual turn.
 
 ## Français
 
@@ -269,8 +305,12 @@ Installez les dépendances facultatives avec
 connecteur avec la configuration correspondant réellement à votre distribution.
 Choisissez **Continuer avec ChatGPT**, sélectionnez votre compte et votre espace
 de travail sur le site officiel, examinez le consentement et revenez au HARNESS.
-Chargez la liste des modèles du compte avant d'exécuter une petite tâche.
-Seule une réponse achevée permet de qualifier cette requête réelle.
+Chargez la liste des modèles du compte et lancez une petite tâche à partir du
+mandat en cours. Le statut distingue l'identité vérifiée, le consentement au
+forfait et l'inférence constatée. Le connecteur conserve un reçu distinct par
+compte et par voie d'exécution pour la dernière réponse achevée. Il indique le
+modèle, l'heure et les nombres de jetons fournis. La vérification du résultat de
+la mission reste une étape distincte.
 
 L'identification ne suffit pas : il faut aussi autoriser l'utilisation du
 forfait. Les jetons restent dans le stockage local protégé, jamais dans le
@@ -284,6 +324,16 @@ calcul local sont distincts. Aucune panne n'active automatiquement une API payan
 Le compteur local limite les requêtes ou tours démarrés; un tour Codex peut
 comporter plusieurs appels internes. Il ne constitue pas un plafond monétaire.
 Consultez [Paramètres ChatGPT → Utilisation](https://chatgpt.com/settings/usage).
+
+Pour les crédits API promotionnels, vérifiez votre admissibilité, activez
+l'avantage depuis votre propre compte et sélectionnez l'organisation API
+bénéficiaire. Vérifiez l'octroi dans les paramètres de facturation et utilisez
+uniquement un projet autorisé de cette organisation. Les crédits API achetés
+peuvent prendre le relais après la promotion. Si vous exigez zéro dépense
+supplémentaire, laissez l'API en pause tant que cette limite ne peut pas être
+appliquée. Une validation réelle exige une requête autorisée et une preuve de
+facturation correspondante. L'avantage ne couvre pas les tours Codex via une
+clé API. [Guide OpenAI de l'avantage en crédits API](https://help.openai.com/en/articles/20001626-api-credits-benefit-for-eligible-chatgpt-subscriptions)
 
 L'édition commerciale exige l'autorisation applicable d'OpenAI. La référence
 enregistrée dans la configuration est une attestation de l'opérateur, pas une
@@ -311,9 +361,12 @@ aucun contournement automatique n'est proposé.
 - [Accounts, renewal and revocation](https://developers.openai.com/siwc/token-sharing-open-source/profiles-and-sessions)
 - [Models and completed inference](https://developers.openai.com/siwc/token-sharing-open-source/models-and-inference)
 - [Preview request restrictions](https://developers.openai.com/siwc/token-sharing-open-source/preview-limitations)
+- [Sign-in user experience and usage settings](https://developers.openai.com/siwc/ui-ux-guidelines)
 - [Error recovery](https://developers.openai.com/siwc/token-sharing-open-source/errors-and-recovery)
 - [SIWC Codex configuration](https://developers.openai.com/siwc/token-sharing-open-source/codex-app-server)
 - [Codex app-server protocol](https://developers.openai.com/codex/app-server)
+- [Codex integration options](https://developers.openai.com/blog/codex-as-a-platform)
+- [Signed-in Codex eligibility](https://help.openai.com/en/articles/11369540-using-codex-with-your-chatgpt-plan)
 
 Tests: `python3 -m unittest discover -s tests -p 'test_chatgpt.py' -v` and
 `python3 -m unittest discover -s tests -p 'test_codex.py' -v` from this product.

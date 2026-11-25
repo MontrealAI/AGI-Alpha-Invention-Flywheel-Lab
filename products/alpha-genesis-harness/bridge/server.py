@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import hmac
+from html import escape
 import importlib.util
 import io
 import json
@@ -31,6 +32,8 @@ PRODUCT = Path(__file__).resolve().parent.parent
 APP = PRODUCT / "app"
 STATIC_FILES = {"/": "index.html", "/index.html": "index.html", "/app.js": "app.js",
                 "/engine.js": "engine.js", "/styles.css": "styles.css", "/workshop.js": "workshop.js"}
+PAIR_GUIDE = "/frontier-pair/"
+FRONTIER_URL = PAGES_ORIGIN + "/AGI-Alpha-Invention-Flywheel-Lab/frontier-omega-alpha/"
 
 
 class NativeMechanism:
@@ -80,6 +83,8 @@ class HarnessServer(ThreadingHTTPServer):
         self._workflows = None
         self._genesis_next = None
         self._local_connections = None
+        self._intelligence_profiles = None
+        self._pairing_guide = None
         self._upgrade_foundry = None
         self._frontier_monitor = None
         self.pages_missions = None
@@ -107,19 +112,39 @@ class HarnessServer(ThreadingHTTPServer):
                 self._workflows = WorkflowService(self.runtime, self.workspace, server_source_sha256=LOADED_SOURCE_SHA256)
             return self._workflows
 
-    def enable_pages_missions(self, *, provider, model, **policy):
+    def enable_pages_missions(self, *, provider=None, model=None, **policy):
         from bridge.pages_missions import PagesMissions
         from bridge.universal_missions import UniversalMissionService
-        configured = self.runtime.provider(provider)
-        if configured.remote or model not in configured.models:
-            raise BridgeError("MISSION_PROVIDER", "Select an explicitly configured local model.")
+        role = None
+        if model is not None:
+            configured = self.runtime.provider(provider)
+            if configured.remote or model not in configured.models:
+                raise BridgeError("MISSION_PROVIDER", "Select an explicitly configured local model.")
+            role = {"provider": provider, "model": model}
         service = UniversalMissionService(self.runtime, self.workspace / "universal-missions",
                                           server_source_sha256=LOADED_SOURCE_SHA256)
         try:
-            self.pages_missions = PagesMissions(service, role={"provider": provider, "model": model}, **policy)
+            self.pages_missions = PagesMissions(service, role=role, intelligence=self.intelligence_profiles, **policy)
         except Exception:
             service.close()
             raise
+
+    def create_pairing_guide(self, code):
+        with self._workflow_lock:
+            ticket = secrets.token_urlsafe(32)
+            self._pairing_guide = (hashlib.sha256(ticket.encode()).digest(), code)
+            return self.origin + PAIR_GUIDE + ticket
+
+    def consume_pairing_guide(self, ticket):
+        with self._workflow_lock:
+            guide = self._pairing_guide
+            if not guide or len(ticket) != 43 or not hmac.compare_digest(
+                    hashlib.sha256(ticket.encode()).digest(), guide[0]):
+                raise BridgeError("NOT_FOUND", "Pairing guide ticket not found or already used.", 404)
+            self._pairing_guide = None
+            if self.pages_missions.clock() >= self.pages_missions.expires:
+                raise BridgeError("MISSION_LEASE_EXPIRED", "The local authorization has ended.", 403)
+            return guide[1]
 
     def server_close(self):
         if self.pages_missions is not None:
@@ -148,6 +173,14 @@ class HarnessServer(ThreadingHTTPServer):
                 from bridge.onboarding import LocalConnectionService
                 self._local_connections = LocalConnectionService(self.runtime, self.workspace)
             return self._local_connections
+
+    @property
+    def intelligence_profiles(self):
+        with self._workflow_lock:
+            if self._intelligence_profiles is None:
+                from bridge.intelligence_profiles import IntelligenceProfiles
+                self._intelligence_profiles = IntelligenceProfiles(self.local_connections)
+            return self._intelligence_profiles
 
     @property
     def upgrade_foundry(self):
@@ -245,6 +278,21 @@ class Handler(BaseHTTPRequestHandler):
     def do_GET(self):
         try:
             self.boundary()
+            if self.path.startswith(PAIR_GUIDE):
+                code = escape(self.server.consume_pairing_guide(self.path[len(PAIR_GUIDE):]))
+                page = (
+                    '<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" '
+                    'content="width=device-width,initial-scale=1"><title>FRONTIER Ω · Pair this computer</title>'
+                    '<link rel="stylesheet" href="/styles.css"><main><h1>FRONTIER Ω</h1>'
+                    '<h2>Pair this computer <span lang="fr">· Jumelez cet ordinateur</span></h2>'
+                    '<p>Copy the one-use code, then open My Intelligence.</p>'
+                    '<p lang="fr">Copiez le code à usage unique, puis ouvrez Mon intelligence.</p>'
+                    f'<p><code>{code}</code></p><p><a href="{FRONTIER_URL}#mission-intelligence">English</a>'
+                    f' · <a lang="fr" href="{FRONTIER_URL}fr.html#mission-intelligence">Français</a></p>'
+                    '<p>Keep the connector open while you run missions.</p>'
+                    '<p lang="fr">Gardez le connecteur ouvert pendant vos missions.</p></main></html>'
+                )
+                return self.send_bytes(200, page.encode("utf-8"), "text/html; charset=utf-8")
             if self.path == "/api/session":
                 self.boundary(bootstrap=True)
                 return self.json(200, {"token": self.server.token})
@@ -413,7 +461,9 @@ class Handler(BaseHTTPRequestHandler):
     def connection_status(self, category):
         result = self.server.runtime.service(category).status()
         if self.server.runtime.status().get("local_only"):
-            result.update(enabled=False, ready=False,
+            result.update(enabled=False, ready=False, reason_code="LOCAL_ONLY",
+                          verification={"state": "DISABLED", "last_completion": None},
+                          qualification="CONTRACT_TESTED_ONLY",
                           reason="Local-only mode disables this remote connection. Existing local credentials can still be removed.")
         return result
 
@@ -539,23 +589,40 @@ def main():
     parser.add_argument("--mission-actions", type=int, default=24)
     parser.add_argument("--mission-output-tokens", type=int, default=1024)
     parser.add_argument("--mission-import", type=Path, help="Restore a historical execution record, paused under the new local lease")
+    parser.add_argument("--mission-evidence", type=Path, help="Approve inputs for the exact ambition declared in a private structured file")
+    parser.add_argument("--pairing-guide", action="store_true", help="Open a one-use guide on the local device")
     args = parser.parse_args()
     server = None
     try:
-        if args.mission_import and not args.pages_missions:
-            raise BridgeError("MISSION_AUTHORITY", "Mission import requires an explicit local mission policy.")
-        config = strict_json(args.config.read_bytes()) if args.config else {}
+        if (args.mission_import or args.mission_evidence or args.pairing_guide) and not args.pages_missions:
+            raise BridgeError("MISSION_AUTHORITY", "Mission setup requires an explicit local mission policy.")
+        config = strict_json(args.config.read_bytes()) if args.config else {"local_only": True} if args.pages_missions else {}
         runtime = Runtime(config)
         port = args.port if args.port is not None else 38463 if args.pages_missions else 8765
         server = HarnessServer(("127.0.0.1", port), runtime, config=config, workspace=args.workspace)
+        guide_url = None
         if args.pages_missions:
-            if not args.workspace or not args.mission_model:
-                raise BridgeError("MISSION_AUTHORITY", "Pages missions require an explicit private workspace and local model.")
+            evidence = None
+            if args.mission_evidence:
+                limit = 544 * 1024
+                with args.mission_evidence.open("rb") as item:
+                    raw = item.read(limit + 1)
+                if len(raw) > limit:
+                    raise BridgeError("MISSION_EVIDENCE_INPUT", "The local mission input file exceeds the supported size.")
+                evidence = strict_json(raw)
+                if not isinstance(evidence, dict):
+                    raise BridgeError("MISSION_EVIDENCE_INPUT", "Use a local mission input manifest.")
+
+            def announce(code):
+                nonlocal guide_url
+                print("FRONTIER Ω one-use pairing code: " + code, flush=True)
+                if args.pairing_guide and not args.no_browser and guide_url is None:
+                    guide_url = server.create_pairing_guide(code)
+
             server.enable_pages_missions(provider=args.mission_provider, model=args.mission_model,
                                          origin=args.pages_origin, lease_minutes=args.mission_lease_minutes,
                                          turns=args.mission_turns, actions=args.mission_actions,
-                                         output_tokens=args.mission_output_tokens,
-                                         announce=lambda code: print("FRONTIER Ω one-use pairing code: " + code, flush=True))
+                                         output_tokens=args.mission_output_tokens, evidence_input=evidence, announce=announce)
             if args.mission_import:
                 from bridge.workflows import MAX_STATE
                 with args.mission_import.open("rb") as item:
@@ -572,7 +639,7 @@ def main():
     print(f"ALPHA GENESIS HARNESS: {server.origin}")
     print("Private process-session connector. Closing it resets this session guard; it does not reset provider bills.")
     if not args.no_browser:
-        webbrowser.open(server.origin)
+        webbrowser.open(guide_url or server.origin)
     try:
         server.serve_forever(poll_interval=0.2)
     except KeyboardInterrupt:

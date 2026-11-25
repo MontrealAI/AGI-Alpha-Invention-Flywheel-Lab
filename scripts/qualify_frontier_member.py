@@ -446,6 +446,8 @@ def qualify_observation_game(directory, root, release):
 
 def qualify_mission_executor(directory, root, release):
     expected = release['universal_mission_sha256'][member.EXECUTOR_ZIP]
+    require(member.digest((directory / member.LEGACY_EXECUTOR_ZIP).read_bytes()) == member.LEGACY_EXECUTOR_SHA256,
+            'Published HARNESS executor 1.0.0 bytes changed')
     manifest = install(directory / member.EXECUTOR_ZIP, root, {'sha256': expected})
     require(manifest['id'] == 'frontier-harness-executor', 'Wrong local executor package')
     require(manifest['source'] == member.commit_url(release['source_commit']), 'Executor source binding changed')
@@ -454,6 +456,8 @@ import json, pathlib, sys
 sys.path.insert(0, str(pathlib.Path.cwd()))
 from bridge.adapters import Runtime, strict_json
 from bridge.instruments import evaluate
+from bridge.intelligence_profiles import IntelligenceProfiles
+from bridge.mission_evidence import assess_claims
 from bridge.mission_contracts import describe
 from bridge.mission_tools import EVALUATOR_SHA256
 from bridge.server import HarnessServer
@@ -461,10 +465,12 @@ from bridge.universal_missions import UniversalMissionService
 runtime = Runtime(strict_json(pathlib.Path('local-model.example.json').read_bytes()))
 calculation = evaluate({'name':'dated check','inputs':['x'],'outputs':{'doubled':{'op':'mul','args':[{'field':'x'},2]}}},{'x':7})
 print(json.dumps({'local': runtime.local_only, 'registered': len(describe()), 'value': calculation['output']['doubled'],
-                  'sql_evaluator': EVALUATOR_SHA256, 'bridge': HarnessServer.__name__, 'service': UniversalMissionService.__name__}))
+                  'sql_evaluator': EVALUATOR_SHA256, 'bridge': HarnessServer.__name__, 'service': UniversalMissionService.__name__,
+                  'profiles': IntelligenceProfiles.__name__, 'evidence': callable(assess_claims)}))
 '''
     result, elapsed = call(root, sys.executable, '-I', '-S', '-c', script)
-    require(result['local'] and result['registered'] >= 2 and result['value'] == 14,
+    require(result['local'] and result['registered'] >= 2 and result['value'] == 14 and result['evidence']
+            and all((root / name).is_file() for name in ('Launch-FRONTIER.sh', 'Launch-FRONTIER.command', 'Launch-FRONTIER.cmd')),
             'Distributed executor entry points failed')
     return {'package_sha256': expected, 'replayed_ns': elapsed, **result}
 

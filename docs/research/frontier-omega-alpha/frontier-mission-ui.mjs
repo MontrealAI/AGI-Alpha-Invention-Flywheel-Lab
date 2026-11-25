@@ -118,6 +118,7 @@ export function setupMissionConsole(member, shell) {
   const active = () => !member.hidden;
   const execution = setupExecution(member, language, {
     currentAmbition: () => mission?.ambition,
+    returnToMission: () => shell.show(node('frontier-mission-panel'), {remember:true}),
     onOpen({ambition, original_ambition: originalAmbition}) {
       stopRequest();
       resetHandoff();
@@ -286,6 +287,7 @@ export function setupMissionConsole(member, shell) {
 
   node('mission-prepare').addEventListener('click', async () => {
     if (!active() || !mission) return;
+    execution.clearWaiting();
     const token = ++serial;
     try {
       if (mission.status !== 'waiting' || mission.run?.provider !== 'assisted' || !mission.request) {
@@ -347,6 +349,7 @@ export function setupMissionConsole(member, shell) {
   });
   node('mission-run-local').addEventListener('click', async () => {
     if (!active() || !mission || !connection || mission.status === 'running') return;
+    execution.clearWaiting();
     const config = connection;
     const controller = new AbortController();
     const token = ++serial;
@@ -388,6 +391,7 @@ export function setupMissionConsole(member, shell) {
   });
   node('mission-cancel').addEventListener('click', () => {
     if (!active() || !mission) return;
+    execution.clearWaiting();
     resetRequest();
     mission = cancelMission(mission);
     render();

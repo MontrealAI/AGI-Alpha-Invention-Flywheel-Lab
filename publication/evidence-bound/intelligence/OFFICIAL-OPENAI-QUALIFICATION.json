@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "recorded_at_utc": "2026-11-25T04:07:19+00:00",
+  "scope": "Official provider connection qualification on the engineering host. Native process observations and offline contract tests have separate scope.",
+  "source_sha256": {
+    "products/alpha-genesis-harness/bridge/chatgpt.py": "c5b302c7ea68e8344fad42ed7dd7a2670c1e358a14d548b2d3da6bac87024934",
+    "products/alpha-genesis-harness/bridge/codex.py": "510589c3d85befcc426066b401c95cb558c41a15578587792da3e27a79a858c8",
+    "products/alpha-genesis-harness/bridge/codex_permissions.py": "ec1dbc1e20b9ca3ae6f4ea5a7c15256e63a4a50413a40321a0281552ee130f66",
+    "products/alpha-genesis-harness/scripts/probe_codex_sandbox.py": "437ff2b6af06670b3f04456fc5260af424428703471caaac57a6667d1686da1e",
+    "products/alpha-genesis-harness/app/app.js": "17906971a9413354a05fea9aca7d19d6bebdf1a7c9f99c80c52a14322c468019",
+    "products/alpha-genesis-harness/app/index.html": "0781983589bc3a4b67c8c2f22f2c022c3996def52b7092f8d024eb4e85b6ea4a",
+    "products/alpha-genesis-harness/docs/CHATGPT-PLAN.md": "7494cc617a67b9d096a0020ebc592471a9831bdfd14b8484407b0a89dbd874a6"
+  },
+  "native_codex_observation": {
+    "installed_version": "codex-cli 0.172.0-alpha.2",
+    "command": "python -B products/alpha-genesis-harness/scripts/probe_codex_sandbox.py --executable <official-codex> --work-root <scratch>",
+    "exit_code": 2,
+    "experimental_named_profile_schema": "PASS",
+    "stdio_initialize_and_named_profile_list": "PASS",
+    "native_read_only_command": "BLOCKED",
+    "native_workspace_write_command": "NOT_REACHED",
+    "probe_output": {
+      "status": "BLOCKED",
+      "code": "CODEX_SANDBOX_UNAVAILABLE",
+      "message": "The native Codex sandbox check failed (host_sandbox_operation_not_permitted). No OAuth-backed Codex process was started; workspace, network and credential isolation must pass before use.",
+      "inference_calls": 0,
+      "real_credentials_used": false,
+      "results": []
+    },
+    "authorized_oauth_process_started": false,
+    "authenticated_model_turns": 0,
+    "authenticated_cancellation_and_continuation": "NOT_REACHED"
+  },
+  "qualification": {
+    "oauth_protocol_and_bound_receipts": {
+      "decision": "GO",
+      "scope": "Offline contract behavior in test_chatgpt and test_chatgpt_hardening. Fixture credentials and outputs."
+    },
+    "live_chatgpt_plan_inference": {
+      "decision": "NO_GO",
+      "scope": "No consenting eligible account connected for this run. No OAuth login, model listing for a real account or authenticated request occurred."
+    },
+    "live_codex_construction": {
+      "decision": "NO_GO",
+      "scope": "Native enforcement blocked before a credentialed child process. Codex tests exercise protocol and continuation with fixtures."
+    },
+    "commercial_or_remotely_hosted_plan_integration": {
+      "decision": "NO_GO",
+      "scope": "No documented applicable approval available. Official interest request requires authorized owner submission."
+    },
+    "api_credit_funded_inference": {
+      "decision": "NO_GO",
+      "scope": "No grant, authorized API project, allowable spend boundary or matching billing evidence observed. No API keys or payments used."
+    }
+  },
+  "next_receipts": {
+    "eligible_open_source_local": "Consenting account owner signs in through the native connector and completes one scoped request using the saved mission. Retain a sanitized completion receipt and preserve mission-specific acceptance separately.",
+    "commercial_or_remote": "Owner submits the canonical integration dossier through the OpenAI interest form and records the applicable provider approval and conditions privately.",
+    "codex": "Rerun both credential-free checks on a supported host; complete a scoped turn under the authorized account, in the validated policy, then check the generated artifact independently.",
+    "api_credits": "Eligible organization owner activates the benefit, confirms receiving organization and project authority, and verifies enforceable spend conditions before any authorized request. Retain matching usage and credit-deduction evidence privately."
+  },
+  "official_references": {
+    "siwc": "https://developers.openai.com/siwc",
+    "registration": "https://developers.openai.com/siwc/token-sharing-open-source/sign-in",
+    "profiles": "https://developers.openai.com/siwc/token-sharing-open-source/profiles-and-sessions",
+    "inference": "https://developers.openai.com/siwc/token-sharing-open-source/models-and-inference",
+    "limitations": "https://developers.openai.com/siwc/token-sharing-open-source/preview-limitations",
+    "ui_guidelines": "https://developers.openai.com/siwc/ui-ux-guidelines",
+    "commercial_interest": "https://openai.com/form/sign-in-with-chatgpt-interest/",
+    "codex": "https://developers.openai.com/siwc/token-sharing-open-source/codex-app-server",
+    "codex_plan": "https://help.openai.com/en/articles/11369540-using-codex-with-your-chatgpt-plan",
+    "promotional_api_credits": "https://help.openai.com/en/articles/20001626-api-credits-benefit-for-eligible-chatgpt-subscriptions"
+  },
+  "native_browser_fixture": {
+    "status": "PASS",
+    "browser": "151.0.7922.34",
+    "viewport": "390x844",
+    "locales": [
+      "en",
+      "fr"
+    ],
+    "scope": "Native HARNESS loopback and Chromium with synthetic OAuth and model transport. Zero real provider and browser outbound requests.",
+    "checks": [
+      "authorization shown before any fixture request",
+      "discovery does not verify inference",
+      "first completed synthetic request updates selected account status",
+      "French rendering and official guidance links",
+      "no application errors or external browser requests"
+    ]
+  }
+}
