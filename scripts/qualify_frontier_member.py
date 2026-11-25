@@ -382,7 +382,7 @@ def qualify_cascade(directory, root, release):
     expected = release['foundry_sha256'][member.CASCADE_ZIP]
     manifest = install(directory/member.CASCADE_ZIP,root,{'sha256':expected})
     require(manifest['id']=='frontier-activation' and manifest['version']=='1.4.0'
-            and manifest['source']==member.commit_url(release['source_commit']),'Wrong cascade workbench source')
+            and manifest['source']==member.commit_url(member.CASCADE_PIN),'Wrong cascade workbench source')
     for name, filename in member.CASCADE_STUDIES.items():
         require((directory/name).read_bytes()==(root/'study/cascade'/filename).read_bytes(),
                 'Cascade public data and portable evidence differ')
@@ -391,6 +391,20 @@ def qualify_cascade(directory, root, release):
             and evidence['composition']['jobs']==13 and evidence['observing_decision']=='ABSTAIN',
             'Cascade evidence is incomplete')
     return {'package_sha256':expected, 'replayed_ns':elapsed, **evidence}
+
+
+def qualify_factory(directory, root, release):
+    expected=release['foundry_sha256'][member.FACTORY_ZIP]
+    manifest=install(directory/member.FACTORY_ZIP,root,{'sha256':expected})
+    require(manifest['id']=='frontier-activation' and manifest['version']=='1.5.0'
+            and manifest['source']==member.commit_url(release['source_commit']),'Wrong factory workbench source')
+    require((directory/member.FACTORY_RESULTS).read_bytes()==(root/'study/factory/FACTORY.json').read_bytes(),
+            'Factory public and portable evidence differ')
+    evidence,elapsed=call(root,sys.executable,'verify_factory.py')
+    require(evidence['industry_cases']==9 and evidence['independent_sql_agreement']==9
+            and evidence['measurement_cases']>=8 and evidence['transit']['forecast_verdict']=='ABSTAIN',
+            'Factory evidence is incomplete')
+    return {'package_sha256':expected,'replayed_ns':elapsed,**evidence}
 
 
 def qualify(directory, live=False):
@@ -425,6 +439,8 @@ def qualify(directory, live=False):
                     results['liberation'] = qualify_liberation(directory, root/'liberation', release)
                 if member.CASCADE_ZIP in release['foundry_sha256']:
                     results['cascade'] = qualify_cascade(directory, root/'cascade', release)
+                if member.FACTORY_ZIP in release['foundry_sha256']:
+                    results['factory'] = qualify_factory(directory, root/'factory', release)
         return results
 
 

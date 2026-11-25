@@ -1,0 +1,21 @@
+{
+  "schema": "toi216-ground-photometry-independent-reduction-v1",
+  "sources": [
+    {
+      "file_id": 5821,
+      "date_utc": "2018-12-16",
+      "role": "LCOGT SAAO Sinistro i′ observer RunB, the documented reduction omitting 29 likely saturated frames"
+    },
+    {
+      "file_id": 10172,
+      "date_utc": "2019-02-24",
+      "role": "El Sauce CDK14 SBIG STT-1603-3 R_C measurement table"
+    }
+  ],
+  "custody": "No TESS flux, fit output, numeric event center, source team's fitted columns or numerical ephemeris enters this ground-only fit. Source file IDs and model bounds are fixed before evaluating either independent reduction. The input files are the public ExoFOP differential aperture series, not detector frames.",
+  "clock": "Use the documented AstroImageJ BJD_TDB exposure midpoint and EXPTIME in seconds. Independently record the source JD_UTC range and observed BJD_TDB minus JD_UTC offset. Integrate the template over each exposure. Reporting an offset does not infer the exact UTC versus TDB assumption in a paper that labels its own result BJD.",
+  "flux": "Use only rel_flux_T1 with rel_flux_err_T1, airmass, exposure and timestamps. Keep finite positive errors and flux. Use the median flux as normalization. A 0.4-times-median floor limits dominance by unusually small errors. Use soft-L1 residual weighting with transition at two reported errors.",
+  "model": "One limb-darkened transit under a common independent geometry prior for the outer planet with a 0.123 radius ratio, supported by published broad depth/duration/shape, and bounded duration 4.3–6.8 h and flux depth 0.005–0.035. Fit free midtime anywhere in the measured visit, broad multistart over time only. Linear baseline in local airmass is primary. Repeat with linear time and two alternate limb/impact assumptions, then report each stress-case result.",
+  "uncertainty": "Fit numerical Jacobian one-sigma uncertainty scaled by the larger of one and the robust residual ratio. Give a zero-intercept separate contact-coverage count for the observed before-first-contact, ingress, interior, egress and after-fourth-contact regions, the independent shape variation, and the 10-minute temporal binning factor. This remains a small-sample conditional estimate.",
+  "comparison": "Freeze ground-fit output before any comparison to TESS or published midpoint values. Published source centers and explicit BJD_TDB catalog values are evaluator comparisons only. Show both comparisons if their clock conventions differ. The secondary reduction does not retrospectively replace the registered primary literature labels."
+}

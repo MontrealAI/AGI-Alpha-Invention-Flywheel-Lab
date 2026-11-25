@@ -380,7 +380,8 @@ def prepare(output, revision, event, run, request=source_with_retry):
     member.build_amplification(directory)
     member.build_substrate(directory)
     member.build_liberation(directory)
-    member.build_cascade(directory, revision)
+    member.build_cascade(directory)
+    member.build_factory(directory, revision)
     (directory / LEDGER).write_bytes(raw)
     files = [(file.relative_to(output).as_posix(), digest(file.read_bytes()))
              for file in sorted(output.rglob('*')) if file.is_file()]
@@ -438,10 +439,11 @@ def verify_live(expected, revision, run, request=source_with_retry):
     foundry = release.get('foundry_sha256', {})
     if (revision or foundry) and set(foundry) != set(member.FOUNDRY_ASSETS):
         raise ValueError('Unexpected Foundry asset set')
-    if foundry and foundry[member.LIBERATION_ZIP] != member.LIBERATION_SHA256:
-        raise ValueError('Activation 1.3 release bytes changed')
+    for archive, fingerprint in member.ACTIVATION_ARCHIVE_SHA256.items():
+        if foundry and foundry[archive] != fingerprint:
+            raise ValueError(f'Archived release bytes changed: {archive}')
     package_limits = {member.AMPLIFICATION_ZIP: 1_500_000, member.SUBSTRATE_ZIP: 1_500_000,
-                      member.LIBERATION_ZIP: 1_500_000, member.CASCADE_ZIP: 2_000_000}
+                      member.LIBERATION_ZIP: 1_500_000, member.CASCADE_ZIP: 2_000_000, member.FACTORY_ZIP: 3_000_000}
     for name, expected_hash in foundry.items():
         maximum = package_limits.get(name, 500_000)
         if digest(request(watch.SITE + name, maximum)) != expected_hash:
@@ -475,8 +477,12 @@ def verify_live(expected, revision, run, request=source_with_retry):
                 or (member.CASCADE_ZIP in foundry and ('id="foundry-cascade-results"' not in workspace
                     or 'id="foundry-cascade-results"' in atlas
                     or any(f'href="{name}"' not in workspace for name in (member.CASCADE_ZIP, *member.CASCADE_STUDIES))))
+                or (member.FACTORY_ZIP in foundry and ('id="foundry-factory-results"' not in workspace
+                    or 'id="foundry-factory-results"' in atlas
+                    or any(f'href="{name}"' not in workspace for name in (member.FACTORY_ZIP, member.FACTORY_RESULTS))))
                 or f'data-preview-count="{len(ids)}"' not in preview
-                or any(marker in html for marker in (member.MARKER, member.PREVIEW_MARKER, '<!-- MV_SAMPLE -->'))):
+                or any(marker in html for marker in (member.MARKER, member.PREVIEW_MARKER,
+                                                     '<!-- MV_SAMPLE -->', '<!-- FACTORY_RESULTS -->'))):
             raise ValueError('Unpublished member-workbench rendering')
         edition = sequenced['edition']
         public = sequenced['public_feature']
