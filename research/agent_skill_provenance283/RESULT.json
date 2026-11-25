@@ -1,0 +1,50 @@
+{
+  "schema": "agi-alpha/agent-skill-provenance283/result/v1",
+  "source_commit": "30aa3f6b7d674fcaa79fe6be12b33febedfbb8f9",
+  "protocol_commit": "a8f094eb3e8e6a1618ac53f9cb5a89c08aa3403c",
+  "first_attempt": "INCOMPLETE_TOOL_CALL_LIMIT_NO_DURABLE_PAIR_RESULTS",
+  "continuation": "Same deterministic pinned inputs and unchanged source, partitioned connector requests",
+  "receipts": [
+    {
+      "file": "ANTHROPICS_TREE.json",
+      "commit": "0a19fe2a4eead77882c6d993caa7bdc1233f064b"
+    },
+    {
+      "file": "OPENAI_TREE.json",
+      "commit": "8e135fb207982e766f6472879a4adc802fbb228b"
+    },
+    {
+      "file": "VERCEL_TREE.json",
+      "commit": "400984c3d522c3d16855aa99a6b2f73597df52b4"
+    },
+    {
+      "file": "ANTHROPICS_METADATA.json",
+      "commit": "f599773dfad94edb47c0fcecd54ef7acf7f31856"
+    },
+    {
+      "file": "OPENAI_METADATA.json",
+      "commit": "5709a5b3ce1bf999a5df1fdd8da7c0b8bfe5381e"
+    }
+  ],
+  "registered_pairs": 3,
+  "completed_pairs": 3,
+  "common_directory_comparisons": 69,
+  "tree_leaf_disagreements": 0,
+  "changed_directories": 4,
+  "metadata_observations": 4,
+  "versionless_identity_collisions": 4,
+  "changed_directory_with_unchanged_skill_file": [
+    "skills/xlsx"
+  ],
+  "measured_batch_wall_ms_including_retrieval": 10835,
+  "first_attempt_cost": "unknown",
+  "cpu": "unknown",
+  "actual_billing": "unknown",
+  "scope": "Git API tracked object identities, not independent verification of every blob byte, publisher signature or installed files. Metadata parser only handles simple top-level scalars; it did not establish registry lock metadata or absence of nested version fields.",
+  "engineering_verdict": "PASS_REGISTERED_METADATA_COMPARISON",
+  "conventional_alternative": "repo+commit+path or Git directory tree identity already distinguishes all observed source revisions; no invention advantage established",
+  "economic_verdict": "NO DEPLOY; no verified buyer, signed award, positive complete-cost surplus or native account",
+  "recursive_improvement": "not tested",
+  "native_profit": null,
+  "milestone": false
+}
