@@ -294,18 +294,23 @@
       <summary>Choisir comment exécuter votre mission</summary>
       <details class="intelligence-choice">
         <summary>Utiliser mon abonnement ChatGPT</summary>
-        <p>Utilisez la connexion officielle si votre abonnement et l’application y sont admissibles. Si elle est indisponible, vous pouvez préparer une démarche assistée.</p>
-        <p class="mv-links"><a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/main/publication/evidence-bound/README.md#chatgpt-et-codex">Configuration de ChatGPT et de Codex</a> <a href="#my-intelligence" data-local-intelligence-workbench target="_blank" rel="noopener noreferrer" hidden>Ouvrir ChatGPT et Codex sur cet appareil</a></p>
+        <p>Utilisez votre propre compte ChatGPT. Vous pouvez dès maintenant poursuivre cette ambition en mode assisté, après avoir relu le mandat. L’exécution automatique avec un abonnement nécessite une connexion admissible et autorisée séparément; elle n’est pas encore qualifiée ici.</p>
+        <div class="foundry-actions"><button type="button" class="entry-button" data-frontier-assisted>Utiliser mon ChatGPT · mode assisté</button></div>
+        <p class="foundry-reference">Relisez le mandat préparé, ouvrez ChatGPT avec votre compte, puis rapportez la réponse à cette mission. Cette page n’utilise ni clé API ni solution de repli payante.</p>
+        <details><summary>Vous avez déjà une connexion HARNESS native autorisée?</summary>
+          <p>Ouvrez l’application HARNESS privée lancée séparément sur cet appareil et choisissez l’accès au forfait ChatGPT. L’exécuteur jumelé standard de Pages est strictement local; cela n’active pas l’inférence automatique par abonnement pour la mission du membre.</p>
+          <p><a href="http://127.0.0.1:8765/" target="_blank" rel="noopener noreferrer">Ouvrir mon HARNESS privé configuré</a></p>
+        </details>
       </details>
       <details class="intelligence-choice mission-execution-connection" open>
         <summary>Utiliser l’intelligence sur mon ordinateur</summary>
         <p>Décompressez le téléchargement. Ouvrez le fichier Launch-FRONTIER de votre système et saisissez ici le code à usage unique.</p>
         <p class="mv-links"><a href="frontier-harness-executor-1.2.0.zip" download>Télécharger l’exécuteur local</a>
-          <a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/main/publication/evidence-bound/README.md#français">Guide de configuration locale</a></p>
+          <a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/main/publication/outcome-driven/README.md#mon-frontier-ω--exécuteur-local-12">Guide technique facultatif</a></p>
         <form id="execution-code-form" autocomplete="off">
           <label for="execution-code">Code de jumelage à usage unique</label>
           <input type="password" id="execution-code" required maxlength="43" autocomplete="off" spellcheck="false">
-          <button type="submit" class="quiet">Jumeler ce navigateur</button>
+          <button type="submit" class="entry-button">Jumeler ce navigateur</button>
         </form>
         <p id="execution-connection" role="status"></p>
         <div id="intelligence-local-controls" hidden>
@@ -330,8 +335,10 @@
       </details>
       <details class="intelligence-choice">
         <summary>Connecter un fournisseur d’IA</summary>
-        <p>Configurez le fournisseur dans l’espace HARNESS local. Avant toute exécution, vérifiez le compte, le modèle et les limites de dépenses. Les crédits API des abonnements admissibles sont liés à une organisation API distincte.</p>
-        <p class="mv-links"><a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/main/publication/evidence-bound/README.md#accès-api-autorisé">Configuration du fournisseur et des crédits API</a> <a href="#my-intelligence" data-local-intelligence-workbench target="_blank" rel="noopener noreferrer" hidden>Ouvrir l’espace HARNESS local</a></p>
+        <p>La connexion API automatique n’est pas encore disponible dans l’exécuteur jumelé. Ne saisissez aucune clé API sur ce site public. Une application HARNESS privée configurée séparément peut utiliser les fournisseurs et les budgets autorisés.</p>
+        <p><a class="quiet" href="http://127.0.0.1:8765/" target="_blank" rel="noopener noreferrer">Ouvrir mon HARNESS privé configuré</a></p>
+        <p>Ouvrez-le seulement si vous avez déjà lancé l’application native autorisée sur cet appareil. La mission actuelle n’y est pas transférée automatiquement. En attendant cette connexion, utilisez votre assistant habituel avec l’ambition conservée.</p>
+        <div class="foundry-actions"><button type="button" class="entry-button" data-frontier-assisted>Utiliser mon assistant IA · mode assisté</button></div>
       </details>
       <details class="intelligence-choice">
         <summary>Combiner modèles et outils vérifiés</summary>
@@ -340,6 +347,7 @@
       </details>
       <details class="intelligence-choice">
         <summary>Paramètres de connexion avancés</summary>
+        <p class="mv-links"><a href="#my-intelligence" data-local-intelligence-workbench target="_blank" rel="noopener noreferrer" hidden>Ouvrir l’espace jumelé strictement local</a> <a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/main/publication/evidence-bound/README.md#chatgpt-et-codex">Documentation technique des fournisseurs</a></p>
       <form id="mission-connection-form" autocomplete="off">
         <h4>Inférence locale</h4>
         <div class="foundry-fields">
