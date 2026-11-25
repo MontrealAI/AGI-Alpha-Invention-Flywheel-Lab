@@ -19,6 +19,11 @@ CLAIM_REASONS = {
     "INPUT_PARENT_CHANGED": "A derived input's parent digest has changed.",
     "INPUT_LINEAGE_CYCLE": "The derived input lineage is cyclic.",
 }
+DECLARATION_CONFLICTS = {
+    "APPROVED_FIELD_TYPE_CONFLICT": "The approved data conflicts with its declared field type.",
+    "APPROVED_FIELD_NULLABILITY_CONFLICT": "The approved data contains null in a declared non-null field.",
+    "APPROVED_FIELD_RANGE_CONFLICT": "The approved data contains a value outside its declared range.",
+}
 
 
 def _plain_text(value, maximum):
@@ -269,6 +274,12 @@ def constructor_context(requirements, *, max_bytes=6500, include_examples=False)
     return result
 
 
+def _affected_names(issues):
+    names = ", ".join(".".join(part for part in (item.get("table"), item.get("field")) if part)
+                      for item in issues[:4] if "table" in item)
+    return " Affected names: " + names if names else ""
+
+
 def bind_table_construction(action, requirements):
     """Resolve a selected dataset to the existing isolated table tool's exact schema."""
     if action.get("tool") != "construct_table" or "dataset" not in action:
@@ -280,9 +291,7 @@ def bind_table_construction(action, requirements):
     if "schema" not in approved:
         code = issues[0]["code"] if issues else "APPROVED_TABLE_KIND_INCOMPATIBLE"
         message = CLAIM_REASONS.get(code, "An exact approved relational schema is unavailable.")
-        details = ", ".join(".".join(part for part in (item.get("table"), item.get("field")) if part)
-                            for item in issues[:4] if "table" in item)
-        raise BridgeError(code, message + (" Affected names: " + details if details else ""))
+        raise BridgeError(code, message + _affected_names(issues))
     return {"tool": action["tool"], "name": action["name"], "schema": approved["schema"], "sql": action["sql"]}
 
 
@@ -291,12 +300,18 @@ def verify_table_input_schema(action, requirements, schema):
     inputs = action.get("input")
     if action.get("tool") != "run_table" or not isinstance(inputs, dict) or set(inputs) != {"dataset"}:
         return
-    approved = inspect_dataset(requirements, inputs["dataset"], max_bytes=None)
+    dataset = inputs["dataset"]
+    approved = inspect_dataset(requirements, dataset, max_bytes=None)
     if approved["status"] in {"REJECTED", "ABSTAIN"}:
         reason = approved["issues"][0]["code"]
         raise BridgeError(reason, CLAIM_REASONS.get(reason, "The approved input is unavailable."))
     if "schema" not in approved:
-        return  # The existing bounded evaluator handles incomplete or ambiguous payloads.
+        if dataset in requirements.get("approved_schemas", {}):
+            issues = approved["issues"]
+            reason = issues[0]["code"]
+            message = DECLARATION_CONFLICTS.get(reason, "The approved data conflicts with its declared schema.")
+            raise BridgeError(reason, message + _affected_names(issues))
+        return  # The bounded evaluator handles legacy data with no declared schema.
     trusted = approved["schema"]
     if schema != trusted:
         fields = ", ".join(f"{name}({', '.join(columns)})" for name, columns in trusted.items())

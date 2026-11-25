@@ -2,12 +2,17 @@
 
 from pathlib import Path
 import sys
+from tempfile import TemporaryDirectory
 import unittest
+from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from bridge import mission_schema_context as schema, mission_tools
 from bridge.adapters import BridgeError
+from bridge.universal_missions import UniversalMissionService
+from bridge.workflow_demo import FixtureRuntime
 from bridge.workflows import digest, encoded
+from test_universal_missions import propose, specification
 
 
 class MissionSchemaContextTests(unittest.TestCase):
@@ -127,6 +132,53 @@ class MissionSchemaContextTests(unittest.TestCase):
         self.assertNotIn("schema", info)
         self.assertEqual({item["code"] for item in info["issues"]},
                          {"APPROVED_FIELD_NULLABILITY_CONFLICT", "APPROVED_FIELD_RANGE_CONFLICT"})
+
+    def test_explicit_table_cannot_verify_against_a_conflicting_approved_declaration(self):
+        data = {"readings": [{"count": 12, "note": None}]}
+        explicit = {"readings": {"count": "INTEGER", "note": "TEXT"}}
+        construct = {"tool": "construct_table", "name": "query.json", "schema": explicit,
+                     "sql": "SELECT SUM(count) FROM readings"}
+        dispatch = {"tool": "run_table", "name": "query.json", "input": {"dataset": "ledger-id"}}
+        annotation = {"id": "total", "unit": "observations", "dimension": "count"}
+        claim = {**annotation, "dataset": "ledger-id", "tool": "run_table", "locator": ["rows", 0, 0],
+                 "version": "ledger-v1", "requires": {}, "required_fields": [["readings", "count"]],
+                 "reference": {"value": "12", "source": "Independent sum of the recorded counts"}}
+        declarations = [
+            ("APPROVED_FIELD_RANGE_CONFLICT", {"tables": explicit, "fields": {"readings": {"count": {"range": [0, 10]}}}}),
+            ("APPROVED_FIELD_NULLABILITY_CONFLICT", {"tables": explicit, "fields": {"readings": {"note": {"nullable": False}}}}),
+            ("APPROVED_FIELD_TYPE_CONFLICT", {"tables": {"readings": {"count": "TEXT", "note": "TEXT"}}}),
+            (None, {"tables": explicit}),
+            (None, None),  # A legacy null-only column has no inferable type.
+        ]
+        controls = [(conflict, declaration, delivery) for conflict, declaration in declarations for delivery in (True, False)]
+        for conflict, declaration, delivery in controls:
+            with self.subTest(conflict=conflict, declaration=declaration, delivery=delivery), TemporaryDirectory() as directory:
+                requirements = self.requirements(data)
+                requirements["evidence"]["claims"] = [claim]
+                if declaration is not None:
+                    requirements["approved_schemas"] = {"ledger-id": declaration}
+                spec = specification(tools=["construct_table", "run_table"], requirements=requirements)
+                runtime = FixtureRuntime([propose(construct, {**dispatch, "claim": annotation})])
+                service = UniversalMissionService(runtime, Path(directory), schema_delivery=delivery)
+                try:
+                    with patch.object(mission_tools, "_run", wraps=mission_tools._run) as worker:
+                        result = service.step(service.submit(spec)["id"])
+                finally:
+                    service.close()
+                self.assertEqual(result["artifacts"]["query.json"]["kind"], "table_instrument")
+                worker_data = [call.args[1] for call in worker.call_args_list]
+                report = result["evidence"]["claims"][0]
+                if conflict:
+                    with self.assertRaises(BridgeError) as refused:
+                        schema.verify_table_input_schema(dispatch, requirements, explicit)
+                    self.assertEqual(refused.exception.code, conflict)
+                    self.assertEqual(worker_data, [{"readings": []}])
+                    self.assertEqual(report["status"], "REJECTED")
+                    self.assertNotIn("execution_receipt", report)
+                    self.assertEqual(result["outcome"]["conclusions"], [])
+                else:
+                    self.assertEqual(worker_data, [{"readings": []}, data])
+                    self.assertEqual((report["status"], report["value"]), ("VERIFIED", "12"))
 
     def test_claim_linked_dataset_schema_wins_the_context_budget(self):
         req = self.requirements({"samples": [{"site": "a", "count": 1}]})

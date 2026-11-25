@@ -170,15 +170,17 @@ assert.ok(fixture);
       assert.equal(second.original_ambition,follow);
       await finished();
       const [continued] = await Promise.all([page.waitForEvent('download'),page.locator('#execution-export').click()]);
-      const followExport = JSON.parse(readFileSync(await continued.path()));
+      const followBytes = readFileSync(await continued.path());
+      const followExport = JSON.parse(followBytes);
       assert.deepEqual(submitted,[{ambition,language},{ambition:follow,language}]);
       assert.equal(operations.filter(operation => operation.startsWith('intelligence-')).length,configCalls);
       assert.equal(followExport.state.spec.mission.original_ambition,follow);
       assert.deepEqual(errors,[]);
+      writeFileSync(join(resultDir,'followup-archive.private.json'),followBytes,{mode:0o600});
       writeFileSync(join(resultDir,'followup-receipt.json'),JSON.stringify({revision:receipt.source_commit,
         same_pair:true,same_model:selection.model_label,new_intelligence_setup_calls:0,id:second.id,original_ambition:follow,
         status:followExport.state.status,model_calls:followExport.state.model_calls,actions:followExport.state.actions,
-        artifacts:Object.keys(followExport.files),checkpoint_sha256:followExport.sha256,
+        artifacts:Object.keys(followExport.files),checkpoint_sha256:followExport.sha256,export_sha256:digest(followBytes),
         visible_outcome:await outcomeLocator.innerText()},null,2)+'\n',{mode:0o600});
     }
     process.stdout.write(JSON.stringify({language,mode,status:state.status,model_calls:state.model_calls,actions:state.actions, files:Object.keys(files),checkpoint_sha256:sha256})+'\n');

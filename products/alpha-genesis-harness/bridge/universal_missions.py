@@ -498,7 +498,8 @@ class UniversalMissionService(WorkflowService):
             from .mission_tools import execute
             prepared = mission_schema_context.bind_table_construction(action, requirements) if self.schema_delivery else action
             try:
-                if self.schema_delivery and tool == "run_table" and meta.get("kind") == "table_instrument":
+                approved_scope = self.schema_delivery or bool(requirements.get("approved_schemas"))
+                if approved_scope and tool == "run_table" and meta.get("kind") == "table_instrument":
                     mission_schema_context.verify_table_input_schema(action, requirements,
                         strict_json(self._read_artifact(state, name)).get("table_schema"))
                 outcome = execute(prepared, read=lambda key: self._read_artifact(state, key),
