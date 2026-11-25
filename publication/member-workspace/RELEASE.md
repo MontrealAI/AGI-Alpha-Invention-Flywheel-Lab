@@ -20,6 +20,19 @@ Three exact production inputs accepted the returned included-Codex reports in th
 
 The live local companion paired and submitted the exact economic ambition to Qwen3-4B. The runtime processed 944 prompt tokens and generated 981 tokens before the companion reached its 180-second HTTP boundary. It reported `PROVIDER_CONNECTION` and preserved the paused mission. No completed workflow reply or artifact reached the application in that attempt. The next exact owner ambition reused the checked local profile. The retained economic research and playable Game Theory downloads have separate assisted and verifier receipts.
 
+## Live local owner inputs
+
+The released companion also ran a bounded one-request experiment on all four exact owner strings with its verified Qwen3.5-0.8B profile. The first three strings used one English browser and model profile. The second and third reused it without a new pairing or discovery. The French interface ran the earlier English Game Theory string without changing its spelling.
+
+| Exact ambition | Observed local result |
+| --- | --- |
+| `Capture the exponential of AI progrees.` | One usable model reply and seven refused tool attempts. |
+| `Build a frontier capability.` | One usable model reply and two refused tool attempts. |
+| `Build frontier AI LLM for Game Theory.` | One model request. The adapter withheld the returned material before any tool operation. |
+| `Build Frontier AI for Game Theory.` | One usable model reply and three refused tool attempts. |
+
+No compact model run produced an artifact or independently accepted outcome. In a separate live cancellation, the companion started a real request, kept the exact ambition, recorded cancellation and applied zero tool operations. [Live local owner receipt](member-replay/LIVE-NATIVE-OWNER.json)
+
 ## Production records
 
 - [Open My Frontier](https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/frontier-omega-alpha/#my-frontier) · [Ouvrir Ma frontière](https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/frontier-omega-alpha/fr.html#my-frontier)
