@@ -366,13 +366,15 @@ def prepare(output, revision, event, run, request=source_with_retry):
     member_view, member_pages, member_digest = member.prepare(directory, ledger, sealed, run,
         previous.get('member_first'), lambda prior: editions.witnessed_run(prior, request),
         promote=event == 'schedule')
+    mission_records = member.build_public_missions(directory, revision)
     for page, lang in watch.PAGES.items():
         source = Path(EDITORIAL_PATH).parent / page
         html = render(source.read_text(), lang, ledger, selected, references, sealed)
         workbench = member_pages[lang]
-        if workbench.count(capture.MARKER) != 1:
-            raise ValueError('Unexpected opportunity workbench template')
+        if workbench.count(capture.MARKER) != 1 or workbench.count(member.MISSION_MARKER) != 1:
+            raise ValueError('Unexpected workbench template')
         workbench = workbench.replace(capture.MARKER, capture.render(opportunity, lang, revision))
+        workbench = workbench.replace(member.MISSION_MARKER, mission_records)
         for marker, contents in ((member.MARKER, workbench),
                                  (member.PREVIEW_MARKER, member.home_preview(member_view, lang)),
                                  (member.PUBLIC_FEATURE_MARKER, member.public_feature(member_view, lang))):
@@ -408,6 +410,9 @@ def prepare(output, revision, event, run, request=source_with_retry):
     release['foundry_sha256'] = {name.removeprefix(member.SITE): fingerprint
                                 for name, fingerprint in files
                                 if name.removeprefix(member.SITE) in member.FOUNDRY_ASSETS and name.startswith(member.SITE)}
+    release['universal_mission_sha256'] = {name.removeprefix(member.SITE): fingerprint for name, fingerprint in files
+                                           if name.startswith(member.SITE)
+                                           and name.removeprefix(member.SITE) in member.MISSION_ASSETS}
     release['decision_edition_sha256'] = {
         name.removeprefix('frontier-omega-alpha/'): fingerprint
         for name, fingerprint in files if name in site.DECISION_EDITION_ASSETS
@@ -465,6 +470,12 @@ def verify_live(expected, revision, run, request=source_with_retry):
         maximum = package_limits.get(name, 500_000)
         if digest(request(watch.SITE + name, maximum)) != expected_hash:
             raise ValueError('Live Foundry bytes do not match')
+    mission = release.get('universal_mission_sha256', {})
+    if mission and (set(mission) != set(member.MISSION_ASSETS)
+                    or mission[member.GAME_THEORY_ZIP] != member.GAME_THEORY_SHA256
+                    or any(digest(request(watch.SITE + name, 500_000)) != fingerprint
+                           for name, fingerprint in mission.items())):
+        raise ValueError('Live universal mission bytes do not match')
     editions = release['decision_edition_sha256']
     if set(editions) != {name.removeprefix('frontier-omega-alpha/') for name in site.DECISION_EDITION_ASSETS}:
         raise ValueError('Unexpected historical edition asset set')
@@ -488,6 +499,10 @@ def verify_live(expected, revision, run, request=source_with_retry):
                 or 'id="access"' not in entrance or 'data-connect="token"' not in entrance
                 or 'id="member-value"' not in workspace or 'id="mv-endpoint-run"' not in workspace
                 or (foundry and 'id="my-intelligence"' not in workspace)
+                or (mission and ('id="frontier-mission-panel"' not in workspace
+                    or 'id="mission-intelligence"' not in workspace or 'id="mission-keeper"' not in workspace
+                    or 'id="mission-public-runs"' not in workspace or member.GAME_THEORY_ZIP not in workspace
+                    or member.MISSION_MARKER in workspace))
                 or (member.AMPLIFICATION_ZIP in foundry and 'id="foundry-amplification-replay"' not in workspace)
                 or (member.SUBSTRATE_ZIP in foundry and 'id="foundry-substrate-replay"' not in workspace)
                 or (member.LIBERATION_ZIP in foundry and 'id="foundry-liberation-results"' not in workspace)

@@ -568,6 +568,71 @@ function content(name, item) {
   return {name, mimeType:'application/json', buffer:Buffer.from(JSON.stringify(item))};
 }
 
+async function universalMission(page, language, width) {
+  const panel = page.locator('#frontier-mission-panel');
+  const original = 'Build Frontier AI for Game Theory.';
+  const initialRequests = [];
+  const observe = request => { if (request.url().startsWith('http://127.0.0.1:38461/') || request.url().startsWith('http://127.0.0.1:11434/')) initialRequests.push(request.url()); };
+  page.on('request', observe);
+  try {
+    await page.locator('#goal-text').fill(original);
+    await page.locator('#goal-submit').click();
+    await panel.waitFor({state:'visible'});
+    assert.equal(await panel.locator('#mission-ambition').textContent(), original);
+    assert.equal(await panel.getAttribute('data-state'), 'ready');
+    assert.equal(await page.locator('#goal-result').isVisible(), false);
+    assert.match(await page.locator('#mission-published-summary').innerText(), /−49[.,]5/u);
+    assert.equal(await page.locator('#mission-published-links a[download]').getAttribute('href'), 'frontier-game-theory-1.0.0.zip');
+    await page.locator('#mission-prepare').click();
+    const prompt = page.locator('#mission-prompt');
+    await prompt.waitFor({state:'visible'});
+    assert.match(await prompt.inputValue(), /Build Frontier AI for Game Theory\./u);
+    assert.match(await prompt.inputValue(), language === 'fr' ? /Écrivez en français/u : /Write text in English/u);
+    assert.equal(await page.locator('#mission-copy').isEnabled(), false);
+    const requestId = (await prompt.inputValue()).match(/"requestId":"([a-f0-9]{64})"/u)[1];
+    const reply = {schema:'frontier/mission-route-result-v1', requestId, route:'invention',
+      objective:'Check a finite zero-sum game with two bounded alternatives.', assumptions:['Use the published payoff data.'],
+      nextAction:'Compare the certificate bounds with a dense solver for a held game.',
+      work:'Illustrative transport fixture <img src=x onerror=alert(1)>', capabilityIds:[]};
+    await destination(page, 'mv-results');
+    await page.locator('#mission-keeper summary').click();
+    const saving = page.waitForEvent('download');
+    await page.locator('#mission-export').click();
+    const saved = JSON.parse(await readFile(await (await saving).path()));
+    assert.equal(saved.mission.originalAmbition, original);
+    assert.equal(saved.mission.request.requestId, requestId);
+    await page.locator('#mission-import').setInputFiles(content('frontier-mission.json', saved));
+    await panel.waitFor({state:'visible'});
+    assert.match(await prompt.inputValue(), new RegExp(requestId));
+    assert.equal(await page.locator('#mission-share').isChecked(), false);
+    await page.locator('#mission-reply').fill(JSON.stringify({...reply,requestId:'0'.repeat(64)}));
+    await page.locator('#mission-import-reply').click();
+    await page.waitForFunction(lang => document.getElementById('mission-status').textContent.includes(lang === 'fr' ? 'ne correspond' : 'does not match'), language);
+    await page.locator('#mission-reply').fill(JSON.stringify(reply));
+    await page.locator('#mission-import-reply').click();
+    await page.waitForFunction(() => document.getElementById('frontier-mission-panel').dataset.state === 'review');
+    assert.equal(await panel.getAttribute('data-route'), 'invention');
+    assert.equal(await page.locator('#mission-work').textContent(), reply.work);
+    assert.equal(await page.locator('#mission-work img').count(), 0);
+    assert.match(await page.locator('#mission-status').textContent(), /Assisted result|Résultat assisté/u);
+    assert.deepEqual(initialRequests, []);
+    await capture(page, language, width, 'universal-mission');
+    const stranger = (language === 'fr' ? 'Construire une preuve de conformité temporelle.\n' : 'Create an interoperable time-series certificate.\n') + 'Δ → α\n'.repeat(105);
+    await page.locator('#goal-text').fill(stranger);
+    await page.locator('#goal-submit').click();
+    assert.equal(await panel.locator('#mission-ambition').textContent(), stranger);
+    assert.equal(await panel.locator('#mission-original').textContent(), original);
+    assert.equal(await panel.getAttribute('data-state'), 'ready');
+    await page.locator('#mission-cancel').click();
+    assert.equal(await panel.getAttribute('data-state'), 'canceled');
+    await page.locator('#mission-continue').click();
+    assert.equal(await panel.getAttribute('data-state'), 'ready');
+    await page.locator('#mission-new').click();
+    assert.equal(await panel.isVisible(), false);
+    assert.equal(await page.locator('#goal-text').inputValue(), '');
+  } finally { page.off('request', observe); }
+}
+
 async function guidedJourney(page, language, width, started) {
   const fr = language === 'fr';
   assert.equal(await page.locator('#mv-export').isEnabled(), false);
@@ -575,6 +640,7 @@ async function guidedJourney(page, language, width, started) {
   let scriptedMs, saved;
   await context.setOffline(true);
   try {
+    if (!await page.locator('#mission-examples').evaluate(item => item.open)) await page.locator('#mission-examples summary').click();
     await page.locator('[data-goal="endpoint"]').click();
     const result = page.locator('#goal-result');
     assert.equal(await result.getAttribute('data-record'), 'shift-autonomous-endpoint');
@@ -677,8 +743,10 @@ async function guidedJourney(page, language, width, started) {
     await page.locator('#goal-import').setInputFiles(content('invalid.json', {wallet:'invalid'}));
     await page.waitForFunction(lang => document.getElementById('goal-file-status').textContent.includes(
       lang === 'fr' ? 'Impossible' : 'could not be opened'), language);
-    await matchGoal(page, fr ? 'Accorder un harmonica avec de la cire d’abeille' : 'Tune a harmonica reed with beeswax', null);
-    assert.match(await page.locator('#goal-status').innerText(), /match|correspondance/i);
+    const unfamiliar = fr ? 'Accorder un harmonica avec de la cire d’abeille' : 'Tune a harmonica reed with beeswax';
+    await matchGoal(page, unfamiliar, null);
+    assert.equal(await page.locator('#mission-ambition').textContent(), unfamiliar);
+    assert.match(await page.locator('#mission-next').innerText(), /connect a model|connectez un modèle/u);
   } finally {
     await context.setOffline(false);
   }
@@ -699,6 +767,7 @@ async function rejectBrokenRun(page, language) {
     };
     window.restoreScreenDigest = () => { crypto.subtle.digest = original; };
   });
+  if (!await page.locator('#mission-examples').evaluate(item => item.open)) await page.locator('#mission-examples summary').click();
   await page.locator('#mf-quick-run').click();
   await page.locator('#goal-action').click();
   await page.waitForFunction(phrase => document.getElementById('mv-run-status').textContent.includes(phrase),
@@ -758,15 +827,13 @@ async function walletPaths(browser, language, width) {
     assert.equal(await page.locator('#mf-edition').isVisible(), false);
     assert.equal(await page.locator('[data-member-view]:visible').count(), 1);
     assert.equal(await page.locator('.mf-destinations [aria-current="page"]').getAttribute('href'), '#my-frontier');
-    const arrival = await page.locator('#mf-quick-run').boundingBox();
     const goalInput = await page.locator('#goal-text').boundingBox();
     const goalSubmit = await page.locator('#goal-submit').boundingBox();
-    const scroll = await page.evaluate(() => scrollY);
-    const preset = await page.locator('[data-goal="endpoint"]').boundingBox();
-    assert.ok([arrival, preset].some(box => box.y >= 0 && box.y + box.height <= dimensions(width).height),
-      `Endpoint starting points beyond the ${language} ${width}px first screen. Scroll ${scroll}, box ${JSON.stringify(preset)}`);
+    assert.equal(await page.locator('#mf-quick-run').isVisible(), false);
+    assert.match(await page.locator('#goal-submit').innerText(), /Activate FRONTIER Ω|Activer FRONTIER Ω/u);
     assert.ok([goalInput, goalSubmit].every(box => box.y >= 0 && box.y + box.height <= dimensions(width).height));
     await capture(page, language, width, 'arrival-token');
+    await universalMission(page, language, width);
     const {scriptedMs, saved} = await guidedJourney(page, language, width, started);
     await rejectBrokenRun(page, language);
     await destination(page, 'mv-earlier');
@@ -793,6 +860,8 @@ async function walletPaths(browser, language, width) {
     assert.equal(await page.locator('#mv-screen-result').textContent(), '');
     assert.equal(await page.locator('#mv-consent').isChecked(), false);
     assert.equal(await page.locator('#goal-text').inputValue(), '');
+    assert.equal(await page.locator('#frontier-mission-panel').isVisible(), false);
+    assert.equal(await page.locator('#mission-ambition').textContent(), '');
     assert.equal(await page.locator('#foundry-objective').inputValue(), '');
     assert.equal(await page.locator('#foundry-comparison').textContent(), '');
     assert.equal(await page.locator('#foundry-library-items li').count(), 0);
@@ -897,6 +966,7 @@ async function walletPaths(browser, language, width) {
       cascadeEvidenceAndDownload:true,
       factoryEvidenceAndDownloads:true,
       opportunityCapture:true,
+      universalMission:true, assistedMissionFixture:true, missionRecovery:true,
       offlineRunAndReceipt: true, receiptTamperDenial: true, rehashedReceiptDenial:true, archivedEditionDownloads:true,
       lock: true, expiry: true, reconnect: true, accountSwitchDenial: true });
   } finally {

@@ -3,6 +3,7 @@
 from hashlib import sha256
 from html import escape
 from decimal import Decimal
+from io import BytesIO
 import json
 import re
 from pathlib import Path
@@ -49,6 +50,11 @@ FACTORY_ZIP = 'frontier-activation-1.5.0.zip'
 FACTORY_PIN = '436bb1b142a0da1f2c272f77821b75c3efdd73fe'
 FACTORY_SHA256 = '5a29bc8d215895216201b85dcf6f5af6709d0ecea857792cf24b3cc4d20ec791'
 FACTORY_RESULTS = 'factory-results.json'
+GAME_THEORY_ZIP = 'frontier-game-theory-1.0.0.zip'
+GAME_THEORY_SHA256 = '5cf63237c4e41aece421d0330286e0521b572f4406e69915c01d66b104b11fcb'
+MISSION_MARKER = '<!-- UNIVERSAL_PUBLIC_RUNS -->'
+PUBLIC_MISSIONS = MAIN / 'publication/universal'
+MISSION_ASSETS = ('frontier-mission.mjs', 'frontier-mission-router.mjs', 'frontier-mission-ui.mjs', GAME_THEORY_ZIP)
 ACTIVATION_ARCHIVE_SHA256 = {
     ACTIVATION_ZIP: ACTIVATION_SHA256,
     AMPLIFICATION_ZIP: AMPLIFICATION_SHA256, SUBSTRATE_ZIP: SUBSTRATE_SHA256,
@@ -414,6 +420,27 @@ def build_factory(destination):
     return build_activation_archive(destination / FACTORY_ZIP, files, FACTORY_PIN,
                                     'Read-only historical evidence rulings, source lineage, and astronomical attribution.',
                                     '1.5.0')
+
+
+def build_public_missions(destination, revision):
+    directory = PUBLIC_MISSIONS / 'game-theory'
+    archive = (directory / GAME_THEORY_ZIP).read_bytes()
+    if digest(archive) != GAME_THEORY_SHA256:
+        raise ValueError('The independently qualified Game Theory archive changed')
+    with ZipFile(BytesIO(archive)) as bundle:
+        receipt_bytes = bundle.read('game-theory/MISSION-RECEIPT.json')
+        receipt = json.loads(receipt_bytes)
+        report = directory.relative_to(MAIN) / 'REPORT.md'
+        if (receipt_bytes != (directory / 'MISSION-RECEIPT.json').read_bytes()
+                or bundle.read('game-theory/REPORT.md') != (MAIN / report).read_bytes()):
+            raise ValueError('The public mission report differs from the portable receipt')
+    (destination / GAME_THEORY_ZIP).write_bytes(archive)
+    return escape(stable([{
+        'ambition': receipt['original_ambition'], 'download': GAME_THEORY_ZIP,
+        'report': f'{MONTREAL}/blob/{revision}/{report.as_posix()}',
+        **{lang: ' '.join(receipt['card'][lang][field] for field in ('summary', 'verification'))
+           for lang in ('en', 'fr')},
+    }]).decode())
 
 
 def render_cascade(fr):

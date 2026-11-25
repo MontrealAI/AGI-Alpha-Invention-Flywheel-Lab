@@ -14,6 +14,7 @@ on:
       - 'products/frontier-member-tools/**'
       - 'tests/test_member_value.py'
       - 'tests/test_member_tools.mjs'
+      - 'tests/test_frontier_mission*.mjs'
       - 'scripts/replay_frontier_alpha1_availability.py'
       - 'publication/frontier-alpha-1-availability.json'
       - 'publication/frontier-public-holds.json'
@@ -52,6 +53,7 @@ on:
       - 'products/frontier-member-tools/**'
       - 'tests/test_member_value.py'
       - 'tests/test_member_tools.mjs'
+      - 'tests/test_frontier_mission*.mjs'
       - 'scripts/replay_frontier_alpha1_availability.py'
       - 'publication/frontier-alpha-1-availability.json'
       - 'publication/frontier-public-holds.json'
@@ -111,6 +113,8 @@ jobs:
             products/frontier-member-tools
             tests/test_member_value.py
             tests/test_member_tools.mjs
+            tests/test_frontier_mission.mjs
+            tests/test_frontier_mission_router.mjs
             tests/live_frontier_browser.cjs
             scripts/replay_frontier_alpha1_availability.py
             publication/frontier-alpha-1-availability.json
@@ -127,6 +131,7 @@ jobs:
             publication/cascade
             publication/factory
             publication/opportunity
+            publication/universal
             tests/test_frontier_public_watch.py
             tests/test_frontier_atlas.py
             tests/test_research_site.py
@@ -171,7 +176,7 @@ jobs:
         if: github.event_name != 'schedule' || steps.frontier_watch.outputs.changed == 'true'
         run: |
           python3 -m unittest discover -s tests -p 'test_member_value.py' -v
-          node --test tests/test_member_tools.mjs
+          node --test tests/test_member_tools.mjs tests/test_frontier_mission.mjs tests/test_frontier_mission_router.mjs
           python3 -m pip install --target "$RUNNER_TEMP/frontier-wasm" --require-hashes -r products/frontier-member-tools/adaptive/requirements-linux.txt
           PYTHONPATH="$RUNNER_TEMP/frontier-wasm" python3 scripts/qualify_frontier_member.py "$RUNNER_TEMP/research-site/frontier-omega-alpha"
           python3 docs/research/frontier-omega-alpha/decision-editions/verify.py all --directory \
@@ -326,7 +331,7 @@ jobs:
               frontier-foundry-1.0.0.zip frontier-foundry-1.1.0.zip frontier-inventor-1.0.0.zip frontier-learning-1.0.0.zip \
               frontier-activation-1.0.0.zip frontier-activation-1.1.0.zip frontier-activation-1.2.0.zip frontier-activation-1.3.0.zip \
               frontier-activation-1.4.0.zip cascade-results.json cascade-fresh-domain.json \
-              frontier-activation-1.5.0.zip factory-results.json; do
+              frontier-activation-1.5.0.zip factory-results.json frontier-game-theory-1.0.0.zip; do
             curl --fail --silent --show-error --retry 2 --max-time 20 --max-filesize 20000000 "$origin/$artifact" --output "$packages/$artifact"
           done
           python3 -m pip install --target "$RUNNER_TEMP/frontier-wasm" --require-hashes -r products/frontier-member-tools/adaptive/requirements-linux.txt

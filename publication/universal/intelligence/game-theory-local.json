@@ -1,0 +1,76 @@
+{
+  "request": {
+    "schema": "frontier/mission-route-request-v1",
+    "missionId": "761f0daa-d6a4-487d-9209-70c2511f6ab8",
+    "revision": 1,
+    "language": "en",
+    "ambition": "Build Frontier AI for Game Theory.",
+    "originalAmbition": "Build Frontier AI for Game Theory.",
+    "context": [],
+    "capabilities": [],
+    "requestId": "d51f1d121ce3ad3ec5b75e789f000c393e1bb58548c2ece9dc92f0fdf416f9d5"
+  },
+  "options": {
+    "endpoint": "http://127.0.0.1:38461/v1/chat/completions",
+    "model": "qwen3-4b-instruct-2507-q4_k_m",
+    "maxOutputTokens": 640,
+    "timeoutMs": 180000,
+    "structuredOutput": true,
+    "contextWindow": 8192
+  },
+  "receipt": {
+    "schema": "frontier/mission-route-receipt-v1",
+    "requestId": "d51f1d121ce3ad3ec5b75e789f000c393e1bb58548c2ece9dc92f0fdf416f9d5",
+    "missionId": "761f0daa-d6a4-487d-9209-70c2511f6ab8",
+    "revision": 1,
+    "intelligence": {
+      "mode": "local",
+      "model": "qwen3-4b-instruct-2507-q4_k_m"
+    },
+    "route": "research",
+    "objective": "Investigate foundational game theory concepts and identify key problems where Frontier AI could provide novel solutions",
+    "assumptions": [],
+    "nextAction": "Research and summarize core game theory problems such as Nash equilibria, repeated games, and strategic interactions where AI-driven modeling or decision-making could offer advantages",
+    "work": "Identify three key game theory problems (e.g., prisoner's dilemma, coordination games, auctions) where AI could improve modeling, prediction, or strategy optimization, with references to existing literature",
+    "capabilityIds": [],
+    "verification": "unverified",
+    "isOperationalApproval": false
+  },
+  "provider": {
+    "choices": [
+      {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"schema\":\"frontier/mission-route-result-v1\",\"requestId\":\"d51f1d121ce3ad3ec5b75e789f000c393e1bb58548c2ece9dc92f0fdf416f9d5\",\"route\":\"research\",\"objective\":\"Investigate foundational game theory concepts and identify key problems where Frontier AI could provide novel solutions\",\"assumptions\":[],\"nextAction\":\"Research and summarize core game theory problems such as Nash equilibria, repeated games, and strategic interactions where AI-driven modeling or decision-making could offer advantages\",\"work\":\"Identify three key game theory problems (e.g., prisoner's dilemma, coordination games, auctions) where AI could improve modeling, prediction, or strategy optimization, with references to existing literature\",\"capabilityIds\":[]}"
+        }
+      }
+    ],
+    "created": 1795570900,
+    "model": "qwen3-4b-instruct-2507-q4_k_m",
+    "system_fingerprint": "b12242-3b4d6ab3f",
+    "object": "chat.completion",
+    "usage": {
+      "completion_tokens": 179,
+      "prompt_tokens": 595,
+      "total_tokens": 774,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      }
+    },
+    "id": "chatcmpl-qGHHjHtDG2XADkGepLaLee1vazuQOav6",
+    "timings": {
+      "cache_n": 0,
+      "prompt_n": 595,
+      "prompt_ms": 36407.974,
+      "prompt_per_token_ms": 61.189872268907564,
+      "prompt_per_second": 16.34257374497136,
+      "predicted_n": 179,
+      "predicted_ms": 138573.143,
+      "predicted_per_token_ms": 778.5008033707866,
+      "predicted_per_second": 1.2845201901785541
+    }
+  },
+  "elapsedMs": 175116
+}

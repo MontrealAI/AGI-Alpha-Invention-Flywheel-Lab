@@ -1,0 +1,76 @@
+{
+  "request": {
+    "schema": "frontier/mission-route-request-v1",
+    "missionId": "160755bf-432b-434a-b958-2f5824156c4c",
+    "revision": 1,
+    "language": "fr",
+    "ambition": "Concevoir et vérifier un instrument qui distingue un retard ponctuel des engorgements récurrents sur des lignes de traversiers sans capteurs permanents. Définir un premier essai réalisable à partir de trois semaines de journaux manuels.",
+    "originalAmbition": "Concevoir et vérifier un instrument qui distingue un retard ponctuel des engorgements récurrents sur des lignes de traversiers sans capteurs permanents. Définir un premier essai réalisable à partir de trois semaines de journaux manuels.",
+    "context": [],
+    "capabilities": [],
+    "requestId": "c779c6b9c2975ef4ae80cdf77a92248cc4db28416bce122cdf41b6442e97766c"
+  },
+  "options": {
+    "endpoint": "http://127.0.0.1:38461/v1/chat/completions",
+    "model": "qwen3-4b-instruct-2507-q4_k_m",
+    "maxOutputTokens": 640,
+    "timeoutMs": 180000,
+    "structuredOutput": true,
+    "contextWindow": 8192
+  },
+  "receipt": {
+    "schema": "frontier/mission-route-receipt-v1",
+    "requestId": "c779c6b9c2975ef4ae80cdf77a92248cc4db28416bce122cdf41b6442e97766c",
+    "missionId": "160755bf-432b-434a-b958-2f5824156c4c",
+    "revision": 1,
+    "intelligence": {
+      "mode": "local",
+      "model": "qwen3-4b-instruct-2507-q4_k_m"
+    },
+    "route": "invention",
+    "objective": "Concevoir un instrument simple pour distinguer un retard ponctuel d'engorgements récurrents à partir de journaux manuels de trafic.",
+    "assumptions": [],
+    "nextAction": "Élaborer un modèle de classification basé sur les motifs temporels des retards (ex : retard isolé vs. suite de retards consécutifs) avec un exemple de données de trois semaines de journaux manuels.",
+    "work": "Modèle de classification : un retard ponctuel est défini comme un retard isolé (sans précédent ou suite immédiate de retards), tandis qu'un engorgement récurrent est identifié par une séquence de retards consécutifs ou répétitifs sur au moins deux jours. Exemple : si un retard de 5 minutes est observé un jour, puis un autre jour sans retard, c'est un retard ponctuel. Si un retard de 5 minutes se produit sur trois jours consécutifs, c'est un engorgement récurrent. Ce modèle peut être testé sur un extrait de données de trois semaines.",
+    "capabilityIds": [],
+    "verification": "unverified",
+    "isOperationalApproval": false
+  },
+  "provider": {
+    "choices": [
+      {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"schema\":\"frontier/mission-route-result-v1\",\"requestId\":\"c779c6b9c2975ef4ae80cdf77a92248cc4db28416bce122cdf41b6442e97766c\",\"route\":\"invention\",\"objective\":\"Concevoir un instrument simple pour distinguer un retard ponctuel d'engorgements récurrents à partir de journaux manuels de trafic.\",\"assumptions\":[],\"nextAction\":\"Élaborer un modèle de classification basé sur les motifs temporels des retards (ex : retard isolé vs. suite de retards consécutifs) avec un exemple de données de trois semaines de journaux manuels.\",\"work\":\"Modèle de classification : un retard ponctuel est défini comme un retard isolé (sans précédent ou suite immédiate de retards), tandis qu'un engorgement récurrent est identifié par une séquence de retards consécutifs ou répétitifs sur au moins deux jours. Exemple : si un retard de 5 minutes est observé un jour, puis un autre jour sans retard, c'est un retard ponctuel. Si un retard de 5 minutes se produit sur trois jours consécutifs, c'est un engorgement récurrent. Ce modèle peut être testé sur un extrait de données de trois semaines.\",\"capabilityIds\":[]}"
+        }
+      }
+    ],
+    "created": 1795570952,
+    "model": "qwen3-4b-instruct-2507-q4_k_m",
+    "system_fingerprint": "b12242-3b4d6ab3f",
+    "object": "chat.completion",
+    "usage": {
+      "completion_tokens": 318,
+      "prompt_tokens": 648,
+      "total_tokens": 966,
+      "prompt_tokens_details": {
+        "cached_tokens": 392
+      }
+    },
+    "id": "chatcmpl-LDCg8lMjykitCPVt5brl3xmjerBHFIjC",
+    "timings": {
+      "cache_n": 392,
+      "prompt_n": 256,
+      "prompt_ms": 4408.187,
+      "prompt_per_token_ms": 17.21948046875,
+      "prompt_per_second": 58.07376138988659,
+      "predicted_n": 318,
+      "predicted_ms": 46614.29,
+      "predicted_per_token_ms": 147.0482334384858,
+      "predicted_per_second": 6.800489721070512
+    }
+  },
+  "elapsedMs": 51099
+}

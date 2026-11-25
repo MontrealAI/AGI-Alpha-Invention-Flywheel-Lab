@@ -592,7 +592,7 @@ class ResearchSiteTests(unittest.TestCase):
             template = (ROOT / 'products' / 'frontier-member-tools' / f'member.{language}.html').read_text()
             page = (self.source / 'frontier-omega-alpha' / name).read_text().replace('<!-- FRONTIER_MEMBER_VALUE -->', template)
             self.assertIn('src="wallet-check.js"', page)
-            self.assertIn("connect-src 'none'", page)
+            self.assertIn('connect-src http://127.0.0.1:38461/v1/chat/completions http://127.0.0.1:11434/api/chat;', page)
             self.assertIn('data-connect="club" disabled', page)
             self.assertIn('data-connect="token" disabled', page)
             self.assertIn('id="brief-content" hidden', page)
@@ -605,6 +605,8 @@ class ResearchSiteTests(unittest.TestCase):
              'frontier-omega-alpha/atlas.js', 'frontier-omega-alpha/endpoint-screen.mjs',
              'frontier-omega-alpha/outcome-receipt.mjs', 'frontier-omega-alpha/member-workbench.mjs',
              'frontier-omega-alpha/frontier-goals.mjs', 'frontier-omega-alpha/foundry-core.mjs',
+             'frontier-omega-alpha/frontier-mission.mjs', 'frontier-omega-alpha/frontier-mission-router.mjs',
+             'frontier-omega-alpha/frontier-mission-ui.mjs',
              'frontier-omega-alpha/foundry-ui.mjs', 'frontier-omega-alpha/foundry-study.mjs',
              *site.DECISION_EDITION_ASSETS},
         )

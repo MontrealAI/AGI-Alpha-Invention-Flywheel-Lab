@@ -408,6 +408,28 @@ def qualify_factory(directory, root, release):
     return {'package_sha256':expected,'replayed_ns':elapsed,**evidence}
 
 
+def qualify_game_theory(directory, root, release):
+    archive_path = directory / member.GAME_THEORY_ZIP
+    expected = release['universal_mission_sha256'][member.GAME_THEORY_ZIP]
+    require(expected == member.GAME_THEORY_SHA256 and member.digest(archive_path.read_bytes()) == expected,
+            'Game Theory mission archive digest mismatch')
+    with ZipFile(archive_path) as archive:
+        for name in ('verify.py', 'EXAMPLE.json', 'EXAMPLE-CERTIFICATE.json', 'MISSION-RECEIPT.json'):
+            (root / name).write_bytes(archive.read(f'game-theory/{name}'))
+        held_report = archive.read('evaluator/game-run-v1/INDEPENDENT-REPORT.json')
+    receipt = json.loads((root / 'MISSION-RECEIPT.json').read_bytes())
+    require(receipt['original_ambition'] == 'Build Frontier AI for Game Theory.'
+            and receipt['source_sha256']['verify.py'] == member.digest((root / 'verify.py').read_bytes())
+            and receipt['evaluation']['candidate_qualified'] == 6
+            and receipt['evaluation']['independent_report_sha256'] == member.digest(held_report),
+            'Game Theory mission evidence differs from the qualified study')
+    result, elapsed = call(root, sys.executable, '-I', '-S', 'verify.py', 'EXAMPLE.json', 'EXAMPLE-CERTIFICATE.json')
+    require(result['verdict'] == 'QUALIFIED' and result['width_numerator'] == 0
+            and result['denominator'] == 1_000_000_000 and result['lower_numerator'] == -49_500_000_000,
+            'Game Theory certificate replay does not match the published bounds')
+    return {'package_sha256': expected, 'replayed_ns': elapsed, 'held_cases': 6, **result}
+
+
 def qualify(directory, live=False):
     manifest = json.loads((directory / member.MEMBER_JSON).read_bytes())
     tools = manifest['capabilities']
@@ -442,6 +464,10 @@ def qualify(directory, live=False):
                     results['cascade'] = qualify_cascade(directory, root/'cascade', release)
                 if member.FACTORY_ZIP in release['foundry_sha256']:
                     results['factory'] = qualify_factory(directory, root/'factory', release)
+            if 'universal_mission_sha256' in release:
+                game = root / 'game-theory'
+                game.mkdir()
+                results['game_theory'] = qualify_game_theory(directory, game, release)
         return results
 
 

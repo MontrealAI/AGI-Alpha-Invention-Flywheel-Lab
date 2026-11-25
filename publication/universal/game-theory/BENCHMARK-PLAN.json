@@ -1,0 +1,28 @@
+{
+  "candidate_exposure_before_freeze": false,
+  "candidate_frozen_at_utc": "2026-11-25T01:37:14.974295+00:00",
+  "comparison": [
+    "explicit matrix HiGHS with vectorized scores under the registered matrix-cell budget",
+    "double oracle with exact budget dynamic programming best responses and HiGHS restricted games; 128 iterations maximum",
+    "sparse path LP construction followed by the same exact-bound check"
+  ],
+  "construction": "One unit flow on an allocation DAG. Lane cumulative mass evaluates each payoff in at most two coefficients. Scenario-dependent shortest-path potentials constrain a single row strategy. Negative SciPy inequality marginals select a joint adversary scenario/action distribution. Round topologically to a billion integer mass units before both certificates are checked. HiGHS IPM chosen on development tests only.",
+  "exact_acceptance": "both strategies satisfy declared budgets and sum to a shared integer denominator; independently recomputed upper−lower ≤ one part per million of max(1,sum weights in any scenario)",
+  "held_set_sha256": "678eec8a0d2f42f708c3f2e85226a80f64528dde13f9c39c7165de74797d7c25",
+  "measurement": "Report preparation, optimization and rational check wall time separately where instrumented. Record ordinary timing as complete method time. Independently enumerate feasible small cases where applicable. A reached iteration budget is a bound, not an accepted equilibrium. Do not infer timing superiority from single trials.",
+  "oracle_iteration_budget": 128,
+  "owner_ambition": "Build Frontier AI for Game Theory.",
+  "primary_sources": [
+    "https://doi.org/10.1609/AAAI.V31I1.10620",
+    "https://doi.org/10.1287/moor.2018.0971",
+    "https://doi.org/10.1609/aaai.v35i6.16641",
+    "https://doi.org/10.24963/ijcai.2024/336"
+  ],
+  "registered_matrix_cell_budget": 250000,
+  "source_sha256": {
+    "baselines.py": "94a5894906cba6962e812fb3582a432351246bd7de902b48fa2d8ad6e61bf64a",
+    "solve.py": "abf3eeab97637c2491597788d0fa8802ee5ba3e33ea38860080e8e9be52f2413",
+    "verify.py": "57d4f4281df204ac1d9f9290f72240df9dedf7ea78844a7009dad4a3aced9121"
+  },
+  "uncertainty": "Payoff scenario and opponent allocation are selected together without observing the row sample. Weights and budgets are known as finite alternatives. Scenarios are adversarial, not a Bayesian prior. Use neutral resource-allocation instances only."
+}

@@ -1,0 +1,195 @@
+{
+  "schema": "frontier/game-theory-held-instances-v1",
+  "preregistered_acceptance": "Verify exact probability feasibility and all-allocation lower/upper bounds using independent solver-free marginal precomputation plus allocation enumeration. Require exact bound width ≤ 1e-6 times the maximum of one and the maximum scenario total lane weight. Where materializable, compare to conventional full-matrix HiGHS minimax.",
+  "cases": [
+    {
+      "id": "one-lane",
+      "game": {
+        "row_budget": 2,
+        "scenarios": [
+          {
+            "id": "equal",
+            "column_budget": 2,
+            "weights": [
+              9
+            ]
+          },
+          {
+            "id": "past",
+            "column_budget": 3,
+            "weights": [
+              2
+            ]
+          },
+          {
+            "id": "short",
+            "column_budget": 1,
+            "weights": [
+              3
+            ]
+          }
+        ]
+      },
+      "purpose": "Deterministic budgets with exact ties and nontrivial cross-scenario worst case."
+    },
+    {
+      "id": "zero-lanes-in-payoff",
+      "game": {
+        "row_budget": 0,
+        "scenarios": [
+          {
+            "id": "zero",
+            "column_budget": 0,
+            "weights": [
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "id": "immaterial",
+            "column_budget": 3,
+            "weights": [
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      },
+      "purpose": "Zero payout, zero budget, degenerate mixtures and zero exact bound width."
+    },
+    {
+      "id": "single-asymmetric",
+      "game": {
+        "row_budget": 5,
+        "scenarios": [
+          {
+            "id": "scarce",
+            "column_budget": 4,
+            "weights": [
+              2,
+              5,
+              1,
+              3
+            ]
+          }
+        ]
+      },
+      "purpose": "Conventional explicit LP oracle; asymmetric integer budgets, unequal weights, several support alternatives."
+    },
+    {
+      "id": "shared-policy",
+      "game": {
+        "row_budget": 7,
+        "scenarios": [
+          {
+            "id": "wide",
+            "column_budget": 9,
+            "weights": [
+              1,
+              5,
+              2,
+              6
+            ]
+          },
+          {
+            "id": "high-north",
+            "column_budget": 6,
+            "weights": [
+              8,
+              0,
+              4,
+              2
+            ]
+          },
+          {
+            "id": "east",
+            "column_budget": 7,
+            "weights": [
+              3,
+              7,
+              0,
+              4
+            ]
+          }
+        ]
+      },
+      "purpose": "One row mixture across three differing budgets and nonexchangeable lane schedules; compare scenario-specific relaxations."
+    },
+    {
+      "id": "different-edges",
+      "game": {
+        "row_budget": 3,
+        "scenarios": [
+          {
+            "id": "quiet",
+            "column_budget": 0,
+            "weights": [
+              6,
+              0,
+              2,
+              1
+            ]
+          },
+          {
+            "id": "balanced",
+            "column_budget": 3,
+            "weights": [
+              0,
+              2,
+              7,
+              1
+            ]
+          },
+          {
+            "id": "crowded",
+            "column_budget": 12,
+            "weights": [
+              1,
+              4,
+              8,
+              0
+            ]
+          }
+        ]
+      },
+      "purpose": "One adversarial scenario changes a full budget and zero-weight lane; mixed exact support constraints."
+    },
+    {
+      "id": "implicit-scale",
+      "game": {
+        "row_budget": 13,
+        "scenarios": [
+          {
+            "id": "tight",
+            "column_budget": 16,
+            "weights": [
+              7,
+              0,
+              4,
+              9,
+              1,
+              3
+            ]
+          },
+          {
+            "id": "shift",
+            "column_budget": 11,
+            "weights": [
+              2,
+              8,
+              3,
+              0,
+              7,
+              1
+            ]
+          }
+        ]
+      },
+      "purpose": "More than 10^8 implicit payoff pairs, no quadratic materialization, independent complete action best-response enumeration."
+    }
+  ]
+}

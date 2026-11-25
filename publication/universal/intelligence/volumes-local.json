@@ -1,0 +1,76 @@
+{
+  "request": {
+    "schema": "frontier/mission-route-request-v1",
+    "missionId": "7bb99eb2-93f4-44f3-a5fc-b4572ef9bcd7",
+    "revision": 1,
+    "language": "en",
+    "ambition": "A garden has three circular beds with radius 2 metres each. How many litres of mulch are required for a uniform 3-centimetre depth? Provide the calculation and round up to whole litres.",
+    "originalAmbition": "A garden has three circular beds with radius 2 metres each. How many litres of mulch are required for a uniform 3-centimetre depth? Provide the calculation and round up to whole litres.",
+    "context": [],
+    "capabilities": [],
+    "requestId": "cd1a876ab1b39d25d5c807a713d46aad1bce52541879ac4ca4353de72556a976"
+  },
+  "options": {
+    "endpoint": "http://127.0.0.1:38461/v1/chat/completions",
+    "model": "qwen3-4b-instruct-2507-q4_k_m",
+    "maxOutputTokens": 640,
+    "timeoutMs": 180000,
+    "structuredOutput": true,
+    "contextWindow": 8192
+  },
+  "receipt": {
+    "schema": "frontier/mission-route-receipt-v1",
+    "requestId": "cd1a876ab1b39d25d5c807a713d46aad1bce52541879ac4ca4353de72556a976",
+    "missionId": "7bb99eb2-93f4-44f3-a5fc-b4572ef9bcd7",
+    "revision": 1,
+    "intelligence": {
+      "mode": "local",
+      "model": "qwen3-4b-instruct-2507-q4_k_m"
+    },
+    "route": "direct",
+    "objective": "Calculate the total mulch required in litres for three circular beds with radius 2 metres and a 3-cm depth.",
+    "assumptions": [],
+    "nextAction": "Compute the volume of mulch for one circular bed and multiply by three, then convert to litres.",
+    "work": "Area of one circular bed = π × r² = π × 2² = 4π m².\nDepth = 3 cm = 0.03 m.\nVolume per bed = area × depth = 4π × 0.03 = 0.12π m³ ≈ 0.377 m³.\nTotal volume for three beds = 3 × 0.377 = 1.131 m³.\nConvert to litres: 1 m³ = 1000 litres → 1.131 × 1000 = 1131 litres.\nRounded up to whole litres: 1131 litres.",
+    "capabilityIds": [],
+    "verification": "unverified",
+    "isOperationalApproval": false
+  },
+  "provider": {
+    "choices": [
+      {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"schema\":\"frontier/mission-route-result-v1\",\"requestId\":\"cd1a876ab1b39d25d5c807a713d46aad1bce52541879ac4ca4353de72556a976\",\"route\":\"direct\",\"objective\":\"Calculate the total mulch required in litres for three circular beds with radius 2 metres and a 3-cm depth.\",\"assumptions\":[],\"nextAction\":\"Compute the volume of mulch for one circular bed and multiply by three, then convert to litres.\",\"work\":\"Area of one circular bed = π × r² = π × 2² = 4π m².\\nDepth = 3 cm = 0.03 m.\\nVolume per bed = area × depth = 4π × 0.03 = 0.12π m³ ≈ 0.377 m³.\\nTotal volume for three beds = 3 × 0.377 = 1.131 m³.\\nConvert to litres: 1 m³ = 1000 litres → 1.131 × 1000 = 1131 litres.\\nRounded up to whole litres: 1131 litres.\",\"capabilityIds\":[]}"
+        }
+      }
+    ],
+    "created": 1795570999,
+    "model": "qwen3-4b-instruct-2507-q4_k_m",
+    "system_fingerprint": "b12242-3b4d6ab3f",
+    "object": "chat.completion",
+    "usage": {
+      "completion_tokens": 291,
+      "prompt_tokens": 630,
+      "total_tokens": 921,
+      "prompt_tokens_details": {
+        "cached_tokens": 392
+      }
+    },
+    "id": "chatcmpl-hn37tzKouV2p6ykP4PUKQlnItdQOPpS5",
+    "timings": {
+      "cache_n": 392,
+      "prompt_n": 238,
+      "prompt_ms": 4608.082,
+      "prompt_per_token_ms": 19.361689075630252,
+      "prompt_per_second": 51.64838646534501,
+      "predicted_n": 291,
+      "predicted_ms": 43020.176,
+      "predicted_per_token_ms": 148.3454344827586,
+      "predicted_per_second": 6.741023095767902
+    }
+  },
+  "elapsedMs": 47673
+}

@@ -20,44 +20,83 @@
   <section id="my-frontier" class="mf-view" aria-labelledby="workspace-title" data-member-view>
     <div class="mf-arrival">
       <h2 id="workspace-title" tabindex="-1">My Frontier <span>Ω</span></h2>
-      <p>Discover, understand and act on what the evidence makes possible.</p>
+      <p>Discover what it takes to make an ambition real.</p>
     </div>
     <div class="mf-canvas">
       <section class="goal-studio" aria-labelledby="my-frontier-title">
         <h3 id="my-frontier-title">What will you make possible?</h3>
-      <form id="goal-form" aria-describedby="goal-local">
-        <label for="goal-text">Describe your ambition, problem or desired result.</label>
-        <div class="goal-input">
-          <textarea id="goal-text" rows="2" maxlength="200" autocomplete="off" spellcheck="false"
-            placeholder="e.g. Find a historical NOAA forecast"></textarea>
-          <button id="goal-submit" type="submit" class="entry-button" disabled>Find my next move <span aria-hidden="true">→</span></button>
-        </div>
-        <p id="goal-local">Matched to the current research on this device.</p>
-        <div class="goal-presets" role="group" aria-label="Suggested goals">
-          <button type="button" data-goal="endpoint" aria-pressed="false">Check an AI endpoint</button>
-          <button type="button" data-goal="archive" aria-pressed="false">Retrieve a forecast</button>
-        </div>
-        <details class="goal-more"><summary>More starting points</summary>
-          <div class="goal-presets">
-          <button type="button" data-goal="workflow" aria-pressed="false">Improve a workflow</button>
-          <button type="button" data-goal="verify" aria-pressed="false">Check a claim</button>
-          <button type="button" data-goal="discover" aria-pressed="false">Find an opportunity</button>
-          <button type="button" data-goal="build" aria-pressed="false">Build an AI capability</button>
+        <form id="goal-form" aria-describedby="goal-local" autocomplete="off">
+          <label for="goal-text">Describe an ambition, problem or desired outcome.</label>
+          <div class="goal-input">
+            <textarea id="goal-text" rows="3" maxlength="24576" autocomplete="off" spellcheck="false"></textarea>
+            <button id="goal-submit" type="submit" class="entry-button" disabled>Activate FRONTIER Ω <span aria-hidden="true">→</span></button>
           </div>
-        </details>
-      </form>
-        <p class="mv-links"><a href="#my-intelligence" data-foundry-start>Use my goal to start a tool <span aria-hidden="true">→</span></a></p>
-        <p><a href="#foundry-learning">Improve a workflow or train a specialist <span aria-hidden="true">→</span></a></p>
-        <p><a href="#opportunity-capture">Review opportunities and next steps <span aria-hidden="true">→</span></a></p>
-        <div id="goal-status" class="status" role="status"></div>
+          <p id="goal-local">Your mission stays in this session until you export it or choose an intelligence connection.</p>
+          <details class="goal-more" id="mission-examples">
+            <summary>Optional examples</summary>
+            <div class="goal-presets">
+              <button type="button" data-goal="endpoint" aria-pressed="false">Check an AI endpoint</button>
+              <button type="button" data-goal="archive" aria-pressed="false">Retrieve a forecast</button>
+            </div>
+            <p><a id="mf-quick-run" href="#goal-result">Run the public Endpoint example</a></p>
+          </details>
+        </form>
+        <p class="mv-links"><a href="#opportunity-capture">Review opportunities and next steps</a></p>
+        <p id="goal-status" class="status" role="status"></p>
       </section>
-      <aside class="mf-sample" aria-labelledby="mf-sample-title">
-        <p class="packet-meta">Public demonstration</p>
-        <h3 id="mf-sample-title">Experience your first verified capability</h3>
-        <p>Find the highest documented AI concurrency that meets both benchmark limits. Check it against SQLite and keep a receipt.</p>
-        <a id="mf-quick-run" href="#goal-result">Try the Endpoint example <span aria-hidden="true">→</span></a>
-      </aside>
     </div>
+    <section id="frontier-mission-panel" class="goal-result mission-console" aria-labelledby="frontier-mission-title" hidden>
+      <h4 id="frontier-mission-title" tabindex="-1">Your mission</h4>
+      <p id="mission-status" class="status" role="status"></p>
+      <div class="mission-brief">
+        <div><h5>Ambition</h5><p id="mission-ambition"></p></div>
+        <div><h5>Next useful action</h5><p id="mission-next"></p></div>
+      </div>
+      <details id="mission-history" hidden><summary>Original ambition</summary><p id="mission-original"></p></details>
+      <div id="mission-understanding" hidden>
+        <dl class="goal-evidence">
+          <div><dt>Approach</dt><dd id="mission-route"></dd></div>
+          <div><dt>Interpreted objective</dt><dd id="mission-objective"></dd></div>
+          <div id="mission-assumptions-group" hidden><dt>Assumptions</dt><dd><ul id="mission-assumptions"></ul></dd></div>
+        </dl>
+        <details id="mission-work-panel"><summary>Work returned for review</summary><pre id="mission-work"></pre><button id="mission-work-download" type="button" class="quiet">Download returned work</button></details>
+        <ul class="mv-links mission-capabilities" id="mission-capabilities"></ul>
+      </div>
+      <div id="mission-published" class="mission-published" hidden>
+        <h5>Published work on this exact ambition</h5>
+        <p id="mission-published-summary"></p>
+        <p class="mv-links" id="mission-published-links"></p>
+      </div>
+      <div class="mv-actions mission-actions">
+        <button id="mission-run-local" type="button" class="entry-button" hidden>Run with my local model</button>
+        <a id="mission-configure" class="quiet" href="#mission-intelligence">Configure intelligence</a>
+        <button id="mission-prepare" type="button" class="quiet">Prepare an assisted mission</button>
+        <button id="mission-pause" type="button" class="quiet" hidden>Pause</button>
+        <button id="mission-continue" type="button" class="quiet" hidden>Continue investigation</button>
+      </div>
+      <details id="mission-handoff" hidden>
+        <summary>Prepared mission prompt</summary>
+        <p>Review the exact prompt before sharing it. Open your chosen assistant separately and bring back the structured reply.</p>
+        <label for="mission-prompt">Prepared mission prompt</label>
+        <textarea id="mission-prompt" rows="8" readonly></textarea>
+        <label class="mv-check"><input id="mission-share" type="checkbox"> I have reviewed the prompt and may share this information with the assistant I choose.</label>
+        <div class="mv-actions">
+          <button id="mission-copy" type="button" class="quiet" disabled>Copy reviewed prompt</button>
+          <button id="mission-prompt-download" type="button" class="quiet" disabled>Download reviewed prompt</button>
+          <a id="mission-assistant" href="https://chatgpt.com/" hidden rel="noreferrer">Open ChatGPT</a>
+        </div>
+        <label for="mission-reply">Structured reply</label>
+        <textarea id="mission-reply" rows="5" maxlength="100000" autocomplete="off" spellcheck="false"></textarea>
+        <button id="mission-import-reply" type="button" class="quiet">Open the reply</button>
+      </details>
+      <div class="mv-actions mission-secondary">
+        <button id="mission-revise" type="button" class="quiet">Revise ambition</button>
+        <button id="mission-cancel" type="button" class="quiet">Cancel</button>
+        <button id="mission-new" type="button" class="quiet">New mission</button>
+        <a href="#mission-keeper">Download current mission</a>
+      </div>
+      <template id="mission-public-runs"><!-- UNIVERSAL_PUBLIC_RUNS --></template>
+    </section>
     <div class="mf-journey" id="mf-journey" hidden>
       <ol class="mf-steps" aria-label="Journey progress">
         <li aria-current="step"><span aria-hidden="true">01</span><b>Ambition</b></li>
@@ -67,7 +106,7 @@
         <li><span aria-hidden="true">05</span><b>Result</b></li>
       </ol>
       <article class="goal-result" id="goal-result" hidden aria-labelledby="goal-result-title">
-        <p class="packet-meta">THE UNSEEN ADVANTAGE Ω</p>
+        <p class="packet-meta">Related Atlas evidence</p>
         <h4 id="goal-result-title" tabindex="-1"></h4>
         <p id="goal-ambition"></p><p id="goal-evidence-state" class="goal-evidence-state"></p>
         <p class="goal-match" id="goal-match"></p>
@@ -231,6 +270,30 @@
     <h3 id="my-intelligence-title" tabindex="-1">My intelligence <span>Ω</span></h3>
     <p class="mf-section-intro">Turn a rule you can verify into a small tool you can keep.</p>
     <p>This workbench processes files on this device. Pages is a public-file service. The mission, inputs and results you add here stay in the current session. Locking clears them. An exported file can contain your objective, rules and candidate.</p>
+    <details class="foundry-stage mission-connection" id="mission-intelligence">
+      <summary>Connect a model for this mission</summary>
+      <form id="mission-connection-form" autocomplete="off">
+        <h4>Local inference</h4>
+        <div class="foundry-fields">
+          <div><label for="mission-endpoint">Runtime</label>
+            <select id="mission-endpoint">
+              <option value="http://127.0.0.1:38461/v1/chat/completions">llama.cpp · 127.0.0.1:38461</option>
+              <option value="http://127.0.0.1:11434/api/chat">Ollama · 127.0.0.1:11434</option>
+            </select></div>
+          <div><label for="mission-model">Exact model name</label><input id="mission-model" required maxlength="160"></div>
+        </div>
+        <p>Supported connections are numeric loopback. The first request is sent only when you run the mission.</p>
+        <button type="submit" class="quiet">Use this local configuration</button>
+      </form>
+      <p id="mission-connection-status" class="status" role="status"></p>
+      <p><a href="#frontier-mission-panel" id="mission-return" hidden>Return to your mission</a></p>
+      <details>
+        <summary>Use your own authorized provider</summary>
+        <p>Export the prepared prompt and run it with the existing HARNESS provider tool on your device. Review the exact request plan and budget there. Bring back the returned text as an assisted report.</p>
+        <p class="mv-links"><a href="frontier-foundry-1.0.0.zip" download>HARNESS</a>
+          <a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/2b4771cf95ca933285602028a83c85b0281499cf/products/frontier-member-tools/foundry/README.md">Read the existing provider guide</a></p>
+      </details>
+    </details>
     <template id="foundry-public-data"><!-- FOUNDRY_PUBLIC_DATA --></template>
     <div class="foundry-example">
       <div><p class="packet-meta">Alpha Genesis HARNESS</p><p>Check a real NOAA byte range against the recorded response length. This is a technical replay.</p></div>
@@ -449,6 +512,15 @@ python3 verify_factory.py</code></pre>
     </section>
     <p id="mf-result-empty">Run the public Endpoint example in My Frontier to see an Endpoint result here.</p>
     <p><a id="mf-current-result" href="#mv-screen-result" hidden>Return to this session’s result</a></p>
+    <details id="mission-keeper" class="mission-keeper">
+      <summary>Save or reopen a mission</summary>
+      <p>Save a mission file to continue after locking, refreshing or switching devices. The file contains your ambition and work. Keep it somewhere you control.</p>
+      <div class="mv-actions">
+        <button id="mission-export" type="button" class="quiet" disabled>Download current mission</button>
+        <label for="mission-import">Reopen a mission file<input id="mission-import" type="file" accept=".json,application/json"></label>
+      </div>
+      <p id="mission-file-status" class="status" role="status"></p>
+    </details>
         <details id="goal-keeper">
           <p id="goal-file-status" class="status" role="status"></p>
           <summary>Keep or reopen a goal</summary>

@@ -116,7 +116,7 @@ function readBrief(card) {
 const labels = {
   en: {
     empty: 'Enter a goal or choose one of the suggested goals.',
-    missing: 'There is no sufficiently specific match in the current evidence. Name a concrete claim, tool or measurement, or start with the public example.',
+    missing: 'No related Atlas record was found.',
     saved: 'Goal downloaded. Reopen it here on a later visit to check the evidence again.',
     invalid: 'This file could not be opened. Choose a goal file downloaded from My Frontier.',
     current: 'The saved recommendation matches today’s evidence.',
@@ -135,7 +135,7 @@ const labels = {
   },
   fr: {
     empty: 'Saisissez un objectif ou choisissez une des suggestions.',
-    missing: 'Les preuves actuelles ne donnent pas de correspondance assez précise. Nommez une affirmation, un outil ou une mesure, ou essayez l’exemple public.',
+    missing: 'Aucun dossier connexe dans l’Atlas.',
     saved: 'Objectif téléchargé. Rouvrez-le lors d’une prochaine visite pour vérifier les preuves à jour.',
     invalid: 'Impossible d’ouvrir ce fichier. Choisissez un fichier d’objectif téléchargé depuis Ma frontière.',
     current: 'La recommandation sauvegardée concorde avec les preuves actuelles.',
@@ -154,7 +154,7 @@ const labels = {
   },
 };
 
-export function setupGoals(member, runner, shell) {
+export function setupGoals(member, runner, shell, mission) {
   const id = key => document.getElementById(key);
   const words = labels[document.documentElement.lang] || labels.en;
   const form = id('goal-form');
@@ -177,15 +177,20 @@ export function setupGoals(member, runner, shell) {
   let state, lastGoal, generation = 0;
   const active = () => !member.hidden;
 
-  function display(goal, prior) {
+  function display(goal, prior, activate = false) {
+    if (activate) {
+      status.textContent = '';
+      if (!mission.start(goal.text)) return;
+    }
     const [match] = rankOpportunities(records, goal);
     const record = match?.record;
+    if (activate) mission.setAtlas(record);
     const pin = record ? {id: record.id, version: record.version, review: record.review} : null;
     const submitted = JSON.stringify(goal);
     if (lastGoal && lastGoal !== submitted) runner.clear();
     lastGoal = submitted;
     state = {schema, goal, pin};
-    save.disabled = false;
+    save.disabled = Boolean(goal.text && goal.text.length > 200);
     journey.hidden = result.hidden = related.hidden = !match;
     for (const chip of chips) chip.setAttribute('aria-pressed', String(chip.dataset.goal === goal.preset));
     const descriptions = [];
@@ -196,11 +201,11 @@ export function setupGoals(member, runner, shell) {
       if (current && prior.version !== current.version) descriptions.push(prior.version + ' → ' + current.version);
       if (record && record.id !== prior.id) descriptions.push(words.reranked);
     }
-    if (!match) descriptions.push(words.missing);
+    if (!match && !activate) descriptions.push(words.missing);
     status.textContent = fileStatus.textContent = descriptions.join(' ');
-    shell.show(id('my-frontier'), {focus:false, remember:true});
+    if (!activate) shell.show(id('my-frontier'), {focus:false, remember:true});
     if (!match) {
-      input.focus();
+      if (!activate) input.focus();
       return;
     }
     shell.step(match.action === 'review' ? 2 : 1);
@@ -222,7 +227,7 @@ export function setupGoals(member, runner, shell) {
     action.href = match.action === 'demo' ? '#mv-endpoint-run' : match.action === 'tool' ? '#tool-archive' : proof.hash;
     available.textContent = match.action === 'review' && record.tool
       ? words[record.tool === 'endpoint' ? 'abstain' : 'prerequisite'] : detail;
-    title.focus();
+    if (!activate) title.focus();
   }
 
   function clear() {
@@ -241,8 +246,8 @@ export function setupGoals(member, runner, shell) {
     event.preventDefault();
     if (!active()) return;
     generation++;
-    const query = input.value.trim();
-    if (query) display({text: query});
+    const query = input.value;
+    if (query.trim()) display({text: query}, undefined, true);
     else status.textContent = words.empty;
   });
   input.addEventListener('input', clear);
@@ -284,7 +289,7 @@ export function setupGoals(member, runner, shell) {
     }
   });
   save.addEventListener('click', () => {
-    if (!active() || !state) return;
+    if (!active() || !state || save.disabled) return;
     downloadJSON(state, 'frontier-goal.json');
     fileStatus.textContent = words.saved;
   });
@@ -299,7 +304,7 @@ export function setupGoals(member, runner, shell) {
       const {goal, pin} = readSavedGoal(JSON.parse(await file.text()));
       if (token !== generation || !active()) return;
       input.value = goal.text || '';
-      display(goal, pin);
+      display(goal, pin, Boolean(goal.text));
     } catch {
       if (token === generation && active()) fileStatus.textContent = words.invalid;
     }
@@ -310,6 +315,7 @@ export function setupGoals(member, runner, shell) {
     form.reset();
     open.value = '';
     id('goal-keeper').open = false;
+    id('mission-examples').open = false;
   });
   submit.disabled = false;
 }
