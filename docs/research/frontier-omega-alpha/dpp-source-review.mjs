@@ -14,7 +14,16 @@ const tidy = value => typeof value === 'string' ? value.normalize('NFC').trim().
 const digest = /^[a-f0-9]{64}$/u;
 const decimal = /^([+-]?)(\d{1,12})(?:[.,](\d{1,8}))?$/u;
 const qualificationHeading = /(?:^|[:—–(]\s*|\s-\s+)(?:max(?:imums?|ima)?|min(?:imums?|ima)?|(?:upper|lower) (?:bounds?|limits?|estimates?)|bounds?|limits?|caps?|ceilings?|floors?|at (?:most|least)|approximat\p{L}*|estimat\p{L}*|typical|indicative|provisional|preliminary|not (?:reported|measured)|(?:valeurs?|mesures?|données) (?:maximales?|minimales?|approximatives?|indicatives?|estim[ée]es?|provisoires?|préliminaires?)|limites?|bornes?|estimations?|environ|à titre indicatif)(?=$|[\s.:,—–…/)])/iu;
-const separateCurrent = /^max(?:imum)? (?:continuous |operating )?(?:(?:charge|charging)\s*\/\s*(?:discharge|discharging) )?current\s*:?\s*\d+(?:[.,]\d+)?\s*A$/iu;
+const boundedPropertyHeading = /^(?:max(?:imum)?|min(?:imum)?)\.?\s+(?:(?:continuous|operating|peak|rated|charge|charging|discharge|discharging|and|allowable|input|output|net|battery|pack|system|module|DC|AC)(?:\s*\/\s*|\s+))*(current|voltage|capacity|weight|mass|power|energy)\s*(?:\((?:AC|DC)\)\s*)?:?\s*/iu;
+const boundedPropertyUnits = new Map([
+  ['current', new Map([['a',0], ['ma',3]])],
+  ['voltage', fields.get('nominalVoltage').units],
+  ['capacity', fields.get('batteryCapacity').units],
+  ['weight', fields.get('batteryWeight').units],
+  ['mass', fields.get('batteryWeight').units],
+  ['power', new Map([['kw',0], ['w',3]])],
+  ['energy', new Map([['kwh',0], ['wh',3]])],
+]);
 
 function exactQuantity(value, unit, units) {
   if (typeof value !== 'string' && !Number.isFinite(value)) return undefined;
@@ -62,7 +71,12 @@ function clauses(text) {
 function qualifiedSection(part) {
   const heading = part.replace(/<\/?(?:h[1-6]|strong|em|b|i)>|[*_`]/giu, '')
     .replace(/^(?:(?:[#>•●◦▪+—–-]+|\d+[.)])\s*)+/u, '').trim();
-  return qualificationHeading.test(heading) && !separateCurrent.test(heading);
+  if (!qualificationHeading.test(heading)) return false;
+  // A complete bound on one named property is a field row, not a section heading.
+  const field = boundedPropertyHeading.exec(heading);
+  if (!field) return true;
+  const units = boundedPropertyUnits.get(field[1].toLowerCase());
+  return !measurementValues(heading.slice(field[0].length), units, true).length;
 }
 
 function columnHeaders(parts) {

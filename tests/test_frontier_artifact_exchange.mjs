@@ -185,6 +185,12 @@ test('a qualified source section cannot support exact readings or be cropped to 
   }
   assert.equal(review('Maximum continuous charging/discharging current: 30 A.\n' + row), 'supported');
   assert.equal(review('Maximum operating current: 30 A.\n' + row), 'supported');
+  assert.equal(review('Maximum discharge current: 30 A.\n' + row), 'supported');
+  assert.equal(review('Maximum charging/discharging current: 25 / 30 A.\n' + row), 'supported');
+  assert.equal(review('Maximum operating voltage: 68 V.\n' + row), 'supported');
+  assert.equal(review('Minimum discharge voltage: 48 V.\n' + row), 'supported');
+  assert.equal(review('Maximum operating values for 30 A.\n' + row), 'insufficient');
+  assert.equal(review('Maximum discharge current: 30 kg.\n' + row), 'insufficient');
   assert.equal(review('Independent measurements.\n' + row), 'supported');
   assert.equal(review(row + '\nUpper limits for a subsequent section.'), 'supported');
 });
