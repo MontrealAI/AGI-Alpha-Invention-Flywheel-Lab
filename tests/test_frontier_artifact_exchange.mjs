@@ -98,3 +98,27 @@ test('compound dimensions are not field measurements, while same-unit table colu
   assert.equal(review('Table of weights: 72.2 kg / 68.5 kg.',72.2), 'supported');
   assert.equal(review('Table of weights: 72.2 kg / 68.5 kg.',68.5), 'supported');
 });
+
+test('source excerpts cannot hide a qualifier or pass an unrelated field heading', () => {
+  const target = {model:'Example Pack',level:'system'};
+  const review = (excerpt, quote = excerpt, field = 'batteryWeight', unit = 'kg') => reviewClaim({
+    id:'clause-check',target,field,claim:{value:64,unit},
+    sources:[{id:'table',excerpt,url:'https://example.org/data',locator:'table',sha256:'a'.repeat(64)}],
+    observations:[{source:'table',target,field,quote,value:64,unit}],
+  }).decision;
+  for (const quote of ['Upper bound for net battery weight: 64 kg.', 'Not the net battery weight: 64 kg.',
+    'Packaged weight: 64 kg.', 'Weight: 64 kg / 80 kg.']) {
+    assert.equal(review(quote), 'insufficient');
+  }
+  assert.equal(review('Not the net battery weight: 64 kg.', 'net battery weight: 64 kg.'), 'insufficient');
+  assert.equal(review('Net battery weight: 64 kg (estimate).', 'Net battery weight: 64 kg'), 'insufficient');
+  assert.equal(review('Example R2. Complete battery net weight: 64 kg.', 'Complete battery net weight: 64 kg.'), 'supported');
+  for (const quote of ['Less than the rated battery capacity: 64 Ah.', 'Capacity: 64 Ah.']) {
+    assert.equal(review(quote, quote, 'batteryCapacity', 'Ah'), 'insufficient');
+  }
+  for (const quote of ['Inverter nominal voltage: 64 V.', 'Rated AC voltage: 64 V.', 'Nominal voltage: 64 Vac.']) {
+    assert.equal(review(quote, quote, 'nominalVoltage', 'V'), 'insufficient');
+  }
+  const french = 'Tension nominale : 64 Vdc.';
+  assert.equal(review(french, french, 'nominalVoltage', 'V'), 'supported');
+});

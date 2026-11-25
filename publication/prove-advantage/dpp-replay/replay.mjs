@@ -15,7 +15,10 @@ for (const stage of ['PRIMARY', 'ADVERSE', 'CONFIRMATION']) {
     const withdrawn = decisions(reviewBatterySources(packet).results);
     const original = decisions(await read(stage + '-WITHDRAWAL.json'));
     const changes = withdrawn.filter((row, index) => JSON.stringify(row) !== JSON.stringify(original[index]));
-    assert.deepEqual(changes, stage === 'PRIMARY' ? [] :
+    assert.deepEqual(changes, stage === 'PRIMARY' ? [
+      {id:'batt-12',decision:'supported',evidence:['b1']},
+      {id:'batt-16',decision:'contradicted',evidence:['b1']},
+    ] :
       [{id:'control-2',decision:'contradicted',evidence:['sim-2']}]);
     result.withdrawalChanges = changes;
   }

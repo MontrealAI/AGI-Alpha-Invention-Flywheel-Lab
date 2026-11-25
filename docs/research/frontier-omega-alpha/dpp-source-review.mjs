@@ -2,11 +2,11 @@ export const sourceReviewSchema = 'frontier/battery-source-review-v1';
 
 const fields = new Map([
   ['batteryCapacity', {label:'rated electrical capacity', units:new Map([['ah',0], ['mah',3]]),
-    heading:/\b(?:(?:rated|nominal) (?:(?:electrical|battery|system|charge) )?capacity|capacité (?:électrique )?nominale)\b\s*:?\s*/iu}],
+    heading:/^(?:(?:rated|nominal) (?:(?:electrical|battery|system|charge) )?capacity|capacité (?:électrique )?nominale)\b\s*:?\s*/iu}],
   ['batteryWeight', {label:'net battery weight', units:new Map([['kg',0], ['g',3]]),
-    heading:/\b(?:weights?(?: of one complete battery system| by column)?|poids(?: net)?|masse nette)\b\s*:?\s*/iu}],
+    heading:/^(?:general data\s*[—–-]\s*)?(?:table of )?(?:(?:(?:complete battery net|net battery|battery|net) )?weights?(?: of one complete battery system| by column)?|poids(?: net)?|masse nette)\b\s*:?\s*/iu}],
   ['nominalVoltage', {label:'nominal voltage', units:new Map([['v',0], ['mv',3]]),
-    heading:/\b(?:(?:rated|nominal) (?:(?:battery|DC|AC) )?voltage|tension nominale)\b\s*(?:\((?:DC|AC)\)\s*)?:?\s*/iu}],
+    heading:/^(?:(?:rated|nominal) (?:(?:battery|DC) )?voltage|tension nominale)\b\s*(?:\(DC\)\s*)?:?\s*/iu}],
 ]);
 const scopeFields = ['model','version','market','level','boundary'];
 const isObject = value => value !== null && typeof value === 'object' && !Array.isArray(value);
@@ -38,25 +38,33 @@ function validSource(item) {
 
 function measurementValues(text, units, ordered) {
   const parts = text.trim().replace(/\s+in both columns$/iu, '').split(/\s+\/\s+|,\s+(?=[+-]?\d)/u);
+  if (parts.length > 1 && !ordered) return [];
   const readings = parts.map(part => part.match(/^([+-]?\d{1,12}(?:[.,]\d{1,8})?)\s*(?:(?:\(±\s*\d+(?:[.,]\d+)?\)|±\s*\d+(?:[.,]\d+)?)\s*)?([a-z]+)?$/iu));
   if (readings.some(row => !row)) return [];
-  const unitOf = row => tidy(row[2]).replace(/^(mv|v)(?:dc|ac)$/u, '$1');
+  const unitOf = row => tidy(row[2]).replace(/^(mv|v)dc$/u, '$1');
   const lastUnit = unitOf(readings.at(-1));
   const sharedUnit = ordered && /\s+\/\s+/u.test(text) && !/,\s+(?=[+-]?\d)/u.test(text);
   const measured = readings.map(row => exactQuantity(row[1], unitOf(row) || (sharedUnit ? lastUnit : ''), units));
   return measured.includes(undefined) ? [] : measured;
 }
 
-function quoteQuantifies(quote, observation, {heading, units}) {
+function clauses(text) {
+  return text.split(/[;\r\n]+|\.\s+(?=\p{Lu}[\p{L}\p{N}-]{2,}\b)|\.$/u).map(part => part.trim()).filter(Boolean);
+}
+
+function quoteQuantifies(quote, excerpt, observation, {heading, units}) {
   // Parse complete labelled clauses. An unsupported expression cannot contribute a suffix.
   const expected = exactQuantity(observation.value, observation.unit, units);
-  if (expected === undefined) return false;
+  if (expected === undefined || !excerpt.includes(quote)) return false;
+  const cited = clauses(quote);
+  const available = clauses(excerpt);
+  if (!available.some((_, start) => cited.every((part, index) => available[start + index] === part))) return false;
   const normal = quote.normalize('NFKC');
-  const ordered = /\b(?:columns?|colonnes?|modules in series)\b/iu.test(normal);
-  return normal.split(/[;\r\n]+|\.\s+(?=\p{Lu}[\p{L}\p{N}-]{2,}\b)|\.$/u).some(clause => {
+  const ordered = /\b(?:columns?|colonnes?|modules in series|table of weights)\b/iu.test(normal);
+  return clauses(normal).some(clause => {
     const prefix = heading.exec(clause);
-    if (!prefix || /\b(?:maximum|minimum|shipping|lifting|gross|per|range|plage|emballage)\b/iu.test(clause.slice(0, prefix.index))) return false;
-    return measurementValues(clause.slice(prefix.index + prefix[0].length), units, ordered).includes(expected);
+    if (!prefix) return false;
+    return measurementValues(clause.slice(prefix[0].length), units, ordered).includes(expected);
   });
 }
 
@@ -75,8 +83,8 @@ export function reviewClaim(input) {
   for (const entry of observations) {
     const source = inputById.get(entry?.source);
     if (!source || entry.field !== field || !eligibleScope(target, entry.target) ||
-        typeof entry.quote !== 'string' || !entry.quote.length || !source.excerpt.includes(entry.quote) ||
-        !quoteQuantifies(entry.quote, entry, definition)) {
+        typeof entry.quote !== 'string' || !entry.quote.length ||
+        !quoteQuantifies(entry.quote, source.excerpt, entry, definition)) {
       rejected++;
       continue;
     }

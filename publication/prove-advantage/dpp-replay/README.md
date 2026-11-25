@@ -11,6 +11,6 @@ sha256sum --check SHA256SUMS --quiet
 python replay-scores.py
 ```
 
-The Node replay checks all 27 frozen dispositions and evidence sets on the installed source code. It also replays the scoped withdrawal. The registered primary withdrawal is byte-equivalent at the disposition and evidence level. The corrected labelled-clause parser rejects a nominal-voltage reading from an inverter-output clause in one adverse withdrawal. The original adverse withdrawal results remain archived.
+The Node replay checks all 27 frozen dispositions and evidence sets on the installed source code. It also reports the differences when scope is removed. The corrected parser excludes two branded inline weight descriptions in the primary withdrawal and an inverter-output reading in the adverse withdrawal. Both original withdrawal files remain archived. Their scores describe the original experiment.
 
 The scoring replay uses the independent evaluator's registered disposition, source attribution and rationale-presence rules. Competent direct and FRONTIER Ω both score 14/16 and 6/6 on the two battery cohorts. Adequate interpretation of the source labels, scope and rationale still needs independent review. The frozen primary result also records the two shared ambiguities and early disclosure. [Matched report](../DPP.md)
