@@ -831,6 +831,13 @@ async function walletPaths(browser, language, width) {
     await page.locator('a[href="#opportunity-capture"]').press('Enter');
     const opportunity = page.locator('#opportunity-capture');
     assert.equal(await opportunity.isVisible(), true);
+    const entry = await opportunity.evaluate(section => ({
+      headingTop: section.querySelector('h4').getBoundingClientRect().top,
+      headerBottom: document.querySelector('.mf-bar').getBoundingClientRect().bottom,
+      disclosureOpen: section.querySelector('details').open
+    }));
+    assert.ok(entry.headingTop >= entry.headerBottom - 1);
+    assert.equal(entry.disclosureOpen, false);
     const study = await (await page.request.get(base + 'opportunity-capture.json')).json();
     assert.ok(study.opportunities.length >= 2);
     assert.deepEqual(await opportunity.locator('[data-opportunity]').evaluateAll(cards =>
