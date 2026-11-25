@@ -142,6 +142,8 @@
     <article class="foundry-entry" id="foundry-amplify">
       <h4>Amplifier mon intelligence</h4>
       <p>Comparez votre modèle local avec et sans instrument expérimental. Utilisez les mêmes cas de développement et confiez à l’évaluateur des cas de confirmation distincts.</p>
+      <p class="mv-links"><a href="#foundry-factory-results">Consulter les conclusions d’Activation 1.5</a>
+        <a href="frontier-activation-1.5.0.zip" download>Télécharger Activation 1.5</a></p>
       <p class="mv-links"><a href="#foundry-cascade-results">Examiner les essais de Cascade</a>
         <a href="frontier-activation-1.4.0.zip" download>Télécharger Activation 1.4</a></p>
       <p class="mv-links"><a href="frontier-activation-1.1.0.zip" download>Télécharger l’utilitaire local</a>
@@ -352,6 +354,19 @@
       </details>
       <p class="mv-links"><a href="frontier-activation-1.2.0.zip" download>Télécharger l’atelier local</a>
         <a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/main/publication/substrate/REPORT.md">Consulter l’étude et ses résultats</a></p>
+    </section>
+    <section class="foundry-stage foundry-learning" id="foundry-factory-results" aria-labelledby="foundry-factory-title">
+      <h4 id="foundry-factory-title">Activation 1.5 · Atelier d’intelligence productive</h4>
+      <p>Vérifiez ce que des sources publiques datées établissent sur une offre industrielle, une version logicielle et des mesures scientifiques historiques.</p>
+      <p class="mv-links"><a href="frontier-activation-1.5.0.zip" download>Télécharger l’atelier Activation 1.5</a>
+        <a href="factory-results.json" download>Preuves et conclusions (JSON)</a></p>
+      <!-- FACTORY_RESULTS -->
+      <details>
+        <summary>Rejouer les vérifications hors ligne</summary>
+        <p>Décompressez l’atelier et exécutez ces commandes depuis son dossier principal. L’étude incluse contient les sources et les résultats des essais.</p>
+        <pre><code>python3 evidence_truth.py --case prusa_offer --case bambu_software --case bambu_machine
+python3 verify_factory.py</code></pre>
+      </details>
     </section>
     <section class="foundry-stage foundry-learning" id="foundry-cascade-results" aria-labelledby="foundry-cascade-title">
       <h4 id="foundry-cascade-title">Activation 1.4 · Cascade</h4>

@@ -87,6 +87,8 @@ EXTERNAL_RESEARCH_REFERENCES = frozenset({
     'https://bbbc.broadinstitute.org/BBBC007',
     'https://math.mit.edu/~drew/grh/',
     'https://blog.prusa3d.com/ht-hotend-is-out-plus-we-offer-new-materials-and-hightemp-sheets-for-core-one-l_138625/',
+    'https://web.archive.org/web/20260929192630id_/https://www.prusa3d.com/product/ht-hotend-upgrade-for-core-one-and-core-one-l/',
+    'https://api.github.com/repos/bambulab/BambuStudio/releases/tags/v02.09.02.62',
     'https://lean-lang.org/doc/reference/latest/releases/v4.36.0/',
     'https://leanprover-community.github.io/blog/posts/riemann-hypothesis/',
 })
@@ -111,6 +113,8 @@ ATLAS_OUTPUTS = frozenset({
     'frontier-omega-alpha/frontier-activation-1.4.0.zip',
     'frontier-omega-alpha/cascade-results.json',
     'frontier-omega-alpha/cascade-fresh-domain.json',
+    'frontier-omega-alpha/frontier-activation-1.5.0.zip',
+    'frontier-omega-alpha/factory-results.json',
 })
 STATES = ('discovered', 'qualified', 'testing', 'verified', 'falsified', 'abstain', 'retained', 'deployed', 'value-verified')
 POSSIBILITY_SOURCE_PATTERNS = (

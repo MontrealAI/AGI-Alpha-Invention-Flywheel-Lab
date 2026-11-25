@@ -33,20 +33,31 @@ LEARNING_ZIP = 'frontier-learning-1.0.0.zip'
 ACTIVATION_ZIP = 'frontier-activation-1.0.0.zip'
 AMPLIFICATION_ZIP = 'frontier-activation-1.1.0.zip'
 AMPLIFICATION_PIN = '3e229271a5408961a8ad686fa32d0b0f2fd08663'
+AMPLIFICATION_SHA256 = '158aa880e2a282915f011ff8c4786ec0641b6d5da82178a9e131d0c64a17499c'
 SUBSTRATE_ZIP = 'frontier-activation-1.2.0.zip'
 SUBSTRATE_PIN = '97dffcd9c40d3a7504466b6ed74140bcb53b2a8c'
+SUBSTRATE_SHA256 = 'f4bc4141d5c86c251b04a9a2d129b65ab610242e5422755161e4882bb35cda06'
 LIBERATION_ZIP = 'frontier-activation-1.3.0.zip'
 LIBERATION_PIN = '96bf376e90acb2ae291a6317e72284a266389d27'
 LIBERATION_SHA256 = 'c73a4f0f261a2be986bf6315bd7ce6102167ccad929d9c44bc31701a1386ff1f'
 CASCADE_ZIP = 'frontier-activation-1.4.0.zip'
+CASCADE_PIN = '0415b78818f795a7adef802e467ef076c00026db'
+CASCADE_SHA256 = '075e28dae9c58c3b856eaad57faaf9ffe189cae925954211266dcef95ac9335e'
 CASCADE_STUDIES = {'cascade-results.json': 'RESULTS.json', 'cascade-fresh-domain.json': 'FRESH-DOMAIN.json'}
+FACTORY_ZIP = 'frontier-activation-1.5.0.zip'
+FACTORY_RESULTS = 'factory-results.json'
+ACTIVATION_ARCHIVE_SHA256 = {
+    AMPLIFICATION_ZIP: AMPLIFICATION_SHA256, SUBSTRATE_ZIP: SUBSTRATE_SHA256,
+    LIBERATION_ZIP: LIBERATION_SHA256, CASCADE_ZIP: CASCADE_SHA256,
+}
 FOUNDRY_ENGINE = 'harness-engine.js'
 FOUNDRY_INPUT = 'FOUNDRY_PUBLIC_DATA'
 HARNESS_PIN = '39e76570c851b3527d78a526053a9ea2a611a993'
 HARNESS = 'products/alpha-genesis-harness/'
 FOUNDRY_ASSETS = ('foundry-core.mjs', 'foundry-ui.mjs', 'foundry-study.mjs', 'outcome-receipt.mjs',
                   FOUNDRY_ENGINE, FOUNDRY_ZIP, STUDY_ZIP, INVENTOR_ZIP, LEARNING_ZIP, ACTIVATION_ZIP,
-                  AMPLIFICATION_ZIP, SUBSTRATE_ZIP, LIBERATION_ZIP, CASCADE_ZIP, *CASCADE_STUDIES)
+                  AMPLIFICATION_ZIP, SUBSTRATE_ZIP, LIBERATION_ZIP, CASCADE_ZIP, *CASCADE_STUDIES,
+                  FACTORY_ZIP, FACTORY_RESULTS)
 INVENTOR_EVIDENCE = MAIN / 'publication/inventor'
 LEARNING_EVIDENCE = MAIN / 'publication/adaptive'
 ACTIVATION_EVIDENCE = MAIN / 'publication/activation'
@@ -54,6 +65,7 @@ AMPLIFICATION_EVIDENCE = MAIN / 'publication/amplification'
 SUBSTRATE_EVIDENCE = MAIN / 'publication/substrate'
 LIBERATION_EVIDENCE = MAIN / 'publication/liberation'
 CASCADE_EVIDENCE = MAIN / 'publication/cascade'
+FACTORY_EVIDENCE = MAIN / 'publication/factory'
 
 OUTPUTS = frozenset(SITE + name for name in (ENDPOINT_ZIP, ARCHIVE_ZIP, MEMBER_JSON))
 MARKER = '<!-- FRONTIER_MEMBER_VALUE -->'
@@ -263,25 +275,35 @@ def render_learning(fr):
             '</tr></thead><tbody>'+rows+'</tbody></table></div>')
 
 
+def activation_archive_files(root, names, prefix=''):
+    # The merged 1.4 tree contains the exact payloads distributed in earlier Activation releases.
+    return {prefix + name: pinned(CASCADE_PIN, (root / name).relative_to(MAIN).as_posix()) for name in names}
+
+
+def build_activation_archive(path, files, pin, scope, version):
+    release = package(path, files, 'frontier-activation', pin, scope, version=version)
+    if release['sha256'] != ACTIVATION_ARCHIVE_SHA256[path.name]:
+        raise ValueError(f'Activation {version} release bytes changed')
+    return release
+
+
 def activation_files():
-    files={name:(TOOLS/'activation'/name).read_bytes() for name in (
+    files = activation_archive_files(TOOLS / 'activation', (
         'README.md','activate.py','model_step.py','packets.py','phase.py','table_program.py',
-        'verify_activation.py','reproduce_activation.py','research_next.py')}
+        'verify_activation.py','reproduce_activation.py','research_next.py'))
     for directory,names in (
             ('adaptive',('pages.py','research.py','learning.py','wasm_policy.py','requirements-linux.txt')),
             ('inventor',('inventor.py','relational.py')),('foundry',('provider.py','study.py','formulas.py','local.example.json'))):
-        files.update({name:(TOOLS/directory/name).read_bytes() for name in names})
+        files.update(activation_archive_files(TOOLS / directory, names))
     files.update({name:pinned(HARNESS_PIN,HARNESS+name) for name in (
         'LICENSE','NOTICE','bridge/adapters.py','bridge/instruments.py','bridge/output_schema.py','bridge/streaming.py')})
     names=['REGISTRATION.md','FOLLOWUP.md','REPORT.md','inventory.json','selection.json','live-case.json',
            'live-replay.json','phase-history.json','phase-events.json','initial-run.json','followup-run.json','verification.json',
-           'next-research.json']
-    if (ACTIVATION_EVIDENCE/'phase-pr.json').is_file():
-        names.append('phase-pr.json')
+           'next-research.json','phase-pr.json']
     names.extend('corpus/'+name+'.json' for name in (
         'catalogue','commitments','learning-replay-development','learning-replay-confirmation',
         'local-runner-development','local-runner-confirmation','inventor-audit-development','inventor-audit-confirmation'))
-    files.update({f'study/{name}':(ACTIVATION_EVIDENCE/name).read_bytes() for name in names})
+    files.update(activation_archive_files(ACTIVATION_EVIDENCE, names, 'study/'))
     return files
 
 
@@ -291,85 +313,104 @@ def build_activation(destination):
 
 
 def amplification_files():
-    files=activation_files()
-    for name in ('AMPLIFICATION.md','amplify.py','native_experiment.py','route_environment.py','reproduce_amplification.py',
-                 'calibration_environment.py','refine_amplification.py','discover_amplification.py'):
-        files[name]=(TOOLS/'activation'/name).read_bytes()
-    for name in ('REPORT.md','registration.json','discovery.json','development.json','confirmation.json',
-                 'provenance.json','trial.json','comparisons.json','build_cases.py','repair-registration.json',
-                 'context-followup.json','transfer-registration.json','calibration-development.json',
-                 'calibration-confirmation.json','calibration-trial.json','build_calibration.py','record_results.py',
-                 'next-investigation.json','phase-additional.json','diagnostic-audit.json',
-                 'initial-research-input.txt','next-research-input.txt'):
-        files[f'study/amplification/{name}']=(AMPLIFICATION_EVIDENCE/name).read_bytes()
+    files = activation_files()
+    files.update(activation_archive_files(TOOLS / 'activation', (
+        'AMPLIFICATION.md','amplify.py','native_experiment.py','route_environment.py','reproduce_amplification.py',
+        'calibration_environment.py','refine_amplification.py','discover_amplification.py')))
+    files.update(activation_archive_files(AMPLIFICATION_EVIDENCE, (
+        'REPORT.md','registration.json','discovery.json','development.json','confirmation.json',
+        'provenance.json','trial.json','comparisons.json','build_cases.py','repair-registration.json',
+        'context-followup.json','transfer-registration.json','calibration-development.json',
+        'calibration-confirmation.json','calibration-trial.json','build_calibration.py','record_results.py',
+        'next-investigation.json','phase-additional.json','diagnostic-audit.json',
+        'initial-research-input.txt','next-research-input.txt'), 'study/amplification/'))
     return files
 
 
 def build_amplification(destination):
-    return package(destination/AMPLIFICATION_ZIP,amplification_files(),'frontier-activation',AMPLIFICATION_PIN,
-                   'Activation 1.1 with a separate native research sandbox, matched comparisons, and exact workload replay.',
-                   version='1.1.0')
+    return build_activation_archive(destination / AMPLIFICATION_ZIP, amplification_files(), AMPLIFICATION_PIN,
+                                    'Activation 1.1 with a separate native research sandbox, matched comparisons, '
+                                    'and exact workload replay.', '1.1.0')
 
 
 def substrate_files():
     files = amplification_files()
-    for filename in ('SUBSTRATE.md', 'science_substrate.py', 'science_reference.py', 'science_workbench.py',
-                     'substrate_study.py', 'verify_substrate.py'):
-        files[filename] = (TOOLS/'activation'/filename).read_bytes()
-    for filename in ('REGISTRATION.json', 'BINDINGS.json', 'CASE.json', 'DEVELOPMENT.json', 'CONFIRMATION.json',
-                     'SURVEYS.json', 'MANUAL-PACKET.json', 'MANUAL-RESPONSE.json', 'manual-candidate.json',
-                     'REPORT.md', 'assemble.py', 'RESULTS.json', 'NEXT.json', 'LOCAL-CONFIG.json',
-                     'model-evidence.json', 'record.py', 'covariance_pilot.py', 'PILOT-REGISTRATION.json', 'PILOT-RESULT.json'):
-        files[f'study/substrate/{filename}'] = (SUBSTRATE_EVIDENCE/filename).read_bytes()
+    files.update(activation_archive_files(TOOLS / 'activation', (
+        'SUBSTRATE.md', 'science_substrate.py', 'science_reference.py', 'science_workbench.py',
+        'substrate_study.py', 'verify_substrate.py')))
+    files.update(activation_archive_files(SUBSTRATE_EVIDENCE, (
+        'REGISTRATION.json', 'BINDINGS.json', 'CASE.json', 'DEVELOPMENT.json', 'CONFIRMATION.json',
+        'SURVEYS.json', 'MANUAL-PACKET.json', 'MANUAL-RESPONSE.json', 'manual-candidate.json',
+        'REPORT.md', 'assemble.py', 'RESULTS.json', 'NEXT.json', 'LOCAL-CONFIG.json',
+        'model-evidence.json', 'record.py', 'covariance_pilot.py', 'PILOT-REGISTRATION.json', 'PILOT-RESULT.json'),
+        'study/substrate/'))
     return files
 
 
 def build_substrate(destination):
-    return package(destination/SUBSTRATE_ZIP,substrate_files(),'frontier-activation',SUBSTRATE_PIN,
-                   'Exact scientific environments and bounded research on source-grounded executable knowledge.',
-                   version='1.2.0')
+    return build_activation_archive(destination / SUBSTRATE_ZIP, substrate_files(), SUBSTRATE_PIN,
+                                    'Exact scientific environments and bounded research on source-grounded executable knowledge.',
+                                    '1.2.0')
 
 
 def liberation_files():
-    files=substrate_files()
-    for filename in ('LIBERATION.md','liberation.py','covariance_study.py','hydrology.py','independent_timing.py',
-                     'discovery_workbench.py','verify_liberation.py'):
-        files[filename]=(TOOLS/'activation'/filename).read_bytes()
-    for filename in ('REGISTRATION.json','FOLLOWUP.json','CONFIRMATION.json','CONSTRUCTION.json','SOURCES.json',
-                     'COVARIANCE.json','HYDROLOGY.json','PACKET.json','RESPONSE.json','NEXT.json','config.json',
-                     'FOLLOWON-REGISTRATION.json','INDEPENDENT-TIMING.json',
-                     'REPORT.md','GATES.md','assemble.py'):
-        files[f'study/liberation/{filename}']=(LIBERATION_EVIDENCE/filename).read_bytes()
+    files = substrate_files()
+    files.update(activation_archive_files(TOOLS / 'activation', (
+        'LIBERATION.md', 'liberation.py', 'covariance_study.py', 'hydrology.py', 'independent_timing.py',
+        'discovery_workbench.py', 'verify_liberation.py')))
+    files.update(activation_archive_files(LIBERATION_EVIDENCE, (
+        'REGISTRATION.json', 'FOLLOWUP.json', 'CONFIRMATION.json', 'CONSTRUCTION.json', 'SOURCES.json',
+        'COVARIANCE.json', 'HYDROLOGY.json', 'PACKET.json', 'RESPONSE.json', 'NEXT.json', 'config.json',
+        'FOLLOWON-REGISTRATION.json', 'INDEPENDENT-TIMING.json', 'REPORT.md', 'GATES.md', 'assemble.py'),
+        'study/liberation/'))
     return files
 
 
 def build_liberation(destination):
-    release = package(destination / LIBERATION_ZIP, liberation_files(), 'frontier-activation', LIBERATION_PIN,
-                      'Historical scientific discovery, compact construction and source-bound hydrology.',
-                      version='1.3.0')
-    if release['sha256'] != LIBERATION_SHA256:
-        raise ValueError('Activation 1.3 release bytes changed')
-    return release
+    return build_activation_archive(destination / LIBERATION_ZIP, liberation_files(), LIBERATION_PIN,
+                                    'Historical scientific discovery, compact construction and source-bound hydrology.',
+                                    '1.3.0')
 
 
-def build_cascade(destination, revision):
+def cascade_files():
     files = liberation_files()
-    for filename in ('cascade.py', 'cascade_fresh_domain.py', 'post_reveal_overlap.py', 'transit_cascade.py',
-                     'transit_ordinary.py', 'ttv_diagnostic.py', 'verify_cascade.py'):
-        files[filename] = (TOOLS / 'activation' / filename).read_bytes()
-    for filename in ('REGISTRATION.md', 'OWNER.md', 'GATES.md', 'REPLAY.md', 'PRIMARY.json', 'ORDINARY.json',
-                     'TTV.json', 'TTV-INPUT.json', 'POST-REVEAL-INPUT.json', 'POST-REVEAL.json',
-                     'LOCAL-CONFIG.json', *CASCADE_STUDIES.values()):
-        files[f'study/cascade/{filename}'] = (CASCADE_EVIDENCE / filename).read_bytes()
+    files.update(activation_archive_files(TOOLS / 'activation', (
+        'cascade.py', 'cascade_fresh_domain.py', 'post_reveal_overlap.py', 'transit_cascade.py',
+        'transit_ordinary.py', 'ttv_diagnostic.py', 'verify_cascade.py')))
+    files.update(activation_archive_files(CASCADE_EVIDENCE, (
+        'REGISTRATION.md', 'OWNER.md', 'GATES.md', 'REPLAY.md', 'PRIMARY.json', 'ORDINARY.json',
+        'TTV.json', 'TTV-INPUT.json', 'POST-REVEAL-INPUT.json', 'POST-REVEAL.json',
+        'LOCAL-CONFIG.json', *CASCADE_STUDIES.values()), 'study/cascade/'))
+    return files
+
+
+def build_cascade(destination):
+    files = cascade_files()
     for output, filename in CASCADE_STUDIES.items():
         (destination / output).write_bytes(files[f'study/cascade/{filename}'])
-    return package(destination / CASCADE_ZIP, files, 'frontier-activation', revision,
-                   'Historical transit timing from source photometry, matched use of tools and a climate evidence replay.',
-                   version='1.4.0')
+    return build_activation_archive(destination / CASCADE_ZIP, files, CASCADE_PIN,
+                                    'Historical transit timing from source photometry, matched use of tools and a climate evidence replay.',
+                                    '1.4.0')
+
+
+def build_factory(destination, revision):
+    files = cascade_files()
+    for filename in ('evidence_truth.py', 'evidence_control.py', 'verify_factory.py', 'joint_transit.py'):
+        files[filename] = (TOOLS / 'activation' / filename).read_bytes()
+    for filename in ('REGISTRATION.md', 'REPORT.md', 'GATES.md', 'EVIDENCE.json', 'EVIDENCE-SOURCES.json',
+                     'TRANSIT-INPUT.json', 'TRANSIT.json', 'FACTORY.json', 'hurricane-lineage-control.py',
+                     'ground/README.md', 'ground/fit_ground.py', 'ground/fetch_ground.py',
+                     'ground/GROUND-ONLY-REGISTRATION.json', 'ground/EXOFOP-FILES.json'):
+        files[f'study/factory/{filename}'] = (FACTORY_EVIDENCE / filename).read_bytes()
+    (destination / FACTORY_RESULTS).write_bytes(files['study/factory/FACTORY.json'])
+    return package(destination / FACTORY_ZIP, files, 'frontier-activation', revision,
+                   'Read-only historical evidence rulings, source lineage, and astronomical attribution.',
+                   version='1.5.0')
 
 
 def render_cascade(fr):
-    summary = json.loads((CASCADE_EVIDENCE / 'RESULTS.json').read_bytes())['summary']
+    source = activation_archive_files(CASCADE_EVIDENCE, CASCADE_STUDIES.values())
+    summary = json.loads(source['RESULTS.json'])['summary']
     tess = summary['tess']
     held = int(tess['held'])
     total = held + int(tess['development'])
@@ -377,7 +418,7 @@ def render_cascade(fr):
     primary = int(tess['primary_agrees'])
     ordinary = int(tess['ordinary_agrees'])
     confirmed = int(tess['held_confirmed'])
-    fresh = json.loads((CASCADE_EVIDENCE / 'FRESH-DOMAIN.json').read_bytes())['observed']
+    fresh = json.loads(source['FRESH-DOMAIN.json'])['observed']
     noaa = f'{int(fresh["matches_published"])}/{int(fresh["seasons_compared"])}'
     composition = summary['composition']
     jobs = int(composition['jobs'])
@@ -415,6 +456,89 @@ def render_cascade(fr):
             f'<div class="foundry-pilot-table" role="region" tabindex="0" aria-label="{accepted}">'
             f'<table><thead><tr><th scope="col">{method}</th><th scope="col">{accepted}</th></tr></thead>'
             f'<tbody>{rows}</tbody></table></div></details>')
+
+
+def render_factory(fr):
+    summary = json.loads((FACTORY_EVIDENCE / 'FACTORY.json').read_bytes())['summary']
+    industry, hurricane, transit = (summary[key] for key in ('industry', 'hurricane', 'transit'))
+
+    def witnessed(case, label, source_label):
+        row = industry[case]
+        stamp = escape(row['first_verified_by'])
+        link = escape(row['source_url'])
+        statement = (f'<p data-factory-claim="{case}" data-verdict="{escape(row["verdict"])}">'
+                     f'<strong>{label}</strong> <time datetime="{stamp}">{stamp[:10]}</time>.</p>')
+        return statement, f'<p class="mv-links"><a href="{link}">{source_label}</a></p>'
+
+    def metric(name, value):
+        return f'<strong data-factory-field="{name}">{escape(str(value))}</strong>'
+
+    cases = metric('hurricane.cases', hurricane['cases'])
+    shared = metric('hurricane.shared_origin', hurricane['shared_origin'])
+    agreement = metric('hurricane.physical_agreement', hurricane['physical_agreement'])
+    products = metric('transit.blind_products', transit['blind_products'])
+    timings = metric('transit.detected_timings', transit['detected_timings'])
+    matches = metric('transit.physical_matches', transit['physical_matches'])
+    fresh = metric('transit.fresh_events', transit['fresh_events'])
+    offset = str(transit['april_b_offset_days'])
+    offset = metric('transit.april_b_offset_days', offset.replace('.', ',') if fr else offset)
+    machine_verdict = escape(industry['bambu_machine']['verdict'])
+    forecast_verdict = escape(transit['forecast_verdict'])
+    if fr:
+        prusa, prusa_source = witnessed('prusa_offer', 'Offre aux États-Unis attestée au', 'Voir la fiche Prusa archivée')
+        prusa_scope = ('La fiche du fabricant couvre la mise à niveau à 400 °C pour la CORE One L. '
+                       'La date du lancement, la disponibilité au Canada et la livraison restent à établir.')
+        bambu, bambu_source = witnessed('bambu_software', 'Prise en charge logicielle attestée au',
+                                       'Voir la fiche de version Bambu (JSON)')
+        bambu_scope = 'La version v02.09.02.62 documente l’usage de buses mixtes avec FTS pour la H2D.'
+        machine = ('<strong>Abstention sur le fonctionnement de la machine.</strong> Le fonctionnement réel de la H2D '
+                   'et la prise en charge de la H2C ou de la X2D exigent des preuves distinctes.')
+        hurricane_title = 'Provenance des données sur les ouragans'
+        hurricane_result = (f'{shared} cas sur {cases} partagent une source en amont. '
+                            f'{agreement} cas satisfont au critère de concordance physique entre sources indépendantes.')
+        transit_title = 'Attribution des transits de TOI-216'
+        transit_result = (f'La recherche a extrait {timings} instants de transit de {products} fichiers TESS. '
+                          f'Les {fresh} comparaisons ont utilisé des références publiées. Une analyse distincte '
+                          f'de mesures indépendantes au sol a trouvé {matches} concordance avec une couverture '
+                          f'complète du transit. Le relevé historique d’avril se situait à {offset} jours du '
+                          'candidat b ajusté le plus proche dans ce secteur. L’ajustement conjoint du secteur 64 '
+                          'de TESS place le transit plus profond de c près de la date du relevé.')
+        forecast = '<strong>Abstention sur les nouvelles prévisions.</strong> Planifier une observation exige une validation distincte.'
+    else:
+        prusa, prusa_source = witnessed('prusa_offer', 'U.S. offer documented by', 'Open the archived Prusa listing')
+        prusa_scope = ('The manufacturer listing covers the 400 °C upgrade for the CORE One L. '
+                       'Launch date, Canadian availability and fulfillment remain open.')
+        bambu, bambu_source = witnessed('bambu_software', 'Software support documented by',
+                                       'Open the Bambu release record (JSON)')
+        bambu_scope = 'Version v02.09.02.62 documents mixed-nozzle support with FTS for the H2D.'
+        machine = ('<strong>Abstain on machine operation.</strong> Actual operation on the H2D and support for the '
+                   'H2C or X2D require separate evidence.')
+        hurricane_title = 'Hurricane source lineage'
+        hurricane_result = (f'{shared} of {cases} cases share an upstream source. '
+                            f'{agreement} cases meet the physical agreement criterion using independent sources.')
+        transit_title = 'TOI-216 transit attribution'
+        transit_result = (f'The search measured {timings} transit times from {products} TESS products. '
+                          f'The {fresh} scored comparisons used published references. A separate analysis of '
+                          f'independent ground observations found {matches} match with full transit coverage. '
+                          f'The historical April record was {offset} days from the nearest fitted b candidate in that '
+                          'sector. The joint fit for TESS Sector 64 places the deeper c transit near the date of the record.')
+        forecast = '<strong>Abstain on new forecasts.</strong> Scheduling an observation requires separate validation.'
+    return (
+        '<div class="mv-grid factory-findings">'
+        '<article class="mv-tool" aria-labelledby="factory-prusa-title">'
+        '<h5 id="factory-prusa-title">Prusa HT Hotend · CORE One L</h5>'
+        f'{prusa}<p>{prusa_scope}</p>{prusa_source}</article>'
+        '<article class="mv-tool" aria-labelledby="factory-bambu-title">'
+        '<h5 id="factory-bambu-title">Bambu Studio · H2D</h5>'
+        f'{bambu}<p>{bambu_scope}</p>'
+        f'<p data-factory-claim="bambu_machine" data-verdict="{machine_verdict}">{machine}</p>{bambu_source}</article>'
+        '<article class="mv-tool" aria-labelledby="factory-hurricane-title">'
+        f'<h5 id="factory-hurricane-title">{hurricane_title}</h5><p>{hurricane_result}</p></article>'
+        '<article class="mv-tool" aria-labelledby="factory-transit-title">'
+        f'<h5 id="factory-transit-title">{transit_title}</h5><p>{transit_result}</p>'
+        f'<p data-factory-claim="forecast" data-verdict="{forecast_verdict}">{forecast}</p></article>'
+        '</div>'
+    )
 
 
 def render_liberation(fr):
@@ -1114,6 +1238,7 @@ def render(lang, compiled, sample):
         '<!-- SUBSTRATE_RESULTS -->': render_substrate(fr),
         '<!-- LIBERATION_RESULTS -->': render_liberation(fr),
         '<!-- CASCADE_RESULTS -->': render_cascade(fr),
+        '<!-- FACTORY_RESULTS -->': render_factory(fr),
         '<!-- MF_UPDATED -->': timestamp_html(compiled['updated_at']),
         '<!-- MV_TIMELINE -->': ''.join(highlights),
         '<!-- MV_FILTERS -->': controls(briefs, fr),
