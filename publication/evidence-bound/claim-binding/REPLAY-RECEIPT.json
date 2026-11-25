@@ -1,0 +1,239 @@
+{
+  "after_original_fixture": "ABSTAIN",
+  "after_original_prose": "ABSTAIN",
+  "corrected_evidence": {
+    "claims": [
+      {
+        "claim_contract_sha256": "09d2168d639a34bc740a20e6db8026943aa02e0f83e96f621d2dcc31ac016b3d",
+        "dataset": "mixture",
+        "dimension": "mass/volume",
+        "event_sha256": "c67158e8fb20cc96b13a08b64dabb75af0bec824f02e372b68725a6a630e4deb",
+        "executed_value": "16600/13",
+        "execution_receipt": {
+          "asserted_value": null,
+          "claim_contract_sha256": "09d2168d639a34bc740a20e6db8026943aa02e0f83e96f621d2dcc31ac016b3d",
+          "claim_id": "concentration",
+          "input": {
+            "id": "mixture",
+            "kind": "table",
+            "origin": "AUTHORIZED_MISSION_INPUT",
+            "parents": {},
+            "sha256": "eee22ded0bf1191391e60042d6065b312b81b2fee731ed6535d14221573bd3b8",
+            "version": "held-m06-authorized-data-v1"
+          },
+          "lineage": [
+            {
+              "id": "mixture",
+              "kind": "table",
+              "origin": "AUTHORIZED_MISSION_INPUT",
+              "parents": {},
+              "sha256": "eee22ded0bf1191391e60042d6065b312b81b2fee731ed6535d14221573bd3b8",
+              "version": "held-m06-authorized-data-v1"
+            }
+          ],
+          "locator": [
+            "rows",
+            0,
+            0
+          ],
+          "mission_id": "wf_4cbf8eea6a910ae5c6fc3a50",
+          "operation": {
+            "artifact": "reconciliation.json",
+            "artifact_sha256": "5353f9bdfcb5e7982a97c15bf7c77a6513612bb98f61324869a58946fd658fe9",
+            "sqlite_version": "3.53.1",
+            "tool": "run_table",
+            "version_sha256": "48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d"
+          },
+          "output_sha256": "78e8b8d15df11113ef9201f2db9f938fc8d2f7741f5023d4bd593a1236a40663",
+          "result_artifact": null,
+          "revision_sha256": "8a90456d4900291e23d784b05fae1ec0c50c064b976bee300b4b3fa2ffbc03c8",
+          "schema": "frontier/mission-claim-execution/v1",
+          "sha256": "a25bb0a3437554495fc965235d34028de79477233e2c7182b2df56f172ef77e9"
+        },
+        "id": "concentration",
+        "locator": [
+          "rows",
+          0,
+          0
+        ],
+        "mission_id": "wf_4cbf8eea6a910ae5c6fc3a50",
+        "reason": "MATCHES_FROZEN_REFERENCE",
+        "reference": {
+          "source": "Separate exact Fraction unit and mass reconciliation",
+          "value": "16600/13"
+        },
+        "requires": {
+          "mass_conserved": true,
+          "volume_additive": true
+        },
+        "revision_sha256": "8a90456d4900291e23d784b05fae1ec0c50c064b976bee300b4b3fa2ffbc03c8",
+        "source_version": "held-m06-authorized-data-v1",
+        "status": "VERIFIED",
+        "unit": "mg/L",
+        "value": "16600/13"
+      },
+      {
+        "claim_contract_sha256": "77668b8a99c8d6871e0e2b876d03c4bf419af1773e32664f3be9b742a4890eb5",
+        "dataset": "mixture",
+        "dimension": "mass",
+        "event_sha256": "c4e08f40ea179c940978b607428abefa3bc1700ecb0d0032c54d3fb42448b2d6",
+        "executed_value": "3320",
+        "execution_receipt": {
+          "asserted_value": null,
+          "claim_contract_sha256": "77668b8a99c8d6871e0e2b876d03c4bf419af1773e32664f3be9b742a4890eb5",
+          "claim_id": "mass",
+          "input": {
+            "id": "mixture",
+            "kind": "table",
+            "origin": "AUTHORIZED_MISSION_INPUT",
+            "parents": {},
+            "sha256": "eee22ded0bf1191391e60042d6065b312b81b2fee731ed6535d14221573bd3b8",
+            "version": "held-m06-authorized-data-v1"
+          },
+          "lineage": [
+            {
+              "id": "mixture",
+              "kind": "table",
+              "origin": "AUTHORIZED_MISSION_INPUT",
+              "parents": {},
+              "sha256": "eee22ded0bf1191391e60042d6065b312b81b2fee731ed6535d14221573bd3b8",
+              "version": "held-m06-authorized-data-v1"
+            }
+          ],
+          "locator": [
+            "rows",
+            0,
+            1
+          ],
+          "mission_id": "wf_4cbf8eea6a910ae5c6fc3a50",
+          "operation": {
+            "artifact": "reconciliation.json",
+            "artifact_sha256": "5353f9bdfcb5e7982a97c15bf7c77a6513612bb98f61324869a58946fd658fe9",
+            "sqlite_version": "3.53.1",
+            "tool": "run_table",
+            "version_sha256": "48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d"
+          },
+          "output_sha256": "78e8b8d15df11113ef9201f2db9f938fc8d2f7741f5023d4bd593a1236a40663",
+          "result_artifact": null,
+          "revision_sha256": "8a90456d4900291e23d784b05fae1ec0c50c064b976bee300b4b3fa2ffbc03c8",
+          "schema": "frontier/mission-claim-execution/v1",
+          "sha256": "e8497e80e5e3e3cb73f698fbe4dd3f2ce039a6d42267d076314e0c56bd22edda"
+        },
+        "id": "mass",
+        "locator": [
+          "rows",
+          0,
+          1
+        ],
+        "mission_id": "wf_4cbf8eea6a910ae5c6fc3a50",
+        "reason": "MATCHES_FROZEN_REFERENCE",
+        "reference": {
+          "source": "Separate exact Fraction unit and mass reconciliation",
+          "value": "3320"
+        },
+        "requires": {
+          "mass_conserved": true,
+          "volume_additive": true
+        },
+        "revision_sha256": "8a90456d4900291e23d784b05fae1ec0c50c064b976bee300b4b3fa2ffbc03c8",
+        "source_version": "held-m06-authorized-data-v1",
+        "status": "VERIFIED",
+        "unit": "mg",
+        "value": "3320"
+      },
+      {
+        "claim_contract_sha256": "52964b3143f76e51995852420da84d731d3742a3e94949c640c6940671fb5445",
+        "dataset": "mixture",
+        "dimension": "volume",
+        "event_sha256": "9dc0746a797241f004b99c14778f5477e41e1b12fac181de9d045e162b38879d",
+        "executed_value": "13/5",
+        "execution_receipt": {
+          "asserted_value": null,
+          "claim_contract_sha256": "52964b3143f76e51995852420da84d731d3742a3e94949c640c6940671fb5445",
+          "claim_id": "volume",
+          "input": {
+            "id": "mixture",
+            "kind": "table",
+            "origin": "AUTHORIZED_MISSION_INPUT",
+            "parents": {},
+            "sha256": "eee22ded0bf1191391e60042d6065b312b81b2fee731ed6535d14221573bd3b8",
+            "version": "held-m06-authorized-data-v1"
+          },
+          "lineage": [
+            {
+              "id": "mixture",
+              "kind": "table",
+              "origin": "AUTHORIZED_MISSION_INPUT",
+              "parents": {},
+              "sha256": "eee22ded0bf1191391e60042d6065b312b81b2fee731ed6535d14221573bd3b8",
+              "version": "held-m06-authorized-data-v1"
+            }
+          ],
+          "locator": [
+            "rows",
+            0,
+            2
+          ],
+          "mission_id": "wf_4cbf8eea6a910ae5c6fc3a50",
+          "operation": {
+            "artifact": "reconciliation.json",
+            "artifact_sha256": "5353f9bdfcb5e7982a97c15bf7c77a6513612bb98f61324869a58946fd658fe9",
+            "sqlite_version": "3.53.1",
+            "tool": "run_table",
+            "version_sha256": "48d0ab154a4fd5d09f8edc7b65dbcb916c7967d68c78901bdeb3c949a534084d"
+          },
+          "output_sha256": "78e8b8d15df11113ef9201f2db9f938fc8d2f7741f5023d4bd593a1236a40663",
+          "result_artifact": null,
+          "revision_sha256": "8a90456d4900291e23d784b05fae1ec0c50c064b976bee300b4b3fa2ffbc03c8",
+          "schema": "frontier/mission-claim-execution/v1",
+          "sha256": "ac143655ca3d4b1645081322953c6a25b83ad32ba6ab278bd083d0d59ce99034"
+        },
+        "id": "volume",
+        "locator": [
+          "rows",
+          0,
+          2
+        ],
+        "mission_id": "wf_4cbf8eea6a910ae5c6fc3a50",
+        "reason": "MATCHES_FROZEN_REFERENCE",
+        "reference": {
+          "source": "Separate exact Fraction unit and mass reconciliation",
+          "value": "13/5"
+        },
+        "requires": {
+          "mass_conserved": true,
+          "volume_additive": true
+        },
+        "revision_sha256": "8a90456d4900291e23d784b05fae1ec0c50c064b976bee300b4b3fa2ffbc03c8",
+        "source_version": "held-m06-authorized-data-v1",
+        "status": "VERIFIED",
+        "unit": "L",
+        "value": "13/5"
+      }
+    ],
+    "scope": "Case-specific numerical agreement and source binding. Independent custody and production admission are separate.",
+    "status": "VERIFIED"
+  },
+  "corrected_mission_qualification": "UNVERIFIED",
+  "corrected_mission_state": "needs_review",
+  "elapsed_seconds": 0.403672,
+  "execution_source_sha256": {
+    "mission_evidence.py": "2682255f3841cfb4ba09385d7caa0971c2364708c36c2f0d115337dfa11ea71b",
+    "mission_tools.py": "c64452be8a9831e936daf14b7073684637371da208bc8da0c1bdf519477ce948",
+    "universal_missions.py": "b11e601e5557d7457c2e6bf90f0fc4c44e2dc7e7411ec7dfc9ed7882027f8579"
+  },
+  "fixture_execution": {
+    "input_origin": "MODEL_DEVELOPMENT_FIXTURE",
+    "input_sha256": "e18fc6b09d1aa8c23844fcb4e7c27c65f985f4cc1f8737ba8732be250dcb9ef1",
+    "output_sha256": "24227028f5989317de063afa979c6b34bfd191537b8fd2ed796a820bf47b2024",
+    "rows": [
+      [
+        2
+      ]
+    ]
+  },
+  "historical_replay_data_sha256": "fc9d5eb85f870233f6ccfd588bcb73c265437e32d7a0ca4161b24b2981d30a2e",
+  "original_unsupported_prose": "138461.54 mg/L",
+  "scope": "Historical proposal replay and authored numerical repair on public m06. No live model requests.",
+  "source_commit": "e39f5b7cf965c5838ba1e1a6c85c59c73bb34e0a"
+}

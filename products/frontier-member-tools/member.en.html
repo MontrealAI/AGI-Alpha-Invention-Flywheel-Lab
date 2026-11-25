@@ -71,8 +71,12 @@
         <h5 id="execution-title">Local execution</h5>
         <p id="execution-status" role="status"></p>
         <p id="execution-counts" class="packet-meta"></p>
-        <div id="execution-understanding" hidden><h6>Proposed understanding and action</h6><p id="execution-proposal"></p></div>
-        <pre id="execution-result" hidden></pre>
+        <section id="execution-evidence" aria-labelledby="execution-evidence-title" hidden>
+          <h6 id="execution-evidence-title">Conclusions supported by evidence</h6>
+          <p id="execution-evidence-status"></p><ul id="execution-claims"></ul>
+        </section>
+        <details id="execution-understanding" hidden><summary>Proposed approach and commentary</summary><p id="execution-proposal"></p></details>
+        <details id="execution-preview" hidden><summary>Raw tool output</summary><p id="execution-result-origin"></p><pre id="execution-result"></pre></details>
         <details><summary>Run events and artifacts</summary><ol id="execution-events"></ol><ul id="execution-artifacts"></ul></details>
         <div class="mv-actions">
           <button id="execution-pause" type="button" class="quiet" hidden>Pause execution</button>
@@ -284,23 +288,57 @@
   </section>
   <section class="mv-section foundry-panel" id="my-intelligence" aria-labelledby="my-intelligence-title" data-member-view hidden>
     <h3 id="my-intelligence-title" tabindex="-1">My intelligence <span>Ω</span></h3>
-    <p class="mf-section-intro">Turn a rule you can verify into a small tool you can keep.</p>
-    <p>This workbench processes mission files on this device. Locking clears the browser session. A paired executor keeps its own private checkpoints on your device.</p>
-    <details class="foundry-stage mission-connection" id="mission-intelligence">
-      <summary>Connect a model for this mission</summary>
-      <details class="mission-execution-connection">
-        <summary>Run missions with your local executor</summary>
-        <p>Start HARNESS on your device and enter the one-use code it prints. Activation then starts work within the limits you selected on that device.</p>
-        <p class="mv-links"><a href="frontier-harness-executor-1.0.0.zip" download>Download the local executor</a>
-          <a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/main/publication/mission-executor/README.md">Setup and operating scope</a></p>
+    <p class="mf-section-intro">Connect intelligence once and return to your ambition.</p>
+    <details class="foundry-stage mission-connection" id="mission-intelligence" open>
+      <summary>Choose how to run your mission</summary>
+      <details class="intelligence-choice">
+        <summary>Use my ChatGPT subscription</summary>
+        <p>Use the official connection when the application and your plan qualify. Review a prepared handoff if the connection is unavailable.</p>
+        <p class="mv-links"><a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/main/publication/evidence-bound/README.md#chatgpt-and-codex">ChatGPT and Codex setup</a> <a href="#my-intelligence" data-local-intelligence-workbench target="_blank" rel="noopener noreferrer" hidden>Open ChatGPT and Codex on this device</a></p>
+      </details>
+      <details class="intelligence-choice mission-execution-connection" open>
+        <summary>Use intelligence on my computer</summary>
+        <p>Extract the download. Open the Launch-FRONTIER file for your system and bring the one-use code here.</p>
+        <p class="mv-links"><a href="frontier-harness-executor-1.1.0.zip" download>Download the local executor</a>
+          <a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/main/publication/evidence-bound/README.md">Local setup guide</a></p>
         <form id="execution-code-form" autocomplete="off">
           <label for="execution-code">One-use pairing code</label>
           <input type="password" id="execution-code" required maxlength="43" autocomplete="off" spellcheck="false">
           <button type="submit" class="quiet">Pair this browser</button>
         </form>
         <p id="execution-connection" role="status"></p>
+        <div id="intelligence-local-controls" hidden>
+          <p id="intelligence-readiness" role="status"></p>
+          <div id="intelligence-install" hidden>
+            <p id="intelligence-device"></p>
+            <p>Choose a runtime’s setup guide, then start a model and search again.</p>
+            <p class="mv-links"><a href="https://ollama.com/download">Ollama</a> <a href="https://lmstudio.ai/download">LM Studio</a> <a href="https://github.com/ggml-org/llama.cpp/releases">llama.cpp</a> <a href="https://docs.vllm.ai/en/latest/getting_started/installation/">vLLM</a></p>
+          </div>
+          <div class="foundry-actions">
+            <button id="intelligence-discover" type="button" class="quiet">Find local models</button>
+            <button id="intelligence-reconnect" type="button" class="quiet" hidden>Reconnect my model</button>
+          </div>
+          <form id="intelligence-select-form" hidden>
+            <label for="intelligence-choice">Model on this computer</label>
+            <select id="intelligence-choice" required></select>
+            <label><input id="intelligence-hybrid" type="checkbox"> Prefer verified tools when they can solve the task</label>
+            <button type="submit" class="entry-button">Check and use this model</button>
+          </form>
+        </div>
         <button id="execution-disconnect" type="button" class="quiet" hidden>Disconnect and pause running work</button>
       </details>
+      <details class="intelligence-choice">
+        <summary>Connect an AI provider</summary>
+        <p>Configure a provider in the local HARNESS workbench. Review the exact account, model and spending limits before running. API credits for eligible subscriptions use a separate API organization.</p>
+        <p class="mv-links"><a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/main/publication/evidence-bound/README.md#authorized-api-access">Provider and API credit setup</a> <a href="#my-intelligence" data-local-intelligence-workbench target="_blank" rel="noopener noreferrer" hidden>Open the local HARNESS workbench</a></p>
+      </details>
+      <details class="intelligence-choice">
+        <summary>Use intelligent hybrid execution</summary>
+        <p>Pair this computer and select the preference for verified tools when choosing a local model. The bridge keeps this selection on your computer.</p>
+        <p><a href="#execution-code-form">Pair this computer</a></p>
+      </details>
+      <details class="intelligence-choice">
+        <summary>Advanced connection settings</summary>
       <form id="mission-connection-form" autocomplete="off">
         <h4>Local inference</h4>
         <div class="foundry-fields">
@@ -316,11 +354,6 @@
       </form>
       <p id="mission-connection-status" class="status" role="status"></p>
       <p><a href="#frontier-mission-panel" id="mission-return" hidden>Return to your mission</a></p>
-      <details>
-        <summary>Use your own authorized provider</summary>
-        <p>Export the prepared prompt and run it with the existing HARNESS provider tool on your device. Review the exact request plan and budget there. Bring back the returned text as an assisted report.</p>
-        <p class="mv-links"><a href="frontier-foundry-1.0.0.zip" download>HARNESS</a>
-          <a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/2b4771cf95ca933285602028a83c85b0281499cf/products/frontier-member-tools/foundry/README.md">Read the existing provider guide</a></p>
       </details>
     </details>
     <template id="foundry-public-data"><!-- FOUNDRY_PUBLIC_DATA --></template>

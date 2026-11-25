@@ -468,6 +468,13 @@ body:has(#member:not([hidden]):not([data-public-view])) #main > :not(#member) { 
 .mission-execution-connection { margin-block-end: 1.15rem; }
 .mission-execution-connection label { display: block; }
 .mission-execution-connection input { max-width: 100%; }
+.intelligence-choice { border-block-start: 1px solid rgba(208,169,119,.24); padding-block: .7rem; }
+.intelligence-choice > summary { cursor: pointer; color: #f4d8a5; }
+#intelligence-select-form { margin-block: .8rem; }
+#intelligence-select-form select { width: 100%; max-width: 36rem; }
+#intelligence-select-form label:has(input) { margin-block: .65rem; }
+#execution-evidence { margin-block: .85rem; }
+#execution-evidence h6 { color: #f4d8a5; font-size: .9rem; margin: .4rem 0; }
 .mission-console .mv-actions a, .mission-capabilities a { display: inline-flex; align-items: center; min-height: 44px; }
 .mission-keeper { margin-block: 1.15rem .65rem; }
 @media (max-width: 680px) { .mission-brief { grid-template-columns: 1fr; } }

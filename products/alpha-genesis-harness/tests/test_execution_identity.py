@@ -216,6 +216,8 @@ class ExecutionIdentityTests(unittest.TestCase):
         result = self.plan.generate(self.request(), expected_execution_identity=identity)
         finished()
         self.assertEqual(result["text"], "Useful result")
+        self.assertFalse(result["connection_receipt_saved"])
+        self.assertIsNone(self.plan.status()["verification"]["last_completion"])
         self.assertEqual(calls, [RESOURCE + "/responses"])
         self.assertEqual(self.plan.requests_started, 1)
 

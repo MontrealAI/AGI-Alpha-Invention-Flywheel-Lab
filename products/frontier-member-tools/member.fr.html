@@ -71,8 +71,12 @@
         <h5 id="execution-title">Exécution locale</h5>
         <p id="execution-status" role="status"></p>
         <p id="execution-counts" class="packet-meta"></p>
-        <div id="execution-understanding" hidden><h6>Interprétation et action proposées</h6><p id="execution-proposal"></p></div>
-        <pre id="execution-result" hidden></pre>
+        <section id="execution-evidence" aria-labelledby="execution-evidence-title" hidden>
+          <h6 id="execution-evidence-title">Conclusions appuyées par les preuves</h6>
+          <p id="execution-evidence-status"></p><ul id="execution-claims"></ul>
+        </section>
+        <details id="execution-understanding" hidden><summary>Approche proposée et commentaires</summary><p id="execution-proposal"></p></details>
+        <details id="execution-preview" hidden><summary>Sortie brute de l’outil</summary><p id="execution-result-origin"></p><pre id="execution-result"></pre></details>
         <details><summary>Journal d’exécution et fichiers produits</summary><ol id="execution-events"></ol><ul id="execution-artifacts"></ul></details>
         <div class="mv-actions">
           <button id="execution-pause" type="button" class="quiet" hidden>Suspendre l’exécution</button>
@@ -284,23 +288,57 @@
   </section>
   <section class="mv-section foundry-panel" id="my-intelligence" aria-labelledby="my-intelligence-title" data-member-view hidden>
     <h3 id="my-intelligence-title" tabindex="-1">Mon intelligence <span>Ω</span></h3>
-    <p class="mf-section-intro">Transformez une règle vérifiable en un outil que vous pouvez conserver.</p>
-    <p>Ce poste traite les fichiers de mission sur cet appareil. Le verrouillage efface la session du navigateur. Un exécuteur jumelé conserve ses propres fichiers de reprise privés sur votre appareil.</p>
-    <details class="foundry-stage mission-connection" id="mission-intelligence">
-      <summary>Connecter un modèle à cette mission</summary>
-      <details class="mission-execution-connection">
-        <summary>Exécuter des missions sur votre appareil</summary>
-        <p>Démarrez HARNESS sur votre appareil et saisissez le code à usage unique qu’il affiche. L’activation lance ensuite le travail dans les limites que vous avez choisies sur cet appareil.</p>
-        <p class="mv-links"><a href="frontier-harness-executor-1.0.0.zip" download>Télécharger l’exécuteur local</a>
-          <a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/main/publication/mission-executor/README.md#français">Configuration et périmètre d’utilisation</a></p>
+    <p class="mf-section-intro">Connectez votre intelligence une seule fois et reprenez votre ambition.</p>
+    <details class="foundry-stage mission-connection" id="mission-intelligence" open>
+      <summary>Choisir comment exécuter votre mission</summary>
+      <details class="intelligence-choice">
+        <summary>Utiliser mon abonnement ChatGPT</summary>
+        <p>Utilisez la connexion officielle si votre abonnement et l’application y sont admissibles. Si elle est indisponible, vous pouvez préparer une démarche assistée.</p>
+        <p class="mv-links"><a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/main/publication/evidence-bound/README.md#chatgpt-et-codex">Configuration de ChatGPT et de Codex</a> <a href="#my-intelligence" data-local-intelligence-workbench target="_blank" rel="noopener noreferrer" hidden>Ouvrir ChatGPT et Codex sur cet appareil</a></p>
+      </details>
+      <details class="intelligence-choice mission-execution-connection" open>
+        <summary>Utiliser l’intelligence sur mon ordinateur</summary>
+        <p>Décompressez le téléchargement. Ouvrez le fichier Launch-FRONTIER de votre système et saisissez ici le code à usage unique.</p>
+        <p class="mv-links"><a href="frontier-harness-executor-1.1.0.zip" download>Télécharger l’exécuteur local</a>
+          <a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/main/publication/evidence-bound/README.md#français">Guide de configuration locale</a></p>
         <form id="execution-code-form" autocomplete="off">
           <label for="execution-code">Code de jumelage à usage unique</label>
           <input type="password" id="execution-code" required maxlength="43" autocomplete="off" spellcheck="false">
           <button type="submit" class="quiet">Jumeler ce navigateur</button>
         </form>
         <p id="execution-connection" role="status"></p>
+        <div id="intelligence-local-controls" hidden>
+          <p id="intelligence-readiness" role="status"></p>
+          <div id="intelligence-install" hidden>
+            <p id="intelligence-device"></p>
+            <p>Consultez le guide d’installation d’un moteur, puis démarrez un modèle et relancez la détection.</p>
+            <p class="mv-links"><a href="https://ollama.com/download">Ollama</a> <a href="https://lmstudio.ai/download">LM Studio</a> <a href="https://github.com/ggml-org/llama.cpp/releases">llama.cpp</a> <a href="https://docs.vllm.ai/en/latest/getting_started/installation/">vLLM</a></p>
+          </div>
+          <div class="foundry-actions">
+            <button id="intelligence-discover" type="button" class="quiet">Détecter les modèles locaux</button>
+            <button id="intelligence-reconnect" type="button" class="quiet" hidden>Reconnecter mon modèle</button>
+          </div>
+          <form id="intelligence-select-form" hidden>
+            <label for="intelligence-choice">Modèle sur cet ordinateur</label>
+            <select id="intelligence-choice" required></select>
+            <label><input id="intelligence-hybrid" type="checkbox"> Privilégier les outils vérifiés adaptés à la tâche</label>
+            <button type="submit" class="entry-button">Vérifier et utiliser ce modèle</button>
+          </form>
+        </div>
         <button id="execution-disconnect" type="button" class="quiet" hidden>Déconnecter et suspendre le travail en cours</button>
       </details>
+      <details class="intelligence-choice">
+        <summary>Connecter un fournisseur d’IA</summary>
+        <p>Configurez le fournisseur dans l’espace HARNESS local. Avant toute exécution, vérifiez le compte, le modèle et les limites de dépenses. Les crédits API des abonnements admissibles sont liés à une organisation API distincte.</p>
+        <p class="mv-links"><a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/main/publication/evidence-bound/README.md#accès-api-autorisé">Configuration du fournisseur et des crédits API</a> <a href="#my-intelligence" data-local-intelligence-workbench target="_blank" rel="noopener noreferrer" hidden>Ouvrir l’espace HARNESS local</a></p>
+      </details>
+      <details class="intelligence-choice">
+        <summary>Combiner modèles et outils vérifiés</summary>
+        <p>Jumelez cet ordinateur et choisissez de privilégier les outils vérifiés lors de la sélection d’un modèle local. Ce choix reste sur votre ordinateur.</p>
+        <p><a href="#execution-code-form">Jumeler cet ordinateur</a></p>
+      </details>
+      <details class="intelligence-choice">
+        <summary>Paramètres de connexion avancés</summary>
       <form id="mission-connection-form" autocomplete="off">
         <h4>Inférence locale</h4>
         <div class="foundry-fields">
@@ -316,11 +354,6 @@
       </form>
       <p id="mission-connection-status" class="status" role="status"></p>
       <p><a href="#frontier-mission-panel" id="mission-return" hidden>Revenir à votre mission</a></p>
-      <details>
-        <summary>Utiliser votre propre fournisseur autorisé</summary>
-        <p>Exportez la consigne préparée et utilisez l’utilitaire de fournisseur HARNESS sur votre appareil. Examinez le plan et le budget de la requête, puis importez le texte obtenu comme rapport assisté.</p>
-        <p class="mv-links"><a href="frontier-foundry-1.0.0.zip" download>HARNESS</a>
-          <a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/2b4771cf95ca933285602028a83c85b0281499cf/products/frontier-member-tools/foundry/README.md">Lire le guide des fournisseurs</a></p>
       </details>
     </details>
     <template id="foundry-public-data"><!-- FOUNDRY_PUBLIC_DATA --></template>

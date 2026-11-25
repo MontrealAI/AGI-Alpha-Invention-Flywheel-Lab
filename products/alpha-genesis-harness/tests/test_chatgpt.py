@@ -105,6 +105,7 @@ class PlanTests(unittest.TestCase):
         conn.close()
         self.assertTrue(self.service.status()["ready"])
         self.assertEqual(self.service.status()["pending"]["status"], "complete")
+        self.assertEqual(self.service.status()["verification"], {"state": "AUTHORIZED", "last_completion": None})
         exchange = self.transport.calls[0][2]
         self.assertEqual(exchange["client_id"], "oaiapp_new")
         self.assertEqual(exchange["redirect_uri"], query["redirect_uri"][0])
@@ -131,6 +132,7 @@ class PlanTests(unittest.TestCase):
         status = self.service.status()
         self.assertTrue(status["accounts"][0]["connected"])
         self.assertFalse(status["ready"])
+        self.assertEqual(status["verification"]["state"], "PLAN_PERMISSION_REQUIRED")
         with self.assertRaises(BridgeError):
             self.service.generate(self.request())
 
@@ -147,6 +149,31 @@ class PlanTests(unittest.TestCase):
         self.assertEqual(progress[-1]["delta"], "Useful result")
         with self.assertRaisesRegex(BridgeError, "already used"):
             self.service.generate(self.request())
+
+    def test_provider_completion_receipt_survives_restart_without_promoting_other_routes(self):
+        seed(self.service)
+        self.service.discover()
+        self.assertEqual(self.service.status()["verification"], {"state": "AUTHORIZED", "last_completion": None})
+        result = self.service.generate(self.request())
+        self.assertTrue(result["connection_receipt_saved"])
+        restarted = ChatGPTPlanService(self.service.config, self.service.store.directory, self.transport)
+        status = restarted.status()["verification"]
+        self.assertEqual(status["state"], "INFERENCE_OBSERVED")
+        receipt = status["last_completion"]
+        self.assertEqual(set(receipt), {"route", "model", "completed_at_unix", "usage"})
+        self.assertEqual(receipt["model"], "account-model")
+        self.assertEqual(receipt["usage"], result["usage"])
+        self.assertEqual(restarted.status(route="codex")["verification"], {"state": "AUTHORIZED", "last_completion": None})
+        restarted.disconnect(revoke_remote=False)
+        self.assertEqual(self.service.status()["verification"], {"state": "REAUTHORIZE", "last_completion": None})
+
+    def test_completed_result_remains_available_if_receipt_cannot_be_saved(self):
+        seed(self.service)
+        with patch.object(self.service.store, "write", side_effect=OSError):
+            result = self.service.generate(self.request())
+        self.assertEqual(result["text"], "Useful result")
+        self.assertFalse(result["connection_receipt_saved"])
+        self.assertEqual(self.service.status()["verification"], {"state": "AUTHORIZED", "last_completion": None})
 
     def test_credential_read_without_unix_nonblocking_flag_keeps_file_checks(self):
         seed(self.service)
@@ -178,6 +205,7 @@ class PlanTests(unittest.TestCase):
             with self.assertRaises(BridgeError):
                 self.service.generate(self.request("case" + str(index)))
         self.assertFalse(self.service.status()["ready"])
+        self.assertEqual(self.service.status()["verification"], {"state": "PAUSED", "last_completion": None})
         before = len(self.transport.calls)
         with self.assertRaises(BridgeError):
             self.service.generate(self.request("after-quota"))

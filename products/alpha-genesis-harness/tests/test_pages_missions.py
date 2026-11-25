@@ -3,7 +3,7 @@ import json
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 import sys
-from threading import Thread
+from threading import Event, Thread
 import unittest
 from uuid import uuid4
 
@@ -17,9 +17,11 @@ class Workflows:
 
     def __init__(self):
         self.states = {}
+        self.inputs = {}
         self.starts = 0
 
     def submit(self, spec, identity):
+        self.inputs.setdefault(identity, spec)
         scope = {"local_only": True, "roles": {"builder": {key: spec[key] for key in ("provider", "model")}},
                  "tool_permissions": ["write_document"], "max_operations": 10_000,
                  "max_iterations": spec["max_turns"], "max_actions": spec["max_actions"],
@@ -61,8 +63,44 @@ class Workflows:
     def export(self, ident):
         return {"state": self.get(ident), "files": {}}
 
+    def import_archive(self, archive, spec):
+        ident = "wf_" + uuid4().hex[:24]
+        self.submit(spec, ident)
+        return self.change(ident, "paused")
+
     def close(self):
         pass
+
+
+class Profiles:
+    """Controlled model-selection fixture for the authentication transport tests."""
+
+    def __init__(self):
+        self.selection = None
+        self.started = Event()
+        self.unblock = None
+
+    def current(self):
+        return self.selection
+
+    def status(self):
+        return {"selection": self.selection}
+
+    def discover(self, body, *, admit=lambda: None):
+        admit()
+        if body != {"consent": True}:
+            raise ValueError("Discovery requires opt-in.")
+        return {"candidates": [{"id": "approved", "model": "verified-model", "label": "Detected runtime"}]}
+
+    def connect(self, body, *, admit):
+        admit()
+        self.started.set()
+        if self.unblock is not None:
+            self.unblock.wait(3)
+        admit()
+        self.selection = {"provider": "endpoint-bound-role", "model": "verified-model",
+                          "ready": True, "max_output_tokens": 512}
+        return self.status()
 
 
 class PagesMissionTests(unittest.TestCase):
@@ -107,6 +145,93 @@ class PagesMissionTests(unittest.TestCase):
         self.assertEqual(status, 200)
         self.command_scope = result["command_scope"]
         return result["session"]
+
+    def enable_discovery(self, *, evidence_input=None):
+        profiles = Profiles()
+        self.server.pages_missions = PagesMissions(
+            self.service, intelligence=profiles, evidence_input=evidence_input,
+            lease_minutes=3, clock=lambda: self.now, announce=self.codes.append,
+        )
+        return profiles
+
+    def test_discovery_starts_only_the_exact_paired_operator_mission(self):
+        goal = {"ambition": "  Exploiter ces données.\n", "language": "fr"}
+        bound = {"approved_tables": {"data": {"entries": [{"n": 42}]}}}
+        self.enable_discovery(evidence_input={
+            "schema": "frontier/local-mission-input-v1", **goal, "requirements": bound,
+        })
+        self.assertEqual(self.send("intelligence-discover", {"consent": True})[0], 403)
+        token = self.pair()
+        status, _, error = self.send("submit", goal, token=token, command=str(uuid4()))
+        self.assertEqual((status, error["error"]["code"]), (409, "MISSION_INTELLIGENCE_REQUIRED"))
+        self.assertEqual(self.service.starts, 0)
+        found = self.send("intelligence-discover", {"consent": True}, token=token)[2]
+        self.assertEqual(found["candidates"][0]["model"], "verified-model")
+        selection = self.send("intelligence-connect", {"id": "approved", "consent": True}, token=token)[2]
+        self.assertEqual(selection["scope"]["max_output_tokens"], 512)
+        status, _, run = self.send("submit", goal, token=token, command=str(uuid4()))
+        self.assertEqual((status, run["ambition"]), (200, goal["ambition"]))
+        self.assertEqual(self.service.inputs[run["id"]]["requirements"], bound)
+        self.assertEqual(self.send("intelligence-connect", {"id": "approved", "consent": True}, token=token)[2]["error"]["code"],
+                         "MISSION_ACTIVE")
+        self.assertEqual(self.send("submit", {**goal, "requirements": bound}, token=token, command=str(uuid4()))[0], 400)
+        _, _, changed = self.send("submit", {**goal, "ambition": goal["ambition"].strip()}, token=token, command=str(uuid4()))
+        self.assertNotIn("requirements", self.service.inputs[changed["id"]])
+
+    def test_new_pairing_revokes_an_inflight_selection(self):
+        profiles = self.enable_discovery()
+        profiles.unblock = Event()
+        token = self.pair()
+        results = []
+        worker = Thread(target=lambda: results.append(self.send("intelligence-connect", {"id": "approved"}, token=token)))
+        worker.start()
+        try:
+            self.assertTrue(profiles.started.wait(2))
+            new_token = self.pair()
+        finally:
+            profiles.unblock.set()
+            worker.join(3)
+        self.assertFalse(worker.is_alive())
+        self.assertEqual(results[0][0], 403)
+        self.assertIsNone(self.send("intelligence-status", token=new_token)[2]["selection"])
+
+    def test_import_rebinds_only_the_exact_operator_manifest(self):
+        goal = {"ambition": "Exploiter les données approuvées.", "language": "fr"}
+        trusted = {"approved_tables": {"current": {"entries": [{"n": 42}]}}}
+        pages = PagesMissions(self.service, role={"provider": "local", "model": "author-fixture"},
+                              evidence_input={"schema": "frontier/local-mission-input-v1", **goal,
+                                              "requirements": trusted, "tools": ["run_table"]},
+                              clock=lambda: self.now, announce=self.codes.append)
+        archive = {"state": {"spec": {"objective": goal["ambition"], "mission": {
+            "language": "fr", "requirements": {"approved_tables": {"obsolete": {"entries": [{"n": 1}]}}},
+        }}}}
+        matching = pages.import_local(archive)
+        self.assertEqual(matching["status"], "paused")
+        self.assertEqual(self.service.inputs[matching["id"]]["requirements"], trusted)
+        self.assertEqual(self.service.inputs[matching["id"]]["tools"], ["run_table"])
+        archive["state"]["spec"]["mission"]["language"] = "en"
+        other = pages.import_local(archive)
+        self.assertNotIn("requirements", self.service.inputs[other["id"]])
+        self.assertNotIn("tools", self.service.inputs[other["id"]])
+
+    def test_local_pairing_guide_is_single_use_and_cross_origin_denied(self):
+        url = self.server.create_pairing_guide(self.codes[-1])
+        path = url.removeprefix(self.server.origin)
+
+        def visit(headers):
+            connection = http.client.HTTPConnection("127.0.0.1", self.server.server_port, timeout=3)
+            try:
+                connection.request("GET", path, headers=headers)
+                response = connection.getresponse()
+                return response.status, response.getheader("Referrer-Policy"), response.read()
+            finally:
+                connection.close()
+
+        self.assertEqual(visit({"Origin": "https://example.org"})[0], 403)
+        status, policy, raw = visit({})
+        self.assertEqual((status, policy), (200, "no-referrer"))
+        self.assertIn(self.codes[-1].encode(), raw)
+        self.assertEqual(visit({})[0], 404)
 
     def test_exact_origin_preflight_does_not_open_native_routes(self):
         headers = {"Access-Control-Request-Method": "POST",

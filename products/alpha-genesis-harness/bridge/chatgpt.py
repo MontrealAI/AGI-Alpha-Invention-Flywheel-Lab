@@ -36,6 +36,8 @@ APP_NAME = "alpha_genesis_harness"
 UNUSABLE_REFRESH = {"invalid_grant", "invalid_refresh_token", "token_expired",
                    "refresh_token_expired", "refresh_token_invalidated", "refresh_token_reused"}
 TOKEN_FIELDS = {"access_token", "refresh_token", "id_token", "expires_at", "scopes"}
+INFERENCE_ROUTES = {"chatgpt", "codex"}
+USAGE_FIELDS = ("input_tokens", "output_tokens")
 
 
 def _b64(raw):
@@ -400,27 +402,92 @@ class ChatGPTPlanService:
     def _has_permission(account):
         return bool(account.get("access_token")) and {"resource.invoke", "chatgpt.tokens.use.direct"}.issubset(account.get("scopes", []))
 
-    def status(self):
+    @staticmethod
+    def _usable_credentials(account):
+        expiry = account.get("expires_at")
+        refresh = account.get("refresh_token")
+        return ((type(expiry) in (int, float) and expiry > time.time() + 60)
+                or (isinstance(refresh, str) and bool(refresh)))
+
+    @staticmethod
+    def _usage_report(usage):
+        return {key: usage[key] if type(usage.get(key)) is int and usage[key] >= 0 else None
+                for key in USAGE_FIELDS}
+
+    @staticmethod
+    def _completion_receipt(account, route):
+        records = account.get("inference_receipts")
+        receipt = records.get(route) if isinstance(records, dict) else None
+        if (not isinstance(receipt, dict) or not isinstance(receipt.get("model"), str)
+                or not ID.fullmatch(receipt["model"]) or type(receipt.get("completed_at_unix")) is not int
+                or receipt["completed_at_unix"] <= 0 or not isinstance(receipt.get("usage"), dict)):
+            return None
+        return {"route": route, "model": receipt["model"], "completed_at_unix": receipt["completed_at_unix"],
+                "usage": ChatGPTPlanService._usage_report(receipt["usage"])}
+
+    def _record_inference_completion(self, account, epoch, cancel, route, model, usage):
+        """Store provider completion separately from identity and task acceptance."""
+        if route not in INFERENCE_ROUTES:
+            raise ValueError("Unknown inference receipt route.")
+        with self._lock, self.store.locked():
+            state = self.store.read()
+            ident = account["client_id"]
+            selected = state["accounts"].get(ident, {})
+            if (cancel.is_set() or self._closed or state.get("active") != ident
+                    or self._authority_epoch(state) != epoch or not self._has_permission(selected)
+                    or selected.get("subject") != account.get("subject")
+                    or set(selected.get("scopes", [])) != set(account.get("scopes", []))):
+                return False  # A dispatched result cannot verify a different grant or account.
+            records = selected.get("inference_receipts")
+            if not isinstance(records, dict):
+                records = selected["inference_receipts"] = {}
+            records[route] = {"model": model, "completed_at_unix": int(time.time()), "usage": self._usage_report(usage)}
+            try:
+                self.store.write(state)
+            except (BridgeError, OSError):
+                return False  # Deliver the completed result even if saving local readiness fails.
+            return True
+
+    def status(self, route="chatgpt"):
+        if route not in INFERENCE_ROUTES:
+            raise ValueError("Unknown inference receipt route.")
         try:
             self.gate()
-            enabled, reason = True, "Choose an account or continue with ChatGPT."
+            enabled, reason, reason_code = True, "Choose an account or continue with ChatGPT.", None
         except BridgeError as error:
-            enabled, reason = False, error.message
+            enabled, reason, reason_code = False, error.message, error.code
         # Disabled default does not create a credential directory.
         state = self._state() if enabled or self.store.path.exists() else {"accounts": {}, "active": None}
         accounts = [{"id": ident, "label": row.get("label", row.get("email") or ident), "email": row.get("email", ""),
-                     "connected": bool(row.get("access_token")), "plan_usage": self._has_permission(row)}
+                     "connected": bool(row.get("access_token")) and self._usable_credentials(row),
+                     "plan_usage": self._has_permission(row)}
                     for ident, row in state["accounts"].items()]
         active = state["accounts"].get(state.get("active"), {})
-        ready = enabled and self._has_permission(active) and not self._quota_blocked and self.requests_started < self.request_limit
-        if self._quota_blocked:
-            reason = "ChatGPT plan usage is paused after a usage-limit response. Review Settings → Usage, then explicitly reconnect."
+        receipt = None
+        if not enabled:
+            verification = "DISABLED"
+        elif not active.get("subject"):
+            verification = "SIGN_IN_REQUIRED"
+        elif not active.get("access_token") or not self._usable_credentials(active):
+            verification, reason = "REAUTHORIZE", "Sign in again to renew this ChatGPT connection."
+        elif not self._has_permission(active):
+            verification, reason = "PLAN_PERMISSION_REQUIRED", "Identity is verified. Authorize ChatGPT plan usage to run a request."
+        else:
+            receipt = self._completion_receipt(active, route)
+            if self._quota_blocked or self.requests_started >= self.request_limit:
+                verification, reason = "PAUSED", "ChatGPT plan requests are paused by the connector or provider limit. Review ChatGPT usage settings."
+            elif receipt:
+                verification, reason = "INFERENCE_OBSERVED", "This account completed an authorized request. Availability remains subject to the selected model and current plan limits."
+            else:
+                verification, reason = "AUTHORIZED", "Plan permission granted. Complete a request to verify inference for this route."
+        ready = verification in {"AUTHORIZED", "INFERENCE_OBSERVED"}
         with self._lock:
             pending = {k: self.pending[k] for k in ("id", "status", "error") if k in self.pending} if self.pending else None
-        return {"enabled": enabled, "ready": ready, "reason": reason, "accounts": accounts,
+        return {"enabled": enabled, "ready": ready, "reason": reason, "reason_code": reason_code, "accounts": accounts,
                 "active_account_id": state.get("active"), "pending": pending,
                 "usage": {"category": "chatgpt_plan", "requests_started": self.requests_started, "request_limit": self.request_limit, "usd": None},
-                "usage_url": "https://chatgpt.com/settings/usage", "qualification": "CONTRACT_TESTED_ONLY"}
+                "usage_url": "https://chatgpt.com/settings/usage", "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION" if receipt else "CONTRACT_TESTED_ONLY",
+                "verification": {"state": verification, "last_completion": receipt}}
 
     def start_sign_in(self, account_id=None, reconsent=False):
         self.gate()
@@ -545,6 +612,7 @@ class ChatGPTPlanService:
                 raise BridgeError("CHATGPT_IDENTITY", "This registration belongs to a different validated identity. Its credentials were not replaced.", 403)
             account.update(identity, client_id=issued, label=(identity["email"] or identity["subject"]) + " · " + issued[-8:])
             self._save_tokens(account, data, initial=True)
+            account.pop("inference_receipts", None)
             state["active"] = issued
             state["authorization_epoch"] = self._authority_epoch(state) + 1
             for cancel in self._active.values():
@@ -567,7 +635,10 @@ class ChatGPTPlanService:
         if "scope" in data:
             if not isinstance(data["scope"], str):
                 raise BridgeError("CHATGPT_TOKEN", "ChatGPT returned malformed granted scopes.", 502)
-            account["scopes"] = data["scope"].split()
+            scopes = data["scope"].split()
+            if set(scopes) != set(account.get("scopes", [])):
+                account.pop("inference_receipts", None)
+            account["scopes"] = scopes
         for field in ("refresh_token", "id_token"):
             if field in data:
                 if not isinstance(data[field], str) or not data[field]:
@@ -603,7 +674,7 @@ class ChatGPTPlanService:
                              "refresh_token": account["refresh_token"], "resource": RESOURCE})
                 except BridgeError as error:
                     if error.code in UNUSABLE_REFRESH:
-                        for key in TOKEN_FIELDS:
+                        for key in TOKEN_FIELDS | {"inference_receipts"}:
                             account.pop(key, None)
                         self.store.write(state)
                     raise
@@ -641,7 +712,7 @@ class ChatGPTPlanService:
                     confirmed = True
                 except (BridgeError, KeyError, ValueError):
                     pass
-            for key in TOKEN_FIELDS:
+            for key in TOKEN_FIELDS | {"inference_receipts"}:
                 account.pop(key, None)
             state["authorization_epoch"] = self._authority_epoch(state) + 1
             self.store.write(state)
@@ -713,6 +784,7 @@ class ChatGPTPlanService:
                 selected = current["accounts"].get(current.get("active"), {})
                 if cancel.is_set() or current.get("active") != account["client_id"] or selected.get("access_token") != account["access_token"]:
                     raise BridgeError("CHATGPT_ACCOUNT_CHANGED", "ChatGPT account changed or request cancelled during preparation.", 409)
+                authority_epoch = self._authority_epoch(current)
                 self.requests_started += 1
                 stream = self.transport.events(account["access_token"], body, cancel)
             for event in stream:
@@ -737,7 +809,7 @@ class ChatGPTPlanService:
                         reported = {}
                     if not isinstance(reported, dict):
                         raise BridgeError("CHATGPT_STREAM", "Malformed ChatGPT usage event.", 502)
-                    usage = {key: reported.get(key) if type(reported.get(key)) is int and reported[key] >= 0 else None for key in usage}
+                    usage = self._usage_report(reported)
                     completed = True
                     break
                 elif kind in {"response.failed", "error"}:
@@ -769,9 +841,11 @@ class ChatGPTPlanService:
             for key in ("access_token", "refresh_token", "id_token"):
                 if account.get(key):
                     text = text.replace(account[key], "[credential redacted]")
+            receipt_saved = self._record_inference_completion(account, authority_epoch, cancel, "chatgpt", model, usage)
             if on_event:
                 on_event({"type": "delta", "provider": "chatgpt", "delta": text})
             return {"run_id": run_id, "provider": "chatgpt", "model": model, "text": text, "usage": usage,
+                    "connection_receipt_saved": receipt_saved,
                     "cost": {"currency": None, "amount": None, "accounted": None, "basis": "chatgpt_plan_allowance", "attempts": 1, "complete_cost_known": False},
                     "notice": "ChatGPT plan allowance is distinct from API billing. HTTP plan requests do not support a max_output_tokens parameter; the local field is not sent.",
                     "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION"}

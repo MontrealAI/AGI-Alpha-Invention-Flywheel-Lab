@@ -7,6 +7,7 @@ from datetime import datetime, timezone
 import re
 
 from .adapters import BridgeError, strict_json
+from . import mission_evidence
 from .workflow_schemas import response_schema
 from .workflows import DEFAULT_TOOLS, RUN, TERMINAL, TOOLS, WorkflowService, digest, encoded, filename, require
 
@@ -77,9 +78,9 @@ class UniversalMissionService(WorkflowService):
         context = spec.get("context", "")
         require(text_field(context, 256 * 1024), "Mission context exceeds the processing envelope.", "MISSION_INPUT")
         requirements = spec.get("requirements", {})
-        require(isinstance(requirements, dict) and set(requirements) <= {"capabilities", "approved_tables", "public_sources"}
+        require(isinstance(requirements, dict) and set(requirements) <= {"capabilities", "approved_tables", "public_sources", "evidence"}
                 and len(encoded(requirements)) <= 256 * 1024,
-                "Trusted requirements must use supported capability, table or source inputs.", "MISSION_INPUT")
+                "Trusted requirements must use supported capability, table, source or evidence inputs.", "MISSION_INPUT")
         require(all(isinstance(requirements.get(key, {}), dict) for key in ("capabilities", "approved_tables")),
                 "Trusted capability requirements and approved tables must be objects.", "MISSION_INPUT")
         sources = requirements.get("public_sources", [])
@@ -95,6 +96,8 @@ class UniversalMissionService(WorkflowService):
         if "retrieve_source" in tools:
             require(self.allow_public_sources and not local_only and bool(sources),
                     "Public source retrieval needs a separately enabled exact URL scope.", "MISSION_AUTHORITY")
+        if "evidence" in requirements:
+            mission_evidence.validate_requirements(requirements["evidence"], tools)
         mission = {"schema": MISSION_SCHEMA, "language": spec["language"], "expires_at": deadline,
                    "requirements": requirements, "original_ambition": ambition}
         if prior is not None:
@@ -155,9 +158,13 @@ class UniversalMissionService(WorkflowService):
         view.update(language=mission["language"], expires_at=mission["expires_at"],
                     original_ambition=mission["original_ambition"], parent_run_id=mission.get("parent_run_id"),
                     qualification="DEVELOPMENT_ONLY" if state["verification"]["checks"] else "UNVERIFIED",
+                    evidence=self._evidence(state),
                     authority=state["status"] if state["status"] in AUTHORITY_REASONS else
                     "expired" if expires(mission["expires_at"]) <= utc_now() else "active")
         return view
+
+    def _evidence(self, state):
+        return mission_evidence.assess_claims(state, lambda name: self._read_artifact(state, name))
 
     def _authority_stop(self, state):
         if state["status"] in TERMINAL:
@@ -282,20 +289,34 @@ class UniversalMissionService(WorkflowService):
         if TABLE_TOOLS.intersection(tools):
             from .mission_tools import describe
             instructions.append("Use only the authorized table operations: " + ", ".join(sorted(TABLE_TOOLS.intersection(tools))) + ". " + describe())
-        tasks = [
-            {"kind": event["kind"], **event["detail"]}
-            for event in state["events"]
-            if event["kind"] in {"tool_completed", "tool_refused", "response_refused"}
-        ]
+        requirements = mission["requirements"]
+        if "evidence" in requirements:
+            instructions.append('The operator registered numerical claims. For a final calculation use its exact authorized '
+                                'dataset, tool, unit and dimension. Add claim:{id:"claim-id",unit:"registered-unit",'
+                                'dimension:"registered-dimension"} at the action root and input:{dataset:"registered-id"}. '
+                                'The executor derives the claim value from the specified output locator. Inline data or fixtures '
+                                'are only demonstrations. Report missing evidence. Prose is a proposal, never a verified value.')
+        tasks = []
+        for event in state["events"]:
+            if event["kind"] not in {"tool_completed", "tool_refused", "response_refused"}:
+                continue
+            item = {"kind": event["kind"], **event["detail"]}
+            if event["kind"] == "tool_completed" and "claim_execution" in item["outcome"]:
+                item["outcome"] = {key: value for key, value in item["outcome"].items() if key != "claim_execution"}
+            tasks.append(item)
+        visible = mission_evidence.for_constructor(requirements)
         payload = {
             "ambition": spec["objective"], "context": bounded_preview(spec["context"], 12_000),
-            "operator_requirements": bounded_preview(mission["requirements"], 6500),
+            "operator_requirements": bounded_preview({key: value for key, value in visible.items() if key != "evidence"}, 6500),
             "latest_tool_results": [bounded_preview(event, 1100) for event in tasks[-5:]],
             "feedback": state["feedback"][-2000:], "development_checks": bounded_preview(state["verification"]["checks"], 1800),
             "artifacts": {name: meta for name, meta in state["artifacts"].items() if name != "RUN_INSTRUMENT.py"},
             "remaining_actions": spec["max_actions"] - state["actions"],
             "remaining_turns": spec["max_iterations"] - state["iteration"],
         }
+        if "evidence" in visible:
+            payload["registered_claims"] = bounded_preview(visible["evidence"]["claims"], 4500)
+            payload["registered_inputs"] = bounded_preview(visible["evidence"]["inputs"], 4500)
         if mission["original_ambition"] != spec["objective"]:
             payload["original_ambition"] = mission["original_ambition"]
         if spec["acceptance"]:
@@ -311,11 +332,29 @@ class UniversalMissionService(WorkflowService):
                 and 0 < len(response["summary"].encode("utf-8")) <= 4000,
                 "Response needs a concise summary and explicit done boolean.", "MISSION_PROPOSAL")
         redact = getattr(self.runtime, "redact", lambda text: text)
-        self._event(state, "route_proposed", {"summary": redact(response["summary"]), "proposed_actions": len(response["actions"])})
+        self._event(state, "route_proposed", {"summary": redact(response["summary"]), "proposed_actions": len(response["actions"]),
+                    "disposition": "PROPOSED"})
 
     def _after_builder(self, state, response):
         self._verify(state)
         checks_passed = state["verification"]["passed"]
+        required_checks = bool(state["spec"]["acceptance"])
+        if "evidence" in state["spec"]["mission"]["requirements"]:
+            evidence = self._evidence(state)
+            dispositions = [{key: claim[key] for key in ("id", "status", "reason")} for claim in evidence["claims"]]
+            self._event(state, "claim_dispositions", {"status": evidence["status"], "claims": dispositions})
+            sufficient_progress = evidence["status"] == "VERIFIED" or response["done"] and evidence["status"] == "SOURCE_BOUND"
+            if sufficient_progress and (checks_passed or not required_checks):
+                state["status"] = "needs_review"
+                self._event(state, "awaiting_independent_evaluation", {"development_checks_passed": checks_passed,
+                             "scope": evidence["scope"]})
+            elif response["done"] and not response["actions"] and evidence["status"] == "ABSTAIN" and all(
+                    claim["reason"] in {"AUTHORIZED_INPUT_MISSING", "REQUIRED_FIELD_MISSING"} for claim in evidence["claims"]):
+                state["status"] = "needs_review"
+                self._event(state, "awaiting_evidence", {"claims": dispositions})
+            else:
+                state["feedback"] = "Resolve the unverified registered claims with authorized inputs: " + encoded(dispositions).decode()[:1600]
+            return
         exercised = any(
             event["kind"] == "tool_completed" and event["detail"]["outcome"].get("operation_executed", True)
             for event in state["events"]
@@ -323,7 +362,6 @@ class UniversalMissionService(WorkflowService):
         proposal = next(event for event in reversed(state["events"]) if event["kind"] == "route_proposed")
         turn_events = state["events"][proposal["index"] + 1:]
         refused = any(event["kind"] == "tool_refused" for event in turn_events)
-        required_checks = bool(state["spec"]["acceptance"])
         if checks_passed or (response["done"] and not required_checks and exercised and not refused):
             state["status"] = "needs_review"
             self._event(state, "awaiting_independent_evaluation", {"development_checks_passed": checks_passed,
@@ -348,11 +386,31 @@ class UniversalMissionService(WorkflowService):
         require(tool == "read_artifact" or RESULT_FILE.fullmatch(name) is None,
                 "Runtime result filenames are reserved.", "MISSION_PROPOSAL")
         requirements = state["spec"]["mission"]["requirements"]
+        if "claim" in action:
+            annotation = action["claim"]
+            ident = annotation.get("id") if isinstance(annotation, dict) else None
+            try:
+                dispatch, binding = mission_evidence.prepare_action(requirements, action)
+                return self._execute_tool(state, dispatch, binding=binding)
+            except mission_evidence.ClaimRefused as error:
+                self._event(state, "claim_refused", {"claim_id": ident, "status": error.status, "reason": error.reason})
+                raise
+            except (BridgeError, ValueError, TypeError, KeyError, RecursionError):
+                self._event(state, "claim_refused", {"claim_id": ident, "status": "REJECTED", "reason": "BOUND_OPERATION_FAILED"})
+                raise
+        return self._execute_tool(state, action)
+
+    def _execute_tool(self, state, action, *, binding=None):
+        tool, name = action["tool"], action["name"]
+        requirements = state["spec"]["mission"]["requirements"]
         meta = state["artifacts"].get(name, {})
         input_artifact = meta.get("sha256") if tool in {"read_artifact", "run_instrument", "run_table"} else None
-        action_id = digest({"mission": state["id"], "action": action, "input_artifact": input_artifact})
+        identity = {"mission": state["id"], "action": action, "input_artifact": input_artifact}
+        if binding is not None:
+            identity.update(claim=binding["claim"]["id"], input_sha256=binding["primary"]["sha256"], asserted=binding["asserted"])
+        action_id = digest(identity)
         deduplicate = tool in {"read_artifact", "run_instrument", "run_table", "retrieve_source", COMPOSITION_TOOL} | CAPABILITY_TOOLS
-        if deduplicate:
+        if deduplicate and binding is None:
             for event in reversed(state["events"]):
                 outcome = event["detail"].get("outcome", {})
                 if event["kind"] == "tool_completed" and outcome.get("action_id") == action_id:
@@ -393,6 +451,9 @@ class UniversalMissionService(WorkflowService):
                               approved_tables=requirements.get("approved_tables", {}))
         else:
             outcome = super()._tool(state, action)
+        if tool == "run_instrument":
+            outcome["input_origin"] = "MODEL_DEVELOPMENT_FIXTURE"
+        execution, saved = outcome, None
         result_limit = 4500
         if len(encoded(outcome)) > result_limit:
             if tool == "read_artifact":
@@ -401,4 +462,7 @@ class UniversalMissionService(WorkflowService):
                 observation = f"runtime-result-{state['actions']}.json"
                 saved = self._write(state, observation, encoded(outcome).decode("utf-8"), "observation")
                 outcome = {**saved, "observed": bounded_preview(outcome, result_limit)}
+        if binding is not None:
+            outcome["claim_execution"] = mission_evidence.record_execution(state, name, input_artifact, binding, execution, saved)
+            outcome["input_origin"] = binding["primary"]["origin"]
         return {**outcome, "action_id": action_id, "operation_executed": True}

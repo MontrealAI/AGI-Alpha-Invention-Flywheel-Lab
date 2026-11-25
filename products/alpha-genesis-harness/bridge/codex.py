@@ -102,6 +102,7 @@ class CodexService:
         self.sandbox_validator = sandbox_validator
         self.runtime_probe = runtime_probe
         self._validated_binary = None
+        self._runtime_verification = {}
 
     def gate(self):
         if self._closed:
@@ -117,15 +118,26 @@ class CodexService:
             self._validated_binary = identity
 
     def status(self):
+        writable = self.config.get("allow_workspace_write") is True
+        verification = {"state": "DISABLED", "last_completion": None}
         try:
             self.gate()
-            enabled, reason = True, "Codex app-server is configured. A completed authenticated turn is required for live qualification."
+            plan = self.plan.status(route="codex")
+            enabled, ready, verification = True, plan["ready"], plan["verification"]
+            reason = ("Codex completed a turn under this authorization."
+                      if verification["state"] == "INFERENCE_OBSERVED" else plan["reason"])
+            reason_code = plan["reason_code"]
+            identity, runtime = self._runtime_verification.get(writable, (None, None))
+            if identity != self._validated_binary or runtime is None:
+                runtime = {"state": "SCHEMA_VERIFIED", "reason_code": None, "reason": "App-server schema verified. Native isolation is checked before starting each turn."}
         except BridgeError as error:
-            enabled, reason = False, error.message
-        return {"enabled": enabled, "ready": enabled and self.plan.status()["ready"], "reason": reason,
-                "sandbox": "workspace-write" if self.config.get("allow_workspace_write") is True else "read-only",
+            enabled, ready, reason, reason_code = False, False, error.message, error.code
+            runtime = {"state": "UNAVAILABLE", "reason_code": reason_code, "reason": reason}
+        return {"enabled": enabled, "ready": ready, "reason": reason, "reason_code": reason_code,
+                "sandbox": "workspace-write" if writable else "read-only",
                 "workspace_root": str(self.root), "network_access": False,
-                "usage_category": "chatgpt_plan_codex", "qualification": "CONTRACT_TESTED_ONLY"}
+                "usage_category": "chatgpt_plan_codex", "runtime_verification": runtime, "verification": verification,
+                "qualification": "LIVE_CODEX_TURN_NOT_INDEPENDENT_VERIFICATION" if verification["last_completion"] else "CONTRACT_TESTED_ONLY"}
 
     def discover(self):
         self.gate()
@@ -350,7 +362,13 @@ class CodexService:
             env = {key: os.environ[key] for key in ("PATH", "SystemRoot", "WINDIR", "TEMP", "TMP", "LANG") if key in os.environ}
             env.update({"CODEX_HOME": str(codex_home), "HOME": str(codex_home), "ACCESS_TOKEN": account["access_token"]})
             command = self._command(directory, writable)
-            self.runtime_probe(command, directory, codex_home, writable)
+            identity = self._validated_binary
+            try:
+                self.runtime_probe(command, directory, codex_home, writable)
+            except BridgeError as error:
+                self._runtime_verification[writable] = (identity, {"state": "NATIVE_BOUNDARY_CHECK_BLOCKED", "reason_code": error.code, "reason": error.message})
+                raise
+            self._runtime_verification[writable] = (identity, {"state": "NATIVE_BOUNDARY_CHECK_PASSED", "reason_code": None, "reason": "The most recent native isolation check passed for this file policy."})
             with self.plan._lock, self.plan.store.locked():
                 current = self.plan.store.read()
                 self.plan._check_execution_identity(expected_execution_identity, state=current)
@@ -358,6 +376,7 @@ class CodexService:
                 selected = current["accounts"].get(current.get("active"), {})
                 if cancel.is_set() or current.get("active") != account["client_id"] or selected.get("access_token") != account["access_token"]:
                     raise BridgeError("CANCELLED", "Codex authorization changed or turn was cancelled before process launch.", 409)
+                authority_epoch = self.plan._authority_epoch(current)
                 self.plan.requests_started += 1
                 process = self.process_factory(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL,
                                                text=True, encoding="utf-8", bufsize=1, cwd=str(directory), env=env)
@@ -478,6 +497,8 @@ class CodexService:
                         process.stdin.flush()
             if not completed or not text.strip():
                 raise BridgeError("CODEX_EMPTY", "Codex completed without a terminal or legacy message result.", 502)
+            usage = {"input_tokens": None, "output_tokens": None}
+            receipt_saved = self.plan._record_inference_completion(account, authority_epoch, cancel, "codex", model, usage)
             checkpoint["status"] = "completed"
             self._checkpoint(workspace_id, checkpoint)
             for field in ("access_token", "refresh_token", "id_token"):
@@ -504,7 +525,7 @@ class CodexService:
                 on_event({"type": "delta", "provider": "codex", "delta": text})
             return {"run_id": run_id, "provider": "codex", "model": model, "text": text, "thread_id": thread_id,
                     "artifacts": artifacts, "workspace": str(directory), "resume_run_id": workspace_id,
-                    "usage": {"input_tokens": None, "output_tokens": None},
+                    "usage": usage, "connection_receipt_saved": receipt_saved,
                     "cost": {"currency": None, "amount": None, "accounted": None, "basis": "chatgpt_plan_codex_turn", "attempts": 1, "complete_cost_known": False},
                     "qualification": "LIVE_CODEX_TURN_NOT_INDEPENDENT_VERIFICATION"}
         finally:

@@ -1,0 +1,123 @@
+{
+  "ambition": "Build a reusable calculator for this digital mixture ledger. Batch A contributes 750 mL at 2.4 g/L, batch B 1.6 L at 950 mg/L, and a final water addition contributes 250 mL. Assume additive volumes and no loss. Convert each concentration and volume as needed, calculate final concentration in mg/L, and independently reconcile total solute mass. Give a reusable computational product with scope for future volume/concentration rows. This is a numerical data-reconciliation exercise with no laboratory activity.",
+  "approved_data": {
+    "batches": [
+      {
+        "concentration_hundredths": 240,
+        "concentration_unit": "g/L",
+        "volume_hundredths": 75000,
+        "volume_unit": "mL"
+      },
+      {
+        "concentration_hundredths": 95000,
+        "concentration_unit": "mg/L",
+        "volume_hundredths": 160,
+        "volume_unit": "L"
+      },
+      {
+        "concentration_hundredths": 0,
+        "concentration_unit": "mg/L",
+        "volume_hundredths": 25000,
+        "volume_unit": "mL"
+      }
+    ]
+  },
+  "historical_fixture_output_sha256": "24227028f5989317de063afa979c6b34bfd191537b8fd2ed796a820bf47b2024",
+  "model_proposals": [
+    {
+      "decoded_proposal": {
+        "actions": [
+          {
+            "name": "table.json",
+            "schema": {
+              "events": {
+                "concentration_hundredths": "INTEGER",
+                "concentration_unit": "TEXT",
+                "volume_hundredths": "INTEGER",
+                "volume_unit": "TEXT"
+              }
+            },
+            "sql": "SELECT volume_hundredths, volume_unit, concentration_hundredths, concentration_unit FROM batches",
+            "tool": "construct_table"
+          },
+          {
+            "input": {
+              "fixtures": {
+                "events": [
+                  {
+                    "concentration_hundredths": 240,
+                    "concentration_unit": "g/L",
+                    "volume_hundredths": 75000,
+                    "volume_unit": "mL"
+                  },
+                  {
+                    "concentration_hundredths": 95000,
+                    "concentration_unit": "mg/L",
+                    "volume_hundredths": 160,
+                    "volume_unit": "L"
+                  },
+                  {
+                    "concentration_hundredths": 0,
+                    "concentration_unit": "mg/L",
+                    "volume_hundredths": 25000,
+                    "volume_unit": "mL"
+                  }
+                ]
+              }
+            },
+            "name": "table.json",
+            "tool": "run_table"
+          },
+          {
+            "content": "Converted volumes to liters and concentrations to mg/L for uniformity. Batch A: 0.75 L, 240 g/L = 240000 mg/L. Batch B: 1.6 L, 95000 mg/L. Batch C: 0.25 L, 0 mg/L. Total solute mass is 240000 * 0.75 + 95000 * 1.6 + 0 * 0.25 = 360000 mg. Final volume is 0.75 + 1.6 + 0.25 = 2.6 L. Final concentration is 360000 / 2.6 = 138461.54 mg/L.",
+            "name": "result.md",
+            "tool": "write_document"
+          }
+        ],
+        "done": false,
+        "summary": "First, convert all volumes to liters and concentrations to mg/L to ensure uniformity. Then calculate the total solute mass and final concentration."
+      },
+      "source_response_sha256": "59ef6ebc62bb2ea0e225748c69dfb90017764b7808600e23c72f68c8d0a56b9e"
+    },
+    {
+      "decoded_proposal": {
+        "actions": [
+          {
+            "name": "table.json",
+            "schema": {
+              "events": {
+                "score": "INTEGER"
+              }
+            },
+            "sql": "SELECT SUM(score) FROM events",
+            "tool": "construct_table"
+          },
+          {
+            "input": {
+              "fixtures": {
+                "events": [
+                  {
+                    "score": 2
+                  }
+                ]
+              }
+            },
+            "name": "table.json",
+            "tool": "run_table"
+          },
+          {
+            "content": "Useful results, assumptions, and what has actually been checked.",
+            "name": "result.md",
+            "tool": "write_document"
+          }
+        ],
+        "done": false,
+        "summary": "Starting with the provided data, convert the concentrations and volumes to consistent units, calculate the total mass of solute, and compute the final concentration in mg/L."
+      },
+      "source_response_sha256": "4b9755f2702ffdb5cf119e2b74de9fefd6161173dcbd4c669f0f86f359fd00a2"
+    }
+  ],
+  "source_case": "m06",
+  "source_commit": "e39f5b7cf965c5838ba1e1a6c85c59c73bb34e0a",
+  "source_spec_sha256": "599da46db94e1d93b830e4f2d6134210029c4dc80e3fff25285edb6a8c34b895"
+}
