@@ -101,13 +101,13 @@ test('compound dimensions are not field measurements, while same-unit table colu
 
 test('source excerpts cannot hide a qualifier or pass an unrelated field heading', () => {
   const target = {model:'Example Pack',level:'system'};
-  const review = (excerpt, quote = excerpt, field = 'batteryWeight', unit = 'kg') => reviewClaim({
-    id:'clause-check',target,field,claim:{value:64,unit},
+  const review = (excerpt, quote = excerpt, field = 'batteryWeight', unit = 'kg', value = 64) => reviewClaim({
+    id:'clause-check',target,field,claim:{value,unit},
     sources:[{id:'table',excerpt,url:'https://example.org/data',locator:'table',sha256:'a'.repeat(64)}],
-    observations:[{source:'table',target,field,quote,value:64,unit}],
+    observations:[{source:'table',target,field,quote,value,unit}],
   }).decision;
   for (const quote of ['Upper bound for net battery weight: 64 kg.', 'Not the net battery weight: 64 kg.',
-    'Packaged weight: 64 kg.', 'Weight: 64 kg / 80 kg.']) {
+    'Packaged weight: 64 kg.', 'Weight: 64 kg / 80 kg.', 'Manual mentions columns. Weight: 64 / 80 kg.']) {
     assert.equal(review(quote), 'insufficient');
   }
   assert.equal(review('Not the net battery weight: 64 kg.', 'net battery weight: 64 kg.'), 'insufficient');
@@ -119,6 +119,26 @@ test('source excerpts cannot hide a qualifier or pass an unrelated field heading
   for (const quote of ['Inverter nominal voltage: 64 V.', 'Rated AC voltage: 64 V.', 'Nominal voltage: 64 Vac.']) {
     assert.equal(review(quote, quote, 'nominalVoltage', 'V'), 'insufficient');
   }
-  const french = 'Tension nominale : 64 Vdc.';
+  const footnote = 'Net battery weight: 184¹ kg.';
+  assert.equal(review(footnote, footnote, 'batteryWeight', 'kg', 1841), 'insufficient');
+  assert.equal(review(footnote, footnote, 'batteryWeight', 'kg', 184), 'insufficient');
+  const french = 'Tension nominale : 64 Vdc.';
   assert.equal(review(french, french, 'nominalVoltage', 'V'), 'supported');
+  const accented = 'Capacite\u0301 nominale : 0,234 Ah.';
+  assert.equal(review(accented, accented, 'batteryCapacity', 'mAh', 234), 'supported');
+});
+
+test('a malformed supplied scope cannot erase a comparison constraint', () => {
+  const target = {model:'Example Pack',version:'2',level:'system'};
+  const quote = 'Net battery weight: 64 kg.';
+  const packet = {id:'typed-scope',target,field:'batteryWeight',claim:{value:64,unit:'kg'},
+    sources:[{id:'table',excerpt:quote,url:'https://example.org/data',locator:'table',sha256:'a'.repeat(64)}],
+    observations:[{source:'table',target,field:'batteryWeight',quote,value:64,unit:'kg'}],
+  };
+  assert.equal(reviewClaim(packet).decision, 'supported');
+  for (const version of [2, true, null, {}, ' ']) {
+    assert.throws(() => reviewClaim({...packet,target:{...target,version}}), /SOURCE_REVIEW_CASE/);
+    const observations = [{...packet.observations[0],target:{...target,version}}];
+    assert.equal(reviewClaim({...packet,observations}).decision, 'insufficient');
+  }
 });

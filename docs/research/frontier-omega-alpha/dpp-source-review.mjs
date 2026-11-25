@@ -25,8 +25,13 @@ function exactQuantity(value, unit, units) {
   return BigInt(sign + whole + fraction) * 10n ** BigInt(11 - fraction.length - scale);
 }
 
+function validScope(scope) {
+  return isObject(scope) && scopeFields.every(key => !Object.hasOwn(scope, key) || tidy(scope[key]) !== '');
+}
+
 function eligibleScope(target, observed) {
-  return isObject(observed) && scopeFields.every(key => !tidy(target[key]) || tidy(target[key]) === tidy(observed[key]));
+  return validScope(observed) && scopeFields.every(key => !Object.hasOwn(target, key) ||
+    (Object.hasOwn(observed, key) && tidy(target[key]) === tidy(observed[key])));
 }
 
 function validSource(item) {
@@ -52,6 +57,13 @@ function clauses(text) {
   return text.split(/[;\r\n]+|\.\s+(?=\p{Lu}[\p{L}\p{N}-]{2,}\b)|\.$/u).map(part => part.trim()).filter(Boolean);
 }
 
+function hasColumnLabels(parts) {
+  return parts.some((part, index) =>
+    /^(?:model columns|colonnes des systèmes)\s*:\s*[^,]+,\s*\S/iu.test(part) ||
+    /^modules in series\s+(?:\d+s\s+\/\s+)+\d+s$/iu.test(part) ||
+    /\bin first column$/iu.test(part) && /\bin second(?: column)?$/iu.test(parts[index + 1] ?? ''));
+}
+
 function quoteQuantifies(quote, excerpt, observation, {heading, units}) {
   // Parse complete labelled clauses. An unsupported expression cannot contribute a suffix.
   const expected = exactQuantity(observation.value, observation.unit, units);
@@ -59,18 +71,21 @@ function quoteQuantifies(quote, excerpt, observation, {heading, units}) {
   const cited = clauses(quote);
   const available = clauses(excerpt);
   if (!available.some((_, start) => cited.every((part, index) => available[start + index] === part))) return false;
-  const normal = quote.normalize('NFKC');
-  const ordered = /\b(?:columns?|colonnes?|modules in series|table of weights)\b/iu.test(normal);
-  return clauses(normal).some(clause => {
+  // Preserve compatibility characters such as superscript footnote digits.
+  const normal = quote.normalize('NFC').replace(/[^\S\r\n]+/gu, ' ');
+  const parts = clauses(normal);
+  const orderedTable = hasColumnLabels(parts);
+  return parts.some(clause => {
     const prefix = heading.exec(clause);
     if (!prefix) return false;
+    const ordered = orderedTable || /\b(?:table of weights?|by column)\b/iu.test(prefix[0]);
     return measurementValues(clause.slice(prefix[0].length), units, ordered).includes(expected);
   });
 }
 
 export function reviewClaim(input) {
   if (!isObject(input) || typeof input.id !== 'string' || !/^[a-z0-9][a-z0-9._:-]{0,95}$/iu.test(input.id) ||
-      !fields.has(input.field) || !isObject(input.target) || !tidy(input.target.model) || !tidy(input.target.level) ||
+      !fields.has(input.field) || !validScope(input.target) || !Object.hasOwn(input.target, 'model') || !Object.hasOwn(input.target, 'level') ||
       !isObject(input.claim) || !Array.isArray(input.sources) || input.sources.length > 12 ||
       !input.sources.every(validSource) || new Set(input.sources.map(row => row.id)).size !== input.sources.length ||
       !Array.isArray(input.observations) || input.observations.length > 32) throw new Error('SOURCE_REVIEW_CASE');
