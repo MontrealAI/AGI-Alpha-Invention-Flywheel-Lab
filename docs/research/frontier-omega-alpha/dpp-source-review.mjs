@@ -65,15 +65,17 @@ function measurementValues(text, units, ordered) {
 }
 
 function clauses(text) {
-  return text.split(/[;\r\n]+|\.\s+(?=\p{Lu}[\p{L}\p{N}-]{2,}\b)|\.$/u).map(part => part.trim()).filter(Boolean);
+  return text.split(/[;\r\n]+|\.\s+(?=\p{Lu}[\p{L}\p{N}-]{2,}\b)/u)
+    .map(part => part.trim().replace(/\.$/u, '')).filter(Boolean);
 }
 
 function sectionDepth(part) {
-  const text = part.replace(/^(?:>\s*)+/u, '');
-  const markdown = text.match(/^(#{1,6})\s+\S/u);
-  if (markdown) return markdown[1].length;
-  const html = text.match(/^<h([1-6])(?:\s[^>]*)?>/iu);
-  return html ? Number(html[1]) : undefined;
+  const markdown = part.match(/^(#{1,6})\s+(.*)$/u);
+  const hasTitle = body => /[\p{L}\p{N}]/u.test(body.replace(/<[^>]*>/gu, ''));
+  if (markdown && hasTitle(markdown[2])) return markdown[1].length;
+  const html = part.match(/^<h([1-6])(?:\s[^>]*)?>(.*)<\/h\1>$/iu);
+  if (html && hasTitle(html[2])) return Number(html[1]);
+  return undefined;
 }
 
 function qualifiedSection(part, isHeading) {
@@ -120,7 +122,7 @@ function columnHeaders(parts) {
 function quoteQuantifies(quote, excerpt, observation, {heading, units}) {
   // Parse complete labelled clauses. An unsupported expression cannot contribute a suffix.
   const expected = exactQuantity(observation.value, observation.unit, units);
-  if (expected === undefined || !excerpt.includes(quote)) return false;
+  if (expected === undefined || !excerpt.includes(quote) || /^[^\S\r\n]*(?:>[^\S\r\n]*)*(?:`{3,}|~{3,})/mu.test(excerpt)) return false;
   // Preserve compatibility characters such as superscript footnote digits.
   const read = text => clauses(text.normalize('NFC').replace(/[^\S\r\n]+/gu, ' '));
   const sourceParts = read(excerpt);
