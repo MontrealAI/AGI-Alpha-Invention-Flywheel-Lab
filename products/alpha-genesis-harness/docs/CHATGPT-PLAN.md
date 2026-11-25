@@ -14,6 +14,24 @@ not request passwords, copy browser tokens, use consumer-interface automation,
 read existing Codex credential files or switch to API billing when a plan fails.
 ChatGPT identity sign-in and authorization to use a plan are separate grants.
 
+The wallet-eligible FRONTIER Ω edition offers local inference, an authorized
+member API provider and reviewed ChatGPT or Codex handoff. Automated ChatGPT
+plan inference and its SIWC-backed Codex executor are outside that edition's
+product scope. The plan integration documented here applies to separately
+operated eligible HARNESS installations.
+
+| Connection | Evidence for readiness | Usage control |
+| --- | --- | --- |
+| Sign in with ChatGPT identity | Validated account and registration | Identity scopes only |
+| ChatGPT plan inference | A completed Responses request on the selected account and model | App and plan limits in ChatGPT usage settings |
+| Codex through the ChatGPT plan | Native isolation passes and the selected model completes a turn with verifiable artifacts | The consented plan and an explicitly enabled local Codex policy |
+| Member API provider | A completed request using the scoped project credential and agreed limit | Provider billing, project limits and local admission controls |
+| Reviewed ChatGPT or Codex handoff | A result returned by the member and checked in the original mission | The member's official app session and explicit review |
+
+The current [credential-free preflight](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/main/publication/bring-your-own-intelligence/PROVIDER-PREFLIGHT.json)
+records the exact source, fixture outcomes and native host results. Contract
+fixtures establish behavior under their synthetic grant and response inputs.
+
 ## Install the optional identity verifier
 
 From the unpacked product directory, in the Python environment used to launch
@@ -61,6 +79,14 @@ open-source/local eligibility requirements:
    request. The first valid `response.completed` with output establishes an
    observed execution on that connection.
 
+The bridge exposes `AUTHORIZED` before the first successful inference and
+`INFERENCE_OBSERVED` after it. Use the route-specific verification and
+completion receipt to present proof of readiness. The bridge's `ready` flag
+also permits the initial dispatch so that the companion can earn that proof.
+Codex additionally reports the host isolation result. Keep the original
+mission associated with the standalone HARNESS setup through consent and
+model selection. Show usage and account management in the trusted companion.
+
 The native connector stores separate HTTP plan and Codex completion receipts
 per account in its protected vault. The latest receipt contains the route, model,
 completion time and provider-reported token counts, when available. Sign-in,
@@ -89,8 +115,14 @@ the [Sign in with ChatGPT interest form](https://openai.com/form/sign-in-with-ch
 The registration/partner process and eligibility decision belong to OpenAI.
 An Apache license does not establish approval for the paid package.
 
-The public Pages experience opens the native connector or a reviewed manual
-handoff. It does not act as a hosted Sign in with ChatGPT inference client.
+The Apache-2.0 source and intended CAD $299 local HARNESS Official Edition
+have distinct distributions. The wallet-eligible FRONTIER Ω release does
+not seek automated plan access. If a later HARNESS Official Edition seeks
+this feature, its application should describe the paid local package, its
+actual consent and runtime design, and its relationship to FRONTIER Ω Pages.
+The official form asks for a work email, contact name, company name, product
+website, selected capabilities and a short product description.
+
 The paid distribution defaults to disabled. When OpenAI has actually granted
 the applicable permission, record the approval reference in private local
 configuration and follow any provider-supplied integration conditions:
@@ -113,7 +145,10 @@ relabel a paid edition as an open-source local installation to bypass this gate.
 If approval requires a different registered-client flow, implement and qualify
 that supplied contract before enabling the paid connection.
 
-The owner application dossier is in `CHATGPT-COMMERCIAL-APPLICATION.md`.
+The [commercial application dossier](CHATGPT-COMMERCIAL-APPLICATION.md)
+has the product facts and contact details the owner must confirm. OpenAI's
+published plan usage preview covers eligible Plus and Pro users of qualifying
+integrations. Verify each account on the supported registration and grant.
 
 ## Identity, storage and account control
 
@@ -123,6 +158,13 @@ issued client ID, ID-token signature, issuer, audience, expiry, nonce and
 returning account identity. It uses OpenAI's OIDC discovery and trusted JWKS.
 Only the granted scopes enable inference; declined plan consent leaves identity
 sign-in usable without authorizing model requests.
+
+Identity scopes are `openid profile email`. For the locally hosted open-source
+flow the companion also requests `offline_access resource.invoke
+chatgpt.tokens.use.direct`. Before dispatch it requires a usable access token
+and both invocation scopes in the grant actually returned by OpenAI. The
+issued client registration belongs to the selected account and workspace.
+The plan limit applies even after a completed request has been recorded.
 
 The HARNESS launcher stores credentials in the local user's
 `~/.alpha-genesis-harness/chatgpt/chatgpt-auth.json` by default. An embedding
@@ -182,25 +224,70 @@ contract evidence, not proof of a successful authenticated Pro request.
 
 ## Promotional API credits for eligible ChatGPT subscribers
 
-1. Open the official benefit guide and check current eligibility from the
-   ChatGPT or API Platform account you control. Activation is handled by OpenAI.
-2. Select the receiving API organization you own. Confirm the grant in that
-   organization's API Billing → Credit grants. A project used for the mission
-   must belong to this organization and be authorized to use its API access.
+1. Check the benefit in ChatGPT Settings → Billing or the API organization’s
+   Billing settings. The published grant covers eligible paid Pro 100, Pro 200
+   and Pro 500 subscriptions and eligible Business Standard or Premium seats
+   after at least seven days on the qualifying paid plan. The account’s cohort,
+   country and plan determine availability. Activation is handled by OpenAI.
+2. Use the same verified email on both sides. The Pro subscriber or Business
+   workspace owner claiming the offer must also own the receiving API
+   organization and be able to manage its billing. Confirm the amount and
+   expiry actually issued in that organization's API Billing → Credit grants.
+   The mission's authorized project must belong to that organization.
 3. Keep API execution paused when you require zero additional expenditure and
-   cannot enforce that boundary. OpenAI applies purchased API credits after
-   promotional credits expire or run out. The HARNESS does not activate
-   recharge, change billing settings or verify account balances.
+   cannot enforce that boundary. An active grant can be used without adding a
+   payment method. Promotional credits expire at the end of the billing cycle.
+   Providers can continue to charge applicable balances after a grant is
+   exhausted. For OpenAI, any remaining purchased credits are used next. The
+   HARNESS does not activate recharge, change billing or verify balances.
 4. For a later authorized qualification, retain private evidence tying the
-   provider request, organization, project, actual usage and applicable
-   credit deduction together. Usage counters alone do not establish the balance
-   used or the cash charged. Protect all account identifiers and credentials.
+   provider request ID and UTC interval to the selected organization, project,
+   model, usage, grant and actual balance or billing effect. Usage and billing
+   are separate records. Publish only the approved redacted receipt.
 
 The API promotion does not fund signed-in Codex usage or Codex via API keys.
 Signed-in Codex and OAuth plan inference follow ChatGPT usage settings.
 [Official API credits benefit guide](https://help.openai.com/en/articles/20001626-api-credits-benefit-for-eligible-chatgpt-subscriptions)
 
+## Project credential and usage permissions
+
+Use the trusted companion to enter the member-operated project's credential.
+For OpenAI, the documented `GET /v1/models` catalog permission is
+`api.model.read` (`model.read` in the role). The model-request permission
+for `POST /v1/responses` is `api.model.request` (`model.request` in the role).
+The project's credential and its user or service account both need the
+applicable permissions. Set the project and available models through the
+provider’s existing controls. [OpenAI roles and permissions](https://developers.openai.com/api/docs/guides/rbac)
+
+The OpenAI Usage Dashboard requires either organization ownership or the
+Usage Dashboard permission. Project ownership alone does not suffice. Filter
+the intended project, model and UTC period in Analytics → Usage. For an
+authorized back-office integration, the organization API Usage and Costs
+endpoints use an organization Admin API key. A scoped example is
+`api.usage.read` for `GET /v1/organization/usage/decisions`. Keep administrative
+credentials outside the companion and review credit grants in the linked
+organization's Billing settings.
+[Usage Dashboard](https://help.openai.com/en/articles/10478918-reviewing-api-usage-and-costs) · [Usage and Costs API](https://developers.openai.com/api/reference/resources/admin/subresources/organization/subresources/usage) · [Usage permission example](https://developers.openai.com/api/docs/guides/decisions)
+
+OpenAI documents a separate **Enforce a hard limit** option for a monthly
+project or organization spend limit. Spend alerts leave traffic running.
+The enforced option returns HTTP 429 when the recorded spend reaches the
+limit, and OpenAI reports a propagation delay that can allow some additional
+usage. Apply a conservative local request reservation within the agreed
+allowance. A strict no-spend route stays paused unless the provider boundary can
+actually enforce it. [OpenAI spend limits](https://developers.openai.com/api/docs/guides/spend-limits)
+
 ## Codex engineering pathway
+
+The companion uses OpenAI's documented SIWC access token as a Responses
+provider in the official app-server. A member can also use their own official
+signed-in Codex session for a reviewed handoff. That separate assisted route
+lets the member review the exact mission before sending it and import the
+result for independent checking. OpenAI limits built-in app-server account
+authentication to eligible existing integrations outside commercial or hosted
+services and recommends SIWC for app integrations. That built-in login flow is
+outside the companion's SIWC provider implementation.
+[Codex authentication](https://learn.chatgpt.com/docs/auth) · [App-server authentication](https://learn.chatgpt.com/docs/app-server#authentication) · [SIWC provider for Codex](https://developers.openai.com/siwc/token-sharing-open-source/codex-app-server)
 
 Install the official Codex CLI separately. Use the HARNESS's authorized ChatGPT
 connection; this implementation does not reuse a consumer session or the CLI's
@@ -226,14 +313,17 @@ absolute path to the trusted official `codex` executable. The default connector
 uses its own private `codex-workspaces` directory. Enable workspace writes only
 when the specific engineering task needs them and you authorize them.
 
-Each run has a new isolated workspace and a protected `CODEX_HOME` in a sibling directory outside the writable execution root. The bridge uses the
-documented app-server initialize → thread/start → turn/start protocol and a
-Responses provider supplied with the HARNESS OAuth token. It excludes existing
-MCP/app configuration and billing environment variables, denies external action
-approval requests, disables tool network access, restricts read roots and permits
-workspace writes only after explicit local opt-in. Model outputs and files still
-need independent acceptance checks. This is an engineering executor, not proof
-that an arbitrary generated program is safe or correct.
+Each run has a new isolated workspace and a protected `CODEX_HOME` outside the
+writable execution root. The bridge uses stdio for the app-server initialize →
+thread/start → turn/start protocol. The official SIWC configuration uses
+Responses over HTTP/SSE, passes the token only to the app-server child and
+disables provider WebSockets. It renews the grant in the companion and resumes
+the saved thread with a fresh process. Host credentials and existing MCP or
+application settings stay outside the execution environment. The bridge denies
+external action approval requests, disables tool network access, restricts read
+roots and permits workspace writes only after explicit local opt-in. A live
+qualification needs a completed turn, a bounded artifact manifest and an
+independent artifact check on the original mission.
 
 A completed turn exposes text and a manifest of bounded ordinary artifact files.
 Symlinks and files containing credentials are not exported. Automatic secure
@@ -295,7 +385,14 @@ The currently installed `0.172.0-alpha.2` reported the required profile
 interfaces in schema inspection and the profile was accepted in a local
 app-server session. The native command failed with `Operation not permitted`.
 The authentication path stayed closed. A separate supported host must pass the
-native check before an eligible account can qualify an actual turn.
+native check before an eligible account can qualify an actual turn. On the
+engineering host, creating a user namespace succeeded, but bubblewrap network
+namespace setup failed at its loopback `NETLINK_ROUTE` socket. An authorized
+Ubuntu operator can use the distribution’s supported bubblewrap setup and
+AppArmor profile where needed, then run the same probe without changing the
+workspace, credential or network controls. The official SDK offers sandbox and
+approval configuration too. Changing transports still requires demonstrated
+host isolation. [Codex sandbox](https://learn.chatgpt.com/docs/sandboxing?surface=cli) · [Codex SDK](https://learn.chatgpt.com/docs/codex-sdk)
 
 ## Français
 
@@ -303,6 +400,11 @@ native check before an eligible account can qualify an actual turn.
 Aucune connexion Pro, inférence réelle ou exécution Codex authentifiée n'a été
 effectuée pour cette version. L'édition payante ne dispose pas d'une autorisation
 commerciale OpenAI enregistrée. Les tests simulés ne prouvent pas ces accès.
+
+Dans l'édition FRONTIER Ω accessible par portefeuille, utilisez l'inférence
+locale, un fournisseur API autorisé ou un transfert assisté vers ChatGPT ou
+Codex. L'intégration automatique au forfait décrite ici concerne les
+installations HARNESS admissibles et exploitées séparément.
 
 Installez les dépendances facultatives avec
 `python3 -m pip install -r requirements-chatgpt.txt`, puis lancez le
@@ -334,21 +436,30 @@ Le compteur local limite les requêtes ou tours démarrés; un tour Codex peut
 comporter plusieurs appels internes. Il ne constitue pas un plafond monétaire.
 Consultez [Paramètres ChatGPT → Utilisation](https://chatgpt.com/settings/usage).
 
-Pour les crédits API promotionnels, vérifiez votre admissibilité, activez
-l'avantage depuis votre propre compte et sélectionnez l'organisation API
-bénéficiaire. Vérifiez l'octroi dans les paramètres de facturation et utilisez
-uniquement un projet autorisé de cette organisation. Les crédits API achetés
-peuvent prendre le relais après la promotion. Si vous exigez zéro dépense
-supplémentaire, laissez l'API en pause tant que cette limite ne peut pas être
-appliquée. Une validation réelle exige une requête autorisée et une preuve de
-facturation correspondante. L'avantage ne couvre pas les tours Codex via une
-clé API. [Guide OpenAI de l'avantage en crédits API](https://help.openai.com/en/articles/20001626-api-credits-benefit-for-eligible-chatgpt-subscriptions)
+Les forfaits Pro 100, 200 et 500 et les sièges Business Standard ou Premium
+peuvent donner droit à une allocation API après sept jours d'abonnement
+admissible. Le titulaire doit être propriétaire de l'abonnement ou de l'espace
+de travail et de l'organisation API destinataire, avec la même adresse courriel
+et le droit de gérer la facturation. Vérifiez le montant et l'expiration dans
+la section des allocations de l'organisation. Une validation réelle associe
+l'identifiant de requête, le projet, l'utilisation et le débit de l'allocation.
+Les crédits API achetés peuvent prendre le relais après la promotion. Les
+crédits API promotionnels sont distincts du forfait ChatGPT et de l'utilisation
+de Codex. [Guide OpenAI de l'avantage en crédits API](https://help.openai.com/en/articles/20001626-api-credits-benefit-for-eligible-chatgpt-subscriptions)
 
-L'édition commerciale exige l'autorisation applicable d'OpenAI. La référence
-enregistrée dans la configuration est une attestation de l'opérateur, pas une
-vérification par OpenAI. Il est interdit de déclarer l'édition payante comme
-installation libre admissible pour contourner cette condition. Le dossier à
-préparer figure dans `CHATGPT-COMMERCIAL-APPLICATION.md`.
+La clé du projet et le compte qui la détient doivent avoir `api.model.read`
+pour le catalogue et `api.model.request` pour les requêtes. Le tableau de bord
+d'utilisation exige le droit correspondant ou la propriété de l'organisation.
+Conservez les clés administratives hors du compagnon. Une limite financière
+mensuelle appliquée par OpenAI peut prendre effet avec un délai. Si vous exigez
+zéro dépense supplémentaire, gardez l'API en pause tant que la limite ne peut
+pas être appliquée. [Droits OpenAI](https://developers.openai.com/api/docs/guides/rbac) · [Limites de dépenses](https://developers.openai.com/api/docs/guides/spend-limits)
+
+Pour une future demande distincte de l'Édition officielle du HARNESS,
+décrivez le paquet payant, le compagnon sur l'appareil du membre et son lien
+avec l'interface publique FRONTIER Ω. Attendez l'autorisation applicable
+avant l'activation commerciale. La configuration consigne l'attestation de
+l'opérateur. [Dossier commercial](CHATGPT-COMMERCIAL-APPLICATION.md)
 
 Pour Codex, installez l'outil officiel, autorisez la connexion ChatGPT du HARNESS
 et activez explicitement l'exécution. Chaque travail utilise un dossier isolé.
@@ -367,6 +478,7 @@ aucun contournement automatique n'est proposé.
 
 - [Overview and eligibility](https://developers.openai.com/siwc/token-sharing-open-source)
 - [Registration and sign-in](https://developers.openai.com/siwc/token-sharing-open-source/sign-in)
+- [Sign in with ChatGPT quickstart](https://developers.openai.com/siwc/quickstart)
 - [Accounts, renewal and revocation](https://developers.openai.com/siwc/token-sharing-open-source/profiles-and-sessions)
 - [Models and completed inference](https://developers.openai.com/siwc/token-sharing-open-source/models-and-inference)
 - [Preview request restrictions](https://developers.openai.com/siwc/token-sharing-open-source/preview-limitations)

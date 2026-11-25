@@ -230,6 +230,61 @@ class MissionEvidenceTests(unittest.TestCase):
             self.service([])[0].submit(new_spec(protected))
         self.assertEqual(error.exception.code, "MISSION_EVIDENCE_PLAN")
 
+    def test_formula_claim_is_withdrawn_through_restart_and_requires_fresh_bound_run(self):
+        values = {"reading": 3}
+        requirements = {"evidence": {"inputs": {"observed": record(values, kind="values")}, "claims": [{
+            "id": "calibration", "dataset": "observed", "tool": "run_instrument", "locator": ["output", "result"],
+            "unit": "points", "dimension": "score", "version": "input-v1", "requires": {},
+            "reference": {"value": "3", "source": "Separate exact arithmetic"},
+        }]}}
+        name = "calibration.json"
+        write = {"tool": "construct_instrument", "name": name,
+                 "spec": {"inputs": ["reading"], "outputs": {"result": {"field": "reading"}}}}
+        invalid = {**write, "spec": {"inputs": ["reading"], "outputs": {"result": {"op": "if", "args": [True, 9]}}}}
+        compute = {"tool": "run_instrument", "name": name, "input": {"dataset": "observed"},
+                   "claim": {"id": "calibration", "unit": "points", "dimension": "score"}}
+        report = {"tool": "write_document", "name": "notes.md", "content": "Checked the synthetic observation."}
+        spec = new_spec(requirements, acceptance=[{"artifact": "notes.md", "kind": "document", "min_chars": 10}])
+        service, _ = self.service([respond(write, compute, done=False), respond(invalid)])
+        ident = service.submit(spec)["id"]
+        verified = service.step(ident)
+        self.assertEqual(verified["status"], "ready")
+        self.assertEqual(verified["outcome"]["status"], "VERIFIED")
+        historical = verified["evidence"]["claims"][0]["execution_receipt"]
+        prior_sha = verified["artifacts"][name]["sha256"]
+
+        rejected = service.step(ident)
+        root = service.root
+        self.assertEqual(service.pause(ident)["status"], "paused")
+        service.close()
+        opened = UniversalMissionService(FixtureRuntime([respond(write), respond(compute, report)]), root)
+        self.addCleanup(opened.close)
+        for withheld in (rejected, opened.get(ident)):
+            self.assertEqual(withheld["evidence"]["status"], "REJECTED")
+            claim = withheld["evidence"]["claims"][0]
+            self.assertEqual(claim["reason"], "INSTRUMENT_REPAIR_REQUIRED")
+            self.assertNotIn("value", claim)
+            self.assertFalse(withheld["outcome"]["quantitative_report_ready"])
+            self.assertEqual(withheld["outcome"]["conclusions"], [])
+            self.assertEqual(withheld["outcome"]["unresolved"][0]["reason"], "INSTRUMENT_REPAIR_REQUIRED")
+            dispositions = [event["detail"] for event in withheld["events"] if event["kind"] == "claim_dispositions"]
+            self.assertEqual(dispositions[-1]["claims"][0]["reason"], "INSTRUMENT_REPAIR_REQUIRED")
+            self.assertTrue(any(event["detail"].get("outcome", {}).get("claim_execution") == historical
+                                for event in withheld["events"]))
+
+        opened.resume(ident, background=False)
+        rebuilt = opened.step(ident)
+        self.assertEqual(rebuilt["artifacts"][name]["sha256"], prior_sha)
+        self.assertEqual(rebuilt["evidence"]["claims"][0]["reason"], "EXECUTION_OPERATION_STALE")
+        self.assertEqual(rebuilt["outcome"]["conclusions"], [])
+        self.assertEqual(rebuilt["status"], "ready")
+        recovered = opened.step(ident)
+        self.assertEqual(recovered["status"], "needs_review")
+        self.assertEqual(recovered["evidence"]["claims"][0]["value"], "3")
+        self.assertEqual(recovered["outcome"]["status"], "VERIFIED")
+        self.assertNotEqual(recovered["outcome"]["conclusions"][0]["event_sha256"],
+                            verified["outcome"]["conclusions"][0]["event_sha256"])
+
     def test_large_execution_attachment_stays_bound_and_visible_claim_survives_prompt_excerpt(self):
         data = {"entries": [{"score": i, "note": "n"*250} for i in range(1, 34)]}
         plan = {"approved_tables": {"ledger": data}, "evidence": {"inputs": {"ledger": record(data)}, "claims": [{

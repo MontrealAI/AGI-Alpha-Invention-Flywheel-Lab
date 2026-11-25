@@ -62,3 +62,44 @@
   .workshop-heading .tag { justify-self: start; }
   .workshop-views .button, .workshop-invitations .button { white-space: normal; text-align: left; }
 }
+
+/* Trusted loopback setup for member-owned intelligence. */
+.native-setup > .shell, .native-setup > .skip-link, .native-intelligence [hidden], .native-intelligence[hidden], #native-api-link[hidden] { display: none; }
+.native-intelligence { width: min(820px, 100%); margin: 0 auto; padding: clamp(16px, 4vw, 48px); }
+.native-intelligence:focus { outline: none; }
+.native-hero { display: grid; grid-template-columns: 1fr auto; gap: 14px; align-items: center; padding: clamp(20px, 4vw, 35px); border-radius: 16px; border: 1px solid #88749d; background: radial-gradient(ellipse at 90% 0%, #654881, transparent 65%), #2b213e; color: #fff9f5; }
+.native-hero h1, .native-hero p { grid-column: 1 / -1; margin: 0; }
+.native-hero h1 { font: 400 clamp(28px, 6vw, 46px)/1.13 Georgia, serif; }
+.native-hero p { max-width: 56ch; line-height: 1.55; color: #ede3f1; }
+.native-hero > div { display: flex; align-items: center; gap: .7rem; letter-spacing: .1em; font-size: 13px; }
+.native-mark { font: 29px Georgia, serif; color: #f1d39b; }
+.native-hero .button { background: #fff9f5; padding: 9px 12px; }
+.native-card { margin: 18px 0; border-color: #d8cce3; }
+.native-card h2 { margin: 0 0 .75rem; font: 500 24px/1.15 Georgia, serif; }
+.native-card p, .native-card .subtle { margin: .5rem 0; line-height: 1.6; overflow-wrap: anywhere; }
+.native-card form { margin-top: 1rem; }
+.native-card .check-label { margin: .9rem 0 1rem; }
+.native-card button { min-height: 40px; }
+.native-card #native-review-details { margin-top: .8rem; }
+.native-cost-fields { display: grid; gap: 14px; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 1rem 0; }
+.native-cost-fields > div { display: flex; flex-direction: column; justify-content: space-between; }
+.native-ambition { max-height: 16rem; margin: .85rem 0; overflow: auto; padding: 12px 14px; line-height: 1.5; white-space: pre-wrap; overflow-wrap: anywhere; background: #f5eff9; border-radius: 8px; font: inherit; }
+.native-options { margin: 1rem 0; }
+.native-options summary { font-weight: 600; cursor: pointer; }
+.native-scope { margin: 1rem 0 0; padding: .85rem 1rem; background: #f4edf8; border: 1px solid #d8cce3; border-radius: 8px; }
+.native-limits { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem 1rem; margin: .9rem 0; }
+.native-limits dt, .native-limits dd { margin: 0; overflow-wrap: anywhere; }
+.native-limits dt { font-weight: 600; }
+.native-profiles { margin: .5rem 0 0; list-style: none; padding: 0; }
+.native-profiles li { padding: .8rem 0; border-top: 1px solid var(--line); overflow-wrap: anywhere; }
+.native-profiles .button { padding-left: 0; }
+.native-state { margin: .8rem 0; color: #38324c; }
+.native-state:empty { margin: 0; }
+.native-error { color: #8c2937; }
+.native-footer { display: flex; flex-wrap: wrap; gap: .8rem 1.4rem; padding: .7rem 0; }
+.native-intelligence :focus-visible { outline: 3px solid #785093; outline-offset: 3px; }
+@media (max-width: 630px) {
+  .native-card { padding: 16px; }
+  .native-card .form-grid, .native-cost-fields { grid-template-columns: 1fr; }
+  .native-card .button { width: 100%; }
+}

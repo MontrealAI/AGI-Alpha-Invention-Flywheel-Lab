@@ -563,7 +563,11 @@ class Runtime:
                 error = BridgeError("CANCELLED", "Request cancelled before provider admission or budget reservation.", 409)
                 error.pre_dispatch = True
                 raise error
-            self.budget.reserve(reserved)
+            try:
+                self.budget.reserve(reserved)
+            except BridgeError as error:
+                error.pre_dispatch = True
+                raise
             cancel = threading.Event()
             self._runs[run_id] = cancel
             self._active.add(run_id)
@@ -572,6 +576,14 @@ class Runtime:
             for attempt in range(attempt_limit):
                 if cancel.is_set():
                     raise BridgeError("CANCELLED", "Run cancelled. Completed or sent attempts remain accounted.", 409)
+                if p.remote and (not self.allow_paid or self.local_only):
+                    error = BridgeError("PERMISSION", "Remote inference requires an active local spending grant.", 403)
+                    error.pre_dispatch = attempts == 0
+                    raise error
+                if expected_provider is not None and self.providers.get(p.id) is not expected_provider:
+                    error = BridgeError("PROVIDER_CHANGED", "Selected connection changed before the next transport attempt.", 409)
+                    error.pre_dispatch = attempts == 0
+                    raise error
                 if cancelled_before_dispatch is not None and cancelled_before_dispatch():
                     error = BridgeError("CANCELLED", "Request authority ended before the next transport attempt.", 409)
                     error.pre_dispatch = attempts == 0

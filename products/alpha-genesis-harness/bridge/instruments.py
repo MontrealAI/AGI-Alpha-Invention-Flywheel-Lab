@@ -7,6 +7,7 @@ import ast
 from fractions import Fraction
 import hashlib
 from io import StringIO
+from itertools import chain
 import json
 import math
 from pathlib import Path
@@ -49,6 +50,30 @@ _FUNCTIONS = {"abs", "min", "max", "sum", "count", "choose"}
 _JSON_LITERALS = {"true": True, "false": False, "null": None}
 EXACT_NUMBER = re.compile(r"[+-]?\d{1,40}(?:/\d{1,40}|\.\d{1,40})?\Z", re.ASCII)
 EXACT_LIMIT = 10**40
+_ARITIES = {
+    "add": (1, None, "Arithmetic needs operands."),
+    "mul": (1, None, "Arithmetic needs operands."),
+    "min": (1, None, "Arithmetic needs operands."),
+    "max": (1, None, "Arithmetic needs operands."),
+    "sub": (2, 2, "Binary arithmetic needs two operands."),
+    "div": (2, 2, "Binary arithmetic needs two operands."),
+    "abs": (1, 1, "abs needs one numeric operand."),
+    "eq": (2, 2, "Comparison needs two operands."),
+    "lt": (2, 2, "Comparison needs two operands."),
+    "lte": (2, 2, "Comparison needs two operands."),
+    "gt": (2, 2, "Comparison needs two operands."),
+    "gte": (2, 2, "Comparison needs two operands."),
+    "and": (1, None, "Boolean operation needs boolean operands."),
+    "or": (1, None, "Boolean operation needs boolean operands."),
+    "not": (1, 1, "Boolean operation needs boolean operands."),
+    "sum": (1, 1, "sum/count needs one array."),
+    "count": (1, 1, "sum/count needs one array."),
+    "if": (3, 3, "if needs three operands."),
+}
+
+
+class InstrumentStructureError(ValueError):
+    """A deterministic, input-independent refusal of a proposed program."""
 
 
 def _bounded_value(value):
@@ -147,8 +172,17 @@ def compile_formula(source, bindings):
     return translate(expression)
 
 
+def validate_instrument(spec):
+    """Check every branch without mission inputs, arithmetic or dynamic evaluation."""
+    _interpret(spec, None, 1_000_000, structure=True)
+
+
 def evaluate(spec, inputs, max_operations=10000):
     """Evaluate a JSON expression grammar, with no IO or dynamic code execution."""
+    return _interpret(spec, inputs, max_operations)
+
+
+def _interpret(spec, inputs, max_operations, *, structure=False):
     allowed_keys = {"name", "inputs", "outputs", "description", "conditions", "limitations", "bindings", "numeric_mode"}
     if not isinstance(spec, dict):
         kind = {type(None): "null", bool: "boolean", int: "number", float: "number", str: "string", list: "array"}.get(type(spec), "non-JSON type")
@@ -168,7 +202,8 @@ def evaluate(spec, inputs, max_operations=10000):
                          + '. Named calculations belong inside the "outputs" object, not at the instrument root.')
     if not isinstance(spec.get("inputs"), list) or any(not isinstance(k, str) for k in spec["inputs"]):
         raise ValueError("Instrument inputs must be field names.")
-    if not isinstance(inputs, dict) or any(k not in inputs for k in spec["inputs"]):
+    fields = set(spec["inputs"])
+    if not structure and (not isinstance(inputs, dict) or not fields.issubset(inputs)):
         raise ValueError("A declared instrument input is missing.")
     if not isinstance(spec.get("outputs"), dict) or not spec["outputs"]:
         raise ValueError("An instrument needs named output expressions.")
@@ -184,6 +219,7 @@ def evaluate(spec, inputs, max_operations=10000):
         raise ValueError("Instrument bindings require up to 128 simple names.")
     resolved, resolving, compiled = {}, set(), {}
     count = 0
+    checked = set()
 
     def number(v):
         if exact:
@@ -200,7 +236,7 @@ def evaluate(spec, inputs, max_operations=10000):
         if value is None or type(value) in {str, int, float, bool}:
             return finite(value)
         if isinstance(value, list):
-            return [visit(v, depth + 1, f"{location}[{index}]") for index, v in enumerate(value)]
+            return [walk(v, depth + 1, f"{location}[{index}]") for index, v in enumerate(value)]
         if not isinstance(value, dict):
             raise ValueError("Only JSON expressions are supported.")
         if set(value) == {"formula"}:
@@ -209,7 +245,7 @@ def evaluate(spec, inputs, max_operations=10000):
                 raise ValueError("Formula text is required.")
             if source not in compiled:
                 compiled[source] = compile_formula(source, bindings)
-            return visit(compiled[source], depth + 1, location + ".formula")
+            return walk(compiled[source], depth + 1, location + ".formula")
         if set(value) == {"ref"}:
             name = value["ref"]
             if not isinstance(name, str) or name not in bindings:
@@ -219,7 +255,7 @@ def evaluate(spec, inputs, max_operations=10000):
             if name not in resolved:
                 resolving.add(name)
                 try:
-                    resolved[name] = visit(bindings[name], depth + 1, "$.bindings." + name)
+                    resolved[name] = walk(bindings[name], depth + 1, "$.bindings." + name)
                 finally:
                     resolving.remove(name)
             return resolved[name]
@@ -227,54 +263,68 @@ def evaluate(spec, inputs, max_operations=10000):
             path = value["field"]
             if not isinstance(path, str) or not path:
                 raise ValueError("Invalid input field.")
-            if path.split(".")[0] not in spec["inputs"]:
+            parts = path.split(".")
+            if parts[0] not in fields:
                 # A model once used {"field":"2"} for the number 2. Keep the
                 # evaluator fail-closed, but make its retry feedback actionable.
                 # Do not echo arbitrary untrusted field paths into model context.
                 if len(path) <= 32 and re.fullmatch(r"-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?(?:[eE][+-]?[0-9]+)?", path):
                     raise ValueError('Input field root was not declared. A numeric constant is a raw JSON number (for example 2), not {"field":"2"}. Only declared input names use {"field":"name"}.')
                 raise ValueError("Input field root was not declared.")
+            if any(part in {"__proto__", "prototype", "constructor"} for part in parts):
+                raise ValueError("Missing or unsafe input field.")
+            if structure:
+                return None
             at = inputs
-            for part in path.split("."):
-                if part in {"__proto__", "prototype", "constructor"} or not isinstance(at, dict) or part not in at:
+            for part in parts:
+                if not isinstance(at, dict) or part not in at:
                     raise ValueError("Missing or unsafe input field.")
                 at = at[part]
             return finite(at)
         if set(value) != {"op", "args"} or not isinstance(value["args"], list):
             if set(value) in ({"literal"}, {"value"}, {"const"}):
-                raise ValueError(location + ': a literal is a raw JSON value (for example 7), not a literal/value/const object. Input references use exactly {"field":"name"}.')
-            raise ValueError(location + ': an operation must contain exactly "op" and an "args" array; received keys ' + ", ".join(sorted(map(str, value))) + ".")
+                message = 'A literal is a raw JSON value (for example 7). Input references use exactly {"field":"name"}.'
+            else:
+                keys = sorted(key[:48] for key in value if isinstance(key, str))[:6]
+                message = 'An operation must contain exactly "op" and an "args" array. Received keys include ' + json.dumps(keys) + "."
+            raise ValueError(message if structure else location + ": " + message)
         op, raw = value["op"], value["args"]
+        if not isinstance(op, str) or op not in _ARITIES:
+            raise ValueError("Unsupported expression operation.")
+        minimum, maximum, error = _ARITIES[op]
+        if len(raw) < minimum or maximum is not None and len(raw) > maximum:
+            if structure:
+                if op == "if":
+                    raise ValueError(f"if needs three operands [boolean condition, when_true, when_false]. Found {len(raw)}.")
+                expected = "at least one operand" if maximum is None else "one operand" if maximum == 1 else f"{maximum} operands"
+                raise ValueError(f"{op} needs {expected}. Found {len(raw)}.")
+            raise ValueError(error)
+        if structure:
+            if op == "if" and (raw[0] is None or type(raw[0]) in {int, float, str, list}):
+                raise ValueError("if condition must be boolean. Supply a boolean input or a comparison.")
+            for index, operand in enumerate(raw):
+                walk(operand, depth + 1, f"{location}.args[{index}]")
+            return None
         if op == "if":
-            if len(raw) != 3:
-                raise ValueError("if needs three operands.")
-            cond = visit(raw[0], depth + 1, location + ".args[0]")
+            cond = walk(raw[0], depth + 1, location + ".args[0]")
             if type(cond) is not bool:
                 raise ValueError("if condition must be boolean.")
             branch = 1 if cond else 2
-            return visit(raw[branch], depth + 1, f"{location}.args[{branch}]")
-        args = [visit(v, depth + 1, f"{location}.args[{index}]") for index, v in enumerate(raw)]
+            return walk(raw[branch], depth + 1, f"{location}.args[{branch}]")
+        args = [walk(v, depth + 1, f"{location}.args[{index}]") for index, v in enumerate(raw)]
         if op in {"add", "mul", "min", "max"}:
-            if not args:
-                raise ValueError("Arithmetic needs operands.")
             vals = [number(v) for v in args]
             result = vals[0]
             for val in vals[1:]:
                 result = _bounded_value(result + val if op == "add" else result * val if op == "mul" else min(result, val) if op == "min" else max(result, val))
         elif op in {"sub", "div"}:
-            if len(args) != 2:
-                raise ValueError("Binary arithmetic needs two operands.")
             a, b = map(number, args)
             if op == "div" and b == 0:
                 raise ValueError("Division by zero.")
             result = a - b if op == "sub" else a / b
         elif op == "abs":
-            if len(args) != 1:
-                raise ValueError("abs needs one numeric operand.")
             result = abs(number(args[0]))
         elif op in {"eq", "lt", "lte", "gt", "gte"}:
-            if len(args) != 2:
-                raise ValueError("Comparison needs two operands.")
             a, b = args
             if op == "eq":
                 result = _equal_exact(a, b) if exact else _json_equal(a, b)
@@ -282,11 +332,11 @@ def evaluate(spec, inputs, max_operations=10000):
                 a, b = number(a), number(b)
                 result = a < b if op == "lt" else a <= b if op == "lte" else a > b if op == "gt" else a >= b
         elif op in {"and", "or", "not"}:
-            if not args or any(type(v) is not bool for v in args) or (op == "not" and len(args) != 1):
+            if any(type(v) is not bool for v in args):
                 raise ValueError("Boolean operation needs boolean operands.")
             result = all(args) if op == "and" else any(args) if op == "or" else not args[0]
         elif op in {"sum", "count"}:
-            if len(args) != 1 or not isinstance(args[0], list):
+            if not isinstance(args[0], list):
                 raise ValueError("sum/count needs one array.")
             result = len(args[0]) if op == "count" else 0
             if op == "sum":
@@ -299,8 +349,46 @@ def evaluate(spec, inputs, max_operations=10000):
             raise ValueError("Unsupported expression operation.")
         return _bounded_value(result)
 
+    def check(value, depth=0, location="$"):
+        # Formula compilation shares repeated subexpressions in chained
+        # comparisons. Check a shared expression only once at each depth.
+        shared = (id(value), depth) if isinstance(value, (dict, list)) else None
+        if shared is not None and shared in checked:
+            return
+        try:
+            visit(value, depth, location)
+        except InstrumentStructureError:
+            raise
+        except ValueError as error:
+            path = location if len(location) <= 144 else location[:90] + "..." + location[-51:]
+            raise InstrumentStructureError(f"{path}: {error}") from None
+        if shared is not None:
+            checked.add(shared)
+
+    walk = check if structure else visit
+    if structure:
+        def output_location(key, index):
+            label = json.dumps(key) if isinstance(key, str) and re.fullmatch(r"[A-Za-z0-9_. -]{1,64}", key) else str(index)
+            return f"$.outputs[{label}]"
+
+        issues = []
+        outputs = ((output_location(key, index), expression)
+                   for index, (key, expression) in enumerate(spec["outputs"].items()))
+        definitions = (("$.bindings." + name, expression) for name, expression in bindings.items() if name not in resolved)
+        for location, expression in chain(outputs, definitions):
+            try:
+                walk(expression, location=location)
+            except InstrumentStructureError as error:
+                message = str(error)
+                if message not in issues:
+                    issues.append(message)
+                if len(issues) == 3 or count > max_operations:
+                    break
+        if issues:
+            raise InstrumentStructureError(" ".join(issues))
+        return None
     finite(inputs)
-    result = {key: visit(expr, location="$.outputs[" + json.dumps(key) + "]") for key, expr in spec["outputs"].items()}
+    result = {key: walk(expr, location="$.outputs[" + json.dumps(key) + "]") for key, expr in spec["outputs"].items()}
     if exact:
         result = {key: _portable_exact(value) for key, value in result.items()}
     return {"output": result, "operations": count, "scope": "Bounded declarative execution; acceptance must be checked separately."}

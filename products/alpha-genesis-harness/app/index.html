@@ -11,8 +11,90 @@
 <script src="engine.js" defer></script>
 <script src="app.js" defer></script>
 <script src="workshop.js" defer></script>
+<script src="native-intelligence.js" defer></script>
 </head>
 <body>
+<main id="native-intelligence" class="native-intelligence" aria-labelledby="native-title" tabindex="-1" hidden>
+  <header class="native-hero">
+    <div><span class="native-mark" aria-hidden="true">Ω</span><strong>FRONTIER Ω</strong></div>
+    <button id="native-language" class="button secondary" type="button">Français</button>
+    <h1 id="native-title" data-native-text="title">Connect your AI provider</h1>
+    <p data-native-text="intro">Choose an account, test a model and set the limits for this private connection.</p>
+  </header>
+  <p id="native-state" class="connection-note native-state" role="status" aria-live="polite" aria-atomic="true"></p>
+  <section id="native-mission" class="panel native-card" aria-labelledby="native-mission-title" hidden>
+    <h2 id="native-mission-title" data-native-text="mission">Review your mission</h2>
+    <pre id="native-ambition" class="native-ambition"></pre>
+    <details id="native-original-panel" hidden><summary data-native-text="original">Original ambition</summary><pre id="native-original" class="native-ambition"></pre></details>
+    <p id="native-review-revision" class="subtle"></p>
+    <form id="native-approve-form" hidden>
+      <label for="native-review-profile" data-native-text="chooseProfile">Verified connection</label>
+      <select id="native-review-profile" required></select>
+      <button id="native-review-details" class="button secondary" type="button" data-native-text="review">Review sharing and limits</button>
+      <div id="native-scope" class="native-scope" hidden>
+        <p data-native-text="scopeData">The selected provider receives the mission text and context generated during this run. Existing private files and unrelated projects stay on this device.</p>
+        <dl id="native-scope-limits" class="native-limits"></dl>
+        <label class="check-label"><input type="checkbox" id="native-mission-consent" required><span data-native-text="missionConsent">I approve this provider, this mission revision, and the limits above.</span></label>
+        <button class="button primary" type="submit" data-native-text="approve">Authorize this mission</button>
+      </div>
+    </form>
+  </section>
+  <section id="native-approved" class="panel native-card" hidden>
+    <h2 data-native-text="approved">Mission authorized</h2>
+    <p data-native-text="approvedDetail">Return to My Frontier to continue the same mission with this connection.</p>
+    <a id="native-authorized-return" class="button primary" data-native-text="return" href="#">Return to My Frontier</a>
+  </section>
+  <section id="native-existing" class="panel native-card" aria-labelledby="native-existing-title" hidden>
+    <h2 id="native-existing-title" data-native-text="profiles">Your connections on this device</h2>
+    <ul id="native-profiles" class="native-profiles"></ul>
+  </section>
+  <section id="native-create" class="panel native-card" aria-labelledby="native-create-title">
+    <h2 id="native-create-title" data-native-text="newProfile">Connect a provider</h2>
+    <p data-native-text="billing">API usage is billed separately through your chosen provider. If you do not want to authorize API charges, return to My Frontier to use local intelligence or an assisted mission.</p>
+    <p id="native-protection" class="subtle"></p>
+    <form id="native-discover-form" autocomplete="off">
+      <label for="native-provider" data-native-text="provider">Provider</label>
+      <select id="native-provider" required></select>
+      <label for="native-key" data-native-text="key">Project API credential</label>
+      <input id="native-key" type="password" autocomplete="off" autocapitalize="none" spellcheck="false" maxlength="4096" required>
+      <div class="form-grid">
+        <div><label for="native-project" id="native-project-label">Project ID</label><input id="native-project" autocomplete="off" autocapitalize="none" spellcheck="false" maxlength="133" required></div>
+        <div id="native-organization-panel"><label for="native-organization" data-native-text="organization">Organization ID (optional)</label><input id="native-organization" autocomplete="off" autocapitalize="none" spellcheck="false" maxlength="132"></div>
+      </div>
+      <p id="native-project-note" class="subtle"></p>
+      <label class="check-label"><input type="checkbox" id="native-discovery-consent" required><span data-native-text="discoveryConsent">I am authorized to use this credential and allow the provider to list models for this account.</span></label>
+      <button class="button primary" type="submit" data-native-text="discover">Discover models</button>
+    </form>
+    <form id="native-verify-form" hidden>
+      <label for="native-model" data-native-text="selectModel">Model</label>
+      <select id="native-model" required></select>
+      <p id="native-metadata" class="subtle"></p>
+      <div class="native-cost-fields">
+        <div><label for="native-budget" data-native-text="budget">Spending limit for this connection (USD estimate)</label><input id="native-budget" type="number" step="any" min="0" inputmode="decimal" required></div>
+        <div><label for="native-input-rate" data-native-text="inputRate">Maximum input rate (USD per million tokens)</label><input id="native-input-rate" type="number" step="any" min="0" inputmode="decimal" required></div>
+        <div><label for="native-output-rate" data-native-text="outputRate">Maximum output rate (USD per million tokens)</label><input id="native-output-rate" type="number" step="any" min="0" inputmode="decimal" required></div>
+      </div>
+      <p class="subtle" data-native-text="costScope">Use the provider’s current highest applicable rates, including reasoning and other billed tokens. The companion reserves a conservative estimate before sending a request. Your provider’s billing rules still apply.</p>
+      <details class="native-options">
+        <summary data-native-text="advanced">Connection limits</summary>
+        <div class="native-cost-fields">
+          <div><label for="native-output-limit" data-native-text="outputLimit">Output tokens per request</label><input id="native-output-limit" type="number" min="64" max="32768" step="1" value="2048" required></div>
+          <div><label for="native-request-limit" data-native-text="requestLimit">Requests per authorized mission</label><input id="native-request-limit" type="number" min="1" max="100" step="1" value="8" required></div>
+          <div><label for="native-expiry" data-native-text="expiry">Connection expires in hours</label><input id="native-expiry" type="number" min="1" max="720" step="1" value="168" required></div>
+        </div>
+      </details>
+      <p id="native-test-estimate" class="subtle"></p>
+      <label class="check-label"><input type="checkbox" id="native-inference-consent" required><span data-native-text="inferenceConsent">I authorize one potentially billable connection test for this model and allow the companion to save this credential if the test succeeds.</span></label>
+      <div class="button-row"><button class="button primary" type="submit" data-native-text="verify">Test and save connection</button><button class="button secondary" id="native-start-over" type="button" data-native-text="startOver">Change provider or credential</button></div>
+    </form>
+  </section>
+  <details id="native-history" class="panel native-card" hidden>
+    <summary data-native-text="testHistory">Interrupted and failed connection tests</summary>
+    <p class="subtle" data-native-text="testHistoryScope">The companion retains reported usage estimates or reserved amounts for tests it could not finish. Review actual charges with your provider.</p>
+    <ul id="native-test-history" class="native-profiles"></ul>
+  </details>
+  <footer class="native-footer"><a id="native-return" data-native-text="return" href="#">Return to My Frontier</a><a id="native-workspace" data-native-text="workspace" href="/">Open HARNESS workspace</a></footer>
+</main>
 <a class="skip-link" href="#main" data-i18n="skip">Skip to workspace</a>
 <div class="shell">
 <aside class="sidebar" aria-label="Workspace navigation">
@@ -172,6 +254,7 @@
   <button class="access-card" data-access="chatgpt" aria-pressed="false"><span class="access-symbol" aria-hidden="true">◎</span><strong data-i18n="accessChatGPT">ChatGPT plan</strong><span data-i18n="accessChatGPTCopy">Official sign-in for eligible connections. Separate plan allowance.</span></button>
  </div>
  <p id="access-status" class="connection-note" role="status"></p>
+ <p id="native-api-link" class="connection-note" hidden><a class="button secondary" href="/?setup=intelligence&amp;route=api&amp;lang=en">Manage FRONTIER Ω provider connections</a></p>
 <div class="panel local-model-setup hidden" id="local-model-setup">
   <div class="section-heading"><h3 data-i18n="localSetupTitle">Connect an installed local model</h3><span class="tag" data-i18n="localSetupBadge">NO CLOUD KEY</span></div>
   <p class="subtle" data-i18n="localSetupHint">Start your local model server, choose it here, then discover its models. Your connection settings stay on this device.</p>

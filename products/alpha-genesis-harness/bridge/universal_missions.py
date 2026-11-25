@@ -9,7 +9,7 @@ import re
 from .adapters import BridgeError, strict_json
 from . import mission_evidence, mission_outcomes, mission_schema_context, mission_sources
 from .workflow_schemas import response_schema
-from .workflows import DEFAULT_TOOLS, RUN, TERMINAL, TOOLS, WorkflowService, digest, encoded, filename, require
+from .workflows import DEFAULT_TOOLS, RUN, TERMINAL, TOOLS, WorkflowService, digest, encoded, filename, instrument_repairs, require
 
 
 SPEC_FIELDS = frozenset({
@@ -70,13 +70,18 @@ class UniversalMissionService(WorkflowService):
         self.outcome_assembly = outcome_assembly is True
         super().__init__(runtime, private_root, server_source_sha256=server_source_sha256)
 
-    def _workflow_spec(self, supplied, *, prior=None):
+    def _workflow_spec(self, supplied, *, prior=None, original_ambition=None):
         require(isinstance(supplied, dict) and SPEC_FIELDS <= set(supplied) <= SPEC_FIELDS | OPTIONAL_FIELDS,
                 "Mission specification has missing or unknown fields.", "MISSION_INPUT")
         spec = strict_json(encoded(supplied))
         ambition = spec["ambition"]
         require(text_field(ambition, self.objective_limit) and bool(ambition.strip()),
                 "Enter a nonempty ambition within 24 KiB.", "MISSION_INPUT")
+        original = prior["spec"]["mission"]["original_ambition"] if prior is not None else original_ambition
+        if original is None:
+            original = ambition
+        require(text_field(original, self.objective_limit) and bool(original.strip()),
+                "The original ambition must be nonempty and within 24 KiB.", "MISSION_INPUT")
         require(spec["language"] in ("en", "fr"), "Mission language must be en or fr.", "MISSION_INPUT")
         deadline = expires(spec["expires_at"]).isoformat()
         context = spec.get("context", "")
@@ -112,9 +117,8 @@ class UniversalMissionService(WorkflowService):
         if "outcome" in requirements:
             mission_outcomes.validate_contract(requirements["outcome"], requirements)
         mission = {"schema": MISSION_SCHEMA, "language": spec["language"], "expires_at": deadline,
-                   "requirements": requirements, "original_ambition": ambition}
+                   "requirements": requirements, "original_ambition": original}
         if prior is not None:
-            mission["original_ambition"] = prior["spec"]["mission"]["original_ambition"]
             mission["parent_run_id"] = prior["id"]
         return {
             "objective": ambition, "context": context, "mission": mission,
@@ -145,9 +149,9 @@ class UniversalMissionService(WorkflowService):
                     "Mission authority has expired.", "MISSION_AUTHORITY")
             return super().create(spec, _identity=identity)
 
-    def submit(self, spec, identity=None):
+    def submit(self, spec, identity=None, *, original_ambition=None):
         """Persist an operator-assembled scope. Transport authentication is the caller's boundary."""
-        return self._submit(self._workflow_spec(spec), identity)
+        return self._submit(self._workflow_spec(spec, original_ambition=original_ambition), identity)
 
     def revise(self, ident, spec, identity=None):
         """Create a separately authorized successor with the exact original ambition retained."""
@@ -286,7 +290,10 @@ class UniversalMissionService(WorkflowService):
         ]
         examples = {
             "construct_instrument": 'construct_instrument needs name and spec. The spec has name, inputs (field names), and outputs '
-                                    '(map of formulas). Formulas support add/sub/mul/div/min/max/sum/count/eq/lt/lte/gt/gte/and/or/not/if. Numbers are bare values.',
+                                    '(map of formulas). Formulas support add/sub/mul/div/min/max/abs/sum/count/eq/lt/lte/gt/gte/and/or/not/if. '
+                                    'Numbers are bare values. Use {"op":"if","args":[condition,when_true,when_false]} or '
+                                    '{"formula":"choose(condition, when_true, when_false)"} with a boolean condition and both branches. '
+                                    'If construction is refused, repair the named expression and resubmit it before running the artifact.',
             "run_instrument": 'run_instrument {name:"calc.json",input:{x:3}} returns actual outputs.',
             "read_artifact": 'read_artifact {name:"calc.json"} reads an artifact from this mission.',
             "write_dataset": 'write_dataset {name:"data.csv",columns:["x"],rows:[[1]]}.',
@@ -375,10 +382,19 @@ class UniversalMissionService(WorkflowService):
         self._verify(state)
         checks_passed = state["verification"]["passed"]
         required_checks = bool(state["spec"]["acceptance"])
+        evidence = None
         if "evidence" in state["spec"]["mission"]["requirements"]:
             evidence = self._evidence(state)
             dispositions = [{key: claim[key] for key in ("id", "status", "reason")} for claim in evidence["claims"]]
             self._event(state, "claim_dispositions", {"status": evidence["status"], "claims": dispositions})
+        repairs = instrument_repairs(state.get("events"))
+        if repairs:
+            guidance = ("Corrigez les instruments refusés avant de les exécuter. "
+                        if state["spec"]["mission"]["language"] == "fr"
+                        else "Correct the refused instruments before running them. ")
+            state["feedback"] = guidance + " ".join(reason[:360] for reason in list(repairs.values())[:4])
+            return
+        if evidence is not None:
             sufficient_progress = evidence["status"] == "VERIFIED" or response["done"] and evidence["status"] == "SOURCE_BOUND"
             if sufficient_progress and (checks_passed or not required_checks):
                 state["status"] = "needs_review"
@@ -397,7 +413,9 @@ class UniversalMissionService(WorkflowService):
         )
         proposal = next(event for event in reversed(state["events"]) if event["kind"] == "route_proposed")
         turn_events = state["events"][proposal["index"] + 1:]
-        refused = any(event["kind"] == "tool_refused" for event in turn_events)
+        refused = any(event["kind"] == "tool_refused"
+                      and event["detail"].get("code") not in {"INSTRUMENT_STRUCTURE", "INSTRUMENT_DEPENDENCY"}
+                      for event in turn_events)
         if checks_passed or (response["done"] and not required_checks and exercised and not refused):
             state["status"] = "needs_review"
             self._event(state, "awaiting_independent_evaluation", {"development_checks_passed": checks_passed,

@@ -4,7 +4,7 @@ import argparse
 from copy import deepcopy
 import json
 import os
-from pathlib import Path, PurePosixPath
+from pathlib import Path, PurePosixPath, PureWindowsPath
 import subprocess
 import sys
 from tempfile import TemporaryDirectory
@@ -27,7 +27,10 @@ def install(path, destination, expected):
                 and len(archive.namelist()) == len(manifest['file_sha256']) + 1, 'Unexpected package member')
         for name, fingerprint in manifest['file_sha256'].items():
             binding = PurePosixPath(name)
-            require(not binding.is_absolute() and '..' not in binding.parts, 'Unsafe package path')
+            require(binding.parts and binding.as_posix() == name and not binding.is_absolute()
+                    and '..' not in binding.parts and all('\\' not in part and ':' not in part
+                        and not part.endswith(('.', ' ')) and not PureWindowsPath(part).is_reserved()
+                        for part in binding.parts), 'Unsafe package path')
             data = archive.read(name)
             require(member.digest(data) == fingerprint, 'Package file digest mismatch')
             target = destination.joinpath(*binding.parts)
@@ -446,10 +449,8 @@ def qualify_observation_game(directory, root, release):
 
 def qualify_mission_executor(directory, root, release):
     expected = release['universal_mission_sha256'][member.EXECUTOR_ZIP]
-    require(member.digest((directory / member.LEGACY_EXECUTOR_ZIP).read_bytes()) == member.LEGACY_EXECUTOR_SHA256,
-            'Published HARNESS executor 1.0.0 bytes changed')
-    require(member.digest((directory / member.PREVIOUS_EXECUTOR_ZIP).read_bytes()) == member.PREVIOUS_EXECUTOR_SHA256,
-            'Published HARNESS executor 1.1.0 bytes changed')
+    for name, fingerprint in member.HISTORICAL_EXECUTORS.items():
+        require(member.digest((directory / name).read_bytes()) == fingerprint, f'Published archive bytes changed for {name}')
     manifest = install(directory / member.EXECUTOR_ZIP, root, {'sha256': expected})
     require(manifest['id'] == 'frontier-harness-executor', 'Wrong local executor package')
     require(manifest['source'] == member.commit_url(release['source_commit']), 'Executor source binding changed')
@@ -465,6 +466,8 @@ from bridge.mission_schema_context import constructor_context
 from bridge.mission_sources import pinned_source
 from bridge.mission_contracts import describe
 from bridge.mission_tools import EVALUATOR_SHA256
+from bridge.native_intelligence import NativeIntelligenceService
+from bridge.paired_missions import PairedMissionService
 from bridge.server import HarnessServer
 from bridge.universal_missions import UniversalMissionService
 runtime = Runtime(strict_json(pathlib.Path('local-model.example.json').read_bytes()))
@@ -475,11 +478,13 @@ print(json.dumps({'local': runtime.local_only, 'registered': len(describe()), 'v
                   'exact': exact['output']['scaled'], 'outcome': callable(assemble_outcome),
                   'schema': callable(constructor_context), 'pinned_source': callable(pinned_source),
                   'sql_evaluator': EVALUATOR_SHA256, 'bridge': HarnessServer.__name__, 'service': UniversalMissionService.__name__,
+                  'native_setup': callable(NativeIntelligenceService.verify), 'paired_setup': callable(PairedMissionService),
                   'profiles': IntelligenceProfiles.__name__, 'evidence': callable(assess_claims)}))
 '''
     result, elapsed = call(root, sys.executable, '-I', '-S', '-c', script)
     require(result['local'] and result['registered'] >= 2 and result['value'] == 14 and result['evidence']
             and result['exact'] == '3/20' and result['outcome'] and result['schema'] and result['pinned_source']
+            and result['native_setup'] and result['paired_setup'] and (root / 'app/native-intelligence.js').is_file()
             and all((root / name).is_file() for name in ('Launch-FRONTIER.sh', 'Launch-FRONTIER.command', 'Launch-FRONTIER.cmd')),
             'Distributed executor entry points failed')
     return {'package_sha256': expected, 'replayed_ns': elapsed, **result}

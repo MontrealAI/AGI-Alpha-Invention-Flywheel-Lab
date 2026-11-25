@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import copy
+from contextlib import contextmanager
 import csv
 from datetime import datetime, timezone
 import hashlib
@@ -28,11 +29,11 @@ if not __package__:
 
 if __package__:
     from .adapters import BridgeError, Runtime, strict_json, retrieve_source
-    from .instruments import evaluate
+    from .instruments import evaluate, validate_instrument
     from .workflow_schemas import INSTRUMENT_GRAMMAR, response_schema
 else:
     from adapters import BridgeError, Runtime, strict_json, retrieve_source
-    from instruments import evaluate
+    from instruments import evaluate, validate_instrument
     from workflow_schemas import INSTRUMENT_GRAMMAR, response_schema
 
 NAME = re.compile(r"[A-Za-z0-9][A-Za-z0-9_.-]{0,99}\Z")
@@ -44,6 +45,8 @@ MAX_FILE = 1_048_576
 MAX_STATE = 16_777_216
 # The 1.0 and 1.1 release archives shipped this exact evaluator. Restore it using the current edition.
 LEGACY_PORTABLE_RUNNER_SHA256 = "46d43d4a017f1d32fcd9e05b32316a6fffac27e1a9572ab9ffbbf87338f00322"
+# This released evaluator already supports exact-rational arithmetic.
+EXACT_PORTABLE_RUNNER_1_2_SHA256 = "9c7dede3414cebcf2a99043cb1ef39e546f5b413157e53d2959d131cbfdb8eb7"
 _WORKSPACES = {}
 _WORKSPACES_LOCK = threading.RLock()
 
@@ -98,6 +101,33 @@ def require(condition, message, code="WORKFLOW_INPUT"):
 def filename(name):
     require(isinstance(name, str) and NAME.fullmatch(name) and ".." not in name, "Use a simple artifact filename without a directory or traversal.")
     return name
+
+
+def instrument_repairs(events, *, last_refusals=None):
+    """Recover pending construction refusals from durable action receipts."""
+    repairs = {}
+    for index, event in enumerate(events if isinstance(events, list) else []):
+        detail = event.get("detail") if isinstance(event, dict) else None
+        if not isinstance(detail, dict):
+            continue
+        kind = event.get("kind")
+        if (kind == "tool_refused" and detail.get("code") == "INSTRUMENT_STRUCTURE"
+                or kind == "instrument_refusal_restored"):
+            name, reason = detail.get("artifact"), detail.get("reason")
+            if (isinstance(name, str) and NAME.fullmatch(name) and name.endswith(".json")
+                    and ".." not in name and isinstance(reason, str)):
+                repairs[name] = reason[:500]
+                if last_refusals is not None:
+                    last_refusals[name] = index
+        elif kind == "tool_completed" and detail.get("tool") == "construct_instrument":
+            outcome = detail.get("outcome")
+            if isinstance(outcome, dict) and isinstance(outcome.get("artifact"), str):
+                repairs.pop(outcome["artifact"], None)
+    return repairs
+
+
+def require_rebuilt_instrument(name, repairs):
+    require(name not in repairs, f"{name}: resubmit the corrected construction before running it.", "INSTRUMENT_DEPENDENCY")
 
 
 def _regular(path, maximum=MAX_STATE):
@@ -536,8 +566,11 @@ class WorkflowService:
         if tool == "construct_instrument":
             require(name.endswith(".json"), "Instrument filename must end in .json.")
             spec = action["spec"]
-            require(isinstance(spec, dict) and isinstance(spec.get("inputs"), list) and isinstance(spec.get("outputs"), dict) and spec["outputs"], "Invalid instrument specification.")
-            # Full semantic checks run with the operator's actual cases, not made-up inputs.
+            try:
+                validate_instrument(spec)
+            except ValueError as error:
+                raise BridgeError("INSTRUMENT_STRUCTURE", f"{name}: {error}") from None
+            # Qualification still depends on execution with the operator's actual cases.
             result = self._write(state, name, json.dumps(spec, ensure_ascii=False, allow_nan=False, indent=2), "instrument")
             runner = Path(__file__).with_name("instruments.py")
             self._write(state, "RUN_INSTRUMENT.py", _regular(runner, MAX_FILE).decode(), "trusted_runner")
@@ -553,12 +586,15 @@ class WorkflowService:
 
     def _verify(self, state, *, final=False):
         checks = []
+        repairs = instrument_repairs(state.get("events"))
         acceptance = state["spec"]["acceptance"]
         if state.get("workshop") and not final:
             acceptance = acceptance[:state["workshop"]["challenge_start"]]
         for case in acceptance + state.get("adversarial_cases", []):
             record = {"artifact": case["artifact"], "kind": case["kind"], "passed": False}
             try:
+                if case["kind"] == "instrument":
+                    require_rebuilt_instrument(case["artifact"], repairs)
                 meta = state["artifacts"].get(case["artifact"])
                 require(meta is not None, "Required artifact is absent.")
                 raw = self._read_artifact(state, case["artifact"])
@@ -595,6 +631,14 @@ class WorkflowService:
         state["status"] = status
         self._event(state, "authority_stopped", {"status": status})
 
+    @contextmanager
+    def _execution_slot(self, ident, route, cancelled):
+        with self.runtime.execution_slot(route, cancelled=cancelled) as admission:
+            yield self.runtime, admission
+
+    def _cancel_model(self, ident, run_id):
+        return self.runtime.cancel(run_id)
+
     def _response_schema(self, state, role):
         if state.get("workshop") and role == "builder":
             from .workshop import BUILDER_SCHEMA
@@ -607,7 +651,9 @@ class WorkflowService:
 
     def _after_builder(self, state, response):
         self._verify(state)
-        if "adversary" in state["spec"]["roles"]:
+        if instrument_repairs(state.get("events")):
+            state["phase"] = "builder"
+        elif "adversary" in state["spec"]["roles"]:
             state["phase"] = "adversary"
         elif "critic" in state["spec"]["roles"]:
             state["phase"] = "critic"
@@ -654,9 +700,9 @@ class WorkflowService:
                 return self._closed or current["epoch"] != epoch or current["status"] in TERMINAL | {"paused"} or self._authority_stop(current) is not None
         admitted = False
         try:
-            with self.runtime.execution_slot(route, cancelled=cancelled) as admission:
+            with self._execution_slot(ident, route, cancelled) as (runtime, admission):
                 admitted = True
-                return self._step_model(ident, _admission=admission, _waiting=marker, _epoch=epoch)
+                return self._step_model(ident, _admission=admission, _waiting=marker, _epoch=epoch, _runtime=runtime)
         except BridgeError as error:
             if admitted:
                 raise
@@ -677,8 +723,9 @@ class WorkflowService:
                     self._waiting.pop(ident, None)
                 self._release_closed_lease()
 
-    def _step_model(self, ident, _admission=None, _waiting=None, _epoch=None):
+    def _step_model(self, ident, _admission=None, _waiting=None, _epoch=None, _runtime=None):
         from .workflow_strategies import call_limit
+        runtime = self.runtime if _runtime is None else _runtime
         with self._lock(ident):
             state = self._load(ident)
             require(self._waiting.get(ident) is _waiting, "A model request is already queued.", "WORKFLOW_BUSY")
@@ -722,8 +769,8 @@ class WorkflowService:
             self._save(state)
         try:
             request = {**route, "run_id": request_id, "prompt": prompt, "max_output_tokens": state["spec"]["max_output_tokens"]}
-            if role in {"builder", "critic"} and hasattr(self.runtime, "provider"):
-                configured = self.runtime.provider(route["provider"])
+            if role in {"builder", "critic"} and hasattr(runtime, "provider"):
+                configured = runtime.provider(route["provider"])
                 model = getattr(configured, "models", {}).get(route["model"])
                 if (getattr(configured, "kind", None) in {"openai", "ollama"}
                         and not getattr(configured, "remote", True) and getattr(model, "json_schema", False) is True):
@@ -748,11 +795,11 @@ class WorkflowService:
                         self._event(live, "model_progress", {"run_id": request_id, "role": role, "received_characters": progress["characters"], "scope": "Transport progress, not accepted output."})
                         self._save(live)
                         progress["reported"] = progress["characters"]
-            supports_progress = "on_event" in inspect.signature(self.runtime.generate).parameters
+            supports_progress = "on_event" in inspect.signature(runtime.generate).parameters
             options = {"on_event": on_event} if supports_progress else {}
             if _admission is not None:
                 options["_admission"] = _admission
-            result = self.runtime.generate(request, **options)
+            result = runtime.generate(request, **options)
             require(isinstance(result, dict) and isinstance(result.get("text"), str) and 0 < len(result["text"].encode()) <= MAX_FILE, "Model returned an invalid or oversized workflow response.", "WORKFLOW_MODEL_RESPONSE")
         except Exception as error:
             with self._lock(ident):
@@ -778,7 +825,7 @@ class WorkflowService:
                 if current["epoch"] == epoch:
                     current["status"] = "paused"
                     current["inflight"] = None
-                    budget = getattr(self.runtime, "budget", None)
+                    budget = getattr(runtime, "budget", None)
                     self._event(current, "model_error", {"run_id": request_id, "role": role, **route, "code": getattr(error, "code", "MODEL_ERROR"), "message": "Model request failed. Its provider allowance or cost may have been consumed; inspect connection before explicitly resuming.", "usage_status": "UNKNOWN", "session_budget_snapshot": budget.view() if budget is not None else None})
                     self._save(current)
                 return self._view(current)
@@ -831,6 +878,7 @@ class WorkflowService:
                     if role == "builder":
                         require(not set(response) - {"summary", "actions", "done"} and isinstance(response.get("actions"), list) and len(response["actions"]) <= 8, "Builder response must contain at most eight actions.")
                         self._record_builder_proposal(state, response)
+                        rejected_instruments = set(instrument_repairs(state.get("events")))
                         for action_index, action in enumerate(response["actions"]):
                             stop = self._authority_stop(state)
                             if stop:
@@ -840,12 +888,25 @@ class WorkflowService:
                                 self._event(state, "actions_truncated", {"remaining_proposals_refused": len(response["actions"]) - action_index, "reason": "Declared tool-action allocation exhausted. Durable artifacts are still independently checked and reviewed."})
                                 break
                             state["actions"] += 1
+                            tool = action.get("tool") if isinstance(action, dict) else None
+                            artifact = action.get("name") if isinstance(action, dict) else None
                             try:
+                                if tool == "run_instrument" and tool in state["spec"]["tool_permissions"] and isinstance(artifact, str):
+                                    require_rebuilt_instrument(artifact, rejected_instruments)
                                 outcome = self._tool(state, action)
-                                self._event(state, "tool_completed", {"tool": action.get("tool"), "outcome": outcome})
+                                if tool == "construct_instrument":
+                                    rejected_instruments.discard(artifact)
+                                self._event(state, "tool_completed", {"tool": tool, "outcome": outcome})
                             except (BridgeError, ValueError, TypeError, KeyError, RecursionError) as error:
-                                self._event(state, "tool_refused", {"tool": action.get("tool") if isinstance(action, dict) else None, "reason": str(error)[:500], "proposal_fields": sorted(action) if isinstance(action, dict) else None})
-                                state["feedback"] = "Tool failed or refused: " + str(error)[:500]
+                                code = getattr(error, "code", None)
+                                refusal = {"tool": tool, "reason": str(error)[:500], "proposal_fields": sorted(action) if isinstance(action, dict) else None}
+                                if code == "INSTRUMENT_STRUCTURE":
+                                    rejected_instruments.add(artifact)
+                                if code in {"INSTRUMENT_STRUCTURE", "INSTRUMENT_DEPENDENCY"}:
+                                    refusal.update(code=code, artifact=artifact)
+                                self._event(state, "tool_refused", refusal)
+                                if code != "INSTRUMENT_DEPENDENCY":
+                                    state["feedback"] = "Tool failed or refused: " + refusal["reason"]
                             # Each local action is durable before moving to the next one.
                             self._save(state)
                         if state["status"] == "running":
@@ -978,7 +1039,7 @@ class WorkflowService:
             self._save(state)
         if inflight:
             try:
-                self.runtime.cancel(inflight["run_id"])
+                self._cancel_model(ident, inflight["run_id"])
             except Exception:
                 pass
         if state.get("branch_runs"):
@@ -1053,7 +1114,7 @@ class WorkflowService:
             require(kind != "trusted_runner" or name == "RUN_INSTRUMENT.py", "Imported runner must have its fixed filename.")
             if name == "RUN_INSTRUMENT.py":
                 require(kind == "trusted_runner" and (
-                    artifact_sha256 == LEGACY_PORTABLE_RUNNER_SHA256
+                    artifact_sha256 in {LEGACY_PORTABLE_RUNNER_SHA256, EXACT_PORTABLE_RUNNER_1_2_SHA256}
                     or raw == _regular(Path(__file__).with_name("instruments.py"), MAX_FILE)
                 ), "Imported runner does not match a released trusted evaluator.", "WORKFLOW_INTEGRITY")
         from .workflow_strategies import PARENT_STRATEGIES, validate_branch_exports
@@ -1073,6 +1134,8 @@ class WorkflowService:
         state["verification"] = {"passed": False, "checks": [], "scope": "Imported historical output; current acceptance not rechecked."}
         state["adversarial_cases"], state["unadjudicated_counterexamples"] = [], []
         self._event(state, "imported", {"source_run": old.get("id"), "export_sha256": value["sha256"], "historical_status": old.get("status"), "current_verification": "NOT_VERIFIED", "historical_events": old.get("events", [])})
+        for name, reason in instrument_repairs(old.get("events")).items():
+            self._event(state, "instrument_refusal_restored", {"artifact": name, "reason": reason})
 
     def import_archive(self, value):
         old = self._validate_import(value)
@@ -1108,6 +1171,7 @@ class WorkflowService:
         with self._lock(capability_id):
             prior = self._load(capability_id)
             require(prior["status"] == "complete" and prior["verification"]["passed"], "Only a locally verified complete capability may be inherited.")
+            require(not instrument_repairs(prior.get("events")), "The source capability has unresolved instrument revisions.", "INSTRUMENT_DEPENDENCY")
             if prior.get("workshop"):
                 from .workshop import require_compatible
                 require_compatible(self, state, prior)
@@ -1120,6 +1184,7 @@ class WorkflowService:
         with self._lock(capability_id):
             state = self._load(capability_id)
             require(state["status"] == "complete" and state["verification"]["passed"], "Capability is not locally verified.")
+            require(not instrument_repairs(state.get("events")), "The capability has unresolved instrument revisions.", "INSTRUMENT_DEPENDENCY")
             if state.get("workshop"):
                 from .workshop import require_current_evidence
                 require_current_evidence(self, state)

@@ -372,6 +372,15 @@ class HTTPBoundaryTests(unittest.TestCase):
         self.assertEqual(self.call("GET", "/api/status")[0], 403)
         self.assertEqual(self.call("OPTIONS", "/api/generate")[0], 403)
 
+    def test_connector_starts_without_resolving_the_loopback_host(self):
+        with patch("socket.getfqdn", side_effect=AssertionError("Unexpected name lookup")):
+            server = HarnessServer(("127.0.0.1", 0), Runtime(), self.directory.name)
+            try:
+                self.assertEqual(server.server_name, "127.0.0.1")
+                self.assertGreater(server.server_port, 0)
+            finally:
+                server.server_close()
+
     def test_post_requires_token_and_json(self):
         self.assertEqual(self.call("POST", "/api/generate", {"Content-Type": "application/json"}, "{}")[0], 403)
         headers = {"X-Harness-Token": self.server.token, "Content-Type": "text/plain"}
@@ -385,6 +394,24 @@ class HTTPBoundaryTests(unittest.TestCase):
         self.assertIn(b"Fixture", raw)
         self.assertEqual(headers["X-Frame-Options"], "DENY")
         self.assertIn("connect-src 'self'", headers["Content-Security-Policy"])
+
+    def test_pages_can_open_only_the_native_setup_document(self):
+        intent = "/?setup=intelligence&route=api&lang=fr"
+        navigation = {"Sec-Fetch-Site": "cross-site", "Sec-Fetch-Mode": "navigate", "Sec-Fetch-Dest": "document"}
+        status, headers, raw = self.call("GET", intent, navigation)
+        self.assertEqual(status, 200)
+        self.assertIn(b"Fixture", raw)
+        self.assertNotIn("Access-Control-Allow-Origin", headers)
+        self.assertEqual(headers["X-Frame-Options"], "DENY")
+        for request_headers in ({**navigation, "Sec-Fetch-Dest": "iframe"},
+                                {**navigation, "Sec-Fetch-Mode": "cors"},
+                                {**navigation, "Origin": "https://montrealai.github.io"},
+                                {**navigation, "Host": "wrong.invalid"}):
+            self.assertEqual(self.call("GET", intent, request_headers)[0], 403)
+        self.assertEqual(self.call("GET", "/?setup=intelligence&route=other&lang=fr", navigation)[0], 403)
+        self.assertEqual(self.call("GET", intent + "&ticket=invalid", navigation)[0], 404)
+        self.assertEqual(self.call("GET", "/api/session", {**navigation, "X-Harness-Client": "browser"})[0], 403)
+        self.assertEqual(self.call("OPTIONS", "/api/frontier-intelligence/verify", navigation)[0], 403)
 
 
 class NativeBoundaryTests(unittest.TestCase):

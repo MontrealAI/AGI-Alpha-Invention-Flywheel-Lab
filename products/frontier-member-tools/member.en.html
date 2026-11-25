@@ -31,7 +31,7 @@
             <textarea id="goal-text" rows="3" maxlength="24576" autocomplete="off" spellcheck="false"></textarea>
             <button id="goal-submit" type="submit" class="entry-button" disabled>Activate FRONTIER Ω <span aria-hidden="true">→</span></button>
           </div>
-          <p id="goal-local">Your mission stays in this session until you export it or choose an intelligence connection.</p>
+          <p id="goal-local">Choose how to use your mission data. Download a copy to keep work from this tab.</p>
           <details class="goal-more" id="mission-examples">
             <summary>Optional examples</summary>
             <div class="goal-presets">
@@ -60,6 +60,7 @@
           <div id="mission-assumptions-group" hidden><dt>Assumptions</dt><dd><ul id="mission-assumptions"></ul></dd></div>
         </dl>
         <details id="mission-work-panel"><summary>Work returned for review</summary><pre id="mission-work"></pre><button id="mission-work-download" type="button" class="quiet">Download returned work</button></details>
+        <ul class="mission-returned-files" id="mission-returned-files" hidden></ul>
         <ul class="mv-links mission-capabilities" id="mission-capabilities"></ul>
       </div>
       <div id="mission-published" class="mission-published" hidden>
@@ -68,7 +69,7 @@
         <p class="mv-links" id="mission-published-links"></p>
       </div>
       <section id="mission-execution" class="mission-execution" aria-labelledby="execution-title" hidden>
-        <h5 id="execution-title">Local execution</h5>
+        <h5 id="execution-title">Mission execution</h5>
         <p id="execution-status" role="status"></p>
         <p id="execution-counts" class="packet-meta"></p>
         <section id="execution-evidence" aria-labelledby="execution-evidence-title" hidden>
@@ -83,6 +84,7 @@
           <button id="execution-pause" type="button" class="quiet" hidden>Pause execution</button>
           <button id="execution-resume" type="button" class="quiet" hidden>Resume execution</button>
           <button id="execution-cancel" type="button" class="quiet" hidden>Cancel execution</button>
+          <button id="execution-approve" type="button" class="entry-button" hidden>Review provider permission</button>
           <button id="execution-retry" type="button" class="quiet" hidden>Check the submitted mission</button>
           <button id="execution-export" type="button" class="quiet" disabled>Download execution record</button>
         </div>
@@ -90,25 +92,28 @@
       <div class="mv-actions mission-actions">
         <button id="execution-send-current" type="button" class="entry-button" hidden>Start local execution</button>
         <button id="mission-run-local" type="button" class="entry-button" hidden>Run with my local model</button>
-        <a id="mission-configure" class="quiet" href="#mission-intelligence">Configure intelligence</a>
+        <a id="mission-configure" class="entry-button" href="#mission-intelligence">Choose intelligence <span aria-hidden="true">→</span></a>
         <button id="mission-prepare" type="button" class="quiet">Prepare an assisted mission</button>
         <button id="mission-pause" type="button" class="quiet" hidden>Pause</button>
         <button id="mission-continue" type="button" class="quiet" hidden>Continue investigation</button>
       </div>
       <details id="mission-handoff" hidden>
-        <summary>Prepared mission prompt</summary>
-        <p>Review the exact prompt before sharing it. Open your chosen assistant separately and bring back the structured reply.</p>
+        <summary>Continue with an assistant</summary>
+        <p>Review the brief, then take it to ChatGPT or another assistant you use. Bring its work back to this mission for review.</p>
         <label for="mission-prompt">Prepared mission prompt</label>
         <textarea id="mission-prompt" rows="8" readonly></textarea>
         <label class="mv-check"><input id="mission-share" type="checkbox"> I have reviewed the prompt and may share this information with the assistant I choose.</label>
         <div class="mv-actions">
           <button id="mission-copy" type="button" class="quiet" disabled>Copy reviewed prompt</button>
           <button id="mission-prompt-download" type="button" class="quiet" disabled>Download reviewed prompt</button>
-          <a id="mission-assistant" href="https://chatgpt.com/" hidden rel="noreferrer">Open ChatGPT</a>
+          <a id="mission-assistant" href="https://chatgpt.com/" target="_blank" hidden rel="noopener noreferrer">Open ChatGPT in a new tab</a>
         </div>
-        <label for="mission-reply">Structured reply</label>
+        <label for="mission-reply">Paste the assistant’s response</label>
         <textarea id="mission-reply" rows="5" maxlength="100000" autocomplete="off" spellcheck="false"></textarea>
-        <button id="mission-import-reply" type="button" class="quiet">Open the reply</button>
+        <div class="mv-actions">
+          <button id="mission-import-reply" type="button" class="entry-button">Keep response for review</button>
+          <label for="mission-import-artifact">Or add a text file (up to 32 KiB)<input id="mission-import-artifact" type="file"></label>
+        </div>
       </details>
       <div class="mv-actions mission-secondary">
         <button id="mission-revise" type="button" class="quiet">Revise ambition</button>
@@ -289,31 +294,64 @@
   </section>
   <section class="mv-section foundry-panel" id="my-intelligence" aria-labelledby="my-intelligence-title" data-member-view hidden>
     <h3 id="my-intelligence-title" tabindex="-1">My intelligence <span>Ω</span></h3>
-    <p class="mf-section-intro">Connect intelligence once and return to your ambition.</p>
+    <p class="mf-section-intro">Use the intelligence you already have. Return to the same ambition when you’re ready.</p>
     <details class="foundry-stage mission-connection" id="mission-intelligence" open>
       <summary>Choose how to run your mission</summary>
-      <details class="intelligence-choice">
-        <summary>Use my ChatGPT subscription</summary>
-        <p>Use the official connection when the application and your plan qualify. Review a prepared handoff if the connection is unavailable.</p>
-        <p class="mv-links"><a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/main/publication/evidence-bound/README.md#chatgpt-and-codex">ChatGPT and Codex setup</a> <a href="#my-intelligence" data-local-intelligence-workbench target="_blank" rel="noopener noreferrer" hidden>Open ChatGPT and Codex on this device</a></p>
-      </details>
-      <details class="intelligence-choice mission-execution-connection" open>
-        <summary>Use intelligence on my computer</summary>
-        <p>Extract the download. Open the Launch-FRONTIER file for your system and bring the one-use code here.</p>
-        <p class="mv-links"><a href="frontier-harness-executor-1.2.0.zip" download>Download the local executor</a>
-          <a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/main/publication/evidence-bound/README.md">Local setup guide</a></p>
+      <div class="intelligence-grid">
+        <article class="intelligence-option">
+          <h4>ChatGPT</h4>
+          <p>Review a mission brief, open your ChatGPT account and bring the work back here.</p>
+          <button type="button" class="entry-button" data-frontier-assisted>Continue with ChatGPT · assisted</button>
+        </article>
+        <article class="intelligence-option">
+          <h4>On my computer</h4>
+          <p>Find a running local model and check that it can respond. Your mission can run on this computer.</p>
+          <button type="button" class="entry-button" data-frontier-connection="local">Find my local intelligence</button>
+          <div class="intelligence-browser" id="intelligence-browser" hidden>
+            <p>Use your browser’s built-in model for a first pass. Your browser may need to download the model.</p>
+            <button type="button" class="quiet" id="intelligence-browser-start">Try the model in this browser</button>
+            <button type="button" class="quiet" id="intelligence-browser-cancel" hidden>Cancel</button>
+            <p id="intelligence-browser-status" role="status"></p>
+          </div>
+        </article>
+        <article class="intelligence-option">
+          <h4>My AI provider</h4>
+          <p>Use your own provider account and key in the private desktop companion. Review the model, data and spending limits before sharing the mission.</p>
+          <button type="button" class="entry-button" data-frontier-connection="api">Connect my API securely</button>
+        </article>
+        <article class="intelligence-option">
+          <h4>Local models and verified tools</h4>
+          <p>Prefer a verified tool when it fits. Use your checked local model when the mission needs reasoning or new work.</p>
+          <button type="button" class="entry-button" data-frontier-connection="hybrid">Use the best available intelligence</button>
+        </article>
+      </div>
+      <section class="intelligence-next" id="intelligence-next" aria-labelledby="intelligence-next-title" hidden>
+        <h4 id="intelligence-next-title" tabindex="-1">Connection status</h4>
+        <p id="intelligence-route-status" role="status"></p>
+        <div class="mv-actions">
+          <a id="intelligence-open-native" class="entry-button" target="_blank" rel="noopener noreferrer" hidden>Continue in private setup</a>
+          <button id="intelligence-check-native" class="quiet" type="button" hidden>Check mission status</button>
+          <button id="intelligence-cancel-native" class="quiet" type="button" hidden>Cancel this setup</button>
+          <button id="intelligence-assist" class="quiet" type="button" data-frontier-assisted hidden>Use an assistant instead</button>
+        </div>
+      </section>
+      <details class="intelligence-choice mission-execution-connection">
+        <summary>Desktop companion and pairing</summary>
+        <p id="intelligence-desktop">On a computer, extract the desktop companion, open Launch-FRONTIER for your system and copy the one-use code.</p>
+        <p id="intelligence-mobile" hidden>Desktop setup requires a computer. You can continue with ChatGPT through an assisted mission here.</p>
+        <p class="mv-links"><a id="intelligence-companion-download" href="frontier-harness-executor-1.3.0.zip" download>Download the desktop companion</a></p>
         <form id="execution-code-form" autocomplete="off">
-          <label for="execution-code">One-use pairing code</label>
+          <label for="execution-code">One-use code from the desktop companion</label>
           <input type="password" id="execution-code" required maxlength="43" autocomplete="off" spellcheck="false">
-          <button type="submit" class="quiet">Pair this browser</button>
+          <button type="submit" class="entry-button">Pair this browser</button>
         </form>
         <p id="execution-connection" role="status"></p>
         <div id="intelligence-local-controls" hidden>
           <p id="intelligence-readiness" role="status"></p>
           <div id="intelligence-install" hidden>
             <p id="intelligence-device"></p>
-            <p>Choose a runtime’s setup guide, then start a model and search again.</p>
-            <p class="mv-links"><a href="https://ollama.com/download">Ollama</a> <a href="https://lmstudio.ai/download">LM Studio</a> <a href="https://github.com/ggml-org/llama.cpp/releases">llama.cpp</a> <a href="https://docs.vllm.ai/en/latest/getting_started/installation/">vLLM</a></p>
+            <p>If you have a model installed, start it and search again. For a first install, choose Ollama or LM Studio and start a model that fits the available memory shown above.</p>
+            <p class="mv-links"><a href="https://ollama.com/download" target="_blank" rel="noopener noreferrer">Get Ollama</a> <a href="https://lmstudio.ai/download" target="_blank" rel="noopener noreferrer">Get LM Studio</a></p>
           </div>
           <div class="foundry-actions">
             <button id="intelligence-discover" type="button" class="quiet">Find local models</button>
@@ -328,18 +366,16 @@
         </div>
         <button id="execution-disconnect" type="button" class="quiet" hidden>Disconnect and pause running work</button>
       </details>
-      <details class="intelligence-choice">
-        <summary>Connect an AI provider</summary>
-        <p>Configure a provider in the local HARNESS workbench. Review the exact account, model and spending limits before running. API credits for eligible subscriptions use a separate API organization.</p>
-        <p class="mv-links"><a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/main/publication/evidence-bound/README.md#authorized-api-access">Provider and API credit setup</a> <a href="#my-intelligence" data-local-intelligence-workbench target="_blank" rel="noopener noreferrer" hidden>Open the local HARNESS workbench</a></p>
-      </details>
-      <details class="intelligence-choice">
-        <summary>Use intelligent hybrid execution</summary>
-        <p>Pair this computer and select the preference for verified tools when choosing a local model. The bridge keeps this selection on your computer.</p>
-        <p><a href="#execution-code-form">Pair this computer</a></p>
-      </details>
+      <div class="mv-actions intelligence-return">
+        <a href="#frontier-mission-panel" id="mission-return" hidden>Return to your mission</a>
+        <button type="button" id="mission-checkpoint" class="quiet" hidden>Download this mission</button>
+        <a href="#mission-keeper" id="mission-restore">Reopen a mission</a>
+        <a href="#mission-keeper" id="execution-recover" hidden>Open companion missions</a>
+      </div>
+      <p id="mission-checkpoint-status" role="status"></p>
       <details class="intelligence-choice">
         <summary>Advanced connection settings</summary>
+      <p class="mv-links"><a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/main/publication/evidence-bound/README.md" target="_blank" rel="noopener noreferrer">Technical setup and provider documentation</a></p>
       <form id="mission-connection-form" autocomplete="off">
         <h4>Local inference</h4>
         <div class="foundry-fields">
@@ -354,7 +390,6 @@
         <button type="submit" class="quiet">Use this local configuration</button>
       </form>
       <p id="mission-connection-status" class="status" role="status"></p>
-      <p><a href="#frontier-mission-panel" id="mission-return" hidden>Return to your mission</a></p>
       </details>
     </details>
     <template id="foundry-public-data"><!-- FOUNDRY_PUBLIC_DATA --></template>
@@ -577,7 +612,7 @@ python3 verify_factory.py</code></pre>
     <p><a id="mf-current-result" href="#mv-screen-result" hidden>Return to this session’s result</a></p>
     <details id="mission-keeper" class="mission-keeper">
       <summary>Save or reopen a mission</summary>
-      <p>Save a mission file to continue after locking, refreshing or switching devices. The file contains your ambition and work. Keep it somewhere you control.</p>
+      <p>Download a mission file to keep work from this tab across reloads, locks or device changes. It contains your ambition and work. Keep it somewhere you control. After pairing, you can also reopen missions saved by the desktop companion.</p>
       <div class="mv-actions">
         <button id="mission-export" type="button" class="quiet" disabled>Download current mission</button>
         <label for="mission-import">Reopen a mission file<input id="mission-import" type="file" accept=".json,application/json"></label>

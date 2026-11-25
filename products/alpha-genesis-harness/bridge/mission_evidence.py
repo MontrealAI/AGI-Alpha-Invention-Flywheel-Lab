@@ -7,7 +7,7 @@ from pathlib import Path
 import re
 
 from .adapters import BridgeError, strict_json
-from .workflows import NAME, digest, require
+from .workflows import EXACT_PORTABLE_RUNNER_1_2_SHA256, NAME, digest, instrument_repairs, require
 
 
 ORIGINS = frozenset({"AUTHORIZED_MISSION_INPUT", "OPERATOR_SUPPLIED_OBSERVATION", "VERIFIED_EXTERNAL_SOURCE",
@@ -222,9 +222,13 @@ def _version(tool):
 def _compatible_operation(tool, operation, read):
     if operation["version_sha256"] == _version(tool):
         return True
-    # Existing 1.1 checkpoints used the same portable arithmetic semantics.
-    # An exact-rational artifact requires an execution by its own evaluator.
-    return (tool == "run_instrument" and operation["version_sha256"] == LEGACY_INSTRUMENT_VERSION
+    if tool != "run_instrument":
+        return False
+    if operation["version_sha256"] == EXACT_PORTABLE_RUNNER_1_2_SHA256:
+        # The structural admission check does not change 1.2 numerical results.
+        return True
+    # The 1.1 evaluator did not have exact-rational arithmetic.
+    return (operation["version_sha256"] == LEGACY_INSTRUMENT_VERSION
             and "numeric_mode" not in strict_json(read(operation["artifact"])))
 
 
@@ -253,8 +257,11 @@ def assess_claims(state, read):
     plan = requirements.get("evidence")
     if not plan:
         return {"status": "UNVERIFIED", "claims": [], "scope": SCOPE}
+    journal = state.get("events", [])
+    last_refusals = {}
+    repairs = instrument_repairs(journal, last_refusals=last_refusals)
     latest = {}
-    for item in state["events"]:
+    for item in journal:
         if item["kind"] == "tool_completed":
             receipt = item["detail"].get("outcome", {}).get("claim_execution")
             ident = receipt.get("claim_id") if isinstance(receipt, dict) else None
@@ -264,7 +271,8 @@ def assess_claims(state, read):
             continue
         if _identity(ident):
             latest[ident] = item
-    claims = [_claim_report(state, requirements, claim, latest.get(claim["id"]), read) for claim in plan["claims"]]
+    claims = [_claim_report(state, requirements, claim, latest.get(claim["id"]), read, repairs, last_refusals)
+              for claim in plan["claims"]]
     states = {item["status"] for item in claims}
     if len(states) == 1:
         status = next(iter(states))
@@ -275,7 +283,7 @@ def assess_claims(state, read):
     return {"status": status, "claims": claims, "scope": SCOPE}
 
 
-def _claim_report(state, requirements, claim, event, read):
+def _claim_report(state, requirements, claim, event, read, repairs, last_refusals):
     report = {key: claim[key] for key in ("id", "dataset", "unit", "dimension", "locator", "requires")}
     report.update(mission_id=state["id"], revision_sha256=state["spec_hash"], source_version=claim["version"],
                   claim_contract_sha256=digest(claim))
@@ -299,6 +307,13 @@ def _claim_report(state, requirements, claim, event, read):
                and state["artifacts"].get(operation["artifact"], {}).get("sha256") == operation["artifact_sha256"]
                and _compatible_operation(claim["tool"], operation, read),
                "EXECUTION_OPERATION_STALE")
+        if claim["tool"] == "run_instrument":
+            artifact = operation["artifact"]
+            _check(artifact not in repairs, "INSTRUMENT_REPAIR_REQUIRED")
+            # A validated reconstruction can reproduce the previous bytes.
+            # The receipt still needs to come from a run after the refusal.
+            refusal = last_refusals.get(artifact)
+            _check(refusal is None or event["index"] > refusal, "EXECUTION_OPERATION_STALE")
         saved = receipt["result_artifact"]
         if saved is not None:
             name = saved["artifact"]

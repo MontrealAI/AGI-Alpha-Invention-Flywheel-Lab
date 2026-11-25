@@ -13,10 +13,11 @@ import json
 import mimetypes
 from pathlib import Path
 import secrets
+from socketserver import TCPServer
 import sys
 import threading
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
-from urllib.parse import urlsplit
+from urllib.parse import parse_qs, urlsplit
 import webbrowser
 import zipfile
 
@@ -25,13 +26,15 @@ LOADED_SOURCE_SHA256 = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
 if not __package__:
     sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from bridge.adapters import BridgeError, MAX_BODY, Runtime, retrieve_source, strict_json
-from bridge.pages_missions import ALLOWED_HEADERS, PAGES_ORIGIN, PREFIX as MISSIONS_PREFIX
+from bridge.pages_missions import ALLOWED_HEADERS, PAGES_ORIGIN, PREPARE as MISSION_PREPARE, PREFIX as MISSIONS_PREFIX
 from bridge.services import AccessRuntime
 
 PRODUCT = Path(__file__).resolve().parent.parent
 APP = PRODUCT / "app"
 STATIC_FILES = {"/": "index.html", "/index.html": "index.html", "/app.js": "app.js",
-                "/engine.js": "engine.js", "/styles.css": "styles.css", "/workshop.js": "workshop.js"}
+                "/engine.js": "engine.js", "/styles.css": "styles.css", "/workshop.js": "workshop.js",
+                "/native-intelligence.js": "native-intelligence.js"}
+INTELLIGENCE_API = "/api/frontier-intelligence/"
 PAIR_GUIDE = "/frontier-pair/"
 FRONTIER_URL = PAGES_ORIGIN + "/AGI-Alpha-Invention-Flywheel-Lab/frontier-omega-alpha/"
 
@@ -74,6 +77,11 @@ class HarnessServer(ThreadingHTTPServer):
     daemon_threads = True
     allow_reuse_address = True
 
+    def server_bind(self):
+        # The service accepts only a literal loopback host. Starting it needs no name lookup.
+        TCPServer.server_bind(self)
+        self.server_name, self.server_port = self.server_address
+
     def __init__(self, address, runtime=None, app_path=APP, *, config=None, workspace=None):
         if address[0] != "127.0.0.1":
             raise BridgeError("BIND", "This connector binds only to 127.0.0.1.")
@@ -84,6 +92,7 @@ class HarnessServer(ThreadingHTTPServer):
         self._genesis_next = None
         self._local_connections = None
         self._intelligence_profiles = None
+        self._native_intelligence = None
         self._pairing_guide = None
         self._upgrade_foundry = None
         self._frontier_monitor = None
@@ -113,18 +122,21 @@ class HarnessServer(ThreadingHTTPServer):
             return self._workflows
 
     def enable_pages_missions(self, *, provider=None, model=None, **policy):
+        from bridge.paired_missions import PairedMissionService
         from bridge.pages_missions import PagesMissions
-        from bridge.universal_missions import UniversalMissionService
         role = None
         if model is not None:
             configured = self.runtime.provider(provider)
             if configured.remote or model not in configured.models:
                 raise BridgeError("MISSION_PROVIDER", "Select an explicitly configured local model.")
             role = {"provider": provider, "model": model}
-        service = UniversalMissionService(self.runtime, self.workspace / "universal-missions",
-                                          server_source_sha256=LOADED_SOURCE_SHA256)
+        service = PairedMissionService(self.runtime, self.workspace / "universal-missions",
+                                       server_source_sha256=LOADED_SOURCE_SHA256,
+                                       provider_profiles=self.native_intelligence.get_route,
+                                       profile_redact=self.native_intelligence.redact)
         try:
-            self.pages_missions = PagesMissions(service, role=role, intelligence=self.intelligence_profiles, **policy)
+            self.pages_missions = PagesMissions(service, role=role, intelligence=self.intelligence_profiles,
+                                                remote=True, **policy)
         except Exception:
             service.close()
             raise
@@ -149,6 +161,8 @@ class HarnessServer(ThreadingHTTPServer):
     def server_close(self):
         if self.pages_missions is not None:
             self.pages_missions.service.close()
+        if self._native_intelligence is not None:
+            self._native_intelligence.close()
         if self._frontier_monitor is not None:
             self._frontier_monitor.close()
         if self._upgrade_foundry is not None:
@@ -181,6 +195,20 @@ class HarnessServer(ThreadingHTTPServer):
                 from bridge.intelligence_profiles import IntelligenceProfiles
                 self._intelligence_profiles = IntelligenceProfiles(self.local_connections)
             return self._intelligence_profiles
+
+    @property
+    def native_intelligence(self):
+        with self._workflow_lock:
+            if self._native_intelligence is None:
+                from bridge.native_intelligence import NativeIntelligenceService
+                self._native_intelligence = NativeIntelligenceService(self.runtime, self.workspace)
+            return self._native_intelligence
+
+    def redact(self, text):
+        sanitized = self.runtime.redact(text)
+        if self._native_intelligence is not None:
+            return self._native_intelligence.redact(sanitized)
+        return sanitized
 
     @property
     def upgrade_foundry(self):
@@ -236,15 +264,22 @@ class Handler(BaseHTTPRequestHandler):
 
     def json(self, status, value):
         raw = json.dumps(value, ensure_ascii=False, allow_nan=False)
-        self.send_bytes(status, self.server.runtime.redact(raw).encode("utf-8"))
+        try:
+            sanitized = self.server.redact(raw)
+        except (BridgeError, ValueError, TypeError, OSError):
+            return self.send_bytes(409, b'{"error":{"code":"INTELLIGENCE_STORAGE"}}')
+        self.send_bytes(status, sanitized.encode("utf-8"))
 
-    def boundary(self, authenticated=False, bootstrap=False):
+    def boundary(self, authenticated=False, bootstrap=False, setup_navigation=False):
         if self.headers.get_all("Host") != [self.server.host]:
             raise BridgeError("HOST", "Use the exact loopback URL printed by the connector.", 403)
         origin = self.headers.get("Origin")
         if origin is not None and origin != self.server.origin:
             raise BridgeError("ORIGIN", "Cross-origin connector requests are refused.", 403)
-        if self.headers.get("Sec-Fetch-Site") not in {None, "same-origin", "none"}:
+        navigation = (setup_navigation and not self.headers.get_all("Origin")
+                      and self.headers.get_all("Sec-Fetch-Mode") == ["navigate"]
+                      and self.headers.get_all("Sec-Fetch-Dest") == ["document"])
+        if self.headers.get("Sec-Fetch-Site") not in {None, "same-origin", "none"} and not navigation:
             raise BridgeError("ORIGIN", "Cross-site connector requests are refused.", 403)
         if bootstrap and self.headers.get("X-Harness-Client") != "browser":
             raise BridgeError("SESSION", "The application must request its connector session.", 403)
@@ -265,6 +300,9 @@ class Handler(BaseHTTPRequestHandler):
         limit = 17 * 1024 * 1024 if self.path == "/api/workflows/import" else MAX_BODY
         if self.path.startswith(MISSIONS_PREFIX):
             limit = 32 * 1024
+            if self.path[len(MISSIONS_PREFIX):] in {MISSION_PREPARE, "submit"}:
+                # Each byte in two 24 KiB texts can occupy six bytes as a JSON escape.
+                limit = (2 * 24 * 6 + 1) * 1024
         if size > limit:
             raise BridgeError("BODY", f"Request exceeds {limit // 1024} KiB.", 413)
         data = self.rfile.read(size)
@@ -277,7 +315,17 @@ class Handler(BaseHTTPRequestHandler):
 
     def do_GET(self):
         try:
-            self.boundary()
+            setup_navigation = False
+            if self.path.startswith("/?"):
+                try:
+                    query = parse_qs(self.path[2:], keep_blank_values=True, max_num_fields=3, strict_parsing=True)
+                except ValueError:
+                    raise BridgeError("NOT_FOUND", "Resource not found.", 404) from None
+                setup_navigation = (set(query) == {"setup", "route", "lang"}
+                                    and query["setup"] == ["intelligence"]
+                                    and query["route"] in (["local"], ["api"], ["hybrid"])
+                                    and query["lang"] in (["en"], ["fr"]))
+            self.boundary(setup_navigation=setup_navigation)
             if self.path.startswith(PAIR_GUIDE):
                 code = escape(self.server.consume_pairing_guide(self.path[len(PAIR_GUIDE):]))
                 page = (
@@ -317,9 +365,10 @@ class Handler(BaseHTTPRequestHandler):
             if self.path in {"/api/chatgpt/status", "/api/codex/status"}:
                 self.boundary(authenticated=True)
                 return self.json(200, self.connection_status(self.path.split("/")[2]))
-            if self.path not in STATIC_FILES:
+            static_path = "/" if setup_navigation else self.path
+            if static_path not in STATIC_FILES:
                 raise BridgeError("NOT_FOUND", "Resource not found.", 404)
-            path = self.server.app_path / STATIC_FILES[self.path]
+            path = self.server.app_path / STATIC_FILES[static_path]
             if path.is_symlink() or not path.is_file() or path.resolve().parent != self.server.app_path:
                 raise BridgeError("NOT_FOUND", "Application file not found.", 404)
             mime = mimetypes.guess_type(path.name)[0] or "application/octet-stream"
@@ -381,6 +430,8 @@ class Handler(BaseHTTPRequestHandler):
                 result = self.frontier_monitor_action(self.path.rsplit("/", 1)[1], data)
             elif self.path.startswith("/api/chatgpt/") or self.path.startswith("/api/codex/"):
                 result = self.connection_action(self.path.split("/")[2], self.path.rsplit("/", 1)[1], data)
+            elif self.path.startswith(INTELLIGENCE_API):
+                result = self.frontier_intelligence_action(self.path[len(INTELLIGENCE_API):], data)
             else:
                 raise BridgeError("NOT_FOUND", "Connector action not found.", 404)
             self.json(200, result)
@@ -390,6 +441,24 @@ class Handler(BaseHTTPRequestHandler):
         except Exception:
             self.json(500, {"error": {"code": "INTERNAL", "message": "Connector failed safely. Inspect configuration and retry with a new run ID."},
                             "budget": self.server.runtime.budget.view()})
+
+    def frontier_intelligence_action(self, action, data):
+        if action == "status" and not data:
+            return self.server.native_intelligence.status()
+        if action in {"discover", "verify", "disconnect"}:
+            return getattr(self.server.native_intelligence, action.replace("-", "_"))(data)
+        if action in {"mission-review", "mission-authorize", "mission-revoke"}:
+            missions = self.server.pages_missions
+            if missions is None:
+                raise BridgeError("MISSION_DISABLED", "Launch the member companion and pair this computer.", 409)
+            if action == "mission-review" and set(data) in ({"ticket"}, {"ticket", "profile"}):
+                return missions.review(data["ticket"], data.get("profile"))
+            if action == "mission-authorize":
+                return missions.approve(data)
+            if action == "mission-revoke" and set(data) == {"id"}:
+                return missions.revoke(data["id"])
+            raise BridgeError("MISSION_INPUT", "The authorization request is incomplete.", 400)
+        raise BridgeError("NOT_FOUND", "Intelligence action not found.", 404)
 
     def frontier_mission(self):
         bridge = self.server.pages_missions
@@ -420,7 +489,10 @@ class Handler(BaseHTTPRequestHandler):
         except Exception:
             code, value = 500, {"error": {"code": "MISSION_EXECUTION"}}
         content = json.dumps(value, ensure_ascii=False, allow_nan=False)
-        sanitized = self.server.runtime.redact(content)
+        try:
+            sanitized = self.server.redact(content)
+        except (BridgeError, ValueError, TypeError, OSError):
+            return self.send_bytes(409, b'{"error":{"code":"INTELLIGENCE_STORAGE"}}', cors=cors)
         if operation == "export" and code == 200 and sanitized != content:
             return self.send_bytes(409, b'{"error":{"code":"MISSION_EXPORT_SECRET"}}', cors=cors)
         return self.send_bytes(code, sanitized.encode(), cors=cors)
@@ -637,8 +709,8 @@ def main():
             server.server_close()
         print("Connector could not start. Check the private configuration and choose an available loopback port.", file=sys.stderr)
         return 1
-    print(f"ALPHA GENESIS HARNESS: {server.origin}")
-    print("Private process-session connector. Closing it resets this session guard; it does not reset provider bills.")
+    print(f"ALPHA GENESIS HARNESS: {server.origin}", flush=True)
+    print("Private process-session connector. Closing it resets this session guard; it does not reset provider bills.", flush=True)
     if not args.no_browser:
         webbrowser.open(guide_url or server.origin)
     try:

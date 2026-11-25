@@ -1,0 +1,87 @@
+{
+  "schema": "frontier/provider-preflight/v1",
+  "recorded_at_utc": "2026-11-25T16:15:37Z",
+  "source_revision": "1bdac817b471157092ea4aac881916824b66734e",
+  "scope": "Credential-free contract and isolation checks on the engineering host. Official provider controls verified from public documentation.",
+  "product_scope": {
+    "wallet_eligible_edition": "Member-authorized API providers, local intelligence and reviewed handoff",
+    "automated_chatgpt_plan": "OUT_OF_SCOPE_FOR_WALLET_ELIGIBLE_EDITION",
+    "native_siwc_codex": "OUT_OF_SCOPE_FOR_WALLET_ELIGIBLE_EDITION",
+    "eligible_standalone_harness_live_plan": "UNQUALIFIED_PENDING_ELIGIBLE_CONSENT_AND_COMPLETION",
+    "eligible_standalone_harness_live_codex": "UNQUALIFIED_PENDING_SUPPORTED_HOST_AND_COMPLETION",
+    "official_edition_paid_siwc": "NO_RECORDED_APPLICABLE_APPROVAL",
+    "api_provider_live": "UNQUALIFIED_BY_THIS_PREFLIGHT",
+    "promotional_credit_funding": "UNQUALIFIED_WITHOUT_AUTHORIZED_ORGANIZATION_USAGE_AND_BILLING"
+  },
+  "native_codex": {
+    "command": "python3 -B products/alpha-genesis-harness/scripts/probe_codex_sandbox.py --executable <official-codex> --work-root <private-local-scratch>",
+    "runtime_version": "codex-cli 0.172.0-alpha.2",
+    "runtime_sha256": "b8c20a7af7f4608bd02dea61981fa42de10e49101ae19bfa9bff1ed6bc400ec0",
+    "script_sha256": "437ff2b6af06670b3f04456fc5260af424428703471caaac57a6667d1686da1e",
+    "codex_bridge_sha256": "510589c3d85befcc426066b401c95cb558c41a15578587792da3e27a79a858c8",
+    "permissions_bridge_sha256": "ec1dbc1e20b9ca3ae6f4ea5a7c15256e63a4a50413a40321a0281552ee130f66",
+    "named_profile_protocol": "PASSED_BEFORE_NATIVE_COMMAND",
+    "native_isolation": "BLOCKED",
+    "exit_code": 2,
+    "error_code": "CODEX_SANDBOX_UNAVAILABLE",
+    "diagnostic": "host_sandbox_operation_not_permitted",
+    "completed_native_profiles": 0,
+    "oauth_backed_process_started": false,
+    "supplemental_host_checks": {
+      "bubblewrap_version": "0.12.0",
+      "unshare_user_namespace_exit_code": 0,
+      "bubblewrap_local_network_namespace_exit_code": 1,
+      "bubblewrap_diagnostic": "loopback: Failed to create NETLINK_ROUTE socket: Operation not permitted"
+    }
+  },
+  "standalone_contract_fixtures": {
+    "plan_bridge_sha256": "c5b302c7ea68e8344fad42ed7dd7a2670c1e358a14d548b2d3da6bac87024934",
+    "chatgpt_command_from_product_root": "python3 -B -m unittest discover -s tests -p 'test_chatgpt*.py' -v",
+    "chatgpt_tests_passed": 23,
+    "codex_command_from_product_root": "python3 -B -m unittest discover -s tests -p '*codex*.py' -v",
+    "codex_tests_passed": 41,
+    "external_provider_tests": 0
+  },
+  "unpacked_companion_candidate": {
+    "archive": "frontier-harness-executor-1.3.0.zip",
+    "archive_sha256": "f2ce173f691fb2bc7177174a69911e33afd501558b67f89a00c74d83e5712ebe",
+    "bytes": 1271380,
+    "scope": "Working-tree candidate built from this base revision and actual loopback HTTP with the production origin simulated. No final source certification, hosted deployment or wallet use.",
+    "ambition": "Build a frontier capability.",
+    "successful_loopback_launches": 2,
+    "isolated_navigational_setup": "PASS",
+    "pages_origin_native_review_status": 403,
+    "authenticated_loopback_review_status": 200,
+    "draft_export_preserves_ambition": true,
+    "restart_and_repairing_recover_same_mission": true,
+    "recovered_status": "awaiting_consent",
+    "model_calls": 0
+  },
+  "local_gpu": {
+    "system": "Linux x86_64",
+    "physical_memory_bytes": 10451427328,
+    "visible_accelerator_device_nodes": 0,
+    "nvidia_smi_available": false,
+    "launcher": "publication/outcome-driven/intelligence/qualify_owner_gpu.py",
+    "launcher_sha256": "942b9b0bc73d8e7f5acfaeb48d85b0e2a2d42afb592cf5a6094b350d84f6beba",
+    "launcher_exit_code": 2,
+    "launcher_diagnostic": "nvidia-smi is unavailable on this host.",
+    "completed_trial_arms": 0,
+    "owner_workstation_tested": false
+  },
+  "actual_credentials_used": false,
+  "actual_provider_dispatches": 0,
+  "paid_provider_dispatches": 0,
+  "primary_sources": {
+    "consent_and_eligibility": "https://developers.openai.com/siwc/token-sharing-open-source",
+    "plan_scopes": "https://developers.openai.com/siwc/token-sharing-open-source/sign-in",
+    "app_server_authentication": "https://learn.chatgpt.com/docs/app-server#authentication",
+    "app_server_siwc_provider": "https://developers.openai.com/siwc/token-sharing-open-source/codex-app-server",
+    "codex_sandbox": "https://learn.chatgpt.com/docs/sandboxing?surface=cli",
+    "api_permissions": "https://developers.openai.com/api/docs/guides/rbac",
+    "api_usage_dashboard": "https://help.openai.com/en/articles/10478918-reviewing-api-usage-and-costs",
+    "api_admin_usage": "https://developers.openai.com/api/reference/resources/admin/subresources/organization/subresources/usage",
+    "api_enforced_spend_controls": "https://developers.openai.com/api/docs/guides/spend-limits",
+    "api_subscription_credit_terms": "https://help.openai.com/en/articles/20001626-api-credits-benefit-for-eligible-chatgpt-subscriptions"
+  }
+}
