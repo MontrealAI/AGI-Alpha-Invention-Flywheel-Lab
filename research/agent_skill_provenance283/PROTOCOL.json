@@ -1,0 +1,37 @@
+{
+  "schema": "agi-alpha/agent-skill-provenance283/v1",
+  "source": "https://github.com/package-url/purl-spec/issues/867",
+  "source_status": "proposal, not ratified",
+  "selection": "Every tracked SKILL.md directory present at both exact heads in each of the three independently selected public repositories. No substitute pairs. All changed directories: parse only explicit name and version if present. No execution of third-party code. Git API tree object IDs are evidence of tracked Git state, not SHA256 content verification, installed bytes, publisher authenticity or signature verification.",
+  "pairs": [
+    [
+      "anthropics/skills",
+      "1780c5e5a552fd4d1c9d6a7b0cab26b0c2bef064",
+      "e4bb5d960d87126ff3b3a8af1a104b7db67560ba"
+    ],
+    [
+      "openai/skills",
+      "778b0e6129cf18cbaee3bf11479f583fadae8d03",
+      "49f948faa9258a0c61caceaf225e179651397431"
+    ],
+    [
+      "vercel-labs/skills",
+      "50894c1d98bc45ca1ab127213e59d6525065b5e7",
+      "57217cf86ba38148a57af9e90d14a4c049558330"
+    ]
+  ],
+  "acceptance": [
+    "Each exact tree is nontruncated and Git ref is pinned; otherwise arm blocked.",
+    "For each common directory compare Git directory-tree identity and separately ordered tracked leaf path/mode/type/blob identities. Disagreement fails the engineering claim.",
+    "For changed trees report identical explicit name/version cases separately from missing/invalid metadata. A versionless logical identifier collision is a counterexample to use of that identifier alone for exact source state, not a rejection of proposed version-bearing PURLs.",
+    "Compare competent conventional repo+commit+path and repo+directory-tree ID; no advantage if they suffice. No economic qualification without observed paid demand and costed superior complete route."
+  ],
+  "stopping": "One evaluation per fixed pair; no extra revisions to improve result. Preserve every blocked/failed pair.",
+  "arrangements": [
+    "Agent-skill component identity, source-change invalidation, and future provenance linkage (public PURL issue #867; CodeSupply second call; conventional Git + SLSA/in-toto).",
+    "Maven inherited license metadata (PurlDB open issue; complete ScanCode/metadata route already under development; do not duplicate).",
+    "Public grant-funded open infrastructure (Sovereign Tech Fund >EUR50k, excludes prototypes; existing adoption not established).",
+    "No entry/no deploy."
+  ],
+  "cost_scope": "No native account, no spend or contracts, no host/model billing measurement. Only repository metadata and public frontmatter; no private installation data."
+}
