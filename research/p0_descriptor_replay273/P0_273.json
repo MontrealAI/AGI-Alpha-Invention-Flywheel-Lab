@@ -1,0 +1,65 @@
+{
+  "actual_billing_usd": null,
+  "actual_commerce": false,
+  "arms": {
+    "bound_empty_replacement": {
+      "accepted": true,
+      "direct_launches": 1,
+      "original_alias_removed": true,
+      "receipt_equal": true,
+      "replacement_alias_retained": null,
+      "route_matches_parent": false
+    },
+    "bound_identical_replacement": {
+      "accepted": true,
+      "direct_launches": 1,
+      "original_alias_removed": true,
+      "receipt_equal": true,
+      "replacement_alias_retained": true,
+      "route_matches_parent": false
+    },
+    "bound_invalid_original_valid_replacement": {
+      "accepted": false,
+      "direct_launches": 1,
+      "exception_type": "ValueError",
+      "historical_rejected": true,
+      "original_alias_removed": false,
+      "receipt_equal": false,
+      "replacement_alias_retained": true,
+      "route_matches_parent": false,
+      "timeout": false
+    },
+    "fresh_baseline": {
+      "accepted": true,
+      "direct_launches": 1,
+      "receipt_equal": true,
+      "route_matches_parent": true
+    },
+    "restored_bound": {
+      "accepted": true,
+      "alias_removed": true,
+      "direct_launches": 1,
+      "receipt_equal": true,
+      "route_matches_parent": true
+    }
+  },
+  "descriptor_equivalent": true,
+  "diagnostic_accepted": true,
+  "independent_lock": true,
+  "invariants": {
+    "directory_identity_restored": true,
+    "referenced_blob_unchanged": true,
+    "signer_inode_unchanged": true,
+    "source_inventory_unchanged": true,
+    "state_and_native_history_unchanged": true
+  },
+  "native_second_authorization": true,
+  "original_account_accessed": false,
+  "owner_commit": "ced6c1cb004887dcdafaea59a2976020be649f8e",
+  "probe_sha256": "62e8c73b0323e314cef8d4df328e7379212c882253812b53ef6bfd0e5a6f3f1f",
+  "second_transition_committed": false,
+  "self_cpu_seconds": 11.923596,
+  "stage": "complete",
+  "waited_child_cpu_seconds": 15.407615,
+  "wall_seconds": 27.529776106999975
+}
