@@ -1,0 +1,23 @@
+{
+  "wallMs": 140256,
+  "state": "review",
+  "route": "capability",
+  "status": "Local model result · qwen3-4b-instruct-2507-q4_k_m · Verification pending",
+  "objective": "Find a reproducible randomized policy for allocating exactly five indivisible exhibition attendants over three stations that maximizes the worst expected payoff across two hidden scenarios, with exact lower/upper payoff certificates and an offline verification.",
+  "next": "Use the 'game-theory-verified-strategic-allocation' capability to compute a randomized policy that maximizes the minimum expected payoff across the two hidden scenarios, with exact certificates for the worst-case payoff.",
+  "work": "The 'game-theory-verified-strategic-allocation' capability is directly applicable: it handles zero-sum strategic allocation with hidden payoff scenarios, finite integer budgets, common lanes, and additive nonnegative weights. Given the exact problem structure—5 attendants to allocate over 3 stations, two hidden scenarios with known weights and attendants—the capability can compute a randomized policy that maximizes the worst-case expected payoff. This includes a certificate of the lower bound (minimum expected payoff) and upper bound (maximum achievable worst-case payoff), and provides a reproducible, offline-verifiable solution.",
+  "capabilityLinks": [
+    {
+      "title": "Verified strategic allocation",
+      "href": "http://127.0.0.1:9011/frontier-omega-alpha/frontier-game-theory-1.0.0.zip"
+    }
+  ],
+  "transport": [
+    {
+      "url": "http://127.0.0.1:38461/v1/chat/completions",
+      "method": "POST",
+      "bodyBytes": 6603,
+      "privateAmbitionInBody": true
+    }
+  ]
+}
