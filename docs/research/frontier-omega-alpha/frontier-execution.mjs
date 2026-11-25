@@ -29,6 +29,7 @@ const copy = {
       UNVERIFIED:'Unverified', EXECUTED:'Executed', PROPOSED:'Proposed', REJECTED:'Rejected', ABSTAIN:'Evidence unavailable'},
     origins: {AUTHORIZED_MISSION_INPUT:'Authorized mission input', OPERATOR_SUPPLIED_OBSERVATION:'Operator observation',
       OPERATOR_APPROVED_DATASET:'Approved dataset', VERIFIED_EXTERNAL_SOURCE:'Verified external source',
+      OPERATOR_PINNED_SOURCE_CAPTURE:'Operator-approved source capture',
       MODEL_DEVELOPMENT_FIXTURE:'Generated development fixture', DEVELOPMENT_FIXTURE:'Development fixture',
       SYNTHETIC_EXAMPLE:'Synthetic example', SIMULATION_OUTPUT:'Simulation output', DERIVED_DATA:'Derived data'},
     rawOutput: 'Tool output without claim acceptance',
@@ -66,6 +67,7 @@ const copy = {
       UNVERIFIED:'Non vérifié', EXECUTED:'Exécuté', PROPOSED:'Proposé', REJECTED:'Rejeté', ABSTAIN:'Preuves indisponibles'},
     origins: {AUTHORIZED_MISSION_INPUT:'Données de mission autorisées', OPERATOR_SUPPLIED_OBSERVATION:'Observation de l’opérateur',
       OPERATOR_APPROVED_DATASET:'Jeu de données approuvé', VERIFIED_EXTERNAL_SOURCE:'Source externe vérifiée',
+      OPERATOR_PINNED_SOURCE_CAPTURE:'Source archivée et approuvée par l’opérateur',
       MODEL_DEVELOPMENT_FIXTURE:'Données d’essai générées', DEVELOPMENT_FIXTURE:'Données d’essai',
       SYNTHETIC_EXAMPLE:'Exemple synthétique', SIMULATION_OUTPUT:'Résultat d’une simulation', DERIVED_DATA:'Données dérivées'},
     rawOutput: 'Sortie de l’outil dont la conclusion reste à valider',
@@ -125,7 +127,28 @@ export function setupExecution(member, language, {onOpen, currentAmbition, retur
     for (const id of ['execution-pause','execution-resume','execution-cancel','execution-disconnect']) node(id).disabled = busyEpoch === serial;
   }
 
-  function renderEvidence(evidence) {
+  function renderEvidence(evidence, outcome) {
+    const contract = node('execution-contract');
+    if (contract) {
+      const deliverable = outcome?.schema === 'frontier/mission-outcome/v1' ? outcome.contract?.deliverable : null;
+      contract.hidden = !deliverable;
+      text('execution-deliverable', deliverable ?? '');
+    }
+    if (outcome?.schema === 'frontier/mission-outcome/v1') {
+      const conclusions = (outcome.conclusions ?? []).filter(item => item.status === 'VERIFIED');
+      const unresolved = (outcome.unresolved ?? []).map(item => ({
+        ...item, value: null, note: [item.message, ...(item.missing ?? []).map(field => field.label)].filter(Boolean).join(' · '),
+      }));
+      node('execution-evidence').hidden = false;
+      text('execution-evidence-status', outcome.message);
+      node('execution-claims').replaceChildren(...[...conclusions, ...unresolved].map(item => {
+        const li = document.createElement('li');
+        const detail = item.value == null ? item.note || words.evidenceStates[item.status] : [item.value, item.unit].filter(Boolean).join(' ');
+        li.textContent = [item.id, detail].filter(Boolean).join(' · ');
+        return li;
+      }));
+      return;
+    }
     const claims = Array.isArray(evidence?.claims) ? evidence.claims : [];
     node('execution-evidence').hidden = !claims.length;
     text('execution-evidence-status', claims.length ? (words.evidenceStates[evidence.status] ?? evidence.status) : '');
@@ -163,7 +186,7 @@ export function setupExecution(member, language, {onOpen, currentAmbition, retur
     text('execution-result', latest?.preview ?? '');
     text('execution-result-origin', (latest && words.origins[latest.input_origin]) || words.rawOutput);
     node('execution-preview').hidden = !latest;
-    renderEvidence(result.evidence);
+    renderEvidence(result.evidence, result.outcome);
     node('execution-artifacts').replaceChildren(...result.artifacts.map(artifact => {
       const li = document.createElement('li');
       li.textContent = artifact.name;

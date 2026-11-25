@@ -252,6 +252,21 @@ class SourceTests(unittest.TestCase):
         for url in ["http://docs.example.com", "https://evil.example/a", "https://user:pass@docs.example.com", "https://docs.example.com:8443/a"]:
             with self.assertRaises(BridgeError): retrieve_source(url, {"docs.example.com"})
 
+    def test_resolver_failures_distinguish_availability_from_source_policy(self):
+        url = "https://docs.example.com/a"
+        for failure, code in ((socket.gaierror(socket.EAI_AGAIN, "raw resolver detail"), "SOURCE_DNS_TEMPORARY"),
+                              (socket.gaierror(socket.EAI_NONAME, "raw resolver detail"), "SOURCE_DNS"),
+                              (OSError("raw resolver detail"), "SOURCE_DNS")):
+            with self.subTest(code=code), \
+                    patch("socket.getaddrinfo", side_effect=failure) as resolve, \
+                    patch("bridge.adapters.PinnedHTTPS") as connect, \
+                    self.assertRaises(BridgeError) as caught:
+                retrieve_source(url, {"docs.example.com"}, resolver=resolve, connector=connect)
+            self.assertEqual((caught.exception.code, caught.exception.status), (code, 502))
+            self.assertNotIn("raw resolver detail", caught.exception.message)
+            resolve.assert_called_once_with("docs.example.com", 443, type=socket.SOCK_STREAM)
+            connect.assert_not_called()
+
     def test_source_identity_and_query_target_are_exact(self):
         requests = []
         class Response:

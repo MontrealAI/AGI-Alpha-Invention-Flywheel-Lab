@@ -5,7 +5,7 @@ const {join} = require('node:path');
 const {createHash} = require('node:crypto');
 const {chromium} = require('playwright-core');
 
-const {base, resultDir, connectorLog, ambition, language, mode} = JSON.parse(process.env.FRONTIER_EXECUTION_TEST);
+const {base, resultDir, connectorLog, ambition, language, mode, archiveName} = JSON.parse(process.env.FRONTIER_EXECUTION_TEST);
 const endpoint = 'http://127.0.0.1:38463/api/frontier-missions/';
 const digest = bytes => createHash('sha256').update(bytes).digest('hex');
 const fixture = readFileSync('tests/live_frontier_browser.cjs','utf8')
@@ -128,29 +128,59 @@ assert.ok(fixture);
       await readSaved(page);
       reopened=true;
     }
-    await page.waitForFunction(()=>{const root=document.getElementById('mission-execution');
+    const finished = () => page.waitForFunction(()=>{const root=document.getElementById('mission-execution');
       return root.dataset.state && !['ready','running'].includes(root.dataset.state) && !document.getElementById('execution-export').disabled;
-    },null,{timeout:280000});
+    },null,{timeout:500000});
+    await finished();
     const [download]=await Promise.all([page.waitForEvent('download'),page.locator('#execution-export').click()]);
     const archive=readFileSync(await download.path());
     const {state,sha256,files}=JSON.parse(archive);
     const visibleClaims=await page.locator('#execution-claims li').allTextContents();
+    const outcomeLocator = page.locator('#execution-evidence');
+    const visibleOutcome = await outcomeLocator.isVisible() ? await outcomeLocator.innerText() : null;
     assert.equal(state.spec.mission.original_ambition,ambition);
     assert.equal(state.spec.mission.language,language);
     assert.deepEqual(submitted,mode==='start' ? [{ambition,language}] : []);
     assert.deepEqual(errors,[]);
     const observations={release_revision:receipt.source_commit, workflow_run:receipt.workflow_run,
-      executor_sha256:receipt.universal_mission_sha256['frontier-harness-executor-1.1.0.zip'],module_sha256:digest(module),
+      executor_sha256:receipt.universal_mission_sha256[archiveName ?? 'frontier-harness-executor-1.1.0.zip'],module_sha256:digest(module),
       base,language,mode,ambition,wallet:'isolated eligibility fixture',selection:safeSelection(selection),
       discovery:discovery?.candidates.map(({model,engine,configured})=>({model,engine,configured})),
       setup:{guide_one_use:true,exact_submit_count:submitted.length,automatic_return:mode==='start',reopened},
-      visible_claims:visibleClaims,
+      visible_claims:visibleClaims,visible_outcome:visibleOutcome,
       state:{id:state.id,status:state.status,phase:state.phase,model_calls:state.model_calls,actions:state.actions,
         evidence:state.evidence,qualification:state.qualification,files:Object.keys(files),
         recorded_events:state.events.map(({kind,detail})=>({kind,tool:detail?.tool,reason:detail?.reason,usage:detail?.usage}))},
       checkpoint_sha256:sha256,export_sha256:digest(archive),operations:[...new Set(operations)]};
     writeFileSync(join(resultDir,mode+'-archive.private.json'),archive,{mode:0o600});
     writeFileSync(join(resultDir,mode+'-receipt.json'),JSON.stringify(observations,null,2)+'\n',{mode:0o600});
+    const follow = process.env.FRONTIER_FOLLOWUP_GOAL;
+    if (follow && mode === 'start') {
+      const configCalls = operations.filter(operation => operation.startsWith('intelligence-')).length;
+      await page.locator('.mf-destinations a[href="#my-frontier"]').press('Enter');
+      await page.locator('#mission-new').press('Enter');
+      await page.locator('#goal-text').fill(follow);
+      const secondResponse = page.waitForResponse(response => response.url() === endpoint+'submit' && response.request().method() === 'POST');
+      await page.locator('#goal-submit').press('Enter');
+      await page.waitForFunction(text => document.getElementById('mission-ambition').textContent === text, follow);
+      const secondRun = await secondResponse;
+      assert.equal(secondRun.status(),200);
+      const second = await secondRun.json();
+      assert.notEqual(second.id,state.id);
+      assert.equal(second.original_ambition,follow);
+      await finished();
+      const [continued] = await Promise.all([page.waitForEvent('download'),page.locator('#execution-export').click()]);
+      const followExport = JSON.parse(readFileSync(await continued.path()));
+      assert.deepEqual(submitted,[{ambition,language},{ambition:follow,language}]);
+      assert.equal(operations.filter(operation => operation.startsWith('intelligence-')).length,configCalls);
+      assert.equal(followExport.state.spec.mission.original_ambition,follow);
+      assert.deepEqual(errors,[]);
+      writeFileSync(join(resultDir,'followup-receipt.json'),JSON.stringify({revision:receipt.source_commit,
+        same_pair:true,same_model:selection.model_label,new_intelligence_setup_calls:0,id:second.id,original_ambition:follow,
+        status:followExport.state.status,model_calls:followExport.state.model_calls,actions:followExport.state.actions,
+        artifacts:Object.keys(followExport.files),checkpoint_sha256:followExport.sha256,
+        visible_outcome:await outcomeLocator.innerText()},null,2)+'\n',{mode:0o600});
+    }
     process.stdout.write(JSON.stringify({language,mode,status:state.status,model_calls:state.model_calls,actions:state.actions, files:Object.keys(files),checkpoint_sha256:sha256})+'\n');
   } finally { await browser.close(); }
 })().catch(error=>{console.error(error.message);process.exitCode=1;});

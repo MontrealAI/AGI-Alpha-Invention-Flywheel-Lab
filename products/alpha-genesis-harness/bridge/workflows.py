@@ -42,6 +42,8 @@ DEFAULT_TOOLS = sorted(TOOLS - {"retrieve_source"})
 TERMINAL = {"complete", "cancelled", "failed", "needs_review", "exhausted", "expired", "revoked"}
 MAX_FILE = 1_048_576
 MAX_STATE = 16_777_216
+# The 1.0 and 1.1 release archives shipped this exact evaluator. Restore it using the current edition.
+LEGACY_PORTABLE_RUNNER_SHA256 = "46d43d4a017f1d32fcd9e05b32316a6fffac27e1a9572ab9ffbbf87338f00322"
 _WORKSPACES = {}
 _WORKSPACES_LOCK = threading.RLock()
 
@@ -1034,9 +1036,13 @@ class WorkflowService:
         require(len(encoded(value)) <= MAX_STATE, "Imported workflow exceeds the processing envelope.")
         for name, content in files.items():
             filename(name)
-            require(isinstance(content, str) and len(content.encode()) <= MAX_FILE and hashlib.sha256(content.encode()).hexdigest() == old["artifacts"][name]["sha256"], "Exported artifact checksum failed.", "WORKFLOW_INTEGRITY")
+            artifact = old["artifacts"][name]
+            require(isinstance(content, str), "Exported artifact checksum failed.", "WORKFLOW_INTEGRITY")
+            raw = content.encode()
+            artifact_sha256 = hashlib.sha256(raw).hexdigest()
+            require(len(raw) <= MAX_FILE and artifact_sha256 == artifact["sha256"], "Exported artifact checksum failed.", "WORKFLOW_INTEGRITY")
             require(name != "state.json", "Reserved import filename.")
-            kind = old["artifacts"][name].get("kind")
+            kind = artifact.get("kind")
             require(kind in {"instrument", "document", "dataset", "trusted_runner", "source"} or kind in self.extra_artifact_suffixes, "Unknown artifact kind.")
             require(kind != "instrument" or name.endswith(".json"), "Imported instrument must be JSON.")
             require(kind != "document" or name.endswith((".md", ".txt")), "Imported document must be plain text or Markdown.")
@@ -1046,7 +1052,10 @@ class WorkflowService:
                     "Imported artifact filename does not match its format.")
             require(kind != "trusted_runner" or name == "RUN_INSTRUMENT.py", "Imported runner must have its fixed filename.")
             if name == "RUN_INSTRUMENT.py":
-                require(kind == "trusted_runner" and content.encode() == _regular(Path(__file__).with_name("instruments.py"), MAX_FILE), "Imported runner does not match this edition's trusted evaluator.")
+                require(kind == "trusted_runner" and (
+                    artifact_sha256 == LEGACY_PORTABLE_RUNNER_SHA256
+                    or raw == _regular(Path(__file__).with_name("instruments.py"), MAX_FILE)
+                ), "Imported runner does not match a released trusted evaluator.", "WORKFLOW_INTEGRITY")
         from .workflow_strategies import PARENT_STRATEGIES, validate_branch_exports
         if old["spec"]["strategy"] in PARENT_STRATEGIES:
             validate_branch_exports(self, value)
@@ -1057,6 +1066,8 @@ class WorkflowService:
     def _restore_import_files(self, state, value):
         old, files = value["state"], value["files"]
         for name, content in files.items():
+            if name == "RUN_INSTRUMENT.py":
+                content = _regular(Path(__file__).with_name("instruments.py"), MAX_FILE).decode()
             self._write(state, name, content, old["artifacts"][name]["kind"])
         state["status"] = "paused"
         state["verification"] = {"passed": False, "checks": [], "scope": "Imported historical output; current acceptance not rechecked."}

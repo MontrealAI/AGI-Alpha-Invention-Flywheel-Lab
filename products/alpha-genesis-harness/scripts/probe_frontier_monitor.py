@@ -29,7 +29,8 @@ from bridge.workflows import WorkflowService
 SOURCE_URL = "https://developers.openai.com/siwc/token-sharing-open-source"
 SOURCE_HOST = "developers.openai.com"
 CAPABILITY_ID = "chatgpt-plan-access"
-TRANSPORT_BLOCKERS = {"SOURCE_URL", "SOURCE_CONNECTION", "SOURCE_HTTP", "SOURCE_TYPE", "SOURCE_SIZE"}
+TRANSPORT_BLOCKERS = {"SOURCE_URL", "SOURCE_DNS", "SOURCE_DNS_TEMPORARY", "SOURCE_CONNECTION", "SOURCE_HTTP",
+                      "SOURCE_TYPE", "SOURCE_SIZE"}
 SOURCE_FILES = ("bridge/adapters.py", "bridge/workflows.py", "bridge/instruments.py", "bridge/genesis_next.py",
                 "bridge/workflow_schemas.py", "bridge/output_schema.py",
                 "bridge/frontier_monitor.py", "scripts/probe_frontier_monitor.py")

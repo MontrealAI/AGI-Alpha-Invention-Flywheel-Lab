@@ -13,7 +13,8 @@ run_dir=$(realpath "$run_dir")
 connector_log="$run_dir/$mode-connector.private.log"
 connector_dir="$run_dir/connector"
 mkdir -p "$connector_dir"
-archive_name=frontier-harness-executor-1.1.0.zip
+executor_version=${FRONTIER_EXECUTOR_VERSION:-1.1.0}
+archive_name="frontier-harness-executor-$executor_version.zip"
 origin=$(python - "$base" <<'PY'
 import sys, urllib.parse
 parts = urllib.parse.urlsplit(sys.argv[1]); print(f'{parts.scheme}://{parts.netloc}')
@@ -48,7 +49,7 @@ else
   curl -fsS --max-time 30 "$base/$archive_name" -o "$run_dir/executor.zip"
 fi
 : "${FRONTIER_EXPECTED_COMMIT:?required verified source}"
-python - "$run_dir" "$FRONTIER_EXPECTED_COMMIT" "$archive_name" <<'PY'
+python - "$run_dir" "$FRONTIER_EXPECTED_COMMIT" "$archive_name" "$executor_version" <<'PY'
 import hashlib, json, sys, zipfile
 from pathlib import Path
 root = Path(sys.argv[1]); receipt = json.loads((root/'live-release.json').read_bytes())
@@ -57,7 +58,7 @@ archive = root/'executor.zip'; digest = hashlib.sha256
 assert digest(archive.read_bytes()).hexdigest() == receipt['universal_mission_sha256'][sys.argv[3]]
 with zipfile.ZipFile(archive) as package:
     manifest = json.loads(package.read('manifest.json'))
-    assert manifest['source'].endswith('/commit/'+sys.argv[2]) and manifest['version'] == '1.1.0'
+    assert manifest['source'].endswith('/commit/'+sys.argv[2]) and manifest['version'] == sys.argv[4]
     assert len(package.namelist()) == len(manifest['file_sha256']) + 1
     for name, fingerprint in manifest['file_sha256'].items():
         path=Path(name)
@@ -82,10 +83,10 @@ for attempt in {1..40}; do
 done
 [[ -s "$FRONTIER_PAIR_GUIDE_FILE" ]]
 export FRONTIER_EXECUTION_TEST
-FRONTIER_EXECUTION_TEST=$(python - "$base" "$run_dir" "$connector_log" "$ambition" "$language" "$mode" <<'PY'
+FRONTIER_EXECUTION_TEST=$(python - "$base" "$run_dir" "$connector_log" "$ambition" "$language" "$mode" "$archive_name" <<'PY'
 import json,sys
-base,result,log,ambition,locale,mode=sys.argv[1:]
-print(json.dumps(dict(base=base,resultDir=result,connectorLog=log,ambition=ambition,language=locale,mode=mode)))
+base,result,log,ambition,locale,mode,archive=sys.argv[1:]
+print(json.dumps(dict(base=base,resultDir=result,connectorLog=log,ambition=ambition,language=locale,mode=mode,archiveName=archive)))
 PY
 )
 node "$runtime_root/run-evidence-browser.cjs"

@@ -71,6 +71,10 @@ original request and cannot qualify the newly selected connection. Completing a
 request establishes provider execution. Accepting its result still requires
 mission-specific verification.
 
+Select **Download connection receipt** in the ChatGPT or Codex status area to
+save a JSON file with the route, model, completion time and available token
+counts. The file omits account identifiers, credentials, prompts and responses.
+
 The local session limit counts started requests or Codex turns. A Codex turn
 can perform several internal model calls. This limit is neither a token cap
 nor a monetary ceiling. Set the app's actual plan and credit permissions in
@@ -311,6 +315,11 @@ forfait et l'inférence constatée. Le connecteur conserve un reçu distinct par
 compte et par voie d'exécution pour la dernière réponse achevée. Il indique le
 modèle, l'heure et les nombres de jetons fournis. La vérification du résultat de
 la mission reste une étape distincte.
+
+Sélectionnez **Télécharger la preuve de connexion** dans le statut de ChatGPT
+ou de Codex pour enregistrer la voie, le modèle, l'heure et les nombres de
+jetons disponibles. Le fichier JSON exclut les identifiants de compte, les
+secrets, les mandats et les réponses.
 
 L'identification ne suffit pas : il faut aussi autoriser l'utilisation du
 forfait. Les jetons restent dans le stockage local protégé, jamais dans le

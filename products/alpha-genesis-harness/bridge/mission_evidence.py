@@ -18,6 +18,7 @@ SELECTORS = {"run_table": "rows", "run_instrument": "output"}
 SHA = re.compile(r"[0-9a-f]{64}\Z")
 NUMBER = re.compile(r"[+-]?[0-9]{1,40}(?:/[0-9]{1,40}|(?:\.[0-9]{1,40})?(?:[eE][+-]?[0-9]{1,3})?)\Z")
 INSTRUMENT_VERSION = sha256(Path(__file__).with_name("instruments.py").read_bytes()).hexdigest()
+LEGACY_INSTRUMENT_VERSION = "46d43d4a017f1d32fcd9e05b32316a6fffac27e1a9572ab9ffbbf87338f00322"
 SCOPE = "Case-specific numerical agreement and source binding. Independent custody and production admission are separate."
 RECEIPT_SCHEMA = "frontier/mission-claim-execution/v1"
 
@@ -218,6 +219,15 @@ def _version(tool):
     return INSTRUMENT_VERSION
 
 
+def _compatible_operation(tool, operation, read):
+    if operation["version_sha256"] == _version(tool):
+        return True
+    # Existing 1.1 checkpoints used the same portable arithmetic semantics.
+    # An exact-rational artifact requires an execution by its own evaluator.
+    return (tool == "run_instrument" and operation["version_sha256"] == LEGACY_INSTRUMENT_VERSION
+            and "numeric_mode" not in strict_json(read(operation["artifact"])))
+
+
 def record_execution(state, name, artifact_sha256, binding, outcome, result_artifact=None):
     claim = binding["claim"]
     tool = claim["tool"]
@@ -285,8 +295,9 @@ def _claim_report(state, requirements, claim, event, read):
                and receipt["claim_contract_sha256"] == digest(claim) and receipt["locator"] == claim["locator"]
                and receipt["input"] == primary and receipt["lineage"] == lineage, "EXECUTION_SCOPE_MISMATCH")
         operation = receipt["operation"]
-        _check(detail["tool"] == operation["tool"] == claim["tool"] and operation["version_sha256"] == _version(claim["tool"])
-               and state["artifacts"].get(operation["artifact"], {}).get("sha256") == operation["artifact_sha256"],
+        _check(detail["tool"] == operation["tool"] == claim["tool"]
+               and state["artifacts"].get(operation["artifact"], {}).get("sha256") == operation["artifact_sha256"]
+               and _compatible_operation(claim["tool"], operation, read),
                "EXECUTION_OPERATION_STALE")
         saved = receipt["result_artifact"]
         if saved is not None:
