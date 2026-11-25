@@ -1,0 +1,121 @@
+{
+  "study_scope": "Additional separate blinded spot check after the frozen primary assessment. Review contexts share workspace administration.",
+  "blind_input_sha256": "31eea37e783d4cad77c3f941877ba1e44ebd7e5429f381472f618cb3adf61849",
+  "observed_review_sha256": "b168e2fd96b607765716c4dedea39d3de7fb672a4f414fbbc79866dda9ab351f",
+  "started_utc": "2026-11-25T18:22:50.637090+00:00",
+  "completed_utc": "2026-11-25T18:23:58.806915+00:00",
+  "initial_decisions_agree": 7,
+  "initial_decisions_checked": 10,
+  "initial_candidates": {
+    "provider-consent-1": {
+      "case": "provider-consent",
+      "arm": "hy-mt3-direct",
+      "first_review": "EDIT",
+      "second_review": {
+        "status": "HOLD",
+        "reason": "‘REJET pour compte en ligne actif’ obscures the release claim that real-account qualification remains outstanding. The separate approval and private-key handling are preserved."
+      }
+    },
+    "provider-consent-2": {
+      "case": "provider-consent",
+      "arm": "direct-included",
+      "first_review": "ACCEPT",
+      "second_review": {
+        "status": "ACCEPT",
+        "reason": "Preserves the fixture scope, precise mission approval before sending, local key storage, withheld live qualification, and member-approved project and budget."
+      }
+    },
+    "provider-consent-3": {
+      "case": "provider-consent",
+      "arm": "hy-mt2-direct",
+      "first_review": "HOLD",
+      "second_review": {
+        "status": "HOLD",
+        "reason": "‘Installations protocolaires’ loses the fixture qualification, and ‘avant son déploiement’ changes dispatch to deployment. The authorization boundary is materially ambiguous."
+      }
+    },
+    "provider-consent-4": {
+      "case": "provider-consent",
+      "arm": "hy-mt3-protected",
+      "first_review": "HOLD",
+      "second_review": {
+        "status": "EDIT",
+        "reason": "All five scope and authorization conditions survive. Replace ‘fixtures’, ‘loopback’, ‘mission exactement en attente’, and unaccented ‘inference’ before publication."
+      }
+    },
+    "provider-consent-5": {
+      "case": "provider-consent",
+      "arm": "hy-mt2-protected",
+      "first_review": "HOLD",
+      "second_review": {
+        "status": "HOLD",
+        "reason": "The wording no longer states that separate approval binds the exact pending mission, a material security condition. It also leaves the simulated-test scope obscure."
+      }
+    },
+    "adapter-comparison-1": {
+      "case": "adapter-comparison",
+      "arm": "hy-mt2-direct",
+      "first_review": "HOLD",
+      "second_review": {
+        "status": "HOLD",
+        "reason": "The direct-base arm is missing, and the malformed CPU sentence loses that this was a 33-update training run."
+      }
+    },
+    "adapter-comparison-2": {
+      "case": "adapter-comparison",
+      "arm": "direct-included",
+      "first_review": "ACCEPT",
+      "second_review": {
+        "status": "EDIT",
+        "reason": "Preserves all four empirical conditions and the precise separate-game scope. ‘Une correspondance sur 1/8 des dossiers’ needs a clear French denominator, and ‘politiques de décision’ would clarify the term."
+      }
+    },
+    "adapter-comparison-3": {
+      "case": "adapter-comparison",
+      "arm": "hy-mt3-protected",
+      "first_review": "HOLD",
+      "second_review": {
+        "status": "HOLD",
+        "reason": "Turns training updates into ‘33 versions’ of a CPU configuration. The learned-specialist promotion verdict is also unclear."
+      }
+    },
+    "adapter-comparison-4": {
+      "case": "adapter-comparison",
+      "arm": "hy-mt2-protected",
+      "first_review": "HOLD",
+      "second_review": {
+        "status": "HOLD",
+        "reason": "The direct-base comparator is omitted and the 33-update CPU training operation is garbled."
+      }
+    },
+    "adapter-comparison-5": {
+      "case": "adapter-comparison",
+      "arm": "hy-mt3-direct",
+      "first_review": "HOLD",
+      "second_review": {
+        "status": "HOLD",
+        "reason": "Omits the direct-base comparator, loses the meaning of 33 training updates, and uses a decimal comma in the parameter count."
+      }
+    }
+  },
+  "accepted_followup_edits": {
+    "browser-observation": {
+      "corrected_draft_sha256": "84bcf8c4c33400a03928a6028de32515a471c28d6578c2c3f802a488e71fe62a",
+      "original_french_sha256": "f3653d4f137833dde90acff17b66706279220eb0bc4876861b14f7d7378d8b69",
+      "approved_french": "**GO pour l’adaptateur à activation volontaire et le contrôle de bon fonctionnement. NON TESTÉ avec un véritable modèle sur l’appareil.** La version d’ingénierie de Chromium indiquait que le modèle était téléchargeable en anglais, mais a renvoyé un écho de test. Le contrôle de bon fonctionnement empêche l’envoi de l’ambition au modèle et oriente le membre vers les autres options d’intelligence de la même mission. La version de test indiquait que le français était indisponible.",
+      "independent_edited_draft_verdict": {
+        "status": "ACCEPT",
+        "reason": "Keeps the opt-in guard separate from genuine inference, records the echo and unavailable French, and explicitly preserves the mission while withholding the ambition from the model."
+      }
+    },
+    "adapter-comparison": {
+      "corrected_draft_sha256": "d251402eb059fdb123c8a37705720b43fa2ccaf9f57f82c6312686b9f8a27c39",
+      "original_french_sha256": "a05cbc51e6f6176a1b8f984dbbc176dc62d8d6d891845ced446507ca83dfd2bb",
+      "approved_french": "**GO pour le point de contrôle expérimental et les politiques de décision exactes examinées. NO-GO pour la promotion du spécialiste entraîné.** Un nouvel entraînement sur processeur, en 33 mises à jour, a modifié 122 880 paramètres aux fins de l’extraction structurée de protocoles stratégiques. Le modèle adapté, le modèle de base direct et le modèle de base avec recherche documentaire ont chacun reproduit exactement un des huit dossiers réservés à l’évaluation. Le comparateur distinct utilisant le Codex compris dans l’abonnement a obtenu 8/8 et a permis les deux vérifications exactes de politiques de décision. Une étude de suivi distincte fondée sur un graphe a obtenu 4/4 et a certifié indépendamment un gain exact de 387/13 minutes dans un seul jeu admis au protocole.",
+      "independent_edited_draft_verdict": {
+        "status": "ACCEPT",
+        "reason": "Clearly preserves one of eight held records in each arm, the two exact policy checks and the one admitted-game scope. No remaining material or copyediting issue."
+      }
+    }
+  }
+}

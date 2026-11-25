@@ -1,0 +1,741 @@
+{
+  "cases": [
+    {
+      "disclosure": "col",
+      "disposition": "solved",
+      "evidence": [
+        "the dispatcher maximizes the listed score and the auditor gets its negative.",
+        "The dispatcher receives only its amber or blue flag. The auditor receives only its near or away flag.",
+        "Dispatcher choices in order: Batch, Separate. Auditor choices in order: Sample, Inspect.",
+        "X has probability 1/4, amber/near, [[2.5, -1], [0, 2]].\n- Y has probability 1/4, amber/near, [[1, 0], [-2, 1]].",
+        "Z has probability 1/3, blue/near, [[-1, 2], [3, -1]].\n- W has probability 1/6, blue/away, [[4, -2], [-1, 2]].",
+        "The proposed policy would additionally tell the auditor the dispatcher's flag before both choices."
+      ],
+      "game": {
+        "actions": [
+          2,
+          2
+        ],
+        "states": [
+          {
+            "col_type": "near",
+            "p": "1/4",
+            "payoff": [
+              [
+                "5/2",
+                -1
+              ],
+              [
+                0,
+                2
+              ]
+            ],
+            "row_type": "amber"
+          },
+          {
+            "col_type": "near",
+            "p": "1/4",
+            "payoff": [
+              [
+                1,
+                0
+              ],
+              [
+                -2,
+                1
+              ]
+            ],
+            "row_type": "amber"
+          },
+          {
+            "col_type": "near",
+            "p": "1/3",
+            "payoff": [
+              [
+                -1,
+                2
+              ],
+              [
+                3,
+                -1
+              ]
+            ],
+            "row_type": "blue"
+          },
+          {
+            "col_type": "away",
+            "p": "1/6",
+            "payoff": [
+              [
+                4,
+                -2
+              ],
+              [
+                -1,
+                2
+              ]
+            ],
+            "row_type": "blue"
+          }
+        ]
+      },
+      "id": "case-01"
+    },
+    {
+      "disclosure": "none",
+      "disposition": "solved",
+      "evidence": [
+        "Les deux choisissent une seule fois en même temps, sans communication et sans connaître le tirage latent.",
+        "Il attribue 30 % à sec/pale, 20 % à humide/pale, 10 % à sec/fonce et 40 % à humide/fonce.",
+        "Le modéliste choisit Filtre (première ligne) ou Échantillon (deuxième ligne). L'équipe de comparaison choisit Lisse (première colonne) ou Grenu (deuxième colonne).",
+        "Ses gains sont exactement les opposés du score du modéliste.",
+        "Matrices du modéliste dans le même ordre que le cahier : [[3, 0], [-1, 1]] ; [[-2, 4], [0, -1]] ; [[2, -3], [1, 2]] ; [[-1, 1], [2, -2]]."
+      ],
+      "game": {
+        "actions": [
+          2,
+          2
+        ],
+        "states": [
+          {
+            "col_type": "pale",
+            "p": "3/10",
+            "payoff": [
+              [
+                3,
+                0
+              ],
+              [
+                -1,
+                1
+              ]
+            ],
+            "row_type": "sec"
+          },
+          {
+            "col_type": "pale",
+            "p": "1/5",
+            "payoff": [
+              [
+                -2,
+                4
+              ],
+              [
+                0,
+                -1
+              ]
+            ],
+            "row_type": "humide"
+          },
+          {
+            "col_type": "fonce",
+            "p": "1/10",
+            "payoff": [
+              [
+                2,
+                -3
+              ],
+              [
+                1,
+                2
+              ]
+            ],
+            "row_type": "sec"
+          },
+          {
+            "col_type": "fonce",
+            "p": "2/5",
+            "payoff": [
+              [
+                -1,
+                1
+              ],
+              [
+                2,
+                -2
+              ]
+            ],
+            "row_type": "humide"
+          }
+        ]
+      },
+      "id": "case-02"
+    },
+    {
+      "disposition": "withheld",
+      "evidence": [
+        "Both are maximizing their own point totals.",
+        "The organizer confirms that these are the separate scores being optimized and their sum varies across the rest of the table.",
+        "I can send the rest after you tell me whether this matches your strategy instrument."
+      ],
+      "id": "case-03",
+      "reason": "Alice and Bob maximize separate scores whose sum varies. Their incomplete general-sum payoff table cannot define the requested zero-sum game."
+    },
+    {
+      "disclosure": "none",
+      "disposition": "solved",
+      "evidence": [
+        "Public deck probabilities are two, one, one, one, and two of seven equally likely cards, grouped as A through E.",
+        "The label author chooses Memo before Trace in the matrix row ordering. This describes the layout. The reviewer chooses Pull before Push in the column ordering.",
+        "Both choose simultaneously once after their private signal. The deck group is hidden.",
+        "A = a/inland, [[3, -2], [-1, 1]]\nB = a/shore, [[-2, 3], [1, -1]]\nC = b/inland, [[0, 2], [2, 0]]\nD = c/inland, [[3, 1], [-1, 2]]\nE = c/shore, [[-3, 1], [4, -2]]",
+        "Listed scores are the label author's and the reviewer's are their negatives."
+      ],
+      "game": {
+        "actions": [
+          2,
+          2
+        ],
+        "states": [
+          {
+            "col_type": "inland",
+            "p": "2/7",
+            "payoff": [
+              [
+                3,
+                -2
+              ],
+              [
+                -1,
+                1
+              ]
+            ],
+            "row_type": "a"
+          },
+          {
+            "col_type": "shore",
+            "p": "1/7",
+            "payoff": [
+              [
+                -2,
+                3
+              ],
+              [
+                1,
+                -1
+              ]
+            ],
+            "row_type": "a"
+          },
+          {
+            "col_type": "inland",
+            "p": "1/7",
+            "payoff": [
+              [
+                0,
+                2
+              ],
+              [
+                2,
+                0
+              ]
+            ],
+            "row_type": "b"
+          },
+          {
+            "col_type": "inland",
+            "p": "1/7",
+            "payoff": [
+              [
+                3,
+                1
+              ],
+              [
+                -1,
+                2
+              ]
+            ],
+            "row_type": "c"
+          },
+          {
+            "col_type": "shore",
+            "p": "2/7",
+            "payoff": [
+              [
+                -3,
+                1
+              ],
+              [
+                4,
+                -2
+              ]
+            ],
+            "row_type": "c"
+          }
+        ]
+      },
+      "id": "case-04"
+    },
+    {
+      "disposition": "withheld",
+      "evidence": [
+        "L'équipe d'achat choisit le premier prix. Le fournisseur voit ce prix avant de choisir une réponse, puis l'équipe d'achat peut publier un indice privé et revoir son prix.",
+        "Le barème change selon l'ordre de ces opérations."
+      ],
+      "id": "case-05",
+      "reason": "Le fournisseur observe le premier prix et réagit. L’équipe d’achat peut ensuite divulguer un indice et réviser son prix. Le jeu séquentiel exige de représenter cet ordre et ces observations."
+    },
+    {
+      "disclosure": "none",
+      "disposition": "solved",
+      "evidence": [
+        "Les relevés pondèrent quatre fiches par 12, 18, 24 et 6 tirages, en tout 60.",
+        "La première équipe reçoit seulement sa cote bas/moyen/haut, et la seconde seulement son témoin clair/sombre.",
+        "Chacune décide en même temps et une seule fois, sans voir la cote ou le témoin de l'autre.",
+        "Les lignes et colonnes suivent respectivement les choix des première et deuxième équipes.",
+        "Le score de la deuxième équipe est le négatif de chaque valeur indiquée, qui revient à la première.",
+        "Fiches dans l'ordre des poids : bas/clair [[2, -1], [0, 3]], moyen/clair [[-3, 1], [2, 0]], haut/sombre [[1, -4], [3, 1]], moyen/sombre [[2, 1], [-2, 3]]."
+      ],
+      "game": {
+        "actions": [
+          2,
+          2
+        ],
+        "states": [
+          {
+            "col_type": "clair",
+            "p": "1/5",
+            "payoff": [
+              [
+                2,
+                -1
+              ],
+              [
+                0,
+                3
+              ]
+            ],
+            "row_type": "bas"
+          },
+          {
+            "col_type": "clair",
+            "p": "3/10",
+            "payoff": [
+              [
+                -3,
+                1
+              ],
+              [
+                2,
+                0
+              ]
+            ],
+            "row_type": "moyen"
+          },
+          {
+            "col_type": "sombre",
+            "p": "2/5",
+            "payoff": [
+              [
+                1,
+                -4
+              ],
+              [
+                3,
+                1
+              ]
+            ],
+            "row_type": "haut"
+          },
+          {
+            "col_type": "sombre",
+            "p": "1/10",
+            "payoff": [
+              [
+                2,
+                1
+              ],
+              [
+                -2,
+                3
+              ]
+            ],
+            "row_type": "moyen"
+          }
+        ]
+      },
+      "id": "case-06"
+    },
+    {
+      "disposition": "withheld",
+      "evidence": [
+        "The lab log has exactly 40 trials.",
+        "It lists 18 Low/Soft and 19 High/Hard draws, with both players' 2-by-2 row-payoff matrices.",
+        "Three entries after those counts are blank.",
+        "The lab lead says the three could mix other signal pairs or could be repeats, and cannot confirm their payoff table or tags."
+      ],
+      "id": "case-07",
+      "reason": "The 37 classified draws leave three of the 40 draws uncharacterized. Their signal pairs and payoff matrices are unknown, so the exact joint prior and game cannot be formed."
+    },
+    {
+      "disclosure": "none",
+      "disposition": "solved",
+      "evidence": [
+        "Four mutually exclusive possible trial cards each carry exact prior weights of 1/8 compact/contrast, 3/8 compact/parallel, 2/8 long/contrast and 2/8 long/parallel.",
+        "Only the drafter sees compact or long. Only the matching editor sees contrast or parallel. They make simultaneous one-off choices without any contact.",
+        "The layout is Share and Hold for drafter rows, Bind and Skip for editor columns.",
+        "Scores for the drafter in card order are [[0, 2], [-1, 3]], [[-1.5, 2], [4, -1]], [[2, 0], [1, -1]], and [[-2, 3], [1, 2]]. Editor scores are the negatives.",
+        "The organizer plans to publish the complete card after both choices."
+      ],
+      "game": {
+        "actions": [
+          2,
+          2
+        ],
+        "states": [
+          {
+            "col_type": "contrast",
+            "p": "1/8",
+            "payoff": [
+              [
+                0,
+                2
+              ],
+              [
+                -1,
+                3
+              ]
+            ],
+            "row_type": "compact"
+          },
+          {
+            "col_type": "parallel",
+            "p": "3/8",
+            "payoff": [
+              [
+                "-3/2",
+                2
+              ],
+              [
+                4,
+                -1
+              ]
+            ],
+            "row_type": "compact"
+          },
+          {
+            "col_type": "contrast",
+            "p": "1/4",
+            "payoff": [
+              [
+                2,
+                0
+              ],
+              [
+                1,
+                -1
+              ]
+            ],
+            "row_type": "long"
+          },
+          {
+            "col_type": "parallel",
+            "p": "1/4",
+            "payoff": [
+              [
+                -2,
+                3
+              ],
+              [
+                1,
+                2
+              ]
+            ],
+            "row_type": "long"
+          }
+        ]
+      },
+      "id": "case-08"
+    },
+    {
+      "disclosure": "none",
+      "disposition": "solved",
+      "evidence": [
+        "Sur chaque fiche publique de probabilité 1/4, un chiffre est le bénéfice du concurrent, jamais celui du gestionnaire. Le gestionnaire maximise l'opposé de ce chiffre, case par case.",
+        "Le classeur place les deux choix du concurrent, Un et Deux, sur les lignes de ses tableaux. Il place les choix du gestionnaire, A et B, sur ses colonnes.",
+        "Pour votre format de référence, mettez le gestionnaire en ligne (A, puis B) et le concurrent en colonne (Un, puis Deux).",
+        "Les deux agissent simultanément, une fois, et connaissent seulement leur propre étiquette, jamais la fiche réalisée.",
+        "Dans l'ordre mat/neuf, mat/ancien, brillant/neuf, brillant/ancien, les tableaux du bénéfice du concurrent sont [[4, -1], [0, 2]], [[-2, 3], [1, 0]], [[0, 2], [-3, 1]] et [[1, -1], [2, 3]]."
+      ],
+      "game": {
+        "actions": [
+          2,
+          2
+        ],
+        "states": [
+          {
+            "col_type": "neuf",
+            "p": "1/4",
+            "payoff": [
+              [
+                -4,
+                0
+              ],
+              [
+                1,
+                -2
+              ]
+            ],
+            "row_type": "mat"
+          },
+          {
+            "col_type": "ancien",
+            "p": "1/4",
+            "payoff": [
+              [
+                2,
+                -1
+              ],
+              [
+                -3,
+                0
+              ]
+            ],
+            "row_type": "mat"
+          },
+          {
+            "col_type": "neuf",
+            "p": "1/4",
+            "payoff": [
+              [
+                0,
+                3
+              ],
+              [
+                -2,
+                -1
+              ]
+            ],
+            "row_type": "brillant"
+          },
+          {
+            "col_type": "ancien",
+            "p": "1/4",
+            "payoff": [
+              [
+                -1,
+                -2
+              ],
+              [
+                1,
+                -3
+              ]
+            ],
+            "row_type": "brillant"
+          }
+        ]
+      },
+      "id": "case-09"
+    },
+    {
+      "disposition": "withheld",
+      "evidence": [
+        "Le responsable assure que c'est un jeu à somme nulle.",
+        "Le classeur a perdu à la fois les en-têtes des lignes et des colonnes ainsi que la mention du joueur à qui correspondent les signes.",
+        "Les choix des deux joueurs portent exactement les mêmes noms."
+      ],
+      "id": "case-10",
+      "reason": "Les en-têtes perdus empêchent d’attribuer les actions des deux joueurs aux dimensions. Les signes doivent aussi être attribués à un joueur précis pour établir les gains de ligne."
+    },
+    {
+      "disclosure": "none",
+      "disposition": "solved",
+      "evidence": [
+        "The public draw is backed by 12 equal-likelihood tokens, comprising 1 first/check, 3 first/hold, 2 last/check and 6 last/hold.",
+        "The controller privately sees first or last, and the opponent sees only check or hold.",
+        "The controller and opponent each decide once at the same time and have no other signals.",
+        "Lay out row actions Inspect, File and column actions Select, Wait. The controller's payoffs are opposite the opponent's.",
+        "In the order of token groups listed above, row scores are [[2, -3], [0, 4]], [[5, 1], [-2, 1]], [[1, -1], [3, 1]], and [[0, 3], [2, -2]]."
+      ],
+      "game": {
+        "actions": [
+          2,
+          2
+        ],
+        "states": [
+          {
+            "col_type": "check",
+            "p": "1/12",
+            "payoff": [
+              [
+                2,
+                -3
+              ],
+              [
+                0,
+                4
+              ]
+            ],
+            "row_type": "first"
+          },
+          {
+            "col_type": "hold",
+            "p": "1/4",
+            "payoff": [
+              [
+                5,
+                1
+              ],
+              [
+                -2,
+                1
+              ]
+            ],
+            "row_type": "first"
+          },
+          {
+            "col_type": "check",
+            "p": "1/6",
+            "payoff": [
+              [
+                1,
+                -1
+              ],
+              [
+                3,
+                1
+              ]
+            ],
+            "row_type": "last"
+          },
+          {
+            "col_type": "hold",
+            "p": "1/2",
+            "payoff": [
+              [
+                0,
+                3
+              ],
+              [
+                2,
+                -2
+              ]
+            ],
+            "row_type": "last"
+          }
+        ]
+      },
+      "id": "case-11"
+    },
+    {
+      "disposition": "withheld",
+      "evidence": [
+        "The current run book says the stage lead reads the Front sticker aloud to everyone before choices.",
+        "The current player instructions for the same run say the Front sticker must be known only to the first player.",
+        "The person running the contest cannot tell which instructions will be followed, and said the score tables may differ by sticker."
+      ],
+      "id": "case-12",
+      "reason": "Two current instructions give incompatible information to the second player. Resolve whether the Front sticker is disclosed before choices to define the observation sets and a defensible unconditional recommendation."
+    },
+    {
+      "disclosure": "both",
+      "disposition": "solved",
+      "evidence": [
+        "Le registre public indique les six tirages H/C 2 sur 12, H/V 4 sur 12, E/L 1 sur 12, R/C 1 sur 12, R/V 2 sur 12 et S/L 2 sur 12.",
+        "Une fois le tirage caché sélectionné, l'équipe calendrier connaît seulement sa saison H, E, R ou S. L'équipe afficheur connaît seulement son témoin C, V ou L.",
+        "Les deux actions calendrier sont Continuer et Lancer en lignes, dans cet ordre. Les deux actions afficheur sont Afficher et Décaler en colonnes, dans cet ordre. Les points du calendrier sont l'opposé de ceux de l'afficheur.",
+        "Dans l'ordre du registre, les six matrices du calendrier sont [[2, -2], [1, 0]], [[-1, 4], [0, 2]], [[0, 1], [-3, 5]], [[3, 0], [-1, 1]], [[-1.5, 2], [3, -2]], [[2, -1], [0, 3]].",
+        "Dans la variante seulement, les deux équipes reçoivent en plus le signal de l'autre avant d'agir."
+      ],
+      "game": {
+        "actions": [
+          2,
+          2
+        ],
+        "states": [
+          {
+            "col_type": "C",
+            "p": "1/6",
+            "payoff": [
+              [
+                2,
+                -2
+              ],
+              [
+                1,
+                0
+              ]
+            ],
+            "row_type": "H"
+          },
+          {
+            "col_type": "V",
+            "p": "1/3",
+            "payoff": [
+              [
+                -1,
+                4
+              ],
+              [
+                0,
+                2
+              ]
+            ],
+            "row_type": "H"
+          },
+          {
+            "col_type": "L",
+            "p": "1/12",
+            "payoff": [
+              [
+                0,
+                1
+              ],
+              [
+                -3,
+                5
+              ]
+            ],
+            "row_type": "E"
+          },
+          {
+            "col_type": "C",
+            "p": "1/12",
+            "payoff": [
+              [
+                3,
+                0
+              ],
+              [
+                -1,
+                1
+              ]
+            ],
+            "row_type": "R"
+          },
+          {
+            "col_type": "V",
+            "p": "1/6",
+            "payoff": [
+              [
+                "-3/2",
+                2
+              ],
+              [
+                3,
+                -2
+              ]
+            ],
+            "row_type": "R"
+          },
+          {
+            "col_type": "L",
+            "p": "1/6",
+            "payoff": [
+              [
+                2,
+                -1
+              ],
+              [
+                0,
+                3
+              ]
+            ],
+            "row_type": "S"
+          }
+        ]
+      },
+      "id": "case-13"
+    }
+  ]
+}

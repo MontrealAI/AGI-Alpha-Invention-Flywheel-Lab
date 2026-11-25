@@ -1,0 +1,174 @@
+{
+  "commands": [
+    {
+      "deadline": 2700,
+      "entrypoint": "qualify_quote_workflow_006.py",
+      "rc": 1,
+      "timeout": false,
+      "wall": 1114.911834873
+    },
+    {
+      "deadline": 1800,
+      "entrypoint": "probe_local_workflows.py",
+      "rc": 0,
+      "timeout": false,
+      "wall": 153.14203256999986
+    },
+    {
+      "deadline": 120,
+      "entrypoint": "-m",
+      "rc": 0,
+      "timeout": false,
+      "wall": 0.3146648940000887
+    },
+    {
+      "deadline": 8100,
+      "entrypoint": "qualify_workshop.py",
+      "rc": 1,
+      "timeout": false,
+      "wall": 288.93533912299995
+    },
+    {
+      "deadline": 8100,
+      "entrypoint": "qualify_workshop.py",
+      "rc": 0,
+      "timeout": false,
+      "wall": 66.5276973529999
+    }
+  ],
+  "overall": "FAIL",
+  "qualifications": {
+    "independent_export": "FAIL",
+    "local_inference": "PASS",
+    "multi_agent": "PASS",
+    "parallel_exploration": "PASS",
+    "quote_construction": "FAIL",
+    "single_agent": "PASS",
+    "successor_reuse": "FAIL",
+    "workshop": "FAIL"
+  },
+  "quote": {
+    "arms": [
+      {
+        "actions": 0,
+        "event_counts": {
+          "created": 1,
+          "model_error": 1,
+          "model_queued": 1,
+          "model_started": 1
+        },
+        "id": "manufacturing_construct",
+        "model_requests": 1,
+        "observed_errors": [
+          {
+            "error_code": "PROVIDER_CONNECTION",
+            "wall_seconds": 600.132696442
+          }
+        ],
+        "status": "paused"
+      },
+      {
+        "actions": null,
+        "event_counts": {},
+        "id": "lab_inherit",
+        "model_requests": null,
+        "observed_errors": [],
+        "status": "BLOCKED"
+      },
+      {
+        "actions": 8,
+        "event_counts": {
+          "created": 1,
+          "critique": 1,
+          "model_completed": 2,
+          "model_queued": 2,
+          "model_started": 2,
+          "stopped": 1,
+          "tool_completed": 7,
+          "tool_refused": 1,
+          "verification": 1
+        },
+        "id": "lab_fresh",
+        "model_requests": 2,
+        "observed_errors": [],
+        "status": "exhausted"
+      }
+    ],
+    "model_sha256": null,
+    "protocol_sha256": "4eafe9112f48d34425adb8c744da0c40393188f650bcad1be0641bd293b693fb",
+    "status": "FAIL"
+  },
+  "source_revision": "504a4c86dae6568e7b50eb09f371c515e5398063",
+  "workshop": {
+    "byte_identical": false,
+    "cases": [
+      {
+        "event_counts": {
+          "created": 1,
+          "finished": 1,
+          "model_completed": 2,
+          "model_queued": 2,
+          "model_started": 2,
+          "route_proposed": 2,
+          "tool_completed": 1,
+          "tool_refused": 1,
+          "verification": 3
+        },
+        "fingerprint": "9bfac4b87c2191d390c2d09909fe81e2ebb0b21e961289a56529444ef48f5172",
+        "name": "foundry",
+        "replay_exit": 0,
+        "status": "complete"
+      },
+      {
+        "event_counts": {
+          "created": 1,
+          "finished": 1,
+          "inherited": 1,
+          "model_completed": 1,
+          "model_queued": 1,
+          "model_started": 1,
+          "route_proposed": 1,
+          "tool_completed": 1,
+          "verification": 3
+        },
+        "fingerprint": "1d417f6d37380303bcde27cfdc52de3b405a1931bd72c7275b905aeb6211080d",
+        "name": "foundry-fresh",
+        "replay_exit": 0,
+        "status": "complete"
+      },
+      {
+        "event_counts": {
+          "created": 1,
+          "finished": 1,
+          "model_completed": 1,
+          "model_queued": 1,
+          "model_started": 1,
+          "route_proposed": 1,
+          "tool_completed": 1,
+          "verification": 2
+        },
+        "fingerprint": "87f74203901d4b4c00fe172c299065e2be090632d1d80af9e6950282c2ead8c8",
+        "name": "arrangement",
+        "replay_exit": 0,
+        "status": "complete"
+      },
+      {
+        "event_counts": {
+          "created": 1,
+          "finished": 1,
+          "model_completed": 1,
+          "model_queued": 1,
+          "model_started": 1,
+          "route_proposed": 1,
+          "tool_completed": 1,
+          "verification": 2
+        },
+        "fingerprint": "8fae00492b0ddccc7f2b1add678a2c64e90de3db2c765c34c83b37bf1577eb4a",
+        "name": "custom",
+        "replay_exit": 0,
+        "status": "complete"
+      }
+    ],
+    "status": "FAIL"
+  }
+}
