@@ -7,6 +7,9 @@ const text = (id, value) => { if (node(id).textContent !== value) node(id).textC
 const activeStates = new Set(['running','ready']);
 const resumable = new Set(['paused','interrupted','ready']);
 const approvalStates = new Set(['awaiting_consent','approval_required']);
+const retryableStatusCodes = new Set([408,429,502,503,504]);
+const statusIntervalMs = 1200;
+const statusRequestMs = 12000;
 const localDevice = () => !(navigator.userAgentData?.mobile || /Android|iPad|iPhone|iPod/u.test(navigator.userAgent)
   || (navigator.maxTouchPoints > 1 && /Macintosh/u.test(navigator.userAgent)));
 
@@ -40,6 +43,7 @@ const copy = {
   en: {
     paired: 'Paired with the local executor', unpaired: 'Pair with the local executor again to reopen its records.',
     unreachable: 'The local executor could not confirm the request. Check its connection before retrying.',
+    statusRetry: 'The companion status is temporarily unavailable. Checking again…',
     refused: 'The local executor paused or refused this request. Check its authorization and the run record.',
     expired: 'The local authorization has ended. Reconnect with a current pairing code.',
     freshScope: 'This mission started under different limits. Activate the ambition again to use your current authorization.',
@@ -117,6 +121,7 @@ const copy = {
   fr: {
     paired: 'Jumelé avec l’exécuteur local', unpaired: 'Jumelez de nouveau l’exécuteur local pour rouvrir ses dossiers.',
     unreachable: 'L’exécuteur local n’a pas pu confirmer la demande. Vérifiez la connexion avant de réessayer.',
+    statusRetry: 'L’état du compagnon est temporairement indisponible. Nouvelle vérification…',
     refused: 'L’exécuteur local a suspendu ou refusé la demande. Consultez l’autorisation et le dossier de la mission.',
     expired: 'L’autorisation locale est terminée. Reconnectez-vous avec un code de jumelage valide.',
     freshScope: 'Cette mission a démarré avec d’autres limites. Activez de nouveau l’ambition pour utiliser l’autorisation actuelle.',
@@ -197,7 +202,7 @@ export function setupExecution(member, language, {onOpen, currentAmbition, curre
   localFilesConsent, filesAttached, updateSummary, onChooseRoute}) {
   const words = copy[language];
   const available = () => !member.hidden;
-  let session, commandScope, view, pending, busyEpoch, serial = 0, timer;
+  let session, sessionExpiry, commandScope, view, pending, busyEpoch, serial = 0, timer;
   let queuedAmbition, ready = false, setupBusy = false;
   let selectedRoute, localSelection, nativeSetup, previousRun, viewMissionKey;
   let pairingRequest;
@@ -213,11 +218,17 @@ export function setupExecution(member, language, {onOpen, currentAmbition, curre
     const headers = {'Content-Type':'application/json'};
     if (action !== 'pair') headers['X-Frontier-Session'] = authorizedSession;
     if (command) headers['X-Frontier-Command'] = `${authorizedCommands}.${command}`;
-    const response = await fetch(base + action, {method:'POST', headers, body:JSON.stringify(body),
-      credentials:'omit', redirect:'error', cache:'no-store', referrerPolicy:'no-referrer', keepalive:action === 'release'});
+    const options = {method:'POST', headers, body:JSON.stringify(body), credentials:'omit',
+      redirect:'error', cache:'no-store', referrerPolicy:'no-referrer', keepalive:action === 'release'};
+    if (action === 'get' && typeof AbortSignal.timeout === 'function') options.signal = AbortSignal.timeout(statusRequestMs);
+    const response = await fetch(base + action, options);
     if (action === 'export' && response.ok) return response.blob();
     const data = await response.json();
-    if (!response.ok) throw new Error(data.error?.code ?? 'MISSION_EXECUTION');
+    if (!response.ok) {
+      const error = new Error(data.error?.code ?? 'MISSION_EXECUTION');
+      error.httpStatus = response.status;
+      throw error;
+    }
     return data;
   }
 
@@ -254,7 +265,7 @@ export function setupExecution(member, language, {onOpen, currentAmbition, curre
 
   function requirePairing(error) {
     if (!['MISSION_LEASE_EXPIRED','MISSION_SESSION'].includes(error.message)) return;
-    session = commandScope = localSelection = undefined;
+    session = sessionExpiry = commandScope = localSelection = undefined;
     ready = false;
     clearTimeout(timer);
     displayNativeLink();
@@ -386,6 +397,38 @@ export function setupExecution(member, language, {onOpen, currentAmbition, curre
     } finally { button.disabled = false; }
   }
 
+  function pollStatus(id, delay = statusIntervalMs) {
+    const epoch = serial;
+    const pairing = session;
+    const observedView = view;
+    const current = () => serial === epoch && session === pairing && view === observedView && available();
+    timer = setTimeout(async () => {
+      if (!current()) return;
+      if (sessionExpiry <= Date.now()) {
+        requirePairing(new Error('MISSION_LEASE_EXPIRED'));
+        status(words.expired);
+        return;
+      }
+      try {
+        const snapshot = await request('get', {id});
+        if (current()) follow(snapshot);
+      } catch (error) {
+        if (!current()) return;
+        requirePairing(error);
+        const retryable = error instanceof TypeError || error instanceof SyntaxError || error.name === 'TimeoutError'
+          || retryableStatusCodes.has(error.httpStatus);
+        if (retryable && current()) {
+          status(words.statusRetry);
+          // A status read can be repeated. Dispatch and approval remain separate commands.
+          pollStatus(id, Math.min(delay * 2, statusRequestMs));
+          return;
+        }
+        status(errorMessage(error));
+        if (nativeSetup?.id === id) showRoute(errorMessage(error), {check:true,cancel:true});
+      }
+    }, delay);
+  }
+
   function follow(result, key = viewMissionKey ?? missionKey()) {
     view = result;
     viewMissionKey = key;
@@ -437,19 +480,7 @@ export function setupExecution(member, language, {onOpen, currentAmbition, curre
     clearTimeout(timer);
     if (session && (result.worker_active || activeStates.has(result.status)
       || (nativeSetup?.id === result.id && nativeSetup.opened && !nativeSetup.canceling))) {
-      const epoch = serial;
-      const pairing = session;
-      timer = setTimeout(async () => {
-        try {
-          const snap = await request('get', {id:result.id});
-          if (serial === epoch && session === pairing && available()) follow(snap);
-        } catch (error) {
-          if (serial !== epoch || session !== pairing || !available()) return;
-          requirePairing(error);
-          status(errorMessage(error));
-          if (nativeSetup?.id === result.id) showRoute(errorMessage(error), {check:true,cancel:true});
-        }
-      }, 1200);
+      pollStatus(result.id);
     }
   }
 
@@ -817,10 +848,11 @@ export function setupExecution(member, language, {onOpen, currentAmbition, curre
         return;
       }
       session = result.session;
+      sessionExpiry = Date.parse(result.expires_at);
       commandScope = result.command_scope;
       node('intelligence-select-form').hidden = true;
-      const end = Number.isFinite(Date.parse(result.expires_at))
-        ? new Intl.DateTimeFormat(language, {dateStyle:'short', timeStyle:'short'}).format(new Date(result.expires_at)) : '';
+      const end = Number.isFinite(sessionExpiry)
+        ? new Intl.DateTimeFormat(language, {dateStyle:'short', timeStyle:'short'}).format(sessionExpiry) : '';
       text('execution-connection', [words.paired,result.scope.model,end].filter(Boolean).join(' · '));
       showConnection(result, result.intelligence);
       if (nativeSetup?.id) {
@@ -899,7 +931,7 @@ export function setupExecution(member, language, {onOpen, currentAmbition, curre
     try {
       await request('disconnect', {}, crypto.randomUUID());
       if (serial !== epoch || !available()) return;
-      session = commandScope = undefined;
+      session = sessionExpiry = commandScope = undefined;
       ready = false;
       localSelection = nativeSetup = undefined;
       clearOnboarding();
@@ -957,7 +989,7 @@ export function setupExecution(member, language, {onOpen, currentAmbition, curre
     pairingRequest?.abort();
     pairingRequest = undefined;
     if (session) request('release').catch(() => {});
-    session = commandScope = undefined;
+    session = sessionExpiry = commandScope = undefined;
     ready = false;
     localSelection = nativeSetup = undefined;
     clearOnboarding();

@@ -801,6 +801,117 @@ async function revokedSourceRetry(browser, language) {
   } finally { await page.close(); }
 }
 
+async function pairedStatusRecovery(browser, language) {
+  const page = await browser.newPage({viewport:dimensions(1440)});
+  const origin = new URL(base).origin;
+  const endpoint = 'http://127.0.0.1:38463/api/frontier-missions/';
+  const operations = [];
+  const runs = [];
+  let heldStatus;
+  try {
+    await page.addInitScript(fakeWallet);
+    await page.clock.install();
+    await page.context().grantPermissions(['local-network-access'], {origin});
+    await page.route(endpoint + '**', async route => {
+      const request = route.request();
+      const headers = {'access-control-allow-origin':origin, 'access-control-allow-methods':'POST',
+        'access-control-allow-headers':'Content-Type, X-Frontier-Session, X-Frontier-Command',
+        'access-control-allow-private-network':'true'};
+      if (request.method() === 'OPTIONS') return route.fulfill({status:204, headers});
+      assert.equal(request.method(),'POST');
+      const action = request.url().slice(endpoint.length);
+      const body = request.postDataJSON();
+      operations.push({action, body, session:request.headers()['x-frontier-session']});
+      const send = json => route.fulfill({status:200, headers, json});
+      if (action === 'pair') return send({session:'S'.repeat(43),command_scope:'0'.repeat(24),
+        scope:{model:'local-fixture'},intelligence:{selection:{mode:'local',ready:true,model_label:'Local fixture'}},
+        expires_at:'2080-01-01T00:00:00Z'});
+      if (action === 'submit') {
+        const id = 'wf_' + String(runs.length + 1).padStart(24,'0');
+        const record = {id,ambition:body.ambition,original_ambition:body.original_ambition ?? body.ambition,
+          language:body.language,status:'running',worker_active:true,actions:0,model_calls:1,events:[],artifacts:[]};
+        runs.push({record, polls:0});
+        return send(record);
+      }
+      if (action === 'release') return send({released:true});
+      const run = runs.find(item=>item.record.id===body.id);
+      assert.ok(run, 'The browser must retain the original paired run ID');
+      const terminal = {...run.record,status:'complete',worker_active:false};
+      if (action === 'get') {
+        if (++run.polls === 1) return route.abort('connectionreset');
+        if (run === runs[1]) {
+          assert.equal(heldStatus,undefined, 'There can be only one pending status read');
+          heldStatus = () => send(terminal);
+          return;
+        }
+        return send(terminal);
+      }
+      if (action === 'cancel') return send({...terminal,status:'cancelled'});
+      if (action === 'export') return send({state:{...terminal,spec:{mission:{
+        original_ambition:run.record.original_ambition,language:run.record.language,
+      }}},files:{}});
+      throw Error('Unexpected isolated fixture operation ' + action);
+    });
+
+    await page.goto(base + (language === 'fr' ? 'fr.html' : ''));
+    await page.locator('[data-connect="token"]').click();
+    await page.locator('#member').waitFor({state:'visible'});
+    const original = 'Audit a fictional portable caption reader. Ω';
+    const revision = 'Trace the same caption reader with a separate replay.';
+    for (const ambition of [original, revision]) {
+      await (await ambitionInput(page)).fill(ambition);
+      await page.locator('#goal-submit').click();
+    }
+    await page.locator('#mission-configure').click();
+    await page.locator('#mission-inline-intelligence [data-frontier-connection="local"]').click();
+    await page.locator('#execution-manual-code summary').click();
+    await page.locator('#execution-code').fill('P'.repeat(43));
+    const isGet = request => request.url()===endpoint+'get' && request.method()==='POST';
+    const execution = page.locator('#mission-execution');
+    const exporting = page.locator('#execution-export');
+    const firstReset = page.waitForEvent('requestfailed',{predicate:isGet});
+    await page.locator('#execution-code-form button').click();
+    assert.match((await firstReset).failure()?.errorText ?? '', /ERR_CONNECTION_RESET/u);
+    try {
+      await page.waitForFunction(()=>document.getElementById('mission-execution').dataset.state==='complete', null, {timeout:9000});
+    } catch (error) {
+      throw new Error('Status read did not recover after the network reset. ' + JSON.stringify({
+        polls:runs[0]?.polls, state:await execution.getAttribute('data-state'), exportEnabled:await exporting.isEnabled(),
+      }), {cause:error});
+    }
+    assert.equal(await exporting.isEnabled(),true);
+    assert.equal(await page.locator('#mission-ambition').textContent(),revision);
+    assert.equal(await page.locator('#mission-original').textContent(),original);
+    const download = page.waitForEvent('download');
+    await exporting.click();
+    const saved = JSON.parse(await readFile(await (await download).path()));
+    assert.equal(saved.state.ambition,revision);
+    assert.equal(saved.state.spec.mission.original_ambition,original);
+    assert.deepEqual(operations.map(item=>item.action), ['pair','submit','get','get','export']);
+    assert.deepEqual(operations.slice(2,4).map(item=>item.body), [{id:runs[0].record.id},{id:runs[0].record.id}]);
+
+    await page.locator('#mission-new').click();
+    await page.locator('#goal-text').fill('Cancel the companion replay while a status read is pending.');
+    const cancelRunReset = page.waitForEvent('requestfailed',{predicate:isGet});
+    await page.locator('#goal-submit').click();
+    assert.match((await cancelRunReset).failure()?.errorText ?? '', /ERR_CONNECTION_RESET/u);
+    const second = await page.waitForRequest(request => isGet(request) && request.postDataJSON().id===runs[1].record.id);
+    await page.locator('#execution-cancel').click();
+    await page.waitForFunction(()=>document.getElementById('mission-execution').dataset.state==='cancelled');
+    const lateResponse = page.waitForResponse(response=>response.request()===second);
+    assert.equal(typeof heldStatus,'function');
+    await heldStatus();
+    await (await lateResponse).finished();
+    await page.clock.fastForward(6000);
+    assert.equal(await execution.getAttribute('data-state'),'cancelled');
+    assert.equal(await exporting.isEnabled(),true);
+    assert.deepEqual(operations.map(item=>item.action), ['pair','submit','get','get','export','submit','get','get','cancel']);
+    assert.ok(operations.slice(1).every(item=>item.session==='S'.repeat(43)));
+    checks.push({kind:'paired-status-recovery-fixture',language,statusReads:2,retries:1,
+      exactOriginalAndRevision:true,exported:true,noDuplicateSubmission:true,lateStatusAfterCancelIgnored:true});
+  } finally { await page.close(); }
+}
+
 async function universalMission(page, language, width) {
   const panel = page.locator('#frontier-mission-panel');
   const original = 'Build Frontier AI for Game Theory.';
@@ -1278,6 +1389,7 @@ async function walletPaths(browser, language, width) {
       }
       await pairedRevisionJourney(browser, language);
       await revokedSourceRetry(browser, language);
+      await pairedStatusRecovery(browser, language);
     }
     process.stdout.write(JSON.stringify(checks, null, 2) + '\n');
   } finally {
