@@ -203,6 +203,10 @@ jobs:
         if: github.event_name == 'pull_request' || github.ref == 'refs/heads/main'
         shell: bash
         run: |
+          # Fetch archive revisions before restoring the first-parent history they may be part of.
+          git fetch --no-tags --depth=1 --filter=blob:none origin \
+            522542e525e96556285560e65e4443c85cc7b709 6a635b77012fb45b4d96c404a33fa04327c19674 \
+            cef4d1caa38b14555613dc25d180c42798b62b78
           for attempt in 1 2 3; do
             if git fetch --no-tags --filter=blob:none --shallow-since=2026-11-22T00:00:00Z origin \
                 "$GITHUB_SHA" refs/heads/frontier-watch-public:refs/remotes/origin/frontier-watch-public; then
@@ -211,9 +215,6 @@ jobs:
             test "$attempt" -lt 3 || exit 1
             sleep "$((2 * attempt))"
           done
-          git fetch --no-tags --depth=1 --filter=blob:none origin \
-            522542e525e96556285560e65e4443c85cc7b709 6a635b77012fb45b4d96c404a33fa04327c19674 \
-            cef4d1caa38b14555613dc25d180c42798b62b78
           git cat-file -e 'c0a14ba028092db648516718f9127ae8166df63e^{commit}'
           git cat-file -e '297a51c25c48031e1e6f964835f4dfae3ddb8023^{commit}'
           git cat-file -e '1bdac817b471157092ea4aac881916824b66734e^{commit}'

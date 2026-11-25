@@ -711,7 +711,7 @@ export function setupMissionConsole(member, shell) {
       render();
       const packet = missionPacket(snapshot);
       const result = await runBrowserStarter({ambition:snapshot.ambition, language:snapshot.language, signal:controller.signal,
-        instruction:packet.instruction, previousWork:packet.previousReport?.work,
+        originalAmbition:packet.originalAmbition, instruction:packet.instruction, previousWork:packet.previousReport?.work,
         onProgress(value) {
           if (token !== serial || !active()) return;
           const message = value < 1 ? words.browserDownloading(new Intl.NumberFormat(language, {style:'percent'}).format(value)) : words.browserStarting;

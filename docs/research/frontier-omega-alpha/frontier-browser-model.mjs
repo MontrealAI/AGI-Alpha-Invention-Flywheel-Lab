@@ -26,18 +26,20 @@ const checkPrompt = {
   fr: marker => `Test de connexion. Répondez exactement ${marker}, sans autre texte.`,
 };
 
-function browserStarterPrompt({ambition, instruction, previousWork, language}) {
+function browserStarterPrompt({ambition, originalAmbition = ambition, instruction, previousWork, language}) {
   if (!['en', 'fr'].includes(language) || typeof ambition !== 'string' || !ambition.trim()
+      || typeof originalAmbition !== 'string' || !originalAmbition.trim()
       || (instruction != null && typeof instruction !== 'string')
       || (previousWork != null && typeof previousWork !== 'string')) {
     throw new Error('BROWSER_MODEL_INPUT');
   }
   let prompt = ambition;
-  if (instruction?.trim() || previousWork?.trim()) {
-    const [objective, work, latest] = language === 'fr' ?
-      ['Ambition originale', 'Travail précédent', 'Dernière consigne'] :
-      ['Original ambition', 'Previous work', 'Latest instruction'];
-    const sections = [[objective, ambition]];
+  if (originalAmbition !== ambition || instruction?.trim() || previousWork?.trim()) {
+    const [original, objective, work, latest] = language === 'fr' ?
+      ['Ambition originale', 'Ambition actuelle', 'Travail précédent', 'Dernière consigne'] :
+      ['Original ambition', 'Current ambition', 'Previous work', 'Latest instruction'];
+    const sections = [[original, originalAmbition]];
+    if (originalAmbition !== ambition) sections.push([objective, ambition]);
     if (previousWork?.trim()) sections.push([work, previousWork]);
     if (instruction?.trim()) sections.push([latest, instruction]);
     prompt = sections.map(([label, content]) => `${label}\n${content}`).join('\n\n');
@@ -46,8 +48,8 @@ function browserStarterPrompt({ambition, instruction, previousWork, language}) {
   return prompt;
 }
 
-export async function runBrowserStarter({ambition, instruction, previousWork, language, signal, onProgress, onReady}, runtime = globalThis.LanguageModel) {
-  const prompt = browserStarterPrompt({ambition, instruction, previousWork, language});
+export async function runBrowserStarter({ambition, originalAmbition, instruction, previousWork, language, signal, onProgress, onReady}, runtime = globalThis.LanguageModel) {
+  const prompt = browserStarterPrompt({ambition, originalAmbition, instruction, previousWork, language});
   if (typeof runtime?.create !== 'function') throw new Error('BROWSER_MODEL_INPUT');
   signal?.throwIfAborted();
   // Invoke create in the user gesture so the browser can ask to download its model.

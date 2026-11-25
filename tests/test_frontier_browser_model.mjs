@@ -69,11 +69,12 @@ test('continues a browser mission with the original ambition, previous work and 
     },
     destroy() {},
   }; }};
-  const ambition = '  Percer ce mystère scientifique.\nConserver la portée.  ';
+  const originalAmbition = '  Percer ce mystère scientifique.\nConserver la portée.  ';
+  const ambition = 'Comparer les deux séries sans les fusionner.';
   const previousWork = 'Deux essais donnent des résultats divergents.';
   const instruction = 'Utilisez les données du deuxième essai.\nExpliquez la différence.';
-  await runBrowserStarter({ambition, previousWork, instruction, language: 'fr'}, fixture);
-  assert.equal(prompt, `Ambition originale\n${ambition}\n\nTravail précédent\n${previousWork}\n\nDernière consigne\n${instruction}`);
+  await runBrowserStarter({ambition, originalAmbition, previousWork, instruction, language: 'fr'}, fixture);
+  assert.equal(prompt, `Ambition originale\n${originalAmbition}\n\nAmbition actuelle\n${ambition}\n\nTravail précédent\n${previousWork}\n\nDernière consigne\n${instruction}`);
 });
 
 test('stops before creating a session if the combined context is too large', async () => {
