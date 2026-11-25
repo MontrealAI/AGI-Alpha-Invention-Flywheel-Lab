@@ -1,0 +1,2053 @@
+{
+  "schema": "frontier/strategic-evidence-pointer-adjudication/v1",
+  "source": {
+    "registration": "dc19ca14c1716bf59538d9ad3104eeca25e7e580ab12646f5c184db54f4c6b81",
+    "held_freeze": "8e3e3fa4ef6803366b0c3fc1668dc74e5bd91bc9e01d2740177cac9793d6145e",
+    "cases": "2acf5f20f86bfd0c1cc2680a03ecc2f205f645d8d29ee13e817f51ec735dbf6d",
+    "oracle": "f21eea3225905a4a9abd01c0b6ab0b6f433e15ef5a749f0047b43ce55fd28726",
+    "predictions": "22b39079f523565a62df5d716a2c0f4e6bc069f82e547ce5af156794fb62f4bb"
+  },
+  "arms": {
+    "base_direct": {
+      "total": {
+        "cases": 8,
+        "queries": 24,
+        "label_correct": 7,
+        "cited_correct": 0,
+        "false_known": 0,
+        "abstained": 23,
+        "exact_cases": 0
+      },
+      "groups": {
+        "en": {
+          "cases": 4,
+          "queries": 12,
+          "label_correct": 4,
+          "cited_correct": 0,
+          "false_known": 0,
+          "abstained": 12,
+          "exact_cases": 0
+        },
+        "conditioned-forwarding": {
+          "cases": 1,
+          "queries": 3,
+          "label_correct": 1,
+          "cited_correct": 0,
+          "false_known": 0,
+          "abstained": 3,
+          "exact_cases": 0
+        },
+        "logical-reconstruction": {
+          "cases": 1,
+          "queries": 3,
+          "label_correct": 1,
+          "cited_correct": 0,
+          "false_known": 0,
+          "abstained": 3,
+          "exact_cases": 0
+        },
+        "pseudonym-and-revision": {
+          "cases": 1,
+          "queries": 3,
+          "label_correct": 1,
+          "cited_correct": 0,
+          "false_known": 0,
+          "abstained": 3,
+          "exact_cases": 0
+        },
+        "pooled-versus-individual-disclosure": {
+          "cases": 1,
+          "queries": 3,
+          "label_correct": 1,
+          "cited_correct": 0,
+          "false_known": 0,
+          "abstained": 3,
+          "exact_cases": 0
+        },
+        "fr": {
+          "cases": 4,
+          "queries": 12,
+          "label_correct": 3,
+          "cited_correct": 0,
+          "false_known": 0,
+          "abstained": 11,
+          "exact_cases": 0
+        },
+        "asymmetric-display": {
+          "cases": 1,
+          "queries": 3,
+          "label_correct": 1,
+          "cited_correct": 0,
+          "false_known": 0,
+          "abstained": 3,
+          "exact_cases": 0
+        },
+        "lookup-and-conditional-veto": {
+          "cases": 1,
+          "queries": 3,
+          "label_correct": 1,
+          "cited_correct": 0,
+          "false_known": 0,
+          "abstained": 3,
+          "exact_cases": 0
+        },
+        "announcement-versus-choice": {
+          "cases": 1,
+          "queries": 3,
+          "label_correct": 1,
+          "cited_correct": 0,
+          "false_known": 0,
+          "abstained": 3,
+          "exact_cases": 0
+        },
+        "role-scoped-rights": {
+          "cases": 1,
+          "queries": 3,
+          "label_correct": 0,
+          "cited_correct": 0,
+          "false_known": 0,
+          "abstained": 2,
+          "exact_cases": 0
+        }
+      },
+      "cases": [
+        {
+          "id": "relay-01",
+          "cases": 1,
+          "queries": 3,
+          "label_correct": 1,
+          "cited_correct": 0,
+          "false_known": 0,
+          "abstained": 3,
+          "exact_cases": 0,
+          "misses": [
+            {
+              "query": 1,
+              "oracle": {
+                "access": "unclear",
+                "witness": [
+                  3
+                ]
+              },
+              "predicted": {
+                "access": "unclear",
+                "witness": 1
+              }
+            },
+            {
+              "query": 2,
+              "oracle": {
+                "access": "hidden",
+                "witness": [
+                  4
+                ]
+              },
+              "predicted": {
+                "access": "unclear",
+                "witness": 1
+              }
+            },
+            {
+              "query": 3,
+              "oracle": {
+                "access": "known",
+                "witness": [
+                  4
+                ]
+              },
+              "predicted": {
+                "access": "unclear",
+                "witness": 1
+              }
+            }
+          ]
+        },
+        {
+          "id": "ledger-02",
+          "cases": 1,
+          "queries": 3,
+          "label_correct": 1,
+          "cited_correct": 0,
+          "false_known": 0,
+          "abstained": 3,
+          "exact_cases": 0,
+          "misses": [
+            {
+              "query": 1,
+              "oracle": {
+                "access": "known",
+                "witness": [
+                  2
+                ]
+              },
+              "predicted": {
+                "access": "unclear",
+                "witness": 0
+              }
+            },
+            {
+              "query": 2,
+              "oracle": {
+                "access": "hidden",
+                "witness": [
+                  3
+                ]
+              },
+              "predicted": {
+                "access": "unclear",
+                "witness": 0
+              }
+            },
+            {
+              "query": 3,
+              "oracle": {
+                "access": "unclear",
+                "witness": [
+                  4
+                ]
+              },
+              "predicted": {
+                "access": "unclear",
+                "witness": 0
+              }
+            }
+          ]
+        },
+        {
+          "id": "order-03",
+          "cases": 1,
+          "queries": 3,
+          "label_correct": 1,
+          "cited_correct": 0,
+          "false_known": 0,
+          "abstained": 3,
+          "exact_cases": 0,
+          "misses": [
+            {
+              "query": 1,
+              "oracle": {
+                "access": "known",
+                "witness": [
+                  1
+                ]
+              },
+              "predicted": {
+                "access": "unclear",
+                "witness": 1
+              }
+            },
+            {
+              "query": 2,
+              "oracle": {
+                "access": "hidden",
+                "witness": [
+                  2
+                ]
+              },
+              "predicted": {
+                "access": "unclear",
+                "witness": 1
+              }
+            },
+            {
+              "query": 3,
+              "oracle": {
+                "access": "unclear",
+                "witness": [
+                  3
+                ]
+              },
+              "predicted": {
+                "access": "unclear",
+                "witness": 1
+              }
+            }
+          ]
+        },
+        {
+          "id": "spare-04",
+          "cases": 1,
+          "queries": 3,
+          "label_correct": 1,
+          "cited_correct": 0,
+          "false_known": 0,
+          "abstained": 3,
+          "exact_cases": 0,
+          "misses": [
+            {
+              "query": 1,
+              "oracle": {
+                "access": "hidden",
+                "witness": [
+                  2
+                ]
+              },
+              "predicted": {
+                "access": "unclear",
+                "witness": 0
+              }
+            },
+            {
+              "query": 2,
+              "oracle": {
+                "access": "known",
+                "witness": [
+                  3
+                ]
+              },
+              "predicted": {
+                "access": "unclear",
+                "witness": 0
+              }
+            },
+            {
+              "query": 3,
+              "oracle": {
+                "access": "unclear",
+                "witness": [
+                  4
+                ]
+              },
+              "predicted": {
+                "access": "unclear",
+                "witness": 1
+              }
+            }
+          ]
+        },
+        {
+          "id": "pupitre-05",
+          "cases": 1,
+          "queries": 3,
+          "label_correct": 1,
+          "cited_correct": 0,
+          "false_known": 0,
+          "abstained": 3,
+          "exact_cases": 0,
+          "misses": [
+            {
+              "query": 1,
+              "oracle": {
+                "access": "known",
+                "witness": [
+                  2
+                ]
+              },
+              "predicted": {
+                "access": "unclear",
+                "witness": 1
+              }
+            },
+            {
+              "query": 2,
+              "oracle": {
+                "access": "hidden",
+                "witness": [
+                  3
+                ]
+              },
+              "predicted": {
+                "access": "unclear",
+                "witness": 1
+              }
+            },
+            {
+              "query": 3,
+              "oracle": {
+                "access": "unclear",
+                "witness": [
+                  4
+                ]
+              },
+              "predicted": {
+                "access": "unclear",
+                "witness": 1
+              }
+            }
+          ]
+        },
+        {
+          "id": "registre-06",
+          "cases": 1,
+          "queries": 3,
+          "label_correct": 1,
+          "cited_correct": 0,
+          "false_known": 0,
+          "abstained": 3,
+          "exact_cases": 0,
+          "misses": [
+            {
+              "query": 1,
+              "oracle": {
+                "access": "known",
+                "witness": [
+                  1
+                ]
+              },
+              "predicted": {
+                "access": "unclear",
+                "witness": 1
+              }
+            },
+            {
+              "query": 2,
+              "oracle": {
+                "access": "hidden",
+                "witness": [
+                  2
+                ]
+              },
+              "predicted": {
+                "access": "unclear",
+                "witness": 1
+              }
+            },
+            {
+              "query": 3,
+              "oracle": {
+                "access": "unclear",
+                "witness": [
+                  3,
+                  4
+                ]
+              },
+              "predicted": {
+                "access": "unclear",
+                "witness": 1
+              }
+            }
+          ]
+        },
+        {
+          "id": "cloche-07",
+          "cases": 1,
+          "queries": 3,
+          "label_correct": 1,
+          "cited_correct": 0,
+          "false_known": 0,
+          "abstained": 3,
+          "exact_cases": 0,
+          "misses": [
+            {
+              "query": 1,
+              "oracle": {
+                "access": "known",
+                "witness": [
+                  1
+                ]
+              },
+              "predicted": {
+                "access": "unclear",
+                "witness": 0
+              }
+            },
+            {
+              "query": 2,
+              "oracle": {
+                "access": "hidden",
+                "witness": [
+                  2
+                ]
+              },
+              "predicted": {
+                "access": "unclear",
+                "witness": 0
+              }
+            },
+            {
+              "query": 3,
+              "oracle": {
+                "access": "unclear",
+                "witness": [
+                  3
+                ]
+              },
+              "predicted": {
+                "access": "unclear",
+                "witness": 0
+              }
+            }
+          ]
+        },
+        {
+          "id": "licence-08",
+          "cases": 1,
+          "queries": 3,
+          "label_correct": 0,
+          "cited_correct": 0,
+          "false_known": 0,
+          "abstained": 2,
+          "exact_cases": 0,
+          "misses": [
+            {
+              "query": 1,
+              "oracle": {
+                "access": "known",
+                "witness": [
+                  2
+                ]
+              },
+              "predicted": {
+                "access": "unclear",
+                "witness": 1
+              }
+            },
+            {
+              "query": 2,
+              "oracle": {
+                "access": "hidden",
+                "witness": [
+                  3
+                ]
+              },
+              "predicted": {
+                "access": "unclear",
+                "witness": 0
+              }
+            },
+            {
+              "query": 3,
+              "oracle": {
+                "access": "unclear",
+                "witness": [
+                  4,
+                  5
+                ]
+              },
+              "predicted": {
+                "access": "hidden",
+                "witness": 1
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "base_retrieval": {
+      "total": {
+        "cases": 8,
+        "queries": 24,
+        "label_correct": 7,
+        "cited_correct": 0,
+        "false_known": 2,
+        "abstained": 4,
+        "exact_cases": 0
+      },
+      "groups": {
+        "en": {
+          "cases": 4,
+          "queries": 12,
+          "label_correct": 4,
+          "cited_correct": 0,
+          "false_known": 0,
+          "abstained": 3,
+          "exact_cases": 0
+        },
+        "conditioned-forwarding": {
+          "cases": 1,
+          "queries": 3,
+          "label_correct": 1,
+          "cited_correct": 0,
+          "false_known": 0,
+          "abstained": 3,
+          "exact_cases": 0
+        },
+        "logical-reconstruction": {
+          "cases": 1,
+          "queries": 3,
+          "label_correct": 1,
+          "cited_correct": 0,
+          "false_known": 0,
+          "abstained": 0,
+          "exact_cases": 0
+        },
+        "pseudonym-and-revision": {
+          "cases": 1,
+          "queries": 3,
+          "label_correct": 1,
+          "cited_correct": 0,
+          "false_known": 0,
+          "abstained": 0,
+          "exact_cases": 0
+        },
+        "pooled-versus-individual-disclosure": {
+          "cases": 1,
+          "queries": 3,
+          "label_correct": 1,
+          "cited_correct": 0,
+          "false_known": 0,
+          "abstained": 0,
+          "exact_cases": 0
+        },
+        "fr": {
+          "cases": 4,
+          "queries": 12,
+          "label_correct": 3,
+          "cited_correct": 0,
+          "false_known": 2,
+          "abstained": 1,
+          "exact_cases": 0
+        },
+        "asymmetric-display": {
+          "cases": 1,
+          "queries": 3,
+          "label_correct": 1,
+          "cited_correct": 0,
+          "false_known": 2,
+          "abstained": 0,
+          "exact_cases": 0
+        },
+        "lookup-and-conditional-veto": {
+          "cases": 1,
+          "queries": 3,
+          "label_correct": 0,
+          "cited_correct": 0,
+          "false_known": 0,
+          "abstained": 1,
+          "exact_cases": 0
+        },
+        "announcement-versus-choice": {
+          "cases": 1,
+          "queries": 3,
+          "label_correct": 1,
+          "cited_correct": 0,
+          "false_known": 0,
+          "abstained": 0,
+          "exact_cases": 0
+        },
+        "role-scoped-rights": {
+          "cases": 1,
+          "queries": 3,
+          "label_correct": 1,
+          "cited_correct": 0,
+          "false_known": 0,
+          "abstained": 0,
+          "exact_cases": 0
+        }
+      },
+      "cases": [
+        {
+          "id": "relay-01",
+          "cases": 1,
+          "queries": 3,
+          "label_correct": 1,
+          "cited_correct": 0,
+          "false_known": 0,
+          "abstained": 3,
+          "exact_cases": 0,
+          "misses": [
+            {
+              "query": 1,
+              "oracle": {
+                "access": "unclear",
+                "witness": [
+                  3
+                ]
+              },
+              "predicted": {
+                "access": "unclear",
+                "witness": 1
+              }
+            },
+            {
+              "query": 2,
+              "oracle": {
+                "access": "hidden",
+                "witness": [
+                  4
+                ]
+              },
+              "predicted": {
+                "access": "unclear",
+                "witness": 1
+              }
+            },
+            {
+              "query": 3,
+              "oracle": {
+                "access": "known",
+                "witness": [
+                  4
+                ]
+              },
+              "predicted": {
+                "access": "unclear",
+                "witness": 1
+              }
+            }
+          ]
+        },
+        {
+          "id": "ledger-02",
+          "cases": 1,
+          "queries": 3,
+          "label_correct": 1,
+          "cited_correct": 0,
+          "false_known": 0,
+          "abstained": 0,
+          "exact_cases": 0,
+          "misses": [
+            {
+              "query": 1,
+              "oracle": {
+                "access": "known",
+                "witness": [
+                  2
+                ]
+              },
+              "predicted": {
+                "access": "hidden",
+                "witness": 1
+              }
+            },
+            {
+              "query": 2,
+              "oracle": {
+                "access": "hidden",
+                "witness": [
+                  3
+                ]
+              },
+              "predicted": {
+                "access": "hidden",
+                "witness": 1
+              }
+            },
+            {
+              "query": 3,
+              "oracle": {
+                "access": "unclear",
+                "witness": [
+                  4
+                ]
+              },
+              "predicted": {
+                "access": "hidden",
+                "witness": 1
+              }
+            }
+          ]
+        },
+        {
+          "id": "order-03",
+          "cases": 1,
+          "queries": 3,
+          "label_correct": 1,
+          "cited_correct": 0,
+          "false_known": 0,
+          "abstained": 0,
+          "exact_cases": 0,
+          "misses": [
+            {
+              "query": 1,
+              "oracle": {
+                "access": "known",
+                "witness": [
+                  1
+                ]
+              },
+              "predicted": {
+                "access": "hidden",
+                "witness": 3
+              }
+            },
+            {
+              "query": 2,
+              "oracle": {
+                "access": "hidden",
+                "witness": [
+                  2
+                ]
+              },
+              "predicted": {
+                "access": "hidden",
+                "witness": 3
+              }
+            },
+            {
+              "query": 3,
+              "oracle": {
+                "access": "unclear",
+                "witness": [
+                  3
+                ]
+              },
+              "predicted": {
+                "access": "hidden",
+                "witness": 3
+              }
+            }
+          ]
+        },
+        {
+          "id": "spare-04",
+          "cases": 1,
+          "queries": 3,
+          "label_correct": 1,
+          "cited_correct": 0,
+          "false_known": 0,
+          "abstained": 0,
+          "exact_cases": 0,
+          "misses": [
+            {
+              "query": 1,
+              "oracle": {
+                "access": "hidden",
+                "witness": [
+                  2
+                ]
+              },
+              "predicted": {
+                "access": "hidden",
+                "witness": 1
+              }
+            },
+            {
+              "query": 2,
+              "oracle": {
+                "access": "known",
+                "witness": [
+                  3
+                ]
+              },
+              "predicted": {
+                "access": "hidden",
+                "witness": 1
+              }
+            },
+            {
+              "query": 3,
+              "oracle": {
+                "access": "unclear",
+                "witness": [
+                  4
+                ]
+              },
+              "predicted": {
+                "access": "hidden",
+                "witness": 1
+              }
+            }
+          ]
+        },
+        {
+          "id": "pupitre-05",
+          "cases": 1,
+          "queries": 3,
+          "label_correct": 1,
+          "cited_correct": 0,
+          "false_known": 2,
+          "abstained": 0,
+          "exact_cases": 0,
+          "misses": [
+            {
+              "query": 1,
+              "oracle": {
+                "access": "known",
+                "witness": [
+                  2
+                ]
+              },
+              "predicted": {
+                "access": "known",
+                "witness": 4
+              }
+            },
+            {
+              "query": 2,
+              "oracle": {
+                "access": "hidden",
+                "witness": [
+                  3
+                ]
+              },
+              "predicted": {
+                "access": "known",
+                "witness": 4
+              }
+            },
+            {
+              "query": 3,
+              "oracle": {
+                "access": "unclear",
+                "witness": [
+                  4
+                ]
+              },
+              "predicted": {
+                "access": "known",
+                "witness": 4
+              }
+            }
+          ]
+        },
+        {
+          "id": "registre-06",
+          "cases": 1,
+          "queries": 3,
+          "label_correct": 0,
+          "cited_correct": 0,
+          "false_known": 0,
+          "abstained": 1,
+          "exact_cases": 0,
+          "misses": [
+            {
+              "query": 1,
+              "oracle": {
+                "access": "known",
+                "witness": [
+                  1
+                ]
+              },
+              "predicted": {
+                "access": "hidden",
+                "witness": 4
+              }
+            },
+            {
+              "query": 2,
+              "oracle": {
+                "access": "hidden",
+                "witness": [
+                  2
+                ]
+              },
+              "predicted": {
+                "access": "unclear",
+                "witness": 4
+              }
+            },
+            {
+              "query": 3,
+              "oracle": {
+                "access": "unclear",
+                "witness": [
+                  3,
+                  4
+                ]
+              },
+              "predicted": {
+                "access": "hidden",
+                "witness": 4
+              }
+            }
+          ]
+        },
+        {
+          "id": "cloche-07",
+          "cases": 1,
+          "queries": 3,
+          "label_correct": 1,
+          "cited_correct": 0,
+          "false_known": 0,
+          "abstained": 0,
+          "exact_cases": 0,
+          "misses": [
+            {
+              "query": 1,
+              "oracle": {
+                "access": "known",
+                "witness": [
+                  1
+                ]
+              },
+              "predicted": {
+                "access": "hidden",
+                "witness": 4
+              }
+            },
+            {
+              "query": 2,
+              "oracle": {
+                "access": "hidden",
+                "witness": [
+                  2
+                ]
+              },
+              "predicted": {
+                "access": "hidden",
+                "witness": 4
+              }
+            },
+            {
+              "query": 3,
+              "oracle": {
+                "access": "unclear",
+                "witness": [
+                  3
+                ]
+              },
+              "predicted": {
+                "access": "hidden",
+                "witness": 4
+              }
+            }
+          ]
+        },
+        {
+          "id": "licence-08",
+          "cases": 1,
+          "queries": 3,
+          "label_correct": 1,
+          "cited_correct": 0,
+          "false_known": 0,
+          "abstained": 0,
+          "exact_cases": 0,
+          "misses": [
+            {
+              "query": 1,
+              "oracle": {
+                "access": "known",
+                "witness": [
+                  2
+                ]
+              },
+              "predicted": {
+                "access": "hidden",
+                "witness": 4
+              }
+            },
+            {
+              "query": 2,
+              "oracle": {
+                "access": "hidden",
+                "witness": [
+                  3
+                ]
+              },
+              "predicted": {
+                "access": "hidden",
+                "witness": 4
+              }
+            },
+            {
+              "query": 3,
+              "oracle": {
+                "access": "unclear",
+                "witness": [
+                  4,
+                  5
+                ]
+              },
+              "predicted": {
+                "access": "hidden",
+                "witness": 4
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "base_word_lookup": {
+      "total": {
+        "cases": 8,
+        "queries": 24,
+        "label_correct": 7,
+        "cited_correct": 0,
+        "false_known": 0,
+        "abstained": 23,
+        "exact_cases": 0
+      },
+      "groups": {
+        "en": {
+          "cases": 4,
+          "queries": 12,
+          "label_correct": 4,
+          "cited_correct": 0,
+          "false_known": 0,
+          "abstained": 12,
+          "exact_cases": 0
+        },
+        "conditioned-forwarding": {
+          "cases": 1,
+          "queries": 3,
+          "label_correct": 1,
+          "cited_correct": 0,
+          "false_known": 0,
+          "abstained": 3,
+          "exact_cases": 0
+        },
+        "logical-reconstruction": {
+          "cases": 1,
+          "queries": 3,
+          "label_correct": 1,
+          "cited_correct": 0,
+          "false_known": 0,
+          "abstained": 3,
+          "exact_cases": 0
+        },
+        "pseudonym-and-revision": {
+          "cases": 1,
+          "queries": 3,
+          "label_correct": 1,
+          "cited_correct": 0,
+          "false_known": 0,
+          "abstained": 3,
+          "exact_cases": 0
+        },
+        "pooled-versus-individual-disclosure": {
+          "cases": 1,
+          "queries": 3,
+          "label_correct": 1,
+          "cited_correct": 0,
+          "false_known": 0,
+          "abstained": 3,
+          "exact_cases": 0
+        },
+        "fr": {
+          "cases": 4,
+          "queries": 12,
+          "label_correct": 3,
+          "cited_correct": 0,
+          "false_known": 0,
+          "abstained": 11,
+          "exact_cases": 0
+        },
+        "asymmetric-display": {
+          "cases": 1,
+          "queries": 3,
+          "label_correct": 1,
+          "cited_correct": 0,
+          "false_known": 0,
+          "abstained": 3,
+          "exact_cases": 0
+        },
+        "lookup-and-conditional-veto": {
+          "cases": 1,
+          "queries": 3,
+          "label_correct": 1,
+          "cited_correct": 0,
+          "false_known": 0,
+          "abstained": 3,
+          "exact_cases": 0
+        },
+        "announcement-versus-choice": {
+          "cases": 1,
+          "queries": 3,
+          "label_correct": 1,
+          "cited_correct": 0,
+          "false_known": 0,
+          "abstained": 3,
+          "exact_cases": 0
+        },
+        "role-scoped-rights": {
+          "cases": 1,
+          "queries": 3,
+          "label_correct": 0,
+          "cited_correct": 0,
+          "false_known": 0,
+          "abstained": 2,
+          "exact_cases": 0
+        }
+      },
+      "cases": [
+        {
+          "id": "relay-01",
+          "cases": 1,
+          "queries": 3,
+          "label_correct": 1,
+          "cited_correct": 0,
+          "false_known": 0,
+          "abstained": 3,
+          "exact_cases": 0,
+          "misses": [
+            {
+              "query": 1,
+              "oracle": {
+                "access": "unclear",
+                "witness": [
+                  3
+                ]
+              },
+              "predicted": {
+                "access": "unclear",
+                "witness": 1
+              }
+            },
+            {
+              "query": 2,
+              "oracle": {
+                "access": "hidden",
+                "witness": [
+                  4
+                ]
+              },
+              "predicted": {
+                "access": "unclear",
+                "witness": 1
+              }
+            },
+            {
+              "query": 3,
+              "oracle": {
+                "access": "known",
+                "witness": [
+                  4
+                ]
+              },
+              "predicted": {
+                "access": "unclear",
+                "witness": 1
+              }
+            }
+          ]
+        },
+        {
+          "id": "ledger-02",
+          "cases": 1,
+          "queries": 3,
+          "label_correct": 1,
+          "cited_correct": 0,
+          "false_known": 0,
+          "abstained": 3,
+          "exact_cases": 0,
+          "misses": [
+            {
+              "query": 1,
+              "oracle": {
+                "access": "known",
+                "witness": [
+                  2
+                ]
+              },
+              "predicted": {
+                "access": "unclear",
+                "witness": 2
+              }
+            },
+            {
+              "query": 2,
+              "oracle": {
+                "access": "hidden",
+                "witness": [
+                  3
+                ]
+              },
+              "predicted": {
+                "access": "unclear",
+                "witness": 0
+              }
+            },
+            {
+              "query": 3,
+              "oracle": {
+                "access": "unclear",
+                "witness": [
+                  4
+                ]
+              },
+              "predicted": {
+                "access": "unclear",
+                "witness": 0
+              }
+            }
+          ]
+        },
+        {
+          "id": "order-03",
+          "cases": 1,
+          "queries": 3,
+          "label_correct": 1,
+          "cited_correct": 0,
+          "false_known": 0,
+          "abstained": 3,
+          "exact_cases": 0,
+          "misses": [
+            {
+              "query": 1,
+              "oracle": {
+                "access": "known",
+                "witness": [
+                  1
+                ]
+              },
+              "predicted": {
+                "access": "unclear",
+                "witness": 1
+              }
+            },
+            {
+              "query": 2,
+              "oracle": {
+                "access": "hidden",
+                "witness": [
+                  2
+                ]
+              },
+              "predicted": {
+                "access": "unclear",
+                "witness": 1
+              }
+            },
+            {
+              "query": 3,
+              "oracle": {
+                "access": "unclear",
+                "witness": [
+                  3
+                ]
+              },
+              "predicted": {
+                "access": "unclear",
+                "witness": 1
+              }
+            }
+          ]
+        },
+        {
+          "id": "spare-04",
+          "cases": 1,
+          "queries": 3,
+          "label_correct": 1,
+          "cited_correct": 0,
+          "false_known": 0,
+          "abstained": 3,
+          "exact_cases": 0,
+          "misses": [
+            {
+              "query": 1,
+              "oracle": {
+                "access": "hidden",
+                "witness": [
+                  2
+                ]
+              },
+              "predicted": {
+                "access": "unclear",
+                "witness": 0
+              }
+            },
+            {
+              "query": 2,
+              "oracle": {
+                "access": "known",
+                "witness": [
+                  3
+                ]
+              },
+              "predicted": {
+                "access": "unclear",
+                "witness": 0
+              }
+            },
+            {
+              "query": 3,
+              "oracle": {
+                "access": "unclear",
+                "witness": [
+                  4
+                ]
+              },
+              "predicted": {
+                "access": "unclear",
+                "witness": 0
+              }
+            }
+          ]
+        },
+        {
+          "id": "pupitre-05",
+          "cases": 1,
+          "queries": 3,
+          "label_correct": 1,
+          "cited_correct": 0,
+          "false_known": 0,
+          "abstained": 3,
+          "exact_cases": 0,
+          "misses": [
+            {
+              "query": 1,
+              "oracle": {
+                "access": "known",
+                "witness": [
+                  2
+                ]
+              },
+              "predicted": {
+                "access": "unclear",
+                "witness": 1
+              }
+            },
+            {
+              "query": 2,
+              "oracle": {
+                "access": "hidden",
+                "witness": [
+                  3
+                ]
+              },
+              "predicted": {
+                "access": "unclear",
+                "witness": 1
+              }
+            },
+            {
+              "query": 3,
+              "oracle": {
+                "access": "unclear",
+                "witness": [
+                  4
+                ]
+              },
+              "predicted": {
+                "access": "unclear",
+                "witness": 1
+              }
+            }
+          ]
+        },
+        {
+          "id": "registre-06",
+          "cases": 1,
+          "queries": 3,
+          "label_correct": 1,
+          "cited_correct": 0,
+          "false_known": 0,
+          "abstained": 3,
+          "exact_cases": 0,
+          "misses": [
+            {
+              "query": 1,
+              "oracle": {
+                "access": "known",
+                "witness": [
+                  1
+                ]
+              },
+              "predicted": {
+                "access": "unclear",
+                "witness": 1
+              }
+            },
+            {
+              "query": 2,
+              "oracle": {
+                "access": "hidden",
+                "witness": [
+                  2
+                ]
+              },
+              "predicted": {
+                "access": "unclear",
+                "witness": 1
+              }
+            },
+            {
+              "query": 3,
+              "oracle": {
+                "access": "unclear",
+                "witness": [
+                  3,
+                  4
+                ]
+              },
+              "predicted": {
+                "access": "unclear",
+                "witness": 1
+              }
+            }
+          ]
+        },
+        {
+          "id": "cloche-07",
+          "cases": 1,
+          "queries": 3,
+          "label_correct": 1,
+          "cited_correct": 0,
+          "false_known": 0,
+          "abstained": 3,
+          "exact_cases": 0,
+          "misses": [
+            {
+              "query": 1,
+              "oracle": {
+                "access": "known",
+                "witness": [
+                  1
+                ]
+              },
+              "predicted": {
+                "access": "unclear",
+                "witness": 1
+              }
+            },
+            {
+              "query": 2,
+              "oracle": {
+                "access": "hidden",
+                "witness": [
+                  2
+                ]
+              },
+              "predicted": {
+                "access": "unclear",
+                "witness": 2
+              }
+            },
+            {
+              "query": 3,
+              "oracle": {
+                "access": "unclear",
+                "witness": [
+                  3
+                ]
+              },
+              "predicted": {
+                "access": "unclear",
+                "witness": 1
+              }
+            }
+          ]
+        },
+        {
+          "id": "licence-08",
+          "cases": 1,
+          "queries": 3,
+          "label_correct": 0,
+          "cited_correct": 0,
+          "false_known": 0,
+          "abstained": 2,
+          "exact_cases": 0,
+          "misses": [
+            {
+              "query": 1,
+              "oracle": {
+                "access": "known",
+                "witness": [
+                  2
+                ]
+              },
+              "predicted": {
+                "access": "unclear",
+                "witness": 1
+              }
+            },
+            {
+              "query": 2,
+              "oracle": {
+                "access": "hidden",
+                "witness": [
+                  3
+                ]
+              },
+              "predicted": {
+                "access": "unclear",
+                "witness": 1
+              }
+            },
+            {
+              "query": 3,
+              "oracle": {
+                "access": "unclear",
+                "witness": [
+                  4,
+                  5
+                ]
+              },
+              "predicted": {
+                "access": "hidden",
+                "witness": 1
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "adapted_direct": {
+      "total": {
+        "cases": 8,
+        "queries": 24,
+        "label_correct": 8,
+        "cited_correct": 2,
+        "false_known": 10,
+        "abstained": 7,
+        "exact_cases": 0
+      },
+      "groups": {
+        "en": {
+          "cases": 4,
+          "queries": 12,
+          "label_correct": 4,
+          "cited_correct": 0,
+          "false_known": 6,
+          "abstained": 3,
+          "exact_cases": 0
+        },
+        "conditioned-forwarding": {
+          "cases": 1,
+          "queries": 3,
+          "label_correct": 1,
+          "cited_correct": 0,
+          "false_known": 0,
+          "abstained": 3,
+          "exact_cases": 0
+        },
+        "logical-reconstruction": {
+          "cases": 1,
+          "queries": 3,
+          "label_correct": 1,
+          "cited_correct": 0,
+          "false_known": 2,
+          "abstained": 0,
+          "exact_cases": 0
+        },
+        "pseudonym-and-revision": {
+          "cases": 1,
+          "queries": 3,
+          "label_correct": 1,
+          "cited_correct": 0,
+          "false_known": 2,
+          "abstained": 0,
+          "exact_cases": 0
+        },
+        "pooled-versus-individual-disclosure": {
+          "cases": 1,
+          "queries": 3,
+          "label_correct": 1,
+          "cited_correct": 0,
+          "false_known": 2,
+          "abstained": 0,
+          "exact_cases": 0
+        },
+        "fr": {
+          "cases": 4,
+          "queries": 12,
+          "label_correct": 4,
+          "cited_correct": 2,
+          "false_known": 4,
+          "abstained": 4,
+          "exact_cases": 0
+        },
+        "asymmetric-display": {
+          "cases": 1,
+          "queries": 3,
+          "label_correct": 1,
+          "cited_correct": 0,
+          "false_known": 2,
+          "abstained": 0,
+          "exact_cases": 0
+        },
+        "lookup-and-conditional-veto": {
+          "cases": 1,
+          "queries": 3,
+          "label_correct": 2,
+          "cited_correct": 1,
+          "false_known": 0,
+          "abstained": 2,
+          "exact_cases": 0
+        },
+        "announcement-versus-choice": {
+          "cases": 1,
+          "queries": 3,
+          "label_correct": 1,
+          "cited_correct": 1,
+          "false_known": 2,
+          "abstained": 0,
+          "exact_cases": 0
+        },
+        "role-scoped-rights": {
+          "cases": 1,
+          "queries": 3,
+          "label_correct": 0,
+          "cited_correct": 0,
+          "false_known": 0,
+          "abstained": 2,
+          "exact_cases": 0
+        }
+      },
+      "cases": [
+        {
+          "id": "relay-01",
+          "cases": 1,
+          "queries": 3,
+          "label_correct": 1,
+          "cited_correct": 0,
+          "false_known": 0,
+          "abstained": 3,
+          "exact_cases": 0,
+          "misses": [
+            {
+              "query": 1,
+              "oracle": {
+                "access": "unclear",
+                "witness": [
+                  3
+                ]
+              },
+              "predicted": {
+                "access": "unclear",
+                "witness": 5
+              }
+            },
+            {
+              "query": 2,
+              "oracle": {
+                "access": "hidden",
+                "witness": [
+                  4
+                ]
+              },
+              "predicted": {
+                "access": "unclear",
+                "witness": 5
+              }
+            },
+            {
+              "query": 3,
+              "oracle": {
+                "access": "known",
+                "witness": [
+                  4
+                ]
+              },
+              "predicted": {
+                "access": "unclear",
+                "witness": 5
+              }
+            }
+          ]
+        },
+        {
+          "id": "ledger-02",
+          "cases": 1,
+          "queries": 3,
+          "label_correct": 1,
+          "cited_correct": 0,
+          "false_known": 2,
+          "abstained": 0,
+          "exact_cases": 0,
+          "misses": [
+            {
+              "query": 1,
+              "oracle": {
+                "access": "known",
+                "witness": [
+                  2
+                ]
+              },
+              "predicted": {
+                "access": "known",
+                "witness": 4
+              }
+            },
+            {
+              "query": 2,
+              "oracle": {
+                "access": "hidden",
+                "witness": [
+                  3
+                ]
+              },
+              "predicted": {
+                "access": "known",
+                "witness": 4
+              }
+            },
+            {
+              "query": 3,
+              "oracle": {
+                "access": "unclear",
+                "witness": [
+                  4
+                ]
+              },
+              "predicted": {
+                "access": "known",
+                "witness": 4
+              }
+            }
+          ]
+        },
+        {
+          "id": "order-03",
+          "cases": 1,
+          "queries": 3,
+          "label_correct": 1,
+          "cited_correct": 0,
+          "false_known": 2,
+          "abstained": 0,
+          "exact_cases": 0,
+          "misses": [
+            {
+              "query": 1,
+              "oracle": {
+                "access": "known",
+                "witness": [
+                  1
+                ]
+              },
+              "predicted": {
+                "access": "known",
+                "witness": 3
+              }
+            },
+            {
+              "query": 2,
+              "oracle": {
+                "access": "hidden",
+                "witness": [
+                  2
+                ]
+              },
+              "predicted": {
+                "access": "known",
+                "witness": 3
+              }
+            },
+            {
+              "query": 3,
+              "oracle": {
+                "access": "unclear",
+                "witness": [
+                  3
+                ]
+              },
+              "predicted": {
+                "access": "known",
+                "witness": 4
+              }
+            }
+          ]
+        },
+        {
+          "id": "spare-04",
+          "cases": 1,
+          "queries": 3,
+          "label_correct": 1,
+          "cited_correct": 0,
+          "false_known": 2,
+          "abstained": 0,
+          "exact_cases": 0,
+          "misses": [
+            {
+              "query": 1,
+              "oracle": {
+                "access": "hidden",
+                "witness": [
+                  2
+                ]
+              },
+              "predicted": {
+                "access": "known",
+                "witness": 5
+              }
+            },
+            {
+              "query": 2,
+              "oracle": {
+                "access": "known",
+                "witness": [
+                  3
+                ]
+              },
+              "predicted": {
+                "access": "known",
+                "witness": 5
+              }
+            },
+            {
+              "query": 3,
+              "oracle": {
+                "access": "unclear",
+                "witness": [
+                  4
+                ]
+              },
+              "predicted": {
+                "access": "known",
+                "witness": 5
+              }
+            }
+          ]
+        },
+        {
+          "id": "pupitre-05",
+          "cases": 1,
+          "queries": 3,
+          "label_correct": 1,
+          "cited_correct": 0,
+          "false_known": 2,
+          "abstained": 0,
+          "exact_cases": 0,
+          "misses": [
+            {
+              "query": 1,
+              "oracle": {
+                "access": "known",
+                "witness": [
+                  2
+                ]
+              },
+              "predicted": {
+                "access": "known",
+                "witness": 4
+              }
+            },
+            {
+              "query": 2,
+              "oracle": {
+                "access": "hidden",
+                "witness": [
+                  3
+                ]
+              },
+              "predicted": {
+                "access": "known",
+                "witness": 4
+              }
+            },
+            {
+              "query": 3,
+              "oracle": {
+                "access": "unclear",
+                "witness": [
+                  4
+                ]
+              },
+              "predicted": {
+                "access": "known",
+                "witness": 1
+              }
+            }
+          ]
+        },
+        {
+          "id": "registre-06",
+          "cases": 1,
+          "queries": 3,
+          "label_correct": 2,
+          "cited_correct": 1,
+          "false_known": 0,
+          "abstained": 2,
+          "exact_cases": 0,
+          "misses": [
+            {
+              "query": 2,
+              "oracle": {
+                "access": "hidden",
+                "witness": [
+                  2
+                ]
+              },
+              "predicted": {
+                "access": "unclear",
+                "witness": 1
+              }
+            },
+            {
+              "query": 3,
+              "oracle": {
+                "access": "unclear",
+                "witness": [
+                  3,
+                  4
+                ]
+              },
+              "predicted": {
+                "access": "unclear",
+                "witness": 1
+              }
+            }
+          ]
+        },
+        {
+          "id": "cloche-07",
+          "cases": 1,
+          "queries": 3,
+          "label_correct": 1,
+          "cited_correct": 1,
+          "false_known": 2,
+          "abstained": 0,
+          "exact_cases": 0,
+          "misses": [
+            {
+              "query": 2,
+              "oracle": {
+                "access": "hidden",
+                "witness": [
+                  2
+                ]
+              },
+              "predicted": {
+                "access": "known",
+                "witness": 1
+              }
+            },
+            {
+              "query": 3,
+              "oracle": {
+                "access": "unclear",
+                "witness": [
+                  3
+                ]
+              },
+              "predicted": {
+                "access": "known",
+                "witness": 4
+              }
+            }
+          ]
+        },
+        {
+          "id": "licence-08",
+          "cases": 1,
+          "queries": 3,
+          "label_correct": 0,
+          "cited_correct": 0,
+          "false_known": 0,
+          "abstained": 2,
+          "exact_cases": 0,
+          "misses": [
+            {
+              "query": 1,
+              "oracle": {
+                "access": "known",
+                "witness": [
+                  2
+                ]
+              },
+              "predicted": {
+                "access": "unclear",
+                "witness": 1
+              }
+            },
+            {
+              "query": 2,
+              "oracle": {
+                "access": "hidden",
+                "witness": [
+                  3
+                ]
+              },
+              "predicted": {
+                "access": "unclear",
+                "witness": 1
+              }
+            },
+            {
+              "query": 3,
+              "oracle": {
+                "access": "unclear",
+                "witness": [
+                  4,
+                  5
+                ]
+              },
+              "predicted": {
+                "access": "hidden",
+                "witness": 1
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "adapted_exact_case_gain_over_strongest_base": 0.0,
+  "preregistered_model_criteria": {
+    "citation": false,
+    "complete_case": false,
+    "learned_gain": false,
+    "false_known": false
+  }
+}

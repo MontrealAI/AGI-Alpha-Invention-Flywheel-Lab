@@ -869,9 +869,13 @@ class WorkflowService:
                     if text.startswith("```json") and text.endswith("```"):
                         text = text[7:-3].strip()
                     if state.get("workshop") and role == "builder":
-                        from .workshop import construction_response
+                        from .workshop import construction_response, retained_predecessor
                         require(self.runtime.redact(text) == text, "The proposal contained a configured credential.", "WORKSHOP_SECRET")
                         response = construction_response(text, "instrument.json" in state["artifacts"])
+                        if response["actions"] and (fingerprint := retained_predecessor(state)):
+                            self._event(state, "inherited_rewrite_refused", {"artifact": "instrument.json", "sha256": fingerprint,
+                                        "reason": "Unchanged candidate passed the fresh development checks. Verify its unchanged bytes on the final checks."})
+                            response["actions"] = []
                     else:
                         response = strict_json(text)
                     require(isinstance(response, dict), "Model must return a JSON object.")
@@ -1177,7 +1181,11 @@ class WorkflowService:
                 require_compatible(self, state, prior)
             for name, meta in prior["artifacts"].items():
                 self._write(state, name, self._read_artifact(prior, name).decode(), meta["kind"])
-        self._event(state, "inherited", {"capability_id": capability_id, "source_spec_hash": prior["spec_hash"], "prior_verification_inherited": False})
+        inheritance = {"capability_id": capability_id, "source_spec_hash": prior["spec_hash"],
+                       "prior_verification_inherited": False}
+        if prior.get("workshop"):
+            inheritance["same_public_contract"] = state["spec"]["context"] == prior["spec"]["context"]
+        self._event(state, "inherited", inheritance)
         self._verify(state)
 
     def reuse(self, capability_id, inputs):

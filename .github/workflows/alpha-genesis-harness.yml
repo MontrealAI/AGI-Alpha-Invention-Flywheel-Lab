@@ -183,7 +183,7 @@ jobs:
           git fetch --no-tags --depth=1 --filter=blob:none origin \
             c0a14ba028092db648516718f9127ae8166df63e 297a51c25c48031e1e6f964835f4dfae3ddb8023 \
             1bdac817b471157092ea4aac881916824b66734e cef4d1caa38b14555613dc25d180c42798b62b78 \
-            3aa1fd3373e4d44969c26d78c6f3dfd8c7274f6c
+            3aa1fd3373e4d44969c26d78c6f3dfd8c7274f6c 769afbd910ef952d15038422fd674e15f4cefc38
           git fetch --no-tags --filter=blob:none --shallow-since=2026-11-22T00:00:00Z origin "$EXPECTED_SOURCE"
           python -B - <<'PY'
           import json, os, sys

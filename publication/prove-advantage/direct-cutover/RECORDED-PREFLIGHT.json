@@ -1,0 +1,378 @@
+{
+  "ambition": "CAPTURE THE EXPONENTIAL",
+  "elapsed_s": 25.6977,
+  "observed_new_paid_inference_calls": 0,
+  "pilot_replacement": false,
+  "process_cpu_s": 0.078,
+  "python": "3.12.14",
+  "scope": "eligibility preflight; no completed calibration, post-cutover deployment, or economic result",
+  "sites": {
+    "mont-saint-bruno": {
+      "date_endpoints": {
+        "MOD09A1": {
+          "last": "2026-11-09",
+          "receipt": {
+            "bytes": 72405,
+            "elapsed_s": 5.8045,
+            "method": "GET",
+            "sha256": "da80cefa0851b28106f2f7fa1cf8eec22d9619829ea665248c1d188a481325b4",
+            "status": 200,
+            "url": "https://modis.ornl.gov/rst/api/v1/MOD09A1/dates?latitude=45.550000&longitude=-73.316667"
+          },
+          "records": 1227
+        },
+        "VJ209H1": {
+          "last": null,
+          "receipt": {
+            "bytes": 29,
+            "elapsed_s": 3.394,
+            "method": "GET",
+            "sha256": "a2aead5a7fef4f0140e6f08d371037fc7f7d74d47bced6f2206317cb9d01269f",
+            "status": 404,
+            "url": "https://modis.ornl.gov/rst/api/v1/VJ209H1/dates?latitude=45.550000&longitude=-73.316667"
+          },
+          "records": 0
+        },
+        "VNP09H1": {
+          "last": "2024-05-24",
+          "receipt": {
+            "bytes": 33465,
+            "elapsed_s": 4.6222,
+            "method": "GET",
+            "sha256": "64d7daaf82f82418d9057fe2e187d86981deb01fcde47733266221d35e0d093c",
+            "status": 200,
+            "url": "https://modis.ornl.gov/rst/api/v1/VNP09H1/dates?latitude=45.550000&longitude=-73.316667"
+          },
+          "records": 567
+        }
+      },
+      "dates": {
+        "2024": {
+          "common_windows": [
+            "A2024145"
+          ],
+          "requested": 17,
+          "suomi_available": 1,
+          "terra_available": 17
+        },
+        "2025": {
+          "common_windows": [],
+          "requested": 17,
+          "suomi_available": 0,
+          "terra_available": 17
+        }
+      },
+      "noaa21": {
+        "catalog": {
+          "bytes": 4578,
+          "elapsed_s": 2.8114,
+          "method": "GET",
+          "sha256": "abee886e8835d67dc7fa92ae08e6965f006eb61fcdc9d3d6da6244e1dc03a20c",
+          "status": 200,
+          "url": "https://cmr.earthdata.nasa.gov/search/granules.json?short_name=VJ209H1&page_size=1&point=-73.316667%2C45.550000&temporal=2026-09-01T00%3A00%3A00Z%2C2026-09-10T00%3A00%3A00Z"
+        },
+        "concept": "C2817366221-LPCLOUD",
+        "delivery": {
+          "bytes": 0,
+          "elapsed_s": 3.4127,
+          "method": "HEAD",
+          "redirect_origin": "https://d1nklfio7vscoe.cloudfront.net",
+          "redirect_path": "/head-2d2df3a34830d5223d1e9547cd713408/lp-prod-protected.s3.us-west-2.amazonaws.com/VJ209H1.002/VJ209H1.A2026241.h12v04.002.2026254221929/VJ209H1.A2026241.h12v04.002.2026254221929.h5",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "status": 303,
+          "url": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/VJ209H1.002/VJ209H1.A2026241.h12v04.002.2026254221929/VJ209H1.A2026241.h12v04.002.2026254221929.h5"
+        },
+        "granule": "VJ209H1.A2026241.h12v04.002.2026254221929",
+        "method_scope": "anonymous archive HEAD and bounded GET; no login or credential use",
+        "ranged_get": {
+          "bytes": 0,
+          "elapsed_s": 3.4068,
+          "method": "GET",
+          "redirect_origin": "https://urs.earthdata.nasa.gov",
+          "redirect_path": "/oauth/authorize",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "status": 302,
+          "url": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/VJ209H1.002/VJ209H1.A2026241.h12v04.002.2026254221929/VJ209H1.A2026241.h12v04.002.2026254221929.h5"
+        }
+      },
+      "noaa21_decision": "ABSTAIN_UNOBSERVED_PIXEL_DATA",
+      "point": [
+        "45.550000",
+        "-73.316667"
+      ],
+      "sample": {
+        "MOD09A1": [
+          {
+            "bytes": 2281,
+            "elapsed_s": 3.8352,
+            "method": "GET",
+            "sha256": "ea40af7a8283d1dc2f2d1fd591bc92a8952229b9cffec4cac8f4dcfc19133347",
+            "status": 200,
+            "url": "https://modis.ornl.gov/rst/api/v1/MOD09A1/subset?latitude=45.550000&longitude=-73.316667&startDate=A2024145&endDate=A2024145&kmAboveBelow=0&kmLeftRight=0"
+          },
+          {
+            "bands": {
+              "sur_refl_b01": [
+                350,
+                "h12v04",
+                "2024157200714"
+              ],
+              "sur_refl_b02": [
+                4277,
+                "h12v04",
+                "2024157200714"
+              ],
+              "sur_refl_qc_500m": [
+                1073741824,
+                "h12v04",
+                "2024157200714"
+              ],
+              "sur_refl_state_500m": [
+                80,
+                "h12v04",
+                "2024157200714"
+              ]
+            },
+            "calendar": "2024-05-24",
+            "day": "A2024145",
+            "grid": [
+              "-5709402.63",
+              "5064471.27",
+              463.312716528
+            ],
+            "ndvi_if_eligible": null,
+            "strict_qa_eligible": false
+          }
+        ],
+        "VNP09H1": [
+          {
+            "bytes": 1105,
+            "elapsed_s": 3.754,
+            "method": "GET",
+            "sha256": "a830fca4b2cb6c6c5534bf84dfa27ff96f4e6226b1f5665dbb1d13dd3ff211fb",
+            "status": 200,
+            "url": "https://modis.ornl.gov/rst/api/v1/VNP09H1/subset?latitude=45.550000&longitude=-73.316667&startDate=A2024145&endDate=A2024145&kmAboveBelow=0&kmLeftRight=0"
+          },
+          {
+            "bands": {
+              "SurfReflect_I1": [
+                274,
+                "h12v04",
+                "2024168013504"
+              ],
+              "SurfReflect_I2": [
+                1593,
+                "h12v04",
+                "2024168013504"
+              ],
+              "SurfReflect_QC_500m": [
+                4108,
+                "h12v04",
+                "2024168013504"
+              ],
+              "SurfReflect_State_500m": [
+                8332,
+                "h12v04",
+                "2024168013504"
+              ]
+            },
+            "calendar": "2024-05-24",
+            "day": "A2024145",
+            "grid": [
+              "-5709402.63",
+              "5064471.27",
+              463.312716528
+            ],
+            "ndvi_if_eligible": null,
+            "strict_qa_eligible": false
+          }
+        ]
+      },
+      "suomi_decision": "ABSTAIN_INSUFFICIENT_OVERLAP"
+    },
+    "morgan-arboretum": {
+      "date_endpoints": {
+        "MOD09A1": {
+          "last": "2026-11-09",
+          "receipt": {
+            "bytes": 72405,
+            "elapsed_s": 4.9226,
+            "method": "GET",
+            "sha256": "da80cefa0851b28106f2f7fa1cf8eec22d9619829ea665248c1d188a481325b4",
+            "status": 200,
+            "url": "https://modis.ornl.gov/rst/api/v1/MOD09A1/dates?latitude=45.432139&longitude=-73.950000"
+          },
+          "records": 1227
+        },
+        "VJ209H1": {
+          "last": null,
+          "receipt": {
+            "bytes": 29,
+            "elapsed_s": 3.7419,
+            "method": "GET",
+            "sha256": "a2aead5a7fef4f0140e6f08d371037fc7f7d74d47bced6f2206317cb9d01269f",
+            "status": 404,
+            "url": "https://modis.ornl.gov/rst/api/v1/VJ209H1/dates?latitude=45.432139&longitude=-73.950000"
+          },
+          "records": 0
+        },
+        "VNP09H1": {
+          "last": "2024-05-24",
+          "receipt": {
+            "bytes": 33465,
+            "elapsed_s": 3.8366,
+            "method": "GET",
+            "sha256": "64d7daaf82f82418d9057fe2e187d86981deb01fcde47733266221d35e0d093c",
+            "status": 200,
+            "url": "https://modis.ornl.gov/rst/api/v1/VNP09H1/dates?latitude=45.432139&longitude=-73.950000"
+          },
+          "records": 567
+        }
+      },
+      "dates": {
+        "2024": {
+          "common_windows": [
+            "A2024145"
+          ],
+          "requested": 17,
+          "suomi_available": 1,
+          "terra_available": 17
+        },
+        "2025": {
+          "common_windows": [],
+          "requested": 17,
+          "suomi_available": 0,
+          "terra_available": 17
+        }
+      },
+      "noaa21": {
+        "catalog": {
+          "bytes": 4578,
+          "elapsed_s": 2.948,
+          "method": "GET",
+          "sha256": "6b155bd05ff1a47ad7fb7337c33a4a3f1e3a9b31e7f6219d2813df9bbcdc6e99",
+          "status": 200,
+          "url": "https://cmr.earthdata.nasa.gov/search/granules.json?short_name=VJ209H1&page_size=1&point=-73.950000%2C45.432139&temporal=2026-09-01T00%3A00%3A00Z%2C2026-09-10T00%3A00%3A00Z"
+        },
+        "concept": "C2817366221-LPCLOUD",
+        "delivery": {
+          "bytes": 0,
+          "elapsed_s": 3.3621,
+          "method": "HEAD",
+          "redirect_origin": "https://d1nklfio7vscoe.cloudfront.net",
+          "redirect_path": "/head-2d2df3a34830d5223d1e9547cd713408/lp-prod-protected.s3.us-west-2.amazonaws.com/VJ209H1.002/VJ209H1.A2026241.h12v04.002.2026254221929/VJ209H1.A2026241.h12v04.002.2026254221929.h5",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "status": 303,
+          "url": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/VJ209H1.002/VJ209H1.A2026241.h12v04.002.2026254221929/VJ209H1.A2026241.h12v04.002.2026254221929.h5"
+        },
+        "granule": "VJ209H1.A2026241.h12v04.002.2026254221929",
+        "method_scope": "anonymous archive HEAD and bounded GET; no login or credential use",
+        "ranged_get": {
+          "bytes": 0,
+          "elapsed_s": 3.4637,
+          "method": "GET",
+          "redirect_origin": "https://urs.earthdata.nasa.gov",
+          "redirect_path": "/oauth/authorize",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "status": 302,
+          "url": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/VJ209H1.002/VJ209H1.A2026241.h12v04.002.2026254221929/VJ209H1.A2026241.h12v04.002.2026254221929.h5"
+        }
+      },
+      "noaa21_decision": "ABSTAIN_UNOBSERVED_PIXEL_DATA",
+      "point": [
+        "45.432139",
+        "-73.950000"
+      ],
+      "sample": {
+        "MOD09A1": [
+          {
+            "bytes": 2281,
+            "elapsed_s": 4.3064,
+            "method": "GET",
+            "sha256": "0b98e666bec36143ef63e53478440054c2f80c34dcaf6b5c883cfda924496800",
+            "status": 200,
+            "url": "https://modis.ornl.gov/rst/api/v1/MOD09A1/subset?latitude=45.432139&longitude=-73.950000&startDate=A2024145&endDate=A2024145&kmAboveBelow=0&kmLeftRight=0"
+          },
+          {
+            "bands": {
+              "sur_refl_b01": [
+                312,
+                "h12v04",
+                "2024157200714"
+              ],
+              "sur_refl_b02": [
+                5053,
+                "h12v04",
+                "2024157200714"
+              ],
+              "sur_refl_qc_500m": [
+                1073741824,
+                "h12v04",
+                "2024157200714"
+              ],
+              "sur_refl_state_500m": [
+                80,
+                "h12v04",
+                "2024157200714"
+              ]
+            },
+            "calendar": "2024-05-24",
+            "day": "A2024145",
+            "grid": [
+              "-5770559.87",
+              "5051498.59",
+              463.312716528
+            ],
+            "ndvi_if_eligible": null,
+            "strict_qa_eligible": false
+          }
+        ],
+        "VNP09H1": [
+          {
+            "bytes": 1104,
+            "elapsed_s": 4.4515,
+            "method": "GET",
+            "sha256": "9a48ed6dac89bd64db7058cea1565aca27f718be63d924725b7b6eed226e23ee",
+            "status": 200,
+            "url": "https://modis.ornl.gov/rst/api/v1/VNP09H1/subset?latitude=45.432139&longitude=-73.950000&startDate=A2024145&endDate=A2024145&kmAboveBelow=0&kmLeftRight=0"
+          },
+          {
+            "bands": {
+              "SurfReflect_I1": [
+                182,
+                "h12v04",
+                "2024168013504"
+              ],
+              "SurfReflect_I2": [
+                3397,
+                "h12v04",
+                "2024168013504"
+              ],
+              "SurfReflect_QC_500m": [
+                4108,
+                "h12v04",
+                "2024168013504"
+              ],
+              "SurfReflect_State_500m": [
+                80,
+                "h12v04",
+                "2024168013504"
+              ]
+            },
+            "calendar": "2024-05-24",
+            "day": "A2024145",
+            "grid": [
+              "-5770559.87",
+              "5051498.59",
+              463.312716528
+            ],
+            "ndvi_if_eligible": null,
+            "strict_qa_eligible": false
+          }
+        ]
+      },
+      "suomi_decision": "ABSTAIN_INSUFFICIENT_OVERLAP"
+    }
+  },
+  "started_utc": "2026-11-25T20:41:01.627427+00:00"
+}

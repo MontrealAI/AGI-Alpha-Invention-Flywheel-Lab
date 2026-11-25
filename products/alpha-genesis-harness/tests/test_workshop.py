@@ -148,6 +148,30 @@ class WorkshopTests(unittest.TestCase):
         self.assertEqual(len(workshop.list_missions(service)["missions"]), 2)
         self.assertEqual(len(workshop.list_missions(self.service(runtime, "separate"))["missions"]), 0)
 
+    def test_successor_preserves_passing_bytes_and_allows_a_changed_contract(self):
+        runtime = AuthoredTransport(candidate("2 * x"), candidate("3 * x"), candidate("3 * x"))
+        service = self.service(runtime)
+        first = workshop.register(service, authored_request())
+        first_result = service.step(first["id"])
+        self.assertEqual(first_result["status"], "complete")
+        predecessor = first_result["artifacts"]["instrument.json"]["sha256"]
+        fresh = dict(authored_request("2", (14, 16, 19)), inherit=first["id"], loop="successor")
+        second = workshop.register(service, fresh)
+        reused = service.step(second["id"])
+        self.assertEqual(reused["status"], "complete")
+        self.assertEqual(reused["artifacts"]["instrument.json"]["sha256"], predecessor)
+        self.assertTrue(any(event["kind"] == "inherited_rewrite_refused" for event in reused["events"]))
+        self.assertIn("Keep its exact bytes", runtime.prompts[1])
+        self.assertEqual(reused["verification"]["stage"], "final")
+        fresh.update(request_id="3" * 32, context="Input x is a package count. Output result is three times x.")
+        for case in fresh["cases"]:
+            case["expected"]["result"] = 3 * case["input"]["x"]
+        third = workshop.register(service, fresh)
+        revised = service.step(third["id"])
+        self.assertEqual(revised["status"], "complete")
+        self.assertNotEqual(revised["artifacts"]["instrument.json"]["sha256"], predecessor)
+        self.assertFalse(any(event["kind"] == "inherited_rewrite_refused" for event in revised["events"]))
+
     def test_repair_reuses_contract_and_preserves_failed_response(self):
         runtime = AuthoredTransport(candidate("x/0"), candidate("2*x"))
         service = self.service(runtime)

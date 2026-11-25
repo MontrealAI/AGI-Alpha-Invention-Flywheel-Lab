@@ -1,0 +1,372 @@
+{
+  "cases": 16,
+  "correct_dispositions": 6,
+  "exact_evidence": 9,
+  "whole_case_acceptance": 0,
+  "false_supported": 3,
+  "expected_distribution": {
+    "supported": 5,
+    "contradicted": 4,
+    "insufficient": 7
+  },
+  "missing": 0,
+  "scores": [
+    {
+      "id": "batt-01",
+      "field": "batteryWeight",
+      "expected": "supported",
+      "observed": "conflicting",
+      "decision_correct": false,
+      "evidence_exact": false,
+      "reason_present": false,
+      "fully_accepted": false,
+      "unsafe_false_support": false,
+      "observed_evidence": [
+        "a1",
+        "a5"
+      ],
+      "reference_evidence_choices": [
+        [
+          "a1"
+        ]
+      ],
+      "rationale": null,
+      "evaluator_reason": "The Home 10-only module row gives 26.5 kg. The 30 kg row concerns the different Home 6/10/15 hardware family."
+    },
+    {
+      "id": "batt-02",
+      "field": "batteryWeight",
+      "expected": "contradicted",
+      "observed": "conflicting",
+      "decision_correct": false,
+      "evidence_exact": false,
+      "reason_present": false,
+      "fully_accepted": false,
+      "unsafe_false_support": false,
+      "observed_evidence": [
+        "a1",
+        "a2"
+      ],
+      "reference_evidence_choices": [
+        [
+          "a2"
+        ]
+      ],
+      "rationale": null,
+      "evaluator_reason": "In the matching battery stack row, 5S weighs 160.0 kg. 133.5 kg belongs to the 4S column."
+    },
+    {
+      "id": "batt-03",
+      "field": "batteryWeight",
+      "expected": "insufficient",
+      "observed": "conflicting",
+      "decision_correct": false,
+      "evidence_exact": true,
+      "reason_present": false,
+      "fully_accepted": false,
+      "unsafe_false_support": false,
+      "observed_evidence": [
+        "a1",
+        "a5"
+      ],
+      "reference_evidence_choices": [
+        [],
+        [
+          "a1"
+        ],
+        [
+          "a1",
+          "a5"
+        ]
+      ],
+      "rationale": null,
+      "evaluator_reason": "Both packets describe a module. Neither gives mass of the 4S stack."
+    },
+    {
+      "id": "batt-04",
+      "field": "batteryCapacity",
+      "expected": "insufficient",
+      "observed": "insufficient",
+      "decision_correct": true,
+      "evidence_exact": true,
+      "reason_present": false,
+      "fully_accepted": false,
+      "unsafe_false_support": false,
+      "observed_evidence": [],
+      "reference_evidence_choices": [
+        [],
+        [
+          "a1"
+        ]
+      ],
+      "rationale": null,
+      "evaluator_reason": "49.1 Ah is expressly usable, not documented rated capacity."
+    },
+    {
+      "id": "batt-05",
+      "field": "nominalVoltage",
+      "expected": "supported",
+      "observed": "supported",
+      "decision_correct": true,
+      "evidence_exact": true,
+      "reason_present": false,
+      "fully_accepted": false,
+      "unsafe_false_support": false,
+      "observed_evidence": [
+        "a2"
+      ],
+      "reference_evidence_choices": [
+        [
+          "a2"
+        ]
+      ],
+      "rationale": null,
+      "evaluator_reason": "Table 17 rates 5S at 224 V at the battery stack; the AC EMS supply is distinct."
+    },
+    {
+      "id": "batt-06",
+      "field": "nominalVoltage",
+      "expected": "insufficient",
+      "observed": "insufficient",
+      "decision_correct": true,
+      "evidence_exact": true,
+      "reason_present": false,
+      "fully_accepted": false,
+      "unsafe_false_support": false,
+      "observed_evidence": [],
+      "reference_evidence_choices": [
+        [],
+        [
+          "a3"
+        ]
+      ],
+      "rationale": null,
+      "evaluator_reason": "230 V applies to the external AC supply of the EMS box, not the battery DC voltage."
+    },
+    {
+      "id": "batt-07",
+      "field": "batteryWeight",
+      "expected": "insufficient",
+      "observed": "supported",
+      "decision_correct": false,
+      "evidence_exact": true,
+      "reason_present": false,
+      "fully_accepted": false,
+      "unsafe_false_support": true,
+      "observed_evidence": [
+        "a1"
+      ],
+      "reference_evidence_choices": [
+        [],
+        [
+          "a1"
+        ]
+      ],
+      "rationale": null,
+      "evaluator_reason": "The request needs the exact 2026.07.01 manual revision. This packet explicitly identifies 2025.11.01."
+    },
+    {
+      "id": "batt-08",
+      "field": "batteryWeight",
+      "expected": "supported",
+      "observed": "conflicting",
+      "decision_correct": false,
+      "evidence_exact": false,
+      "reason_present": false,
+      "fully_accepted": false,
+      "unsafe_false_support": false,
+      "observed_evidence": [
+        "a1",
+        "a4",
+        "a5"
+      ],
+      "reference_evidence_choices": [
+        [
+          "a4"
+        ]
+      ],
+      "rationale": null,
+      "evaluator_reason": "Matching Home 10 manual v2026.07.01 confirms 26.5 kg. Older and different-family documents are not the deciding evidence."
+    },
+    {
+      "id": "batt-09",
+      "field": "batteryCapacity",
+      "expected": "supported",
+      "observed": "supported",
+      "decision_correct": true,
+      "evidence_exact": true,
+      "reason_present": false,
+      "fully_accepted": false,
+      "unsafe_false_support": false,
+      "observed_evidence": [
+        "b1"
+      ],
+      "reference_evidence_choices": [
+        [
+          "b1"
+        ]
+      ],
+      "rationale": null,
+      "evaluator_reason": "The UK Version 15 manual explicitly names the V2 BMS+pack unit and 50 Ah on the nominal row."
+    },
+    {
+      "id": "batt-10",
+      "field": "batteryWeight",
+      "expected": "contradicted",
+      "observed": "conflicting",
+      "decision_correct": false,
+      "evidence_exact": true,
+      "reason_present": false,
+      "fully_accepted": false,
+      "unsafe_false_support": false,
+      "observed_evidence": [
+        "b1"
+      ],
+      "reference_evidence_choices": [
+        [
+          "b1"
+        ]
+      ],
+      "rationale": null,
+      "evaluator_reason": "HV11550 V2 is 68.5 kg. 72.2 kg is the adjacent master unit."
+    },
+    {
+      "id": "batt-11",
+      "field": "batteryCapacity",
+      "expected": "insufficient",
+      "observed": "supported",
+      "decision_correct": false,
+      "evidence_exact": false,
+      "reason_present": false,
+      "fully_accepted": false,
+      "unsafe_false_support": true,
+      "observed_evidence": [
+        "b1"
+      ],
+      "reference_evidence_choices": [
+        [],
+        [
+          "b2"
+        ],
+        [
+          "b1",
+          "b2"
+        ]
+      ],
+      "rationale": null,
+      "evaluator_reason": "AU V3 lists nominal energy, usable energy and current. UK V2's 50 Ah cannot authenticate an AU V3 capacity or justify deriving one."
+    },
+    {
+      "id": "batt-12",
+      "field": "batteryWeight",
+      "expected": "contradicted",
+      "observed": "conflicting",
+      "decision_correct": false,
+      "evidence_exact": false,
+      "reason_present": false,
+      "fully_accepted": false,
+      "unsafe_false_support": false,
+      "observed_evidence": [
+        "b1",
+        "b3"
+      ],
+      "reference_evidence_choices": [
+        [
+          "b3"
+        ]
+      ],
+      "rationale": null,
+      "evaluator_reason": "AU V3 net mass is 61.5 ±1 kg, excluding 72.2 kg. UK V2 mass is for a different variant."
+    },
+    {
+      "id": "batt-13",
+      "field": "nominalVoltage",
+      "expected": "contradicted",
+      "observed": "contradicted",
+      "decision_correct": true,
+      "evidence_exact": false,
+      "reason_present": false,
+      "fully_accepted": false,
+      "unsafe_false_support": false,
+      "observed_evidence": [
+        "b1",
+        "b2"
+      ],
+      "reference_evidence_choices": [
+        [
+          "b2"
+        ]
+      ],
+      "rationale": null,
+      "evaluator_reason": "The nominal 115.2 V row directly contradicts 130 V, which is the endpoint of the operating range."
+    },
+    {
+      "id": "batt-14",
+      "field": "nominalVoltage",
+      "expected": "insufficient",
+      "observed": "supported",
+      "decision_correct": false,
+      "evidence_exact": true,
+      "reason_present": false,
+      "fully_accepted": false,
+      "unsafe_false_support": true,
+      "observed_evidence": [
+        "b1"
+      ],
+      "reference_evidence_choices": [
+        [],
+        [
+          "b1"
+        ]
+      ],
+      "rationale": null,
+      "evaluator_reason": "The only matching numeric row explicitly uses Vdc. The claim requests AC."
+    },
+    {
+      "id": "batt-15",
+      "field": "batteryCapacity",
+      "expected": "insufficient",
+      "observed": "insufficient",
+      "decision_correct": true,
+      "evidence_exact": true,
+      "reason_present": false,
+      "fully_accepted": false,
+      "unsafe_false_support": false,
+      "observed_evidence": [],
+      "reference_evidence_choices": [
+        [],
+        [
+          "b2"
+        ]
+      ],
+      "rationale": null,
+      "evaluator_reason": "Only Australian V3 is shown, with energy/current but no documented nameplate Ah. Exact UK V2 support is unavailable."
+    },
+    {
+      "id": "batt-16",
+      "field": "batteryWeight",
+      "expected": "supported",
+      "observed": "conflicting",
+      "decision_correct": false,
+      "evidence_exact": false,
+      "reason_present": false,
+      "fully_accepted": false,
+      "unsafe_false_support": false,
+      "observed_evidence": [
+        "b1",
+        "b3"
+      ],
+      "reference_evidence_choices": [
+        [
+          "b3"
+        ]
+      ],
+      "rationale": null,
+      "evaluator_reason": "The exact requested AU BMS+pack unit has 61.5 kg stated central net mass with ±1 kg tolerance."
+    }
+  ],
+  "input_sha256": "4beacffb0261b8da8f8583eb63058d5d01e37ab56ef6c619eae13834b229a561",
+  "oracle_sha256": "0f5fdb14743e522d519effb32fb98d06e912a5020261e5092f0873e2f011bfee",
+  "predictions_sha256": "a63fbaf6847f0eeeb63551bf7bddab5193e015b69f81036adb3a24fd365ba9ab",
+  "evaluation_scope": "Supplied documents and registered engineering claim dimensions only. Reason presence is machine-checked; reviewer compares substantive rationale separately."
+}

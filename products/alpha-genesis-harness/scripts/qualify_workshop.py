@@ -22,9 +22,19 @@ PRODUCT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PRODUCT))
 from bridge import workshop
 from scripts.qualify_hosted_local import MODEL_SHA, WORKSHOP_MODEL_ALIAS, WORKSHOP_MODEL_SHA, sha, write
+from scripts.qualify_quote_workflow_006 import ordinary
 
 PINNED_MODELS = {MODEL_SHA: "Qwen3-4B-Instruct-2507-Q4_K_M", WORKSHOP_MODEL_SHA: WORKSHOP_MODEL_ALIAS}
 TERMINAL = {"complete", "cancelled", "failed", "exhausted", "needs_review", "paused", "interrupted"}
+QUOTE_CONTRACT = (
+    "Inputs are six numeric fields: quantity, unit_cost_cents, setup_cents, verification_cents, "
+    "maintenance_cents, capacity. Output exactly valid, declared_cost_cents, within_capacity. "
+    "valid is true only when all six inputs are nonnegative. Then declared_cost_cents is quantity "
+    "times unit_cost_cents plus setup_cents, verification_cents and maintenance_cents, and "
+    "within_capacity is true exactly when quantity is at most capacity. Zero quantity retains "
+    "fixed costs. If invalid, return false, null and false respectively. Quantity can be fractional. "
+    "Keep this planning result within the evaluator's portable numerical range."
+)
 
 
 def port():
@@ -105,6 +115,38 @@ def trial(api, output, family, ambition, *, model, prior=None, trial_name=None, 
     return receipt
 
 
+def quote_replay(record, output):
+    protocol = PRODUCT / "evidence" / "LOCAL-QUOTE-PROTOCOL-006.json"
+    frozen = json.loads(protocol.read_bytes())
+    scopes = [("quote-manufacturing", "Quote a small manufacturing batch", frozen["manufacturing_cases"]),
+              ("quote-lab", "Reuse the quote for a laboratory service batch", frozen["lab_cases"])]
+    comparison = {"protocol_sha256": sha(protocol), "rows": [], "same_artifact": False,
+                  "scope": "Same planning contract and frozen cases through the Workshop interface. The direct formula is a strong control."}
+    for _, _, cases in scopes:
+        if any(ordinary(case["input"]) != case["expected"] for case in cases):
+            raise ValueError("Conventional quote disagrees with the registered expectation.")
+    comparison["ordinary_passed"] = sum(len(cases) for _, _, cases in scopes)
+    predecessor = None
+    for name, objective, cases in scopes:
+        result = record("custom", objective, trial_name=name, prior=predecessor and predecessor["id"],
+                        context=QUOTE_CONTRACT, cases=[{key: case[key] for key in ("input", "expected")} for case in cases])
+        if result["docket"]["status"] != "admitted":
+            break
+        root = output / name
+        write(root / "outside-range.json", dict(cases[0]["input"], quantity=2**53))
+        check = subprocess.run([sys.executable, "-B", "RUN_INSTRUMENT.py", "instrument.json", "outside-range.json"],
+                               cwd=root, capture_output=True, text=True, timeout=20)
+        fingerprint = result["docket"]["artifact_hashes"]["instrument.json"]
+        comparison["rows"].append({"case": name, "artifact_sha256": fingerprint, "registered_cases": len(cases),
+                                   "out_of_range_refused": check.returncode != 0 and "range" in check.stderr.lower()})
+        if predecessor is None:
+            predecessor = result
+    if len(comparison["rows"]) == 2:
+        first, second = comparison["rows"]
+        comparison["same_artifact"] = first["artifact_sha256"] == second["artifact_sha256"]
+    return comparison
+
+
 def run(args):
     source, tree = source_identity()
     model_sha = sha(args.model)
@@ -173,8 +215,14 @@ def run(args):
             receipt["unchanged_artifact_reuse"] = bool(first_hash and first_hash == successor.get("docket", {}).get("artifact_hashes", {}).get("instrument.json"))
         if args.scope in {"all", "contrast"}:
             record("contrast", "Check scoped accessibility evidence and exceptions without rounding.")
-        expected = {"all": 5, "vertical": 4, "contrast": 1}[args.scope]
-        receipt["status"] = "PASS" if (len(receipt["cases"]) == expected and (not vertical or receipt["unchanged_artifact_reuse"]) and
+        quote_ok = True
+        if args.scope == "quote":
+            quote = quote_replay(record, output)
+            receipt["quote_replay"] = quote
+            quote_ok = quote["same_artifact"] and all(row["out_of_range_refused"] for row in quote["rows"])
+        expected = {"all": 5, "vertical": 4, "contrast": 1, "quote": 2}[args.scope]
+        receipt["status"] = "PASS" if (len(receipt["cases"]) == expected and quote_ok and
+            (not vertical or receipt["unchanged_artifact_reuse"]) and
             all(row["status"] == "complete" and row["replay_exit"] == 0 and row["sources_sha256"] == receipt["sources_sha256"] and
                 any(event["kind"] == "model_completed" and event["detail"]["reported_model"] == model
                     for event in row["events"]) for row in receipt["cases"])) else "FAIL"
@@ -223,7 +271,7 @@ def main():
     parser.add_argument("--model", type=lambda value: Path(value).resolve(), required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--threads", type=int, choices=range(1, 33), default=4)
-    parser.add_argument("--scope", choices=("all", "vertical", "contrast"), default="all",
+    parser.add_argument("--scope", choices=("all", "vertical", "contrast", "quote"), default="all",
                         help="Qualification scope. The hosted release requires both scoped runs on matching source.")
     parser.add_argument("--browser", action="store_true", help="Also operate a rendered Chromium client against the real connector.")
     parser.add_argument("--study", action="store_true", help="Run the separate matched study of reusable builder guidance.")

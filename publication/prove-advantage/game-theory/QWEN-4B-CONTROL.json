@@ -1,0 +1,257 @@
+{
+  "schema": "frontier/strategic-4b-control/v1",
+  "server_sha256": "fe211d00c4754aa67aaa492d2c755ab0f6ef60bf30eee3c0c74a3496189cde17",
+  "model": "Qwen3-4B-Instruct-2507 Q4_K_M",
+  "weights_sha256": "2fde00ce69dd4899c70d020845e2638353015bba0fdf161b3eb965f2bca4464e",
+  "source": "https://huggingface.co/bartowski/Qwen_Qwen3-4B-Instruct-2507-GGUF/tree/ae44f08e1392f39c0e474af10c3ff8355c8b6688",
+  "cases_sha256": "caa9bd9596b36bded98d84c26f54bbfbd329587de1dee2c14c08a9d3a3db9529",
+  "cpu_threads": 3,
+  "startup_seconds": 4.007768655996188,
+  "results": {
+    "gate-score": {
+      "answers": [
+        {
+          "access": "known",
+          "witness": 1
+        },
+        {
+          "access": "hidden",
+          "witness": 4
+        }
+      ],
+      "usage": {
+        "completion_tokens": 52,
+        "prompt_tokens": 218,
+        "total_tokens": 270,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        }
+      },
+      "content": "{\n  \"answers\": [\n    {\n      \"access\": \"known\",\n      \"witness\": 1\n    },\n    {\n      \"access\": \"hidden\",\n      \"witness\": 4\n    }\n  ]\n}",
+      "wall_seconds": 13.919298572000116
+    },
+    "postponed-appeal": {
+      "answers": [
+        {
+          "access": "hidden",
+          "witness": 2
+        },
+        {
+          "access": "known",
+          "witness": 3
+        },
+        {
+          "access": "unclear",
+          "witness": 0
+        }
+      ],
+      "usage": {
+        "completion_tokens": 60,
+        "prompt_tokens": 234,
+        "total_tokens": 294,
+        "prompt_tokens_details": {
+          "cached_tokens": 96
+        }
+      },
+      "content": "{\n  \"answers\": [\n    {\"access\": \"hidden\", \"witness\": 2},\n    {\"access\": \"known\", \"witness\": 3},\n    {\"access\": \"unclear\", \"witness\": 0}\n  ]\n}",
+      "wall_seconds": 13.257505702989874
+    },
+    "one-of-two-readers": {
+      "answers": [
+        {
+          "access": "known",
+          "witness": 2
+        },
+        {
+          "access": "hidden",
+          "witness": 5
+        }
+      ],
+      "usage": {
+        "completion_tokens": 53,
+        "prompt_tokens": 232,
+        "total_tokens": 285,
+        "prompt_tokens_details": {
+          "cached_tokens": 96
+        }
+      },
+      "content": "{\n  \"answers\": [\n    {\n      \"access\": \"known\",\n      \"witness\": 2\n    },\n    {\n      \"access\": \"hidden\",\n      \"witness\": 5\n    }\n  ]\n}",
+      "wall_seconds": 13.544705605992931
+    },
+    "sealed-transfer": {
+      "answers": [
+        {
+          "access": "known",
+          "witness": 1
+        },
+        {
+          "access": "hidden",
+          "witness": 4
+        }
+      ],
+      "usage": {
+        "completion_tokens": 53,
+        "prompt_tokens": 209,
+        "total_tokens": 262,
+        "prompt_tokens_details": {
+          "cached_tokens": 96
+        }
+      },
+      "content": "{\n  \"answers\": [\n    {\n      \"access\": \"known\",\n      \"witness\": 1\n    },\n    {\n      \"access\": \"hidden\",\n      \"witness\": 4\n    }\n  ]\n}",
+      "wall_seconds": 67.41567041300004
+    },
+    "split-credentials": {
+      "answers": [
+        {
+          "access": "known",
+          "witness": 1
+        },
+        {
+          "access": "hidden",
+          "witness": 2
+        },
+        {
+          "access": "unclear",
+          "witness": 0
+        }
+      ],
+      "usage": {
+        "completion_tokens": 72,
+        "prompt_tokens": 257,
+        "total_tokens": 329,
+        "prompt_tokens_details": {
+          "cached_tokens": 96
+        }
+      },
+      "content": "{\n  \"answers\": [\n    {\n      \"access\": \"known\",\n      \"witness\": 1\n    },\n    {\n      \"access\": \"hidden\",\n      \"witness\": 2\n    },\n    {\n      \"access\": \"unclear\",\n      \"witness\": 0\n    }\n  ]\n}",
+      "wall_seconds": 23.299709664992406
+    },
+    "refund-switch": {
+      "answers": [
+        {
+          "access": "hidden",
+          "witness": 1
+        },
+        {
+          "access": "known",
+          "witness": 2
+        },
+        {
+          "access": "unclear",
+          "witness": 0
+        }
+      ],
+      "usage": {
+        "completion_tokens": 72,
+        "prompt_tokens": 291,
+        "total_tokens": 363,
+        "prompt_tokens_details": {
+          "cached_tokens": 96
+        }
+      },
+      "content": "{\n  \"answers\": [\n    {\n      \"access\": \"hidden\",\n      \"witness\": 1\n    },\n    {\n      \"access\": \"known\",\n      \"witness\": 2\n    },\n    {\n      \"access\": \"unclear\",\n      \"witness\": 0\n    }\n  ]\n}",
+      "wall_seconds": 71.26518124299764
+    },
+    "contradictory-consultation": {
+      "answers": [
+        {
+          "access": "hidden",
+          "witness": 3
+        },
+        {
+          "access": "known",
+          "witness": 4
+        }
+      ],
+      "usage": {
+        "completion_tokens": 51,
+        "prompt_tokens": 264,
+        "total_tokens": 315,
+        "prompt_tokens_details": {
+          "cached_tokens": 96
+        }
+      },
+      "content": "{\n  \"answers\": [\n    {\n      \"access\": \"hidden\",\n      \"witness\": 3\n    },\n    {\n      \"access\": \"known\",\n      \"witness\": 4\n    }\n  ]\n}",
+      "wall_seconds": 8.684316600993043
+    },
+    "signal-two-causes": {
+      "answers": [
+        {
+          "access": "known",
+          "witness": 2
+        },
+        {
+          "access": "hidden",
+          "witness": 0
+        },
+        {
+          "access": "hidden",
+          "witness": 0
+        }
+      ],
+      "usage": {
+        "completion_tokens": 70,
+        "prompt_tokens": 285,
+        "total_tokens": 355,
+        "prompt_tokens_details": {
+          "cached_tokens": 96
+        }
+      },
+      "content": "{\n  \"answers\": [\n    {\n      \"access\": \"known\",\n      \"witness\": 2\n    },\n    {\n      \"access\": \"hidden\",\n      \"witness\": 0\n    },\n    {\n      \"access\": \"hidden\",\n      \"witness\": 0\n    }\n  ]\n}",
+      "wall_seconds": 11.63992267899448
+    },
+    "unequal-token-outcomes": {
+      "answers": [
+        {
+          "access": "known",
+          "witness": 4
+        },
+        {
+          "access": "known",
+          "witness": 1
+        },
+        {
+          "access": "known",
+          "witness": 4
+        }
+      ],
+      "usage": {
+        "completion_tokens": 71,
+        "prompt_tokens": 230,
+        "total_tokens": 301,
+        "prompt_tokens_details": {
+          "cached_tokens": 97
+        }
+      },
+      "content": "{\n  \"answers\": [\n     {\n      \"access\": \"known\",\n      \"witness\": 4\n    },\n    {\n      \"access\": \"known\",\n      \"witness\": 1\n    },\n    {\n      \"access\": \"known\",\n      \"witness\": 4\n    }\n  ]\n}",
+      "wall_seconds": 33.17548340700159
+    },
+    "two-forms-removed": {
+      "answers": [
+        {
+          "access": "known",
+          "witness": 1
+        },
+        {
+          "access": "hidden",
+          "witness": 3
+        },
+        {
+          "access": "unclear",
+          "witness": 0
+        }
+      ],
+      "usage": {
+        "completion_tokens": 59,
+        "prompt_tokens": 279,
+        "total_tokens": 338,
+        "prompt_tokens_details": {
+          "cached_tokens": 96
+        }
+      },
+      "content": "{\n  \"answers\": [\n    {\"access\": \"known\", \"witness\": 1},\n    {\"access\": \"hidden\", \"witness\": 3},\n    {\"access\": \"unclear\", \"witness\": 0}\n  ]\n}",
+      "wall_seconds": 85.4578527900012
+    }
+  },
+  "status": "complete"
+}

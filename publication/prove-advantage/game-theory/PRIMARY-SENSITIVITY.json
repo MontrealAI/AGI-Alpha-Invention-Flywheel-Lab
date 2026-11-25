@@ -1,0 +1,66 @@
+{
+  "scope": "Sensitivity only. Preserve original case labels and all original scores.",
+  "uncertain_label_boundary": {
+    "signal-two-causes/2": "The red signal does not distinguish A/B and no additional clue is communicated. Primary label is unclear for underdetermination. Hidden is also defensible when the term means no disclosure of that detail.",
+    "unequal-token-outcomes/1": "SMALL gives a set of possible values. Exact T is underdetermined at the summary choice and deliberately shown only later. Primary label is unclear; hidden also reasonably describes the exact detail's later delivery."
+  },
+  "cases": 10,
+  "queries": 26,
+  "arms": {
+    "adapted_direct": {
+      "primary_score_receipt_sha256": "286eacb3403183ed8fd9026f03a3dec2021dbffa68e460d91fbd8a0f6f2d09ce",
+      "primary_case_acceptance": 0,
+      "primary_query_acceptance": 6,
+      "sensitivity_case_acceptance": 0,
+      "sensitivity_query_acceptance": 6,
+      "query_label_accuracy": 12,
+      "query_evidence_accuracy": 12
+    },
+    "base_direct": {
+      "primary_score_receipt_sha256": "ec1a43c88ece6d2c62c88cf63465d5f9d1c7f62592bf4011139ba0e742ec2cb3",
+      "primary_case_acceptance": 0,
+      "primary_query_acceptance": 4,
+      "sensitivity_case_acceptance": 0,
+      "sensitivity_query_acceptance": 4,
+      "query_label_accuracy": 10,
+      "query_evidence_accuracy": 10
+    },
+    "base_retrieval": {
+      "primary_score_receipt_sha256": "9fe8bbdf13e67a9f542bd4aebdcde684fda500c270c5080fd40af29f8b454844",
+      "primary_case_acceptance": 0,
+      "primary_query_acceptance": 0,
+      "sensitivity_case_acceptance": 0,
+      "sensitivity_query_acceptance": 1,
+      "query_label_accuracy": 9,
+      "query_evidence_accuracy": 11
+    },
+    "base_word_lookup": {
+      "primary_score_receipt_sha256": "d478f033c625b5e98c111d479fc54016ba37c438cdc10503b762b24724607f04",
+      "primary_case_acceptance": 0,
+      "primary_query_acceptance": 8,
+      "sensitivity_case_acceptance": 0,
+      "sensitivity_query_acceptance": 8,
+      "query_label_accuracy": 9,
+      "query_evidence_accuracy": 12
+    },
+    "included-Codex": {
+      "primary_score_receipt_sha256": "77bb2224d9f24b26ac2654c9ce232f5dc785d4038eaac00fdd0fd59c6de0f49d",
+      "primary_case_acceptance": 8,
+      "primary_query_acceptance": 24,
+      "sensitivity_case_acceptance": 10,
+      "sensitivity_query_acceptance": 26,
+      "query_label_accuracy": 24,
+      "query_evidence_accuracy": 26
+    },
+    "qwen-4b": {
+      "primary_score_receipt_sha256": "e30f1641031804f81b0c37f7dfdc6ba7dfc43db68238192d002e954a4fa0e9ed",
+      "primary_case_acceptance": 2,
+      "primary_query_acceptance": 16,
+      "sensitivity_case_acceptance": 2,
+      "sensitivity_query_acceptance": 16,
+      "query_label_accuracy": 20,
+      "query_evidence_accuracy": 18
+    }
+  },
+  "inference": "Portable exact reasoning support remains scope-limited. Neither small-adapter promotion nor general strategic intelligence is supported by this panel."
+}

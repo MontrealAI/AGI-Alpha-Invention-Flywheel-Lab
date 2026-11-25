@@ -1,0 +1,230 @@
+[
+  {
+    "id": "relay-01",
+    "language": "en",
+    "family": "conditioned-forwarding",
+    "rules": [
+      "The ceremony's publicly displayed plan is indoor or outdoor. Both plans are possible. The display carries no clue about the private card.",
+      "Before anyone chooses, the announcer receives the full private card.",
+      "The elector makes a nomination after seeing the plan. Before that choice, the announcer must read the card to the elector under the indoor plan and must withhold it under the outdoor plan.",
+      "The auditor chooses an opening procedure before being offered the card. The auditor receives the full card after the nomination and before deciding whether to veto.",
+      "No other actor observes or can infer the card before the access just described."
+    ],
+    "queries": [
+      {
+        "observer": "elector",
+        "decision": "nomination",
+        "datum": "private card"
+      },
+      {
+        "observer": "auditor",
+        "decision": "opening procedure",
+        "datum": "private card"
+      },
+      {
+        "observer": "auditor",
+        "decision": "veto",
+        "datum": "private card"
+      }
+    ]
+  },
+  {
+    "id": "ledger-02",
+    "language": "en",
+    "family": "logical-reconstruction",
+    "rules": [
+      "The desk picks two whole-number counts, alpha and beta. The combined count is posted publicly before both actors choose.",
+      "The scheduler privately receives the exact alpha count before choosing a schedule, and can use it together with the posted total to calculate beta exactly.",
+      "The inspector chooses a codeword from the total alone. The inspector receives alpha only after the choice. More than one split can have the same total.",
+      "For audit exposure the scheduler receives an unrelated calibration mark only upon inspection. The rules omit whether inspection precedes or follows the scheduling choice."
+    ],
+    "queries": [
+      {
+        "observer": "scheduler",
+        "decision": "schedule",
+        "datum": "beta exact count"
+      },
+      {
+        "observer": "inspector",
+        "decision": "codeword",
+        "datum": "alpha exact count"
+      },
+      {
+        "observer": "scheduler",
+        "decision": "schedule",
+        "datum": "calibration mark"
+      }
+    ]
+  },
+  {
+    "id": "order-03",
+    "language": "en",
+    "family": "pseudonym-and-revision",
+    "rules": [
+      "Before a first allocation, the broker reads the public tally for all sealed lots. The tally contains the exact lot-A quantity but no identities.",
+      "The broker receives the lot-A owner's identity after first allocation, then chooses whether to revise the allocation. Owner identity is independent of the public tally.",
+      "An exception policy permits a second assistant to open a separate correction note and pass it unchanged to the broker. The protocol says neither whether the assistant passes it nor whether it arrives before revision.",
+      "No information from the correction note is available otherwise. The correction note's contents are independent of the tally and ownership."
+    ],
+    "queries": [
+      {
+        "observer": "broker",
+        "decision": "first allocation",
+        "datum": "lot-A quantity"
+      },
+      {
+        "observer": "broker",
+        "decision": "first allocation",
+        "datum": "lot-A owner identity"
+      },
+      {
+        "observer": "broker",
+        "decision": "revision",
+        "datum": "correction note contents"
+      }
+    ]
+  },
+  {
+    "id": "spare-04",
+    "language": "en",
+    "family": "pooled-versus-individual-disclosure",
+    "rules": [
+      "Before the analyst selects an option, everyone can read the pooled total for the north and south sites.",
+      "The analyst never sees either individual site's count before option selection, and each of several different count pairs can yield the same pooled total.",
+      "The reviewer receives the south count before the reviewer issues an approval or rejection.",
+      "The organizer gives the reviewer the north count before approval if a separate administrative exception is issued. Whether that exception is issued is unspecified and independent of the counts.",
+      "The reviewer cannot see the public board. Beyond the listed receipts the reviewer has no access or means to derive either count."
+    ],
+    "queries": [
+      {
+        "observer": "analyst",
+        "decision": "option selection",
+        "datum": "north-site individual count"
+      },
+      {
+        "observer": "reviewer",
+        "decision": "approval or rejection",
+        "datum": "south-site individual count"
+      },
+      {
+        "observer": "reviewer",
+        "decision": "approval or rejection",
+        "datum": "north-site individual count"
+      }
+    ]
+  },
+  {
+    "id": "pupitre-05",
+    "language": "fr",
+    "family": "asymmetric-display",
+    "rules": [
+      "Le code de la réserve et le numéro du lot varient indépendamment.",
+      "La responsable lit le numéro du lot avant de fixer un ordre de passage.",
+      "La responsable reçoit le code de la réserve après avoir fixé l’ordre. Son écran ne contient aucun indice sur ce code.",
+      "Avant de répartir les chaises, la préposée reçoit une enveloppe avec le code de la réserve. Le protocole ne dit pas si elle est autorisée à l’ouvrir à ce moment ou uniquement après la répartition.",
+      "La préposée ne peut déduire le code autrement."
+    ],
+    "queries": [
+      {
+        "observer": "responsable",
+        "decision": "fixer l’ordre de passage",
+        "datum": "numéro du lot"
+      },
+      {
+        "observer": "responsable",
+        "decision": "fixer l’ordre de passage",
+        "datum": "code de la réserve"
+      },
+      {
+        "observer": "préposée",
+        "decision": "répartir les chaises",
+        "datum": "code de la réserve"
+      }
+    ]
+  },
+  {
+    "id": "registre-06",
+    "language": "fr",
+    "family": "lookup-and-conditional-veto",
+    "rules": [
+      "Le régisseur voit avant de réserver le casier le numéro de la plaque et le registre complet qui donne la couleur unique pour ce numéro.",
+      "La gardienne choisit un accès avec seulement un compteur agrégé compatible avec plusieurs couleurs de casier. La couleur exacte lui est explicitement cachée jusqu’après ce choix.",
+      "Le régisseur décide de rouvrir ou non la réservation après son premier choix. Si la gardienne vient de recevoir son laissez-passer spécial, elle doit lui annoncer avant cette décision le nom du titulaire de la plaque. Sinon elle doit le taire.",
+      "Le laissez-passer peut être délivré ou ne pas l’être. Le nom du titulaire ne figure pas dans le registre et ne se déduit ni de la couleur ni du numéro."
+    ],
+    "queries": [
+      {
+        "observer": "régisseur",
+        "decision": "réserver le casier",
+        "datum": "couleur unique du casier"
+      },
+      {
+        "observer": "gardienne",
+        "decision": "choisir un accès",
+        "datum": "couleur unique du casier"
+      },
+      {
+        "observer": "régisseur",
+        "decision": "rouvrir ou non la réservation",
+        "datum": "nom du titulaire de la plaque"
+      }
+    ]
+  },
+  {
+    "id": "cloche-07",
+    "language": "fr",
+    "family": "announcement-versus-choice",
+    "rules": [
+      "Avant de choisir un itinéraire, la cheffe lit le numéro de quai écrit sur son billet. Elle choisit l’itinéraire avant la sonnerie.",
+      "Le motif du fanion est distinct du numéro de quai et aucune information sur le motif n’est disponible avant la sonnerie, qui a lieu seulement après le choix d’itinéraire.",
+      "Le contrôleur entend la sonnerie et décide ensuite s’il valide le trajet. Selon le règlement le motif peut lui être communiqué avant ou après la validation, sans autre précision.",
+      "Le contrôleur ne déduit pas le motif du seul son de la cloche et ne voit pas le billet de la cheffe."
+    ],
+    "queries": [
+      {
+        "observer": "cheffe",
+        "decision": "choisir un itinéraire",
+        "datum": "numéro de quai"
+      },
+      {
+        "observer": "cheffe",
+        "decision": "choisir un itinéraire",
+        "datum": "motif du fanion"
+      },
+      {
+        "observer": "contrôleur",
+        "decision": "valider le trajet",
+        "datum": "motif du fanion"
+      }
+    ]
+  },
+  {
+    "id": "licence-08",
+    "language": "fr",
+    "family": "role-scoped-rights",
+    "rules": [
+      "Une carte montre deux inscriptions indépendantes, celle de l’atelier et celle du dépôt.",
+      "La messagère lit toujours l’inscription de l’atelier avant de choisir son trajet.",
+      "L’agent du dépôt choisit sa liste avant l’arrivée du courrier. L’inscription de l’atelier lui reste inaccessible jusqu’à cette arrivée, et la liste ne peut pas être modifiée.",
+      "Le gardien choisit de barrer ou non l’entrée. Sa licence rouge lui donne accès à l’inscription du dépôt avant ce choix; une licence verte lui refuse cet accès.",
+      "Le gardien reçoit une seule licence, rouge ou verte. Le protocole ne précise pas laquelle et ne lui donne aucune autre source sur cette inscription."
+    ],
+    "queries": [
+      {
+        "observer": "messagère",
+        "decision": "choisir son trajet",
+        "datum": "inscription de l’atelier"
+      },
+      {
+        "observer": "agent du dépôt",
+        "decision": "choisir sa liste",
+        "datum": "inscription de l’atelier"
+      },
+      {
+        "observer": "gardien",
+        "decision": "barrer ou non l’entrée",
+        "datum": "inscription du dépôt"
+      }
+    ]
+  }
+]

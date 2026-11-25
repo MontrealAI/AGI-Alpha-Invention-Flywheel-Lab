@@ -1,0 +1,45 @@
+{
+  "scope": "A local JSON Schema check of the publishers conforming example and controlled variations. SHACL, manufacturer evidence, independent held cases, registry/API submission and compliance were outside this source-scope probe.",
+  "checked_at": "2026-11-25T20:43:05+00:00",
+  "archive_sha256": "46b753cdcdf11d3dba9d045c2c8410eabe41125c741e5240499c0ca0fccd2ddd",
+  "schema": "product/batteries/1.0.0/schemas/pub-batteries.schema.json",
+  "schema_url": "https://repository.product-passport.ec.europa.eu/product/batteries/1.0.0/schemas/pub-batteries.schema.json",
+  "fixture": "product/batteries/1.0.0/tests/conforms/pub-batteries.json",
+  "fixture_sha256": "30a03867e1773191924a1c7fde31ba220d19c619cb33d23a1e6893e7ec2ecbb5",
+  "property_checks": {
+    "batteryCapacity": {
+      "$ref": "https://repository.product-passport.ec.europa.eu/core/1.0.0/schemas/common.schema.json#/$defs/unitValue",
+      "message": {
+        "type": "SEM-BAT-MSG-022"
+      }
+    },
+    "euDeclarationOfConformity": {
+      "$ref": "https://repository.product-passport.ec.europa.eu/core/1.0.0/schemas/common.schema.json#/$defs/relatedResource",
+      "message": {
+        "type": "SEM-BAT-MSG-045"
+      }
+    }
+  },
+  "outcomes": [
+    {
+      "case": "official conforming fixture",
+      "schema_valid": true,
+      "errors": []
+    },
+    {
+      "case": "same-shape alternate numeric capacity absent supporting source",
+      "schema_valid": true,
+      "errors": []
+    },
+    {
+      "case": "wrong data type for capacity",
+      "schema_valid": false,
+      "errors": [
+        {
+          "field": "batteryCapacity/value",
+          "validator": "type"
+        }
+      ]
+    }
+  ]
+}

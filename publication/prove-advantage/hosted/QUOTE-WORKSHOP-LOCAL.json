@@ -1,0 +1,146 @@
+{
+  "complete_cost": null,
+  "corrected_rows": [
+    {
+      "bundle_sha256": "0b2611cc1e3ea18f1bc1fb012b6ad04966b42a8e333170f051240292751f2dfc",
+      "case": "quote-manufacturing",
+      "instrument_sha256": "b2b18ed407b7c5a6c04dbb481a23038d52b29103e60d221150a62fc73e0b5189",
+      "model_requests": 1,
+      "observed_wall_seconds": 41.3057621439948,
+      "portable_accepted": 7,
+      "portable_exit": 0,
+      "provider_reported_tokens": {
+        "input_tokens": 440,
+        "output_tokens": 240
+      },
+      "range_refusal": true,
+      "received_fields": [
+        "declared_cost_cents",
+        "valid",
+        "within_capacity"
+      ]
+    },
+    {
+      "bundle_sha256": "61c025a5e289814b8b68af0288ae13dfb703ff75a952f8bba52a29b1647d01e3",
+      "case": "quote-lab",
+      "instrument_sha256": "b2b18ed407b7c5a6c04dbb481a23038d52b29103e60d221150a62fc73e0b5189",
+      "model_requests": 1,
+      "observed_wall_seconds": 45.3875376030046,
+      "portable_accepted": 4,
+      "portable_exit": 0,
+      "provider_reported_tokens": {
+        "input_tokens": 760,
+        "output_tokens": 166
+      },
+      "range_refusal": true,
+      "received_fields": [
+        "declared_cost_cents",
+        "valid",
+        "within_capacity"
+      ]
+    }
+  ],
+  "exploratory_decimal_check": {
+    "decimal_reference_cents": "0.3",
+    "portable_result_cents": "0.30000000000000004",
+    "quantity": "0.1",
+    "unit_cost_cents": 3,
+    "verdict": "Outside the verified cases; exact decimal qualification absent."
+  },
+  "formula_protocol_006_sha256": "4eafe9112f48d34425adb8c744da0c40393188f650bcad1be0641bd293b693fb",
+  "interpretation": "Synthetic quote construction, portable execution and exact-byte reuse were observed. Absolute performance, exact decimal settlement and economic advantage are unestablished. The original trial is unchanged.",
+  "local_git_tree": "5887b68f4555792862f9d2e68c84dda5f49cde34",
+  "local_source_revision": "e9b8f0799311629da4d399fed35b49f88d8bb56d",
+  "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+  "model_sha256": "2fde00ce69dd4899c70d020845e2638353015bba0fdf161b3eb965f2bca4464e",
+  "ordinary_control": {
+    "model_requests": 0,
+    "observations": 11,
+    "passed": 11
+  },
+  "original": {
+    "artifact_sha256": "f708630bcc5d954527a44327bc313a0344767fd5a2b6a374e22953f74d7f4280",
+    "checks": 7,
+    "first_artifact_output_fields": [
+      "declared_cost_cents"
+    ],
+    "hosted_first_failure": {
+      "cause": "UNCLASSIFIED",
+      "error": "PROVIDER_CONNECTION",
+      "seconds": 600.132696442
+    },
+    "hosted_job": "139358308706",
+    "hosted_qualification": "FAIL",
+    "local_first_request_case_scope": "First manufacturing dispatch only; seven original operator-frozen cases",
+    "passed": 0,
+    "request_identity": {
+      "configured_transport_timeout_seconds": 600,
+      "matches_historical_request": true,
+      "max_output_tokens": 4096,
+      "prompt_sha256": "5f2cca0214199364891517c1556f0611367738b275682ba533f57caf2bf6c93c",
+      "schema_sha256": "a7fcb99ddc5b8461cdc42e272b16500cdff1c47ac0d25311eb2dec944fad24bb"
+    },
+    "runtime_task_timing": {
+      "eval": {
+        "milliseconds": 46700.56,
+        "tokens": 262
+      },
+      "prompt_eval": {
+        "milliseconds": 55710.23,
+        "tokens": 1445
+      },
+      "slot": 0,
+      "task": 0,
+      "total": {
+        "milliseconds": 102410.79,
+        "tokens": 1707
+      }
+    }
+  },
+  "paid_model_requests": 0,
+  "reproduction": "python -B products/alpha-genesis-harness/scripts/qualify_workshop.py --runtime ABSOLUTE_LLAMA_SERVER --model ABSOLUTE_GGUF --threads 2 --scope quote --output NEW_PRIVATE_DIRECTORY",
+  "result": "PASS",
+  "runtime_sha256": "fe211d00c4754aa67aaa492d2c755ab0f6ef60bf30eee3c0c74a3496189cde17",
+  "same_content_github_revision": "258cd9b6b559951e7618b6ebba3bd24cde74d355",
+  "scope": "Locally executed same-contract Workshop quote. Seven frozen manufacturing and four different laboratory cases portably replayed.",
+  "source_product_tree": "0a4e0493def7fa45bd7b63cd622bf2d5517df223",
+  "timing": {
+    "scope": "Recorded llama.cpp task timings only",
+    "source_log_sha256": "9fdf50f264cafc3e74cedbba0fc60450baca9a0c610ea284d8f62025d0f77bfb",
+    "tasks": [
+      {
+        "eval": {
+          "milliseconds": 26118.23,
+          "tokens": 240
+        },
+        "prompt_eval": {
+          "milliseconds": 14871.54,
+          "tokens": 440
+        },
+        "slot": 0,
+        "task": 0,
+        "total": {
+          "milliseconds": 40989.77,
+          "tokens": 680
+        }
+      },
+      {
+        "eval": {
+          "milliseconds": 21408.17,
+          "tokens": 166
+        },
+        "prompt_eval": {
+          "milliseconds": 23401.48,
+          "tokens": 757
+        },
+        "slot": 0,
+        "task": 241,
+        "total": {
+          "milliseconds": 44809.65,
+          "tokens": 923
+        }
+      }
+    ]
+  },
+  "workflow_candidate": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/45697208730"
+}

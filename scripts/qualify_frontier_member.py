@@ -471,7 +471,8 @@ def qualify_mission_executor(directory, root, release):
     for name, fingerprint in member.HISTORICAL_EXECUTORS.items():
         require(member.digest((directory / name).read_bytes()) == fingerprint, f'Published archive bytes changed for {name}')
     manifest = install(directory / member.EXECUTOR_ZIP, root, {'sha256': expected})
-    require(manifest['id'] == 'frontier-harness-executor', 'Wrong local executor package')
+    require(manifest['id'] == 'frontier-harness-executor' and manifest['version'] == member.EXECUTOR_VERSION,
+            'Wrong local executor package or version')
     payload_revision = verify_executor_source(root, manifest, release['source_commit'])
     runtime = root / 'runtime'
     require((root / 'START-HERE.html').is_file() and (runtime / 'app/frontier-pairing.js').is_file(),

@@ -1,0 +1,155 @@
+{
+  "cases": 6,
+  "correct_dispositions": 6,
+  "exact_evidence": 6,
+  "whole_case_acceptance": 6,
+  "false_supported": 0,
+  "expected_distribution": {
+    "supported": 2,
+    "contradicted": 2,
+    "insufficient": 2
+  },
+  "missing": 0,
+  "scores": [
+    {
+      "id": "confirm-01",
+      "field": "batteryWeight",
+      "expected": "supported",
+      "observed": "supported",
+      "decision_correct": true,
+      "evidence_exact": true,
+      "reason_present": true,
+      "fully_accepted": true,
+      "unsafe_false_support": false,
+      "observed_evidence": [
+        "sr-01"
+      ],
+      "reference_evidence_choices": [
+        [
+          "sr-01"
+        ]
+      ],
+      "rationale": "The second system column names SBR096 and gives a total weight of 114 kg. The shared 33 kg row is for a single battery module.",
+      "evaluator_reason": "The 114 kg row is for the SBR096 system. The 33 kg row is for a single component."
+    },
+    {
+      "id": "confirm-02",
+      "field": "nominalVoltage",
+      "expected": "contradicted",
+      "observed": "contradicted",
+      "decision_correct": true,
+      "evidence_exact": true,
+      "reason_present": true,
+      "fully_accepted": true,
+      "unsafe_false_support": false,
+      "observed_evidence": [
+        "sr-01",
+        "sr-03"
+      ],
+      "reference_evidence_choices": [
+        [
+          "sr-01"
+        ],
+        [
+          "sr-03"
+        ],
+        [
+          "sr-01",
+          "sr-03"
+        ]
+      ],
+      "rationale": "Both manufacturer tables give 128 V as the nominal battery-system voltage in the SBR064 column. In Ver22, 146 V is the upper operating endpoint.",
+      "evaluator_reason": "Both applicable documents specify a 128 V nominal voltage for SBR064. 146 V is a range boundary."
+    },
+    {
+      "id": "confirm-03",
+      "field": "batteryCapacity",
+      "expected": "insufficient",
+      "observed": "insufficient",
+      "decision_correct": true,
+      "evidence_exact": true,
+      "reason_present": true,
+      "fully_accepted": true,
+      "unsafe_false_support": false,
+      "observed_evidence": [],
+      "reference_evidence_choices": [
+        [],
+        [
+          "sr-01"
+        ]
+      ],
+      "rationale": "Ver22 states usable energy, nominal voltage and a maximum charging/discharging current. Their values do not constitute a documented rated electrical Ah for SBR128.",
+      "evaluator_reason": "Usable energy, DC voltage and continuous current do not document rated Ah."
+    },
+    {
+      "id": "confirm-04",
+      "field": "batteryWeight",
+      "expected": "supported",
+      "observed": "supported",
+      "decision_correct": true,
+      "evidence_exact": true,
+      "reason_present": true,
+      "fully_accepted": true,
+      "unsafe_false_support": false,
+      "observed_evidence": [
+        "gw-01"
+      ],
+      "reference_evidence_choices": [
+        [
+          "gw-01"
+        ]
+      ],
+      "rationale": "The second system column identifies LX F9.8-H and states 158 kg. The separate LX F3.3-H module is a different equipment level.",
+      "evaluator_reason": "The named system's exact column reads 158 kg and remains distinct from its module spec."
+    },
+    {
+      "id": "confirm-05",
+      "field": "nominalVoltage",
+      "expected": "contradicted",
+      "observed": "contradicted",
+      "decision_correct": true,
+      "evidence_exact": true,
+      "reason_present": true,
+      "fully_accepted": true,
+      "unsafe_false_support": false,
+      "observed_evidence": [
+        "gw-01"
+      ],
+      "reference_evidence_choices": [
+        [
+          "gw-01"
+        ]
+      ],
+      "rationale": "LX F13.1-H is the third column and has nominal system voltage 409.6 V. The requested 307.2 V is the second column for LX F9.8-H.",
+      "evaluator_reason": "409.6 V is the explicit nominal entry for the requested battery system. 307.2 V belongs to LX F9.8-H."
+    },
+    {
+      "id": "confirm-06",
+      "field": "batteryCapacity",
+      "expected": "insufficient",
+      "observed": "insufficient",
+      "decision_correct": true,
+      "evidence_exact": true,
+      "reason_present": true,
+      "fully_accepted": true,
+      "unsafe_false_support": false,
+      "observed_evidence": [],
+      "reference_evidence_choices": [
+        [],
+        [
+          "gw-03"
+        ],
+        [
+          "gw-02",
+          "gw-03"
+        ]
+      ],
+      "rationale": "The 25 A field measures charge and discharge current. The other fields give usable energy and separate module specifications, leaving rated system Ah undocumented.",
+      "evaluator_reason": "25 A is present as the charge/discharge current. The accompanying energy is usable kWh. Neither is rated capacity in Ah."
+    }
+  ],
+  "input_sha256": "e6b88a46d9e3d8d918d92b20de34a2e51cbba8510e51a9f68bb6de84c53f625c",
+  "oracle_sha256": "a17ac3dad3d07586a74ed0473fb76afca7e12ed37dc2e17fb9a85243e13a1731",
+  "predictions_sha256": "da018c8b5aae06c263ea2653fad98f91c06e18ad4794f55544a689bfeebf72e0",
+  "evaluation_scope": "Supplied documents and registered engineering claim dimensions only. Reason presence is machine-checked; reviewer compares substantive rationale separately."
+}

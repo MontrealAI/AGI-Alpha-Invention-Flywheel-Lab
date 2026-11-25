@@ -630,7 +630,7 @@ async function ownerConnectionJourney(page, language, width) {
     assert.equal(await page.locator('#my-intelligence').isVisible(), false);
     assert.equal(await page.locator('#intelligence-open-native').getAttribute('href'), null);
     assert.equal(await page.locator('#intelligence-check-native').isVisible(), false);
-    assert.match(await page.locator('#intelligence-companion-download').getAttribute('href'), /frontier-harness-executor-1\.4\.0\.zip/u);
+    assert.equal(await page.locator('#intelligence-companion-download').getAttribute('href'), 'frontier-harness-executor-1.5.0.zip');
     assert.equal(await page.locator('#mission-ambition').textContent(), ambition);
     assert.equal(await prompt.isVisible(), false);
   }
