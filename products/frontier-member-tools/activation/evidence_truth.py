@@ -9,6 +9,7 @@ from pathlib import Path
 import re
 from urllib.parse import urlsplit
 
+from bridge.instruments import strict_portable_json
 from science_substrate import canonical, read_json
 
 
@@ -229,13 +230,17 @@ def main():
     if opts.registry:
         print(canonical(read_json(STUDY/'FACTORY.json')['registry']).decode())
         return
-    data = read_json(opts.document)
+    with opts.document.open('rb') as stream:
+        raw=stream.read(2_000_001)
+    valid(0 < len(raw) <= 2_000_000,'ARTIFACT_LENGTH')
+    data = strict_portable_json(raw.decode())
     if opts.case:
         cases=unique_map(data['cases'],'DUPLICATE_CASE')
         valid(all(name in cases for name in opts.case) and len(set(opts.case))==len(opts.case),'CASE_SELECTION')
         data={**data,'cases':[cases[name] for name in opts.case]}
     result = evaluate(data)
-    print(canonical({'input_sha256':sha256(opts.document.read_bytes()).hexdigest(),'outcomes':result}).decode())
+    print(canonical({'input_sha256':sha256(raw).hexdigest(),
+                     'source_assurance':'DECLARED_PROJECTION_ONLY','outcomes':result}).decode())
 
 
 if __name__=='__main__':
