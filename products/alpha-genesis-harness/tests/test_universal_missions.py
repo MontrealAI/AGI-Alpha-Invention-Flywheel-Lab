@@ -133,32 +133,42 @@ class UniversalMissionTests(unittest.TestCase):
         self.assertEqual(imported_revision["original_ambition"], intent["ambition"])
         self.assertEqual(imported_revision["parent_run_id"], revision["id"])
 
-    def test_import_replaces_exact_released_runner_and_rejects_rehashed_edits(self):
-        service, runtime = self.service([])
-        fixture = ROOT.parents[1] / "publication/evidence-bound/evaluation/historical/m08/historical-checkpoint.json"
-        archive = json.loads(fixture.read_text(encoding="utf-8"))
+    def test_import_replaces_only_the_pinned_runner_and_rejects_rehashed_edits(self):
+        service, runtime = self.service([propose(construct(), done=True)])
+        scope = specification()
+        original = service.step(service.submit(scope)["id"])
+        archive = service.export(original["id"])
         runner = "RUN_INSTRUMENT.py"
-        scope = specification(ambition=archive["state"]["spec"]["objective"], tools=["read_artifact"])
-        restored = service.import_archive(archive, scope)
+        # Exercise migration in the standalone package as well as the checkout.
+        # An independent release replay tests the actual historical package bytes.
+        previous_runner = "raise AssertionError('An imported runner must never execute')\n"
+
+        def replace_runner(source):
+            raw = source.encode()
+            fingerprint = hashlib.sha256(raw).hexdigest()
+            archive["files"][runner] = source
+            archive["state"]["artifacts"][runner].update(sha256=fingerprint, bytes=len(raw))
+            archive["sha256"] = portable_digest({k: v for k, v in archive.items() if k != "sha256"})
+            return fingerprint
+
+        historical_hash = replace_runner(previous_runner)
+        new_scope = {**scope, "tools": ["read_artifact"]}
+        with patch("bridge.workflows.LEGACY_PORTABLE_RUNNER_SHA256", historical_hash):
+            restored = service.import_archive(archive, new_scope)
+            replace_runner(previous_runner + "# Changed archive bytes\n")
+            with self.assertRaises(BridgeError) as failure:
+                service.import_archive(archive, new_scope)
+            self.assertEqual(failure.exception.code, "WORKFLOW_INTEGRITY")
+
         exported = service.export(restored["id"])
         current = (ROOT / "bridge/instruments.py").read_bytes()
         self.assertEqual(restored["status"], "paused")
         self.assertFalse(restored["verification"]["passed"])
         self.assertEqual(exported["files"][runner].encode(), current)
         self.assertEqual(exported["state"]["artifacts"][runner]["sha256"], hashlib.sha256(current).hexdigest())
-        self.assertNotEqual(exported["state"]["artifacts"][runner]["sha256"],
-                            archive["state"]["artifacts"][runner]["sha256"])
+        self.assertNotEqual(exported["state"]["artifacts"][runner]["sha256"], historical_hash)
         self.assertEqual(exported["sha256"], portable_digest({k: v for k, v in exported.items() if k != "sha256"}))
-
-        archive["files"][runner] += "\n# Changed archive bytes\n"
-        changed = archive["files"][runner].encode()
-        archive["state"]["artifacts"][runner]["bytes"] = len(changed)
-        archive["state"]["artifacts"][runner]["sha256"] = hashlib.sha256(changed).hexdigest()
-        archive["sha256"] = portable_digest({k: v for k, v in archive.items() if k != "sha256"})
-        with self.assertRaises(BridgeError) as failure:
-            service.import_archive(archive, scope)
-        self.assertEqual(failure.exception.code, "WORKFLOW_INTEGRITY")
-        self.assertEqual(runtime.calls, [])
+        self.assertEqual(len(runtime.calls), 1)
 
     def test_repeated_computation_reuses_exact_settled_result(self):
         service, _ = self.service([propose(construct(), compute(), compute(), done=True)])
