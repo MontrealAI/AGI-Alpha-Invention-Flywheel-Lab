@@ -1,6 +1,6 @@
 {
   "original_code_sha256": "911be246982e1a03610675580f345dcae898048f358489b72b056f0a2707c489",
-  "corrected_code_sha256": "a754bfc0e958aca9578c5b58b6bed6b0414def86756e206a93c937045b80ba2c",
+  "corrected_code_sha256": "4f3719f9db0ca6001eb3f9bad9ec5525d97cdb762fe412fe73ae3c447c755bb6",
   "outcomes": [
     {
       "part": "PRIMARY",
@@ -10,18 +10,45 @@
       "frozen_prediction_sha256": "226dbdce354890c589346bd6d6498c39baa81c8d854dedf00bb96ebc73b34221",
       "changes_vs_original_withdrawal": [
         {
-          "id": "batt-12",
-          "decision": "supported",
+          "id": "batt-10",
+          "decision": "contradicted",
           "evidence": [
             "b1"
           ]
         },
         {
-          "id": "batt-16",
+          "id": "batt-11",
+          "decision": "insufficient",
+          "evidence": []
+        },
+        {
+          "id": "batt-12",
+          "decision": "insufficient",
+          "evidence": []
+        },
+        {
+          "id": "batt-13",
           "decision": "contradicted",
           "evidence": [
-            "b1"
+            "b2"
           ]
+        },
+        {
+          "id": "batt-16",
+          "decision": "insufficient",
+          "evidence": []
+        }
+      ],
+      "differences_from_frozen_using_original_input": [
+        {
+          "id": "batt-02",
+          "decision": "insufficient",
+          "evidence": []
+        },
+        {
+          "id": "batt-05",
+          "decision": "insufficient",
+          "evidence": []
         }
       ]
     },
@@ -39,15 +66,18 @@
             "sim-2"
           ]
         }
-      ]
+      ],
+      "differences_from_frozen_using_original_input": []
     },
     {
       "part": "CONFIRMATION",
       "count": 6,
       "matchedFrozen": true,
       "input_sha256": "45213ac412587b8205ab4ca2b018ec14dee7aa694f02b8c36afd9d1e4fae54bb",
-      "frozen_prediction_sha256": "8655f0f1059da9f121498b220ffe25cfe778217256798bc44558d78de4a1ad8a"
+      "frozen_prediction_sha256": "8655f0f1059da9f121498b220ffe25cfe778217256798bc44558d78de4a1ad8a",
+      "differences_from_frozen_using_original_input": []
     }
   ],
-  "verdict": "all 27 supplied-scope dispositions and attributions reproduce under the final source clause parser"
+  "verdict": "25 decisions reproduce on original inputs and 27 after two explicit source column-label annotations",
+  "reviewed_primary_packet_sha256": "f4f9e2c1e715b688a3ad623c5da1adef1c13c813b60637064e828af214b5a231"
 }

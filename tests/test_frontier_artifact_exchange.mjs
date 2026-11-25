@@ -72,7 +72,7 @@ test('quantity checks reject exponents, tolerances and range suffixes as indepen
   assert.equal(review('Net battery weight: 60 – 68 kg.', 68), 'insufficient');
   assert.equal(review('Net battery weight: 1/2 kg.', 2), 'insufficient');
   assert.equal(review('Net battery weight: 1 200 kg.', 200), 'insufficient');
-  assert.equal(review('Net battery weights by column: 64 / 80 / 100 kg.', 80), 'supported');
+  assert.equal(review('Model columns: First Pack, Example Pack, Third Pack. Net battery weights by column: 64 / 80 / 100 kg.', 80), 'supported');
 });
 
 test('compound dimensions are not field measurements, while same-unit table columns remain usable', () => {
@@ -95,8 +95,10 @@ test('compound dimensions are not field measurements, while same-unit table colu
   assert.equal(review('Specified net weight: 1,200 kg.',1.2), 'insufficient');
   assert.equal(review('Net battery weight: < 64 kg.',64), 'insufficient');
   assert.equal(review('Net battery weight: 64 to 68 kg.',68), 'insufficient');
-  assert.equal(review('Table of weights: 72.2 kg / 68.5 kg.',72.2), 'supported');
-  assert.equal(review('Table of weights: 72.2 kg / 68.5 kg.',68.5), 'supported');
+  assert.equal(review('Table of weights: 72.2 kg / 68.5 kg.',72.2), 'insufficient');
+  const table = 'Model columns: Example Pack, Second Pack. Table of weights: 72.2 kg / 68.5 kg.';
+  assert.equal(review(table,72.2), 'supported');
+  assert.equal(review(table,68.5), 'insufficient');
 });
 
 test('source excerpts cannot hide a qualifier or pass an unrelated field heading', () => {
@@ -141,4 +143,26 @@ test('a malformed supplied scope cannot erase a comparison constraint', () => {
     const observations = [{...packet.observations[0],target:{...target,version}}];
     assert.equal(reviewClaim({...packet,observations}).decision, 'insufficient');
   }
+});
+
+test('a multi-model row binds the value to its exact supervised column label', () => {
+  const review = (excerpt, values, quote = excerpt, model = 'Beta Pack') => {
+    const target = {model,level:'system'};
+    return reviewClaim({id:'column',target,field:'batteryWeight',claim:{value:72.2,unit:'kg'},
+      sources:[{id:'table',excerpt,url:'https://example.org/data',locator:'rows',sha256:'a'.repeat(64)}],
+      observations:values.map(value => ({source:'table',target,field:'batteryWeight',quote,value,unit:'kg'})),
+    });
+  };
+  const row = 'Weight: 72.2 kg / 68.5 kg.';
+  const explicit = `Model columns: Alpha Pack, Beta Pack. ${row}`;
+  assert.equal(review(explicit,[72.2]).decision, 'insufficient');
+  assert.equal(review(explicit,[72.2,68.5]).decision, 'contradicted');
+  assert.equal(review(explicit,[72.2],explicit,'Alpha Pack').decision, 'supported');
+  assert.equal(review(explicit,[68.5],row).decision, 'insufficient');
+  assert.equal(review(explicit,[68.5],explicit,'Beta').decision, 'insufficient');
+  assert.equal(review(`Model columns: Beta Pack, Beta Pack. ${row}`,[72.2]).decision, 'insufficient');
+  assert.equal(review(`Model columns: Beta¹ Pack, Alpha Pack. ${row}`,[72.2],undefined,'Beta1 Pack').decision, 'insufficient');
+  assert.equal(review('Alpha Pack and Alpha Plus in first column. Beta and Beta Pack in second. Weight: 72.2 kg in both columns.',[72.2]).decision, 'supported');
+  assert.equal(review('Model columns: Alpha Pack, Beta Pack, Extra Pack. Weight: 72.2 kg in both columns.',[72.2]).decision, 'insufficient');
+  assert.equal(review('Model columns: Alpha Pack, Beta Pack. Weight: 72.2 kg.',[72.2]).decision, 'insufficient');
 });
