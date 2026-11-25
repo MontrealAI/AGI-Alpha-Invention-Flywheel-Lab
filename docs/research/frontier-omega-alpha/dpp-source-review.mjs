@@ -13,6 +13,7 @@ const isObject = value => value !== null && typeof value === 'object' && !Array.
 const tidy = value => typeof value === 'string' ? value.normalize('NFC').trim().toLowerCase().replace(/\s+/gu, ' ') : '';
 const digest = /^[a-f0-9]{64}$/u;
 const decimal = /^([+-]?)(\d{1,12})(?:[.,](\d{1,8}))?$/u;
+const literalBlocks = /`{3,}|~{3,}|<!--|<(?:pre|code|blockquote|script|style|textarea|template|details|samp|xmp)(?:\s|>)/iu;
 const qualificationHeading = /(?:^|[:—–(]\s*|\s-\s+)(?:max(?:imums?|ima)?|min(?:imums?|ima)?|(?:upper|lower) (?:bounds?|limits?|estimates?)|bounds?|limits?|caps?|ceilings?|floors?|at (?:most|least)|approximat\p{L}*|estimat\p{L}*|typical|indicative|provisional|preliminary|not (?:reported|measured)|(?:valeurs?|mesures?|données) (?:maximales?|minimales?|approximatives?|indicatives?|estim[ée]es?|provisoires?|préliminaires?)|limites?|bornes?|estimations?|environ|à titre indicatif)(?=$|[\s.:,—–…/)])/iu;
 const boundedPropertyHeading = /^(?:max(?:imum)?|min(?:imum)?)\.?\s+(?:(?:continuous|operating|peak|rated|charge|charging|discharge|discharging|and|allowable|input|output|net|battery|pack|system|module|DC|AC)(?:\s*\/\s*|\s+))*(current|voltage|capacity|weight|mass|power|energy)\s*(?:\((?:AC|DC)\)\s*)?:?\s*/iu;
 const boundedPropertyUnits = new Map([
@@ -69,13 +70,24 @@ function clauses(text) {
     .map(part => part.trim().replace(/\.$/u, '')).filter(Boolean);
 }
 
-function sectionDepth(part) {
-  const markdown = part.match(/^(#{1,6})\s+(.*)$/u);
+function sectionDepth(line) {
+  const markdown = line.match(/^(#{1,6})\s+(.*)$/u);
   const hasTitle = body => /[\p{L}\p{N}]/u.test(body.replace(/<[^>]*>/gu, ''));
   if (markdown && hasTitle(markdown[2])) return markdown[1].length;
-  const html = part.match(/^<h([1-6])(?:\s[^>]*)?>(.*)<\/h\1>$/iu);
-  if (html && hasTitle(html[2])) return Number(html[1]);
+  const html = line.match(/^<h([1-6])([^>]*)>(.*)<\/h\1>[ \t]*$/iu);
+  if (html && /^(?:\s+(?:class|id)\s*=\s*(?:"[^"]*"|'[^']*'))*\s*$/iu.test(html[2]) && hasTitle(html[3])) return Number(html[1]);
   return undefined;
+}
+
+function sourceClauses(text) {
+  return text.split(/\r\n|\r|\n/u).flatMap(line => {
+    const indented = /^(?: {4}| {0,3}\t)/u.test(line);
+    const depth = indented ? undefined : sectionDepth(line);
+    // Whitespace folding must not grant heading status to a code example or inline marker.
+    const plain = line.normalize('NFC').replace(/[^\S\r\n]+/gu, ' ');
+    const parts = depth === undefined ? clauses(plain) : [plain.trim().replace(/\.$/u, '')];
+    return parts.map(part => ({part, depth, indented}));
+  });
 }
 
 function qualifiedSection(part, isHeading) {
@@ -93,13 +105,12 @@ function qualifiedSection(part, isHeading) {
 function sectionQualifications(parts) {
   const active = [];
   let depth = 1;
-  return parts.map(part => {
-    const level = sectionDepth(part);
+  return parts.map(({part, depth:level, indented}) => {
     if (level !== undefined) {
       while (active.at(-1) >= level) active.pop();
       depth = level;
     }
-    if (qualifiedSection(part, level !== undefined) && active.at(-1) !== depth) active.push(depth);
+    if (!indented && qualifiedSection(part, level !== undefined) && active.at(-1) !== depth) active.push(depth);
     return active.length > 0;
   });
 }
@@ -122,24 +133,25 @@ function columnHeaders(parts) {
 function quoteQuantifies(quote, excerpt, observation, {heading, units}) {
   // Parse complete labelled clauses. An unsupported expression cannot contribute a suffix.
   const expected = exactQuantity(observation.value, observation.unit, units);
-  if (expected === undefined || !excerpt.includes(quote) || /^[^\S\r\n]*(?:>[^\S\r\n]*)*(?:`{3,}|~{3,})/mu.test(excerpt)) return false;
+  if (expected === undefined || !excerpt.includes(quote) || literalBlocks.test(excerpt)) return false;
   // Preserve compatibility characters such as superscript footnote digits.
-  const read = text => clauses(text.normalize('NFC').replace(/[^\S\r\n]+/gu, ' '));
-  const sourceParts = read(excerpt);
-  const parts = read(quote);
-  const starts = sourceParts.flatMap((_, start) => parts.every((part, index) => sourceParts[start + index] === part) ? [start] : []);
+  const sourceParts = sourceClauses(excerpt);
+  const parts = sourceClauses(quote);
+  const starts = sourceParts.flatMap((_, start) => parts.every(({part}, index) => sourceParts[start + index]?.part === part) ? [start] : []);
   if (starts.length !== 1 || parts.length === 0) return false;
   // A source section heading still applies when the supplied quote begins at its field row.
   const qualified = sectionQualifications(sourceParts);
-  const tables = columnHeaders(parts);
-  if (tables.length > 1 || tables.length !== columnHeaders(sourceParts).length) return false;
+  const readColumns = rows => columnHeaders(rows.map(row => row.indented ? '' : row.part));
+  const tables = readColumns(parts);
+  if (tables.length > 1 || tables.length !== readColumns(sourceParts).length) return false;
   const [table] = tables;
   const model = tidy(observation.target.model);
   const positions = table?.labels.flatMap((models, index) => models.includes(model) ? [index] : []) ?? [];
   if (table && (table.labels.length < 2 || table.labels.some(models => models.includes('')) || positions.length !== 1)) return false;
-  return parts.some((clause, index) => {
+  return parts.some(({part:clause}, index) => {
+    const source = starts[0] + index;
     const prefix = heading.exec(clause);
-    if (!prefix || (table && index <= table.index) || qualified[starts[0] + index]) return false;
+    if (!prefix || sourceParts[source].indented || (table && index <= table.index) || qualified[source]) return false;
     const text = clause.slice(prefix[0].length);
     const sharedAcrossBoth = /\s+in both columns$/iu.test(text);
     const values = measurementValues(text.replace(/\s+in both columns$/iu, ''), units, Boolean(table));

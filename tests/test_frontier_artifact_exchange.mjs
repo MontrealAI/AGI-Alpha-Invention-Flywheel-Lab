@@ -214,7 +214,13 @@ test('explicit peer headings end a qualifier without dropping inherited limits i
   assert.equal(review('## Measured specifications\n' + row + '\n## Upper limits'), 'contradicted');
   assert.equal(review('## Upper limits\n' + row + '\n## Measured specifications\n' + row), 'insufficient');
   for (const text of ['<h2>', '<h2></h2>', '<h2><em></em></h2>', '<h2>Measured</h3>', '> ## Measured specifications',
-    '## ---', '```md\n## Measured specifications\n```', '~~~\n## Measured specifications\n~~~']) {
+    '## ---', '```md\n## Measured specifications\n```', '~~~\n## Measured specifications\n~~~',
+    '    ## Measured specifications', '\t## Measured specifications', 'Note; ## Measured specifications',
+    '    <h2>Measured specifications</h2>', 'Note; <h2>Measured specifications</h2>',
+    '<pre>\n## Measured specifications\n</pre>', '<!--\n## Measured specifications\n-->',
+    '<h2 hidden>Measured specifications</h2>']) {
     assert.equal(review(first + text + '\n' + row), 'insufficient');
   }
+  assert.equal(review(first + '- Example\n   ## Measured specifications\n' + row), 'insufficient');
+  assert.equal(review('## Measured specifications\n    ' + row), 'insufficient');
 });
