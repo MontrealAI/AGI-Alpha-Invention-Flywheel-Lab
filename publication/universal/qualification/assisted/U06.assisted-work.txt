@@ -1,0 +1,139 @@
+Executed outcome: value 32, all six cannot fit in 11 minutes. Independently checked with a time-indexed HiGHS MILP.
+
+{
+  "all_clips_feasible": false,
+  "certificate": {
+    "all_clip_duration": 17,
+    "feasible_subsets": 41,
+    "method": "earliest completion by subset dominates any later completion for future windows",
+    "total_subsets": 64,
+    "window_envelope_duration": 11
+  },
+  "input_sha256": "c1512f7ea15995713e48fe6fbfdfb446db39951f77cfcd7dd45f714a026f6741",
+  "optimum_value": 32,
+  "schema": "frontier/local-caption-schedule-v1",
+  "screenings": [
+    {
+      "clip": "C",
+      "end": 4,
+      "start": 0,
+      "value": 11
+    },
+    {
+      "clip": "D",
+      "end": 6,
+      "start": 4,
+      "value": 7
+    },
+    {
+      "clip": "E",
+      "end": 9,
+      "start": 6,
+      "value": 8
+    },
+    {
+      "clip": "F",
+      "end": 11,
+      "start": 9,
+      "value": 6
+    }
+  ]
+}
+
+Source of the executed compiler
+"""Compile exact weighted screenings from local clip-window CSV data."""
+
+import argparse
+from dataclasses import dataclass
+from hashlib import sha256
+import csv
+import io
+import json
+from pathlib import Path
+
+
+@dataclass(frozen=True)
+class Clip:
+    name: str
+    first: int
+    last: int
+    length: int
+    value: int
+
+
+def read_clips(raw):
+    stream = csv.DictReader(io.StringIO(raw.decode('utf-8-sig'), newline=''))
+    headers = ['clip', 'available_minute', 'deadline_minute', 'duration_minutes', 'value']
+    if stream.fieldnames != headers:
+        raise ValueError('Unexpected CSV columns')
+    clips = []
+    names = set()
+    for line, row in enumerate(stream, 2):
+        try:
+            name = row['clip'].strip()
+            if not name or name in names or None in row or any(ord(c) < 32 for c in name):
+                raise ValueError('Expected a unique, nonempty clip name')
+            clip = Clip(name, *(int(row[field]) for field in headers[1:]))
+            if clip.last < clip.first or clip.length < 1:
+                raise ValueError('Expected valid window and positive duration')
+        except (AttributeError, TypeError, ValueError) as error:
+            raise ValueError(f'Invalid CSV line {line}: {error}') from error
+        names.add(name)
+        clips.append(clip)
+    return sorted(clips, key=lambda clip: clip.name)
+
+
+def schedule(clips):
+    """For each feasible subset, retain its earliest attainable completion."""
+    finish = {0: min((clip.first for clip in clips), default=0)}
+    value = {0: 0}
+    previous = {}
+    level = {0}
+    for _ in clips:
+        next_level = set()
+        for mask in sorted(level):
+            for index, clip in enumerate(clips):
+                bit = 1 << index
+                if bit & mask:
+                    continue
+                start = max(clip.first, finish[mask])
+                end = start + clip.length
+                if end > clip.last:
+                    continue
+                new = mask | bit
+                if new not in finish or end < finish[new]:
+                    finish[new] = end
+                    value[new] = value[mask] + clip.value
+                    previous[new] = (mask, clip, start, end)
+                next_level.add(new)
+        if not next_level:
+            break
+        level = next_level
+    best = min(finish, key=lambda subset: (-value[subset], finish[subset], subset))
+    chosen = []
+    path = best
+    while path:
+        path, clip, start, end = previous[path]
+        chosen.append({'clip': clip.name, 'start': start, 'end': end, 'value': clip.value})
+    all_mask = (1 << len(clips)) - 1
+    horizon = max((clip.last for clip in clips), default=0) - min((clip.first for clip in clips), default=0)
+    units = sum(clip.length for clip in clips)
+    return {'optimum_value': value[best], 'screenings': chosen[::-1], 'all_clips_feasible': all_mask in finish,
+            'certificate': {'feasible_subsets': len(finish), 'total_subsets': 1 << len(clips),
+                            'all_clip_duration': units, 'window_envelope_duration': horizon,
+                            'method': 'earliest completion by subset dominates any later completion for future windows'}}
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('clips', type=Path)
+    parser.add_argument('--output', type=Path, required=True)
+    args = parser.parse_args()
+    raw = args.clips.read_bytes()
+    clips = read_clips(raw)
+    answer = {'schema': 'frontier/local-caption-schedule-v1', 'input_sha256': sha256(raw).hexdigest(), **schedule(clips)}
+    args.output.write_text(json.dumps(answer, ensure_ascii=False, sort_keys=True, indent=2) + '\n')
+
+
+if __name__ == '__main__':
+    main()

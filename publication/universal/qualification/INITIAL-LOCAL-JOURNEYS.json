@@ -1,0 +1,239 @@
+{
+  "startedAt": "2026-11-25T01:48:37.955Z",
+  "recordedAt": "2026-11-25T01:56:26.632Z",
+  "url": "http://127.0.0.1:9011/frontier-omega-alpha/",
+  "website": {
+    "files": {
+      "(index)": {
+        "sha256": "e666a572c766166b4e0885d7497952caa045e73055d939a2104000ba1b6e1e1d",
+        "httpStatus": 200,
+        "url": "http://127.0.0.1:9011/frontier-omega-alpha/"
+      },
+      "fr.html": {
+        "sha256": "d82677c9e29e4870d3ec46dd0bf30e7ebfb8421ba52ddfb35edd5ddaa755eafe",
+        "httpStatus": 200,
+        "url": "http://127.0.0.1:9011/frontier-omega-alpha/fr.html"
+      },
+      "frontier-mission.mjs": {
+        "sha256": "ea6b3a0ec9547eb7d8d0f693fea0fa313aeb7a429255ae9ead515c0ca07a605a",
+        "httpStatus": 200,
+        "url": "http://127.0.0.1:9011/frontier-omega-alpha/frontier-mission.mjs"
+      },
+      "frontier-mission-ui.mjs": {
+        "sha256": "e22a5aa16952940cc346fb54ca8014a2c461c03c272859f6b9747389da3957be",
+        "httpStatus": 200,
+        "url": "http://127.0.0.1:9011/frontier-omega-alpha/frontier-mission-ui.mjs"
+      },
+      "frontier-mission-router.mjs": {
+        "sha256": "6b61d6cc637113f7a4cf6681080cd37f4a0ad2a4d42b78b635a64f0953f65ca1",
+        "httpStatus": 200,
+        "url": "http://127.0.0.1:9011/frontier-omega-alpha/frontier-mission-router.mjs"
+      }
+    },
+    "sourceCommit": "d30c6eaa0d004adba5e924cb0b18c124f0fe604e",
+    "workflowRun": "424242",
+    "ledgerSha256": "68c7937d959f7eb10f1958db4d1473510f586f19c855647a5824ddfd4f6d3f17",
+    "artifactSha256": "5cf63237c4e41aece421d0330286e0521b572f4406e69915c01d66b104b11fcb"
+  },
+  "heldSha256": "1c5ac610775459bc23d57446373abdf3962decb0886254d76c3fb9ab8ed29116",
+  "syntheticWallet": true,
+  "enrolledWalletTested": false,
+  "results": [
+    {
+      "id": "U01",
+      "language": "en",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "ambitionSha256": "edc407d855c478083728dbc58ee37fdfb2334e3808a6732630a7f468942a4a67",
+      "bytes": 254,
+      "intake": {
+        "activated": true,
+        "next": "Use an available tool, connect intelligence or open a prepared assisted mission."
+      },
+      "published": false,
+      "handoff": {
+        "prepared": true,
+        "exactAmbition": true,
+        "shareConfirmation": true,
+        "requestId": "7de4ec850e78d7667502b5b6dcede5a032af020eae4fa5be0849c95b2bd6db0e",
+        "atlasLeadSupplied": false,
+        "promptSha256": "f82977764748567f0fee7b57488b1acd1dc9ca1c011c10ec1c0e8efe8b411e61",
+        "capabilityIds": [
+          "endpoint-screen",
+          "noaa-archive",
+          "harness",
+          "scientific-evidence",
+          "opportunity-capture",
+          "successor-study"
+        ]
+      },
+      "local": {
+        "wallMs": 107701,
+        "state": "review",
+        "route": "direct",
+        "status": "Local model result · qwen3-4b-instruct-2507-q4_k_m · Verification pending",
+        "objective": "Determine the end day and local timestamp of a 90-minute session starting at 22:20 Montréal time on 2026-02-07, using America/Toronto timezone, and provide both local and UTC timestamps.",
+        "next": "Calculate the end time of the session by adding 90 minutes to the start time, using America/Toronto timezone.",
+        "work": "Start time: 22:20 on 2026-02-07 (Montréal time, America/Toronto). Adding 90 minutes: 22:20 + 1h30m = 00:50 on 2026-02-08. Thus, the session ends on a Saturday (since 2026-02-08 is a Saturday). Local timestamp: 2026-02-08 00:50 (America/Toronto). UTC timestamp: 2026-02-08 00:50 UTC (since UTC is 1 hour ahead of America/Toronto). Correction: America/Toronto is UTC-5 during standard time and UTC-4 during daylight saving. As of 2026, daylight saving is in effect in Montréal from March to November. Assuming daylight saving is active, America/Toronto is UTC-4. Therefore, UTC = 22:20 + 4 hours = 02:20 on 2026-02-08. End time in UTC: 02:20 on 2026-02-08. Final result: The session ends on Saturday. Local timestamp: 2026-02-08 00:50. UTC timestamp: 2026-02-08 02:20.",
+        "transport": [
+          {
+            "url": "http://127.0.0.1:38461/v1/chat/completions",
+            "method": "POST",
+            "bodyBytes": 5107,
+            "privateAmbitionInBody": true
+          }
+        ]
+      },
+      "pageErrors": []
+    },
+    {
+      "id": "U02",
+      "language": "fr",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "ambitionSha256": "24e48b2365fe1558c41f035f7c7c156d497fc045a25ad38382f2ff4d91be4960",
+      "bytes": 366,
+      "intake": {
+        "activated": true,
+        "next": "Utilisez un outil disponible, connectez un modèle ou ouvrez une mission assistée."
+      },
+      "published": false,
+      "handoff": {
+        "prepared": true,
+        "exactAmbition": true,
+        "shareConfirmation": true,
+        "requestId": "04c6df468a2ac325b563cc9b71ecd972d5d4c1a13f183d4a029d6ada0281c02f",
+        "atlasLeadSupplied": true,
+        "promptSha256": "133652730cb0404a443ae7486b017c8e31a814b05366437fa638b8057045e4dd",
+        "capabilityIds": [
+          "endpoint-screen",
+          "noaa-archive",
+          "harness",
+          "scientific-evidence",
+          "opportunity-capture",
+          "successor-study"
+        ]
+      },
+      "local": {
+        "wallMs": 98902,
+        "state": "review",
+        "route": "capability",
+        "status": "Résultat du modèle local · qwen3-4b-instruct-2507-q4_k_m · Vérification à venir",
+        "objective": "Récupérer un point de prévision GFS archivée à 00 UTC le 29 novembre 2024 pour Montréal, à midi UTC du même jour, en utilisant l'outil NOAA déjà validé, et distinguer cette prévision de la météo observée.",
+        "next": "Utiliser l'outil NOAA-archive pour extraire le point de prévision GFS à 00 UTC le 29 novembre 2024 pour le centre de Montréal, à midi UTC du même jour.",
+        "work": "L'outil NOAA-archive est déjà validé pour l'extraction de données météorologiques historiques. Il peut être utilisé directement pour récupérer le point de prévision GFS à 00 UTC le 29 novembre 2024 pour Montréal. Une fois le point récupéré, il sera comparé à des données d'observation réelles disponibles dans les archives NOAA pour distinguer la prévision de la météo observée.",
+        "transport": [
+          {
+            "url": "http://127.0.0.1:38461/v1/chat/completions",
+            "method": "POST",
+            "bodyBytes": 6209,
+            "privateAmbitionInBody": true
+          }
+        ]
+      },
+      "pageErrors": []
+    },
+    {
+      "id": "U09",
+      "language": "fr",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "ambitionSha256": "1a38020af403cb78f98989bdc2cc6ce98f2dcc5a2dfb2f35cf486c367c5d14c8",
+      "bytes": 381,
+      "intake": {
+        "activated": true,
+        "next": "Utilisez un outil disponible, connectez un modèle ou ouvrez une mission assistée."
+      },
+      "published": false,
+      "handoff": {
+        "prepared": true,
+        "exactAmbition": true,
+        "shareConfirmation": true,
+        "requestId": "5bcb5f75e52099921623cda4849a1cff7f0a13a49abe91330c909d11abcb3db6",
+        "atlasLeadSupplied": true,
+        "promptSha256": "f100359f3768c37a275a43e2b6dfcfb55fc9b51b4edc8a3db440976e62e938eb",
+        "capabilityIds": [
+          "endpoint-screen",
+          "noaa-archive",
+          "harness",
+          "scientific-evidence",
+          "opportunity-capture",
+          "successor-study"
+        ]
+      },
+      "local": {
+        "wallMs": 85649,
+        "state": "review",
+        "route": "research",
+        "status": "Résultat du modèle local · qwen3-4b-instruct-2507-q4_k_m · Vérification à venir",
+        "objective": "Identifier les créneaux de non-accessibilité du service de prêt de matériel en se basant sur les données disponibles sans accès aux identifiants, en exploitant les capacités existantes pour établir une analyse préliminaire réversible.",
+        "next": "Utiliser la capacité 'scientific-evidence' pour examiner les contrôles qualifiés de provenance, de portée et de mesures historiques disponibles dans le contexte de l'archive NOAA, afin de repérer des lacunes dans les données sur les créneaux d'accessibilité du service de prêt.",
+        "work": "L'analyse initiale repose sur la disponibilité d'archives historiques de NOAA, qui peuvent fournir des données sur les périodes de fonctionnement, les fréquences d'usage et les anomalies de service. En utilisant la capacité 'scientific-evidence', on peut évaluer la portée et la provenance des données historiques pour identifier des périodes où le service de prêt de matériel semble inactif ou sous-utilisé, sans nécessiter d'accès aux identifiants de la coopérative. Cela permet de formuler des hypothèses sur les créneaux d'inaccessibilité, comme les périodes de forte demande ou de maintenance, sans violer les contraintes d'accès ou de confidentialité.",
+        "transport": [
+          {
+            "url": "http://127.0.0.1:38461/v1/chat/completions",
+            "method": "POST",
+            "bodyBytes": 6224,
+            "privateAmbitionInBody": true
+          }
+        ]
+      },
+      "pageErrors": []
+    },
+    {
+      "id": "U11",
+      "language": "fr",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "ambitionSha256": "674d395318b0210c33653400ab080290aae8ffa423c8cfc55533d8c539aa1181",
+      "bytes": 423,
+      "intake": {
+        "activated": true,
+        "next": "Utilisez un outil disponible, connectez un modèle ou ouvrez une mission assistée."
+      },
+      "published": false,
+      "handoff": {
+        "prepared": true,
+        "exactAmbition": true,
+        "shareConfirmation": true,
+        "requestId": "1452fe1da90fdd75a2e11f03667531558bacfcbf5533c05dc4266cb41c825952",
+        "atlasLeadSupplied": true,
+        "promptSha256": "a5f48e641664b8cec628580bccac89b445e1b568ef8675faaf5df1c14a59ce49",
+        "capabilityIds": [
+          "endpoint-screen",
+          "noaa-archive",
+          "harness",
+          "scientific-evidence",
+          "opportunity-capture",
+          "successor-study"
+        ]
+      },
+      "local": {
+        "wallMs": 172505,
+        "state": "review",
+        "route": "invention",
+        "status": "Résultat du modèle local · qwen3-4b-instruct-2507-q4_k_m · Vérification à venir",
+        "objective": "Concevoir un langage miniature pour des cartes tactiles avec une syntaxe claire, capable de détecter des lignes mal formées, des liaisons en double dans le sens inverse, et d’exporter un graphe JSON stable, en utilisant un exemple combinant deux lignes valides et une erreur, sans dépendre d’un vocabulaire préexistant.",
+        "next": "Définir la syntaxe du langage miniature avec les règles de base pour les segments et les repères, puis formuler un exemple de fichier d’entrée contenant deux lignes valides et une erreur de syntaxe ou de double liaison inverse.",
+        "work": "Syntaxe proposée :\n- `segment A B 5` : une liaison entre les points A et B avec une longueur de 5.\n- `repère A entrée` : un libellé associé au point A.\n\nRègles d’analyse :\n1. Une ligne mal formée est détectée si elle ne suit pas la syntaxe `segment <point> <point> <longueur>` ou `repère <point> <libellé>`.\n2. Une liaison en double dans le sens inverse (ex. `segment A B 5` et `segment B A 5`) est identifiée comme une duplication non autorisée.\n3. Le graphe JSON exporté inclut les points, les segments, les repères, et une section d’erreurs avec les descriptions des anomalies trouvées.\n\nExemple d’entrée :\n```\nsegment A B 5\nsegment B A 5\nrepère A entrée\nrepère C sortie\n```\n\nRésultat attendu (graphe JSON) :\n{\n  \"points\": {\"A\": {}, \"B\": {}, \"C\": {}},\n  \"segments\": [{\"from\": \"A\", \"to\": \"B\", \"length\": 5}, {\"from\": \"B\", \"to\": \"A\", \"length\": 5}],\n  \"errors\": [{\"type\": \"double_link_reverse\", \"from\": \"A\", \"to\": \"B\"}]\n}",
+        "transport": [
+          {
+            "url": "http://127.0.0.1:38461/v1/chat/completions",
+            "method": "POST",
+            "bodyBytes": 6249,
+            "privateAmbitionInBody": true
+          }
+        ]
+      },
+      "pageErrors": []
+    }
+  ]
+}

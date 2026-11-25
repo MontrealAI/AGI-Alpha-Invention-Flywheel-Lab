@@ -1,0 +1,17 @@
+{
+  "wallMs": 172505,
+  "state": "review",
+  "route": "invention",
+  "status": "Résultat du modèle local · qwen3-4b-instruct-2507-q4_k_m · Vérification à venir",
+  "objective": "Concevoir un langage miniature pour des cartes tactiles avec une syntaxe claire, capable de détecter des lignes mal formées, des liaisons en double dans le sens inverse, et d’exporter un graphe JSON stable, en utilisant un exemple combinant deux lignes valides et une erreur, sans dépendre d’un vocabulaire préexistant.",
+  "next": "Définir la syntaxe du langage miniature avec les règles de base pour les segments et les repères, puis formuler un exemple de fichier d’entrée contenant deux lignes valides et une erreur de syntaxe ou de double liaison inverse.",
+  "work": "Syntaxe proposée :\n- `segment A B 5` : une liaison entre les points A et B avec une longueur de 5.\n- `repère A entrée` : un libellé associé au point A.\n\nRègles d’analyse :\n1. Une ligne mal formée est détectée si elle ne suit pas la syntaxe `segment <point> <point> <longueur>` ou `repère <point> <libellé>`.\n2. Une liaison en double dans le sens inverse (ex. `segment A B 5` et `segment B A 5`) est identifiée comme une duplication non autorisée.\n3. Le graphe JSON exporté inclut les points, les segments, les repères, et une section d’erreurs avec les descriptions des anomalies trouvées.\n\nExemple d’entrée :\n```\nsegment A B 5\nsegment B A 5\nrepère A entrée\nrepère C sortie\n```\n\nRésultat attendu (graphe JSON) :\n{\n  \"points\": {\"A\": {}, \"B\": {}, \"C\": {}},\n  \"segments\": [{\"from\": \"A\", \"to\": \"B\", \"length\": 5}, {\"from\": \"B\", \"to\": \"A\", \"length\": 5}],\n  \"errors\": [{\"type\": \"double_link_reverse\", \"from\": \"A\", \"to\": \"B\"}]\n}",
+  "transport": [
+    {
+      "url": "http://127.0.0.1:38461/v1/chat/completions",
+      "method": "POST",
+      "bodyBytes": 6249,
+      "privateAmbitionInBody": true
+    }
+  ]
+}

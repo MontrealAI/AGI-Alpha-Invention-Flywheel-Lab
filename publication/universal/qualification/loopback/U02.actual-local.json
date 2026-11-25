@@ -1,0 +1,17 @@
+{
+  "wallMs": 98902,
+  "state": "review",
+  "route": "capability",
+  "status": "Résultat du modèle local · qwen3-4b-instruct-2507-q4_k_m · Vérification à venir",
+  "objective": "Récupérer un point de prévision GFS archivée à 00 UTC le 29 novembre 2024 pour Montréal, à midi UTC du même jour, en utilisant l'outil NOAA déjà validé, et distinguer cette prévision de la météo observée.",
+  "next": "Utiliser l'outil NOAA-archive pour extraire le point de prévision GFS à 00 UTC le 29 novembre 2024 pour le centre de Montréal, à midi UTC du même jour.",
+  "work": "L'outil NOAA-archive est déjà validé pour l'extraction de données météorologiques historiques. Il peut être utilisé directement pour récupérer le point de prévision GFS à 00 UTC le 29 novembre 2024 pour Montréal. Une fois le point récupéré, il sera comparé à des données d'observation réelles disponibles dans les archives NOAA pour distinguer la prévision de la météo observée.",
+  "transport": [
+    {
+      "url": "http://127.0.0.1:38461/v1/chat/completions",
+      "method": "POST",
+      "bodyBytes": 6209,
+      "privateAmbitionInBody": true
+    }
+  ]
+}

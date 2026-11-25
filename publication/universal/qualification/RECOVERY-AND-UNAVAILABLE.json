@@ -1,0 +1,137 @@
+{
+  "startedAt": "2026-11-25T01:49:30.605Z",
+  "recordedAt": "2026-11-25T01:49:34.929Z",
+  "url": "http://127.0.0.1:9011/frontier-omega-alpha/",
+  "website": {
+    "files": {
+      "(index)": {
+        "sha256": "e666a572c766166b4e0885d7497952caa045e73055d939a2104000ba1b6e1e1d",
+        "httpStatus": 200,
+        "url": "http://127.0.0.1:9011/frontier-omega-alpha/"
+      },
+      "fr.html": {
+        "sha256": "d82677c9e29e4870d3ec46dd0bf30e7ebfb8421ba52ddfb35edd5ddaa755eafe",
+        "httpStatus": 200,
+        "url": "http://127.0.0.1:9011/frontier-omega-alpha/fr.html"
+      },
+      "frontier-mission.mjs": {
+        "sha256": "ea6b3a0ec9547eb7d8d0f693fea0fa313aeb7a429255ae9ead515c0ca07a605a",
+        "httpStatus": 200,
+        "url": "http://127.0.0.1:9011/frontier-omega-alpha/frontier-mission.mjs"
+      },
+      "frontier-mission-ui.mjs": {
+        "sha256": "e22a5aa16952940cc346fb54ca8014a2c461c03c272859f6b9747389da3957be",
+        "httpStatus": 200,
+        "url": "http://127.0.0.1:9011/frontier-omega-alpha/frontier-mission-ui.mjs"
+      },
+      "frontier-mission-router.mjs": {
+        "sha256": "6b61d6cc637113f7a4cf6681080cd37f4a0ad2a4d42b78b635a64f0953f65ca1",
+        "httpStatus": 200,
+        "url": "http://127.0.0.1:9011/frontier-omega-alpha/frontier-mission-router.mjs"
+      }
+    },
+    "sourceCommit": "d30c6eaa0d004adba5e924cb0b18c124f0fe604e",
+    "workflowRun": "424242",
+    "ledgerSha256": "68c7937d959f7eb10f1958db4d1473510f586f19c855647a5824ddfd4f6d3f17",
+    "artifactSha256": "5cf63237c4e41aece421d0330286e0521b572f4406e69915c01d66b104b11fcb"
+  },
+  "heldSha256": "1c5ac610775459bc23d57446373abdf3962decb0886254d76c3fb9ab8ed29116",
+  "syntheticWallet": true,
+  "enrolledWalletTested": false,
+  "results": [
+    {
+      "id": "STRESS-fr",
+      "language": "fr",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "ambitionSha256": "35255c901fa1ab6371178e4a3313a9c495cbb0db00a67da329d0a3126162f46d",
+      "bytes": 17427,
+      "intake": {
+        "activated": true,
+        "next": "Utilisez un outil disponible, connectez un modèle ou ouvrez une mission assistée."
+      },
+      "published": false,
+      "handoff": {
+        "prepared": true,
+        "exactAmbition": true,
+        "shareConfirmation": true,
+        "requestId": "7614fc5b5eefb670ff0b66a288cc7e56279ed2f5a29d2274953e8d3b8270f977",
+        "atlasLeadSupplied": true,
+        "promptSha256": "84d3cb07adeac2e8e89312cc244f008f1b0fe46ca8d95b372c14e44d63365eb7",
+        "capabilityIds": [
+          "endpoint-screen",
+          "noaa-archive",
+          "harness",
+          "scientific-evidence",
+          "opportunity-capture",
+          "successor-study"
+        ]
+      },
+      "recovery": {
+        "pendingSha256": "175acdfe000e35105164a6bfe4130353a25cf4b5e0d4c651774d66bcb59566e6",
+        "revisedSha256": "051f730dae154f155d89dd2e69cb554a98c1244cd2c21f5df1050d00f5ccb48d",
+        "checked": [
+          "download checkpoint",
+          "cold reload after re-unlock",
+          "tampered checkpoint rejection",
+          "same request and prompt restore",
+          "pause/resume/cancel/resume",
+          "keyboard revision target",
+          "retain original across second revision"
+        ]
+      },
+      "pageErrors": []
+    },
+    {
+      "id": "UNAVAILABLE-en",
+      "language": "en",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "ambitionSha256": "3ddd9acefc4231de08198453eabf1816a59c369e2e030aa3a9a680be52c1e4fd",
+      "bytes": 98,
+      "intake": {
+        "activated": true,
+        "next": "Use an available tool, connect intelligence or open a prepared assisted mission."
+      },
+      "published": false,
+      "handoff": {
+        "prepared": true,
+        "exactAmbition": true,
+        "shareConfirmation": true,
+        "requestId": "9d2fb33923a2abdfee3b2bd582a41e03b91e3cf8fb4d8b6cd2ada507f97697a3",
+        "atlasLeadSupplied": false,
+        "promptSha256": "96c7474989d69882309f43a462742b611c0c9be0eaecfef25552c56ed4d15e35",
+        "capabilityIds": [
+          "endpoint-screen",
+          "noaa-archive",
+          "harness",
+          "scientific-evidence",
+          "opportunity-capture",
+          "successor-study"
+        ]
+      },
+      "unavailable": {
+        "message": "The local model did not return a usable response. Check the running service, model name and connection, or continue with an assisted mission.",
+        "fallbackRetainedAmbition": true,
+        "transport": [
+          {
+            "url": "http://127.0.0.1:38461/v1/chat/completions",
+            "method": "POST",
+            "bodyBytes": 4951,
+            "privateAmbitionInBody": true
+          },
+          {
+            "url": "http://127.0.0.1:38461/v1/chat/completions",
+            "method": "POST",
+            "transportFailure": "net::ERR_CONNECTION_REFUSED"
+          }
+        ]
+      },
+      "pageErrors": []
+    }
+  ]
+}

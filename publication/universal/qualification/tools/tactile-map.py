@@ -1,0 +1,69 @@
+"""Commande locale pour convertir une carte tactile textuelle en graphe JSON."""
+
+import argparse
+import json
+from pathlib import Path
+import re
+
+
+IDENTIFIER = re.compile(r'[A-Za-z_][A-Za-z0-9_-]{0,63}\Z')
+DISTANCE = re.compile(r'[1-9][0-9]{0,8}\Z')
+
+
+def parse_map(text):
+    vertices, links, issues = {}, {}, []
+    for line_number, row in enumerate(text.splitlines(), 1):
+        if not row.strip():
+            continue
+        command, *parts = row.split(maxsplit=1)
+
+        def issue(code, **context):
+            issues.append({'ligne': line_number, 'code': code, **context})
+
+        fields = parts[0].split() if parts else []
+        if command == 'segment':
+            if (len(fields) != 3 or not all(IDENTIFIER.fullmatch(name) for name in fields[:2])
+                    or not DISTANCE.fullmatch(fields[2])):
+                issue('segment-invalide')
+                continue
+            first, last, amount = fields
+            if first == last:
+                issue('boucle-interdite')
+                continue
+            ends = tuple(sorted((first, last)))
+            if ends in links:
+                issue('segment-en-double', première_ligne=links[ends][1])
+                continue
+            links[ends] = (int(amount), line_number)
+            vertices.setdefault(first, None)
+            vertices.setdefault(last, None)
+        elif command == 'repère':
+            fields = parts[0].split(maxsplit=1) if parts else []
+            if len(fields) != 2 or not IDENTIFIER.fullmatch(fields[0]) or not fields[1].strip():
+                issue('repère-invalide')
+                continue
+            name, label = fields
+            if vertices.get(name) is not None:
+                issue('repère-en-double', première_ligne=vertices[name][1])
+                continue
+            vertices[name] = (label.strip(), line_number)
+        else:
+            issue('instruction-inconnue')
+
+    node_list = [{'id': name, **({'libellé': value[0]} if value else {})}
+                 for name, value in sorted(vertices.items())]
+    edge_list = [{'extrémités': list(ends), 'distance': distance} for ends, (distance, _) in sorted(links.items())]
+    return {'ok': not issues, 'graphe': {'repères': node_list, 'segments': edge_list}, 'erreurs': issues}
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('carte', type=Path)
+    args = parser.parse_args()
+    report = parse_map(args.carte.read_text(encoding='utf-8'))
+    print(json.dumps(report, ensure_ascii=False, indent=2, sort_keys=True))
+    return 0 if report['ok'] else 2
+
+
+if __name__ == '__main__':
+    raise SystemExit(main())

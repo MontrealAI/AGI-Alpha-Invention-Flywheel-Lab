@@ -1,0 +1,92 @@
+{
+  "case": "U05",
+  "specimen": "tzdata-2025.2-py2.py3-none-any.whl",
+  "scope": "One public artifact and one alternate build index",
+  "events": {
+    "pypi": {
+      "requested_utc": "2026-11-25T01:42:29.898447+00:00",
+      "retrieved_utc": "2026-11-25T01:42:33.508053+00:00",
+      "requested_url": "https://pypi.org/pypi/tzdata/2025.2/json",
+      "response_url": "https://pypi.org/pypi/tzdata/2025.2/json",
+      "status": 200,
+      "bytes": 3660,
+      "date_header": "Wed, 25 Nov 2026 01:42:33 GMT",
+      "last_modified_header": null,
+      "etag": "\"2q6QDrGS3P5jFM3wE4eZIA\"",
+      "sha256": "d0463f2e13d744f6096fa5f81cb7a89c1b9d2aea632390c9cb8c1d56107966c0",
+      "role": "Primary distribution registry",
+      "source_event_utc": "2025-03-23T13:54:41.845043Z",
+      "source_event_meaning": "Registry-side wheel upload"
+    },
+    "piwheels": {
+      "requested_utc": "2026-11-25T01:42:33.508483+00:00",
+      "retrieved_utc": "2026-11-25T01:42:37.318317+00:00",
+      "requested_url": "https://www.piwheels.org/project/tzdata/json/",
+      "response_url": "https://www.piwheels.org/project/tzdata/json/",
+      "status": 200,
+      "bytes": 17444,
+      "date_header": "Wed, 25 Nov 2026 01:42:37 GMT",
+      "last_modified_header": "Sat, 21 Nov 2026 12:41:58 GMT",
+      "etag": "\"4424-660c8afc58349\"",
+      "sha256": "a9d9559807a7c83781fa754922df4b697cd9613e3d128fda0000d2aeb51487e4",
+      "role": "Alternative ARM wheel build index",
+      "source_event_value": "2025-03-23 13:54:41",
+      "source_event_meaning": "Index’s release field; metadata response declares no independent build/visibility UTC"
+    },
+    "upstream": {
+      "requested_utc": "2026-11-25T01:42:37.318881+00:00",
+      "retrieved_utc": "2026-11-25T01:42:40.895624+00:00",
+      "requested_url": "https://api.github.com/repos/python/tzdata/releases/tags/2025.2",
+      "response_url": "https://api.github.com/repos/python/tzdata/releases/tags/2025.2",
+      "status": 200,
+      "bytes": 2440,
+      "date_header": "Wed, 25 Nov 2026 01:42:40 GMT",
+      "last_modified_header": "Sun, 23 Mar 2025 13:54:07 GMT",
+      "etag": "W/\"d3ab1f367f780a60a705b0bd3e77c083b5ead245305fe1473da3735cd80a777a\"",
+      "sha256": "d3ab1f367f780a60a705b0bd3e77c083b5ead245305fe1473da3735cd80a777a",
+      "role": "Maintainer release record for same tag",
+      "source_event_utc": "2025-03-23T13:54:07Z",
+      "source_event_meaning": "Repository release publication, not wheel publication",
+      "source_event_created_utc": "2025-03-23T13:52:21Z"
+    },
+    "pypi-wheel": {
+      "requested_utc": "2026-11-25T01:42:40.896142+00:00",
+      "retrieved_utc": "2026-11-25T01:42:44.027943+00:00",
+      "requested_url": "https://files.pythonhosted.org/packages/5c/23/c7abc0ca0a1526a0774eca151daeb8de62ec457e77262b66b359c3c7679e/tzdata-2025.2-py2.py3-none-any.whl",
+      "response_url": "https://files.pythonhosted.org/packages/5c/23/c7abc0ca0a1526a0774eca151daeb8de62ec457e77262b66b359c3c7679e/tzdata-2025.2-py2.py3-none-any.whl",
+      "status": 200,
+      "bytes": 347839,
+      "date_header": "Wed, 25 Nov 2026 01:42:43 GMT",
+      "last_modified_header": "Sun, 23 Mar 2025 13:54:43 GMT",
+      "etag": "\"569bb6ed6b325726a0c73e8681085036\"",
+      "sha256": "1a403fada01ff9221ca8044d701868fa132215d84beb92242d9acd2147f667a8"
+    },
+    "piwheels-wheel": {
+      "requested_utc": "2026-11-25T01:42:44.028365+00:00",
+      "retrieved_utc": "2026-11-25T01:42:48.268027+00:00",
+      "requested_url": "https://www.piwheels.org/simple/tzdata/tzdata-2025.2-py2.py3-none-any.whl",
+      "response_url": "https://www.piwheels.org/simple/tzdata/tzdata-2025.2-py2.py3-none-any.whl",
+      "status": 200,
+      "bytes": 347839,
+      "date_header": "Wed, 25 Nov 2026 01:42:47 GMT",
+      "last_modified_header": "Sun, 23 Mar 2025 14:55:01 GMT",
+      "etag": "\"54ebf-63103ac0b0f9f\"",
+      "sha256": "4e87b5840916dc14fd650d261981d8b944d6db8962b4d22478591ccdc3bd69bd"
+    }
+  },
+  "sha256_verified_for_each_download": true,
+  "identical_wheel_bytes": false,
+  "archive_members": {
+    "pypi": 633,
+    "piwheels": 633,
+    "only_pypi": [],
+    "only_piwheels": [],
+    "different_content": []
+  },
+  "inference": [
+    "PyPI has a self-reported upload time for a byte-identified wheel. The maintainer release describes a source tag and a separate event.",
+    "The piwheels result is a separately built wheel under the same version and filename. Its released field cannot date first visibility of those bytes.",
+    "First positive capture is an upper bound on first visibility for a documented observation path. With no previous negative probe, first visibility is left-censored.",
+    "For future releases, define identity and path first, poll both paths on a UTC schedule, store status and hashes, and bracket each first visibility between last negative and first positive. Failed retrieval is missing evidence. Report a lead only if the resulting intervals establish an order."
+  ]
+}
