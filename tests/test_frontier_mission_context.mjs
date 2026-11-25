@@ -116,14 +116,10 @@ test('sharing selection and package projection exclude unselected entries and pr
   assert.equal(selected.length, 1);
   assert.match(selected[0], /\/discovery\/RADAR-CONTROL\.json/u);
   assert.doesNotMatch(selected[0], /Training environment/u);
-  const packet = {missionId:'mission', revision:2, language:'en', originalAmbition:'original', ambition:'changed',
-    instruction:'new instruction', authorizedFiles:['secret file'], previousReport:{work:'private'}, token:'private'};
-  const output = missionIntelligencePackage(packet, context, ['shift-repofactory']);
+  const output = missionIntelligencePackage('Reviewed text', context, ['shift-repofactory']);
   assert.deepEqual(output.context.map(item => item.id), ['shift-repofactory']);
-  assert.equal(output.originalAmbition, 'original');
-  assert.equal(output.ambition, 'changed');
-  assert.equal(output.instruction, 'new instruction');
-  assert.doesNotMatch(JSON.stringify(output), /secret|private/u);
+  assert.deepEqual(Object.keys(output), ['schema','language','brief','context']);
+  assert.equal(output.brief, 'Reviewed text');
   output.context[0].source.url = 'invalid';
   assert.equal(context.items[2].source.url, sourceUrl);
 });

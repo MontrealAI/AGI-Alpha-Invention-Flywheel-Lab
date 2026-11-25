@@ -714,7 +714,8 @@ async function proofOfAdvantageJourney(page, language, width) {
     const study = evidence.locator('li').filter({hasText:/Battery passport source review|Passeports de batterie/u});
     await study.waitFor({state:'visible'});
     assert.match(await study.innerText(), /14\/16.*6\/6/u);
-    const modified = (await prompt.inputValue()) + '\n\nInspect the actual files and cite the relevant source.';
+    const modified = (await prompt.inputValue()).replace(ambition, 'Review the evidence') +
+      '\n\nInspect the actual files and cite the relevant source.';
     await prompt.fill(modified);
     await page.locator('#mission-copy').click();
     const copied = await page.evaluate(() => window.advantageClipboard[0]);
@@ -722,6 +723,25 @@ async function proofOfAdvantageJourney(page, language, width) {
     await study.getByRole('checkbox').uncheck();
     await page.locator('#mission-copy').click();
     assert.doesNotMatch(await page.evaluate(() => window.advantageClipboard[1]), /14\/16.*6\/6/u);
+    const sharing = page.waitForEvent('download');
+    await page.locator('#mission-context-download').click();
+    const share = JSON.parse(await readFile(await (await sharing).path()));
+    assert.deepEqual(Object.keys(share), ['schema','language','brief','context']);
+    assert.ok(share.brief.startsWith(modified));
+    assert.doesNotMatch(JSON.stringify(share), /CAPTURE THE EXPONENTIAL|14\/16.*6\/6/u);
+    assert.ok(share.context.every(item => item.id !== 'battery-source-review'));
+    await page.evaluate(() => { navigator.clipboard.writeText = async () => { throw Error('fixture clipboard unavailable'); }; });
+    const fallback = page.locator('#mission-copy-fallback');
+    await page.locator('#mission-copy').click();
+    await fallback.waitFor({state:'visible'});
+    assert.equal(await fallback.inputValue(), share.brief);
+    assert.equal(await prompt.inputValue(), modified);
+    await study.getByRole('checkbox').check();
+    await fallback.waitFor({state:'hidden'});
+    await page.locator('#mission-copy').click();
+    await fallback.waitFor({state:'visible'});
+    assert.match(await fallback.inputValue(), /14\/16.*6\/6/u);
+    assert.equal(await prompt.inputValue(), modified);
     const reply = 'I completed a calculation. [Download the file](sandbox:/mnt/data/claimed.py).';
     await page.locator('#mission-reply').fill(reply);
     await page.locator('#mission-import-reply').click();
@@ -775,7 +795,8 @@ async function proofOfAdvantageJourney(page, language, width) {
     await capture(page, language, width, 'actual-results-and-checks');
     await page.locator('#mission-new').click();
     checks.push({kind:'proof-of-advantage-ui',language,width,exactAmbition:true,
-      editableBriefAndSelectableEvidence:true,missingSandboxArtifact:true,exactFileBytes:true,localEvidenceCheck:true,
+      editableBriefAndSelectableEvidence:true,reviewedExportOnly:true,manualCopyPreservesSelection:true,
+      missingSandboxArtifact:true,exactFileBytes:true,localEvidenceCheck:true,
       retainedReceiptAndRecovery:true,exactFileRemovalAndReturn:true,noExternalDispatch:true});
   } finally {
     page.off('request',watch);

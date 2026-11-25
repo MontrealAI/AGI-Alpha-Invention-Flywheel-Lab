@@ -547,6 +547,7 @@ export function setupMissionConsole(member, shell) {
     for (const id of ['mission-prompt','mission-reply','mission-import-artifact']) node(id).value = '';
     node('mission-technical').checked = false;
     text('mission-copy-status', '');
+    clearCopyFallback();
     resetAssistedImport();
     node('mission-handoff').open = false;
     show('mission-handoff', false);
@@ -790,6 +791,7 @@ export function setupMissionConsole(member, shell) {
       : assistedDraft ?? createAssistedBrief(request, context, Boolean(mission.reports.length));
     show('mission-evidence-context', !prompt.readOnly && Boolean(evidenceContext));
     text('mission-copy-status', '');
+    clearCopyFallback();
     updateHandoffControls();
   }
 
@@ -808,6 +810,8 @@ export function setupMissionConsole(member, shell) {
       include.addEventListener('change', () => {
         if (include.checked) selectedEvidence.add(item.id);
         else selectedEvidence.delete(item.id);
+        clearCopyFallback();
+        text('mission-copy-status', '');
       });
       label.append(include, document.createTextNode(' ' + item.title));
       const detail = document.createElement('p');
@@ -843,8 +847,8 @@ export function setupMissionConsole(member, shell) {
 
   node('mission-context-download').addEventListener('click', () => {
     if (!active() || !request || !evidenceContext) return;
-    const packet = missionIntelligencePackage(missionPacket(mission), evidenceContext, [...selectedEvidence]);
-    downloadJSON({...packet, brief:sharedBrief()}, 'frontier-reviewed-mission.json');
+    const packet = missionIntelligencePackage(sharedBrief(), evidenceContext, [...selectedEvidence]);
+    downloadJSON(packet, 'frontier-reviewed-mission.json');
   });
 
   async function prepareAssistance({focus = true} = {}) {
@@ -891,22 +895,32 @@ export function setupMissionConsole(member, shell) {
     if (node('mission-technical').checked) assistedDraft = node('mission-prompt').value;
     updateAssistedBrief();
   });
+  function clearCopyFallback() {
+    const fallback = node('mission-copy-fallback');
+    fallback.value = '';
+    fallback.hidden = true;
+  }
+  node('mission-prompt').addEventListener('input', () => {
+    clearCopyFallback();
+    text('mission-copy-status', '');
+  });
   node('mission-copy').addEventListener('click', async () => {
     if (!active() || !request) return;
     const token = serial;
     const reviewed = sharedBrief();
     try {
       await navigator.clipboard.writeText(reviewed);
-      if (token === serial && active()) text('mission-copy-status', words.copy);
+      if (token === serial && active()) {
+        clearCopyFallback();
+        text('mission-copy-status', words.copy);
+      }
     } catch {
       if (token !== serial || !active()) return;
-      if (!node('mission-prompt').readOnly) {
-        node('mission-prompt').value = reviewed;
-        selectedEvidence?.clear();
-        if (evidenceContext) renderEvidence();
-      }
-      node('mission-prompt').focus();
-      node('mission-prompt').select();
+      const fallback = node('mission-copy-fallback');
+      fallback.value = sharedBrief();
+      fallback.hidden = false;
+      fallback.focus();
+      fallback.select();
       text('mission-copy-status', words.select);
     }
   });
