@@ -83,11 +83,62 @@ test('compound dimensions are not field measurements, while same-unit table colu
     observations:[{source:'table',target,field,quote,value,unit}],
   }).decision;
   assert.equal(review('Specific capacity: 100 Ah/kg.',100,'batteryCapacity','Ah'), 'insufficient');
+  assert.equal(review('Rated capacity: 100 Ah÷kg.',100,'batteryCapacity','Ah'), 'insufficient');
+  assert.equal(review('Rated capacity: 100 Ah／kg.',100,'batteryCapacity','Ah'), 'insufficient');
+  for (const separator of ["'", '’', '_']) {
+    assert.equal(review(`Rated capacity: 1${separator}200 mAh.`,200,'batteryCapacity','mAh'), 'insufficient');
+  }
   assert.equal(review('Mass per unit energy: 10 kg/kWh.',10), 'insufficient');
   assert.equal(review('Mass per unit energy: 10 kg per kWh.',10), 'insufficient');
   assert.equal(review('Mass relationship: 10 kg·m⁻³.',10), 'insufficient');
   assert.equal(review('Experimental ratio: 100 Ah / 5 kg.',5), 'insufficient');
   assert.equal(review('Specified net weight: 1,200 kg.',1.2), 'insufficient');
+  assert.equal(review('Net battery weight: < 64 kg.',64), 'insufficient');
+  assert.equal(review('Net battery weight: 64 to 68 kg.',68), 'insufficient');
   assert.equal(review('Table of weights: 72.2 kg / 68.5 kg.',72.2), 'supported');
   assert.equal(review('Table of weights: 72.2 kg / 68.5 kg.',68.5), 'supported');
+});
+
+test('source excerpts cannot hide a qualifier or pass an unrelated field heading', () => {
+  const target = {model:'Example Pack',level:'system'};
+  const review = (excerpt, quote = excerpt, field = 'batteryWeight', unit = 'kg', value = 64) => reviewClaim({
+    id:'clause-check',target,field,claim:{value,unit},
+    sources:[{id:'table',excerpt,url:'https://example.org/data',locator:'table',sha256:'a'.repeat(64)}],
+    observations:[{source:'table',target,field,quote,value,unit}],
+  }).decision;
+  for (const quote of ['Upper bound for net battery weight: 64 kg.', 'Not the net battery weight: 64 kg.',
+    'Packaged weight: 64 kg.', 'Weight: 64 kg / 80 kg.', 'Manual mentions columns. Weight: 64 / 80 kg.']) {
+    assert.equal(review(quote), 'insufficient');
+  }
+  assert.equal(review('Not the net battery weight: 64 kg.', 'net battery weight: 64 kg.'), 'insufficient');
+  assert.equal(review('Net battery weight: 64 kg (estimate).', 'Net battery weight: 64 kg'), 'insufficient');
+  assert.equal(review('Example R2. Complete battery net weight: 64 kg.', 'Complete battery net weight: 64 kg.'), 'supported');
+  for (const quote of ['Less than the rated battery capacity: 64 Ah.', 'Capacity: 64 Ah.']) {
+    assert.equal(review(quote, quote, 'batteryCapacity', 'Ah'), 'insufficient');
+  }
+  for (const quote of ['Inverter nominal voltage: 64 V.', 'Rated AC voltage: 64 V.', 'Nominal voltage: 64 Vac.']) {
+    assert.equal(review(quote, quote, 'nominalVoltage', 'V'), 'insufficient');
+  }
+  const footnote = 'Net battery weight: 184¹ kg.';
+  assert.equal(review(footnote, footnote, 'batteryWeight', 'kg', 1841), 'insufficient');
+  assert.equal(review(footnote, footnote, 'batteryWeight', 'kg', 184), 'insufficient');
+  const french = 'Tension nominale : 64 Vdc.';
+  assert.equal(review(french, french, 'nominalVoltage', 'V'), 'supported');
+  const accented = 'Capacite\u0301 nominale : 0,234 Ah.';
+  assert.equal(review(accented, accented, 'batteryCapacity', 'mAh', 234), 'supported');
+});
+
+test('a malformed supplied scope cannot erase a comparison constraint', () => {
+  const target = {model:'Example Pack',version:'2',level:'system'};
+  const quote = 'Net battery weight: 64 kg.';
+  const packet = {id:'typed-scope',target,field:'batteryWeight',claim:{value:64,unit:'kg'},
+    sources:[{id:'table',excerpt:quote,url:'https://example.org/data',locator:'table',sha256:'a'.repeat(64)}],
+    observations:[{source:'table',target,field:'batteryWeight',quote,value:64,unit:'kg'}],
+  };
+  assert.equal(reviewClaim(packet).decision, 'supported');
+  for (const version of [2, true, null, {}, ' ']) {
+    assert.throws(() => reviewClaim({...packet,target:{...target,version}}), /SOURCE_REVIEW_CASE/);
+    const observations = [{...packet.observations[0],target:{...target,version}}];
+    assert.equal(reviewClaim({...packet,observations}).decision, 'insufficient');
+  }
 });

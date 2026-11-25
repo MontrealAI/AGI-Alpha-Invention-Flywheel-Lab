@@ -1,0 +1,332 @@
+{
+  "schema": "frontier/battery-source-review-v1",
+  "cases": [
+    {
+      "id": "control-1",
+      "target": {
+        "model": "Orchid PX-701",
+        "version": "R8",
+        "market": "EU",
+        "level": "system"
+      },
+      "field": "batteryWeight",
+      "claim": {
+        "value": 64,
+        "unit": "kg"
+      },
+      "sources": [
+        {
+          "id": "sim-1",
+          "url": "https://battery-fixtures.example/sim-1.txt",
+          "sha256": "4ddcc7cbd033488872cd2a43538dd1101399e4e7b9356b4093840e9610d466dd",
+          "date": "2026-10-17",
+          "locator": "Fictional controlled text fixture, table 1",
+          "excerpt": "Orchid PX-701, R8, EU. Net weight of one complete battery system: 64 kg."
+        },
+        {
+          "id": "sim-2",
+          "url": "https://battery-fixtures.example/sim-2.txt",
+          "sha256": "7d48d7588ed8f01e7d8ab340e0e6bd6ede1396db0b30a7e9d7a7915ee28b9c20",
+          "date": "2026-10-17",
+          "locator": "Fictional controlled text fixture, table 1",
+          "excerpt": "Orchid PX-701, R8, EU. Net weight of one complete battery system: 68 kg."
+        }
+      ],
+      "observations": [
+        {
+          "source": "sim-1",
+          "quote": "Orchid PX-701, R8, EU. Net weight of one complete battery system: 64 kg.",
+          "field": "batteryWeight",
+          "target": {
+            "model": "Orchid PX-701",
+            "version": "R8",
+            "market": "EU",
+            "level": "system"
+          },
+          "value": 64,
+          "unit": "kg"
+        },
+        {
+          "source": "sim-2",
+          "quote": "Orchid PX-701, R8, EU. Net weight of one complete battery system: 68 kg.",
+          "field": "batteryWeight",
+          "target": {
+            "model": "Orchid PX-701",
+            "version": "R8",
+            "market": "EU",
+            "level": "system"
+          },
+          "value": 68,
+          "unit": "kg"
+        }
+      ]
+    },
+    {
+      "id": "control-2",
+      "target": {
+        "model": "Orchid PX-701",
+        "version": "R8",
+        "market": "EU",
+        "level": "system",
+        "boundary": "DC"
+      },
+      "field": "nominalVoltage",
+      "claim": {
+        "value": 192,
+        "unit": "V"
+      },
+      "sources": [
+        {
+          "id": "sim-1",
+          "url": "https://battery-fixtures.example/sim-1.txt",
+          "sha256": "bdeed5791e289f49aa4cf4d0cc4cda3c0196c218afac333f0de45fc4f5ee7455",
+          "date": "2026-10-17",
+          "locator": "Fictional controlled text fixture, table 1",
+          "excerpt": "Orchid PX-701, R8, EU. Rated AC inverter output voltage: 192 V."
+        },
+        {
+          "id": "sim-2",
+          "url": "https://battery-fixtures.example/sim-2.txt",
+          "sha256": "59741c0ab259b9ea24bce55ed7a0743f4b5158ce1f997f72c29fa59097ee8752",
+          "date": "2026-10-17",
+          "locator": "Fictional controlled text fixture, table 1",
+          "excerpt": "Orchid PX-701, R8, EU. Nominal battery voltage (DC): 184 V."
+        }
+      ],
+      "observations": [
+        {
+          "source": "sim-1",
+          "quote": "Orchid PX-701, R8, EU. Rated AC inverter output voltage: 192 V.",
+          "field": "nominalVoltage",
+          "target": {
+            "model": "Orchid PX-701",
+            "version": "R8",
+            "market": "EU",
+            "level": "system",
+            "boundary": "AC"
+          },
+          "value": 192,
+          "unit": "V"
+        },
+        {
+          "source": "sim-2",
+          "quote": "Orchid PX-701, R8, EU. Nominal battery voltage (DC): 184 V.",
+          "field": "nominalVoltage",
+          "target": {
+            "model": "Orchid PX-701",
+            "version": "R8",
+            "market": "EU",
+            "level": "system",
+            "boundary": "DC"
+          },
+          "value": 184,
+          "unit": "V"
+        }
+      ]
+    },
+    {
+      "id": "control-3",
+      "target": {
+        "model": "Orchid PX-701",
+        "version": "R8",
+        "market": "EU",
+        "level": "system"
+      },
+      "field": "batteryCapacity",
+      "claim": {
+        "value": 55,
+        "unit": "Ah"
+      },
+      "sources": [
+        {
+          "id": "sim-1",
+          "url": "https://battery-fixtures.example/sim-1.txt",
+          "sha256": "cb2b8b74d1732b3131cb9b98c1d32e36229b09a84b4224a849805672ca8a1dfc",
+          "date": "2026-10-17",
+          "locator": "Fictional controlled text fixture, table 1",
+          "excerpt": "Orchid PX-701, R7, EU. Rated system capacity: 55 Ah."
+        },
+        {
+          "id": "sim-2",
+          "url": "https://battery-fixtures.example/sim-2.txt",
+          "sha256": "2b1c39d761114897b6e0e6b073e4621db2f574b765b6141083dab8729ef450d9",
+          "date": "2026-10-17",
+          "locator": "Fictional controlled text fixture, table 1",
+          "excerpt": "Orchid PX-701, R8, AU. Rated system capacity: 55 Ah."
+        },
+        {
+          "id": "sim-3",
+          "url": "https://battery-fixtures.example/sim-3.txt",
+          "sha256": "fca794ae197746e25fb2521b2f5ea5af89d075b58d6718cd399ba00ee60f1db0",
+          "date": "2026-10-17",
+          "locator": "Fictional controlled text fixture, table 1",
+          "excerpt": "Orchid PX-701, R8, EU. Usable charge capacity: 55 Ah. Nominal energy: 10 kWh."
+        }
+      ],
+      "observations": [
+        {
+          "source": "sim-1",
+          "quote": "Orchid PX-701, R7, EU. Rated system capacity: 55 Ah.",
+          "field": "batteryCapacity",
+          "target": {
+            "model": "Orchid PX-701",
+            "version": "R7",
+            "market": "EU",
+            "level": "system"
+          },
+          "value": 55,
+          "unit": "Ah"
+        },
+        {
+          "source": "sim-2",
+          "quote": "Orchid PX-701, R8, AU. Rated system capacity: 55 Ah.",
+          "field": "batteryCapacity",
+          "target": {
+            "model": "Orchid PX-701",
+            "version": "R8",
+            "market": "AU",
+            "level": "system"
+          },
+          "value": 55,
+          "unit": "Ah"
+        },
+        {
+          "source": "sim-3",
+          "quote": "Orchid PX-701, R8, EU. Usable charge capacity: 55 Ah. Nominal energy: 10 kWh.",
+          "field": "usableCapacity",
+          "target": {
+            "model": "Orchid PX-701",
+            "version": "R8",
+            "market": "EU",
+            "level": "system"
+          },
+          "value": 55,
+          "unit": "Ah"
+        }
+      ]
+    },
+    {
+      "id": "control-4",
+      "target": {
+        "model": "Orchid PX-701",
+        "version": "R8",
+        "market": "EU",
+        "level": "system"
+      },
+      "field": "batteryCapacity",
+      "claim": {
+        "value": 55,
+        "unit": "Ah"
+      },
+      "sources": [
+        {
+          "id": "sim-1",
+          "url": "https://battery-fixtures.example/sim-1.txt",
+          "sha256": "bca0262488ed0e7ce0269cc5b060dd91250e3a4d4a86ab87cf041eac3c25b56e",
+          "date": "2026-10-17",
+          "locator": "Fictional controlled text fixture, table 1",
+          "excerpt": "Orchid PX-701, R8, EU. Rated battery capacity: 55 Ah. This cell is for a single removable module."
+        },
+        {
+          "id": "sim-2",
+          "url": "https://battery-fixtures.example/sim-2.txt",
+          "sha256": "fe92eb4134dc385b553dafb52528e3ae2bfbb3a9c2dfd6622fc93e6f85d73cf7",
+          "date": "2026-10-17",
+          "locator": "Fictional controlled text fixture, table 1",
+          "excerpt": "Orchid PX-701, R8, EU. Rated battery capacity: 55 Ah. This cell is for the battery system including the BMS."
+        }
+      ],
+      "observations": [
+        {
+          "source": "sim-1",
+          "quote": "Orchid PX-701, R8, EU. Rated battery capacity: 55 Ah. This cell is for a single removable module.",
+          "field": "batteryCapacity",
+          "target": {
+            "model": "Orchid PX-701",
+            "version": "R8",
+            "market": "EU",
+            "level": "module"
+          },
+          "value": 55,
+          "unit": "Ah"
+        },
+        {
+          "source": "sim-2",
+          "quote": "Orchid PX-701, R8, EU. Rated battery capacity: 55 Ah. This cell is for the battery system including the BMS.",
+          "field": "batteryCapacity",
+          "target": {
+            "model": "Orchid PX-701",
+            "version": "R8",
+            "market": "EU",
+            "level": "system"
+          },
+          "value": 55,
+          "unit": "Ah"
+        }
+      ]
+    },
+    {
+      "id": "control-5",
+      "target": {
+        "model": "Orchid PX-701",
+        "version": "R8",
+        "market": "EU",
+        "level": "system",
+        "boundary": "DC"
+      },
+      "field": "nominalVoltage",
+      "claim": {
+        "value": 128,
+        "unit": "V"
+      },
+      "sources": [
+        {
+          "id": "sim-1",
+          "url": "https://battery-fixtures.example/sim-1.txt",
+          "sha256": "833d8677cd5176d7d3265e040d323a2d0b8746a56f4b382ada7aae1c2e21d420",
+          "date": "2026-10-17",
+          "locator": "Fictional controlled text fixture, table 1",
+          "excerpt": "Orchid PX-701, R8, EU complete battery. Nominal DC voltage: 128 V. Operating window: 96–145 V."
+        },
+        {
+          "id": "sim-2",
+          "url": "https://battery-fixtures.example/sim-2.txt",
+          "sha256": "fec949b5f69e8e4b90b9bdbe894b7eff8542662749de9bea0da7f8dbf62fff33",
+          "date": "2026-10-17",
+          "locator": "Fictional controlled text fixture, table 1",
+          "excerpt": "Orchid PX-701, R8, EU complete battery. Nominal DC voltage: 128 V. Recommended commissioning test setting: 140 V."
+        }
+      ],
+      "observations": [
+        {
+          "source": "sim-1",
+          "quote": "Orchid PX-701, R8, EU complete battery. Nominal DC voltage: 128 V. Operating window: 96–145 V.",
+          "field": "nominalVoltage",
+          "target": {
+            "model": "Orchid PX-701",
+            "version": "R8",
+            "market": "EU",
+            "level": "system",
+            "boundary": "DC"
+          },
+          "value": 128,
+          "unit": "V"
+        },
+        {
+          "source": "sim-2",
+          "quote": "Orchid PX-701, R8, EU complete battery. Nominal DC voltage: 128 V. Recommended commissioning test setting: 140 V.",
+          "field": "nominalVoltage",
+          "target": {
+            "model": "Orchid PX-701",
+            "version": "R8",
+            "market": "EU",
+            "level": "system",
+            "boundary": "DC"
+          },
+          "value": 128,
+          "unit": "V"
+        }
+      ]
+    }
+  ]
+}

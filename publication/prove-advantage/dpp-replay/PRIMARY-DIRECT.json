@@ -1,0 +1,112 @@
+[
+  {
+    "id": "batt-01",
+    "decision": "supported",
+    "evidence": [
+      "a1"
+    ],
+    "reason": "The exact v2025.11.01 Home 10 module table specifies 26.5 kg. The newer grouped manual identifies a different document revision."
+  },
+  {
+    "id": "batt-02",
+    "decision": "contradicted",
+    "evidence": [
+      "a2"
+    ],
+    "reason": "In the ordered columns, 133.5 kg belongs to 4S. The requested 5S stack is the middle column at 160.0 kg."
+  },
+  {
+    "id": "batt-03",
+    "decision": "insufficient",
+    "evidence": [],
+    "reason": "Both excerpts describe single modules. Neither provides the net mass of the requested 4S system."
+  },
+  {
+    "id": "batt-04",
+    "decision": "insufficient",
+    "evidence": [],
+    "reason": "The matching revision expressly labels 49.1 Ah as usable capacity. It supplies no independently stated rated electrical Ah."
+  },
+  {
+    "id": "batt-05",
+    "decision": "supported",
+    "evidence": [
+      "a2"
+    ],
+    "reason": "The middle 5S column gives the stack's rated output as 224 V. The 230 V figure instead powers an external AC EMS box."
+  },
+  {
+    "id": "batt-06",
+    "decision": "insufficient",
+    "evidence": [],
+    "reason": "The only source describes the EMS box's external AC power supply. It contains no evidence about the 5S stack's DC nominal voltage."
+  },
+  {
+    "id": "batt-07",
+    "decision": "insufficient",
+    "evidence": [],
+    "reason": "Only the 2025.11.01 module revision is supplied. The claim requests 2026.07.01, and the excerpt supplies no bridging revision evidence."
+  },
+  {
+    "id": "batt-08",
+    "decision": "supported",
+    "evidence": [
+      "a4"
+    ],
+    "reason": "The exact 2026.07.01 HTML revision and its battery module table give 26.5 kg. The other excerpts apply to different revisions."
+  },
+  {
+    "id": "batt-09",
+    "decision": "supported",
+    "evidence": [
+      "b1"
+    ],
+    "reason": "The UK version 15.0 manual includes the explicit V2 model and gives nominal electrical capacity as 50 Ah in both columns. The Australian V3 excerpt addresses a different variant."
+  },
+  {
+    "id": "batt-10",
+    "decision": "contradicted",
+    "evidence": [
+      "b1"
+    ],
+    "reason": "The exact HV11550 V2 appears in the second column. The corresponding weight is 68.5 kg, while 72.2 kg belongs to the first column."
+  },
+  {
+    "id": "batt-11",
+    "decision": "insufficient",
+    "evidence": [],
+    "reason": "The exact Australian V3 source reports energy in kWh and current in A. The UK V2 manual's 50 Ah cannot establish rated electrical capacity for the Australian V3."
+  },
+  {
+    "id": "batt-12",
+    "decision": "insufficient",
+    "evidence": [],
+    "reason": "The AU V3 excerpt separates an integrated BMS+PACK assembly from the HV11550-A V3 module. Neither is documented as the requested T-BAT H 5.8 V3 module configuration. The UK manual describes earlier variants."
+  },
+  {
+    "id": "batt-13",
+    "decision": "contradicted",
+    "evidence": [
+      "b2"
+    ],
+    "reason": "The Australian V3 battery's named nominal rating is 115.2 V. The 130 V value is the upper end of its operating range. The older UK table is inapplicable."
+  },
+  {
+    "id": "batt-14",
+    "decision": "insufficient",
+    "evidence": [],
+    "reason": "The applicable model's electrical ratings in the source are in Vdc. No value at the requested AC boundary is supplied."
+  },
+  {
+    "id": "batt-15",
+    "decision": "insufficient",
+    "evidence": [],
+    "reason": "The only excerpt is the Australian V3 data sheet, which does not identify rated Ah for the requested UK V2."
+  },
+  {
+    "id": "batt-16",
+    "decision": "insufficient",
+    "evidence": [],
+    "reason": "The quoted 61.5 kg explicitly belongs to BMS+PACK. The document names the bare module as HV11550-A V3 and gives it a different mass. The supplied packet cannot bind 61.5 kg to the requested module."
+  }
+]

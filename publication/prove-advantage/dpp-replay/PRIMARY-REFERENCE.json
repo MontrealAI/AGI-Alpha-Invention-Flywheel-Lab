@@ -1,0 +1,161 @@
+{
+  "batt-01": {
+    "decision": "supported",
+    "evidence": [
+      [
+        "a1"
+      ]
+    ],
+    "reason": "The Home 10-only module row gives 26.5 kg. The 30 kg row concerns the different Home 6/10/15 hardware family."
+  },
+  "batt-02": {
+    "decision": "contradicted",
+    "evidence": [
+      [
+        "a2"
+      ]
+    ],
+    "reason": "In the matching battery stack row, 5S weighs 160.0 kg. 133.5 kg belongs to the 4S column."
+  },
+  "batt-03": {
+    "decision": "insufficient",
+    "evidence": [
+      [],
+      [
+        "a1"
+      ],
+      [
+        "a1",
+        "a5"
+      ]
+    ],
+    "reason": "Both packets describe a module. Neither gives mass of the 4S stack."
+  },
+  "batt-04": {
+    "decision": "insufficient",
+    "evidence": [
+      [],
+      [
+        "a1"
+      ]
+    ],
+    "reason": "49.1 Ah is expressly usable, not documented rated capacity."
+  },
+  "batt-05": {
+    "decision": "supported",
+    "evidence": [
+      [
+        "a2"
+      ]
+    ],
+    "reason": "Table 17 rates 5S at 224 V at the battery stack; the AC EMS supply is distinct."
+  },
+  "batt-06": {
+    "decision": "insufficient",
+    "evidence": [
+      [],
+      [
+        "a3"
+      ]
+    ],
+    "reason": "230 V applies to the external AC supply of the EMS box, not the battery DC voltage."
+  },
+  "batt-07": {
+    "decision": "insufficient",
+    "evidence": [
+      [],
+      [
+        "a1"
+      ]
+    ],
+    "reason": "The request needs the exact 2026.07.01 manual revision. This packet explicitly identifies 2025.11.01."
+  },
+  "batt-08": {
+    "decision": "supported",
+    "evidence": [
+      [
+        "a4"
+      ]
+    ],
+    "reason": "Matching Home 10 manual v2026.07.01 confirms 26.5 kg. Older and different-family documents are not the deciding evidence."
+  },
+  "batt-09": {
+    "decision": "supported",
+    "evidence": [
+      [
+        "b1"
+      ]
+    ],
+    "reason": "The UK Version 15 manual explicitly names the V2 BMS+pack unit and 50 Ah on the nominal row."
+  },
+  "batt-10": {
+    "decision": "contradicted",
+    "evidence": [
+      [
+        "b1"
+      ]
+    ],
+    "reason": "HV11550 V2 is 68.5 kg. 72.2 kg is the adjacent master unit."
+  },
+  "batt-11": {
+    "decision": "insufficient",
+    "evidence": [
+      [],
+      [
+        "b2"
+      ],
+      [
+        "b1",
+        "b2"
+      ]
+    ],
+    "reason": "AU V3 lists nominal energy, usable energy and current. UK V2's 50 Ah cannot authenticate an AU V3 capacity or justify deriving one."
+  },
+  "batt-12": {
+    "decision": "contradicted",
+    "evidence": [
+      [
+        "b3"
+      ]
+    ],
+    "reason": "AU V3 net mass is 61.5 ±1 kg, excluding 72.2 kg. UK V2 mass is for a different variant."
+  },
+  "batt-13": {
+    "decision": "contradicted",
+    "evidence": [
+      [
+        "b2"
+      ]
+    ],
+    "reason": "The nominal 115.2 V row directly contradicts 130 V, which is the endpoint of the operating range."
+  },
+  "batt-14": {
+    "decision": "insufficient",
+    "evidence": [
+      [],
+      [
+        "b1"
+      ]
+    ],
+    "reason": "The only matching numeric row explicitly uses Vdc. The claim requests AC."
+  },
+  "batt-15": {
+    "decision": "insufficient",
+    "evidence": [
+      [],
+      [
+        "b2"
+      ]
+    ],
+    "reason": "Only Australian V3 is shown, with energy/current but no documented nameplate Ah. Exact UK V2 support is unavailable."
+  },
+  "batt-16": {
+    "decision": "supported",
+    "evidence": [
+      [
+        "b3"
+      ]
+    ],
+    "reason": "The exact requested AU BMS+pack unit has 61.5 kg stated central net mass with ±1 kg tolerance."
+  }
+}

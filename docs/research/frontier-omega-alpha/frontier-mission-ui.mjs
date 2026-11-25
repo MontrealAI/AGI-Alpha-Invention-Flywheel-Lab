@@ -46,6 +46,7 @@ const messages = {
     reopened: 'Mission restored. Review its current status before continuing.',
     fileInvalid: 'This file is unreadable, changed or outside the mission format.',
     copy: 'Reviewed brief copied.', select: 'The reviewed brief is selected for copying.',
+    copyEarlier: 'An earlier draft was copied. Copy the updated brief before sharing.',
     localSource: 'Local model result', manualSource: 'Assisted result', restoredSource: 'Restored work record', unpublished: 'Verification pending',
     publicReport: 'Read the completed study', publicArtifact: 'Download the verified research tool',
     contextRun: 'Current mission run reference', contextAtlas: 'Public Atlas lead with unverified applicability',
@@ -117,6 +118,7 @@ const messages = {
     reopened: 'Mission rétablie. Examinez son état avant de poursuivre.',
     fileInvalid: 'Ce fichier est illisible, a été modifié ou ne respecte pas le format de mission.',
     copy: 'Résumé relu copié.', select: 'Le résumé relu est sélectionné pour la copie.',
+    copyEarlier: 'Un résumé antérieur a été copié. Copiez le résumé actuel avant de le partager.',
     localSource: 'Résultat du modèle local', manualSource: 'Résultat assisté', restoredSource: 'Travail rétabli', unpublished: 'Vérification à venir',
     publicReport: 'Lire l’étude terminée', publicArtifact: 'Télécharger l’outil de recherche vérifié',
     contextRun: 'Identifiant de l’exécution en cours', contextAtlas: 'Piste publique de l’Atlas dont l’applicabilité reste à vérifier',
@@ -912,7 +914,7 @@ export function setupMissionConsole(member, shell) {
       await navigator.clipboard.writeText(reviewed);
       if (token === serial && active()) {
         clearCopyFallback();
-        text('mission-copy-status', words.copy);
+        text('mission-copy-status', sharedBrief() === reviewed ? words.copy : words.copyEarlier);
       }
     } catch {
       if (token !== serial || !active()) return;

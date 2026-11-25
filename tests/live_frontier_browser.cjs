@@ -742,6 +742,16 @@ async function proofOfAdvantageJourney(page, language, width) {
     await fallback.waitFor({state:'visible'});
     assert.match(await fallback.inputValue(), /14\/16.*6\/6/u);
     assert.equal(await prompt.inputValue(), modified);
+    await page.evaluate(() => {
+      navigator.clipboard.writeText = text => new Promise(resolve => {
+        window.finishReviewedCopy = () => { window.advantageClipboard.push(text); resolve(); };
+      });
+    });
+    await page.locator('#mission-copy').click();
+    await prompt.fill(modified + '\nReview one changed input.');
+    await page.evaluate(() => window.finishReviewedCopy());
+    await page.waitForFunction(() => /earlier draft|résumé antérieur/u.test(document.getElementById('mission-copy-status').textContent));
+    assert.ok((await page.evaluate(() => window.advantageClipboard.at(-1))).startsWith(modified));
     const reply = 'I completed a calculation. [Download the file](sandbox:/mnt/data/claimed.py).';
     await page.locator('#mission-reply').fill(reply);
     await page.locator('#mission-import-reply').click();

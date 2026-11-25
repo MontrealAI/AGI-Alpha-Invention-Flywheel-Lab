@@ -1,9 +1,12 @@
 export const sourceReviewSchema = 'frontier/battery-source-review-v1';
 
 const fields = new Map([
-  ['batteryCapacity', {label:'rated electrical capacity', units:new Map([['ah',0], ['mah',3]])}],
-  ['batteryWeight', {label:'net battery weight', units:new Map([['kg',0], ['g',3]])}],
-  ['nominalVoltage', {label:'nominal voltage', units:new Map([['v',0], ['mv',3]])}],
+  ['batteryCapacity', {label:'rated electrical capacity', units:new Map([['ah',0], ['mah',3]]),
+    heading:/^(?:(?:rated|nominal) (?:(?:electrical|battery|system|charge) )?capacity|capacité (?:électrique )?nominale)\b\s*:?\s*/iu}],
+  ['batteryWeight', {label:'net battery weight', units:new Map([['kg',0], ['g',3]]),
+    heading:/^(?:general data\s*[—–-]\s*)?(?:table of )?(?:(?:(?:complete battery net|net battery|battery|net) )?weights?(?: of one complete battery system| by column)?|poids(?: net)?|masse nette)\b\s*:?\s*/iu}],
+  ['nominalVoltage', {label:'nominal voltage', units:new Map([['v',0], ['mv',3]]),
+    heading:/^(?:(?:rated|nominal) (?:(?:battery|DC) )?voltage|tension nominale)\b\s*(?:\(DC\)\s*)?:?\s*/iu}],
 ]);
 const scopeFields = ['model','version','market','level','boundary'];
 const isObject = value => value !== null && typeof value === 'object' && !Array.isArray(value);
@@ -22,8 +25,13 @@ function exactQuantity(value, unit, units) {
   return BigInt(sign + whole + fraction) * 10n ** BigInt(11 - fraction.length - scale);
 }
 
+function validScope(scope) {
+  return isObject(scope) && scopeFields.every(key => !Object.hasOwn(scope, key) || tidy(scope[key]) !== '');
+}
+
 function eligibleScope(target, observed) {
-  return isObject(observed) && scopeFields.every(key => !tidy(target[key]) || tidy(target[key]) === tidy(observed[key]));
+  return validScope(observed) && scopeFields.every(key => !Object.hasOwn(target, key) ||
+    (Object.hasOwn(observed, key) && tidy(target[key]) === tidy(observed[key])));
 }
 
 function validSource(item) {
@@ -33,52 +41,65 @@ function validSource(item) {
     typeof item.locator === 'string' && item.locator.trim().length > 0 && digest.test(item.sha256 ?? '');
 }
 
-function standaloneUnit(before, after, units) {
-  const tail = after.trimStart();
-  if (/^(?:[·⋅×*^\p{No}⁄∕]|\.(?=[\p{L}\p{N}])|(?:per|par)\b|[a-zµμ]+\s*(?:\^|[−-]\d|\p{No}))/iu.test(tail)) return false;
-  if (/^\s+(?:m|s|g|kg|a|ah|v|wh|kwh)\b/iu.test(after)) return false;
-  if (tail.startsWith('/')) {
-    // Preserve same-dimension table alternatives such as "72.2 kg / 68.5 kg".
-    const next = tail.match(/^\/\s+[+-]?\d{1,12}(?:[.,]\d{1,8})?\s*(mAh|Ah|kg|g|mV|V)(?:dc|ac)?\b/iu);
-    if (!next || !units.has(tidy(next[1]))) return false;
-  }
-  const previous = before.match(/([a-zµμ]+)\s*[/⁄∕]\s*$/iu);
-  if (previous && !units.has(tidy(previous[1].replace(/(?:dc|ac)$/iu, '')))) return false;
-  return true;
+function measurementValues(text, units, ordered) {
+  const parts = text.trim().replace(/\s+in both columns$/iu, '').split(/\s+\/\s+|,\s+(?=[+-]?\d)/u);
+  if (parts.length > 1 && !ordered) return [];
+  const readings = parts.map(part => part.match(/^([+-]?\d{1,12}(?:[.,]\d{1,8})?)\s*(?:(?:\(±\s*\d+(?:[.,]\d+)?\)|±\s*\d+(?:[.,]\d+)?)\s*)?([a-z]+)?$/iu));
+  if (readings.some(row => !row)) return [];
+  const unitOf = row => tidy(row[2]).replace(/^(mv|v)dc$/u, '$1');
+  const lastUnit = unitOf(readings.at(-1));
+  const sharedUnit = ordered && /\s+\/\s+/u.test(text) && !/,\s+(?=[+-]?\d)/u.test(text);
+  const measured = readings.map(row => exactQuantity(row[1], unitOf(row) || (sharedUnit ? lastUnit : ''), units));
+  return measured.includes(undefined) ? [] : measured;
 }
 
-function quoteQuantifies(quote, observation, units) {
-  // A source row can state a unit once after an ordered series of configuration columns.
+function clauses(text) {
+  return text.split(/[;\r\n]+|\.\s+(?=\p{Lu}[\p{L}\p{N}-]{2,}\b)|\.$/u).map(part => part.trim()).filter(Boolean);
+}
+
+function hasColumnLabels(parts) {
+  return parts.some((part, index) =>
+    /^(?:model columns|colonnes des systèmes)\s*:\s*[^,]+,\s*\S/iu.test(part) ||
+    /^modules in series\s+(?:\d+s\s+\/\s+)+\d+s$/iu.test(part) ||
+    /\bin first column$/iu.test(part) && /\bin second(?: column)?$/iu.test(parts[index + 1] ?? ''));
+}
+
+function quoteQuantifies(quote, excerpt, observation, {heading, units}) {
+  // Parse complete labelled clauses. An unsupported expression cannot contribute a suffix.
   const expected = exactQuantity(observation.value, observation.unit, units);
-  if (expected === undefined) return false;
-  const tokens = quote.matchAll(/(?<![\p{L}\p{N}.,+±−–—-])([+-]?\d{1,12}(?:[.,]\d{1,8})?(?:\s+\/\s+[+-]?\d{1,12}(?:[.,]\d{1,8})?)*)\s*(?:(?:\(±\s*\d+(?:[.,]\d+)?\)|±\s*\d+(?:[.,]\d+)?)\s*)?(mAh|Ah|kg|g|mV|V)(?:dc|ac)?\b/giu);
-  for (const match of tokens) {
-    // A suffix after a range separator, exponent, or unsupported tolerance is not a new value.
-    const before = quote.slice(0, match.index);
-    if (/(?:\d|\))\s*(?:[±−–—+\/×*·-]|[eE][+-]?)\s*$/u.test(before) || /\d\p{Zs}+$/u.test(before)) continue;
-    if (!standaloneUnit(before, quote.slice(match.index + match[0].length), units)) continue;
-    const [, values, unit] = match;
-    if (values.split('/').some(value => exactQuantity(value.trim(), unit, units) === expected)) return true;
-  }
-  return false;
+  if (expected === undefined || !excerpt.includes(quote)) return false;
+  const cited = clauses(quote);
+  const available = clauses(excerpt);
+  if (!available.some((_, start) => cited.every((part, index) => available[start + index] === part))) return false;
+  // Preserve compatibility characters such as superscript footnote digits.
+  const normal = quote.normalize('NFC').replace(/[^\S\r\n]+/gu, ' ');
+  const parts = clauses(normal);
+  const orderedTable = hasColumnLabels(parts);
+  return parts.some(clause => {
+    const prefix = heading.exec(clause);
+    if (!prefix) return false;
+    const ordered = orderedTable || /\b(?:table of weights?|by column)\b/iu.test(prefix[0]);
+    return measurementValues(clause.slice(prefix[0].length), units, ordered).includes(expected);
+  });
 }
 
 export function reviewClaim(input) {
   if (!isObject(input) || typeof input.id !== 'string' || !/^[a-z0-9][a-z0-9._:-]{0,95}$/iu.test(input.id) ||
-      !fields.has(input.field) || !isObject(input.target) || !tidy(input.target.model) || !tidy(input.target.level) ||
+      !fields.has(input.field) || !validScope(input.target) || !Object.hasOwn(input.target, 'model') || !Object.hasOwn(input.target, 'level') ||
       !isObject(input.claim) || !Array.isArray(input.sources) || input.sources.length > 12 ||
       !input.sources.every(validSource) || new Set(input.sources.map(row => row.id)).size !== input.sources.length ||
       !Array.isArray(input.observations) || input.observations.length > 32) throw new Error('SOURCE_REVIEW_CASE');
   const {id,field,target,claim,sources,observations} = input;
-  const {label,units} = fields.get(field);
+  const definition = fields.get(field);
+  const {label,units} = definition;
   const inputById = new Map(sources.map(row => [row.id,row]));
   const values = new Map();
   let rejected = 0;
   for (const entry of observations) {
     const source = inputById.get(entry?.source);
     if (!source || entry.field !== field || !eligibleScope(target, entry.target) ||
-        typeof entry.quote !== 'string' || !entry.quote.length || !source.excerpt.includes(entry.quote) ||
-        !quoteQuantifies(entry.quote, entry, units)) {
+        typeof entry.quote !== 'string' || !entry.quote.length ||
+        !quoteQuantifies(entry.quote, source.excerpt, entry, definition)) {
       rejected++;
       continue;
     }

@@ -1,0 +1,69 @@
+{
+  "confirm-01": {
+    "decision": "supported",
+    "evidence": [
+      [
+        "sr-01"
+      ]
+    ],
+    "reason": "The 114 kg row is for the SBR096 system. The 33 kg row is for a single component."
+  },
+  "confirm-02": {
+    "decision": "contradicted",
+    "evidence": [
+      [
+        "sr-01"
+      ],
+      [
+        "sr-03"
+      ],
+      [
+        "sr-01",
+        "sr-03"
+      ]
+    ],
+    "reason": "Both applicable documents specify a 128 V nominal voltage for SBR064. 146 V is a range boundary."
+  },
+  "confirm-03": {
+    "decision": "insufficient",
+    "evidence": [
+      [],
+      [
+        "sr-01"
+      ]
+    ],
+    "reason": "Usable energy, DC voltage and continuous current do not document rated Ah."
+  },
+  "confirm-04": {
+    "decision": "supported",
+    "evidence": [
+      [
+        "gw-01"
+      ]
+    ],
+    "reason": "The named system's exact column reads 158 kg and remains distinct from its module spec."
+  },
+  "confirm-05": {
+    "decision": "contradicted",
+    "evidence": [
+      [
+        "gw-01"
+      ]
+    ],
+    "reason": "409.6 V is the explicit nominal entry for the requested battery system. 307.2 V belongs to LX F9.8-H."
+  },
+  "confirm-06": {
+    "decision": "insufficient",
+    "evidence": [
+      [],
+      [
+        "gw-03"
+      ],
+      [
+        "gw-02",
+        "gw-03"
+      ]
+    ],
+    "reason": "25 A is present as the charge/discharge current. The accompanying energy is usable kWh. Neither is rated capacity in Ah."
+  }
+}
