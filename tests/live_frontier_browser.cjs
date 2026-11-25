@@ -765,12 +765,18 @@ async function proofOfAdvantageJourney(page, language, width) {
     await page.locator('#mission-import').setInputFiles(content('frontier-mission.json',mission));
     await files.waitFor({state:'visible'});
     assert.equal(await entries.count(),3);
+    await entries.first().locator('summary').click();
+    await entries.first().getByRole('button',{name:/Remove result file|Retirer le fichier livré/u}).click();
+    assert.match(await page.locator('#mission-next').innerText(), /claimed\.py/u);
+    await input.setInputFiles({name:'claimed.py',mimeType:'text/plain',buffer:source});
+    await page.waitForFunction(() => document.querySelectorAll('#mission-deliverable-list > li').length === 3);
+    assert.doesNotMatch(await page.locator('#mission-next').innerText(), /claimed\.py/u);
     assert.deepEqual(external,[]);
     await capture(page, language, width, 'actual-results-and-checks');
     await page.locator('#mission-new').click();
     checks.push({kind:'proof-of-advantage-ui',language,width,exactAmbition:true,
       editableBriefAndSelectableEvidence:true,missingSandboxArtifact:true,exactFileBytes:true,localEvidenceCheck:true,
-      retainedReceiptAndRecovery:true,noExternalDispatch:true});
+      retainedReceiptAndRecovery:true,exactFileRemovalAndReturn:true,noExternalDispatch:true});
   } finally {
     page.off('request',watch);
     await page.evaluate(() => { delete navigator.clipboard.writeText; });

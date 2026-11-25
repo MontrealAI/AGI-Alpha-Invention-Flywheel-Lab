@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {createHash, webcrypto} from 'node:crypto';
 import {File} from 'node:buffer';
 import {readMissionArtifact, inspectReturnedWork} from '../docs/research/frontier-omega-alpha/frontier-artifact-exchange.mjs';
-import {createMission, reviseMission, addMissionArtifacts, exportMission, importMission} from '../docs/research/frontier-omega-alpha/frontier-mission.mjs';
+import {createMission, reviseMission, addMissionArtifacts, removeMissionArtifact, exportMission, importMission} from '../docs/research/frontier-omega-alpha/frontier-mission.mjs';
 import {fingerprint} from '../docs/research/frontier-omega-alpha/outcome-receipt.mjs';
 import {reviewClaim} from '../docs/research/frontier-omega-alpha/dpp-source-review.mjs';
 
@@ -42,6 +42,19 @@ test('review intake rejects unsafe names, disallowed binaries, invalid UTF-8 and
     new File(['{"nbformat":4}'], 'study.ipynb'),
   ]) await assert.rejects(readMissionArtifact(file, 1));
   assert.equal((await readMissionArtifact(new File(['{"nbformat":4,"cells":[]}'], 'study.ipynb'), 1)).kind, 'notebook');
+});
+
+test('removing one exact version permits corrected files to enter the same full mission', async () => {
+  const versions = await Promise.all(Array.from({length:8}, (_,n) =>
+    readMissionArtifact(new File([`Result version ${n}`], 'result.txt'), 1)));
+  const full = addMissionArtifacts(createMission('Original goal'), versions);
+  const updated = reviseMission(full, 'Recheck the result');
+  const correction = await readMissionArtifact(new File(['Corrected result'], 'result.txt'), 2);
+  assert.throws(() => addMissionArtifacts(updated, [correction]), /MISSION_ARTIFACT/);
+  const continued = addMissionArtifacts(removeMissionArtifact(updated, versions[0]), [correction]);
+  const reopened = await importMission(await exportMission(continued));
+  assert.equal(reopened.originalAmbition, 'Original goal');
+  assert.deepEqual(reopened.workFiles, [...versions.slice(1), correction]);
 });
 
 test('quantity checks reject exponents, tolerances and range suffixes as independent measurements', () => {

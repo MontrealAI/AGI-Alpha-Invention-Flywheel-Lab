@@ -5,7 +5,7 @@ import {
   createMission, reviseMission, prepareMission, beginMission, recordMission, interruptMission,
   cancelMission, continueMission, exportMission, importMission, missionPacket, bindMissionRequest,
   addMissionInstruction, checkMissionDocuments, setMissionDocuments, maxDocuments, maxDocumentBytes,
-  addMissionArtifacts,
+  addMissionArtifacts, removeMissionArtifact,
 } from './frontier-mission.mjs';
 import {
   createMissionRequest, createMissionPrompt, runLocalMission, validateLocalMissionConfig,
@@ -74,6 +74,8 @@ const messages = {
     duplicateReply: 'That exact reply is already in this mission. Bring back a new finding, test or file.',
     useFile: 'Stage for private companion review',
     artifactUnverified: 'Imported file · verification pending',
+    removeFile: 'Remove result file',
+    fileRemoved: 'Result file removed from this mission.',
     askFiles: 'Ask the assistant for the actual files',
     continueAssistant: 'Continue with ChatGPT',
     reviewSourceClaims: 'Check supplied battery measurements',
@@ -143,6 +145,8 @@ const messages = {
     duplicateReply: 'Cette réponse exacte figure déjà dans la mission. Rapportez un nouveau résultat, un essai ou un fichier.',
     useFile: 'Préparer l’examen dans le compagnon privé',
     artifactUnverified: 'Fichier ajouté · vérification à venir',
+    removeFile: 'Retirer le fichier livré',
+    fileRemoved: 'Fichier livré retiré de la mission.',
     askFiles: 'Demander les fichiers à l’assistant',
     continueAssistant: 'Poursuivre avec ChatGPT',
     reviewSourceClaims: 'Vérifier les mesures de batterie fournies',
@@ -413,6 +417,21 @@ export function setupMissionConsole(member, shell) {
         stage.textContent = words.useFile;
         stage.addEventListener('click', () => { if (active()) stageArtifact(file); });
         record.append(stage);
+      }
+      if (mission.status !== 'running') {
+        const remove = document.createElement('button');
+        remove.type = 'button';
+        remove.className = 'quiet';
+        remove.textContent = words.removeFile;
+        remove.addEventListener('click', () => {
+          if (!active() || !mission || mission.status === 'running') return;
+          mission = removeMissionArtifact(mission, file);
+          observedFileChecks.delete(`${mission.id}:${file.revision}:${file.sha256}`);
+          render();
+          text('mission-deliverable-feedback', words.fileRemoved);
+          node('mission-deliverables').querySelector('summary').focus();
+        });
+        record.append(remove);
       }
       row.append(record);
       return row;

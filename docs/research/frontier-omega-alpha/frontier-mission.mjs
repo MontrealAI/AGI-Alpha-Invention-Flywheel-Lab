@@ -169,6 +169,14 @@ export function addMissionArtifacts(mission, artifacts) {
   return update(mission, {workFiles:files});
 }
 
+export function removeMissionArtifact(mission, file) {
+  const files = mission.workFiles ?? [];
+  const index = files.findIndex(item => item.revision === file.revision && item.name === file.name
+    && item.sha256 === file.sha256);
+  if (index < 0) return mission;
+  return update(mission, {workFiles:files.toSpliced(index, 1)});
+}
+
 function start(mission, {route = null, provider = null, model = null}, status) {
   if (mission.status === 'running' || mission.status === 'canceled') return mission;
   need(validSelection(route, provider, model) && (status === 'waiting' || provider !== null), 'MISSION_ROUTE');
