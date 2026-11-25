@@ -12,7 +12,7 @@ import {
 } from './frontier-mission-router.mjs';
 import {createAssistedBrief, maximumReturnedBytes, readAssistedReply, renderAssistedWork, workPreview} from './frontier-assisted-work.mjs';
 import {inspectReturnedWork, readMissionArtifact, maximumArtifacts, maximumArtifactBytes} from './frontier-artifact-exchange.mjs';
-import {loadMissionContextSources, selectMissionContext, missionContextLines, missionIntelligencePackage} from './frontier-mission-context.mjs';
+import {selectMissionContext, missionContextLines, missionIntelligencePackage} from './frontier-mission-context.mjs';
 import {reviewBatterySources, sourceReviewSchema} from './dpp-source-review.mjs';
 
 const messages = {
@@ -200,6 +200,11 @@ function publicRuns() {
   } catch { return []; }
 }
 
+function publicContext() {
+  try { return JSON.parse(node('mission-public-context').content.textContent); }
+  catch { return {}; }
+}
+
 export function setupMissionConsole(member, shell) {
   const language = document.documentElement.lang === 'fr' ? 'fr' : 'en';
   const words = messages[language];
@@ -212,9 +217,10 @@ export function setupMissionConsole(member, shell) {
   const capabilities = available.map(([id,, title, scope]) => ({id, title:title[i], scope:scope[i]}));
   const localRuns = new Set();
   const observedFileChecks = new Map();
+  const evidenceSources = publicContext();
   let mission, request, connection, activeRequest, atlas, unmatchedWork, serial = 0;
   let entryDocuments, recoveredDocuments, fileSerial = 0, editingAmbition = false;
-  let evidenceSources, evidenceLoad, evidenceContext, selectedEvidence, assistedDraft;
+  let evidenceContext, selectedEvidence, assistedDraft;
   let artifactSerial = 0;
   let browserCheck = 0;
   const active = () => !member.hidden;
@@ -804,15 +810,6 @@ export function setupMissionConsole(member, shell) {
   }
 
   function refreshEvidence() {
-    if (!evidenceSources) {
-      evidenceLoad ??= loadMissionContextSources(new URL('.', import.meta.url)).catch(() => ({}));
-      const prepared = request;
-      void evidenceLoad.then(sources => {
-        evidenceSources = sources;
-        if (active() && request === prepared) refreshEvidence();
-      });
-      return;
-    }
     const {ambition, instruction, language:missionLanguage} = missionPacket(mission);
     evidenceContext = selectMissionContext({ambition, instruction, language:missionLanguage, ...evidenceSources});
     selectedEvidence = new Set(evidenceContext.items.map(item => item.id));

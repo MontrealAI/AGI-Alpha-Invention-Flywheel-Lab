@@ -349,6 +349,30 @@ def public_checkpoint(request):
         return {}, {}
 
 
+def mission_context(ledger, opportunity, value, revision, mission_assets):
+    records = [
+        {**{key: row[key] for key in ('id', 'state')},
+         'editorial': row.get('editorial', [])[-1:],
+         'sources': {name: versions[-1:] for name, versions in row.get('sources', {}).items()}}
+        for row in ledger['records'] if row['state'] == 'discovered'
+    ]
+    return {
+        'atlas': {'schema': ledger['schema'], 'records': records},
+        'opportunity': {key: opportunity[key] for key in
+                        ('schema', 'opportunities', 'comparison', 'receipts', 'atlas_cutoff_utc')},
+        'memberValue': {
+            **{key: value[key] for key in ('schema', 'publication', 'updated_at', 'capabilities')},
+            'briefs': [{'tool': row['tool'], 'observed_at': row.get('observed_at')}
+                       for row in value['briefs'] if row.get('tool') in ('endpoint', 'archive')],
+        },
+        'release': {
+            'source_commit': revision, 'content_updated_at': ledger['updated_at'],
+            'public_capability_sha256': {tool['download']: tool['sha256'] for tool in value['capabilities'].values()},
+            'universal_mission_sha256': {name: mission_assets[name] for name in member.MISSION_CONTEXT_ASSETS},
+        },
+    }
+
+
 def prepare(output, revision, event, run, request=source_with_retry):
     previous, cache = public_checkpoint(request) if event != 'pull_request' else ({}, {})
     holds = watch.parse_holds(watch.HOLDS.read_bytes())
@@ -367,14 +391,17 @@ def prepare(output, revision, event, run, request=source_with_retry):
         previous.get('member_first'), lambda prior: editions.witnessed_run(prior, request),
         promote=event == 'schedule')
     mission_records = member.build_public_missions(directory, revision)
+    context_assets = {name: digest((directory / name).read_bytes()) for name in member.MISSION_CONTEXT_ASSETS}
+    context_raw = canonical_json(mission_context(ledger, opportunity, member_view, revision, context_assets))
     for page, lang in watch.PAGES.items():
         source = Path(EDITORIAL_PATH).parent / page
         html = render(source.read_text(), lang, ledger, selected, references, sealed)
         workbench = member_pages[lang]
-        if workbench.count(capture.MARKER) != 1 or workbench.count(member.MISSION_MARKER) != 1:
+        if any(workbench.count(marker) != 1 for marker in (capture.MARKER, member.MISSION_MARKER, member.MISSION_CONTEXT_MARKER)):
             raise ValueError('Unexpected workbench template')
         workbench = workbench.replace(capture.MARKER, capture.render(opportunity, lang, revision))
         workbench = workbench.replace(member.MISSION_MARKER, mission_records)
+        workbench = workbench.replace(member.MISSION_CONTEXT_MARKER, escape(context_raw.decode()))
         for marker, contents in ((member.MARKER, workbench),
                                  (member.PREVIEW_MARKER, member.home_preview(member_view, lang)),
                                  (member.PUBLIC_FEATURE_MARKER, member.public_feature(member_view, lang))):
@@ -401,7 +428,7 @@ def prepare(output, revision, event, run, request=source_with_retry):
     release = {'schema': 'frontier-omega-alpha/atlas-release-v1', 'source_commit': revision,
                'content_updated_at': ledger['updated_at'], 'ledger_sha256': sealed,
                'opportunity_capture_sha256': digest(opportunity_raw),
-               'member_value_sha256': member_digest,
+               'member_value_sha256': member_digest, 'mission_context_sha256': digest(context_raw),
                'member_first': member_view['member_first'],
                'public_capability_sha256': {v['download']: v['sha256'] for v in member_view['capabilities'].values()},
                'records': len(ledger['records']), 'states': dict(Counter(row['state'] for row in ledger['records'])),
@@ -479,6 +506,17 @@ def verify_live(expected, revision, run, request=source_with_retry):
                     or any(digest(request(watch.SITE + name, 2_000_000 if name in executor_zips else 500_000)) != fingerprint
                            for name, fingerprint in mission.items())):
         raise ValueError('Live universal mission bytes do not match')
+    context_markup = None
+    if 'frontier-mission-context.mjs' in mission and 'mission_context_sha256' not in release:
+        raise ValueError('Live mission context has no source receipt')
+    if 'mission_context_sha256' in release:
+        if not has_opportunity:
+            raise ValueError('Mission context needs the qualified opportunity evidence')
+        context_raw = canonical_json(mission_context(ledger, json.loads(opportunity_raw), member_evidence,
+                                                     release['source_commit'], mission))
+        if digest(context_raw) != release['mission_context_sha256']:
+            raise ValueError('Live mission context does not bind the public inputs')
+        context_markup = '<template id="mission-public-context">' + escape(context_raw.decode()) + '</template>'
     editions = release['decision_edition_sha256']
     if set(editions) != {name.removeprefix('frontier-omega-alpha/') for name in site.DECISION_EDITION_ASSETS}:
         raise ValueError('Unexpected historical edition asset set')
@@ -497,6 +535,8 @@ def verify_live(expected, revision, run, request=source_with_retry):
             raise ValueError('Expected public records outside the wallet gate')
         entrance, _, reader = html.partition('<section id="member" class="frame workspace" hidden')
         workspace, _, preview = reader.partition('id="member-preview"')
+        if context_markup and context_markup not in workspace:
+            raise ValueError('Live mission context markup does not match the public inputs')
         preview = preview.partition('id="possibility-shifts"')[0]
         if (not {'enter-club', 'member-preview', 'mf-quick-run'}.issubset(parser.ids)
                 or 'id="access"' not in entrance or 'data-connect="token"' not in entrance

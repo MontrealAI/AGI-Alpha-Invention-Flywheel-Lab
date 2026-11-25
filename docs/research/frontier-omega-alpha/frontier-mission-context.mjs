@@ -7,7 +7,6 @@ const commit = /^[a-f0-9]{40}$/u;
 const named = /^[a-z0-9][a-z0-9.-]{0,100}$/u;
 const isoDay = /^\d{4}-\d\d-\d\d$/u;
 const encoder = new TextEncoder();
-const decoder = new TextDecoder('utf-8', {fatal:true});
 
 const word = {
   en: {
@@ -337,56 +336,4 @@ export function missionIntelligencePackage(packet, context, selectedIds) {
   return {schema:packageSchema, missionId, revision, language, originalAmbition, ambition,
     ...(typeof instruction === 'string' && instruction && {instruction}),
     context:structuredClone(selectedItems(context, selectedIds))};
-}
-
-const sourceFiles = [
-  ['atlas', 'atlas-ledger.json', 'ledger_sha256', 20_000_000],
-  ['opportunity', 'opportunity-capture.json', 'opportunity_capture_sha256', 1_000_000],
-  ['memberValue', 'member-value.json', 'member_value_sha256', 8_000_000],
-];
-
-async function readPublicBytes(address, maximum, fetcher) {
-  const response = await fetcher(address.href, {credentials:'omit', redirect:'error', cache:'no-store',
-    referrerPolicy:'no-referrer', signal:AbortSignal.timeout(8000)});
-  if (!response.ok || Number(response.headers.get('content-length')) > maximum || !response.body) throw Error('CONTEXT_SOURCE');
-  const reader = response.body.getReader();
-  const chunks = [];
-  let size = 0;
-  for (;;) {
-    const {value, done} = await reader.read();
-    if (done) break;
-    size += value.byteLength;
-    if (size > maximum) {
-      await reader.cancel();
-      throw Error('CONTEXT_SOURCE');
-    }
-    chunks.push(value);
-  }
-  const bytes = new Uint8Array(size);
-  let offset = 0;
-  for (const chunk of chunks) {
-    bytes.set(chunk, offset);
-    offset += chunk.byteLength;
-  }
-  return bytes;
-}
-
-/** Fixed, same-origin public GETs. Verify the received bytes against one release before JSON parsing. */
-export async function loadMissionContextSources(base = new URL('.', location.href), fetcher = globalThis.fetch) {
-  base = new URL('.', base);
-  if (globalThis.location && base.origin !== globalThis.location.origin) throw Error('CONTEXT_ORIGIN');
-  const response = await readPublicBytes(new URL('atlas-release.json', base), 64_000, fetcher);
-  const release = JSON.parse(decoder.decode(response));
-  if (release?.schema !== 'frontier-omega-alpha/atlas-release-v1' || !commit.test(release.source_commit ?? '')) {
-    throw Error('CONTEXT_RELEASE');
-  }
-  const results = await Promise.allSettled(sourceFiles.filter(([, , field]) => sha.test(release[field] ?? '')).map(
-    async ([key, filename, field, maximum]) => {
-      const bytes = await readPublicBytes(new URL(filename, base), maximum, fetcher);
-      const digest = new Uint8Array(await crypto.subtle.digest('SHA-256', bytes));
-      const actual = Array.from(digest, value => value.toString(16).padStart(2, '0')).join('');
-      if (actual !== release[field]) throw Error('CONTEXT_SOURCE');
-      return [key, JSON.parse(decoder.decode(bytes))];
-    }));
-  return {release, ...Object.fromEntries(results.filter(result => result.status === 'fulfilled').map(result => result.value))};
 }

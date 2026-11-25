@@ -1,10 +1,8 @@
 import assert from 'node:assert/strict';
-import {createHash} from 'node:crypto';
 import {test} from 'node:test';
-import {loadMissionContextSources, missionContextLines, missionIntelligencePackage, selectMissionContext}
+import {missionContextLines, missionIntelligencePackage, selectMissionContext}
   from '../docs/research/frontier-omega-alpha/frontier-mission-context.mjs';
 
-const digest = value => createHash('sha256').update(value).digest('hex');
 const gitRevision = '1'.repeat(40);
 const source = 'https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/commit/' + gitRevision;
 const release = {
@@ -130,31 +128,13 @@ test('sharing selection and package projection exclude unselected entries and pr
   assert.equal(context.items[2].source.url, sourceUrl);
 });
 
-test('fixed public loader verifies exact release bytes and keeps intact sources on a mixed revision', async () => {
-  const resources = {
-    'atlas-ledger.json':JSON.stringify(atlas),
-    'opportunity-capture.json':JSON.stringify(opportunity),
-    'member-value.json':JSON.stringify(memberValue),
-  };
-  resources['atlas-release.json'] = JSON.stringify({...release, ledger_sha256:digest(resources['atlas-ledger.json']),
-    opportunity_capture_sha256:digest(resources['opportunity-capture.json']),
-    member_value_sha256:digest(resources['member-value.json'])});
-  resources['opportunity-capture.json'] = JSON.stringify({...opportunity, context:'correct JSON but mismatched bytes'});
-  const requests = [];
-  const fetcher = async (address, options) => {
-    const parsed = new URL(address);
-    assert.equal(parsed.origin, 'https://public.example');
-    assert.equal(options.credentials, 'omit');
-    assert.equal(options.redirect, 'error');
-    assert.equal(options.referrerPolicy, 'no-referrer');
-    assert.equal(parsed.search, '');
-    requests.push(parsed.pathname);
-    return new Response(resources[parsed.pathname.split('/').at(-1)]);
-  };
-  const loaded = await loadMissionContextSources('https://public.example/frontier/fr.html', fetcher);
-  assert.deepEqual(loaded.atlas, atlas);
-  assert.deepEqual(loaded.memberValue, memberValue);
-  assert.equal(loaded.opportunity, undefined);
-  assert.equal(loaded.release.source_commit, gitRevision);
-  assert.deepEqual(requests, ['/frontier/atlas-release.json','/frontier/atlas-ledger.json','/frontier/opportunity-capture.json','/frontier/member-value.json']);
+test('battery source review requires both released artifacts and omits inapplicable filing requests', () => {
+  const manifest = {...release, universal_mission_sha256:{...release.universal_mission_sha256,
+    'dpp-source-review.mjs':'d'.repeat(64), 'frontier-battery-source-example.json':'e'.repeat(64)}};
+  const search = (ambition, source) => selectMissionContext({ambition, release:source}).items;
+  const inputs = 'Check the battery passport weight against its source';
+  assert.equal(search(inputs, release).length, 0);
+  assert.equal(search(inputs, manifest)[0].artifact.sha256, 'e'.repeat(64));
+  assert.equal(search('Submit a battery passport', manifest).length, 0);
+  assert.equal(search('CAPTURE THE EXPONENTIAL', manifest)[0].id, 'battery-source-review');
 });

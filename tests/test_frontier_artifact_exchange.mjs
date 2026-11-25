@@ -13,6 +13,8 @@ test('a claimed assistant file and an inline example are distinct from file poss
   assert.deepEqual(inspectReturnedWork(work), {missing:['check tool.py'], sourceSnippet:true});
   assert.deepEqual(inspectReturnedWork(work, [{name:'check tool.py'}]), {missing:[], sourceSnippet:true});
   assert.deepEqual(inspectReturnedWork('[file](sandbox:/mnt/data/..%2fprivate.py)'), {missing:[], sourceSnippet:false});
+  assert.deepEqual(inspectReturnedWork('[file](sandbox:/mnt/data/analysis/run.py).').missing, ['run.py']);
+  assert.deepEqual(inspectReturnedWork('https://example.org/mnt/data/remote.py').missing, []);
 });
 
 test('working source preserves exact UTF-8 bytes across revision and checkpoint without evaluating it', async () => {

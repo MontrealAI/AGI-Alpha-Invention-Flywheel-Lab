@@ -19,10 +19,13 @@ function kind(filename) {
 export function artifactReferences(work) {
   if (typeof work !== 'string') return [];
   const found = new Set();
-  for (const match of work.matchAll(/(?:sandbox:)?\/mnt\/data\/([^\s<>"')`]+)/gu)) {
+  for (const match of work.matchAll(/(?:sandbox:\/mnt\/data\/|(?<![\p{L}\p{N}:/.-])\/mnt\/data\/)([^\s<>"')`]+)/gu)) {
     try {
-      const filename = decodeURIComponent(match[1].replace(/[.,;]+$/u, ''));
-      if (kind(filename)) found.add(filename);
+      const parts = match[1].replace(/[.,;]+$/u, '').split('/').map(part => decodeURIComponent(part));
+      const filename = parts.at(-1);
+      if (kind(filename) && parts.every(part => part && !['.','..'].includes(part) && !/[\/\\]/u.test(part))) {
+        found.add(filename);
+      }
     } catch { /* An incomplete path cannot identify a file. */ }
     if (found.size >= maximumArtifacts) break;
   }
